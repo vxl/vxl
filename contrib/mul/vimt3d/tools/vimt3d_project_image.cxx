@@ -8,7 +8,9 @@
 // Need to resample image to cubic voxels before projection to keep aspect ratios.
 
 #include <vul/vul_arg.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iostream>
 #include <vimt3d/vimt3d_load.h>
 #include <vil3d/vil3d_slice.h>
 #include <vil3d/vil3d_resample_trilinear.h>
@@ -22,8 +24,8 @@
 
 void print_usage()
 {
-  vcl_cout<<"vimt3d_project_image: Tool to load in a 3D image and produce 2D projection(s)."<<vcl_endl;
-  vcl_cout<<"Sums pixels along one direction (eg k) and linearly stretches to a byte image."<<vcl_endl;
+  std::cout<<"vimt3d_project_image: Tool to load in a 3D image and produce 2D projection(s)."<<std::endl;
+  std::cout<<"Sums pixels along one direction (eg k) and linearly stretches to a byte image."<<std::endl;
 
   vul_arg_display_usage_and_exit();
 }
@@ -83,15 +85,15 @@ void k_axis_projection(const vil3d_image_view<T>& im3d,
 
 int main(int argc, char** argv)
 {
-  vul_arg<vcl_string> image_path("-i","3D image filename");
-  vul_arg<vcl_string> output_path("-o","Base path for output","projection");
+  vul_arg<std::string> image_path("-i","3D image filename");
+  vul_arg<std::string> output_path("-o","Base path for output","projection");
   vul_arg<double> bx("-bx","Proportional border along x",0.1);
   vul_arg<double> by("-by","Proportional border along y",0.1);
   vul_arg<double> bz("-bz","Proportional border along z",0.1);
   vul_arg<double> voxel_width("-vw","Voxel width for resampling (or 0 for smallest in input)",0.0);
   vul_arg<unsigned > n_frames("-nf","Number of frames",36);
-  vul_arg<vcl_string> axis_str("-a","Axis of rotation (x/y/z)","y");
-  vul_arg<vcl_string> projection_dir("-pd","Projection direction (x/y/z)","z");
+  vul_arg<std::string> axis_str("-a","Axis of rotation (x/y/z)","y");
+  vul_arg<std::string> projection_dir("-pd","Projection direction (x/y/z)","z");
   vul_arg<float> value_threshold("-t","Threshold below which image ignored.",-999.0f);
 
   vul_arg_parse(argc,argv);
@@ -111,23 +113,23 @@ int main(int argc, char** argv)
 
   if (image3d.image().size()==0)
   {
-    vcl_cout<<"Failed to load image from "<<image_path()<<vcl_endl;
+    std::cout<<"Failed to load image from "<<image_path()<<std::endl;
     return 1;
   }
 
-  vcl_cout<<"Image: "<<image3d<<vcl_endl;
+  std::cout<<"Image: "<<image3d<<std::endl;
 
   // Compute Voxel sizes
   vimt3d_transform_3d i2w=image3d.world2im().inverse();
   double dx = (i2w(1,0,0)-i2w(0,0,0)).length();
   double dy = (i2w(0,1,0)-i2w(0,0,0)).length();
   double dz = (i2w(0,0,1)-i2w(0,0,0)).length();
-  vcl_cout<<"Original voxels: "<<dx<<","<<dy<<","<<dz<<vcl_endl;
+  std::cout<<"Original voxels: "<<dx<<","<<dy<<","<<dz<<std::endl;
 
   // Use smallest voxel width for cubic resampling
-  double d = vcl_min(dx,vcl_min(dy,dz));
+  double d = std::min(dx,std::min(dy,dz));
   if (voxel_width()!=0.0) d=voxel_width();
-  vcl_cout<<"Resampling cubic voxels of width: "<<d<<vcl_endl;
+  std::cout<<"Resampling cubic voxels of width: "<<d<<std::endl;
 
   // Image extent
   double wx = dx*image3d.image().ni();
@@ -138,11 +140,11 @@ int main(int argc, char** argv)
   unsigned ni=unsigned((1-2*bx())*wx/d+0.5);
   unsigned nj=unsigned((1-2*by())*wy/d+0.5);
   unsigned nk=unsigned((1-2*bz())*wz/d+0.5);
-  vcl_cout<<"Resampled image: "<<ni<<"x"<<nj<<"x"<<nk<<vcl_endl;
+  std::cout<<"Resampled image: "<<ni<<"x"<<nj<<"x"<<nk<<std::endl;
 
   float min_v,max_v;
   vil3d_math_value_range(image3d.image(),min_v,max_v);
-  vcl_cout<<"Pixel range: ["<<min_v<<","<<max_v<<"]"<<vcl_endl;
+  std::cout<<"Pixel range: ["<<min_v<<","<<max_v<<"]"<<std::endl;
 
   if (min_v<value_threshold())
   {
@@ -202,15 +204,15 @@ int main(int argc, char** argv)
     else
       k_axis_projection(resampled_image,image2d);
 
-    vcl_stringstream ss;
+    std::stringstream ss;
     ss<<output_path()<<"_";
     if (i<10) ss<<"0";
     ss<<i<<".png";
-    vcl_string out_path=ss.str();
+    std::string out_path=ss.str();
     if (vil_save(image2d,out_path.c_str()))
-      vcl_cout<<"Saved projection to "<<out_path<<vcl_endl;
+      std::cout<<"Saved projection to "<<out_path<<std::endl;
     else
-      vcl_cout<<"Failed to save to "<<out_path<<vcl_endl;
+      std::cout<<"Failed to save to "<<out_path<<std::endl;
   }
 
   return 0;

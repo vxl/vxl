@@ -6,7 +6,7 @@
 #include <vgl/vgl_ray_3d.h>
 
 #include <vcl_cassert.h>
-#include <vcl_iostream.h>
+#include <iostream>
 
 #include <boxm2/boxm2_scene.h>
 #include <boxm2/boxm2_block.h>
@@ -15,7 +15,9 @@
 
 #include <boct/boct_bit_tree.h>
 
-#include <vcl_algorithm.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <algorithm>
 #include <vpgl/vpgl_generic_camera.h>
 
 #define BLOCK_EPSILON .006125f
@@ -39,10 +41,10 @@ void boxm2_cast_ray_function(vgl_ray_3d<double> & ray_ij,
 
     //thresh ray direction components - too small a treshhold causes axis aligned
     //viewpoints to hang in infinite loop (block loop)
-    float thresh = vcl_exp(-12.0f);
-    if (vcl_fabs(dray_ij_x) < thresh) dray_ij_x = (dray_ij_x>0)?thresh:-thresh;
-    if (vcl_fabs(dray_ij_y) < thresh) dray_ij_y = (dray_ij_y>0)?thresh:-thresh;
-    if (vcl_fabs(dray_ij_z) < thresh) dray_ij_z = (dray_ij_z>0)?thresh:-thresh;
+    float thresh = std::exp(-12.0f);
+    if (std::fabs(dray_ij_x) < thresh) dray_ij_x = (dray_ij_x>0)?thresh:-thresh;
+    if (std::fabs(dray_ij_y) < thresh) dray_ij_y = (dray_ij_y>0)?thresh:-thresh;
+    if (std::fabs(dray_ij_z) < thresh) dray_ij_z = (dray_ij_z>0)?thresh:-thresh;
 
     vgl_vector_3d<float> direction(dray_ij_x,dray_ij_y,dray_ij_z);
     vgl_ray_3d<float> ray(block_origin,direction);
@@ -62,11 +64,11 @@ void boxm2_cast_ray_function(vgl_ray_3d<double> & ray_ij,
   float max_facex = (ray_dx > 0.0f) ? (linfo->scene_dims[0]) : 0.0f;
   float max_facey = (ray_dy > 0.0f) ? (linfo->scene_dims[1]) : 0.0f;
   float max_facez = (ray_dz > 0.0f) ? (linfo->scene_dims[2]) : 0.0f;
-  float tfar = vcl_min(vcl_min( (max_facex-ray_ox)*(1.0f/ray_dx), (max_facey-ray_oy)*(1.0f/ray_dy)), (max_facez-ray_oz)*(1.0f/ray_dz));
+  float tfar = std::min(std::min( (max_facex-ray_ox)*(1.0f/ray_dx), (max_facey-ray_oy)*(1.0f/ray_dy)), (max_facez-ray_oz)*(1.0f/ray_dz));
   float min_facex = (ray_dx < 0.0f) ? (linfo->scene_dims[0]) : 0.0f;
   float min_facey = (ray_dy < 0.0f) ? (linfo->scene_dims[1]) : 0.0f;
   float min_facez = (ray_dz < 0.0f) ? (linfo->scene_dims[2]) : 0.0f;
-  float tblock = vcl_max(vcl_max( (min_facex-ray_ox)*(1.0f/ray_dx), (min_facey-ray_oy)*(1.0f/ray_dy)), (min_facez-ray_oz)*(1.0f/ray_dz));
+  float tblock = std::max(std::max( (min_facex-ray_ox)*(1.0f/ray_dx), (min_facey-ray_oy)*(1.0f/ray_dy)), (min_facez-ray_oz)*(1.0f/ray_dz));
 
 
   if (tfar <= tblock || tfar < 0) {
@@ -97,9 +99,9 @@ void boxm2_cast_ray_function(vgl_ray_3d<double> & ray_ij,
     float posz = (ray_oz + (tblock + TREE_EPSILON)*ray_dz);
 
     //curr block index (var later used as cell_min), check to make sure block index isn't 192 or -1
-    float cell_minx = boxm2_util::clamp(vcl_floor(posx), 0.0f, linfo->scene_dims[0]-1.0f);
-    float cell_miny = boxm2_util::clamp(vcl_floor(posy), 0.0f, linfo->scene_dims[1]-1.0f);
-    float cell_minz = boxm2_util::clamp(vcl_floor(posz), 0.0f, linfo->scene_dims[2]-1.0f);
+    float cell_minx = boxm2_util::clamp(std::floor(posx), 0.0f, linfo->scene_dims[0]-1.0f);
+    float cell_miny = boxm2_util::clamp(std::floor(posy), 0.0f, linfo->scene_dims[1]-1.0f);
+    float cell_minz = boxm2_util::clamp(std::floor(posz), 0.0f, linfo->scene_dims[2]-1.0f);
 
     //load current block/tree
     uchar16 tree=blk_sptr->trees()((unsigned short)cell_minx,(unsigned short)cell_miny,(unsigned short)cell_minz);
@@ -118,7 +120,7 @@ void boxm2_cast_ray_function(vgl_ray_3d<double> & ray_ij,
     cell_minx = (ray_dx > 0) ? cell_minx+1.0f : cell_minx;
     cell_miny = (ray_dy > 0) ? cell_miny+1.0f : cell_miny;
     cell_minz = (ray_dz > 0) ? cell_minz+1.0f : cell_minz;
-    float texit = vcl_min(vcl_min( (cell_minx-ray_ox)*(1.0f/ray_dx), (cell_miny-ray_oy)*(1.0f/ray_dy)), (cell_minz-ray_oz)*(1.0f/ray_dz));
+    float texit = std::min(std::min( (cell_minx-ray_ox)*(1.0f/ray_dx), (cell_miny-ray_oy)*(1.0f/ray_dy)), (cell_minz-ray_oz)*(1.0f/ray_dz));
     if (texit <= tblock) break; //need this check to make sure the ray is progressing
 
     //ttree starts at 0, ttree_exit is t exit value in the tree level (scaled from scene level)
@@ -136,11 +138,11 @@ void boxm2_cast_ray_function(vgl_ray_3d<double> & ray_ij,
 
       int bit_index=bit_tree.traverse(vgl_point_3d<double>(posx,posy,posz));
       int depth =bit_tree.depth_at(bit_index);
-      float cell_len=vcl_pow((float)2,(float)-depth);
+      float cell_len=std::pow((float)2,(float)-depth);
 
-      cell_minx=vcl_floor(posx/cell_len)* cell_len;
-      cell_miny=vcl_floor(posy/cell_len)* cell_len;
-      cell_minz=vcl_floor(posz/cell_len)* cell_len;
+      cell_minx=std::floor(posx/cell_len)* cell_len;
+      cell_miny=std::floor(posy/cell_len)* cell_len;
+      cell_minz=std::floor(posz/cell_len)* cell_len;
 
       int data_offset=bit_tree.get_data_index(bit_index);
 
@@ -148,7 +150,7 @@ void boxm2_cast_ray_function(vgl_ray_3d<double> & ray_ij,
       cell_minx = (ray_dx > 0.0f) ? cell_minx+cell_len : cell_minx;
       cell_miny = (ray_dy > 0.0f) ? cell_miny+cell_len : cell_miny;
       cell_minz = (ray_dz > 0.0f) ? cell_minz+cell_len : cell_minz;
-      float t1 = vcl_min(vcl_min( (cell_minx-lrayx)*(1.0f/ray_dx), (cell_miny-lrayy)*(1.0f/ray_dy)), (cell_minz-lrayz)*(1.0f/ray_dz));
+      float t1 = std::min(std::min( (cell_minx-lrayx)*(1.0f/ray_dx), (cell_miny-lrayy)*(1.0f/ray_dy)), (cell_minz-lrayz)*(1.0f/ray_dz));
 
       //make sure ray goes through the cell with positive seg length
       if (t1 <= ttree) break;
@@ -191,7 +193,7 @@ bool cast_ray_per_block(functor_type functor,
   }
   else if (cam->type_name()== "vpgl_perspective_camera") {
     for (unsigned i=roi_ni0;i<roi_ni;++i) {
-      if (i%10==0) vcl_cout<<'.'<<vcl_flush;
+      if (i%10==0) std::cout<<'.'<<std::flush;
       for (unsigned j=roi_nj0;j<roi_nj;++j) {
         vgl_ray_3d<double> ray_ij =  ((vpgl_perspective_camera<double>*) cam.ptr())->backproject(i,j);
         boxm2_cast_ray_function<functor_type>(ray_ij,linfo,blk_sptr,i,j,functor);
@@ -200,7 +202,7 @@ bool cast_ray_per_block(functor_type functor,
     return true;
   }
 
-  vcl_cout<<"boxm2_cast_ray_function cannot dynamic cast camera"<<vcl_endl;
+  std::cout<<"boxm2_cast_ray_function cannot dynamic cast camera"<<std::endl;
   return false;
 }
 

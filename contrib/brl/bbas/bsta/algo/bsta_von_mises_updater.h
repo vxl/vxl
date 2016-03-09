@@ -21,9 +21,11 @@
 
 #include <bsta/bsta_von_mises.h>
 #include <bsta/bsta_attributes.h>
-#include <vcl_algorithm.h>
-#include <vcl_cmath.h>
-#include <vcl_vector.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <algorithm>
+#include <cmath>
+#include <vector>
 
 //: A von_mises window updater based on samples of the space of unit vectors.
 // Implemented only for vector dimensions 2 and 3.

@@ -1,6 +1,8 @@
 // This is brl/bbas/btol/tests/test_face_algs.cxx
 #include <testlib/testlib_test.h>
-#include <vcl_string.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <string>
 #include <vnl/vnl_matrix_fixed.h>
 #include <vgl/vgl_polygon.h>
 #include <vtol/vtol_vertex_2d_sptr.h>
@@ -12,13 +14,13 @@
 #include <vtol/vtol_face_2d_sptr.h>
 #include <btol/btol_face_algs.h>
 
-static void print_edges(vcl_string const& msg, vtol_face_2d_sptr const& f)
+static void print_edges(std::string const& msg, vtol_face_2d_sptr const& f)
 {
   if (!f)
     return;
   edge_list edges; f->edges(edges);
   for (edge_list::iterator eit = edges.begin(); eit != edges.end(); eit++)
-    vcl_cout << msg << '('
+    std::cout << msg << '('
              << (*eit)->v1()->cast_to_vertex_2d()->x() << ' '
              << (*eit)->v1()->cast_to_vertex_2d()->y() << "):("
              << (*eit)->v2()->cast_to_vertex_2d()->x() << ' '
@@ -26,19 +28,19 @@ static void print_edges(vcl_string const& msg, vtol_face_2d_sptr const& f)
              << ")\n";
 }
 
-static void print_verts(vcl_string const& msg, vtol_face_2d_sptr const& f)
+static void print_verts(std::string const& msg, vtol_face_2d_sptr const& f)
 {
   if (!f)
     return;
   vertex_list verts; f->vertices(verts);
   for (vertex_list::iterator vit = verts.begin(); vit != verts.end(); vit++)
-    vcl_cout << msg << (*vit)->cast_to_vertex_2d()->x() << ' '
+    std::cout << msg << (*vit)->cast_to_vertex_2d()->x() << ' '
              << (*vit)->cast_to_vertex_2d()->y() << ")\n";
 }
 
 static void test_face_algs()
 {
-  vcl_cout << "testing one_chain constructor\n";
+  std::cout << "testing one_chain constructor\n";
 
   //Outside boundary
   vtol_vertex_sptr v1 = new vtol_vertex_2d(0.0,0.0);
@@ -65,7 +67,7 @@ static void test_face_algs()
   hole_verts.push_back(vh4);
 
   vtol_one_chain_sptr outside_chain = btol_face_algs::one_chain(verts);
-  outside_chain->describe(vcl_cout);
+  outside_chain->describe(std::cout);
   vertex_list chain_verts; outside_chain->vertices(chain_verts);
   bool all_equal = true;
   int n = chain_verts.size();
@@ -76,7 +78,7 @@ static void test_face_algs()
 
   TEST("vtol_face_algs::chain_constructor", all_equal, true);
 
-  vcl_cout << "testing simply-connected face transformation\n";
+  std::cout << "testing simply-connected face transformation\n";
   vnl_matrix_fixed<double, 3, 3> T; T.set_identity();
 
   one_chain_list chains;
@@ -89,25 +91,25 @@ static void test_face_algs()
 
   TEST("vtol_face_algs::transform_simple_face", *simple_f, *trans_simple_f);
 
-  vcl_cout << "testing multiply-connected face transformation\n";
+  std::cout << "testing multiply-connected face transformation\n";
   vtol_one_chain_sptr hole_chain = btol_face_algs::one_chain(hole_verts);
 
   chains.push_back(hole_chain);
   vtol_face_2d_sptr  multi_f = new vtol_face_2d(chains);
   print_edges("multi_f_edge ", multi_f);
-  vcl_cout << "\n\n";
+  std::cout << "\n\n";
   vertex_list* mf_verts = multi_f->outside_boundary_vertices();
   for (vertex_list::iterator vit = mf_verts->begin();
        vit != mf_verts->end(); vit++)
-    vcl_cout << "mf_bound_v (" << (*vit)->cast_to_vertex_2d()->x() << ' '
+    std::cout << "mf_bound_v (" << (*vit)->cast_to_vertex_2d()->x() << ' '
              << (*vit)->cast_to_vertex_2d()->y() << ")\n";
-  vcl_cout << "\n\n";
+  std::cout << "\n\n";
   delete mf_verts;
   one_chain_list *holes = multi_f->get_hole_cycles();
   vertex_list mf_hole_verts; (*holes)[0]->vertices(mf_hole_verts);
   for (vertex_list::iterator vit = mf_hole_verts.begin();
        vit != mf_hole_verts.end(); vit++)
-    vcl_cout << "mf_hole_v (" << (*vit)->cast_to_vertex_2d()->x() << ' '
+    std::cout << "mf_hole_v (" << (*vit)->cast_to_vertex_2d()->x() << ' '
              << (*vit)->cast_to_vertex_2d()->y() << ")\n";
   delete holes;
 
@@ -116,7 +118,7 @@ static void test_face_algs()
 
   TEST("vtol_face_algs::transform_multi_face", *multi_f, *trans_multi_f);
 
-  vcl_cout << "testing construction from vgl_polygons\n";
+  std::cout << "testing construction from vgl_polygons\n";
   vgl_polygon<double> poly;
   poly.clear();
   poly.new_sheet();

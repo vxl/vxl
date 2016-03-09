@@ -1,10 +1,12 @@
 #include <testlib/testlib_test.h>
 #include <testlib/testlib_root_dir.h>
-#include <vcl_iostream.h>
-#include <vcl_fstream.h>
-#include <vcl_string.h>
-#include <vcl_vector.h>
-#include <vcl_sstream.h>
+#include <iostream>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <fstream>
+#include <string>
+#include <vector>
+#include <sstream>
 #include <vil/vil_image_view.h>
 #include <vil/vil_save.h>
 #include <vil/vil_load.h>
@@ -15,7 +17,7 @@
 static void test_spherical_map()
 {
    START("icam spherical map test");
-   vcl_stringstream str0;
+   std::stringstream str0;
    str0 << 1593.82 << ' '<< 0 << ' ' << 752 << '\n';
    str0 << 0 << ' '<< 1593.82 << ' ' << 500 << '\n';
    str0 << 0 << ' '<< 0 << ' ' << 1 << '\n';
@@ -26,7 +28,7 @@ static void test_spherical_map()
    vpgl_perspective_camera<double> C0;
    str0 >> C0;
 
-   vcl_stringstream str1;
+   std::stringstream str1;
    str1 << 1477.45 << ' '<< 0 << ' ' << 752 << '\n';
    str1 << 0 << ' '<< 1477.45 << ' ' << 500 << '\n';
    str1 << 0 << ' '<< 0 << ' ' << 1 << '\n';
@@ -36,7 +38,7 @@ static void test_spherical_map()
    str1 << 1.49612  << ' ' << 2.60614  << ' ' << 9.84735 << '\n';
    vpgl_perspective_camera<double> C1;
    str1 >> C1;
-   vcl_vector<vpgl_camera_double_sptr> cams;
+   std::vector<vpgl_camera_double_sptr> cams;
    cams.push_back(new vpgl_perspective_camera<double>(C0));
    cams.push_back(new vpgl_perspective_camera<double>(C1));
    int ni = 1504, nj = 1000;
@@ -53,7 +55,7 @@ static void test_spherical_map()
    for(int j = js1; j<je1; ++j)
      for(int i = is1; i<ie1; ++i)
        img1(i,j, 0) = 255.0;
-  vcl_vector<vil_image_view<vxl_byte> > images;
+  std::vector<vil_image_view<vxl_byte> > images;
   images.push_back(img0); images.push_back(img1);
 
   double x = -0.881, y = -4.606, z = 1.5;

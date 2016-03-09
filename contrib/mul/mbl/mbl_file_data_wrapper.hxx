@@ -6,21 +6,23 @@
 
 #include "mbl_file_data_wrapper.h"
 
-#include <vcl_ios.h>
-#include <vcl_iostream.h>
-#include <vcl_cstdlib.h>
+#include <ios>
+#include <iostream>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <cstdlib>
 
 // constructor
 template<class T>
-mbl_file_data_wrapper<T>::mbl_file_data_wrapper(vcl_string path)
+mbl_file_data_wrapper<T>::mbl_file_data_wrapper(std::string path)
 : bfs_(path)
 {
   path_ = path;
   if (!bfs_)
   {
-    vcl_cerr<<"ERROR: mbl_file_data_wrapper::constructor\n"
+    std::cerr<<"ERROR: mbl_file_data_wrapper::constructor\n"
             <<"file stream failed\n";
-    vcl_abort();
+    std::abort();
   }
 
   calc_data_size();
@@ -38,13 +40,13 @@ void mbl_file_data_wrapper<T>::calc_data_size()
   short version;
   if (!bfs_)
   {
-     vcl_cerr<<"ERROR: mbl_file_data_wrapper::calc_data_size()\n"
+     std::cerr<<"ERROR: mbl_file_data_wrapper::calc_data_size()\n"
              <<"file stream failed\n";
-     vcl_abort();
+     std::abort();
   }
 
 
-  //vcl_cout<<"count= "<<count<<vcl_endl;
+  //std::cout<<"count= "<<count<<std::endl;
   vsl_b_read(bfs_,version);
   T d;
   bool is_last;
@@ -53,13 +55,13 @@ void mbl_file_data_wrapper<T>::calc_data_size()
   {
     vsl_b_read(bfs_,d);
     count++;
-    //vcl_cout<<"count= "<<count<<vcl_endl;
+    //std::cout<<"count= "<<count<<std::endl;
     vsl_b_read(bfs_,is_last);
 #if 0
-    vcl_cout << " ***Results1 " << bfs_.is().eof() << ' ' << bfs_.is().bad()
-             << ' ' << bfs_.is().fail() << ' ' << bfs_.is().good() << vcl_endl
+    std::cout << " ***Results1 " << bfs_.is().eof() << ' ' << bfs_.is().bad()
+             << ' ' << bfs_.is().fail() << ' ' << bfs_.is().good() << std::endl
              << " ***Results2 " << bfs_.is().eof() << ' ' << bfs_.is().bad()
-             << ' ' << bfs_.is().fail() << ' ' << bfs_.is().good() << vcl_endl;
+             << ' ' << bfs_.is().fail() << ' ' << bfs_.is().good() << std::endl;
 #endif
   }
 
@@ -85,19 +87,19 @@ unsigned long mbl_file_data_wrapper<T>::size() const
 template<class T>
 void mbl_file_data_wrapper<T>::reset()
 {
-  bfs_.is().seekg(vsl_b_ostream::header_length, vcl_ios_beg);
+  bfs_.is().seekg(vsl_b_ostream::header_length, std::ios::beg);
 #if 0
-  vcl_cout << " ***Results3 " << bfs_.is().eof() << ' ' << bfs_.is().bad()
-           << ' ' << bfs_.is().fail() << ' ' << bfs_.is().good() << vcl_endl
+  std::cout << " ***Results3 " << bfs_.is().eof() << ' ' << bfs_.is().bad()
+           << ' ' << bfs_.is().fail() << ' ' << bfs_.is().good() << std::endl
            << " ***Results4 " << bfs_.is().eof() << ' ' << bfs_.is().bad()
-           << ' ' << bfs_.is().fail() << ' ' << bfs_.is().good() << vcl_endl;
+           << ' ' << bfs_.is().fail() << ' ' << bfs_.is().good() << std::endl;
 #endif
 
   if (!bfs_)
   {
-    vcl_cerr<<"ERROR: mbl_file_data_wrapper::reset()\n"
+    std::cerr<<"ERROR: mbl_file_data_wrapper::reset()\n"
             <<"file stream failed\n";
-    vcl_abort();
+    std::abort();
   }
 
   short version;
@@ -106,9 +108,9 @@ void mbl_file_data_wrapper<T>::reset()
   vsl_b_read(bfs_,is_last);
   if (is_last)
   {
-    vcl_cerr<<"ERROR: mbl_file_data_wrapper::reset()\n"
+    std::cerr<<"ERROR: mbl_file_data_wrapper::reset()\n"
             <<"appears to be no data in file\n";
-    vcl_abort();
+    std::abort();
   }
   else
    vsl_b_read(bfs_,d_);
@@ -130,9 +132,9 @@ bool mbl_file_data_wrapper<T>::next()
 {
   if (!bfs_)
   {
-    vcl_cerr<<"ERROR: mbl_file_data_wrapper::next()\n"
+    std::cerr<<"ERROR: mbl_file_data_wrapper::next()\n"
             <<"file stream failed\n";
-    vcl_abort();
+    std::abort();
   }
 
   bool is_last;
@@ -140,7 +142,7 @@ bool mbl_file_data_wrapper<T>::next()
   if (is_last)
   {
     reset();
-    //vcl_cout<<"WARNING: Reached end of file, so wrapper has been reset!\n";
+    //std::cout<<"WARNING: Reached end of file, so wrapper has been reset!\n";
     return false;
   }
   else
@@ -171,7 +173,7 @@ template<class T>
 void mbl_file_data_wrapper<T>::set_index(unsigned long n)
 {
   // unsupported
-  vcl_cout<<"mbl_file_data_wrapper<T>::set_index unsupported\n";
+  std::cout<<"mbl_file_data_wrapper<T>::set_index unsupported\n";
 }
 
 #endif
@@ -185,15 +187,15 @@ mbl_data_wrapper< T >* mbl_file_data_wrapper<T>::clone() const
 }
 
 template <class T>
-bool mbl_file_data_wrapper<T>::is_class(vcl_string const& s) const
+bool mbl_file_data_wrapper<T>::is_class(std::string const& s) const
 {
   return s==is_a(); // no ref to parent's is_class() since that is pure virtual
 }
 
 
 #define MBL_FILE_DATA_WRAPPER_INSTANTIATE(T) \
-VCL_DEFINE_SPECIALIZATION vcl_string mbl_file_data_wrapper<T >::is_a() const \
-{ return vcl_string("mbl_file_data_wrapper<" #T ">"); } \
+VCL_DEFINE_SPECIALIZATION std::string mbl_file_data_wrapper<T >::is_a() const \
+{ return std::string("mbl_file_data_wrapper<" #T ">"); } \
 template class mbl_file_data_wrapper<T >
 
 #endif // mbl_file_data_wrapper_hxx_

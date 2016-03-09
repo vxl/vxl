@@ -7,13 +7,15 @@
 
 #include "bvgl_volume_of_intersection.h"
 
-#include <vcl_limits.h>
+#include <limits>
 #include <vcl_cassert.h>
-#include <vcl_cmath.h>
-#include <vcl_algorithm.h>
+#include <cmath>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <algorithm>
 #include <vnl/vnl_math.h>
 #include <vgl/vgl_sphere_3d.h>
-#include <vcl_vector.h>
+#include <vector>
 
 //tolerance constants/functions
 static double bvgl_eps = 1.0e-8; // tolerance for intersections
@@ -31,11 +33,11 @@ T bvgl_volume_of_intersection(vgl_sphere_3d<T> const& A, vgl_sphere_3d<T> const&
 
   //cases
   //0. if one sphere is completely inside the other one
-  T difR = vcl_fabs(r0 - r1);
+  T difR = std::fabs(r0 - r1);
   if ( d <= difR )
   {
     //return the volume of the smaller sphere
-    T minR = vcl_min(r0, r1);
+    T minR = std::min(r0, r1);
     return (4.0/3.0) * vnl_math::pi * minR * minR * minR;
   }
 

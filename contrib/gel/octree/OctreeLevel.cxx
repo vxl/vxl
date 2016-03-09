@@ -13,7 +13,9 @@
 //-----------------------------------------------------------------------------
 
 #include "OctreeLevel.h"
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iostream>
 
 // Default ctor
 OctreeLevel::OctreeLevel( const int d) :
@@ -23,7 +25,7 @@ OctreeLevel::OctreeLevel( const int d) :
   next( VXL_NULLPTR),
   prev( VXL_NULLPTR)
 {
-  vcl_cout << "Size = " << size << vcl_endl;
+  std::cout << "Size = " << size << std::endl;
 }
 
 
@@ -35,7 +37,7 @@ OctreeLevel::OctreeLevel( OctreeLevel *p) :
   prev( p)
 {
   prev->SetNext( this);
-  vcl_cout << "Size = " << size << vcl_endl;
+  std::cout << "Size = " << size << std::endl;
 }
 
 void OctreeLevel::InheritFromAbove()

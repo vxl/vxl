@@ -4,17 +4,19 @@
 #include <vipl/vipl_monadic.h>
 #include <vil/vil_image_view.h>
 #include <vil/vil_new.h>
-#include <vcl_cmath.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <cmath>
+#include <iostream>
 #include <vxl_config.h> // for vxl_byte
 
 vxl_sbyte abs_byte(vxl_sbyte const& a) { return (a<0) ? -a : a; }
 vxl_int_16 abs_short(vxl_int_16 const& a) { return (a<0) ? -a : a; }
 vxl_int_32 abs_int(vxl_int_32 const& a) { return (a<0) ? -a : a; }
 float abs_float(float const& a) { return (a<0) ? -a : a; }
-double abs_double(double const& a) { return vcl_fabs(a); }
-float sqrt_float(float const& a) { return (a<0) ? -vcl_sqrt(-a) : vcl_sqrt(a); }
-double sqrt_double(double const& a) { return (a<0) ? -vcl_sqrt(-a) : vcl_sqrt(a); }
+double abs_double(double const& a) { return std::fabs(a); }
+float sqrt_float(float const& a) { return (a<0) ? -std::sqrt(-a) : std::sqrt(a); }
+double sqrt_double(double const& a) { return (a<0) ? -std::sqrt(-a) : std::sqrt(a); }
 vxl_byte sqr_ubyte(vxl_byte const& a) { return vxl_byte(a*a); }
 float sqr_float(float const& a) { return a*a; }
 vxl_uint_16 sqr_short(vxl_uint_16 const& a) { vxl_uint_32 b = a; return vxl_uint_16(b*b); }
@@ -119,7 +121,7 @@ vil_image_resource_sptr vepl_monadic_abs(vil_image_resource_sptr image)
 
   //
   else
-    vcl_cerr << __FILE__ ": vepl_monadic_abs() not implemented for " << image << '\n';
+    std::cerr << __FILE__ ": vepl_monadic_abs() not implemented for " << image << '\n';
 
   return img_out;
 }
@@ -152,7 +154,7 @@ vil_image_resource_sptr vepl_monadic_sqrt(vil_image_resource_sptr image)
 
   //
   else
-    vcl_cerr << __FILE__ ": vepl_monadic_sqrt() not implemented for " << image << '\n';
+    std::cerr << __FILE__ ": vepl_monadic_sqrt() not implemented for " << image << '\n';
 
   return img_out;
 }
@@ -218,7 +220,7 @@ vil_image_resource_sptr vepl_monadic_sqr(vil_image_resource_sptr image)
 
   //
   else
-    vcl_cerr << __FILE__ ": vepl_monadic_sqr() not implemented for " << image << '\n';
+    std::cerr << __FILE__ ": vepl_monadic_sqr() not implemented for " << image << '\n';
 
   return img_out;
 }
@@ -285,7 +287,7 @@ vil_image_resource_sptr vepl_monadic_shear(vil_image_resource_sptr image, double
 
   //
   else
-    vcl_cerr << __FILE__ ": vepl_monadic_shear() not implemented for " << image << '\n';
+    std::cerr << __FILE__ ": vepl_monadic_shear() not implemented for " << image << '\n';
 
   return img_out;
 }

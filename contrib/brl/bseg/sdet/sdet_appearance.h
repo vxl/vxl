@@ -9,9 +9,11 @@
 //
 //\endverbatim
 
-#include <vcl_string.h>
-#include <vcl_iostream.h>
-#include <vcl_sstream.h>
+#include <string>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iostream>
+#include <sstream>
 
 #include "sdet_EMD.h"
 
@@ -35,7 +37,7 @@ public:
   virtual double value()=0;
 
   //:
-  virtual vcl_string print_info() const=0;
+  virtual std::string print_info() const=0;
 
   //: Clone `this': creation of a new object and initialization. This is used so
   // that client classes like sdet_edgel supports any type of sdet_appearance.
@@ -71,8 +73,8 @@ public:
   }
 
   //: return a string with the info of this appearance measure
-  virtual vcl_string print_info() const {
-    vcl_stringstream ss;
+  virtual std::string print_info() const {
+    std::stringstream ss;
     ss << val << '\0';
     return ss.str();
   }
@@ -109,12 +111,12 @@ public:
     //euclidean distance
     sdet_color* o = (sdet_color*)&other;
 
-    return vcl_sqrt((c1-o->c1)*(c1-o->c1) + (c2-o->c2)*(c2-o->c2) + (c3-o->c3)*(c3-o->c3));
+    return std::sqrt((c1-o->c1)*(c1-o->c1) + (c2-o->c2)*(c2-o->c2) + (c3-o->c3)*(c3-o->c3));
   }
 
   //: return a string with the info of this appearance measure
-  virtual vcl_string print_info() const{
-    vcl_stringstream ss;
+  virtual std::string print_info() const{
+    std::stringstream ss;
     ss << "(" << c1 << ", " << c2 << ", " << c3 << ")" << '\0';
     return ss.str();
   }
@@ -149,13 +151,13 @@ public:
   //: compute the distance between two appearance values (assumes that the operator '-' is defined for class A)
   virtual double dist(const sdet_appearance& other)
   {
-    return vcl_fabs(sig - ((sdet_gray_signature*)&other)->sig);
+    return std::fabs(sig - ((sdet_gray_signature*)&other)->sig);
   }
 
   //: return a string with the info of this appearance measure
-  virtual vcl_string print_info() const
+  virtual std::string print_info() const
   {
-    vcl_stringstream ss;
+    std::stringstream ss;
     ss << "[" ;
     for (int i=0; i<NBINS; i++)
       ss << sig.bins[i].weight << " ,";
@@ -193,13 +195,13 @@ public:
   //: compute the distance between two appearance values (assumes that the operator '-' is defined for class A)
   virtual double dist(const sdet_appearance& other)
   {
-    return vcl_fabs(sig - ((sdet_color_signature*)&other)->sig);
+    return std::fabs(sig - ((sdet_color_signature*)&other)->sig);
   }
 
   //: return a string with the info of this appearance measure
-  virtual vcl_string print_info() const
+  virtual std::string print_info() const
   {
-    vcl_stringstream ss;
+    std::stringstream ss;
     ss << "[" ;
     //for (int i=0; i<NBINS; i++)
     //  ss << sig.bins[i].weight << " ,";

@@ -8,7 +8,9 @@
 
 #include "vil3d_new.h"
 
-#include <vcl_cstring.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <cstring>
 
 #include <vil3d/vil3d_file_format.h>
 #include <vil3d/vil3d_image_resource.h>
@@ -45,22 +47,22 @@ vil3d_image_resource_sptr vil3d_new_image_resource(const char* name,
   for (unsigned i=0; i < vil3d_file_format::n_formats(); ++i)
   {
     const vil3d_file_format& fmt = vil3d_file_format::format(i);
-    if (vcl_strcmp(fmt.tag(), file_type) == 0) {
+    if (std::strcmp(fmt.tag(), file_type) == 0) {
       outimage = fmt.make_output_image(name, ni, nj, nk, nplanes, format);
       if (!outimage)
-        vcl_cerr << "vil3d_new: Cannot new to type [" << file_type << "]\n";
+        std::cerr << "vil3d_new: Cannot new to type [" << file_type << "]\n";
       return outimage;
     }
   }
 
-  vcl_cerr << "vil3d_new: Unknown file type [" << file_type << "]\n";
-  vcl_cerr << "Known file types are: ";
+  std::cerr << "vil3d_new: Unknown file type [" << file_type << "]\n";
+  std::cerr << "Known file types are: ";
   for (unsigned i=0; i < vil3d_file_format::n_formats(); ++i)
   {
-    if (i) vcl_cerr << ',';
-    vcl_cerr << vil3d_file_format::format(i).tag() ;
+    if (i) std::cerr << ',';
+    std::cerr << vil3d_file_format::format(i).tag() ;
   }
-  vcl_cerr << '.' << vcl_endl;
+  std::cerr << '.' << std::endl;
 
   return VXL_NULLPTR;
 }

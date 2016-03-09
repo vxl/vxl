@@ -7,7 +7,9 @@
 #include <boxm2/boxm2_data.h>
 #include <boxm2/basic/boxm2_block_id.h>
 
-#include <vcl_fstream.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <fstream>
 
 #include <vbl/vbl_ref_count.h>
 #include <vbl/vbl_smart_ptr.h>
@@ -15,16 +17,16 @@
 class boxm2_stream_block_cache: public vbl_ref_count
 {
 
-    typedef vcl_string data_type;
-    typedef vcl_string identifier;
+    typedef std::string data_type;
+    typedef std::string identifier;
 
     typedef int identifier_index;
 
   public:
     //: hidden constructor (singleton class)
     boxm2_stream_block_cache(boxm2_scene_sptr scene,
-                             const vcl_vector<vcl_string>& data_types,
-                             const vcl_vector<vcl_string>& identifier_list);
+                             const std::vector<std::string>& data_types,
+                             const std::vector<std::string>& identifier_list);
 
     bool init(boxm2_block_id id);
 
@@ -34,18 +36,18 @@ class boxm2_stream_block_cache: public vbl_ref_count
     ~boxm2_stream_block_cache();
 
     //: map to store various info about each datatype
-    vcl_map<data_type, boxm2_data_base *> data_types_;
+    std::map<data_type, boxm2_data_base *> data_types_;
 
     //: for each data type, there is a list for each identifier
-    vcl_map<data_type, unsigned long > block_size_in_bytes_;
+    std::map<data_type, unsigned long > block_size_in_bytes_;
 
   protected:
 
     boxm2_scene_sptr scene_;
 
     boxm2_block_id current_block_id_;
-    vcl_vector<vcl_string> data_types_list_;
-    vcl_vector<vcl_string> identifier_list_;
+    std::vector<std::string> data_types_list_;
+    std::vector<std::string> identifier_list_;
 };
 
 typedef vbl_smart_ptr<boxm2_stream_block_cache> boxm2_stream_block_cache_sptr;

@@ -44,11 +44,11 @@ static void test_bil_finite_second_differences()
   bil_finite_differences(testim, dxp, dxm, dxc, dyp, dym, dyc);
   bil_finite_second_differences(testim, dxp, dxm, dyp, dym,dxx,dyy,dxy);
   /*
-  vil_print_all(vcl_cout,dxx);
-  vil_print_all(vcl_cout,dyy);
-  vil_print_all(vcl_cout,dxy);
+  vil_print_all(std::cout,dxx);
+  vil_print_all(std::cout,dyy);
+  vil_print_all(std::cout,dxy);
   */
-  vcl_cout << "testing half-one half-zero (along i-axis) image" << vcl_endl;
+  std::cout << "testing half-one half-zero (along i-axis) image" << std::endl;
   for (unsigned j = 0 ; j < testim.nj(); j++) {
     TEST_NEAR("D_xx"  ,     dxx(0,j)    ,    0    ,     0.001);
     TEST_NEAR("D_yy"  ,     dyy(0,j)    ,    0    ,     0.001);
@@ -81,13 +81,13 @@ static void test_bil_finite_second_differences()
   bil_finite_differences(testim, dxp, dxm, dxc, dyp, dym, dyc);
   bil_finite_second_differences(testim, dxp, dxm, dyp, dym,dxx,dyy,dxy);
   /*
-  vil_print_all(vcl_cout,dxx);
-  vil_print_all(vcl_cout,dxy);
+  vil_print_all(std::cout,dxx);
+  vil_print_all(std::cout,dxy);
   */
 
-  vil_print_all(vcl_cout,testim);
-  vil_print_all(vcl_cout,dyy);
-  vcl_cout << "testing half-one half-zero (along j-axis) image" << vcl_endl;
+  vil_print_all(std::cout,testim);
+  vil_print_all(std::cout,dyy);
+  std::cout << "testing half-one half-zero (along j-axis) image" << std::endl;
   for (unsigned i = 0 ; i < testim.nj(); i++) {
     TEST_NEAR("D_xx"  ,     dxx(i,0)    ,    0    ,     0.001);
     TEST_NEAR("D_yy"  ,     dyy(i,0)    ,    0    ,     0.001);
@@ -120,63 +120,63 @@ static void test_bil_finite_second_differences()
   bil_finite_differences(testim, dxp, dxm, dxc, dyp, dym, dyc);
   bil_finite_second_differences(testim, dxp, dxm, dyp, dym,dxx,dyy,dxy);
 
-  vil_print_all(vcl_cout,dxx);
-  vil_print_all(vcl_cout,dyy);
+  vil_print_all(std::cout,dxx);
+  vil_print_all(std::cout,dyy);
 
-  vcl_cout << "testing diagonal image" << vcl_endl;
+  std::cout << "testing diagonal image" << std::endl;
   for (unsigned j = 0 ; j < testim.nj(); ++j) {
     for (unsigned i = 0 ; i < testim.ni(); ++i) {
       if ((i==0 && j==0) || (i+1 == testim.ni() && j+1 == testim.nj())) {
-        vcl_cout << "corners on diagonal " << vcl_endl;
+        std::cout << "corners on diagonal " << std::endl;
         TEST_NEAR("D_xx"  ,     dxx(i,j)    ,    -1    ,     0.001);
         TEST_NEAR("D_yy"  ,     dyy(i,j)    ,    -1    ,     0.001);
       }
       else if (i == j) {
-        vcl_cout << "non-corner on diagonal " << vcl_endl;
+        std::cout << "non-corner on diagonal " << std::endl;
         TEST_NEAR("D_xx"  ,     dxx(i,j)    ,    -2    ,     0.001);
         TEST_NEAR("D_yy"  ,     dyy(i,j)    ,    -2    ,     0.001);
       }
       else if (i == j + 1 || i == j-1 ) {
-        vcl_cout << "super/sub diagonal " << vcl_endl;
+        std::cout << "super/sub diagonal " << std::endl;
         TEST_NEAR("D_xx"  ,     dxx(i,j)    ,     1    ,     0.001);
         TEST_NEAR("D_yy"  ,     dyy(i,j)    ,     1    ,     0.001);
       }
       else {
-        vcl_cout << "elsewhere " << vcl_endl;
+        std::cout << "elsewhere " << std::endl;
         TEST_NEAR("D_xx"  ,     dxx(i,j)    ,     0    ,     0.001);
         TEST_NEAR("D_yy"  ,     dyy(i,j)    ,     0    ,     0.001);
       }
     }
   }
 
-  vil_print_all(vcl_cout,dxy);
+  vil_print_all(std::cout,dxy);
   for (unsigned j = 0 ; j < testim.nj(); j++)
   {
     for (unsigned i = 0 ; i < testim.ni(); i++)
     {
       if (i == j) {
-        vcl_cout << "corner on diagonal\n"
-                 << '(' << i << ',' << j << ')' << vcl_endl;
+        std::cout << "corner on diagonal\n"
+                 << '(' << i << ',' << j << ')' << std::endl;
         TEST_NEAR("D_xy"  ,     dxy(i,j)    ,    0.5   ,     0.001);
       }
       else if (i == j - 2 || j == i- 2 ) {
-        vcl_cout << "second super/sub diagonals\n"
-                 << '(' << i << ',' << j << ')' << vcl_endl;
+        std::cout << "second super/sub diagonals\n"
+                 << '(' << i << ',' << j << ')' << std::endl;
         TEST_NEAR("D_xy"  ,     dxy(i,j)    ,    -0.25   ,     0.001);
       }
       else if (i + j == 1 || i + j == testim.ni() + testim.nj() - 3 ) {
-        vcl_cout << "i + j == 1 || i + j == testim.ni() + testim.nj() - 1\n"
-                 << '(' << i << ',' << j << ')' << vcl_endl;;
+        std::cout << "i + j == 1 || i + j == testim.ni() + testim.nj() - 1\n"
+                 << '(' << i << ',' << j << ')' << std::endl;;
         TEST_NEAR("D_xy"  ,     dxy(i,j)    ,    0.25   ,     0.001);
       }
       else if (i + j == 2 || i + j == testim.ni() + testim.nj() - 4 ) {
-        vcl_cout << "i + j == 1 || i + j == testim.ni() + testim.nj() - 2\n"
-                 << '(' << i << ',' << j << ')' << vcl_endl;
+        std::cout << "i + j == 1 || i + j == testim.ni() + testim.nj() - 2\n"
+                 << '(' << i << ',' << j << ')' << std::endl;
         TEST_NEAR("D_xy"  ,     dxy(i,j)    ,    -0.25   ,     0.001);
       }
       else {
-        vcl_cout << "elsewhere\n"
-                 << '(' << i << ',' << j << ')' << vcl_endl;
+        std::cout << "elsewhere\n"
+                 << '(' << i << ',' << j << ')' << std::endl;
         TEST_NEAR("D_xy"  ,     dxy(i,j)    ,    0   ,     0.001);
       }
     }

@@ -69,7 +69,9 @@
 //  Peter Vanroose  (2003) removed z coord arg of Translate()
 //-----------------------------------------------------------------------------
 
-#include <vcl_vector.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <vector>
 #include <vbl/vbl_array_2d.h>
 #include <vtol/vtol_vertex_2d_sptr.h>
 #include <vtol/vtol_edge_2d_sptr.h>
@@ -86,52 +88,52 @@ class gevd_contour
   bool FindNetwork(gevd_bufferxy& edgels, // link pixels into network
                    const int njunction, // junctions detected previously
                    const int* junctionx, const int* junctiony,
-                   vcl_vector<vtol_edge_2d_sptr>*& edges,
-                   vcl_vector<vtol_vertex_2d_sptr >*& vertices);
-  void SubPixelAccuracy(vcl_vector<vtol_edge_2d_sptr>& edges, // insert subpixel
-                        vcl_vector<vtol_vertex_2d_sptr >& vertices, // accuracy
+                   std::vector<vtol_edge_2d_sptr>*& edges,
+                   std::vector<vtol_vertex_2d_sptr >*& vertices);
+  void SubPixelAccuracy(std::vector<vtol_edge_2d_sptr>& edges, // insert subpixel
+                        std::vector<vtol_vertex_2d_sptr >& vertices, // accuracy
                         const gevd_bufferxy& locationx, // along normal to
                         const gevd_bufferxy& locationy); // contour only
-  void InsertBorder(vcl_vector<vtol_edge_2d_sptr>& edges, // border location = 3
-                    vcl_vector<vtol_vertex_2d_sptr >& vertices); // virtual chain/junction
+  void InsertBorder(std::vector<vtol_edge_2d_sptr>& edges, // border location = 3
+                    std::vector<vtol_vertex_2d_sptr >& vertices); // virtual chain/junction
 
-  static void EqualizeSpacing(vcl_vector<vtol_edge_2d_sptr>& chains); // uniform spacing
-  static void Translate(vcl_vector<vtol_edge_2d_sptr>& edges, // translate loc to center
-                        vcl_vector<vtol_vertex_2d_sptr >& vertices, // instead of upper-left
+  static void EqualizeSpacing(std::vector<vtol_edge_2d_sptr>& chains); // uniform spacing
+  static void Translate(std::vector<vtol_edge_2d_sptr>& edges, // translate loc to center
+                        std::vector<vtol_vertex_2d_sptr >& vertices, // instead of upper-left
                         const float tx=0.5, const float ty = 0.5);
-  static void ClearNetwork(vcl_vector<vtol_edge_2d_sptr>*& edges, // remove network of edges
-                           vcl_vector<vtol_vertex_2d_sptr >*& vertices); // and vertices
-  int CheckInvariants(vcl_vector<vtol_edge_2d_sptr>& edges, // return number of errors
-                      vcl_vector<vtol_vertex_2d_sptr >& vertices);
+  static void ClearNetwork(std::vector<vtol_edge_2d_sptr>*& edges, // remove network of edges
+                           std::vector<vtol_vertex_2d_sptr >*& vertices); // and vertices
+  int CheckInvariants(std::vector<vtol_edge_2d_sptr>& edges, // return number of errors
+                      std::vector<vtol_vertex_2d_sptr >& vertices);
 
   static void MaskEdgels(const gevd_bufferxy& mask, // byte mask image
                          gevd_bufferxy& edgels, // edge elements AND with mask
                          int& njunction, // vertices AND with mask
                          int* junctionx, int* junctiony);
   static void SetEdgelData(gevd_bufferxy& grad_mag, gevd_bufferxy& angle,
-                           vcl_vector<vtol_edge_2d_sptr>& edges);
+                           std::vector<vtol_edge_2d_sptr>& edges);
 
 #if 0 // commented out
-  static int ClosedRegions(vcl_vector<vtol_edge_2d*>& edges, // remove dangling/bridge
-                           vcl_vector<vtol_vertex_2d*>& vertices); //  edges/vertices
+  static int ClosedRegions(std::vector<vtol_edge_2d*>& edges, // remove dangling/bridge
+                           std::vector<vtol_vertex_2d*>& vertices); //  edges/vertices
   static void SetRayOrigin(const float x, const float y);
   static int ClockWiseOrder(vtol_edge_2d* const& dc1, vtol_edge_2d* const& dc2);
 #endif
 
   static int LengthCmp(vtol_edge_2d_sptr const& dc1, vtol_edge_2d_sptr const& dc2); // pixel length
-  static vcl_vector<vtol_edge_2d_sptr>* CreateLookupTable(vcl_vector<vtol_edge_2d_sptr>&);
-  static void LookupTableInsert(vcl_vector<vtol_edge_2d_sptr>& set, vtol_edge_2d_sptr elmt);
-  static void LookupTableReplace(vcl_vector<vtol_edge_2d_sptr>& set,
+  static std::vector<vtol_edge_2d_sptr>* CreateLookupTable(std::vector<vtol_edge_2d_sptr>&);
+  static void LookupTableInsert(std::vector<vtol_edge_2d_sptr>& set, vtol_edge_2d_sptr elmt);
+  static void LookupTableReplace(std::vector<vtol_edge_2d_sptr>& set,
                                  vtol_edge_2d_sptr deleted, vtol_edge_2d_sptr inserted);
-  static void LookupTableRemove(vcl_vector<vtol_edge_2d_sptr>& set, vtol_edge_2d_sptr elmt);
-  static void LookupTableCompress(vcl_vector<vtol_edge_2d_sptr>& set);
+  static void LookupTableRemove(std::vector<vtol_edge_2d_sptr>& set, vtol_edge_2d_sptr elmt);
+  static void LookupTableCompress(std::vector<vtol_edge_2d_sptr>& set);
 
-  static vcl_vector<vtol_vertex_2d_sptr >* CreateLookupTable(vcl_vector<vtol_vertex_2d_sptr >&);
-  static void LookupTableInsert(vcl_vector<vtol_vertex_2d_sptr >& set, vtol_vertex_2d_sptr  elmt);
-  static void LookupTableReplace(vcl_vector<vtol_vertex_2d_sptr >& set,
+  static std::vector<vtol_vertex_2d_sptr >* CreateLookupTable(std::vector<vtol_vertex_2d_sptr >&);
+  static void LookupTableInsert(std::vector<vtol_vertex_2d_sptr >& set, vtol_vertex_2d_sptr  elmt);
+  static void LookupTableReplace(std::vector<vtol_vertex_2d_sptr >& set,
                                  vtol_vertex_2d_sptr  deleted, vtol_vertex_2d_sptr  inserted);
-  static void LookupTableRemove(vcl_vector<vtol_vertex_2d_sptr >& set, vtol_vertex_2d_sptr  elmt);
-  static void LookupTableCompress(vcl_vector<vtol_vertex_2d_sptr >& set);
+  static void LookupTableRemove(std::vector<vtol_vertex_2d_sptr >& set, vtol_vertex_2d_sptr  elmt);
+  static void LookupTableCompress(std::vector<vtol_vertex_2d_sptr >& set);
 
   static void BeSilent() {talkative = false;}
   static void BeTalkative() {talkative = true;}
@@ -147,10 +149,10 @@ class gevd_contour
   int FindChains(gevd_bufferxy& edgels, // link pixels into chains
                  const int njunction, // junctions detected
                  const int* junctionx, const int* junctiony,
-                 vcl_vector<vtol_edge_2d_sptr>& edges);
+                 std::vector<vtol_edge_2d_sptr>& edges);
   int FindJunctions(gevd_bufferxy& edgels, // merge end/end and end/contour
-                    vcl_vector<vtol_edge_2d_sptr>& edges, // replace these global lists
-                    vcl_vector<vtol_vertex_2d_sptr >& vertices);
+                    std::vector<vtol_edge_2d_sptr>& edges, // replace these global lists
+                    std::vector<vtol_vertex_2d_sptr >& vertices);
 
   static bool talkative; // output comentaries or not
 };

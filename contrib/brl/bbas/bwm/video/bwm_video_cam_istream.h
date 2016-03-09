@@ -12,8 +12,10 @@
 // \endverbatim
 //
 //-----------------------------------------------------------------------------
-#include <vcl_vector.h>
-#include <vcl_string.h>
+#include <vector>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <string>
 #include <vbl/vbl_ref_count.h>
 #include <vpgl/vpgl_perspective_camera.h>
 
@@ -29,21 +31,21 @@ class bwm_video_cam_istream : public vbl_ref_count
   bwm_video_cam_istream();
 
   //: Constructor - from a file glob string
-  bwm_video_cam_istream(const vcl_string& glob);
+  bwm_video_cam_istream(const std::string& glob);
 
   //: Constructor - from a vector of file paths
-  bwm_video_cam_istream(const vcl_vector<vcl_string>& paths);
+  bwm_video_cam_istream(const std::vector<std::string>& paths);
 
   //: Destructor
    ~bwm_video_cam_istream() { close(); }
 
   //: Open a new stream using a file glob (see vul_file_iterator)
   // \note files are loaded in alphanumeric order by path name
-  bool open(const vcl_string& glob);
+  bool open(const std::string& glob);
 
   //: Open a new stream using a vector of file paths
   // \note all files are tested and only valid image files are retained
-  bool open(const vcl_vector<vcl_string>& paths);
+  bool open(const std::vector<std::string>& paths);
 
   //: Close the stream
   void close();
@@ -71,7 +73,7 @@ class bwm_video_cam_istream : public vbl_ref_count
   //: Return the current camera in the stream
    vpgl_perspective_camera<double>* current_camera();
 
-   vcl_string current_cam_name() { return cam_paths_[index_]; }
+   std::string current_cam_name() { return cam_paths_[index_]; }
 
   //: Seek to the given camera number (but do not load the camera)
   // \returns true if successful
@@ -86,7 +88,7 @@ class bwm_video_cam_istream : public vbl_ref_count
   // Data Members--------------------------------------------------------------
  private:
   //: The vector of cameras
-  vcl_vector<vcl_string> cam_paths_;
+  std::vector<std::string> cam_paths_;
 
   //: The current camera index
   unsigned int index_;

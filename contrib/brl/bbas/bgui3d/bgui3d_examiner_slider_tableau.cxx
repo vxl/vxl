@@ -3,7 +3,9 @@
 //:
 // \file
 
-#include <vcl_algorithm.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <algorithm>
 #include <vnl/vnl_math.h> // for vnl_math::pi_over_2
 
 #include <Inventor/nodes/SoSeparator.h>
@@ -159,8 +161,8 @@ bgui3d_examiner_slider_tableau::handle(const vgui_event& e)
     const SbVec2s viewport_size(get_viewport_region().getViewportSizePixels());
     const SbVec2s viewport_origin(get_viewport_region().getViewportOriginPixels());
     const SbVec2s curr_pos = SbVec2s(e.wx, e.wy) - viewport_origin;
-    const SbVec2f curr_pos_norm((float) curr_pos[0] / (float) vcl_max((int)(viewport_size[0] - 1), 1),
-                              (float) curr_pos[1] / (float) vcl_max((int)(viewport_size[1] - 1), 1));
+    const SbVec2f curr_pos_norm((float) curr_pos[0] / (float) std::max((int)(viewport_size[0] - 1), 1),
+                              (float) curr_pos[1] / (float) std::max((int)(viewport_size[1] - 1), 1));
     const SbVec2f last_pos_norm = last_pos_;
     // unused variable: float aspect_ratio = get_viewport_region().getViewportAspectRatio();
 

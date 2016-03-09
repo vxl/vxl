@@ -52,7 +52,7 @@ estimate( rgrl_set_of<rgrl_match_set_sptr> const& matches,
   vnl_double_2 from_centre, to_centre;
   vnl_matrix<double> covar;
   if ( !homo_func.projective_estimate( init_H, covar, from_centre, to_centre ) ) {
-    WarningMacro( "L-M estimation failed." << vcl_endl );
+    WarningMacro( "L-M estimation failed." << std::endl );
     return VXL_NULLPTR;
   }
 
@@ -60,7 +60,7 @@ estimate( rgrl_set_of<rgrl_match_set_sptr> const& matches,
 }
 
 
-const vcl_type_info&
+const std::type_info&
 rgrl_est_homo2d_proj::
 transformation_type() const
 {

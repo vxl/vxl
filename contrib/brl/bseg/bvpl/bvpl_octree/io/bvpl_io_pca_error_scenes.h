@@ -15,7 +15,9 @@
 
 #include <bvpl/bvpl_octree/bvpl_pca_error_scenes.h>
 
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iostream>
 #include <vsl/vsl_binary_io.h>
 
 //: Binary save parameters to stream.
@@ -26,7 +28,7 @@ void vsl_b_write(vsl_b_ostream & os, bvpl_kernel const &bvpl_pca_error_scenes);
 void vsl_b_read(vsl_b_istream & is, bvpl_pca_error_scenes &m);
 
 
-void vsl_print_summary(vcl_ostream &os, const bvpl_pca_error_scenes &m);
+void vsl_print_summary(std::ostream &os, const bvpl_pca_error_scenes &m);
 
 
 void vsl_b_read(vsl_b_istream& is, bvpl_pca_error_scenes* m);
@@ -34,7 +36,7 @@ void vsl_b_read(vsl_b_istream& is, bvpl_pca_error_scenes* m);
 
 void vsl_b_write(vsl_b_ostream& os, const bvpl_pca_error_scenes* &m);
 
-void vsl_print_summary(vcl_ostream& os, const bvpl_pca_error_scenes* &m);
+void vsl_print_summary(std::ostream& os, const bvpl_pca_error_scenes* &m);
 
 
 #endif

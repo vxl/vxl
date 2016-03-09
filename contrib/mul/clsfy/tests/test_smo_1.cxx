@@ -6,9 +6,11 @@
 // \brief Tests the Sequential minimum optimisation code.
 // \author Ian Scott
 
-#include <vcl_iostream.h>
-#include <vcl_ios.h>
-#include <vcl_iomanip.h>
+#include <iostream>
+#include <ios>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iomanip>
 #include <clsfy/clsfy_smo_1.h>
 #include <clsfy/clsfy_k_nearest_neighbour.h>
 #include <clsfy/clsfy_rbf_parzen.h>
@@ -23,14 +25,14 @@
 
 void test_smo_1()
 {
-  vcl_cout << "\n\n\n"
+  std::cout << "\n\n\n"
            << "*************************\n"
            << " Testing clsfy_smo_1_rbf\n"
            << "*************************\n\n"
 
            <<"======== TESTING BUILDING ===========\n";
 
-  vcl_vector<vpdfl_axis_gaussian_sampler *> generator(4);//
+  std::vector<vpdfl_axis_gaussian_sampler *> generator(4);//
   const unsigned nDims = 2;
   vnl_vector<double> mean0(nDims), var0(nDims), mean1(nDims), var1(nDims), mean2(nDims), var2(nDims), mean3(nDims), var3(nDims);
   vpdfl_axis_gaussian PDF0, PDF1, PDF2, PDF3;
@@ -69,14 +71,14 @@ void test_smo_1()
   vnl_random rng;
   rng.reseed(33323335);
   const unsigned nSamples = 200;
-  vcl_vector<unsigned> labels(nSamples);
-  vcl_vector<int> svlabels(nSamples);
-  vcl_vector<vnl_vector<double> > data(nSamples);
+  std::vector<unsigned> labels(nSamples);
+  std::vector<int> svlabels(nSamples);
+  std::vector<vnl_vector<double> > data(nSamples);
   vnl_vector<double> s;
-  vcl_cout << "Generating test data\n";
-  vcl_vector<unsigned> labelcount(4, 0u);
+  std::cout << "Generating test data\n";
+  std::vector<unsigned> labelcount(4, 0u);
 #if 0
-  vcl_ofstream svmtest("C:\\svmtest.txt");
+  std::ofstream svmtest("C:\\svmtest.txt");
 #endif
   for (unsigned int i=0; i<nSamples; i++)
   {
@@ -86,7 +88,7 @@ void test_smo_1()
     labelcount[c] ++;
     generator[c]->sample(s);
 #if 0
-    svmtest << s << ' ' << svlabels[i] << vcl_endl;
+    svmtest << s << ' ' << svlabels[i] << std::endl;
 #endif
     data[i] = s;
   }
@@ -98,65 +100,65 @@ void test_smo_1()
 
   mbl_data_array_wrapper<vnl_vector<double> > trainingVectors(data);
 
-  vcl_cout << "****************The Training set****************\n"
+  std::cout << "****************The Training set****************\n"
            << "The number of labels from each generators are respectively "
            << labelcount[0] << ' '
            << labelcount[1] << ' '
            << labelcount[2] << ' '
-           << labelcount[3] << vcl_endl;
+           << labelcount[3] << std::endl;
 
   vnl_vector<double> x(nDims);
-  vcl_vector<double> out(1);
+  std::vector<double> out(1);
   x.fill(0.0);
-  vcl_cout << "x(2) varies across from -2 to + 2\n"
+  std::cout << "x(2) varies across from -2 to + 2\n"
            << "x(1) varies down from -2 to + 2\n";
 
   clsfy_k_nearest_neighbour knn;
   knn.set(data, labels);
   knn.set_k(3);
-  vcl_cout << vcl_endl << "KNN output\n" << vcl_setprecision(4);
+  std::cout << std::endl << "KNN output\n" << std::setprecision(4);
   for (x(0) = -2; x(0) <= 2 ; x(0) += 0.25)
   {
     for (x(1) = -2; x(1) <= 2 ; x(1) += 0.25)
     {
       knn.class_probabilities(out, x);
-      vcl_cout << vcl_fixed << vcl_setw(3) << out[0] << ' ';
+      std::cout << std::fixed << std::setw(3) << out[0] << ' ';
     }
-    vcl_cout << vcl_endl;
+    std::cout << std::endl;
   }
 
   for (x(0) = -2; x(0) <= 2 ; x(0) += 0.25)
   {
     for (x(1) = -2; x(1) <= 2 ; x(1) += 0.25)
     {
-      vcl_cout << knn.classify(x);
+      std::cout << knn.classify(x);
     }
-    vcl_cout << vcl_endl;
+    std::cout << std::endl;
   }
 
   clsfy_rbf_parzen win;
   win.set(data, labels);
   win.set_rbf_width(0.14);
   win.set_power(10);
-  vcl_cout << vcl_endl << "Training data distribution\n"
-           << vcl_setprecision(1);
+  std::cout << std::endl << "Training data distribution\n"
+           << std::setprecision(1);
   for (x(0) = -2; x(0) <= 2 ; x(0) += 0.25)
   {
     for (x(1) = -2; x(1) <= 2 ; x(1) += 0.25)
     {
       double v = win.weightings(x);
       if (v < 0.01)
-        vcl_cout << " 0   ";
+        std::cout << " 0   ";
       else
-        vcl_cout << vcl_fixed << vcl_setw(4) << v << ' ';
+        std::cout << std::fixed << std::setw(4) << v << ' ';
     }
-    vcl_cout << vcl_endl;
+    std::cout << std::endl;
   }
 
   mbl_data_wrapper<vnl_vector<double> > &inputs = trainingVectors;
 
-  vcl_cout << "****************Testing SVM on Training set**************\n"
-           << vcl_setprecision(8) << vcl_resetiosflags(vcl_ios_floatfield);
+  std::cout << "****************Testing SVM on Training set**************\n"
+           << std::setprecision(8) << std::resetiosflags(std::ios::floatfield);
 
   clsfy_smo_1_rbf svAPI;
   svAPI.set_gamma( (1.0/(2.0*0.2*0.2)));
@@ -166,7 +168,7 @@ void test_smo_1()
   vul_timer mytimer;
 
   svAPI.calc();
-  vcl_cerr << "Optimisation took " << mytimer.real() << " milliseconds\n";
+  std::cerr << "Optimisation took " << mytimer.real() << " milliseconds\n";
 
   unsigned int nSupports=0;
   for (unsigned int i=0; i<nSamples; i++)
@@ -175,18 +177,18 @@ void test_smo_1()
     {
       nSupports++;
       inputs.set_index(i);
-      vcl_cout << i << ' ' << vcl_fabs(svAPI.lagrange_mults()(i)) << ' ';
+      std::cout << i << ' ' << std::fabs(svAPI.lagrange_mults()(i)) << ' ';
       for (unsigned int j=0; j<nDims; j++)
-        vcl_cout << inputs.current().operator()(j) << ' ';
-      vcl_cout << labels[i] <<vcl_endl;
+        std::cout << inputs.current().operator()(j) << ' ';
+      std::cout << labels[i] <<std::endl;
     }
   }
-  vcl_cout << "\n\n";
+  std::cout << "\n\n";
   TEST_NEAR("Number of support vectors", nSupports, 29, 3);
   TEST_NEAR("Bias", svAPI.bias(), -0.064, 0.03);
   TEST_NEAR("Error", svAPI.error(), 0.0, 0.0);
 
-  vcl_cout << vcl_setprecision(6) << vcl_resetiosflags(vcl_ios_floatfield);
+  std::cout << std::setprecision(6) << std::resetiosflags(std::ios::floatfield);
 }
 
 TESTMAIN(test_smo_1);

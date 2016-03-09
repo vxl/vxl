@@ -6,7 +6,9 @@
 // \author Ian Scott
 
 
-#include <vcl_string.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <string>
 #include <vil3d/vil3d_fwd.h>
 class vimt3d_transform_3d;
 class vimt3d_image_3d;
@@ -24,7 +26,7 @@ void vimt3d_save_transform(vil3d_image_resource_sptr &ir,
 //  reverts to the lowest common set.  Those formats which can cope with translations will include
 //  this as well.  It was felt that it is safest to be consistent and never save rotations/shears,
 //  rather than have them arbitrarily saved/not saved depending on the image format chosen.
-bool vimt3d_save(const vcl_string& path,
+bool vimt3d_save(const std::string& path,
                  const vimt3d_image_3d& image,
                  bool use_millimetres =false);
 

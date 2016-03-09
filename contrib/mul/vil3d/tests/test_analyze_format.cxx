@@ -1,7 +1,9 @@
 // This is mul/vil3d/tests/test_analyze_format.cxx
 #include <testlib/testlib_test.h>
 
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iostream>
 #include <vil3d/file_formats/vil3d_analyze_format.h>
 #include <vil3d/vil3d_math.h>
 #include <vil3d/vil3d_new.h>
@@ -11,13 +13,13 @@
 #include <vil3d/vil3d_save.h>
 
 template <class T>
-inline void test_analyze_format(const vcl_string& dir,vcl_string type, vil_pixel_format format, T /*dummy*/)
+inline void test_analyze_format(const std::string& dir,std::string type, vil_pixel_format format, T /*dummy*/)
 {
-  vcl_cout << "******************************************************************\n"
+  std::cout << "******************************************************************\n"
            << " Testing vil3d_analyze_format objects with pixel type = " << type << '\n'
            << "******************************************************************\n";
 
-  vcl_string filepath=dir+"/ff_"+type+".hdr";
+  std::string filepath=dir+"/ff_"+type+".hdr";
   vil3d_image_resource_sptr image_res = vil3d_load_image_resource(filepath.c_str());
   TEST("Load header successful",image_res!=VXL_NULLPTR,true);
   if (image_res==VXL_NULLPTR) return;
@@ -46,7 +48,7 @@ inline void test_analyze_format(const vcl_string& dir,vcl_string type, vil_pixel
   TEST_NEAR("Pixel value (4,3,2)",im(4,3,2),69,1e-6);
 
   // Test saving the file
-  vcl_string out_path="./analyze_format_out.hdr";
+  std::string out_path="./analyze_format_out.hdr";
   bool save_ok= vil3d_save(im,out_path.c_str());
   TEST("Save successful",save_ok,true);
   if (save_ok)
@@ -58,7 +60,7 @@ inline void test_analyze_format(const vcl_string& dir,vcl_string type, vil_pixel
 
 static void test_analyze_format(int argc, char* argv[])
 {
-  vcl_string dir(".");
+  std::string dir(".");
   if ( argc >= 2 ) dir=argv[1];
 
   test_analyze_format(dir,"float32", VIL_PIXEL_FORMAT_FLOAT, float());

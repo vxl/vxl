@@ -2,11 +2,13 @@
 #include "pop_point_3d.h"
 //:
 // \file
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iostream>
 
 
 //: constructor
-pop_point_3d::pop_point_3d(pop_vertex *coordinate_system,vcl_vector<pop_parameter*> &params):
+pop_point_3d::pop_point_3d(pop_vertex *coordinate_system,std::vector<pop_parameter*> &params):
   vgl_point_3d<double>(params[0]->value_,params[1]->value_,params[2]->value_),
   pop_geometric_object(coordinate_system,params)
 {
@@ -38,7 +40,7 @@ double pop_point_3d::cost(pop_geometric_object *other)
   pop_point_3d *p = other->cast_to_pop_point_3d();
 
   if (p->coordinate_system_ != this->coordinate_system_) {
-    vcl_cout << "Warning the systems do not match\n";
+    std::cout << "Warning the systems do not match\n";
   }
 
   if (p)

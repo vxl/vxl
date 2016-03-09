@@ -1,5 +1,7 @@
-#include <vcl_iostream.h>
-#include <vcl_cstring.h>
+#include <iostream>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <cstring>
 
 #include <vgui/vgui.h>
 #include <vgui/vgui_shell_tableau.h>
@@ -27,7 +29,7 @@
 // Print instructions on std::cout.
 void show_instructions(void)
 {
-  vcl_cout << "\nThis example program shows off the dragpoint dragger.\n"
+  std::cout << "\nThis example program shows off the dragpoint dragger.\n"
            << "\nQuick instructions:\n\n"
            << "  - Use left mouse button to rotate, mid mouse button to pan.\n"
            << "  - Pick and drag plane or stick with CTRL + left mouse button.\n\n";
@@ -96,13 +98,13 @@ int main(int argc, char** argv)
 
   // Run the specified cmd-line process with visualization in GUI Window.
   // force option "--mfc-use-gl" to use gl in initializing vgui.
-  vcl_cout << "Starting bgui3d window...\n";
+  std::cout << "Starting bgui3d window...\n";
   int my_argc = argc+1;
   char** my_argv = new char*[argc+1];
   for (int i=0; i<argc; i++)
     my_argv[i] = argv[i];
   my_argv[argc] = new char[13];
-  vcl_strcpy(my_argv[argc], "--mfc-use-gl");
+  std::strcpy(my_argv[argc], "--mfc-use-gl");
   vgui::init(my_argc, my_argv);
 
   delete[] my_argv;

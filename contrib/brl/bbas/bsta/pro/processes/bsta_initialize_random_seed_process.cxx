@@ -7,17 +7,19 @@
 //
 #include <bprb/bprb_parameters.h>
 #include <bsta/bsta_random_wrapper.h>
-#include <vcl_ctime.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <ctime>
 #include <brdb/brdb_value.h>
 
 //: sets input and output types
 bool bsta_initialize_random_seed_process_cons(bprb_func_process& pro)
 {
-  vcl_vector<vcl_string> input_types_(1);
+  std::vector<std::string> input_types_(1);
   input_types_[0] = "unsigned";
 
   //output
-  vcl_vector<vcl_string> output_types_(1);
+  std::vector<std::string> output_types_(1);
   output_types_[0]= "bsta_random_wrapper_sptr";
 
   bool good = pro.set_input_types(input_types_) &&
@@ -35,14 +37,14 @@ bool bsta_initialize_random_seed_process(bprb_func_process& pro)
   // check number of inputs
   if (!pro.verify_inputs())
   {
-    vcl_cout << pro.name() << ": Invalid inputs" << vcl_endl;
+    std::cout << pro.name() << ": Invalid inputs" << std::endl;
     return false;
   }
 
   //get the inputs
   unsigned seed = pro.get_input<unsigned>(0);
   if (!seed) {
-    pro.set_output_val<bsta_random_wrapper_sptr>(0, new bsta_random_wrapper(vcl_clock()));
+    pro.set_output_val<bsta_random_wrapper_sptr>(0, new bsta_random_wrapper(std::clock()));
   }
   else {
     pro.set_output_val<bsta_random_wrapper_sptr>(0, new bsta_random_wrapper(seed));

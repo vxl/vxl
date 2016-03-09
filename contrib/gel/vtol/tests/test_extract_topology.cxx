@@ -1,5 +1,7 @@
-#include <vcl_iostream.h>
-#include <vcl_cmath.h>
+#include <iostream>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <cmath>
 #include <vil/vil_image_view.h>
 #include <testlib/testlib_test.h>
 #include <vxl_config.h>
@@ -149,7 +151,7 @@ void
 test_vtol_extract_topology::
 test_image_1a()
 {
-  vcl_cout << "\n\nTesting image 1a\n";
+  std::cout << "\n\nTesting image 1a\n";
 
   label_image_type img( image_to_label( image_1a() ) );
 
@@ -190,12 +192,12 @@ test_image_1a()
         if ( (edges[j][i] & d) != 0 ) {
           if ( ! te.is_edge( i, j, dir ) ) {
             good = false;
-            vcl_cout << '['<<edges[j][i]<<"] ("<<i<<','<<j<<", d="<<dir<<")  should be a boundary edge\n";
+            std::cout << '['<<edges[j][i]<<"] ("<<i<<','<<j<<", d="<<dir<<")  should be a boundary edge\n";
           }
         } else {
           if ( te.is_edge( i, j, dir ) ) {
             good = false;
-            vcl_cout << '['<<edges[j][i]<<"] ("<<i<<','<<j<<", d="<<dir<<")  should not be a boundary edge\n";
+            std::cout << '['<<edges[j][i]<<"] ("<<i<<','<<j<<", d="<<dir<<")  should not be a boundary edge\n";
           }
         }
       }
@@ -212,7 +214,7 @@ void
 test_vtol_extract_topology::
 test_image_1b()
 {
-  vcl_cout << "\n\nTesting image 1b\n";
+  std::cout << "\n\nTesting image 1b\n";
 
   label_image_type img = image_to_label( image_1b() );
 
@@ -251,12 +253,12 @@ test_image_1b()
         if ( (edges[j][i] & d) != 0 ) {
           if ( ! te.is_edge( i, j, dir ) ) {
             good = false;
-            vcl_cout << '['<<edges[j][i]<<"] ("<<i<<','<<j<<", d="<<dir<<")  should be a boundary edge\n";
+            std::cout << '['<<edges[j][i]<<"] ("<<i<<','<<j<<", d="<<dir<<")  should be a boundary edge\n";
           }
         } else {
           if ( te.is_edge( i, j, dir ) ) {
             good = false;
-            vcl_cout << '['<<edges[j][i]<<"] ("<<i<<','<<j<<", d="<<dir<<")  should not be a boundary edge\n";
+            std::cout << '['<<edges[j][i]<<"] ("<<i<<','<<j<<", d="<<dir<<")  should not be a boundary edge\n";
           }
         }
       }
@@ -270,7 +272,7 @@ test_image_1b()
 static void
 test_image_2()
 {
-  vcl_cout << "\n\nTesting image 2\n";
+  std::cout << "\n\nTesting image 2\n";
 
   label_image_type img( image_to_label(image_2()) );
 
@@ -286,7 +288,7 @@ test_image_2()
 static void
 test_image_3()
 {
-  vcl_cout << "\n\nTesting image 3\n";
+  std::cout << "\n\nTesting image 3\n";
 
   label_image_type img( image_to_label(image_3()) );
 
@@ -302,7 +304,7 @@ test_image_3()
 static void
 test_image_4()
 {
-  vcl_cout << "\n\nTesting image 4\n";
+  std::cout << "\n\nTesting image 4\n";
 
   label_image_type img( image_to_label(image_4()) );
 
@@ -317,7 +319,7 @@ test_image_4()
 static void
 test_image_6()
 {
-  vcl_cout << "\n\nTesting image 6\n";
+  std::cout << "\n\nTesting image 6\n";
 
   label_image_type img( image_to_label(image_6()) );
 
@@ -341,12 +343,12 @@ has_vertex( vtol_intensity_face_sptr face, double x, double y )
   {
     vtol_vertex_2d* v2d = (*itr)->cast_to_vertex_2d();
     if ( !v2d ) {
-      vcl_cerr << "Error: Non-2D vertex in face\n";
+      std::cerr << "Error: Non-2D vertex in face\n";
       delete verts;
       return false;
     }
-    if ( vcl_abs( v2d->x() - x ) < tol &&
-         vcl_abs( v2d->y() - y ) < tol ) {
+    if ( std::abs( v2d->x() - x ) < tol &&
+         std::abs( v2d->y() - y ) < tol ) {
       delete verts;
       return true;
     }
@@ -361,17 +363,17 @@ test_smoothing()
 {
   // Make sure that smoothing doesn't move the vertices around
 
-  vcl_cout << "\n\nTesting edgel chain smoothing\n";
+  std::cout << "\n\nTesting edgel chain smoothing\n";
 
   {
-    vcl_cout << "Without smoothing\n";
+    std::cout << "Without smoothing\n";
     label_image_type img( image_to_label(image_5()) );
 
     testlib_test_begin( "Constructing extract object" );
     vtol_extract_topology< TEST_LABEL_TYPE >te( img );
     testlib_test_perform( true );
 
-    vcl_vector< vtol_intensity_face_sptr > const& faces = te.faces();
+    std::vector< vtol_intensity_face_sptr > const& faces = te.faces();
 
     TEST_EQUAL( "Face count", faces.size(), 2 );
 
@@ -383,7 +385,7 @@ test_smoothing()
   }
 
   {
-    vcl_cout << "Small smoothing (3)\n";
+    std::cout << "Small smoothing (3)\n";
     label_image_type img( image_to_label(image_5()) );
 
     testlib_test_begin( "Constructing extract object" );
@@ -391,7 +393,7 @@ test_smoothing()
       te( img, vtol_extract_topology_params().set_smooth( 3 ) );
     testlib_test_perform( true );
 
-    vcl_vector< vtol_intensity_face_sptr > const& faces = te.faces();
+    std::vector< vtol_intensity_face_sptr > const& faces = te.faces();
 
     TEST_EQUAL( "Face count", faces.size(), 2 );
 
@@ -403,7 +405,7 @@ test_smoothing()
   }
 
   {
-    vcl_cout << "Excessive smoothing (8)\n";
+    std::cout << "Excessive smoothing (8)\n";
     label_image_type img( image_to_label(image_5()) );
 
     testlib_test_begin( "Constructing extract object" );
@@ -411,7 +413,7 @@ test_smoothing()
       te( img,vtol_extract_topology_params().set_smooth( 8 ) );
     testlib_test_perform( true );
 
-    vcl_vector< vtol_intensity_face_sptr > const& faces = te.faces();
+    std::vector< vtol_intensity_face_sptr > const& faces = te.faces();
 
     TEST_EQUAL( "Face count", faces.size(), 2 );
 
@@ -429,7 +431,7 @@ test_digital_region()
 {
   // Make sure the digital regions match the segmented regions.
 
-  vcl_cout << "\n\nTesting digital region\n";
+  std::cout << "\n\nTesting digital region\n";
 
   image_type img( image_2() );
   label_image_type label_img = image_to_label(img);
@@ -438,7 +440,7 @@ test_digital_region()
   vtol_extract_topology< TEST_LABEL_TYPE > te( label_img );
   testlib_test_perform( true );
 
-  vcl_vector< vtol_intensity_face_sptr > const& faces = te.faces( img );
+  std::vector< vtol_intensity_face_sptr > const& faces = te.faces( img );
 
   TEST( "Vertex count" , te.vertices().size() >= 2, true);
   TEST_EQUAL( "Face count", te.faces().size(), 2 );

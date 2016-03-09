@@ -13,8 +13,10 @@
 //    Amir Tamrakar
 //\endverbatim
 
-#include <vcl_vector.h>
-#include <vcl_list.h>
+#include <vector>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <list>
 
 #include "sdet_edgel.h"
 #include "sdet_edgemap.h"
@@ -37,16 +39,16 @@ public:
 
 };
 
-typedef vcl_list<sdet_CFTG_link*> sdet_CFTG_link_list;
-typedef vcl_list<sdet_CFTG_link*>::iterator sdet_CFTG_link_list_iter;
+typedef std::list<sdet_CFTG_link*> sdet_CFTG_link_list;
+typedef std::list<sdet_CFTG_link*>::iterator sdet_CFTG_link_list_iter;
 
 //: This class represents the curve fragment topology graph formed from the contour fragments
 //  The links are equivalence classes of curve fragments represented by sets of edgel chains
 class sdet_CFTG
 {
 public:
-  vcl_vector<sdet_CFTG_link_list> cLinks; ///< child links
-  vcl_vector<sdet_CFTG_link_list> pLinks; ///< parent links
+  std::vector<sdet_CFTG_link_list> cLinks; ///< child links
+  std::vector<sdet_CFTG_link_list> pLinks; ///< parent links
 
   sdet_CFTG_link_list Links; ///< redundant single list of all links
 

@@ -16,13 +16,13 @@ float render_expected_image( bstm_scene_sptr & scene,
                             bocl_mem_sptr & exp_image,
                             bocl_mem_sptr & vis_image,
                             bocl_mem_sptr & exp_img_dim,
-                            vcl_string data_type,
+                            std::string data_type,
                             bocl_kernel* kernel,
-                            vcl_size_t * lthreads,
+                            std::size_t * lthreads,
                             unsigned cl_ni,
                             unsigned cl_nj,
                             int apptypesize,  float time,
-                            vcl_string label_data_type = "", int label_apptypesize = 0, bool render_label = false);
+                            std::string label_data_type = "", int label_apptypesize = 0, bool render_label = false);
 
 
 #endif // bstm_ocl_render_expected_image_function_h_

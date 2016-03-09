@@ -7,8 +7,10 @@
 
 #include <rgrl/rgrl_estimator.h>
 #include <rgrl/rgrl_feature_set.h>
-// not used? #include <vcl_vector.h>
-#include <vcl_cstdlib.h>
+// not used? #include <vector>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <cstdlib>
 #include <vcl_cassert.h>
 
 rgrl_view::
@@ -113,14 +115,14 @@ scale_by( unsigned new_resol, double scaling ) const
 
   rgrl_mask_sptr from_new_roi, to_new_roi;
 
-  if ( vcl_abs(scaling-1.0) <= 1e-5 ) // if scaling is 1.0
+  if ( std::abs(scaling-1.0) <= 1e-5 ) // if scaling is 1.0
   {
     from_new_roi = from_image_roi();
     to_new_roi   = to_image_roi();
   }
   else // approximation
   {
-    // WarningMacro( "Approximating the region of interest by scale " << scale << vcl_endl );
+    // WarningMacro( "Approximating the region of interest by scale " << scale << std::endl );
     from_new_roi = new rgrl_mask_box( from_image_roi()->x0()*scaling,
                                       from_image_roi()->x1()*scaling );
     to_new_roi = new rgrl_mask_box( to_image_roi()->x0()*scaling,

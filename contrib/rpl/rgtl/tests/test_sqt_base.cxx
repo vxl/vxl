@@ -7,7 +7,9 @@
 #include <testlib/testlib_test.h>
 
 #include <rgtl/rgtl_sqt_base.hxx>
-#include <vcl_cmath.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <cmath>
 
 static double const test_directions[100][3] =
 {{0.9409, 0.1315, -0.9139},
@@ -127,7 +129,7 @@ static void cross_product(double const a[3], double const b[3], double c[3])
 
 static void normalize(double d[3])
 {
-  double mag = vcl_sqrt(dot_product(d,d));
+  double mag = std::sqrt(dot_product(d,d));
   if (mag > 0)
   {
     d[0] /= mag;

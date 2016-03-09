@@ -1,10 +1,12 @@
 #include "bwm_observable_textured_mesh.h"
 
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iostream>
 #include <vul/vul_file.h>
 #include <vgl/vgl_point_2d.h>
 
-void bwm_observable_textured_mesh::save_gml(vcl_ostream& os, int obj_count, vpgl_lvcs* lvcs)
+void bwm_observable_textured_mesh::save_gml(std::ostream& os, int obj_count, vpgl_lvcs* lvcs)
 {
   if (lvcs) {
       //bmsh3d_textured_mesh_mc* mesh = static_cast<bmsh3d_textured_mesh_mc*>(object_);
@@ -13,7 +15,7 @@ void bwm_observable_textured_mesh::save_gml(vcl_ostream& os, int obj_count, vpgl
       os << "<gml:description>Building #" << obj_count << "</gml:description>\n";
       os << "<gml:name>Building #" << obj_count << "</gml:name>\n";
 
-      vcl_map<int, bmsh3d_face*>::iterator fit;
+      std::map<int, bmsh3d_face*>::iterator fit;
       for (fit = object_->facemap().begin(); fit!= object_->facemap().end(); fit++) {
         bmsh3d_textured_face_mc* face = (bmsh3d_textured_face_mc*)fit->second;
 
@@ -78,7 +80,7 @@ void bwm_observable_textured_mesh::save_gml(vcl_ostream& os, int obj_count, vpgl
   }
 }
 
-void bwm_observable_textured_mesh::save_kml(vcl_ostream& os, int obj_count, vpgl_lvcs* lvcs,
+void bwm_observable_textured_mesh::save_kml(std::ostream& os, int obj_count, vpgl_lvcs* lvcs,
                                             double ground_height, double x_offset, double y_offset )
 {
   if (lvcs) {
@@ -93,7 +95,7 @@ void bwm_observable_textured_mesh::save_kml(vcl_ostream& os, int obj_count, vpgl
       return;
     }
 
-    vcl_map<int, bmsh3d_face*>::iterator fit;
+    std::map<int, bmsh3d_face*>::iterator fit;
     for (fit = object_->facemap().begin(); fit!= object_->facemap().end(); fit++) {
       bmsh3d_textured_face_mc* face = (bmsh3d_textured_face_mc*)fit->second;
 
@@ -127,14 +129,14 @@ void bwm_observable_textured_mesh::save_kml(vcl_ostream& os, int obj_count, vpgl
 }
 
 
-void bwm_observable_textured_mesh::save_kml_collada(vcl_ostream& os, vpgl_lvcs* lvcs,
-                                                    vcl_string geometry_id,
-                                                    vcl_string geometry_position_id,
-                                                    vcl_string geometry_position_array_id,
-                                                    vcl_string geometry_uv_id,
-                                                    vcl_string geometry_uv_array_id,
-                                                    vcl_string geometry_vertex_id,
-                                                    vcl_string material_name)
+void bwm_observable_textured_mesh::save_kml_collada(std::ostream& os, vpgl_lvcs* lvcs,
+                                                    std::string geometry_id,
+                                                    std::string geometry_position_id,
+                                                    std::string geometry_position_array_id,
+                                                    std::string geometry_uv_id,
+                                                    std::string geometry_uv_array_id,
+                                                    std::string geometry_vertex_id,
+                                                    std::string material_name)
 {
   int nverts = num_vertices();
   int nfaces = num_faces();
@@ -145,11 +147,11 @@ void bwm_observable_textured_mesh::save_kml_collada(vcl_ostream& os, vpgl_lvcs* 
   os <<"        <float_array id=\"" << geometry_position_array_id.c_str() << "\" count=\"" << nverts*3 << "\">\n";
 
   // map vertex ID's to indices.
-  vcl_map<int,int> vert_indices;
+  std::map<int,int> vert_indices;
 
 
   int vert_idx = 0;
-  vcl_map<int, bmsh3d_vertex*>::iterator vit;
+  std::map<int, bmsh3d_vertex*>::iterator vit;
   for (vit = object_->vertexmap().begin(); vit != object_->vertexmap().end(); vit++, vert_idx++) {
     bmsh3d_vertex* v = (bmsh3d_vertex*)vit->second;
     vert_indices[v->id()] = vert_idx;
@@ -171,7 +173,7 @@ void bwm_observable_textured_mesh::save_kml_collada(vcl_ostream& os, vpgl_lvcs* 
 
   // determine total number of corners in mesh
   int ncorners = 0;
-  vcl_map<int, bmsh3d_face*>::iterator fit;
+  std::map<int, bmsh3d_face*>::iterator fit;
   for (fit = object_->facemap().begin(); fit!= object_->facemap().end(); fit++) {
     bmsh3d_textured_face_mc* face = (bmsh3d_textured_face_mc*)fit->second;
     ncorners += face->vertices().size();
@@ -210,7 +212,7 @@ void bwm_observable_textured_mesh::save_kml_collada(vcl_ostream& os, vpgl_lvcs* 
     bmsh3d_textured_face_mc* face = (bmsh3d_textured_face_mc*)fit->second;
 
     if (face->vertices().size() != 3) {
-      vcl_cerr << "ERROR! only triangle meshes are supported. Face has "<<face->vertices().size()<<" vertices.\n";
+      std::cerr << "ERROR! only triangle meshes are supported. Face has "<<face->vertices().size()<<" vertices.\n";
     }
 
    for (unsigned j=0; j< 3; j++) {
@@ -220,13 +222,13 @@ void bwm_observable_textured_mesh::save_kml_collada(vcl_ostream& os, vpgl_lvcs* 
   }
 }
 
-void bwm_observable_textured_mesh::save_x3d(vcl_ostream &os, vpgl_lvcs* lvcs)
+void bwm_observable_textured_mesh::save_x3d(std::ostream &os, vpgl_lvcs* lvcs)
 {
   if (!lvcs)
     return;
 
   if (!os.bad()) {
-    vcl_string texmap_url = tex_map_uri();
+    std::string texmap_url = tex_map_uri();
 
     os << "Transform {\n";
     os << "  children\n";
@@ -242,9 +244,9 @@ void bwm_observable_textured_mesh::save_x3d(vcl_ostream &os, vpgl_lvcs* lvcs)
     os << "        point [\n";
 
     // map vertex ID's to indices.
-    vcl_map<int,int> vert_indices;
+    std::map<int,int> vert_indices;
 
-    vcl_map<int, bmsh3d_vertex*>::iterator vit;
+    std::map<int, bmsh3d_vertex*>::iterator vit;
     int idx = 0;
     for (vit = object_->vertexmap().begin(); vit != object_->vertexmap().end(); vit++, idx++) {
       bmsh3d_vertex* v = (bmsh3d_vertex*)vit->second;
@@ -257,7 +259,7 @@ void bwm_observable_textured_mesh::save_x3d(vcl_ostream &os, vpgl_lvcs* lvcs)
     os << "      }\n";
     os << "      coordIndex[\n";
 
-    vcl_map<int, bmsh3d_face*>::iterator fit;
+    std::map<int, bmsh3d_face*>::iterator fit;
     for (fit = object_->facemap().begin(); fit!= object_->facemap().end(); fit++) {
       bmsh3d_textured_face_mc* face = (bmsh3d_textured_face_mc*)fit->second;
       os << "             ";

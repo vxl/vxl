@@ -5,8 +5,10 @@
 // \brief Tests the clsfy_binary_hyperplane_logit_builder class
 // \author TFC
 
-#include <vcl_iostream.h>
-#include <vcl_string.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iostream>
+#include <string>
 #include <vpl/vpl.h> // vpl_unlink()
 #include <clsfy/clsfy_binary_hyperplane_logit_builder.h>
 #include <vpdfl/vpdfl_axis_gaussian.h>
@@ -16,7 +18,7 @@
 //: Tests the clsfy_binary_hyperplane_logit_builder class
 void test_binary_hyperplane_logit()
 {
-  vcl_cout << "**************************************\n"
+  std::cout << "**************************************\n"
            << " Testing clsfy_binary_hyperplane_logit_builder_builder\n"
            << "**************************************\n";
 
@@ -24,8 +26,8 @@ void test_binary_hyperplane_logit()
   unsigned n_egs=50;
   unsigned n_dim=10;
   vnl_random rand1(3857);
-  vcl_vector<vnl_vector<double> > data(n_egs);
-  vcl_vector<unsigned> outputs(n_egs);
+  std::vector<vnl_vector<double> > data(n_egs);
+  std::vector<unsigned> outputs(n_egs);
 
   vnl_vector<double> mean1(n_dim,0.0),mean2(n_dim,1.1),var(n_dim,n_dim);
 
@@ -56,7 +58,7 @@ void test_binary_hyperplane_logit()
   builder.set_alpha(0.1);
   clsfy_binary_hyperplane classifier;
   double mean_error = builder.build(classifier,data1,outputs);
-  vcl_cout<<"Mean error: "<<mean_error<<vcl_endl;
+  std::cout<<"Mean error: "<<mean_error<<std::endl;
 }
 
 TESTMAIN(test_binary_hyperplane_logit);

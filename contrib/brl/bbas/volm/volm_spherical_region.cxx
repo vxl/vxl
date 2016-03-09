@@ -23,10 +23,10 @@ bool volm_spherical_region::attribute_value(spherical_region_attributes att, uns
     }
 }
 
-void volm_spherical_region::print(vcl_ostream& os)
+void volm_spherical_region::print(std::ostream& os)
 {
     os<<"Box "<<box_<<' ';
-    vcl_map<spherical_region_attributes,unsigned char>::iterator iter = attributes_.begin();
+    std::map<spherical_region_attributes,unsigned char>::iterator iter = attributes_.begin();
     for (;iter!= attributes_.end();iter++)
     {
         os<<'('<<iter->first<<", "<<(int)iter->second<<") " ;
@@ -34,10 +34,10 @@ void volm_spherical_region::print(vcl_ostream& os)
     os<<'\n';
 }
 
-vcl_vector<spherical_region_attributes> volm_spherical_region::attribute_types()
+std::vector<spherical_region_attributes> volm_spherical_region::attribute_types()
 {
-    vcl_vector<spherical_region_attributes> attributes;
-    vcl_map<spherical_region_attributes,unsigned char>::iterator iter = attributes_.begin();
+    std::vector<spherical_region_attributes> attributes;
+    std::map<spherical_region_attributes,unsigned char>::iterator iter = attributes_.begin();
     for (;iter!= attributes_.end();iter++)
     {
         attributes.push_back(iter->first);
@@ -52,7 +52,7 @@ void volm_spherical_regions_layer::add_region(volm_spherical_region region)
 }
 
 
-vcl_map<unsigned char,vcl_vector<unsigned int > >
+std::map<unsigned char,std::vector<unsigned int > >
 volm_spherical_regions_layer::attributed_regions_by_type(spherical_region_attributes att)
 {
     if ( attributed_regions_.find(att)!= attributed_regions_.end())
@@ -61,45 +61,45 @@ volm_spherical_regions_layer::attributed_regions_by_type(spherical_region_attrib
     }
     else // return an empty vector
     {
-        vcl_map<unsigned char, vcl_vector<unsigned int> > ids;
+        std::map<unsigned char, std::vector<unsigned int> > ids;
         return ids;
     }
 }
 
-vcl_vector<unsigned int >
+std::vector<unsigned int >
 volm_spherical_regions_layer::attributed_regions_by_type_only(spherical_region_attributes att)
 {
     if ( attributed_regions_.find(att)!= attributed_regions_.end())
     {
-        vcl_map<unsigned char,vcl_vector<unsigned int > >::iterator iter = attributed_regions_[att].begin();
-        vcl_vector<unsigned int>  sids;
+        std::map<unsigned char,std::vector<unsigned int > >::iterator iter = attributed_regions_[att].begin();
+        std::vector<unsigned int>  sids;
         for (;iter!=attributed_regions_[att].end();iter++)
             sids.insert(sids.begin(),iter->second.begin(),iter->second.end());
         return  sids;
     }
     else // return an empty vector
     {
-         vcl_vector<unsigned int>  ids;
+         std::vector<unsigned int>  ids;
         return ids;
     }
 }
 
-vcl_vector<unsigned int>
+std::vector<unsigned int>
     volm_spherical_regions_layer::attributed_regions_by_value(spherical_region_attributes att,unsigned char & val)
 {
-    vcl_map<unsigned char,vcl_vector<unsigned int > > temp = this->attributed_regions_by_type(att);
+    std::map<unsigned char,std::vector<unsigned int > > temp = this->attributed_regions_by_type(att);
 
     if ( temp.find(val)!= temp.end())
     {
         return temp[val];
     }
-    vcl_vector<unsigned int> ids;
+    std::vector<unsigned int> ids;
     return ids;
 }
 
 void volm_spherical_regions_layer::update_attribute_map(int id)
 {
-    vcl_vector<spherical_region_attributes> attribute_types = regions_[id].attribute_types();
+    std::vector<spherical_region_attributes> attribute_types = regions_[id].attribute_types();
     for (unsigned i =0; i < attribute_types.size(); i++)
     {
         unsigned char val =255;

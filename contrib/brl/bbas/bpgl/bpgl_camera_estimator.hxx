@@ -6,7 +6,9 @@
 #include <vnl/vnl_double_3x3.h>
 #include <vil/vil_math.h>
 #include <vcl_cassert.h>
-#include <vcl_limits.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <limits>
 
 // Default constructor
 template <class exp_edge_func>
@@ -45,19 +47,19 @@ vil_image_view<float> bpgl_camera_estimator<exp_edge_func>::convert_to_spherical
 
   vnl_double_3x3 R(0.0);
   R(0,0) = 1.0;
-  R(1,1) = vcl_cos(rotate);
-  R(1,2) = vcl_sin(rotate);
-  R(2,1) = -vcl_sin(rotate);
-  R(2,2) = vcl_cos(rotate);
+  R(1,1) = std::cos(rotate);
+  R(1,2) = std::sin(rotate);
+  R(2,1) = -std::sin(rotate);
+  R(2,2) = std::cos(rotate);
 
   for (unsigned i=0; i<imgs.ni(); i++) {
     for (unsigned j=0; j<imgs.nj(); j++) {
       double curr_theta = (0.5*vnl_math::pi) - theta_range_ + (theta_step_*(double)i);
       double curr_phi = -phi_range_ + (phi_step_*(double)j);
 
-      double x = vcl_sin(curr_theta)*vcl_cos(curr_phi);
-      double y = vcl_sin(curr_theta)*vcl_sin(curr_phi);
-      double z = vcl_cos(curr_theta);
+      double x = std::sin(curr_theta)*std::cos(curr_phi);
+      double y = std::sin(curr_theta)*std::sin(curr_phi);
+      double z = std::cos(curr_theta);
 
       vnl_double_3 curr_vector(x,y,z);
       curr_vector = R*curr_vector;
@@ -90,9 +92,9 @@ void bpgl_camera_estimator<exp_edge_func>::convert_angles_to_vector(const double
                                                                      double &vy,
                                                                      double &vz)
 {
-  vx = vcl_sin(theta)*vcl_cos(phi);
-  vy = vcl_sin(theta)*vcl_sin(phi);
-  vz = vcl_cos(theta);
+  vx = std::sin(theta)*std::cos(phi);
+  vy = std::sin(theta)*std::sin(phi);
+  vz = std::cos(theta);
 }
 
 template <class exp_edge_func>
@@ -132,7 +134,7 @@ double bpgl_camera_estimator<exp_edge_func>::estimate_rotation_angle(const vil_i
 
   int rot_size = vnl_math::ceil(rot_range_/rot_step_);
 
-  double best_score = vcl_numeric_limits<double>::min();
+  double best_score = std::numeric_limits<double>::min();
   double best_rot = 0.0;
 
   for (int r=-rot_size; r<rot_size+1; r++) {
@@ -169,7 +171,7 @@ void bpgl_camera_estimator<exp_edge_func>::estimate_rotation_iterative(const vil
                                                                         vpgl_perspective_camera<double> *cam)
 {
   if (!estimation_params_set_) {
-    vcl_cerr << "Error: estimation parameters are not set\n";
+    std::cerr << "Error: estimation parameters are not set\n";
     return;
   }
 
@@ -177,7 +179,7 @@ void bpgl_camera_estimator<exp_edge_func>::estimate_rotation_iterative(const vil
   int nj = img_e.nj();
 
   for (int iter=0; iter<max_iter_rot_angle_; iter++) {
-    vcl_cout << '.';
+    std::cout << '.';
     vil_image_view<float> img_eei(ni,nj,1);
     vil_image_view<vxl_byte> img_temp(ni,nj,1);
 

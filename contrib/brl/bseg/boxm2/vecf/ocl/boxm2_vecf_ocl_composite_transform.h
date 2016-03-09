@@ -13,7 +13,7 @@ class boxm2_vecf_ocl_composite_transform: public boxm2_vecf_ocl_vector_field
 {
   public:
     //: constructor
-    boxm2_vecf_ocl_composite_transform(vcl_vector<boxm2_vecf_ocl_vector_field_sptr> xforms);
+    boxm2_vecf_ocl_composite_transform(std::vector<boxm2_vecf_ocl_vector_field_sptr> xforms);
 
     //: compute forward transform
     // Note that both pts_source and pts_target are defined for each cell in source scene using data type float4
@@ -32,7 +32,7 @@ class boxm2_vecf_ocl_composite_transform: public boxm2_vecf_ocl_vector_field
                                            cl_command_queue &queue);
 
   private:
-    vcl_vector<boxm2_vecf_ocl_vector_field_sptr> xforms_;
+    std::vector<boxm2_vecf_ocl_vector_field_sptr> xforms_;
 };
 
 #endif

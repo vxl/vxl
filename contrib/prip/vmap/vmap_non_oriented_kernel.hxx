@@ -3,7 +3,9 @@
 #define vmap_non_oriented_kernel_hxx_
 
 #include "vmap_non_oriented_kernel.h"
-#include <vcl_list.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <list>
 
 template <class TKernel>
 void
@@ -20,7 +22,7 @@ vmap_non_oriented_kernel<TKernel>::finalise()
 {
   int nbel=this->permutation().nb_cycles() ;
   this->representatives_.initialise(nbel) ;
-  vcl_vector<int> visited (nbel,false) ;
+  std::vector<int> visited (nbel,false) ;
   for (int i=0; i<nbel;i++)
   {
     if (!graph_[i].empty() && this->representatives_.representative(i)==i)
@@ -50,9 +52,9 @@ bool vmap_non_oriented_kernel<TKernel>::add(const dart_iterator & arg)
 }
 
 template <class TKernel>
-void vmap_non_oriented_kernel<TKernel>::add_from(element_index elt, vcl_vector<int> & visited)
+void vmap_non_oriented_kernel<TKernel>::add_from(element_index elt, std::vector<int> & visited)
 {
-  vcl_list<int> fifo ;
+  std::list<int> fifo ;
   fifo.push_back(elt) ;
   visited[elt]=true ;
   while (!fifo.empty()) // breadth first strategy

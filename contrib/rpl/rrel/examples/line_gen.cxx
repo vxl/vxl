@@ -5,7 +5,9 @@
 //  Simple program to generate line data plus outliers.
 //
 
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iostream>
 #include <vnl/vnl_random.h>
 
 int
@@ -45,7 +47,7 @@ main()
       y += sigma * mz_random.normal();
       inliers ++ ;
     }
-    vcl_cout << double(x) << "  " << y << vcl_endl;
+    std::cout << double(x) << "  " << y << std::endl;
   }
 
   for ( ; x<=x1; ++ x) {
@@ -58,9 +60,9 @@ main()
       y += sigma * mz_random.normal();
       inliers ++ ;
     }
-    vcl_cout << double(x) << "  " << y << vcl_endl;
+    std::cout << double(x) << "  " << y << std::endl;
   }
-  vcl_cerr << "outlier frac = " << outliers / double(inliers+outliers) << vcl_endl;
+  std::cerr << "outlier frac = " << outliers / double(inliers+outliers) << std::endl;
 
   return 0;
 }

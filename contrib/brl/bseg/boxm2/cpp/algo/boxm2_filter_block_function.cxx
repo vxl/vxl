@@ -9,9 +9,9 @@ boxm2_filter_block_function::boxm2_filter_block_function(boxm2_scene_sptr scene,
   : scene_(scene)
 {
   //1. allocate new alpha data array (stays the same size)
-  vcl_cout<<"Allocating new data blocks"<<vcl_endl;
+  std::cout<<"Allocating new data blocks"<<std::endl;
   boxm2_block_id id = blk->block_id();
-  vcl_size_t dataSize = alphas->buffer_length();
+  std::size_t dataSize = alphas->buffer_length();
   boxm2_data_base* newA = new boxm2_data_base(new char[dataSize], dataSize, id);
   float*   alpha_cpy = (float*) newA->data_buffer();
 
@@ -20,10 +20,10 @@ boxm2_filter_block_function::boxm2_filter_block_function(boxm2_scene_sptr scene,
   float*   alpha_data = (float*) alphas->data_buffer();
 
   //iterate through each block, filtering the root level first
-  vcl_cout<<"Filtering scene: "<<vcl_flush;
+  std::cout<<"Filtering scene: "<<std::flush;
   for (unsigned int x=0; x<trees.get_row1_count(); ++x)
   {
-    vcl_cout<<'['<<x<<'/'<<trees.get_row1_count()<<']'<<vcl_flush;
+    std::cout<<'['<<x<<'/'<<trees.get_row1_count()<<']'<<std::flush;
     for (unsigned int y=0; y<trees.get_row2_count(); ++y)
     {
       for (unsigned int z=0; z<trees.get_row3_count(); ++z)
@@ -33,8 +33,8 @@ boxm2_filter_block_function::boxm2_filter_block_function(boxm2_scene_sptr scene,
         boct_bit_tree bit_tree( (unsigned char*) tree.data_block(), data.max_level_);
 
         //FOR ALL LEAVES IN CURRENT TREE
-        vcl_vector<int> leafBits = bit_tree.get_leaf_bits();
-        vcl_vector<int>::iterator iter;
+        std::vector<int> leafBits = bit_tree.get_leaf_bits();
+        std::vector<int>::iterator iter;
         for (iter = leafBits.begin(); iter != leafBits.end(); ++iter)
         {
           int currBitIndex = (*iter);
@@ -46,10 +46,10 @@ boxm2_filter_block_function::boxm2_filter_block_function(boxm2_scene_sptr scene,
           //get cell center, and get six neighbor points
           vgl_point_3d<double> localCenter = bit_tree.cell_center(currBitIndex);
           vgl_point_3d<double> cellCenter(localCenter.x() + x, localCenter.y() + y, localCenter.z() + z);
-          vcl_vector<vgl_point_3d<double> > neighborPoints = this->neighbor_points(cellCenter, side_len, trees);
+          std::vector<vgl_point_3d<double> > neighborPoints = this->neighbor_points(cellCenter, side_len, trees);
 
           //get each prob and sort it
-          vcl_vector<float> probs;
+          std::vector<float> probs;
           for (unsigned int i=0; i<neighborPoints.size(); ++i)
           {
             //load neighbor block/tree
@@ -75,7 +75,7 @@ boxm2_filter_block_function::boxm2_filter_block_function(boxm2_scene_sptr scene,
 #endif
               //grab alpha, calculate probability
               float alpha = alpha_data[idx];
-              float prob = 1.0f - (float)vcl_exp(-alpha * side_len * data.sub_block_dim_.x());
+              float prob = 1.0f - (float)std::exp(-alpha * side_len * data.sub_block_dim_.x());
               probs.push_back(prob);
             }
             else //neighbor is smaller, must combine neighborhood
@@ -87,15 +87,15 @@ boxm2_filter_block_function::boxm2_filter_block_function(boxm2_scene_sptr scene,
 #else // USE_ALPHALEN
               float totalAlphaL = 0.0f;
 #endif
-              vcl_vector<int> subLeafBits = neighborTree.get_leaf_bits(neighborBitIdx);
-              vcl_vector<int>::iterator leafIter;
+              std::vector<int> subLeafBits = neighborTree.get_leaf_bits(neighborBitIdx);
+              std::vector<int>::iterator leafIter;
               for (leafIter = subLeafBits.begin(); leafIter != subLeafBits.end(); ++leafIter) {
                  //side length of the cell
                 int ndepth = bit_tree.depth_at( *leafIter );
                 double nlen = 1.0 / (double) (1<<ndepth);
                 int dataIndex = neighborTree.get_data_index(*leafIter);
 #ifdef USE_AVGPROB
-                totalProb += (1.0f - vcl_exp(-alpha_data[dataIndex] * nlen * data.sub_block_dim_.x()) );
+                totalProb += (1.0f - std::exp(-alpha_data[dataIndex] * nlen * data.sub_block_dim_.x()) );
                 totalLen += nlen*data.sub_block_dim_.x();
 #else
                 totalAlphaL += (float)(alpha_data[dataIndex] * nlen * data.sub_block_dim_.x());
@@ -104,7 +104,7 @@ boxm2_filter_block_function::boxm2_filter_block_function(boxm2_scene_sptr scene,
 #ifdef USE_AVGPROB
               float prob = totalProb / totalLen;
 #else
-              float prob = 1.0f - vcl_exp( -totalAlphaL );
+              float prob = 1.0f - std::exp( -totalAlphaL );
 #endif
               probs.push_back(prob);
             }
@@ -112,12 +112,12 @@ boxm2_filter_block_function::boxm2_filter_block_function(boxm2_scene_sptr scene,
 
           //if you've collected a nonzero amount of probs, update it
           int currIdx = bit_tree.get_data_index(currBitIndex);
-          float prob = 1.0f - (float)vcl_exp( -alpha_data[currIdx] * side_len * data.sub_block_dim_.x() );
+          float prob = 1.0f - (float)std::exp( -alpha_data[currIdx] * side_len * data.sub_block_dim_.x() );
           probs.push_back(prob);
           if (probs.size() > 0) {
-            vcl_sort( probs.begin(), probs.end() );
+            std::sort( probs.begin(), probs.end() );
             double median = probs[ (int) (probs.size()/2) ];
-            double medAlpha = - vcl_log(1.0-median) / ( side_len * data.sub_block_dim_.x() );
+            double medAlpha = - std::log(1.0-median) / ( side_len * data.sub_block_dim_.x() );
 
             //store the median value in the new alpha (copy)
             alpha_cpy[currIdx] = float(medAlpha);
@@ -134,10 +134,10 @@ boxm2_filter_block_function::boxm2_filter_block_function(boxm2_scene_sptr scene,
 
 
 //: returns a list of 3d points (int locations) of neighboring blocks
-vcl_vector<vgl_point_3d<int> >
+std::vector<vgl_point_3d<int> >
 boxm2_filter_block_function::neighbors( vgl_point_3d<int>& center, boxm2_array_3d<uchar16>& trees )
 {
-  vcl_vector<vgl_point_3d<int> > toReturn;
+  std::vector<vgl_point_3d<int> > toReturn;
 
   //neighbors along X
   if ( center.x() + 1 < (int)trees.get_row1_count() )
@@ -162,10 +162,10 @@ boxm2_filter_block_function::neighbors( vgl_point_3d<int>& center, boxm2_array_3
 
 
 //: returns a list of 3d points of neighboring blocks
-vcl_vector<vgl_point_3d<double> >
+std::vector<vgl_point_3d<double> >
 boxm2_filter_block_function::neighbor_points( vgl_point_3d<double>& cellCenter, double side_len, const boxm2_array_3d<uchar16>& trees )
 {
-  vcl_vector<vgl_point_3d<double> > toReturn;
+  std::vector<vgl_point_3d<double> > toReturn;
 
   //neighbors along X
   if ( cellCenter.x() + side_len < trees.get_row1_count() )

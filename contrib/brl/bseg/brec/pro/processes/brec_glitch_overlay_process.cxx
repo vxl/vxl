@@ -14,7 +14,9 @@
 
 #include <bprb/bprb_func_process.h>
 #include <bprb/bprb_parameters.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iostream>
 #include <brdb/brdb_value.h>
 #include <vil/vil_image_view.h>
 #include <vil/vil_convert.h>
@@ -27,7 +29,7 @@ bool brec_glitch_overlay_process_cons(bprb_func_process& pro)
 {
   //inputs
   bool ok=false;
-  vcl_vector<vcl_string> input_types;
+  std::vector<std::string> input_types;
   input_types.push_back("vil_image_view_base_sptr"); //input probability frame
   input_types.push_back("vil_image_view_base_sptr"); //input img
   input_types.push_back("unsigned"); // size of the inner-square for the glitch mask (e.g. 5 means we're detecting foreground islands of 5x5 on background)
@@ -35,7 +37,7 @@ bool brec_glitch_overlay_process_cons(bprb_func_process& pro)
   if (!ok) return ok;
 
   //output
-  vcl_vector<vcl_string> output_types;
+  std::vector<std::string> output_types;
   output_types.push_back("vil_image_view_base_sptr");  // output float overlayed glitch map
   output_types.push_back("vil_image_view_base_sptr");  // output float overlayed glitch map as stretched to byte img
   output_types.push_back("vil_image_view_base_sptr");  // output the glitch map as overlayed on input img
@@ -48,7 +50,7 @@ bool brec_glitch_overlay_process(bprb_func_process& pro)
 {
   // Sanity check
   if (pro.n_inputs() < 3){
-    vcl_cerr << " brec_glitch_overlay_process - invalid inputs\n";
+    std::cerr << " brec_glitch_overlay_process - invalid inputs\n";
     return false;
   }
 
@@ -79,20 +81,20 @@ bool brec_glitch_overlay_process(bprb_func_process& pro)
       for (unsigned j = 0; j < nj; j++) {
         out2(i,j,0) = input_img(i,j,0);
         out2(i,j,1) = input_img(i,j,1);
-        out2(i,j,2) = (vxl_byte)(vcl_floor(out(i,j)*255.0f+0.5f));
+        out2(i,j,2) = (vxl_byte)(std::floor(out(i,j)*255.0f+0.5f));
       }
   } else {
     for (unsigned i = 0; i < ni; i++)
       for (unsigned j = 0; j < nj; j++) {
         out2(i,j,0) = input_img(i,j,0);
         out2(i,j,1) = input_img(i,j,0);
-        out2(i,j,2) = (vxl_byte)(vcl_floor(out(i,j)*255.0f+0.5f));
+        out2(i,j,2) = (vxl_byte)(std::floor(out(i,j)*255.0f+0.5f));
       }
   }
 
   float min, max;
   vil_math_value_range(out, min, max);
-  vcl_cout << "\t glitch map overlayed min: " << min << " max: " << max << vcl_endl;
+  std::cout << "\t glitch map overlayed min: " << min << " max: " << max << std::endl;
   vil_image_view<vxl_byte> out_byte(ni, nj, 1);
   vil_convert_stretch_range_limited(out, out_byte, 0.0f, max);
 

@@ -1,11 +1,13 @@
-#include <vcl_iostream.h>
-#include <vcl_iomanip.h>
-#include <vcl_sstream.h>
+#include <iostream>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iomanip>
+#include <sstream>
 #include <vnl/vnl_random.h>
-#include <vcl_string.h>
+#include <string>
 #include <vul/vul_file.h>
 #include <vul/vul_arg.h>
-#include <vcl_vector.h>
+#include <vector>
 #include <vsl/vsl_binary_io.h>
 #include <vsl/vsl_vector_io.h>
 #include <vsl/vsl_binary_loader.h>
@@ -18,28 +20,28 @@
 #include <vsol/vsol_box_2d.h>
 
 
-static vcl_string image_sequence_path(vcl_string const& dir_path,
-                                      vcl_string const& sname,
+static std::string image_sequence_path(std::string const& dir_path,
+                                      std::string const& sname,
                                       unsigned index,
-                                      vcl_string const& format)
+                                      std::string const& format)
 {
-  vcl_stringstream str;
-  str << vcl_setw(5) << vcl_setfill('0') << index;
-  vcl_string path = dir_path + "\\" + sname +str.str();
-  vcl_string save_path = path + '.' + format;
+  std::stringstream str;
+  str << std::setw(5) << std::setfill('0') << index;
+  std::string path = dir_path + "\\" + sname +str.str();
+  std::string save_path = path + '.' + format;
   return save_path;
 }
 
-static bool extract_snippets(vcl_string const& spatial_object_path,
-                             vcl_string const& image_path,
-                             vcl_string const& snippet_output_dir,
-                             vcl_string const& mode,
+static bool extract_snippets(std::string const& spatial_object_path,
+                             std::string const& image_path,
+                             std::string const& snippet_output_dir,
+                             std::string const& mode,
                              unsigned num_objects)
 {
   if (image_path == ""||
     snippet_output_dir == "")
   {
-    vcl_cerr<< " image path or output path arguments are empty" << vcl_endl;
+    std::cerr<< " image path or output path arguments are empty" << std::endl;
     return false;
   }
 
@@ -47,26 +49,26 @@ static bool extract_snippets(vcl_string const& spatial_object_path,
   vil_image_resource_sptr image = vil_load_image_resource(image_path.c_str());
   if (!image)
   {
-    vcl_cerr << "image failed to load "
-      << image_path << vcl_endl;
+    std::cerr << "image failed to load "
+      << image_path << std::endl;
     return false;
   }
 
 
   //get the 2d spatial objects
-  vcl_vector<vsol_spatial_object_2d_sptr> sos;
+  std::vector<vsol_spatial_object_2d_sptr> sos;
 
   if (mode == "binary")
   {
     if (spatial_object_path == "")
     {
-      vcl_cerr << "Spatial object path is empty" << vcl_endl;
+      std::cerr << "Spatial object path is empty" << std::endl;
       return false;
     }
     vsl_b_ifstream istr(spatial_object_path);
     if (!istr) {
-      vcl_cerr << "Failed to open spatial object input stream "
-        << spatial_object_path << vcl_endl;
+      std::cerr << "Failed to open spatial object input stream "
+        << spatial_object_path << std::endl;
       return false;
     }
 
@@ -74,8 +76,8 @@ static bool extract_snippets(vcl_string const& spatial_object_path,
 
     if (!sos.size())
     {
-      vcl_cerr << "no spatial objects in file "
-        << spatial_object_path << vcl_endl;
+      std::cerr << "no spatial objects in file "
+        << spatial_object_path << std::endl;
       return false;
     }
 
@@ -93,7 +95,7 @@ static bool extract_snippets(vcl_string const& spatial_object_path,
       vsol_point_2d_sptr p1 = new vsol_point_2d(v1+10, v2);
       vsol_point_2d_sptr p2 = new vsol_point_2d(v1+10, v2+10);
       vsol_point_2d_sptr p3 = new vsol_point_2d(v1, v2+10);
-      vcl_vector<vsol_point_2d_sptr> vertices;
+      std::vector<vsol_point_2d_sptr> vertices;
       vertices.push_back(p0);
       vertices.push_back(p1);
       vertices.push_back(p2);
@@ -103,7 +105,7 @@ static bool extract_snippets(vcl_string const& spatial_object_path,
     }
   }
   else
-    vcl_cout << "unsupported spatialobject generation type" << vcl_endl;
+    std::cout << "unsupported spatialobject generation type" << std::endl;
 
 
   if (!vul_file::exists(snippet_output_dir))
@@ -111,7 +113,7 @@ static bool extract_snippets(vcl_string const& spatial_object_path,
       return false;
 
   unsigned ni = 0, nj = 0;
-  for (vcl_vector<vsol_spatial_object_2d_sptr>::iterator soit = sos.begin();
+  for (std::vector<vsol_spatial_object_2d_sptr>::iterator soit = sos.begin();
     soit != sos.end(); ++soit)
   {
     vsol_spatial_object_2d_sptr so = (*soit);
@@ -127,12 +129,12 @@ static bool extract_snippets(vcl_string const& spatial_object_path,
   }
   if (!ni || !nj)
   {
-    vcl_cerr << "degenerate snippet\n";
+    std::cerr << "degenerate snippet\n";
     return false;
   }
 
   unsigned index = 0;
-  for (vcl_vector<vsol_spatial_object_2d_sptr>::iterator soit = sos.begin();
+  for (std::vector<vsol_spatial_object_2d_sptr>::iterator soit = sos.begin();
     soit != sos.end(); ++soit, ++index)
   {
     vsol_spatial_object_2d_sptr so = (*soit);
@@ -148,12 +150,12 @@ static bool extract_snippets(vcl_string const& spatial_object_path,
     unsigned j0 = static_cast<unsigned>(cy-nj/2);
     vil_image_view_base_sptr view = image->get_view(i0, ni, j0, nj);
     // create the output snippet file path
-    vcl_string path = image_sequence_path(snippet_output_dir,
+    std::string path = image_sequence_path(snippet_output_dir,
       "snippet", index,
       "tiff");
     if (!vil_save(*view, path.c_str()))
     {
-      vcl_cerr << "snippet not saved to " << path << vcl_endl;
+      std::cerr << "snippet not saved to " << path << std::endl;
       return false;
     }
   }
@@ -175,12 +177,12 @@ int main(int argc, char** argv)
   //4. -number_sos(Optional): Number of spatial objects. Must be specified in
   //                          random mode
 
-  vul_arg<vcl_string> spatial_object_mode(arglist, "-spatial_object_mode",
+  vul_arg<std::string> spatial_object_mode(arglist, "-spatial_object_mode",
     "spatial object mode", "");
-  vul_arg<vcl_string> spatial_object_path(arglist, "-spatial_object_path",
+  vul_arg<std::string> spatial_object_path(arglist, "-spatial_object_path",
     "spatial object path", "");
-  vul_arg<vcl_string> image_path(arglist, "-image_path", "image path", "");
-  vul_arg<vcl_string> snippet_output_dir(arglist, "-snippet_output_dir",
+  vul_arg<std::string> image_path(arglist, "-image_path", "image path", "");
+  vul_arg<std::string> snippet_output_dir(arglist, "-snippet_output_dir",
     "snippet output file directory", "");
   vul_arg<unsigned> number_objects(arglist, "-number_objects",
     "number objects", 0);

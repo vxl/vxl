@@ -1,7 +1,9 @@
 #include "rgrl_initializer_inv_indexing.h"
 
-#include <vcl_vector.h>
-#include <vcl_algorithm.h>
+#include <vector>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <algorithm>
 #include <vcl_cassert.h>
 
 #include <rsdl/rsdl_kd_tree.h>
@@ -51,20 +53,20 @@ rgrl_initializer_inv_indexing( rgrl_mask_sptr const&     from_image_roi,
 
 void
 rgrl_initializer_inv_indexing::
-add_data( vcl_vector<rgrl_invariant_sptr> const& fixed_set,
-          vcl_vector<rgrl_invariant_sptr> const& moving_set,
+add_data( std::vector<rgrl_invariant_sptr> const& fixed_set,
+          std::vector<rgrl_invariant_sptr> const& moving_set,
           double nn_radius,
           unsigned int k_nn )
 {
-  vcl_vector<vcl_vector<rgrl_invariant_sptr> > moving_sets;
+  std::vector<std::vector<rgrl_invariant_sptr> > moving_sets;
   moving_sets.push_back( moving_set );
   add_multiple_data( fixed_set, moving_sets, nn_radius , k_nn );
 }
 
 void
 rgrl_initializer_inv_indexing::
-add_multiple_data( vcl_vector<rgrl_invariant_sptr> const& fixed_set,
-                   vcl_vector<vcl_vector<rgrl_invariant_sptr> > const& moving_sets,
+add_multiple_data( std::vector<rgrl_invariant_sptr> const& fixed_set,
+                   std::vector<std::vector<rgrl_invariant_sptr> > const& moving_sets,
                    double nn_radius,
                    unsigned int k_nn )
 {
@@ -81,7 +83,7 @@ add_multiple_data( vcl_vector<rgrl_invariant_sptr> const& fixed_set,
   unsigned int na = fixed_set[0]->angular_invariants().size();
 
   // Construct a kd-tree for the set of search points from the fixed_set
-  vcl_vector<rsdl_point> search_pts(fixed_set.size());
+  std::vector<rsdl_point> search_pts(fixed_set.size());
   for (unsigned int pt=0; pt<fixed_set.size(); ++pt) {
     // Set number of expected cartesian and angular values
     search_pts[pt].resize( nc, na );
@@ -102,8 +104,8 @@ add_multiple_data( vcl_vector<rgrl_invariant_sptr> const& fixed_set,
       query_pt.set_angular(moving_sets[m_ind][pt]->angular_invariants());
 
       // Find all points (and their indices) within nn_radius of the query_pt
-      vcl_vector<rsdl_point> near_neighbor_pts;
-      vcl_vector<int> near_neighbor_indices;
+      std::vector<rsdl_point> near_neighbor_pts;
+      std::vector<int> near_neighbor_indices;
       if ( nn_radius > 0.0 ) {
         kd_tree.points_in_radius( query_pt, nn_radius, near_neighbor_pts,
                                   near_neighbor_indices );
@@ -119,7 +121,7 @@ add_multiple_data( vcl_vector<rgrl_invariant_sptr> const& fixed_set,
         matches_[m_ind].push_back( new rgrl_invariant_match(moving_sets[m_ind][pt], fixed_set[near_neighbor_indices[nn_ind]]) );
       }
     }
-    vcl_sort(matches_[m_ind].begin(), matches_[m_ind].end(), dist_greater);
+    std::sort(matches_[m_ind].begin(), matches_[m_ind].end(), dist_greater);
   }
 }
 
@@ -131,7 +133,7 @@ set_current_moving_image( unsigned int moving_image_index)
   num_matches_tried_ = 0;
 }
 
-const vcl_vector<rgrl_invariant_match_sptr>&
+const std::vector<rgrl_invariant_match_sptr>&
 rgrl_initializer_inv_indexing::
 matches_for_moving_image( unsigned int moving_image_index)
 {

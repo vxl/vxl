@@ -12,7 +12,9 @@
 //   None
 // \endverbatim
 
-#include <vcl_vector.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <vector>
 #include <vsl/vsl_binary_io.h>
 #include <icam/icam_image.h>
 #include <icam/icam_transform_2d.h>

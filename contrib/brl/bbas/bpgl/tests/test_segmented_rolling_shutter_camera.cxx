@@ -1,6 +1,8 @@
 #include <testlib/testlib_test.h>
-#include <vcl_iostream.h>
-#include <vcl_fstream.h>
+#include <iostream>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <fstream>
 #include <vpl/vpl.h>
 
 #include <bpgl/bpgl_segmented_rolling_shutter_camera.h>
@@ -28,15 +30,15 @@ static void test_segmented_rolling_shutter_camera()
   vgl_rotation_3d<double> R1; // the identity
   vgl_homg_point_3d<double>center1(0,0,-10.0);
   vpgl_perspective_camera<double> P1(K, center1, R1);
-  vcl_cout << "Camera 1 " << P1;
+  std::cout << "Camera 1 " << P1;
 
   vgl_rotation_3d<double> R2; // the identity
   vgl_homg_point_3d<double>center2(0,0,-10.0);
   vpgl_perspective_camera<double> P2(K, center2, R2);
-  vcl_cout << "Camera 2 " << P2;
+  std::cout << "Camera 2 " << P2;
 
 
-  vcl_map<unsigned int,vpgl_perspective_camera<double> >  cam_map;
+  std::map<unsigned int,vpgl_perspective_camera<double> >  cam_map;
   cam_map[0]=P1;
   cam_map[384]=P2;
 
@@ -50,12 +52,12 @@ static void test_segmented_rolling_shutter_camera()
   vgl_homg_point_3d<double>hp_3d(0,0,0);
   vgl_homg_point_2d<double>hp_2d, hpa_2d;
   hp_2d = P(hp_3d);
-  vcl_cout << "p3d " << hp_3d << " p2d " << hp_2d << '\n';
+  std::cout << "p3d " << hp_3d << " p2d " << hp_2d << '\n';
   TEST_NEAR("test projection to principal point", hp_2d.x()/hp_2d.w(), 512, 1e-06);
 
   vgl_homg_point_3d<double>hpa_3d(10,20,10);
   hpa_2d = P(hpa_3d);
-  vcl_cout << "p3da " << hpa_3d << " p2da " << hpa_2d << '\n';
+  std::cout << "p3da " << hpa_3d << " p2da " << hpa_2d << '\n';
   TEST_NEAR("test x projection of arbitrary point", hpa_2d.x()/hpa_2d.w(), 1512, 1e-06);
 
   TEST_NEAR("test y projection of arbitrary point", hpa_2d.y()/hpa_2d.w(), 2384, 1e-06);
@@ -67,10 +69,10 @@ static void test_segmented_rolling_shutter_camera()
   vgl_h_matrix_3d<double> tr;
   tr.set_identity();
   tr.set_rotation_about_axis(axis, theta);
-  vcl_cout <<"Rotation Matrix\n" << tr << '\n';
+  std::cout <<"Rotation Matrix\n" << tr << '\n';
   bpgl_segmented_rolling_shutter_camera<double> P_rot =
     bpgl_segmented_rolling_shutter_camera<double>::postmultiply(P, tr);
-  vcl_cout << "P_rot\n" << P_rot << '\n';
+  std::cout << "P_rot\n" << P_rot << '\n';
 
   // test look_at
   {
@@ -83,8 +85,8 @@ static void test_segmented_rolling_shutter_camera()
     bool infront = !P.is_behind_camera(target);
     vgl_point_2d<double> tgt(P(target));
     vgl_point_2d<double> abv(P(above));
-    vcl_cout << "target projects to "<< tgt << vcl_endl
-             << "this point should be above "<< abv << vcl_endl;
+    std::cout << "target projects to "<< tgt << std::endl
+             << "this point should be above "<< abv << std::endl;
     TEST("look_at - in front of camera", infront, true);
     TEST_NEAR("look_at - target projects to prin. pt.", (tgt - K.principal_point()).length(), 0.0, 1e-8);
     // a point above the target should project above in the image (-Y is "up" in the image)
@@ -93,14 +95,14 @@ static void test_segmented_rolling_shutter_camera()
 
   vgl_homg_point_3d<double> X(10.,0,0);
   vgl_point_2d<double> hur = P_rot.project(X);
-  vcl_cout << X << '\n' << hur << '\n';
+  std::cout << X << '\n' << hur << '\n';
   TEST_NEAR("test postmultipy with pure rotation", hur.x(), 5340.43, 0.01);
   //shift down 1 unit in z
   tr.set_translation(0.0, 0.0, -1.0);
   bpgl_segmented_rolling_shutter_camera<double> P_rott =
     bpgl_segmented_rolling_shutter_camera<double>::postmultiply(P, tr);
   vgl_point_2d<double> hurt = P_rott.project(X);
-  vcl_cout << X << '\n' << hurt << '\n';
+  std::cout << X << '\n' << hurt << '\n';
   TEST_NEAR("test postmultipy with general Euclidean", hurt.x(),  7843.59, 0.01);
 
   // test align up/down
@@ -164,11 +166,11 @@ static void test_segmented_rolling_shutter_camera()
   Po.set_camera_center(c);
   Po.set_rotation(rot);
   Po.set_calibration(Ko);
-  vcl_string cam_path = "cam_path";
-  vcl_ofstream os(cam_path.c_str());
+  std::string cam_path = "cam_path";
+  std::ofstream os(cam_path.c_str());
   os << Po;
   os.close();
-  vcl_ifstream is(cam_path.c_str());
+  std::ifstream is(cam_path.c_str());
   bpgl_segmented_rolling_shutter_camera<double> Pin;
   is >> Pin;
   bool eql = cams_near_equal(Pin, Po, 0.01);

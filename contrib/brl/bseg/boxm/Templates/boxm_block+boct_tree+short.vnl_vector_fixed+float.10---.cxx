@@ -3,7 +3,9 @@
 #include <boxm/boxm_scene.hxx>
 #include <vnl/vnl_vector_fixed.h>
 #include <vbl/vbl_array_3d.hxx>
-#include <vcl_string.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <string>
 
 typedef boct_tree<short, vnl_vector_fixed<float,10> > tree_type;
 

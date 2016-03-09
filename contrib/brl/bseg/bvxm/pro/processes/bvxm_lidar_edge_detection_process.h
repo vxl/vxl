@@ -22,7 +22,9 @@
 // \endverbatim
 
 #include <bprb/bprb_func_process.h>
-#include <vcl_string.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <string>
 
 //: global variables/functions
 namespace bvxm_lidar_edge_detection_process_globals
@@ -31,7 +33,7 @@ namespace bvxm_lidar_edge_detection_process_globals
   const unsigned n_outputs_ =3;
 
   // set parameter identifying strings
-  const vcl_string param_thresh_diff_ =  "threshold_edge_difference";
+  const std::string param_thresh_diff_ =  "threshold_edge_difference";
 }
 
 //: set input and output types

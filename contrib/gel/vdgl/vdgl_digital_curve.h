@@ -18,7 +18,9 @@
 //                                to distinguish from vsol cast_to_digital_curve()
 // \endverbatim
 
-#include <vcl_iosfwd.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iosfwd>
 #include <vdgl/vdgl_digital_curve_sptr.h>
 #include <vsol/vsol_curve_2d.h>
 #include <vsol/vsol_point_2d_sptr.h>
@@ -108,17 +110,17 @@ class vdgl_digital_curve : public vsol_curve_2d
   short version() const;
 
   //: Print an ascii summary to the stream
-  void print_summary(vcl_ostream &os) const;
+  void print_summary(std::ostream &os) const;
 
   //: Return a platform independent string identifying the class
-  virtual vcl_string is_a() const { return vcl_string("vdgl_digital_curve"); }
+  virtual std::string is_a() const { return std::string("vdgl_digital_curve"); }
 
   //: Return true if the argument matches the string identifying the class or any parent class
-  virtual bool is_class(const vcl_string& cls) const { return cls==is_a(); }
+  virtual bool is_class(const std::string& cls) const { return cls==is_a(); }
 };
 
 //: Stream operator
-vcl_ostream& operator<<(vcl_ostream& s, const vdgl_digital_curve& dc);
+std::ostream& operator<<(std::ostream& s, const vdgl_digital_curve& dc);
 
 //: Binary save vdgl_digital_curve* to stream.
 void vsl_b_write(vsl_b_ostream &os, const vdgl_digital_curve* dc);
@@ -127,6 +129,6 @@ void vsl_b_write(vsl_b_ostream &os, const vdgl_digital_curve* dc);
 void vsl_b_read(vsl_b_istream &is, vdgl_digital_curve* &dc);
 
 //: Print human readable summary of vdgl_digital_curve* to a stream.
-void vsl_print_summary(vcl_ostream &os, const vdgl_digital_curve* dc);
+void vsl_print_summary(std::ostream &os, const vdgl_digital_curve* dc);
 
 #endif // vdgl_digital_curve_h_

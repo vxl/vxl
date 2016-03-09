@@ -222,7 +222,7 @@ void bgui_picker_tableau::pick_polyline(vsol_polyline_2d_sptr& poly)
 
 //========================================================================
 // add max as argument to this method
-bool bgui_picker_tableau::pick_point_set(vcl_vector< vsol_point_2d_sptr >& ps_list,
+bool bgui_picker_tableau::pick_point_set(std::vector< vsol_point_2d_sptr >& ps_list,
                                          unsigned max)
 {
   obj_type = point_set_enum;
@@ -249,9 +249,9 @@ bool bgui_picker_tableau::pick_point_set(vcl_vector< vsol_point_2d_sptr >& ps_li
   else       // too many points picked?
     {
       ps_list.clear();          // error, return empty list
-      vcl_cout << "Error, " << point_set_list.size()
+      std::cout << "Error, " << point_set_list.size()
          << " points picked (more than " << max << ")!!  Try again.\n";
-      vcl_cout.flush();
+      std::cout.flush();
       return false;
     }
 }
@@ -280,7 +280,7 @@ bool bgui_picker_tableau::handle(const vgui_event& e)
     child_handled = child_tab->handle(e);
 #ifdef DEBUG
   if(e.type != vgui_MOTION)
-    vcl_cout << "picker " << e << '\n' << vcl_flush;
+    std::cout << "picker " << e << '\n' << std::flush;
 #endif
   use_event_ = true;
   //---- Object type is point -----
@@ -461,8 +461,8 @@ bool bgui_picker_tableau::handle(const vgui_event& e)
   post_overlay_redraw();
   return true;
 #ifdef DEBUG
-  vcl_cout << "Left click returned " << ix << ",  " << iy  << vcl_endl;
-  vcl_cout.flush();
+  std::cout << "Left click returned " << ix << ",  " << iy  << std::endl;
+  std::cout.flush();
 #endif
       }
 
@@ -474,8 +474,8 @@ bool bgui_picker_tableau::handle(const vgui_event& e)
       point_set_list.push_back(vsol_point_2d_sptr(new vsol_point_2d(ix,iy)));
       post_overlay_redraw();
 #ifdef DEBUG
-      vcl_cout << "Shift left returned " << ix << ",  " << iy << vcl_endl;
-      vcl_cout.flush();
+      std::cout << "Shift left returned " << ix << ",  " << iy << std::endl;
+      std::cout.flush();
 #endif
     }
 
@@ -483,8 +483,8 @@ bool bgui_picker_tableau::handle(const vgui_event& e)
     active = false;
     picking_completed = true;
 #ifdef DEBUG
-    vcl_cout << "Detected either middle or END key\n";
-    vcl_cout.flush();
+    std::cout << "Detected either middle or END key\n";
+    std::cout.flush();
 #endif
     return true;
   }

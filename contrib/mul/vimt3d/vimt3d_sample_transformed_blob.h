@@ -23,17 +23,17 @@ template<class T>
 inline void vimt3d_sample_transformed_blob(
                           const vil3d_image_view<T>& image,
                           const vimt3d_transform_3d& i2i,
-                          const vcl_vector<vil3d_chord>& chords,
+                          const std::vector<vil3d_chord>& chords,
                           vnl_vector<double>& sample)
 {
   double *s = sample.data_block();
 
-  vcl_vector<vil3d_chord>::const_iterator c = chords.begin();
+  std::vector<vil3d_chord>::const_iterator c = chords.begin();
   vgl_vector_3d<double> dp = i2i(1,0,0)-i2i.origin();
 
-  vcl_ptrdiff_t istep = image.istep();
-  vcl_ptrdiff_t jstep = image.jstep();
-  vcl_ptrdiff_t kstep = image.kstep();
+  std::ptrdiff_t istep = image.istep();
+  std::ptrdiff_t jstep = image.jstep();
+  std::ptrdiff_t kstep = image.kstep();
   const T* im_data = image.origin_ptr();
 
   for (;c!=chords.end();++c)
@@ -60,18 +60,18 @@ template<class T>
 inline void vimt3d_sample_transformed_blob_safe(
                           const vil3d_image_view<T>& image,
                           const vimt3d_transform_3d& i2i,
-                          const vcl_vector<vil3d_chord>& chords,
+                          const std::vector<vil3d_chord>& chords,
                           vnl_vector<double>& sample,
                           T outval=0)
 {
   double *s = sample.data_block();
 
-  vcl_vector<vil3d_chord>::const_iterator c = chords.begin();
+  std::vector<vil3d_chord>::const_iterator c = chords.begin();
   vgl_vector_3d<double> dp = i2i(1,0,0)-i2i.origin();
 
-  vcl_ptrdiff_t istep = image.istep();
-  vcl_ptrdiff_t jstep = image.jstep();
-  vcl_ptrdiff_t kstep = image.kstep();
+  std::ptrdiff_t istep = image.istep();
+  std::ptrdiff_t jstep = image.jstep();
+  std::ptrdiff_t kstep = image.kstep();
   unsigned ni=image.ni(),nj=image.nj(),nk=image.nk();
   const T* im_data = image.origin_ptr();
 

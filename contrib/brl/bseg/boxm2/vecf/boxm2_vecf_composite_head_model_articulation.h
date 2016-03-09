@@ -33,19 +33,19 @@ class boxm2_vecf_composite_head_model_articulation : public boxm2_vecf_scene_art
    return params_[i] ; }
   void register_play_sequences(boxm2_vecf_composite_head_parameters const&  head_params);
 
-bool set_play_sequence(vcl_string seq_id){
+bool set_play_sequence(std::string seq_id){
    if(play_sequence_map_.find(seq_id) != play_sequence_map_.end()){
      params_ = play_sequence_map_[seq_id];
      return true;
    }else{
-     vcl_cout<<"could not find play sequance "<<seq_id<<" in map. choosing default one"<<vcl_endl;
+     std::cout<<"could not find play sequance "<<seq_id<<" in map. choosing default one"<<std::endl;
      params_=play_sequence_map_["default"];
      return false;
    }
   }
  private:
-  vcl_vector<boxm2_vecf_composite_head_parameters> params_;
-  vcl_map<vcl_string,vcl_vector<boxm2_vecf_composite_head_parameters> > play_sequence_map_;
+  std::vector<boxm2_vecf_composite_head_parameters> params_;
+  std::map<std::string,std::vector<boxm2_vecf_composite_head_parameters> > play_sequence_map_;
 
 };
 #endif// boxm2_vecf_composite_head_model_articulation

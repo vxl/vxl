@@ -14,7 +14,9 @@
 #include <vul/vul_file.h>
 #include <vpgl/vpgl_camera.h>
 #include <vpgl/vpgl_perspective_camera.h>
-#include <vcl_sstream.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <sstream>
 #include <vil/vil_load.h>
 #include <vil/vil_save.h>
 #include <vil/vil_convert.h>
@@ -22,30 +24,30 @@
 #include <vpl/vpl.h>
 #endif
 
-vcl_vector<vpgl_camera_double_sptr > generate_cameras_z(vgl_box_3d<double>& world)
+std::vector<vpgl_camera_double_sptr > generate_cameras_z(vgl_box_3d<double>& world)
 {
   vgl_point_2d<double> principal_point(IMAGE_U/2., IMAGE_V/2.);
 
   vgl_point_3d<double> centroid = world.centroid();
   double alpha = (vnl_math::pi_over_180)*65; // was: (vnl_math::pi/8.) * 3;
   double delta_alpha = vnl_math::pi/36.;
-  vcl_vector<vgl_point_3d<double> > centers;
+  std::vector<vgl_point_3d<double> > centers;
   for (unsigned i=0; i<11; i++) {
-    // double x = boxm_camera_dist*vcl_cos(alpha)/10;
-    double z = boxm_camera_dist*vcl_sin(alpha);
+    // double x = boxm_camera_dist*std::cos(alpha)/10;
+    double z = boxm_camera_dist*std::sin(alpha);
     centers.push_back(vgl_point_3d<double> (centroid.x(), centroid.y(), centroid.z()+z));
-    vcl_cout << centers[i] << vcl_endl;
+    std::cout << centers[i] << std::endl;
     alpha += delta_alpha;
   }
 
   vgl_box_2d<double> bb;
-  vcl_vector<vpgl_camera_double_sptr> rat_cameras;
+  std::vector<vpgl_camera_double_sptr> rat_cameras;
   for (unsigned i=0; i<centers.size(); i++)
   {
     vpgl_camera_double_sptr rat_cam = generate_camera_top(world);
     rat_cameras.push_back(rat_cam);
 
-    vcl_vector<vgl_point_3d<double> > corners = boxm_utils::corners_of_box_3d(world);
+    std::vector<vgl_point_3d<double> > corners = boxm_utils::corners_of_box_3d(world);
     for (unsigned i=0; i<corners.size(); i++) {
       vgl_point_3d<double> c = corners[i];
       double u,v, u2, v2;
@@ -56,37 +58,37 @@ vcl_vector<vpgl_camera_double_sptr > generate_cameras_z(vgl_box_3d<double>& worl
 
       if (verbose)
       {
-        vcl_cout << "Perspective [" << u << ',' << v << "]\n"
+        std::cout << "Perspective [" << u << ',' << v << "]\n"
                  << "Rational [" << u2 << ',' << v2 << "]\n\n";
       }
     }
-    vcl_cout << bb << vcl_endl;
+    std::cout << bb << std::endl;
   }
   return rat_cameras;
 }
 
-vcl_vector<vpgl_camera_double_sptr > generate_cameras_yz(vgl_box_3d<double>& world)
+std::vector<vpgl_camera_double_sptr > generate_cameras_yz(vgl_box_3d<double>& world)
 {
   vgl_point_2d<double> principal_point(IMAGE_U/2., IMAGE_V/2.);
 
   vgl_point_3d<double> centroid = world.centroid();
-  vcl_cout << "centroid: " << centroid << vcl_endl;
+  std::cout << "centroid: " << centroid << std::endl;
   double alpha = (vnl_math::pi/8.) * 3;
   double delta_alpha = vnl_math::pi/40.;
-  vcl_vector<vgl_point_3d<double> > centers;
+  std::vector<vgl_point_3d<double> > centers;
 
   for (unsigned i=0; i<num_train_images; i++) {
-    double x = boxm_camera_dist*vcl_cos(alpha);
-    double y = boxm_camera_dist*vcl_sin(alpha);
+    double x = boxm_camera_dist*std::cos(alpha);
+    double y = boxm_camera_dist*std::sin(alpha);
     centers.push_back(vgl_point_3d<double> (x+centroid.x(), y+centroid.y(), 450+centroid.z()));
   if (verbose)
-    vcl_cout << centers[i] << vcl_endl;
+    std::cout << centers[i] << std::endl;
 
     alpha += delta_alpha;
   }
 
   vgl_box_2d<double> bb;
-  vcl_vector<vpgl_camera_double_sptr> persp_cameras;
+  std::vector<vpgl_camera_double_sptr> persp_cameras;
   for (unsigned i=0; i<centers.size(); i++)
   {
     vgl_point_3d<double> camera_center  = centers[i];
@@ -96,22 +98,22 @@ vcl_vector<vpgl_camera_double_sptr > generate_cameras_yz(vgl_box_3d<double>& wor
     persp_cameras.push_back(new vpgl_perspective_camera<double>(persp_cam));
 
     //save the camera to file
-    vcl_stringstream cam_file;
+    std::stringstream cam_file;
     vul_file::make_directory("./cams");
     cam_file << "./cams/cam_" << i << ".txt";
-    vcl_ofstream cam_out(cam_file.str().c_str());
+    std::ofstream cam_out(cam_file.str().c_str());
     cam_out << persp_cam;
 
     if (verbose) {
-      vcl_vector<vgl_point_3d<double> > corners = boxm_utils::corners_of_box_3d(world);
+      std::vector<vgl_point_3d<double> > corners = boxm_utils::corners_of_box_3d(world);
       for (unsigned i=0; i<corners.size(); i++) {
         vgl_point_3d<double> c = corners[i];
         double u,v;
         persp_cam.project(c.x(), c.y() ,c.z(), u, v);
         bb.add(vgl_point_2d<double> (u,v));
-        vcl_cout << "Perspective [" << u << ',' << v << "]\n"<< vcl_endl;
+        std::cout << "Perspective [" << u << ',' << v << "]\n"<< std::endl;
       }
-      vcl_cout << bb << vcl_endl;
+      std::cout << bb << std::endl;
     }
   }
   return persp_cameras;
@@ -130,7 +132,7 @@ static void test_update()
 #endif
   scene.set_paths("boxm_scene2", "block");
   vul_file::make_directory("boxm_scene2");
-  vcl_ofstream os("scene2.xml");
+  std::ofstream os("scene2.xml");
   x_write(os, scene, "scene");
   os.close();
 
@@ -202,7 +204,7 @@ static void test_update()
 #if 0
   vpgl_camera_double_sptr camera = generate_camera_top(world);
 #endif
-  vcl_vector<vpgl_camera_double_sptr > cameras = generate_cameras_z(world);
+  std::vector<vpgl_camera_double_sptr > cameras = generate_cameras_z(world);
 
   vil_image_view<boxm_apm_traits<BOXM_APM_MOG_GREY>::obs_datatype> expected(IMAGE_U,IMAGE_V);
   vil_image_view<boxm_apm_traits<BOXM_APM_MOG_GREY>::obs_datatype> mask(IMAGE_U,IMAGE_V);
@@ -212,7 +214,7 @@ static void test_update()
     mask.fill(0.0);
 
     boxm_render_image_splatting_triangle<short,boxm_sample<BOXM_APM_MOG_GREY> >(scene,cameras[i],expected,mask);
-    vcl_stringstream ss;
+    std::stringstream ss;
     ss << "./boxm_scene2/img" << i << ".tif";
 #if 0
     vil_image_view<unsigned char> expected_byte(expected.ni(),expected.nj(),expected.nplanes());
@@ -230,13 +232,13 @@ static void test_update()
   scene_new.set_appearance_model(BOXM_APM_MOG_GREY);
   scene_new.set_paths("./boxm_scene_update", "block");
   vul_file::make_directory("./boxm_scene_update");
-  vcl_ofstream os1("./boxm_scene_update/scene.xml");
+  std::ofstream os1("./boxm_scene_update/scene.xml");
   x_write(os1, scene_new, "scene");
   os1.close();
 
   // update the world, with all the generated images and cameras
   for (unsigned i=0; i<cameras.size(); i++) {
-    vcl_stringstream ss;
+    std::stringstream ss;
     ss << "./boxm_scene2/img" << i << ".tif";
     expected = vil_load(ss.str().data());
     boxm_update_triangle<short,boxm_sample<BOXM_APM_MOG_GREY> >(scene_new, expected, cameras[i] );
@@ -244,7 +246,7 @@ static void test_update()
 
   // regenerate the images from world
   for (unsigned i=0; i<cameras.size(); i++) {
-    vcl_stringstream ss; ss << "boxm_scene2/img_new" << i << ".tif";
+    std::stringstream ss; ss << "boxm_scene2/img_new" << i << ".tif";
     vil_image_view<float> expected_new(IMAGE_U,IMAGE_V);
     boxm_render_image_splatting<short,boxm_sample<BOXM_APM_MOG_GREY> >(scene_new,cameras[i],expected_new,mask);
     vil_image_view<unsigned char> expected_byte(expected_new.ni(),expected_new.nj(),expected_new.nplanes());

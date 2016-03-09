@@ -4,12 +4,14 @@
 #include <bwm/bwm_observer_mgr.h>
 #include <bwm/bwm_3d_corr.h>
 #include <bwm/bwm_3d_corr_sptr.h>
-#include <vcl_vector.h>
-#include <vcl_set.h>
+#include <vector>
+#include <set>
 #include <vcl_cassert.h>
-#include <vcl_iostream.h>
-#include <vcl_fstream.h>
-#include <vcl_string.h>
+#include <iostream>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <fstream>
+#include <string>
 #include <vul/vul_arg.h>
 #include <vul/vul_file.h>
 #include <vul/vul_file_iterator.h>
@@ -24,9 +26,9 @@
 class ply_points_reader
 {
  public:
-  vcl_vector<vnl_vector_fixed<double,3> > all_points;
+  std::vector<vnl_vector_fixed<double,3> > all_points;
   vnl_vector_fixed<double,3> p;
-  vcl_vector<int > vertex_indices;
+  std::vector<int > vertex_indices;
 };
 
 //: Call-back function for a "vertex" element
@@ -58,17 +60,17 @@ int plyio_vertex_cb(p_ply_argument argument)
 }
 
 
-void readPointsFromPLY(const vcl_string& filename, vcl_vector<vnl_vector_fixed<double,3> > &all_points)
+void readPointsFromPLY(const std::string& filename, std::vector<vnl_vector_fixed<double,3> > &all_points)
 {
   ply_points_reader parsed_ply;
   parsed_ply.all_points = all_points;
 
   p_ply ply = ply_open(filename.c_str(), VXL_NULLPTR, 0, VXL_NULLPTR);
   if (!ply) {
-    vcl_cout << "File " << filename << " doesn't exist.";
+    std::cout << "File " << filename << " doesn't exist.";
   }
   if (!ply_read_header(ply))
-    vcl_cout << "File " << filename << " doesn't have header.";
+    std::cout << "File " << filename << " doesn't have header.";
 
   // vertex
   int  nvertices =
@@ -76,7 +78,7 @@ void readPointsFromPLY(const vcl_string& filename, vcl_vector<vnl_vector_fixed<d
   ply_set_read_cb(ply, "vertex", "y", plyio_vertex_cb, (void*) (&parsed_ply), 1);
   ply_set_read_cb(ply, "vertex", "z", plyio_vertex_cb, (void*) (&parsed_ply), 2);
 
-  vcl_cerr << nvertices << " points\n";
+  std::cerr << nvertices << " points\n";
 
   // Read DATA
   ply_read(ply);
@@ -89,12 +91,12 @@ void readPointsFromPLY(const vcl_string& filename, vcl_vector<vnl_vector_fixed<d
 
 
 //: Write points to a PLY file
-void writePointsToPLY(const vcl_string& ply_file_out, vcl_vector<vnl_vector_fixed<double,3> > &all_points)
+void writePointsToPLY(const std::string& ply_file_out, std::vector<vnl_vector_fixed<double,3> > &all_points)
 {
     // OPEN output file
   p_ply oply = ply_create(ply_file_out.c_str(), PLY_ASCII, VXL_NULLPTR, 0, VXL_NULLPTR);
 
-  vcl_cerr << "  saving " << ply_file_out << " :\n";
+  std::cerr << "  saving " << ply_file_out << " :\n";
 
   // HEADER SECTION
   // vertex
@@ -134,8 +136,8 @@ static bool compute_similarity(vnl_matrix<double> const& pts0,
   t = op.t();
   scale = op.s();
   if (! op.compute_ok()) return false;
-  vcl_cout << "Ortho procrustes error "
-           << vcl_sqrt(op.residual_mean_sq_error()) << '\n';
+  std::cout << "Ortho procrustes error "
+           << std::sqrt(op.residual_mean_sq_error()) << '\n';
   return true;
 }
 
@@ -146,13 +148,13 @@ int main(int argc, char** argv)
 {
   //Get Inputs
 
-  vul_arg<vcl_string> corrs_path   ("-corrs", "corr input file",  "");
+  vul_arg<std::string> corrs_path   ("-corrs", "corr input file",  "");
 
-  vul_arg<vcl_string> input_point_dir ("-in_point_dir","directory to get .ply files containing the points","");
-  vul_arg<vcl_string> output_point_dir ("-out_point_dir","directory to store transformed points", "");
+  vul_arg<std::string> input_point_dir ("-in_point_dir","directory to get .ply files containing the points","");
+  vul_arg<std::string> output_point_dir ("-out_point_dir","directory to store transformed points", "");
 
   if (argc != 7) {
-    vcl_cout << "usage: bwm_3d_site_transform -corrs <corr file> -in_point_dir <dir> -out_point_dir <dir>\n";
+    std::cout << "usage: bwm_3d_site_transform -corrs <corr file> -in_point_dir <dir> -out_point_dir <dir>\n";
     return -1;
   }
 
@@ -161,25 +163,25 @@ int main(int argc, char** argv)
   // verify input camera dir
   if (!vul_file::is_directory(input_point_dir().c_str()))
   {
-    vcl_cout<<"Input directory does not exist"<<vcl_endl;
+    std::cout<<"Input directory does not exist"<<std::endl;
     return -1;
   }
 
   // verify output camera dir
   if (!vul_file::is_directory(output_point_dir().c_str()))
   {
-    vcl_cout<<"Output directory does not exist"<<vcl_endl;
+    std::cout<<"Output directory does not exist"<<std::endl;
     return -1;
   }
 
-  vcl_vector<bwm_3d_corr_sptr> corrs;
+  std::vector<bwm_3d_corr_sptr> corrs;
   bwm_observer_mgr::load_3d_corrs(corrs_path(), corrs);
   // assume correspondences between two sites only
   unsigned n = corrs.size();
   vnl_matrix<double> pts0(3,n), pts1(3,n);
   for (unsigned i = 0; i<n; ++i) {
-    vcl_cout << *(corrs[i]);
-    vcl_vector<vgl_point_3d<double> > match_pts = corrs[i]->matching_pts();
+    std::cout << *(corrs[i]);
+    std::vector<vgl_point_3d<double> > match_pts = corrs[i]->matching_pts();
     pts0[0][i] = match_pts[0].x();  pts1[0][i] = match_pts[1].x();
     pts0[1][i] = match_pts[0].y();  pts1[1][i] = match_pts[1].y();
     pts0[2][i] = match_pts[0].z();  pts1[2][i] = match_pts[1].z();
@@ -188,26 +190,26 @@ int main(int argc, char** argv)
   vnl_vector_fixed<double, 3> t;
   double scale;
   if (!compute_similarity(pts1, pts0, R, t, scale)) {
-    vcl_cout << "similarity computation failed\n";
+    std::cout << "similarity computation failed\n";
     return -1;
   }
-  vcl_cout << "scale = " << scale << "\nR = " << R << "\nt = " << t << '\n';
+  std::cout << "scale = " << scale << "\nR = " << R << "\nt = " << t << '\n';
   //transform the points
-  vcl_string in_dir = input_point_dir() + "/*.ply";
+  std::string in_dir = input_point_dir() + "/*.ply";
   for (vul_file_iterator fn = in_dir.c_str(); fn; ++fn) {
-    vcl_string f = fn();
-    vcl_vector<vnl_vector_fixed<double,3> > points2transform;
-    vcl_vector<vnl_vector_fixed<double,3> > transformed_points;
+    std::string f = fn();
+    std::vector<vnl_vector_fixed<double,3> > points2transform;
+    std::vector<vnl_vector_fixed<double,3> > transformed_points;
     readPointsFromPLY(f, points2transform);
     for (unsigned pi = 0; pi < points2transform.size(); ++pi) {
       vnl_vector_fixed<double, 3> new_p = scale*(R * (points2transform[pi])+ t);
       transformed_points.push_back(new_p);
     }
-    vcl_cout << "Transformed Poins: " << points2transform.size() << '\n';
-    vcl_string fname = vul_file::strip_directory(f.c_str());
-    vcl_cout << fname << '\n';
-    vcl_string out_dir = output_point_dir() + "/";
-    vcl_string out_file = out_dir + fname;
+    std::cout << "Transformed Poins: " << points2transform.size() << '\n';
+    std::string fname = vul_file::strip_directory(f.c_str());
+    std::cout << fname << '\n';
+    std::string out_dir = output_point_dir() + "/";
+    std::string out_file = out_dir + fname;
     writePointsToPLY(out_file, transformed_points);
   }
   return 0;

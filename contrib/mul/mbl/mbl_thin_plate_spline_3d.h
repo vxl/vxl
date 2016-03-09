@@ -10,8 +10,10 @@
 #include <vnl/vnl_vector.h>
 #include <vnl/vnl_matrix.h>
 #include <vsl/vsl_binary_io.h>
-#include <vcl_vector.h>
-#include <vcl_iosfwd.h>
+#include <vector>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iosfwd>
 
 //=======================================================================
 //: Construct thin plate spline to map 3D to 3D.
@@ -26,7 +28,7 @@
 // use set_source_pts(src_pts);  then build(target_pts); for each target set.
 //
 // \code
-// vcl_vector<vgl_point_3d<double> > src_pts(n_points),dest_pts(n_points);
+// std::vector<vgl_point_3d<double> > src_pts(n_points),dest_pts(n_points);
 //
 // // Fill src_pts and dest_pts
 // .....
@@ -47,14 +49,14 @@ class mbl_thin_plate_spline_3d
   double Az0_, AzX_, AzY_, AzZ_;
   double energy_x_,energy_y_,energy_z_;
 
-  vcl_vector<vgl_point_3d<double> > src_pts_;
+  std::vector<vgl_point_3d<double> > src_pts_;
 
   //: Used to estimate weights in set_source_points()
   vnl_matrix<double> L_inv_;
 
   //: Build from small number of points
-  void build_pure_affine(const vcl_vector<vgl_point_3d<double> >& source_pts,
-                         const vcl_vector<vgl_point_3d<double> >& dest_pts);
+  void build_pure_affine(const std::vector<vgl_point_3d<double> >& source_pts,
+                         const std::vector<vgl_point_3d<double> >& dest_pts);
 
   //: Set parameters from vectors
   void set_params(const vnl_vector<double>& W1,
@@ -64,7 +66,7 @@ class mbl_thin_plate_spline_3d
   void set_up_rhs(vnl_vector<double>& Bx,
                   vnl_vector<double>& By,
                   vnl_vector<double>& Bz,
-                  const vcl_vector<vgl_point_3d<double> >& dest_pts);
+                  const std::vector<vgl_point_3d<double> >& dest_pts);
 
   //: Compute spline-bending energy
   void compute_energy(vnl_vector<double>& W1,
@@ -81,17 +83,17 @@ class mbl_thin_plate_spline_3d
   virtual ~mbl_thin_plate_spline_3d();
 
   //: Sets up internal transformation to map source_pts onto dest_pts
-  void build(const vcl_vector<vgl_point_3d<double> >& source_pts,
-             const vcl_vector<vgl_point_3d<double> >& dest_pts,
+  void build(const std::vector<vgl_point_3d<double> >& source_pts,
+             const std::vector<vgl_point_3d<double> >& dest_pts,
              bool compute_the_energy=false);
 
   //: Define source point positions
   //  Performs pre-computations so that build(dest_points) can be
   //  called multiple times efficiently
-  void set_source_pts(const vcl_vector<vgl_point_3d<double> >& source_pts);
+  void set_source_pts(const std::vector<vgl_point_3d<double> >& source_pts);
 
   //: Sets up internal transformation to map source_pts onto dest_pts
-  void build(const vcl_vector<vgl_point_3d<double> >& dest_pts);
+  void build(const std::vector<vgl_point_3d<double> >& dest_pts);
 
   //: Return transformed version of (x,y,z)
   vgl_point_3d<double>  operator()(double x, double y, double z) const;
@@ -116,7 +118,7 @@ class mbl_thin_plate_spline_3d
   short version_no() const;
 
   //: Print class to os
-  void print_summary(vcl_ostream& os) const;
+  void print_summary(std::ostream& os) const;
 
   //: Save class to binary file stream
   void b_write(vsl_b_ostream& bfs) const;
@@ -135,7 +137,7 @@ void vsl_b_write(vsl_b_ostream& bfs, const mbl_thin_plate_spline_3d& b);
 void vsl_b_read(vsl_b_istream& bfs, mbl_thin_plate_spline_3d& b);
 
 //: Stream output operator for class reference
-vcl_ostream& operator<<(vcl_ostream& os,const mbl_thin_plate_spline_3d& b);
+std::ostream& operator<<(std::ostream& os,const mbl_thin_plate_spline_3d& b);
 
 #endif
 

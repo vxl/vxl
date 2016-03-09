@@ -3,7 +3,9 @@
 //:
 // \file
 
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iostream>
 #include <vsl/vsl_binary_io.h>
 #include <vgl/vgl_homg_plane_3d.h>
 #include <boxm/boxm_aux_traits.h>
@@ -16,7 +18,7 @@ class boxm_plane_obs
   boxm_plane_obs(vgl_homg_plane_3d<T> plane, float seg_len) : seg_len_(seg_len), plane_(plane) {}
   ~boxm_plane_obs() {}
   static short version_no() { return 1; }
-  void print(vcl_ostream& os) const { os << "(plane=" << plane_ << " seg_len=" << seg_len_ << ')'; }
+  void print(std::ostream& os) const { os << "(plane=" << plane_ << " seg_len=" << seg_len_ << ')'; }
 
   // public members
   float seg_len_;
@@ -36,7 +38,7 @@ template <class T>
 void vsl_b_read(vsl_b_istream & is, boxm_plane_obs<T> *&sample);
 
 template <class T>
-vcl_ostream& operator << (vcl_ostream& os, const boxm_plane_obs<T>& sample);
+std::ostream& operator << (std::ostream& os, const boxm_plane_obs<T>& sample);
 
 
 #endif // boxm_plane_obs_h_

@@ -3,7 +3,9 @@
 //:
 // \file
 #include <vcl_cassert.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iostream>
 #include <vsl/vsl_vector_io.h>
 #include <vsol/vsol_point_3d.h>
 
@@ -12,10 +14,10 @@
 //***************************************************************************
 
 //---------------------------------------------------------------------------
-//: Constructor from a vcl_vector (not a geometric vector but a list of points)
+//: Constructor from a std::vector (not a geometric vector but a list of points)
 // Require: new_vertices.size()>=4 and valid_vertices(new_vertices)
 //---------------------------------------------------------------------------
-vsol_polyhedron::vsol_polyhedron(vcl_vector<vsol_point_3d_sptr> const& new_vertices)
+vsol_polyhedron::vsol_polyhedron(std::vector<vsol_point_3d_sptr> const& new_vertices)
 {
   // require
   assert(new_vertices.size()>=4);
@@ -91,7 +93,7 @@ void vsol_polyhedron::compute_bounding_box(void) const
 double vsol_polyhedron::volume(void) const
 {
   // TO DO
-  vcl_cerr << "Warning: vsol_polyhedron::volume() has not been implemented yet\n";
+  std::cerr << "Warning: vsol_polyhedron::volume() has not been implemented yet\n";
   return -1;
 }
 
@@ -114,7 +116,7 @@ bool vsol_polyhedron::is_convex(void) const
 //---------------------------------------------------------------------------
 bool vsol_polyhedron::in(vsol_point_3d_sptr const& ) const
 {
-  vcl_cerr << "Warning: vsol_polyhedron::in() has not been implemented yet\n";
+  std::cerr << "Warning: vsol_polyhedron::in() has not been implemented yet\n";
   return false;
 }
 
@@ -136,13 +138,13 @@ vsol_point_3d_sptr vsol_polyhedron::vertex(int i) const
   return storage_[i];
 }
 
-void vsol_polyhedron::describe(vcl_ostream &strm, int blanking) const
+void vsol_polyhedron::describe(std::ostream &strm, int blanking) const
 {
   if (blanking < 0) blanking = 0; while (blanking--) strm << ' ';
   strm << "[vsol_polyhedron";
   for (unsigned int i=0; i<size(); ++i)
     strm << ' ' << *(vertex(i));
-  strm << ']' << vcl_endl;
+  strm << ']' << std::endl;
 }
 
 //----------------------------------------------------------------
@@ -175,7 +177,7 @@ void vsol_polyhedron::b_read(vsl_b_istream &is)
     vsl_b_read(is, storage_);
     break;
    default:
-    vcl_cerr << "vsol_polyhedron: unknown I/O version " << ver << '\n';
+    std::cerr << "vsol_polyhedron: unknown I/O version " << ver << '\n';
   }
 }
 
@@ -186,7 +188,7 @@ short vsol_polyhedron::version() const
 }
 
 //: Print an ascii summary to the stream
-void vsol_polyhedron::print_summary(vcl_ostream &os) const
+void vsol_polyhedron::print_summary(std::ostream &os) const
 {
   os << *this;
 }
@@ -212,7 +214,7 @@ vsl_b_read(vsl_b_istream &is, vsol_polyhedron* &p)
   bool not_null_ptr;
   vsl_b_read(is, not_null_ptr);
   if (not_null_ptr) {
-    p = new vsol_polyhedron(vcl_vector<vsol_point_3d_sptr>());
+    p = new vsol_polyhedron(std::vector<vsol_point_3d_sptr>());
     p->b_read(is);
   }
   else

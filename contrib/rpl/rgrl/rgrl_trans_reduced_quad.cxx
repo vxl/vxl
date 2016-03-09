@@ -299,14 +299,14 @@ higher_order_terms(vnl_vector<double> p) const
 
 void
 rgrl_trans_reduced_quad::
-write( vcl_ostream& os ) const
+write( std::ostream& os ) const
 {
   vnl_vector<double> origin(from_centre_.size(), 0.0);
   // tag
   os << "REDUCED_QUADRATIC\n"
   // parameters
      << t().size() << '\n'
-     << Q_<< A_ << trans_ << ' ' << origin << vcl_endl;
+     << Q_<< A_ << trans_ << ' ' << origin << std::endl;
 
   // parent
   rgrl_transformation::write( os );
@@ -314,15 +314,15 @@ write( vcl_ostream& os ) const
 
 bool
 rgrl_trans_reduced_quad::
-read( vcl_istream& is )
+read( std::istream& is )
 {
   int dim;
 
   // skip empty lines
   rgrl_util_skip_empty_lines( is );
 
-  vcl_string str;
-  vcl_getline( is, str );
+  std::string str;
+  std::getline( is, str );
 
   // The token should appear at the beginning of line
   if ( str.find( "REDUCED_QUADRATIC" ) != 0 ) {

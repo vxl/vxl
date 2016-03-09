@@ -25,7 +25,9 @@
 // \endverbatim
 //-----------------------------------------------------------------------------
 
-#include <vcl_vector.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <vector>
 #include <vgl/vgl_homg_point_2d.h>
 #include <mvl/HomgPoint2D.h>
 #include <mvl/SimilarityMetric.h>
@@ -43,8 +45,8 @@ class HomgNorm2D : public SimilarityMetric
 // stored in this class.  If the optional parameter unit_omega is
 // set to false, then the points will not be scaled to ensure that
 // the homogeneous parameter is one.
-  HomgNorm2D(const vcl_vector<HomgPoint2D>& points, bool unit_omega = true);
-  HomgNorm2D(vcl_vector<vgl_homg_point_2d<double> > const& points, bool unit_omega = true);
+  HomgNorm2D(const std::vector<HomgPoint2D>& points, bool unit_omega = true);
+  HomgNorm2D(std::vector<vgl_homg_point_2d<double> > const& points, bool unit_omega = true);
 
 //: Destructor
  ~HomgNorm2D();
@@ -52,13 +54,13 @@ class HomgNorm2D : public SimilarityMetric
   // Computations--------------------------------------------------------------
 
 //: Perform the normalization
-  void normalize(const vcl_vector<HomgPoint2D>& points);
-  void normalize(vcl_vector<vgl_homg_point_2d<double> > const& points);
+  void normalize(const std::vector<HomgPoint2D>& points);
+  void normalize(std::vector<vgl_homg_point_2d<double> > const& points);
 
   bool was_coincident(void) const { return was_coincident_; } // FSM
 
-  void set(const vcl_vector<HomgPoint2D>& points) { normalize(points); }
-  void set(vcl_vector<vgl_homg_point_2d<double> > const& points) { normalize(points); }
+  void set(const std::vector<HomgPoint2D>& points) { normalize(points); }
+  void set(std::vector<vgl_homg_point_2d<double> > const& points) { normalize(points); }
 
   // Operations----------------------------------------------------------------
 
@@ -73,8 +75,8 @@ class HomgNorm2D : public SimilarityMetric
   // Data Access---------------------------------------------------------------
 
 //: Return the array of normalized points
-  vcl_vector<HomgPoint2D>& get_normalized_points() { return normalized_; }
-  vcl_vector<vgl_homg_point_2d<double> > normalized_points();
+  std::vector<HomgPoint2D>& get_normalized_points() { return normalized_; }
+  std::vector<vgl_homg_point_2d<double> > normalized_points();
 
 //: Have the points been scaled so their third components are one?
   bool points_have_unit_omega() const { return unit_omega_; }
@@ -87,7 +89,7 @@ class HomgNorm2D : public SimilarityMetric
 
  protected:
   // Data Members--------------------------------------------------------------
-  vcl_vector<HomgPoint2D> normalized_;
+  std::vector<HomgPoint2D> normalized_;
   bool unit_omega_;
   bool was_coincident_;  // FSM
 };

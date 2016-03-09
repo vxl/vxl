@@ -4,8 +4,10 @@
 // \file
 
 #include <bprb/bprb_parameters.h>
-#include <vcl_iostream.h>
-#include <vcl_fstream.h>
+#include <iostream>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <fstream>
 #include <vpgl/vpgl_camera.h>
 #include <vpgl/vpgl_perspective_camera.h>
 #include <vpgl/vpgl_proj_camera.h>
@@ -19,7 +21,7 @@ bool vpgl_save_perspective_camera_process_cons(bprb_func_process& pro)
   //this process takes two inputs:
   //input[0]: the camera
   //input[1]: the filename
-  vcl_vector<vcl_string> input_types;
+  std::vector<std::string> input_types;
   input_types.push_back("vpgl_camera_double_sptr");
   input_types.push_back("vcl_string");
   return pro.set_input_types(input_types);
@@ -29,21 +31,21 @@ bool vpgl_save_perspective_camera_process_cons(bprb_func_process& pro)
 bool vpgl_save_perspective_camera_process(bprb_func_process& pro)
 {
   if (pro.n_inputs()< 2) {
-    vcl_cout << "vpgl_save_perspective_camera_process: The input number should be 1" << vcl_endl;
+    std::cout << "vpgl_save_perspective_camera_process: The input number should be 1" << std::endl;
     return false;
   }
 
   // get the inputs
   vpgl_camera_double_sptr camera = pro.get_input<vpgl_camera_double_sptr>(0);
-  vcl_string camera_filename = pro.get_input<vcl_string>(1);
+  std::string camera_filename = pro.get_input<std::string>(1);
   vpgl_perspective_camera<double> *cam = dynamic_cast<vpgl_perspective_camera<double>*>(camera.as_pointer());
 
   if (!cam) {
-    vcl_cerr << "error: could not convert camera input to a vpgl_perspective_camera\n";
+    std::cerr << "error: could not convert camera input to a vpgl_perspective_camera\n";
     return false;
   }
 
-  vcl_string ext = vul_file_extension(camera_filename);
+  std::string ext = vul_file_extension(camera_filename);
   if (ext == ".vsl") // binary form
   {
     vsl_b_ofstream bp_out(camera_filename.c_str());
@@ -52,9 +54,9 @@ bool vpgl_save_perspective_camera_process(bprb_func_process& pro)
   }
   else {
     // write matrices to the text file.
-    vcl_ofstream ofs(camera_filename.c_str());
+    std::ofstream ofs(camera_filename.c_str());
     if (!ofs.is_open()) {
-      vcl_cerr << "Failed to open file " << camera_filename << '\n';
+      std::cerr << "Failed to open file " << camera_filename << '\n';
       return false;
     }
     ofs << *cam;
@@ -69,7 +71,7 @@ bool vpgl_save_projective_camera_process_cons(bprb_func_process& pro)
   //this process takes two inputs:
   //input[0]: the camera
   //input[1]: the filename
-  vcl_vector<vcl_string> input_types;
+  std::vector<std::string> input_types;
   input_types.push_back("vpgl_camera_double_sptr");
   input_types.push_back("vcl_string");
   return pro.set_input_types(input_types);
@@ -79,23 +81,23 @@ bool vpgl_save_projective_camera_process_cons(bprb_func_process& pro)
 bool vpgl_save_projective_camera_process(bprb_func_process& pro)
 {
   if (pro.n_inputs()< 2) {
-    vcl_cout << "vpgl_save_perspective_camera_process: The input number should be 1" << vcl_endl;
+    std::cout << "vpgl_save_perspective_camera_process: The input number should be 1" << std::endl;
     return false;
   }
 
   // get the inputs
   vpgl_camera_double_sptr camera = pro.get_input<vpgl_camera_double_sptr>(0);
-  vcl_string camera_filename = pro.get_input<vcl_string>(1);
+  std::string camera_filename = pro.get_input<std::string>(1);
   vpgl_proj_camera<double> *cam = dynamic_cast<vpgl_proj_camera<double>*>(camera.as_pointer());
 
   if (!cam) {
-    vcl_cerr << "error: could not convert camera input to a vpgl_proj_camera\n";
+    std::cerr << "error: could not convert camera input to a vpgl_proj_camera\n";
     return false;
   }
 
-  vcl_ofstream ofs(camera_filename.c_str());
+  std::ofstream ofs(camera_filename.c_str());
   if (!ofs.is_open()) {
-    vcl_cerr << "Failed to open file " << camera_filename << '\n';
+    std::cerr << "Failed to open file " << camera_filename << '\n';
     return false;
   }
   ofs << cam->get_matrix();

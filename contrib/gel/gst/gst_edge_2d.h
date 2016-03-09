@@ -8,7 +8,9 @@
 // \file
 // \author crossge@crd.ge.com
 
-#include <vcl_iosfwd.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iosfwd>
 #include <vbl/vbl_ref_count.h>
 
 #include "gst_vertex_2d_sptr.h"
@@ -33,13 +35,13 @@ class gst_edge_2d : public vbl_ref_count
   void flip() { gst_vertex_2d_sptr temp= start_; start_= end_; end_= temp; }
 
   // display
-  friend vcl_ostream &operator<<( vcl_ostream &os, gst_edge_2d &e);
+  friend std::ostream &operator<<( std::ostream &os, gst_edge_2d &e);
 
  protected:
   gst_vertex_2d_sptr start_;
   gst_vertex_2d_sptr end_;
 };
 
-vcl_ostream &operator<<( vcl_ostream &os, gst_edge_2d &e);
+std::ostream &operator<<( std::ostream &os, gst_edge_2d &e);
 
 #endif // gst_edge_2d_h_

@@ -1,5 +1,7 @@
 #include "bstm_majority_filter.h"
-#include <vcl_algorithm.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <algorithm>
 
 
 bstm_majority_filter::bstm_majority_filter(bstm_block_metadata data, bstm_block* blk, bstm_time_block* blk_t, bstm_data_base* changes)
@@ -7,7 +9,7 @@ bstm_majority_filter::bstm_majority_filter(bstm_block_metadata data, bstm_block*
 
   boxm2_array_3d<uchar16>& trees = blk->trees();
 
-  vcl_size_t data_size = changes->buffer_length();
+  std::size_t data_size = changes->buffer_length();
   bstm_data_base* new_change = new bstm_data_base(new char[data_size], data_size, data.id_);
   bstm_data_traits<BSTM_CHANGE>::datatype*  new_change_data = (bstm_data_traits<BSTM_CHANGE>::datatype*) new_change->data_buffer();
   bstm_data_traits<BSTM_CHANGE>::datatype * change_data = (bstm_data_traits<BSTM_CHANGE>::datatype*) changes->data_buffer();
@@ -20,8 +22,8 @@ bstm_majority_filter::bstm_majority_filter(bstm_block_metadata data, bstm_block*
        uchar16 tree = trees(x, y, z);
        boct_bit_tree bit_tree((unsigned char*) tree.data_block(), data.max_level_);
        //iterate through leaves of the tree
-       vcl_vector<int> leafBits = bit_tree.get_leaf_bits(0);
-       vcl_vector<int>::iterator iter;
+       std::vector<int> leafBits = bit_tree.get_leaf_bits(0);
+       std::vector<int>::iterator iter;
        for (iter = leafBits.begin(); iter != leafBits.end(); ++iter) {
          int currBitIndex = (*iter);
          int currIdx = bit_tree.get_data_index(currBitIndex); //data index
@@ -31,10 +33,10 @@ bstm_majority_filter::bstm_majority_filter(bstm_block_metadata data, bstm_block*
          //get cell center, and get six neighbor points
           vgl_point_3d<double> localCenter = bit_tree.cell_center(currBitIndex);
           vgl_point_3d<double> cellCenter(localCenter.x() + x, localCenter.y() + y, localCenter.z() + z);
-          vcl_vector<vgl_point_3d<double> > neighborPoints = this->neighbor_points(cellCenter, side_len, trees);
+          std::vector<vgl_point_3d<double> > neighborPoints = this->neighbor_points(cellCenter, side_len, trees);
 
           //get each prob and sort it
-          vcl_vector<float> probs;
+          std::vector<float> probs;
           for (unsigned int i=0; i<neighborPoints.size(); ++i)
           {
             //load neighbor block/tree
@@ -64,8 +66,8 @@ bstm_majority_filter::bstm_majority_filter(bstm_block_metadata data, bstm_block*
               float totalChange = 0.0f;
               float totalLen = 0.0f;
 
-              vcl_vector<int> subLeafBits = neighborTree.get_leaf_bits(neighborBitIdx);
-              vcl_vector<int>::iterator leafIter;
+              std::vector<int> subLeafBits = neighborTree.get_leaf_bits(neighborBitIdx);
+              std::vector<int>::iterator leafIter;
               for (leafIter = subLeafBits.begin(); leafIter != subLeafBits.end(); ++leafIter) {
                  //side length of the cell
                 int ndepth = bit_tree.depth_at( *leafIter );
@@ -84,7 +86,7 @@ bstm_majority_filter::bstm_majority_filter(bstm_block_metadata data, bstm_block*
           //if you've collected a nonzero amount of probs, update it
           probs.push_back(change_data[currIdx] );
           if (probs.size() > 0) {
-            vcl_sort( probs.begin(), probs.end() );
+            std::sort( probs.begin(), probs.end() );
             double median = probs[ (int) (3*probs.size()/4) ];
             new_change_data[currIdx] = float(median);
           }
@@ -103,10 +105,10 @@ bstm_majority_filter::bstm_majority_filter(bstm_block_metadata data, bstm_block*
 
 
 //: returns a list of 3d points of neighboring blocks
-vcl_vector<vgl_point_3d<double> >
+std::vector<vgl_point_3d<double> >
 bstm_majority_filter::neighbor_points( vgl_point_3d<double>& cellCenter, double side_len, boxm2_array_3d<uchar16>& trees )
 {
-  vcl_vector<vgl_point_3d<double> > toReturn;
+  std::vector<vgl_point_3d<double> > toReturn;
 
   for(int i = 1; i < 3; i++) {
     //neighbors along X

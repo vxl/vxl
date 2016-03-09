@@ -10,14 +10,16 @@
 // \author Tim Cootes
 // \brief test mfpf_pose
 
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iostream>
 #include <mfpf/mfpf_pose.h>
 #include <vgl/vgl_point_2d.h>
 #include <vgl/vgl_vector_2d.h>
 
 void test_pose()
 {
-  vcl_cout << "***********************\n"
+  std::cout << "***********************\n"
            << " Testing mfpf_pose\n"
            << "***********************\n";
 
@@ -44,9 +46,9 @@ void test_pose()
   TEST("rel_pose",(pose1(p1) - pose0(rpose(p1))).length()<1e-6,true);
 
   mfpf_pose inv_pose = pose0.inverse();
-  vcl_cout<<"Pose0:   "<<pose0<<vcl_endl
-          <<"Inverse: "<<inv_pose<<vcl_endl
-          <<"Inverse of inverse: "<<inv_pose.inverse()<<vcl_endl;
+  std::cout<<"Pose0:   "<<pose0<<std::endl
+          <<"Inverse: "<<inv_pose<<std::endl
+          <<"Inverse of inverse: "<<inv_pose.inverse()<<std::endl;
   mfpf_pose pose2=inv_pose.inverse();
   TEST("Inverse of inverse == Identity",pose0,pose2);
 

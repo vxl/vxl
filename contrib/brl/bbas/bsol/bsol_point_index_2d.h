@@ -15,7 +15,9 @@
 //
 //-----------------------------------------------------------------------------
 
-#include <vcl_vector.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <vector>
 #include <vsol/vsol_box_2d_sptr.h>
 #include <vsol/vsol_point_2d_sptr.h>
 
@@ -25,7 +27,7 @@ class bsol_point_index_2d
  public:
   bsol_point_index_2d(int nrows, int ncols, vsol_box_2d_sptr const& bb);
   bsol_point_index_2d(int nrows, int ncols,
-                      vcl_vector<vsol_point_2d_sptr> const& points);
+                      std::vector<vsol_point_2d_sptr> const& points);
   ~bsol_point_index_2d();
   //:accessors
   int ncols() const { return ncols_; }
@@ -44,10 +46,10 @@ class bsol_point_index_2d
   int n_points();
 
   //:the points in an index cell
-  vcl_vector<vsol_point_2d_sptr> points(const int row, const int col);
+  std::vector<vsol_point_2d_sptr> points(const int row, const int col);
 
   //:all points in the index
-  vcl_vector<vsol_point_2d_sptr> points();
+  std::vector<vsol_point_2d_sptr> points();
 
   //: the box corresponding to an index cell, r, c
   vsol_box_2d_sptr index_cell(const int row, const int col);
@@ -60,7 +62,7 @@ class bsol_point_index_2d
 
   //:mutators
   bool add_point(vsol_point_2d_sptr const& p);
-  bool add_points(vcl_vector<vsol_point_2d_sptr> const& points);
+  bool add_points(std::vector<vsol_point_2d_sptr> const& points);
 
   //:mark as not in index, but point remains. Useful for matching
   bool mark_point(vsol_point_2d_sptr&  p);
@@ -76,7 +78,7 @@ class bsol_point_index_2d
 
   //:find the points within a radius of a point, possibly none
   bool in_radius(const double radius, vsol_point_2d_sptr const& p,
-                 vcl_vector<vsol_point_2d_sptr>& points);
+                 std::vector<vsol_point_2d_sptr>& points);
 
   //:find the closest point to p within a radius, possibly none
   bool closest_in_radius(const double radius, vsol_point_2d_sptr const& p,
@@ -100,7 +102,7 @@ class bsol_point_index_2d
   vsol_box_2d_sptr b_box_;//bounding box for the array
 
   //  row         col            points in cell
-  vcl_vector<vcl_vector<vcl_vector<vsol_point_2d_sptr> > > point_array_;
+  std::vector<std::vector<std::vector<vsol_point_2d_sptr> > > point_array_;
 };
 
 #endif

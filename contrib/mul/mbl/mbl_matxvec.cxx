@@ -20,8 +20,10 @@
 #include <vnl/vnl_vector.h>
 #include <vnl/vnl_matrix.h>
 #include <vcl_cassert.h>
-#include <vcl_cstdlib.h> // for vcl_abort()
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <cstdlib> // for std::abort()
+#include <iostream>
 
 
 // Some of the code in this file has been converted to use VXL,
@@ -40,7 +42,7 @@ static bool HasNaN(const char* s,
   {
     if (isnan(M(i,j)))
     {
-      vcl_cout<<s<<" has NaN at element "<<i<<','<<j
+      std::cout<<s<<" has NaN at element "<<i<<','<<j
               <<" in a "<<M.nrows()<<" x "<<M.ncols()<<" matrix.\n";
       return true;
     }
@@ -59,9 +61,9 @@ void NC_VecXMat(const vnl_vector<double>& V,
   int ncols = M.ncols();
   if (M.nrows()>1)
   {
-    vcl_cerr << "NC_VecXMat : M is a "<<M.nrows()<<"-row matrix.\n"
+    std::cerr << "NC_VecXMat : M is a "<<M.nrows()<<"-row matrix.\n"
              << "it may only be 1-row.\n";
-    vcl_abort();
+    std::abort();
   }
 
   R.set_size(nrows,ncols);
@@ -123,8 +125,8 @@ void mbl_matxvec_prod_mv_2(const vnl_matrix<double>& M,
   int nr = M.rows();
   if (nR>nr)
   {
-    vcl_cerr<<"ERROR: mbl_matxvec_prod_mv_2() R too long.\n";
-    vcl_abort();
+    std::cerr<<"ERROR: mbl_matxvec_prod_mv_2() R too long.\n";
+    std::abort();
   }
 #endif
 
@@ -134,8 +136,8 @@ void mbl_matxvec_prod_mv_2(const vnl_matrix<double>& M,
 #ifndef NDEBUG
   if (t>nc)
   {
-    vcl_cerr<<"ERROR: mbl_matxvec_prod_mv_2() V too long. V has "<<t<<" elements. M has "<<nc<<" columns.\n";
-    vcl_abort();
+    std::cerr<<"ERROR: mbl_matxvec_prod_mv_2() V too long. V has "<<t<<" elements. M has "<<nc<<" columns.\n";
+    std::abort();
   }
 #endif
 
@@ -149,9 +151,9 @@ void mbl_matxvec_prod_mv_2(const vnl_matrix<double>& M,
 #ifndef NDEBUG
   if ((nr<1) || (nc<1))
   {
-    vcl_cerr<<"ERROR: mbl_matxvec_prod_mv_2() - vnl_matrix<double> is 0 x 0\n"
-            <<"V has dimension "<<V.size()<<vcl_endl;
-    vcl_abort();
+    std::cerr<<"ERROR: mbl_matxvec_prod_mv_2() - vnl_matrix<double> is 0 x 0\n"
+            <<"V has dimension "<<V.size()<<std::endl;
+    std::abort();
   }
 #endif
 
@@ -181,15 +183,15 @@ void mbl_matxvec_prod_mv_2(const vnl_matrix<double>& M,
 void TC_MatXVec(const vnl_matrix<double>& M,
                 const vnl_vector<double>& V,
                 vnl_vector<double>& R,
-                const vcl_vector<int>& index)
+                const std::vector<int>& index)
 // R = MV but only use sub-set of all rows of M
 {
   int nc = M.ncols();
   int nr = M.nrows();
   if (index.lo()!=1)
   {
-    vcl_cerr<<"TC_MatXVec(M,V,R,index) : index array must begin at 1\n";
-    vcl_abort();
+    std::cerr<<"TC_MatXVec(M,V,R,index) : index array must begin at 1\n";
+    std::abort();
   }
   int n = index.size();
 
@@ -200,8 +202,8 @@ void TC_MatXVec(const vnl_matrix<double>& M,
   int t = V.size();
   if (t>nc)
   {
-    vcl_cerr<<"TC_MatXVec() R too long.\n";
-    vcl_abort();
+    std::cerr<<"TC_MatXVec() R too long.\n";
+    std::abort();
   }
 
   if (t==0)
@@ -213,9 +215,9 @@ void TC_MatXVec(const vnl_matrix<double>& M,
 
   if ((nr<1) || (nc<1))
   {
-    vcl_cerr<<"TC_MatXVec - vnl_matrix<double> is 0 x 0\n"
-            <<"V has dimension "<<V.size()<<vcl_endl;
-    vcl_abort();
+    std::cerr<<"TC_MatXVec - vnl_matrix<double> is 0 x 0\n"
+            <<"V has dimension "<<V.size()<<std::endl;
+    std::abort();
   }
 
   const double ** Mdata = M.dataPtr();
@@ -262,9 +264,9 @@ void mbl_matxvec_add_prod_vm(const vnl_vector<double>& V,
   unsigned int nc = M.cols();
   if (nr!=V.size())
   {
-    vcl_cerr<<"ERROR: mbl_matxvec_add_prod_vm - V wrong length\n"
-            <<"Expected "<<nr<<" got "<<V.size()<<vcl_endl;
-    vcl_abort();
+    std::cerr<<"ERROR: mbl_matxvec_add_prod_vm - V wrong length\n"
+            <<"Expected "<<nr<<" got "<<V.size()<<std::endl;
+    std::abort();
   }
 #endif //!NDEBUG
 
@@ -275,9 +277,9 @@ void mbl_matxvec_add_prod_vm(const vnl_vector<double>& V,
   assert(t<=nc); // R too long
   if ((nr<1) || (nc<1))
   {
-    vcl_cerr<<"ERROR: mbl_matxvec_add_prod_vm - vnl_matrix<double> is 0 x 0\n"
-            <<"V has dimension "<<V.size()<<vcl_endl;
-    vcl_abort();
+    std::cerr<<"ERROR: mbl_matxvec_add_prod_vm - vnl_matrix<double> is 0 x 0\n"
+            <<"V has dimension "<<V.size()<<std::endl;
+    std::abort();
   }
 #endif //!NDEBUG
 
@@ -314,8 +316,8 @@ void TC_ProductABt(vnl_matrix<double>& ABt,
 #ifndef NDEBUG
    if ( nc2 != nc1 )
    {
-      vcl_cerr<<"TC_ProductABt : B.ncols != A.ncols\n";
-      vcl_abort() ;
+      std::cerr<<"TC_ProductABt : B.ncols != A.ncols\n";
+      std::abort() ;
    }
 #endif //!NDEBUG
 
@@ -360,8 +362,8 @@ void TC_ProductAtB(vnl_matrix<double>& AtB,
 
    if ( nr2 != nr1 )
    {
-      vcl_cerr<<"TC_ProductAtB : B.nrows != A.nrows\n";
-      vcl_abort() ;
+      std::cerr<<"TC_ProductAtB : B.nrows != A.nrows\n";
+      std::abort() ;
    }
 
    if ( (AtB.nrows()!=nc1) || (AtB.ncols()!= nc2) )
@@ -413,10 +415,10 @@ void TC_ProductMD(vnl_matrix<double>& MD,
   int nc = M.ncols();
   if (d.size()!=nc)
   {
-    vcl_cerr<<"TC_ProductMD() d doesnt match M\n"
+    std::cerr<<"TC_ProductMD() d doesnt match M\n"
             <<"d is "<<d.size()<<" element vector.\n"
-            <<"M is "<<nr<<" x "<<nc<<vcl_endl;
-    vcl_abort();
+            <<"M is "<<nr<<" x "<<nc<<std::endl;
+    std::abort();
   }
 
   if ((MD.nrows()!=nr) || (MD.ncols()!=nc)) MD.set_size(nr,nc);
@@ -445,10 +447,10 @@ void TC_ProductDM(vnl_matrix<double>& DM,
   int nc = M.ncols();
   if (d.size()!=nr)
   {
-    vcl_cerr<<"TC_ProductDM() d doesnt match M\n"
+    std::cerr<<"TC_ProductDM() d doesnt match M\n"
             <<"d is "<<d.size()<<" element vector.\n"
-            <<"M is "<<nr<<" x "<<nc<<vcl_endl;
-    vcl_abort();
+            <<"M is "<<nr<<" x "<<nc<<std::endl;
+    std::abort();
   }
 
   if ((DM.nrows()!=nr) || (DM.ncols()!=nc)) DM.set_size(nr,nc);

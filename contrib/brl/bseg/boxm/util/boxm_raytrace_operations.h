@@ -13,7 +13,9 @@
 #include <vil/vil_image_view.h>
 
 #if 0
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iostream>
 #endif
 
 bool cube_fill_value(double* xverts_2d, double* yverts_2d, boct_face_idx visible_faces, vil_image_view<float> &img, float const& val);
@@ -41,8 +43,8 @@ bool tri_interpolated_weighted_sum(tri_int_it_t &tri_it, vil_image_view<T> const
       // no part of this scanline is within the image bounds. go to next scanline.
       continue;
     }
-    unsigned int startx = (unsigned int)vcl_max((int)0,tri_it.startx());
-    unsigned int endx = (unsigned int)vcl_min((int)values.ni(),tri_it.endx());
+    unsigned int startx = (unsigned int)std::max((int)0,tri_it.startx());
+    unsigned int endx = (unsigned int)std::min((int)values.ni(),tri_it.endx());
 
     if (subtract) {
       for (unsigned int x = startx; x < endx; ++x) {
@@ -82,8 +84,8 @@ bool tri_interpolated_weighted_sum(tri_it_t &tri_it, vil_image_view<T1> const& w
       // no part of this scanline is within the image bounds. go to next scanline.
       continue;
     }
-    unsigned int startx = (unsigned int)vcl_max((int)0,tri_it.startx());
-    unsigned int endx = (unsigned int)vcl_min((int)values.ni(),tri_it.endx());
+    unsigned int startx = (unsigned int)std::max((int)0,tri_it.startx());
+    unsigned int endx = (unsigned int)std::min((int)values.ni(),tri_it.endx());
 
     if (subtract) {
       for (unsigned int x = startx; x < endx; ++x) {
@@ -123,8 +125,8 @@ void tri_interpolate_values(tri_it_t &tri_it, vil_image_view<T> &img, bool subtr
       // no part of this scanline is within the image bounds. go to next scanline.
       continue;
     }
-    unsigned int startx = (unsigned int)vcl_max((int)0,tri_it.startx());
-    unsigned int endx = (unsigned int)vcl_min((int)img.ni(),tri_it.endx());
+    unsigned int startx = (unsigned int)std::max((int)0,tri_it.startx());
+    unsigned int endx = (unsigned int)std::min((int)img.ni(),tri_it.endx());
 
     if (subtract) {
       for (unsigned int x = startx; x < endx; ++x) {
@@ -175,8 +177,8 @@ void tri_interpolate_values(tri_it_T &tri_it, double* xvals, double* yvals, T* v
       // no part of this scanline is within the image bounds. go to next scanline.
       continue;
     }
-    unsigned int startx = (unsigned int)vcl_max((int)0,tri_it.startx());
-    unsigned int endx = (unsigned int)vcl_min((int)img.ni(),tri_it.endx());
+    unsigned int startx = (unsigned int)std::max((int)0,tri_it.startx());
+    unsigned int endx = (unsigned int)std::min((int)img.ni(),tri_it.endx());
 
     for (unsigned int x = startx; x < endx; ++x) {
       T interp_val = (T)(s0*x + s1*y + s2);
@@ -225,8 +227,8 @@ void tri_interpolate_min_max(tri_it_T &tri_it, double* xvals, double* yvals, T* 
       // no part of this scanline is within the image bounds. go to next scanline.
       continue;
     }
-    unsigned int startx = (unsigned int)vcl_max((int)0,tri_it.startx());
-    unsigned int endx = (unsigned int)vcl_min((int)max_img.ni(),tri_it.endx());
+    unsigned int startx = (unsigned int)std::max((int)0,tri_it.startx());
+    unsigned int endx = (unsigned int)std::min((int)max_img.ni(),tri_it.endx());
 
     for (unsigned int x = startx; x < endx; ++x) {
       T interp_val = (T)(s0*x + s1*y + s2);
@@ -260,8 +262,8 @@ void tri_weighted_sum(vgl_triangle_scan_iterator<double> &tri_it, vil_image_view
       // no part of this scanline is within the image bounds. go to next scanline.
       continue;
     }
-    unsigned int startx = (unsigned int)vcl_max((int)0,tri_it.startx());
-    unsigned int endx = (unsigned int)vcl_min((int)img.ni(),tri_it.endx());
+    unsigned int startx = (unsigned int)std::max((int)0,tri_it.startx());
+    unsigned int endx = (unsigned int)std::min((int)img.ni(),tri_it.endx());
 
     for (unsigned int x = startx; x < endx; ++x) {
       val_sum += img(x,yu)*weights(x,yu);
@@ -290,8 +292,8 @@ void tri_fill_value(tri_it_T &tri_it, vil_image_view<T> &img, T val)
       // no part of this scanline is within the image bounds. go to next scanline.
       continue;
     }
-    unsigned int startx = (unsigned int)vcl_max((int)0,tri_it.startx());
-    unsigned int endx = (unsigned int)vcl_min((int)img.ni(),tri_it.endx());
+    unsigned int startx = (unsigned int)std::max((int)0,tri_it.startx());
+    unsigned int endx = (unsigned int)std::min((int)img.ni(),tri_it.endx());
 
     for (unsigned int x = startx; x < endx; ++x) {
       img(x,yu) = val;
@@ -321,13 +323,13 @@ void tri_fill_value_aa(boxm_triangle_scan_iterator_aa &tri_it, vil_image_view<T>
       // no part of this scanline is within the image bounds. go to next scanline.
       continue;
     }
-    unsigned int startx = (unsigned int)vcl_max((int)0,tri_it.startx());
-    unsigned int endx = (unsigned int)vcl_min((int)img.ni(),tri_it.endx());
+    unsigned int startx = (unsigned int)std::max((int)0,tri_it.startx());
+    unsigned int endx = (unsigned int)std::min((int)img.ni(),tri_it.endx());
 
     for (unsigned int x = startx; x < endx; ++x) {
       float pix_cov = tri_it.pix_coverage(x);
       if ((pix_cov < 0.0f) || (pix_cov > 1.0f)) {
-        vcl_cerr << " error: pix_cov = " << pix_cov << vcl_endl;
+        std::cerr << " error: pix_cov = " << pix_cov << std::endl;
       }
       aa_weights(x,yu) += tri_it.pix_coverage(x);
       img(x,yu) += val * pix_cov;
@@ -429,7 +431,7 @@ bool cube_mean(double* xverts_2d, double* yverts_2d, float* vert_dists, boct_fac
   else
     tri_interpolated_weighted_sum(tri_it, values, value_sum, weight_sum, false);
 
-  if (vcl_fabs(weight_sum) > 1e-6)  {
+  if (std::fabs(weight_sum) > 1e-6)  {
     mean = value_sum / weight_sum;
   }
   else {

@@ -1,11 +1,13 @@
 #include <volm/volm_camera_space.h>
 //:
 // \file
-#include <vcl_algorithm.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <algorithm>
 #include <bpgl/bpgl_camera_utils.h>
 #include <vsl/vsl_vector_io.h>
 #include <vsph/vsph_utils.h>
-#include <vcl_limits.h>
+#include <limits>
   //it is possible for radius and increment to be inconsistent
   //that is, the radius is not a multiple of the increment
   //perhaps the best assumption is that increment rules and
@@ -34,7 +36,7 @@ void volm_camera_space::adjust_limits()
 }
 
 volm_camera_space::
-volm_camera_space(vcl_vector<double> const& top_fovs,double altitude,
+volm_camera_space(std::vector<double> const& top_fovs,double altitude,
                   unsigned ni, unsigned nj,
                   double head_mid,  double head_radius, double head_inc,
                   double tilt_mid, double tilt_radius,  double tilt_inc,
@@ -108,12 +110,12 @@ cam_angles volm_camera_space::camera_angles(unsigned cam_index) const
 
 double cam_angles::dif(cam_angles& b)
 {
-  return vcl_sqrt(vcl_pow(roll_ - b.roll_, 2.0) + vcl_pow(top_fov_ - b.top_fov_, 2.0) +
-    vcl_pow(heading_ - b.heading_, 2.0) + vcl_pow(tilt_ - b.tilt_, 2.0) );
+  return std::sqrt(std::pow(roll_ - b.roll_, 2.0) + std::pow(top_fov_ - b.top_fov_, 2.0) +
+    std::pow(heading_ - b.heading_, 2.0) + std::pow(tilt_ - b.tilt_, 2.0) );
 }
 
 //: return the index of the camera with params closest to the input angles, only the cameras in the valid array are searched
-vcl_pair<unsigned, cam_angles> volm_camera_space::cam_index_nearest_in_valid_array(cam_angles a)
+std::pair<unsigned, cam_angles> volm_camera_space::cam_index_nearest_in_valid_array(cam_angles a)
 {
   double min = 4*360.0;
   cam_angles min_b(0,0,0,0);
@@ -127,7 +129,7 @@ vcl_pair<unsigned, cam_angles> volm_camera_space::cam_index_nearest_in_valid_arr
       min = val;
     }
   }
-  return vcl_pair<unsigned, cam_angles>(min_id, min_b);
+  return std::pair<unsigned, cam_angles>(min_id, min_b);
 }
 
 
@@ -142,8 +144,8 @@ void volm_camera_space::generate_full_camera_index_space()
 bool volm_camera_space::remove_camera_index(unsigned cam_index)
 {
   // find if index exists
-  vcl_vector<unsigned>::iterator it;
-  it = vcl_find(valid_camera_indices_.begin(), valid_camera_indices_.end(),
+  std::vector<unsigned>::iterator it;
+  it = std::find(valid_camera_indices_.begin(), valid_camera_indices_.end(),
                 cam_index);
   if (it == valid_camera_indices_.end())
     return false;
@@ -254,8 +256,8 @@ vpgl_perspective_camera<double> volm_camera_space::camera(unsigned cam_index) co
   cam_angles ca = this->camera_angles(cam_index);
   double top_fov = ca.top_fov_;
   double dtor = vnl_math::pi_over_180;
-  double tan_top_fov = vcl_tan(top_fov*dtor);
-  double right_fov = vcl_atan(ni_*tan_top_fov/nj_)/dtor;
+  double tan_top_fov = std::tan(top_fov*dtor);
+  double right_fov = std::atan(ni_*tan_top_fov/nj_)/dtor;
   return bpgl_camera_utils::camera_from_kml(ni_, nj_, right_fov, top_fov,
                                             altitude_, ca.heading_,
                                             ca.tilt_, ca.roll_);
@@ -348,14 +350,14 @@ void volm_camera_space::b_read(vsl_b_istream& is)
     this->init();
   }
   else {
-    vcl_cout << "volm_camera_space - unknown binary io version " << ver <<'\n';
+    std::cout << "volm_camera_space - unknown binary io version " << ver <<'\n';
     return;
   }
 }
 int volm_camera_space::closest_index(cam_angles const& cangs){
 
   camera_space_iterator cit = this->begin();
-  double mind = vcl_numeric_limits<double>::max();
+  double mind = std::numeric_limits<double>::max();
   int mindx = -1;
   for (; cit != this->end(); ++cit){
     cam_angles cit_cangs = this->camera_angles();
@@ -373,7 +375,7 @@ double distance(cam_angles const& a, cam_angles const& b){
   double ha = a.heading_, hb = b.heading_;
   double ta = a.tilt_, tb = b.tilt_;
   double fa = a.top_fov_, fb = b.top_fov_;
-  double d = vcl_numeric_limits<double>::max();
+  double d = std::numeric_limits<double>::max();
   //don't allow invalid tilt angles
   if(rola<-90.0||rola>90.0||rolb<-90.0||rolb>90.0)
     return d;
@@ -384,20 +386,20 @@ double distance(cam_angles const& a, cam_angles const& b){
   if(ta < -90.0  || ta>90.0 ||
      tb < -90.0  || tb>90.0)
     return d;
-  d = vcl_fabs(vsph_utils::azimuth_diff(ha, hb));
-  d += vcl_fabs(rola - rolb);
-  d += (vcl_fabs(ta - tb) + vcl_fabs(fa - fb));
+  d = std::fabs(vsph_utils::azimuth_diff(ha, hb));
+  d += std::fabs(rola - rolb);
+  d += (std::fabs(ta - tb) + std::fabs(fa - fb));
   return d;
 }
 
-vcl_string cam_angles::get_string() const
+std::string cam_angles::get_string() const
 {
-  vcl_stringstream str;
+  std::stringstream str;
   str << "_h_" << heading_ << "_t_" << tilt_ << "_r_" << roll_ << "_top_fov_" << top_fov_;
   return str.str();
 }
 
-vcl_string volm_camera_space::get_string(unsigned cam_index) const
+std::string volm_camera_space::get_string(unsigned cam_index) const
 {
   cam_angles angles = this->camera_angles(cam_index);
   return angles.get_string();
@@ -406,5 +408,5 @@ vcl_string volm_camera_space::get_string(unsigned cam_index) const
 void volm_camera_space::print_valid_cams() const
 {
   for (unsigned i = 0; i < valid_camera_indices_.size(); ++i)
-    vcl_cout << i << ": " << this->get_string(valid_camera_indices_[i]) << vcl_endl;
+    std::cout << i << ": " << this->get_string(valid_camera_indices_[i]) << std::endl;
 }

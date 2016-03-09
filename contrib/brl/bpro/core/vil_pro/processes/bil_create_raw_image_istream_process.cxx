@@ -4,24 +4,26 @@
 // \file
 
 #include <bprb/bprb_parameters.h>
-#include <vcl_iostream.h>
-#include <vcl_string.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iostream>
+#include <string>
 #include <vil/vil_image_view_base.h>
 #include <bil/bil_raw_image_istream.h>
-#include <vcl_sstream.h>
+#include <sstream>
 
 //: Constructor
 bool bil_create_raw_image_istream_process_cons(bprb_func_process& pro)
 {
   //process takes 1 input
-  vcl_vector<vcl_string> input_types_(4);
+  std::vector<std::string> input_types_(4);
   input_types_[0] = "vcl_string"; //raw file
   input_types_[1] = "int"; //raw file
   input_types_[2] = "int"; //raw file
   input_types_[3] = "int"; //raw file
 
   // process has 2 outputs
-  vcl_vector<vcl_string>  output_types_(2);
+  std::vector<std::string>  output_types_(2);
   output_types_[0] = "bil_raw_image_istream_sptr";     //an initialized istream_sptr
   output_types_[1] = "int";
   return pro.set_input_types(input_types_)
@@ -34,11 +36,11 @@ bool bil_create_raw_image_istream_process(bprb_func_process& pro)
 {
   // Sanity check
   if (pro.n_inputs()<1) {
-    vcl_cout << "bil_create_raw_image_istream_process: The number of inputs should be 1" << vcl_endl;
+    std::cout << "bil_create_raw_image_istream_process: The number of inputs should be 1" << std::endl;
     return false;
   }
   //Retrieve filename from input
-  vcl_string raw_file = pro.get_input<vcl_string>(0);
+  std::string raw_file = pro.get_input<std::string>(0);
   int ni = pro.get_input<int>(1);
   int nj = pro.get_input<int>(2);
   int pixelsize = pro.get_input<int>(3);
@@ -66,11 +68,11 @@ bool bil_create_raw_image_istream_process(bprb_func_process& pro)
 bool bil_read_frame_process_cons(bprb_func_process& pro)
 {
   //process takes 1 input
-  vcl_vector<vcl_string> input_types_(1);
+  std::vector<std::string> input_types_(1);
   input_types_[0] = "bil_raw_image_istream_sptr"; //raw file
 
   // process has 1 output:
-  vcl_vector<vcl_string>  output_types_(1);
+  std::vector<std::string>  output_types_(1);
   output_types_[0] = "vil_image_view_base_sptr";     //an initialized istream_sptr
   //output_types_[1] = "unsigned";                     //time stamp
   return pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
@@ -81,7 +83,7 @@ bool bil_read_frame_process(bprb_func_process& pro)
 {
   // Sanity check
   if (pro.n_inputs()<1) {
-    vcl_cout << "bil_create_raw_image_istream_process: The number of inputs should be 1" << vcl_endl;
+    std::cout << "bil_create_raw_image_istream_process: The number of inputs should be 1" << std::endl;
     return false;
   }
   //Retrieve filename from input
@@ -103,12 +105,12 @@ bool bil_read_frame_process(bprb_func_process& pro)
 bool bil_seek_frame_process_cons(bprb_func_process& pro)
 {
   //process takes 2 inputs
-  vcl_vector<vcl_string> input_types_(2);
+  std::vector<std::string> input_types_(2);
   input_types_[0] = "bil_raw_image_istream_sptr"; //raw file
   input_types_[1] = "unsigned"; //frame to seek to
 
   // process has 2 outputs
-  vcl_vector<vcl_string>  output_types_(1);
+  std::vector<std::string>  output_types_(1);
   output_types_[0] = "vil_image_view_base_sptr";     //an initialized istream_sptr
   return pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
 }
@@ -118,7 +120,7 @@ bool bil_seek_frame_process(bprb_func_process& pro)
 {
   // Sanity check
   if (pro.n_inputs()<2) {
-    vcl_cout << "bil_create_raw_image_istream_process: The number of inputs should be 2" << vcl_endl;
+    std::cout << "bil_create_raw_image_istream_process: The number of inputs should be 2" << std::endl;
     return false;
   }
 

@@ -7,8 +7,10 @@
 
 #include <mmn/mmn_arc.h>
 #include <mmn/mmn_dependancy.h>
-#include <vcl_vector.h>
-#include <vcl_utility.h>  // For vcl_pair
+#include <vector>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <utility>  // For std::pair
 
 //: Representation of a graph, stored by links at each node.
 //  Optimised for adding arcs and finding arcs for each node.
@@ -20,12 +22,12 @@ class mmn_graph_rep1
   //: Indicates arcs connected to each node
   //  node_data_[i][j].first == vertex connected to node i
   //. *.second == index of arc which does the connection.
-  vcl_vector<vcl_vector<vcl_pair<unsigned,unsigned> > > node_data_;
+  std::vector<std::vector<std::pair<unsigned,unsigned> > > node_data_;
 
 #if 0
   //: Number of options for each node
   //  Used to select most efficient simplification of the graph
-  vcl_vector<unsigned> n_;
+  std::vector<unsigned> n_;
 #endif // 0
 
   //: Maximum number of arcs used
@@ -46,7 +48,7 @@ class mmn_graph_rep1
   //: Indicates arcs connected to each node
   //  node_data_[i][j].first == vertex connected to node i
   //. *.second == index of arc which does the connection.
-  const vcl_vector<vcl_vector<vcl_pair<unsigned,unsigned> > >& node_data() const
+  const std::vector<std::vector<std::pair<unsigned,unsigned> > >& node_data() const
   { return node_data_; }
 
   //: Maximum number of distinct arcs used
@@ -56,7 +58,7 @@ class mmn_graph_rep1
   unsigned n_arcs() const { return n_arcs_; }
 
   //: Build from list of arcs
-  void build(unsigned n_nodes, const vcl_vector<mmn_arc>& arcs);
+  void build(unsigned n_nodes, const std::vector<mmn_arc>& arcs);
 
   //: Return index of arc between v1 and v2, or -1 if none
   int arc_index(unsigned v1, unsigned v2) const;
@@ -69,21 +71,21 @@ class mmn_graph_rep1
   //  For each leaf node removed, add one dependency object to
   //  the deps list.
   //  Returns number of leaves removed.
-  unsigned remove_leaves(vcl_vector<mmn_dependancy>& deps);
+  unsigned remove_leaves(std::vector<mmn_dependancy>& deps);
 
   //: Remove all of leaves of graph, recording dependencies
   //  A leaf node is one with only one arc
   //  For each leaf node removed, add one dependency object to
   //  the deps list.  On exit, this graph has no leaves.
   //  Returns number of leaves removed.
-  unsigned remove_all_leaves(vcl_vector<mmn_dependancy>& deps);
+  unsigned remove_all_leaves(std::vector<mmn_dependancy>& deps);
 
   //: Remove arcs from some of the nodes with two neighbours
   //  Record the pairwise dependencies.
   //  For each node removed, add one dependency object to
   //  the deps list.
   //  Returns number of removed.
-  unsigned remove_pair_deps(vcl_vector<mmn_dependancy>& deps);
+  unsigned remove_pair_deps(std::vector<mmn_dependancy>& deps);
 
   //: Compute list of all single and pairwise dependencies
   //  Finds ordered list of dependencies.
@@ -101,12 +103,12 @@ class mmn_graph_rep1
   //  root_index indicates which node is to be the root for the
   //  resulting tree (ie the one node remaining - defined in the
   //  v1 of the last element in deps).
-  bool compute_dependancies(vcl_vector<mmn_dependancy>& deps,
+  bool compute_dependancies(std::vector<mmn_dependancy>& deps,
                             unsigned root_index);
 
   //: Compute list of all single and pairwise dependencies
   //  As compute_dependancies(deps,root), but root selected by algorithm
-  bool compute_dependancies(vcl_vector<mmn_dependancy>& deps);
+  bool compute_dependancies(std::vector<mmn_dependancy>& deps);
 
 };
 

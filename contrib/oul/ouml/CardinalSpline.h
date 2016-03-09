@@ -4,14 +4,16 @@
 #include <vnl/vnl_matrix.h>
 #include <vnl/vnl_vector_fixed.h>
 #include <vnl/vnl_matrix_fixed.h>
-#include <vcl_vector.h>
-#include <vcl_string.h>
+#include <vector>
+#include <string>
 #include <vcl_cassert.h>
 #include <vnl/io/vnl_io_vector_fixed.hxx>
 #include <vnl/io/vnl_io_matrix.hxx>
 #include <vsl/vsl_binary_io.h>
 #include <vsl/vsl_vector_io.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iostream>
 
 // A 3D cardinal spline class. See Hearn and Baker, "Computer
 // Graphics", C Version, Second Edition, page 325. Cardinal splines
@@ -34,7 +36,7 @@ class CardinalSpline
  public:
     typedef vnl_vector_fixed<double, 3> Vector3D;
     CardinalSpline(): Mc(4,4,0.0), s(0.25) {}
-    CardinalSpline(vcl_vector<Vector3D> &cPoints)
+    CardinalSpline(std::vector<Vector3D> &cPoints)
     : controlPoints(cPoints), Mc(4,4,0.0), s(0.25)
     {
         setMc(s);
@@ -53,8 +55,8 @@ class CardinalSpline
     ~CardinalSpline() {}
 
     Vector3D getPoint(double t) const;
-    vcl_vector<Vector3D> getPoints(int num_points) const;
-    vcl_vector<Vector3D> getControlPoints() const {return controlPoints;}
+    std::vector<Vector3D> getPoints(int num_points) const;
+    std::vector<Vector3D> getControlPoints() const {return controlPoints;}
     void setT(double t){setMc((1-t)/2.0);}
     Vector3D closest_point(const Vector3D &point) const {
         double t = closest_point_t(point);
@@ -78,14 +80,14 @@ class CardinalSpline
     void b_write(vsl_b_ostream &os) const;
     void b_read(vsl_b_istream &os);
     short version() const {return 1;}
-    void print_summary(vcl_ostream &os) const {
+    void print_summary(std::ostream &os) const {
         os << "Cardinal Spline:\n"
            << "\tcontrolPts =\n";
         for (unsigned i=0; i<controlPoints.size(); i++)
-            os << "\t\t" << controlPoints[i] << vcl_endl;
+            os << "\t\t" << controlPoints[i] << std::endl;
     }
-    vcl_string is_a() const {return vcl_string("CardinalSpline");}
-    bool is_class(const vcl_string &s) const {return s==is_a();}
+    std::string is_a() const {return std::string("CardinalSpline");}
+    bool is_class(const std::string &s) const {return s==is_a();}
 
     bool operator==(const CardinalSpline &c) const {
         return (controlPoints==c.controlPoints) && (Mc==c.Mc) && (s==c.s);
@@ -122,13 +124,13 @@ class CardinalSpline
         Mc(2,0)=-s; Mc(2,1)=0; Mc(2,2)=s; Mc(2,3)=0;
         Mc(3,0)=0; Mc(3,1)=1; Mc(3,2)=0; Mc(3,3)=0;
     }
-    vcl_vector<Vector3D> controlPoints;
+    std::vector<Vector3D> controlPoints;
     vnl_matrix<double> Mc;
     double s;
 };
 
 void vsl_b_write(vsl_b_ostream &os, const CardinalSpline &e);
 void vsl_b_read(vsl_b_istream &is, CardinalSpline &e);
-void vsl_print_summary(vcl_ostream &is, const CardinalSpline &e);
+void vsl_print_summary(std::ostream &is, const CardinalSpline &e);
 
 #endif // CARDINAL_SPLINE_D_

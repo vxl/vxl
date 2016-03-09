@@ -8,7 +8,9 @@
 // \author Ali Osman Ulusoy
 // \date June 25, 2013
 
-#include <vcl_fstream.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <fstream>
 #include <bstm/bstm_scene.h>
 #include <bstm/bstm_util.h>
 #include <bstm/io/bstm_cache.h>
@@ -30,8 +32,8 @@ bool bstm_cpp_extract_point_cloud_process_cons (bprb_func_process& pro)
   using namespace bstm_cpp_extract_point_cloud_process_globals;
 
   //process takes 3 inputs, no outputs
-  vcl_vector<vcl_string>  output_types_(n_outputs_);
-  vcl_vector<vcl_string> input_types_(n_inputs_);
+  std::vector<std::string>  output_types_(n_outputs_);
+  std::vector<std::string> input_types_(n_inputs_);
   input_types_[0] = "bstm_scene_sptr";
   input_types_[1] = "bstm_cache_sptr";
   input_types_[2] = "float"; //prob. threshold
@@ -50,7 +52,7 @@ bool bstm_cpp_extract_point_cloud_process (bprb_func_process& pro)
   using namespace bstm_cpp_extract_point_cloud_process_globals;
 
   if ( pro.n_inputs() < n_inputs_ ) {
-    vcl_cout << pro.name() << ": The input number should be " << n_inputs_<< vcl_endl;
+    std::cout << pro.name() << ": The input number should be " << n_inputs_<< std::endl;
     return false;
   }
 
@@ -63,8 +65,8 @@ bool bstm_cpp_extract_point_cloud_process (bprb_func_process& pro)
 
 
   //zip through each block
-  vcl_map<bstm_block_id, bstm_block_metadata> blocks = scene->blocks();
-  vcl_map<bstm_block_id, bstm_block_metadata>::iterator blk_iter;
+  std::map<bstm_block_id, bstm_block_metadata> blocks = scene->blocks();
+  std::map<bstm_block_id, bstm_block_metadata>::iterator blk_iter;
   for (blk_iter = blocks.begin(); blk_iter != blocks.end(); ++blk_iter)
   {
     bstm_block_id id = blk_iter->first;
@@ -72,7 +74,7 @@ bool bstm_cpp_extract_point_cloud_process (bprb_func_process& pro)
     double local_time;
     if(!data.contains_t(time,local_time))
       continue;
-    int time_tree_index = vcl_floor(local_time);
+    int time_tree_index = std::floor(local_time);
 
     //get data from cache
     bstm_data_base * alpha = cache->get_data_base(id,bstm_data_traits<BSTM_ALPHA>::prefix());
@@ -92,7 +94,7 @@ bool bstm_cpp_extract_point_cloud_process (bprb_func_process& pro)
     int num_points = 0;
     //iterate through each tree
     for (unsigned int x = 0; x < trees.get_row1_count(); ++x) {
-      //vcl_cout << '[' << x << '/' << trees.get_row1_count() << ']' << vcl_flush;
+      //std::cout << '[' << x << '/' << trees.get_row1_count() << ']' << std::flush;
       for (unsigned int y = 0; y < trees.get_row2_count(); ++y) {
        for (unsigned int z = 0; z < trees.get_row3_count(); ++z) {
          //load current block/tree
@@ -100,8 +102,8 @@ bool bstm_cpp_extract_point_cloud_process (bprb_func_process& pro)
          boct_bit_tree bit_tree((unsigned char*) tree.data_block(), data.max_level_);
 
          //iterate through leaves of the tree
-         vcl_vector<int> leafBits = bit_tree.get_leaf_bits(0);
-         vcl_vector<int>::iterator iter;
+         std::vector<int> leafBits = bit_tree.get_leaf_bits(0);
+         std::vector<int>::iterator iter;
          for (iter = leafBits.begin(); iter != leafBits.end(); ++iter) {
            int currBitIndex = (*iter);
            int currIdx = bit_tree.get_data_index(currBitIndex); //data index
@@ -112,9 +114,9 @@ bool bstm_cpp_extract_point_cloud_process (bprb_func_process& pro)
            //compute probability
            int curr_depth = bit_tree.depth_at(currBitIndex);
            double side_len = 1.0 / (double) (1<<curr_depth);
-           float prob = 1.0f - (float)vcl_exp(-alpha_data[data_ptr] * side_len * data.sub_block_dim_.x());
+           float prob = 1.0f - (float)std::exp(-alpha_data[data_ptr] * side_len * data.sub_block_dim_.x());
 
-           //vcl_cout << prob << " " << curr_depth << " " << side_len << " " <<  local_time << " " << time_tree_index << " " << tt. traverse(local_time - time_tree_index) << vcl_endl;
+           //std::cout << prob << " " << curr_depth << " " << side_len << " " <<  local_time << " " << time_tree_index << " " << tt. traverse(local_time - time_tree_index) << std::endl;
 
            if (prob < prob_t)
            {
@@ -134,7 +136,7 @@ bool bstm_cpp_extract_point_cloud_process (bprb_func_process& pro)
       }
     }
   }
-  vcl_cout << "Done extracting." << vcl_endl;
+  std::cout << "Done extracting." << std::endl;
   return true;
 }
 

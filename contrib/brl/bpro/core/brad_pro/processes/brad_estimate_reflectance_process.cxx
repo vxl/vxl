@@ -4,8 +4,10 @@
 #include <bprb/bprb_func_process.h>
 #include <bprb/bprb_parameters.h>
 #include <brdb/brdb_value.h>
-#include <vcl_string.h>
-#include <vcl_iostream.h>
+#include <string>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iostream>
 #include <vil/vil_image_view_base.h>
 #include <vil/vil_image_view.h>
 #include <brad/brad_image_metadata.h>
@@ -20,7 +22,7 @@ bool brad_estimate_reflectance_process_cons(bprb_func_process& pro)
   //1: image metadata
   //2: estimated atmospheric parameters
 
-  vcl_vector<vcl_string> input_types_(3);
+  std::vector<std::string> input_types_(3);
   input_types_[0] = "vil_image_view_base_sptr";
   input_types_[1] = "brad_image_metadata_sptr";
   input_types_[2] = "brad_atmospheric_parameters_sptr";
@@ -29,7 +31,7 @@ bool brad_estimate_reflectance_process_cons(bprb_func_process& pro)
     return false;
 
   //output: predicted reflectance values:
-  vcl_vector<vcl_string> output_types_(1);
+  std::vector<std::string> output_types_(1);
   output_types_[0] = "vil_image_view_base_sptr";
 
   if (!pro.set_output_types(output_types_))
@@ -43,7 +45,7 @@ bool brad_estimate_reflectance_process(bprb_func_process& pro)
   //check number of inputs
   if (!pro.verify_inputs())
   {
-    vcl_cout << pro.name() << " Invalid inputs" << vcl_endl;
+    std::cout << pro.name() << " Invalid inputs" << std::endl;
     return false;
   }
 
@@ -54,17 +56,17 @@ bool brad_estimate_reflectance_process(bprb_func_process& pro)
 
   //check inputs validity
   if (!radiance_img_base) {
-    vcl_cout << pro.name() <<" :--  image  is null!\n";
+    std::cout << pro.name() <<" :--  image  is null!\n";
     return false;
   }
 
   if (radiance_img_base->pixel_format() != VIL_PIXEL_FORMAT_FLOAT) {
-     vcl_cerr << "ERROR: brad_estimate_reflectance: expecting floating point image\n";
+     std::cerr << "ERROR: brad_estimate_reflectance: expecting floating point image\n";
      return false;
   }
   vil_image_view<float>* radiance_img = dynamic_cast<vil_image_view<float>*>(radiance_img_base.ptr());
   if (!radiance_img) {
-     vcl_cerr << "ERROR: brad_estimate_reflectance: error casting to float image\n";
+     std::cerr << "ERROR: brad_estimate_reflectance: error casting to float image\n";
      return false;
   }
 

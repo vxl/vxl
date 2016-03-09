@@ -36,8 +36,8 @@ bool bvpl_save_vrml_process_cons(bprb_func_process& pro)
   using namespace bvpl_save_vrml_process_globals;
 
   //process takes 3 inputs but has no outputs
-  vcl_vector<vcl_string> output_types_(n_outputs_);
-  vcl_vector<vcl_string> input_types_(n_inputs_);
+  std::vector<std::string> output_types_(n_outputs_);
+  std::vector<std::string> input_types_(n_inputs_);
   input_types_[0] = "boxm_scene_base_sptr";
   input_types_[1] = "bvpl_kernel_vector_sptr";
   input_types_[2] = "vcl_string";
@@ -51,25 +51,25 @@ bool bvpl_save_vrml_process(bprb_func_process& pro)
 
   if (pro.n_inputs() != n_inputs_)
   {
-    vcl_cout << pro.name() << ": the input number should be " << n_inputs_
-             << " but instead it is " << pro.n_inputs() << vcl_endl;
+    std::cout << pro.name() << ": the input number should be " << n_inputs_
+             << " but instead it is " << pro.n_inputs() << std::endl;
     return false;
   }
 
   //get inputs:
   boxm_scene_base_sptr scene_base = pro.get_input<boxm_scene_base_sptr>(0);
   bvpl_kernel_vector_sptr kernel_vector = pro.get_input<bvpl_kernel_vector_sptr>(1);
-  vcl_string vrml_path = pro.get_input<vcl_string>(2);
+  std::string vrml_path = pro.get_input<std::string>(2);
 
   //check input's validity
   if (!scene_base.ptr()) {
-    vcl_cout <<  " :-- Grid is not valid!\n";
+    std::cout <<  " :-- Grid is not valid!\n";
     return false;
   }
 
   //:Note initial implementation is for fixed types, but this can be changed if more cases are needed
 
-  vcl_ofstream ofs(vrml_path.c_str());
+  std::ofstream ofs(vrml_path.c_str());
 
   if (boxm_scene<boct_tree<short, bvpl_octree_sample<float> > > *scene_in =
       dynamic_cast<boxm_scene<boct_tree<short, bvpl_octree_sample<float> > >* > (scene_base.as_pointer()))
@@ -82,7 +82,7 @@ bool bvpl_save_vrml_process(bprb_func_process& pro)
     bvpl_octree_vrml_util::write_scene_as_disks(ofs, scene_in, kernel_vector);
   }
   else {
-    vcl_cerr << "In bvpl_save_vrml_process: Unsupported scene type\n";
+    std::cerr << "In bvpl_save_vrml_process: Unsupported scene type\n";
   }
 
   return true;

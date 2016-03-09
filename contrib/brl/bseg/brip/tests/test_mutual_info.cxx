@@ -1,8 +1,10 @@
 #include <testlib/testlib_test.h>
-#include <vcl_cstdlib.h> // for rand()
-#include <vcl_vector.h>
-#include <vcl_fstream.h>
-#include <vcl_string.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <cstdlib> // for rand()
+#include <vector>
+#include <fstream>
+#include <string>
 #include <vil/vil_image_view.h>
 #include <vil/vil_load.h>
 #include <vil/vil_flip.h>
@@ -11,10 +13,10 @@
 #include <bsta/bsta_joint_histogram.h>
 #include <bsta/bsta_histogram.h>
 
-static void data(vcl_string const& path, vcl_vector<float>& x,
-                 vcl_vector<float>& I)
+static void data(std::string const& path, std::vector<float>& x,
+                 std::vector<float>& I)
 {
-  vcl_ifstream is(path.c_str());
+  std::ifstream is(path.c_str());
   unsigned npts;
   is >> npts;
   float tx, tI;
@@ -25,7 +27,7 @@ static void data(vcl_string const& path, vcl_vector<float>& x,
   }
 }
 
-static bsta_histogram<float> compute_hist(vcl_vector<float> const& I)
+static bsta_histogram<float> compute_hist(std::vector<float> const& I)
 {
   //compute mean intensity and direction
   unsigned npts = I.size();
@@ -34,13 +36,13 @@ static bsta_histogram<float> compute_hist(vcl_vector<float> const& I)
     Im += I[i];
   bsta_histogram<float> h(1.0f, 25);
   for (unsigned i = 0; i<npts; ++i)
-    //    h.upcount(vcl_fabs(I[i]-Im), 1.0f);
+    //    h.upcount(std::fabs(I[i]-Im), 1.0f);
     h.upcount(I[i], 1.0f);
   return h;
 }
 
-static bsta_joint_histogram<float> compute_jhist(vcl_vector<float> const& x,
-                                                 vcl_vector<float> const& I)
+static bsta_joint_histogram<float> compute_jhist(std::vector<float> const& x,
+                                                 std::vector<float> const& I)
 {
   //compute mean intensity and direction
   unsigned npts = x.size();
@@ -53,7 +55,7 @@ static bsta_joint_histogram<float> compute_jhist(vcl_vector<float> const& x,
   bsta_histogram<float> h1(420.0f, 20);
   for (unsigned k = 0; k<npts; ++k) {
     float xk = x[k], Ik = I[k];
-    float dI = vcl_fabs(Ik-Im);
+    float dI = std::fabs(Ik-Im);
     h.upcount(xk, 1.0f, dI, 1.0);
     //    h1.upcount(dx, 1.0f);
   }
@@ -90,8 +92,8 @@ static void test_mutual_info()
 
   // Test Entropy functions
   //----------------------------------------------------
-  vcl_vector<double> hist1, hist2;
-  vcl_vector<vcl_vector<double> > hist3;
+  std::vector<double> hist1, hist2;
+  std::vector<std::vector<double> > hist3;
 
   double sum1 = brip_histogram(image1, hist1, 0, 255, 16);
   double entropy1 = brip_hist_entropy(hist1, sum1);
@@ -114,7 +116,7 @@ static void test_mutual_info()
   double mi2 = brip_mutual_info(image1, image2, 0, 255, 16);
   double mi3 = brip_mutual_info(image2, image1, 0, 255, 16);
 
-  //vcl_cout << "MI1: " << mi1 <<  " MI2: " << mi2 << " MI3: " << mi3 << vcl_endl;
+  //std::cout << "MI1: " << mi1 <<  " MI2: " << mi2 << " MI3: " << mi3 << std::endl;
 
   TEST_NEAR("Mutual Information Commutative", mi2, mi3, 1e-9);
   TEST("Large Self Mutual Info", mi2 < mi1, true);

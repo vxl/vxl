@@ -5,7 +5,9 @@
 
 #include "mfpf_dp_snake.h"
 
-#include <vcl_cmath.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <cmath>
 
 #include <vsl/vsl_indent.h>
 #include <vsl/vsl_binary_loader.h>
@@ -54,15 +56,15 @@ void mfpf_dp_snake::set_to_circle(const mfpf_point_finder& finder,
   for (unsigned iA=0;iA<n_points;++iA)
   {
     double A = iA*6.283/n_points;
-    double dx=vcl_cos(A),dy=vcl_sin(A);
+    double dx=std::cos(A),dy=std::sin(A);
     pts_[iA] = vgl_point_2d<double>(c.x()+r*dx,c.y()+r*dy);
   }
 }
 
 //: Replace each point with the average of it and its neighbours
 void mfpf_dp_snake::smooth_curve(
-                    vcl_vector<vgl_point_2d<double> >& src_pts,
-                    vcl_vector<vgl_point_2d<double> >& dest_pts)
+                    std::vector<vgl_point_2d<double> >& src_pts,
+                    std::vector<vgl_point_2d<double> >& dest_pts)
 {
   unsigned n = src_pts.size();
   dest_pts.resize(n);
@@ -80,11 +82,11 @@ double mfpf_dp_snake::update_step(const vimt_image_2d_of<float>& image)
   unsigned s_ni = finder().search_ni();
   unsigned nr = 1+2*s_ni;
 
-  vcl_vector<vgl_vector_2d<double> > u(n); // Space for normals
+  std::vector<vgl_vector_2d<double> > u(n); // Space for normals
 
   // Create reference shape,
   // which will be slightly smoothed version of pts_
-  vcl_vector<vgl_point_2d<double> > ref_pts(n);
+  std::vector<vgl_point_2d<double> > ref_pts(n);
 
   // Space to hold response data
   vnl_matrix<double> D(n,nr);
@@ -121,7 +123,7 @@ double mfpf_dp_snake::update_step(const vimt_image_2d_of<float>& image)
     move_cost[i]=shape_k*i;
   }
 
-  vcl_vector<int> x;
+  std::vector<int> x;
   dp.solve_loop(x,D,move_cost);
 
   // Compute new image positions
@@ -152,7 +154,7 @@ void mfpf_dp_snake::search(const vimt_image_2d_of<float>& image)
 //: Replace each point with the average of it and its neighbours
 void mfpf_dp_snake::smooth_curve()
 {
-  vcl_vector<vgl_point_2d<double> > old_pts = pts_;
+  std::vector<vgl_point_2d<double> > old_pts = pts_;
   smooth_curve(old_pts,pts_);
 }
 
@@ -213,13 +215,13 @@ short mfpf_dp_snake::version_no() const
 // Method: is_a
 //=======================================================================
 
-vcl_string mfpf_dp_snake::is_a() const
+std::string mfpf_dp_snake::is_a() const
 {
-  return vcl_string("mfpf_dp_snake");
+  return std::string("mfpf_dp_snake");
 }
 
 //: Print class to os
-void mfpf_dp_snake::print_summary(vcl_ostream& os) const
+void mfpf_dp_snake::print_summary(std::ostream& os) const
 {
   vsl_indent_inc(os);
 
@@ -263,9 +265,9 @@ void mfpf_dp_snake::b_read(vsl_b_istream& bfs)
       vsl_b_read(bfs,pts_);
       break;
     default:
-      vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&)\n"
-               << "           Unknown version number "<< version << vcl_endl;
-      bfs.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
+      std::cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&)\n"
+               << "           Unknown version number "<< version << std::endl;
+      bfs.is().clear(std::ios::badbit); // Set an unrecoverable IO error on stream
       return;
   }
 }
@@ -274,7 +276,7 @@ void mfpf_dp_snake::b_read(vsl_b_istream& bfs)
 // Associated function: operator<<
 //=======================================================================
 
-vcl_ostream& operator<<(vcl_ostream& os,const mfpf_dp_snake& b)
+std::ostream& operator<<(std::ostream& os,const mfpf_dp_snake& b)
 {
   os << b.is_a() << ": ";
   vsl_indent_inc(os);

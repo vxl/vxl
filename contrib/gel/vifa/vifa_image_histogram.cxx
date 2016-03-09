@@ -95,7 +95,7 @@ fill_histogram(vil_image_view_base_sptr  image,
         // Yes - use fast iterator to scan pixels
         vxl_byte*    cur_pix = img->begin();
         vxl_byte*    last_pix = img->end();
-        vcl_ptrdiff_t  istep = img->istep();
+        std::ptrdiff_t  istep = img->istep();
         while (cur_pix != last_pix)
         {
           counts[*cur_pix]++;
@@ -129,7 +129,7 @@ fill_histogram(vil_image_view_base_sptr  image,
         // Yes - use fast iterator to scan pixels
         vxl_int_16*    cur_pix = img->begin();
         vxl_int_16*    last_pix = img->end();
-        vcl_ptrdiff_t  istep = img->istep();
+        std::ptrdiff_t  istep = img->istep();
         while (cur_pix != last_pix)
         {
           counts[*cur_pix]++;

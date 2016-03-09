@@ -11,8 +11,10 @@
 //   None
 // \endverbatim
 //------------------------------------------------------------------
-#include <vcl_vector.h>
-#include <vcl_iostream.h>
+#include <vector>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iostream>
 #include <vil/vil_image_view.h>
 #include <brip/brip_quadtree_node.h>
 #include <vbl/vbl_array_2d.h>
@@ -49,14 +51,14 @@ static void connect_children(vbl_array_2d<brip_quadtree_node_base_sptr>& nodes,
 
 //: Construct the quadtree from an image pyramid, with masks defined for each pyramid layer
 static
-void quadtrees_from_pyramid(vcl_vector<vil_image_view<T> > levels,
-                            vcl_vector<vil_image_view<bool> > masks,
+void quadtrees_from_pyramid(std::vector<vil_image_view<T> > levels,
+                            std::vector<vil_image_view<bool> > masks,
                             vbl_array_2d<brip_quadtree_node_base_sptr>& roots);
 
 //: Recursively print all the levels of the quadtree below the node
  static void print_node( brip_quadtree_node_base_sptr const& node,
-                         vcl_ostream& os = vcl_cout,
-                         vcl_string indent = "");
+                         std::ostream& os = std::cout,
+                         std::string indent = "");
 };
 
 

@@ -2,9 +2,11 @@
 //:
 // \file
 
-#include <vcl_cstdlib.h>
-#include <vcl_iostream.h>
-#include <vcl_algorithm.h> // for std::min() & std::max()
+#include <cstdlib>
+#include <iostream>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <algorithm> // for std::min() & std::max()
 #include <vsl/vsl_indent.h>
 #include <vsl/vsl_binary_io.h>
 #include <vnl/io/vnl_io_matrix.h>
@@ -29,7 +31,7 @@ mbl_dyn_prog::~mbl_dyn_prog()
 
 
 //: Construct path from links_, assuming it ends at end_state
-void mbl_dyn_prog::construct_path(vcl_vector<int>& x, int end_state)
+void mbl_dyn_prog::construct_path(std::vector<int>& x, int end_state)
 {
   unsigned int n = links_.rows();
   int ** b_data = links_.get_rows()-1;  // So that b_data[i] corresponds to i-th row
@@ -94,8 +96,8 @@ void mbl_dyn_prog::running_costs(
       }
       else
       {
-        int klo = vcl_max(0,j-max_d);
-        int khi = vcl_min(n_states-1,j+max_d);
+        int klo = std::max(0,j-max_d);
+        int khi = std::min(n_states-1,j+max_d);
         k_best=klo;
         cost_best = ci[klo] + pair_cost[mbl_abs(j-klo)] + wj;
         for (int k=klo+1;k<=khi;++k)
@@ -125,7 +127,7 @@ void mbl_dyn_prog::running_costs(
 //  If first_state>=0 then the first is constrained to that index value
 // \retval x  Optimal path
 // \return Total cost of given path
-double mbl_dyn_prog::solve(vcl_vector<int>& x,
+double mbl_dyn_prog::solve(std::vector<int>& x,
                            const vnl_matrix<double>& W,
                            const vnl_vector<double>& pair_cost,
                            int first_state)
@@ -154,7 +156,7 @@ double mbl_dyn_prog::solve(vcl_vector<int>& x,
 // Includes cost between x[0] and x[n-1] to ensure loop closure.
 // \retval x  Optimal path
 // \return Total cost of given path
-double mbl_dyn_prog::solve_loop(vcl_vector<int>& x,
+double mbl_dyn_prog::solve_loop(std::vector<int>& x,
                                 const vnl_matrix<double>& W,
                                 const vnl_vector<double>& pair_cost)
 {
@@ -163,7 +165,7 @@ double mbl_dyn_prog::solve_loop(vcl_vector<int>& x,
 
   double best_overall_cost=9.9e9;
 
-  vcl_vector<int> x1;
+  std::vector<int> x1;
   for (int i0=0;i0<n_states;++i0)
   {
     // Solve with constraint that first is i0
@@ -171,8 +173,8 @@ double mbl_dyn_prog::solve_loop(vcl_vector<int>& x,
 
     double *ci = running_cost_.data_block();
     // Find the best final cost
-    int klo = vcl_max(0,i0-max_d);
-    int khi = vcl_min(n_states-1,i0+max_d);
+    int klo = std::max(0,i0-max_d);
+    int khi = std::min(n_states-1,i0+max_d);
     int k_best=klo;
     double best_cost = ci[klo] + pair_cost[mbl_abs(i0-klo)];
     for (int k=klo+1;k<=khi;++k)
@@ -204,9 +206,9 @@ short mbl_dyn_prog::version_no() const
 // Method: is_a
 //=======================================================================
 
-vcl_string mbl_dyn_prog::is_a() const
+std::string mbl_dyn_prog::is_a() const
 {
-  return vcl_string("mbl_dyn_prog");
+  return std::string("mbl_dyn_prog");
 }
 
 //=======================================================================
@@ -214,7 +216,7 @@ vcl_string mbl_dyn_prog::is_a() const
 //=======================================================================
 
 // required if data is present in this class
-void mbl_dyn_prog::print_summary(vcl_ostream& os) const
+void mbl_dyn_prog::print_summary(std::ostream& os) const
 {
   os << is_a();
 }
@@ -239,14 +241,14 @@ void mbl_dyn_prog::b_read(vsl_b_istream& bfs)
 {
   if (!bfs) return;
 
-  vcl_string name;
+  std::string name;
   vsl_b_read(bfs,name);
   if (name != is_a())
   {
-    vcl_cerr << "DerivedClass::load :"
+    std::cerr << "DerivedClass::load :"
              << " Attempted to load object of type "
-             << name <<" into object of type " << is_a() << vcl_endl;
-    vcl_abort();
+             << name <<" into object of type " << is_a() << std::endl;
+    std::abort();
   }
 
   short version;
@@ -257,9 +259,9 @@ void mbl_dyn_prog::b_read(vsl_b_istream& bfs)
       // vsl_b_read(bfs,data_); // example of data input
       break;
     default:
-      vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, mbl_dyn_prog &)\n"
-               << "           Unknown version number "<< version << vcl_endl;
-      bfs.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
+      std::cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, mbl_dyn_prog &)\n"
+               << "           Unknown version number "<< version << std::endl;
+      bfs.is().clear(std::ios::badbit); // Set an unrecoverable IO error on stream
       return;
   }
 }
@@ -286,7 +288,7 @@ void vsl_b_read(vsl_b_istream& bfs, mbl_dyn_prog& b)
 // Associated function: operator<<
 //=======================================================================
 
-vcl_ostream& operator<<(vcl_ostream& os,const mbl_dyn_prog& b)
+std::ostream& operator<<(std::ostream& os,const mbl_dyn_prog& b)
 {
   os << b.is_a() << ": ";
   vsl_indent_inc(os);

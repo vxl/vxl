@@ -9,7 +9,9 @@
 // \verbatim
 // \endverbatim
 #include <vnl/vnl_cost_function.h>
-#include <vcl_cmath.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <cmath>
 
 class brad_illum_cost_function : public vnl_cost_function
 {
@@ -27,7 +29,7 @@ class brad_illum_cost_function : public vnl_cost_function
   //:  The main function.  Given the parameter vector x, compute the value of f(x).
   virtual double f(vnl_vector<double> const& x){
     double theta = x[0];
-    double c = vcl_cos(theta), s = vcl_sin(theta);
+    double c = std::cos(theta), s = std::sin(theta);
     double temp = a_uu_*c*c + 2.0*a_uv_*s*c + a_vv_*s*s;
     temp -= 2*a_uh_*c;
     temp -= 2*a_vh_*s;

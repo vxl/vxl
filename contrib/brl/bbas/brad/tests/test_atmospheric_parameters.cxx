@@ -2,10 +2,12 @@
 // \file
 #include <testlib/testlib_test.h>
 #include <brad/brad_atmospheric_parameters.h>
-#include <vcl_cmath.h>
-#include <vcl_iostream.h>
-#include <vcl_sstream.h>
-#include <vcl_string.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <cmath>
+#include <iostream>
+#include <sstream>
+#include <string>
 
 //: Test the atmospheric_parameters class
 static void test_atmospheric_parameters()
@@ -16,7 +18,7 @@ static void test_atmospheric_parameters()
    atm.skylight_ = 28.0;
    atm.optical_depth_ = 0.20;
 
-   vcl_stringstream ss;
+   std::stringstream ss;
    ss << atm;
 
    brad_atmospheric_parameters atm2;

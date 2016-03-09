@@ -7,7 +7,9 @@
 // \author Octi Biris
 // \date Jun 16, 2015
 
-#include <vcl_fstream.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <fstream>
 #include <boxm2/ocl/algo/boxm2_ocl_filter_scene_data.h>
 #include <boxm2/ocl/boxm2_opencl_cache.h>
 #include <boxm2/boxm2_scene.h>
@@ -37,7 +39,7 @@ bool boxm2_ocl_filter_scene_data_process_cons(bprb_func_process& pro)
     using namespace boxm2_ocl_filter_scene_data_process_globals;
 
     //process takes 1 input
-    vcl_vector<vcl_string> input_types_(n_inputs_);
+    std::vector<std::string> input_types_(n_inputs_);
     input_types_[0] = "bocl_device_sptr";
     input_types_[1] = "boxm2_scene_sptr";
     input_types_[2] = "boxm2_opencl_cache_sptr";
@@ -47,7 +49,7 @@ bool boxm2_ocl_filter_scene_data_process_cons(bprb_func_process& pro)
 
     // process has 1 output:
     // output[0]: scene sptr
-    vcl_vector<vcl_string>  output_types_(n_outputs_);
+    std::vector<std::string>  output_types_(n_outputs_);
     return pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
 }
 
@@ -55,7 +57,7 @@ bool boxm2_ocl_filter_scene_data_process(bprb_func_process& pro)
 {
     using namespace boxm2_ocl_filter_scene_data_process_globals;
     if ( pro.n_inputs() < n_inputs_ ) {
-        vcl_cout << pro.name() << ": The input number should be " << n_inputs_<< vcl_endl;
+        std::cout << pro.name() << ": The input number should be " << n_inputs_<< std::endl;
         return false;
     }
     float transfer_time=0.0f;
@@ -67,22 +69,22 @@ bool boxm2_ocl_filter_scene_data_process(bprb_func_process& pro)
     boxm2_opencl_cache_sptr opencl_cache= pro.get_input<boxm2_opencl_cache_sptr>(i++);
     bvpl_kernel_vector_sptr filter_vector = pro.get_input<bvpl_kernel_vector_sptr>(i++);
     int filter_index = pro.get_input<int>(i++);
-    vcl_string identifier=device->device_identifier();
+    std::string identifier=device->device_identifier();
     // create a command queue.
     int status=0;
-    vcl_vector<vcl_string> valid_types;
+    std::vector<std::string> valid_types;
     int appTypeSize;
-        vcl_string appType;
+        std::string appType;
         valid_types.push_back("boxm2_mog3_grey");
         valid_types.push_back("boxm2_mog6_view_compact");
         if (!boxm2_util::verify_appearance(*scene,valid_types,appType,appTypeSize)){
-                vcl_cout<<"scene doesn't have the correct appearance type - only mog3_grey and mog6_view compact allowed!!"<<vcl_endl;
+                std::cout<<"scene doesn't have the correct appearance type - only mog3_grey and mog6_view compact allowed!!"<<std::endl;
         }
     cl_command_queue queue = clCreateCommandQueue(device->context(),
                                                   *(device->device_id()),
                                                   CL_QUEUE_PROFILING_ENABLE,&status);
     if (status!=0) {
-        vcl_cout<<" ERROR in initializing a queue"<<vcl_endl;
+        std::cout<<" ERROR in initializing a queue"<<std::endl;
         return false;
     }
     opencl_cache->clear_cache();

@@ -13,7 +13,7 @@ vsph_sph_point_2d::vsph_sph_point_2d(double theta, double phi, bool in_radians)
   if (phi> pye) phi_ = phi - two_pye;
 }
 
-void vsph_sph_point_2d::print(vcl_ostream& os) const
+void vsph_sph_point_2d::print(std::ostream& os) const
 {
   os << " vsph_sph_point_2d(";
   if (in_radians_) os << "rad"; else os << "deg";
@@ -33,7 +33,7 @@ bool vsph_sph_point_2d::operator==(const vsph_sph_point_2d &other) const
     oth /= vnl_math::deg_per_rad;
     oph /= vnl_math::deg_per_rad;
   }
-  double er = vcl_fabs(oth-th) + vcl_fabs(oph - ph);
+  double er = std::fabs(oth-th) + std::fabs(oph - ph);
   return er <= tol;
 }
 
@@ -67,12 +67,12 @@ void vsl_b_write(vsl_b_ostream& os, vsph_sph_point_2d const& sp)
   sp.b_write(os);
 }
 
-void vsl_print_summary(vcl_ostream& os, vsph_sph_point_2d const& sp)
+void vsl_print_summary(std::ostream& os, vsph_sph_point_2d const& sp)
 {
   sp.print(os);
 }
 
-vcl_ostream& operator<<(vcl_ostream& os, vsph_sph_point_2d const& sp)
+std::ostream& operator<<(std::ostream& os, vsph_sph_point_2d const& sp)
 {
   sp.print(os);
   return os;

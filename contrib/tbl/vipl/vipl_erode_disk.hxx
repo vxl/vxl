@@ -2,14 +2,16 @@
 #define vipl_erode_disk_hxx_
 
 #include "vipl_erode_disk.h"
-#include <vcl_algorithm.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <algorithm>
+#include <iostream>
 
 template <class ImgIn,class ImgOut,class DataIn,class DataOut,class PixelItr>
 bool vipl_erode_disk <ImgIn,ImgOut,DataIn,DataOut,PixelItr> :: section_applyop()
 {
 #ifdef DEBUG
-  vcl_cout << "Starting vipl_erode_disk::section_applyop() ...";
+  std::cout << "Starting vipl_erode_disk::section_applyop() ...";
 #endif
   const ImgIn &in = this->in_data(0);
   ImgOut &out = *this->out_data_ptr();
@@ -19,15 +21,15 @@ bool vipl_erode_disk <ImgIn,ImgOut,DataIn,DataOut,PixelItr> :: section_applyop()
 
   // apply filter:
 #ifdef DEBUG
-  vcl_cout << " set start & stop ...";
+  std::cout << " set start & stop ...";
 #endif
   int startx = vipl_filter<ImgIn,ImgOut,DataIn,DataOut,2,PixelItr>::start(this->X_Axis());
   int starty = 0; // = vipl_filter<ImgIn,ImgOut,DataIn,DataOut,2,PixelItr>::start(this->Y_Axis());
   int stopx  = vipl_filter<ImgIn,ImgOut,DataIn,DataOut,2,PixelItr>::stop(this->X_Axis());
   int stopy  = vipl_filter<ImgIn,ImgOut,DataIn,DataOut,2,PixelItr>::stop(this->Y_Axis()); // = height(out);
 #ifdef DEBUG
-  vcl_cout << " (" << startx << ':' << stopx << ',' << starty << ':' << stopy << ')';
-  vcl_cout << " run over image ...";
+  std::cout << " (" << startx << ':' << stopx << ',' << starty << ':' << stopy << ')';
+  std::cout << " run over image ...";
 #endif
   for (register int j = starty; j < stopy; ++j)
     for (register int i = startx; i < stopx; ++i)
@@ -36,15 +38,15 @@ bool vipl_erode_disk <ImgIn,ImgOut,DataIn,DataOut,PixelItr> :: section_applyop()
       for (register int x=0; x<=size; ++x)
       for (register int y=0; y<=size; ++y)
         if (mask()[x][y]) {
-          v = vcl_min(v, getpixel(in, i+x, j+y, DataIn(0)));
-          v = vcl_min(v, getpixel(in, i-x, j+y, DataIn(0)));
-          v = vcl_min(v, getpixel(in, i+x, j-y, DataIn(0)));
-          v = vcl_min(v, getpixel(in, i-x, j-y, DataIn(0)));
+          v = std::min(v, getpixel(in, i+x, j+y, DataIn(0)));
+          v = std::min(v, getpixel(in, i-x, j+y, DataIn(0)));
+          v = std::min(v, getpixel(in, i+x, j-y, DataIn(0)));
+          v = std::min(v, getpixel(in, i-x, j-y, DataIn(0)));
         }
       fsetpixel(out, i, j, DataOut(v));
     }
 #ifdef DEBUG
-  vcl_cout << " done\n";
+  std::cout << " done\n";
 #endif
   return true;
 }
@@ -55,7 +57,7 @@ template <class ImgIn,class ImgOut,class DataIn,class DataOut,class PixelItr>
 bool vipl_erode_disk <ImgIn,ImgOut,DataIn,DataOut,PixelItr> :: preop()
 {
 #ifdef DEBUG
-  vcl_cout << "Starting vipl_erode_disk::preop() ...";
+  std::cout << "Starting vipl_erode_disk::preop() ...";
 #endif
   // create circular mask:
   int size = (radius() < 0) ? 0 : int(radius());
@@ -63,13 +65,13 @@ bool vipl_erode_disk <ImgIn,ImgOut,DataIn,DataOut,PixelItr> :: preop()
   typedef bool* boolptr;
   if (mask() == 0) {
 #ifdef DEBUG
-    vcl_cout << " allocate mask ...";
+    std::cout << " allocate mask ...";
 #endif
     ref_mask() = new boolptr[1+size];
   }
   else {
 #ifdef DEBUG
-    vcl_cout << " re-allocate mask ...";
+    std::cout << " re-allocate mask ...";
 #endif
     for (int x=0; x<=size; ++x)
       if (mask()[x]) delete[] ref_mask()[x];
@@ -77,7 +79,7 @@ bool vipl_erode_disk <ImgIn,ImgOut,DataIn,DataOut,PixelItr> :: preop()
     ref_mask() = new boolptr[1+size];
   }
 #ifdef DEBUG
-  vcl_cout << " write mask ...";
+  std::cout << " write mask ...";
 #endif
   for (int x=0; x<=size; ++x) {
     ref_mask()[x] = new bool[size+1];
@@ -85,7 +87,7 @@ bool vipl_erode_disk <ImgIn,ImgOut,DataIn,DataOut,PixelItr> :: preop()
       ref_mask()[x][y] = (x*x + y*y <= rs);
   }
 #ifdef DEBUG
-  vcl_cout << " done\n";
+  std::cout << " done\n";
 #endif
   return true;
 }
@@ -96,12 +98,12 @@ template <class ImgIn,class ImgOut,class DataIn,class DataOut,class PixelItr>
 bool vipl_erode_disk <ImgIn,ImgOut,DataIn,DataOut,PixelItr> :: postop()
 {
 #ifdef DEBUG
-  vcl_cout << "Starting vipl_erode_disk::postop() ...";
+  std::cout << "Starting vipl_erode_disk::postop() ...";
 #endif
   int size = (radius() < 0) ? 0 : int(radius());
   if (mask()) {
 #ifdef DEBUG
-    vcl_cout << " de-allocate mask ...";
+    std::cout << " de-allocate mask ...";
 #endif
     for (int x=0; x<=size; ++x)
       if (mask()[x]) delete[] ref_mask()[x];
@@ -109,7 +111,7 @@ bool vipl_erode_disk <ImgIn,ImgOut,DataIn,DataOut,PixelItr> :: postop()
     ref_mask()=0;
   }
 #ifdef DEBUG
-  vcl_cout << " done\n";
+  std::cout << " done\n";
 #endif
   return true;
 }

@@ -3,7 +3,9 @@
 // \file
 #include <vpgl/vpgl_perspective_camera.h>
 #include <vgui/vgui_modifier.h>
-#include <vcl_sstream.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <sstream>
 
 #include <bocl/bocl_device.h>
 #include <bocl/bocl_kernel.h>
@@ -108,7 +110,7 @@ bool bstm_ocl_render_tableau::handle(vgui_event const &e)
     glBindBuffer(GL_PIXEL_UNPACK_BUFFER_ARB, 0);
 
     //calculate and write fps to status
-    vcl_stringstream str;
+    std::stringstream str;
     str<<".  rendering at ~ "<< (1000.0f / gpu_time) <<" fps ";
     if (status_) {
       status_->write(str.str().c_str());
@@ -174,12 +176,12 @@ float bstm_ocl_render_tableau::render_frame()
     brdb_query_aptr Q = brdb_query_comp_new("id", brdb_query::EQ, time_id);
     brdb_selection_sptr S = DATABASE->select("float_data", Q);
     if (S->size()!=1){
-        vcl_cout << "in bprb_batch_process_manager::set_input_from_db(.) -"
+        std::cout << "in bprb_batch_process_manager::set_input_from_db(.) -"
             << " no selections\n";
     }
     brdb_value_sptr value;
-    if (!S->get_value(vcl_string("value"), value)) {
-        vcl_cout << "in bprb_batch_process_manager::set_input_from_db(.) -"
+    if (!S->get_value(std::string("value"), value)) {
+        std::cout << "in bprb_batch_process_manager::set_input_from_db(.) -"
             << " didn't get value\n";
     }
     float time = value->val<float>();
@@ -195,7 +197,7 @@ float bstm_ocl_render_tableau::render_frame()
 bool bstm_ocl_render_tableau::init_clgl()
 {
   //get relevant blocks
-  vcl_cout<<"Data Path: "<<scene_->data_path()<<vcl_endl;
+  std::cout<<"Data Path: "<<scene_->data_path()<<std::endl;
   device_->context() = boxm2_view_utils::create_clgl_context(*(device_->device_id()));
   opencl_cache_->set_context(device_->context());
 

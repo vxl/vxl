@@ -10,8 +10,10 @@
 //
 //=======================================================================
 
-#include <vcl_iostream.h>
-#include <vcl_sstream.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iostream>
+#include <sstream>
 #include <vsl/vsl_binary_loader.h>
 #include <mfpf/mfpf_add_all_loaders.h>
 #include <mfpf/mfpf_region_pdf.h>
@@ -25,7 +27,7 @@
 
 void test_region_pdf_search(mfpf_point_finder_builder& b)
 {
-  vcl_cout<<"Testing building and search."<<vcl_endl;
+  std::cout<<"Testing building and search."<<std::endl;
 
   mfpf_point_finder* pf = b.new_finder();
 
@@ -43,22 +45,22 @@ void test_region_pdf_search(mfpf_point_finder_builder& b)
   b.add_example(image,p0,u);
   b.build(*pf);
 
-  vcl_cout<<"Built model: "<<pf<<vcl_endl;
+  std::cout<<"Built model: "<<pf<<std::endl;
 
   vgl_point_2d<double> new_p;
   vgl_vector_2d<double> new_u;
 
-  vcl_cout<<"Value at true point ="<<pf->evaluate(image,p0,u)<<vcl_endl;
+  std::cout<<"Value at true point ="<<pf->evaluate(image,p0,u)<<std::endl;
 
   pf->set_search_area(0,0);
   pf->search(image,p0,u,new_p,new_u);
-  vcl_cout<<"search(): Found point: "<<new_p<<vcl_endl;
+  std::cout<<"search(): Found point: "<<new_p<<std::endl;
   TEST_NEAR("Correct location",(new_p-p0).length(),0.0,1e-6);
 
   pf->set_search_area(3,3);
   pf->search(image,p1,u,new_p,new_u);
-  vcl_cout<<"Found point: "<<new_p<<vcl_endl
-          <<"Should be : "<<p0<<vcl_endl;
+  std::cout<<"Found point: "<<new_p<<std::endl
+          <<"Should be : "<<p0<<std::endl;
 
   TEST_NEAR("Correct orientation",(new_u-u).length(),0.0,1e-6);
   TEST_NEAR("Correct location",(new_p-p0).length(),0.0,1e-6);
@@ -67,7 +69,7 @@ void test_region_pdf_search(mfpf_point_finder_builder& b)
   pf->evaluate_region(image,p1,u,response);
   TEST("Response ni",response.image().ni(),7);
   TEST("Response nj",response.image().nj(),7);
-  vcl_cout<<"World2im: "<<response.world2im()<<vcl_endl;
+  std::cout<<"World2im: "<<response.world2im()<<std::endl;
 
   // Check that response has local minima in correct place
   vgl_point_2d<double> ip = response.world2im()(new_p);
@@ -77,7 +79,7 @@ void test_region_pdf_search(mfpf_point_finder_builder& b)
   double r0 = vil_bilin_interp_safe(response.image(),ip.x(),ip.y());
   double r1 = vil_bilin_interp_safe(response.image(),ip.x()-1,ip.y());
   double r2 = vil_bilin_interp_safe(response.image(),ip.x()+1,ip.y());
-  vcl_cout<<r0<<','<<r1<<','<<r2<<vcl_endl;
+  std::cout<<r0<<','<<r1<<','<<r2<<std::endl;
   TEST("Local minima 1",r0<r1,true);
   TEST("Local minima 2",r0<r2,true);
 
@@ -86,7 +88,7 @@ void test_region_pdf_search(mfpf_point_finder_builder& b)
 
 void test_region_pdf()
 {
-  vcl_cout << "*************************\n"
+  std::cout << "*************************\n"
            << " Testing mfpf_region_pdf\n"
            << "*************************\n";
 
@@ -97,15 +99,15 @@ void test_region_pdf()
   mfpf_region_pdf_builder r_builder;
   r_builder.set_as_box(4,5,pdf_builder);
   TEST("Number of pixels",r_builder.n_pixels(),20);
-  vcl_cout<<r_builder<<vcl_endl;
-  r_builder.print_shape(vcl_cout);
+  std::cout<<r_builder<<std::endl;
+  r_builder.print_shape(std::cout);
 
   test_region_pdf_search(r_builder);
 
   r_builder.set_as_ellipse(4,3,pdf_builder);
   TEST("Number of pixels",r_builder.n_pixels(),35);
-  vcl_cout<<r_builder<<vcl_endl;
-  r_builder.print_shape(vcl_cout);
+  std::cout<<r_builder<<std::endl;
+  r_builder.print_shape(std::cout);
 
   test_region_pdf_search(r_builder);
 
@@ -114,8 +116,8 @@ void test_region_pdf()
   // -------------------------------------------
 
   {
-    vcl_cout<<"Testing initialisation as box"<<vcl_endl;
-    vcl_istringstream ss(
+    std::cout<<"Testing initialisation as box"<<std::endl;
+    std::istringstream ss(
           "mfpf_region_pdf_builder\n"
           "{\n"
           "  shape: box { ni: 5 nj: 3 ref_x: 2.5 ref_y: 1.5 }\n"
@@ -123,14 +125,14 @@ void test_region_pdf()
           "  search_nj: 15\n"
           "}\n");
 
-    vcl_auto_ptr<mfpf_point_finder_builder>
+    std::auto_ptr<mfpf_point_finder_builder>
             pf = mfpf_point_finder_builder::create_from_stream(ss);
 
     TEST("Correct Point Finder Builder", pf->is_a(),"mfpf_region_pdf_builder");
     if (pf->is_a()=="mfpf_region_pdf_builder")
     {
       mfpf_region_pdf_builder &a_pf = static_cast<mfpf_region_pdf_builder&>(*pf);
-      vcl_cout<<a_pf<<vcl_endl;
+      std::cout<<a_pf<<std::endl;
       TEST("search_ni configured",a_pf.search_ni(),17);
       TEST("search_nj configured",a_pf.search_nj(),15);
       TEST("shape",a_pf.shape(),"box");
@@ -139,8 +141,8 @@ void test_region_pdf()
   }
 
   {
-    vcl_cout<<"Testing initialisation as ellipse"<<vcl_endl;
-    vcl_istringstream ss(
+    std::cout<<"Testing initialisation as ellipse"<<std::endl;
+    std::istringstream ss(
           "mfpf_region_pdf_builder\n"
           "{\n"
           "  shape: ellipse { ri: 5 rj: 3 }\n"
@@ -151,14 +153,14 @@ void test_region_pdf()
           "  step_size: 1.01\n"
           "}\n");
 
-    vcl_auto_ptr<mfpf_point_finder_builder>
+    std::auto_ptr<mfpf_point_finder_builder>
             pf = mfpf_point_finder_builder::create_from_stream(ss);
 
     TEST("Correct Point Finder Builder", pf->is_a(),"mfpf_region_pdf_builder");
     if (pf->is_a()=="mfpf_region_pdf_builder")
     {
       mfpf_region_pdf_builder &a_pf = static_cast<mfpf_region_pdf_builder&>(*pf);
-      vcl_cout<<a_pf<<vcl_endl;
+      std::cout<<a_pf<<std::endl;
       TEST("search_ni configured",a_pf.search_ni(),17);
       TEST("search_nj configured",a_pf.search_nj(),15);
       TEST("shape",a_pf.shape(),"ellipse");
@@ -200,8 +202,8 @@ void test_region_pdf()
 #endif
     TEST ("Finished reading file successfully", (!bfs_in), false);
     bfs_in.close();
-    vcl_cout<<region_pdf<<vcl_endl
-            <<region_pdf_in<<vcl_endl;
+    std::cout<<region_pdf<<std::endl
+            <<region_pdf_in<<std::endl;
     TEST("Loaded==Saved",region_pdf_in,region_pdf);
 #ifdef POINT_FINDER_WORKS
     TEST("Load region_pdf by base ptr (type)",

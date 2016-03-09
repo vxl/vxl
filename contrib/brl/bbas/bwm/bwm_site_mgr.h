@@ -10,9 +10,11 @@
 #include <vgui/vgui_dialog_extensions.h>
 
 #include <vul/vul_timer.h>
-#include <vcl_map.h>
-#include <vcl_string.h>
-#include <vcl_vector.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <map>
+#include <string>
+#include <vector>
 
 class bwm_site_mgr
 {
@@ -40,8 +42,8 @@ class bwm_site_mgr
   //: compute 3-d parameters, site bounding box and GSD
   void compute_3d_world_params();
   //:site info
-  vcl_string site_name() { return site_name_;}
-  vcl_string site_dir() { return site_dir_;}
+  std::string site_name() { return site_name_;}
+  std::string site_dir() { return site_dir_;}
   //: depth map scene io
   void load_depth_map_scene();
   void save_depth_map_scene();
@@ -49,21 +51,21 @@ class bwm_site_mgr
   bwm_site_mgr();
   static bwm_site_mgr* instance_;
 
-  vcl_vector<bwm_io_tab_config*> inactive_tableaus_;
-  vcl_vector<bwm_io_tab_config*> active_tableaus_;
+  std::vector<bwm_io_tab_config*> inactive_tableaus_;
+  std::vector<bwm_io_tab_config*> active_tableaus_;
 
   bwm_tableau_factory tableau_factory_;
 
   //: object files are mapped to the file paths
-  vcl_map<vcl_string, vcl_vector<vcl_string> > site_objs_;
-  vcl_vector<vcl_string> object_types_;
+  std::map<std::string, std::vector<std::string> > site_objs_;
+  std::vector<std::string> object_types_;
 #ifdef HAS_MFC
 #if HAS_MFC
   bwm_site_process* site_create_process_;
 #endif
 #endif
-  vcl_string site_name_, site_dir_, pyr_exe_ ;
-  vcl_string camera_path_, video_path_;
+  std::string site_name_, site_dir_, pyr_exe_ ;
+  std::string camera_path_, video_path_;
   vul_timer timer_;
 
   double xmin_;   double ymin_;   double zmin_;  double res_;
@@ -71,13 +73,13 @@ class bwm_site_mgr
 
 
   void create_site_dialog(vgui_dialog_extensions &site_dialog,
-                          vcl_string &site_name,
-                          vcl_string &site_dir,
-                          vcl_string &pyr_exe_dir,
-                          vcl_vector<vcl_string> &files,
+                          std::string &site_name,
+                          std::string &site_dir,
+                          std::string &pyr_exe_dir,
+                          std::vector<std::string> &files,
                           bool* pyr_v, bool* act_v,
-                          vcl_vector<vcl_string> &pyr_levels,
-                          vcl_vector<vcl_string> &objs,
+                          std::vector<std::string> &pyr_levels,
+                          std::vector<std::string> &objs,
                           int *choices,
                           double &lat, double &lon, double &elev);
 

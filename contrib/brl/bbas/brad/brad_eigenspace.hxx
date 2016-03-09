@@ -4,7 +4,9 @@
 #include "brad_eigenspace.h"
 //:
 // \file
-#include <vcl_cstdlib.h> // for std::rand()
+#include <vcl_compiler.h>
+#include <iostream>
+#include <cstdlib> // for std::rand()
 #include <vcl_cassert.h>
 #include <vil/vil_convert.h>
 #include <vil/vil_new.h>
@@ -30,23 +32,23 @@ static float bayes(float eig0, float eig1, float eig2,
 }
 
 static void
-print_resource_stats(vcl_vector<vil_image_resource_sptr> const& rescs)
+print_resource_stats(std::vector<vil_image_resource_sptr> const& rescs)
 {
-  vcl_cout << "processing " << rescs.size() << " resources\n";
-  vcl_vector<vil_image_resource_sptr>::const_iterator rit = rescs.begin();
+  std::cout << "processing " << rescs.size() << " resources\n";
+  std::vector<vil_image_resource_sptr>::const_iterator rit = rescs.begin();
   for (unsigned i = 0; rit!= rescs.end(); ++rit, ++i) {
     unsigned ni = (*rit)->ni(), nj = (*rit)->nj();
-    vcl_cout << '[' << i << "]:(" << ni << ' ' << nj << ")\n" << vcl_flush;
+    std::cout << '[' << i << "]:(" << ni << ' ' << nj << ")\n" << std::flush;
   }
 }
 
 template <class T>
 bool brad_eigenspace<T>::
-compute_covariance_matrix(vcl_vector<vil_image_resource_sptr> const& rescs)
+compute_covariance_matrix(std::vector<vil_image_resource_sptr> const& rescs)
 {
   unsigned n = funct_.size();
   if (!n) return false;
-  vcl_cout << "computing covariance matrix\n" << vcl_flush;
+  std::cout << "computing covariance matrix\n" << std::flush;
   covar_valid_ = false;
   print_resource_stats(rescs);
   mean_.set_size(n);
@@ -54,7 +56,7 @@ compute_covariance_matrix(vcl_vector<vil_image_resource_sptr> const& rescs)
   vnl_matrix<double> var(n, n);
   var.fill(0.0);
   unsigned n_samples = 0;
-  vcl_vector<vil_image_resource_sptr>::const_iterator rit = rescs.begin();
+  std::vector<vil_image_resource_sptr>::const_iterator rit = rescs.begin();
   for (; rit!= rescs.end(); ++rit) {
     unsigned ni = (*rit)->ni(), nj = (*rit)->nj();
     if (ni==0||nj==0||ni<nib_||nj<njb_) return false;
@@ -72,9 +74,9 @@ compute_covariance_matrix(vcl_vector<vil_image_resource_sptr> const& rescs)
         var += outer_product(v, v);
         ++n_samples;
       }
-      vcl_cout << '.' << vcl_flush;
+      std::cout << '.' << std::flush;
     }
-    vcl_cout << '\n' << vcl_flush;
+    std::cout << '\n' << std::flush;
   }
   if (!n_samples) return false;
   double ninv = 1.0/static_cast<double>(n_samples);
@@ -86,9 +88,9 @@ compute_covariance_matrix(vcl_vector<vil_image_resource_sptr> const& rescs)
 
 template <class T>
 bool brad_eigenspace<T>::
-compute_covariance_matrix_rand(vcl_vector<vil_image_resource_sptr> const& rescs, double frac, unsigned nit, unsigned njt)
+compute_covariance_matrix_rand(std::vector<vil_image_resource_sptr> const& rescs, double frac, unsigned nit, unsigned njt)
 {
-  vcl_vector<vil_image_resource_sptr>::const_iterator rit = rescs.begin();
+  std::vector<vil_image_resource_sptr>::const_iterator rit = rescs.begin();
   double area = 0.0;
   for (unsigned i = 0; rit!= rescs.end(); ++rit, ++i) {
     unsigned ni = (*rit)->ni(), nj = (*rit)->nj();
@@ -106,8 +108,8 @@ compute_covariance_matrix_rand(vcl_vector<vil_image_resource_sptr> const& rescs,
   //set up the covariance data
   unsigned n = funct_.size();
   if (!n) return false;
-  vcl_cout << "computing covariance matrix - randomly selecting "
-           << ntiles << " (" << nit << 'x' << njt << ") tiles\n" << vcl_flush;
+  std::cout << "computing covariance matrix - randomly selecting "
+           << ntiles << " (" << nit << 'x' << njt << ") tiles\n" << std::flush;
   covar_valid_ = false;
   print_resource_stats(rescs);
   mean_.set_size(n);
@@ -121,11 +123,11 @@ compute_covariance_matrix_rand(vcl_vector<vil_image_resource_sptr> const& rescs,
   for (unsigned t = 0; t<ntiles; ++t) {
     //randomly select a resource
     unsigned ires =
-      static_cast<unsigned>((nd)*(vcl_rand()/(RAND_MAX+1.0)));
+      static_cast<unsigned>((nd)*(std::rand()/(RAND_MAX+1.0)));
     //compute random access to tile
     double nid = rescs[ires]->ni(), njd = rescs[ires]->nj();
-    double rd = (njd-njtd-1.0)*(vcl_rand()/(RAND_MAX+1.0));
-    double cd = (nid-nitd-1.0)*(vcl_rand()/(RAND_MAX+1.0));
+    double rd = (njd-njtd-1.0)*(std::rand()/(RAND_MAX+1.0));
+    double cd = (nid-nitd-1.0)*(std::rand()/(RAND_MAX+1.0));
     if (rd<0) rd = 0.0;
     if (cd<0) cd = 0.0;
     if (rd>(njd-njtd-1.0)) rd = (njd-njtd-1.0);
@@ -148,7 +150,7 @@ compute_covariance_matrix_rand(vcl_vector<vil_image_resource_sptr> const& rescs,
         var += outer_product(v, v);
         ++n_samples;
         if (n_samples%100==0)
-          vcl_cout << ires << ' ' << vcl_flush;
+          std::cout << ires << ' ' << std::flush;
       }
     }
   }
@@ -157,17 +159,17 @@ compute_covariance_matrix_rand(vcl_vector<vil_image_resource_sptr> const& rescs,
   mean_ *= ninv;
   covar_ = ninv*var - outer_product(mean_, mean_);
   covar_valid_ = true;
-  vcl_cout << '\n' << vcl_flush;
+  std::cout << '\n' << std::flush;
   return true;
 }
 
 template <class T>
 bool brad_eigenspace<T>::
-compute_covariance_matrix_blocked(vcl_vector<vil_image_resource_sptr> const& rescs, unsigned nit, unsigned njt)
+compute_covariance_matrix_blocked(std::vector<vil_image_resource_sptr> const& rescs, unsigned nit, unsigned njt)
 {
   unsigned n = funct_.size();
   if (!n) return false;
-  vcl_cout << "computing covariance matrix (blocked cache)\n" << vcl_flush;
+  std::cout << "computing covariance matrix (blocked cache)\n" << std::flush;
   covar_valid_ = false;
   print_resource_stats(rescs);
   mean_.set_size(n);
@@ -175,7 +177,7 @@ compute_covariance_matrix_blocked(vcl_vector<vil_image_resource_sptr> const& res
   vnl_matrix<double> var(n, n);
   var.fill(0.0);
   unsigned n_samples = 0;
-  vcl_vector<vil_image_resource_sptr>::const_iterator rit = rescs.begin();
+  std::vector<vil_image_resource_sptr>::const_iterator rit = rescs.begin();
   for (; rit!= rescs.end(); ++rit) {
     unsigned ni = (*rit)->ni(), nj = (*rit)->nj();
     if (ni==0||nj==0||ni<nib_||nj<njb_) return false;
@@ -197,9 +199,9 @@ compute_covariance_matrix_blocked(vcl_vector<vil_image_resource_sptr> const& res
         var += outer_product(v, v);
         n_samples++;
       }
-      vcl_cout << '.'<< vcl_flush;
+      std::cout << '.'<< std::flush;
     }
-    vcl_cout << '\n' << vcl_flush;
+    std::cout << '\n' << std::flush;
   }
   if (!n_samples) return false;
   double ninv = 1.0/static_cast<double>(n_samples);
@@ -216,7 +218,7 @@ compute_eigensystem()
   if (!covar_valid_)
     return false;
   eigensystem_valid_ = false;
-  vcl_cout << "computing eigensystem\n" << vcl_flush;
+  std::cout << "computing eigensystem\n" << std::flush;
   vnl_symmetric_eigensystem<double> sym_eig(covar_);
   unsigned n = covar_.rows();
   eigenvectors_ = sym_eig.V;
@@ -230,11 +232,11 @@ compute_eigensystem()
 template <class T>
 bool brad_eigenspace<T>::
 compute_eigenimage(vil_image_resource_sptr const& resc,
-                   vcl_string const& output_path)
+                   std::string const& output_path)
 {
   if (!eigensystem_valid_)
     return false;
-  vcl_cout << "computing eigenvalue color image\n";
+  std::cout << "computing eigenvalue color image\n";
   unsigned n = funct_.size();
   vnl_vector<double> v(n);
   vnl_vector<double> v0 = eigenvectors_.get_column(n-1);
@@ -263,9 +265,9 @@ compute_eigenimage(vil_image_resource_sptr const& resc,
       row(c, 0, 0) = eig0; row(c, 0, 1) = eig1; row(c, 0, 2) = eig2;
     }
     out_resc->put_view(row, 0, r);
-    vcl_cout << '.'<< vcl_flush;
+    std::cout << '.'<< std::flush;
   }
-  vcl_cout << '\n' << vcl_flush;
+  std::cout << '\n' << std::flush;
   return true;
 }
 
@@ -305,9 +307,9 @@ compute_eigenimage_pixel(vil_image_view<float> const& input,
       eignimage(c, r, 2)=eig2/l2;
     }
     if (r%10==0)
-      vcl_cout << '.'<< vcl_flush;
+      std::cout << '.'<< std::flush;
   }
-  vcl_cout << '\n' << vcl_flush;
+  std::cout << '\n' << std::flush;
   return true;
 }
 
@@ -317,7 +319,7 @@ classify_image(vil_image_resource_sptr const& resc,
                bsta_joint_histogram_3d<float> const& no_atmos,
                bsta_joint_histogram_3d<float> const& atmos,
                unsigned nit, unsigned njt,
-               vcl_string const& output_path)
+               std::string const& output_path)
 {
   if (!eigensystem_valid_)
     return false;
@@ -354,9 +356,9 @@ classify_image(vil_image_resource_sptr const& resc,
       row(c, 0)=q;
     }
     out_resc->put_view(row, 0, r);
-    vcl_cout << '.'<< vcl_flush;
+    std::cout << '.'<< std::flush;
   }
-  vcl_cout << '\n' << vcl_flush;
+  std::cout << '\n' << std::flush;
   return true;
 }
 template <class T>
@@ -410,9 +412,9 @@ classify_image(vil_image_resource_sptr const& resc,
         out_resc_orig_size->put_view(temp, i0, j0);
       }
     out_resc->put_view(row, 0, r);
-    vcl_cout << '.'<< vcl_flush;
+    std::cout << '.'<< std::flush;
   }
-  vcl_cout << '\n' << vcl_flush;
+  std::cout << '\n' << std::flush;
   return true;
 }
 
@@ -452,9 +454,9 @@ classify_image_pixel(vil_image_view<float> const& image,
       class_image(c, r) = q;
     }
     if (r%10==0)
-      vcl_cout << '.'<< vcl_flush;
+      std::cout << '.'<< std::flush;
   }
-  vcl_cout << '\n' << vcl_flush;
+  std::cout << '\n' << std::flush;
   return true;
 }
 
@@ -465,7 +467,7 @@ init_histogram(vil_image_resource_sptr const& resc, unsigned nbins,
 {
   if (!eigensystem_valid_)
     return false;
-  vcl_cout << "intializing eigenvalue histogram\n";
+  std::cout << "intializing eigenvalue histogram\n";
   unsigned n = funct_.size();
   vnl_vector<double> v(n), minv(n), maxv(n);
   minv.fill(vnl_numeric_traits<float>::maxval);
@@ -493,9 +495,9 @@ init_histogram(vil_image_resource_sptr const& resc, unsigned nbins,
       if (eig0>maxv[0]) maxv[0]=eig0; if (eig1>maxv[1]) maxv[1]=eig1;
       if (eig2>maxv[2]) maxv[2]=eig2;
     }
-    vcl_cout << '.'<< vcl_flush;
+    std::cout << '.'<< std::flush;
   }
-  vcl_cout << '\n' << vcl_flush;
+  std::cout << '\n' << std::flush;
   vnl_vector<double> delta = (maxv-minv)/static_cast<float>(nbins);
   float min0 = static_cast<float>(minv[0]-delta[0]);
   float max0 = static_cast<float>(maxv[0]+delta[0]);
@@ -506,7 +508,7 @@ init_histogram(vil_image_resource_sptr const& resc, unsigned nbins,
   hist = bsta_joint_histogram_3d<float>(min0, max0, nbins,
                                         min1, max1, nbins,
                                         min2, max2, nbins);
-  vcl_cout << " not blocked " << min0 << ' ' << max0 << '\n' << vcl_flush;
+  std::cout << " not blocked " << min0 << ' ' << max0 << '\n' << std::flush;
   return true;
 }
 
@@ -557,11 +559,11 @@ bool get_view(vil_image_resource_sptr const& ir,
         bi = 0;
         if ((bj+1)>=nbj) {
           done = true;
-          vcl_cout << '\n' << vcl_flush;
+          std::cout << '\n' << std::flush;
           return true;
         }
         ++bj; j0 = 0;
-        vcl_cout << bj << ' '<< vcl_flush;
+        std::cout << bj << ' '<< std::flush;
       }
       else {
         ++bi; j0=0;
@@ -582,7 +584,7 @@ update_histogram(vil_image_resource_sptr const& resc,
 {
   if (!eigensystem_valid_)
     return false;
-  vcl_cout << "updating eigenvalue histogram\n";
+  std::cout << "updating eigenvalue histogram\n";
 
   unsigned n = funct_.size();
   vnl_vector<double> v(n);
@@ -601,7 +603,7 @@ update_histogram(vil_image_resource_sptr const& resc,
     float eig2 = static_cast<float>(dot_product(v, v2));
     hist.upcount(eig0, 0.333f, eig1, 0.333f, eig2, 0.333f);
   }
-  vcl_cout << '\n' << vcl_flush;
+  std::cout << '\n' << std::flush;
   return true;
 }
 
@@ -613,7 +615,7 @@ update_histogram(vil_image_resource_sptr const& resc,
 {
   if (!eigensystem_valid_)
     return false;
-  vcl_cout << "updating eigenvalue histogram\n";
+  std::cout << "updating eigenvalue histogram\n";
 
   unsigned n = funct_.size();
   vnl_vector<double> v(n);
@@ -637,21 +639,21 @@ update_histogram(vil_image_resource_sptr const& resc,
       float eig2 = static_cast<float>(dot_product(v, v2));
       hist.upcount(eig0, 0.333f, eig1, 0.333f, eig2, 0.333f);
     }
-    vcl_cout << '.'<< vcl_flush;
+    std::cout << '.'<< std::flush;
   }
-  vcl_cout << '\n' << vcl_flush;
+  std::cout << '\n' << std::flush;
   return true;
 }
 #endif
 
 template <class T>
 bool brad_eigenspace<T>::
-init_histogram(vcl_vector<vil_image_resource_sptr> const& rescs,
+init_histogram(std::vector<vil_image_resource_sptr> const& rescs,
                unsigned nbins, bsta_joint_histogram_3d<float>& hist)
 {
   if (!eigensystem_valid_)
     return false;
-  vcl_cout << "intializing eigenvalue histogram\n";
+  std::cout << "intializing eigenvalue histogram\n";
   unsigned n = funct_.size();
   vnl_vector<double> v(n), minv(n), maxv(n);
   minv.fill(vnl_numeric_traits<float>::maxval);
@@ -659,7 +661,7 @@ init_histogram(vcl_vector<vil_image_resource_sptr> const& rescs,
   vnl_vector<double> v0 = eigenvectors_.get_column(n-1);
   vnl_vector<double> v1 = eigenvectors_.get_column(n-2);
   vnl_vector<double> v2 = eigenvectors_.get_column(n-3);
-  for (vcl_vector<vil_image_resource_sptr>::const_iterator rit = rescs.begin();
+  for (std::vector<vil_image_resource_sptr>::const_iterator rit = rescs.begin();
        rit != rescs.end(); ++rit) {
     unsigned ni = (*rit)->ni(), nj = (*rit)->nj();
     if (ni==0||nj==0||ni<nib_||nj<njb_) return false;
@@ -681,9 +683,9 @@ init_histogram(vcl_vector<vil_image_resource_sptr> const& rescs,
         if (eig0>maxv[0]) maxv[0]=eig0; if (eig1>maxv[1]) maxv[1]=eig1;
         if (eig2>maxv[2]) maxv[2]=eig2;
       }
-      vcl_cout << '.'<< vcl_flush;
+      std::cout << '.'<< std::flush;
     }
-    vcl_cout << '\n' << vcl_flush;
+    std::cout << '\n' << std::flush;
   }
   vnl_vector<double> delta = (maxv-minv)/static_cast<float>(nbins);
   float min0 = static_cast<float>(minv[0]-delta[0]);
@@ -700,10 +702,10 @@ init_histogram(vcl_vector<vil_image_resource_sptr> const& rescs,
 
 template <class T>
 bool brad_eigenspace<T>::
-update_histogram(vcl_vector<vil_image_resource_sptr> const& rescs,
+update_histogram(std::vector<vil_image_resource_sptr> const& rescs,
                  bsta_joint_histogram_3d<float>& hist)
 {
-  for (vcl_vector<vil_image_resource_sptr>::const_iterator rit = rescs.begin();
+  for (std::vector<vil_image_resource_sptr>::const_iterator rit = rescs.begin();
        rit != rescs.end(); ++rit)
     if (!this->update_histogram((*rit), hist))
       return false;
@@ -712,14 +714,14 @@ update_histogram(vcl_vector<vil_image_resource_sptr> const& rescs,
 
 template <class T>
 bool brad_eigenspace<T>::
-init_histogram_rand(vcl_vector<vil_image_resource_sptr> const& rescs,
+init_histogram_rand(std::vector<vil_image_resource_sptr> const& rescs,
                     unsigned nbins,
                     bsta_joint_histogram_3d<float>& hist,
                     double frac, unsigned nit, unsigned njt)
 {
   if (!eigensystem_valid_)
     return false;
-  vcl_vector<vil_image_resource_sptr>::const_iterator rit = rescs.begin();
+  std::vector<vil_image_resource_sptr>::const_iterator rit = rescs.begin();
   double area = 0.0;
   for (unsigned i = 0; rit!= rescs.end(); ++rit, ++i) {
     unsigned ni = (*rit)->ni(), nj = (*rit)->nj();
@@ -735,8 +737,8 @@ init_histogram_rand(vcl_vector<vil_image_resource_sptr> const& rescs,
   if (!ntiles) return false;
   unsigned n = funct_.size();
   if (!n) return false;
-  vcl_cout << "initializing histogram - randomly selecting "
-           << ntiles << " (" << nit << 'x' << njt << ") tiles\n" << vcl_flush;
+  std::cout << "initializing histogram - randomly selecting "
+           << ntiles << " (" << nit << 'x' << njt << ") tiles\n" << std::flush;
   print_resource_stats(rescs);
 
   vnl_vector<double> minv(n), maxv(n);
@@ -750,11 +752,11 @@ init_histogram_rand(vcl_vector<vil_image_resource_sptr> const& rescs,
   for (unsigned t = 0; t<ntiles; ++t) {
     //randomly select a resource
     unsigned ires =
-      static_cast<unsigned>((nd)*(vcl_rand()/(RAND_MAX+1.0)));
+      static_cast<unsigned>((nd)*(std::rand()/(RAND_MAX+1.0)));
     //compute random access to tile
     double nid = rescs[ires]->ni(), njd = rescs[ires]->nj();
-    double rd = (njd-njtd-1.0)*(vcl_rand()/(RAND_MAX+1.0));
-    double cd = (nid-nitd-1.0)*(vcl_rand()/(RAND_MAX+1.0));
+    double rd = (njd-njtd-1.0)*(std::rand()/(RAND_MAX+1.0));
+    double cd = (nid-nitd-1.0)*(std::rand()/(RAND_MAX+1.0));
     if (rd<0) rd = 0.0;
     if (cd<0) cd = 0.0;
     if (rd>(njd-njtd-1.0)) rd = (njd-njtd-1.0);
@@ -782,7 +784,7 @@ init_histogram_rand(vcl_vector<vil_image_resource_sptr> const& rescs,
         if (eig2>maxv[2]) maxv[2]=eig2;
       }
     }
-    vcl_cout << '.' << vcl_flush;
+    std::cout << '.' << std::flush;
   }
   vnl_vector<double> delta = (maxv-minv)/static_cast<float>(nbins);
   float min0 = static_cast<float>(minv[0]-delta[0]);
@@ -794,19 +796,19 @@ init_histogram_rand(vcl_vector<vil_image_resource_sptr> const& rescs,
   hist = bsta_joint_histogram_3d<float>(min0, max0, nbins,
                                         min1, max1, nbins,
                                         min2, max2, nbins);
-  vcl_cout << '\n' << vcl_flush;
+  std::cout << '\n' << std::flush;
   return true;
 }
 
 template <class T>
 bool brad_eigenspace<T>::
-init_histogram_blocked(vcl_vector<vil_image_resource_sptr> const& rescs,
+init_histogram_blocked(std::vector<vil_image_resource_sptr> const& rescs,
                        unsigned nbins,
                        bsta_joint_histogram_3d<float>& hist,
                        unsigned nit, unsigned njt) {
   if (!eigensystem_valid_)
     return false;
-  vcl_cout << "intializing eigenvalue histogram(blocked)\n";
+  std::cout << "intializing eigenvalue histogram(blocked)\n";
   unsigned n = funct_.size();
   vnl_vector<double> v(n), minv(n), maxv(n);
   minv.fill(vnl_numeric_traits<float>::maxval);
@@ -814,7 +816,7 @@ init_histogram_blocked(vcl_vector<vil_image_resource_sptr> const& rescs,
   vnl_vector<double> v0 = eigenvectors_.get_column(n-1);
   vnl_vector<double> v1 = eigenvectors_.get_column(n-2);
   vnl_vector<double> v2 = eigenvectors_.get_column(n-3);
-  for (vcl_vector<vil_image_resource_sptr>::const_iterator rit = rescs.begin();
+  for (std::vector<vil_image_resource_sptr>::const_iterator rit = rescs.begin();
        rit != rescs.end(); ++rit) {
     unsigned ni = (*rit)->ni(), nj = (*rit)->nj();
     if (ni==0||nj==0||ni<nib_||nj<njb_) return false;
@@ -839,9 +841,9 @@ init_histogram_blocked(vcl_vector<vil_image_resource_sptr> const& rescs,
         if (eig1<minv[1]) minv[1]=eig1; if (eig1>maxv[1]) maxv[1]=eig1;
         if (eig2<minv[2]) minv[2]=eig2; if (eig2>maxv[2]) maxv[2]=eig2;
       }
-      vcl_cout << '.'<< vcl_flush;
+      std::cout << '.'<< std::flush;
     }
-    vcl_cout << '\n' << vcl_flush;
+    std::cout << '\n' << std::flush;
   }
   vnl_vector<double> delta = (maxv-minv)/static_cast<float>(nbins);
   float min0 = static_cast<float>(minv[0]-delta[0]);
@@ -858,13 +860,13 @@ init_histogram_blocked(vcl_vector<vil_image_resource_sptr> const& rescs,
 
 template <class T>
 bool brad_eigenspace<T>::
-update_histogram_rand(vcl_vector<vil_image_resource_sptr> const& rescs,
+update_histogram_rand(std::vector<vil_image_resource_sptr> const& rescs,
                       bsta_joint_histogram_3d<float>& hist,
                       double frac, unsigned nit, unsigned njt)
 {
   if (!eigensystem_valid_)
     return false;
-  vcl_vector<vil_image_resource_sptr>::const_iterator rit = rescs.begin();
+  std::vector<vil_image_resource_sptr>::const_iterator rit = rescs.begin();
   double area = 0.0;
   for (unsigned i = 0; rit!= rescs.end(); ++rit, ++i) {
     unsigned ni = (*rit)->ni(), nj = (*rit)->nj();
@@ -881,8 +883,8 @@ update_histogram_rand(vcl_vector<vil_image_resource_sptr> const& rescs,
 
   unsigned n = funct_.size();
   if (!n) return false;
-  vcl_cout << "updating histogram - randomly selecting "
-           << ntiles << " (" << nit << 'x' << njt << ") tiles\n" << vcl_flush;
+  std::cout << "updating histogram - randomly selecting "
+           << ntiles << " (" << nit << 'x' << njt << ") tiles\n" << std::flush;
   print_resource_stats(rescs);
 
   vnl_vector<double> v0 = eigenvectors_.get_column(n-1);
@@ -893,11 +895,11 @@ update_histogram_rand(vcl_vector<vil_image_resource_sptr> const& rescs,
   for (unsigned t = 0; t<ntiles; ++t) {
     //randomly select a resource
     unsigned ires =
-      static_cast<unsigned>((nd)*(vcl_rand()/(RAND_MAX+1.0)));
+      static_cast<unsigned>((nd)*(std::rand()/(RAND_MAX+1.0)));
     //compute random access to tile
     double nid = rescs[ires]->ni(), njd = rescs[ires]->nj();
-    double rd = (njd-njtd-1.0)*(vcl_rand()/(RAND_MAX+1.0));
-    double cd = (nid-nitd-1.0)*(vcl_rand()/(RAND_MAX+1.0));
+    double rd = (njd-njtd-1.0)*(std::rand()/(RAND_MAX+1.0));
+    double cd = (nid-nitd-1.0)*(std::rand()/(RAND_MAX+1.0));
     if (rd<0) rd = 0.0; else if (rd>njd-njtd-1.0) rd = njd-njtd-1.0;
     if (cd<0) cd = 0.0; else if (cd>nid-nitd-1.0) cd = nid-nitd-1.0;
     unsigned j0 = static_cast<unsigned>(rd), i0 = static_cast<unsigned>(cd);
@@ -919,18 +921,18 @@ update_histogram_rand(vcl_vector<vil_image_resource_sptr> const& rescs,
         hist.upcount(eig0, 0.333f, eig1, 0.333f, eig2, 0.333f);
       }
     }
-    vcl_cout << '.' << vcl_flush;
+    std::cout << '.' << std::flush;
   }
-  vcl_cout << '\n' << vcl_flush;
+  std::cout << '\n' << std::flush;
   return true;
 }
 
 template <class T>
 bool brad_eigenspace<T>::
-update_histogram_blocked(vcl_vector<vil_image_resource_sptr> const& rescs,
+update_histogram_blocked(std::vector<vil_image_resource_sptr> const& rescs,
                          bsta_joint_histogram_3d<float>& hist,
                          unsigned nit, unsigned njt) {
-  for (vcl_vector<vil_image_resource_sptr>::const_iterator rit = rescs.begin();
+  for (std::vector<vil_image_resource_sptr>::const_iterator rit = rescs.begin();
        rit != rescs.end(); ++rit) {
     vil_blocked_image_resource_sptr bresc =
       vil_new_blocked_image_facade(*rit, nit, njt);
@@ -938,7 +940,7 @@ update_histogram_blocked(vcl_vector<vil_image_resource_sptr> const& rescs,
       vil_new_cached_image_resource(bresc);
     if (!eigensystem_valid_)
       return false;
-    vcl_cout << "updating eigenvalue histogram(blocked)\n";
+    std::cout << "updating eigenvalue histogram(blocked)\n";
 
     unsigned n = funct_.size();
     vnl_vector<double> v(n);
@@ -962,9 +964,9 @@ update_histogram_blocked(vcl_vector<vil_image_resource_sptr> const& rescs,
         float eig2 = static_cast<float>(dot_product(v, v2));
         hist.upcount(eig0, 0.333f, eig1, 0.333f, eig2, 0.333f);
       }
-      vcl_cout << '.' << vcl_flush;
+      std::cout << '.' << std::flush;
     }
-    vcl_cout << '\n' << vcl_flush;
+    std::cout << '\n' << std::flush;
   }
   return true;
 }
@@ -1004,7 +1006,7 @@ void vsl_b_read(vsl_b_istream &is, brad_eigenspace<T>& ep)
 }
 
 template <class T>
-bool brad_eigenspace<T>::print(vcl_ostream& os) const
+bool brad_eigenspace<T>::print(std::ostream& os) const
 {
   os << "image block size(" << nib_ << ' ' << njb_ << ")\n"
      << "feature vector size " << funct_.size() << '\n'
@@ -1037,7 +1039,7 @@ bool brad_eigenspace<T>::print(vcl_ostream& os) const
 //: Print summary
 template <class T>
 void
-vsl_print_summary(vcl_ostream &os, const brad_eigenspace<T>& ep)
+vsl_print_summary(std::ostream &os, const brad_eigenspace<T>& ep)
 {
   ep.print(os);
 }
@@ -1045,7 +1047,7 @@ vsl_print_summary(vcl_ostream &os, const brad_eigenspace<T>& ep)
 #undef BRAD_EIGENSPACE_INSTANTIATE
 #define BRAD_EIGENSPACE_INSTANTIATE(T) \
 template class brad_eigenspace<T >; \
-template void vsl_print_summary(vcl_ostream&,brad_eigenspace<T > const&); \
+template void vsl_print_summary(std::ostream&,brad_eigenspace<T > const&); \
 template void vsl_b_read(vsl_b_istream&,brad_eigenspace<T >&); \
 template void vsl_b_write(vsl_b_ostream &,brad_eigenspace<T > const&)
 

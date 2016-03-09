@@ -16,7 +16,9 @@
 // \endverbatim
 //
 #include "volm_desc.h"
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iostream>
 #include <volm_io.h>
 #include <vcl_cassert.h>
 #include <vsl/vsl_binary_io.h>
@@ -33,21 +35,21 @@ public:
   volm_desc_ex_land_only() {}
 
   //: simple constructor that only sets the number of bins
-  volm_desc_ex_land_only(unsigned ndists, unsigned nlands, vcl_vector<double>& radius) :
+  volm_desc_ex_land_only(unsigned ndists, unsigned nlands, std::vector<double>& radius) :
     ndists_(ndists), nlands_(nlands), radius_(radius) { nbins_ = ndists_ * nlands_; h_.resize(nbins_); initialize_bin(0); name_ = "existence land only descriptor";}
 
 
   //: Constructor from depth map scene
   volm_desc_ex_land_only(depth_map_scene_sptr const& dms,
-                         vcl_vector<double> const& radius,
+                         std::vector<double> const& radius,
                          unsigned const& nlands = volm_label_table::compute_number_of_labels(),
                          unsigned char const& initial_mag = 0);
 
   //: Constructor from created index
-  volm_desc_ex_land_only(vcl_vector<unsigned char> const& index_dst,
-                         vcl_vector<unsigned char> const& index_combined,
-                         vcl_vector<double> depth_interval,
-                         vcl_vector<double> const& radius,
+  volm_desc_ex_land_only(std::vector<unsigned char> const& index_dst,
+                         std::vector<unsigned char> const& index_combined,
+                         std::vector<double> depth_interval,
+                         std::vector<double> const& radius,
                          unsigned const& nlands = volm_label_table::compute_number_of_labels(),
                          unsigned char const& initial_mag = 0);
 
@@ -61,7 +63,7 @@ public:
   unsigned nlands() const { return this->nlands_; }
 
   //: the radius that defines the distance interval
-  vcl_vector<double>& radius() { return radius_; }
+  std::vector<double>& radius() { return radius_; }
 
   //: initialize the histogram with given value
   void initialize_bin(unsigned char const& mag);
@@ -102,9 +104,9 @@ private:
   //: histogram structure
   unsigned ndists_;
   unsigned nlands_;
-  vcl_vector<double> radius_;
+  std::vector<double> radius_;
 
-  unsigned locate_idx(double const& target, vcl_vector<double> const& arr) const;
+  unsigned locate_idx(double const& target, std::vector<double> const& arr) const;
 };
 
 #endif // volm_desc_ex_land_only_h_

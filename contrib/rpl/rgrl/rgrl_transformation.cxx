@@ -10,7 +10,9 @@
 #include <vnl/vnl_least_squares_function.h>
 #include <vnl/algo/vnl_levenberg_marquardt.h>
 
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iostream>
 #include <vcl_cassert.h>
 
 #include <vnl/vnl_cross.h>
@@ -130,10 +132,10 @@ map_normal( vnl_vector<double> const & from_loc,
     vnl_double_3 from_tangent1;
     // find the element with smallest magnitude
     unsigned int min_index=0;
-    double min = vcl_abs(from_dir[0]);
+    double min = std::abs(from_dir[0]);
     for ( unsigned int i=1; i<3; i++)
-      if ( vcl_abs(from_dir[i]) < min ) {
-        min = vcl_abs( from_dir[i] );
+      if ( std::abs(from_dir[i]) < min ) {
+        min = std::abs( from_dir[i] );
         min_index = i;
       }
 
@@ -249,7 +251,7 @@ log_det_sym_matrix( vnl_matrix<double> const& m ) const
   double result = 0;
   vnl_symmetric_eigensystem<double> eig(m);
   for ( unsigned i=0; i<m.rows(); ++i )
-    result += vcl_log( eig.get_eigenvalue(i) );
+    result += std::log( eig.get_eigenvalue(i) );
   return result;
 }
 
@@ -259,7 +261,7 @@ log_det_covar_deficient( int rank ) const
 {
   // first, scan the matrix and eliminate
   // rows and columns containing only zeros
-  vcl_vector<unsigned int> zero_indices;
+  std::vector<unsigned int> zero_indices;
   for ( unsigned i=0; i<covar_.rows(); ++i )
     if ( !covar_(i,i) ) {
 
@@ -315,7 +317,7 @@ log_det_covar_deficient( int rank ) const
   double result = 0;
   vnl_symmetric_eigensystem<double> eig(m);
   for ( int i=0; i<rank; ++i )
-    result += vcl_log( eig.get_eigenvalue(num-1-i) );
+    result += std::log( eig.get_eigenvalue(num-1-i) );
   return result;
 }
 
@@ -365,8 +367,8 @@ set_scaling_factors( vnl_vector<double> const& scaling )
 }
 
 
-vcl_ostream&
-operator<< (vcl_ostream& os, rgrl_transformation const& xform )
+std::ostream&
+operator<< (std::ostream& os, rgrl_transformation const& xform )
 {
   xform.write( os );
   return os;
@@ -375,14 +377,14 @@ operator<< (vcl_ostream& os, rgrl_transformation const& xform )
 //: output transformation
 void
 rgrl_transformation::
-write( vcl_ostream& os ) const
+write( std::ostream& os ) const
 {
   if ( is_covar_set() )
   {
     // write covariance
     os << "COVARIANCE\n"
        << covar_.rows() << ' ' << covar_.cols() << '\n'
-       << covar_ << vcl_endl;
+       << covar_ << std::endl;
   }
 
   if ( scaling_factors_.size() )
@@ -390,17 +392,17 @@ write( vcl_ostream& os ) const
     // write scaling factors
     os << "SCALING_FACTORS\n"
        << scaling_factors_.size() << '\n'
-       << scaling_factors_ << vcl_endl;
+       << scaling_factors_ << std::endl;
   }
 }
 
 //: input transformation
 bool
 rgrl_transformation::
-read( vcl_istream& is )
+read( std::istream& is )
 {
-  vcl_streampos pos;
-  vcl_string tag_str;
+  std::streampos pos;
+  std::string tag_str;
 
   // skip any empty lines
   rgrl_util_skip_empty_lines( is );
@@ -409,7 +411,7 @@ read( vcl_istream& is )
 
   tag_str="";
   pos = is.tellg();
-  vcl_getline( is, tag_str );
+  std::getline( is, tag_str );
 
   if ( tag_str.find("COVARIANCE") == 0 )
   {
@@ -439,7 +441,7 @@ read( vcl_istream& is )
 
     tag_str="";
     pos = is.tellg();
-    vcl_getline( is, tag_str );
+    std::getline( is, tag_str );
   }
 
   if ( tag_str.find("SCALING_FACTORS") == 0 )

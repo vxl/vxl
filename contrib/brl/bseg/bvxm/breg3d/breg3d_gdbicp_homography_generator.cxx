@@ -1,11 +1,13 @@
 #include "breg3d_gdbicp_homography_generator.h"
 
-#include <vcl_string.h>
-#include <vcl_sstream.h>
-#include <vcl_iostream.h>
-#include <vcl_fstream.h>
+#include <string>
+#include <sstream>
+#include <iostream>
+#include <fstream>
 
-#include <vcl_cstdlib.h> // for "system" function
+#include <vcl_compiler.h>
+#include <iostream>
+#include <cstdlib> // for "system" function
 
 #include <vul/vul_file.h>
 #include <vil/vil_image_view.h>
@@ -19,26 +21,26 @@
 ihog_transform_2d breg3d_gdbicp_homography_generator::compute_homography()
 {
   // this command must be in path.
-  vcl_string gdbicp_command("gdbicp");
+  std::string gdbicp_command("gdbicp");
 
   // create local dir for i/o
-  vcl_string io_dirname("./temp_gdbicp_io");
+  std::string io_dirname("./temp_gdbicp_io");
   if (!vul_file::exists(io_dirname)) {
-    vcl_cout << "creating gdbicp io directory " << io_dirname << vcl_endl;
+    std::cout << "creating gdbicp io directory " << io_dirname << std::endl;
     if (!vul_file::make_directory(io_dirname)) {
-      vcl_cerr << "error creating directory!\n";
+      std::cerr << "error creating directory!\n";
       return ihog_transform_2d();
     }
   }
   // move to io directory
-  vcl_string og_dir = vul_file::get_cwd();
+  std::string og_dir = vul_file::get_cwd();
   vul_file::change_directory(io_dirname);
 
   // create input files
-  vcl_string img0_fname("img0.tiff");
-  vcl_string img1_fname("img1.tiff");
-  vcl_string mask0_fname("mask0.tiff");
-  vcl_string mask1_fname("mask1.tiff");
+  std::string img0_fname("img0.tiff");
+  std::string img1_fname("img1.tiff");
+  std::string mask0_fname("mask0.tiff");
+  std::string mask1_fname("mask1.tiff");
 
   // save image0
   vil_image_view<vxl_byte> img0_byte(img0_->ni(),img0_->nj());
@@ -62,7 +64,7 @@ ihog_transform_2d breg3d_gdbicp_homography_generator::compute_homography()
     vil_convert_stretch_range_limited<float>(*mask1_,mask1_byte,0.0f,1.0f);
     vil_save(mask1_byte,mask1_fname.c_str());
   }
-  vcl_stringstream command;
+  std::stringstream command;
   command << gdbicp_command << ' ' << img0_fname << ' ' << img1_fname << ' ';
   if (use_mask0_) {
     command << "-mask_from " << mask0_fname << ' ';
@@ -78,10 +80,10 @@ ihog_transform_2d breg3d_gdbicp_homography_generator::compute_homography()
   }
   //command << "-no_render";
 
-  vcl_cout << "running " << command.str() << vcl_endl;
-  int retval = vcl_system(command.str().c_str());
+  std::cout << "running " << command.str() << std::endl;
+  int retval = std::system(command.str().c_str());
   if (retval) {
-    vcl_cerr << "vcl_system(" << command.str()
+    std::cerr << "std::system(" << command.str()
              << ") returned " << retval << ".\n"
              << "  make sure " << gdbicp_command << " is in your path.\n";
     vul_file::change_directory(og_dir);
@@ -89,9 +91,9 @@ ihog_transform_2d breg3d_gdbicp_homography_generator::compute_homography()
   }
 
   // read in output file
-  vcl_string output_fname("mosaic_" + vul_file::strip_extension(img0_fname) +"_to_" + vul_file::strip_extension(img1_fname) + ".xform");
+  std::string output_fname("mosaic_" + vul_file::strip_extension(img0_fname) +"_to_" + vul_file::strip_extension(img1_fname) + ".xform");
   if (!vul_file::exists(output_fname)) {
-    vcl_cerr << "error: output file " << output_fname << " does not exist!\n";
+    std::cerr << "error: output file " << output_fname << " does not exist!\n";
     vul_file::change_directory(og_dir);
     return ihog_transform_2d();
   }
@@ -101,41 +103,41 @@ ihog_transform_2d breg3d_gdbicp_homography_generator::compute_homography()
   return xform;
 }
 
-ihog_transform_2d breg3d_gdbicp_homography_generator::parse_gdbicp_output(vcl_string filename)
+ihog_transform_2d breg3d_gdbicp_homography_generator::parse_gdbicp_output(std::string filename)
 {
-  vcl_ifstream ifs(filename.c_str());
+  std::ifstream ifs(filename.c_str());
 
   char curr_char = 0;
   while (curr_char != '<' && ifs.good()) {
     ifs.read(&curr_char,1);
   }
-  vcl_string htype;
+  std::string htype;
   ifs >> htype;
-  vcl_cout << "transformation type = " << htype << vcl_endl;
+  std::cout << "transformation type = " << htype << std::endl;
   unsigned hdim = 0;
   ifs >> hdim;
-  vcl_cout << "transformation dimension = " << hdim << vcl_endl;
+  std::cout << "transformation dimension = " << hdim << std::endl;
 
   vnl_matrix_fixed<double,3,3> H_centered;
   double cx,cy,dx,dy;
   if (compute_projective_) {
     // full projective transformation
     ifs >> H_centered;
-    vcl_cout << "H_centered =\n" << H_centered << vcl_endl;
+    std::cout << "H_centered =\n" << H_centered << std::endl;
     ifs >> cx >> cy >> dx >> dy;
   }
   else {
     // affine transformation
     vnl_matrix_fixed<double,2,2> A;
     ifs >> A;
-    vcl_cout << "A =\n" << A << vcl_endl;
+    std::cout << "A =\n" << A << std::endl;
     H_centered.fill(0.0);
     H_centered.update(A,0,0);
     H_centered(2,2) = 1.0;
-    vcl_cout << "H_centered =\n" << H_centered << vcl_endl;
+    std::cout << "H_centered =\n" << H_centered << std::endl;
     ifs >> dx >> dy >> cx >> cy;
   }
-  vcl_cout << "cx=" << cx << " cy=" << cy << " dx=" << dx << " dy=" << dy << vcl_endl;
+  std::cout << "cx=" << cx << " cy=" << cy << " dx=" << dx << " dy=" << dy << std::endl;
   vnl_matrix_fixed<double,3,3> C,D;
   C.set_identity();
   D.set_identity();
@@ -144,7 +146,7 @@ ihog_transform_2d breg3d_gdbicp_homography_generator::parse_gdbicp_output(vcl_st
   D(0,2) = dx;
   D(1,2) = dy;
   vnl_matrix_fixed<double,3,3> H = D*H_centered*C;
-  vcl_cout << "H = " << H << vcl_endl;
+  std::cout << "H = " << H << std::endl;
 
   ihog_transform_2d xform;
   if (compute_projective_) {

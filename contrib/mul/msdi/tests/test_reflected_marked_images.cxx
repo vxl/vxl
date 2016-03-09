@@ -10,7 +10,9 @@
 // \author Tim Cootes
 // \brief test msdi_reflected_marked_images
 
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iostream>
 #include <msdi/msdi_reflected_marked_images.h>
 #include <msdi/msdi_array_of_marked_images.h>
 #include <vimt/vimt_image_2d_of.h>
@@ -19,14 +21,14 @@
 
 void test_reflected_marked_images()
 {
-  vcl_cout << "***********************\n"
+  std::cout << "***********************\n"
            << " Testing msdi_reflected_marked_images\n"
            << "***********************\n";
 
   // Create some points and images
   unsigned n_egs=3;
-  vcl_vector<vil_image_view<vxl_byte> > images(n_egs);
-  vcl_vector<msm_points> points(n_egs);
+  std::vector<vil_image_view<vxl_byte> > images(n_egs);
+  std::vector<msm_points> points(n_egs);
 
   for (unsigned i=0;i<n_egs;++i)
   {
@@ -46,11 +48,11 @@ void test_reflected_marked_images()
   while (array_data.next()) count++;
   TEST("Correct number of steps",count,n_egs);
 
-  vcl_vector<unsigned> sym_pts(2);
+  std::vector<unsigned> sym_pts(2);
   sym_pts[0]=1;
   sym_pts[1]=0;
 
-  vcl_cout<<"Test only returning reflected examples."<<vcl_endl;
+  std::cout<<"Test only returning reflected examples."<<std::endl;
   msdi_reflected_marked_images ref_data1(array_data,sym_pts,true);
   TEST("Reflected array has correct size (1)",ref_data1.size(),n_egs);
   count=1;
@@ -68,7 +70,7 @@ void test_reflected_marked_images()
     TEST("Image value",image.image()(0,0),i);
   }
 
-  vcl_cout<<"Test  returning reflected examples and originals"<<vcl_endl;
+  std::cout<<"Test  returning reflected examples and originals"<<std::endl;
   msdi_reflected_marked_images ref_data2(array_data,sym_pts,false);
   TEST("Reflected array has correct size (2)",ref_data2.size(),2*n_egs);
   count=1;

@@ -8,9 +8,11 @@
 #include "vpdfl_axis_gaussian_builder.h"
 //
 #include <vcl_cassert.h>
-#include <vcl_string.h>
-#include <vcl_sstream.h>
-#include <vcl_cstdlib.h> // vcl_abort()
+#include <string>
+#include <sstream>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <cstdlib> // std::abort()
 
 #include <mbl/mbl_data_wrapper.h>
 #include <vpdfl/vpdfl_axis_gaussian.h>
@@ -88,8 +90,8 @@ void vpdfl_axis_gaussian_builder::build(vpdfl_pdf_base& model,
 
   if (n_samples<1L)
   {
-    vcl_cerr<<"vpdfl_axis_gaussian_builder::build() Too few examples available.\n";
-    vcl_abort();
+    std::cerr<<"vpdfl_axis_gaussian_builder::build() Too few examples available.\n";
+    std::abort();
   }
 
   data.reset();
@@ -137,7 +139,7 @@ void vpdfl_axis_gaussian_builder::build(vpdfl_pdf_base& model,
 
 void vpdfl_axis_gaussian_builder::weighted_build(vpdfl_pdf_base& model,
                                                  mbl_data_wrapper<vnl_vector<double> >& data,
-                                                 const vcl_vector<double>& wts) const
+                                                 const std::vector<double>& wts) const
 {
   vpdfl_axis_gaussian& g = gaussian(model);
 
@@ -145,15 +147,15 @@ void vpdfl_axis_gaussian_builder::weighted_build(vpdfl_pdf_base& model,
 
   if (n_samples<2L)
   {
-    vcl_cerr<<"vpdfl_axis_gaussian_builder::build() Too few examples available.\n";
-    vcl_abort();
+    std::cerr<<"vpdfl_axis_gaussian_builder::build() Too few examples available.\n";
+    std::abort();
   }
 
   if (wts.size()!=n_samples)
   {
-    vcl_cerr<<"vpdfl_axis_gaussian_builder::build() Weight array must contain "
-            <<n_samples<<" not "<<wts.size()<<vcl_endl;
-    vcl_abort();
+    std::cerr<<"vpdfl_axis_gaussian_builder::build() Weight array must contain "
+            <<n_samples<<" not "<<wts.size()<<std::endl;
+    std::abort();
   }
   data.reset();
   unsigned long n_dims = data.current().size();
@@ -207,16 +209,16 @@ void vpdfl_axis_gaussian_builder::weighted_build(vpdfl_pdf_base& model,
 // Method: is_a
 //=======================================================================
 
-vcl_string vpdfl_axis_gaussian_builder::is_a() const
+std::string vpdfl_axis_gaussian_builder::is_a() const
 {
-  return vcl_string("vpdfl_axis_gaussian_builder");
+  return std::string("vpdfl_axis_gaussian_builder");
 }
 
 //=======================================================================
 // Method: is_class
 //=======================================================================
 
-bool vpdfl_axis_gaussian_builder::is_class(vcl_string const& s) const
+bool vpdfl_axis_gaussian_builder::is_class(std::string const& s) const
 {
   return vpdfl_builder_base::is_class(s) || s==vpdfl_axis_gaussian_builder::is_a();
 }
@@ -243,7 +245,7 @@ vpdfl_builder_base* vpdfl_axis_gaussian_builder::clone() const
 // Method: print
 //=======================================================================
 
-void vpdfl_axis_gaussian_builder::print_summary(vcl_ostream& os) const
+void vpdfl_axis_gaussian_builder::print_summary(std::ostream& os) const
 {
   os << "Min. var.: "<< min_var_;
 }
@@ -274,9 +276,9 @@ void vpdfl_axis_gaussian_builder::b_read(vsl_b_istream& bfs)
       vsl_b_read(bfs,min_var_);
       break;
     default:
-      vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, vpdfl_axis_gaussian_builder &)\n"
-               << "           Unknown version number "<< version << vcl_endl;
-      bfs.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
+      std::cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, vpdfl_axis_gaussian_builder &)\n"
+               << "           Unknown version number "<< version << std::endl;
+      bfs.is().clear(std::ios::badbit); // Set an unrecoverable IO error on stream
       return;
   }
 }
@@ -289,11 +291,11 @@ void vpdfl_axis_gaussian_builder::b_read(vsl_b_istream& bfs)
 // }
 // \endverbatim
 // \throw mbl_exception_parse_error if the parse fails.
-void vpdfl_axis_gaussian_builder::config_from_stream(vcl_istream & is)
+void vpdfl_axis_gaussian_builder::config_from_stream(std::istream & is)
 {
-  vcl_string s = mbl_parse_block(is);
+  std::string s = mbl_parse_block(is);
 
-  vcl_istringstream ss(s);
+  std::istringstream ss(s);
   mbl_read_props_type props = mbl_read_props_ws(ss);
 
   double mv=1.0e-6;

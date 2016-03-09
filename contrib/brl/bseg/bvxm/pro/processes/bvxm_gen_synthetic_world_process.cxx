@@ -14,7 +14,7 @@ bool bvxm_gen_synthetic_world_process_cons(bprb_func_process& pro)
 {
   //process has 1 output
   //output[0] : The voxel_world
-  vcl_vector<vcl_string> output_types_(1);
+  std::vector<std::string> output_types_(1);
   output_types_[0] = "bvxm_voxel_world_sptr";
   pro.set_output_types(output_types_);
   return true;
@@ -28,7 +28,7 @@ bool bvxm_gen_synthetic_world_process(bprb_func_process& pro)
 
   //store output
   pro.set_output_val<bvxm_voxel_world_sptr>(0,world);
-  vcl_cout << "synth world params " << *world->get_params();
+  std::cout << "synth world params " << *world->get_params();
   return true;
 }
 

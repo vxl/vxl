@@ -12,7 +12,9 @@
 //-----------------------------------------------------------------------------
 #include <vbl/vbl_ref_count.h>
 #include <gevd/gevd_param_mixin.h>
-#include <vcl_iosfwd.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iosfwd>
 
 class sdet_denoise_mrf_bp_params : public gevd_param_mixin, public vbl_ref_count
 {
@@ -30,7 +32,7 @@ class sdet_denoise_mrf_bp_params : public gevd_param_mixin, public vbl_ref_count
 
   bool SanityCheck();
  friend
-  vcl_ostream& operator<<(vcl_ostream& os, const sdet_denoise_mrf_bp_params& imp);
+  std::ostream& operator<<(std::ostream& os, const sdet_denoise_mrf_bp_params& imp);
  protected:
   void InitParams(unsigned n_labels, unsigned n_iter, unsigned pyramid_levels,
                   float discontinuity_cost, float truncation_cost,

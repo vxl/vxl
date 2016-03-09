@@ -9,19 +9,21 @@
 // That list of entries must be kept sorted.
 
 
-#include <vcl_iostream.h>
+#include <iostream>
 
 #if VCL_HAS_EXCEPTIONS
-#include <vcl_exception.h>
-#include <vcl_iterator.h>
-#include <vcl_stdexcept.h>
-#include <vcl_sstream.h>
-#include <vcl_cstdio.h>
-#include <vcl_deque.h>
-#include <vcl_map.h>
-#include <vcl_iomanip.h>
+#include <exception>
+#include <iterator>
+#include <stdexcept>
+#include <sstream>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <cstdio>
+#include <deque>
+#include <map>
+#include <iomanip>
 #include <vcl_cassert.h>
-#include <vcl_cstdlib.h>
+#include <cstdlib>
 #include <vsl/vsl_deque_io.hxx>
 #include <vsl/vsl_map_io.hxx>
 #include <vsl/vsl_stream.h>
@@ -80,14 +82,14 @@ enum global_option_load_as_image_t
 
 //: List of command arguments parsed so far
 // Kept for error reporting purposes.
-vcl_string args_so_far;
+std::string args_so_far;
 
 class operand;
-vcl_ostream& operator <<( vcl_ostream&, const operand&);
+std::ostream& operator <<( std::ostream&, const operand&);
 
-bool string_to_double(const vcl_string&s, double&d)
+bool string_to_double(const std::string&s, double&d)
 {
-  vcl_istringstream ss(s);
+  std::istringstream ss(s);
   ss >> d;
   if (!ss) return false;
   char dummy;
@@ -98,14 +100,14 @@ bool string_to_double(const vcl_string&s, double&d)
 
 //: Like string_to_image, but suppress any error messages, and report success or failure.
 template <class T>
-bool try_string_to_image(const vcl_string&s, vimt3d_image_3d_of<T>&d)
+bool try_string_to_image(const std::string&s, vimt3d_image_3d_of<T>&d)
 {
   try
   {
     vimt3d_load(s, d, true);
     if (!d.image()) return false; // LEGACY_ERROR_REPORTING
   }
-  catch (const vcl_exception&)
+  catch (const std::exception&)
   {
     return false;
   }
@@ -114,23 +116,23 @@ bool try_string_to_image(const vcl_string&s, vimt3d_image_3d_of<T>&d)
 
 //: Load filename /p s as an image.
 template <class T>
-void string_to_image(const vcl_string&s, vimt3d_image_3d_of<T>&d)
+void string_to_image(const std::string&s, vimt3d_image_3d_of<T>&d)
 {
   try
   {
     vimt3d_load(s, d, true);
     if (!d.image())
     {
-      vcl_cerr << "\nERROR: Failed to load image: " << s << " for unknown reason.\n"
+      std::cerr << "\nERROR: Failed to load image: " << s << " for unknown reason.\n"
                << "At \"" << args_so_far << "\"<-- HERE\n";
-      vcl_exit(4);
+      std::exit(4);
     }
   }
-  catch (const vcl_exception& e)
+  catch (const std::exception& e)
   {
-    vcl_cerr << "\nERROR: " << e.what() << '\n'
+    std::cerr << "\nERROR: " << e.what() << '\n'
              << "At \"" << args_so_far << "\"<-- HERE\n";
-    vcl_exit(4);
+    std::exit(4);
   }
 }
 
@@ -139,7 +141,7 @@ void string_to_image(const vcl_string&s, vimt3d_image_3d_of<T>&d)
 // This is a rather inefficient VARIANT-type class.
 class operand
 {
-  vcl_string string_;
+  std::string string_;
   vimt3d_image_3d_of<double> image_3d_of_double_;
   vimt3d_image_3d_of<float> image_3d_of_float_;
   vimt3d_image_3d_of<int> image_3d_of_int_;
@@ -163,7 +165,7 @@ class operand
  public:
   operand(): operand_type_(e_never) {} // if used with this value - should throw.
 
-  explicit operand(const vcl_string& s):
+  explicit operand(const std::string& s):
     string_(s), operand_type_(e_string) {}
   explicit operand(const vimt3d_image_3d_of<double>& i):
     image_3d_of_double_(i), operand_type_(e_image_3d_of_double) {}
@@ -177,7 +179,7 @@ class operand
   operand_type_t operand_type() const { return operand_type_; }
 
   bool is_string() const { return operand_type_==e_string; }
-  const vcl_string& as_string() const { assert(is_string()); return string_; }
+  const std::string& as_string() const { assert(is_string()); return string_; }
 
   bool is_double() const
   {
@@ -195,9 +197,9 @@ class operand
       string_to_double(string_, v);
       return v;
     }
-    vcl_cerr << "\nERROR: Tried to use unsuitable operand as a double: " << *this
+    std::cerr << "\nERROR: Tried to use unsuitable operand as a double: " << *this
              << "\nAt \"" << args_so_far << "\"<-- HERE\n";
-    vcl_exit(1);
+    std::exit(1);
   }
 
   bool is_image_3d_of_float() const
@@ -215,7 +217,7 @@ class operand
       string_to_image(string_, v);
       return v;
     }
-    vcl_ostringstream ss;
+    std::ostringstream ss;
     ss << "Tried to use unsuitable operand as a vimt_image_3d_of<float>: " << *this;
     mbl_exception_abort(ss.str());
     return vimt3d_image_3d_of<float>();
@@ -236,7 +238,7 @@ class operand
       string_to_image(string_, v);
       return v;
     }
-    vcl_ostringstream ss;
+    std::ostringstream ss;
     ss << "Tried to use unsuitable operand as a vimt_image_3d_of<double>: " << *this;
     mbl_exception_abort(ss.str());
     return vimt3d_image_3d_of<double>();
@@ -257,7 +259,7 @@ class operand
       string_to_image(string_, v);
       return v;
     }
-    vcl_ostringstream ss;
+    std::ostringstream ss;
     ss << "Tried to use unsuitable operand as a vimt_image_3d_of<int>: " << *this;
     mbl_exception_abort(ss.str());
     return vimt3d_image_3d_of<int>();
@@ -267,10 +269,10 @@ class operand
     return operand_type_==e_open_brace;
   }
 
-  void print_summary(vcl_ostream &os) const
+  void print_summary(std::ostream &os) const
   {
     // Forward declaration.
-    vcl_ostream& operator <<( vcl_ostream&os, const operand::operand_type_t& t);
+    std::ostream& operator <<( std::ostream&os, const operand::operand_type_t& t);
 
     os << operand_type_ << ": ";
     switch (operand_type_)
@@ -294,7 +296,7 @@ class operand
       break;
      default: {
       os << "Unknown operand_type: " << operand_type_;
-      vcl_ostringstream ss;
+      std::ostringstream ss;
       ss << "Unknown operand_type: " << operand_type_;
       throw mbl_exception_abort(ss.str()); }
     }
@@ -317,7 +319,7 @@ class operand
      case e_open_brace:
       return is_open_brace();
      default: {
-      vcl_ostringstream ss;
+      std::ostringstream ss;
       ss << "Unknown operand_type: " << operand_type_;
       throw mbl_exception_abort(ss.str()); }
     }
@@ -353,7 +355,7 @@ class operand
       }
       default:
       {
-        vcl_ostringstream ss;
+        std::ostringstream ss;
         ss << "Unknown operand_type: " << operand_type_;
         throw mbl_exception_abort(ss.str());
       }
@@ -369,23 +371,23 @@ class operand_open_brace: public operand
   operand_open_brace() { operand_type_ = e_open_brace; }
 };
 
-void vsl_print_summary( vcl_ostream&os, const operand& p) { p.print_summary(os); }
-vcl_ostream& operator <<( vcl_ostream&os, const operand& p) { p.print_summary(os); return os; }
+void vsl_print_summary( std::ostream&os, const operand& p) { p.print_summary(os); }
+std::ostream& operator <<( std::ostream&os, const operand& p) { p.print_summary(os); return os; }
 
-void vsl_print_summary(vcl_ostream& os, const vcl_deque<operand> &v)
+void vsl_print_summary(std::ostream& os, const std::deque<operand> &v)
 {
-  os << "Operand Stack Length: " << v.size() << vcl_endl;
+  os << "Operand Stack Length: " << v.size() << std::endl;
   for (unsigned int i=0; i<v.size() && i<5; i++)
   {
     os << ' ' << i << ": ";
     vsl_print_summary(os,v[i]);
-    os << vcl_endl;
+    os << std::endl;
   }
   if (v.size() > 5)
     os << " ...\n";
 }
 
-vcl_ostream& operator <<( vcl_ostream&os, const operand::operand_type_t& t)
+std::ostream& operator <<( std::ostream&os, const operand::operand_type_t& t)
 {
   switch (t)
   {
@@ -403,17 +405,17 @@ vcl_ostream& operator <<( vcl_ostream&os, const operand::operand_type_t& t)
       os << "brace {"; break;
     default: {
       os << "Unknown operand_type: " << static_cast<int>(t);
-      vcl_ostringstream ss;
+      std::ostringstream ss;
       ss << "Unknown operand_type: " << static_cast<int>(t);
       throw mbl_exception_abort(ss.str()); }
   }
   return os;
 }
 
-class opstack_t : public vcl_deque<operand>
+class opstack_t : public std::deque<operand>
 {
  public:
-  opstack_t(): last_pop_(vcl_numeric_limits<vcl_size_t>::max()) {}
+  opstack_t(): last_pop_(std::numeric_limits<std::size_t>::max()) {}
 
   //: Get rid of n operands on the stack.
   // The stack size after this is stored in last_pop,
@@ -431,25 +433,25 @@ class opstack_t : public vcl_deque<operand>
 
   void reset_last_pop()
   {
-    last_pop_=vcl_numeric_limits<vcl_size_t>::max();
+    last_pop_=std::numeric_limits<std::size_t>::max();
   }
  private:
-  vcl_size_t last_pop_;
+  std::size_t last_pop_;
 
   // Force the use of pop(unsigned) rather than pop_front();
-  void pop_front() { vcl_deque<operand>::pop_front(); }
+  void pop_front() { std::deque<operand>::pop_front(); }
 };
 
-typedef vcl_map<vcl_string, operand> named_store_t;
+typedef std::map<std::string, operand> named_store_t;
 
 static named_store_t named_store;
 
-void print_operations(vcl_ostream&);
+void print_operations(std::ostream&);
 
 template <class T>
 void check_size_and_plane_consistency(const vimt3d_image_3d_of<T>& im1,
                                       const vimt3d_image_3d_of<T>& im2,
-                                      const opstack_t& s, const vcl_string & op_name)
+                                      const opstack_t& s, const std::string & op_name)
 {
   const vil3d_image_view<T>& im1im = im1.image();
   const vil3d_image_view<T>& im2im = im2.image();
@@ -458,10 +460,10 @@ void check_size_and_plane_consistency(const vimt3d_image_3d_of<T>& im1,
       im1im.nk() == im2im.nk() && im1im.nplanes() == im2im.nplanes() )
     return;
 
-  vcl_cerr << "\nERROR: --" <<op_name<<" command. Two operand images are different size.\n"
+  std::cerr << "\nERROR: --" <<op_name<<" command. Two operand images are different size.\n"
            << "At \"" << args_so_far << "\"<-- HERE\n"
            << "Stack is :\n" << vsl_stream_summary(s);
-  vcl_exit(1);
+  std::exit(1);
 }
 
 //-------------------------------------------------------------------------------------
@@ -469,17 +471,17 @@ void check_size_and_plane_consistency(const vimt3d_image_3d_of<T>& im1,
 
 void help(opstack_t& )
 {
-  vcl_cout <<
+  std::cout <<
     "usage: image3d_math [--operation|operand] [--operation|operand] ... --operation\n"
     "Manipulate images using Reverse polish notiation.\n"
     "List of commands:\n";
-  print_operations(vcl_cout);
-  vcl_cout << "{ and }:  Braces - for debugging, have no side effects.\n"
+  print_operations(std::cout);
+  std::cout << "{ and }:  Braces - for debugging, have no side effects.\n"
            << "usage: eg. { { v1 v2 --op1 } v3 --op2 }\n"
            << "       The braces can be used to delineate all the operands used by the\n"
            << "       operation preceding the closing brace.\n\n"
            << "+name: identical to \"name --recall\"\n";
-  vcl_exit(3);
+  std::exit(3);
 }
 
 
@@ -490,23 +492,23 @@ void close_brace__brace(opstack_t& s)
 
   if (s.last_pop() > s.size())
   {
-    vcl_cerr << "\nERROR: A closing brace must be preceeded by an operation.\n"
+    std::cerr << "\nERROR: A closing brace must be preceeded by an operation.\n"
              << "At \"" << args_so_far << "\"<-- HERE\n";
-    vcl_exit(1);
+    std::exit(1);
   }
   if (s.size() < 1 || s.last_pop() > s.size() ||
       s.last_pop()==0 || !s[s.size() - s.last_pop()].is_open_brace() )
   {
-    vcl_cerr << "\nERROR: No matching opening brace found for closing brace.\n";
+    std::cerr << "\nERROR: No matching opening brace found for closing brace.\n";
     if (del_stack_brace_re.find(args_so_far))
-      vcl_cerr << "      The interaction of --del-stack and braces can be misleading. Try\n"
+      std::cerr << "      The interaction of --del-stack and braces can be misleading. Try\n"
                   "      removing the closing brace following --del-stack, and its opening pair.\n";
     else if (brace_brace_re.find(args_so_far))
-      vcl_cerr << "      You cannot have two closing braces next to each other, since closing\n"
+      std::cerr << "      You cannot have two closing braces next to each other, since closing\n"
                   "      braces check the behaviour of the immediately preceding operation.\n";
-    vcl_cerr << "At \"" << args_so_far << "\"<-- HERE\n"
+    std::cerr << "At \"" << args_so_far << "\"<-- HERE\n"
              << "Stack is:\n" << vsl_stream_summary(s);
-    vcl_exit(1);
+    std::exit(1);
   }
   s.erase(s.end() - s.last_pop());
 }
@@ -766,7 +768,7 @@ void min__image_3d_of_int__image_3d_of_int(opstack_t& s)
     for (unsigned k=0; k<nk; ++k)
       for (unsigned j=0; j<nj; ++j)
         for (unsigned i=0; i<ni; ++i)
-          result_image(i,j,k) = vcl_min(o1_image(i,j,k), o2_image(i,j,k));
+          result_image(i,j,k) = std::min(o1_image(i,j,k), o2_image(i,j,k));
 
   s.pop(2);
   s.push_front(operand(result));
@@ -797,7 +799,7 @@ void min__image_3d_of_float__image_3d_of_float(opstack_t& s)
     for (unsigned k=0; k<nk; ++k)
       for (unsigned j=0; j<nj; ++j)
         for (unsigned i=0; i<ni; ++i)
-          result_image(i,j,k) = vcl_min(o1_image(i,j,k), o2_image(i,j,k));
+          result_image(i,j,k) = std::min(o1_image(i,j,k), o2_image(i,j,k));
 
   s.pop(2);
   s.push_front(operand(result));
@@ -827,7 +829,7 @@ void max__image_3d_of_int__image_3d_of_int(opstack_t& s)
     for (unsigned k=0; k<nk; ++k)
       for (unsigned j=0; j<nj; ++j)
         for (unsigned i=0; i<ni; ++i)
-          result_image(i,j,k) = vcl_max(o1_image(i,j,k), o2_image(i,j,k));
+          result_image(i,j,k) = std::max(o1_image(i,j,k), o2_image(i,j,k));
 
   s.pop(2);
   s.push_front(operand(result));
@@ -858,7 +860,7 @@ void max__image_3d_of_float__image_3d_of_float(opstack_t& s)
     for (unsigned k=0; k<nk; ++k)
       for (unsigned j=0; j<nj; ++j)
         for (unsigned i=0; i<ni; ++i)
-          result_image(i,j,k) = vcl_max(o1_image(i,j,k), o2_image(i,j,k));
+          result_image(i,j,k) = std::max(o1_image(i,j,k), o2_image(i,j,k));
 
   s.pop(2);
   s.push_front(operand(result));
@@ -951,13 +953,13 @@ void recall__string(opstack_t& s)
 {
   assert(s.size() >= 1);
 
-  const vcl_string& o1 = s[0].as_string();
+  const std::string& o1 = s[0].as_string();
   named_store_t::const_iterator it = named_store.find(o1);
   if (it == named_store.end())
   {
-    vcl_cerr << "\nERROR: --recall could not find a store called " << o1
+    std::cerr << "\nERROR: --recall could not find a store called " << o1
              << "\n Store is :\n" << vsl_stream_summary(named_store);
-    vcl_exit(5);
+    std::exit(5);
   }
   s.pop(1);
   s.push_front(it->second.deep_copy());
@@ -990,25 +992,25 @@ void load_from_mat__string(opstack_t& s)
 {
   assert(s.size() >= 1);
 
-  vcl_string o1(s[0].as_string());
+  std::string o1(s[0].as_string());
 
-  vcl_ifstream input(o1.c_str());
+  std::ifstream input(o1.c_str());
 
   if (!input)
   {
-    vcl_cerr << "\nERROR: --load_from_mat: ";
-    vcl_perror(o1.c_str());
-    vcl_cerr << "At \"" << args_so_far << "\"<-- HERE\n";
-    vcl_exit(4);
+    std::cerr << "\nERROR: --load_from_mat: ";
+    std::perror(o1.c_str());
+    std::cerr << "At \"" << args_so_far << "\"<-- HERE\n";
+    std::exit(4);
   }
 
   char c;
-  vcl_string dummy;
+  std::string dummy;
   while (true)
   {
-    input >> vcl_ws >> c;
+    input >> std::ws >> c;
     if (c=='#')
-      vcl_getline(input, dummy);
+      std::getline(input, dummy);
     else
       break;
   }
@@ -1017,9 +1019,9 @@ void load_from_mat__string(opstack_t& s)
   input >> ni >> nj >> nk;
   if (!input)
   {
-    vcl_cerr << "\nERROR: Unable to parse " << o1
+    std::cerr << "\nERROR: Unable to parse " << o1
              << "\nAt \"" << args_so_far << "\"<-- HERE\n";
-    vcl_exit(1);
+    std::exit(1);
   }
 
   s.pop(1);
@@ -1036,9 +1038,9 @@ void load_from_mat__string(opstack_t& s)
             input >> result.image()(i,j,k);
         if (!input)
         {
-          vcl_cerr << "\nERROR: Unable to parse " << o1
+          std::cerr << "\nERROR: Unable to parse " << o1
                    << "\nAt \"" << args_so_far << "\"<-- HERE\n";
-          vcl_exit(1);
+          std::exit(1);
         }
       }
       s.push_front(operand(result));
@@ -1054,9 +1056,9 @@ void load_from_mat__string(opstack_t& s)
             input >> result.image()(i,j,k);
         if (!input)
         {
-          vcl_cerr << "\nERROR: Unable to parse " << o1
+          std::cerr << "\nERROR: Unable to parse " << o1
                    << "\nAt \"" << args_so_far << "\"<-- HERE\n";
-          vcl_exit(1);
+          std::exit(1);
         }
       }
       s.push_front(operand(result));
@@ -1072,9 +1074,9 @@ void load_from_mat__string(opstack_t& s)
             input >> result.image()(i,j,k);
         if (!input)
         {
-          vcl_cerr << "\nERROR: Unable to parse " << o1
+          std::cerr << "\nERROR: Unable to parse " << o1
                    << "\nAt \"" << args_so_far << "\"<-- HERE\n";
-          vcl_exit(1);
+          std::exit(1);
         }
       }
       s.push_front(operand(result));
@@ -1091,15 +1093,15 @@ void save_to_mat__image_3d_of_int__string(opstack_t& s)
 {
   assert(s.size() >= 2);
 
-  vcl_string o1(s[0].as_string());
+  std::string o1(s[0].as_string());
   vimt3d_image_3d_of<int> o2(s[1].as_image_3d_of_int());
   const vil3d_image_view<int>& o2_image = o2.image();;
 
-  vcl_ofstream output_file;
-  vcl_ostream *output;
+  std::ofstream output_file;
+  std::ostream *output;
 
   if (o1 == "-")
-    output = &vcl_cout;
+    output = &std::cout;
   else
   {
     output_file.open(o1.c_str());
@@ -1108,14 +1110,14 @@ void save_to_mat__image_3d_of_int__string(opstack_t& s)
 
   if (!*output)
   {
-    vcl_cerr << "\nERROR: --save_to_mat: ";
-    vcl_perror(o1.c_str());
-    vcl_cerr << "\nAt \"" << args_so_far << "\"<-- HERE\n";
-    vcl_exit(4);
+    std::cerr << "\nERROR: --save_to_mat: ";
+    std::perror(o1.c_str());
+    std::cerr << "\nAt \"" << args_so_far << "\"<-- HERE\n";
+    std::exit(4);
   }
 
   // copy precision length from console to output file
-  output->precision(vcl_cout.precision());
+  output->precision(std::cout.precision());
 
   (*output) <<
     "# Created by vxl/image3d_math\n"
@@ -1137,15 +1139,15 @@ void save_to_mat__image_3d_of_float__string(opstack_t& s)
 {
   assert(s.size() >= 2);
 
-  vcl_string o1(s[0].as_string());
+  std::string o1(s[0].as_string());
   vimt3d_image_3d_of<float> o2(s[1].as_image_3d_of_float());
   const vil3d_image_view<float>& o2_image = o2.image();;
 
-  vcl_ofstream output_file;
-  vcl_ostream *output;
+  std::ofstream output_file;
+  std::ostream *output;
 
   if (o1 == "-")
-    output = &vcl_cout;
+    output = &std::cout;
   else
   {
     output_file.open(o1.c_str());
@@ -1154,14 +1156,14 @@ void save_to_mat__image_3d_of_float__string(opstack_t& s)
 
   if (!*output)
   {
-    vcl_cerr << "\nERROR: --save_to_mat: ";
-    vcl_perror(o1.c_str());
-    vcl_cerr << "\nAt \"" << args_so_far << "\"<-- HERE\n";
-    vcl_exit(4);
+    std::cerr << "\nERROR: --save_to_mat: ";
+    std::perror(o1.c_str());
+    std::cerr << "\nAt \"" << args_so_far << "\"<-- HERE\n";
+    std::exit(4);
   }
 
   // copy precision length from console to output file
-  output->precision(vcl_cout.precision());
+  output->precision(std::cout.precision());
 
   (*output) <<
     "# Created by vxl/image3d_math\n"
@@ -1184,15 +1186,15 @@ void save_to_mat__image_3d_of_double__string(opstack_t& s)
 {
   assert(s.size() >= 2);
 
-  vcl_string o1(s[0].as_string());
+  std::string o1(s[0].as_string());
   vimt3d_image_3d_of<double> o2(s[1].as_image_3d_of_double());
   const vil3d_image_view<double>& o2_image = o2.image();;
 
-  vcl_ofstream output_file;
-  vcl_ostream *output;
+  std::ofstream output_file;
+  std::ostream *output;
 
   if (o1 == "-")
-    output = &vcl_cout;
+    output = &std::cout;
   else
   {
     output_file.open(o1.c_str());
@@ -1201,14 +1203,14 @@ void save_to_mat__image_3d_of_double__string(opstack_t& s)
 
   if (!*output)
   {
-    vcl_cerr << "\nERROR: --save_to_mat: ";
-    vcl_perror(o1.c_str());
-    vcl_cerr << "\nAt \"" << args_so_far << "\"<-- HERE\n";
-    vcl_exit(4);
+    std::cerr << "\nERROR: --save_to_mat: ";
+    std::perror(o1.c_str());
+    std::cerr << "\nAt \"" << args_so_far << "\"<-- HERE\n";
+    std::exit(4);
   }
 
   // copy precision length from console to output file
-  output->precision(vcl_cout.precision());
+  output->precision(std::cout.precision());
 
   (*output) <<
     "# Created by vxl/image3d_math\n"
@@ -1371,11 +1373,11 @@ void option_precision__double(opstack_t& s)
   int prec = vnl_math::rnd(s[0].as_double());
   if (prec < 0 || prec > 20)
   {
-    vcl_cerr << "\nERROR: option_precision takes an integer between 0 and 20.\n"
+    std::cerr << "\nERROR: option_precision takes an integer between 0 and 20.\n"
              << "At \"" << args_so_far << "\"<-- HERE\n";
-    vcl_exit(1);
+    std::exit(1);
   }
-  vcl_cout.precision(prec);
+  std::cout.precision(prec);
   s.pop(1);
 }
 
@@ -1500,27 +1502,27 @@ void plane_merge__image_3d_of_float__image_3d_of_float__double(opstack_t& s)
 
   if (s.size() < n+1)
   {
-    vcl_cerr << "\nERROR: --plane_merge command could not find " << n << " images to merge.\n"
+    std::cerr << "\nERROR: --plane_merge command could not find " << n << " images to merge.\n"
              << "At \"" << args_so_far << "\"<-- HERE\n"
              << "Stack is :\n" << vsl_stream_summary(s);
-    vcl_exit(1);
+    std::exit(1);
   }
   if (n < 2)
   {
-    vcl_cerr << "\nERROR: --plane_merge command must merge at least two images.\n"
+    std::cerr << "\nERROR: --plane_merge command must merge at least two images.\n"
              << "At \"" << args_so_far << "\"<-- HERE\n"
              << "Stack is :\n" << vsl_stream_summary(s);
-    vcl_exit(1);
+    std::exit(1);
   }
 
   for (unsigned i=1;i<=n; ++i)
   {
     if (!s[i].is_image_3d_of_float())
     {
-      vcl_cerr << "\nERROR: --plane_merge command could not find " << n << " float image to merge.\n"
+      std::cerr << "\nERROR: --plane_merge command could not find " << n << " float image to merge.\n"
                << "At \"" << args_so_far << "\"<-- HERE\n"
                << "Stack is :\n" << vsl_stream_summary(s);
-      vcl_exit(1);
+      std::exit(1);
     }
   }
 
@@ -1535,10 +1537,10 @@ void plane_merge__image_3d_of_float__image_3d_of_float__double(opstack_t& s)
         im.nj() != image0_im.nj() ||
         im.nk() != image0_im.nk() )
     {
-      vcl_cerr << "\nERROR: --plane_merge command. Not all " << n << " images of are same size.\n"
+      std::cerr << "\nERROR: --plane_merge command. Not all " << n << " images of are same size.\n"
                << "At \"" << args_so_far << "\"<-- HERE\n"
                << "Stack is :\n" << vsl_stream_summary(s);
-      vcl_exit(1);
+      std::exit(1);
     }
   }
 
@@ -1565,24 +1567,24 @@ void del_stack__double(opstack_t& s)
 
   if (o1 != index || o1 < 0)
   {
-    vcl_cerr << "\nERROR: --del_stack Must give positive integer value.\n"
+    std::cerr << "\nERROR: --del_stack Must give positive integer value.\n"
              << "At \"" << args_so_far << "\"<-- HERE\n"
              << "Stack is:\n" << vsl_stream_summary(s);
-    vcl_exit(1);
+    std::exit(1);
   }
   if (index==0)
   {
-    vcl_cerr << "\nERROR: --del_stack Cannot delete top entry (index 0) on stack.\n"
+    std::cerr << "\nERROR: --del_stack Cannot delete top entry (index 0) on stack.\n"
              << "At \"" << args_so_far << "\"<-- HERE\n"
              << "Stack is:\n" << vsl_stream_summary(s);
-    vcl_exit(1);
+    std::exit(1);
   }
   if (index+1>s.size())
   {
-    vcl_cerr << "\nERROR: --del_stack Stack too short to delete entry " << o1 << ".\n"
+    std::cerr << "\nERROR: --del_stack Stack too short to delete entry " << o1 << ".\n"
              << "At \"" << args_so_far << "\"<-- HERE\n"
              << "Stack is:\n" << vsl_stream_summary(s);
-    vcl_exit(1);
+    std::exit(1);
   }
 
   s.erase(s.begin()+index);
@@ -1701,10 +1703,10 @@ void decimate__image_3d_of_float__double__double__double(opstack_t& s)
 
   if (si<=0 || sj<=0 || sk<=0)
   {
-    vcl_cerr << "\nERROR: --decimate Spacings must be >= 1.\n"
+    std::cerr << "\nERROR: --decimate Spacings must be >= 1.\n"
              << "At \"" << args_so_far << "\"<-- HERE\n"
              << "Stack is:\n" << vsl_stream_summary(s);
-    vcl_exit(1);
+    std::exit(1);
   }
 
   vimt3d_transform_3d scale;
@@ -1729,10 +1731,10 @@ void decimate__image_3d_of_int__double__double__double(opstack_t& s)
 
   if (si <0 || sj < 0 || sk < 0)
   {
-    vcl_cerr << "\nERROR: --decimate Cannot handle negative decimatino spacing.\n"
+    std::cerr << "\nERROR: --decimate Cannot handle negative decimatino spacing.\n"
              << "At \"" << args_so_far << "\"<-- HERE\n"
              << "Stack is:\n" << vsl_stream_summary(s);
-    vcl_exit(1);
+    std::exit(1);
   }
 
   vimt3d_transform_3d scale;
@@ -1770,17 +1772,17 @@ void print_overlap__image_3d_of_float__image_3d_of_float(opstack_t& s)
         double p2 = i2(i,j,k);
         if (p1<0.0 || p1>1.0 || p2<0.0 || p2>1.0)
           dodgy=true;
-        gTanamoto_num += vcl_min(p1, p2);
-        gTanamoto_den += vcl_max(p1, p2);
+        gTanamoto_num += std::min(p1, p2);
+        gTanamoto_den += std::max(p1, p2);
         sum1 += p1;
         sum2 += p2;
       }
 
-  vcl_cout << "Tanimoto: " << gTanamoto_num/gTanamoto_den <<
-    " Volume Change: " << (sum2-sum1)/sum1 << " DSC: " << 2.0*gTanamoto_num/(sum1+sum2) << vcl_endl;
+  std::cout << "Tanimoto: " << gTanamoto_num/gTanamoto_den <<
+    " Volume Change: " << (sum2-sum1)/sum1 << " DSC: " << 2.0*gTanamoto_num/(sum1+sum2) << std::endl;
 
   if (dodgy)
-    vcl_cerr << "WARNING: PRINT_OVERLAP: At least some voxels were outside the range [0,1].\n";
+    std::cerr << "WARNING: PRINT_OVERLAP: At least some voxels were outside the range [0,1].\n";
 
   s.pop(2);
 }
@@ -1812,9 +1814,9 @@ void print_overlap__image_3d_of_int__image_3d_of_int(opstack_t& s)
         sum2 += p2;
       }
 
-  vcl_cout << "Tanimoto: " << static_cast<double>(Tanamoto_num)/Tanamoto_den
+  std::cout << "Tanimoto: " << static_cast<double>(Tanamoto_num)/Tanamoto_den
            << " Volume Change: " << (static_cast<double>(sum2)-sum1)/sum1
-           << " DSC: " << 2.0*static_cast<double>(Tanamoto_num)/static_cast<double>(sum1+sum2) << vcl_endl;
+           << " DSC: " << 2.0*static_cast<double>(Tanamoto_num)/static_cast<double>(sum1+sum2) << std::endl;
 
   s.pop(2);
 }
@@ -1830,20 +1832,20 @@ void print_quantiles__image_3d_of_float__double(opstack_t& s)
   double nsteps = vnl_math::floor(s[0].as_double());
   double step = storage.size() / nsteps;
 
-  vcl_nth_element(storage.begin(), storage.begin() + vnl_math::rnd(step), storage.end());
+  std::nth_element(storage.begin(), storage.begin() + vnl_math::rnd(step), storage.end());
 
-  vcl_cout << "     0%: " << vcl_setw(20) << *vcl_min_element(storage.begin(), storage.begin() + vnl_math::rnd(step))
-           << '\n' << vcl_setw(6) << 100.0/nsteps << "%: "
-           << vcl_setw(20) << *(storage.begin() + vnl_math::rnd(step)) << '\n';
+  std::cout << "     0%: " << std::setw(20) << *std::min_element(storage.begin(), storage.begin() + vnl_math::rnd(step))
+           << '\n' << std::setw(6) << 100.0/nsteps << "%: "
+           << std::setw(20) << *(storage.begin() + vnl_math::rnd(step)) << '\n';
   for (unsigned i=1; i+1<nsteps; ++i)
   {
-    vcl_nth_element(storage.begin() + vnl_math::rnd(i*step),
+    std::nth_element(storage.begin() + vnl_math::rnd(i*step),
                     storage.begin() + vnl_math::rnd((i+1)*step), storage.end());
-    vcl_cout << vcl_setw(6) << (i+1)*100.0/nsteps << "%: " << vcl_setw(20)
+    std::cout << std::setw(6) << (i+1)*100.0/nsteps << "%: " << std::setw(20)
              << *(storage.begin() + vnl_math::rnd((i+1)*step)) << '\n';
   }
-  vcl_cout << "   100%: " << vcl_setw(20)
-           << *vcl_max_element(storage.begin() + vnl_math::rnd((nsteps-1)*step), storage.end()) << vcl_endl;
+  std::cout << "   100%: " << std::setw(20)
+           << *std::max_element(storage.begin() + vnl_math::rnd((nsteps-1)*step), storage.end()) << std::endl;
   s.pop(2);
 }
 
@@ -1857,20 +1859,20 @@ void print_quantiles__image_3d_of_int__double(opstack_t& s)
 
   double nsteps = vnl_math::floor(s[0].as_double());
   double step = storage.size() / nsteps;
-  vcl_nth_element(storage.begin(), storage.begin() + vnl_math::rnd(step), storage.end());
+  std::nth_element(storage.begin(), storage.begin() + vnl_math::rnd(step), storage.end());
 
-  vcl_cout << "     0%: " << vcl_setw(20) << *vcl_min_element(storage.begin(), storage.begin() + vnl_math::rnd(step))
-           << '\n' << vcl_setw(6) << 100.0/nsteps << "%: " << vcl_setw(20) << *(storage.begin() + vnl_math::rnd(step))
+  std::cout << "     0%: " << std::setw(20) << *std::min_element(storage.begin(), storage.begin() + vnl_math::rnd(step))
+           << '\n' << std::setw(6) << 100.0/nsteps << "%: " << std::setw(20) << *(storage.begin() + vnl_math::rnd(step))
            << '\n';
   for (unsigned i=1; i+1<nsteps; ++i)
   {
-    vcl_nth_element(storage.begin() + vnl_math::rnd(i*step),
+    std::nth_element(storage.begin() + vnl_math::rnd(i*step),
                     storage.begin() + vnl_math::rnd((i+1)*step), storage.end());
-    vcl_cout << vcl_setw(6) << (i+1)*100.0/nsteps << "%: " << vcl_setw(20)
+    std::cout << std::setw(6) << (i+1)*100.0/nsteps << "%: " << std::setw(20)
              << *(storage.begin() + vnl_math::rnd((i+1)*step)) << '\n';
   }
-  vcl_cout << "   100%: " << vcl_setw(20)
-           << *vcl_max_element(storage.begin() + vnl_math::rnd((nsteps-1)*step), storage.end()) << vcl_endl;
+  std::cout << "   100%: " << std::setw(20)
+           << *std::max_element(storage.begin() + vnl_math::rnd((nsteps-1)*step), storage.end()) << std::endl;
   s.pop(2);
 }
 
@@ -1881,7 +1883,7 @@ void print_stats__image_3d_of_float(opstack_t& s)
 
   double mean=0, var=0;
   vil3d_math_mean_and_variance(mean, var, o1.image(), 0);
-  vcl_cout << "Mean: " << mean << " Std: " << vcl_sqrt(var) << vcl_endl;
+  std::cout << "Mean: " << mean << " Std: " << std::sqrt(var) << std::endl;
 
   s.pop(1);
 }
@@ -1893,7 +1895,7 @@ void print_stats__image_3d_of_int(opstack_t& s)
 
   double mean=0, var=0;
   vil3d_math_mean_and_variance(mean, var, o1.image(), 0);
-  vcl_cout << "Mean: " << mean << " Std: " << vcl_sqrt(var) << vcl_endl;
+  std::cout << "Mean: " << mean << " Std: " << std::sqrt(var) << std::endl;
 
   s.pop(1);
 }
@@ -1904,14 +1906,14 @@ void print_unique__image_3d_of_int(opstack_t& s)
   vimt3d_image_3d_of<int> o1(s[0].as_image_3d_of_int());
   const vil3d_image_view<int>& image = o1.image();
 
-  vcl_set<int> set;
+  std::set<int> set;
 
   if (o1.image().is_contiguous())
     set.insert(image.begin(), image.end()); // faster version
   else
   {
     unsigned ni=image.ni(), nj=image.nj(), nk=image.nk(), np=image.nplanes();
-    vcl_ptrdiff_t istep = image.istep();
+    std::ptrdiff_t istep = image.istep();
     for (unsigned p=0; p<np; ++p)
       for (unsigned k=0; k<nk; ++k)
         for (unsigned j=0; j<nj; ++j)
@@ -1925,8 +1927,8 @@ void print_unique__image_3d_of_int(opstack_t& s)
         }
   }
 
-  vcl_ostream_iterator<int> output(vcl_cout, " ");
-  vcl_copy(set.begin(), set.end(), output);
+  std::ostream_iterator<int> output(std::cout, " ");
+  std::copy(set.begin(), set.end(), output);
 
   s.pop(1);
 }
@@ -1939,10 +1941,10 @@ void print__double(opstack_t& s)
 
   if (s.size() < n+1)
   {
-    vcl_cerr << "\nERROR: --print command could not find " << n << " doubles or strings to print.\n"
+    std::cerr << "\nERROR: --print command could not find " << n << " doubles or strings to print.\n"
              << "At \"" << args_so_far << "\"<-- HERE\n"
              << "Stack is :\n" << vsl_stream_summary(s);
-    vcl_exit(1);
+    std::exit(1);
   }
 
   if (n)
@@ -1951,28 +1953,28 @@ void print__double(opstack_t& s)
     {
       if (!s[i].is_string() && !s[i].is_double())
       {
-        vcl_ostringstream ss;
-        vcl_cerr << "\nERROR: --print command could not find " << n << " doubles or strings to print.\n"
+        std::ostringstream ss;
+        std::cerr << "\nERROR: --print command could not find " << n << " doubles or strings to print.\n"
                  << "At \"" << args_so_far << "\"<-- HERE\n"
                  << "Stack is :\n" << vsl_stream_summary(s);
-        vcl_exit(1);
+        std::exit(1);
       }
     }
 
     if (s[n].is_string())
-      vcl_cout << s[n].as_string();
+      std::cout << s[n].as_string();
     else
-      vcl_cout << s[n].as_double();
+      std::cout << s[n].as_double();
 
     for (unsigned i=n-1;i>=1; --i)
     {
       if (s[i].is_string())
-        vcl_cout << ' ' << s[i].as_string();
+        std::cout << ' ' << s[i].as_string();
       else
-        vcl_cout << ' ' << s[i].as_double();
+        std::cout << ' ' << s[i].as_double();
     }
   }
-  vcl_cout << vcl_endl;
+  std::cout << std::endl;
 
   s.pop(n+1);
 }
@@ -1991,9 +1993,9 @@ void signed_distance_transform__image_3d_of_int(opstack_t& s)
   result.world2im() = o1.world2im();
 
   vil3d_signed_distance_transform(mask, result.image(), 1000.f,
-                                  static_cast<float>(vcl_abs(voxel_size.x())),
-                                  static_cast<float>(vcl_abs(voxel_size.y())),
-                                  static_cast<float>(vcl_abs(voxel_size.z())) );
+                                  static_cast<float>(std::abs(voxel_size.x())),
+                                  static_cast<float>(std::abs(voxel_size.y())),
+                                  static_cast<float>(std::abs(voxel_size.z())) );
 
   s.pop(1);
   s.push_front(operand(result));
@@ -2334,7 +2336,7 @@ class operations
 {
  private:
   //: Syntax sugar to allow
-  class function_type_t: public vcl_vector<operand::operand_type_t>
+  class function_type_t: public std::vector<operand::operand_type_t>
   {
    public:
     function_type_t& operator << (operand::operand_type_t t)
@@ -2345,12 +2347,12 @@ class operations
   };
 
   typedef void(*function_t)(opstack_t& stack);
-  vcl_vector<vcl_string> names_;
-  vcl_vector<function_t> functions_;
-  vcl_vector<function_type_t > function_types_;
-  vcl_vector<vcl_string> help_input_;
-  vcl_vector<vcl_string> help_output_;
-  vcl_vector<vcl_string> help_desc_;
+  std::vector<std::string> names_;
+  std::vector<function_t> functions_;
+  std::vector<function_type_t > function_types_;
+  std::vector<std::string> help_input_;
+  std::vector<std::string> help_output_;
+  std::vector<std::string> help_desc_;
 
   static operations singleton_;
 
@@ -2633,21 +2635,21 @@ class operations
                   "image", "value", "Sum over all the voxel values.");
 
     // Check they are correctly sorted.
-    vcl_vector<vcl_string>::iterator it=names_.begin(), end=names_.end();
+    std::vector<std::string>::iterator it=names_.begin(), end=names_.end();
     while ((it+1)!=end)
     {
-      vcl_string &left = *it;
+      std::string &left = *it;
       if (left > *++it)
       {
-        vcl_cerr << "INTERNAL ERROR: \"" << left << "\" is not in correct order\n";
-        vcl_abort();
+        std::cerr << "INTERNAL ERROR: \"" << left << "\" is not in correct order\n";
+        std::abort();
       }
     }
     for (it=names_.begin(); it!=end; ++it)
-      if (it->find('_')!=vcl_string::npos)
+      if (it->find('_')!=std::string::npos)
       {
-        vcl_cerr << "INTERNAL ERROR: \"" << *it << "\" contains an underscore\n";
-        vcl_abort();
+        std::cerr << "INTERNAL ERROR: \"" << *it << "\" contains an underscore\n";
+        std::abort();
       }
   }
 
@@ -2662,22 +2664,22 @@ class operations
     return true;
   }
  public:
-  static void run(vcl_string name, opstack_t& stack)
+  static void run(std::string name, opstack_t& stack)
   {
     // Handle underscores or dashes in name.
-    vcl_replace(name.begin(), name.end(), '_', '-');
+    std::replace(name.begin(), name.end(), '_', '-');
 
-    typedef vcl_pair<vcl_vector<vcl_string>::iterator, vcl_vector<vcl_string>::iterator> range_t;
+    typedef std::pair<std::vector<std::string>::iterator, std::vector<std::string>::iterator> range_t;
     range_t range =
-      vcl_equal_range(singleton_.names_.begin(), singleton_.names_.end(), name);
+      std::equal_range(singleton_.names_.begin(), singleton_.names_.end(), name);
 
     if (range.first == range.second)
     {
-      vcl_cerr << "\nERROR: No such operation \"" << name << "\".\n"
+      std::cerr << "\nERROR: No such operation \"" << name << "\".\n"
                << "At \"" << args_so_far << "\"<-- HERE\n";
-      vcl_exit(1);
+      std::exit(1);
     }
-    for (vcl_ptrdiff_t i = distance(singleton_.names_.begin(), range.first),
+    for (std::ptrdiff_t i = distance(singleton_.names_.begin(), range.first),
          end = distance(singleton_.names_.begin(), range.second); i!=end; ++i)
     {
       if (operation_type_matches(singleton_.function_types_[i], stack))
@@ -2686,20 +2688,20 @@ class operations
         return ;
       }
     }
-    vcl_cerr << "\nERROR: Unable to match operands for operation \"" << name << '"'
+    std::cerr << "\nERROR: Unable to match operands for operation \"" << name << '"'
              << "\nAt \"" << args_so_far << "\"<-- HERE\n"
              << "\nStack is :\n" << vsl_stream_summary(stack)
              << "\nPossible \"" << name << "\" operations are:\n";
-    print(vcl_cerr, distance(singleton_.names_.begin(), range.first),
+    print(std::cerr, distance(singleton_.names_.begin(), range.first),
           distance(range.first, range.second) );
-    vcl_exit(1);
+    std::exit(1);
   }
-  static void print(vcl_ostream& os, vcl_size_t j, vcl_size_t n)
+  static void print(std::ostream& os, std::size_t j, std::size_t n)
   {
     n+=j;
     for (unsigned i=j; i<n; ++i)
     {
-      vcl_string name = singleton_.names_[i].substr(2);
+      std::string name = singleton_.names_[i].substr(2);
       os << vul_string_upcase(name) << ":  "
          << singleton_.help_desc_[i] << "\n    usage: "
          << singleton_.help_input_[i] << ' ' << singleton_.names_[i];
@@ -2713,14 +2715,14 @@ class operations
       os << "\n\n";
     }
   }
-  static void print(vcl_ostream& os)
+  static void print(std::ostream& os)
   {
     print(os, 0, singleton_.names_.size());
   }
 };
 
 operations operations::singleton_ = operations();
-void print_operations(vcl_ostream&os) { operations::print(os); }
+void print_operations(std::ostream&os) { operations::print(os); }
 
 //========================================================================
 // Actual main function
@@ -2734,7 +2736,7 @@ int main2(int argc, char*argv[])
 
   for (int i=1; i<argc; ++i)
   {
-    vcl_string option = argv[i];
+    std::string option = argv[i];
 
     args_so_far += option + ' ';
 
@@ -2752,7 +2754,7 @@ int main2(int argc, char*argv[])
       close_brace__brace(stack);
     else if (option.length()>1 && option[0]=='+')
     {
-      stack.push_front(operand(option.substr(1, vcl_string::npos)));
+      stack.push_front(operand(option.substr(1, std::string::npos)));
       recall__string(stack);
     }
     else // operand case
@@ -2784,14 +2786,14 @@ int main(int argc, char*argv[])
 
     return main2(argc, argv);
   }
-  catch (vcl_exception& e)
+  catch (std::exception& e)
   {
-    vcl_cerr << "caught exception " << e.what() << '\n';
+    std::cerr << "caught exception " << e.what() << '\n';
     return 3;
   }
   catch (...)
   {
-    vcl_cerr << "caught unknown exception\n";
+    std::cerr << "caught unknown exception\n";
     return 3;
   }
 }
@@ -2799,6 +2801,6 @@ int main(int argc, char*argv[])
 #else // VCL_HAS_EXCEPTIONS
 int main(int argc, char*argv[])
 {
-  vcl_cerr << "\nERROR: image3d_math needs exception support to compile properly.\n";
+  std::cerr << "\nERROR: image3d_math needs exception support to compile properly.\n";
 }
 #endif // VCL_HAS_EXCEPTIONS

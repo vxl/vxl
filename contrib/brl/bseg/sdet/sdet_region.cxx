@@ -36,7 +36,7 @@ bool sdet_region::compute_boundary()
   //need at least a triangle
   if (this->Npix()<3)
     return false;
-  vcl_vector<vgl_point_2d<double> > region_points;
+  std::vector<vgl_point_2d<double> > region_points;
   for (this->reset(); this->next();)
     region_points.push_back(vgl_point_2d<double>(this->X(), this->Y()));
   vgl_convex_hull_2d<double> ch(region_points);

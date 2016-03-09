@@ -27,10 +27,10 @@ class boxm2_ocl_update_sky
 
   private:
     //compile kernels and place in static map
-    static vcl_vector<bocl_kernel*>& get_kernels(bocl_device_sptr device, vcl_string opts="", bool isRGB = false);
+    static std::vector<bocl_kernel*>& get_kernels(bocl_device_sptr device, std::string opts="", bool isRGB = false);
 
     //map of paint kernel by device
-    static vcl_map<vcl_string, vcl_vector<bocl_kernel*> > kernels_;
+    static std::map<std::string, std::vector<bocl_kernel*> > kernels_;
 
 };
 class boxm2_ocl_update_sky2
@@ -48,10 +48,10 @@ class boxm2_ocl_update_sky2
 
   private:
     //compile kernels and place in static map
-    static vcl_vector<bocl_kernel*>& get_kernels(bocl_device_sptr device, vcl_string opts="", bool isRGB = false);
+    static std::vector<bocl_kernel*>& get_kernels(bocl_device_sptr device, std::string opts="", bool isRGB = false);
 
     //map of paint kernel by device
-    static vcl_map<vcl_string, vcl_vector<bocl_kernel*> > kernels_;
+    static std::map<std::string, std::vector<bocl_kernel*> > kernels_;
 
 };
 #endif // boxm2_ocl_update_sky_h_

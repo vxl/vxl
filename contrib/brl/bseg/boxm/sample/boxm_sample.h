@@ -3,7 +3,9 @@
 //:
 // \file
 #include <boxm/boxm_apm_traits.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iostream>
 #include <vsl/vsl_binary_io.h>
 #include <bsta/io/bsta_io_attributes.h>
 
@@ -43,7 +45,7 @@ class boxm_sample
   //: the appearance model at the sample point
   typename boxm_apm_traits<APM_MODEL>::apm_datatype appearance_;
 
-  void  print(vcl_ostream& os) const;
+  void  print(std::ostream& os) const;
 };
 
 template <boxm_apm_type APM_MODEL>
@@ -59,6 +61,6 @@ template <boxm_apm_type APM_MODEL>
 void vsl_b_read(vsl_b_istream & is, boxm_sample<APM_MODEL> *&sample);
 
 template <boxm_apm_type APM_MODEL>
-vcl_ostream& operator << (vcl_ostream& os, const boxm_sample<APM_MODEL>& sample);
+std::ostream& operator << (std::ostream& os, const boxm_sample<APM_MODEL>& sample);
 
 #endif

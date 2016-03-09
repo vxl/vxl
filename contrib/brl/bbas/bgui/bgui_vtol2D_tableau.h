@@ -27,9 +27,11 @@
 //   Peter Vanroose  August 2004   Moved bgui_vtol2D_rubberband_client to separate file
 // \endverbatim
 //-----------------------------------------------------------------------------
-#include <vcl_vector.h>
-#include <vcl_map.h>
-#include <vcl_string.h>
+#include <vector>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <map>
+#include <string>
 #include <vgui/vgui_style_sptr.h>
 #include <vtol/vtol_vertex_2d_sptr.h>
 #include <vtol/vtol_edge_2d_sptr.h>
@@ -60,7 +62,7 @@ class bgui_vtol2D_tableau : public bgui_vsol2D_tableau
 
   ~bgui_vtol2D_tableau();
 
-  virtual vcl_string type_name() const { return "bgui_vtol2D_tableau"; }
+  virtual std::string type_name() const { return "bgui_vtol2D_tableau"; }
 
   //:virtual handle method for events
   virtual bool handle(vgui_event const &);
@@ -72,7 +74,7 @@ class bgui_vtol2D_tableau : public bgui_vsol2D_tableau
   bgui_vtol_soview2D_edge* add_edge(vtol_edge_2d_sptr const& e,
                                     const vgui_style_sptr& style = NULL);
 
-  bgui_vtol_soview2D_edge_group* add_edge_group(vcl_vector<vtol_edge_2d_sptr>& edges,
+  bgui_vtol_soview2D_edge_group* add_edge_group(std::vector<vtol_edge_2d_sptr>& edges,
                                                 const vgui_style_sptr& style = NULL);
 
   bgui_vtol_soview2D_face* add_face(vtol_face_2d_sptr const& f,
@@ -82,14 +84,14 @@ class bgui_vtol2D_tableau : public bgui_vsol2D_tableau
   void add_topology_object(vtol_topology_object_sptr const& tos,
                            const vgui_style_sptr& style = NULL);
 
-  void add_topology_objects(vcl_vector<vtol_topology_object_sptr> const& tos,
+  void add_topology_objects(std::vector<vtol_topology_object_sptr> const& tos,
                             const vgui_style_sptr& style = NULL);
 
-  void add_edges(vcl_vector<vtol_edge_2d_sptr> const & edges,
+  void add_edges(std::vector<vtol_edge_2d_sptr> const & edges,
                  bool verts=false,
                  const vgui_style_sptr& style = NULL);
 
-  void add_faces(vcl_vector<vtol_face_2d_sptr> const & faces, bool verts=false,
+  void add_faces(std::vector<vtol_face_2d_sptr> const & faces, bool verts=false,
                  const vgui_style_sptr& style = NULL);
 
   //: clear the tableau including the highlight map
@@ -119,7 +121,7 @@ class bgui_vtol2D_tableau : public bgui_vsol2D_tableau
   vgui_style_sptr face_style_;
   void init();
   vtol_topology_object_sptr temp_; //temporary storage for a topology object
-  vcl_map<int, vtol_topology_object_sptr> obj_map_;
+  std::map<int, vtol_topology_object_sptr> obj_map_;
 };
 
 //this stuff is needed to establish inheritance between tableau  smart pointers

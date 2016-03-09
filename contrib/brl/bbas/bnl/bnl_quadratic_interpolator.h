@@ -10,7 +10,9 @@
 //   J.L. Mundy - November 12, 2003
 //
 //-----------------------------------------------------------------------------
-#include <vcl_vector.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <vector>
 #include <vnl/vnl_matrix.h>
 
 //-----------------------------------------------------------------------------
@@ -34,9 +36,9 @@ class bnl_quadratic_interpolator
   //private methods
   void fill_scatter_matrix();
   //members
-  vcl_vector<double> px_; //parameter values
-  vcl_vector<double> py_;
-  vcl_vector<double> v_; //data values
+  std::vector<double> px_; //parameter values
+  std::vector<double> py_;
+  std::vector<double> v_; //data values
   vnl_matrix<double> s_; //scatter matrix
   double px_ext_;//extremum values
   double py_ext_;

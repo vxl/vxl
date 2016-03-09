@@ -1,9 +1,11 @@
 #include <volm/volm_vrml_io.h>
-#include <vcl_cmath.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <cmath>
 #include <vsph/vsph_unit_sphere.h>
 #include <vgl/vgl_point_3d.h>
 
-void volm_vrml_io::display_spherical_region_by_attrbute(vcl_ostream& str ,
+void volm_vrml_io::display_spherical_region_by_attrbute(std::ostream& str ,
                                                         volm_spherical_region & region,
                                                         spherical_region_attributes att,
                                                         double factor,                // this mis multipled by 1.0 and is used to display outwards or inwards of the unit sphere.
@@ -21,33 +23,33 @@ void volm_vrml_io::display_spherical_region_by_attrbute(vcl_ostream& str ,
 
 }
 
-void volm_vrml_io::display_spherical_region_layer_by_attrbute(vcl_ostream& str ,
+void volm_vrml_io::display_spherical_region_layer_by_attrbute(std::ostream& str ,
                                                            volm_spherical_regions_layer layer,
                                                            spherical_region_attributes att,
                                                            double factor,                //: this is multiplied by 1.0 and is used to display outwards or inwards of the unit sphere.
                                                            double tol)
 {
-    vcl_map<unsigned char, vcl_vector<unsigned int> > ids = layer.attributed_regions_by_type(att);
-    vcl_vector<volm_spherical_region> regions = layer.regions();
-    for (vcl_map<unsigned char, vcl_vector<unsigned int> >::iterator iter = ids.begin() ; iter!= ids.end(); ++iter)
+    std::map<unsigned char, std::vector<unsigned int> > ids = layer.attributed_regions_by_type(att);
+    std::vector<volm_spherical_region> regions = layer.regions();
+    for (std::map<unsigned char, std::vector<unsigned int> >::iterator iter = ids.begin() ; iter!= ids.end(); ++iter)
         for (unsigned i = 0; i < iter->second.size(); ++i)
              volm_vrml_io::display_spherical_region_by_attrbute(str,regions[iter->second[i]],att,factor,tol);
 
 
 }
 
-void volm_vrml_io::display_segment_sphere(vcl_ostream& str ,
+void volm_vrml_io::display_segment_sphere(std::ostream& str ,
                                           vsph_segment_sphere * sph,
                                           double factor)
 {
-    vcl_map<int,  vcl_vector<int> >::const_iterator rit = sph->regions().begin();
+    std::map<int,  std::vector<int> >::const_iterator rit = sph->regions().begin();
     vsph_unit_sphere usph = sph->unit_sphere();
-    vcl_vector<vgl_vector_3d<double> > unit_vectors = usph.cart_vectors();
-    vcl_vector<vgl_vector_3d<double> > points;
-    vcl_vector<vgl_point_3d<double> > colors;
+    std::vector<vgl_vector_3d<double> > unit_vectors = usph.cart_vectors();
+    std::vector<vgl_vector_3d<double> > points;
+    std::vector<vgl_point_3d<double> > colors;
     for (; rit != sph->regions().end(); ++rit) {
-        const vcl_vector<int>& pt_ids = rit->second;
-        unsigned char val =(unsigned char) vcl_floor(sph->region_median(rit->first));
+        const std::vector<int>& pt_ids = rit->second;
+        unsigned char val =(unsigned char) std::floor(sph->region_median(rit->first));
 
         vgl_point_3d<double> pc((double) volm_vrml_io_data::color_codes[(val)%8][0], (double) volm_vrml_io_data::color_codes[(val)%8][1], (double) volm_vrml_io_data::color_codes[(val)%8][2]);
         if(val > 100)

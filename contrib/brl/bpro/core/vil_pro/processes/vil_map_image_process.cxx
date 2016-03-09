@@ -6,8 +6,10 @@
 #include "../vil_math_functors.h"
 #include <vil/vil_convert.h>
 #include <bprb/bprb_parameters.h>
-#include <vcl_iostream.h>
-#include <vcl_string.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iostream>
+#include <string>
 #include <vil/vil_image_view_base.h>
 #include <vil/vil_transform.h>
 #include <vil/vil_math.h>
@@ -17,14 +19,14 @@ bool vil_map_image_process_cons(bprb_func_process& pro)
 {
   //input
   bool ok=false;
-  vcl_vector<vcl_string> input_types;
+  std::vector<std::string> input_types;
   input_types.push_back("vil_image_view_base_sptr");
   input_types.push_back("vcl_string");
   ok = pro.set_input_types(input_types);
   if (!ok) return ok;
 
   //output
-  vcl_vector<vcl_string> output_types;
+  std::vector<std::string> output_types;
   output_types.push_back("vil_image_view_base_sptr");
   ok = pro.set_output_types(output_types);
   if (!ok) return ok;
@@ -36,7 +38,7 @@ bool vil_map_image_process(bprb_func_process& pro)
 {
   // Sanity check
   if (pro.n_inputs()< 2) {
-    vcl_cout << "vil_map_image_process: The input number should be 2" << vcl_endl;
+    std::cout << "vil_map_image_process: The input number should be 2" << std::endl;
     return false;
   }
 
@@ -45,19 +47,19 @@ bool vil_map_image_process(bprb_func_process& pro)
   vil_image_view_base_sptr image = pro.get_input<vil_image_view_base_sptr>(i++);
 
   //Retrieve map functor name
-  vcl_string functor = pro.get_input<vcl_string>(i++);
+  std::string functor = pro.get_input<std::string>(i++);
 
   // convert image to float
   vil_image_view_base_sptr fimage = vil_convert_cast(float(), image);
   vil_image_view<float>fimg = *fimage;
   // apply the functor
   if (functor == "log"){
-    vcl_cout << "in log\n";
+    std::cout << "in log\n";
     vil_math_log_functor lg;
     vil_transform(fimg, lg);
   }
   else if (functor == "not") {
-    vcl_cout << "in not\n";
+    std::cout << "in not\n";
     vil_math_not_functor nt;
     vil_transform(fimg, nt);
   }
@@ -66,7 +68,7 @@ bool vil_map_image_process(bprb_func_process& pro)
     vil_transform(fimg, nlg);
   }
   else{
-    vcl_cerr << "In vil_map_image_process::execute() - unknown functor "
+    std::cerr << "In vil_map_image_process::execute() - unknown functor "
              << functor << '\n';
     return false;
   }

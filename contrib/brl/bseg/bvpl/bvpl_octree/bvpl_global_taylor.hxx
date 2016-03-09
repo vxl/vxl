@@ -27,29 +27,29 @@
 
 //: Constructor  from xml file
 template<class T_data, unsigned DIM>
-bvpl_global_taylor<T_data, DIM>::bvpl_global_taylor(const vcl_string &path, const vcl_string kernel_names[])
+bvpl_global_taylor<T_data, DIM>::bvpl_global_taylor(const std::string &path, const std::string kernel_names[])
 {
-  vcl_cout << "Loading taylor info from xml-file" << vcl_endl;
+  std::cout << "Loading taylor info from xml-file" << std::endl;
   path_out_ = path;
-  vcl_ifstream xml_ifs(xml_path().c_str());
+  std::ifstream xml_ifs(xml_path().c_str());
   if (!xml_ifs.is_open()) {
-    vcl_cerr << "Error: could not open xml info file: " << xml_path() << '\n';
+    std::cerr << "Error: could not open xml info file: " << xml_path() << '\n';
     throw;
   }
   bxml_document doc = bxml_read(xml_ifs);
   bxml_element query("taylor_global_info");
   bxml_data_sptr root = bxml_find_by_name(doc.root_element(), query);
   if (!root) {
-    vcl_cerr << "Error: bvpl_discover_pca_kernels - could not parse xml root\n";
+    std::cerr << "Error: bvpl_discover_pca_kernels - could not parse xml root\n";
     throw;
   }
 
   //Parse scenes
   bxml_element scenes_query("scene");
-  vcl_vector<bxml_data_sptr> scenes_data = bxml_find_all_with_name(root, scenes_query);
+  std::vector<bxml_data_sptr> scenes_data = bxml_find_all_with_name(root, scenes_query);
 
   unsigned nscenes=scenes_data.size();
-  vcl_cout << "Number of scenes: " << nscenes <<vcl_endl;
+  std::cout << "Number of scenes: " << nscenes <<std::endl;
 
   scenes_.clear();
   scenes_.resize(nscenes);
@@ -69,7 +69,7 @@ bvpl_global_taylor<T_data, DIM>::bvpl_global_taylor(const vcl_string &path, cons
     scenes_elm->get_attribute("aux_dir", aux_dirs_[id]);
     scenes_elm->get_attribute("cell_length" , finest_cell_length_[id]);
 
-    vcl_cout << "Scene " << id << " is " << scenes_[id] << '\n';
+    std::cout << "Scene " << id << " is " << scenes_[id] << '\n';
   }
 
   //Parse kernels
@@ -81,7 +81,7 @@ bvpl_global_taylor<T_data, DIM>::bvpl_global_taylor(const vcl_string &path, cons
 
     kernels_elm->get_attribute("path", kernels_path_);
 
-    vcl_cout << "Kernels path is " << kernels_path_ << '\n';
+    std::cout << "Kernels path is " << kernels_path_ << '\n';
     kernel_vector_ = new bvpl_kernel_vector;
 
     if (vul_file::exists(kernels_path_) && vul_file::is_directory(kernels_path_)) {
@@ -90,10 +90,10 @@ bvpl_global_taylor<T_data, DIM>::bvpl_global_taylor(const vcl_string &path, cons
       kernel_vector_->kernels_.clear();
 
       kernel_vector_->kernels_.resize(DIM, NULL);
-      //vcl_string kernel_names[]={"I0", "Ix", "Iy", "Iz", "Ixx", "Iyy", "Izz", "Ixy", "Ixz", "Iyz"};
+      //std::string kernel_names[]={"I0", "Ix", "Iy", "Iz", "Ixx", "Iyy", "Izz", "Ixy", "Ixz", "Iyz"};
       for (unsigned ki = 0; ki<DIM; ki++) {
-        vcl_string filename = kernels_path_ + "/" + kernel_names[ki] + ".txt";
-        vcl_cout << "Reading kernel file : " << filename << vcl_endl;
+        std::string filename = kernels_path_ + "/" + kernel_names[ki] + ".txt";
+        std::cout << "Reading kernel file : " << filename << std::endl;
         bvpl_taylor_basis_factory factory(filename);
         bvpl_kernel_sptr kernel = new bvpl_kernel(factory.create());
         kernel_vector_->kernels_[ki] = kernel;
@@ -101,7 +101,7 @@ bvpl_global_taylor<T_data, DIM>::bvpl_global_taylor(const vcl_string &path, cons
     }
   }
   else {
-    vcl_cerr << " In Gobal Taylor, path to kernels does not exist\n";
+    std::cerr << " In Gobal Taylor, path to kernels does not exist\n";
   }
 }
 
@@ -124,7 +124,7 @@ void bvpl_global_taylor<T_data, DIM>::compute_taylor_coefficients(int scene_id, 
   boxm_scene<boct_tree<short, bool> >* valid_scene = dynamic_cast<boxm_scene<boct_tree<short, bool> >*> (valid_scene_base.as_pointer());
   if (!(data_scene && proj_scene && valid_scene))
   {
-    vcl_cerr << "Error in bvpl_global_taylor::sample_statistics: Could not cast input scenes\n";
+    std::cerr << "Error in bvpl_global_taylor::sample_statistics: Could not cast input scenes\n";
     return;
   }
 
@@ -162,7 +162,7 @@ bool bvpl_global_taylor<T_data, DIM>::compute_approximation_error(int scene_id, 
   boxm_scene<float_tree_type> * error_scene = dynamic_cast<boxm_scene<float_tree_type>* > (error_scene_base.as_pointer());
 
   if (!data_scene || !basis_scene || !error_scene) {
-    vcl_cerr << "Error in compute_approximation_error: Faild to cast scene\n";
+    std::cerr << "Error in compute_approximation_error: Faild to cast scene\n";
     return false;
   }
 
@@ -179,14 +179,14 @@ bool bvpl_global_taylor<T_data, DIM>::compute_approximation_error(int scene_id, 
   error_tree->init_cells(-1.0f);
   taylor_tree_type* basis_tree = basis_scene->get_block(block_i, block_j, block_k)->get_tree();
 
-  vcl_vector<float_cell_type*> data_leaves = data_tree->leaf_cells();
-  vcl_vector<float_cell_type*> error_leaves = error_tree->leaf_cells();
-  vcl_vector<taylor_cell_type*> basis_leaves = basis_tree->leaf_cells();
+  std::vector<float_cell_type*> data_leaves = data_tree->leaf_cells();
+  std::vector<float_cell_type*> error_leaves = error_tree->leaf_cells();
+  std::vector<taylor_cell_type*> basis_leaves = basis_tree->leaf_cells();
 
   vgl_point_3d<int> min_point = kernel_vector_->min();
   vgl_point_3d<int> max_point = kernel_vector_->max();
   double cell_length = this->finest_cell_length_[scene_id];
-  vcl_cout << "In computing taylor error, limits are: " <<min_point << " and " <<max_point <<vcl_endl;
+  std::cout << "In computing taylor error, limits are: " <<min_point << " and " <<max_point <<std::endl;
 
   for (unsigned i =0; i<data_leaves.size(); i++)
   {
@@ -199,7 +199,7 @@ bool bvpl_global_taylor<T_data, DIM>::compute_approximation_error(int scene_id, 
 
     //check cells are at the same location
     if (! data_code.isequal(basis_code)) {
-      vcl_cerr << "Error in compute_approximation_error: Cells don't have the same location in the tree\n"
+      std::cerr << "Error in compute_approximation_error: Cells don't have the same location in the tree\n"
                << "Data Code: " << data_code << '\n'
                << "Basis Code: " << basis_code << '\n';
 
@@ -251,8 +251,8 @@ bool bvpl_global_taylor<T_data, DIM>::compute_approximation_error(int scene_id, 
             vnl_double_3 X((double)x,(double)y, (double)z);
             double approx = I0 + dot_product(X,G) + 0.5* (dot_product(X,(H*X)));
             error = error + (this_cell->data() - approx)*(this_cell->data() - approx);
-            //vcl_cout << "Taylor Error :\n" << "This centroid: " << this_centroid << ", box_centroid: " <<box_centroid <<vcl_endl;
-            //vcl_cout << "Taylor Error :\n" << "X: " << X << "\nI0: " << I0 <<"\nG: " << G << "\nH: " << H <<"\nApprox: " <<approx << "\nError: " << error << vcl_endl;
+            //std::cout << "Taylor Error :\n" << "This centroid: " << this_centroid << ", box_centroid: " <<box_centroid <<std::endl;
+            //std::cout << "Taylor Error :\n" << "X: " << X << "\nI0: " << I0 <<"\nG: " << G << "\nH: " << H <<"\nApprox: " <<approx << "\nError: " << error << std::endl;
           }
         }
       }
@@ -292,7 +292,7 @@ void bvpl_global_taylor<T_data, DIM>::threshold_corners(int scene_id, int block_
 
   if (!( proj_scene && valid_scene && corner_scene ))
   {
-    vcl_cerr << "Error in bvpl_global_taylor::threshold_corners: Could not cast input scenes\n";
+    std::cerr << "Error in bvpl_global_taylor::threshold_corners: Could not cast input scenes\n";
     return;
   }
 
@@ -307,7 +307,7 @@ void bvpl_global_taylor<T_data, DIM>::threshold_corners(int scene_id, int block_
   vgl_point_3d<int> max_neigborhood_idx = kernel_vector_->max();
   vgl_point_3d<int> min_neigborhood_idx = kernel_vector_->min();
 
-  vcl_cout << "Neighborhood for harris threshhold: " << min_neigborhood_idx << " , " << max_neigborhood_idx << vcl_endl;
+  std::cout << "Neighborhood for harris threshhold: " << min_neigborhood_idx << " , " << max_neigborhood_idx << std::endl;
 
   corner_detector.detect_and_threshold(proj_scene, harris_functor, min_neigborhood_idx, max_neigborhood_idx,
                                        block_i, block_j, block_k, valid_scene, corner_scene, finest_cell_length_[scene_id]);
@@ -327,7 +327,7 @@ void bvpl_global_taylor<T_data, DIM>::init()
     boxm_scene_base_sptr data_scene_base = load_scene(i);
     boxm_scene<boct_tree<short, float> >* data_scene = dynamic_cast<boxm_scene<boct_tree<short, float> >*> (data_scene_base.as_pointer());
     if (!data_scene) {
-      vcl_cerr << "Error in bvpl_global_taylor::init(): Could not cast data scene\n";
+      std::cerr << "Error in bvpl_global_taylor::init(): Could not cast data scene\n";
       return;
     }
     double finest_cell_length = data_scene->finest_cell_length();
@@ -338,11 +338,11 @@ void bvpl_global_taylor<T_data, DIM>::init()
     }
 
     {
-      vcl_stringstream aux_scene_ss;
+      std::stringstream aux_scene_ss;
       aux_scene_ss << "valid_scene_" << i ;
-      vcl_string aux_scene_path = aux_dirs_[i] + "/" + aux_scene_ss.str() + ".xml";
+      std::string aux_scene_path = aux_dirs_[i] + "/" + aux_scene_ss.str() + ".xml";
       if (!vul_file::exists(aux_scene_path)) {
-        vcl_cout<< "Scene: " << aux_scene_path << " does not exist, initializing" << vcl_endl;
+        std::cout<< "Scene: " << aux_scene_path << " does not exist, initializing" << std::endl;
         boxm_scene<boct_tree<short, bool> > *aux_scene =
         new boxm_scene<boct_tree<short, bool> >(data_scene->lvcs(), data_scene->origin(), data_scene->block_dim(), data_scene->world_dim(), data_scene->max_level(), data_scene->init_level());
         aux_scene->set_appearance_model(BOXM_BOOL);
@@ -352,11 +352,11 @@ void bvpl_global_taylor<T_data, DIM>::init()
     }
 
     {
-      vcl_stringstream proj_scene_ss;
+      std::stringstream proj_scene_ss;
       proj_scene_ss << "proj_taylor_scene_" << i ;
-      vcl_string proj_scene_path = aux_dirs_[i] + "/" + proj_scene_ss.str() + ".xml";
+      std::string proj_scene_path = aux_dirs_[i] + "/" + proj_scene_ss.str() + ".xml";
       if (!vul_file::exists(proj_scene_path)) {
-        vcl_cout<< "Scene: " << proj_scene_path << " does not exist, initializing" << vcl_endl;
+        std::cout<< "Scene: " << proj_scene_path << " does not exist, initializing" << std::endl;
         typedef boct_tree<short,vnl_vector_fixed<T_data,DIM> > taylor_tree_type;
         boxm_scene<taylor_tree_type > *proj_scene =
         new boxm_scene<taylor_tree_type >(data_scene->lvcs(), data_scene->origin(), data_scene->block_dim(), data_scene->world_dim(), data_scene->max_level(), data_scene->init_level());
@@ -377,7 +377,7 @@ boxm_scene_base_sptr bvpl_global_taylor<T_data, DIM>::load_scene (int scene_id)
 {
   if (scene_id<0 || scene_id>((int)scenes_.size() -1))
   {
-    vcl_cerr << "Error in bvpl_global_pca::load_scene: Invalid scene id\n";
+    std::cerr << "Error in bvpl_global_pca::load_scene: Invalid scene id\n";
     return NULL;
   }
   //load scene
@@ -392,7 +392,7 @@ boxm_scene_base_sptr bvpl_global_taylor<T_data, DIM>::load_scene (int scene_id)
     scene_base = scene;
   }
   else {
-    vcl_cerr << "Error in bvpl_global_pca::load_scene: Invalid appearance model\n";
+    std::cerr << "Error in bvpl_global_pca::load_scene: Invalid appearance model\n";
     return NULL;
   }
 
@@ -405,13 +405,13 @@ boxm_scene_base_sptr bvpl_global_taylor<T_data, DIM>::load_valid_scene (int scen
 {
   if (scene_id<0 || scene_id>((int)scenes_.size() -1))
   {
-    vcl_cerr << "Error in bvpl_global_taylor::load_scene: Invalid scene id\n";
+    std::cerr << "Error in bvpl_global_taylor::load_scene: Invalid scene id\n";
     return NULL;
   }
   //load scene
   boxm_scene_base_sptr aux_scene_base = new boxm_scene_base();
   boxm_scene_parser aux_parser;
-  vcl_stringstream aux_scene_ss;
+  std::stringstream aux_scene_ss;
   aux_scene_ss << aux_dirs_[scene_id] << "/valid_scene_" << scene_id << ".xml";
   aux_scene_base->load_scene(aux_scene_ss.str(), aux_parser);
 
@@ -422,7 +422,7 @@ boxm_scene_base_sptr bvpl_global_taylor<T_data, DIM>::load_valid_scene (int scen
     aux_scene_base = aux_scene;
   }
   else {
-    vcl_cerr << "Error in bvpl_global_taylor::load_aux_scene: Invalid appearance model\n";
+    std::cerr << "Error in bvpl_global_taylor::load_aux_scene: Invalid appearance model\n";
     return NULL;
   }
 
@@ -436,22 +436,22 @@ boxm_scene_base_sptr bvpl_global_taylor<T_data, DIM>::load_error_scene (int scen
 {
   if (scene_id<0 || scene_id>=(int)scenes_.size())
   {
-    vcl_cerr << "Error in bvpl_global_taylor::load_error_scene: Invalid scene id\n";
+    std::cerr << "Error in bvpl_global_taylor::load_error_scene: Invalid scene id\n";
     return NULL;
   }
 
   boxm_scene_base_sptr data_scene_base = load_scene(scene_id);
   boxm_scene<boct_tree<short, float> >* data_scene = dynamic_cast<boxm_scene<boct_tree<short, float> >*> (data_scene_base.as_pointer());
   if (!data_scene) {
-    vcl_cerr << "Error in bvpl_global_pca<feature_dim>::init(): Could not cast data scene\n";
+    std::cerr << "Error in bvpl_global_pca<feature_dim>::init(): Could not cast data scene\n";
     return NULL;
   }
 
-  vcl_stringstream aux_scene_ss;
+  std::stringstream aux_scene_ss;
   aux_scene_ss << "error_taylor_scene_" << scene_id ;
-  vcl_string aux_scene_path = aux_dirs_[scene_id] + "/" + aux_scene_ss.str() + ".xml";
+  std::string aux_scene_path = aux_dirs_[scene_id] + "/" + aux_scene_ss.str() + ".xml";
   if (!vul_file::exists(aux_scene_path)) {
-    vcl_cout<< "Scene: " << aux_scene_path << " does not exist, initializing" << vcl_endl;
+    std::cout<< "Scene: " << aux_scene_path << " does not exist, initializing" << std::endl;
     boxm_scene<boct_tree<short, float> > *aux_scene =
     new boxm_scene<boct_tree<short, float> >(data_scene->lvcs(), data_scene->origin(), data_scene->block_dim(), data_scene->world_dim(), data_scene->max_level(), data_scene->init_level());
     aux_scene->set_appearance_model(BOXM_FLOAT);
@@ -462,7 +462,7 @@ boxm_scene_base_sptr bvpl_global_taylor<T_data, DIM>::load_error_scene (int scen
   //load scene
   boxm_scene_base_sptr error_scene_base = new boxm_scene_base();
   boxm_scene_parser error_parser;
-  vcl_stringstream error_scene_ss;
+  std::stringstream error_scene_ss;
   error_scene_ss << aux_dirs_[scene_id] << "/error_taylor_scene_" << scene_id << ".xml";
   error_scene_base->load_scene(error_scene_ss.str(), error_parser);
 
@@ -473,7 +473,7 @@ boxm_scene_base_sptr bvpl_global_taylor<T_data, DIM>::load_error_scene (int scen
     error_scene_base = error_scene;
   }
   else {
-    vcl_cerr << "Error in bvpl_global_taylor::load_error_scene: Invalid appearance model\n";
+    std::cerr << "Error in bvpl_global_taylor::load_error_scene: Invalid appearance model\n";
     return NULL;
   }
 
@@ -487,13 +487,13 @@ boxm_scene_base_sptr bvpl_global_taylor::load_train_scene (int scene_id)
 {
   if (scene_id<0 || scene_id>((int)scenes_.size() -1))
   {
-    vcl_cerr << "Error in bvpl_global_taylor::load_scene: Invalid scene id\n";
+    std::cerr << "Error in bvpl_global_taylor::load_scene: Invalid scene id\n";
     return NULL;
   }
   //load scene
   boxm_scene_base_sptr aux_scene_base = new boxm_scene_base();
   boxm_scene_parser aux_parser;
-  vcl_stringstream aux_scene_ss;
+  std::stringstream aux_scene_ss;
   aux_scene_ss << aux_dirs_[scene_id] << "/train_scene_" << scene_id << ".xml";
   aux_scene_base->load_scene(aux_scene_ss.str(), aux_parser);
 
@@ -504,7 +504,7 @@ boxm_scene_base_sptr bvpl_global_taylor::load_train_scene (int scene_id)
     aux_scene_base = aux_scene;
   }
   else {
-    vcl_cerr << "Error in bvpl_global_taylor::load_aux_scene: Invalid appearance model\n";
+    std::cerr << "Error in bvpl_global_taylor::load_aux_scene: Invalid appearance model\n";
     return NULL;
   }
 
@@ -519,13 +519,13 @@ boxm_scene_base_sptr bvpl_global_taylor<T_data, DIM>::load_projection_scene (int
 {
   if (scene_id<0 || scene_id>((int)scenes_.size() -1))
   {
-    vcl_cerr << "Error in bvpl_global_taylor::load_projection_scene: Invalid scene id\n";
+    std::cerr << "Error in bvpl_global_taylor::load_projection_scene: Invalid scene id\n";
     return NULL;
   }
   //load scene
   boxm_scene_base_sptr proj_scene_base = new boxm_scene_base();
   boxm_scene_parser proj_parser;
-  vcl_stringstream proj_scene_ss;
+  std::stringstream proj_scene_ss;
   proj_scene_ss << aux_dirs_[scene_id] << "/proj_taylor_scene_" << scene_id << ".xml";
   proj_scene_base->load_scene(proj_scene_ss.str(), proj_parser);
 
@@ -537,7 +537,7 @@ boxm_scene_base_sptr bvpl_global_taylor<T_data, DIM>::load_projection_scene (int
     proj_scene_base = proj_scene;
   }
   else {
-    vcl_cerr << "Error in bvpl_global_taylor::load_proj_scene: Invalid appearance model\n";
+    std::cerr << "Error in bvpl_global_taylor::load_proj_scene: Invalid appearance model\n";
     return NULL;
   }
 
@@ -574,7 +574,7 @@ void bvpl_global_taylor<T_data, DIM>::xml_write()
   root->append_text("\n");
 
   //write to disk
-  vcl_ofstream os(xml_path().c_str());
+  std::ofstream os(xml_path().c_str());
   bxml_write(os, doc);
   os.close();
 }
@@ -589,7 +589,7 @@ void bvpl_global_taylor<T_data, DIM>::extract_coefficient_scene(int scene_id, in
 
   typedef boct_tree<short,vnl_vector_fixed<double,10> > projection_tree_type;
   typedef boct_tree_cell<short,vnl_vector_fixed<double,10> > projection_cell_type;
-  vcl_vector<vnl_vector_fixed<double,10> > projections;
+  std::vector<vnl_vector_fixed<double,10> > projections;
 
   boxm_scene_base_sptr projection_scene_base = load_projection_scene(scene_id);
 
@@ -597,7 +597,7 @@ void bvpl_global_taylor<T_data, DIM>::extract_coefficient_scene(int scene_id, in
 
   if (!(projection_scene && float_scene))
   {
-    vcl_cerr << "Error in bof_util::random_label_for_training: Could not cast scenes\n";
+    std::cerr << "Error in bof_util::random_label_for_training: Could not cast scenes\n";
     return;
   }
 
@@ -610,7 +610,7 @@ void bvpl_global_taylor<T_data, DIM>::extract_coefficient_scene(int scene_id, in
   for (it.begin(); !it.end(); ++it)
   {
     if (!(projection_scene->valid_index(it.index()) && float_scene->valid_index(it.index()))) {
-      vcl_cerr << "In bof_util::random_label_for_training: invalid block\n";
+      std::cerr << "In bof_util::random_label_for_training: invalid block\n";
       return;
     }
 
@@ -622,8 +622,8 @@ void bvpl_global_taylor<T_data, DIM>::extract_coefficient_scene(int scene_id, in
     float_tree_type* float_tree = projection_tree->clone_to_type<float>();
 
     //get leaf cells
-    vcl_vector<projection_cell_type *> projection_leaves = projection_tree->leaf_cells();
-    vcl_vector<float_cell_type *> float_leaves = float_tree->leaf_cells();
+    std::vector<projection_cell_type *> projection_leaves = projection_tree->leaf_cells();
+    std::vector<float_cell_type *> float_leaves = float_tree->leaf_cells();
 
     unsigned int tree_ncells = projection_leaves.size();
 

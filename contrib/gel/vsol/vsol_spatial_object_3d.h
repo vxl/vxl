@@ -44,8 +44,10 @@
 // \endverbatim
 //-----------------------------------------------------------------------------
 
-#include <vcl_string.h>
-#include <vcl_iostream.h>
+#include <string>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iostream>
 #include <vsol/vsol_spatial_object.h>
 #include <vsl/vsl_fwd.h>
 #include <vsol/vsol_spatial_object_3d_sptr.h>
@@ -111,9 +113,9 @@ class vsol_spatial_object_3d : public vsol_spatial_object
   //   bounding_box is set to NULL.
   vsol_spatial_object_3d();
   vsol_spatial_object_3d(vsol_spatial_object_3d const& other);
-  void not_applicable(vcl_string const& message) const
+  void not_applicable(std::string const& message) const
   {
-      vcl_cerr <<message<<"() function call not applicable\tfor 3d spatial object "
+      std::cerr <<message<<"() function call not applicable\tfor 3d spatial object "
                <<get_name()<<" !\n";
   }
 
@@ -137,7 +139,7 @@ class vsol_spatial_object_3d : public vsol_spatial_object
   // Binary I/O------------------------------------------------------------------
 
   //: Return a platform independent string identifying the class
-  virtual vcl_string is_a() const=0;
+  virtual std::string is_a() const=0;
 
   //: Return IO version number;
   short version() const;
@@ -148,11 +150,11 @@ class vsol_spatial_object_3d : public vsol_spatial_object
   //: Binary load self from stream.
   virtual void b_read(vsl_b_istream &is);
 
-  virtual void print(vcl_ostream &strm=vcl_cout) const { describe(strm); }
-  virtual void describe(vcl_ostream& =vcl_cout, int /*blanking*/=0) const { not_applicable("describe"); }
+  virtual void print(std::ostream &strm=std::cout) const { describe(strm); }
+  virtual void describe(std::ostream& =std::cout, int /*blanking*/=0) const { not_applicable("describe"); }
 
-  friend inline vcl_ostream &operator<<(vcl_ostream &, vsol_spatial_object_3d const&);
-  friend inline vcl_ostream &operator<<(vcl_ostream &, vsol_spatial_object_3d const*);
+  friend inline std::ostream &operator<<(std::ostream &, vsol_spatial_object_3d const&);
+  friend inline std::ostream &operator<<(std::ostream &, vsol_spatial_object_3d const*);
 
   //Operators
   virtual bool operator==(vsol_spatial_object_3d const& obj) const { return this==&obj; }
@@ -220,13 +222,13 @@ class vsol_spatial_object_3d : public vsol_spatial_object
 
 // inline member functions
 
-inline vcl_ostream &operator<<(vcl_ostream &strm, vsol_spatial_object_3d const& so)
+inline std::ostream &operator<<(std::ostream &strm, vsol_spatial_object_3d const& so)
 {
   so.print(strm);
   return strm;
 }
 
-inline vcl_ostream &operator<<(vcl_ostream &strm, vsol_spatial_object_3d const* so)
+inline std::ostream &operator<<(std::ostream &strm, vsol_spatial_object_3d const* so)
 {
   if (so)
     so->print(strm);
@@ -236,7 +238,7 @@ inline vcl_ostream &operator<<(vcl_ostream &strm, vsol_spatial_object_3d const* 
 }
 
 //: Stream output operator for class pointer
-inline void vsl_print_summary(vcl_ostream& os, vsol_spatial_object_3d const* so)
+inline void vsl_print_summary(std::ostream& os, vsol_spatial_object_3d const* so)
 {
   os << so;
 }

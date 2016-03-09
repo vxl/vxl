@@ -7,8 +7,10 @@
 // \author Vishal Jain
 // \date Mar 25, 2011
 
-#include <vcl_fstream.h>
-#include <vcl_algorithm.h>
+#include <fstream>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <algorithm>
 #include <boxm2/ocl/boxm2_opencl_cache.h>
 #include <boxm2/boxm2_scene.h>
 #include <boxm2/boxm2_block.h>
@@ -43,7 +45,7 @@ bool boxm2_ocl_update_auxQ_per_view_process_cons(bprb_func_process& pro)
   using namespace boxm2_ocl_update_auxQ_per_view_process_globals;
 
   //process takes 9 inputs (of which the four last ones are optional):
-  vcl_vector<vcl_string> input_types_(n_inputs_);
+  std::vector<std::string> input_types_(n_inputs_);
   input_types_[0] = "bocl_device_sptr";
   input_types_[1] = "boxm2_scene_sptr";
   input_types_[2] = "boxm2_opencl_cache_sptr";
@@ -52,12 +54,12 @@ bool boxm2_ocl_update_auxQ_per_view_process_cons(bprb_func_process& pro)
   input_types_[5] = "vcl_string";                   //illumination identifier
   input_types_[6] = "vcl_string";                   //mask image view
   // process has no outputs
-  vcl_vector<vcl_string>  output_types_(n_outputs_);
+  std::vector<std::string>  output_types_(n_outputs_);
   bool good = pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
   // default 5, 6 and 7 and 8 inputs
-  brdb_value_sptr idx5        = new brdb_value_t<vcl_string>("");
+  brdb_value_sptr idx5        = new brdb_value_t<std::string>("");
   pro.set_input(5, idx5);
-  brdb_value_sptr idx6        = new brdb_value_t<vcl_string>("");
+  brdb_value_sptr idx6        = new brdb_value_t<std::string>("");
   pro.set_input(6, idx6);
   return good;
 }
@@ -67,7 +69,7 @@ bool boxm2_ocl_update_auxQ_per_view_process(bprb_func_process& pro)
   using namespace boxm2_ocl_update_auxQ_per_view_process_globals;
   //sanity check inputs
   if ( pro.n_inputs() < n_inputs_ ) {
-    vcl_cout << pro.name() << ": The input number should be " << n_inputs_<< vcl_endl;
+    std::cout << pro.name() << ": The input number should be " << n_inputs_<< std::endl;
     return false;
   }
   //get the inputs
@@ -77,8 +79,8 @@ bool boxm2_ocl_update_auxQ_per_view_process(bprb_func_process& pro)
   boxm2_opencl_cache_sptr  opencl_cache = pro.get_input<boxm2_opencl_cache_sptr>(i++);
   vpgl_camera_double_sptr  cam          = pro.get_input<vpgl_camera_double_sptr>(i++);
   vil_image_view_base_sptr img          = pro.get_input<vil_image_view_base_sptr>(i++);
-  vcl_string               ident        = pro.get_input<vcl_string>(i++);
-  vcl_string               view_ident   = pro.get_input<vcl_string>(i++);
+  std::string               ident        = pro.get_input<std::string>(i++);
+  std::string               view_ident   = pro.get_input<std::string>(i++);
   vul_timer t;
   t.mark();
   //TODO Factor this out to a utility function

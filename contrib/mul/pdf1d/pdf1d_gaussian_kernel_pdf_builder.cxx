@@ -2,7 +2,9 @@
 #include "pdf1d_gaussian_kernel_pdf_builder.h"
 
 #include <vcl_cassert.h>
-#include <vcl_string.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <string>
 
 #include <pdf1d/pdf1d_gaussian_kernel_pdf.h>
 
@@ -37,25 +39,25 @@ pdf1d_pdf* pdf1d_gaussian_kernel_pdf_builder::new_model() const
 }
 
 
-vcl_string pdf1d_gaussian_kernel_pdf_builder::new_model_type() const
+std::string pdf1d_gaussian_kernel_pdf_builder::new_model_type() const
 {
-  return vcl_string("pdf1d_gaussian_kernel_pdf");
+  return std::string("pdf1d_gaussian_kernel_pdf");
 }
 
 //=======================================================================
 // Method: is_a
 //=======================================================================
 
-vcl_string pdf1d_gaussian_kernel_pdf_builder::is_a() const
+std::string pdf1d_gaussian_kernel_pdf_builder::is_a() const
 {
-  return vcl_string("pdf1d_gaussian_kernel_pdf_builder");
+  return std::string("pdf1d_gaussian_kernel_pdf_builder");
 }
 
 //=======================================================================
 // Method: is_class
 //=======================================================================
 
-bool pdf1d_gaussian_kernel_pdf_builder::is_class(vcl_string const& s) const
+bool pdf1d_gaussian_kernel_pdf_builder::is_class(std::string const& s) const
 {
   return pdf1d_kernel_pdf_builder::is_class(s) || s==pdf1d_gaussian_kernel_pdf_builder::is_a();
 }
@@ -82,9 +84,9 @@ pdf1d_builder* pdf1d_gaussian_kernel_pdf_builder::clone() const
 // Method: print
 //=======================================================================
 
-void pdf1d_gaussian_kernel_pdf_builder::print_summary(vcl_ostream& /*os*/) const
+void pdf1d_gaussian_kernel_pdf_builder::print_summary(std::ostream& /*os*/) const
 {
-  vcl_cerr << "pdf1d_gaussian_kernel_pdf_builder::print_summary() NYI\n";
+  std::cerr << "pdf1d_gaussian_kernel_pdf_builder::print_summary() NYI\n";
 }
 
 

@@ -9,7 +9,9 @@
 #include <vnl/algo/vnl_svd.h>
 
 #include <vcl_cassert.h>
-// not used? #include <vcl_iostream.h>
+// not used? #include <vcl_compiler.h>
+#include <iostream>
+#include <iostream>
 
 rgrl_feature_trace_region::
 rgrl_feature_trace_region( vnl_vector<double> const& loc,
@@ -141,7 +143,7 @@ generate_pixel_coordinates( vnl_vector< double > const&  spacing_ratio )
 
   unsigned dim = this -> location_ . size();
   vnl_matrix< double > normals = this -> normal_subspace();
-  vcl_vector< vnl_vector<double> > directions;
+  std::vector< vnl_vector<double> > directions;
   directions . reserve( dim );
 
   vnl_vector< double > radii_in_pixel( dim );

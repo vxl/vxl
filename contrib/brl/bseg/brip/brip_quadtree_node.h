@@ -20,7 +20,9 @@
 // \endverbatim
 //------------------------------------------------------------------
 
-#include <vcl_vector.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <vector>
 #include <vbl/vbl_ref_count.h>
 #include <brip/brip_quadtree_node_base_sptr.h>
 
@@ -30,12 +32,12 @@ class brip_quadtree_node_base : public vbl_ref_count
  public:
   brip_quadtree_node_base()
   : iul_(0), jul_(0), ilr_(0), jlr_(0), valid_(false),
-    children_(vcl_vector<brip_quadtree_node_base_sptr>(4)) {}
+    children_(std::vector<brip_quadtree_node_base_sptr>(4)) {}
 
   brip_quadtree_node_base(unsigned iul, unsigned jul,
                           unsigned ilr, unsigned jlr, bool valid = false)
   : iul_(iul), jul_(jul), ilr_(ilr), jlr_(jlr), valid_(valid),
-    children_(vcl_vector<brip_quadtree_node_base_sptr>(4)) {}
+    children_(std::vector<brip_quadtree_node_base_sptr>(4)) {}
 
   ~brip_quadtree_node_base() {}
 
@@ -73,7 +75,7 @@ class brip_quadtree_node_base : public vbl_ref_count
   unsigned ilr_, jlr_;
   bool valid_; // data valid
   brip_quadtree_node_base_sptr parent_;
-  vcl_vector<brip_quadtree_node_base_sptr> children_;
+  std::vector<brip_quadtree_node_base_sptr> children_;
 };
 
 //: the templated subclass that holds data values, T,  in a quadtree structure

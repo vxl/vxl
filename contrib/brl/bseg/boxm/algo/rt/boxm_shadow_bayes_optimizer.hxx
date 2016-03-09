@@ -8,12 +8,14 @@
 #include <boxm/boxm_aux_traits.h>
 #include <boxm/boxm_scene.h>
 #include <boxm/boxm_aux_scene.h>
-#include <vcl_vector.h>
-#include <vcl_string.h>
+#include <vector>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <string>
 
 template <class T_loc, boxm_apm_type APM, boxm_aux_type AUX>
 boxm_shadow_bayes_optimizer<T_loc,APM,AUX>::boxm_shadow_bayes_optimizer(boxm_scene<boct_tree<T_loc, boxm_sample<APM> > > &scene,
-                                                                        vcl_vector<vcl_string> const& image_ids, float min_app_sigma,
+                                                                        std::vector<std::string> const& image_ids, float min_app_sigma,
                                                                         float shadow_prior, float shadow_mean, float shadow_sigma,
                                                                         bool verbose, vgl_point_3d<double> debug_pt)
   : image_ids_(image_ids), scene_(scene), max_cell_P_(0.995f), min_cell_P_(0.0001f),
@@ -32,13 +34,13 @@ bool boxm_shadow_bayes_optimizer<T_loc,APM,AUX>::optimize_cells(double damping_f
   typedef boct_tree<T_loc, boxm_sample<APM> > tree_type;
   typedef boct_tree<T_loc, aux_type > aux_tree_type;
 
-  vcl_vector<boxm_aux_scene<T_loc,  boxm_sample<APM>, aux_type> > aux_scenes;
+  std::vector<boxm_aux_scene<T_loc,  boxm_sample<APM>, aux_type> > aux_scenes;
   for (unsigned int i=0; i<image_ids_.size(); ++i) {
     boxm_aux_scene<T_loc, boxm_sample<APM>, aux_type> aux_scene(&scene_,image_ids_[i],boxm_aux_scene<T_loc, boxm_sample<APM>, aux_type>::LOAD);
     aux_scenes.push_back(aux_scene);
   }
 
-  vcl_vector<boxm_rt_sample<typename boxm_apm_traits<APM>::obs_datatype> > aux_samples;
+  std::vector<boxm_rt_sample<typename boxm_apm_traits<APM>::obs_datatype> > aux_samples;
 
   // for each block
   boxm_block_iterator<tree_type> iter(&scene_);
@@ -51,10 +53,10 @@ bool boxm_shadow_bayes_optimizer<T_loc,APM,AUX>::optimize_cells(double damping_f
     boct_tree_cell<T_loc,boxm_sample<APM> >* debug_cell  = 0;
     if (verbose_)
       debug_cell = tree->locate_point_global(debug_pt_);
-    vcl_vector<boct_tree_cell<T_loc,boxm_sample<APM> >*> cells = tree->leaf_cells();
+    std::vector<boct_tree_cell<T_loc,boxm_sample<APM> >*> cells = tree->leaf_cells();
 
     // get a vector of incremental readers for each aux scene.
-    vcl_vector<boct_tree_cell_reader<T_loc, aux_type>* > aux_readers(aux_scenes.size());
+    std::vector<boct_tree_cell_reader<T_loc, aux_type>* > aux_readers(aux_scenes.size());
     for (unsigned int i=0; i<aux_scenes.size(); ++i) {
       aux_readers[i] = aux_scenes[i].get_block_incremental(iter.index());
     }
@@ -68,11 +70,11 @@ bool boxm_shadow_bayes_optimizer<T_loc,APM,AUX>::optimize_cells(double damping_f
         boct_tree_cell<T_loc, aux_type> temp_cell;
 
         if (!aux_readers[j]->next(temp_cell)) {
-          vcl_cerr << "error: incremental reader returned false.\n";
+          std::cerr << "error: incremental reader returned false.\n";
           return false;
         }
         if (!temp_cell.code_.isequal(&(cell->code_))) {
-          vcl_cerr << "error: temp_cell idx does not match cell idx.\n";
+          std::cerr << "error: temp_cell idx does not match cell idx.\n";
           return false;
         }
         if (temp_cell.data().seg_len_ > 0.0f) {
@@ -80,19 +82,19 @@ bool boxm_shadow_bayes_optimizer<T_loc,APM,AUX>::optimize_cells(double damping_f
         }
       }
       unsigned n_samp = aux_samples.size();
-      vcl_vector<float> pre_vector(n_samp);
-      vcl_vector<float> vis_vector(n_samp);
+      std::vector<float> pre_vector(n_samp);
+      std::vector<float> vis_vector(n_samp);
       // new discrete probability code
       float log_sum = 0.0f;
       float total_length_sum = 0.0f;
       //===
       typedef typename boxm_apm_traits<APM>::obs_datatype obs_type;
-      vcl_vector<obs_type> obs_vector(n_samp);
+      std::vector<obs_type> obs_vector(n_samp);
 //#if 0 // old beta calculation
       double Beta = 1.0;
 //#endif
       if (verbose_&&cell == debug_cell){
-        vcl_cout << "Contents of Debug Cell\n"
+        std::cout << "Contents of Debug Cell\n"
                  << "s    vis[s]    pre[s]    beta[s]\n";
       }
       double vis_sum = 0;
@@ -116,7 +118,7 @@ bool boxm_shadow_bayes_optimizer<T_loc,APM,AUX>::optimize_cells(double damping_f
           // ====
           if (cell == debug_cell)
           {
-            vcl_cout << s << ' ' << vis << ' ' << pre << ' '
+            std::cout << s << ' ' << vis << ' ' << pre << ' '
                      << beta_s << '\n';
           }
         }
@@ -131,13 +133,13 @@ bool boxm_shadow_bayes_optimizer<T_loc,APM,AUX>::optimize_cells(double damping_f
 #if 0 // old beta calculation
       double damped_Beta = 1.0;
       if (n_samp>1.0){
-        damped_Beta = vcl_pow(Beta, 1.0/n_samp);
+        damped_Beta = std::pow(Beta, 1.0/n_samp);
       }
 #else
       double damped_Beta = (Beta + damping_factor)/(damping_factor*Beta + 1.0);
 
       if ((damped_Beta < 0.00000001) && (damped_Beta > -0.00000001))
-        vcl_cout << "ERROR: damped_Beta is:" << damped_Beta << vcl_endl;
+        std::cout << "ERROR: damped_Beta is:" << damped_Beta << std::endl;
 
       data.alpha *= static_cast<float>(damped_Beta);
 
@@ -148,8 +150,8 @@ bool boxm_shadow_bayes_optimizer<T_loc,APM,AUX>::optimize_cells(double damping_f
       // do bounds check on new alpha value
       vgl_box_3d<double> cell_bb = tree->cell_bounding_box(cell);
       const float cell_len = float(cell_bb.width());
-      const float max_alpha = -vcl_log(1.0f - max_cell_P_)/cell_len;
-      const float min_alpha = -vcl_log(1.0f - min_cell_P_)/cell_len;
+      const float max_alpha = -std::log(1.0f - max_cell_P_)/cell_len;
+      const float min_alpha = -std::log(1.0f - min_cell_P_)/cell_len;
       if (data.alpha > max_alpha) {
         data.alpha = max_alpha;
       }
@@ -157,12 +159,12 @@ bool boxm_shadow_bayes_optimizer<T_loc,APM,AUX>::optimize_cells(double damping_f
         data.alpha = min_alpha;
       }
       if (!((data.alpha >= min_alpha) && (data.alpha <= max_alpha)) ){
-        vcl_cerr << "\nerror: data.alpha = " << data.alpha << vcl_endl;
+        std::cerr << "\nerror: data.alpha = " << data.alpha << std::endl;
       }
       // update with new appearance
       bool print_p = false;
       if (verbose_&&cell == debug_cell){
-        vcl_cout << "Cell Level = " << cell->level()
+        std::cout << "Cell Level = " << cell->level()
                  << "  AlphaPosterior  = " << data.alpha << '\n';
         print_p = true;
       }

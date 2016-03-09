@@ -5,7 +5,9 @@
 // \file
 
 #include "mbl_stochastic_data_collector.h"
-#include <vcl_string.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <string>
 #include <vsl/vsl_vector_io.h>
 #include <vnl/vnl_math.h>
 
@@ -144,7 +146,7 @@ void mbl_stochastic_data_collector<T>::reseed (unsigned long seed)
 //=======================================================================
 
 template <class T>
-bool mbl_stochastic_data_collector<T>::is_class(vcl_string const& s) const
+bool mbl_stochastic_data_collector<T>::is_class(std::string const& s) const
 {
   return s==mbl_stochastic_data_collector<T>::is_a() || mbl_data_collector<T>::is_class(s);
 }
@@ -168,7 +170,7 @@ mbl_data_collector_base* mbl_stochastic_data_collector<T>::clone() const
 //=======================================================================
 
 template <class T>
-void mbl_stochastic_data_collector<T>::print_summary(vcl_ostream& os) const
+void mbl_stochastic_data_collector<T>::print_summary(std::ostream& os) const
 {
   os << "number stored: " << samples_.size()
      << ", number presented: " << nPresented_ << '\n';
@@ -201,16 +203,16 @@ void mbl_stochastic_data_collector<T>::b_read(vsl_b_istream& bfs)
     vsl_b_read(bfs, nPresented_);
     break;
   default:
-    vcl_cerr << "I/O ERROR: mbl_stochastic_data_collector<T::b_read(vsl_b_istream&)\n"
+    std::cerr << "I/O ERROR: mbl_stochastic_data_collector<T::b_read(vsl_b_istream&)\n"
              << "           Unknown version number "<< version << '\n';
-    bfs.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
+    bfs.is().clear(std::ios::badbit); // Set an unrecoverable IO error on stream
     return;
   }
 }
 
 #define MBL_STOCHASTIC_DATA_COLLECTOR_INSTANTIATE(T) \
-VCL_DEFINE_SPECIALIZATION vcl_string mbl_stochastic_data_collector<T >::is_a() const \
-{  return vcl_string("mbl_stochastic_data_collector<" #T ">"); }\
+VCL_DEFINE_SPECIALIZATION std::string mbl_stochastic_data_collector<T >::is_a() const \
+{  return std::string("mbl_stochastic_data_collector<" #T ">"); }\
 template class mbl_stochastic_data_collector< T >
 
 #endif // mbl_stochastic_data_collector_hxx_

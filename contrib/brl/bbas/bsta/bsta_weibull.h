@@ -26,7 +26,9 @@
 #include "bsta_distribution.h"
 #include <vnl/vnl_gamma.h>
 #include <vcl_cassert.h>
-#include <vcl_iosfwd.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iosfwd>
 
 // A Weibull distribution does not have a natural, unique extension to
 // multi-dimensional variables. However, various approaches do exist
@@ -98,7 +100,7 @@ class bsta_weibull : public bsta_distribution<T,1>
 };
 
 template <class T >
-inline vcl_ostream& operator<< (vcl_ostream& os,
+inline std::ostream& operator<< (std::ostream& os,
                                 bsta_weibull<T> const& w)
 {
   os << "weibull:lambda(" << w.lambda() << ")\n"

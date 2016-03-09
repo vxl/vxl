@@ -18,7 +18,9 @@
 //
 //-----------------------------------------------------------------------------
 
-#include <vcl_vector.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <vector>
 #include <mvl/FileNameGenerator.h>
 #include <mvl/PMatrix_sptr.h>
 
@@ -41,7 +43,7 @@ class RawPMatrixStore
  protected:
 
   // Data Members--------------------------------------------------------------
-  vcl_vector<PMatrix_sptr> pmatrix_;
+  std::vector<PMatrix_sptr> pmatrix_;
   bool check_index(int i);
 
   FileNameGenerator fng_;

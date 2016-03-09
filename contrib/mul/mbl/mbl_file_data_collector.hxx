@@ -6,7 +6,9 @@
 
 #include "mbl_file_data_collector.h"
 
-#include <vcl_cstdlib.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <cstdlib>
 #include <vcl_cassert.h>
 
 #include <vsl/vsl_binary_loader.h>
@@ -19,7 +21,7 @@
 //=======================================================================
 
 template<class T>
-mbl_file_data_collector<T>::mbl_file_data_collector( const vcl_string & path )
+mbl_file_data_collector<T>::mbl_file_data_collector( const std::string & path )
 //: bfs_( path ),
 : bfs_( 0 ),
   wrapper_( 0 )
@@ -27,7 +29,7 @@ mbl_file_data_collector<T>::mbl_file_data_collector( const vcl_string & path )
   path_ = path;
   while ( vul_file::exists( path_ ) )
   {
-    path_ = vul_file::strip_extension( path_ ) + vcl_string( "a" ) + vul_file::extension( path_ );
+    path_ = vul_file::strip_extension( path_ ) + std::string( "a" ) + vul_file::extension( path_ );
   }
 
   short vn= 1;
@@ -35,9 +37,9 @@ mbl_file_data_collector<T>::mbl_file_data_collector( const vcl_string & path )
   bfs_ = new vsl_b_ofstream( path_ );
   if ( !( *bfs_ ) )
   {
-    vcl_cerr<<"ERROR: mbl_file_data_collector::constructor\n"
+    std::cerr<<"ERROR: mbl_file_data_collector::constructor\n"
             <<"file stream failed\n";
-    vcl_abort();
+    std::abort();
   }
 
   vsl_b_write( *bfs_, vn );
@@ -84,7 +86,7 @@ mbl_file_data_collector<T>& mbl_file_data_collector<T>::operator=( const mbl_fil
   path_ = c.path_;
   while ( vul_file::exists( path_ ) )
   {
-    path_ = vul_file::strip_extension( path_ ) + vcl_string( "a" ) + vul_file::extension( path_ );
+    path_ = vul_file::strip_extension( path_ ) + std::string( "a" ) + vul_file::extension( path_ );
   }
 
   delete bfs_;
@@ -163,7 +165,7 @@ template<class T>
 void mbl_file_data_collector<T>::clear()
 {
   // can't clear (need to wipe data file to do a proper clear ???)
-  vcl_cout<<"mbl_file_data_collector<T>::clear - no action taken\n"
+  std::cout<<"mbl_file_data_collector<T>::clear - no action taken\n"
           <<"can't delete data file\n";
 }
 
@@ -171,7 +173,7 @@ void mbl_file_data_collector<T>::clear()
 template<class T>
 void mbl_file_data_collector<T>::set_n_samples(int /*n*/)
 {
-  vcl_cerr << "mbl_file_data_collector::set_n_samples() is not useful\n";
+  std::cerr << "mbl_file_data_collector::set_n_samples() is not useful\n";
 }
 
 //: Record given object
@@ -180,9 +182,9 @@ void mbl_file_data_collector<T>::record(const T& d)
 {
   if (!bfs_)
   {
-    vcl_cerr<<"ERROR: mbl_file_data_collector::record()\n"
+    std::cerr<<"ERROR: mbl_file_data_collector::record()\n"
             <<"file stream failed\n";
-    vcl_abort();
+    std::abort();
   }
   else
   {
@@ -210,7 +212,7 @@ mbl_data_wrapper<T >& mbl_file_data_collector<T>::data_wrapper()
 }
 
 template <class T>
-bool mbl_file_data_collector<T>::is_class(vcl_string const& s) const
+bool mbl_file_data_collector<T>::is_class(std::string const& s) const
 {
   return s==mbl_file_data_collector<T>::is_a() || mbl_data_collector<T>::is_class(s);
 }
@@ -232,7 +234,7 @@ mbl_data_collector_base* mbl_file_data_collector<T>::clone() const
 }
 
 template <class T>
-void mbl_file_data_collector<T>::print_summary(vcl_ostream& os) const
+void mbl_file_data_collector<T>::print_summary(std::ostream& os) const
 {
   os<<"Data saved to: "<<path_<<'\n';
 }
@@ -240,19 +242,19 @@ void mbl_file_data_collector<T>::print_summary(vcl_ostream& os) const
 template <class T>
 void mbl_file_data_collector<T>::b_write(vsl_b_ostream& /*bfs*/) const
 {
-  vcl_cout<<"mbl_file_data_collector<T>::b_write - Can't save collector!\n";
+  std::cout<<"mbl_file_data_collector<T>::b_write - Can't save collector!\n";
 }
 
 template <class T>
 void mbl_file_data_collector<T>::b_read(vsl_b_istream& /*bfs*/)
 {
-  vcl_cout<<"mbl_file_data_collector<T>::b_read - Can't load collector!\n";
+  std::cout<<"mbl_file_data_collector<T>::b_read - Can't load collector!\n";
 }
 
 
 #define MBL_FILE_DATA_COLLECTOR_INSTANTIATE(T) \
-VCL_DEFINE_SPECIALIZATION vcl_string mbl_file_data_collector<T >::is_a() const \
-{ return vcl_string("mbl_file_data_collector<" #T ">"); } \
+VCL_DEFINE_SPECIALIZATION std::string mbl_file_data_collector<T >::is_a() const \
+{ return std::string("mbl_file_data_collector<" #T ">"); } \
 template class mbl_file_data_collector<T >
 
 #endif // mbl_file_data_collector_hxx_

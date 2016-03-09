@@ -14,7 +14,9 @@
 //  May 10, 2010 Andrew Hoelscher - Added verbose option to disable printing
 // \endverbatim
 
-#include <vcl_vector.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <vector>
 #include <vbl/vbl_ref_count.h>
 #include <vbl/vbl_smart_ptr.h>
 #include <vnl/vnl_vector_fixed.h>
@@ -65,7 +67,7 @@ class bapl_bbf_node : public vbl_ref_count
   bapl_bbf_node( const bapl_bbf_box& outer_box,
                  const bapl_bbf_box& inner_box,
                  unsigned int depth,
-                 const vcl_vector<int>& indices )
+                 const std::vector<int>& indices )
     : outer_box_(outer_box), inner_box_(inner_box), depth_(depth),
       point_indices_(indices), left_(0), right_(0) {}
 
@@ -76,7 +78,7 @@ class bapl_bbf_node : public vbl_ref_count
   //: Depth of node in the tree
   unsigned int depth_;
   //: Indices of the points stored at this leaf
-  vcl_vector< int > point_indices_;
+  std::vector< int > point_indices_;
   //: Left child
   bapl_bbf_node_sptr left_;
   //: Right child
@@ -109,20 +111,20 @@ class bapl_bbf_tree
 {
  public:
   //: Constructor
-  bapl_bbf_tree( const vcl_vector< bapl_keypoint_sptr >& points,
+  bapl_bbf_tree( const std::vector< bapl_keypoint_sptr >& points,
                  int points_per_leaf=4 );
 
   //: Return an estimate of the n closest points to the query point
   void n_nearest( const bapl_keypoint_sptr query_point,
-                  vcl_vector< bapl_keypoint_sptr >& closest_points,
-                  vcl_vector< int >& closest_indices,
+                  std::vector< bapl_keypoint_sptr >& closest_points,
+                  std::vector< int >& closest_indices,
                   int n=1, int max_search_nodes=-1 );
 
   //: Return an estimate of the n closest points to the query point
   // \param n is the number of nearest nodes to return
   // \param max_search_nodes is the number of nodes to examine (-1 mean all)
   void n_nearest( const bapl_keypoint_sptr query_point,
-                  vcl_vector< bapl_keypoint_sptr >& closest_points,
+                  std::vector< bapl_keypoint_sptr >& closest_points,
                   int n=1, int max_search_nodes=-1);
 
  private:
@@ -130,18 +132,18 @@ class bapl_bbf_tree
   bapl_bbf_node_sptr build_tree( int points_per_leaf,
                                  const bapl_bbf_box& outer_box,
                                  int depth,
-                                 vcl_vector< int >& indices );
+                                 std::vector< int >& indices );
   //: Build an inner bounding box
-  bapl_bbf_box build_inner_box( const vcl_vector< int >& indices );
+  bapl_bbf_box build_inner_box( const std::vector< int >& indices );
   //: Find the dimension with the greatest variation
-  int greatest_variation( const vcl_vector<int>& indices );
+  int greatest_variation( const std::vector<int>& indices );
   //: Update
   void update_closest( const bapl_keypoint_sptr query_point, int n,
-                       bapl_bbf_node_sptr p, vcl_vector< int >& closest_indices,
-                       vcl_vector< double >& sq_distances, int & num_found );
+                       bapl_bbf_node_sptr p, std::vector< int >& closest_indices,
+                       std::vector< double >& sq_distances, int & num_found );
   //: See if the current leaf contains the NN neighbors
   bool bounded_at_leaf( const bapl_keypoint_sptr query_point, int n,
-                        bapl_bbf_node_sptr current, const vcl_vector< double >& sq_distances,
+                        bapl_bbf_node_sptr current, const std::vector< double >& sq_distances,
                         int & num_found );
 
   //: The number of leaves in the tree
@@ -155,7 +157,7 @@ class bapl_bbf_tree
   //: the root node in the tree
   bapl_bbf_node_sptr root_;
   //: vector of keypoints in the tree
-  vcl_vector< bapl_keypoint_sptr > points_;
+  std::vector< bapl_keypoint_sptr > points_;
 };
 
 #endif // bapl_bbf_tree_h_

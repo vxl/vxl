@@ -10,7 +10,9 @@
 #include <bvxm/bvxm_voxel_world.h>
 
 #include <vcl_string.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <string>
+#include <iostream>
 
 #include <brdb/brdb_value.h>
 #include <brdb/brdb_selection.h>
@@ -58,7 +60,7 @@ static void test_brec_create_mog_image_process()
   // convert image to a voxel_slab
   bvxm_voxel_slab<obs_datatype> image_slab(img.ni(), img.nj(), 1);
   if (!bvxm_util::img_to_slab(img_sptr,image_slab)) {
-    vcl_cerr << "error converting image to voxel slab of observation type for bvxm_voxel_type: APM_MOG_GREY\n";
+    std::cerr << "error converting image to voxel slab of observation type for bvxm_voxel_type: APM_MOG_GREY\n";
     TEST("converting image to voxel slab of observation type", true, false);
     return;
   }
@@ -100,7 +102,7 @@ static void test_brec_create_mog_image_process()
   // inits
   bvxm_voxel_slab_base_sptr s_ptr = new bvxm_voxel_slab<mog_type>(slab);
   brdb_value_sptr v0 = new brdb_value_t<bvxm_voxel_slab_base_sptr>(s_ptr);
-  brdb_value_sptr v1 = new brdb_value_t<vcl_string>("apm_mog_grey");
+  brdb_value_sptr v1 = new brdb_value_t<std::string>("apm_mog_grey");
 
   bool good = bprb_batch_process_manager::instance()->init_process("brecCreateMOGImageProcess");
   good = good && bprb_batch_process_manager::instance()->set_input(0, v0);
@@ -114,7 +116,7 @@ static void test_brec_create_mog_image_process()
   brdb_selection_sptr S_img = DATABASE->select("bbgm_image_sptr_data", Q_img);
   TEST("output image is in db", S_img->size(), 1);
   brdb_value_sptr value_img;
-  TEST("output image is in db", S_img->get_value(vcl_string("value"), value_img), true);
+  TEST("output image is in db", S_img->get_value(std::string("value"), value_img), true);
   TEST("output image is non-null", (value_img != VXL_NULLPTR) ,true);
   brdb_value_t<bbgm_image_sptr>* result = static_cast<brdb_value_t<bbgm_image_sptr>* >(value_img.ptr());
   bbgm_image_sptr out_exp_img = result->value();
@@ -143,14 +145,14 @@ static void test_brec_create_mog_image_process()
   brdb_selection_sptr S_img1 = DATABASE->select("bbgm_image_sptr_data", Q_img1);
   TEST("output image is in db", S_img1->size(), 1);
   brdb_value_sptr value_img1;
-  TEST("output image is in db", S_img1->get_value(vcl_string("value"), value_img1), true);
+  TEST("output image is in db", S_img1->get_value(std::string("value"), value_img1), true);
   TEST("output image is non-null", (value_img1 != 0) ,true);
   brdb_value_t<bbgm_image_sptr>* result1 = static_cast<brdb_value_t<bbgm_image_sptr>* >(value_img1.ptr());
   bbgm_image_sptr out_mog_img = result1->value();
   TEST("run create mog image process - mog image ptr", !out_mog_img , false);
 
   // save the output mog image
-  brdb_value_sptr v6 = new brdb_value_t<vcl_string>("out_mog.bin");
+  brdb_value_sptr v6 = new brdb_value_t<std::string>("out_mog.bin");
   brdb_value_sptr v7 = new brdb_value_t<bbgm_image_sptr>(out_mog_img);
   good = bprb_batch_process_manager::instance()->init_process("bbgmSaveImageOfProcess");
   good = good && bprb_batch_process_manager::instance()->set_input(0, v6);
@@ -159,9 +161,9 @@ static void test_brec_create_mog_image_process()
   TEST("save mog image process", good , true);
 
   for (int component = 0; component < 3; component++) {
-    vcl_stringstream ss; ss << component;
+    std::stringstream ss; ss << component;
     // display the output mog image
-    brdb_value_sptr v8 = new brdb_value_t<vcl_string>("mean");
+    brdb_value_sptr v8 = new brdb_value_t<std::string>("mean");
     brdb_value_sptr v9 = new brdb_value_t<int>(component);  // the component to display
     brdb_value_sptr v11 = new brdb_value_t<bool>(true);  // scale result to a byte image
     good = bprb_batch_process_manager::instance()->init_process("bbgmDisplayDistImageProcess");
@@ -175,18 +177,18 @@ static void test_brec_create_mog_image_process()
     unsigned id_mean; bprb_batch_process_manager::instance()->commit_output(0, id_mean);
     Q_img1 = brdb_query_comp_new("id", brdb_query::EQ, id_mean);
     S_img1 = DATABASE->select("vil_image_view_base_sptr_data", Q_img1);
-    S_img1->get_value(vcl_string("value"), value_img1);
+    S_img1->get_value(std::string("value"), value_img1);
     result = static_cast<brdb_value_t<vil_image_view_base_sptr>* >(value_img1.ptr());
 
   #if 1
     vil_image_view<vxl_byte> mean_img_v(result->value());
-    vcl_string name = "mean_image_of_mog_component_" + ss.str() + ".png";
+    std::string name = "mean_image_of_mog_component_" + ss.str() + ".png";
     saved = vil_save(mean_img_v, name.c_str());
     TEST("saved", saved, true);
   #endif // 0
 
     // display the output mog image's std deviation
-    brdb_value_sptr v10 = new brdb_value_t<vcl_string>("variance");
+    brdb_value_sptr v10 = new brdb_value_t<std::string>("variance");
 
     good = bprb_batch_process_manager::instance()->init_process("bbgmDisplayDistImageProcess");
     good = good && bprb_batch_process_manager::instance()->set_input(0, v7);
@@ -199,7 +201,7 @@ static void test_brec_create_mog_image_process()
     bprb_batch_process_manager::instance()->commit_output(0, id_mean);
     Q_img1 = brdb_query_comp_new("id", brdb_query::EQ, id_mean);
     S_img1 = DATABASE->select("vil_image_view_base_sptr_data", Q_img1);
-    S_img1->get_value(vcl_string("value"), value_img1);
+    S_img1->get_value(std::string("value"), value_img1);
     result = static_cast<brdb_value_t<vil_image_view_base_sptr>* >(value_img1.ptr());
 
   #if 1

@@ -67,10 +67,10 @@ test_inv_indexing()
   vnl_random rand;
 
   //generate invariant features
-  vcl_vector<rgrl_invariant_sptr> fixed_set1;
-  vcl_vector<rgrl_invariant_sptr> moving_set1;
-  vcl_vector<rgrl_invariant_sptr> fixed_set2;
-  vcl_vector<rgrl_invariant_sptr> moving_set2;
+  std::vector<rgrl_invariant_sptr> fixed_set1;
+  std::vector<rgrl_invariant_sptr> moving_set1;
+  std::vector<rgrl_invariant_sptr> fixed_set2;
+  std::vector<rgrl_invariant_sptr> moving_set2;
 
   vnl_vector_fixed<double,2> location1(10.0, 17.0);
   vnl_vector_fixed<double,2> location2(30.0, 84.0);
@@ -121,7 +121,7 @@ test_inv_indexing()
   rgrl_view_sptr v;
   rgrl_scale_sptr s;
 
-  vcl_vector<rgrl_invariant_match_sptr> matches = initializer->matches_for_moving_image(0);
+  std::vector<rgrl_invariant_match_sptr> matches = initializer->matches_for_moving_image(0);
 
   simple_invariant_feature* from = rgrl_cast<simple_invariant_feature*>(matches[3]->from());
   simple_invariant_feature* to = rgrl_cast<simple_invariant_feature*>(matches[3]->to());

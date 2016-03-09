@@ -14,7 +14,7 @@
 
 //: Asks question and waits for an answer from standard input.
 //       If the answer is a non-empty string, returns it.
-//       If the answer is an empty vcl_string (return)
+//       If the answer is an empty std::string (return)
 //       then returns default.
 // \param reply Space for reply
 // \param max_str_len Length of space for reply
@@ -32,7 +32,7 @@
 //
 // b) If default_str = current reply, then reply
 //   is only overwritten if a different
-//   vcl_string given.
+//   std::string given.
 //
 // \code
 // const int N_max_len = 20;

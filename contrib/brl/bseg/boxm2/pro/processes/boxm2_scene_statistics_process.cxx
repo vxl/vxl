@@ -8,7 +8,9 @@
 
 #include <bprb/bprb_func_process.h>
 
-#include <vcl_fstream.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <fstream>
 #include <boxm2/boxm2_scene.h>
 #include <boxm2/io/boxm2_cache.h>
 #include <boxm2/boxm2_block.h>
@@ -30,7 +32,7 @@ bool boxm2_scene_statistics_process_cons(bprb_func_process& pro)
   using namespace boxm2_scene_statistics_process_globals;
 
   //process takes 1 inputs
-  vcl_vector<vcl_string> input_types_(n_inputs_);
+  std::vector<std::string> input_types_(n_inputs_);
   input_types_[0] = "boxm2_scene_sptr";
   input_types_[1] = "boxm2_cache_sptr";
   input_types_[2] = "float"; //center x
@@ -40,7 +42,7 @@ bool boxm2_scene_statistics_process_cons(bprb_func_process& pro)
   input_types_[6] = "float"; //len y
   input_types_[7] = "float"; //len z
 
-  vcl_vector<vcl_string> output_types(n_outputs_);
+  std::vector<std::string> output_types(n_outputs_);
   output_types[0] = "float";
 
   //default values for the box is empty
@@ -71,7 +73,7 @@ bool boxm2_scene_statistics_process(bprb_func_process& pro)
   typedef vnl_vector_fixed<ushort, 4> ushort4;
 
   if ( pro.n_inputs() < n_inputs_ ){
-    vcl_cout << pro.name() << ": The input number should be " << n_inputs_<< vcl_endl;
+    std::cout << pro.name() << ": The input number should be " << n_inputs_<< std::endl;
     return false;
   }
   //get the inputs
@@ -94,8 +96,8 @@ bool boxm2_scene_statistics_process(bprb_func_process& pro)
   unsigned total_num_cells = 0;
 
   //get blocks
-  vcl_map<boxm2_block_id, boxm2_block_metadata> blocks = scene->blocks();
-  vcl_map<boxm2_block_id, boxm2_block_metadata>::const_iterator boxm2_iter = blocks.begin();
+  std::map<boxm2_block_id, boxm2_block_metadata> blocks = scene->blocks();
+  std::map<boxm2_block_id, boxm2_block_metadata>::const_iterator boxm2_iter = blocks.begin();
   for (; boxm2_iter != blocks.end(); ++boxm2_iter)
   {
     boxm2_block_id boxm2_id = boxm2_iter->first;

@@ -10,7 +10,9 @@
 #include "rgtl_octree_cell_bounds.hxx"
 #include "rgtl_sqt_space.txx"
 
-#include <vcl_cmath.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <cmath>
 
 #define RGTL_OCTREE_CELL_GEOMETRY_CONE_SPECIALIZE_3
 
@@ -45,7 +47,7 @@ rgtl_octree_cell_geometry<D>
   {
     this->center_[a] = this->lower_[a] + half_size;
   }
-  this->radius_ = vcl_sqrt(D*half_size*half_size);
+  this->radius_ = std::sqrt(D*half_size*half_size);
 
   // Compute the corner locations.
   this->compute_corners();

@@ -37,7 +37,7 @@ inline void vil3d_clamp(vil3d_image_view<T >&src, vil3d_image_view<T >&dest, T l
 template <class T>
 inline void vil3d_clamp_below(vil3d_image_view<T>& src, T t, T v)
 {
-  vcl_ptrdiff_t istepA=src.istep(), jstepA=src.jstep(),
+  std::ptrdiff_t istepA=src.istep(), jstepA=src.jstep(),
     kstepA=src.kstep(), pstepA=src.planestep();
   T* planeA = src.origin_ptr();
   for (unsigned int p=0; p<src.nplanes(); ++p,planeA+=pstepA)
@@ -70,7 +70,7 @@ inline void vil3d_clamp_below(vil3d_image_view<T>& src, T t)
 template <class T>
 inline void vil3d_clamp_above(vil3d_image_view<T>& src, T t, T v)
 {
-  vcl_ptrdiff_t istepA=src.istep(), jstepA=src.jstep(),
+  std::ptrdiff_t istepA=src.istep(), jstepA=src.jstep(),
     kstepA=src.kstep(), pstepA=src.planestep();
   T* planeA = src.origin_ptr();
   for (unsigned int p=0; p<src.nplanes(); ++p,planeA+=pstepA)

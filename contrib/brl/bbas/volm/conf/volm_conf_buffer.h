@@ -12,9 +12,11 @@
 //   Modifications
 // \endverbatim
 
-#include <vcl_string.h>
-#include <vcl_fstream.h>
-#include <vcl_vector.h>
+#include <string>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <fstream>
+#include <vector>
 #include <vsl/vsl_binary_io.h>
 
 template <class Type>
@@ -33,14 +35,14 @@ class volm_conf_buffer
 
   // ================ access ========================
 
-  vcl_vector<int>& length_vec() { return length_vec_; }
+  std::vector<int>& length_vec() { return length_vec_; }
   unsigned current_id()  const { return current_id_; }
   unsigned global_current_id() const { return global_current_id_; }
   unsigned buffer_size() const { return buffer_size_; }
   unsigned unit_size()   const { return unit_size_; }
   unsigned read_in()     const { return read_in_; }
-  vcl_string file_name() const { return file_name_; }
-  vcl_string index_mode() const {
+  std::string file_name() const { return file_name_; }
+  std::string index_mode() const {
     switch (m_)
     {
       case(READ):
@@ -56,19 +58,19 @@ class volm_conf_buffer
 
   //: append values associated with certain location to the end of the current active buffer.
   //: caller is in charge of the internal order
-  bool add_to_index(vcl_vector<Type> const& values);
+  bool add_to_index(std::vector<Type> const& values);
   bool add_to_index(Type const& value);
 
   //: retrieve the next index from current active buffer.  if active_buffer has been retrieved, read form disc
   //: caller is in charge of the internal order
-  bool get_next(vcl_vector<Type>& values);
+  bool get_next(std::vector<Type>& values);
   bool get_next(Type& value);
 
 
   // ================ IO ============================
 
-  bool initialize_read(vcl_string const& filename);
-  bool initialize_write(vcl_string const& filename);
+  bool initialize_read(std::string const& filename);
+  bool initialize_write(std::string const& filename);
   bool finalize();
 
  private:
@@ -82,7 +84,7 @@ class volm_conf_buffer
   Type* active_buffer_;
 
   //: vector to store number of configurational objects in each location
-  vcl_vector<int> length_vec_;
+  std::vector<int> length_vec_;
 
   //: maximum number of configurational objects allowed in defined buffer
   unsigned buffer_size_;
@@ -97,7 +99,7 @@ class volm_conf_buffer
   unsigned read_in_;
   int  prev_length_;
   //: binary filename
-  vcl_string file_name_;
+  std::string file_name_;
 
   //: file stream
   vsl_b_ofstream *ofs_ptr_;

@@ -28,8 +28,10 @@
 #include <vil3d/vil3d_image_view.h>
 #include <vil3d/algo/vil3d_distance_transform.h>
 #include <vnl/vnl_vector_fixed.h>
-#include <vcl_iostream.h>
-#include <vcl_limits.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iostream>
+#include <limits>
 
 //: Multiplies 2 grids. The types of input grids must have a * operator
 template <class T>
@@ -43,14 +45,14 @@ bool bvxm_voxel_grid_multiply(bvxm_voxel_grid_base_sptr grid1_base, bvxm_voxel_g
   // check the casting was successful
   if ( !grid1 || !grid2 || !grid_out)
   {
-    vcl_cerr << "One of the input voxels is of the wrong type\n";
+    std::cerr << "One of the input voxels is of the wrong type\n";
     return false;
   }
 
   // check sizes are the same
   if ( grid1->grid_size() != grid2->grid_size() ||  grid1->grid_size() != grid_out->grid_size() )
   {
-    vcl_cerr << "Grids are not of the same type\n";
+    std::cerr << "Grids are not of the same type\n";
     return false;
   }
 
@@ -80,14 +82,14 @@ bool bvxm_voxel_grid_copy(bvxm_voxel_grid<T> *grid1,  bvxm_voxel_grid<T> *grid2)
     //check the pointers
   if ( !grid1 || !grid2 )
   {
-    vcl_cerr << "One of the input voxels is of the wrong type\n";
+    std::cerr << "One of the input voxels is of the wrong type\n";
     return false;
   }
 
   //check sizes are the same
   if ( grid1->grid_size() != grid2->grid_size() )
   {
-    vcl_cerr << "Grids are not of the same type\n";
+    std::cerr << "Grids are not of the same type\n";
     return false;
   }
 
@@ -127,14 +129,14 @@ bool bvxm_voxel_grid_threshold(bvxm_voxel_grid_base_sptr grid_in_base,bvxm_voxel
   //check the casting was successful
   if ( !grid_in || !grid_out || !mask_grid)
   {
-    vcl_cerr << "One of the input voxels is of the wrong type\n";
+    std::cerr << "One of the input voxels is of the wrong type\n";
     return false;
   }
 
   //check sizes are the same
   if ( grid_in->grid_size() != grid_out->grid_size() ||  grid_in->grid_size() != mask_grid->grid_size() )
   {
-    vcl_cerr << "Grids are not of the same type\n";
+    std::cerr << "Grids are not of the same type\n";
     return false;
   }
 
@@ -148,10 +150,10 @@ bool bvxm_voxel_grid_threshold(bvxm_voxel_grid_base_sptr grid_in_base,bvxm_voxel
   typename bvxm_voxel_grid<T>::iterator out_slab_it = grid_out->begin();
   bvxm_voxel_grid<bool>::iterator mask_slab_it = mask_grid->begin();
 
-  vcl_cout << "Thresholding Grid:" << vcl_endl;
+  std::cout << "Thresholding Grid:" << std::endl;
   for (unsigned z=0; z<(unsigned)(grid_in->grid_size().z()); ++z, ++in_slab_it, ++mask_slab_it, ++out_slab_it)
   {
-    vcl_cout << '.';
+    std::cout << '.';
 
     //iterate through slab and threshold. At this point the grids get updated on disk
     typename bvxm_voxel_slab<T>::iterator in_it = (*in_slab_it).begin();
@@ -177,7 +179,7 @@ bool bvxm_load_mesh_into_grid(bvxm_voxel_grid<T>* grid,imesh_mesh& mesh,T val)
   imesh_face_array_base& fs = mesh.faces();
   for (unsigned i=0; i < fs.size(); ++i)
   {
-    vcl_list<vgl_point_3d<double> > v_list;
+    std::list<vgl_point_3d<double> > v_list;
     imesh_vertex_array<3>& vertices = mesh.vertices<3>();
     vgl_box_3d<double> bb;
     for (unsigned j=0; j<fs.num_verts(i); ++j) {
@@ -227,7 +229,7 @@ bool bvxm_load_mesh_normals_into_grid(bvxm_voxel_grid<vnl_vector_fixed<float,3> 
 //: Digitize a simple polygon in local coordinates i.e. the same coordinate system of the grid.
 template <class T>
 bool bvxm_load_polygon_into_grid(bvxm_voxel_grid<T>* grid,
-                                 vcl_vector<vgl_point_3d<double> > v_list,
+                                 std::vector<vgl_point_3d<double> > v_list,
                                  T val)
 {
   vgl_box_3d<double> bb;
@@ -282,7 +284,7 @@ bool bvxm_grid_dist_transform(bvxm_voxel_grid<float>* grid,
           if (s(i,j)>0)
             image(i,j,k)=0;
           else
-            image(i,j,k)=vcl_numeric_limits<float>::max();
+            image(i,j,k)=std::numeric_limits<float>::max();
       }
     }
     ++k;
@@ -320,7 +322,7 @@ bool bvxm_grid_dist_transform(bvxm_voxel_grid<float>* grid,
     for (unsigned i=0; i<dir->grid_size().x(); ++i) {
       for (unsigned j=0; j<dir->grid_size().y(); ++j) {
           d(i,j)=vnl_vector_fixed<float,3>(directions(i,j,k).R(),directions(i,j,k).G(),directions(i,j,k).B());
-          d_mag(i,j)=vcl_sqrt(directions(i,j,k).R()*directions(i,j,k).R()
+          d_mag(i,j)=std::sqrt(directions(i,j,k).R()*directions(i,j,k).R()
                              +directions(i,j,k).G()*directions(i,j,k).G()
                              +directions(i,j,k).B()*directions(i,j,k).B());
       }

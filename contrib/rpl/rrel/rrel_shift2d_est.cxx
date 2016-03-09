@@ -5,11 +5,13 @@
 #include <vnl/vnl_math.h>
 
 #include <vcl_cassert.h>
-#include <vcl_cmath.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <cmath>
 
 rrel_shift2d_est::rrel_shift2d_est(
-    const vcl_vector< vgl_homg_point_2d<double> > & from_pts,
-    const vcl_vector< vgl_homg_point_2d<double> > & to_pts )
+    const std::vector< vgl_homg_point_2d<double> > & from_pts,
+    const std::vector< vgl_homg_point_2d<double> > & to_pts )
     : rrel_estimation_problem( 2 /*dof*/, 1 /*points to instantiate*/ )
 {
   assert( from_pts.size() == to_pts.size() );
@@ -31,8 +33,8 @@ rrel_shift2d_est::rrel_shift2d_est(
 }
 
 rrel_shift2d_est::rrel_shift2d_est(
-    const vcl_vector< vnl_vector<double> > & from_pts,
-    const vcl_vector< vnl_vector<double> > & to_pts )
+    const std::vector< vnl_vector<double> > & from_pts,
+    const std::vector< vnl_vector<double> > & to_pts )
     : rrel_estimation_problem( 2 /*dof*/, 1 /*points to instantiate*/ ),
       from_pts_( from_pts ), to_pts_( to_pts )
 {
@@ -56,7 +58,7 @@ rrel_shift2d_est::num_samples( ) const
 
 bool
 rrel_shift2d_est::fit_from_minimal_set(
-    const vcl_vector<int>& point_indices,
+    const std::vector<int>& point_indices,
     vnl_vector<double>& params ) const
 {
   assert( point_indices.size() == 1 );
@@ -68,7 +70,7 @@ rrel_shift2d_est::fit_from_minimal_set(
 void
 rrel_shift2d_est::compute_residuals(
     const vnl_vector<double>& params,
-    vcl_vector<double>& residuals ) const
+    std::vector<double>& residuals ) const
 {
   assert (2 == params.size() );
   if ( residuals.size() != from_pts_.size() )
@@ -77,7 +79,7 @@ rrel_shift2d_est::compute_residuals(
   for (unsigned i=0; i<from_pts_.size(); i++) {
       double del_x = del_pts_[i][0] - params[0];
       double del_y = del_pts_[i][1] - params[1];
-      residuals[i] = vcl_sqrt( vnl_math::sqr(del_x) + vnl_math::sqr(del_y) );
+      residuals[i] = std::sqrt( vnl_math::sqr(del_x) + vnl_math::sqr(del_y) );
   }
 }
 
@@ -85,13 +87,13 @@ bool
 rrel_shift2d_est::weighted_least_squares_fit(
     vnl_vector<double>& params,
     vnl_matrix<double>& /* norm_covar */,
-    const vcl_vector<double>* weights ) const
+    const std::vector<double>* weights ) const
 {
-  const vcl_vector<double> * w;
+  const std::vector<double> * w;
   if ( weights )
     w = weights;
   else
-    w = new vcl_vector<double>( from_pts_.size(), 1 );
+    w = new std::vector<double>( from_pts_.size(), 1 );
 
   params.set_size(2);
   double x_del_tot = 0.0;

@@ -24,11 +24,11 @@
 template<class T>
 void vil3d_gauss_reduce_i(const T* src_im,
                           unsigned src_ni, unsigned src_nj, unsigned src_nk,
-                          vcl_ptrdiff_t s_i_step, vcl_ptrdiff_t s_j_step,
-                          vcl_ptrdiff_t s_k_step,
+                          std::ptrdiff_t s_i_step, std::ptrdiff_t s_j_step,
+                          std::ptrdiff_t s_k_step,
                           T* dest_im,
-                          vcl_ptrdiff_t d_i_step, vcl_ptrdiff_t d_j_step,
-                          vcl_ptrdiff_t d_k_step)
+                          std::ptrdiff_t d_i_step, std::ptrdiff_t d_j_step,
+                          std::ptrdiff_t d_k_step)
 {
   for (unsigned k=0;k<src_nk;++k)
   {
@@ -219,11 +219,11 @@ void vil3d_gauss_reduce_jk(const vil3d_image_view<T>& src_im,
 #define VIL3D_GAUSS_REDUCE_INSTANTIATE(T) \
 template void vil3d_gauss_reduce_i(const T* src_im,   \
                                    unsigned src_ni, unsigned src_nj, unsigned src_nk, \
-                                   vcl_ptrdiff_t s_i_step, vcl_ptrdiff_t s_j_step,  \
-                                   vcl_ptrdiff_t s_k_step,  \
+                                   std::ptrdiff_t s_i_step, std::ptrdiff_t s_j_step,  \
+                                   std::ptrdiff_t s_k_step,  \
                                    T* dest_im,  \
-                                   vcl_ptrdiff_t d_i_step,  \
-                                   vcl_ptrdiff_t d_j_step, vcl_ptrdiff_t d_k_step); \
+                                   std::ptrdiff_t d_i_step,  \
+                                   std::ptrdiff_t d_j_step, std::ptrdiff_t d_k_step); \
 template void vil3d_gauss_reduce(const vil3d_image_view<T >& src_im, \
                                  vil3d_image_view<T >& dest_im,  \
                                  vil3d_image_view<T >& work_im1, \

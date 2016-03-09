@@ -16,8 +16,10 @@
 #include "bvpl_combined_neighb_operator.h"
 #include <bvpl/kernels/bvpl_kernel_factory.h>
 #include <bvpl/functors/bvpl_local_max_functor.h>
-#include <vcl_iostream.h>
-#include <vcl_limits.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iostream>
+#include <limits>
 #include <vpl/vpl.h>
 #include <vul/vul_file.h>
 
@@ -80,10 +82,10 @@ void bvpl_discriminative_non_max_suppression::suppress_and_combine(bvxm_voxel_gr
   for (unsigned id = 0; id < kernel_vector->kernels_.size(); ++id)
   {
     bvpl_kernel_sptr kernel = kernel_vector->kernels_[id];
-    vcl_cout << "Processing axis: "  << kernel->axis() << vcl_endl
-             << "Processing angle: " << kernel->angle() << vcl_endl;
+    std::cout << "Processing axis: "  << kernel->axis() << std::endl
+             << "Processing angle: " << kernel->angle() << std::endl;
 #if 0
-             << "Processing scale: " << kernel->scale() << vcl_endl;
+             << "Processing scale: " << kernel->scale() << std::endl;
 #endif
 
     // run kernel on the grid
@@ -121,10 +123,10 @@ void bvpl_discriminative_non_max_suppression::suppress_and_combine(bvxm_voxel_gr
   for (unsigned id = 0; id < kernel_vector->kernels_.size(); ++id)
   {
     bvpl_kernel_sptr kernel = kernel_vector->kernels_[id];
-    vcl_cout << "Processing axis: "  << kernel->axis() << vcl_endl
-             << "Processing angle: " << kernel->angle() << vcl_endl;
+    std::cout << "Processing axis: "  << kernel->axis() << std::endl
+             << "Processing angle: " << kernel->angle() << std::endl;
 #if 0
-             << "Processing scale: " << kernel->scale() << vcl_endl;
+             << "Processing scale: " << kernel->scale() << std::endl;
 #endif
 
     // run kernel on the grid
@@ -161,7 +163,7 @@ void bvpl_discriminative_non_max_suppression::local_non_maxima_suppression(bvxm_
       if (!((idx.x() == 0) && (idx.y() == 0) && (idx.z() == 0)))
         if (subgrid.voxel(idx, val)) {
 #if 0
-          vcl_cout << "val" << val << "at " << idx <<vcl_endl;
+          std::cout << "val" << val << "at " << idx <<std::endl;
 #endif
           bvpl_kernel_dispatch d = *kernel_iter;
           func_max.apply(val, d);

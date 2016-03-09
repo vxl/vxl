@@ -22,7 +22,7 @@ class vpdfl_mixture_sampler : public vpdfl_sampler_base
 {
  private:
   //: workspace
-  vcl_vector<vpdfl_sampler_base*> inst_;
+  std::vector<vpdfl_sampler_base*> inst_;
 
   void init();
   void delete_stuff();
@@ -59,10 +59,10 @@ class vpdfl_mixture_sampler : public vpdfl_sampler_base
   short version_no() const;
 
   //: Name of the class
-  virtual vcl_string is_a() const;
+  virtual std::string is_a() const;
 
   //: Does the name of the class match the argument?
-  virtual bool is_class(vcl_string const& s) const;
+  virtual bool is_class(std::string const& s) const;
 
   //: Create a copy on the heap and return base class pointer
   virtual vpdfl_sampler_base* clone() const;

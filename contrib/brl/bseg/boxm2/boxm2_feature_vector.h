@@ -1,7 +1,9 @@
 #ifndef boxm2_feature_vector_h_
 #define boxm2_feature_vector_h_
 
-#include <vcl_iosfwd.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iosfwd>
 
 class boxm2_feature_vector
 {
@@ -15,7 +17,7 @@ class boxm2_feature_vector
   float features_[SIZE];
 };
 
-vcl_ostream& operator<<(vcl_ostream &s, boxm2_feature_vector& f);
+std::ostream& operator<<(std::ostream &s, boxm2_feature_vector& f);
 
 float prob_correspondence(boxm2_feature_vector& f1, float p1,
                           boxm2_feature_vector& f2, float p2,

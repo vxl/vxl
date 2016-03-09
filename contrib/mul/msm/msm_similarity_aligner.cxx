@@ -8,7 +8,9 @@
 #include <vsl/vsl_binary_loader.h>
 #include <vnl/algo/vnl_svd.h>
 #include <vnl/algo/vnl_cholesky.h>
-#include <vcl_cstddef.h> // for std::size_t
+#include <vcl_compiler.h>
+#include <iostream>
+#include <cstddef> // for std::size_t
 #include <vcl_cassert.h>
 
 //=======================================================================
@@ -54,7 +56,7 @@ double msm_similarity_aligner::scale(const vnl_vector<double>& trans) const
 {
   assert(trans.size()==4);
   double a=1.0+trans[0],b=trans[1];
-  return vcl_sqrt(a*a+b*b);
+  return std::sqrt(a*a+b*b);
 }
 
 
@@ -208,7 +210,7 @@ void msm_similarity_aligner::calc_transform_wt(const msm_points& pts1,
 void msm_similarity_aligner::calc_transform_wt_mat(
                               const msm_points& pts1,
                               const msm_points& pts2,
-                              const vcl_vector<msm_wt_mat_2d>& wt_mat,
+                              const std::vector<msm_wt_mat_2d>& wt_mat,
                               vnl_vector<double>& trans) const
 {
   assert(pts2.size()==pts1.size());
@@ -230,7 +232,7 @@ void msm_similarity_aligner::calc_transform_wt_mat(
   const double* p1 = pts1.vector().begin();
   const double* p2 = pts2.vector().begin();
   const double* p1_end = pts1.vector().end();
-  vcl_vector<msm_wt_mat_2d>::const_iterator w=wt_mat.begin();
+  std::vector<msm_wt_mat_2d>::const_iterator w=wt_mat.begin();
 
   for (;p1!=p1_end;p1+=2,p2+=2,++w)
   {
@@ -293,9 +295,9 @@ void msm_similarity_aligner::calc_transform_wt_mat(
 
   //: Apply transform to weight matrices (ie ignore translation component)
 void msm_similarity_aligner::transform_wt_mat(
-                                const vcl_vector<msm_wt_mat_2d>& wt_mat,
+                                const std::vector<msm_wt_mat_2d>& wt_mat,
                                 const vnl_vector<double>& trans,
-                                vcl_vector<msm_wt_mat_2d>& new_wt_mat) const
+                                std::vector<msm_wt_mat_2d>& new_wt_mat) const
 {
   double a = 1+trans[0], b=trans[1];
   new_wt_mat.resize(wt_mat.size());
@@ -340,13 +342,13 @@ void msm_similarity_aligner::normalise_shape(msm_points& points) const
 //  the target frames).
 // \param pose_source defines how alignment of ref_mean_shape is calculated
 // \param average_pose Average mapping from ref to target frame
-void msm_similarity_aligner::align_set(const vcl_vector<msm_points>& points,
+void msm_similarity_aligner::align_set(const std::vector<msm_points>& points,
                                        msm_points& ref_mean_shape,
-                                       vcl_vector<vnl_vector<double> >& pose_to_ref,
+                                       std::vector<vnl_vector<double> >& pose_to_ref,
                                        vnl_vector<double>& average_pose,
                                        ref_pose_source pose_source) const
 {
-  vcl_size_t n_shapes = points.size();
+  std::size_t n_shapes = points.size();
   assert(n_shapes>0);
   pose_to_ref.resize(n_shapes);
 
@@ -403,9 +405,9 @@ void msm_similarity_aligner::align_set(const vcl_vector<msm_points>& points,
 
 //=======================================================================
 
-vcl_string msm_similarity_aligner::is_a() const
+std::string msm_similarity_aligner::is_a() const
 {
-  return vcl_string("msm_similarity_aligner");
+  return std::string("msm_similarity_aligner");
 }
 
 //: Create a copy on the heap and return base class pointer

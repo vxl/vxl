@@ -18,7 +18,7 @@ void icam_view_sphere::create_view_points(double cap_angle, double view_angle, u
 }
 
 //: returns the cameras of the view points, associated with the view point id
-void icam_view_sphere::cameras(vcl_map<unsigned, vpgl_camera_double_sptr> &cameras)
+void icam_view_sphere::cameras(std::map<unsigned, vpgl_camera_double_sptr> &cameras)
 {
   vsph_view_sphere<vsph_view_point<icam_view_metadata> >::iterator it=view_sphere_->begin();
   while (it != view_sphere_->end()) {
@@ -29,10 +29,10 @@ void icam_view_sphere::cameras(vcl_map<unsigned, vpgl_camera_double_sptr> &camer
   }
 }
 
-void icam_view_sphere::set_cameras(vcl_map<unsigned, vpgl_camera_double_sptr> const &cameras)
+void icam_view_sphere::set_cameras(std::map<unsigned, vpgl_camera_double_sptr> const &cameras)
 {
   vsph_view_sphere<vsph_view_point<icam_view_metadata> >::iterator it=view_sphere_->begin();
-  vcl_map<unsigned, vpgl_camera_double_sptr>::const_iterator cam_it=cameras.begin();
+  std::map<unsigned, vpgl_camera_double_sptr>::const_iterator cam_it=cameras.begin();
   while (it != view_sphere_->end() && cam_it != cameras.end()) {
     vpgl_camera_double_sptr cam = cam_it->second;
     it->second.set_camera(cam);
@@ -48,10 +48,10 @@ void icam_view_sphere::set_cameras(vcl_map<unsigned, vpgl_camera_double_sptr> co
 }
 
 //: sets the images and depth images, associated with the view point id
-void icam_view_sphere::set_images(vcl_map<unsigned, vcl_string>& images,
-                                  vcl_map<unsigned, vcl_string>& depth_images)
+void icam_view_sphere::set_images(std::map<unsigned, std::string>& images,
+                                  std::map<unsigned, std::string>& depth_images)
 {
-  vcl_map<unsigned, vcl_string>::iterator it_imgs=images.begin();
+  std::map<unsigned, std::string>::iterator it_imgs=images.begin();
   while (it_imgs != images.end()) {
     unsigned uid = it_imgs->first;
     if (images[uid].size()>0) {
@@ -69,7 +69,7 @@ void icam_view_sphere::set_images(vcl_map<unsigned, vcl_string>& images,
         }
       }
       else
-        vcl_cout << "icam_view_sphere::set_images -- ERROR! There is a missing depth image for image id=" << uid << vcl_endl;
+        std::cout << "icam_view_sphere::set_images -- ERROR! There is a missing depth image for image id=" << uid << std::endl;
     }
     it_imgs++;
   }
@@ -87,35 +87,35 @@ void icam_view_sphere::register_image(vil_image_view<float> const& dest_img,
     icam_view_metadata* data=vp.metadata();
     if (data) {
       vpgl_camera_double_sptr camera=vp.camera();
-      vcl_cout << "Evaluating viewpoint " << index << '\n';
+      std::cout << "Evaluating viewpoint " << index << '\n';
       data->register_image(dest_img, camera, params);
     }
     it++; index++;
   }
 
-  vcl_vector<vsph_view_point<icam_view_metadata> > local_min;
+  std::vector<vsph_view_point<icam_view_metadata> > local_min;
   find_local_minima(local_min);
 #if 0
-  vcl_vector<vsph_view_point<icam_view_metadata> > local_min;
+  std::vector<vsph_view_point<icam_view_metadata> > local_min;
   vsph_view_point<icam_view_metadata>* vp;
   view_sphere_->view_point(85,vp);
   vpgl_perspective_camera<double>* cam = (vpgl_perspective_camera<double>*)vp->camera().as_pointer();
-  vcl_cout << *cam;
+  std::cout << *cam;
   local_min.push_back(*vp);
   //vsph_view_point<icam_view_metadata>* vp;
   view_sphere_->view_point(87,vp);
   cam = (vpgl_perspective_camera<double>*)vp->camera().as_pointer();
-  vcl_cout << *cam;
+  std::cout << *cam;
   local_min.push_back(*vp);
   //vsph_view_point<icam_view_metadata>* vp;
   view_sphere_->view_point(88,vp);
   cam = (vpgl_perspective_camera<double>*)vp->camera().as_pointer();
-  vcl_cout << *cam;
+  std::cout << *cam;
   local_min.push_back(*vp);
 #endif
   double cam_cost=1e99; // will become min cost, so initialise with high value
   for (unsigned i=0; i<local_min.size(); i++) {
-    vcl_cout << "Local MINIMA " << i << "--" << local_min[i].view_point() << vcl_endl;
+    std::cout << "Local MINIMA " << i << "--" << local_min[i].view_point() << std::endl;
     vpgl_perspective_camera<double>* gt_cam =
       dynamic_cast<vpgl_perspective_camera<double>* >(ground_truth_cam_.as_pointer());
     if (gt_cam) {
@@ -123,10 +123,10 @@ void icam_view_sphere::register_image(vil_image_view<float> const& dest_img,
       vgl_rotation_3d<double> rel_rot;
       vgl_vector_3d<double> rel_trans;
       vsph_camera_bounds::relative_transf(*gt_cam, *cam,rel_rot,rel_trans);
-      vcl_cout <<"***************************************\n"
+      std::cout <<"***************************************\n"
                << "Rel Rot=" << rel_rot << '\n'
                << "Rel trans=" << rel_trans << '\n'
-               <<"***************************************" << vcl_endl;
+               <<"***************************************" << std::endl;
     }
     icam_view_metadata* md = local_min[i].metadata();
     md->refine_camera(dest_img, local_min[i].camera(),params);
@@ -136,7 +136,7 @@ void icam_view_sphere::register_image(vil_image_view<float> const& dest_img,
   }
 }
 
-void icam_view_sphere::find_local_minima(vcl_vector<vsph_view_point<icam_view_metadata> >& local_minima)
+void icam_view_sphere::find_local_minima(std::vector<vsph_view_point<icam_view_metadata> >& local_minima)
 {
   // go through all the viewpoints to see if it is a local maxima
   vsph_view_sphere<vsph_view_point<icam_view_metadata> >::iterator it=view_sphere_->begin();
@@ -150,7 +150,7 @@ void icam_view_sphere::find_local_minima(vcl_vector<vsph_view_point<icam_view_me
     double cost=vp.metadata()->cost();
 
     // find the closest neighbors' errors
-    vcl_vector<vsph_view_point<icam_view_metadata> > neighbors;
+    std::vector<vsph_view_point<icam_view_metadata> > neighbors;
     view_sphere_->find_neighbors(vp_uid, neighbors);
     // compare the errors with the neighbors
     bool smallest=true;
@@ -171,7 +171,7 @@ void icam_view_sphere::find_local_minima(vcl_vector<vsph_view_point<icam_view_me
     }
     if (smallest) { // && smallest_diff > ICAM_LOCAL_MIN_THRESH_
       // the smallest should be really different, and much smaller than the neighborhood
-      vcl_cout << " Selected-->" << vp_uid << " how far?=" << smallest_diff << vcl_endl;
+      std::cout << " Selected-->" << vp_uid << " how far?=" << smallest_diff << std::endl;
       local_minima.push_back(vp);
     }
     it++;
@@ -192,11 +192,11 @@ void icam_view_sphere::camera_transf(vpgl_perspective_camera<double> const& cam)
     vgl_rotation_3d<double> rel_rot;
     vgl_vector_3d<double> rel_trans;
     vsph_camera_bounds::relative_transf(cam, *vp_cam,rel_rot,rel_trans);
-    vcl_cout <<"***************************************\n"
+    std::cout <<"***************************************\n"
              << "VIEW POINT " << vp_uid << '\n'
              << "Rel Rot=" << rel_rot << '\n'
              << "Rel trans=" << rel_trans << '\n'
-             <<"***************************************" << vcl_endl;
+             <<"***************************************" << std::endl;
   }
 }
 
@@ -238,9 +238,9 @@ void icam_view_sphere::b_read(vsl_b_istream &is)
         view_sphere_=new vsph_view_sphere<vsph_view_point<icam_view_metadata> >(view_sphere);
     }
     default:
-      vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, icam_view_sphere&)\n"
+      std::cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, icam_view_sphere&)\n"
                << "           Unknown version number "<< version << '\n';
-      is.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
+      is.is().clear(std::ios::badbit); // Set an unrecoverable IO error on stream
       break;
   }
 }

@@ -4,7 +4,9 @@
 
 #include "vmap_2_tmap.h"
 #include <vcl_cassert.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iostream>
 
 template <class V, class E, class F, class D>
 vmap_2_tmap< V,E,F,D >::vmap_2_tmap(self_type const& tmap)
@@ -292,7 +294,7 @@ bool vmap_2_tmap< V,E,F,D >::valid() const
 }
 
 template <class V, class E, class F, class D>
-void vmap_2_tmap< V,E,F,D >::read_structure(vcl_istream & stream)
+void vmap_2_tmap< V,E,F,D >::read_structure(std::istream & stream)
 {
   int tmp_vertex,tmp_edge,tmp_face ;
   stream>>tmp_vertex>>tmp_edge>>tmp_face ;
@@ -306,16 +308,16 @@ void vmap_2_tmap< V,E,F,D >::read_structure(vcl_istream & stream)
 }
 
 template <class V, class E, class F, class D>
-void vmap_2_tmap< V,E,F,D >::write_structure(vcl_ostream & stream) const
+void vmap_2_tmap< V,E,F,D >::write_structure(std::ostream & stream) const
 {
-  stream<<nb_vertices()<<' '<<nb_edges()<<' '<<nb_faces()<<vcl_endl ;
+  stream<<nb_vertices()<<' '<<nb_edges()<<' '<<nb_faces()<<std::endl ;
   for (int i=0; i<this->nb_darts(); i++)
   {
     stream<<this->sigma(i)<<' '
           <<dart_associated_vertex(i)<<' '
           <<dart_associated_face(i)<<"   " ;
   }
-  stream<<vcl_endl ;
+  stream<<std::endl ;
 }
 
 template <class V, class E, class F, class D>

@@ -8,8 +8,10 @@
 //  \file
 
 #include "mbl_data_wrapper.h"
-#include <vcl_iostream.h>
-#include <vcl_cstdlib.h>
+#include <iostream>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <cstdlib>
 
 //: Default constructor
 template<class T>
@@ -30,9 +32,9 @@ void mbl_data_wrapper<T>::set_index(unsigned long n)
 {
   if ((n>=size()))
   {
-    vcl_cerr<<"TC_VectorDataBase::set_index(n) ";
-    vcl_cerr<<"n = "<<n<<" not in range 0 <= n < "<<size()<<vcl_endl;
-    vcl_abort();
+    std::cerr<<"TC_VectorDataBase::set_index(n) ";
+    std::cerr<<"n = "<<n<<" not in range 0 <= n < "<<size()<<std::endl;
+    std::abort();
   }
 
   if (index()==n) return;

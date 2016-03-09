@@ -1,6 +1,8 @@
 #include <testlib/testlib_test.h>
-#include <vcl_cmath.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <cmath>
+#include <iostream>
 #include <bil/algo/bil_scale_image.h>
 #include <vil/vil_image_view.h>
 #include <vil/vil_save.h>
@@ -8,13 +10,13 @@
 
 
 static void save_and_display(const vil_image_view<float> img,
-                             const vcl_string& name)
+                             const std::string& name)
 {
   vil_image_view<vxl_byte> save_img;
   vil_convert_stretch_range(img, save_img);
-  vil_save(save_img, vcl_string(name+".png").c_str());
-  vcl_cout << "<DartMeasurementFile name=\""<<name<<"\" type=\"image/png\"> "
-           << name << ".png </DartMeasurementFile>" << vcl_endl;
+  vil_save(save_img, std::string(name+".png").c_str());
+  std::cout << "<DartMeasurementFile name=\""<<name<<"\" type=\"image/png\"> "
+           << name << ".png </DartMeasurementFile>" << std::endl;
 }
 
 static void test_bil_scale_image()
@@ -26,7 +28,7 @@ static void test_bil_scale_image()
     for (unsigned int j=0; j<img_size; ++j) {
       float x = (float)i - float(img_size)*0.5f;
       float y = (float)j - float(img_size)*0.5f;
-      gaussian(i,j) = (float)vcl_exp(-(x*x+y*y)/(2.0f*sigma*sigma));
+      gaussian(i,j) = (float)std::exp(-(x*x+y*y)/(2.0f*sigma*sigma));
     }
   }
 
@@ -36,11 +38,11 @@ static void test_bil_scale_image()
   TEST("levels()",gs_test.levels(),3);
   TEST("octaves()",gs_test.octaves(),4);
   TEST("closest_scale(scale)",gs_test.closest_scale(2.01f),2.0f);
-  vcl_cout << gs_test.closest_scale(2.01f) <<vcl_endl;
+  std::cout << gs_test.closest_scale(2.01f) <<std::endl;
 
   int octaves = 5;
   int levels = 3;
-  float k = (float)vcl_pow(2.0,1.0/double(levels));
+  float k = (float)std::pow(2.0,1.0/double(levels));
   bil_scale_image<float> gauss_scale(levels, octaves);
 
   bil_scale_image<float> dog_scale;
@@ -53,7 +55,7 @@ static void test_bil_scale_image()
   float sigma2 = sigma*sigma;
 
   bool good_approx = true;
-  vcl_cout << "  scale \t actual \t expected \t error"<<vcl_endl;
+  std::cout << "  scale \t actual \t expected \t error"<<std::endl;
   for (unsigned int oc=0; oc<gauss_scale.octaves(); ++oc) {
     for (unsigned int lvl=0; lvl<gauss_scale.levels(); ++lvl) {
       float x = (float)img_size*0.5f;
@@ -69,10 +71,10 @@ static void test_bil_scale_image()
       float expected = -sigma2*scale2*(k2-1)/(k2*scale2+sigma2)/(sigma2+scale2);
       float actual = image(int(x),int(y));
 
-      vcl_cout <<"  "<< scale <<"     \t" << actual << '\t'
-               << expected <<'\t' << (actual-expected) << '\t' << vcl_endl;
+      std::cout <<"  "<< scale <<"     \t" << actual << '\t'
+               << expected <<'\t' << (actual-expected) << '\t' << std::endl;
 
-      good_approx = good_approx && vcl_fabs(actual-expected) < 1e-3;
+      good_approx = good_approx && std::fabs(actual-expected) < 1e-3;
     }
   }
 

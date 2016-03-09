@@ -1,7 +1,9 @@
 #ifndef vipl_filterable_section_container_generator_vcl_vector_hxx_
 #define vipl_filterable_section_container_generator_vcl_vector_hxx_
 
-#include <vcl_vector.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <vector>
 
 #undef FILTER_IMPTR_DEC_REFCOUNT
 #define FILTER_IMPTR_DEC_REFCOUNT(v) { delete (v); (v)=0; }
@@ -14,7 +16,7 @@
 #include <vipl/section/vipl_section_iterator.hxx>
 template <class DataType>
 vipl_section_container<DataType>*
-vipl_filterable_section_container_generator(const vcl_vector<DataType>& vec, DataType*)
+vipl_filterable_section_container_generator(const std::vector<DataType>& vec, DataType*)
 {
   vipl_section_container<DataType> *rtn = new vipl_section_container<DataType>((vipl_section_container<DataType>*)0);
   rtn->put_imgptr((const void*) &vec);

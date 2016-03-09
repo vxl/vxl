@@ -9,8 +9,10 @@
 //  Copyright (c) 2011 Brown University. All rights reserved.
 //
 
-#include <vcl_queue.h>
-#include <vcl_iostream.h>
+#include <queue>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iostream>
 
 //executable args
 #include <vul/vul_arg.h>
@@ -47,9 +49,9 @@ void convert_data(boct_tree<T_loc,T_data>* tree,
                   int& data_idx)
 {
   // go through the tree, in depth first order to collect data
-  vcl_queue<boct_tree_cell<T_loc,T_data>*> Q;
-  vcl_queue<boct_tree_cell<T_loc,float>*> alpha_Q;
-  vcl_queue<boct_tree_cell<T_loc,bool>*> valid_Q;
+  std::queue<boct_tree_cell<T_loc,T_data>*> Q;
+  std::queue<boct_tree_cell<T_loc,float>*> alpha_Q;
+  std::queue<boct_tree_cell<T_loc,bool>*> valid_Q;
 
   Q.push(tree_cell);
   alpha_Q.push(alpha_cell);
@@ -156,7 +158,7 @@ void convert_scene( boxm_scene<boct_octree<T_loc, T_data> > &scene,
                     boxm_scene<boct_octree<T_loc, float> > &alpha_scene,
                     boxm2_scene &new_scene)
 {
-  vcl_map<boxm2_block_id, boxm2_block_metadata> new_blocks;
+  std::map<boxm2_block_id, boxm2_block_metadata> new_blocks;
   unsigned int dim=sub_block_dim();
   typedef boct_octree<T_loc, T_data> tree_type;
   boxm_block_iterator<tree_type > iter(&scene);
@@ -168,7 +170,7 @@ void convert_scene( boxm_scene<boct_octree<T_loc, T_data> > &scene,
     scene.load_block(idx);
     boxm_block<tree_type >* block = scene.get_block(idx);
     vgl_box_3d<double> block_bb = block->bounding_box();
-    vcl_cout<<block_bb<<vcl_endl;
+    std::cout<<block_bb<<std::endl;
     tree_type * tree = block->get_tree();
 
     valid_scene.load_block(idx);
@@ -204,9 +206,9 @@ void convert_scene( boxm_scene<boct_octree<T_loc, T_data> > &scene,
           vgl_box_3d<double> cell_bb(p, cell_dim, cell_dim, cell_dim, vgl_box_3d<double>::min_pos);
           boct_tree_cell<T_loc,T_data >* node = tree->locate_point_at_level(cell_bb.centroid(),3);
           if (!node)
-            vcl_cout << "The node COULD not be FOUND" << vcl_endl;
+            std::cout << "The node COULD not be FOUND" << std::endl;
           else {
-            vcl_vector<boct_tree_cell<T_loc,T_data> > *> children;
+            std::vector<boct_tree_cell<T_loc,T_data> > *> children;
             node->all_children(children);
             int n2= children.size()+1;
             data_size += n2;
@@ -237,9 +239,9 @@ void convert_scene( boxm_scene<boct_octree<T_loc, T_data> > &scene,
           boct_tree_cell<T_loc, float> *alpha_node = alpha_tree->locate_point_at_level(cell_bb.centroid(), 3);
 
           if (!(node && valid_node && alpha_node) )
-            vcl_cout << "One of the nodes COULD not be FOUND" << vcl_endl;
+            std::cout << "One of the nodes COULD not be FOUND" << std::endl;
           else {
-            vcl_vector<boct_tree_cell<T_loc, T_data > *> children;
+            std::vector<boct_tree_cell<T_loc, T_data > *> children;
             node->all_children(children);
             int n2= children.size()+1;
 
@@ -254,8 +256,8 @@ void convert_scene( boxm_scene<boct_octree<T_loc, T_data> > &scene,
             boxm2_block::uchar16& t=trees[x][y][z];
             t.set(bit_tree->get_bits());
             if (n1 != n2) {
-              vcl_cout << x << ',' << y << ',' << z << '\n'
-                       << "ERROR! The converted tree is not right, should have " << n1 << " nodes instead of " << n2 << vcl_endl;
+              std::cout << x << ',' << y << ',' << z << '\n'
+                       << "ERROR! The converted tree is not right, should have " << n1 << " nodes instead of " << n2 << std::endl;
             }
           }
         }
@@ -284,11 +286,11 @@ void convert_scene( boxm_scene<boct_octree<T_loc, T_data> > &scene,
 
 int main(int argc, char** argv)
 {
-  vcl_cout << "Converting boxm scene with normals to boxm2 normals and points" << vcl_endl;
-  vul_arg<vcl_string> scene_path("-normals_scene", "scene filename", "");
-  vul_arg<vcl_string> scene_path("-valid_scene", "scene filename", "");
-  vul_arg<vcl_string> scene_path("-alpha_scene", "scene filename", "");
-  vul_arg<vcl_string> out_dir("-out", "output directory", "");
+  std::cout << "Converting boxm scene with normals to boxm2 normals and points" << std::endl;
+  vul_arg<std::string> scene_path("-normals_scene", "scene filename", "");
+  vul_arg<std::string> scene_path("-valid_scene", "scene filename", "");
+  vul_arg<std::string> scene_path("-alpha_scene", "scene filename", "");
+  vul_arg<std::string> out_dir("-out", "output directory", "");
   vul_arg<unsigned int> sub_block_dim("-dim", "sub block dimensions", 64);
   vul_arg_parse(argc, argv);
 

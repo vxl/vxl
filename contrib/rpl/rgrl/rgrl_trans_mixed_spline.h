@@ -4,14 +4,16 @@
 // \file
 #include "rgrl_transformation.h"
 #include "rgrl_trans_spline.h"
-#include <vcl_vector.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <vector>
 
 class rgrl_trans_mixed_spline
   : public rgrl_transformation
 {
  public:
   //: Constructor
-  rgrl_trans_mixed_spline( vcl_vector< rgrl_trans_spline > const& trans_splines )
+  rgrl_trans_mixed_spline( std::vector< rgrl_trans_spline > const& trans_splines )
     : trans_splines_( trans_splines ){}
 
   ~rgrl_trans_mixed_spline() {}
@@ -47,7 +49,7 @@ class rgrl_trans_mixed_spline
  private:
   // each rgrl_trans_spline defines its own region transformation
   // the transformation is the sum of these rgrl_trans_spline
-  vcl_vector< rgrl_trans_spline > trans_splines_;
+  std::vector< rgrl_trans_spline > trans_splines_;
 };
 
 #endif

@@ -22,7 +22,9 @@
 //     231002 Peter Vanroose - using fixed 3x4 matrices throughout
 // \endverbatim
 
-#include <vcl_iosfwd.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iosfwd>
 
 #include <vnl/algo/vnl_algo_fwd.h> // for vnl_svd
 #include <vnl/vnl_matrix.h>
@@ -60,7 +62,7 @@ class PMatrix : public vbl_ref_count
   // Constructors/Initializers/Destructors-------------------------------------
 
   PMatrix();
-  PMatrix(vcl_istream&);
+  PMatrix(std::istream&);
   PMatrix(const double *c_matrix);
   explicit PMatrix(vnl_double_3x4 const&);
   PMatrix(const vnl_matrix<double>& A, const vnl_vector<double>& a);
@@ -68,7 +70,7 @@ class PMatrix : public vbl_ref_count
  ~PMatrix();
 
   static PMatrix read(const char* filename);
-  static PMatrix read(vcl_istream&);
+  static PMatrix read(std::istream&);
 
   // Operations----------------------------------------------------------------
 
@@ -140,7 +142,7 @@ class PMatrix : public vbl_ref_count
   const vnl_double_3x4& get_matrix() const { return p_matrix_; }
 
   // Utility Methods-----------------------------------------------------------
-  bool read_ascii(vcl_istream& f);
+  bool read_ascii(std::istream& f);
 
   // Data Members--------------------------------------------------------------
  protected:
@@ -148,8 +150,8 @@ class PMatrix : public vbl_ref_count
   mutable vnl_svd<double>* svd_;
 };
 
-vcl_ostream& operator<<(vcl_ostream& s, const PMatrix& p);
-vcl_istream& operator>>(vcl_istream& i, PMatrix& p);
+std::ostream& operator<<(std::ostream& s, const PMatrix& p);
+std::istream& operator>>(std::istream& i, PMatrix& p);
 
 inline
 PMatrix operator*(vnl_double_3x3 const& C, const PMatrix& P)

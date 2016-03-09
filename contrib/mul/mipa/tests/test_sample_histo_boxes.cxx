@@ -6,7 +6,9 @@
 //=======================================================================
 #include <testlib/testlib_test.h>
 #include <mipa/mipa_sample_histo_boxes.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iostream>
 
 //:
 // \file
@@ -32,27 +34,27 @@ void mipa_print_h_vec(const vnl_vector<double>& v,
   {
     for (unsigned i=0;i<2*ni;++i)
     {
-      for (unsigned k=0;k<nb;++k,++c)  vcl_cout<<v[c]<<' ';
-      vcl_cout<<"  ";
+      for (unsigned k=0;k<nb;++k,++c)  std::cout<<v[c]<<' ';
+      std::cout<<"  ";
     }
-    vcl_cout<<vcl_endl;
+    std::cout<<std::endl;
   }
   for (unsigned j=0;j<nj;++j)
   {
     for (unsigned i=0;i<ni;++i)
     {
-      for (unsigned k=0;k<nb;++k,++c)  vcl_cout<<v[c]<<' ';
-      vcl_cout<<"  ";
+      for (unsigned k=0;k<nb;++k,++c)  std::cout<<v[c]<<' ';
+      std::cout<<"  ";
     }
-    vcl_cout<<vcl_endl;
+    std::cout<<std::endl;
   }
-  for (unsigned k=0;k<nb;++k,++c)  vcl_cout<<v[c]<<' ';
-  vcl_cout<<vcl_endl;
+  for (unsigned k=0;k<nb;++k,++c)  std::cout<<v[c]<<' ';
+  std::cout<<std::endl;
 }
 
 void test_sample_histo_boxes()
 {
-  vcl_cout << "*********************************\n"
+  std::cout << "*********************************\n"
            << " Testing mipa_sample_histo_boxes\n"
            << "*********************************\n";
 
@@ -61,14 +63,14 @@ void test_sample_histo_boxes()
   unsigned ni=9, nj=10;
   vil_image_view<float> histo(ni,nj,1,nb);
 
-  vcl_cout<<"Histo image: "<<histo<<vcl_endl;
+  std::cout<<"Histo image: "<<histo<<std::endl;
 
   for (unsigned j=0;j<nj;++j)
     for (unsigned i=0;i<ni;++i)
       for (unsigned k=0;k<nb;++k)
         histo(i,j,k)=10.0f*i+100.0f*j+k;
 
-  vcl_cout<<"Test at (0,0):"<<vcl_endl;
+  std::cout<<"Test at (0,0):"<<std::endl;
 
   unsigned nbi=2,nbj=3;
 
@@ -97,7 +99,7 @@ void test_sample_histo_boxes()
     TEST_NEAR("Total sum",v0[5*nbi*nbj*nb+k],sum,1e-6);
   }
 
-  vcl_cout<<"Test at (1,1):"<<vcl_endl;
+  std::cout<<"Test at (1,1):"<<std::endl;
 
   mipa_sample_histo_boxes_3L(histo,1,1,v0,nbi,nbj);
   mipa_print_h_vec(v0,nbi,nbj,nb);

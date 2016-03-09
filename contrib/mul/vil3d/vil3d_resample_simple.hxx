@@ -31,10 +31,10 @@ void vil3d_resample_simple(const vil3d_image_view< T >& src_image,
   const unsigned dnk = static_cast<unsigned>(snk*dz);
 
   dst_image.set_size(dni, dnj, dnk, np);
-  const vcl_ptrdiff_t d_istep = dst_image.istep();
-  const vcl_ptrdiff_t d_jstep = dst_image.jstep();
-  const vcl_ptrdiff_t d_kstep = dst_image.kstep();
-  const vcl_ptrdiff_t d_pstep = dst_image.planestep();
+  const std::ptrdiff_t d_istep = dst_image.istep();
+  const std::ptrdiff_t d_jstep = dst_image.jstep();
+  const std::ptrdiff_t d_kstep = dst_image.kstep();
+  const std::ptrdiff_t d_pstep = dst_image.planestep();
   T* d_plane = dst_image.origin_ptr();
 
   // Loop over all voxels in the destination image and

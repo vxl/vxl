@@ -48,8 +48,8 @@ static void bmsh3d_test_face_geom()
   M->_add_face (f0);
 
   //Test the 2D polygon of the face f0
-  vcl_vector<double> xs, ys;
-  vcl_vector<bmsh3d_vertex*> vertices;
+  std::vector<double> xs, ys;
+  std::vector<bmsh3d_vertex*> vertices;
   f0->get_ordered_Vs (vertices);
   get_2d_polygon (vertices, xs, ys);
 

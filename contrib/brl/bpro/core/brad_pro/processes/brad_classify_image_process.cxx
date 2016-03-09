@@ -5,7 +5,9 @@
 //:
 // \file
 
-#include <vcl_fstream.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <fstream>
 namespace bbas_core_brad_classify_image
 {
 }
@@ -15,7 +17,7 @@ bool brad_classify_image_process_cons(bprb_func_process& pro)
 {
   using namespace bbas_core_brad_classify_image;
 #if 0
-  vcl_vector<vcl_string> input_types(7);
+  std::vector<std::string> input_types(7);
   input_types[0]="brad_eigenspace_sptr"; //eigenspace
   input_types[1]="bsta_joint_histogram_3d_base_sptr"; //no atmospherics
   input_types[2]="bsta_joint_histogram_3d_base_sptr"; //with atmospherics
@@ -27,11 +29,11 @@ bool brad_classify_image_process_cons(bprb_func_process& pro)
   if (!ok) return ok;
 
   //no outputs
-  vcl_vector<vcl_string> output_types;
+  std::vector<std::string> output_types;
   ok = pro.set_output_types(output_types);
   if (!ok) return ok;
 #endif
-  vcl_vector<vcl_string> input_types(6);
+  std::vector<std::string> input_types(6);
   input_types[0]="brad_eigenspace_sptr"; //eigenspace
   input_types[1]="bsta_joint_histogram_3d_base_sptr"; //no atmospherics
   input_types[2]="bsta_joint_histogram_3d_base_sptr"; //with atmospherics
@@ -40,7 +42,7 @@ bool brad_classify_image_process_cons(bprb_func_process& pro)
   input_types[5]="unsigned"; //tile nj
 
   //no outputs
-  vcl_vector<vcl_string> output_types;
+  std::vector<std::string> output_types;
   output_types.push_back("vil_image_view_base_sptr");
   output_types.push_back("vil_image_view_base_sptr");
   return pro.set_input_types(input_types)
@@ -53,12 +55,12 @@ bool brad_classify_image_process(bprb_func_process& pro)
   using namespace bbas_core_brad_classify_image;
   // Sanity check
   if (pro.n_inputs()!= 6) {
-    vcl_cout << "brad_classify_image_process: The number of inputs should be 6" << vcl_endl;
+    std::cout << "brad_classify_image_process: The number of inputs should be 6" << std::endl;
     return false;
   }
   brad_eigenspace_sptr es_ptr = pro.get_input<brad_eigenspace_sptr>(0);
   if (!es_ptr) {
-    vcl_cout << "in classify_image_process, null eigenspace pointer\n";
+    std::cout << "in classify_image_process, null eigenspace pointer\n";
     return false;
   }
   bsta_joint_histogram_3d_base_sptr hno_ptr =
@@ -67,7 +69,7 @@ bool brad_classify_image_process(bprb_func_process& pro)
   bsta_joint_histogram_3d<float>* hist_no = dynamic_cast<bsta_joint_histogram_3d<float>*>(hno_ptr.ptr());
 
   if (!hist_no) {
-    vcl_cout << "in classify_image_process, hist can't be cast\n";
+    std::cout << "in classify_image_process, hist can't be cast\n";
     return false;
   }
 
@@ -77,16 +79,16 @@ bool brad_classify_image_process(bprb_func_process& pro)
   bsta_joint_histogram_3d<float>* hist_atmos = dynamic_cast<bsta_joint_histogram_3d<float>*>(h_atmos_ptr.ptr());
 
   if (!hist_atmos) {
-    vcl_cout << "in classify_image_process, hist can't be cast\n";
+    std::cout << "in classify_image_process, hist can't be cast\n";
     return false;
   }
-  vcl_string input_path = pro.get_input<vcl_string>(3);
+  std::string input_path = pro.get_input<std::string>(3);
   vil_image_resource_sptr input = vil_load_image_resource(input_path.c_str());
   if (!input) {
-    vcl_cout << "in classify_image_process, input resource can't be loaded\n";
+    std::cout << "in classify_image_process, input resource can't be loaded\n";
     return false;
   }
-  //vcl_string output_path = pro.get_input<vcl_string>(4);
+  //std::string output_path = pro.get_input<std::string>(4);
 
   unsigned nit = pro.get_input<unsigned>(4);
   unsigned njt = pro.get_input<unsigned>(5);

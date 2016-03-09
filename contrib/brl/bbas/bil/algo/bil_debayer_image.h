@@ -8,7 +8,9 @@
 
 #include <vil/vil_image_view.h>
 
-#include <vcl_vector.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <vector>
 
 
 

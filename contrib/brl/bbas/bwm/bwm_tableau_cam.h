@@ -15,7 +15,9 @@
 
 #include <vsol/vsol_point_3d_sptr.h>
 
-#include <vcl_string.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <string>
 
 
 class bwm_tableau_cam : public bwm_tableau_img
@@ -27,7 +29,7 @@ class bwm_tableau_cam : public bwm_tableau_img
   // Tableaux are responsible for deleting their observers
   virtual ~bwm_tableau_cam() { delete my_observer_; }
 
-  virtual vcl_string type_name() const { return "bwm_tableau_cam"; }
+  virtual std::string type_name() const { return "bwm_tableau_cam"; }
 
   bool handle(const vgui_event& e);
 
@@ -92,8 +94,8 @@ class bwm_tableau_cam : public bwm_tableau_img
   //: saves the observables with their save method specific to the object
   void save();
   void save_all();
-  void save(vcl_string path);
-  void save_all(vcl_string path);
+  void save(std::string path);
+  void save_all(std::string path);
 
   //: deletes the selected object
   void delete_object();
@@ -143,8 +145,8 @@ class bwm_tableau_cam : public bwm_tableau_img
   void calibrate_cam_from_horizon()
     {my_observer_->calibrate_cam_from_horizon();}
   void toggle_cam_horizon(){my_observer_->toggle_cam_horizon();}
-  vcl_vector<vcl_string> set_land_types();
-  vcl_vector<vcl_string> set_orient_types();
+  std::vector<std::string> set_land_types();
+  std::vector<std::string> set_orient_types();
 #if 0
   void set_ground_plane(){ my_observer_->set_ground_plane();}
   void set_sky(){ my_observer_->set_sky();}

@@ -21,7 +21,9 @@
 #include <bpgl/bpgl_camera_estimator.h>
 #include <bpgl/bpgl_camera_estimator_amoeba.h>
 
-#include <vcl_cstdio.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <cstdio>
 #include <vcl_cassert.h>
 
 #include "bvxm_expected_edge_functor.h"
@@ -37,7 +39,7 @@ bool bvxm_estimate_camera_process_cons(bprb_func_process& pro)
   //input[2]: Edge image
   //input[3]: Scale of the image
 
-  vcl_vector<vcl_string> input_types_(n_inputs_);
+  std::vector<std::string> input_types_(n_inputs_);
   unsigned i = 0;
   input_types_[i++] = "bvxm_voxel_world_sptr";
   input_types_[i++] = "vpgl_camera_double_sptr";
@@ -51,7 +53,7 @@ bool bvxm_estimate_camera_process_cons(bprb_func_process& pro)
   // output[1]: Expected edge image (after camera correction)
   // output[2]: Expected edge image (before camera correction)
 
-  vcl_vector<vcl_string> output_types_(n_outputs_);
+  std::vector<std::string> output_types_(n_outputs_);
   unsigned j = 0;
   output_types_[j++] = "vpgl_camera_double_sptr";
   output_types_[j++] = "vil_image_view_base_sptr";
@@ -66,7 +68,7 @@ bool bvxm_estimate_camera_process(bprb_func_process& pro)
 
   //check number of inputs
   if ( pro.n_inputs() < n_inputs_ ) {
-    vcl_cout << pro.name() << " The input number should be " << n_inputs_<< vcl_endl;
+    std::cout << pro.name() << " The input number should be " << n_inputs_<< std::endl;
     return false;
   }
 
@@ -109,7 +111,7 @@ bool bvxm_estimate_camera_process(bprb_func_process& pro)
   pro.parameters()->get_value(max_iter_cam_center_, max_iter_cam_center);
 
 #if 0
-  vcl_cout << "printing bvxm_estimate_camera_process parameters:\n"
+  std::cout << "printing bvxm_estimate_camera_process parameters:\n"
            << "theta_range: " << theta_range << '\n'
            << "theta_step: " << theta_step << '\n'
            << "phi_range: " << phi_range << '\n'
@@ -123,7 +125,7 @@ bool bvxm_estimate_camera_process(bprb_func_process& pro)
   //float n_normal = vox_world->get_params()->edges_n_normal();
 
   int num_obs = vox_world->num_observations<EDGES>(0,scale);
-  vcl_cout << "Number of observations in the voxel world: " << num_obs << '\n';
+  std::cout << "Number of observations in the voxel world: " << num_obs << '\n';
 
   vil_image_view<float> *img_eei = new vil_image_view<float>(ni,nj,1);
   img_eei->fill(0.0f);
@@ -175,7 +177,7 @@ bool bvxm_estimate_camera_process(bprb_func_process& pro)
   vil_image_view<vxl_byte> *img_eei_before_correction = new vil_image_view<vxl_byte>(ni,nj,1);
   brip_vil_float_ops::normalize_to_interval<float,vxl_byte>(*img_eei,*img_eei_before_correction,0.0f,255.0f);
 
-  //vcl_cout << "Estimating correct camera parameters\n";
+  //std::cout << "Estimating correct camera parameters\n";
   bpgl_camera_estimator_amoeba<bvxm_expected_edge_functor> cost_ftn(cam_estimator,img_e,cam_inp);
   vnl_vector<double> x(2,1.0);
   vnl_amoeba amoeba(cost_ftn);

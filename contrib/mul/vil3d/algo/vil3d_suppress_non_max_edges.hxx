@@ -9,7 +9,9 @@
 #include "vil3d_suppress_non_max_edges.h"
 #include <vil3d/algo/vil3d_fill_border.h>
 #include <vil3d/vil3d_trilin_interp.h>
-#include <vcl_cmath.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <cmath>
 #include <vcl_cassert.h>
 
 
@@ -47,20 +49,20 @@ void vil3d_suppress_non_max_edges(const vil3d_image_view<srcT>& world_grad,
   // Fill 2 voxel border with zero
   vil3d_fill_border(max_grad_mag,2,2,2,srcT(0));
 
-  const vcl_ptrdiff_t g_istep = world_grad.istep(), g_jstep = world_grad.jstep(),
+  const std::ptrdiff_t g_istep = world_grad.istep(), g_jstep = world_grad.jstep(),
                       g_kstep = world_grad.kstep();
-  const vcl_ptrdiff_t gm_istep = grad_mag.istep(), gm_jstep = grad_mag.jstep(),
+  const std::ptrdiff_t gm_istep = grad_mag.istep(), gm_jstep = grad_mag.jstep(),
                       gm_kstep = grad_mag.kstep();
-  const vcl_ptrdiff_t d_istep = max_grad_mag.istep(), d_jstep = max_grad_mag.jstep(),
+  const std::ptrdiff_t d_istep = max_grad_mag.istep(), d_jstep = max_grad_mag.jstep(),
                       d_kstep = max_grad_mag.kstep();
-  const vcl_ptrdiff_t pstep = world_grad.planestep();
-  const vcl_ptrdiff_t pstep2 = 2*pstep;
+  const std::ptrdiff_t pstep = world_grad.planestep();
+  const std::ptrdiff_t pstep2 = 2*pstep;
 
   unsigned ihi=ni-3;
   unsigned jhi=nj-3;
   unsigned khi=nk-3;
 
-  double step_size = vcl_sqrt((voxel_width_i*voxel_width_i +
+  double step_size = std::sqrt((voxel_width_i*voxel_width_i +
                                voxel_width_j*voxel_width_j +
                                voxel_width_k*voxel_width_k   )/3.0);
 
@@ -98,9 +100,9 @@ void vil3d_suppress_non_max_edges(const vil3d_image_view<srcT>& world_grad,
         double dz=step_size*vg[pstep2]/(gmag*voxel_width_k);
 
         // Check that step isn't larger than 1 pixel in any direction
-        double a= vcl_fabs(dx); if (a>=1.0) { dx/=a; dy/=a; dz/=a; }
-        a= vcl_fabs(dy); if (a>=1.0) { dx/=a; dy/=a; dz/=a; }
-        a= vcl_fabs(dz); if (a>=1.0) { dx/=a; dy/=a; dz/=a; }
+        double a= std::fabs(dx); if (a>=1.0) { dx/=a; dy/=a; dz/=a; }
+        a= std::fabs(dy); if (a>=1.0) { dx/=a; dy/=a; dz/=a; }
+        a= std::fabs(dz); if (a>=1.0) { dx/=a; dy/=a; dz/=a; }
 
         // Evaluate gradient at point (i+dx,j+dy,k+dz)
         double gm1=vil3d_trilin_interp_raw(i+dx,j+dy,k+dz,gm_data,gm_istep,gm_jstep,gm_kstep);

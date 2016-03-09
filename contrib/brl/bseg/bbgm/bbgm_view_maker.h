@@ -26,7 +26,7 @@ class bbgm_view_maker_base : public vbl_ref_count
 {
  public:
   //: return the type_info for the distribution type
-  virtual const vcl_type_info& dist_typeid() const=0;
+  virtual const std::type_info& dist_typeid() const=0;
 
   //: Return the maximum number of components if a mixture
   // If not a mixture return 1
@@ -48,7 +48,7 @@ class bbgm_view_maker
   : public bbgm_view_maker_base
 {
   //: return the type_info for the distribution type
-  virtual const vcl_type_info& dist_typeid() const
+  virtual const std::type_info& dist_typeid() const
   { return typeid(dist_type); }
 
   //: Return the maximum number of components if a mixture
@@ -113,7 +113,7 @@ class bbgm_view_maker<dist_type, func_type,
   : public bbgm_view_maker_base
 {
   //: Return the type_info for the distribution type
-  virtual const vcl_type_info& dist_typeid() const
+  virtual const std::type_info& dist_typeid() const
   { return typeid(dist_type); }
 
   //: Return the maximum number of components if a mixture

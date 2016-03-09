@@ -8,7 +8,9 @@
 #include "vimt_image_pyramid.h"
 
 #include <vcl_cassert.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iostream>
 #include <vsl/vsl_indent.h>
 #include <vimt/vimt_image.h>
 
@@ -135,7 +137,7 @@ double vimt_image_pyramid::scale_step() const
 
 //: Access to image data
 //  Should only be used by pyramid builders
-vcl_vector<vimt_image*>& vimt_image_pyramid::data()
+std::vector<vimt_image*>& vimt_image_pyramid::data()
 {
     return image_;
 }
@@ -148,7 +150,7 @@ void vimt_image_pyramid::set_widths(double base_pixel_width,
     scale_step_ = scale_step;
 }
 
-void vimt_image_pyramid::print_summary(vcl_ostream& os) const
+void vimt_image_pyramid::print_summary(std::ostream& os) const
 {
     os<< vsl_indent() << "Levels: "<<image_.size()<<'\n';
     for (unsigned int i=0;i<image_.size();++i)
@@ -156,7 +158,7 @@ void vimt_image_pyramid::print_summary(vcl_ostream& os) const
 }
 
 //: Print whole of each image to os
-void vimt_image_pyramid::print_all(vcl_ostream& os) const
+void vimt_image_pyramid::print_all(std::ostream& os) const
 {
     os<<"Levels: "<<image_.size()<<'\n';
     for (unsigned int i=0;i<image_.size();++i)
@@ -167,13 +169,13 @@ void vimt_image_pyramid::print_all(vcl_ostream& os) const
     }
 }
 
-vcl_ostream& operator<<(vcl_ostream& os, const vimt_image_pyramid& im_pyr)
+std::ostream& operator<<(std::ostream& os, const vimt_image_pyramid& im_pyr)
 {
     im_pyr.print_summary(os);
     return os;
 }
 
-vcl_ostream& operator<<(vcl_ostream& os, const vimt_image_pyramid* im_pyr)
+std::ostream& operator<<(std::ostream& os, const vimt_image_pyramid* im_pyr)
 {
     if (im_pyr)
         im_pyr->print_summary(os);
@@ -182,12 +184,12 @@ vcl_ostream& operator<<(vcl_ostream& os, const vimt_image_pyramid* im_pyr)
     return os;
 }
 
-void vsl_print_summary(vcl_ostream& os, const vimt_image_pyramid& im_pyr)
+void vsl_print_summary(std::ostream& os, const vimt_image_pyramid& im_pyr)
 {
   os << im_pyr;
 }
 
-void vsl_print_summary(vcl_ostream& os, const vimt_image_pyramid* im_pyr)
+void vsl_print_summary(std::ostream& os, const vimt_image_pyramid* im_pyr)
 {
   os << im_pyr;
 }

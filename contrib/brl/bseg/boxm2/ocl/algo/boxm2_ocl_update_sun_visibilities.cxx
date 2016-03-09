@@ -1,15 +1,17 @@
 #include "boxm2_ocl_update_sun_visibilities.h"
 #include <boxm2/ocl/boxm2_ocl_util.h>
 #include <boxm2/ocl/algo/boxm2_ocl_camera_converter.h>
-#include <vcl_algorithm.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <algorithm>
 #include <vul/vul_timer.h>
 
-vcl_map<vcl_string, vcl_vector<bocl_kernel*> > boxm2_ocl_update_sun_visibilities::kernels_;
+std::map<std::string, std::vector<bocl_kernel*> > boxm2_ocl_update_sun_visibilities::kernels_;
 
-void boxm2_ocl_update_sun_visibilities::compile_kernel(bocl_device_sptr device,vcl_vector<bocl_kernel*> & vec_kernels,vcl_string opts)
+void boxm2_ocl_update_sun_visibilities::compile_kernel(bocl_device_sptr device,std::vector<bocl_kernel*> & vec_kernels,std::string opts)
 {
-    vcl_vector<vcl_string> src_paths;
-    vcl_string source_dir = boxm2_ocl_util::ocl_src_root();
+    std::vector<std::string> src_paths;
+    std::string source_dir = boxm2_ocl_util::ocl_src_root();
     src_paths.push_back(source_dir + "scene_info.cl");
     src_paths.push_back(source_dir + "pixel_conversion.cl");
     src_paths.push_back(source_dir + "bit/bit_tree_library_functions.cl");
@@ -19,15 +21,15 @@ void boxm2_ocl_update_sun_visibilities::compile_kernel(bocl_device_sptr device,v
     src_paths.push_back(source_dir + "bit/sun_visibilities_kernel.cl");
     src_paths.push_back(source_dir + "bit/cast_ray_bit.cl");
 
-    vcl_vector<vcl_string> src_paths2;
+    std::vector<std::string> src_paths2;
     src_paths2.push_back(source_dir + "scene_info.cl");
     src_paths2.push_back(source_dir + "bit/sun_visibilities_kernel.cl");
 
     //compilation options
-    vcl_string options ="" + opts;
+    std::string options ="" + opts;
     //seg len pass
     bocl_kernel* seg_len = new bocl_kernel();
-    vcl_string seg_opts = options + " -D SEGLENVIS -D STEP_CELL=step_cell_seglen_vis(aux_args,data_ptr,llid,d*linfo->block_len) ";
+    std::string seg_opts = options + " -D SEGLENVIS -D STEP_CELL=step_cell_seglen_vis(aux_args,data_ptr,llid,d*linfo->block_len) ";
     seg_len->create_kernel(&device->context(), device->device_id(), src_paths, "seg_len_and_vis_main", seg_opts, "update::seg_len_vis");
     vec_kernels.push_back(seg_len);
 
@@ -46,7 +48,7 @@ bool boxm2_ocl_update_sun_visibilities::update( boxm2_scene_sptr         scene,
                                                 vpgl_camera_double_sptr  sun_cam,
                                                 unsigned ni,
                                                 unsigned nj,
-                                                vcl_string               prefix_name
+                                                std::string               prefix_name
                                               )
 {
   float transfer_time=0.0f;
@@ -61,20 +63,20 @@ bool boxm2_ocl_update_sun_visibilities::update( boxm2_scene_sptr         scene,
   }
 
   // compile kernels if not already compiled
-  vcl_string identifier = device->device_identifier();
+  std::string identifier = device->device_identifier();
   if (kernels_.find(identifier)==kernels_.end())
   {
-    vcl_cout<<"boxm2_ocl_update_sun_visibilities_process::compiling kernels on device" << identifier << "===" << vcl_endl;
-    vcl_vector<bocl_kernel*> ks;
+    std::cout<<"boxm2_ocl_update_sun_visibilities_process::compiling kernels on device" << identifier << "===" << std::endl;
+    std::vector<bocl_kernel*> ks;
     compile_kernel(device,ks,"");
     kernels_[identifier]=ks;
   }
   //grab input image dimensions - round up to the nearest 8 for OPENCL
-  vcl_size_t local_threads[2]={8,8};
+  std::size_t local_threads[2]={8,8};
   unsigned cl_ni=RoundUp(ni,local_threads[0]);
   unsigned cl_nj=RoundUp(nj,local_threads[1]);
 
-  vcl_size_t global_threads[2]={cl_ni, cl_nj};
+  std::size_t global_threads[2]={cl_ni, cl_nj};
 
   // create all buffers
   cl_float* ray_origins    = new cl_float[4*cl_ni*cl_nj];
@@ -85,13 +87,13 @@ bool boxm2_ocl_update_sun_visibilities::update( boxm2_scene_sptr         scene,
 
   //create vis, pre, norm and input image buffers
   float* vis_buff  = new float[cl_ni*cl_nj];
-  vcl_fill(vis_buff, vis_buff+cl_ni*cl_nj, 1.0f);
+  std::fill(vis_buff, vis_buff+cl_ni*cl_nj, 1.0f);
 
   bocl_mem_sptr vis_image = opencl_cache->alloc_mem(cl_ni*cl_nj*sizeof(float), vis_buff,"vis image buffer");
   vis_image->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
 
   float* last_vis_buff  = new float[cl_ni*cl_nj];
-  vcl_fill(last_vis_buff, last_vis_buff+cl_ni*cl_nj, 1.0f);
+  std::fill(last_vis_buff, last_vis_buff+cl_ni*cl_nj, 1.0f);
 
   bocl_mem_sptr last_vis_image = opencl_cache->alloc_mem(cl_ni*cl_nj*sizeof(float), last_vis_buff, "last vis image buffer");
   last_vis_image->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
@@ -118,12 +120,12 @@ bool boxm2_ocl_update_sun_visibilities::update( boxm2_scene_sptr         scene,
   lookup->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR);
 
   // set arguments
-  vcl_vector<boxm2_block_id> vis_order = scene->get_vis_blocks((vpgl_generic_camera<double>*)sun_cam.ptr());
-  vcl_vector<boxm2_block_id>::iterator id;
+  std::vector<boxm2_block_id> vis_order = scene->get_vis_blocks((vpgl_generic_camera<double>*)sun_cam.ptr());
+  std::vector<boxm2_block_id>::iterator id;
 
   for (id = vis_order.begin(); id != vis_order.end(); ++id)
   {
-      vcl_cout << "update_sun_vis0: id = " << id->to_string() << vcl_endl;
+      std::cout << "update_sun_vis0: id = " << id->to_string() << std::endl;
       //choose correct render kernel
       boxm2_block_metadata mdata = scene->get_block_metadata(*id);
       bocl_kernel* kern =  kernels_[identifier][0];
@@ -204,10 +206,10 @@ bool boxm2_ocl_update_sun_visibilities::update( boxm2_scene_sptr         scene,
   local_threads[1] = 1;
   for (id = vis_order.begin(); id != vis_order.end(); ++id)
   {
-      vcl_cout << "update_sun_vis2 : id = " << id->to_string() << vcl_endl;
+      std::cout << "update_sun_vis2 : id = " << id->to_string() << std::endl;
       //choose correct render kernel
       boxm2_block_metadata mdata = scene->get_block_metadata(*id);
-      //vcl_cout << "got metadata " << vcl_endl;
+      //std::cout << "got metadata " << std::endl;
       bocl_kernel* kern =  kernels_[identifier][1];
 
       //write the image values to the buffer
@@ -221,18 +223,18 @@ bool boxm2_ocl_update_sun_visibilities::update( boxm2_scene_sptr         scene,
       info_buffer->data_buffer_length = (int) (alpha->num_bytes()/alphaTypeSize);
       blk_info->write_to_buffer((queue));
 
-      //vcl_cout << "getting aux0 and aux1 data " << vcl_endl;
+      //std::cout << "getting aux0 and aux1 data " << std::endl;
       //grab an appropriately sized AUX data buffer
       int auxTypeSize = boxm2_data_info::datasize(boxm2_data_traits<BOXM2_AUX0>::prefix());
       bocl_mem *aux0   = opencl_cache->get_data<BOXM2_AUX0>(scene,*id, info_buffer->data_buffer_length*auxTypeSize,true);
       auxTypeSize = boxm2_data_info::datasize(boxm2_data_traits<BOXM2_AUX1>::prefix());
       bocl_mem *aux1   = opencl_cache->get_data<BOXM2_AUX1>(scene,*id, info_buffer->data_buffer_length*auxTypeSize,true);
 
-      //vcl_cout << "getting output data: prefix_name = " << prefix_name << vcl_endl;
+      //std::cout << "getting output data: prefix_name = " << prefix_name << std::endl;
       bocl_mem *aux_out  = opencl_cache->get_data(scene,*id, boxm2_data_traits<BOXM2_AUX0>::prefix(prefix_name),
                                                   info_buffer->data_buffer_length*auxTypeSize,false);
 
-      //vcl_cout << "got data. " << vcl_endl;
+      //std::cout << "got data. " << std::endl;
 
       transfer_time += (float) transfer.all();
       kern->set_arg( blk_info );
@@ -241,7 +243,7 @@ bool boxm2_ocl_update_sun_visibilities::update( boxm2_scene_sptr         scene,
       kern->set_arg( aux_out );
       global_threads[0]=RoundUp(info_buffer->data_buffer_length,local_threads[0]);
       global_threads[1]=1;
-      //vcl_cout << "executing kernel " << vcl_endl;
+      //std::cout << "executing kernel " << std::endl;
 
       //execute kernel
       kern->execute(queue, 2, local_threads, global_threads);
@@ -250,24 +252,24 @@ bool boxm2_ocl_update_sun_visibilities::update( boxm2_scene_sptr         scene,
           return false;
       gpu_time += kern->exec_time();
       clFinish(queue);
-      //vcl_cout << "kernel completed" << vcl_endl;
+      //std::cout << "kernel completed" << std::endl;
 
       //clear render kernel args so it can reset em on next execution
       kern->clear_args();
-      //vcl_cout << "1" << vcl_endl;
+      //std::cout << "1" << std::endl;
       //read info back to host memory
       blk->read_to_buffer(queue);
-      //vcl_cout << "2" << vcl_endl;
-      //vcl_cout << "aux_out cpu_buffer= " << aux_out->cpu_buffer() << vcl_endl;
-      //vcl_cout << "aux_out nbytes = " << aux_out->num_bytes() << vcl_endl;
+      //std::cout << "2" << std::endl;
+      //std::cout << "aux_out cpu_buffer= " << aux_out->cpu_buffer() << std::endl;
+      //std::cout << "aux_out nbytes = " << aux_out->num_bytes() << std::endl;
       aux_out->read_to_buffer(queue);
-      //vcl_cout << "3" << vcl_endl;
+      //std::cout << "3" << std::endl;
       clFinish(queue);
-      //vcl_cout << "4" << vcl_endl;
+      //std::cout << "4" << std::endl;
       //cache->remove_data_base(scene,*id,boxm2_data_traits<BOXM2_AUX0>::prefix(prefix_name));
-      //vcl_cout << "5" << vcl_endl;
+      //std::cout << "5" << std::endl;
   }
-  vcl_cout<<"Gpu time "<<gpu_time<<" transfer time "<<transfer_time<<vcl_endl;
+  std::cout<<"Gpu time "<<gpu_time<<" transfer time "<<transfer_time<<std::endl;
   clReleaseCommandQueue(queue);
   return true;
 }

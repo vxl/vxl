@@ -6,7 +6,9 @@
 // \brief Abstract base class for robust objective functions.
 
 #include <vnl/vnl_fwd.h>
-#include <vcl_vector.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <vector>
 
 //: An objective function to be minimised.
 //  It returns a "cost" given the residuals, and thus gives a cost for
@@ -24,10 +26,10 @@ class rrel_objective
   //  particular type of container for residuals. Using this typedef
   //  will allow things to easily change when member templates are
   //  allowed.
-  typedef vcl_vector<double>::const_iterator vect_const_iter;
+  typedef std::vector<double>::const_iterator vect_const_iter;
 
   //: The iterators used to pass out values.
-  typedef vcl_vector<double>::iterator vect_iter;
+  typedef std::vector<double>::iterator vect_iter;
 
  public:
   rrel_objective() {}

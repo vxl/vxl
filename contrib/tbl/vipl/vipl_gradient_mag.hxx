@@ -2,7 +2,9 @@
 #define vipl_gradient_mag_hxx_
 
 #include "vipl_gradient_mag.h"
-#include <vcl_cmath.h> // for sqrt()
+#include <vcl_compiler.h>
+#include <iostream>
+#include <cmath> // for sqrt()
 
 template <class ImgIn,class ImgOut,class DataIn,class DataOut,class PixelItr>
 bool vipl_gradient_mag <ImgIn,ImgOut,DataIn,DataOut,PixelItr> :: section_applyop()
@@ -19,7 +21,7 @@ bool vipl_gradient_mag <ImgIn,ImgOut,DataIn,DataOut,PixelItr> :: section_applyop
     for (int i = startx; i < stopx; ++i) {
       dx = fgetpixel(in, i, j, DataIn(0)) - getpixel(in, i-1, j, DataIn(0));
       dy = fgetpixel(in, i, j, DataIn(0)) - getpixel(in, i, j-1, DataIn(0));
-      dx = (vcl_sqrt( dx*dx + dy*dy ) + shift()) * scale();
+      dx = (std::sqrt( dx*dx + dy*dy ) + shift()) * scale();
       fsetpixel(out, i, j, DataOut(dx));
     }
   return true;

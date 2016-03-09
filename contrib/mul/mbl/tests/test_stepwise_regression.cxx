@@ -1,9 +1,11 @@
 // This is mul/mbl/tests/test_stepwise_regression.cxx
-#include <vcl_cstddef.h>
-#include <vcl_iostream.h>
-#include <vcl_vector.h>
-#include <vcl_algorithm.h>
-#include <vcl_iterator.h>
+#include <cstddef>
+#include <iostream>
+#include <vector>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <algorithm>
+#include <iterator>
 #include <vnl/vnl_random.h>
 #include <vnl/vnl_matrix.h>
 #include <vnl/vnl_vector.h>
@@ -15,7 +17,7 @@
 
 void test_stepwise_regression()
 {
-    vcl_cout << "**************************\n"
+    std::cout << "**************************\n"
              << " Testing mbl_stepwise_regression\n"
              << "**************************\n";
 
@@ -30,7 +32,7 @@ void test_stepwise_regression()
     vnl_matrix<double> data(num_examples,ndims);
     vnl_vector<double > ydata(num_examples);
 
-    vcl_vector<vnl_vector<double > > bases(nbases);
+    std::vector<vnl_vector<double > > bases(nbases);
     vnl_vector<double >  xmean(ndims);
     vnl_vector<double> sigmas(nbases);
     vnl_vector<double> vars(nbases);
@@ -41,16 +43,16 @@ void test_stepwise_regression()
     {
         bases[k].set_size(ndims);
         vars[k] = 10.0*vary + 5.0*double(nbases-k);
-        sigmas[k] = vcl_sqrt(vars[k]);
+        sigmas[k] = std::sqrt(vars[k]);
     }
-    vcl_cout<<"generating bases with "<<nbases<< " bases"<<vcl_endl;
+    std::cout<<"generating bases with "<<nbases<< " bases"<<std::endl;
     for (unsigned int j=0;j<ndims;++j)
     {
         for (unsigned k=0;k<nbases;++k)
         {
             bases[k][j] = mz_random.normal64();
         }
-        xmean[j] = 100.0*vcl_fabs(mz_random.normal64());
+        xmean[j] = 100.0*std::fabs(mz_random.normal64());
     }
     for (unsigned k=0;k<nbases;++k)
     {
@@ -65,16 +67,16 @@ void test_stepwise_regression()
     }
     mbl_mod_gram_schmidt(xbasis,orthog_basis);
 
-    vcl_cout<<"generating data for "<<num_examples<< " examples with "<<ndims<< " dimensions"<<vcl_endl;
+    std::cout<<"generating data for "<<num_examples<< " examples with "<<ndims<< " dimensions"<<std::endl;
 
     unsigned num_signif = 5;
-    vcl_vector<unsigned> signifIndices;
+    std::vector<unsigned> signifIndices;
     signifIndices.push_back(0);
     signifIndices.push_back(2);
     signifIndices.push_back(4);
     signifIndices.push_back(6);
     signifIndices.push_back(8);
-    vcl_vector<double > coeffs;
+    std::vector<double > coeffs;
     coeffs.push_back(1.0);
     coeffs.push_back(0.8);
     coeffs.push_back(0.6);
@@ -85,7 +87,7 @@ void test_stepwise_regression()
     {
         double* pxdata = data[i];
         vnl_vector_ref<double> xdata(ndims,pxdata);
-        vcl_copy(xmean.begin(),xmean.end(),pxdata);
+        std::copy(xmean.begin(),xmean.end(),pxdata);
         //Generate the x value from the principal components
         for (unsigned k=0;k<nbases;++k)
         {
@@ -110,36 +112,36 @@ void test_stepwise_regression()
     mbl_stepwise_regression swRegressor(data,ydata);
     swRegressor();
     vnl_vector<double > weights=swRegressor.weights();
-    vcl_set<unsigned> basis=swRegressor.basis();
+    std::set<unsigned> basis=swRegressor.basis();
 
     TEST("Weights and basis set have a consistent size",basis.size()+1 == weights.size(),true);
     TEST("basis set contains all it should",basis.size() >= signifIndices.size(),true);
     TEST("basis set contains at most one spurious variable",basis.size() <= signifIndices.size()+1,true);
 
-    vcl_set<unsigned>::iterator failedIter=basis.end();
-    vcl_set<unsigned>::iterator seeker=basis.begin();
-    vcl_vector<unsigned >::iterator signifIter=signifIndices.begin();
-    vcl_vector<unsigned >::iterator signifIterEnd=signifIndices.end();
+    std::set<unsigned>::iterator failedIter=basis.end();
+    std::set<unsigned>::iterator seeker=basis.begin();
+    std::vector<unsigned >::iterator signifIter=signifIndices.begin();
+    std::vector<unsigned >::iterator signifIterEnd=signifIndices.end();
     while (signifIter !=  signifIterEnd)
     {
         seeker=basis.find(*signifIter);
-        vcl_cout<<"Checking for variable "<< *signifIter<<" in basis"<<vcl_endl;
+        std::cout<<"Checking for variable "<< *signifIter<<" in basis"<<std::endl;
         TEST("Significant variable located",seeker==failedIter,false);
         ++signifIter;
     }
 
     //Now check that the returned weights are the correlation coefficients
     vnl_vector<double > delta(basis.size(),0.0);
-    vcl_set<unsigned >::iterator basisIter=basis.begin();
+    std::set<unsigned >::iterator basisIter=basis.begin();
     for (unsigned k=0;k<delta.size();++k,++basisIter)
     {
         //Note the ordering can be different if there is a spurious variable somewhere in the basis
         //So find the position of the basis variable in the coefficient vector
-        vcl_vector<unsigned >::iterator seekIter=vcl_find(signifIndices.begin(),signifIndices.end(),*basisIter);
+        std::vector<unsigned >::iterator seekIter=std::find(signifIndices.begin(),signifIndices.end(),*basisIter);
         if (seekIter != signifIndices.end())
         {
             //If the basis variable is significant
-            vcl_ptrdiff_t kprime=vcl_distance(signifIndices.begin(),seekIter);
+            std::ptrdiff_t kprime=std::distance(signifIndices.begin(),seekIter);
             delta[k]=weights[k] - coeffs[kprime];
         }
         else

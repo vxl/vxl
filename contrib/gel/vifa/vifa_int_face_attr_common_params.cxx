@@ -3,8 +3,10 @@
 //:
 // \file
 
-#include <vcl_iostream.h>
-#include <vcl_sstream.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iostream>
+#include <sstream>
 
 //: Default constructor
 vifa_int_face_attr_common_params::
@@ -52,7 +54,7 @@ set_params(const vifa_int_face_attr_common_params&  ifap)
 //: Checks that parameters are within acceptable bounds
 bool vifa_int_face_attr_common_params::SanityCheck()
 {
-  vcl_stringstream  msg;
+  std::stringstream  msg;
   bool valid;
 
   if (!fitter_params_.ptr() ||
@@ -60,7 +62,7 @@ bool vifa_int_face_attr_common_params::SanityCheck()
       !gpp_w_.ptr() ||
       !cpp_.ptr())
   {
-    msg << "ERROR: {FitLines, GroupParallelogram, CollinearLines} params not set." << vcl_ends;
+    msg << "ERROR: {FitLines, GroupParallelogram, CollinearLines} params not set." << std::ends;
     valid = false;
   }
   else
@@ -79,32 +81,32 @@ bool vifa_int_face_attr_common_params::SanityCheck()
 void vifa_int_face_attr_common_params::
 print_info(void)
 {
-  vcl_cout << "vifa_int_face_attr_common_params:\n"
+  std::cout << "vifa_int_face_attr_common_params:\n"
            << "  line fitting params: ";
   if (fitter_params_.ptr())
-    vcl_cout << *fitter_params_;
+    std::cout << *fitter_params_;
   else
-    vcl_cout << "NULL\n";
-  vcl_cout << "  strong group parallellogram params: ";
+    std::cout << "NULL\n";
+  std::cout << "  strong group parallellogram params: ";
   if (gpp_s_.ptr())
     gpp_s_->print_info();
   else
-    vcl_cout << "NULL\n";
-  vcl_cout << "  weak group parallellogram params: ";
+    std::cout << "NULL\n";
+  std::cout << "  weak group parallellogram params: ";
   if (gpp_w_.ptr())
     gpp_w_->print_info();
   else
-    vcl_cout << "NULL\n";
-  vcl_cout << "  collinear lines params: ";
+    std::cout << "NULL\n";
+  std::cout << "  collinear lines params: ";
   if (cpp_.ptr())
     cpp_->print_info();
   else
-    vcl_cout << "NULL\n";
-  vcl_cout << "  normalization params: ";
+    std::cout << "NULL\n";
+  std::cout << "  normalization params: ";
   if (np_.ptr())
     np_->print_info();
   else
-    vcl_cout << "NULL\n";
+    std::cout << "NULL\n";
 }
 
 //: Assign internal parameter blocks

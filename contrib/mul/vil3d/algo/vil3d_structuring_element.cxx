@@ -6,20 +6,22 @@
 // \author Tim Cootes
 
 #include <vcl_cassert.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iostream>
 
   //: Define elements { (p_i[a],p_j[a],p_k[a]) }
-vil3d_structuring_element::vil3d_structuring_element(const vcl_vector<int>& p_i,
-                                                     const vcl_vector<int>& p_j,
-                                                     const vcl_vector<int>& p_k)
+vil3d_structuring_element::vil3d_structuring_element(const std::vector<int>& p_i,
+                                                     const std::vector<int>& p_j,
+                                                     const std::vector<int>& p_k)
 {
   set(p_i,p_j,p_k);
 }
 
   //: Define elements { (p_i[a],p_j[a],p_k[a]) }
-void vil3d_structuring_element::set(const vcl_vector<int>& p_i,
-                                    const vcl_vector<int>& p_j,
-                                    const vcl_vector<int>& p_k)
+void vil3d_structuring_element::set(const std::vector<int>& p_i,
+                                    const std::vector<int>& p_j,
+                                    const std::vector<int>& p_k)
 {
   assert(p_i.size()==p_j.size());
   assert(p_i.size()==p_k.size());
@@ -50,7 +52,7 @@ void vil3d_structuring_element::set(const vcl_vector<int>& p_i,
 //: Set to 6 axis-aligned neighbours plus self
 void vil3d_structuring_element::set_to_7()
 {
-  vcl_vector<int> px,py,pz;
+  std::vector<int> px,py,pz;
   for (int i=-1;i<=1;i+=2)
   {
     px.push_back(i);  py.push_back(0);  pz.push_back(0);
@@ -64,7 +66,7 @@ void vil3d_structuring_element::set_to_7()
   //: Set to 26 touching neighbours plus self
 void vil3d_structuring_element::set_to_27()
 {
-  vcl_vector<int> px,py,pz;
+  std::vector<int> px,py,pz;
   for (int k=-1;k<=1;++k)
     for (int j=-1;j<=1;++j)
       for (int i=-1;i<=1;++i)
@@ -79,7 +81,7 @@ void vil3d_structuring_element::set_to_27()
 //  Select pixels in disk s.t. x*x+y*y+z*z<=r^r
 void vil3d_structuring_element::set_to_sphere(double r)
 {
-  vcl_vector<int> px,py,pz;
+  std::vector<int> px,py,pz;
   double r2 = r*r;
   int r0 = int(r+1);
   for (int k=-r0;k<=r0;++k)
@@ -94,7 +96,7 @@ void vil3d_structuring_element::set_to_sphere(double r)
 //  Select pixels in circle s.t. y*y+z*z<=r^r
 void vil3d_structuring_element::set_to_circle_i(double r)
 {
-  vcl_vector<int> px,py,pz;
+  std::vector<int> px,py,pz;
   double r2 = r*r;
   int r0 = int(r+1);
   const int i = 0;
@@ -109,7 +111,7 @@ void vil3d_structuring_element::set_to_circle_i(double r)
 //  Select pixels in circle s.t. x*x+z*z<=r^r
 void vil3d_structuring_element::set_to_circle_j(double r)
 {
-  vcl_vector<int> px,py,pz;
+  std::vector<int> px,py,pz;
   double r2 = r*r;
   int r0 = int(r+1);
   const int j = 0;
@@ -124,7 +126,7 @@ void vil3d_structuring_element::set_to_circle_j(double r)
 //  Select pixels in circle s.t. y*y+z*z<=r^r
 void vil3d_structuring_element::set_to_circle_k(double r)
 {
-  vcl_vector<int> px,py,pz;
+  std::vector<int> px,py,pz;
   double r2 = r*r;
   int r0 = int(r+1);
   const int k = 0;
@@ -140,7 +142,7 @@ void vil3d_structuring_element::set_to_circle_k(double r)
 //  Select pixels in disk s.t. x*x+y*y+z*z<=r^r
 void vil3d_structuring_element::set_to_sphere_noniso(double r, double sx, double sy, double sz)
 {
-  vcl_vector<int> px,py,pz;
+  std::vector<int> px,py,pz;
   double r2 = r*r;
   double sx2 = sx*sx;
   double sy2 = sy*sy;
@@ -203,7 +205,7 @@ void vil3d_structuring_element::set_to_line_k(int klo, int khi)
 }
 
 //: Write details to stream
-vcl_ostream& operator<<(vcl_ostream& os, const vil3d_structuring_element& element)
+std::ostream& operator<<(std::ostream& os, const vil3d_structuring_element& element)
 {
   os<<"Bounds ["
     <<element.min_i()<<','<<element.max_i()<<"]["
@@ -218,11 +220,11 @@ vcl_ostream& operator<<(vcl_ostream& os, const vil3d_structuring_element& elemen
 }
 
 //: Generate a list of offsets for use on image with istep,jstep,kstep
-void vil3d_compute_offsets(vcl_vector<vcl_ptrdiff_t>& offset,
+void vil3d_compute_offsets(std::vector<std::ptrdiff_t>& offset,
                           const vil3d_structuring_element& element,
-                          vcl_ptrdiff_t istep,
-                          vcl_ptrdiff_t jstep,
-                          vcl_ptrdiff_t kstep)
+                          std::ptrdiff_t istep,
+                          std::ptrdiff_t jstep,
+                          std::ptrdiff_t kstep)
 {
   unsigned n = element.p_i().size();
   offset.resize(n);

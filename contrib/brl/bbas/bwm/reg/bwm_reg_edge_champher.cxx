@@ -1,7 +1,9 @@
 #include "bwm_reg_edge_champher.h"
 //:
 // \file
-#include <vcl_cmath.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <cmath>
 #include <vsol/vsol_point_2d.h>
 #include <bsol/bsol_algs.h>
 
@@ -26,7 +28,7 @@ bwm_reg_edge_champher::bwm_reg_edge_champher()
 bwm_reg_edge_champher::
 bwm_reg_edge_champher(unsigned col_off, unsigned row_off,
                       unsigned ncols, unsigned nrows,
-                      vcl_vector<vsol_digital_curve_2d_sptr> const& edges)
+                      std::vector<vsol_digital_curve_2d_sptr> const& edges)
 {
   // need a border of 1 pixel around the edge of the champher array
   ncols_ = ncols+2;
@@ -68,13 +70,13 @@ void bwm_reg_edge_champher::print_distance()
     {
       unsigned v = static_cast<unsigned>(distance_[r][c]);
       if (v>0)
-        vcl_cout << 1 ;
+        std::cout << 1 ;
       else
-        vcl_cout << 0 ;
+        std::cout << 0 ;
     }
-    vcl_cout << '\n';
+    std::cout << '\n';
   }
-  vcl_cout << vcl_flush;
+  std::cout << std::flush;
 }
 
 void bwm_reg_edge_champher::print_full_distance()
@@ -85,13 +87,13 @@ void bwm_reg_edge_champher::print_full_distance()
     {
       unsigned v = static_cast<unsigned>(distance_[r][c]);
       if (v>0)
-        vcl_cout << v ;
+        std::cout << v ;
       else
-        vcl_cout << 0 ;
+        std::cout << 0 ;
     }
-    vcl_cout << '\n';
+    std::cout << '\n';
   }
-  vcl_cout << vcl_flush;
+  std::cout << std::flush;
 }
 
 //-----------------------------------------------------------------------------
@@ -100,9 +102,9 @@ void bwm_reg_edge_champher::print_full_distance()
 //
 //-----------------------------------------------------------------------------
 void bwm_reg_edge_champher::
-initialize_arrays(vcl_vector<vsol_digital_curve_2d_sptr> const& edges)
+initialize_arrays(std::vector<vsol_digital_curve_2d_sptr> const& edges)
 {
-  vcl_vector<vsol_digital_curve_2d_sptr>::const_iterator cit = edges.begin();
+  std::vector<vsol_digital_curve_2d_sptr>::const_iterator cit = edges.begin();
   for (; cit != edges.end(); ++cit)
     for (unsigned i = 0; i<(*cit)->size(); ++i)
     {
@@ -111,8 +113,8 @@ initialize_arrays(vcl_vector<vsol_digital_curve_2d_sptr> const& edges)
       c -= col_off_; r -= row_off_;
       if (c<0||r<0) continue;
       if (c>ncols_-2||r>nrows_-2) continue;
-      unsigned ic = static_cast<unsigned>(vcl_floor(c)),
-        ir = static_cast<unsigned>(vcl_floor(r));
+      unsigned ic = static_cast<unsigned>(std::floor(c)),
+        ir = static_cast<unsigned>(std::floor(r));
       distance_[ir+1][ic+1] = 0;
       sample_index_[ir+1][ic+1] = i;
       edges_[ir+1][ic+1] = *cit;
@@ -272,11 +274,11 @@ bool bwm_reg_edge_champher::match_tangent(unsigned col, unsigned row,
   bsol_algs::tangent(i_edge, i_index, idx, idy);
   //compute the dot product of the tangents
   double dot = idx*dx + idy*dy;
-  double i_mag = vcl_sqrt(idx*idx +idy*idy);
-  double mag = vcl_sqrt(dx*dx +dy*dy);
+  double i_mag = std::sqrt(idx*idx +idy*idy);
+  double mag = std::sqrt(dx*dx +dy*dy);
   dot /= i_mag; dot /= mag;
   //compute the angle between the tangents
-  double angle = vcl_acos(dot);
+  double angle = std::acos(dot);
   //determine match
-  return vcl_fabs(angle) <= angle_tolerance;
+  return std::fabs(angle) <= angle_tolerance;
 }

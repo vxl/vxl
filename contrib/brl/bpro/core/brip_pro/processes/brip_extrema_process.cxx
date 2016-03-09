@@ -14,7 +14,7 @@ bool brip_extrema_process_cons(bprb_func_process& pro)
 {
   //input
   bool ok=false;
-  vcl_vector<vcl_string> input_types;
+  std::vector<std::string> input_types;
   input_types.push_back("vil_image_view_base_sptr"); // input image
   input_types.push_back("float");  // lambda0
   input_types.push_back("float");  // lambda1
@@ -24,7 +24,7 @@ bool brip_extrema_process_cons(bprb_func_process& pro)
   ok = pro.set_input_types(input_types);
   if (!ok) return ok;
 
-  vcl_vector<vcl_string> output_types;
+  std::vector<std::string> output_types;
   output_types.push_back("vil_image_view_base_sptr");  // point response
   output_types.push_back("vil_image_view_base_sptr");  // kernel domain response
   ok = pro.set_output_types(output_types);
@@ -39,7 +39,7 @@ bool brip_extrema_process(bprb_func_process& pro)
 {
   // Sanity check
   if (pro.n_inputs()< 6) {
-    vcl_cout << "brip_extrema_process: The input number should be 6" << vcl_endl;
+    std::cout << "brip_extrema_process: The input number should be 6" << std::endl;
     return false;
   }
 

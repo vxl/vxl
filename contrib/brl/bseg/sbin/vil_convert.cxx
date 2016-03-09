@@ -1,7 +1,9 @@
-#include <vcl_string.h>
-#include <vcl_vector.h>
-#include <vcl_cstdlib.h>
-#include <vcl_sstream.h>
+#include <string>
+#include <vector>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <cstdlib>
+#include <sstream>
 #include <vul/vul_file.h>
 #include <vul/vul_file_iterator.h>
 #include <vil/vil_load.h>
@@ -10,10 +12,10 @@
 #include <vil/vil_new.h>
 #include <vil/vil_image_view_base.h>
 
-static void filenames_from_directory(vcl_string const& dirname,
-                                     vcl_vector<vcl_string>& filenames)
+static void filenames_from_directory(std::string const& dirname,
+                                     std::vector<std::string>& filenames)
 {
-  vcl_string s(dirname);
+  std::string s(dirname);
   s += "/*.*";
   for (vul_file_iterator fit = s;fit; ++fit) {
     // check to see if file is a directory.
@@ -23,15 +25,15 @@ static void filenames_from_directory(vcl_string const& dirname,
   }
 }
 
-static bool convert_images(vcl_string const& image_indir,
-                           vcl_string const& image_outdir,
+static bool convert_images(std::string const& image_indir,
+                           std::string const& image_outdir,
                            const unsigned blocksize,
-                           vcl_string const& basename)
+                           std::string const& basename)
 {
-  vcl_vector<vcl_string> in_filenames;
+  std::vector<std::string> in_filenames;
   filenames_from_directory(image_indir, in_filenames);
   unsigned n_infiles = in_filenames.size();
-  vcl_string file;
+  std::string file;
   unsigned cnt = 0;
   for (unsigned int i=0; i<n_infiles; ++i)
   {
@@ -50,14 +52,14 @@ static bool convert_images(vcl_string const& image_indir,
     if (!imgr)
       return false;
     cnt++;
-    vcl_string infname = vul_file::strip_directory(file);
+    std::string infname = vul_file::strip_directory(file);
     infname = vul_file::strip_extension(infname);
-    vcl_string outname;
+    std::string outname;
     if (basename=="")
       outname = image_outdir+ '/' + infname + ".tif";
     else
     {
-        vcl_stringstream cs;
+        std::stringstream cs;
         cs << cnt;
         outname = image_outdir+ '/' + basename + '.' + cs.str().c_str() + ".tif";
     }
@@ -84,23 +86,23 @@ int main(int argc,char * argv[])
 {
     if (argc<3)
     {
-      vcl_cout<<"Usage : vil_convert.exe image_in_dir image_out_dir blocksize basename\n";
+      std::cout<<"Usage : vil_convert.exe image_in_dir image_out_dir blocksize basename\n";
       return -1;
     }
     else
     {
-      vcl_string image_indir(argv[1]);
-      vcl_string image_outdir(argv[2]);
+      std::string image_indir(argv[1]);
+      std::string image_outdir(argv[2]);
 
       unsigned blocksize = 0;
       if (argc==4)
-        blocksize = vcl_atoi(argv[3]);
-      vcl_string basename = "";
+        blocksize = std::atoi(argv[3]);
+      std::string basename = "";
       if (argc==5)
         basename = argv[4];
       if (!convert_images(image_indir, image_outdir, blocksize, basename))
       {
-        vcl_cout << "Convert failed\n";
+        std::cout << "Convert failed\n";
         return -1;
       }
       return 0;

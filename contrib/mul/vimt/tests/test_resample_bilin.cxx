@@ -1,8 +1,10 @@
 // This is mul/vimt/tests/test_resample_bilin.cxx
 #include <testlib/testlib_test.h>
 
-#include <vcl_iostream.h>
-#include <vcl_iomanip.h>
+#include <iostream>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iomanip>
 
 #include <vil/vil_math.h>
 #include <vil/vil_crop.h>
@@ -17,12 +19,12 @@
 
 static void test_resample_bilin()
 {
-  vcl_cout << "*********************************************\n"
+  std::cout << "*********************************************\n"
            << " Testing vimt_resample_bilin_smoothed (byte)\n"
            << "*********************************************\n";
 
   unsigned ni = 20, nj = 20;
-  vcl_cout<<"Image Size: "<<ni<<" x "<<nj<<'\n';
+  std::cout<<"Image Size: "<<ni<<" x "<<nj<<'\n';
 
   vimt_transform_2d t;
   t.set_origin(vgl_point_2d<double>(ni/2.0, nj/2.0));
@@ -32,14 +34,14 @@ static void test_resample_bilin()
     for (unsigned x=0;x<image0.image().ni();++x)
       image0.image()(x,y) = x+y*10.0f + 15.0f;
 
-  vcl_cout << "image 0: " << image0 << vcl_setw(3);
-  vil_print_all(vcl_cout, image0.image());
+  std::cout << "image 0: " << image0 << std::setw(3);
+  vil_print_all(std::cout, image0.image());
 
   vimt_resample_bilin_smoothing_edge_extend(image0, image1, vgl_point_2d<double>(0,0),
                                             vgl_vector_2d<double>(1,0), vgl_vector_2d<double>(0,1), ni/2, nj/2);
 
-  vcl_cout << "\n\n\nimage 1: " << image1 << vcl_setw(3);
-  vil_print_all(vcl_cout, image1.image());
+  std::cout << "\n\n\nimage 1: " << image1 << std::setw(3);
+  vil_print_all(std::cout, image1.image());
 
   TEST("similar resolutions sample is ok",
        vil_math_ssd(vil_crop(image0.image(), ni/2, ni/2, nj/2, nj/2),
@@ -52,17 +54,17 @@ static void test_resample_bilin()
     for (unsigned x=0;x<image2.image().ni();++x)
       image2.image()(x,y) = x+y*10.0f + (((x+y)%2) ? 30.0f : 0.0f);
 
-  vcl_cout << "image 2: " << image2 << vcl_setw(3) << vcl_right;
-  vil_print_all(vcl_cout, image2.image());
+  std::cout << "image 2: " << image2 << std::setw(3) << std::right;
+  vil_print_all(std::cout, image2.image());
 
   vimt_resample_bilin_smoothing_edge_extend(image2, image3, vgl_point_2d<double>(0,0),
                                             vgl_vector_2d<double>(0,2), vgl_vector_2d<double>(2,0), ni/4, nj/4);
 
-  vcl_cout << "image 3: " << image3 << vcl_setw(3);
-  vil_print_all(vcl_cout, image3.image());
+  std::cout << "image 3: " << image3 << std::setw(3);
+  vil_print_all(std::cout, image3.image());
 
-  vcl_cout << "dec(crop (image 0)): " << image3 << vcl_setw(3);
-  vil_print_all(vcl_cout, vil_transpose(vil_decimate(vil_crop(image0.image(), ni/2, ni/2, nj/2, nj/2), 2)));
+  std::cout << "dec(crop (image 0)): " << image3 << std::setw(3);
+  vil_print_all(std::cout, vil_transpose(vil_decimate(vil_crop(image0.image(), ni/2, ni/2, nj/2, nj/2), 2)));
 
   TEST_NEAR("different resolutions sample is ok",
             vil_math_ssd(

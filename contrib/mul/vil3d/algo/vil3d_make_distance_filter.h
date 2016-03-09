@@ -20,7 +20,7 @@ void vil3d_make_distance_filter_r1(
                            double width_j,
                            double width_k,
                            vil3d_structuring_element& se,
-                           vcl_vector<double>& d);
+                           std::vector<double>& d);
 
 //: Create filter such that d[a] is distance from origin of se[a]
 //  Pixel widths are (width_i,width_j,width_k).  Elements are
@@ -35,6 +35,6 @@ void vil3d_make_distance_filter(
                            double width_k,
                            int r,
                            vil3d_structuring_element& se,
-                           vcl_vector<double>& d);
+                           std::vector<double>& d);
 
 #endif // vil3d_make_distance_filter_h_

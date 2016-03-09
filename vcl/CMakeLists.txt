@@ -41,7 +41,6 @@ set( vcl_sources
   vcl_climits.h
   vcl_clocale.h
   vcl_complex.h
-  vcl_complex_fwd.h
   vcl_csetjmp.h
   vcl_csignal.h
   vcl_cstdarg.h

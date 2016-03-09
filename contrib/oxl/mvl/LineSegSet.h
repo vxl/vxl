@@ -10,8 +10,10 @@
 //
 //-----------------------------------------------------------------------------
 
-#include <vcl_vector.h>
-#include <vcl_iosfwd.h>
+#include <vector>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iosfwd>
 #include <mvl/HomgLineSeg2D.h>
 #include <mvl/HomgMetric.h>
 
@@ -20,14 +22,14 @@ class ImageMetric;
 class LineSegSet
 {
   // Data Members--------------------------------------------------------------
-  vcl_vector<HomgLineSeg2D> hlines_;
+  std::vector<HomgLineSeg2D> hlines_;
   HomgMetric conditioner_;
 
  public:
   // Constructors/Destructors--------------------------------------------------
 
   LineSegSet();
-  LineSegSet(const HomgMetric& c, const vcl_vector<HomgLineSeg2D>& lines, bool is_conditioned = true);
+  LineSegSet(const HomgMetric& c, const std::vector<HomgLineSeg2D>& lines, bool is_conditioned = true);
   LineSegSet(const char* filename, const HomgMetric& c = 0);
   LineSegSet(const LineSegSet& that);
  ~LineSegSet();
@@ -45,13 +47,13 @@ class LineSegSet
         HomgLineSeg2D& get_homg(int i)       { return hlines_[i]; }
   const HomgLineSeg2D& get_homg(int i) const { return hlines_[i]; }
 
-  vcl_vector<HomgLineSeg2D>& get_homg() { return hlines_; }
+  std::vector<HomgLineSeg2D>& get_homg() { return hlines_; }
 
   int FindNearestLineIndex(double x, double y);
 
   // Data Control--------------------------------------------------------------
-  bool load_ascii(vcl_istream&, HomgMetric const& c);
-  bool save_ascii(vcl_ostream&) const;
+  bool load_ascii(std::istream&, HomgMetric const& c);
+  bool save_ascii(std::ostream&) const;
 
   bool set_iuline(int i, void* l);
 

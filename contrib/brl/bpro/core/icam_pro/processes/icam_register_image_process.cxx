@@ -18,8 +18,10 @@
 #include <brdb/brdb_value.h>
 
 #include <vpgl/vpgl_perspective_camera.h>
-#include <vcl_string.h>
-#include <vcl_iostream.h>
+#include <string>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iostream>
 
 #include <icam/icam_view_sphere.h>
 #include <icam/icam_view_metadata.h>
@@ -37,9 +39,9 @@ namespace icam_register_image_process_globals
 }
 
 template <class T>
-bool load_image(vcl_string const& path, vil_image_view<T>*& image)
+bool load_image(std::string const& path, vil_image_view<T>*& image)
 {
-  vcl_cout << path.c_str() << vcl_endl;
+  std::cout << path.c_str() << std::endl;
   vil_image_view_base_sptr base_img = vil_load(path.c_str(),true);
   if (!base_img)
     return false;
@@ -52,13 +54,13 @@ bool icam_register_image_process_cons(bprb_func_process& pro)
 {
   using namespace icam_register_image_process_globals;
   unsigned i=0;
-  vcl_vector<vcl_string> input_types_(n_inputs_);
+  std::vector<std::string> input_types_(n_inputs_);
   input_types_[i++] = "vcl_string";   // the file path of the expected images list
   input_types_[i++] = "vcl_string";   // the file path of the depth images list
   input_types_[i++] = "icam_view_sphere_sptr";
   input_types_[i++] = "vil_image_view_base_sptr";      // the destination image
 
-  vcl_vector<vcl_string> output_types_(n_outputs_);
+  std::vector<std::string> output_types_(n_outputs_);
   output_types_[0] = "vpgl_camera_double_sptr"; // the text file that contains the paths for the view point cameras
 
   return pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
@@ -68,21 +70,21 @@ bool icam_register_image_process_cons(bprb_func_process& pro)
 bool icam_register_image_process(bprb_func_process& pro)
 {
   if (!pro.verify_inputs()) {
-    vcl_cout << pro.name() << "icam_register_image_process: invalid inputs" << vcl_endl;
+    std::cout << pro.name() << "icam_register_image_process: invalid inputs" << std::endl;
     return false;
   }
   using namespace icam_register_image_process_globals;
 
   int i=0;
-  vcl_string exp_path = pro.get_input<vcl_string>(i++);
-  vcl_string depth_path = pro.get_input<vcl_string>(i++);
+  std::string exp_path = pro.get_input<std::string>(i++);
+  std::string depth_path = pro.get_input<std::string>(i++);
   icam_view_sphere_sptr view_sphere= pro.get_input<icam_view_sphere_sptr>(i++);
   vil_image_view_base_sptr dest_image = pro.get_input<vil_image_view_base_sptr>(i++);
 
   // get the parameters
   unsigned nbins=0, min_pyramid_image_size=0, box_reduction_k=0;
   double local_min_thresh=0.0, smooth_sigma=0.0, axis_search_cone_multiplier=0.0, polar_range_multiplier=0.0;
-  vcl_string base_path="";
+  std::string base_path="";
   // with dummy initialisations to avoid compiler warnings
   if (!pro.parameters()->get_value("nbins", nbins)) return false;
   if (!pro.parameters()->get_value("min_pyramid_image_size", min_pyramid_image_size)) return false;
@@ -98,30 +100,30 @@ bool icam_register_image_process(bprb_func_process& pro)
                                polar_range_multiplier,local_min_thresh,smooth_sigma,base_path);
 
   // set the images to view points
-  vcl_map<unsigned, vcl_string> images;
-  vcl_map<unsigned, vcl_string> depth_images;
+  std::map<unsigned, std::string> images;
+  std::map<unsigned, std::string> depth_images;
 
   // read the image list from text files
-  vcl_ifstream ifs1(exp_path.c_str());
+  std::ifstream ifs1(exp_path.c_str());
   if (!ifs1.good()) {
-    vcl_cout << "Error opening " << exp_path << vcl_endl;
+    std::cout << "Error opening " << exp_path << std::endl;
     return false;
   }
 
   // load the view point image paths
   while (ifs1) {
     unsigned id;
-    vcl_string path;
+    std::string path;
     ifs1 >> id >> path;
     images[id]=path;
   }
   ifs1.close();
 
   // load the depth image path
-  vcl_ifstream ifs2(depth_path.c_str());
+  std::ifstream ifs2(depth_path.c_str());
   while (ifs2) {
     unsigned id;
-    vcl_string path;
+    std::string path;
     ifs2 >> id >> path;
     depth_images[id]=path;
   }

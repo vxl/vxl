@@ -40,7 +40,7 @@ class bgui_picker_tableau : public vgui_tableau
   bgui_picker_tableau(vgui_tableau_sptr const&);
   //: Destructor.
   ~bgui_picker_tableau();
-  vcl_string type_name() const { return "bgui_picker_tableau";}
+  std::string type_name() const { return "bgui_picker_tableau";}
 
   //: Gets a user selected point.
   bool pick_point(float* x, float* y);
@@ -64,7 +64,7 @@ class bgui_picker_tableau : public vgui_tableau
   //: pick a polyline (set of connected lines)
   void pick_polyline(vsol_polyline_2d_sptr& poly);
 
-  bool pick_point_set(vcl_vector< vsol_point_2d_sptr >& ps_list, unsigned max);
+  bool pick_point_set(std::vector< vsol_point_2d_sptr >& ps_list, unsigned max);
 
   //: Set drawing style, [0 1.0] for colors
   void set_color(const float red=1.0f, const float green=1.0f,
@@ -109,10 +109,10 @@ class bgui_picker_tableau : public vgui_tableau
   vgui_event_condition gesture1;
   vgui_event_condition gesture2;
 
-  vcl_vector< vsol_point_2d_sptr > point_list;
+  std::vector< vsol_point_2d_sptr > point_list;
 
   // for point_set
-  vcl_vector< vsol_point_2d_sptr > point_set_list;
+  std::vector< vsol_point_2d_sptr > point_set_list;
 
   float last_x;
   float last_y;

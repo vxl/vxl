@@ -10,8 +10,8 @@ vdtop_8_neighborhood_mask vdtop_pixel<T>::upper_neighborhood() const
 {
   image_iterator tmp=position_;
   vxl_byte mask=0;
-  const vcl_ptrdiff_t istep=img_->istep();
-  const vcl_ptrdiff_t jstep=img_->jstep();
+  const std::ptrdiff_t istep=img_->istep();
+  const std::ptrdiff_t jstep=img_->jstep();
 
   tmp+=istep; // right
   mask|=((*tmp)>=(*position_));
@@ -38,8 +38,8 @@ vdtop_8_neighborhood_mask vdtop_pixel<T>::lower_neighborhood() const
 {
   image_iterator tmp=position_;
   vxl_byte mask= 0;
-  const vcl_ptrdiff_t istep=img_->istep();
-  const vcl_ptrdiff_t jstep=img_->jstep();
+  const std::ptrdiff_t istep=img_->istep();
+  const std::ptrdiff_t jstep=img_->jstep();
 
   tmp+=istep; // right
   mask|=((*tmp)<=(*position_));
@@ -67,8 +67,8 @@ void vdtop_pixel<T>::destruct_4()
 {
   image_iterator tmp=position_, alpha;
   bool unset=true;
-  const vcl_ptrdiff_t istep=img_->istep();
-  const vcl_ptrdiff_t jstep=img_->jstep();
+  const std::ptrdiff_t istep=img_->istep();
+  const std::ptrdiff_t jstep=img_->jstep();
 
   tmp+=istep; // right
   if (*tmp < *position_ && (unset || *tmp > *alpha ))
@@ -121,8 +121,8 @@ void vdtop_pixel<T>::destruct_8()
 {
   image_iterator tmp=position_, alpha=tmp;
   bool unset=true;
-  const vcl_ptrdiff_t istep=img_->istep();
-  const vcl_ptrdiff_t jstep=img_->jstep();
+  const std::ptrdiff_t istep=img_->istep();
+  const std::ptrdiff_t jstep=img_->jstep();
 
   tmp+=istep; // right
   if (*tmp < *position_ && (unset || *tmp > *alpha ))
@@ -195,8 +195,8 @@ void vdtop_pixel<T>::construct_4()
 {
   image_iterator  tmp=position_, alpha=tmp;
   bool unset=true;
-  const vcl_ptrdiff_t istep=img_->istep();
-  const vcl_ptrdiff_t jstep=img_->jstep();
+  const std::ptrdiff_t istep=img_->istep();
+  const std::ptrdiff_t jstep=img_->jstep();
 
   tmp+=istep; // right
   if (*tmp > *position_ && (unset || *tmp < *alpha ))
@@ -249,8 +249,8 @@ void vdtop_pixel<T>::construct_8()
 {
   image_iterator tmp=position_, alpha=tmp;
   bool unset=true;
-  const vcl_ptrdiff_t istep=img_->istep();
-  const vcl_ptrdiff_t jstep=img_->jstep();
+  const std::ptrdiff_t istep=img_->istep();
+  const std::ptrdiff_t jstep=img_->jstep();
 
   tmp+=istep; // right
   if (*tmp > *position_ && (unset || *tmp < *alpha ))

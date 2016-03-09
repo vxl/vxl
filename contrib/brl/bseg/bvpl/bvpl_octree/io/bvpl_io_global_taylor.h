@@ -15,7 +15,9 @@
 
 #include <bvpl/bvpl_octree/bvpl_global_taylor.h>
 
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iostream>
 #include <vsl/vsl_binary_io.h>
 
 
@@ -23,7 +25,7 @@
 template <class T, unsigned N>
 void vsl_b_write(vsl_b_ostream & os, bvpl_global_taylor<T,N> const &)
 {
-  vcl_cerr << "Error: Trying to save but binary io not implemented\n";
+  std::cerr << "Error: Trying to save but binary io not implemented\n";
   return;
 }
 
@@ -31,14 +33,14 @@ void vsl_b_write(vsl_b_ostream & os, bvpl_global_taylor<T,N> const &)
 template <class T, unsigned N>
 void vsl_b_read(vsl_b_istream & is, bvpl_global_taylor<T,N> &p)
 {
-  vcl_cerr << "Error: Trying to save but binary io not implemented\n";
+  std::cerr << "Error: Trying to save but binary io not implemented\n";
   return;
 }
 
 template <class T, unsigned N>
-void vsl_print_summary(vcl_ostream &os, const bvpl_global_taylor<T,N> &p)
+void vsl_print_summary(std::ostream &os, const bvpl_global_taylor<T,N> &p)
 {
-  vcl_cerr << "Error: Trying to save but binary io not implemented\n";
+  std::cerr << "Error: Trying to save but binary io not implemented\n";
   return;
 }
 
@@ -46,7 +48,7 @@ void vsl_print_summary(vcl_ostream &os, const bvpl_global_taylor<T,N> &p)
 template <class T, unsigned N>
 void vsl_b_read(vsl_b_istream& is, bvpl_global_taylor<T,N>* p)
 {
-  vcl_cerr << "Error: Trying to save but binary io not implemented\n";
+  std::cerr << "Error: Trying to save but binary io not implemented\n";
   return;
 }
 
@@ -54,12 +56,12 @@ void vsl_b_read(vsl_b_istream& is, bvpl_global_taylor<T,N>* p)
 template <class T, unsigned N>
 void vsl_b_write(vsl_b_ostream& os, const bvpl_global_taylor<T,N>* &mp)
 {
-  vcl_cerr << "Error: Trying to save but binary io not implemented\n";
+  std::cerr << "Error: Trying to save but binary io not implemented\n";
   return;
 }
 
 template <class T, unsigned N>
-void vsl_print_summary(vcl_ostream& os, const bvpl_global_taylor<T,N>* &p)
+void vsl_print_summary(std::ostream& os, const bvpl_global_taylor<T,N>* &p)
 {
   if (p==0)
     os << "NULL PTR";

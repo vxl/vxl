@@ -12,7 +12,9 @@
 //   (none yet)
 // \endverbatim
 
-#include <vcl_limits.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <limits>
 #include <bsta/bsta_attributes.h> // for bsta_num_obs<T>
 #include <bsta/bsta_mixture.h>
 
@@ -87,7 +89,7 @@ class bsta_mixture_prob_functor
         }
       }
       if (normalize_){
-        if (tmp > vcl_numeric_limits<T>::epsilon()){
+        if (tmp > std::numeric_limits<T>::epsilon()){
           for (unsigned int i=0; i<mix.num_components(); ++i){
             result[i] /= tmp;
           }

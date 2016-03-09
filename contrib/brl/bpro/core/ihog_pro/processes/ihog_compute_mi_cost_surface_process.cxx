@@ -4,7 +4,9 @@
 // \file
 // \brief A process to register two images by finding the best translational mapping.
 
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iostream>
 #include <ihog/ihog_minimizer.h>
 #include <ihog/ihog_world_roi.h>
 #include <ihog/ihog_minfo_cost_func.h>
@@ -19,12 +21,12 @@ bool ihog_compute_mi_cost_surface_process_cons(bprb_func_process& pro)
   //  1) image 1
   //  2) mask
   //  3) radius
-  vcl_vector<vcl_string> input_types;
+  std::vector<std::string> input_types;
   input_types.push_back("vil_image_view_base_sptr");
   input_types.push_back("vil_image_view_base_sptr");
   input_types.push_back("vil_image_view_base_sptr");
   input_types.push_back("int");
-  vcl_vector<vcl_string> output_types;
+  std::vector<std::string> output_types;
   output_types.push_back("vil_image_view_base_sptr");
 
   return pro.set_input_types(input_types)
@@ -35,7 +37,7 @@ bool ihog_compute_mi_cost_surface_process_cons(bprb_func_process& pro)
 bool ihog_compute_mi_cost_surface_process(bprb_func_process& pro)
 {
   if (pro.n_inputs()!= pro.input_types().size()) {
-    vcl_cout << "ihog_compute_mi_cost_surface_process: The input number should be " << pro.input_types().size() << vcl_endl;
+    std::cout << "ihog_compute_mi_cost_surface_process: The input number should be " << pro.input_types().size() << std::endl;
     return false;
   }
   // get the inputs
@@ -65,7 +67,7 @@ bool ihog_compute_mi_cost_surface_process(bprb_func_process& pro)
   ihog_transform_2d init_xform;
   init_xform.set_translation_only(0,0);
   ihog_image<float> from_img(img1, init_xform);
-  //vcl_cout << "init_xform.form = " << from_img.world2im().form() << vcl_endl;
+  //std::cout << "init_xform.form = " << from_img.world2im().form() << std::endl;
   //return true;
   ihog_image<float> to_img(img0, ihog_transform_2d());
   ihog_image<float> mask1_img(mask1, ihog_transform_2d());
@@ -81,7 +83,7 @@ bool ihog_compute_mi_cost_surface_process(bprb_func_process& pro)
   vil_image_view_base_sptr cost_map_sptr(cost_map);
 
   for (int i=0; i<n_steps; ++i) {
-    vcl_cout << "-------------------------------------  i = " << i << vcl_endl;
+    std::cout << "-------------------------------------  i = " << i << std::endl;
     for (int j=0; j<n_steps; ++j) {
       float offset_x = (j - half_n_steps)*step;
       float offset_y = (i - half_n_steps)*step;
@@ -89,10 +91,10 @@ bool ihog_compute_mi_cost_surface_process(bprb_func_process& pro)
       xform.set_translation_only(offset_x,offset_y);
       vnl_vector<double> x;
       xform.params(x);
-      //vcl_cout << "x = " << x << vcl_endl;
+      //std::cout << "x = " << x << std::endl;
       float minfo = float(cost_fun.f(x));
       (*cost_map)(i,j) = minfo;
-      vcl_cout << "minfo(" << offset_x << ", " << offset_y << ") = " << minfo << vcl_endl;
+      std::cout << "minfo(" << offset_x << ", " << offset_y << ") = " << minfo << std::endl;
     }
   }
 

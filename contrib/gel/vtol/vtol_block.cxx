@@ -7,7 +7,9 @@
 #include <vtol/vtol_two_chain.h>
 #include <vtol/vtol_macros.h>
 #include <vtol/vtol_list_functions.h>
-#include <vcl_vector.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <vector>
 #include <vcl_cassert.h>
 
 //***************************************************************************
@@ -122,10 +124,10 @@ vsol_spatial_object_2d* vtol_block::clone() const
 vertex_list *vtol_block::outside_boundary_vertices()
 {
   vertex_list *result=new vertex_list();
-  vcl_vector<vtol_vertex *> *ptr_list=outside_boundary_compute_vertices();
+  std::vector<vtol_vertex *> *ptr_list=outside_boundary_compute_vertices();
 
   // copy the lists
-  vcl_vector<vtol_vertex*>::iterator i;
+  std::vector<vtol_vertex*>::iterator i;
   for (i=ptr_list->begin();i!=ptr_list->end();++i)
     result->push_back(*i);
   delete ptr_list;
@@ -133,14 +135,14 @@ vertex_list *vtol_block::outside_boundary_vertices()
   return result;
 }
 
-vcl_vector<vtol_vertex *> *vtol_block::outside_boundary_compute_vertices()
+std::vector<vtol_vertex *> *vtol_block::outside_boundary_compute_vertices()
 {
   OUTSIDE_BOUNDARY(vtol_vertex,two_chain,compute_vertices);
 }
 
 //: get vertex list
 
-vcl_vector<vtol_vertex *> *vtol_block::compute_vertices()
+std::vector<vtol_vertex *> *vtol_block::compute_vertices()
 {
   SEL_INF(vtol_vertex,compute_vertices);
 }
@@ -150,10 +152,10 @@ vcl_vector<vtol_vertex *> *vtol_block::compute_vertices()
 zero_chain_list *vtol_block::outside_boundary_zero_chains()
 {
   zero_chain_list *result=new zero_chain_list();
-  vcl_vector<vtol_zero_chain *> *ptr_list=outside_boundary_compute_zero_chains();
+  std::vector<vtol_zero_chain *> *ptr_list=outside_boundary_compute_zero_chains();
 
   // copy the lists
-  vcl_vector<vtol_zero_chain*>::iterator i;
+  std::vector<vtol_zero_chain*>::iterator i;
   for (i=ptr_list->begin();i!=ptr_list->end();++i)
     result->push_back(*i);
   delete ptr_list;
@@ -162,7 +164,7 @@ zero_chain_list *vtol_block::outside_boundary_zero_chains()
 }
 
 
-vcl_vector<vtol_zero_chain *> *
+std::vector<vtol_zero_chain *> *
 vtol_block::outside_boundary_compute_zero_chains()
 {
   OUTSIDE_BOUNDARY(vtol_zero_chain,two_chain,compute_zero_chains);
@@ -170,7 +172,7 @@ vtol_block::outside_boundary_compute_zero_chains()
 
 //: get zero chains
 
-vcl_vector<vtol_zero_chain *> *vtol_block::compute_zero_chains()
+std::vector<vtol_zero_chain *> *vtol_block::compute_zero_chains()
 {
  SEL_INF(vtol_zero_chain,compute_zero_chains);
 }
@@ -180,10 +182,10 @@ vcl_vector<vtol_zero_chain *> *vtol_block::compute_zero_chains()
 edge_list *vtol_block::outside_boundary_edges()
 {
   edge_list *result=new edge_list();
-  vcl_vector<vtol_edge *> *ptr_list=outside_boundary_compute_edges();
+  std::vector<vtol_edge *> *ptr_list=outside_boundary_compute_edges();
 
   // copy the lists
-  vcl_vector<vtol_edge*>::iterator i;
+  std::vector<vtol_edge*>::iterator i;
   for (i=ptr_list->begin();i!=ptr_list->end();++i)
     result->push_back(*i);
   delete ptr_list;
@@ -193,13 +195,13 @@ edge_list *vtol_block::outside_boundary_edges()
 
 //: outside boundary edges
 
-vcl_vector<vtol_edge *> *vtol_block::outside_boundary_compute_edges()
+std::vector<vtol_edge *> *vtol_block::outside_boundary_compute_edges()
 {
   OUTSIDE_BOUNDARY(vtol_edge,two_chain,compute_edges);
 }
 
 //: get edges
-vcl_vector<vtol_edge *> *vtol_block::compute_edges()
+std::vector<vtol_edge *> *vtol_block::compute_edges()
 {
   SEL_INF(vtol_edge,compute_edges);
 }
@@ -209,9 +211,9 @@ vcl_vector<vtol_edge *> *vtol_block::compute_edges()
 one_chain_list *vtol_block::outside_boundary_one_chains()
 {
   one_chain_list *result=new one_chain_list;
-  vcl_vector<vtol_one_chain *> *ptr_list=outside_boundary_compute_one_chains();
+  std::vector<vtol_one_chain *> *ptr_list=outside_boundary_compute_one_chains();
 
-  vcl_vector<vtol_one_chain*>::iterator i;
+  std::vector<vtol_one_chain*>::iterator i;
   for (i=ptr_list->begin();i!=ptr_list->end();++i)
     result->push_back(*i);
   delete ptr_list;
@@ -221,14 +223,14 @@ one_chain_list *vtol_block::outside_boundary_one_chains()
 
 //: get outside boundary one chains
 
-vcl_vector<vtol_one_chain *> *
+std::vector<vtol_one_chain *> *
 vtol_block::outside_boundary_compute_one_chains()
 {
   OUTSIDE_BOUNDARY(vtol_one_chain,two_chain,compute_one_chains);
 }
 
 //: get the one chains
-vcl_vector<vtol_one_chain *> *vtol_block::compute_one_chains()
+std::vector<vtol_one_chain *> *vtol_block::compute_one_chains()
 {
   SEL_INF(vtol_one_chain,compute_one_chains);
 }
@@ -238,9 +240,9 @@ vcl_vector<vtol_one_chain *> *vtol_block::compute_one_chains()
 face_list *vtol_block::outside_boundary_faces()
 {
   face_list *result=new face_list();
-  vcl_vector<vtol_face *> *ptr_list=outside_boundary_compute_faces();
+  std::vector<vtol_face *> *ptr_list=outside_boundary_compute_faces();
 
-  vcl_vector<vtol_face*>::iterator i;
+  std::vector<vtol_face*>::iterator i;
   for (i=ptr_list->begin();i!=ptr_list->end();++i)
     result->push_back(*i);
   delete ptr_list;
@@ -250,13 +252,13 @@ face_list *vtol_block::outside_boundary_faces()
 
 //: get the outside boundary faces
 
-vcl_vector<vtol_face *> *vtol_block::outside_boundary_compute_faces()
+std::vector<vtol_face *> *vtol_block::outside_boundary_compute_faces()
 {
   OUTSIDE_BOUNDARY(vtol_face,two_chain,compute_faces);
 }
 
 //: get the faces
-vcl_vector<vtol_face *> *vtol_block::compute_faces()
+std::vector<vtol_face *> *vtol_block::compute_faces()
 {
   SEL_INF(vtol_face,compute_faces);
 }
@@ -266,9 +268,9 @@ vcl_vector<vtol_face *> *vtol_block::compute_faces()
 two_chain_list *vtol_block::outside_boundary_two_chains()
 {
   two_chain_list *result=new two_chain_list();
-  vcl_vector<vtol_two_chain *> *ptr_list=outside_boundary_compute_two_chains();
+  std::vector<vtol_two_chain *> *ptr_list=outside_boundary_compute_two_chains();
 
-  vcl_vector<vtol_two_chain*>::iterator i;
+  std::vector<vtol_two_chain*>::iterator i;
   for (i=ptr_list->begin();i!=ptr_list->end();++i)
     result->push_back(*i);
   delete ptr_list;
@@ -278,7 +280,7 @@ two_chain_list *vtol_block::outside_boundary_two_chains()
 
 //: get the outside boundary two chains
 
-vcl_vector<vtol_two_chain *> *
+std::vector<vtol_two_chain *> *
 vtol_block::outside_boundary_compute_two_chains()
 {
   OUTSIDE_BOUNDARY(vtol_two_chain,two_chain,compute_two_chains);
@@ -286,13 +288,13 @@ vtol_block::outside_boundary_compute_two_chains()
 
 //: get the two chains
 
-vcl_vector<vtol_two_chain *> *vtol_block::compute_two_chains()
+std::vector<vtol_two_chain *> *vtol_block::compute_two_chains()
 {
   SEL_INF(vtol_two_chain,compute_two_chains);
 }
 
 //: get blocks
-vcl_vector<vtol_block *> *vtol_block::compute_blocks()
+std::vector<vtol_block *> *vtol_block::compute_blocks()
 {
   LIST_SELF(vtol_block);
 }
@@ -381,12 +383,12 @@ bool vtol_block::add_hole_cycle(vtol_two_chain_sptr new_hole)
 
 //: print data
 
-void vtol_block::print(vcl_ostream &strm) const
+void vtol_block::print(std::ostream &strm) const
 {
   strm<<"<vtol_block "<<inferiors()->size()<<"  "<<(void const*)this<<">\n";
 }
 
-void vtol_block::describe(vcl_ostream &strm,
+void vtol_block::describe(std::ostream &strm,
                           int blanking) const
 {
   for (int i=0; i<blanking; ++i) strm << ' ';

@@ -46,7 +46,7 @@ void mipa_sample_histo_boxes_3L(const vil_image_view<srcT>& h_im,
   for (unsigned a=0;a<nA;++a) sum[a]=0;
 
   const srcT *h_row = &h_im(i0,j0);
-  vcl_ptrdiff_t hj_step = 2*h_im.jstep();
+  std::ptrdiff_t hj_step = 2*h_im.jstep();
   unsigned dh1=nA,dh2=nA*h_im.ni(),dh3=dh1+dh2;
 
   for (unsigned j=0;j<nj;++j,h_row+=hj_step,v+=dv2)
@@ -95,7 +95,7 @@ void mipa_sample_histo_boxes_3L_inv(vil_image_view<srcT>& h_im,
   unsigned dv1=nA,dv2=2*ni*nA,dv3=dv1+dv2;
 
   srcT *h_row = &h_im(i0,j0);
-  vcl_ptrdiff_t hj_step = 2*h_im.jstep();
+  std::ptrdiff_t hj_step = 2*h_im.jstep();
   unsigned dh1=nA,dh2=nA*h_im.ni(),dh3=dh1+dh2;
 
   for (unsigned j=0;j<nj;++j,h_row+=hj_step,v+=dv2)

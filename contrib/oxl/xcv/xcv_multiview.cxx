@@ -18,9 +18,11 @@
 #include "xcv_tjunction.h"
 #include "xcv_segmentation.h"
 
-#include <vcl_string.h>
-#include <vcl_fstream.h>
-#include <vcl_iostream.h>
+#include <string>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <fstream>
+#include <iostream>
 #include <vil1/vil1_image.h>
 
 #include <mvl/HomgInterestPointSet.h>
@@ -37,19 +39,19 @@
 #include <vgui/vgui_soview.h>
 #include <vgui/vgui_soview2D.h>
 
-vcl_vector<xcv_twoview_manager*> xcv_multiview::twoview_mgrs;
-vcl_vector<vgui_rubberband_tableau_sptr> xcv_multiview::twoview_rubber0;
-vcl_vector<vgui_rubberband_tableau_sptr> xcv_multiview::twoview_rubber1;
-vcl_vector<xcv_threeview_manager*> xcv_multiview::threeview_mgrs;
-vcl_vector<vgui_rubberband_tableau_sptr> xcv_multiview::threeview_rubber0;
-vcl_vector<vgui_rubberband_tableau_sptr> xcv_multiview::threeview_rubber1;
-vcl_vector<vgui_rubberband_tableau_sptr> xcv_multiview::threeview_rubber2;
+std::vector<xcv_twoview_manager*> xcv_multiview::twoview_mgrs;
+std::vector<vgui_rubberband_tableau_sptr> xcv_multiview::twoview_rubber0;
+std::vector<vgui_rubberband_tableau_sptr> xcv_multiview::twoview_rubber1;
+std::vector<xcv_threeview_manager*> xcv_multiview::threeview_mgrs;
+std::vector<vgui_rubberband_tableau_sptr> xcv_multiview::threeview_rubber0;
+std::vector<vgui_rubberband_tableau_sptr> xcv_multiview::threeview_rubber1;
+std::vector<vgui_rubberband_tableau_sptr> xcv_multiview::threeview_rubber2;
 
-extern vcl_string* get_loadfile();
-extern vcl_string* get_savefile();
+extern std::string* get_loadfile();
+extern std::string* get_savefile();
 extern void get_current(unsigned*, unsigned*);
-extern bool get_twoviews(vcl_vector<int>*, vcl_vector<int>*);
-extern bool get_threeviews(vcl_vector<int>*, vcl_vector<int>*);
+extern bool get_twoviews(std::vector<int>*, std::vector<int>*);
+extern bool get_threeviews(std::vector<int>*, std::vector<int>*);
 extern vgui_rubberband_tableau_sptr get_rubberbander_at(unsigned, unsigned);
 extern vgui_easy2D_tableau_sptr get_easy2D_at(unsigned, unsigned);
 extern bool get_image_at(vil1_image*, unsigned, unsigned);
@@ -59,8 +61,8 @@ extern bool get_image_at(vil1_image*, unsigned, unsigned);
 //   If a manager already exists this manager is returned, otherwise a
 //   new manager is created and returned.
 //-----------------------------------------------------------------------------
-xcv_twoview_manager* xcv_multiview::get_twoview_manager(vcl_vector<int>& col_pos,
-                                                        vcl_vector<int>& row_pos)
+xcv_twoview_manager* xcv_multiview::get_twoview_manager(std::vector<int>& col_pos,
+                                                        std::vector<int>& row_pos)
 {
   vgui_rubberband_tableau_sptr rubbers[2];
   rubbers[0] = get_rubberbander_at(col_pos[0], row_pos[0]);
@@ -108,8 +110,8 @@ xcv_twoview_manager* xcv_multiview::get_twoview_manager(vcl_vector<int>& col_pos
 //   If a manager already exists then this manager is returned, otherwise a
 //   new manager is created and returned.
 //-----------------------------------------------------------------------------
-xcv_threeview_manager* xcv_multiview::get_threeview_manager(vcl_vector<int>& col_pos,
-                                                            vcl_vector<int>& row_pos)
+xcv_threeview_manager* xcv_multiview::get_threeview_manager(std::vector<int>& col_pos,
+                                                            std::vector<int>& row_pos)
 {
   vgui_rubberband_tableau_sptr rubbers[3];
   for (int i=0; i<3; i++)
@@ -192,7 +194,7 @@ xcv_threeview_manager* xcv_multiview::get_threeview_manager(vcl_vector<int>& col
 //-----------------------------------------------------------------------------
 void xcv_multiview::compute_f_matrix()
 {
-  vcl_vector<int> col_pos, row_pos;
+  std::vector<int> col_pos, row_pos;
   if (!get_twoviews(&col_pos, &row_pos))
     return;
 
@@ -207,7 +209,7 @@ void xcv_multiview::compute_f_matrix()
 //-----------------------------------------------------------------------------
 void xcv_multiview::compute_h_matrix2d()
 {
-  vcl_vector<int> col_pos, row_pos;
+  std::vector<int> col_pos, row_pos;
   if (!get_twoviews(&col_pos, &row_pos))
     return;
 
@@ -222,7 +224,7 @@ void xcv_multiview::compute_h_matrix2d()
 //-----------------------------------------------------------------------------
 void xcv_multiview::compute_corner_matches()
 {
-  vcl_vector<int> col_pos, row_pos;
+  std::vector<int> col_pos, row_pos;
   if (!get_twoviews(&col_pos, &row_pos))
     return;
 
@@ -234,17 +236,17 @@ void xcv_multiview::compute_corner_matches()
 //-----------------------------------------------------------------------------
 void xcv_multiview::load_f_matrix()
 {
-  vcl_vector<int> col_pos, row_pos;
+  std::vector<int> col_pos, row_pos;
   if (!get_twoviews(&col_pos, &row_pos))
     return;
 #ifdef DEBUG
-  vcl_cerr << "Selected positions = (" << col_pos[0] << ", "
+  std::cerr << "Selected positions = (" << col_pos[0] << ", "
            << row_pos[0] << "), (" << col_pos[1] << ", " << row_pos[1] << ").\n";
 #endif
 
   vgui_dialog f_dialog("Load FMatrix");
-  vcl_string* f_matrix_filename = get_loadfile();
-  static vcl_string regexp = "*.*";
+  std::string* f_matrix_filename = get_loadfile();
+  static std::string regexp = "*.*";
   f_dialog.inline_file("File containing FMatrix:", regexp, *f_matrix_filename);
   if (!f_dialog.ask() || f_matrix_filename->size() == 0)
     return;
@@ -261,13 +263,13 @@ void xcv_multiview::load_f_matrix()
 //-----------------------------------------------------------------------------
 void xcv_multiview::load_h_matrix2d()
 {
-  vcl_vector<int> col_pos, row_pos;
+  std::vector<int> col_pos, row_pos;
   if (!get_twoviews(&col_pos, &row_pos))
     return;
 
   vgui_dialog h_dialog("Load HMatrix2D");
-  vcl_string* h_matrix_filename = get_loadfile();
-  static vcl_string regexp = "*.*";
+  std::string* h_matrix_filename = get_loadfile();
+  static std::string regexp = "*.*";
   h_dialog.inline_file("File containing HMatrix2D:", regexp, *h_matrix_filename);
   if (!h_dialog.ask())
     return;
@@ -284,13 +286,13 @@ void xcv_multiview::load_h_matrix2d()
 //-----------------------------------------------------------------------------
 void xcv_multiview::load_corner_matches()
 {
-  vcl_vector<int> col_pos, row_pos;
+  std::vector<int> col_pos, row_pos;
   if (!get_twoviews(&col_pos, &row_pos))
     return;
 
   vgui_dialog corner_dialog("Load corner matches");
-  vcl_string* cm_filename = get_loadfile();
-  static vcl_string regexp = "*.*";
+  std::string* cm_filename = get_loadfile();
+  static std::string regexp = "*.*";
   corner_dialog.inline_file("File containing corner matches:", regexp, *cm_filename);
   if (!corner_dialog.ask())
     return;
@@ -303,13 +305,13 @@ void xcv_multiview::load_corner_matches()
 //-----------------------------------------------------------------------------
 void xcv_multiview::save_f_matrix()
 {
-  vcl_vector<int> col_pos, row_pos;
+  std::vector<int> col_pos, row_pos;
   if (!get_twoviews(&col_pos, &row_pos))
     return;
 
   vgui_dialog fsave_dialog("Save FMatrix");
-  vcl_string* f_matrix_filename = get_savefile();
-  static vcl_string regexp = "*.*";
+  std::string* f_matrix_filename = get_savefile();
+  static std::string regexp = "*.*";
   fsave_dialog.inline_file("File to save FMatrix:", regexp, *f_matrix_filename);
   if (!fsave_dialog.ask())
     return;
@@ -319,10 +321,10 @@ void xcv_multiview::save_f_matrix()
   FMatrix* fm = mgr->get_f_matrix();
   if (fm == VXL_NULLPTR)
   {
-    vcl_cerr << "No FMatrix exists to save\n";
+    std::cerr << "No FMatrix exists to save\n";
     return;
   }
-  vcl_ofstream output_filestream(f_matrix_filename->c_str());
+  std::ofstream output_filestream(f_matrix_filename->c_str());
   output_filestream << *fm;
 }
 
@@ -331,13 +333,13 @@ void xcv_multiview::save_f_matrix()
 //-----------------------------------------------------------------------------
 void xcv_multiview::save_h_matrix2d()
 {
-  vcl_vector<int> col_pos, row_pos;
+  std::vector<int> col_pos, row_pos;
   if (!get_twoviews(&col_pos, &row_pos))
     return;
 
   vgui_dialog hsave_dialog("Save HMatrix2D");
-  vcl_string* h_matrix_filename = get_savefile();
-  static vcl_string regexp = "*.*";
+  std::string* h_matrix_filename = get_savefile();
+  static std::string regexp = "*.*";
   hsave_dialog.inline_file("File to save HMatrix2D:", regexp, *h_matrix_filename);
   if (!hsave_dialog.ask())
     return;
@@ -347,10 +349,10 @@ void xcv_multiview::save_h_matrix2d()
   HMatrix2D* hm = mgr->get_h_matrix();
   if (hm == VXL_NULLPTR)
   {
-    vcl_cerr << "No HMatrix2D exists to save\n";
+    std::cerr << "No HMatrix2D exists to save\n";
     return;
   }
-  vcl_ofstream output_filestream(h_matrix_filename->c_str());
+  std::ofstream output_filestream(h_matrix_filename->c_str());
   output_filestream << *hm;
 }
 
@@ -359,13 +361,13 @@ void xcv_multiview::save_h_matrix2d()
 //-----------------------------------------------------------------------------
 void xcv_multiview::save_corner_matches()
 {
-  vcl_vector<int> col_pos, row_pos;
+  std::vector<int> col_pos, row_pos;
   if (!get_twoviews(&col_pos, &row_pos))
     return;
 
   vgui_dialog cmsave_dialog("Save HMatrix2D");
-  vcl_string* cm_filename = get_savefile();
-  static vcl_string regexp = "*.*";
+  std::string* cm_filename = get_savefile();
+  static std::string regexp = "*.*";
   cmsave_dialog.inline_file("File to save corner matches:", regexp, *cm_filename);
   if (!cmsave_dialog.ask())
     return;
@@ -374,10 +376,10 @@ void xcv_multiview::save_corner_matches()
   PairMatchSetCorner* corner_matches = mgr->get_corner_matches();
   if (corner_matches == VXL_NULLPTR)
   {
-    vcl_cerr << "No corner matches between these two views exist to save\n";
+    std::cerr << "No corner matches between these two views exist to save\n";
     return;
   }
-  vcl_ofstream output_filestream(cm_filename->c_str());
+  std::ofstream output_filestream(cm_filename->c_str());
   output_filestream << *corner_matches;
 }
 
@@ -386,7 +388,7 @@ void xcv_multiview::save_corner_matches()
 //-----------------------------------------------------------------------------
 void xcv_multiview::toggle_f_matrix()
 {
-  vcl_vector<int> col_pos, row_pos;
+  std::vector<int> col_pos, row_pos;
   if (!get_twoviews(&col_pos, &row_pos))
     return;
 
@@ -399,7 +401,7 @@ void xcv_multiview::toggle_f_matrix()
 //-----------------------------------------------------------------------------
 void xcv_multiview::toggle_h_matrix()
 {
-  vcl_vector<int> col_pos, row_pos;
+  std::vector<int> col_pos, row_pos;
   if (!get_twoviews(&col_pos, &row_pos))
     return;
 
@@ -412,7 +414,7 @@ void xcv_multiview::toggle_h_matrix()
 //-----------------------------------------------------------------------------
 void xcv_multiview::display_corner_matches()
 {
-  vcl_vector<int> col_pos, row_pos;
+  std::vector<int> col_pos, row_pos;
   if (!get_twoviews(&col_pos, &row_pos))
     return;
 
@@ -421,7 +423,7 @@ void xcv_multiview::display_corner_matches()
   PairMatchSetCorner* corner_matches = mgr->get_corner_matches();
   if (corner_matches == NULL)
   {
-    vcl_cerr << "No corner matches exist between these two views.\n";
+    std::cerr << "No corner matches exist between these two views.\n";
     return;
   }
 #endif // 0
@@ -434,7 +436,7 @@ void xcv_multiview::display_corner_matches()
 //-----------------------------------------------------------------------------
 void xcv_multiview::display_corner_tracks()
 {
-  vcl_vector<int> col_pos, row_pos;
+  std::vector<int> col_pos, row_pos;
   if (!get_twoviews(&col_pos, &row_pos))
     return;
 
@@ -442,14 +444,14 @@ void xcv_multiview::display_corner_tracks()
   PairMatchSetCorner* corner_matches = mgr->get_corner_matches();
   if (corner_matches == VXL_NULLPTR)
   {
-    vcl_cerr << "No corner matches exist between these two views.\n";
+    std::cerr << "No corner matches exist between these two views.\n";
     return;
   }
 
   vgui_easy2D_tableau_sptr easy0 = get_easy2D_at(col_pos[0], row_pos[0]);
   vgui_easy2D_tableau_sptr easy1 = get_easy2D_at(col_pos[1], row_pos[1]);
 
-  vcl_vector<HomgPoint2D> points0, points1;
+  std::vector<HomgPoint2D> points0, points1;
   corner_matches->extract_matches(points0, points1);
   ImageMetric* metric1 = const_cast<ImageMetric*>( corner_matches->get_corners1()->get_conditioner() );
   ImageMetric* metric2 = const_cast<ImageMetric*>( corner_matches->get_corners2()->get_conditioner() );
@@ -474,21 +476,21 @@ void xcv_multiview::display_corner_tracks()
 //-----------------------------------------------------------------------------
 void xcv_multiview::load_tri_tensor()
 {
-  vcl_vector<int> col_pos, row_pos;
+  std::vector<int> col_pos, row_pos;
   if (!get_threeviews(&col_pos, &row_pos))
     return;
 
   vgui_dialog t_dialog("Load TriTensor");
-  vcl_string* tri_tensor_filename = get_loadfile();
-  static vcl_string regexp = "*.*";
+  std::string* tri_tensor_filename = get_loadfile();
+  static std::string regexp = "*.*";
   t_dialog.inline_file("File containing TriTensor:", regexp, *tri_tensor_filename);
   if (!t_dialog.ask())
     return;
 
-  vcl_ifstream tri_tensor_filestream(tri_tensor_filename->c_str());
+  std::ifstream tri_tensor_filestream(tri_tensor_filename->c_str());
   if (!tri_tensor_filestream)
   {
-    vcl_cerr << "Unable to open file: " << tri_tensor_filename->c_str() << vcl_endl;
+    std::cerr << "Unable to open file: " << tri_tensor_filename->c_str() << std::endl;
     return;
   }
   TriTensor* tt = new TriTensor();
@@ -503,14 +505,14 @@ void xcv_multiview::load_tri_tensor()
   FMatrix* f12 = new FMatrix(tt->get_fmatrix_12());
   mgr12->set_f_matrix(f12);
 
-  vcl_vector<int> two_col_pos, two_row_pos;
+  std::vector<int> two_col_pos, two_row_pos;
   two_col_pos.push_back(col_pos[0]); two_col_pos.push_back(col_pos[2]);
   two_row_pos.push_back(row_pos[0]); two_row_pos.push_back(row_pos[2]);
   xcv_twoview_manager* mgr13 = get_twoview_manager(two_col_pos, two_row_pos);
   FMatrix* f13 = new FMatrix(tt->get_fmatrix_13());
   mgr13->set_f_matrix(f13);
 
-  vcl_vector<int> two_col_pos2, two_row_pos2;
+  std::vector<int> two_col_pos2, two_row_pos2;
   two_col_pos2.push_back(col_pos[1]); two_col_pos2.push_back(col_pos[2]);
   two_row_pos2.push_back(row_pos[1]); two_row_pos2.push_back(row_pos[2]);
   xcv_twoview_manager* mgr23 = get_twoview_manager(two_col_pos2, two_row_pos2);
@@ -523,13 +525,13 @@ void xcv_multiview::load_tri_tensor()
 //-----------------------------------------------------------------------------
 void xcv_multiview::save_tri_tensor()
 {
-  vcl_vector<int>col_pos, row_pos;
+  std::vector<int>col_pos, row_pos;
   if (!get_threeviews(&col_pos, &row_pos))
     return;
 
   vgui_dialog t_dialog("Save TriTensor");
-  vcl_string* tri_tensor_filename = get_savefile();
-  static vcl_string regexp = "*.*";
+  std::string* tri_tensor_filename = get_savefile();
+  static std::string regexp = "*.*";
   t_dialog.inline_file("File to save TriTensor:", regexp, *tri_tensor_filename);
   if (!t_dialog.ask())
     return;
@@ -540,10 +542,10 @@ void xcv_multiview::save_tri_tensor()
   TriTensor* tt = mgr->get_tri_tensor();
   if (tt == VXL_NULLPTR)
   {
-    vcl_cerr << "No TriTensor exists to save\n";
+    std::cerr << "No TriTensor exists to save\n";
     return;
   }
-  vcl_ofstream output_filestream(tri_tensor_filename->c_str());
+  std::ofstream output_filestream(tri_tensor_filename->c_str());
   output_filestream << *tt;
 }
 
@@ -552,7 +554,7 @@ void xcv_multiview::save_tri_tensor()
 //-----------------------------------------------------------------------------
 void xcv_multiview::toggle_tri_tensor()
 {
-  vcl_vector<int> col_pos, row_pos;
+  std::vector<int> col_pos, row_pos;
   if (!get_threeviews(&col_pos, &row_pos))
     return;
 
@@ -560,7 +562,7 @@ void xcv_multiview::toggle_tri_tensor()
   mgr->toggle_tri_tensor_display();
 
   // Toggle off display of all F matrices:
-  vcl_vector<int> two_col_pos(2), two_row_pos(2);
+  std::vector<int> two_col_pos(2), two_row_pos(2);
   two_col_pos[0] = col_pos[0]; two_row_pos[0] = row_pos[0];
   two_col_pos[1] = col_pos[1]; two_row_pos[1] = row_pos[1];
   xcv_twoview_manager* mgr2 = get_twoview_manager(two_col_pos, two_row_pos);
@@ -582,7 +584,7 @@ void xcv_multiview::toggle_tri_tensor()
 //-----------------------------------------------------------------------------
 void xcv_multiview::transfer_point()
 {
-  vcl_vector<int> col_pos, row_pos;
+  std::vector<int> col_pos, row_pos;
   if (!get_threeviews(&col_pos, &row_pos))
     return;
   xcv_threeview_manager* mgr = get_threeview_manager(col_pos, row_pos);
@@ -596,7 +598,7 @@ void xcv_multiview::transfer_point()
     easys[i] = get_easy2D_at(col_pos[i], row_pos[i]);
     if (! easys[i])
       return;
-    vcl_vector<vgui_soview*> sel_objs = easys[i]->get_selected_soviews();
+    std::vector<vgui_soview*> sel_objs = easys[i]->get_selected_soviews();
 
     for (unsigned int j=0; j<sel_objs.size(); ++j)
       if (sel_objs[j]->type_name() == "vgui_soview2D_point")
@@ -665,7 +667,7 @@ void xcv_multiview::transfer_point()
 //-----------------------------------------------------------------------------
 void xcv_multiview::transfer_line()
 {
-  vcl_vector<int> col_pos, row_pos;
+  std::vector<int> col_pos, row_pos;
   if (!get_threeviews(&col_pos, &row_pos))
     return;
   xcv_threeview_manager* mgr = get_threeview_manager(col_pos, row_pos);
@@ -679,7 +681,7 @@ void xcv_multiview::transfer_line()
     easys[i] = get_easy2D_at(col_pos[i], row_pos[i]);
     if (! easys[i])
       return;
-    vcl_vector<vgui_soview*> sel_objs = easys[i]->get_selected_soviews();
+    std::vector<vgui_soview*> sel_objs = easys[i]->get_selected_soviews();
     for (unsigned int j=0; j<sel_objs.size(); ++j)
       if (sel_objs[j]->type_name() == "vgui_soview2D_lineseg")
       {

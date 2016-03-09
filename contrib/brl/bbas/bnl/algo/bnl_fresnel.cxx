@@ -3,9 +3,11 @@
 // \file
 
 #include "bnl_fresnel.h"
-#include <vcl_complex.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <complex>
 #include <vnl/vnl_math.h>
-#include <vcl_iostream.h>
+#include <iostream>
 
 // Fresnel Integral computation adapted from Numerical recipes in C
 // eps   is the relative error;
@@ -38,11 +40,11 @@ void bnl_fresnel_integral(double x, double* fresnel_cos, double* fresnel_sin){
   bool odd;
   int k,n;
   double a,ax,fact,pix2,sign,sum,sumc,sums,term,test;
-  vcl_complex<double > b,cc,d,h,del,cs;
+  std::complex<double > b,cc,d,h,del,cs;
   double fcos, fsin;
 
-  ax= vcl_fabs(x);
-  if (ax < vcl_sqrt(fpmin)){
+  ax= std::fabs(x);
+  if (ax < std::sqrt(fpmin)){
     //Special case: avoid failure of convergence test because of undeflow.
     *fresnel_sin = 0.0;
     *fresnel_cos = ax;
@@ -61,7 +63,7 @@ void bnl_fresnel_integral(double x, double* fresnel_cos, double* fresnel_sin){
     for (k = 1; k <= maxit; k++){
       term *= fact/k;
       sum  += sign*term/n;
-      test = vcl_fabs(sum) * eps;
+      test = std::fabs(sum) * eps;
       if (odd){
         sign = -sign;
         sums = sum;
@@ -79,37 +81,37 @@ void bnl_fresnel_integral(double x, double* fresnel_cos, double* fresnel_sin){
     }
 
     if (k > maxit)
-      vcl_cerr << "series failed in fresnel" << vcl_endl;
+      std::cerr << "series failed in fresnel" << std::endl;
     fsin = sums;
     fcos = sumc;
   }
   else {
     // Evaluate continued fraction by modified Lentz's method
     pix2 = vnl_math::pi *ax*ax;
-    b = vcl_complex<double >(1.0,-pix2);
-    cc = vcl_complex<double >(1.0/fpmin,0.0);
-    d = h = vcl_complex<double >(1.0,0.0)/b;
+    b = std::complex<double >(1.0,-pix2);
+    cc = std::complex<double >(1.0/fpmin,0.0);
+    d = h = std::complex<double >(1.0,0.0)/b;
     n = -1;
 
     for (k = 2; k <= maxit; k++){
       n += 2;
       a = -n*(n+1);
-      b = b + vcl_complex<double >(4.0,0.0);
-      d =(vcl_complex<double >(1.0,0.0)/((a*d)+b));
+      b = b + std::complex<double >(4.0,0.0);
+      d =(std::complex<double >(1.0,0.0)/((a*d)+b));
 
       //Denominators cannot be zero
-      cc = (b+(vcl_complex<double >(a,0.0)/cc));
+      cc = (b+(std::complex<double >(a,0.0)/cc));
       del =(cc*d);
       h = h*del;
-      if ((vcl_fabs(del.real()-1.0) + vcl_fabs(del.imag())) < eps)
+      if ((std::fabs(del.real()-1.0) + std::fabs(del.imag())) < eps)
         break;
     }
     if (k > maxit)
-      vcl_cerr << "cf failed in frenel" << vcl_endl;
+      std::cerr << "cf failed in frenel" << std::endl;
 
-    h = vcl_complex<double >(ax,-ax)*h;
-    cs = vcl_complex<double >(0.5,0.5)*(vcl_complex<double >(1.0,0.0) -
-      vcl_complex<double >(vcl_cos(0.5*pix2), vcl_sin(0.5*pix2))*h );
+    h = std::complex<double >(ax,-ax)*h;
+    cs = std::complex<double >(0.5,0.5)*(std::complex<double >(1.0,0.0) -
+      std::complex<double >(std::cos(0.5*pix2), std::sin(0.5*pix2))*h );
     fcos = cs.real();
     fsin = cs.imag();
   }

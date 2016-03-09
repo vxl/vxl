@@ -9,10 +9,12 @@
 
 #include "vpdfl_gaussian_kernel_pdf.h"
 
-#include <vcl_cstdlib.h>
+#include <cstdlib>
 #include <vcl_cassert.h>
-#include <vcl_string.h>
-#include <vcl_cmath.h>
+#include <string>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <cmath>
 
 #include <vnl/vnl_math.h>
 #include <vpdfl/vpdfl_gaussian_kernel_pdf_sampler.h>
@@ -41,14 +43,14 @@ double vpdfl_gaussian_kernel_pdf::operator()(const vnl_vector<double>& x0) const
   double p;
   const vnl_vector<double>* x = &x_[0];
   const double* w = width_.data_block();
-  double k = 1.0/(n*vcl_pow(vnl_math::sqrt2pi,double(dim)));
+  double k = 1.0/(n*std::pow(vnl_math::sqrt2pi,double(dim)));
   double sum = 0;
 
   for (int i=0;i<n;++i)
   {
     double M = vnl_vector_ssd(x[i],x0)/(w[i]*w[i]);
     if (M<20)
-      sum += vcl_exp(-0.5*M)/vcl_pow(w[i],dim);
+      sum += std::exp(-0.5*M)/std::pow(w[i],dim);
   }
 
   p = k*sum;
@@ -59,7 +61,7 @@ double vpdfl_gaussian_kernel_pdf::operator()(const vnl_vector<double>& x0) const
   // Probability densities:
 double vpdfl_gaussian_kernel_pdf::log_p(const vnl_vector<double>& x) const
 {
-  return vcl_log(vpdfl_gaussian_kernel_pdf::operator()(x));
+  return std::log(vpdfl_gaussian_kernel_pdf::operator()(x));
 }
 
 //=======================================================================
@@ -79,25 +81,25 @@ void vpdfl_gaussian_kernel_pdf::gradient(vnl_vector<double>& /*g*/,
                                          vnl_vector<double>const& /*x*/,
                                          double& /*p*/) const
 {
-  vcl_cerr<<"vpdfl_gaussian_kernel_pdf::gradient() Not yet implemented.\n";
-  vcl_abort();
+  std::cerr<<"vpdfl_gaussian_kernel_pdf::gradient() Not yet implemented.\n";
+  std::abort();
 }
 
 //=======================================================================
 
 void vpdfl_gaussian_kernel_pdf::nearest_plausible(vnl_vector<double>& /*x*/, double /*log_p_min*/) const
 {
-  vcl_cerr<<"vpdfl_gaussian_kernel_pdf::nearest_plausible() Not yet implemented.\n";
-  vcl_abort();
+  std::cerr<<"vpdfl_gaussian_kernel_pdf::nearest_plausible() Not yet implemented.\n";
+  std::abort();
 }
 
 //=======================================================================
 // Method: is_a
 //=======================================================================
 
-vcl_string vpdfl_gaussian_kernel_pdf::is_a() const
+std::string vpdfl_gaussian_kernel_pdf::is_a() const
 {
-  static vcl_string class_name_ = "vpdfl_gaussian_kernel_pdf";
+  static std::string class_name_ = "vpdfl_gaussian_kernel_pdf";
   return class_name_;
 }
 
@@ -105,7 +107,7 @@ vcl_string vpdfl_gaussian_kernel_pdf::is_a() const
 // Method: is_class
 //=======================================================================
 
-bool vpdfl_gaussian_kernel_pdf::is_class(vcl_string const& s) const
+bool vpdfl_gaussian_kernel_pdf::is_class(std::string const& s) const
 {
   return vpdfl_kernel_pdf::is_class(s) || s==vpdfl_gaussian_kernel_pdf::is_a();
 }
@@ -133,7 +135,7 @@ vpdfl_pdf_base* vpdfl_gaussian_kernel_pdf::clone() const
 //=======================================================================
 
 
-void vpdfl_gaussian_kernel_pdf::print_summary(vcl_ostream& os) const
+void vpdfl_gaussian_kernel_pdf::print_summary(std::ostream& os) const
 {
   vpdfl_kernel_pdf::print_summary(os);
 }
@@ -157,14 +159,14 @@ void vpdfl_gaussian_kernel_pdf::b_read(vsl_b_istream& bfs)
 {
   if (!bfs) return;
 
-  vcl_string name;
+  std::string name;
   vsl_b_read(bfs,name);
   if (name != is_a())
   {
-    vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, vpdfl_gaussian_kernel_pdf &)\n"
+    std::cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, vpdfl_gaussian_kernel_pdf &)\n"
              << "           Attempted to load object of type "
              << name <<" into object of type " << is_a() << '\n';
-    bfs.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
+    bfs.is().clear(std::ios::badbit); // Set an unrecoverable IO error on stream
     return;
   }
 
@@ -176,9 +178,9 @@ void vpdfl_gaussian_kernel_pdf::b_read(vsl_b_istream& bfs)
       vpdfl_kernel_pdf::b_read(bfs);
       break;
     default:
-      vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, vpdfl_gaussian_kernel_pdf &)\n"
+      std::cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, vpdfl_gaussian_kernel_pdf &)\n"
                << "           Unknown version number "<< version << '\n';
-      bfs.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
+      bfs.is().clear(std::ios::badbit); // Set an unrecoverable IO error on stream
       return;
   }
 }

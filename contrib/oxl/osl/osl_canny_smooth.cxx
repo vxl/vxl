@@ -8,8 +8,10 @@
 // see osl_canny_smooth.txx for template functions.
 
 #include "osl_canny_smooth.h"
-#include <vcl_cstdlib.h> // vcl_abort()
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <cstdlib> // std::abort()
+#include <iostream>
 #include <vxl_config.h>
 #include <vil1/vil1_rgb.h>
 #include <vil1/vil1_pixel.h>
@@ -22,7 +24,7 @@ void debug_save(float const * const *image_out, int w, int h, char const *file) 
   for (unsigned i=0; i<h; ++i)
     for (unsigned j=0; j<w; ++j)
       debug[i][j] = (unsigned char) image_out[i][j];
-  vcl_cerr << "save to " << file << vcl_endl;
+  std::cerr << "save to " << file << std::endl;
   vil1_save(debug, file, "png");
 }
 #endif
@@ -50,8 +52,8 @@ void osl_canny_smooth_rothwell(vil1_image const &image_in,
   macro(VIL1_FLOAT, float)
 #undef macro
   else {
-    vcl_cerr << "Image must be either UBYTE, SHORT, RGB or FLOAT.\n";
-    vcl_abort();
+    std::cerr << "Image must be either UBYTE, SHORT, RGB or FLOAT.\n";
+    std::abort();
   }
 }
 
@@ -73,8 +75,8 @@ void osl_canny_smooth_rothwell_adaptive(vil1_image const &image_in,
   macro(VIL1_FLOAT, float)
 #undef macro
   else {
-    vcl_cerr << "Image must be either UBYTE, SHORT, RGB or FLOAT.\n";
-    vcl_abort();
+    std::cerr << "Image must be either UBYTE, SHORT, RGB or FLOAT.\n";
+    std::abort();
   }
 }
 
@@ -95,7 +97,7 @@ void osl_canny_smooth(vil1_image const &image_in,
   macro(VIL1_FLOAT, float)
 #undef macro
   else {
-    vcl_cerr << "Image must be either UBYTE, SHORT, RGB or FLOAT.\n";
-    vcl_abort();
+    std::cerr << "Image must be either UBYTE, SHORT, RGB or FLOAT.\n";
+    std::abort();
   }
 }

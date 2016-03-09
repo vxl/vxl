@@ -1,15 +1,17 @@
 #include "bocl_mem.h"
 //:
 // \file
-#include <vcl_iostream.h>
-#include <vcl_cstring.h>
-#include <vcl_cstdio.h>
-#include <vcl_cstdlib.h>
+#include <iostream>
+#include <cstring>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <cstdio>
+#include <cstdlib>
 #include <vcl_cassert.h>
-#include <vcl_sstream.h>
+#include <sstream>
 #include <bocl/bocl_kernel.h>
 
-bocl_mem::bocl_mem(const cl_context& context, void* buffer, unsigned num_bytes, vcl_string id)
+bocl_mem::bocl_mem(const cl_context& context, void* buffer, unsigned num_bytes, std::string id)
 : cpu_buf_(buffer),
   delete_cpu_(false),
   queue_(VXL_NULLPTR),
@@ -47,7 +49,7 @@ bool bocl_mem::create_buffer(const cl_mem_flags& flags, cl_command_queue& queue)
   //if memory was allocated and a null pointer was passed in, store it
   if ( (flags & CL_MEM_ALLOC_HOST_PTR) && !cpu_buf_) {
 #ifdef DEBUG
-    vcl_cout<<"bocl_mem is allocating host pointer"<<vcl_endl;
+    std::cout<<"bocl_mem is allocating host pointer"<<std::endl;
 #endif
     cpu_buf_ = clEnqueueMapBuffer(queue,
                                   buffer_,
@@ -68,7 +70,7 @@ bool bocl_mem::create_buffer(const cl_mem_flags& flags, cl_command_queue& queue)
 }
 
 bool bocl_mem::create_image_buffer(const cl_mem_flags& flags, const cl_image_format* format,
-                                   vcl_size_t width, vcl_size_t height)
+                                   std::size_t width, std::size_t height)
 {
   cl_int status = MEM_FAILURE;
   //
@@ -115,22 +117,22 @@ bool bocl_mem::release_memory()
 
 
 //: helper method to initialize gpu buffer with a constant value
-bool bocl_mem::init_gpu_buffer(void const* init_val, vcl_size_t value_size, cl_command_queue& cmd_queue)
+bool bocl_mem::init_gpu_buffer(void const* init_val, std::size_t value_size, cl_command_queue& cmd_queue)
 {
   // sanity check on sizes
   if (this->num_bytes_ % value_size != 0) {
-    vcl_cerr << "ERROR: bocl_mem::init_gpu_buffer(): value_size does not divide evenly into buffer size.\n";
+    std::cerr << "ERROR: bocl_mem::init_gpu_buffer(): value_size does not divide evenly into buffer size.\n";
     return MEM_FAILURE;
   }
   unsigned char* init_buff = new unsigned char[this->num_bytes_];
   unsigned int num_values = this->num_bytes_ / value_size;
-  vcl_cout << "value_size = " << value_size << vcl_endl
-           << "num_values = " << num_values << vcl_endl;
+  std::cout << "value_size = " << value_size << std::endl
+           << "num_values = " << num_values << std::endl;
 
   // fill in buffer with copies of init value
   unsigned char* buff_ptr = init_buff;
   for (unsigned int i=0; i<num_values; ++i) {
-    vcl_memcpy(buff_ptr, init_val, value_size);
+    std::memcpy(buff_ptr, init_val, value_size);
     buff_ptr += value_size;
   }
   // copy buffer over to GPU
@@ -167,7 +169,7 @@ bool bocl_mem::read_to_buffer(const cl_command_queue& cmd_queue, bool blocking)
   return true;
 }
 
-bool bocl_mem::write_to_gpu_mem(const cl_command_queue& cmd_queue, void* buff, vcl_size_t size, bool blocking)
+bool bocl_mem::write_to_gpu_mem(const cl_command_queue& cmd_queue, void* buff, std::size_t size, bool blocking)
 {
   assert(size <= this->num_bytes_);
   ceEvent_ = VXL_NULLPTR;
@@ -186,7 +188,7 @@ bool bocl_mem::write_to_gpu_mem(const cl_command_queue& cmd_queue, void* buff, v
   return MEM_SUCCESS;
 }
 
-bool bocl_mem::read_from_gpu_mem(const cl_command_queue& cmd_queue, void* buff, vcl_size_t size, bool blocking)
+bool bocl_mem::read_from_gpu_mem(const cl_command_queue& cmd_queue, void* buff, std::size_t size, bool blocking)
 {
   assert(size <= this->num_bytes_);
   int status = MEM_FAILURE;
@@ -272,24 +274,24 @@ float bocl_mem::exec_time()
 }
 
 //: declare static var (for linking)
-vcl_map<vcl_string, bocl_kernel*> bocl_mem::set_kernels_;
+std::map<std::string, bocl_kernel*> bocl_mem::set_kernels_;
 
 //: Get set kernel
-bocl_kernel* bocl_mem::get_set_kernel(cl_device_id dev_id, cl_context context, vcl_string type)
+bocl_kernel* bocl_mem::get_set_kernel(cl_device_id dev_id, cl_context context, std::string type)
 {
-  vcl_string opts = " -D TYPE=" + type;
+  std::string opts = " -D TYPE=" + type;
 
   // check to see if this device has compiled kernels already
-  vcl_stringstream ss; ss<<opts<<'_'<<dev_id<<'_'<<context;
-  vcl_string identifier = ss.str();
+  std::stringstream ss; ss<<opts<<'_'<<dev_id<<'_'<<context;
+  std::string identifier = ss.str();
   if (set_kernels_.find(identifier) != set_kernels_.end())
     return set_kernels_[identifier];
 
   //if not, compile and cache them
-  vcl_cout<<"compiling set kernel for device_id: "<<dev_id<<vcl_endl;
+  std::cout<<"compiling set kernel for device_id: "<<dev_id<<std::endl;
 
   // OpenCL source code
-  vcl_string oclSrc =
+  std::string oclSrc =
        "__kernel void set(__global TYPE* buffer,"
        "                  __global TYPE* var,"
        "                  __global uint* len){"

@@ -11,7 +11,9 @@
 #include <vnl/algo/vnl_matrix_inverse.h>
 #include <vnl/vnl_vector_fixed.h>
 #include <vnl/vnl_random.h>
-#include <vcl_cmath.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <cmath>
 
 //: Constructor
 template<class T>
@@ -34,37 +36,37 @@ short mbl_ar_process<T>::version_no() const
 
 //: Print class to os
 template<class T>
-void mbl_ar_process<T>::print_summary(vcl_ostream& /*os*/) const
+void mbl_ar_process<T>::print_summary(std::ostream& /*os*/) const
 {
 #if 0
     os << data_; // example of data output
 #endif
-    vcl_cerr << "mbl_ar_process<T>::print_summary() is NYI\n";
+    std::cerr << "mbl_ar_process<T>::print_summary() is NYI\n";
 }
 
 //: Save class to binary file stream
 template  <class T>
 void mbl_ar_process<T>::b_write(vsl_b_ostream& /*bfs*/) const
 {
-  vcl_cout<<"mbl_ar_process<T>::b_write - NYI !\n";
+  std::cout<<"mbl_ar_process<T>::b_write - NYI !\n";
 }
 
 //: Load class from binary file stream
 template  <class T>
 void mbl_ar_process<T>::b_read(vsl_b_istream& /*bfs*/)
 {
-  vcl_cout<<"mbl_ar_process<T>::b_read - NYI !\n";
+  std::cout<<"mbl_ar_process<T>::b_read - NYI !\n";
 }
 
 //: Does the name of the class match the argument?
 template<class T>
-bool mbl_ar_process<T>::is_class(vcl_string const& s) const
+bool mbl_ar_process<T>::is_class(std::string const& s) const
 {
   return s==mbl_ar_process<T>::is_a();
 }
 
 //: Prediction
-// of a vcl_vector given the two previous vectors
+// of a std::vector given the two previous vectors
 template<class T>
 vnl_vector<T> mbl_ar_process<T>::predict(vnl_vector<T>& Xm1,
                                          vnl_vector<T>& Xm2,
@@ -91,7 +93,7 @@ vnl_vector<T> mbl_ar_process<T>::predict(vnl_vector<T>& Xm1,
 
 //: Learning using Burg's algorithm
 template<class T>
-void mbl_ar_process<T>::learn_burg(vcl_vector<vnl_vector<T> >& data)
+void mbl_ar_process<T>::learn_burg(std::vector<vnl_vector<T> >& data)
 {
   if (data.size()<2) return;
 
@@ -157,7 +159,7 @@ void mbl_ar_process<T>::learn_burg(vcl_vector<vnl_vector<T> >& data)
     }
     A_1[j][j]=-a[1];
     A_2[j][j]=-a[2];
-    B_0[j][j]=E>((T)0.0)?vcl_sqrt(E):((T)0.0);
+    B_0[j][j]=E>((T)0.0)?std::sqrt(E):((T)0.0);
   }
 
   for (unsigned int i=0;i<data.size();i++)
@@ -166,7 +168,7 @@ void mbl_ar_process<T>::learn_burg(vcl_vector<vnl_vector<T> >& data)
 
 //: Dynamic learning
 template<class T>
-void mbl_ar_process<T>::learn(vcl_vector<vnl_vector<T> >& data)
+void mbl_ar_process<T>::learn(std::vector<vnl_vector<T> >& data)
 {
   if (data.size()==0) return;
   unsigned int dim=data[0].size();
@@ -263,18 +265,18 @@ void vsl_b_read(vsl_b_istream& is, mbl_ar_process<T>* & v)
 
 //: Print class to os
 template<class T>
-void vsl_print_summary(vcl_ostream& os, const mbl_ar_process<T>* p)
+void vsl_print_summary(std::ostream& os, const mbl_ar_process<T>* p)
 {
   p->print_summary(os);
 }
 
 #undef MBL_AR_PROCESS_INSTANTIATE
 #define MBL_AR_PROCESS_INSTANTIATE(T) \
-VCL_DEFINE_SPECIALIZATION vcl_string mbl_ar_process<T >::is_a() const \
-{ return vcl_string("mbl_ar_process<" #T ">"); } \
+VCL_DEFINE_SPECIALIZATION std::string mbl_ar_process<T >::is_a() const \
+{ return std::string("mbl_ar_process<" #T ">"); } \
 template class mbl_ar_process<T >; \
 template void vsl_b_write(vsl_b_ostream& s, const mbl_ar_process<T >* arp); \
 template void vsl_b_read(vsl_b_istream& s, mbl_ar_process<T >* & arp); \
-template void vsl_print_summary(vcl_ostream& s,const mbl_ar_process<T >* arp)
+template void vsl_print_summary(std::ostream& s,const mbl_ar_process<T >* arp)
 
 #endif //mbl_ar_process_hxx_

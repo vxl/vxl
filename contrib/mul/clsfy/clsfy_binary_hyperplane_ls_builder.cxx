@@ -9,31 +9,33 @@
 
 //=======================================================================
 
-#include <vcl_string.h>
-#include <vcl_iostream.h>
-#include <vcl_vector.h>
+#include <string>
+#include <iostream>
+#include <vector>
 #include <vcl_cassert.h>
-#include <vcl_algorithm.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <algorithm>
 #include <vnl/algo/vnl_svd.h>
 #include <vnl/vnl_math.h>
 
 //=======================================================================
 
-vcl_string clsfy_binary_hyperplane_ls_builder::is_a() const
+std::string clsfy_binary_hyperplane_ls_builder::is_a() const
 {
-  return vcl_string("clsfy_binary_hyperplane_ls_builder");
+  return std::string("clsfy_binary_hyperplane_ls_builder");
 }
 
 //=======================================================================
 
-bool clsfy_binary_hyperplane_ls_builder::is_class(vcl_string const& s) const
+bool clsfy_binary_hyperplane_ls_builder::is_class(std::string const& s) const
 {
   return s == clsfy_binary_hyperplane_ls_builder::is_a() || clsfy_builder_base::is_class(s);
 }
 
 //=======================================================================
 
-void clsfy_binary_hyperplane_ls_builder::print_summary(vcl_ostream& os) const
+void clsfy_binary_hyperplane_ls_builder::print_summary(std::ostream& os) const
 {
   os << is_a();
 }
@@ -43,10 +45,10 @@ void clsfy_binary_hyperplane_ls_builder::print_summary(vcl_ostream& os) const
 //: Build a multi layer perceptron classifier, with the given data.
 double clsfy_binary_hyperplane_ls_builder::build(
   clsfy_classifier_base &classifier, mbl_data_wrapper<vnl_vector<double> > &inputs,
-  const vcl_vector<unsigned> &outputs) const
+  const std::vector<unsigned> &outputs) const
 {
   assert(outputs.size() == inputs.size());
-  assert(* vcl_max_element(outputs.begin(), outputs.end()) <= 1);
+  assert(* std::max_element(outputs.begin(), outputs.end()) <= 1);
   assert(classifier.is_class("clsfy_binary_hyperplane"));
 
   clsfy_binary_hyperplane &hyperplane = (clsfy_binary_hyperplane &) classifier;
@@ -103,9 +105,9 @@ double clsfy_binary_hyperplane_ls_builder::build(
   vnl_svd<double> svd(XtX, 1.0e-12); // 1e-12 = zero-tolerance for singular values
   vnl_vector<double> w = svd.solve(XtY);
 #if 0
-  vcl_cerr << "XtX: " << XtX << '\n'
+  std::cerr << "XtX: " << XtX << '\n'
            << "XtY: " << XtY << '\n'
-           << "w: "   << w   << vcl_endl;
+           << "w: "   << w   << std::endl;
 #endif
   vnl_vector<double> weights(&w(0), k);
   hyperplane.set(weights, w(k));
@@ -122,7 +124,7 @@ double clsfy_binary_hyperplane_ls_builder::build(
 // n_classes must be 1.
 double clsfy_binary_hyperplane_ls_builder::build(
   clsfy_classifier_base &classifier, mbl_data_wrapper<vnl_vector<double> > &inputs,
-  unsigned n_classes, const vcl_vector<unsigned> &outputs) const
+  unsigned n_classes, const std::vector<unsigned> &outputs) const
 {
   assert (n_classes == 1);
   return build(classifier, inputs, outputs);
@@ -149,8 +151,8 @@ void clsfy_binary_hyperplane_ls_builder::b_read(vsl_b_istream &bfs)
     case (1):
       break;
     default:
-      vcl_cerr << "I/O ERROR: clsfy_binary_hyperplane_ls_builder::b_read(vsl_b_istream&)\n"
+      std::cerr << "I/O ERROR: clsfy_binary_hyperplane_ls_builder::b_read(vsl_b_istream&)\n"
                << "           Unknown version number "<< version << '\n';
-      bfs.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
+      bfs.is().clear(std::ios::badbit); // Set an unrecoverable IO error on stream
   }
 }

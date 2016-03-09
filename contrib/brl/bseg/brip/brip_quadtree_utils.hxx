@@ -137,8 +137,8 @@ connect_children(vbl_array_2d<brip_quadtree_node_base_sptr>& nodes,
 
 template <class T>
 void brip_quadtree_utils<T>::
-quadtrees_from_pyramid(vcl_vector<vil_image_view<T> > levels,
-                       vcl_vector<vil_image_view<bool> > masks,
+quadtrees_from_pyramid(std::vector<vil_image_view<T> > levels,
+                       std::vector<vil_image_view<bool> > masks,
                        vbl_array_2d<brip_quadtree_node_base_sptr>& roots)
 {
   //start at the base image of the pyramid, i.e. levels[0].
@@ -184,8 +184,8 @@ quadtrees_from_pyramid(vcl_vector<vil_image_view<T> > levels,
 template <class T>
 void brip_quadtree_utils<T>::
 print_node( brip_quadtree_node_base_sptr const& node,
-            vcl_ostream& os,
-            vcl_string indent)
+            std::ostream& os,
+            std::string indent)
 {
   //cast the node to the type
   brip_quadtree_node<T>* nt = dynamic_cast<brip_quadtree_node<T>* >(node.ptr());
@@ -209,7 +209,7 @@ print_node( brip_quadtree_node_base_sptr const& node,
     os << nt->data() << '\n';
   else
     os << "###\n";
-  vcl_string ind = indent + "  ";
+  std::string ind = indent + "  ";
   for (unsigned i = 0; i<2; ++i)
     for (unsigned j = 0; j<2; ++j)
       if (nt->child(i,j))

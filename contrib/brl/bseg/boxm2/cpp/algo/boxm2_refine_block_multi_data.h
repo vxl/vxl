@@ -9,7 +9,9 @@
 #include <boxm2/boxm2_data_traits.h>
 #include <boct/boct_bit_tree.h>
 #include <vnl/vnl_vector_fixed.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iostream>
 #include <boxm2/io/boxm2_cache.h>
 #include <vbl/vbl_array_3d.h>
 class boxm2_refine_block_multi_data
@@ -25,13 +27,13 @@ class boxm2_refine_block_multi_data
  boxm2_refine_block_multi_data():alpha_(0),alpha_index_(0), old_bufs_(0){}
 
   //: initialize generic data base pointers as their data type
-  bool init_data(boxm2_scene_sptr scene, boxm2_block_sptr blk, vcl_vector<vcl_string> const& prefixes, float prob_thresh);
+  bool init_data(boxm2_scene_sptr scene, boxm2_block_sptr blk, std::vector<std::string> const& prefixes, float prob_thresh);
 
   //: refine function (based on alpha);
-  bool refine_deterministic(vcl_vector<vcl_string> const& prefixes);
+  bool refine_deterministic(std::vector<std::string> const& prefixes);
 
   //: fully refine trees to match specified depths
-  bool match_refine(vcl_vector<vcl_string> const& prefixes,vbl_array_3d<int> const& depths_to_match);
+  bool match_refine(std::vector<std::string> const& prefixes,vbl_array_3d<int> const& depths_to_match);
 
   //: refine bit tree
   boct_bit_tree refine_bit_tree(boct_bit_tree& curr_tree,
@@ -40,8 +42,8 @@ class boxm2_refine_block_multi_data
   //: move data into new location
   int move_data(boct_bit_tree& unrefined_tree,
                 boct_bit_tree& refined_tree,
-                vcl_vector<vcl_size_t> const& type_sizes,
-                vcl_vector<char*>& new_bufs);
+                std::vector<std::size_t> const& type_sizes,
+                std::vector<char*>& new_bufs);
   //: helper method
   int free_space(int startPtr, int endPtr);
 
@@ -51,8 +53,8 @@ class boxm2_refine_block_multi_data
   boxm2_block_sptr blk_;
   float* alpha_;
   int alpha_index_;
-  vcl_vector<char*> old_bufs_;
-  vcl_vector<boxm2_data_base*> dbs_;
+  std::vector<char*> old_bufs_;
+  std::vector<boxm2_data_base*> dbs_;
   //block max level
   int max_level_;
   int MAX_INNER_CELLS_;
@@ -75,7 +77,7 @@ class boxm2_refine_block_multi_data
 ////////////////////////////////////////////////////////////////////////////////
 void boxm2_refine_block_multi_data_function( boxm2_scene_sptr scene,
                                              boxm2_block_sptr blk,
-                                             vcl_vector<vcl_string> const& prefixes,
+                                             std::vector<std::string> const& prefixes,
                                              float prob_thresh);
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -83,6 +85,6 @@ void boxm2_refine_block_multi_data_function( boxm2_scene_sptr scene,
 ////////////////////////////////////////////////////////////////////////////////
 void boxm2_refine_block_multi_data_function( boxm2_scene_sptr scene,
                                              boxm2_block_sptr blk,
-                                             vcl_vector<vcl_string> const& prefixes,
+                                             std::vector<std::string> const& prefixes,
                                              vbl_array_3d<int> const& depths_to_match);
 #endif

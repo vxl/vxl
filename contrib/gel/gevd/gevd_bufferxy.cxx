@@ -3,9 +3,11 @@
 //:
 // \file
 
-#include <vcl_fstream.h>
-#include <vcl_cstdio.h>
-#include <vcl_cstring.h>
+#include <fstream>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <cstdio>
+#include <cstring>
 #include <vil/vil_pixel_format.h>
 #include <vil/vil_image_view.h>
 #include <vil/vil_math.h>
@@ -73,13 +75,13 @@ gevd_bufferxy::gevd_bufferxy(vil_image_resource_sptr const& image_s) :
 {
   if (!image_s)
   {
-    vcl_cout << "In gevd_bufferxy - null image_resource\n";
+    std::cout << "In gevd_bufferxy - null image_resource\n";
     return;
   }
   vil_image_resource& image = *image_s;
   if (image.nplanes()!=1)
   {
-    vcl_cout << "In gevd_bufferxy - can't handle image format, buffer invalid\n";
+    std::cout << "In gevd_bufferxy - can't handle image format, buffer invalid\n";
     return;
   }
   unsigned n_rows= image.nj();
@@ -100,7 +102,7 @@ gevd_bufferxy::gevd_bufferxy(vil_image_resource_sptr const& image_s) :
     unsigned char* buf = gevd_memory_mixin::GetBufferPtr();
     vil_image_view<unsigned char> view = image.get_view(0, n_cols,
                                                         0, n_rows);
-    vcl_ptrdiff_t istep=view.istep(),jstep=view.jstep();
+    std::ptrdiff_t istep=view.istep(),jstep=view.jstep();
     const unsigned char* row = view.top_left_ptr();
     for (unsigned j=0;j<n_rows;++j,row += jstep, buf += jstep)
     {
@@ -130,7 +132,7 @@ gevd_bufferxy::gevd_bufferxy(vil_image_resource_sptr const& image_s) :
     break;
    }
    default:
-    vcl_cout << "In gevd_bufferxy - can't handle pixel type, buffer invalid\n";
+    std::cout << "In gevd_bufferxy - can't handle pixel type, buffer invalid\n";
     return;
   }
 }
@@ -144,14 +146,14 @@ gevd_bufferxy::~gevd_bufferxy()
 gevd_bufferxy::gevd_bufferxy(gevd_bufferxy const& buf) : gevd_memory_mixin(buf)
 {
   Init(buf.GetSizeX(), buf.GetSizeY(), buf.GetBitsPixel());
-  vcl_memcpy(yra[0], buf.yra[0], GetSizeX()*GetSizeY()*GetBytesPixel());
+  std::memcpy(yra[0], buf.yra[0], GetSizeX()*GetSizeY()*GetBytesPixel());
 }
 
 //: Write to file.  Note that this can be OS-specific!
 void gevd_bufferxy::dump(const char* filename)
 {
-  vcl_ofstream f(filename,vcl_ios_out|vcl_ios_binary);
-  if (!f) { vcl_cerr << "Cannot open "<< filename <<" for writing\n"; return; }
+  std::ofstream f(filename,std::ios::out|std::ios::binary);
+  if (!f) { std::cerr << "Cannot open "<< filename <<" for writing\n"; return; }
   f << "BUFFERXYDUMP "<< GetSizeX() <<' '<< GetSizeY() <<' '<< GetBitsPixel()
 #ifdef WORDS_BIGENDIAN
     << " BIGENDIAN DATA\n";
@@ -164,20 +166,20 @@ void gevd_bufferxy::dump(const char* filename)
 
 static int read_from_file(const char* filename)
 {
-  vcl_ifstream f(filename,vcl_ios_in|vcl_ios_binary); // ios::nocreate is on by default for VCL_WIN32
-  if (!f) { vcl_cerr <<"Cannot open "<< filename <<" for reading\n"; return -1; }
+  std::ifstream f(filename,std::ios::in|std::ios::binary); // ios::nocreate is on by default for VCL_WIN32
+  if (!f) { std::cerr <<"Cannot open "<< filename <<" for reading\n"; return -1; }
   char l[1024];
   f.get(l, 1024); // read single line
   int x=-1, y=-1, b=-1; char w;
-  if ( 4 > vcl_sscanf(l, "BUFFERXYDUMP %d %d %d %c", &x, &y, &b, &w)
+  if ( 4 > std::sscanf(l, "BUFFERXYDUMP %d %d %d %c", &x, &y, &b, &w)
        || x <= 0 || y <= 0 || b <= 0 )
-    { vcl_cerr << filename << " is not a gevd_bufferxy dump file\n"; return -1; }
+    { std::cerr << filename << " is not a gevd_bufferxy dump file\n"; return -1; }
 #ifdef WORDS_BIGENDIAN
   if (w != 'B')
 #else
   if (w != 'L')
 #endif
-    vcl_cerr << "Warning: "<<filename<<" was created on a different platform\n";
+    std::cerr << "Warning: "<<filename<<" was created on a different platform\n";
   return x*y*(int)((b+7)/8);
 }
 
@@ -186,16 +188,16 @@ gevd_bufferxy::gevd_bufferxy(const char* filename) : gevd_memory_mixin(read_from
   yra(VXL_NULLPTR), xra(VXL_NULLPTR)
 {
   if (gevd_memory_mixin::GetSize() > 0) {
-    vcl_ifstream f(filename,vcl_ios_in|vcl_ios_binary); // ios::nocreate is on by default for VCL_WIN32
+    std::ifstream f(filename,std::ios::in|std::ios::binary); // ios::nocreate is on by default for VCL_WIN32
     char l[1024];
     f.get(l, 1024); // read single line
     int x=-1, y=-1, b=-1;
-    vcl_sscanf(l, "BUFFERXYDUMP %d %d %d", &x, &y, &b);
+    std::sscanf(l, "BUFFERXYDUMP %d %d %d", &x, &y, &b);
     f.get(l[0]); // read end-of-line
     Init(x, y, b);
     iostream_char* buf = (iostream_char*)GetBuffer();
     f.read(buf, gevd_memory_mixin::GetSize());
   }
   else
-    vcl_cerr<< "ERROR: This should not happen in gevd_bufferxy::gevd_bufferxy(char const*)\n";
+    std::cerr<< "ERROR: This should not happen in gevd_bufferxy::gevd_bufferxy(char const*)\n";
 }

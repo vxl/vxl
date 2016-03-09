@@ -1,7 +1,9 @@
 // This is mul/vimt/tests/test_transform_2d.cxx
 #include <testlib/testlib_test.h>
 
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iostream>
 #include <vpl/vpl.h> // vpl_unlink()
 #include <vgl/vgl_distance.h>
 #include <vnl/vnl_matrix.h>
@@ -27,33 +29,33 @@ static void test_products(const vimt_transform_2d& trans1)
 {
   vimt_transform_2d trans0;
   trans0.set_identity();
-  vcl_cout<<"Pre-multiply with Identity\n";
+  std::cout<<"Pre-multiply with Identity\n";
   test_product(trans0,trans1);
 
-  vcl_cout<<"Pre-multiply with Translation\n";
+  std::cout<<"Pre-multiply with Translation\n";
   trans0.set_translation(1.2, 3.4);
   test_product(trans0,trans1);
 
-  vcl_cout<<"Pre-multiply with ZoomOnly\n";
+  std::cout<<"Pre-multiply with ZoomOnly\n";
   trans0.set_zoom_only(2, 3, -4);
   test_product(trans0,trans1);
 
-  vcl_cout<<"Pre-multiply with RigidBody\n";
+  std::cout<<"Pre-multiply with RigidBody\n";
   trans0.set_rigid_body(1.5, 3.4, 5.6);
   test_product(trans0,trans1);
 
-  vcl_cout<<"Pre-multiply with Sivimtarity\n";
+  std::cout<<"Pre-multiply with Sivimtarity\n";
   trans0.set_similarity(2,2,3,4);
   test_product(trans0,trans1);
 
-   vcl_cout<<"Pre-multiply with Affine\n";
+   std::cout<<"Pre-multiply with Affine\n";
    vnl_matrix<double> A(2,3);
    for (int i=0;i<2;++i)
      for (int j=0;j<3;++j) A(i,j)=3+i-j*j;
    trans0.set_affine(A);
    test_product(trans0,trans1);
 
-   vcl_cout<<"Pre-multiply with Projective\n";
+   std::cout<<"Pre-multiply with Projective\n";
    vnl_matrix<double> P(3,3);
    P(0,0)=3;  P(0,1)=1; P(0,2)=1;
    P(1,0)=-1; P(1,1)=1; P(1,2)=3;
@@ -82,7 +84,7 @@ static void test_the_transform(vimt_transform_2d& t)
 
 static void test_simplify(const vimt_transform_2d& input, const vimt_transform_2d& expected)
 {
-  vcl_cout << "Testing Simplify\n";
+  std::cout << "Testing Simplify\n";
 
   vimt_transform_2d copy(input);
   copy.simplify();
@@ -131,8 +133,8 @@ static void test_set_matrix()
   form = vimt_transform_2d::Affine;
   vimt_transform_2d A;
   A.set_affine(vgl_point_2d<double>(tx, ty),
-               sx*vgl_vector_2d<double>(vcl_cos(r), vcl_cos(r)),
-               sy*vgl_vector_2d<double>(-vcl_sin(r), vcl_cos(r)) ).matrix(M);
+               sx*vgl_vector_2d<double>(std::cos(r), std::cos(r)),
+               sy*vgl_vector_2d<double>(-std::sin(r), std::cos(r)) ).matrix(M);
   T.set_matrix(M).simplify().matrix(N);
   TEST_NEAR("set_matrix and simplify of Affine", (M-N).fro_norm(), 0, 1e-12);
   TEST("set_matrix and simplify of Affine", T.form(), form);
@@ -141,7 +143,7 @@ static void test_set_matrix()
 
 static void test_transform_2d()
 {
-  vcl_cout << "***************************\n"
+  std::cout << "***************************\n"
            << " Testing vimt_transform_2d\n"
            << "***************************\n";
 
@@ -149,12 +151,12 @@ static void test_transform_2d()
   vgl_point_2d<double> p0(1,2),p1;
 
   trans0.set_identity();
-  vcl_cout<<"== Testing Identity ==\n";
+  std::cout<<"== Testing Identity ==\n";
   TEST_NEAR("Identity transform",vgl_distance(trans0(p0),p0),0.0,1e-8);
   test_the_transform(trans0);
   test_simplify(trans0, trans0);
 
-  vcl_cout<<"== Testing Translation ==\n";
+  std::cout<<"== Testing Translation ==\n";
   trans0.set_translation(1.2, 3.4);
   p1 = vgl_point_2d<double>(2.2,5.4);
   TEST_NEAR("Translation transform",vgl_distance(trans0(p0),p1),0.0,1e-8);
@@ -164,7 +166,7 @@ static void test_transform_2d()
   trans1.set_identity();
   test_simplify(trans1, trans2);
 
-  vcl_cout<<"== Testing ZoomOnly ==\n";
+  std::cout<<"== Testing ZoomOnly ==\n";
   trans0.set_zoom_only(2, 3, 4);
   p1 = vgl_point_2d<double>(5,8);
   TEST_NEAR("Zoom transform",vgl_distance(trans0(p0),p1),0.0,1e-8);
@@ -179,7 +181,7 @@ static void test_transform_2d()
   trans2.set_identity();
   test_simplify(trans1, trans2);
 
-  vcl_cout<<"== Testing RigidBody ==\n";
+  std::cout<<"== Testing RigidBody ==\n";
   trans0.set_rigid_body(1.2, 3.4, 5.6);
   test_the_transform(trans0);
 
@@ -192,7 +194,7 @@ static void test_transform_2d()
   trans2.set_identity();
   test_simplify(trans1, trans2);
 
-  vcl_cout<<"== Testing Similarity ==\n";
+  std::cout<<"== Testing Similarity ==\n";
   trans0.set_similarity(1,2,3,4);
   test_the_transform(trans0);
 
@@ -208,7 +210,7 @@ static void test_transform_2d()
   trans2.set_translation(-30, -40);
   test_simplify(trans1, trans2);
 
-  vcl_cout<<"== Testing Affine ==\n";
+  std::cout<<"== Testing Affine ==\n";
   vnl_matrix<double> A(2,3);
   for (int i=0;i<2;++i)
    for (int j=0;j<3;++j) A(i,j)=2+i-j*j;
@@ -221,17 +223,17 @@ static void test_transform_2d()
   trans2.set_zoom_only(-1.0, -2.0, -30, -40);
   test_simplify(trans1, trans2);
   trans1.set_affine(vgl_point_2d<double>(-30, -40),
-                    2.0 * vgl_vector_2d<double>(vcl_sqrt(0.5), vcl_sqrt(0.5)),
-                    2.0 * vgl_vector_2d<double>(-vcl_sqrt(0.5), vcl_sqrt(0.5)) );
+                    2.0 * vgl_vector_2d<double>(std::sqrt(0.5), std::sqrt(0.5)),
+                    2.0 * vgl_vector_2d<double>(-std::sqrt(0.5), std::sqrt(0.5)) );
   trans2.set_similarity(2.0, vnl_math::pi/4.0, -30, -40);
   test_simplify(trans1, trans2);
   trans1.set_affine(vgl_point_2d<double>(-30, -40),
-                    2.0 * vgl_vector_2d<double>(vcl_sqrt(0.5), vcl_sqrt(0.5)),
-                    3.0 * vgl_vector_2d<double>(-vcl_sqrt(0.5), vcl_sqrt(0.5)) );
+                    2.0 * vgl_vector_2d<double>(std::sqrt(0.5), std::sqrt(0.5)),
+                    3.0 * vgl_vector_2d<double>(-std::sqrt(0.5), std::sqrt(0.5)) );
   test_simplify(trans1, trans1);
   trans1.set_affine(vgl_point_2d<double>(-30, -40),
-                    vgl_vector_2d<double>(vcl_sqrt(0.75), 0.5),
-                    vgl_vector_2d<double>(-0.5, vcl_sqrt(0.75)) );
+                    vgl_vector_2d<double>(std::sqrt(0.75), 0.5),
+                    vgl_vector_2d<double>(-0.5, std::sqrt(0.75)) );
 #if 0
   trans1.set_affine(1.0, 1.0, 1.0, vnl_math::pi/4.0, vnl_math::pi/4.0, 0, -30, -40, -50);
 #endif
@@ -243,7 +245,7 @@ static void test_transform_2d()
   trans2.set_identity();
   test_simplify(trans1, trans2);
 
-  vcl_cout<<"== Testing Projective ==\n";
+  std::cout<<"== Testing Projective ==\n";
   vnl_matrix<double> P(3,3);
   P(0,0)=2;  P(0,1)=1; P(0,2)=1;
   P(1,0)=-1; P(1,1)=1; P(1,2)=3;

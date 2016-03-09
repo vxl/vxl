@@ -13,7 +13,9 @@
 // \endverbatim
 
 #include <boxm/boxm_scene.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iostream>
 #include <vnl/vnl_double_3x3.h>
 #include <vnl/algo/vnl_determinant.h>
 
@@ -67,7 +69,7 @@ void bvpl_corner_detector::detect_and_threshold( boxm_scene<boct_tree<short, T_d
   typedef boct_tree<short, T_data> tree_type;
   typedef boct_tree_cell<short,T_data> cell_type;
 
-  vcl_cout << "bvpl_block_kernel_operator: Operating on cells of length: " << cell_length << vcl_endl;
+  std::cout << "bvpl_block_kernel_operator: Operating on cells of length: " << cell_length << std::endl;
 
   // Load input and output blocks
   scene_in->load_block_and_neighbors(block_i,block_j,block_k);
@@ -79,14 +81,14 @@ void bvpl_corner_detector::detect_and_threshold( boxm_scene<boct_tree<short, T_d
   boct_tree<short, float> *corner_tree = tree_in->template clone_to_type<float>();
   corner_tree->init_cells(0.0f);
 
-  vcl_vector<cell_type* > cells_in = tree_in->leaf_cells();
-  vcl_vector<boct_tree_cell<short, bool> * > valid_cells = valid_tree->leaf_cells();
-  vcl_vector<boct_tree_cell<short, float> * > corner_cells = corner_tree->leaf_cells();
+  std::vector<cell_type* > cells_in = tree_in->leaf_cells();
+  std::vector<boct_tree_cell<short, bool> * > valid_cells = valid_tree->leaf_cells();
+  std::vector<boct_tree_cell<short, float> * > corner_cells = corner_tree->leaf_cells();
 
   //iterators
-  typename vcl_vector<cell_type* >::iterator it_in = cells_in.begin();
-  vcl_vector<boct_tree_cell<short, bool> * >::iterator valid_it = valid_cells.begin();
-  vcl_vector<boct_tree_cell<short, float> * >::iterator corner_it = corner_cells.begin();
+  typename std::vector<cell_type* >::iterator it_in = cells_in.begin();
+  std::vector<boct_tree_cell<short, bool> * >::iterator valid_it = valid_cells.begin();
+  std::vector<boct_tree_cell<short, float> * >::iterator corner_it = corner_cells.begin();
 
   unsigned long n_fail = 0;
 
@@ -104,7 +106,7 @@ void bvpl_corner_detector::detect_and_threshold( boxm_scene<boct_tree<short, T_d
 
     //if level and location code of cells isn't the same then continue
     if ((center_cell->level() != out_center_cell->level()) || !(in_code.isequal(&out_code))) {
-      vcl_cerr << " Input and output cells don't have the same structure\n";
+      std::cerr << " Input and output cells don't have the same structure\n";
       continue;
     }
 #endif
@@ -138,7 +140,7 @@ void bvpl_corner_detector::detect_and_threshold( boxm_scene<boct_tree<short, T_d
     corner_center_cell->set_data(float(C));
   }
 
-  vcl_cout << "Number of Harris fails: " << n_fail << vcl_endl;
+  std::cout << "Number of Harris fails: " << n_fail << std::endl;
   //write the output block
   valid_scene->get_block(block_i, block_j, block_k)->init_tree(valid_tree);
   valid_scene->write_active_block();
@@ -159,7 +161,7 @@ void bvpl_corner_detector::compute_C( boxm_scene<boct_tree<short, T_data > > *sc
   typedef boct_tree<short, T_data> tree_type;
   typedef boct_tree_cell<short,T_data> cell_type;
 
-  vcl_cout << "bvpl_block_kernel_operator: Operating on cells of length: " << cell_length << vcl_endl;
+  std::cout << "bvpl_block_kernel_operator: Operating on cells of length: " << cell_length << std::endl;
 
   // Load input and output blocks
   scene_in->load_block_and_neighbors(block_i,block_j,block_k);
@@ -171,14 +173,14 @@ void bvpl_corner_detector::compute_C( boxm_scene<boct_tree<short, T_data > > *sc
   boct_tree<short, float> *corner_tree = tree_in->template clone_to_type<float>();
   corner_tree->init_cells(0.0f);
 
-  vcl_vector<cell_type* > cells_in = tree_in->leaf_cells();
-  vcl_vector<boct_tree_cell<short, bool> * > valid_cells = valid_tree->leaf_cells();
-  vcl_vector<boct_tree_cell<short, float> * > corner_cells = corner_tree->leaf_cells();
+  std::vector<cell_type* > cells_in = tree_in->leaf_cells();
+  std::vector<boct_tree_cell<short, bool> * > valid_cells = valid_tree->leaf_cells();
+  std::vector<boct_tree_cell<short, float> * > corner_cells = corner_tree->leaf_cells();
 
   //iterators
-  typename vcl_vector<cell_type* >::iterator it_in = cells_in.begin();
-  vcl_vector<boct_tree_cell<short, bool> * >::iterator valid_it = valid_cells.begin();
-  vcl_vector<boct_tree_cell<short, float> * >::iterator corner_it = corner_cells.begin();
+  typename std::vector<cell_type* >::iterator it_in = cells_in.begin();
+  std::vector<boct_tree_cell<short, bool> * >::iterator valid_it = valid_cells.begin();
+  std::vector<boct_tree_cell<short, float> * >::iterator corner_it = corner_cells.begin();
 
   unsigned long n_fail = 0;
 
@@ -196,7 +198,7 @@ void bvpl_corner_detector::compute_C( boxm_scene<boct_tree<short, T_data > > *sc
 
     //if level and location code of cells isn't the same then continue
     if ((center_cell->level() != out_center_cell->level()) || !(in_code.isequal(&out_code))) {
-      vcl_cerr << " Input and output cells don't have the same structure\n";
+      std::cerr << " Input and output cells don't have the same structure\n";
       continue;
     }
 #endif
@@ -227,7 +229,7 @@ void bvpl_corner_detector::compute_C( boxm_scene<boct_tree<short, T_data > > *sc
     corner_center_cell->set_data(float(C));
   }
 
-  vcl_cout << "Number of Harris fails: " << n_fail << vcl_endl;
+  std::cout << "Number of Harris fails: " << n_fail << std::endl;
   //write the output block
   corner_scene->get_block(block_i, block_j, block_k)->init_tree(corner_tree);
   corner_scene->write_active_block();
@@ -253,14 +255,14 @@ void bvpl_corner_detector::compute_det_H( boxm_scene<boct_tree<short, T_data > >
   boct_tree<short, float> *corner_tree = tree_in->template clone_to_type<float>();
   corner_tree->init_cells(0.0f);
 
-  vcl_vector<cell_type* > cells_in = tree_in->leaf_cells();
-  vcl_vector<boct_tree_cell<short, bool> * > valid_cells = valid_tree->leaf_cells();
-  vcl_vector<boct_tree_cell<short, float> * > corner_cells = corner_tree->leaf_cells();
+  std::vector<cell_type* > cells_in = tree_in->leaf_cells();
+  std::vector<boct_tree_cell<short, bool> * > valid_cells = valid_tree->leaf_cells();
+  std::vector<boct_tree_cell<short, float> * > corner_cells = corner_tree->leaf_cells();
 
   //iterators
-  typename vcl_vector<cell_type* >::iterator it_in = cells_in.begin();
-  vcl_vector<boct_tree_cell<short, bool> * >::iterator valid_it = valid_cells.begin();
-  vcl_vector<boct_tree_cell<short, float> * >::iterator corner_it = corner_cells.begin();
+  typename std::vector<cell_type* >::iterator it_in = cells_in.begin();
+  std::vector<boct_tree_cell<short, bool> * >::iterator valid_it = valid_cells.begin();
+  std::vector<boct_tree_cell<short, float> * >::iterator corner_it = corner_cells.begin();
 
   for (; (it_in!=cells_in.end())&& (valid_it!=valid_cells.end()) && (corner_it!=corner_cells.end()); it_in++, valid_it++, corner_it++)
   {

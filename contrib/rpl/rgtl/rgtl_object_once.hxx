@@ -13,13 +13,15 @@
 
 class rgtl_serialize_access;
 
-#include <vcl_vector.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <vector>
 
 //: Efficiently keep track of objects visited to avoid repeat visits.
 class rgtl_object_once
 {
   typedef unsigned int mark_type;
-  typedef vcl_vector<mark_type>::size_type size_type;
+  typedef std::vector<mark_type>::size_type size_type;
 public:
   //: Construct for zero objects.
   rgtl_object_once();
@@ -41,7 +43,7 @@ public:
 
 private:
   // TODO: Reimplement this to use per-object thread-local storage.
-  mutable vcl_vector<mark_type> marks_;
+  mutable std::vector<mark_type> marks_;
   mutable mark_type mark_;
 
   friend class rgtl_serialize_access;

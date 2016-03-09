@@ -3,7 +3,9 @@
 // \brief Example of taking sub-windows of an image.
 // \author Tim Cootes - Manchester
 
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iostream>
 #include <vxl_config.h> // for vxl_byte
 #include <vnl/vnl_vector.h>
 #include <vgl/vgl_point_2d.h>
@@ -25,21 +27,21 @@ int main()
       for (int x=0;x<nx;++x)
         image0.image()(x,y,p) = vxl_byte(x+10*y+100*p);
 
-  image0.print_all(vcl_cout);
+  image0.print_all(std::cout);
 
-  vcl_cout<<"\nCreate a 5 x 5 window with corner at (3,3)\n";
+  std::cout<<"\nCreate a 5 x 5 window with corner at (3,3)\n";
   vimt_image_2d_of<vxl_byte> window = vimt_crop(image0, 3,5,3,5);
-  window.print_all(vcl_cout);
-  vcl_cout<<vcl_endl;
+  window.print_all(std::cout);
+  std::cout<<std::endl;
 
   vgl_point_2d<double> p0(4,4);
   vgl_vector_2d<double> u(0.5,0.25);
   vnl_vector<double> v;
-  vcl_cout<<"Sampling along (0.5,0.25) starting at (4,4) :\n";
+  std::cout<<"Sampling along (0.5,0.25) starting at (4,4) :\n";
   vimt_sample_profile_bilin(v,static_cast<const vimt_image_2d_of<vxl_byte>&>(image0),p0,u,8);
-  vcl_cout<<"Original Image View: "<<v<<vcl_endl;
+  std::cout<<"Original Image View: "<<v<<std::endl;
   vimt_sample_profile_bilin(v,static_cast<const vimt_image_2d_of<vxl_byte>&>(window),p0,u,8);
-  vcl_cout<<"Window on View     : "<<v<<vcl_endl
+  std::cout<<"Window on View     : "<<v<<std::endl
 
           <<"Notice that the projection of the world coordinates "
           <<"into image coordinates is all handled for us.\n"

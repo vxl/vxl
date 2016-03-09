@@ -15,7 +15,9 @@
 //                 and added the sorting as a part of the code.
 // \endverbatim
 
-#include <vcl_vector.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <vector>
 #include <vgl/vgl_point_2d.h>
 #include <vgl/vgl_point_3d.h>
 
@@ -25,8 +27,8 @@ class bwm_delaunay_tri
   bwm_delaunay_tri() {}
   ~bwm_delaunay_tri() {}
 
-  int triangulate(vcl_vector<vgl_point_3d<double> >& pxyz,
-                  vcl_vector<vgl_point_3d<int> >& v,
+  int triangulate(std::vector<vgl_point_3d<double> >& pxyz,
+                  std::vector<vgl_point_3d<int> >& v,
                   int &ntri);
  private:
 

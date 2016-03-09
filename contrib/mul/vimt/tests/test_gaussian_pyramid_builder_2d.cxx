@@ -1,7 +1,9 @@
 // This is mul/vimt/tests/test_gaussian_pyramid_builder_2d.cxx
 #include <testlib/testlib_test.h>
 
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iostream>
 #include <vxl_config.h> // for vxl_byte
 #include <vpl/vpl.h> // vpl_unlink()
 #include <vimt/vimt_gaussian_pyramid_builder_2d.h>
@@ -15,7 +17,7 @@
 static void test_gaussian_pyramid_builder_2d_build(vimt_gaussian_pyramid_builder_2d<vxl_byte>& builder)
 {
   unsigned ni = 20, nj = 20;
-  vcl_cout<<"Filter Width: "<<builder.filter_width()<<'\n'
+  std::cout<<"Filter Width: "<<builder.filter_width()<<'\n'
           <<"Image Size: "<<ni<<" x "<<nj<<'\n';
 
   vimt_image_2d_of<vxl_byte> image0;
@@ -31,8 +33,8 @@ static void test_gaussian_pyramid_builder_2d_build(vimt_gaussian_pyramid_builder
 
   builder.build(image_pyr,image0);
 
-  vcl_cout<<"Result:\n";
-  image_pyr.print_all(vcl_cout);
+  std::cout<<"Result:\n";
+  image_pyr.print_all(std::cout);
 
   TEST("Found correct number of levels", image_pyr.n_levels(), 2);
   const vimt_image_2d_of<vxl_byte>& v_image0 = static_cast<const vimt_image_2d_of<vxl_byte>&>(image_pyr(0));
@@ -51,15 +53,15 @@ static void test_gaussian_pyramid_builder_2d_build(vimt_gaussian_pyramid_builder
 
   builder.set_max_levels(default_n_levels);
   builder.extend(image_pyr);
-  vcl_cout<<"\n\n\nTesting builder.extend():\n";
-  image_pyr.print_all(vcl_cout);
+  std::cout<<"\n\n\nTesting builder.extend():\n";
+  image_pyr.print_all(std::cout);
 
   TEST("Found correct number of levels", image_pyr.n_levels(), 3);
 }
 
 static void test_gaussian_pyramid_builder_2d()
 {
-  vcl_cout << "*************************************************\n"
+  std::cout << "*************************************************\n"
            << " Testing vimt_gaussian_pyramid_builder_2d (byte)\n"
            << "*************************************************\n";
 
@@ -69,11 +71,11 @@ static void test_gaussian_pyramid_builder_2d()
   builder.set_filter_width(5);
   test_gaussian_pyramid_builder_2d_build(builder);
 
-  vcl_cout<<"\n\n======== TESTING I/O ===========\n";
+  std::cout<<"\n\n======== TESTING I/O ===========\n";
 
   vsl_add_to_binary_loader(vimt_gaussian_pyramid_builder_2d<vxl_byte>());
 
-  vcl_string test_path = "test_gaussian_pyramid_builder_2d.bvl.tmp";
+  std::string test_path = "test_gaussian_pyramid_builder_2d.bvl.tmp";
   vsl_b_ofstream bfs_out(test_path);
   TEST(("Created " + test_path + " for writing").c_str(), (!bfs_out), false);
   vsl_b_write(bfs_out, builder);

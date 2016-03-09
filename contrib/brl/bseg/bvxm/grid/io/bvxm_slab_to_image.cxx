@@ -6,7 +6,7 @@ bool bvxm_slab_to_image::slab_to_image(bvxm_voxel_slab<vnl_float_3> const& slab,
   // check image is preallocated to correct size
   if ( (slab.nx() != image->ni()) || (slab.ny() != image->nj()) )
   {
-    vcl_cerr << "error: slab and image are different sizes.\n";
+    std::cerr << "error: slab and image are different sizes.\n";
     return false;
   }
 
@@ -26,7 +26,7 @@ bool bvxm_slab_to_image::slab_to_image(bvxm_voxel_slab<vnl_float_3> const& slab,
   }
   else
   {
-      vcl_cerr << "error: failed to cast image_view_base to image_view\n";
+      std::cerr << "error: failed to cast image_view_base to image_view\n";
       return false;
   }
 
@@ -39,7 +39,7 @@ bool bvxm_slab_to_image::slab_to_image(bvxm_voxel_slab<vnl_float_4> const& slab,
     // check image is preallocated to correct size
     if ( (slab.nx() != image->ni()) || (slab.ny() != image->nj()) )
     {
-        vcl_cerr << "error: slab and image are different sizes.\n";
+        std::cerr << "error: slab and image are different sizes.\n";
         return false;
     }
     // take care of pixel format issues. might want to specialize this function for rgb, etc
@@ -59,7 +59,7 @@ bool bvxm_slab_to_image::slab_to_image(bvxm_voxel_slab<vnl_float_4> const& slab,
     }
     else
     {
-        vcl_cerr << "error: failed to cast image_view_base to image_view\n";
+        std::cerr << "error: failed to cast image_view_base to image_view\n";
         return false;
     }
 

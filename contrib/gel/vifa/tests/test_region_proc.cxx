@@ -1,5 +1,7 @@
 // This is gel/vifa/tests/test_region_proc.cxx
-#include <vcl_ostream.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <ostream>
 #include <vgl/vgl_vector_2d.h>
 #include <testlib/testlib_test.h>
 #include <sdet/sdet_detector_params.h>
@@ -26,7 +28,7 @@ static void test_region_proc(int argc, char* argv[])
     // Get the detector & region processor parameters
     sdet_detector_params  dp;
     sdet_region_proc_params  rpp(dp, true, true, 1);
-    vcl_cout << rpp;
+    std::cout << rpp;
 
     // Instantiate a region processor & attach the test image
     sdet_region_proc    rp(rpp);
@@ -47,13 +49,13 @@ static void test_region_proc(int argc, char* argv[])
 #endif
 
     // Dump the intensity regions
-    vcl_cout << region_list.size() << " intensity faces found:\n";
+    std::cout << region_list.size() << " intensity faces found:\n";
     iface_iterator  ifi = region_list.begin();
     for (int i=1; ifi != region_list.end(); ifi++, i++)
     {
       vtol_intensity_face_sptr  face = *ifi;
 
-      vcl_cout << "  Intensity Face #" << i << ": " << (*face);
+      std::cout << "  Intensity Face #" << i << ": " << (*face);
 
       edge_list el; face->edges(el);
 #ifdef TEST_END_VERTEX_COINCIDENCE
@@ -71,13 +73,13 @@ static void test_region_proc(int argc, char* argv[])
 
         if (oc->numinf() > 0)
         {
-          vcl_cout << "    One Chain #" << j << ": " << (*oc);
+          std::cout << "    One Chain #" << j << ": " << (*oc);
           topology_list*    tl = oc->inferiors();
           topology_list::const_iterator  tli = tl->begin();
           for (int k = 1; tli != tl->end(); tli++, k++)
           {
-            vcl_cout << "      Edge #" << k << ": ";
-            (*tli)->describe(vcl_cout, 6);
+            std::cout << "      Edge #" << k << ": ";
+            (*tli)->describe(std::cout, 6);
 
             if ((*tli)->cast_to_edge())
             {
@@ -88,7 +90,7 @@ static void test_region_proc(int argc, char* argv[])
               double  l1 = v.length();
               double  l2 = e->curve()->length();
 
-              vcl_cout << "      Length: " << l1 << " (E)  " << l2 << " (C)\n";
+              std::cout << "      Length: " << l1 << " (E)  " << l2 << " (C)\n";
               TEST("triangle inequality", l1<=l2, true);
 
               perim1 += l1;
@@ -97,10 +99,10 @@ static void test_region_proc(int argc, char* argv[])
           }
         }
 
-        vcl_cout << "    Perimeter (Edge-based): " << perim1 << vcl_endl
-                 << "    Perimeter (Curve-based): " << perim2 << vcl_endl;
+        std::cout << "    Perimeter (Edge-based): " << perim1 << std::endl
+                 << "    Perimeter (Curve-based): " << perim2 << std::endl;
         TEST("triangle inequality", perim1<=perim2, true);
-//      oc->describe_directions(vcl_cout, 4);
+//      oc->describe_directions(std::cout, 4);
       }
     }
   }

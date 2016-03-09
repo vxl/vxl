@@ -23,7 +23,7 @@ class bwm_soview2D_cross : public vgui_soview2D_point
   //: Destructor - delete this soview2D.
   virtual ~bwm_soview2D_cross() {}
 
-  virtual vcl_string type_name() const { return "bwm_soview2D_cross"; }
+  virtual std::string type_name() const { return "bwm_soview2D_cross"; }
 
   void draw() const;
 

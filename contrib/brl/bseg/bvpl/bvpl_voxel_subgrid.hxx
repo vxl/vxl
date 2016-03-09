@@ -3,7 +3,9 @@
 
 #include "bvpl_voxel_subgrid.h"
 
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iostream>
 
 template <class T>
 bvpl_voxel_subgrid<T>::bvpl_voxel_subgrid(bvxm_voxel_slab<T>& slab,
@@ -31,19 +33,19 @@ bool bvpl_voxel_subgrid<T>::voxel(int x, int y, int z, T& v)
   // make sure that the point is inside the box
   if (!box_.contains(x,y,z)){
 #ifdef DEBUG
-    vcl_cerr << "bvpl_subgrid_voxel_iterator: The index is out of subgrid boundaries!\n";
+    std::cerr << "bvpl_subgrid_voxel_iterator: The index is out of subgrid boundaries!\n";
 #endif
     return false;
   }
   else if (!slab_box.contains(x,y,z)) {
 #ifdef DEBUG
-    vcl_cerr << "bvpl_subgrid_voxel_iterator: The index is out of grid boundaries!\n";
+    std::cerr << "bvpl_subgrid_voxel_iterator: The index is out of grid boundaries!\n";
 #endif
     return false;
   }
   else {
 #if 0
-    vcl_cout << "Slab idx " << x << ' ' << y << ' ' << z << vcl_endl;
+    std::cout << "Slab idx " << x << ' ' << y << ' ' << z << std::endl;
 #endif
     v = slab_(x,y,z);
     return true;
@@ -64,18 +66,18 @@ void bvpl_voxel_subgrid<T>::set_voxel_at(int x, int y, int z, T const &v)
   // make sure that the point is inside the box
   if (!box_.contains(x,y,z)){
 #ifdef DEBUG
-    vcl_cerr << "bvpl_subgrid_voxel_iterator: The index is out of subgrid boundaries!\n";
+    std::cerr << "bvpl_subgrid_voxel_iterator: The index is out of subgrid boundaries!\n";
 #endif
     return;
   }
   else if (!slab_box.contains(x,y,z)) {
 #ifdef DEBUG
-    vcl_cerr << "bvpl_subgrid_voxel_iterator: The index is out of grid boundaries!\n";
+    std::cerr << "bvpl_subgrid_voxel_iterator: The index is out of grid boundaries!\n";
 #endif
     return;
   }
   else {
-    //vcl_cout << "Slab idx " << x <<" " << y  <<" "<< z << vcl_endl;
+    //std::cout << "Slab idx " << x <<" " << y  <<" "<< z << std::endl;
     slab_(x,y,z)= v;
     return;
   }
@@ -86,7 +88,7 @@ void bvpl_voxel_subgrid<T>::set_voxel(const T& v)
 {
   vgl_point_3d<int> c = center_;
 
- //  vcl_cout << "Setting " << c << ' ' << v << vcl_endl;
+ //  std::cout << "Setting " << c << ' ' << v << std::endl;
 
   T& val = slab_(c.x(), c.y(), c.z());
   val = v;

@@ -1,7 +1,9 @@
 #include "mbl_gamma.h"
-#include <vcl_iostream.h>
-#include <vcl_cmath.h>
-#include <vcl_cstdlib.h> // vcl_abort()
+#include <iostream>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <cmath>
+#include <cstdlib> // std::abort()
 
 const int MAX_ITS = 200;
 const double EPS = 3.0e-7;
@@ -17,10 +19,10 @@ double mbl_log_gamma(double xx)
 
   y=x=xx;
   tmp=x+5.5;
-  tmp -= (x+0.5)*vcl_log(tmp);
+  tmp -= (x+0.5)*std::log(tmp);
   ser=1.000000000190015;
   for (j=0;j<=5;j++) ser += cof[j]/++y;
-  return -tmp+vcl_log(2.5066282746310005*ser/x);
+  return -tmp+std::log(2.5066282746310005*ser/x);
 }
 
 
@@ -39,22 +41,22 @@ static double mbl_gamma_ser(double a, double x)
       ++ap;
       del *= x/ap;
       sum += del;
-      if (vcl_fabs(del) < vcl_fabs(sum)*EPS)
+      if (std::fabs(del) < std::fabs(sum)*EPS)
       {
-        return sum*vcl_exp(-x+a*vcl_log(x)-(gln));
+        return sum*std::exp(-x+a*std::log(x)-(gln));
       }
     }
-    vcl_cerr<<"mbl_gamma_ser : Failed to converge."<<vcl_endl;
-    vcl_cerr<<"a = "<<a<<"   x= "<<x<<vcl_endl;
-    vcl_cerr<<"Returning best guess."<<vcl_endl;
-    // vcl_abort();
+    std::cerr<<"mbl_gamma_ser : Failed to converge."<<std::endl;
+    std::cerr<<"a = "<<a<<"   x= "<<x<<std::endl;
+    std::cerr<<"Returning best guess."<<std::endl;
+    // std::abort();
   }
   else
   {
     if (x < 0.0)
     {
-      vcl_cerr<<"mbl_gamma_ser : x less than 0"<<vcl_endl;
-      vcl_abort();
+      std::cerr<<"mbl_gamma_ser : x less than 0"<<std::endl;
+      std::abort();
     }
   }
 
@@ -77,20 +79,20 @@ static double NR_log_gamma_cf(double a, double x)
     an = -i*(i-a);
     b += 2.0;
     d=an*d+b;
-    if (vcl_fabs(d) < FPMIN) d=FPMIN;
+    if (std::fabs(d) < FPMIN) d=FPMIN;
     c=b+an/c;
-    if (vcl_fabs(c) < FPMIN) c=FPMIN;
+    if (std::fabs(c) < FPMIN) c=FPMIN;
     d=1.0/d;
     del=d*c;
     h *= del;
-    if (vcl_fabs(del-1.0) < EPS) break;
+    if (std::fabs(del-1.0) < EPS) break;
   }
   if (i > MAX_ITS)
   {
-    vcl_cerr<<"NR_log_gamma_cf : Failed to converge."<<vcl_endl;
-    vcl_abort();
+    std::cerr<<"NR_log_gamma_cf : Failed to converge."<<std::endl;
+    std::abort();
   }
-  return -x+a*vcl_log(x)-(gln)+vcl_log(h);
+  return -x+a*std::log(x)-(gln)+std::log(h);
 }
 
 static double mbl_gamma_cf(double a, double x)
@@ -108,20 +110,20 @@ static double mbl_gamma_cf(double a, double x)
     an = -i*(i-a);
     b += 2.0;
     d=an*d+b;
-    if (vcl_fabs(d) < FPMIN) d=FPMIN;
+    if (std::fabs(d) < FPMIN) d=FPMIN;
     c=b+an/c;
-    if (vcl_fabs(c) < FPMIN) c=FPMIN;
+    if (std::fabs(c) < FPMIN) c=FPMIN;
     d=1.0/d;
     del=d*c;
     h *= del;
-    if (vcl_fabs(del-1.0) < EPS) break;
+    if (std::fabs(del-1.0) < EPS) break;
   }
   if (i > MAX_ITS)
   {
-    vcl_cerr<<"mbl_gamma_cf : Failed to converge. a="<<a<<" x="<<x<<vcl_endl;
+    std::cerr<<"mbl_gamma_cf : Failed to converge. a="<<a<<" x="<<x<<std::endl;
     return 1.0; // Arbitrary
   }
-  return vcl_exp(-x+a*vcl_log(x)-(gln))*h;
+  return std::exp(-x+a*std::log(x)-(gln))*h;
 }
 
 double mbl_gamma_p(double a, double x)
@@ -129,8 +131,8 @@ double mbl_gamma_p(double a, double x)
 #ifndef NDEBUG
   if ((x < 0.0) || (a <= 0.0))
   {
-    vcl_cerr<<"mbl_gamma_p : Invalid arguments."<<vcl_endl;
-    vcl_abort();
+    std::cerr<<"mbl_gamma_p : Invalid arguments."<<std::endl;
+    std::abort();
   }
 #endif
 
@@ -149,8 +151,8 @@ double mbl_gamma_q(double a, double x)
 #ifndef NDEBUG
   if ((x < 0.0) || (a <= 0.0))
   {
-    vcl_cerr<<"mbl_gamma_q : Invalid arguments."<<vcl_endl;
-    vcl_abort();
+    std::cerr<<"mbl_gamma_q : Invalid arguments."<<std::endl;
+    std::abort();
   }
 #endif
 
@@ -169,14 +171,14 @@ double mbl_log_gamma_q(double a, double x)
 #ifndef NDEBUG
   if ((x < 0.0) || (a <= 0.0))
   {
-    vcl_cerr<<"mbl_log_gamma_q : Invalid arguments."<<vcl_endl;
-    vcl_abort();
+    std::cerr<<"mbl_log_gamma_q : Invalid arguments."<<std::endl;
+    std::abort();
   }
 #endif
 
   if (x < (a+1.0))
   {
-    return vcl_log(1.0 - mbl_gamma_ser(a,x)); // Use series representation
+    return std::log(1.0 - mbl_gamma_ser(a,x)); // Use series representation
   }
   else
   {

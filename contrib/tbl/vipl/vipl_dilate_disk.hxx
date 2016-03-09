@@ -2,7 +2,9 @@
 #define vipl_dilate_disk_hxx_
 
 #include "vipl_dilate_disk.h"
-#include <vcl_algorithm.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <algorithm>
 
 template <class ImgIn,class ImgOut,class DataIn,class DataOut,class PixelItr>
 bool vipl_dilate_disk <ImgIn,ImgOut,DataIn,DataOut,PixelItr> :: section_applyop()
@@ -23,10 +25,10 @@ bool vipl_dilate_disk <ImgIn,ImgOut,DataIn,DataOut,PixelItr> :: section_applyop(
       for (register int x=0; x<=size; ++x)
       for (register int y=0; y<=size; ++y)
         if (mask()[x][y]) {
-          v = vcl_max(v, getpixel(in, i+x, j+y, DataIn(0)));
-          v = vcl_max(v, getpixel(in, i-x, j+y, DataIn(0)));
-          v = vcl_max(v, getpixel(in, i+x, j-y, DataIn(0)));
-          v = vcl_max(v, getpixel(in, i-x, j-y, DataIn(0)));
+          v = std::max(v, getpixel(in, i+x, j+y, DataIn(0)));
+          v = std::max(v, getpixel(in, i-x, j+y, DataIn(0)));
+          v = std::max(v, getpixel(in, i+x, j-y, DataIn(0)));
+          v = std::max(v, getpixel(in, i-x, j-y, DataIn(0)));
         }
       fsetpixel(out, i, j, DataOut(v));
     }

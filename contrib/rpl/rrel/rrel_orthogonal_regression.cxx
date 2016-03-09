@@ -6,8 +6,10 @@
 #include <vnl/algo/vnl_svd.h>
 
 #include <vcl_cassert.h>
-#include <vcl_iostream.h>
-#include <vcl_vector.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iostream>
+#include <vector>
 
 rrel_orthogonal_regression::rrel_orthogonal_regression( const vnl_matrix<double>& pts )
   : vars_( pts )
@@ -15,14 +17,14 @@ rrel_orthogonal_regression::rrel_orthogonal_regression( const vnl_matrix<double>
   unsigned int num_pts = pts.rows ();
   set_param_dof( pts.cols() );
   if ( param_dof() > num_pts )
-    vcl_cerr << "\nrrel_orthogonal_regression::rrel_orthogonal_regression  WARNING:\n"
+    std::cerr << "\nrrel_orthogonal_regression::rrel_orthogonal_regression  WARNING:\n"
              << "DoF ("<<param_dof()<<") is greater than the number of data points ("
              << num_pts << ").\nAn infinite set of equally valid solutions exists.\n";
   set_num_samples_for_fit( param_dof() );
 }
 
 
-rrel_orthogonal_regression::rrel_orthogonal_regression( const vcl_vector<vnl_vector<double> >& pts )
+rrel_orthogonal_regression::rrel_orthogonal_regression( const std::vector<vnl_vector<double> >& pts )
   : vars_( pts.size(),pts[0].size() )
 {
   unsigned int num_pts = vars_.rows();
@@ -32,7 +34,7 @@ rrel_orthogonal_regression::rrel_orthogonal_regression( const vcl_vector<vnl_vec
 
   set_param_dof( vars_.cols() ); // up to a scale
   if ( param_dof() > num_pts )
-    vcl_cerr << "\nrrel_orthogonal_regression::rrel_orthogonal_regression  WARNING:\n"
+    std::cerr << "\nrrel_orthogonal_regression::rrel_orthogonal_regression  WARNING:\n"
              << "DoF ("<<param_dof()<<") is greater than the number of data points ("
              << num_pts << ").\nAn infinite set of equally valid solutions exists.\n";
   set_num_samples_for_fit( param_dof() );
@@ -50,11 +52,11 @@ rrel_orthogonal_regression::num_samples( ) const
 }
 
 bool
-rrel_orthogonal_regression::fit_from_minimal_set( const vcl_vector<int>& point_indices,
+rrel_orthogonal_regression::fit_from_minimal_set( const std::vector<int>& point_indices,
                                                   vnl_vector<double>& params ) const
 {
   if ( point_indices.size() != param_dof() ) {
-    vcl_cerr << "rrel_orthogonal_regression::fit_from_minimal_sample  The number of point "
+    std::cerr << "rrel_orthogonal_regression::fit_from_minimal_sample  The number of point "
              << "indices must agree with the fit degrees of freedom.\n";
     return false;
   }
@@ -70,12 +72,12 @@ rrel_orthogonal_regression::fit_from_minimal_set( const vcl_vector<int>& point_i
   }
   vnl_svd<double> svd( A, 1.0e-8 );
   if ( (unsigned int)svd.rank() < param_dof() ) {
-    vcl_cerr << "rrel_orthogonal_regression:: singular fit!\n";
+    std::cerr << "rrel_orthogonal_regression:: singular fit!\n";
     return false;    // singular fit
   }
   else {
     params = svd.nullvector();
-    params /= vcl_sqrt( 1 - vnl_math::sqr( params[ params.size()-1 ] ) );
+    params /= std::sqrt( 1 - vnl_math::sqr( params[ params.size()-1 ] ) );
   }
   return true;
 }
@@ -83,7 +85,7 @@ rrel_orthogonal_regression::fit_from_minimal_set( const vcl_vector<int>& point_i
 
 void
 rrel_orthogonal_regression::compute_residuals( const vnl_vector<double>& params,
-                                               vcl_vector<double>& residuals ) const
+                                               std::vector<double>& residuals ) const
 {
   // The residual is the algebraic distance, which is simply A * p.
   // Assumes the parameter vector has a unit normal.
@@ -104,7 +106,7 @@ rrel_orthogonal_regression::compute_residuals( const vnl_vector<double>& params,
 bool
 rrel_orthogonal_regression::weighted_least_squares_fit( vnl_vector<double>& params,
                                                         vnl_matrix<double>& /*cofact*/,
-                                                        const vcl_vector<double> *weights ) const
+                                                        const std::vector<double> *weights ) const
 {
   // If params and cofact are NULL pointers and the fit is successful,
   // this function will allocate a new vector and a new
@@ -126,7 +128,7 @@ rrel_orthogonal_regression::weighted_least_squares_fit( vnl_vector<double>& para
     }
     avg = sum_vect / sum_weight;
     for (unsigned int i=0; i<vars_.rows(); ++i)
-      shift_vars.set_row(i, (vars_.get_row(i)-avg) * vcl_sqrt((*weights)[i]));
+      shift_vars.set_row(i, (vars_.get_row(i)-avg) * std::sqrt((*weights)[i]));
   }
   else {
     for (unsigned int i=0; i<vars_.rows(); ++i)
@@ -141,7 +143,7 @@ rrel_orthogonal_regression::weighted_least_squares_fit( vnl_vector<double>& para
   vnl_svd<double> svd( A, 1.0e-8 );
   // Rank of (param_dof() -1) is an exact fit
   if ( (unsigned int)svd.rank() < param_dof() - 1 ) {
-    vcl_cerr << "rrel_orthogonal_regression::WeightedLeastSquaresFit --- singularity!\n";
+    std::cerr << "rrel_orthogonal_regression::WeightedLeastSquaresFit --- singularity!\n";
     return false;
   }
   else {
@@ -159,12 +161,12 @@ rrel_orthogonal_regression::weighted_least_squares_fit( vnl_vector<double>& para
 void
 rrel_orthogonal_regression::print_points() const
 {
-  vcl_cout << "\nrrel_orthogonal_regression::print_points:\n"
+  std::cout << "\nrrel_orthogonal_regression::print_points:\n"
            << "  param_dof() = " << param_dof() << '\n'
            << "  num_pts = " << vars_.rows() << "\n\n"
            << " i   vars_\n"
            << " =   =========\n";
   for ( unsigned int i=0; i<vars_.rows(); ++i ) {
-    vcl_cout << ' ' << i << "   " << vars_.get_row (i) << '\n';
+    std::cout << ' ' << i << "   " << vars_.get_row (i) << '\n';
   }
 }

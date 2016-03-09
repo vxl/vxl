@@ -5,8 +5,10 @@
 
 #include "bvpl_algebraic_functor.h"
 
-#include <vcl_cmath.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <cmath>
+#include <iostream>
 
 
 // Default constructor

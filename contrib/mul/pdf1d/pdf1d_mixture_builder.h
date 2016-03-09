@@ -11,7 +11,9 @@
 #include <pdf1d/pdf1d_builder.h>
 #include <pdf1d/pdf1d_mixture_builder.h>
 #include <pdf1d/pdf1d_mixture.h>
-#include <vcl_iosfwd.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iosfwd>
 
 //=======================================================================
 
@@ -19,7 +21,7 @@
 class pdf1d_mixture_builder : public pdf1d_builder
 {
  private:
-  vcl_vector<pdf1d_builder*> builder_;
+  std::vector<pdf1d_builder*> builder_;
   double min_var_;
   int max_its_;
 
@@ -28,19 +30,19 @@ class pdf1d_mixture_builder : public pdf1d_builder
 
   void initialise(pdf1d_mixture& model,
                   const double* data,
-                  const vcl_vector<double>& wts) const;
+                  const std::vector<double>& wts) const;
 
   //: The Expectation part of the EM algorithm
   void e_step(pdf1d_mixture& model,
-              vcl_vector<vnl_vector<double> >& probs,
+              std::vector<vnl_vector<double> >& probs,
               const double* data,
-              const vcl_vector<double>& wts) const;
+              const std::vector<double>& wts) const;
 
   //: The Maximisation part of the EM algorithm
   double m_step(pdf1d_mixture& model,
-                const vcl_vector<vnl_vector<double> >& probs,
+                const std::vector<vnl_vector<double> >& probs,
                 const double* data,
-                const vcl_vector<double>& wts) const;
+                const std::vector<double>& wts) const;
 
   void init();
   void delete_stuff();
@@ -75,7 +77,7 @@ class pdf1d_mixture_builder : public pdf1d_builder
   virtual pdf1d_pdf* new_model() const;
 
   //: Name of the model class returned by new_model()
-  virtual vcl_string new_model_type() const;
+  virtual std::string new_model_type() const;
 
   //: Define lower threshold on variance for built models
   virtual void set_min_var(double min_var);
@@ -112,22 +114,22 @@ class pdf1d_mixture_builder : public pdf1d_builder
   //  parameters.
   virtual void weighted_build(pdf1d_pdf& model,
                               mbl_data_wrapper<double>& data,
-                              const vcl_vector<double>& wts) const;
+                              const std::vector<double>& wts) const;
 
   //: Version number for I/O
   short version_no() const;
 
   //: Name of the class
-  virtual vcl_string is_a() const;
+  virtual std::string is_a() const;
 
   //: Does the name of the class match the argument?
-  virtual bool is_class(vcl_string const& s) const;
+  virtual bool is_class(std::string const& s) const;
 
   //: Create a copy on the heap and return base class pointer
   virtual pdf1d_builder* clone() const;
 
   //: Print class to os
-  virtual void print_summary(vcl_ostream& os) const;
+  virtual void print_summary(std::ostream& os) const;
 
   //: Save class to binary file stream
   virtual void b_write(vsl_b_ostream& bfs) const;

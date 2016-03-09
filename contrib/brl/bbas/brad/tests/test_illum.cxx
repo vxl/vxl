@@ -1,8 +1,10 @@
 #include <testlib/testlib_test.h>
 #include <brad/brad_illum_util.h>
 #include <bsta/bsta_histogram.h>
-#include <vcl_cstdlib.h> // for rand()
-#include <vcl_fstream.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <cstdlib> // for rand()
+#include <fstream>
 
 static void test_illum()
 {
@@ -40,7 +42,7 @@ static void test_illum()
     vnl_double_3(0.200950347,-0.171021944,0.964557128),
     vnl_double_3(0.181560261,-0.207394314,0.961261395)
   };
-  vcl_vector<vnl_double_3> illumination_dirs(ill_dirs, ill_dirs+31);
+  std::vector<vnl_double_3> illumination_dirs(ill_dirs, ill_dirs+31);
   double intens [] ={
     0.681509147,
     0.729145981,
@@ -73,8 +75,8 @@ static void test_illum()
     0.874122302,
     0.802154069,
     0.826317575};
-  vcl_vector<double> intensities(intens, intens+31);
-  vcl_vector<double> fitting_error;
+  std::vector<double> intensities(intens, intens+31);
+  std::vector<double> fitting_error;
   vnl_double_4 model_params;
   brad_solve_lambertian_model(illumination_dirs,
                               intensities,
@@ -86,22 +88,22 @@ static void test_illum()
   for (unsigned i = 0; i<m; ++i)
     er += fitting_error[i];
   er /= m;
-  er = vcl_sqrt(er);
-  vcl_cout << "Model Params: " << model_params << '\n'
-           << "Fitting Error: " << er << vcl_endl;
+  er = std::sqrt(er);
+  std::cout << "Model Params: " << model_params << '\n'
+           << "Fitting Error: " << er << std::endl;
   TEST_NEAR("test lambertian model", er , 0.072795, 1.0e-6);
 #if 0
   for (unsigned i = 0; i<m ; ++i)
-    vcl_cout << vcl_sqrt(fitting_error[i]) << vcl_endl;
+    std::cout << std::sqrt(fitting_error[i]) << std::endl;
 
-  vcl_cout << "Predicted Intensity\n";
+  std::cout << "Predicted Intensity\n";
   for (unsigned i = 0; i<m; ++i)
-    vcl_cout << brad_expected_intensity(illumination_dirs[i], model_params) << vcl_endl;
-  vcl_vector<double> fitting_errors;
+    std::cout << brad_expected_intensity(illumination_dirs[i], model_params) << std::endl;
+  std::vector<double> fitting_errors;
   brad_solution_error(illumination_dirs, intensities, fitting_errors);
-  vcl_cout << "Interpolated intensity\n";
+  std::cout << "Interpolated intensity\n";
   for (unsigned i = 0; i<m; ++i)
-    vcl_cout << fitting_errors[i] << vcl_endl;
+    std::cout << fitting_errors[i] << std::endl;
 #endif
 }
 

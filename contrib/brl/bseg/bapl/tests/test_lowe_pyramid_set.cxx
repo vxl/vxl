@@ -1,5 +1,7 @@
 #include <testlib/testlib_test.h>
-#include <vcl_cmath.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <cmath>
 #include <bapl/bapl_lowe_pyramid_set.h>
 #include <vil/vil_image_view.h>
 #include <vil/vil_new.h>
@@ -17,7 +19,7 @@ MAIN( test_lowe_pyramid_set )
     for(int j=0; j<512; ++j){
       float x = (float)(i - 256);
       float y = (float)(j - 256);
-      gaussian(i,j) = (float)vcl_exp(-(x*x+y*y)/(2.0*sigma*sigma));
+      gaussian(i,j) = (float)std::exp(-(x*x+y*y)/(2.0*sigma*sigma));
     }
   }
 
@@ -28,19 +30,19 @@ MAIN( test_lowe_pyramid_set )
   vil_image_resource_sptr gaussian_sptr = vil_new_image_resource_of_view(save_img);
   int octaves = 7;
   int levels = 3;
-  float k = (float)vcl_pow(2.0,1.0/double(levels));
+  float k = (float)std::pow(2.0,1.0/double(levels));
   bapl_lowe_pyramid_set pyramids(gaussian_sptr, levels, octaves);
 
   float k2 = k*k;
   float sigma2 = sigma*sigma;
 
   bool good_approx = true;
-  vcl_cout << "  scale \t actual \t expected \t error"<<vcl_endl;
+  std::cout << "  scale \t actual \t expected \t error"<<std::endl;
   for(int i=0; i<octaves*levels; ++i){
     float x = 256;
     float y = 256;
-    float ps = vcl_pow(2.0f,(float)(i/levels)-1);
-    float scale = ps * (vcl_pow(2.0f,(i%levels)/float(levels)));
+    float ps = std::pow(2.0f,(float)(i/levels)-1);
+    float scale = ps * (std::pow(2.0f,(i%levels)/float(levels)));
 
     float actual_scale;
     vil_image_view<float> image = pyramids.dog_at(scale,&actual_scale);
@@ -50,10 +52,10 @@ MAIN( test_lowe_pyramid_set )
     float expected = -sigma2*scale2*(-1+k2)/(k2*scale2+sigma2)/(sigma2+scale2);
     float actual = image(int(x),int(y));
 
-    vcl_cout <<"  "<< scale <<"     \t " << actual <<"\t "
-             << expected <<"\t " << (actual-expected) <<"\t "<<vcl_endl;
+    std::cout <<"  "<< scale <<"     \t " << actual <<"\t "
+             << expected <<"\t " << (actual-expected) <<"\t "<<std::endl;
 
-    good_approx = good_approx && vcl_fabs(actual-expected) < 1e-2;
+    good_approx = good_approx && std::fabs(actual-expected) < 1e-2;
   }
 
   TEST("Pyramid Test",good_approx,true);

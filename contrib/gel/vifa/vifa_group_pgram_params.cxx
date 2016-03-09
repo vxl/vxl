@@ -3,8 +3,10 @@
 //:
 // \file
 
-#include <vcl_iostream.h>
-#include <vcl_sstream.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iostream>
+#include <sstream>
 
 vifa_group_pgram_params::
 vifa_group_pgram_params(const vifa_group_pgram_params&  dp)
@@ -18,24 +20,24 @@ vifa_group_pgram_params(const vifa_group_pgram_params&  dp)
 bool vifa_group_pgram_params::
 SanityCheck()
 {
-  vcl_stringstream  msg;
+  std::stringstream  msg;
   bool        valid = true;
 
   if ((angle_increment_ <= 0) || (angle_increment_ > 45))
   {
-    msg << "ERROR: Value of angle increment is out of range (0, 45]" << vcl_ends;
+    msg << "ERROR: Value of angle increment is out of range (0, 45]" << std::ends;
     valid = false;
   }
 
   if (max_suppress_radius_ <= 0)
   {
-    msg << "ERROR: Maximum suppression radius must be greater than 0" << vcl_ends;
+    msg << "ERROR: Maximum suppression radius must be greater than 0" << std::ends;
     valid = false;
   }
 
   if ((length_ratio_ <= 0) || (length_ratio_ > 1.0))
   {
-    msg << "ERROR: length_ratio is out of range (0, 1.0]" << vcl_ends;
+    msg << "ERROR: length_ratio is out of range (0, 1.0]" << std::ends;
     valid = false;
   }
 
@@ -46,8 +48,8 @@ SanityCheck()
 void vifa_group_pgram_params::
 print_info(void)
 {
-  vcl_cout << "vifa_group_pgram_params:\n"
-           << "  angle increment     = " << angle_increment_ << vcl_endl
-           << "  max suppress radius = " << max_suppress_radius_ << vcl_endl
-           << "  length ratio        = " << length_ratio_ << vcl_endl;
+  std::cout << "vifa_group_pgram_params:\n"
+           << "  angle increment     = " << angle_increment_ << std::endl
+           << "  max suppress radius = " << max_suppress_radius_ << std::endl
+           << "  length ratio        = " << length_ratio_ << std::endl;
 }

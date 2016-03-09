@@ -1,6 +1,8 @@
-#include <vcl_string.h>
-#include <vcl_vector.h>
-#include <vcl_limits.h>
+#include <string>
+#include <vector>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <limits>
 #include <vul/vul_file.h>
 #include <vul/vul_file_iterator.h>
 #include <vil/vil_load.h>
@@ -10,10 +12,10 @@
 #include <vil/vil_math.h>
 #include <vil/vil_image_view.h>
 
-static void filenames_from_directory(vcl_string const& dirname,
-                                     vcl_vector<vcl_string>& filenames)
+static void filenames_from_directory(std::string const& dirname,
+                                     std::vector<std::string>& filenames)
 {
-  vcl_string s(dirname);
+  std::string s(dirname);
   s += "/*.*";
   for (vul_file_iterator fit = s;fit; ++fit) {
     // check to see if file is a directory.
@@ -23,13 +25,13 @@ static void filenames_from_directory(vcl_string const& dirname,
   }
 }
 
-static bool negate_images(vcl_string const& image_indir,
-                          vcl_string const& image_outdir)
+static bool negate_images(std::string const& image_indir,
+                          std::string const& image_outdir)
 {
-  vcl_vector<vcl_string> in_filenames;
+  std::vector<std::string> in_filenames;
   filenames_from_directory(image_indir, in_filenames);
   unsigned n_infiles = in_filenames.size();
-  vcl_string file;
+  std::string file;
   for (unsigned int i=0; i<n_infiles; ++i)
   {
     bool no_valid_image = true;
@@ -53,7 +55,7 @@ static bool negate_images(vcl_string const& image_indir,
 #define NEGATE_CASE(FORMAT, T) \
      case FORMAT: { \
       vil_image_view<T> view = imgr->get_copy_view(); \
-      T mxv = vcl_numeric_limits<T>::max(); \
+      T mxv = std::numeric_limits<T>::max(); \
       vil_math_scale_and_offset_values(view, -1.0, mxv); \
       outr = vil_new_image_resource_of_view(view);  \
       break; \
@@ -66,11 +68,11 @@ static bool negate_images(vcl_string const& image_indir,
      NEGATE_CASE(VIL_PIXEL_FORMAT_DOUBLE, double);
 #undef NEGATE_CASE
      default:
-      vcl_cout << "Unknown image format\n";
+      std::cout << "Unknown image format\n";
       return false;
     }
-    vcl_string infname = vul_file::strip_directory(file);
-    vcl_string outname = image_outdir+ '/' + infname ;
+    std::string infname = vul_file::strip_directory(file);
+    std::string outname = image_outdir+ '/' + infname ;
     vil_save_image_resource(outr, outname.c_str(), "tiff");
   }
   return true;
@@ -80,16 +82,16 @@ int main(int argc,char * argv[])
 {
     if (argc!=3)
     {
-        vcl_cout<<"Usage : negate.exe image_in_dir image_out_dir\n";
+        std::cout<<"Usage : negate.exe image_in_dir image_out_dir\n";
         return -1;
     }
     else
     {
-        vcl_string image_indir(argv[1]);
-        vcl_string image_outdir(argv[2]);
+        std::string image_indir(argv[1]);
+        std::string image_outdir(argv[2]);
         if (!negate_images(image_indir, image_outdir))
         {
-          vcl_cout << "Negation failed\n";
+          std::cout << "Negation failed\n";
           return -1;
         }
         return 0;

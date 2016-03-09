@@ -5,7 +5,9 @@
 #include <boct/boct_tree_cell.h>
 #include <boct/boct_tree.h>
 #include <vpgl/vpgl_camera_double_sptr.h>
-#include <vcl_vector.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <vector>
 
 template <class T_loc, class T_data>
 class boxm_cell_vis_graph_iterator
@@ -20,7 +22,7 @@ class boxm_cell_vis_graph_iterator
 
   bool next();
 
-  vcl_vector<boct_tree_cell<T_loc,T_data>*> frontier() { return frontier_; }
+  std::vector<boct_tree_cell<T_loc,T_data>*> frontier() { return frontier_; }
 
   void set_reverse_iter(bool reverse) { reverse_iter_ = reverse; }
 
@@ -29,8 +31,8 @@ class boxm_cell_vis_graph_iterator
   vpgl_camera_double_sptr camera_;
 
   //: blocks that can be seen by the camera unoccluded
-  vcl_vector<boct_tree_cell<T_loc,T_data>*> frontier_;
-  vcl_vector<boct_tree_cell<T_loc,T_data>*> curr_cells_;
+  std::vector<boct_tree_cell<T_loc,T_data>*> frontier_;
+  std::vector<boct_tree_cell<T_loc,T_data>*> curr_cells_;
   bool reverse_iter_;
 
   unsigned img_ni_;
@@ -44,7 +46,7 @@ class boxm_cell_vis_graph_iterator
                            boct_face_idx face_idx,
                            boct_tree<T_loc,T_data>* tree);
 
-  vcl_vector<boct_tree_cell<T_loc,T_data>* > list_of_vis_nodes_;
+  std::vector<boct_tree_cell<T_loc,T_data>* > list_of_vis_nodes_;
 };
 
 #endif

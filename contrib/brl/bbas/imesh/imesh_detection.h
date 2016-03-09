@@ -14,11 +14,13 @@
 
 
 #include "imesh_mesh.h"
-#include <vcl_vector.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <vector>
 
 //: Return the indices of half edges that are on the mesh boundary
 //  The results are organized into loops
-vcl_vector<vcl_vector<unsigned int> >
+std::vector<std::vector<unsigned int> >
 imesh_detect_boundary_loops(const imesh_half_edge_set& half_edges);
 
 
@@ -27,37 +29,37 @@ imesh_detect_boundary_loops(const imesh_half_edge_set& half_edges);
 //  The loops are returned in \param loops as vectors of half edge indices
 bool
 imesh_trace_half_edge_loops(const imesh_half_edge_set& half_edges,
-                            const vcl_vector<bool>& flags,
-                            vcl_vector<vcl_vector<unsigned int> >& loops);
+                            const std::vector<bool>& flags,
+                            std::vector<std::vector<unsigned int> >& loops);
 
 //: Return the indices of contour half edges as seen from direction \param dir
 //  The results are organized into loops
-vcl_vector<vcl_vector<unsigned int> >
+std::vector<std::vector<unsigned int> >
 imesh_detect_contour_generator(const imesh_mesh& mesh, const vgl_vector_3d<double>& dir);
 
 //: Mark contour half edges as seen from direction \param dir
 //  For each contour edge the half edge with the face normal opposing dir is marked
-vcl_vector<bool>
+std::vector<bool>
 imesh_detect_contours(const imesh_mesh& mesh, vgl_vector_3d<double> dir);
 
 
 //: Return the indices of contour half edges as seen from center of projection \param pt
 //  The results are organized into loops
-vcl_vector<vcl_vector<unsigned int> >
+std::vector<std::vector<unsigned int> >
 imesh_detect_contour_generator(const imesh_mesh& mesh, const vgl_point_3d<double>& pt);
 
 //: Mark contour half edges as seen from center of projection \param pt
 //  For each contour edge the half edge with the face normal opposing dir is marked
-vcl_vector<bool>
+std::vector<bool>
 imesh_detect_contours(const imesh_mesh& mesh, const vgl_point_3d<double>& pt);
 
 
 //: Segment the faces into groups of connected components
-vcl_vector<vcl_set<unsigned int> >
+std::vector<std::set<unsigned int> >
 imesh_detect_connected_components(const imesh_half_edge_set& he);
 
 //: Compute the set of all faces in the same connected component as \a face
-vcl_set<unsigned int>
+std::set<unsigned int>
 imesh_detect_connected_faces(const imesh_half_edge_set& he, unsigned int face);
 
 

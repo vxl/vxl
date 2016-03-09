@@ -11,9 +11,11 @@
 
 #include "clsfy_parzen_builder.h"
 
-#include <vcl_iostream.h>
-#include <vcl_sstream.h>
-#include <vcl_string.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iostream>
+#include <sstream>
+#include <string>
 #include <vcl_cassert.h>
 #include <vsl/vsl_binary_loader.h>
 #include <vul/vul_string.h>
@@ -38,14 +40,14 @@ short clsfy_parzen_builder::version_no() const
 
 //=======================================================================
 
-vcl_string clsfy_parzen_builder::is_a() const
+std::string clsfy_parzen_builder::is_a() const
 {
-  return vcl_string("clsfy_parzen_builder");
+  return std::string("clsfy_parzen_builder");
 }
 
 //=======================================================================
 
-bool clsfy_parzen_builder::is_class(vcl_string const& s) const
+bool clsfy_parzen_builder::is_class(std::string const& s) const
 {
   return s == clsfy_parzen_builder::is_a() || clsfy_builder_base::is_class(s);
 }
@@ -59,7 +61,7 @@ clsfy_builder_base* clsfy_parzen_builder::clone() const
 
 //=======================================================================
 
-void clsfy_parzen_builder::print_summary(vcl_ostream& os) const
+void clsfy_parzen_builder::print_summary(std::ostream& os) const
 {
   os << "rbf width = " << sigma_ << ", power = "<< power_;
 }
@@ -88,9 +90,9 @@ void clsfy_parzen_builder::b_read(vsl_b_istream& bfs)
     vsl_b_read(bfs, power_);
     break;
   default:
-    vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, clsfy_parzen_builder&)\n"
+    std::cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, clsfy_parzen_builder&)\n"
              << "           Unknown version number "<< version << '\n';
-    bfs.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
+    bfs.is().clear(std::ios::badbit); // Set an unrecoverable IO error on stream
   }
 }
 
@@ -103,14 +105,14 @@ void clsfy_parzen_builder::b_read(vsl_b_istream& bfs)
 double clsfy_parzen_builder::build(clsfy_classifier_base& model,
                                    mbl_data_wrapper<vnl_vector<double> >& inputs,
                                    unsigned /* nClasses */,
-                                   const vcl_vector<unsigned> &outputs) const
+                                   const std::vector<unsigned> &outputs) const
 {
   assert(model.is_class("clsfy_rbf_parzen")); // equiv to dynamic_cast<> != 0
   assert(inputs.size()==outputs.size());
 
   clsfy_rbf_parzen &parzen = (clsfy_rbf_parzen&) model;
 
-  vcl_vector<vnl_vector<double> > vin(inputs.size());
+  std::vector<vnl_vector<double> > vin(inputs.size());
 
   inputs.reset();
   unsigned i=0;
@@ -171,11 +173,11 @@ clsfy_classifier_base* clsfy_parzen_builder::new_classifier() const
 // \endverbatim
 // \throw mbl_exception_parse_error if the parse fails.
 
-void clsfy_parzen_builder::config(vcl_istream &as)
+void clsfy_parzen_builder::config(std::istream &as)
 {
- vcl_string s = mbl_parse_block(as);
+ std::string s = mbl_parse_block(as);
 
-  vcl_istringstream ss(s);
+  std::istringstream ss(s);
   mbl_read_props_type props = mbl_read_props_ws(ss);
 
   {

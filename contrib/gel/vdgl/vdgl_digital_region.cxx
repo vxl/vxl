@@ -3,7 +3,9 @@
 //:
 // \file
 
-#include <vcl_cmath.h> // for fabs and sqrt
+#include <vcl_compiler.h>
+#include <iostream>
+#include <cmath> // for fabs and sqrt
 #include <vcl_cassert.h>
 #include <vnl/algo/vnl_svd.h>
 #include <vnl/vnl_float_3.h>
@@ -12,7 +14,7 @@
 #define MAX_ROUNDOFF .000025
 #endif
 
-#define near_zero(a) (vcl_fabs (a) < MAX_ROUNDOFF)
+#define near_zero(a) (std::fabs (a) < MAX_ROUNDOFF)
 
 vsol_spatial_object_2d* vdgl_digital_region::clone() const
 {
@@ -165,7 +167,7 @@ float vdgl_digital_region::ComputeIntensityStdev()
     io_stdev_ += (pix_[i]-mean)*(pix_[i]-mean);
   }
   io_stdev_ = io_stdev_ * 1.0f/(npts_ - 1.0f);
-  io_stdev_ = vcl_sqrt(io_stdev_);
+  io_stdev_ = std::sqrt(io_stdev_);
   return io_stdev_;
 }
 
@@ -281,9 +283,9 @@ float vdgl_digital_region::Diameter() const
   //Compute SVD of s to get diameter
   vnl_svd<double> svd(s);
   if (svd.rank()!=2)
-    return float(vcl_sqrt(this->area()));
+    return float(std::sqrt(this->area()));
   //The factor of two is to estimate the extreme limit of the distribution
-  double radius = 2*vcl_sqrt(vcl_fabs(svd.W(0))+ vcl_fabs(svd.W(1)));
+  double radius = 2*std::sqrt(std::fabs(svd.W(0))+ std::fabs(svd.W(1)));
   return float(2*radius);//diameter
 }
 
@@ -305,7 +307,7 @@ float vdgl_digital_region::AspectRatio() const
   vnl_svd<double> svd(s);
   if (svd.rank()!=2)
     return 1.0f;
-  return (float)vcl_sqrt(svd.W(0)/svd.W(1));
+  return (float)std::sqrt(svd.W(0)/svd.W(1));
 }
 
 //------------------------------------------------------------
@@ -318,7 +320,7 @@ void vdgl_digital_region::PrincipalOrientation(vnl_float_2& major_axis)
     this->ComputeScatterMatrix();
   if (this->Npix() < 4)
   {
-    vcl_cout << "In vdgl_digital_region::PrincipalOrientation(..) Npts<4\n";
+    std::cout << "In vdgl_digital_region::PrincipalOrientation(..) Npts<4\n";
     major_axis[0]=1.0; major_axis[1]=0.0;
     return;
   }
@@ -331,13 +333,13 @@ void vdgl_digital_region::PrincipalOrientation(vnl_float_2& major_axis)
   vnl_svd<double> svd(s);
   if (svd.rank()!=2)
   {
-    vcl_cout << "In vdgl_digital_region::PrincipalOrientation(..) Insufficient rank\n";
+    std::cout << "In vdgl_digital_region::PrincipalOrientation(..) Insufficient rank\n";
     major_axis[0]=1.0; major_axis[1]=0.0;
     return;
   }
   vnl_matrix<double> v = svd.V();
   //2 sigma gives a good estimate of axis length (sigma = principal eigenvalue)
-  double radius = 2*vcl_sqrt(vcl_fabs(svd.W(0)));
+  double radius = 2*std::sqrt(std::fabs(svd.W(0)));
   major_axis[0]=float(v(0,0)*radius);
   major_axis[1]=float(v(1,0)*radius);
 }
@@ -377,7 +379,7 @@ void vdgl_digital_region::ComputeScatterMatrix() const
 {
   if (!npts_)
   {
-    vcl_cout << "In vdgl_digital_region::ComputeScatterMatrix() - no pixels\n";
+    std::cout << "In vdgl_digital_region::ComputeScatterMatrix() - no pixels\n";
     return;
   }
   X2_ = 0;  Y2_ = 0;  I2_ = 0;
@@ -430,7 +432,7 @@ void vdgl_digital_region::DoPlaneFit() const
              - Si_(1,2)*Si_(2,1);
   if (near_zero(den))
   {
-    vcl_cout << "In vdgl_digital_region::SolveForPlane(..) determinant near zero\n";
+    std::cout << "In vdgl_digital_region::SolveForPlane(..) determinant near zero\n";
     Ix_ = Iy_ = 0;
     error_ = Si_(0,0);
     sigma_sq_ = Si_(0,0) + Si_(1,1) + Si_(2,2);
@@ -452,18 +454,18 @@ void vdgl_digital_region::PrintFit() const
 {
   if (!fit_valid_)
     this->DoPlaneFit();
-  vcl_cout << "IntensityFit(In Plane Coordinates): "
-           << "Number of Points =" <<  npts_ << vcl_endl
+  std::cout << "IntensityFit(In Plane Coordinates): "
+           << "Number of Points =" <<  npts_ << std::endl
            << "Scatter Matrix:\n"
-           << "X2 Y2 I2   " << X2() << ' ' << Y2() << ' ' << I2() << vcl_endl
-           << "XY XI YI = " << XY() << ' ' << XI() << ' ' << YI() << vcl_endl
-           << "Xo Yo Io   " << Xo() << ' ' << Yo() << ' ' << Io() << vcl_endl
+           << "X2 Y2 I2   " << X2() << ' ' << Y2() << ' ' << I2() << std::endl
+           << "XY XI YI = " << XY() << ' ' << XI() << ' ' << YI() << std::endl
+           << "Xo Yo Io   " << Xo() << ' ' << Yo() << ' ' << Io() << std::endl
            << "fitted Plane:\n"
-           << "di/dx " << this->Ix() << vcl_endl
-           << "di/dy " << this->Iy() << vcl_endl
-           << "sample variance: " << this->Var()<< vcl_endl
-           << "squared cost: " << error_ << vcl_endl
-           << "average cost: " << vcl_sqrt(error_) << vcl_endl << vcl_endl;
+           << "di/dx " << this->Ix() << std::endl
+           << "di/dy " << this->Iy() << std::endl
+           << "sample variance: " << this->Var()<< std::endl
+           << "squared cost: " << error_ << std::endl
+           << "average cost: " << std::sqrt(error_) << std::endl << std::endl;
 }
 
 #if 0
@@ -526,11 +528,11 @@ bool vdgl_digital_region::transform(vnl_float_3x3 const& t)
 
 //--------------------------------------------------------
 //: Compute the histogram
-vcl_vector<unsigned int> vdgl_digital_region::histogram(int nbins)
+std::vector<unsigned int> vdgl_digital_region::histogram(int nbins)
 {
   assert(nbins > 0);
-  if (nbins == 1) return vcl_vector<unsigned int>(1, npts_);
-  vcl_vector<unsigned int> hist(nbins, 0U);
+  if (nbins == 1) return std::vector<unsigned int>(1, npts_);
+  std::vector<unsigned int> hist(nbins, 0U);
   if (npts_ == 0) return hist;
   float res = max_-min_, step = res/nbins + 1e-6f;
   for (unsigned int i =0; i<npts_; ++i)
@@ -538,13 +540,13 @@ vcl_vector<unsigned int> vdgl_digital_region::histogram(int nbins)
   return hist;
 }
 
-vcl_vector<unsigned int> vdgl_digital_region::residual_histogram(int nbins,
+std::vector<unsigned int> vdgl_digital_region::residual_histogram(int nbins,
                                                                  float* min,
                                                                  float* max)
 {
   assert(nbins > 0);
-  if (nbins == 1) return vcl_vector<unsigned int>(1, npts_);
-  vcl_vector<unsigned int> hist(nbins, 0U);
+  if (nbins == 1) return std::vector<unsigned int>(1, npts_);
+  std::vector<unsigned int> hist(nbins, 0U);
   if (npts_ == 0) return hist;
   this->reset();
   float mini = this->Ir(), maxi=mini;

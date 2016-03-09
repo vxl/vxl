@@ -7,10 +7,12 @@
 
 #include "vrml_out.h"
 
-#include <vcl_functional.h>
-#include <vcl_fstream.h>
-#include <vcl_map.h>
-#include <vcl_iostream.h>
+#include <functional>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <fstream>
+#include <map>
+#include <iostream>
 #include <vul/vul_printf.h>
 
 // Default ctor
@@ -21,7 +23,7 @@ vrml_out::vrml_out()
 }
 
 //: Point vrml output to this stream
-vrml_out::vrml_out(vcl_ostream& s)
+vrml_out::vrml_out(std::ostream& s)
 {
   s_ = &s;
   own_ostream_ = false;
@@ -30,16 +32,16 @@ vrml_out::vrml_out(vcl_ostream& s)
 //: Open filename for writing, write prologue, and on closure write epilogue
 vrml_out::vrml_out(char const* filename)
 {
-  s_ = new vcl_ofstream(filename);
+  s_ = new std::ofstream(filename);
   own_ostream_ = true;
   if (!s_ || !(*s_)) {
-    vcl_cerr << "Cannot open " << filename << " for writing\n";
+    std::cerr << "Cannot open " << filename << " for writing\n";
     delete s_; s_ = VXL_NULLPTR; own_ostream_ = false;
   }
   else prologue();
 }
 
-//: Destructor.  If we own the vcl_ostream, write the epilogue
+//: Destructor.  If we own the std::ostream, write the epilogue
 vrml_out::~vrml_out()
 {
   if (own_ostream_) {
@@ -48,7 +50,7 @@ vrml_out::~vrml_out()
   }
 }
 
-#define SETUP if (s_ == 0) { vcl_cerr << "vrml_out -- vcl_ostream not set!\n"; return; } vcl_ostream& f = *s_
+#define SETUP if (s_ == 0) { std::cerr << "vrml_out -- std::ostream not set!\n"; return; } std::ostream& f = *s_
 
 //: Write vrml_out header and an opening "Separator {"
 void vrml_out::prologue()
@@ -69,13 +71,13 @@ void vrml_out::prologue()
 void vrml_out::comment(char const* msg)
 {
   SETUP;
-  f << "# " << msg << vcl_endl;
+  f << "# " << msg << std::endl;
 }
 
 void vrml_out::verbatim(char const* msg)
 {
   SETUP;
-  f << msg << vcl_endl;
+  f << msg << std::endl;
 }
 
 //: Write closing "}"
@@ -87,10 +89,10 @@ void vrml_out::epilogue()
 }
 
 #if 0
-void vrml_out::write_vertices(vcl_vector<vgl_point_3d<double> > const& points)
+void vrml_out::write_vertices(std::vector<vgl_point_3d<double> > const& points)
 {
   begin_pointset();
-  for (vcl_vector<vgl_point_3d<double> >::const_iterator it = points.begin();
+  for (std::vector<vgl_point_3d<double> >::const_iterator it = points.begin();
        it != points.end(); ++it)
     point3d(*it);
   end_pointset();
@@ -110,7 +112,7 @@ void vrml_out::display_pointset ()
 struct VRML_IO_VertexRememberer
 {
   vrml_out* vrml_;
-  typedef vcl_map<void*, int, vcl_less<void*> > Map;
+  typedef std::map<void*, int, std::less<void*> > Map;
   Map vertex_ids;
   int current_vertex_id;
 
@@ -142,7 +144,7 @@ int VRML_IO_VertexRememberer::vertex_id(vgl_point_3d<double> v)
   if (p != vertex_ids.end())
     return (*p).second;
 
-  vcl_cerr << "VRML_IO_VertexRememberer::vertex_ids() WARNING! "
+  std::cerr << "VRML_IO_VertexRememberer::vertex_ids() WARNING! "
            << "This can't happen -- vertex " << v << " has no id.  Fnarrr.\n";
 
   return -1;
@@ -150,7 +152,7 @@ int VRML_IO_VertexRememberer::vertex_id(vgl_point_3d<double> v)
 
 // -----------------------------------------------------------------------------
 
-void vrml_out::write_edges(vcl_list<vgl_line_segment_3d<double> >& edges)
+void vrml_out::write_edges(std::list<vgl_line_segment_3d<double> >& edges)
 {
   // Start sending vertices
   begin_pointset();
@@ -170,7 +172,7 @@ void vrml_out::write_edges(vcl_list<vgl_line_segment_3d<double> >& edges)
   end_lineset();
 }
 
-void vrml_out::write_faces(vcl_list<vgl_polygon<float> >& triangles)
+void vrml_out::write_faces(std::list<vgl_polygon<float> >& triangles)
 {
   VRML_IO_VertexRememberer vertexer(this, triangles.length() * 3/2);
 
@@ -178,7 +180,7 @@ void vrml_out::write_faces(vcl_list<vgl_polygon<float> >& triangles)
   begin_pointset();
   for (triangles.reset(); triangles.next(); ) {
     vgl_polygon<float> face = triangles.value();
-    vcl_list<vgl_point_3d<double> > vertices = face->Vertices();
+    std::list<vgl_point_3d<double> > vertices = face->Vertices();
     for (vertices->reset(); vertices->next();)
       vertexer.send_vertex(vertices->value());
   }
@@ -188,7 +190,7 @@ void vrml_out::write_faces(vcl_list<vgl_polygon<float> >& triangles)
   begin_faceset();
   for (triangles.reset(); triangles.next(); ) {
     vgl_polygon<float> face = triangles.value();
-    vcl_list<vgl_point_3d<double> > vertices = face->Vertices();
+    std::list<vgl_point_3d<double> > vertices = face->Vertices();
     face_open();
     for (vertices->reset(); vertices->next();)
       face_index(vertexer.vertex_id(vertices->value()));
@@ -197,25 +199,25 @@ void vrml_out::write_faces(vcl_list<vgl_polygon<float> >& triangles)
   end_faceset();
 }
 
-void vrml_out::write_faces_textured(vcl_list<vgl_polygon<float> >& triangles,
+void vrml_out::write_faces_textured(std::list<vgl_polygon<float> >& triangles,
                                     char const* texfile,
                                     vrml_out_vertex_to_texture const& v2t
                                    )
 {
   VRML_IO_VertexRememberer vertexer(this, triangles.length() * 3/2);
 
-  vcl_ofstream phil3d("/tmp/pcptex.3d");
-  vcl_ofstream phil2d("/tmp/pcptex.2d");
+  std::ofstream phil3d("/tmp/pcptex.3d");
+  std::ofstream phil2d("/tmp/pcptex.2d");
 
   begin_pointset();
   for (triangles.reset(); triangles.next(); ) {
     vgl_polygon<float> face = triangles.value();
-    vcl_list<vgl_point_3d<double> > vertices = face->Vertices();
+    std::list<vgl_point_3d<double> > vertices = face->Vertices();
     for (vertices->reset(); vertices->next();) {
       Vertex *v = vertices->value();
       if (vertexer.send_vertex(v)) {
         // Save pcp3d
-        phil3d << v->GetX() << ' ' << v->GetY() << ' ' << v->GetZ() << vcl_endl;
+        phil3d << v->GetX() << ' ' << v->GetY() << ' ' << v->GetZ() << std::endl;
         // Save pcp texture coord
         int xsize = v2t.image_xsize;
         int ysize = v2t.image_ysize;
@@ -223,7 +225,7 @@ void vrml_out::write_faces_textured(vcl_list<vgl_polygon<float> >& triangles,
         v2t.get_texture_coords(v, &ix, &iy);
         ix = ix / xsize;
         iy = 1.0 - iy / ysize;
-        phil2d << ix << ' ' << iy << vcl_endl;
+        phil2d << ix << ' ' << iy << std::endl;
       }
     }
   }
@@ -238,14 +240,14 @@ void vrml_out::write_faces_textured(vcl_list<vgl_polygon<float> >& triangles,
   for (triangles.reset(); triangles.next(); )
   {
     vgl_polygon<float> face = triangles.value();
-    vcl_list<vgl_point_3d<double> > vertices = face->Vertices();
+    std::list<vgl_point_3d<double> > vertices = face->Vertices();
     for (vertices->reset(); vertices->next();)
     {
       Vertex *v = vertices->value();
       int id = vertexer.vertex_id(v);
       if (id > last_id) {
         if (last_id + 1 != id)
-          vcl_cerr << "vrml_out::write_faces_textured() -- texture buggered\n";
+          std::cerr << "vrml_out::write_faces_textured() -- texture buggered\n";
         ++last_id;
 
         double ix, iy;
@@ -261,7 +263,7 @@ void vrml_out::write_faces_textured(vcl_list<vgl_polygon<float> >& triangles,
   begin_faceset();
   for (triangles.reset(); triangles.next(); ) {
     vgl_polygon<float> face = triangles.value();
-    vcl_list<vgl_point_3d<double> > vertices = face->Vertices();
+    std::list<vgl_point_3d<double> > vertices = face->Vertices();
     face_open();
     for (vertices->reset(); vertices->next();)
       face_index(vertexer.vertex_id(vertices->value()));
@@ -289,12 +291,12 @@ struct Hack_VertexToTexture : public vrml_out_vertex_to_texture
   }
 };
 
-void vrml_out::write_faces_textured(vcl_list<vgl_polygon<float> >& triangles,
+void vrml_out::write_faces_textured(std::list<vgl_polygon<float> >& triangles,
                                     char const* imagefilename,
                                     int xsize, int ysize
                                    )
 {
-  vcl_cerr << "vrml_out::write_faces_textured() -- hacking image-world transform\n";
+  std::cerr << "vrml_out::write_faces_textured() -- hacking image-world transform\n";
   Hack_VertexToTexture hack(xsize, ysize);
   write_faces_textured(triangles, imagefilename, hack);
 }
@@ -319,7 +321,7 @@ class VTT : public vrml_out_vertex_to_texture
   vnl_matrix<double> Pmatrix;
 };
 
-void vrml_out::write_faces_textured(vcl_list<vgl_polygon<float> >& triangles,
+void vrml_out::write_faces_textured(std::list<vgl_polygon<float> >& triangles,
                                     char const* imagefilename,
                                     int xsize, int ysize,
                                     vnl_matrix<double> const& Pmatrix
@@ -348,7 +350,7 @@ void vrml_out::write_topology(TopologyObject* topobj)
   vgl_polygon<float> face = topobj->CastToFace();
   if (face) {
     begin_separator();
-    vcl_list<vgl_polygon<float> > faces; faces.push(face);
+    std::list<vgl_polygon<float> > faces; faces.push(face);
     write_faces(faces);
     end_separator();
     return;
@@ -357,7 +359,7 @@ void vrml_out::write_topology(TopologyObject* topobj)
   vgl_line_segment_3d<double> edge = topobj->CastToEdge();
   if (edge) {
     begin_separator();
-    vcl_list<vgl_line_segment_3d<double> > edges(edge);
+    std::list<vgl_line_segment_3d<double> > edges(edge);
     write_edges(edges);
     end_separator();
     return;
@@ -366,18 +368,18 @@ void vrml_out::write_topology(TopologyObject* topobj)
   vgl_point_3d<double> vertex = topobj->CastToVertex();
   if (vertex) {
     begin_separator();
-    vcl_list<vgl_point_3d<double> > vertices(vertex);
+    std::list<vgl_point_3d<double> > vertices(vertex);
     write_vertices(vertices);
     end_separator();
     return;
   }
 
-  vcl_cerr << "VRML: not handling " << topobj << vcl_endl;
+  std::cerr << "VRML: not handling " << topobj << std::endl;
   f << "# vrml_out: Couldn't handle "
-    << TopologyObject::TopoNames[topobj->GetTopologyType()] << vcl_endl;
+    << TopologyObject::TopoNames[topobj->GetTopologyType()] << std::endl;
 }
 
-void vrml_out::write_topology(vcl_list<TopologyObject*>& topobjs)
+void vrml_out::write_topology(std::list<TopologyObject*>& topobjs)
 {
   for (topobjs.reset(); topobjs.next(); )
     write_topology(topobjs.value());

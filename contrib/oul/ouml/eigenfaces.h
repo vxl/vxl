@@ -11,7 +11,9 @@
 //----------------------------------------------------------------------
 
 #include <vcl_cfloat.h> // for DBL_MAX
-#include <vcl_vector.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <vector>
 #include <vnl/vnl_vector.h>
 #include <vil1/vil1_memory_image_of.h>
 #include "inlines.h"
@@ -24,11 +26,11 @@ class EigenFace
 {
  private:
   unsigned int image_size;
-  vcl_vector<vnl_vector<double> *> training_images;
-  vcl_vector<vnl_vector<double> *> encoded_training_images;
-  vcl_vector<char *> training_labels;
-  vcl_vector<vnl_vector<double> *> eigenvectors;
-  vcl_vector<double> eigenvalues;
+  std::vector<vnl_vector<double> *> training_images;
+  std::vector<vnl_vector<double> *> encoded_training_images;
+  std::vector<char *> training_labels;
+  std::vector<vnl_vector<double> *> eigenvectors;
+  std::vector<double> eigenvalues;
   vnl_vector<double> *average_training_image;
   vnl_vector<double> *convert_image_to_vector(Image *im);
   void encode_training_images();

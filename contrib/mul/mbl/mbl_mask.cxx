@@ -6,10 +6,12 @@
 // \brief Class representing a binary mask, and related functions
 
 #include "mbl_mask.h"
-#include <vcl_set.h>
-#include <vcl_map.h>
-#include <vcl_fstream.h>
-#include <vcl_string.h>
+#include <set>
+#include <map>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <fstream>
+#include <string>
 #include <vul/vul_string.h>
 #include <mbl/mbl_exception.h>
 
@@ -20,18 +22,18 @@
     //    The output vector of masks is sorted such that
     //    for example: (1,4,2,1,2) will make three masks: (1,0,0,1,0), (0,0,1,0,1) and (0,1,0,0,0)
     //    which correspond to the sorted index sets 1,2,4
-void mbl_masks_from_index_set(const vcl_vector<unsigned> & indices,
-                              vcl_vector<mbl_mask> & masks)
+void mbl_masks_from_index_set(const std::vector<unsigned> & indices,
+                              std::vector<mbl_mask> & masks)
 {
   masks.clear();
   unsigned n = indices.size(), n_masks = 0;
-  vcl_set<unsigned> used_indices;
-  vcl_map<unsigned, unsigned> ordering;
+  std::set<unsigned> used_indices;
+  std::map<unsigned, unsigned> ordering;
 
   for (unsigned i = 0 ; i < n ; ++i)
     used_indices.insert(indices[i]);
 
-  for (vcl_set<unsigned>::const_iterator it = used_indices.begin(),
+  for (std::set<unsigned>::const_iterator it = used_indices.begin(),
                                          end = used_indices.end();
                                          it != end; ++it)
   {
@@ -51,7 +53,7 @@ void mbl_mask_on_mask(const mbl_mask & A, mbl_mask & B)
   unsigned nB = 0;
   for (unsigned i = 0 ; i < B.size() ; ++i) nB += B[i];
   if (nA != nB)
-    throw vcl_out_of_range("mbl_mask: Length of A mismatch with number of true elements of B");
+    throw std::out_of_range("mbl_mask: Length of A mismatch with number of true elements of B");
 
   for (unsigned i = 0, j = 0 ; i < B.size() ; ++i)
     if (B[i]) B[i] = A[j++];
@@ -96,21 +98,21 @@ void mbl_mask_logic_nand(const mbl_mask & A, mbl_mask & B)
 
 
     //: Apply a general logical operation between two masks
-void mbl_mask_logic(const mbl_mask & A, mbl_mask & B, const vcl_string & operation)
+void mbl_mask_logic(const mbl_mask & A, mbl_mask & B, const std::string & operation)
 {
   if (A.size() != B.size())
-    throw vcl_out_of_range("mbl_mask_logic: Mask lengths differ");
+    throw std::out_of_range("mbl_mask_logic: Mask lengths differ");
 
   // Validate the operation to perform and parse into vector
 
   if (operation.length() != 4)
-    throw vcl_length_error("mbl_mask_logic: Operation must be of length 4");
-  vcl_vector<bool> op_rule(4);
+    throw std::length_error("mbl_mask_logic: Operation must be of length 4");
+  std::vector<bool> op_rule(4);
   for (unsigned i = 0 ; i < 4 ; ++i)
   {
     if (operation[i] == '0') op_rule[i] = false;
     else if (operation[i] == '1') op_rule[i] = true;
-    else throw vcl_invalid_argument("mbl_mask_logic: Invalid character in operation string - must contain only '0' or '1'");
+    else throw std::invalid_argument("mbl_mask_logic: Invalid character in operation string - must contain only '0' or '1'");
   }
 
   // Apply the operation in place
@@ -120,49 +122,49 @@ void mbl_mask_logic(const mbl_mask & A, mbl_mask & B, const vcl_string & operati
 
 
     //: Save to file
-void mbl_save_mask(const mbl_mask & mask, vcl_ostream & stream)
+void mbl_save_mask(const mbl_mask & mask, std::ostream & stream)
 {
-  vcl_vector<bool>::const_iterator it = mask.begin();
-  const vcl_vector<bool>::const_iterator & end = mask.end();
+  std::vector<bool>::const_iterator it = mask.begin();
+  const std::vector<bool>::const_iterator & end = mask.end();
   for (; it != end; ++it)
-    stream << *it << vcl_endl;
+    stream << *it << std::endl;
 }
 
     //: Save to file
 void mbl_save_mask(const mbl_mask & mask, const char * filename)
 {
-  vcl_ofstream stream(filename);
+  std::ofstream stream(filename);
   if (!stream)
     mbl_exception_throw_os_error(filename);
   mbl_save_mask(mask, stream);
 }
 
     //: Save to file
-void mbl_save_mask(const mbl_mask & mask, const vcl_string &filename)
+void mbl_save_mask(const mbl_mask & mask, const std::string &filename)
 {
-  vcl_ofstream stream(filename.c_str());
+  std::ofstream stream(filename.c_str());
   if (!stream)
     mbl_exception_throw_os_error(filename);
   mbl_save_mask(mask, stream);
 }
 
     //: Load from file
-void mbl_load_mask(mbl_mask & mask, vcl_istream & stream)
+void mbl_load_mask(mbl_mask & mask, std::istream & stream)
 {
   mask.clear();
-  vcl_string line;
+  std::string line;
   while (stream.good())
   {
     char c='X';
-    stream >> vcl_ws >> c;
+    stream >> std::ws >> c;
     if (stream.eof()) break;
     if (c == '0') mask.push_back(false);
     else if (c == '1') mask.push_back(true);
     else
     {
       mask.clear();
-      throw mbl_exception_parse_file_error(vcl_string("Unable to parse mask value " +
-        vul_string_escape_ctrl_chars(vcl_string(1,c)) ), "" );
+      throw mbl_exception_parse_file_error(std::string("Unable to parse mask value " +
+        vul_string_escape_ctrl_chars(std::string(1,c)) ), "" );
     }
   }
 }
@@ -170,7 +172,7 @@ void mbl_load_mask(mbl_mask & mask, vcl_istream & stream)
     //: Load from file
 void mbl_load_mask(mbl_mask & mask, const char * filename)
 {
-  vcl_ifstream stream(filename);
+  std::ifstream stream(filename);
   if (!stream)
     mbl_exception_throw_os_error(filename);
   try
@@ -184,14 +186,14 @@ void mbl_load_mask(mbl_mask & mask, const char * filename)
 }
 
     //: Load from file
-void mbl_load_mask(mbl_mask & mask, const vcl_string &filename)
+void mbl_load_mask(mbl_mask & mask, const std::string &filename)
 {
   mbl_load_mask( mask, filename.c_str() );
 }
 
 
 //: Convert a mask to a list of indices.
-void mbl_mask_to_indices(const mbl_mask& mask, vcl_vector<unsigned>& inds)
+void mbl_mask_to_indices(const mbl_mask& mask, std::vector<unsigned>& inds)
 {
   inds.clear();
   for (unsigned i=0,n=mask.size(); i<n; ++i)
@@ -202,7 +204,7 @@ void mbl_mask_to_indices(const mbl_mask& mask, vcl_vector<unsigned>& inds)
 
 
 //: Convert a list of indices to a mask.
-void mbl_indices_to_mask(const vcl_vector<unsigned>& inds,
+void mbl_indices_to_mask(const std::vector<unsigned>& inds,
                          const unsigned n,
                          mbl_mask& mask)
 {

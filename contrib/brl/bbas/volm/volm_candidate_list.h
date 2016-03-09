@@ -14,8 +14,10 @@
 
 #include <vgl/vgl_polygon.h>
 #include <vil/algo/vil_find_4con_boundary.h>
-#include <vcl_functional.h>
-#include <vcl_map.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <functional>
+#include <map>
 #include <volm/volm_io.h>
 #include <volm/volm_tile.h>
 #include <volm/volm_camera_space.h>
@@ -23,7 +25,7 @@
 #include <vgl/vgl_polygon.hxx>
 #include <vgl/algo/vgl_convex_hull_2d.h>
 
-typedef vcl_multimap<unsigned, vgl_point_2d<int>, vcl_greater<unsigned> > mymap;
+typedef std::multimap<unsigned, vgl_point_2d<int>, std::greater<unsigned> > mymap;
 
 class volm_candidate_list
 {
@@ -44,25 +46,25 @@ class volm_candidate_list
     unsigned num_of_regions() { return n_sheet_; }
 
     //: best score for each sheet
-    bool region_score(vcl_vector<unsigned>& scores);
+    bool region_score(std::vector<unsigned>& scores);
 
     //: return the top pixel which has highest scores
-    bool top_locations(vcl_vector<vcl_vector<vgl_point_2d<int> > >& top_locs, vcl_vector<vcl_vector<unsigned> >& top_loc_scores);
+    bool top_locations(std::vector<std::vector<vgl_point_2d<int> > >& top_locs, std::vector<std::vector<unsigned> >& top_loc_scores);
 
     //: for each sheet, return top number of pixels which have high scores
-    bool top_locations(vcl_vector<vcl_vector<vgl_point_2d<int> > >& top_locs, vcl_vector<vcl_vector<unsigned> >& top_loc_scores, unsigned const& size);
+    bool top_locations(std::vector<std::vector<vgl_point_2d<int> > >& top_locs, std::vector<std::vector<unsigned> >& top_loc_scores, unsigned const& size);
 
     //: return the top number of pixels which have highest scores, for sheet sh_idx
-    bool top_locations(vcl_vector<vgl_point_2d<int> >& top_locs, vcl_vector<unsigned>& top_loc_scores, unsigned const& size, unsigned const& sh_idx);
+    bool top_locations(std::vector<vgl_point_2d<int> >& top_locs, std::vector<unsigned>& top_loc_scores, unsigned const& size, unsigned const& sh_idx);
 
     //: return the top number of locs which have highest scores, for sheet sh_idx
-    bool top_locations(vcl_vector<vgl_point_2d<double> >& top_locs, vcl_vector<unsigned>& top_loc_scores, volm_tile& tile, unsigned const& size, unsigned const& sh_idx);
+    bool top_locations(std::vector<vgl_point_2d<double> >& top_locs, std::vector<unsigned>& top_loc_scores, volm_tile& tile, unsigned const& size, unsigned const& sh_idx);
 
     //: create an image with candidate region highlighted
     bool candidate_list_image(vil_image_view<vxl_byte>& image);
 
     //: transfer the region coordinates from image to global, returned points vector are the polygon for kml
-    bool img_to_golbal(unsigned const& sh_idx, volm_tile& tile, vcl_vector<vgl_point_2d<double> >& region_global);
+    bool img_to_golbal(unsigned const& sh_idx, volm_tile& tile, std::vector<vgl_point_2d<double> >& region_global);
 
     //: find the region where the given location is in
     bool find(unsigned const& i, unsigned const& j, unsigned& sh_idx, unsigned& loc_score);
@@ -78,41 +80,41 @@ class volm_candidate_list
       return this->find(u, v, sh_idx, loc_score);
     }
     //: write the header of the kml
-    static void open_kml_document(vcl_ofstream& str, vcl_string const& name, float const& threshold);
+    static void open_kml_document(std::ofstream& str, std::string const& name, float const& threshold);
     //: close the document
-    static void close_kml_document(vcl_ofstream& str);
+    static void close_kml_document(std::ofstream& str);
     //: write a region into kml
-    static void write_kml_regions(vcl_ofstream& str,
-                                  vcl_vector<vgl_point_2d<double> >& region,
-                                  vcl_vector<vgl_point_2d<double> >& top_locs,
-                                  vcl_vector<cam_angles>& camera,
-                                  vcl_vector<double>& right_fov,
+    static void write_kml_regions(std::ofstream& str,
+                                  std::vector<vgl_point_2d<double> >& region,
+                                  std::vector<vgl_point_2d<double> >& top_locs,
+                                  std::vector<cam_angles>& camera,
+                                  std::vector<double>& right_fov,
                                   float const& likelihood,
                                   unsigned const& rank);
-    static void write_kml_regions(vcl_ofstream& str,
-                                  vcl_vector<vgl_point_2d<double> >& region,
+    static void write_kml_regions(std::ofstream& str,
+                                  std::vector<vgl_point_2d<double> >& region,
                                   vgl_point_2d<double>& top_loc,
                                   cam_angles const& camera,
                                   double const& right_fov,
                                   float const& likelihood,
                                   unsigned const& rank);
     //: write a candidate region associated with its favored heading direction (represented as a line)
-    static void write_kml_regions(vcl_ofstream& str,
-                                  vcl_vector<vgl_point_2d<double> >& region,
+    static void write_kml_regions(std::ofstream& str,
+                                  std::vector<vgl_point_2d<double> >& region,
                                   vgl_point_2d<double>& top_loc,
-                                  vcl_vector<vgl_point_2d<double> >& heading,
-                                  vcl_vector<vgl_point_2d<double> >& viewing,
-                                  vcl_vector<vgl_point_2d<double> >& landmarks,
-                                  vcl_vector<unsigned char>& landmark_types,
+                                  std::vector<vgl_point_2d<double> >& heading,
+                                  std::vector<vgl_point_2d<double> >& viewing,
+                                  std::vector<vgl_point_2d<double> >& landmarks,
+                                  std::vector<unsigned char>& landmark_types,
                                   float const& likelihood,
                                   unsigned const& rank);
 
     //: generate a circular region given a circular center and radius
-    static bool generate_pin_point_circle(vgl_point_2d<double> const& center, double const& radius, vcl_vector<vgl_point_2d<double> >& circle);
+    static bool generate_pin_point_circle(vgl_point_2d<double> const& center, double const& radius, std::vector<vgl_point_2d<double> >& circle);
     //: generate a heading directional line and camera viewing volume given the camera center and heading direction
     static bool generate_heading_direction(vgl_point_2d<double> const& center, float const& heading_angle, float const& length, float const& right_fov,
-                                           vcl_vector<vgl_point_2d<double> >& heading_line,
-                                           vcl_vector<vgl_point_2d<double> >& viewing);
+                                           std::vector<vgl_point_2d<double> >& heading_line,
+                                           std::vector<vgl_point_2d<double> >& viewing);
     //: method to check whether a given point is inside the candidate region
     static bool inside_candidate_region(vgl_polygon<double> const& cand_poly, double const& lon, double const& lat);
     static bool inside_candidate_region(vgl_polygon<double> const& cand_poly, vgl_point_2d<double> const& pt);
@@ -128,9 +130,9 @@ class volm_candidate_list
     //: candidate list polygon for current image
     vgl_polygon<int> poly_;
     //: a expanded sheet vector used to check whether a given points is inside these sheets
-    vcl_vector<vgl_polygon<double> > hull_poly_;
+    std::vector<vgl_polygon<double> > hull_poly_;
     //: create a expand polygon sheet given a sheet inside the polygon
-    bool create_expand_polygon(vcl_vector<vgl_point_2d<int> > const& sheet);
+    bool create_expand_polygon(std::vector<vgl_point_2d<int> > const& sheet);
     //: check whether the pixel is inside the candidate poly
     bool contains(unsigned const& sheet_id, unsigned const& i, unsigned const& j);
 

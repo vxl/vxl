@@ -22,11 +22,13 @@
 #include <vnl/vnl_double_3x3.h>
 #include <vnl/vnl_cross.h>
 
-#include <vcl_map.h>
+#include <map>
 
-#include <vcl_cmath.h>
-#include <vcl_cstddef.h>
-#include <vcl_cstdlib.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <cmath>
+#include <cstddef>
+#include <cstdlib>
 #include <vcl_cassert.h>
 
 //----------------------------------------------------------------------------
@@ -135,7 +137,7 @@ class rgtl_object_array_triangles_3d::pimpl
   {
     this->set_number_of_triangles(triangle_axes_.size()+1);
   }
-  void set_number_of_triangles(vcl_size_t n)
+  void set_number_of_triangles(std::size_t n)
   {
     this->triangle_computed_.resize(n, 0);
     this->triangle_axes_.resize(n);
@@ -143,7 +145,7 @@ class rgtl_object_array_triangles_3d::pimpl
     this->triangle_radii_.resize(n);
     this->triangle_closest_features_.resize(n);
   }
-  void reserve_triangles(vcl_size_t n)
+  void reserve_triangles(std::size_t n)
   {
     this->triangle_computed_.reserve(n);
     this->triangle_axes_.reserve(n);
@@ -153,21 +155,21 @@ class rgtl_object_array_triangles_3d::pimpl
   }
 
   // Store the flags for whether triangle axes have been computed.
-  vcl_vector<char> triangle_computed_;
+  std::vector<char> triangle_computed_;
 
   // Store the axes that can separate each triangle from an axis-aligned
   // box.
   typedef rgtl_separating_axis<3, double> axis_type;
   struct triangle_axes_type { axis_type axes[13]; };
-  vcl_vector<triangle_axes_type> triangle_axes_;
+  std::vector<triangle_axes_type> triangle_axes_;
 
   // Store the minimum bounding sphere for each triangle.
-  vcl_vector<vnl_double_3> triangle_centers_;
-  vcl_vector<double> triangle_radii_;
+  std::vector<vnl_double_3> triangle_centers_;
+  std::vector<double> triangle_radii_;
 
   // Store the edge normal index for each triangle's edges.
   typedef vnl_vector_fixed<int, 3> triangle_edge_type;
-  vcl_vector<triangle_edge_type> triangle_edges_ids_;
+  std::vector<triangle_edge_type> triangle_edges_ids_;
 
   // The helper class used to compute closest points.
   typedef rgtl_object_closest_polygon_3d<rgtl_oat3_geometry>
@@ -179,19 +181,19 @@ class rgtl_object_array_triangles_3d::pimpl
     closest_finder_type::feature_kind_type kind;
     int index;
   };
-  vcl_vector<closest_feature_type> triangle_closest_features_;
+  std::vector<closest_feature_type> triangle_closest_features_;
 
   // Store whether or not normals have been computed.
   bool have_pseudonormals;
 
   // Store an angle-weighted pseudo-normal for each vertex.
-  vcl_vector<vnl_double_3> vertex_normals_;
+  std::vector<vnl_double_3> vertex_normals_;
 
   // Store an angle-weighted pseudo-normal for each edge.
-  vcl_vector<vnl_double_3> edge_normals_;
+  std::vector<vnl_double_3> edge_normals_;
 
   // Store an angle-weighted pseudo-normal for each face.
-  vcl_vector<vnl_double_3> face_normals_;
+  std::vector<vnl_double_3> face_normals_;
 
   // Map key for an edge.
   struct edge_key
@@ -224,7 +226,7 @@ class rgtl_object_array_triangles_3d::pimpl
   }
   static double normalize(double n[3])
   {
-    double mag = vcl_sqrt(dot(n,n));
+    double mag = std::sqrt(dot(n,n));
     if (mag > 0)
     {
       double mag_inv = 1/mag;
@@ -378,7 +380,7 @@ rgtl_object_array_triangles_3d
   // If the triangle bounding ball does not intersect the query ball
   // skip computing the closest point.
   if (bound_squared >= 0 &&
-      !this->pimpl_->balls_intersect(id, x, vcl_sqrt(bound_squared)))
+      !this->pimpl_->balls_intersect(id, x, std::sqrt(bound_squared)))
   {
     return false;
   }
@@ -462,7 +464,7 @@ rgtl_object_array_triangles_3d
                                      verts[2].data_block(),
                                      tc.data_block(),
                                      radius_squared);
-  tr = vcl_sqrt(radius_squared);
+  tr = std::sqrt(radius_squared);
 }
 
 //----------------------------------------------------------------------------
@@ -480,7 +482,7 @@ rgtl_object_array_triangles_3d
   // First compute the intersection with the triangle plane.
   double const* n = g.get_face_normal();
   double denominator = pimpl::dot(direction, n);
-  if (vcl_fabs(denominator) > 0)
+  if (std::fabs(denominator) > 0)
   {
     double local_s;
     double local_y[3];
@@ -624,7 +626,7 @@ rgtl_object_array_triangles_3d::pimpl
 {
   double const* tc = this->triangle_centers_[id].data_block();
   double v[3] = {tc[0]-center[0], tc[1]-center[1], tc[2]-center[2]};
-  double m = vcl_sqrt(dot(v,v));
+  double m = std::sqrt(dot(v,v));
   double r = radius + this->triangle_radii_[id];
   return m <= r;
 }
@@ -651,7 +653,7 @@ rgtl_object_array_triangles_3d::pimpl
   this->edge_normals_.clear();
 
   // Map from edge endpoint ids to edge index.
-  typedef vcl_map<edge_key, int> edge_map_type;
+  typedef std::map<edge_key, int> edge_map_type;
   edge_map_type edge_map;
 
   // Compute normal information using every triangle.
@@ -678,7 +680,7 @@ rgtl_object_array_triangles_3d::pimpl
       double pe[3] = {-ppe[0], -ppe[1], -ppe[2]};
       normalize(pe);
       normalize(ne);
-      double angle = vcl_acos(dot(pe, ne));
+      double angle = std::acos(dot(pe, ne));
 
       // Contribute the triangle normal to this vertex normal weighted
       // by the incident angle.  We do not need to accumulate the
@@ -736,7 +738,7 @@ void rgtl_object_array_triangles_3d::serialize_load(Serializer& sr)
   sr >> have_pseudonormals;
 
   // Allocate triangle intersection info.
-  vcl_size_t n = this->triangles_.size();
+  std::size_t n = this->triangles_.size();
   this->pimpl_->set_number_of_triangles(n);
 
   // Compute the pseudonormals now if they were already computed when

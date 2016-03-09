@@ -8,8 +8,10 @@
 
 #include "bvxm_voxel_slab.h"
 
-#include <vcl_cstring.h> // for memcpy
-#include <vcl_algorithm.h>
+#include <cstring> // for memcpy
+#include <vcl_compiler.h>
+#include <iostream>
+#include <algorithm>
 
 //=======================================================================
 
@@ -27,7 +29,7 @@ bvxm_voxel_slab<T>::bvxm_voxel_slab(unsigned nx, unsigned ny, unsigned nz)
 template<class T>
 void bvxm_voxel_slab<T>::fill(T const& value)
 {
-  vcl_fill(begin(), end(), value);
+  std::fill(begin(), end(), value);
   return;
 }
 
@@ -51,7 +53,7 @@ void bvxm_voxel_slab<T>::deep_copy(bvxm_voxel_slab<T> const& src)
 {
   set_size(src.nx(),src.ny(),src.nz());
 
-  vcl_memcpy((void*)(this->first_voxel_),(void*)(src.first_voxel()),src.size()*sizeof(T));
+  std::memcpy((void*)(this->first_voxel_),(void*)(src.first_voxel()),src.size()*sizeof(T));
   return;
 }
 

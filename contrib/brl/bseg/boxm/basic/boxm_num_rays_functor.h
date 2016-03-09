@@ -3,7 +3,9 @@
 //:
 // \file
 #include <boxm/boxm_scene.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iostream>
 #include <bsta/bsta_histogram.h>
 #include <boxm/boxm_apm_traits.h>
 #include "boxm_raytrace_function.h"
@@ -28,7 +30,7 @@ class boxm_num_rays_functor
     const float seg_len = (float)(s1 - s0).length();
 
     aux_val.scalar_sum_+=1;
-    //vcl_cout<<aux_val.scalar_sum_<<' ';
+    //std::cout<<aux_val.scalar_sum_<<' ';
     aux_val.seg_len_ += seg_len;
     return true;
   }

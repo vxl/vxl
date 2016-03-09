@@ -14,7 +14,9 @@
 #include <sdet/sdet_img_edge.h>
 #include <vgl/vgl_distance.h>
 #ifdef DEBUG
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iostream>
 #endif
 
 template <boxm_apm_type APM, class T_aux>
@@ -42,7 +44,7 @@ class boxm_render_expected_edge_tangent_image_functor
                         boxm_inf_line_sample<typename boxm_apm_traits<APM>::obs_datatype> &cell_value,
                         T_aux /*aux_val*/)
   {
-    //vcl_cout<< cell_value.residual_<<' ';
+    //std::cout<< cell_value.residual_<<' ';
 #if 0
     if (cell_value.residual_<residual) {
       if (expected_(i,j) > cell_value.residual_)
@@ -87,7 +89,7 @@ class boxm_render_expected_edge_tangent_image_functor
       {
         expected_(i,j,0)=float(u1+u2)/2;
         expected_(i,j,1)=float(v1+v2)/2;
-        expected_(i,j,2)=float(vnl_math::angle_0_to_2pi(vcl_atan2(v2-v1,u2-u1)));
+        expected_(i,j,2)=float(vnl_math::angle_0_to_2pi(std::atan2(v2-v1,u2-u1)));
       }
     }
 #endif // 0

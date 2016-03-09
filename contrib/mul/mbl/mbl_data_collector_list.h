@@ -8,14 +8,16 @@
 #include <mbl/mbl_data_collector.h>
 #include <mbl/mbl_data_array_wrapper.h>
 #include <vsl/vsl_binary_io.h>
-#include <vcl_string.h>
-#include <vcl_iosfwd.h>
+#include <string>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iosfwd>
 
 //: Collect data and store them in a list.
 template<class T>
 class mbl_data_collector_list : public mbl_data_collector<T>
 {
-  vcl_vector<T> data_;
+  std::vector<T> data_;
   mbl_data_array_wrapper<T> wrapper_;
 
  public:
@@ -42,16 +44,16 @@ class mbl_data_collector_list : public mbl_data_collector<T>
   short version_no() const;
 
   //: Name of the class
-  virtual vcl_string is_a() const;
+  virtual std::string is_a() const;
 
   //: Does the name of the class match the argument?
-  virtual bool is_class(vcl_string const& s) const;
+  virtual bool is_class(std::string const& s) const;
 
   //: Create a copy on the heap and return base class pointer
   virtual mbl_data_collector_base* clone() const;
 
   //: Print class to os
-  virtual void print_summary(vcl_ostream& os) const;
+  virtual void print_summary(std::ostream& os) const;
 
   //: Save class to binary file stream
   virtual void b_write(vsl_b_ostream& bfs) const;

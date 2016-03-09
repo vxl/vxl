@@ -7,7 +7,9 @@
 // \author Franck Bettinger
 
 #include "mvl2_video_to_avi_linux.h"
-#include <vcl_cstring.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <cstring>
 #include <vil/vil_resample_bilin.h>
 
 mvl2_video_to_avi::mvl2_video_to_avi()
@@ -60,7 +62,7 @@ void mvl2_video_to_avi::set_quality(int qual)
 }
 
 bool mvl2_video_to_avi::open( int width, int height,
-                              vcl_string format, vcl_string file_name)
+                              std::string format, std::string file_name)
 {
   if (is_initialized_) return false;
 
@@ -127,12 +129,12 @@ void mvl2_video_to_avi::write_frame(vil_image_view<vxl_byte>& image)
     vil_resample_bilin(image,resampled_image,0.0,0.0,
                        ratio,0.0,0.0,ratio,width_,height_);
 
-    vcl_cout << "write frame "<< current_frame_+1 << " ... "
+    std::cout << "write frame "<< current_frame_+1 << " ... "
              << image.ni()<<'x'<<image.nj()<<" -> "
-             << width_<<'x'<<height_<< vcl_endl;
+             << width_<<'x'<<height_<< std::endl;
 
     uint8_t data[width_*height_*3];
-    vcl_memset(data,0,width_*height_*3*sizeof(uint8_t));
+    std::memset(data,0,width_*height_*3*sizeof(uint8_t));
 
     BitmapInfo bi=BitmapInfo(width_,height_,24);
     CImage* im24;
@@ -167,9 +169,9 @@ void mvl2_video_to_avi::write_frame(vil_image_view<vxl_byte>& image)
   current_frame_++;
 }
 
-vcl_string mvl2_video_to_avi::is_a() const
+std::string mvl2_video_to_avi::is_a() const
 {
-  return vcl_string("mvl2_video_to_avi");
+  return std::string("mvl2_video_to_avi");
 }
 
 mvl2_video_writer* mvl2_video_to_avi::clone() const

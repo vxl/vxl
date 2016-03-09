@@ -9,7 +9,9 @@
 // .FILE osl_edgel_chain.cxx
 // \author fsm
 
-#include <vcl_iosfwd.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iosfwd>
 
 struct osl_edgel_chain
 {
@@ -37,8 +39,8 @@ struct osl_edgel_chain
   void SetY(float v, unsigned int i);
   unsigned int size() const;
   //
-  void write_ascii(vcl_ostream &) const;
-  void read_ascii(vcl_istream &);
+  void write_ascii(std::ostream &) const;
+  void read_ascii(std::istream &);
 };
 
 #endif // osl_edgel_chain_h_

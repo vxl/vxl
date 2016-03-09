@@ -45,14 +45,14 @@ class boxm2_vecf_ocl_store_nbrs : public vbl_ref_count
   bool compile_kernel();
   bool init_ocl_store();
   bool get_scene_appearance(boxm2_scene_sptr scene,
-                            vcl_string&      options);
+                            std::string&      options);
 
   boxm2_opencl_cache_sptr  opencl_cache_;
   boxm2_scene_sptr source_scene_;
   bocl_device_sptr device_;
   int status;
   int apptypesize_;//size of the appearance model
-  vcl_string app_type_;
+  std::string app_type_;
   bocl_kernel * kern;
   bocl_mem_sptr centerX;
   bocl_mem_sptr centerY;

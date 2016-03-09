@@ -3,9 +3,11 @@
 //:
 // \file
 
-#include <vcl_iostream.h>
-#include <vcl_fstream.h>
-#include <vcl_cmath.h>
+#include <iostream>
+#include <fstream>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <cmath>
 #include <vgl/vgl_point_3d.h>
 #include <vnl/vnl_math.h>
 #include <vsol/vsol_point_2d.h> // for dereferencing ps_list[j]
@@ -20,7 +22,7 @@
 // -----------------------------------------------------------------
 // constructor
 sdet_adjust_lsqr::
-    sdet_adjust_lsqr( vcl_vector<vgl_point_3d<double> > const& img_pts,
+    sdet_adjust_lsqr( std::vector<vgl_point_3d<double> > const& img_pts,
                       unsigned int num_unknowns, unsigned int num_residuals,
                       int n_peaks)
             : vnl_least_squares_function(num_unknowns, num_residuals,
@@ -89,7 +91,7 @@ void sdet_adjust_lsqr::f( vnl_vector<double> const& unknowns,
       double exponent = ((-1.0 * Dtrans * Vinv * D)(0,0))/2.0;    // exponent of e
 
       //value of gaussian at x,y, a matrix operation
-      double gaussian = peak_delta * vcl_exp(exponent);
+      double gaussian = peak_delta * std::exp(exponent);
 
       // add up value of summed components of multiple peaks at eacy image point
       sum[i] += gaussian;
@@ -101,19 +103,19 @@ void sdet_adjust_lsqr::f( vnl_vector<double> const& unknowns,
     fit_value[i] = sum[i] + unknowns[0];    // add value of pixel above "floor"
 
 #if 0 // Debug:  print out values for this step
-  vcl_cout << "plane(" << unknowns[0] << "),  peak(" << unknowns[1] << "),\n"
+  std::cout << "plane(" << unknowns[0] << "),  peak(" << unknowns[1] << "),\n"
            << "x(" << unknowns[2] << "),  y(" << unknowns[3] << ")\n"
            << "var x(" << unknowns[4] << "),  var y(" << unknowns[5] << ")\n"
-           << "covar(" << unknowns[6] << ')' << vcl_endl;
+           << "covar(" << unknowns[6] << ')' << std::endl;
 #endif
 
 // calculate the fit_error values of the current fit
   for (unsigned i = 0; i < img_pts_.size(); ++i)
   {
     double e = (fit_value[i] - img_pts_[i].z());
-    fit_error[i] = vcl_fabs(e);
+    fit_error[i] = std::fabs(e);
 #if 0 // Debug:  print out values of fit error for each point
-    vcl_cout << "fiterror[" << i << ']' << fit_error[i] << vcl_endl;
+    std::cout << "fiterror[" << i << ']' << fit_error[i] << std::endl;
 #endif
   }
 }
@@ -122,10 +124,10 @@ void sdet_adjust_lsqr::f( vnl_vector<double> const& unknowns,
 // -------------------------------------------------------------------------
 // Initialize the process
 
-static bool init(vcl_vector<vgl_point_3d<double> > img_pts, vcl_vector<double>& peak,
-                 double& plane, vcl_vector<double>& ux, vcl_vector<double>& uy,
-                 vcl_vector<double>& sxx, vcl_vector<double>& syy, vcl_vector<double>& sxy,
-                 vcl_vector<vsol_point_2d_sptr> ps_list, int n_peaks, double xmin, double ymin)
+static bool init(std::vector<vgl_point_3d<double> > img_pts, std::vector<double>& peak,
+                 double& plane, std::vector<double>& ux, std::vector<double>& uy,
+                 std::vector<double>& sxx, std::vector<double>& syy, std::vector<double>& sxy,
+                 std::vector<vsol_point_2d_sptr> ps_list, int n_peaks, double xmin, double ymin)
 {
   //find the smallest intensity value in polygon
   plane = 65000.;
@@ -223,9 +225,9 @@ static bool init(vcl_vector<vgl_point_3d<double> > img_pts, vcl_vector<double>& 
 //: Adjust the parameters of the 2d gaussian
 //    Returns adjusted fit parameters
 
-vnl_vector<double> sdet_gauss_fit::adjust( vcl_vector<vgl_point_3d<double> > img_pts,
-                                           vcl_vector<vsol_point_2d_sptr> ps_list,
-                                           int n_peaks, vcl_ofstream& outfile,
+vnl_vector<double> sdet_gauss_fit::adjust( std::vector<vgl_point_3d<double> > img_pts,
+                                           std::vector<vsol_point_2d_sptr> ps_list,
+                                           int n_peaks, std::ofstream& outfile,
                                            double xmin, double ymin)
 {
   unsigned num_pixels = img_pts.size();
@@ -236,37 +238,37 @@ vnl_vector<double> sdet_gauss_fit::adjust( vcl_vector<vgl_point_3d<double> > img
 
   // We want to be able to draw a polygon on the image and fit only the
   //   pixels in that polygon.  So here the pixels and their x,y location
-  //   in the image are stored in a vcl_vector<vgl_point_3d<double> img_pnts
+  //   in the image are stored in a std::vector<vgl_point_3d<double> img_pnts
 
   double plane;
-  vcl_vector<double> peak;
-  vcl_vector<double> ux;
-  vcl_vector<double> uy;
-  vcl_vector<double> sxx;
-  vcl_vector<double> syy;
-  vcl_vector<double> sxy;
+  std::vector<double> peak;
+  std::vector<double> ux;
+  std::vector<double> uy;
+  std::vector<double> sxx;
+  std::vector<double> syy;
+  std::vector<double> sxy;
 
   if (!init(img_pts, peak, plane, ux, uy, sxx, syy, sxy, ps_list, n_peaks, xmin, ymin))
   {
-    outfile << "ERROR!! sdet_gauss_fit::adjust(), Cannot init()" << vcl_endl;
-    vcl_cerr << "ERROR!! sdet_gauss_fit::adjust(), Cannot init()\n";
+    outfile << "ERROR!! sdet_gauss_fit::adjust(), Cannot init()" << std::endl;
+    std::cerr << "ERROR!! sdet_gauss_fit::adjust(), Cannot init()\n";
   }
 
   for (int i=0; i < n_peaks; ++i)
   {
 #if 0
     outfile << "Init values:\n-----------------------------------------------\n Peak "
-            << i+1 << "\n -------------------------\nplane= " << plane << vcl_endl
+            << i+1 << "\n -------------------------\nplane= " << plane << std::endl
             << "peak=" << peak[i] << ",  ux=" << ux[i]
             << ",  uy=" << uy[i] << ",  sxx=" << sxx[i] << ",  syy=" << syy[i]
-            << ",  sxy=" << sxy[i] << vcl_endl;
+            << ",  sxy=" << sxy[i] << std::endl;
     outfile.flush();
 #endif
-    vcl_cout << "Init values:\n-----------------------------------------------\n Peak "
-             << i+1 << "\n -------------------------\nplane= " << plane << vcl_endl
+    std::cout << "Init values:\n-----------------------------------------------\n Peak "
+             << i+1 << "\n -------------------------\nplane= " << plane << std::endl
              << "peak=" << peak[i] << ",  ux=" << ux[i]
              << ",  uy=" << uy[i] << ",  sxx=" << sxx[i] << ",  syy=" << syy[i]
-             << ",  sxy=" << sxy[i] << vcl_endl;
+             << ",  sxy=" << sxy[i] << std::endl;
   }
 
   // Initialize the least squares function
@@ -311,11 +313,11 @@ vnl_vector<double> sdet_gauss_fit::adjust( vcl_vector<vgl_point_3d<double> > img
     unknowns[5+6*i] = syy[i];
     unknowns[6+6*i] = sxy[i];
 
-    outfile << "max pixel for peak " << i+1 << " = " << peak[i] << vcl_endl;
+    outfile << "max pixel for peak " << i+1 << " = " << peak[i] << std::endl;
   }
 
-  vcl_cout << "\nStarting Levenberg-Marquardt minimizer, may take a few seconds per iteration"
-           << vcl_endl;
+  std::cout << "\nStarting Levenberg-Marquardt minimizer, may take a few seconds per iteration"
+           << std::endl;
 
   // Minimize the error and get best correspondence vertices and translations
   levmarq.minimize(unknowns);
@@ -324,36 +326,36 @@ vnl_vector<double> sdet_gauss_fit::adjust( vcl_vector<vgl_point_3d<double> > img
   levmarq.diagnose_outcome();
 #if 0
   outfile << "Min error of " << levmarq.get_end_error()
-          << " at the following local minima :" << vcl_endl;
+          << " at the following local minima :" << std::endl;
 #endif
-  vcl_cout << "Min error of " << levmarq.get_end_error()
-           << " at the following local minima :" << vcl_endl;
+  std::cout << "Min error of " << levmarq.get_end_error()
+           << " at the following local minima :" << std::endl;
 
   // print out parameter fit results
 #if 0
-  outfile << "  -----------------------------\nFitted parameters:\n------------" << vcl_endl;
+  outfile << "  -----------------------------\nFitted parameters:\n------------" << std::endl;
 #endif
-  vcl_cout << "  -----------------------------\nFitted parameters:\n------------" << vcl_endl;
+  std::cout << "  -----------------------------\nFitted parameters:\n------------" << std::endl;
 
   for (unsigned i=0; i<num_unknowns; ++i)
   {
 #if 0
-    outfile << "unknowns[" << i << "]= " << unknowns[i] << vcl_endl;
-    if (i%6==4||i%6==5) vcl_cout << "  sd = " << vcl_sqrt(unknowns[i]) << vcl_endl;
+    outfile << "unknowns[" << i << "]= " << unknowns[i] << std::endl;
+    if (i%6==4||i%6==5) std::cout << "  sd = " << std::sqrt(unknowns[i]) << std::endl;
 #endif
 
-    vcl_cout << "unknowns[" << i << "]= " << unknowns[i] << vcl_endl;
-    if (i%6==4||i%6==5) vcl_cout << "  sd = " << vcl_sqrt(unknowns[i]) << vcl_endl;
+    std::cout << "unknowns[" << i << "]= " << unknowns[i] << std::endl;
+    if (i%6==4||i%6==5) std::cout << "  sd = " << std::sqrt(unknowns[i]) << std::endl;
 
     if ((i % 6) == 0)  {
 #if 0
-      outfile << "------------" << vcl_endl;
+      outfile << "------------" << std::endl;
 #endif
-      vcl_cout << "------------" << vcl_endl;
+      std::cout << "------------" << std::endl;
     }
   }
   outfile.flush();
-  vcl_cout.flush();
+  std::cout.flush();
 
   return unknowns;
 }
@@ -364,7 +366,7 @@ vnl_vector<double> sdet_gauss_fit::adjust( vcl_vector<vgl_point_3d<double> > img
 
 vnl_vector<double> sdet_gauss_fit::calculate_ellipse( vnl_vector<double> result, float x,
                                                       float y, int i, int n_peaks,
-                                                      vcl_ofstream& outfile)
+                                                      std::ofstream& outfile)
 {
   // First check to be sure n_peaks agrees with the length of result
   vnl_vector<double> params(3*n_peaks);
@@ -380,9 +382,9 @@ vnl_vector<double> sdet_gauss_fit::calculate_ellipse( vnl_vector<double> result,
   // take care of special cases where sxy = 0 or sxx = syy
   // First calculate the appropriate booleans about relationship of s(nn)
   bool xxgtyy = (sxx > syy);
-  bool xxeqyy = (vcl_fabs(sxx - syy) < 0.0001);
+  bool xxeqyy = (std::fabs(sxx - syy) < 0.0001);
   bool xygt0 = (sxy > 0.0001);
-  bool xyeq0 = (vcl_fabs(sxy) < 0.0001);
+  bool xyeq0 = (std::fabs(sxy) < 0.0001);
 
   // Case 7
   if (xyeq0 && xxeqyy)
@@ -396,7 +398,7 @@ vnl_vector<double> sdet_gauss_fit::calculate_ellipse( vnl_vector<double> result,
   // the other normal cases
   else
   {
-    theta = 0.5 * vcl_atan(2.0 * sxy/(sxx - syy));
+    theta = 0.5 * std::atan(2.0 * sxy/(sxx - syy));
 
     // Case 1
     if (xxgtyy && xygt0) {}                // theta is correct
@@ -411,40 +413,40 @@ vnl_vector<double> sdet_gauss_fit::calculate_ellipse( vnl_vector<double> result,
   double angle = theta*180./pi;
 
   // now calculate the one sigma length of the major and minor axis
-  double sqrt2 = vcl_sqrt(2.0);
-  double factor = vcl_sqrt(sxx*sxx + syy*syy + 4.0*sxy*sxy - 2.0*sxx*syy);
-  a = vcl_sqrt(sxx + syy + factor)/sqrt2;
-  b = vcl_sqrt(sxx + syy - factor)/sqrt2;
+  double sqrt2 = std::sqrt(2.0);
+  double factor = std::sqrt(sxx*sxx + syy*syy + 4.0*sxy*sxy - 2.0*sxx*syy);
+  a = std::sqrt(sxx + syy + factor)/sqrt2;
+  b = std::sqrt(sxx + syy - factor)/sqrt2;
 
   // print out and write results to a file too
-  outfile << "--------------------\nresults for peak " << i+1 << vcl_endl;
-  vcl_cout << "--------------------\nresults for peak " << i+1 << vcl_endl;
+  outfile << "--------------------\nresults for peak " << i+1 << std::endl;
+  std::cout << "--------------------\nresults for peak " << i+1 << std::endl;
 
   double bkgd = result[0];
   double peak = result[6*i+1];
   double d_peak = peak - bkgd;
 
   outfile << "bkgd= " << bkgd << ",  peak= " << peak << ",  d_peak= "
-          << d_peak << vcl_endl
-          << "x= " << x << ",  y= " << y << vcl_endl;
-  vcl_cout << "bkgd= " << bkgd << ",  peak= " << peak << ",  d_peak= "
-           << d_peak << vcl_endl
-           << "x= " << x << ",  y= " << y << vcl_endl;
+          << d_peak << std::endl
+          << "x= " << x << ",  y= " << y << std::endl;
+  std::cout << "bkgd= " << bkgd << ",  peak= " << peak << ",  d_peak= "
+           << d_peak << std::endl
+           << "x= " << x << ",  y= " << y << std::endl;
 #if 0
   outfile << "sxx= " << sxx << ",  syy= " << syy << ",  sxy= " << sxy
-          << ",  factor= " << factor << vcl_endl;
-  vcl_cout << "sxx= " << sxx << ",  syy= " << syy << ",  sxy= " << sxy
-           << ",  factor= " << factor << vcl_endl
-           << "sin(theta)= " << vcl_sin(theta) << ",   cos(theta)= "
-           << vcl_cos(theta) << vcl_endl;
+          << ",  factor= " << factor << std::endl;
+  std::cout << "sxx= " << sxx << ",  syy= " << syy << ",  sxy= " << sxy
+           << ",  factor= " << factor << std::endl
+           << "sin(theta)= " << std::sin(theta) << ",   cos(theta)= "
+           << std::cos(theta) << std::endl;
 #endif
 
   outfile << "theta= " << theta << ",   angle= " << angle
-          << ",   a= " << a << ",   b= " << b << vcl_endl;
-  vcl_cout << "theta= " << theta << ",   angle= " << angle
-           << ",   a= " << a << ",   b= " << b << vcl_endl;
+          << ",   a= " << a << ",   b= " << b << std::endl;
+  std::cout << "theta= " << theta << ",   angle= " << angle
+           << ",   a= " << a << ",   b= " << b << std::endl;
   outfile.flush();
-  vcl_cout.flush();
+  std::cout.flush();
 
   params[0] = theta;
   params[1] = a;

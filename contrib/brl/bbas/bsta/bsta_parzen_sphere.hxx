@@ -18,10 +18,10 @@ namespace
 {
   template <class T, unsigned int n>
   typename bsta_distribution<T,n>::vector_type
-  compute_mean(vcl_vector<typename bsta_distribution<T,n>::vector_type > const& samples)
+  compute_mean(std::vector<typename bsta_distribution<T,n>::vector_type > const& samples)
   {
     typedef typename bsta_distribution<T,n>::vector_type vect_t;
-    typedef typename vcl_vector<vect_t >::const_iterator sit_t;
+    typedef typename std::vector<vect_t >::const_iterator sit_t;
     vect_t sum(T(0));
     sit_t sit = samples.begin();
     T nsamp = static_cast<T>(samples.size());
@@ -34,10 +34,10 @@ namespace
 
   template <class T , unsigned int n >
   T compute_prob_density(typename bsta_distribution<T,n>::vector_type const& pt,
-                         vcl_vector<typename bsta_distribution<T,n>::vector_type > const& samples, T var)
+                         std::vector<typename bsta_distribution<T,n>::vector_type > const& samples, T var)
   {
     typedef typename bsta_distribution<T,n>::vector_type vect_t;
-    typedef typename vcl_vector<vect_t >::const_iterator sit_t;
+    typedef typename std::vector<vect_t >::const_iterator sit_t;
     unsigned size = samples.size();
     if (!size) return T(0);
     T nsamp = static_cast<T>(size);
@@ -56,10 +56,10 @@ namespace
   }
 
   template <class T, unsigned int n>
-  T compute_probability(typename bsta_distribution<T,n>::vector_type const& min_pt, typename bsta_distribution<T,n>::vector_type const& max_pt, vcl_vector<typename bsta_distribution<T,n>::vector_type > const& samples, T var)
+  T compute_probability(typename bsta_distribution<T,n>::vector_type const& min_pt, typename bsta_distribution<T,n>::vector_type const& max_pt, std::vector<typename bsta_distribution<T,n>::vector_type > const& samples, T var)
   {
     typedef typename bsta_distribution<T,n>::vector_type vect_t;
-    typedef typename vcl_vector<vect_t >::const_iterator sit_t;
+    typedef typename std::vector<vect_t >::const_iterator sit_t;
     unsigned size = samples.size();
     if (!size) return static_cast<T>(0);
     T nsamp = static_cast<T>(size);

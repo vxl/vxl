@@ -16,8 +16,10 @@
 //  Yi Dong - July 29 2014 - add more tile generators
 // \endverbatim
 
-#include <vcl_string.h>
-#include <vcl_vector.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <string>
+#include <vector>
 #include <vpgl/file_formats/vpgl_geo_camera.h>
 #include <vbl/vbl_array_2d.h>
 #include <vil/vil_image_view.h>
@@ -32,10 +34,10 @@ class volm_tile
    volm_tile(float lat, float lon, float scale_i, float scale_j, unsigned ni, unsigned nj);
 
    //: parse the name string and construct tile, for now only parses for 'N' and 'W'
-   volm_tile(vcl_string name, unsigned ni, unsigned nj);
+   volm_tile(std::string name, unsigned ni, unsigned nj);
 
    volm_tile() {}
-   vcl_string get_string();
+   std::string get_string();
 
    //: assessors
    unsigned ni() { return ni_; }
@@ -58,7 +60,7 @@ class volm_tile
    bool global_to_img(double lon, double lat, unsigned& i, unsigned& j);
 
    //: create a kml file of the tile as a box and with circular marks throughout at every n pixels in each direction
-   void write_kml(vcl_string name, int n);
+   void write_kml(std::string name, int n);
 
    //: mark the uncertainty region around a given location using a gaussian mask, the center has the designated score, the rest diminishes with respect to a cutoff degree
    //  \p lambda_i and \p lambda_j are the radii of the gaussian mask in pixels
@@ -68,25 +70,25 @@ class volm_tile
    static void mark_uncertainty_region(int i, int j, float score, vbl_array_2d<bool>& mask, vbl_array_2d<float>& kernel, vil_image_view<unsigned int>& img);
    static void mark_uncertainty_region(int i, int j, float score, vbl_array_2d<bool>& mask, vbl_array_2d<float>& kernel, vil_image_view<vxl_byte>& img);
 #if 0
-   static volm_tile parse_string(vcl_string& filename);
+   static volm_tile parse_string(std::string& filename);
 #endif
-   static vcl_vector<volm_tile> generate_p1_tiles();
-   static vcl_vector<volm_tile> generate_p1_wr1_tiles();
-   static vcl_vector<volm_tile> generate_p1_wr2_tiles();
-   static vcl_vector<volm_tile> generate_p1b_wr1_tiles();
-   static vcl_vector<volm_tile> generate_p1b_wr2_tiles();
-   static vcl_vector<volm_tile> generate_p1b_wr3_tiles();
-   static vcl_vector<volm_tile> generate_p1b_wr4_tiles();
-   static vcl_vector<volm_tile> generate_p1b_wr5_tiles();
-   static vcl_vector<volm_tile> generate_p1b_wr_tiles(int world_id);
-   static vcl_vector<volm_tile> generate_p2a_wr8_tiles();
-   static vcl_vector<volm_tile> generate_p2a_wr9_tiles();
-   static vcl_vector<volm_tile> generate_p2a_wr10_tiles();
-   static vcl_vector<volm_tile> generate_p2a_wr11_tiles();
-   static vcl_vector<volm_tile> generate_p2a_wr12_tiles();
-   static vcl_vector<volm_tile> generate_p2a_wr13_tiles();
-   static vcl_vector<volm_tile> generate_p2a_wr_tiles(int world_id);
-   static bool generate_tiles(unsigned const& world_id, vcl_vector<volm_tile>& tiles);
+   static std::vector<volm_tile> generate_p1_tiles();
+   static std::vector<volm_tile> generate_p1_wr1_tiles();
+   static std::vector<volm_tile> generate_p1_wr2_tiles();
+   static std::vector<volm_tile> generate_p1b_wr1_tiles();
+   static std::vector<volm_tile> generate_p1b_wr2_tiles();
+   static std::vector<volm_tile> generate_p1b_wr3_tiles();
+   static std::vector<volm_tile> generate_p1b_wr4_tiles();
+   static std::vector<volm_tile> generate_p1b_wr5_tiles();
+   static std::vector<volm_tile> generate_p1b_wr_tiles(int world_id);
+   static std::vector<volm_tile> generate_p2a_wr8_tiles();
+   static std::vector<volm_tile> generate_p2a_wr9_tiles();
+   static std::vector<volm_tile> generate_p2a_wr10_tiles();
+   static std::vector<volm_tile> generate_p2a_wr11_tiles();
+   static std::vector<volm_tile> generate_p2a_wr12_tiles();
+   static std::vector<volm_tile> generate_p2a_wr13_tiles();
+   static std::vector<volm_tile> generate_p2a_wr_tiles(int world_id);
+   static bool generate_tiles(unsigned const& world_id, std::vector<volm_tile>& tiles);
    //: calculate width of the tile
    double calculate_width();
    double calculate_height();

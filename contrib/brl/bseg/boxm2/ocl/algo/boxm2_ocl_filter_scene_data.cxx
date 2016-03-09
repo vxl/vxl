@@ -13,8 +13,8 @@
 void boxm2_ocl_filter_scene_data::compile_kernels()
     {
         //gather all render sources... seems like a lot for rendering...
-        vcl_vector<vcl_string> src_paths;
-        vcl_string source_dir = boxm2_ocl_util::ocl_src_root();
+        std::vector<std::string> src_paths;
+        std::string source_dir = boxm2_ocl_util::ocl_src_root();
         src_paths.push_back(source_dir + "scene_info.cl");
         src_paths.push_back(source_dir + "bit/bit_tree_library_functions.cl");
         src_paths.push_back(source_dir + "boxm2_ocl_helpers.cl");
@@ -24,9 +24,9 @@ void boxm2_ocl_filter_scene_data::compile_kernels()
         }else{
                 src_paths.push_back(source_dir + "bit/filter_scene_data.cl");
         }
-        vcl_string opts = boxm2_ocl_util::mog_options(appType_);
+        std::string opts = boxm2_ocl_util::mog_options(appType_);
 
-        vcl_cout<<"compiling downsampling and filler kernel with options "<<opts<<vcl_endl;
+        std::cout<<"compiling downsampling and filler kernel with options "<<opts<<std::endl;
 
         bocl_kernel * smooth_kernel= new bocl_kernel();
         smooth_kernel->create_kernel( &device_->context(),
@@ -52,12 +52,12 @@ bool boxm2_ocl_filter_scene_data::apply_filter(int index)
      bvpl_kernel_sptr filter = filter_vector_->kernels_[index]; //get last kernel, the averaging one
      bocl_kernel* kern= kernels[0];
 
-    vcl_stringstream filter_ident; filter_ident << filter->name() << '_' << filter->id();
-    vcl_cout<<"Smoothing scene with filter: " << filter_ident.str() << " of size: " << filter->float_kernel_.size() <<vcl_endl;
+    std::stringstream filter_ident; filter_ident << filter->name() << '_' << filter->id();
+    std::cout<<"Smoothing scene with filter: " << filter_ident.str() << " of size: " << filter->float_kernel_.size() <<std::endl;
     //filter->print();
 
     //set up the filter, filter buffer and other related filter variables
-    vcl_vector<vcl_pair<vgl_point_3d<float>, bvpl_kernel_dispatch> >::iterator kit = filter->float_kernel_.begin();
+    std::vector<std::pair<vgl_point_3d<float>, bvpl_kernel_dispatch> >::iterator kit = filter->float_kernel_.begin();
     unsigned ci=0;
     cl_float4* filter_coeff = new cl_float4 [filter->float_kernel_.size()];
     for (; kit!= filter->float_kernel_.end(); kit++, ci++)
@@ -80,8 +80,8 @@ bool boxm2_ocl_filter_scene_data::apply_filter(int index)
   filter_size_buffer->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR);
     //2. set workgroup size
 
-    vcl_map<boxm2_block_id, boxm2_block_metadata> blocks = scene_->blocks();
-    vcl_map<boxm2_block_id, boxm2_block_metadata>::iterator blk_iter;
+    std::map<boxm2_block_id, boxm2_block_metadata> blocks = scene_->blocks();
+    std::map<boxm2_block_id, boxm2_block_metadata>::iterator blk_iter;
     bocl_mem_sptr centerX = opencl_cache_->alloc_mem(sizeof(cl_float)*585, boct_bit_tree::centerX, "centersX lookup buffer");
     bocl_mem_sptr centerY = opencl_cache_->alloc_mem(sizeof(cl_float)*585, boct_bit_tree::centerY, "centersY lookup buffer");
     bocl_mem_sptr centerZ = opencl_cache_->alloc_mem(sizeof(cl_float)*585, boct_bit_tree::centerZ, "centersZ lookup buffer");
@@ -92,7 +92,7 @@ bool boxm2_ocl_filter_scene_data::apply_filter(int index)
     for (blk_iter = blocks.begin(); blk_iter != blocks.end(); ++blk_iter)
     {
         boxm2_block_id id = blk_iter->first;
-        vcl_cout<<"Smoothing scene_"<<id<<vcl_endl;
+        std::cout<<"Smoothing scene_"<<id<<std::endl;
         //clear cache
         boxm2_block_metadata data = blk_iter->second;
         int numTrees = data.sub_block_num_.x() * data.sub_block_num_.y() * data.sub_block_num_.z();
@@ -106,11 +106,11 @@ bool boxm2_ocl_filter_scene_data::apply_filter(int index)
         // check for invalid parameters
         if( alphaTypeSize == 0 ) //This should never happen, it will result in division by zero later
         {
-            vcl_cout << "ERROR: alphaTypeSize == 0 in " << __FILE__ << __LINE__ << vcl_endl;
+            std::cout << "ERROR: alphaTypeSize == 0 in " << __FILE__ << __LINE__ << std::endl;
             return false;
         }
 
-                vcl_size_t data_size = alpha->num_bytes()/alphaTypeSize;
+                std::size_t data_size = alpha->num_bytes()/alphaTypeSize;
                 bocl_mem * blk_info  = opencl_cache_->loaded_block_info();
 
                 bocl_mem * mog       = opencl_cache_->get_data(scene_,id,appType_,data_size * appTypeSize_,false);
@@ -123,8 +123,8 @@ bool boxm2_ocl_filter_scene_data::apply_filter(int index)
         alpha_new->zero_gpu_buffer(*queue_);
         mog_new->zero_gpu_buffer(*queue_);
         cl_output->zero_gpu_buffer(*queue_);
-        vcl_size_t lThreads[] = {4, 4, 4};
-                        vcl_size_t gThreads[] = { RoundUp(data.sub_block_num_.x(), lThreads[0]),
+        std::size_t lThreads[] = {4, 4, 4};
+                        std::size_t gThreads[] = { RoundUp(data.sub_block_num_.x(), lThreads[0]),
                                         RoundUp(data.sub_block_num_.y(), lThreads[1]),
                                         RoundUp(data.sub_block_num_.z(), lThreads[2]) };
 
@@ -158,9 +158,9 @@ bool boxm2_ocl_filter_scene_data::apply_filter(int index)
 
       /*  for(unsigned i=0;i<data_size;i++)
                 if (output_arr[i]!=0)
-                        vcl_cout<<output_arr[i]<<" ";*/
-        vcl_memcpy((char*)alpha->cpu_buffer(),(char*)alpha_new->cpu_buffer(),data_size * alphaTypeSize);
-        vcl_memcpy((char*)mog->cpu_buffer(),  (char*)mog_new->cpu_buffer(),data_size * appTypeSize_);
+                        std::cout<<output_arr[i]<<" ";*/
+        std::memcpy((char*)alpha->cpu_buffer(),(char*)alpha_new->cpu_buffer(),data_size * alphaTypeSize);
+        std::memcpy((char*)mog->cpu_buffer(),  (char*)mog_new->cpu_buffer(),data_size * appTypeSize_);
 
         alpha->write_to_buffer(*queue_);
         mog->write_to_buffer(*queue_);

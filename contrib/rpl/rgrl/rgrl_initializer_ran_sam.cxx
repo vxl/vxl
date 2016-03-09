@@ -5,7 +5,9 @@
 // \author Charlene Tsai
 // \date   Sep 2003
 
-#include <vcl_cmath.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <cmath>
 #include <vcl_cassert.h>
 
 #include "rgrl_match_set.h"
@@ -203,8 +205,8 @@ estimate()
 
   DebugMacro_abv( 1 , "Samples = " << samples_to_take_ <<'\n' );
 
-  unsigned int points_per = (int)vcl_floor((double)transform_estiamtor_->param_dof()/match_set_->num_constraints_per_match());
-  vcl_vector<int> point_indices( points_per );
+  unsigned int points_per = (int)std::floor((double)transform_estiamtor_->param_dof()/match_set_->num_constraints_per_match());
+  std::vector<int> point_indices( points_per );
   rgrl_trans_affine dummy_trans(3);
   rgrl_scale_sptr dummy_scale;
   bool  scale_set=false;
@@ -266,7 +268,7 @@ calc_num_samples( unsigned int num_matches )
     unsigned long numer=1;
     unsigned long denom=1;
     unsigned int n=num_matches;
-    unsigned int k=(int)vcl_floor((double)transform_estiamtor_->param_dof()/match_set_->num_constraints_per_match());
+    unsigned int k=(int)std::floor((double)transform_estiamtor_->param_dof()/match_set_->num_constraints_per_match());
     for ( ; k>0; --k, --n ) {
       numer *= n;
       denom *= k;
@@ -279,14 +281,14 @@ calc_num_samples( unsigned int num_matches )
     //  to determine the minimum number of samples required.
     //
     int num_samples_to_instantiate =
-      (int)vcl_floor((double)transform_estiamtor_->param_dof()/match_set_->num_constraints_per_match());
+      (int)std::floor((double)transform_estiamtor_->param_dof()/match_set_->num_constraints_per_match());
     unsigned int num_unique_matches = match_set_->from_size();
     double prob_pt_inlier = (1 - max_outlier_frac_) * num_unique_matches / double(num_matches);
     double prob_pt_good
       = max_populations_expected_
-      * vcl_pow( prob_pt_inlier / max_populations_expected_, num_samples_to_instantiate );
-    samples_to_take_ = int(vcl_ceil( vcl_log(1.0 - desired_prob_good_) /
-                                     vcl_log(1.0 - prob_pt_good) ));
+      * std::pow( prob_pt_inlier / max_populations_expected_, num_samples_to_instantiate );
+    samples_to_take_ = int(std::ceil( std::log(1.0 - desired_prob_good_) /
+                                     std::log(1.0 - prob_pt_good) ));
     if ( samples_to_take_ < min_samples_ )
       samples_to_take_ = min_samples_;
   }
@@ -296,7 +298,7 @@ calc_num_samples( unsigned int num_matches )
 void
 rgrl_initializer_ran_sam::
 next_sample( unsigned int taken, unsigned int num_points,
-             vcl_vector<int>& sample,
+             std::vector<int>& sample,
              unsigned int points_per_sample )
 {
   assert( sample.size() == points_per_sample );
@@ -307,7 +309,7 @@ next_sample( unsigned int taken, unsigned int num_points,
         sample[i] = i;
     }
     else if ( taken >= samples_to_take_ )
-      vcl_cerr << "rrel_ran_sam_search::next_sample -- ERROR: used all samples\n";
+      std::cerr << "rrel_ran_sam_search::next_sample -- ERROR: used all samples\n";
     else {
       //
       //  Generate the subsets in lexicographic order.
@@ -330,7 +332,7 @@ next_sample( unsigned int taken, unsigned int num_points,
     {
       int id = generator_->lrand32( 0, num_points-1 );
       if ( id >= int(num_points) ) {   //  safety check
-        vcl_cerr << "rrel_ran_sam_search::next_sample --- "
+        std::cerr << "rrel_ran_sam_search::next_sample --- "
                  << "WARNING: random value out of range\n";
       }
       else
@@ -343,7 +345,7 @@ next_sample( unsigned int taken, unsigned int num_points,
           sample[k++] = id, counter = 0;
         else if (counter > 100)
         {
-          vcl_cerr << "rrel_ran_sam_search::next_sample --- WARNING: "
+          std::cerr << "rrel_ran_sam_search::next_sample --- WARNING: "
                    << "lrand32() generated 100x the same value "<< id
                    << " from the range [0," << num_points-1 << "]\n";
           sample[k++] = id+1;
@@ -355,7 +357,7 @@ next_sample( unsigned int taken, unsigned int num_points,
 
 rgrl_match_set_sptr
 rgrl_initializer_ran_sam::
-get_matches(const vcl_vector<int>&  point_indices, unsigned int total_num_matches)
+get_matches(const std::vector<int>&  point_indices, unsigned int total_num_matches)
 {
   rgrl_match_set_sptr
     sub_match_set = new rgrl_match_set( match_set_->from_feature_type(), match_set_->to_feature_type() );
@@ -390,10 +392,10 @@ get_matches(const vcl_vector<int>&  point_indices, unsigned int total_num_matche
 
 void
 rgrl_initializer_ran_sam::
-trace_sample( const vcl_vector<int>& indices ) const
+trace_sample( const std::vector<int>& indices ) const
 {
-  vcl_cout << "\nNew sample: ";
+  std::cout << "\nNew sample: ";
   for ( unsigned int i=0; i<indices.size(); ++i)
-    vcl_cout << ' ' << indices[i];
-  vcl_cout << vcl_endl;
+    std::cout << ' ' << indices[i];
+  std::cout << std::endl;
 }

@@ -1,6 +1,8 @@
 #include "bocl_global_memory_bandwidth_manager.h"
 //
-#include <vcl_cstdio.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <cstdio>
 
 #define local_workgroup_size 32
 
@@ -106,12 +108,12 @@ bool bocl_global_memory_bandwidth_manager::run_kernel()
   if (!check_val(status,CL_SUCCESS,"clGetKernelWorkGroupInfo CL_KERNEL_WORK_GROUP_SIZE, failed."))
     return SDK_FAILURE;
 
-  vcl_size_t globalThreads[]= {RoundUp(len_,local_workgroup_size)};
-  vcl_size_t localThreads[] = {local_workgroup_size};
+  std::size_t globalThreads[]= {RoundUp(len_,local_workgroup_size)};
+  std::size_t localThreads[] = {local_workgroup_size};
 
   if (used_local_memory > this->total_local_memory())
   {
-    vcl_cout << "Unsupported: Insufficient local memory on device.\n";
+    std::cout << "Unsupported: Insufficient local memory on device.\n";
     return SDK_FAILURE;
   }
 
@@ -166,12 +168,12 @@ bool bocl_global_memory_bandwidth_manager::run_kernel_prefetch()
   if (!check_val(status,CL_SUCCESS,"clGetKernelWorkGroupInfo CL_KERNEL_WORK_GROUP_SIZE, failed."))
     return SDK_FAILURE;
 
-  vcl_size_t globalThreads[]= {RoundUp(len_,local_workgroup_size)};
-  vcl_size_t localThreads[] = {local_workgroup_size};//this->group_size()
+  std::size_t globalThreads[]= {RoundUp(len_,local_workgroup_size)};
+  std::size_t localThreads[] = {local_workgroup_size};//this->group_size()
 
   if (used_local_memory > this->total_local_memory())
   {
-    vcl_cout << "Unsupported: Insufficient local memory on device.\n";
+    std::cout << "Unsupported: Insufficient local memory on device.\n";
     return SDK_FAILURE;
   }
 
@@ -239,12 +241,12 @@ bool bocl_global_memory_bandwidth_manager::run_kernel_using_image()
   if (!check_val(status,CL_SUCCESS,"clGetKernelWorkGroupInfo CL_KERNEL_WORK_GROUP_SIZE, failed."))
     return SDK_FAILURE;
 
-  vcl_size_t globalThreads[]= {RoundUp(len_,local_workgroup_size)};
-  vcl_size_t localThreads[] = {local_workgroup_size};
+  std::size_t globalThreads[]= {RoundUp(len_,local_workgroup_size)};
+  std::size_t localThreads[] = {local_workgroup_size};
 
   if (used_local_memory > this->total_local_memory())
   {
-    vcl_cout << "Unsupported: Insufficient local memory on device.\n";
+    std::cout << "Unsupported: Insufficient local memory on device.\n";
     return SDK_FAILURE;
   }
 
@@ -271,11 +273,11 @@ bool bocl_global_memory_bandwidth_manager::run_kernel_using_image()
   return SDK_SUCCESS;
 }
 
-int bocl_global_memory_bandwidth_manager::create_kernel(vcl_string const& kernel_name,
-                                                        vcl_string src_path,
-                                                        vcl_string options)
+int bocl_global_memory_bandwidth_manager::create_kernel(std::string const& kernel_name,
+                                                        std::string src_path,
+                                                        std::string options)
 {
-  vcl_vector<vcl_string> src_paths;
+  std::vector<std::string> src_paths;
   src_paths.push_back(src_path);
   return kernel_.create_kernel(&this->context(),&this->devices()[0],
                                src_paths, kernel_name, options, "the kernel");

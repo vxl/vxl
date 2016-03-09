@@ -10,7 +10,9 @@
 #include <mbl/mbl_cloneable_ptr.h>
 #include <mbl/mbl_chord.h>
 #include <vgl/vgl_fwd.h>
-#include <vcl_iosfwd.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iosfwd>
 
 //: Searches with a PDF of an arbitrary region.
 //  Records a PDF of the normalised intensities in a
@@ -25,7 +27,7 @@ class mfpf_region_pdf : public mfpf_point_finder
   double ref_y_;
 
   //: Chords defining the region of interest
-  vcl_vector<mbl_chord> roi_;
+  std::vector<mbl_chord> roi_;
 
   //: Size of bounding box of region of interest
   unsigned roi_ni_;
@@ -57,7 +59,7 @@ class mfpf_region_pdf : public mfpf_point_finder
   virtual ~mfpf_region_pdf();
 
   //: Define region and PDF of region
-  void set(const vcl_vector<mbl_chord>& roi,
+  void set(const std::vector<mbl_chord>& roi,
            double ref_x, double ref_y,
            const vpdfl_pdf_base& pdf,
            short norm_method=1);
@@ -114,7 +116,7 @@ class mfpf_region_pdf : public mfpf_point_finder
   //: Generate points in ref frame that represent boundary
   //  Points of a contour around the shape.
   //  Used for display purposes.
-  virtual void get_outline(vcl_vector<vgl_point_2d<double> >& pts) const;
+  virtual void get_outline(std::vector<vgl_point_2d<double> >& pts) const;
 
   //: Create an image summarising the average model (where possible)
   //  Creates an image of the mean template used for search.
@@ -126,16 +128,16 @@ class mfpf_region_pdf : public mfpf_point_finder
   short version_no() const;
 
   //: Name of the class
-  virtual vcl_string is_a() const;
+  virtual std::string is_a() const;
 
   //: Create a copy on the heap and return base class pointer
   virtual mfpf_point_finder* clone() const;
 
   //: Print class to os
-  virtual void print_summary(vcl_ostream& os) const;
+  virtual void print_summary(std::ostream& os) const;
 
   //: Prints ASCII representation of shape to os
-  void print_shape(vcl_ostream& os) const;
+  void print_shape(std::ostream& os) const;
 
   //: Save class to binary file stream
   virtual void b_write(vsl_b_ostream& bfs) const;

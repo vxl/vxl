@@ -9,7 +9,9 @@
 #include <clsfy/clsfy_classifier_base.h>
 #include <clsfy/clsfy_classifier_1d.h>
 #include <vnl/vnl_vector.h>
-#include <vcl_iosfwd.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iosfwd>
 
 //: Classifier using adaboost on combinations of simple 1D classifiers
 //  Uses a weighted combination of 1D classifiers applied to the
@@ -19,13 +21,13 @@ class clsfy_simple_adaboost : public clsfy_classifier_base
  protected:
 
   //: The classifiers in order
-  vcl_vector<clsfy_classifier_1d*> classifier_1d_;
+  std::vector<clsfy_classifier_1d*> classifier_1d_;
 
   //: Coefficients applied to each classifier
-  vcl_vector<double> alphas_;
+  std::vector<double> alphas_;
 
   //: Index of input vector appropriate for each classifier
-  vcl_vector<int> index_;
+  std::vector<int> index_;
 
   //: number of classifiers used
   int n_clfrs_used_;
@@ -70,7 +72,7 @@ class clsfy_simple_adaboost : public clsfy_classifier_base
 
   //: Find the posterior probability of the input being in the positive class.
   // The result is outputs(0)
-  virtual void class_probabilities(vcl_vector<double> &outputs, const vnl_vector<double> &input) const;
+  virtual void class_probabilities(std::vector<double> &outputs, const vnl_vector<double> &input) const;
 
   //: Classify the input vector.
   // Returns a number between 0 and nClasses-1 inclusive to represent the most likely class
@@ -91,31 +93,31 @@ class clsfy_simple_adaboost : public clsfy_classifier_base
   virtual unsigned n_classes() const { return 1;}
 
   //: Set parameters.  Clones taken of *classifier[i]
-  void set_parameters(const vcl_vector<clsfy_classifier_1d*>& classifier,
-                      const vcl_vector<double>& alphas,
-                      const vcl_vector<int>& index);
+  void set_parameters(const std::vector<clsfy_classifier_1d*>& classifier,
+                      const std::vector<double>& alphas,
+                      const std::vector<int>& index);
 
   //: Access functions
-  const vcl_vector<clsfy_classifier_1d*>& classifiers() const
+  const std::vector<clsfy_classifier_1d*>& classifiers() const
     {return classifier_1d_;}
 
-  const vcl_vector<double>& alphas() const
+  const std::vector<double>& alphas() const
     {return alphas_;}
 
-  const vcl_vector<int>& index() const
+  const std::vector<int>& index() const
     {return index_;}
 
   //: Version number for I/O
   short version_no() const;
 
   //: Name of the class
-  virtual vcl_string is_a() const;
+  virtual std::string is_a() const;
 
   //: Name of the class
-  virtual bool is_class(vcl_string const& s) const;
+  virtual bool is_class(std::string const& s) const;
 
   //: Print class to os
-  virtual void print_summary(vcl_ostream& os) const;
+  virtual void print_summary(std::ostream& os) const;
 
   //: Save class to a binary File Stream
   virtual void b_write(vsl_b_ostream& bfs) const;

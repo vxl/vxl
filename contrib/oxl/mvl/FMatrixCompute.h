@@ -32,7 +32,9 @@
 // \endverbatim
 //
 
-#include <vcl_vector.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <vector>
 #include <mvl/FMatrix.h>
 #include <vgl/vgl_homg_point_2d.h>
 class HomgPoint2D;
@@ -49,9 +51,9 @@ class FMatrixCompute
   // so it suffices to implement exactly one of them in a derived class,
   // and implement the other ones by calling this implementation.
   virtual bool compute(PairMatchSetCorner& matched_points, FMatrix* f_matrix_ptr);
-  virtual bool compute(vcl_vector<HomgPoint2D>&, vcl_vector<HomgPoint2D>&, FMatrix* f_matrix_ptr);
-  virtual bool compute(vcl_vector<vgl_homg_point_2d<double> >&,
-                       vcl_vector<vgl_homg_point_2d<double> >&,
+  virtual bool compute(std::vector<HomgPoint2D>&, std::vector<HomgPoint2D>&, FMatrix* f_matrix_ptr);
+  virtual bool compute(std::vector<vgl_homg_point_2d<double> >&,
+                       std::vector<vgl_homg_point_2d<double> >&,
                        FMatrix& f_matrix_ptr);
 
   //: Compute fundamental matrix using given matchlist and return an FMatrix object.
@@ -59,10 +61,10 @@ class FMatrixCompute
   inline FMatrix compute(PairMatchSetCorner& matched_points)
     { FMatrix ret; compute(matched_points, &ret); return ret; }
 
-  inline FMatrix compute(vcl_vector<HomgPoint2D>& pts1, vcl_vector<HomgPoint2D>& pts2)
+  inline FMatrix compute(std::vector<HomgPoint2D>& pts1, std::vector<HomgPoint2D>& pts2)
     { FMatrix ret; compute(pts1, pts2, &ret); return ret; }
-  inline FMatrix compute(vcl_vector<vgl_homg_point_2d<double> >& pts1,
-                         vcl_vector<vgl_homg_point_2d<double> >& pts2)
+  inline FMatrix compute(std::vector<vgl_homg_point_2d<double> >& pts1,
+                         std::vector<vgl_homg_point_2d<double> >& pts2)
     { FMatrix ret; compute(pts1, pts2, ret); return ret; }
 };
 

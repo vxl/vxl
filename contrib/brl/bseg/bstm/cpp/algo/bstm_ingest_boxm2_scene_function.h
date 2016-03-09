@@ -10,12 +10,14 @@
 #include <boct/boct_bit_tree.h>
 #include <boxm2/basic/boxm2_array_3d.h>
 #include <vnl/vnl_vector_fixed.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iostream>
 #include <bstm/io/bstm_cache.h>
 
 #include <boxm2/boxm2_scene.h>
 #include <boxm2/io/boxm2_cache.h>
-#include <vcl_map.h>
+#include <map>
 
 #include <bstm/cpp/algo/bstm_data_similarity_traits.h>
 
@@ -32,14 +34,14 @@ class bstm_ingest_boxm2_scene_function
    typedef vnl_vector_fixed<ushort, 4> ushort4;
 
    //: "default" constructor does all the work
-   bstm_ingest_boxm2_scene_function(bstm_block* blk,bstm_time_block* blk_t, vcl_map<vcl_string, bstm_data_base*> & datas,
-                                    boxm2_block* boxm2_blk, vcl_map<vcl_string, boxm2_data_base*> & boxm2_datas, double local_time, double p_threshold, double app_threshold);
+   bstm_ingest_boxm2_scene_function(bstm_block* blk,bstm_time_block* blk_t, std::map<std::string, bstm_data_base*> & datas,
+                                    boxm2_block* boxm2_blk, std::map<std::string, boxm2_data_base*> & boxm2_datas, double local_time, double p_threshold, double app_threshold);
 
  private:
 
    //: initialize generic data base pointers as their data type
-   bool init_data(bstm_block* blk,bstm_time_block* blk_t,  vcl_map<vcl_string, bstm_data_base*> & datas,
-                  boxm2_block* boxm2_blk, vcl_map<vcl_string, boxm2_data_base*> & boxm2_datas, double time);
+   bool init_data(bstm_block* blk,bstm_time_block* blk_t,  std::map<std::string, bstm_data_base*> & datas,
+                  boxm2_block* boxm2_blk, std::map<std::string, boxm2_data_base*> & boxm2_datas, double time);
 
    //main functions
    bool ingest();  //inserts the boxm2 data into bstm blk

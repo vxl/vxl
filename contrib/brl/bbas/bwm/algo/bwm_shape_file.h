@@ -2,8 +2,10 @@
 #define bwm_shape_file_h_
 //:
 // \file
-#include <vcl_vector.h>
-#include <vcl_string.h>
+#include <vector>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <string>
 
 #include <shapefil.h>
 #include <vsol/vsol_point_3d_sptr.h>
@@ -20,7 +22,7 @@ class bwm_shape_file
   bwm_shape_file(){}
   ~bwm_shape_file(){}
 
-  bool load(vcl_string filename);
+  bool load(std::string filename);
 
   //: only one shape type is included, no MIX types
   int shape_type() const{ return nShapeType_; }
@@ -31,7 +33,7 @@ class bwm_shape_file
   //: returns the bounding box of the items included in the shape file
   vsol_box_3d bounding_box() const { return bb_; }
 
-  vcl_vector<vcl_vector<vsol_point_3d_sptr> > vertices() {return vertices_; }
+  std::vector<std::vector<vsol_point_3d_sptr> > vertices() {return vertices_; }
 
   void print();
 
@@ -42,7 +44,7 @@ class bwm_shape_file
   double padfMinBound[4];
   double padfMaxBound[4];
   vsol_box_3d bb_;
-  vcl_vector<vcl_vector<vsol_point_3d_sptr> > vertices_;
+  std::vector<std::vector<vsol_point_3d_sptr> > vertices_;
 };
 
 #endif

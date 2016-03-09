@@ -1,8 +1,10 @@
 #include <testlib/testlib_test.h>
 #include <testlib/testlib_root_dir.h>
-#include <vcl_iostream.h>
-#include <vcl_string.h>
-#include <vcl_vector.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iostream>
+#include <string>
+#include <vector>
 
 #include <vgl/vgl_vector_3d.h>
 #include <vgl/vgl_point_2d.h>

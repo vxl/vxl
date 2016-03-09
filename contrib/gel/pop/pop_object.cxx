@@ -2,9 +2,11 @@
 #include "pop_object.h"
 //:
 // \file
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iostream>
 
 void pop_object::update()
 {
-  vcl_cout << "Warning: update should have been called elsewhere\n";
+  std::cout << "Warning: update should have been called elsewhere\n";
 }

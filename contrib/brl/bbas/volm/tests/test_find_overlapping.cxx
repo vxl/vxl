@@ -1,5 +1,7 @@
 #include <testlib/testlib_test.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iostream>
 #include <vgl/vgl_point_2d.h>
 
 #include <volm/volm_satellite_resources.h>
@@ -15,14 +17,14 @@ static volm_satellite_resources_sptr create_test_sat_res()
   vgl_box_2d<double> bbox(35.0, 37.0, 32.0, 33.0);
   volm_satellite_resources_sptr res_sptr = new volm_satellite_resources(bbox, 0.25, false);
   volm_satellite_resource res;
-  vcl_string name1 = "/path_to_img1/img_1.tif";
+  std::string name1 = "/path_to_img1/img_1.tif";
   res.full_path_ = name1;
   res.name_ = vul_file::strip_directory(name1);
   res.name_ = vul_file::strip_extension(res.name_);
   res.meta_ = new brad_image_metadata();
   res.meta_->lower_left_.set(36.10513, 32.13166, 0.0);   res.meta_->upper_right_.set(36.40004, 32.51381, 0.0);
   res.meta_->gsd_ = 1.0f;  res.meta_->band_ = "PAN";  res.meta_->satellite_name_ = "GeoEye-1";
-  vcl_vector<vgl_point_2d<double> > footprint_corners;
+  std::vector<vgl_point_2d<double> > footprint_corners;
   footprint_corners.push_back(vgl_point_2d<double>(res.meta_->lower_left_.x(),  res.meta_->lower_left_.y()));
   footprint_corners.push_back(vgl_point_2d<double>(res.meta_->upper_right_.x(), res.meta_->lower_left_.y()));
   footprint_corners.push_back(vgl_point_2d<double>(res.meta_->upper_right_.x(), res.meta_->upper_right_.y()));
@@ -30,7 +32,7 @@ static volm_satellite_resources_sptr create_test_sat_res()
   res.meta_->footprint_ = vgl_polygon<double>(footprint_corners);
   res_sptr->resources_.push_back(res);
 
-  vcl_string name2 = "/path_to_img2/img_2.tif";
+  std::string name2 = "/path_to_img2/img_2.tif";
   res.full_path_ = name2;
   res.name_ = vul_file::strip_directory(name2);
   res.name_ = vul_file::strip_extension(res.name_);  res.meta_->satellite_name_ = "GeoEye-1";
@@ -45,7 +47,7 @@ static volm_satellite_resources_sptr create_test_sat_res()
   res.meta_->footprint_ = vgl_polygon<double>(footprint_corners);
   res_sptr->resources_.push_back(res);
 
-  vcl_string name3 = "/path_to_img3/img_3.tif";
+  std::string name3 = "/path_to_img3/img_3.tif";
   res.full_path_ = name3;
   res.name_ = vul_file::strip_directory(name3);
   res.name_ = vul_file::strip_extension(res.name_);
@@ -60,7 +62,7 @@ static volm_satellite_resources_sptr create_test_sat_res()
   res.meta_->footprint_ = vgl_polygon<double>(footprint_corners);
   res_sptr->resources_.push_back(res);
 
-  vcl_string name4 = "/path_to_img4/img_4.tif";
+  std::string name4 = "/path_to_img4/img_4.tif";
   res.full_path_ = name4;
   res.name_ = vul_file::strip_directory(name4);
   res.name_ = vul_file::strip_extension(res.name_);
@@ -75,7 +77,7 @@ static volm_satellite_resources_sptr create_test_sat_res()
   res.meta_->footprint_ = vgl_polygon<double>(footprint_corners);
   res_sptr->resources_.push_back(res);
 
-  vcl_string name5 = "/path_to_img5/img_5.tif";
+  std::string name5 = "/path_to_img5/img_5.tif";
   res.full_path_ = name5;
   res.name_ = vul_file::strip_directory(name5);
   res.name_ = vul_file::strip_extension(res.name_);
@@ -90,7 +92,7 @@ static volm_satellite_resources_sptr create_test_sat_res()
   res.meta_->footprint_ = vgl_polygon<double>(footprint_corners);
   res_sptr->resources_.push_back(res);
 
-  vcl_string name6 = "/path_to_img6/img_6.tif";
+  std::string name6 = "/path_to_img6/img_6.tif";
   res.full_path_ = name6;
   res.name_ = vul_file::strip_directory(name6);
   res.name_ = vul_file::strip_extension(res.name_);
@@ -105,7 +107,7 @@ static volm_satellite_resources_sptr create_test_sat_res()
   res.meta_->footprint_ = vgl_polygon<double>(footprint_corners);
   res_sptr->resources_.push_back(res);
 
-  vcl_string name7 = "/path_to_img7/img_7.tif";
+  std::string name7 = "/path_to_img7/img_7.tif";
   res.full_path_ = name7;
   res.name_ = vul_file::strip_directory(name7);
   res.name_ = vul_file::strip_extension(res.name_);
@@ -120,7 +122,7 @@ static volm_satellite_resources_sptr create_test_sat_res()
   res.meta_->footprint_ = vgl_polygon<double>(footprint_corners);
   res_sptr->resources_.push_back(res);
 
-  vcl_string name8 = "/path_to_img8/img_8.tif";
+  std::string name8 = "/path_to_img8/img_8.tif";
   res.full_path_ = name8;
   res.name_ = vul_file::strip_directory(name8);
   res.name_ = vul_file::strip_extension(res.name_);
@@ -135,7 +137,7 @@ static volm_satellite_resources_sptr create_test_sat_res()
   res.meta_->footprint_ = vgl_polygon<double>(footprint_corners);
   res_sptr->resources_.push_back(res);
 
-  vcl_string name9 = "/path_to_img9/img_9.tif";
+  std::string name9 = "/path_to_img9/img_9.tif";
   res.full_path_ = name9;
   res.name_ = vul_file::strip_directory(name9);
   res.name_ = vul_file::strip_extension(res.name_);
@@ -150,7 +152,7 @@ static volm_satellite_resources_sptr create_test_sat_res()
   res.meta_->footprint_ = vgl_polygon<double>(footprint_corners);
   res_sptr->resources_.push_back(res);
 
-  vcl_string name10 = "/path_to_img10/img_10.tif";
+  std::string name10 = "/path_to_img10/img_10.tif";
   res.full_path_ = name10;
   res.name_ = vul_file::strip_directory(name10);
   res.name_ = vul_file::strip_extension(res.name_);
@@ -167,13 +169,13 @@ static volm_satellite_resources_sptr create_test_sat_res()
 
   // add resources into tree
   for (unsigned i = 0; i < res_sptr->resources_.size(); i++) {
-    vcl_vector<volm_geo_index2_node_sptr> leaves;
+    std::vector<volm_geo_index2_node_sptr> leaves;
     vgl_box_2d<double> satellite_footprint;
     satellite_footprint.add(vgl_point_2d<double>(res_sptr->resources_[i].meta_->lower_left_.x(),  res_sptr->resources_[i].meta_->lower_left_.y()));
     satellite_footprint.add(vgl_point_2d<double>(res_sptr->resources_[i].meta_->upper_right_.x(), res_sptr->resources_[i].meta_->upper_right_.y()));
     volm_geo_index2::get_leaves(res_sptr->root_, leaves, satellite_footprint);
     for (unsigned j = 0; j < leaves.size(); j++) {
-      volm_geo_index2_node<vcl_vector<unsigned> >* leaf_ptr = dynamic_cast<volm_geo_index2_node<vcl_vector<unsigned> >* >(leaves[j].ptr());
+      volm_geo_index2_node<std::vector<unsigned> >* leaf_ptr = dynamic_cast<volm_geo_index2_node<std::vector<unsigned> >* >(leaves[j].ptr());
       leaf_ptr->contents_.push_back(i);  // push this satellite image to this leave that intersects its footprint
     }
   }
@@ -181,16 +183,16 @@ static volm_satellite_resources_sptr create_test_sat_res()
   return res_sptr;
 }
 
-static void create_a_test_kml(vcl_string const& kml_file)
+static void create_a_test_kml(std::string const& kml_file)
 {
   vgl_polygon<double> poly;
-  vcl_vector<vgl_point_2d<double> > points;
+  std::vector<vgl_point_2d<double> > points;
   points.push_back(vgl_point_2d<double>(36.18825968469867,32.32497866643852));
   points.push_back(vgl_point_2d<double>(36.22929773807768,32.34162986956272));
   points.push_back(vgl_point_2d<double>(36.22927331990476,32.34222250106324));
   points.push_back(vgl_point_2d<double>(36.19077105901775,32.34223021056664));
   poly.push_back(points);
-  vcl_ofstream ofs(kml_file.c_str());
+  std::ofstream ofs(kml_file.c_str());
   bkml_write::open_document(ofs);
   bkml_write::write_polygon(ofs, poly, "footprint", "");
   bkml_write::close_document(ofs);
@@ -200,37 +202,37 @@ static void create_a_test_kml(vcl_string const& kml_file)
 static void test_overlapping_resources()
 {
   // resource file created by create_satellite_resources.py, which calls
-  vcl_string kml_file = "./test_overlapping.kml";
+  std::string kml_file = "./test_overlapping.kml";
   create_a_test_kml(kml_file);
   volm_satellite_resources_sptr res = create_test_sat_res();
-  vcl_cout << "there are " << res->resources_size() << " resources in the file!\n";
+  std::cout << "there are " << res->resources_size() << " resources in the file!\n";
 
-  vcl_vector<vcl_string> overlapping_res;
+  std::vector<std::string> overlapping_res;
   res->highly_overlapping_resources(overlapping_res, res, kml_file, 100.0f);
 
   for (unsigned int i=0; i < overlapping_res.size(); ++i)
     {
-    vcl_cout << overlapping_res[i] << vcl_endl;
+    std::cout << overlapping_res[i] << std::endl;
     }
-  vcl_cout << vcl_endl;
+  std::cout << std::endl;
 
 }
 
 static void test_intersecting_resources()
 {
   // resource file created by create_satellite_resources.py, which calls
-  vcl_string kml_file = "./test_overlapping.kml";
+  std::string kml_file = "./test_overlapping.kml";
   create_a_test_kml(kml_file);
   volm_satellite_resources_sptr res = create_test_sat_res();
-  vcl_cout << "there are " << res->resources_size() << " resources in the file!\n";
+  std::cout << "there are " << res->resources_size() << " resources in the file!\n";
 #if 0 // FIX BUGS AS NUMBER OF RESOURCE IS SMALL
-  vcl_vector<vcl_string> overlapping_res;
+  std::vector<std::string> overlapping_res;
   res->highly_intersecting_resources(overlapping_res, res, kml_file);
 
   for(int i=0; i < overlapping_res.size(); ++i) {
-    vcl_cout << overlapping_res[i] << vcl_endl;
+    std::cout << overlapping_res[i] << std::endl;
   }
-  vcl_cout << vcl_endl;
+  std::cout << std::endl;
 #endif
 }
 
@@ -238,9 +240,9 @@ static void test_compute_intersection()
 {
   // resource file created by create_satellite_resources.py, which calls
   volm_satellite_resources_sptr res = create_test_sat_res();
-  vcl_cout << "there are " << res->resources_size() << " resources in the file!\n";
+  std::cout << "there are " << res->resources_size() << " resources in the file!\n";
 
-  vcl_vector<vgl_polygon<double> > footprints;
+  std::vector<vgl_polygon<double> > footprints;
   {
     vgl_polygon<double> footprint(1);
     footprint.push_back(vgl_point_2d<double>(  6.96578484, -14.32022812));
@@ -332,13 +334,13 @@ static void test_compute_intersection()
     footprints.push_back(footprint);
   }
 #if 0// FIX BUGS AS NUMBER OF RESOURCE IS SMALL
-  vcl_vector<unsigned> overlapping_ids;
+  std::vector<unsigned> overlapping_ids;
   res->highly_intersecting_resources(overlapping_ids, footprints, 2, 5);
 
   for(int i=0; i < overlapping_ids.size(); ++i) {
-    vcl_cout << overlapping_ids[i] << ",";
+    std::cout << overlapping_ids[i] << ",";
   }
-  vcl_cout << vcl_endl;
+  std::cout << std::endl;
 #endif
 }
 

@@ -12,7 +12,9 @@
 //   06 May 2004 Jocelyn Marchadier
 // \endverbatim
 
-#include <vcl_iosfwd.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iosfwd>
 #include "vmap_types.h" // for vmap_dart_index
 #include "vmap_ptr_sequences.h"
 #include "vmap_kernel.h"
@@ -518,10 +520,10 @@ class vmap_2_map : public vmap_owning_sequence<D>
   virtual void clear() ;
 
   //: Initializes the structure of the combinatorial map from "stream".
-  void read_structure(vcl_istream & stream) ;
+  void read_structure(std::istream & stream) ;
 
   //: Writes the structure of the combinatorial map to "stream".
-  void write_structure(vcl_ostream & stream) const ;
+  void write_structure(std::ostream & stream) const ;
 
  protected:
 

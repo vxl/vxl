@@ -7,8 +7,10 @@
 
 
 #include <vsl/vsl_binary_io.h>
-#include <vcl_iostream.h>
-#include <vcl_vector.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iostream>
+#include <vector>
 
 //: Representation of three vertex indices, eg a triangle
 //  For comparison, order not important.
@@ -74,7 +76,7 @@ inline bool operator==(const mmn_triplet& t1, const mmn_triplet& t2)
 inline bool operator!=(const mmn_triplet& t1, const mmn_triplet& t2)
 { return !(t1==t2); }
 
-inline vcl_ostream& operator<<(vcl_ostream& os, const mmn_triplet& t)
+inline std::ostream& operator<<(std::ostream& os, const mmn_triplet& t)
 {
   return os<<'{'<<t.v1<<','<<t.v2<<','<<t.v3<<'}';
 }
@@ -93,7 +95,7 @@ inline void vsl_b_read(vsl_b_istream& bfs, mmn_triplet& t)
   vsl_b_read(bfs,t.v3);
 }
 
-inline void vsl_b_write(vsl_b_ostream& bfs, const vcl_vector<mmn_triplet>& a)
+inline void vsl_b_write(vsl_b_ostream& bfs, const std::vector<mmn_triplet>& a)
 {
   short version_no = 1;
   vsl_b_write(bfs,version_no);
@@ -101,7 +103,7 @@ inline void vsl_b_write(vsl_b_ostream& bfs, const vcl_vector<mmn_triplet>& a)
   for (unsigned i=0;i<a.size();++i) vsl_b_write(bfs,a[i]);
 }
 
-inline void vsl_b_read(vsl_b_istream& bfs, vcl_vector<mmn_triplet>& a)
+inline void vsl_b_read(vsl_b_istream& bfs, std::vector<mmn_triplet>& a)
 {
   if (!bfs) return;
   short version;
@@ -115,9 +117,9 @@ inline void vsl_b_read(vsl_b_istream& bfs, vcl_vector<mmn_triplet>& a)
       for (unsigned i=0;i<n;++i) vsl_b_read(bfs,a[i]);
       break;
     default:
-      vcl_cerr << "I/O ERROR: vsl_b_read(bfs,vector<mmn_triplet>)\n"
+      std::cerr << "I/O ERROR: vsl_b_read(bfs,vector<mmn_triplet>)\n"
                << "           Unknown version number "<< version << '\n';
-      bfs.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
+      bfs.is().clear(std::ios::badbit); // Set an unrecoverable IO error on stream
       return;
   }
 }

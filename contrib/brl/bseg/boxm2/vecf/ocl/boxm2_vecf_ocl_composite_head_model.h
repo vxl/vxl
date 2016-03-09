@@ -1,7 +1,9 @@
 #ifndef boxm2_vecf_ocl_composite_head_model_h_
 #define boxm2_vecf_ocl_composite_head_model_h_
 
-#include <vcl_string.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <string>
 
 #include <boxm2/boxm2_scene.h>
 #include "../boxm2_vecf_orbit_scene.h"
@@ -20,7 +22,7 @@
 class boxm2_vecf_ocl_composite_head_model : public boxm2_vecf_ocl_head_model{
 friend class boxm2_vecf_ocl_appearance_extractor; //the appearance extractor needs to signal a change to the original model when its apm is updated
 public:
-  boxm2_vecf_ocl_composite_head_model(vcl_string const& head_model_path, vcl_string const& eye_model_path,bocl_device_sptr device,boxm2_opencl_cache_sptr opencl_cache);
+  boxm2_vecf_ocl_composite_head_model(std::string const& head_model_path, std::string const& eye_model_path,bocl_device_sptr device,boxm2_opencl_cache_sptr opencl_cache);
 
   void map_to_target(boxm2_scene_sptr target);
   void update_gpu_target(boxm2_scene_sptr target_scene);
@@ -41,7 +43,7 @@ private:
 
   ORBIT right_orbit_;
   ORBIT left_orbit_;
-  vcl_string scene_path;
+  std::string scene_path;
 };
 
 #endif

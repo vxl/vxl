@@ -8,10 +8,12 @@
 
 #include <vimt/vimt_image_pyramid.h>
 #include <vil/vil_save.h>
-#include <vcl_cmath.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <cmath>
 #include <vcl_cassert.h>
-#include <vcl_cstdlib.h> // for std::abort()
-#include <vcl_sstream.h>
+#include <cstdlib> // for std::abort()
+#include <sstream>
 
 #include <vsl/vsl_indent.h>
 #include <vsl/vsl_binary_loader.h>
@@ -43,7 +45,7 @@ void mfpf_mr_point_finder::set_max_after_pruning(unsigned max_n)
 }
 
 //: Define point finders.  Clone of each taken
-void mfpf_mr_point_finder::set(const vcl_vector<mfpf_point_finder*>& finders)
+void mfpf_mr_point_finder::set(const std::vector<mfpf_point_finder*>& finders)
 {
   finders_.resize(finders.size());
   for (unsigned i=0;i<finders.size();++i)
@@ -84,7 +86,7 @@ void mfpf_mr_point_finder::get_sample_vector(
                         const vgl_point_2d<double>& p,
                         const vgl_vector_2d<double>& u,
                         unsigned L,
-                        vcl_vector<double>& v)
+                        std::vector<double>& v)
 {
   assert( L<finders_.size() );
 
@@ -92,15 +94,15 @@ void mfpf_mr_point_finder::get_sample_vector(
 
   if (image_pyr(im_L).image_size()[0]==0)
   {
-    vcl_cerr<<"Image at level "<<im_L<<" in pyramid has not been set up.\n"
+    std::cerr<<"Image at level "<<im_L<<" in pyramid has not been set up.\n"
             <<"This is required for level "<<L<<" of the mfpf model.\n"
             <<"Check range for which pyramid is defined.\n";
 
     im_L=nearest_valid_level(image_pyr,im_L);
     if (image_pyr(im_L).image_size()[0]==0)
     {
-       vcl_cerr << "No image pyramid levels set up.\n";
-       vcl_abort();
+       std::cerr << "No image pyramid levels set up.\n";
+       std::abort();
     }
   }
 
@@ -189,8 +191,8 @@ void mfpf_mr_point_finder::refine_match(
 void mfpf_mr_point_finder::multi_search(
                   const vimt_image_pyramid& im_pyr,
                   const mfpf_pose& pose0,
-                  vcl_vector<mfpf_pose>& poses,
-                  vcl_vector<double>& fits)
+                  std::vector<mfpf_pose>& poses,
+                  std::vector<double>& fits)
 {
   poses.resize(0); fits.resize(0);
 
@@ -225,8 +227,8 @@ void mfpf_mr_point_finder::multi_search(
 void mfpf_mr_point_finder::multi_search_and_prune(
                     const vimt_image_pyramid& im_pyr,
                     const mfpf_pose& pose0,
-                    vcl_vector<mfpf_pose>& poses,
-                    vcl_vector<double>& fits,
+                    std::vector<mfpf_pose>& poses,
+                    std::vector<double>& fits,
                     int prune_level)
 {
   poses.resize(0); fits.resize(0);
@@ -245,7 +247,7 @@ void mfpf_mr_point_finder::multi_search_and_prune(
 
   if (poses.size()==0)
   {
-    vcl_cerr<<"Warning: No poses returned by mfpf_point_finder\n";
+    std::cerr<<"Warning: No poses returned by mfpf_point_finder\n";
     // Perform search to find single good point
     vgl_point_2d<double> new_p;
     double f = finder(L0).search_one_pose(image,pose0.p(),pose0.u(),new_p);
@@ -278,18 +280,18 @@ void mfpf_mr_point_finder::multi_search_and_prune(
 
 //: Save an image summarising each model in the hierarchy
 //  Saves images to basepath_L0.png, basepath_L1.png ...
-void mfpf_mr_point_finder::save_images_of_models(const vcl_string& basepath) const
+void mfpf_mr_point_finder::save_images_of_models(const std::string& basepath) const
 {
   for (unsigned L=0;L<size();++L)
   {
-    vcl_stringstream s;
+    std::stringstream s;
     s<<basepath<<"_L"<<L<<".png";
     vimt_image_2d_of<vxl_byte> image;
     finder(L).get_image_of_model(image);
     if (vil_save(image.image(),s.str().c_str()))
-      vcl_cout<<"Saved image to "<<s.str()<<vcl_endl;
+      std::cout<<"Saved image to "<<s.str()<<std::endl;
     else
-      vcl_cout<<"Failed to save image to "<<s.str()<<vcl_endl;
+      std::cout<<"Failed to save image to "<<s.str()<<std::endl;
   }
 }
 
@@ -308,13 +310,13 @@ short mfpf_mr_point_finder::version_no() const
 // Method: is_a
 //=======================================================================
 
-vcl_string mfpf_mr_point_finder::is_a() const
+std::string mfpf_mr_point_finder::is_a() const
 {
-  return vcl_string("mfpf_mr_point_finder");
+  return std::string("mfpf_mr_point_finder");
 }
 
 //: Print class to os
-void mfpf_mr_point_finder::print_summary(vcl_ostream& os) const
+void mfpf_mr_point_finder::print_summary(std::ostream& os) const
 {
   os<<'\n';
   unsigned n=finders_.size();
@@ -364,9 +366,9 @@ void mfpf_mr_point_finder::b_read(vsl_b_istream& bfs)
       else vsl_b_read(bfs,max_after_pruning_);
       break;
     default:
-      vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&)\n"
-               << "           Unknown version number "<< version << vcl_endl;
-      bfs.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
+      std::cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&)\n"
+               << "           Unknown version number "<< version << std::endl;
+      bfs.is().clear(std::ios::badbit); // Set an unrecoverable IO error on stream
       return;
   }
 }
@@ -375,7 +377,7 @@ void mfpf_mr_point_finder::b_read(vsl_b_istream& bfs)
 // Associated function: operator<<
 //=======================================================================
 
-vcl_ostream& operator<<(vcl_ostream& os,const mfpf_mr_point_finder& b)
+std::ostream& operator<<(std::ostream& os,const mfpf_mr_point_finder& b)
 {
   os << b.is_a() << ": ";
   vsl_indent_inc(os);

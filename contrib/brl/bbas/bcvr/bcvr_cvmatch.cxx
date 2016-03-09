@@ -3,13 +3,15 @@
 // \file
 #include "bcvr_cv_cor.h"
 
-#include <vcl_cmath.h>
-#include <vcl_string.h>
-#include <vcl_vector.h>
-#include <vcl_utility.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <cmath>
+#include <string>
+#include <vector>
+#include <utility>
 
-#include <vcl_iostream.h>
-#include <vcl_fstream.h>
+#include <iostream>
+#include <fstream>
 #include <vcl_cassert.h>
 
 #include <vnl/vnl_math.h>
@@ -131,10 +133,10 @@ void bcvr_cvmatch::initializeDPCosts()
   assert (m_>0);
 
   for (int i=0;i<n_;i++) {
-    vcl_vector<double> tmp1(m_,DP_VERY_LARGE_COST);
+    std::vector<double> tmp1(m_,DP_VERY_LARGE_COST);
     DPCost_.push_back(tmp1);
-    vcl_pair <int,int> tmp3(0,0);
-    vcl_vector< vcl_pair <int,int> > tmp2(m_,tmp3);
+    std::pair <int,int> tmp3(0,0);
+    std::vector< std::pair <int,int> > tmp2(m_,tmp3);
     DPMap_.push_back(tmp2);
   }
 
@@ -151,37 +153,37 @@ void bcvr_cvmatch::initializeDPCosts()
 // Cost of matching the interval [x(i-1),x(i)]  to [y(k),y(j)].
 double bcvr_cvmatch::computeIntervalCost(int i, int ip, int j, int jp)
 {
-  double ds1 = vcl_fabs(stretchCost (curve1_, i,ip));
-  double ds2 = vcl_fabs(stretchCost (curve2_, j,jp));
+  double ds1 = std::fabs(stretchCost (curve1_, i,ip));
+  double ds2 = std::fabs(stretchCost (curve2_, j,jp));
   double dF;
 
   if (normalized_stretch_cost_) {
     if (ds1+ds2 > 1E-5)
-      dF = vcl_pow(ds1-ds2,2)/(ds1+ds2);
+      dF = std::pow(ds1-ds2,2)/(ds1+ds2);
     else dF = 0;
   }
   else
-    dF = vcl_fabs(ds1-ds2);
+    dF = std::fabs(ds1-ds2);
 
   double dt1 = bendCost (curve1_, i,ip);
   double dt2 = bendCost (curve2_, j,jp);
-  double dK = vcl_fabs(dt1-dt2);
+  double dK = std::fabs(dt1-dt2);
 #if 0
-  double dK = vcl_fabs(curve_angleDiff(dt1, dt2));
+  double dK = std::fabs(curve_angleDiff(dt1, dt2));
 
   // 1)The bad orientation cost from fix starting tangent!
   double do1 = bendCost (curve1_, i,0);
   double do2 = bendCost (curve2_, j,0);
-  double dO = vcl_fabs(do1-do2);
+  double dO = std::fabs(do1-do2);
 
   // 2)The good orientation cost from absolute position
   double dx = curve1_.x(i) - curve1_.x(0);
   double dy = curve1_.y(i) - curve1_.y(0);
-  double do1 = vcl_atan2(dy, dx);
+  double do1 = std::atan2(dy, dx);
   dx = curve2_.x(j) - curve2_.x(0);
   dy = curve2_.y(j) - curve2_.y(0);
-  double do2 = vcl_atan2(dy, dx);
-  double dO = vcl_fabs(do1-do2);
+  double do2 = std::atan2(dy, dx);
+  double dO = std::fabs(do1-do2);
 #endif
   double cost = dF + R_*dK; // + R_*0.2*dO;
 
@@ -217,7 +219,7 @@ void bcvr_cvmatch::computeDPCosts ()
     }
   }
   //Kai
-  ///vcl_cout<<"computeDPCosts() Number of computation: "<<count<<'\n';
+  ///std::cout<<"computeDPCosts() Number of computation: "<<count<<'\n';
 }
 
 // ###########################################################
@@ -241,14 +243,14 @@ void bcvr_cvmatch::findDPCorrespondence (void)
   i = n_-1;
   j = m_-1;
 
-  vcl_pair <int,int> p(ip,jp);
+  std::pair <int,int> p(ip,jp);
   finalMap_.push_back(p);
   finalMapCost_.push_back(DPCost_[p.first][p.second]);
 
   while (ip > 0 || jp > 0) { //Ming: should be &&
     ip=DPMap_[i][j].first;
     jp=DPMap_[i][j].second;
-    vcl_pair <int,int> p(ip,jp);
+    std::pair <int,int> p(ip,jp);
     finalMap_.push_back(p);
     finalMapCost_.push_back(DPCost_[p.first][p.second]);
 
@@ -443,34 +445,34 @@ void bcvr_cvmatch::ListDPTable (void)
   int n = curve1_->size();
   int m = curve2_->size();
 
-  vcl_cout<< "===================================================\n"
+  std::cout<< "===================================================\n"
           << "i j _map[i][j].first _map[i][j].second _cost[i][j]\n";
   for (int i=0;i<=n-1; i++) {
     for (int j=0;j<=m-1; j++) {
-      vcl_cout<<i<<' '<<j<<' '<<(*DPMap())[i][j].first<<' '<<(*DPMap())[i][j].second<<' '<<(*DPCost())[i][j]<<'\n';
+      std::cout<<i<<' '<<j<<' '<<(*DPMap())[i][j].first<<' '<<(*DPMap())[i][j].second<<' '<<(*DPCost())[i][j]<<'\n';
     }
   }
 }
 
 void bcvr_cvmatch::ListAlignCurve (void)
 {
-  vcl_cout<<"==========================================================\n"
+  std::cout<<"==========================================================\n"
           <<"i, finalMap[i].first, finalMap[i].second, finalMapCost[i]\n";
   for (unsigned int i=0;i<=finalMap()->size()-1; i++) {
-    vcl_cout<<i<<' '<<(*finalMap())[i].first<<' '<<(*finalMap())[i].second<<' '<<(*finalMapCost())[i]<<'\n';
+    std::cout<<i<<' '<<(*finalMap())[i].first<<' '<<(*finalMap())[i].second<<' '<<(*finalMapCost())[i]<<'\n';
   }
 }
 
 void bcvr_cvmatch::SaveDPTable (void)
 {
-  vcl_string basefname1 = fileName1_; //getBaseFileName(fileName1_);
-  vcl_string basefname2 = fileName2_; //getBaseFileName(fileName2_);
-  vcl_string basefname=basefname1+'-'+basefname2;
+  std::string basefname1 = fileName1_; //getBaseFileName(fileName1_);
+  std::string basefname2 = fileName2_; //getBaseFileName(fileName2_);
+  std::string basefname=basefname1+'-'+basefname2;
 
   //Output AlignCurve File
-  vcl_string acfname = basefname;
+  std::string acfname = basefname;
   acfname += "-ACurve.txt";
-  vcl_ofstream outfp2(acfname.c_str());
+  std::ofstream outfp2(acfname.c_str());
   for (unsigned int i=0; i<(*finalMap()).size(); i++) {
     outfp2<<i<<' '<<(*finalMap())[i].first<<' '<<(*finalMap())[i].second<<' '<<(*finalMapCost())[i]<<'\n';
   }
@@ -482,14 +484,14 @@ void bcvr_cvmatch::SaveAlignCurve (void)
   int n = curve1_->size();
   int m = curve2_->size();
 
-  vcl_string basefname1 = fileName1_; //getBaseFileName(fileName1_);
-  vcl_string basefname2 = fileName2_; //getBaseFileName(fileName2_);
-  vcl_string basefname=basefname1+'-'+basefname2;
+  std::string basefname1 = fileName1_; //getBaseFileName(fileName1_);
+  std::string basefname2 = fileName2_; //getBaseFileName(fileName2_);
+  std::string basefname=basefname1+'-'+basefname2;
 
   //Output DPTalbe File
-  vcl_string dpfname = basefname;
+  std::string dpfname = basefname;
   dpfname += "-DPMap.txt";
-  vcl_ofstream outfp3(dpfname.c_str());
+  std::ofstream outfp3(dpfname.c_str());
   for (int i=0;i<=n-1; i++) {
     for (int j=0;j<=m-1; j++) {
       outfp3<<i<<' '<<j<<' '<<(*DPMap())[i][j].first<<' '<<(*DPMap())[i][j].second<<' '<<(*DPCost())[i][j]<<'\n';

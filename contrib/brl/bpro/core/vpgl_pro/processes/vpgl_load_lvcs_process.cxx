@@ -8,7 +8,9 @@
 // \date Nov. 11, 2013
 
 #include <bprb/bprb_parameters.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iostream>
 #include <vpgl/vpgl_lvcs.h>
 #include <vpgl/vpgl_lvcs_sptr.h>
 
@@ -16,9 +18,9 @@
 bool vpgl_load_lvcs_process_cons(bprb_func_process& pro)
 {
   //this process take one input and one output
-  vcl_vector<vcl_string> input_types;
+  std::vector<std::string> input_types;
   input_types.push_back("vcl_string");  // text file where the lvcs is saved
-  vcl_vector<vcl_string> output_types;
+  std::vector<std::string> output_types;
   output_types.push_back("vpgl_lvcs_sptr");
 
   return pro.set_input_types(input_types) && pro.set_output_types(output_types);
@@ -28,18 +30,18 @@ bool vpgl_load_lvcs_process_cons(bprb_func_process& pro)
 bool vpgl_load_lvcs_process(bprb_func_process& pro)
 {
   if ( pro.n_inputs() != 1) {
-    vcl_cerr << pro.name() << ": The input number should be 1" << vcl_endl;
+    std::cerr << pro.name() << ": The input number should be 1" << std::endl;
     return false;
   }
 
   // get inputs
-  vcl_string lvcs_filename = pro.get_input<vcl_string>(0);
+  std::string lvcs_filename = pro.get_input<std::string>(0);
 
   // load lvcs from file
   vpgl_lvcs_sptr lvcs = new vpgl_lvcs;
-  vcl_ifstream ifs(lvcs_filename.c_str());
+  std::ifstream ifs(lvcs_filename.c_str());
   if (!ifs.good()) {
-    vcl_cerr << pro.name() << ": can not open lvcs text file: " << lvcs_filename << vcl_endl;
+    std::cerr << pro.name() << ": can not open lvcs text file: " << lvcs_filename << std::endl;
     return false;
   }
 

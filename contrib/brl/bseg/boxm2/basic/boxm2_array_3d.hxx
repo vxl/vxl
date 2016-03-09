@@ -6,7 +6,9 @@
 // \file
 
 #include "boxm2_array_3d.h"
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iostream>
 
 //--------------------------------------------------------------
 //
@@ -112,7 +114,7 @@ void boxm2_array_3d<T>::fill(T const& value)
 //--------------------------------------------------------------------------------
 
 template <class T>
-vcl_ostream & operator<<(vcl_ostream& os, boxm2_array_3d<T> const& A)
+std::ostream & operator<<(std::ostream& os, boxm2_array_3d<T> const& A)
 {
   typedef typename boxm2_array_3d<T>::size_type size_type;
   for (size_type i=0; i<A.get_row1_count(); ++i) {
@@ -122,15 +124,15 @@ vcl_ostream & operator<<(vcl_ostream& os, boxm2_array_3d<T> const& A)
           os << ' ';
         os << A(i,j,k);
       }
-      os << vcl_endl;
+      os << std::endl;
     }
-    os << vcl_endl;
+    os << std::endl;
   }
   return os;
 }
 
 template <class T>
-vcl_istream & operator>>(vcl_istream& is, boxm2_array_3d<T>& A)
+std::istream & operator>>(std::istream& is, boxm2_array_3d<T>& A)
 {
   typedef typename boxm2_array_3d<T>::size_type size_type;
   for (size_type i=0; i<A.get_row1_count(); ++i)
@@ -147,7 +149,7 @@ vcl_istream & operator>>(vcl_istream& is, boxm2_array_3d<T>& A)
 
 #undef BOXM2_ARRAY_3D_IO_INSTANTIATE
 #define BOXM2_ARRAY_3D_IO_INSTANTIATE(T) \
-template vcl_ostream & operator<<(vcl_ostream &,boxm2_array_3d<T > const &); \
-template vcl_istream & operator>>(vcl_istream &,boxm2_array_3d<T > &)
+template std::ostream & operator<<(std::ostream &,boxm2_array_3d<T > const &); \
+template std::istream & operator>>(std::istream &,boxm2_array_3d<T > &)
 
 #endif // boxm2_array_3d_hxx_

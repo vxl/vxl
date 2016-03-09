@@ -28,7 +28,9 @@
 #include <vil/vil_image_view_base.h>
 #include <vil/vil_image_view.h>
 
-#include <vcl_cstdio.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <cstdio>
 
 //: globals
 namespace boxm_line_backproject_process_globals
@@ -46,12 +48,12 @@ bool boxm_line_backproject_process_cons(bprb_func_process& pro)
 {
   using namespace boxm_line_backproject_process_globals;
 
-  vcl_vector<vcl_string> input_types_(n_inputs_);
+  std::vector<std::string> input_types_(n_inputs_);
   unsigned i = 0;
   input_types_[i++] = "vil_image_view_base_sptr";
   input_types_[i++] = "vpgl_camera_double_sptr";
 
-  vcl_vector<vcl_string> output_types_(n_outputs_);
+  std::vector<std::string> output_types_(n_outputs_);
   unsigned j = 0;
   output_types_[j++] = "vil_image_view_base_sptr";
 
@@ -62,7 +64,7 @@ vpgl_rational_camera<double>
 perspective_to_rational(vpgl_perspective_camera<double>&cam_pers)
 {
   vnl_matrix_fixed<double,3,4> cam_pers_matrix = cam_pers.get_matrix();
-  vcl_vector<double> neu_u,den_u,neu_v,den_v;
+  std::vector<double> neu_u,den_u,neu_v,den_v;
   double x_scale = 1.0, x_off = 0.0, y_scale = 1.0, y_off = 0.0, z_scale = 1.0, z_off = 0.0, u_scale = 1.0, u_off = 0.0, v_scale = 1.0, v_off = 0.0;
 
   for (int i=0; i<20; i++) {
@@ -94,7 +96,7 @@ bool boxm_line_backproject_process(bprb_func_process& pro)
 
   // check number of inputs
   if ( pro.n_inputs() < n_inputs_ ) {
-    vcl_cout << pro.name() << " The number of inputs should be " << n_inputs_<< vcl_endl;
+    std::cout << pro.name() << " The number of inputs should be " << n_inputs_<< std::endl;
     return false;
   }
 
@@ -109,7 +111,7 @@ bool boxm_line_backproject_process(bprb_func_process& pro)
 
   // make sure that image has 3 planes
   if (edge_image_sptr->nplanes() != 3) {
-    vcl_cerr << "boxm_line_backproject_process: The edge image is expected to have 3 planes!\n";
+    std::cerr << "boxm_line_backproject_process: The edge image is expected to have 3 planes!\n";
     return false;
   }
 
@@ -138,8 +140,8 @@ bool boxm_line_backproject_process(bprb_func_process& pro)
             // get two points on the line
             vgl_point_2d<double> p1(col,row);
 
-            float x = col + 0.5f*vcl_cos(theta);
-            float y = row + 0.5f*vcl_sin(theta);
+            float x = col + 0.5f*std::cos(theta);
+            float y = row + 0.5f*std::sin(theta);
             vgl_point_2d<double> p2(x,y);
 
             vgl_line_2d<double> line(p1,p2);
@@ -148,7 +150,7 @@ bool boxm_line_backproject_process(bprb_func_process& pro)
             vgl_homg_line_2d<double> image_line(line);
             vgl_homg_plane_3d<double> plane = cam->backproject(image_line);
             if (plane.a()==0 && plane.b()==0 && plane.c()==0 && plane.d()==0)
-            vcl_cout << "ZERO a,b,c,d" << vcl_endl;
+            std::cout << "ZERO a,b,c,d" << std::endl;
             (*plane_image)(i,j,0)=float(plane.a());
             (*plane_image)(i,j,1)=float(plane.b());
             (*plane_image)(i,j,2)=float(plane.c());
@@ -175,8 +177,8 @@ bool boxm_line_backproject_process(bprb_func_process& pro)
             // get two point on the line
             vgl_point_2d<double> p1(col, row);
 
-            float x = col + 0.5f*vcl_cos(theta);
-            float y = row + 0.5f*vcl_sin(theta);
+            float x = col + 0.5f*std::cos(theta);
+            float y = row + 0.5f*std::sin(theta);
             vgl_point_2d<double> p2(x,y);
 
             //backproject it
@@ -188,7 +190,7 @@ bool boxm_line_backproject_process(bprb_func_process& pro)
               (*plane_image)(i,j,3)=float(plane.d());
             }
             else { // the backprojection was unsuccessful
-              vcl_cout << i << ',' << j << "NO PLANE!!!!!" << vcl_endl;
+              std::cout << i << ',' << j << "NO PLANE!!!!!" << std::endl;
               (*plane_image)(i,j,0) = 0.0f;
               (*plane_image)(i,j,1) = 0.0f;
               (*plane_image)(i,j,2) = 0.0f;
@@ -217,8 +219,8 @@ bool boxm_line_backproject_process(bprb_func_process& pro)
             // get two point on the line
             vgl_point_2d<double> p1(col, row);
 
-            float x = col + 0.5f*vcl_cos(theta);
-            float y = row + 0.5f*vcl_sin(theta);
+            float x = col + 0.5f*std::cos(theta);
+            float y = row + 0.5f*std::sin(theta);
             vgl_point_2d<double> p2(x,y);
 
             vgl_line_2d<double> line(p1,p2);
@@ -228,7 +230,7 @@ bool boxm_line_backproject_process(bprb_func_process& pro)
 
             vgl_homg_plane_3d<double> plane = proj_cam->backproject(image_line);
             if (plane.a()==0 && plane.b()==0 && plane.c()==0 && plane.d()==0)
-            vcl_cout << "ZERO a,b,c,d" << vcl_endl;
+            std::cout << "ZERO a,b,c,d" << std::endl;
             (*plane_image)(i,j,0)=float(plane.a());
             (*plane_image)(i,j,1)=float(plane.b());
             (*plane_image)(i,j,2)=float(plane.c());
@@ -238,12 +240,12 @@ bool boxm_line_backproject_process(bprb_func_process& pro)
       }
     }
     else {
-      vcl_cerr << "boxm_line_backproject_process: The camera type [" << camera->type_name() << "]is not defined yet!\n";
+      std::cerr << "boxm_line_backproject_process: The camera type [" << camera->type_name() << "]is not defined yet!\n";
       return false;
     }
   }
   else {
-    vcl_cerr << "boxm_line_backproject_process: This pixel format is not supported yet!\n";
+    std::cerr << "boxm_line_backproject_process: This pixel format is not supported yet!\n";
     return false;
   }
   // output

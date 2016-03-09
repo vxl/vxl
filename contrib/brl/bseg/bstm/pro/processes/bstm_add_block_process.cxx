@@ -6,7 +6,9 @@
 //
 
 
-#include <vcl_fstream.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <fstream>
 #include <bstm/bstm_scene.h>
 
 namespace bstm_add_block_process_globals
@@ -20,7 +22,7 @@ bool bstm_add_block_process_cons(bprb_func_process& pro)
   using namespace bstm_add_block_process_globals;
 
   //process takes 2 inputs
-  vcl_vector<vcl_string> input_types_(n_inputs_);
+  std::vector<std::string> input_types_(n_inputs_);
   input_types_[0]  = "bstm_scene_sptr";
 
   input_types_[1]  = "int";
@@ -50,7 +52,7 @@ bool bstm_add_block_process_cons(bprb_func_process& pro)
   input_types_[20]  = "unsigned"; // init time tree depth
 
   // process has 1 output
-  vcl_vector<vcl_string> output_types_(n_outputs_);
+  std::vector<std::string> output_types_(n_outputs_);
 
   return pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
 }
@@ -60,7 +62,7 @@ bool bstm_add_block_process(bprb_func_process& pro)
   using namespace bstm_add_block_process_globals;
 
   if ( pro.n_inputs() < n_inputs_ ) {
-    vcl_cout << pro.name() << ": The input number should be " << n_inputs_<< vcl_endl;
+    std::cout << pro.name() << ": The input number should be " << n_inputs_<< std::endl;
     return false;
   }
   //get the inputs
@@ -92,11 +94,11 @@ bool bstm_add_block_process(bprb_func_process& pro)
   unsigned init_level_t   =pro.get_input<unsigned>        (i++);
 
   bstm_block_id id(index_i,index_j,index_k, index_t);
-  vcl_map<bstm_block_id, bstm_block_metadata> blks=scene->blocks();
+  std::map<bstm_block_id, bstm_block_metadata> blks=scene->blocks();
 
   if (blks.find(id)!=blks.end())
   {
-      vcl_cout<<"block already exists"<<vcl_endl;
+      std::cout<<"block already exists"<<std::endl;
       return false;
   }
 

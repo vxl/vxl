@@ -5,7 +5,9 @@
 #include <vsol/vsol_box_3d.h>
 #include "bsol_algs.h"
 #ifdef DEBUG
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iostream>
 #endif
 
 static void clear_flag(vsol_point_3d_sptr& p)
@@ -46,8 +48,8 @@ bsol_point_index_3d::bsol_point_index_3d(int nrows, int ncols, int nslabs,
   for (int r = 0; r<nrows; r++)
     for (int c = 0; c<ncols; c++)
     {
-      vcl_vector<vcl_vector<vsol_point_3d_sptr> >* v =
-        new vcl_vector<vcl_vector<vsol_point_3d_sptr> >(nslabs);
+      std::vector<std::vector<vsol_point_3d_sptr> >* v =
+        new std::vector<std::vector<vsol_point_3d_sptr> >(nslabs);
       point_array_[r][c] = v;
     //  v->clear();
     }
@@ -66,7 +68,7 @@ bsol_point_index_3d::bsol_point_index_3d(int nrows, int ncols, int nslabs,
 
 bsol_point_index_3d::
 bsol_point_index_3d(int nrows, int ncols, int nslabs,
-                    vcl_vector<vsol_point_3d_sptr> const& points)
+                    std::vector<vsol_point_3d_sptr> const& points)
 {
   nrows_ = nrows;
   ncols_ = ncols;
@@ -76,8 +78,8 @@ bsol_point_index_3d(int nrows, int ncols, int nslabs,
   for (int r = 0; r<nrows; r++)
     for (int c = 0; c<ncols; c++)
     {
-      vcl_vector<vcl_vector<vsol_point_3d_sptr> >* v =
-        new vcl_vector<vcl_vector<vsol_point_3d_sptr> >(nslabs);
+      std::vector<std::vector<vsol_point_3d_sptr> >* v =
+        new std::vector<std::vector<vsol_point_3d_sptr> >(nslabs);
       point_array_[r][c] = v;
       //  v->clear();
     }
@@ -143,10 +145,10 @@ int bsol_point_index_3d::n_points()
   return n;
 }
 
-vcl_vector<vsol_point_3d_sptr> bsol_point_index_3d::points(const int row, const int col,
+std::vector<vsol_point_3d_sptr> bsol_point_index_3d::points(const int row, const int col,
                                                            const int slab)
 {
-  vcl_vector<vsol_point_3d_sptr> out;
+  std::vector<vsol_point_3d_sptr> out;
   if (row<0||row>=nrows_||col<0||col>=ncols_||slab<0||slab>=nslabs_)
     return out;
   return (*(point_array_[row][col]))[slab];
@@ -177,15 +179,15 @@ bool bsol_point_index_3d::add_point(vsol_point_3d_sptr const& p)
     return false;
   if (row<0||row>=nrows_||col<0||col>=ncols_||slab<0||slab>=nslabs_)
     return false;
-   vcl_vector<vcl_vector<vsol_point_3d_sptr> >* v = point_array_[row][col];
+   std::vector<std::vector<vsol_point_3d_sptr> >* v = point_array_[row][col];
    (*v)[slab].push_back(p);
   return true;
 }
 
-bool bsol_point_index_3d::add_points(vcl_vector<vsol_point_3d_sptr> const& points)
+bool bsol_point_index_3d::add_points(std::vector<vsol_point_3d_sptr> const& points)
 {
   bool ok = true;
-  for (vcl_vector<vsol_point_3d_sptr>::const_iterator pit = points.begin();
+  for (std::vector<vsol_point_3d_sptr>::const_iterator pit = points.begin();
        pit != points.end(); pit++)
     if (!this->add_point(*pit))
       ok = false;
@@ -199,8 +201,8 @@ bool bsol_point_index_3d::find_point(vsol_point_3d_sptr const& p)
     return false;
   if (row<0||row>=nrows_||col<0||col>=ncols_||slab<0||slab>=nslabs_)
     return false;
-  vcl_vector<vsol_point_3d_sptr>& points = (*(point_array_[row][col]))[slab];
-  for (vcl_vector<vsol_point_3d_sptr>::iterator pit = points.begin();
+  std::vector<vsol_point_3d_sptr>& points = (*(point_array_[row][col]))[slab];
+  for (std::vector<vsol_point_3d_sptr>::iterator pit = points.begin();
        pit!=points.end(); pit++)
     if ((*pit)==p)
       return true;
@@ -209,7 +211,7 @@ bool bsol_point_index_3d::find_point(vsol_point_3d_sptr const& p)
 
 //:find the points within a box
 bool bsol_point_index_3d::in_box(vsol_box_3d_sptr const& box,
-                                 vcl_vector<vsol_point_3d_sptr>& points)
+                                 std::vector<vsol_point_3d_sptr>& points)
 {
   if (!box)
     return false;
@@ -237,8 +239,8 @@ bool bsol_point_index_3d::in_box(vsol_box_3d_sptr const& box,
     for (int c=col_min; c<col_max; c++)
       for (int s=slab_min; s<slab_max; s++)
       {
-        vcl_vector<vsol_point_3d_sptr>& pts = (*(point_array_[r][c]))[s];
-        for (vcl_vector<vsol_point_3d_sptr>::iterator pit = pts.begin();
+        std::vector<vsol_point_3d_sptr>& pts = (*(point_array_[r][c]))[s];
+        for (std::vector<vsol_point_3d_sptr>::iterator pit = pts.begin();
              pit != pts.end(); pit++)
           points.push_back(*pit);
       }
@@ -248,7 +250,7 @@ bool bsol_point_index_3d::in_box(vsol_box_3d_sptr const& box,
 //:find the points within a radius of p
 bool bsol_point_index_3d::in_radius(const double radius,
                                     vsol_point_3d_sptr const& p,
-                                    vcl_vector<vsol_point_3d_sptr>& points)
+                                    std::vector<vsol_point_3d_sptr>& points)
 {
   if (!p)
     return false;
@@ -270,7 +272,7 @@ bool bsol_point_index_3d::in_radius(const double radius,
         int r = row+ro, c = col+co, s = slab + so;
         if (r<0||r>=nrows_||c<0||c>=ncols_||s<0||s>=nslabs_)
           continue;
-        vcl_vector<vsol_point_3d_sptr>& points_in_cell =
+        std::vector<vsol_point_3d_sptr>& points_in_cell =
           (*(point_array_[r][c]))[s];
         int n = points_in_cell.size();
         if (!n)
@@ -290,14 +292,14 @@ bool bsol_point_index_3d::closest_in_radius(const double radius,
                                             vsol_point_3d_sptr const& p,
                                             vsol_point_3d_sptr& point)
 {
-  vcl_vector<vsol_point_3d_sptr> points;
+  std::vector<vsol_point_3d_sptr> points;
   this->in_radius(radius, p, points);
   double d = 0;
   point = bsol_algs::closest_point(p, points, d);
   if (!point||d>radius)
     return false;
 #ifdef DEBUG
-  vcl_cout << "p("<< p->x() << ' ' << p->y()<< "):P(" << point->x() << ' ' << point->y() << "):" << d << vcl_endl;
+  std::cout << "p("<< p->x() << ' ' << p->y()<< "):P(" << point->x() << ' ' << point->y() << "):" << d << std::endl;
 #endif
   return true;
 }
@@ -333,15 +335,15 @@ bool bsol_point_index_3d::marked(vsol_point_3d_sptr const& p)
   return flag(p);
 }
 
-vcl_vector<vsol_point_3d_sptr> bsol_point_index_3d::points()
+std::vector<vsol_point_3d_sptr> bsol_point_index_3d::points()
 {
-  vcl_vector<vsol_point_3d_sptr> out;
+  std::vector<vsol_point_3d_sptr> out;
   for (int r=0; r<nrows_; r++)
     for (int c=0; c<ncols_; c++)
       for (int s=0; s<nslabs_; s++)
       {
-        vcl_vector<vsol_point_3d_sptr>& points = (*(point_array_[r][c]))[s];
-        for (vcl_vector<vsol_point_3d_sptr>::iterator pit = points.begin();
+        std::vector<vsol_point_3d_sptr>& points = (*(point_array_[r][c]))[s];
+        for (std::vector<vsol_point_3d_sptr>::iterator pit = points.begin();
              pit!= points.end(); pit++)
           out.push_back(*pit);
       }
@@ -353,7 +355,7 @@ void bsol_point_index_3d::clear_marks()
   for (int r=0; r<nrows_; ++r)
     for (int c=0; c<ncols_; ++c)
       for (int s=0; s<nslabs_; ++s)
-        for (vcl_vector<vsol_point_3d_sptr>::iterator pit = (*(point_array_[r][c]))[s].begin();
+        for (std::vector<vsol_point_3d_sptr>::iterator pit = (*(point_array_[r][c]))[s].begin();
              pit != (*(point_array_[r][c]))[s].end(); ++pit)
           clear_flag(*pit);
 }
@@ -394,8 +396,8 @@ vsol_box_3d_sptr bsol_point_index_3d::point_bounds()
     for (int c=0; c<ncols_; c++)
       for (int s=0; s<nslabs_; s++)
       {
-        vcl_vector<vsol_point_3d_sptr>& points = (*(point_array_[r][c]))[s];
-        for (vcl_vector<vsol_point_3d_sptr>::iterator pit = points.begin();
+        std::vector<vsol_point_3d_sptr>& points = (*(point_array_[r][c]))[s];
+        for (std::vector<vsol_point_3d_sptr>::iterator pit = points.begin();
              pit!= points.end(); pit++)
           box->add_point((*pit)->x(), (*pit)->y(), (*pit)->z());
       }

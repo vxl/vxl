@@ -9,10 +9,12 @@
 // \verbatim
 // \endverbatim
 
-#include <vcl_string.h>
-#include <vcl_vector.h>
-#include <vcl_iostream.h>
-#include <vcl_cmath.h>
+#include <string>
+#include <vector>
+#include <iostream>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <cmath>
 
 #include <vbl/vbl_array_2d.h>
 

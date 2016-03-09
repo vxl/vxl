@@ -9,7 +9,9 @@
 //
 
 #include "boxm2_vecf_orbit_params.h"
-#include <vcl_vector.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <vector>
 #include <vgl/vgl_point_3d.h>
 #include <vgl/vgl_sphere_3d.h>
 struct cpoint{
@@ -25,13 +27,13 @@ class boxm2_vecf_point_cloud_orbit_viewer{
   boxm2_vecf_point_cloud_orbit_viewer() {}
 
 
-  bool set_point_cloud(vcl_string const& pc_path);
+  bool set_point_cloud(std::string const& pc_path);
   void add_sphere(vgl_sphere_3d<double> const& sph, int r = 0, int g = 255, int b = 0);
-  bool save_point_cloud(vcl_string const& pc_path) const;
+  bool save_point_cloud(std::string const& pc_path) const;
   bool display_orbit(boxm2_vecf_orbit_params opr, bool is_right);
 
  private:
-   vcl_vector<vgl_point_3d<double> > draw_sphere(vgl_sphere_3d<double> const& sph);
-   vcl_vector<cpoint> pc_;
+   std::vector<vgl_point_3d<double> > draw_sphere(vgl_sphere_3d<double> const& sph);
+   std::vector<cpoint> pc_;
 };
 #endif// boxm2_vecf_point_cloud_orbit_viewer

@@ -9,8 +9,10 @@
 // \author awf@robots.ox.ac.uk
 // \date   19 Mar 00
 
-#include <vcl_iosfwd.h>
-#include <vcl_vector.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iosfwd>
+#include <vector>
 
 class vrml_out_vertex_to_texture;
 
@@ -21,32 +23,32 @@ class vrml_out
   // Constructors/Destructors--------------------------------------------------
 
   vrml_out();
-  vrml_out(vcl_ostream& s);
+  vrml_out(std::ostream& s);
   vrml_out(char const* filename);
   ~vrml_out();
 
   // Operations----------------------------------------------------------------
-  void open(vcl_ostream& s);
+  void open(std::ostream& s);
   void close();
 
   void prologue();
-  void write_points(vcl_vector<double> const& x, vcl_vector<double> const& y, vcl_vector<double> const& z);
+  void write_points(std::vector<double> const& x, std::vector<double> const& y, std::vector<double> const& z);
   void display_pointset();
 #if 0 // NYI - TODO
-  void write_vertices(vcl_vector<vgl_point_3d<double> > const&);
-  void write_points(vcl_vector<vgl_point_3d<double> > const& l) { return write_vertices(l); }
-  void write_edges(vcl_vector<vgl_line_segment_3d<double> > const&);
-  void write_faces(vcl_list<vgl_polygon<float> > const& triangles);
-  void write_faces_textured(vcl_list<v<float> gl_polygon> const& triangles, char const* imagefilename, int xsize, int ysize);
-  void write_faces_textured(vcl_list<v<float> gl_polygon> const& triangles, char const* imagefilename, int xsize, int ysize,
+  void write_vertices(std::vector<vgl_point_3d<double> > const&);
+  void write_points(std::vector<vgl_point_3d<double> > const& l) { return write_vertices(l); }
+  void write_edges(std::vector<vgl_line_segment_3d<double> > const&);
+  void write_faces(std::list<vgl_polygon<float> > const& triangles);
+  void write_faces_textured(std::list<v<float> gl_polygon> const& triangles, char const* imagefilename, int xsize, int ysize);
+  void write_faces_textured(std::list<v<float> gl_polygon> const& triangles, char const* imagefilename, int xsize, int ysize,
                             vnl_matrix<double> const& Pmatrix);
-  void write_faces_textured(vcl_list<v<float> gl_polygon> const& triangles, char const* imagefilename, int xsize, int ysize,
-                            vcl_vector<vcl_pair<vgl_point_3d<double>, vgl_point_3d<double> > >&);
-  void write_faces_textured(vcl_list<v<float> gl_polygon> const& triangles, char const* imagefilename,
+  void write_faces_textured(std::list<v<float> gl_polygon> const& triangles, char const* imagefilename, int xsize, int ysize,
+                            std::vector<std::pair<vgl_point_3d<double>, vgl_point_3d<double> > >&);
+  void write_faces_textured(std::list<v<float> gl_polygon> const& triangles, char const* imagefilename,
                             vrml_out_vertex_to_texture const& textures);
   void write_block(Block* topology);
   void write_topology(TopologyObject* topology);
-  void write_topology(vcl_list<TopologyObject*>& topology);
+  void write_topology(std::list<TopologyObject*>& topology);
 #endif
   void comment(char const* msg);
   void verbatim(char const* msg);
@@ -85,11 +87,11 @@ class vrml_out
 
  protected:
   // Data Members--------------------------------------------------------------
-  vcl_ostream* s_;
+  std::ostream* s_;
   bool own_ostream_;
 
  private:
-  // private as don't want 2 people on same vcl_ostream
+  // private as don't want 2 people on same std::ostream
   vrml_out(const vrml_out& that);
   vrml_out& operator=(const vrml_out& that);
 };

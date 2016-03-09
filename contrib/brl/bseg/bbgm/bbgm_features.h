@@ -17,9 +17,11 @@
 #include <vgl/vgl_polygon.h>
 #include <vsl/vsl_binary_io.h>
 #include <vsl/vsl_set_io.h>
-#include <vcl_vector.h>
-#include <vcl_set.h>
-#include <vcl_iosfwd.h> // for std::ostream
+#include <vector>
+#include <set>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iosfwd> // for std::ostream
 
 //================================================================
 //=======================  mask feature ===========================
@@ -70,7 +72,7 @@ class bbgm_mask_feature
   unsigned id() const {return id_;}
 
   //: pixels corresponding to + elements of the mask centered on (i, j)
-  vcl_vector<vgl_point_2d<unsigned short> > pixels(unsigned i, unsigned j);
+  std::vector<vgl_point_2d<unsigned short> > pixels(unsigned i, unsigned j);
 
   //===========================================================================
   // Binary I/O Methods
@@ -78,7 +80,7 @@ class bbgm_mask_feature
 
   //: Return a string name
   // \note this is probably not portable
-  virtual vcl_string is_a() const;
+  virtual std::string is_a() const;
 
   virtual bbgm_mask_feature* clone() const;
 
@@ -100,7 +102,7 @@ class bbgm_mask_feature
 };
 
 
-void vsl_print_summary(vcl_ostream& os,
+void vsl_print_summary(std::ostream& os,
                        const bbgm_mask_feature& b);
 
 
@@ -170,7 +172,7 @@ class bbgm_mask_pair_feature
   unsigned id() const {return id_;}
 
   //: The pixels in the pair (positive mask elements + path pixels)
-  vcl_vector<vgl_point_2d<unsigned short> > pixels();
+  std::vector<vgl_point_2d<unsigned short> > pixels();
 
   //======================================================================
   // Binary I/O Methods
@@ -178,7 +180,7 @@ class bbgm_mask_pair_feature
 
   //: Return a string name
   // \note this is probably not portable
-  virtual vcl_string is_a() const;
+  virtual std::string is_a() const;
 
   virtual bbgm_mask_pair_feature* clone() const;
 
@@ -204,7 +206,7 @@ class bbgm_mask_pair_feature
 };
 
 
-void vsl_print_summary(vcl_ostream& os,
+void vsl_print_summary(std::ostream& os,
                        const bbgm_mask_pair_feature& b);
 
 
@@ -250,10 +252,10 @@ class bbgm_pair_group_feature
   //: A group with a single pair
   bbgm_pair_group_feature(bbgm_mask_pair_feature const& mp);
   //: set probability and vertices
-  void set_prob(vcl_set<bbgm_mask_pair_feature, fless >const& pairs, float p)
+  void set_prob(std::set<bbgm_mask_pair_feature, fless >const& pairs, float p)
   {
     pairs_ = pairs;
-    vcl_set<bbgm_mask_pair_feature, fless >::const_iterator pit = pairs.begin();
+    std::set<bbgm_mask_pair_feature, fless >::const_iterator pit = pairs.begin();
     float cif = 0.0f, cjf = 0.0f;
     unsigned np = 0;
     for (; pit != pairs.end(); ++pit, ++np)
@@ -276,7 +278,7 @@ class bbgm_pair_group_feature
 
   unsigned n_pairs() const {return pairs_.size();}
 
-  const vcl_set<bbgm_mask_pair_feature, fless>& pairs() const
+  const std::set<bbgm_mask_pair_feature, fless>& pairs() const
   { return pairs_; }
 
   //: probability for the pair group
@@ -297,7 +299,7 @@ class bbgm_pair_group_feature
   vgl_polygon<double> convex_hull() const;
 
   //: List of pixels in group ( + mask elements and paths)
-  vcl_vector<vgl_point_2d<unsigned short> > pixels();
+  std::vector<vgl_point_2d<unsigned short> > pixels();
 
   //===========================================================================
   // Binary I/O Methods
@@ -305,7 +307,7 @@ class bbgm_pair_group_feature
 
   //: Return a string name
   // \note this is probably not portable
-  virtual vcl_string is_a() const;
+  virtual std::string is_a() const;
 
   virtual bbgm_pair_group_feature* clone() const;
 
@@ -325,12 +327,12 @@ class bbgm_pair_group_feature
   brip_rect_mask::mask_id mid_; //!< the mask type of the group
   unsigned short ci_;           //!< the center of the group
   unsigned short cj_;
-  vcl_set<bbgm_mask_pair_feature, fless > pairs_;
+  std::set<bbgm_mask_pair_feature, fless > pairs_;
   float p_;
 };
 
 
-void vsl_print_summary(vcl_ostream& os,
+void vsl_print_summary(std::ostream& os,
                        const bbgm_pair_group_feature& b);
 
 

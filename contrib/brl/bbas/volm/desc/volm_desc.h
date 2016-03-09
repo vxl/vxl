@@ -18,7 +18,9 @@
 #include <vbl/vbl_ref_count.h>
 #include <vbl/vbl_smart_ptr.h>
 #include <vsl/vsl_binary_io.h>
-#include <vcl_vector.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <vector>
 
 class volm_desc;
 typedef vbl_smart_ptr<volm_desc> volm_desc_sptr;
@@ -30,7 +32,7 @@ public:
   volm_desc() {}
 
   //: construct the histogram from a vector
-  volm_desc(vcl_vector<unsigned char> values)
+  volm_desc(std::vector<unsigned char> values)
     : h_(values)
   { name_ = "descriptor";  nbins_ = (unsigned)values.size(); }
 
@@ -38,7 +40,7 @@ public:
   virtual ~volm_desc() {};
 
   //: return the name of the descriptor
-  virtual vcl_string name() { return "volm_desc base"; }
+  virtual std::string name() { return "volm_desc base"; }
 
   //: return the number of bins of the histogram
   unsigned int nbins() { return nbins_; }
@@ -53,7 +55,7 @@ public:
   virtual float similarity(volm_desc_sptr other);
 
   //: visualization using bsvg
-  void visualize(vcl_string outfile, unsigned char const& y_max = 10) const;
+  void visualize(std::string outfile, unsigned char const& y_max = 10) const;
 
   //: return the value of bin
   unsigned char count(unsigned const& i) const { return h_[i]; }
@@ -61,7 +63,7 @@ public:
   //: Accessor to the value at bin i in the histogram
   unsigned char operator[] (unsigned int i) const { return h_[i];}
 
-  void get_char_array(vcl_vector<unsigned char>& values) const;
+  void get_char_array(std::vector<unsigned char>& values) const;
 
   // ===========  binary I/O ================
 
@@ -76,13 +78,13 @@ public:
 
 protected:
   //: name of the descriptor
-  vcl_string name_;
+  std::string name_;
 
   //: number of bins of the histogram
   unsigned int nbins_;
 
   //: a simple 1D histogram
-  vcl_vector<unsigned char> h_;
+  std::vector<unsigned char> h_;
 };
 
 #endif  // volm_desc_h_

@@ -4,8 +4,10 @@
 // \file
 
 #include <bprb/bprb_parameters.h>
-#include <vcl_iostream.h>
-#include <vcl_string.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iostream>
+#include <string>
 #include <vil/vil_image_view.h>
 #include <vil/vil_image_view_base.h>
 
@@ -13,7 +15,7 @@
 bool vil_init_byte_image_process_cons(bprb_func_process& pro)
 {
   // input
-  vcl_vector<vcl_string> input_types_;
+  std::vector<std::string> input_types_;
   input_types_.push_back("unsigned");  // ni
   input_types_.push_back("unsigned");  // nj
   input_types_.push_back("unsigned");  // np
@@ -29,7 +31,7 @@ bool vil_init_byte_image_process_cons(bprb_func_process& pro)
   pro.set_input(3, brdb_value_sptr(new brdb_value_t<unsigned>(0)));
 
   // output
-  vcl_vector<vcl_string> output_types_;
+  std::vector<std::string> output_types_;
   output_types_.push_back("vil_image_view_base_sptr");
   return pro.set_output_types(output_types_);
 }
@@ -40,7 +42,7 @@ bool vil_init_byte_image_process(bprb_func_process& pro)
   unsigned int num_inputs = pro.input_types().size();
   // Sanity check
   if (pro.n_inputs() != num_inputs) {
-    vcl_cout << pro.name() << ": The number of inputs should be " << num_inputs << vcl_endl;
+    std::cout << pro.name() << ": The number of inputs should be " << num_inputs << std::endl;
     return false;
   }
   // get the input

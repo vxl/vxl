@@ -3,9 +3,11 @@
 //:
 // \file
 
-#include <vcl_sstream.h>
-#include <vcl_iostream.h>
-#include <vcl_fstream.h>
+#include <sstream>
+#include <iostream>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <fstream>
 #include <vul/vul_arg.h>
 #include <vil/vil_load.h>
 #include <vil/vil_save.h>
@@ -32,9 +34,9 @@
 
 int main( int argc, char* argv[] )
 {
-  vul_arg<vcl_string> in_path("-i","Input image");
-  vul_arg<vcl_string> key_path("-keys", "Just display keypoints if keypoint file is available, otherwise will extract keys");
-  vul_arg<vcl_string> out_path("-o","Output image");
+  vul_arg<std::string> in_path("-i","Input image");
+  vul_arg<std::string> key_path("-keys", "Just display keypoints if keypoint file is available, otherwise will extract keys");
+  vul_arg<std::string> out_path("-o","Output image");
   vul_arg_parse(argc, argv);
 
   if (!in_path.set())
@@ -50,24 +52,24 @@ int main( int argc, char* argv[] )
   grey_image_sptr = vil_new_image_resource_of_view( *vil_convert_to_grey_using_rgb_weighting ( color_image_sptr->get_view() ) );
   if (grey_image_sptr->ni()==0)
   {
-    vcl_cout<<"Failed to load image."<<vcl_endl;
+    std::cout<<"Failed to load image."<<std::endl;
     return 1;
   }
 
-  vcl_vector< bapl_keypoint_sptr > keypoints;
+  std::vector< bapl_keypoint_sptr > keypoints;
   if (extract) {
-    vcl_cout << "Finding Keypoints" << vcl_endl;
+    std::cout << "Finding Keypoints" << std::endl;
     bapl_keypoint_extractor( grey_image_sptr, keypoints);
   }
   else {
-    vcl_cout << "Reading Keypoints from file: " << key_path().c_str() << vcl_endl;
-    vcl_ifstream ifs(key_path().c_str());
+    std::cout << "Reading Keypoints from file: " << key_path().c_str() << std::endl;
+    std::ifstream ifs(key_path().c_str());
     if (!ifs.is_open()) {
-      vcl_cerr << "Failed to open file " << key_path().c_str() << '\n';
+      std::cerr << "Failed to open file " << key_path().c_str() << '\n';
       return 0;
     }
     int n; ifs >> n; int len; ifs >> len;
-    vcl_cout << "Found " << n << " keypoints.\n";
+    std::cout << "Found " << n << " keypoints.\n";
     for (int i = 0; i < n; i++) {
       float loc_x, loc_y, scale, orientation;
       ifs >> loc_x; ifs >> loc_y; ifs >> scale; ifs >> orientation;
@@ -85,7 +87,7 @@ int main( int argc, char* argv[] )
     ifs.close();
   }
 
-  vcl_cout << "Drawing Keypoints" << vcl_endl;
+  std::cout << "Drawing Keypoints" << std::endl;
 
   vil_image_view<vxl_byte> color_img(color_image_sptr->get_view());
   for (unsigned i=0;i<keypoints.size();++i){
@@ -97,12 +99,12 @@ int main( int argc, char* argv[] )
         ipts_draw_cross(color_img, ii,jj,int(kp->scale()+0.5), vxl_byte(255) );
   }
 
-  vcl_cout << "Saving the results" << vcl_endl;
+  std::cout << "Saving the results" << std::endl;
 
   vil_save(color_img, out_path().c_str() );
 
 
-  vcl_cout <<  "done!" <<vcl_endl;
+  std::cout <<  "done!" <<std::endl;
   return 0;
 }
 

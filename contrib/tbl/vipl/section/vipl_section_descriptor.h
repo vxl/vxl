@@ -7,7 +7,9 @@
 //:
 //  \file
 
-#include <vcl_vector.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <vector>
 
 template < class DataType > class vipl_section_container; //template forward reference
 template < class DataType > class vipl_section_iterator; //template forward reference
@@ -21,10 +23,10 @@ class vipl_section_descriptor
   vipl_section_descriptor< DataType >* hsreal_descriptor;
   vipl_section_container< DataType >* hsreal_container;
   DataType* hsi_data_ptr;
-  vcl_vector< int > hsi_data_offsets;
-  vcl_vector< int > hsi_curr_sec_start;
-  vcl_vector< int > hsi_curr_sec_end;
-  vcl_vector< int > hsi_curr_sec_size;
+  std::vector< int > hsi_data_offsets;
+  std::vector< int > hsi_curr_sec_start;
+  std::vector< int > hsi_curr_sec_end;
+  std::vector< int > hsi_curr_sec_size;
 
  protected:
   //: Assigns the pointers directly. Does not attempt to deep copy them.
@@ -45,7 +47,7 @@ class vipl_section_descriptor
   // is none associated with it), but if used for the ROA of a
   // filter this can be used to limit its operation to only a small
   // window within the image.
-  vipl_section_descriptor( vcl_vector< int >& startpts , vcl_vector< int >& endpts);
+  vipl_section_descriptor( std::vector< int >& startpts , std::vector< int >& endpts);
 
   virtual ~vipl_section_descriptor();//low_level destructor
   vipl_section_descriptor();//low_level c++ constructor
@@ -126,23 +128,23 @@ class vipl_section_descriptor
   DataType* i_data_ptr() const{ return hsi_data_ptr;}
   DataType* & ref_i_data_ptr(){ return hsi_data_ptr;}
   void put_i_data_ptr( DataType* v){ hsi_data_ptr = v;}
-  vcl_vector< int > const & i_data_offsets() const{ return hsi_data_offsets;}
-  vcl_vector< int > & ref_i_data_offsets(){ return hsi_data_offsets;}
-  void put_i_data_offsets( vcl_vector< int > const & v){ hsi_data_offsets = v;}
-  vcl_vector< int > const & i_curr_sec_start() const{ return hsi_curr_sec_start;}
-  vcl_vector< int > & ref_i_curr_sec_start(){ return hsi_curr_sec_start;}
-  void put_i_curr_sec_start( vcl_vector< int > const & v){ hsi_curr_sec_start = v;}
+  std::vector< int > const & i_data_offsets() const{ return hsi_data_offsets;}
+  std::vector< int > & ref_i_data_offsets(){ return hsi_data_offsets;}
+  void put_i_data_offsets( std::vector< int > const & v){ hsi_data_offsets = v;}
+  std::vector< int > const & i_curr_sec_start() const{ return hsi_curr_sec_start;}
+  std::vector< int > & ref_i_curr_sec_start(){ return hsi_curr_sec_start;}
+  void put_i_curr_sec_start( std::vector< int > const & v){ hsi_curr_sec_start = v;}
   //:
   // This method takes in an integer argument called axis (i.e. 0
   // means the ``x'' axis, 1 means ``y'' axis etc...) and returns
   // an integer which describes the end coordinate value for ``x''
   // (or ``y'' etc..) with respect to the ``image'' coordinate system.
-  vcl_vector< int > const & i_curr_sec_end() const{ return hsi_curr_sec_end;}
-  vcl_vector< int > & ref_i_curr_sec_end(){ return hsi_curr_sec_end;}
-  void put_i_curr_sec_end( vcl_vector< int > const & v){ hsi_curr_sec_end = v;}
-  vcl_vector< int > const & i_curr_sec_size() const{ return hsi_curr_sec_size;}
-  vcl_vector< int > & ref_i_curr_sec_size(){ return hsi_curr_sec_size;}
-  void put_i_curr_sec_size( vcl_vector< int > const & v){ hsi_curr_sec_size = v;}
+  std::vector< int > const & i_curr_sec_end() const{ return hsi_curr_sec_end;}
+  std::vector< int > & ref_i_curr_sec_end(){ return hsi_curr_sec_end;}
+  void put_i_curr_sec_end( std::vector< int > const & v){ hsi_curr_sec_end = v;}
+  std::vector< int > const & i_curr_sec_size() const{ return hsi_curr_sec_size;}
+  std::vector< int > & ref_i_curr_sec_size(){ return hsi_curr_sec_size;}
+  void put_i_curr_sec_size( std::vector< int > const & v){ hsi_curr_sec_size = v;}
 
   // refcounting:
  private: int refcount_;

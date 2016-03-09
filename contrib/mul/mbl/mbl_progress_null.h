@@ -23,16 +23,16 @@ class mbl_progress_null : public mbl_progress
   ~mbl_progress_null();
 
   //: Name of the class
-  virtual vcl_string is_a() const;
+  virtual std::string is_a() const;
 
  protected:
-  virtual void on_set_estimated_iterations(const vcl_string& identifier,
+  virtual void on_set_estimated_iterations(const std::string& identifier,
                                            const int total_iterations);
 
-  virtual void on_set_progress(const vcl_string& identifier,
+  virtual void on_set_progress(const std::string& identifier,
                                const int progress);
 
-  virtual void on_end_progress(const vcl_string& identifier);
+  virtual void on_end_progress(const std::string& identifier);
 };
 
 //========================================================================

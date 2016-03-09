@@ -8,9 +8,11 @@
 #include <vpgl/file_formats/vpgl_nitf_rational_camera.h>
 #endif
 // include for project points menu option
-#include <vcl_iostream.h>
-#include <vcl_cstdio.h> // sprintf
-#include <vcl_fstream.h>
+#include <iostream>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <cstdio> // sprintf
+#include <fstream>
 #include <vul/vul_timer.h>
 #include <vbl/vbl_array_2d.h>
 #include <vnl/vnl_math.h>
@@ -229,11 +231,11 @@ bgui_image_tableau_sptr segv_vil_segmentation_manager::selected_image_tab()
   {
     bgui_image_tableau_sptr itab;
     itab.vertical_cast(vgui_find_below_by_type_name(top_tab,
-                                                    vcl_string("vgui_image_tableau")));
+                                                    std::string("vgui_image_tableau")));
     if (itab)
       return itab;
   }
-  vcl_cout << "Unable to get bgui_image_tableau at (" << col
+  std::cout << "Unable to get bgui_image_tableau at (" << col
            << ", " << row << ")\n";
   return bgui_image_tableau_sptr();
 }
@@ -248,11 +250,11 @@ segv_vil_segmentation_manager::vtol2D_tab_at(const unsigned col,
   {
     bgui_vtol2D_tableau_sptr v2D;
     v2D.vertical_cast(vgui_find_below_by_type_name(top_tab,
-                                                   vcl_string("bgui_vtol2D_tableau")));
+                                                   std::string("bgui_vtol2D_tableau")));
     if (v2D)
       return v2D;
   }
-  vcl_cout << "Unable to get bgui_vtol2D_tableau at (" << col
+  std::cout << "Unable to get bgui_vtol2D_tableau at (" << col
            << ", " << row << ")\n";
   return bgui_vtol2D_tableau_sptr();
 }
@@ -275,11 +277,11 @@ bgui_picker_tableau_sptr segv_vil_segmentation_manager::selected_picker_tab()
   {
     bgui_picker_tableau_sptr pick;
     pick.vertical_cast(vgui_find_below_by_type_name(top_tab,
-                                                    vcl_string("bgui_picker_tableau")));
+                                                    std::string("bgui_picker_tableau")));
     if (pick)
       return pick;
   }
-  vcl_cout << "Unable to get bgui_picker_tableau at (" << col
+  std::cout << "Unable to get bgui_picker_tableau at (" << col
            << ", " << row << ")\n";
   return bgui_picker_tableau_sptr();
 }
@@ -302,10 +304,10 @@ vil_image_resource_sptr segv_vil_segmentation_manager::image_at(const unsigned c
 
   bgui_image_tableau_sptr itab;
   itab.vertical_cast(vgui_find_below_by_type_name(top_tab,
-                                                  vcl_string("vgui_image_tableau")));
+                                                  std::string("vgui_image_tableau")));
   if (!itab)
   {
-    vcl_cout << "Unable to get bgui_image_tableau at (" << col
+    std::cout << "Unable to get bgui_image_tableau at (" << col
              << ", " << row << ")\n";
     return VXL_NULLPTR;
   }
@@ -342,7 +344,7 @@ void segv_vil_segmentation_manager::clear_all()
 //: Draw edges onto the tableau
 //-----------------------------------------------------------------------------
 void
-segv_vil_segmentation_manager::draw_edges(vcl_vector<vtol_edge_2d_sptr>& edges,
+segv_vil_segmentation_manager::draw_edges(std::vector<vtol_edge_2d_sptr>& edges,
                                           bool verts)
 {
   bgui_vtol2D_tableau_sptr t2D = this->selected_vtol2D_tab();
@@ -353,11 +355,11 @@ segv_vil_segmentation_manager::draw_edges(vcl_vector<vtol_edge_2d_sptr>& edges,
   vgui_image_tableau_sptr itab = t2D->get_image_tableau();
   if (!itab)
   {
-    vcl_cout << "In segv_vil_segmentation_manager::draw_edges - null image tab\n";
+    std::cout << "In segv_vil_segmentation_manager::draw_edges - null image tab\n";
     return;
   }
 #endif
-  for (vcl_vector<vtol_edge_2d_sptr>::iterator eit = edges.begin();
+  for (std::vector<vtol_edge_2d_sptr>::iterator eit = edges.begin();
        eit != edges.end(); eit++)
   {
     t2D->add_edge(*eit);
@@ -384,7 +386,7 @@ segv_vil_segmentation_manager::draw_edges(vcl_vector<vtol_edge_2d_sptr>& edges,
 //: Draw polylines on the tableau
 //-----------------------------------------------------------------------------
 void segv_vil_segmentation_manager::
-draw_polylines(vcl_vector<vsol_polyline_2d_sptr > const& polys)
+draw_polylines(std::vector<vsol_polyline_2d_sptr > const& polys)
 {
   bgui_vtol2D_tableau_sptr t2D = this->selected_vtol2D_tab();
   if (!t2D)
@@ -393,10 +395,10 @@ draw_polylines(vcl_vector<vsol_polyline_2d_sptr > const& polys)
   vgui_image_tableau_sptr itab = t2D->get_image_tableau();
   if (!itab)
   {
-    vcl_cout << "In segv_vil_segmentation_manager::draw_edges - null image tab\n";
+    std::cout << "In segv_vil_segmentation_manager::draw_edges - null image tab\n";
     return;
   }
-  for (vcl_vector<vsol_polyline_2d_sptr>::const_iterator pit = polys.begin();
+  for (std::vector<vsol_polyline_2d_sptr>::const_iterator pit = polys.begin();
        pit != polys.end(); pit++)
   {
     t2D->add_vsol_polyline_2d(*pit);
@@ -409,7 +411,7 @@ draw_polylines(vcl_vector<vsol_polyline_2d_sptr > const& polys)
 //: Draw line segments on the tableau
 //-----------------------------------------------------------------------------
 void segv_vil_segmentation_manager::
-draw_lines(vcl_vector<vsol_line_2d_sptr > const& lines,
+draw_lines(std::vector<vsol_line_2d_sptr > const& lines,
            const vgui_style_sptr& style)
 {
   bgui_vtol2D_tableau_sptr t2D = this->selected_vtol2D_tab();
@@ -420,11 +422,11 @@ draw_lines(vcl_vector<vsol_line_2d_sptr > const& lines,
   vgui_image_tableau_sptr itab = t2D->get_image_tableau();
   if (!itab)
   {
-    vcl_cout << "In segv_vil_segmentation_manager::draw_edges - null image tab\n";
+    std::cout << "In segv_vil_segmentation_manager::draw_edges - null image tab\n";
     return;
   }
 #endif
-  for (vcl_vector<vsol_line_2d_sptr>::const_iterator lit = lines.begin();
+  for (std::vector<vsol_line_2d_sptr>::const_iterator lit = lines.begin();
        lit != lines.end(); lit++)
   {
     t2D->add_vsol_line_2d(*lit,style);
@@ -437,7 +439,7 @@ draw_lines(vcl_vector<vsol_line_2d_sptr > const& lines,
 //: Draw conic segments on the tableau
 //-----------------------------------------------------------------------------
 void segv_vil_segmentation_manager::
-draw_conics(vcl_vector<vsol_conic_2d_sptr > const& conics,
+draw_conics(std::vector<vsol_conic_2d_sptr > const& conics,
             const vgui_style_sptr& style)
 {
   bgui_vtol2D_tableau_sptr t2D = this->selected_vtol2D_tab();
@@ -448,11 +450,11 @@ draw_conics(vcl_vector<vsol_conic_2d_sptr > const& conics,
   vgui_image_tableau_sptr itab = t2D->get_image_tableau();
   if (!itab)
   {
-    vcl_cout << "In segv_vil_segmentation_manager::draw_edges - null image tab\n";
+    std::cout << "In segv_vil_segmentation_manager::draw_edges - null image tab\n";
     return;
   }
 #endif
-  for (vcl_vector<vsol_conic_2d_sptr>::const_iterator lit = conics.begin();
+  for (std::vector<vsol_conic_2d_sptr>::const_iterator lit = conics.begin();
        lit != conics.end(); lit++)
   {
     t2D->add_vsol_conic_2d(*lit,style);
@@ -464,7 +466,7 @@ draw_conics(vcl_vector<vsol_conic_2d_sptr > const& conics,
 //: Draw points on the tableau
 //-----------------------------------------------------------------------------
 void segv_vil_segmentation_manager::
-draw_points(vcl_vector<vsol_point_2d_sptr> const& points, const vgui_style_sptr& style)
+draw_points(std::vector<vsol_point_2d_sptr> const& points, const vgui_style_sptr& style)
 {
   bgui_vtol2D_tableau_sptr t2D = this->selected_vtol2D_tab();
   if (!t2D)
@@ -474,11 +476,11 @@ draw_points(vcl_vector<vsol_point_2d_sptr> const& points, const vgui_style_sptr&
   vgui_image_tableau_sptr itab = t2D->get_image_tableau();
   if (!itab)
   {
-    vcl_cout << "In segv_vil_segmentation_manager::draw_edges - null image tab\n";
+    std::cout << "In segv_vil_segmentation_manager::draw_edges - null image tab\n";
     return;
   }
 #endif
-  for (vcl_vector<vsol_point_2d_sptr>::const_iterator pit = points.begin();
+  for (std::vector<vsol_point_2d_sptr>::const_iterator pit = points.begin();
        pit != points.end(); pit++)
   {
     t2D->add_vsol_point_2d(*pit,style);
@@ -487,22 +489,22 @@ draw_points(vcl_vector<vsol_point_2d_sptr> const& points, const vgui_style_sptr&
   t2D->post_redraw();
 }
 
-void segv_vil_segmentation_manager::draw_regions(vcl_vector<vtol_intensity_face_sptr>& regions,
+void segv_vil_segmentation_manager::draw_regions(std::vector<vtol_intensity_face_sptr>& regions,
                                                  bool verts)
 {
   bgui_vtol2D_tableau_sptr t2D = this->selected_vtol2D_tab();
   if (!t2D)
     return;
-  for (vcl_vector<vtol_intensity_face_sptr>::iterator rit = regions.begin();
+  for (std::vector<vtol_intensity_face_sptr>::iterator rit = regions.begin();
        rit != regions.end(); rit++)
   {
     vtol_face_2d_sptr f = (*rit)->cast_to_face_2d();
     t2D->add_face(f);
     if (verts)
     {
-      vcl_vector<vtol_vertex_sptr> vts;
+      std::vector<vtol_vertex_sptr> vts;
       f->vertices(vts);
-      for (vcl_vector<vtol_vertex_sptr>::iterator vit = vts.begin();
+      for (std::vector<vtol_vertex_sptr>::iterator vit = vts.begin();
            vit != vts.end(); vit++)
       {
         vtol_vertex_2d_sptr v = (*vit)->cast_to_vertex_2d();
@@ -524,8 +526,8 @@ void segv_vil_segmentation_manager::load_image()
   static bool greyscale = false;
   static bool sblock = false;
   vgui_dialog load_image_dlg("Load image file");
-  static vcl_string image_filename = "/home/dec/images/cal_image1.tif";
-  static vcl_string ext = "*.*";
+  static std::string image_filename = "/home/dec/images/cal_image1.tif";
+  static std::string ext = "*.*";
   load_image_dlg.file("Image Filename:", ext, image_filename);
   load_image_dlg.checkbox("greyscale ", greyscale);
   load_image_dlg.checkbox("blocked?:", sblock);
@@ -546,13 +548,13 @@ void segv_vil_segmentation_manager::load_image()
     image = vil_load_image_resource(image_filename.c_str(), false);
 
   if (!image) {
-    vcl_cout << "Failed to load image path " << image_filename << '\n';
+    std::cout << "Failed to load image path " << image_filename << '\n';
     return;
   }
 #if HAS_J2K
   // determine if the image can be made into a J2K-nitf pyramid
   char const* fmtp = image->file_format();
-  vcl_string file_fmt = "";
+  std::string file_fmt = "";
   if (fmtp) file_fmt = fmtp;//fmtp can be 0 for undefined formats
   if (file_fmt == "nitf21")
   {
@@ -596,7 +598,7 @@ void segv_vil_segmentation_manager::load_image()
     this->add_image(image, rmps);
 }
 
-void segv_vil_segmentation_manager::load_image_nomenu(vcl_string const& path)
+void segv_vil_segmentation_manager::load_image_nomenu(std::string const& path)
 {
   bool pyrm = false;
   vil_image_resource_sptr image;
@@ -612,13 +614,13 @@ void segv_vil_segmentation_manager::load_image_nomenu(vcl_string const& path)
     image = vil_load_image_resource(path.c_str(), false);
 
   if (!image) {
-    vcl_cout << "Failed to load image path " << path << '\n';
+    std::cout << "Failed to load image path " << path << '\n';
     return;
   }
 #if HAS_J2K
 // determine if the image can be made into a J2K-nitf pyramid
   char const* fmtp = image->file_format();
-  vcl_string file_fmt = "";
+  std::string file_fmt = "";
   if (fmtp) file_fmt = fmtp;//fmtp can be 0 for undefined formats
   if (file_fmt == "nitf21")
   {
@@ -652,9 +654,9 @@ void segv_vil_segmentation_manager::load_image_nomenu(vcl_string const& path)
 void segv_vil_segmentation_manager::save_image()
 {
   vgui_dialog file_dialog("Save Image");
-  static vcl_string image_file;
-  static vcl_string ext = "tif";
-  static vcl_string type = "tiff";
+  static std::string image_file;
+  static std::string ext = "tif";
+  static std::string type = "tiff";
   static unsigned size_block = 0;
   static bool byte = false;
   file_dialog.file("Image Filename:", ext, image_file);
@@ -666,7 +668,7 @@ void segv_vil_segmentation_manager::save_image()
   vil_image_resource_sptr img = this->selected_image();
   if (!img)
   {
-    vcl_cerr << "Null image in segv_vil_segmentation_manager::save_image\n";
+    std::cerr << "Null image in segv_vil_segmentation_manager::save_image\n";
     return;
   }
   vil_image_resource_sptr save_image = img;
@@ -691,7 +693,7 @@ void segv_vil_segmentation_manager::save_image()
   }
 
   if (!vil_save_image_resource(save_image, image_file.c_str(), type.c_str()))
-    vcl_cerr << "segv_vil_segmentation_manager::save_image operation failed\n";
+    std::cerr << "segv_vil_segmentation_manager::save_image operation failed\n";
 }
 
 void segv_vil_segmentation_manager::save_nitf_camera()
@@ -699,18 +701,18 @@ void segv_vil_segmentation_manager::save_nitf_camera()
   vil_image_resource_sptr img = this->selected_image();
   if (!img)
   {
-    vcl_cerr << "Null image in segv_vil_segmentation_manager::save_camera\n";
+    std::cerr << "Null image in segv_vil_segmentation_manager::save_camera\n";
     return;
   }
 
   vil_nitf2_image* nitf = VXL_NULLPTR;
-  vcl_string format = img->file_format();
-  vcl_string prefix = format.substr(0,4);
+  std::string format = img->file_format();
+  std::string prefix = format.substr(0,4);
   if (prefix == "nitf") {
     nitf = (vil_nitf2_image*)img.ptr();
     vgui_dialog file_dialog("Save NITF Camera");
-    static vcl_string image_file;
-    static vcl_string ext = "rpc";
+    static std::string image_file;
+    static std::string ext = "rpc";
     file_dialog.file("Image Filename:", ext, image_file);
     if (!file_dialog.ask())
       return;
@@ -773,7 +775,7 @@ void segv_vil_segmentation_manager::threshold_image()
   vil_image_resource_sptr img = selected_image();
   if (!img)
   {
-    vcl_cout << "In segv_segmentation_manager::threshold_image - no image\n";
+    std::cout << "In segv_segmentation_manager::threshold_image - no image\n";
     return;
   }
   static float thresh = 128.0f;
@@ -793,7 +795,7 @@ void segv_vil_segmentation_manager::harris_corners()
   vil_image_resource_sptr img = selected_image();
   if (!img)
   {
-    vcl_cout << "In segv_segmentation_manager::harris_measure) - no image\n";
+    std::cout << "In segv_segmentation_manager::harris_measure) - no image\n";
     return;
   }
   static sdet_harris_detector_params hdp;
@@ -809,7 +811,7 @@ void segv_vil_segmentation_manager::harris_corners()
   sdet_harris_detector hd(hdp);
   hd.set_image_resource(img);
   hd.extract_corners();
-  vcl_vector<vsol_point_2d_sptr>& points = hd.get_points();
+  std::vector<vsol_point_2d_sptr>& points = hd.get_points();
   int N = points.size();
   if (!N)
     return;
@@ -828,7 +830,7 @@ void segv_vil_segmentation_manager::nonmaximal_suppression()
   vil_image_resource_sptr img = selected_image();
   if (!img)
   {
-    vcl_cout << "In segv_segmentation_manager::nonmaximal_suppression) - no image\n";
+    std::cout << "In segv_segmentation_manager::nonmaximal_suppression) - no image\n";
     return;
   }
   static sdet_nonmax_suppression_params nsp;
@@ -889,7 +891,7 @@ void segv_vil_segmentation_manager::nonmaximal_suppression()
       double yval = grad_j(i,j);
       grad_x(i,j) = xval;
       grad_y(i,j) = yval;
-      double val = vcl_sqrt(vcl_pow(xval,2.0) + vcl_pow(yval,2.0));
+      double val = std::sqrt(std::pow(xval,2.0) + std::pow(yval,2.0));
       grad_mag(i,j) = val;
       grad_mag_img(i,j) = val;
       vgl_vector_2d<double> dir(xval, yval);
@@ -903,10 +905,10 @@ void segv_vil_segmentation_manager::nonmaximal_suppression()
 //  sdet_nonmax_suppression ns(nsp, grad_i, grad_j);
 //  sdet_nonmax_suppression ns(nsp, grad_mag_img, input_directions);
   ns.apply();
-  vcl_vector<vsol_point_2d_sptr>& points = ns.get_points();
-  vcl_vector<vsol_line_2d_sptr>& lines = ns.get_lines();
+  std::vector<vsol_point_2d_sptr>& points = ns.get_points();
+  std::vector<vsol_line_2d_sptr>& lines = ns.get_lines();
   // not used below, just for demonstration purposes
-  //vcl_vector<vgl_vector_2d<double> >& directions = ns.get_directions();
+  //std::vector<vgl_vector_2d<double> >& directions = ns.get_directions();
   int N = points.size();
   if (!N)
     return;
@@ -950,14 +952,14 @@ void segv_vil_segmentation_manager::vd_edges()
   vil_image_resource_sptr img = selected_image();
   if (!img||!img->ni()||!img->nj())
   {
-    vcl_cout << "In segv_vil_segmentation_manager::vd_edges() - no image\n";
+    std::cout << "In segv_vil_segmentation_manager::vd_edges() - no image\n";
     return;
   }
   sdet_detector det(dp);
   det.SetImage(img);
 
   det.DoContour();
-  vcl_vector<vtol_edge_2d_sptr>* edges = det.GetEdges();
+  std::vector<vtol_edge_2d_sptr>* edges = det.GetEdges();
   if (edges)
     this->draw_edges(*edges, true);
 }
@@ -977,12 +979,12 @@ void segv_vil_segmentation_manager::third_order_edges()
   vil_image_resource_sptr img = selected_image();
   if (!img||!img->ni()||!img->nj())
   {
-    vcl_cout << "In segv_vil_segmentation_manager::third_order_edges() - no image\n";
+    std::cout << "In segv_vil_segmentation_manager::third_order_edges() - no image\n";
     return;
   }
   sdet_third_order_edge_det det(dp);
   det.apply(img->get_view());
-  vcl_vector<vsol_line_2d_sptr> lines;
+  std::vector<vsol_line_2d_sptr> lines;
   det.line_segs(lines);
   if (lines.size())
     this->draw_lines(lines);
@@ -1019,23 +1021,23 @@ void segv_vil_segmentation_manager::fit_lines()
   vil_image_resource_sptr img = selected_image();
   if (!img||!img->ni()||!img->nj())
   {
-    vcl_cout << "In segv_vil_segmentation_manager::vd_edges() - no image\n";
+    std::cout << "In segv_vil_segmentation_manager::vd_edges() - no image\n";
     return;
   }
 
   det.SetImage(img);
 
   det.DoContour();
-  vcl_vector<vtol_edge_2d_sptr>* edges = det.GetEdges();
+  std::vector<vtol_edge_2d_sptr>* edges = det.GetEdges();
   if (!edges)
   {
-    vcl_cout << "No edges to fit lines\n";
+    std::cout << "No edges to fit lines\n";
     return;
   }
   sdet_fit_lines fl(flp);
   fl.set_edges(*edges);
   fl.fit_lines();
-  vcl_vector<vsol_line_2d_sptr> lines = fl.get_line_segs();
+  std::vector<vsol_line_2d_sptr> lines = fl.get_line_segs();
   this->draw_lines(lines);
 }
 
@@ -1070,33 +1072,33 @@ void segv_vil_segmentation_manager::fit_conics()
   vil_image_resource_sptr img = selected_image();
   if (!img||!img->ni()||!img->nj())
   {
-    vcl_cout << "In segv_vil_segmentation_manager::vd_edges() - no image\n";
+    std::cout << "In segv_vil_segmentation_manager::vd_edges() - no image\n";
     return;
   }
 
   det.SetImage(img);
 
   det.DoContour();
-  vcl_vector<vtol_edge_2d_sptr>* edges = det.GetEdges();
+  std::vector<vtol_edge_2d_sptr>* edges = det.GetEdges();
   if (!edges)
   {
-    vcl_cout << "No edges to fit conics\n";
+    std::cout << "No edges to fit conics\n";
     return;
   }
   sdet_fit_conics fl(fcp);
   fl.set_edges(*edges);
   fl.fit_conics();
-  vcl_vector<vsol_conic_2d_sptr> conics = fl.get_conic_segs();
+  std::vector<vsol_conic_2d_sptr> conics = fl.get_conic_segs();
   this->draw_conics(conics);
 
-  vcl_vector<vsol_point_2d_sptr> center_points;
+  std::vector<vsol_point_2d_sptr> center_points;
   double cx,cy,phi,width,height;
   // draw the center points of the conics
   for (unsigned int i=0; i<conics.size(); i++) {
     if (conics[i]->is_real_ellipse()) {
       conics[i]->ellipse_parameters(cx,cy,phi,width,height);
       vsol_point_2d_sptr p = new vsol_point_2d(cx, cy);
-      vcl_cout << i << " center (" << cx << ',' << cy << ')' << vcl_endl;
+      std::cout << i << " center (" << cx << ',' << cy << ')' << std::endl;
       center_points.push_back(p);
     }
   }
@@ -1115,8 +1117,8 @@ void segv_vil_segmentation_manager::fit_overlay_conics()
   static sdet_fit_conics_params fcp;
 
   vgui_dialog lf_dialog("Fit overlay Conics");
-  static vcl_string image_filename = "/home/dec/images/cal_image1.tif";
-  static vcl_string ext = "*.*";
+  static std::string image_filename = "/home/dec/images/cal_image1.tif";
+  static std::string ext = "*.*";
   lf_dialog.file("Image Filename:", ext, image_filename);
   lf_dialog.field("Gaussian sigma", dp.smooth);
   lf_dialog.field("Noise Threshold", nm);
@@ -1139,34 +1141,34 @@ void segv_vil_segmentation_manager::fit_overlay_conics()
   vil_image_resource_sptr img = vil_load_image_resource(image_filename.c_str());
   if (!img||!img->ni()||!img->nj())
   {
-    vcl_cout << "In segv_vil_segmentation_manager::vd_edges() - no image\n";
+    std::cout << "In segv_vil_segmentation_manager::vd_edges() - no image\n";
     return;
   }
 
   det.SetImage(img);
 
   det.DoContour();
-  vcl_vector<vtol_edge_2d_sptr>* edges = det.GetEdges();
+  std::vector<vtol_edge_2d_sptr>* edges = det.GetEdges();
   if (!edges)
   {
-    vcl_cout << "No edges to fit conics\n";
+    std::cout << "No edges to fit conics\n";
     return;
   }
   sdet_fit_conics fl(fcp);
   fl.set_edges(*edges);
   fl.fit_conics();
-  vcl_vector<vsol_conic_2d_sptr> conics = fl.get_conic_segs();
+  std::vector<vsol_conic_2d_sptr> conics = fl.get_conic_segs();
   vgui_style_sptr style = vgui_style::new_style(1.0f,1.0f,0.0f,5.0f,1.0f);
   this->draw_conics(conics, style);
 
-  vcl_vector<vsol_point_2d_sptr> center_points;
+  std::vector<vsol_point_2d_sptr> center_points;
   double cx,cy,phi,width,height;
   // draw the center points of the conics
   for (unsigned int i=0; i<conics.size(); i++) {
     if (conics[i]->is_real_ellipse()) {
       conics[i]->ellipse_parameters(cx,cy,phi,width,height);
       vsol_point_2d_sptr p = new vsol_point_2d(cx, cy);
-      vcl_cout << i << " center (" << cx << ',' << cy << ')' << vcl_endl;
+      std::cout << i << " center (" << cx << ',' << cy << ')' << std::endl;
       center_points.push_back(p);
     }
   }
@@ -1183,8 +1185,8 @@ void segv_vil_segmentation_manager::project_points()
   this->clear_display(); // apparently this call is needed?
   vil_image_resource_sptr img = this->selected_image();
   vil_nitf2_image* nitf = VXL_NULLPTR;
-  vcl_string format = img->file_format();
-  vcl_string prefix = format.substr(0,4);
+  std::string format = img->file_format();
+  std::string prefix = format.substr(0,4);
   if (prefix == "nitf")
     nitf = (vil_nitf2_image*)img.ptr();
   else
@@ -1193,7 +1195,7 @@ void segv_vil_segmentation_manager::project_points()
     bool pyr = img->get_property(vil_property_pyramid, VXL_NULLPTR);
     if (!pyr)
     {
-      vcl_cout << "Current image is not a NITF image\n";
+      std::cout << "Current image is not a NITF image\n";
       return;
     }
     //Get the base image
@@ -1205,7 +1207,7 @@ void segv_vil_segmentation_manager::project_points()
       nitf = (vil_nitf2_image*)base.ptr();
     else
     {
-      vcl_cout << "Current image is not a NITF image\n";
+      std::cout << "Current image is not a NITF image\n";
       return;
     }
   }
@@ -1222,7 +1224,7 @@ void segv_vil_segmentation_manager::project_points()
 
   if (!lf_dialog.ask())
   {
-    vcl_cerr << "In project_points() dialog failed; returning.\n";
+    std::cerr << "In project_points() dialog failed; returning.\n";
     return;
   }
   // calculate point location (x1, y1) for 1st camera
@@ -1230,8 +1232,8 @@ void segv_vil_segmentation_manager::project_points()
   double v = 0;
   vpgl_nitf_rational_camera rpcam(nitf, true);
   rpcam.project(lon, lat, elev, u,  v);
-  vcl_cout << " camera projects to <" << u << ", " << v << '>' << vcl_endl;
-  vcl_vector<vsol_point_2d_sptr> points;
+  std::cout << " camera projects to <" << u << ", " << v << '>' << std::endl;
+  std::vector<vsol_point_2d_sptr> points;
   vsol_point_2d_sptr p1 = new vsol_point_2d(u, v);
   points.push_back(p1);
   vgui_style_sptr style1 = vgui_style::new_style(1.0f,0.0f,0.0f,10.0f,1.0f);   // first style, red
@@ -1266,7 +1268,7 @@ void segv_vil_segmentation_manager::regions()
   vil_image_resource_sptr img = selected_image();
   if (!img||!img->ni()||!img->nj())
   {
-    vcl_cout << "In segv_vil_segmentation_manager::vd_edges() - no image\n";
+    std::cout << "In segv_vil_segmentation_manager::vd_edges() - no image\n";
     return;
   }
 
@@ -1281,7 +1283,7 @@ void segv_vil_segmentation_manager::regions()
     vgui_image_tableau_sptr itab =  t2D->get_image_tableau();
     if (!itab)
     {
-      vcl_cout << "In segv_vil_segmentation_manager::regions() - null image tableau\n";
+      std::cout << "In segv_vil_segmentation_manager::regions() - null image tableau\n";
       return;
     }
     itab->set_image(ed_img);
@@ -1291,7 +1293,7 @@ void segv_vil_segmentation_manager::regions()
   }
   if (!debug)
   {
-    vcl_vector<vtol_intensity_face_sptr>& regions = rp.get_regions();
+    std::vector<vtol_intensity_face_sptr>& regions = rp.get_regions();
     this->draw_regions(regions, true);
   }
   if (residual)
@@ -1310,7 +1312,7 @@ void segv_vil_segmentation_manager::display_images_as_color()
   unsigned ncols =grid_->cols();
   if (ncols<2)
   {
-    vcl_cout << "In segv_vil_segmentation_manager::display_images_as_color() -"
+    std::cout << "In segv_vil_segmentation_manager::display_images_as_color() -"
              << " not enough active panes\n";
     return;
   }
@@ -1318,7 +1320,7 @@ void segv_vil_segmentation_manager::display_images_as_color()
   vil_image_resource_sptr img1 = this->image_at(1,0);
   if (!img0||!img1)
   {
-    vcl_cout << "In segv_vil_segmentation_manager::display_images_as_color()() -"
+    std::cout << "In segv_vil_segmentation_manager::display_images_as_color()() -"
              << " some input images are null\n";
     return;
   }
@@ -1353,13 +1355,13 @@ void segv_vil_segmentation_manager::intensity_profile()
   bgui_picker_tableau_sptr ptab = selected_picker_tab();
   float start_col=0, end_col=0, start_row=0, end_row=0;
   ptab->pick_line(&start_col, &start_row, &end_col, &end_row);
-  vcl_vector<double> pos, vals;
+  std::vector<double> pos, vals;
   itab->image_line(start_col, start_row, end_col, end_row, pos, vals);
   bgui_graph_tableau_sptr g = bgui_graph_tableau_new(512, 512);
   g->update(pos, vals);
   //popup a profile graph
   char location[100];
-  vcl_sprintf(location, "scan:(%d, %d)<->(%d, %d)",
+  std::sprintf(location, "scan:(%d, %d)<->(%d, %d)",
               static_cast<unsigned>(start_col),
               static_cast<unsigned>(start_row),
               static_cast<unsigned>(end_col),
@@ -1378,13 +1380,13 @@ delete ip_dialog;
 void segv_vil_segmentation_manager::display_roi()
 {
   if (!roi_) {
-    vcl_cout << " Null ROI\n";
+    std::cout << " Null ROI\n";
     return;
   }
   //assume only one region
   if (roi_->n_regions() != 1)
   {
-    vcl_cout << " Can't handle a roi with more than one region\n";
+    std::cout << " Can't handle a roi with more than one region\n";
     return;
   }
   int cmin=roi_->cmin(0), cmax=roi_->cmax(0),
@@ -1395,7 +1397,7 @@ void segv_vil_segmentation_manager::display_roi()
   vsol_point_2d_sptr p1 = new vsol_point_2d(cmax, rmin);
   vsol_point_2d_sptr p2 = new vsol_point_2d(cmax, rmax);
   vsol_point_2d_sptr p3 = new vsol_point_2d(cmin, rmax);
-  vcl_vector<vsol_point_2d_sptr> pts;
+  std::vector<vsol_point_2d_sptr> pts;
   pts.push_back(p0);pts.push_back(p1);pts.push_back(p2);pts.push_back(p3);
   vsol_polygon_2d_sptr poly = new vsol_polygon_2d(pts);
   bgui_vtol2D_tableau_sptr t2D = this->selected_vtol2D_tab();
@@ -1420,17 +1422,17 @@ void segv_vil_segmentation_manager::crop_image()
 {
   vil_image_resource_sptr img = this->selected_image();
   if (!img) {
-    vcl_cout << "No image to crop\n";
+    std::cout << "No image to crop\n";
     return;
   }
   if (!roi_) {
-    vcl_cout << "No crop roi specified\n";
+    std::cout << "No crop roi specified\n";
     return;
   }
   vil_image_resource_sptr chip;
   if (!brip_vil_float_ops::chip(img, roi_, chip))
   {
-    vcl_cout << "Crop operation failed\n";
+    std::cout << "Crop operation failed\n";
     return;
   }
   this->add_image(chip);
@@ -1440,7 +1442,7 @@ void segv_vil_segmentation_manager::gaussian()
 {
   vil_image_resource_sptr img = this->selected_image();
   if (!img) {
-    vcl_cout << "No image to smooth\n";
+    std::cout << "No image to smooth\n";
     return;
   }
   vil_image_view<float> view = brip_vil_float_ops::convert_to_float(img);
@@ -1458,7 +1460,7 @@ void segv_vil_segmentation_manager::abs_value()
 {
   vil_image_resource_sptr img = this->selected_image();
   if (!img) {
-    vcl_cout << "No image to for absolute value\n";
+    std::cout << "No image to for absolute value\n";
     return;
   }
   vil_image_view<float> view = brip_vil_float_ops::convert_to_float(img);
@@ -1487,20 +1489,20 @@ void segv_vil_segmentation_manager::intensity_histogram()
   vil_image_resource_sptr img = selected_image();
   if (!img||!img->ni()||!img->nj())
   {
-    vcl_cout << "In segv_vil_segmentation_manager::intensity_histogram() - no image\n";
+    std::cout << "In segv_vil_segmentation_manager::intensity_histogram() - no image\n";
     return;
   }
   bgui_image_utils iu(img);
   bgui_graph_tableau_sptr g = iu.hist_graph();
 
   if (!g)
-  { vcl_cout << "In segv_vil_segmentation_manager::intensity_histogram()- color images not supported\n";
+  { std::cout << "In segv_vil_segmentation_manager::intensity_histogram()- color images not supported\n";
     return;
   }
 
   //popup a profile graph
   char location[100];
-  vcl_sprintf(location, "Intensity Histogram");
+  std::sprintf(location, "Intensity Histogram");
   vgui_dialog* ip_dialog = g->popup_graph(location);
   if (!ip_dialog->ask())
   {
@@ -1517,7 +1519,7 @@ void segv_vil_segmentation_manager::add_images()
   unsigned ncols =grid_->cols();
   if (ncols<2)
   {
-    vcl_cout << "In segv_vil_segmentation_manager::add_images() -"
+    std::cout << "In segv_vil_segmentation_manager::add_images() -"
              << " not enough active panes\n";
     return;
   }
@@ -1525,7 +1527,7 @@ void segv_vil_segmentation_manager::add_images()
   vil_image_resource_sptr img1 = this->image_at(1,0);
   if (!img0||!img1)
   {
-    vcl_cout << "In segv_vil_segmentation_manager::add_images() -"
+    std::cout << "In segv_vil_segmentation_manager::add_images() -"
              << " one or both input images are null\n";
     return;
   }
@@ -1543,7 +1545,7 @@ void segv_vil_segmentation_manager::subtract_images()
   unsigned ncols =grid_->cols();
   if (ncols<2)
   {
-    vcl_cout << "In segv_vil_segmentation_manager::subtract_images() -"
+    std::cout << "In segv_vil_segmentation_manager::subtract_images() -"
              << " not enough active panes\n";
     return;
   }
@@ -1551,7 +1553,7 @@ void segv_vil_segmentation_manager::subtract_images()
   vil_image_resource_sptr img1 = this->image_at(1,0);
   if (!img0||!img1)
   {
-    vcl_cout << "In segv_vil_segmentation_manager::subtract_images() -"
+    std::cout << "In segv_vil_segmentation_manager::subtract_images() -"
              << " one or both input images are null\n";
     return;
   }
@@ -1568,7 +1570,7 @@ void segv_vil_segmentation_manager::negate_image()
     vil_image_resource_sptr img = selected_image();
   if (!img)
   {
-    vcl_cout << "In segv_segmentation_manager::negate_image - no image\n";
+    std::cout << "In segv_segmentation_manager::negate_image - no image\n";
     return;
   }
   vil_image_resource_sptr neg = brip_vil_float_ops::negate(img);
@@ -1625,7 +1627,7 @@ void segv_vil_segmentation_manager::minfo()
   vil_image_resource_sptr img1 = this->image_at(1,0);
   if (!img0||!img1)
   {
-    vcl_cout << "In segv_vil_segmentation_manager::minfo() -"
+    std::cout << "In segv_vil_segmentation_manager::minfo() -"
              << " one or both input images are null\n";
     return;
   }
@@ -1648,7 +1650,7 @@ void segv_vil_segmentation_manager::rotate_image()
   vil_image_resource_sptr img = selected_image();
   if (!img)
   {
-    vcl_cout << "In segv_vil_segmentation_manager::rotate_image - no image\n";
+    std::cout << "In segv_vil_segmentation_manager::rotate_image - no image\n";
     return;
   }
   vil_image_view<float> flt =
@@ -1673,7 +1675,7 @@ void segv_vil_segmentation_manager::reduce_image()
   vil_image_resource_sptr img = selected_image();
   if (!img)
   {
-    vcl_cout << "In segv_vil_segmentation_manager::reduce_image - no image\n";
+    std::cout << "In segv_vil_segmentation_manager::reduce_image - no image\n";
     return;
   }
   static float coef=0.6f;
@@ -1697,7 +1699,7 @@ void segv_vil_segmentation_manager::reduce_image_bicubic()
   vil_image_resource_sptr img = selected_image();
   if (!img)
   {
-    vcl_cout << "In segv_vil_segmentation_manager::reduce_image_bicubic - no image\n";
+    std::cout << "In segv_vil_segmentation_manager::reduce_image_bicubic - no image\n";
     return;
   }
   vil_image_view<float> flt =
@@ -1716,7 +1718,7 @@ void segv_vil_segmentation_manager::expand_image()
   vil_image_resource_sptr img = selected_image();
   if (!img)
   {
-    vcl_cout << "In segv_vil_segmentation_manager::expand_image - no image\n";
+    std::cout << "In segv_vil_segmentation_manager::expand_image - no image\n";
     return;
   }
   static float coef=0.6f;
@@ -1740,7 +1742,7 @@ void segv_vil_segmentation_manager::expand_image_bicubic()
   vil_image_resource_sptr img = selected_image();
   if (!img)
   {
-    vcl_cout << "In segv_vil_segmentation_manager::expand_image_bicubic - no image\n";
+    std::cout << "In segv_vil_segmentation_manager::expand_image_bicubic - no image\n";
     return;
   }
   vil_image_view<float> flt =
@@ -1758,7 +1760,7 @@ void segv_vil_segmentation_manager::flip_image_lr()
   vil_image_resource_sptr img = selected_image();
   if (!img)
   {
-    vcl_cout << "In segv_vil_segmentation_manager::flip_image - no image\n";
+    std::cout << "In segv_vil_segmentation_manager::flip_image - no image\n";
     return;
   }
 
@@ -1782,7 +1784,7 @@ void segv_vil_segmentation_manager::max_trace_scale()
   vil_image_resource_sptr img = selected_image();
   if (!img)
   {
-    vcl_cout<< "In segv_vil_segmentation_manager::max_trace_scale - no image\n";
+    std::cout<< "In segv_vil_segmentation_manager::max_trace_scale - no image\n";
     return;
   }
   vil_image_view<float> fimg = brip_vil_float_ops::convert_to_float(img);
@@ -1797,7 +1799,7 @@ void segv_vil_segmentation_manager::color_order()
   vil_image_resource_sptr img = selected_image();
   if (!img)
   {
-    vcl_cout<< "In segv_vil_segmentation_manager::color order - no image\n";
+    std::cout<< "In segv_vil_segmentation_manager::color order - no image\n";
     return;
   }
   static float equal_tol = 0.1f;
@@ -1824,19 +1826,19 @@ void segv_vil_segmentation_manager::create_polygon()
 {
   bgui_picker_tableau_sptr ptab = selected_picker_tab();
   if (!ptab) {
-    vcl_cerr << "In segv_vil_segmentation_managerd::create_polygon() - no picker tableau\n";
+    std::cerr << "In segv_vil_segmentation_managerd::create_polygon() - no picker tableau\n";
     return;
   }
   vsol_polygon_2d_sptr poly2d;
   ptab->pick_polygon(poly2d);
   if (!poly2d)
   {
-    vcl_cerr << "In segv_vil_segmentation_manager::create_polygon() - picking failed\n";
+    std::cerr << "In segv_vil_segmentation_manager::create_polygon() - picking failed\n";
     return;
   }
   bgui_vtol2D_tableau_sptr btab = selected_vtol2D_tab();
   if (!btab) {
-    vcl_cerr << "In segv_vil_segmentation_managerd::create_polygon() - no vtol2D tableau\n";
+    std::cerr << "In segv_vil_segmentation_managerd::create_polygon() - no vtol2D tableau\n";
     return;
   }
 //  btab->add(poly2d);
@@ -1857,15 +1859,15 @@ void segv_vil_segmentation_manager::save_mask()
 void segv_vil_segmentation_manager::mser_conics()
 {
   vgui_dialog mser_dialog("Fit overlay Conics");
-  static vcl_string conic_filename = "";
-  static vcl_string ext = "*.*";
+  static std::string conic_filename = "";
+  static std::string ext = "*.*";
   mser_dialog.file("MSER Conic Filename:", ext, conic_filename);
   if (!mser_dialog.ask())
     return;
-  vcl_ifstream istr(conic_filename.c_str());
+  std::ifstream istr(conic_filename.c_str());
   if (!istr.is_open())
     return;
-  vcl_vector<vsol_conic_2d_sptr> conics;
+  std::vector<vsol_conic_2d_sptr> conics;
 #if 0 //check in later
   sdet_read_mser_regions::read_mser_conics(istr, conics);
 #endif
@@ -1879,16 +1881,16 @@ void segv_vil_segmentation_manager::image_as_vrml_points()
   vil_image_resource_sptr img = selected_image();
   if (!img)
   {
-    vcl_cout<< "In segv_vil_segmentation_manager::image_as_vrml_points - no image\n";
+    std::cout<< "In segv_vil_segmentation_manager::image_as_vrml_points - no image\n";
     return;
   }
   vgui_dialog vrml_dialog("VRML Intensity Display");
-  static vcl_string vrml_filename = "";
-  static vcl_string ext = "*.*";
+  static std::string vrml_filename = "";
+  static std::string ext = "*.*";
   vrml_dialog.file("VRML Filename:", ext, vrml_filename);
   if (!vrml_dialog.ask())
     return;
-  vcl_ofstream ostr(vrml_filename.c_str());
+  std::ofstream ostr(vrml_filename.c_str());
   if (!ostr.is_open())
     return;
   vil_image_view<float> fimg =
@@ -1904,7 +1906,7 @@ void segv_vil_segmentation_manager::extrema()
   vil_image_resource_sptr img = selected_image();
   if (!img)
   {
-    vcl_cout<< "In segv_vil_segmentation_manager::extrema - no image\n";
+    std::cout<< "In segv_vil_segmentation_manager::extrema - no image\n";
     return;
   }
   static float lambda0 = 1.0f;
@@ -1914,7 +1916,7 @@ void segv_vil_segmentation_manager::extrema()
   static bool color_overlay = true;
   static bool fast = true;
   static int choice = 1;
-  vcl_vector<vcl_string> choices;
+  std::vector<std::string> choices;
   choices.push_back("Point Response Only");
   choices.push_back("Point & Mask");
   choices.push_back("Point & Unclipped");
@@ -1954,7 +1956,7 @@ void segv_vil_segmentation_manager::extrema()
   else
     extr = brip_vil_float_ops::extrema(fimg, lambda0, lambda1, theta, bright, mag_only, output_mask, output_unclipped, scale_invariant, non_max_suppress);
 
-  vcl_cout << "Extrema computation time " << t.real() << " msec\n";
+  std::cout << "Extrema computation time " << t.real() << " msec\n";
   if (choice ==3 || choice == 4) {
     vil_image_resource_sptr resc = vil_new_image_resource_of_view(extr);
     this->add_image(resc);
@@ -2007,7 +2009,7 @@ void segv_vil_segmentation_manager::rot_extrema()
   vil_image_resource_sptr img = selected_image();
   if (!img)
   {
-    vcl_cout<< "In segv_vil_segmentation_manager::extrema - no image\n";
+    std::cout<< "In segv_vil_segmentation_manager::extrema - no image\n";
     return;
   }
   static float lambda0 = 1.0f;
@@ -2044,7 +2046,7 @@ void segv_vil_segmentation_manager::beaudet()
   vil_image_resource_sptr img = selected_image();
   if (!img)
   {
-    vcl_cout<< "In segv_vil_segmentation_manager::beaudet - no image\n";
+    std::cout<< "In segv_vil_segmentation_manager::beaudet - no image\n";
     return;
   }
   static float sigma = 1.0f;
@@ -2093,8 +2095,8 @@ void segv_vil_segmentation_manager::parallel_coverage()
 void segv_vil_segmentation_manager::draw_line_image()
 {
   vgui_dialog file_dlg("Edge File");
-  static vcl_string filename = "";
-  static vcl_string ext = "*.*";
+  static std::string filename = "";
+  static std::string ext = "*.*";
   file_dlg.file("Edge filename:", ext, filename);
   if (!file_dlg.ask())
     return;
@@ -2102,7 +2104,7 @@ void segv_vil_segmentation_manager::draw_line_image()
   if (img_sptr->pixel_format() == VIL_PIXEL_FORMAT_FLOAT) {
     vil_image_view<float> edge_image(img_sptr);
     if (edge_image.nplanes() < 3) {
-      vcl_cout << "The image should have at least 3 planes" << vcl_endl;
+      std::cout << "The image should have at least 3 planes" << std::endl;
       return;
     }
     bgui_vtol2D_tableau_sptr t2D = this->selected_vtol2D_tab();
@@ -2115,11 +2117,11 @@ void segv_vil_segmentation_manager::draw_line_image()
         double y = edge_image(i,j,1);
         double theta = edge_image(i,j,2);
         double a,b;
-        a = x-0.5*vcl_cos(theta);
-        b = y-0.5*vcl_sin(theta);
+        a = x-0.5*std::cos(theta);
+        b = y-0.5*std::sin(theta);
         vgl_point_2d<double> p0(a,b);
-        a = x+0.5*vcl_cos(theta);
-        b = y+0.5*vcl_sin(theta);
+        a = x+0.5*std::cos(theta);
+        b = y+0.5*std::sin(theta);
         vgl_point_2d<double> p1(a,b);
         // define a line
         vsol_line_2d_sptr line = new vsol_line_2d(p0,p1);
@@ -2128,7 +2130,7 @@ void segv_vil_segmentation_manager::draw_line_image()
     }
   }
   else
-    vcl_cout << "Pixel format: " << img_sptr->pixel_format() << " is not implemented yet" << vcl_endl;
+    std::cout << "Pixel format: " << img_sptr->pixel_format() << " is not implemented yet" << std::endl;
 }
 
 void segv_vil_segmentation_manager::gradient_mag_angle()
@@ -2157,7 +2159,7 @@ void segv_vil_segmentation_manager::gradient_mag_angle()
   vil_image_resource_sptr img = selected_image();
   if (!img||!img->ni()||!img->nj())
   {
-    vcl_cout << "In segv_vil_segmentation_manager::gradient_mag_angle() -  no image\n";
+    std::cout << "In segv_vil_segmentation_manager::gradient_mag_angle() -  no image\n";
     return;
   }
   unsigned ni = img->ni(), nj = img->nj();
@@ -2165,7 +2167,7 @@ void segv_vil_segmentation_manager::gradient_mag_angle()
   vil_image_view<float> smooth = brip_vil_float_ops::gaussian(fview, sigma);
   vil_image_view<float> mag(ni, nj), gx(ni, nj), gy(ni, nj);
   brip_vil_float_ops::gradient_mag_comp_3x3(smooth, mag, gx, gy);
-  vcl_vector<vsol_line_2d_sptr > lines;
+  std::vector<vsol_line_2d_sptr > lines;
   if (sep_mag_displ) {
     for (unsigned j = 2; j<nj-2; j+=display_interval)
       for (unsigned i = 2; i<ni-2; i+=display_interval) {
@@ -2220,7 +2222,7 @@ void segv_vil_segmentation_manager::fft()
   vil_image_resource_sptr img = selected_image();
   if (!img||!img->ni()||!img->nj())
   {
-    vcl_cout << "In segv_vil_segmentation_manager::fft() - no image\n";
+    std::cout << "In segv_vil_segmentation_manager::fft() - no image\n";
     return;
   }
   vgui_dialog dlg("FFT");

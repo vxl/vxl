@@ -145,7 +145,7 @@ update(bvxm_voxel_slab<dir_dist_t> & dir_dist,
       pos_t minp = s-delta;
       pos_t maxp = s+delta;
       double pos_prob = (*pos_dist_it).probability(minp, maxp);
-      double prob = vcl_pow(dir_prob*pos_prob, 0.125);
+      double prob = std::pow(dir_prob*pos_prob, 0.125);
       if (prob<0.05) continue;//JLM temporary hardcoded threshold
       //update the number of observations on the pos distribution
       (*pos_dist_it).num_observations = npos;
@@ -175,7 +175,7 @@ update(bvxm_voxel_slab<dir_dist_t> & dir_dist,
       //Find the endpoints of the line joining the closest points
       //on the mean tangent line and the sample tangent line
       bool u = false;
-      vcl_pair<vgl_point_3d<T>, vgl_point_3d<T> > closest
+      std::pair<vgl_point_3d<T>, vgl_point_3d<T> > closest
         = vgl_closest_points(mean_line, samp_line, &u);
       double pdist = (closest.first-closest.second).length();//jlm debug
       //generate a new mean line with the modified intersection point
@@ -197,7 +197,7 @@ update(bvxm_voxel_slab<dir_dist_t> & dir_dist,
       pos_t diff = mean_pos-(*pos_dist_it).mean();
       double dist = diff.magnitude();
       if (von_mises_debug)
-        vcl_cout  << vcl_fabs(angle(updt_mean_dirv, mean_dirv))*vnl_math::deg_per_rad
+        std::cout  << std::fabs(angle(updt_mean_dirv, mean_dirv))*vnl_math::deg_per_rad
                   << ' ' << dir_prob << ' ' << pdist << ' ' <<  pos_prob <<'\n'
                   << "Distance: " << dist << '\n';
     }

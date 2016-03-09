@@ -7,7 +7,9 @@
 // \date Sep 2003
 
 #include "rgrl_transformation.h"
-#include <vcl_iosfwd.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iosfwd>
 
 //:
 // A reduced quadratic transformation, when centered, consists of a
@@ -97,10 +99,10 @@ class rgrl_trans_reduced_quad
   rgrl_type_macro( rgrl_trans_reduced_quad, rgrl_transformation );
 
   //: Output UNCENTERED transformation, with the origin as the center.
-  void write(vcl_ostream& os ) const;
+  void write(std::ostream& os ) const;
 
   // for input
-  bool read(vcl_istream& is );
+  bool read(std::istream& is );
 
   //: make a clone copy
   rgrl_transformation_sptr clone() const;

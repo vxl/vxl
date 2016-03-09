@@ -2,7 +2,7 @@
 //:
 // \file
 
-volm_desc_land_matcher::volm_desc_land_matcher(vcl_string const& NLCD_folder, vgl_point_3d<double>& query_gt_loc) : query_gt_loc_(query_gt_loc)
+volm_desc_land_matcher::volm_desc_land_matcher(std::string const& NLCD_folder, vgl_point_3d<double>& query_gt_loc) : query_gt_loc_(query_gt_loc)
 {
   //volm_io_tools::load_nlcd_imgs(NLCD_folder, NLCD_imgs_);
   volm_io_tools::load_imgs(NLCD_folder, NLCD_imgs_, true, true, true);

@@ -18,7 +18,7 @@ boxm_rational_camera_utils::boxm_find_parallel_image_plane(vpgl_rational_camera<
 }
 
 void
-boxm_rational_camera_utils::project_corners_rational_camera(vcl_vector<vgl_point_3d<double> > const& corners,
+boxm_rational_camera_utils::project_corners_rational_camera(std::vector<vgl_point_3d<double> > const& corners,
                                                             vpgl_rational_camera<double> * rcam,vgl_plane_3d<double> plane,
                                                             double* xverts, double* yverts,
                                                             float* vertdist)
@@ -27,7 +27,7 @@ boxm_rational_camera_utils::project_corners_rational_camera(vcl_vector<vgl_point
   double b=plane.b();
   double c=plane.c();
   double d=plane.d();
-  double denom=vcl_sqrt(a*a+b*b+c*c);
+  double denom=std::sqrt(a*a+b*b+c*c);
   for (unsigned i=0; i<corners.size(); ++i)
   {
     rcam->project(corners[i].x(), corners[i].y(), corners[i].z(), xverts[i], yverts[i]);

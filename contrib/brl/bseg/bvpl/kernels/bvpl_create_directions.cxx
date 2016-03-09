@@ -1,7 +1,9 @@
 #include "bvpl_create_directions.h"
 #include <vnl/vnl_math.h>
-#include <vcl_iostream.h>
-#include <vcl_iomanip.h>
+#include <iostream>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iomanip>
 #include <bxml/bsvg/bsvg_document.h>
 #include <bxml/bsvg/bsvg_element.h>
 #include <bxml/bxml_write.h>
@@ -36,9 +38,9 @@ bvpl_create_directions_a::bvpl_create_directions_a()
     // theta=0,pi/4,pi/2,3pi/4,pi,5pi/4,3pi/2,7pi/4
     for (double theta=0.0; theta<vnl_math::twopi-1e-5; theta+=theta_res)
     {
-      axis[0] = float(vcl_cos(theta) * vcl_sin(phi));
-      axis[1] = float(vcl_sin(theta) * vcl_sin(phi));
-      axis[2] = float(vcl_cos(phi));
+      axis[0] = float(std::cos(theta) * std::sin(phi));
+      axis[1] = float(std::sin(theta) * std::sin(phi));
+      axis[2] = float(std::cos(phi));
       axes_.push_back(axis);
       angles_.push_back(0.0f);
     }
@@ -61,9 +63,9 @@ bvpl_create_directions_b::bvpl_create_directions_b()
   double theta_res = vnl_math::pi_over_4; //azimuth; phi_res = zenith (from the pole)
   for (;theta < 2.0f*float(vnl_math::pi)-1e-5; theta +=theta_res)
   {
-    axis[0] = float(vcl_cos(theta) * vcl_sin(phi));
-    axis[1] = float(vcl_sin(theta) * vcl_sin(phi));
-    axis[2] = float(vcl_cos(phi));
+    axis[0] = float(std::cos(theta) * std::sin(phi));
+    axis[1] = float(std::sin(theta) * std::sin(phi));
+    axis[2] = float(std::cos(phi));
     axes_.push_back(axis);
     angles_.push_back(0.0f);
   }
@@ -71,9 +73,9 @@ bvpl_create_directions_b::bvpl_create_directions_b()
   phi = vnl_math::pi_over_4;
   for (;theta < 2.0f*float(vnl_math::pi)-1e-5; theta +=theta_res)
   {
-    axis[0] = float(vcl_cos(theta) * vcl_sin(phi));
-    axis[1] = float(vcl_sin(theta) * vcl_sin(phi));
-    axis[2] = float(vcl_cos(phi));
+    axis[0] = float(std::cos(theta) * std::sin(phi));
+    axis[1] = float(std::sin(theta) * std::sin(phi));
+    axis[2] = float(std::cos(phi));
     axes_.push_back(axis);
     angles_.push_back(0.0f);
   }
@@ -82,9 +84,9 @@ bvpl_create_directions_b::bvpl_create_directions_b()
   theta =0.0;
   for (;theta < vnl_math::pi-1e-5; theta +=theta_res)
   {
-    axis[0] = float(vcl_cos(theta) * vcl_sin(phi));
-    axis[1] = float(vcl_sin(theta) * vcl_sin(phi));
-    axis[2] = float(vcl_cos(phi));
+    axis[0] = float(std::cos(theta) * std::sin(phi));
+    axis[1] = float(std::sin(theta) * std::sin(phi));
+    axis[2] = float(std::cos(phi));
     axes_.push_back(axis);
     angles_.push_back(0.0f);
    }
@@ -107,9 +109,9 @@ bvpl_create_directions_c::bvpl_create_directions_c()
   double theta_res = vnl_math::pi_over_4; //azimuth; phi_res = zenith (from the pole)
   for (;theta < 2.0f*float(vnl_math::pi)-1e-5; theta +=theta_res)
   {
-    axis[0] = float(vcl_cos(theta) * vcl_sin(phi));
-    axis[1] = float(vcl_sin(theta) * vcl_sin(phi));
-    axis[2] = float(vcl_cos(phi));
+    axis[0] = float(std::cos(theta) * std::sin(phi));
+    axis[1] = float(std::sin(theta) * std::sin(phi));
+    axis[2] = float(std::cos(phi));
     axes_.push_back(axis);
     angles_.push_back(0.0f);
   }
@@ -118,9 +120,9 @@ bvpl_create_directions_c::bvpl_create_directions_c()
 
   for (theta=0.0;theta < 2.0f*float(vnl_math::pi)-1e-5; theta +=theta_res)
   {
-    axis[0] = float(vcl_cos(theta) * vcl_sin(phi));
-    axis[1] = float(vcl_sin(theta) * vcl_sin(phi));
-    axis[2] = float(vcl_cos(phi));
+    axis[0] = float(std::cos(theta) * std::sin(phi));
+    axis[1] = float(std::sin(theta) * std::sin(phi));
+    axis[2] = float(std::cos(phi));
     axes_.push_back(axis);
     angles_.push_back(0.0f);
   }
@@ -128,9 +130,9 @@ bvpl_create_directions_c::bvpl_create_directions_c()
 
   for (theta=0.0;theta < 2.0f*float(vnl_math::pi)-1e-5; theta +=theta_res)
   {
-    axis[0] = float(vcl_cos(theta) * vcl_sin(phi));
-    axis[1] = float(vcl_sin(theta) * vcl_sin(phi));
-    axis[2] = float(vcl_cos(phi));
+    axis[0] = float(std::cos(theta) * std::sin(phi));
+    axis[1] = float(std::sin(theta) * std::sin(phi));
+    axis[2] = float(std::cos(phi));
     axes_.push_back(axis);
     angles_.push_back(0.0f);
   }
@@ -139,9 +141,9 @@ bvpl_create_directions_c::bvpl_create_directions_c()
   theta =0.0;
   for (;theta < vnl_math::pi-1e-5; theta +=theta_res)
   {
-    axis[0] = float(vcl_cos(theta) * vcl_sin(phi));
-    axis[1] = float(vcl_sin(theta) * vcl_sin(phi));
-    axis[2] = float(vcl_cos(phi));
+    axis[0] = float(std::cos(theta) * std::sin(phi));
+    axis[1] = float(std::sin(theta) * std::sin(phi));
+    axis[2] = float(std::cos(phi));
     axes_.push_back(axis);
     angles_.push_back(0.0f);
    }
@@ -149,17 +151,17 @@ bvpl_create_directions_c::bvpl_create_directions_c()
   save_directions_map("directions_c.svg");
 }
 
-void bvpl_create_directions_base::save_directions_map(vcl_string outfile)
+void bvpl_create_directions_base::save_directions_map(std::string outfile)
 {
   bsvg_document doc(400, 800);
-  vcl_vector<vnl_float_3>::iterator iter1 = axes_.begin();
-  vcl_vector<float>::iterator iter2 = angles_.begin();
+  std::vector<vnl_float_3>::iterator iter1 = axes_.begin();
+  std::vector<float>::iterator iter2 = angles_.begin();
   int i=0;
   for (;iter1!=axes_.end(); ++iter1, ++iter2, i++)
   {
-    vcl_ostringstream os_dir;
+    std::ostringstream os_dir;
     os_dir.precision(2);
-    os_dir<<'['<<vcl_setw(3)<<(*iter1)[0]<<','<<vcl_setw(3)<<(*iter1)[1]<<','<<vcl_setw(3)<<(*iter1)[2]<<','<<vcl_setw(2)<<*iter2<<']';
+    os_dir<<'['<<std::setw(3)<<(*iter1)[0]<<','<<std::setw(3)<<(*iter1)[1]<<','<<std::setw(3)<<(*iter1)[2]<<','<<std::setw(2)<<*iter2<<']';
     bsvg_text* t = new bsvg_text(os_dir.str());
     t->set_font_size(15);
     t->set_location(10.0f, 15.0f*float(i+1));
@@ -220,9 +222,9 @@ bvpl_all_corner_dirs::bvpl_all_corner_dirs()
   {
     for (theta =0.0;theta < 2.0f*float(vnl_math::pi)-1e-5; theta +=theta_res)
     {
-      axis[0] = float(vcl_cos(theta) * vcl_sin(phi));
-      axis[1] = float(vcl_sin(theta) * vcl_sin(phi));
-      axis[2] = float(vcl_cos(phi));
+      axis[0] = float(std::cos(theta) * std::sin(phi));
+      axis[1] = float(std::sin(theta) * std::sin(phi));
+      axis[2] = float(std::cos(phi));
       axes_.push_back(axis);
       angles_.push_back(float(angle));
     }
@@ -235,14 +237,14 @@ bvpl_all_corner_dirs::bvpl_all_corner_dirs()
   {
     for (double angle =0.0; angle<vnl_math::twopi-1e-5; angle+=angle_res)
     {
-      axis[0] = float(vcl_cos(theta) * vcl_sin(phi));
-      axis[1] = float(vcl_sin(theta) * vcl_sin(phi));
-      axis[2] = float(vcl_cos(phi));
+      axis[0] = float(std::cos(theta) * std::sin(phi));
+      axis[1] = float(std::sin(theta) * std::sin(phi));
+      axis[2] = float(std::cos(phi));
       axes_.push_back(axis);
       angles_.push_back(float(angle));
     }
   }
-   vcl_cout << "************" << angles_.size() << vcl_endl;
+   std::cout << "************" << angles_.size() << std::endl;
   save_directions_map("directions_c.svg");
 }
 
@@ -270,13 +272,13 @@ bvpl_pi_over_2_corner_dirs::bvpl_pi_over_2_corner_dirs()
   {
     for (double angle =0.0; angle<vnl_math::twopi-1e-5; angle+=angle_res)
     {
-      axis[0] = float(vcl_cos(theta) * vcl_sin(phi));
-      axis[1] = float(vcl_sin(theta) * vcl_sin(phi));
-      axis[2] = float(vcl_cos(phi));
+      axis[0] = float(std::cos(theta) * std::sin(phi));
+      axis[1] = float(std::sin(theta) * std::sin(phi));
+      axis[2] = float(std::cos(phi));
       axes_.push_back(axis);
       angles_.push_back(float(angle));
     }
   }
-  vcl_cout << "************" << angles_.size() << vcl_endl;
+  std::cout << "************" << angles_.size() << std::endl;
   save_directions_map("directions_90.svg");
 }

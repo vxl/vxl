@@ -99,7 +99,7 @@ void construct_sub_tree_poly(volm_geo_index2_node_sptr parent, double const& min
 template <class Type>
 volm_geo_index2_node_sptr volm_geo_index2::construct_tree(vgl_box_2d<double> bbox, double const& min_size)
 {
-  vcl_cout << "bounding box for geo_index root: " << bbox << vcl_endl;
+  std::cout << "bounding box for geo_index root: " << bbox << std::endl;
   volm_geo_index2_node_sptr root = new volm_geo_index2_node<Type>(bbox);
   // recursively add children
   construct_sub_tree<Type>(root, min_size);
@@ -111,14 +111,14 @@ volm_geo_index2_node_sptr volm_geo_index2::construct_tree(volm_tile t, double co
 {
   // create the bbox for the root
   vgl_box_2d<double> bbox = t.bbox_double();
-  vcl_cout << "bounding box for root: " << bbox << vcl_endl;
+  std::cout << "bounding box for root: " << bbox << std::endl;
   return volm_geo_index2::construct_tree<Type>(bbox, min_size);
 }
 
 template <class Type>
 volm_geo_index2_node_sptr volm_geo_index2::construct_tree(vgl_box_2d<double> bbox, double const& min_size, vgl_polygon<double> const& poly)
 {
-  vcl_cout << "bounding box for root: " << bbox << vcl_endl;
+  std::cout << "bounding box for root: " << bbox << std::endl;
   volm_geo_index2_node_sptr root;
   if (vgl_intersection(bbox, poly)) {
     root = new volm_geo_index2_node<Type>(bbox);
@@ -151,7 +151,7 @@ volm_geo_index2_node_sptr volm_geo_index2::construct_tree(volm_tile t, double co
 }
 
 template <class Type>
-volm_geo_index2_node_sptr read_and_construct_node(vcl_ifstream& ifs, volm_geo_index2_node_sptr parent)
+volm_geo_index2_node_sptr read_and_construct_node(std::ifstream& ifs, volm_geo_index2_node_sptr parent)
 {
   double x, y;
   ifs >> x;  ifs >> y;  vgl_point_2d<double> min_pt(x, y);
@@ -160,7 +160,7 @@ volm_geo_index2_node_sptr read_and_construct_node(vcl_ifstream& ifs, volm_geo_in
   volm_geo_index2_node_sptr node = new volm_geo_index2_node<Type>(bbox, parent);
   unsigned nc;
   ifs >> nc;
-  vcl_vector<unsigned> existence(nc);
+  std::vector<unsigned> existence(nc);
   for (unsigned i = 0; i < nc; i++)
     ifs >> existence[i];
   for (unsigned i = 0; i < nc; i++) {
@@ -173,9 +173,9 @@ volm_geo_index2_node_sptr read_and_construct_node(vcl_ifstream& ifs, volm_geo_in
 }
 
 template <class Type>
-volm_geo_index2_node_sptr volm_geo_index2::read_and_construct(vcl_string const& file_name, double& min_size)
+volm_geo_index2_node_sptr volm_geo_index2::read_and_construct(std::string const& file_name, double& min_size)
 {
-  vcl_ifstream ifs(file_name.c_str());
+  std::ifstream ifs(file_name.c_str());
   ifs >> min_size;
   volm_geo_index2_node_sptr dummy_parent;
   volm_geo_index2_node_sptr root = read_and_construct_node<Type>(ifs, dummy_parent);
@@ -190,7 +190,7 @@ template volm_geo_index2_node_sptr volm_geo_index2::construct_tree<T>(vgl_box_2d
 template volm_geo_index2_node_sptr volm_geo_index2::construct_tree<T>(vgl_box_2d<double> bbox, double const& min_size, vgl_polygon<float> const& poly);\
 template volm_geo_index2_node_sptr volm_geo_index2::construct_tree<T>(volm_tile t, const double& min_size, vgl_polygon<double> const& poly);\
 template volm_geo_index2_node_sptr volm_geo_index2::construct_tree<T>(volm_tile t, const double& min_size, vgl_polygon<float> const& poly);\
-template volm_geo_index2_node_sptr volm_geo_index2::read_and_construct<T>(vcl_string const& flie_name, double& min_size)
+template volm_geo_index2_node_sptr volm_geo_index2::read_and_construct<T>(std::string const& flie_name, double& min_size)
 
 
 #endif // volm_geo_index2_hxx_

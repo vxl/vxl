@@ -12,7 +12,9 @@
 #include <boxm/sample/algo/boxm_simple_grey_processor.h>
 #include <vil/vil_math.h>
 #include <vil/vil_save.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iostream>
 
 
 template <boxm_apm_type APM>
@@ -45,7 +47,7 @@ class pre_inf_functor
     // update alpha integral
     alpha_integral_(i,j) += cell_value.alpha * seg_len;
     // compute new visibility probability with updated alpha_integral
-    const float vis_prob_end = vcl_exp(-alpha_integral_(i,j));
+    const float vis_prob_end = std::exp(-alpha_integral_(i,j));
     // compute weight for this cell
     const float Omega = vis_img_(i,j) - vis_prob_end;
     // and update pre
@@ -93,7 +95,7 @@ class boxm_generate_opt3_sample_functor
     // update alpha integral
     alpha_integral_(i,j) += cell_value.alpha * seg_len;
     // compute new visibility probability with updated alpha_integral
-    const float vis_prob_end = (float)vcl_exp(-alpha_integral_(i,j));
+    const float vis_prob_end = (float)std::exp(-alpha_integral_(i,j));
     // grab this cell's pre and vis value
     const float pre = pre_img_(i,j);
     const float vis = vis_img_(i,j);
@@ -108,7 +110,7 @@ class boxm_generate_opt3_sample_functor
     aux_val.update_obs_dist(obs_(i,j),vis);
     aux_val.weighted_vis_sum_ += vis*seg_len;
 
-    const float old_PQ = 1.0f - (float)vcl_exp(-cell_value.alpha * seg_len);
+    const float old_PQ = 1.0f - (float)std::exp(-cell_value.alpha * seg_len);
     float new_PQ = old_PQ;
     const float beta_denom_val = beta_denom_(i,j);
     const double epsilon = 1e-6;
@@ -120,7 +122,7 @@ class boxm_generate_opt3_sample_functor
     if (pass_prob < epsilon) {
       pass_prob = epsilon;
     }
-    aux_val.log_pass_prob_sum_ += (float)vcl_log(pass_prob);
+    aux_val.log_pass_prob_sum_ += (float)std::log(pass_prob);
     aux_val.seg_len_sum_ += seg_len;
 
     return true;
@@ -143,7 +145,7 @@ template <class T_loc, class T_data, boxm_aux_type AUX_T>
 void boxm_generate_opt3_sample(boxm_scene<boct_tree<T_loc, T_data > > &scene,
                                vpgl_camera_double_sptr cam,
                                vil_image_view<typename T_data::obs_datatype> &obs,
-                               vcl_string image_id,
+                               std::string image_id,
                                bool black_background = false)
 {
   typedef boxm_opt3_sample<boxm_aux_traits<AUX_T>::APM_TYPE> aux_sample_datatype;
@@ -151,7 +153,7 @@ void boxm_generate_opt3_sample(boxm_scene<boct_tree<T_loc, T_data > > &scene,
 #if 0
   typedef boxm_seg_length_functor<T_data::apm_type,sample_datatype>  pass_0;
   boxm_raytrace_function<pass_0,T_loc, T_data, sample_datatype> raytracer_0(scene,aux_scene,cam.ptr(),obs.ni(),obs.nj());
-  vcl_cout<<"PASS 0"<<vcl_endl;
+  std::cout<<"PASS 0"<<std::endl;
   pass_0 pass_0_functor(obs,obs.ni(),obs.nj());
   raytracer_0.run(pass_0_functor);
 #endif
@@ -160,7 +162,7 @@ void boxm_generate_opt3_sample(boxm_scene<boct_tree<T_loc, T_data > > &scene,
 
   typedef pre_inf_functor<T_data::apm_type> pre_inf_functor_t;
   boxm_raytrace_function<pre_inf_functor_t, T_loc, T_data> raytracer_1(scene,cam.ptr(),obs.ni(),obs.nj());
-  vcl_cout<<"PASS 1"<<vcl_endl;
+  std::cout<<"PASS 1"<<std::endl;
   pre_inf_functor_t pass_1_functor(obs,pre_inf,vis_inf);
   raytracer_1.run(pass_1_functor);
 
@@ -170,7 +172,7 @@ void boxm_generate_opt3_sample(boxm_scene<boct_tree<T_loc, T_data > > &scene,
   // compute observation probability for "infinity" appearance model
   vil_image_view<float> PI_inf(obs.ni(), obs.nj(),1);
   if (black_background) {
-    vcl_cout << "using black background model" << vcl_endl;
+    std::cout << "using black background model" << std::endl;
     // use single-mode gaussian centered at 0
     typedef bsta_gaussian_sphere<typename T_data::obs_mathtype, T_data::obs_dim> gauss_type;
     typename T_data::obs_mathtype black(0);
@@ -178,7 +180,7 @@ void boxm_generate_opt3_sample(boxm_scene<boct_tree<T_loc, T_data > > &scene,
     const gauss_type appearance_dist(black, black_std_dev);
 #if 0
     float peak=T_data::apm_processor::expected_color(background_apm);
-    vcl_cout<<"Peak: "<<peak<<vcl_endl;
+    std::cout<<"Peak: "<<peak<<std::endl;
 #endif
     typename vil_image_view<typename T_data::obs_datatype>::const_iterator img_it = obs.begin();
     typename vil_image_view<float>::iterator PI_it = PI_inf.begin();
@@ -202,7 +204,7 @@ void boxm_generate_opt3_sample(boxm_scene<boct_tree<T_loc, T_data > > &scene,
   vil_save(pass_1_functor.alpha_integral_, "E:/tests/capitol/alpha_integr.tiff");
 #endif
 
-  vcl_cout<<"PASS 2"<<vcl_endl;
+  std::cout<<"PASS 2"<<std::endl;
   typedef boxm_generate_opt3_sample_functor<T_data::apm_type, aux_sample_datatype> pass_2_functor_t;
   boxm_raytrace_function<pass_2_functor_t, T_loc, T_data, aux_sample_datatype> raytracer_2(scene,aux_scene,cam.ptr(),obs.ni(),obs.nj());
   pass_2_functor_t pass_2_functor(obs, beta_denom_img);
@@ -210,7 +212,7 @@ void boxm_generate_opt3_sample(boxm_scene<boct_tree<T_loc, T_data > > &scene,
 #if 0
   aux_scene.clean_scene();
 #endif
-  vcl_cout<<"DONE."<<vcl_endl;
+  std::cout<<"DONE."<<std::endl;
 }
 
 #endif // boxm_generate_opt3_sample_functor_h

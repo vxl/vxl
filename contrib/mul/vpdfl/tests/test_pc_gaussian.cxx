@@ -5,8 +5,10 @@
 // \author Ian Scott
 // \brief test vpdfl_pc_gaussian, building, sampling, saving etc.
 
-#include <vcl_iostream.h>
-#include <vcl_ctime.h>
+#include <iostream>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <ctime>
 #include <vpl/vpl.h> // vpl_unlink()
 
 #include <vpdfl/vpdfl_pc_gaussian.h>
@@ -25,7 +27,7 @@
 //: Generate lots of samples using pdf, build new pdf with builder and compare the two
 void test_pc_gaussian()
 {
-  vcl_cout << "***************************\n"
+  std::cout << "***************************\n"
            << " Testing vpdfl_pc_gaussian\n"
            << "***************************\n";
 
@@ -53,8 +55,8 @@ void test_pc_gaussian()
     evecs(i,i) = 1.0;
   }
 
-  vcl_cout<<"Setting evecs:\n"<<evecs<<vcl_endl
-          <<"Setting evals: "<<evals<<vcl_endl;
+  std::cout<<"Setting evecs:\n"<<evecs<<std::endl
+          <<"Setting evals: "<<evals<<std::endl;
 
   pdf.set(mean,evecs,evals,1.5);
 
@@ -63,7 +65,7 @@ void test_pc_gaussian()
   vpdfl_sampler_base* p_sampler = pdf.new_sampler();
 
     // Generate lots of samples
-  vcl_vector<vnl_vector<double> > data(n_samples);
+  std::vector<vnl_vector<double> > data(n_samples);
   for (int i=0;i<n_samples;++i)
     p_sampler->sample(data[i]);
 
@@ -76,10 +78,10 @@ void test_pc_gaussian()
 
   builder.build(*p_pdf_built, data_array);
 
-  vcl_cout<<"Original PDF: "; vsl_print_summary(vcl_cout, pdf);
-  vcl_cout<<"\nRebuilt PDF: "; vsl_print_summary(vcl_cout, p_pdf_built);
-  vcl_cout<<"\n\nPDF sampler: "; vsl_print_summary(vcl_cout, p_sampler);
-  vcl_cout<<'\n';
+  std::cout<<"Original PDF: "; vsl_print_summary(std::cout, pdf);
+  std::cout<<"\nRebuilt PDF: "; vsl_print_summary(std::cout, p_pdf_built);
+  std::cout<<"\n\nPDF sampler: "; vsl_print_summary(std::cout, p_sampler);
+  std::cout<<'\n';
 
 // Test the IO ================================================
   vpdfl_builder_base* p_builder = & builder;
@@ -87,29 +89,29 @@ void test_pc_gaussian()
 
   TEST("mean of built model",vnl_vector_ssd(pdf.mean(), p_pdf_built->mean())<0.1,true);
 
-  vcl_cout<<"\n=================Testing Fast log_p():\n";
+  std::cout<<"\n=================Testing Fast log_p():\n";
 
   vnl_vector<double> x;
   p_sampler->sample(x);
-  vcl_cout << "Fast log_p() = "<<pdf.log_p(x)
-           <<"\tSlow log_p() = "<<pdf.vpdfl_gaussian::log_p(x)<<vcl_endl;
+  std::cout << "Fast log_p() = "<<pdf.log_p(x)
+           <<"\tSlow log_p() = "<<pdf.vpdfl_gaussian::log_p(x)<<std::endl;
 
 #ifdef TEST_RELATIVE_SPEEDS_OF_FASTER_LOGP
   double v;
   long t0,t1;
-  t0 = vcl_clock();
+  t0 = std::clock();
   for (int i =0; i<10000; i++)
     v = pdf.log_p(x);
-  t1 = vcl_clock();
-  vcl_cout <<"Time for fast log_p(): " << (t1-t0)/(10.0*double(CLOCKS_PER_SEC)) << "ms\n";
-  t0 = vcl_clock();
+  t1 = std::clock();
+  std::cout <<"Time for fast log_p(): " << (t1-t0)/(10.0*double(CLOCKS_PER_SEC)) << "ms\n";
+  t0 = std::clock();
   for (int i =0; i<10000; i++)
     v = pdf.vpdfl_gaussian::log_p(x);
-  t1 = vcl_clock();
-  vcl_cout <<"Time for slow log_p(): " << (t1-t0)/(10.0*double(CLOCKS_PER_SEC)) << "ms\n";
+  t1 = std::clock();
+  std::cout <<"Time for slow log_p(): " << (t1-t0)/(10.0*double(CLOCKS_PER_SEC)) << "ms\n";
 #endif
 
-  vcl_cout<<"\n=================Testing I/O:\n";
+  std::cout<<"\n=================Testing I/O:\n";
   vsl_b_ofstream bfs_out("test_pc_gaussian.bvl.tmp");
   TEST("Created test_pc_gaussian.bvl.tmp for writing", (!bfs_out), false);
   vsl_b_write(bfs_out,pdf);
@@ -141,11 +143,11 @@ void test_pc_gaussian()
   vpl_unlink("test_pc_gaussian.bvl.tmp");
 #endif
 
-  vcl_cout<<"\nOriginal PDF: "; vsl_print_summary(vcl_cout, pdf);
-  vcl_cout<<"\nOriginal builder: "; vsl_print_summary(vcl_cout, builder);
-  vcl_cout<<"\n\nLoaded PDF: "; vsl_print_summary(vcl_cout, pdf_in);
-  vcl_cout<<"\nLoaded builder: "; vsl_print_summary(vcl_cout, builder_in);
-  vcl_cout<<"\n\n";
+  std::cout<<"\nOriginal PDF: "; vsl_print_summary(std::cout, pdf);
+  std::cout<<"\nOriginal builder: "; vsl_print_summary(std::cout, builder);
+  std::cout<<"\n\nLoaded PDF: "; vsl_print_summary(std::cout, pdf_in);
+  std::cout<<"\nLoaded builder: "; vsl_print_summary(std::cout, builder_in);
+  std::cout<<"\n\n";
 
   TEST("Original Model == Loaded model",
        pdf.mean()==pdf_in.mean() &&
@@ -184,7 +186,7 @@ void test_pc_gaussian()
     static_cast<const vpdfl_pc_gaussian_builder *>(pdf_in2.partition_chooser()) : VXL_NULLPTR;
 #endif
 
-  //vcl_cout << "Chooser " << *chooser <<vcl_endl;
+  //std::cout << "Chooser " << *chooser <<std::endl;
 
   TEST("Loaded Model partition chooser == Original Builder",
        chooser &&
@@ -193,11 +195,11 @@ void test_pc_gaussian()
        builder.partition_method() == chooser->partition_method(),
        true);
 
-  vcl_cout << "========Testing PDF Thresholds==========";
+  std::cout << "========Testing PDF Thresholds==========";
   vpdfl_sampler_base *p_sampler2 = p_pdf_built->new_sampler();
   unsigned pass=0, fail=0;
   double thresh = p_pdf_built->log_prob_thresh(0.9);
-  vcl_cout << "\nlog density threshold for passing 90%: " << thresh << '\n';
+  std::cout << "\nlog density threshold for passing 90%: " << thresh << '\n';
   for (unsigned i=0; i < 1000; i++)
   {
     p_sampler2->sample(x);
@@ -206,11 +208,11 @@ void test_pc_gaussian()
     else
       fail ++;
   }
-  vcl_cout << "In a sample of 1000 vectors " << pass << " passed and " << fail <<  " failed.\n";
+  std::cout << "In a sample of 1000 vectors " << pass << " passed and " << fail <<  " failed.\n";
   TEST("880 < pass < 920", pass > 880 && pass < 920, true);
   pass=0; fail=0;
   thresh = p_pdf_built->log_prob_thresh(0.1);
-  vcl_cout << "\n\nlog density threshold for passing 10%: " << thresh << '\n';
+  std::cout << "\n\nlog density threshold for passing 10%: " << thresh << '\n';
   for (unsigned i=0; i < 1000; i++)
   {
     p_sampler2->sample(x);
@@ -219,7 +221,7 @@ void test_pc_gaussian()
     else
       fail ++;
   }
-  vcl_cout << "In a sample of 1000 vectors " << pass << " passed and " << fail <<  " failed.\n";
+  std::cout << "In a sample of 1000 vectors " << pass << " passed and " << fail <<  " failed.\n";
   TEST("70 < pass < 130", pass > 70 && pass < 130, true);
 
   vsl_delete_all_loaders();

@@ -9,7 +9,9 @@
 //
 #include "boxm2_vecf_articulated_params.h"
 #include <vnl/vnl_vector_fixed.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iostream>
 #include <vgl/vgl_sphere_3d.h>
 
 class boxm2_vecf_orbit_params
@@ -258,7 +260,7 @@ public:
 
   //outward normal to planar brow region
   vgl_vector_3d<double> upper_socket_normal() const
-  {return vgl_vector_3d<double>(0.0,-vcl_sin(brow_angle_rad_), vcl_cos(brow_angle_rad_));}
+  {return vgl_vector_3d<double>(0.0,-std::sin(brow_angle_rad_), std::cos(brow_angle_rad_));}
   boxm2_data_traits<BOXM2_MOG3_GREY>::datatype app_;
 
   //: vector of  monomials to form the polynomial when multiplied by the coefficients
@@ -300,7 +302,7 @@ public:
   vgl_sphere_3d<double> sph_;
   vgl_sphere_3d<double> lid_sph_;
 };
-vcl_ostream&  operator << (vcl_ostream& s, boxm2_vecf_orbit_params const& pr);
-vcl_istream&  operator >> (vcl_istream& s, boxm2_vecf_orbit_params& pr);
+std::ostream&  operator << (std::ostream& s, boxm2_vecf_orbit_params const& pr);
+std::istream&  operator >> (std::istream& s, boxm2_vecf_orbit_params& pr);
 
 #endif// boxm2_vecf_orbit_params

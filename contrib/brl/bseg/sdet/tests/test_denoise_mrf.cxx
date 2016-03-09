@@ -32,7 +32,7 @@ void test_denoise_mrf()
   vil_image_resource_sptr outr = dm.output();
   vil_image_view<float> out_v = outr->get_view();
   for (unsigned int i = 0; i<ni; ++i)
-    vcl_cout << "Fi[" << i << "] = " << out_v(i,2) << '\n';
+    std::cout << "Fi[" << i << "] = " << out_v(i,2) << '\n';
   TEST_NEAR("center output pixel", out_v(2,2), 5.72894, 0.01);
 }
 

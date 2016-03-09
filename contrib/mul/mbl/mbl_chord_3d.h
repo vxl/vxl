@@ -7,7 +7,9 @@
 // \brief Horizontal line used in 3D images, with integer co-ordinates
 
 #include <vsl/vsl_binary_io.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iostream>
 
 //: Horizontal line used in 3D images, with integer co-ordinates
 class mbl_chord_3d
@@ -74,7 +76,7 @@ inline bool mbl_chord_3d::operator==(const mbl_chord_3d& c) const
 }
 
 //: Print
-inline vcl_ostream& operator<<(vcl_ostream& os, const mbl_chord_3d& c)
+inline std::ostream& operator<<(std::ostream& os, const mbl_chord_3d& c)
 {
   return os<<"(["<<c.start_x()<<","<<c.end_x()<<"],"<<c.y()<<","<<c.z()<<")";
 }
@@ -92,7 +94,7 @@ inline void vsl_b_read(vsl_b_istream& bfs, mbl_chord_3d& t)
 }
 
 //: Print
-inline void vsl_print_summary(vcl_ostream& os, const mbl_chord_3d& t)
+inline void vsl_print_summary(std::ostream& os, const mbl_chord_3d& t)
 {
   os<<t;
 }

@@ -37,15 +37,17 @@
 #include <vgl/vgl_box_3d.h>
 #include <vul/vul_file.h>
 
+#include <vcl_compiler.h>
 #include <vcl_string.h>
-#include <vcl_iostream.h>
+#include <string>
+#include <iostream>
 
 //:
 vpgl_rational_camera<double>
 perspective_to_rational(vpgl_perspective_camera<double>& cam_pers)
 {
   vnl_double_3x4 cam_pers_matrix = cam_pers.get_matrix();
-  vcl_vector<double> neu_u,den_u,neu_v,den_v;
+  std::vector<double> neu_u,den_u,neu_v,den_v;
   double x_scale = 1.0, x_off = 0.0,
          y_scale = 1.0, y_off = 0.0,
          z_scale = 1.0, z_off = 0.0,
@@ -96,14 +98,14 @@ vpgl_camera_double_sptr create_syn_world_camera(bvxm_voxel_world_sptr vox_world)
   vgl_point_2d<double> principal_point(IMAGE_U/2., IMAGE_V/2.);
 
   vgl_point_3d<double> centroid = world.centroid();
-  vcl_cout << "centroid: " << centroid << vcl_endl;
+  std::cout << "centroid: " << centroid << std::endl;
   double x,y;
   double alpha = (vnl_math::pi/8.) * 3;
   double delta_alpha = vnl_math::pi/40.;
   alpha += 5*delta_alpha;
 
-  x = camera_dist*vcl_cos(alpha);
-  y = camera_dist*vcl_sin(alpha);
+  x = camera_dist*std::cos(alpha);
+  y = camera_dist*std::sin(alpha);
 
   vgl_point_3d<double> camera_center(x+centroid.x(), y+centroid.y(), 450+centroid.z());
 
@@ -117,7 +119,7 @@ vpgl_camera_double_sptr create_syn_world_camera(bvxm_voxel_world_sptr vox_world)
   persp_cam.look_at(vgl_homg_point_3d<double>(centroid));
   vpgl_camera_double_sptr rat_cam = new vpgl_rational_camera<double>(perspective_to_rational(persp_cam));
 
-  vcl_vector<vgl_point_3d<double> > corners = bvxm_util::corners_of_box_3d<double>(world);
+  std::vector<vgl_point_3d<double> > corners = bvxm_util::corners_of_box_3d<double>(world);
   vgl_box_2d<double> bb;
   for (unsigned i=0; i<corners.size(); i++) {
     vgl_point_3d<double> c = corners[i];
@@ -125,10 +127,10 @@ vpgl_camera_double_sptr create_syn_world_camera(bvxm_voxel_world_sptr vox_world)
     persp_cam.project(c.x(), c.y() ,c.z(), u, v);
     rat_cam->project(c.x(), c.y() ,c.z(), u2, v2);
     bb.add(vgl_point_2d<double> (u,v));
-    vcl_cout << "Perspective [" << u << ',' << v << "]\n"
-             << "Rational [" << u2 << ',' << v2 << "]\n" << vcl_endl;
+    std::cout << "Perspective [" << u << ',' << v << "]\n"
+             << "Rational [" << u2 << ',' << v2 << "]\n" << std::endl;
   }
-  vcl_cout << bb << vcl_endl;
+  std::cout << bb << std::endl;
 
   return rat_cam;
 }
@@ -159,10 +161,10 @@ static void test_brec_update_changes_process()
   REGISTER_DATATYPE(unsigned);
 
   bool good = bprb_batch_process_manager::instance()->init_process("bvxmGenSyntheticWorldProcess");
-  vcl_string world_dir("test_syn_world");
+  std::string world_dir("test_syn_world");
 
   // create an empty directory, or empty the directory if it exists
-  vcl_string delete_str = world_dir+"/*.vox";
+  std::string delete_str = world_dir+"/*.vox";
   if (vul_file::is_directory(world_dir))
     vul_file::delete_file_glob(delete_str.c_str());
   else {
@@ -182,7 +184,7 @@ static void test_brec_update_changes_process()
   TEST("output world is in db", S_w->size(), 1);
 
   brdb_value_sptr value_w;
-  TEST("output world is in db", S_w->get_value(vcl_string("value"), value_w), true);
+  TEST("output world is in db", S_w->get_value(std::string("value"), value_w), true);
   TEST("output world is non-null", (value_w != VXL_NULLPTR) ,true);
 
   brdb_value_t<bvxm_voxel_world_sptr>* result_w = static_cast<brdb_value_t<bvxm_voxel_world_sptr>* >(value_w.ptr());
@@ -198,7 +200,7 @@ static void test_brec_update_changes_process()
   bgd.verbose = true;
   TEST("testing bacground model generation", bgd.generate_mixture_image(), true);
   bgd.set_image_coords(0,0);
-  vcl_cout << "prob returned: " << bgd(0.1, 0.1) << vcl_endl;
+  std::cout << "prob returned: " << bgd(0.1, 0.1) << std::endl;
 #endif // 0
 
   // first run the detect changes process to get the change map
@@ -210,7 +212,7 @@ static void test_brec_update_changes_process()
   brdb_value_sptr v0 = new brdb_value_t<vil_image_view_base_sptr>(input_img_sptr);
   brdb_value_sptr v1 = new brdb_value_t<vpgl_camera_double_sptr>(cam1);
   brdb_value_sptr v2 = new brdb_value_t<bvxm_voxel_world_sptr>(vox_world);
-  brdb_value_sptr v3 = new brdb_value_t<vcl_string>("apm_mog_grey");
+  brdb_value_sptr v3 = new brdb_value_t<std::string>("apm_mog_grey");
   brdb_value_sptr v4 = new brdb_value_t<unsigned>(0);
   brdb_value_sptr v5 = new brdb_value_t<unsigned>(0);
 
@@ -231,7 +233,7 @@ static void test_brec_update_changes_process()
   brdb_selection_sptr S_img = DATABASE->select("vil_image_view_base_sptr_data", Q_img);
   TEST("output image is in db", S_img->size(), 1);
   brdb_value_sptr value_img;
-  TEST("output image is in db", S_img->get_value(vcl_string("value"), value_img), true);
+  TEST("output image is in db", S_img->get_value(std::string("value"), value_img), true);
   TEST("output image is non-null", (value_img != VXL_NULLPTR) ,true);
   brdb_value_t<vil_image_view_base_sptr>* result =
     static_cast<brdb_value_t<vil_image_view_base_sptr>* >(value_img.ptr());

@@ -6,9 +6,11 @@
 // \brief Simple object to build histogram from supplied data, with weights
 // \author Tim Cootes
 
-#include <vcl_iosfwd.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iosfwd>
 #include <vsl/vsl_binary_io.h>
-#include <vcl_vector.h>
+#include <vector>
 
 //: Simple object to build histogram from supplied data, with weights
 //  Each observation is supplied with a weight.  Record total weight
@@ -22,7 +24,7 @@ class mbl_wt_histogram
   double dx_;
 
   //: Total weight in each bin
-  vcl_vector<double> wt_sum_;
+  std::vector<double> wt_sum_;
 
   //: Number below lowest bin
   double wt_below_;
@@ -67,7 +69,7 @@ class mbl_wt_histogram
   double total_wt() const { return total_wt_; }
 
   //: Total weight in each bin
-  const vcl_vector<double>& wt_sum() const { return wt_sum_; }
+  const std::vector<double>& wt_sum() const { return wt_sum_; }
 
   //: Total weight below lowest bin (bin_t0())
   double wt_below() const { return wt_below_; }
@@ -82,7 +84,7 @@ class mbl_wt_histogram
   // \return true if successful
   bool write_probabilities(const char* path);
 
-  void print_summary(vcl_ostream& os) const;
+  void print_summary(std::ostream& os) const;
   //: Version number for I/O
   short version_no() const;
   void b_write(vsl_b_ostream& bfs) const;
@@ -99,9 +101,9 @@ void vsl_b_write(vsl_b_ostream& bfs, const mbl_wt_histogram& histo);
 void vsl_b_read(vsl_b_istream& bfs, mbl_wt_histogram& histo);
 
 //: Stream output operator for class reference
-vcl_ostream& operator<<(vcl_ostream& os, const mbl_wt_histogram& histo);
+std::ostream& operator<<(std::ostream& os, const mbl_wt_histogram& histo);
 
 //: Stream output operator for class reference
-void vsl_print_summary(vcl_ostream& os, const mbl_wt_histogram& histo);
+void vsl_print_summary(std::ostream& os, const mbl_wt_histogram& histo);
 
 #endif

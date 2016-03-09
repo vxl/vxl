@@ -1,4 +1,6 @@
-#include <vcl_vector.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <vector>
 #include <vnl/vnl_double_2.h>
 #include <vnl/vnl_double_3.h>
 #include <vnl/vnl_math.h>
@@ -25,9 +27,9 @@ static void test_point()
     testlib_test_perform( pt1.num_cartesian() == Nc && pt1.num_angular() == Na );
   }
 
-  vcl_vector<double> cart(Nc);
+  std::vector<double> cart(Nc);
   cart[0] = 2.5; cart[1] = -3.0;
-  vcl_vector<double> ang(Na);
+  std::vector<double> ang(Na);
   ang[0] = -vnl_math::pi/2; ang[1] = vnl_math::pi/4; ang[2] = vnl_math::pi;
 #if 0
   testlib_test_begin( "ctor from two arrays" );
@@ -69,7 +71,7 @@ static void test_point()
   }
 
   testlib_test_begin( "ctor all angles" );
-  vcl_vector<double> a(6);
+  std::vector<double> a(6);
   a[0] = -0.3;  a[1] = -0.2; a[2] = 0.3; a[3] = 0; a[4] = 0.1; a[5] = 0.3;
   // Note that a.begin() - a.begin() is a null range.
   rsdl_point pt_no_cart( a.begin(), a.begin(), a.begin(), a.end() );
@@ -86,7 +88,7 @@ static void test_point()
   }
 
   testlib_test_begin( "ctor all cartesian" );
-  vcl_vector<double> c(2);
+  std::vector<double> c(2);
   c[0] = 15; c[1] = 13.1;
   rsdl_point pt_no_ang( c.begin(), c.end(), c.begin(), c.begin() );
   testlib_test_perform( true );
@@ -153,7 +155,7 @@ static void test_point()
     testlib_test_perform( ok );
   }
 
-  testlib_test_begin( "set_angular from vcl_vector" );
+  testlib_test_begin( "set_angular from std::vector" );
   {
     ang[0] = -1.5; ang[1] = 2.1; ang[2] = 0.6;
     q.set_angular( ang.begin() );

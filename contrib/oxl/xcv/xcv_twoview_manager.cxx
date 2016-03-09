@@ -59,20 +59,20 @@ void xcv_twoview_manager::set_tableau(vgui_tableau_sptr const& tab, unsigned tab
     return;
   }
 #ifdef DEBUG
-  vcl_cerr << "xcv_two_view_manager: Setting tab position [" << tab_nb
-           << "] to tableau pointer: " << tab << vcl_endl;
+  std::cerr << "xcv_two_view_manager: Setting tab position [" << tab_nb
+           << "] to tableau pointer: " << tab << std::endl;
 #endif
   tabs[tab_nb] = tab;
   rubberbands[tab_nb].vertical_cast(vgui_find_below_by_type_name(tab,
-    vcl_string("vgui_rubberband_tableau")));
+    std::string("vgui_rubberband_tableau")));
   if (! rubberbands[tab_nb])
     vgui_macro_warning << "Unable to find rubberbander for tableau1\n";
   easys[tab_nb].vertical_cast(vgui_find_below_by_type_name(tab,
-    vcl_string("vgui_easy2D_tableau")));
+    std::string("vgui_easy2D_tableau")));
   if (!easys[tab_nb]) {
     vgui_macro_warning << "Unable to find easy2D for tableau no. " << tab_nb
                        << " \"" << tab << "\"\n";
-    vgui_text_graph(vcl_cerr);
+    vgui_text_graph(std::cerr);
   }
 }
 
@@ -134,7 +134,7 @@ void xcv_twoview_manager::draw_f_matrix(vgui_event const& e, vgui_tableau_sptr c
   }
   else
   {
-    vgui_macro_warning << "Unknown child tableau: " << child_tab << vcl_endl;
+    vgui_macro_warning << "Unknown child tableau: " << child_tab << std::endl;
     return;
   }
 
@@ -142,19 +142,19 @@ void xcv_twoview_manager::draw_f_matrix(vgui_event const& e, vgui_tableau_sptr c
   if (make_permanent)
   {
 #ifdef DEBUG
-    vcl_cerr << "Drawing the infinite line: " << hl[0] << "x + "
+    std::cerr << "Drawing the infinite line: " << hl[0] << "x + "
              << hl[1] << "y + " << hl[2] << " = 0.\n";
 #endif
     if (easys[transfer_index])
       easys[transfer_index]->add_infinite_line(float(hl[0]), float(hl[1]), float(hl[2]));
     else
       vgui_macro_warning << "no vgui_easy2D_tableau for transfer_index = "
-                         << transfer_index << vcl_endl;
+                         << transfer_index << std::endl;
     if (easys[(transfer_index+1)%2])
       easys[(transfer_index+1)%2]->add_point(ix, iy);
     else
       vgui_macro_warning << "no vgui_easy2D_tableau for transfer_index = "
-                         << (transfer_index+1)%2 << vcl_endl;
+                         << (transfer_index+1)%2 << std::endl;
     if (easys[0])
       easys[0]->post_redraw();
     else
@@ -217,7 +217,7 @@ void xcv_twoview_manager::draw_h_matrix(
   }
   else
   {
-    vgui_macro_warning << "Unknown child tableau: " << child_tab << vcl_endl;
+    vgui_macro_warning << "Unknown child tableau: " << child_tab << std::endl;
     return;
   }
 
@@ -228,7 +228,7 @@ void xcv_twoview_manager::draw_h_matrix(
   if (make_permanent)
   {
 #ifdef DEBUG
-    vcl_cerr << "draw_h_matrix: Adding points at (" << px << ", " << py
+    std::cerr << "draw_h_matrix: Adding points at (" << px << ", " << py
              << ") and (" << ix << ", " << iy << ").\n";
 #endif
     easys[transfer_index]->add_point(float(px), float(py));
@@ -289,7 +289,7 @@ void xcv_twoview_manager::draw_corner_matches(
   }
   else
   {
-    vgui_macro_warning << "Unknown child tableau: " << child_tab << vcl_endl;
+    vgui_macro_warning << "Unknown child tableau: " << child_tab << std::endl;
     return;
   }
 }
@@ -300,7 +300,7 @@ void xcv_twoview_manager::draw_corner_matches(
 //-----------------------------------------------------------------------------
 void xcv_twoview_manager::draw_overlay_corner_matches(vgui_tableau_sptr const&)
 {
-  vcl_cerr << "xcv_twoview_manager::draw_overlay_corner_matches(vgui_tableau_sptr) is not yet implemented\n";
+  std::cerr << "xcv_twoview_manager::draw_overlay_corner_matches(vgui_tableau_sptr) is not yet implemented\n";
 #if 0 // commented out - FIXME
   // Get the currently highlighted point:
   vgui_soview* sv = easys[(transfer_index+1)%2]->get_highlighted_soview();

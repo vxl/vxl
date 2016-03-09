@@ -1,7 +1,9 @@
 #include <testlib/testlib_test.h>
 
-#include <vcl_vector.h>
-#include <vcl_cmath.h>
+#include <vector>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <cmath>
 
 #include <vnl/vnl_matrix.h>
 #include <vnl/vnl_vector.h>
@@ -30,8 +32,8 @@ generate_match_set(rgrl_transformation_sptr trans)
   vnl_vector<double> t = xform->t();
 
   //generate 15 correct matches
-  vcl_vector< rgrl_feature_sptr > from_pts;
-  vcl_vector< rgrl_feature_sptr > to_pts;
+  std::vector< rgrl_feature_sptr > from_pts;
+  std::vector< rgrl_feature_sptr > to_pts;
 
   { //pt 1
     vnl_vector<double> v = vec2d( 2.0, 3.0);
@@ -172,8 +174,8 @@ generate_ambiguous_match_set(rgrl_transformation_sptr trans)
   vnl_vector<double> t = xform->t();
 
   //generate 15 correct matches
-  vcl_vector< rgrl_feature_sptr > from_pts;
-  vcl_vector< rgrl_feature_sptr > to_pts;
+  std::vector< rgrl_feature_sptr > from_pts;
+  std::vector< rgrl_feature_sptr > to_pts;
 
   { //pt 1
     vnl_vector<double> v = vec2d( 2.0, 3.0);
@@ -241,9 +243,9 @@ generate_ambiguous_match_set(rgrl_transformation_sptr trans)
   }
 
   //another 5 matches, each with 2 matches, one correct and one incorrect
-  vcl_vector< rgrl_feature_sptr > from_pts_II;
-  vcl_vector< vcl_vector< rgrl_feature_sptr > > to_pts_II;
-  vcl_vector< rgrl_feature_sptr > empty;
+  std::vector< rgrl_feature_sptr > from_pts_II;
+  std::vector< std::vector< rgrl_feature_sptr > > to_pts_II;
+  std::vector< rgrl_feature_sptr > empty;
   {
     to_pts_II.push_back(empty);
     vnl_vector<double> v = vec2d( 27.0, 33.0);
@@ -313,9 +315,9 @@ gen_num_samples(unsigned int total_matches, unsigned int unique_matches, bool al
   double prob_pt_inlier = (1 - max_outlier_frac) * unique_matches / double(total_matches);
   double prob_pt_good
     = max_populations_expected
-    * vcl_pow( prob_pt_inlier / max_populations_expected, 3);
-  return int(vcl_ceil( vcl_log(1.0 - desired_prob_good) /
-                       vcl_log(1.0 - prob_pt_good) ));
+    * std::pow( prob_pt_inlier / max_populations_expected, 3);
+  return int(std::ceil( std::log(1.0 - desired_prob_good) /
+                       std::log(1.0 - prob_pt_good) ));
 }
 
 static
@@ -327,7 +329,7 @@ test_on_matches(rgrl_transformation_sptr xform, rgrl_match_set_sptr matches, uns
   rgrl_mask_sptr to_roi = from_roi;
   rgrl_estimator_sptr est = new rgrl_est_affine(2);
   rgrl_view_sptr  view = new rgrl_view( from_roi, to_roi, from_roi->bounding_box(), from_roi->bounding_box(), est, xform, 0 );
-  vcl_auto_ptr<rrel_objective> obj( new rrel_muset_obj(matches->from_size()) );
+  std::auto_ptr<rrel_objective> obj( new rrel_muset_obj(matches->from_size()) );
   rgrl_scale_estimator_unwgted_sptr scale_est = new rgrl_scale_est_closest( obj );
 
   rgrl_initializer_ran_sam* init = new rgrl_initializer_ran_sam();

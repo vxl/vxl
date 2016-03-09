@@ -1,5 +1,7 @@
 #include <testlib/testlib_test.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iostream>
 #include <vil/vil_image_view.h>
 #include <bil/bil_bounded_image_view.h>
 
@@ -16,8 +18,8 @@ static void test_bounded_image_view()
   for (unsigned r = 0; r<njb; ++r)
   {
     for (unsigned c = 0; c<nib; ++c)
-      vcl_cout << bv.gpix(c,r) << ' ';
-    vcl_cout << '\n';
+      std::cout << bv.gpix(c,r) << ' ';
+    std::cout << '\n';
   }
   bool good = bv.gpix(3,4)==10&&bv.gpix(8,9)==0;
   TEST("bounded image values",good, true);

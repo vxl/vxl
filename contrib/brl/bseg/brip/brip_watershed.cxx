@@ -1,7 +1,9 @@
 #include "brip_watershed.h"
 //:
 // \file
-#include <vcl_cmath.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <cmath>
 #include <vnl/vnl_numeric_traits.h>
 #include <vnl/vnl_math.h>
 #include <vgl/vgl_point_2d.h>
@@ -20,7 +22,7 @@ brip_watershed::brip_watershed(brip_watershed_params const& bwp)
 
 brip_watershed::~brip_watershed()
 {
-  for (vcl_map<unsigned int, vcl_vector<unsigned int>* >::iterator
+  for (std::map<unsigned int, std::vector<unsigned int>* >::iterator
        mit = region_adjacency_.begin();
        mit != region_adjacency_.end(); mit++)
     delete (*mit).second;
@@ -29,15 +31,15 @@ brip_watershed::~brip_watershed()
 //: Print the region label array
 void brip_watershed::print_region_array()
 {
-  vcl_cout << "\n\n";
+  std::cout << "\n\n";
   int rows = region_label_array_.rows(), cols = region_label_array_.cols();
   for (int r = 0; r<rows; r++)
   {
     for (int c = 0; c<cols; c++)
-      vcl_cout << region_label_array_[r][c] << ' ';
-    vcl_cout << '\n';
+      std::cout << region_label_array_[r][c] << ' ';
+    std::cout << '\n';
   }
-  vcl_cout << vcl_endl << vcl_endl;
+  std::cout << std::endl << std::endl;
 }
 
 void brip_watershed::print_neighborhood(int col, int row, unsigned int lab)
@@ -50,39 +52,39 @@ void brip_watershed::print_neighborhood(int col, int row, unsigned int lab)
     int cn = col + n_col[n];
     if (rn<0||rn>=rows||cn<0||cn>=cols)
     {
-      vcl_cout << "Neighborhood out of range\n";
+      std::cout << "Neighborhood out of range\n";
       return;
     }
     if (k>2)
     {
-      vcl_cout << '\n';
+      std::cout << '\n';
       k = 0;
     }
     if (m == 4)
     {
-      vcl_cout << lab << ' ' << region_label_array_[rn][cn];
+      std::cout << lab << ' ' << region_label_array_[rn][cn];
       k++;
     }
     else
-      vcl_cout << region_label_array_[rn][cn] << ' ';
+      std::cout << region_label_array_[rn][cn] << ' ';
   }
-  vcl_cout << vcl_endl;
+  std::cout << std::endl;
 }
 
 void brip_watershed::print_adjacency_map()
 {
-  for (vcl_map<unsigned int, vcl_vector<unsigned int>* >::iterator
+  for (std::map<unsigned int, std::vector<unsigned int>* >::iterator
        mit = region_adjacency_.begin();
        mit != region_adjacency_.end(); mit++)
   {
     unsigned int reg = (*mit).first;
-    vcl_vector<unsigned int>* adj_regs = (*mit).second;
-    vcl_cout << "R[" << reg << "]:(";
+    std::vector<unsigned int>* adj_regs = (*mit).second;
+    std::cout << "R[" << reg << "]:(";
     if (adj_regs)
-      for (vcl_vector<unsigned int>::iterator rit = adj_regs->begin();
+      for (std::vector<unsigned int>::iterator rit = adj_regs->begin();
            rit != adj_regs->end(); rit++)
-        vcl_cout << (*rit) << ' ';
-    vcl_cout << ")\n";
+        std::cout << (*rit) << ' ';
+    std::cout << ")\n";
   }
 }
 
@@ -100,10 +102,10 @@ void brip_watershed::set_image(vil1_memory_image_of<float> const& image)
     for (int c = 0; c<w; c++)
     {
       float gx = Ix(c,r), gy = Iy(c,r);
-      gradient_mag_image_(c,r) = vcl_sqrt(gx*gx+gy*gy);
-   // vcl_cout << gradient_mag_image_(c,r) << ' ';
+      gradient_mag_image_(c,r) = std::sqrt(gx*gx+gy*gy);
+   // std::cout << gradient_mag_image_(c,r) << ' ';
     }
- // vcl_cout << vcl_endl;
+ // std::cout << std::endl;
   }
   region_label_array_.resize(h,w);
   region_label_array_.fill(UNLABELED);
@@ -144,7 +146,7 @@ bool brip_watershed::compute_seeds()
         region_label_array_[r][c] = max_region_label_;
         if (verbose_)
         {
-          vcl_cout << "\nS(c:" << c << " r:" << r << ')' << vcl_endl;
+          std::cout << "\nS(c:" << c << " r:" << r << ')' << std::endl;
           this->print_neighborhood(c, r, max_region_label_);
         }
       }
@@ -174,7 +176,7 @@ bool brip_watershed::initialize_queue()
           priority_queue_.push(pix);
         }
       }
-  //  vcl_cout << *(priority_queue_.top()) << vcl_endl;
+  //  std::cout << *(priority_queue_.top()) << std::endl;
   return priority_queue_.size()>0;
 }
 
@@ -199,7 +201,7 @@ bool brip_watershed::grow_regions()
     vgl_point_2d<int> nearest =  pix->nearest_;
     if (verbose_)
     {
-      vcl_cout << "\nN(c:" << location.x() << " r:" << location.y() << ")\n";
+      std::cout << "\nN(c:" << location.x() << " r:" << location.y() << ")\n";
       this->print_neighborhood(location.x(), location.y(), lab);
     }
     for (int n = 0; n<8; n++)
@@ -249,12 +251,12 @@ bool brip_watershed::grow_regions()
       }
     if (verbose_)
     {
-      vcl_cout << '\n';
+      std::cout << '\n';
       this->print_neighborhood(location.x(), location.y(), lab);
     }
   }
   if (verbose_)
-    vcl_cout << "Found " << n_boundary_pix << " boundary pixels and "
+    std::cout << "Found " << n_boundary_pix << " boundary pixels and "
              << n_region_pix << " region pixels\n";
   return n_region_pix>0||n_boundary_pix>0;
 }
@@ -263,12 +265,12 @@ bool brip_watershed::grow_regions()
 bool brip_watershed::add_adjacency(const unsigned int reg,
                                    const unsigned int adj_reg)
 {
-  vcl_map<unsigned int, vcl_vector<unsigned int>* >::iterator adi;
+  std::map<unsigned int, std::vector<unsigned int>* >::iterator adi;
   adi = region_adjacency_.find(reg);
 
   if (adi !=region_adjacency_.end())
   {
-    vcl_vector<unsigned int> * vec = region_adjacency_[reg];
+    std::vector<unsigned int> * vec = region_adjacency_[reg];
 
     for (unsigned int i =0 ; i < vec->size(); i++)
       if ((*vec)[i] == adj_reg)
@@ -278,7 +280,7 @@ bool brip_watershed::add_adjacency(const unsigned int reg,
   }
   else//make a new adjacent region array
   {
-    vcl_vector<unsigned int>* adj_array = new vcl_vector<unsigned int>;
+    std::vector<unsigned int>* adj_array = new std::vector<unsigned int>;
     adj_array->push_back(adj_reg);
     region_adjacency_[reg]=adj_array;
   }
@@ -286,10 +288,10 @@ bool brip_watershed::add_adjacency(const unsigned int reg,
 }
 
 bool brip_watershed::adjacent_regions(const unsigned int reg,
-                                      vcl_vector<unsigned int>& adj_regs)
+                                      std::vector<unsigned int>& adj_regs)
 {
   adj_regs.clear();
-  vcl_map<unsigned int, vcl_vector<unsigned int>* >::iterator adi;
+  std::map<unsigned int, std::vector<unsigned int>* >::iterator adi;
   adi = region_adjacency_.find(reg);
 
   if (adi !=region_adjacency_.end())
@@ -305,18 +307,18 @@ bool brip_watershed::compute_regions()
 {
   if (!compute_seeds())
   {
-    vcl_cout << "In brip_watershed::compute_regions() - no seeds\n";
+    std::cout << "In brip_watershed::compute_regions() - no seeds\n";
     return false;
   }
 
   if (!initialize_queue())
   {
-    vcl_cout << "In brip_watershed::compute_regions() - queue initialization failed\n";
+    std::cout << "In brip_watershed::compute_regions() - queue initialization failed\n";
     return false;
   }
   if (!grow_regions())
   {
-    vcl_cout << "In brip_watershed::grow_regions() - failed\n";
+    std::cout << "In brip_watershed::grow_regions() - failed\n";
     return false;
   }
 

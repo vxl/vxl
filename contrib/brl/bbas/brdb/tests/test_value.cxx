@@ -1,6 +1,8 @@
 #include <testlib/testlib_test.h>
 #include <brdb/brdb_value.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iostream>
 
 static void test_value()
 {
@@ -10,11 +12,11 @@ static void test_value()
   brdb_value_t<long> long_value(1234l);
   brdb_value_t<int> int_value(-10);
 
-  vcl_cout << "Registered Database Value Types:" << vcl_endl;
-  vcl_map<vcl_string, const brdb_value*>::const_iterator itr = brdb_value::registry().begin();
+  std::cout << "Registered Database Value Types:" << std::endl;
+  std::map<std::string, const brdb_value*>::const_iterator itr = brdb_value::registry().begin();
   bool registration_test = true;
   for (; itr != brdb_value::registry().end(); ++itr){
-    vcl_cout << "   " << itr->first << vcl_endl;
+    std::cout << "   " << itr->first << std::endl;
     registration_test = (itr->first == itr->second->is_a()) && registration_test;
   }
 

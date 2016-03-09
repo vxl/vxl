@@ -22,8 +22,10 @@
 // \endverbatim
 //-----------------------------------------------------------------------------
 
-#include <vcl_iosfwd.h>
-#include <vcl_vector.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iosfwd>
+#include <vector>
 #include <vtol/vtol_topology_object.h>
 #include <vtol/vtol_vertex.h>
 #include <vtol/vtol_vertex_sptr.h>
@@ -90,10 +92,10 @@ class vtol_zero_chain : public vtol_topology_object
   virtual vsol_spatial_object_2d* clone() const;
 
   //: Return a platform independent string identifying the class
-  virtual vcl_string is_a() const { return vcl_string("vtol_zero_chain"); }
+  virtual std::string is_a() const { return std::string("vtol_zero_chain"); }
 
   //: Return true if the argument matches the string identifying the class or any parent class
-  virtual bool is_class(vcl_string const& cls) const { return cls==is_a(); }
+  virtual bool is_class(std::string const& cls) const { return cls==is_a(); }
 
  private: // has been superseded by is_a()
   //: Return the topology type
@@ -149,19 +151,19 @@ class vtol_zero_chain : public vtol_topology_object
   inline bool operator!=(const vtol_zero_chain &other)const{return !operator==(other);}
   bool operator==(const vsol_spatial_object_2d& obj) const; // virtual of vsol_spatial_object_2d
 
-  virtual void print(vcl_ostream &strm=vcl_cout) const;
-  virtual void describe(vcl_ostream &strm=vcl_cout,
+  virtual void print(std::ostream &strm=std::cout) const;
+  virtual void describe(std::ostream &strm=std::cout,
                         int blanking=0) const;
 
   //: \warning these should not be used by clients
  protected:
-  virtual vcl_vector<vtol_vertex*> *compute_vertices();
-  virtual vcl_vector<vtol_edge*> *compute_edges();
-  virtual vcl_vector<vtol_zero_chain*> *compute_zero_chains();
-  virtual vcl_vector<vtol_one_chain*> *compute_one_chains();
-  virtual vcl_vector<vtol_face*> *compute_faces();
-  virtual vcl_vector<vtol_two_chain*> *compute_two_chains();
-  virtual vcl_vector<vtol_block*> *compute_blocks();
+  virtual std::vector<vtol_vertex*> *compute_vertices();
+  virtual std::vector<vtol_edge*> *compute_edges();
+  virtual std::vector<vtol_zero_chain*> *compute_zero_chains();
+  virtual std::vector<vtol_one_chain*> *compute_one_chains();
+  virtual std::vector<vtol_face*> *compute_faces();
+  virtual std::vector<vtol_two_chain*> *compute_two_chains();
+  virtual std::vector<vtol_block*> *compute_blocks();
 };
 
 #endif // vtol_zero_chain_h_

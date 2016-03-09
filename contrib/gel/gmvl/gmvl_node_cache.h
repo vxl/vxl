@@ -8,9 +8,11 @@
 // \file
 // \author crossge@crd.ge.com
 
-#include <vcl_vector.h>
-#include <vcl_iosfwd.h>
-#include <vcl_utility.h>
+#include <vector>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iosfwd>
+#include <utility>
 
 #include <gmvl/gmvl_node_sptr.h>
 
@@ -30,21 +32,21 @@ class gmvl_node_cache
   bool cached( const gmvl_node_sptr node) const;
 
   // clever accessors
-  vcl_vector<gmvl_node_sptr> get( const vcl_string type) const;
+  std::vector<gmvl_node_sptr> get( const std::string type) const;
 
   // input / output
-  friend vcl_ostream &operator<<( vcl_ostream &os, const gmvl_node_cache &c);
+  friend std::ostream &operator<<( std::ostream &os, const gmvl_node_cache &c);
 
  protected:
 
-  vcl_vector<gmvl_node_sptr> nodes_;
+  std::vector<gmvl_node_sptr> nodes_;
 
   // node type cache
-  vcl_vector<vcl_pair<vcl_string,vcl_vector<gmvl_node_sptr> > > typecache_;
+  std::vector<std::pair<std::string,std::vector<gmvl_node_sptr> > > typecache_;
 
   void rebuild();
 };
 
-vcl_ostream &operator<<( vcl_ostream &os, const gmvl_node_cache &c);
+std::ostream &operator<<( std::ostream &os, const gmvl_node_cache &c);
 
 #endif // gmvl_node_cache_h_

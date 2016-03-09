@@ -2,13 +2,13 @@
 
 
 
-volm_desc_land_indexer::volm_desc_land_indexer(vcl_string const& NLCD_folder, vcl_string const& out_index_folder) : volm_desc_indexer(out_index_folder)
+volm_desc_land_indexer::volm_desc_land_indexer(std::string const& NLCD_folder, std::string const& out_index_folder) : volm_desc_indexer(out_index_folder)
 {
   //volm_io_tools::load_nlcd_imgs(NLCD_folder, NLCD_imgs_);
   volm_io_tools::load_imgs(NLCD_folder, NLCD_imgs_, true, true, true);
 }
 
-bool volm_desc_land_indexer::extract(double lat, double lon, double elev, vcl_vector<unsigned char>& values)
+bool volm_desc_land_indexer::extract(double lat, double lon, double elev, std::vector<unsigned char>& values)
 {
   // use location to read the land type from NLCD image
   unsigned char label = 0;

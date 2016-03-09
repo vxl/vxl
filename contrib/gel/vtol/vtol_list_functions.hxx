@@ -11,11 +11,11 @@
 // vsol_spatial_object_[23]d as {s,g}et_tagged_union_flag() must exist.
 
 template <class T>
-vcl_vector<T>* tagged_union(vcl_vector<T>* topolist)
+std::vector<T>* tagged_union(std::vector<T>* topolist)
 {
   if (!topolist) return 0; // null pointer invalid
-  vcl_vector<T> temp;
-  typename vcl_vector<T>::iterator i;
+  std::vector<T> temp;
+  typename std::vector<T>::iterator i;
 
   // Clearing the tags before processing...
   for (i=topolist->begin();i!=topolist->end(); ++i)
@@ -36,11 +36,11 @@ vcl_vector<T>* tagged_union(vcl_vector<T>* topolist)
 }
 
 template <class T>
-vcl_list<T>* tagged_union(vcl_list<T>* topolist)
+std::list<T>* tagged_union(std::list<T>* topolist)
 {
   if (!topolist) return 0; // null pointer invalid
-  vcl_list<T> temp;
-  typename vcl_list<T>::iterator i;
+  std::list<T> temp;
+  typename std::list<T>::iterator i;
 
   // Clearing the tags before processing...
   for (i=topolist->begin();i!=topolist->end(); ++i)

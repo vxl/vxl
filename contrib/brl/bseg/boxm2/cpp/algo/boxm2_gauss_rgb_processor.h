@@ -13,7 +13,9 @@
 // \endverbatim
 
 #include <vnl/vnl_vector_fixed.h>
-#include <vcl_vector.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <vector>
 
 class  boxm2_gauss_rgb_processor
 {

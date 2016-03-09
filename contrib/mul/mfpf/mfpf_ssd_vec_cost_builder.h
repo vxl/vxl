@@ -7,8 +7,10 @@
 
 #include <mfpf/mfpf_vec_cost_builder.h>
 #include <vnl/vnl_vector.h>
-#include <vcl_iosfwd.h>
-#include <vcl_vector.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iosfwd>
+#include <vector>
 
 //: Builder for mfpf_ssd_vec_cost objects.
 //  Computes mean and weights given the training data.
@@ -21,7 +23,7 @@ class mfpf_ssd_vec_cost_builder : public mfpf_vec_cost_builder
   double min_var_;
 
   //: Space to record examples
-  vcl_vector<vnl_vector<double> > data_;
+  std::vector<vnl_vector<double> > data_;
 
   //: Define default values
   void set_defaults();
@@ -48,16 +50,16 @@ class mfpf_ssd_vec_cost_builder : public mfpf_vec_cost_builder
   virtual void build(mfpf_vec_cost&);
 
   //: Initialise from a string stream
-  virtual bool set_from_stream(vcl_istream &is);
+  virtual bool set_from_stream(std::istream &is);
 
   //: Name of the class
-  virtual vcl_string is_a() const;
+  virtual std::string is_a() const;
 
   //: Create a copy on the heap and return base class pointer
   virtual mfpf_vec_cost_builder* clone() const;
 
   //: Print class to os
-  virtual void print_summary(vcl_ostream& os) const;
+  virtual void print_summary(std::ostream& os) const;
 
   //: Version number for I/O
   short version_no() const;

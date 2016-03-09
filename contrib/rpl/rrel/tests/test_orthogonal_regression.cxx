@@ -1,4 +1,6 @@
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iostream>
 
 #include <vnl/vnl_double_3.h>
 #include <vnl/vnl_double_4.h>
@@ -23,7 +25,7 @@ static void test_orthogonal_regression()
 
   //  Build LinearRegression objects exercising both constructors and
   //  the two different options for the first constructor.
-  vcl_vector<double> error( num_pts );
+  std::vector<double> error( num_pts );
   error[0]=-0.001;
   error[1]=0;
   error[2]=0;
@@ -33,7 +35,7 @@ static void test_orthogonal_regression()
   error[6]=-0.004;
 
 
-  vcl_vector< vnl_vector<double> > pts(num_pts);
+  std::vector< vnl_vector<double> > pts(num_pts);
   vnl_double_3 p;
 
   p[0] = 1.0;  p[1]=-0.5; p[2] = a0 * p[0] + a1* p[1] + a2;
@@ -80,7 +82,7 @@ static void test_orthogonal_regression()
   //
   //  Test the residuals function.
   //
-  vcl_vector<double> residuals( pts.size() );
+  std::vector<double> residuals( pts.size() );
   lr1 = new rrel_orthogonal_regression( pts );
 
   lr1->compute_residuals( true_params.as_vector(), residuals );
@@ -92,7 +94,7 @@ static void test_orthogonal_regression()
   //
   //  Test the fit from minimal set function.
   //
-  vcl_vector< int > pts_indices(3);
+  std::vector< int > pts_indices(3);
   pts_indices[0] = 1;
   pts_indices[1] = 2;
   pts_indices[2] = 3;
@@ -108,15 +110,15 @@ static void test_orthogonal_regression()
 
   TEST("fit_from_minimal_set" , ok && err <1e-2, true);
 #if 0
-  vcl_cout << " estimated params: " << params << vcl_endl
-           << " true params: " << true_params << vcl_endl
-           << " error : " << err << vcl_endl;
+  std::cout << " estimated params: " << params << std::endl
+           << " true params: " << true_params << std::endl
+           << " error : " << err << std::endl;
 #endif
 
   //
   //  Test the weighted least squares function.
   //
-  vcl_vector<double> wgts( num_pts );
+  std::vector<double> wgts( num_pts );
   vnl_matrix<double> cofact;
 
   // Make weights so that the estimation is singular.
@@ -136,9 +138,9 @@ static void test_orthogonal_regression()
 
   TEST("weighted_least_squares_fit (ok) ", ok && err <1e-2, true);
 #if 0
-  vcl_cout << " estimated params: " << par << vcl_endl
-           << " true params: " << true_params << vcl_endl
-           << " error : " << err << vcl_endl;
+  std::cout << " estimated params: " << par << std::endl
+           << " true params: " << true_params << std::endl
+           << " error : " << err << std::endl;
 #endif
 
   delete lr1;

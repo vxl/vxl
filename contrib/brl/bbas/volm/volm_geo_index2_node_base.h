@@ -15,10 +15,14 @@
 //
 
 #include <vbl/vbl_ref_count.h>
-#include <vcl_string.h>
-#include <vcl_vector.h>
-#include <vcl_string.h>
-#include <vcl_vector.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <string>
+#include <vector>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <string>
+#include <vector>
 #include <vgl/vgl_box_2d.h>
 #include <vgl/vgl_point_2d.h>
 #include "volm_geo_index2_sptr.h"
@@ -33,16 +37,16 @@ public:
   virtual ~volm_geo_index2_node_base() { children_.clear(); }
 
   //: retrive the mini tile name based on the bbox
-  vcl_string get_string() const;
+  std::string get_string() const;
 
   //: retrive the desired binary filename for current mini tile
-  vcl_string get_label_name(vcl_string const& geo_index_name_pre, vcl_string const& identifier);
+  std::string get_label_name(std::string const& geo_index_name_pre, std::string const& identifier);
 
 public:
   //: parent tile
   volm_geo_index2_node_sptr parent_;
   //: 4 children
-  vcl_vector<volm_geo_index2_node_sptr> children_;
+  std::vector<volm_geo_index2_node_sptr> children_;
   //: mini tile ( min point of this bbox is lower left corner of the mini tile and max point of this bbox is upper bound )
   //   x is lon, y is lat (xmin: lower left lon, ymin: lower left lat, xmax: upper right lon, ymax: upper right lat)
   vgl_box_2d<double> extent_;

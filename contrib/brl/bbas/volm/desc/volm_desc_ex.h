@@ -17,7 +17,9 @@
 //
 
 #include "volm_desc.h"
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iostream>
 #include <volm_io.h>
 #include <volm_category_io.h>
 #include <vcl_cassert.h>
@@ -37,7 +39,7 @@ public:
   ~volm_object() {}
 
   void print() const {
-    vcl_cout << "[dist: " << dist_ << " height: " << height_
+    std::cout << "[dist: " << dist_ << " height: " << height_
              << " orient: " << orient_ << " land: " << land_
              << "(" << volm_osm_category_io::volm_category_name_table[land_] << ")]\n";
   }
@@ -56,22 +58,22 @@ public:
   volm_desc_ex() {}
   //: constructor from depth_map_scene
   volm_desc_ex(depth_map_scene_sptr const& dms,
-               vcl_vector<double> const& radius,
+               std::vector<double> const& radius,
                unsigned const& norients = 3,
                unsigned const& nlands = volm_osm_category_io::volm_land_table.size(),
                unsigned char const& initial_mag = 0);
 
   //: constructor from created index
-  volm_desc_ex(vcl_vector<unsigned char> const& index_dst,
-               vcl_vector<unsigned char> const& index_combined,
-               vcl_vector<double> depth_interval,
-               vcl_vector<double> const& radius,
+  volm_desc_ex(std::vector<unsigned char> const& index_dst,
+               std::vector<unsigned char> const& index_combined,
+               std::vector<double> depth_interval,
+               std::vector<double> const& radius,
                unsigned const& norients = 3,
                unsigned const& nlands = volm_osm_category_io::volm_land_table.size(),
                unsigned char const& initial_mag = 0);
 
   //: simple constructor that only sets the number of bins
-  volm_desc_ex(unsigned ndists, unsigned norients, unsigned nlands, vcl_vector<double>& radius) :
+  volm_desc_ex(unsigned ndists, unsigned norients, unsigned nlands, std::vector<double>& radius) :
     ndists_(ndists), norients_(norients), nlands_(nlands), radius_(radius) { nbins_ = ndists_ * nlands_; h_.resize(nbins_); initialize_bin(0); }
 
   //: destructor
@@ -87,7 +89,7 @@ public:
   unsigned nlands() const { return this->nlands_; }
 
   //: the radius that defines the distance interval
-  vcl_vector<double>& radius() { return radius_; }
+  std::vector<double>& radius() { return radius_; }
 
   //: initialize the histogram with given value
   void initialize_bin(unsigned char const& mag);
@@ -143,7 +145,7 @@ private:
   unsigned ndists_;
   unsigned norients_;
   unsigned nlands_;
-  vcl_vector<double> radius_;
+  std::vector<double> radius_;
 
 };
 

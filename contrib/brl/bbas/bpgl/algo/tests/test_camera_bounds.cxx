@@ -2,8 +2,10 @@
 #ifdef DEBUG
 #include <testlib/testlib_root_dir.h>
 #endif
-#include <vcl_iostream.h>
-#include <vcl_fstream.h>
+#include <iostream>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <fstream>
 #include <vgl/vgl_point_3d.h>
 #include <vpgl/vpgl_perspective_camera.h>
 #include <vpgl/vpgl_generic_camera.h>
@@ -18,8 +20,8 @@
 
 #ifdef DEBUG
 static void
-write_points_vrml(vcl_ofstream& str,
-                  vcl_vector<vgl_point_3d<double> > const& pts3d)
+write_points_vrml(std::ofstream& str,
+                  std::vector<vgl_point_3d<double> > const& pts3d)
 {
   str << "#VRML V2.0 utf8\n"
       << "Background {\n"
@@ -90,12 +92,12 @@ static void test_camera_bounds()
   double half_ang, sang;
   vpgl_camera_bounds::pixel_solid_angle(C, 640, 360,
                                         cone_axis,half_ang, sang);
-  vcl_cout << " pixel "<< cone_axis << '\n'
+  std::cout << " pixel "<< cone_axis << '\n'
            << " half angle (deg) " << half_ang*rad_to_deg
            << " solid_ang (ster) = " << sang << '\n';
   TEST_NEAR("pixel bounds", sang, 4.48621e-007, 1e-8);
   vpgl_camera_bounds::image_solid_angle(C,cone_axis,half_ang, sang);
-  vcl_cout << " image "<< cone_axis << '\n'
+  std::cout << " image "<< cone_axis << '\n'
            << " half angle (deg)" << half_ang*rad_to_deg
            << " solid_ang = " << sang << '\n';
   TEST_NEAR("image bounds", sang, vnl_math::log10e, 1e-6);
@@ -105,13 +107,13 @@ static void test_camera_bounds()
   vgl_box_2d<double> box_prj = vpgl_project::project_bounding_box(C, box);
   bool good = vpgl_camera_bounds::box_solid_angle(C, box, cone_axis,half_ang, sang);
   double mask = good ? 1.0 : 0.0;
-  vcl_cout << " box "<< cone_axis << '\n'
+  std::cout << " box "<< cone_axis << '\n'
            << " half angle (deg) " << half_ang*rad_to_deg
            << " solid_ang = " << sang << '\n';
   TEST_NEAR("box bounds", sang, mask*0.0294621, 1e-6);
 
   double pixel_interval = vpgl_camera_bounds::rotation_angle_interval(C);
-  vcl_cout << " pixel angle interval (deg)  "<< pixel_interval*rad_to_deg << '\n';
+  std::cout << " pixel angle interval (deg)  "<< pixel_interval*rad_to_deg << '\n';
   TEST_NEAR("pixel interval (deg)", pixel_interval*rad_to_deg, 0.159155, 1e-5);
   double scl = 0.0625;
   Km[0][0] = scl*1871.2; Km[1][1] = scl*1871.2;
@@ -120,18 +122,18 @@ static void test_camera_bounds()
   vpgl_calibration_matrix<double> Ks(Km);
   vpgl_perspective_camera<double> Cs(Ks, Rr, t);
   pixel_interval = vpgl_camera_bounds::rotation_angle_interval(Cs);
-  vcl_cout << " pixel angle interval (deg) - scaled K "<< pixel_interval*rad_to_deg << '\n';
+  std::cout << " pixel angle interval (deg) - scaled K "<< pixel_interval*rad_to_deg << '\n';
   TEST_NEAR("pixel interval (deg) -Ks ", pixel_interval*rad_to_deg, 2.54606, 1e-5);
   vpgl_camera_bounds::pixel_solid_angle(Cs, static_cast<unsigned>(scl*640),
                                         static_cast<unsigned>(scl*360),
                                         cone_axis,half_ang, sang);
-  vcl_cout << " pixel  - Ks "<< cone_axis << '\n'
+  std::cout << " pixel  - Ks "<< cone_axis << '\n'
            << " half angle (deg)" << half_ang*rad_to_deg
            << " solid_ang (ster) = " << sang << '\n';
   TEST_NEAR("pixel bounds - Ks", sang, 0.000114845, 1e-8);
 
   vpgl_camera_bounds::image_solid_angle(Cs,cone_axis,half_ang, sang);
-  vcl_cout << " image -Ks "<< cone_axis << '\n'
+  std::cout << " image -Ks "<< cone_axis << '\n'
            << " half angle " << half_ang*rad_to_deg
            << " solid_ang = " << sang << '\n';
   TEST_NEAR("image bounds -Ks", sang, vnl_math::log10e, 1e-006);
@@ -139,23 +141,23 @@ static void test_camera_bounds()
   unsigned npts = 400;
   principal_ray_scan prs(0.785, npts);
 #ifdef DEBUG
-  vcl_vector<vgl_point_3d<double> > pts;
+  std::vector<vgl_point_3d<double> > pts;
   for (prs.reset(); prs.next();)
   {
-    vcl_cout << "theta = " << prs.theta()*rad_to_deg
+    std::cout << "theta = " << prs.theta()*rad_to_deg
              << " phi = " << prs.phi()*rad_to_deg << '\n';
     pts.push_back(prs.pt_on_unit_sphere());
   }
-  vcl_ofstream os(testlib_root_dir() + "/contrib/gel/mrc/vpgl/tests/images/calibration/sphere.wrl");
+  std::ofstream os(testlib_root_dir() + "/contrib/gel/mrc/vpgl/tests/images/calibration/sphere.wrl");
   write_points_vrml(os, pts);
   os.close();
 #endif
   unsigned indx = 200;
-  double ang_pr = 1.0/vcl_sqrt(2.0);
+  double ang_pr = 1.0/std::sqrt(2.0);
   vgl_point_3d<double> pt =  prs.pt_on_unit_sphere(indx), zaxis(0.0, 0.0, 1.0);
   vgl_rotation_3d<double> rot = prs.rot(indx, ang_pr);
   vgl_point_3d<double> rot_z = (rot.transpose())*zaxis;
-  vcl_cout << "theta = " << prs.theta(indx)*rad_to_deg
+  std::cout << "theta = " << prs.theta(indx)*rad_to_deg
            << " phi = " << prs.phi(indx)*rad_to_deg << '\n'
            << " pt on unit sphere " << pt << '\n'
            << " rotated zaxis " << rot_z << '\n';

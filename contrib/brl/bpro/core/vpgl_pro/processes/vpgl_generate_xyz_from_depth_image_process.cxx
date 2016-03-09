@@ -3,8 +3,10 @@
 //:
 // \file
 
-#include <vcl_iostream.h>
-#include <vcl_fstream.h>
+#include <iostream>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <fstream>
 #include <vpgl/vpgl_camera.h>
 #include <vpgl/vpgl_perspective_camera.h>
 #include <vpgl/vpgl_generic_camera.h>
@@ -22,12 +24,12 @@ bool vpgl_generate_xyz_from_depth_image_process_cons(bprb_func_process& pro)
     using namespace vpgl_generate_xyz_from_depth_image_process_globals;
 
     //process takes 2 inputs
-    vcl_vector<vcl_string> input_types_(n_inputs_);
+    std::vector<std::string> input_types_(n_inputs_);
     input_types_[0] = "vpgl_camera_double_sptr";
     input_types_[1] = "vil_image_view_base_sptr";
 
     // process has 3 outputs
-    vcl_vector<vcl_string>  output_types_(n_outputs_);
+    std::vector<std::string>  output_types_(n_outputs_);
     output_types_[0] = "vil_image_view_base_sptr";  // x image
     output_types_[1] = "vil_image_view_base_sptr";  // y image
     output_types_[2] = "vil_image_view_base_sptr";  // z image
@@ -41,7 +43,7 @@ bool vpgl_generate_xyz_from_depth_image_process(bprb_func_process& pro)
 {
    // Sanity check
   if (!pro.verify_inputs()) {
-    vcl_cerr << "vpgl_generate_xyz_from_depth_image_process: Invalid inputs\n";
+    std::cerr << "vpgl_generate_xyz_from_depth_image_process: Invalid inputs\n";
     return false;
   }
   // get the inputs
@@ -52,7 +54,7 @@ bool vpgl_generate_xyz_from_depth_image_process(bprb_func_process& pro)
 
   vil_image_view<float>* depth_img = dynamic_cast<vil_image_view<float>*>(depth_img_ptr.ptr());
   if ( !depth_img ) {
-    vcl_cout<<"Depth image cannot be converted to float image"<<vcl_endl;
+    std::cout<<"Depth image cannot be converted to float image"<<std::endl;
     return false;
   }
   unsigned ni = depth_img->ni();
@@ -68,7 +70,7 @@ bool vpgl_generate_xyz_from_depth_image_process(bprb_func_process& pro)
       for (unsigned int v=0; v < nj; ++v)
         {
         vgl_ray_3d<double> ray = cam->backproject_ray(vgl_point_2d<double>(u,v));
-        //vcl_cout<<ray.origin()<<vcl_endl;
+        //std::cout<<ray.origin()<<std::endl;
         float t = (*depth_img)(u,v);
         vgl_point_3d<double> pt3d = ray.origin()+ray.direction()*t;
         (*out_img_x)(u,v) = (float)pt3d.x();
@@ -84,7 +86,7 @@ bool vpgl_generate_xyz_from_depth_image_process(bprb_func_process& pro)
       for (unsigned int v=0; v < nj; ++v)
         {
         vgl_ray_3d<double> ray = cam->ray(u,v);
-        //vcl_cout<<ray.origin()<<vcl_endl;
+        //std::cout<<ray.origin()<<std::endl;
         float t = (*depth_img)(u,v);
         vgl_point_3d<double> pt3d = ray.origin()+ray.direction()*t;
         (*out_img_x)(u,v) = (float)pt3d.x();
@@ -95,7 +97,7 @@ bool vpgl_generate_xyz_from_depth_image_process(bprb_func_process& pro)
     }
   else
     {
-    vcl_cerr << "vpgl_generate_xyz_from_depth_image_process: couldn't cast camera\n";
+    std::cerr << "vpgl_generate_xyz_from_depth_image_process: couldn't cast camera\n";
     return false;
     }
 

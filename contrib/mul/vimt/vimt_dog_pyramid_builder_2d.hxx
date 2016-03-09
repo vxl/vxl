@@ -9,8 +9,10 @@
 #include "vimt_dog_pyramid_builder_2d.h"
 #include "vimt_image_pyramid.h"
 
-#include <vcl_cstdlib.h>
-#include <vcl_string.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <cstdlib>
+#include <string>
 
 #include <vcl_cassert.h>
 #include <vnl/vnl_math.h> // for sqrt2
@@ -44,8 +46,8 @@ void vimt_dog_pyramid_builder_2d<T>::set_max_levels(int max_l)
 {
   if (max_l<1)
   {
-    vcl_cerr<<"vimt_dog_pyramid_builder_2d<T>::set_max_levels() argument must be >=1\n";
-    vcl_abort();
+    std::cerr<<"vimt_dog_pyramid_builder_2d<T>::set_max_levels() argument must be >=1\n";
+    std::abort();
   }
   max_levels_ = max_l;
 }
@@ -228,14 +230,14 @@ void vimt_dog_pyramid_builder_2d<T>::build_dog(vimt_image_pyramid& dog_pyr,
 template<class T>
 void vimt_dog_pyramid_builder_2d<T>::extend(vimt_image_pyramid& ) const
 {
-  vcl_cerr << "vimt_dog_pyramid_builder_2d<T>::extend(vimt_image_pyramid&) NYI\n";
+  std::cerr << "vimt_dog_pyramid_builder_2d<T>::extend(vimt_image_pyramid&) NYI\n";
 }
 
 
 //=======================================================================
 
 template<class T>
-bool vimt_dog_pyramid_builder_2d<T>::is_class(vcl_string const& s) const
+bool vimt_dog_pyramid_builder_2d<T>::is_class(std::string const& s) const
 {
   return s==vimt_dog_pyramid_builder_2d<T>::is_a() || vimt_image_pyramid_builder::is_class(s);
 }
@@ -259,7 +261,7 @@ vimt_image_pyramid_builder* vimt_dog_pyramid_builder_2d<T>::clone() const
 //=======================================================================
 
 template<class T>
-void vimt_dog_pyramid_builder_2d<T>::print_summary(vcl_ostream&) const
+void vimt_dog_pyramid_builder_2d<T>::print_summary(std::ostream&) const
 {
 }
 
@@ -292,9 +294,9 @@ void vimt_dog_pyramid_builder_2d<T>::b_read(vsl_b_istream& bfs)
     vsl_b_read(bfs,min_y_size_);
     break;
    default:
-    vcl_cerr << "I/O ERROR: vimt_dog_pyramid_builder_2d<T>::b_read(vsl_b_istream&)\n"
+    std::cerr << "I/O ERROR: vimt_dog_pyramid_builder_2d<T>::b_read(vsl_b_istream&)\n"
              << "           Unknown version number "<< version << '\n';
-    bfs.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
+    bfs.is().clear(std::ios::badbit); // Set an unrecoverable IO error on stream
     return;
   }
 }
@@ -303,12 +305,12 @@ template<class T>
 void vimt_dog_pyramid_builder_2d<T>::gauss_reduce(const vimt_image_2d_of<T>& /*src_im*/,
                                                   vimt_image_2d_of<T>& /*dest_im*/) const
 {
-  vcl_cerr << "ERROR: vimt_dog_pyramid_builder_2d<T>::gauss_reduce() not yet implemented\n";
+  std::cerr << "ERROR: vimt_dog_pyramid_builder_2d<T>::gauss_reduce() not yet implemented\n";
 }
 
 #define VIMT_DOG_PYRAMID_BUILDER_2D_INSTANTIATE(T) \
-VCL_DEFINE_SPECIALIZATION vcl_string vimt_dog_pyramid_builder_2d<T >::is_a() const \
-{  return vcl_string("vimt_dog_pyramid_builder_2d<" #T ">"); }\
+VCL_DEFINE_SPECIALIZATION std::string vimt_dog_pyramid_builder_2d<T >::is_a() const \
+{  return std::string("vimt_dog_pyramid_builder_2d<" #T ">"); }\
 template class vimt_dog_pyramid_builder_2d<T >
 
 #endif // vimt_dog_pyramid_builder_2d_hxx_

@@ -33,7 +33,7 @@ sdet_fit_conics::~sdet_fit_conics()
 //-------------------------------------------------------------------------
 //: Set the edges to be processed
 //
-void sdet_fit_conics::set_edges(vcl_vector<vtol_edge_2d_sptr> const& edges)
+void sdet_fit_conics::set_edges(std::vector<vtol_edge_2d_sptr> const& edges)
 {
   segs_valid_ = false;
   edges_=edges;
@@ -55,7 +55,7 @@ bool sdet_fit_conics::fit_conics()
     return false;
   fitter_.set_min_fit_length(min_fit_length_);
   fitter_.set_rms_error_tol(rms_distance_);
-  for (vcl_vector<vtol_edge_2d_sptr>::iterator eit = edges_.begin();
+  for (std::vector<vtol_edge_2d_sptr>::iterator eit = edges_.begin();
        eit != edges_.end(); eit++)
   {
     vsol_curve_2d_sptr c = (*eit)->curve();
@@ -75,12 +75,12 @@ bool sdet_fit_conics::fit_conics()
     }
 
     fitter_.fit();
-    vcl_vector<vgl_conic_segment_2d<double> >& segs = fitter_.get_conic_segs();
-    for (vcl_vector<vgl_conic_segment_2d<double> >::iterator sit=segs.begin();
+    std::vector<vgl_conic_segment_2d<double> >& segs = fitter_.get_conic_segs();
+    for (std::vector<vgl_conic_segment_2d<double> >::iterator sit=segs.begin();
          sit != segs.end(); sit++)
     {
       vsol_conic_2d_sptr conic = new vsol_conic_2d(*sit);
-      //vcl_cout << "Fitted a conic of type " << conic->real_conic_type() << '\n';
+      //std::cout << "Fitted a conic of type " << conic->real_conic_type() << '\n';
       //adding a condition on aspect ratio
       if (conic->real_type() != vsol_conic_2d::real_ellipse)
       {
@@ -102,7 +102,7 @@ bool sdet_fit_conics::fit_conics()
 //-------------------------------------------------------------------------
 //: Get the conic segments
 //
-vcl_vector<vsol_conic_2d_sptr>& sdet_fit_conics::get_conic_segs()
+std::vector<vsol_conic_2d_sptr>& sdet_fit_conics::get_conic_segs()
 {
   if (segs_valid_)
     return conic_segs_;

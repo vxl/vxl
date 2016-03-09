@@ -16,7 +16,9 @@
 #include <boxm2/basic/boxm2_array_3d.h>
 #include <vnl/vnl_vector_fixed.h>
 #include <vgl/vgl_vector_3d.h>
-#include <vcl_iosfwd.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iosfwd>
 
 //smart pointer stuff
 #include <vbl/vbl_ref_count.h>
@@ -48,7 +50,7 @@ class bstm_block : public vbl_ref_count
   bool b_write(char* buffer);
 
   //: filename for all block files stored by bstm_scenes
-  vcl_string              filename()          const { return "block.bin"; }
+  std::string              filename()          const { return "block.bin"; }
 
   //: accessors
   bstm_block_id&            block_id()          { return block_id_; }         //somehow make this a const return..
@@ -107,10 +109,10 @@ class bstm_block : public vbl_ref_count
 typedef vbl_smart_ptr<bstm_block> bstm_block_sptr;
 
 //: output stream
-vcl_ostream& operator <<(vcl_ostream &s, bstm_block& block);
+std::ostream& operator <<(std::ostream &s, bstm_block& block);
 
 //: write to xml file
-//void x_write(vcl_ostream &os, bstm_block& scene, vcl_string name);
+//void x_write(std::ostream &os, bstm_block& scene, std::string name);
 
 //: Binary write boxm_update_bit_scene_manager scene to stream
 void vsl_b_write(vsl_b_ostream& os, bstm_block const& scene);

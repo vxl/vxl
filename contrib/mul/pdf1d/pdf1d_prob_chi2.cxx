@@ -1,16 +1,18 @@
 // This is mul/pdf1d/pdf1d_prob_chi2.cxx
 #include "pdf1d_prob_chi2.h"
 
-#include <vcl_iostream.h>
-#include <vcl_cstdlib.h> // for vcl_abort()
+#include <iostream>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <cstdlib> // for std::abort()
 #include <mbl/mbl_gamma.h>
 
 double pdf1d_chi2_for_cum_prob(double p, int n_dof, double tol)
 {
   if ((p<0) | (p>=1.0))
   {
-    vcl_cerr<<"pdf1d_chi2_for_cum_prob : Illegal value for probability. (Outside range [0,1) )"<<vcl_endl;
-    vcl_abort();
+    std::cerr<<"pdf1d_chi2_for_cum_prob : Illegal value for probability. (Outside range [0,1) )"<<std::endl;
+    std::abort();
   }
 
   if (p==0) return 0;

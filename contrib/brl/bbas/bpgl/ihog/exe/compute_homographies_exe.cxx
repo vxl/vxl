@@ -1,6 +1,8 @@
-#include <vcl_string.h>
-#include <vcl_vector.h>
-#include <vcl_cstdio.h>
+#include <string>
+#include <vector>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <cstdio>
 #include <vul/vul_file.h>
 #include <vul/vul_file_iterator.h>
 #include <vul/vul_timer.h>
@@ -17,10 +19,10 @@
 #include <vcl_cassert.h>
 
 
-static void filenames_from_directory(vcl_string const& dirname,
-                                     vcl_vector<vcl_string>& filenames)
+static void filenames_from_directory(std::string const& dirname,
+                                     std::vector<std::string>& filenames)
 {
-  vcl_string s(dirname);
+  std::string s(dirname);
   s += "/*.*";
   for (vul_file_iterator fit = s;fit; ++fit) {
     // check to see if file is a directory.
@@ -30,19 +32,19 @@ static void filenames_from_directory(vcl_string const& dirname,
   }
 }
 
-static bool write_homographies(vcl_string const& filename,
-                               vcl_vector<vnl_double_3x3 > const& homographies)
+static bool write_homographies(std::string const& filename,
+                               std::vector<vnl_double_3x3 > const& homographies)
 {
-  vcl_ofstream ofile(filename.c_str(),vcl_ios::out);
-  vcl_cout<<"\n Writing Homographies "<<filename;
+  std::ofstream ofile(filename.c_str(),std::ios::out);
+  std::cout<<"\n Writing Homographies "<<filename;
 
   if (!ofile)
   {
-    vcl_cerr<<"\n error opening output file\n";
+    std::cerr<<"\n error opening output file\n";
     return false;
   }
   unsigned frame = 0;
-  for (vcl_vector<vnl_double_3x3 >::const_iterator hit = homographies.begin();
+  for (std::vector<vnl_double_3x3 >::const_iterator hit = homographies.begin();
        hit != homographies.end(); ++hit, ++frame)
   {
     ofile <<"Frame No " << frame << '\n' << *hit;
@@ -54,7 +56,7 @@ static bool write_homographies(vcl_string const& filename,
 static ihog_transform_2d
 register_image(vil_image_view<float> & curr_view,
                vil_image_view<float> & last_view,
-               vcl_string transform_type ="Affine")
+               std::string transform_type ="Affine")
 {
   // do registration
   vul_timer time;
@@ -62,7 +64,7 @@ register_image(vil_image_view<float> & curr_view,
   unsigned ni = curr_view.ni(), nj = curr_view.nj();
   if (transform_type  ==  "Identity")
   {
-    vcl_cout << "In ihog/exe/compute_homographies_exe:"
+    std::cout << "In ihog/exe/compute_homographies_exe:"
              << " an identity transform doesn't make sense\n";
     assert (!"Identity transform makes no sense");
   }
@@ -108,7 +110,7 @@ register_image(vil_image_view<float> & curr_view,
   }
 #endif
   else {
-    vcl_cerr << "Unrecoverable error:\n"
+    std::cerr << "Unrecoverable error:\n"
              << " Unknown ihog transform type " << transform_type << '\n';
     assert(!"Unrecoverable error");
   }
@@ -122,19 +124,19 @@ register_image(vil_image_view<float> & curr_view,
   ihog_image<float> curr_img(curr_view, init_xform);
   ihog_minimizer minimizer(last_img, curr_img, roi);
   minimizer.minimize(init_xform);
-  vcl_cout << "Registration in " << time.real() << " msecs\n";
+  std::cout << "Registration in " << time.real() << " msecs\n";
   return init_xform;
 }
 
-static bool compute_homogs(vcl_string const& image_indir,
-                           vcl_string const& transform_type,
-                           vcl_string const& homg_file
+static bool compute_homogs(std::string const& image_indir,
+                           std::string const& transform_type,
+                           std::string const& homg_file
                           )
 {
   ihog_transform_2d total_xform;
   total_xform.set_identity();
-  vcl_vector<vnl_double_3x3 > homographies;
-  vcl_vector<vcl_string> in_filenames;
+  std::vector<vnl_double_3x3 > homographies;
+  std::vector<std::string> in_filenames;
   filenames_from_directory(image_indir, in_filenames);
   unsigned n_infiles = in_filenames.size();
   unsigned infile_counter = 0;
@@ -149,7 +151,7 @@ static bool compute_homogs(vcl_string const& image_indir,
     if (infile_counter>=n_infiles)
       return false;
   }
-  vcl_cout << "Initialized\n";
+  std::cout << "Initialized\n";
   vil_image_view<float> float_last_view = *vil_convert_cast(float(), imgr->get_view());
 
   infile_counter = 0;//return to first frame
@@ -162,7 +164,7 @@ static bool compute_homogs(vcl_string const& image_indir,
     if (!imgr||imgr->ni()==0||imgr->nj()==0)
       continue;
     vil_image_view<float> float_curr_view = *vil_convert_cast(float(), imgr->get_view());
-    vcl_cout << "Registering frame " << frame++ << '\n'<< vcl_flush;
+    std::cout << "Registering frame " << frame++ << '\n'<< std::flush;
     ihog_transform_2d xform = register_image(float_curr_view,
                                              float_last_view,
                                              transform_type);
@@ -179,17 +181,17 @@ int main(int argc,char * argv[])
 {
   if (argc!=4)
   {
-    vcl_cout<<"Usage : compute_homographies_exe.exe image_in_dir homography_type(Identity|Translation|ZoomOnly|RigidBody|Similarity|Affine|Projective) homography_outfile\n";
+    std::cout<<"Usage : compute_homographies_exe.exe image_in_dir homography_type(Identity|Translation|ZoomOnly|RigidBody|Similarity|Affine|Projective) homography_outfile\n";
     return -1;
   }
   else
   {
-    vcl_string image_indir(argv[1]);
-    vcl_string transform_type(argv[2]);
-    vcl_string homg_file(argv[3]);
+    std::string image_indir(argv[1]);
+    std::string transform_type(argv[2]);
+    std::string homg_file(argv[3]);
     if (!compute_homogs(image_indir, transform_type, homg_file))
     {
-      vcl_cout << "Registration failed\n";
+      std::cout << "Registration failed\n";
       return -1;
     }
     return 0;

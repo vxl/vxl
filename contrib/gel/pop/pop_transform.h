@@ -16,7 +16,7 @@
 
 #include<pop/pop_object.h>
 #include<pop/pop_parameter.h>
-#include<vcl_vector.h>
+#include<std::vector.h>
 #include<pop/pop_vertex.h>
 #include<pop/pop_geometric_object.h>
 
@@ -25,7 +25,7 @@ class pop_transform:public pop_object
 {
  public:
   //: constructor
-  pop_transform(vcl_vector<pop_parameter*> params,
+  pop_transform(std::vector<pop_parameter*> params,
                 pop_vertex *cs1, pop_vertex *cs2);
 
   //: destructor

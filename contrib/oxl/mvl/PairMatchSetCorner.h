@@ -37,15 +37,15 @@ class PairMatchSetCorner : public PairMatchSet
  ~PairMatchSetCorner();
 
   // Data Access---------------------------------------------------------------
-  void extract_matches(vcl_vector <HomgPoint2D>& points1, vcl_vector <int>& corner_index_1,
-                       vcl_vector <HomgPoint2D>& points2, vcl_vector <int>& corner_index_2) const;
+  void extract_matches(std::vector <HomgPoint2D>& points1, std::vector <int>& corner_index_1,
+                       std::vector <HomgPoint2D>& points2, std::vector <int>& corner_index_2) const;
 
-  void extract_matches(vcl_vector <HomgPoint2D>& points1, vcl_vector <HomgPoint2D>& points2) const;
+  void extract_matches(std::vector <HomgPoint2D>& points1, std::vector <HomgPoint2D>& points2) const;
 
   //: Clear all matches and then set only those for which the corresponding inliers flag is set.
-  void set(const vcl_vector<bool>& inliers,
-           const vcl_vector<int>&  corner_index_1,
-           const vcl_vector<int>&  corner_index_2);
+  void set(const std::vector<bool>& inliers,
+           const std::vector<int>&  corner_index_1,
+           const std::vector<int>&  corner_index_2);
 
   // Data Control--------------------------------------------------------------
   void set(HomgInterestPointSet const* corners1, HomgInterestPointSet const* corners2);

@@ -13,7 +13,9 @@
 
 #include <vbl/vbl_sparse_array_3d.h>
 #include <vnl/vnl_double_3.h>
-#include <vcl_vector.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <vector>
 
 class VoxmapPoints
 {
@@ -48,7 +50,7 @@ class VoxmapPoints
 
  private:
 
-  mutable vcl_vector<vnl_double_3> cornerpoints;
+  mutable std::vector<vnl_double_3> cornerpoints;
   mutable vbl_sparse_array_3d<int> corners;
   mutable vbl_sparse_array_3d<vnl_double_3> centres;
 };

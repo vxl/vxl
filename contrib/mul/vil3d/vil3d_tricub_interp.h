@@ -5,7 +5,9 @@
 // \brief Tricubic interpolation functions for 3D images
 //
 #include <vcl_cassert.h>
-#include <vcl_cstddef.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <cstddef>
 #include <vil3d/vil3d_image_view.h>
 #include <vil3d/vil3d_trilin_interp.h>
 
@@ -14,7 +16,7 @@
 //  No bound checks are done.
 template<class T>
 double vil3d_tricub_interp_raw(double x, double y, double z, const T* data,
-                               vcl_ptrdiff_t xstep, vcl_ptrdiff_t ystep, vcl_ptrdiff_t zstep);
+                               std::ptrdiff_t xstep, std::ptrdiff_t ystep, std::ptrdiff_t zstep);
 
 //: Compute tricubic interpolation at (x,y,z), with bound checks
 //  Image is nx * ny * nz array of T. x,y,z element is data[z*zstep+ystep*y+x*xstep]
@@ -23,7 +25,7 @@ double vil3d_tricub_interp_raw(double x, double y, double z, const T* data,
 template<class T>
 inline double vil3d_tricub_interp_safe(double x, double y, double z, const T* data,
                                        int nx, int ny, int nz,
-                                       vcl_ptrdiff_t xstep, vcl_ptrdiff_t ystep, vcl_ptrdiff_t zstep,
+                                       std::ptrdiff_t xstep, std::ptrdiff_t ystep, std::ptrdiff_t zstep,
                                        T outval=0)
 {
     if (x<1) return static_cast<double>(outval);
@@ -43,7 +45,7 @@ inline double vil3d_tricub_interp_safe(double x, double y, double z, const T* da
 template<class T>
 inline double vil3d_tricub_interp_assert(double x, double y, double z, const T* data,
                                          int nx, int ny, int nz,
-                                         vcl_ptrdiff_t xstep, vcl_ptrdiff_t ystep, vcl_ptrdiff_t zstep)
+                                         std::ptrdiff_t xstep, std::ptrdiff_t ystep, std::ptrdiff_t zstep)
 {
     assert (x>=1);
     assert (y>=1);
@@ -62,7 +64,7 @@ template<class T>
 inline double vil3d_tricub_interp_safe_extend(double x, double y, double z,
                                               const T* data,
                                               int nx, int ny, int nz,
-                                              vcl_ptrdiff_t xstep, vcl_ptrdiff_t ystep, vcl_ptrdiff_t zstep)
+                                              std::ptrdiff_t xstep, std::ptrdiff_t ystep, std::ptrdiff_t zstep)
 {
   if (x<0.9999999) x= 0.0;
   else if (x>nx-3.0000001 && x<nx-1.9999999) x=nx-2.0;
@@ -87,7 +89,7 @@ template<class T>
 double vil3d_tricub_interp_safe_trilinear_extend(double x, double y, double z,
                                                  const T* data,
                                                  int nx, int ny, int nz,
-                                                 vcl_ptrdiff_t xstep, vcl_ptrdiff_t ystep, vcl_ptrdiff_t zstep);
+                                                 std::ptrdiff_t xstep, std::ptrdiff_t ystep, std::ptrdiff_t zstep);
 
 
 // //: Compute tricubic interpolation at (x,y,z), with bound checks

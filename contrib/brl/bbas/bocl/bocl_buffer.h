@@ -12,8 +12,10 @@
 // \endverbatim
 
 #include "bocl_cl.h"
-#include <vcl_string.h>
-#include <vcl_cstddef.h>
+#include <string>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <cstddef>
 
 #define MEM_SUCCESS 1
 #define MEM_FAILURE 0
@@ -25,10 +27,10 @@ class bocl_buffer
   bocl_buffer(const cl_context& context);
 
   //: creates the memory for buffer
-  bool create_buffer(const cl_mem_flags& flags,  vcl_size_t size,  void *host_ptr);
+  bool create_buffer(const cl_mem_flags& flags,  std::size_t size,  void *host_ptr);
 
   bool create_image2D(const cl_mem_flags& flags, const cl_image_format *format,
-                      vcl_size_t width, vcl_size_t height, vcl_size_t row_pitch, void *host_ptr);
+                      std::size_t width, std::size_t height, std::size_t row_pitch, void *host_ptr);
 #if 0
   bool set_mem(cl_mem* buffer) { buffer_=&buffer; return true; }
 #endif
@@ -42,7 +44,7 @@ class bocl_buffer
   cl_mem buffer_;
   const cl_context& context_;
 
-  int check_val(cl_int status, cl_int result, vcl_string message);
+  int check_val(cl_int status, cl_int result, std::string message);
 };
 
 #endif

@@ -32,15 +32,15 @@ class bsol_algs
 
   //: Finds a bounding box for a set of vsol_point_2ds
   static vbl_bounding_box<double,2>
-    bounding_box(vcl_vector<vsol_point_2d_sptr> const& points);
+    bounding_box(std::vector<vsol_point_2d_sptr> const& points);
 
   //: Finds a bounding box for a set of vsol_line_2ds
   static vbl_bounding_box<double,2>
-    bounding_box(vcl_vector<vsol_line_2d_sptr> const& lines);
+    bounding_box(std::vector<vsol_line_2d_sptr> const& lines);
 
   //: Finds a bounding box for a set of vsol_point_3ds
   static vbl_bounding_box<double,3>
-    bounding_box(vcl_vector<vsol_point_3d_sptr> const& points);
+    bounding_box(std::vector<vsol_point_3d_sptr> const& points);
 
   //: Is a point inside the box?
   static bool in(vsol_box_2d_sptr const & a, double x, double y);
@@ -65,7 +65,7 @@ class bsol_algs
 
 
   //: find the convex hull of a set of polygons
-  static bool hull_of_poly_set(vcl_vector<vsol_polygon_2d_sptr> const& polys,
+  static bool hull_of_poly_set(std::vector<vsol_polygon_2d_sptr> const& polys,
                                vsol_polygon_2d_sptr& hull);
   //: Is a point inside the box?
   static bool in(vsol_box_3d_sptr const & a, double x, double y, double z);
@@ -82,12 +82,12 @@ class bsol_algs
   //: find the closest point in a set
   static vsol_point_2d_sptr
     closest_point(vsol_point_2d_sptr const& p,
-                  vcl_vector<vsol_point_2d_sptr> const& point_set,
+                  std::vector<vsol_point_2d_sptr> const& point_set,
                   double& d);
 
   static vsol_point_3d_sptr
     closest_point(vsol_point_3d_sptr const& p,
-                  vcl_vector<vsol_point_3d_sptr> const& point_set,
+                  std::vector<vsol_point_3d_sptr> const& point_set,
                   double& d);
 
   //: Transform a vsol_polygon_2d with a general homography

@@ -12,11 +12,11 @@ bool vil_rgbi_to_grey_process_cons(bprb_func_process& pro)
 {
   //this process takes one input:
   // input(0): the vil_image_view_base_sptr
-  vcl_vector<vcl_string> input_types;
+  std::vector<std::string> input_types;
   input_types.push_back("vil_image_view_base_sptr");
 
   //this process has one output
-  vcl_vector<vcl_string> output_types;
+  std::vector<std::string> output_types;
   output_types.push_back("vil_image_view_base_sptr");
 
   return pro.set_input_types(input_types)
@@ -28,7 +28,7 @@ bool vil_rgbi_to_grey_process(bprb_func_process& pro)
 {
   // Sanity check
   if (pro.n_inputs()< 1) {
-    vcl_cout << "vil_rgbi_to_grey_process: The number of inputs should be 1" << vcl_endl;
+    std::cout << "vil_rgbi_to_grey_process: The number of inputs should be 1" << std::endl;
     return false;
   }
 

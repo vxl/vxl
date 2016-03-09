@@ -8,7 +8,9 @@
 //  \brief  Look-up table for the normalization terms used in the MUSE objective function.
 //
 
-#include <vcl_map.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <map>
 
 //: Look-up table for the MUSET objective function.
 //  Look-up table for the MUSET objective function, derived in James
@@ -41,7 +43,7 @@ class rrel_muse_table_entry
   double muse_t_sq_divisor_;
 };
 
-typedef vcl_map< rrel_muse_key_type, rrel_muse_table_entry > rrel_muse_map_type;
+typedef std::map< rrel_muse_key_type, rrel_muse_table_entry > rrel_muse_map_type;
 
 
 class rrel_muse_table

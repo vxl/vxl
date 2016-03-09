@@ -9,7 +9,9 @@ extern "C" {
 #include <vgl/vgl_point_2d.h>
 #include <vgl/vgl_line_segment_2d.h>
 #include <vgl/vgl_box_2d.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iostream>
 #include <vil/vil_image_view.h>
 #define GRID_SIZE 1000 // defined by the tolerance for equal vertices
 
@@ -65,8 +67,8 @@ class point_index
 };
 
 void
-imesh_generate_mesh_2d(vcl_vector<vgl_point_2d<double> > const& convex_hull,
-                       vcl_vector<vgl_line_segment_2d<double> > const& segs,
+imesh_generate_mesh_2d(std::vector<vgl_point_2d<double> > const& convex_hull,
+                       std::vector<vgl_line_segment_2d<double> > const& segs,
                        imesh_mesh& mesh)
 {
   // form a grid to store vertex indices in order to detect
@@ -148,7 +150,7 @@ imesh_generate_mesh_2d(vcl_vector<vgl_point_2d<double> > const& convex_hull,
   unsigned k = 0;
   for (unsigned i = 0; i<npts; ++i, k+=2)
     verts->push_back(imesh_vertex<2>(out.pointlist[k], out.pointlist[k+1]));
-  vcl_auto_ptr<imesh_vertex_array_base> v(verts);
+  std::auto_ptr<imesh_vertex_array_base> v(verts);
   mesh.set_vertices(v);
   //construct triangular faces
   unsigned ntri = static_cast<unsigned>(out.numberoftriangles);
@@ -161,15 +163,15 @@ imesh_generate_mesh_2d(vcl_vector<vgl_point_2d<double> > const& convex_hull,
     faces->push_back(tri);
   }
   //set the faces on the mesh
-  vcl_auto_ptr<imesh_face_array_base> f(faces);
+  std::auto_ptr<imesh_face_array_base> f(faces);
   mesh.set_faces(f);
 }
 
 
 void
-imesh_generate_mesh_2d_2(vcl_vector<vgl_point_2d<double> > const& convex_hull,
-                         vcl_vector<vgl_line_segment_2d<double> > const& segs,
-                         vcl_vector<vgl_point_2d<double> > const & points,
+imesh_generate_mesh_2d_2(std::vector<vgl_point_2d<double> > const& convex_hull,
+                         std::vector<vgl_line_segment_2d<double> > const& segs,
+                         std::vector<vgl_point_2d<double> > const & points,
                          imesh_mesh& mesh)
 {
   // form a grid to store vertex indices in order to detect
@@ -261,7 +263,7 @@ imesh_generate_mesh_2d_2(vcl_vector<vgl_point_2d<double> > const& convex_hull,
   unsigned k = 0;
   for (unsigned i = 0; i<npts; ++i, k+=2)
     verts->push_back(imesh_vertex<2>(out.pointlist[k], out.pointlist[k+1]));
-  vcl_auto_ptr<imesh_vertex_array_base> v(verts);
+  std::auto_ptr<imesh_vertex_array_base> v(verts);
   mesh.set_vertices(v);
   //construct triangular faces
   unsigned ntri = static_cast<unsigned>(out.numberoftriangles);
@@ -274,6 +276,6 @@ imesh_generate_mesh_2d_2(vcl_vector<vgl_point_2d<double> > const& convex_hull,
     faces->push_back(tri);
   }
   //set the faces on the mesh
-  vcl_auto_ptr<imesh_face_array_base> f(faces);
+  std::auto_ptr<imesh_face_array_base> f(faces);
   mesh.set_faces(f);
 }

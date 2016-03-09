@@ -3,7 +3,9 @@
 // \file
 
 #include <vnl/vnl_math.h>
-#include <vcl_algorithm.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <algorithm>
 
 // Default Constructor
 bvpl_neighborhood_kernel_factory::bvpl_neighborhood_kernel_factory()
@@ -55,7 +57,7 @@ void bvpl_neighborhood_kernel_factory::create_canonical()
     {
       for (int y=min_width_; y<=max_width_; y++)
       {
-        canonical_kernel_.push_back(vcl_pair<point_3d,dispatch>(point_3d(float(x),float(y),float(z)), dispatch(1.0f)));
+        canonical_kernel_.push_back(std::pair<point_3d,dispatch>(point_3d(float(x),float(y),float(z)), dispatch(1.0f)));
       }
     }
   }

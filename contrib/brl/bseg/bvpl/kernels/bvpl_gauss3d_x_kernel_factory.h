@@ -40,7 +40,7 @@ class bvpl_gauss3d_x_kernel_factory : public bvpl_kernel_factory
 
   virtual ~bvpl_gauss3d_x_kernel_factory() {}
 
-  static vcl_string name() {return "gauss_x"; }
+  static std::string name() {return "gauss_x"; }
 
  private:
 

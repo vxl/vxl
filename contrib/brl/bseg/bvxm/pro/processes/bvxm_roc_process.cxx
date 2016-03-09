@@ -4,7 +4,9 @@
 // \file
 #include <bprb/bprb_func_process.h>
 
-#include <vcl_fstream.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <fstream>
 
 #include <vil/vil_load.h>
 #include <vil/vil_save.h>
@@ -14,8 +16,8 @@
 #include <vul/vul_file.h>
 #include <vul/vul_file_iterator.h>
 
-#include <vcl_vector.h>
-#include <vcl_sstream.h>
+#include <vector>
+#include <sstream>
 
 bool bvxm_roc_process_cons(bprb_func_process& pro)
 {
@@ -24,7 +26,7 @@ bool bvxm_roc_process_cons(bprb_func_process& pro)
   //input[0]: True changes directory
   //input[1]: Observed changes directory
   //input[2]: The ROC output filename
-  vcl_vector<vcl_string> input_types_(n_inputs_);
+  std::vector<std::string> input_types_(n_inputs_);
   input_types_[0] = "vcl_string";
   input_types_[1] = "vcl_string";
   input_types_[2] = "vcl_string";
@@ -36,33 +38,33 @@ bool bvxm_roc_process(bprb_func_process& pro)
   using namespace bvxm_roc_process_globals;
 
   if ( pro.n_inputs() < n_inputs_ ){
-    vcl_cout << pro.name() << ": The input number should be " << n_inputs_<< vcl_endl;
+    std::cout << pro.name() << ": The input number should be " << n_inputs_<< std::endl;
     return false;
   }
 
   //get the inputs
   unsigned i = 0;
-  vcl_string true_changes_dir = pro.get_input<vcl_string>(i++);
-  vcl_string detected_changes_dir = pro.get_input<vcl_string>(i++);
-  vcl_string roc_filename = pro.get_input<vcl_string>(i++);
+  std::string true_changes_dir = pro.get_input<std::string>(i++);
+  std::string detected_changes_dir = pro.get_input<std::string>(i++);
+  std::string roc_filename = pro.get_input<std::string>(i++);
 
-  vcl_ofstream roc_stream(roc_filename.c_str());
+  std::ofstream roc_stream(roc_filename.c_str());
 
 
   //iterate through changes dir, get all image names that we need to process
-  vcl_vector<vcl_string> names;
+  std::vector<std::string> names;
   for ( vul_file_iterator fit = (true_changes_dir + "/*.*"); fit; ++fit )
   {
     if ( vul_file::is_directory(fit()) )
       continue;
-    vcl_string image_name = fit();
+    std::string image_name = fit();
 
-    vcl_string file_ext = vul_file::extension(fit());
+    std::string file_ext = vul_file::extension(fit());
 
     //get extension
     if (( file_ext !=  ".png") & ( file_ext !=  ".jpg") & ( file_ext !=  ".tiff"))
     {
-      vcl_cerr << "error: file extension not supported\n";
+      std::cerr << "error: file extension not supported\n";
       continue;
     }
 
@@ -70,7 +72,7 @@ bool bvxm_roc_process(bprb_func_process& pro)
   }
 
   //define threshold interval
-  vcl_vector<float> thresh;
+  std::vector<float> thresh;
   for (unsigned p = 0; p <= 1000; p= p+10)
     thresh.push_back(float(float(p)/1000.0));
 
@@ -83,17 +85,17 @@ bool bvxm_roc_process(bprb_func_process& pro)
     unsigned nonchange_marked_nonchange = 0;
     unsigned nonchange_marked_change = 0;
 
-    for (vcl_vector<vcl_string>::iterator vit = names.begin(); vit !=names.end(); vit++)
+    for (std::vector<std::string>::iterator vit = names.begin(); vit !=names.end(); vit++)
     {
       //Read image containing probabilistic changes
-      vcl_string prob_image = detected_changes_dir + "\\" + *vit + ".tiff";
+      std::string prob_image = detected_changes_dir + "\\" + *vit + ".tiff";
       vil_image_view<float> prob_change = vil_load( prob_image.c_str() );
 
       unsigned image_height = prob_change.nj();
       unsigned image_width = prob_change.ni();
 
       //Read image containing true changes
-      vcl_string true_change_file =  true_changes_dir + "\\" + *vit + ".png";
+      std::string true_change_file =  true_changes_dir + "\\" + *vit + ".png";
       vil_image_view<vxl_byte> true_change =
         vil_convert_to_grey_using_average( vil_load(true_change_file.c_str()));
 
@@ -128,7 +130,7 @@ bool bvxm_roc_process(bprb_func_process& pro)
 
 #ifdef DEBUG //for debugging
             if (true_change(i,j) == 255)
-              vcl_cout<<i<<' '<< j<<' ' << thresh_i<< ' ' <<thresh_j<< '\n';
+              std::cout<<i<<' '<< j<<' ' << thresh_i<< ' ' <<thresh_j<< '\n';
 #endif // DEBUG
             if ( true_change(i,j) > 200  && detected_change(thresh_i, thresh_j) == 255 )
               change_marked_change++;
@@ -143,9 +145,9 @@ bool bvxm_roc_process(bprb_func_process& pro)
       }
 
       //save image: for debugging purposes
-      vcl_stringstream img_out_ss;
+      std::stringstream img_out_ss;
       img_out_ss <<"./"<< thresh[n] *20.0 <<".png";
-      vcl_string img_out = img_out_ss.str();
+      std::string img_out = img_out_ss.str();
       vil_save( detected_change, img_out.c_str()  );
     }
 
@@ -156,9 +158,9 @@ bool bvxm_roc_process(bprb_func_process& pro)
       (double)(nonchange_marked_change+nonchange_marked_nonchange);
     roc_stream << percent_change_marked_change << '\t' <<
       percent_nonchange_marked_change << '\n';
-    vcl_cerr << '.';
+    std::cerr << '.';
   }
-  vcl_cerr << '\n';
+  std::cerr << '\n';
   return true;
 }
 

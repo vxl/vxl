@@ -13,12 +13,14 @@
 // \endverbatim
 
 #include <vil/vil_image_view.h>
-#include <vcl_cmath.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <cmath>
 
 //: the canny_deriche filter for 1d pass.
 template <class srcT, class destT, class accumT>
-inline void vil_canny_deriche_base_filter_1d(const srcT* src, vcl_ptrdiff_t sstep,
-                                             destT* dest, vcl_ptrdiff_t dstep,
+inline void vil_canny_deriche_base_filter_1d(const srcT* src, std::ptrdiff_t sstep,
+                                             destT* dest, std::ptrdiff_t dstep,
                                              int n, accumT a1, accumT a2, accumT a3, accumT a4, accumT b1, accumT b2, accumT c1)
 {
   const srcT* s = src, *p=src;
@@ -59,12 +61,12 @@ inline void vil_canny_deriche_grad_filter(const vil_image_view<srcT>& src_im,
   tmp.set_size(ni,nj,src_im.nplanes());
   grad_i.set_size(ni,nj,src_im.nplanes());
   grad_j.set_size(ni,nj,src_im.nplanes());
-  vcl_ptrdiff_t s_istep = src_im.istep(), s_jstep = src_im.jstep();
-  vcl_ptrdiff_t t_istep = tmp.istep(), t_jstep = tmp.jstep();
-  vcl_ptrdiff_t gi_istep = grad_i.istep(), gi_jstep = grad_i.jstep();
-  vcl_ptrdiff_t gj_istep = grad_j.istep(), gj_jstep = grad_j.jstep();
+  std::ptrdiff_t s_istep = src_im.istep(), s_jstep = src_im.jstep();
+  std::ptrdiff_t t_istep = tmp.istep(), t_jstep = tmp.jstep();
+  std::ptrdiff_t gi_istep = grad_i.istep(), gi_jstep = grad_i.jstep();
+  std::ptrdiff_t gj_istep = grad_j.istep(), gj_jstep = grad_j.jstep();
 
-  accumT e = vcl_exp(-alpha) ;
+  accumT e = std::exp(-alpha) ;
   accumT me2 = (1-e)*(1-e) ;
   accumT b1 = 2*e , b2 = -e*e ;
   accumT k = me2/(1+2*alpha*e-e*e) ;

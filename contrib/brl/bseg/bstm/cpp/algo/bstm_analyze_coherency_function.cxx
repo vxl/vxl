@@ -5,13 +5,13 @@
 
 bstm_analyze_coherency_function::bstm_analyze_coherency_function(bstm_block* blk, bstm_block_metadata blk_data, bstm_time_block* blk_t, bstm_data_traits<BSTM_MOG6_VIEW_COMPACT>::datatype *apps,
                                        bstm_data_traits<BSTM_ALPHA>::datatype * alphas, double init_local_time, double end_local_time, vgl_box_3d<double> box, float p_threshold,
-                                       vcl_ofstream &output_file)
+                                       std::ofstream &output_file)
 
 {
   boxm2_array_3d<uchar16>&  trees = blk->trees();
 
   double time_inc = blk_data.sub_block_num_t_ / blk_data.sub_block_dim_t_ ;
-  vcl_cout << "time inc: " << time_inc << vcl_endl;
+  std::cout << "time inc: " << time_inc << std::endl;
   //iterate through each tree
   for (unsigned int x = 0; x < trees.get_row1_count(); ++x) {
     for (unsigned int y = 0; y < trees.get_row2_count(); ++y) {
@@ -31,8 +31,8 @@ bstm_analyze_coherency_function::bstm_analyze_coherency_function(bstm_block* blk
        if(!vgl_intersection<double>(tree_box,box).is_empty())
        {
          //iterate through leaves of the tree
-         vcl_vector<int> leafBits = bit_tree.get_leaf_bits();
-         vcl_vector<int>::iterator iter;
+         std::vector<int> leafBits = bit_tree.get_leaf_bits();
+         std::vector<int>::iterator iter;
          for (iter = leafBits.begin(); iter != leafBits.end(); ++iter) {
            int currBitIndex = (*iter);
 
@@ -61,7 +61,7 @@ bstm_analyze_coherency_function::bstm_analyze_coherency_function(bstm_block* blk
              bstm_time_tree time_tree(time_treebits.data_block(),blk_data.max_level_t_);
              int bit_index_t = time_tree.traverse(init_local_time - blk_t->tree_index(init_local_time) );
              int data_offset_t = time_tree.get_data_index(bit_index_t);
-             float original_prob = 1.0f - (float)vcl_exp(-alphas[data_offset_t] * side_len * blk_data.sub_block_dim_.x());
+             float original_prob = 1.0f - (float)std::exp(-alphas[data_offset_t] * side_len * blk_data.sub_block_dim_.x());
              bstm_data_traits<BSTM_MOG6_VIEW_COMPACT>::datatype original_app = apps[data_offset_t];
 
              for(double t = init_local_time; t <= end_local_time; t += time_inc)
@@ -71,11 +71,11 @@ bstm_analyze_coherency_function::bstm_analyze_coherency_function(bstm_block* blk
                bstm_time_tree time_tree(time_treebits.data_block(),blk_data.max_level_t_);
                int bit_index_t = time_tree.traverse(t - blk_t->tree_index(t) );
                int data_offset_t = time_tree.get_data_index(bit_index_t);
-               float prob = 1.0f - (float)vcl_exp(-alphas[data_offset_t] * side_len * blk_data.sub_block_dim_.x());
+               float prob = 1.0f - (float)std::exp(-alphas[data_offset_t] * side_len * blk_data.sub_block_dim_.x());
                bstm_data_traits<BSTM_MOG6_VIEW_COMPACT>::datatype app = apps[data_offset_t];
                output_file << bstm_similarity_traits<BSTM_MOG6_VIEW_COMPACT, BOXM2_MOG6_VIEW_COMPACT>::kl_div_surf (original_prob,prob) << " ";
              }
-             output_file << vcl_endl;
+             output_file << std::endl;
            }
         }
       }

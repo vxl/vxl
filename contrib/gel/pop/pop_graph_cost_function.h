@@ -14,7 +14,9 @@
 //
 //-------------------------------------------------------------------------------
 #include <vnl/vnl_least_squares_function.h>
-#include <vcl_vector.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <vector>
 #include <pop/pop_parameter.h>
 #include <pop/pop_geometric_cost_function.h>
 #include <pop/pop_manager.h>
@@ -28,8 +30,8 @@ class pop_graph_cost_function : public vnl_least_squares_function
   //  the residuals that would be evaluated and the pop manager
   //  that is responsible for updating the graph based on the
   //  current parameter values.
-  pop_graph_cost_function(vcl_vector<pop_parameter*> &params,
-                          vcl_vector<pop_geometric_cost_function*> &cfs,
+  pop_graph_cost_function(std::vector<pop_parameter*> &params,
+                          std::vector<pop_geometric_cost_function*> &cfs,
                           pop_manager *manager);
 
   //: destructor
@@ -45,8 +47,8 @@ class pop_graph_cost_function : public vnl_least_squares_function
   vnl_vector<double> get_current_costs();
 
  private:
-  vcl_vector<pop_parameter*> params_;
-  vcl_vector<pop_geometric_cost_function*> cfs_;
+  std::vector<pop_parameter*> params_;
+  std::vector<pop_geometric_cost_function*> cfs_;
   pop_manager *manager_;
 };
 

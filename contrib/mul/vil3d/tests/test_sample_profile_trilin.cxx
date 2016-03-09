@@ -1,17 +1,19 @@
 // This is mul/vil3d/tests/test_sample_profile_trilin.cxx
 #include <testlib/testlib_test.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iostream>
 #include <vil3d/vil3d_image_view.h>
 #include <vil3d/vil3d_sample_profile_trilin.h>
-#include <vcl_vector.h>
+#include <vector>
 
 static void test_sample_profile_trilin_float()
 {
-  vcl_cout << "*************************************\n"
+  std::cout << "*************************************\n"
            << " Testing vil3d_sample_profile_trilin\n"
            << "*************************************\n";
 
-  vcl_cout<< "One plane image\n";
+  std::cout<< "One plane image\n";
   vil3d_image_view<float> image1;
   image1.set_size(10,10,10);
 
@@ -24,7 +26,7 @@ static void test_sample_profile_trilin_float()
   double dx0=1,dy0=0,dz0=0;
   double dx1=0.3,dy1=0.3,dz1=0.3;
 
-  vcl_vector<double> vec(100);
+  std::vector<double> vec(100);
   vil3d_sample_profile_trilin(&vec[0],image1,x0,y0,z0,dx0,dy0,dz0,3);
   TEST_NEAR("First value",vec[0],55.5f,1e-6);
   TEST_NEAR("Last value",vec[2],55.7f,1e-5);
@@ -37,7 +39,7 @@ static void test_sample_profile_trilin_float()
   TEST_NEAR("(Diagonal) First value",vec[0],55.5f,1e-6);
   TEST_NEAR("(Diagonal) Last value",vec[1],58.83f,1e-5);
 
-  vcl_cout<< "Three plane image (float)\n";
+  std::cout<< "Three plane image (float)\n";
   vil3d_image_view<float> image3;
   image3.set_size(10,10,10,3);
 

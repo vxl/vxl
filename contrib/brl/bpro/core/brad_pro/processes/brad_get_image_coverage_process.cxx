@@ -10,9 +10,9 @@
 
 bool brad_get_image_coverage_process_cons(bprb_func_process& pro)
 {
-  vcl_vector<vcl_string> input_types;
+  std::vector<std::string> input_types;
   input_types.push_back("brad_image_metadata_sptr"); // image metadata
-  vcl_vector<vcl_string> output_types;
+  std::vector<std::string> output_types;
   output_types.push_back("double");
   output_types.push_back("double");
   output_types.push_back("double");
@@ -25,7 +25,7 @@ bool brad_get_image_coverage_process_cons(bprb_func_process& pro)
 bool brad_get_image_coverage_process(bprb_func_process& pro)
 {
   if (!pro.verify_inputs()) {
-    vcl_cout << pro.name() << ": WRONG inputs!!!" << vcl_endl;
+    std::cout << pro.name() << ": WRONG inputs!!!" << std::endl;
     return false;
   }
 

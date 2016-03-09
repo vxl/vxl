@@ -154,7 +154,7 @@ void vtol_edge::add_edge_loop(vtol_one_chain_sptr const& new_edge_loop)
 #if 1 // deprecated
 void vtol_edge::add_edge_loop(vtol_one_chain &new_edge_loop)
 {
-  vcl_cerr << "Warning: deprecated form of vtol_edge::add_edge_loop()\n";
+  std::cerr << "Warning: deprecated form of vtol_edge::add_edge_loop()\n";
   new_edge_loop.link_inferior(this);
 }
 #endif
@@ -172,7 +172,7 @@ void vtol_edge::remove_edge_loop(vtol_one_chain_sptr const& doomed_edge_loop)
 #if 1 // deprecated
 void vtol_edge::remove_edge_loop(vtol_one_chain &doomed_edge_loop)
 {
-  vcl_cerr << "Warning: deprecated form of vtol_edge::remove_edge_loop()\n";
+  std::cerr << "Warning: deprecated form of vtol_edge::remove_edge_loop()\n";
   doomed_edge_loop.unlink_inferior(this);
 }
 #endif
@@ -221,44 +221,44 @@ bool vtol_edge::operator==(const vsol_spatial_object_2d& obj) const
 
 //: Returns a list of vertices on the vtol_edge.
 
-vcl_vector<vtol_vertex *> *vtol_edge::compute_vertices(void)
+std::vector<vtol_vertex *> *vtol_edge::compute_vertices(void)
 {
   SEL_INF(vtol_vertex,compute_vertices);
 }
 
 //: Returns the vtol_zero_chain list of the vtol_edge. This list is the Inferiors of the edge.
-vcl_vector<vtol_zero_chain *> *vtol_edge::compute_zero_chains(void)
+std::vector<vtol_zero_chain *> *vtol_edge::compute_zero_chains(void)
 {
   COPY_INF(zero_chain);
 }
 
 //: Returns a list with itself as the only element. This utility is used in Inferior/Superior accessing methods.
-vcl_vector<vtol_edge *> *vtol_edge::compute_edges(void)
+std::vector<vtol_edge *> *vtol_edge::compute_edges(void)
 {
   LIST_SELF(vtol_edge);
 }
 
 //: Returns a list of one_chains which contain the vtol_edge. This list is the Superiors of the edge.
-vcl_vector<vtol_one_chain *> *vtol_edge::compute_one_chains(void)
+std::vector<vtol_one_chain *> *vtol_edge::compute_one_chains(void)
 {
   SEL_SUP(vtol_one_chain,compute_one_chains);
 }
 
 
 //: Returns a list of the faces which contain the vtol_edge.
-vcl_vector<vtol_face *> *vtol_edge::compute_faces(void)
+std::vector<vtol_face *> *vtol_edge::compute_faces(void)
 {
   SEL_SUP(vtol_face,compute_faces);
 }
 
 //: Returns the list of two_chains which contain the vtol_edge.
-vcl_vector<vtol_two_chain *> *vtol_edge::compute_two_chains(void)
+std::vector<vtol_two_chain *> *vtol_edge::compute_two_chains(void)
 {
   SEL_SUP(vtol_two_chain,compute_two_chains);
 }
 
 //: Returns the list of blocks which contain the vtol_edge.
-vcl_vector<vtol_block *> *vtol_edge::compute_blocks(void)
+std::vector<vtol_block *> *vtol_edge::compute_blocks(void)
 {
   SEL_SUP(vtol_block,compute_blocks);
 }
@@ -359,9 +359,9 @@ vtol_vertex_sptr vtol_edge::other_endpoint(const vtol_vertex &overt) const
 //
 
 //:
-// This method outputs all edge information to the vcl_ostream, strm.  It
+// This method outputs all edge information to the std::ostream, strm.  It
 // indents various levels of output by the number given in blanking.
-void vtol_edge::describe(vcl_ostream &strm,
+void vtol_edge::describe(std::ostream &strm,
                          int blanking) const
 {
   for (int i1=0; i1<blanking; ++i1) strm << ' ';
@@ -377,7 +377,7 @@ void vtol_edge::describe(vcl_ostream &strm,
 
 //:
 // This method outputs a brief vtol_edge info with vtol_edge object address.
-void vtol_edge::print(vcl_ostream &strm) const
+void vtol_edge::print(std::ostream &strm) const
 {
    strm<<"<vtol_edge "<<(void const *)this <<"> with id "<<get_id()<<'\n';
 }

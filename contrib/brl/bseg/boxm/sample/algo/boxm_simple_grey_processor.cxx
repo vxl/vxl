@@ -16,7 +16,7 @@ float boxm_simple_grey_processor::prob_density(apm_datatype const& appear, obs_d
 {
   const float norm =  float(appear.one_over_sigma() * vnl_math::one_over_sqrt2pi);
   const float diff = obs - appear.color();
-  const float p = norm * vcl_exp(-(diff*diff)*appear.one_over_sigma()*appear.one_over_sigma()*0.5f);
+  const float p = norm * std::exp(-(diff*diff)*appear.one_over_sigma()*appear.one_over_sigma()*0.5f);
   // normalize by area of distribution between 0 and 1
   //return p / total_prob(appear);
   return p * appear.gauss_weight() + (1.0f - appear.gauss_weight());
@@ -72,7 +72,7 @@ boxm_simple_grey_processor::obs_datatype boxm_simple_grey_processor::most_probab
   return appear.color();
 }
 
-void boxm_simple_grey_processor::compute_appearance(vcl_vector<boxm_apm_traits<BOXM_APM_SIMPLE_GREY>::obs_datatype> const& obs, vcl_vector<float> const& pre, vcl_vector<float> const& vis, boxm_apm_traits<BOXM_APM_SIMPLE_GREY>::apm_datatype &model, float min_sigma)
+void boxm_simple_grey_processor::compute_appearance(std::vector<boxm_apm_traits<BOXM_APM_SIMPLE_GREY>::obs_datatype> const& obs, std::vector<float> const& pre, std::vector<float> const& vis, boxm_apm_traits<BOXM_APM_SIMPLE_GREY>::apm_datatype &model, float min_sigma)
 {
   bsta_gauss_sf1 model_bsta(model.color(),model.sigma()*model.sigma());
   const float big_sigma = (float)vnl_math::sqrt1_2; // maximum possible std. dev for set of samples drawn from [0 1]
@@ -88,9 +88,9 @@ void boxm_simple_grey_processor::compute_appearance(vcl_vector<boxm_apm_traits<B
     model = boxm_simple_grey(obs[0], big_sigma);
     return;
   }
-  //vcl_cout << "nobs = " << obs.size() << vcl_endl;
+  //std::cout << "nobs = " << obs.size() << std::endl;
   //for (unsigned int i=0; i<obs.size(); ++i) {
-  //  vcl_cout << "obs=" << obs[i] << " vis=" << vis[i] << "pre=" << pre[i] << vcl_endl;
+  //  std::cout << "obs=" << obs[i] << " vis=" << vis[i] << "pre=" << pre[i] << std::endl;
   //}
   const float min_var_EM = 1.5e-5f; // to prevent degenerate solution (corresponds roughly to sigma = 1/255)
   bsta_fit_gaussian(obs,vis,pre,model_bsta,min_var_EM);
@@ -103,7 +103,7 @@ void boxm_simple_grey_processor::compute_appearance(vcl_vector<boxm_apm_traits<B
   static const boxm_sigma_normalizer sigma_norm(0.20f);
   const float norm_factor = sigma_norm.normalization_factor(expected_nobs);
   //const float norm_factor = 1.0f;
-  float sigma = vcl_sqrt(model_bsta.var()) * norm_factor;
+  float sigma = std::sqrt(model_bsta.var()) * norm_factor;
 
   // bounds check on std. deviation value
   if (sigma < min_sigma) {
@@ -113,7 +113,7 @@ void boxm_simple_grey_processor::compute_appearance(vcl_vector<boxm_apm_traits<B
     sigma = big_sigma;
   }
   if (!(sigma < big_sigma) && !(sigma > min_sigma)) {
-    vcl_cerr << "error: sigma = " << sigma << " model_bsta.var() = " << model_bsta.var() << vcl_endl;
+    std::cerr << "error: sigma = " << sigma << " model_bsta.var() = " << model_bsta.var() << std::endl;
     sigma = big_sigma;
   }
   // convert back to a boxm_simple_grey model
@@ -121,7 +121,7 @@ void boxm_simple_grey_processor::compute_appearance(vcl_vector<boxm_apm_traits<B
   return;
 }
 
-void boxm_simple_grey_processor::compute_appearance(vcl_vector<boxm_apm_traits<BOXM_APM_SIMPLE_GREY>::obs_datatype> const& obs, vcl_vector<float> const& weights, boxm_apm_traits<BOXM_APM_SIMPLE_GREY>::apm_datatype &model, float min_sigma)
+void boxm_simple_grey_processor::compute_appearance(std::vector<boxm_apm_traits<BOXM_APM_SIMPLE_GREY>::obs_datatype> const& obs, std::vector<float> const& weights, boxm_apm_traits<BOXM_APM_SIMPLE_GREY>::apm_datatype &model, float min_sigma)
 {
   const float big_sigma = (float)vnl_math::sqrt1_2; // maximum possible std. dev for set of samples drawn from [0 1]
 
@@ -179,7 +179,7 @@ void boxm_simple_grey_processor::compute_appearance(vcl_vector<boxm_apm_traits<B
 }
 
 
-void boxm_simple_grey_processor::update_appearance(vcl_vector<boxm_apm_traits<BOXM_APM_SIMPLE_GREY>::obs_datatype> const& obs, vcl_vector<float> const& weights, boxm_apm_traits<BOXM_APM_SIMPLE_GREY>::apm_datatype &model, float min_sigma)
+void boxm_simple_grey_processor::update_appearance(std::vector<boxm_apm_traits<BOXM_APM_SIMPLE_GREY>::obs_datatype> const& obs, std::vector<float> const& weights, boxm_apm_traits<BOXM_APM_SIMPLE_GREY>::apm_datatype &model, float min_sigma)
 {
   const float big_sigma = (float)vnl_math::sqrt1_2; // maximum possible std. dev for set of samples drawn from [0 1]
 
@@ -195,7 +195,7 @@ void boxm_simple_grey_processor::update_appearance(vcl_vector<boxm_apm_traits<BO
   }
   else {
     // compute estimate of gaussian weight by summing probabilities
-    vcl_vector<float> obs_gauss_weights = weights;
+    std::vector<float> obs_gauss_weights = weights;
     float gauss_weight = 0.0f;
     float expected_nobs = 0.0f;
     if (USE_UNIFORM_COMPONENT) {
@@ -220,7 +220,7 @@ void boxm_simple_grey_processor::update_appearance(vcl_vector<boxm_apm_traits<BO
       expected_nobs = weight_sum;
     }
     else {
-      vcl_vector<float>::const_iterator wit = weights.begin();
+      std::vector<float>::const_iterator wit = weights.begin();
       for (; wit != weights.end(); ++wit) {
         expected_nobs += *wit;
       }
@@ -248,8 +248,8 @@ void boxm_simple_grey_processor::update_appearance(vcl_vector<boxm_apm_traits<BO
   return;
 }
 
-void boxm_simple_grey_processor::finalize_appearance(vcl_vector<boxm_apm_traits<BOXM_APM_SIMPLE_GREY>::obs_datatype> const& obs,
-                                                     vcl_vector<float> const& weights,
+void boxm_simple_grey_processor::finalize_appearance(std::vector<boxm_apm_traits<BOXM_APM_SIMPLE_GREY>::obs_datatype> const& obs,
+                                                     std::vector<float> const& weights,
                                                      boxm_apm_traits<BOXM_APM_SIMPLE_GREY>::apm_datatype &model)
 {
   const float big_sigma = (float)vnl_math::sqrt1_2; // maximum possible std. dev for set of samples drawn from [0 1]
@@ -257,7 +257,7 @@ void boxm_simple_grey_processor::finalize_appearance(vcl_vector<boxm_apm_traits<
   float expected_nobs = 0.0f;
     const unsigned int nobs = (unsigned int)obs.size();
 
-  vcl_vector<float>::const_iterator wit = weights.begin();
+  std::vector<float>::const_iterator wit = weights.begin();
   for (; wit != weights.end(); ++wit) {
     expected_nobs += *wit;
   }
@@ -273,7 +273,7 @@ void boxm_simple_grey_processor::finalize_appearance(vcl_vector<boxm_apm_traits<
 }
 
 
-void boxm_simple_grey_processor::compute_gaussian_params(vcl_vector<boxm_apm_traits<BOXM_APM_SIMPLE_GREY>::obs_datatype> obs, vcl_vector<float> weights, boxm_apm_traits<BOXM_APM_SIMPLE_GREY>::obs_datatype &mean, float &sigma)
+void boxm_simple_grey_processor::compute_gaussian_params(std::vector<boxm_apm_traits<BOXM_APM_SIMPLE_GREY>::obs_datatype> obs, std::vector<float> weights, boxm_apm_traits<BOXM_APM_SIMPLE_GREY>::obs_datatype &mean, float &sigma)
 {
   const unsigned int nobs = (unsigned int)obs.size();
   double w_sum = 0.0;
@@ -301,7 +301,7 @@ void boxm_simple_grey_processor::compute_gaussian_params(vcl_vector<boxm_apm_tra
   }
 
   mean = (float)mean_obs;
-  sigma = (float)vcl_sqrt(var);
+  sigma = (float)std::sqrt(var);
 }
 
 float boxm_simple_grey_processor::sigma_norm_factor(float nobs)
@@ -311,8 +311,8 @@ float boxm_simple_grey_processor::sigma_norm_factor(float nobs)
   }
 
   // linearly interpolate between integer values
-  float nobs_floor = vcl_floor(nobs);
-  float nobs_ceil = vcl_ceil(nobs);
+  float nobs_floor = std::floor(nobs);
+  float nobs_ceil = std::ceil(nobs);
   float floor_weight = nobs_ceil - nobs;
   float norm_factor = (sigma_norm_factor((unsigned int)nobs_floor) * floor_weight) + (sigma_norm_factor((unsigned int)nobs_ceil) * (1.0f - floor_weight));
 
@@ -338,9 +338,9 @@ float boxm_simple_grey_processor::sigma_norm_factor(unsigned int nobs)
 }
 
 void boxm_simple_grey_processor::
-boxm_compute_shadow_appearance(vcl_vector<boxm_apm_traits<BOXM_APM_SIMPLE_GREY>::obs_datatype> const& obs,
-                               vcl_vector<float> const& pre,
-                               vcl_vector<float> const& vis,
+boxm_compute_shadow_appearance(std::vector<boxm_apm_traits<BOXM_APM_SIMPLE_GREY>::obs_datatype> const& obs,
+                               std::vector<float> const& pre,
+                               std::vector<float> const& vis,
                                boxm_apm_traits<BOXM_APM_SIMPLE_GREY>::apm_datatype &model,
                                float min_app_sigma,
                                float shadow_prior,
@@ -348,8 +348,8 @@ boxm_compute_shadow_appearance(vcl_vector<boxm_apm_traits<BOXM_APM_SIMPLE_GREY>:
                                float shadow_sigma,
                                bool verbose )
 {
-  vcl_vector<float> obs_weights(vis.size(), 0.0f);
-  vcl_vector<float> sh_density(vis.size(), 0.0f);
+  std::vector<float> obs_weights(vis.size(), 0.0f);
+  std::vector<float> sh_density(vis.size(), 0.0f);
   //assume that the initial appearance distribution is uniform on [0 1]
   //thus a reasonable initialization for weights is
   //
@@ -369,7 +369,7 @@ boxm_compute_shadow_appearance(vcl_vector<boxm_apm_traits<BOXM_APM_SIMPLE_GREY>:
       neu/(neu + sh_density[n]*shadow_prior);
     obs_weights[n]=weight;
   }
-  vcl_vector<float> initial_weights = obs_weights;
+  std::vector<float> initial_weights = obs_weights;
   // initial estimate for the illuminated appearance model
   boxm_simple_grey_processor::compute_appearance(obs,obs_weights,model,min_app_sigma);
   double initial_mean = model.color();
@@ -397,7 +397,7 @@ boxm_compute_shadow_appearance(vcl_vector<boxm_apm_traits<BOXM_APM_SIMPLE_GREY>:
         new_obs_weight = neu / den;
       }
       // compute delta weight for convergence check
-      float weight_delta = vcl_fabs(obs_weights[n] - new_obs_weight);
+      float weight_delta = std::fabs(obs_weights[n] - new_obs_weight);
       if (weight_delta > max_weight_change) {
         max_weight_change = weight_delta;
       }
@@ -414,21 +414,21 @@ boxm_compute_shadow_appearance(vcl_vector<boxm_apm_traits<BOXM_APM_SIMPLE_GREY>:
     for (unsigned n = 0; n<obs.size(); ++n) {
       if (obs[n]>0) print = true;
       if (i<max_its&&print) {
-        vcl_cout << "converged after " << i << " iterations.\n"
+        std::cout << "converged after " << i << " iterations.\n"
                  << " initial mean = " << initial_mean << " final mean = "
                  << model.color() << '\n'
                  << " initial sigma = " << initial_sigma << " final sigma = "
                  << model.sigma() << '\n';
       }
-      else { vcl_cout << "failed to converge\n"; }
+      else { std::cout << "failed to converge\n"; }
 
-      vcl_cout << "Initial (Observations, Weights):\n";
+      std::cout << "Initial (Observations, Weights):\n";
       for (unsigned n=0; n<obs.size(); ++n)
-        vcl_cout << '('<< obs[n] << ' ' << initial_weights[n] << ") ";
-      vcl_cout << "\nFinal (Observations, Weights):\n";
+        std::cout << '('<< obs[n] << ' ' << initial_weights[n] << ") ";
+      std::cout << "\nFinal (Observations, Weights):\n";
       for (unsigned n=0; n<obs.size(); ++n)
-        vcl_cout << '('<< obs[n] << ' ' << obs_weights[n] << ") ";
-      vcl_cout << '\n';
+        std::cout << '('<< obs[n] << ' ' << obs_weights[n] << ") ";
+      std::cout << '\n';
     }
   }
 

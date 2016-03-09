@@ -12,8 +12,8 @@
 
 //: Compute mean of points after transforming with pose
 void msm_aligner::mean_of_transformed(
-                         const vcl_vector<msm_points>& points,
-                         const vcl_vector<vnl_vector<double> >& pose,
+                         const std::vector<msm_points>& points,
+                         const std::vector<vnl_vector<double> >& pose,
                          msm_points& mean) const
 {
   mean.vector().set_size(points[0].vector().size());
@@ -28,7 +28,7 @@ void msm_aligner::mean_of_transformed(
 }
 
 //: Print class to os
-void msm_aligner::print_summary(vcl_ostream& os) const
+void msm_aligner::print_summary(std::ostream& os) const
 {
   os<<" { } ";
 }
@@ -67,9 +67,9 @@ void vsl_b_write(vsl_b_ostream& bfs, const msm_aligner& b)
 //: Initialise from a text stream.
 // The default implementation is for attribute-less normalisers,
 // and throws if it finds any data in the stream.
-void msm_aligner::config_from_stream(vcl_istream &is)
+void msm_aligner::config_from_stream(std::istream &is)
 {
-  vcl_string s = mbl_parse_block(is);
+  std::string s = mbl_parse_block(is);
   if (s.empty() || s=="{}") return;
 
   mbl_exception_parse_error x(
@@ -81,12 +81,12 @@ void msm_aligner::config_from_stream(vcl_istream &is)
 
 //=======================================================================
 //: Create a concrete msm_aligner-derived object, from a text specification.
-vcl_auto_ptr<msm_aligner> msm_aligner::create_from_stream(vcl_istream &is)
+std::auto_ptr<msm_aligner> msm_aligner::create_from_stream(std::istream &is)
 {
-  vcl_string name;
+  std::string name;
   is >> name;
 
-  vcl_auto_ptr<msm_aligner> ps =
+  std::auto_ptr<msm_aligner> ps =
     mbl_cloneables_factory<msm_aligner>::get_clone(name);
 
   ps -> config_from_stream(is);
@@ -102,7 +102,7 @@ void vsl_b_read(vsl_b_istream& bfs, msm_aligner& b)
 
 //=======================================================================
 
-vcl_ostream& operator<<(vcl_ostream& os,const msm_aligner& b)
+std::ostream& operator<<(std::ostream& os,const msm_aligner& b)
 {
   os << b.is_a() << ": ";
   vsl_indent_inc(os);
@@ -113,7 +113,7 @@ vcl_ostream& operator<<(vcl_ostream& os,const msm_aligner& b)
 
 //=======================================================================
 
-vcl_ostream& operator<<(vcl_ostream& os,const msm_aligner* b)
+std::ostream& operator<<(std::ostream& os,const msm_aligner* b)
 {
   if (b)
     return os << *b;
@@ -123,14 +123,14 @@ vcl_ostream& operator<<(vcl_ostream& os,const msm_aligner* b)
 
 //=======================================================================
 //: Stream output operator for class reference
-void vsl_print_summary(vcl_ostream& os,const msm_aligner& b)
+void vsl_print_summary(std::ostream& os,const msm_aligner& b)
 {
   os << b;
 }
 
 //=======================================================================
 //: Stream output operator for class reference
-void vsl_print_summary(vcl_ostream& os,const msm_aligner* b)
+void vsl_print_summary(std::ostream& os,const msm_aligner* b)
 {
   if (b)
     os << *b;

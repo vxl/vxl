@@ -4,8 +4,10 @@
 #include <vimt/vimt_scale_pyramid_builder_2d.h>
 #include <vimt/vimt_image_pyramid.h>
 #include <vimt/vimt_image_2d_of.h>
-#include <vcl_iostream.h>
-#include <vcl_cmath.h> // for log()
+#include <iostream>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <cmath> // for log()
 #include <vxl_config.h>
 #include <vpl/vpl.h> // vpl_unlink()
 #include <vsl/vsl_binary_loader.h>
@@ -16,7 +18,7 @@
 
 static void test_scale_pyramid_builder_2d(unsigned int nx, unsigned int ny)
 {
-  vcl_cout << "************************************************************\n"
+  std::cout << "************************************************************\n"
            << " Testing vimt_scale_pyramid_builder_2d (byte)(nx="<<nx<<", ny="<<ny<<")\n"
            << "************************************************************\n";
 
@@ -42,10 +44,10 @@ static void test_scale_pyramid_builder_2d(unsigned int nx, unsigned int ny)
 
   builder.build(image_pyr,image0);
 
-  vcl_cout<<"Result:\n";
-  image_pyr.print_all(vcl_cout);
+  std::cout<<"Result:\n";
+  image_pyr.print_all(std::cout);
 
-  vcl_cout<<"image_pyr.n_levels= "<< image_pyr.n_levels()<<vcl_endl;
+  std::cout<<"image_pyr.n_levels= "<< image_pyr.n_levels()<<std::endl;
 
   TEST("Found correct number of levels", image_pyr.n_levels(), 2);
 
@@ -65,12 +67,12 @@ static void test_scale_pyramid_builder_2d(unsigned int nx, unsigned int ny)
 
   builder.set_max_levels(default_n_levels);
   builder.extend(image_pyr);
-  vcl_cout<<"\n\n\nTesting builder.extend():\n";
-  image_pyr.print_all(vcl_cout);
+  std::cout<<"\n\n\nTesting builder.extend():\n";
+  image_pyr.print_all(std::cout);
 
   // nx/(scale_step^(nr_levels-1)) must be at least 4.5 in order to have
   // at least a 5x5 image at the last level:
-  int nr_levels = 1+int(vcl_log((nx<ny?nx:ny)/4.5)/vcl_log(scale_step));
+  int nr_levels = 1+int(std::log((nx<ny?nx:ny)/4.5)/std::log(scale_step));
   TEST("Found correct number of levels", image_pyr.n_levels(), nr_levels);
 
   vimt_image_2d_of<float> image2(200, 200, 1);
@@ -91,11 +93,11 @@ static void test_scale_pyramid_builder_2d(unsigned int nx, unsigned int ny)
   TEST("No drift upwards in a float pyramid", all_less_than_256, true);
   TEST("No drift downwards in a float pyramid", all_more_than_254, true);
 
-  vcl_cout<<"\n\n======== TESTING I/O ===========\n";
+  std::cout<<"\n\n======== TESTING I/O ===========\n";
 
   vsl_add_to_binary_loader(vimt_scale_pyramid_builder_2d<vxl_byte>());
 
-  vcl_string test_path = "test_scale_pyramid_builder_2d.bvl.tmp";
+  std::string test_path = "test_scale_pyramid_builder_2d.bvl.tmp";
   vsl_b_ofstream bfs_out(test_path);
   TEST(("Created " + test_path + " for writing").c_str(), (!bfs_out), false);
   vsl_b_write(bfs_out, builder);

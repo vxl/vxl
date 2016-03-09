@@ -1,7 +1,9 @@
 #include "rsdl_dist.h"
 
 #include <vcl_cassert.h>
-#include <vcl_cmath.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <cmath>
 #include <vnl/vnl_math.h>
 
 double
@@ -32,7 +34,7 @@ rsdl_dist_sq( const rsdl_point& p, const rsdl_point& q )
 double
 rsdl_dist( const rsdl_point& p, const rsdl_point& q )
 {
-  return vcl_sqrt( rsdl_dist_sq( p, q ) );
+  return std::sqrt( rsdl_dist_sq( p, q ) );
 }
 
 
@@ -79,7 +81,7 @@ rsdl_dist_sq( const rsdl_point & p, const rsdl_bounding_box &  b )
 double
 rsdl_dist( const rsdl_point & p, const rsdl_bounding_box& b )
 {
-  return vcl_sqrt( rsdl_dist_sq( p, b ) );
+  return std::sqrt( rsdl_dist_sq( p, b ) );
 }
 
 

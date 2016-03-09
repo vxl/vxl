@@ -3,25 +3,27 @@
 #include <testlib/testlib_test.h>
 #include <bhdfs/bhdfs_manager.h>
 #include <bhdfs/bhdfs_fstream.h>
-#include <vcl_iostream.h>
-//#include <vcl_fstream.h>
+#include <iostream>
+//#include <vcl_compiler.h>
+#include <iostream>
+#include <fstream>
 
 //: Test bhdfs fstream
 void test_fstream()
 {
   if (!bhdfs_manager::exists())
-    bhdfs_manager::create(vcl_string("default"), 0);
+    bhdfs_manager::create(std::string("default"), 0);
 
   bhdfs_manager_sptr mins = bhdfs_manager::instance();
-  vcl_string cur_dir = mins->get_working_dir();
+  std::string cur_dir = mins->get_working_dir();
 
-  vcl_string test_file_name = cur_dir + "/testfile.txt";
+  std::string test_file_name = cur_dir + "/testfile.txt";
   bhdfs_fstream_sptr fs = new bhdfs_fstream(test_file_name, "w");
   //bhdfs_fstream_sptr fs = new bhdfs_fstream(test_file_name, "a");
   //bhdfs_fstream_sptr fs = new bhdfs_fstream(test_file_name, "r");
   TEST("open stream", fs->ok(), true);
 
-  vcl_string buffer2 = "Hello, World!";
+  std::string buffer2 = "Hello, World!";
   TEST("write to stream", fs->write(buffer2.c_str(), buffer2.length()), 13);
 
   TEST("close stream", fs->close(), true);

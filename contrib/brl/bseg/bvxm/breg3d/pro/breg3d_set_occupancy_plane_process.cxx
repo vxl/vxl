@@ -68,7 +68,7 @@ bool breg3d_set_occupancy_plane_process::execute()
   bvxm_voxel_world_sptr vox_world = input5->value();
 
   // normalize plane parameters
-  double norm_val = vcl_sqrt(plane_a*plane_a + plane_b*plane_b + plane_c*plane_c);
+  double norm_val = std::sqrt(plane_a*plane_a + plane_b*plane_b + plane_c*plane_c);
   plane_a /= norm_val;
   plane_b /= norm_val;
   plane_c /= norm_val;
@@ -96,7 +96,7 @@ bool breg3d_set_occupancy_plane_process::execute()
         double dist = world_pt.x() * plane_a + world_pt.y() * plane_b + world_pt.z() * plane_c + plane_d;
 
         ocp_datatype vox_prob =
-          (ocp_datatype)( vnl_math::sqrt1_2 * vnl_math::two_over_sqrtpi * (0.5/plane_std) * vcl_exp(-(dist*dist)/(2*plane_std*plane_std)) );
+          (ocp_datatype)( vnl_math::sqrt1_2 * vnl_math::two_over_sqrtpi * (0.5/plane_std) * std::exp(-(dist*dist)/(2*plane_std*plane_std)) );
         if (vox_prob < min_prob)
           vox_prob = min_prob;
         if (vox_prob > max_prob)

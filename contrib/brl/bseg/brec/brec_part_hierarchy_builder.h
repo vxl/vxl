@@ -21,7 +21,9 @@
 #include "brec_part_hierarchy_sptr.h"
 #include "brec_part_base_sptr.h"
 #include <vil/vil_image_resource_sptr.h>
-#include <vcl_vector.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <vector>
 
 class brec_part_hierarchy_builder
 {
@@ -31,7 +33,7 @@ class brec_part_hierarchy_builder
   static brec_part_hierarchy_sptr construct_candidates_from_one_image(vil_image_resource_sptr img, float min_strength);
 
   //: construct layer_n from all pairwise combinations of detected parts of layer_n-1
-  static bool construct_layer_candidates(unsigned layer_n, brec_part_hierarchy_sptr& h, vcl_vector<brec_part_instance_sptr>& parts);
+  static bool construct_layer_candidates(unsigned layer_n, brec_part_hierarchy_sptr& h, std::vector<brec_part_instance_sptr>& parts);
 
   //: construct a hierarchy manually
   static brec_part_hierarchy_sptr construct_vehicle_detector();

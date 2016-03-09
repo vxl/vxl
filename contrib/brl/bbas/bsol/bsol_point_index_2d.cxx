@@ -5,7 +5,9 @@
 #include <vsol/vsol_box_2d.h>
 #include "bsol_algs.h"
 #ifdef DEBUG
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iostream>
 #endif
 
 static void clear_flag(vsol_point_2d_sptr& p)
@@ -51,7 +53,7 @@ bsol_point_index_2d::bsol_point_index_2d(int nrows, int ncols,
 
 bsol_point_index_2d::
 bsol_point_index_2d(int nrows, int ncols,
-                    vcl_vector<vsol_point_2d_sptr> const& points)
+                    std::vector<vsol_point_2d_sptr> const& points)
 {
   nrows_ = nrows;
   ncols_ = ncols;
@@ -104,10 +106,10 @@ bool bsol_point_index_2d::add_point(vsol_point_2d_sptr const& p)
   return true;
 }
 
-bool bsol_point_index_2d::add_points(vcl_vector<vsol_point_2d_sptr> const& points)
+bool bsol_point_index_2d::add_points(std::vector<vsol_point_2d_sptr> const& points)
 {
   bool ok = true;
-  for (vcl_vector<vsol_point_2d_sptr>::const_iterator pit = points.begin();
+  for (std::vector<vsol_point_2d_sptr>::const_iterator pit = points.begin();
        pit != points.end(); pit++)
     if (!this->add_point(*pit))
       ok = false;
@@ -121,8 +123,8 @@ bool bsol_point_index_2d::find_point(vsol_point_2d_sptr const& p)
     return false;
   if (row<0||row>=nrows_||col<0||col>=ncols_)
     return false;
-  vcl_vector<vsol_point_2d_sptr>& points =  point_array_[row][col];
-  for (vcl_vector<vsol_point_2d_sptr>::iterator pit = points.begin();
+  std::vector<vsol_point_2d_sptr>& points =  point_array_[row][col];
+  for (std::vector<vsol_point_2d_sptr>::iterator pit = points.begin();
        pit!=points.end(); pit++)
     if ((*pit)==p)
       return true;
@@ -132,7 +134,7 @@ bool bsol_point_index_2d::find_point(vsol_point_2d_sptr const& p)
 //:find the points within a radius of p
 bool bsol_point_index_2d::in_radius(const double radius,
                                     vsol_point_2d_sptr const& p,
-                                    vcl_vector<vsol_point_2d_sptr>& points)
+                                    std::vector<vsol_point_2d_sptr>& points)
 {
   if (!p)
     return false;
@@ -152,7 +154,7 @@ bool bsol_point_index_2d::in_radius(const double radius,
       int r = row+ro, c = col+co;
       if (r<0||r>=nrows_||c<0||c>=ncols_)
         continue;
-      vcl_vector<vsol_point_2d_sptr>& points_in_cell = point_array_[r][c];
+      std::vector<vsol_point_2d_sptr>& points_in_cell = point_array_[r][c];
       int n = points_in_cell.size();
       if (!n)
         continue;
@@ -171,14 +173,14 @@ bool bsol_point_index_2d::closest_in_radius(const double radius,
                                             vsol_point_2d_sptr const& p,
                                             vsol_point_2d_sptr& point)
 {
-  vcl_vector<vsol_point_2d_sptr> points;
+  std::vector<vsol_point_2d_sptr> points;
   this->in_radius(radius, p, points);
   double d =0;
   point = bsol_algs::closest_point(p, points, d);
   if (!point||d>radius)
     return false;
 #ifdef DEBUG
-  vcl_cout << "p("<< p->x() << ' ' << p->y()<< "):P(" << point->x() << ' ' << point->y() << "):" << d << vcl_endl;
+  std::cout << "p("<< p->x() << ' ' << p->y()<< "):P(" << point->x() << ' ' << point->y() << "):" << d << std::endl;
 #endif
   return true;
 }
@@ -213,14 +215,14 @@ bool bsol_point_index_2d::marked(vsol_point_2d_sptr const& p)
   return flag(p);
 }
 
-vcl_vector<vsol_point_2d_sptr> bsol_point_index_2d::points()
+std::vector<vsol_point_2d_sptr> bsol_point_index_2d::points()
 {
-  vcl_vector<vsol_point_2d_sptr> out;
+  std::vector<vsol_point_2d_sptr> out;
   for (int r = 0; r<nrows_; r++)
     for (int c = 0; c<ncols_; c++)
     {
-      vcl_vector<vsol_point_2d_sptr>& points = point_array_[r][c];
-      for (vcl_vector<vsol_point_2d_sptr>::iterator pit = points.begin();
+      std::vector<vsol_point_2d_sptr>& points = point_array_[r][c];
+      for (std::vector<vsol_point_2d_sptr>::iterator pit = points.begin();
            pit!= points.end(); pit++)
         out.push_back(*pit);
     }
@@ -229,8 +231,8 @@ vcl_vector<vsol_point_2d_sptr> bsol_point_index_2d::points()
 
 void bsol_point_index_2d::clear_marks()
 {
-  vcl_vector<vsol_point_2d_sptr> pts = this->points();
-  for (vcl_vector<vsol_point_2d_sptr>::iterator pit = pts.begin();
+  std::vector<vsol_point_2d_sptr> pts = this->points();
+  for (std::vector<vsol_point_2d_sptr>::iterator pit = pts.begin();
        pit!= pts.end(); pit++)
     clear_flag(*pit);
 }
@@ -276,10 +278,10 @@ int bsol_point_index_2d::n_points()
 }
 
 //:the points in an index cell
-vcl_vector<vsol_point_2d_sptr> bsol_point_index_2d::
+std::vector<vsol_point_2d_sptr> bsol_point_index_2d::
 points(const int row, const int col)
 {
-  vcl_vector<vsol_point_2d_sptr> out;
+  std::vector<vsol_point_2d_sptr> out;
   if (row<0||row>=nrows_||col<0||col>=ncols_)
     return out;
   return point_array_[row][col];
@@ -319,8 +321,8 @@ vsol_box_2d_sptr bsol_point_index_2d::point_bounds()
   for (int r = 0; r<nrows_; r++)
     for (int c = 0; c<ncols_; c++)
     {
-      vcl_vector<vsol_point_2d_sptr>& points = point_array_[r][c];
-      for (vcl_vector<vsol_point_2d_sptr>::iterator pit = points.begin();
+      std::vector<vsol_point_2d_sptr>& points = point_array_[r][c];
+      for (std::vector<vsol_point_2d_sptr>::iterator pit = points.begin();
            pit!= points.end(); pit++)
         box->add_point((*pit)->x(), (*pit)->y());
     }

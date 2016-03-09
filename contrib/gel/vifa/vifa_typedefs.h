@@ -2,7 +2,9 @@
 #ifndef VIFA_TYPEDEFS_H
 #define VIFA_TYPEDEFS_H
 
-#include <vcl_vector.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <vector>
 #include <vbl/vbl_smart_ptr.h>
 #include <vdgl/vdgl_fit_lines_params.h>
 #include <vtol/vtol_intensity_face_sptr.h>
@@ -12,11 +14,11 @@
 
 
 // Intensity faces
-typedef vcl_vector<vtol_intensity_face_sptr>  iface_list;
+typedef std::vector<vtol_intensity_face_sptr>  iface_list;
 typedef iface_list::iterator          iface_iterator;
 
 // Edges
-typedef vcl_vector<vtol_edge_2d_sptr> edge_2d_list;
+typedef std::vector<vtol_edge_2d_sptr> edge_2d_list;
 typedef edge_2d_list::iterator        edge_2d_iterator;
 
 // Edge list iterator
@@ -28,10 +30,10 @@ typedef face_list::iterator           face_iterator;
 // Implicit lines
 typedef vifa_imp_line<double>         imp_line;
 typedef vbl_smart_ptr<imp_line>       imp_line_sptr;
-typedef vcl_vector<imp_line_sptr>     imp_line_list;
+typedef std::vector<imp_line_sptr>     imp_line_list;
 typedef imp_line_list::iterator       imp_line_iterator;
 
-typedef vcl_vector<imp_line_list*>    imp_line_table;
+typedef std::vector<imp_line_list*>    imp_line_table;
 typedef imp_line_table::iterator      imp_line_table_iterator;
 
 // Line fitting parameters

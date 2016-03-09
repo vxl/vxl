@@ -8,7 +8,9 @@
 
 #include <vnl/vnl_math.h>
 
-#include <vcl_fstream.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <fstream>
 
 vsph_view_point<double> create_view_point(vsph_spherical_coord_sptr coord, double theta, double phi, double* data)
 {
@@ -55,8 +57,8 @@ static void test_view_sphere()
   bool good=true;
   while (it != vs.end()) {
     good = good && (int(it->first) == count);
-    vcl_cout << it->first << vcl_endl;
-    it->second.print(vcl_cout);
+    std::cout << it->first << std::endl;
+    it->second.print(std::cout);
     ++count;
     ++it;
   }

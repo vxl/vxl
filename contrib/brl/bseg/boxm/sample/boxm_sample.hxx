@@ -5,7 +5,7 @@
 #include <bsta/bsta_mixture_fixed.h>
 
 template <boxm_apm_type APM_MODEL>
-void boxm_sample<APM_MODEL>::print(vcl_ostream& os) const
+void boxm_sample<APM_MODEL>::print(std::ostream& os) const
 {
   os << "(alpha=" << alpha << " appearence=" << appearance_ << ')';
 }
@@ -40,9 +40,9 @@ void vsl_b_read(vsl_b_istream & is, boxm_sample<APM_MODEL> &sample)
       vsl_b_read(is, sample.appearance_);
       break;
     default:
-      vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, boxm_sample<T>&)\n"
+      std::cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, boxm_sample<T>&)\n"
                << "           Unknown version number "<< version << '\n';
-      is.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
+      is.is().clear(std::ios::badbit); // Set an unrecoverable IO error on stream
       break;
   }
 }
@@ -54,7 +54,7 @@ void vsl_b_read(vsl_b_istream & is, boxm_sample<APM_MODEL> *&sample)
 }
 
 template <boxm_apm_type APM_MODEL>
-vcl_ostream& operator << (vcl_ostream& os, const boxm_sample<APM_MODEL>& sample)
+std::ostream& operator << (std::ostream& os, const boxm_sample<APM_MODEL>& sample)
 {
   sample.print(os);
   return os;
@@ -66,6 +66,6 @@ template void vsl_b_write(vsl_b_ostream &, boxm_sample<T > const &); \
 template void vsl_b_write(vsl_b_ostream &, boxm_sample<T > const *&); \
 template void vsl_b_read(vsl_b_istream &, boxm_sample<T > &); \
 template void vsl_b_read(vsl_b_istream &, boxm_sample<T > *&); \
-template vcl_ostream& operator << (vcl_ostream&, const boxm_sample<T >&)
+template std::ostream& operator << (std::ostream&, const boxm_sample<T >&)
 
 #endif

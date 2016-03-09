@@ -7,7 +7,9 @@
 
 #include "AffineMetric.h"
 
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iostream>
 #include <vcl_cassert.h>
 
 #include <vnl/vnl_inverse.h>
@@ -129,8 +131,8 @@ vnl_double_2 AffineMetric::homg_to_image(const HomgPoint2D& p) const
   return vnl_double_2(x[0] * s, x[1] * s);
 }
 
-//: print to vcl_ostream
-vcl_ostream& AffineMetric::print(vcl_ostream& s) const
+//: print to std::ostream
+std::ostream& AffineMetric::print(std::ostream& s) const
 {
   return s << "AffineMetric ["
            << A_.get_row(0) << ';'

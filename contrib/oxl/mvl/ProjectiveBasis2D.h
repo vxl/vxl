@@ -27,7 +27,9 @@
 //-----------------------------------------------------------------------------
 
 #include <mvl/HMatrix2D.h>
-#include <vcl_vector.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <vector>
 class HomgPoint2D;
 
 class ProjectiveBasis2D
@@ -37,7 +39,7 @@ class ProjectiveBasis2D
 
   // tm_get_canonical_proj
   ProjectiveBasis2D(const HomgPoint2D&, const HomgPoint2D&, const HomgPoint2D&, const HomgPoint2D&);
-  ProjectiveBasis2D(const vcl_vector<HomgPoint2D>&);
+  ProjectiveBasis2D(const std::vector<HomgPoint2D>&);
   ProjectiveBasis2D(const ProjectiveBasis2D& that);
  ~ProjectiveBasis2D();
 

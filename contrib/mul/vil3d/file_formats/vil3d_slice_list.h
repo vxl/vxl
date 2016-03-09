@@ -8,7 +8,9 @@
 // \brief Interface/base for a volume made up of slices.
 // \author Ian Scott - Manchester
 
-#include <vcl_vector.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <vector>
 #include <vil3d/vil3d_file_format.h>
 #include <vil3d/vil3d_image_resource.h>
 #include <vil/vil_image_resource.h>
@@ -46,7 +48,7 @@ class vil3d_slice_list_format : public vil3d_file_format
 // If the slices do not match (in size, type etc) a null ptr will
 // be returned.
 vil3d_image_resource_sptr
-vil3d_slice_list_to_volume(const vcl_vector<vil_image_resource_sptr> &);
+vil3d_slice_list_to_volume(const std::vector<vil_image_resource_sptr> &);
 
 //: Format class for a volume made up of a list of images.
 // You can't create one of these yourself.
@@ -54,14 +56,14 @@ vil3d_slice_list_to_volume(const vcl_vector<vil_image_resource_sptr> &);
 class vil3d_slice_list_image: public vil3d_image_resource
 {
   //: All the 2d image slice resources that make up this volume
-  vcl_vector<vil_image_resource_sptr> slices_;
+  std::vector<vil_image_resource_sptr> slices_;
 
   friend vil3d_image_resource_sptr
-    vil3d_slice_list_to_volume(const vcl_vector<vil_image_resource_sptr> &);
+    vil3d_slice_list_to_volume(const std::vector<vil_image_resource_sptr> &);
   friend class vil3d_slice_list_format;
 
  protected:
-  vil3d_slice_list_image(const vcl_vector<vil_image_resource_sptr>&);
+  vil3d_slice_list_image(const std::vector<vil_image_resource_sptr>&);
 
  public:
   virtual ~vil3d_slice_list_image();

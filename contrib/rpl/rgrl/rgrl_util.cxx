@@ -3,10 +3,12 @@
 // \author Charlene Tsai
 
 #include "rgrl_util.h"
-#include <vcl_vector.h>
-#include <vcl_string.h>
+#include <vector>
+#include <string>
 #include <vcl_cassert.h>
-#include <vcl_algorithm.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <algorithm>
 
 #include <vnl/vnl_vector.h>
 #include <vnl/algo/vnl_svd.h>
@@ -24,13 +26,13 @@
 static
 rgrl_mask_box
 global_region_from_inv_xformed_points(
-          vcl_vector< vnl_vector<double> > const& inv_mapped_pts,
+          std::vector< vnl_vector<double> > const& inv_mapped_pts,
           rgrl_mask_sptr                   const& from_image_roi,
           rgrl_mask_box                    const& current_region,
           bool                                    union_with_curr,
           double                                  drastic_change_ratio)
 {
-  typedef vcl_vector<vnl_vector<double> > pt_vector;
+  typedef std::vector<vnl_vector<double> > pt_vector;
   typedef pt_vector::const_iterator pt_iter;
 
   const vnl_vector<double> from_x0 =  from_image_roi->x0();
@@ -52,7 +54,7 @@ global_region_from_inv_xformed_points(
   }
 
   DebugFuncMacro( debug_flag, 1, "Global Region after inv-mapping: "
-                  << inv_mapped_x0 << " - " << inv_mapped_x1 << vcl_endl );
+                  << inv_mapped_x0 << " - " << inv_mapped_x1 << std::endl );
 
   //3. Take the intersection of the from_image_roi and the inverse_xformed to_image_roi
   //   as the maximum region.
@@ -69,7 +71,7 @@ global_region_from_inv_xformed_points(
     return current_region;
 
   DebugFuncMacro( debug_flag, 1, "Global Region after intersecting with ROI: "
-                  << region_x0 << " - " << region_x1 << vcl_endl );
+                  << region_x0 << " - " << region_x1 << std::endl );
 
   //4. If union_with_curr set, union region and current_region to prevent oscillation
   if (union_with_curr) {
@@ -80,7 +82,7 @@ global_region_from_inv_xformed_points(
   }
 
   DebugFuncMacro( debug_flag, 1, "Global Region after union with prev region: "
-                  << region_x0 << " - " << region_x1 << vcl_endl );
+                  << region_x0 << " - " << region_x1 << std::endl );
 
   //5. If the changes from current_region is insignificant, or the change is too
   //   drastic, set region to be same ascurrent_region
@@ -106,7 +108,7 @@ global_region_from_inv_xformed_points(
   }
 
   DebugFuncMacro( debug_flag, 1, "Global Region finalized: "
-                  << region_x0 << " - " << region_x1 << vcl_endl );
+                  << region_x0 << " - " << region_x1 << std::endl );
 
   return region;
 }
@@ -128,7 +130,7 @@ rgrl_util_estimate_global_region_with_inverse_xform(
   // this procedure fails.
   //
 
-  typedef vcl_vector<vnl_vector<double> > pt_vector;
+  typedef std::vector<vnl_vector<double> > pt_vector;
   typedef pt_vector::iterator pt_iter;
 
   vnl_vector<double> const& to_x0 =  to_image_roi->x0();
@@ -137,7 +139,7 @@ rgrl_util_estimate_global_region_with_inverse_xform(
   assert( 2 <= m && m <= 3 );
 
   // dimension/axis index
-  vcl_vector<int> ind( m );
+  std::vector<int> ind( m );
   for ( unsigned i=0; i<m; ++i )
     ind[i] = i;
 
@@ -175,9 +177,9 @@ rgrl_util_estimate_global_region_with_inverse_xform(
 
     // Only the 1st element keeps the boundary dimension
     // The others can exchange wo/ affecting the boundary
-    while (vcl_next_permutation(ind.begin()+1, ind.end() ) ) /* do nothing */;
+    while (std::next_permutation(ind.begin()+1, ind.end() ) ) /* do nothing */;
   }
-  while ( vcl_next_permutation(ind.begin(), ind.end() ) );
+  while ( std::next_permutation(ind.begin(), ind.end() ) );
 
 
   //2. For each boundary point q of the to_image_roi, inverse map it to
@@ -215,7 +217,7 @@ rgrl_util_estimate_global_region( rgrl_mask_sptr const&        from_image_roi,
   // this procedure fails.
   //
 
-  typedef vcl_vector<vnl_vector<double> > pt_vector;
+  typedef std::vector<vnl_vector<double> > pt_vector;
   typedef pt_vector::iterator pt_iter;
   const double epsilon = 1;
   const double eps_squared = epsilon*epsilon;
@@ -226,7 +228,7 @@ rgrl_util_estimate_global_region( rgrl_mask_sptr const&        from_image_roi,
   assert( 2 <= m && m <= 3 );
 
   // dimension/axis index
-  vcl_vector<int> ind( m );
+  std::vector<int> ind( m );
   for ( unsigned i=0; i<m; ++i )
     ind[i] = i;
 
@@ -268,9 +270,9 @@ rgrl_util_estimate_global_region( rgrl_mask_sptr const&        from_image_roi,
 
     // Only the 1st element keeps the boundary dimension
     // The others can exchange wo/ affecting the boundary
-    while (vcl_next_permutation(ind.begin()+1, ind.end() ) ) /* do nothing */;
+    while (std::next_permutation(ind.begin()+1, ind.end() ) ) /* do nothing */;
   }
-  while ( vcl_next_permutation(ind.begin(), ind.end() ) );
+  while ( std::next_permutation(ind.begin(), ind.end() ) );
 
 
   //2. For each boundary point q of the to_image_roi, inverse map it to
@@ -375,7 +377,7 @@ rgrl_util_geometric_error_scaling( rgrl_match_set const& match_set )
                                        1/factors[1] );
 
   double scaling = std::max( change_in_fst, change_in_snd );
-  //double scaling = vcl_sqrt(scaling_sqr);
+  //double scaling = std::sqrt(scaling_sqr);
 
   return scaling;
 
@@ -461,8 +463,8 @@ rgrl_util_geometric_scaling_factors( rgrl_match_set const& match_set,
   double sv_from, sv_mapped;
   factors.set_size( m );
   for ( unsigned i=0; i<m; ++i ) {
-    sv_from = vcl_sqrt( std::max( svd_from.W(i), 1e-16 ) );
-    sv_mapped = vcl_sqrt( std::max( svd_mapped.W(i), 1e-16 ) );
+    sv_from = std::sqrt( std::max( svd_from.W(i), 1e-16 ) );
+    sv_mapped = std::sqrt( std::max( svd_mapped.W(i), 1e-16 ) );
     factors[i] = sv_mapped / sv_from;
   }
 
@@ -549,7 +551,7 @@ rgrl_util_geometric_scaling_factors( rgrl_set_of<rgrl_match_set_sptr> const& cur
     // As the scatter matrix essentially squared the
     // underlying scaling factors,
     // take square-root to get the real factor
-    factors[i] = vcl_sqrt( sv_mapped / sv_from );
+    factors[i] = std::sqrt( sv_mapped / sv_from );
   }
 
   return true;
@@ -558,9 +560,9 @@ rgrl_util_geometric_scaling_factors( rgrl_set_of<rgrl_match_set_sptr> const& cur
 
 void
 rgrl_util_extract_region_locations( vnl_vector< double >             const& center,
-                                    vcl_vector< vnl_vector<double> > const& basis_dirs,
+                                    std::vector< vnl_vector<double> > const& basis_dirs,
                                     vnl_vector< double >             const& basis_radii,
-                                    vcl_vector< vnl_vector<int> >         & pixel_locations )
+                                    std::vector< vnl_vector<int> >         & pixel_locations )
 {
   //  0. Get the image dimension, clear the pixels, and make sure
   //  everyone agrees on the sizes.
@@ -577,8 +579,8 @@ rgrl_util_extract_region_locations( vnl_vector< double >             const& cent
   //  1a. We start by forming a vector of corner points.  There will be
   //  2^dimension corners.
 
-  vcl_vector< vnl_vector<double> > corner_points;
-  int num_corners = vnl_math::rnd( vcl_exp( dimension * vcl_log(2.0) ));
+  std::vector< vnl_vector<double> > corner_points;
+  int num_corners = vnl_math::rnd( std::exp( dimension * std::log(2.0) ));
   corner_points.reserve( num_corners );
 
   //  1b. Since the dimension is computed dynamically, we can't do the
@@ -645,7 +647,7 @@ rgrl_util_extract_region_locations( vnl_vector< double >             const& cent
 
   int max_num_intervals = 1;
   for ( unsigned int i=0; i < dimension-1; ++i )
-    max_num_intervals *= (int)vcl_floor( upper[i] - lower[i] + 1 );
+    max_num_intervals *= (int)std::floor( upper[i] - lower[i] + 1 );
 
   //  2b. Allocate a vector of interval indices.  Note that in each
   //  of these, the last component will be 0.0.  It is important that
@@ -653,7 +655,7 @@ rgrl_util_extract_region_locations( vnl_vector< double >             const& cent
   //  interval_indices will be stored as doubles even though they are
   //  really integers.  This just simplifies some computation.
 
-  vcl_vector< vnl_vector<double> > interval_indices;
+  std::vector< vnl_vector<double> > interval_indices;
   interval_indices.reserve( max_num_intervals );
 
   //  2c. The procedure is similar to 1b above.  We are after all
@@ -676,8 +678,8 @@ rgrl_util_extract_region_locations( vnl_vector< double >             const& cent
     // round or floor/ceil?
     //       int lower_index = vnl_math::rnd( lower[i] );
     //       int upper_index = vnl_math::rnd( upper[i] );
-    int lower_index = (int)vcl_ceil( lower[i] );
-    int upper_index = (int)vcl_floor( upper[i] );
+    int lower_index = (int)std::ceil( lower[i] );
+    int upper_index = (int)std::floor( upper[i] );
     int prev_size = interval_indices.size();
 
     //  2c(i).  For the current dimension, expand the set of
@@ -769,8 +771,8 @@ rgrl_util_extract_region_locations( vnl_vector< double >             const& cent
     // round or floor/ceil?
     //       int last_lower_bound = vnl_math::rnd( min_z + center[ dimension-1 ] );
     //       int last_upper_bound = vnl_math::rnd( max_z + center[ dimension-1 ] );
-    int last_lower_bound = (int)vcl_ceil( min_z );
-    int last_upper_bound = (int)vcl_floor( max_z );
+    int last_lower_bound = (int)std::ceil( min_z );
+    int last_upper_bound = (int)std::floor( max_z );
     for ( int last_component = last_lower_bound; last_component <= last_upper_bound;
           ++ last_component )
     {
@@ -794,7 +796,7 @@ rgrl_util_irls( rgrl_match_set_sptr              match_set,
   match_sets.push_back( match_set );
   rgrl_set_of<rgrl_scale_sptr> scales;
   scales.push_back( scale );
-  vcl_vector<rgrl_weighter_sptr> weighters;
+  std::vector<rgrl_weighter_sptr> weighters;
   weighters.push_back(weighter);
 
   return rgrl_util_irls(match_sets, scales, weighters,
@@ -805,7 +807,7 @@ rgrl_util_irls( rgrl_match_set_sptr              match_set,
 bool
 rgrl_util_irls( rgrl_set_of<rgrl_match_set_sptr> const& match_sets,
                 rgrl_set_of<rgrl_scale_sptr>     const& scales,
-                vcl_vector<rgrl_weighter_sptr>   const& weighters,
+                std::vector<rgrl_weighter_sptr>   const& weighters,
                 rgrl_convergence_tester          const& conv_tester,
                 rgrl_estimator_sptr              estimator,
                 rgrl_transformation_sptr&        estimate,
@@ -873,7 +875,7 @@ rgrl_util_irls( rgrl_set_of<rgrl_match_set_sptr> const& match_sets,
     else {
       // use the previous ones
       new_estimate->set_scaling_factors( estimate->scaling_factors() );
-      vcl_cout << "WARNING in " << __FILE__ << __LINE__ << "cannot compute scaling factors!!!" << vcl_endl;
+      std::cout << "WARNING in " << __FILE__ << __LINE__ << "cannot compute scaling factors!!!" << std::endl;
     }
 
     //  Step 2.  Map matches and calculate weights
@@ -902,9 +904,9 @@ rgrl_util_irls( rgrl_set_of<rgrl_match_set_sptr> const& match_sets,
 
     DebugFuncMacro_abv(debug_flag, 2, "irls: (iteration = " << iteration
                        << ") oscillation count = " << current_status->oscillation_count() << '\n' );
-    DebugFuncMacro_abv(debug_flag, 2, "irls: error = " << current_status->error() << vcl_endl );
-    DebugFuncMacro_abv(debug_flag, 2, "irls: error_diff = " << current_status->error_diff() << vcl_endl );
-    DebugFuncMacro_abv(debug_flag, 2, "irls: converged = " << current_status->has_converged() << vcl_endl );
+    DebugFuncMacro_abv(debug_flag, 2, "irls: error = " << current_status->error() << std::endl );
+    DebugFuncMacro_abv(debug_flag, 2, "irls: error_diff = " << current_status->error_diff() << std::endl );
+    DebugFuncMacro_abv(debug_flag, 2, "irls: converged = " << current_status->has_converged() << std::endl );
 
     estimate = new_estimate;
     ++ iteration;
@@ -935,19 +937,19 @@ rgrl_util_irls( rgrl_set_of<rgrl_match_set_sptr> const& match_sets,
 
 //: skip empty lines in input stream
 void
-rgrl_util_skip_empty_lines( vcl_istream& is )
+rgrl_util_skip_empty_lines( std::istream& is )
 {
-  vcl_streampos pos;
-  vcl_string str;
-  static const vcl_string white_chars = " \t\r";
-  vcl_string::size_type non_empty_pos;
+  std::streampos pos;
+  std::string str;
+  static const std::string white_chars = " \t\r";
+  std::string::size_type non_empty_pos;
 
   // skip any empty lines
   do {
     // store current reading position
     pos = is.tellg();
     str = "";
-    vcl_getline( is, str );
+    std::getline( is, str );
 
     non_empty_pos = str.find_first_not_of( white_chars );
   } while ( is.good() && !is.eof() && (str.empty() || non_empty_pos == std::string::npos ||

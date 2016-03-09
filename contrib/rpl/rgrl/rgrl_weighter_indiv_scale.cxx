@@ -4,7 +4,9 @@
 // \author Gehua Yang
 // \date   March 2006
 
-#include <vcl_cmath.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <cmath>
 #include <vcl_cassert.h>
 #include <vnl/vnl_matrix.h>
 #include <rrel/rrel_m_est_obj.h>
@@ -14,7 +16,7 @@
 #include <rgrl/rgrl_transformation.h>
 
 rgrl_weighter_indiv_scale::
-rgrl_weighter_indiv_scale( vcl_auto_ptr<rrel_m_est_obj>  m_est,
+rgrl_weighter_indiv_scale( std::auto_ptr<rrel_m_est_obj>  m_est,
                      bool                          use_signature_error,
                      bool                          use_precomputed_signature_wgt )
  :rgrl_weighter_m_est( m_est, use_signature_error, use_precomputed_signature_wgt )
@@ -86,14 +88,14 @@ compute_weights( rgrl_scale const&  scales,
       else if ( use_signature_error_ ) {
         vnl_vector<double> error_vector = to_feature->signature_error_vector( *mapped_from );
         assert ( error_vector.size() > 0 );
-        double signature_err = vcl_sqrt( dot_product( error_vector * signature_inv_covar, error_vector ) );
+        double signature_err = std::sqrt( dot_product( error_vector * signature_inv_covar, error_vector ) );
         // CS: we may need to add some chi-squared normalization here for large signature vectors.
         signature_wgt = m_est_->wgt( signature_err );  // already normalized at this point
       }
 
       double cumul_wgt = geometric_wgt * signature_wgt;
 
-      DebugMacro_abv(1, cumul_wgt << vcl_endl );
+      DebugMacro_abv(1, cumul_wgt << std::endl );
 
       titr.set_geometric_weight( geometric_wgt );
       if ( !signature_precomputed_ ) titr.set_signature_weight( signature_wgt );
@@ -169,7 +171,7 @@ aux_sum_rho_values( rgrl_scale const&  scale,
       }
     }
     // sum of rho is weighted by signature??
-    sum_rho += vcl_log(fea_scale) +
+    sum_rho += std::log(fea_scale) +
                m_est_->rho(min_val, scale.geometric_scale()*fea_scale);
   }
 

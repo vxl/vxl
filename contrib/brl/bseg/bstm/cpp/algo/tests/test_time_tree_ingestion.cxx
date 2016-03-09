@@ -3,10 +3,12 @@
 
 #include <bstm/bstm_time_tree.h>
 
-#include <vcl_iostream.h>
-#include <vcl_fstream.h>
+#include <iostream>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <fstream>
 
-#include <vcl_vector.h>
+#include <vector>
 
 
 #define DATA_LEN 80
@@ -86,7 +88,7 @@ void ingest(bstm_time_tree& tree, char*  tree_data ,float time, char data)
     }
     //write new data in
     new_data[ tree.get_relative_index( tree.traverse(time)) ] = data;
-    vcl_cout << "Placing " << data << " to " << tree.get_relative_index( tree.traverse(time))  << vcl_endl;
+    std::cout << "Placing " << data << " to " << tree.get_relative_index( tree.traverse(time))  << std::endl;
     for (int i = 0; i < DATA_LEN; tree_data[i] = new_data[i], ++i); //copy new data into old data
   }
 }
@@ -109,9 +111,9 @@ void test_time_tree_ingestion()
   for (int i = 0; i < 32; ++i) //loop over each data item
       ingest(tree, tree_data, (float)i /32, data[i]);
 
-  vcl_vector<int> leaf_bits = tree.get_leaf_bits(0);
+  std::vector<int> leaf_bits = tree.get_leaf_bits(0);
   for (unsigned int i = 0; i < leaf_bits.size(); ++i)
-    vcl_cout << "Data at leaf " << leaf_bits[i] << " is " << tree_data[tree.get_relative_index(leaf_bits[i])] << vcl_endl;
+    std::cout << "Data at leaf " << leaf_bits[i] << " is " << tree_data[tree.get_relative_index(leaf_bits[i])] << std::endl;
 
   bool good = tree.bit_at(0)  == 1
            && tree.bit_at(1)  == 1

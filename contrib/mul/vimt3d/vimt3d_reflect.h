@@ -22,7 +22,7 @@ inline void vimt3d_reflect_x(vimt3d_image_3d_of<T>& img)
   img.image() = vil3d_reflect_i(img.image());
 
   // Compose the transform with a translation about the world origin.
-  vcl_vector<double> bboxmin, bboxmax;
+  std::vector<double> bboxmin, bboxmax;
   img.world_bounds(bboxmin, bboxmax);
   vimt3d_transform_3d transl;
   transl.set_translation(bboxmin[0]+bboxmax[0], 0, 0);
@@ -38,7 +38,7 @@ inline void vimt3d_reflect_y(vimt3d_image_3d_of<T>& img)
   img.image() = vil3d_reflect_j(img.image());
 
   // Compose the transform with a translation about the world origin.
-  vcl_vector<double> bboxmin, bboxmax;
+  std::vector<double> bboxmin, bboxmax;
   img.world_bounds(bboxmin, bboxmax);
   vimt3d_transform_3d transl;
   transl.set_translation(0, bboxmin[1]+bboxmax[1], 0);
@@ -54,7 +54,7 @@ inline void vimt3d_reflect_z(vimt3d_image_3d_of<T>& img)
   img.image() = vil3d_reflect_k(img.image());
 
   // Compose the transform with a translation about the world origin.
-  vcl_vector<double> bboxmin, bboxmax;
+  std::vector<double> bboxmin, bboxmax;
   img.world_bounds(bboxmin, bboxmax);
   vimt3d_transform_3d transl;
   transl.set_translation(0, 0, bboxmin[2]+bboxmax[2]);

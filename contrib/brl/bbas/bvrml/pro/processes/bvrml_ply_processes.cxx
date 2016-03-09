@@ -5,10 +5,12 @@
 //
 #include <bprb/bprb_parameters.h>
 
-#include <vcl_string.h>
+#include <string>
 #include <vcl_cassert.h>
 #ifdef DEBUG
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iostream>
 #endif
 
 #include <brdb/brdb_value.h>
@@ -30,7 +32,7 @@ class bvrml_point_cov
   float prob_;
 };
 
-typedef vcl_pair<vgl_point_3d<float>, vcl_vector<bvrml_point_cov> > point_pair;
+typedef std::pair<vgl_point_3d<float>, std::vector<bvrml_point_cov> > point_pair;
 
 class bvrml_filter_fileio_parsed_ply
 {
@@ -44,11 +46,11 @@ class bvrml_filter_fileio_parsed_ply
   float dist_thres;
 
   //accumulated data
-  vcl_vector<point_pair> data;
+  std::vector<point_pair> data;
 };
 
-bool bvrml_load_points_ply(const vcl_string &ply_file, float dist_thres,
-                           vcl_vector<point_pair> &data);
+bool bvrml_load_points_ply(const std::string &ply_file, float dist_thres,
+                           std::vector<point_pair> &data);
 
 //: Call-back function for a "vertex" element
 int bvrml_plyio_vertex_cb_(p_ply_argument argument);
@@ -58,7 +60,7 @@ int bvrml_plyio_vertex_cb_(p_ply_argument argument);
 bool bvrml_filtered_ply_process_cons(bprb_func_process& pro)
 {
   //inputs
-  vcl_vector<vcl_string> input_types_(5);
+  std::vector<std::string> input_types_(5);
   input_types_[0] = "vcl_string";  // vrml file name
   input_types_[1] = "vcl_string";  // ply file
   input_types_[2] = "vcl_string";  // the point coordinates to be used to filter points in the ply file
@@ -66,7 +68,7 @@ bool bvrml_filtered_ply_process_cons(bprb_func_process& pro)
   input_types_[4] = "bool"; // pass true if just to display nearest
 
   //output
-  vcl_vector<vcl_string> output_types_(0);
+  std::vector<std::string> output_types_(0);
 
   bool good = pro.set_input_types(input_types_) &&
               pro.set_output_types(output_types_);
@@ -78,31 +80,31 @@ bool bvrml_filtered_ply_process(bprb_func_process& pro)
   // check number of inputs
   if (!pro.verify_inputs())
   {
-    vcl_cout << pro.name() << ": Invalid inputs" << vcl_endl;
+    std::cout << pro.name() << ": Invalid inputs" << std::endl;
     return false;
   }
 
-  vcl_string fname = pro.get_input<vcl_string>(0);
-  vcl_string ply_file = pro.get_input<vcl_string>(1);
-  vcl_string point_file = pro.get_input<vcl_string>(2);
+  std::string fname = pro.get_input<std::string>(0);
+  std::string ply_file = pro.get_input<std::string>(1);
+  std::string point_file = pro.get_input<std::string>(2);
   float dist_thres = pro.get_input<float>(3);
   bool nearest = pro.get_input<bool>(4);
 
-  vcl_ofstream ofs(fname.c_str(), vcl_ios::app);
+  std::ofstream ofs(fname.c_str(), std::ios::app);
 
-  vcl_vector<point_pair> data;
+  std::vector<point_pair> data;
 
-  vcl_ifstream ifs(point_file.c_str());
+  std::ifstream ifs(point_file.c_str());
   vul_awk awk(ifs);
   for (; awk; ++awk)
   {
-    vcl_string pt_line = awk.line();
-    vcl_stringstream ss(pt_line);
+    std::string pt_line = awk.line();
+    std::stringstream ss(pt_line);
     float x,y,z;
     ss >> x; ss >> y; ss >> z;
-    vcl_cout << "read: " << x << ' ' << y << ' ' << z << '\n';
+    std::cout << "read: " << x << ' ' << y << ' ' << z << '\n';
     vgl_point_3d<float> pt(x,y,z);
-    vcl_vector<bvrml_point_cov> tmp;
+    std::vector<bvrml_point_cov> tmp;
     data.push_back(point_pair(pt, tmp));
   }
   //: now filter the ply points while reading them
@@ -116,11 +118,11 @@ bool bvrml_filtered_ply_process(bprb_func_process& pro)
   //: now write the filtered points to vrml
   for (unsigned i = 0; i < data.size(); ++i) {
     vgl_point_3d<float> pt = data[i].first;
-    vcl_vector<bvrml_point_cov> fpts = data[i].second;
+    std::vector<bvrml_point_cov> fpts = data[i].second;
     //vgl_sphere_3d<float> sp(pt.x(), pt.y(), pt.z(), 0.5f);
     vgl_sphere_3d<float> sp(pt.x(), pt.y(), pt.z(), 0.1f);
     bvrml_write::write_vrml_sphere(ofs, sp, 1.0, 0.0, 0.0, 0.0f);
-    vcl_vector<bvrml_point_cov> fpts_to_write;
+    std::vector<bvrml_point_cov> fpts_to_write;
     if (nearest) {
       double dist_min = 10000000.0;
       bvrml_point_cov pc_min;
@@ -141,9 +143,9 @@ bool bvrml_filtered_ply_process(bprb_func_process& pro)
       avg_LE += pc_min.LE_;
       avg_CE += pc_min.CE_;
       ++cnt;
-      vcl_cout << "pt: " << pt << vcl_endl
-               << "nearest pt: " << pt_min << vcl_endl
-               << "dist min: " << dist_min << vcl_endl;
+      std::cout << "pt: " << pt << std::endl
+               << "nearest pt: " << pt_min << std::endl
+               << "dist min: " << dist_min << std::endl;
     }
     else
       fpts_to_write = fpts;
@@ -157,7 +159,7 @@ bool bvrml_filtered_ply_process(bprb_func_process& pro)
       //: create a cylinder that encapsulates the CE (circular error) and LE (linear error)
       float radius = pc.CE_;
       float height = pc.LE_; // make the major axis height
-      vcl_cout << "CE: " << pc.CE_ << " height: " << pc.LE_ << vcl_endl;
+      std::cout << "CE: " << pc.CE_ << " height: " << pc.LE_ << std::endl;
       bvrml_write::write_vrml_cylinder(ofs, pt, dir, radius, height, 0.0, 1.0, 0.0);
     }
   }
@@ -165,7 +167,7 @@ bool bvrml_filtered_ply_process(bprb_func_process& pro)
     avg_dist /= cnt;
     avg_LE /= cnt;
     avg_CE /= cnt;
-    vcl_cout << "there were " << cnt << " nearest pts, avg dist: " << avg_dist << " avg LE: " << avg_LE << " avg CE: " << avg_CE << vcl_endl;
+    std::cout << "there were " << cnt << " nearest pts, avg dist: " << avg_dist << " avg LE: " << avg_LE << " avg CE: " << avg_CE << std::endl;
   }
 
   // CLOSE file
@@ -177,8 +179,8 @@ bool bvrml_filtered_ply_process(bprb_func_process& pro)
 
 // ============================== PLY ==============================
 
-bool bvrml_load_points_ply(const vcl_string &ply_file, float dist_thres,
-                           vcl_vector<point_pair> &data)
+bool bvrml_load_points_ply(const std::string &ply_file, float dist_thres,
+                           std::vector<point_pair> &data)
 {
   long nvertices;
 
@@ -188,7 +190,7 @@ bool bvrml_load_points_ply(const vcl_string &ply_file, float dist_thres,
 
   p_ply ply = ply_open(ply_file.c_str(), VXL_NULLPTR, 0, VXL_NULLPTR);
   if (!ply){
-    vcl_cerr << "Couldn't open ply file: " << ply_file << '\n';
+    std::cerr << "Couldn't open ply file: " << ply_file << '\n';
     return false;
   }
 
@@ -216,7 +218,7 @@ bool bvrml_load_points_ply(const vcl_string &ply_file, float dist_thres,
   ply_set_read_cb(ply, "vertex", "prob",
                   bvrml_plyio_vertex_cb_, (void*) (&parsed_ply), 8);
 
-  vcl_cout << "ply nvertices: " << nvertices << " points\n";
+  std::cout << "ply nvertices: " << nvertices << " points\n";
 
   // Read DATA
   if (!ply_read(ply))
@@ -270,7 +272,7 @@ int bvrml_plyio_vertex_cb_(p_ply_argument argument)
       parsed_ply->prob = (float)ply_get_argument_value(argument);
       // now check if this point needs to be collected
       vgl_point_3d<float> read_pt(parsed_ply->p[0], parsed_ply->p[1], parsed_ply->p[2]);
-      vcl_vector<point_pair>& pp = parsed_ply->data;
+      std::vector<point_pair>& pp = parsed_ply->data;
       for (unsigned i = 0; i < pp.size(); ++i) {
         vgl_vector_3d<float> dif = read_pt-pp[i].first;
         float dist = (float)dif.length();

@@ -7,7 +7,9 @@
 // can all be overridden by creating a new class that inherits from the
 // relevant stage. These defaults are the most general case.
 
-#include <vcl_vector.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <vector>
 #include <vil/vil_image_resource.h>
 #include <bundler/bundler_tracks.h>
 #include <bundler/bundler_settings.h>
@@ -55,8 +57,8 @@ class bundler_tracks_impl_propose_matches_all
 
     //: Performs the match list creation
   void operator() (
-      const vcl_vector<bundler_inters_image_sptr> &features,
-      vcl_vector<bundler_inters_image_pair> &proposed_matches);
+      const std::vector<bundler_inters_image_sptr> &features,
+      std::vector<bundler_inters_image_pair> &proposed_matches);
 };
 
 
@@ -122,9 +124,9 @@ class bundler_tracks_impl_chain_matches
 
   //: Performs the track chaining
   void operator() (
-      vcl_vector<bundler_inters_match_set> &match_set,
-      vcl_vector<bundler_inters_image_sptr> &images,
-      vcl_vector<bundler_inters_track_sptr> &tracks);
+      std::vector<bundler_inters_match_set> &match_set,
+      std::vector<bundler_inters_image_sptr> &images,
+      std::vector<bundler_inters_track_sptr> &tracks);
 };
 
 

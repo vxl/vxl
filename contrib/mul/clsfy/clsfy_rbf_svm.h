@@ -14,8 +14,10 @@
 // \endverbatim
 
 #include <clsfy/clsfy_classifier_base.h>
-#include <vcl_cmath.h>
-#include <vcl_iosfwd.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <cmath>
+#include <iosfwd>
 
 //: A Support Vector Machine Binary Classifier.
 class clsfy_rbf_svm : public clsfy_classifier_base
@@ -29,11 +31,11 @@ class clsfy_rbf_svm : public clsfy_classifier_base
   double lower_target_;
 
   //: The support vectors.
-  vcl_vector<vnl_vector<double> > supports_;
+  std::vector<vnl_vector<double> > supports_;
 
   //: The Lagrangian multipliers
   // The values have been pre-multiplied by the +/-1.0 depending on the support target.
-  vcl_vector<double> lagrangians_;
+  std::vector<double> lagrangians_;
 
   //: The offset bias.
   double bias_;
@@ -58,11 +60,11 @@ class clsfy_rbf_svm : public clsfy_classifier_base
   // is in class i;
   // This are not strict probability values, since SVMs do not give Bayesian
   // outputs. However their properties fit the requirements of a probability.
-  virtual void class_probabilities(vcl_vector<double> &outputs,
+  virtual void class_probabilities(std::vector<double> &outputs,
                                    const vnl_vector<double> &input) const;
 
   //: Log likelihood of being in class (binary classifiers only)
-  // class probability = vcl_exp(logL) / (1+vcl_exp(logL)
+  // class probability = std::exp(logL) / (1+std::exp(logL)
   virtual double log_l(const vnl_vector<double> &input) const;
 
   //: Set the internal values defining the classifier.
@@ -71,14 +73,14 @@ class clsfy_rbf_svm : public clsfy_classifier_base
   // \param labels These should be 0 or 1.
   // \param RBFWidth
   // \param bias
-  virtual void set( const vcl_vector<vnl_vector<double> > & supportVectors,
-                    const vcl_vector<double> & lagrangianAlphas,
-                    const vcl_vector<unsigned> &labels,
+  virtual void set( const std::vector<vnl_vector<double> > & supportVectors,
+                    const std::vector<double> & lagrangianAlphas,
+                    const std::vector<unsigned> &labels,
                     double RBFWidth, double bias);
 
   //: The 1st standard deviation width of the RBF kernel.
   // Really this could be better named as the RBF radius.
-  double rbf_width() const { return 1/vcl_sqrt(-2.0*gamma_);}
+  double rbf_width() const { return 1/std::sqrt(-2.0*gamma_);}
 
   //: The number of support vectors.
   unsigned n_support_vectors() const { return supports_.size();}
@@ -93,11 +95,11 @@ class clsfy_rbf_svm : public clsfy_classifier_base
   //: The Lagrange multipliers.
   // The values corresponding to negative training vectors are pre-multiplied by -1.
   // The array ordering corresponds to supportVectors()
-  const vcl_vector<double> & lagrangians() const {return lagrangians_;}
+  const std::vector<double> & lagrangians() const {return lagrangians_;}
 
   //: The support vectors.
   // The array ordering corresponds to lagrangians()
-  const vcl_vector<vnl_vector<double> > & support_vectors() const {return supports_;}
+  const std::vector<vnl_vector<double> > & support_vectors() const {return supports_;}
 
 
   //: The number of possible output classes.
@@ -110,16 +112,16 @@ class clsfy_rbf_svm : public clsfy_classifier_base
   short version_no() const;
 
   //: Name of the class
-  virtual vcl_string is_a() const ;
+  virtual std::string is_a() const ;
 
   //: Name of the class
-  virtual bool is_class(vcl_string const& s) const;
+  virtual bool is_class(std::string const& s) const;
 
   //: Create a copy on the heap and return base class pointer
   virtual clsfy_classifier_base* clone() const;
 
   //: Print class to os
-  virtual void print_summary(vcl_ostream& os) const;
+  virtual void print_summary(std::ostream& os) const;
 
   //: Save class to binary file stream
   virtual void b_write(vsl_b_ostream& bfs) const;

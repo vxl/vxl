@@ -3,9 +3,9 @@
 void bwm_observable_mesh_circular::decrease_radius(double p)
 {
   // get the vertices
-  vcl_map<int, bmsh3d_vertex* > vertices = object_->vertexmap();
-  vcl_vector<vgl_point_3d<double> > new_vertices;
-  vcl_map<int, bmsh3d_vertex* >::iterator v_it = vertices.begin();
+  std::map<int, bmsh3d_vertex* > vertices = object_->vertexmap();
+  std::vector<vgl_point_3d<double> > new_vertices;
+  std::map<int, bmsh3d_vertex* >::iterator v_it = vertices.begin();
   while (v_it != vertices.end()) {
     bmsh3d_vertex* vertex = (bmsh3d_vertex*) v_it->second;
     vgl_point_3d<double> point(vertex->get_pt());
@@ -23,9 +23,9 @@ void bwm_observable_mesh_circular::decrease_radius(double p)
 void bwm_observable_mesh_circular::increase_radius(double p)
 {
   // get the vertices
-  vcl_map<int, bmsh3d_vertex* > vertices = object_->vertexmap();
-  vcl_vector<vgl_point_3d<double> > new_vertices;
-  vcl_map<int, bmsh3d_vertex* >::iterator v_it = vertices.begin();
+  std::map<int, bmsh3d_vertex* > vertices = object_->vertexmap();
+  std::vector<vgl_point_3d<double> > new_vertices;
+  std::map<int, bmsh3d_vertex* >::iterator v_it = vertices.begin();
   while (v_it != vertices.end()) {
     bmsh3d_vertex* vertex = (bmsh3d_vertex*) v_it->second;
     vgl_point_3d<double> point(vertex->get_pt());

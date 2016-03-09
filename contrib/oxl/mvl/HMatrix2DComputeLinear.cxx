@@ -3,8 +3,10 @@
 //:
 //  \file
 
-#include <vcl_vector.h>
-#include <vcl_iostream.h>
+#include <vector>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iostream>
 #include <vcl_cassert.h>
 #include <vnl/algo/vnl_svd.h>
 #include <mvl/HMatrix2D.h>
@@ -58,8 +60,8 @@ HMatrix2DComputeLinear::compute_p(PointArray const& inpoints1,
 
   int equ_count = n * (allow_ideal_points_ ? 3 : 2);
   if (n * 2 < TM_UNKNOWNS_COUNT - 1) {
-    vcl_cerr << "HMatrix2DComputeLinear: Need at least 4 matches.\n";
-    if (n == 0) vcl_cerr << "Could be vcl_vector setlength idiosyncrasies!\n";
+    std::cerr << "HMatrix2DComputeLinear: Need at least 4 matches.\n";
+    if (n == 0) std::cerr << "Could be std::vector setlength idiosyncrasies!\n";
     return false;
   }
 
@@ -116,8 +118,8 @@ HMatrix2DComputeLinear::compute_p(PointArray const& inpoints1,
   // FSM added :
   //
   if (svd.W(7)<DEGENERACY_THRESHOLD*svd.W(8)) {
-    vcl_cerr << "HMatrix2DComputeLinear : design matrix has rank < 8" << vcl_endl;
-    vcl_cerr << "HMatrix2DComputeLinear : probably due to degenerate point configuration" << vcl_endl;
+    std::cerr << "HMatrix2DComputeLinear : design matrix has rank < 8" << std::endl;
+    std::cerr << "HMatrix2DComputeLinear : probably due to degenerate point configuration" << std::endl;
     return false;
   }
   H->set(svd.nullvector().data_block());

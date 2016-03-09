@@ -35,9 +35,11 @@
 #include <vgl/vgl_plane_3d.h>
 #include <vil/vil_image_view.h>
 
-#include <vcl_iostream.h>
-#include <vcl_fstream.h>
-#include <vcl_limits.h>
+#include <iostream>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <fstream>
+#include <limits>
 
 int convert_uncertainty_from_meters_to_pixels(float uncertainty,
                                               vpgl_lvcs lvcs,
@@ -45,7 +47,7 @@ int convert_uncertainty_from_meters_to_pixels(float uncertainty,
 {
   // estimate the offset search size in the image space
   vgl_box_3d<double> box_uncertainty(-uncertainty,-uncertainty,-uncertainty,uncertainty,uncertainty,uncertainty);
-  vcl_vector<vgl_point_3d<double> > box_uncertainty_corners = boxm_utils::corners_of_box_3d(box_uncertainty);
+  std::vector<vgl_point_3d<double> > box_uncertainty_corners = boxm_utils::corners_of_box_3d(box_uncertainty);
   vgl_box_2d<double> roi_uncertainty;
 
   for (unsigned i=0; i<box_uncertainty_corners.size(); i++) {
@@ -83,7 +85,7 @@ bool boxm_rpc_registration(boxm_scene_base_sptr scene_base,//<boct_tree<T_loc, T
                            float n_normal, // FIXME - unused
                            unsigned num_observations)
 {
-  double max_prob = vcl_numeric_limits<double>::min();
+  double max_prob = std::numeric_limits<double>::min();
   unsigned int best_offset_u = 0, best_offset_v = 0;
 
   typedef boct_tree<T_loc,T_data> tree_type;
@@ -98,9 +100,9 @@ bool boxm_rpc_registration(boxm_scene_base_sptr scene_base,//<boct_tree<T_loc, T
   int offset_lower_limit_v = -offset_search_size;
   int offset_upper_limit_u =  offset_search_size;
   int offset_upper_limit_v =  offset_search_size;
-  vcl_cout << "Estimating image offsets:" << vcl_endl;
+  std::cout << "Estimating image offsets:" << std::endl;
   for (int u=offset_lower_limit_u; u<=offset_upper_limit_u; u++) {
-    vcl_cout << '.';
+    std::cout << '.';
     for (int v=offset_lower_limit_v; v<=offset_upper_limit_v; v++) {
       // for each offset pair (u,v)
       double prob = 0.0;
@@ -126,14 +128,14 @@ bool boxm_rpc_registration(boxm_scene_base_sptr scene_base,//<boct_tree<T_loc, T
       }
     }
   }
-  vcl_cout << vcl_endl;
+  std::cout << std::endl;
 
-  vcl_cout << "Estimated changes in offsets (u,v)=(" << best_offset_u << ',' << best_offset_v << ')' << vcl_endl;
+  std::cout << "Estimated changes in offsets (u,v)=(" << best_offset_u << ',' << best_offset_v << ')' << std::endl;
   // local variables
-  vcl_ifstream file_inp;
-  vcl_ofstream file_out;
+  std::ifstream file_inp;
+  std::ofstream file_out;
   file_out.clear();
-  file_out.open("offsets.txt",vcl_ofstream::app);
+  file_out.open("offsets.txt",std::ofstream::app);
   file_out << best_offset_u << ' ' << best_offset_v << '\n';
   file_out.close();
 
@@ -219,7 +221,7 @@ bool boxm_rpc_registration(boxm_scene_base_sptr scene_base,//<boct_tree<T_loc, T
     camera_out = new vpgl_rational_camera<double>(cam_out_rational);
   }
   else {
-    vcl_cerr << "error: process expects camera to be a vpgl_rational_camera or vpgl_local_rational_camera.\n";
+    std::cerr << "error: process expects camera to be a vpgl_rational_camera or vpgl_local_rational_camera.\n";
     return false;
   }
 
@@ -237,7 +239,7 @@ bool boxm_rpc_registration(boxm_scene_base_sptr scene_base,//<boct_tree<T_loc, T
                            float uncertainty,
                            unsigned num_observations)
 {
-  double max_cost = vcl_numeric_limits<double>::max();
+  double max_cost = std::numeric_limits<double>::max();
   unsigned int best_offset_u = 0, best_offset_v = 0;
   double subpixel_best_offset_u = 0.0, subpixel_best_offset_v = 0.0;
 
@@ -248,15 +250,15 @@ bool boxm_rpc_registration(boxm_scene_base_sptr scene_base,//<boct_tree<T_loc, T
   int ni = edge_image.ni();
   int nj = edge_image.nj();
 
-  vcl_cout<<ni<<','<<nj<<','<<expected_edge_image.ni()<<','<<expected_edge_image.nj();
+  std::cout<<ni<<','<<nj<<','<<expected_edge_image.ni()<<','<<expected_edge_image.nj();
   // this is the two level offset search algorithm
   int offset_lower_limit_u = -offset_search_size;
   int offset_lower_limit_v = -offset_search_size;
   int offset_upper_limit_u =  offset_search_size;
   int offset_upper_limit_v =  offset_search_size;
-  vcl_cout << "Estimating image offsets:" << vcl_endl;
+  std::cout << "Estimating image offsets:" << std::endl;
   for (int u=offset_lower_limit_u; u<=offset_upper_limit_u; u++) {
-    vcl_cout << '.';
+    std::cout << '.';
     for (int v=offset_lower_limit_v; v<=offset_upper_limit_v; v++) {
       // for each offset pair (u,v)
       double cost = 0.0;
@@ -266,28 +268,28 @@ bool boxm_rpc_registration(boxm_scene_base_sptr scene_base,//<boct_tree<T_loc, T
         for (int n=offset_search_size+1; n<nj-offset_search_size-1; n++) {
           if (edge_image(m,n,0)>-1 && edge_image(m,n,1)>-1 && edge_image(m,n,2)>-1) {
             if (expected_edge_image(m-u,n-v,0)>0 && expected_edge_image(m-u,n-v,1)>0 && expected_edge_image(m-u,n-v,2)>0) {
-            //vcl_cout<<'.';
-            float sintheta1=vcl_sin(edge_image(m,n,2));
-            float costheta1=vcl_cos(edge_image(m,n,2));
+            //std::cout<<'.';
+            float sintheta1=std::sin(edge_image(m,n,2));
+            float costheta1=std::cos(edge_image(m,n,2));
 
-            float sintheta2=vcl_sin(expected_edge_image(m-u,n-v,2));
-            float costheta2=vcl_cos(expected_edge_image(m-u,n-v,2));
+            float sintheta2=std::sin(expected_edge_image(m-u,n-v,2));
+            float costheta2=std::cos(expected_edge_image(m-u,n-v,2));
 #if 0
             float dx=expected_edge_image(m-u,n-v,0)+u-edge_image(m,n,0);
             float dy=expected_edge_image(m-u,n-v,1)+v-edge_image(m,n,1);
 
-            float dist=vcl_sqrt(dx*dx+dy*dy);
+            float dist=std::sqrt(dx*dx+dy*dy);
             if (dist<min_dist)
               min_dist=dist;
 
-            float dist1=vcl_sqrt((dx*sintheta1*sintheta1+dy*sintheta1*costheta1)*(dx*sintheta1*sintheta1+dy*sintheta1*costheta1)
+            float dist1=std::sqrt((dx*sintheta1*sintheta1+dy*sintheta1*costheta1)*(dx*sintheta1*sintheta1+dy*sintheta1*costheta1)
                                 +(dy*costheta1*costheta1+dx*sintheta1*costheta1)*(dy*costheta1*costheta1+dx*sintheta1*costheta1));
-            float dist2=vcl_sqrt((dx*sintheta2*sintheta2+dy*sintheta2*costheta2)*(dx*sintheta2*sintheta2+dy*sintheta2*costheta2)
+            float dist2=std::sqrt((dx*sintheta2*sintheta2+dy*sintheta2*costheta2)*(dx*sintheta2*sintheta2+dy*sintheta2*costheta2)
                                 +(dy*costheta2*costheta2+dx*sintheta2*costheta2)*(dy*costheta2*costheta2+dx*sintheta2*costheta2));
             if ((dist1+dist2)/2<min_dist)
               min_dist=(dist1+dist2)/2;
 #endif // 0
-            float dist=(1-vcl_fabs(sintheta1*sintheta2+costheta2*costheta1));//+vcl_sqrt(dx*dx+dy*dy);
+            float dist=(1-std::fabs(sintheta1*sintheta2+costheta2*costheta1));//+std::sqrt(dx*dx+dy*dy);
             cost += dist;//(dist1+dist2)/2;
           }
           else
@@ -302,7 +304,7 @@ bool boxm_rpc_registration(boxm_scene_base_sptr scene_base,//<boct_tree<T_loc, T
     if (norm>0.0)
         cost/=norm;
 
-      //vcl_cout<<cost<<"u "<<u<<" v"<<v<<'\n';
+      //std::cout<<cost<<"u "<<u<<" v"<<v<<'\n';
       // if maximum is found
       if (cost < max_cost) {
         max_cost = cost;
@@ -311,11 +313,11 @@ bool boxm_rpc_registration(boxm_scene_base_sptr scene_base,//<boct_tree<T_loc, T
       }
     }
   }
-  vcl_cout << "Estimated changes in offsets (u,v)=(" << best_offset_u << ',' << best_offset_v << ')' << vcl_endl;
+  std::cout << "Estimated changes in offsets (u,v)=(" << best_offset_u << ',' << best_offset_v << ')' << std::endl;
   double subpixel_offset_limit=0.5;
-  max_cost = vcl_numeric_limits<double>::max();
+  max_cost = std::numeric_limits<double>::max();
   for (double u=-subpixel_offset_limit; u<=subpixel_offset_limit; ) {
-    vcl_cout << '.';
+    std::cout << '.';
     for (double v=-subpixel_offset_limit; v<=subpixel_offset_limit; ) {
       // for each offset pair (u,v)
       double cost = 0.0;
@@ -326,13 +328,13 @@ bool boxm_rpc_registration(boxm_scene_base_sptr scene_base,//<boct_tree<T_loc, T
             if (expected_edge_image(m-best_offset_u,n-best_offset_v,0)>0 && expected_edge_image(m-best_offset_u,n-best_offset_v,1)>0 && expected_edge_image(m-best_offset_u,n-best_offset_v,2)>0) {
               double dx=expected_edge_image(m-best_offset_u,n-best_offset_v,0)+best_offset_u+u-edge_image(m,n,0);
               double dy=expected_edge_image(m-best_offset_u,n-best_offset_v,1)+best_offset_v+v-edge_image(m,n,1);
-              double dist=vcl_sqrt(dx*dx+dy*dy);
+              double dist=std::sqrt(dx*dx+dy*dy);
               cost += dist;
             }
           }
         }
       }
-      //vcl_cout<<cost<<' ';
+      //std::cout<<cost<<' ';
       if (cost < max_cost) {
           max_cost = cost;
           subpixel_best_offset_u = (double)u;
@@ -343,13 +345,13 @@ bool boxm_rpc_registration(boxm_scene_base_sptr scene_base,//<boct_tree<T_loc, T
     }
     u+=0.05;
   }
-  vcl_cout << "Estimated changes in offsets (u,v)=(" << subpixel_best_offset_u << ',' << subpixel_best_offset_v << ')' << vcl_endl;
+  std::cout << "Estimated changes in offsets (u,v)=(" << subpixel_best_offset_u << ',' << subpixel_best_offset_v << ')' << std::endl;
 
   // local variables
-  vcl_ifstream file_inp;
-  vcl_ofstream file_out;
+  std::ifstream file_inp;
+  std::ofstream file_out;
   file_out.clear();
-  file_out.open("offsets.txt",vcl_ofstream::app);
+  file_out.open("offsets.txt",std::ofstream::app);
   file_out << best_offset_u +subpixel_best_offset_u<< ' ' << best_offset_v+subpixel_best_offset_v << '\n';
   file_out.close();
 
@@ -435,7 +437,7 @@ bool boxm_rpc_registration(boxm_scene_base_sptr scene_base,//<boct_tree<T_loc, T
     camera_out = new vpgl_rational_camera<double>(cam_out_rational);
   }
   else {
-    vcl_cerr << "error: process expects camera to be a vpgl_rational_camera or vpgl_local_rational_camera.\n";
+    std::cerr << "error: process expects camera to be a vpgl_rational_camera or vpgl_local_rational_camera.\n";
     return false;
   }
 

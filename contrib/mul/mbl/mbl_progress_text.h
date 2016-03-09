@@ -9,7 +9,9 @@
 // \author Graham Vincent and Kevin de Souza
 // \date 25 Feb 2005
 
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iostream>
 #include <mbl/mbl_progress.h>
 
 //========================================================================
@@ -20,33 +22,33 @@ class mbl_progress_text : public mbl_progress
 
   //: Constructor
   // \param os Ostream for text output (defaults to cout)
-  mbl_progress_text(vcl_ostream& os=vcl_cout);
+  mbl_progress_text(std::ostream& os=std::cout);
 
   //: Destructor
   ~mbl_progress_text();
 
   //: Name of the class
-  virtual vcl_string is_a() const;
+  virtual std::string is_a() const;
 
 
  protected:
 
   //: Called when set_estimate_iterations() is called for a given identifier.
   //  \param identifier The operation being monitored.
-  virtual void on_set_estimated_iterations(const vcl_string& identifier,
+  virtual void on_set_estimated_iterations(const std::string& identifier,
                                            const int total_iterations);
 
   //: Called when set_progress() is called for a given identifier.
   //  \param identifier The operation being monitored.
   //  \param progress The new progress status.
-  virtual void on_set_progress(const vcl_string& identifier,
+  virtual void on_set_progress(const std::string& identifier,
                                const int progress);
 
   //: Called when end_progress() is called for a given identifier.
   //  \param identifier The operation being monitored.
-  virtual void on_end_progress(const vcl_string &identifier);
+  virtual void on_end_progress(const std::string &identifier);
 
-  vcl_ostream& os_;
+  std::ostream& os_;
 };
 
 //========================================================================

@@ -1,7 +1,9 @@
 // This is mul/vil3d/tests/test_algo_anisotropic_filter.cxx
 
 #include <testlib/testlib_test.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iostream>
 #include <vgl/vgl_vector_3d.h>
 #include <vil3d/algo/vil3d_anisotropic_filter.h>
 #include <vil3d/vil3d_print.h>
@@ -11,7 +13,7 @@
 // Test the anisotropic_gaussian_filter
 static void test_anisotropic_gaussian_filter()
 {
-  vcl_cout << "************************************************\n"
+  std::cout << "************************************************\n"
            << " Testing vil3d_algo_anisotropic_gaussian_filter\n"
            << "************************************************\n";
 
@@ -39,11 +41,11 @@ static void test_anisotropic_gaussian_filter()
   vil3d_anisotropic_gaussian_filter(src_im, dst_im, sd, work1, work2, work3);
 
 #ifdef DEBUG
-  vcl_cout << "Source image:\n";
-  vil3d_print_all(vcl_cout, src_im);
+  std::cout << "Source image:\n";
+  vil3d_print_all(std::cout, src_im);
 
-  vcl_cout << "\n\nDestination image:\n";
-  vil3d_print_all(vcl_cout, dst_im);
+  std::cout << "\n\nDestination image:\n";
+  vil3d_print_all(std::cout, dst_im);
 #endif // DEBUG
 
   double src_sum = 0;

@@ -4,61 +4,63 @@
 #include <bbas/volm/volm_spherical_container.h>
 #include <boxm2/volm/boxm2_volm_locations.h>
 #include <vgl/vgl_box_3d.h>
-#include <vcl_algorithm.h>
-#include <vcl_iterator.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <algorithm>
+#include <iterator>
 
-bool volm_buffered_index_params::write_params_file(vcl_string index_file_name_pre)
+bool volm_buffered_index_params::write_params_file(std::string index_file_name_pre)
 {
-  //vcl_string index_params_file = vul_file::strip_extension(index_file_name) + ".params";
-  vcl_string index_params_file = index_file_name_pre + ".params";
-  vcl_ofstream ofs(index_params_file.c_str());
+  //std::string index_params_file = vul_file::strip_extension(index_file_name) + ".params";
+  std::string index_params_file = index_file_name_pre + ".params";
+  std::ofstream ofs(index_params_file.c_str());
   if (!ofs.is_open())
     return false;
-  ofs << "layer_size " << layer_size << vcl_endl;
+  ofs << "layer_size " << layer_size << std::endl;
   ofs.close();
   return true;
 }
 
-bool volm_buffered_index_params::read_params_file(vcl_string index_file_name_pre)
+bool volm_buffered_index_params::read_params_file(std::string index_file_name_pre)
 {
-  //vcl_string index_params_file = vul_file::strip_extension(index_file_name) + ".params";
-  vcl_string index_params_file = index_file_name_pre + ".params";
-  vcl_ifstream ifs(index_params_file.c_str());
+  //std::string index_params_file = vul_file::strip_extension(index_file_name) + ".params";
+  std::string index_params_file = index_file_name_pre + ".params";
+  std::ifstream ifs(index_params_file.c_str());
   if (!ifs.is_open())
     return false;
-  vcl_string tmp;
+  std::string tmp;
   ifs >> tmp >> layer_size;
   ifs.close();
   return true;
 }
 
-bool volm_buffered_index_params::write_ex_param_file(vcl_string index_file_name_pre)
+bool volm_buffered_index_params::write_ex_param_file(std::string index_file_name_pre)
 {
-  //vcl_string index_params_file = vul_file::strip_extension(index_file_name) + ".params";
-  vcl_string index_params_file = index_file_name_pre + ".params";
-  vcl_ofstream ofs(index_params_file.c_str());
+  //std::string index_params_file = vul_file::strip_extension(index_file_name) + ".params";
+  std::string index_params_file = index_file_name_pre + ".params";
+  std::ofstream ofs(index_params_file.c_str());
   if (ofs.fail())
     return false;
-  ofs << "layer_size " << layer_size << vcl_endl;
-  ofs << "radius_type " << radius.size() << vcl_endl;
-  ofs << "orientation_type " << norients << vcl_endl;
-  ofs << "land_type " << nlands << vcl_endl;
+  ofs << "layer_size " << layer_size << std::endl;
+  ofs << "radius_type " << radius.size() << std::endl;
+  ofs << "orientation_type " << norients << std::endl;
+  ofs << "land_type " << nlands << std::endl;
   ofs << "radius: ";
   for (unsigned i = 0; i < radius.size(); i++)
     ofs << radius[i] << ' ';
-  ofs << vcl_endl;
+  ofs << std::endl;
   ofs.close();
   return true;
 }
 
-bool volm_buffered_index_params::read_ex_param_file(vcl_string index_file_name_pre)
+bool volm_buffered_index_params::read_ex_param_file(std::string index_file_name_pre)
 {
-  //vcl_string index_params_file = vul_file::strip_extension(index_file_name) + ".params";
-  vcl_string index_params_file = index_file_name_pre + ".params";
-  vcl_ifstream ifs(index_params_file.c_str());
+  //std::string index_params_file = vul_file::strip_extension(index_file_name) + ".params";
+  std::string index_params_file = index_file_name_pre + ".params";
+  std::ifstream ifs(index_params_file.c_str());
   if (!ifs.is_open())
     return false;
-  vcl_string tmp;
+  std::string tmp;
   unsigned nradius;
   ifs >> tmp >> layer_size;
   ifs >> tmp >> nradius;
@@ -73,32 +75,32 @@ bool volm_buffered_index_params::read_ex_param_file(vcl_string index_file_name_p
   return true;
 }
 
-bool volm_buffered_index_params::write_conf_param_file(vcl_string const& index_file_name_pre)
+bool volm_buffered_index_params::write_conf_param_file(std::string const& index_file_name_pre)
 {
-  vcl_string index_params_file = index_file_name_pre + ".params";
-  vcl_ofstream ofs(index_params_file.c_str());
+  std::string index_params_file = index_file_name_pre + ".params";
+  std::ofstream ofs(index_params_file.c_str());
   if (ofs.fail())
     return false;
-  ofs << "radius " << this->conf_radius << vcl_endl;
+  ofs << "radius " << this->conf_radius << std::endl;
   ofs.close();
   return true;
 }
 
-bool volm_buffered_index_params::read_conf_param_file(vcl_string const& index_file_name_pre)
+bool volm_buffered_index_params::read_conf_param_file(std::string const& index_file_name_pre)
 {
-  vcl_string index_params_file = index_file_name_pre + ".params";
-  vcl_ifstream ifs(index_params_file.c_str());
+  std::string index_params_file = index_file_name_pre + ".params";
+  std::ifstream ifs(index_params_file.c_str());
   if (!ifs.is_open())
     return false;
-  vcl_string tmp;
+  std::string tmp;
   ifs >> tmp >> conf_radius;
   return true;
 }
 
-bool volm_buffered_index_params::write_size_file(vcl_string index_file_name, unsigned long indexed_cnt)
+bool volm_buffered_index_params::write_size_file(std::string index_file_name, unsigned long indexed_cnt)
 {
-  vcl_string index_size_file = vul_file::strip_extension(index_file_name) + ".txt";
-  vcl_ofstream ofs(index_size_file.c_str());
+  std::string index_size_file = vul_file::strip_extension(index_file_name) + ".txt";
+  std::ofstream ofs(index_size_file.c_str());
   if (!ofs.is_open())
     return false;
   ofs << indexed_cnt << '\n';
@@ -106,10 +108,10 @@ bool volm_buffered_index_params::write_size_file(vcl_string index_file_name, uns
   return true;
 }
 
-bool volm_buffered_index_params::read_size_file(vcl_string index_file_name, unsigned long& size)
+bool volm_buffered_index_params::read_size_file(std::string index_file_name, unsigned long& size)
 {
-  vcl_string index_size_file = vul_file::strip_extension(index_file_name) + ".txt";
-  vcl_ifstream ifs(index_size_file.c_str());
+  std::string index_size_file = vul_file::strip_extension(index_file_name) + ".txt";
+  std::ifstream ifs(index_size_file.c_str());
   if (!ifs.is_open())
     return false;
   ifs >> size;
@@ -121,7 +123,7 @@ bool volm_buffered_index_params::read_size_file(vcl_string index_file_name, unsi
 volm_buffered_index::volm_buffered_index(unsigned layer_size, float buffer_capacity) :
 layer_size_(layer_size), buffer_size_(0), current_id_(0), current_global_id_(0), m_(NOT_INITIALIZED), file_name_(""), active_buffer_(VXL_NULLPTR)
 {
-  buffer_size_ = (unsigned int)vcl_floor((buffer_capacity*1024*1024*1024)/(2.0f*layer_size));
+  buffer_size_ = (unsigned int)std::floor((buffer_capacity*1024*1024*1024)/(2.0f*layer_size));
   active_buffer_ = new uchar[buffer_size_*layer_size_];
 }
 
@@ -133,14 +135,14 @@ volm_buffered_index::~volm_buffered_index()
     delete [] active_buffer_;
 }
 
-bool volm_buffered_index::initialize_write(vcl_string file_name)
+bool volm_buffered_index::initialize_write(std::string file_name)
 {
   if (m_ == READ)
     this->finalize();
   m_ = WRITE;
   file_name_ = file_name;
-  //f_obj_.open(file_name.c_str(), vcl_ios::app | vcl_ios::binary);
-  of_obj_.open(file_name.c_str(), vcl_ios::binary);
+  //f_obj_.open(file_name.c_str(), std::ios::app | std::ios::binary);
+  of_obj_.open(file_name.c_str(), std::ios::binary);
   if (!of_obj_.good())
     return false;
   current_id_ = 0;
@@ -148,13 +150,13 @@ bool volm_buffered_index::initialize_write(vcl_string file_name)
   return true;
 }
 
-bool volm_buffered_index::initialize_read(vcl_string file_name)
+bool volm_buffered_index::initialize_read(std::string file_name)
 {
   if (m_ == WRITE)
     this->finalize();
   m_ = READ;
   file_name_ = file_name;
-  if_obj_.open(file_name.c_str(), vcl_ios::in | vcl_ios::binary);
+  if_obj_.open(file_name.c_str(), std::ios::in | std::ios::binary);
   if (!if_obj_.good())
     return false;
   current_id_ = 0;
@@ -180,14 +182,14 @@ bool volm_buffered_index::finalize()
 
 //: just appends to the end of the current active buffer, nothing about which location hypothesis these values correspond is known.
 //  caller is responsible to keep the ordering consistent with the hypotheses ordering
-bool volm_buffered_index::add_to_index(vcl_vector<uchar>& values)
+bool volm_buffered_index::add_to_index(std::vector<uchar>& values)
 {
   if (m_ == READ) {
-    vcl_cout << "index object is in READ mode! cannot add to index!\n";
+    std::cout << "index object is in READ mode! cannot add to index!\n";
     return false;
   }
   if (values.size() != layer_size_) {
-    vcl_cout << "In boxm2_volm_wr3db_index::add_to_index() -- size of value array is not consistent with layer size of this index object!\n";
+    std::cout << "In boxm2_volm_wr3db_index::add_to_index() -- size of value array is not consistent with layer size of this index object!\n";
     return false;
   }
   if (current_id_ == buffer_size_) {  // write the current cache
@@ -208,7 +210,7 @@ bool volm_buffered_index::add_to_index(vcl_vector<uchar>& values)
 bool volm_buffered_index::add_to_index(uchar* values)
 {
   if (m_ == READ) {
-    vcl_cout << "index object is in READ mode! cannot add to index!\n";
+    std::cout << "index object is in READ mode! cannot add to index!\n";
     return false;
   }
   if (current_id_ == buffer_size_) {  // write the current cache
@@ -242,10 +244,10 @@ unsigned int volm_buffered_index::read_to_buffer(uchar* buf)
 }
 
 //: retrieve the next index, use the active_cache, if all on the active_cache has been retrieved, read from disc, values array is resized to layer_size
-bool volm_buffered_index::get_next(vcl_vector<uchar>& values)
+bool volm_buffered_index::get_next(std::vector<uchar>& values)
 {
   if (m_ == WRITE) {
-    vcl_cout << "index object is in WRITE mode! cannot read from index!\n";
+    std::cout << "index object is in WRITE mode! cannot read from index!\n";
     return false;
   }
 
@@ -267,7 +269,7 @@ bool volm_buffered_index::get_next(vcl_vector<uchar>& values)
 bool volm_buffered_index::get_next(uchar* values, unsigned size)
 {
   if (m_ == WRITE) {
-    vcl_cout << "index object is in WRITE mode! cannot read from index!\n";
+    std::cout << "index object is in WRITE mode! cannot read from index!\n";
     return false;
   }
 
@@ -282,7 +284,7 @@ bool volm_buffered_index::get_next(uchar* values, unsigned size)
   //unsigned char val = (unsigned char)0;
   //for (unsigned i = layer_size_; i < size; i++)
   //  values[i] = val;
-  vcl_fill(values+layer_size_, values+size, (unsigned char)0);
+  std::fill(values+layer_size_, values+size, (unsigned char)0);
   current_global_id_++;
   current_id_++;
   return true;

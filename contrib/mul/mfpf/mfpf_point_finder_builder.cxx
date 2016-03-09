@@ -10,8 +10,10 @@
 #include <mbl/mbl_parse_block.h>
 #include <mbl/mbl_read_props.h>
 #include <mbl/mbl_cloneables_factory.h>
-#include <vcl_cmath.h>
-#include <vcl_sstream.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <cmath>
+#include <sstream>
 
 #include <mfpf/mfpf_point_finder.h>
 #include <vul/vul_string.h>
@@ -74,10 +76,10 @@ unsigned mfpf_point_finder_builder::model_dim()
 void mfpf_point_finder_builder::get_sample_vector(const vimt_image_2d_of<float>& image,
                                                   const vgl_point_2d<double>& p,
                                                   const vgl_vector_2d<double>& u,
-                                                  vcl_vector<double>& v)
+                                                  std::vector<double>& v)
 {
   // Return empty vector
-  v = vcl_vector<double>();
+  v = std::vector<double>();
 }
 
 
@@ -132,16 +134,16 @@ void mfpf_point_finder_builder::set_base_parameters(mfpf_point_finder& pf)
 }
 
 //: Initialise from a string stream
-bool mfpf_point_finder_builder::set_from_stream(vcl_istream &is)
+bool mfpf_point_finder_builder::set_from_stream(std::istream &is)
 {
   // Cycle through string and produce a map of properties
-  vcl_string s = mbl_parse_block(is);
-  vcl_istringstream ss(s);
+  std::string s = mbl_parse_block(is);
+  std::istringstream ss(s);
   mbl_read_props_type props = mbl_read_props_ws(ss);
 
   if (props.size()!=0)
   {
-    vcl_cerr<<is_a()<<" does not expect any extra arguments.\n";
+    std::cerr<<is_a()<<" does not expect any extra arguments.\n";
     mbl_read_props_look_for_unused_props(
       "mfpf_point_finder_builder::set_from_stream", props, mbl_read_props_type());
   }
@@ -149,12 +151,12 @@ bool mfpf_point_finder_builder::set_from_stream(vcl_istream &is)
 }
 
 //: Create a concrete object, from a text specification.
-vcl_auto_ptr<mfpf_point_finder_builder> mfpf_point_finder_builder::
-  create_from_stream(vcl_istream &is)
+std::auto_ptr<mfpf_point_finder_builder> mfpf_point_finder_builder::
+  create_from_stream(std::istream &is)
 {
-  vcl_string name;
+  std::string name;
   is >> name;
-  vcl_auto_ptr<mfpf_point_finder_builder> opt;
+  std::auto_ptr<mfpf_point_finder_builder> opt;
   try {
     opt = mbl_cloneables_factory<mfpf_point_finder_builder>::get_clone(name);
   }
@@ -180,9 +182,9 @@ short mfpf_point_finder_builder::version_no() const
 // Method: is_a
 //=======================================================================
 
-vcl_string mfpf_point_finder_builder::is_a() const
+std::string mfpf_point_finder_builder::is_a() const
 {
-  return vcl_string("mfpf_point_finder_builder");
+  return std::string("mfpf_point_finder_builder");
 }
 
 //: Return true if base class parameters are the same in pf
@@ -192,9 +194,9 @@ bool mfpf_point_finder_builder::base_equality(const mfpf_point_finder_builder& p
   if (search_nj_!=pf.search_nj_) return false;
   if (search_nA_!=pf.search_nA_) return false;
   if (search_ns_!=pf.search_ns_) return false;
-  if (vcl_fabs(search_dA_-pf.search_dA_)>1e-6) return false;
-  if (vcl_fabs(search_ds_-pf.search_ds_)>1e-6) return false;
-  if (vcl_fabs(step_size_-pf.step_size_)>1e-6) return false;
+  if (std::fabs(search_dA_-pf.search_dA_)>1e-6) return false;
+  if (std::fabs(search_ds_-pf.search_ds_)>1e-6) return false;
+  if (std::fabs(step_size_-pf.step_size_)>1e-6) return false;
   return true;
 }
 
@@ -202,7 +204,7 @@ bool mfpf_point_finder_builder::base_equality(const mfpf_point_finder_builder& p
 // Method: print
 //=======================================================================
 
-void mfpf_point_finder_builder::print_summary(vcl_ostream& os) const
+void mfpf_point_finder_builder::print_summary(std::ostream& os) const
 {
   os<<" step_size: "<<step_size_
     <<" search: { ni: "<<search_ni_
@@ -248,9 +250,9 @@ void mfpf_point_finder_builder::b_read(vsl_b_istream& bfs)
       vsl_b_read(bfs,search_ds_);
       break;
     default:
-      vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&)\n"
+      std::cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&)\n"
                << "           Unknown version number "<< version << '\n';
-      bfs.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
+      bfs.is().clear(std::ios::badbit); // Set an unrecoverable IO error on stream
       return;
   }
 }
@@ -283,7 +285,7 @@ void vsl_b_read(vsl_b_istream& bfs, mfpf_point_finder_builder& b)
 // Associated function: operator<<
 //=======================================================================
 
-vcl_ostream& operator<<(vcl_ostream& os,const mfpf_point_finder_builder& b)
+std::ostream& operator<<(std::ostream& os,const mfpf_point_finder_builder& b)
 {
   os << b.is_a() << ": ";
   vsl_indent_inc(os);
@@ -296,7 +298,7 @@ vcl_ostream& operator<<(vcl_ostream& os,const mfpf_point_finder_builder& b)
 // Associated function: operator<<
 //=======================================================================
 
-vcl_ostream& operator<<(vcl_ostream& os,const mfpf_point_finder_builder* b)
+std::ostream& operator<<(std::ostream& os,const mfpf_point_finder_builder* b)
 {
   if (b)
     return os << *b;

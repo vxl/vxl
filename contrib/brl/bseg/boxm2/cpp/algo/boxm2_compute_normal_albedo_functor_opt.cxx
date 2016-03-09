@@ -4,9 +4,11 @@
 #include <boxm2/boxm2_data_traits.h>
 #include <vgl/vgl_vector_3d.h>
 #include <vnl/vnl_math.h>
-#include <vcl_vector.h>
-#include <vcl_algorithm.h>
-#include <vcl_iostream.h>
+#include <vector>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <algorithm>
+#include <iostream>
 #include <vnl/algo/vnl_brent_minimizer.h>
 
 #include <brad/brad_image_metadata.h>
@@ -27,32 +29,32 @@ double boxm2_compute_normal_albedo_cost_function::f(vnl_vector<double> const& x)
       if (rad_var <= 0.0) {
          // indicates that surface with given normal is not visible from this view
          double background_density = 0.01; // TODO: compute actual uniform density value
-         log_prob += vcl_log((1.0 - weight)*background_density);
+         log_prob += std::log((1.0 - weight)*background_density);
       }
       else {
          double diff = (radiance_scales_[m]*rho + radiance_offsets_[m] - radiances_[m]);
-         double log_norm = -0.5 * vcl_log(vnl_math::twopi * rad_var);
+         double log_norm = -0.5 * std::log(vnl_math::twopi * rad_var);
          log_prob += weight * (log_norm - (diff*diff / (2.0*rad_var)));
       }
 #endif
       double prob = 0.0;
       if (rad_var > 0.0) {
          double diff = (radiance_scales_[m]*rho + radiance_offsets_[m] - radiances_[m]);
-         prob = visibilities_[m] * vcl_exp(-diff*diff/(2.0*rad_var)) / vcl_sqrt(vnl_math::twopi*rad_var);
+         prob = visibilities_[m] * std::exp(-diff*diff/(2.0*rad_var)) / std::sqrt(vnl_math::twopi*rad_var);
       }
       const double background_density = 0.01; // TODO: compute actual uniform density value
       prob += (1.0 - visibilities_[m])*background_density;
       if (!(prob >= 1e-6)) {
          prob = 1e-6;
       }
-      log_prob += vcl_log(prob);
+      log_prob += std::log(prob);
    }
    return -log_prob;
 }
 
 
-bool boxm2_compute_normal_albedo_functor_opt::init_data(vcl_vector<brad_image_metadata> const& metadata,
-                                                        vcl_vector<brad_atmospheric_parameters> const& atm_params,
+bool boxm2_compute_normal_albedo_functor_opt::init_data(std::vector<brad_image_metadata> const& metadata,
+                                                        std::vector<brad_atmospheric_parameters> const& atm_params,
                                                         boxm2_stream_cache_sptr str_cache,
                                                         boxm2_data_base * alpha_data,
                                                         boxm2_data_base * normal_albedo_model)
@@ -78,12 +80,12 @@ bool boxm2_compute_normal_albedo_functor_opt::init_data(vcl_vector<brad_image_me
    num_images_ = metadata.size();
    // sanity check on atmospheric parameters
    if (atm_params_.size() != num_images_) {
-      vcl_cerr << "ERROR: boxm2_compute_normal_albedo_functor_opt: image metadata.size() = "
+      std::cerr << "ERROR: boxm2_compute_normal_albedo_functor_opt: image metadata.size() = "
                << num_images_ << ", atm_params_.size() = " << atm_params_.size() << '\n';
       return false;
    }
    // get normal directions
-   vcl_vector<vgl_vector_3d<double> > normals = boxm2_normal_albedo_array::get_normals();
+   std::vector<vgl_vector_3d<double> > normals = boxm2_normal_albedo_array::get_normals();
    num_normals_ = normals.size();
 
    // compute offsets and scales for linear radiance model
@@ -121,27 +123,27 @@ bool boxm2_compute_normal_albedo_functor_opt::init_data(vcl_vector<brad_image_me
 bool boxm2_compute_normal_albedo_functor_opt::process_cell(unsigned int index, bool is_leaf, float side_len)
 {
    if (index >= naa_model_data_->data().size()) {
-      vcl_cerr << "ERROR: index = " << index << ", naa_model_data_->data().size = " << naa_model_data_->data().size() << '\n'
+      std::cerr << "ERROR: index = " << index << ", naa_model_data_->data().size = " << naa_model_data_->data().size() << '\n'
                << "   alpha_data_->data().size() = " << alpha_data_->data().size() << '\n';
       return false;
    }
    if (index >= alpha_data_->data().size()) {
-      vcl_cerr << "ERROR: index = " << index << ", alpha_data_->data().size = " << alpha_data_->data().size() << '\n';
+      std::cerr << "ERROR: index = " << index << ", alpha_data_->data().size = " << alpha_data_->data().size() << '\n';
       return false;
    }
    boxm2_data<BOXM2_NORMAL_ALBEDO_ARRAY>::datatype & naa_model = naa_model_data_->data()[index];
-   vcl_vector<aux0_datatype> aux0_raw = str_cache_->get_next<BOXM2_AUX0>(id_, index); // seg_len
-   vcl_vector<aux1_datatype> aux1_raw = str_cache_->get_next<BOXM2_AUX1>(id_, index); // mean_obs
-   vcl_vector<aux2_datatype> aux2_raw = str_cache_->get_next<BOXM2_AUX2>(id_, index); // vis
-   vcl_vector<aux3_datatype> aux3_raw = str_cache_->get_next<BOXM2_AUX3>(id_, index); // pre
+   std::vector<aux0_datatype> aux0_raw = str_cache_->get_next<BOXM2_AUX0>(id_, index); // seg_len
+   std::vector<aux1_datatype> aux1_raw = str_cache_->get_next<BOXM2_AUX1>(id_, index); // mean_obs
+   std::vector<aux2_datatype> aux2_raw = str_cache_->get_next<BOXM2_AUX2>(id_, index); // vis
+   std::vector<aux3_datatype> aux3_raw = str_cache_->get_next<BOXM2_AUX3>(id_, index); // pre
 
    if (aux0_raw.size() != num_images_) {
-      vcl_cerr << "ERROR: boxm2_compute_normal_albedo_functor_opt : aux0_raw.size() " << aux0_raw.size() << " != num_images_ " << num_images_ << '\n';
+      std::cerr << "ERROR: boxm2_compute_normal_albedo_functor_opt : aux0_raw.size() " << aux0_raw.size() << " != num_images_ " << num_images_ << '\n';
       return false;
    }
 
-   vcl_vector<double> radiances(num_images_, 0.0);
-   vcl_vector<double> vis_vals(num_images_, 0.0);
+   std::vector<double> radiances(num_images_, 0.0);
+   std::vector<double> vis_vals(num_images_, 0.0);
 
    for (unsigned m = 0; m < num_images_; ++m) {
       if (aux0_raw[m]>1e-10f)
@@ -153,13 +155,13 @@ bool boxm2_compute_normal_albedo_functor_opt::process_cell(unsigned int index, b
    }
 
    double prob_sum = 0.0;
-   vcl_vector<double> normal_probs(num_normals_);
+   std::vector<double> normal_probs(num_normals_);
    for (unsigned int n=0; n<num_normals_; ++n) {
       boxm2_compute_normal_albedo_cost_function cost_fun(radiances, vis_vals, radiance_scales_[n], radiance_offsets_[n], radiance_var_scales_[n], radiance_var_offsets_[n]);
       vnl_brent_minimizer bmin(cost_fun);
       double albedo = bmin.minimize_given_bounds(0.0, 0.2, 1.0);
       naa_model.set_albedo(n,float(albedo));
-      double opt_prob = vcl_exp(-1.0 * bmin.f_at_last_minimum());
+      double opt_prob = std::exp(-1.0 * bmin.f_at_last_minimum());
       normal_probs[n] = opt_prob;
       prob_sum += opt_prob;
    }

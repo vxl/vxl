@@ -8,9 +8,11 @@
 #include <boxm/boxm_scene.h>
 
 #include <vul/vul_file.h>
-#include <vcl_sstream.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <sstream>
 
-bvpl_pca_error_scenes::bvpl_pca_error_scenes(boxm_scene_base_sptr data_scene_base, vcl_string pca_path, unsigned dim)
+bvpl_pca_error_scenes::bvpl_pca_error_scenes(boxm_scene_base_sptr data_scene_base, std::string pca_path, unsigned dim)
 {
   typedef boct_tree<short,float> tree_type;
   for (unsigned i =0; i<dim+1; i++)
@@ -18,14 +20,14 @@ bvpl_pca_error_scenes::bvpl_pca_error_scenes(boxm_scene_base_sptr data_scene_bas
 
   boxm_scene<tree_type>* data_scene= dynamic_cast<boxm_scene<tree_type>* > (data_scene_base.as_pointer());
   if (!data_scene)
-    vcl_cerr << "In bvpl_pca_error_scenes: Null Scene\n";
+    std::cerr << "In bvpl_pca_error_scenes: Null Scene\n";
 
   for (unsigned i = 0; i<dim+1; i++)
   {
     //path to error scenes
-    vcl_stringstream error_path_ss;
+    std::stringstream error_path_ss;
     error_path_ss << pca_path << "/error_" << i;
-    vcl_string error_path = error_path_ss.str();
+    std::string error_path = error_path_ss.str();
     if (!vul_file::is_directory(error_path))
       vul_file::make_directory(error_path);
 
@@ -33,7 +35,7 @@ bvpl_pca_error_scenes::bvpl_pca_error_scenes(boxm_scene_base_sptr data_scene_bas
     new boxm_scene<tree_type>(data_scene->lvcs(), data_scene->origin(), data_scene->block_dim(), data_scene->world_dim(), data_scene->max_level(), data_scene->init_level());
     error_scene->set_appearance_model(BOXM_FLOAT);
 
-    vcl_string scene_name = "error_scene";
+    std::string scene_name = "error_scene";
     error_scene->set_paths(error_path, scene_name);
 
     if (!vul_file::exists(error_path + "/" + scene_name +  ".xml"))

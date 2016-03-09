@@ -17,7 +17,7 @@ bool vil_set_float_image_pixel_process_cons( bprb_func_process& pro )
 {
     using namespace vil_set_float_image_pixel_process_globals;
 
-    vcl_vector<vcl_string> input_types_(n_inputs_);
+    std::vector<std::string> input_types_(n_inputs_);
 
     unsigned i = 0;
     input_types_[i++] = "vil_image_view_base_sptr";
@@ -33,7 +33,7 @@ bool vil_set_float_image_pixel_process( bprb_func_process& pro )
     using namespace vil_set_float_image_pixel_process_globals;
 
     if (pro.n_inputs() != n_inputs_) {
-        vcl_cout << "vil_set_float_image_pixel_process: The number of inputs should be " << n_inputs_ << vcl_endl;
+        std::cout << "vil_set_float_image_pixel_process: The number of inputs should be " << n_inputs_ << std::endl;
         return false;
     }
 
@@ -47,7 +47,7 @@ bool vil_set_float_image_pixel_process( bprb_func_process& pro )
 
     if ( x > base_sptr->ni() || y > base_sptr->nj() )
     {
-        vcl_cerr << "-----ERROR-----\n"
+        std::cerr << "-----ERROR-----\n"
                  << "In vil_set_float_image_pixel_process\n"
                  << "Target (" << x << ", "<< y << ") out of bounds.\n";
         return false;
@@ -55,7 +55,7 @@ bool vil_set_float_image_pixel_process( bprb_func_process& pro )
 
     if ( pixel_array_sptr->data_array.size() != base_sptr->nplanes() )
     {
-        vcl_cerr << "-----ERROR-----\n"
+        std::cerr << "-----ERROR-----\n"
                  << "In vil_set_float_image_pixel_process\n"
                  << "Pixel array and Image dimensions don't match.\n";
         return false;
@@ -66,7 +66,7 @@ bool vil_set_float_image_pixel_process( bprb_func_process& pro )
 
     if ( !img_ptr )
     {
-        vcl_cerr << "-----ERROR-----\n"
+        std::cerr << "-----ERROR-----\n"
                  << "In vil_set_float_image_pixel_process\n"
                  << "Couldn't cast to vil_image_view<float>*\n";
         return false;

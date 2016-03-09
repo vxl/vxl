@@ -9,22 +9,24 @@
 #include "brip_histogram.h"
 
 #include <vcl_cassert.h>
-#include <vcl_algorithm.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <algorithm>
 
 //: Construct histogram from pixels in the given image.
 template<class T>
 double brip_histogram(const vil_image_view<T>& image,
-                      vcl_vector<double>& histo,
+                      std::vector<double>& histo,
                       double min, double max, unsigned n_bins)
 {
   histo.resize(n_bins);
-  vcl_fill(histo.begin(),histo.end(),0.0);
+  std::fill(histo.begin(),histo.end(),0.0);
   double x0 = double(min);
   double s = double(n_bins-1)/(double(max)-x0);
   double total_weight = 0.0;
 
   unsigned ni=image.ni(), nj=image.nj(), np=image.nplanes();
-  vcl_ptrdiff_t istep=image.istep(), jstep=image.jstep(), pstep=image.planestep();
+  std::ptrdiff_t istep=image.istep(), jstep=image.jstep(), pstep=image.planestep();
 
   const T* plane = image.top_left_ptr();
   for (unsigned p=0; p<np; ++p,plane+=pstep)
@@ -51,7 +53,7 @@ double brip_histogram(const vil_image_view<T>& image,
 template<class T>
 double brip_weighted_histogram(const vil_image_view<T>& image,
                                const vil_image_view<double>& weights,
-                               vcl_vector<double>& histo,
+                               std::vector<double>& histo,
                                double min, double max, unsigned n_bins)
 {
   assert( (image.ni() == weights.ni()) &&
@@ -59,14 +61,14 @@ double brip_weighted_histogram(const vil_image_view<T>& image,
           (image.nplanes() == weights.nplanes()) );
 
   histo.resize(n_bins);
-  vcl_fill(histo.begin(),histo.end(),0.0);
+  std::fill(histo.begin(),histo.end(),0.0);
   double x0 = double(min);
   double s = double(n_bins-1)/(double(max)-x0);
   double total_weight = 0.0;
 
   unsigned ni=image.ni(), nj=image.nj(), np=image.nplanes();
-  vcl_ptrdiff_t i_istep=image.istep(), i_jstep=image.jstep(), i_pstep=image.planestep();
-  vcl_ptrdiff_t w_istep=weights.istep(), w_jstep=weights.jstep(), w_pstep=weights.planestep();
+  std::ptrdiff_t i_istep=image.istep(), i_jstep=image.jstep(), i_pstep=image.planestep();
+  std::ptrdiff_t w_istep=weights.istep(), w_jstep=weights.jstep(), w_pstep=weights.planestep();
 
   const T* i_plane = image.top_left_ptr();
   const double* w_plane = weights.top_left_ptr();
@@ -96,14 +98,14 @@ double brip_weighted_histogram(const vil_image_view<T>& image,
 template<class T>
 double brip_joint_histogram(const vil_image_view<T>& image1,
                             const vil_image_view<T>& image2,
-                            vcl_vector<vcl_vector<double> >& histo,
+                            std::vector<std::vector<double> >& histo,
                             double min, double max, unsigned n_bins)
 {
   assert( (image1.ni() == image2.ni()) &&
           (image1.nj() == image2.nj()) &&
           (image1.nplanes() == image2.nplanes()) );
 
-  vcl_vector<double> empty(n_bins, 0.0);
+  std::vector<double> empty(n_bins, 0.0);
   histo.clear();
   for (unsigned i=0; i<n_bins; ++i)
     histo.push_back(empty);
@@ -113,8 +115,8 @@ double brip_joint_histogram(const vil_image_view<T>& image1,
   double total_weight = 0.0;
 
   unsigned ni=image1.ni(), nj=image1.nj(), np=image1.nplanes();
-  vcl_ptrdiff_t istep1=image1.istep(), jstep1=image1.jstep(), pstep1=image1.planestep();
-  vcl_ptrdiff_t istep2=image2.istep(), jstep2=image2.jstep(), pstep2=image2.planestep();
+  std::ptrdiff_t istep1=image1.istep(), jstep1=image1.jstep(), pstep1=image1.planestep();
+  std::ptrdiff_t istep2=image2.istep(), jstep2=image2.jstep(), pstep2=image2.planestep();
 
   const T* plane1 = image1.top_left_ptr();
   const T* plane2 = image2.top_left_ptr();
@@ -146,17 +148,17 @@ double brip_joint_histogram(const vil_image_view<T>& image1,
 #define BRIP_HISTOGRAM_INSTANTIATE(T) \
   template \
   double brip_histogram(const vil_image_view<T >& image, \
-                        vcl_vector<double>& histo, \
+                        std::vector<double>& histo, \
                         double min, double max, unsigned n_bins); \
   template \
   double brip_weighted_histogram(const vil_image_view<T >& image, \
                                  const vil_image_view<double>& weights, \
-                                 vcl_vector<double>& histo, \
+                                 std::vector<double>& histo, \
                                  double min, double max, unsigned n_bins); \
   template \
   double brip_joint_histogram(const vil_image_view<T >& image1, \
                               const vil_image_view<T >& image2, \
-                              vcl_vector<vcl_vector<double> >& histo, \
+                              std::vector<std::vector<double> >& histo, \
                               double min, double max, unsigned n_bins)
 
 #endif // brip_histogram_hxx_

@@ -5,8 +5,10 @@
 // \brief Use F&H's DP style algorithm to search for global solutions
 
 #include <vcl_cassert.h>
-#include <vcl_cmath.h>
-#include <vcl_cstdlib.h> // for std::abort()
+#include <vcl_compiler.h>
+#include <iostream>
+#include <cmath>
+#include <cstdlib> // for std::abort()
 #include <vnl/vnl_math.h>
 #include <vgl/vgl_point_2d.h>
 #include <vgl/vgl_vector_2d.h>
@@ -23,12 +25,12 @@ fhs_searcher::fhs_searcher()
 //: Set tree defining relationships between features
 //  Input arcs define neighbour relationships in any order.
 //  root_node defines which feature to be used as the root
-void fhs_searcher::set_tree(const vcl_vector<fhs_arc>& arcs,
+void fhs_searcher::set_tree(const std::vector<fhs_arc>& arcs,
                             unsigned root_node)
 {
   if (!fhs_order_tree_from_root(arcs,arc_,children_,root_node))
   {
-    vcl_cerr<<"fhs_searcher::set_tree() Failed to set up the tree.\n";
+    std::cerr<<"fhs_searcher::set_tree() Failed to set up the tree.\n";
     return;
   }
 
@@ -79,22 +81,22 @@ void fhs_searcher::combine_responses(unsigned im_index,
     vgl_vector_2d<double> dx = p1-p0;
     vgl_vector_2d<double> dy = p2-p0;
     // Check that dx=(0,1) and dy=(1,0)
-    bool is_int_transform = (vcl_fabs(dx.x()-1)<1e-4) &&
-                            (vcl_fabs(dx.y()  )<1e-4) &&
-                            (vcl_fabs(dy.x()  )<1e-4) &&
-                            (vcl_fabs(dy.y()-1)<1e-4);
+    bool is_int_transform = (std::fabs(dx.x()-1)<1e-4) &&
+                            (std::fabs(dx.y()  )<1e-4) &&
+                            (std::fabs(dy.x()  )<1e-4) &&
+                            (std::fabs(dy.y()-1)<1e-4);
 
     vil_image_view<float>& sum_image = sum_im_[im_index].image();
     unsigned ni = sum_image.ni();
     unsigned nj = sum_image.nj();
     float* s_data = sum_image.top_left_ptr();
-    vcl_ptrdiff_t s_istep = sum_image.istep();
-    vcl_ptrdiff_t s_jstep = sum_image.jstep();
+    std::ptrdiff_t s_istep = sum_image.istep();
+    std::ptrdiff_t s_jstep = sum_image.jstep();
     unsigned cni = dist_im_[child_node].image().ni();
     unsigned cnj = dist_im_[child_node].image().nj();
     const float* c_data = dist_im_[child_node].image().top_left_ptr();
-    vcl_ptrdiff_t c_istep = dist_im_[child_node].image().istep();
-    vcl_ptrdiff_t c_jstep = dist_im_[child_node].image().jstep();
+    std::ptrdiff_t c_istep = dist_im_[child_node].image().istep();
+    std::ptrdiff_t c_jstep = dist_im_[child_node].image().jstep();
 
     if (is_int_transform)
     {
@@ -152,7 +154,7 @@ void fhs_searcher::combine_responses(unsigned im_index,
 //
 //  After calling search(), results can be obtained using
 //  points() and best_points() etc
-void fhs_searcher::search(const vcl_vector<vimt_image_2d_of<float> >& feature_response)
+void fhs_searcher::search(const std::vector<vimt_image_2d_of<float> >& feature_response)
 {
   assert(feature_response.size()==n_points());
 
@@ -198,12 +200,12 @@ void fhs_searcher::search(const vcl_vector<vimt_image_2d_of<float> >& feature_re
 //: Compute optimal position of all points given position of root
 //  Assumes search() has been called first
 void fhs_searcher::points_from_root(const vgl_point_2d<double>& root_pt,
-                                    vcl_vector<vgl_point_2d<double> >& pts) const
+                                    std::vector<vgl_point_2d<double> >& pts) const
 {
   if (n_points()<2)
   {
-    vcl_cerr<<"fhs_searcher::points_from_root() Not initialised.\n";
-    vcl_abort();
+    std::cerr<<"fhs_searcher::points_from_root() Not initialised.\n";
+    std::abort();
   }
 
   pts.resize(n_points());
@@ -211,7 +213,7 @@ void fhs_searcher::points_from_root(const vgl_point_2d<double>& root_pt,
 
   // Propagate solution through the tree
   // arc_ ordered so that parents always precede leaves
-  for (vcl_vector<fhs_arc>::const_iterator a=arc_.begin();a!=arc_.end();++a)
+  for (std::vector<fhs_arc>::const_iterator a=arc_.begin();a!=arc_.end();++a)
   {
     // Compute mean predicted position for leaf point
     vgl_point_2d<double> p_j0 = pts[a->i()]
@@ -228,7 +230,7 @@ void fhs_searcher::points_from_root(const vgl_point_2d<double>& root_pt,
 static vgl_point_2d<int> min_image_point(const vil_image_view<float>& image)
 {
   const unsigned ni=image.ni(),nj=image.nj();
-  const vcl_ptrdiff_t istep = image.istep(),jstep=image.jstep();
+  const std::ptrdiff_t istep = image.istep(),jstep=image.jstep();
   const float* row = image.top_left_ptr();
   unsigned best_i=0,best_j=0;
   float min_val = *row;
@@ -244,7 +246,7 @@ static vgl_point_2d<int> min_image_point(const vil_image_view<float>& image)
 
 //: Compute optimal position of all points
 //  Assumes search() has been called first
-double fhs_searcher::best_points(vcl_vector<vgl_point_2d<double> >& pts) const
+double fhs_searcher::best_points(std::vector<vgl_point_2d<double> >& pts) const
 {
   // Find position of global minima in root quality image
   vgl_point_2d<int> p_im = min_image_point(sum_im_[root_node()].image());

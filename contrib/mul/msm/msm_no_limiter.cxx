@@ -35,7 +35,7 @@ void msm_no_limiter::apply_limit(vnl_vector<double>&) const
 
 //=======================================================================
 //: Print class to os
-void msm_no_limiter::print_summary(vcl_ostream& os) const
+void msm_no_limiter::print_summary(std::ostream& os) const
 {
   os << "{ }";
 }
@@ -59,16 +59,16 @@ void msm_no_limiter::b_read(vsl_b_istream& bfs)
     case (1):
       break;
     default:
-      vcl_cerr << "msm_no_limiter::b_read() :\n"
-               << "Unexpected version number " << version << vcl_endl;
-      bfs.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
+      std::cerr << "msm_no_limiter::b_read() :\n"
+               << "Unexpected version number " << version << std::endl;
+      bfs.is().clear(std::ios::badbit); // Set an unrecoverable IO error on stream
       return;
   }
 }
 
-vcl_string msm_no_limiter::is_a() const
+std::string msm_no_limiter::is_a() const
 {
-  return vcl_string("msm_no_limiter");
+  return std::string("msm_no_limiter");
 }
 
 //: Create a copy on the heap and return base class pointer

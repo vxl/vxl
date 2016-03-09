@@ -23,10 +23,12 @@
 // // \endverbatim
 //
 //-----------------------------------------------------------------------------
-#include <vcl_vector.h>
+#include <vector>
 #include <vil/vil_image_view.h>
 #include <vil/vil_pyramid_image_view.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iostream>
 
 class brip_filter_bank
 {
@@ -61,11 +63,11 @@ class brip_filter_bank
   vil_image_view<float>& response(unsigned int scale_level){
     return filter_responses_[scale_level];}
   //: full set of filter responses
-  vcl_vector<vil_image_view<float> > responses() const{
+  std::vector<vil_image_view<float> > responses() const{
     return filter_responses_;}
   //: save filter responses as individual images
-  bool save_filter_responses(vcl_string const& dir) const;
-  bool load_filter_responses(vcl_string const& dir, unsigned n_levels);
+  bool save_filter_responses(std::string const& dir) const;
+  bool load_filter_responses(std::string const& dir, unsigned n_levels);
 
   void set_params(unsigned n_levels, double scale_range, float lambda0, float lambda1, float theta_interval, float cuttoff_ratio);
 
@@ -84,9 +86,9 @@ class brip_filter_bank
   float cutoff_ratio_;
   vil_pyramid_image_view<float> scale_pyramid_;
   //: signed filter response in direction with maximum response
-  vcl_vector<vil_image_view<float> > filter_responses_;
+  std::vector<vil_image_view<float> > filter_responses_;
 };
 
-vcl_ostream&  operator<<(vcl_ostream& s, brip_filter_bank const& r);
+std::ostream&  operator<<(std::ostream& s, brip_filter_bank const& r);
 
 #endif // brip_filter_bank_h_

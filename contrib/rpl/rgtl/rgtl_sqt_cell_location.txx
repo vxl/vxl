@@ -7,7 +7,9 @@
 
 #include "rgtl_sqt_cell_location.hxx"
 
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iostream>
 
 //----------------------------------------------------------------------------
 template <unsigned int D>
@@ -60,7 +62,7 @@ bool operator==(rgtl_sqt_cell_location<D> const& l,
 
 //----------------------------------------------------------------------------
 template <unsigned int D>
-vcl_ostream& operator<<(vcl_ostream& os, rgtl_sqt_cell_location<D> const& cell)
+std::ostream& operator<<(std::ostream& os, rgtl_sqt_cell_location<D> const& cell)
 {
   // Decompose the face index into axis and side.
   unsigned int axis = cell.face()>>1;
@@ -90,7 +92,7 @@ vcl_ostream& operator<<(vcl_ostream& os, rgtl_sqt_cell_location<D> const& cell)
                           rgtl_sqt_cell_location< D > const&); \
   template bool operator==(rgtl_sqt_cell_location< D > const&, \
                            rgtl_sqt_cell_location< D > const&); \
-  template vcl_ostream& operator<<(vcl_ostream&, \
+  template std::ostream& operator<<(std::ostream&, \
                                    rgtl_sqt_cell_location< D > const&)
 
 #endif

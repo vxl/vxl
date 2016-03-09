@@ -40,8 +40,8 @@ void vsl_b_write(vsl_b_ostream &os, const bvpl_bundler_features_2d* p)
   return;
 }
 
-void vsl_print_summary(vcl_ostream& os, const bvpl_bundler_features_2d *p)
+void vsl_print_summary(std::ostream& os, const bvpl_bundler_features_2d *p)
 {
-  os << "vsl_print_summary not yet implemented. " << vcl_flush;
+  os << "vsl_print_summary not yet implemented. " << std::flush;
   return;
 }

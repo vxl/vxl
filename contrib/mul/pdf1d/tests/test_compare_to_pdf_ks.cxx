@@ -3,7 +3,9 @@
 // \author Tim Cootes
 // \brief test pdf1d_compare_to_pdf_ks
 
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iostream>
 #include <pdf1d/pdf1d_compare_to_pdf_ks.h>
 #include <pdf1d/pdf1d_gaussian.h>
 #include <pdf1d/pdf1d_sampler.h>
@@ -17,7 +19,7 @@
 //: Generate lots of samples using pdf, build new pdf with builder and compare the two
 void test_compare_to_pdf_ks()
 {
-  vcl_cout << "*********************************\n"
+  std::cout << "*********************************\n"
            << " Testing pdf1d_compare_to_pdf_ks\n"
            << "*********************************\n";
 
@@ -37,12 +39,12 @@ void test_compare_to_pdf_ks()
     p_sampler->get_samples(data);
 
     double P = comparator.compare(data.data_block(),n_samples,gauss);
-    vcl_cout<<"Testing "<<n_samples<<" samples drawn from Gaussian with unit Gaussian\n"
-            <<"Prob = "<<P<<vcl_endl;
+    std::cout<<"Testing "<<n_samples<<" samples drawn from Gaussian with unit Gaussian\n"
+            <<"Prob = "<<P<<std::endl;
 
     double mean,var;
     pdf1d_calc_mean_var(mean,var,data);
-    vcl_cout<<"Sample Mean: "<<mean<<" Variance: "<<var<<vcl_endl;
+    std::cout<<"Sample Mean: "<<mean<<" Variance: "<<var<<std::endl;
   }
 
   TEST_NEAR("pdf1d_prob_ks(0)",  pdf1d_prob_ks(0),   1.0, 1e-8);

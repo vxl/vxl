@@ -20,7 +20,7 @@ void test_gauss3D_steerable_filters()
   boxm_scene<boct_tree<short, float > > *mean_scene = create_scene(2,2,2);
 
   //Explore mean scene
-  vcl_cout << "Exploring mean scene \n";
+  std::cout << "Exploring mean scene \n";
   {
     boxm_cell_iterator<boct_tree<short,float > > iterator = mean_scene->cell_iterator(&boxm_scene<boct_tree<short, float > >::load_block);
     iterator.begin();
@@ -30,8 +30,8 @@ void test_gauss3D_steerable_filters()
       //if(cell->data().mean() > 0.6)
       {
         boct_loc_code<short> code =cell->get_code();
-        vcl_cout << " Code: " <<code<< vcl_endl;
-        vcl_cout << " At cell located at: " << iterator.global_origin() << " Data: " << cell->data() << vcl_endl;
+        std::cout << " Code: " <<code<< std::endl;
+        std::cout << " At cell located at: " << iterator.global_origin() << " Data: " << cell->data() << std::endl;
 
       }
       ++iterator;
@@ -47,7 +47,7 @@ void test_gauss3D_steerable_filters()
   mean_scene->clone_blocks_to_vector<10>(*scene_out);
 
   //Explore Initial Response scene
-  vcl_cout << "Exploring initial response scene \n";
+  std::cout << "Exploring initial response scene \n";
   {
     boxm_cell_iterator<out_tree_type > iterator = scene_out->cell_iterator(&boxm_scene<out_tree_type>::load_block);
     iterator.begin();
@@ -57,8 +57,8 @@ void test_gauss3D_steerable_filters()
       //if(cell->data().mean() > 0.6)
       {
         boct_loc_code<short> code =cell->get_code();
-        vcl_cout << " Code: " <<code<< vcl_endl;
-        vcl_cout << " At cell located at: " << iterator.global_origin() << " Data: " << cell->data() << vcl_endl;
+        std::cout << " Code: " <<code<< std::endl;
+        std::cout << " At cell located at: " << iterator.global_origin() << " Data: " << cell->data() << std::endl;
 
       }
       ++iterator;
@@ -79,7 +79,7 @@ void test_gauss3D_steerable_filters()
 
 
   //Explore Response scene
-  vcl_cout << "Exploring response scene \n";
+  std::cout << "Exploring response scene \n";
   {
     boxm_cell_iterator<out_tree_type > iterator = scene_out->cell_iterator(&boxm_scene<out_tree_type>::load_block);
     iterator.begin();
@@ -89,8 +89,8 @@ void test_gauss3D_steerable_filters()
       //if(cell->data().mean() > 0.6)
       {
         boct_loc_code<short> code =cell->get_code();
-        vcl_cout << " Code: " <<code<< vcl_endl;
-        vcl_cout << " At cell located at: " << iterator.global_origin() << " Data: " << cell->data() << vcl_endl;
+        std::cout << " Code: " <<code<< std::endl;
+        std::cout << " At cell located at: " << iterator.global_origin() << " Data: " << cell->data() << std::endl;
 
       }
       ++iterator;
@@ -101,7 +101,7 @@ void test_gauss3D_steerable_filters()
   sf.rotation_invariant_interpolation(scene_out, valid_scene);
 
   //Explore Invariant Response scene
-  vcl_cout << "Exploring rotation invariant response scene \n";
+  std::cout << "Exploring rotation invariant response scene \n";
   {
     boxm_cell_iterator<out_tree_type > iterator = scene_out->cell_iterator(&boxm_scene<out_tree_type>::load_block);
     iterator.begin();
@@ -111,8 +111,8 @@ void test_gauss3D_steerable_filters()
       //if(cell->data().mean() > 0.6)
       {
         boct_loc_code<short> code =cell->get_code();
-        vcl_cout << " Code: " <<code<< vcl_endl;
-        vcl_cout << " At cell located at: " << iterator.global_origin() << " Data: " << cell->data() << vcl_endl;
+        std::cout << " Code: " <<code<< std::endl;
+        std::cout << " At cell located at: " << iterator.global_origin() << " Data: " << cell->data() << std::endl;
 
       }
       ++iterator;

@@ -8,12 +8,14 @@
 #include <vnl/vnl_vector.h>
 #include <mmn/mmn_arc.h>
 #include <mmn/mmn_dependancy.h>
-#include <vcl_vector.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <vector>
 
-double mmn_solve(const vcl_vector<vnl_vector<double> >& node_cost,
-                 const vcl_vector<vnl_matrix<double> >& pair_cost,
-                 const vcl_vector<mmn_dependancy>& deps,
+double mmn_solve(const std::vector<vnl_vector<double> >& node_cost,
+                 const std::vector<vnl_matrix<double> >& pair_cost,
+                 const std::vector<mmn_dependancy>& deps,
                  unsigned max_n_arcs,
-                 vcl_vector<unsigned>& x);
+                 std::vector<unsigned>& x);
 
 #endif // mmn_solve_h_

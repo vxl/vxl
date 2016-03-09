@@ -12,12 +12,12 @@
 bool bvxm_scene_local_box_process_cons(bprb_func_process& pro)
 {
   using namespace bvxm_scene_local_box_process_globals;
-  vcl_vector<vcl_string> input_types_(n_inputs_);
+  std::vector<std::string> input_types_(n_inputs_);
   input_types_[0] = "bvxm_voxel_world_sptr";     // voxel world spec
   if (!pro.set_input_types(input_types_))
     return false;
 
-  vcl_vector<vcl_string> output_types_(n_outputs_);
+  std::vector<std::string> output_types_(n_outputs_);
   output_types_[0] = "double"; // lower left x
   output_types_[1] = "double"; // lower left y
   output_types_[2] = "double"; // upper right x
@@ -33,7 +33,7 @@ bool bvxm_scene_local_box_process(bprb_func_process& pro)
   using namespace bvxm_scene_local_box_process_globals;
   // sanity check input
   if ( pro.n_inputs() < n_inputs_ ) {
-    vcl_cout << pro.name() << " The input number should be " << n_inputs_ << vcl_endl;
+    std::cout << pro.name() << " The input number should be " << n_inputs_ << std::endl;
     return false;
   }
 

@@ -12,11 +12,13 @@
 #include <bvpl/bvpl_octree/sample/bvpl_taylor_basis_sample.h>
 
 #include <vul/vul_file.h>
-#include <vcl_iostream.h>
-#include <vcl_map.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iostream>
+#include <map>
 #include <vnl/vnl_sym_matrix.h>
 
-void create_basis(vcl_string test_dir, vcl_map<vcl_string, float> &values)
+void create_basis(std::string test_dir, std::map<std::string, float> &values)
 {
   //generate basis paths
   if (!vul_file::is_directory(test_dir))
@@ -26,13 +28,13 @@ void create_basis(vcl_string test_dir, vcl_map<vcl_string, float> &values)
 
   bvpl_taylor_basis_loader loader(test_dir);
 
-  vcl_vector<vcl_string> basis_names;
+  std::vector<std::string> basis_names;
   loader.files(basis_names);
 
   //make the basis directories
   for (unsigned i= 0; i<basis_names.size(); i++)
   {
-    vcl_string basis_dir = vul_file::get_cwd()+ "/" + basis_names[i];
+    std::string basis_dir = vul_file::get_cwd()+ "/" + basis_names[i];
     if (!vul_file::is_directory(basis_dir))
       vul_file::make_directory(basis_dir);
 
@@ -42,11 +44,11 @@ void create_basis(vcl_string test_dir, vcl_map<vcl_string, float> &values)
 
     vul_file::change_directory("..");
 
-    values.insert(vcl_pair<vcl_string, float>(basis_names[i], float(i)));
+    values.insert(std::pair<std::string, float>(basis_names[i], float(i)));
   }
 }
 
-void test_assemble_basis(bvpl_taylor_scenes_map_sptr taylor_scenes, vcl_map<vcl_string, float> &values)
+void test_assemble_basis(bvpl_taylor_scenes_map_sptr taylor_scenes, std::map<std::string, float> &values)
 {
   bvpl_taylor_basis::assemble_basis(taylor_scenes, 0, 0, 0);
 
@@ -67,31 +69,31 @@ void test_assemble_basis(bvpl_taylor_scenes_map_sptr taylor_scenes, vcl_map<vcl_
   H_as_vector[5] = values["Izz"];
   vnl_sym_matrix<double> H(H_as_vector, 3);
 
-  vcl_cout << "IO: " << I0 << "\nG: " << G <<"\nH: " << H.as_matrix() << vcl_endl;
+  std::cout << "IO: " << I0 << "\nG: " << G <<"\nH: " << H.as_matrix() << std::endl;
 
   boxm_scene<boct_tree<short, bvpl_taylor_basis2_sample > >* basis_scene = dynamic_cast<boxm_scene<boct_tree<short, bvpl_taylor_basis2_sample > >* > (taylor_scenes->get_scene("basis").as_pointer());
   basis_scene->load_block(0, 0, 0);
 
-  vcl_vector<boct_tree_cell<short, bvpl_taylor_basis2_sample >* > basis_leaves = basis_scene->get_block(0, 0, 0)->get_tree()->leaf_cells();
+  std::vector<boct_tree_cell<short, bvpl_taylor_basis2_sample >* > basis_leaves = basis_scene->get_block(0, 0, 0)->get_tree()->leaf_cells();
 
-  vcl_vector<boct_tree_cell<short, bvpl_taylor_basis2_sample >* >::iterator it = basis_leaves.begin();
+  std::vector<boct_tree_cell<short, bvpl_taylor_basis2_sample >* >::iterator it = basis_leaves.begin();
   bool result = true;
   for (; it!= basis_leaves.end(); it++)
   {
     bvpl_taylor_basis2_sample sample = (*it)->data();
     if (sample.I0!=I0){
       result = false;
-      vcl_cout << sample << vcl_endl;
+      std::cout << sample << std::endl;
     }
 
     if (!((sample.G.as_vector()).is_equal(G, 1e-7))){
       result = false;
-      vcl_cout << sample << vcl_endl;
+      std::cout << sample << std::endl;
     }
 
     if (!((sample.H.as_matrix()).is_equal(H.as_matrix(), 1e-7))){
       result = false;
-      vcl_cout << sample << vcl_endl;
+      std::cout << sample << std::endl;
     }
   }
 
@@ -102,13 +104,13 @@ void test_assemble_basis(bvpl_taylor_scenes_map_sptr taylor_scenes, vcl_map<vcl_
 void test_taylor_basis()
 {
   //generate basis
-  vcl_string basis_dir = "./taylor_basis";
-  vcl_map<vcl_string, float> values;
+  std::string basis_dir = "./taylor_basis";
+  std::map<std::string, float> values;
   create_basis(basis_dir, values);
 
   //load map of scenes into memory
   bvpl_taylor_basis_loader loader(vul_file::get_cwd());
-  vcl_cout << vul_file::get_cwd() << vcl_endl;
+  std::cout << vul_file::get_cwd() << std::endl;
   bvpl_taylor_scenes_map_sptr  taylor_scenes = new bvpl_taylor_scenes_map(loader);
 
 
@@ -122,7 +124,7 @@ void test_taylor_basis()
   bvpl_taylor_basis::compute_approximation_error(data_scene, taylor_scenes->get_scene("basis"),error_scene,loader,0,0,0, cell_length);
 
   error_scene->load_block(0,0,0);
-  vcl_cout.precision(15);
+  std::cout.precision(15);
   error_scene->get_block(0,0,0)->get_tree()->print();
 
   unsigned long tree_ncells = error_scene->get_block(0,0,0)->get_tree()->size();

@@ -32,7 +32,7 @@ public:
   xcv_picker_tableau(vgui_tableau_sptr const&);
   //: Destructor.
   ~xcv_picker_tableau();
-  vcl_string type_name() const { return "xcv_picker_tableau";}
+  std::string type_name() const { return "xcv_picker_tableau";}
 
   //: Gets a user selected point.
   bool pick_point(float* x, float* y);

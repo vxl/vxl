@@ -1,12 +1,14 @@
 #include "carmen_interface.h"
-#include <vcl_string.h>
-#include <vcl_iostream.h>
+#include <string>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iostream>
 
 int main(int argc, char ** argv)
 {
-  vcl_string path = "./egemen1.cm";
-  if (argc > 1) path = vcl_string(argv[1]);
-  vcl_cout << "loading correspondence file " << path << vcl_endl;
+  std::string path = "./egemen1.cm";
+  if (argc > 1) path = std::string(argv[1]);
+  std::cout << "loading correspondence file " << path << std::endl;
 
   carmen_interface ci;
   ci.set_carmen_camera(1);

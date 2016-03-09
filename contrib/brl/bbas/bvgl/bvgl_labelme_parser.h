@@ -12,8 +12,10 @@
 // \endverbatim
 
 #include <expatpplib.h>
-#include <vcl_string.h>
-#include <vcl_sstream.h>
+#include <string>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <sstream>
 #include <vgl/vgl_polygon.h>
 #include <vgl/vgl_point_2d.h>
 
@@ -74,34 +76,34 @@ class bvgl_labelme_parser : public expatpp
 {
  public:
   bvgl_labelme_parser() {}
-  bvgl_labelme_parser(vcl_string& filename);
+  bvgl_labelme_parser(std::string& filename);
   ~bvgl_labelme_parser(void) {}
 
   //image filename/path, category, and size
-  vcl_string image_name() const { return image_name_; }
-  vcl_string image_category() const { return image_category_; }
-  vcl_string region() const { return region_tag_; }
+  std::string image_name() const { return image_name_; }
+  std::string image_category() const { return image_category_; }
+  std::string region() const { return region_tag_; }
   unsigned image_ni() const { return image_ni_; }
   unsigned image_nj() const { return image_nj_; }
   //object names (in the same order as polygons)
-  vcl_vector<vcl_string>& obj_names()            { return obj_names_; }
-  vcl_vector<vcl_string>& obj_types()            { return obj_types_; }
-  vcl_vector<float>& obj_mindists()              { return obj_min_dists_; }
-  vcl_vector<float>& obj_maxdists()              { return obj_max_dists_; }
-  vcl_vector<int>& obj_depth_orders()            { return obj_depth_orders_; }
-  vcl_vector<int>& obj_heights()                 { return obj_heights_; }
-  vcl_vector<bool>& obj_references()             { return obj_references_; }
-  vcl_vector<vcl_string>& obj_orientations()     { return obj_orientations_; }
-  vcl_vector<unsigned>& obj_nlcd_ids()           { return obj_nlcd_ids_; }
-  vcl_vector<vcl_string>& obj_land_categories()  { return obj_land_categories_; }
-  vcl_vector<float>& obj_weights()               { return obj_weights_; }
-  vcl_vector<unsigned>& obj_frame_ids()          { return obj_frame_ids_; }
+  std::vector<std::string>& obj_names()            { return obj_names_; }
+  std::vector<std::string>& obj_types()            { return obj_types_; }
+  std::vector<float>& obj_mindists()              { return obj_min_dists_; }
+  std::vector<float>& obj_maxdists()              { return obj_max_dists_; }
+  std::vector<int>& obj_depth_orders()            { return obj_depth_orders_; }
+  std::vector<int>& obj_heights()                 { return obj_heights_; }
+  std::vector<bool>& obj_references()             { return obj_references_; }
+  std::vector<std::string>& obj_orientations()     { return obj_orientations_; }
+  std::vector<unsigned>& obj_nlcd_ids()           { return obj_nlcd_ids_; }
+  std::vector<std::string>& obj_land_categories()  { return obj_land_categories_; }
+  std::vector<float>& obj_weights()               { return obj_weights_; }
+  std::vector<unsigned>& obj_frame_ids()          { return obj_frame_ids_; }
 
   // ACCESSORS for parser info
-  vcl_vector<vgl_polygon<double> >& polygons() { return polygons_; }
-  vcl_vector<vgl_point_2d<double> >& points()  { return pts_; }
-  vcl_vector<vgl_point_2d<double> >& pixels()  { return pixels_; }
-  void trim_string(vcl_string& s);
+  std::vector<vgl_polygon<double> >& polygons() { return polygons_; }
+  std::vector<vgl_point_2d<double> >& points()  { return pts_; }
+  std::vector<vgl_point_2d<double> >& pixels()  { return pixels_; }
+  void trim_string(std::string& s);
 
  private:
   virtual void startElement(const XML_Char* name, const XML_Char** atts);
@@ -109,23 +111,23 @@ class bvgl_labelme_parser : public expatpp
   virtual void charData(const XML_Char* s, int len);
 
   //lvcs temp values
-  vcl_vector<vgl_polygon<double> > polygons_;
-  vcl_vector<vgl_point_2d<double> > pts_;
-  vcl_vector<vgl_point_2d<double> > pixels_;
+  std::vector<vgl_polygon<double> > polygons_;
+  std::vector<vgl_point_2d<double> > pts_;
+  std::vector<vgl_point_2d<double> > pixels_;
   double x_, y_;
 
-  vcl_vector<vcl_string>         obj_names_;
-  vcl_vector<vcl_string>         obj_types_;
-  vcl_vector<float>          obj_min_dists_;
-  vcl_vector<float>          obj_max_dists_;
-  vcl_vector<int>         obj_depth_orders_;
-  vcl_vector<unsigned>        obj_nlcd_ids_;
-  vcl_vector<vcl_string>  obj_orientations_;
-  vcl_vector<vcl_string>  obj_land_categories_;
-  vcl_vector<int>         obj_heights_;
-  vcl_vector<bool>        obj_references_;
-  vcl_vector<float>       obj_weights_;
-  vcl_vector<unsigned>    obj_frame_ids_;
+  std::vector<std::string>         obj_names_;
+  std::vector<std::string>         obj_types_;
+  std::vector<float>          obj_min_dists_;
+  std::vector<float>          obj_max_dists_;
+  std::vector<int>         obj_depth_orders_;
+  std::vector<unsigned>        obj_nlcd_ids_;
+  std::vector<std::string>  obj_orientations_;
+  std::vector<std::string>  obj_land_categories_;
+  std::vector<int>         obj_heights_;
+  std::vector<bool>        obj_references_;
+  std::vector<float>       obj_weights_;
+  std::vector<unsigned>    obj_frame_ids_;
 
   float min_dist_;
   float max_dist_;
@@ -133,11 +135,11 @@ class bvgl_labelme_parser : public expatpp
   int order_;
   int height_;
   int reference_;
-  vcl_string image_category_;
-  vcl_string image_name_;
-  vcl_string obj_orient_;
-  vcl_string region_tag_;
-  vcl_string temp_str_;
+  std::string image_category_;
+  std::string image_name_;
+  std::string obj_orient_;
+  std::string region_tag_;
+  std::string temp_str_;
   unsigned frame_id_;
   unsigned nlcd_id_;
   unsigned image_ni_;
@@ -145,20 +147,20 @@ class bvgl_labelme_parser : public expatpp
 
 
   //set active tag for parsing char data from different tags
-  vcl_string active_tag_;
+  std::string active_tag_;
 };
 
 //string converter
 template <typename T>
 void convert(const char* t, T& d)
 {
-  vcl_string s = t;
-  vcl_stringstream strm(s);
+  std::string s = t;
+  std::stringstream strm(s);
   strm >> d;
 }
 
 template <typename T>
-void convert(vcl_string s, T& d)
+void convert(std::string s, T& d)
 {
   convert(s.c_str(), d);
 }

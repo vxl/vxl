@@ -11,9 +11,11 @@
 //   only dependency is on 'tag' nodes, although tag nodes are in all other
 //   sense identical to other nodes.
 
-#include <vcl_iosfwd.h>
-#include <vcl_vector.h>
-#include <vcl_string.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iosfwd>
+#include <vector>
+#include <string>
 
 #include <gmvl/gmvl_node_cache.h>
 #include <gmvl/gmvl_connection_cache.h>
@@ -28,31 +30,31 @@ class gmvl_database
 
   // methods on connections
   void add_connection( const gmvl_node_sptr node1, const gmvl_node_sptr node2);
-  void add_connections( const gmvl_node_sptr node1, vcl_vector<gmvl_node_sptr> nodes);
+  void add_connections( const gmvl_node_sptr node1, std::vector<gmvl_node_sptr> nodes);
 
   // clever accessors
 
   //   nodes of a particular type
-  vcl_vector<gmvl_node_sptr> get_nodes( const vcl_string type) const;
+  std::vector<gmvl_node_sptr> get_nodes( const std::string type) const;
 
   //   nodes with a particular connection list
-  vcl_vector<gmvl_node_sptr> get_connected_nodes( const gmvl_node_sptr node) const;
-  vcl_vector<gmvl_node_sptr> get_connected_nodes( const gmvl_node_sptr node1,
+  std::vector<gmvl_node_sptr> get_connected_nodes( const gmvl_node_sptr node) const;
+  std::vector<gmvl_node_sptr> get_connected_nodes( const gmvl_node_sptr node1,
                                                   const gmvl_node_sptr node2) const;
-  vcl_vector<gmvl_node_sptr> get_connected_nodes( const gmvl_node_sptr node1,
+  std::vector<gmvl_node_sptr> get_connected_nodes( const gmvl_node_sptr node1,
                                                   const gmvl_node_sptr node2,
                                                   const gmvl_node_sptr node3) const;
-  vcl_vector<gmvl_node_sptr> get_connected_nodes( const vcl_vector<gmvl_node_sptr> nodes) const;
+  std::vector<gmvl_node_sptr> get_connected_nodes( const std::vector<gmvl_node_sptr> nodes) const;
 
   //   nodes with a particular connection list and a particular type
-  vcl_vector<gmvl_node_sptr> get_connected_nodes( const gmvl_node_sptr node, const vcl_string type) const;
-  vcl_vector<gmvl_node_sptr> get_connected_nodes( const vcl_vector<gmvl_node_sptr> nodes, const vcl_string type) const;
+  std::vector<gmvl_node_sptr> get_connected_nodes( const gmvl_node_sptr node, const std::string type) const;
+  std::vector<gmvl_node_sptr> get_connected_nodes( const std::vector<gmvl_node_sptr> nodes, const std::string type) const;
 
   // lookup a particular tag (returns null if not found)
-  gmvl_node_sptr find_tag( const vcl_string &string) const;
+  gmvl_node_sptr find_tag( const std::string &string) const;
 
   // output
-  friend vcl_ostream &operator<<( vcl_ostream &os, const gmvl_database &db);
+  friend std::ostream &operator<<( std::ostream &os, const gmvl_database &db);
 
  protected:
 
@@ -60,6 +62,6 @@ class gmvl_database
   gmvl_connection_cache connectioncache_;
 };
 
-vcl_ostream &operator<<( vcl_ostream &os, const gmvl_database &db);
+std::ostream &operator<<( std::ostream &os, const gmvl_database &db);
 
 #endif // gmvl_database_h_

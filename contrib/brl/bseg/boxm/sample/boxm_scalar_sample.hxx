@@ -4,7 +4,7 @@
 #include "boxm_scalar_sample.h"
 
 template <class OBS_T>
-void boxm_scalar_sample<OBS_T>::print(vcl_ostream& os) const
+void boxm_scalar_sample<OBS_T>::print(std::ostream& os) const
 {
   os << "(scalar=" << scalar_sum_ << " seg_len=" << seg_len_ << ")\n";
 }
@@ -39,9 +39,9 @@ void vsl_b_read(vsl_b_istream & is, boxm_scalar_sample<T> &sample)
     vsl_b_read(is, sample.seg_len_);
     break;
    default:
-    vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, boxm_scalar_sample<T>&)\n"
+    std::cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, boxm_scalar_sample<T>&)\n"
              << "           Unknown version number "<< version << '\n';
-    is.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
+    is.is().clear(std::ios::badbit); // Set an unrecoverable IO error on stream
     break;
   }
 }
@@ -53,7 +53,7 @@ void vsl_b_read(vsl_b_istream & is, boxm_scalar_sample<T> *&sample)
 }
 
 template <class T>
-vcl_ostream& operator << (vcl_ostream& os, const boxm_scalar_sample<T>& sample)
+std::ostream& operator << (std::ostream& os, const boxm_scalar_sample<T>& sample)
 {
   sample.print(os);
   return os;
@@ -65,6 +65,6 @@ vcl_ostream& operator << (vcl_ostream& os, const boxm_scalar_sample<T>& sample)
   template void vsl_b_write(vsl_b_ostream &, boxm_scalar_sample<T > const *&); \
   template void vsl_b_read(vsl_b_istream &, boxm_scalar_sample<T > &); \
   template void vsl_b_read(vsl_b_istream &, boxm_scalar_sample<T > *&); \
-  template vcl_ostream& operator << (vcl_ostream&, const boxm_scalar_sample<T >&)
+  template std::ostream& operator << (std::ostream&, const boxm_scalar_sample<T >&)
 
 #endif

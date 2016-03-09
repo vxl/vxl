@@ -1,6 +1,8 @@
 // This is mul/tools/reflect_image_3d.cxx
 
-#include <vcl_exception.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <exception>
 #include <vul/vul_arg.h>
 #include <vul/vul_file.h>
 #include <vil3d/vil3d_reflect.h>
@@ -43,9 +45,9 @@ int main2(int argc, char *argv[])
     "The output image is written in v3i format (vimt3d_image_3d_of<float>).\n"
     "NB. Default units are metres.\n"
   );
-  vul_arg<vcl_string> src_file(VXL_NULLPTR, "Input image file");
-  vul_arg<vcl_string> dst_file(VXL_NULLPTR, "Output image file");
-  vul_arg<vcl_string> axis("-a", "Axis along which to reflect, i.e. X means reflect in X direction (through YZ plane)", "X");
+  vul_arg<std::string> src_file(VXL_NULLPTR, "Input image file");
+  vul_arg<std::string> dst_file(VXL_NULLPTR, "Output image file");
+  vul_arg<std::string> axis("-a", "Axis along which to reflect, i.e. X means reflect in X direction (through YZ plane)", "X");
   vul_arg<bool> image_centre("-c", "Reflect about image centre if set, otherwise about world origin", false);
   vul_arg<bool> use_mm("-mm", "World coords in units of mm", false);
   vul_arg_parse(argc, argv);
@@ -145,18 +147,18 @@ int main(int argc, char *argv[])
 
     retcode = main2(argc, argv);
   }
-  catch (const vcl_exception &e)
+  catch (const std::exception &e)
   {
-    vcl_cerr << "ERROR: " << e.what() << '\n';
+    std::cerr << "ERROR: " << e.what() << '\n';
     retcode = 1;
   }
   catch (...)
   {
-    vcl_cout << '\n'
+    std::cout << '\n'
              << "====================================\n"
              << "Caught unknown exception.\n"
              << "Ending program.\n"
-             << "====================================\n" << vcl_endl;
+             << "====================================\n" << std::endl;
     MBL_LOG(ERR, logger(), "Caught unknown exception");
     retcode = 2;
   }

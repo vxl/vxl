@@ -17,13 +17,15 @@
 #include <bmsh3d/bmsh3d_vertex.h>
 #include <bmsh3d/bmsh3d_edge.h>
 #include <vcl_cassert.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iostream>
 
 #if 0 // commented out
 bmsh3d_face_mc::bmsh3d_face_mc(const bmsh3d_face_mc& face)
 {
-  vcl_map<int, bmsh3d_halfedge*> set_he = face.set_he_;
-  vcl_map<int, bmsh3d_halfedge*>::iterator it = set_he.begin();
+  std::map<int, bmsh3d_halfedge*> set_he = face.set_he_;
+  std::map<int, bmsh3d_halfedge*>::iterator it = set_he.begin();
   while (it != set_he.end()) {
     bmsh3d_halfedge* he = it->second;
     bmsh3d_edge* edge = he->edge();
@@ -35,7 +37,7 @@ bmsh3d_face_mc::bmsh3d_face_mc(const bmsh3d_face_mc& face)
 
 bmsh3d_halfedge* bmsh3d_face_mc::face_mc_map(int i)
 {
-  vcl_map<int, bmsh3d_halfedge*>::iterator it = set_he_.find(i);
+  std::map<int, bmsh3d_halfedge*>::iterator it = set_he_.find(i);
   if (it == set_he_.end())
     return VXL_NULLPTR;
   return (*it).second;
@@ -48,7 +50,7 @@ void bmsh3d_face_mc::add_mc_halfedge(bmsh3d_halfedge* inputHE)
 
 bool bmsh3d_face_mc::face_mc_id(bmsh3d_halfedge* inputHE, int& id)
 {
-  vcl_map<int, bmsh3d_halfedge*>::iterator it = set_he_.begin();
+  std::map<int, bmsh3d_halfedge*>::iterator it = set_he_.begin();
   while (it != set_he_.end()) {
     if (inputHE == it->second) {
       id = it->first;
@@ -59,13 +61,13 @@ bool bmsh3d_face_mc::face_mc_id(bmsh3d_halfedge* inputHE, int& id)
 }
 
 void bmsh3d_face_mc::get_mc_incident_halfedges(bmsh3d_halfedge* inputHE,
-                                               vcl_vector<bmsh3d_halfedge*>& incident_halfedges) const
+                                               std::vector<bmsh3d_halfedge*>& incident_halfedges) const
 {
 #if 0
   // first make sure that this halfedge head is in the set
   int id;
   if (! face_mc_id(inputHE, id))
-    vcl_cerr << "Halfedge is not included in set\n";
+    std::cerr << "Halfedge is not included in set\n";
 #endif // 0
 
   bmsh3d_face face(inputHE);
@@ -73,12 +75,12 @@ void bmsh3d_face_mc::get_mc_incident_halfedges(bmsh3d_halfedge* inputHE,
 }
 
 void bmsh3d_face_mc::get_mc_incident_edges(bmsh3d_halfedge* inputHE,
-                                           vcl_vector<bmsh3d_edge*>& incident_edges) const
+                                           std::vector<bmsh3d_edge*>& incident_edges) const
 {
 #if 0
   int id;
   if (! face_mc_id(inputHE, id))
-    vcl_cerr << "Halfedge is not included in set\n";
+    std::cerr << "Halfedge is not included in set\n";
 #endif // 0
 
   bmsh3d_halfedge* HE = inputHE;
@@ -92,7 +94,7 @@ void bmsh3d_face_mc::get_mc_incident_edges(bmsh3d_halfedge* inputHE,
 //: reverse the orientation of this inner face, i.e. reverse the chain of halfedges
 void bmsh3d_face_mc::reverse_mc_chain_of_halfedges(bmsh3d_halfedge* inputHE)
 {
-  vcl_vector<bmsh3d_halfedge*> chain;
+  std::vector<bmsh3d_halfedge*> chain;
   bmsh3d_halfedge* HE = inputHE;
   do {
     chain.push_back(HE);
@@ -119,8 +121,8 @@ void bmsh3d_face_mc::print()
     do {
       bmsh3d_vertex* s = HE->edge()->sV();
       bmsh3d_vertex* e = HE->edge()->eV();
-      vcl_cout << "S=" << HE->edge()->sV() << ' ' << s->get_pt() << vcl_endl
-               << "E=" << HE->edge()->eV() << ' ' << e->get_pt() << vcl_endl;
+      std::cout << "S=" << HE->edge()->sV() << ' ' << s->get_pt() << std::endl
+               << "E=" << HE->edge()->eV() << ' ' << e->get_pt() << std::endl;
       HE = HE->next();
     } while (HE != startHE);
   }

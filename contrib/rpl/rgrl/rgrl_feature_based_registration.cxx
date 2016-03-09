@@ -289,7 +289,7 @@ register_single_feature( rgrl_mask_box            from_image_region,
   rgrl_scale_estimator_wgted_sptr   wgted_scale_est;
   rgrl_weighter_sptr                weighter;
   rgrl_match_set_sptr               match_set;
-  vcl_vector<rgrl_estimator_sptr>   xform_estimators;
+  std::vector<rgrl_estimator_sptr>   xform_estimators;
   rgrl_estimator_sptr               xform_estimator;
   bool                              failed, scale_in_range;
   unsigned                          prev_resol = 0;
@@ -476,8 +476,8 @@ register_single_feature( rgrl_mask_box            from_image_region,
                                       match_set, scale,
                                       should_penalize_scaling_);
       DebugMacro(  3, "run: (iterations = " << iterations_at_stage_ << ") oscillation count = " << current_status->oscillation_count() << '\n' );
-      DebugMacro(  3, "run: error = " << current_status->error() << vcl_endl );
-      DebugMacro(  3, "run: error_diff = " << current_status->error_diff() << vcl_endl );
+      DebugMacro(  3, "run: error = " << current_status->error() << std::endl );
+      DebugMacro(  3, "run: error_diff = " << current_status->error_diff() << std::endl );
 
       ++iterations_at_stage_;
     }
@@ -508,9 +508,9 @@ register_single_feature( rgrl_mask_box            from_image_region,
                                     current_xform_estimate_, resolution );
     int level_diff = prev_resol - resolution;
     double dim_increase = data_->dimension_increase_for_next_stage(prev_resol);
-//  double scale_multipler = vcl_pow(dim_increase, level_diff);
+//  double scale_multipler = std::pow(dim_increase, level_diff);
     scale->set_geometric_scale( scale->geometric_scale()*
-                                vcl_pow(dim_increase, level_diff) );
+                                std::pow(dim_increase, level_diff) );
   }
   while ( !failed && ( resolution != 0 || prev_resol != 0 ) );
 
@@ -550,14 +550,14 @@ register_multi_feature( rgrl_mask_box            from_image_region,
                         unsigned                 resolution )
 {
   rgrl_converge_status_sptr                     current_status;
-  vcl_vector<rgrl_feature_set_sptr>             from_sets;
-  vcl_vector<rgrl_feature_set_sptr>             to_sets;
-  vcl_vector<rgrl_matcher_sptr>                 matchers;
-  vcl_vector<rgrl_scale_estimator_unwgted_sptr> unwgted_scale_ests;
-  vcl_vector<rgrl_scale_estimator_wgted_sptr>   wgted_scale_ests;
-  vcl_vector<rgrl_weighter_sptr>                weighters;
+  std::vector<rgrl_feature_set_sptr>             from_sets;
+  std::vector<rgrl_feature_set_sptr>             to_sets;
+  std::vector<rgrl_matcher_sptr>                 matchers;
+  std::vector<rgrl_scale_estimator_unwgted_sptr> unwgted_scale_ests;
+  std::vector<rgrl_scale_estimator_wgted_sptr>   wgted_scale_ests;
+  std::vector<rgrl_weighter_sptr>                weighters;
   rgrl_set_of<rgrl_scale_sptr>                  scales;
-  vcl_vector<rgrl_estimator_sptr>               xform_estimators;
+  std::vector<rgrl_estimator_sptr>               xform_estimators;
   rgrl_estimator_sptr                           xform_estimator;
   bool                                          failed, scale_in_range, use_prior_scale;
   unsigned                                      prev_resol = 0;
@@ -617,7 +617,7 @@ register_multi_feature( rgrl_mask_box            from_image_region,
       // Compute matches, and scales for each feature set.
       //
       for ( unsigned int fs=0; fs < data_count; ++fs ) {
-        DebugMacro(  2, "   Data set " << fs << vcl_endl );
+        DebugMacro(  2, "   Data set " << fs << std::endl );
         rgrl_match_set_sptr new_matches =
           matchers[fs]->compute_matches( *from_sets[fs],
                                          *to_sets[fs],
@@ -766,8 +766,8 @@ register_multi_feature( rgrl_mask_box            from_image_region,
                                       current_match_sets_, scales,
                                       should_penalize_scaling_);
       DebugMacro( 3, "run: (iterations = " << iterations_at_stage_ << ") oscillation count = " << current_status->oscillation_count() << '\n' );
-      DebugMacro( 3, "run: error = " << current_status->error() << vcl_endl );
-      DebugMacro( 3, "run: error_diff = " << current_status->error_diff() << vcl_endl );
+      DebugMacro( 3, "run: error = " << current_status->error() << std::endl );
+      DebugMacro( 3, "run: error_diff = " << current_status->error_diff() << std::endl );
 
       ++iterations_at_stage_;
     }
@@ -798,7 +798,7 @@ register_multi_feature( rgrl_mask_box            from_image_region,
                                       current_xform_estimate_, resolution );
       int level_diff = prev_resol - resolution;
       double dim_increase = data_->dimension_increase_for_next_stage(prev_resol);
-      double scale_multipler = vcl_pow(dim_increase, level_diff);
+      double scale_multipler = std::pow(dim_increase, level_diff);
       for ( unsigned int fs=0; fs < data_count; ++fs ) {
         scales[fs]->set_geometric_scale( scales[fs]->geometric_scale()*scale_multipler );
       }
@@ -858,7 +858,7 @@ initialize_for_next_resolution(  rgrl_mask_box            & from_image_region,
   //
   int level_diff = current_resol - new_resol;
   double dim_increase = data_->dimension_increase_for_next_stage(current_resol);
-  double scale = vcl_pow(dim_increase, level_diff);
+  double scale = std::pow(dim_increase, level_diff);
 
   from_image_region.set_x0( from_image_region.x0()*scale );
   from_image_region.set_x1( from_image_region.x1()*scale );

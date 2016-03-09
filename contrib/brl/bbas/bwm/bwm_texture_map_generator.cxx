@@ -19,18 +19,18 @@
 
 
 bool bwm_texture_map_generator::generate_texture_map(bwm_observable_mesh_sptr obj,
-                                                     vcl_string texture_filename,
+                                                     std::string texture_filename,
                                                      vpgl_lvcs lvcs)
 {
   if (observers_.size() == 0) {
-    vcl_cerr << "Error: Cannot create texture map, zero observers!\n";
+    std::cerr << "Error: Cannot create texture map, zero observers!\n";
     return false;
   }
 
   // find best observer for each mesh face
 
-  vcl_vector<vgl_point_2d<int> > img_sizes;
-  vcl_vector<vsol_box_2d> bounding_box;
+  std::vector<vgl_point_2d<int> > img_sizes;
+  std::vector<vsol_box_2d> bounding_box;
 
   for (unsigned obs_idx = 0; obs_idx < observers_.size(); obs_idx++) {
     vgui_image_tableau_sptr img_tab(observers_[obs_idx]->get_image_tableau());
@@ -48,16 +48,16 @@ bool bwm_texture_map_generator::generate_texture_map(bwm_observable_mesh_sptr ob
   mesh->orient_face_normals();
   mesh->build_IFS_mesh();
 
-  vcl_map<int, int> best_face_observer_idx;
+  std::map<int, int> best_face_observer_idx;
 
   // project all mesh vertices with each observer
-  vcl_map<int, bmsh3d_vertex*> mesh_verts = mesh->vertexmap();
-  vcl_vector<vcl_map<int, vgl_point_2d<double> > > vert_projections;
+  std::map<int, bmsh3d_vertex*> mesh_verts = mesh->vertexmap();
+  std::vector<std::map<int, vgl_point_2d<double> > > vert_projections;
 
   for (unsigned obs_idx = 0; obs_idx < observers_.size(); obs_idx++) {
-    vcl_map<int, vgl_point_2d<double> > observer_vert_projections;
+    std::map<int, vgl_point_2d<double> > observer_vert_projections;
 
-    vcl_map<int, bmsh3d_vertex*>::iterator vit;
+    std::map<int, bmsh3d_vertex*>::iterator vit;
     for (vit = mesh_verts.begin(); vit!=mesh_verts.end(); vit++) {
       bmsh3d_vertex* vert = (bmsh3d_vertex*)vit->second;
       vgl_point_3d<double> world_pt = vert->pt();
@@ -70,12 +70,12 @@ bool bwm_texture_map_generator::generate_texture_map(bwm_observable_mesh_sptr ob
   }// for each observer
 
   // find best observer for each face
-  vcl_map<int, bmsh3d_face*>::iterator fit;
+  std::map<int, bmsh3d_face*>::iterator fit;
   for (fit = mesh->facemap().begin(); fit != mesh->facemap().end(); fit++) {
     bmsh3d_textured_face_mc* tex_face = (bmsh3d_textured_face_mc*)fit->second;
     tex_face->set_tex_map_uri(texture_filename);
 
-    vcl_vector<bmsh3d_vertex*> face_vertices = tex_face->vertices();
+    std::vector<bmsh3d_vertex*> face_vertices = tex_face->vertices();
 
     int best_observer_idx = -1;
     double best_observer_score = 0.0;
@@ -104,9 +104,9 @@ bool bwm_texture_map_generator::generate_texture_map(bwm_observable_mesh_sptr ob
         vgl_vector_3d<double> face_normal_global = compute_normal_ifs(face_vertices);
         vgl_vector_3d<double> face_normal_phe = tex_face->compute_normal();
 
-        vcl_cout << "face normal local = " << face_normal << vcl_endl
-                 << "face normal phe =    " << face_normal_phe << vcl_endl
-                 << "face normal global = "<< face_normal_global << vcl_endl << vcl_endl;
+        std::cout << "face normal local = " << face_normal << std::endl
+                 << "face normal phe =    " << face_normal_phe << std::endl
+                 << "face normal global = "<< face_normal_global << std::endl << std::endl;
 #endif // DEBUG
 
         face_normal = face_normal / face_normal.length(); // not guaranteed to be normalized
@@ -138,21 +138,21 @@ bool bwm_texture_map_generator::generate_texture_map(bwm_observable_mesh_sptr ob
   } // for each face
 
   // determine crop region for each observers image
-  vcl_vector<vgl_point_2d<int> > crop_points;
-  vcl_vector<vgl_point_2d<int> > crop_sizes;
+  std::vector<vgl_point_2d<int> > crop_points;
+  std::vector<vgl_point_2d<int> > crop_sizes;
 
   // cropped images will be stacked horizontally, so
   // calculate max height for image and x offsets for each region
   int tex_width, tex_height = 0;
-  vcl_vector<int> x_offsets;
+  std::vector<int> x_offsets;
   x_offsets.push_back(0); // for beginning of first image
 
   for (unsigned obs_idx = 0; obs_idx < observers_.size(); obs_idx++) {
     if (!bounding_box[obs_idx].empty()) {
-      int min_x = vcl_floor(bounding_box[obs_idx].get_min_x());
-       int max_x = vcl_ceil(bounding_box[obs_idx].get_max_x());
-       int min_y = vcl_floor(bounding_box[obs_idx].get_min_y());
-       int max_y = vcl_ceil(bounding_box[obs_idx].get_max_y());
+      int min_x = std::floor(bounding_box[obs_idx].get_min_x());
+       int max_x = std::ceil(bounding_box[obs_idx].get_max_x());
+       int min_y = std::floor(bounding_box[obs_idx].get_min_y());
+       int max_y = std::ceil(bounding_box[obs_idx].get_max_y());
        vgl_point_2d<int> crop_point(min_x,min_y);
        vgl_point_2d<int> crop_size(max_x - min_x + 1, max_y - min_y + 1);
 
@@ -178,7 +178,7 @@ bool bwm_texture_map_generator::generate_texture_map(bwm_observable_mesh_sptr ob
   for (fit = mesh->facemap().begin(); fit != mesh->facemap().end(); fit++)
   {
     bmsh3d_textured_face_mc* tex_face = (bmsh3d_textured_face_mc*)fit->second;
-    vcl_vector<bmsh3d_vertex*> face_vertices = tex_face->vertices();
+    std::vector<bmsh3d_vertex*> face_vertices = tex_face->vertices();
     int best_obs = best_face_observer_idx[tex_face->id()];
 
     if (best_obs >= 0) {
@@ -213,7 +213,7 @@ bool bwm_texture_map_generator::generate_texture_map(bwm_observable_mesh_sptr ob
 
 
       if (img_orig_res->pixel_format() != VIL_PIXEL_FORMAT_BYTE) {
-        vcl_cerr << "texture_map generator: unsupported image type "<<img_orig_res->pixel_format()<<'\n';
+        std::cerr << "texture_map generator: unsupported image type "<<img_orig_res->pixel_format()<<'\n';
         continue;
       }
       vil_image_resource_sptr img_orig_cropped = vil_crop(img_orig_res,
@@ -222,8 +222,8 @@ bool bwm_texture_map_generator::generate_texture_map(bwm_observable_mesh_sptr ob
 
 
       vil_image_view<vxl_byte> cropped_view = img_orig_cropped->get_view();
-      vcl_cout << "cropped_view nplanes = "<<cropped_view.nplanes()<<vcl_endl
-               << "tex_map_view nplanes = "<<tex_map_view.nplanes()<<vcl_endl;
+      std::cout << "cropped_view nplanes = "<<cropped_view.nplanes()<<std::endl
+               << "tex_map_view nplanes = "<<tex_map_view.nplanes()<<std::endl;
       vil_copy_to_window(cropped_view,tex_map_view,x_offsets[obs_idx],0);
     }
   }
@@ -236,7 +236,7 @@ vgl_vector_3d<double> bwm_texture_map_generator::compute_face_normal_lvcs(bmsh3d
 {
   vgl_vector_3d<double> normal;
 
-  vcl_vector<bmsh3d_vertex*> verts = face->vertices();
+  std::vector<bmsh3d_vertex*> verts = face->vertices();
 
   double cx,cy,cz;
   vgl_point_3d<double> centroid = face->compute_center_pt();

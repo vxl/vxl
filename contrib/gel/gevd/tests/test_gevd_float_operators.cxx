@@ -10,7 +10,9 @@
 
 #include <gevd/gevd_float_operators.h>
 #include <gevd/gevd_bufferxy.h>
-#include <vcl_cmath.h> // for sqrt(float)
+#include <vcl_compiler.h>
+#include <iostream>
+#include <cmath> // for sqrt(float)
 #include <testlib/testlib_test.h>
 
 void
@@ -55,11 +57,11 @@ test_gevd_float_operators()
   }
   gevd_float_operators::Correlation(buf_in, kernel_buf, buf_out);
   for (int i=1; i<7; ++i) for (int j=1; j<7; ++j) {
-    if      (i==2 && j==3) TEST_("Correlation", i,j, -3.f/vcl_sqrt(177.f));
-    else if (i==2 && j==2) TEST_("Correlation", i,j, 5.f/vcl_sqrt(177.f));
-    else if (i==1 && j==2) TEST_("Correlation", i,j, -11.f/vcl_sqrt(177.f));
-    else if (i==1 && j==3) TEST_("Correlation", i,j, 9.f/vcl_sqrt(177.f));
-    else                   TEST_("Correlation", i,j, 0.f/vcl_sqrt(177.f));
+    if      (i==2 && j==3) TEST_("Correlation", i,j, -3.f/std::sqrt(177.f));
+    else if (i==2 && j==2) TEST_("Correlation", i,j, 5.f/std::sqrt(177.f));
+    else if (i==1 && j==2) TEST_("Correlation", i,j, -11.f/std::sqrt(177.f));
+    else if (i==1 && j==3) TEST_("Correlation", i,j, 9.f/std::sqrt(177.f));
+    else                   TEST_("Correlation", i,j, 0.f/std::sqrt(177.f));
   }
   gevd_float_operators::CorrelationAlongAxis(buf_in, kernel_buf, buf_out);
   for (int i=1; i<7; ++i) for (int j=1; j<7; ++j) {

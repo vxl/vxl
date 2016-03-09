@@ -2,7 +2,7 @@
 #define boxm_depth_image_triangle_h_
 //:
 // \file
-#include <vcl_vector.h>
+#include <vector>
 #include "boxm_render_image.h"
 #include <boct/boct_tree.h>
 #include <boxm/boxm_scene.h>
@@ -19,7 +19,9 @@
 #include <vil/vil_image_view.h>
 #include <vil/vil_math.h>
 #include <vil/vil_transform.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iostream>
 #include <vul/vul_timer.h>
 
 
@@ -46,17 +48,17 @@ void boxm_depth_image_splatting_triangle(boxm_scene<boct_tree<T_loc, T_data > > 
 
   while (block_vis_iter.next())
   {
-    vcl_vector<vgl_point_3d<int> > block_indices = block_vis_iter.frontier_indices();
+    std::vector<vgl_point_3d<int> > block_indices = block_vis_iter.frontier_indices();
     for (unsigned i=0; i<block_indices.size(); i++) // code for each block
     {
       t.mark();
       scene.load_block(block_indices[i].x(),block_indices[i].y(),block_indices[i].z());
-      vcl_cout<<"The time taken to read a block is "<<t.all()<<vcl_endl;
+      std::cout<<"The time taken to read a block is "<<t.all()<<std::endl;
       boxm_block<tree_type> * curr_block=scene.get_active_block();
       t.mark();
       // project vertices to the image determine which faces of the cell are visible
       boxm_cell_vis_graph_iterator<T_loc, T_data > frontier_it(cam,curr_block->get_tree(),ni,nj);
-      vcl_cout<<"The time taken to build the vis graph is "<<t.all()<<vcl_endl;
+      std::cout<<"The time taken to build the vis graph is "<<t.all()<<std::endl;
 
       // for each frontier layer of each block
       tree_type * tree=curr_block->get_tree();
@@ -71,14 +73,14 @@ void boxm_depth_image_splatting_triangle(boxm_scene<boct_tree<T_loc, T_data > > 
       float vertdists[8];
       while (frontier_it.next())
       {
-        vcl_vector<cell_type *> vis_cells=frontier_it.frontier();
-        typename vcl_vector<cell_type *>::iterator cell_it=vis_cells.begin();
+        std::vector<cell_type *> vis_cells=frontier_it.frontier();
+        typename std::vector<cell_type *>::iterator cell_it=vis_cells.begin();
         vis_end.fill(0.0f);
         temp_depth.fill(0.0f);
         temp_weights.fill(0.0f);
         alpha_img_.fill(0.0f);
 
-        vcl_cout<<'.';
+        std::cout<<'.';
 
         for (;cell_it!=vis_cells.end();cell_it++)
         {
@@ -88,7 +90,7 @@ void boxm_depth_image_splatting_triangle(boxm_scene<boct_tree<T_loc, T_data > > 
           {
             // get vertices of cell in the form of a bounding box (cells are always axis-aligned))
             vgl_box_3d<double> cell_bb = tree->cell_bounding_box(*cell_it);
-            vcl_vector<vgl_point_3d<double> > corners=boxm_utils::corners_of_box_3d(cell_bb);
+            std::vector<vgl_point_3d<double> > corners=boxm_utils::corners_of_box_3d(cell_bb);
             if (dynamic_cast<vpgl_perspective_camera<double> *>(cam.ptr()))
             boxm_utils::project_corners(corners,cam,xverts,yverts,vertdists);
             boct_face_idx  vis_face_ids=boxm_utils::visible_faces(cell_bb,cam,xverts,yverts);
@@ -117,7 +119,7 @@ void boxm_depth_image_splatting_triangle(boxm_scene<boct_tree<T_loc, T_data > > 
       }
     }
   }
-  vcl_cout<<"\nThe time taken is"<< t.all()<<vcl_endl;
+  std::cout<<"\nThe time taken is"<< t.all()<<std::endl;
   return;
 }
 

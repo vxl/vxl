@@ -1,13 +1,15 @@
 // This is mul/mmn/tests/test_diffusion_solver.cxx
 #include <testlib/testlib_test.h>
-#include <vcl_vector.h>
+#include <vector>
 #include <mmn/mmn_graph_rep1.h>
 #include <mmn/mmn_diffusion_solver.h>
 #include <mmn/mmn_dp_solver.h>
-#include <vcl_algorithm.h>
-#include <vcl_numeric.h>
-#include <vcl_iterator.h>
-#include <vcl_cmath.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <algorithm>
+#include <numeric>
+#include <iterator>
+#include <cmath>
 #include <vcl_cassert.h>
 #include <vgl/vgl_point_2d.h>
 #include <vgl/vgl_vector_2d.h>
@@ -26,17 +28,17 @@ namespace test_diffusion_bits
         double amplitude; //DP "value" is a function of this
     };
 
-    void convert_to_minus_log_probs(vcl_vector<vnl_vector<double> >& node_cost)
+    void convert_to_minus_log_probs(std::vector<vnl_vector<double> >& node_cost)
     {
         for (unsigned i=0; i<node_cost.size();++i)
         {
-            double sum=vcl_accumulate(node_cost[i].begin(),
+            double sum=std::accumulate(node_cost[i].begin(),
                                       node_cost[i].end(),
                                       0.0);
             node_cost[i]/=sum;
             for (unsigned j=0; j<node_cost[i].size();j++)
             {
-                node_cost[i][j] = -vcl_log(node_cost[i][j]);
+                node_cost[i][j] = -std::log(node_cost[i][j]);
             }
         }
     }
@@ -46,23 +48,23 @@ using namespace test_diffusion_bits;
 
 void test_diffusion_solver_a()
 {
-    vcl_cout<<"==== test test_diffusion_solver (chain) ====="<<vcl_endl;
+    std::cout<<"==== test test_diffusion_solver (chain) ====="<<std::endl;
 
     unsigned n=5;
     // Generate linked list
-    vcl_vector<mmn_arc> arc(n-1);
+    std::vector<mmn_arc> arc(n-1);
     for (unsigned i=0;i<n-1;++i)
         arc[i]=mmn_arc(i,i+1);
 
     mmn_graph_rep1 graph;
     graph.build(n,arc);
-    vcl_vector<mmn_dependancy> deps;
+    std::vector<mmn_dependancy> deps;
     graph.compute_dependancies(deps);
 
-    vcl_vector<vnl_vector<double> > node_cost(n);
-    vcl_vector<vnl_matrix<double> > pair_cost(arc.size());
+    std::vector<vnl_vector<double> > node_cost(n);
+    std::vector<vnl_matrix<double> > pair_cost(arc.size());
 
-    vcl_cout<<"Set up trivial problem. Optimal node=i, pair_costs all flat"<<vcl_endl;
+    std::cout<<"Set up trivial problem. Optimal node=i, pair_costs all flat"<<std::endl;
 
     for (unsigned i=0;i<n;++i)
     {
@@ -72,7 +74,7 @@ void test_diffusion_solver_a()
     }
 
     convert_to_minus_log_probs(node_cost);
-    double arc_cost=-vcl_log(0.25);
+    double arc_cost=-std::log(0.25);
 
     for (unsigned a=0;a<arc.size();++a)
     {
@@ -85,13 +87,13 @@ void test_diffusion_solver_a()
     mmn_diffusion_solver solver;
     solver.set_arcs(n,arc);
     solver.set_verbose(true);
-    vcl_cout<<"Run solver."<<vcl_endl;
+    std::cout<<"Run solver."<<std::endl;
 
-    vcl_vector<unsigned> x;
-    vcl_pair<bool,double> status = solver(node_cost,pair_cost,x);
+    std::vector<unsigned> x;
+    std::pair<bool,double> status = solver(node_cost,pair_cost,x);
     double min_cost = status.second;
     bool arcConsistent=status.first;
-    vcl_cout<<"DIFFUSION Solver Iteration Count Is: "<<solver.count()<<vcl_endl;
+    std::cout<<"DIFFUSION Solver Iteration Count Is: "<<solver.count()<<std::endl;
     double cost=0.0;
     for (unsigned i=0; i<node_cost.size();i++)
     {
@@ -103,30 +105,30 @@ void test_diffusion_solver_a()
     for (unsigned i=0;i<n;++i)
     {
         TEST("Correct node value",x[i],i);
-        vcl_cout<<"x["<<i<<"]="<<x[i]<<vcl_endl;
+        std::cout<<"x["<<i<<"]="<<x[i]<<std::endl;
     }
     TEST("Arc Consistent Solution",arcConsistent,true);
 }
 
 void test_diffusion_solver_b()
 {
-    vcl_cout<<"==== test test_diffusion_solver (reversed chain) ====="<<vcl_endl;
+    std::cout<<"==== test test_diffusion_solver (reversed chain) ====="<<std::endl;
 
     unsigned n=5;
     // Generate linked list
-    vcl_vector<mmn_arc> arc(n-1);
+    std::vector<mmn_arc> arc(n-1);
     for (unsigned i=0;i<n-1;++i)
         arc[i]=mmn_arc(i+1,i);
 
     mmn_graph_rep1 graph;
     graph.build(n,arc);
-    vcl_vector<mmn_dependancy> deps;
+    std::vector<mmn_dependancy> deps;
     graph.compute_dependancies(deps);
 
-    vcl_vector<vnl_vector<double> > node_cost(n);
-    vcl_vector<vnl_matrix<double> > pair_cost(arc.size());
+    std::vector<vnl_vector<double> > node_cost(n);
+    std::vector<vnl_matrix<double> > pair_cost(arc.size());
 
-    vcl_cout<<"Set up trivial problem. Optimal node=i, pair_costs all flat"<<vcl_endl;
+    std::cout<<"Set up trivial problem. Optimal node=i, pair_costs all flat"<<std::endl;
     for (unsigned i=0;i<n;++i)
     {
         node_cost[i].set_size(5+i);
@@ -135,7 +137,7 @@ void test_diffusion_solver_b()
     }
     convert_to_minus_log_probs(node_cost);
 
-    double arc_cost=-vcl_log(0.25);
+    double arc_cost=-std::log(0.25);
     for (unsigned a=0;a<arc.size();++a)
     {
         unsigned v1=arc[a].min_v();
@@ -147,14 +149,14 @@ void test_diffusion_solver_b()
     mmn_diffusion_solver solver;
     solver.set_arcs(n,arc);
     solver.set_verbose(true);
-    vcl_cout<<"Run solver."<<vcl_endl;
+    std::cout<<"Run solver."<<std::endl;
 
-    vcl_vector<unsigned> x;
-    vcl_pair<bool,double> status = solver(node_cost,pair_cost,x);
+    std::vector<unsigned> x;
+    std::pair<bool,double> status = solver(node_cost,pair_cost,x);
     double min_cost = status.second;
     bool arcConsistent=status.first;
     TEST("Arc Consistent Solution",arcConsistent,true);
-    vcl_cout<<"DIFFUSION Solver Iteration Count Is: "<<solver.count()<<vcl_endl;
+    std::cout<<"DIFFUSION Solver Iteration Count Is: "<<solver.count()<<std::endl;
     double cost=0.0;
     for (unsigned i=0; i<node_cost.size();i++)
     {
@@ -167,30 +169,30 @@ void test_diffusion_solver_b()
     for (unsigned i=0;i<n;++i)
     {
         TEST("Correct node value",x[i],i);
-        vcl_cout<<"x["<<i<<"]="<<x[i]<<vcl_endl;
+        std::cout<<"x["<<i<<"]="<<x[i]<<std::endl;
     }
     TEST("Arc Consistent Solution",arcConsistent,true);
 }
 
 void test_diffusion_solver_loop_a(unsigned n)
 {
-    vcl_cout << "==== test test_diffusion_solver (loop) =====\n"
-             << n << " nodes." << vcl_endl;
+    std::cout << "==== test test_diffusion_solver (loop) =====\n"
+             << n << " nodes." << std::endl;
 
     // Generate arcs
-    vcl_vector<mmn_arc> arc(n);
+    std::vector<mmn_arc> arc(n);
     for (unsigned i=0;i<n;++i)
         arc[i]=mmn_arc(i,(i+1)%n);
 
     mmn_graph_rep1 graph;
     graph.build(n,arc);
-    vcl_vector<mmn_dependancy> deps;
+    std::vector<mmn_dependancy> deps;
     graph.compute_dependancies(deps);
 
-    vcl_vector<vnl_vector<double> > node_cost(n);
-    vcl_vector<vnl_matrix<double> > pair_cost(arc.size());
+    std::vector<vnl_vector<double> > node_cost(n);
+    std::vector<vnl_matrix<double> > pair_cost(arc.size());
 
-    vcl_cout<<"Set up trivial problem. Optimal node=i, pair_costs all flat"<<vcl_endl;
+    std::cout<<"Set up trivial problem. Optimal node=i, pair_costs all flat"<<std::endl;
     for (unsigned i=0;i<n;++i)
     {
         node_cost[i].set_size(5+i);
@@ -198,7 +200,7 @@ void test_diffusion_solver_loop_a(unsigned n)
         node_cost[i][i]=20;
     }
     convert_to_minus_log_probs(node_cost);
-    double arc_cost=-vcl_log(0.25);
+    double arc_cost=-std::log(0.25);
     for (unsigned a=0;a<arc.size();++a)
     {
         unsigned v1=arc[a].min_v();
@@ -210,17 +212,17 @@ void test_diffusion_solver_loop_a(unsigned n)
     mmn_diffusion_solver solver;
     solver.set_arcs(n,arc);
     solver.set_verbose(true);
-    vcl_cout<<"Run solver."<<vcl_endl;
+    std::cout<<"Run solver."<<std::endl;
 
-    vcl_vector<unsigned> x;
-    vcl_pair<bool,double> status = solver(node_cost,pair_cost,x);
+    std::vector<unsigned> x;
+    std::pair<bool,double> status = solver(node_cost,pair_cost,x);
     double min_cost = status.second;
     bool arcConsistent=status.first;
 
-    vcl_cout<<"DIFFUSION Solver Iteration Count Is: "<<solver.count()<<vcl_endl
-            <<"LOOP GRAPH SOLUTION IS:"<<vcl_endl;
-    vcl_copy(x.begin(),x.end(),vcl_ostream_iterator<unsigned>(vcl_cout,"\t"));
-    vcl_cout<<vcl_endl;
+    std::cout<<"DIFFUSION Solver Iteration Count Is: "<<solver.count()<<std::endl
+            <<"LOOP GRAPH SOLUTION IS:"<<std::endl;
+    std::copy(x.begin(),x.end(),std::ostream_iterator<unsigned>(std::cout,"\t"));
+    std::cout<<std::endl;
     double cost=0.0;
     for (unsigned i=0; i<node_cost.size();i++)
     {
@@ -233,38 +235,38 @@ void test_diffusion_solver_loop_a(unsigned n)
     for (unsigned i=0;i<n;++i)
     {
         TEST("Correct node value",x[i],i);
-        vcl_cout<<"x["<<i<<"]="<<x[i]<<vcl_endl;
+        std::cout<<"x["<<i<<"]="<<x[i]<<std::endl;
     }
     TEST("Arc Consistent Solution",arcConsistent,true);
 }
 
 void test_diffusion_solver_loop_b(unsigned n)
 {
-    vcl_cout<<"==== test test_diffusion_solver (loop) ====="<<vcl_endl;
+    std::cout<<"==== test test_diffusion_solver (loop) ====="<<std::endl;
 
     // Generate arcs
-    vcl_vector<mmn_arc> arc(n);
+    std::vector<mmn_arc> arc(n);
     for (unsigned i=0;i<n;++i)
         arc[i]=mmn_arc(i,(i+1)%n);
 
     mmn_graph_rep1 graph;
     graph.build(n,arc);
-    vcl_vector<mmn_dependancy> deps;
+    std::vector<mmn_dependancy> deps;
     graph.compute_dependancies(deps);
 
-    vcl_vector<vnl_vector<double> > node_cost(n);
-    vcl_vector<vnl_matrix<double> > pair_cost(arc.size());
+    std::vector<vnl_vector<double> > node_cost(n);
+    std::vector<vnl_matrix<double> > pair_cost(arc.size());
 
-    vcl_cout << "Set up trivial problem. Optimal node=i\n"
-             << "node_costs all flat"<<vcl_endl;
+    std::cout << "Set up trivial problem. Optimal node=i\n"
+             << "node_costs all flat"<<std::endl;
     for (unsigned i=0;i<n;++i)
     {
         node_cost[i].set_size(5+i);
         node_cost[i].fill(1.0);
     }
     convert_to_minus_log_probs(node_cost);
-    double arc_cost_good=-vcl_log(0.5);
-    double arc_cost_bad=-vcl_log(0.001);
+    double arc_cost_good=-std::log(0.5);
+    double arc_cost_bad=-std::log(0.001);
 
     for (unsigned a=0;a<arc.size();++a)
     {
@@ -278,14 +280,14 @@ void test_diffusion_solver_loop_b(unsigned n)
     mmn_diffusion_solver solver;
     solver.set_arcs(n,arc);
     solver.set_verbose(true);
-    vcl_cout<<"Run solver."<<vcl_endl;
+    std::cout<<"Run solver."<<std::endl;
 
-    vcl_vector<unsigned> x;
-    vcl_pair<bool,double> status = solver(node_cost,pair_cost,x);
+    std::vector<unsigned> x;
+    std::pair<bool,double> status = solver(node_cost,pair_cost,x);
     double min_cost = status.second;
     bool arcConsistent=status.first;
 
-    vcl_cout<<"DIFFUSION Solver Iteration Count Is: "<<solver.count()<<vcl_endl;
+    std::cout<<"DIFFUSION Solver Iteration Count Is: "<<solver.count()<<std::endl;
     double cost=double (arc.size())*arc_cost_good;
     for (unsigned i=0;i<n;++i)
     {
@@ -296,7 +298,7 @@ void test_diffusion_solver_loop_b(unsigned n)
     for (unsigned i=0;i<n;++i)
     {
         TEST("Correct node value",x[i],i);
-        vcl_cout<<"x["<<i<<"]="<<x[i]<<vcl_endl;
+        std::cout<<"x["<<i<<"]="<<x[i]<<std::endl;
     }
     TEST("Arc Consistent Solution",arcConsistent,true);
 }
@@ -305,16 +307,16 @@ void test_diff_best_xy_line()
 {
     const unsigned NSTAGES=5;
     const unsigned NPOINTS_PER_STAGE=10;
-    vcl_cout<<"==== test test_diffusion_solver best y line ====="<<vcl_endl;
+    std::cout<<"==== test test_diffusion_solver best y line ====="<<std::endl;
 
     unsigned n=NSTAGES;
     // Generate linked list
-    vcl_vector<mmn_arc> arc(n-1);
+    std::vector<mmn_arc> arc(n-1);
     for (unsigned i=0;i<n-1;++i)
         arc[i]=mmn_arc(i,i+1);
 
-    vcl_vector<vnl_vector<double> > node_cost(n);
-    vcl_vector<vnl_matrix<double> > pair_cost(arc.size());
+    std::vector<vnl_vector<double> > node_cost(n);
+    std::vector<vnl_matrix<double> > pair_cost(arc.size());
 
     //Create some point data
 
@@ -344,12 +346,12 @@ void test_diff_best_xy_line()
 
     //--------- Now loop over all stages and create some raw data, then transform it to input data form
 
-    vcl_vector<vcl_vector<vgl_point_2d<double > > > locations(NSTAGES);
+    std::vector<std::vector<vgl_point_2d<double > > > locations(NSTAGES);
 
-    vcl_vector<point_data> prev_raw_data(NPOINTS_PER_STAGE);
+    std::vector<point_data> prev_raw_data(NPOINTS_PER_STAGE);
     for (unsigned int istage=0;istage<NSTAGES;++istage)
     {
-        vcl_vector<point_data> raw_data(NPOINTS_PER_STAGE);
+        std::vector<point_data> raw_data(NPOINTS_PER_STAGE);
         vnl_vector<double> amps(NPOINTS_PER_STAGE);
         vnl_vector<double> error(2);
         amp_sampler->get_samples(amps);
@@ -374,7 +376,7 @@ void test_diff_best_xy_line()
         for (unsigned j=0;j<NPOINTS_PER_STAGE;++j)
         {
             const double STRENGTH_FACTOR=1/20.0;
-            double ampprob=1.0-vcl_exp(-raw_data[j].amplitude * STRENGTH_FACTOR);
+            double ampprob=1.0-std::exp(-raw_data[j].amplitude * STRENGTH_FACTOR);
             if (ampprob<1.0E-8)
                 ampprob=1.0E-8;
             node_cost[istage][j]=ampprob;
@@ -393,7 +395,7 @@ void test_diff_best_xy_line()
                     vnl_vector<double > delta(2);
                     delta[0] = d.x(); delta[1]=d.y();
                     double linkProb=pdf_model(delta);
-                    pair_cost[arcId][kprev][k]=vcl_log(linkProb);
+                    pair_cost[arcId][kprev][k]=std::log(linkProb);
                 }
             }
         }
@@ -404,7 +406,7 @@ void test_diff_best_xy_line()
     convert_to_minus_log_probs(node_cost);
 
     //Also test using Markov alg
-    vcl_vector<vnl_matrix<double  > > pair_costs_neg=pair_cost;
+    std::vector<vnl_matrix<double  > > pair_costs_neg=pair_cost;
 
     for (unsigned i=0;i<pair_costs_neg.size();++i)
     {
@@ -420,35 +422,35 @@ void test_diff_best_xy_line()
     mmn_diffusion_solver solver;
     solver.set_arcs(n,arc);
     solver.set_verbose(true);
-    vcl_cout<<"Run solver."<<vcl_endl;
+    std::cout<<"Run solver."<<std::endl;
 
-    vcl_vector<unsigned> x;
-    vcl_pair<bool,double> status = solver(node_cost,pair_costs_neg,x);
+    std::vector<unsigned> x;
+    std::pair<bool,double> status = solver(node_cost,pair_costs_neg,x);
 
     double min_cost = status.second;
     bool arcConsistent=status.first;
 
-    vcl_cout<<"DIFFUSION Solver Iteration Count Is: "<<solver.count()<<vcl_endl;
+    std::cout<<"DIFFUSION Solver Iteration Count Is: "<<solver.count()<<std::endl;
     TEST("Correct number of nodes",x.size(),n);
     TEST("Arc Consistent Solution",arcConsistent,true);
 
     mmn_graph_rep1 graph;
     graph.build(n,arc);
-    vcl_vector<mmn_dependancy> deps;
+    std::vector<mmn_dependancy> deps;
     graph.compute_dependancies(deps);
 
     mmn_dp_solver dpSolver;
     dpSolver.set_dependancies(deps,n,graph.max_n_arcs());
 
-    vcl_cout<<"Run DP solver."<<vcl_endl;
+    std::cout<<"Run DP solver."<<std::endl;
 
-    vcl_vector<unsigned> xDP;
+    std::vector<unsigned> xDP;
     double min_costdp = dpSolver.solve(node_cost,pair_costs_neg,xDP);
     TEST_NEAR("Optimum value",min_cost,min_costdp,1e-6);
     for (unsigned i=0;i<n;++i)
     {
         TEST("Correct node value",x[i],xDP[i]);
-        vcl_cout<<"x["<<i<<"]="<<x[i]<<'\t'<<locations[i][x[i]]<<"\t prior prob: "<<vcl_exp(-node_cost[i][x[i]])<<vcl_endl;
+        std::cout<<"x["<<i<<"]="<<x[i]<<'\t'<<locations[i][x[i]]<<"\t prior prob: "<<std::exp(-node_cost[i][x[i]])<<std::endl;
     }
 }
 
@@ -456,11 +458,11 @@ void test_diff_5x5grid_easy()
 {
     const unsigned NSTAGES=5;
     const unsigned NPOINTS_PER_NODE=10;
-    vcl_cout<<"==== test test_diffusion_solver 5x5 grid ====="<<vcl_endl;
+    std::cout<<"==== test test_diffusion_solver 5x5 grid ====="<<std::endl;
 
     unsigned n=NSTAGES*NSTAGES;
     // Generate linked list
-    vcl_vector<mmn_arc> arcs;
+    std::vector<mmn_arc> arcs;
     const double DG=100.0;
     for (unsigned iy=0;iy<NSTAGES;++iy)
     {
@@ -481,10 +483,10 @@ void test_diff_5x5grid_easy()
         }
     }
 
-    vcl_vector<vnl_vector<double> > node_costs(n);
-    vcl_vector<vnl_matrix<double> > pair_costs(arcs.size());
+    std::vector<vnl_vector<double> > node_costs(n);
+    std::vector<vnl_matrix<double> > pair_costs(arcs.size());
 
-    vcl_cout<<"All arcs added, total number of arcs= "<<arcs.size()<<vcl_endl;
+    std::cout<<"All arcs added, total number of arcs= "<<arcs.size()<<std::endl;
 
     //Create some point data
 
@@ -518,7 +520,7 @@ void test_diff_5x5grid_easy()
     //--------- Now loop over all grid points and create some raw data, then transform it to input data form
 
 
-    vcl_vector<vcl_vector<vgl_point_2d<double > > > locations(n);
+    std::vector<std::vector<vgl_point_2d<double > > > locations(n);
 
     for (unsigned int inode=0;inode<n;++inode)
     {
@@ -527,7 +529,7 @@ void test_diff_5x5grid_easy()
         unsigned nodeId=NSTAGES*iy+ix;
         assert(nodeId==inode);
 
-        vcl_vector<point_data> raw_data(NPOINTS_PER_NODE);
+        std::vector<point_data> raw_data(NPOINTS_PER_NODE);
         vnl_vector<double> amps(NPOINTS_PER_NODE);
         vnl_vector<double> error(2);
         amp_sampler->get_samples(amps);
@@ -546,7 +548,7 @@ void test_diff_5x5grid_easy()
                                                                   gridPoint.y()+error[1]);
 
             locations[nodeId].push_back(location);
-            double ampprob=1.0-vcl_exp(-amplitude * STRENGTH_FACTOR);
+            double ampprob=1.0-std::exp(-amplitude * STRENGTH_FACTOR);
             if (ampprob<1.0E-8)
                 ampprob=1.0E-8;
 
@@ -555,7 +557,7 @@ void test_diff_5x5grid_easy()
 
         //Raw data points are go.......
     }
-    vcl_cout<<"Have created points grid and node costs..."<<vcl_endl;
+    std::cout<<"Have created points grid and node costs..."<<std::endl;
 
     for (unsigned i=0; i<arcs.size();i++)
     {
@@ -582,26 +584,26 @@ void test_diff_5x5grid_easy()
                 }
                 else
                 {
-                    vcl_cout<<"WARNING - inconsistent node numbering on arc "<<i<<"\tlinking\t"<<node1<<'\t'<<node2<<vcl_endl;
+                    std::cout<<"WARNING - inconsistent node numbering on arc "<<i<<"\tlinking\t"<<node1<<'\t'<<node2<<std::endl;
                     assert(0);
                 }
                 delta[0] = d.x()-dgx; delta[1]=d.y()-dgy;
                 double linkProb=pdf_model(delta);
-                pairCost=vcl_log(linkProb);
+                pairCost=std::log(linkProb);
             }
         }
     }
 
-    vcl_cout<<"Have computed all node and arc costs"<<vcl_endl;
+    std::cout<<"Have computed all node and arc costs"<<std::endl;
     convert_to_minus_log_probs(node_costs);
 
     for (unsigned i=0;i<n;++i)
     {
-        vcl_copy(node_costs[i].begin(),node_costs[i].end(),
-                 vcl_ostream_iterator<double >(vcl_cout,"\t"));
-        vcl_cout<<vcl_endl;
+        std::copy(node_costs[i].begin(),node_costs[i].end(),
+                 std::ostream_iterator<double >(std::cout,"\t"));
+        std::cout<<std::endl;
     }
-    vcl_vector<vnl_matrix<double  > > pair_costs_neg=pair_costs;
+    std::vector<vnl_matrix<double  > > pair_costs_neg=pair_costs;
 
     for (unsigned i=0;i<pair_costs_neg.size();++i)
     {
@@ -618,14 +620,14 @@ void test_diff_5x5grid_easy()
     solver.set_arcs(n,arcs);
     solver.set_verbose(true);
 
-    vcl_cout<<"Run solver."<<vcl_endl;
+    std::cout<<"Run solver."<<std::endl;
 
-    vcl_vector<unsigned> x;
-    vcl_pair<bool,double> status = solver(node_costs,pair_costs_neg,x);
+    std::vector<unsigned> x;
+    std::pair<bool,double> status = solver(node_costs,pair_costs_neg,x);
     double min_cost = status.second;
     bool arcConsistent=status.first;
 
-    vcl_cout<<"DIFFUSION Solver Iteration Count Is: "<<solver.count()<<" solution value is "<<min_cost<<vcl_endl;
+    std::cout<<"DIFFUSION Solver Iteration Count Is: "<<solver.count()<<" solution value is "<<min_cost<<std::endl;
     TEST("Correct number of nodes",x.size(),n);
     TEST("Arc Consistent Solution",arcConsistent,true);
 
@@ -638,7 +640,7 @@ void test_diff_5x5grid_easy()
             unsigned nodeIdRight=nodeId+1;
             unsigned nodeIdAbove=nodeId+NSTAGES;
 
-            vcl_cout<<"x["<<nodeId<<"]="<<x[nodeId]<<'\t'<<locations[nodeId][x[nodeId]]<<"\t prior prob: "<<vcl_exp(-node_costs[nodeId][x[nodeId]])<<vcl_endl;
+            std::cout<<"x["<<nodeId<<"]="<<x[nodeId]<<'\t'<<locations[nodeId][x[nodeId]]<<"\t prior prob: "<<std::exp(-node_costs[nodeId][x[nodeId]])<<std::endl;
 
             unsigned i0=x[nodeId];
             if (ix<NSTAGES-1)
@@ -646,9 +648,9 @@ void test_diff_5x5grid_easy()
                 unsigned iR=x[nodeIdRight];
 
                 vgl_vector_2d<double> dR=locations[nodeIdRight][iR]-locations[nodeId][i0];
-                TEST_NEAR("Grid Point dx to Right", vcl_fabs(dR.x()-DG),0.0,2.0*twoSigma);
-                TEST_NEAR("Grid Point dy to Right", vcl_fabs(dR.y()),0.0,2.0*twoSigma);
-                if (vcl_fabs(dR.x()-DG)>twoSigma || vcl_fabs(dR.y())>twoSigma)
+                TEST_NEAR("Grid Point dx to Right", std::fabs(dR.x()-DG),0.0,2.0*twoSigma);
+                TEST_NEAR("Grid Point dy to Right", std::fabs(dR.y()),0.0,2.0*twoSigma);
+                if (std::fabs(dR.x()-DG)>twoSigma || std::fabs(dR.y())>twoSigma)
                 {
                     ++badCount;
                 }
@@ -657,17 +659,17 @@ void test_diff_5x5grid_easy()
             {
                 unsigned iA=x[nodeIdAbove];
                 vgl_vector_2d<double> dA=locations[nodeIdAbove][iA]-locations[nodeId][i0];
-                TEST_NEAR("Grid Point dx to Above", vcl_fabs(dA.x()),0.0,2.0*twoSigma);
-                TEST_NEAR("Grid Point dy to Above", vcl_fabs(dA.y()-DG),0.0,2.0*twoSigma);
+                TEST_NEAR("Grid Point dx to Above", std::fabs(dA.x()),0.0,2.0*twoSigma);
+                TEST_NEAR("Grid Point dy to Above", std::fabs(dA.y()-DG),0.0,2.0*twoSigma);
 
-                if (vcl_fabs(dA.y()-DG)>twoSigma || vcl_fabs(dA.x())>twoSigma)
+                if (std::fabs(dA.y()-DG)>twoSigma || std::fabs(dA.x())>twoSigma)
                 {
                     ++badCount;
                 }
             }
         }
     }
-    vcl_cout<<"Number of unusual grid point separations= "<<badCount<<vcl_endl;
+    std::cout<<"Number of unusual grid point separations= "<<badCount<<std::endl;
     TEST("Unusual grid point separation count",badCount<3,true);
 }
 
@@ -675,11 +677,11 @@ void test_diff_5x5grid_hard()
 {
     const unsigned NSTAGES=5;
     const unsigned NPOINTS_PER_NODE=10;
-    vcl_cout<<"==== test test_diffusion_solver 5x5 grid ====="<<vcl_endl;
+    std::cout<<"==== test test_diffusion_solver 5x5 grid ====="<<std::endl;
 
     unsigned n=NSTAGES*NSTAGES;
     // Generate linked list
-    vcl_vector<mmn_arc> arcs;
+    std::vector<mmn_arc> arcs;
     const double DG=100.0;
     for (unsigned iy=0;iy<NSTAGES;++iy)
     {
@@ -700,10 +702,10 @@ void test_diff_5x5grid_hard()
         }
     }
 
-    vcl_vector<vnl_vector<double> > node_costs(n);
-    vcl_vector<vnl_matrix<double> > pair_costs(arcs.size());
+    std::vector<vnl_vector<double> > node_costs(n);
+    std::vector<vnl_matrix<double> > pair_costs(arcs.size());
 
-    vcl_cout<<"All arcs added, total number of arcs= "<<arcs.size()<<vcl_endl;
+    std::cout<<"All arcs added, total number of arcs= "<<arcs.size()<<std::endl;
 
     //Create some point data
 
@@ -744,8 +746,8 @@ void test_diff_5x5grid_hard()
 
 
     unsigned NALL=n*NPOINTS_PER_NODE;
-    vcl_vector< vgl_point_2d<double > > locations;
-    vcl_vector<double> all_responses;
+    std::vector< vgl_point_2d<double > > locations;
+    std::vector<double> all_responses;
     all_responses.reserve(NALL);
     locations.reserve(NALL);
 
@@ -756,7 +758,7 @@ void test_diff_5x5grid_hard()
         unsigned nodeId=NSTAGES*iy+ix;
         assert(nodeId==inode);
 
-        vcl_vector<point_data> raw_data(NPOINTS_PER_NODE);
+        std::vector<point_data> raw_data(NPOINTS_PER_NODE);
         vnl_vector<double> amps(NPOINTS_PER_NODE);
         vnl_vector<double> error(2);
         amp_sampler->get_samples(amps);
@@ -777,7 +779,7 @@ void test_diff_5x5grid_hard()
                                                                   gridPoint.y()+error[1]);
 
             locations.push_back(location);
-            double ampprob=1.0-vcl_exp(-amplitude * STRENGTH_FACTOR);
+            double ampprob=1.0-std::exp(-amplitude * STRENGTH_FACTOR);
             if (ampprob<1.0E-8)
                 ampprob=1.0E-8;
             all_responses.push_back(ampprob);
@@ -787,12 +789,12 @@ void test_diff_5x5grid_hard()
 
     assert(all_responses.size()==NALL);
     assert(locations.size()==NALL);
-    vcl_cout<<"Have created points grid and node costs..."<<vcl_endl
-            <<"Now doing dumb assignment of all responses to every node..."<<vcl_endl;
+    std::cout<<"Have created points grid and node costs..."<<std::endl
+            <<"Now doing dumb assignment of all responses to every node..."<<std::endl;
     for (unsigned int inode=0;inode<n;++inode)
     {
         node_costs[inode].set_size(NALL);
-        vcl_copy(all_responses.begin(),all_responses.end(),
+        std::copy(all_responses.begin(),all_responses.end(),
                  node_costs[inode].begin());
     }
     for (unsigned i=0; i<arcs.size();i++)
@@ -826,7 +828,7 @@ void test_diff_5x5grid_hard()
                     }
                     else
                     {
-                        vcl_cout<<"WARNING - inconsistent node numbering on arc "<<i<<"\tlinking\t"<<node1<<'\t'<<node2<<vcl_endl;
+                        std::cout<<"WARNING - inconsistent node numbering on arc "<<i<<"\tlinking\t"<<node1<<'\t'<<node2<<std::endl;
                         assert(0);
                     }
                     delta[0] = d.x()-dgx; delta[1]=d.y()-dgy;
@@ -836,11 +838,11 @@ void test_diff_5x5grid_hard()
         }
     }
 
-    vcl_cout<<"Have computed all node and arc costs"<<vcl_endl;
+    std::cout<<"Have computed all node and arc costs"<<std::endl;
     convert_to_minus_log_probs(node_costs);
 
 
-    vcl_vector<vnl_matrix<double  > > pair_costs_neg=pair_costs;
+    std::vector<vnl_matrix<double  > > pair_costs_neg=pair_costs;
 
     for (unsigned i=0;i<pair_costs_neg.size();++i)
     {
@@ -856,14 +858,14 @@ void test_diff_5x5grid_hard()
     mmn_diffusion_solver solver;
     solver.set_arcs(n,arcs);
     solver.set_verbose(true);
-    vcl_cout<<"Run solver."<<vcl_endl;
+    std::cout<<"Run solver."<<std::endl;
 
-    vcl_vector<unsigned> x;
-    vcl_pair<bool,double> status = solver(node_costs,pair_costs_neg,x);
+    std::vector<unsigned> x;
+    std::pair<bool,double> status = solver(node_costs,pair_costs_neg,x);
     double min_cost = status.second;
     bool arcConsistent=status.first;
 
-    vcl_cout<<"DIFFUSION Solver Iteration Count Is: "<<solver.count()<<" solution value is "<<min_cost<<vcl_endl;
+    std::cout<<"DIFFUSION Solver Iteration Count Is: "<<solver.count()<<" solution value is "<<min_cost<<std::endl;
     TEST("Correct number of nodes",x.size(),n);
     TEST("Arc Consistent Solution",arcConsistent,true);
 
@@ -876,7 +878,7 @@ void test_diff_5x5grid_hard()
             unsigned nodeIdRight=nodeId+1;
             unsigned nodeIdAbove=nodeId+NSTAGES;
 
-            vcl_cout<<"x["<<nodeId<<"]="<<x[nodeId]<<'\t'<<locations[x[nodeId]]<<"\t prior prob: "<<vcl_exp(-node_costs[nodeId][x[nodeId]])<<vcl_endl;
+            std::cout<<"x["<<nodeId<<"]="<<x[nodeId]<<'\t'<<locations[x[nodeId]]<<"\t prior prob: "<<std::exp(-node_costs[nodeId][x[nodeId]])<<std::endl;
 
             unsigned i0=x[nodeId];
             if (ix<NSTAGES-1)
@@ -884,9 +886,9 @@ void test_diff_5x5grid_hard()
                 unsigned iR=x[nodeIdRight];
 
                 vgl_vector_2d<double> dR=locations[iR]-locations[i0];
-                TEST_NEAR("Grid Point dx to Right", vcl_fabs(dR.x()-DG),0.0,2.0*twoSigma);
-                TEST_NEAR("Grid Point dy to Right", vcl_fabs(dR.y()),0.0,2.0*twoSigma);
-                if (vcl_fabs(dR.x()-DG)>twoSigma || vcl_fabs(dR.y())>twoSigma)
+                TEST_NEAR("Grid Point dx to Right", std::fabs(dR.x()-DG),0.0,2.0*twoSigma);
+                TEST_NEAR("Grid Point dy to Right", std::fabs(dR.y()),0.0,2.0*twoSigma);
+                if (std::fabs(dR.x()-DG)>twoSigma || std::fabs(dR.y())>twoSigma)
                 {
                     ++badCount;
                 }
@@ -895,17 +897,17 @@ void test_diff_5x5grid_hard()
             {
                 unsigned iA=x[nodeIdAbove];
                 vgl_vector_2d<double> dA=locations[iA]-locations[i0];
-                TEST_NEAR("Grid Point dx to Above", vcl_fabs(dA.x()),0.0,2.0*twoSigma);
-                TEST_NEAR("Grid Point dy to Above", vcl_fabs(dA.y()-DG),0.0,2.0*twoSigma);
+                TEST_NEAR("Grid Point dx to Above", std::fabs(dA.x()),0.0,2.0*twoSigma);
+                TEST_NEAR("Grid Point dy to Above", std::fabs(dA.y()-DG),0.0,2.0*twoSigma);
 
-                if (vcl_fabs(dA.y()-DG)>twoSigma || vcl_fabs(dA.x())>twoSigma)
+                if (std::fabs(dA.y()-DG)>twoSigma || std::fabs(dA.x())>twoSigma)
                 {
                     ++badCount;
                 }
             }
         }
     }
-    vcl_cout<<"Number of unusual grid point separations= "<<badCount<<vcl_endl;
+    std::cout<<"Number of unusual grid point separations= "<<badCount<<std::endl;
     TEST("Unusual grid point separation count",badCount<3,true);
 }
 

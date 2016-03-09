@@ -15,9 +15,11 @@
 // \endverbatim
 //*****************************************************************************
 
-#include <vcl_vector.h>
-#include <vcl_iostream.h>
-#include <vcl_string.h>
+#include <vector>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iostream>
+#include <string>
 #include <vcl_cassert.h>
 #include <vsol/vsol_curve_3d.h>
 #include <vsol/vsol_point_3d.h>
@@ -37,47 +39,47 @@ class bsol_intrinsic_curve_3d : public vsol_curve_3d
   //***************************************************************************
   // Data members
   // Description: List of vsol_point_3d
-  vcl_vector<vsol_point_3d_sptr> *storage_;
+  std::vector<vsol_point_3d_sptr> *storage_;
   //: First point of the curve : just to conform to vsol_curve_2d standard
   vsol_point_3d_sptr p0_;
   //: Last point of the curve
   vsol_point_3d_sptr p1_;
   //: Arclength measured from the p0_
-  vcl_vector<double> arcLength_;
+  std::vector<double> arcLength_;
   //: Arclength of the current segment i to i+1
-  vcl_vector<double> s_;
+  std::vector<double> s_;
   //: The z angle of the intrinsic curve
-  vcl_vector<double> phi_;
+  std::vector<double> phi_;
   //: First derivative of the z angle of the intrinsic curve
-  vcl_vector<double> phis_;
+  std::vector<double> phis_;
   //: Second derivative of the z angle of the intrinsic curve
-  vcl_vector<double> phiss_;
+  std::vector<double> phiss_;
   //: The xy angle of the intrinsic curve
-  vcl_vector<double> theta_;
+  std::vector<double> theta_;
   //: First derivative of the xy angle of the intrinsic curve
-  vcl_vector<double> thetas_;
+  std::vector<double> thetas_;
   //: Second derivative of the xy angle of the intrinsic curve
-  vcl_vector<double> thetass_;
+  std::vector<double> thetass_;
   //: Curvature of the intrinsic curve
-  vcl_vector<double> curvature_;
+  std::vector<double> curvature_;
   //: Torsion of the intrinsic curve
-  vcl_vector<double> torsion_;
+  std::vector<double> torsion_;
   //: Total curvature of the intrinsic curve
   double totalCurvature_;
   //: Total angle change of the intrinsic curve
   double totalAngleChange_;
 
   //: Tangent vector for each point
-  vcl_vector<vgl_vector_3d<double>*> Tangent_;
+  std::vector<vgl_vector_3d<double>*> Tangent_;
   //: Normal vector for each point
-  vcl_vector<vgl_vector_3d<double>*> Normal_;
+  std::vector<vgl_vector_3d<double>*> Normal_;
   //: Binormal vector for each point
-  vcl_vector<vgl_vector_3d<double>*> Binormal_;
+  std::vector<vgl_vector_3d<double>*> Binormal_;
 
   //: A flag to indicate if this curve is open or close
   bool isOpen_;
   //: The '*.con3' filename of this intrinsic curve
-  vcl_string CON3Filename_;
+  std::string CON3Filename_;
 
  public:
   //***************************************************************************
@@ -85,8 +87,8 @@ class bsol_intrinsic_curve_3d : public vsol_curve_3d
 
   //: Default Constructor
   bsol_intrinsic_curve_3d();
-  //: Constructor from a vcl_vector of points
-  bsol_intrinsic_curve_3d(const vcl_vector<vsol_point_3d_sptr> &new_vertices);
+  //: Constructor from a std::vector of points
+  bsol_intrinsic_curve_3d(const std::vector<vsol_point_3d_sptr> &new_vertices);
   //: Copy constructor
   bsol_intrinsic_curve_3d(const bsol_intrinsic_curve_3d &other);
   //: Destructor
@@ -95,7 +97,7 @@ class bsol_intrinsic_curve_3d : public vsol_curve_3d
   // See Prototype pattern
   virtual vsol_spatial_object_3d* clone(void) const;
   //: Return a platform independent string identifying the class
-  vcl_string is_a() const { return vcl_string("bsol_intrinsic_curve_3d"); }
+  std::string is_a() const { return std::string("bsol_intrinsic_curve_3d"); }
 
   //***************************************************************************
   // Access
@@ -303,7 +305,7 @@ class bsol_intrinsic_curve_3d : public vsol_curve_3d
     return isOpen_;
   }
   //: The '*.con3' filename of this intrinsic curve
-  vcl_string CON3Filename (void) {
+  std::string CON3Filename (void) {
     return CON3Filename_;
   }
 
@@ -366,14 +368,14 @@ class bsol_intrinsic_curve_3d : public vsol_curve_3d
   void insert_vertex (int i, double x, double y, double z) {
     assert (valid_index(i));
     vsol_point_3d_sptr pt = new vsol_point_3d (x,y,z);
-    vcl_vector< vsol_point_3d_sptr >::iterator it = storage_->begin();
+    std::vector< vsol_point_3d_sptr >::iterator it = storage_->begin();
     it += i;
     storage_->insert (it, pt);
   }
 
   //: File I/O
-  bool LoadCON3File (vcl_string fileName);
-  bool SaveCON3File (vcl_string fileName);
+  bool LoadCON3File (std::string fileName);
+  bool SaveCON3File (std::string fileName);
 
   //***************************************************************************
   // Basic operations
@@ -382,7 +384,7 @@ class bsol_intrinsic_curve_3d : public vsol_curve_3d
   virtual void compute_bounding_box(void) const;
 
   //: output description to stream
-  inline void describe(vcl_ostream &strm, int blanking=0) const {
+  inline void describe(std::ostream &strm, int blanking=0) const {
     if (blanking < 0) blanking = 0; while (blanking--) strm << ' ';
     strm << "<bsol_intrinsic_curve_3d " << ( isOpen_ ? "open" : "closed" )
          << ", total curvature=" << totalCurvature_

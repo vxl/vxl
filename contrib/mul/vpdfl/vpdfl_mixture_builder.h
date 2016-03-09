@@ -18,7 +18,9 @@
 #include <vpdfl/vpdfl_builder_base.h>
 #include <vpdfl/vpdfl_mixture_builder.h>
 #include <vpdfl/vpdfl_mixture.h>
-#include <vcl_iosfwd.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iosfwd>
 
 //=======================================================================
 
@@ -27,10 +29,10 @@ class vpdfl_mixture;
 //: Uses the EM algorithm to build vpdfl_mixture objects.
 class vpdfl_mixture_builder : public vpdfl_builder_base
 {
-  vcl_vector<vpdfl_builder_base*> builder_;
+  std::vector<vpdfl_builder_base*> builder_;
   double min_var_;
   int max_its_;
-  vcl_vector<vnl_vector<double> > initial_means_;
+  std::vector<vnl_vector<double> > initial_means_;
 
   //: Whether weights changed during iterations
   bool weights_fixed_;
@@ -39,35 +41,35 @@ class vpdfl_mixture_builder : public vpdfl_builder_base
     // \param mean_sep : Rough guess of mean separation between points
   void initialise_given_means(vpdfl_mixture& model,
                               const vnl_vector<double>* data,
-                              const vcl_vector<vnl_vector<double> >& mean,
-                              const vcl_vector<double>& wts) const;
+                              const std::vector<vnl_vector<double> >& mean,
+                              const std::vector<double>& wts) const;
 
     //: Means centred on data[i*f]
   void initialise_to_regular_samples(vpdfl_mixture& model,
                                      const vnl_vector<double>* data,
-                                     const vcl_vector<double>& wts) const;
+                                     const std::vector<double>& wts) const;
 
     //: Select positions along diagonal of bounding box
   void initialise_diagonal(vpdfl_mixture& model,
                            const vnl_vector<double>* data,
-                           const vcl_vector<double>& wts) const;
+                           const std::vector<double>& wts) const;
 
     //: Select positions and widths for components to start
   void initialise(vpdfl_mixture& model,
                   const vnl_vector<double>* data,
-                  const vcl_vector<double>& wts) const;
+                  const std::vector<double>& wts) const;
 
   //: The Expectation part of the EM algorithm
   void e_step(vpdfl_mixture& model,
-              vcl_vector<vnl_vector<double> >& probs,
+              std::vector<vnl_vector<double> >& probs,
               const vnl_vector<double>* data,
-              const vcl_vector<double>& wts) const;
+              const std::vector<double>& wts) const;
 
   //: The Maximisation part of the EM algorithm
   double m_step(vpdfl_mixture& model,
-                const vcl_vector<vnl_vector<double> >& probs,
+                const std::vector<vnl_vector<double> >& probs,
                 const vnl_vector<double>* data,
-                const vcl_vector<double>& wts) const;
+                const std::vector<double>& wts) const;
 
   void init();
   void delete_stuff();
@@ -147,28 +149,28 @@ class vpdfl_mixture_builder : public vpdfl_builder_base
   //  parameters.
   virtual void weighted_build(vpdfl_pdf_base& model,
                               mbl_data_wrapper<vnl_vector<double> >& data,
-                              const vcl_vector<double>& wts) const;
+                              const std::vector<double>& wts) const;
 
   //: Preset initial component means
   // When initialise is called these means will be used as the initial guess
   // Note that the vector must  is copied
-  void preset_initial_means(const vcl_vector<vnl_vector<double> >& component_means);
+  void preset_initial_means(const std::vector<vnl_vector<double> >& component_means);
 
 
   //: Version number for I/O
   short version_no() const;
 
   //: Name of the class
-  virtual vcl_string is_a() const;
+  virtual std::string is_a() const;
 
   //: Does the name of the class match the argument?
-  virtual bool is_class(vcl_string const& s) const;
+  virtual bool is_class(std::string const& s) const;
 
   //: Create a copy on the heap and return base class pointer
   virtual vpdfl_builder_base* clone() const;
 
   //: Print class to os
-  virtual void print_summary(vcl_ostream& os) const;
+  virtual void print_summary(std::ostream& os) const;
 
   //: Save class to binary file stream
   virtual void b_write(vsl_b_ostream& bfs) const;
@@ -192,7 +194,7 @@ class vpdfl_mixture_builder : public vpdfl_builder_base
   // }
   // \endverbatim
   // \throw mbl_exception_parse_error if the parse fails.
-  virtual void config_from_stream(vcl_istream & is);
+  virtual void config_from_stream(std::istream & is);
 };
 
 #endif // vpdfl_mixture_builder_h_

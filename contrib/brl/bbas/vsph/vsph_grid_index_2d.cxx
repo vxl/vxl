@@ -10,8 +10,8 @@ double vsph_grid_index_2d::pye() const
   return 180.0;
 }
 vsph_grid_index_2d::vsph_grid_index_2d(): n_bins_theta_(180), n_bins_phi_(360), in_radians_(true){
-  vcl_vector<vcl_pair<vsph_sph_point_2d, int> > temp0;
-  vcl_vector<vcl_vector<vcl_pair<vsph_sph_point_2d, int> > > temp(n_bins_phi_+1, temp0);
+  std::vector<std::pair<vsph_sph_point_2d, int> > temp0;
+  std::vector<std::vector<std::pair<vsph_sph_point_2d, int> > > temp(n_bins_phi_+1, temp0);
   // two extra bins are reserved for theta = 0 and theta = 180
   // since for these bins, the value of phi is irrelevant
   index_.resize(n_bins_theta_+2, temp);
@@ -25,8 +25,8 @@ vsph_grid_index_2d::vsph_grid_index_2d(unsigned n_bins_theta, unsigned n_bins_ph
   n_bins_theta_(n_bins_theta), n_bins_phi_(n_bins_phi),
   in_radians_(in_radians)
 {
-  vcl_vector<vcl_pair<vsph_sph_point_2d, int> > temp0;
-  vcl_vector<vcl_vector<vcl_pair<vsph_sph_point_2d, int> > > temp(n_bins_phi_+1, temp0);
+  std::vector<std::pair<vsph_sph_point_2d, int> > temp0;
+  std::vector<std::vector<std::pair<vsph_sph_point_2d, int> > > temp(n_bins_phi_+1, temp0);
   // two extra bins are reserved for theta = 0 and theta = 180
   // since for these bins, the value of phi is irrelevant
   index_.resize(n_bins_theta_+2, temp);
@@ -60,7 +60,7 @@ bool vsph_grid_index_2d::index(vsph_sph_point_2d const& sp,
     return true;
   }
   else {
-    th_idx = static_cast<unsigned>(vcl_floor(th/theta_inc_));
+    th_idx = static_cast<unsigned>(std::floor(th/theta_inc_));
     if (th_idx >= n_bins_theta_)
       return false;
   }
@@ -68,7 +68,7 @@ bool vsph_grid_index_2d::index(vsph_sph_point_2d const& sp,
   if (ph == pye())
     ph_idx = n_bins_phi_-1;
   else{
-    double diff = vcl_floor(ph+pye());
+    double diff = std::floor(ph+pye());
     ph_idx = static_cast<unsigned>(diff/phi_inc_);
     if (ph_idx >= n_bins_phi_)
       return false;
@@ -93,12 +93,12 @@ bool vsph_grid_index_2d::insert(vsph_sph_point_2d const& sp, int id )
     ph/=vnl_math::deg_per_rad; th/=vnl_math::deg_per_rad;
   }
   vsph_sph_point_2d spin(th, ph, in_radians_);
-  vcl_pair<vsph_sph_point_2d, int> pr(spin, id);
+  std::pair<vsph_sph_point_2d, int> pr(spin, id);
   index_[th_idx][phi_idx].push_back(pr);
   return true;
 }
 
-static void add(vcl_vector<vcl_pair<vsph_sph_point_2d, int> > const& vec_to_add, vcl_vector<vcl_pair<vsph_sph_point_2d, int> >& result)
+static void add(std::vector<std::pair<vsph_sph_point_2d, int> > const& vec_to_add, std::vector<std::pair<vsph_sph_point_2d, int> >& result)
 {
   unsigned n = vec_to_add.size();
   for (unsigned i = 0; i<n; ++i)
@@ -127,9 +127,9 @@ bool vsph_grid_index_2d::find(vsph_sph_point_2d const& sp, unsigned& th_idx,
   //determine if the point is near the grid bin boundaries
   double th_min = th_idx*theta_inc_, th_max = th_min+theta_inc_;
   double ph_min = (ph_idx*phi_inc_)-pye(), ph_max = ph_min + phi_inc_;
-  double th_min_dif = vcl_fabs(th-th_min), th_max_dif = vcl_fabs(th_max-th);
-  double ph_min_dif = vcl_fabs(vsph_utils::azimuth_diff(ph_min, ph, in_radians_));
-  double ph_max_dif = vcl_fabs(vsph_utils::azimuth_diff(ph, ph_max, in_radians_));
+  double th_min_dif = std::fabs(th-th_min), th_max_dif = std::fabs(th_max-th);
+  double ph_min_dif = std::fabs(vsph_utils::azimuth_diff(ph_min, ph, in_radians_));
+  double ph_max_dif = std::fabs(vsph_utils::azimuth_diff(ph, ph_max, in_radians_));
   bool th_min_zero = th_min == 0.0;
   bool near_th_min = th>0.0 && (th_min_dif<=marg);
 
@@ -143,7 +143,7 @@ bool vsph_grid_index_2d::find(vsph_sph_point_2d const& sp, unsigned& th_idx,
   bool near_ph_max = ph < pye() && (ph_max_dif<=marg);
 
   //add the bin specified by input thetha and phi
-  vcl_vector<vcl_pair<vsph_sph_point_2d, int> > spts = index_[th_idx][ph_idx];
+  std::vector<std::pair<vsph_sph_point_2d, int> > spts = index_[th_idx][ph_idx];
   // add points from surrounding bins if the point is close to the boundaries
   if (near_th_min&&!th_min_zero) add(index_[th_idx-1][ph_idx], spts);
   if (near_th_max&&!th_max_pi) add(index_[th_idx+1][ph_idx], spts);
@@ -183,22 +183,22 @@ bool vsph_grid_index_2d::find(vsph_sph_point_2d const& sp, unsigned& th_idx,
     ph /= vnl_math::deg_per_rad;
     th /= vnl_math::deg_per_rad;
   }
-  double x = vcl_sin(th)*vcl_cos(ph);
-  double y = vcl_sin(th)*vcl_sin(ph);
-  double z = vcl_cos(th);
+  double x = std::sin(th)*std::cos(ph);
+  double y = std::sin(th)*std::sin(ph);
+  double z = std::cos(th);
   vgl_vector_3d<double> cp(x, y, z);
 
   bool found = false;
   if (spts.size())
-    for (vcl_vector<vcl_pair<vsph_sph_point_2d, int> >::const_iterator sit = spts.begin(); (sit != spts.end())&&!found; ++sit) {
+    for (std::vector<std::pair<vsph_sph_point_2d, int> >::const_iterator sit = spts.begin(); (sit != spts.end())&&!found; ++sit) {
       double ph_ix = ((*sit).first).phi_,  th_ix = ((*sit).first).theta_;
       if (!this->in_radians_) {
         ph_ix /= vnl_math::deg_per_rad;
         th_ix /= vnl_math::deg_per_rad;
       }
-      double xix = vcl_sin(th_ix)*vcl_cos(ph_ix);
-      double yix = vcl_sin(th_ix)*vcl_sin(ph_ix);
-      double zix = vcl_cos(th_ix);
+      double xix = std::sin(th_ix)*std::cos(ph_ix);
+      double yix = std::sin(th_ix)*std::sin(ph_ix);
+      double zix = std::cos(th_ix);
       vgl_vector_3d<double> cpix(xix, yix, zix);
       vgl_vector_3d<double> dif = cp-cpix;
       double dist = length(dif);
@@ -212,9 +212,9 @@ bool vsph_grid_index_2d::find(vsph_sph_point_2d const& sp, unsigned& th_idx,
 
 void vsph_grid_index_2d::clear()
 {
-  vcl_vector<vcl_vector<vcl_vector<vcl_pair<vsph_sph_point_2d, int> > > >::iterator iit = index_.begin();
+  std::vector<std::vector<std::vector<std::pair<vsph_sph_point_2d, int> > > >::iterator iit = index_.begin();
   for (; iit!=index_.end(); iit++) {
-    vcl_vector<vcl_vector<vcl_pair<vsph_sph_point_2d, int> > >::iterator jit =
+    std::vector<std::vector<std::pair<vsph_sph_point_2d, int> > >::iterator jit =
       (*iit).begin();
     for (; jit != (*iit).end(); ++jit)
       (*jit).clear();

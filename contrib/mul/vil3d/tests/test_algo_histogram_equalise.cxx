@@ -23,10 +23,10 @@ static void test_histogram_equalise_byte()
       for (unsigned i=0;i<image.ni();++i)
         image(i,j,k) = vxl_byte(i);
 
-  vil3d_print_all(vcl_cout, image);
+  vil3d_print_all(std::cout, image);
 
   vil3d_histogram_equalise(image);
-  vil3d_print_all(vcl_cout, image);
+  vil3d_print_all(std::cout, image);
 
   TEST("Equalised pixel (0,0,0)", image(0,0,0), 0);
   TEST("Equalised pixel (1,1,1)", image(1,1,1), 85);

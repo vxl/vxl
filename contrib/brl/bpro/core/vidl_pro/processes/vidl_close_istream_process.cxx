@@ -5,13 +5,15 @@
 
 #include <vidl/vidl_istream_sptr.h>
 #include <bprb/bprb_parameters.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iostream>
 
 //: Constructor
 bool vidl_close_istream_process_cons(bprb_func_process& pro)
 {
   //input
-  vcl_vector<vcl_string> input_types;
+  std::vector<std::string> input_types;
   input_types.push_back("vidl_istream_sptr");
   return pro.set_input_types(input_types);
 
@@ -23,7 +25,7 @@ bool vidl_close_istream_process(bprb_func_process& pro)
 {
   // Sanity check
   if (pro.n_inputs()< 1) {
-    vcl_cout << "vidl_close_istream_process: The input number should be 1" << vcl_endl;
+    std::cout << "vidl_close_istream_process: The input number should be 1" << std::endl;
     return false;
   }
 
@@ -31,7 +33,7 @@ bool vidl_close_istream_process(bprb_func_process& pro)
   vidl_istream_sptr i_stream = pro.get_input<vidl_istream_sptr>(i++);
 
   if (!i_stream->is_open()) {
-    vcl_cerr << "In vidl_close_istream_process::execute()"
+    std::cerr << "In vidl_close_istream_process::execute()"
              << " - is already closed\n";
     return false;
   }

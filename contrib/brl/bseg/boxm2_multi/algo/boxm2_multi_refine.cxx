@@ -4,7 +4,9 @@
 
 #include <boxm2_multi_util.h>
 
-#include <vcl_algorithm.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <algorithm>
 #include <boxm2/boxm2_scene.h>
 #include <boxm2/boxm2_util.h>
 #include <bocl/bocl_manager.h>
@@ -17,8 +19,8 @@
 #include <bocl/bocl_kernel.h>
 #include <vul/vul_timer.h>
 
-vcl_map<vcl_string, bocl_kernel*> boxm2_multi_refine::refine_tree_kernels_;
-vcl_map<vcl_string, bocl_kernel*> boxm2_multi_refine::refine_data_kernels_;
+std::map<std::string, bocl_kernel*> boxm2_multi_refine::refine_tree_kernels_;
+std::map<std::string, bocl_kernel*> boxm2_multi_refine::refine_data_kernels_;
 
 
 float boxm2_multi_refine::refine(boxm2_multi_cache& cache, float thresh)
@@ -26,26 +28,26 @@ float boxm2_multi_refine::refine(boxm2_multi_cache& cache, float thresh)
   //debug clearing
   cache.clear();
 
-  vcl_cout<<"------------ boxm2_multi_render -----------------------"<<vcl_endl;
+  std::cout<<"------------ boxm2_multi_render -----------------------"<<std::endl;
   //verify appearance model
   vul_timer rtime; rtime.mark();
-  vcl_string data_type, options;
+  std::string data_type, options;
   int apptypesize;
   if ( !boxm2_multi_util::get_scene_appearances(cache.get_scene(), data_type, options, apptypesize) )
     return 0.0f;
 
   //set up image lists
-  vcl_vector<cl_command_queue> queues;
+  std::vector<cl_command_queue> queues;
 
   //--------------------------------
   //prep buffers for each device
   //--------------------------------
-  vcl_vector<BlockMemMap > sizeMaps, copyMaps, newDataMaps;
-  vcl_vector<BlockIntMap > newDataSizes;
-  vcl_vector<vcl_vector<boxm2_block_id> > vis_orders;
-  vcl_vector<bocl_mem_sptr> out_mems, lookups, prob_mems;
-  vcl_size_t maxBlocks = 0;
-  vcl_vector<boxm2_opencl_cache1*> ocl_caches = cache.ocl_caches();
+  std::vector<BlockMemMap > sizeMaps, copyMaps, newDataMaps;
+  std::vector<BlockIntMap > newDataSizes;
+  std::vector<std::vector<boxm2_block_id> > vis_orders;
+  std::vector<bocl_mem_sptr> out_mems, lookups, prob_mems;
+  std::size_t maxBlocks = 0;
+  std::vector<boxm2_opencl_cache1*> ocl_caches = cache.ocl_caches();
   for (unsigned int i=0; i<ocl_caches.size(); ++i) {
     //grab sub scene and it's cache
     boxm2_opencl_cache1* ocl_cache = ocl_caches[i];
@@ -60,7 +62,7 @@ float boxm2_multi_refine::refine(boxm2_multi_cache& cache, float thresh)
                                                    &status );
     queues.push_back(queue);
     if (status!=0) {
-      vcl_cout<<"boxm2_multi_store_aux::store_aux unable to create command queue"<<vcl_endl;
+      std::cout<<"boxm2_multi_store_aux::store_aux unable to create command queue"<<std::endl;
       return 0.0f;
     }
 
@@ -71,7 +73,7 @@ float boxm2_multi_refine::refine(boxm2_multi_cache& cache, float thresh)
 
     // Output Array
     float* output_arr = new float[100];
-    vcl_fill(output_arr, output_arr+100, 0.0f);
+    std::fill(output_arr, output_arr+100, 0.0f);
     bocl_mem_sptr  cl_output=new bocl_mem(device->context(), output_arr, sizeof(float)*100, "output buffer");
     cl_output->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
     out_mems.push_back(cl_output);
@@ -84,9 +86,9 @@ float boxm2_multi_refine::refine(boxm2_multi_cache& cache, float thresh)
     lookups.push_back(lookup);
 
     //keep track of block IDS per subscene
-    vcl_vector<boxm2_block_id> ids = sub_scene->get_block_ids();
+    std::vector<boxm2_block_id> ids = sub_scene->get_block_ids();
     vis_orders.push_back(ids);
-    maxBlocks = vcl_max(maxBlocks, ids.size());
+    maxBlocks = std::max(maxBlocks, ids.size());
 
     //initialize sizebuff map (id->mem), and blockCopy map (id->mem)
     BlockMemMap sizeMap, copyMap, newDataMap;
@@ -108,7 +110,7 @@ float boxm2_multi_refine::refine(boxm2_multi_cache& cache, float thresh)
       bocl_device_sptr    device    = ocl_cache->get_device();
 
       //Run block store aux
-      vcl_vector<boxm2_block_id>& vis_order = vis_orders[i];
+      std::vector<boxm2_block_id>& vis_order = vis_orders[i];
       if (blk >= vis_order.size())
         continue;
       boxm2_block_id id = vis_order[blk];
@@ -153,9 +155,9 @@ float boxm2_multi_refine::refine(boxm2_multi_cache& cache, float thresh)
 
       //calculate old size vs new size
       bocl_mem* alpha = ocl_cache->get_data<BOXM2_ALPHA>(id);
-      vcl_size_t dataLen = (vcl_size_t) (alpha->num_bytes() / sizeof(float));
-      //vcl_cout<<"  New data size: "<<newDataSize<<", old data: "<<dataLen<<'\n'
-      //        <<"  num refined: "<<(newDataSize-dataLen)/8<<vcl_endl;
+      std::size_t dataLen = (std::size_t) (alpha->num_bytes() / sizeof(float));
+      //std::cout<<"  New data size: "<<newDataSize<<", old data: "<<dataLen<<'\n'
+      //        <<"  num refined: "<<(newDataSize-dataLen)/8<<std::endl;
       num_refined += (unsigned) ( (newDataSize-dataLen)/8 );
     }
 
@@ -178,7 +180,7 @@ float boxm2_multi_refine::refine(boxm2_multi_cache& cache, float thresh)
       bocl_device_sptr    device    = ocl_cache->get_device();
 
       //Run block store aux
-      vcl_vector<boxm2_block_id>& vis_order = vis_orders[i];
+      std::vector<boxm2_block_id>& vis_order = vis_orders[i];
       if (blk >= vis_order.size())
         continue;
       boxm2_block_id id = vis_order[blk];
@@ -195,7 +197,7 @@ float boxm2_multi_refine::refine(boxm2_multi_cache& cache, float thresh)
   }
 
   //STEP FOUR: Clean up
-  vcl_cout<<" Total Num Refined: "<<num_refined<<vcl_endl;
+  std::cout<<" Total Num Refined: "<<num_refined<<std::endl;
   for (unsigned int i=0; i<queues.size(); ++i) {
     boxm2_opencl_cache1* ocl_cache = ocl_caches[i];
     BlockMemMap& sizeMap = sizeMaps[i];
@@ -230,16 +232,16 @@ float boxm2_multi_refine::refine_trees_per_block(const boxm2_block_id& id,
                                                  bocl_mem_sptr& lookup,
                                                  bocl_mem_sptr& cl_output )
 {
-  //vcl_cout<<"Refining Block "<< id << vcl_endl;
+  //std::cout<<"Refining Block "<< id << std::endl;
 
   //set up tree copy and store for later use
-  //vcl_cout<<"  creating tree copy"<<vcl_endl;
+  //std::cout<<"  creating tree copy"<<std::endl;
   bocl_mem_sptr blk_copy = ocl_cache->alloc_mem(numTrees*sizeof(cl_uchar16), new cl_uchar16[numTrees], "refine trees block copy buffer");
   blk_copy->create_buffer(CL_MEM_READ_WRITE| CL_MEM_COPY_HOST_PTR);
   blockCopies[id] = blk_copy;
 
   //set up tree size (first find num trees)
-  //vcl_cout<<"  creating tree sizes buff"<<vcl_endl;
+  //std::cout<<"  creating tree sizes buff"<<std::endl;
   bocl_mem_sptr tree_sizes = ocl_cache->alloc_mem(sizeof(cl_int)*numTrees, new cl_int[numTrees], "refine tree sizes buffer");
   tree_sizes->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
   sizebuffs[id] = tree_sizes;
@@ -249,13 +251,13 @@ float boxm2_multi_refine::refine_trees_per_block(const boxm2_block_id& id,
   bocl_mem* blk       = ocl_cache->get_block(id);
   bocl_mem* alpha     = ocl_cache->get_data<BOXM2_ALPHA>(id);
   bocl_mem* blk_info  = ocl_cache->loaded_block_info();
-  vcl_size_t lThreads[] = {64, 1};
-  vcl_size_t gThreads[] = {RoundUp(numTrees,lThreads[0]), 1};
+  std::size_t lThreads[] = {64, 1};
+  std::size_t gThreads[] = {RoundUp(numTrees,lThreads[0]), 1};
 
 #if 0 // TODO - add a STOP LIST to pass around
   float alphasize=(float)alpha->num_bytes()/1024/1024;
   if (alphasize >= (float)data.max_mb_/10.0) {
-      vcl_cout<<"  Refine STOP !!!"<<vcl_endl;
+      std::cout<<"  Refine STOP !!!"<<std::endl;
       continue;
   }
 #endif
@@ -296,7 +298,7 @@ void boxm2_multi_refine::swap_data_per_block( boxm2_scene_sptr scene,
                                               BlockIntMap&  newDataSizes,
                                               bocl_mem_sptr cl_output,
                                               bocl_mem_sptr lookup,
-                                              vcl_string data_type,
+                                              std::string data_type,
                                               int  apptypesize,
                                               bocl_mem_sptr prob_thresh )
 {
@@ -306,23 +308,23 @@ void boxm2_multi_refine::swap_data_per_block( boxm2_scene_sptr scene,
   bocl_mem_sptr tree_sizes = sizebuffs[id];
 
   //local/global sizes
-  vcl_size_t lThreads[] = {64, 1};
-  vcl_size_t gThreads[] = {RoundUp(numTrees,lThreads[0]), 1};
+  std::size_t lThreads[] = {64, 1};
+  std::size_t gThreads[] = {RoundUp(numTrees,lThreads[0]), 1};
 
   //swap data into place
-  vcl_vector<vcl_string> data_types = scene->appearances();
+  std::vector<std::string> data_types = scene->appearances();
   data_types.push_back(boxm2_data_traits<BOXM2_ALPHA>::prefix());
   for (unsigned int i=0; i<data_types.size(); ++i)
   {
-    //vcl_cout<<"  Swapping data of type: "<<data_types[i]<<vcl_endl;
-    vcl_string options = get_option_string( boxm2_data_info::datasize(data_types[i]) );
+    //std::cout<<"  Swapping data of type: "<<data_types[i]<<std::endl;
+    std::string options = get_option_string( boxm2_data_info::datasize(data_types[i]) );
     bocl_kernel* kern = get_refine_data_kernel(device, options);
 
     //get bocl_mem data independent of CPU pointer
     bocl_mem* dat = ocl_cache->get_data(id, data_types[i]);
 
     //get a new data pointer (with newSize), will create CPU buffer and GPU buffer
-    //vcl_cout<<"  Data_type "<<data_types[i]<<" new size is: "<<newDataSize<<vcl_endl;
+    //std::cout<<"  Data_type "<<data_types[i]<<" new size is: "<<newDataSize<<std::endl;
     int dataBytes = boxm2_data_info::datasize(data_types[i]) * newDataSize;
     bocl_mem* new_dat = ocl_cache->alloc_mem(dataBytes, VXL_NULLPTR, "new data buffer " + data_types[i]);
     new_dat->create_buffer(CL_MEM_READ_WRITE, queue);
@@ -371,7 +373,7 @@ void boxm2_multi_refine::swap_data_per_block( boxm2_scene_sptr scene,
     clFinish(queue);
     ocl_cache->deep_replace_data(id, data_types[i], new_dat);
     if (data_types[i] == boxm2_data_traits<BOXM2_ALPHA>::prefix()) {
-      //vcl_cout<<"  Writing refined trees."<<vcl_endl;
+      //std::cout<<"  Writing refined trees."<<std::endl;
       blk->read_to_buffer(queue);
     }
     ocl_cache->unref_mem(new_dat);
@@ -382,16 +384,16 @@ void boxm2_multi_refine::swap_data_per_block( boxm2_scene_sptr scene,
 //----------------------------------------------
 // compile and cache kernels
 //----------------------------------------------
-bocl_kernel* boxm2_multi_refine::get_refine_tree_kernel(bocl_device_sptr device, vcl_string options)
+bocl_kernel* boxm2_multi_refine::get_refine_tree_kernel(bocl_device_sptr device, std::string options)
 {
   // check to see if this device has compiled kernels already
-  vcl_string identifier = device->device_identifier() + options;
+  std::string identifier = device->device_identifier() + options;
   if (refine_tree_kernels_.find(identifier) != refine_tree_kernels_.end())
     return refine_tree_kernels_[identifier];
 
   //gather all render sources... seems like a lot for rendering...
-  vcl_vector<vcl_string> src_paths;
-  vcl_string source_dir = boxm2_ocl_util::ocl_src_root();
+  std::vector<std::string> src_paths;
+  std::string source_dir = boxm2_ocl_util::ocl_src_root();
   src_paths.push_back(source_dir + "scene_info.cl");
   src_paths.push_back(source_dir + "basic/linked_list.cl");
   src_paths.push_back(source_dir + "bit/bit_tree_library_functions.cl");
@@ -409,16 +411,16 @@ bocl_kernel* boxm2_multi_refine::get_refine_tree_kernel(bocl_device_sptr device,
   return refine_tree_kernel;
 }
 
-bocl_kernel* boxm2_multi_refine::get_refine_data_kernel(bocl_device_sptr device, vcl_string option)
+bocl_kernel* boxm2_multi_refine::get_refine_data_kernel(bocl_device_sptr device, std::string option)
 {
   // check to see if this device has compiled kernels already
-  vcl_string identifier = device->device_identifier() + option;
+  std::string identifier = device->device_identifier() + option;
   if (refine_data_kernels_.find(identifier) != refine_data_kernels_.end())
     return refine_data_kernels_[identifier];
 
-  vcl_vector<vcl_string> src_paths;
+  std::vector<std::string> src_paths;
   bocl_kernel* refine_data_kernel = new bocl_kernel();
-  vcl_string source_dir = boxm2_ocl_util::ocl_src_root();
+  std::string source_dir = boxm2_ocl_util::ocl_src_root();
   src_paths.push_back(source_dir + "scene_info.cl");
   src_paths.push_back(source_dir + "basic/linked_list.cl");
   src_paths.push_back(source_dir + "bit/bit_tree_library_functions.cl");
@@ -431,9 +433,9 @@ bocl_kernel* boxm2_multi_refine::get_refine_data_kernel(bocl_device_sptr device,
   return refine_data_kernel;
 }
 
-vcl_string boxm2_multi_refine::get_option_string(int datasize)
+std::string boxm2_multi_refine::get_option_string(int datasize)
 {
-  vcl_string options="";
+  std::string options="";
   switch (datasize)
   {
     case 2:

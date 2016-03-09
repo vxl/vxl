@@ -13,11 +13,13 @@
 // \endverbatim
 
 #include <boct/boct_tree.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iostream>
 
 //: Construct a tree from leaf nodes. Cells are initialized to the default value given
 template <class T_loc,class T_data>
-boct_tree_cell<T_loc,T_data>* boct_construct_tree(vcl_vector<boct_tree_cell<T_loc, T_data> >& leaf_nodes,
+boct_tree_cell<T_loc,T_data>* boct_construct_tree(std::vector<boct_tree_cell<T_loc, T_data> >& leaf_nodes,
                                                   short num_levels, T_data default_val)
 {
   // create an empty tree
@@ -30,7 +32,7 @@ boct_tree_cell<T_loc,T_data>* boct_construct_tree(vcl_vector<boct_tree_cell<T_lo
     root->set_data(default_val);
   }
   else {
-    vcl_cerr << "boct_tree: the tree max level is 0, cannot create a tree!\n";
+    std::cerr << "boct_tree: the tree max level is 0, cannot create a tree!\n";
     return 0;
   }
 
@@ -51,7 +53,7 @@ boct_tree_cell<T_loc,T_data>* boct_construct_tree(vcl_vector<boct_tree_cell<T_lo
       }
       short child_index=loccode.child_index(curr_level);
       if (child_index < 0)
-        vcl_cout << "ERROR 1: child_index is " << child_index << vcl_endl;
+        std::cout << "ERROR 1: child_index is " << child_index << std::endl;
       curr_cell=curr_cell->children()+child_index;
       --curr_level;
     }
@@ -60,7 +62,7 @@ boct_tree_cell<T_loc,T_data>* boct_construct_tree(vcl_vector<boct_tree_cell<T_lo
       // the place of the cell is found, put the data in
       curr_cell->set_data(cell.data());
     else
-      vcl_cerr << "WRONG ERROR CODE OR CELL FOUND!!!!!!!!!!!!!!!!!!!!!!!!!!\n";
+      std::cerr << "WRONG ERROR CODE OR CELL FOUND!!!!!!!!!!!!!!!!!!!!!!!!!!\n";
   }
   return root;
 }

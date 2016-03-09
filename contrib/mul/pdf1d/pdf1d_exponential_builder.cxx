@@ -6,9 +6,11 @@
 #include "pdf1d_exponential_builder.h"
 
 #include <vcl_cassert.h>
-#include <vcl_string.h>
-#include <vcl_cstdlib.h> // vcl_abort()
-#include <vcl_cmath.h>
+#include <string>
+#include <cstdlib> // std::abort()
+#include <vcl_compiler.h>
+#include <iostream>
+#include <cmath>
 
 #include <mbl/mbl_data_wrapper.h>
 #include <mbl/mbl_data_array_wrapper.h>
@@ -46,9 +48,9 @@ pdf1d_pdf* pdf1d_exponential_builder::new_model() const
   return new pdf1d_exponential;
 }
 
-vcl_string pdf1d_exponential_builder::new_model_type() const
+std::string pdf1d_exponential_builder::new_model_type() const
 {
-  return vcl_string("pdf1d_exponential");
+  return std::string("pdf1d_exponential");
 }
 
 
@@ -79,15 +81,15 @@ void pdf1d_exponential_builder::build_from_array(pdf1d_pdf& model, const double*
 {
   if (n<2)
   {
-    vcl_cerr<<"pdf1d_exponential_builder::build_from_array()"
+    std::cerr<<"pdf1d_exponential_builder::build_from_array()"
             <<" Too few examples available.\n";
-    vcl_abort();
+    std::abort();
   }
 
   double m,v;
   pdf1d_calc_mean_var(m,v,data,n);
 
-  double min_m = vcl_sqrt(min_var_);
+  double min_m = std::sqrt(min_var_);
   if (m<min_m) m=min_m;
 
   pdf1d_exponential& g = exponential(model);
@@ -100,8 +102,8 @@ void pdf1d_exponential_builder::build(pdf1d_pdf& model, mbl_data_wrapper<double>
 
   if (n_samples<2)
   {
-    vcl_cerr<<"pdf1d_exponential_builder::build() Too few examples available.\n";
-    vcl_abort();
+    std::cerr<<"pdf1d_exponential_builder::build() Too few examples available.\n";
+    std::abort();
   }
 
   if (data.is_class("mbl_data_array_wrapper<T>"))
@@ -124,7 +126,7 @@ void pdf1d_exponential_builder::build(pdf1d_pdf& model, mbl_data_wrapper<double>
   }
 
   double m = sum/n_samples;
-  double min_m = vcl_sqrt(min_var_);
+  double min_m = std::sqrt(min_var_);
   if (m<min_m) m=min_m;
 
   pdf1d_exponential& g = exponential(model);
@@ -133,14 +135,14 @@ void pdf1d_exponential_builder::build(pdf1d_pdf& model, mbl_data_wrapper<double>
 
 void pdf1d_exponential_builder::weighted_build(pdf1d_pdf& model,
                                                mbl_data_wrapper<double>& data,
-                                               const vcl_vector<double>& wts) const
+                                               const std::vector<double>& wts) const
 {
   int n_samples = data.size();
 
   if (n_samples<2)
   {
-    vcl_cerr<<"pdf1d_exponential_builder::build() Too few examples available.\n";
-    vcl_abort();
+    std::cerr<<"pdf1d_exponential_builder::build() Too few examples available.\n";
+    std::abort();
   }
 
   double sum = 0;
@@ -162,7 +164,7 @@ void pdf1d_exponential_builder::weighted_build(pdf1d_pdf& model,
   }
 
   double m = sum/w_sum;
-  double min_m = vcl_sqrt(min_var_);
+  double min_m = std::sqrt(min_var_);
   if (m<min_m) m=min_m;
 
   pdf1d_exponential& g = exponential(model);
@@ -172,16 +174,16 @@ void pdf1d_exponential_builder::weighted_build(pdf1d_pdf& model,
 // Method: is_a
 //=======================================================================
 
-vcl_string pdf1d_exponential_builder::is_a() const
+std::string pdf1d_exponential_builder::is_a() const
 {
-  return vcl_string("pdf1d_exponential_builder");
+  return std::string("pdf1d_exponential_builder");
 }
 
 //=======================================================================
 // Method: is_class
 //=======================================================================
 
-bool pdf1d_exponential_builder::is_class(vcl_string const& s) const
+bool pdf1d_exponential_builder::is_class(std::string const& s) const
 {
   return pdf1d_builder::is_class(s) || s==pdf1d_exponential_builder::is_a();
 }
@@ -208,7 +210,7 @@ pdf1d_builder* pdf1d_exponential_builder::clone() const
 // Method: print
 //=======================================================================
 
-void pdf1d_exponential_builder::print_summary(vcl_ostream& os) const
+void pdf1d_exponential_builder::print_summary(std::ostream& os) const
 {
   os << "Min. var.: "<< min_var_;
 }
@@ -239,9 +241,9 @@ void pdf1d_exponential_builder::b_read(vsl_b_istream& bfs)
       vsl_b_read(bfs,min_var_);
       break;
     default:
-      vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, pdf1d_exponential_builder &)\n"
-               << "           Unknown version number "<< version << vcl_endl;
-      bfs.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
+      std::cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, pdf1d_exponential_builder &)\n"
+               << "           Unknown version number "<< version << std::endl;
+      bfs.is().clear(std::ios::badbit); // Set an unrecoverable IO error on stream
       return;
   }
 }

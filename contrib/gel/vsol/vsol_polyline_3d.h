@@ -20,9 +20,11 @@
 #include <vsol/vsol_curve_3d.h>
 #include <vsol/vsol_point_3d_sptr.h>
 #include <vsl/vsl_binary_io.h>
-#include <vcl_vector.h>
-#include <vcl_string.h>
-#include <vcl_iosfwd.h>
+#include <vector>
+#include <string>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iosfwd>
 
 //: General Polyline class, part of the vsol_curve_3d hierarchy
 
@@ -36,7 +38,7 @@ class vsol_polyline_3d : public vsol_curve_3d
   //---------------------------------------------------------------------------
   // Description: List of vsol_point_3d
   //---------------------------------------------------------------------------
-  vcl_vector<vsol_point_3d_sptr> *storage_;
+  std::vector<vsol_point_3d_sptr> *storage_;
 
     //---------------------------------------------------------------------------
   //: First point of the curve : just to conform to vsol_curve_3d standard
@@ -60,9 +62,9 @@ class vsol_polyline_3d : public vsol_curve_3d
   vsol_polyline_3d();
 
   //---------------------------------------------------------------------------
-  //: Constructor from a vcl_vector of points
+  //: Constructor from a std::vector of points
   //---------------------------------------------------------------------------
-  vsol_polyline_3d(vcl_vector<vsol_point_3d_sptr> const& new_vertices);
+  vsol_polyline_3d(std::vector<vsol_point_3d_sptr> const& new_vertices);
 
   //---------------------------------------------------------------------------
   //: Copy constructor
@@ -179,7 +181,7 @@ class vsol_polyline_3d : public vsol_curve_3d
   //---------------------------------------------------------------------------
   //: output description to stream
   //---------------------------------------------------------------------------
-  void describe(vcl_ostream &strm, int blanking=0) const;
+  void describe(std::ostream &strm, int blanking=0) const;
 
   // ==== Binary IO methods ======
 
@@ -193,13 +195,13 @@ class vsol_polyline_3d : public vsol_curve_3d
   short version() const;
 
   //: Print an ascii summary to the stream
-  void print_summary(vcl_ostream &os) const;
+  void print_summary(std::ostream &os) const;
 
   //: Return a platform independent string identifying the class
-  virtual vcl_string is_a() const { return vcl_string("vsol_polyline_3d"); }
+  virtual std::string is_a() const { return std::string("vsol_polyline_3d"); }
 
   //: Return true if the argument matches the string identifying the class or any parent class
-  virtual bool is_class(vcl_string const& cls) const { return cls==is_a(); }
+  virtual bool is_class(std::string const& cls) const { return cls==is_a(); }
 };
 
 //: Binary save vsol_polyline_3d* to stream.

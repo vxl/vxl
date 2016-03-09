@@ -8,8 +8,10 @@
 
 #include <mbl/mbl_data_collector.h>
 #include <mbl/mbl_data_array_wrapper.h>
-#include <vcl_vector.h>
-#include <vcl_iosfwd.h>
+#include <vector>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iosfwd>
 #include <vnl/vnl_random.h>
 
 //=======================================================================
@@ -34,7 +36,7 @@ class mbl_stochastic_data_collector: public mbl_data_collector<T>
 {
  private:
   //: Recorded samples are stored here
-  vcl_vector<T > samples_;
+  std::vector<T > samples_;
 
   //: Provides iterator access to the data via data_wrapper()
   mbl_data_array_wrapper<T > v_data_;
@@ -91,16 +93,16 @@ class mbl_stochastic_data_collector: public mbl_data_collector<T>
   short version_no() const;
 
   //: Name of the class
-  virtual vcl_string is_a() const;
+  virtual std::string is_a() const;
 
   //: Does the name of the class match the argument?
-  virtual bool is_class(vcl_string const& s) const;
+  virtual bool is_class(std::string const& s) const;
 
   //: Create a copy on the heap and return base class pointer
   virtual mbl_data_collector_base* clone() const;
 
   //: Print class to os
-  virtual void print_summary(vcl_ostream& os) const;
+  virtual void print_summary(std::ostream& os) const;
 
   //: Save class to binary file stream
   virtual void b_write(vsl_b_ostream& bfs) const;

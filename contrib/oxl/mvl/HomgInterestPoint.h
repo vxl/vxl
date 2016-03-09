@@ -21,7 +21,9 @@
 // \endverbatim
 //-----------------------------------------------------------------------------
 
-#include <vcl_iosfwd.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iosfwd>
 #include <vnl/vnl_int_2.h>
 #include <mvl/HomgPoint2D.h>
 #include <vgl/vgl_homg_point_2d.h>
@@ -50,6 +52,6 @@ class HomgInterestPoint
   friend bool operator == (const HomgInterestPoint&, const HomgInterestPoint&);
 };
 
-vcl_ostream& operator << (vcl_ostream& s, const HomgInterestPoint&);
+std::ostream& operator << (std::ostream& s, const HomgInterestPoint&);
 
 #endif // HomgInterestPoint_h_

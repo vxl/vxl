@@ -4,7 +4,9 @@
 
 #include <vcl_cassert.h>
 #include <vnl/algo/vnl_symmetric_eigensystem.h>
-#include <vcl_limits.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <limits>
 
 #include <rply.h>   //.ply parser
 
@@ -14,7 +16,7 @@
 void boxm2_export_oriented_point_cloud_function::exportPointCloudXYZ(const boxm2_scene_sptr& scene, boxm2_block_metadata data, boxm2_block* blk,
                                                                      boxm2_data_base* alpha, boxm2_data_base* vis, boxm2_data_base* vis_sum, boxm2_data_base* exp,boxm2_data_base* nobs,
                                                                      boxm2_data_base* points, boxm2_data_base* normals,
-                                                                     boxm2_data_base* ray_dir_sum, vcl_ofstream& file,
+                                                                     boxm2_data_base* ray_dir_sum, std::ofstream& file,
                                                                      bool output_aux, float vis_t, float nmag_t, float prob_t, float exp_t, vgl_box_3d<double> bb)
 {
   boxm2_data_traits<BOXM2_ALPHA>::datatype *     alpha_data = (boxm2_data_traits<BOXM2_ALPHA>::datatype*) alpha->data_buffer();
@@ -26,12 +28,12 @@ void boxm2_export_oriented_point_cloud_function::exportPointCloudXYZ(const boxm2
   boxm2_data_traits<BOXM2_NUM_OBS_SINGLE_INT>::datatype *  nobs_data = (boxm2_data_traits<BOXM2_NUM_OBS_SINGLE_INT>::datatype*) nobs->data_buffer();
   boxm2_data_traits<BOXM2_RAY_DIR>::datatype *  ray_dir_sum_data = (boxm2_data_traits<BOXM2_RAY_DIR>::datatype*) ray_dir_sum->data_buffer();
 
-  file << vcl_fixed;
+  file << std::fixed;
   int pointTypeSize = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_POINT>::prefix());
   //check for invalid parameters
   if( pointTypeSize == 0 ) //This should never happen, it will result in division by zero later
   {
-    vcl_cerr << "ERROR: Division by zero in " << __FILE__ << __LINE__ << vcl_endl;
+    std::cerr << "ERROR: Division by zero in " << __FILE__ << __LINE__ << std::endl;
     throw 0;
   }
 
@@ -57,7 +59,7 @@ void boxm2_export_oriented_point_cloud_function::exportPointCloudXYZ(const boxm2
             file << ' ' << ray_dir_sum_data[currIdx][0] << " " << ray_dir_sum_data[currIdx][1] << " " << ray_dir_sum_data[currIdx][2] << " ";
             file << ' ' <<  exp_data[currIdx] << ' ' <<  nobs_data[currIdx];
           }
-          file << vcl_endl;
+          file << std::endl;
         }
       }
     }
@@ -67,7 +69,7 @@ void boxm2_export_oriented_point_cloud_function::exportPointCloudXYZ(const boxm2
 void boxm2_export_oriented_point_cloud_function::exportPointCloudPLY(const boxm2_scene_sptr& scene, boxm2_block_metadata data, boxm2_block* blk,
                                             boxm2_data_base* alpha, boxm2_data_base* vis,
                                             boxm2_data_base* points, boxm2_data_base* normals,
-                                            vcl_ofstream& file,
+                                            std::ofstream& file,
                                             bool output_aux, float vis_t, float nmag_t, float prob_t, vgl_box_3d<double> bb, unsigned& num_vertices)
 {
   boxm2_data_traits<BOXM2_ALPHA>::datatype *   alpha_data = (boxm2_data_traits<BOXM2_ALPHA>::datatype*) alpha->data_buffer();
@@ -75,12 +77,12 @@ void boxm2_export_oriented_point_cloud_function::exportPointCloudPLY(const boxm2
   boxm2_data_traits<BOXM2_NORMAL>::datatype *  normals_data = (boxm2_data_traits<BOXM2_NORMAL>::datatype*) normals->data_buffer();
   boxm2_data_traits<BOXM2_VIS_SCORE>::datatype * vis_data = (boxm2_data_traits<BOXM2_VIS_SCORE>::datatype*) vis->data_buffer();
 
-  file << vcl_fixed;
+  file << std::fixed;
   int pointTypeSize = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_POINT>::prefix());
   //check for invalid parameters
   if( pointTypeSize == 0 ) //This should never happen, it will result in division by zero later
   {
-    vcl_cerr << "ERROR: Division by 0 in " << __FILE__ << __LINE__ << vcl_endl;
+    std::cerr << "ERROR: Division by 0 in " << __FILE__ << __LINE__ << std::endl;
     throw 0;
   }
 
@@ -104,7 +106,7 @@ void boxm2_export_oriented_point_cloud_function::exportPointCloudPLY(const boxm2
           if (output_aux){
             file << ' ' << normals_data[currIdx][0] << ' ' << normals_data[currIdx][1] << ' ' << normals_data[currIdx][2] << ' ' << prob  << ' ' << vis_data[currIdx] << ' ' << normals_data[currIdx][3];
           }
-          file << vcl_endl;
+          file << std::endl;
         }
       }
     }
@@ -113,19 +115,19 @@ void boxm2_export_oriented_point_cloud_function::exportPointCloudPLY(const boxm2
 
 void boxm2_export_oriented_point_cloud_function::exportPointCloudPLY(const boxm2_scene_sptr& scene, boxm2_block_metadata data, boxm2_block* blk,
                                                                      boxm2_data_base* mog, boxm2_data_base* alpha,
-                                                                     boxm2_data_base* points, boxm2_data_base* covariances, vcl_ofstream& file,
+                                                                     boxm2_data_base* points, boxm2_data_base* covariances, std::ofstream& file,
                                                                      float prob_t, vgl_box_3d<double> bb, unsigned& num_vertices, bool color_using_model)
 {
   boxm2_data_traits<BOXM2_POINT>::datatype *   points_data = (boxm2_data_traits<BOXM2_POINT>::datatype*) points->data_buffer();
   boxm2_data_traits<BOXM2_COVARIANCE>::datatype *  covs_data = (boxm2_data_traits<BOXM2_COVARIANCE>::datatype*) covariances->data_buffer();
   boxm2_data_traits<BOXM2_MOG3_GREY>::datatype * mog_data = (boxm2_data_traits<BOXM2_MOG3_GREY>::datatype*) mog->data_buffer();
 
-  file << vcl_fixed;
+  file << std::fixed;
   int pointTypeSize = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_POINT>::prefix());
   //check for invalid parameters
   if( pointTypeSize == 0 ) //This should never happen, it will result in division by zero later
   {
-    vcl_cerr << "ERROR: Division by 0 in " << __FILE__ << __LINE__ << vcl_endl;
+    std::cerr << "ERROR: Division by 0 in " << __FILE__ << __LINE__ << std::endl;
     throw 0;
   }
 
@@ -154,25 +156,25 @@ void boxm2_export_oriented_point_cloud_function::exportPointCloudPLY(const boxm2
         //     << eval[0] << ' ' << eval[1] << ' ' << eval[2] << ' '
                << LE << ' ' << CE << ' ';
           num_vertices++;
-          file  <<  prob << vcl_endl;
+          file  <<  prob << std::endl;
         }
       }
     //}
   }
 }
 void boxm2_export_oriented_point_cloud_function::exportColorPointCloudPLY(const boxm2_scene_sptr& scene, boxm2_block_metadata data, boxm2_block* blk,
-                                                                        boxm2_data_base* mog, boxm2_data_base* alpha,vcl_string datatype ,
-                                                                        boxm2_data_base* points,vcl_ofstream& file,float prob_t,vgl_box_3d<double> bb, unsigned& num_vertices)
+                                                                        boxm2_data_base* mog, boxm2_data_base* alpha,std::string datatype ,
+                                                                        boxm2_data_base* points,std::ofstream& file,float prob_t,vgl_box_3d<double> bb, unsigned& num_vertices)
 {
     boxm2_data_traits<BOXM2_POINT>::datatype     *   points_data  = (boxm2_data_traits<BOXM2_POINT>::datatype*) points->data_buffer();
 
     boxm2_data_traits<BOXM2_ALPHA>::datatype     *   alpha_data   = (boxm2_data_traits<BOXM2_ALPHA>::datatype*) alpha->data_buffer();
-    file << vcl_fixed;
+    file << std::fixed;
     int pointTypeSize = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_POINT>::prefix());
     //check for invalid parameters
     if( pointTypeSize == 0 ) //This should never happen, it will result in division by zero later
     {
-        vcl_cerr << "ERROR: Division by 0 in " << __FILE__ << __LINE__ << vcl_endl;
+        std::cerr << "ERROR: Division by 0 in " << __FILE__ << __LINE__ << std::endl;
         throw 0;
     }
     for (unsigned currIdx=0; currIdx < (points->buffer_length()/pointTypeSize) ; currIdx++) {
@@ -231,7 +233,7 @@ bool boxm2_export_oriented_point_cloud_function::calculateProbOfPoint(const boxm
   vgl_point_3d<double> vgl_point(point[0],point[1],point[2]);
   //if the scene doesn't contain point,
   if (!scene->contains(vgl_point, id, local)) {
-    //vcl_cout << "Point " << vgl_point << " not present in scene! Skipping..." << vcl_endl;
+    //std::cout << "Point " << vgl_point << " not present in scene! Skipping..." << std::endl;
     return false;
   }
   //if the block passed isn't the block that contains the point, there is something wrong...
@@ -259,13 +261,13 @@ bool boxm2_export_oriented_point_cloud_function::calculateProbOfPoint(const boxm
     return false;
 
   // place from the longest axis to the shortest, largest eigen value is in eigs[2]
-  axes[0] =2*vcl_sqrt(eigs[2])*2.5;  // to find 90% confidence ellipsoid, scale the eigenvalues, see pg. 416 on Intro To Modern Photogrammetry, Mikhail, et. al.
-  axes[1] =2*vcl_sqrt(eigs[1])*2.5;
-  axes[2] =2*vcl_sqrt(eigs[0])*2.5;
+  axes[0] =2*std::sqrt(eigs[2])*2.5;  // to find 90% confidence ellipsoid, scale the eigenvalues, see pg. 416 on Intro To Modern Photogrammetry, Mikhail, et. al.
+  axes[1] =2*std::sqrt(eigs[1])*2.5;
+  axes[2] =2*std::sqrt(eigs[0])*2.5;
   // check if values are valid (AND is the only way to detect invalid value, do not change into ORs
-  if (!(axes[0] < vcl_numeric_limits<double>::max() && axes[0] > vcl_numeric_limits<double>::min() &&
-        axes[1] < vcl_numeric_limits<double>::max() && axes[1] > vcl_numeric_limits<double>::min() &&
-        axes[2] < vcl_numeric_limits<double>::max() && axes[2] > vcl_numeric_limits<double>::min()))
+  if (!(axes[0] < std::numeric_limits<double>::max() && axes[0] > std::numeric_limits<double>::min() &&
+        axes[1] < std::numeric_limits<double>::max() && axes[1] > std::numeric_limits<double>::min() &&
+        axes[2] < std::numeric_limits<double>::max() && axes[2] > std::numeric_limits<double>::min()))
     return false;
 
   // now find LE (vertical error) using the eigenvector that corresponds to major axis
@@ -275,9 +277,9 @@ bool boxm2_export_oriented_point_cloud_function::calculateProbOfPoint(const boxm
   vnl_vector<double> major_ellipsoid = axes[0]*major;
 
 
-  LE = vcl_abs(major_ellipsoid.get(2));
-  double CEx = vcl_abs(major_ellipsoid.get(0));
-  double CEy = vcl_abs(major_ellipsoid.get(1));
+  LE = std::abs(major_ellipsoid.get(2));
+  double CEx = std::abs(major_ellipsoid.get(0));
+  double CEy = std::abs(major_ellipsoid.get(1));
 
   CE = CEx > CEy ? CEx : CEy;
 
@@ -306,9 +308,9 @@ bool boxm2_export_oriented_point_cloud_function::calculateProbOfPoint(const boxm
   if (blk->block_id() != id)
     return false;
 
-  int index_x=(int)vcl_floor(local.x());
-  int index_y=(int)vcl_floor(local.y());
-  int index_z=(int)vcl_floor(local.z());
+  int index_x=(int)std::floor(local.x());
+  int index_y=(int)std::floor(local.y());
+  int index_z=(int)std::floor(local.z());
 
   boxm2_block_metadata mdata = scene->get_block_metadata_const(id);
   vnl_vector_fixed<unsigned char,16> treebits=blk->trees()(index_x,index_y,index_z);
@@ -317,11 +319,11 @@ bool boxm2_export_oriented_point_cloud_function::calculateProbOfPoint(const boxm
   int depth=tree.depth_at(bit_index);
   float side_len=static_cast<float>(mdata.sub_block_dim_.x()/((float)(1<<depth)));
 
-  prob=1.0f-vcl_exp(-alpha*side_len);
+  prob=1.0f-std::exp(-alpha*side_len);
   return true;
 }
 
-void boxm2_export_oriented_point_cloud_function::writePLYHeader(vcl_ofstream& file, unsigned num_vertices,vcl_stringstream& ss, bool output_aux)
+void boxm2_export_oriented_point_cloud_function::writePLYHeader(std::ofstream& file, unsigned num_vertices,std::stringstream& ss, bool output_aux)
 {
    file << "ply\nformat ascii 1.0\nelement vertex " << num_vertices;
    file << "\nproperty float32 x\nproperty float32 y\nproperty float32 z";
@@ -333,7 +335,7 @@ void boxm2_export_oriented_point_cloud_function::writePLYHeader(vcl_ofstream& fi
         << ss.str();
 }
 
-void boxm2_export_oriented_point_cloud_function::writePLYHeaderOnlyPoints(vcl_ofstream& file, unsigned num_vertices, vcl_stringstream& ss)
+void boxm2_export_oriented_point_cloud_function::writePLYHeaderOnlyPoints(std::ofstream& file, unsigned num_vertices, std::stringstream& ss)
 {
   file << "ply\nformat ascii 1.0\nelement vertex " << num_vertices
        << "\nproperty float x\nproperty float y\nproperty float z\nproperty uchar red\nproperty uchar green\nproperty uchar blue\n"
@@ -351,7 +353,7 @@ class ply_bb_reader
  public:
   vgl_box_3d<double> bbox;
   double p[3];
-  vcl_vector<int > vertex_indices;
+  std::vector<int > vertex_indices;
 };
 
 
@@ -384,17 +386,17 @@ int boxm2_plyio_vertex_cb(p_ply_argument argument)
 }
 
 
-void boxm2_export_oriented_point_cloud_function::readBBFromPLY(const vcl_string& filename, vgl_box_3d<double>& box)
+void boxm2_export_oriented_point_cloud_function::readBBFromPLY(const std::string& filename, vgl_box_3d<double>& box)
 {
   ply_bb_reader parsed_ply;
   parsed_ply.bbox = box;
 
   p_ply ply = ply_open(filename.c_str(), VXL_NULLPTR, 0, VXL_NULLPTR);
   if (!ply) {
-    vcl_cout << "File " << filename << " doesn't exist.";
+    std::cout << "File " << filename << " doesn't exist.";
   }
   if (!ply_read_header(ply))
-    vcl_cout << "File " << filename << " doesn't have header.";
+    std::cout << "File " << filename << " doesn't have header.";
 
   // vertex
   ply_set_read_cb(ply, "vertex", "x", boxm2_plyio_vertex_cb, (void*) (&parsed_ply), 0);

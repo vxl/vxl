@@ -15,8 +15,10 @@
 #include <boxm2/io/boxm2_stream_cache.h>
 #include <boxm2/boxm2_util.h>
 #include <bprb/bprb_func_process.h>
-#include <vcl_fstream.h>
-#include <vcl_algorithm.h>
+#include <fstream>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <algorithm>
 
 //bsta sigma normalizer...
 #include <bsta/algo/bsta_sigma_normalizer.h>
@@ -37,14 +39,14 @@ bool boxm2_ocl_paint_batch_process_cons(bprb_func_process& pro)
   // 1) cache
   // 2) stream cache
   // 3) the pre-computed sigma normalizer table, for fast access to normalizer values given number of images
-  vcl_vector<vcl_string> input_types_(n_inputs_);
+  std::vector<std::string> input_types_(n_inputs_);
   input_types_[0] = "bocl_device_sptr";
   input_types_[1] = "boxm2_scene_sptr";
   input_types_[2] = "boxm2_opencl_cache_sptr";
   input_types_[3] = "boxm2_stream_cache_sptr";
   input_types_[4] = "bsta_sigma_normalizer_sptr";
   // process has 0 output:
-  vcl_vector<vcl_string>  output_types_(n_outputs_);
+  std::vector<std::string>  output_types_(n_outputs_);
 
   return pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
 }
@@ -55,7 +57,7 @@ bool boxm2_ocl_paint_batch_process(bprb_func_process& pro)
 
   //using namespace boxm2_ocl_paint_batch_process_globals;
   if ( pro.n_inputs() < n_inputs_ ){
-      vcl_cout << pro.name() << ": The input number should be " << n_inputs_<< vcl_endl;
+      std::cout << pro.name() << ": The input number should be " << n_inputs_<< std::endl;
       return false;
   }
   //get the inputs
@@ -67,13 +69,13 @@ bool boxm2_ocl_paint_batch_process(bprb_func_process& pro)
   bsta_sigma_normalizer_sptr n_table   = pro.get_input<bsta_sigma_normalizer_sptr>(i++);
 
   //get scene data type and appTypeSize
-  vcl_string data_type;
+  std::string data_type;
   int appTypeSize;
-  vcl_vector<vcl_string> valid_types;
+  std::vector<std::string> valid_types;
   valid_types.push_back(boxm2_data_traits<BOXM2_MOG3_GREY>::prefix());
   valid_types.push_back(boxm2_data_traits<BOXM2_GAUSS_GREY>::prefix());
   if ( !boxm2_util::verify_appearance(*scene, valid_types, data_type, appTypeSize) ) {
-    vcl_cout<<"boxm2_ocl_paint_batch ERROR: scene doesn't have BOXM2_MOG3_GREY or BOXM2_MOG3_GREY_16 data type"<<vcl_endl;
+    std::cout<<"boxm2_ocl_paint_batch ERROR: scene doesn't have BOXM2_MOG3_GREY or BOXM2_MOG3_GREY_16 data type"<<std::endl;
     return false;
   }
 
@@ -83,20 +85,20 @@ bool boxm2_ocl_paint_batch_process(bprb_func_process& pro)
                                                 *(device->device_id()),
                                                 CL_QUEUE_PROFILING_ENABLE,&status);
   if (status!=0) {
-    vcl_cout<<" ERROR in initializing a queue"<<vcl_endl;
+    std::cout<<" ERROR in initializing a queue"<<std::endl;
     return false;
   }
 
   // iterate the scene block by block and write to output
   vul_timer totalTime;
-  vcl_vector<boxm2_block_id> blk_ids = scene->get_block_ids();
-  vcl_vector<boxm2_block_id>::iterator id = blk_ids.begin();
+  std::vector<boxm2_block_id> blk_ids = scene->get_block_ids();
+  std::vector<boxm2_block_id>::iterator id = blk_ids.begin();
   for (; id != blk_ids.end(); ++id) {
     boxm2_block_id bid = *id;
-    vcl_cout<<" block "<<bid<<vcl_endl;
+    std::cout<<" block "<<bid<<std::endl;
     boxm2_ocl_paint_batch::paint_block(scene,device,str_cache,ocl_cache,queue,data_type,bid,n_table);
   }
-  vcl_cout<<"boxm2_ocl_paint_batch_process:: Total time - "<<(float) totalTime.all()/1000.0f<<" sec"<<vcl_endl;
+  std::cout<<"boxm2_ocl_paint_batch_process:: Total time - "<<(float) totalTime.all()/1000.0f<<" sec"<<std::endl;
 
   return true;
 }

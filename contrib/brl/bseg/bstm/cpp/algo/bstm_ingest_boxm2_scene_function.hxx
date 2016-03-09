@@ -9,9 +9,9 @@
 
 template <bstm_data_type APM_TYPE, boxm2_data_type BOXM2_APM_TYPE>
 bstm_ingest_boxm2_scene_function<APM_TYPE, BOXM2_APM_TYPE>::bstm_ingest_boxm2_scene_function(bstm_block* blk,bstm_time_block* blk_t,
-                                                                                             vcl_map<vcl_string, bstm_data_base*> & datas,
+                                                                                             std::map<std::string, bstm_data_base*> & datas,
                                                                                              boxm2_block* boxm2_blk,
-                                                                                             vcl_map<vcl_string,
+                                                                                             std::map<std::string,
                                                                                              boxm2_data_base*> & boxm2_datas,
                                                                                              double local_time, double p_threshold, double app_threshold)
 {
@@ -25,8 +25,8 @@ bstm_ingest_boxm2_scene_function<APM_TYPE, BOXM2_APM_TYPE>::bstm_ingest_boxm2_sc
 
 
 template <bstm_data_type APM_TYPE, boxm2_data_type BOXM2_APM_TYPE>
-bool bstm_ingest_boxm2_scene_function<APM_TYPE, BOXM2_APM_TYPE>::init_data(bstm_block* blk,bstm_time_block* blk_t,  vcl_map<vcl_string,bstm_data_base*> & datas,
-                                                                           boxm2_block* boxm2_blk,  vcl_map<vcl_string, boxm2_data_base*> & boxm2_datas, double local_time)
+bool bstm_ingest_boxm2_scene_function<APM_TYPE, BOXM2_APM_TYPE>::init_data(bstm_block* blk,bstm_time_block* blk_t,  std::map<std::string,bstm_data_base*> & datas,
+                                                                           boxm2_block* boxm2_blk,  std::map<std::string, boxm2_data_base*> & boxm2_datas, double local_time)
 {
    local_time_ = local_time;
 
@@ -36,7 +36,7 @@ bool bstm_ingest_boxm2_scene_function<APM_TYPE, BOXM2_APM_TYPE>::init_data(bstm_
    boxm2_blk_ = boxm2_blk;
 
    //store data buffers
-   for (vcl_map<vcl_string,bstm_data_base*>::const_iterator iter = datas.begin(); iter != datas.end(); iter++)
+   for (std::map<std::string,bstm_data_base*>::const_iterator iter = datas.begin(); iter != datas.end(); iter++)
    {
      if (iter->first == bstm_data_traits<BSTM_ALPHA>::prefix("")) {//if alpha,
        alpha_   = (bstm_data_traits<BSTM_ALPHA>::datatype *)  iter->second->data_buffer();
@@ -47,7 +47,7 @@ bool bstm_ingest_boxm2_scene_function<APM_TYPE, BOXM2_APM_TYPE>::init_data(bstm_
    }
 
    //get boxm2 data buffers
-   for (vcl_map<vcl_string,boxm2_data_base*>::const_iterator iter = boxm2_datas.begin(); iter != boxm2_datas.end(); iter++)
+   for (std::map<std::string,boxm2_data_base*>::const_iterator iter = boxm2_datas.begin(); iter != boxm2_datas.end(); iter++)
    {
      if (iter->first == boxm2_data_traits<BOXM2_ALPHA>::prefix("")) //if alpha,
        boxm2_alpha_   = (boxm2_data_traits<BOXM2_ALPHA>::datatype *)  iter->second->data_buffer();
@@ -68,7 +68,7 @@ bool bstm_ingest_boxm2_scene_function<APM_TYPE, BOXM2_APM_TYPE>::init_data(bstm_
 
    //USE rootlevel to determine MAX_INNER and MAX_CELLS
    if (max_level_t_ == 1) {
-     vcl_cout<<"Trying to refine scene with max level 1"<<vcl_endl;
+     std::cout<<"Trying to refine scene with max level 1"<<std::endl;
      return true;
    }
    else if (max_level_t_ == 2) {
@@ -87,11 +87,11 @@ bool bstm_ingest_boxm2_scene_function<APM_TYPE, BOXM2_APM_TYPE>::init_data(bstm_
      MAX_INNER_CELLS_T_=31, MAX_CELLS_T_=63;
    }
    else
-     vcl_cerr << "ERROR! No max_level_t_\n";
+     std::cerr << "ERROR! No max_level_t_\n";
 
    //USE rootlevel to determine MAX_INNER and MAX_CELLS
    if (max_level_ == 1) {
-     vcl_cout<<"Trying to refine scene with max level 1"<<vcl_endl;
+     std::cout<<"Trying to refine scene with max level 1"<<std::endl;
      return true;
    }
    else if (max_level_ == 2) {
@@ -104,7 +104,7 @@ bool bstm_ingest_boxm2_scene_function<APM_TYPE, BOXM2_APM_TYPE>::init_data(bstm_
      MAX_INNER_CELLS_=73, MAX_CELLS_=585;
    }
    else
-     vcl_cerr << "ERROR! No max_level_\n";
+     std::cerr << "ERROR! No max_level_\n";
 
    //for debugging
    num_split_ = 0;
@@ -142,7 +142,7 @@ bool bstm_ingest_boxm2_scene_function<APM_TYPE, BOXM2_APM_TYPE>::conform()
     int newSize = refined_tree.num_cells();
 
     //cache refined tree
-    vcl_memcpy (trees_copy[currIndex].data_block(), refined_tree.get_bits(), 16);
+    std::memcpy (trees_copy[currIndex].data_block(), refined_tree.get_bits(), 16);
     dataSize += newSize;
   }
 
@@ -152,12 +152,12 @@ bool bstm_ingest_boxm2_scene_function<APM_TYPE, BOXM2_APM_TYPE>::conform()
   bstm_time_block* newTimeBlk = new bstm_time_block(id, m_data, dataSize); //create empty time block
 
   boxm2_array_1d<uchar8>&  new_time_trees = newTimeBlk->time_trees();    //refined trees
-  //vcl_cout<<"Number of new time trees: "<<  new_time_trees.size() - blk_t_->time_trees().size() <<vcl_endl;
+  //std::cout<<"Number of new time trees: "<<  new_time_trees.size() - blk_t_->time_trees().size() <<std::endl;
 
   //allocate buffer to hold depth differences, one difference per time tree
   //will be used to scale alpha later on
   char* depth_diff = new char[new_time_trees.size()];
-  vcl_memset (depth_diff, 0, sizeof(char) * new_time_trees.size() ); //zero out buffer
+  std::memset (depth_diff, 0, sizeof(char) * new_time_trees.size() ); //zero out buffer
 
   //3. loop through trees again, putting the time trees in the right place
   int newInitCount = 0;
@@ -180,7 +180,7 @@ bool bstm_ingest_boxm2_scene_function<APM_TYPE, BOXM2_APM_TYPE>::conform()
       newInitCount += this->move_time_trees(old_tree, refined_tree, newTimeBlk,depth_diff);
 
       //4. store old tree in new tree, swap data out
-      vcl_memcpy(blk_iter, refined_tree.get_bits(), 16);
+      std::memcpy(blk_iter, refined_tree.get_bits(), 16);
   }
 
   delete[] dataIndex;
@@ -227,8 +227,8 @@ bool bstm_ingest_boxm2_scene_function<APM_TYPE, BOXM2_APM_TYPE>::conform()
     int new_data_ptr = dataIndex[currIndex];
 
     //3. copy data using old ptr to new data buffers
-    vcl_memcpy( &(alpha_cpy[new_data_ptr]), &(alpha_[old_data_ptr]),      bstm_data_traits<BSTM_ALPHA>::datasize() * new_time_tree.num_leaves()); //number of leaves, not all cells.
-    vcl_memcpy( &(mog_cpy[new_data_ptr]),   &(apm_model_[old_data_ptr]),  bstm_data_traits<APM_TYPE>::datasize()  * new_time_tree.num_leaves()); //number of leaves, not all cells.
+    std::memcpy( &(alpha_cpy[new_data_ptr]), &(alpha_[old_data_ptr]),      bstm_data_traits<BSTM_ALPHA>::datasize() * new_time_tree.num_leaves()); //number of leaves, not all cells.
+    std::memcpy( &(mog_cpy[new_data_ptr]),   &(apm_model_[old_data_ptr]),  bstm_data_traits<APM_TYPE>::datasize()  * new_time_tree.num_leaves()); //number of leaves, not all cells.
 
     //scale alpha data using the depth they were copied from
     //to be consistent.
@@ -242,7 +242,7 @@ bool bstm_ingest_boxm2_scene_function<APM_TYPE, BOXM2_APM_TYPE>::conform()
     new_time_tree.set_data_ptr(dataIndex[currIndex]);
 
     //5. save it back
-    vcl_memcpy(time_trees_iter, new_time_tree.get_bits(), TT_NUM_BYTES);
+    std::memcpy(time_trees_iter, new_time_tree.get_bits(), TT_NUM_BYTES);
   }
 
   delete[] dataIndex;
@@ -363,7 +363,7 @@ bool bstm_ingest_boxm2_scene_function<APM_TYPE, BOXM2_APM_TYPE>::ingest()
   uchar8* time_tree_copy_buffer = new uchar8[time_trees.size()];
   boxm2_array_1d<uchar8> time_trees_blk_copy(time_trees.size(), time_tree_copy_buffer);
   for (unsigned int i = 0; i < time_trees.size(); ++i)
-    vcl_memcpy (time_trees_blk_copy[i].data_block(), time_trees[i].data_block(), TT_NUM_BYTES );
+    std::memcpy (time_trees_blk_copy[i].data_block(), time_trees[i].data_block(), TT_NUM_BYTES );
 
   int* dataIndex = new int[time_trees.size()];           //data index for each new tree
   int dataSize = 0;                                       //running sum of data size
@@ -414,7 +414,7 @@ bool bstm_ingest_boxm2_scene_function<APM_TYPE, BOXM2_APM_TYPE>::ingest()
      tree_index++;
   }
 
-  //vcl_cout << "New data size is " << dataSize << vcl_endl;
+  //std::cout << "New data size is " << dataSize << std::endl;
 
 
 
@@ -463,7 +463,7 @@ bool bstm_ingest_boxm2_scene_function<APM_TYPE, BOXM2_APM_TYPE>::ingest()
      }
   }
 
-  //vcl_cout<<"Number of new cells: "<<newInitCount<<vcl_endl;
+  //std::cout<<"Number of new cells: "<<newInitCount<<std::endl;
 
   //replace databases
   cache->replace_data_base(id, bstm_data_traits<BSTM_ALPHA>::prefix(), newA);
@@ -569,7 +569,7 @@ void bstm_ingest_boxm2_scene_function<APM_TYPE, BOXM2_APM_TYPE>::place_curr_data
 
 #ifdef DEBUG
   if (new_ptr == -1)
-    vcl_cerr << "ERROR, data index is -1\n";
+    std::cerr << "ERROR, data index is -1\n";
 #endif
 
   alpha_cpy[ new_ptr] = boxm2_alpha_[boxm2_data_offset];
@@ -589,12 +589,12 @@ bstm_time_tree bstm_ingest_boxm2_scene_function<APM_TYPE, BOXM2_APM_TYPE>::refin
   float trees_local_time = local_time_ - blk_t_->tree_index(local_time_);
 
   if (currDepth < currDepth_boxm2)
-    vcl_cout << "ERROR: boxm2 and bstm depths don't match!" << vcl_endl;
+    std::cout << "ERROR: boxm2 and bstm depths don't match!" << std::endl;
 
   //first, query for boxm2 data
   double side_len_boxm2 = block_len_/ double(1<<currDepth_boxm2);
   boxm2_data_traits<BOXM2_ALPHA>::datatype boxm2_curr_alpha = boxm2_alpha_[boxm2_data_offset];
-  float boxm2_p = 1 - vcl_exp(- boxm2_curr_alpha * side_len_boxm2);
+  float boxm2_p = 1 - std::exp(- boxm2_curr_alpha * side_len_boxm2);
   typename boxm2_data_traits<BOXM2_APM_TYPE>::datatype boxm2_mog = boxm2_apm_model_[boxm2_data_offset];
 
   //and then bstm data
@@ -603,15 +603,15 @@ bstm_time_tree bstm_ingest_boxm2_scene_function<APM_TYPE, BOXM2_APM_TYPE>::refin
 
 #ifdef DEBUG
   if (data_offset == -1)
-    vcl_cerr << "ERROR, data index is -1!\n";
+    std::cerr << "ERROR, data index is -1!\n";
 #endif
 
   bstm_data_traits<BSTM_ALPHA>::datatype alpha = alpha_[data_offset];
-  float p = 1 - vcl_exp(- alpha * side_len);
+  float p = 1 - std::exp(- alpha * side_len);
   typename bstm_data_traits<APM_TYPE>::datatype mog = apm_model_[data_offset];
 
   //save change of probabilities
-  change_array_[bstm_data_offset] = vcl_fabs(boxm2_p - p);
+  change_array_[bstm_data_offset] = std::fabs(boxm2_p - p);
 
   if ( is_similar(p, mog, boxm2_p, boxm2_mog) )
     return refined_tree;
@@ -653,10 +653,10 @@ int bstm_ingest_boxm2_scene_function<APM_TYPE, BOXM2_APM_TYPE>::move_data(bstm_t
 {
   int newInitCount = 0;
 
-  vcl_vector<int> new_leaves = refined_tree.get_leaf_bits();
-  vcl_vector<int> old_leaves = unrefined_tree.get_leaf_bits();
+  std::vector<int> new_leaves = refined_tree.get_leaf_bits();
+  std::vector<int> old_leaves = unrefined_tree.get_leaf_bits();
 
-  for (vcl_vector<int>::iterator iter = new_leaves.begin(); iter != new_leaves.end(); iter++)
+  for (std::vector<int>::iterator iter = new_leaves.begin(); iter != new_leaves.end(); iter++)
   {
     //get new data ptr
     int newDataPtr = refined_tree.get_data_index(*iter);
@@ -737,7 +737,7 @@ int bstm_ingest_boxm2_scene_function<APM_TYPE, BOXM2_APM_TYPE>::move_data(bstm_t
 
 #ifdef DEBUG
   if (parent_data_ptr == -1)
-    vcl_cerr << "ERROR, data index is -1\n";
+    std::cerr << "ERROR, data index is -1\n";
 #endif
 
       alpha_cpy[newDataPtr]    = alpha_[ parent_data_ptr ];

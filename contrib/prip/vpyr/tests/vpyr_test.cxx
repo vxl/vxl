@@ -13,40 +13,40 @@ void vpyr_test_contraction_removal_copy()
   my_tpyramid p ;
   int i;
 
-  vcl_cout<<vcl_endl<<"-----------------------------------------"<<vcl_endl
-          <<"pyramid_type general contraction/removal test."<<vcl_endl
-          <<"-----------------------------------------"<<vcl_endl ;
+  std::cout<<std::endl<<"-----------------------------------------"<<std::endl
+          <<"pyramid_type general contraction/removal test."<<std::endl
+          <<"-----------------------------------------"<<std::endl ;
 
   build_base_grid(p) ;
 
-  vcl_cout<<"Contraction of {1,7}/{"<<p.top_level().alpha(0)<<','<<p.top_level().alpha(12)<<'}'<<vcl_endl ;
+  std::cout<<"Contraction of {1,7}/{"<<p.top_level().alpha(0)<<','<<p.top_level().alpha(12)<<'}'<<std::endl ;
 
   my_tpyramid::contraction_kernel K(p.top_level()) ;
   K.initialise() ;
   K.add(find_dart(p.top_level(),1).alpha()) ;
   K.add(find_dart(p.top_level(),7).alpha()) ;
   K.finalise() ;
-  vcl_cout<<K.size()<<vcl_endl ;
+  std::cout<<K.size()<<std::endl ;
   p.top_level().contraction(K) ;
   display_tpyramid(p) ;
 
 #if 0
-  vcl_cout<<"Vertices :"<<vcl_endl ;
+  std::cout<<"Vertices :"<<std::endl ;
   for (my_pyr_level::vertex_iterator v=p.level(0).begin_vertex(); v!=p.level(0).end_vertex(); ++v)
   {
-    vcl_cout<<my_pyr_level::cast(*v).last_level()<<' ' ;
+    std::cout<<my_pyr_level::cast(*v).last_level()<<' ' ;
   }
 
-  vcl_cout<<vcl_endl
-          <<"Edges :"<<vcl_endl ;
+  std::cout<<std::endl
+          <<"Edges :"<<std::endl ;
   for (my_pyr_level::edge_iterator e=p.level(0).begin_edge(); e!=p.level(0).end_edge(); ++e)
   {
-    vcl_cout<<my_pyr_level::cast(*e).last_level()<<' ' ;
+    std::cout<<my_pyr_level::cast(*e).last_level()<<' ' ;
   }
-  vcl_cout<<vcl_endl ;
+  std::cout<<std::endl ;
 #endif // 0
 
-  vcl_cout<<"Removal of {8,4} :"<<vcl_endl ;
+  std::cout<<"Removal of {8,4} :"<<std::endl ;
   my_tpyramid::removal_kernel K2(p.top_level()) ;
 
   K2.initialise() ;
@@ -56,7 +56,7 @@ void vpyr_test_contraction_removal_copy()
   p.top_level().removal(K2) ;
   display_tpyramid(p) ;
 
-  vcl_cout<<"Setting structure of level 1..."<<vcl_endl ;
+  std::cout<<"Setting structure of level 1..."<<std::endl ;
   my_tmap copy_map ;
   copy_map.set_structure(p.level(1)) ;
   for (i=0;i<copy_map.nb_vertices();++i)
@@ -77,36 +77,36 @@ void vpyr_test_contraction_removal_copy()
   }
   if (!copy_map.valid_permutations())
   {
-    vcl_cerr<<"Problem !!!!"<<vcl_endl ;
+    std::cerr<<"Problem !!!!"<<std::endl ;
   }
   display_tmap(copy_map) ;
 
 #if 0
-    vcl_cout<<"Removal of {11,4} :"<<vcl_endl ;
+    std::cout<<"Removal of {11,4} :"<<std::endl ;
     my_tpyramid::removal_kernel Kr(p.top_level()) ;
     Kr.add(20) ;
     Kr.add(6) ;
-    vcl_cout<<Kr.size()<<vcl_endl ;
+    std::cout<<Kr.size()<<std::endl ;
     p.top_level().removal(Kr) ;
     display_tpyramid(p) ;
 #endif // 0
 
 #if 0
-  vcl_cout<<"Contraction of {8,10} :"<<vcl_endl ;
+  std::cout<<"Contraction of {8,10} :"<<std::endl ;
   K.clear() ;
   K.insert(p.alpha(7)) ;
   K.insert(p.alpha(9)) ;
-  vcl_cout<<K.size()<<vcl_endl ;
+  std::cout<<K.size()<<std::endl ;
   p.top_level().contraction(K) ;
   display_pyramid(p) ;
 #endif // 0
 
 #if 0
-  vcl_cout<<"Removal of {11,4} :"<<vcl_endl ;
+  std::cout<<"Removal of {11,4} :"<<std::endl ;
   pyramid_type::removal_kernel Kr(p) ;
   Kr.insert(10) ;
   Kr.insert(3) ;
-  vcl_cout<<Kr.size()<<vcl_endl ;
+  std::cout<<Kr.size()<<std::endl ;
   p.top_level().removal(Kr) ;
   display_pyramid(p) ;
 #endif // 0
@@ -117,13 +117,13 @@ void vpyr_test_pendant()
 {
   my_tpyramid p ;
 
-  vcl_cout<<vcl_endl<<"-----------------------------------------"<<vcl_endl
-          <<"pyramid_type general contraction/removal test."<<vcl_endl
-          <<"-----------------------------------------"<<vcl_endl ;
+  std::cout<<std::endl<<"-----------------------------------------"<<std::endl
+          <<"pyramid_type general contraction/removal test."<<std::endl
+          <<"-----------------------------------------"<<std::endl ;
 
   build_base_grid(p) ;
 
-  vcl_cout<<"Removal of {2,6}/{"<<p.top_level().alpha(0)<<','<<p.top_level().alpha(12)<<'}'<<vcl_endl ;
+  std::cout<<"Removal of {2,6}/{"<<p.top_level().alpha(0)<<','<<p.top_level().alpha(12)<<'}'<<std::endl ;
 
   my_tpyramid::removal_kernel K(p.top_level()) ;
   K.initialise() ;
@@ -138,7 +138,7 @@ void vpyr_test_pendant()
   K2.initialise() ;
   K2.add_1_cycles() ;
   K2.finalise() ;
-  vcl_cout<<"Contraction of " ; display_kernel(K2) ; vcl_cout<<vcl_endl ;
+  std::cout<<"Contraction of " ; display_kernel(K2) ; std::cout<<std::endl ;
   p.top_level().contraction(K2) ;
   display_tpyramid(p) ;
 }
@@ -148,13 +148,13 @@ void vpyr_test_pendant_redundant()
 {
   my_tpyramid p ;
 
-  vcl_cout<<vcl_endl<<"-----------------------------------------"<<vcl_endl
-          <<"pyramid_type general contraction/removal test."<<vcl_endl
-          <<"-----------------------------------------"<<vcl_endl ;
+  std::cout<<std::endl<<"-----------------------------------------"<<std::endl
+          <<"pyramid_type general contraction/removal test."<<std::endl
+          <<"-----------------------------------------"<<std::endl ;
 
   build_base_grid(p) ;
 
-  vcl_cout<<"Removal of {8,4,11}"<<vcl_endl ;
+  std::cout<<"Removal of {8,4,11}"<<std::endl ;
 
   my_pyramid_level::removal_kernel K(p.top_level()) ;
   K.initialise() ;
@@ -170,14 +170,14 @@ void vpyr_test_pendant_redundant()
   K2.initialise() ;
   K2.add_1_cycles() ;
   K2.finalise() ;
-  vcl_cout<<"Contraction of " ; display_kernel(K2) ; vcl_cout<<vcl_endl ;
+  std::cout<<"Contraction of " ; display_kernel(K2) ; std::cout<<std::endl ;
   p.top_level().contraction(K2) ;
   display_tpyramid(p) ;
   K2.clear() ;
   K2.initialise() ;
   K2.add_2_cycles() ;
   K2.finalise() ;
-  vcl_cout<<"Contraction of " ; display_kernel(K2) ; vcl_cout<<vcl_endl ;
+  std::cout<<"Contraction of " ; display_kernel(K2) ; std::cout<<std::endl ;
   p.top_level().contraction(K2) ;
   display_tpyramid(p) ;
 }
@@ -187,28 +187,28 @@ void vpyr_test_non_oriented_kernel()
 {
   my_tpyramid p ;
 
-  vcl_cout<<vcl_endl<<"-----------------------------------------"<<vcl_endl
-          <<"pyramid_type general contraction/removal test."<<vcl_endl
-          <<"-----------------------------------------"<<vcl_endl ;
+  std::cout<<std::endl<<"-----------------------------------------"<<std::endl
+          <<"pyramid_type general contraction/removal test."<<std::endl
+          <<"-----------------------------------------"<<std::endl ;
 
   build_base_grid(p) ;
 
-  vcl_cout<<"Removal of {8,a(8),a(4),4,11,3}"<<vcl_endl ;
+  std::cout<<"Removal of {8,a(8),a(4),4,11,3}"<<std::endl ;
 
   vmap_non_oriented_kernel<my_pyramid_level::removal_kernel> K(p.top_level()) ;
   K.initialise() ;
   if (!K.add(find_dart(p.top_level(),8).alpha()))
-    vcl_cout<<"Couldn't add 8."<<vcl_endl ;
+    std::cout<<"Couldn't add 8."<<std::endl ;
   if (!K.add(find_dart(p.top_level(),8)))
-    vcl_cout<<"Couldn't add a(8)."<<vcl_endl ;
+    std::cout<<"Couldn't add a(8)."<<std::endl ;
   if (!K.add(find_dart(p.top_level(),4).alpha()))
-    vcl_cout<<"Couldn't add a(4)."<<vcl_endl ;
+    std::cout<<"Couldn't add a(4)."<<std::endl ;
   if (!K.add(find_dart(p.top_level(),4)))
-    vcl_cout<<"Couldn't add 4."<<vcl_endl ;
+    std::cout<<"Couldn't add 4."<<std::endl ;
   if (!K.add(find_dart(p.top_level(),11)))
-    vcl_cout<<"Couldn't add 11."<<vcl_endl ;
+    std::cout<<"Couldn't add 11."<<std::endl ;
   if (!K.add(find_dart(p.top_level(),3)))
-    vcl_cout<<"Couldn't add 3."<<vcl_endl ;
+    std::cout<<"Couldn't add 3."<<std::endl ;
   K.finalise() ;
   p.top_level().removal(K) ;
   display_tpyramid(p) ;
@@ -218,14 +218,14 @@ void vpyr_test_non_oriented_kernel()
   K2.initialise() ;
   K2.add_1_cycles() ;
   K2.finalise() ;
-  vcl_cout<<"Contraction of " ; display_kernel(K2) ; vcl_cout<<vcl_endl ;
+  std::cout<<"Contraction of " ; display_kernel(K2) ; std::cout<<std::endl ;
   p.top_level().contraction(K2) ;
   display_tpyramid(p) ;
   K2.clear() ;
   K2.initialise() ;
   K2.add_2_cycles() ;
   K2.finalise() ;
-  vcl_cout<<"Contraction of " ; display_kernel(K2) ; vcl_cout<<vcl_endl ;
+  std::cout<<"Contraction of " ; display_kernel(K2) ; std::cout<<std::endl ;
   p.top_level().contraction(K2) ;
   display_tpyramid(p) ;
 }
@@ -235,28 +235,28 @@ void vpyr_test_oriented_kernel()
 {
   my_tpyramid p ;
 
-  vcl_cout<<vcl_endl<<"-----------------------------------------"<<vcl_endl
-          <<"pyramid_type general contraction/removal test."<<vcl_endl
-          <<"-----------------------------------------"<<vcl_endl ;
+  std::cout<<std::endl<<"-----------------------------------------"<<std::endl
+          <<"pyramid_type general contraction/removal test."<<std::endl
+          <<"-----------------------------------------"<<std::endl ;
 
   build_base_grid(p) ;
 
-  vcl_cout<<"Removal of {8,a(8),a(4),4,11,3}"<<vcl_endl ;
+  std::cout<<"Removal of {8,a(8),a(4),4,11,3}"<<std::endl ;
 
   vmap_oriented_kernel<my_pyramid_level::removal_kernel> K(p.top_level()) ;
   K.initialise() ;
   if (!K.add(find_dart(p.top_level(),8)))
-    vcl_cout<<"Couldn't add 8."<<vcl_endl ;
+    std::cout<<"Couldn't add 8."<<std::endl ;
   if (!K.add(find_dart(p.top_level(),8).alpha()))
-    vcl_cout<<"Couldn't add a(8)."<<vcl_endl ;
+    std::cout<<"Couldn't add a(8)."<<std::endl ;
   if (!K.add(find_dart(p.top_level(),4).alpha()))
-    vcl_cout<<"Couldn't add a(4)."<<vcl_endl ;
+    std::cout<<"Couldn't add a(4)."<<std::endl ;
   if (!K.add(find_dart(p.top_level(),4)))
-    vcl_cout<<"Couldn't add 4."<<vcl_endl ;
+    std::cout<<"Couldn't add 4."<<std::endl ;
   if (!K.add(find_dart(p.top_level(),11)))
-    vcl_cout<<"Couldn't add 11."<<vcl_endl ;
+    std::cout<<"Couldn't add 11."<<std::endl ;
   if (!K.add(find_dart(p.top_level(),3)))
-    vcl_cout<<"Couldn't add 3."<<vcl_endl ;
+    std::cout<<"Couldn't add 3."<<std::endl ;
   K.finalise() ;
   p.top_level().removal(K) ;
   display_tpyramid(p) ;
@@ -266,14 +266,14 @@ void vpyr_test_oriented_kernel()
   K2.initialise() ;
   K2.add_1_cycles() ;
   K2.finalise() ;
-  vcl_cout<<"Contraction of " ; vcl_cout.flush() ; display_kernel(K2) ; vcl_cout<<vcl_endl ;
+  std::cout<<"Contraction of " ; std::cout.flush() ; display_kernel(K2) ; std::cout<<std::endl ;
   p.top_level().contraction(K2) ;
   display_tpyramid(p) ;
   K2.clear() ;
   K2.initialise() ;
   K2.add_2_cycles() ;
   K2.finalise() ;
-  vcl_cout<<"Contraction of " ; vcl_cout.flush() ; display_kernel(K2) ; vcl_cout<<vcl_endl ;
+  std::cout<<"Contraction of " ; std::cout.flush() ; display_kernel(K2) ; std::cout<<std::endl ;
   p.top_level().contraction(K2) ;
   display_tpyramid(p) ;
 }

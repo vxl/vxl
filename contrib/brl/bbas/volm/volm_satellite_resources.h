@@ -11,9 +11,11 @@
 //======================================================================
 
 
-#include <vcl_string.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <string>
 #include <vbl/vbl_ref_count.h>
-#include <vcl_vector.h>
+#include <vector>
 #include <vgl/vgl_box_2d.h>
 #include <vpgl/vpgl_lvcs_sptr.h>
 #include <volm/volm_geo_index2_sptr.h>
@@ -33,9 +35,9 @@ class volm_satellite_resource
   void b_read(vsl_b_istream& is);
 
   public:
-    vcl_string full_path_;
-    vcl_string name_;
-    vcl_string pair_;   // if this is a PAN img, save its MULTI pair if available, save only the name
+    std::string full_path_;
+    std::string name_;
+    std::string pair_;   // if this is a PAN img, save its MULTI pair if available, save only the name
     brad_image_metadata_sptr meta_;
 };
 
@@ -50,23 +52,23 @@ class volm_satellite_resources : public vbl_ref_count
     volm_satellite_resources(vgl_box_2d<double>& bbox, double min_size = 1.0, bool eliminate_same = false);
 
     //: traverse the given path recursively and add each satellite resource
-    void add_path(vcl_string path);
+    void add_path(std::string path);
 
     int resources_size() { return resources_.size(); }
 
     //: get a list of ids in the resources_ list that overlap the given rectangular region
-    void query(double lower_left_lon, double lower_left_lat, double upper_right_lon, double upper_right_lat, const vcl_string& band_str, vcl_vector<unsigned>& ids, double gsd_thres);
+    void query(double lower_left_lon, double lower_left_lat, double upper_right_lon, double upper_right_lat, const std::string& band_str, std::vector<unsigned>& ids, double gsd_thres);
     //: query the resources in the given box and output the full paths to the given file
-    bool query_print_to_file(double lower_left_lon, double lower_left_lat, double upper_right_lon, double upper_right_lat, unsigned& cnt, vcl_string& out_file, const vcl_string& band_str, double gsd_thres);
+    bool query_print_to_file(double lower_left_lon, double lower_left_lat, double upper_right_lon, double upper_right_lat, unsigned& cnt, std::string& out_file, const std::string& band_str, double gsd_thres);
 
     //: query the resources in the given box and output the full paths of randomly selected seeds to the given file,
     //  the order of satellites to select seeds from: GeoEye1, WorldView2, WorldView1 and then any others
-    bool query_seeds_print_to_file(double lower_left_lon, double lower_left_lat, double upper_right_lon, double upper_right_lat, int n_seeds, unsigned& cnt, vcl_string& out_file, vcl_string& band_str, double gsd_thres);
+    bool query_seeds_print_to_file(double lower_left_lon, double lower_left_lat, double upper_right_lon, double upper_right_lat, int n_seeds, unsigned& cnt, std::string& out_file, std::string& band_str, double gsd_thres);
 
     //: get a list of pairs of ids in the resources_ list that are taken a few minutes apart from each other
-    unsigned query_pairs(double lower_left_lon, double lower_left_lat, double upper_right_lon, double upper_right_lat, vcl_string& sat_name, float GSD_threshold, vcl_vector<vcl_pair<unsigned, unsigned> >& ids);
+    unsigned query_pairs(double lower_left_lon, double lower_left_lat, double upper_right_lon, double upper_right_lat, std::string& sat_name, float GSD_threshold, std::vector<std::pair<unsigned, unsigned> >& ids);
     //: query the resources in the given box and output the full paths of pairs to the given file
-    bool query_pairs_print_to_file(double lower_left_lon, double lower_left_lat, double upper_right_lon, double upper_right_lat, float GSD_threshold, unsigned& cnt, vcl_string& out_file, vcl_string& sat_name);
+    bool query_pairs_print_to_file(double lower_left_lon, double lower_left_lat, double upper_right_lon, double upper_right_lat, float GSD_threshold, unsigned& cnt, std::string& out_file, std::string& sat_name);
 
     void rasterize(const vgl_polygon<double> &bounds, vil_image_view<bool> &mask);
 
@@ -76,40 +78,40 @@ class volm_satellite_resources : public vbl_ref_count
 
     double compactness(const vgl_polygon<double>& poly, const vil_image_view<bool>& mask);
 
-    void convert_to_local_footprints(vpgl_lvcs_sptr& lvcs, vcl_vector<vgl_polygon<double> >& lvcs_footprints,
-        const vcl_vector<vgl_polygon<double> >& footprints, float downsample_factor=1.0);
+    void convert_to_local_footprints(vpgl_lvcs_sptr& lvcs, std::vector<vgl_polygon<double> >& lvcs_footprints,
+        const std::vector<vgl_polygon<double> >& footprints, float downsample_factor=1.0);
 
-    void convert_to_global_footprints(vcl_vector<vgl_polygon<double> >& footprints, const vpgl_lvcs_sptr& lvcs,
-        const vcl_vector<vgl_polygon<double> >& lvcs_footprints, float downsample_factor);
+    void convert_to_global_footprints(std::vector<vgl_polygon<double> >& footprints, const vpgl_lvcs_sptr& lvcs,
+        const std::vector<vgl_polygon<double> >& lvcs_footprints, float downsample_factor);
 
     // rasterise the footprints of each nitf into a heatmap
     void compute_footprints_heatmap(vil_image_view<unsigned>& heatmap, vgl_box_2d<double>& image_window,
-        const vcl_vector<vgl_polygon<double> >& footprints);
+        const std::vector<vgl_polygon<double> >& footprints);
 
-    void query_resources(vcl_vector<vgl_polygon<double> >& footprints, vcl_vector<unsigned>& footprint_ids,
-        volm_satellite_resources_sptr res, const vcl_string& kml_file, const vcl_string& band="PAN", double gsd_thres=10.0);
+    void query_resources(std::vector<vgl_polygon<double> >& footprints, std::vector<unsigned>& footprint_ids,
+        volm_satellite_resources_sptr res, const std::string& kml_file, const std::string& band="PAN", double gsd_thres=10.0);
 
-    void highly_overlapping_resources(vcl_vector<vcl_string>& overlapping_res, volm_satellite_resources_sptr res,
-        const vcl_string& kml_file, float downsample_factor, const vcl_string& band="PAN", double gsd_thres=10.0);
+    void highly_overlapping_resources(std::vector<std::string>& overlapping_res, volm_satellite_resources_sptr res,
+        const std::string& kml_file, float downsample_factor, const std::string& band="PAN", double gsd_thres=10.0);
 
-    void highly_overlapping_resources(vcl_vector<unsigned>& overlapping_ids, const vcl_vector<vgl_polygon<double> >& footprints,
+    void highly_overlapping_resources(std::vector<unsigned>& overlapping_ids, const std::vector<vgl_polygon<double> >& footprints,
         float downsample_factor);
 
-    void highly_intersecting_resources(vcl_vector<vcl_string>& overlapping_res, volm_satellite_resources_sptr res,
-        const vcl_string& kml_file, int k=3, int l=5, const vcl_string& band="PAN", double gsd_thres=10.0);
+    void highly_intersecting_resources(std::vector<std::string>& overlapping_res, volm_satellite_resources_sptr res,
+        const std::string& kml_file, int k=3, int l=5, const std::string& band="PAN", double gsd_thres=10.0);
 
-    void highly_intersecting_resources(vcl_vector<unsigned>& overlapping_ids,
-        const vcl_vector<vgl_polygon<double> >& footprints, unsigned k=3, unsigned l=5);
+    void highly_intersecting_resources(std::vector<unsigned>& overlapping_ids,
+        const std::vector<vgl_polygon<double> >& footprints, unsigned k=3, unsigned l=5);
 
-    void ind_combinations(vcl_vector<vcl_vector<unsigned> >& combs, unsigned N, unsigned K);
+    void ind_combinations(std::vector<std::vector<unsigned> >& combs, unsigned N, unsigned K);
 
     //: return the full path of a satellite image given its name, if not found returns empty string
-    vcl_pair<vcl_string, vcl_string> full_path(vcl_string name);
+    std::pair<std::string, std::string> full_path(std::string name);
 
     //: find the image PAN/MULTI band pair given the satellite image name
     //: Note the PAN and MULTI band generally has shifted footprint and tolerance here is used to set the threshold that PAN/MULTI band needs to have footprint shift less than
     //  10.0 meters (experiments shows a 30.0 meter for most of the pairs)
-    vcl_string find_pair(vcl_string const& name, double const& tol = 10.0);
+    std::string find_pair(std::string const& name, double const& tol = 10.0);
 
     // ===========  binary I/O ================
     short version() const { return 0; }
@@ -117,10 +119,10 @@ class volm_satellite_resources : public vbl_ref_count
     void b_read(vsl_b_istream& is);
 
     //: use the corresponding global reliability for each satellite when setting weights for camera correction
-    static vcl_map<vcl_string, float> satellite_geo_reliability;
+    static std::map<std::string, float> satellite_geo_reliability;
 
 protected:
-    void add_resource(vcl_string name);
+    void add_resource(std::string name);
     void construct_tree();
     //: add the resources in the resources_ vector to the tree
     void add_resources(unsigned start, unsigned end);
@@ -132,7 +134,7 @@ protected:
     bool same_view(volm_satellite_resource const& res_a, volm_satellite_resource const& res_b, double const& tol = 0.1);
 
   public:
-    vcl_vector<volm_satellite_resource> resources_;
+    std::vector<volm_satellite_resource> resources_;
     volm_geo_index2_node_sptr root_;
     double min_size_;
     vgl_box_2d<double> bbox_;
@@ -146,19 +148,19 @@ void vsl_b_write(vsl_b_ostream & os, volm_satellite_resources const &tc);
 //: Binary load parameters from stream.
 void vsl_b_read(vsl_b_istream & is, volm_satellite_resources &tc);
 
-void vsl_print_summary(vcl_ostream &os, const volm_satellite_resources &tc);
+void vsl_print_summary(std::ostream &os, const volm_satellite_resources &tc);
 
 void vsl_b_read(vsl_b_istream& is, volm_satellite_resources* tc);
 
 void vsl_b_write(vsl_b_ostream& os, const volm_satellite_resources* &tc);
 
-void vsl_print_summary(vcl_ostream& os, const volm_satellite_resources* &tc);
+void vsl_print_summary(std::ostream& os, const volm_satellite_resources* &tc);
 
 void vsl_b_read(vsl_b_istream& is, volm_satellite_resources_sptr& tc);
 
 void vsl_b_write(vsl_b_ostream& os, const volm_satellite_resources_sptr &tc);
 
-void vsl_print_summary(vcl_ostream& os, const volm_satellite_resources_sptr &tc);
+void vsl_print_summary(std::ostream& os, const volm_satellite_resources_sptr &tc);
 
 
 #endif

@@ -2,13 +2,15 @@
 //:
 // \file
 
-#include <vcl_utility.h>
-#include <vcl_iostream.h>
+#include <utility>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iostream>
 
 //: add a label pair equivalence
 void brip_label_equivalence::add_label_pair(unsigned la, unsigned lb)
 {
-  vcl_pair<vcl_set<unsigned>::iterator, bool> result;
+  std::pair<std::set<unsigned>::iterator, bool> result;
   result = forward_pairs_[la].insert(lb);
   if (result.second)
     if (la>max_label_)
@@ -19,10 +21,10 @@ void brip_label_equivalence::add_label_pair(unsigned la, unsigned lb)
       max_label_ = lb;
 }
 //: find all the individual labels and determine the largest label
-vcl_set<unsigned> brip_label_equivalence::labels() const
+std::set<unsigned> brip_label_equivalence::labels() const
 {
-  vcl_set<unsigned> labs;
-  vcl_map<unsigned, vcl_set<unsigned> >::const_iterator mit =
+  std::set<unsigned> labs;
+  std::map<unsigned, std::set<unsigned> >::const_iterator mit =
     forward_pairs_.begin();
   for (; mit != forward_pairs_.end(); ++mit) {
     labs.insert((*mit).first);
@@ -35,18 +37,18 @@ vcl_set<unsigned> brip_label_equivalence::labels() const
 }
 
 bool brip_label_equivalence::
-merge_equivalence(vcl_map<unsigned int, vcl_set<unsigned int> >& tab,
+merge_equivalence(std::map<unsigned int, std::set<unsigned int> >& tab,
                   unsigned int cur_label,
                   unsigned int label)
 {
-  vcl_map<unsigned , vcl_set<unsigned> >::iterator hashi;
+  std::map<unsigned , std::set<unsigned> >::iterator hashi;
   //If we can't find the label in tab then there are no equivalences to be merged
   hashi = tab.find(label);
   if (hashi == tab.end()) {
     return false;
   }
   //We did find label, and labels is a set of equivalent labels
-  vcl_set<unsigned>& labels = hashi->second;
+  std::set<unsigned>& labels = hashi->second;
 
   //If the set is empty then nothing to do
   unsigned len = labels.size();
@@ -58,10 +60,10 @@ merge_equivalence(vcl_map<unsigned int, vcl_set<unsigned int> >& tab,
   {
     //We didn't find any equivalent labels for cur_label so we initialize a new one
     //and insert it into equivalence_sets
-    equivalence_sets_[cur_label] = vcl_set<unsigned>();
+    equivalence_sets_[cur_label] = std::set<unsigned>();
   }
 
-  for (vcl_set<unsigned>::iterator lit = labels.begin();
+  for (std::set<unsigned>::iterator lit = labels.begin();
        lit != labels.end(); ++lit)
     equivalence_sets_[cur_label].insert(*lit);
   return true;
@@ -71,7 +73,7 @@ merge_equivalence(vcl_map<unsigned int, vcl_set<unsigned int> >& tab,
 //: Find the next label not accounted for in the current equivalence set.
 //  The set of labels is searched to find a label larger than label, but
 //  not in the set, labels.
-bool brip_label_equivalence::get_next_label(vcl_set<unsigned> const& labels,
+bool brip_label_equivalence::get_next_label(std::set<unsigned> const& labels,
                                             unsigned int& label)
 {
   //If the set labels is null then
@@ -88,7 +90,7 @@ bool brip_label_equivalence::get_next_label(vcl_set<unsigned> const& labels,
   //set.
   for (unsigned int i = tmp; i<=max_label_; i++)
   {
-    vcl_set<unsigned>::const_iterator sit=labels.find(i);
+    std::set<unsigned>::const_iterator sit=labels.find(i);
     if (sit==labels.end()){
       label = i;
       return true;
@@ -100,18 +102,18 @@ bool brip_label_equivalence::get_next_label(vcl_set<unsigned> const& labels,
 
 void brip_label_equivalence::transitive_closure()
 {
-  vcl_set<unsigned> labs = this->labels();
+  std::set<unsigned> labs = this->labels();
   if (labs.size()<=1)
     return;
   unsigned cur_label = *(labs.begin());
 
   //the iterator for equivalence_sets_
-  vcl_map<unsigned , vcl_set<unsigned > >::iterator mei;
+  std::map<unsigned , std::set<unsigned > >::iterator mei;
   while (true)
   {
     bool merging = true;
     unsigned i = cur_label;
-    vcl_set<unsigned> cur_set;
+    std::set<unsigned> cur_set;
     int len = 0;
     int old_len;
     while (merging)
@@ -121,7 +123,7 @@ void brip_label_equivalence::transitive_closure()
       //find label equivalence in the forward map
       bool find_forward =
         this->merge_equivalence(forward_pairs_, cur_label, i);
-      vcl_map<unsigned, vcl_set<unsigned> >::iterator sit;
+      std::map<unsigned, std::set<unsigned> >::iterator sit;
       if (find_forward)
       {
         sit = forward_pairs_.find(i);
@@ -130,7 +132,7 @@ void brip_label_equivalence::transitive_closure()
       }
 #if 0
       if (find_forward)
-        vcl_cout << "merged forward pairs on label " << i << '\n' << vcl_flush;
+        std::cout << "merged forward pairs on label " << i << '\n' << std::flush;
 #endif
       //find label equivalence in the reverse map
       bool find_reverse =
@@ -143,7 +145,7 @@ void brip_label_equivalence::transitive_closure()
       }
 #if 0
       if (find_reverse)
-        vcl_cout << "merged reverse pairs on label " << i << '\n' << vcl_flush;
+        std::cout << "merged reverse pairs on label " << i << '\n' << std::flush;
 #endif
       //At this point we may have established or added to the equivalence set
       //for cur_label stored in equivalence_sets[cur_label]
@@ -171,7 +173,7 @@ void brip_label_equivalence::transitive_closure()
       }
       //Get the next larger label from cur_set
       //so that we can insert its equivalent labels
-      for (vcl_set<unsigned>::iterator cit = cur_set.begin();
+      for (std::set<unsigned>::iterator cit = cur_set.begin();
            cit != cur_set.end() && !merging; ++cit)
         if (*cit>i)
         {
@@ -185,8 +187,8 @@ void brip_label_equivalence::transitive_closure()
     //next equivalence class
     if (!get_next_label(cur_set, cur_label)) return;
 #if 0
-    vcl_cout << "Getting next label to seed equivalence "
-             << cur_label << '\n' << vcl_flush;
+    std::cout << "Getting next label to seed equivalence "
+             << cur_label << '\n' << std::flush;
 #endif
   }
 }

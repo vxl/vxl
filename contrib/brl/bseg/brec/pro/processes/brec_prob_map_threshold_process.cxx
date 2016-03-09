@@ -16,7 +16,9 @@
 
 #include <bprb/bprb_func_process.h>
 #include <bprb/bprb_parameters.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iostream>
 #include <brdb/brdb_value.h>
 #include <vil/vil_image_view.h>
 #include <vil/vil_convert.h>
@@ -27,7 +29,7 @@ bool brec_prob_map_threshold_process_cons(bprb_func_process& pro)
 {
   //inputs
   bool ok=false;
-  vcl_vector<vcl_string> input_types;
+  std::vector<std::string> input_types;
   input_types.push_back("vil_image_view_base_sptr"); //input probability frame
   input_types.push_back("vil_image_view_base_sptr"); //input probability frame's mask
   input_types.push_back("vil_image_view_base_sptr"); //orig_view
@@ -36,7 +38,7 @@ bool brec_prob_map_threshold_process_cons(bprb_func_process& pro)
   if (!ok) return ok;
 
   //output
-  vcl_vector<vcl_string> output_types;
+  std::vector<std::string> output_types;
   output_types.push_back("vil_image_view_base_sptr");   // output a thresholded image where red channel is binarized wrt given threshold
   output_types.push_back("vil_image_view_base_sptr");   // output a thresholded image where red channel is mapped wrt prob
   ok = pro.set_output_types(output_types);
@@ -48,7 +50,7 @@ bool brec_prob_map_threshold_process(bprb_func_process& pro)
 {
   // Sanity check
   if (pro.n_inputs() < 4) {
-    vcl_cerr << " brec_prob_map_threshold_process - invalid inputs\n";
+    std::cerr << " brec_prob_map_threshold_process - invalid inputs\n";
     return false;
   }
 
@@ -93,15 +95,15 @@ bool brec_prob_map_threshold_process(bprb_func_process& pro)
           // assuming that change is in [0,1] where 0 is no change and 1 is change
           // we set red channel so that: on the threshold value it becomes 255*0.01
           // and it increases exponentially till 1 when it becomes 255
-          out2(i,j,0) = (vxl_byte)(255*vcl_exp((vcl_log(0.01)/(thres-1))*(change-1)));
+          out2(i,j,0) = (vxl_byte)(255*std::exp((std::log(0.01)/(thres-1))*(change-1)));
           count++;
         }
       }
     }
 
-  vcl_cout << "----------------------------------\n"
+  std::cout << "----------------------------------\n"
            << "\tthres: " << thres << '\n'
-           << "\tnumber of CHANGE PIXELS: " << count << " out of " << ni*nj << " pixels: %" << (float)count/float(ni*nj)*100.0f << vcl_endl
+           << "\tnumber of CHANGE PIXELS: " << count << " out of " << ni*nj << " pixels: %" << (float)count/float(ni*nj)*100.0f << std::endl
            << "----------------------------------\n";
 
   pro.set_output_val<vil_image_view_base_sptr>(0, new vil_image_view<vxl_byte>(out));

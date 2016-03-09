@@ -21,7 +21,7 @@ static inline vnl_bignum factorial(int n)
 
 //: constructs from a set of sample values
 template <class T>
-bsta_beta<T>::bsta_beta(vcl_vector<T> x)
+bsta_beta<T>::bsta_beta(std::vector<T> x)
 {
   T mean=0;
   T var=0;
@@ -107,7 +107,7 @@ bool bsta_beta<T>::bsta_beta_from_moments(T mean, T var, T& alpha, T& beta)
     beta=(1-mean)*t;
   }
 #if 0 // commented out ...
-  T det=vcl_sqrt(1-12*var);
+  T det=std::sqrt(1-12*var);
   if (mean<=(1-det)/2)
   {
     alpha=T(1);
@@ -171,15 +171,15 @@ T bsta_beta<T>::prob_density(T x) const
   else
   {
     double a = vnl_log_beta(alpha_,beta_);
-    double b = (alpha_-1)*vcl_log(x);
-    double c = (beta_-1)*vcl_log(1-x);
+    double b = (alpha_-1)*std::log(x);
+    double c = (beta_-1)*std::log(1-x);
 
     if (b+c-a<-60)
       return T(0);
     else if (b+c-a>60)
       return T(100);
     else
-      return (T)vcl_exp(b+c-a);
+      return (T)std::exp(b+c-a);
   }
 }
 
@@ -188,11 +188,11 @@ T bsta_beta<T>::distance(T x) const
 {
   T mean =alpha_/(alpha_+beta_);
   if (x==0 && alpha_==1)
-    return (T)((beta_-1)*vcl_log((1-x)/(1-mean)));
+    return (T)((beta_-1)*std::log((1-x)/(1-mean)));
   else if (x==1 && beta_==1)
-    return (T)((alpha_-1)*vcl_log(x/mean));
+    return (T)((alpha_-1)*std::log(x/mean));
   else
-    return (T)((alpha_-1)*vcl_log(x/mean)+(beta_-1)*vcl_log((1-x)/(1-mean)));
+    return (T)((alpha_-1)*std::log(x/mean)+(beta_-1)*std::log((1-x)/(1-mean)));
 }
 
 // cumulative distribution function
@@ -205,7 +205,7 @@ T bsta_beta<T>::cum_dist_funct(T x) const
   T val;
   for (unsigned j=a; j<=a+b-1; j++) {
     val = factorial(a+b-1)/(factorial(j)*factorial(a+b-1-j));
-    val *= vcl_pow(x,T(j))*vcl_pow(1-x, T(a+b-1-j));
+    val *= std::pow(x,T(j))*std::pow(1-x, T(a+b-1-j));
     Ix+=val;
   }
   return Ix;

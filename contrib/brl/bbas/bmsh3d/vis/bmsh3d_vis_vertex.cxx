@@ -17,7 +17,9 @@
 #include <Inventor/nodes/SoTranslation.h>
 #include <Inventor/nodes/SoDrawStyle.h>
 
-#include <vcl_cstdio.h> // std::sprintf()
+#include <vcl_compiler.h>
+#include <iostream>
+#include <cstdio> // std::sprintf()
 
 SoSeparator* draw_vertex_geom_SoPoint (const bmsh3d_vertex* V)
 {
@@ -142,7 +144,7 @@ SoSeparator* draw_vertex_vispt_SoCube (const bmsh3d_vertex* V,
 
   if (show_id) {
     char buf[64];
-    vcl_sprintf (buf, "%d", V->id());
+    std::sprintf (buf, "%d", V->id());
     draw_text2d_geom (root, buf);
   }
 

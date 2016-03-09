@@ -15,7 +15,7 @@ static void test_lms_lts()
   double frac = 0.5;
   rrel_objective * lms1 = new rrel_lms_obj( dof, frac );
 
-  vcl_vector<double> test_lms;
+  std::vector<double> test_lms;
   test_lms.push_back( -1.0 );
   test_lms.push_back( -2.0 );
   test_lms.push_back( 1.2 );
@@ -48,7 +48,7 @@ static void test_lms_lts()
   dof = 3;
   frac = 0.5;
   rrel_objective * lts1 = new rrel_lts_obj( dof, frac );
-  vcl_vector<double> test_lts;
+  std::vector<double> test_lts;
   test_lts.push_back( -1.0 );
   test_lts.push_back( -2.0 );
   test_lts.push_back( 1.2 );

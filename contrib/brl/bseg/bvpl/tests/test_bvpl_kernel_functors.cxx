@@ -16,11 +16,13 @@
 #include <vnl/vnl_random.h>
 #include <vbl/vbl_array_3d.h>
 
-#include <vcl_sstream.h>
-#include <vcl_iostream.h>
-#include <vcl_fstream.h>
-#include <vcl_iomanip.h>
-#include <vcl_cmath.h>
+#include <sstream>
+#include <iostream>
+#include <fstream>
+#include <iomanip>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <cmath>
 
 template<class data_type>
 void fill_in_data(vbl_array_3d<data_type> & data,data_type min_p, data_type max_p, vnl_float_3 axis)
@@ -93,7 +95,7 @@ data_type run_kernel_at_the_center(vbl_array_3d<data_type> & data, bvpl_kernel_s
     vgl_point_3d<int> idx = kernel_iter.index();
     data_type val;
     val=data(ci+idx.x(),cj+idx.y(),ck+idx.z());
-    //vcl_cout<< val << "at " << idx <<vcl_endl;
+    //std::cout<< val << "at " << idx <<std::endl;
     bvpl_kernel_dispatch d = *kernel_iter;
     func.apply(val, d);
     ++kernel_iter;
@@ -131,7 +133,7 @@ bool is_correct_solution(bvpl_kernel_vector_sptr kernel_vec,
       data_type val=run_kernel_at_the_center<F>(data,kernel_vec->kernels_[i],func);
 #ifdef DEBUG
       if (val>0)
-        entropy_sum-=val*vcl_log(val);
+        entropy_sum-=val*std::log(val);
 #endif
       if (val>max_val)
       {
@@ -141,12 +143,12 @@ bool is_correct_solution(bvpl_kernel_vector_sptr kernel_vec,
     }
     if (axis_result!=j)
     {
-      vcl_cout<<"Val: "<<max_val<<" Result axis: "<<kernel_vec->kernels_[axis_result]->axis()
-              <<"Orig axis: "<<axis<<vcl_endl;
+      std::cout<<"Val: "<<max_val<<" Result axis: "<<kernel_vec->kernels_[axis_result]->axis()
+              <<"Orig axis: "<<axis<<std::endl;
       flag=false;
     }
 #ifdef DEBUG
-    vcl_cout<<"Entropy Sum "<<entropy_sum<<vcl_endl;
+    std::cout<<"Entropy Sum "<<entropy_sum<<std::endl;
 #endif
   }
   return flag;
@@ -182,9 +184,9 @@ bool is_correct_solution(bvpl_kernel_vector_sptr kernel_vec,
       bsta_gauss_sf1 val=run_kernel_at_the_center<F>(data,kernel_vec->kernels_[i],func);
 #ifdef DEBUG
       if (val>0)
-        entropy_sum-=val*vcl_log(val);
+        entropy_sum-=val*std::log(val);
 #endif
-      if (vcl_abs(val.mean())>vcl_abs(max_val.mean()))
+      if (std::abs(val.mean())>std::abs(max_val.mean()))
       {
         max_val=val;
         axis_result=i;
@@ -193,12 +195,12 @@ bool is_correct_solution(bvpl_kernel_vector_sptr kernel_vec,
     response[j] = max_val.mean();
     if (axis_result!=j)
     {
-      vcl_cout<<"Val: "<<max_val.mean() <<" Result axis: "<<kernel_vec->kernels_[axis_result]->axis()
-              <<"Orig axis: "<<axis<<vcl_endl;
+      std::cout<<"Val: "<<max_val.mean() <<" Result axis: "<<kernel_vec->kernels_[axis_result]->axis()
+              <<"Orig axis: "<<axis<<std::endl;
       flag=false;
     }
 #ifdef DEBUG
-    vcl_cout<<"Entropy Sum "<<entropy_sum<<vcl_endl;
+    std::cout<<"Entropy Sum "<<entropy_sum<<std::endl;
 #endif
   }
   return flag;
@@ -274,12 +276,12 @@ void test_gaussian_kernels()
     TEST("Test gaussian functor with no noise ", true,result);
 
 #if 0
-    vcl_stringstream file;
+    std::stringstream file;
     file << "response" << i << ".txt";
-    vcl_string filename = file.str();
-    vcl_fstream ofs(filename.c_str(), vcl_ios::out);
+    std::string filename = file.str();
+    std::fstream ofs(filename.c_str(), std::ios::out);
     if (!ofs.is_open()) {
-      vcl_cerr << "error opening file for write!\n";
+      std::cerr << "error opening file for write!\n";
       return;
     }
     ofs << response;
@@ -312,12 +314,12 @@ void test_gauss_convolve()
 MAIN(test_bvpl_kernel_functors)
 {
   //test algebraic, geometric and opinion functors
-  vcl_cout << "-------------------------\n"
+  std::cout << "-------------------------\n"
            << "Testing edged functors\n";
   test_edge_functors();
 
   //test gaussian convolution functor
-  vcl_cout << "-------------------------\n"
+  std::cout << "-------------------------\n"
            << "Testing gaussian functors\n";
   test_gauss_convolve();
 

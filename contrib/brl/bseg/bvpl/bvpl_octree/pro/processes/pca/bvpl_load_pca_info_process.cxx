@@ -25,10 +25,10 @@ bool bvpl_load_pca_info_process_cons(bprb_func_process& pro)
 {
   using namespace bvpl_load_pca_info_process_globals ;
 
-  vcl_vector<vcl_string> input_types_(n_inputs_);
+  std::vector<std::string> input_types_(n_inputs_);
   input_types_[0] = "vcl_string" ;  //directory path
 
-  vcl_vector<vcl_string> output_types_(n_outputs_);
+  std::vector<std::string> output_types_(n_outputs_);
   output_types_[0] = "bvpl_discover_pca_kernels_sptr";  //pca info
 
   return pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
@@ -41,7 +41,7 @@ bool bvpl_load_pca_info_process(bprb_func_process& pro)
   using namespace bvpl_load_pca_info_process_globals;
 
   //get inputs
-  vcl_string pca_dir = pro.get_input<vcl_string>(0);
+  std::string pca_dir = pro.get_input<std::string>(0);
 
   if (!vul_file::is_directory(pca_dir))
     return false;

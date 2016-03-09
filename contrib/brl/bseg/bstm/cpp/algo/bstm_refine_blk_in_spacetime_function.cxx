@@ -1,9 +1,11 @@
 #include "bstm_refine_blk_in_spacetime_function.h"
 #include <bstm/io/bstm_lru_cache.h>
-#include <vcl_algorithm.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <algorithm>
 
 
-bool bstm_refine_blk_in_spacetime_function::init_data(bstm_time_block* blk_t, bstm_block* blk, vcl_vector<bstm_data_base*> & datas, float prob_thresh)
+bool bstm_refine_blk_in_spacetime_function::init_data(bstm_time_block* blk_t, bstm_block* blk, std::vector<bstm_data_base*> & datas, float prob_thresh)
 {
   //store block and pointer to uchar16 3d block
    blk_   = blk;
@@ -27,7 +29,7 @@ bool bstm_refine_blk_in_spacetime_function::init_data(bstm_time_block* blk_t, bs
 
    //USE rootlevel to determine MAX_INNER and MAX_CELLS
    if (max_level_t_ == 1) {
-     vcl_cout<<"Trying to refine scene with max level 1"<<vcl_endl;
+     std::cout<<"Trying to refine scene with max level 1"<<std::endl;
      return true;
    }
    else if (max_level_t_ == 2) {
@@ -48,7 +50,7 @@ bool bstm_refine_blk_in_spacetime_function::init_data(bstm_time_block* blk_t, bs
 
    //USE rootlevel to determine MAX_INNER and MAX_CELLS
    if (max_level_ == 1) {
-     vcl_cout<<"Trying to refine scene with max level 1"<<vcl_endl;
+     std::cout<<"Trying to refine scene with max level 1"<<std::endl;
      return true;
    }
    else if (max_level_ == 2) {
@@ -70,7 +72,7 @@ bool bstm_refine_blk_in_spacetime_function::init_data(bstm_time_block* blk_t, bs
    return true;
 }
 
-bool bstm_refine_blk_in_spacetime_function::refine(vcl_vector<bstm_data_base*>& datas)
+bool bstm_refine_blk_in_spacetime_function::refine(std::vector<bstm_data_base*>& datas)
 {
 
   //1. loop over each tree, refine it in place
@@ -94,10 +96,10 @@ bool bstm_refine_blk_in_spacetime_function::refine(vcl_vector<bstm_data_base*>& 
       int newSize = refined_tree.num_cells();
 
       //save refined tree to trees_copy
-      vcl_memcpy (trees_copy[currIndex].data_block(), refined_tree.get_bits(), sizeof(uchar16));
+      std::memcpy (trees_copy[currIndex].data_block(), refined_tree.get_bits(), sizeof(uchar16));
       dataSize += newSize;
   }
-  vcl_cout << "Num space cells split: " << num_split_ << vcl_endl;
+  std::cout << "Num space cells split: " << num_split_ << std::endl;
 
 
 
@@ -131,10 +133,10 @@ bool bstm_refine_blk_in_spacetime_function::refine(vcl_vector<bstm_data_base*>& 
       newInitCount += this->move_time_trees(old_tree, refined_tree, newTimeBlk, newRefinedTimeBlk, depths);
 
       //4. store old tree in new tree, swap data out
-      vcl_memcpy(blk_iter, refined_tree.get_bits(), sizeof(uchar16));
+      std::memcpy(blk_iter, refined_tree.get_bits(), sizeof(uchar16));
   }
 
-  vcl_cout << "Num time cells split: " << num_split_t_ << vcl_endl;
+  std::cout << "Num time cells split: " << num_split_t_ << std::endl;
 
 
   delete[] trees_copy;
@@ -158,7 +160,7 @@ bool bstm_refine_blk_in_spacetime_function::refine(vcl_vector<bstm_data_base*>& 
       int newSize = new_time_tree.num_leaves(); //number of leaves, not all cells.
       dataSize += newSize;
   }
-  vcl_cout << "New data size: " << dataSize << vcl_endl;
+  std::cout << "New data size: " << dataSize << std::endl;
 
   //alloc new buffers
   bstm_data_base* newA = new bstm_data_base(new char[dataSize * bstm_data_traits<BSTM_ALPHA>::datasize() ],
@@ -183,7 +185,7 @@ bool bstm_refine_blk_in_spacetime_function::refine(vcl_vector<bstm_data_base*>& 
       //2. correct data ptr
       refined_time_tree.set_data_ptr(dataIndex[currIndex]);
       //3. save it back to newRefinedTimeBlk
-      vcl_memcpy(refined_time_trees_iter, refined_time_tree.get_bits(), TT_NUM_BYTES);
+      std::memcpy(refined_time_trees_iter, refined_time_tree.get_bits(), TT_NUM_BYTES);
       //4. move the data
       this->move_data(unrefined_time_tree, refined_time_tree, alpha_cpy, mog_cpy, numobs_cpy, (int)( depths[currIndex / sub_block_num_t_]) );
   }
@@ -210,10 +212,10 @@ void bstm_refine_blk_in_spacetime_function::move_data(bstm_time_tree& unrefined_
                                                                                  bstm_data_traits<BSTM_NUM_OBS_VIEW_COMPACT>::datatype * numobs_cpy,
                                                                                  int depth)
 {
-  vcl_vector<int> new_leaves = refined_time_tree.get_leaf_bits();
-  vcl_vector<int> old_leaves = unrefined_time_tree.get_leaf_bits();
+  std::vector<int> new_leaves = refined_time_tree.get_leaf_bits();
+  std::vector<int> old_leaves = unrefined_time_tree.get_leaf_bits();
 
-  for (vcl_vector<int>::iterator iter = new_leaves.begin(); iter != new_leaves.end(); iter++)
+  for (std::vector<int>::iterator iter = new_leaves.begin(); iter != new_leaves.end(); iter++)
   {
     //get new data ptr
     int newDataPtr = refined_time_tree.get_data_index(*iter);
@@ -236,7 +238,7 @@ void bstm_refine_blk_in_spacetime_function::move_data(bstm_time_tree& unrefined_
       //find parent in old tree
       oldDataPtr = unrefined_time_tree.get_data_index(pj);
 
-      float max_alpha_int = -vcl_log(1.0f - prob_t_);
+      float max_alpha_int = -std::log(1.0f - prob_t_);
 
       float side_len = block_len_ / (float) (1 << depth );
       float newAlpha = (max_alpha_int / side_len);
@@ -349,12 +351,12 @@ bool bstm_refine_blk_in_spacetime_function::decide_refinement_in_space(int dataI
   {
     bstm_time_tree time_tree( all_time_trees[t].data_block(), max_level_t_);
     //loop over its leaves to see if any cell has prob > prob_t
-    vcl_vector<int> leaves = time_tree.get_leaf_bits();
-    for(vcl_vector<int>::const_iterator iter = leaves.begin(); iter != leaves.end(); iter++)
+    std::vector<int> leaves = time_tree.get_leaf_bits();
+    for(std::vector<int>::const_iterator iter = leaves.begin(); iter != leaves.end(); iter++)
     {
       int data_ptr = time_tree.get_data_index(*iter);
       //fetch prob
-      float p = 1 - vcl_exp(- alpha_[data_ptr] * side_len);
+      float p = 1 - std::exp(- alpha_[data_ptr] * side_len);
       if(p > prob_t_)
         return true;
     }
@@ -366,16 +368,16 @@ bstm_time_tree bstm_refine_blk_in_spacetime_function::refine_time_tree(bstm_time
 {
   //initialize tree to return
   bstm_time_tree refined_tree(unrefined_time_tree.get_bits(), max_level_t_);
-  vcl_vector<int> leaves = unrefined_time_tree.get_leaf_bits();
+  std::vector<int> leaves = unrefined_time_tree.get_leaf_bits();
 
-  for(vcl_vector<int>::const_iterator iter = leaves.begin(); iter != leaves.end(); iter++)
+  for(std::vector<int>::const_iterator iter = leaves.begin(); iter != leaves.end(); iter++)
   {
     //////////////////////////////////////////////////
     //LEAF CODE HERE
     //////////////////////////////////////////////////
     int data_ptr = unrefined_time_tree.get_data_index(*iter);
     //fetch prob
-    float p = 1 - vcl_exp(- alpha_[data_ptr] * side_len);
+    float p = 1 - std::exp(- alpha_[data_ptr] * side_len);
     bool should_refine = (p > prob_t_);
     if (should_refine && unrefined_time_tree.depth_at(*iter) < max_level_t_ -1) {
       refined_tree.set_bit_at(*iter, true);
@@ -431,7 +433,7 @@ boct_bit_tree bstm_refine_blk_in_spacetime_function::refine_bit_tree(const boct_
 //MAIN REFINE FUNCTION
 ////////////////////////////////////////////////////////////////////////////////
 void bstm_refine_block_spacetime(bstm_time_block* t_blk, bstm_block* blk,
-                        vcl_vector<bstm_data_base*> & datas,
+                        std::vector<bstm_data_base*> & datas,
                         float prob_thresh)
 {
   bstm_refine_blk_in_spacetime_function refine_block;

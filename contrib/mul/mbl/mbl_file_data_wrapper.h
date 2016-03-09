@@ -11,7 +11,9 @@
 
 #include <vsl/vsl_binary_io.h>
 #include <mbl/mbl_data_wrapper.h>
-#include <vcl_string.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <string>
 
 //: Base class for objects which can return a set of objects, one at a time
 //  This is an iterator-like object.  However, unlike STL, generality is
@@ -46,7 +48,7 @@ class mbl_file_data_wrapper : public mbl_data_wrapper<T>
   vsl_b_ifstream bfs_;
 
   // path to file holding all data
-  vcl_string path_;
+  std::string path_;
 
   // data
   T d_;
@@ -64,7 +66,7 @@ class mbl_file_data_wrapper : public mbl_data_wrapper<T>
 #endif
 
   // constructors
-  mbl_file_data_wrapper(const vcl_string path);
+  mbl_file_data_wrapper(const std::string path);
 
   //: Default destructor
   virtual ~mbl_file_data_wrapper();
@@ -101,10 +103,10 @@ class mbl_file_data_wrapper : public mbl_data_wrapper<T>
   virtual mbl_data_wrapper< T >* clone() const;
 
   //: Name of the class
-  virtual vcl_string is_a() const;
+  virtual std::string is_a() const;
 
   //: True if this is (or is derived from) class named s
-  virtual bool is_class(vcl_string const& s) const;
+  virtual bool is_class(std::string const& s) const;
 };
 
 #endif // mbl_file_data_wrapper_h

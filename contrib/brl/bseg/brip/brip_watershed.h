@@ -29,9 +29,11 @@
 // \endverbatim
 //
 //-----------------------------------------------------------------------------
-#include <vcl_vector.h>
-#include <vcl_map.h>
-#include <vcl_queue.h>
+#include <vector>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <map>
+#include <queue>
 #include <vbl/vbl_array_2d.h>
 #include <vil1/vil1_image.h>
 #include <vil1/vil1_memory_image_of.h>
@@ -52,7 +54,7 @@ class brip_watershed : public brip_watershed_params
   vil1_image overlay_image();
   vbl_array_2d<unsigned int>& region_label_array(){return region_label_array_;}
   bool adjacent_regions(const unsigned int region,
-                        vcl_vector<unsigned int>& adj_regs);
+                        std::vector<unsigned int>& adj_regs);
   //: Main process method
   bool compute_regions();
   //: Debug methods
@@ -73,9 +75,9 @@ class brip_watershed : public brip_watershed_params
   vbl_array_2d<unsigned int> region_label_array_;
   vil1_memory_image_of<float> image_;
   vil1_memory_image_of<float> gradient_mag_image_;
-  vcl_priority_queue<brip_region_pixel_sptr, vcl_vector<brip_region_pixel_sptr>,
+  std::priority_queue<brip_region_pixel_sptr, std::vector<brip_region_pixel_sptr>,
                      brip_region_pixel::compare> priority_queue_;
-  vcl_map<unsigned int, vcl_vector<unsigned int>* > region_adjacency_;
+  std::map<unsigned int, std::vector<unsigned int>* > region_adjacency_;
 };
 
 #endif // brip_watershed_h_

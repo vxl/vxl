@@ -74,7 +74,7 @@ void bvpl_scene_neighborhood_operator::local_non_maxima_suppression(boxm_scene<b
     functor.init(this_data, roi);
 
     // get all cells that intersect a region
-    vcl_vector<boct_tree_cell<short, T_data>* > cells_in_roi;
+    std::vector<boct_tree_cell<short, T_data>* > cells_in_roi;
 
     //Return all cells that intersec the region
     scene_in.leaves_in_region(roi,cells_in_roi);

@@ -16,7 +16,9 @@
 #include <vgl/vgl_box_3d.h>
 #include <vul/vul_arg.h>
 #include <vul/vul_timer.h>
-#include <vcl_algorithm.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <algorithm>
 #include <bocl/bocl_manager.h>
 #include <bocl/bocl_device.h>
 #include <boxm2/ocl/boxm2_opencl_cache.h>
@@ -25,14 +27,14 @@
 #include <vnl/algo/vnl_powell.h>
 #include <vnl/algo/vnl_levenberg_marquardt.h>
 
-#include <vcl_iostream.h>
+#include <iostream>
 #include <vil/vil_image_view.h>
 #include <vil/vil_save.h>
 
 
 struct ltstr
 {
-  bool operator()(const vcl_pair<int,int> & s1, const vcl_pair<int,int> & s2) const
+  bool operator()(const std::pair<int,int> & s1, const std::pair<int,int> & s2) const
   {
     return  s1.first < s2.first
         || (s1.first == s2.first && s1.second < s2.second);
@@ -70,11 +72,11 @@ void convert_params_to_xform(vnl_vector<double>  x,  vnl_matrix<double> & xform,
 int main(int argc,  char** argv)
 {
   //init vgui (should choose/determine toolkit)
-  vul_arg<vcl_string> sceneA_file("-plyA", "points A (xyz) filename", "");
-  vul_arg<vcl_string> sceneB_file("-sceneB", "sceneB filename", "");
-  vul_arg<vcl_string> xformAtoB_file("-xform", "xfrom filename", "");
+  vul_arg<std::string> sceneA_file("-plyA", "points A (xyz) filename", "");
+  vul_arg<std::string> sceneB_file("-sceneB", "sceneB filename", "");
+  vul_arg<std::string> xformAtoB_file("-xform", "xfrom filename", "");
   vul_arg<double> rotationangle("-rot", "rotation angle ( in radians )", 0.1);
-  vul_arg<vcl_string> oxform("-oxform", "xform filename", "");
+  vul_arg<std::string> oxform("-oxform", "xform filename", "");
   vul_arg<float> radius("-radius", "radius * sub_block_dim of scene B",3);
   vul_arg<float> iscale("-iscale", "init scale",1);
   vul_arg<float> rscale("-rscale", "radius of scale",0.00);
@@ -84,18 +86,18 @@ int main(int argc,  char** argv)
 
   if (!vul_file::exists(sceneB_file()) )
   {
-      vcl_cout<<"scene files do not exist"<<vcl_endl;
+      std::cout<<"scene files do not exist"<<std::endl;
       return -1;
   }
   //create scene
-  vcl_vector<vgl_point_3d<double> > pts;
+  std::vector<vgl_point_3d<double> > pts;
   if(vul_file::extension(sceneA_file()) == ".xyz")
   {
-      vcl_ifstream ifile(sceneA_file().c_str());
-      vcl_string line;
-      while(vcl_getline(ifile,line))
+      std::ifstream ifile(sceneA_file().c_str());
+      std::string line;
+      while(std::getline(ifile,line))
       {
-          vcl_istringstream iss(line);
+          std::istringstream iss(line);
           vnl_vector<double> x;
           iss>>x;
           pts.push_back(vgl_point_3d<double>(x[0],x[1],x[2]) );
@@ -103,10 +105,10 @@ int main(int argc,  char** argv)
       ifile.close();
   }
   else{
-      vcl_cout<<"Point Cloud is empty"<<vcl_endl;
+      std::cout<<"Point Cloud is empty"<<std::endl;
       return 0;
   }
-  vcl_cout<<"Points Loaded "<<pts.size()<<vcl_endl;
+  std::cout<<"Points Loaded "<<pts.size()<<std::endl;
   float * vpts = new float[pts.size()*3];
   for(unsigned i= 0;i < pts.size(); i++)
   {
@@ -127,10 +129,10 @@ int main(int argc,  char** argv)
   x[6] = iscale();
   if(xformAtoB_file() != "" )
   {
-      vcl_ifstream ifile( xformAtoB_file().c_str() ) ;
+      std::ifstream ifile( xformAtoB_file().c_str() ) ;
       if(!ifile)
       {
-          vcl_cout<<"Error: Cannot open" <<xformAtoB_file()<<vcl_endl;
+          std::cout<<"Error: Cannot open" <<xformAtoB_file()<<std::endl;
           return -1;
       }
       double scale = 1.0;
@@ -174,9 +176,9 @@ int main(int argc,  char** argv)
   vnl_vector<double> xfinal = func.max_sample();
   vnl_matrix<double> xform;
   convert_params_to_xform(xfinal,xform,reverse());
-  vcl_cout<<"Final Xform is "<<vcl_endl;
-  vcl_cout<<xform<<vcl_endl;
-  vcl_ofstream ofile(oxform().c_str());
+  std::cout<<"Final Xform is "<<std::endl;
+  std::cout<<xform<<std::endl;
+  std::ofstream ofile(oxform().c_str());
   if(ofile)
   {
       ofile<<xfinal[6]<<"\n";
@@ -184,8 +186,8 @@ int main(int argc,  char** argv)
       ofile.close();
   }
   else
-      vcl_cout<<"Incorrect output file "<<vcl_endl;
+      std::cout<<"Incorrect output file "<<std::endl;
 
-  vcl_cout<<"Total time taken is "<<t.all()<<vcl_endl;
+  std::cout<<"Total time taken is "<<t.all()<<std::endl;
   return 0;
 }

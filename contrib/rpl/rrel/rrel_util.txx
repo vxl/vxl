@@ -5,9 +5,11 @@
 #include "rrel_util.h"
 
 #include <vcl_cassert.h>
-#include <vcl_cmath.h>
-#include <vcl_algorithm.h>
-#include <vcl_vector.h>
+#include <cmath>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <algorithm>
+#include <vector>
 
 #include <vnl/vnl_math.h>
 
@@ -26,7 +28,7 @@ rrel_util_median_abs_dev_scale( const T& begin,  const T& end, int dof, O* /*dum
     *i = vnl_math::abs( *i );
   }
   T loc = begin + ((count-dof)/2 + dof);
-  vcl_nth_element( begin, loc, end );
+  std::nth_element( begin, loc, end );
   return O (1.4826 * (1 + 5.0/(count-dof)) * *loc);
 }
 
@@ -51,7 +53,7 @@ rrel_util_weighted_scale( const T& residuals_first, const T& residuals_end,
     return 0;
 
   O divisor = sum_weights * ( num - dof ) / num;
-  return vcl_sqrt( sum / divisor );
+  return std::sqrt( sum / divisor );
 }
 
 
@@ -65,13 +67,13 @@ void rrel_util_median_and_scale( Ran first, Ran last,
   assert( count > dof );
 
   Ran loc = first + count/2;
-  vcl_nth_element( first, loc, last );
+  std::nth_element( first, loc, last );
   median = *loc;
   for ( Ran i=first; i!=last; ++i ) {
     *i = vnl_math::abs(*i-median);
   }
   ++loc;
-  vcl_nth_element( first, loc, last );
+  std::nth_element( first, loc, last );
   scale = T(1.4826 * (1 + 5.0/(count-dof)) * *loc);
 }
 
@@ -81,12 +83,12 @@ void rrel_util_median_and_scale_copy( InpIter first, InpIter last,
                                       T& median, T& scale,
                                       int dof )
 {
-  // FIXME: scratch should be vcl_vector<
-  // vcl_iterator_traits<InpIter>::value_type >, but this is not
+  // FIXME: scratch should be std::vector<
+  // std::iterator_traits<InpIter>::value_type >, but this is not
   // supported under all compilers. In particular, VC++ doesn't
   // support it for vector iterators.
   //
-  vcl_vector<T> scratch;
+  std::vector<T> scratch;
   for ( ; first != last; ++first )
     scratch.push_back( *first );
   rrel_util_median_and_scale( scratch.begin(), scratch.end(), median, scale, dof );
@@ -100,7 +102,7 @@ void rrel_util_intercept_adjustment( Ran first, Ran last,
 {
   long count = long(last-first);
   assert( count > dof );
-  vcl_sort( first, last );
+  std::sort( first, last );
   int num_in_interval = (count-dof)/2 + dof;
   if ( num_in_interval > count ) num_in_interval = count;
   T min_start = *first;
@@ -124,12 +126,12 @@ void rrel_util_intercept_adjustment_copy( InpIter first, InpIter last,
                                           T & center, T & half_width,
                                           int dof )
 {
-  // FIXME: scratch should be vcl_vector<
-  // vcl_iterator_traits<InpIter>::value_type >, but this is not
+  // FIXME: scratch should be std::vector<
+  // std::iterator_traits<InpIter>::value_type >, but this is not
   // supported under all compilers. In particular, VC++ doesn't
   // support it for vector iterators.
   //
-  vcl_vector<T> scratch;
+  std::vector<T> scratch;
   for ( ; first != last; ++first )
     scratch.push_back( *first );
   rrel_util_intercept_adjustment( scratch.begin(), scratch.end(),
@@ -166,7 +168,7 @@ void rrel_util_intercept_adjust_stats( Ran first, Ran last,
   for ( Ran i=begin_itr; i!=end_itr; ++i ) {
     sum_sq += vnl_math::sqr( *i - robust_mean );
   }
-  robust_std = T( vcl_sqrt(sum_sq / (inliers-dof)) );
+  robust_std = T( std::sqrt(sum_sq / (inliers-dof)) );
 }
 
 
@@ -175,12 +177,12 @@ void rrel_util_intercept_adjust_stats_copy( InpIter first, InpIter last,
                                             T & robust_mean, T & robust_std, T & inlier_frac,
                                             int dof )
 {
-  // FIXME: scratch should be vcl_vector<
-  // vcl_iterator_traits<InpIter>::value_type >, but this is not
+  // FIXME: scratch should be std::vector<
+  // std::iterator_traits<InpIter>::value_type >, but this is not
   // supported under all compilers. In particular, VC++ doesn't
   // support it for vector iterators.
   //
-  vcl_vector<T> scratch;
+  std::vector<T> scratch;
   for ( ; first != last; ++first )
     scratch.push_back( *first );
   rrel_util_intercept_adjust_stats( scratch.begin(), scratch.end(),

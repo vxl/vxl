@@ -12,7 +12,9 @@
 //   06 May 2004 Jocelyn Marchadier
 // \endverbatim
 
-#include <vcl_iosfwd.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iosfwd>
 #include "vpyr_2_tpyramid_level.h"
 #include "vpyr_2_pyramid.h"
 
@@ -113,16 +115,16 @@ class vpyr_2_tpyramid : public vpyr_2_pyramid<TLevel>
   }
 
   //: Initializes the structure of the combinatorial map from "stream".
-  virtual void read_structure(vcl_istream & stream) ;
+  virtual void read_structure(std::istream & stream) ;
 
   //: Writes the structure of the combinatorial map to "stream".
-  virtual void write_structure(vcl_ostream & stream) const ;
+  virtual void write_structure(std::ostream & stream) const ;
 
   //: For each vertex of index v of the base level, res[v] is the index of v's surviving vertex of level "arg_level".
-  void down_projection_vertices(vmap_level_index arg_level,vcl_vector<vmap_vertex_index> & res) const ;
+  void down_projection_vertices(vmap_level_index arg_level,std::vector<vmap_vertex_index> & res) const ;
 
   //: For each face of index v of the base level, res[v] is the index of v's surviving face of level "arg_level".
-  void down_projection_faces(vmap_level_index arg_level,vcl_vector<vmap_face_index> & res) const ;
+  void down_projection_faces(vmap_level_index arg_level,std::vector<vmap_face_index> & res) const ;
 
  protected:
 

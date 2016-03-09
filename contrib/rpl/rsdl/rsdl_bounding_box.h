@@ -16,7 +16,9 @@
 
 
 #include <rsdl/rsdl_point.h>
-#include <vcl_iosfwd.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iosfwd>
 
 class rsdl_bounding_box
 {
@@ -75,6 +77,6 @@ class rsdl_bounding_box
   rsdl_point max_point_;
 };
 
-vcl_ostream& operator<< ( vcl_ostream& ostr, const rsdl_bounding_box& box );
+std::ostream& operator<< ( std::ostream& ostr, const rsdl_bounding_box& box );
 
 #endif

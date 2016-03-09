@@ -13,12 +13,14 @@
 // \endverbatim
 
 #include "vmap_grid_structure.h"
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iostream>
 
 template < class TMap >
 void vmap_set_grid_structure(TMap & arg, const vmap_grid_structure& grid, vmap_2_tmap_tag)
 {
-  vcl_cout<<"Building TopologicalGrid"<<vcl_endl ;
+  std::cout<<"Building TopologicalGrid"<<std::endl ;
   arg.initialise(grid.nb_vertices(),
                  grid.nb_edges(),
                  grid.nb_faces());
@@ -83,7 +85,7 @@ void vmap_set_grid_structure(TMap & arg, const vmap_grid_structure& grid, vmap_2
 template < class TMap >
 void vmap_set_grid_structure(TMap & arg, const vmap_grid_structure& grid, vmap_2_map_tag)
 {
-  vcl_cout<<"Building CombinatorialGrid"<<vcl_endl ;
+  std::cout<<"Building CombinatorialGrid"<<std::endl ;
   arg.initialise_darts(grid.nb_darts()) ;
 
   int i,j;

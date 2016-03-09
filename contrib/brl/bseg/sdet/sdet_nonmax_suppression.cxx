@@ -2,7 +2,9 @@
 #include "sdet_nonmax_suppression.h"
 //:
 // \file
-#include <vcl_cstdlib.h>   // for vcl_abs(int) and vcl_sqrt()
+#include <vcl_compiler.h>
+#include <iostream>
+#include <cstdlib>   // for std::abs(int) and std::sqrt()
 #include <vsol/vsol_point_2d.h>
 #include <vsol/vsol_line_2d.h>
 #include <vgl/vgl_point_2d.h>
@@ -36,7 +38,7 @@ sdet_nonmax_suppression::sdet_nonmax_suppression(sdet_nonmax_suppression_params&
   {
     for (int i = 0; i < width_; i++)
     {
-      double val = vcl_sqrt(vcl_pow(grad_x_(i,j),2.0) + vcl_pow(grad_y_(i,j),2.0));
+      double val = std::sqrt(std::pow(grad_x_(i,j),2.0) + std::pow(grad_y_(i,j),2.0));
       grad_mag_(i,j) = val;
       if (val > max_grad_mag_)
         max_grad_mag_ = val;
@@ -127,7 +129,7 @@ sdet_nonmax_suppression::sdet_nonmax_suppression(sdet_nonmax_suppression_params&
       double val_y = grad_y(i,j);
       grad_x_(i,j) = val_x;
       grad_y_(i,j) = val_y;
-      double val = vcl_sqrt(vcl_pow(val_x,2.0) + vcl_pow(val_y,2.0));
+      double val = std::sqrt(std::pow(val_x,2.0) + std::pow(val_y,2.0));
       grad_mag_(i,j) = val;
       if (val > max_grad_mag_)
         max_grad_mag_ = val;
@@ -224,7 +226,7 @@ void sdet_nonmax_suppression::apply()
         double gy = grad_y_(x,y);
         vgl_vector_2d<double> direction(gx,gy);
         normalize(direction);
-        if (vcl_abs(gx) > 10e-6 && vcl_abs(gy) > 10e-6)
+        if (std::abs(gx) > 10e-6 && std::abs(gy) > 10e-6)
         {
           int face_num = intersected_face_number(gx, gy);
           assert(face_num != -1);
@@ -271,21 +273,21 @@ int sdet_nonmax_suppression::intersected_face_number(double gx, double gy)
   }
   else if (gx < 0 && gy >= 0)
   {
-    if (vcl_abs(gx) < gy)
+    if (std::abs(gx) < gy)
       return 3;
     else
       return 4;
   }
   else if (gx < 0 && gy < 0)
   {
-    if (vcl_abs(gx) >= vcl_abs(gy))
+    if (std::abs(gx) >= std::abs(gy))
       return 5;
     else
       return 6;
   }
   else if (gx >= 0 && gy < 0)
   {
-    if (gx < vcl_abs(gy))
+    if (gx < std::abs(gy))
       return 7;
     else
       return 8;
@@ -427,7 +429,7 @@ double sdet_nonmax_suppression::subpixel_s(int x, int y, vgl_vector_2d<double> d
     {
       find_distance_s_and_f_for_point(i, j, line1, d, s, direction);
       f = grad_mag_(x+i,y+j);
-      A(index, 0) = vcl_pow(s,2.0);
+      A(index, 0) = std::pow(s,2.0);
       A(index, 1) = s;
       A(index, 2) = 1.0;
       B(index, 0) = f;

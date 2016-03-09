@@ -7,8 +7,10 @@
 // \author Vishal Jain
 // \date Mar 10, 2011
 
-#include <vcl_fstream.h>
-#include <vcl_algorithm.h>
+#include <fstream>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <algorithm>
 #include <boxm2/ocl/boxm2_opencl_cache.h>
 #include <boxm2/boxm2_scene.h>
 #include <boxm2/boxm2_block.h>
@@ -38,7 +40,7 @@ bool boxm2_ocl_render_expected_image_process_cons(bprb_func_process& pro)
   using namespace boxm2_ocl_render_expected_image_process_globals;
 
   //process takes 1 input
-  vcl_vector<vcl_string> input_types_(n_inputs_);
+  std::vector<std::string> input_types_(n_inputs_);
   input_types_[0] = "bocl_device_sptr";
   input_types_[1] = "boxm2_scene_sptr";
   input_types_[2] = "boxm2_opencl_cache_sptr";
@@ -50,13 +52,13 @@ bool boxm2_ocl_render_expected_image_process_cons(bprb_func_process& pro)
   input_types_[8] = "float"; // far factor ( minimum # of pixels should map to the finest voxel )
 
   // process has 2 outputs:
-  vcl_vector<vcl_string>  output_types_(n_outputs_);
+  std::vector<std::string>  output_types_(n_outputs_);
   output_types_[0] = "vil_image_view_base_sptr";
   output_types_[1] = "vil_image_view_base_sptr";
 
   bool good = pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
   // in case the 7th input is not set
-  brdb_value_sptr idx = new brdb_value_t<vcl_string>("");
+  brdb_value_sptr idx = new brdb_value_t<std::string>("");
   brdb_value_sptr tnearfactor  = new brdb_value_t<float>(1e6f);
   brdb_value_sptr tfarfactor   = new brdb_value_t<float>(1e6f);
 
@@ -71,7 +73,7 @@ bool boxm2_ocl_render_expected_image_process(bprb_func_process& pro)
   using namespace boxm2_ocl_render_expected_image_process_globals;
 
   if ( pro.n_inputs() < n_inputs_ ) {
-    vcl_cout << pro.name() << ": The input number should be " << n_inputs_<< vcl_endl;
+    std::cout << pro.name() << ": The input number should be " << n_inputs_<< std::endl;
     return false;
   }
   //get the inputs
@@ -83,7 +85,7 @@ bool boxm2_ocl_render_expected_image_process(bprb_func_process& pro)
   vpgl_camera_double_sptr cam= pro.get_input<vpgl_camera_double_sptr>(i++);
   unsigned ni=pro.get_input<unsigned>(i++);
   unsigned nj=pro.get_input<unsigned>(i++);
-  vcl_string ident = pro.get_input<vcl_string>(i++);
+  std::string ident = pro.get_input<std::string>(i++);
   float   nearfactor   = pro.get_input<float>(i++);
   float   farfactor    = pro.get_input<float>(i++);
 
@@ -96,10 +98,10 @@ bool boxm2_ocl_render_expected_image_process(bprb_func_process& pro)
   bool ret = true;
   //TODO Factor this out to a utility function
   //make sure this image small enough (or else carve it into image pieces)
-  const vcl_size_t MAX_PIXELS = 16777216;
+  const std::size_t MAX_PIXELS = 16777216;
   if (ni*nj > MAX_PIXELS) {
-    vcl_size_t sni = RoundUp(ni, 16);
-    vcl_size_t snj = RoundUp(nj, 16);
+    std::size_t sni = RoundUp(ni, 16);
+    std::size_t snj = RoundUp(nj, 16);
     unsigned int numSegI = 1;
     unsigned int numSegJ = 1;
     while ( sni*snj*2 > MAX_PIXELS ) {
@@ -115,18 +117,18 @@ bool boxm2_ocl_render_expected_image_process(bprb_func_process& pro)
     for (unsigned int i=0; i<=numSegI; ++i) {
       for (unsigned int j=0; j<=numSegJ; ++j) {
         if(!ret) {
-          vcl_cout << pro.name() << " failed" << vcl_endl;
+          std::cout << pro.name() << " failed" << std::endl;
           return false;
         }
 
         //make sure the view doesn't extend past the original image
-        vcl_size_t startI = (vcl_size_t) i * sni;
-        vcl_size_t startJ = (vcl_size_t) j * snj;
-        vcl_size_t endI = vcl_min(startI + sni, (vcl_size_t) ni);
-        vcl_size_t endJ = vcl_min(startJ + snj, (vcl_size_t) nj);
+        std::size_t startI = (std::size_t) i * sni;
+        std::size_t startJ = (std::size_t) j * snj;
+        std::size_t endI = std::min(startI + sni, (std::size_t) ni);
+        std::size_t endJ = std::min(startJ + snj, (std::size_t) nj);
         if (endI <= startI || endJ <= startJ)
           break;
-        vcl_cout<<"Getting patch: ("<<startI<<','<<startJ<<") -> ("<<endI<<','<<endJ<<')'<<vcl_endl;
+        std::cout<<"Getting patch: ("<<startI<<','<<startJ<<") -> ("<<endI<<','<<endJ<<')'<<std::endl;
 
         unsigned int chunkNI = endI-startI;
         unsigned int chunkNJ = endJ-startJ;
@@ -143,7 +145,7 @@ bool boxm2_ocl_render_expected_image_process(bprb_func_process& pro)
     ret = boxm2_ocl_render_expected_image::render(exp_img, vis_img, scene, device, opencl_cache, cam, ident,
       ni, nj, nearfactor, farfactor);
   }
-  vcl_cout<<"Total time taken is "<<t.all()<<vcl_endl;
+  std::cout<<"Total time taken is "<<t.all()<<std::endl;
 
   if(!ret) return false;
 

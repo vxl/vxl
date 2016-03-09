@@ -4,7 +4,9 @@
 //:
 // \file
 #include <bpro/core/bbas_pro/bbas_1d_array_float.h>
-#include <vcl_algorithm.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <algorithm>
 #include <vnl/vnl_vector.h>
 #include <vnl/algo/vnl_levenberg_marquardt.h>
 
@@ -20,7 +22,7 @@ bool brad_estimate_phongs_model_process_cons(bprb_func_process& pro)
 {
   using namespace brad_estimate_phongs_model_process_globals;
 
-  vcl_vector<vcl_string> input_types_(n_inputs_);
+  std::vector<std::string> input_types_(n_inputs_);
   input_types_[0] = "bbas_1d_array_float_sptr";
   input_types_[1] = "bbas_1d_array_float_sptr";
   input_types_[2] = "bbas_1d_array_float_sptr";
@@ -28,7 +30,7 @@ bool brad_estimate_phongs_model_process_cons(bprb_func_process& pro)
   input_types_[4] = "float";
   input_types_[5] = "float";
 
-  vcl_vector<vcl_string>  output_types_(n_outputs_);
+  std::vector<std::string>  output_types_(n_outputs_);
   output_types_[0] = "bbas_1d_array_float_sptr";
   output_types_[1] = "float";
   output_types_[2] = "float";
@@ -47,7 +49,7 @@ bool brad_estimate_phongs_model_process(bprb_func_process& pro)
 {
   // Sanity check
   if (pro.n_inputs()< 6) {
-    vcl_cout << "brip_extrema_process: The input number should be 6" << vcl_endl;
+    std::cout << "brip_extrema_process: The input number should be 6" << std::endl;
     return false;
   }
 
@@ -95,13 +97,13 @@ bool brad_estimate_phongs_model_process(bprb_func_process& pro)
   lm.minimize(x);
   vnl_vector<float> xf(5); for (int i=0; i<5; ++i) xf[i]=float(x[i]);
 
-  vcl_cout<<"\n Phong's Model : "
-          <<vcl_fabs(xf[0])<<','
-          <<vcl_fabs(xf[1])<<','
+  std::cout<<"\n Phong's Model : "
+          <<std::fabs(xf[0])<<','
+          <<std::fabs(xf[1])<<','
           <<xf[2]<<','<<xf[3]<<','<<xf[4]<<'\n'
           <<"St Error "<<f.error_var(x)<<'\n';
 
-  brad_phongs_model pm(vcl_fabs(xf[0]),vcl_fabs(xf[1]),xf[2],xf[3],xf[4]);
+  brad_phongs_model pm(std::fabs(xf[0]),std::fabs(xf[1]),xf[2],xf[3],xf[4]);
   bbas_1d_array_float_sptr new_obs = new bbas_1d_array_float(num_samples);
 
   for (unsigned i=0;i<num_samples;++i)

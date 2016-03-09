@@ -15,7 +15,7 @@
 //#include <boxm/boxm_mog_rgb_processor.h>
 
 template <boxm_apm_type APM>
-void boxm_opt3_sample<APM>::print(vcl_ostream& os) const
+void boxm_opt3_sample<APM>::print(std::ostream& os) const
 {
   os << "(log_pass_prob_sum=" << log_pass_prob_sum_ << " seg_len_sum_=" << seg_len_sum_
      << "weighted_vis_sum_=" << weighted_vis_sum_ << " obs_dist=" << obs_dist_ << ')';
@@ -61,9 +61,9 @@ void vsl_b_read(vsl_b_istream & is, boxm_opt3_sample<APM> &sample)
     vsl_b_read(is, sample.obs_dist_);
     break;
    default:
-    vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, boxm_opt3_sample<APM>&)\n"
+    std::cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, boxm_opt3_sample<APM>&)\n"
              << "           Unknown version number "<< version << '\n';
-    is.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
+    is.is().clear(std::ios::badbit); // Set an unrecoverable IO error on stream
     break;
   }
 }
@@ -75,7 +75,7 @@ void vsl_b_read(vsl_b_istream & is, boxm_opt3_sample<APM> *&sample)
 }
 
 template <boxm_apm_type APM>
-vcl_ostream& operator << (vcl_ostream& os, const boxm_opt3_sample<APM>& sample)
+std::ostream& operator << (std::ostream& os, const boxm_opt3_sample<APM>& sample)
 {
   sample.print(os);
   return os;
@@ -87,6 +87,6 @@ template void vsl_b_write(vsl_b_ostream &, boxm_opt3_sample<T > const &); \
 template void vsl_b_write(vsl_b_ostream &, boxm_opt3_sample<T > const *&); \
 template void vsl_b_read(vsl_b_istream &, boxm_opt3_sample<T > &); \
 template void vsl_b_read(vsl_b_istream &, boxm_opt3_sample<T > *&); \
-template vcl_ostream& operator << (vcl_ostream&, const boxm_opt3_sample<T >&)
+template std::ostream& operator << (std::ostream&, const boxm_opt3_sample<T >&)
 
 #endif

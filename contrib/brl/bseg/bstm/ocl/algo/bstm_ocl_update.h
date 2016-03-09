@@ -30,20 +30,20 @@ class bstm_ocl_update
 
   private:
     //compile kernels and place in static map
-    static vcl_vector<bocl_kernel*>& get_kernels(bocl_device_sptr device, vcl_string opts="", bool isRGB = false);
+    static std::vector<bocl_kernel*>& get_kernels(bocl_device_sptr device, std::string opts="", bool isRGB = false);
 
     //map of paint kernel by device
-    static vcl_map<vcl_string, vcl_vector<bocl_kernel*> > kernels_;
+    static std::map<std::string, std::vector<bocl_kernel*> > kernels_;
 
     //create an image buffer
     static float* prep_image_buffer(vil_image_view_base_sptr floatImg, bool isRGB, int& numFloats);
 
     //helper method to validate appearances
     static bool validate_appearances(bstm_scene_sptr scene,
-                                         vcl_string& data_type,
+                                         std::string& data_type,
                                          int& appTypeSize,
-                                         vcl_string& nobs_type,
-                                         vcl_string& options);
+                                         std::string& nobs_type,
+                                         std::string& options);
 };
 
 #endif // bstm_ocl_update_h_

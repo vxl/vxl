@@ -12,21 +12,23 @@
 
 #include "vpdfl_pc_gaussian_sampler.h"
 
-#include <vcl_string.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <string>
 
 //=======================================================================
 // Method: is_a
 //=======================================================================
-vcl_string vpdfl_pc_gaussian_sampler::is_a() const
+std::string vpdfl_pc_gaussian_sampler::is_a() const
 {
-  return vcl_string("vpdfl_pc_gaussian_sampler");
+  return std::string("vpdfl_pc_gaussian_sampler");
 }
 
 //=======================================================================
 // Method: is_class
 //=======================================================================
 
-bool vpdfl_pc_gaussian_sampler::is_class(vcl_string const& s) const
+bool vpdfl_pc_gaussian_sampler::is_class(std::string const& s) const
 {
   return vpdfl_gaussian_sampler::is_class(s) || s==vpdfl_pc_gaussian_sampler::is_a();
 }

@@ -31,10 +31,10 @@ double vil3d_abs_shuffle_distance(const vil3d_image_view<T1>& image1,
   assert(image2.nj()==nj);
   assert(image2.nk()==nk);
 
-  vcl_ptrdiff_t istep1 = image1.istep(), jstep1 = image1.jstep(), kstep1 = image1.kstep(),
+  std::ptrdiff_t istep1 = image1.istep(), jstep1 = image1.jstep(), kstep1 = image1.kstep(),
                 istep2 = image2.istep(), jstep2 = image2.jstep(), kstep2 = image2.kstep();
 
-  vcl_vector<vcl_ptrdiff_t> offset;
+  std::vector<std::ptrdiff_t> offset;
   vil3d_compute_offsets(offset, element, istep1, jstep1, kstep1);
 
   // Define box in which all element will be valid
@@ -115,8 +115,8 @@ void vil3d_abs_shuffle_distance(const vil3d_image_view<T1>& image1,
                                 const vil3d_structuring_element& element,
                                 vil3d_image_view<T1>& image3)
 {
-  vcl_cout << "image1: " << image1 << vcl_endl
-           << "image2: " << image2 << vcl_endl;
+  std::cout << "image1: " << image1 << std::endl
+           << "image2: " << image2 << std::endl;
 
   // Get image dimensions
   unsigned ni = image1.ni();
@@ -131,11 +131,11 @@ void vil3d_abs_shuffle_distance(const vil3d_image_view<T1>& image1,
 
   image3.set_size( ni, nj, nk );
 
-  vcl_ptrdiff_t istep1 = image1.istep(), jstep1 = image1.jstep(), kstep1 = image1.kstep(),
+  std::ptrdiff_t istep1 = image1.istep(), jstep1 = image1.jstep(), kstep1 = image1.kstep(),
                 istep2 = image2.istep(), jstep2 = image2.jstep(), kstep2 = image2.kstep(),
                 istep3 = image3.istep(), jstep3 = image3.jstep(), kstep3 = image3.kstep();
 
-  vcl_vector<vcl_ptrdiff_t> offset;
+  std::vector<std::ptrdiff_t> offset;
   vil3d_compute_offsets(offset, element, istep1, jstep1, kstep1);
 
   // Define box in which all element will be valid

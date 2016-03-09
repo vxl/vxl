@@ -7,9 +7,11 @@
 // \date  7-Aug-2007
 // \brief Load a sequence of PODs/objects from a config file.
 
-#include <vcl_algorithm.h>
-#include <vcl_istream.h>
-#include <vcl_iterator.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <algorithm>
+#include <istream>
+#include <iterator>
 #include <mbl/mbl_exception.h>
 
 //: Read a sequence of PODs from a stream.
@@ -22,11 +24,11 @@
 //
 // \verbatim
 // Example:
-// vcl_vector<unsigned> v;
-// mbl_parse_sequence(vcl_cin, vcl_back_inserter(v), unsigned());
+// std::vector<unsigned> v;
+// mbl_parse_sequence(std::cin, std::back_inserter(v), unsigned());
 // \endverbatim
 template <class ITER, class T>
-inline void mbl_parse_sequence(vcl_istream &afs, ITER insert_iter, T /*dummy*/)
+inline void mbl_parse_sequence(std::istream &afs, ITER insert_iter, T /*dummy*/)
 {
   // Can't use iterator_traits<ITER>::value_type to infer T,
   // because output_iterators may not have a useful value_type
@@ -35,22 +37,22 @@ inline void mbl_parse_sequence(vcl_istream &afs, ITER insert_iter, T /*dummy*/)
 
   if (!afs) return;
   char brace1, brace2;
-  afs >> vcl_ws >> brace1;
+  afs >> std::ws >> brace1;
   if (afs.eof()) return;
 
   if ( brace1 == '{')
   {
-    vcl_copy(vcl_istream_iterator<T>(afs),
-             vcl_istream_iterator<T>(), insert_iter);
+    std::copy(std::istream_iterator<T>(afs),
+             std::istream_iterator<T>(), insert_iter);
 
     if (afs.fail())
       afs.clear();
 
-    afs >> vcl_ws >> brace2;
+    afs >> std::ws >> brace2;
     if (!afs || brace2 != '}')
     {
       afs.putback(brace2);
-      afs.clear(vcl_ios::failbit); // Set a recoverable IO error on stream
+      afs.clear(std::ios::failbit); // Set a recoverable IO error on stream
       throw mbl_exception_parse_error(
         "mbl_parse_sequence failed to find closing brace.");
     }
@@ -59,8 +61,8 @@ inline void mbl_parse_sequence(vcl_istream &afs, ITER insert_iter, T /*dummy*/)
   {
     afs.putback(brace1);
 
-    vcl_copy(vcl_istream_iterator<T>(afs),
-             vcl_istream_iterator<T>(), insert_iter);
+    std::copy(std::istream_iterator<T>(afs),
+             std::istream_iterator<T>(), insert_iter);
 
     if (afs.fail())
       afs.clear();
@@ -70,12 +72,12 @@ inline void mbl_parse_sequence(vcl_istream &afs, ITER insert_iter, T /*dummy*/)
     if (!(!afs))
     {
       afs.putback(c);
-      afs.clear(vcl_ios::failbit);
+      afs.clear(std::ios::failbit);
 
       throw mbl_exception_parse_error(
         "mbl_parse_sequence failed to find EOF.");
     }
-    afs.clear(vcl_ios::eofbit);
+    afs.clear(std::ios::eofbit);
   }
 }
 

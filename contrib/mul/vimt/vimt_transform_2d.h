@@ -17,7 +17,9 @@
 #include <vgl/vgl_vector_2d.h>
 #include <vgl/vgl_point_2d.h>
 #include <vsl/vsl_binary_io.h>
-#include <vcl_iosfwd.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iosfwd>
 
 //: 2D transform, which can be up to a projective transformation.
 // In order of complexity the transform can be
@@ -182,7 +184,7 @@ class vimt_transform_2d
                                        const vimt_transform_2d&);
 
     short version_no() const;
-    void print_summary(vcl_ostream&) const;
+    void print_summary(std::ostream&) const;
     void b_write(vsl_b_ostream& bfs) const;
     void b_read(vsl_b_istream& bfs);
 
@@ -206,7 +208,7 @@ class vimt_transform_2d
 };
 
 
-vcl_ostream& operator<<(vcl_ostream&,const vimt_transform_2d& t);
+std::ostream& operator<<(std::ostream&,const vimt_transform_2d& t);
 
 //: Binary file stream output operator for pointer to class
 void vsl_b_write(vsl_b_ostream& bfs, const vimt_transform_2d& b);
@@ -215,7 +217,7 @@ void vsl_b_write(vsl_b_ostream& bfs, const vimt_transform_2d& b);
 void vsl_b_read(vsl_b_istream& bfs, vimt_transform_2d& b);
 
 //: Stream output operator for class reference
-void vsl_print_summary(vcl_ostream& os,const vimt_transform_2d& t);
+void vsl_print_summary(std::ostream& os,const vimt_transform_2d& t);
 
 
 #endif // vimt_transform_2d_h_

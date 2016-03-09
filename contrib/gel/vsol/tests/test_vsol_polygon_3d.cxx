@@ -14,7 +14,9 @@
 //:
 // \file
 
-#include <vcl_vector.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <vector>
 
 #include <vsol/vsol_polygon_3d.h>
 #include <vsol/vsol_polygon_3d_sptr.h>
@@ -23,7 +25,7 @@
 
 void test_vsol_polygon_3d()
 {
-  vcl_vector<vsol_point_3d_sptr> vertices(5);
+  std::vector<vsol_point_3d_sptr> vertices(5);
   vertices[0]=new vsol_point_3d(0,0,5);
   vertices[1]=new vsol_point_3d(3,1,5);
   vertices[2]=new vsol_point_3d(5,3,5);

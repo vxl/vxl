@@ -7,10 +7,12 @@
 
 #include "TriTensor.h"
 
-#include <vcl_iostream.h>
-#include <vcl_cmath.h>
+#include <iostream>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <cmath>
 #include <vcl_cassert.h>
-#include <vcl_vector.h>
+#include <vector>
 
 #include <vul/vul_printf.h>
 
@@ -195,7 +197,7 @@ TriTensor::set(vnl_matrix<double> const& T1,
                vnl_matrix<double> const& T2,
                vnl_matrix<double> const& T3)
 {
-  vcl_cerr << "TriTensor: construct from 3 T-matrices: Unimplemented\n";
+  std::cerr << "TriTensor: construct from 3 T-matrices: Unimplemented\n";
   vnl_matrix<double> const* Ts[3];
   Ts[0] = &T1;
   Ts[1] = &T2;
@@ -227,7 +229,7 @@ TriTensor::image3_transfer(HomgPoint2D const& point1,
   if (!corrected) corrected = corr;
   get_fmp12()->correct(point1, point2, &corrected[0], &corrected[1]);
 
-  vcl_vector<HomgLine2D> constraint_lines(9);
+  std::vector<HomgLine2D> constraint_lines(9);
   get_constraint_lines_image3(corrected[0], corrected[1], &constraint_lines);
   return HomgOperator2D::lines_to_point(constraint_lines);
 }
@@ -246,7 +248,7 @@ TriTensor::image2_transfer(HomgPoint2D const& point1,
   if (!corrected) corrected = corr;
   get_fmp13()->correct(point1, point3, &corrected[0], &corrected[1]);
 
-  vcl_vector<HomgLine2D> constraint_lines(9);
+  std::vector<HomgLine2D> constraint_lines(9);
   get_constraint_lines_image2(corrected[0], corrected[1], &constraint_lines);
   return HomgOperator2D::lines_to_point(constraint_lines);
 }
@@ -265,7 +267,7 @@ TriTensor::image1_transfer(vgl_homg_point_2d<double> const& point2,
   if (!corrected) corrected = corr;
   get_fmp23()->correct(point2, point3, corrected[0], corrected[1]);
 
-  vcl_vector<vgl_homg_line_2d<double> > constraint_lines(9);
+  std::vector<vgl_homg_line_2d<double> > constraint_lines(9);
   get_constraint_lines_image1(corrected[0], corrected[1], constraint_lines);
   return vgl_homg_operators_2d<double>::lines_to_point(constraint_lines);
 }
@@ -279,7 +281,7 @@ TriTensor::image1_transfer(HomgPoint2D const& point2,
   if (!corrected) corrected = corr;
   get_fmp23()->correct(point2, point3, &corrected[0], &corrected[1]);
 
-  vcl_vector<HomgLine2D> constraint_lines(9);
+  std::vector<HomgLine2D> constraint_lines(9);
   get_constraint_lines_image1(corrected[0], corrected[1], &constraint_lines);
   return HomgOperator2D::lines_to_point(constraint_lines);
 }
@@ -296,7 +298,7 @@ TriTensor::image3_transfer_qd(vgl_homg_point_2d<double> const& point1,
                               vgl_homg_point_2d<double> const& point2) const
 {
   // tr_transfer_point_12_to_3
-  vcl_vector<vgl_homg_line_2d<double> > constraint_lines(9);
+  std::vector<vgl_homg_line_2d<double> > constraint_lines(9);
   get_constraint_lines_image3(point1, point2, constraint_lines);
   return vgl_homg_operators_2d<double>::lines_to_point(constraint_lines);
 }
@@ -306,7 +308,7 @@ TriTensor::image3_transfer_qd(HomgPoint2D const& point1,
                               HomgPoint2D const& point2) const
 {
   // tr_transfer_point_12_to_3
-  vcl_vector<HomgLine2D> constraint_lines(9);
+  std::vector<HomgLine2D> constraint_lines(9);
   get_constraint_lines_image3(point1, point2, &constraint_lines);
   return HomgOperator2D::lines_to_point(constraint_lines);
 }
@@ -320,7 +322,7 @@ vgl_homg_point_2d<double>
 TriTensor::image2_transfer_qd(vgl_homg_point_2d<double> const& point1,
                               vgl_homg_point_2d<double> const& point3) const
 {
-  vcl_vector<vgl_homg_line_2d<double> > constraint_lines(9);
+  std::vector<vgl_homg_line_2d<double> > constraint_lines(9);
   get_constraint_lines_image2(point1, point3, constraint_lines);
   return vgl_homg_operators_2d<double>::lines_to_point(constraint_lines);
 }
@@ -329,7 +331,7 @@ HomgPoint2D
 TriTensor::image2_transfer_qd(HomgPoint2D const& point1,
                               HomgPoint2D const& point3) const
 {
-  vcl_vector<HomgLine2D> constraint_lines(9);
+  std::vector<HomgLine2D> constraint_lines(9);
   get_constraint_lines_image2(point1, point3, &constraint_lines);
   return HomgOperator2D::lines_to_point(constraint_lines);
 }
@@ -343,7 +345,7 @@ vgl_homg_point_2d<double>
 TriTensor::image1_transfer_qd(vgl_homg_point_2d<double> const& point2,
                               vgl_homg_point_2d<double> const& point3) const
 {
-  vcl_vector<vgl_homg_line_2d<double> > constraint_lines(9);
+  std::vector<vgl_homg_line_2d<double> > constraint_lines(9);
   get_constraint_lines_image1(point2, point3, constraint_lines);
   return vgl_homg_operators_2d<double>::lines_to_point(constraint_lines);
 }
@@ -352,7 +354,7 @@ HomgPoint2D
 TriTensor::image1_transfer_qd(HomgPoint2D const& point2,
                               HomgPoint2D const& point3) const
 {
-  vcl_vector<HomgLine2D> constraint_lines(9);
+  std::vector<HomgLine2D> constraint_lines(9);
   get_constraint_lines_image1(point2, point3, &constraint_lines);
   return HomgOperator2D::lines_to_point(constraint_lines);
 }
@@ -691,7 +693,7 @@ TriTensor TriTensor::decondition(vnl_matrix<double> const& line_1_norm,
 // - Return the 9 lines on which a transferred point ought to lie.
 void TriTensor::get_constraint_lines_image3(vgl_homg_point_2d<double> const& p1,
                                             vgl_homg_point_2d<double> const& p2,
-                                            vcl_vector<vgl_homg_line_2d<double> >& lines) const
+                                            std::vector<vgl_homg_line_2d<double> >& lines) const
 {
   // use the same notation as the output of tr_hartley_equation.
   double x1 = p1.x();
@@ -856,14 +858,14 @@ void TriTensor::get_constraint_lines_image3(vgl_homg_point_2d<double> const& p1,
   assert(lines.size() == 9);
   if (tt_verbose)
     for (int i = 0; i < 9; ++i)
-      vcl_cerr << lines[i]<< '\n';
+      std::cerr << lines[i]<< '\n';
 
   return;
 }
 
 void TriTensor::get_constraint_lines_image3(HomgPoint2D const& p1,
                                             HomgPoint2D const& p2,
-                                            vcl_vector<HomgLine2D>* lines) const
+                                            std::vector<HomgLine2D>* lines) const
 {
 #if 0 // Old code assumed points were in image coordinates and conditioned them,
       // deconditioning the lines on return.
@@ -881,7 +883,7 @@ void TriTensor::get_constraint_lines_image3(HomgPoint2D const& p1,
   double z2 = p2.w();
 
 #ifdef DEBUG
-  vcl_cerr << "CLINES = [" << x1 << ' ' << y1 << ' ' << z1 << "; " << x2 << ' ' << y2 << ' ' << z2 << "];\n";
+  std::cerr << "CLINES = [" << x1 << ' ' << y1 << ' ' << z1 << "; " << x2 << ' ' << y2 << ' ' << z2 << "];\n";
 #endif
 
   lines->resize(0);
@@ -1039,7 +1041,7 @@ void TriTensor::get_constraint_lines_image3(HomgPoint2D const& p1,
   assert(lines->size() == 9);
   if (tt_verbose)
     for (int i = 0; i < 9; ++i)
-      vcl_cerr << (*lines)[i]<< '\n';
+      std::cerr << (*lines)[i]<< '\n';
 
   return;
 
@@ -1059,7 +1061,7 @@ void TriTensor::get_constraint_lines_image3(HomgPoint2D const& p1,
 
 void TriTensor::get_constraint_lines_image2(vgl_homg_point_2d<double> const& p1,
                                             vgl_homg_point_2d<double> const& p3,
-                                            vcl_vector<vgl_homg_line_2d<double> >& lines) const
+                                            std::vector<vgl_homg_line_2d<double> >& lines) const
 {
   double x1 = p1.x();
   double y1 = p1.y();
@@ -1227,7 +1229,7 @@ void TriTensor::get_constraint_lines_image2(vgl_homg_point_2d<double> const& p1,
 
 void TriTensor::get_constraint_lines_image2(HomgPoint2D const& p1,
                                             HomgPoint2D const& p3,
-                                            vcl_vector<HomgLine2D>* lines) const
+                                            std::vector<HomgLine2D>* lines) const
 {
   double x1 = p1.x();
   double y1 = p1.y();
@@ -1397,7 +1399,7 @@ void TriTensor::get_constraint_lines_image2(HomgPoint2D const& p1,
 
 void TriTensor::get_constraint_lines_image1(vgl_homg_point_2d<double> const& p2,
                                             vgl_homg_point_2d<double> const& p3,
-                                            vcl_vector<vgl_homg_line_2d<double> >& lines) const
+                                            std::vector<vgl_homg_line_2d<double> >& lines) const
 {
   // use the same notation as the output of tr_hartley_equation.
 
@@ -1622,7 +1624,7 @@ void TriTensor::get_constraint_lines_image1(vgl_homg_point_2d<double> const& p2,
 
 void TriTensor::get_constraint_lines_image1(HomgPoint2D const& p2,
                                             HomgPoint2D const& p3,
-                                            vcl_vector<HomgLine2D>* lines) const
+                                            std::vector<HomgLine2D>* lines) const
 {
   // use the same notation as the output of tr_hartley_equation.
 
@@ -1851,8 +1853,8 @@ void TriTensor::get_constraint_lines_image1(HomgPoint2D const& p2,
 // == INPUT/OUTPUT ==
 
 //-----------------------------------------------------------------------------
-//: Read from ASCII vcl_istream
-vcl_istream& operator>>(vcl_istream& s, TriTensor& T)
+//: Read from ASCII std::istream
+std::istream& operator>>(std::istream& s, TriTensor& T)
 {
   for (int i = 0; i < 3; ++i)
     for (int j = 0; j < 3; ++j)
@@ -1862,16 +1864,16 @@ vcl_istream& operator>>(vcl_istream& s, TriTensor& T)
 }
 
 //-----------------------------------------------------------------------------
-//: Print in ASCII to vcl_ostream
-vcl_ostream& operator<<(vcl_ostream& s, const TriTensor& T)
+//: Print in ASCII to std::ostream
+std::ostream& operator<<(std::ostream& s, const TriTensor& T)
 {
   for (int i = 0; i < 3; ++i) {
     for (int j = 0; j < 3; ++j) {
       for (int k = 0; k < 3; ++k)
         vul_printf(s, "%20.16e ", T(i,j,k));
-      s << vcl_endl;
+      s << std::endl;
     }
-    s << vcl_endl;
+    s << std::endl;
   }
   return s;
 }
@@ -2042,7 +2044,7 @@ void TriTensor::compute_P_matrices(const vnl_double_3& x, double alpha, double b
   vnl_double_3x3 DIFF = B0 + TTe2 - OuterProduct3x3(e3, TTe2.transpose()*e3);
   double diffmag = DIFF.fro_norm();
   if (diffmag > 1e-12) {
-    vcl_cerr << "TriTensor::compute_P_matrices: DIFF = " << DIFF << '\n';
+    std::cerr << "TriTensor::compute_P_matrices: DIFF = " << DIFF << '\n';
   }
 
   vnl_double_3x3& A0 = Te3;
@@ -2054,7 +2056,7 @@ void TriTensor::compute_P_matrices(const vnl_double_3& x, double alpha, double b
   P2->set(A0 + OuterProduct3x3(e2, x), beta*e2);
   P3->set(B0 + OuterProduct3x3(e3, x), alpha*e3);
 
-  vcl_cerr << *P2 << '\n'
+  std::cerr << *P2 << '\n'
            << *P3 << '\n';
 
   // Check
@@ -2073,7 +2075,7 @@ maxabs::maxabs(const TriTensor& T) : i(0), j(0), k(0), maxval(0.0)
   for (int i = 0; i < 3; ++i)
     for (int j = 0; j < 3; ++j)
       for (int k = 0; k < 3; ++k) {
-        double v = vcl_fabs(T(i,j,k));
+        double v = std::fabs(T(i,j,k));
         if (v >= maxval) {
           maxval = v;
           this->i = i;
@@ -2087,7 +2089,7 @@ static bool check_same(const TriTensor& T1, const TriTensor& T2)
 {
   maxabs m1(T1);
   double scale1 = 1/m1.maxval;
-  double scale2 = 1/vcl_fabs(T2(m1.i,m1.j,m1.k));
+  double scale2 = 1/std::fabs(T2(m1.i,m1.j,m1.k));
 
   double rms = 0;
   for (int i = 0; i < 3; ++i)
@@ -2100,7 +2102,7 @@ static bool check_same(const TriTensor& T1, const TriTensor& T2)
   rms /= 27;
 
   if (rms > 1e-15) {
-    vcl_cerr << "check_same: different TriTensors\n"
+    std::cerr << "check_same: different TriTensors\n"
              << "T1 =\n" << T1
              << "T2 =\n" << T2;
     return false;

@@ -2,8 +2,10 @@
 #include "volm_io.h"
 //:
 // \file
-#include <vcl_iomanip.h>
-#include <vcl_sstream.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iomanip>
+#include <sstream>
 #include <vcl_cassert.h>
 
 #include <brip/brip_vil_float_ops.h>
@@ -40,37 +42,37 @@ volm_tile::volm_tile(float lat, float lon, char hemisphere, char direction, floa
 }
 
 //: parse the name string and construct tile
-volm_tile::volm_tile(vcl_string file_name, unsigned ni, unsigned nj) : ni_(ni), nj_(nj)
+volm_tile::volm_tile(std::string file_name, unsigned ni, unsigned nj) : ni_(ni), nj_(nj)
 {
-  vcl_string name = vul_file::strip_directory(file_name);
+  std::string name = vul_file::strip_directory(file_name);
   name = name.substr(name.find_first_of('_')+1, name.size());
 
-  vcl_string n_coords = name.substr(0, name.find_first_of('_'));
-  vcl_string n_scale = name.substr(name.find_first_of('_')+1, name.find_last_of('_')-name.find_first_of('_')-1);
+  std::string n_coords = name.substr(0, name.find_first_of('_'));
+  std::string n_scale = name.substr(name.find_first_of('_')+1, name.find_last_of('_')-name.find_first_of('_')-1);
 
   // determine the lat, lon, hemisphere (North or South) and direction (East or West)
-  vcl_size_t n = n_coords.find("N");
+  std::size_t n = n_coords.find("N");
   if (n < n_coords.size())  hemisphere_ = 'N';
   else                      hemisphere_ = 'S';
   n = n_coords.find("E");
   if (n < n_coords.size())  direction_ = 'E';
   else                      direction_ = 'W';
 
-  vcl_string n_str = n_coords.substr(n_coords.find_first_of(hemisphere_)+1,
+  std::string n_str = n_coords.substr(n_coords.find_first_of(hemisphere_)+1,
                                      n_coords.find_first_of(direction_)-n_coords.find_first_of(hemisphere_)-1);
-  vcl_stringstream str(n_str);  str >> lat_;
+  std::stringstream str(n_str);  str >> lat_;
 
   n_str = n_coords.substr(n_coords.find_first_of(direction_)+1, n_coords.size());
-  vcl_stringstream str2(n_str);  str2 >> lon_;
+  std::stringstream str2(n_str);  str2 >> lon_;
 
   n_str = n_scale.substr(n_scale.find_first_of('S')+1, n_scale.find_first_of('x')-n_scale.find_first_of('S')-1);
-  vcl_stringstream str3(n_str);  str3 >> scale_i_;  scale_j_ = scale_i_;
+  std::stringstream str3(n_str);  str3 >> scale_i_;  scale_j_ = scale_i_;
 
 #if 1
-  if (hemisphere_ == 'N')  vcl_cout << " upper left corner in the image is: " << hemisphere_ << lat_+scale_i_ << direction_ << lon_ << vcl_endl;
-  else                    vcl_cout << " upper left corner in the image is: " << hemisphere_ << lat_-scale_i_ << direction_ << lon_ << vcl_endl;
-  if (direction_ == 'W')   vcl_cout << " lower right corner in the image is: " << hemisphere_ << lat_ << direction_ << lon_-scale_j_ << vcl_endl;
-  else                    vcl_cout << " lower right corner in the image is: " << hemisphere_ << lat_ << direction_ << lon_+scale_j_ << vcl_endl;
+  if (hemisphere_ == 'N')  std::cout << " upper left corner in the image is: " << hemisphere_ << lat_+scale_i_ << direction_ << lon_ << std::endl;
+  else                    std::cout << " upper left corner in the image is: " << hemisphere_ << lat_-scale_i_ << direction_ << lon_ << std::endl;
+  if (direction_ == 'W')   std::cout << " lower right corner in the image is: " << hemisphere_ << lat_ << direction_ << lon_-scale_j_ << std::endl;
+  else                    std::cout << " lower right corner in the image is: " << hemisphere_ << lat_ << direction_ << lon_+scale_j_ << std::endl;
 #endif
   vnl_matrix<double> trans_matrix(4,4,0.0);
   //divide by ni-1 to account for 1 pixel overlap with the next tile
@@ -96,28 +98,28 @@ volm_tile::volm_tile(vcl_string file_name, unsigned ni, unsigned nj) : ni_(ni), 
 
 #if 0
 #ifdef DEBUG
-  vcl_cout << "will determine transformation matrix from the file name: " << name << vcl_endl;
+  std::cout << "will determine transformation matrix from the file name: " << name << std::endl;
 #endif
-  vcl_string n = name.substr(name.find_first_of('N')+1, name.find_first_of('W'));
+  std::string n = name.substr(name.find_first_of('N')+1, name.find_first_of('W'));
   assert(n.size() != 0);  // for now there is no support for 'S' and/or 'E'
   hemisphere_ = 'N';
   direction_ = 'W';
 
-  vcl_stringstream str(n); str >> lat_;
+  std::stringstream str(n); str >> lat_;
   n = name.substr(name.find_first_of('W')+1, name.find_first_of('_'));
-  vcl_stringstream str2(n); str2 >> lon_;
+  std::stringstream str2(n); str2 >> lon_;
 
   name = name.substr(name.find_first_of('_'), name.size());
   n = name.substr(name.find_first_of('S')+1, name.find_first_of('x'));
-  vcl_stringstream str3(n); str3 >> scale_i_;
+  std::stringstream str3(n); str3 >> scale_i_;
   n = name.substr(name.find_first_of('x')+1, name.find_last_of('.'));
-  vcl_stringstream str4(n); str4 >> scale_j_;
+  std::stringstream str4(n); str4 >> scale_j_;
 #ifdef DEBUG
-  vcl_cout << " lat: " << lat_ << " lon: " << lon_ << " scale_i:" << scale_i_ << " scale_j: " << scale_j_ << vcl_endl;
+  std::cout << " lat: " << lat_ << " lon: " << lon_ << " scale_i:" << scale_i_ << " scale_j: " << scale_j_ << std::endl;
 
   // determine the upper left corner to use a vpgl_geo_cam, subtract from lat
-  vcl_cout << "upper left corner in the image is: " << lat_+scale_j_ << " N " << lon_ << " W\n"
-           << "lower right corner in the image is: " << lat_ << " N " << lon_-scale_i_ << " W" << vcl_endl;
+  std::cout << "upper left corner in the image is: " << lat_+scale_j_ << " N " << lon_ << " W\n"
+           << "lower right corner in the image is: " << lat_ << " N " << lon_-scale_i_ << " W" << std::endl;
 #endif
   vnl_matrix<double> trans_matrix(4,4,0.0);
   //divide by ni-1 to account for 1 pixel overlap with the next tile
@@ -172,9 +174,9 @@ volm_tile::volm_tile(float lat, float lon, float scale_i, float scale_j, unsigne
   cam_ = cam;
 }
 
-vcl_vector<volm_tile> volm_tile::generate_p1_tiles()
+std::vector<volm_tile> volm_tile::generate_p1_tiles()
 {
-  vcl_vector<volm_tile> p1_tiles;
+  std::vector<volm_tile> p1_tiles;
   unsigned ni = 3601;
   unsigned nj = 3601;
   float scale_i = 1;
@@ -200,9 +202,9 @@ vcl_vector<volm_tile> volm_tile::generate_p1_tiles()
   return p1_tiles;
 }
 
-vcl_vector<volm_tile> volm_tile::generate_p1_wr1_tiles()
+std::vector<volm_tile> volm_tile::generate_p1_wr1_tiles()
 {
-  vcl_vector<volm_tile> p1_tiles;
+  std::vector<volm_tile> p1_tiles;
   unsigned ni = 3601;
   unsigned nj = 3601;
   float scale_i = 1;
@@ -214,9 +216,9 @@ vcl_vector<volm_tile> volm_tile::generate_p1_wr1_tiles()
   return p1_tiles;
 }
 
-vcl_vector<volm_tile> volm_tile::generate_p1_wr2_tiles()
+std::vector<volm_tile> volm_tile::generate_p1_wr2_tiles()
 {
-  vcl_vector<volm_tile> p1_tiles;
+  std::vector<volm_tile> p1_tiles;
   unsigned ni = 3601;
   unsigned nj = 3601;
   float scale_i = 1;
@@ -238,9 +240,9 @@ vcl_vector<volm_tile> volm_tile::generate_p1_wr2_tiles()
   return p1_tiles;
 }
 
-vcl_vector<volm_tile> volm_tile::generate_p1b_wr1_tiles()
+std::vector<volm_tile> volm_tile::generate_p1b_wr1_tiles()
 {
-  vcl_vector<volm_tile> p1b_tiles;
+  std::vector<volm_tile> p1b_tiles;
   unsigned ni = 3601;
   unsigned nj = 3601;
   float scale_i = 1;
@@ -254,9 +256,9 @@ vcl_vector<volm_tile> volm_tile::generate_p1b_wr1_tiles()
   return p1b_tiles;
 }
 
-vcl_vector<volm_tile> volm_tile::generate_p1b_wr2_tiles()
+std::vector<volm_tile> volm_tile::generate_p1b_wr2_tiles()
 {
-  vcl_vector<volm_tile> p1b_tiles;
+  std::vector<volm_tile> p1b_tiles;
   unsigned ni = 3601;
   unsigned nj = 3601;
   float scale_i = 1;
@@ -268,9 +270,9 @@ vcl_vector<volm_tile> volm_tile::generate_p1b_wr2_tiles()
   return p1b_tiles;
 }
 
-vcl_vector<volm_tile> volm_tile::generate_p1b_wr3_tiles()
+std::vector<volm_tile> volm_tile::generate_p1b_wr3_tiles()
 {
-  vcl_vector<volm_tile> p1b_tiles;
+  std::vector<volm_tile> p1b_tiles;
   unsigned ni = 3601;
   unsigned nj = 3601;
   float scale_i = 1;
@@ -283,9 +285,9 @@ vcl_vector<volm_tile> volm_tile::generate_p1b_wr3_tiles()
   return p1b_tiles;
 }
 
-vcl_vector<volm_tile> volm_tile::generate_p1b_wr4_tiles()
+std::vector<volm_tile> volm_tile::generate_p1b_wr4_tiles()
 {
-  vcl_vector<volm_tile> p1b_tiles;
+  std::vector<volm_tile> p1b_tiles;
   unsigned ni = 3601;
   unsigned nj = 3601;
   float scale_i = 1;
@@ -300,9 +302,9 @@ vcl_vector<volm_tile> volm_tile::generate_p1b_wr4_tiles()
   return p1b_tiles;
 }
 
-vcl_vector<volm_tile> volm_tile::generate_p1b_wr5_tiles()
+std::vector<volm_tile> volm_tile::generate_p1b_wr5_tiles()
 {
-  vcl_vector<volm_tile> p1b_tiles;
+  std::vector<volm_tile> p1b_tiles;
   unsigned ni = 3601;
   unsigned nj = 3601;
   float scale_i = 1;
@@ -315,9 +317,9 @@ vcl_vector<volm_tile> volm_tile::generate_p1b_wr5_tiles()
   return p1b_tiles;
 }
 
-vcl_vector<volm_tile> volm_tile::generate_p1b_wr_tiles(int world_id)
+std::vector<volm_tile> volm_tile::generate_p1b_wr_tiles(int world_id)
 {
-  vcl_vector<volm_tile> tiles;
+  std::vector<volm_tile> tiles;
   switch (world_id) {
   case 1: { tiles = volm_tile::generate_p1b_wr1_tiles(); break; }
   case 2: { tiles = volm_tile::generate_p1b_wr2_tiles(); break; }
@@ -325,14 +327,14 @@ vcl_vector<volm_tile> volm_tile::generate_p1b_wr_tiles(int world_id)
   case 4: { tiles = volm_tile::generate_p1b_wr4_tiles(); break; }
   case 5: { tiles = volm_tile::generate_p1b_wr5_tiles(); break; }
   default: {
-    vcl_cerr << "Unknown world id: " << world_id << vcl_endl;
+    std::cerr << "Unknown world id: " << world_id << std::endl;
            } }
   return tiles;
 }
 
-vcl_vector<volm_tile> volm_tile::generate_p2a_wr8_tiles()
+std::vector<volm_tile> volm_tile::generate_p2a_wr8_tiles()
 {
-  vcl_vector<volm_tile> tiles;
+  std::vector<volm_tile> tiles;
   unsigned ni = 3601,       nj = 3601;
   float    scale_i = 1.0f,  scale_j = 1.0f;
   tiles.push_back(volm_tile(33, 145, 'S', 'E', scale_i, scale_j, ni, nj));
@@ -376,9 +378,9 @@ vcl_vector<volm_tile> volm_tile::generate_p2a_wr8_tiles()
   return tiles;
 }
 
-vcl_vector<volm_tile> volm_tile::generate_p2a_wr9_tiles()
+std::vector<volm_tile> volm_tile::generate_p2a_wr9_tiles()
 {
-  vcl_vector<volm_tile> tiles;
+  std::vector<volm_tile> tiles;
   unsigned ni = 3601,       nj = 3601;
   float    scale_i = 1.0f,  scale_j = 1.0f;
   tiles.push_back(volm_tile(35, 147, 'S', 'E', scale_i, scale_j, ni, nj));
@@ -394,9 +396,9 @@ vcl_vector<volm_tile> volm_tile::generate_p2a_wr9_tiles()
   return tiles;
 }
 
-vcl_vector<volm_tile> volm_tile::generate_p2a_wr10_tiles()
+std::vector<volm_tile> volm_tile::generate_p2a_wr10_tiles()
 {
-  vcl_vector<volm_tile> tiles;
+  std::vector<volm_tile> tiles;
   unsigned ni = 3601,       nj = 3601;
   float    scale_i = 1.0f,  scale_j = 1.0f;
   tiles.push_back(volm_tile(35, 149, 'S', 'E', scale_i, scale_j, ni, nj));
@@ -412,9 +414,9 @@ vcl_vector<volm_tile> volm_tile::generate_p2a_wr10_tiles()
   return tiles;
 }
 
-vcl_vector<volm_tile> volm_tile::generate_p2a_wr11_tiles()
+std::vector<volm_tile> volm_tile::generate_p2a_wr11_tiles()
 {
-  vcl_vector<volm_tile> tiles;
+  std::vector<volm_tile> tiles;
   unsigned ni = 3601,       nj = 3601;
   float    scale_i = 1.0f,  scale_j = 1.0f;
   tiles.push_back(volm_tile(35, 145, 'S', 'E', scale_i, scale_j, ni, nj));
@@ -429,9 +431,9 @@ vcl_vector<volm_tile> volm_tile::generate_p2a_wr11_tiles()
   return tiles;
 }
 
-vcl_vector<volm_tile> volm_tile::generate_p2a_wr12_tiles()
+std::vector<volm_tile> volm_tile::generate_p2a_wr12_tiles()
 {
-  vcl_vector<volm_tile> tiles;
+  std::vector<volm_tile> tiles;
   unsigned ni = 3601,       nj = 3601;
   float    scale_i = 1.0f,  scale_j = 1.0f;
   tiles.push_back(volm_tile(38, 148, 'S', 'E', scale_i, scale_j, ni, nj));
@@ -450,9 +452,9 @@ vcl_vector<volm_tile> volm_tile::generate_p2a_wr12_tiles()
   return tiles;
 }
 
-vcl_vector<volm_tile> volm_tile::generate_p2a_wr13_tiles()
+std::vector<volm_tile> volm_tile::generate_p2a_wr13_tiles()
 {
-  vcl_vector<volm_tile> tiles;
+  std::vector<volm_tile> tiles;
   unsigned ni = 3601,       nj = 3601;
   float    scale_i = 1.0f,  scale_j = 1.0f;
   tiles.push_back(volm_tile(38, 145, 'S', 'E', scale_i, scale_j, ni, nj));
@@ -469,9 +471,9 @@ vcl_vector<volm_tile> volm_tile::generate_p2a_wr13_tiles()
   return tiles;
 }
 
-vcl_vector<volm_tile> volm_tile::generate_p2a_wr_tiles(int world_id)
+std::vector<volm_tile> volm_tile::generate_p2a_wr_tiles(int world_id)
 {
-  vcl_vector<volm_tile> tiles;
+  std::vector<volm_tile> tiles;
   tiles.clear();
   switch (world_id) {
     case 8:  { tiles = volm_tile::generate_p2a_wr8_tiles();   break; }
@@ -480,12 +482,12 @@ vcl_vector<volm_tile> volm_tile::generate_p2a_wr_tiles(int world_id)
     case 11: { tiles = volm_tile::generate_p2a_wr11_tiles();  break; }
     case 12: { tiles = volm_tile::generate_p2a_wr12_tiles();  break; }
     case 13: { tiles = volm_tile::generate_p2a_wr13_tiles();  break; }
-    default: {  vcl_cerr << "in volm_tile::generate_p2a_wr_tiles: unknown world id: " << world_id << vcl_endl; }
+    default: {  std::cerr << "in volm_tile::generate_p2a_wr_tiles: unknown world id: " << world_id << std::endl; }
   }
   return tiles;
 }
 
-bool volm_tile::generate_tiles(unsigned const& world_id, vcl_vector<volm_tile>& tiles)
+bool volm_tile::generate_tiles(unsigned const& world_id, std::vector<volm_tile>& tiles)
 {
   tiles.clear();
   switch (world_id)
@@ -508,10 +510,10 @@ bool volm_tile::generate_tiles(unsigned const& world_id, vcl_vector<volm_tile>& 
   return true;
 }
 
-vcl_string volm_tile::get_string()
+std::string volm_tile::get_string()
 {
-  vcl_stringstream str;
-  str << hemisphere_ << lat_ << direction_ << vcl_setfill('0') << vcl_setw(3) << lon_
+  std::stringstream str;
+  str << hemisphere_ << lat_ << direction_ << std::setfill('0') << std::setw(3) << lon_
       << "_S" << scale_i_ << 'x' << scale_j_;
   return str.str();
 }
@@ -554,8 +556,8 @@ bool volm_tile::global_to_img(double lon, double lat, unsigned& i, unsigned& j)
   cam_.global_to_img(lon, lat, dummy_elev, u, v);
   if (u < 0 || v < 0 || u >= this->ni_ || v >= this->nj_)
     return false;
-  i = (unsigned)vcl_floor( (int)(u*100+0.5)/100+0.5);  // truncation up to 0.01 floating precion
-  j = (unsigned)vcl_floor( (int)(v*100+0.5)/100+0.5);  // this may be ceil cause image direction is in reverse in latitude
+  i = (unsigned)std::floor( (int)(u*100+0.5)/100+0.5);  // truncation up to 0.01 floating precion
+  j = (unsigned)std::floor( (int)(v*100+0.5)/100+0.5);  // this may be ceil cause image direction is in reverse in latitude
   if (j == this->nj_) j--;         // v may be larger than nj+0.5 due to the floating point precision
   return true;
 }
@@ -567,7 +569,7 @@ double volm_tile::calculate_width()
   double x, x2, y, y2; int utm_zone;
   utm.transform(lat_, lon_, x,  y, utm_zone);
   utm.transform(lat_, lon_+scale_i_, x2, y2, utm_zone);
-  return vcl_abs(x-x2);
+  return std::abs(x-x2);
 }
 
 //: calculate width of the tile
@@ -577,7 +579,7 @@ double volm_tile::calculate_height()
   double x, x2, y, y2; int utm_zone;
   utm.transform(lat_, lon_, x,  y, utm_zone);
   utm.transform(lat_+scale_j_, lon_, x2, y2, utm_zone);
-  return vcl_abs(y-y2);
+  return std::abs(y-y2);
 }
 
 void volm_tile::get_uncertainty_region(float lambda_i, float lambda_j, float cutoff, vbl_array_2d<bool>& mask, vbl_array_2d<float>& kernel)
@@ -604,10 +606,10 @@ void volm_tile::mark_uncertainty_region(int i, int j, float score, vbl_array_2d<
   unsigned nrows = (unsigned)mask.rows();
   unsigned ncols = (unsigned)mask.cols();
 
-  int js = (int)vcl_floor(j - (float)nrows/2.0f + 0.5f);
-  int is = (int)vcl_floor(i - (float)ncols/2.0f + 0.5f);
-  int je = (int)vcl_floor(j + (float)nrows/2.0f + 0.5f);
-  int ie = (int)vcl_floor(i + (float)ncols/2.0f + 0.5f);
+  int js = (int)std::floor(j - (float)nrows/2.0f + 0.5f);
+  int is = (int)std::floor(i - (float)ncols/2.0f + 0.5f);
+  int je = (int)std::floor(j + (float)nrows/2.0f + 0.5f);
+  int ie = (int)std::floor(i + (float)ncols/2.0f + 0.5f);
 
   int ni = (int)img.ni();
   int nj = (int)img.nj();
@@ -634,10 +636,10 @@ void volm_tile::mark_uncertainty_region(int i, int j, float score, vbl_array_2d<
   unsigned nrows = (unsigned)mask.rows();
   unsigned ncols = (unsigned)mask.cols();
 
-  int js = (int)vcl_floor(j - (float)nrows/2.0f + 0.5f);
-  int is = (int)vcl_floor(i - (float)ncols/2.0f + 0.5f);
-  int je = (int)vcl_floor(j + (float)nrows/2.0f + 0.5f);
-  int ie = (int)vcl_floor(i + (float)ncols/2.0f + 0.5f);
+  int js = (int)std::floor(j - (float)nrows/2.0f + 0.5f);
+  int is = (int)std::floor(i - (float)ncols/2.0f + 0.5f);
+  int je = (int)std::floor(j + (float)nrows/2.0f + 0.5f);
+  int ie = (int)std::floor(i + (float)ncols/2.0f + 0.5f);
 
   int ni = (int)img.ni();
   int nj = (int)img.nj();
@@ -673,9 +675,9 @@ void volm_tile::mark_uncertainty_region(int i, int j, float score, vbl_array_2d<
 }
 
 // create a kml file of the tile as a box and with circular marks throughout at every n pixels in each direction
-void volm_tile::write_kml(vcl_string name, int n)
+void volm_tile::write_kml(std::string name, int n)
 {
-  vcl_ofstream ofs(name.c_str());
+  std::ofstream ofs(name.c_str());
   bkml_write::open_document(ofs);
 
   double lon, lat;
@@ -705,19 +707,19 @@ void volm_tile::write_kml(vcl_string name, int n)
 }
 
 #if 0 //TODO
-volm_tile volm_tile::parse_string(vcl_string& filename)
+volm_tile volm_tile::parse_string(std::string& filename)
 {
-  vcl_string name = vul_file::strip_directory(filename);
+  std::string name = vul_file::strip_directory(filename);
   name = name.substr(name.find_first_of('_')+1, name.size());
   if (name.find_first_of('N') != name.end())
-  vcl_string n = name.substr(name.find_first_of('N')+1, name.find_first_of('W'));
+  std::string n = name.substr(name.find_first_of('N')+1, name.find_first_of('W'));
   float lon, lat, scale;
-  vcl_stringstream str(n); str >> lat;
+  std::stringstream str(n); str >> lat;
   n = name.substr(name.find_first_of('W')+1, name.find_first_of('_'));
-  vcl_stringstream str2(n); str2 >> lon;
+  std::stringstream str2(n); str2 >> lon;
   n = name.substr(name.find_first_of('x')+1, name.find_last_of('.'));
-  vcl_stringstream str3(n); str3 >> scale;
-  vcl_cout << " lat: " << lat << " lon: " << lon << " scale: " << scale << vcl_endl;
+  std::stringstream str3(n); str3 >> scale;
+  std::cout << " lat: " << lat << " lon: " << lon << " scale: " << scale << std::endl;
 }
 #endif
 
@@ -758,9 +760,9 @@ void volm_tile::b_read(vsl_b_istream &is)
     break;
 
    default:
-    vcl_cerr << "I/O ERROR: vpgl_geo_camera::b_read(vsl_b_istream&)\n"
+    std::cerr << "I/O ERROR: vpgl_geo_camera::b_read(vsl_b_istream&)\n"
              << "           Unknown version number "<< ver << '\n';
-    is.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
+    is.is().clear(std::ios::badbit); // Set an unrecoverable IO error on stream
     return;
   }
 }

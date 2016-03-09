@@ -12,7 +12,9 @@
 
 #include <bprb/bprb_func_process.h>
 
-#include <vcl_fstream.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <fstream>
 
 #include <boxm/boxm_scene_base.h>
 #include <boxm/boxm_scene.h>
@@ -39,14 +41,14 @@ bool boxm_update_process_cons(bprb_func_process& pro)
   //input[2]: The scene
   //input[3]: The bin index to be updated
   //input[4]: ???
-  vcl_vector<vcl_string> input_types_(n_inputs_);
+  std::vector<std::string> input_types_(n_inputs_);
   input_types_[0] = "vil_image_view_base_sptr";
   input_types_[1] = "vpgl_camera_double_sptr";
   input_types_[2] = "boxm_scene_base_sptr";
   input_types_[3] = "unsigned";
   input_types_[4] = "bool";
 
-  vcl_vector<vcl_string> output_types_(n_outputs_);
+  std::vector<std::string> output_types_(n_outputs_);
   return pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
 }
 
@@ -55,7 +57,7 @@ bool boxm_update_process(bprb_func_process& pro)
   using namespace boxm_update_process_globals;
 
   if ( pro.n_inputs() < n_inputs_ ){
-    vcl_cout << pro.name() << "boxm_update_process: The input number should be " << n_inputs_<< vcl_endl;
+    std::cout << pro.name() << "boxm_update_process: The input number should be " << n_inputs_<< std::endl;
     return false;
   }
 
@@ -69,7 +71,7 @@ bool boxm_update_process(bprb_func_process& pro)
 
   // check the input validity
   if ((input_image == VXL_NULLPTR) || (camera == VXL_NULLPTR) || (scene == VXL_NULLPTR)) {
-    vcl_cout << "boxm_update_process: null input value, cannot run" << vcl_endl;
+    std::cout << "boxm_update_process: null input value, cannot run" << std::endl;
     return false;
   }
 
@@ -87,7 +89,7 @@ bool boxm_update_process(bprb_func_process& pro)
     }
     else
     {
-      vcl_cout<<"Multi Bin Update"<<vcl_endl;
+      std::cout<<"Multi Bin Update"<<std::endl;
       typedef boct_tree<short, boxm_sample_multi_bin<BOXM_APM_MOG_GREY> > tree_type;
       boxm_scene<tree_type> *s = static_cast<boxm_scene<tree_type>*> (scene.as_pointer());
       boxm_update_triangle<short, boxm_sample_multi_bin<BOXM_APM_MOG_GREY> >(*s, img, camera, bin_index,use_black_background);
@@ -95,7 +97,7 @@ bool boxm_update_process(bprb_func_process& pro)
     //vil_image_view<float> image = *vil_convert_cast(float(), input_image);
   }
   else {
-    vcl_cout << "boxm_update_process: undefined APM type" << vcl_endl;
+    std::cout << "boxm_update_process: undefined APM type" << std::endl;
     return false;
   }
 

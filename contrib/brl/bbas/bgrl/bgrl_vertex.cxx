@@ -20,7 +20,7 @@ bgrl_vertex::bgrl_vertex()
 bgrl_vertex::bgrl_vertex(const bgrl_vertex& vertex)
   : vbl_ref_count()
 {
-  for ( vcl_set<bgrl_edge_sptr>::const_iterator itr = vertex.out_edges_.begin();
+  for ( std::set<bgrl_edge_sptr>::const_iterator itr = vertex.out_edges_.begin();
         itr != vertex.out_edges_.end();  ++itr ){
     bgrl_edge_sptr edge_copy((*itr)->clone());
     edge_copy->from_ = this;
@@ -171,7 +171,7 @@ bgrl_vertex::end()
 
 
 //: Return a platform independent string identifying the class
-vcl_string
+std::string
 bgrl_vertex::is_a() const
 {
   return "bgrl_vertex";
@@ -228,9 +228,9 @@ bgrl_vertex::b_read( vsl_b_istream& is )
     break;
 
   default:
-    vcl_cerr << "I/O ERROR: bgrl_vertex::b_read(vsl_b_istream&)\n"
+    std::cerr << "I/O ERROR: bgrl_vertex::b_read(vsl_b_istream&)\n"
              << "           Unknown version number "<< ver << '\n';
-    is.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
+    is.is().clear(std::ios::badbit); // Set an unrecoverable IO error on stream
     return;
   }
 }
@@ -246,7 +246,7 @@ bgrl_vertex::version() const
 
 //: Print an ascii summary to the stream
 void
-bgrl_vertex::print_summary( vcl_ostream& os ) const
+bgrl_vertex::print_summary( std::ostream& os ) const
 {
   os << this->degree() << " degree";
 }
@@ -274,7 +274,7 @@ void vsl_add_to_binary_loader(const bgrl_vertex& v)
 
 //: Print an ASCII summary to the stream
 void
-vsl_print_summary(vcl_ostream &os, const bgrl_vertex* v)
+vsl_print_summary(std::ostream &os, const bgrl_vertex* v)
 {
   os << "bgrl_vertex{ ";
   v->print_summary(os);

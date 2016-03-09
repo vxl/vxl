@@ -34,7 +34,7 @@ bxml_data_sptr bxml_find_by_name(const bxml_data_sptr& head,
 
 //: Find all elements that match the query only by name
 //  (no check on the attribute matching)
-vcl_vector<bxml_data_sptr> bxml_find_all_with_name(const bxml_data_sptr& head,
+std::vector<bxml_data_sptr> bxml_find_all_with_name(const bxml_data_sptr& head,
                                                    const bxml_element& query);
 
 #endif // bxml_find_h_

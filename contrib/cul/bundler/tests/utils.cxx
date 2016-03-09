@@ -1,7 +1,9 @@
 #include "utils.h"
 //
 #include <testlib/testlib_test.h>
-#include <vcl_cmath.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <cmath>
 
 static const double TOL = 480 * .2;
 
@@ -9,10 +11,10 @@ void test_recon(const bundler_inters_reconstruction &recon,
                 int expected_cameras)
 {
     // Check that only tracks with contributing points are observed
-    vcl_vector<bundler_inters_track_sptr>::const_iterator i;
+    std::vector<bundler_inters_track_sptr>::const_iterator i;
     for (i = recon.tracks.begin(); i != recon.tracks.end(); i++){
         const bool has_cont_points =
-            vcl_find(
+            std::find(
                 (*i)->contributing_points.begin(),
                 (*i)->contributing_points.end(),
                 true)
@@ -27,7 +29,7 @@ void test_recon(const bundler_inters_reconstruction &recon,
     // are observed are in the recon.
     int num_observed_imgs = 0;
 
-    vcl_vector<bundler_inters_image_sptr>::const_iterator j;
+    std::vector<bundler_inters_image_sptr>::const_iterator j;
     for (j = recon.feature_sets.begin(); j != recon.feature_sets.end(); j++)
     {
         bool has_cont_pt = false;
@@ -60,7 +62,7 @@ void test_recon(const bundler_inters_reconstruction &recon,
     {
         vgl_point_3d<double> &pt = (*i)->world_point;
 
-        vcl_vector<bundler_inters_feature_sptr>::iterator f;
+        std::vector<bundler_inters_feature_sptr>::iterator f;
         for (f = (*i)->points.begin(); f != (*i)->points.end(); f++){
             if ( (*f)->is_contributing() ) {
                 vpgl_perspective_camera<double> &cam = (*f)->image->camera;
@@ -82,16 +84,16 @@ void test_recon(const bundler_inters_reconstruction &recon,
                           "its 3d world point.",
                           v, (*f)->point.y(), TOL);
 
-                if (vcl_fabs(u - (*f)->point.x()) > TOL ||
-                    vcl_fabs(v - (*f)->point.y()) > TOL) {
-                    vcl_cout << "----------------------------\n"
+                if (std::fabs(u - (*f)->point.x()) > TOL ||
+                    std::fabs(v - (*f)->point.y()) > TOL) {
+                    std::cout << "----------------------------\n"
                              << "Point failed!!\n"
                              << "World point: " << pt << '\n'
                              << "Image point: " << (*f)->point << '\n'
                              << "Projection: (" << u << ", " << v << ")\n"
                              << "Camera:\n"
                              << cam
-                             << "----------------------------" << vcl_endl;
+                             << "----------------------------" << std::endl;
                 }
             }
         }

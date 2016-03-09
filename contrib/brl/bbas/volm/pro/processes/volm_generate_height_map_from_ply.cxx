@@ -18,17 +18,19 @@
 #include <vgl/vgl_polygon_scan_iterator.h>
 #include <core/bbas_pro/bbas_1d_array_float.h>
 #include <vil/vil_math.h>
-#include <vcl_limits.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <limits>
 
 //:
 //  Take a colored segmentation output and map it to volm labels
 bool volm_generate_height_map_from_ply_process_cons(bprb_func_process& pro)
 {
-  vcl_vector<vcl_string> input_types;
+  std::vector<std::string> input_types;
   input_types.push_back("vcl_string");  // path to ply files
   input_types.push_back("unsigned");  // ni
   input_types.push_back("unsigned");  // nj
-  vcl_vector<vcl_string> output_types;
+  std::vector<std::string> output_types;
   output_types.push_back("vil_image_view_base_sptr"); // output height map
   return pro.set_input_types(input_types)
       && pro.set_output_types(output_types);
@@ -38,37 +40,37 @@ bool volm_generate_height_map_from_ply_process_cons(bprb_func_process& pro)
 bool volm_generate_height_map_from_ply_process(bprb_func_process& pro)
 {
   if (pro.n_inputs() < 3) {
-    vcl_cout << "volm_map_osm_process: The number of inputs should be 1" << vcl_endl;
+    std::cout << "volm_map_osm_process: The number of inputs should be 1" << std::endl;
     return false;
   }
 
   // get the inputs
-  vcl_string path = pro.get_input<vcl_string>(0);
+  std::string path = pro.get_input<std::string>(0);
   unsigned ni = pro.get_input<unsigned>(1);
   unsigned nj = pro.get_input<unsigned>(2);
 
   vil_image_view<float> out_map(ni, nj);
   out_map.fill(0.0f);
 
-  vcl_string ply_glob=path+"/*.ply";
+  std::string ply_glob=path+"/*.ply";
   vul_file_iterator ply_it(ply_glob.c_str());
   while (ply_it) {
-    vcl_string name(ply_it());
-    vcl_cout << " name: " << name << vcl_endl;
+    std::string name(ply_it());
+    std::cout << " name: " << name << std::endl;
 
     bmsh3d_mesh_mc *  bmesh = new bmsh3d_mesh_mc();
     bmsh3d_load_ply(bmesh,name.c_str());
-    vcl_map <int, bmsh3d_face*>::iterator it = bmesh->facemap().begin();
+    std::map <int, bmsh3d_face*>::iterator it = bmesh->facemap().begin();
     for (; it != bmesh->facemap().end(); it++) {
       int id = (*it).first;
       bmsh3d_face* tmpF = (*it).second;
-      vcl_vector<bmsh3d_vertex*> vertices;
+      std::vector<bmsh3d_vertex*> vertices;
       tmpF->get_ordered_Vs(vertices);
 
       vgl_polygon<double> poly(1);
       double height = 0.0f;
       for (unsigned j = 0; j < vertices.size(); j++) {
-        vcl_cout << "vertex[" << j << "]: x:" << vertices[j]->get_pt().x() << " y: " << vertices[j]->get_pt().y() << " z: " << vertices[j]->get_pt().z() << vcl_endl;
+        std::cout << "vertex[" << j << "]: x:" << vertices[j]->get_pt().x() << " y: " << vertices[j]->get_pt().y() << " z: " << vertices[j]->get_pt().z() << std::endl;
         poly.push_back(vertices[j]->get_pt().x(), nj-vertices[j]->get_pt().y());
         height += vertices[j]->get_pt().z();
       }
@@ -79,8 +81,8 @@ bool volm_generate_height_map_from_ply_process(bprb_func_process& pro)
         int y = psi.scany();
         for (int x = psi.startx(); x<=psi.endx(); ++x)
         {
-          int u = (int)vcl_floor(x+0.5);
-          int v = (int)vcl_floor(y+0.5);
+          int u = (int)std::floor(x+0.5);
+          int v = (int)std::floor(y+0.5);
           if (u >= (int)ni || v >= (int)nj || u < 0 || v < 0)
             continue;
           out_map(u,v) = height;
@@ -101,7 +103,7 @@ bool volm_generate_height_map_from_ply_process(bprb_func_process& pro)
 //  note that we cannot plot a classical ROC as there is no Negative class (algo always reports a height)
 bool volm_generate_height_map_plot_process_cons(bprb_func_process& pro)
 {
-  vcl_vector<vcl_string> input_types;
+  std::vector<std::string> input_types;
   input_types.push_back("vil_image_view_base_sptr");  // gt height map
   input_types.push_back("vil_image_view_base_sptr");  // input height map
   input_types.push_back("float");  // initial height difference
@@ -109,7 +111,7 @@ bool volm_generate_height_map_plot_process_cons(bprb_func_process& pro)
   input_types.push_back("float");  // height increments
   input_types.push_back("float");  // fix the ground truth height
 
-  vcl_vector<vcl_string> output_types;
+  std::vector<std::string> output_types;
   output_types.push_back("bbas_1d_array_float_sptr");  // #correct rate
   output_types.push_back("bbas_1d_array_float_sptr");  // #height difs
   output_types.push_back("vil_image_view_base_sptr");  // output image with pixels given by threshold of 0.8 tpr marked red
@@ -123,7 +125,7 @@ bool volm_generate_height_map_plot_process_cons(bprb_func_process& pro)
 bool volm_generate_height_map_plot_process(bprb_func_process& pro)
 {
   if (pro.n_inputs() < 5) {
-    vcl_cout << "volm_map_osm_process: The number of inputs should be 1" << vcl_endl;
+    std::cout << "volm_map_osm_process: The number of inputs should be 1" << std::endl;
     return false;
   }
 
@@ -136,11 +138,11 @@ bool volm_generate_height_map_plot_process(bprb_func_process& pro)
   float gt_fix = pro.get_input<float>(5);
 
   vil_image_view<float> gt_height(gt_height_sptr);
-  vcl_cout << "gt ni: " << gt_height.ni() << " nj: " << gt_height.nj() << vcl_endl;
+  std::cout << "gt ni: " << gt_height.ni() << " nj: " << gt_height.nj() << std::endl;
   vil_image_view<float> height(height_map_sptr);
-  vcl_cout << "height ni: " << height.ni() << " nj: " << height.nj() << vcl_endl;
+  std::cout << "height ni: " << height.ni() << " nj: " << height.nj() << std::endl;
   if (gt_height.ni() != height.ni() || gt_height.nj() != height.nj()) {
-    vcl_cerr << " The input images have inconsistent sizes!\n";
+    std::cerr << " The input images have inconsistent sizes!\n";
     return false;
   }
 
@@ -163,7 +165,7 @@ bool volm_generate_height_map_plot_process(bprb_func_process& pro)
       unsigned char val = vxl_byte(((height(i,j)-min_val)/dif_min_max)*255);
       vil_rgb<vxl_byte> col(val, val, val);
       height_out(i,j) = col;
-      height_out_dif(i,j) = vcl_numeric_limits<float>::quiet_NaN();
+      height_out_dif(i,j) = std::numeric_limits<float>::quiet_NaN();
     }
 
   float dif_mark = dif_final;
@@ -201,23 +203,23 @@ bool volm_generate_height_map_plot_process(bprb_func_process& pro)
               min_val_act = dif_actual_val;
             if (dif_actual_val > max_val_act)
               max_val_act = dif_actual_val;
-            float dif_val = vcl_abs(dif_actual_val);
+            float dif_val = std::abs(dif_actual_val);
             if (dif_val <= dif) {
               correct_rate->data_array[pnt]++;
               if (dif_mark == dif)
                 height_out(i,j) = vil_rgb<vxl_byte>(255,0,0);
             }
           } else {
-            height_out_dif(i,j) = vcl_numeric_limits<float>::infinity();
+            height_out_dif(i,j) = std::numeric_limits<float>::infinity();
           }
         }
       }
     }
-    vcl_cout << "ratio: " << correct_rate->data_array[pnt] << " gt pixel: " << gt_cnt << vcl_endl;
+    std::cout << "ratio: " << correct_rate->data_array[pnt] << " gt pixel: " << gt_cnt << std::endl;
     correct_rate->data_array[pnt] /= gt_cnt;
   }
 
-  vcl_cout << " !!!!!!!!!! minimum difference value: " << min_val_act << " max difference val: " << max_val_act << vcl_endl;
+  std::cout << " !!!!!!!!!! minimum difference value: " << min_val_act << " max difference val: " << max_val_act << std::endl;
 
   pro.set_output_val<bbas_1d_array_float_sptr>(0, correct_rate);
   pro.set_output_val<bbas_1d_array_float_sptr>(1, height_difs);
@@ -230,14 +232,14 @@ bool volm_generate_height_map_plot_process(bprb_func_process& pro)
 //:  Find the minimum and maximum height values for a given 2-d box region
 bool volm_find_min_max_height_process_cons(bprb_func_process& pro)
 {
-  vcl_vector<vcl_string> input_types(5);
+  std::vector<std::string> input_types(5);
   input_types[0] = "double";      // 2-d region lower left lon
   input_types[1] = "double";      // 2-d region lower left lat
   input_types[2] = "double";      // 2-d region upper right lon
   input_types[3] = "double";      // 2-d region upper right lat
   input_types[4] = "vcl_string";  // folder of the orthogonal height maps
 
-  vcl_vector<vcl_string> output_types(2);
+  std::vector<std::string> output_types(2);
   output_types[0] = "double";     // minimum elevation value for the given region from height maps
   output_types[1] = "double";     // maximum elevation value for the given region from height maps
 
@@ -250,7 +252,7 @@ bool volm_find_min_max_height_process(bprb_func_process& pro)
 {
   // check input
   if (!pro.verify_inputs()) {
-    vcl_cerr << pro.name() << ": Wrong Inputs!!!\n";
+    std::cerr << pro.name() << ": Wrong Inputs!!!\n";
     return false;
   }
   // get inputs
@@ -259,13 +261,13 @@ bool volm_find_min_max_height_process(bprb_func_process& pro)
   double ll_lat = pro.get_input<double>(in_i++);
   double ur_lon = pro.get_input<double>(in_i++);
   double ur_lat = pro.get_input<double>(in_i++);
-  vcl_string dem_folder = pro.get_input<vcl_string>(in_i++);
+  std::string dem_folder = pro.get_input<std::string>(in_i++);
 
   // load DEM images
-  vcl_vector<volm_img_info> infos;
+  std::vector<volm_img_info> infos;
   volm_io_tools::load_aster_dem_imgs(dem_folder, infos);
   if (infos.empty()) {
-    vcl_cerr << pro.name() << ": can not find any height map in the folder: " << dem_folder << "\n";
+    std::cerr << pro.name() << ": can not find any height map in the folder: " << dem_folder << "\n";
     return false;
   }
 
@@ -274,7 +276,7 @@ bool volm_find_min_max_height_process(bprb_func_process& pro)
   vgl_point_2d<double> upper_right(ur_lon, ur_lat);
   double min_elev = 10000.0, max_elev = -10000.0;
   if (!volm_io_tools::find_min_max_height(lower_left, upper_right, infos, min_elev, max_elev)) {
-    vcl_cerr << pro.name() << " can not find elevation for the given region " << lower_left << ", " << upper_right << "\n";
+    std::cerr << pro.name() << " can not find elevation for the given region " << lower_left << ", " << upper_right << "\n";
     return false;
   }
 

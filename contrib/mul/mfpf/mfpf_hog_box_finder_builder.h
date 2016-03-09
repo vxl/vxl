@@ -9,7 +9,9 @@
 #include <mipa/mipa_vector_normaliser.h>
 #include <mfpf/mfpf_vec_cost_builder.h>
 #include <mbl/mbl_cloneable_ptr.h>
-#include <vcl_iosfwd.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iosfwd>
 #include <mfpf/mfpf_region_form.h>
 
 
@@ -154,19 +156,19 @@ class mfpf_hog_box_finder_builder : public mfpf_point_finder_builder
   virtual void build(mfpf_point_finder&);
 
   //: Initialise from a string stream
-  virtual bool set_from_stream(vcl_istream &is);
+  virtual bool set_from_stream(std::istream &is);
 
   //: Name of the class
-  virtual vcl_string is_a() const;
+  virtual std::string is_a() const;
 
   //: Create a copy on the heap and return base class pointer
   virtual mfpf_point_finder_builder* clone() const;
 
   //: Print class to os
-  virtual void print_summary(vcl_ostream& os) const;
+  virtual void print_summary(std::ostream& os) const;
 
   //: Prints ASCII representation of shape to os
-  void print_shape(vcl_ostream& os) const;
+  void print_shape(std::ostream& os) const;
 
   //: Version number for I/O
   short version_no() const;

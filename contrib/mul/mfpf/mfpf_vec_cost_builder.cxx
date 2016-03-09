@@ -10,7 +10,9 @@
 #include <mbl/mbl_parse_block.h>
 #include <mbl/mbl_read_props.h>
 #include <mbl/mbl_cloneables_factory.h>
-#include <vcl_sstream.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <sstream>
 
 //=======================================================================
 // Dflt ctor
@@ -30,16 +32,16 @@ mfpf_vec_cost_builder::~mfpf_vec_cost_builder()
 
 
 //: Initialise from a string stream
-bool mfpf_vec_cost_builder::set_from_stream(vcl_istream &is)
+bool mfpf_vec_cost_builder::set_from_stream(std::istream &is)
 {
   // Cycle through string and produce a map of properties
-  vcl_string s = mbl_parse_block(is);
-  vcl_istringstream ss(s);
+  std::string s = mbl_parse_block(is);
+  std::istringstream ss(s);
   mbl_read_props_type props = mbl_read_props_ws(ss);
 
   if (props.size()!=0)
   {
-    vcl_cerr<<is_a()<<" does not expect any extra arguments.\n";
+    std::cerr<<is_a()<<" does not expect any extra arguments.\n";
     mbl_read_props_look_for_unused_props(
       "mfpf_vec_cost_builder::set_from_stream", props, mbl_read_props_type());
   }
@@ -47,12 +49,12 @@ bool mfpf_vec_cost_builder::set_from_stream(vcl_istream &is)
 }
 
 //: Create a concrete object, from a text specification.
-vcl_auto_ptr<mfpf_vec_cost_builder> mfpf_vec_cost_builder::
-  create_from_stream(vcl_istream &is)
+std::auto_ptr<mfpf_vec_cost_builder> mfpf_vec_cost_builder::
+  create_from_stream(std::istream &is)
 {
-  vcl_string name;
+  std::string name;
   is >> name;
-  vcl_auto_ptr<mfpf_vec_cost_builder> vcb;
+  std::auto_ptr<mfpf_vec_cost_builder> vcb;
   try {
     vcb = mbl_cloneables_factory<mfpf_vec_cost_builder>::get_clone(name);
   }
@@ -78,9 +80,9 @@ short mfpf_vec_cost_builder::version_no() const
 // Method: is_a
 //=======================================================================
 
-vcl_string mfpf_vec_cost_builder::is_a() const
+std::string mfpf_vec_cost_builder::is_a() const
 {
-  return vcl_string("mfpf_vec_cost_builder");
+  return std::string("mfpf_vec_cost_builder");
 }
 
 
@@ -112,7 +114,7 @@ void vsl_b_read(vsl_b_istream& bfs, mfpf_vec_cost_builder& b)
 // Associated function: operator<<
 //=======================================================================
 
-vcl_ostream& operator<<(vcl_ostream& os,const mfpf_vec_cost_builder& b)
+std::ostream& operator<<(std::ostream& os,const mfpf_vec_cost_builder& b)
 {
   os << b.is_a() << ": ";
   vsl_indent_inc(os);
@@ -125,7 +127,7 @@ vcl_ostream& operator<<(vcl_ostream& os,const mfpf_vec_cost_builder& b)
 // Associated function: operator<<
 //=======================================================================
 
-vcl_ostream& operator<<(vcl_ostream& os,const mfpf_vec_cost_builder* b)
+std::ostream& operator<<(std::ostream& os,const mfpf_vec_cost_builder* b)
 {
   if (b)
     return os << *b;

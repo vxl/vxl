@@ -6,8 +6,10 @@
 // \author Tim Cootes
 
 #include <vcl_cassert.h>
-#include <vcl_iosfwd.h>
-#include <vcl_string.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iosfwd>
+#include <string>
 #include <vsl/vsl_fwd.h>
 #include <msm/msm_shape_model.h>
 #include <msm/msm_param_limiter.h>
@@ -65,7 +67,7 @@ class msm_shape_model_builder
   { return param_limiter_; }
 
   //: Builds the model from the supplied examples
-  void build_model(const vcl_vector<msm_points>& shapes,
+  void build_model(const std::vector<msm_points>& shapes,
                    msm_shape_model& shape_model);
 
   //: Builds the model, using subsets of elements for some modes
@@ -78,8 +80,8 @@ class msm_shape_model_builder
   //  Modes beyond \p pts_used.size() will use all elements.
   //  Builds at least \p pts_used.size() modes. Number defined by
   //  max_modes and var_prop.
-  void build_model(const vcl_vector<msm_points>& shapes,
-                   const vcl_vector<vcl_vector<unsigned> >& pts_used,
+  void build_model(const std::vector<msm_points>& shapes,
+                   const std::vector<std::vector<unsigned> >& pts_used,
                    msm_shape_model& shape_model);
 
   //: Builds shape model from within-class variation
@@ -93,9 +95,9 @@ class msm_shape_model_builder
   //
   //  \param pts_used[i] indicates which points will be controlled by mode i.
   void build_within_class_model(
-                   const vcl_vector<msm_points>& shapes,
-                   const vcl_vector<int>& id,
-                   const vcl_vector<vcl_vector<unsigned> >& pts_used,
+                   const std::vector<msm_points>& shapes,
+                   const std::vector<int>& id,
+                   const std::vector<std::vector<unsigned> >& pts_used,
                    msm_shape_model& shape_model);
 
   //: Builds shape model from within-class variation
@@ -107,26 +109,26 @@ class msm_shape_model_builder
   //  If \p id[i]<0, then shape is
   //  used for building global mean, but not for within class model.
   void build_within_class_model(
-                   const vcl_vector<msm_points>& shapes,
-                   const vcl_vector<int>& id,
+                   const std::vector<msm_points>& shapes,
+                   const std::vector<int>& id,
                    msm_shape_model& shape_model);
 
   //: Builds the model from the points loaded from given files
   //  Loads from \p points_dir/filenames[i].
   //  throws a mbl_exception_parse_error if fails to load in
   //  any of the files.
-  void build_from_files(const vcl_string& points_dir,
-                        const vcl_vector<vcl_string>& filenames,
+  void build_from_files(const std::string& points_dir,
+                        const std::vector<std::string>& filenames,
                         msm_shape_model& shape_model);
 
   //: Version number for I/O
   short version_no() const;
 
   //: Name of the class
-  vcl_string is_a() const;
+  std::string is_a() const;
 
   //: Print class to os
-  void print_summary(vcl_ostream& os) const;
+  void print_summary(std::ostream& os) const;
 
   //: Save class to binary file stream
   void b_write(vsl_b_ostream& bfs) const;
@@ -143,14 +145,14 @@ class msm_shape_model_builder
   //   min_modes: 0 max_modes: 49 var_prop: 0.98
   // }
   // \endverbatim
-  void config_from_stream(vcl_istream &is);
+  void config_from_stream(std::istream &is);
 };
 
 //: Loads all shapes from \p points_dir/filenames[i].
 //  Throws mbl_exception_parse_error if fails.
-void msm_load_shapes(const vcl_string& points_dir,
-                     const vcl_vector<vcl_string>& filenames,
-                     vcl_vector<msm_points>& shapes);
+void msm_load_shapes(const std::string& points_dir,
+                     const std::vector<std::string>& filenames,
+                     std::vector<msm_points>& shapes);
 
 //: Binary file stream output operator for class reference
 void vsl_b_write(vsl_b_ostream& bfs, const msm_shape_model_builder& pts);
@@ -159,9 +161,9 @@ void vsl_b_write(vsl_b_ostream& bfs, const msm_shape_model_builder& pts);
 void vsl_b_read(vsl_b_istream& bfs, msm_shape_model_builder& pts);
 
 //: Stream output operator for class reference
-vcl_ostream& operator<<(vcl_ostream& os,const msm_shape_model_builder& pts);
+std::ostream& operator<<(std::ostream& os,const msm_shape_model_builder& pts);
 
 //: Stream output operator for class reference
-void vsl_print_summary(vcl_ostream& os,const msm_shape_model_builder& pts);
+void vsl_print_summary(std::ostream& os,const msm_shape_model_builder& pts);
 
 #endif // msm_shape_model_builder_h_

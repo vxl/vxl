@@ -7,8 +7,10 @@
 #include "bsta_gaussian_updater.h"
 #include "bsta_gaussian_stats.h"
 
-#include <vcl_iostream.h>
-#include <vcl_limits.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iostream>
+#include <limits>
 
 // The update equations used here are based on the following
 // paper that extends the Stauffer-Grimson approach.
@@ -26,9 +28,9 @@ bsta_mg_statistical_updater<mix_dist_>::update( mix_dist_& mix, const vector_& s
   const unsigned num_components = mix.num_components();
 
   // prune components by mahalanobis distance
-  static vcl_vector<T> probs;
+  static std::vector<T> probs;
   probs.resize(num_components,T(0));
-  static vcl_vector<unsigned int> matched;
+  static std::vector<unsigned int> matched;
   matched.clear();
 
   for (unsigned int i=0; i<num_components; ++i) {
@@ -63,7 +65,7 @@ bsta_mg_statistical_updater<mix_dist_>::update( mix_dist_& mix, const vector_& s
     }
     else {
       // compute probabilites for each match
-      typedef typename vcl_vector<unsigned int>::iterator m_itr;
+      typedef typename std::vector<unsigned int>::iterator m_itr;
       T sum_probs = T(0);
       for (m_itr itr = matched.begin(); itr != matched.end(); ++itr) {
         const unsigned int i = *itr;
@@ -89,13 +91,13 @@ bsta_mg_statistical_updater<mix_dist_>::update( mix_dist_& mix, const vector_& s
   mix.sort(bsta_gaussian_fitness<gaussian_>::order);
 
   // try to clean up gaussian components with weights that have converged to zero
-  if (mix.weight(mix.num_components()-1) < vcl_numeric_limits<T>::epsilon()) {
+  if (mix.weight(mix.num_components()-1) < std::numeric_limits<T>::epsilon()) {
     mix.remove_last();
     T sum = 0;
     for (unsigned int i=0; i<mix.num_components(); ++i) {
       sum += mix.weight(i);
     }
-    vcl_cout << "removed, total weight = " << sum << vcl_endl;
+    std::cout << "removed, total weight = " << sum << std::endl;
     mix.normalize_weights();
   }
 }

@@ -7,9 +7,11 @@
 #include <brad/brad_eigenspace.h>
 #include <bpro/core/bbas_pro/bbas_1d_array_string.h>
 #include <vil/vil_load.h>
-#include <vcl_vector.h>
-#include <vcl_string.h>
-#include <vcl_fstream.h>
+#include <vector>
+#include <string>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <fstream>
 
 namespace bbas_core_brad_train_hist
 {
@@ -24,7 +26,7 @@ namespace bbas_core_brad_train_hist
   {
     unsigned nlow = low_paths.data_array.size();
     unsigned nbins = 20;
-    vcl_vector<vil_image_resource_sptr> low_resources;
+    std::vector<vil_image_resource_sptr> low_resources;
     for (unsigned i  = 0; i < nlow; ++i){
       vil_image_resource_sptr temp =
         vil_load_image_resource(low_paths.data_array[i].c_str());
@@ -32,7 +34,7 @@ namespace bbas_core_brad_train_hist
       low_resources.push_back(temp);
     }
     unsigned nhigh = high_paths.data_array.size();
-    vcl_vector<vil_image_resource_sptr> high_resources;
+    std::vector<vil_image_resource_sptr> high_resources;
     for (unsigned i  = 0; i < nhigh; ++i){
       vil_image_resource_sptr temp =
         vil_load_image_resource(high_paths.data_array[i].c_str());
@@ -41,8 +43,8 @@ namespace bbas_core_brad_train_hist
     }
     bsta_joint_histogram_3d<float> hist_init;
 
-    vcl_vector<vil_image_resource_sptr> resources = low_resources;
-    for (vcl_vector<vil_image_resource_sptr>::iterator rit = high_resources.begin();
+    std::vector<vil_image_resource_sptr> resources = low_resources;
+    for (std::vector<vil_image_resource_sptr>::iterator rit = high_resources.begin();
          rit != high_resources.end(); ++rit)
       resources.push_back(*rit);
     if (frac==1.0)
@@ -69,7 +71,7 @@ bool brad_train_histograms_process_cons(bprb_func_process& pro)
 {
   using namespace bbas_core_brad_train_hist;
   //inputs
-  vcl_vector<vcl_string> input_types(6);
+  std::vector<std::string> input_types(6);
   input_types[0]="brad_eigenspace_sptr"; //eigenspace
   input_types[1]="bbas_1d_array_string_sptr"; //low atmos input images
   input_types[2]="bbas_1d_array_string_sptr"; //high atmos input images
@@ -78,7 +80,7 @@ bool brad_train_histograms_process_cons(bprb_func_process& pro)
   input_types[5]="unsigned";//number of rows in a tile
 
   //outputs
-  vcl_vector<vcl_string> output_types;
+  std::vector<std::string> output_types;
   output_types.push_back("bsta_joint_histogram_3d_base_sptr"); // low atmos hist
   output_types.push_back("bsta_joint_histogram_3d_base_sptr"); // high atmos hist
 
@@ -92,12 +94,12 @@ bool brad_train_histograms_process(bprb_func_process& pro)
   using namespace bbas_core_brad_train_hist;
   // Sanity check
   if (pro.n_inputs()< 3) {
-    vcl_cout << "brad_train_histograms_process: The input number should be 1" << vcl_endl;
+    std::cout << "brad_train_histograms_process: The input number should be 1" << std::endl;
     return false;
   }
   brad_eigenspace_sptr es_ptr = pro.get_input<brad_eigenspace_sptr>(0);
   if (!es_ptr) {
-    vcl_cout << "in train_histograms_process, null eigenspace pointer\n";
+    std::cout << "in train_histograms_process, null eigenspace pointer\n";
     return false;
   }
   bbas_1d_array_string_sptr low_paths =

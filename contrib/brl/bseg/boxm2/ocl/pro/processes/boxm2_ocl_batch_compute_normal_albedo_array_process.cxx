@@ -7,7 +7,9 @@
 // \author Daniel Crispell
 // \date Feb 14, 2012
 
-#include <vcl_fstream.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <fstream>
 #include <boxm2/ocl/boxm2_opencl_cache.h>
 #include <boxm2/boxm2_scene.h>
 #include <boxm2/boxm2_block.h>
@@ -32,10 +34,10 @@ namespace boxm2_ocl_batch_compute_normal_albedo_array_process_globals
 {
    const unsigned n_inputs_ =  6;
    const unsigned n_outputs_ = 0;
-   void compile_kernel(bocl_device_sptr device,vcl_vector<bocl_kernel*> & vec_kernels)
+   void compile_kernel(bocl_device_sptr device,std::vector<bocl_kernel*> & vec_kernels)
    {
-      vcl_vector<vcl_string> src_paths;
-      vcl_string source_dir = boxm2_ocl_util::ocl_src_root();
+      std::vector<std::string> src_paths;
+      std::string source_dir = boxm2_ocl_util::ocl_src_root();
       src_paths.push_back(source_dir + "scene_info.cl");
       src_paths.push_back(source_dir + "statistics_library_functions.cl");
       src_paths.push_back(source_dir + "batch/batch_naa_kernels.cl");
@@ -43,12 +45,12 @@ namespace boxm2_ocl_batch_compute_normal_albedo_array_process_globals
       //compilation options
 
       bocl_kernel* compute_naa = new bocl_kernel();
-      vcl_string opts = " -D COMPUTE_NAA ";
+      std::string opts = " -D COMPUTE_NAA ";
 
       compute_naa->create_kernel(&device->context(), device->device_id(), src_paths, "batch_fit_normal_albedo_array", opts, "batch_fit_normal_albedo_array");
       vec_kernels.push_back(compute_naa);
    }
-   static vcl_map<cl_device_id*,vcl_vector<bocl_kernel*> > kernels;
+   static std::map<cl_device_id*,std::vector<bocl_kernel*> > kernels;
 }
 
 bool boxm2_ocl_batch_compute_normal_albedo_array_process_cons(bprb_func_process& pro)
@@ -62,7 +64,7 @@ bool boxm2_ocl_batch_compute_normal_albedo_array_process_cons(bprb_func_process&
    // 3) name of text file containing list of image ids
    // 4) name of text file containing list of image_metadata files
    // 5) name of text file containing list of atmospheric_parameters files
-   vcl_vector<vcl_string> input_types_(n_inputs_);
+   std::vector<std::string> input_types_(n_inputs_);
    input_types_[0] = "bocl_device_sptr";
    input_types_[1] = "boxm2_scene_sptr";
    input_types_[2] = "boxm2_opencl_cache_sptr";
@@ -70,7 +72,7 @@ bool boxm2_ocl_batch_compute_normal_albedo_array_process_cons(bprb_func_process&
    input_types_[4] = "vcl_string";        // filename: list of image metadata files
    input_types_[5] = "vcl_string";        // filename: list of atmospheric parameters files
 
-   vcl_vector<vcl_string>  output_types_(n_outputs_);
+   std::vector<std::string>  output_types_(n_outputs_);
 
    return pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
 }
@@ -80,29 +82,29 @@ bool boxm2_ocl_batch_compute_normal_albedo_array_process(bprb_func_process& pro)
    using namespace boxm2_ocl_batch_compute_normal_albedo_array_process_globals;
 
    if ( pro.n_inputs() < n_inputs_ ) {
-      vcl_cout << pro.name() << ": The number of inputs should be " << n_inputs_<< vcl_endl;
+      std::cout << pro.name() << ": The number of inputs should be " << n_inputs_<< std::endl;
       return false;
    }
    //get the inputs
    bocl_device_sptr device             = pro.get_input<bocl_device_sptr>(0);
    boxm2_scene_sptr scene              = pro.get_input<boxm2_scene_sptr>(1);
    boxm2_opencl_cache_sptr opencl_cache= pro.get_input<boxm2_opencl_cache_sptr>(2);
-   vcl_string id_list_fname =  pro.get_input<vcl_string>(3);
-   vcl_string md_list_fname =  pro.get_input<vcl_string>(4);
-   vcl_string atm_list_fname = pro.get_input<vcl_string>(5);
+   std::string id_list_fname =  pro.get_input<std::string>(3);
+   std::string md_list_fname =  pro.get_input<std::string>(4);
+   std::string atm_list_fname = pro.get_input<std::string>(5);
 
    // load metadata and atmopsheric_parameters
-   vcl_vector<brad_image_metadata> metadata;
-   vcl_vector<brad_atmospheric_parameters> atm_params;
-   vcl_vector<vcl_string> image_ids;
+   std::vector<brad_image_metadata> metadata;
+   std::vector<brad_atmospheric_parameters> atm_params;
+   std::vector<std::string> image_ids;
 
-   vcl_ifstream id_list_ifs(id_list_fname.c_str());
+   std::ifstream id_list_ifs(id_list_fname.c_str());
    if (!id_list_ifs.good()) {
-      vcl_cerr << "ERROR reading: " << id_list_fname << '\n';
+      std::cerr << "ERROR reading: " << id_list_fname << '\n';
       return false;
    }
    while (!id_list_ifs.eof()) {
-      vcl_string img_id;
+      std::string img_id;
       id_list_ifs >> img_id;
       if (img_id.length() == 0)
          continue;
@@ -110,21 +112,21 @@ bool boxm2_ocl_batch_compute_normal_albedo_array_process(bprb_func_process& pro)
    }
    id_list_ifs.close();
 
-   vcl_ifstream md_list_ifs(md_list_fname.c_str());
+   std::ifstream md_list_ifs(md_list_fname.c_str());
    if (!md_list_ifs.good()) {
-      vcl_cerr << "ERROR reading: " << md_list_fname << '\n';
+      std::cerr << "ERROR reading: " << md_list_fname << '\n';
       return false;
    }
    while (!md_list_ifs.eof()) {
-      vcl_string filename;
+      std::string filename;
       md_list_ifs >> filename;
       if (filename.length() == 0)
          continue;
-      vcl_cout << "metadata filename = <" << filename << '>' <<  vcl_endl;
+      std::cout << "metadata filename = <" << filename << '>' <<  std::endl;
       brad_image_metadata md;
-      vcl_ifstream md_ifs(filename.c_str());
+      std::ifstream md_ifs(filename.c_str());
       if (!md_ifs.good()) {
-         vcl_cerr << "ERROR reading image_metadata file: " << filename << '\n';
+         std::cerr << "ERROR reading image_metadata file: " << filename << '\n';
          return false;
       }
       md_ifs >> md;
@@ -132,21 +134,21 @@ bool boxm2_ocl_batch_compute_normal_albedo_array_process(bprb_func_process& pro)
    }
    md_list_ifs.close();
 
-   vcl_ifstream atm_list_ifs(atm_list_fname.c_str());
+   std::ifstream atm_list_ifs(atm_list_fname.c_str());
    if (!atm_list_ifs.good()) {
-      vcl_cerr << "ERROR reading: " << atm_list_fname << '\n';
+      std::cerr << "ERROR reading: " << atm_list_fname << '\n';
       return false;
    }
    while (!atm_list_ifs.eof()) {
-      vcl_string filename;
+      std::string filename;
       atm_list_ifs >> filename;
       if (filename.length() == 0)
          continue;
-      vcl_cout << "atmospheric_params filename = <" << filename << '>' <<  vcl_endl;
+      std::cout << "atmospheric_params filename = <" << filename << '>' <<  std::endl;
       brad_atmospheric_parameters atm;
-      vcl_ifstream atm_ifs(filename.c_str());
+      std::ifstream atm_ifs(filename.c_str());
       if (!atm_ifs.good()) {
-         vcl_cerr << "ERROR reading atmospheric_parameters file: " << filename << '\n';
+         std::cerr << "ERROR reading atmospheric_parameters file: " << filename << '\n';
          return false;
       }
       atm_ifs >> atm;
@@ -157,11 +159,11 @@ bool boxm2_ocl_batch_compute_normal_albedo_array_process(bprb_func_process& pro)
    // sanity check
    unsigned int num_images = image_ids.size();
    if (atm_params.size() != num_images) {
-      vcl_cerr << "ERROR: atmospheric params and image id list are different length" << '\n';
+      std::cerr << "ERROR: atmospheric params and image id list are different length" << '\n';
       return false;
    }
    if (metadata.size() != num_images) {
-      vcl_cerr << "ERROR: metadata and image id list are different length" << '\n';
+      std::cerr << "ERROR: metadata and image id list are different length" << '\n';
       return false;
    }
 
@@ -173,11 +175,11 @@ bool boxm2_ocl_batch_compute_normal_albedo_array_process(bprb_func_process& pro)
    const double skylight_var = boxm2_normal_albedo_array_constants::sigma_skylight * boxm2_normal_albedo_array_constants::sigma_skylight;
 
    // get normal directions
-   vcl_vector<vgl_vector_3d<double> > normals = boxm2_normal_albedo_array::get_normals();
+   std::vector<vgl_vector_3d<double> > normals = boxm2_normal_albedo_array::get_normals();
    unsigned int num_normals = normals.size();
    // opencl code depends on 16 normal directions
    if (num_normals != 16) {
-      vcl_cerr << "ERROR: boxm2_ocl_batch_compute_normal_albedo_array_process: expecting 16 normals, got " << num_normals << '\n';
+      std::cerr << "ERROR: boxm2_ocl_batch_compute_normal_albedo_array_process: expecting 16 normals, got " << num_normals << '\n';
       return false;
    }
    // compute offsets and scales for linear radiance model
@@ -220,7 +222,7 @@ bool boxm2_ocl_batch_compute_normal_albedo_array_process(bprb_func_process& pro)
   bocl_mem_sptr num_images_ocl = new bocl_mem(device->context(), &num_images_buff, sizeof(cl_int), "num images buffer");
   num_images_ocl->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR);
 
-  vcl_vector<vcl_string> type_names;
+  std::vector<std::string> type_names;
   type_names.push_back("aux0");
   type_names.push_back("aux1");
   type_names.push_back("aux2");
@@ -237,8 +239,8 @@ bool boxm2_ocl_batch_compute_normal_albedo_array_process(bprb_func_process& pro)
    // compile the kernel
    if (kernels.find((device->device_id()))==kernels.end())
    {
-      vcl_cout<<"===========Compiling kernels==========="<<vcl_endl;
-      vcl_vector<bocl_kernel*> ks;
+      std::cout<<"===========Compiling kernels==========="<<std::endl;
+      std::vector<bocl_kernel*> ks;
       compile_kernel(device,ks);
       kernels[(device->device_id())]=ks;
    }
@@ -249,8 +251,8 @@ bool boxm2_ocl_batch_compute_normal_albedo_array_process(bprb_func_process& pro)
 
    boxm2_stream_block_cache str_blk_cache(scene, type_names, image_ids);
 
-   vcl_vector<boxm2_block_id> block_ids = scene->get_block_ids();
-   vcl_vector<boxm2_block_id>::iterator id;
+   std::vector<boxm2_block_id> block_ids = scene->get_block_ids();
+   std::vector<boxm2_block_id>::iterator id;
    for (id = block_ids.begin(); id != block_ids.end(); ++id)
    {
       /* bocl_mem* blk = */ opencl_cache->get_block(scene,*id);
@@ -264,38 +266,38 @@ bool boxm2_ocl_batch_compute_normal_albedo_array_process(bprb_func_process& pro)
       //boxm2_block_metadata block_mdata = scene->get_block_metadata(*id);
       str_blk_cache.init(*id);
 
-      vcl_size_t num_cells = str_blk_cache.block_size_in_bytes_["aux0"]/ sizeof(float);
+      std::size_t num_cells = str_blk_cache.block_size_in_bytes_["aux0"]/ sizeof(float);
 
       cl_int num_cells_buff = (cl_int)num_cells;
       bocl_mem_sptr num_cells_ocl = new bocl_mem(device->context(), &num_cells_buff, sizeof(cl_int), "num cells buffer");
       num_cells_ocl->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR);
 
-      vcl_string data_type = boxm2_data_traits<BOXM2_NORMAL_ALBEDO_ARRAY>::prefix();
+      std::string data_type = boxm2_data_traits<BOXM2_NORMAL_ALBEDO_ARRAY>::prefix();
       int appTypeSize = (int)boxm2_data_info::datasize(data_type);
       bocl_mem* naa_apm   = opencl_cache->get_data(scene,*id,data_type,num_cells*appTypeSize, true);
 
       boxm2_data_base * data_type0 = str_blk_cache.data_types_["aux0"];
       bocl_mem_sptr bocl_data_type0 = opencl_cache->alloc_mem(data_type0->buffer_length(), data_type0->data_buffer(),"bocl data type0");
       if (!bocl_data_type0->create_buffer(CL_MEM_USE_HOST_PTR,queue))
-         vcl_cout<<"Aux0 buffer was not created"<<vcl_endl;
+         std::cout<<"Aux0 buffer was not created"<<std::endl;
 
       boxm2_data_base * data_type1 = str_blk_cache.data_types_["aux1"];
       bocl_mem_sptr bocl_data_type1 = opencl_cache->alloc_mem(data_type1->buffer_length(), data_type1->data_buffer(), "bocl data type1");
       if (!bocl_data_type1->create_buffer(CL_MEM_USE_HOST_PTR,queue))
-         vcl_cout<<"Aux1 buffer was not created"<<vcl_endl;
+         std::cout<<"Aux1 buffer was not created"<<std::endl;
 
       boxm2_data_base * data_type2 = str_blk_cache.data_types_["aux2"];
       bocl_mem_sptr bocl_data_type2 = opencl_cache->alloc_mem(data_type2->buffer_length(), data_type2->data_buffer(), "bocl data type2");
       if (!bocl_data_type2->create_buffer(CL_MEM_USE_HOST_PTR,queue))
-         vcl_cout<<"Aux2 buffer was not created"<<vcl_endl;
+         std::cout<<"Aux2 buffer was not created"<<std::endl;
 
       boxm2_data_base * data_type3 = str_blk_cache.data_types_["aux3"];
       bocl_mem_sptr bocl_data_type3 = opencl_cache->alloc_mem(data_type3->buffer_length(), data_type3->data_buffer(), "bocl data type3");
       if (!bocl_data_type3->create_buffer(CL_MEM_USE_HOST_PTR,queue))
-         vcl_cout<<"Aux3 buffer was not created"<<vcl_endl;
+         std::cout<<"Aux3 buffer was not created"<<std::endl;
 
-      vcl_size_t lThreads[] = {8, 8};
-      vcl_size_t gThreads[] = {num_cells*8,8};
+      std::size_t lThreads[] = {8, 8};
+      std::size_t gThreads[] = {num_cells*8,8};
 
       kern->set_arg(bocl_data_type0.ptr());
       kern->set_arg(bocl_data_type1.ptr());
@@ -317,13 +319,13 @@ bool boxm2_ocl_batch_compute_normal_albedo_array_process(bprb_func_process& pro)
 
       clFinish(queue);
 
-      vcl_cout<<"Time taken "<< kern->exec_time()<<vcl_endl;
+      std::cout<<"Time taken "<< kern->exec_time()<<std::endl;
 
       //clear kernel args so it can reset em on next execution
       kern->clear_args();
       naa_apm->read_to_buffer(queue);
       clFinish(queue);
-      vcl_cout << "read appearance model to buffer" << vcl_endl;
+      std::cout << "read appearance model to buffer" << std::endl;
       //cpu_cache->remove_data_base( *id, boxm2_data_traits<BOXM2_NORMAL_ALBEDO_ARRAY>::prefix() );
       str_blk_cache.clear();
 
@@ -340,6 +342,6 @@ bool boxm2_ocl_batch_compute_normal_albedo_array_process(bprb_func_process& pro)
   delete[] radiance_var_offsets_buff;
 
 
-  vcl_cout << "Finished Ocl NAA in " << timer.all() << " ms" << vcl_endl;
+  std::cout << "Finished Ocl NAA in " << timer.all() << " ms" << std::endl;
   return true;
 }

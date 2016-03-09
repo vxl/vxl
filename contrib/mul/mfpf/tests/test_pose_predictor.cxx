@@ -10,7 +10,9 @@
 //
 //=======================================================================
 
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iostream>
 #include <vsl/vsl_binary_loader.h>
 #include <mfpf/mfpf_add_all_loaders.h>
 #include <mfpf/mfpf_pose_predictor.h>
@@ -22,7 +24,7 @@
 
 void test_pose_predictor_search(mfpf_pose_predictor& pp)
 {
-  vcl_cout<<"========== Testing Search under "
+  std::cout<<"========== Testing Search under "
           <<pp.pose_type()<<" =====\n";
 
   // Create a test image
@@ -47,7 +49,7 @@ void test_pose_predictor_search(mfpf_pose_predictor& pp)
   pp_builder.add_example(image,pose0);
   pp_builder.build(pp);
 
-  vcl_cout<<"Built model: "<<pp<<vcl_endl;
+  std::cout<<"Built model: "<<pp<<std::endl;
 
   mfpf_pose new_pose;
 
@@ -59,7 +61,7 @@ void test_pose_predictor_search(mfpf_pose_predictor& pp)
 
       pp.new_pose(image,pose1,new_pose);
 //       pp.new_pose(image,new_pose,new_pose);
-      vcl_cout<<i<<","<<j<<" : "<<new_pose<<vcl_endl;
+      std::cout<<i<<","<<j<<" : "<<new_pose<<std::endl;
       double d = mfpf_max_sqr_diff(new_pose,pose0,1.0);
       double r = (new_pose.p()-pose0.p()).length();
       TEST_NEAR("Test at displaced pt",r,0,0.9);
@@ -68,15 +70,15 @@ void test_pose_predictor_search(mfpf_pose_predictor& pp)
     }
 
   pp.new_pose(image,pose0,new_pose);
-  vcl_cout<<"pose0: "<<pose0<<vcl_endl;
-  vcl_cout<<"New pose: "<<new_pose<<vcl_endl;
+  std::cout<<"pose0: "<<pose0<<std::endl;
+  std::cout<<"New pose: "<<new_pose<<std::endl;
   TEST("Pose unchanged at true point",
        mfpf_max_sqr_diff(new_pose,pose0,1.0)<0.2, true);
 }
 
 void test_pose_predictor()
 {
-  vcl_cout << "**************************\n"
+  std::cout << "**************************\n"
            << " Testing mfpf_pose_predictor\n"
            << "**************************\n";
 
@@ -84,7 +86,7 @@ void test_pose_predictor()
 
   mfpf_pose_predictor pp;
   pp.set_as_ellipse(4.5,4.5,1);
-  vcl_cout<<"Sampler: "<<pp<<vcl_endl;
+  std::cout<<"Sampler: "<<pp<<std::endl;
 
   pp.set_pose_type(translation);
   test_pose_predictor_search(pp);
@@ -113,8 +115,8 @@ void test_pose_predictor()
     vsl_b_read(bfs_in, pp_in);
     TEST ("Finished reading file successfully", (!bfs_in), false);
     bfs_in.close();
-    vcl_cout<<pp<<vcl_endl
-            <<pp_in<<vcl_endl;
+    std::cout<<pp<<std::endl
+            <<pp_in<<std::endl;
     TEST("Loaded==Saved",pp_in,pp);
   }
 

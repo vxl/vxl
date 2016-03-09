@@ -13,11 +13,13 @@
 // \endverbatim
 
 #include <brdb/brdb_value_sptr.h>
-#include <vcl_string.h>
-#include <vcl_map.h>
+#include <string>
+#include <map>
 #include <vcl_cassert.h>
 #include <vbl/vbl_ref_count.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iostream>
 #include <vsl/vsl_binary_io.h>
 
 // forward declaration
@@ -55,7 +57,7 @@ class brdb_value : public vbl_ref_count
   virtual brdb_value* clone() const = 0;
 
   //: Return the string identifying this class
-  virtual vcl_string is_a() const = 0;
+  virtual std::string is_a() const = 0;
 
   //: Test for equality under polymorphism
   virtual bool eq(const brdb_value& other) const = 0;
@@ -70,7 +72,7 @@ class brdb_value : public vbl_ref_count
   virtual void print() const = 0;
 
   //: Return a const reference to the global registry of database value classes
-  static vcl_map<vcl_string, const brdb_value*> const & registry() { return mut_registry(); }
+  static std::map<std::string, const brdb_value*> const & registry() { return mut_registry(); }
 
   //: Create static instances of this struct to register a database value class
   struct registrar{
@@ -86,14 +88,14 @@ class brdb_value : public vbl_ref_count
   //  Handles only the value (without version or type info)
   virtual void b_read_value(vsl_b_istream&)
   {
-    vcl_cout << "Warning: calling binary read on parent value class, this value is not being read" << vcl_endl;
+    std::cout << "Warning: calling binary read on parent value class, this value is not being read" << std::endl;
   }
 
   //: binary io write value only
   //  Handles only the value (without version or type info)
   virtual void b_write_value(vsl_b_ostream&)
   {
-    vcl_cout << "Warning: calling binary write on parent value class, this value is not being saved" << vcl_endl;
+    std::cout << "Warning: calling binary write on parent value class, this value is not being saved" << std::endl;
   }
 
 
@@ -105,7 +107,7 @@ class brdb_value : public vbl_ref_count
 
  private:
   //: Return a reference to the global registry of database value classes
-  static vcl_map<vcl_string, const brdb_value*> & mut_registry();
+  static std::map<std::string, const brdb_value*> & mut_registry();
 };
 
 //: Equals operator
@@ -168,9 +170,9 @@ class brdb_value_t : public brdb_value
    : value_(value) {}
 
   //: Return the string identifying this class
-  virtual vcl_string is_a() const { return get_type_string(); }
+  virtual std::string is_a() const { return get_type_string(); }
 
-  static vcl_string const& type() { return get_type_string(); }
+  static std::string const& type() { return get_type_string(); }
 
   //: Clone
   virtual brdb_value * clone() const { return new brdb_value_t<T>(*this); }
@@ -185,7 +187,7 @@ class brdb_value_t : public brdb_value
   virtual bool assign(const brdb_value& other);
 
   //: Return the string identifying this class
-  virtual void print() const { vcl_cout << value_ << "   ";}
+  virtual void print() const { std::cout << value_ << "   ";}
 
   //: Return the value
   T value() const { return value_; }
@@ -214,7 +216,7 @@ class brdb_value_t : public brdb_value
   T value_;
 
   //: The type identifier string for this class
-  static const vcl_string& get_type_string();
+  static const std::string& get_type_string();
 };
 
 template< class T >

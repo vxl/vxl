@@ -4,10 +4,12 @@
 // \date 25-Jan-2011
 
 #include "bvpl_taylor_basis_factory.h"
-#include <vcl_map.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <map>
 
 //: Constructor from filename
-bvpl_taylor_basis_factory::bvpl_taylor_basis_factory(vcl_string filename)
+bvpl_taylor_basis_factory::bvpl_taylor_basis_factory(std::string filename)
 {
   //initialize variables
   filename_ = filename;
@@ -27,7 +29,7 @@ void bvpl_taylor_basis_factory::create_canonical()
   typedef vgl_point_3d<float> point_3d;
   typedef bvpl_kernel_dispatch dispatch;
 
-  vcl_ifstream ifs(filename_.c_str());
+  std::ifstream ifs(filename_.c_str());
 
   //set the dimension of the 3-d bounding box containing the kernels
   if (!ifs.eof())
@@ -35,7 +37,7 @@ void bvpl_taylor_basis_factory::create_canonical()
     ifs >> min_point_;
     ifs >> max_point_;
   }
-  vcl_cout << " Max point: " << max_point_ << " Min point: " << min_point_ << vcl_endl;
+  std::cout << " Max point: " << max_point_ << " Min point: " << min_point_ << std::endl;
 
   while (!ifs.eof())
   {
@@ -43,7 +45,7 @@ void bvpl_taylor_basis_factory::create_canonical()
     float weight;
     ifs >> this_loc;
     ifs >> weight;
-    canonical_kernel_.push_back(vcl_pair<point_3d,dispatch>(this_loc, dispatch(weight)));
+    canonical_kernel_.push_back(std::pair<point_3d,dispatch>(this_loc, dispatch(weight)));
   }
 
   //set the current kernel
@@ -54,27 +56,27 @@ void bvpl_taylor_basis_factory::create_canonical()
 
 /************************bvpl_taylor_basis_loader**************************************/
 
-void bvpl_taylor_basis_loader::create_basis(vcl_map<vcl_string, bvpl_kernel_sptr> &taylor_basis)
+void bvpl_taylor_basis_loader::create_basis(std::map<std::string, bvpl_kernel_sptr> &taylor_basis)
 {
   //get filenames, iterate through files reading the kernels
-  vcl_vector<vcl_string> filenames;
+  std::vector<std::string> filenames;
   files(filenames);
 
-  vcl_vector<vcl_string>::iterator file_it =filenames.begin();
+  std::vector<std::string>::iterator file_it =filenames.begin();
 
   for (; file_it != filenames.end(); file_it++)
   {
-    vcl_string filename = path_ + '/' + *file_it + ".txt";
-    vcl_cout << "Reading kernel file : " << filename << vcl_endl;
+    std::string filename = path_ + '/' + *file_it + ".txt";
+    std::cout << "Reading kernel file : " << filename << std::endl;
     bvpl_taylor_basis_factory factory(filename);
     bvpl_kernel_sptr kernel = new bvpl_kernel(factory.create());
     //kernel->print();
-    taylor_basis.insert(vcl_pair<vcl_string, bvpl_kernel_sptr>(*file_it, kernel));
+    taylor_basis.insert(std::pair<std::string, bvpl_kernel_sptr>(*file_it, kernel));
   }
 }
 
 //: Kernels needed for 2 degree approximation of 3D functions
-void bvpl_taylor_basis_loader::files(vcl_vector<vcl_string> &filenames)
+void bvpl_taylor_basis_loader::files(std::vector<std::string> &filenames)
 {
   if (degree_ == 2)
   {

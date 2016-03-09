@@ -5,7 +5,9 @@
 // \file
 #include "bsta_mean_shift.h"
 
-#include <vcl_map.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <map>
 
 template <class T, unsigned n>
 bool
@@ -15,18 +17,18 @@ bsta_mean_shift<T,n>::find_modes(bsta_sample_set<T,n>& set, vnl_random & rng, fl
 
   // initialize seeds by picking given percentage of the sample set randomly
   int size = set.size();
-  int seed_size = (int)vcl_ceil(percentage*size/100.0f);
-  vcl_cout << "size: " << size << " seed_size: " << seed_size << vcl_endl;
+  int seed_size = (int)std::ceil(percentage*size/100.0f);
+  std::cout << "size: " << size << " seed_size: " << seed_size << std::endl;
 
   set.initialize_assignments();
 
-  vcl_cout << "initialized assignment_, its size: " << set.assignments().size()  << vcl_endl;
+  std::cout << "initialized assignment_, its size: " << set.assignments().size()  << std::endl;
 
   for (int i = 0; i < seed_size; i++)
   {
     // randomly pick one of the samples as seed
     double rn = rng.drand32();
-    int s_id = (int)vcl_floor(rn*(size-1)+0.5f);
+    int s_id = (int)std::floor(rn*(size-1)+0.5f);
     if (set.assignment(s_id) >= 0) { // has already been assigned to a mode
       i--;
       continue;
@@ -100,7 +102,7 @@ bool
 bsta_mean_shift<T,n>::merge_modes(bsta_sample_set<T,n>& set, int cnt, T epsilon)
 {
   typedef typename bsta_distribution<T,n>::vector_type vect_t;
-  vcl_vector<bool> eliminated_modes(modes_.size(), false);
+  std::vector<bool> eliminated_modes(modes_.size(), false);
 
   for (unsigned m = 0; m < modes_.size(); m++)
   {
@@ -145,7 +147,7 @@ bsta_mean_shift<T,n>::merge_modes(bsta_sample_set<T,n>& set, int cnt, T epsilon)
   }
 
   // re-arrange the assignment vector with the new mode ids
-  vcl_vector<vect_t > new_modes;
+  std::vector<vect_t > new_modes;
   for (unsigned i = 0; i < modes_.size(); i++) {
     if (!eliminated_modes[i]) {
       new_modes.push_back(modes_[i]);
@@ -172,7 +174,7 @@ bsta_mean_shift<T,n>::trim_modes(bsta_sample_set<T,n>& set, T epsilon)
   if (!modes_.size())
     return false;
 
-  vcl_vector<bool> trimmed(modes_.size(), false);
+  std::vector<bool> trimmed(modes_.size(), false);
   for (unsigned i = 0; i < modes_.size(); i++) {
     if (trimmed[i])
       continue;
@@ -195,7 +197,7 @@ bsta_mean_shift<T,n>::trim_modes(bsta_sample_set<T,n>& set, T epsilon)
       }
     }
   }
-  vcl_vector<vect_t > new_modes;
+  std::vector<vect_t > new_modes;
   for (unsigned i = 0; i < modes_.size(); i++) {
     if (!trimmed[i]) {
       new_modes.push_back(modes_[i]);

@@ -9,7 +9,9 @@
 #include <boxm2/ocl/boxm2_opencl_cache1.h>
 #include <vgl/vgl_box_3d.h>
 #include <vpgl/vpgl_camera_double_sptr.h>
-#include <vcl_iosfwd.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iosfwd>
 
 //: a helper class that groups together contiguous blocks across devices.
 // Essentially this enforces that a group contains just one block per device,
@@ -28,7 +30,7 @@ class boxm2_multi_cache_group
 {
   public:
     boxm2_multi_cache_group() {}
-    boxm2_multi_cache_group(vcl_vector<boxm2_block_id> ids):ids_(ids) {}
+    boxm2_multi_cache_group(std::vector<boxm2_block_id> ids):ids_(ids) {}
 
     //: add a block to the group
     void add_block(boxm2_block_metadata data, boxm2_opencl_cache1* cache) {
@@ -43,7 +45,7 @@ class boxm2_multi_cache_group
     }
 
     //: visibility order of blocks from camera (returns indices)
-    vcl_vector<int> order_from_cam(vpgl_camera_double_sptr cam);
+    std::vector<int> order_from_cam(vpgl_camera_double_sptr cam);
 
     //: set visibility image, set pre image
     void set_vis(int i, float* vis) { vis_imgs_[i] = vis; }
@@ -53,10 +55,10 @@ class boxm2_multi_cache_group
 
     //get id
     boxm2_block_id& id(int i) { return ids_[i]; }
-    vcl_vector<boxm2_block_id>& ids() { return ids_; };
+    std::vector<boxm2_block_id>& ids() { return ids_; };
 
     //get boxes
-    vcl_vector<vgl_box_3d<double> >& bboxes() { return bboxes_; }
+    std::vector<vgl_box_3d<double> >& bboxes() { return bboxes_; }
     vgl_box_3d<double>& bbox(int i) { return bboxes_[i]; }
 
     //get full bbox
@@ -64,23 +66,23 @@ class boxm2_multi_cache_group
 
   private:
     //ids
-    vcl_vector<boxm2_block_id> ids_;
+    std::vector<boxm2_block_id> ids_;
 
     //cache taht each block belongs to
-    vcl_vector<boxm2_opencl_cache1*> caches_;
+    std::vector<boxm2_opencl_cache1*> caches_;
 
     //bboxes for each block
-    vcl_vector<vgl_box_3d<double> > bboxes_;
+    std::vector<vgl_box_3d<double> > bboxes_;
 
     //group Bbox
     vgl_box_3d<double> bbox_;
 
     //vis/pre images
-    vcl_vector<float*> vis_imgs_;
-    vcl_vector<float*> pre_imgs_;
+    std::vector<float*> vis_imgs_;
+    std::vector<float*> pre_imgs_;
 };
 
 //group IO
-vcl_ostream& operator<<(vcl_ostream &s, boxm2_multi_cache_group& grp);
+std::ostream& operator<<(std::ostream &s, boxm2_multi_cache_group& grp);
 
 #endif // boxm2_multi_cache_group_h_

@@ -20,7 +20,7 @@ namespace vil_shadow_ridge_detection_process_globals
 
   float dist_angles(float a,float b)
   {
-    float dist = vcl_fabs((b-a));
+    float dist = std::fabs((b-a));
     return dist < float(vnl_math::pi) ? dist : float(vnl_math::twopi) - dist;
   }
 }
@@ -31,13 +31,13 @@ bool vil_shadow_ridge_detection_process_cons(bprb_func_process& pro)
   using namespace vil_shadow_ridge_detection_process_globals;
 
   //process takes 3 inputs
-  vcl_vector<vcl_string> input_types_(n_inputs_);
+  std::vector<std::string> input_types_(n_inputs_);
   input_types_[0] = "vil_image_view_base_sptr";
   input_types_[1] = "int"; // blob size ( 100 pixels or so)
   input_types_[2] = "float"; // -0.75*vnl_math::pi
 
   // process has 3 outputs
-  vcl_vector<vcl_string>  output_types_(n_outputs_);
+  std::vector<std::string>  output_types_(n_outputs_);
   output_types_[0] = "vil_image_view_base_sptr"; // Shadow  Regions
   output_types_[1] = "vil_image_view_base_sptr"; // Shadow Ridges
   output_types_[2] = "vil_image_view_base_sptr"; // Length of Shadows
@@ -53,7 +53,7 @@ bool vil_shadow_ridge_detection_process(bprb_func_process& pro)
 
   // Sanity check
   if (pro.n_inputs()< 3) {
-    vcl_cout << "vil_shadow_ridge_detection_process: The number of inputs should be 3" << vcl_endl;
+    std::cout << "vil_shadow_ridge_detection_process: The number of inputs should be 3" << std::endl;
     return false;
   }
 
@@ -65,7 +65,7 @@ bool vil_shadow_ridge_detection_process(bprb_func_process& pro)
 
   if (out_img->nplanes() != 1)
   {
-    vcl_cout<<"Input needs to be a bool image" << vcl_endl;
+    std::cout<<"Input needs to be a bool image" << std::endl;
     return false;
   }
 
@@ -83,7 +83,7 @@ bool vil_shadow_ridge_detection_process(bprb_func_process& pro)
   vil_image_view<unsigned> * conn_edge = new vil_image_view<unsigned>(out_img->ni(),out_img->nj());
   vil_blob_labels(close_img,vil_blob_8_conn,*conn_region);
 
-  vcl_vector<vil_blob_pixel_list> dest_pixel_lists;
+  std::vector<vil_blob_pixel_list> dest_pixel_lists;
   vil_blob_labels_to_pixel_lists(*conn_region,dest_pixel_lists);
 
   unsigned count = 1;
@@ -98,10 +98,10 @@ bool vil_shadow_ridge_detection_process(bprb_func_process& pro)
     }
   }
 
-  vcl_cout<<"Selected "<<count <<" out of "<<dest_pixel_lists.size()<<vcl_endl;
+  std::cout<<"Selected "<<count <<" out of "<<dest_pixel_lists.size()<<std::endl;
   vil_blob_labels_to_edge_labels(*conn_thresh_region,vil_blob_8_conn,*conn_edge);
 
-  vcl_vector<vil_blob_pixel_list> blob_edge_pixel_lists;
+  std::vector<vil_blob_pixel_list> blob_edge_pixel_lists;
   vil_blob_labels_to_pixel_lists(*conn_edge,blob_edge_pixel_lists);
 
   vil_image_view<float> * shadow_border_edge = new vil_image_view<float>(out_img->ni(),out_img->nj());
@@ -123,7 +123,7 @@ bool vil_shadow_ridge_detection_process(bprb_func_process& pro)
         {
           float dx = (float)blob_edge_pixel_lists[k][m].first - (float)blob_edge_pixel_lists[k][l].first;
           float dy = (float)blob_edge_pixel_lists[k][m].second -  (float)blob_edge_pixel_lists[k][l].second;
-          float angle = vcl_atan2(dy,dx);
+          float angle = std::atan2(dy,dx);
 
           float r = dx*dx+dy*dy;
           if (r > 16.0)
@@ -140,7 +140,7 @@ bool vil_shadow_ridge_detection_process(bprb_func_process& pro)
       if (min < 0.04)
       {
         (*shadow_border_edge_thresholded)(blob_edge_pixel_lists[k][l].first,blob_edge_pixel_lists[k][l].second) = 1;
-        (*shadow_border_dist)(blob_edge_pixel_lists[k][l].first,blob_edge_pixel_lists[k][l].second) = vcl_sqrt(min_r);
+        (*shadow_border_dist)(blob_edge_pixel_lists[k][l].first,blob_edge_pixel_lists[k][l].second) = std::sqrt(min_r);
       }
     }
   }
@@ -152,7 +152,7 @@ bool vil_shadow_ridge_detection_process(bprb_func_process& pro)
   shadow_border_conn_thresh_region->fill(0);
 
   vil_blob_labels(*shadow_border_edge_thresholded,vil_blob_8_conn,*shadow_border_conn_region);
-  vcl_vector<vil_blob_pixel_list> shadow_edge_dest_pixel_lists;
+  std::vector<vil_blob_pixel_list> shadow_edge_dest_pixel_lists;
   vil_blob_labels_to_pixel_lists(*shadow_border_conn_region,shadow_edge_dest_pixel_lists);
   count = 1;
   for ( unsigned int k = 0 ; k < shadow_edge_dest_pixel_lists.size(); k++)

@@ -8,8 +8,10 @@
 #include <sys/stat.h>
 #include <fcntl.h>
 #include <sys/signal.h>
-#include <vcl_cstdlib.h> // for exit()
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <cstdlib> // for exit()
+#include <iostream>
 #include <vil/vil_image_view.h>
 #include <unistd.h>
 
@@ -26,9 +28,9 @@ class FrameGrabberVil
                   int width=320, int height=240);
   ~FrameGrabberVil();
   FrameGrabberVil(const FrameGrabberVil &cpy)
-  { vcl_cerr << "Can't copy framegrabber\n"; vcl_exit(-1); }
+  { std::cerr << "Can't copy framegrabber\n"; std::exit(-1); }
   FrameGrabberVil &operator=(const FrameGrabberVil &cpy)
-  { vcl_cerr << "Can't copy framegrabber\n"; vcl_exit(-1); return *this; }
+  { std::cerr << "Can't copy framegrabber\n"; std::exit(-1); return *this; }
   vil_image_view<vxl_byte> *grab_frame();
 
  private:

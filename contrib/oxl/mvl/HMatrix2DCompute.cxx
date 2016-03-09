@@ -1,11 +1,13 @@
 #include "HMatrix2DCompute.h"
 
-#include <vcl_cstdlib.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <cstdlib>
+#include <iostream>
 
 #include <mvl/HMatrix2D.h>
 #include <mvl/PairMatchSetCorner.h>
-#include <vcl_vector.h>
+#include <vector>
 
 bool
 HMatrix2DCompute::compute_p(PointArray const&p1,
@@ -32,14 +34,14 @@ HMatrix2DCompute::compute_pl(PointArray const&,
                              LineArray const&,
                              HMatrix2D *)
 {
-  vcl_cerr << vcl_endl;
-  vcl_cerr << "HMatrix2DCompute::compute_pl() :" << vcl_endl;
-  vcl_cerr << "This is a virtual method which should have been" << vcl_endl;
-  vcl_cerr << "overridden by a class derived from HMatrix2DCompute." << vcl_endl;
-  vcl_cerr << "The derived class may have omitted to implement" << vcl_endl;
-  vcl_cerr << "enough of the methods compute_p(),compute_l() and" << vcl_endl;
-  vcl_cerr << "compute_pl()." << vcl_endl;
-  vcl_abort();
+  std::cerr << std::endl;
+  std::cerr << "HMatrix2DCompute::compute_pl() :" << std::endl;
+  std::cerr << "This is a virtual method which should have been" << std::endl;
+  std::cerr << "overridden by a class derived from HMatrix2DCompute." << std::endl;
+  std::cerr << "The derived class may have omitted to implement" << std::endl;
+  std::cerr << "enough of the methods compute_p(),compute_l() and" << std::endl;
+  std::cerr << "compute_pl()." << std::endl;
+  std::abort();
   return false;
 }
 
@@ -114,8 +116,8 @@ bool
 HMatrix2DCompute::compute(PairMatchSetCorner const &matches,
                           HMatrix2D *H)
 {
-  vcl_vector<HomgPoint2D> pts1(matches.count());
-  vcl_vector<HomgPoint2D> pts2(matches.count());
+  std::vector<HomgPoint2D> pts1(matches.count());
+  std::vector<HomgPoint2D> pts2(matches.count());
   matches.extract_matches(pts1, pts2);
   return compute(pts1, pts2, H);
 }

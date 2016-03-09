@@ -6,9 +6,11 @@
 // \brief Simple object to build histogram from supplied data.
 // \author Tim Cootes
 
-#include <vcl_iosfwd.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iosfwd>
 #include <vsl/vsl_binary_io.h>
-#include <vcl_vector.h>
+#include <vector>
 
 //: Simple object to build histogram from supplied data.
 //  Assumes all 1D data can be cast to doubles
@@ -17,10 +19,10 @@ class mbl_histogram
 {
   //: Position of limits of each bin.
   //  Bin i is [bins_[i],bins_[i+1])
-  vcl_vector<double> bins_;
+  std::vector<double> bins_;
 
   //: Number in each bin
-  vcl_vector<int> freq_;
+  std::vector<int> freq_;
 
   //: Number below lowest bin
   int n_below_;
@@ -51,13 +53,13 @@ class mbl_histogram
 
   //: Position of limits of each bin.
   //  Bin i is [bins_[i],bins_[i+1])
-  const vcl_vector<double>& bins() const { return bins_; }
+  const std::vector<double>& bins() const { return bins_; }
 
   //: Number of observations
   int n_obs() const { return n_obs_;}
 
   //: Number in each bin
-  const vcl_vector<int>& frequency() const { return freq_; }
+  const std::vector<int>& frequency() const { return freq_; }
 
   //: Number below lowest bin
   int n_below() const { return n_below_; }
@@ -77,7 +79,7 @@ class mbl_histogram
   // \return true if successful
   bool write_cdf(const char* path);
 
-  void print_summary(vcl_ostream& os) const;
+  void print_summary(std::ostream& os) const;
   //: Version number for I/O
   short version_no() const;
   void b_write(vsl_b_ostream& bfs) const;
@@ -94,9 +96,9 @@ void vsl_b_write(vsl_b_ostream& bfs, const mbl_histogram& histo);
 void vsl_b_read(vsl_b_istream& bfs, mbl_histogram& histo);
 
 //: Stream output operator for class reference
-vcl_ostream& operator<<(vcl_ostream& os, const mbl_histogram& histo);
+std::ostream& operator<<(std::ostream& os, const mbl_histogram& histo);
 
 //: Stream output operator for class reference
-void vsl_print_summary(vcl_ostream& os, const mbl_histogram& histo);
+void vsl_print_summary(std::ostream& os, const mbl_histogram& histo);
 
 #endif

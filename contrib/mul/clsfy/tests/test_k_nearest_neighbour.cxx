@@ -7,13 +7,15 @@
 // \author Ian Scott
 // Test construction, IO etc.
 
-#include <vcl_vector.h>
-#include <vcl_iostream.h>
-#include <vcl_sstream.h>
-#include <vcl_iomanip.h>
-#include <vcl_ios.h>
-#include <vcl_algorithm.h>
-#include <vcl_string.h>
+#include <vector>
+#include <iostream>
+#include <sstream>
+#include <iomanip>
+#include <ios>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <algorithm>
+#include <string>
 #include <vpl/vpl.h> // vpl_unlink()
 
 #include <clsfy/clsfy_add_all_loaders.h>
@@ -34,10 +36,10 @@
 #endif
 
 template <class T>
-inline static vcl_ostream& operator<< (vcl_ostream& os, vcl_vector<T> const& v)
+inline static std::ostream& operator<< (std::ostream& os, std::vector<T> const& v)
 {
   os << '[' << v.size() << ']';
-  typename vcl_vector<T>::const_iterator it = v.begin();
+  typename std::vector<T>::const_iterator it = v.begin();
   for (; it != v.end(); ++it) os << ' ' << (*it);
   return os;
 }
@@ -45,15 +47,15 @@ inline static vcl_ostream& operator<< (vcl_ostream& os, vcl_vector<T> const& v)
 //: Test clsfy_k_nearest_neighbour and clsfy.rbf_parzen_window
 void test_k_nearest_neighbour()
 {
-  vcl_cout << "***************************************************************\n"
+  std::cout << "***************************************************************\n"
            << " Testing clsfy_k_nearest_neighbour and clsfy.rbf_parzen_window\n"
            << "***************************************************************\n";
 
-  vcl_cout<<"\n======== TESTING CONSTRUCTION ===========\n";
+  std::cout<<"\n======== TESTING CONSTRUCTION ===========\n";
 
   clsfy_add_all_loaders();
 
-  vcl_vector<vpdfl_axis_gaussian_sampler *> generator(4);//
+  std::vector<vpdfl_axis_gaussian_sampler *> generator(4);//
   const unsigned nDims = 2;
   vnl_vector<double> mean0(nDims), var0(nDims), mean1(nDims), var1(nDims), mean2(nDims), var2(nDims), mean3(nDims), var3(nDims);
   vpdfl_axis_gaussian PDF0, PDF1, PDF2, PDF3;
@@ -84,13 +86,13 @@ void test_k_nearest_neighbour()
   const unsigned nSamples = 200;
   const unsigned nTestSamples = 500;
 
-  vcl_vector<unsigned> labels(nSamples);
-  vcl_vector<unsigned> testLabels(nTestSamples);
-  vcl_vector<vnl_vector<double> > data(nSamples);
-  vcl_vector<vnl_vector<double> > testData(nTestSamples);
+  std::vector<unsigned> labels(nSamples);
+  std::vector<unsigned> testLabels(nTestSamples);
+  std::vector<vnl_vector<double> > data(nSamples);
+  std::vector<vnl_vector<double> > testData(nTestSamples);
   vnl_vector<double> s;
-  vcl_vector<unsigned> labelcount(4);
-  vcl_fill(labelcount.begin(), labelcount.end(), 0u);
+  std::vector<unsigned> labelcount(4);
+  std::fill(labelcount.begin(), labelcount.end(), 0u);
 
   for (unsigned int i=0; i<nSamples; i++)
   {
@@ -100,9 +102,9 @@ void test_k_nearest_neighbour()
     generator[c]->sample(s);
     data[i] = s;
   }
-  vcl_cout << "The number of labels from each generators are respectively "
+  std::cout << "The number of labels from each generators are respectively "
            << labelcount[0] << ' ' << labelcount[1] << ' ' << labelcount[2]
-           << ' ' << labelcount[3] <<  vcl_endl;
+           << ' ' << labelcount[3] <<  std::endl;
 
   for (unsigned int i=0; i<nTestSamples; i++)
   {
@@ -119,57 +121,57 @@ void test_k_nearest_neighbour()
   mbl_data_array_wrapper<vnl_vector<double> > training_set_inputs(data);
   mbl_data_array_wrapper<vnl_vector<double> > test_set_inputs(testData);
 
-  vcl_cout << "****************Testing over descision space****************\n";
+  std::cout << "****************Testing over descision space****************\n";
 
   vnl_vector<double> x(nDims);
-  vcl_vector<double> out(1);
+  std::vector<double> out(1);
   x.fill(0.0);
-  vcl_cout << "x(2) varies across from -2 to + 2\n"
+  std::cout << "x(2) varies across from -2 to + 2\n"
            << "x(1) varies down from -2 to + 2\n";
 
   clsfy_k_nearest_neighbour knn;
   knn.set(data, labels);
   knn.set_k(3);
-  vcl_cout << vcl_endl << "KNN output\n"
-           << vcl_setprecision(4);
+  std::cout << std::endl << "KNN output\n"
+           << std::setprecision(4);
   for (x(0) = -2; x(0) <= 2 ; x(0) += 0.25)
   {
     for (x(1) = -2; x(1) <= 2 ; x(1) += 0.25)
     {
       knn.class_probabilities(out, x);
-      vcl_cout << vcl_fixed << vcl_setw(3) << out[0] << ' ';
+      std::cout << std::fixed << std::setw(3) << out[0] << ' ';
     }
-    vcl_cout << vcl_endl;
+    std::cout << std::endl;
   }
 
   for (x(0) = -2; x(0) <= 2 ; x(0) += 0.25)
   {
     for (x(1) = -2; x(1) <= 2 ; x(1) += 0.25)
     {
-      vcl_cout << knn.classify(x);
+      std::cout << knn.classify(x);
     }
-    vcl_cout << vcl_endl;
+    std::cout << std::endl;
   }
 
   clsfy_rbf_parzen win;
   win.set(data, labels);
   win.set_rbf_width(0.141);
   win.set_power(10);
-  vcl_cout << vcl_endl << "Training data distribution\n";
+  std::cout << std::endl << "Training data distribution\n";
 
-  vcl_cout << vcl_setprecision(1);
+  std::cout << std::setprecision(1);
   for (x(0) = -2; x(0) <= 2 ; x(0) += 0.25)
   {
     for (x(1) = -2; x(1) <= 2 ; x(1) += 0.25)
     {
-      vcl_cout << vcl_fixed << vcl_setw(4) << win.weightings(x) << ' ';
+      std::cout << std::fixed << std::setw(4) << win.weightings(x) << ' ';
     }
-    vcl_cout << vcl_endl;
+    std::cout << std::endl;
   }
 
-  vcl_cout << vcl_endl << "RBF Window Classifier output\n";
+  std::cout << std::endl << "RBF Window Classifier output\n";
 
-  vcl_cout << vcl_setprecision(4);
+  std::cout << std::setprecision(4);
   win.set_rbf_width(0.3);
   win.set_power(2);
   for (x(0) = -2; x(0) <= 2 ; x(0) += 0.25)
@@ -177,18 +179,18 @@ void test_k_nearest_neighbour()
     for (x(1) = -2; x(1) <= 2 ; x(1) += 0.25)
     {
       win.class_probabilities(out, x);
-      vcl_cout << vcl_fixed << vcl_setw(3) << out[0] << ' ';
+      std::cout << std::fixed << std::setw(3) << out[0] << ' ';
     }
-    vcl_cout << vcl_endl;
+    std::cout << std::endl;
   }
 
   for (x(0) = -2; x(0) <= 2 ; x(0) += 0.25)
   {
     for (x(1) = -2; x(1) <= 2 ; x(1) += 0.25)
     {
-      vcl_cout << win.classify(x);
+      std::cout << win.classify(x);
     }
-    vcl_cout << vcl_endl;
+    std::cout << std::endl;
   }
 
 
@@ -198,76 +200,76 @@ void test_k_nearest_neighbour()
   rc.reseed(456456ul);
   rb.build(rc, training_set_inputs, 1, labels);
 
-  vcl_cout  << vcl_endl << "Random Classifier output\n";
+  std::cout  << std::endl << "Random Classifier output\n";
 
-  vcl_cout << vcl_setprecision(4);
+  std::cout << std::setprecision(4);
   for (x(0) = -2; x(0) <= 2 ; x(0) += 0.25)
   {
     for (x(1) = -2; x(1) <= 2 ; x(1) += 0.25)
     {
       rc.class_probabilities(out, x);
-      vcl_cout << vcl_fixed << vcl_setw(3) << out[0] << ' ';
+      std::cout << std::fixed << std::setw(3) << out[0] << ' ';
     }
-    vcl_cout << vcl_endl;
+    std::cout << std::endl;
   }
 
   for (x(0) = -2; x(0) <= 2 ; x(0) += 0.25)
   {
     for (x(1) = -2; x(1) <= 2 ; x(1) += 0.25)
     {
-      vcl_cout << rc.classify(x);
+      std::cout << rc.classify(x);
     }
-    vcl_cout << vcl_endl;
+    std::cout << std::endl;
   }
 
 
-  vcl_cout << "****************Testing over testing set**************\n";
+  std::cout << "****************Testing over testing set**************\n";
 #if 0
-  vcl_cout << clsfy_test_error(knn, test_set_inputs, testLabels) << vcl_endl;
+  std::cout << clsfy_test_error(knn, test_set_inputs, testLabels) << std::endl;
 #endif
 
   TEST_NEAR("Test error on clsfy_k_nearest_neighbour close to 0.0",
             clsfy_test_error(knn, test_set_inputs, testLabels), 0.0, 0.02);
 #if 0
-  vcl_cout << clsfy_test_error(win, test_set_inputs, testLabels) << vcl_endl;
+  std::cout << clsfy_test_error(win, test_set_inputs, testLabels) << std::endl;
 #endif
 
   TEST_NEAR("test error on clsfy_rbf_parzen_window close to 0.0",
             clsfy_test_error(win, test_set_inputs, testLabels), 0.0, 0.02);
 
-  vcl_vector<double> probs(2);
+  std::vector<double> probs(2);
   probs[0] = 0.25;
   probs[1] = 0.75;
   rc.set_probs(probs);
 
 #if 0
-  vcl_cout << clsfy_test_error(rc, test_set_inputs, testLabels) << vcl_endl;
+  std::cout << clsfy_test_error(rc, test_set_inputs, testLabels) << std::endl;
 #endif
   TEST_NEAR("test error on clsfy_random_classifier close to 0.5",
             clsfy_test_error(rc, test_set_inputs, testLabels), 0.5, 0.05);
 
-  vcl_cout << "****************Testing builder configuration**************\n";
+  std::cout << "****************Testing builder configuration**************\n";
   {
     clsfy_knn_builder knn_build;
     knn_build.set_k(5);
 
-    vcl_istringstream ss("clsfy_knn_builder { k: 5 }\n");
-    vcl_auto_ptr<clsfy_builder_base> knn_build_conf =
+    std::istringstream ss("clsfy_knn_builder { k: 5 }\n");
+    std::auto_ptr<clsfy_builder_base> knn_build_conf =
       clsfy_builder_base::new_builder(ss);
 
     TEST("Builder config knn", mbl_test_summaries_are_equal(knn_build_conf.get(),
       static_cast<clsfy_builder_base*>(&knn_build) ), true);
   }
-  vcl_cout << "****************Testing builder**************\n";
+  std::cout << "****************Testing builder**************\n";
 
   rc.class_probabilities(out, x);
   TEST("Random classifier indicates correct input size", rc.n_dims(), 2);
   TEST("Random classifier indicates correct output size", rc.n_classes(), 1);
   TEST("Random classifier gives correct output size", out.size(), 1);
 
-  vcl_cout << "****************Testing classifier IO**************\n";
+  std::cout << "****************Testing classifier IO**************\n";
 
-  vcl_string test_path = "test_k_nearest_neighbour.bvl.tmp";
+  std::string test_path = "test_k_nearest_neighbour.bvl.tmp";
 
   vsl_b_ofstream bfs_out(test_path);
   TEST(("Opened " + test_path + " for writing").c_str(), (!bfs_out ), false);
@@ -295,13 +297,13 @@ void test_k_nearest_neighbour()
   vpl_unlink(test_path.c_str());
 #endif
 
-  vcl_cout<<"Saved KNN: " << knn << vcl_endl
-          <<"Loaded KNN: " << knn_in << vcl_endl
-          <<"Loaded KNN: " << p_base_class_knn_in << vcl_endl
+  std::cout<<"Saved KNN: " << knn << std::endl
+          <<"Loaded KNN: " << knn_in << std::endl
+          <<"Loaded KNN: " << p_base_class_knn_in << std::endl
 
-          <<"Saved Win: " << win << vcl_endl
-          <<"Loaded Win: " << win_in << vcl_endl
-          <<"Loaded Win: " << p_base_class_win_in << vcl_endl;
+          <<"Saved Win: " << win << std::endl
+          <<"Loaded Win: " << win_in << std::endl
+          <<"Loaded Win: " << p_base_class_win_in << std::endl;
 
 
   const vnl_vector<double> probe(2,2.0);
@@ -315,7 +317,7 @@ void test_k_nearest_neighbour()
        true);
 
 
-  vcl_cout << "knn.log_l(2.0, 2.0) = " << knn.log_l(probe) << vcl_endl;
+  std::cout << "knn.log_l(2.0, 2.0) = " << knn.log_l(probe) << std::endl;
   TEST("Original KNN(2.0, 2.0) == Loaded KNN(2.0, 2.0)",
        knn.log_l(probe), knn_in.log_l(probe));
 
@@ -338,7 +340,7 @@ void test_k_nearest_neighbour()
        win.rbf_width() == win_in.rbf_width(),
        true);
 
-  vcl_cout << "win.log_l(2.0, 2.0) = " << win.log_l(probe) << vcl_endl;
+  std::cout << "win.log_l(2.0, 2.0) = " << win.log_l(probe) << std::endl;
   TEST("Original Parzen(2.0, 2.0) == Loaded Parzen(2.0, 2.0)",
        win.log_l(probe), win_in.log_l(probe));
 
@@ -353,7 +355,7 @@ void test_k_nearest_neighbour()
   TEST("Original Parzen(2.0, 2.0) == Loaded by base ptr Parzen(2.0, 2.0)",
        win.log_l(probe), p_base_class_win_in->log_l(probe));
 
-  vcl_cout << vcl_setprecision(6) << vcl_resetiosflags(vcl_ios_floatfield);
+  std::cout << std::setprecision(6) << std::resetiosflags(std::ios::floatfield);
 
   delete p_base_class_knn_in;
   delete p_base_class_win_in;

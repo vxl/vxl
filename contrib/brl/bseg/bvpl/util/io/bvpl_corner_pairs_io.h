@@ -14,7 +14,9 @@
 // \endverbatim
 
 #include <vsl/vsl_binary_io.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iostream>
 #include <bvpl/util/bvpl_corner_pair_finder.h>
 
 
@@ -28,7 +30,7 @@ void vsl_b_write(vsl_b_ostream & os, bvpl_corner_pairs const &kernel);
 void vsl_b_read(vsl_b_istream & is, bvpl_corner_pairs &k);
 
 
-void vsl_print_summary(vcl_ostream &os, const bvpl_corner_pairs &k);
+void vsl_print_summary(std::ostream &os, const bvpl_corner_pairs &k);
 
 
 void vsl_b_read(vsl_b_istream& is, bvpl_corner_pairs* k);
@@ -36,7 +38,7 @@ void vsl_b_read(vsl_b_istream& is, bvpl_corner_pairs* k);
 
 void vsl_b_write(vsl_b_ostream& os, const bvpl_corner_pairs* &k);
 
-void vsl_print_summary(vcl_ostream& os, const bvpl_corner_pairs* &k);
+void vsl_print_summary(std::ostream& os, const bvpl_corner_pairs* &k);
 
 
 #endif

@@ -1,5 +1,7 @@
 #include "bstm_data_base.h"
-#include <vcl_algorithm.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <algorithm>
 //:
 // \file
 
@@ -32,7 +34,7 @@ void helper(bstm_block_metadata& data, long& num_cells, double& side_len)
   else if(data.init_level_t_ == 6)
     init_cells_per_tree *= 32;
   else {
-    vcl_cerr << "Init lvl " << data.init_level_t_ << " not supported. Only init level 1 or 6 is supported for time trees currently...\n";
+    std::cerr << "Init lvl " << data.init_level_t_ << " not supported. Only init level 1 or 6 is supported for time trees currently...\n";
     init_cells_per_tree = 0;
   }
   //total number of cells = numTrees * init_cells_per_tree
@@ -43,7 +45,7 @@ void helper(bstm_block_metadata& data, long& num_cells, double& side_len)
 }
 
 //: allocate an empty data diddy
-bstm_data_base::bstm_data_base(bstm_block_metadata data, const vcl_string data_type, bool read_only)
+bstm_data_base::bstm_data_base(bstm_block_metadata data, const std::string data_type, bool read_only)
 {
   read_only_ = read_only;
   id_ = data.id_;
@@ -52,13 +54,13 @@ bstm_data_base::bstm_data_base(bstm_block_metadata data, const vcl_string data_t
   double side_len;
   helper(data, num_cells, side_len);
 
-  vcl_size_t cell_size = bstm_data_info::datasize(data_type);
+  std::size_t cell_size = bstm_data_info::datasize(data_type);
   //total buffer length
   buffer_length_ = num_cells * cell_size;
 #if 0
-  vcl_cout<<"bstm_data_base::empty "<<data_type<<" num cells: "
+  std::cout<<"bstm_data_base::empty "<<data_type<<" num cells: "
           <<num_cells<<'\n'
-          <<"  number of bytes: "<<buffer_length_<<vcl_endl;
+          <<"  number of bytes: "<<buffer_length_<<std::endl;
 #endif
 
   //now construct a byte stream, and read in with b_read
@@ -67,22 +69,22 @@ bstm_data_base::bstm_data_base(bstm_block_metadata data, const vcl_string data_t
   this->set_default_value(data_type, data);
 }
 //: accessor to a portion of the byte buffer
-void bstm_data_base::set_default_value(vcl_string data_type, bstm_block_metadata data)
+void bstm_data_base::set_default_value(std::string data_type, bstm_block_metadata data)
 {
   long num_cells;
   double side_len;
   helper(data, num_cells, side_len);
 
   //initialize the data to the correct value
-  if (data_type.find(bstm_data_traits<BSTM_ALPHA>::prefix()) != vcl_string::npos) {
-    const float ALPHA_INIT = float(-vcl_log(1.0f - data.p_init_) / side_len);
+  if (data_type.find(bstm_data_traits<BSTM_ALPHA>::prefix()) != std::string::npos) {
+    const float ALPHA_INIT = float(-std::log(1.0f - data.p_init_) / side_len);
     float* alphas = (float*) data_buffer_;
-    vcl_fill(alphas, alphas+num_cells, ALPHA_INIT);
+    std::fill(alphas, alphas+num_cells, ALPHA_INIT);
   }
-//  else if (data_type.find(bstm_data_traits<BSTM_GAUSS_RGB>::prefix()) != vcl_string::npos) {
-//    vcl_memset(data_buffer_, (vxl_byte) 128, buffer_length_);
+//  else if (data_type.find(bstm_data_traits<BSTM_GAUSS_RGB>::prefix()) != std::string::npos) {
+//    std::memset(data_buffer_, (vxl_byte) 128, buffer_length_);
 //  }
-  else if (data_type.find(bstm_data_traits<BSTM_CHANGE>::prefix()) != vcl_string::npos) {
+  else if (data_type.find(bstm_data_traits<BSTM_CHANGE>::prefix()) != std::string::npos) {
     const float CHANGE_P_INIT = data.p_init_;
     float* change_p = (float*) data_buffer_;
 
@@ -90,12 +92,12 @@ void bstm_data_base::set_default_value(vcl_string data_type, bstm_block_metadata
     for (int i=0; i<buffer_length; ++i) change_p[i] = CHANGE_P_INIT;
   }
   else {
-    vcl_memset(data_buffer_, 0, buffer_length_);
+    std::memset(data_buffer_, 0, buffer_length_);
   }
 }
 
 //: accessor to a portion of the byte buffer
-char * bstm_data_base::cell_buffer(int i, vcl_size_t cell_size)
+char * bstm_data_base::cell_buffer(int i, std::size_t cell_size)
 {
   if ((i+cell_size-1) < buffer_length_) {
     char * out = new char[cell_size];

@@ -8,7 +8,9 @@
 
 #include <bprb/bprb_func_process.h>
 
-#include <vcl_fstream.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <fstream>
 #include <boxm2/boxm2_scene.h>
 #include <boxm2_multi/boxm2_multi_cache.h>
 
@@ -26,12 +28,12 @@ bool boxm2_create_multi_cache_process_cons(bprb_func_process& pro)
   using namespace boxm2_create_multi_cache_process_globals;
 
   //process takes 1 input
-  vcl_vector<vcl_string> input_types_(n_inputs_);
+  std::vector<std::string> input_types_(n_inputs_);
   input_types_[0] = "boxm2_scene_sptr";
   input_types_[1] = "int";
   // process has 1 output:
   // output[0]: scene sptr
-  vcl_vector<vcl_string>  output_types_(n_outputs_);
+  std::vector<std::string>  output_types_(n_outputs_);
   output_types_[0] = "boxm2_multi_cache_sptr";
 
   brdb_value_sptr idx = new brdb_value_t<int>(1);
@@ -44,7 +46,7 @@ bool boxm2_create_multi_cache_process(bprb_func_process& pro)
 {
     using namespace boxm2_create_multi_cache_process_globals;
     if ( pro.n_inputs() < n_inputs_ ){
-        vcl_cout << pro.name() << ": The input number should be " << n_inputs_<< vcl_endl;
+        std::cout << pro.name() << ": The input number should be " << n_inputs_<< std::endl;
         return false;
     }
     //get the inputs
@@ -54,11 +56,11 @@ bool boxm2_create_multi_cache_process(bprb_func_process& pro)
     bocl_manager_child &mgr = bocl_manager_child::instance();
     //make a multicache
     if ( numGPU > mgr.gpus_.size() ) {
-        vcl_cout<<"-numGPU ("<<numGPU<<") is too big, only "<<mgr.gpus_.size()<<" available"<<vcl_endl;
+        std::cout<<"-numGPU ("<<numGPU<<") is too big, only "<<mgr.gpus_.size()<<" available"<<std::endl;
         return false;
     }
     //grab the number of devices specified
-    vcl_vector<bocl_device_sptr> gpus;
+    std::vector<bocl_device_sptr> gpus;
     for (unsigned int i=0; i< numGPU; ++i)
         gpus.push_back(mgr.gpus_[i]);
     boxm2_multi_cache_sptr  mcache = new boxm2_multi_cache(scene, gpus);
@@ -79,12 +81,12 @@ bool boxm2_write_multi_cache_process_cons(bprb_func_process& pro)
   using namespace boxm2_write_multi_cache_process_globals;
 
   //process takes 1 input
-  vcl_vector<vcl_string> input_types_(n_inputs_);
+  std::vector<std::string> input_types_(n_inputs_);
   input_types_[0] = "boxm2_multi_cache_sptr";
   input_types_[1] = "bool";
   // process has 1 output:
   // output[0]: scene sptr
-  vcl_vector<vcl_string>  output_types_(n_outputs_);
+  std::vector<std::string>  output_types_(n_outputs_);
 
 
   brdb_value_sptr idx = new brdb_value_t<bool>(true);
@@ -97,7 +99,7 @@ bool boxm2_write_multi_cache_process(bprb_func_process& pro)
 {
     using namespace boxm2_write_multi_cache_process_globals;
     if ( pro.n_inputs() < n_inputs_ ){
-        vcl_cout << pro.name() << ": The input number should be " << n_inputs_<< vcl_endl;
+        std::cout << pro.name() << ": The input number should be " << n_inputs_<< std::endl;
         return false;
     }
     //get the inputs

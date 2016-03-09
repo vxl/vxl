@@ -145,7 +145,7 @@ estimate( rgrl_set_of<rgrl_match_set_sptr> const& matches,
   // them and increase the numerical stability.
   double factor0 = std::max(XtWX(2,2),XtWX(3,3));
   double factor1 = std::max(XtWX(1,1),XtWX(0,0));
-  double scale = vcl_sqrt( (factor1 > 0 && factor0 > 0) ? factor1 / factor0 : 1 );   // neither should be 0
+  double scale = std::sqrt( (factor1 > 0 && factor0 > 0) ? factor1 / factor0 : 1 );   // neither should be 0
 
   vnl_vector_fixed<double, 4> s;
   s(2) = s(3) = scale; s(0) = s(1) = 1;
@@ -213,7 +213,7 @@ estimate( rgrl_match_set_sptr matches,
   return rgrl_estimator::estimate( matches, cur_transform );
 }
 
-const vcl_type_info&
+const std::type_info&
 rgrl_est_similarity2d::
 transformation_type() const
 {

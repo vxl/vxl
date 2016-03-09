@@ -10,7 +10,9 @@
 //
 //-----------------------------------------------------------------------------
 
-#include <vcl_string.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <string>
 class Carmen;
 
 class carmen_interface
@@ -23,8 +25,8 @@ class carmen_interface
   ~carmen_interface();
 
   // Data Access---------------------------------------------------------------
-  bool load_correspondence_file(const vcl_string& file_path);
-  void save_camera(const vcl_string& file_path);
+  bool load_correspondence_file(const std::string& file_path);
+  void save_camera(const std::string& file_path);
   void print_results();
   // Utility Methods-------------------------------------------------------
   void set_carmen_camera(int view_no);

@@ -4,7 +4,9 @@
 #include <boxm/boxm_scene.h>
 #include <boxm/util/boxm_utils.h>
 #include <vpgl/vpgl_perspective_camera.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iostream>
 
 template <class T_loc, class T_data>
 float boxm_compute_point_visibility(vgl_point_3d<double> point,
@@ -17,7 +19,7 @@ float boxm_compute_point_visibility(vgl_point_3d<double> point,
     // make a test for vertices for behind-front case
     vpgl_perspective_camera<double>* cam = static_cast<vpgl_perspective_camera<double>*>(camera.ptr());
 
-    vcl_cout<<"The point is "<<point;
+    std::cout<<"The point is "<<point;
     if (cam->is_behind_camera(vgl_homg_point_3d<double>(point)))
     return 1.0f;
     // first block of intersection
@@ -72,7 +74,7 @@ float boxm_compute_point_visibility(vgl_point_3d<double> point,
           continue_flag=false;
           else
           {
-            vcl_vector<boct_tree_cell<T_loc,T_data > * > neighbors;
+            std::vector<boct_tree_cell<T_loc,T_data > * > neighbors;
             curr_cell->find_neighbors(face_id,neighbors,tree->root_level());
 
             vgl_vector_3d<double> len(exit_point-entry_point);
@@ -80,8 +82,8 @@ float boxm_compute_point_visibility(vgl_point_3d<double> point,
             alpha_int-=data.alpha*len.length();
             curr_cell=NULL;
 #if 0
-            vcl_cout<<"Lambda= "<<lambda<<" lambda0= "<<lambda0
-                    <<" exit_point="<<exit_point<<"# of neighbors"<< neighbors.size()<<vcl_endl;
+            std::cout<<"Lambda= "<<lambda<<" lambda0= "<<lambda0
+                    <<" exit_point="<<exit_point<<"# of neighbors"<< neighbors.size()<<std::endl;
 #endif
             double min_dist=1e5;
             int min_i=-1;
@@ -90,17 +92,17 @@ float boxm_compute_point_visibility(vgl_point_3d<double> point,
               vgl_box_3d<double> bbox=tree->cell_bounding_box(neighbors[i]);
               double dist=0;
               if (exit_point.x()<bbox.min_x())
-                dist+=vcl_fabs(exit_point.x()-bbox.min_x());
+                dist+=std::fabs(exit_point.x()-bbox.min_x());
               if (exit_point.x()>bbox.max_x())
-                dist+=vcl_fabs(exit_point.x()-bbox.max_x());
+                dist+=std::fabs(exit_point.x()-bbox.max_x());
               if (exit_point.y()<bbox.min_y())
-                dist+=vcl_fabs(exit_point.y()-bbox.min_y());
+                dist+=std::fabs(exit_point.y()-bbox.min_y());
               if (exit_point.y()>bbox.max_y())
-                dist+=vcl_fabs(exit_point.y()-bbox.max_y());
+                dist+=std::fabs(exit_point.y()-bbox.max_y());
               if (exit_point.z()<bbox.min_z())
-                dist+=vcl_fabs(exit_point.z()-bbox.min_z());
+                dist+=std::fabs(exit_point.z()-bbox.min_z());
               if (exit_point.z()>bbox.max_z())
-                dist+=vcl_fabs(exit_point.z()-bbox.max_z());
+                dist+=std::fabs(exit_point.z()-bbox.max_z());
 
               if (dist<min_dist)
               {
@@ -112,7 +114,7 @@ float boxm_compute_point_visibility(vgl_point_3d<double> point,
               curr_cell=neighbors[min_i];
             else if (neighbors.size()>0)
             {
-              vcl_cout<<"ERROR"<<vcl_endl;return -1.0f;
+              std::cout<<"ERROR"<<std::endl;return -1.0f;
             }
             entry_point=exit_point;
           }
@@ -147,11 +149,11 @@ float boxm_compute_point_visibility(vgl_point_3d<double> point,
         }
       }
     }
-    return (float)vcl_exp(alpha_int);
+    return (float)std::exp(alpha_int);
   }
   else
   {
-  vcl_cout<<"Not a perspective camera"<<vcl_endl;
+  std::cout<<"Not a perspective camera"<<std::endl;
   return -1.0f;
   }
 }

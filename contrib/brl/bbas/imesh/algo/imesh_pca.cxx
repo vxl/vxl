@@ -6,11 +6,13 @@
 #include <imesh/imesh_fileio.h>
 #include <vnl/vnl_vector.h>
 #include <vnl/algo/vnl_svd.h>
-#include <vcl_fstream.h>
-#include <vcl_sstream.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <fstream>
+#include <sstream>
 #include <vcl_cassert.h>
 
-imesh_pca_mesh::imesh_pca_mesh(const vcl_vector<imesh_mesh>& meshes)
+imesh_pca_mesh::imesh_pca_mesh(const std::vector<imesh_mesh>& meshes)
   : imesh_mesh(meshes[0]), mean_verts_(this->vertices().clone())
 {
   vnl_matrix<double> M = compute_mean(meshes);
@@ -29,7 +31,7 @@ imesh_pca_mesh::imesh_pca_mesh(const vcl_vector<imesh_mesh>& meshes)
 
 //: compute and set the mean return the deviations matrix
 vnl_matrix<double>
-imesh_pca_mesh::compute_mean(const vcl_vector<imesh_mesh>& meshes)
+imesh_pca_mesh::compute_mean(const std::vector<imesh_mesh>& meshes)
 {
   const unsigned num_training = meshes.size();
   vnl_matrix<double> M(this->num_verts()*3,num_training);
@@ -96,7 +98,7 @@ imesh_pca_mesh& imesh_pca_mesh::operator=(const imesh_pca_mesh& other)
     this->imesh_mesh::operator=(other);
     std_devs_ = other.std_devs_;
     pc_ = other.pc_;
-    mean_verts_ = vcl_auto_ptr<imesh_vertex_array_base>((other.mean_verts_.get()) ?
+    mean_verts_ = std::auto_ptr<imesh_vertex_array_base>((other.mean_verts_.get()) ?
                                                         other.mean_verts_->clone() : VXL_NULLPTR);
     params_ = other.params_;
   }
@@ -229,25 +231,25 @@ imesh_pca_mesh::project(const imesh_vertex_array_base& vertices) const
 //: Compute the image Jacobians at each vertex for PCA parameters in the result
 //  Matrix n, row i is the image space derivative
 //  at vertex n with respect to the ith pca parameter
-vcl_vector<vnl_matrix<double> >
+std::vector<vnl_matrix<double> >
 imesh_pca_image_jacobians(const vpgl_proj_camera<double>& camera,
                           const imesh_pca_mesh& mesh)
 {
   // convert vertices to vgl points
   const imesh_vertex_array<3>& verts = mesh.vertices<3>();
   const unsigned int num_verts = mesh.num_verts();
-  vcl_vector<vgl_point_3d<double> > pts(num_verts);
+  std::vector<vgl_point_3d<double> > pts(num_verts);
   for (unsigned int i=0; i<num_verts; ++i)
     pts[i] = verts[i];
 
   // compute the Jacobians at each point
-  vcl_vector<vnl_matrix_fixed<double,2,3> > J = image_jacobians(camera,pts);
+  std::vector<vnl_matrix_fixed<double,2,3> > J = image_jacobians(camera,pts);
 
   // map the image Jacobians into PCA Jacobians
   const vnl_matrix<double>& pc = mesh.principal_comps();
   const vnl_vector<double>& std = mesh.std_devs();
 
-  vcl_vector<vnl_matrix<double> > img_jac(num_verts);
+  std::vector<vnl_matrix<double> > img_jac(num_verts);
   for (unsigned int i=0; i<num_verts; ++i)
   {
     vnl_matrix<double> dir_3d(pc.rows(),3);
@@ -266,8 +268,8 @@ imesh_pca_image_jacobians(const vpgl_proj_camera<double>& camera,
 
 
 //: Read a PCA mesh from a mean mesh and a pca file
-imesh_pca_mesh imesh_read_pca(const vcl_string& mean_file,
-                              const vcl_string& pca_file)
+imesh_pca_mesh imesh_read_pca(const std::string& mean_file,
+                              const std::string& pca_file)
 {
   imesh_mesh mean;
   vnl_vector<double> m,s;
@@ -279,23 +281,23 @@ imesh_pca_mesh imesh_read_pca(const vcl_string& mean_file,
 
 
 //: Read a PCA file
-bool imesh_read_pca(const vcl_string& pca_file,
+bool imesh_read_pca(const std::string& pca_file,
                     vnl_vector<double>& mean,
                     vnl_vector<double>& std_devs,
                     vnl_matrix<double>& pc)
 {
-  vcl_ifstream ifs(pca_file.c_str());
+  std::ifstream ifs(pca_file.c_str());
   if (!ifs.is_open())
     return false;
 
-  vcl_vector<double> data;
+  std::vector<double> data;
   if (ifs.peek() == '#') {
-    vcl_string s;
+    std::string s;
     ifs >> s;
     if (s == "#mag") {
-      vcl_string line;
-      vcl_getline(ifs,line);
-      vcl_stringstream ss(line);
+      std::string line;
+      std::getline(ifs,line);
+      std::stringstream ss(line);
       double val;
       while (ss >> val) {
         data.push_back(val);
@@ -305,15 +307,15 @@ bool imesh_read_pca(const vcl_string& pca_file,
         std_devs[i] = data[i];
     }
   }
-  vcl_string line;
+  std::string line;
   data.clear();
-  vcl_vector<vcl_vector<double> > data_M;
-  while (vcl_getline(ifs,line).good()) {
-    vcl_stringstream ss(line);
+  std::vector<std::vector<double> > data_M;
+  while (std::getline(ifs,line).good()) {
+    std::stringstream ss(line);
     double val;
     ss >> val;
     data.push_back(val);
-    vcl_vector<double> row;
+    std::vector<double> row;
     while (ss >> val) {
       row.push_back(val);
     }
@@ -333,8 +335,8 @@ bool imesh_read_pca(const vcl_string& pca_file,
 
 
 //: Write the mean mesh and PCA file
-void imesh_write_pca(const vcl_string& mesh_file,
-                     const vcl_string& pca_file,
+void imesh_write_pca(const std::string& mesh_file,
+                     const std::string& pca_file,
                      const imesh_pca_mesh& pmesh)
 {
   const vnl_vector<double>& std_dev = pmesh.std_devs();
@@ -345,8 +347,8 @@ void imesh_write_pca(const vcl_string& mesh_file,
   for (unsigned int i=0; i<num_data; ++i)
     mean[i] = mverts[i/3][i%3];
 
-  vcl_auto_ptr<imesh_vertex_array_base> verts(mverts.clone());
-  vcl_auto_ptr<imesh_face_array_base> faces(pmesh.faces().clone());
+  std::auto_ptr<imesh_vertex_array_base> verts(mverts.clone());
+  std::auto_ptr<imesh_face_array_base> faces(pmesh.faces().clone());
   imesh_mesh mean_mesh(verts,faces);
 
   imesh_write_pca(pca_file,mean,std_dev,pc);
@@ -355,14 +357,14 @@ void imesh_write_pca(const vcl_string& mesh_file,
 
 
 //: Write a PCA file
-bool imesh_write_pca(const vcl_string& filename,
+bool imesh_write_pca(const std::string& filename,
                      const vnl_vector<double>& mean,
                      const vnl_vector<double>& svals,
                      const vnl_matrix<double>& vars)
 {
   const unsigned int num_comps = svals.size();
   const unsigned int num_data = mean.size();
-  vcl_ofstream ofs(filename.c_str());
+  std::ofstream ofs(filename.c_str());
   ofs << "#mag";
   for (unsigned int i=0; i<num_comps; ++i)
     ofs << ' ' << svals[i];

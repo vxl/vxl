@@ -12,7 +12,9 @@
 //-----------------------------------------------------------------------------
 
 #include "ConvexHull.h"
-#include <vcl_cstdlib.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <cstdlib>
 
 #define CMPM(c,A,B) \
         v = (*(const double*const*)A)[c] - (*(const double*const*)B)[c];\
@@ -56,7 +58,7 @@ int ConvexHull::make_chain(double** V, int n, int (*cmp)(const void*, const void
   int i, j, s = 1;
   double* t;
 
-  vcl_qsort(V, n, sizeof(double*), cmp);
+  std::qsort(V, n, sizeof(double*), cmp);
   for (i=2; i<n; i++) {
     for (j=s; j>=1 && ccw(V, i, j, j-1); j--){}
     s = j+1;

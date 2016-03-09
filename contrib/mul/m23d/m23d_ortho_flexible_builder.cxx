@@ -16,9 +16,11 @@
 #include <vnl/algo/vnl_levenberg_marquardt.h>
 #include <vgl/vgl_vector_3d.h>
 
-#include <vcl_iostream.h>
-#include <vcl_algorithm.h>
-#include <vcl_cstdlib.h>  // abort()
+#include <iostream>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <algorithm>
+#include <cstdlib>  // abort()
 #include <vcl_cassert.h>
 
 
@@ -47,7 +49,7 @@ inline void m23d_swap_rows(vnl_matrix<double>& M,
 //: Reconstruct structure from set of 2d pts
 // Formulates measurement matrix P2D then calls reconstruct() function
 void m23d_ortho_flexible_builder::reconstruct(
-   const vcl_vector< vcl_vector< vgl_point_2d<double> > >& pt_vec_list,
+   const std::vector< std::vector< vgl_point_2d<double> > >& pt_vec_list,
                             const unsigned& n_modes )
 {
   // convert pts into a matrix
@@ -58,12 +60,12 @@ void m23d_ortho_flexible_builder::reconstruct(
   {
     if ( (unsigned)n0!= pt_vec_list[i].size() )
     {
-      vcl_cerr<< "ERROR m23d_ortho_rigid_builder::reconstruct()\n"
+      std::cerr<< "ERROR m23d_ortho_rigid_builder::reconstruct()\n"
               << "problem with different numbers of pts\n"
               << "pt_vec_list[0].size()= " << pt_vec_list[0].size() << '\n'
               << "pt_vec_list[" << i << "].size()= " << pt_vec_list[i].size()
-              << vcl_endl;
-      vcl_abort();
+              << std::endl;
+      std::abort();
     }
 
     for (int p=0; p<n0; ++p)
@@ -89,7 +91,7 @@ void m23d_ortho_flexible_builder::reconstruct(const vnl_matrix<double>& P2D, uns
 
   set_view_data(P2D);
 
-  vcl_vector<unsigned> basis = m23d_select_basis_views(P2Dc_,n_modes,1000);
+  std::vector<unsigned> basis = m23d_select_basis_views(P2Dc_,n_modes,1000);
 
   // Swap in basis here
   for (unsigned i=0;i<=n_modes;++i)
@@ -161,7 +163,7 @@ void m23d_ortho_flexible_builder::initial_decomposition(unsigned n_modes)
     P3D_.set_row(i,svd.V().get_column(i));
   }
 
-  vcl_cout<<"Initial reconstruction error: "<<(P_*P3D_-P2Dc_).rms()<<vcl_endl;
+  std::cout<<"Initial reconstruction error: "<<(P_*P3D_-P2Dc_).rms()<<std::endl;
 }
 
 //: Disambiguate the ambiguity in the sign of the z ordinates
@@ -237,12 +239,12 @@ static vnl_matrix<double> am_solve_for_G0(const vnl_matrix<double>& A,
   vnl_matrix<double> Gk(n,3);
   for (unsigned i=0;i<3;++i)
   {
-    //Gk.set_column(i,vcl_sqrt(eig.get_eigenvalue(n-1-i))
+    //Gk.set_column(i,std::sqrt(eig.get_eigenvalue(n-1-i))
     //                        *eig.get_eigenvector(n-1-i));
 
 
     // nb critical bit making sure Gk is pos def
-    double s= vcl_sqrt(  vcl_fabs(eig.get_eigenvalue(n-1-i)) );
+    double s= std::sqrt(  std::fabs(eig.get_eigenvalue(n-1-i)) );
     Gk.set_column(i, s*eig.get_eigenvector(n-1-i) );
   }
 
@@ -263,11 +265,11 @@ static vnl_matrix<double> am_solve_for_Gk(const vnl_matrix<double>& A,
 
   if (!LM.minimize_using_gradient(g))
   {
-    vcl_cout<<"LM failed!!" << vcl_endl;
-    vcl_abort();
+    std::cout<<"LM failed!!" << std::endl;
+    std::abort();
   }
 
-  vcl_cout<<"am_solve_for_Gk (k="<<k<<") RMS="<<err_fn.rms(g)<<vcl_endl;
+  std::cout<<"am_solve_for_Gk (k="<<k<<") RMS="<<err_fn.rms(g)<<std::endl;
 
   // Reshape g into 3(m+1) x 3 matrix
   return vnl_matrix<double>(g.data_block(),3*(m+1),3);
@@ -303,19 +305,19 @@ static vnl_matrix<double> am_solve_for_Gk(const vnl_matrix<double>& A,
   {
     vnl_matrix<double> Q1=Gk*Gk.transpose();
     vnl_vector<double> q1=vec_from_sym_matrix(Q1);
-    vcl_cout<<"Error for q1 = "<<(A*q1-rhs).rms()<<vcl_endl;
+    std::cout<<"Error for q1 = "<<(A*q1-rhs).rms()<<std::endl;
     vnl_vector<double> q2=q0+K*(q1-q0);
 
     Q0=sym_matrix_from_vec(q2,n);
     vnl_symmetric_eigensystem<double> eig2(Q0);
-    vcl_cout<<"Eigenvalues: "<<eig2.D.diagonal()<<vcl_endl;
+    std::cout<<"Eigenvalues: "<<eig2.D.diagonal()<<std::endl;
     for (unsigned i=0;i<3;++i)
     {
-      Gk.set_column(i,vcl_sqrt(eig2.get_eigenvalue(n-1-i))
+      Gk.set_column(i,std::sqrt(eig2.get_eigenvalue(n-1-i))
                               *eig2.get_eigenvector(n-1-i));
     }
   }
-  vcl_cout<<"Gk*Gk'="<<Gk*Gk.transpose()<<vcl_endl;
+  std::cout<<"Gk*Gk'="<<Gk*Gk.transpose()<<std::endl;
 
   return Gk;
 }
@@ -377,7 +379,7 @@ static double min_row_scale(const vnl_matrix<double>& M)
     r1+=M(0,j)*M(0,j);
     r2+=M(1,j)*M(1,j);
   }
-  return vcl_sqrt(vcl_min(r1,r2));
+  return std::sqrt(std::min(r1,r2));
 }
 #endif // 0
 
@@ -403,7 +405,7 @@ void m23d_ortho_flexible_builder::correct_coord_frame(vnl_matrix<double>& M,
     // there are four possible rotations for each row.
     // Compute all rotations, then select the consistent ones.
 
-    vcl_vector<vnl_matrix<double> > U;
+    std::vector<vnl_matrix<double> > U;
     for (unsigned i=0;i<ns;++i)
     {
       vnl_matrix<double> Mi0=M.extract(2,3,2*i,0);
@@ -414,20 +416,20 @@ void m23d_ortho_flexible_builder::correct_coord_frame(vnl_matrix<double>& M,
       vnl_matrix<double> Ui0 = m23d_rotation_from_ortho_projection(Mi0);
       vnl_matrix<double> Uij = m23d_rotation_from_ortho_projection(Mij);
 #if 0 // DEBUG
-      vcl_cout<<Mij*Uij.transpose()<<vcl_endl;
+      std::cout<<Mij*Uij.transpose()<<std::endl;
 #endif
       U.push_back(Uij.transpose()*Ui0);
 #if 0 // DEBUG
-      vcl_cout<<"j="<<j<<" i="<<i<<") C1:"<<vcl_endl
-              <<Uij.transpose()*Ui0<<vcl_endl;
+      std::cout<<"j="<<j<<" i="<<i<<") C1:"<<std::endl
+              <<Uij.transpose()*Ui0<<std::endl;
 #endif
       // Swap sign of 3rd row of Uij
       for (unsigned k=0;k<3;++k) Uij(2,k)*=-1;
       U.push_back(Uij.transpose()*Ui0);
 #if 0 // DEBUG
-      vcl_cout<<"j="<<j<<" i="<<i<<") C2:"<<vcl_endl
-              <<Uij.transpose()*Ui0<<vcl_endl
-              <<"Rel wts: "<<Mij(0,0)/Mi0(0,0)<<vcl_endl;
+      std::cout<<"j="<<j<<" i="<<i<<") C2:"<<std::endl
+              <<Uij.transpose()*Ui0<<std::endl
+              <<"Rel wts: "<<Mij(0,0)/Mi0(0,0)<<std::endl;
 #endif
     }
 
@@ -438,7 +440,7 @@ void m23d_ortho_flexible_builder::correct_coord_frame(vnl_matrix<double>& M,
     vnl_matrix<double> best_meanU;
     double best_rms = 1e99;
 
-    for (unsigned i=0;i<vcl_min(2*ns,40u);++i)
+    for (unsigned i=0;i<std::min(2*ns,40u);++i)
     {
       vnl_matrix<double> baseR = U[i];
       vnl_matrix<double> sumU(3,3,0.0), bestU;
@@ -531,7 +533,7 @@ void m23d_ortho_flexible_builder::make_pure_projections()
     // Mi should be a'p where a are coeffs and p is mean projection
     // |p| should be sqrt(2) for a pure projection (no scaling)
     vnl_svd<double> Mi_svd(Mi);
-    vnl_vector<double> p=Mi_svd.V().get_column(0)*vcl_sqrt(2.0);
+    vnl_vector<double> p=Mi_svd.V().get_column(0)*std::sqrt(2.0);
 
     vnl_matrix<double> Pi0 = vnl_matrix<double>(p.data_block(),2,3);
     vnl_matrix<double> Pi = m23d_pure_ortho_projection(Pi0);
@@ -554,8 +556,8 @@ void m23d_ortho_flexible_builder::make_pure_projections()
 //: Refine estimates of projection and structure
 void m23d_ortho_flexible_builder::refine()
 {
-  vcl_cout<<"RMS Reconstruction error before refine = "
-          <<(P2Dc_-P_*P3D_).rms()<<vcl_endl;
+  std::cout<<"RMS Reconstruction error before refine = "
+          <<(P2Dc_-P_*P3D_).rms()<<std::endl;
 
   make_pure_projections();
   // Re-estimate the 3D shape by solving the linear equation
@@ -563,8 +565,8 @@ void m23d_ortho_flexible_builder::refine()
   P3D_ = svd.pinverse() * P2Dc_;
        // Slightly less stable than backsub, but what the heck.
 
-  vcl_cout<<"RMS Reconstruction error after refine = "
-          <<(P2Dc_-P_*P3D_).rms()<<vcl_endl;
+  std::cout<<"RMS Reconstruction error after refine = "
+          <<(P2Dc_-P_*P3D_).rms()<<std::endl;
 
   compute_mean(mean_shape_,mean_coeffs_);
 }
@@ -599,16 +601,16 @@ vnl_matrix<double> m23d_ortho_flexible_builder::shape(unsigned i) const
 
 
 //: Get back 3d pts rotated and shifted for each frame
-void m23d_ortho_flexible_builder::get_shape_3d_pts( vcl_vector< vgl_point_3d<double> >& pts ) const
+void m23d_ortho_flexible_builder::get_shape_3d_pts( std::vector< vgl_point_3d<double> >& pts ) const
 {
 #if 0
   if (P_.rows() < 2 || P_.cols() != 3 )
   {
-    vcl_cerr<<"ERROR m23d_ortho_flexible_builder::get_shape_3d_pts()\n"
+    std::cerr<<"ERROR m23d_ortho_flexible_builder::get_shape_3d_pts()\n"
             <<"problem with size of P_\n"
             <<"P_.rows()= "<<P_.rows()<<'\n'
-            <<"P_.cols()= "<<P_.cols()<<vcl_endl;
-    vcl_abort();
+            <<"P_.cols()= "<<P_.cols()<<std::endl;
+    std::abort();
   }
 
 
@@ -639,18 +641,18 @@ void m23d_ortho_flexible_builder::get_shape_3d_pts( vcl_vector< vgl_point_3d<dou
 
 
 //: Return 3d rigid pts, i.e., aligned with first frame
-void m23d_ortho_flexible_builder::mat_to_3d_pts(vcl_vector< vgl_point_3d<double> >& pt_vec,
+void m23d_ortho_flexible_builder::mat_to_3d_pts(std::vector< vgl_point_3d<double> >& pt_vec,
                                                 const vnl_matrix<double>& M) const
 {
 #if 0
   // get pts out of P3D_ matrix
   if ( M.rows() != 3 )
   {
-    vcl_cerr<<"ERROR m23d_ortho_flexible_builder::mat_to_3d_pts()\n"
+    std::cerr<<"ERROR m23d_ortho_flexible_builder::mat_to_3d_pts()\n"
             <<"problem with size of matrix\n"
             <<"M.rows()= "<<M.rows()<<'\n'
-            <<"M.cols()= "<<M.cols()<<vcl_endl;
-    vcl_abort();
+            <<"M.cols()= "<<M.cols()<<std::endl;
+    std::abort();
   }
 #endif // 0
 

@@ -12,10 +12,12 @@
 #include <brec/brec_part_hierarchy_detector.h>
 
 #include <vil/vil_image_view.h>
-#include <vcl_algorithm.h> // for std::sort()
-#include <vcl_limits.h>
-#include <vcl_cmath.h> // for std::cos() and std::sin()
-#include <vcl_sstream.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <algorithm> // for std::sort()
+#include <limits>
+#include <cmath> // for std::cos() and std::sin()
+#include <sstream>
 
 //: check the "true" part of the mask
 bool check_equal(vbl_array_2d<bool>& left_array, vbl_array_2d<bool>& right_array)
@@ -96,7 +98,7 @@ void brec_part_hierarchy_learner::initialize_layer0_as_gaussians(int ndirs, floa
   float theta_inc = 180.0f/(float)ndirs;
   unsigned type_cnt = 0;
 
-  vcl_vector<vbl_array_2d<bool> > masks;
+  std::vector<vbl_array_2d<bool> > masks;
 
   for (float lambda0 = lambda_inc; lambda0 <= lambda_range; lambda0 += lambda_inc)
   {
@@ -123,14 +125,14 @@ void brec_part_hierarchy_learner::initialize_layer0_as_gaussians(int ndirs, floa
 
         // create histogram for foreground stats
         bsta_histogram<float>* h = new bsta_histogram<float>(0.0f, 2.0f, 100); // was (-7.0f, 1.0f, 32)
-        vcl_pair<brec_part_instance_sptr, bsta_histogram<float>* > pa(p->cast_to_instance(), h);
+        std::pair<brec_part_instance_sptr, bsta_histogram<float>* > pa(p->cast_to_instance(), h);
         stats_layer0_.push_back(pa);
         type_cnt++;
 
         // initialize the dark operator as well
         brec_part_gaussian_sptr pd = new brec_part_gaussian(0.0f, 0.0f, 0.0f, lambda0, lambda1, adjusted_theta, false, type_cnt);
         bsta_histogram<float>* hd = new bsta_histogram<float>(0.0f, 2.0f, 100);
-        vcl_pair<brec_part_instance_sptr, bsta_histogram<float>* > pad(pd->cast_to_instance(), hd);
+        std::pair<brec_part_instance_sptr, bsta_histogram<float>* > pad(pd->cast_to_instance(), hd);
         stats_layer0_.push_back(pad);
         type_cnt++;
 
@@ -138,21 +140,21 @@ void brec_part_hierarchy_learner::initialize_layer0_as_gaussians(int ndirs, floa
       }
     }
   }
-  vcl_cout << "initialized: " << type_cnt << " (array size: " << stats_layer0_.size() << ") operators\n";
+  std::cout << "initialized: " << type_cnt << " (array size: " << stats_layer0_.size() << ") operators\n";
 #if 1
-  vcl_cout << "initialized as follows:\n";
+  std::cout << "initialized as follows:\n";
   for (unsigned i = 0; i < stats_layer0_.size(); i++) {
     brec_part_gaussian_sptr p = stats_layer0_[i].first->cast_to_gaussian();
-    vcl_cout << "l0: " << p->lambda0_ << " l1: " << p->lambda1_ << " t: " << p->theta_;
+    std::cout << "l0: " << p->lambda0_ << " l1: " << p->lambda1_ << " t: " << p->theta_;
     if (p->bright_)
-      vcl_cout << " bright\n";
+      std::cout << " bright\n";
     else
-      vcl_cout << " dark\n";
+      std::cout << " dark\n";
   }
-  vcl_cout << "--------------------------\n"
-           << " masks size: " << masks.size() << vcl_endl;
+  std::cout << "--------------------------\n"
+           << " masks size: " << masks.size() << std::endl;
   for (unsigned i = 0; i < masks.size(); i++) {
-    vcl_cout << masks[i] << vcl_endl
+    std::cout << masks[i] << std::endl
              << "--------------------------\n";
   }
 #endif
@@ -206,8 +208,8 @@ void brec_part_hierarchy_learner::layer0_collect_posterior_stats(vil_image_view<
   layer0_collect_posterior_stats(inp, fg_prob_img, mask, mean_img, std_dev_img);
 }
 
-bool rho_more(const vcl_pair<brec_part_instance_sptr, bsta_histogram<float>*>& p1,
-              const vcl_pair<brec_part_instance_sptr, bsta_histogram<float>*>& p2)
+bool rho_more(const std::pair<brec_part_instance_sptr, bsta_histogram<float>*>& p1,
+              const std::pair<brec_part_instance_sptr, bsta_histogram<float>*>& p2)
 {
   return p1.first->rho_c_f_ > p2.first->rho_c_f_;
 }
@@ -217,12 +219,12 @@ bool rho_more(const vcl_pair<brec_part_instance_sptr, bsta_histogram<float>*>& p
 brec_part_hierarchy_sptr brec_part_hierarchy_learner::layer0_rank_and_create_hierarchy(int N)
 {
   brec_part_hierarchy_sptr h = new brec_part_hierarchy();
-  vcl_sort(stats_layer0_.begin(), stats_layer0_.end(), rho_more);
+  std::sort(stats_layer0_.begin(), stats_layer0_.end(), rho_more);
 
   int cnt = (N < (int)stats_layer0_.size() ? N : (int)stats_layer0_.size());
   for (int i = 0; i < cnt; i++) {
     brec_part_instance_sptr p = stats_layer0_[i].first;
-    vcl_cout << "adding layer0 i: " << i << " type: " << p->type_ << " rho_: " << p->rho_c_f_ << vcl_endl;
+    std::cout << "adding layer0 i: " << i << " type: " << p->type_ << " rho_: " << p->rho_c_f_ << std::endl;
     brec_part_base_sptr p_0 = new brec_part_base(0, p->type_);
     h->add_vertex(p_0);
     h->add_dummy_primitive_instance(p);
@@ -279,12 +281,12 @@ bool brec_part_hierarchy_learner::initialize_layer_n_as_pairs(brec_part_hierarch
             hist_ptr_pair ph(d_hist, a_hist);
             //sample_set_ptr_pair ps(d_mss, a_mss);
 
-            //vcl_pair<hist_ptr_pair, sample_set_ptr_pair> hist_pair(ph, ps);
-            vcl_pair<hist_ptr_pair, sample_set_ptr> hist_pair(ph, mss);
+            //std::pair<hist_ptr_pair, sample_set_ptr_pair> hist_pair(ph, ps);
+            std::pair<hist_ptr_pair, sample_set_ptr> hist_pair(ph, mss);
 
-            vcl_pair<brec_part_instance_sptr, vcl_pair<hist_ptr_pair, sample_set_ptr> > pa(p_n, hist_pair);
+            std::pair<brec_part_instance_sptr, std::pair<hist_ptr_pair, sample_set_ptr> > pa(p_n, hist_pair);
 
-            vcl_pair<unsigned, unsigned> pa_id(p1->type_, p2->type_);
+            std::pair<unsigned, unsigned> pa_id(p1->type_, p2->type_);
             (*map)[pa_id] = pa;
           }
         }
@@ -294,22 +296,22 @@ bool brec_part_hierarchy_learner::initialize_layer_n_as_pairs(brec_part_hierarch
     stats_layer_n_[c] = map;
   }
 
-  vcl_cout << "initialized learner for: " << stats_layer_n_.size() << " classes\n";
+  std::cout << "initialized learner for: " << stats_layer_n_.size() << " classes\n";
 #if 1
   unsigned cnt = 0;
   for (layer_n_map::iterator it = stats_layer_n_.begin();
        it != stats_layer_n_.end(); it++) {
     class_map* map = (*it).second;
-    vcl_cout << "\t class: " << cnt++ << ", initialized with " << map->size() << " pairs:\n";
+    std::cout << "\t class: " << cnt++ << ", initialized with " << map->size() << " pairs:\n";
     class_map::iterator m_it;
     for (m_it = map->begin(); m_it != map->end(); m_it++) {
-      vcl_pair<unsigned, unsigned> id_p = (*m_it).first;
-      vcl_pair<brec_part_instance_sptr, vcl_pair<hist_ptr_pair, sample_set_ptr> > pa = (*m_it).second;
-      vcl_cout << '(' << id_p.first << ", " << id_p.second << ") ";
+      std::pair<unsigned, unsigned> id_p = (*m_it).first;
+      std::pair<brec_part_instance_sptr, std::pair<hist_ptr_pair, sample_set_ptr> > pa = (*m_it).second;
+      std::cout << '(' << id_p.first << ", " << id_p.second << ") ";
       for (brec_part_hierarchy::edge_iterator eit = pa.first->out_edges_begin(); eit != pa.first->out_edges_end(); eit++) {
-        vcl_cout << '(' << (*eit)->target()->layer_ << ", " << (*eit)->target()->type_ << ") ";
+        std::cout << '(' << (*eit)->target()->layer_ << ", " << (*eit)->target()->type_ << ") ";
       }
-      vcl_cout << vcl_endl;
+      std::cout << std::endl;
     }
   }
 
@@ -330,8 +332,8 @@ float map_range_for_angle(float a, float radius)
 
 void map_to_cartesian(float angle, float radius, float max_radius, float& x, float& y)
 {
-  x = max_radius + (float)radius*vcl_cos(angle);
-  y = max_radius + (float)radius*vcl_sin(angle);
+  x = max_radius + (float)radius*std::cos(angle);
+  y = max_radius + (float)radius*std::sin(angle);
 }
 
 //: collect joint stats to construct parts of layer with layer_id using detected parts of layer_id-1
@@ -339,12 +341,12 @@ void map_to_cartesian(float angle, float radius, float max_radius, float& x, flo
 bool brec_part_hierarchy_learner::layer_n_collect_stats(brec_part_hierarchy_detector_sptr hd, unsigned layer_id, unsigned class_id)
 {
   if (!layer_id) {
-    vcl_cout << "In brec_part_hierarchy_learner::layer_n_collect_stats() -- layer_id is zero!!\n";
+    std::cout << "In brec_part_hierarchy_learner::layer_n_collect_stats() -- layer_id is zero!!\n";
     return false;
   }
 
   brec_part_hierarchy_sptr h = hd->get_hierarchy();
-  vcl_vector<brec_part_instance_sptr> parts = hd->get_parts(layer_id-1);
+  std::vector<brec_part_instance_sptr> parts = hd->get_parts(layer_id-1);
   Rtree_type* rtree = hd->get_tree(layer_id-1);
 
   class_map* map;
@@ -353,11 +355,11 @@ bool brec_part_hierarchy_learner::layer_n_collect_stats(brec_part_hierarchy_dete
   if (it != stats_layer_n_.end())
     map = (*it).second;
   else {
-    vcl_cout << "WARNING: This class: " << class_id << " was not initialized!\n";
+    std::cout << "WARNING: This class: " << class_id << " was not initialized!\n";
     return false;
   }
 
-  vcl_cout << "there are " << parts.size() << " parts of layer: " << layer_id-1 << " in the detector!\n";
+  std::cout << "there are " << parts.size() << " parts of layer: " << layer_id-1 << " in the detector!\n";
   class_map::iterator qit;
 
   vnl_random rng;
@@ -367,7 +369,7 @@ bool brec_part_hierarchy_learner::layer_n_collect_stats(brec_part_hierarchy_dete
     if (parts[jj]->layer_ == layer_id-1)
     {
       vgl_box_2d<float> probe = parts[jj]->get_probe_box(radius_);
-      vcl_vector<brec_part_instance_sptr> found;
+      std::vector<brec_part_instance_sptr> found;
       rtree->get(probe, found);
 
       bsta_gaussian_sphere<float, 2> jj_dist;
@@ -392,7 +394,7 @@ bool brec_part_hierarchy_learner::layer_n_collect_stats(brec_part_hierarchy_dete
           bsta_gaussian_sphere<float, 2> kk_dist;
           kk_dist.set_mean(found[kk]->location()); kk_dist.set_var(1.0f);
 
-          vcl_vector<float> as, ds;
+          std::vector<float> as, ds;
           as.push_back(a); ds.push_back(d);
           for (unsigned mmm = 0; mmm < 10; mmm++) {
             cent_dif = kk_dist.sample(rng) - jj_dist.sample(rng);
@@ -400,7 +402,7 @@ bool brec_part_hierarchy_learner::layer_n_collect_stats(brec_part_hierarchy_dete
             as.push_back(a); ds.push_back(d);
           }
 
-          vcl_pair<unsigned, unsigned> qid(parts[jj]->type_, found[kk]->type_);
+          std::pair<unsigned, unsigned> qid(parts[jj]->type_, found[kk]->type_);
           qit = map->find(qid);
           if (qit != map->end()) {  // found the histogram
             hist_ptr d_hist = (qit->second).second.first.first;
@@ -438,13 +440,13 @@ bool brec_part_hierarchy_learner::layer_n_fit_distributions(unsigned class_id, u
   if (it != stats_layer_n_.end())
     map = (*it).second;
   else {
-    vcl_cout << "WARNING: This class: " << class_id << " was not initialized!\n";
+    std::cout << "WARNING: This class: " << class_id << " was not initialized!\n";
     return false;
   }
 
   // get the class hierarchy
   brec_part_hierarchy_sptr class_h;
-  vcl_map<unsigned, brec_part_hierarchy_sptr>::iterator h_it = h_map_.find(class_id);
+  std::map<unsigned, brec_part_hierarchy_sptr>::iterator h_it = h_map_.find(class_id);
   if (h_it != h_map_.end()) {
     class_h = (*h_it).second;
   }
@@ -471,14 +473,14 @@ bool brec_part_hierarchy_learner::layer_n_fit_distributions(unsigned class_id, u
     sample_set_ptr set = (qit->second).second.second;
     total_weight += set->total_weight();
   }
-  vcl_cout << "total weight of all the data from all the pairs for class: " << class_id << " is: " << total_weight << vcl_endl;
+  std::cout << "total weight of all the data from all the pairs for class: " << class_id << " is: " << total_weight << std::endl;
 
   for (qit = map->begin(); qit != map->end(); qit++) {
     hist_ptr d_hist = (qit->second).second.first.first;
     hist_ptr a_hist = (qit->second).second.first.second;
 
     if (qit->first.first == 23 && qit->first.second == 3)
-      vcl_cout << "here!\n";
+      std::cout << "here!\n";
 
     //sample_set_ptr d_set = (qit->second).second.second.first;
     //sample_set_ptr a_set = (qit->second).second.second.second;
@@ -492,14 +494,14 @@ bool brec_part_hierarchy_learner::layer_n_fit_distributions(unsigned class_id, u
     // create 1D marginalized distance sample set from nD set
     bsta_sample_set<double,1> d_set;
     if (!bsta_sample_set_marginalize(*set, 0, d_set)) {
-      vcl_cout << "ERROR: cannot create 1D distance set from set!\n";
+      std::cout << "ERROR: cannot create 1D distance set from set!\n";
       return false;
     }
     d_set.set_bandwidth(d_bandwidth_);
 
     bsta_sample_set<double,1> a_set;
     if (!bsta_sample_set_marginalize(*set, 1, a_set)) {
-      vcl_cout << "ERROR: cannot create 1D distance set from set!\n";
+      std::cout << "ERROR: cannot create 1D distance set from set!\n";
       return false;
     }
     a_set.set_bandwidth(a_bandwidth_);
@@ -508,9 +510,9 @@ bool brec_part_hierarchy_learner::layer_n_fit_distributions(unsigned class_id, u
     bsta_mean_shift<double,1> d_ms;
     d_ms.find_modes(d_set, 0.01);
     d_ms.trim_modes(d_set, 2*d_delta);
-    //vcl_cout << "In layer_n_fit_distributions(" << class_id << ") - type: " << layer_n_part->type_ << ", # of d modes: " << d_set.mode_cnt() << vcl_endl;
+    //std::cout << "In layer_n_fit_distributions(" << class_id << ") - type: " << layer_n_part->type_ << ", # of d modes: " << d_set.mode_cnt() << std::endl;
     d_ms.merge_modes(d_set, 3, 0.01);  // merge the modes with samples less then 3
-    vcl_cout << "In layer_n_fit_distributions(" << class_id << ") - type: " << layer_n_part->type_ << ", # of d modes: " << d_set.mode_cnt() << vcl_endl;
+    std::cout << "In layer_n_fit_distributions(" << class_id << ") - type: " << layer_n_part->type_ << ", # of d modes: " << d_set.mode_cnt() << std::endl;
 
     // get the fitted mixture using ss, ms set the assignments after trimming
     bool ok = true;
@@ -518,7 +520,7 @@ bool brec_part_hierarchy_learner::layer_n_fit_distributions(unsigned class_id, u
     delete d_hist;
     d_hist = new bsta_histogram<double>(radius_, d_nbins);
     if (!bsta_sample_set_fit_distribution<double>(d_set, d_out_dist)) {
-      vcl_cout << "Warning: Cannot fit a mixture to the distribution of the class: " << class_id << '\n';
+      std::cout << "Warning: Cannot fit a mixture to the distribution of the class: " << class_id << '\n';
       ok = false;
     }
     else {
@@ -539,16 +541,16 @@ bool brec_part_hierarchy_learner::layer_n_fit_distributions(unsigned class_id, u
     bsta_mean_shift<double,1> a_ms;
     a_ms.find_modes(a_set, 0.01f);
     a_ms.trim_modes(a_set, 2*a_delta);
-    //vcl_cout << "In layer_n_fit_distributions(" << class_id << ") - type: " << layer_n_part->type_ << ", # of a modes: " << a_set.mode_cnt() << vcl_endl;
+    //std::cout << "In layer_n_fit_distributions(" << class_id << ") - type: " << layer_n_part->type_ << ", # of a modes: " << a_set.mode_cnt() << std::endl;
     a_ms.merge_modes(a_set, 3, 0.01f);  // merge the modes with samples less then 3
-    vcl_cout << "In layer_n_fit_distributions(" << class_id << ") - type: " << layer_n_part->type_ << ", # of a modes: " << a_set.mode_cnt() << vcl_endl;
+    std::cout << "In layer_n_fit_distributions(" << class_id << ") - type: " << layer_n_part->type_ << ", # of a modes: " << a_set.mode_cnt() << std::endl;
 
     // get the fitted mixture using ss, ms set the assignments after trimming
     bsta_mixture<bsta_num_obs<bsta_gaussian_sphere<double,1> > > a_out_dist;
     delete a_hist;
     a_hist = new bsta_histogram<double>(-vnl_math::pi, vnl_math::pi, a_nbins);
     if (!bsta_sample_set_fit_distribution<double>(a_set, a_out_dist)) {
-      vcl_cout << "Warning: Cannot fit a mixture to the distribution of the class: " << class_id << '\n';
+      std::cout << "Warning: Cannot fit a mixture to the distribution of the class: " << class_id << '\n';
       ok = false;
     }
     else {
@@ -575,21 +577,21 @@ bool brec_part_hierarchy_learner::layer_n_fit_distributions(unsigned class_id, u
           if (ll < -1e10)
             continue;  // skip it if it overflowed
 
-          vcl_cout << "\t ll: " << ll << ' ';
+          std::cout << "\t ll: " << ll << ' ';
 
           double ratio = ll;
 
           if (stats_layer_n_.size() > 1) {
           // find the likelihood for each class's sample sets
-          double best_class_ll = -vcl_numeric_limits<double>::infinity();
+          double best_class_ll = -std::numeric_limits<double>::infinity();
           for (layer_n_map::iterator class_it = stats_layer_n_.begin(); class_it != stats_layer_n_.end(); class_it++) {
             if (it == class_it)
               continue;
 
-            vcl_pair<unsigned, unsigned> op_pair(qit->first.first, qit->first.second);
+            std::pair<unsigned, unsigned> op_pair(qit->first.first, qit->first.second);
             class_map::iterator class_pair_it = (*class_it).second->find(op_pair);
             if (class_pair_it == (*class_it).second->end()) {
-              vcl_cout << "Error: One of the classes was not initialized for the pair: " << qit->first.first << ' ' << qit->first.second << '\n';
+              std::cout << "Error: One of the classes was not initialized for the pair: " << qit->first.first << ' ' << qit->first.second << '\n';
               return false;
             }
             sample_set_ptr class_set = (class_pair_it->second).second.second;
@@ -604,10 +606,10 @@ bool brec_part_hierarchy_learner::layer_n_fit_distributions(unsigned class_id, u
             continue;
 
           ratio -= best_class_ll;
-          vcl_cout << "\t best_class_ll: " << best_class_ll << " ratio: " << ratio << vcl_endl;
+          std::cout << "\t best_class_ll: " << best_class_ll << " ratio: " << ratio << std::endl;
           }
 
-          vcl_cout << "\t ratio: " << ratio << vcl_endl;
+          std::cout << "\t ratio: " << ratio << std::endl;
 
           // prepare the part
           brec_part_base_sptr p_n = new brec_part_base(layer_id, type_cnt_);
@@ -651,7 +653,7 @@ bool brec_part_hierarchy_learner::layer_n_fit_distributions(unsigned class_id, u
             }
             if (min < ratio) {
               if (!class_h->remove_vertex(*v_min_it)) {
-                vcl_cout << "ERROR: brec_part_hierarchy_learner::layer_n_fit_distributions() -- cannot delete vertex from hierarchy!\n";
+                std::cout << "ERROR: brec_part_hierarchy_learner::layer_n_fit_distributions() -- cannot delete vertex from hierarchy!\n";
                 return false;
               }
               class_h->add_vertex(p_n);
@@ -685,19 +687,19 @@ void brec_part_hierarchy_learner::print_layer0()
     if (pi->kind_ == brec_part_instance_kind::GAUSSIAN) {
       brec_part_gaussian_sptr p = pi->cast_to_gaussian();
       if (p->bright_)
-        vcl_cout << "--- lambda0 " << p->lambda0_ << " --- lambda1 " << p->lambda1_ << " --- theta " << p->theta_ << " --- bright ---\n";
+        std::cout << "--- lambda0 " << p->lambda0_ << " --- lambda1 " << p->lambda1_ << " --- theta " << p->theta_ << " --- bright ---\n";
       else
-        vcl_cout << "--- lambda0 " << p->lambda0_ << " --- lambda1 " << p->lambda1_ << " --- theta " << p->theta_ << " --- dark ---\n";
+        std::cout << "--- lambda0 " << p->lambda0_ << " --- lambda1 " << p->lambda1_ << " --- theta " << p->theta_ << " --- dark ---\n";
     }
-    vcl_cout << "----- foreground hist ----------\n";
+    std::cout << "----- foreground hist ----------\n";
     h->print();
-    vcl_cout << "-------------------------------------------\n";
+    std::cout << "-------------------------------------------\n";
   }
 }
 
-void brec_part_hierarchy_learner::print_to_m_file_layer0(vcl_string file_name)
+void brec_part_hierarchy_learner::print_to_m_file_layer0(std::string file_name)
 {
-  vcl_ofstream ofs(file_name.c_str());
+  std::ofstream ofs(file_name.c_str());
   ofs << "% dump histograms\n";
 
   for (unsigned i = 0; i < stats_layer0_.size(); i++) {
@@ -725,14 +727,14 @@ void brec_part_hierarchy_learner::print_to_m_file_layer0(vcl_string file_name)
   ofs.close();
 }
 
-void brec_part_hierarchy_learner::print_to_m_file_layer_n(vcl_string file_name, unsigned class_id, bool print_set)
+void brec_part_hierarchy_learner::print_to_m_file_layer_n(std::string file_name, unsigned class_id, bool print_set)
 {
-  vcl_ofstream ofs(file_name.c_str());
+  std::ofstream ofs(file_name.c_str());
   ofs << "% dump histograms\n";
 
   layer_n_map::iterator it = stats_layer_n_.find(class_id);
   if (it == stats_layer_n_.end()) {
-    vcl_cout << "Error: Cannot find stats for class: " << class_id << '\n';
+    std::cout << "Error: Cannot find stats for class: " << class_id << '\n';
     ofs.close();
     return;
   }
@@ -743,7 +745,7 @@ void brec_part_hierarchy_learner::print_to_m_file_layer_n(vcl_string file_name, 
   //unsigned i = 0;
   for (m_it = map->begin(); m_it != map->end(); m_it++)
   {
-    vcl_pair<unsigned, unsigned> id_p = (*m_it).first;
+    std::pair<unsigned, unsigned> id_p = (*m_it).first;
 
     hist_ptr d_hist = (*m_it).second.second.first.first;
     hist_ptr a_hist = (*m_it).second.second.first.second;
@@ -756,20 +758,20 @@ void brec_part_hierarchy_learner::print_to_m_file_layer_n(vcl_string file_name, 
 
     brec_part_base_sptr cp = pa->edge_to_central_part()->target();
     brec_part_base_sptr sp = pa->edge_to_second_part()->target();
-    vcl_string cp_sid = "";
-    vcl_string sp_sid = "";
+    std::string cp_sid = "";
+    std::string sp_sid = "";
     brec_part_instance_sptr cpi = h_->get_node_instance(cp->layer_, cp->type_);
     brec_part_instance_sptr spi = h_->get_node_instance(sp->layer_, sp->type_);
     if (!cpi) {
-      //vcl_cout << "instance could not be found in the hierarchy!\n";
-      vcl_stringstream ss; ss << cp->layer_ << ' ' << cp->type_;
+      //std::cout << "instance could not be found in the hierarchy!\n";
+      std::stringstream ss; ss << cp->layer_ << ' ' << cp->type_;
       cp_sid = ss.str();
     }
     else if (cpi->kind_ == brec_part_instance_kind::GAUSSIAN)
       cp_sid = cpi->cast_to_gaussian()->string_identifier();
     if (!spi) {
-      //vcl_cout << "instance could not be found in the hierarchy!\n";
-      vcl_stringstream ss; ss << sp->layer_ << ' ' << sp->type_;
+      //std::cout << "instance could not be found in the hierarchy!\n";
+      std::stringstream ss; ss << sp->layer_ << ' ' << sp->type_;
       sp_sid = ss.str();
     }
     else if (spi->kind_ == brec_part_instance_kind::GAUSSIAN)
@@ -807,7 +809,7 @@ void brec_part_hierarchy_learner::print_to_m_file_layer_n(vcl_string file_name, 
       // create 1D marginalized distance sample set from nD set
       bsta_sample_set<double,1> d_set;
       if (!bsta_sample_set_marginalize(*set, 0, d_set)) {
-        vcl_cout << "ERROR: cannot create 1D distance set from set!\n";
+        std::cout << "ERROR: cannot create 1D distance set from set!\n";
         ofs.close();
         return;
       }
@@ -821,7 +823,7 @@ void brec_part_hierarchy_learner::print_to_m_file_layer_n(vcl_string file_name, 
 
       bsta_sample_set<double,1> a_set;
       if (!bsta_sample_set_marginalize(*set, 1, a_set)) {
-        vcl_cout << "ERROR: cannot create 1D distance set from set!\n";
+        std::cout << "ERROR: cannot create 1D distance set from set!\n";
         ofs.close();
         return;
       }
@@ -851,16 +853,16 @@ void brec_part_hierarchy_learner::print_to_m_file_layer_n(vcl_string file_name, 
   ofs.close();
 }
 
-void brec_part_hierarchy_learner::print_to_m_file_layer0_fitted_dists(vcl_string file_name)
+void brec_part_hierarchy_learner::print_to_m_file_layer0_fitted_dists(std::string file_name)
 {
-  vcl_ofstream ofs(file_name.c_str());
+  std::ofstream ofs(file_name.c_str());
   ofs << "% dump histograms of fitted distributions\n";
 
   for (unsigned i = 0; i < stats_layer0_.size(); i++) {
     brec_part_instance_sptr pi = stats_layer0_[i].first;
     bsta_histogram<float> *h = stats_layer0_[i].second;
 
-    vcl_vector<float> x;
+    std::vector<float> x;
     for (float val = h->min(); val <= h->max(); val += h->delta()) {
       x.push_back(val);
     }
@@ -893,7 +895,7 @@ void brec_part_hierarchy_learner::print_to_m_file_layer0_fitted_dists(vcl_string
           ofs << "l0: " << p->lambda0_ << " l1: " << p->lambda1_ << " t: " << p->theta_ << " d weibull');\n";
       }
       else {
-        vcl_cout << "WARNING: no fitted foreground response model for this operator! Cannot print to m file.\n";
+        std::cout << "WARNING: no fitted foreground response model for this operator! Cannot print to m file.\n";
       }
     }
     //ofs << "axis([-7.0 1.0 0.0 1.0]);\n";
@@ -905,14 +907,14 @@ void brec_part_hierarchy_learner::print_to_m_file_layer0_fitted_dists(vcl_string
 //: Binary io, NOT IMPLEMENTED, signatures defined to use brec_part_hierarchy as a brdb_value
 void vsl_b_write(vsl_b_ostream & /*os*/, brec_part_hierarchy_learner const & /*ph*/)
 {
-  vcl_cerr << "vsl_b_write() -- Binary io, NOT IMPLEMENTED, signatures defined to use brec_part_hierarchy_learner as a brdb_value\n";
+  std::cerr << "vsl_b_write() -- Binary io, NOT IMPLEMENTED, signatures defined to use brec_part_hierarchy_learner as a brdb_value\n";
   return;
 }
 
 //: Binary io, NOT IMPLEMENTED, signatures defined to use brec_part_hierarchy as a brdb_value
 void vsl_b_read(vsl_b_istream & /*is*/, brec_part_hierarchy_learner & /*ph*/)
 {
-  vcl_cerr << "vsl_b_read() -- Binary io, NOT IMPLEMENTED, signatures defined to use brec_part_hierarchy_learner as a brdb_value\n";
+  std::cerr << "vsl_b_read() -- Binary io, NOT IMPLEMENTED, signatures defined to use brec_part_hierarchy_learner as a brdb_value\n";
   return;
 }
 

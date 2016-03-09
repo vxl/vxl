@@ -9,8 +9,10 @@
 //
 
 #include <vgl/vgl_fwd.h>
-#include <vcl_iostream.h>
-#include <vcl_string.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iostream>
+#include <string>
 #include <bpgl/bpgl_rolling_shutter_camera.h>
 #include <vpgl/vpgl_perspective_camera.h>
 
@@ -18,7 +20,7 @@ template <class T>
 class  bpgl_segmented_rolling_shutter_camera : public bpgl_rolling_shutter_camera<T>
 {
  public:
-  typedef typename vcl_map<unsigned int ,vpgl_perspective_camera<T> >  maptype;
+  typedef typename std::map<unsigned int ,vpgl_perspective_camera<T> >  maptype;
   typedef typename maptype::iterator  iterator;
   typedef typename maptype::const_iterator const_iterator;
 
@@ -38,7 +40,7 @@ class  bpgl_segmented_rolling_shutter_camera : public bpgl_rolling_shutter_camer
 
   virtual ~bpgl_segmented_rolling_shutter_camera() {}
 
-  virtual vcl_string type_name() const { return "bpgl_segmented_rolling_shutter_camera"; }
+  virtual std::string type_name() const { return "bpgl_segmented_rolling_shutter_camera"; }
 
   //: Clone `this': creation of a new object and initialization
   //  See Prototype pattern
@@ -74,10 +76,10 @@ class  bpgl_segmented_rolling_shutter_camera : public bpgl_rolling_shutter_camer
   bool update_camera(unsigned int v, vpgl_perspective_camera<double> cam);
 
   //: print the camera parameters
-  virtual void print(vcl_ostream& s = vcl_cout) const;
+  virtual void print(std::ostream& s = std::cout) const;
 
   //: save to file (the lvcs is after the global rational camera parameters)
-  virtual bool save(vcl_string cam_path);
+  virtual bool save(std::string cam_path);
 
   // === binary IO ===
 
@@ -94,22 +96,22 @@ class  bpgl_segmented_rolling_shutter_camera : public bpgl_rolling_shutter_camer
 //: Creates a local rational camera from a file
 // \relatesalso bpgl_segmented_rolling_shutter_camera
 template <class T>
-bpgl_segmented_rolling_shutter_camera<T>* read_segmented_rolling_shutter_camera(vcl_string cam_path);
+bpgl_segmented_rolling_shutter_camera<T>* read_segmented_rolling_shutter_camera(std::string cam_path);
 
 //: Creates a local rational camera from a file
 // \relatesalso bpgl_segmented_rolling_shutter_camera
 template <class T>
-bpgl_segmented_rolling_shutter_camera<T>* read_segmented_rolling_shutter_camera(vcl_istream& istr);
+bpgl_segmented_rolling_shutter_camera<T>* read_segmented_rolling_shutter_camera(std::istream& istr);
 
 //: Write to stream
 // \relatesalso bpgl_segmented_rolling_shutter_camera
 template <class T>
-vcl_ostream& operator<<(vcl_ostream& s, const bpgl_segmented_rolling_shutter_camera<T>& p);
+std::ostream& operator<<(std::ostream& s, const bpgl_segmented_rolling_shutter_camera<T>& p);
 
 //: Read from stream
 // \relatesalso bpgl_segmented_rolling_shutter_camera
 template <class T>
-vcl_istream& operator>>(vcl_istream& is, bpgl_segmented_rolling_shutter_camera<T>& p);
+std::istream& operator>>(std::istream& is, bpgl_segmented_rolling_shutter_camera<T>& p);
 
 #define BPGL_SEGMENTED_ROLLING_SHUTTER_CAMERA_INSTANTIATE(T) extern "please include bpgl/bpgl_segmented_rolling_shutter_camera.txx first"
 

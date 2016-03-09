@@ -5,14 +5,16 @@
 // \brief Adaptor which steps through images and returns a subset of original points
 
 #include <vcl_cassert.h>
-#include <vcl_string.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <string>
 
 #include "msdi_points_subset.h"
 
 //: Construct with external vectors of images and points
 msdi_points_subset::msdi_points_subset(
                         msdi_marked_images& raw_data,
-                        const vcl_vector<unsigned>& index)
+                        const std::vector<unsigned>& index)
   : marked_images_(raw_data), index_(index)
 {
   points_.set_size(index.size());
@@ -81,13 +83,13 @@ bool msdi_points_subset::next()
 }
 
 //: Return current image file name
-vcl_string msdi_points_subset::image_name() const
+std::string msdi_points_subset::image_name() const
 {
   return marked_images_.image_name();
 }
 
 //: Return current points file name
-vcl_string msdi_points_subset::points_name() const
+std::string msdi_points_subset::points_name() const
 {
   return marked_images_.points_name();
 }

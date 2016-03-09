@@ -12,7 +12,9 @@
 // \endverbatim
 
 #include <bprb/bprb_func_process.h>
-#include <vcl_string.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <string>
 
 //: globals
 namespace bvxm_update_edge_tangent_process_globals

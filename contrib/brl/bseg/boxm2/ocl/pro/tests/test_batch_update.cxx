@@ -21,18 +21,20 @@
 #include <boxm2/io/boxm2_sio_mgr.h>
 #include <vnl/vnl_vector_fixed.h>
 
-#include <vcl_iostream.h>
-#include <vcl_string.h>
-#include <vcl_vector.h>
-#include <vcl_map.h>
-#include <vcl_algorithm.h>
+#include <iostream>
+#include <string>
+#include <vector>
+#include <map>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <algorithm>
 
 #include <brdb/brdb_value.h>
 
 class boxm2_process
 {
  public:
-  bool init_kernel(_cl_context**, _cl_device_id**, vcl_string const&) { return false; }
+  bool init_kernel(_cl_context**, _cl_device_id**, std::string const&) { return false; }
 };
 
 void test_batch_update_kernels()
@@ -41,9 +43,9 @@ void test_batch_update_kernels()
   //--- BEGIN BOXM2 API EXAMPLE ------------------------------------------------
   //----------------------------------------------------------------------------
   //start out reading the scene.
-  vcl_string test_dir  = testlib_root_dir()+ "/contrib/brl/bseg/boxm2/ocl/pro/tests/";
-  vcl_string test_dir2  ="f:/visdt/";
-  vcl_string test_file = test_dir2 + "boxm2_empty/scene.xml";
+  std::string test_dir  = testlib_root_dir()+ "/contrib/brl/bseg/boxm2/ocl/pro/tests/";
+  std::string test_dir2  ="f:/visdt/";
+  std::string test_file = test_dir2 + "boxm2_empty/scene.xml";
 
   boxm2_scene_sptr scene = new boxm2_scene(test_file);
 
@@ -57,17 +59,17 @@ void test_batch_update_kernels()
   gpu_pro->set_scene(scene.ptr());
   gpu_pro->set_cpu_cache(cache);
   gpu_pro->init();
-  vcl_string update_opts=" -D MOG_TYPE_8 ";
+  std::string update_opts=" -D MOG_TYPE_8 ";
   boxm2_process update;
   update.init_kernel(&gpu_pro->context(), &gpu_pro->devices()[0],update_opts);
 
-  vcl_string cam_dir=test_dir2+"cams24";
-  vcl_string img_dir=test_dir2+"imgs24";
-  vcl_vector<brdb_value_sptr> input, output;
+  std::string cam_dir=test_dir2+"cams24";
+  std::string img_dir=test_dir2+"imgs24";
+  std::vector<brdb_value_sptr> input, output;
 
   brdb_value_sptr brdb_scene = new brdb_value_t<boxm2_scene_sptr>(scene);
-  brdb_value_sptr brdb_camdir = new brdb_value_t<vcl_string>(cam_dir);
-  brdb_value_sptr brdb_imgdir = new brdb_value_t<vcl_string>(img_dir);
+  brdb_value_sptr brdb_camdir = new brdb_value_t<std::string>(cam_dir);
+  brdb_value_sptr brdb_imgdir = new brdb_value_t<std::string>(img_dir);
 
   input.push_back(brdb_scene);
   input.push_back(brdb_camdir);
@@ -75,9 +77,9 @@ void test_batch_update_kernels()
 
   gpu_pro->run(input, output);
 #endif
-  vcl_map<boxm2_block_id, boxm2_block_metadata> blk_map=scene->blocks();
+  std::map<boxm2_block_id, boxm2_block_metadata> blk_map=scene->blocks();
 
-  vcl_map<boxm2_block_id, boxm2_block_metadata>::iterator iter=blk_map.begin();
+  std::map<boxm2_block_id, boxm2_block_metadata>::iterator iter=blk_map.begin();
   typedef vnl_vector_fixed<unsigned char, 16> uchar16;    //defines a bit tree
   typedef vnl_vector_fixed<unsigned char, 8> uchar8;    //defines a bit tree
   typedef vnl_vector_fixed<float , 4> float4;    //defines a bit tree
@@ -88,7 +90,7 @@ void test_batch_update_kernels()
     boxm2_block *     blk     = cache->get_block(scene, iter->first);
     boxm2_array_3d<uchar16> trees=blk->trees();
 
-    vcl_cout<<" DATA buffers "<< blk->num_buffers()<<vcl_endl;
+    std::cout<<" DATA buffers "<< blk->num_buffers()<<std::endl;
     boxm2_data_base * data_base = cache->get_data_base(scene, iter->first,boxm2_data_traits<BOXM2_AUX>::prefix());
     boxm2_data<BOXM2_AUX> *aux_data=new boxm2_data<BOXM2_AUX>(data_base->data_buffer(),data_base->buffer_length(),data_base->block_id());
 
@@ -119,19 +121,19 @@ void test_batch_update_kernels()
           buff_index+=(int)curr_tree[13];
           if (tk==63)
           {
-            vcl_cout<<ti<<','<<tj<<','<<tk<<" [";
+            std::cout<<ti<<','<<tj<<','<<tk<<" [";
             for (unsigned vecindex=0;vecindex<8;vecindex++)
-              vcl_cout<<hist_data_array[(buff_index*65536+buff_offset)][vecindex]<<',';
-            vcl_cout<<"] "
+              std::cout<<hist_data_array[(buff_index*65536+buff_offset)][vecindex]<<',';
+            std::cout<<"] "
                     <<data[(buff_index*65536+buff_offset)/4][(buff_index*65536+buff_offset)%4]
-                    <<"  " <<alpha_data_array[(buff_index*65536+buff_offset)]<<vcl_endl;
+                    <<"  " <<alpha_data_array[(buff_index*65536+buff_offset)]<<std::endl;
           }
           sumP+=alpha_data_array[(buff_index*65536+buff_offset)];
           count++;
         }
       }
     }
-    vcl_cout<<"MEAN P "<<sumP/(float)count<<vcl_endl;
+    std::cout<<"MEAN P "<<sumP/(float)count<<std::endl;
   }
 }
 

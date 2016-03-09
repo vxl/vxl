@@ -7,12 +7,14 @@
 // \author J.L. Mundy
 // \date   6 November 2015
 //
-#include <vcl_iostream.h>
-#include <vcl_fstream.h>
+#include <iostream>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <fstream>
 #include <vcl_cassert.h>
-#include <vcl_vector.h>
-#include <vcl_string.h>
-#include <vcl_map.h>
+#include <vector>
+#include <string>
+#include <map>
 #include <vgl/vgl_point_3d.h>
 #include <vgl/vgl_vector_3d.h>
 #include <vgl/vgl_pointset_3d.h>
@@ -47,8 +49,8 @@ class bvgl_grid_index_3d{
 
  protected:
   bool has_normals_;
-  vbl_array_3d<vcl_vector<vgl_point_3d<double > > >   p_grid_;
-  vbl_array_3d<vcl_vector<vgl_vector_3d<double > > >  n_grid_;//optional
+  vbl_array_3d<std::vector<vgl_point_3d<double > > >   p_grid_;
+  vbl_array_3d<std::vector<vgl_vector_3d<double > > >  n_grid_;//optional
   vgl_box_3d<double> bbox_;
   double delta_x_;
   double delta_y_;

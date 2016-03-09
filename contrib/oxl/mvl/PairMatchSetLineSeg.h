@@ -36,7 +36,7 @@ class PairMatchSetLineSeg : public PairMatchSet
   LineSegSet* get_linesegs1() const { return linesegs1_; }
   LineSegSet* get_linesegs2() const { return linesegs2_; }
 
-  void extract_matches(vcl_vector<HomgLineSeg2D>& l1, vcl_vector<HomgLineSeg2D>& l2) const;
+  void extract_matches(std::vector<HomgLineSeg2D>& l1, std::vector<HomgLineSeg2D>& l2) const;
 
   // Data Control--------------------------------------------------------------
   void set(LineSegSet* lines1, LineSegSet* lines2);

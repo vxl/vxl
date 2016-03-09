@@ -2,10 +2,12 @@
 // \file
 #include <testlib/testlib_test.h>
 #include <brad/brad_image_metadata.h>
-#include <vcl_cmath.h>
-#include <vcl_iostream.h>
-#include <vcl_sstream.h>
-#include <vcl_string.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <cmath>
+#include <iostream>
+#include <sstream>
+#include <string>
 
 //: Test the image_metadata class
 static void test_image_metadata()
@@ -21,7 +23,7 @@ static void test_image_metadata()
    md.sun_irradiance_ = 1350.5;
    md.number_of_bits_ = 11;
 
-   vcl_stringstream ss;
+   std::stringstream ss;
    ss << md;
 
    brad_image_metadata md2;

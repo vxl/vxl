@@ -10,9 +10,9 @@
 //: Return vector indicating size of image in pixels
 //  2D image is v[0] x v[1],  3D image is v[0] x v[1] x v[2]
 //  Somewhat inefficient: Only use when you have to
-vcl_vector<unsigned> vimt_image_2d::image_size() const
+std::vector<unsigned> vimt_image_2d::image_size() const
 {
-  vcl_vector<unsigned> d(2);
+  std::vector<unsigned> d(2);
   d[0]=image_base().ni();
   d[1]=image_base().nj();
   return d;
@@ -20,9 +20,9 @@ vcl_vector<unsigned> vimt_image_2d::image_size() const
 
 
 //: Return 2 element vector indicating the size of a pixel
-vcl_vector<double> vimt_image_2d::pixel_size() const
+std::vector<double> vimt_image_2d::pixel_size() const
 {
-  vcl_vector<double> d(2);
+  std::vector<double> d(2);
   vgl_vector_2d<double> v =world2im_.inverse().
     delta(vgl_point_2d<double>(0,0), vgl_vector_2d<double>(1.0,1.0));
 
@@ -33,8 +33,8 @@ vcl_vector<double> vimt_image_2d::pixel_size() const
 
 
 //: Return vectors defining bounding box containing image in world co-ords
-void vimt_image_2d::world_bounds(vcl_vector<double>& b_lo,
-                                 vcl_vector<double>& b_hi) const
+void vimt_image_2d::world_bounds(std::vector<double>& b_lo,
+                                 std::vector<double>& b_hi) const
 {
   b_lo.resize(2); b_hi.resize(2);
   vgl_point_2d<double> p = world2im_.inverse()(0,0);
@@ -59,8 +59,8 @@ void vimt_image_2d::world_bounds(vcl_vector<double>& b_lo,
 // Return bounding box containing image in world co-ords as a box
 vgl_box_2d<double> world_bounding_box(const vimt_image_2d& img)
 {
-  vcl_vector<double> b_lo(2,0.0);
-  vcl_vector<double> b_hi(2,0.0);
+  std::vector<double> b_lo(2,0.0);
+  std::vector<double> b_hi(2,0.0);
   img.world_bounds(b_lo,b_hi);
   return vgl_box_2d<double>(b_lo[0],b_hi[0],b_lo[1],b_hi[1]);
 }

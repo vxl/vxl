@@ -9,7 +9,9 @@
 // \date August 17, 2013
 
 #include <vul/vul_file.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iostream>
 #include <volm/volm_osm_objects.h>
 #include <volm/volm_io.h>
 #include <volm/volm_category_io.h>
@@ -37,12 +39,12 @@ bool boxm2_geo_cover_with_osm_to_xyz_process_cons(bprb_func_process& pro)
 {
   using namespace boxm2_geo_cover_with_osm_to_xyz_process_globals;
 
-  vcl_vector<vcl_string> input_types_(n_inputs_);
+  std::vector<std::string> input_types_(n_inputs_);
   input_types_[0] = "boxm2_scene_sptr";   // boxm2 scene
   input_types_[1] = "vcl_string";         // tiff geo cover image name
   input_types_[2] = "vcl_string";         // open street map road binary
 
-  vcl_vector<vcl_string> output_types_(n_outputs_);
+  std::vector<std::string> output_types_(n_outputs_);
   output_types_[0] = "vil_image_view_base_sptr";  // x image
   output_types_[1] = "vil_image_view_base_sptr";  // y image
   output_types_[2] = "vil_image_view_base_sptr";  // z image
@@ -56,18 +58,18 @@ bool boxm2_geo_cover_with_osm_to_xyz_process(bprb_func_process& pro)
   using namespace boxm2_geo_cover_with_osm_to_xyz_process_globals;
 
   if ( pro.n_inputs() < n_inputs_ ){
-    vcl_cout << pro.name() << ": The number of inputs should be " << n_inputs_<< vcl_endl;
+    std::cout << pro.name() << ": The number of inputs should be " << n_inputs_<< std::endl;
     return false;
   }
   // get the input
   unsigned i = 0;
   boxm2_scene_sptr scene = pro.get_input<boxm2_scene_sptr>(i++);
-  vcl_string img_fname = pro.get_input<vcl_string>(i++);
-  vcl_string osm_bin = pro.get_input<vcl_string>(i++);
+  std::string img_fname = pro.get_input<std::string>(i++);
+  std::string osm_bin = pro.get_input<std::string>(i++);
 
   // find the bbox of scene and resolution of scene
   vpgl_lvcs_sptr lvcs = new vpgl_lvcs(scene->lvcs());
-  vcl_vector<boxm2_block_id> blks = scene->get_block_ids();
+  std::vector<boxm2_block_id> blks = scene->get_block_ids();
   // fetch the minimum voxel length
   float vox_length = 1E6;
   for (unsigned i = 0; i < blks.size(); i++) {
@@ -76,32 +78,32 @@ bool boxm2_geo_cover_with_osm_to_xyz_process(bprb_func_process& pro)
     if (sb_length/8.0f < vox_length)  vox_length = sb_length/8.0f;
   }
   double orig_lat, orig_lon, orig_elev; scene->lvcs().get_origin(orig_lat, orig_lon, orig_elev);
-  vcl_cout << "scene voxel length: " << vox_length << vcl_endl;
+  std::cout << "scene voxel length: " << vox_length << std::endl;
   vgl_box_3d<double> scene_bbox = scene->bounding_box();
   double min_lon, min_lat, gz, max_lon, max_lat;
   lvcs->local_to_global(scene_bbox.min_point().x(), scene_bbox.min_point().y(), 0, vpgl_lvcs::wgs84, min_lon, min_lat, gz);
   lvcs->local_to_global(scene_bbox.max_point().x(), scene_bbox.max_point().y(), 0, vpgl_lvcs::wgs84, max_lon, max_lat, gz);
   vgl_box_2d<double> sbbox(min_lon, max_lon, min_lat, max_lat);
-  vcl_cout << " scene bbox in geo coords: " << sbbox << vcl_endl;
+  std::cout << " scene bbox in geo coords: " << sbbox << std::endl;
 
   // find the bounding box of geo cover image from filename
   volm_tile t(img_fname, 0, 0);
   vgl_box_2d<double> bbox = t.bbox_double();
-  vcl_cout << " image bounding box in geo coords: " << bbox << vcl_endl;
+  std::cout << " image bounding box in geo coords: " << bbox << std::endl;
 
   // check whether the image intersects with the scene
   if (vgl_intersection(bbox, sbbox).area() <= 0) {
-    vcl_cout << " scene does not intersect with the image: " << img_fname << vcl_endl;
+    std::cout << " scene does not intersect with the image: " << img_fname << std::endl;
     return false;
   }
 
   // load the geo_cover image
   if (!vul_file::exists(img_fname)) {
-    vcl_cout << pro.name() << " can not find the image: " << img_fname << vcl_endl;
+    std::cout << pro.name() << " can not find the image: " << img_fname << std::endl;
     return false;
   }
   if (!vul_file::exists(osm_bin)) {
-    vcl_cout << pro.name() << " can not find the osm binary: " << osm_bin << vcl_endl;
+    std::cout << pro.name() << " can not find the osm binary: " << osm_bin << std::endl;
     return false;
   }
   vil_image_view_base_sptr img_sptr = vil_load(img_fname.c_str());
@@ -116,12 +118,12 @@ bool boxm2_geo_cover_with_osm_to_xyz_process(bprb_func_process& pro)
   double lon2, lat2;
   cam->img_to_global(nii, nji, lon2, lat2);
   vpgl_utm utm; double x, y; int zone; utm.transform(lat2, -lon2, x, y, zone);
-  vcl_cout << "lower right corner in the image given by geocam is: " << lat2 << " " << lon2 <<  " zone: " << zone << vcl_endl;
+  std::cout << "lower right corner in the image given by geocam is: " << lat2 << " " << lon2 <<  " zone: " << zone << std::endl;
 
   // prepare an image for the voxel resolution
-  int ni = (int)vcl_ceil((scene_bbox.max_x()-scene_bbox.min_x()+1.0)/vox_length);
-  int nj = (int)vcl_ceil((scene_bbox.max_y()-scene_bbox.min_y()+1.0)/vox_length);
-  vcl_cout << " image size needs ni: " << ni << " nj: " << nj << " to support voxel res: " << vox_length << vcl_endl;
+  int ni = (int)std::ceil((scene_bbox.max_x()-scene_bbox.min_x()+1.0)/vox_length);
+  int nj = (int)std::ceil((scene_bbox.max_y()-scene_bbox.min_y()+1.0)/vox_length);
+  std::cout << " image size needs ni: " << ni << " nj: " << nj << " to support voxel res: " << vox_length << std::endl;
 
   // create x y z images
   vil_image_view<float>* out_img_x = new vil_image_view<float>(ni, nj, 1);
@@ -154,8 +156,8 @@ bool boxm2_geo_cover_with_osm_to_xyz_process(bprb_func_process& pro)
       if (lon < 0)  lon = -lon;
       if (lat < 0)  lat = -lat;
       cam->global_to_img(lon, lat, gz, u, v);
-      unsigned uu = (unsigned)vcl_floor(u + 0.5);
-      unsigned vv = (unsigned)vcl_floor(v + 0.5);
+      unsigned uu = (unsigned)std::floor(u + 0.5);
+      unsigned vv = (unsigned)std::floor(v + 0.5);
       if (uu > 0 && vv > 0 && uu < nii && vv < nji) {
         if (vil_image_view<vxl_byte>* img = dynamic_cast<vil_image_view<vxl_byte> * >(img_sptr.ptr())) {
           (*out_img_z)(i,j) = (float)(scene_bbox.max_z()+100.0f);  // make the ray origin above all surface if the pixel is valid
@@ -170,9 +172,9 @@ bool boxm2_geo_cover_with_osm_to_xyz_process(bprb_func_process& pro)
   // create a level image to records the level of objects
   // load osm binary
   volm_osm_objects osm_obj(osm_bin);
-  vcl_cout << " open street map data are retrieved from: " << osm_bin << vcl_endl;
-  vcl_cout << " start to ingest open street map data into x y z image... " << vcl_endl;
-  vcl_cout << " there are " << osm_obj.num_regions() << " regions and " << osm_obj.num_roads() << " roads in current geo_cover image region" << vcl_endl;
+  std::cout << " open street map data are retrieved from: " << osm_bin << std::endl;
+  std::cout << " start to ingest open street map data into x y z image... " << std::endl;
+  std::cout << " there are " << osm_obj.num_regions() << " regions and " << osm_obj.num_roads() << " roads in current geo_cover image region" << std::endl;
 
   unsigned cnt = 0;
   // ingest regions
@@ -224,7 +226,7 @@ bool boxm2_geo_cover_with_osm_to_xyz_process(bprb_func_process& pro)
       }
     }
   }
-  vcl_cout << " number of osm regions ingested into geo cover: " << cnt << vcl_endl;
+  std::cout << " number of osm regions ingested into geo cover: " << cnt << std::endl;
 #if 0
     // go from geo coord wgs84 to local
     vgl_polygon<double> img_poly(1);
@@ -255,19 +257,19 @@ bool boxm2_geo_cover_with_osm_to_xyz_process(bprb_func_process& pro)
       }
     }
   }
-  vcl_cout << " number of osm regions ingested into geo cover: " << cnt << vcl_endl;
+  std::cout << " number of osm regions ingested into geo cover: " << cnt << std::endl;
 #endif
   // ingest roads
   cnt = 0;
   unsigned num_roads = osm_obj.num_roads();
   for (unsigned r_idx = 0; r_idx < num_roads; r_idx++) {
-    vcl_vector<vgl_point_2d<double> > road = osm_obj.loc_lines()[r_idx]->line();
-    vcl_vector<vgl_point_2d<double> > line_geo = vgl_intersection(road, sbbox);
+    std::vector<vgl_point_2d<double> > road = osm_obj.loc_lines()[r_idx]->line();
+    std::vector<vgl_point_2d<double> > line_geo = vgl_intersection(road, sbbox);
     // check whether current road intersects with scene bounding box
     if (line_geo.size() < 2)
       continue;
     // go from geo coord wgs84 to scene local coo
-    vcl_vector<vgl_point_2d<double> > line_img;
+    std::vector<vgl_point_2d<double> > line_img;
     unsigned char curr_level = osm_obj.loc_lines()[r_idx]->prop().level_;
     unsigned char curr_id = osm_obj.loc_lines()[r_idx]->prop().id_;
     vil_rgb<vxl_byte> curr_color = osm_obj.loc_lines()[r_idx]->prop().color_;
@@ -286,7 +288,7 @@ bool boxm2_geo_cover_with_osm_to_xyz_process(bprb_func_process& pro)
     if (width < vox_length) width = vox_length;
     vgl_polygon<double> img_poly;
     if (!volm_io_tools::expend_line(line_img, width/vox_length, img_poly)) {
-      vcl_cout << pro.name() << " expending osm line " << r_idx << " failed for width " << width << vcl_endl;
+      std::cout << pro.name() << " expending osm line " << r_idx << " failed for width " << width << std::endl;
       return false;
     }
     // update the label
@@ -305,13 +307,13 @@ bool boxm2_geo_cover_with_osm_to_xyz_process(bprb_func_process& pro)
       }
     }
   }
-  vcl_cout << " number of osm regions ingested into geo cover: " << cnt << vcl_endl;
+  std::cout << " number of osm regions ingested into geo cover: " << cnt << std::endl;
 
 #if 0 // use this when we have satellite data
   // ingest points (will occupy a single pixel)
   cnt = 0;
   unsigned n_pts = osm_obj.num_locs();
-  vcl_vector<volm_osm_object_point_sptr> loc_pts = osm_obj.loc_pts();
+  std::vector<volm_osm_object_point_sptr> loc_pts = osm_obj.loc_pts();
   for (unsigned p_idx = 0; p_idx < n_pts; p_idx++) {
     vgl_point_2d<double> pt = loc_pts[p_idx]->loc();
     if (!sbbox.contains(pt))
@@ -335,7 +337,7 @@ bool boxm2_geo_cover_with_osm_to_xyz_process(bprb_func_process& pro)
       }
     }
   }
-  vcl_cout << " number of osm points ingested into geo cover: " << cnt << vcl_endl;
+  std::cout << " number of osm points ingested into geo cover: " << cnt << std::endl;
 #endif
 
   pro.set_output_val<vil_image_view_base_sptr>(0, out_img_x);

@@ -7,7 +7,9 @@
 // \author Ozge C. Ozcanli
 // \date May 12, 2011
 
-#include <vcl_fstream.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <fstream>
 #include <boxm2/io/boxm2_stream_cache.h>
 #include <boxm2/io/boxm2_cache.h>
 #include <boxm2/boxm2_scene.h>
@@ -35,12 +37,12 @@ bool boxm2_cpp_batch_update_nonsurface_model_process_cons(bprb_func_process& pro
   // 0) scene
   // 1) cache
   // 2) stream cache
-  vcl_vector<vcl_string> input_types_(n_inputs_);
+  std::vector<std::string> input_types_(n_inputs_);
   input_types_[0] = "boxm2_scene_sptr";
   input_types_[1] = "boxm2_cache_sptr";
   input_types_[2] = "boxm2_stream_cache_sptr";
   // process has 0 output:
-  vcl_vector<vcl_string>  output_types_(n_outputs_);
+  std::vector<std::string>  output_types_(n_outputs_);
 
   return pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
 }
@@ -50,7 +52,7 @@ bool boxm2_cpp_batch_update_nonsurface_model_process(bprb_func_process& pro)
   using namespace boxm2_cpp_batch_update_nonsurface_model_process_globals;
 
   if ( pro.n_inputs() < n_inputs_ ) {
-    vcl_cout << pro.name() << ": The number of inputs should be " << n_inputs_<< vcl_endl;
+    std::cout << pro.name() << ": The number of inputs should be " << n_inputs_<< std::endl;
     return false;
   }
   //get the inputs
@@ -62,8 +64,8 @@ bool boxm2_cpp_batch_update_nonsurface_model_process(bprb_func_process& pro)
   // assumes that the data of each image has been created in the data models previously
   // (but unused:) int alphaTypeSize = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_ALPHA>::prefix());
   // iterate the scene block by block and write to output
-  vcl_vector<boxm2_block_id> blk_ids = scene->get_block_ids();
-  vcl_vector<boxm2_block_id>::iterator id;
+  std::vector<boxm2_block_id> blk_ids = scene->get_block_ids();
+  std::vector<boxm2_block_id>::iterator id;
   for (id = blk_ids.begin(); id != blk_ids.end(); id++) {
     boxm2_data_base *  alpha  = cache->get_data_base(scene,*id,boxm2_data_traits<BOXM2_ALPHA>::prefix(),0,true);
 
@@ -75,7 +77,7 @@ bool boxm2_cpp_batch_update_nonsurface_model_process(bprb_func_process& pro)
     // check for invalid parameters
     if( histo_entropy_airTypeSize == 0 ) {
     //This should never happen, it will result in division by zero later
-        vcl_cout << "ERROR: histo_entropy_airTypeSize == 0 in " << __FILE__ << __LINE__ << vcl_endl;
+        std::cout << "ERROR: histo_entropy_airTypeSize == 0 in " << __FILE__ << __LINE__ << std::endl;
         return false;
     }
 

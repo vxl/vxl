@@ -20,7 +20,9 @@
 #include <vnl/vnl_double_3x3.h>
 #include <vgl/vgl_fwd.h>
 #include <mvl/ImageMetric.h>
-#include <vcl_iosfwd.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iosfwd>
 
 class AffineMetric : public ImageMetric
 {
@@ -62,7 +64,7 @@ class AffineMetric : public ImageMetric
   virtual bool can_invert_distance() const { return false; }
 
   //: Send a human-readable representation to ostream
-  vcl_ostream& print(vcl_ostream& s) const;
+  std::ostream& print(std::ostream& s) const;
 };
 
 #endif // AffineMetric_h_

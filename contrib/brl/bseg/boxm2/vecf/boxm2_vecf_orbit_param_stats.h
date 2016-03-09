@@ -7,18 +7,20 @@
 // \author J.L. Mundy
 // \date   5 July 2015
 //
-#include <vcl_vector.h>
-#include <vcl_fstream.h>
-#include <vcl_map.h>
+#include <vector>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <fstream>
+#include <map>
 #include "boxm2_vecf_orbit_params.h"
 #include <vnl/vnl_matrix.h>
 class boxm2_vecf_orbit_param_stats{
  public:
   boxm2_vecf_orbit_param_stats(){}
- boxm2_vecf_orbit_param_stats(vcl_map<vcl_string, vcl_pair<boxm2_vecf_orbit_params, boxm2_vecf_orbit_params > > const& param_map):
+ boxm2_vecf_orbit_param_stats(std::map<std::string, std::pair<boxm2_vecf_orbit_params, boxm2_vecf_orbit_params > > const& param_map):
   param_map_(param_map){}
 
-  void add_param_pair(vcl_string patient_id, vcl_pair<boxm2_vecf_orbit_params, boxm2_vecf_orbit_params> const& param_pair){
+  void add_param_pair(std::string patient_id, std::pair<boxm2_vecf_orbit_params, boxm2_vecf_orbit_params> const& param_pair){
     param_map_[patient_id] = param_pair;
   }
   void generate_stats();
@@ -26,20 +28,20 @@ class boxm2_vecf_orbit_param_stats{
   void print_xy_fitting_error();
   void print_xyz_fitting_error();
   bool merge_margins_and_crease();
-  bool plot_merged_margins(vcl_ofstream& os, unsigned sample_skip = 3);
+  bool plot_merged_margins(std::ofstream& os, unsigned sample_skip = 3);
   void compute_feature_vectors();
   void compute_covariance_matrix();
   void separation_stats();
  private:
   void average_params();
-  vcl_map<vcl_string, vcl_pair<boxm2_vecf_orbit_params, boxm2_vecf_orbit_params > > param_map_;
-  vcl_map<vcl_string, boxm2_vecf_orbit_params> param_avg_;
+  std::map<std::string, std::pair<boxm2_vecf_orbit_params, boxm2_vecf_orbit_params > > param_map_;
+  std::map<std::string, boxm2_vecf_orbit_params> param_avg_;
   //      patient id          parameter   deviation
-  vcl_map<vcl_string, vcl_map<vcl_string, double > > devs_;
-  vcl_map<vcl_string, vcl_vector<vgl_point_3d<double> > > merged_inf_margin_;
-  vcl_map<vcl_string, vcl_vector<vgl_point_3d<double> > > merged_sup_margin_;
-  vcl_map<vcl_string, vcl_vector<vgl_point_3d<double> > > merged_crease_;
-  vcl_map<vcl_string, vnl_matrix<double> > feature_vectors_;
+  std::map<std::string, std::map<std::string, double > > devs_;
+  std::map<std::string, std::vector<vgl_point_3d<double> > > merged_inf_margin_;
+  std::map<std::string, std::vector<vgl_point_3d<double> > > merged_sup_margin_;
+  std::map<std::string, std::vector<vgl_point_3d<double> > > merged_crease_;
+  std::map<std::string, vnl_matrix<double> > feature_vectors_;
   vnl_matrix<double> mean_;
   vnl_matrix<double> cov_;
 };

@@ -12,7 +12,9 @@
 //   Aug 09 2010 jlm  moved to brl/bseg/bvxm/breg3d/pro
 // \endverbatim
 
-#include <vcl_string.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <string>
 #include <bprb/bprb_process.h>
 
 
@@ -32,7 +34,7 @@ class breg3d_set_occupancy_plane_process : public bprb_process
   //: Clone the process
   virtual breg3d_set_occupancy_plane_process* clone() const {return new breg3d_set_occupancy_plane_process(*this);}
 
-  virtual vcl_string name() const {return "breg3dSetOccupancyPlane";}
+  virtual std::string name() const {return "breg3dSetOccupancyPlane";}
 
   bool init() { return true; }
   bool execute();

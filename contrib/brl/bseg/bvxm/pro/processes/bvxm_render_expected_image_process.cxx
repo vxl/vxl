@@ -26,7 +26,7 @@ bool bvxm_render_expected_image_process_cons(bprb_func_process& pro)
   //input[5]: The bin index to be updated
       //input[6]: The scale index to be updated
 
-  vcl_vector<vcl_string> input_types_(n_inputs_);
+  std::vector<std::string> input_types_(n_inputs_);
   unsigned i = 0;
   input_types_[i++] = "vpgl_camera_double_sptr";
   input_types_[i++] = "unsigned";
@@ -41,7 +41,7 @@ bool bvxm_render_expected_image_process_cons(bprb_func_process& pro)
   // process has 2 outputs:
   // output[0]: The rendered frame
   // output[1]: A confidence map, giving probability that each pixel was seen from the original view.
-  vcl_vector<vcl_string> output_types_(n_outputs_);
+  std::vector<std::string> output_types_(n_outputs_);
   unsigned j = 0;
   output_types_[j++]= "vil_image_view_base_sptr";
   output_types_[j++] = "vil_image_view_base_sptr";
@@ -56,7 +56,7 @@ bool bvxm_render_expected_image_process(bprb_func_process& pro)
   //check number of inputs
   if (pro.n_inputs()<n_inputs_)
   {
-    vcl_cout << pro.name() << " The input number should be " << n_inputs_<< vcl_endl;
+    std::cout << pro.name() << " The input number should be " << n_inputs_<< std::endl;
     return false;
   }
   //get the inputs
@@ -65,17 +65,17 @@ bool bvxm_render_expected_image_process(bprb_func_process& pro)
   unsigned npixels_x = pro.get_input<unsigned>(i++);
   unsigned npixels_y = pro.get_input<unsigned>(i++);
   bvxm_voxel_world_sptr world = pro.get_input<bvxm_voxel_world_sptr>(i++);
-  vcl_string voxel_type = pro.get_input<vcl_string>(i++);
+  std::string voxel_type = pro.get_input<std::string>(i++);
   unsigned bin_index = pro.get_input<unsigned>(i++);
   unsigned scale_index = pro.get_input<unsigned>(i++);
 
   //check input validity
   if (!camera) {
-    vcl_cout << pro.name() <<" :--  Input 0  is not valid!\n";
+    std::cout << pro.name() <<" :--  Input 0  is not valid!\n";
     return false;
   }
   if (!world) {
-    vcl_cout << pro.name() <<" :--  Input 3  is not valid!\n";
+    std::cout << pro.name() <<" :--  Input 3  is not valid!\n";
     return false;
   }
 
@@ -118,7 +118,7 @@ bool bvxm_render_expected_image_process(bprb_func_process& pro)
     result = world->expected_image<FLOAT>(camera_metadata, expected_img, *mask_img, bin_index,scale_index);
   }
   else
-    vcl_cerr << "Error in bvxm_render_expected_image_process: Unknown appearance model\n";
+    std::cerr << "Error in bvxm_render_expected_image_process: Unknown appearance model\n";
 
   //store output
   // process has 2 outputs:

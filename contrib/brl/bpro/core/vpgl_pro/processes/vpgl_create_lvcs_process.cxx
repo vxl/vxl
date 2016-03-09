@@ -4,7 +4,9 @@
 // \file
 
 #include <bprb/bprb_parameters.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iostream>
 #include <vpgl/vpgl_lvcs.h>
 #include <vpgl/vpgl_lvcs_sptr.h>
 
@@ -17,7 +19,7 @@ bool vpgl_create_lvcs_process_cons(bprb_func_process& pro)
   // 2: (double)  elevation
   // 3: (string)  lvcs csname (wgs84, nad27n, wgs72, utm)
   bool ok=false;
-  vcl_vector<vcl_string> input_types;
+  std::vector<std::string> input_types;
   input_types.push_back("double");
   input_types.push_back("double");
   input_types.push_back("double");
@@ -26,7 +28,7 @@ bool vpgl_create_lvcs_process_cons(bprb_func_process& pro)
   if (!ok) return ok;
 
   // process has no outputs
-  vcl_vector<vcl_string> output_types;
+  std::vector<std::string> output_types;
   output_types.push_back("vpgl_lvcs_sptr");
   ok = pro.set_output_types(output_types);
   if (!ok) return ok;
@@ -38,7 +40,7 @@ bool vpgl_create_lvcs_process_cons(bprb_func_process& pro)
 bool vpgl_create_lvcs_process(bprb_func_process& pro)
 {
   if (pro.n_inputs() != pro.input_types().size()) {
-    vcl_cout << "vpgl_create_lvcs_process: The number of inputs should be " << pro.input_types().size() << vcl_endl;
+    std::cout << "vpgl_create_lvcs_process: The number of inputs should be " << pro.input_types().size() << std::endl;
     return false;
   }
 
@@ -46,7 +48,7 @@ bool vpgl_create_lvcs_process(bprb_func_process& pro)
   double lat = pro.get_input<double>(0);
   double lon = pro.get_input<double>(1);
   double el = pro.get_input<double>(2);
-  vcl_string lvcs_name = pro.get_input<vcl_string>(3);
+  std::string lvcs_name = pro.get_input<std::string>(3);
 
   // create lvcs
   vpgl_lvcs_sptr lvcs = new  vpgl_lvcs(lat, lon, el, vpgl_lvcs::str_to_enum(lvcs_name.c_str()), vpgl_lvcs::DEG, vpgl_lvcs::METERS);

@@ -16,7 +16,7 @@ class bwm_soview2D_vertex : public vgui_soview2D_circle
   //: Destructor - delete this soview2D.
   virtual ~bwm_soview2D_vertex() {}
 
-  virtual vcl_string type_name() const { return "bwm_soview2D_vertex"; }
+  virtual std::string type_name() const { return "bwm_soview2D_vertex"; }
 
   bgui_vsol_soview2D* obj() { return obj_; }
   int vertex_indx() const { return v_index_; }

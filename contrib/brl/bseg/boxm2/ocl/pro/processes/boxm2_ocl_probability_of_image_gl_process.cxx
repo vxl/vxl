@@ -7,8 +7,10 @@
 // \author Vishal Jain
 // \date Mar 10, 2011
 
-#include <vcl_fstream.h>
-#include <vcl_algorithm.h>
+#include <fstream>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <algorithm>
 #include <boxm2/ocl/boxm2_opencl_cache.h>
 #include <boxm2/boxm2_scene.h>
 #include <boxm2/boxm2_block.h>
@@ -30,16 +32,16 @@ namespace boxm2_ocl_probability_of_image_gl_process_globals
 {
     const unsigned n_inputs_  = 7;
     const unsigned n_outputs_ = 0;
-    vcl_size_t lthreads[2]={8,8};
+    std::size_t lthreads[2]={8,8};
 
-    static vcl_map<vcl_string,vcl_vector<bocl_kernel*> > kernels;
+    static std::map<std::string,std::vector<bocl_kernel*> > kernels;
 
-    void compile_kernel(bocl_device_sptr device,vcl_vector<bocl_kernel*> & vec_kernels, vcl_string opts)
+    void compile_kernel(bocl_device_sptr device,std::vector<bocl_kernel*> & vec_kernels, std::string opts)
     {
         //gather all render sources... seems like a lot for rendering...
         //gather all render sources... seems like a lot for rendering...
-        vcl_vector<vcl_string> src_paths;
-        vcl_string source_dir = boxm2_ocl_util::ocl_src_root();
+        std::vector<std::string> src_paths;
+        std::string source_dir = boxm2_ocl_util::ocl_src_root();
         src_paths.push_back(source_dir + "scene_info.cl");
         src_paths.push_back(source_dir + "cell_utils.cl");
         src_paths.push_back(source_dir + "bit/bit_tree_library_functions.cl");
@@ -52,7 +54,7 @@ namespace boxm2_ocl_probability_of_image_gl_process_globals
 
         //set kernel options
         opts += " -D PROB_IMAGE -D DETERMINISTIC ";
-        vcl_string options=opts;
+        std::string options=opts;
 
         opts += " -D STEP_CELL=step_cell_compute_probability_of_intensity(aux_args.mog,aux_args.alpha,data_ptr,d*linfo->block_len,vis,aux_args.prob_image,aux_args.intensity) ";
 
@@ -67,7 +69,7 @@ namespace boxm2_ocl_probability_of_image_gl_process_globals
                                          "boxm2 ocl probability computation"); //kernel identifier (for error checking)
         vec_kernels.push_back(ray_trace_kernel);
         //create normalize image kernel
-        vcl_vector<vcl_string> norm_src_paths;
+        std::vector<std::string> norm_src_paths;
         norm_src_paths.push_back(source_dir + "pixel_conversion.cl");
         norm_src_paths.push_back(source_dir + "bit/normalize_kernels.cl");
         bocl_kernel * normalize_render_kernel=new bocl_kernel();
@@ -81,7 +83,7 @@ namespace boxm2_ocl_probability_of_image_gl_process_globals
 
         vec_kernels.push_back(normalize_render_kernel);
 
-        vcl_vector<vcl_string> convert_src_paths;
+        std::vector<std::string> convert_src_paths;
         convert_src_paths.push_back(source_dir + "pixel_conversion.cl");
         convert_src_paths.push_back(source_dir + "bit/pixel_conversion_kernels.cl");
         bocl_kernel * convert_kernel=new bocl_kernel();
@@ -101,7 +103,7 @@ bool boxm2_ocl_probability_of_image_gl_process_cons(bprb_func_process& pro)
   using namespace boxm2_ocl_probability_of_image_gl_process_globals;
 
   //process takes 1 input
-  vcl_vector<vcl_string> input_types_(n_inputs_);
+  std::vector<std::string> input_types_(n_inputs_);
   input_types_[0] = "bocl_device_sptr";
   input_types_[1] = "boxm2_scene_sptr";
   input_types_[2] = "boxm2_opencl_cache_sptr";
@@ -112,7 +114,7 @@ bool boxm2_ocl_probability_of_image_gl_process_cons(bprb_func_process& pro)
 
   // process has 1 output:
   // output[0]: scene sptr
-  vcl_vector<vcl_string>  output_types_(n_outputs_);
+  std::vector<std::string>  output_types_(n_outputs_);
 
   return pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
 }
@@ -120,11 +122,11 @@ bool boxm2_ocl_probability_of_image_gl_process_cons(bprb_func_process& pro)
 bool boxm2_ocl_probability_of_image_gl_process(bprb_func_process& pro)
 {
   using namespace boxm2_ocl_probability_of_image_gl_process_globals;
-  vcl_size_t local_threads[2]={8,8};
-  vcl_size_t global_threads[2]={8,8};
+  std::size_t local_threads[2]={8,8};
+  std::size_t global_threads[2]={8,8};
 
   if ( pro.n_inputs() < n_inputs_ ) {
-    vcl_cout << pro.name() << ": The input number should be " << n_inputs_<< vcl_endl;
+    std::cout << pro.name() << ": The input number should be " << n_inputs_<< std::endl;
     return false;
   }
   float transfer_time=0.0f;
@@ -140,8 +142,8 @@ bool boxm2_ocl_probability_of_image_gl_process(bprb_func_process& pro)
   bocl_mem_sptr exp_img_dim =pro.get_input<bocl_mem_sptr>(i++);
 
   bool foundDataType = false, foundNumObsType = false;
-  vcl_string data_type,num_obs_type,options;
-  vcl_vector<vcl_string> apps = scene->appearances();
+  std::string data_type,num_obs_type,options;
+  std::vector<std::string> apps = scene->appearances();
   for (unsigned int i=0; i<apps.size(); ++i) {
     if ( apps[i] == boxm2_data_traits<BOXM2_MOG3_GREY>::prefix() )
     {
@@ -162,11 +164,11 @@ bool boxm2_ocl_probability_of_image_gl_process(bprb_func_process& pro)
     }
   }
   if (!foundDataType) {
-    vcl_cout<<"boxm2_ocl_probability_of_image_gl_process ERROR: scene doesn't have BOXM2_MOG3_GREY or BOXM2_MOG3_GREY_16 data type"<<vcl_endl;
+    std::cout<<"boxm2_ocl_probability_of_image_gl_process ERROR: scene doesn't have BOXM2_MOG3_GREY or BOXM2_MOG3_GREY_16 data type"<<std::endl;
     return false;
   }
   if (!foundNumObsType) {
-    vcl_cout<<"boxm2_ocl_probability_of_image_gl_process ERROR: scene doesn't have BOXM2_NUM_OBS type"<<vcl_endl;
+    std::cout<<"boxm2_ocl_probability_of_image_gl_process ERROR: scene doesn't have BOXM2_NUM_OBS type"<<std::endl;
     return false;
   }
 
@@ -176,12 +178,12 @@ bool boxm2_ocl_probability_of_image_gl_process(bprb_func_process& pro)
                                                 CL_QUEUE_PROFILING_ENABLE,&status);
   if (status!=0) return false;
 
-  vcl_string identifier=device->device_identifier()+options;
+  std::string identifier=device->device_identifier()+options;
   // compile the kernel
   if (kernels.find(identifier)==kernels.end())
   {
-    vcl_cout<<"===========Compiling kernels==========="<<vcl_endl;
-    vcl_vector<bocl_kernel*> ks;
+    std::cout<<"===========Compiling kernels==========="<<std::endl;
+    std::vector<bocl_kernel*> ks;
     compile_kernel(device,ks,options);
     kernels[identifier]=ks;
   }
@@ -250,8 +252,8 @@ bool boxm2_ocl_probability_of_image_gl_process(bprb_func_process& pro)
   bocl_mem_sptr lookup=new bocl_mem(device->context(), lookup_arr, sizeof(cl_uchar)*256, "bit lookup buffer");
   lookup->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR);
   //For each ID in the visibility order, grab that block
-  vcl_vector<boxm2_block_id> vis_order = scene->get_vis_blocks(  (vpgl_perspective_camera<double>*) cam.ptr());
-  vcl_vector<boxm2_block_id>::iterator id;
+  std::vector<boxm2_block_id> vis_order = scene->get_vis_blocks(  (vpgl_perspective_camera<double>*) cam.ptr());
+  std::vector<boxm2_block_id>::iterator id;
   for (id = vis_order.begin(); id != vis_order.end(); ++id)
   {
       //choose correct render kernel

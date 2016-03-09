@@ -4,12 +4,14 @@
 // \file
 
 
-#include <vcl_fstream.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <fstream>
 #include <bstm/bstm_scene.h>
 #include <bstm/bstm_util.h>
 #include <bstm/io/bstm_cache.h>
 #include <bstm/bstm_data_traits.h>
-#include <vcl_sstream.h>
+#include <sstream>
 
 
 namespace bstm_cpp_export_point_cloud_process_globals
@@ -23,8 +25,8 @@ bool bstm_cpp_export_point_cloud_process_cons(bprb_func_process& pro)
   using namespace bstm_cpp_export_point_cloud_process_globals;
 
   //process takes 8 inputs (3 required ones), no outputs
-  vcl_vector<vcl_string>  output_types_(n_outputs_);
-  vcl_vector<vcl_string> input_types_(n_inputs_);
+  std::vector<std::string>  output_types_(n_outputs_);
+  std::vector<std::string> input_types_(n_inputs_);
   input_types_[0] = "bstm_scene_sptr";
   input_types_[1] = "bstm_cache_sptr";
   input_types_[2] = "vcl_string"; //filename
@@ -44,7 +46,7 @@ bool bstm_cpp_export_point_cloud_process (bprb_func_process& pro)
   using namespace bstm_cpp_export_point_cloud_process_globals;
 
   if ( pro.n_inputs() < n_inputs_ ) {
-    vcl_cout << pro.name() << ": The number of inputs should be " << n_inputs_<< vcl_endl;
+    std::cout << pro.name() << ": The number of inputs should be " << n_inputs_<< std::endl;
     return false;
   }
 
@@ -52,17 +54,17 @@ bool bstm_cpp_export_point_cloud_process (bprb_func_process& pro)
   unsigned i = 0;
   bstm_scene_sptr scene = pro.get_input<bstm_scene_sptr>(i++);
   bstm_cache_sptr cache = pro.get_input<bstm_cache_sptr>(i++);
-  vcl_string output_filename = pro.get_input<vcl_string>(i++);
+  std::string output_filename = pro.get_input<std::string>(i++);
   bool output_aux = pro.get_input<bool>(i++);
   float time = pro.get_input<float>(i++);
 
-  vcl_ofstream file;
+  std::ofstream file;
   file.open(output_filename.c_str());
 
 
   //zip through each block
-  vcl_map<bstm_block_id, bstm_block_metadata> blocks = scene->blocks();
-  vcl_map<bstm_block_id, bstm_block_metadata>::iterator blk_iter;
+  std::map<bstm_block_id, bstm_block_metadata> blocks = scene->blocks();
+  std::map<bstm_block_id, bstm_block_metadata>::iterator blk_iter;
   for (blk_iter = blocks.begin(); blk_iter != blocks.end(); ++blk_iter)
   {
     bstm_block_id id = blk_iter->first;
@@ -85,21 +87,21 @@ bool bstm_cpp_export_point_cloud_process (bprb_func_process& pro)
 //    bstm_data_traits<BSTM_CHANGE>::datatype *    change_data_prob = (bstm_data_traits<BSTM_CHANGE>::datatype*) change_prob_pos->data_buffer();
 //    bstm_data_traits<BSTM_CHANGE>::datatype *    change_data_neg = (bstm_data_traits<BSTM_CHANGE>::datatype*) change_prob_neg->data_buffer();
 
-    file << vcl_fixed;
+    file << std::fixed;
     for (unsigned currIdx=0; currIdx < (points->buffer_length()/bstm_data_traits<BSTM_POINT>::datasize() ) ; currIdx++) {
       if (points_data[currIdx][3] != -1) {
         file <<  points_data[currIdx][0] << ' ' << points_data[currIdx][1] << ' ' << points_data[currIdx][2] << ' ';
         if(output_aux)
-          file << change_data[currIdx]  << vcl_endl;
+          file << change_data[currIdx]  << std::endl;
         else
-          file << vcl_endl;
+          file << std::endl;
       }
 
     }
 
   }
 
-  vcl_cout << "Done exporting." << vcl_endl;
+  std::cout << "Done exporting." << std::endl;
   return true;
 }
 

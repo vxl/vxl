@@ -37,13 +37,13 @@
 bool brec_bayesian_update_process_cons(bprb_func_process& pro)
 {
   bool ok=false;
-  vcl_vector<vcl_string> input_types;
+  std::vector<std::string> input_types;
   input_types.push_back("vil_image_view_base_sptr"); // input prob map p(x in B) (float map with values in [0,1]
   input_types.push_back("vil_image_view_base_sptr"); // input measurement map
   ok = pro.set_input_types(input_types);
   if (!ok) return ok;
 
-  vcl_vector<vcl_string> output_types;
+  std::vector<std::string> output_types;
   output_types.push_back("vil_image_view_base_sptr");  // output new prob map
   output_types.push_back("vil_image_view_base_sptr");  // output new prob map as a byte image
   ok = pro.set_output_types(output_types);
@@ -61,7 +61,7 @@ bool brec_bayesian_update_process(bprb_func_process& pro)
 {
   // Sanity check
   if (pro.n_inputs() < 2) {
-    vcl_cout << "brec_bayesian_update_process: The input number should be 2" << vcl_endl;
+    std::cout << "brec_bayesian_update_process: The input number should be 2" << std::endl;
     return false;
   }
 
@@ -94,7 +94,7 @@ bool brec_bayesian_update_process(bprb_func_process& pro)
   vil_image_view_base_sptr out_map_sptr2 = new vil_image_view<vxl_byte>(out_b);
   pro.set_output_val<vil_image_view_base_sptr>(1, out_map_sptr2);
 
-  vcl_cout << " whole process took: " << t2.real() / 60000.0 << " mins.\n";
+  std::cout << " whole process took: " << t2.real() / 60000.0 << " mins.\n";
 
   return true;
 }

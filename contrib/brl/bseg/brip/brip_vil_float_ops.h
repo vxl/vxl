@@ -22,8 +22,10 @@
 // \endverbatim
 //
 //-----------------------------------------------------------------------------
-#include <vcl_vector.h>
-#include <vcl_complex.h>
+#include <vector>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <complex>
 #include <vcl_cassert.h>
 #include <vnl/vnl_matrix.h>
 #include <vbl/vbl_array_2d.h>
@@ -75,7 +77,7 @@ class brip_vil_float_ops
   // out  ... ---------------------------
   static vil_image_view<float> gaussian(vil_image_view<float> const& input,
                                         float sigma,
-                                        vcl_string const& boundary_condition = "none",
+                                        std::string const& boundary_condition = "none",
                                         float fill = 0.0f);
   //: computes absolute value
   static vil_image_view<float>
@@ -91,9 +93,9 @@ class brip_vil_float_ops
   //: non-maximum suppression on a NxN neighborhood, with sub-pixel location
   static void non_maximum_suppression(vil_image_view<float> const& input,
                                       int n, float thresh,
-                                      vcl_vector<float>& x_pos,
-                                      vcl_vector<float>& y_pos,
-                                      vcl_vector<float>& value);
+                                      std::vector<float>& x_pos,
+                                      std::vector<float>& y_pos,
+                                      std::vector<float>& value);
 
   //: downsamples the input using the Bert-Adelson algorithm
   static vil_image_view<float>
@@ -507,11 +509,11 @@ class brip_vil_float_ops
   //           ...
   //     k2n0 k2n1 ... k2n2n
   // \endverbatim
-  static vbl_array_2d<float> load_kernel(vcl_string const& file);
+  static vbl_array_2d<float> load_kernel(std::string const& file);
 
   //: compute basis images for a set of input images
-  static void basis_images(vcl_vector<vil_image_view<float> > const& input_images,
-                           vcl_vector<vil_image_view<float> >& basis);
+  static void basis_images(std::vector<vil_image_view<float> > const& input_images,
+                           std::vector<vil_image_view<float> >& basis);
 
   //: compute the Fourier transform using the vnl FFT algorithm
   static bool fourier_transform(vil_image_view<float> const& input,
@@ -581,16 +583,16 @@ class brip_vil_float_ops
   //: chip multiple images.
   // Must be all the same dimensions
   // If \p roi does not overlap input, return false
-  static bool chip(vcl_vector<vil_image_resource_sptr> const& images,
+  static bool chip(std::vector<vil_image_resource_sptr> const& images,
                    brip_roi_sptr const& roi,
-                   vcl_vector<vil_image_resource_sptr>& chips);
+                   std::vector<vil_image_resource_sptr>& chips);
 
   //: compute the average of the image intensity within the specified region
   static float average_in_box(vil_image_view<float> const& v,
                               vgl_box_2d<double> const& box);
 
   //: scan a polygon and return the pixel values as well as max min
-  static vcl_vector<float> scan_region(vil_image_resource_sptr img,
+  static std::vector<float> scan_region(vil_image_resource_sptr img,
                                        vgl_polygon<double> poly,
                                        float& min,
                                        float& max);
@@ -758,11 +760,11 @@ class brip_vil_float_ops
   static bool fft_1d(int dir, int m, double* x, double* y);
 
   //: Two-dimensional fft
-  static bool fft_2d(vnl_matrix<vcl_complex<double> >& c, int nx,int ny,int dir);
+  static bool fft_2d(vnl_matrix<std::complex<double> >& c, int nx,int ny,int dir);
 
   //: Transform the fft coefficients from/to fft/frequency order(self inverse).
-  static void ftt_fourier_2d_reorder(vnl_matrix<vcl_complex<double> > const& F1,
-                                     vnl_matrix<vcl_complex<double> >& F2);
+  static void ftt_fourier_2d_reorder(vnl_matrix<std::complex<double> > const& F1,
+                                     vnl_matrix<std::complex<double> >& F2);
 
   //: Blocking filter function
   static float gaussian_blocking_filter(float dir_fx, float dir_fy,

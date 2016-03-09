@@ -17,8 +17,10 @@
 // \endverbatim
 
 #include <vbl/vbl_array_2d.h>
-#include <vcl_vector.h>
-#include <vcl_iostream.h>
+#include <vector>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iostream>
 #include <bsta/bsta_joint_histogram_base.h>
 
 template <class T> class bsta_joint_histogram : public bsta_joint_histogram_base
@@ -92,7 +94,7 @@ template <class T> class bsta_joint_histogram : public bsta_joint_histogram_base
   T renyi_entropy() const;
   T entropy_marginal_a() const;
 
-  void print(vcl_ostream& os = vcl_cout) const;
+  void print(std::ostream& os = std::cout) const;
 
   //: The average and variance bin value for row a using counts to compute probs
   bool avg_and_variance_bin_for_row_a(const unsigned int a, T & avg, T & var) const;
@@ -114,9 +116,9 @@ template <class T> class bsta_joint_histogram : public bsta_joint_histogram_base
   //:access by value
   T get_count(T a, T b) const;
 
-  void print_to_vrml(vcl_ostream& os) const;
-  void print_to_m(vcl_ostream& os) const;
-  void print_to_text(vcl_ostream& os) const;
+  void print_to_vrml(std::ostream& os) const;
+  void print_to_m(std::ostream& os) const;
+  void print_to_text(std::ostream& os) const;
 
   //:restore to default constructor state
   void clear();

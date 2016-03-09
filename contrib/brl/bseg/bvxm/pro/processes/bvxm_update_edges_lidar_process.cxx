@@ -22,7 +22,7 @@ bool bvxm_update_edges_lidar_process_cons(bprb_func_process& pro)
   //input[2]: The camera of the observation (dummy)
   //input[3]: The voxel world
   //input[4]: scale index
-  vcl_vector<vcl_string> input_types_(n_inputs_);
+  std::vector<std::string> input_types_(n_inputs_);
   input_types_[0] = "vil_image_view_base_sptr";
   input_types_[1] = "vil_image_view_base_sptr";
   input_types_[2] = "vil_image_view_base_sptr";
@@ -40,7 +40,7 @@ bool bvxm_update_edges_lidar_process(bprb_func_process& pro)
   // check number of inputs
   if (pro.n_inputs() < n_inputs_)
   {
-    vcl_cout << pro.name() << " The input number should be " << n_inputs_<< vcl_endl;
+    std::cout << pro.name() << " The input number should be " << n_inputs_<< std::endl;
     return false;
   }
 
@@ -54,22 +54,22 @@ bool bvxm_update_edges_lidar_process(bprb_func_process& pro)
   unsigned scale_idx = pro.get_input<unsigned>(i++);
 
   if ( !lidar_height ){
-    vcl_cout << pro.name() << " :--  Input 0  is not valid!\n";
+    std::cout << pro.name() << " :--  Input 0  is not valid!\n";
     return false;
   }
 
   if ( !lidar_edges ){
-    vcl_cout << pro.name() << " :--  Input 1  is not valid!\n";
+    std::cout << pro.name() << " :--  Input 1  is not valid!\n";
     return false;
   }
 
   if ( !lidar_edges_prob ){
-    vcl_cout << pro.name() << " :--  Input 2  is not valid!\n";
+    std::cout << pro.name() << " :--  Input 2  is not valid!\n";
     return false;
   }
 
   if ( !camera ){
-    vcl_cout << pro.name() << " :--  Input 3  is not valid!\n";
+    std::cout << pro.name() << " :--  Input 3  is not valid!\n";
     return false;
   }
 
@@ -81,7 +81,7 @@ bool bvxm_update_edges_lidar_process(bprb_func_process& pro)
   }
 
   if (!result){
-    vcl_cerr << "error bvxm_update_edges_lidar_process: failed to update observation\n";
+    std::cerr << "error bvxm_update_edges_lidar_process: failed to update observation\n";
     return false;
   }
 

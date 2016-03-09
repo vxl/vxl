@@ -10,7 +10,7 @@ bsta_otsu_threshold<T>::bsta_otsu_threshold(bsta_histogram<T> const& hist)
 }
 
 template <class T>
-bsta_otsu_threshold<T>::bsta_otsu_threshold(vcl_vector<T> data, T low , T high)
+bsta_otsu_threshold<T>::bsta_otsu_threshold(std::vector<T> data, T low , T high)
 :distribution_1d_(low,high,data)
 {
 }

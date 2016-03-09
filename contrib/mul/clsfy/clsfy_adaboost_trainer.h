@@ -20,8 +20,10 @@
 #include <clsfy/clsfy_simple_adaboost.h>
 #include <clsfy/clsfy_builder_1d.h>
 #include <mbl/mbl_data_wrapper.h>
-#include <vcl_string.h>
-#include <vcl_iosfwd.h>
+#include <string>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iosfwd>
 
 //=======================================================================
 
@@ -61,13 +63,13 @@ class clsfy_adaboost_trainer
   short version_no() const;
 
   //: Name of the class
-  vcl_string is_a() const;
+  std::string is_a() const;
 
   //: Name of the class
-  virtual bool is_class(vcl_string const& s) const;
+  virtual bool is_class(std::string const& s) const;
 
   //: Print class to os
-  void print_summary(vcl_ostream& os) const;
+  void print_summary(std::ostream& os) const;
 
   //: Save class to binary file stream.
   void b_write(vsl_b_ostream& bfs) const;
@@ -101,9 +103,9 @@ void vsl_b_write(vsl_b_ostream& bfs, const clsfy_adaboost_trainer& b);
 void vsl_b_read(vsl_b_istream& bfs, clsfy_adaboost_trainer& b);
 
 //: Stream output operator for class reference
-vcl_ostream& operator<<(vcl_ostream& os,const clsfy_adaboost_trainer& b);
+std::ostream& operator<<(std::ostream& os,const clsfy_adaboost_trainer& b);
 
 //: Stream output operator for class reference
-void vsl_print_summary(vcl_ostream& os,const clsfy_adaboost_trainer& b);
+void vsl_print_summary(std::ostream& os,const clsfy_adaboost_trainer& b);
 
 #endif // clsfy_adaboost_trainer_h_

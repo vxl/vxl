@@ -1,7 +1,9 @@
 #include "bstm_ocl_annealed_particle_filter.h"
 
-#include <vcl_fstream.h>
-#include <vcl_sstream.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <fstream>
+#include <sstream>
 #define ALPHA 0.5
 #define MAX_BETA 15
 #define ENABLE_ROT
@@ -10,7 +12,7 @@ void bstm_ocl_annealed_particle_filter::track()
 {
   for(unsigned t = start_t_ + 1; t <= end_t_; t++ )
   {
-    vcl_cerr << "PROCESSING TIME: " << t << vcl_endl;
+    std::cerr << "PROCESSING TIME: " << t << std::endl;
 
     //correct covariance, move this to propagate_particles
     //vnl_vector_fixed<double,3> t_covar((double)(t_sigma_ * t_sigma_) * ALPHA);
@@ -25,7 +27,7 @@ void bstm_ocl_annealed_particle_filter::track()
     float beta = 1.0f;
     for(unsigned m = num_annealing_layers_; m > 0; m--)
     {
-      vcl_cerr << "LAYER: " << m << vcl_endl;
+      std::cerr << "LAYER: " << m << std::endl;
 
       //remove the mi from the prev layer, no need to store it...
       if(m != num_annealing_layers_)
@@ -36,7 +38,7 @@ void bstm_ocl_annealed_particle_filter::track()
 
       //calculate the optimal beta to ensure alpha
       beta = scale_obs_density(t, beta,m);
-      vcl_cerr << "SURVIVAL DIAGNOSTIC: " << bstm_ocl_particle_filter::survival_diagnostic(t) << " BETA: " << beta << vcl_endl;
+      std::cerr << "SURVIVAL DIAGNOSTIC: " << bstm_ocl_particle_filter::survival_diagnostic(t) << " BETA: " << beta << std::endl;
 
       dump_particles(t,m);
 
@@ -61,19 +63,19 @@ void bstm_ocl_annealed_particle_filter::track()
 
 void bstm_ocl_annealed_particle_filter::dump_particles(unsigned cur_time, unsigned cascade)
 {
-  vcl_stringstream filename;
+  std::stringstream filename;
   filename <<  pf_output_path_ << "/iter_" << cur_time << "_" << cascade << ".xyz";
-  vcl_ofstream myfile(filename.str().c_str());
+  std::ofstream myfile(filename.str().c_str());
 
-  vcl_vector<vgl_orient_box_3d<double> > bb = bb_[cur_time - start_t_];
+  std::vector<vgl_orient_box_3d<double> > bb = bb_[cur_time - start_t_];
   for(unsigned particle_no = 0; particle_no < num_particles_;particle_no++)
   {
 #ifndef DUMP_BOX
-    myfile << bb[particle_no].centroid().x() << " " << bb[particle_no].centroid().y() << " "<< bb[particle_no].centroid().z() << " " <<  mi_[cur_time - start_t_][particle_no] << vcl_endl;
+    myfile << bb[particle_no].centroid().x() << " " << bb[particle_no].centroid().y() << " "<< bb[particle_no].centroid().z() << " " <<  mi_[cur_time - start_t_][particle_no] << std::endl;
 #else
-    vcl_vector<vgl_point_3d<double> > corners  = bb[particle_no].corners();
+    std::vector<vgl_point_3d<double> > corners  = bb[particle_no].corners();
     for(int i = 0; i < corners.size(); i++)
-      myfile << corners[i].x() << " " << corners[i].y() << " " << corners[i].z() << " " <<  mi_[cur_time - start_t_][particle_no] << vcl_endl;
+      myfile << corners[i].x() << " " << corners[i].y() << " " << corners[i].z() << " " <<  mi_[cur_time - start_t_][particle_no] << std::endl;
 #endif
   }
   myfile.close();
@@ -84,20 +86,20 @@ void bstm_ocl_annealed_particle_filter::perturb_particles(unsigned prev_time, un
   t_sigma_ *= ALPHA;
   w_sigma_ *= ALPHA;
   w_kappa_ /= ALPHA;
-  vcl_cout << "Using t_sigma: " << t_sigma_ << vcl_endl;
-  vcl_cout << "Using w_sigma: " << w_sigma_ << vcl_endl;
-  vcl_cout << "Using w_kappa: " << w_kappa_ << vcl_endl;
+  std::cout << "Using t_sigma: " << t_sigma_ << std::endl;
+  std::cout << "Using w_sigma: " << w_sigma_ << std::endl;
+  std::cout << "Using w_kappa: " << w_kappa_ << std::endl;
 
   global_blk_map_.clear(); //make sure to empty the blk map
 
   //get the latest bb,R,T and blk_map to perturb
-  vcl_vector<vgl_orient_box_3d<double> > new_bb = bb_[cur_time - start_t_];
-  vcl_vector< vgl_rotation_3d<double> > new_R = R_[cur_time - start_t_];
-  vcl_vector< vgl_vector_3d<double> >  new_T = T_[cur_time - start_t_];
-  vcl_vector< vgl_rotation_3d<double> > new_infrot = infrot_[cur_time - start_t_];
-  vcl_vector< vgl_vector_3d<double> >  new_inft = inft_[cur_time - start_t_];
+  std::vector<vgl_orient_box_3d<double> > new_bb = bb_[cur_time - start_t_];
+  std::vector< vgl_rotation_3d<double> > new_R = R_[cur_time - start_t_];
+  std::vector< vgl_vector_3d<double> >  new_T = T_[cur_time - start_t_];
+  std::vector< vgl_rotation_3d<double> > new_infrot = infrot_[cur_time - start_t_];
+  std::vector< vgl_vector_3d<double> >  new_inft = inft_[cur_time - start_t_];
 
-  vcl_vector< vcl_map<bstm_block_id, vcl_vector<bstm_block_id> > > new_blk_map = blk_map_[cur_time - start_t_];
+  std::vector< std::map<bstm_block_id, std::vector<bstm_block_id> > > new_blk_map = blk_map_[cur_time - start_t_];
 
   for(unsigned particle_no = 0; particle_no < num_particles_;particle_no++)
   {
@@ -121,7 +123,7 @@ void bstm_ocl_annealed_particle_filter::perturb_particles(unsigned prev_time, un
     //update box
     //look into vgl_box_3d to see why corners 0,1,2,4 are taken.
     vgl_orient_box_3d<double> orientedbox( initial_bb_, new_R[particle_no].as_quaternion() );
-    vcl_vector<vgl_point_3d<double> > corners = orientedbox.corners();
+    std::vector<vgl_point_3d<double> > corners = orientedbox.corners();
 
     vgl_point_3d<double> box_min_pt = corners[0] + new_T[particle_no];
     vgl_point_3d<double> box_min_pt_plus_width  = corners[1] + new_T[particle_no];
@@ -132,7 +134,7 @@ void bstm_ocl_annealed_particle_filter::perturb_particles(unsigned prev_time, un
 
 
     //figure out mapping
-    vcl_map<bstm_block_id, vcl_vector<bstm_block_id> > map;
+    std::map<bstm_block_id, std::vector<bstm_block_id> > map;
     populate_blk_mapping( map, initial_bb_, new_R[particle_no], new_T[particle_no], start_t_, cur_time);
 
   }
@@ -161,8 +163,8 @@ float bstm_ocl_annealed_particle_filter::survival_diagnostic(unsigned cur_time, 
   {
     if(mi_[cur_time - start_t_][particle_no] > 0.0f)
     {
-      sum_weights += vcl_pow(mi_[cur_time - start_t_][particle_no], beta);
-      sum_weights_sq += vcl_pow(mi_[cur_time - start_t_][particle_no],beta) * vcl_pow(mi_[cur_time - start_t_][particle_no],beta);
+      sum_weights += std::pow(mi_[cur_time - start_t_][particle_no], beta);
+      sum_weights_sq += std::pow(mi_[cur_time - start_t_][particle_no],beta) * std::pow(mi_[cur_time - start_t_][particle_no],beta);
     }
   }
   sum_weights_sq /= sum_weights * sum_weights;
@@ -180,13 +182,13 @@ float bstm_ocl_annealed_particle_filter::scale_obs_density(unsigned cur_time, do
   }
   else
   {
-    while(  vcl_fabs(survival_diagnostic(cur_time, cur_beta) - ALPHA) > 0.01 && cur_beta < MAX_BETA)
+    while(  std::fabs(survival_diagnostic(cur_time, cur_beta) - ALPHA) > 0.01 && cur_beta < MAX_BETA)
       cur_beta += (survival_diagnostic(cur_time, cur_beta) - ALPHA) > 0 ? grad_step : -grad_step;
   }
 
   for(unsigned particle_no = 0; particle_no < num_particles_;particle_no++)
     if(mi_[cur_time - start_t_][particle_no] > 0.0f)
-      mi_[cur_time - start_t_][particle_no] = vcl_pow(mi_[cur_time - start_t_][particle_no],cur_beta);
+      mi_[cur_time - start_t_][particle_no] = std::pow(mi_[cur_time - start_t_][particle_no],cur_beta);
 
 
   return cur_beta;

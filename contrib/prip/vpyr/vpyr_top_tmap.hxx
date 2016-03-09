@@ -27,22 +27,22 @@ void vpyr_top_tmap< TPyramid , V , E , F , D >::contraction(const contraction_ke
   {
     if (pyramid_.base_map().vertex_position(i)!=vertex(i).value())
     {
-      vcl_cout<<pyramid_.base_map().vertex_position(i)<<"ii"<<vertex(i).value()<<' ' << vcl_flush;
+      std::cout<<pyramid_.base_map().vertex_position(i)<<"ii"<<vertex(i).value()<<' ' << std::flush;
     }
   }
   for (int i=0; i<arg.size(); ++i)
   {
     if (ck.dart(i)->vertex().sequence_index()!= arg.dart(i)->vertex().sequence_index())
     {
-      vcl_cout<<"ICI2"<<pyramid_.base_map().vertex(ck.dart(i)->vertex().sequence_index()).last_level()<<'/'
-              <<ck.dart(i)->vertex().sequence_index()<<','<<arg.dart(i)->vertex().sequence_index()<<vcl_endl ;
+      std::cout<<"ICI2"<<pyramid_.base_map().vertex(ck.dart(i)->vertex().sequence_index()).last_level()<<'/'
+              <<ck.dart(i)->vertex().sequence_index()<<','<<arg.dart(i)->vertex().sequence_index()<<std::endl ;
     }
   }
 #endif // 0
 
 #if 0
   if (!ck.valid())
-    vcl_cerr<<"error while copying contraction kernel\n" ;
+    std::cerr<<"error while copying contraction kernel\n" ;
 #endif // 0
   pyramid_.top_level().contraction(ck) ;
   Base_::contraction(arg) ;
@@ -66,7 +66,7 @@ void vpyr_top_tmap< TPyramid , V , E , F , D >::removal(const removal_kernel & a
   ck=arg ;
 #if 0
   if (!ck.valid())
-    vcl_cerr<<"error while copying removal kernel\n" ;
+    std::cerr<<"error while copying removal kernel\n" ;
 #endif // 0
   pyramid_.top_level().removal(ck) ;
   Base_::removal(arg) ;

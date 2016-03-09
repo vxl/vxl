@@ -10,13 +10,15 @@
 // \brief Concatenate together data in two or more mbl_data_wrapper objects
 
 #include <mbl/mbl_data_wrapper.h>
-#include <vcl_vector.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <vector>
 
 //: Concatenate together data in two or more mbl_data_wrapper objects
 template<class T>
 class mbl_data_wrapper_mixer : public mbl_data_wrapper<T>
 {
-  vcl_vector<mbl_data_wrapper<T> *> wrapper_;
+  std::vector<mbl_data_wrapper<T> *> wrapper_;
   unsigned long n_;
   unsigned long index_;
   unsigned long current_wrapper_;
@@ -32,7 +34,7 @@ class mbl_data_wrapper_mixer : public mbl_data_wrapper<T>
   //: Constructor
   // Sets up object to return examples from wrapper[i] (i=0..n-1) in turn
   // The wrappers must be kept in scope, this does not take a copy.
-  mbl_data_wrapper_mixer(vcl_vector<mbl_data_wrapper<T> *> wrapper);
+  mbl_data_wrapper_mixer(std::vector<mbl_data_wrapper<T> *> wrapper);
 
   //: Construct to mix two data wrappers
   // Sets up object to return examples from wrapper1 then wrapper2
@@ -72,10 +74,10 @@ class mbl_data_wrapper_mixer : public mbl_data_wrapper<T>
   virtual mbl_data_wrapper< T >* clone() const;
 
   //: Name of the class
-  virtual vcl_string is_a() const;
+  virtual std::string is_a() const;
 
   //: True if this is (or is derived from) class named s
-  virtual bool is_class(vcl_string const& s) const;
+  virtual bool is_class(std::string const& s) const;
 };
 
 #endif // mbl_data_wrapper_mixer_h

@@ -9,14 +9,14 @@
 
 template <bstm_data_type APM_DATA_TYPE, bstm_data_type NOBS_DATA_TYPE >
 bstm_refine_blk_in_time_function<APM_DATA_TYPE, NOBS_DATA_TYPE>::bstm_refine_blk_in_time_function(
-                                  bstm_time_block* t_blk, bstm_block* blk, vcl_vector<bstm_data_base*> & datas, float change_prob_t, float time)
+                                  bstm_time_block* t_blk, bstm_block* blk, std::vector<bstm_data_base*> & datas, float change_prob_t, float time)
 {
   init_data(t_blk, blk, datas, change_prob_t,time);
   refine(datas);
 }
 
 template <bstm_data_type APM_DATA_TYPE, bstm_data_type NOBS_DATA_TYPE >
-bool bstm_refine_blk_in_time_function<APM_DATA_TYPE, NOBS_DATA_TYPE>::init_data(bstm_time_block* blk_t, bstm_block* blk, vcl_vector<bstm_data_base*> & datas, float change_prob_t, float local_time)
+bool bstm_refine_blk_in_time_function<APM_DATA_TYPE, NOBS_DATA_TYPE>::init_data(bstm_time_block* blk_t, bstm_block* blk, std::vector<bstm_data_base*> & datas, float change_prob_t, float local_time)
 {
   //store block and pointer to uchar16 3d block
    blk_   = blk;
@@ -43,7 +43,7 @@ bool bstm_refine_blk_in_time_function<APM_DATA_TYPE, NOBS_DATA_TYPE>::init_data(
 
   //USE rootlevel to determine MAX_INNER and MAX_CELLS
   if (max_level_t_ == 1) {
-    vcl_cout<<"Trying to refine scene with max level 1"<<vcl_endl;
+    std::cout<<"Trying to refine scene with max level 1"<<std::endl;
     return true;
   }
   else if (max_level_t_ == 2) {
@@ -64,7 +64,7 @@ bool bstm_refine_blk_in_time_function<APM_DATA_TYPE, NOBS_DATA_TYPE>::init_data(
 
   //USE rootlevel to determine MAX_INNER and MAX_CELLS
   if (max_level_ == 1) {
-    vcl_cout<<"Trying to refine scene with max level 1"<<vcl_endl;
+    std::cout<<"Trying to refine scene with max level 1"<<std::endl;
     return true;
   }
   else if (max_level_ == 2) {
@@ -83,14 +83,14 @@ bool bstm_refine_blk_in_time_function<APM_DATA_TYPE, NOBS_DATA_TYPE>::init_data(
 }
 
 template <bstm_data_type APM_DATA_TYPE, bstm_data_type NOBS_DATA_TYPE >
-bool bstm_refine_blk_in_time_function<APM_DATA_TYPE, NOBS_DATA_TYPE>::refine(vcl_vector<bstm_data_base*>& datas)
+bool bstm_refine_blk_in_time_function<APM_DATA_TYPE, NOBS_DATA_TYPE>::refine(std::vector<bstm_data_base*>& datas)
 {
 
   //0. allocate new time trees and copy old time trees to here.
   bstm_block_id id = blk_->block_id();
   bstm_block_metadata m_data; m_data.init_level_t_ = blk_t_->init_level(); m_data.max_level_t_ = blk_t_->max_level(); m_data.sub_block_num_t_ = blk_t_->sub_block_num();
   bstm_time_block* newTimeBlk = new bstm_time_block(id, m_data, blk_t_->tree_buff_length() / blk_t_->sub_block_num()); //create empty time block
-  vcl_memcpy(newTimeBlk->buffer(), blk_t_->buffer(), blk_t_->byte_count() ); //copy the time trees to new loc
+  std::memcpy(newTimeBlk->buffer(), blk_t_->buffer(), blk_t_->byte_count() ); //copy the time trees to new loc
   char* depths = new char[blk_t_->tree_buff_length() / blk_t_->sub_block_num() ];
 
   //1. loop over each tree, decide at each leaf whether the time tree should be refined or not.
@@ -102,8 +102,8 @@ bool bstm_refine_blk_in_time_function<APM_DATA_TYPE, NOBS_DATA_TYPE>::refine(vcl
       uchar16 tree  = (*blk_iter);
       boct_bit_tree curr_tree( (unsigned char*) tree.data_block(), max_level_);
 
-      vcl_vector<int> leaves = curr_tree.get_leaf_bits(0);
-      for(vcl_vector<int>::const_iterator iter = leaves.begin(); iter != leaves.end(); iter++)
+      std::vector<int> leaves = curr_tree.get_leaf_bits(0);
+      for(std::vector<int>::const_iterator iter = leaves.begin(); iter != leaves.end(); iter++)
       {
         //2. decide whether to refine its time trees or not.
         int dataPtr = curr_tree.get_data_index(*iter);
@@ -123,7 +123,7 @@ bool bstm_refine_blk_in_time_function<APM_DATA_TYPE, NOBS_DATA_TYPE>::refine(vcl
         }
       }
   }
-  vcl_cout << "Num time cells split: " << num_split_ << vcl_endl;
+  std::cout << "Num time cells split: " << num_split_ << std::endl;
 
   //2. figure out new sizes for the time blk
   boxm2_array_1d<uchar8>&  old_time_trees = blk_t_->time_trees();           //refined trees
@@ -168,7 +168,7 @@ bool bstm_refine_blk_in_time_function<APM_DATA_TYPE, NOBS_DATA_TYPE>::refine(vcl
       //2. correct data ptr
       refined_time_tree.set_data_ptr(dataIndex[currIndex]);
       //3. save it back to newRefinedTimeBlk
-      vcl_memcpy(refined_time_trees_iter, refined_time_tree.get_bits(), TT_NUM_BYTES);
+      std::memcpy(refined_time_trees_iter, refined_time_tree.get_bits(), TT_NUM_BYTES);
       //4. move the data
       this->move_data(unrefined_time_tree, refined_time_tree, alpha_cpy, mog_cpy, numobs_cpy, (int)( depths[currIndex / sub_block_num_t_]) );
   }
@@ -216,11 +216,11 @@ void bstm_refine_blk_in_time_function<APM_DATA_TYPE, NOBS_DATA_TYPE>::move_data(
                                                                                  typename bstm_data_traits<NOBS_DATA_TYPE>::datatype * numobs_cpy,
                                                                                  int depth)
 {
-  vcl_vector<int> new_leaves = refined_time_tree.get_leaf_bits();
-  vcl_vector<int> old_leaves = unrefined_time_tree.get_leaf_bits();
+  std::vector<int> new_leaves = refined_time_tree.get_leaf_bits();
+  std::vector<int> old_leaves = unrefined_time_tree.get_leaf_bits();
 
   int curr_time_tree_leaf = refined_time_tree.traverse(local_time_ - blk_t_->tree_index(local_time_));
-  for (vcl_vector<int>::iterator iter = new_leaves.begin(); iter != new_leaves.end(); iter++)
+  for (std::vector<int>::iterator iter = new_leaves.begin(); iter != new_leaves.end(); iter++)
   {
 
     //get new data ptr
@@ -243,7 +243,7 @@ void bstm_refine_blk_in_time_function<APM_DATA_TYPE, NOBS_DATA_TYPE>::move_data(
     {
       //if the cell contains the current time, initialize with 0. Otherwise, copy from parents
       if (  curr_time_tree_leaf == *iter )  { //if the current time is the start of a cell in which new data will be placed
-        float max_alpha_int = -vcl_log(1.0f - INIT_PROB);
+        float max_alpha_int = -std::log(1.0f - INIT_PROB);
 
         float side_len = block_len_ / (float) (1 << depth );
         float newAlpha = (max_alpha_int / side_len);

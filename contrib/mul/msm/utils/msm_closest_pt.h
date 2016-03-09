@@ -8,7 +8,9 @@
 
 #include <msm/msm_points.h>
 #include <msm/msm_curve.h>
-#include <vcl_algorithm.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <algorithm>
 
 
 //: Define position of point on a line segment between points with index i0,i1.
@@ -32,7 +34,7 @@ struct msm_line_seg_pt
     i1=i1a; alpha=a;
   }
 
-  vgl_point_2d<double> point(const vcl_vector<vgl_point_2d<double> >& pts) const
+  vgl_point_2d<double> point(const std::vector<vgl_point_2d<double> >& pts) const
   {
     if (i0<0) return vgl_point_2d<double>();
     if (i1<0) return pts[i0];
@@ -69,7 +71,7 @@ inline double msm_sqr_dist_to_line_segment(const vgl_point_2d<double>& pt0,
   alpha = pu/Lu2;
 
   // Use pythagorus  :   dp^2 = d^2 + sqr(pu/u.length)
-  return vcl_max(dp.sqr_length() - (pu*pu)/Lu2,0.0);
+  return std::max(dp.sqr_length() - (pu*pu)/Lu2,0.0);
 }
 
 //: Compute the point on the poly-line given by curve to pt

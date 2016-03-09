@@ -6,8 +6,10 @@
 //
 // \author Andy Miller
 // \date Sep 16, 2011
-#include <vcl_fstream.h>
-#include <vcl_cstdio.h> // for sprintf()
+#include <fstream>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <cstdio> // for sprintf()
 #include <bstm/bstm_scene.h>
 #include <boxm2/boxm2_scene.h>
 #include <bstm/util/bstm_cams_and_box_to_scene.h>
@@ -28,13 +30,13 @@ bool bstm_boxm2_scene_to_bstm_process_cons(bprb_func_process& pro)
   using namespace bstm_boxm2_scene_to_bstm_process_globals;
 
   //process takes 5 inputs
-  vcl_vector<vcl_string> input_types_(n_inputs_);
+  std::vector<std::string> input_types_(n_inputs_);
   input_types_[0] = "vcl_string"; // boxm2 filename
   input_types_[1] = "vcl_string"; // bstm data pathc
   input_types_[2] = "unsigned";   // number of time steps
 
   // process has 2 outputs
-  vcl_vector<vcl_string>  output_types_(n_outputs_);
+  std::vector<std::string>  output_types_(n_outputs_);
 
   //set input and output types
   bool good = pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
@@ -46,7 +48,7 @@ bool bstm_boxm2_scene_to_bstm_process(bprb_func_process& pro)
   using namespace bstm_boxm2_scene_to_bstm_process_globals;
   typedef vpgl_perspective_camera<double> CamType;
   if ( pro.n_inputs() < n_inputs_ ) {
-    vcl_cout << pro.name() << ": The number of inputs should be " << n_inputs_<< vcl_endl;
+    std::cout << pro.name() << ": The number of inputs should be " << n_inputs_<< std::endl;
     return false;
   }
 
@@ -54,8 +56,8 @@ bool bstm_boxm2_scene_to_bstm_process(bprb_func_process& pro)
   //get the inputs
   //----------------------------------------------------------------------------
   unsigned i = 0;
-  vcl_string boxm2_filename = pro.get_input<vcl_string>(i++);
-  vcl_string bstm_scene_dir = pro.get_input<vcl_string>(i++);
+  std::string boxm2_filename = pro.get_input<std::string>(i++);
+  std::string bstm_scene_dir = pro.get_input<std::string>(i++);
   unsigned time_steps   = pro.get_input<unsigned>(i++);
 
 
@@ -67,11 +69,11 @@ bool bstm_boxm2_scene_to_bstm_process(bprb_func_process& pro)
   scene->set_local_origin(vgl_point_3d<double>(0.0,0.0,0.0));
 
   //setup appearances
-  vcl_vector<vcl_string> boxm2_apps = boxm2Scene->appearances();
-  vcl_vector<vcl_string> apps;
-  for(vcl_vector<vcl_string>::iterator iter = boxm2_apps.begin(); iter != boxm2_apps.end(); iter++)
+  std::vector<std::string> boxm2_apps = boxm2Scene->appearances();
+  std::vector<std::string> apps;
+  for(std::vector<std::string>::iterator iter = boxm2_apps.begin(); iter != boxm2_apps.end(); iter++)
   {
-    vcl_string boxm2_app = *iter;
+    std::string boxm2_app = *iter;
     boxm2_app.replace(boxm2_app.begin(), boxm2_app.begin() + 5, "bstm");
     apps.push_back(boxm2_app);
   }
@@ -84,10 +86,10 @@ bool bstm_boxm2_scene_to_bstm_process(bprb_func_process& pro)
   double subBlockDim_t = 32; //fixed for now
   unsigned num_blocks_t = (double)(time_steps) / subBlockDim_t;
   unsigned numSubBlocks_t = 1;
-  vcl_cout << "Num t blocks :" << num_blocks_t << vcl_endl;
+  std::cout << "Num t blocks :" << num_blocks_t << std::endl;
 
-  vcl_vector<boxm2_block_id> boxm2_blocks = boxm2Scene->get_block_ids();
-  for(vcl_vector<boxm2_block_id>::const_iterator iter = boxm2_blocks.begin(); iter != boxm2_blocks.end(); iter++)
+  std::vector<boxm2_block_id> boxm2_blocks = boxm2Scene->get_block_ids();
+  for(std::vector<boxm2_block_id>::const_iterator iter = boxm2_blocks.begin(); iter != boxm2_blocks.end(); iter++)
   {
     boxm2_block_metadata boxm2_mdata = boxm2Scene->get_block_metadata_const(*iter);
 
@@ -96,9 +98,9 @@ bool bstm_boxm2_scene_to_bstm_process(bprb_func_process& pro)
         //get block map
         bstm_block_id id(iter->i_,iter->j_,iter->k_,t);
 
-        vcl_map<bstm_block_id, bstm_block_metadata> blks = scene->blocks();
+        std::map<bstm_block_id, bstm_block_metadata> blks = scene->blocks();
         if (blks.find(id)!=blks.end()) {
-            vcl_cout<<"block already exists: "<<id<<vcl_endl;
+            std::cout<<"block already exists: "<<id<<std::endl;
             continue;
         }
 
@@ -124,6 +126,6 @@ bool bstm_boxm2_scene_to_bstm_process(bprb_func_process& pro)
 
 
   scene->save_scene();
-  vcl_cout << "Done." << vcl_endl;
+  std::cout << "Done." << std::endl;
   return true;
 }

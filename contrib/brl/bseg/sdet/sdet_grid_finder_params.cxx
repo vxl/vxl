@@ -5,8 +5,10 @@
 // See sdet_grid_finder_params.h
 //
 //-----------------------------------------------------------------------------
-#include <vcl_sstream.h>
-#include <vcl_iostream.h>
+#include <sstream>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iostream>
 
 //------------------------------------------------------------------------
 // Constructors
@@ -36,7 +38,7 @@ sdet_grid_finder_params(const int n_lines_x, const int n_lines_y,
 }
 
 void
-sdet_grid_finder_params::get_debug_choices(vcl_vector<vcl_string>& choices)
+sdet_grid_finder_params::get_debug_choices(std::vector<std::string>& choices)
 {
   choices.clear();
   choices.push_back("NO_DEBUG");
@@ -69,10 +71,10 @@ void sdet_grid_finder_params::InitParams(const int n_lines_x,
 //:   Checks that parameters are within acceptable bounds
 //    Note that msg << ends seems to restart the string and erase the
 //    previous string. We should only use it as the last call, use
-//    vcl_endl otherwise.
+//    std::endl otherwise.
 bool sdet_grid_finder_params::SanityCheck()
 {
-  vcl_stringstream msg;
+  std::stringstream msg;
   bool valid = true;
 
   if (n_lines_x_<2)
@@ -100,13 +102,13 @@ bool sdet_grid_finder_params::SanityCheck()
     msg << "ERROR: need at least 5 degrees tolerance ";
     valid = false;
   }
-  msg << vcl_ends;
+  msg << std::ends;
 
   SetErrorMsg(msg.str().c_str());
   return valid;
 }
 
-vcl_ostream& operator << (vcl_ostream& os, const sdet_grid_finder_params& gfp)
+std::ostream& operator << (std::ostream& os, const sdet_grid_finder_params& gfp)
 {
   return
   os << "sdet_grid_finder_params:\n[---\n"
@@ -115,5 +117,5 @@ vcl_ostream& operator << (vcl_ostream& os, const sdet_grid_finder_params& gfp)
      << "spacing between lines " << gfp.spacing_ << '\n'
      << "hough index bin count threshold " << gfp.thresh_ << '\n'
      << "hough angle tolerance " << gfp.thresh_ << '\n'
-     << "---]" << vcl_endl;
+     << "---]" << std::endl;
 }

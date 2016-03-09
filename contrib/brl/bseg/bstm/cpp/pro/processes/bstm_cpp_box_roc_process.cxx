@@ -7,7 +7,9 @@
 // \author Ali Osman Ulusoy
 // \date Nov 1, 2013
 
-#include <vcl_fstream.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <fstream>
 #include <bstm/io/bstm_cache.h>
 #include <bstm/io/bstm_lru_cache.h>
 #include <bstm/bstm_scene.h>
@@ -43,7 +45,7 @@ bool bstm_cpp_box_roc_process_cons(bprb_func_process& pro)
   using namespace bstm_cpp_box_roc_process_globals;
 
   //process takes 1 input
-  vcl_vector<vcl_string> input_types_(n_inputs_);
+  std::vector<std::string> input_types_(n_inputs_);
 
   input_types_[0] = "bstm_scene_sptr";
   input_types_[1] = "bstm_cache_sptr";
@@ -65,7 +67,7 @@ bool bstm_cpp_box_roc_process_cons(bprb_func_process& pro)
 
   // process has 1 output:
   // output[0]: scene sptr
-  vcl_vector<vcl_string> output_types;
+  std::vector<std::string> output_types;
 
   output_types.push_back("bbas_1d_array_float_sptr");  // tpr
   output_types.push_back("bbas_1d_array_float_sptr");  // fpr
@@ -78,7 +80,7 @@ bool bstm_cpp_box_roc_process(bprb_func_process& pro)
   using namespace bstm_cpp_box_roc_process_globals;
 
   if ( pro.n_inputs() < n_inputs_ ) {
-    vcl_cout << pro.name() << ": The input number should be " << n_inputs_<< vcl_endl;
+    std::cout << pro.name() << ": The input number should be " << n_inputs_<< std::endl;
     return false;
   }
 
@@ -125,8 +127,8 @@ bool bstm_cpp_box_roc_process(bprb_func_process& pro)
 
 
   //iterate over each block/metadata to check if bbox intersects the input bbox
-  vcl_map<bstm_block_id, bstm_block_metadata> blocks = scene->blocks();
-  vcl_map<bstm_block_id, bstm_block_metadata> ::const_iterator bstm_iter = blocks.begin();
+  std::map<bstm_block_id, bstm_block_metadata> blocks = scene->blocks();
+  std::map<bstm_block_id, bstm_block_metadata> ::const_iterator bstm_iter = blocks.begin();
   for(; bstm_iter != blocks.end() ; bstm_iter++)
   {
     bstm_block_id bstm_id = bstm_iter->first;
@@ -161,8 +163,8 @@ bool bstm_cpp_box_roc_process(bprb_func_process& pro)
 
 
            //iterate through leaves of the tree
-           vcl_vector<int> leafBits = bit_tree.get_leaf_bits();
-           vcl_vector<int>::iterator iter;
+           std::vector<int> leafBits = bit_tree.get_leaf_bits();
+           std::vector<int>::iterator iter;
            for (iter = leafBits.begin(); iter != leafBits.end(); ++iter) {
              int curr_depth = bit_tree.depth_at((*iter));
              double side_len = 1.0 / (double) (1<<curr_depth);
@@ -207,7 +209,7 @@ bool bstm_cpp_box_roc_process(bprb_func_process& pro)
   for (unsigned int pnt=0; pnt<numPoints; ++pnt) {
     tpr->data_array[pnt]= tp->data_array[pnt] / (tp->data_array[pnt] + fn->data_array[pnt]);
     fpr->data_array[pnt]= fp->data_array[pnt] / (fp->data_array[pnt] + tn->data_array[pnt]);
-    vcl_cout << "tpr: " <<tpr->data_array[pnt] << " and fpr: " << fpr->data_array[pnt] << vcl_endl;
+    std::cout << "tpr: " <<tpr->data_array[pnt] << " and fpr: " << fpr->data_array[pnt] << std::endl;
   }
 
   pro.set_output_val<bbas_1d_array_float_sptr>(0, tpr);

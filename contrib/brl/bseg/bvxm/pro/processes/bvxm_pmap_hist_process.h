@@ -6,7 +6,7 @@
 // \brief A class for generating a histogram out of occupancy probability grid
 //        -  Inputs:
 //             * bvxm_voxel_world_sptr
-//             * vcl_string             --path for the text file of the histogram
+//             * std::string             --path for the text file of the histogram
 //        -  No outputs
 //
 // \author  Gamze D. Tunali
@@ -18,7 +18,9 @@
 // \endverbatim
 
 #include <bprb/bprb_func_process.h>
-#include <vcl_string.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <string>
 
 //: globals
 namespace bvxm_pmap_hist_process_globals
@@ -27,7 +29,7 @@ namespace bvxm_pmap_hist_process_globals
   const unsigned n_outputs_ = 0;
 
   // functions
-  bool compute(vcl_string pmap, vcl_string path);
+  bool compute(std::string pmap, std::string path);
 }
 
 //: set input and output types

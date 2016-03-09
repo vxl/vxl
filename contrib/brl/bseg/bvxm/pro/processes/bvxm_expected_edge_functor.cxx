@@ -73,12 +73,12 @@ bool bvxm_expected_edge_functor::apply(const vpgl_camera_double_sptr& camera,
     return true;
   }
   else {
-    vcl_cout << "bvxm_expected_edge_functor::apply() -- The camera type: " << camera->type_name() << " is not implemented yet!" << vcl_endl;
+    std::cout << "bvxm_expected_edge_functor::apply() -- The camera type: " << camera->type_name() << " is not implemented yet!" << std::endl;
     return false;
   }
 }
 
-vcl_vector<vgl_point_3d<double> > bvxm_expected_edge_functor::convert_3d_box_to_3d_points(const vgl_box_3d<double> box_3d)
+std::vector<vgl_point_3d<double> > bvxm_expected_edge_functor::convert_3d_box_to_3d_points(const vgl_box_3d<double> box_3d)
 {
   double box_x[2],box_y[2],box_z[2];
   box_x[0] = box_3d.min_x();
@@ -88,7 +88,7 @@ vcl_vector<vgl_point_3d<double> > bvxm_expected_edge_functor::convert_3d_box_to_
   box_y[1] = box_3d.max_y();
   box_z[1] = box_3d.max_z();
 
-  vcl_vector<vgl_point_3d<double> > box_pts_3d;
+  std::vector<vgl_point_3d<double> > box_pts_3d;
   for (int i=0; i<2; i++) {
     for (int j=0; j<2; j++) {
       for (int k=0; k<2; k++) {
@@ -103,9 +103,9 @@ vcl_vector<vgl_point_3d<double> > bvxm_expected_edge_functor::convert_3d_box_to_
 vgl_polygon<double> bvxm_expected_edge_functor::convert_3d_box_to_2d_polygon(const vgl_box_3d<double> box_3d,
                                                                              const vpgl_perspective_camera<double> *cam)
 {
-  vcl_vector<vgl_point_3d<double> > box_pts_3d = convert_3d_box_to_3d_points(box_3d);
+  std::vector<vgl_point_3d<double> > box_pts_3d = convert_3d_box_to_3d_points(box_3d);
 
-  vcl_vector<vgl_point_2d<double> > box_pts_2d;
+  std::vector<vgl_point_2d<double> > box_pts_2d;
   for (unsigned i=0; i<box_pts_3d.size(); i++) {
     double u,v;
     cam->project(box_pts_3d[i].x(),box_pts_3d[i].y(),box_pts_3d[i].z(),u,v);

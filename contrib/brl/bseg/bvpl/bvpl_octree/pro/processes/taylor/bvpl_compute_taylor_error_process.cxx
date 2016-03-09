@@ -25,7 +25,7 @@ bool bvpl_compute_taylor_error_process_cons(bprb_func_process& pro)
 {
   using namespace bvpl_compute_taylor_error_process_globals ;
 
-  vcl_vector<vcl_string> input_types_(n_inputs_);
+  std::vector<std::string> input_types_(n_inputs_);
   unsigned i = 0;
   input_types_[i++] = "boxm_scene_base_sptr"; //the original data scene
   input_types_[i++] = "bvpl_taylor_scenes_map_sptr" ; //scenes needed for Taylor operations
@@ -33,7 +33,7 @@ bool bvpl_compute_taylor_error_process_cons(bprb_func_process& pro)
   input_types_[i++] = "int" ; //block index in y-dimension
   input_types_[i++] = "int" ; //block index in z-dimension
 
-  vcl_vector<vcl_string> output_types_(n_outputs_);
+  std::vector<std::string> output_types_(n_outputs_);
   i=0;
   output_types_[i++] = "boxm_scene_base_sptr"; //the error for this block
   return pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
@@ -53,11 +53,11 @@ bool bvpl_compute_taylor_error_process(bprb_func_process& pro)
   int block_j = pro.get_input<int>(i++);
   int block_k = pro.get_input<int>(i++);
   if (!data_scene_base) {
-    vcl_cerr << "Error in bvpl_compute_taylor_error_process: Null data scene\n";
+    std::cerr << "Error in bvpl_compute_taylor_error_process: Null data scene\n";
     return false;
   }
   if (!taylor_scenes) {
-    vcl_cerr << "Error in bvpl_compute_taylor_error_process: Null scenes map\n";
+    std::cerr << "Error in bvpl_compute_taylor_error_process: Null scenes map\n";
     return false;
   }
 

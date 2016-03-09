@@ -17,8 +17,10 @@
 // and scale in u and v (2 dof).
 //
 #include <vgl/vgl_fwd.h>
-#include <vcl_iostream.h>
-#include <vcl_string.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iostream>
+#include <string>
 #include <vnl/vnl_vector_fixed.h>
 #include <vnl/vnl_matrix_fixed.h>
 #include <vpgl/vpgl_rational_camera.h>
@@ -52,7 +54,7 @@ class bpgl_comp_rational_camera : public vpgl_rational_camera<T>
                             vpgl_rational_camera<T> const& rcam);
 
   //: Constructor, create from a camera file given by cam_path
-  bpgl_comp_rational_camera(vcl_string cam_path);
+  bpgl_comp_rational_camera(std::string cam_path);
 
   virtual ~bpgl_comp_rational_camera() {}
 
@@ -96,9 +98,9 @@ class bpgl_comp_rational_camera : public vpgl_rational_camera<T>
 
 
   //: print the camera parameters
-  virtual void print(vcl_ostream& s = vcl_cout) const;
+  virtual void print(std::ostream& s = std::cout) const;
   //: save to file (the affine map is after the end of the rational definition)
-  bool save(vcl_string cam_path);
+  bool save(std::string cam_path);
 
  protected:
   vnl_matrix_fixed<T, 3,3> matrix_;
@@ -107,12 +109,12 @@ class bpgl_comp_rational_camera : public vpgl_rational_camera<T>
 //: Write to stream
 // \relatesalso bpgl_comp_rational_camera
 template <class T>
-vcl_ostream& operator<<(vcl_ostream& s, const bpgl_comp_rational_camera<T>& p);
+std::ostream& operator<<(std::ostream& s, const bpgl_comp_rational_camera<T>& p);
 
 //: Read from stream
 // \relatesalso bpgl_comp_rational_camera
 template <class T>
-vcl_istream& operator>>(vcl_istream& is, bpgl_comp_rational_camera<T>& p);
+std::istream& operator>>(std::istream& is, bpgl_comp_rational_camera<T>& p);
 
 #define BPGL_COMP_RATIONAL_CAMERA_INSTANTIATE(T) extern "please include vgl/bpgl_comp_rational_camera.txx first"
 

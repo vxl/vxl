@@ -46,14 +46,14 @@ void vsl_add_to_binary_loader(const pdf1d_builder& b)
 
 //=======================================================================
 
-vcl_string pdf1d_builder::is_a() const
+std::string pdf1d_builder::is_a() const
 {
-  return vcl_string("pdf1d_builder");
+  return std::string("pdf1d_builder");
 }
 
 //=======================================================================
 
-bool pdf1d_builder::is_class(vcl_string const& s) const
+bool pdf1d_builder::is_class(std::string const& s) const
 {
   return s==pdf1d_builder::is_a();
 }
@@ -74,7 +74,7 @@ void vsl_b_read(vsl_b_istream& bfs, pdf1d_builder& b)
 
 //=======================================================================
 
-void vsl_print_summary(vcl_ostream& os,const pdf1d_builder& b)
+void vsl_print_summary(std::ostream& os,const pdf1d_builder& b)
 {
   os << b.is_a() << ": ";
   vsl_indent_inc(os);
@@ -84,7 +84,7 @@ void vsl_print_summary(vcl_ostream& os,const pdf1d_builder& b)
 
 //=======================================================================
 
-void vsl_print_summary(vcl_ostream& os,const pdf1d_builder* b)
+void vsl_print_summary(std::ostream& os,const pdf1d_builder* b)
 {
   if (b)
     vsl_print_summary(os, *b);
@@ -95,7 +95,7 @@ void vsl_print_summary(vcl_ostream& os,const pdf1d_builder* b)
 //=======================================================================
 
 //: Stream output operator for class reference
-vcl_ostream& operator<<(vcl_ostream& os,const pdf1d_builder& b)
+std::ostream& operator<<(std::ostream& os,const pdf1d_builder& b)
 {
   vsl_print_summary(os,b);
   return os;
@@ -104,7 +104,7 @@ vcl_ostream& operator<<(vcl_ostream& os,const pdf1d_builder& b)
 //=======================================================================
 
 //: Stream output operator for class pointer
-vcl_ostream& operator<<(vcl_ostream& os,const pdf1d_builder* b)
+std::ostream& operator<<(std::ostream& os,const pdf1d_builder* b)
 {
   vsl_print_summary(os,b);
   return os;

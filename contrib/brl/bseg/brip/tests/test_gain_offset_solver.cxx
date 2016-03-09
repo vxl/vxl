@@ -4,11 +4,13 @@
 #include <brip/brip_gain_offset_solver.h>
 #include <brip/brip_vil_float_ops.h>
 #include <testlib/testlib_test.h>
-#include <vcl_iostream.h>
+#include <iostream>
 #include <vil/vil_load.h>
 #include <vil/vil_save.h>
 #include <vil/vil_math.h>
-#include <vcl_cstdlib.h> // for std::rand()
+#include <vcl_compiler.h>
+#include <iostream>
+#include <cstdlib> // for std::rand()
 
 static void test_gain_offset_solver()
 {
@@ -18,25 +20,25 @@ static void test_gain_offset_solver()
   for(unsigned j = 0; j<nj; ++j)
     for(unsigned i = 0; i<ni; ++i){
       // range 0-> 1
-      float v = static_cast<float>((vcl_rand()/(RAND_MAX+1.0)));
+      float v = static_cast<float>((std::rand()/(RAND_MAX+1.0)));
       model(i,j) = v;
-      float noise = (0.01f)*(static_cast<float>((vcl_rand()/(RAND_MAX+1.0))));
+      float noise = (0.01f)*(static_cast<float>((std::rand()/(RAND_MAX+1.0))));
       test(i,j) = v + noise;
     }
   brip_gain_offset_solver gos(model, test);
   bool good = gos.solve();
   float gain = gos.gain();
   float offset = gos.offset();
-  vcl_cout << "gain = " << gain << "  offset = " << offset << '\n';
-  float er = vcl_fabs(gain-1.0f);
-  er += vcl_fabs(offset);
+  std::cout << "gain = " << gain << "  offset = " << offset << '\n';
+  float er = std::fabs(gain-1.0f);
+  er += std::fabs(offset);
   if(!good) er += 1.0f;
   TEST_NEAR("gain, offset test", er, 0.0f, 0.01f);
   //
   //===========================    actual experiment =================
   //
 #if 0
-  vcl_string exp_path = "e:/mundy/Dropbox/deliveries/exp_imgs/view_00_exp.png";
+  std::string exp_path = "e:/mundy/Dropbox/deliveries/exp_imgs/view_00_exp.png";
   vil_image_view<unsigned char> exp = vil_load(exp_path.c_str());
    ni = exp.ni(); nj = exp.nj();
   vil_image_view<float> test_image =
@@ -48,7 +50,7 @@ static void test_gain_offset_solver()
     for(unsigned i = 47; i<771; ++i)
       test_mask(i,j) = static_cast<unsigned char>(255);
 
-  vcl_string mod_path = "e:/mundy/Dropbox/deliveries/cropped_imgs_raw_pixel_values_11_bit_stretched/view_00_cropped_stretched.tiff";
+  std::string mod_path = "e:/mundy/Dropbox/deliveries/cropped_imgs_raw_pixel_values_11_bit_stretched/view_00_cropped_stretched.tiff";
   vil_image_view<float> in_img = vil_load(mod_path.c_str());
   //map the pixels by translation
   unsigned tu = 422, tv = 421;
@@ -65,16 +67,16 @@ static void test_gain_offset_solver()
   good = gos2.solve();
   gain = gos2.gain();
   offset = gos2.offset();
-  vcl_cout << "gain = " << gain << "  offset = " << offset << '\n';
+  std::cout << "gain = " << gain << "  offset = " << offset << '\n';
 
   // ==== output resulting mapped image
-  vcl_string map_path = "e:/images/TextureTraining/mapped_images/map_00.tiff";
+  std::string map_path = "e:/images/TextureTraining/mapped_images/map_00.tiff";
   vil_image_view<float> mapped_img = gos2.mapped_test_image();
   vil_save(mapped_img, map_path.c_str());
   mod_path = "e:/images/TextureTraining/mapped_images/model_00.tiff";
   vil_save(model_image, mod_path.c_str());
 
-  vcl_string mask_path = "e:/images/TextureTraining/mapped_images/test_mask_00.tiff";
+  std::string mask_path = "e:/images/TextureTraining/mapped_images/test_mask_00.tiff";
   vil_save(test_mask, mask_path.c_str());
 #endif
 }

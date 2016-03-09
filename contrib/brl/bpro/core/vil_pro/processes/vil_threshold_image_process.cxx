@@ -13,7 +13,7 @@ bool vil_threshold_image_process_cons(bprb_func_process& pro)
 {
     //input
     bool ok=false;
-    vcl_vector<vcl_string> input_types;
+    std::vector<std::string> input_types;
     input_types.push_back("vil_image_view_base_sptr");
     input_types.push_back("float");     // threshold
     input_types.push_back("bool");      // whether to threshold above or below, if true thresholds above, i.e. dest(i,j) = true if src(i,j) >= threshold
@@ -22,7 +22,7 @@ bool vil_threshold_image_process_cons(bprb_func_process& pro)
     if (!ok) return ok;
 
     //output
-    vcl_vector<vcl_string> output_types;
+    std::vector<std::string> output_types;
     output_types.push_back("vil_image_view_base_sptr");
     ok = pro.set_output_types(output_types);
     if (!ok) return ok;
@@ -34,7 +34,7 @@ bool vil_threshold_image_process(bprb_func_process& pro)
 {
     // Sanity check
     if (pro.n_inputs()< 3) {
-        vcl_cout << "vil_threshold_image_process: The input number should be 3" << vcl_endl;
+        std::cout << "vil_threshold_image_process: The input number should be 3" << std::endl;
         return false;
     }
 
@@ -82,14 +82,14 @@ bool vil_threshold_max_image_process_cons(bprb_func_process& pro)
 {
     //input
     bool ok=false;
-    vcl_vector<vcl_string> input_types;
+    std::vector<std::string> input_types;
     input_types.push_back("vil_image_view_base_sptr");
     input_types.push_back("float");   // fmax or threshold
     ok = pro.set_input_types(input_types);
     if (!ok) return ok;
 
     //output
-    vcl_vector<vcl_string> output_types;
+    std::vector<std::string> output_types;
     output_types.push_back("vil_image_view_base_sptr");
     ok = pro.set_output_types(output_types);
     if (!ok) return ok;
@@ -101,7 +101,7 @@ bool vil_threshold_max_image_process(bprb_func_process& pro)
 {
     // Sanity check
     if (pro.n_inputs()< 2) {
-        vcl_cout << "vil_threshold_image_process: The input number should be 3" << vcl_endl;
+        std::cout << "vil_threshold_image_process: The input number should be 3" << std::endl;
         return false;
     }
 
@@ -143,7 +143,7 @@ bool vil_threshold_image_region_process_cons(bprb_func_process& pro)
 {
     // input
     bool ok=false;
-    vcl_vector<vcl_string> input_types(4);
+    std::vector<std::string> input_types(4);
     input_types[0] = "vil_image_view_base_sptr";  // input image
     input_types[1] = "float";                     // min threshold
     input_types[2] = "float";                     // max threshold
@@ -152,7 +152,7 @@ bool vil_threshold_image_region_process_cons(bprb_func_process& pro)
     if (!ok) return ok;
 
     // output
-    vcl_vector<vcl_string> output_types(1);
+    std::vector<std::string> output_types(1);
     output_types[0] = "vil_image_view_base_sptr";
     ok = pro.set_output_types(output_types);
     if (!ok) return ok;

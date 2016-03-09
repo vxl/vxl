@@ -4,14 +4,16 @@
 // \file
 // \author Martin Roberts
 
-#include <vcl_iostream.h>
-#include <vcl_string.h>
+#include <iostream>
+#include <string>
 #include <vcl_cassert.h>
 #include <vsl/vsl_binary_loader.h>
 #include <vnl/vnl_double_2.h>
 #include <clsfy/clsfy_builder_1d.h>
 #include <clsfy/clsfy_binary_threshold_1d.h>
-#include <vcl_algorithm.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <algorithm>
 
 // Note this is used by clsfy_binary_tree_builder
 // Derived from clsfy_binary_threshold_1d_builder but uses a slightly different
@@ -54,7 +56,7 @@ clsfy_classifier_1d* clsfy_binary_threshold_1d_gini_builder::new_classifier() co
 // (i.e. but minimise as per error rate)
 double clsfy_binary_threshold_1d_gini_builder::build_gini(clsfy_classifier_1d& classifier,
                                                           const vnl_vector<double>&  inputs,
-                                                          const vcl_vector<unsigned> &outputs) const
+                                                          const std::vector<unsigned> &outputs) const
 {
     assert(classifier.is_class("clsfy_binary_threshold_1d"));
 
@@ -62,11 +64,11 @@ double clsfy_binary_threshold_1d_gini_builder::build_gini(clsfy_classifier_1d& c
     assert ( outputs.size() == n );
 
     // create triples data, so can sort
-    vcl_vector<vbl_triple<double,int,int> > data;
+    std::vector<vbl_triple<double,int,int> > data;
     data.reserve(n);
 
     //First just create sorted data
-    vcl_vector<unsigned >::const_iterator classIter=outputs.begin();
+    std::vector<unsigned >::const_iterator classIter=outputs.begin();
     vnl_vector<double  >::const_iterator inputIter=inputs.begin();
     vnl_vector<double  >::const_iterator inputIterEnd=inputs.end();
     vbl_triple<double,int,int> t;
@@ -81,7 +83,7 @@ double clsfy_binary_threshold_1d_gini_builder::build_gini(clsfy_classifier_1d& c
 
     assert(i==inputs.size());
 
-    vcl_sort(data.begin(),data.end());
+    std::sort(data.begin(),data.end());
     return build_gini_from_sorted_data(static_cast<clsfy_classifier_1d&>(classifier), data);
 }
 
@@ -92,7 +94,7 @@ double clsfy_binary_threshold_1d_gini_builder::build_gini(clsfy_classifier_1d& c
 //Return -improvement in impurity (as normally these builders minimise)
 double clsfy_binary_threshold_1d_gini_builder::build_gini_from_sorted_data(
     clsfy_classifier_1d& classifier,
-    const vcl_vector<vbl_triple<double,int,int> >& data) const
+    const std::vector<vbl_triple<double,int,int> >& data) const
 {
     // here the triple consists of (value, class number, example index)
     // the example index specifies the weight of each example
@@ -101,9 +103,9 @@ double clsfy_binary_threshold_1d_gini_builder::build_gini_from_sorted_data(
 
     //Validate that the data is not homogeneous
     const double epsilon=1.0E-20;
-    if (vcl_fabs(data.front().first-data.back().first)<epsilon)
+    if (std::fabs(data.front().first-data.back().first)<epsilon)
     {
-        vcl_cerr<<"WARNING - clsfy_binary_threshold_1d_gini_builder::build_from_sorted_data - homogeneous data - cannot split\n";
+        std::cerr<<"WARNING - clsfy_binary_threshold_1d_gini_builder::build_from_sorted_data - homogeneous data - cannot split\n";
         int polarity=1;
         double threshold=data[0].first;
         vnl_double_2 params(polarity, threshold*polarity);
@@ -113,8 +115,8 @@ double clsfy_binary_threshold_1d_gini_builder::build_gini_from_sorted_data(
 
     unsigned int ntot=data.size();
     double dntot=double (ntot);
-    vcl_vector<vbl_triple<double,int,int> >::const_iterator dataIter=data.begin();
-    vcl_vector<vbl_triple<double,int,int> >::const_iterator dataIterEnd=data.end();
+    std::vector<vbl_triple<double,int,int> >::const_iterator dataIter=data.begin();
+    std::vector<vbl_triple<double,int,int> >::const_iterator dataIterEnd=data.end();
     unsigned n0Tot=0;
     unsigned n1Tot=0;
     while (dataIter != dataIterEnd)
@@ -145,7 +147,7 @@ double clsfy_binary_threshold_1d_gini_builder::build_gini_from_sorted_data(
     while (dataIter != dataIterEnd)
     {
         s=dataIter->first;
-        vcl_vector<vbl_triple<double,int,int> >::const_iterator dataIterNext=dataIter;
+        std::vector<vbl_triple<double,int,int> >::const_iterator dataIterNext=dataIter;
 
         //Increment till threshold increases (may have some same data values)
         while (dataIterNext != dataIterEnd && (dataIterNext->first-s)<epsilon)
@@ -199,12 +201,12 @@ double clsfy_binary_threshold_1d_gini_builder::build_gini_from_sorted_data(
 
 //=======================================================================
 
-vcl_string clsfy_binary_threshold_1d_gini_builder::is_a() const
+std::string clsfy_binary_threshold_1d_gini_builder::is_a() const
 {
-  return vcl_string("clsfy_binary_threshold_1d_gini_builder");
+  return std::string("clsfy_binary_threshold_1d_gini_builder");
 }
 
-bool clsfy_binary_threshold_1d_gini_builder::is_class(vcl_string const& s) const
+bool clsfy_binary_threshold_1d_gini_builder::is_class(std::string const& s) const
 {
   return s == clsfy_binary_threshold_1d_gini_builder::is_a() || clsfy_builder_1d::is_class(s);
 }
@@ -238,9 +240,9 @@ clsfy_binary_threshold_1d_gini_builder::operator=(const clsfy_binary_threshold_1
 //=======================================================================
 
 // required if data is present in this base class
-void clsfy_binary_threshold_1d_gini_builder::print_summary(vcl_ostream& os) const
+void clsfy_binary_threshold_1d_gini_builder::print_summary(std::ostream& os) const
 {
-    os<<"clsfy_binary_threshold_1d_gini_builder"<<vcl_endl;
+    os<<"clsfy_binary_threshold_1d_gini_builder"<<std::endl;
 }
 
 //=======================================================================
@@ -274,9 +276,9 @@ void clsfy_binary_threshold_1d_gini_builder::b_read(vsl_b_istream& bfs)
             clsfy_binary_threshold_1d_builder::b_read(bfs);
             break;
         default:
-            vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, clsfy_binary_threshold_1d_gini_builder&)\n"
+            std::cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, clsfy_binary_threshold_1d_gini_builder&)\n"
                      << "           Unknown version number "<< version << '\n';
-            bfs.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
+            bfs.is().clear(std::ios::badbit); // Set an unrecoverable IO error on stream
             return;
     }
 }

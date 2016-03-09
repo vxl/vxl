@@ -30,12 +30,12 @@ class bgui_graph_tableau : public  vgui_tableau
 
   //: Update the graph with new data
   //  Single plot
-  void update(vcl_vector<double> const& pos, vcl_vector<double> const & vals);
-  void update(vcl_vector<float> const& pos, vcl_vector<float> const & vals);
+  void update(std::vector<double> const& pos, std::vector<double> const & vals);
+  void update(std::vector<float> const& pos, std::vector<float> const & vals);
   //: multiple plots. The current implementation requires pos to contain the same horizontal axis values.
   // Future plans are to have this class handle multiple position ranges
-  void update(vcl_vector<vcl_vector<double> > const& pos,
-              vcl_vector<vcl_vector<double> >const & vals);
+  void update(std::vector<std::vector<double> > const& pos,
+              std::vector<std::vector<double> >const & vals);
   //: Clear the data
   void clear();
 
@@ -46,7 +46,7 @@ class bgui_graph_tableau : public  vgui_tableau
   float ymax() const {return ymax_;}
 
   //: Get a conveniently wrapped popup dialog
-  vgui_dialog* popup_graph(vcl_string const& info,
+  vgui_dialog* popup_graph(std::string const& info,
                            const unsigned sizex =0,
                            const unsigned sizey=0);
 
@@ -81,18 +81,18 @@ class bgui_graph_tableau : public  vgui_tableau
   vgui_easy2D_tableau_sptr easy_;
   //: The graph
   vgui_soview2D_linestrip* plot_;
-  vcl_vector<vgui_soview2D_linestrip*> m_plot_;
+  std::vector<vgui_soview2D_linestrip*> m_plot_;
   //: the tics
   float xinc_, yinc_;
   float yorigin_;
-  vcl_vector<vgui_soview2D_lineseg*> xtics_;
-  vcl_vector<vgui_soview2D_lineseg*> ytics_;
+  std::vector<vgui_soview2D_lineseg*> xtics_;
+  std::vector<vgui_soview2D_lineseg*> ytics_;
   unsigned n_;
   float* pos_;
   float* vals_;
   unsigned n_plots_;
-  vcl_vector<vcl_vector<double> > mpos_;
-  vcl_vector<vcl_vector<double> > mvals_;
+  std::vector<std::vector<double> > mpos_;
+  std::vector<std::vector<double> > mvals_;
 };
 
 struct bgui_graph_tableau_new : public bgui_graph_tableau_sptr

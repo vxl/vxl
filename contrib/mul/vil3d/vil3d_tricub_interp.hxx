@@ -5,7 +5,9 @@
 // \brief Tricubic interpolation functions for 3D images
 
 #include "vil3d_tricub_interp.h"
-#include <vcl_limits.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <limits>
 #include <vil/vil_round.h>
 
 
@@ -26,7 +28,7 @@ template<class T>
 // double vil3d_tricub_interp_unsafe(double x, double y, double z,
 double vil3d_tricub_interp_raw(double x, double y, double z,
                                const T* data,
-                               vcl_ptrdiff_t xstep, vcl_ptrdiff_t ystep, vcl_ptrdiff_t zstep)
+                               std::ptrdiff_t xstep, std::ptrdiff_t ystep, std::ptrdiff_t zstep)
 {
   int p1x=int(x);
   double normx = x-p1x;
@@ -89,7 +91,7 @@ template<class T>
 double vil3d_tricub_interp_safe_trilinear_extend(double x, double y, double z,
                                                  const T* data,
                                                  int nx, int ny, int nz,
-                                                 vcl_ptrdiff_t xstep, vcl_ptrdiff_t ystep, vcl_ptrdiff_t zstep)
+                                                 std::ptrdiff_t xstep, std::ptrdiff_t ystep, std::ptrdiff_t zstep)
 {
   if ( x>=1    && y>=1    && z>=1 &&
        x<=nx-3 && y<=ny-3 && z<=nz-3 )
@@ -103,29 +105,29 @@ double vil3d_tricub_interp_safe_trilinear_extend(double x, double y, double z,
   double normz = z - p1z;
 
   const T* pix1 = data + p1y*ystep + p1x*xstep + p1z*zstep;
-  double xi00 = vcl_numeric_limits<double>::infinity();
-  double xi10 = vcl_numeric_limits<double>::infinity();
-  double xi20 = vcl_numeric_limits<double>::infinity();
-  double xi30 = vcl_numeric_limits<double>::infinity();
-  double xi01 = vcl_numeric_limits<double>::infinity();
-  double xi11 = vcl_numeric_limits<double>::infinity();
-  double xi21 = vcl_numeric_limits<double>::infinity();
-  double xi31 = vcl_numeric_limits<double>::infinity();
-  double xi02 = vcl_numeric_limits<double>::infinity();
-  double xi12 = vcl_numeric_limits<double>::infinity();
-  double xi22 = vcl_numeric_limits<double>::infinity();
-  double xi32 = vcl_numeric_limits<double>::infinity();
-  double xi03 = vcl_numeric_limits<double>::infinity();
-  double xi13 = vcl_numeric_limits<double>::infinity();
-  double xi23 = vcl_numeric_limits<double>::infinity();
-  double xi33 = vcl_numeric_limits<double>::infinity();
+  double xi00 = std::numeric_limits<double>::infinity();
+  double xi10 = std::numeric_limits<double>::infinity();
+  double xi20 = std::numeric_limits<double>::infinity();
+  double xi30 = std::numeric_limits<double>::infinity();
+  double xi01 = std::numeric_limits<double>::infinity();
+  double xi11 = std::numeric_limits<double>::infinity();
+  double xi21 = std::numeric_limits<double>::infinity();
+  double xi31 = std::numeric_limits<double>::infinity();
+  double xi02 = std::numeric_limits<double>::infinity();
+  double xi12 = std::numeric_limits<double>::infinity();
+  double xi22 = std::numeric_limits<double>::infinity();
+  double xi32 = std::numeric_limits<double>::infinity();
+  double xi03 = std::numeric_limits<double>::infinity();
+  double xi13 = std::numeric_limits<double>::infinity();
+  double xi23 = std::numeric_limits<double>::infinity();
+  double xi33 = std::numeric_limits<double>::infinity();
 
-  double val0 = vcl_numeric_limits<double>::infinity();
-  double val1 = vcl_numeric_limits<double>::infinity();
-  double val2 = vcl_numeric_limits<double>::infinity();
-  double val3 = vcl_numeric_limits<double>::infinity();
+  double val0 = std::numeric_limits<double>::infinity();
+  double val1 = std::numeric_limits<double>::infinity();
+  double val2 = std::numeric_limits<double>::infinity();
+  double val3 = std::numeric_limits<double>::infinity();
 
-  double val  = vcl_numeric_limits<double>::infinity();
+  double val  = std::numeric_limits<double>::infinity();
 
 #define vil3d_I(dx,dy,dz) (pix1[(dx)*xstep+(dy)*ystep+(dz)*zstep])
   if ( x < 0 ) x = 0.0;
@@ -418,9 +420,9 @@ double vil3d_tricub_interp_safe_trilinear_extend(double x, double y, double z,
 
 #define VIL3D_TRICUB_INTERP_INSTANTIATE(T)                              \
 template double vil3d_tricub_interp_raw (double x, double y, double z, const T* data,  \
-                                         vcl_ptrdiff_t xstep, vcl_ptrdiff_t ystep, vcl_ptrdiff_t zstep); \
+                                         std::ptrdiff_t xstep, std::ptrdiff_t ystep, std::ptrdiff_t zstep); \
 template double vil3d_tricub_interp_safe_trilinear_extend (double x, double y, double z, const T* data,  \
                                                            int nx, int ny, int nz, \
-                                                           vcl_ptrdiff_t xstep, vcl_ptrdiff_t ystep, vcl_ptrdiff_t zstep)
+                                                           std::ptrdiff_t xstep, std::ptrdiff_t ystep, std::ptrdiff_t zstep)
 
 #endif // vil3d_tricub_interp_hxx_

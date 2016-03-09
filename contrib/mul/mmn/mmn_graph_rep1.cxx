@@ -14,15 +14,15 @@ mmn_graph_rep1::mmn_graph_rep1()
 
 //: Build from list of arcs
 void mmn_graph_rep1::build(unsigned n_nodes,
-                           const vcl_vector<mmn_arc>& arcs)
+                           const std::vector<mmn_arc>& arcs)
 {
   node_data_.resize(n_nodes);
   for (unsigned i=0;i<n_nodes;++i) node_data_[i].resize(0);
 
   for (unsigned i=0;i<arcs.size();++i)
   {
-    node_data_[arcs[i].v1].push_back(vcl_pair<unsigned,unsigned>(arcs[i].v2,i));
-    node_data_[arcs[i].v2].push_back(vcl_pair<unsigned,unsigned>(arcs[i].v1,i));
+    node_data_[arcs[i].v1].push_back(std::pair<unsigned,unsigned>(arcs[i].v2,i));
+    node_data_[arcs[i].v2].push_back(std::pair<unsigned,unsigned>(arcs[i].v1,i));
   }
 
   max_n_arcs_ = arcs.size();
@@ -35,7 +35,7 @@ void mmn_graph_rep1::build(unsigned n_nodes,
 //: Return index of arc between v1 and v2, or -1 if none
 int mmn_graph_rep1::arc_index(unsigned v1, unsigned v2) const
 {
-  const vcl_vector<vcl_pair<unsigned,unsigned> >& nd = node_data_[v1];
+  const std::vector<std::pair<unsigned,unsigned> >& nd = node_data_[v1];
   for (unsigned i=0;i<nd.size();++i)
     if (nd[i].first==v2) return nd[i].second;
   return -1;
@@ -49,8 +49,8 @@ unsigned mmn_graph_rep1::get_arc(unsigned v1, unsigned v2)
 
   // No existing arc, so add one.
   a = max_n_arcs_;
-  node_data_[v1].push_back(vcl_pair<unsigned,unsigned>(v2,a));
-  node_data_[v2].push_back(vcl_pair<unsigned,unsigned>(v1,a));
+  node_data_[v1].push_back(std::pair<unsigned,unsigned>(v2,a));
+  node_data_[v2].push_back(std::pair<unsigned,unsigned>(v1,a));
   max_n_arcs_++;
   n_arcs_++;
   return a;
@@ -67,8 +67,8 @@ bool mmn_graph_rep1::remove_arc(unsigned v1, unsigned v2)
 //: Remove record of arc v1-v2 from v1
 void mmn_graph_rep1::remove_arc_from_node(unsigned v1, unsigned v2)
 {
-  vcl_vector<vcl_pair<unsigned,unsigned> >& nd = node_data_[v1];
-  vcl_vector<vcl_pair<unsigned,unsigned> >::iterator ndi;
+  std::vector<std::pair<unsigned,unsigned> >& nd = node_data_[v1];
+  std::vector<std::pair<unsigned,unsigned> >::iterator ndi;
   for (ndi=nd.begin();ndi!=nd.end();++ndi)
     if (ndi->first==v2)
     {
@@ -83,7 +83,7 @@ void mmn_graph_rep1::remove_arc_from_node(unsigned v1, unsigned v2)
 //  For each leaf node removed, add one dependency object to
 //  the deps list.
 //  Returns number of leaves removed.
-unsigned mmn_graph_rep1::remove_leaves(vcl_vector<mmn_dependancy>& deps)
+unsigned mmn_graph_rep1::remove_leaves(std::vector<mmn_dependancy>& deps)
 {
   unsigned n_removed = 0;
   for (unsigned v1=0;v1<node_data_.size();++v1)
@@ -118,7 +118,7 @@ unsigned mmn_graph_rep1::remove_leaves(vcl_vector<mmn_dependancy>& deps)
 //  For each leaf node removed, add one dependency object to
 //  the deps list.  On exit, this graph has no leaves.
 //  Returns number of leaves removed.
-unsigned mmn_graph_rep1::remove_all_leaves(vcl_vector<mmn_dependancy>& deps)
+unsigned mmn_graph_rep1::remove_all_leaves(std::vector<mmn_dependancy>& deps)
 {
   unsigned n_removed=0;
   unsigned nr=0;
@@ -136,7 +136,7 @@ unsigned mmn_graph_rep1::remove_all_leaves(vcl_vector<mmn_dependancy>& deps)
 //  For each node removed, add one dependency object to
 //  the deps list.
 //  Returns number of removed.
-unsigned mmn_graph_rep1::remove_pair_deps(vcl_vector<mmn_dependancy>& deps)
+unsigned mmn_graph_rep1::remove_pair_deps(std::vector<mmn_dependancy>& deps)
 {
   unsigned n_removed = 0;
   for (unsigned v0=0;v0<node_data_.size();++v0)
@@ -180,7 +180,7 @@ unsigned mmn_graph_rep1::remove_pair_deps(vcl_vector<mmn_dependancy>& deps)
 
 //: Compute list of all single and pairwise dependencies
 //  Return true if graph can be fully decomposed in this way
-bool mmn_graph_rep1::compute_dependancies(vcl_vector<mmn_dependancy>& deps, unsigned root_index)
+bool mmn_graph_rep1::compute_dependancies(std::vector<mmn_dependancy>& deps, unsigned root_index)
 {
   assert(root_index<node_data_.size());
 
@@ -201,7 +201,7 @@ bool mmn_graph_rep1::compute_dependancies(vcl_vector<mmn_dependancy>& deps, unsi
 
 //: Compute list of all single and pairwise dependencies
 //  Return true if graph can be fully decomposed in this way
-bool mmn_graph_rep1::compute_dependancies(vcl_vector<mmn_dependancy>& deps)
+bool mmn_graph_rep1::compute_dependancies(std::vector<mmn_dependancy>& deps)
 {
   // Indicate that root index is undefined.
   root_index_=node_data_.size()+1;

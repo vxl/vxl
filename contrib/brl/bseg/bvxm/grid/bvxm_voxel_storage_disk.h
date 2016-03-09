@@ -3,7 +3,9 @@
 //:
 // \file
 
-#include <vcl_string.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <string>
 #ifdef BVXM_USE_FSTREAM64
 #include <vil/vil_stream_fstream64.h>
 #else
@@ -38,8 +40,8 @@ template <class T>
 class bvxm_voxel_storage_disk : public bvxm_voxel_storage<T>
 {
  public:
-  bvxm_voxel_storage_disk(vcl_string storage_filename, vgl_vector_3d<unsigned int> grid_size);
-  bvxm_voxel_storage_disk(vcl_string storage_filename);
+  bvxm_voxel_storage_disk(std::string storage_filename, vgl_vector_3d<unsigned int> grid_size);
+  bvxm_voxel_storage_disk(std::string storage_filename);
 
   virtual ~bvxm_voxel_storage_disk();
 
@@ -55,7 +57,7 @@ class bvxm_voxel_storage_disk : public bvxm_voxel_storage<T>
   virtual void zero_observations();
  private:
 
-  vcl_string storage_fname_;
+  std::string storage_fname_;
 
   // input and output file stream
 #ifdef BVXM_USE_FSTREAM64
@@ -64,7 +66,7 @@ class bvxm_voxel_storage_disk : public bvxm_voxel_storage<T>
   mutable vil_stream_fstream *fio_;
 #endif //BVXM_USE_FSTREAM64
 
-  //vcl_fstream fio_;
+  //std::fstream fio_;
 
   // currently active slab starting index
   int active_slab_start_;

@@ -3,7 +3,9 @@
 // \file
 
 #include <bprb/bprb_func_process.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iostream>
 #include <bbgm/bbgm_image_of.h>
 #include <bbgm/bbgm_image_sptr.h>
 #include <bbgm/bbgm_update.h>
@@ -20,7 +22,7 @@
 bool bbgm_update_parzen_dist_image_process_cons(bprb_func_process& pro)
 {
   //input
-  vcl_vector<vcl_string> in_types(5), out_types(1);
+  std::vector<std::string> in_types(5), out_types(1);
   in_types[0]= "bbgm_image_sptr"; // the initial parzen distribution image
   in_types[1]= "vil_image_view_base_sptr"; // the update image
   in_types[2]= "float"; //bandwidth
@@ -46,7 +48,7 @@ bool bbgm_update_parzen_dist_image_process(bprb_func_process& pro)
 {
   // Sanity check
   if (pro.verify_inputs()){
-    vcl_cerr << "In bbgm_update_parzen_dist_image_process::execute() -"
+    std::cerr << "In bbgm_update_parzen_dist_image_process::execute() -"
              << " invalid inputs\n";
     return false;
   }
@@ -75,7 +77,7 @@ bool bbgm_update_parzen_dist_image_process(bprb_func_process& pro)
 
   if(np!=3)
     {
-      vcl_cout << "Parzen update only implemented for color\n";
+      std::cout << "Parzen update only implemented for color\n";
       return false;
     }
 

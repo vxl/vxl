@@ -6,7 +6,9 @@
 #include <boxm2/boxm2_block.h>
 #include <boxm2/boxm2_data.h>
 #include <boct/boct_bit_tree.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iostream>
 
 template <class F>
 void boxm2_data_serial_iterator(int data_buff_length,
@@ -15,7 +17,7 @@ void boxm2_data_serial_iterator(int data_buff_length,
     for (int i=0; i<data_buff_length; ++i)
     {
         // counter
-        if ( i%(data_buff_length/10) == 0 ) vcl_cout<<'.';
+        if ( i%(data_buff_length/10) == 0 ) std::cout<<'.';
         functor.process_cell(i);
     }
 }
@@ -37,7 +39,7 @@ void boxm2_data_leaves_serial_iterator(boxm2_block * blk,
         uchar16 tree  = (*blk_iter);
         boct_bit_tree curr_tree( (unsigned char*) tree.data_block(), 4);
 
-        if ( currIndex%counter_length == 0 ) vcl_cout<<'.';
+        if ( currIndex%counter_length == 0 ) std::cout<<'.';
 
         for (int i=0; i<585; i++)
         {

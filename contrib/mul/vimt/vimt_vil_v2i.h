@@ -19,7 +19,9 @@
 
 #include <vil/vil_file_format.h>
 #include <vimt/vimt_image_2d.h>
-// not used? #include <vcl_iosfwd.h>
+// not used? #include <vcl_compiler.h>
+#include <iostream>
+#include <iosfwd>
 
 
 //: Reader/Writer for v2i format images.

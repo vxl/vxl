@@ -9,7 +9,9 @@
 //  J.L. Mundy - November 12, 2003
 //
 //-----------------------------------------------------------------------------
-#include <vcl_vector.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <vector>
 #include <vnl/vnl_matrix.h>
 
 //-----------------------------------------------------------------------------
@@ -34,8 +36,8 @@ class bnl_parabolic_interpolator
   //private methods
   void fill_scatter_matrix();
   //members
-  vcl_vector<double> p_; //parameter values
-  vcl_vector<double> v_; //data values
+  std::vector<double> p_; //parameter values
+  std::vector<double> v_; //data values
   vnl_matrix<double> s_; //scatter matrix
   double p_ext_;//extremum values
 };

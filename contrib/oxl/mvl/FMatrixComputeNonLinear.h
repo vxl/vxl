@@ -16,7 +16,9 @@
 //
 //-----------------------------------------------------------------------------
 
-#include <vcl_vector.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <vector>
 #include <vnl/vnl_least_squares_function.h>
 #include <vgl/vgl_homg_point_2d.h>
 #include <mvl/AffineMetric.h>
@@ -35,7 +37,7 @@ class FMatrixComputeNonLinear : public vnl_least_squares_function
   // Calling this function results in the 36 parametrisations
   bool compute(FMatrix* F);
   // Calling this function results in the augmentation of the basis
-  bool compute_basis(FMatrix* F, vcl_vector<int> basis);
+  bool compute_basis(FMatrix* F, std::vector<int> basis);
 
   // The virtual function from vnl_levenberg_marquardt
   void f(const vnl_vector<double>& x, vnl_vector<double>& fx);
@@ -48,10 +50,10 @@ class FMatrixComputeNonLinear : public vnl_least_squares_function
   int p_, q_, r_;
   FMatrix F_orig_;
   bool one_;
-  vcl_vector<vgl_homg_point_2d<double> > basis1_;
-  vcl_vector<vgl_homg_point_2d<double> > basis2_;
-  vcl_vector<vgl_homg_point_2d<double> > points1_;
-  vcl_vector<vgl_homg_point_2d<double> > points2_;
+  std::vector<vgl_homg_point_2d<double> > basis1_;
+  std::vector<vgl_homg_point_2d<double> > basis2_;
+  std::vector<vgl_homg_point_2d<double> > points1_;
+  std::vector<vgl_homg_point_2d<double> > points2_;
 
   // Helpers-------------------------------------------------------------------
   void fmatrix_to_params(const FMatrix& F, vnl_vector<double>& params);

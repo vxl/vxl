@@ -16,7 +16,9 @@
 #include <vsl/vsl_binary_io.h>
 #include <vnl/io/vnl_io_vector_fixed.h>
 #include <vnl/io/vnl_io_matrix_fixed.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iostream>
 
 //: Binary save bsta_beta to stream.
 template <class T>
@@ -42,7 +44,7 @@ vsl_b_read(vsl_b_istream &is, bsta_beta<T>& g)
 //: Print summary
 template <class T>
 void
-vsl_print_summary(vcl_ostream &os, const bsta_beta<T>& g)
+vsl_print_summary(std::ostream &os, const bsta_beta<T>& g)
 {
   os << "Beta - alpha:"<<g.alpha()<<" beta:"<<g.beta();
 }

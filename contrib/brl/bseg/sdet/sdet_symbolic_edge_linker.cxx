@@ -8,8 +8,10 @@
 #include <sdet/sdet_sel.h>
 #include <sdet/sdet_curve_model.h>
 
-#include <vcl_vector.h>
-#include <vcl_string.h>
+#include <vector>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <string>
 #include <vul/vul_timer.h>
 #include <vil/vil_image_resource.h>
 
@@ -94,7 +96,7 @@ void sdet_symbolic_edge_linker::apply(sdet_edgemap_sptr edgemap) {
 
   double group_time = t.real() / 1000.0;
   t.mark();
-  vcl_cout << "Time taken to form groups and cunstruct curvelet map: " << group_time << " sec" << vcl_endl;
+  std::cout << "Time taken to form groups and cunstruct curvelet map: " << group_time << " sec" << std::endl;
 
   if (bFormLinkGraph_){
   //form a link graph
@@ -125,6 +127,6 @@ void sdet_symbolic_edge_linker::apply(sdet_edgemap_sptr edgemap) {
       edge_linker->Post_Process();
     }
     double link_time = t.real() / 1000.0;
-    vcl_cout << "Time taken to link: " << link_time << " sec" << vcl_endl;
+    std::cout << "Time taken to link: " << link_time << " sec" << std::endl;
   }
 }

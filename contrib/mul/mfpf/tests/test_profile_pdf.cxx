@@ -10,8 +10,10 @@
 //
 //=======================================================================
 
-#include <vcl_iostream.h>
-#include <vcl_sstream.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iostream>
+#include <sstream>
 #include <vsl/vsl_binary_loader.h>
 #include <mfpf/mfpf_add_all_loaders.h>
 #include <mfpf/mfpf_profile_pdf.h>
@@ -25,7 +27,7 @@
 
 void test_profile_pdf_search(mfpf_point_finder_builder& b)
 {
-  vcl_cout<<"Testing building and search."<<vcl_endl;
+  std::cout<<"Testing building and search."<<std::endl;
 
   mfpf_point_finder* pf = b.new_finder();
 
@@ -45,19 +47,19 @@ void test_profile_pdf_search(mfpf_point_finder_builder& b)
   b.add_example(image,p0,u);
   b.build(*pf);
 
-  vcl_cout<<"Built model: "<<pf<<vcl_endl;
+  std::cout<<"Built model: "<<pf<<std::endl;
 
   vgl_point_2d<double> new_p;
   vgl_vector_2d<double> new_u;
 
   pf->set_search_area(3,0);
 
-  vcl_cout<<"Value at p0-u: "<<pf->evaluate(image,p0-u,u)<<vcl_endl
-          <<"Value at p0  : "<<pf->evaluate(image,p0,u)<<vcl_endl
-          <<"Value at p0+u: "<<pf->evaluate(image,p0+u,u)<<vcl_endl;
+  std::cout<<"Value at p0-u: "<<pf->evaluate(image,p0-u,u)<<std::endl
+          <<"Value at p0  : "<<pf->evaluate(image,p0,u)<<std::endl
+          <<"Value at p0+u: "<<pf->evaluate(image,p0+u,u)<<std::endl;
 
   pf->search(image,p1,u,new_p,new_u);
-  vcl_cout<<"Found point: "<<new_p<<vcl_endl;
+  std::cout<<"Found point: "<<new_p<<std::endl;
 
   TEST_NEAR("Correct orientation",(new_u-u).length(),0.0,1e-6);
   TEST_NEAR("Correct location",(new_p-p0).length(),0.0,1e-6);
@@ -66,7 +68,7 @@ void test_profile_pdf_search(mfpf_point_finder_builder& b)
   pf->evaluate_region(image,p1,u,response);
   TEST("Response ni",response.image().ni(),7);
   TEST("Response nj",response.image().nj(),1);
-  vcl_cout<<"World2im: "<<response.world2im()<<vcl_endl;
+  std::cout<<"World2im: "<<response.world2im()<<std::endl;
 
   // Check that response has local minima in correct place
   vgl_point_2d<double> ip = response.world2im()(new_p);
@@ -77,7 +79,7 @@ void test_profile_pdf_search(mfpf_point_finder_builder& b)
   double r0 = vil_bilin_interp_safe(response.image(),ip.x(),ip.y());
   double r1 = vil_bilin_interp_safe(response.image(),ip.x()-1,ip.y());
   double r2 = vil_bilin_interp_safe(response.image(),ip.x()+1,ip.y());
-  vcl_cout<<r0<<','<<r1<<','<<r2<<vcl_endl;
+  std::cout<<r0<<','<<r1<<','<<r2<<std::endl;
   TEST("Local minima 1",r0<r1,true);
   TEST("Local minima 2",r0<r2,true);
 
@@ -86,7 +88,7 @@ void test_profile_pdf_search(mfpf_point_finder_builder& b)
 
 void test_profile_pdf()
 {
-  vcl_cout << "**************************\n"
+  std::cout << "**************************\n"
            << " Testing mfpf_profile_pdf\n"
            << "**************************\n";
 
@@ -102,7 +104,7 @@ void test_profile_pdf()
   //  Test configuring from stream
   // -------------------------------------------
   {
-    vcl_istringstream ss(
+    std::istringstream ss(
           "mfpf_profile_pdf_builder\n"
           "{\n"
           "  ilo: -3 ihi: 4\n"
@@ -110,14 +112,14 @@ void test_profile_pdf()
           "  pdf_builder: vpdfl_axis_gaussian_builder { }\n"
           "}\n");
 
-    vcl_auto_ptr<mfpf_point_finder_builder>
+    std::auto_ptr<mfpf_point_finder_builder>
             pf = mfpf_point_finder_builder::create_from_stream(ss);
 
     TEST("Correct Point Finder Builder", pf->is_a(),"mfpf_profile_pdf_builder");
     if (pf->is_a()=="mfpf_profile_pdf_builder")
     {
       mfpf_profile_pdf_builder &a_pf = static_cast<mfpf_profile_pdf_builder&>(*pf);
-      vcl_cout<<a_pf<<vcl_endl;
+      std::cout<<a_pf<<std::endl;
       TEST("search_ni configured",a_pf.search_ni(),17);
       TEST("ilo configured",a_pf.ilo(),-3);
       TEST("ihi configured",a_pf.ihi(),4);

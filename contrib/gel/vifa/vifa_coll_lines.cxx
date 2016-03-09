@@ -1,6 +1,8 @@
 // This is gel/vifa/vifa_coll_lines.cxx
 #include "vifa_coll_lines.h"
-#include <vcl_cmath.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <cmath>
 #include <vnl/vnl_math.h>
 #include <vsol/vsol_point_2d.h>
 #include <vtol/vtol_face.h>
@@ -18,7 +20,7 @@ vifa_coll_lines::vifa_coll_lines(vtol_edge_2d_sptr  e,
 
   hypothesized_line_ = new imp_line(p1->get_p(), p2->get_p());
   contributors_.push_back(e);
-  projected_length_cutoff_ = vcl_cos(cutoff_angle_deg * vnl_math::pi_over_180);
+  projected_length_cutoff_ = std::cos(cutoff_angle_deg * vnl_math::pi_over_180);
   endpt_distance_ = endpt_distance;
   id_ = vifa_coll_lines::serial_num_++;
   discard_flag_ = discard_flag;
@@ -97,8 +99,8 @@ face_list* vifa_coll_lines::get_contributor_faces(void)
   return ret;
 }
 
-void vifa_coll_lines::lms_fit(const vcl_vector<double>&  x,
-                              const vcl_vector<double>&  y,
+void vifa_coll_lines::lms_fit(const std::vector<double>&  x,
+                              const std::vector<double>&  y,
                               double&                    A,
                               double&                    B,
                               double&                    C)
@@ -109,8 +111,8 @@ void vifa_coll_lines::lms_fit(const vcl_vector<double>&  x,
   double  sum_y = 0.0;
   double  n = 0.0;
 
-  vcl_vector<double>::const_iterator  xi = x.begin();
-  vcl_vector<double>::const_iterator  yi = y.begin();
+  std::vector<double>::const_iterator  xi = x.begin();
+  std::vector<double>::const_iterator  yi = y.begin();
   for (; xi != x.end(); ++xi, ++yi)
   {
     sum_x_sq += (*xi * (*xi));
@@ -164,10 +166,10 @@ double vifa_coll_lines::spanning_length(vgl_point_2d<double>&  p1,
 
       hypothesized_line_->project_2d_pt(v->x(), v->y(), x, y);
 
-      //vcl_cout << "    ---> " << v->x() << ", " << v->y() <<
-      //  " projects to " << x << ", " << y << vcl_endl;
+      //std::cout << "    ---> " << v->x() << ", " << v->y() <<
+      //  " projects to " << x << ", " << y << std::endl;
 
-      double  d = vcl_sqrt((x * x) + (y * y));
+      double  d = std::sqrt((x * x) + (y * y));
       if (d > max_d)
       {
         max_d = d;
@@ -177,7 +179,7 @@ double vifa_coll_lines::spanning_length(vgl_point_2d<double>&  p1,
     }
   }
 
-  //vcl_cout << "  -> span: p1 is " << max_x << " , " << max_y << " ( " << max_d << " )\n";
+  //std::cout << "  -> span: p1 is " << max_x << " , " << max_y << " ( " << max_d << " )\n";
 
   min_d = max_d;
   for (edge_2d_iterator e = contributors_.begin();
@@ -194,12 +196,12 @@ double vifa_coll_lines::spanning_length(vgl_point_2d<double>&  p1,
 
       hypothesized_line_->project_2d_pt(v->x(), v->y(), x, y);
 
-      //vcl_cout << "    ---> " << v->x() << ", " << v->y() <<
-      //  " projects to " << x << ", " << y << vcl_endl;
+      //std::cout << "    ---> " << v->x() << ", " << v->y() <<
+      //  " projects to " << x << ", " << y << std::endl;
 
       double  dx = x - max_x;
       double  dy = y - max_y;
-      double  d = vcl_sqrt((dx * dx) + (dy * dy));
+      double  d = std::sqrt((dx * dx) + (dy * dy));
 
       if (d > min_d)
       {
@@ -210,14 +212,14 @@ double vifa_coll_lines::spanning_length(vgl_point_2d<double>&  p1,
     }
   }
 
-  //vcl_cout << "  -> span: p2 is " << min_x << " , " << min_y << " ( " << min_d << " )\n";
+  //std::cout << "  -> span: p2 is " << min_x << " , " << min_y << " ( " << min_d << " )\n";
 
   double  dx = max_x - min_x;
   double  dy = max_y - min_y;
   p1 = vgl_point_2d<double>(min_x, min_y);
   p2 = vgl_point_2d<double>(max_x, max_y);
 
-  return vcl_sqrt((dx * dx) + (dy * dy));
+  return std::sqrt((dx * dx) + (dy * dy));
 }
 
 double vifa_coll_lines::support_length(void)
@@ -267,15 +269,15 @@ double vifa_coll_lines::get_projected_length(const vtol_edge_2d&  e,
 
   double  dx = x2 - x1;
   double  dy = y2 - y1;
-  double  midpt_dist = vcl_sqrt((dx * dx) + (dy * dy));
+  double  midpt_dist = std::sqrt((dx * dx) + (dy * dy));
 
   dx = x1 - v1->x();
   dy = y1 - v1->y();
-  v1_dist = vcl_sqrt((dx * dx) + (dy * dy));
+  v1_dist = std::sqrt((dx * dx) + (dy * dy));
 
   dx = x2 - v2->x();
   dy = y2 - v2->y();
-  v2_dist = vcl_sqrt((dx * dx) + (dy * dy));
+  v2_dist = std::sqrt((dx * dx) + (dy * dy));
 
   return midpt_dist;
 }
@@ -294,7 +296,7 @@ double vifa_coll_lines::get_midpt_dist(const vtol_edge_2d&  e,
 
   double  mid_dx = mx - midx;
   double  mid_dy = my - midy;
-  return vcl_sqrt((mid_dx * mid_dx) + (mid_dy * mid_dy));
+  return std::sqrt((mid_dx * mid_dx) + (mid_dy * mid_dy));
 }
 
 
@@ -323,8 +325,8 @@ double vifa_coll_lines::get_measure(const vtol_edge_2d&  e,
 
 void vifa_coll_lines::fit_line(void)
 {
-  vcl_vector<double>  x;
-  vcl_vector<double>  y;
+  std::vector<double>  x;
+  std::vector<double>  y;
   double              A;
   double              B;
   double              C;

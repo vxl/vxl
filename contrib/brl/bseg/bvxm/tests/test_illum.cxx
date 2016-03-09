@@ -3,21 +3,23 @@
 #include <bsta/bsta_histogram.h>
 #include <bsta/io/bsta_io_histogram.h>
 #include <vsl/vsl_binary_io.h>
-#include <vcl_cstdlib.h> // for rand()
+#include <vcl_compiler.h>
+#include <iostream>
+#include <cstdlib> // for rand()
 
 static void test_illum()
 {
   START("bvxm illum utilities test");
 #if 0
-  vcl_vector<vcl_vector<vnl_matrix<float> > > nhds;
+  std::vector<std::vector<vnl_matrix<float> > > nhds;
   bool good = bvxm_illum_util::load_surface_nhbds("E:/BaghdadIlum/white-side.txt",
                                                   nhds);
   // assume that each surface point has the same number of neighborhoods
   unsigned n_images = nhds[0].size();
   unsigned n_surf_pts = nhds.size();
-  vcl_vector<vcl_vector<float> > mean_intensities(n_images);
+  std::vector<std::vector<float> > mean_intensities(n_images);
   for (unsigned i = 0; i<n_images; ++i) {
-    vcl_vector<float> ints(n_surf_pts);
+    std::vector<float> ints(n_surf_pts);
     for (unsigned s = 0; s<n_surf_pts; ++s) {
       vnl_matrix<float> mat = nhds[s][i];
       float mean = mat.mean();
@@ -27,8 +29,8 @@ static void test_illum()
   }
   for (unsigned i = 0; i<n_images; ++i) {
     for (unsigned s = 0; s<n_surf_pts; ++s)
-      vcl_cout << mean_intensities[i][s] << ' ';
-    vcl_cout << '\n';
+      std::cout << mean_intensities[i][s] << ' ';
+    std::cout << '\n';
   }
 #endif
 #if 0
@@ -39,7 +41,7 @@ static void test_illum()
   vsl_b_read(is, n);
   if (!n)
     return;
-  vcl_vector<bsta_histogram<float> > hists;
+  std::vector<bsta_histogram<float> > hists;
   for (unsigned i = 0; i<n; ++i) {
     bsta_histogram<float> hist;
     vsl_b_read(is, hist);
@@ -51,7 +53,7 @@ static void test_illum()
     float vmin = hists[i].avg_bin_value(hists[i].low_bin());
     float vlow = hists[i].value_with_area_below(frac);
     float vhigh = hists[i].value_with_area_above(3*frac);
-    vcl_cout << vmin << ' ' << vlow << ' ' << vhigh << ' ' << '\n';
+    std::cout << vmin << ' ' << vlow << ' ' << vhigh << ' ' << '\n';
   }
 #endif
   // test model fitting
@@ -59,7 +61,7 @@ static void test_illum()
                    0.507035684,0.288599204,0.957025019,0.651967156,
                    0.850692165,0.668889453,0.630201033,0.510793676,
                    0.72214914,0.796109,0.754603,0.858133993};
-  vcl_vector<double> intensities(inten, inten+16);
+  std::vector<double> intensities(inten, inten+16);
 
   vnl_double_3 ill_dirs[]={
     vnl_double_3(0.34476,-0.30717,0.8870),
@@ -79,7 +81,7 @@ static void test_illum()
     vnl_double_3(0.271353,-0.17689,0.946085),
     vnl_double_3(0.150315903,-0.803200724,0.576431892)
   };
-  vcl_vector<vnl_double_3> illumination_dirs(ill_dirs, ill_dirs+16);
+  std::vector<vnl_double_3> illumination_dirs(ill_dirs, ill_dirs+16);
 #if 0
   bvxm_illum_util::load_illumination_dirs("illum_dirs.txt", illumination_dirs);
 #endif
@@ -89,7 +91,7 @@ static void test_illum()
                                           intensities,
                                           model_params,
                                           fitting_error);
-  vcl_cout << "Model Params: " << model_params << '\n'
+  std::cout << "Model Params: " << model_params << '\n'
            << "Fitting Error: " << fitting_error << '\n';
   TEST_NEAR("test lambertian model", fitting_error , 0.137807, 1.0e-6);
 }

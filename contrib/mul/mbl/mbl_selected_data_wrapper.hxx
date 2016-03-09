@@ -6,8 +6,10 @@
 
 #include "mbl_selected_data_wrapper.h"
 
-#include <vcl_iostream.h>
-#include <vcl_cstdlib.h>
+#include <iostream>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <cstdlib>
 #include <vcl_cassert.h>
 
 //: Default constructor.
@@ -20,7 +22,7 @@ mbl_selected_data_wrapper<T>::mbl_selected_data_wrapper():
 //: Constructor.
 template<class T>
 mbl_selected_data_wrapper<T>::mbl_selected_data_wrapper(
-  const mbl_data_wrapper<T>& data, const vcl_vector<unsigned> &selection)
+  const mbl_data_wrapper<T>& data, const std::vector<unsigned> &selection)
   : data_(0)
 {
   set(data, selection);
@@ -37,7 +39,7 @@ mbl_selected_data_wrapper<T>::mbl_selected_data_wrapper(
 
 template<class T>
 void mbl_selected_data_wrapper<T>::set(const mbl_data_wrapper<T>& data,
-                                       const vcl_vector<unsigned> &selection)
+                                       const std::vector<unsigned> &selection)
 {
   delete data_;
   data_ = data.clone();
@@ -130,24 +132,24 @@ void mbl_selected_data_wrapper<T>::set_index(unsigned long n)
   assert(n != ((unsigned)-1));
   if (n>=size())
   {
-    vcl_cerr<<"mbl_selected_data_wrapper<T>::set_index(n) :\n"
-            <<"  n = "<<n<<" not in range 0<=n<"<<size()<<vcl_endl;
-    vcl_abort();
+    std::cerr<<"mbl_selected_data_wrapper<T>::set_index(n) :\n"
+            <<"  n = "<<n<<" not in range 0<=n<"<<size()<<std::endl;
+    std::abort();
   }
   index_=n;
   data_->set_index(selection_[index_]);
 }
 
 template <class T>
-bool mbl_selected_data_wrapper<T>::is_class(vcl_string const& s) const
+bool mbl_selected_data_wrapper<T>::is_class(std::string const& s) const
 {
   return s==is_a(); // no ref to parent's is_class() since that is pure virtual
 }
 
 
 #define MBL_SELECTED_DATA_WRAPPER_INSTANTIATE(T) \
-VCL_DEFINE_SPECIALIZATION vcl_string mbl_selected_data_wrapper<T >::is_a() const \
-{ return vcl_string("mbl_selected_data_wrapper<" #T ">"); } \
+VCL_DEFINE_SPECIALIZATION std::string mbl_selected_data_wrapper<T >::is_a() const \
+{ return std::string("mbl_selected_data_wrapper<" #T ">"); } \
 template class mbl_selected_data_wrapper< T >
 
 #endif // mbl_selected_data_wrapper_hxx_

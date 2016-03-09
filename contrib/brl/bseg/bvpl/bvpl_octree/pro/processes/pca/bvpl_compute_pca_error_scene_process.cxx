@@ -14,7 +14,9 @@
 
 #include <vul/vul_file.h>
 
-#include <vcl_cstdlib.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <cstdlib>
 
 // global variables
 namespace bvpl_compute_pca_error_scene_process_globals
@@ -29,13 +31,13 @@ bool bvpl_compute_pca_error_scene_process_cons(bprb_func_process& pro)
 {
   using namespace bvpl_compute_pca_error_scene_process_globals ;
 
-  vcl_vector<vcl_string> input_types_(n_inputs_);
+  std::vector<std::string> input_types_(n_inputs_);
   unsigned i = 0;
   input_types_[i++] = "vcl_string" ;  //directory path
   input_types_[i++] = "bvpl_pca_error_scenes_sptr";
   input_types_[i++] = "unsigned";  //num_components
 
-  vcl_vector<vcl_string> output_types_(n_outputs_);
+  std::vector<std::string> output_types_(n_outputs_);
 
   return pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
 }
@@ -70,7 +72,7 @@ bool bvpl_compute_pca_error_scene_process(bprb_func_process& pro)
 
   //get inputs
   unsigned i = 0;
-  vcl_string pca_dir = pro.get_input<vcl_string>(i++);
+  std::string pca_dir = pro.get_input<std::string>(i++);
   bvpl_pca_error_scenes_sptr pca_error_scenes = pro.get_input<bvpl_pca_error_scenes_sptr>(i++);
   unsigned num_components = pro.get_input<unsigned>(i++);
 
@@ -88,7 +90,7 @@ bool bvpl_compute_pca_error_scene_process(bprb_func_process& pro)
   pca_extractor->load_all_scene_blocks();
   error_scene->read_all_blocks();
   unsigned num_threads = 0;
-  vcl_vector<vgl_point_3d<int> > block_indices;
+  std::vector<vgl_point_3d<int> > block_indices;
   for (unsigned block_i = 0; block_i < num_blocks.x(); ++block_i) {
     for (unsigned block_j = 0; block_j < num_blocks.y(); ++block_j) {
       for (unsigned block_k = 0; block_k < num_blocks.z(); ++block_k) {
@@ -111,8 +113,8 @@ bool bvpl_compute_pca_error_scene_process(bprb_func_process& pro)
     //pthread_detach(thread_id[i]);
     if (rc)
     {
-      vcl_cerr << "Error creating pthread, return code: "<<rc<<'\n';
-      vcl_exit(-1);
+      std::cerr << "Error creating pthread, return code: "<<rc<<'\n';
+      std::exit(-1);
     }
   }
 #if 0

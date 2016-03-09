@@ -8,7 +8,9 @@
 #include <vtol/vtol_face.h>
 #include <vtol/vtol_macros.h>
 #include <vtol/vtol_list_functions.h>
-#include <vcl_algorithm.h> // for vcl_find()
+#include <vcl_compiler.h>
+#include <iostream>
+#include <algorithm> // for std::find()
 #include <vcl_cassert.h>
 
 //***************************************************************************
@@ -29,44 +31,44 @@ vtol_vertex::~vtol_vertex()
 //*
 
 //: Returns a list of Vertices which only contains a pointer to itself.
-vcl_vector<vtol_vertex*> *vtol_vertex::compute_vertices()
+std::vector<vtol_vertex*> *vtol_vertex::compute_vertices()
 {
   LIST_SELF(vtol_vertex);
 }
 
 //: Returns a list of ZeroChains that contain the vertex. This is the vertex superiors list.
-vcl_vector<vtol_zero_chain*>* vtol_vertex::compute_zero_chains()
+std::vector<vtol_zero_chain*>* vtol_vertex::compute_zero_chains()
 {
   SEL_SUP(vtol_zero_chain,compute_zero_chains);
 }
 
 
 //: Returns a list of Edges which contain the vertex.
- vcl_vector<vtol_edge*>* vtol_vertex::compute_edges()
+ std::vector<vtol_edge*>* vtol_vertex::compute_edges()
 {
   SEL_SUP(vtol_edge,compute_edges);
 }
 
 //: Returns a list of OneChains which contain the vertex.
-vcl_vector<vtol_one_chain*>* vtol_vertex::compute_one_chains()
+std::vector<vtol_one_chain*>* vtol_vertex::compute_one_chains()
 {
   SEL_SUP(vtol_one_chain,compute_one_chains);
 }
 
 //: Returns a list of Faces which contain the vertex.
- vcl_vector<vtol_face*>* vtol_vertex::compute_faces()
+ std::vector<vtol_face*>* vtol_vertex::compute_faces()
 {
   SEL_SUP(vtol_face,compute_faces);
 }
 
 //: Returns a list of TwoChains which contain the vertex.
-  vcl_vector<vtol_two_chain*>* vtol_vertex::compute_two_chains()
+  std::vector<vtol_two_chain*>* vtol_vertex::compute_two_chains()
 {
   SEL_SUP(vtol_two_chain,compute_two_chains);
 }
 
 //: Returns a list of Blocks which contain the vertex.
-vcl_vector<vtol_block*>* vtol_vertex::compute_blocks()
+std::vector<vtol_block*>* vtol_vertex::compute_blocks()
 {
   SEL_SUP(vtol_block,compute_blocks);
 }
@@ -77,15 +79,15 @@ vcl_vector<vtol_block*>* vtol_vertex::compute_blocks()
 //*
 
 //: This method outputs a simple text representation of the vertex including its address in memory.
-void vtol_vertex::print(vcl_ostream &strm) const
+void vtol_vertex::print(std::ostream &strm) const
 {
   strm<< "<vtol_vertex " << (void const *)this<<"> with id "
-      << get_id() << vcl_endl;
+      << get_id() << std::endl;
 }
 
 
 //: This method outputs a detailed description of the vertex including the inferiors and superiors.
-void vtol_vertex::describe(vcl_ostream &strm,
+void vtol_vertex::describe(std::ostream &strm,
                            int blanking) const
 {
   for (int i=0; i<blanking; ++i) strm << ' ';
@@ -117,7 +119,7 @@ bool vtol_vertex::is_connected(vtol_vertex_sptr const& v2) const
 bool vtol_vertex::is_endpoint(vtol_edge_sptr const& e) const
 {
   edge_list e_list; this->edges(e_list);
-  return vcl_find(e_list.begin(),e_list.end(),e)!=e_list.end();
+  return std::find(e_list.begin(),e_list.end(),e)!=e_list.end();
 }
 
 //---------------------------------------------------------------------------
@@ -184,12 +186,12 @@ void vtol_vertex::explore_vertex(vertex_list &verts)
       vv=e->v1();
     else
     {
-      vcl_cerr << "Explore vtol_vertex: shouldn't get this\n";
+      std::cerr << "Explore vtol_vertex: shouldn't get this\n";
       assert(false);
       continue;
     }
 
-    if (vcl_find(verts.begin(),verts.end(),vv)==verts.end())
+    if (std::find(verts.begin(),verts.end(),vv)==verts.end())
     {
       verts.push_back(vv);
       vv->explore_vertex(verts);

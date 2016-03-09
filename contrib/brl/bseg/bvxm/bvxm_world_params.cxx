@@ -31,7 +31,7 @@ bvxm_world_params::~bvxm_world_params()
 //---------------------------------------------------
 void
 bvxm_world_params::set_params(
-  const vcl_string& model_dir,
+  const std::string& model_dir,
   const vgl_point_3d<float>& corner,
   const vgl_vector_3d<unsigned int>& num_voxels,
   float voxel_length,
@@ -118,37 +118,37 @@ void bvxm_world_params::b_read(vsl_b_istream & is)
       vsl_b_read(is, base_z_);
       break;
      default:
-      vcl_cout << "In bvxm_world_params::b_read() - Version not supported\n";
+      std::cout << "In bvxm_world_params::b_read() - Version not supported\n";
     }
   }
 }
 
 //: output world_params to stream
-vcl_ostream&  operator << (vcl_ostream& os, bvxm_world_params const& params)
+std::ostream&  operator << (std::ostream& os, bvxm_world_params const& params)
 {
   if (!params.lvcs_) {
-    os << params.model_dir_ << vcl_endl
-       << params.corner_.x() << ' ' << params.corner_.y() << ' ' << params.corner_.z() << vcl_endl
-       << params.num_voxels_.x() << ' ' << params.num_voxels_.y() << ' ' << params.num_voxels_.z() << vcl_endl
-       << params.voxel_length_ << vcl_endl
-       << params.min_occupancy_prob_ << vcl_endl
-       << params.max_occupancy_prob_ << vcl_endl;
+    os << params.model_dir_ << std::endl
+       << params.corner_.x() << ' ' << params.corner_.y() << ' ' << params.corner_.z() << std::endl
+       << params.num_voxels_.x() << ' ' << params.num_voxels_.y() << ' ' << params.num_voxels_.z() << std::endl
+       << params.voxel_length_ << std::endl
+       << params.min_occupancy_prob_ << std::endl
+       << params.max_occupancy_prob_ << std::endl;
   }
   else {
-    os << params.model_dir_ << vcl_endl
-       << params.corner_.x() << ' ' << params.corner_.y() << ' ' << params.corner_.z() << vcl_endl
-       << params.num_voxels_.x() << ' ' << params.num_voxels_.y() << ' ' << params.num_voxels_.z() << vcl_endl
-       << params.voxel_length_ << vcl_endl
-       << *(params.lvcs_) << vcl_endl
-       << params.min_occupancy_prob_ << vcl_endl
-       << params.max_occupancy_prob_ << vcl_endl;
+    os << params.model_dir_ << std::endl
+       << params.corner_.x() << ' ' << params.corner_.y() << ' ' << params.corner_.z() << std::endl
+       << params.num_voxels_.x() << ' ' << params.num_voxels_.y() << ' ' << params.num_voxels_.z() << std::endl
+       << params.voxel_length_ << std::endl
+       << *(params.lvcs_) << std::endl
+       << params.min_occupancy_prob_ << std::endl
+       << params.max_occupancy_prob_ << std::endl;
   }
 
   return os;
 }
 
 //: input world_params from stream
-vcl_istream& operator >> (vcl_istream& is, bvxm_world_params &params)
+std::istream& operator >> (std::istream& is, bvxm_world_params &params)
 {
   is >> params.model_dir_;
   is >> params.corner_;
@@ -162,11 +162,11 @@ vcl_istream& operator >> (vcl_istream& is, bvxm_world_params &params)
 }
 
 //: write as xml file to be passed to bvxm_create_world process
-void bvxm_world_params::write_xml(vcl_string const& filename, vcl_string const& lvcs_filename)
+void bvxm_world_params::write_xml(std::string const& filename, std::string const& lvcs_filename)
 {
-  vcl_ofstream ofs(filename.c_str());
+  std::ofstream ofs(filename.c_str());
   if (!ofs) {
-    vcl_cerr << "In bvxm_world_params::write_xml() -- cannot open file:" << filename << '\n';
+    std::cerr << "In bvxm_world_params::write_xml() -- cannot open file:" << filename << '\n';
     return;
   }
   ofs << "<?xml version=\"1.0\" encoding=\"utf-8\" ?>\n"

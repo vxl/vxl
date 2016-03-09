@@ -15,15 +15,17 @@
 //     Andrew W. Fitzgibbon, Oxford RRG, 17 Sep 96
 //-----------------------------------------------------------------------------
 
-#include <vcl_functional.h>
-#include <vcl_map.h>
-#include <vcl_cstdlib.h> // for vcl_abort()
+#include <functional>
+#include <map>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <cstdlib> // for std::abort()
 class PairMatchMulti;
 
 // conceptually a list of tuples (index1, index2, strength)
-class vcl_multimap_uint_uint : public vcl_multimap<unsigned,unsigned, vcl_less<unsigned> >
+class vcl_multimap_uint_uint : public std::multimap<unsigned,unsigned, std::less<unsigned> >
 {
-  typedef vcl_multimap<unsigned, unsigned, vcl_less<unsigned> > base;
+  typedef std::multimap<unsigned, unsigned, std::less<unsigned> > base;
  public:
   iterator insert(unsigned int key, unsigned int value);
   void clear();
@@ -64,7 +66,7 @@ class PairMatchMultiIterator
   int get_i2() const { return (*first_).second; }
 
  private:
-  PairMatchMultiIterator operator++ (int /*postfix*/) { vcl_abort(); return *this; }
+  PairMatchMultiIterator operator++ (int /*postfix*/) { std::abort(); return *this; }
 };
 
 #endif // PairMatchMultiIterator_h_

@@ -7,9 +7,11 @@
 // \author Louise Butcher
 
 #include "mvl2_video_reader.h"
-#include <vcl_cstdlib.h> // for vcl_getenv()
-#include <vcl_algorithm.h> // for vcl_find()
-#include <vcl_fstream.h>
+#include <cstdlib> // for std::getenv()
+#include <vcl_compiler.h>
+#include <iostream>
+#include <algorithm> // for std::find()
+#include <fstream>
 
 mvl2_video_reader::mvl2_video_reader()
 {
@@ -20,54 +22,54 @@ mvl2_video_reader::~mvl2_video_reader()
   if (is_initialized()) uninitialize();
 }
 
-vcl_string mvl2_video_reader::is_a() const
+std::string mvl2_video_reader::is_a() const
 {
-  return vcl_string("mvl2_video_reader");
+  return std::string("mvl2_video_reader");
 }
 
-vcl_vector<vcl_string> mvl2_video_reader::load_configs(vcl_string filename)
+std::vector<std::string> mvl2_video_reader::load_configs(std::string filename)
 {
   config_names_.clear();
   config_sizes_.clear();
   config_strings_.clear();
   config_filenames_.clear();
 
-  vcl_string config_name("Default");
-  vcl_pair<int,int> config_size(320,240);
-  vcl_string config_string("");
-  vcl_string config_filename("");
+  std::string config_name("Default");
+  std::pair<int,int> config_size(320,240);
+  std::string config_string("");
+  std::string config_filename("");
 
   config_names_.push_back(config_name);
   config_sizes_.push_back(config_size);
   config_strings_.push_back(config_string);
   config_filenames_.push_back(config_filename);
 
-  vcl_ifstream* config_file=new vcl_ifstream(filename.c_str());
+  std::ifstream* config_file=new std::ifstream(filename.c_str());
   if (!(*config_file))
   {
     const char* val;
-    if ((val=vcl_getenv("VIDL2RC"))==VXL_NULLPTR)
+    if ((val=std::getenv("VIDL2RC"))==VXL_NULLPTR)
     {
-      vcl_cerr << "VIDL2RC environment variable not defined.\n"
+      std::cerr << "VIDL2RC environment variable not defined.\n"
                << "Cannot find configuration file for video input.\n";
       return config_names_;
     }
-    config_file=new vcl_ifstream(val);
+    config_file=new std::ifstream(val);
     if (!(*config_file))
     {
-      vcl_cerr << "Cannot find configuration file for video input.\n";
+      std::cerr << "Cannot find configuration file for video input.\n";
       return config_names_;
     }
   }
 
   while (!config_file->eof())
   {
-    config_name=vcl_string("");
+    config_name=std::string("");
 
     *config_file >> config_name >> config_size.first >> config_size.second;
     *config_file >> config_string >> config_filename;
 
-    if (config_name!=vcl_string(""))
+    if (config_name!=std::string(""))
     {
       config_names_.push_back(config_name);
       config_sizes_.push_back(config_size);
@@ -81,25 +83,25 @@ vcl_vector<vcl_string> mvl2_video_reader::load_configs(vcl_string filename)
 
 void mvl2_video_reader::display_configs()
 {
-  vcl_cout << vcl_endl
+  std::cout << std::endl
            << "Video configurations :\n"
            << "======================\n";
   for (unsigned int i=0; i<config_names_.size(); ++i)
   {
-    vcl_cout << "Configuration " << i<< vcl_endl
+    std::cout << "Configuration " << i<< std::endl
              << "----------------\n"
-             << "name = " <<   config_names_[i] << vcl_endl
+             << "name = " <<   config_names_[i] << std::endl
              << "size = " <<   config_sizes_[i].first << 'x'
-             << config_sizes_[i].second << vcl_endl
-             << "options = " <<   config_strings_[i] << vcl_endl
-             << "filename = " <<   config_filenames_[i] << vcl_endl
-             << vcl_endl;
+             << config_sizes_[i].second << std::endl
+             << "options = " <<   config_strings_[i] << std::endl
+             << "filename = " <<   config_filenames_[i] << std::endl
+             << std::endl;
   }
 }
 
-bool mvl2_video_reader::use_config(vcl_string configname)
+bool mvl2_video_reader::use_config(std::string configname)
 {
-  vcl_size_t position=vcl_find(config_names_.begin(), config_names_.end(), configname) - config_names_.begin();
+  std::size_t position=std::find(config_names_.begin(), config_names_.end(), configname) - config_names_.begin();
   if (position<config_names_.size())
   {
     return initialize(config_sizes_[position].first,

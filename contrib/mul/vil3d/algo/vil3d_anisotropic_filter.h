@@ -15,7 +15,9 @@
 #include <vil3d/vil3d_switch_axes.h>
 #include <vil3d/vil3d_convert.h>
 #include <vil3d/vil3d_print.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iostream>
 
 
 //========================================================================
@@ -36,7 +38,7 @@ template <class T>
 inline
 void vil3d_anisotropic_filter(const vil3d_image_view<T>& src,
                               vil3d_image_view<float>& dest,
-                              const vgl_vector_3d<vcl_vector<double> >& filter,
+                              const vgl_vector_3d<std::vector<double> >& filter,
                               const vgl_vector_3d<unsigned>& c,
                               const vgl_vector_3d<int>& lo,
                               const vgl_vector_3d<int>& hi,
@@ -64,26 +66,26 @@ void vil3d_anisotropic_filter(const vil3d_image_view<T>& src,
   //
 #ifdef PERFORM_TESTING
   //
-  vcl_cout << "Source image:\n";
-  vil3d_print_all(vcl_cout, src);
+  std::cout << "Source image:\n";
+  vil3d_print_all(std::cout, src);
 
-  vcl_cout << "\n\nWork1 image:\n";
-  vil3d_print_all(vcl_cout, work1);
+  std::cout << "\n\nWork1 image:\n";
+  vil3d_print_all(std::cout, work1);
   double sum1 = 0;
   vil3d_math_sum(sum1, work1, 0);
-  vcl_cout << "\nSum1= " << sum1 << vcl_endl;
+  std::cout << "\nSum1= " << sum1 << std::endl;
 
-  vcl_cout << "\n\nWork2 image:\n";
-  vil3d_print_all(vcl_cout, work2);
+  std::cout << "\n\nWork2 image:\n";
+  vil3d_print_all(std::cout, work2);
   double sum2 = 0;
   vil3d_math_sum(sum2, work2, 0);
-  vcl_cout << "\nSum2= " << sum2 << vcl_endl;
+  std::cout << "\nSum2= " << sum2 << std::endl;
 
-  vcl_cout << "\n\nDest image:\n";
-  vil3d_print_all(vcl_cout, dest);
+  std::cout << "\n\nDest image:\n";
+  vil3d_print_all(std::cout, dest);
   double sumd = 0;
   vil3d_math_sum(sumd, dest, 0);
-  vcl_cout << "\nSumd= " << sumd << vcl_endl;
+  std::cout << "\nSumd= " << sumd << std::endl;
   //
 #endif // PERFORM_TESTING
   //
@@ -101,7 +103,7 @@ void vil3d_anisotropic_filter(const vil3d_image_view<T>& src,
 //========================================================================
 inline
 void vil3d_generate_gaussian_filters(const vgl_vector_3d<double>& sd,
-                                     vgl_vector_3d<vcl_vector<double> >& filter,
+                                     vgl_vector_3d<std::vector<double> >& filter,
                                      vgl_vector_3d<unsigned>& c,
                                      vgl_vector_3d<int>& lo,
                                      vgl_vector_3d<int>& hi)
@@ -121,11 +123,11 @@ void vil3d_generate_gaussian_filters(const vgl_vector_3d<double>& sd,
   // Is nt even?
   if (nt.x()%2==0 || nt.y()%2==0 || nt.z()%2==0)
   {
-    vcl_cout << "------------------------------------------------------\n"
+    std::cout << "------------------------------------------------------\n"
              << "Warning: filter size is even: this may cause problems.\n"
              << nt.x() << '\t' << nt.y()<< '\t' << nt.z() << '\n'
              << "------------------------------------------------------\n"
-             << vcl_endl;
+             << std::endl;
   }
 
 
@@ -176,7 +178,7 @@ void vil3d_anisotropic_gaussian_filter(const vil3d_image_view<T>& src,
                                        vil3d_image_view<float>& work3)
 {
   // Generate Gaussian filters suitable for each dimension
-  vgl_vector_3d<vcl_vector<double> > filter;
+  vgl_vector_3d<std::vector<double> > filter;
   vgl_vector_3d<unsigned> c;
   vgl_vector_3d<int> lo;
   vgl_vector_3d<int> hi;
@@ -201,20 +203,20 @@ void vil3d_anisotropic_gaussian_filter(const vil3d_image_view<T>& src,
   //
 #ifdef PERFORM_TESTING
   //
-  vcl_cout << "Source image:\n";
-  vil3d_print_all(vcl_cout, src);
+  std::cout << "Source image:\n";
+  vil3d_print_all(std::cout, src);
 
-  vcl_cout << "\n\nWork3 image:\n";
-  vil3d_print_all(vcl_cout, work3);
+  std::cout << "\n\nWork3 image:\n";
+  vil3d_print_all(std::cout, work3);
   double sum3 = 0;
   vil3d_math_sum(sum3, work3, 0);
-  vcl_cout << "\nSum3= " << sum3 << vcl_endl;
+  std::cout << "\nSum3= " << sum3 << std::endl;
 
-  vcl_cout << "\n\nDest image:\n";
-  vil3d_print_all(vcl_cout, dest);
+  std::cout << "\n\nDest image:\n";
+  vil3d_print_all(std::cout, dest);
   double sumd = 0;
   vil3d_math_sum(sumd, dest, 0);
-  vcl_cout << "\nSumd= " << sumd << vcl_endl;
+  std::cout << "\nSumd= " << sumd << std::endl;
   //
 #endif // PERFORM_TESTING
   //

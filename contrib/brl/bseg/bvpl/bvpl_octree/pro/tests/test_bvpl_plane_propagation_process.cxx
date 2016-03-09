@@ -31,7 +31,9 @@
 #include <bvpl/bvpl_octree/pro/bvpl_octree_processes.h>
 #include <vul/vul_file.h>
 
-#include <vcl_vector.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <vector>
 
 static void test_bvpl_plane_propagation_process()
 {
@@ -48,7 +50,7 @@ static void test_bvpl_plane_propagation_process()
   scene.set_octree_levels(3,2);
   scene.set_paths("./boxm_scene", "block");
   scene.set_appearance_model(BOXM_EDGE_LINE);
-  x_write(vcl_cout, scene, "scene");
+  x_write(std::cout, scene, "scene");
   vul_file::make_directory("./boxm_scene");
   scene.write_scene();
 
@@ -60,7 +62,7 @@ static void test_bvpl_plane_propagation_process()
     boct_tree<short,data_type > * tree= block->get_tree();
 
     // get the leaf nodes and insert one plane to each
-    vcl_vector<boct_tree_cell<short,data_type >*> cells=tree->leaf_cells();
+    std::vector<boct_tree_cell<short,data_type >*> cells=tree->leaf_cells();
     for (unsigned i=0; i<cells.size(); i++) {
       boxm_plane_obs<float> p(vgl_homg_plane_3d<float>(float(i+1),0.f,0.f,1.f), 1.0f);
       data_type data = cells[i]->data();
@@ -79,9 +81,9 @@ static void test_bvpl_plane_propagation_process()
 
   //: set the inputs
   brdb_value_sptr v0 = new brdb_value_t<boxm_scene_base_sptr>(new boxm_scene<boct_tree<short,data_type > >(scene));
-  brdb_value_sptr v1 = new brdb_value_t<vcl_string>(scene.path());
-  brdb_value_sptr v2 = new brdb_value_t<vcl_string>("new_scene");
-  brdb_value_sptr v3 = new brdb_value_t<vcl_string>("new_scene.xml");
+  brdb_value_sptr v1 = new brdb_value_t<std::string>(scene.path());
+  brdb_value_sptr v2 = new brdb_value_t<std::string>("new_scene");
+  brdb_value_sptr v3 = new brdb_value_t<std::string>("new_scene.xml");
 
   //: inits with the default params
   bool good = bprb_batch_process_manager::instance()->init_process("bvplPlanePropagateProcess");
@@ -99,12 +101,12 @@ static void test_bvpl_plane_propagation_process()
   brdb_query_aptr Q = brdb_query_comp_new("id", brdb_query::EQ, id);
   brdb_selection_sptr S = DATABASE->select("boxm_scene_base_sptr_data", Q);
   if (S->size()!=1){
-    vcl_cout << "in bprb_batch_process_manager::set_input_from_db(.) -"
+    std::cout << "in bprb_batch_process_manager::set_input_from_db(.) -"
              << " no selections\n";
   }
   brdb_value_sptr value;
-  if (!S->get_value(vcl_string("value"), value)) {
-    vcl_cout << "in bprb_batch_process_manager::set_input_from_db(.) -"
+  if (!S->get_value(std::string("value"), value)) {
+    std::cout << "in bprb_batch_process_manager::set_input_from_db(.) -"
              << " didn't get value\n";
   }
   bool non_null = (value != VXL_NULLPTR);
@@ -125,7 +127,7 @@ static void test_bvpl_plane_propagation_process()
     tree_type * tree= block->get_tree();
 
     // get the leaf nodes and insert one plane to each
-    vcl_vector<boct_tree_cell<short,data_type >*> nodes=tree->leaf_cells();
+    std::vector<boct_tree_cell<short,data_type >*> nodes=tree->leaf_cells();
     for (unsigned i=0; i<nodes.size(); i++) {
       unsigned num=nodes[i]->data().num_obs();
       // each node has 8 neighbors in the 3x3 neighborhood including itself

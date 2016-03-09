@@ -18,7 +18,9 @@
 // \endverbatim
 //-----------------------------------------------------------------------------
 
-#include <vcl_vector.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <vector>
 #include <vbl/vbl_smart_ptr.h>
 #include <vdgl/vdgl_fit_lines_params.h>
 #include <vtol/vtol_intensity_face_sptr.h>
@@ -47,7 +49,7 @@ class vifa_int_faces_attr : public vifa_int_face_attr_common
   //  map<vifa_intensity_face_sptr, vifa_int_face_attr_sptr, less<vifa_intensity_face_sptr> > attr_map_;
   attr_list      attr_map_;
 
-  vcl_vector<float>  centroid_;      // cache for region group center-of-mass
+  std::vector<float>  centroid_;      // cache for region group center-of-mass
   float          perimeter_;
   float          weighted_perimeter_;
 
@@ -63,7 +65,7 @@ class vifa_int_faces_attr : public vifa_int_face_attr_common
   // Histogrammed attributes are grouped together into parallel
   // vectors.  Histograms compute mean and standard deviation.
   // Attributes defined by attr_get_funcs.
-  //vcl_vector<vifa_histogram_sptr> attr_hists_;
+  //std::vector<vifa_histogram_sptr> attr_hists_;
   incr_var_list  attr_vec_;
 
   float cached_2_parallel_;
@@ -95,9 +97,9 @@ class vifa_int_faces_attr : public vifa_int_face_attr_common
   // ---
 
   virtual bool  ComputeAttributes();
-  virtual bool  GetAttributes(vcl_vector<float>& attrs);
-  static void    GetAttributeNames(vcl_vector<vcl_string>& names);
-  virtual bool  GetNativeAttributes(vcl_vector<float>& attrs);
+  virtual bool  GetAttributes(std::vector<float>& attrs);
+  static void    GetAttributeNames(std::vector<std::string>& names);
+  virtual bool  GetNativeAttributes(std::vector<float>& attrs);
 
   // Data access for non-attributes
   virtual iface_list&  GetFaces() { return faces_; }
@@ -150,7 +152,7 @@ class vifa_int_faces_attr : public vifa_int_face_attr_common
 
   // Caller must delete returned edge_list when done
   edge_list*    GetPerimeterEdges();
-  vifa_histogram_sptr  MakeAttrHist(vcl_vector<float>& attr_vals);
+  vifa_histogram_sptr  MakeAttrHist(std::vector<float>& attr_vals);
 };
 
 typedef vbl_smart_ptr<vifa_int_faces_attr>  vifa_int_faces_attr_sptr;

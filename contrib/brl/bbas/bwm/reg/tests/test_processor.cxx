@@ -1,8 +1,10 @@
 // This is brl/bbas/bwm/reg/tests/test_processor.cxx
 #include <testlib/testlib_test.h>
 
-#include <vcl_iostream.h>
-#include <vcl_string.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iostream>
+#include <string>
 #include <vnl/vnl_numeric_traits.h>
 #include <vgl/vgl_point_2d.h>
 #include <vgl/vgl_point_3d.h>
@@ -14,12 +16,12 @@
 #include <vpgl/vpgl_rational_camera.h>
 
 #if 0 // unused!!
-static void print_edges(vcl_vector<vsol_digital_curve_2d_sptr> const& edges)
+static void print_edges(std::vector<vsol_digital_curve_2d_sptr> const& edges)
 {
   for (unsigned cv = 0; cv<edges.size(); ++cv)
   {
     vsol_digital_curve_2d_sptr dc = edges[cv];
-    vcl_cout << "dc[" << cv << "](" << dc->p0()->x()<< ' '
+    std::cout << "dc[" << cv << "](" << dc->p0()->x()<< ' '
              << dc->p0()->y() << ")(" << dc->p1()->x()<< ' '
              << dc->p0()->y() << ")\n";
   }
@@ -27,12 +29,12 @@ static void print_edges(vcl_vector<vsol_digital_curve_2d_sptr> const& edges)
 #endif // 0
 
 #if 0 // unused!!
-static void display_edges(vcl_vector<vsol_digital_curve_2d_sptr> const& edges)
+static void display_edges(std::vector<vsol_digital_curve_2d_sptr> const& edges)
 {
   //get the bounds on the model edges
   double dcmin = vnl_numeric_traits<double>::maxval, dcmax = 0;
   double drmin = dcmin, drmax = 0;
-  vcl_vector<vsol_digital_curve_2d_sptr>::const_iterator cit =
+  std::vector<vsol_digital_curve_2d_sptr>::const_iterator cit =
     edges.begin();
   for (; cit != edges.end(); ++cit)
     for (unsigned i = 0; i<(*cit)->size(); ++i)
@@ -50,9 +52,9 @@ static void display_edges(vcl_vector<vsol_digital_curve_2d_sptr> const& edges)
   unsigned rmax = static_cast<unsigned>(drmax);
   unsigned ncols = cmax - cmin +1;
   unsigned nrows = rmax - rmin +1;
-  vcl_vector<vcl_vector<bool> > edge_map(nrows);
+  std::vector<std::vector<bool> > edge_map(nrows);
   for (unsigned r = 0; r<nrows; ++r)
-    edge_map[r]=vcl_vector<bool>(ncols, false);
+    edge_map[r]=std::vector<bool>(ncols, false);
   cit = edges.begin();
   for (; cit != edges.end(); ++cit)
     for (unsigned i = 0; i<(*cit)->size(); ++i)
@@ -67,10 +69,10 @@ static void display_edges(vcl_vector<vsol_digital_curve_2d_sptr> const& edges)
   {
     for (unsigned c = 0; c<ncols; ++c)
       if (edge_map[r][c])
-        vcl_cout << '1' ;
+        std::cout << '1' ;
       else
-        vcl_cout << ' ' ;
-    vcl_cout << '\n';
+        std::cout << ' ' ;
+    std::cout << '\n';
   }
 }
 #endif // 0
@@ -78,12 +80,12 @@ static void display_edges(vcl_vector<vsol_digital_curve_2d_sptr> const& edges)
 void test_processor()
 {
 #ifdef SanDiegoExists
-  vcl_string model_image_file =
+  std::string model_image_file =
     "C:/images/SanDiego/SanDiegoA/po_39942_pan_0000010000/po_39942_pan_0000010000_0.NTF";
   vil_image_resource_sptr model_image =
     vil_load_image_resource(model_image_file.c_str());
 
-  vcl_string model_cam_file = "C:/images/SanDiego/SanDiegoA/po_39942_pan_0000010000/camera/po_39942_pan_0000010000.RPB";
+  std::string model_cam_file = "C:/images/SanDiego/SanDiegoA/po_39942_pan_0000010000/camera/po_39942_pan_0000010000.RPB";
   vpgl_rational_camera<double>* model_cam =
     read_rational_camera<double>(model_cam_file);
 

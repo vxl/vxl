@@ -15,15 +15,17 @@
 //     Peter Vanroose - July 2000 - made templated
 // \endverbatim
 
-#include <vcl_list.h>
-#include <vcl_vector.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <list>
+#include <vector>
 
 //: \brief function used to get rid of duplicate entries
 template <class T>
-vcl_vector<T>* tagged_union(vcl_vector<T>*);
+std::vector<T>* tagged_union(std::vector<T>*);
 
 //: \brief function used to get rid of duplicate entries
 template <class T>
-vcl_list<T>* tagged_union(vcl_list<T>*);
+std::list<T>* tagged_union(std::list<T>*);
 
 #endif // vtol_list_functions_h_

@@ -8,10 +8,12 @@
 // \date Feb 08, 2011
 //
 #include <vgl/vgl_fwd.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iostream>
 #include <vsl/vsl_binary_io.h>
-#include <vcl_vector.h>
-#include <vcl_string.h>
+#include <vector>
+#include <string>
 #include <vnl/vnl_fwd.h>
 #include <vpgl/vpgl_camera.h>
 
@@ -24,7 +26,7 @@ class bpgl_rolling_shutter_camera : public vpgl_camera<T>
 
   virtual ~bpgl_rolling_shutter_camera() {}
 
-  virtual vcl_string type_name() const { return "bpgl_rolling_shutter_camera"; }
+  virtual std::string type_name() const { return "bpgl_rolling_shutter_camera"; }
 
   //: Clone `this': creation of a new object and initialization
   //  See Prototype pattern
@@ -37,9 +39,9 @@ class bpgl_rolling_shutter_camera : public vpgl_camera<T>
   virtual vgl_point_2d<T> project(vgl_point_3d<T> world_point) const=0;
 
   //: print the camera parameters
-  virtual void print(vcl_ostream& s = vcl_cout) const=0;
+  virtual void print(std::ostream& s = std::cout) const=0;
 
-  virtual bool save(vcl_string cam_path)=0;
+  virtual bool save(std::string cam_path)=0;
 
   // --- binary IO ---
 

@@ -1,7 +1,9 @@
 // This is mul/vil3d/tests/test_image_view.cxx
 #include <testlib/testlib_test.h>
-#include <vcl_iostream.h>
-#include <vcl_functional.h>
+#include <iostream>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <functional>
 #include <vxl_config.h> // for vxl_int_32
 #include <vil3d/vil3d_print.h>
 #include <vil3d/vil3d_plane.h>
@@ -22,13 +24,13 @@ bool Equal(const vil3d_image_view<vxl_int_32>& im0,
 
 static void test_image_view_int()
 {
-  vcl_cout << "*******************************\n"
+  std::cout << "*******************************\n"
            << " Testing vil3d_image_view<int>\n"
            << "*******************************\n";
 
   vil3d_image_view<vxl_int_32> image0;
   image0.set_size(10,8,2);
-  vcl_cout<<"image0: "<<image0<<vcl_endl;
+  std::cout<<"image0: "<<image0<<std::endl;
 
   TEST("N.Planes",image0.nplanes(),1);
   TEST("set_size i",image0.ni(),10);
@@ -40,14 +42,14 @@ static void test_image_view_int()
      for (unsigned int i=0;i<image0.ni();++i)
        image0(i,j,k) = i+j*10+100*k;
 
-  vil3d_print_all(vcl_cout, image0);
+  vil3d_print_all(std::cout, image0);
 
   {
     // Test the shallow copy
     vil3d_image_view<vxl_int_32> image1;
     image1 = image0;
 
-    vcl_cout<<"Shallow copy: "<<image1<<vcl_endl;
+    std::cout<<"Shallow copy: "<<image1<<std::endl;
 
     TEST("Shallow copy (size)",
          image0.ni()==image1.ni() &&
@@ -69,7 +71,7 @@ static void test_image_view_int()
     vil3d_image_view<vxl_int_32> image1;
     image1 = image_sptr;
 
-    vcl_cout<<"Shallow copy by smart pointer: "<<image1<<vcl_endl;
+    std::cout<<"Shallow copy by smart pointer: "<<image1<<std::endl;
 
     TEST("Shallow copy (size)",
          image0.ni()==image1.ni() &&
@@ -98,7 +100,7 @@ static void test_image_view_int()
   TEST("Data still in scope",image2(3,3,0),111);
   TEST("Data still in scope",image2(1,1,1),17);
 
-  vcl_cout<<image2<<vcl_endl;
+  std::cout<<image2<<std::endl;
 
   {
     // Test the deep copy
@@ -125,7 +127,7 @@ static void test_image_view_int()
   image0(2,3,0)=222;
   TEST("vil3d_crop is shallow copy",image_win(0,0,0),222);
 
-  vcl_cout<<image0.is_a()<<vcl_endl;
+  std::cout<<image0.is_a()<<std::endl;
   TEST("is_a() specialisation for vxl_int_32",image0.is_a(),"vil3d_image_view<vxl_int_32>");
 
   vil3d_image_view<vxl_int_32> image5(7,8,9,3);
@@ -191,7 +193,7 @@ static void test_image_view_int()
 
 
 #if 0
-  vcl_cout << "************************************\n"
+  std::cout << "************************************\n"
            << " Testing vil3d_image_view functions\n"
            << "************************************\n";
 
@@ -203,7 +205,7 @@ static void test_image_view_int()
   image0 = image5;
 
   vil_copy_reformat(image0, image_win);
-  vil_print_all(vcl_cout, image2);
+  vil_print_all(std::cout, image2);
   vil3d_image_view<vxl_int_32> test_image(5,4,3);
   test_image.fill(0);
   test_image(2,1,0) = test_image(2,2,0) = 25;
@@ -215,40 +217,40 @@ static void test_image_view_int()
   TEST("!vil_deep_equality", vil3d_image_view_deep_equality(test_image,image2), false);
   test_image.set_size(5,4,4);
   TEST("!vil_deep_equality", vil3d_image_view_deep_equality(test_image,image2), false);
-  vil_print_all(vcl_cout, image2);
+  vil_print_all(std::cout, image2);
 
   vil3d_image_view<float> image7;
   vil_convert_cast(image2, image7);
-  vil_print_all(vcl_cout, image7);
-  vil_transform(image7, image7, vcl_bind2nd(vcl_plus<float>(),0.6f));
+  vil_print_all(std::cout, image7);
+  vil_transform(image7, image7, std::bind2nd(std::plus<float>(),0.6f));
   vil_convert_cast(image7, image2);
-  vil_print_all(vcl_cout, image2);
+  vil_print_all(std::cout, image2);
   TEST("Rounding up", image2(0,0,0) == 1 && image2(2,2,1) == 36, true);
 
   image7.clear();
   vil_convert_rgb_to_grey(vil_view_as_rgb(image2), image7);
-  vil_print_all(vcl_cout, image7);
+  vil_print_all(std::cout, image7);
   TEST("vil_convert_rgb_to_grey(vil_rgba)", image7, true);
   TEST_NEAR("Conversion rgb to grey", image7(0,0), 1.0, 1e-5);
   TEST_NEAR("Conversion rgb to grey", image7(2,1), 34.5960, 1e-5);
   vil_convert_grey_to_rgb(image7, image5);
   TEST("vil_convert_grey_to_rgb", image5, true);
-  vil_print_all(vcl_cout, image5);
+  vil_print_all(std::cout, image5);
 
   vil_convert_grey_to_rgba(image7, image6);
   TEST("vil_convert_grey_to_rgba", image6, true);
 
   image2 = vil_plane(vil_view_as_planes(image6),1);
   vil_transform(vil_plane(vil_view_as_planes(image6),1), image2,
-                 vcl_bind2nd(vcl_plus<vxl_int_32>(),1));
+                 std::bind2nd(std::plus<vxl_int_32>(),1));
 
-  vil_print_all(vcl_cout, image6);
+  vil_print_all(std::cout, image6);
   image7.clear();
   vil_convert_rgb_to_grey(image6, image7);
   TEST("vil_convert_rgb_to_grey(vil_rgba)", image7, true);
   TEST_NEAR("Conversion rgba to grey", image7(0,0),  1.71540, 1e-5);
   TEST_NEAR("Conversion rgba to grey", image7(2,1), 35.71540, 1e-5);
-  vil_print_all(vcl_cout, image7);
+  vil_print_all(std::cout, image7);
 #endif // 0
 }
 

@@ -8,9 +8,11 @@
 #include "PairMatchSetCorner.h"
 
 #include <vcl_cassert.h>
-#include <vcl_cstdlib.h>
-#include <vcl_vector.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <cstdlib>
+#include <vector>
+#include <iostream>
 #include <mvl/HomgInterestPointSet.h>
 
 //: Constructor
@@ -66,8 +68,8 @@ void PairMatchSetCorner::set(HomgInterestPointSet const* corners1,
 // For example, given a set of matches between corner features,
 // this function copies the inliers to a pair of arrays which
 // can then be fed to a non-robust matcher.
-void PairMatchSetCorner::extract_matches(vcl_vector<HomgPoint2D>& points1,
-                                         vcl_vector<HomgPoint2D>& points2) const
+void PairMatchSetCorner::extract_matches(std::vector<HomgPoint2D>& points1,
+                                         std::vector<HomgPoint2D>& points2) const
 {
   int n = count();
   points1.resize(n);
@@ -78,8 +80,8 @@ void PairMatchSetCorner::extract_matches(vcl_vector<HomgPoint2D>& points1,
     points2[i] = corners2_->get_homg(match.get_i2());
     ++i;
     if (i > n) {
-      vcl_cerr << "ERRRRRK!";
-      vcl_abort();
+      std::cerr << "ERRRRRK!";
+      std::abort();
     }
   }
   assert(i == n);
@@ -89,10 +91,10 @@ void PairMatchSetCorner::extract_matches(vcl_vector<HomgPoint2D>& points1,
 // In addition, return the corresponding point indices in corner_index_[12].
 // Thus, points1[0] = corner_set_1()[corner_index_1[0]].
 // This is useful with procedures such as RANSAC.
-void PairMatchSetCorner::extract_matches(vcl_vector<HomgPoint2D>& points1,
-                                         vcl_vector<int>& corner_index_1,
-                                         vcl_vector<HomgPoint2D>& points2,
-                                         vcl_vector<int>& corner_index_2) const
+void PairMatchSetCorner::extract_matches(std::vector<HomgPoint2D>& points1,
+                                         std::vector<int>& corner_index_1,
+                                         std::vector<HomgPoint2D>& points2,
+                                         std::vector<int>& corner_index_2) const
 {
   unsigned n = count();
   points1.resize(n);
@@ -112,9 +114,9 @@ void PairMatchSetCorner::extract_matches(vcl_vector<HomgPoint2D>& points1,
 //: Clear all matches and then set only those for which the corresponding inliers flag is set.
 //  For example, if inliers[5] == true, then the match
 // (corner_index_1[5], corner_index_2[5]) is added to the set.
-void PairMatchSetCorner::set(const vcl_vector<bool>& inliers,
-                             const vcl_vector<int>&  corner_index_1,
-                             const vcl_vector<int>&  corner_index_2)
+void PairMatchSetCorner::set(const std::vector<bool>& inliers,
+                             const std::vector<int>&  corner_index_1,
+                             const std::vector<int>&  corner_index_2)
 {
   clear();
   unsigned n = inliers.size();

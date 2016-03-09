@@ -21,7 +21,7 @@ bgui_histogram_tableau::bgui_histogram_tableau()
   easy_ = vgui_easy2D_tableau_new();
 
   // Draw a square around the histogram
-  vcl_vector<float> x_corners, y_corners;
+  std::vector<float> x_corners, y_corners;
   x_corners.push_back(left_offset_);
   x_corners.push_back(left_offset_+graph_width_);
   x_corners.push_back(left_offset_+graph_width_);
@@ -53,7 +53,7 @@ void bgui_histogram_tableau::update(vil1_memory_image_of< vil1_rgb<unsigned char
     if (max < data_[i]) max = data_[i];
 
   // scale and shift the data points
-  vcl_vector<float> xscaled, yscaled;
+  std::vector<float> xscaled, yscaled;
   for (unsigned int i=0; i<data_.size(); ++i) {
     xscaled.push_back(float(left_offset_ + i));
     yscaled.push_back(float(top_offset_ + graph_height_ - data_[i]/max*graph_height_));
@@ -85,7 +85,7 @@ void bgui_histogram_tableau::update(vil_image_view< vxl_byte >& img_view)
     if (max < data_[i]) max = data_[i];
 
   // scale and shift the data points
-  vcl_vector<float> xscaled, yscaled;
+  std::vector<float> xscaled, yscaled;
   for (unsigned int i=0; i<data_.size(); ++i) {
     xscaled.push_back(float(left_offset_ + i));
     yscaled.push_back(float(top_offset_ + graph_height_ - data_[i]/max*graph_height_));

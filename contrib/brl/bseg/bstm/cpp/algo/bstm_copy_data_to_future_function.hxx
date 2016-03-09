@@ -7,14 +7,14 @@
 
 template <bstm_data_type APM_DATA_TYPE, bstm_data_type NOBS_DATA_TYPE >
 bstm_copy_data_to_future_function<APM_DATA_TYPE, NOBS_DATA_TYPE>::bstm_copy_data_to_future_function(
-                                  bstm_time_block* t_blk, bstm_block* blk, vcl_vector<bstm_data_base*> & datas, float time)
+                                  bstm_time_block* t_blk, bstm_block* blk, std::vector<bstm_data_base*> & datas, float time)
 {
   init_data(t_blk, blk, datas ,time);
   copy();
 }
 
 template <bstm_data_type APM_DATA_TYPE, bstm_data_type NOBS_DATA_TYPE >
-bool bstm_copy_data_to_future_function<APM_DATA_TYPE, NOBS_DATA_TYPE>::init_data(bstm_time_block* blk_t, bstm_block* blk, vcl_vector<bstm_data_base*> & datas,  float local_time)
+bool bstm_copy_data_to_future_function<APM_DATA_TYPE, NOBS_DATA_TYPE>::init_data(bstm_time_block* blk_t, bstm_block* blk, std::vector<bstm_data_base*> & datas,  float local_time)
 {
   //store block and pointer to uchar16 3d block
    blk_   = blk;
@@ -54,12 +54,12 @@ bool bstm_copy_data_to_future_function<APM_DATA_TYPE, NOBS_DATA_TYPE>::copy()
 template <bstm_data_type APM_DATA_TYPE, bstm_data_type NOBS_DATA_TYPE >
 void bstm_copy_data_to_future_function<APM_DATA_TYPE, NOBS_DATA_TYPE>::move_data(bstm_time_tree& time_tree)
 {
-  vcl_vector<int> leaves = time_tree.get_leaf_bits();
+  std::vector<int> leaves = time_tree.get_leaf_bits();
 
   int num_cells = 0;
   int curr_leaf_bit = time_tree.traverse(local_time_);
   int oldDataPtr = time_tree.get_data_index(curr_leaf_bit);
-  for (vcl_vector<int>::iterator iter = leaves.begin(); iter != leaves.end(); iter++)
+  for (std::vector<int>::iterator iter = leaves.begin(); iter != leaves.end(); iter++)
   {
 
     float cell_min;

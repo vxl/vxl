@@ -3,9 +3,11 @@
 //:
 // \file
 
-#include <vcl_cstdlib.h>
-#include <vcl_vector.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <cstdlib>
+#include <vector>
+#include <iostream>
 #include <vcl_cassert.h>
 
 #include <vnl/vnl_matrix.h>
@@ -27,21 +29,21 @@
 // Fixed => RESCALE ALL THE POINTS TO FIT -1,1(x) -1,1(y)
 // IT IS SUPPOSED THAT THE CENTER OF THE POINTS IS (0,0)
 
-vcl_vector<int> Monte_Carlo(vcl_vector<HomgPoint2D> points, vcl_vector<int> index, int buckets, int samples)
+std::vector<int> Monte_Carlo(std::vector<HomgPoint2D> points, std::vector<int> index, int buckets, int samples)
 {
   assert(samples > 0);
   double row_size = 2.0;
   double col_size = 2.0;
-  vcl_vector<int> out_points(samples);
+  std::vector<int> out_points(samples);
   double row_div = row_size/buckets;
   double col_div = col_size/buckets;
   int no_buckets = buckets*buckets;
   if (buckets < 1) {
-    vcl_cerr << "Warning Monte Carlo sampling will not work.\n"
+    std::cerr << "Warning Monte Carlo sampling will not work.\n"
              << "Not enough buckets: need 1, have " << buckets << ".\n";
   }
   if (index.size() < (unsigned int)samples) {
-    vcl_cerr << "Warning Monte Carlo sampling will not work.\n"
+    std::cerr << "Warning Monte Carlo sampling will not work.\n"
              << "Not enough points to choose from: need " << samples
              << ", have " << index.size() << ".\n";
   }
@@ -73,7 +75,7 @@ vcl_vector<int> Monte_Carlo(vcl_vector<HomgPoint2D> points, vcl_vector<int> inde
   double center_x = ( max_x - min_x ) * 0.5;
   double center_y = ( max_y - min_y ) * 0.5;
 
-  vcl_vector<vnl_double_2> points_rescale;
+  std::vector<vnl_double_2> points_rescale;
   for (unsigned int i=0;i<index.size();i++)
   {
     vnl_double_2 v = points[i].get_double2(); // non-homogeneous representation
@@ -88,7 +90,7 @@ vcl_vector<int> Monte_Carlo(vcl_vector<HomgPoint2D> points, vcl_vector<int> inde
   {
     int random;
     if (buckets > 1) {
-      random  = (int)((float)(no_buckets - 1)*vcl_rand()/(RAND_MAX+1.0));
+      random  = (int)((float)(no_buckets - 1)*std::rand()/(RAND_MAX+1.0));
     }
     else {
       random  = 1;
@@ -118,7 +120,7 @@ vcl_vector<int> Monte_Carlo(vcl_vector<HomgPoint2D> points, vcl_vector<int> inde
     row_check_upper -= 1.0;
     col_check_upper -= 1.0;
 
-    vcl_vector<int> list;
+    std::vector<int> list;
 
     // Select from the first list
     for (unsigned int j = 0; j < index.size(); j++) {
@@ -144,7 +146,7 @@ vcl_vector<int> Monte_Carlo(vcl_vector<HomgPoint2D> points, vcl_vector<int> inde
       int counter = 0;
       bool fail;
       while (not_picked && counter < list_size*4) {
-        int pick = (int)((float)(list_size - 1)*vcl_rand()/(RAND_MAX+1.0));
+        int pick = (int)((float)(list_size - 1)*std::rand()/(RAND_MAX+1.0));
         int picked = list[pick];
         fail = false;
         for (unsigned int k = 0; k < i; k++) {
@@ -158,7 +160,7 @@ vcl_vector<int> Monte_Carlo(vcl_vector<HomgPoint2D> points, vcl_vector<int> inde
         }
         else {
           counter++;
-          //vcl_cerr << "Failed\n";
+          //std::cerr << "Failed\n";
         }
       }
     }
@@ -169,9 +171,9 @@ vcl_vector<int> Monte_Carlo(vcl_vector<HomgPoint2D> points, vcl_vector<int> inde
 }
 
 #if 0 // Note : this hasn't been implemented properly yet
-vcl_vector<HomgPoint2D> Taubins_MLE(HomgPoint2D x1, HomgPoint2D x2, FMatrix *F)
+std::vector<HomgPoint2D> Taubins_MLE(HomgPoint2D x1, HomgPoint2D x2, FMatrix *F)
 {
-  vcl_vector<HomgPoint2D> actual_points;
+  std::vector<HomgPoint2D> actual_points;
 
   // Generate a Jacobian matrix
   vnl_matrix<double> J;
@@ -203,20 +205,20 @@ double Sampsons_MLE(HomgPoint2D x1, HomgPoint2D x2, FMatrix *F)
 {
   double rX, rY, rX_dash, rY_dash, GRADr, r, dist;
   vnl_matrix_fixed<double,3,3> temp = F->get_matrix();
-  vcl_cerr << x2.x() << '\n';
+  std::cerr << x2.x() << '\n';
   rX = temp.get(0, 0)*x2.x() + temp.get(1, 0)*x2.y() + temp.get(2, 0);
   rY = F->get(0, 1)*x2.x() + F->get(1, 1)*x2.y() + F->get(2, 1);
   rX_dash = F->get(0, 0)*x1.x() + F->get(0, 1)*x1.y() + F->get(0, 2);
   rY_dash = F->get(1, 0)*x1.x() + F->get(1, 1)*x1.y() + F->get(1, 2);
-  vcl_cerr << "Points : " << rX << ' ' << rY << ' ' << rX_dash << ' ' << rY_dash << '\n';
+  std::cerr << "Points : " << rX << ' ' << rY << ' ' << rX_dash << ' ' << rY_dash << '\n';
   GRADr = vnl_math::sqr(rX*rX + rY*rY + rX_dash*rX_dash + rY_dash*rY_dash);
-  vcl_cerr << "1 :  " << GRADr << '\n';
+  std::cerr << "1 :  " << GRADr << '\n';
   // This is an annoying interface
   HomgPoint2D *x1p = new HomgPoint2D(x1.x(), x1.y(), 1.0);
   HomgPoint2D *x2p = new HomgPoint2D(x2.x(), x2.y(), 1.0);
-  vcl_cerr << "2\n";
+  std::cerr << "2\n";
   r = F->image1_epipolar_distance_squared(x1p, x2p);
-  vcl_cerr << "r " << r << '\n';
+  std::cerr << "r " << r << '\n';
   dist = r/GRADr;
   return dist;
 }

@@ -5,18 +5,20 @@
 // \brief Simple statistics on a 1D variable.
 // \author Tim Cootes
 
-#include <vcl_cmath.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <cmath>
+#include <iostream>
 
 mbl_stats_1d::mbl_stats_1d()
 {
   clear();
 }
 
-mbl_stats_1d::mbl_stats_1d(const vcl_vector<double>& observations)
+mbl_stats_1d::mbl_stats_1d(const std::vector<double>& observations)
 {
   clear();
-  vcl_vector<double>::const_iterator it;
+  std::vector<double>::const_iterator it;
   for (it=observations.begin(); it != observations.end(); ++it)
   {
     obs(*it);
@@ -96,7 +98,7 @@ double mbl_stats_1d::sd() const
   // Use of numerically dodgy Sum{x^2} - {Sum x}^2
   // can return negative numbers.
   if (var_v<0) var_v=0;
-  return vcl_sqrt(var_v);
+  return std::sqrt(var_v);
 }
 
 double mbl_stats_1d::stdError() const
@@ -104,7 +106,7 @@ double mbl_stats_1d::stdError() const
   if (n_obs_==0) return 0;
 
   double var_v = variance();
-  return vcl_sqrt(var_v/w_obs_);
+  return std::sqrt(var_v/w_obs_);
 }
 
 double mbl_stats_1d::min() const
@@ -131,7 +133,7 @@ double mbl_stats_1d::sumSq() const
 
 double mbl_stats_1d::rms() const
 {
-  return n_obs_==0 ? -1.0 : vcl_sqrt(sum_sq_/w_obs_);
+  return n_obs_==0 ? -1.0 : std::sqrt(sum_sq_/w_obs_);
 }
 
 
@@ -152,11 +154,11 @@ const double MAX_ERROR = 1.0e-8;
 bool mbl_stats_1d::operator==(const mbl_stats_1d& s) const
 {
   return n_obs_==s.n_obs_ &&
-         vcl_fabs(w_obs_-s.w_obs_)<MAX_ERROR &&
-         vcl_fabs(sum_-s.sum_)<MAX_ERROR &&
-         vcl_fabs(sum_sq_-s.sum_sq_)<MAX_ERROR &&
-         vcl_fabs(min_v_-s.min_v_)<MAX_ERROR &&
-         vcl_fabs(max_v_-s.max_v_)<MAX_ERROR;
+         std::fabs(w_obs_-s.w_obs_)<MAX_ERROR &&
+         std::fabs(sum_-s.sum_)<MAX_ERROR &&
+         std::fabs(sum_sq_-s.sum_sq_)<MAX_ERROR &&
+         std::fabs(min_v_-s.min_v_)<MAX_ERROR &&
+         std::fabs(max_v_-s.max_v_)<MAX_ERROR;
 }
 
 
@@ -209,14 +211,14 @@ void mbl_stats_1d::b_read(vsl_b_istream& bfs)
     }
     break;
    default:
-    vcl_cerr << "I/O ERROR: mbl_stats_1d::b_read(vsl_b_istream&)\n"
+    std::cerr << "I/O ERROR: mbl_stats_1d::b_read(vsl_b_istream&)\n"
              << "           Unknown version number "<< file_version_no << '\n';
-    bfs.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
+    bfs.is().clear(std::ios::badbit); // Set an unrecoverable IO error on stream
     return;
   }
 }
 
-void mbl_stats_1d::print_summary(vcl_ostream& os) const
+void mbl_stats_1d::print_summary(std::ostream& os) const
 {
   os << "mbl_stats_1d: ";
   if (n_obs_==0)
@@ -229,14 +231,14 @@ void mbl_stats_1d::print_summary(vcl_ostream& os) const
   }
 }
 
-vcl_ostream& operator<<(vcl_ostream& os, const mbl_stats_1d& stats)
+std::ostream& operator<<(std::ostream& os, const mbl_stats_1d& stats)
 {
   stats.print_summary(os);
   return os;
 }
 
   //: Stream output operator for class reference
-void vsl_print_summary(vcl_ostream& os,const mbl_stats_1d& stats)
+void vsl_print_summary(std::ostream& os,const mbl_stats_1d& stats)
 {
   stats.print_summary(os);
 }

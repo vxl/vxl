@@ -6,7 +6,9 @@
 
 #include <vsl/vsl_indent.h>
 #include <vsl/vsl_binary_loader.h>
-#include <vcl_sstream.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <sstream>
 #include <vcl_cassert.h>
 
 #include <mbl/mbl_parse_block.h>
@@ -31,16 +33,16 @@ mmn_solver::~mmn_solver()
 
 
 //: Initialise from a string stream
-bool mmn_solver::set_from_stream(vcl_istream &is)
+bool mmn_solver::set_from_stream(std::istream &is)
 {
   // Cycle through string and produce a map of properties
-  vcl_string s = mbl_parse_block(is);
-  vcl_istringstream ss(s);
+  std::string s = mbl_parse_block(is);
+  std::istringstream ss(s);
   mbl_read_props_type props = mbl_read_props_ws(ss);
 
   if (props.size()!=0)
   {
-    vcl_cerr<<is_a()<<" does not expect any extra arguments.\n";
+    std::cerr<<is_a()<<" does not expect any extra arguments.\n";
     mbl_read_props_look_for_unused_props(
       "mmn_solver::set_from_stream", props, mbl_read_props_type());
   }
@@ -60,9 +62,9 @@ short mmn_solver::version_no() const
 // Method: is_a
 //=======================================================================
 
-vcl_string mmn_solver::is_a() const
+std::string mmn_solver::is_a() const
 {
-  return vcl_string("mmn_solver");
+  return std::string("mmn_solver");
 }
 
 //: Allows derived class to be loaded by base-class pointer
@@ -72,12 +74,12 @@ void vsl_add_to_binary_loader(const mmn_solver& b)
 }
 
 //: Create a concrete region_model-derived object, from a text specification.
-vcl_auto_ptr<mmn_solver> mmn_solver::
-  create_from_stream(vcl_istream &is)
+std::auto_ptr<mmn_solver> mmn_solver::
+  create_from_stream(std::istream &is)
 {
-  vcl_string name;
+  std::string name;
   is >> name;
-  vcl_auto_ptr<mmn_solver> pair_cost;
+  std::auto_ptr<mmn_solver> pair_cost;
   try {
     pair_cost = mbl_cloneables_factory<mmn_solver>::get_clone(name);
   }
@@ -111,7 +113,7 @@ void vsl_b_read(vsl_b_istream& bfs, mmn_solver& b)
 // Associated function: operator<<
 //=======================================================================
 
-vcl_ostream& operator<<(vcl_ostream& os,const mmn_solver& b)
+std::ostream& operator<<(std::ostream& os,const mmn_solver& b)
 {
   os << b.is_a() << ": ";
   vsl_indent_inc(os);
@@ -124,7 +126,7 @@ vcl_ostream& operator<<(vcl_ostream& os,const mmn_solver& b)
 // Associated function: operator<<
 //=======================================================================
 
-vcl_ostream& operator<<(vcl_ostream& os,const mmn_solver* b)
+std::ostream& operator<<(std::ostream& os,const mmn_solver* b)
 {
   if (b)
     return os << *b;

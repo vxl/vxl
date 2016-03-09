@@ -8,8 +8,10 @@
 // \file
 // \author crossge@crd.ge.com
 
-#include <vcl_vector.h>
-#include <vcl_iosfwd.h>
+#include <vector>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iosfwd>
 
 #include <vbl/vbl_bit_array_2d.h>
 #include <gmvl/gmvl_connection_sptr.h>
@@ -26,31 +28,31 @@ class gmvl_connection_cache
   void add( const gmvl_node_sptr node1, const gmvl_node_sptr node2);
 
   // clever accessors
-  vcl_vector<int> get_connected_nodes( const gmvl_node_sptr node) const { return cache_[node->ref_]; }
-  vcl_vector<int> get_connected_nodes( const gmvl_node_sptr node1,
+  std::vector<int> get_connected_nodes( const gmvl_node_sptr node) const { return cache_[node->ref_]; }
+  std::vector<int> get_connected_nodes( const gmvl_node_sptr node1,
                                        const gmvl_node_sptr node2) const;
-  vcl_vector<int> get_connected_nodes( const gmvl_node_sptr node1,
+  std::vector<int> get_connected_nodes( const gmvl_node_sptr node1,
                                        const gmvl_node_sptr node2,
                                        const gmvl_node_sptr node3) const;
-  vcl_vector<int> get_connected_nodes( const vcl_vector<gmvl_node_sptr> nodes) const;
+  std::vector<int> get_connected_nodes( const std::vector<gmvl_node_sptr> nodes) const;
 
   void rebuild();
 
   // input output
-  friend vcl_ostream &operator<<( vcl_ostream &os, const gmvl_connection_cache &c);
+  friend std::ostream &operator<<( std::ostream &os, const gmvl_connection_cache &c);
 
  protected:
 
   // raw connections
-  vcl_vector<gmvl_connection_sptr> connections_;
+  std::vector<gmvl_connection_sptr> connections_;
 
   // cached connections
-  vcl_vector<vcl_vector<int> > cache_;
+  std::vector<std::vector<int> > cache_;
 
   // and more caching...
   vbl_bit_array_2d cachebool_;
 };
 
-vcl_ostream &operator<<( vcl_ostream &os, const gmvl_connection_cache &c);
+std::ostream &operator<<( std::ostream &os, const gmvl_connection_cache &c);
 
 #endif // gmvl_connection_cache_h_

@@ -25,15 +25,17 @@
 //
 // \verbatim
 //  Modifications:
-//   8 jun 97: PVr - removed vcl_vector<bool> instantiation (is in Templates/stl_bool.C)
+//   8 jun 97: PVr - removed std::vector<bool> instantiation (is in Templates/stl_bool.C)
 // \endverbatim
 //
 //-----------------------------------------------------------------------------
 
 #include <mvl/MatchSet.h>
 #include <mvl/PairMatchSet.h>
-#include <vcl_cstdlib.h> // for vcl_abort()
-#include <vcl_iosfwd.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <cstdlib> // for std::abort()
+#include <iosfwd>
 
 class TripleMatchSet : public MatchSet
 {
@@ -67,8 +69,8 @@ class TripleMatchSet : public MatchSet
   void set(PairMatchSet* match12, PairMatchSet* match23);
   void set_from_pairwise_matches(const PairMatchSet& matches12, const PairMatchSet& matches23);
 
-  void write_ascii(vcl_ostream& s) const;
-  bool read_ascii(vcl_istream& s);
+  void write_ascii(std::ostream& s) const;
+  bool read_ascii(std::istream& s);
 
   void update_feature_match_data();
   int  size() const;
@@ -92,7 +94,7 @@ class TripleMatchSet : public MatchSet
     bool isfull() const;
     operator bool () const;
    private:
-    iterator operator ++ (int /*postfix*/) { vcl_abort(); return *this; }
+    iterator operator ++ (int /*postfix*/) { std::abort(); return *this; }
 
    protected:
     const TripleMatchSet* c_;
@@ -109,7 +111,7 @@ class TripleMatchSet : public MatchSet
   PairMatchSet *match23_;
 };
 
-vcl_istream& operator >> (vcl_istream& s,  TripleMatchSet& ccc);
-vcl_ostream& operator << (vcl_ostream& s, const TripleMatchSet& ccc);
+std::istream& operator >> (std::istream& s,  TripleMatchSet& ccc);
+std::ostream& operator << (std::ostream& s, const TripleMatchSet& ccc);
 
 #endif // TripleMatchSet_h_

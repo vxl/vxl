@@ -8,14 +8,16 @@
 #include "NViewMatches.h"
 
 #include <vcl_cassert.h>
-#include <vcl_cstdlib.h> // for vcl_abort()
-#include <vcl_fstream.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <cstdlib> // for std::abort()
+#include <fstream>
 #include <vul/vul_awk.h>
 #include <vul/vul_printf.h>
 
 /////////////////////////////////////////////////////////////////////////////
 
-vcl_ostream& operator<<(vcl_ostream& s, const NViewMatch& c)
+std::ostream& operator<<(std::ostream& s, const NViewMatch& c)
 {
   for (unsigned i = 0; i < c.size(); ++i)
     vul_printf(s, "%-4d ", c[i]);
@@ -32,7 +34,7 @@ bool NViewMatch::matches(const NViewMatch& b, int min_overlap) const
   unsigned l = size();
 
   if (l != b.size()) {
-    vcl_cerr << "NViewMatch::matches(B): matching vectors of different lengths\n";
+    std::cerr << "NViewMatch::matches(B): matching vectors of different lengths\n";
     return false;
   }
 
@@ -85,7 +87,7 @@ NViewMatches::NViewMatches():
 {
 }
 
-NViewMatches::NViewMatches(vcl_istream& s)
+NViewMatches::NViewMatches(std::istream& s)
 {
   load(s);
 }
@@ -112,15 +114,15 @@ void NViewMatches::clear()
 
 bool NViewMatches::load(const char* filename)
 {
-  vcl_ifstream s(filename);
+  std::ifstream s(filename);
   if (!s.good()) {
-    vcl_cerr << "NViewMatches::load(" << filename << ") - bad filename\n";
+    std::cerr << "NViewMatches::load(" << filename << ") - bad filename\n";
     return false;
   }
   return load(s);
 }
 
-bool NViewMatches::load(vcl_istream& s)
+bool NViewMatches::load(std::istream& s)
 {
   clear();
   for (vul_awk awk(s); awk; ++awk) {
@@ -130,7 +132,7 @@ bool NViewMatches::load(vcl_istream& s)
       nviews_ = awk.NF();
     else
       if (awk.NF() != nviews_) {
-        vcl_cerr << "NViewMatches::load() ERROR: only " << awk.NF() << " fields on line " << awk.NR() << '\n';
+        std::cerr << "NViewMatches::load() ERROR: only " << awk.NF() << " fields on line " << awk.NR() << '\n';
         return false;
       }
 
@@ -149,7 +151,7 @@ bool NViewMatches::load(vcl_istream& s)
   return true;
 }
 
-bool NViewMatches::save(vcl_ostream& s)
+bool NViewMatches::save(std::ostream& s)
 {
   for (unsigned i = 0; i < size(); ++i)
     s << (*this)[i] << '\n';
@@ -158,7 +160,7 @@ bool NViewMatches::save(vcl_ostream& s)
 
 bool NViewMatches::save(const char* filename)
 {
-  vcl_ofstream o(filename);
+  std::ofstream o(filename);
   return save(o);
 }
 
@@ -173,9 +175,9 @@ int NViewMatches::count_matches(const NViewMatch& match)
 }
 
 //: Return an array of the indices that match the given \p match
-vcl_vector<int> NViewMatches::get_matches(const NViewMatch& match)
+std::vector<int> NViewMatches::get_matches(const NViewMatch& match)
 {
-  vcl_vector<int> ret;
+  std::vector<int> ret;
   for (unsigned i = 0; i < size(); ++i)
     if (operator[](i).matches(match,min_overlap_))
       ret.push_back(i);
@@ -200,7 +202,7 @@ int NViewMatches::incorporate(const NViewMatch& newtrack)
 {
   int nmatches = 0;
   iterator merged = end();
-  vcl_abort(); // This routine is untested.....
+  std::abort(); // This routine is untested.....
   for (iterator i = begin(); i != end(); ++i) {
     if ((*i).matches(newtrack,min_overlap_)) {
       if (nmatches == 0) {
@@ -210,7 +212,7 @@ int NViewMatches::incorporate(const NViewMatch& newtrack)
         merged = i;
       }
       else if ((*i).is_consistent(*merged)) {
-        vcl_cerr << "Merge : " << (*i) << '\n'
+        std::cerr << "Merge : " << (*i) << '\n'
                  << "        " << (*merged) << '\n';
         // A further consistent match, so merge the two match tracks
         (*merged).incorporate((*i));
@@ -220,7 +222,7 @@ int NViewMatches::incorporate(const NViewMatch& newtrack)
       }
       else {
         // Two matches are inconsistent so remove them both and return -1
-        //  vcl_cerr << "NViewMatches::incorporate(): Doh! Found inconsistent matches - removing them\n";
+        //  std::cerr << "NViewMatches::incorporate(): Doh! Found inconsistent matches - removing them\n";
         erase(i);
         erase(merged);
         return -1;
@@ -234,7 +236,7 @@ int NViewMatches::incorporate(const NViewMatch& newtrack)
 
 #ifdef DEBUG
   if (nmatches > 1) {
-    vcl_cerr << "NViewMatches::incorporate(): " << nmatches << " consistent matches merged\n";
+    std::cerr << "NViewMatches::incorporate(): " << nmatches << " consistent matches merged\n";
   }
 #endif
   return merged - begin();

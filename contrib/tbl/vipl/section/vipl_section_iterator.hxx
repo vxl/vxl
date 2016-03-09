@@ -9,7 +9,9 @@
 #include <vipl/section/vipl_section_descriptor.h>
 #include <vipl/filter/vipl_filter_abs.h> // for default def of FILTER_IMPTR_INC_REFCOUNT
 #if 0
-#include <vcl_iostream.h> // for error message stuff
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iostream> // for error message stuff
 #endif
 
 #ifdef VCL_VC
@@ -30,7 +32,7 @@ template < class DataType >
   if (desc) { FILTER_IMPTR_INC_REFCOUNT(desc); }
   if (containr) { FILTER_IMPTR_INC_REFCOUNT(containr); }
 #if 0
-  vcl_cerr << "Warning: called unimplemented constructor with signature "
+  std::cerr << "Warning: called unimplemented constructor with signature "
            << "vipl_section_descriptor< DataType >* desc, vipl_section_container< DataType >* containr\n";
 #endif
 }
@@ -62,7 +64,7 @@ template < class DataType >
   if (ref_container()) FILTER_IMPTR_DEC_REFCOUNT(ref_container());
   if (ref_real_descriptor()) FILTER_IMPTR_DEC_REFCOUNT(ref_real_descriptor());
 #if 0
-  vcl_cerr << "Warning: called unimplemented vipl_section_iterator destructor\n";
+  std::cerr << "Warning: called unimplemented vipl_section_iterator destructor\n";
 #endif
 }
 

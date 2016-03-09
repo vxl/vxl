@@ -3,12 +3,14 @@
 
 #include "bugl_random_transform_set_2d.h"
 
-#include <vcl_cstdlib.h> // for rand()
+#include <vcl_compiler.h>
+#include <iostream>
+#include <cstdlib> // for rand()
 
 template<class T>
 void bugl_random_transform_set_2d<T>::
 equiform_uniform(const unsigned n_trans,
-                 vcl_vector<vgl_h_matrix_2d<T> >& transform_set,
+                 std::vector<vgl_h_matrix_2d<T> >& transform_set,
                  const T dx, const T dy,
                  const T dtheta, const T ds)
 {
@@ -18,11 +20,11 @@ equiform_uniform(const unsigned n_trans,
   for (unsigned i = 0; i<n_trans; ++i)
   {
     //generate random samples of uniform distribution
-    T rnd_dx = (T)((2.0*dx_d)*(vcl_rand()/(RAND_MAX+1.0)) - dx_d);
-    T rnd_dy = (T)((2.0*dy_d)*(vcl_rand()/(RAND_MAX+1.0)) - dy_d);
+    T rnd_dx = (T)((2.0*dx_d)*(std::rand()/(RAND_MAX+1.0)) - dx_d);
+    T rnd_dy = (T)((2.0*dy_d)*(std::rand()/(RAND_MAX+1.0)) - dy_d);
     T rnd_dtheta =
-      (T)((2.0*dtheta_d)*(vcl_rand()/(RAND_MAX+1.0)) - dtheta_d);
-    T rnd_ds = (T)((2.0*ds_d)*(vcl_rand()/(RAND_MAX+1.0)) - ds_d);
+      (T)((2.0*dtheta_d)*(std::rand()/(RAND_MAX+1.0)) - dtheta_d);
+    T rnd_ds = (T)((2.0*ds_d)*(std::rand()/(RAND_MAX+1.0)) - ds_d);
     rnd_ds += 1.0f;
     transform_set[i].set_identity();
     transform_set[i].set_rotation(rnd_dtheta);
@@ -34,7 +36,7 @@ equiform_uniform(const unsigned n_trans,
 template<class T>
 void bugl_random_transform_set_2d<T>::
 zero_skew_affine_uniform(const unsigned n_trans,
-                         vcl_vector<vgl_h_matrix_2d<T> >& transform_set,
+                         std::vector<vgl_h_matrix_2d<T> >& transform_set,
                          const T dx, const T dy,
                          const T dtheta, const T ds,
                          const T daspect)
@@ -45,13 +47,13 @@ zero_skew_affine_uniform(const unsigned n_trans,
   for (unsigned i = 0; i<n_trans; ++i)
   {
     //generate random samples of uniform distribution
-    T rnd_dx = (T)((2.0*dx_d)*(vcl_rand()/(RAND_MAX+1.0)) - dx_d);
-    T rnd_dy = (T)((2.0*dy_d)*(vcl_rand()/(RAND_MAX+1.0)) - dy_d);
+    T rnd_dx = (T)((2.0*dx_d)*(std::rand()/(RAND_MAX+1.0)) - dx_d);
+    T rnd_dy = (T)((2.0*dy_d)*(std::rand()/(RAND_MAX+1.0)) - dy_d);
     T rnd_dtheta =
-      (T)((2.0*dtheta_d)*(vcl_rand()/(RAND_MAX+1.0)) - dtheta_d);
-    T rnd_ds = (T)((2.0*ds_d)*(vcl_rand()/(RAND_MAX+1.0)) - ds_d);
+      (T)((2.0*dtheta_d)*(std::rand()/(RAND_MAX+1.0)) - dtheta_d);
+    T rnd_ds = (T)((2.0*ds_d)*(std::rand()/(RAND_MAX+1.0)) - ds_d);
     rnd_ds += 1.0f;
-    T rnd_da = (T)((2.0*da_d)*(vcl_rand()/(RAND_MAX+1.0)) - da_d);
+    T rnd_da = (T)((2.0*da_d)*(std::rand()/(RAND_MAX+1.0)) - da_d);
     rnd_da += 1.0f;
     transform_set[i].set_identity();
     transform_set[i].set_rotation(rnd_dtheta);
@@ -64,7 +66,7 @@ zero_skew_affine_uniform(const unsigned n_trans,
 template<class T>
 void bugl_random_transform_set_2d<T>::
 zero_skew_affine_uniform_interval(const unsigned n_trans,
-                                  vcl_vector<vgl_h_matrix_2d<T> >& trans_set,
+                                  std::vector<vgl_h_matrix_2d<T> >& trans_set,
                                   const T xmin, const T xmax,
                                   const T ymin, const T ymax,
                                   const T theta_min, const T theta_max,
@@ -81,14 +83,14 @@ zero_skew_affine_uniform_interval(const unsigned n_trans,
   for (unsigned i = 0; i<n_trans; ++i)
   {
     //generate random samples of uniform distribution
-    T rnd_x = (T)((xmax_d-xmin_d)*(vcl_rand()/(RAND_MAX+1.0)) + xmin_d );
-    T rnd_y = (T)((ymax_d-ymin_d)*(vcl_rand()/(RAND_MAX+1.0)) + ymin_d );
+    T rnd_x = (T)((xmax_d-xmin_d)*(std::rand()/(RAND_MAX+1.0)) + xmin_d );
+    T rnd_y = (T)((ymax_d-ymin_d)*(std::rand()/(RAND_MAX+1.0)) + ymin_d );
     T rnd_theta = (T)((theta_max_d-theta_min_d) *
-                      (vcl_rand()/(RAND_MAX+1.0)) + theta_min_d );
+                      (std::rand()/(RAND_MAX+1.0)) + theta_min_d );
     T rnd_scale = (T)((scale_max_d-scale_min_d) *
-                      (vcl_rand()/(RAND_MAX+1.0)) + scale_min_d );
+                      (std::rand()/(RAND_MAX+1.0)) + scale_min_d );
     T rnd_aspect = (T)((aspect_max_d-aspect_min_d) *
-                       (vcl_rand()/(RAND_MAX+1.0)) + aspect_min_d );
+                       (std::rand()/(RAND_MAX+1.0)) + aspect_min_d );
 
     trans_set[i].set_identity();
     trans_set[i].set_rotation(rnd_theta);

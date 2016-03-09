@@ -1,8 +1,8 @@
 #ifndef boxm_save_block_raw_h_
 #define boxm_save_block_raw_h_
 
-#include <vcl_vector.h>
-#include <vcl_new.h>
+#include <vector>
+#include <new>
 
 #include <boct/boct_tree.h>
 #include <boxm/boxm_scene.h>
@@ -14,12 +14,14 @@
 
 #include <bsta/bsta_attributes.h>
 
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iostream>
 
 template <class T_loc, class T_data>
 void boxm_save_block_raw(boxm_scene<boct_tree<T_loc, T_data > > &scene,
                          vgl_point_3d<int> block_idx,
-                         vcl_string filename,
+                         std::string filename,
                          unsigned int resolution_level)
 {
   typedef boct_tree<T_loc, T_data > tree_type;
@@ -50,7 +52,7 @@ void boxm_save_block_raw(boxm_scene<boct_tree<T_loc, T_data > > &scene,
   data = new (std::nothrow)float[data_size];
 
   if (data == 0) {
-    vcl_cout << "boxm_save_block_raw: Could not allocate data!" << vcl_endl;
+    std::cout << "boxm_save_block_raw: Could not allocate data!" << std::endl;
     return;
   }
   // init to zero
@@ -61,7 +63,7 @@ void boxm_save_block_raw(boxm_scene<boct_tree<T_loc, T_data > > &scene,
   double out_cell_norm_volume = (tree->number_levels() - (int)resolution_level + 1);
   out_cell_norm_volume = out_cell_norm_volume*out_cell_norm_volume*out_cell_norm_volume;
 
-  vcl_vector<boct_tree_cell<T_loc, T_data > *> cells = tree->leaf_cells();
+  std::vector<boct_tree_cell<T_loc, T_data > *> cells = tree->leaf_cells();
   for (unsigned i=0; i<cells.size(); i++)
   {
     vgl_point_3d<double> node = tree->cell_bounding_box_local(cells[i]).min_point();
@@ -74,7 +76,7 @@ void boxm_save_block_raw(boxm_scene<boct_tree<T_loc, T_data > > &scene,
       // just copy value to output array
       int out_index = static_cast<int>((node.x()/step_len)*ncells*ncells + (node.y()/step_len)*ncells + (node.z()/step_len));
       if (out_index >= data_size)
-        vcl_cout << "boxm_save_block_raw, array out of index! " << out_index << " -- " << data_size << vcl_endl;
+        std::cout << "boxm_save_block_raw, array out of index! " << out_index << " -- " << data_size << std::endl;
       else
         data[out_index] = cell_val;
     }
@@ -88,9 +90,9 @@ void boxm_save_block_raw(boxm_scene<boct_tree<T_loc, T_data > > &scene,
         for (unsigned int y=node_y_start; y<node_y_start+us_factor; ++y) {
           for (unsigned int x=node_x_start; x<node_x_start+us_factor; ++x) {
             int out_index = z*y_size + y*ncells + x;
-            //vcl_cout << level << "  " << out_index << vcl_endl;
+            //std::cout << level << "  " << out_index << std::endl;
             if (out_index >= data_size)
-              vcl_cout << "boxm_save_block_raw, array out of index! " << out_index << " -- " << data_size << vcl_endl;
+              std::cout << "boxm_save_block_raw, array out of index! " << out_index << " -- " << data_size << std::endl;
             else
               data[out_index] = cell_val;
           }
@@ -113,14 +115,14 @@ void boxm_save_block_raw(boxm_scene<boct_tree<T_loc, T_data > > &scene,
   unsigned char *byte_data = 0;
   byte_data = new (std::nothrow) unsigned char[data_size];
   if (byte_data == 0) {
-    vcl_cout << "boxm_save_block_raw: Could not allocate byte data!" << vcl_endl;
+    std::cout << "boxm_save_block_raw: Could not allocate byte data!" << std::endl;
     return;
   }
 
   float* dp = data;
   for (unsigned char* bdp = byte_data; dp < data + data_size; ++dp, ++bdp) {
-    //double P = 1.0 - vcl_exp(-*dp*step_len);
-    *bdp = (unsigned char)(vcl_floor((255.0 * (*dp)) + 0.5)); // always positive so this is an ok way to round
+    //double P = 1.0 - std::exp(-*dp*step_len);
+    *bdp = (unsigned char)(std::floor((255.0 * (*dp)) + 0.5)); // always positive so this is an ok way to round
   }
   delete[] data;
 
@@ -131,9 +133,9 @@ void boxm_save_block_raw(boxm_scene<boct_tree<T_loc, T_data > > &scene,
   vxl_uint_32 ny = ncells;
   vxl_uint_32 nz = ncells;
 
-  vcl_ofstream os(filename.c_str(),vcl_ios::binary);
+  std::ofstream os(filename.c_str(),std::ios::binary);
   if (!os.good()) {
-    vcl_cerr << "error opening " << filename << " for write!\n";
+    std::cerr << "error opening " << filename << " for write!\n";
     return;
   }
 

@@ -9,7 +9,7 @@
 template< class T>
 static inline
 void bil_harr_helper(const T* src, T* dest,
-                     vcl_ptrdiff_t s_step, vcl_ptrdiff_t d_step,
+                     std::ptrdiff_t s_step, std::ptrdiff_t d_step,
                      unsigned int length)
 {
   for (unsigned int i=0; i<length; ++i){
@@ -30,8 +30,8 @@ void bil_harr_wavelet_transform(const vil_image_view<T>& src,
   unsigned np = src.nplanes();
   dest.set_size(ni,nj,np);
 
-  vcl_ptrdiff_t istepS=src.istep(),jstepS=src.jstep(),pstepS=src.planestep();
-  vcl_ptrdiff_t istepD=dest.istep(),jstepD=dest.jstep(),pstepD=dest.planestep();
+  std::ptrdiff_t istepS=src.istep(),jstepS=src.jstep(),pstepS=src.planestep();
+  std::ptrdiff_t istepD=dest.istep(),jstepD=dest.jstep(),pstepD=dest.planestep();
   const T* planeS = src.top_left_ptr();
         T* planeD = dest.top_left_ptr();
 
@@ -74,7 +74,7 @@ void bil_harr_wavelet_transform(const vil_image_view<T>& src,
 template< class T>
 static inline
 void bil_harr_inv_helper(const T* src, T* dest,
-                         vcl_ptrdiff_t s_step, vcl_ptrdiff_t d_step,
+                         std::ptrdiff_t s_step, std::ptrdiff_t d_step,
                           unsigned int length)
 {
   for (unsigned int i=0; i<length; ++i){
@@ -99,8 +99,8 @@ void bil_harr_wavelet_inverse(const vil_image_view<T>& src,
   if (src != dest)
     dest.deep_copy(src);
 
-  //vcl_ptrdiff_t istepS=src.istep(),jstepS=src.jstep(),pstepS=src.planestep();
-  vcl_ptrdiff_t istepD=dest.istep(),jstepD=dest.jstep(),pstepD=dest.planestep();
+  //std::ptrdiff_t istepS=src.istep(),jstepS=src.jstep(),pstepS=src.planestep();
+  std::ptrdiff_t istepD=dest.istep(),jstepD=dest.jstep(),pstepD=dest.planestep();
   //const T* planeS = src.top_left_ptr();
         T* planeD = dest.top_left_ptr();
 

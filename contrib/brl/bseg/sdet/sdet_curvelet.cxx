@@ -1,10 +1,12 @@
 #include "sdet_curvelet.h"
 
-#include <vcl_iostream.h>
-#include <vcl_fstream.h>
+#include <iostream>
+#include <fstream>
 #include <vcl_cassert.h>
-#include <vcl_deque.h>
-#include <vcl_algorithm.h>
+#include <deque>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <algorithm>
 
 //: copy constructor
 sdet_curvelet::sdet_curvelet(const sdet_curvelet& other)
@@ -96,7 +98,7 @@ void sdet_curvelet::compute_properties(double R, double token_len)
 }
 
 //: print info to file
-void sdet_curvelet::print(vcl_ostream& os)
+void sdet_curvelet::print(std::ostream& os)
 {
   //first output the edgel chain
   os << "[";
@@ -115,13 +117,13 @@ void sdet_curvelet::print(vcl_ostream& os)
   curve_model->print(os);
 
   //then output the other properties
-  os << " " << length << " " << quality << vcl_endl;
+  os << " " << length << " " << quality << std::endl;
 }
 
-vcl_list<sdet_edgel*> sdet_curvelet::child_chain()
+std::list<sdet_edgel*> sdet_curvelet::child_chain()
 {
     bool flag=false;
-    vcl_list<sdet_edgel*> return_chain;
+    std::list<sdet_edgel*> return_chain;
     for(unsigned i=0;i<edgel_chain.size();i++)
     {
         if(flag)
@@ -135,10 +137,10 @@ vcl_list<sdet_edgel*> sdet_curvelet::child_chain()
 }
 
 
-vcl_list<sdet_edgel*> sdet_curvelet::parent_chain()
+std::list<sdet_edgel*> sdet_curvelet::parent_chain()
 {
     bool flag=true;
-    vcl_list<sdet_edgel*> return_chain;
+    std::list<sdet_edgel*> return_chain;
     for(unsigned i=0;i<edgel_chain.size();i++)
     {
 

@@ -4,7 +4,9 @@
 #include <vil/vil_new.h>
 #include <vil/vil_image_view.h>
 #include <vxl_config.h> // for vxl_byte etc.
-#include <vcl_string.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <string>
 
 DECLARE(vepl_test_dilate_disk);
 DECLARE(vepl_test_dyadic);
@@ -139,7 +141,7 @@ vil_image_resource_sptr CreateTestdoubleImage(int wd, int ht)
 // Compare two images and return true if their difference is not v
 bool difference(vil_image_resource_sptr a,
                 vil_image_resource_sptr b,
-                vxl_uint_32 v, vcl_string const& m, bool exact)
+                vxl_uint_32 v, std::string const& m, bool exact)
 {
   unsigned int sx = a->ni(),  sy = a->nj(), sp = a->nplanes();
   TEST("# rows match", sx, b->ni());
@@ -194,7 +196,7 @@ bool difference(vil_image_resource_sptr a,
   else if (a->pixel_format() == VIL_PIXEL_FORMAT_UINT_32) { DIFI(vxl_uint_32); }
 #undef DIFF
 #undef DIFI
-  vcl_cout<<m<<": expected "<<v<<", found "<<ret<<'\n';
+  std::cout<<m<<": expected "<<v<<", found "<<ret<<'\n';
   TEST(m.c_str(), ret, v);
   return v!=ret;
 }

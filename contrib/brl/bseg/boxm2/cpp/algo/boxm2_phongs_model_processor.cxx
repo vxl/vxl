@@ -2,7 +2,9 @@
 //
 #include <vnl/algo/vnl_levenberg_marquardt.h>
 #include <vnl/vnl_math.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iostream>
 
 float boxm2_phongs_model_processor::expected_color(brad_phongs_model & pmodel,
                                                    vnl_double_3 view_dir,
@@ -15,7 +17,7 @@ float boxm2_phongs_model_processor::expected_color(brad_phongs_model & pmodel,
 float boxm2_phongs_model_processor::prob_density(float obs, float expected_obs, float var)
 {
     if (var>0.0f)
-        return (float)vcl_exp(-(obs-expected_obs)*(obs-expected_obs)/(2*var))/(float)vcl_sqrt(vnl_math::twopi*var);
+        return (float)std::exp(-(obs-expected_obs)*(obs-expected_obs)/(2*var))/(float)std::sqrt(vnl_math::twopi*var);
     else
         return 1.0f;
 }
@@ -23,9 +25,9 @@ float boxm2_phongs_model_processor::prob_density(float obs, float expected_obs, 
 brad_phongs_model boxm2_phongs_model_processor::compute_phongs_model(float & var,
                                                                      float sun_elev,
                                                                      float sun_azim,
-                                                                     vcl_vector<float>        & obs,
-                                                                     vcl_vector<vnl_double_3> & view_dirs,
-                                                                     vcl_vector<float>        & vis)
+                                                                     std::vector<float>        & obs,
+                                                                     std::vector<vnl_double_3> & view_dirs,
+                                                                     std::vector<float>        & vis)
 {
     vnl_vector<double> samples(obs.size());
     vnl_vector<double> samples_weights(obs.size());

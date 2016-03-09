@@ -13,9 +13,11 @@
 #include <vil/algo/vil_binary_dilate.h>
 #include <vil/algo/vil_binary_erode.h>
 #include <vil/vil_math.h>
-#include <vcl_vector.h>
+#include <vector>
 #include <vcl_cassert.h>
-#include <vcl_algorithm.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <algorithm>
 
 //: Calculate the Mutual Information between the images.
 template<class T>
@@ -31,14 +33,14 @@ void brip_blobwise_mutual_info (const vil_image_view<T>& img1,
 #endif
   //blob region is just a vector of vil_chords (rows in image)
   bil_blob_finder finder(mask);
-  vcl_vector<vil_chord> region;
+  std::vector<vil_chord> region;
   while (finder.next_4con_region(region))
   {
     //gather vector of samples
-    vcl_vector<T> x_samps;
-    vcl_vector<T> y_samps;
-    vcl_vector<double> weight_samps;
-    vcl_vector<vil_chord>::iterator iter;
+    std::vector<T> x_samps;
+    std::vector<T> y_samps;
+    std::vector<double> weight_samps;
+    std::vector<vil_chord>::iterator iter;
     for (iter=region.begin(); iter!=region.end(); ++iter) {
       //add each pixel in this row to blob
       for (unsigned i=iter->ilo; i<iter->ihi+1; ++i) {
@@ -62,8 +64,8 @@ void brip_blobwise_mutual_info (const vil_image_view<T>& img1,
       y(0, i) = y_samps[i];
       wImg(0,i) = weight_samps[i];
     }
-    vcl_vector<double> x_hist, y_hist;
-    vcl_vector<vcl_vector<double> > joint_hist;
+    std::vector<double> x_hist, y_hist;
+    std::vector<std::vector<double> > joint_hist;
 
     unsigned n_bins = 32;
     double min = -vnl_math::pi,
@@ -102,19 +104,19 @@ void brip_blobwise_mutual_info (const vil_image_view<T>& img1,
       MI = 5.0;
 
     if (MI != MI) {
-      vcl_cout<<"mutual info is NAN\n"
-              <<"  num samps = "<<x_samps.size()<<vcl_endl;
+      std::cout<<"mutual info is NAN\n"
+              <<"  num samps = "<<x_samps.size()<<std::endl;
     }
-    if ( vcl_fabs(MI-.6702) < .0001 ) {
-      vcl_cout<<"MID BLOB samps:\n"
-              <<"  num samps = "<<x_samps.size()<<vcl_endl;
+    if ( std::fabs(MI-.6702) < .0001 ) {
+      std::cout<<"MID BLOB samps:\n"
+              <<"  num samps = "<<x_samps.size()<<std::endl;
     }
     if (x_samps.size() == 0) {
-      vcl_cout<<"ZERO SAMPLE SET:\n"
+      std::cout<<"ZERO SAMPLE SET:\n"
               <<"   MI = "<<MI<<'\n'
               <<"   H1 = "<<H1<<'\n'
               <<"   H2 = "<<H2<<'\n'
-              <<"   Hxy= "<<H3<<vcl_endl;
+              <<"   Hxy= "<<H3<<std::endl;
     }
 
 
@@ -137,13 +139,13 @@ void brip_blobwise_kl_div( const vil_image_view<T>& img1,
   //   compute KL div for blob distribution in img1 to img2
   //------------------------------------------------
   bil_blob_finder finder(mask);
-  vcl_vector<vil_chord> region;
+  std::vector<vil_chord> region;
   while (finder.next_4con_region(region))
   {
     //gather vector of samples
-    vcl_vector<T> x_samps;
-    vcl_vector<T> y_samps;
-    vcl_vector<vil_chord>::iterator iter;
+    std::vector<T> x_samps;
+    std::vector<T> y_samps;
+    std::vector<vil_chord>::iterator iter;
     for (iter=region.begin(); iter!=region.end(); ++iter) {
       //add each pixel in this row to blob
       for (unsigned i=iter->ilo; i<iter->ihi+1; ++i) {
@@ -164,15 +166,15 @@ void brip_blobwise_kl_div( const vil_image_view<T>& img1,
     T min1, max1, min2, max2;
     vil_math_value_range(x, min1, max1);
     vil_math_value_range(y, min2, max2);
-    double min = vcl_min(min1, min2);
-    double max = vcl_max(max1, max2);
+    double min = std::min(min1, min2);
+    double max = std::max(max1, max2);
 
     //compute the number of bins as a function of num samps
-    unsigned n_bins = vcl_min((int) x_samps.size()/2, 32);
+    unsigned n_bins = std::min((int) x_samps.size()/2, 32);
 
     //bin the two blob samples
-    vcl_vector<double> x_hist, y_hist;
-    vcl_vector<vcl_vector<double> > joint_hist;
+    std::vector<double> x_hist, y_hist;
+    std::vector<std::vector<double> > joint_hist;
     double magX = brip_histogram(x, x_hist, min, max, n_bins);
     double magY = brip_histogram(y, y_hist, min, max, n_bins);
 
@@ -196,14 +198,14 @@ void brip_blobwise_kl_div( const vil_image_view<T>& img1,
     int startI = iter->ilo,
         startJ = iter->j;
     if (startI > 422 && startI < 460 && startJ>280 && startJ<310) {
-      vcl_cout<<"BLOB with size "<<x_samps.size()<<'\n'
+      std::cout<<"BLOB with size "<<x_samps.size()<<'\n'
               <<"  histX (inimg) = ";
-      for (int i=0; i<x_hist.size(); ++i) vcl_cout<<x_hist[i]/magX<<' ';
-      vcl_cout<<'\n'
+      for (int i=0; i<x_hist.size(); ++i) std::cout<<x_hist[i]/magX<<' ';
+      std::cout<<'\n'
               <<"  histY (expimg)= ";
-      for (int i=0; i<y_hist.size(); ++i) vcl_cout<<y_hist[i]/magY<<' ';
-      vcl_cout<<'\n'
-              <<"  KL div = "<<KL<<vcl_endl;
+      for (int i=0; i<y_hist.size(); ++i) std::cout<<y_hist[i]/magY<<' ';
+      std::cout<<'\n'
+              <<"  KL div = "<<KL<<std::endl;
     }
 #endif
   } //end blob while

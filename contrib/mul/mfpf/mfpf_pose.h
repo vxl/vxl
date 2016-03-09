@@ -7,10 +7,12 @@
 
 
 #include <vsl/vsl_binary_io.h>
-#include <vcl_iostream.h>
-#include <vcl_cstdlib.h>
-#include <vcl_cmath.h>
-#include <vcl_vector.h>
+#include <iostream>
+#include <cstdlib>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <cmath>
+#include <vector>
 #include <vgl/vgl_point_2d.h>
 #include <vgl/vgl_vector_2d.h>
 
@@ -58,7 +60,7 @@ class mfpf_pose
   //: Scaling applied by this pose
   double scale() const
   { double s2 = u_.x()*u_.x()+u_.y()*u_.y();
-    return s2>0.0 ? vcl_sqrt(s2) : 0.0;
+    return s2>0.0 ? std::sqrt(s2) : 0.0;
   }
 
   //: Apply pose transformation (map from ref frame to pose)
@@ -110,10 +112,10 @@ inline bool operator==(const mfpf_pose& p1,
                        const mfpf_pose& p2)
 {
   const double tol=1e-6;
-  return vcl_fabs(p1.p().x()-p2.p().x())<tol &&
-         vcl_fabs(p1.p().y()-p2.p().y())<tol &&
-         vcl_fabs(p1.u().x()-p2.u().x())<tol &&
-         vcl_fabs(p1.u().y()-p2.u().y())<tol;
+  return std::fabs(p1.p().x()-p2.p().x())<tol &&
+         std::fabs(p1.p().y()-p2.p().y())<tol &&
+         std::fabs(p1.u().x()-p2.u().x())<tol &&
+         std::fabs(p1.u().y()-p2.u().y())<tol;
 }
 
 inline bool operator!=(const mfpf_pose& p1,
@@ -127,14 +129,14 @@ inline bool operator!=(const mfpf_pose& p1,
 inline double mfpf_max_sqr_diff(const mfpf_pose& p1,
                                 const mfpf_pose& p2, double r)
 {
-  double dx = vcl_fabs(p1.p().x()-p2.p().x())
-              + r*vcl_fabs(p1.u().x()-p2.u().x());
-  double dy = vcl_fabs(p1.p().y()-p2.p().y())
-              + r*vcl_fabs(p1.u().y()-p2.u().y());
+  double dx = std::fabs(p1.p().x()-p2.p().x())
+              + r*std::fabs(p1.u().x()-p2.u().x());
+  double dy = std::fabs(p1.p().y()-p2.p().y())
+              + r*std::fabs(p1.u().y()-p2.u().y());
   return dx*dx+dy*dy;
 }
 
-inline vcl_ostream& operator<<(vcl_ostream& os,
+inline std::ostream& operator<<(std::ostream& os,
                                const mfpf_pose& p)
 {
   os<<"{("<<p.p().x()<<','<<p.p().y()<<") u:"
@@ -175,15 +177,15 @@ inline void vsl_b_read(vsl_b_istream& bfs, mfpf_pose& p)
       p.u()=vgl_vector_2d<double>(ux,uy);
       break;
     default:
-      vcl_cerr << "I/O ERROR: vsl_b_read(bfs,mfpf_pose):\n"
+      std::cerr << "I/O ERROR: vsl_b_read(bfs,mfpf_pose):\n"
                << "           Unexpected version number " << version << '\n';
-      vcl_abort();
+      std::abort();
   }
 }
 
 //: Write vector of feature points to stream
 inline void vsl_b_write(vsl_b_ostream& bfs,
-                        const vcl_vector<mfpf_pose>& p)
+                        const std::vector<mfpf_pose>& p)
 {
   vsl_b_write(bfs,short(1));  // Version number
   vsl_b_write(bfs,unsigned(p.size()));
@@ -193,7 +195,7 @@ inline void vsl_b_write(vsl_b_ostream& bfs,
 
 //: Read in vector of feature points from stream
 inline void vsl_b_read(vsl_b_istream& bfs,
-                       vcl_vector<mfpf_pose>& p)
+                       std::vector<mfpf_pose>& p)
 {
   short version;
   vsl_b_read(bfs,version);
@@ -206,9 +208,9 @@ inline void vsl_b_read(vsl_b_istream& bfs,
       for (unsigned i=0;i<n;++i) vsl_b_read(bfs,p[i]);
       break;
     default:
-      vcl_cerr << "vsl_b_read(bfs,vcl_vector<mfpf_pose>): "
-               << "Unexpected version number " << version << vcl_endl;
-      vcl_abort();
+      std::cerr << "vsl_b_read(bfs,std::vector<mfpf_pose>): "
+               << "Unexpected version number " << version << std::endl;
+      std::abort();
   }
 }
 

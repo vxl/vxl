@@ -7,11 +7,11 @@
 //: Return a list of points on the boundary of the curve.
 // This is intended for drawing the curve as a list of line segments.
 // \param int num_points: the number of points to return.
-// \return vcl_vector<Vector3D>: a list of points.
-vcl_vector<CardinalSpline::Vector3D> CardinalSpline::getPoints(int num_points) const
+// \return std::vector<Vector3D>: a list of points.
+std::vector<CardinalSpline::Vector3D> CardinalSpline::getPoints(int num_points) const
 {
   assert(num_points!=0);
-  vcl_vector<Vector3D> points;
+  std::vector<Vector3D> points;
   Vector3D current_point;
   for (int i=0; i<num_points; i++)
   {
@@ -168,7 +168,7 @@ double CardinalSpline::closest_point_t(const Vector3D &point) const
   // now if the neighbours happen to be pt 0 and pt 1-delta, then
   // set pt 0 to pt 1
   // can only happen if there's a wraparound
-  if (vcl_fabs(t2-t1)>2.0*delta)
+  if (std::fabs(t2-t1)>2.0*delta)
   {
     if (t2>t1) t1 = 1.0; //  else t2 = 1.0;
   }
@@ -179,7 +179,7 @@ double CardinalSpline::closest_point_t(const Vector3D &point) const
           distanceFunctionSecondDerivative(t1, point);
   for (double t = t1 /* (d2*t1+d1*t2)/(d1+d2) */;
                      // do a simple interpolation
-       vcl_fabs(delta)>1e-8;
+       std::fabs(delta)>1e-8;
        delta = distanceFunctionFirstDerivative(t, point)/
                distanceFunctionSecondDerivative(t, point)
       )
@@ -193,10 +193,10 @@ double CardinalSpline::closest_point_t(const Vector3D &point) const
     // so just return the closest point found so far
     if (dist>d1)
     {
-      vcl_cerr << "Closest point not converging:\n"
+      std::cerr << "Closest point not converging:\n"
                << " t = " << t1
                << ", dist = " << dist << ", d1 = " << d1
-               << ", delta = " << delta << vcl_endl;
+               << ", delta = " << delta << std::endl;
       break;
     }
     else if (dist<d1)
@@ -240,7 +240,7 @@ void vsl_b_read(vsl_b_istream &is, CardinalSpline &e)
   e.b_read(is);
 }
 
-void vsl_print_summary(vcl_ostream &os, const CardinalSpline &e)
+void vsl_print_summary(std::ostream &os, const CardinalSpline &e)
 {
   e.print_summary(os);
 }

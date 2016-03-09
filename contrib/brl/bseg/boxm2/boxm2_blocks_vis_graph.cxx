@@ -1,24 +1,26 @@
 #include <boxm2/boxm2_blocks_vis_graph.h>
 #include <vgl/vgl_intersection.h>
-#include <vcl_queue.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <queue>
 
-boxm2_block_vis_graph::boxm2_block_vis_graph(vcl_map<boxm2_block_id,boxm2_block_metadata> & blkmetadata, vpgl_generic_camera<double> const& cam ): nodes_()
+boxm2_block_vis_graph::boxm2_block_vis_graph(std::map<boxm2_block_id,boxm2_block_metadata> & blkmetadata, vpgl_generic_camera<double> const& cam ): nodes_()
 {
     // bounding box representation of image point samples
     vgl_box_2d<double> image_bounds(vgl_point_2d<double>(0,0),
                                     vgl_point_2d<double>(cam.cols()-1, cam.rows()-1));
 
-    vcl_list<boxm2_block_vis_graph_node_sptr> temp_nodes;
+    std::list<boxm2_block_vis_graph_node_sptr> temp_nodes;
     // create a node for every block in the model
-    for(vcl_map<boxm2_block_id,boxm2_block_metadata>::iterator iter = blkmetadata.begin();
+    for(std::map<boxm2_block_id,boxm2_block_metadata>::iterator iter = blkmetadata.begin();
         iter!=blkmetadata.end();iter++)
     {
         vgl_box_3d<double> bbox = iter->second.bbox();
 
         // project bounding box and check for any overlap with the image bounds
         vgl_box_2d<double> projected_bbox;
-        const vcl_vector<vgl_point_3d<double> > block_corners = bbox.vertices();
-        for (vcl_vector<vgl_point_3d<double> >::const_iterator corner_it = block_corners.begin();
+        const std::vector<vgl_point_3d<double> > block_corners = bbox.vertices();
+        for (std::vector<vgl_point_3d<double> >::const_iterator corner_it = block_corners.begin();
              corner_it != block_corners.end(); ++corner_it) {
           double u,v;
           cam.project( corner_it->x(), corner_it->y(), corner_it->z(), u, v);
@@ -36,7 +38,7 @@ boxm2_block_vis_graph::boxm2_block_vis_graph(vcl_map<boxm2_block_id,boxm2_block_
     // loop over each vis graph node and create necessary edges
     // each edge A->B represents the constraint that block A must be processed before
     // block B, i.e. block A is "in front of" block B from the perspective of cam
-    for(vcl_list<boxm2_block_vis_graph_node_sptr>::iterator node_iter = temp_nodes.begin();
+    for(std::list<boxm2_block_vis_graph_node_sptr>::iterator node_iter = temp_nodes.begin();
         node_iter != temp_nodes.end();node_iter++)
     {
       boxm2_block_id this_block_id = (*node_iter)->id_;
@@ -76,7 +78,7 @@ boxm2_block_vis_graph::boxm2_block_vis_graph(vcl_map<boxm2_block_id,boxm2_block_
               ++other_block_id.i_;
             }
             // check for other block in list of nodes
-            vcl_list<boxm2_block_vis_graph_node_sptr>::iterator other =
+            std::list<boxm2_block_vis_graph_node_sptr>::iterator other =
               this->find(other_block_id, temp_nodes) ;
             if ( other != temp_nodes.end() )
             {
@@ -118,7 +120,7 @@ boxm2_block_vis_graph::boxm2_block_vis_graph(vcl_map<boxm2_block_id,boxm2_block_
               ++other_block_id.j_;
             }
             // check for other block in list of nodes
-            vcl_list<boxm2_block_vis_graph_node_sptr>::iterator other =
+            std::list<boxm2_block_vis_graph_node_sptr>::iterator other =
               this->find(other_block_id, temp_nodes) ;
             if ( other != temp_nodes.end() )
             {
@@ -160,7 +162,7 @@ boxm2_block_vis_graph::boxm2_block_vis_graph(vcl_map<boxm2_block_id,boxm2_block_
               ++other_block_id.k_;
             }
             // check for other block in list of nodes
-            vcl_list<boxm2_block_vis_graph_node_sptr>::iterator other =
+            std::list<boxm2_block_vis_graph_node_sptr>::iterator other =
               this->find(other_block_id, temp_nodes) ;
             if ( other != temp_nodes.end() )
             {
@@ -178,7 +180,7 @@ boxm2_block_vis_graph::boxm2_block_vis_graph(vcl_map<boxm2_block_id,boxm2_block_
       int min_incoming = 7; // maximum possible number of incoming edges + 1
       boxm2_block_vis_graph_node_sptr next_node;
 
-      for(vcl_list<boxm2_block_vis_graph_node_sptr>::iterator node_iter = temp_nodes.begin();
+      for(std::list<boxm2_block_vis_graph_node_sptr>::iterator node_iter = temp_nodes.begin();
           node_iter != temp_nodes.end();node_iter++)
       {
         int num_incoming = (*node_iter)->num_incoming_edges_;
@@ -193,7 +195,7 @@ boxm2_block_vis_graph::boxm2_block_vis_graph(vcl_map<boxm2_block_id,boxm2_block_
       }
 
       if (min_incoming > 0) {
-        vcl_cerr << "Warning: unable to find strict visibilty ordering of blocks." << vcl_endl;
+        std::cerr << "Warning: unable to find strict visibilty ordering of blocks." << std::endl;
       }
 
       assert(next_node);
@@ -202,7 +204,7 @@ boxm2_block_vis_graph::boxm2_block_vis_graph(vcl_map<boxm2_block_id,boxm2_block_
       ordered_nodes_.push_back(next_node->id_);
 
       // decrement incoming edge count of all blocks behind this one
-      for (vcl_set<boxm2_block_vis_graph_node_sptr>::iterator sink_node_it =
+      for (std::set<boxm2_block_vis_graph_node_sptr>::iterator sink_node_it =
            next_node->out_edges.begin(); sink_node_it != next_node->out_edges.end(); ++sink_node_it) {
         --(*sink_node_it)->num_incoming_edges_;
       }
@@ -213,10 +215,10 @@ boxm2_block_vis_graph::boxm2_block_vis_graph(vcl_map<boxm2_block_id,boxm2_block_
     }
 }
 
-vcl_list<boxm2_block_vis_graph_node_sptr>::iterator
-    boxm2_block_vis_graph::find(const boxm2_block_id & id, vcl_list<boxm2_block_vis_graph_node_sptr> & list_nodes )
+std::list<boxm2_block_vis_graph_node_sptr>::iterator
+    boxm2_block_vis_graph::find(const boxm2_block_id & id, std::list<boxm2_block_vis_graph_node_sptr> & list_nodes )
 {
-    vcl_list<boxm2_block_vis_graph_node_sptr>::iterator iter = list_nodes.begin();
+    std::list<boxm2_block_vis_graph_node_sptr>::iterator iter = list_nodes.begin();
     for (; iter!= list_nodes.end(); iter++)
     {
         if(id == (*iter)->id_ )

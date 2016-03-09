@@ -1,7 +1,10 @@
 #include <testlib/testlib_test.h>
-#include <vcl_string.h>
-#include <vcl_iostream.h>
+#include <string>
+#include <vcl_compiler.h>
+#include <iostream>
 #include <vpl/vpl.h>
+//For backwards compatibility
+#include <vcl_string.h>
 #include <bbgm/bbgm_image_of.h>
 #include <bbgm/bbgm_image_sptr.h>
 #include <bsta/bsta_attributes.h>
@@ -51,7 +54,7 @@ namespace
 
 void test_io_function_2(void)
 {
-  vcl_cout << "Starting test_io2\n";
+  std::cout << "Starting test_io2\n";
   const float window_size = 50.0;
   const unsigned int max_components = 3;
   const float init_var = 0.01f;
@@ -78,12 +81,12 @@ void test_io_function_2(void)
   update(*mptr,img,updater);
 
   bbgm_image_sptr mp = mptr;
-  vcl_string source = mp->is_a();
-  vcl_cout << "Starting save/read bbgm_image_sptr\n"
+  std::string source = mp->is_a();
+  std::cout << "Starting save/read bbgm_image_sptr\n"
            << "Saving an image_of with type " << source << '\n';
   bprb_process_sptr save_p= bprb_batch_process_manager::instance()->get_process_by_name("bbgmSaveImageOfProcess");
   brdb_value_sptr mv = new brdb_value_t<bbgm_image_sptr>(mp);
-  brdb_value_sptr pv = new brdb_value_t<vcl_string>(vcl_string("./background.md"));
+  brdb_value_sptr pv = new brdb_value_t<std::string>(std::string("./background.md"));
   bool good = save_p->set_input(0, pv);
   good = good && save_p->set_input(1, mv);
   good = good &&  save_p->execute();
@@ -92,13 +95,13 @@ void test_io_function_2(void)
   good = good &&  load_p->execute();
   brdb_value_sptr iv = load_p->output(0);
   if (!iv) good = false;
-  vcl_string test;
+  std::string test;
   if (good){
     brdb_value_t<bbgm_image_sptr>* vp =
     static_cast<brdb_value_t<bbgm_image_sptr>*>(iv.ptr());
     test = vp->value()->is_a();
   }
-  vcl_cout << "Retrieved image_of with type " << test << '\n';
+  std::cout << "Retrieved image_of with type " << test << '\n';
   good = good && source==test;
   TEST("test save and load image_of", good, true);
   vpl_unlink("./background.md");
@@ -110,7 +113,7 @@ static void test_io()
   REGISTER_DATATYPE( bbgm_image_sptr );
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bbgm_save_image_of_process, "bbgmSaveImageOfProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bbgm_load_image_of_process, "bbgmLoadImageOfProcess");
-  vcl_cout << "Starting test_io\n";
+  std::cout << "Starting test_io\n";
   bbgm_loader::register_loaders();
   const float window_size = 50.0;
   const unsigned int max_components = 3;
@@ -141,13 +144,13 @@ static void test_io()
   update(*mptr,img,updater);
 
   bbgm_image_sptr mp = mptr;
-  vcl_string source = mp->is_a();
-  vcl_cout << "Starting save/read bbgm_image_sptr\n"
+  std::string source = mp->is_a();
+  std::cout << "Starting save/read bbgm_image_sptr\n"
            << "Saving an image_of with type " << source << '\n';
  bprb_process_sptr save_p = bprb_batch_process_manager::instance()->get_process_by_name("bbgmSaveImageOfProcess");
  bprb_process_sptr load_p = bprb_batch_process_manager::instance()->get_process_by_name("bbgmLoadImageOfProcess");
   brdb_value_sptr mv = new brdb_value_t<bbgm_image_sptr>(mp);
-  brdb_value_sptr pv = new brdb_value_t<vcl_string>(vcl_string("./background.md"));
+  brdb_value_sptr pv = new brdb_value_t<std::string>(std::string("./background.md"));
   bool good = save_p->set_input(0, pv);
   good = good && save_p->set_input(1, mv);
   good = good && save_p->execute();
@@ -155,13 +158,13 @@ static void test_io()
   good = good && load_p->execute();
   brdb_value_sptr iv = load_p->output(0);
   if (!iv) good = false;
-  vcl_string test;
+  std::string test;
   if (good){
     brdb_value_t<bbgm_image_sptr>* vp =
     static_cast<brdb_value_t<bbgm_image_sptr>*>(iv.ptr());
     test = vp->value()->is_a();
   }
-  vcl_cout << "Retrieved image_of with type " << test << '\n';
+  std::cout << "Retrieved image_of with type " << test << '\n';
   good = good && source==test;
   TEST("test save and load image_of", good, true);
   vpl_unlink("./background.md");

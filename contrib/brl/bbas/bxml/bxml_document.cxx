@@ -11,10 +11,10 @@
 
 
 //: Return the value of an attribute
-vcl_string
-bxml_element::attribute(const vcl_string& attr_name) const
+std::string
+bxml_element::attribute(const std::string& attr_name) const
 {
-  vcl_map<vcl_string,vcl_string>::const_iterator result = attributes_.find(attr_name);
+  std::map<std::string,std::string>::const_iterator result = attributes_.find(attr_name);
   if (result != attributes_.end())
     return result->second;
   return "";
@@ -32,7 +32,7 @@ bxml_document::bxml_document()
 
 
 //: Append text in this element
-void bxml_element::append_text(const vcl_string& text)
+void bxml_element::append_text(const std::string& text)
 {
   bxml_text * last_text = VXL_NULLPTR;
   if (!data_.empty()){
@@ -115,13 +115,13 @@ bool operator==(const bxml_document& d1, const bxml_document& d2)
 //: Binary io, NOT IMPLEMENTED, signatures defined to use bxml_document as a brdb_value
 void vsl_b_write(vsl_b_ostream & /*os*/, bxml_document const & /*ph*/)
 {
-  vcl_cerr << "vsl_b_write() -- Binary io, NOT IMPLEMENTED, signatures defined to use bxml_document as a brdb_value\n";
+  std::cerr << "vsl_b_write() -- Binary io, NOT IMPLEMENTED, signatures defined to use bxml_document as a brdb_value\n";
   return;
 }
 
 void vsl_b_read(vsl_b_istream & /*is*/, bxml_document & /*ph*/)
 {
-  vcl_cerr << "vsl_b_read() -- Binary io, NOT IMPLEMENTED, signatures defined to use bxml_document as a brdb_value\n";
+  std::cerr << "vsl_b_read() -- Binary io, NOT IMPLEMENTED, signatures defined to use bxml_document as a brdb_value\n";
   return;
 }
 

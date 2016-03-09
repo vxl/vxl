@@ -5,7 +5,9 @@
 // \author Ming-Ching Chang
 // \date May 03, 2005.
 
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iostream>
 #include <vcl_cassert.h>
 
 #include <bmsh3d/pro/bmsh3d_cmdpara.h>
@@ -32,7 +34,7 @@
 #include <Inventor/engines/SoTimeCounter.h>
 #include <Inventor/engines/SoCalculator.h>
 
-int count_faces_indices_(const vcl_vector<vcl_vector<int> >& faces)
+int count_faces_indices_(const std::vector<std::vector<int> >& faces)
 {
   unsigned int total = 0;
   for (unsigned int i=0; i<faces.size(); i++)
@@ -41,8 +43,8 @@ int count_faces_indices_(const vcl_vector<vcl_vector<int> >& faces)
 }
 
 void draw_ifs_geom(SoGroup* root,
-                   const vcl_vector<vgl_point_3d<double> >& pts,
-                   const vcl_vector<vcl_vector<int> >& faces)
+                   const std::vector<vgl_point_3d<double> >& pts,
+                   const std::vector<std::vector<int> >& faces)
 {
   // Assign vertices
   int nVertices = pts.size();
@@ -78,20 +80,20 @@ void draw_ifs_geom(SoGroup* root,
   root->addChild(indexedFaceSet);
 }
 
-void draw_ifs_geom(SoGroup* root, vcl_set<bmsh3d_vertex*>& pts,
-                   vcl_set<bmsh3d_face*>& faces)
+void draw_ifs_geom(SoGroup* root, std::set<bmsh3d_vertex*>& pts,
+                   std::set<bmsh3d_face*>& faces)
 {
-  // convert to vcl_vector and draw.
-  vcl_vector<vgl_point_3d<double> > pts_vector(pts.size());
-  vcl_vector<vcl_vector<int> > faces_vector(faces.size());
+  // convert to std::vector and draw.
+  std::vector<vgl_point_3d<double> > pts_vector(pts.size());
+  std::vector<std::vector<int> > faces_vector(faces.size());
 
-  vcl_set<bmsh3d_vertex*>::iterator vit = pts.begin();
+  std::set<bmsh3d_vertex*>::iterator vit = pts.begin();
   for (unsigned int i=0; vit != pts.end(); vit++, i++) {
     (*vit)->set_vid(i);
     pts_vector[i] = (*vit)->pt();
   }
 
-  vcl_set<bmsh3d_face*>::iterator fit = faces.begin();
+  std::set<bmsh3d_face*>::iterator fit = faces.begin();
   for (unsigned int i=0 ; fit != faces.end(); fit++, i++) {
     bmsh3d_face* F = *fit;
     faces_vector[i].resize(F->vertices().size());
@@ -105,8 +107,8 @@ void draw_ifs_geom(SoGroup* root, vcl_set<bmsh3d_vertex*>& pts,
   draw_ifs_geom(root, pts_vector, faces_vector);
 }
 
-SoSeparator* draw_ifs(const vcl_vector<vgl_point_3d<double> >& pts,
-                      const vcl_vector<vcl_vector<int> >& faces,
+SoSeparator* draw_ifs(const std::vector<vgl_point_3d<double> >& pts,
+                      const std::vector<std::vector<int> >& faces,
                       const int colorcode,
                       const bool b_shape_hints, const float transp)
 {
@@ -156,8 +158,8 @@ SoSeparator* draw_ifs(const vcl_vector<vgl_point_3d<double> >& pts,
   return root;
 }
 
-SoSeparator* draw_ifs(const vcl_vector<vgl_point_3d<double> >& pts,
-                      const vcl_vector<vcl_vector<int> >& faces,
+SoSeparator* draw_ifs(const std::vector<vgl_point_3d<double> >& pts,
+                      const std::vector<std::vector<int> >& faces,
                       const SbColor& color,
                       const bool b_shape_hints, const float transp)
 {
@@ -192,7 +194,7 @@ SoSeparator* draw_ifs(const vcl_vector<vgl_point_3d<double> >& pts,
   return root;
 }
 
-SoSeparator* draw_ifs(vcl_set<bmsh3d_vertex*>& pts, vcl_set<bmsh3d_face*>& faces,
+SoSeparator* draw_ifs(std::set<bmsh3d_vertex*>& pts, std::set<bmsh3d_face*>& faces,
                       const int colorcode, const bool b_shape_hints, const float transp)
 {
   SoSeparator* root = new SoSeparator;
@@ -241,7 +243,7 @@ SoSeparator* draw_ifs(vcl_set<bmsh3d_vertex*>& pts, vcl_set<bmsh3d_face*>& faces
   return root;
 }
 
-SoSeparator* draw_ifs(vcl_set<bmsh3d_vertex*>& pts, vcl_set<bmsh3d_face*>& faces,
+SoSeparator* draw_ifs(std::set<bmsh3d_vertex*>& pts, std::set<bmsh3d_face*>& faces,
                       const SbColor& color, const bool b_shape_hints, const float transp)
 {
   SoSeparator* root = new SoSeparator;
@@ -288,7 +290,7 @@ void draw_M_ifs_geom_(bmsh3d_mesh* M, SoVertexProperty* vp, int n_ind, int* ind)
   float (*xyz)[3] = new float[nVertices][3];
 
   // Assign vertices
-  vcl_map<int, bmsh3d_vertex*>::iterator it = M->vertexmap().begin();
+  std::map<int, bmsh3d_vertex*>::iterator it = M->vertexmap().begin();
   for (int i=0; it != M->vertexmap().end(); it++, i++) {
     bmsh3d_vertex* v = (*it).second;
 
@@ -301,7 +303,7 @@ void draw_M_ifs_geom_(bmsh3d_mesh* M, SoVertexProperty* vp, int n_ind, int* ind)
   // Assign faces
   int k = 0;
 
-  vcl_map<int, bmsh3d_face*>::iterator fit = M->facemap().begin();
+  std::map<int, bmsh3d_face*>::iterator fit = M->facemap().begin();
   for (; fit != M->facemap().end(); fit++) {
     bmsh3d_face* F = (*fit).second;
     assert (F->vertices().size() > 2);
@@ -329,7 +331,7 @@ void draw_M_mhe_geom_(bmsh3d_mesh* M, SoVertexProperty* vp, int n_ind, int* ind)
   float (*xyz)[3] = new float[nVertices][3];
 
   // Assign vertices
-  vcl_map<int, bmsh3d_vertex*>::iterator it = M->vertexmap().begin();
+  std::map<int, bmsh3d_vertex*>::iterator it = M->vertexmap().begin();
   for (int i=0; it != M->vertexmap().end(); it++, i++) {
     bmsh3d_vertex* v = (*it).second;
 
@@ -342,10 +344,10 @@ void draw_M_mhe_geom_(bmsh3d_mesh* M, SoVertexProperty* vp, int n_ind, int* ind)
   // Assign faces
   int k = 0;
 
-  vcl_map<int, bmsh3d_face*>::iterator fit = M->facemap().begin();
+  std::map<int, bmsh3d_face*>::iterator fit = M->facemap().begin();
   for (; fit != M->facemap().end(); fit++) {
     bmsh3d_face* F = (*fit).second;
-    vcl_vector<bmsh3d_vertex*> vertices;
+    std::vector<bmsh3d_vertex*> vertices;
     F->get_ordered_Vs(vertices);
     assert (vertices.size() > 2);
 
@@ -461,7 +463,7 @@ void _draw_M_visited_ifs_geom(bmsh3d_mesh* M, SoVertexProperty* vp, int* ind)
   float (*xyz)[3] = new float[nVertices][3];
 
   // Assign vertices
-  vcl_map<int, bmsh3d_vertex*>::iterator it = M->vertexmap().begin();
+  std::map<int, bmsh3d_vertex*>::iterator it = M->vertexmap().begin();
   for (int i=0; it != M->vertexmap().end(); it++, i++) {
     bmsh3d_vertex* v = (*it).second;
 
@@ -474,7 +476,7 @@ void _draw_M_visited_ifs_geom(bmsh3d_mesh* M, SoVertexProperty* vp, int* ind)
   // Assign faces
   unsigned int k = 0;
 
-  vcl_map<int, bmsh3d_face*>::iterator fit = M->facemap().begin();
+  std::map<int, bmsh3d_face*>::iterator fit = M->facemap().begin();
   for (; fit != M->facemap().end(); fit++) {
     bmsh3d_face* F = (*fit).second;
     if (! F->b_visited())
@@ -574,12 +576,12 @@ SoSeparator* draw_M_ifs_visited(bmsh3d_mesh* M, const int colorcode,
 SoSeparator* draw_M_topo_vertices(bmsh3d_mesh* M, const int option,
                                   const float size, const bool user_defined_class)
 {
-  vcl_cerr << "draw_M_topo_vertices(): ";
+  std::cerr << "draw_M_topo_vertices(): ";
   unsigned int n_non_m_1ring_v = 0;
   unsigned int n_non_1ring_v = 0;
   SoSeparator* root = new SoSeparator;
 
-  vcl_map<int, bmsh3d_vertex*>::iterator it = M->vertexmap().begin();
+  std::map<int, bmsh3d_vertex*>::iterator it = M->vertexmap().begin();
   for (; it != M->vertexmap().end(); it++)
   {
     bmsh3d_vertex* V = (*it).second;
@@ -599,7 +601,7 @@ SoSeparator* draw_M_topo_vertices(bmsh3d_mesh* M, const int option,
         root->addChild(draw_vertex_SoCube(V, NON_1RING_COLOR, size));
     }
   }
-  vcl_cerr << n_non_m_1ring_v << " non-manifold 1-ring vertices.\n"
+  std::cerr << n_non_m_1ring_v << " non-manifold 1-ring vertices.\n"
            << n_non_1ring_v << " non-1-ring vertices.\n";
 
   return root;
@@ -625,14 +627,14 @@ SoSeparator* draw_M_edges_idv(bmsh3d_mesh* M, const SbColor& color,
   root->addChild(ds);
 
   if (user_defined_class) {
-    vcl_map<int, bmsh3d_edge*>::iterator it = M->edgemap().begin();
+    std::map<int, bmsh3d_edge*>::iterator it = M->edgemap().begin();
     for (; it != M->edgemap().end(); it++) {
       bmsh3d_edge* E = (*it).second;
       draw_edge_geom(root, E, true);
     }
   }
   else {
-    vcl_map<int, bmsh3d_edge*>::iterator it = M->edgemap().begin();
+    std::map<int, bmsh3d_edge*>::iterator it = M->edgemap().begin();
     for (; it != M->edgemap().end(); it++) {
       bmsh3d_edge* E = (*it).second;
       draw_edge_geom(root, E, false);
@@ -676,7 +678,7 @@ void draw_M_mhe_edges_geom(SoSeparator* root, bmsh3d_mesh* M)
   int* ind = new int [nLinesIndices];
 
   // Assign vertices and lines
-  vcl_map<int, bmsh3d_edge*>::iterator eit = M->edgemap().begin();
+  std::map<int, bmsh3d_edge*>::iterator eit = M->edgemap().begin();
   for (unsigned int i=0; eit != M->edgemap().end(); eit++, i++) {
     bmsh3d_edge* E = (*eit).second;
     vgl_point_3d<double> Ps = E->sV()->pt();
@@ -715,7 +717,7 @@ void draw_M_ifs_edges_geom(SoSeparator* root, bmsh3d_mesh* M)
 
   // Assign vertices and lines
   unsigned int i=0;
-  vcl_map<int, bmsh3d_face*>::iterator fit = M->facemap().begin();
+  std::map<int, bmsh3d_face*>::iterator fit = M->facemap().begin();
   for (; fit != M->facemap().end(); fit++) {
     bmsh3d_face* F = (*fit).second;
     // Go through each implicit incident E and draw it.
@@ -769,11 +771,11 @@ SoSeparator* draw_M_bndcurve(bmsh3d_mesh* M, const int colorcode, const float wi
   bnd_chain_set->detect_bnd_chains();
 
   // Draw each bnd_chain in polyline
-  vcl_vector<bmsh3d_bnd_chain*>::iterator bit = bnd_chain_set->chainset().begin();
+  std::vector<bmsh3d_bnd_chain*>::iterator bit = bnd_chain_set->chainset().begin();
   for (; bit != bnd_chain_set->chainset().end(); bit++) {
     bmsh3d_bnd_chain* BC = (*bit);
 
-    vcl_vector<vgl_point_3d<double> > polyline_vertices;
+    std::vector<vgl_point_3d<double> > polyline_vertices;
     // Trace each bnd_chain to a vector of points.
     BC->trace_polyline(polyline_vertices);
     draw_polyline_geom(root, polyline_vertices);
@@ -811,14 +813,14 @@ SoSeparator* draw_M_faces_idv(bmsh3d_mesh* M,
   root->addChild(ds);
 
   if (user_defined_class) {
-    vcl_map<int, bmsh3d_face*>::iterator it = M->facemap().begin();
+    std::map<int, bmsh3d_face*>::iterator it = M->facemap().begin();
     for (; it != M->facemap().end(); it++) {
       bmsh3d_face* F = (*it).second;
       draw_F_geom_vispt(root, F);
     }
   }
   else {
-    vcl_map<int, bmsh3d_face*>::iterator it = M->facemap().begin();
+    std::map<int, bmsh3d_face*>::iterator it = M->facemap().begin();
     for (; it != M->facemap().end(); it++) {
       bmsh3d_face* F = (*it).second;
       draw_F_geom(root, F);
@@ -830,7 +832,7 @@ SoSeparator* draw_M_faces_idv(bmsh3d_mesh* M,
 
 SoSeparator* draw_M_color(bmsh3d_mesh* M,
                           const bool b_shape_hints, const float trans,
-                          const vcl_vector<SbColor>& color_set,
+                          const std::vector<SbColor>& color_set,
                           const bool user_defined_class)
 {
   SoSeparator* root = new SoSeparator;
@@ -845,7 +847,7 @@ SoSeparator* draw_M_color(bmsh3d_mesh* M,
     root->addChild(hints);
   }
 
-  vcl_map<int, bmsh3d_face*>::iterator it = M->facemap().begin();
+  std::map<int, bmsh3d_face*>::iterator it = M->facemap().begin();
   for (; it != M->facemap().end(); it++) {
     bmsh3d_face* F = (*it).second;
     root->addChild(draw_F(F, color_set[F->id()], trans, user_defined_class));
@@ -862,7 +864,7 @@ SoSeparator* draw_M_color(bmsh3d_mesh* M,
 SoSeparator* draw_M_bnd_faces_cost_col(bmsh3d_mesh* M, const bool draw_idv,
                                        const bool showid, const float transp)
 {
-  vcl_cerr << "draw_M_bnd_faces_cost_col()\n";
+  std::cerr << "draw_M_bnd_faces_cost_col()\n";
 
   SoSeparator* root = new SoSeparator;
 
@@ -889,10 +891,10 @@ SoSeparator* draw_M_bnd_faces_cost_col(bmsh3d_mesh* M, const bool draw_idv,
   if (!showid)
   {
     // draw all obtuse triangles in a batch.
-    vcl_map<int, bmsh3d_face*>::iterator it = M->facemap().begin();
+    std::map<int, bmsh3d_face*>::iterator it = M->facemap().begin();
     for (; it != M->facemap().end(); it++) {
       bmsh3d_face* F = (*it).second;
-      vcl_vector<bmsh3d_vertex*> vertices;
+      std::vector<bmsh3d_vertex*> vertices;
       F->get_ordered_Vs(vertices);
       if (is_tri_non_acute(vertices)) {
         n_obtuse++;
@@ -907,7 +909,7 @@ SoSeparator* draw_M_bnd_faces_cost_col(bmsh3d_mesh* M, const bool draw_idv,
     it = M->facemap().begin();
     for (; it != M->facemap().end(); it++) {
       bmsh3d_face* F = (*it).second;
-      vcl_vector<bmsh3d_vertex*> vertices;
+      std::vector<bmsh3d_vertex*> vertices;
       F->get_ordered_Vs(vertices);
       if (! is_tri_non_acute(vertices)) {
         n_acute++;
@@ -924,10 +926,10 @@ SoSeparator* draw_M_bnd_faces_cost_col(bmsh3d_mesh* M, const bool draw_idv,
     SoBaseColor* idbasecolor = new SoBaseColor;
     idbasecolor->rgb = FACE_ID_COLOR;
 
-    vcl_map<int, bmsh3d_face*>::iterator it = M->facemap().begin();
+    std::map<int, bmsh3d_face*>::iterator it = M->facemap().begin();
     for (; it != M->facemap().end(); it++) {
       bmsh3d_face* F = (*it).second;
-      vcl_vector<bmsh3d_vertex*> vertices;
+      std::vector<bmsh3d_vertex*> vertices;
       F->get_ordered_Vs(vertices);
       // Determine color according to its cost type.
       if (is_tri_non_acute(vertices)) {
@@ -940,7 +942,7 @@ SoSeparator* draw_M_bnd_faces_cost_col(bmsh3d_mesh* M, const bool draw_idv,
       }
     }
   }
-  vcl_cerr << '\t' << n_acute << " acute, "
+  std::cerr << '\t' << n_acute << " acute, "
            << n_obtuse << " obtuse faces drawn (totally " << M->facemap().size() << ").\n";
   return root;
 }
@@ -949,7 +951,7 @@ SoSeparator* draw_M_bnd_faces_topo_col(bmsh3d_mesh* M, const bool draw_idv,
                                        const bool showid, const float transp,
                                        const bool user_defined_class)
 {
-  vcl_cerr << "draw_M_bnd_faces_topo_col()\n";
+  std::cerr << "draw_M_bnd_faces_topo_col()\n";
   SoSeparator* root = new SoSeparator;
 
   SoDrawStyle* ds = new SoDrawStyle;
@@ -972,7 +974,7 @@ SoSeparator* draw_M_bnd_faces_topo_col(bmsh3d_mesh* M, const bool draw_idv,
   VIS_COLOR_CODE colorcode;
   SbColor color;
 
-  vcl_map<int, bmsh3d_face*>::iterator it = M->facemap().begin();
+  std::map<int, bmsh3d_face*>::iterator it = M->facemap().begin();
   for (; it != M->facemap().end(); it++)
   {
     bmsh3d_face* F = (*it).second;
@@ -1016,7 +1018,7 @@ SoSeparator* draw_M_bnd_faces_topo_col(bmsh3d_mesh* M, const bool draw_idv,
     root->addChild(draw_M_ifs_visited(M, colorcode, false, transp));
   }
 
-  vcl_cerr << "\tAmong " << M->facemap().size() << " mesh faces:\n\t"
+  std::cerr << "\tAmong " << M->facemap().size() << " mesh faces:\n\t"
            << n_222+n_112+n_122 << " 2-manifold faces: " << n_222 << " (222) interior DARKGRAY,\n"
            << "\t  + boundary: " << n_112 << " (112) DARKGREEN + " << n_122 << " (122) DARKBLUE.\n\t"
 
@@ -1097,7 +1099,7 @@ static void timerCallback(void *data, SoSensor* /*sensor*/)
 
 SoSeparator* draw_M_bnd_faces_anim(bmsh3d_mesh* M, const int nF_batch)
 {
-  vcl_cerr << "  draw_M_bnd_faces_anim(" << nF_batch << ").\n";
+  std::cerr << "  draw_M_bnd_faces_anim(" << nF_batch << ").\n";
   SoSeparator* root = new SoSeparator;
 
   SoDrawStyle* ds = new SoDrawStyle;
@@ -1112,8 +1114,8 @@ SoSeparator* draw_M_bnd_faces_anim(bmsh3d_mesh* M, const int nF_batch)
   root->addChild(animRoot);
 
   unsigned int frame = 0;
-  vcl_vector<bmsh3d_face*> faces;
-  vcl_map<int, bmsh3d_face*>::iterator it = M->facemap().begin();
+  std::vector<bmsh3d_face*> faces;
+  std::map<int, bmsh3d_face*>::iterator it = M->facemap().begin();
   for (unsigned int i=0; it != M->facemap().end(); it++, i++) {
     bmsh3d_face* F = (*it).second;
     faces.push_back(F);
@@ -1128,7 +1130,7 @@ SoSeparator* draw_M_bnd_faces_anim(bmsh3d_mesh* M, const int nF_batch)
   draw_faces_in_switch(animRoot, faces);
   faces.clear();
   frame++;
-  vcl_cerr << "    total animation frames: " << frame << ".\n";
+  std::cerr << "    total animation frames: " << frame << ".\n";
 
   SoTimerSensor* timer = new SoTimerSensor(timerCallback, animRoot);
   timer->setInterval(0.01f);
@@ -1137,25 +1139,25 @@ SoSeparator* draw_M_bnd_faces_anim(bmsh3d_mesh* M, const int nF_batch)
   return root;
 }
 
-void draw_faces_in_switch(SoSeparator* root, const vcl_vector<bmsh3d_face*>& faces)
+void draw_faces_in_switch(SoSeparator* root, const std::vector<bmsh3d_face*>& faces)
 {
   SoSwitch* sw = new SoSwitch;
   sw->whichChild = SO_SWITCH_NONE;
   root->addChild(sw);
 
   // Prepare the set of all vertices for the input faces.
-  vcl_set<bmsh3d_vertex*> vertex_set;
+  std::set<bmsh3d_vertex*> vertex_set;
   for (unsigned int i=0; i<faces.size(); i++) {
     bmsh3d_face* F = faces[i];
-    vcl_vector<bmsh3d_vertex*> vs;
+    std::vector<bmsh3d_vertex*> vs;
     F->get_ordered_Vs(vs);
     for (unsigned int j=0; j<vs.size(); j++)
       vertex_set.insert(vs[j]);
   }
 
   // Put all points into a vector.
-  vcl_vector<vgl_point_3d<double> > ifs_pts;
-  vcl_set<bmsh3d_vertex*>::iterator vit = vertex_set.begin();
+  std::vector<vgl_point_3d<double> > ifs_pts;
+  std::set<bmsh3d_vertex*>::iterator vit = vertex_set.begin();
   for (unsigned int i=0; vit != vertex_set.end(); vit++, i++) {
     bmsh3d_vertex* V = (*vit);
     V->set_vid(i);
@@ -1164,12 +1166,12 @@ void draw_faces_in_switch(SoSeparator* root, const vcl_vector<bmsh3d_face*>& fac
   vertex_set.clear();
 
   // Put all faces into the IFS.
-  vcl_vector<vcl_vector<int> > ifs_faces;
+  std::vector<std::vector<int> > ifs_faces;
   for (unsigned int i=0; i<faces.size(); i++) {
     bmsh3d_face* F = faces[i];
-    vcl_vector<bmsh3d_vertex*> vs;
+    std::vector<bmsh3d_vertex*> vs;
     F->get_ordered_Vs(vs);
-    vcl_vector<int> face_vids;
+    std::vector<int> face_vids;
     for (unsigned int j=0; j<vs.size(); j++)
       face_vids.push_back(vs[j]->vid());
     ifs_faces.push_back(face_vids);

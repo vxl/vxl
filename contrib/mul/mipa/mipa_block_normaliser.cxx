@@ -4,16 +4,18 @@
 // \brief Class to independently normalise sub-blocks with a region
 // \author Martin Roberts
 
-#include <vcl_iostream.h>
-#include <vcl_sstream.h>
-#include <vcl_algorithm.h>
+#include <iostream>
+#include <sstream>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <algorithm>
 #include <vsl/vsl_binary_loader.h>
 #include <vsl/vsl_vector_io.h>
 #include <vnl/vnl_vector.h>
 #include <mbl/mbl_read_props.h>
 #include <mbl/mbl_parse_block.h>
 #include <mbl/mbl_exception.h>
-#include <vcl_cstddef.h>
+#include <cstddef>
 
 //=======================================================================
 //: Apply transform to texture vector
@@ -32,8 +34,8 @@ void mipa_block_normaliser::normalise(vnl_vector<double>& v) const
     //Working vector for a contiguous memory single block
 
     vnl_vector<double> vblock(nblockEls,0.0);
-    vcl_ptrdiff_t colStep=nA_; //Columns are contiguous
-    vcl_ptrdiff_t rowStep=nA_*ni_region_;
+    std::ptrdiff_t colStep=nA_; //Columns are contiguous
+    std::ptrdiff_t rowStep=nA_*ni_region_;
 
     for (unsigned jbRows=0;jbRows<nblockRows;++jbRows) //move down rows of region in block chunks
     {
@@ -47,7 +49,7 @@ void mipa_block_normaliser::normalise(vnl_vector<double>& v) const
                 for (unsigned j=0;j<nc_per_block_;++j) //rows of this target block
                 {
                     //Copy all elements across the columns of the block
-                    vcl_copy(pBlockTopLeft,pBlockTopLeft+nTargetColEls,pTarget);
+                    std::copy(pBlockTopLeft,pBlockTopLeft+nTargetColEls,pTarget);
                     pBlockTopLeft+= rowStep; //Next row of block source
                     pTarget+= nTargetColEls; //Next row of block target
                 }
@@ -62,7 +64,7 @@ void mipa_block_normaliser::normalise(vnl_vector<double>& v) const
                 for (unsigned j=0;j<nc_per_block_;++j) //rows of this target block
                 {
                     //Copy all elements across the columns of the block
-                    vcl_copy(pTarget,pTarget+nTargetColEls,pBlockTopLeft);
+                    std::copy(pTarget,pTarget+nTargetColEls,pBlockTopLeft);
                     pBlockTopLeft+= rowStep; //Next row of block in overall normalised vector
                     pTarget+= nTargetColEls; //Next row of block
                 }
@@ -73,9 +75,9 @@ void mipa_block_normaliser::normalise(vnl_vector<double>& v) const
 
 //=======================================================================
 
-vcl_string mipa_block_normaliser::is_a() const
+std::string mipa_block_normaliser::is_a() const
 {
-    return vcl_string("mipa_block_normaliser");
+    return std::string("mipa_block_normaliser");
 }
 
 //=======================================================================
@@ -88,7 +90,7 @@ mipa_vector_normaliser* mipa_block_normaliser::clone() const
 //=======================================================================
 
     // required if data is present in this base class
-void mipa_block_normaliser::print_summary(vcl_ostream& os) const
+void mipa_block_normaliser::print_summary(std::ostream& os) const
 {
     os<<"mipa_block_normaliser:\n"
       <<"\tni_region_\t"<<ni_region_
@@ -137,9 +139,9 @@ void mipa_block_normaliser::b_read(vsl_b_istream& bfs)
             vsl_b_read(bfs,normaliser_);
             break;
         default:
-            vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, mipa_block_normaliser&)\n"
+            std::cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, mipa_block_normaliser&)\n"
                      << "           Unknown version number "<< version << '\n';
-            bfs.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
+            bfs.is().clear(std::ios::badbit); // Set an unrecoverable IO error on stream
             return;
         }
     }
@@ -159,41 +161,41 @@ void mipa_block_normaliser::b_read(vsl_b_istream& bfs)
 // \endverbatim
 
 void mipa_block_normaliser::config_from_stream(
-    vcl_istream &is, const mbl_read_props_type &extra_props)
+    std::istream &is, const mbl_read_props_type &extra_props)
 {
-    vcl_string s = mbl_parse_block(is);
+    std::string s = mbl_parse_block(is);
 
-    vcl_istringstream ss(s);
+    std::istringstream ss(s);
     mbl_read_props_type props = mbl_read_props(ss);
 
     props = mbl_read_props_merge(props, extra_props, true);
 
     if (props["normaliser"].empty())
     {
-        mbl_exception_parse_error x(vcl_string("mipa_block_normaliser could not find a normaliser property"));
+        mbl_exception_parse_error x(std::string("mipa_block_normaliser could not find a normaliser property"));
         mbl_exception_error(x);
     }
-    vcl_istringstream ss2(props["normaliser"]);
-    vcl_auto_ptr<mipa_vector_normaliser> norm = new_normaliser_from_stream(ss2, extra_props);
+    std::istringstream ss2(props["normaliser"]);
+    std::auto_ptr<mipa_vector_normaliser> norm = new_normaliser_from_stream(ss2, extra_props);
     normaliser_=norm.release();
     props.erase("normaliser");
 
     {
         if (props["ni"].empty())
         {
-            mbl_exception_parse_error x(vcl_string("mipa_block_normaliser could not find a ni  property"));
+            mbl_exception_parse_error x(std::string("mipa_block_normaliser could not find a ni  property"));
             mbl_exception_error(x);
         }
 
         //Decode the feature indices using a string stream
-        vcl_string sfi=props["ni"];
-//    vcl_istringstream ssInner(sfi.substr(1,sfi.size()-2));
-        vcl_istringstream ssInner(sfi);
+        std::string sfi=props["ni"];
+//    std::istringstream ssInner(sfi.substr(1,sfi.size()-2));
+        std::istringstream ssInner(sfi);
         int n=0;
         ssInner>>n;
         if (ssInner.bad() || n<=0)
         {
-            mbl_exception_parse_error x(vcl_string("mipa_block_normaliser - string stream read error of ni property"));
+            mbl_exception_parse_error x(std::string("mipa_block_normaliser - string stream read error of ni property"));
             mbl_exception_error(x);
         }
         ni_region_ =n;
@@ -204,19 +206,19 @@ void mipa_block_normaliser::config_from_stream(
     {
         if (props["nj"].empty())
         {
-            mbl_exception_parse_error x(vcl_string("mipa_block_normaliser could not find a nj  property"));
+            mbl_exception_parse_error x(std::string("mipa_block_normaliser could not find a nj  property"));
             mbl_exception_error(x);
         }
 
         //Decode the feature indices using a string stream
-        vcl_string sfi=props["nj"];
-//    vcl_istringstream ssInner(sfi.substr(1,sfi.size()-2));
-        vcl_istringstream ssInner(sfi);
+        std::string sfi=props["nj"];
+//    std::istringstream ssInner(sfi.substr(1,sfi.size()-2));
+        std::istringstream ssInner(sfi);
         int n=0;
         ssInner>>n;
         if (ssInner.bad() || n<=0)
         {
-            mbl_exception_parse_error x(vcl_string("mipa_block_normaliser - string stream read error of nj property"));
+            mbl_exception_parse_error x(std::string("mipa_block_normaliser - string stream read error of nj property"));
             mbl_exception_error(x);
         }
         nj_region_ =n;
@@ -226,17 +228,17 @@ void mipa_block_normaliser::config_from_stream(
     {
         if (props["nA"].empty())
         {
-            mbl_exception_parse_error x(vcl_string("mipa_block_normaliser could not find a nA  property"));
+            mbl_exception_parse_error x(std::string("mipa_block_normaliser could not find a nA  property"));
             mbl_exception_error(x);
         }
 
-        vcl_string sfi=props["nA"];
-        vcl_istringstream ssInner(sfi);
+        std::string sfi=props["nA"];
+        std::istringstream ssInner(sfi);
         int n=0;
         ssInner>>n;
         if (ssInner.bad() || n<=0)
         {
-            mbl_exception_parse_error x(vcl_string("mipa_block_normaliser - string stream read error of nj property"));
+            mbl_exception_parse_error x(std::string("mipa_block_normaliser - string stream read error of nj property"));
             mbl_exception_error(x);
         }
         nA_ =n;
@@ -245,17 +247,17 @@ void mipa_block_normaliser::config_from_stream(
     {
         if (props["block_size"].empty())
         {
-            mbl_exception_parse_error x(vcl_string("mipa_block_normaliser could not find a block_size  property"));
+            mbl_exception_parse_error x(std::string("mipa_block_normaliser could not find a block_size  property"));
             mbl_exception_error(x);
         }
 
-        vcl_string sfi=props["block_size"];
-        vcl_istringstream ssInner(sfi);
+        std::string sfi=props["block_size"];
+        std::istringstream ssInner(sfi);
         int n=0;
         ssInner>>n;
         if (ssInner.bad() || n<=0)
         {
-            mbl_exception_parse_error x(vcl_string("mipa_block_normaliser - string stream read error of block_size property"));
+            mbl_exception_parse_error x(std::string("mipa_block_normaliser - string stream read error of block_size property"));
             mbl_exception_error(x);
         }
         nc_per_block_ =n;

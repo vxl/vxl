@@ -16,7 +16,7 @@
 vsol_group_2d::vsol_group_2d(void)
   : vsol_spatial_object_2d()
 {
-  storage_=new vcl_vector<vsol_spatial_object_2d_sptr>();
+  storage_=new std::vector<vsol_spatial_object_2d_sptr>();
 }
 
 //---------------------------------------------------------------------------
@@ -26,7 +26,7 @@ vsol_group_2d::vsol_group_2d(void)
 vsol_group_2d::vsol_group_2d(const vsol_group_2d &other)
   : vsol_spatial_object_2d(other)
 {
-  storage_=new vcl_vector<vsol_spatial_object_2d_sptr>(*other.storage_);
+  storage_=new std::vector<vsol_spatial_object_2d_sptr>(*other.storage_);
 }
 
 //---------------------------------------------------------------------------
@@ -60,7 +60,7 @@ vsol_spatial_object_2d_sptr vsol_group_2d::object(unsigned int i) const
   // require
   assert(i<size());
 
-  vcl_vector<vsol_spatial_object_2d_sptr>::iterator j = storage_->begin();
+  std::vector<vsol_spatial_object_2d_sptr>::iterator j = storage_->begin();
   for (unsigned int k=0;k<i;++k)
     ++j;
   return *j;
@@ -88,7 +88,7 @@ void vsol_group_2d::compute_bounding_box(void) const
   // require
   assert(size()>0);
 
-  vcl_vector<vsol_spatial_object_2d_sptr>::iterator i = storage_->begin();
+  std::vector<vsol_spatial_object_2d_sptr>::iterator i = storage_->begin();
   set_bounding_box(   (*i)->get_min_x(), (*i)->get_min_y());
   add_to_bounding_box((*i)->get_max_x(), (*i)->get_max_y());
   for (++i; i!=storage_->end(); ++i)
@@ -104,7 +104,7 @@ void vsol_group_2d::compute_bounding_box(void) const
 unsigned int vsol_group_2d::deep_size(void) const
 {
   int result = 0;
-  vcl_vector<vsol_spatial_object_2d_sptr>::iterator i;
+  std::vector<vsol_spatial_object_2d_sptr>::iterator i;
   for (i=storage_->begin();i!=storage_->end();++i)
   {
     vsol_group_2d const* g=(*i)->cast_to_group();
@@ -145,7 +145,7 @@ void vsol_group_2d::remove_object(unsigned int i)
   // require
   assert(i<size());
 
-  vcl_vector<vsol_spatial_object_2d_sptr>::iterator j = storage_->begin();
+  std::vector<vsol_spatial_object_2d_sptr>::iterator j = storage_->begin();
   for (unsigned int k=0;k<i;++k)
     ++j;
   storage_->erase(j);
@@ -157,7 +157,7 @@ void vsol_group_2d::remove_object(unsigned int i)
 bool
 vsol_group_2d::is_child(const vsol_spatial_object_2d_sptr &new_object) const
 {
-  vcl_vector<vsol_spatial_object_2d_sptr>::iterator i;
+  std::vector<vsol_spatial_object_2d_sptr>::iterator i;
   for (i=storage_->begin(); i!=storage_->end(); ++i)
   {
     if ((*i).ptr()==new_object.ptr())
@@ -266,7 +266,7 @@ void vsol_group_2d::b_write(vsl_b_ostream &os) const
       g->b_write(os);
     }
   }
-  vsl_b_write(os, vcl_string("vsol_group_2d_end"));
+  vsl_b_write(os, std::string("vsol_group_2d_end"));
 #endif // 0
 }
 
@@ -284,7 +284,7 @@ void vsol_group_2d::b_read(vsl_b_istream &is)
    case 1:
     vsl_b_read(is, *storage_);
 #if 0
-    vcl_string type;
+    std::string type;
     while (true)
     {
       vsl_b_read(is, type);
@@ -358,7 +358,7 @@ short vsol_group_2d::version() const
 }
 
 //: Print an ascii summary to the stream
-void vsol_group_2d::print_summary(vcl_ostream &os) const
+void vsol_group_2d::print_summary(std::ostream &os) const
 {
   os << *this;
 }

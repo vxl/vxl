@@ -5,8 +5,10 @@
 // \brief Iterator for images and points stored in arrays
 
 #include <vcl_cassert.h>
-#include <vcl_string.h>
-#include <vcl_sstream.h>
+#include <string>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <sstream>
 
 #include "msdi_array_of_marked_images.h"
 #include <vimt/vimt_image_2d_of.h>
@@ -20,8 +22,8 @@ msdi_array_of_marked_images::msdi_array_of_marked_images()
 
 //: Construct with external vectors of images and points
 msdi_array_of_marked_images::msdi_array_of_marked_images(
-                 const vcl_vector<vil_image_view<vxl_byte> >& images,
-                 const vcl_vector<msm_points>& points,
+                 const std::vector<vil_image_view<vxl_byte> >& images,
+                 const std::vector<msm_points>& points,
                  bool grey_only)
   : images_(VXL_NULLPTR),points_(VXL_NULLPTR),index_(0)
 {
@@ -30,8 +32,8 @@ msdi_array_of_marked_images::msdi_array_of_marked_images(
 
 //: Initialise with directories and filenames
 void msdi_array_of_marked_images::set(
-           const vcl_vector<vil_image_view<vxl_byte> >& images,
-           const vcl_vector<msm_points>& points,
+           const std::vector<vil_image_view<vxl_byte> >& images,
+           const std::vector<msm_points>& points,
            bool grey_only)
 {
   assert(images.size()==points.size());
@@ -122,7 +124,7 @@ void msdi_array_of_marked_images::get_image()
   image_.image() = images_->operator[](index_);
   if (image_.image().size()==0)
   {
-    vcl_cerr<<"Empty image! "<<vcl_endl;
+    std::cerr<<"Empty image! "<<std::endl;
   }
   if (grey_only_ && image_.image().nplanes()>1)
   {
@@ -134,19 +136,19 @@ void msdi_array_of_marked_images::get_image()
 }
 
 //: Return current image file name
-vcl_string msdi_array_of_marked_images::image_name() const
+std::string msdi_array_of_marked_images::image_name() const
 {
   assert(index_ < (int)size());
-  vcl_stringstream ss;
+  std::stringstream ss;
   ss<<"image"<<index_<<".png";
   return ss.str();
 }
 
 //: Return current points file name
-vcl_string msdi_array_of_marked_images::points_name() const
+std::string msdi_array_of_marked_images::points_name() const
 {
   assert(index_ < (int)size());
-  vcl_stringstream ss;
+  std::stringstream ss;
   ss<<"points"<<index_<<".pts";
   return ss.str();
 }

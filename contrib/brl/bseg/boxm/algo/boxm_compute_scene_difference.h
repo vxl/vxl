@@ -9,7 +9,9 @@
 #include <imesh/imesh_mesh.h>
 #include <imesh/imesh_operations.h>
 #include <vgl/vgl_point_3d.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iostream>
 
 
 void boxm_compute_block_difference(boxm_block<boct_tree<short, boxm_sample<BOXM_APM_MOG_GREY> > > * block1,
@@ -25,8 +27,8 @@ void boxm_compute_block_difference(boxm_block<boct_tree<short, boxm_sample<BOXM_
   tree_type* tree2 = block2->get_tree();
   tree_type* treeout = blockout->get_tree();
 
-  vcl_vector<cell_type*> leaves=tree1->leaf_cells();
-  vcl_vector<cell_type*> leavesout=treeout->leaf_cells();
+  std::vector<cell_type*> leaves=tree1->leaf_cells();
+  std::vector<cell_type*> leavesout=treeout->leaf_cells();
 
   for (unsigned i=0;i<leaves.size();i++)
   {
@@ -44,12 +46,12 @@ void boxm_compute_block_difference(boxm_block<boct_tree<short, boxm_sample<BOXM_
 
       data_type dataout=cellout->data();
 
-      double p1=1-vcl_exp(-data1.alpha*len1);
-      double p2=1-vcl_exp(-data2.alpha*len2);
+      double p1=1-std::exp(-data1.alpha*len1);
+      double p2=1-std::exp(-data2.alpha*len2);
 
       double p=p1+p2-2*p1*p2;
 
-      double alphaout=-vcl_log(1-p)/len1;
+      double alphaout=-std::log(1-p)/len1;
       if (p<threshold)
           alphaout=0.0;
       dataout.alpha=(float)alphaout;
@@ -78,7 +80,7 @@ void boxm_compute_scene_difference(boxm_scene<boct_tree<short, boxm_sample<BOXM_
   boxm_block_iterator<tree_type> iterout(&sceneout);
 
   for (; !iter1.end(); iter1++,iter2++,iterout++) {
-    vcl_cout<<'.';
+    std::cout<<'.';
     scene1.load_block(iter1.index());
     scene2.load_block(iter2.index());
     sceneout.load_block(iterout.index());

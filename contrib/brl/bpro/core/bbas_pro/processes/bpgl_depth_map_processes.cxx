@@ -6,8 +6,10 @@
 #include <bsta/bsta_histogram.h>
 #include <bpgl/depth_map/depth_map_scene.h>
 
-#include <vcl_string.h>
-#include <vcl_iostream.h>
+#include <string>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iostream>
 
 #include <brdb/brdb_value.h>
 #include <vil/vil_image_view.h>
@@ -16,7 +18,7 @@
 //:sets input and output types
 bool bpgl_generate_depth_maps_process_cons(bprb_func_process& pro)
 {
-  vcl_vector<vcl_string> input_types_(4);
+  std::vector<std::string> input_types_(4);
   input_types_[0] = "vcl_string"; // the path to the binary stream for depth_scene object
   input_types_[1] = "unsigned";   // down sampling level to generate the depth maps
   input_types_[2] = "vcl_string"; // output folder
@@ -25,7 +27,7 @@ bool bpgl_generate_depth_maps_process_cons(bprb_func_process& pro)
   if (!pro.set_input_types(input_types_))
     return false;
   //output
-  vcl_vector<vcl_string> output_types_(0);
+  std::vector<std::string> output_types_(0);
   return pro.set_output_types(output_types_);
 }
 
@@ -35,20 +37,20 @@ bool bpgl_generate_depth_maps_process(bprb_func_process& pro)
  //check number of inputs
   if(!pro.verify_inputs())
   {
-    vcl_cout << pro.name() << " Invalid inputs " << vcl_endl;
+    std::cout << pro.name() << " Invalid inputs " << std::endl;
     return false;
   }
 
   //get the inputs
-  vcl_string filename = pro.get_input<vcl_string>(0);
+  std::string filename = pro.get_input<std::string>(0);
   unsigned level = pro.get_input<unsigned>(1);
-  vcl_string output_folder = pro.get_input<vcl_string>(2);
-  vcl_string name_prefix = pro.get_input<vcl_string>(3);
+  std::string output_folder = pro.get_input<std::string>(2);
+  std::string name_prefix = pro.get_input<std::string>(3);
 
   depth_map_scene scene;
   vsl_b_ifstream is(filename.c_str());
   if (!is) {
-    vcl_cout << "invalid binary stream for path " << filename << vcl_endl;
+    std::cout << "invalid binary stream for path " << filename << std::endl;
     return false;
   }
   scene.b_read(is);
@@ -56,8 +58,8 @@ bool bpgl_generate_depth_maps_process(bprb_func_process& pro)
   unsigned cnt = 0;
   for (scene_depth_iterator iter = scene.begin(); iter != scene.end(); ++iter) {
     vil_image_view<float> depth_map = scene.depth_map(level);
-    vcl_stringstream ss; ss << cnt++;
-    vcl_string name = output_folder + "/" + name_prefix + "_" + ss.str() + ".tif";
+    std::stringstream ss; ss << cnt++;
+    std::string name = output_folder + "/" + name_prefix + "_" + ss.str() + ".tif";
     vil_save(depth_map, name.c_str());
   }
 

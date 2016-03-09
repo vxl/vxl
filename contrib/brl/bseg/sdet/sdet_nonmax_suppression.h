@@ -40,7 +40,9 @@
 // \endverbatim
 //
 //-------------------------------------------------------------------------
-#include <vcl_vector.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <vector>
 #include <vsol/vsol_point_2d_sptr.h>
 #include <vsol/vsol_line_2d_sptr.h>
 #include <sdet/sdet_nonmax_suppression_params.h>
@@ -81,9 +83,9 @@ class sdet_nonmax_suppression : public sdet_nonmax_suppression_params
   //: Destructor
   ~sdet_nonmax_suppression();
   //Accessors
-  vcl_vector<vsol_point_2d_sptr>& get_points(){return points_;}
-  vcl_vector<vsol_line_2d_sptr>& get_lines(){return lines_;}
-  vcl_vector<vgl_vector_2d<double> >& get_directions() {return directions_;}
+  std::vector<vsol_point_2d_sptr>& get_points(){return points_;}
+  std::vector<vsol_line_2d_sptr>& get_lines(){return lines_;}
+  std::vector<vgl_vector_2d<double> >& get_directions() {return directions_;}
   //Utility Methods
   void apply();
   void clear();
@@ -91,9 +93,9 @@ class sdet_nonmax_suppression : public sdet_nonmax_suppression_params
  protected:
   //members
   bool points_valid_;      //process state flag
-  vcl_vector<vsol_point_2d_sptr> points_; //output, resulting edge points
-  vcl_vector<vsol_line_2d_sptr> lines_; //output, lines along the edges
-  vcl_vector<vgl_vector_2d<double> > directions_; //output, direction along which non-maximal suppression was done
+  std::vector<vsol_point_2d_sptr> points_; //output, resulting edge points
+  std::vector<vsol_line_2d_sptr> lines_; //output, lines along the edges
+  std::vector<vgl_vector_2d<double> > directions_; //output, direction along which non-maximal suppression was done
   vbl_array_2d<double> grad_x_; //Gradient in x-direction
   vbl_array_2d<double> grad_y_; //Gradient in y-direction
   vbl_array_2d<double> grad_mag_;   //Gradient magnitude

@@ -6,7 +6,9 @@
 // \author Isabel Restrepo
 // \date March 11, 2009
 
-#include <vcl_string.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <string>
 #include <vul/vul_file.h>
 #include <bprb/bprb_func_process.h>
 #include <brdb/brdb_value.h>
@@ -23,13 +25,13 @@ bool bvxm_mog_l2_process_cons(bprb_func_process& pro)
   // 1. Path to mask grid, if file doesn't exist a "ones" mask is created
   // 2. Path to output grid, if file exists it gets overwritten
 
-  vcl_vector<vcl_string> input_types_(3);
+  std::vector<std::string> input_types_(3);
   input_types_[0] = "vcl_string";
   input_types_[1] = "vcl_string";
   input_types_[2] = "vcl_string";
 
   // No outputs to the database. The resulting grid is stored on disk
-  vcl_vector<vcl_string> output_types_(0);
+  std::vector<std::string> output_types_(0);
 
   if (!pro.set_input_types(input_types_))
     return false;
@@ -44,13 +46,13 @@ bool bvxm_mog_l2_process(bprb_func_process& pro)
   // check number of inputs
   if (pro.n_inputs() != 3)
   {
-    vcl_cout << pro.name() << "The number of inputs should be " << 3 << vcl_endl;
+    std::cout << pro.name() << "The number of inputs should be " << 3 << std::endl;
     return false;
   }
 
-  vcl_string apm_path = pro.get_input<vcl_string>(0);
-  vcl_string mask_path = pro.get_input<vcl_string>(1);
-  vcl_string output_path = pro.get_input<vcl_string>(2);
+  std::string apm_path = pro.get_input<std::string>(0);
+  std::string mask_path = pro.get_input<std::string>(1);
+  std::string output_path = pro.get_input<std::string>(2);
 
  //get the grids
 
@@ -68,7 +70,7 @@ bool bvxm_mog_l2_process(bprb_func_process& pro)
 
   bvxm_voxel_grid<float> *mask_base = new bvxm_voxel_grid<float>(mask_path, apm_base->grid_size());
   if (!mask_exists){
-    vcl_cout<< "Mask file does not exist, creating dummy mask\n";
+    std::cout<< "Mask file does not exist, creating dummy mask\n";
     mask_base->initialize_data(float(1));
   }
 

@@ -7,8 +7,10 @@
 // \author Tim Cootes
 
 #include <clsfy/clsfy_builder_1d.h>
-#include <vcl_string.h>
-#include <vcl_iosfwd.h>
+#include <string>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iosfwd>
 #include <vnl/vnl_vector.h>
 #include <vbl/vbl_triple.h>
 
@@ -38,7 +40,7 @@ class clsfy_binary_threshold_1d_builder : public clsfy_builder_1d
   virtual double build(clsfy_classifier_1d& classifier,
                        const vnl_vector<double>& egs,
                        const vnl_vector<double>& wts,
-                       const vcl_vector<unsigned> &outputs) const;
+                       const std::vector<unsigned> &outputs) const;
 
   //: Build a binary_threshold classifier
   // Train classifier, returning weighted error
@@ -63,10 +65,10 @@ class clsfy_binary_threshold_1d_builder : public clsfy_builder_1d
                                         const vnl_vector<double>& wts) const;
 
   //: Name of the class
-  virtual vcl_string is_a() const;
+  virtual std::string is_a() const;
 
   //: Name of the class
-  virtual bool is_class(vcl_string const& s) const;
+  virtual bool is_class(std::string const& s) const;
 
   //: Version number for I/O
   short version_no() const;
@@ -75,7 +77,7 @@ class clsfy_binary_threshold_1d_builder : public clsfy_builder_1d
   virtual clsfy_builder_1d* clone() const;
 
   //: Print class to os
-  virtual void print_summary(vcl_ostream& os) const;
+  virtual void print_summary(std::ostream& os) const;
 
   //: Save class to binary file stream
   virtual void b_write(vsl_b_ostream& bfs) const;
@@ -91,9 +93,9 @@ void vsl_b_write(vsl_b_ostream& bfs, const clsfy_binary_threshold_1d_builder& b)
 void vsl_b_read(vsl_b_istream& bfs, clsfy_binary_threshold_1d_builder& b);
 
 //: Stream output operator for class reference
-vcl_ostream& operator<<(vcl_ostream& os,const clsfy_binary_threshold_1d_builder& b);
+std::ostream& operator<<(std::ostream& os,const clsfy_binary_threshold_1d_builder& b);
 
 //: Stream output operator for class pointer
-vcl_ostream& operator<<(vcl_ostream& os,const clsfy_binary_threshold_1d_builder* b);
+std::ostream& operator<<(std::ostream& os,const clsfy_binary_threshold_1d_builder* b);
 
 #endif // clsfy_binary_threshold_1d_builder_h_

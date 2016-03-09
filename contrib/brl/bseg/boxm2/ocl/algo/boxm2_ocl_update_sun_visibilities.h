@@ -24,14 +24,14 @@ class boxm2_ocl_update_sun_visibilities
                         vpgl_camera_double_sptr  sun_cam,
                         unsigned ni,
                         unsigned nj,
-                        vcl_string               prefix_name
+                        std::string               prefix_name
                       );
 
   private:
-    static void compile_kernel(bocl_device_sptr device,vcl_vector<bocl_kernel*> & vec_kernels,vcl_string opts);
+    static void compile_kernel(bocl_device_sptr device,std::vector<bocl_kernel*> & vec_kernels,std::string opts);
 
     //map of kernel by device
-    static vcl_map<vcl_string, vcl_vector<bocl_kernel*> > kernels_;
+    static std::map<std::string, std::vector<bocl_kernel*> > kernels_;
 };
 
 #endif // boxm2_ocl_update_sun_visibilities_h_

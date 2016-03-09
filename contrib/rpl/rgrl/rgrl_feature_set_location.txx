@@ -59,7 +59,7 @@ rgrl_feature_set_location( feature_vector const& features,
   // Now store the feature points in the chosen data structure
   //
   // Use kd_tree
-  vcl_vector<rsdl_point> search_pts;
+  std::vector<rsdl_point> search_pts;
   search_pts.reserve( features.size() );
   for ( feature_vector::const_iterator itr = features.begin(); itr != features.end(); ++itr ) {
     search_pts.push_back( rsdl_point((*itr)->location()) );
@@ -93,8 +93,8 @@ features_in_region( feature_vector& results, rgrl_mask_box const& roi ) const
 
   // transfer the closest_pts to result
   //
-  vcl_size_t num_pts = temp_point_indices_.size();
-  for (vcl_size_t i = 0; i<num_pts; i++ )
+  std::size_t num_pts = temp_point_indices_.size();
+  for (std::size_t i = 0; i<num_pts; i++ )
     results.push_back( fea_vec_[temp_point_indices_[i]] );
 }
 
@@ -109,9 +109,9 @@ features_within_radius( feature_vector& results, vnl_vector<double> const& cente
 
   // transfer the closest_pts to result
   //
-  vcl_size_t num_pts = temp_point_indices_.size();
+  std::size_t num_pts = temp_point_indices_.size();
   results.reserve( num_pts );
-  for (vcl_size_t i = 0; i<num_pts; i++ )
+  for (std::size_t i = 0; i<num_pts; i++ )
     results.push_back( fea_vec_[temp_point_indices_[i]] );
 }
 
@@ -150,8 +150,8 @@ features_within_radius( feature_vector& results, rgrl_feature_sptr const& featur
 
   // transfer the closest_pts to result
   //
-  vcl_size_t num_pts = temp_point_indices_.size();
-  for (vcl_size_t i = 0; i<num_pts; i++ )
+  std::size_t num_pts = temp_point_indices_.size();
+  for (std::size_t i = 0; i<num_pts; i++ )
     results.push_back( fea_vec_[temp_point_indices_[i]] );
 }
 
@@ -167,8 +167,8 @@ k_nearest_features( feature_vector& results, rgrl_feature_sptr const& feature, u
 
   // transfer the closest_pts to result
   //
-  vcl_size_t num_pts = temp_point_indices_.size();
-  for (vcl_size_t i = 0; i<num_pts; i++ )
+  std::size_t num_pts = temp_point_indices_.size();
+  for (std::size_t i = 0; i<num_pts; i++ )
     results.push_back( fea_vec_[temp_point_indices_[i]] );
 }
 
@@ -184,8 +184,8 @@ k_nearest_features( feature_vector& results, const vnl_vector<double> & loc, uns
 
   // transfer the closest_pts to result
   //
-  vcl_size_t num_pts = temp_point_indices_.size();
-  for (vcl_size_t i = 0; i<num_pts; i++ )
+  std::size_t num_pts = temp_point_indices_.size();
+  for (std::size_t i = 0; i<num_pts; i++ )
     results.push_back( fea_vec_[temp_point_indices_[i]] );
 }
 
@@ -198,7 +198,7 @@ bounding_box() const
 }
 
 template<unsigned N>
-const vcl_type_info&
+const std::type_info&
 rgrl_feature_set_location<N>::
 type() const
 {

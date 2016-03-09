@@ -7,8 +7,10 @@
 // \date 4 Nov 2014
 #include "boxm2_ocl_vis_score_renderer.h"
 
-#include <vcl_algorithm.h>
-#include <vcl_stdexcept.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <algorithm>
+#include <stdexcept>
 #include <boxm2/ocl/boxm2_opencl_cache.h>
 #include <boxm2/boxm2_scene.h>
 #include <boxm2/boxm2_block.h>
@@ -28,7 +30,7 @@
 boxm2_ocl_vis_score_renderer
 ::boxm2_ocl_vis_score_renderer(boxm2_scene_sptr scene,
                                boxm2_opencl_cache_sptr ocl_cache,
-                               vcl_string ident) :
+                               std::string ident) :
   scene_(scene),
   opencl_cache_(ocl_cache),
   ident_(ident),
@@ -139,7 +141,7 @@ boxm2_ocl_vis_score_renderer
 
   vul_timer rtime;
 
-  vcl_size_t lthreads[2]={8,8};
+  std::size_t lthreads[2]={8,8};
 
   //: create a command queue.
   int status=0;
@@ -172,15 +174,15 @@ boxm2_ocl_vis_score_renderer
   if(camera->type_name() == "vpgl_perspective_camera")
   {
       float f  = ((vpgl_perspective_camera<double> *)camera.ptr())->get_calibration().focal_length()*((vpgl_perspective_camera<double> *)camera.ptr())->get_calibration().x_scale();
-      vcl_cout<<"Focal Length " << f<<vcl_endl;
+      std::cout<<"Focal Length " << f<<std::endl;
       tnearfar_buff_[0] = f* scene_->finest_resolution()/nearfactor ;
       tnearfar_buff_[1] = f* scene_->finest_resolution()*farfactor ;
 
-      vcl_cout<<"Near and Far Clipping planes "<<tnearfar_buff_[0]<<" "<<tnearfar_buff_[1]<<vcl_endl;
+      std::cout<<"Near and Far Clipping planes "<<tnearfar_buff_[0]<<" "<<tnearfar_buff_[1]<<std::endl;
   }
   tnearfar_->write_to_buffer(queue, true);
 
-  vcl_string vis_score_type = boxm2_data_traits<BOXM2_VIS_SCORE>::prefix(ident_);
+  std::string vis_score_type = boxm2_data_traits<BOXM2_VIS_SCORE>::prefix(ident_);
   int vis_score_size = boxm2_data_traits<BOXM2_VIS_SCORE>::datasize();
 
   // run expected image function
@@ -191,7 +193,7 @@ boxm2_ocl_vis_score_renderer
   // normalize
   if (kernels_.size()>1)
   {
-    vcl_size_t gThreads[] = {cl_ni,cl_nj};
+    std::size_t gThreads[] = {cl_ni,cl_nj};
     bocl_kernel* normalize_kern = kernels_[1];
     normalize_kern->set_arg( exp_image_.ptr() );
     normalize_kern->set_arg( vis_image_.ptr() );
@@ -218,7 +220,7 @@ boxm2_ocl_vis_score_renderer
     }
   }
 
-  vcl_cout<<"Total Render time: "<<rtime.all()<<" ms"<<vcl_endl;
+  std::cout<<"Total Render time: "<<rtime.all()<<" ms"<<std::endl;
   clReleaseCommandQueue(queue);
 
   render_success_ = true;
@@ -230,8 +232,8 @@ boxm2_ocl_vis_score_renderer
 ::compile_kernels(bocl_device_sptr device)
 {
 
-    vcl_vector<vcl_string> src_paths;
-    vcl_string source_dir = boxm2_ocl_util::ocl_src_root();
+    std::vector<std::string> src_paths;
+    std::string source_dir = boxm2_ocl_util::ocl_src_root();
     src_paths.push_back(source_dir + "scene_info.cl");
     src_paths.push_back(source_dir + "bit/bit_tree_library_functions.cl");
     src_paths.push_back(source_dir + "statistics_library_functions.cl");
@@ -242,7 +244,7 @@ boxm2_ocl_vis_score_renderer
     src_paths.push_back(source_dir + "bit/vis_score_kernel.cl");
     src_paths.push_back(source_dir + "bit/cast_ray_bit.cl");
 
-    vcl_string options = "-D RENDER_VIS_SCORE -D STEP_CELL=step_cell_render_vis_score(aux_args,data_ptr,d*linfo->block_len)";
+    std::string options = "-D RENDER_VIS_SCORE -D STEP_CELL=step_cell_render_vis_score(aux_args,data_ptr,d*linfo->block_len)";
 
     //have kernel construct itself using the context and device
     ray_trace_kernel_.create_kernel( &device->context(),
@@ -254,7 +256,7 @@ boxm2_ocl_vis_score_renderer
 
 #if 0
     //create normalize image kernel
-    vcl_vector<vcl_string> norm_src_paths;
+    std::vector<std::string> norm_src_paths;
     norm_src_paths.push_back(source_dir + "pixel_conversion.cl");
     norm_src_paths.push_back(source_dir + "bit/normalize_kernels.cl");
 

@@ -4,7 +4,7 @@
 #include <boct/boct_test_util.h>
 #include <vnl/vnl_random.h>
 
-boct_tree_cell<short,vgl_point_3d<double> >* brute_force_locate_point(vcl_vector<boct_tree_cell<short,vgl_point_3d<double> >*> leafcells,
+boct_tree_cell<short,vgl_point_3d<double> >* brute_force_locate_point(std::vector<boct_tree_cell<short,vgl_point_3d<double> >*> leafcells,
                                                                       vgl_point_3d<double> p,
                                                                       int max_level)
 {
@@ -42,7 +42,7 @@ static void test_locate_point()
   boct_tree<short,vgl_point_3d<double> > * rtree=new boct_tree<short,vgl_point_3d<double> >(nlevels);
   create_random_configuration_tree<short,vgl_point_3d<double> >(rtree);
 
-  vcl_vector<boct_tree_cell<short,vgl_point_3d<double> >*> leaves=rtree->leaf_cells();
+  std::vector<boct_tree_cell<short,vgl_point_3d<double> >*> leaves=rtree->leaf_cells();
   unsigned int cnt=0;
   for (unsigned i=0; i<100; ++i)
   {

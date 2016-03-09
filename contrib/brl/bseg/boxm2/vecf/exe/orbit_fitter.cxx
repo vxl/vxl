@@ -1,5 +1,7 @@
-#include <vcl_fstream.h>
-#include <vcl_string.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <fstream>
+#include <string>
 #include <vul/vul_arg.h>
 #include <vul/vul_file.h>
 #include "../boxm2_vecf_fit_orbit.h"
@@ -8,34 +10,34 @@ int main(int argc, char ** argv)
 {
 
   vul_arg_info_list arglist;
-  vul_arg<vcl_string> base_dir_path(arglist, "-bdir", "Base patient directory", "");
-  vul_arg<vcl_string> patient_idstr(arglist, "-bid", "Patient id string", "");
-  vul_arg<vcl_string> show_model_arg(arglist, "-smod", "Show model", "true");
-  vul_arg<vcl_string> verbose_arg(arglist, "-verbose", "print out fitting results", "true");
-  vul_arg<vcl_string> estimate_t_arg(arglist,"-estimate_t", "Estimate lid opening amount rather than s_y" , "false");
+  vul_arg<std::string> base_dir_path(arglist, "-bdir", "Base patient directory", "");
+  vul_arg<std::string> patient_idstr(arglist, "-bid", "Patient id string", "");
+  vul_arg<std::string> show_model_arg(arglist, "-smod", "Show model", "true");
+  vul_arg<std::string> verbose_arg(arglist, "-verbose", "print out fitting results", "true");
+  vul_arg<std::string> estimate_t_arg(arglist,"-estimate_t", "Estimate lid opening amount rather than s_y" , "false");
   vul_arg<float> mm_scale_arg(arglist,"-mm_scale", "mm per pixel coversion scale" , 0.0f);
-  vul_arg<vcl_string> non_lin_arg(arglist, "-nlin", "non-linear refine orbit parameters", "true");
-  vul_arg<vcl_string> dlib_arg(arglist, "-dlib", "2-d data from dlib", "false");
+  vul_arg<std::string> non_lin_arg(arglist, "-nlin", "non-linear refine orbit parameters", "true");
+  vul_arg<std::string> dlib_arg(arglist, "-dlib", "2-d data from dlib", "false");
   arglist.parse(argc, argv, false);
-  vcl_string show_model_str = show_model_arg();
+  std::string show_model_str = show_model_arg();
   bool show_model = show_model_str == "true";
 
-  vcl_string non_lin_str = non_lin_arg();
+  std::string non_lin_str = non_lin_arg();
   bool do_non_lin = non_lin_str == "true";
 
   float mm_per_pix = mm_scale_arg();
-  vcl_string dlib_str = dlib_arg();
+  std::string dlib_str = dlib_arg();
   bool from_dlib = dlib_str == "true";
 
-  vcl_string base_dir = base_dir_path();
+  std::string base_dir = base_dir_path();
 
   if(base_dir == ""){
-    vcl_cout << "Must have a patient directory - fatal!\n";
+    std::cout << "Must have a patient directory - fatal!\n";
     return -1;
   }
-  vcl_string patient_id = patient_idstr();
+  std::string patient_id = patient_idstr();
   if(patient_idstr() == ""){
-    vcl_cout << "Must have a patient id string - fatal!\n";
+    std::cout << "Must have a patient id string - fatal!\n";
     return -1;
   }
 
@@ -44,48 +46,48 @@ int main(int argc, char ** argv)
   //  patient sub-directory named by patient_id
   base_dir =  base_dir+ patient_id + "/";
 
-  vcl_string left_dlib_path = base_dir + patient_id + "_left_orbit_parts.txt";
-  vcl_string left_anchor_path = base_dir + patient_id + "_left_anchors.txt";
-  vcl_string left_sclera_path = base_dir + patient_id + "_left_sclera.txt";
-  vcl_string left_inferior_margin_path = base_dir + patient_id + "_left_inferior_margin.txt";
-  vcl_string left_inferior_surface_path = base_dir + patient_id + "_left_inferior_surface.txt";
-  vcl_string left_superior_margin_path = base_dir + patient_id + "_left_superior_margin.txt";
-  vcl_string left_superior_crease_path = base_dir + patient_id + "_left_superior_crease.txt";
-  vcl_string left_vrml_path = base_dir + patient_id + "_left_orbit_plot.wrl";
-  vcl_string left_param_path = base_dir + patient_id + "_left_orbit_params.txt";
+  std::string left_dlib_path = base_dir + patient_id + "_left_orbit_parts.txt";
+  std::string left_anchor_path = base_dir + patient_id + "_left_anchors.txt";
+  std::string left_sclera_path = base_dir + patient_id + "_left_sclera.txt";
+  std::string left_inferior_margin_path = base_dir + patient_id + "_left_inferior_margin.txt";
+  std::string left_inferior_surface_path = base_dir + patient_id + "_left_inferior_surface.txt";
+  std::string left_superior_margin_path = base_dir + patient_id + "_left_superior_margin.txt";
+  std::string left_superior_crease_path = base_dir + patient_id + "_left_superior_crease.txt";
+  std::string left_vrml_path = base_dir + patient_id + "_left_orbit_plot.wrl";
+  std::string left_param_path = base_dir + patient_id + "_left_orbit_params.txt";
 
-  vcl_string right_dlib_path = base_dir + patient_id + "_right_orbit_parts.txt";
-  vcl_string right_anchor_path = base_dir + patient_id + "_right_anchors.txt";
-  vcl_string right_sclera_path = base_dir + patient_id + "_right_sclera.txt";
-  vcl_string right_inferior_margin_path = base_dir + patient_id + "_right_inferior_margin.txt";
-  vcl_string right_inferior_surface_path = base_dir + patient_id + "_right_inferior_surface.txt";
-  vcl_string right_superior_margin_path = base_dir + patient_id + "_right_superior_margin.txt";
-  vcl_string right_superior_crease_path = base_dir + patient_id + "_right_superior_crease.txt";
-  vcl_string right_vrml_path = base_dir + patient_id + "_right_orbit_plot.wrl";
-  vcl_string right_param_path = base_dir + patient_id + "_right_orbit_params.txt";
+  std::string right_dlib_path = base_dir + patient_id + "_right_orbit_parts.txt";
+  std::string right_anchor_path = base_dir + patient_id + "_right_anchors.txt";
+  std::string right_sclera_path = base_dir + patient_id + "_right_sclera.txt";
+  std::string right_inferior_margin_path = base_dir + patient_id + "_right_inferior_margin.txt";
+  std::string right_inferior_surface_path = base_dir + patient_id + "_right_inferior_surface.txt";
+  std::string right_superior_margin_path = base_dir + patient_id + "_right_superior_margin.txt";
+  std::string right_superior_crease_path = base_dir + patient_id + "_right_superior_crease.txt";
+  std::string right_vrml_path = base_dir + patient_id + "_right_orbit_plot.wrl";
+  std::string right_param_path = base_dir + patient_id + "_right_orbit_params.txt";
 
-  vcl_string left_right_merge_path = base_dir + patient_id + "_left_right_merge_plot.wrl";
+  std::string left_right_merge_path = base_dir + patient_id + "_left_right_merge_plot.wrl";
 
-  vcl_ostream* output_s = &vcl_cout;
+  std::ostream* output_s = &std::cout;
   boxm2_vecf_fit_orbit fo;
   bool good = true;
   /// left eye processing
   if(!from_dlib){
   good = fo.read_anchor_file(left_anchor_path);
   if(!good){
-    vcl_cout << "failed to read left anchor file\n";
+    std::cout << "failed to read left anchor file\n";
     return -1;
   }
   good = fo.load_orbit_data("left_eye_sclera", left_sclera_path);
   if(!good){
-        vcl_cout << "failed to read left sclera file\n";
+        std::cout << "failed to read left sclera file\n";
     return -1;
   }
   good = fo.load_orbit_data("left_eye_inferior_lid_surface", left_inferior_surface_path, false);
   if(!good){
     good = fo.load_orbit_data("left_eye_inferior_lid_surface", left_inferior_margin_path);
     if(!good){
-      vcl_cout << "failed to read left inferior lid surface file  or next best choice the left_inferior_margin file\n";
+      std::cout << "failed to read left inferior lid surface file  or next best choice the left_inferior_margin file\n";
       return -1;
     }else{
       fo.set_has_inferior_surface(false);
@@ -101,20 +103,20 @@ int main(int argc, char ** argv)
   if(!from_dlib){
   good = fo.read_anchor_file(right_anchor_path);
   if(!good){
-    vcl_cout << "failed to read right anchor file\n";
+    std::cout << "failed to read right anchor file\n";
     return -1;
   }
   good = fo.load_orbit_data("right_eye_sclera", right_sclera_path);
   if(!good){
-    vcl_cout << "failed to read right sclera file\n";
+    std::cout << "failed to read right sclera file\n";
     return -1;
   }
   good = fo.load_orbit_data("right_eye_inferior_lid_surface", right_inferior_surface_path, false);
   if(!good){
-    vcl_cout << "failed to read right inferior lid surface file\n";
+    std::cout << "failed to read right inferior lid surface file\n";
     good = fo.load_orbit_data("right_eye_inferior_lid_surface", right_inferior_margin_path);
     if(!good){
-      vcl_cout << "failed to read right inferior lid surface file  or next best choice, the right_inferior_margin file\n";
+      std::cout << "failed to read right inferior lid surface file  or next best choice, the right_inferior_margin file\n";
       return -1;
     }else{
       fo.set_has_inferior_surface(false);
@@ -139,13 +141,13 @@ int main(int argc, char ** argv)
 
   good = fo.fit_left();
   if(!good){
-    vcl_cout << "left orbit parameter fit failed\n";
+    std::cout << "left orbit parameter fit failed\n";
     return -1;
   }
 
   good = fo.fit_right();
   if(!good){
-    vcl_cout << "right orbit parameter fit failed\n";
+    std::cout << "right orbit parameter fit failed\n";
     return -1;
   }
 
@@ -155,40 +157,40 @@ int main(int argc, char ** argv)
     fo.load_orbit_data("right_eye_superior_margin", right_superior_margin_path);
     fo.load_orbit_data("right_eye_superior_crease", right_superior_crease_path);
   }
-  vcl_cout << "\n>>>Processing "<< patient_id << " right eye <<<\n";
+  std::cout << "\n>>>Processing "<< patient_id << " right eye <<<\n";
   // non-linear fit
   if(do_non_lin){
     vgl_point_3d<double> rlat, rmed;
     good = fo.lab_point("right_eye_lateral_canthus", rlat);
     if(!good){
-      vcl_cout << "right_eye_lateral_canthus missing\n";
+      std::cout << "right_eye_lateral_canthus missing\n";
       return -1;
     }
     good = fo.lab_point("right_eye_medial_canthus", rmed);
     if(!good){
-      vcl_cout << "right_eye_medial_canthus missing\n";
+      std::cout << "right_eye_medial_canthus missing\n";
       return -1;
     }
     boxm2_vecf_fit_margins right_fmargs(fo.orbit_data("right_eye_inferior_margin"), fo.orbit_data("right_eye_superior_margin"),
                                         fo.orbit_data("right_eye_superior_crease"), rlat, rmed,true,estimate_t);
     right_fmargs.set_initial_guess(fo.right_params());
-    double rer = right_fmargs.fit(&vcl_cout, verbose);
+    double rer = right_fmargs.fit(&std::cout, verbose);
     if(rer == -1){
-      vcl_cout << "non-linear fit for right eye failed \n";
+      std::cout << "non-linear fit for right eye failed \n";
       return -1;
     }
     boxm2_vecf_orbit_params rprm = right_fmargs.orbit_parameters();
     if(estimate_t){
-      vcl_cout<<"right T was estimated to be "<<rprm.superior_margin_t<<vcl_endl;
+      std::cout<<"right T was estimated to be "<<rprm.superior_margin_t<<std::endl;
       rprm.eyelid_dt_ = rprm.eyelid_tmax_ - rprm.superior_margin_t;
     }
 
     fo.set_right_params(rprm);
-    vcl_string right_marg_path = base_dir + patient_id +"_right_margin_fit.txt";
-    vcl_ofstream rmstr(right_marg_path.c_str());
+    std::string right_marg_path = base_dir + patient_id +"_right_margin_fit.txt";
+    std::ofstream rmstr(right_marg_path.c_str());
     good = right_fmargs.plot_orbit(rmstr);
     if(!good){
-      vcl_cout << "ERROR: Invalid parameter to plot_orbit: " << __FILE__ << __LINE__ << vcl_endl;
+      std::cout << "ERROR: Invalid parameter to plot_orbit: " << __FILE__ << __LINE__ << std::endl;
       return -1;
     }
     rmstr.close();
@@ -201,10 +203,10 @@ int main(int argc, char ** argv)
   }
 
 
-  vcl_ofstream rostr(right_vrml_path.c_str());
+  std::ofstream rostr(right_vrml_path.c_str());
   good = fo.display_orbit_vrml(rostr, true, show_model);
   if(!good){
-    vcl_cout << "ERROR: Invalid parameter to display_orbit: " << __FILE__ << __LINE__ << vcl_endl;
+    std::cout << "ERROR: Invalid parameter to display_orbit: " << __FILE__ << __LINE__ << std::endl;
     return -1;
   }
   rostr.close();
@@ -213,13 +215,13 @@ int main(int argc, char ** argv)
   fo.fitting_error("right_eye_superior_margin");
   fo.fitting_error("right_eye_superior_crease");
 
-  vcl_ofstream rpstr(right_param_path.c_str());
+  std::ofstream rpstr(right_param_path.c_str());
   rpstr << fo.right_params() << '\n';
   rpstr.close();
 
   if(verbose){
-    vcl_cout<<"---Right parameters---"<<vcl_endl;
-    vcl_cout<<fo.right_params()<<vcl_endl;
+    std::cout<<"---Right parameters---"<<std::endl;
+    std::cout<<fo.right_params()<<std::endl;
     }
 
   if(!from_dlib){
@@ -229,40 +231,40 @@ int main(int argc, char ** argv)
   }
 
 
-  vcl_cout << "\n>>>Processing "<< patient_id << " left eye <<<\n";
+  std::cout << "\n>>>Processing "<< patient_id << " left eye <<<\n";
   // non-linear fit
   if(do_non_lin){
     vgl_point_3d<double> llat, lmed;
     good = fo.lab_point("left_eye_lateral_canthus", llat);
     if(!good){
-      vcl_cout << "left_eye_lateral_canthus missing\n";
+      std::cout << "left_eye_lateral_canthus missing\n";
       return -1;
     }
     good = fo.lab_point("left_eye_medial_canthus", lmed);
     if(!good){
-      vcl_cout << "left_eye_medial_canthus missing\n";
+      std::cout << "left_eye_medial_canthus missing\n";
       return -1;
     }
     boxm2_vecf_fit_margins left_fmargs(fo.orbit_data("left_eye_inferior_margin"), fo.orbit_data("left_eye_superior_margin"),
                                        fo.orbit_data("left_eye_superior_crease"),  llat, lmed,false,estimate_t);
     left_fmargs.set_initial_guess(fo.left_params());
-    double ler = left_fmargs.fit(&vcl_cout, verbose);
+    double ler = left_fmargs.fit(&std::cout, verbose);
     if(ler == -1){
-      vcl_cout << "non-linear fit for left eye failed \n";
+      std::cout << "non-linear fit for left eye failed \n";
       return -1;
     }
     boxm2_vecf_orbit_params lprm = left_fmargs.orbit_parameters();
     if(estimate_t){
-      vcl_cout<<"left T was estimated to be "<<lprm.superior_margin_t<<vcl_endl;
+      std::cout<<"left T was estimated to be "<<lprm.superior_margin_t<<std::endl;
       lprm.eyelid_dt_ = lprm.eyelid_tmax_ - lprm.superior_margin_t;
     }
 
     fo.set_left_params(lprm);
-    vcl_string left_marg_path = base_dir + patient_id +"_left_margin_fit.txt";
-    vcl_ofstream lmstr(left_marg_path.c_str());
+    std::string left_marg_path = base_dir + patient_id +"_left_margin_fit.txt";
+    std::ofstream lmstr(left_marg_path.c_str());
     good = left_fmargs.plot_orbit(lmstr);
     if(!good){
-      vcl_cout << "ERROR: Invalid parameter to plot_orbit: " << __FILE__ << __LINE__ << vcl_endl;
+      std::cout << "ERROR: Invalid parameter to plot_orbit: " << __FILE__ << __LINE__ << std::endl;
       return -1;
     }
     lmstr.close();
@@ -273,10 +275,10 @@ int main(int argc, char ** argv)
      if(!good)
       return -1;
   }
-  vcl_ofstream lostr(left_vrml_path.c_str());
+  std::ofstream lostr(left_vrml_path.c_str());
   good = fo.display_orbit_vrml(lostr, false, show_model);
   if(!good){
-    vcl_cout << "ERROR: Invalid parameter to display_orbit: " << __FILE__ << __LINE__ << vcl_endl;
+    std::cout << "ERROR: Invalid parameter to display_orbit: " << __FILE__ << __LINE__ << std::endl;
     return -1;
   }
   lostr.close();
@@ -290,19 +292,19 @@ int main(int argc, char ** argv)
   fo.fitting_error("left_eye_superior_margin");
   fo.fitting_error("left_eye_superior_crease");
 
-   vcl_ofstream lpstr(left_param_path.c_str());
+   std::ofstream lpstr(left_param_path.c_str());
   lpstr << fo.left_params() << '\n';
   lpstr.close();
 
   if(verbose){
-    vcl_cout<<"---Left parameters---"<<vcl_endl;
-    vcl_cout<<fo.left_params()<<vcl_endl;
+    std::cout<<"---Left parameters---"<<std::endl;
+    std::cout<<fo.left_params()<<std::endl;
     }
 
-  vcl_ofstream lrmstr(left_right_merge_path.c_str());
+  std::ofstream lrmstr(left_right_merge_path.c_str());
   good = fo.display_left_right_orbit_model_vrml(lrmstr);
   if(!good){
-    vcl_cout << "ERROR: Invalid parameter to display_orbit: " << __FILE__ << __LINE__ << vcl_endl;
+    std::cout << "ERROR: Invalid parameter to display_orbit: " << __FILE__ << __LINE__ << std::endl;
     return -1;
   }
   lrmstr.close();

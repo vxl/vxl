@@ -3,7 +3,9 @@
 
 #include <vnl/vnl_least_squares_function.h>
 #include <vnl/vnl_double_3.h>
-#include <vcl_vector.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <vector>
 class brad_phongs_model
 {
  public:
@@ -42,7 +44,7 @@ class brad_phongs_model_est : public vnl_least_squares_function
                         bool with_grad);
   brad_phongs_model_est(double sun_elev,
                         double sun_azim,
-                        vcl_vector<vnl_double_3> & viewing_dir,
+                        std::vector<vnl_double_3> & viewing_dir,
                         vnl_vector<double> & obs,
                         vnl_vector<double> & obs_weights,
                         bool with_grad);
@@ -55,7 +57,7 @@ class brad_phongs_model_est : public vnl_least_squares_function
  protected:
   double sun_elev_;
   double sun_azim_;
-  vcl_vector<vnl_double_3> viewing_dirs_;
+  std::vector<vnl_double_3> viewing_dirs_;
   vnl_vector<double>  camera_elev_;
   vnl_vector<double>  camera_azim_;
   vnl_vector<double>  obs_;
@@ -90,7 +92,7 @@ class brad_phongs_model_approx_est : public vnl_least_squares_function
                         bool with_grad);
   brad_phongs_model_approx_est(double sun_elev,
                         double sun_azim,
-                        vcl_vector<vnl_double_3> & viewing_dir,
+                        std::vector<vnl_double_3> & viewing_dir,
                         vnl_vector<double> & obs,
                         vnl_vector<double> & obs_weights,
                         bool with_grad);
@@ -103,7 +105,7 @@ class brad_phongs_model_approx_est : public vnl_least_squares_function
  protected:
   double sun_elev_;
   double sun_azim_;
-  vcl_vector<vnl_double_3> viewing_dirs_;
+  std::vector<vnl_double_3> viewing_dirs_;
   vnl_vector<double>  camera_elev_;
   vnl_vector<double>  camera_azim_;
   vnl_vector<double>  obs_;

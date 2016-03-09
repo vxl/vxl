@@ -32,18 +32,18 @@
 
 int main(int argc, char** argv)
 {
-  vul_arg<vcl_string> gt_file("-gt_locs", "file with the gt locs of all test cases", "");
-  vul_arg<vcl_string> geo_hypo_folder("-hypo", "folder prefix to read the geo hypotheses", "");
-  vul_arg<vcl_string> geo_index_folder("-index", "folder prefix to read the geo index and the hypo","");
+  vul_arg<std::string> gt_file("-gt_locs", "file with the gt locs of all test cases", "");
+  vul_arg<std::string> geo_hypo_folder("-hypo", "folder prefix to read the geo hypotheses", "");
+  vul_arg<std::string> geo_index_folder("-index", "folder prefix to read the geo index and the hypo","");
   vul_arg<unsigned>   point_angle("-point", "point_angle use to locate geo index", 0);
-  vul_arg<vcl_string> candidate_list("-cand", "candidate list if exist", "");
-  vul_arg<vcl_string> cam_bin("-cam", "camera space binary", "");                                // query -- camera space binary
-  vul_arg<vcl_string> dms_bin("-dms", "depth_map_scene binary", "");                             // query -- depth map scene
-  vul_arg<vcl_string> img("-img", "query images, to get the image size", "");                    // query -- actual query image
-  vul_arg<vcl_string> sph_bin("-sph", "spherical shell binary", "");                             // query -- spherical_shell binary
-  vul_arg<vcl_string> query_bin("-query", "query binary file", "");
+  vul_arg<std::string> candidate_list("-cand", "candidate list if exist", "");
+  vul_arg<std::string> cam_bin("-cam", "camera space binary", "");                                // query -- camera space binary
+  vul_arg<std::string> dms_bin("-dms", "depth_map_scene binary", "");                             // query -- depth map scene
+  vul_arg<std::string> img("-img", "query images, to get the image size", "");                    // query -- actual query image
+  vul_arg<std::string> sph_bin("-sph", "spherical shell binary", "");                             // query -- spherical_shell binary
+  vul_arg<std::string> query_bin("-query", "query binary file", "");
   vul_arg<float>      buffer_capacity("-buff", "index buffer capacity (GB)", 1.0f);
-  vul_arg<vcl_string> out("-out", "job output folder", "");
+  vul_arg<std::string> out("-out", "job output folder", "");
   vul_arg<unsigned>   id("-id", "id of the test image", 9999);
   vul_arg<unsigned>   pass_id("-pass", "from pass 0 to pass 1", 1);
   vul_arg_parse(argc, argv);
@@ -59,51 +59,51 @@ int main(int argc, char** argv)
     vul_arg_display_usage_and_exit();
     return volm_io::EXE_ARGUMENT_ERROR;
   }
-  vcl_stringstream log;
-  vcl_string log_file = out() + "/render_img_log.xml";
+  std::stringstream log;
+  std::string log_file = out() + "/render_img_log.xml";
 
   // read the gt location for test image id, i.e., lat and lon
   if (!vul_file::exists(gt_file())) {
     log << "ERROR: can not find ground truth position file -->" << gt_file() << '\n';
     volm_io::write_post_processing_log(log_file, log.str());
-    vcl_cerr << log.str();
+    std::cerr << log.str();
     return volm_io::EXE_ARGUMENT_ERROR;
   }
-  vcl_vector<vcl_pair<vgl_point_3d<double>, vcl_pair<vcl_pair<vcl_string, int>, vcl_string> > > samples;
+  std::vector<std::pair<vgl_point_3d<double>, std::pair<std::pair<std::string, int>, std::string> > > samples;
   unsigned int cnt = volm_io::read_gt_file(gt_file(), samples);
   if (id() >= cnt) {
     log << "ERROR: the file: " << gt_file() << " does not contain test id: " << id() << "!\n";
     volm_io::write_post_processing_log(log_file, log.str());
-    vcl_cerr << log.str();
+    std::cerr << log.str();
     return volm_io::EXE_ARGUMENT_ERROR;
   }
 
   // check whether we have candidate list for this query
   bool is_candidate = false;
   vgl_polygon<double> cand_poly;
-  vcl_cout << " candidate list = " <<  candidate_list() << vcl_endl;
+  std::cout << " candidate list = " <<  candidate_list() << std::endl;
   if ( candidate_list().compare("") != 0) {
     if (!vul_file::exists(candidate_list())) {
       log << " ERROR: can not fine candidate list file: " << candidate_list() << '\n';
       volm_io::write_post_processing_log(log_file, log.str());
-      vcl_cerr << log.str();
+      std::cerr << log.str();
       return volm_io::EXE_ARGUMENT_ERROR;
     }
     else {
       // parse polygon from kml
       is_candidate = true;
       cand_poly = bkml_parser::parse_polygon(candidate_list());
-      vcl_cout << " candidate list is parsed from file: " << candidate_list() << vcl_endl;
-      vcl_cout << " number of sheet in the candidate poly " << cand_poly.num_sheets() << vcl_endl;
+      std::cout << " candidate list is parsed from file: " << candidate_list() << std::endl;
+      std::cout << " number of sheet in the candidate poly " << cand_poly.num_sheets() << std::endl;
     }
   }
   else {
-    vcl_cout << " NO candidate list for this query image, full index space is considered" << vcl_endl;
+    std::cout << " NO candidate list for this query image, full index space is considered" << std::endl;
     is_candidate = false;
   }
 
   // create tiles
-  vcl_vector<volm_tile> tiles;
+  std::vector<volm_tile> tiles;
   if (samples[id()].second.second == "desert" )
     tiles = volm_tile::generate_p1_wr1_tiles();
   else if (samples[id()].second.second == "coast" )
@@ -120,7 +120,7 @@ int main(int argc, char** argv)
     tiles = volm_tile::generate_p1b_wr5_tiles();
   else {
     log << "ERROR: unknown world region, should be \" desert, coast, Chile, India, Jordan, Philippines, Taiwan\"\n";
-    volm_io::write_post_processing_log(log_file, log.str());  vcl_cerr << log.str();
+    volm_io::write_post_processing_log(log_file, log.str());  std::cerr << log.str();
     return volm_io::EXE_ARGUMENT_ERROR;
   }
 
@@ -129,16 +129,16 @@ int main(int argc, char** argv)
   for (unsigned i = 0; i < tiles.size(); i++)
     if (tiles[i].bbox_double().contains(samples[id()].first.x(), samples[id()].first.y()))
       tile_id = i;
-  vcl_cout << "GT location " << id() << " ---> " << samples[id()].first.x() << ", " << samples[id()].first.y() << ", is in tile " << tile_id << vcl_endl;
+  std::cout << "GT location " << id() << " ---> " << samples[id()].first.x() << ", " << samples[id()].first.y() << ", is in tile " << tile_id << std::endl;
 
   // load the geo_locations
-  vcl_stringstream file_name_pre;
+  std::stringstream file_name_pre;
   file_name_pre << geo_hypo_folder() << "/geo_index_tile_" << tile_id;
   if (!vul_file::exists(file_name_pre.str() + ".txt")) {
     log << "GT location " << id() << " ---> " << samples[id()].first.x() << ", " << samples[id()].first.y() << " is in tile " << tile_id
         << " but no geo_locations for this tile\n";
     volm_io::write_post_processing_log(log_file, log.str());
-    vcl_cout << log.str();
+    std::cout << log.str();
     return volm_io::POST_PROCESS_HALT;
   }
   float min_size;
@@ -147,17 +147,17 @@ int main(int argc, char** argv)
   if (is_candidate) {
     volm_geo_index::prune_tree(root, cand_poly);
   }
-  vcl_vector<volm_geo_index_node_sptr> leaves;
+  std::vector<volm_geo_index_node_sptr> leaves;
   volm_geo_index::get_leaves_with_hyps(root, leaves);
 
   // load index parameters
   boxm2_volm_wr3db_index_params params;
-  vcl_stringstream params_file;
+  std::stringstream params_file;
   params_file << geo_index_folder() << "/geo_index_tile_" << tile_id << "_index.params";
   if (!params.read_params_file(params_file.str())) {
     log << "ERROR: cannot read params file from " << params_file.str() << '\n';
     volm_io::write_post_processing_log(log_file, log.str());
-    vcl_cerr << log.str();
+    std::cerr << log.str();
     return volm_io::EXE_ARGUMENT_ERROR;
   }
   unsigned layer_size = params.layer_size;
@@ -168,7 +168,7 @@ int main(int argc, char** argv)
   if (!vul_file::exists(sph_bin())) {
     log << "ERROR: cannot read spherical shell binary from " << sph_bin() << '\n';
     volm_io::write_post_processing_log(log_file, log.str());
-    vcl_cerr << log.str();
+    std::cerr << log.str();
     return volm_io::EXE_ARGUMENT_ERROR;
   }
   vsl_b_ifstream sph_ifs(sph_bin());
@@ -179,14 +179,14 @@ int main(int argc, char** argv)
     log << "ERROR: the spherical shell binary (" << sph_shell->get_container_size() << ") has different parameters setting from index ("
         << params.layer_size << ")\n";
     volm_io::write_post_processing_log(log_file, log.str());
-    vcl_cerr << log.str();
+    std::cerr << log.str();
     return volm_io::EXE_ARGUMENT_ERROR;
   }
   // load camera space
   if (!vul_file::exists(cam_bin())) {
     log << "ERROR: can not find camera_space binary: " << cam_bin() << '\n';
     volm_io::write_post_processing_log(log_file, log.str());
-    vcl_cerr << log.str();
+    std::cerr << log.str();
     return volm_io::EXE_ARGUMENT_ERROR;
   }
   vsl_b_ifstream cam_ifs(cam_bin());
@@ -197,22 +197,22 @@ int main(int argc, char** argv)
   if (!vul_file::exists(dms_bin())) {
     log << "ERROR: can not find depth_map_scene " << dms_bin() << '\n';
     volm_io::write_post_processing_log(log_file, log.str());
-    vcl_cerr << log.str();
+    std::cerr << log.str();
     return volm_io::EXE_ARGUMENT_ERROR;
   }
   // load query
   volm_query_sptr query = new volm_query(query_bin(), cam_space, dms_bin(), sph_shell, sph);
 
   // load associate score binary file
-  vcl_stringstream score_file;
+  std::stringstream score_file;
   score_file << out() << "ps_1_scores_tile_" << tile_id << ".bin";
   if (!vul_file::exists(score_file.str())) {
     log << "ERROR: can not find score file " << score_file.str() << '\n';
     volm_io::write_post_processing_log(log_file, log.str());
-    vcl_cerr << log.str();
+    std::cerr << log.str();
     return volm_io::EXE_ARGUMENT_ERROR;
   }
-  vcl_vector<volm_score_sptr> scores;
+  std::vector<volm_score_sptr> scores;
   volm_score::read_scores(scores, score_file.str());
 
   // get the ground truth score and camera from score binary
@@ -226,11 +226,11 @@ int main(int argc, char** argv)
   vgl_point_3d<double> gt_closest = leaf_gt->hyps_->locs_[hyp_gt];
 
   double sec_to_meter = 21.0/0.000202;;  // 1 arcsec ~ 30 meter ~ 1/3600 degree
-  double x_dist = vcl_abs(gt_loc.x()-gt_closest.x())*sec_to_meter;
-  double y_dist = vcl_abs(gt_loc.y()-gt_closest.y())*sec_to_meter;
+  double x_dist = std::abs(gt_loc.x()-gt_closest.x())*sec_to_meter;
+  double y_dist = std::abs(gt_loc.y()-gt_closest.y())*sec_to_meter;
   vgl_vector_2d<double> gt_dist_vec(x_dist, y_dist);
   double gt_dist = sqrt(gt_dist_vec.sqr_length());
-  vcl_cerr << vcl_setprecision(10) << " GT_location = " << gt_loc
+  std::cerr << std::setprecision(10) << " GT_location = " << gt_loc
            << ", closest location = " << gt_closest
            << ", distance = " << gt_dist << " meter\n";
 
@@ -256,14 +256,14 @@ int main(int argc, char** argv)
       << " distance from closest to GT location is " << gt_dist
       << " has best score = " << score_gt << ", best camera stored in BestCamera.kml ( "
       << gt_cam_ang.get_string() << ", id = " << cam_gt_best << " ) img size " << query_img.ni() << " by " << query_img.nj() << '\n';
-  vcl_cout << log.str();
+  std::cout << log.str();
   volm_io::write_post_processing_log(log_file, log.str());
 
   // render the index ray-based image
-  vcl_stringstream out_fname_pre;
+  std::stringstream out_fname_pre;
   out_fname_pre << out() << "/geo_index_tile_" << tile_id;
   // load associate indices
-  vcl_stringstream file_index_name_pre;
+  std::stringstream file_index_name_pre;
   file_index_name_pre << geo_index_folder() << "/geo_index_tile_" << tile_id;
   boxm2_volm_wr3db_index_sptr ind_dst = new boxm2_volm_wr3db_index(layer_size, buffer_capacity());
   boxm2_volm_wr3db_index_sptr ind_ori = new boxm2_volm_wr3db_index(layer_size, buffer_capacity());
@@ -275,17 +275,17 @@ int main(int argc, char** argv)
   unsigned h_id;
   vgl_point_3d<double> h_pt;
   while (leaf_gt->hyps_->get_next(0,1,h_pt)) {
-    vcl_vector<unsigned char> values_dst(layer_size);
-    vcl_vector<unsigned char> values_ori(layer_size);
-    vcl_vector<unsigned char> values_lnd(layer_size);
+    std::vector<unsigned char> values_dst(layer_size);
+    std::vector<unsigned char> values_ori(layer_size);
+    std::vector<unsigned char> values_lnd(layer_size);
     h_id = leaf_gt->hyps_->current_-1;
     ind_dst->get_next(values_dst);
     ind_ori->get_next(values_ori);
     ind_lnd->get_next(values_lnd);
     if (h_id == h_gt) {
-      vcl_stringstream dst_img_fname;
-      vcl_stringstream ori_img_fname;
-      vcl_stringstream lnd_img_fname;
+      std::stringstream dst_img_fname;
+      std::stringstream ori_img_fname;
+      std::stringstream lnd_img_fname;
       dst_img_fname << out_fname_pre.str() << "_ps_" << pass_id() << "_ind_dst_best_cam.png";
       ori_img_fname << out_fname_pre.str() << "_ps_" << pass_id() << "_ind_ori_best_cam.png";
       lnd_img_fname << out_fname_pre.str() << "_ps_" << pass_id() << "_ind_lnd_best_cam.png";
@@ -303,9 +303,9 @@ int main(int argc, char** argv)
       vil_save(lnd_img, (lnd_img_fname.str()).c_str());
 
       if (id() == 46 || id() == 61 || id() == 56) {
-        vcl_stringstream dst_gt_img_fname;
-        vcl_stringstream ori_gt_img_fname;
-        vcl_stringstream lnd_gt_img_fname;
+        std::stringstream dst_gt_img_fname;
+        std::stringstream ori_gt_img_fname;
+        std::stringstream lnd_gt_img_fname;
         dst_gt_img_fname << out_fname_pre.str() << "_ps_" << pass_id() << "_ind_dst_gt_cam.png";
         ori_gt_img_fname << out_fname_pre.str() << "_ps_" << pass_id() << "_ind_ori_gt_cam.png";
         lnd_gt_img_fname << out_fname_pre.str() << "_ps_" << pass_id() << "_ind_lnd_gt_cam.png";
@@ -323,10 +323,10 @@ int main(int argc, char** argv)
           gt_cam_ang_ptr = new cam_angles(0, 11.1, 11.11, 84.095883);
         else if (id() == 56)
           gt_cam_ang_ptr = new cam_angles(0, 12.6, 10.6377, 97.660);
-        vcl_cout << " ground truth camera is: ";
+        std::cout << " ground truth camera is: ";
         gt_cam_ang_ptr->print();
-        vcl_cout << vcl_endl;
-        vcl_pair<unsigned, cam_angles> gt_cam_pair = cam_space->cam_index_nearest_in_valid_array(*gt_cam_ang_ptr);
+        std::cout << std::endl;
+        std::pair<unsigned, cam_angles> gt_cam_pair = cam_space->cam_index_nearest_in_valid_array(*gt_cam_ang_ptr);
         //unsigned gt_cam_id = gt_cam_pair.first;
         unsigned gt_cam_id = (cam_space->valid_indices()[gt_cam_pair.first]);
         query->depth_rgb_image(values_dst, gt_cam_id, dst_gt_img, "depth");
@@ -340,12 +340,12 @@ int main(int argc, char** argv)
   }
 
   // write out the camera kml
-  vcl_string cam_kml = out() + "/BestCamera.kml";
-  vcl_ofstream ofs_kml(cam_kml.c_str());
+  std::string cam_kml = out() + "/BestCamera.kml";
+  std::ofstream ofs_kml(cam_kml.c_str());
   bkml_write::open_document(ofs_kml);
 
   // write camera
-  vcl_string kml_name = "BestCamera";
+  std::string kml_name = "BestCamera";
   double head = (gt_cam_ang.heading_ < 0) ? gt_cam_ang.heading_ + 360.0 : gt_cam_ang.heading_;
   double tilt = (gt_cam_ang.tilt_ < 0) ? gt_cam_ang.tilt_ + 360 : gt_cam_ang.tilt_;
   double roll;
@@ -354,8 +354,8 @@ int main(int argc, char** argv)
 
   double tfov = gt_cam_ang.top_fov_;
   double tv_rad = tfov / vnl_math::deg_per_rad;
-  double ttr = vcl_tan(tv_rad);
-  double rfov = vcl_atan( query_img.ni() * ttr / query_img.nj() ) * vnl_math::deg_per_rad;
+  double ttr = std::tan(tv_rad);
+  double rfov = std::atan( query_img.ni() * ttr / query_img.nj() ) * vnl_math::deg_per_rad;
   bkml_write::write_photo_overlay(ofs_kml, kml_name, gt_closest.x(), gt_closest.y(), cam_space->altitude(),
                                   head, tilt, roll, tfov, rfov);
   // write location
@@ -369,25 +369,25 @@ int main(int argc, char** argv)
 // generate gt hypos
 int main(int argc,  char** argv)
 {
-  vul_arg<vcl_string> gt_file("-gt_locs", "file with the gt locs of all test cases", "");
-  vul_arg<vcl_string> geo_hypo_folder_pre("-hypo", "folder prefix to read the geo hypotheses", "");
-  vul_arg<vcl_string> geo_index_folder_pre("-geo_pre", "folder prefix to read the geo index and the hypo","");
+  vul_arg<std::string> gt_file("-gt_locs", "file with the gt locs of all test cases", "");
+  vul_arg<std::string> geo_hypo_folder_pre("-hypo", "folder prefix to read the geo hypotheses", "");
+  vul_arg<std::string> geo_index_folder_pre("-geo_pre", "folder prefix to read the geo index and the hypo","");
   vul_arg<unsigned> point_angle("-point", "point_angle use to locate geo index", 0);
-  vul_arg<vcl_string> candidate_list("-cand", "candidate list if exist", "");
-  vul_arg<vcl_string> cam_bin("-cam", "camera space binary", "");                                // query -- camera space binary
-  vul_arg<vcl_string> dms_bin("-dms", "depth_map_scene binary", "");                             // query -- depth map scene
-  vul_arg<vcl_string> sph_bin("-sph", "spherical shell binary", "");                             // query -- spherical_shell binary
-  vul_arg<vcl_string> query_bin("-query", "query binary file", "");
+  vul_arg<std::string> candidate_list("-cand", "candidate list if exist", "");
+  vul_arg<std::string> cam_bin("-cam", "camera space binary", "");                                // query -- camera space binary
+  vul_arg<std::string> dms_bin("-dms", "depth_map_scene binary", "");                             // query -- depth map scene
+  vul_arg<std::string> sph_bin("-sph", "spherical shell binary", "");                             // query -- spherical_shell binary
+  vul_arg<std::string> query_bin("-query", "query binary file", "");
   vul_arg<float>      buffer_capacity("-buff", "index buffer capacity (GB)", 1.0f);
-  vul_arg<vcl_string> out("-out", "job output folder", "");
+  vul_arg<std::string> out("-out", "job output folder", "");
   vul_arg<unsigned>   id("-id", "id of the test image", 6);
   vul_arg<float>      inc("-inc", "increments in arcseconds, e.g. 0.1 for ~3m increments", 0.35f);
-  vul_arg<vcl_string> img("-img", "query images, to get the image size", "");
+  vul_arg<std::string> img("-img", "query images, to get the image size", "");
   vul_arg<unsigned>   pass_id("-pass", "from pass 0 to pass 1", 1);
   vul_arg_parse(argc, argv);
 
-  vcl_stringstream log;
-  vcl_string log_file = out() + "/render_img_log.xml";
+  std::stringstream log;
+  std::string log_file = out() + "/render_img_log.xml";
   if (out().compare("") == 0 ||
       geo_hypo_folder_pre().compare("") == 0 ||
       geo_index_folder_pre().compare("") == 0 ||
@@ -401,7 +401,7 @@ int main(int argc,  char** argv)
     log << "EXE_ARGUMENT_ERROR!\n";
     vul_arg_display_usage_and_exit();
     volm_io::write_post_processing_log(log_file, log.str());
-    vcl_cerr << log.str();
+    std::cerr << log.str();
     return volm_io::EXE_ARGUMENT_ERROR;
   }
 
@@ -413,15 +413,15 @@ int main(int argc,  char** argv)
   if (!vul_file::exists(gt_file())) {
     log << "ERROR: can not find ground truth position file -->" << gt_file() << '\n';
     volm_io::write_post_processing_log(log_file, log.str());
-    vcl_cerr << log.str();
+    std::cerr << log.str();
     return volm_io::EXE_ARGUMENT_ERROR;
   }
-  vcl_vector<vcl_pair<vgl_point_3d<double>, vcl_pair<vcl_pair<vcl_string, int>, vcl_string> > > samples;
+  std::vector<std::pair<vgl_point_3d<double>, std::pair<std::pair<std::string, int>, std::string> > > samples;
   unsigned int cnt = volm_io::read_gt_file(gt_file(), samples);
   if (id() >= cnt) {
     log << "ERROR: the file: " << gt_file() << " does not contain test id: " << id() << "!\n";
     volm_io::write_post_processing_log(log_file, log.str());
-    vcl_cerr << log.str();
+    std::cerr << log.str();
     return volm_io::EXE_ARGUMENT_ERROR;
   }
 
@@ -430,7 +430,7 @@ int main(int argc,  char** argv)
   vgl_polygon<double> cand_poly;
   if ( candidate_list().compare("") != 0) {
 #ifdef DEBUG
-    vcl_cout << " candidate list = " <<  candidate_list() << vcl_endl;
+    std::cout << " candidate list = " <<  candidate_list() << std::endl;
 #endif
     if ( vul_file::extension(candidate_list()).compare(".txt") == 0) {
       is_candidate = true;
@@ -439,13 +439,13 @@ int main(int argc,  char** argv)
     else {
       log << "ERROR: candidate list exist but with wrong format, only txt allowed" << candidate_list() << '\n';
       volm_io::write_post_processing_log(log_file, log.str());
-      vcl_cerr << log.str();
+      std::cerr << log.str();
       return volm_io::EXE_ARGUMENT_ERROR;
     }
   }
 
   // create tiles
-  vcl_vector<volm_tile> tiles;
+  std::vector<volm_tile> tiles;
   if (samples[id()].second.second == "desert")
     tiles = volm_tile::generate_p1_wr1_tiles();
   else
@@ -466,24 +466,24 @@ int main(int argc,  char** argv)
   vpgl_utm utm;
   double x, y;
   utm.transform(samples[id()].first.y(), samples[id()].first.x(), x, y, zone_id);
-  vcl_cerr << " for GT location " << id() << " ----> "
+  std::cerr << " for GT location " << id() << " ----> "
            << samples[id()].first.y() << ", "
            << samples[id()].first.x() << ", the zone is "
            << zone_id << " and the utm coord = " << x << ", " << y << '\n';
 
-  vcl_stringstream geo_hypo_ss;
+  std::stringstream geo_hypo_ss;
   geo_hypo_ss << geo_hypo_folder_pre() << zone_id << "_inc_0.99_nh_200/";
-  vcl_string geo_hypo_folder = geo_hypo_ss.str();
+  std::string geo_hypo_folder = geo_hypo_ss.str();
 
-  vcl_stringstream geo_index_ss;
+  std::stringstream geo_index_ss;
   geo_index_ss << geo_index_folder_pre() << zone_id << "_inc_0.99_nh_200_pa_" << point_angle() << '/';
-  vcl_string geo_index_folder = geo_index_ss.str();
+  std::string geo_index_folder = geo_index_ss.str();
 
-  vcl_cerr << " geo_hypo_folder = " << geo_hypo_folder << '\n'
+  std::cerr << " geo_hypo_folder = " << geo_hypo_folder << '\n'
            << " geo_index_folder = " << geo_index_folder << '\n';
 
   // check the existance of index for current tile
-  vcl_stringstream file_name_pre;
+  std::stringstream file_name_pre;
   file_name_pre << geo_hypo_folder << "geo_index_tile_" << tile_id;
   if (!vul_file::exists(file_name_pre.str() + ".txt")) {
     log << "for GT location " << id() << " ---> "
@@ -491,7 +491,7 @@ int main(int argc,  char** argv)
         << samples[id()].first.y() << " is in the tile "
         << tile_id << " but no geo_index for this tile, stop the post_processing\n";
     volm_io::write_post_processing_log(log_file, log.str());
-    vcl_cout << log.str();
+    std::cout << log.str();
     return volm_io::POST_PROCESS_HALT;
   }
   else {
@@ -500,7 +500,7 @@ int main(int argc,  char** argv)
         << samples[id()].first.y() << " is in the tile "
         << tile_id << '\n';
     volm_io::write_post_processing_log(log_file, log.str());
-    vcl_cout << log.str();
+    std::cout << log.str();
   }
 
   // load associate index given tile_id, if index exists
@@ -510,18 +510,18 @@ int main(int argc,  char** argv)
   if (is_candidate) {
     volm_geo_index::prune_tree(root, cand_poly);
   }
-  vcl_vector<volm_geo_index_node_sptr> leaves;
+  std::vector<volm_geo_index_node_sptr> leaves;
   volm_geo_index::get_leaves_with_hyps(root, leaves);
 
   // create volm_query
   // read in the parameter to create spherical container for query
   boxm2_volm_wr3db_index_params params;
-  vcl_stringstream params_file;
+  std::stringstream params_file;
   params_file << geo_index_folder << "geo_index_tile_" << tile_id << "_index.params";
   if (!params.read_params_file(params_file.str())) {
     log << "ERROR: cannot read params file from " << params_file.str() << '\n';
     volm_io::write_post_processing_log(log_file, log.str());
-    vcl_cerr << log.str();
+    std::cerr << log.str();
     return volm_io::EXE_ARGUMENT_ERROR;
   }
 
@@ -530,7 +530,7 @@ int main(int argc,  char** argv)
   if (!vul_file::exists(sph_bin())) {
     log << "ERROR: cannot read spherical shell binary from " << sph_bin() << '\n';
     volm_io::write_post_processing_log(log_file, log.str());
-    vcl_cerr << log.str();
+    std::cerr << log.str();
     return volm_io::EXE_ARGUMENT_ERROR;
   }
   vsl_b_ifstream sph_ifs(sph_bin());
@@ -541,7 +541,7 @@ int main(int argc,  char** argv)
     log << "ERROR: the spherical shell binary (" << sph_shell->get_container_size() << ") has different parameters setting from index ("
         << params.layer_size << ")\n";
     volm_io::write_post_processing_log(log_file, log.str());
-    vcl_cerr << log.str();
+    std::cerr << log.str();
     return volm_io::EXE_ARGUMENT_ERROR;
   }
   unsigned layer_size = (unsigned)sph_shell->get_container_size();
@@ -549,7 +549,7 @@ int main(int argc,  char** argv)
   if (!vul_file::exists(cam_bin())) {
     log << "ERROR: can not find camera_space binary: " << cam_bin() << '\n';
     volm_io::write_post_processing_log(log_file, log.str());
-    vcl_cerr << log.str();
+    std::cerr << log.str();
     return volm_io::EXE_ARGUMENT_ERROR;
   }
   vsl_b_ifstream cam_ifs(cam_bin());
@@ -560,7 +560,7 @@ int main(int argc,  char** argv)
   if (!vul_file::exists(dms_bin())) {
     log << "ERROR: can not find depth_map_scene " << dms_bin() << '\n';
     volm_io::write_post_processing_log(log_file, log.str());
-    vcl_cerr << log.str();
+    std::cerr << log.str();
     return volm_io::EXE_ARGUMENT_ERROR;
   }
 
@@ -568,30 +568,30 @@ int main(int argc,  char** argv)
   //if (!vul_file::exists(query_bin())) {
   //  log << "ERROR: can not find query_binar " << query_bin() << '\n';
   //  volm_io::write_post_processing_log(log_file, log.str());
-  //  vcl_cerr << log.str();
+  //  std::cerr << log.str();
   //  return volm_io::EXE_ARGUMENT_ERROR;
   //}
   volm_query_sptr query = new volm_query(query_bin(), cam_space, dms_bin(), sph_shell, sph);
 
 
   // load associate score binary file
-  vcl_stringstream score_file;
+  std::stringstream score_file;
   score_file << out() << "ps_1_scores_tile_" << tile_id << ".bin";
   if (!vul_file::exists(score_file.str())) {
     log << "ERROR: can not find score file " << score_file.str() << '\n';
     volm_io::write_post_processing_log(log_file, log.str());
-    vcl_cerr << log.str();
+    std::cerr << log.str();
     return volm_io::EXE_ARGUMENT_ERROR;
   }
-  vcl_vector<volm_score_sptr> scores;
+  std::vector<volm_score_sptr> scores;
   volm_score::read_scores(scores, score_file.str());
 
 #ifdef DEBUG
-    vcl_cout << " THE READ IN BINRAY SCORE FILE\n"
-             << " file name = " << score_file.str() << vcl_endl;
+    std::cout << " THE READ IN BINRAY SCORE FILE\n"
+             << " file name = " << score_file.str() << std::endl;
     for (unsigned i = 0; i < scores.size(); i++) {
-      vcl_cout << scores[i]->leaf_id_ << ' ' << scores[i]->hypo_id_
-               << ' ' << scores[i]->max_score_ << ' ' << scores[i]->max_cam_id_ << vcl_endl;
+      std::cout << scores[i]->leaf_id_ << ' ' << scores[i]->hypo_id_
+               << ' ' << scores[i]->max_score_ << ' ' << scores[i]->max_cam_id_ << std::endl;
     }
 #endif
 
@@ -610,7 +610,7 @@ int main(int argc,  char** argv)
   double y_dist = abs(gt_loc.y()-gt_closest.y())*sec_to_meter;
   vgl_vector_2d<double> gt_dist_vec(x_dist, y_dist);
   double gt_dist = sqrt(gt_dist_vec.sqr_length());
-  vcl_cerr << vcl_setprecision(10) << " GT_location = " << gt_loc
+  std::cerr << std::setprecision(10) << " GT_location = " << gt_loc
            << ", closest location = " << gt_closest
            << ", distance = " << gt_dist << " meter\n";
 #if 0
@@ -621,7 +621,7 @@ int main(int argc,  char** argv)
         << gt_dist << ", larger than hypotheses interval "
         << hypo_interval << " meters in geo_index\n";
     volm_io::write_post_processing_log(log_file, log.str());
-    vcl_cerr << log.str();
+    std::cerr << log.str();
   }
 #endif
 
@@ -649,15 +649,15 @@ int main(int argc,  char** argv)
       << " distance from closest to GT location is " << gt_dist
       << " has best score = " << score_gt << ", best camera stored in BestCamera.kml ( "
       << gt_cam_ang.get_string() << ", id = " << cam_gt_best << " ) img size " << query_img.ni() << " by " << query_img.nj() << '\n';
-  vcl_cout << log.str();
+  std::cout << log.str();
   volm_io::write_post_processing_log(log_file, log.str());
 
 
   // render the index_depth image
-  vcl_stringstream out_fname_pre;
+  std::stringstream out_fname_pre;
   out_fname_pre << out() << "/geo_index_tile_" << tile_id;
 
-  vcl_stringstream file_index_name_pre;
+  std::stringstream file_index_name_pre;
   file_index_name_pre << geo_index_folder << "geo_index_tile_" << tile_id;
   boxm2_volm_wr3db_index_sptr ind_dst = new boxm2_volm_wr3db_index(layer_size, buffer_capacity());
   boxm2_volm_wr3db_index_sptr ind_combine = new boxm2_volm_wr3db_index(layer_size, buffer_capacity());
@@ -667,18 +667,18 @@ int main(int argc,  char** argv)
   unsigned h_id;
   vgl_point_3d<double> h_pt;
   while (leaf_gt->hyps_->get_next(0,1,h_pt)) {
-    vcl_vector<unsigned char> values_dst(layer_size);
-    vcl_vector<unsigned char> values_combine(layer_size);
+    std::vector<unsigned char> values_dst(layer_size);
+    std::vector<unsigned char> values_combine(layer_size);
     h_id = leaf_gt->hyps_->current_-1;
     ind_dst->get_next(values_dst);
     ind_combine->get_next(values_combine);
     if (h_id == h_gt) {
 
       // extract the values from combined index to orient and hypo
-      vcl_vector<unsigned char> values_ori;
-      vcl_vector<unsigned char> values_lnd;
-      vcl_vector<unsigned char> test_ori;
-      vcl_vector<unsigned char> test_lnd;
+      std::vector<unsigned char> values_ori;
+      std::vector<unsigned char> values_lnd;
+      std::vector<unsigned char> test_ori;
+      std::vector<unsigned char> test_lnd;
       for (unsigned ii = 0; ii < values_combine.size(); ii++) {
         unsigned char ind_ori, ind_lnd;
         if (values_combine[ii] != 254)
@@ -693,19 +693,19 @@ int main(int argc,  char** argv)
 
 #if 0
       if (id() == 40) {
-        vcl_cout << "id = " << id() << ", h_id = " << h_id << ", h_gt = " << h_gt << ", point = " << h_pt << vcl_endl;
+        std::cout << "id = " << id() << ", h_id = " << h_id << ", h_gt = " << h_gt << ", point = " << h_pt << std::endl;
         for (unsigned ii = 0; ii < values_combine.size(); ii++) {
-          vcl_cout << " ii = " << ii << ", combine = " << (int)values_combine[ii]
+          std::cout << " ii = " << ii << ", combine = " << (int)values_combine[ii]
                    << " ---> orient = " << (int)values_ori[ii] << " test_ori = " << (int)test_ori[ii]
                    << ", land_id = " << (int)values_lnd[ii] << " test_lnd = " << (int)test_lnd[ii]
-                   << vcl_endl;
+                   << std::endl;
         }
       }
 #endif
 
-      vcl_stringstream dst_img_fname;
-      vcl_stringstream ori_img_fname;
-      vcl_stringstream lnd_img_fname;
+      std::stringstream dst_img_fname;
+      std::stringstream ori_img_fname;
+      std::stringstream lnd_img_fname;
       dst_img_fname << out_fname_pre.str() << "_ps_" << pass_id() << "_ind_depth_best_cam.png";
       ori_img_fname << out_fname_pre.str() << "_ps_" << pass_id() << "_ind_orient_best_cam.png";
       lnd_img_fname << out_fname_pre.str() << "_ps_" << pass_id() << "_ind_land_best_cam.png";
@@ -722,7 +722,7 @@ int main(int argc,  char** argv)
           lnd_img(i,j).r = (unsigned char)120;  lnd_img(i,j).g = (unsigned char)120;  lnd_img(i,j).b = (unsigned char)120;
         }
 #ifdef DEBUG
-      vcl_cout << " cam_id = " << cam_gt_best << vcl_endl;
+      std::cout << " cam_id = " << cam_gt_best << std::endl;
 #endif
       query->depth_rgb_image(values_dst, cam_gt_best, dst_img, "depth");
       query->depth_rgb_image(values_ori, cam_gt_best, ori_img, "orientation");
@@ -732,30 +732,30 @@ int main(int argc,  char** argv)
       vil_save(lnd_img, (lnd_img_fname.str()).c_str());
 
       // hack here to render the gt camera for test_id_36
-      //vcl_pair<unsigned, cam_angles> gt_cam_pair;
+      //std::pair<unsigned, cam_angles> gt_cam_pair;
       unsigned gt_cam_id;
       if (id() == 36) {
         cam_angles gt_cam_ang(0.31, 29.03, 68.0, 77.13);
-        vcl_pair<unsigned, cam_angles> gt_cam_pair = cam_space->cam_index_nearest_in_valid_array(gt_cam_ang);
+        std::pair<unsigned, cam_angles> gt_cam_pair = cam_space->cam_index_nearest_in_valid_array(gt_cam_ang);
         gt_cam_id = gt_cam_pair.first;
         log << " For GT location , closest hypo_loc " << gt_closest.x() << ", " << gt_closest.y()
             << " GT camera " << gt_cam_pair.first << " --> " << gt_cam_pair.second.get_string() << '\n';
         volm_io::write_post_processing_log(log_file, log.str());
-        vcl_cout << log.str();
+        std::cout << log.str();
       }
       else if (id() == 40) {
         cam_angles gt_cam_ang(-0.74, 5.30, 67.0, 87.70);
-        vcl_pair<unsigned, cam_angles> gt_cam_pair = cam_space->cam_index_nearest_in_valid_array(gt_cam_ang);
+        std::pair<unsigned, cam_angles> gt_cam_pair = cam_space->cam_index_nearest_in_valid_array(gt_cam_ang);
         gt_cam_id = gt_cam_pair.first;
         log << " For GT location , closest hypo_loc " << gt_closest.x() << ", " << gt_closest.y()
             << " GT camera " << gt_cam_pair.first << " --> " << gt_cam_pair.second.get_string() << '\n';
         volm_io::write_post_processing_log(log_file, log.str());
-        vcl_cout << log.str();
+        std::cout << log.str();
       }
       if (id() == 36 || id() == 40) {
-        vcl_stringstream dst_gt_img_fname;
-        vcl_stringstream ori_gt_img_fname;
-        vcl_stringstream lnd_gt_img_fname;
+        std::stringstream dst_gt_img_fname;
+        std::stringstream ori_gt_img_fname;
+        std::stringstream lnd_gt_img_fname;
         dst_gt_img_fname << out_fname_pre.str() << "_ps_" << pass_id() << "_ind_depth_gt_cam.png";
         ori_gt_img_fname << out_fname_pre.str() << "_ps_" << pass_id() << "_ind_orient_gt_cam.png";
         lnd_gt_img_fname << out_fname_pre.str() << "_ps_" << pass_id() << "_ind_lnd_gt_cam.png";
@@ -780,10 +780,10 @@ int main(int argc,  char** argv)
   }
 
   // write out the camera.kml
-  vcl_string cam_kml = out() + "/BestCamera.kml";
-  vcl_ofstream ofs_kml(cam_kml.c_str());
+  std::string cam_kml = out() + "/BestCamera.kml";
+  std::ofstream ofs_kml(cam_kml.c_str());
 
-  vcl_stringstream kml_name;
+  std::stringstream kml_name;
   kml_name << "p1a_test1_" << id();
   bkml_write::open_document(ofs_kml);
 
@@ -795,8 +795,8 @@ int main(int argc,  char** argv)
 
   double tfov = gt_cam_ang.top_fov_;
   double tv_rad = tfov / vnl_math::deg_per_rad;
-  double ttr = vcl_tan(tv_rad);
-  double rfov = vcl_atan( query_img.ni() * ttr / query_img.nj() ) * vnl_math::deg_per_rad;
+  double ttr = std::tan(tv_rad);
+  double rfov = std::atan( query_img.ni() * ttr / query_img.nj() ) * vnl_math::deg_per_rad;
 
   bkml_write::write_photo_overlay(ofs_kml, kml_name.str(), gt_closest.x(), gt_closest.y(), cam_space->altitude(),
                                   head, tilt, roll, tfov, rfov);
@@ -805,23 +805,23 @@ int main(int argc,  char** argv)
 
 #if 0
   bkml_parser* parser = new bkml_parser();
-  vcl_FILE* xmlFile = vcl_fopen(cam_kml.c_str(), "r");
+  std::FILE* xmlFile = std::fopen(cam_kml.c_str(), "r");
   if (!xmlFile) {
-    vcl_cerr << cam_kml.c_str() << " error on opening\n";
+    std::cerr << cam_kml.c_str() << " error on opening\n";
     delete parser;
     return false;
   }
   if (!parser->parseFile(xmlFile)) {
-    vcl_cerr << XML_ErrorString(parser->XML_GetErrorCode()) << " at line "
+    std::cerr << XML_ErrorString(parser->XML_GetErrorCode()) << " at line "
              << parser->XML_GetCurrentLineNumber() << '\n';
 
     delete parser;
     return false;
   }
-  vcl_cout << "test reading Bestcamera.kml -------\n"
+  std::cout << "test reading Bestcamera.kml -------\n"
            << "\t\t lon = " << parser->longitude_ << ", lat = " << parser->latitude_ << ", alt = " << parser->altitude_
            << ", head = " << parser->heading_ << ", tilt = " << parser->tilt_ << ", roll = " << parser->roll_
-           << ", tfov = " << parser->top_fov_ << ", rfov = " << parser->right_fov_ << vcl_endl;
+           << ", tfov = " << parser->top_fov_ << ", rfov = " << parser->right_fov_ << std::endl;
 #endif
 
 #endif

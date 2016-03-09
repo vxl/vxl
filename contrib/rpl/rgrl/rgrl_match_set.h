@@ -6,15 +6,17 @@
 // \author Amitha Perera
 // \date 14 Nov 2002
 
-#include <vcl_vector.h>
-#include <vcl_cstddef.h>
+#include <vector>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <cstddef>
 
 #include <rgrl/rgrl_feature_sptr.h>
 #include <rgrl/rgrl_feature_set.h>
 #include <rgrl/rgrl_object.h>
 #include <rgrl/rgrl_match_set_sptr.h>
 
-#include <vcl_iosfwd.h>
+#include <iosfwd>
 
 class rgrl_transformation;
 
@@ -46,7 +48,7 @@ class rgrl_match_set
   : public rgrl_object
 {
  public:
-  typedef vcl_size_t                          size_type;
+  typedef std::size_t                          size_type;
   typedef rgrl_match_set_from_iterator        from_iterator;
   typedef rgrl_match_set_const_from_iterator  const_from_iterator;
 
@@ -55,20 +57,20 @@ class rgrl_match_set
   rgrl_match_set( );
 
   //:  construct an empty match set, specifying the feature type
-  rgrl_match_set( const vcl_type_info& feature_type );
+  rgrl_match_set( const std::type_info& feature_type );
 
   //:  construct an empty match set, specifying the feature type
-  rgrl_match_set( const vcl_type_info& from_type,
-                  const vcl_type_info& to_type,
+  rgrl_match_set( const std::type_info& from_type,
+                  const std::type_info& to_type,
                   const rgrl_feature_set_label& from_label = rgrl_feature_set_label(),
                   const rgrl_feature_set_label& to_label = rgrl_feature_set_label() );
 
   //: type of from features
-  const vcl_type_info&
+  const std::type_info&
   from_type() const { return *from_type_; }
 
   //: type of from features
-  const vcl_type_info&
+  const std::type_info&
   to_type() const { return *to_type_; }
 
   //: label of from features
@@ -96,35 +98,35 @@ class rgrl_match_set
   void clear();
 
   //: write out a match set
-  void write( vcl_ostream& os ) const;
+  void write( std::ostream& os ) const;
 
   //: write out a match set
-  void write_sorted( vcl_ostream& os ) const;
+  void write_sorted( std::ostream& os ) const;
 
   //: read in a match set
-  bool read( vcl_istream& is );
+  bool read( std::istream& is );
 
   //: Add from feature, the transformed feature, and its matching "to" features.
   //
   void add_feature_and_matches( rgrl_feature_sptr                      from_feature,
                                 rgrl_feature_sptr                      mapped_feature,
-                                vcl_vector< rgrl_feature_sptr > const& matching_to );
+                                std::vector< rgrl_feature_sptr > const& matching_to );
 
   //: Add from feature, the transformed feature, and its matching "to" features, and the signature weight.
   //
   void add_feature_matches_and_weights( rgrl_feature_sptr                      from_feature,
                                         rgrl_feature_sptr                      mapped_feature,
-                                        vcl_vector< rgrl_feature_sptr > const& matching_to,
-                                        vcl_vector< double > const&            signature_weights );
+                                        std::vector< rgrl_feature_sptr > const& matching_to,
+                                        std::vector< double > const&            signature_weights );
 
   //: Add from feature, the transformed feature, and its matching "to" features, and ALL weights.
   //
   void add_feature_matches_and_weights( rgrl_feature_sptr                      from_feature,
                                         rgrl_feature_sptr                      mapped_feature,
-                                        vcl_vector< rgrl_feature_sptr > const& matching_to,
-                                        vcl_vector< double > const&            sig_wgts,
-                                        vcl_vector< double > const&            geo_wgts,
-                                        vcl_vector< double > const&            cum_wgts );
+                                        std::vector< rgrl_feature_sptr > const& matching_to,
+                                        std::vector< double > const&            sig_wgts,
+                                        std::vector< double > const&            geo_wgts,
+                                        std::vector< double > const&            cum_wgts );
 
   //: Add from feature and its matching "to" feature.
   //
@@ -159,8 +161,8 @@ class rgrl_match_set
 
   //: to access feature types
   //
-  const vcl_type_info& from_feature_type() const {return *from_type_;}
-  const vcl_type_info& to_feature_type() const {return *to_type_;}
+  const std::type_info& from_feature_type() const {return *from_type_;}
+  const std::type_info& to_feature_type() const {return *to_type_;}
 
   unsigned int num_constraints_per_match() const;
 
@@ -211,24 +213,24 @@ class rgrl_match_set
   friend class rgrl_match_set_const_from_to_iterator;
 
 
-  const vcl_type_info* from_type_;
-  const vcl_type_info* to_type_;
+  const std::type_info* from_type_;
+  const std::type_info* to_type_;
   rgrl_feature_set_label from_label_;
   rgrl_feature_set_label to_label_;
 
   mutable unsigned int num_constraints_per_match_;
-  vcl_vector< rgrl_feature_sptr > from_features_;
-  vcl_vector< rgrl_feature_sptr > xformed_from_features_;
-  vcl_vector< vcl_vector< match_info > > matches_and_weights_;
+  std::vector< rgrl_feature_sptr > from_features_;
+  std::vector< rgrl_feature_sptr > xformed_from_features_;
+  std::vector< std::vector< match_info > > matches_and_weights_;
 };
 
 //: stream output
-vcl_ostream&
-operator<< ( vcl_ostream& os, rgrl_match_set const& set );
+std::ostream&
+operator<< ( std::ostream& os, rgrl_match_set const& set );
 
 //: stream input
-vcl_istream&
-operator>> ( vcl_istream& is, rgrl_match_set& set );
+std::istream&
+operator>> ( std::istream& is, rgrl_match_set& set );
 
 class rgrl_match_set_from_iterator
 {
@@ -236,7 +238,7 @@ class rgrl_match_set_from_iterator
   typedef rgrl_match_set::match_info                            match_info;
  public:
   typedef rgrl_match_set_from_to_iterator                       to_iterator;
-  typedef vcl_vector< vcl_vector< match_info > >::size_type     size_type;
+  typedef std::vector< std::vector< match_info > >::size_type     size_type;
 
  public:
   //: Default constructor.
@@ -274,10 +276,10 @@ class rgrl_match_set_from_iterator
 
   // For use by rgrl_match_set
   rgrl_match_set_from_iterator( rgrl_match_set* ms,
-                                vcl_vector< rgrl_feature_sptr >::size_type ind );
+                                std::vector< rgrl_feature_sptr >::size_type ind );
 
   rgrl_match_set* match_set_;
-  vcl_vector< rgrl_feature_sptr >::size_type index_;
+  std::vector< rgrl_feature_sptr >::size_type index_;
 };
 
 
@@ -287,7 +289,7 @@ class rgrl_match_set_const_from_iterator
   typedef rgrl_match_set::match_info                            match_info;
  public:
   typedef rgrl_match_set_const_from_to_iterator                 to_iterator;
-  typedef vcl_vector< vcl_vector< match_info > >::size_type     size_type;
+  typedef std::vector< std::vector< match_info > >::size_type     size_type;
 
  public:
   //: Default constructor.
@@ -329,10 +331,10 @@ class rgrl_match_set_const_from_iterator
 
   // For use by rgrl_match_set
   rgrl_match_set_const_from_iterator( rgrl_match_set const* ms,
-                                      vcl_vector< rgrl_feature_sptr >::size_type ind );
+                                      std::vector< rgrl_feature_sptr >::size_type ind );
 
   rgrl_match_set const* match_set_;
-  vcl_vector< rgrl_feature_sptr >::size_type index_;
+  std::vector< rgrl_feature_sptr >::size_type index_;
 };
 
 
@@ -379,7 +381,7 @@ class rgrl_match_set_from_to_iterator
   friend class rgrl_match_set_const_from_to_iterator;
 
   typedef rgrl_match_set::match_info match_info;
-  typedef vcl_vector< match_info >::iterator MatchInfoIter;
+  typedef std::vector< match_info >::iterator MatchInfoIter;
   // for use by rgrl_match_set_from_iterator
   rgrl_match_set_from_to_iterator( MatchInfoIter const& itr );
 
@@ -425,7 +427,7 @@ class rgrl_match_set_const_from_to_iterator
 
   friend class rgrl_match_set_const_from_iterator;
   typedef rgrl_match_set::match_info match_info;
-  typedef vcl_vector< match_info >::const_iterator MatchInfoIter;
+  typedef std::vector< match_info >::const_iterator MatchInfoIter;
   // for use by rgrl_match_set_from_iterator
   rgrl_match_set_const_from_to_iterator( MatchInfoIter const& itr );
 

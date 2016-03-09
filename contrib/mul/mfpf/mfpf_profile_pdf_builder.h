@@ -9,7 +9,9 @@
 #include <vpdfl/vpdfl_builder_base.h>
 #include <mbl/mbl_cloneable_ptr.h>
 #include <vgl/vgl_fwd.h>
-#include <vcl_iosfwd.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iosfwd>
 
 //: Builder for mfpf_profile_pdf objects.
 class mfpf_profile_pdf_builder : public mfpf_point_finder_builder
@@ -24,7 +26,7 @@ class mfpf_profile_pdf_builder : public mfpf_point_finder_builder
   mbl_cloneable_ptr<vpdfl_builder_base> pdf_builder_;
 
   //: Samples added in calls to add_example()
-  vcl_vector<vnl_vector<double> > data_;
+  std::vector<vnl_vector<double> > data_;
 
   //: Define default values
   void set_defaults();
@@ -69,16 +71,16 @@ class mfpf_profile_pdf_builder : public mfpf_point_finder_builder
   virtual void build(mfpf_point_finder&);
 
   //: Initialise from a string stream
-  virtual bool set_from_stream(vcl_istream &is);
+  virtual bool set_from_stream(std::istream &is);
 
   //: Name of the class
-  virtual vcl_string is_a() const;
+  virtual std::string is_a() const;
 
   //: Create a copy on the heap and return base class pointer
   virtual mfpf_point_finder_builder* clone() const;
 
   //: Print class to os
-  virtual void print_summary(vcl_ostream& os) const;
+  virtual void print_summary(std::ostream& os) const;
 
   //: Version number for I/O
   short version_no() const;

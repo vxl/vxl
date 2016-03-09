@@ -36,7 +36,7 @@ bool bvpl_create_generic_kernel_vector_process_cons(bprb_func_process& pro)
   //input[5]: Kernel support_z
   //input[6]: String : type of kernel
   //input[4]: String : type of directions
-  vcl_vector<vcl_string> input_types_(n_inputs_);
+  std::vector<std::string> input_types_(n_inputs_);
   input_types_[0] = "float";
   input_types_[1] = "float";
   input_types_[2] = "float";
@@ -47,7 +47,7 @@ bool bvpl_create_generic_kernel_vector_process_cons(bprb_func_process& pro)
   input_types_[7] = "vcl_string";
 
 
-  vcl_vector<vcl_string> output_types_(n_outputs_);
+  std::vector<std::string> output_types_(n_outputs_);
   output_types_[0] = "bvpl_kernel_vector_sptr";
 
   return pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
@@ -59,7 +59,7 @@ bool bvpl_create_generic_kernel_vector_process(bprb_func_process& pro)
 
   if (pro.n_inputs() < n_inputs_)
   {
-    vcl_cout << pro.name() << " The input number should be " << n_inputs_<< vcl_endl;
+    std::cout << pro.name() << " The input number should be " << n_inputs_<< std::endl;
     return false;
   }
 
@@ -70,8 +70,8 @@ bool bvpl_create_generic_kernel_vector_process(bprb_func_process& pro)
   float supp_x = 1.0f; supp_x = pro.get_input<float>(3);
   float supp_y = 1.0f; supp_y = pro.get_input<float>(4);
   float supp_z = 1.0f; supp_z = pro.get_input<float>(5);
-  vcl_string factory_name =pro.get_input<vcl_string>(6);
-  vcl_string dir_type =pro.get_input<vcl_string>(7);
+  std::string factory_name =pro.get_input<std::string>(6);
+  std::string dir_type =pro.get_input<std::string>(7);
 
 
   if (factory_name == "gauss_x") { //first order derivative of gaussian
@@ -96,7 +96,7 @@ bool bvpl_create_generic_kernel_vector_process(bprb_func_process& pro)
   }
 
   //if got to here is because we didn't meet available conditions
-  vcl_cerr << "Error: No vector could be created for specified factory and directions " <<vcl_endl;
+  std::cerr << "Error: No vector could be created for specified factory and directions " <<std::endl;
   pro.set_output_val<bvpl_kernel_vector_sptr>(0, VXL_NULLPTR);
   return false;
 }
@@ -114,11 +114,11 @@ bool bvpl_write_generic_kernel_vector_process_cons(bprb_func_process& pro)
 {
   using namespace bvpl_write_generic_kernel_vector_process_globals;
 
-  vcl_vector<vcl_string> input_types_(n_inputs_);
+  std::vector<std::string> input_types_(n_inputs_);
   input_types_[0] = "bvpl_kernel_vector_sptr";
   input_types_[1] = "vcl_string";  // prefix of the output text files
 
-  vcl_vector<vcl_string> output_types_(n_outputs_);
+  std::vector<std::string> output_types_(n_outputs_);
 
   return pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
 }
@@ -129,24 +129,24 @@ bool bvpl_write_generic_kernel_vector_process(bprb_func_process& pro)
 
   if (pro.n_inputs() < n_inputs_)
   {
-    vcl_cout << pro.name() << " The input number should be " << n_inputs_<< vcl_endl;
+    std::cout << pro.name() << " The input number should be " << n_inputs_<< std::endl;
     return false;
   }
 
   //get inputs:
   bvpl_kernel_vector_sptr kernels = pro.get_input<bvpl_kernel_vector_sptr>(0);
-  vcl_string output_prefix =pro.get_input<vcl_string>(1);
+  std::string output_prefix =pro.get_input<std::string>(1);
 
-  vcl_vector< bvpl_kernel_sptr >::iterator iter = kernels->begin();
+  std::vector< bvpl_kernel_sptr >::iterator iter = kernels->begin();
   unsigned id = 1;
   for ( ; iter != kernels->end(); iter++, id++) {
     bvpl_kernel_sptr k = *iter;
-    vcl_cout << " printing out kernel: " << k->name() << vcl_endl;
-    vcl_stringstream ss; ss << output_prefix << k->name() << "_" << id << ".txt";
+    std::cout << " printing out kernel: " << k->name() << std::endl;
+    std::stringstream ss; ss << output_prefix << k->name() << "_" << id << ".txt";
     k->print_to_file(ss.str());
 
     // sanity check
-    vcl_cout << " kernel angle: " << k->angle() << " axis: " << k->axis() << " sum: " << k->cum_sum() << vcl_endl;
+    std::cout << " kernel angle: " << k->angle() << " axis: " << k->axis() << " sum: " << k->cum_sum() << std::endl;
   }
 
   return true;

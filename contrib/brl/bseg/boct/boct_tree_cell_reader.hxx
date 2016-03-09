@@ -51,17 +51,17 @@ void boct_tree_cell_reader<T_loc,T_data>::begin()
             break;
           }
         default:
-          vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, boct_tree<T_loc,T_data>&)\n"
+          std::cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, boct_tree<T_loc,T_data>&)\n"
                    << "           Unknown version number of the tree "<< v << '\n';
           return ;
         }
      }
      break;
    default:
-     vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, boct_tree<T_loc,T_data>&)\n"
+     std::cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, boct_tree<T_loc,T_data>&)\n"
               << "           Unknown version number "<< v << '\n';
 #if 0
-                *is_.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
+                *is_.is().clear(std::ios::badbit); // Set an unrecoverable IO error on stream
 #endif
      return;
   }
@@ -126,7 +126,7 @@ bool boct_tree_cell_reader<T_loc,T_data>::next(boct_tree_cell<T_loc,T_data>& c)
     }
   }
   else
-    vcl_cerr << "bool boct_tree_cell_reader<T_loc,T_data>::next -- Wrong version number!" << vcl_endl;
+    std::cerr << "bool boct_tree_cell_reader<T_loc,T_data>::next -- Wrong version number!" << std::endl;
   return false;
 }
 

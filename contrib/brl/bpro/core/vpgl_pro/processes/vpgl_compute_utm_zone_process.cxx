@@ -7,7 +7,9 @@
 // \author Yi Dong
 // \date April 14, 2014
 
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iostream>
 #include <vpgl/vpgl_utm.h>
 
 // global variables and functions
@@ -22,12 +24,12 @@ bool vpgl_compute_utm_zone_process_cons(bprb_func_process& pro)
 {
   using namespace vpgl_compute_utm_zone_process_globals;
   // process takes 2 inputs
-  vcl_vector<vcl_string> input_types_(n_inputs_);
+  std::vector<std::string> input_types_(n_inputs_);
   input_types_[0] = "double";         // lon
   input_types_[1] = "double";         // lat
 
   // process takes 4 outputs
-  vcl_vector<vcl_string> output_types_(n_outputs_);
+  std::vector<std::string> output_types_(n_outputs_);
   output_types_[0] = "double";      // utm coordiantes east
   output_types_[1] = "double";      // utm coordinates north
   output_types_[2] = "int";         // utm zone id
@@ -42,7 +44,7 @@ bool vpgl_compute_utm_zone_process(bprb_func_process& pro)
   using namespace vpgl_compute_utm_zone_process_globals;
   // sanity check
   if (!pro.verify_inputs()) {
-    vcl_cout << pro.name() << ": Input is not valid" << vcl_endl;
+    std::cout << pro.name() << ": Input is not valid" << std::endl;
     return false;
   }
   // get input

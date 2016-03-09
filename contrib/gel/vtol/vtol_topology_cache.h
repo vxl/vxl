@@ -13,7 +13,9 @@
 //-----------------------------------------------------------------------------
 
 #include <vtol/vtol_topology_object.h>
-#include <vcl_vector.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <vector>
 #include <vul/vul_timestamp.h>
 
 class vtol_vertex;
@@ -69,13 +71,13 @@ class vtol_topology_cache : public vul_timestamp
   //members
   vtol_topology_object* source_;
 
-  vcl_vector<vtol_vertex*>* vertices_;
-  vcl_vector<vtol_zero_chain*>* zerochains_;
-  vcl_vector<vtol_edge*>* edges_;
-  vcl_vector<vtol_one_chain*>*  onechains_;
-  vcl_vector<vtol_face*>*  faces_;
-  vcl_vector<vtol_two_chain*>*  twochains_;
-  vcl_vector<vtol_block*>*  blocks_;
+  std::vector<vtol_vertex*>* vertices_;
+  std::vector<vtol_zero_chain*>* zerochains_;
+  std::vector<vtol_edge*>* edges_;
+  std::vector<vtol_one_chain*>*  onechains_;
+  std::vector<vtol_face*>*  faces_;
+  std::vector<vtol_two_chain*>*  twochains_;
+  std::vector<vtol_block*>*  blocks_;
 
   //friend classes
   friend class vtol_vertex;

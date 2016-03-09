@@ -6,7 +6,9 @@
 
 #include <vil/vil_exception.h>
 #include <vil3d/vil3d_file_format.h>
-#include <vcl_sstream.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <sstream>
 
 vil3d_image_resource_sptr vil3d_load_image_resource(char const* filename)
 {
@@ -16,7 +18,7 @@ vil3d_image_resource_sptr vil3d_load_image_resource(char const* filename)
       vil3d_file_format::format(i).make_input_image(filename);
     if (im) return im;
   }
-  vcl_ostringstream ss;
+  std::ostringstream ss;
   for (unsigned i=0;i+1<vil3d_file_format::n_formats();++i)
     ss << vil3d_file_format::format(i).tag() << ' ';
   if (vil3d_file_format::n_formats() > 1)

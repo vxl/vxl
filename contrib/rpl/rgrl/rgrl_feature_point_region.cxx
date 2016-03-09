@@ -51,7 +51,7 @@ generate_pixel_coordinates( vnl_vector< double > const& spacing_ratio )
   //  The others are all equal to the radius of the trace region.
 
   unsigned int dim = this -> location_ . size();
-  vcl_vector< vnl_vector<double> > directions;
+  std::vector< vnl_vector<double> > directions;
   directions.reserve( dim );
 //    directions.push_back( this -> normal_ );
 

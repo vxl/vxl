@@ -1,5 +1,7 @@
 #include <testlib/testlib_test.h>
-#include <vcl_vector.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <vector>
 #include <vnl/vnl_double_3x3.h>
 #include <vnl/vnl_double_3.h>
 #include <vnl/vnl_vector.h>
@@ -11,8 +13,8 @@ static void test_homography2d_est()
 {
   vnl_double_3x3 H(0.0);
   vnl_matrix<double> cofact;
-  vcl_vector <int> indices;
-  vcl_vector <vnl_vector<double> > p,q;
+  std::vector <int> indices;
+  std::vector <vnl_vector<double> > p,q;
   vnl_vector<double> param(9,0.0);
   vnl_vector<double> true_param(9,0.0);
   int n;
@@ -106,8 +108,8 @@ static void test_homography2d_est()
   }
 
   //similarity transform
-  H(1,1) = H(0,0) = 2*vcl_cos(pi/3);
-  H(0,1) = -2*vcl_sin(pi/3);
+  H(1,1) = H(0,0) = 2*std::cos(pi/3);
+  H(0,1) = -2*std::sin(pi/3);
   H(1,0) = -H(0,1);
   {
     for (i=0;i<3;i++)
@@ -176,7 +178,7 @@ static void test_homography2d_est()
     TEST("(Projective) Weighted Least Squares", (param-true_param).two_norm() < tol, true);
 
     // degenerate
-    vcl_vector <double> wgts(n,0.0);
+    std::vector <double> wgts(n,0.0);
     for (i=0;i<5;i++)
       wgts[i] = 1.0;
     bool ret = homo_est.weighted_least_squares_fit(param, cofact, &wgts);

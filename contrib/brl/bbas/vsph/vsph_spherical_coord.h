@@ -14,7 +14,9 @@
 #include <vgl/vgl_point_3d.h>
 #include <vbl/vbl_ref_count.h>
 #include <vsl/vsl_binary_io.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iostream>
 
 
 //: 3D coordinate system specified by distance rho, angles theta (elevation) and phi (azimuth).
@@ -63,7 +65,7 @@ class vsph_spherical_coord : public vbl_ref_count
   // Returns true if the point changed, false if it was already on the sphere
   bool move_point(vsph_sph_point_3d& p);
 
-  void print(vcl_ostream& os) const;
+  void print(std::ostream& os) const;
 
   void b_read(vsl_b_istream& is);
 
@@ -76,7 +78,7 @@ class vsph_spherical_coord : public vbl_ref_count
   vgl_point_3d<double> origin_;  // the origin in cartesian coordinates
 };
 
-vcl_ostream& operator<<(vcl_ostream& os, vsph_spherical_coord const& p);
-vcl_ostream& operator<<(vcl_ostream& os, vsph_spherical_coord_sptr const& p);
+std::ostream& operator<<(std::ostream& os, vsph_spherical_coord const& p);
+std::ostream& operator<<(std::ostream& os, vsph_spherical_coord_sptr const& p);
 
 #endif // vsph_spherical_coord_h_

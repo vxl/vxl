@@ -1,11 +1,13 @@
 // This is mul/mbl/tests/test_select_n_from_m.cxx
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iostream>
 #include <mbl/mbl_select_n_from_m.h>
 #include <testlib/testlib_test.h>
 
 void test_select_n_from_m()
 {
-  vcl_cout << "*****************************\n"
+  std::cout << "*****************************\n"
            << " Testing mbl_select_n_from_m\n"
            << "*****************************\n";
 
@@ -32,10 +34,10 @@ void test_select_n_from_m()
   do
   {
     count++;
-    vcl_cout << selector.subset()[0] << ',' << selector.subset()[1] << vcl_endl;
+    std::cout << selector.subset()[0] << ',' << selector.subset()[1] << std::endl;
   }
   while (selector.next());
-  vcl_cout << "count = " << count << vcl_endl;
+  std::cout << "count = " << count << std::endl;
 
   TEST("2 from 9 = 9*8/2 = 36 combinations",count,36);
 

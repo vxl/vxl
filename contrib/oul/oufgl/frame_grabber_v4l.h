@@ -21,7 +21,9 @@
 #include <sys/ioctl.h>
 #include <sys/types.h>
 #include <linux/videodev.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iostream>
 
 //----------------------------------------------------------------------
 //: The FrameGrabberV4lGrey class
@@ -51,9 +53,9 @@ class FrameGrabberV4lGrey : public FrameGrabber
   {
     if (debug)
     {
-      vcl_cout << "get_current_frame called\n"
+      std::cout << "get_current_frame called\n"
                << "current = " << current
-               << " im = " << im[current] << vcl_endl;
+               << " im = " << im[current] << std::endl;
     }
     return im[current];
   }

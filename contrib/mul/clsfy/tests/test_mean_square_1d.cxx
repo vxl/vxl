@@ -6,8 +6,10 @@
 // \author dac
 // Test construction, IO etc
 
-#include <vcl_iostream.h>
-#include <vcl_string.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iostream>
+#include <string>
 #include <vpl/vpl.h> // vpl_unlink()
 #include <clsfy/clsfy_mean_square_1d.h>
 #include <clsfy/clsfy_mean_square_1d_builder.h>
@@ -23,7 +25,7 @@
 //: Tests the clsfy_mean_square_1d class
 void test_mean_square_1d()
 {
-  vcl_cout << "**************************************\n"
+  std::cout << "**************************************\n"
            << " Testing clsfy_mean_square_1d_builder\n"
            << "**************************************\n";
 
@@ -49,18 +51,18 @@ void test_mean_square_1d()
 
   pos_sampler.get_samples( pos_samples );
   neg_sampler.get_samples( neg_samples );
-  //vcl_cout<<"pos_samples= "<<pos_samples<<vcl_endl
-  //        <<"neg_samples= "<<neg_samples<<vcl_endl;
+  //std::cout<<"pos_samples= "<<pos_samples<<std::endl
+  //        <<"neg_samples= "<<neg_samples<<std::endl;
 
   // Generate lots of examples for test set
   vnl_vector<double>  pos_samples_test(n_pos), neg_samples_test(n_neg);
   pos_sampler.get_samples( pos_samples_test );
   neg_sampler.get_samples( neg_samples_test );
-  //vcl_cout<<"pos_samples_test= "<<pos_samples_test<<vcl_endl
-  //        <<"neg_samples_test= "<<neg_samples_test<<vcl_endl;
+  //std::cout<<"pos_samples_test= "<<pos_samples_test<<std::endl
+  //        <<"neg_samples_test= "<<neg_samples_test<<std::endl;
 
 
-  vcl_cout<<"=================test pos + neg samples ============\n";
+  std::cout<<"=================test pos + neg samples ============\n";
 
   clsfy_mean_square_1d_builder mean_square_builder;
   clsfy_classifier_1d* mean_square_clsfr=mean_square_builder.new_classifier();
@@ -73,7 +75,7 @@ void test_mean_square_1d()
   // + check get the same result
   int n= n_pos + n_neg;
   vnl_vector<double> egs(n), wts(n);
-  vcl_vector<unsigned> outputs(n);
+  std::vector<unsigned> outputs(n);
   for (int i=0; i<n_neg; ++i)
   {
     egs(i) = neg_samples(i);
@@ -96,10 +98,10 @@ void test_mean_square_1d()
   TEST("Clsfrs the same", *mean_square_clsfr2, *mean_square_clsfr);
   TEST_NEAR("Clsfr error", error2, 0.0, 0.2);
 
-  vcl_cout<<*mean_square_clsfr2<<vcl_endl
-          <<*mean_square_clsfr<<vcl_endl;
-  //mean_square_clsfr->print_summary(vcl_cout);
-  vcl_cout<<"error1= "<<error1<<vcl_endl;
+  std::cout<<*mean_square_clsfr2<<std::endl
+          <<*mean_square_clsfr<<std::endl;
+  //mean_square_clsfr->print_summary(std::cout);
+  std::cout<<"error1= "<<error1<<std::endl;
 
 
   //calc te (ie total error) on train set
@@ -112,7 +114,7 @@ void test_mean_square_1d()
 
 
   double te=((n_pos-tp+fp)*1.0)/(n_pos+n_neg);
-  vcl_cout<<"te on training set= "<<te<<vcl_endl;
+  std::cout<<"te on training set= "<<te<<std::endl;
 
 
   // calc te (ie total error) on test set
@@ -123,20 +125,20 @@ void test_mean_square_1d()
   for (int i=0; i<n_neg; ++i)
     if ( mean_square_clsfr->classify( neg_samples_test[i] ) == 1 ) fp++;
 
-  vcl_cout<<"Applied to test set:\n";
+  std::cout<<"Applied to test set:\n";
   double tpr=(tp*1.0)/n_pos, fpr= (fp*1.0)/n_neg;
-  vcl_cout<<"True positives= "<<tpr<<vcl_endl
-          <<"False positives= "<<fpr<<vcl_endl;
+  std::cout<<"True positives= "<<tpr<<std::endl
+          <<"False positives= "<<fpr<<std::endl;
 
   te=((n_pos-tp+fp)*1.0)/(n_pos+n_neg);
-  vcl_cout<<"te= "<<te<<vcl_endl;
+  std::cout<<"te= "<<te<<std::endl;
 
   // simple test for binary threshold
   TEST("tpr>0.7", tpr>0.7, true);
   TEST("fpr<0.3", fpr<0.3, true);
 
 
-  vcl_cout << "******************************\n"
+  std::cout << "******************************\n"
            << " Testing clsfy_mean_square_1d\n"
            << "******************************\n";
 
@@ -151,11 +153,11 @@ void test_mean_square_1d()
 
   // Test loading clsfy_mean_square_1d by base class pointer
 
-  vcl_cout<<"======== TESTING I/O ===========\n";
+  std::cout<<"======== TESTING I/O ===========\n";
 
    // add binary loaders
   vsl_add_to_binary_loader(clsfy_mean_square_1d());
-  vcl_string test_path = "test_clsfy_simple_adaboost.bvl.tmp";
+  std::string test_path = "test_clsfy_simple_adaboost.bvl.tmp";
 
   vsl_b_ofstream bfs_out(test_path);
   TEST(("Opened " + test_path + " for writing").c_str(), (!bfs_out ), false);
@@ -173,10 +175,10 @@ void test_mean_square_1d()
   vpl_unlink(test_path.c_str());
 #endif
 
-  vcl_cout<<"Saved :\n"
-          << *mean_square_clsfr << vcl_endl
+  std::cout<<"Saved :\n"
+          << *mean_square_clsfr << std::endl
           <<"Loaded:\n"
-          << classifier_in << vcl_endl;
+          << classifier_in << std::endl;
 
   TEST("saved classifier = loaded classifier",
        mean_square_clsfr ->params(), classifier_in->params());

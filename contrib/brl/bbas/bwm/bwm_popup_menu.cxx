@@ -203,7 +203,7 @@ void bwm_popup_menu::get_menu(vgui_menu &menu)
       gen_tab = static_cast<bwm_tableau_generic_cam* > (tab_.as_pointer());
 
     vgui_menu mesh_submenu;
-    vcl_string on = "[x] ", off = "[ ] ";
+    std::string on = "[x] ", off = "[ ] ";
     mesh_submenu.add( ((cam_tab->show_vertices_)?on:off)+"show vertices",
                       new bwm_vertex_toggle_command(cam_tab, &(cam_tab->show_vertices_)));
 

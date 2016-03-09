@@ -1,10 +1,12 @@
 // This is basic/bvgl/algo/tests/test_eulerspiral.cxx
 
-#include <vcl_cstdlib.h>
-#include <vcl_cmath.h>
-#include <vcl_iostream.h>
-#include <vcl_vector.h>
-#include <vcl_string.h>
+#include <cstdlib>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <cmath>
+#include <iostream>
+#include <vector>
+#include <string>
 
 #include <testlib/testlib_test.h>
 
@@ -24,26 +26,26 @@ MAIN( test_eulerspiral )
   // -------------- INITIALIZERS/CONSTRUCTORS/DESTRUCTORS ----------------------------
   // Default
   START (" Test bvgl_eulerspiral class");
-  vcl_cout << "Test Constructors" << vcl_endl;
+  std::cout << "Test Constructors" << std::endl;
   bvgl_eulerspiral es1 = bvgl_eulerspiral();
   // this is always true TEST("Default Constructor", &es1 != 0, true);
 
   // construct from intrinsic params
   bvgl_eulerspiral es2 = bvgl_eulerspiral(vgl_point_2d< double >(0, 0), 0.0, 1, 1, 2);
-  test_passed = (vcl_fabs(es2.start().x() - 0) < tolerance) &&
-     (vcl_fabs(es2.start().y() - 0) < tolerance) &&
-     (vcl_fabs(es2.start_angle() - 0) < tolerance) &&
-     (vcl_fabs(es2.k0() - 1) < tolerance) &&
-     (vcl_fabs(es2.gamma() - 1) < tolerance) &&
-     (vcl_fabs(es2.length() - 2) < tolerance);
+  test_passed = (std::fabs(es2.start().x() - 0) < tolerance) &&
+     (std::fabs(es2.start().y() - 0) < tolerance) &&
+     (std::fabs(es2.start_angle() - 0) < tolerance) &&
+     (std::fabs(es2.k0() - 1) < tolerance) &&
+     (std::fabs(es2.gamma() - 1) < tolerance) &&
+     (std::fabs(es2.length() - 2) < tolerance);
   TEST("Contruct from intrinsic params", test_passed, true);
 
   // contruct from 2 point-tangents
   bvgl_eulerspiral es3 = bvgl_eulerspiral(vgl_point_2d< double >(0, 0), 0,
     vgl_point_2d< double >(5, 5), vnl_math::pi_over_2);
-  test_passed = (vcl_fabs(es3.gamma() - 0) < tolerance) &&
-    (vcl_fabs(es3.k0() - 0.2) < tolerance);
-  es3.print(vcl_cout);
+  test_passed = (std::fabs(es3.gamma() - 0) < tolerance) &&
+    (std::fabs(es3.k0() - 0.2) < tolerance);
+  es3.print(std::cout);
   TEST("Construct from two point-tangents", test_passed, true);
 
   // copy contructor
@@ -55,33 +57,33 @@ MAIN( test_eulerspiral )
   TEST("Copy contructor" , test_passed, true);
 
   // MEMBER ACCESS FUNCTIONS
-  vcl_cout << "Test accesing member variables" << vcl_endl;
+  std::cout << "Test accesing member variables" << std::endl;
   // test set_starting_angle (converted to [0, 2*pi))
   es3.set_start_angle(7);
   TEST("Set start angle", es3.start_angle() == (7-2*vnl_math::pi), true);
   // test init function
   es3.init(vgl_point_2d< double >(1, 1), vnl_math::pi / 6, 0.2, 0.05, 2);
-  test_passed = (vcl_fabs(es3.start().x() - 1) < tolerance) &&
-     (vcl_fabs(es3.start().y() - 1) < tolerance) &&
-     (vcl_fabs(es3.start_angle() - vnl_math::pi/6) < tolerance) &&
-     (vcl_fabs(es3.k0() - 0.2) < tolerance) &&
-     (vcl_fabs(es3.gamma() - 0.05) < tolerance) &&
-     (vcl_fabs(es3.length() - 2) < tolerance);
+  test_passed = (std::fabs(es3.start().x() - 1) < tolerance) &&
+     (std::fabs(es3.start().y() - 1) < tolerance) &&
+     (std::fabs(es3.start_angle() - vnl_math::pi/6) < tolerance) &&
+     (std::fabs(es3.k0() - 0.2) < tolerance) &&
+     (std::fabs(es3.gamma() - 0.05) < tolerance) &&
+     (std::fabs(es3.length() - 2) < tolerance);
   TEST("init(...) function", test_passed, true);
 
   // test set intrinsic and extrinsic params functions
   es2.set_extrinsic_params(vgl_point_2d< double >(1, 1), 1);
   es2.set_intrinsic_params(0.2, 0.5, 4);
-  test_passed = (vcl_fabs(es2.start().x() - 1) < tolerance) &&
-     (vcl_fabs(es2.start().y() - 1) < tolerance) &&
-     (vcl_fabs(es2.start_angle() - 1) < tolerance) &&
-     (vcl_fabs(es2.k0() - 0.2) < tolerance) &&
-     (vcl_fabs(es2.gamma() - 0.5) < tolerance) &&
-     (vcl_fabs(es2.length() - 4) < tolerance);
+  test_passed = (std::fabs(es2.start().x() - 1) < tolerance) &&
+     (std::fabs(es2.start().y() - 1) < tolerance) &&
+     (std::fabs(es2.start_angle() - 1) < tolerance) &&
+     (std::fabs(es2.k0() - 0.2) < tolerance) &&
+     (std::fabs(es2.gamma() - 0.5) < tolerance) &&
+     (std::fabs(es2.length() - 4) < tolerance);
 
   TEST("set_intrinsic_params() and set_extrinsic_params()", test_passed, true);
 
-  vcl_cout << "Test creating Euler spiral from 2 point-tangents" << vcl_endl;
+  std::cout << "Test creating Euler spiral from 2 point-tangents" << std::endl;
   // data structure: case = [x0, y0, t0 (radian), x1, y1, t1(radian)]
   // result = [k0, gamma, len]
   // a straight line
@@ -110,7 +112,7 @@ MAIN( test_eulerspiral )
   double r1[] = {es.k0(), es.gamma(), es.length()};
   test_passed = true;
   for (int i = 0; i < 3; i ++){
-    if (vcl_fabs(r1[i] - result1[i]) > tolerance)
+    if (std::fabs(r1[i] - result1[i]) > tolerance)
       test_passed = false;
   }
   TEST("Straight-line Euler spiral", test_passed, true);
@@ -121,7 +123,7 @@ MAIN( test_eulerspiral )
   double r2[] = {es.k0(), es.gamma(), es.length()};
   test_passed = true;
   for (int i = 0; i < 3; i ++){
-    if (vcl_fabs(r2[i] - result2[i]) > tolerance)
+    if (std::fabs(r2[i] - result2[i]) > tolerance)
       test_passed = false;
   }
   TEST("Circular Euler spiral", test_passed, true);
@@ -132,7 +134,7 @@ MAIN( test_eulerspiral )
   double r3[] = {es.k0(), es.gamma(), es.length()};
   test_passed = true;
   for (int i = 0; i < 3; i ++){
-    if (vcl_fabs(r3[i] - result3[i]) > tolerance)
+    if (std::fabs(r3[i] - result3[i]) > tolerance)
       test_passed = false;
   }
   TEST("Euler spiral with no inflection point", test_passed, true);
@@ -143,7 +145,7 @@ MAIN( test_eulerspiral )
   double r4[] = {es.k0(), es.gamma(), es.length()};
   test_passed = true;
   for (int i = 0; i < 3; i ++){
-    if (vcl_fabs(r4[i] - result4[i]) > tolerance)
+    if (std::fabs(r4[i] - result4[i]) > tolerance)
       test_passed = false;
   }
   TEST("No inflection point, negative curvature", test_passed, true);
@@ -155,35 +157,35 @@ MAIN( test_eulerspiral )
   double r5[] = {es.k0(), es.gamma(), es.length()};
   test_passed = true;
   for (int i = 0; i < 3; i ++){
-    if (vcl_fabs(r5[i] - result5[i]) > tolerance)
+    if (std::fabs(r5[i] - result5[i]) > tolerance)
       test_passed = false;
   }
   TEST("Euler spiral with inflection point", test_passed, true);
 
   // test geometry functions - using case5 information
-  vcl_cout << " Test geometry functions" << vcl_endl;
+  std::cout << " Test geometry functions" << std::endl;
   double s1 = 1.37;
   vgl_point_2d<double > p1(1.368419857, -0.5909225611e-1);
-  vgl_vector_2d< double > v1(vcl_cos(0.75350000e-2), vcl_sin(0.75350000e-2));
+  vgl_vector_2d< double > v1(std::cos(0.75350000e-2), std::sin(0.75350000e-2));
   double k1 = .211;
 
   // test point_at(s) function
-  test_passed = vcl_fabs(es.point_at_length(s1).x() - p1.x()) < tolerance &&
-    vcl_fabs(es.point_at_length(s1).y() - p1.y()) < tolerance;
-  vcl_cout << "x = " << es.point_at_length(s1).x() << vcl_endl;
-  vcl_cout << "y = " << es.point_at_length(s1).y() << vcl_endl;
+  test_passed = std::fabs(es.point_at_length(s1).x() - p1.x()) < tolerance &&
+    std::fabs(es.point_at_length(s1).y() - p1.y()) < tolerance;
+  std::cout << "x = " << es.point_at_length(s1).x() << std::endl;
+  std::cout << "y = " << es.point_at_length(s1).y() << std::endl;
   TEST("Test point_at_length(s) function", test_passed, true);
   // test tangent_at_length(s) function
-  test_passed = vcl_fabs(es.tangent_at_length(s1).x() - v1.x()) < tolerance &&
-    vcl_fabs(es.tangent_at_length(s1).y() - v1.y()) < tolerance;
-  //vcl_cout << "Tangent x = " << es.tangent_at_length(s1).x() << "\t v1.x() = " << v1.x() << vcl_endl;
-  //vcl_cout << "Tangent y = " << es.tangent_at_length(s1).y() << "\t v1.y() = " << v1.y() << vcl_endl;
+  test_passed = std::fabs(es.tangent_at_length(s1).x() - v1.x()) < tolerance &&
+    std::fabs(es.tangent_at_length(s1).y() - v1.y()) < tolerance;
+  //std::cout << "Tangent x = " << es.tangent_at_length(s1).x() << "\t v1.x() = " << v1.x() << std::endl;
+  //std::cout << "Tangent y = " << es.tangent_at_length(s1).y() << "\t v1.y() = " << v1.y() << std::endl;
   TEST("Test tangent_at_length(s) function", test_passed, true);
   // test curvature_at_length(s) function
-  test_passed = vcl_fabs(es.curvature_at_length(s1)- k1) < tolerance;
+  test_passed = std::fabs(es.curvature_at_length(s1)- k1) < tolerance;
   TEST("Test curvature_at_length(s) function", test_passed, true);
 
-  vcl_vector< double > g;
+  std::vector< double > g;
   for (int i = 0; i < 10; i ++){
     es.set_params(vgl_point_2d< double >(0, 0), 0,
       vgl_point_2d<double >(1, 0), vnl_math::pi / 10.0 * i);
@@ -192,45 +194,45 @@ MAIN( test_eulerspiral )
   }
 
 
-  vcl_cout << vcl_endl << "Example using eulerspiral look-up table " << vcl_endl;
+  std::cout << std::endl << "Example using eulerspiral look-up table " << std::endl;
   double s2 = vnl_math::pi*2+ 1.1;
   double e2 = 0.5 - vnl_math::pi*2;
   es.compute_es_params(vgl_point_2d< double >(0, 0), s2, vgl_point_2d< double >(1, 0), e2);
-  es.print(vcl_cout);
+  es.print(std::cout);
 
   if (bvgl_eulerspiral_lookup_table::instance()->has_table()){
     double k0_new, gamma_new, len_new, k0_max_error_new, gamma_max_error_new, len_max_error_new ;
     bvgl_eulerspiral_lookup_table::instance()->look_up(s2, e2, &k0_new, &gamma_new, &len_new,
       &k0_max_error_new, &gamma_max_error_new, &len_max_error_new);
-    vcl_cout << "Data from look-up table : " << vcl_endl;
-    vcl_cout << "k0_new = " << k0_new << vcl_endl;
-    vcl_cout << "gamma_new = " << gamma_new << vcl_endl;
-    vcl_cout << "len_new = " << len_new << vcl_endl;
-    test_passed = (vcl_abs(es.k0()-k0_new) + vcl_abs(es.gamma()-gamma_new) +
-      vcl_abs(es.length()-len_new)) < 1e-2;
+    std::cout << "Data from look-up table : " << std::endl;
+    std::cout << "k0_new = " << k0_new << std::endl;
+    std::cout << "gamma_new = " << gamma_new << std::endl;
+    std::cout << "len_new = " << len_new << std::endl;
+    test_passed = (std::abs(es.k0()-k0_new) + std::abs(es.gamma()-gamma_new) +
+      std::abs(es.length()-len_new)) < 1e-2;
     TEST("Test look-up table validity", test_passed, true);
   }
   else
-    vcl_cout << "no table" << vcl_endl;
+    std::cout << "no table" << std::endl;
 
-  vcl_cout << "Comparing between levenberg_marquardt minimization and simple gradient descent" << vcl_endl;
+  std::cout << "Comparing between levenberg_marquardt minimization and simple gradient descent" << std::endl;
 
   // use vnl_levenberg_marquardt
   es.compute_es_params(vgl_point_2d< double >(case3[0], case3[1]), case3[2],
     vgl_point_2d<double >(case3[3], case3[4]), case3[5]);
   double x_1[] = {es.k0(), es.gamma(), es.length()};
-  vcl_cout << vcl_endl << "Use Levenberg-Marquart" ;
-  es.print(vcl_cout);
+  std::cout << std::endl << "Use Levenberg-Marquart" ;
+  es.print(std::cout);
   // use simple gradient descent
   es.compute_es_params(true, false);
   double x_2[] = {es.k0(), es.gamma(), es.length()};
-  vcl_cout << vcl_endl << "use simple gradient descent " ;
-  es.print(vcl_cout);
+  std::cout << std::endl << "use simple gradient descent " ;
+  es.print(std::cout);
 
-  test_passed = vcl_fabs(x_1[0]-x_2[0]) < tolerance &&
-    vcl_fabs(x_1[1]-x_2[1]) < tolerance &&
-    vcl_fabs(x_1[2]-x_2[2]) < tolerance;
-  vcl_cout << vcl_endl;
+  test_passed = std::fabs(x_1[0]-x_2[0]) < tolerance &&
+    std::fabs(x_1[1]-x_2[1]) < tolerance &&
+    std::fabs(x_1[2]-x_2[2]) < tolerance;
+  std::cout << std::endl;
   TEST("Match results between levenberg_marquardt and simple gradient descent", test_passed, true);
 
   SUMMARY();

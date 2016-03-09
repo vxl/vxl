@@ -23,7 +23,9 @@
 //   Nhon Trinh   Sep 20, 2005       Added support for elliptical curve segment.
 // \endverbatim
 //-----------------------------------------------------------------------------
-#include <vcl_vector.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <vector>
 
 #include <vsol/vsol_spatial_object_2d_sptr.h>
 #include <vsol/vsol_point_2d_sptr.h>
@@ -66,7 +68,7 @@ class bgui_vsol2D_tableau : public vgui_easy2D_tableau
   ~bgui_vsol2D_tableau();
 
   //: Returns the type of this tableau ('bgui_vsol2D_tableau').
-  vcl_string type_name() const { return "bgui_vsol2D_tableau";}
+  std::string type_name() const { return "bgui_vsol2D_tableau";}
 
   //: display for vsol_point_2d
   bgui_vsol_soview2D_point*
@@ -122,7 +124,7 @@ class bgui_vsol2D_tableau : public vgui_easy2D_tableau
                           const vgui_style_sptr& style = NULL);
 
   //: display methods for vectors of vsol classes (not grouped)
-  void add_spatial_objects(vcl_vector<vsol_spatial_object_2d_sptr> const& sos,
+  void add_spatial_objects(std::vector<vsol_spatial_object_2d_sptr> const& sos,
                            const vgui_style_sptr& style = NULL);
 
 

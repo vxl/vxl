@@ -119,7 +119,7 @@ bgui_vsol_soview2D_polygon*
 bgui_vsol_camera_tableau::add_vsol_polygon_3d(vsol_polygon_3d_sptr const& poly)
 {
   int n = poly->size();
-  vcl_vector<vsol_point_2d_sptr> vertices(n);
+  std::vector<vsol_point_2d_sptr> vertices(n);
   //project the polygon
   for (int i = 0; i<n; ++i)
   {
@@ -181,7 +181,7 @@ bgui_vsol_camera_tableau::add_vsol_box_3d(vsol_box_3d_sptr const& box)
   vsol_point_2d_sptr pb3_2d = new vsol_point_2d(vpb3_2d);
 
   //construct the 6 polygons that make up the box and glue them together
-  vcl_vector<vsol_point_2d_sptr> verts;
+  std::vector<vsol_point_2d_sptr> verts;
   //Top face
   verts.push_back(pt0_2d); verts.push_back(pt1_2d); verts.push_back(pt2_2d); verts.push_back(pt3_2d);
   //Side face 0
@@ -204,9 +204,9 @@ bgui_vsol_camera_tableau::add_vsol_box_3d(vsol_box_3d_sptr const& box)
 // Add general spatial objects
 //
 void bgui_vsol_camera_tableau::
-add_spatial_objects_3d(vcl_vector<vsol_spatial_object_3d_sptr> const& sos)
+add_spatial_objects_3d(std::vector<vsol_spatial_object_3d_sptr> const& sos)
 {
-  for (vcl_vector<vsol_spatial_object_3d_sptr>::const_iterator sit = sos.begin();
+  for (std::vector<vsol_spatial_object_3d_sptr>::const_iterator sit = sos.begin();
        sit != sos.end(); sit++)
   {
     add_spatial_object_3d( (*sit) );
@@ -244,25 +244,25 @@ add_spatial_object_3d(vsol_spatial_object_3d_sptr const& so)
 }
 
 void bgui_vsol_camera_tableau::
-add_points_3d(vcl_vector<vsol_point_3d_sptr> const& points)
+add_points_3d(std::vector<vsol_point_3d_sptr> const& points)
 {
-  for (vcl_vector<vsol_point_3d_sptr>::const_iterator pit = points.begin();
+  for (std::vector<vsol_point_3d_sptr>::const_iterator pit = points.begin();
        pit != points.end(); pit++)
     add_vsol_point_3d(*pit);
 }
 
 void bgui_vsol_camera_tableau::
-add_lines_3d(vcl_vector<vsol_line_3d_sptr> const& lines)
+add_lines_3d(std::vector<vsol_line_3d_sptr> const& lines)
 {
-  for (vcl_vector<vsol_line_3d_sptr>::const_iterator lit = lines.begin();
+  for (std::vector<vsol_line_3d_sptr>::const_iterator lit = lines.begin();
        lit != lines.end(); lit++)
     add_vsol_line_3d(*lit);
 }
 
 void bgui_vsol_camera_tableau::
-add_polygons_3d(vcl_vector<vsol_polygon_3d_sptr> const& polys)
+add_polygons_3d(std::vector<vsol_polygon_3d_sptr> const& polys)
 {
-  for (vcl_vector<vsol_polygon_3d_sptr>::const_iterator pit = polys.begin();
+  for (std::vector<vsol_polygon_3d_sptr>::const_iterator pit = polys.begin();
        pit != polys.end(); pit++)
     add_vsol_polygon_3d(*pit);
 }

@@ -8,13 +8,15 @@
 // \file
 // \author crossge@crd.ge.com
 
-#include <vcl_vector.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <vector>
 #include <gtrl/gtrl_vertex.h>
 
 class gtrl_polygon
 {
  public:
-  gtrl_polygon( const vcl_vector<gtrl_vertex_sptr> ps);
+  gtrl_polygon( const std::vector<gtrl_vertex_sptr> ps);
 
   int size() const { return ps_.size(); }
   gtrl_vertex_sptr operator[]( const int i) const { return ps_[i]; }
@@ -23,7 +25,7 @@ class gtrl_polygon
   bool inside( const gtrl_vertex_sptr point) const;
 
  protected:
-  vcl_vector<gtrl_vertex_sptr> ps_;
+  std::vector<gtrl_vertex_sptr> ps_;
 };
 
 #endif // gtrl_polygon_h_

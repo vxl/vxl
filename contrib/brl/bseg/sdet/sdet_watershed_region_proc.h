@@ -16,8 +16,10 @@
 // \endverbatim
 //
 //-------------------------------------------------------------------------
-#include <vcl_vector.h>
-#include <vcl_map.h>
+#include <vector>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <map>
 #include <vbl/vbl_array_2d.h>
 #include <vil1/vil1_memory_image_of.h>
 #include <vil1/vil1_image.h>
@@ -52,7 +54,7 @@ class sdet_watershed_region_proc : public sdet_watershed_region_proc_params
   //clear region array
   void clear();
 
-  vcl_vector<sdet_region_sptr>& regions(){return regions_;}
+  std::vector<sdet_region_sptr>& regions(){return regions_;}
 
   //Utility Methods
   bool extract_regions();
@@ -63,7 +65,7 @@ class sdet_watershed_region_proc : public sdet_watershed_region_proc_params
   void print_region_info();
   vil1_image overlay_image(){return overlay_image_;}
   vil1_image region_image();
-  vcl_vector<vsol_polygon_2d_sptr> boundaries();
+  std::vector<vsol_polygon_2d_sptr> boundaries();
  protected:
   //protected methods
   void chip_out_roi(vil1_image& image);
@@ -73,7 +75,7 @@ class sdet_watershed_region_proc : public sdet_watershed_region_proc_params
                      sdet_region_sptr const& adj_reg);
   bool remove_adjacencies(sdet_region_sptr const& reg);
   bool adjacent_regions(sdet_region_sptr const& reg,
-                        vcl_vector<sdet_region_sptr>& adj_regs);
+                        std::vector<sdet_region_sptr>& adj_regs);
   bool compute_region_image();
   void compute_boundaries();
   //members
@@ -91,9 +93,9 @@ class sdet_watershed_region_proc : public sdet_watershed_region_proc_params
   brip_roi_sptr roi_;
   vil1_image overlay_image_; // for display of original watershed regions
   vil1_memory_image_of<unsigned char> region_image_; //for display of digital regions
-  vcl_vector<sdet_region_sptr> regions_; //resulting intensity faces
-  vcl_map<sdet_region_sptr, vcl_vector<sdet_region_sptr>* > region_adjacency_;
-  vcl_vector<vsol_polygon_2d_sptr> boundaries_;
+  std::vector<sdet_region_sptr> regions_; //resulting intensity faces
+  std::map<sdet_region_sptr, std::vector<sdet_region_sptr>* > region_adjacency_;
+  std::vector<vsol_polygon_2d_sptr> boundaries_;
 };
 
 #endif // sdet_watershed_region_proc_h_

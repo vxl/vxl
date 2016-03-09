@@ -32,7 +32,7 @@ static void test_match_ann(int argc, char** argv)
     vil_image_resource_sptr img2;
 
     if (argc < 3) {
-        vcl_cerr<<"Supply a filename for the first two args!\n";
+        std::cerr<<"Supply a filename for the first two args!\n";
         TEST("test_match_ann", true, false);
 
         img1 = vil_load_image_resource(IMG1_PATH, false);

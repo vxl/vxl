@@ -8,8 +8,10 @@
 
 #include "gmvl_helpers.h"
 
-#include <vcl_iostream.h>
-#include <vcl_fstream.h>
+#include <iostream>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <fstream>
 #include <vil1/vil1_image.h>
 #include <vil1/vil1_load.h>
 #include <gmvl/gmvl_corner_node.h>
@@ -17,7 +19,7 @@
 
 
 // input output
-vcl_ostream &operator<<( vcl_ostream &os, const vcl_vector<gmvl_node_sptr> &r)
+std::ostream &operator<<( std::ostream &os, const std::vector<gmvl_node_sptr> &r)
 {
   for (unsigned int i=0; i< r.size(); ++i) os << *r[i];
   return os;
@@ -26,11 +28,11 @@ vcl_ostream &operator<<( vcl_ostream &os, const vcl_vector<gmvl_node_sptr> &r)
 
 // loaders and savers
 
-vcl_vector<gmvl_node_sptr> gmvl_load_raw_corners( const vcl_string filename)
+std::vector<gmvl_node_sptr> gmvl_load_raw_corners( const std::string filename)
 {
-  vcl_vector<gmvl_node_sptr> corners;
+  std::vector<gmvl_node_sptr> corners;
 
-  vcl_ifstream fin( filename.c_str());
+  std::ifstream fin( filename.c_str());
 
   while (fin.good() && !fin.eof())
     {
@@ -41,20 +43,20 @@ vcl_vector<gmvl_node_sptr> gmvl_load_raw_corners( const vcl_string filename)
       if (fin.good()) corners.push_back( new gmvl_corner_node( x, y));
     }
 
-  vcl_cerr << "gmvl_load_raw_corners: loaded " << corners.size() << " corners from " << filename << vcl_endl;
+  std::cerr << "gmvl_load_raw_corners: loaded " << corners.size() << " corners from " << filename << std::endl;
 
   return corners;
 }
 
-gmvl_node_sptr gmvl_load_image( const vcl_string filename)
+gmvl_node_sptr gmvl_load_image( const std::string filename)
 {
   vil1_image image= vil1_load( filename.c_str());
   gmvl_image_node *node= new gmvl_image_node( image);
 
   if (image)
-    vcl_cerr << "gmvl_load_image: load image from " << filename << vcl_endl;
+    std::cerr << "gmvl_load_image: load image from " << filename << std::endl;
   else
-    vcl_cerr << "gmvl_load_image: failed to load image from " << filename << vcl_endl;
+    std::cerr << "gmvl_load_image: failed to load image from " << filename << std::endl;
 
   return gmvl_node_sptr( node);
 }

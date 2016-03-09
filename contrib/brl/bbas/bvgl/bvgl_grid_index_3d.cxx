@@ -2,7 +2,9 @@
 #include <vgl/vgl_bounding_box.h>
 #include <vgl/vgl_closest_point.h>
 #include <vgl/vgl_plane_3d.h>
-#include <vcl_limits.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <limits>
 
 void
 bvgl_grid_index_3d
@@ -32,9 +34,9 @@ bvgl_grid_index_3d
   npts_(0),
   thresh_(thresh)
 {
-  p_grid_ = vbl_array_3d<vcl_vector<vgl_point_3d<double> > >(nx, ny, nz);
+  p_grid_ = vbl_array_3d<std::vector<vgl_point_3d<double> > >(nx, ny, nz);
   if(has_normals_)
-    n_grid_ = vbl_array_3d<vcl_vector<vgl_vector_3d<double> > >(nx, ny, nz);
+    n_grid_ = vbl_array_3d<std::vector<vgl_vector_3d<double> > >(nx, ny, nz);
   bbox_ = vgl_bounding_box(ptset);
   double dnx = static_cast<double>(nx), dny = static_cast<double>(ny), dnz = static_cast<double>(nz);
   delta_x_ = bbox_.width()/dnx;
@@ -71,7 +73,7 @@ bvgl_grid_index_3d
   if(ix<(nx_-1)) ixe = ix+1;
   if(iy<(ny_-1)) iye = iy+1;
   if(iz<(nz_-1)) ize = iz+1;
-  double dmin = vcl_numeric_limits<double>::max();
+  double dmin = std::numeric_limits<double>::max();
   unsigned ixc = 0, iyc = 0,  izc = 0, ipc = 0;
   for(unsigned i = ixs; i<=ixe; ++i)
     for(unsigned j = iys; j<=iye; ++j)
@@ -107,7 +109,7 @@ bvgl_grid_index_3d
   vgl_point_3d<double> pc;
   bool good = this->closest_point(p, pc);
   if(!good)
-    return vcl_numeric_limits<double>::max();
+    return std::numeric_limits<double>::max();
   return (p-pc).length();
 }
 

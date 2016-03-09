@@ -7,7 +7,9 @@
 
 #include <vnl/vnl_vector.h>
 #include <vnl/vnl_matrix.h>
-#include <vcl_vector.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <vector>
 
 //: Computes one mode from used elements of each \p dv
 //  Compute a mode which only uses a subset of the elements,
@@ -21,8 +23,8 @@
 //
 //  The contribution of this vector is removed from each \p dv,
 //  \p dv[i]-=mode*b, where \p b=dv[i].mode
-void mcal_extract_mode(vcl_vector<vnl_vector<double> >& dv,
-                       const vcl_vector<unsigned>& elements_used,
+void mcal_extract_mode(std::vector<vnl_vector<double> >& dv,
+                       const std::vector<unsigned>& elements_used,
                        vnl_vector<double>& mode,
                        double& var);
 
@@ -31,15 +33,15 @@ void mcal_extract_mode(vcl_vector<vnl_vector<double> >& dv,
 //  covariance matrix.
 //  The contribution of this vector is removed from each \p dv,
 //  \p dv[i]-=mode*b, where \p b=dv[i].mode
-void mcal_extract_mode(vcl_vector<vnl_vector<double> >& dv,
+void mcal_extract_mode(std::vector<vnl_vector<double> >& dv,
                        vnl_vector<double>& mode,
                        double& var);
 
 //: Compute modes and associated variance of supplied data
 //  \param elements_used[i] indicates the set of elements to be used for
 //  mode i.  Modes beyond \p used.size() will use all elements.
-void mcal_extract_modes(vcl_vector<vnl_vector<double> >& dv,
-                        const vcl_vector<vcl_vector<unsigned> >& elements_used,
+void mcal_extract_modes(std::vector<vnl_vector<double> >& dv,
+                        const std::vector<std::vector<unsigned> >& elements_used,
                         unsigned max_modes, double var_prop,
                         vnl_matrix<double>& modes,
                         vnl_vector<double>& mode_var);

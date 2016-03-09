@@ -8,8 +8,10 @@
 
 #include <bprb/bprb_func_process.h>
 
-#include <vcl_fstream.h>
-#include <vcl_algorithm.h>
+#include <fstream>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <algorithm>
 #include <boxm2/ocl/boxm2_opencl_cache.h>
 #include <boxm2/boxm2_scene.h>
 #include <boxm2/boxm2_block.h>
@@ -35,11 +37,11 @@ namespace boxm2_ocl_aux_update_view_direction_process_globals
     const unsigned n_inputs_  = 9;
     const unsigned n_outputs_ = 0;
 
-    void compile_kernel(bocl_device_sptr device,vcl_vector<bocl_kernel*> & vec_kernels,vcl_string opts)
+    void compile_kernel(bocl_device_sptr device,std::vector<bocl_kernel*> & vec_kernels,std::string opts)
     {
         //gather all render sources... seems like a lot for rendering...
-        vcl_vector<vcl_string> src_paths;
-        vcl_string source_dir = boxm2_ocl_util::ocl_src_root();
+        std::vector<std::string> src_paths;
+        std::string source_dir = boxm2_ocl_util::ocl_src_root();
         src_paths.push_back(source_dir + "scene_info.cl");
         src_paths.push_back(source_dir + "cell_utils.cl");
         src_paths.push_back(source_dir + "bit/bit_tree_library_functions.cl");
@@ -47,14 +49,14 @@ namespace boxm2_ocl_aux_update_view_direction_process_globals
         src_paths.push_back(source_dir + "statistics_library_functions.cl");
         src_paths.push_back(source_dir + "ray_bundle_library_opt.cl");
         src_paths.push_back(source_dir + "bit/batch_update_kernels.cl");
-        vcl_vector<vcl_string> second_pass_src = vcl_vector<vcl_string>(src_paths);
+        std::vector<std::string> second_pass_src = std::vector<std::string>(src_paths);
         src_paths.push_back(source_dir + "batch_update_functors.cl");
         src_paths.push_back(source_dir + "bit/cast_ray_bit.cl");
         //compilation options
-        vcl_string options = opts;
+        std::string options = opts;
         //create all passes
         bocl_kernel* aux_direction_kernel = new bocl_kernel();
-        vcl_string seg_opts = options + " -D UPDATE_AUX_DIRECTION -D STEP_CELL=step_cell_directions(aux_args,data_ptr,d) ";
+        std::string seg_opts = options + " -D UPDATE_AUX_DIRECTION -D STEP_CELL=step_cell_directions(aux_args,data_ptr,d) ";
         aux_direction_kernel->create_kernel(&device->context(),device->device_id(), src_paths, "aux_directions_main", seg_opts, "batch_update::viewing directions");
         vec_kernels.push_back(aux_direction_kernel);
 
@@ -72,7 +74,7 @@ namespace boxm2_ocl_aux_update_view_direction_process_globals
     }
 
 
-    static vcl_map<vcl_string,vcl_vector<bocl_kernel*> > kernels;
+    static std::map<std::string,std::vector<bocl_kernel*> > kernels;
 }
 
 bool boxm2_ocl_aux_update_view_direction_process_cons(bprb_func_process& pro)
@@ -80,7 +82,7 @@ bool boxm2_ocl_aux_update_view_direction_process_cons(bprb_func_process& pro)
     using namespace boxm2_ocl_aux_update_view_direction_process_globals;
 
     //process takes 1 input
-    vcl_vector<vcl_string> input_types_(n_inputs_);
+    std::vector<std::string> input_types_(n_inputs_);
     input_types_[0] = "bocl_device_sptr";
     input_types_[1] = "boxm2_scene_sptr";
     input_types_[2] = "boxm2_cache_sptr";
@@ -93,13 +95,13 @@ bool boxm2_ocl_aux_update_view_direction_process_cons(bprb_func_process& pro)
 
     // process has 1 output:
     // output[0]: scene sptr
-    vcl_vector<vcl_string>  output_types_(n_outputs_);
+    std::vector<std::string>  output_types_(n_outputs_);
 
     bool good = pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
     // in case the 6th input is not set
-    brdb_value_sptr idx = new brdb_value_t<vcl_string>("");
+    brdb_value_sptr idx = new brdb_value_t<std::string>("");
     pro.set_input(7, idx);
-    brdb_value_sptr idx_coordinate_type = new brdb_value_t<vcl_string>("Cartesian");
+    brdb_value_sptr idx_coordinate_type = new brdb_value_t<std::string>("Cartesian");
     pro.set_input(8, idx_coordinate_type);
     return good;
 }
@@ -107,11 +109,11 @@ bool boxm2_ocl_aux_update_view_direction_process_cons(bprb_func_process& pro)
 bool boxm2_ocl_aux_update_view_direction_process(bprb_func_process& pro)
 {
     using namespace boxm2_ocl_aux_update_view_direction_process_globals;
-    vcl_size_t local_threads[2]={8,8};
-    vcl_size_t global_threads[2]={8,8};
+    std::size_t local_threads[2]={8,8};
+    std::size_t global_threads[2]={8,8};
 
     if ( pro.n_inputs() < n_inputs_ ) {
-        vcl_cout << pro.name() << ": The input number should be " << n_inputs_<< vcl_endl;
+        std::cout << pro.name() << ": The input number should be " << n_inputs_<< std::endl;
         return false;
     }
     float transfer_time=0.0f;
@@ -125,13 +127,13 @@ bool boxm2_ocl_aux_update_view_direction_process(bprb_func_process& pro)
     vpgl_camera_double_sptr cam           = pro.get_input<vpgl_camera_double_sptr>(i++);
     unsigned int ni                       = pro.get_input<unsigned>(i++);
     unsigned int nj                       = pro.get_input<unsigned>(i++);
-    vcl_string suffix                     = pro.get_input<vcl_string>(i++);
-    vcl_string coordinate_type            = pro.get_input<vcl_string>(i++);
+    std::string suffix                     = pro.get_input<std::string>(i++);
+    std::string coordinate_type            = pro.get_input<std::string>(i++);
 
     //  opencl_cache->get_cpu_cache()->clear_cache();
 
     long binCache = opencl_cache.ptr()->bytes_in_cache();
-    vcl_cout<<"Update MBs in cache: "<<binCache/(1024.0*1024.0)<<vcl_endl;
+    std::cout<<"Update MBs in cache: "<<binCache/(1024.0*1024.0)<<std::endl;
 
     // create a command queue.
     int status=0;
@@ -140,12 +142,12 @@ bool boxm2_ocl_aux_update_view_direction_process(bprb_func_process& pro)
     if (status!=0)
         return false;
 
-    vcl_string identifier=device->device_identifier();
+    std::string identifier=device->device_identifier();
     // compile the kernel if not already compiled
     if (kernels.find(identifier)==kernels.end())
     {
-        vcl_cout<<"===========Compiling kernels==========="<<vcl_endl;
-        vcl_vector<bocl_kernel*> ks;
+        std::cout<<"===========Compiling kernels==========="<<std::endl;
+        std::vector<bocl_kernel*> ks;
         compile_kernel(device,ks,"");
         kernels[identifier]=ks;
     }
@@ -173,13 +175,13 @@ bool boxm2_ocl_aux_update_view_direction_process(bprb_func_process& pro)
         geocam->project(scene_bbox.max_x(), scene_bbox.max_y(), scene_bbox.max_z(), u, v);
         proj_bbox.add(vgl_point_2d<double>(u,v));
 
-        vcl_cout<<"Scene BBox "<<scene_bbox<<" Proj Box "<<proj_bbox<<vcl_endl;
-        int min_i = int(vcl_max(0.0, vcl_floor(proj_bbox.min_x())));
-        int min_j = int(vcl_max(0.0, vcl_floor(proj_bbox.min_y())));
-        int max_i = int(vcl_min(ni-1.0, vcl_ceil(proj_bbox.max_x())));
-        int max_j = int(vcl_min(nj-1.0, vcl_ceil(proj_bbox.max_y())));
+        std::cout<<"Scene BBox "<<scene_bbox<<" Proj Box "<<proj_bbox<<std::endl;
+        int min_i = int(std::max(0.0, std::floor(proj_bbox.min_x())));
+        int min_j = int(std::max(0.0, std::floor(proj_bbox.min_y())));
+        int max_i = int(std::min(ni-1.0, std::ceil(proj_bbox.max_x())));
+        int max_j = int(std::min(nj-1.0, std::ceil(proj_bbox.max_y())));
         if ((min_i > max_i) || (min_j > max_j)) {
-            vcl_cerr << "Error: boxm2_ocl_ingest_buckeye_dem_process: No overlap between scene and DEM image.\n";
+            std::cerr << "Error: boxm2_ocl_ingest_buckeye_dem_process: No overlap between scene and DEM image.\n";
             return false;
         }
         // initialize ray origin buffer, first and last return buffers
@@ -236,7 +238,7 @@ bool boxm2_ocl_aux_update_view_direction_process(bprb_func_process& pro)
     boxm2_ocl_util::set_bit_lookup(lookup_arr);
     bocl_mem_sptr lookup=new bocl_mem(device->context(), lookup_arr, sizeof(cl_uchar)*256, "bit lookup buffer");
     lookup->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR);
-    vcl_vector<boxm2_block_id> vis_order ;
+    std::vector<boxm2_block_id> vis_order ;
     // set arguments
     if(cam->type_name() == "vpgl_geo_camera" )
         vis_order= scene->get_block_ids();
@@ -245,7 +247,7 @@ bool boxm2_ocl_aux_update_view_direction_process(bprb_func_process& pro)
     else
         vis_order= scene->get_vis_blocks(cam);
 
-    vcl_vector<boxm2_block_id>::iterator id;
+    std::vector<boxm2_block_id>::iterator id;
     for (id = vis_order.begin(); id != vis_order.end(); ++id)
     {
         boxm2_block_metadata mdata = scene->get_block_metadata(*id);
@@ -352,7 +354,7 @@ bool boxm2_ocl_aux_update_view_direction_process(bprb_func_process& pro)
     }
     delete [] ray_origins;
     delete [] ray_directions;
-    vcl_cout<<"Gpu time "<<gpu_time<<" transfer time "<<transfer_time<<vcl_endl;
+    std::cout<<"Gpu time "<<gpu_time<<" transfer time "<<transfer_time<<std::endl;
     clReleaseCommandQueue(queue);
     return true;
 }

@@ -42,7 +42,9 @@
 //   9 Jan. 2003, Peter Vanroose - added "copy_geometry()"
 // \endverbatim
 
-#include <vcl_iosfwd.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iosfwd>
 #include <vtol/vtol_zero_chain.h>
 #include <vtol/vtol_vertex_2d.h>
 #include <vtol/vtol_vertex_2d_sptr.h>
@@ -127,10 +129,10 @@ class vtol_edge_2d : public vtol_edge
   virtual vsol_spatial_object_2d* clone() const;
 
   //: Return a platform independent string identifying the class
-  virtual vcl_string is_a() const { return vcl_string("vtol_edge_2d"); }
+  virtual std::string is_a() const { return std::string("vtol_edge_2d"); }
 
   //: Return true if the argument matches the string identifying the class or any parent class
-  virtual bool is_class(const vcl_string& cls) const
+  virtual bool is_class(const std::string& cls) const
   { return cls==is_a() || vtol_edge::is_class(cls); }
 
   //---------------------------------------------------------------------------
@@ -167,8 +169,8 @@ class vtol_edge_2d : public vtol_edge
 
   virtual void compute_bounding_box() const; //A local implementation
 
-  virtual void print(vcl_ostream &strm=vcl_cout) const;
-  virtual void describe(vcl_ostream &strm=vcl_cout,
+  virtual void print(std::ostream &strm=std::cout) const;
+  virtual void describe(std::ostream &strm=std::cout,
                         int blanking=0) const;
 
   //:  copy the geometry

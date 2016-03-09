@@ -1,6 +1,8 @@
 // This is rpl/rsdl/tests/test_bins_2d.cxx
-#include <vcl_vector.h>
-#include <vcl_algorithm.h>
+#include <vector>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <algorithm>
 
 #include <vnl/vnl_vector_fixed.h>
 #include <vnl/vnl_double_2.h>
@@ -73,8 +75,8 @@ static void test_bins_2d()
 
   //  Generate a bunch of points:
   const int M=60;
-  vcl_vector< vnl_vector_fixed< double, 2 > > points( M );
-  vcl_vector< int > indices( M );
+  std::vector< vnl_vector_fixed< double, 2 > > points( M );
+  std::vector< int > indices( M );
   vnl_random mz_rand;
   bins.reset( min_pt, max_pt, bin_sizes );
 
@@ -96,7 +98,7 @@ static void test_bins_2d()
 
     bool bin_answer = bins.is_any_point_within_radius( q, radius );
 
-    vcl_vector< int > all_close_indices;
+    std::vector< int > all_close_indices;
     for ( int i=0; i<M; ++i ) {
       if ( vnl_vector_ssd( points[ i ], q ) < vnl_math::sqr( radius ) )
         all_close_indices.push_back( i );
@@ -104,14 +106,14 @@ static void test_bins_2d()
 
     TEST("is_any_point_within_radius", bin_answer, (all_close_indices.size() > 0));
 
-    vcl_vector< int > bin_close_indices;
+    std::vector< int > bin_close_indices;
     bins.points_within_radius( q, radius, bin_close_indices );
     bool correct = all_close_indices.size() ==  bin_close_indices.size();
-    vcl_sort( all_close_indices.begin(), all_close_indices.end() );
-    vcl_sort( bin_close_indices.begin(), bin_close_indices.end() );
+    std::sort( all_close_indices.begin(), all_close_indices.end() );
+    std::sort( bin_close_indices.begin(), bin_close_indices.end() );
 
     for ( unsigned int i=0; correct &&
-          i < vcl_min(all_close_indices.size(), bin_close_indices.size()); ++i )
+          i < std::min(all_close_indices.size(), bin_close_indices.size()); ++i )
       correct = all_close_indices[ i ] == bin_close_indices[ i ];
 
     TEST("points_within_radius", correct, true);
@@ -124,7 +126,7 @@ static void test_bins_2d()
     bins.add_point(e, 1);
     bins.add_point(f, 2);
 
-    vcl_vector<int> answer;
+    std::vector<int> answer;
     bins.n_nearest(d, 1, answer);
 
     TEST("Second bin test bin size 5,5" , answer.size() >= 1 && (answer[0] == 1 ||  answer[0] == 2), true);
@@ -137,7 +139,7 @@ static void test_bins_2d()
     bins.add_point(e, 1);
     bins.add_point(f, 2);
 
-    vcl_vector<int> answer;
+    std::vector<int> answer;
     bins.n_nearest(d, 1, answer);
 
     TEST("Second bin test bin size 2,2" , answer.size() >= 1 && (answer[0] == 1 ||  answer[0] == 2), true);

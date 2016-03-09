@@ -2,7 +2,9 @@
 #define boxm_compute_num_rays_statistics_h
 
 #include <boxm/boxm_scene.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iostream>
 #include <bsta/bsta_histogram.h>
 #include <boxm/basic/boxm_num_rays_functor.h>
 #include <boxm/sample/boxm_scalar_sample.h>
@@ -38,8 +40,8 @@ bool compute_ray_statistics(boxm_scene<boct_tree<T_loc, T_data > >& scene,
     boxm_block<aux_tree_type> * block = aux_scene.get_block(block_index);
     aux_tree_type* tree=block->get_tree();
     if (!tree) return false;
-    vcl_vector<aux_cell_type *> leaves = tree->leaf_cells();
-    for (typename vcl_vector<aux_cell_type *>::iterator cit = leaves.begin(); cit != leaves.end(); ++cit)
+    std::vector<aux_cell_type *> leaves = tree->leaf_cells();
+    for (typename std::vector<aux_cell_type *>::iterator cit = leaves.begin(); cit != leaves.end(); ++cit)
     {
       boxm_scalar_sample<sample_datatype>  data = (*cit)->data();
       num_rays_hist.upcount(static_cast<float>(data.scalar_sum_), 1.0f);
@@ -49,12 +51,12 @@ bool compute_ray_statistics(boxm_scene<boct_tree<T_loc, T_data > >& scene,
   }
 
   //aux_scene.clean_scene();
-  vcl_cout<<"Avg num of rays per cell "<<avg_rays/num_cells<<vcl_endl
+  std::cout<<"Avg num of rays per cell "<<avg_rays/num_cells<<std::endl
           << "[#rays]=Frequency" << '\n';
 
   for (unsigned int i=0; i<num_rays_hist.nbins(); i++)
   {
-      vcl_cout<< '[' << num_rays_hist.avg_bin_value(i) << "]=" << num_rays_hist.counts(i) << '\n';
+      std::cout<< '[' << num_rays_hist.avg_bin_value(i) << "]=" << num_rays_hist.counts(i) << '\n';
   }
 
   return true;

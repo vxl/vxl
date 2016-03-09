@@ -18,7 +18,9 @@
 #include <vsl/vsl_binary_io.h>
 #include <boxm/sample/boxm_edge_sample.h>
 #include <boxm/sample/boxm_inf_line_sample.h>
-#include <vcl_iosfwd.h> // for std::ostream
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iosfwd> // for std::ostream
 #include "boxm_export.h"
 
 class boxm_mog_grey_processor;
@@ -197,6 +199,6 @@ void vsl_b_write(vsl_b_ostream & os, boxm_simple_grey const &sample);
 void vsl_b_write(vsl_b_ostream & os, boxm_simple_grey const * &sample);
 void vsl_b_read(vsl_b_istream & is, boxm_simple_grey &sample);
 void vsl_b_read(vsl_b_istream & is, boxm_simple_grey *&sample);
-vcl_ostream& operator << (vcl_ostream& os, const boxm_simple_grey& sample);
+std::ostream& operator << (std::ostream& os, const boxm_simple_grey& sample);
 
 #endif

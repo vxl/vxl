@@ -5,7 +5,9 @@
 #include <brdb/brdb_selection.h>
 #include <brdb/brdb_database_manager.h>
 #include <brdb/brdb_value.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iostream>
 #include "bprb_test_process.h"
 #include <bprb/bprb_parameters.h>
 #include <bprb/bprb_macros.h>
@@ -33,13 +35,13 @@ void test_process_params()
 
   brdb_selection_sptr selec = DATABASE->select("float_data", Q);
   if (selec->size()!=1) {
-    vcl_cout << "in bprb_batch_process_manager::set_input_from_db(.) -"
+    std::cout << "in bprb_batch_process_manager::set_input_from_db(.) -"
              << " no selections\n";
   }
 
   brdb_value_sptr value;
-  if (!selec->get_value(vcl_string("value"), value)) {
-    vcl_cout << "in bprb_batch_process_manager::set_input_from_db(.) -"
+  if (!selec->get_value(std::string("value"), value)) {
+    std::cout << "in bprb_batch_process_manager::set_input_from_db(.) -"
              << " didn't get value\n";
   }
   brdb_value_t<float>* result =

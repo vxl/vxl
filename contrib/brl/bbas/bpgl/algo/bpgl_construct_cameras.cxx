@@ -3,7 +3,9 @@
 //:
 // \file
 
-#include <vcl_cmath.h> // for std::abs
+#include <vcl_compiler.h>
+#include <iostream>
+#include <cmath> // for std::abs
 #include <vnl/vnl_inverse.h>
 #include <vnl/vnl_vector.h>
 #include <vnl/vnl_double_3.h>
@@ -22,15 +24,15 @@ bpgl_construct_cameras::bpgl_construct_cameras()
 
 //: constructor with initialization of corresponding points
 bpgl_construct_cameras::bpgl_construct_cameras(
-    vcl_vector<vgl_point_2d<double> > p0,
-    vcl_vector<vgl_point_2d<double> > p1,
+    std::vector<vgl_point_2d<double> > p0,
+    std::vector<vgl_point_2d<double> > p1,
     const vpgl_calibration_matrix<double>* K )
 {
     points0_=p0;
     points1_=p1;
 
     if ( p0.size() < 8 )
-      vcl_cerr << "ERROR: bpgl_construct_cameras: need at least 7 correspondences.\n";
+      std::cerr << "ERROR: bpgl_construct_cameras: need at least 7 correspondences.\n";
 
     if ( K == VXL_NULLPTR ) {
       K_[0][0]=2000;K_[0][1]=0;K_[0][2]=512;
@@ -52,7 +54,7 @@ bpgl_construct_cameras::~bpgl_construct_cameras()
 // - Computes the camera pose such that all points are in front of the camera
 bool bpgl_construct_cameras::construct()
 {
-    vcl_vector<vgl_homg_point_2d<double> > p0,p1;
+    std::vector<vgl_homg_point_2d<double> > p0,p1;
 
     for (unsigned int i=0;i<points0_.size();i++)
     {
@@ -75,10 +77,10 @@ bool bpgl_construct_cameras::construct()
       pt0(0) = p0[i].x(); pt0(1) = p0[i].y(); pt0(2) = 1;
       pt1(0) = p1[i].x(); pt1(1) = p1[i].y(); pt1(2) = 1;
       vnl_vector<double> m = fm.get_matrix()*pt0;
-      fm_error += vcl_abs( pt1(0)*m(0)+pt1(1)*m(1)+pt1(2)*m(2) );
+      fm_error += std::abs( pt1(0)*m(0)+pt1(1)*m(1)+pt1(2)*m(2) );
     }
     if ( fm_error > .2 ) {
-      vcl_cerr << "\nWARNING: vpgl_construct_cameras: fundamental matrix error is " <<
+      std::cerr << "\nWARNING: vpgl_construct_cameras: fundamental matrix error is " <<
         fm_error << '\n';
     }
 
@@ -138,7 +140,7 @@ bool bpgl_construct_cameras::construct()
       if (!P1_.is_behind_camera(ph3d) && !P2_.is_behind_camera(ph3d))
         break;
       if ( c == 3 ) {
-        vcl_cerr << "ERROR: vpgl_construct_cameras failed.\n";
+        std::cerr << "ERROR: vpgl_construct_cameras failed.\n";
         return false;
       }
     }
@@ -151,7 +153,7 @@ bool bpgl_construct_cameras::construct()
 
 void
 bpgl_construct_cameras::get_world_points(
-  vcl_vector< vgl_point_3d<double> >& world_points )
+  std::vector< vgl_point_3d<double> >& world_points )
 {
   world_points.clear();
   for ( unsigned int p = 0; p < points0_.size(); ++p ) {

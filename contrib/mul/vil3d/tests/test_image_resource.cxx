@@ -1,7 +1,9 @@
 // This is mul/vil3d/tests/test_image_resource.cxx
 #include <testlib/testlib_test.h>
 
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iostream>
 #include <vil3d/vil3d_image_resource.h>
 #include <vil3d/vil3d_math.h>
 #include <vil3d/vil3d_new.h>
@@ -10,9 +12,9 @@
 
 
 template <class T>
-inline void test_image_resource(vcl_string type, vil_pixel_format format, T /*dummy*/)
+inline void test_image_resource(std::string type, vil_pixel_format format, T /*dummy*/)
 {
-  vcl_cout << "******************************************************************\n"
+  std::cout << "******************************************************************\n"
            << " Testing vil3d_image_resource objects with pixel type = " << type << '\n'
            << "******************************************************************\n";
 
@@ -49,7 +51,7 @@ inline void test_image_resource(vcl_string type, vil_pixel_format format, T /*du
   TEST("vil3d_memory_image::put_view(copy)", mem->put_view(view2,5,3,1), true);
 
   view1 = mem->get_view(0, mem->ni(), 0, mem->nj(), 0, mem->nk());
-  vil3d_print_all(vcl_cout, view1);
+  vil3d_print_all(std::cout, view1);
 
   T v1, v2;
 

@@ -31,7 +31,7 @@ class bgui_range_adjuster_tableau : public vgui_easy2D_tableau
   bgui_range_adjuster_tableau(vgui_tableau_sptr const& t, const char* n="unnamed");
 
   //: Returns the type of this tableau ('bgui_range_adjuster_tableau').
-  //  vcl_string type_name() const { return "bgui_range_adjuster_tableau";}
+  //  std::string type_name() const { return "bgui_range_adjuster_tableau";}
 
   //: Destructor.
   ~bgui_range_adjuster_tableau();
@@ -47,7 +47,7 @@ class bgui_range_adjuster_tableau : public vgui_easy2D_tableau
 
   //: Update the data from a histogram
   bool update(const double min, const double max,
-              vcl_vector<double> const& hist);
+              std::vector<double> const& hist);
 
 
   //: Low range limit histogram area fraction
@@ -91,9 +91,9 @@ class bgui_range_adjuster_tableau : public vgui_easy2D_tableau
   int graph_width_;
   int graph_height_;
   //: List of points.
-  vcl_vector<float> xpoints_, ypoints_;
+  std::vector<float> xpoints_, ypoints_;
   vgui_soview2D_linestrip* plot_;
-  vcl_vector<double> data_;
+  std::vector<double> data_;
   bsta_histogram<double> hist_;
 };
 

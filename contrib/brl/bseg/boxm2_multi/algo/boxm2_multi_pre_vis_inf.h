@@ -22,8 +22,8 @@ class boxm2_multi_pre_vis_inf
     //static float pre_vis_inf( boxm2_multi_cache&              cache,
     //                          const vil_image_view<float>&    img,
     //                          vpgl_camera_double_sptr         cam,
-    //                          vcl_map<bocl_device*, float*>&  vis_map,
-    //                          vcl_map<bocl_device*, float*>&  pre_map,
+    //                          std::map<bocl_device*, float*>&  vis_map,
+    //                          std::map<bocl_device*, float*>&  pre_map,
     //                          float*                          norm_img,
     //                          boxm2_multi_update_helper&      helper);
     static float pre_vis_inf( boxm2_multi_cache&              cache,
@@ -39,7 +39,7 @@ class boxm2_multi_pre_vis_inf
                                         boxm2_scene_sptr    scene,
                                         boxm2_opencl_cache1* opencl_cache,
                                         cl_command_queue&   queue,
-                                        vcl_string          data_type,
+                                        std::string          data_type,
                                         bocl_kernel*        kernel,
                                         bocl_mem_sptr&      vis_image,
                                         bocl_mem_sptr&      pre_image,
@@ -49,30 +49,30 @@ class boxm2_multi_pre_vis_inf
                                         bocl_mem_sptr&      tnearfarptr,
                                         bocl_mem_sptr&      cl_output,
                                         bocl_mem_sptr&      lookup,
-                                        vcl_size_t*         lthreads,
-                                        vcl_size_t*         gThreads);
+                                        std::size_t*         lthreads,
+                                        std::size_t*         gThreads);
 
 #if 0
     //reduction step (proc norm image)
     static float pre_vis_reduce( boxm2_multi_cache&    cache,
-                                 vcl_vector<float*>&   pre_imgs,
-                                 vcl_vector<float*>&   vis_imgs,
-                                 vcl_vector<boxm2_opencl_cache1*>& ocl_caches,
-                                 vcl_map<bocl_device*, float*>& pre_map,
-                                 vcl_map<bocl_device*, float*>& vis_map,
+                                 std::vector<float*>&   pre_imgs,
+                                 std::vector<float*>&   vis_imgs,
+                                 std::vector<boxm2_opencl_cache1*>& ocl_caches,
+                                 std::map<bocl_device*, float*>& pre_map,
+                                 std::map<bocl_device*, float*>& vis_map,
                                  int ni,
                                  int nj,
                                  float* norm_img   );
 #endif
 
     //map keeps track of all kernels compiled and cached
-    static vcl_map<vcl_string, vcl_vector<bocl_kernel*> > kernels_;
+    static std::map<std::string, std::vector<bocl_kernel*> > kernels_;
 
     //compile kernels and cache
-    static vcl_vector<bocl_kernel*>& get_kernels(bocl_device_sptr device, vcl_string opts);
+    static std::vector<bocl_kernel*>& get_kernels(bocl_device_sptr device, std::string opts);
 
     //debug write imgs to disk method
-    static void write_imgs_out(vcl_map<bocl_device*, float*>& img_map, int ni, int nj,vcl_string name);
+    static void write_imgs_out(std::map<bocl_device*, float*>& img_map, int ni, int nj,std::string name);
 
     template <class T>
     static inline T clamp(T x, T a, T b) { return x < a ? a : (x > b ? b : x); }

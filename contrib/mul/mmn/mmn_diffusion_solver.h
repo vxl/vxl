@@ -5,8 +5,10 @@
 // \brief Run diffusion algorithm over the graph
 // \author Martin Roberts
 
-#include <vcl_vector.h>
-#include <vcl_map.h>
+#include <vector>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <map>
 #include <vnl/vnl_vector.h>
 #include <vnl/vnl_matrix.h>
 #include <mmn/mmn_arc.h>
@@ -26,42 +28,42 @@ class mmn_diffusion_solver
     //: in below the map is indexed by the neighbour's node id
 
     //: Inner vector indexed by source node state ID, map by neighbour node (t')
-    typedef vcl_map<unsigned,vnl_vector<double > > potential_set_t;
+    typedef std::map<unsigned,vnl_vector<double > > potential_set_t;
 
     //: Matrix referenced by [source node state ID][target node state ID]
     // Map ID is target node ID
-    typedef vcl_map<unsigned, vnl_matrix<double > > neigh_arc_cost_t;
+    typedef std::map<unsigned, vnl_matrix<double > > neigh_arc_cost_t;
 
     //:Store in graph form (so each node's neighbours are conveniently to hand)
     mmn_graph_rep1 graph_;
 
     //: The arcs from which graph was generated
-    vcl_vector<mmn_arc> arcs_;
+    std::vector<mmn_arc> arcs_;
 
     //: Total number of nodes
     unsigned nnodes_;
 
     //: Workspace for costs of each arc
-    vcl_vector<neigh_arc_cost_t > arc_costs_;
+    std::vector<neigh_arc_cost_t > arc_costs_;
 
     //: Workspace for transformed costs of each arc
-    vcl_vector<neigh_arc_cost_t > arc_costs_phi_;
+    std::vector<neigh_arc_cost_t > arc_costs_phi_;
 
 
     //: All the potentials at previous iteration (vector index is source node)
-    vcl_vector<potential_set_t > phi_;
+    std::vector<potential_set_t > phi_;
 
     //: Update potentials calculated during this iteration (vector index is source node)
-    vcl_vector<potential_set_t > phi_upd_;
+    std::vector<potential_set_t > phi_upd_;
 
     //: Node costs (outer vector is node ID, inner vnl_vector is by state value)
-    vcl_vector<vnl_vector<double> > node_costs_;
+    std::vector<vnl_vector<double> > node_costs_;
 
     //: Node costs after phi transform (outer vector is node ID, inner vnl_vector is by state value)
-    vcl_vector<vnl_vector<double> > node_costs_phi_;
+    std::vector<vnl_vector<double> > node_costs_phi_;
 
     //: Workspace for adjustment to potential
-    vcl_vector<vcl_map<unsigned,vnl_vector<double > > > u_;
+    std::vector<std::map<unsigned,vnl_vector<double > > > u_;
 
     //: Current iteration count
     unsigned count_;
@@ -107,22 +109,22 @@ class mmn_diffusion_solver
     void transform_costs(unsigned inode);
 
     //: Find maximal nodes and arcs and check if arc consistent
-    bool arc_consistent_solution(vcl_vector<unsigned >& x);
+    bool arc_consistent_solution(std::vector<unsigned >& x);
 
     //: Reset iteration counters
     void init();
     //: Calculate final sum of node and arc values
-    double solution_cost(vcl_vector<unsigned>& x);
+    double solution_cost(std::vector<unsigned>& x);
 
    public:
     //: Default constructor
     mmn_diffusion_solver();
 
     //: Construct with arcs
-    mmn_diffusion_solver(unsigned num_nodes,const vcl_vector<mmn_arc>& arcs);
+    mmn_diffusion_solver(unsigned num_nodes,const std::vector<mmn_arc>& arcs);
 
     //: Input the arcs that define the graph
-    void set_arcs(unsigned num_nodes,const vcl_vector<mmn_arc>& arcs);
+    void set_arcs(unsigned num_nodes,const std::vector<mmn_arc>& arcs);
 
     //: Find values for each node with minimise the total cost
     //  \param node_cost: node_cost[i][j] is cost of selecting value j for node i
@@ -139,9 +141,9 @@ class mmn_diffusion_solver
     // to an arc-consistent solution, and the double is the cost (negative minimum, i.e. -internal max)
     // Even if the solution is not arc-consistent a solution is still returned given by the local node
     // first maxima, but this may not then be optimal.
-    vcl_pair<bool,double> operator()(const vcl_vector<vnl_vector<double> >& node_cost,
-                                     const vcl_vector<vnl_matrix<double> >& arc_cost,
-                                     vcl_vector<unsigned>& x);
+    std::pair<bool,double> operator()(const std::vector<vnl_vector<double> >& node_cost,
+                                     const std::vector<vnl_matrix<double> >& arc_cost,
+                                     std::vector<unsigned>& x);
 
     //: final iteration count
     unsigned count() const {return count_;}

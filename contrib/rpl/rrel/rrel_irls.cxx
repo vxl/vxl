@@ -11,8 +11,10 @@
 #include <vnl/vnl_vector.h>
 #include <vnl/vnl_matrix.h>
 
-#include <vcl_iostream.h>
-#include <vcl_vector.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iostream>
+#include <vector>
 #include <vcl_cassert.h>
 
 const double rrel_irls::dflt_convergence_tol_ = 1e-4;
@@ -42,7 +44,7 @@ rrel_irls::set_est_scale( int iterations_for_scale_est,
   use_weighted_scale_ = use_weighted_scale;
   iterations_for_scale_est_ = iterations_for_scale_est;
   if ( iterations_for_scale_est_ < 0 )
-    vcl_cerr << "rrel_irls::est_scale_during WARNING last_scale_est_iter is\n"
+    std::cerr << "rrel_irls::est_scale_during WARNING last_scale_est_iter is\n"
              << "negative, so scale will not be estimated!\n";
 }
 
@@ -122,8 +124,8 @@ rrel_irls::estimate( const rrel_estimation_problem* problem,
   obj_fcn_ = 1e256;
   unsigned int num_for_fit = problem->num_samples_to_instantiate();
   bool allow_convergence_test = true;
-  vcl_vector<double> residuals( problem->num_samples() );
-  vcl_vector<double> weights( problem->num_samples() );
+  std::vector<double> residuals( problem->num_samples() );
+  std::vector<double> weights( problem->num_samples() );
   bool failed = false;
 
   //  Parameter initialization, if necessary
@@ -138,7 +140,7 @@ rrel_irls::estimate( const rrel_estimation_problem* problem,
 
   //  Scale initialization, if necessary
   if ( obj->requires_prior_scale() && problem->scale_type() == rrel_estimation_problem::NONE ) {
-    vcl_cerr << "irls::estimate: Objective function requires a prior scale, and the problem does not provide one.\n"
+    std::cerr << "irls::estimate: Objective function requires a prior scale, and the problem does not provide one.\n"
              << "                Aborting estimation.\n";
     return false;
   }
@@ -150,7 +152,7 @@ rrel_irls::estimate( const rrel_estimation_problem* problem,
   }
 
   if ( trace_level_ >= 1 )
-    vcl_cout << "Initial estimate: " << params_ << ", scale = " << scale_ <<  vcl_endl;
+    std::cout << "Initial estimate: " << params_ << ", scale = " << scale_ <<  std::endl;
 
   assert( params_initialized_ && scale_initialized_ );
   if ( scale_ <= 1e-8 ) {
@@ -158,7 +160,7 @@ rrel_irls::estimate( const rrel_estimation_problem* problem,
     cofact_ = 1e-16 * vnl_matrix<double>(dof, dof, vnl_matrix_identity);
     scale_ = 0.0;
     converged_ = true;
-    vcl_cerr << "rrel_irls::estimate: initial scale is zero - cannot estimate\n";
+    std::cerr << "rrel_irls::estimate: initial scale is zero - cannot estimate\n";
     // usually, This means that it already has an exact fitting.
     // Thus, no harm if return true
     return true;
@@ -189,7 +191,7 @@ rrel_irls::estimate( const rrel_estimation_problem* problem,
     }
     ++ iteration_;
     if ( iteration_ > max_iterations_ ) break;
-    if ( trace_level_ >= 1 ) vcl_cout << "\nIteration: " << iteration_ << '\n';
+    if ( trace_level_ >= 1 ) std::cout << "\nIteration: " << iteration_ << '\n';
 
     //  Step 3. Weights
     problem->compute_weights( residuals, obj, scale_, weights );
@@ -199,7 +201,7 @@ rrel_irls::estimate( const rrel_estimation_problem* problem,
     //  rrel_util_median_abs_dev_scale.
     if ( est_scale_during_ && iteration_ <= iterations_for_scale_est_ ) {
       allow_convergence_test = false;
-      if ( trace_level_ >= 1 ) vcl_cout << "num samples for fit = " << num_for_fit << '\n';
+      if ( trace_level_ >= 1 ) std::cout << "num samples for fit = " << num_for_fit << '\n';
       if ( use_weighted_scale_ ) {
         assert( residuals.size() == weights.size() );
         scale_ = rrel_util_weighted_scale( residuals.begin(), residuals.end(),
@@ -208,13 +210,13 @@ rrel_irls::estimate( const rrel_estimation_problem* problem,
       else {
         scale_ = rrel_util_median_abs_dev_scale( residuals.begin(), residuals.end(), num_for_fit );
       }
-      if ( trace_level_ >= 1 ) vcl_cout << "Scale estimated: " << scale_ << vcl_endl;
+      if ( trace_level_ >= 1 ) std::cout << "Scale estimated: " << scale_ << std::endl;
       if ( scale_ <= 1e-8 ) {  //  fit exact enough to yield 0 scale estimate
         unsigned int dof = problem-> param_dof();
         cofact_ = 1e-16 * vnl_matrix<double>(dof, dof, vnl_matrix_identity);
         scale_ = 0.0;
         converged_ = true;
-        vcl_cerr << "rrel_irls::estimate:  scale has gone to 0.\n";
+        std::cerr << "rrel_irls::estimate:  scale has gone to 0.\n";
         break;
       }
 
@@ -230,7 +232,7 @@ rrel_irls::estimate( const rrel_estimation_problem* problem,
       failed = true;
       break;
     }
-    if ( trace_level_ >= 1 ) vcl_cout << "Fit: " << params_ << vcl_endl;
+    if ( trace_level_ >= 1 ) std::cout << "Fit: " << params_ << std::endl;
   }
 
   return !failed;
@@ -265,7 +267,7 @@ rrel_irls::iterations_used() const
 
 // -------------------------------------------------------------------------
 bool
-rrel_irls::has_converged( const vcl_vector<double>& residuals,
+rrel_irls::has_converged( const std::vector<double>& residuals,
                           const rrel_wls_obj* obj,
                           const rrel_estimation_problem* problem,
                           vnl_vector<double>* params )
@@ -287,8 +289,8 @@ rrel_irls::has_converged( const vcl_vector<double>& residuals,
   }
 
   if ( trace_level_ >= 1 )
-    vcl_cout << "  prev obj fcn = " << prev_obj_fcn_
-             << ",  new obj fcn = " << obj_fcn_ << vcl_endl;
+    std::cout << "  prev obj fcn = " << prev_obj_fcn_
+             << ",  new obj fcn = " << obj_fcn_ << std::endl;
 
   return vnl_math::abs( obj_fcn_ ) < convergence_tol_  ||
     vnl_math::abs(obj_fcn_ - prev_obj_fcn_) < convergence_tol_ * obj_fcn_;
@@ -297,21 +299,21 @@ rrel_irls::has_converged( const vcl_vector<double>& residuals,
 
 // -------------------------------------------------------------------------
 void
-rrel_irls::trace_residuals( const vcl_vector<double>& residuals ) const
+rrel_irls::trace_residuals( const std::vector<double>& residuals ) const
 {
-  vcl_cout << "Residuals:\n";
+  std::cout << "Residuals:\n";
   for ( unsigned int i=0; i<residuals.size(); ++i )
-    vcl_cout << "  " << i << ": " << residuals[i] << '\n';
+    std::cout << "  " << i << ": " << residuals[i] << '\n';
 }
 
 
 // -------------------------------------------------------------------------
 void
-rrel_irls::trace_weights( const vcl_vector<double>& weights ) const
+rrel_irls::trace_weights( const std::vector<double>& weights ) const
 {
-  vcl_cout << "Weights:\n";
+  std::cout << "Weights:\n";
   for ( unsigned int i=0; i<weights.size(); ++i )
-    vcl_cout << "  " << i << ": " << weights[i] << '\n';
+    std::cout << "  " << i << ": " << weights[i] << '\n';
 }
 
 
@@ -319,10 +321,10 @@ rrel_irls::trace_weights( const vcl_vector<double>& weights ) const
 void
 rrel_irls::print_params() const
 {
-  vcl_cout << "  max_iterations_ = " << max_iterations_ << '\n'
+  std::cout << "  max_iterations_ = " << max_iterations_ << '\n'
            << "  test_converge_ = " << test_converge_ << '\n'
            << "  convergence_tol_ = " << convergence_tol_ << '\n'
            << "  est_scale_during_ = " << est_scale_during_ << '\n'
            << "  iterations_for_scale_est_ = " << iterations_for_scale_est_
-           << vcl_endl;
+           << std::endl;
 }

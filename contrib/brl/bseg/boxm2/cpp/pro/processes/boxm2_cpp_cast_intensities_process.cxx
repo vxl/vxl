@@ -7,7 +7,9 @@
 // \author Ozge C. Ozcanli
 // \date May 04, 2011
 
-#include <vcl_fstream.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <fstream>
 #include <boxm2/io/boxm2_cache.h>
 #include <boxm2/boxm2_scene.h>
 #include <boxm2/boxm2_block.h>
@@ -37,7 +39,7 @@ bool boxm2_cpp_cast_intensities_process_cons(bprb_func_process& pro)
   // 2) camera
   // 3) image
   // 4) image identifier
-  vcl_vector<vcl_string> input_types_(n_inputs_);
+  std::vector<std::string> input_types_(n_inputs_);
   input_types_[0] = "boxm2_scene_sptr";
   input_types_[1] = "boxm2_cache_sptr";
   input_types_[2] = "vpgl_camera_double_sptr";
@@ -45,7 +47,7 @@ bool boxm2_cpp_cast_intensities_process_cons(bprb_func_process& pro)
   input_types_[4] = "vcl_string";  //image identifier
   // process has 1 output:
   // output[0]: scene sptr
-  vcl_vector<vcl_string>  output_types_(n_outputs_);
+  std::vector<std::string>  output_types_(n_outputs_);
 
   return pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
 }
@@ -55,7 +57,7 @@ bool boxm2_cpp_cast_intensities_process(bprb_func_process& pro)
   using namespace boxm2_cpp_cast_intensities_process_globals;
 
   if ( pro.n_inputs() < n_inputs_ ) {
-    vcl_cout << pro.name() << ": The number of inputs should be " << n_inputs_<< vcl_endl;
+    std::cout << pro.name() << ": The number of inputs should be " << n_inputs_<< std::endl;
     return false;
   }
   //get the inputs
@@ -65,24 +67,24 @@ bool boxm2_cpp_cast_intensities_process(bprb_func_process& pro)
   vpgl_camera_double_sptr cam= pro.get_input<vpgl_camera_double_sptr>(i++);
   vil_image_view_base_sptr in_img=pro.get_input<vil_image_view_base_sptr>(i++);
   vil_image_view_base_sptr float_image=boxm2_util::prepare_input_image(in_img);
-  vcl_string identifier = pro.get_input<vcl_string>(i++);
+  std::string identifier = pro.get_input<std::string>(i++);
 
   if (vil_image_view<float> * input_image=dynamic_cast<vil_image_view<float> * > (float_image.ptr()))
   {
-    vcl_vector<boxm2_block_id> vis_order=scene->get_vis_blocks(reinterpret_cast<vpgl_generic_camera<double>*>(cam.ptr()));
+    std::vector<boxm2_block_id> vis_order=scene->get_vis_blocks(reinterpret_cast<vpgl_generic_camera<double>*>(cam.ptr()));
     if (vis_order.empty())
     {
-      vcl_cout<<" None of the blocks are visible from this viewpoint"<<vcl_endl;
+      std::cout<<" None of the blocks are visible from this viewpoint"<<std::endl;
       return true;
     }
 
     bool success=true;
     boxm2_cast_intensities_functor pass;
 
-    vcl_vector<boxm2_block_id>::iterator id;
+    std::vector<boxm2_block_id>::iterator id;
     for (id = vis_order.begin(); id != vis_order.end(); ++id)
     {
-      vcl_cout<<"Block id "<<(*id)<<' ';
+      std::cout<<"Block id "<<(*id)<<' ';
       boxm2_block *   blk   = cache->get_block(scene,*id);
 
       //: first make sure that the database is removed from memory if it already exists

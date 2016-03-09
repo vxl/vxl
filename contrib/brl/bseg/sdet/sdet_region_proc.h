@@ -17,7 +17,9 @@
 // \endverbatim
 //
 //-------------------------------------------------------------------------
-#include <vcl_vector.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <vector>
 #include <vil1/vil1_image.h>
 #include <vil/vil_image_resource.h>
 #include <vil/vil_image_view.h>
@@ -41,7 +43,7 @@ class sdet_region_proc : public sdet_region_proc_params
                           vsol_box_2d_sptr const& box = vsol_box_2d_sptr());
 
 
-  vcl_vector<vtol_intensity_face_sptr>& get_regions(){return regions_;}
+  std::vector<vtol_intensity_face_sptr>& get_regions(){return regions_;}
 
   //Utility Methods
   void extract_regions();
@@ -68,7 +70,7 @@ class sdet_region_proc : public sdet_region_proc_params
   vil1_image clip_; //clipped image region
   vil_image_resource_sptr vclip_; //clipped image resource
   vil1_image edge_image_;//debug
-  vcl_vector<vtol_intensity_face_sptr> regions_; //resulting intensity faces
+  std::vector<vtol_intensity_face_sptr> regions_; //resulting intensity faces
 };
 
 #endif // sdet_region_proc_h_

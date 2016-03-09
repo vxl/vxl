@@ -14,8 +14,10 @@
 #include "rgtl_serialize_direction.hxx"
 
 #include <vcl_compiler.h>
-#include <vcl_iosfwd.h>
-#include <vcl_cstddef.h>
+#include <iosfwd>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <cstddef>
 
 //: Serialization save object that writes to a stream.
 //  See rgtl_serialize.txt for serialization interface details.
@@ -27,20 +29,20 @@ class rgtl_serialize_ostream
   typedef rgtl_serialize_direction_save serialize_direction;
 
   //: Construct with a stream to which to write data.
-  rgtl_serialize_ostream(vcl_ostream& is): stream_(is) {}
+  rgtl_serialize_ostream(std::ostream& is): stream_(is) {}
 
   //: Safe conversion to a boolean type.
   operator safe_bool() const
   { return this->okay()? VCL_SAFE_BOOL_TRUE : 0; }
 
   //: Write data to the output stream.
-  rgtl_serialize_ostream& write(void const* data, vcl_size_t length);
+  rgtl_serialize_ostream& write(void const* data, std::size_t length);
 
   //: Get the current position in the stream.
-  vcl_size_t position();
+  std::size_t position();
  private:
   bool okay() const;
-  vcl_ostream& stream_;
+  std::ostream& stream_;
 };
 
 //: Provide "saver << object" syntax

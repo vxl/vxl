@@ -30,10 +30,10 @@ bprb_param_type<T>::set_value( const T& val )
 
 //: Create a string representation of the value
 template<class T>
-vcl_string
+std::string
 bprb_param_type<T>::create_string(const T& val) const
 {
-  vcl_stringstream stm;
+  std::stringstream stm;
   stm << val;
   return stm.str();
 }
@@ -42,10 +42,10 @@ bprb_param_type<T>::create_string(const T& val) const
 //: Parse a string representation of the value
 template<class T>
 T
-bprb_param_type<T>::parse_string(const vcl_string& input) const
+bprb_param_type<T>::parse_string(const std::string& input) const
 {
   T val;
-  vcl_istringstream strm(input);
+  std::istringstream strm(input);
   strm >> val;
   return val;
 }

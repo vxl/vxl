@@ -17,7 +17,7 @@ static void test_spherical_region()
   sph_region.set_attribute(NLCD,44);
 
 
-  sph_region.print(vcl_cout);
+  sph_region.print(std::cout);
   bool good = sph_region.is_attribute(ORIENTATION);
 
   TEST("Attribute Orietnation Present", good, true);

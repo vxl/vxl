@@ -13,10 +13,12 @@
 // None
 // \endverbatim
 
-#include <vcl_vector.h>
-#include <vcl_iostream.h>
-#include <vcl_map.h>
-#include <vcl_string.h>
+#include <vector>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iostream>
+#include <map>
+#include <string>
 #include <volm/volm_camera_space.h>
 #include <volm/volm_camera_space_sptr.h>
 #include <bpgl/depth_map/depth_map_scene_sptr.h>
@@ -34,7 +36,7 @@ class volm_spherical_region_query
 
   volm_spherical_regions_layer query_regions(unsigned roll_indx);
 
-  void print(vcl_ostream& os) const;
+  void print(std::ostream& os) const;
 
  private:
   void construct_spherical_regions();
@@ -49,7 +51,7 @@ class volm_spherical_region_query
   volm_spherical_container_sptr sph_vol_;
 
   //     roll index  regions on sphere
-  vcl_map< unsigned, volm_spherical_regions_layer > sph_regions_;
+  std::map< unsigned, volm_spherical_regions_layer > sph_regions_;
 
   double canonical_top_fov_ ;
   double canonical_head_    ;

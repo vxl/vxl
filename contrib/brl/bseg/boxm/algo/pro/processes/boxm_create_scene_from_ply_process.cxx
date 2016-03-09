@@ -38,13 +38,13 @@ class boxm_apperace_fileio_parsed_ply_
   unsigned char color; //holds color
   double grey_offset; //offset the floating point (0,1) color value
   //accumulated data in the shape of leaf cells
-  vcl_map<vgl_point_3d<int>, vcl_vector<boct_tree_cell<short, float> >, boxm_vgl_point_3d_coord_compare > data;
+  std::map<vgl_point_3d<int>, std::vector<boct_tree_cell<short, float> >, boxm_vgl_point_3d_coord_compare > data;
   boxm_scene<boct_tree<short, float> > *scene;
 };
 
-bool boxm_load_color_ply(const vcl_string &ply_file,  boxm_scene<boct_tree<short, float> > *scene,
-                         vcl_map<vgl_point_3d<int>,
-                         vcl_vector<boct_tree_cell<short, float> >,boxm_vgl_point_3d_coord_compare > &data,
+bool boxm_load_color_ply(const std::string &ply_file,  boxm_scene<boct_tree<short, float> > *scene,
+                         std::map<vgl_point_3d<int>,
+                         std::vector<boct_tree_cell<short, float> >,boxm_vgl_point_3d_coord_compare > &data,
                          const float &grey_offset);
 
 //: Call-back function for a "vertex" element
@@ -63,12 +63,12 @@ bool boxm_create_scene_from_ply_process_cons(bprb_func_process& pro)
 {
   using namespace boxm_create_scene_from_ply_process_globals ;
 
-  vcl_vector<vcl_string> input_types_(n_inputs_);
+  std::vector<std::string> input_types_(n_inputs_);
   input_types_[0] = "vcl_string"; //path to .ply file
   input_types_[1] = "boxm_scene_base_sptr"; //the scene to fill up
   input_types_[2] = "float"; //offset for appearance values
 
-  vcl_vector<vcl_string> output_types_(n_outputs_);
+  std::vector<std::string> output_types_(n_outputs_);
   output_types_[0] = "boxm_scene_base_sptr";
 
   return pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
@@ -82,13 +82,13 @@ bool boxm_create_scene_from_ply_process(bprb_func_process& pro)
 
   if (pro.n_inputs() != n_inputs_)
   {
-    vcl_cout << pro.name() << ": the input number should be " << n_inputs_
-             << " but instead it is " << pro.n_inputs() << vcl_endl;
+    std::cout << pro.name() << ": the input number should be " << n_inputs_
+             << " but instead it is " << pro.n_inputs() << std::endl;
     return false;
   }
 
   //get inputs:
-  vcl_string ply_file = pro.get_input<vcl_string>(0);
+  std::string ply_file = pro.get_input<std::string>(0);
   boxm_scene_base_sptr scene_base = pro.get_input<boxm_scene_base_sptr>(1);
   float grey_offset = pro.get_input<float>(2);
 
@@ -98,18 +98,18 @@ bool boxm_create_scene_from_ply_process(bprb_func_process& pro)
 
   //check input's validity
   if (!scene_base.ptr()) {
-    vcl_cout <<  " :-- Scene is not valid!\n";
+    std::cout <<  " :-- Scene is not valid!\n";
     return false;
   }
 
   // Map to hold the index of block and the cell containing appearance (0,1)
-  vcl_map<vgl_point_3d<int>, vcl_vector<boct_tree_cell<short, float> >, boxm_vgl_point_3d_coord_compare > data;
+  std::map<vgl_point_3d<int>, std::vector<boct_tree_cell<short, float> >, boxm_vgl_point_3d_coord_compare > data;
 
   boxm_block_iterator<boct_tree<short, float> > block_iter = scene->iterator();
 
   for (block_iter.begin(); !block_iter.end(); ++block_iter)
   {
-    data[block_iter.index()]= vcl_vector<boct_tree_cell<short, float> >();
+    data[block_iter.index()]= std::vector<boct_tree_cell<short, float> >();
   }
 
   if (!boxm_load_color_ply(ply_file, scene, data, grey_offset)){
@@ -121,7 +121,7 @@ bool boxm_create_scene_from_ply_process(bprb_func_process& pro)
   //construct trees
   for (block_iter.begin(); !block_iter.end(); ++block_iter)
   {
-    vcl_cout << "In block: " << block_iter.index() << "Number of leaves: " <<data[block_iter.index()].size() << vcl_endl;
+    std::cout << "In block: " << block_iter.index() << "Number of leaves: " <<data[block_iter.index()].size() << std::endl;
     boct_tree_cell<short, float>* root = boct_construct_tree(data[block_iter.index()], scene->max_level(), 0.0f );
     boct_tree<short,float>* tree = new boct_tree<short,float>(root,  scene->max_level());
     vgl_box_3d<double> tree_bbox= scene->get_block_bbox(block_iter.index());
@@ -142,9 +142,9 @@ bool boxm_create_scene_from_ply_process(bprb_func_process& pro)
 // ============================== PLY ==============================
 
 
-bool boxm_load_color_ply(const vcl_string &ply_file,  boxm_scene<boct_tree<short, float> > *scene,
-                         vcl_map<vgl_point_3d<int>,
-                         vcl_vector<boct_tree_cell<short, float> >,boxm_vgl_point_3d_coord_compare > &data,
+bool boxm_load_color_ply(const std::string &ply_file,  boxm_scene<boct_tree<short, float> > *scene,
+                         std::map<vgl_point_3d<int>,
+                         std::vector<boct_tree_cell<short, float> >,boxm_vgl_point_3d_coord_compare > &data,
                          const float &grey_offset)
 {
   long nvertices;
@@ -157,14 +157,14 @@ bool boxm_load_color_ply(const vcl_string &ply_file,  boxm_scene<boct_tree<short
 
   // OPEN file
 #ifdef DEBUG_PLY
-  vcl_cerr << " loading " << ply_file << " :\n";
-  vcl_cerr << " gray_offset " << parsed_ply.grey_offset << grey_offset << " :\n";
+  std::cerr << " loading " << ply_file << " :\n";
+  std::cerr << " gray_offset " << parsed_ply.grey_offset << grey_offset << " :\n";
 
 #endif
 
   p_ply ply = ply_open(ply_file.c_str(), VXL_NULLPTR, 0, VXL_NULLPTR);
   if (!ply){
-    vcl_cerr << "Couldn't open ply file: " << ply_file << '\n';
+    std::cerr << "Couldn't open ply file: " << ply_file << '\n';
     return false;
   }
 
@@ -183,7 +183,7 @@ bool boxm_load_color_ply(const vcl_string &ply_file,  boxm_scene<boct_tree<short
                   boxm_plyio_vertex_cb_, (void*) (&parsed_ply), 3);
 
 #ifdef DEBUG_PLY
-  vcl_cerr << nvertices << " points\n";
+  std::cerr << nvertices << " points\n";
 #endif
 
   // Read DATA
@@ -195,7 +195,7 @@ bool boxm_load_color_ply(const vcl_string &ply_file,  boxm_scene<boct_tree<short
   data=parsed_ply.data;
 
 #ifdef DEBUG_PLY
-  vcl_cerr << "  done.\n";
+  std::cerr << "  done.\n";
 #endif
 
   return true;
@@ -210,7 +210,7 @@ int boxm_plyio_vertex_cb_(p_ply_argument argument)
   ply_get_argument_user_data(argument, &temp, &index);
 
   boxm_apperace_fileio_parsed_ply_* parsed_ply =  (boxm_apperace_fileio_parsed_ply_*) temp;
-  //vcl_cout << "color: " <<  parsed_ply->grey_offset << vcl_endl;
+  //std::cout << "color: " <<  parsed_ply->grey_offset << std::endl;
 
   switch (index)
   {
@@ -240,7 +240,7 @@ int boxm_plyio_vertex_cb_(p_ply_argument argument)
         boct_tree_cell<short, float> leaf_cell(loc_code);
         float expected_color = float(parsed_ply->color)/255.0f + float(parsed_ply->grey_offset);
         if (expected_color > 2.0f || expected_color < 0.0f)
-          vcl_cout << "color: " <<  parsed_ply->grey_offset << vcl_endl;
+          std::cout << "color: " <<  parsed_ply->grey_offset << std::endl;
         leaf_cell.set_data(expected_color);
         parsed_ply->data[block_index].push_back(leaf_cell);
       }

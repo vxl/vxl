@@ -27,7 +27,7 @@ vgl_vector_3d<double> boxm2_vecf_spline_field::operator ()(double t) const{
   return ret;
 }
 vgl_cubic_spline_3d<double> boxm2_vecf_spline_field::apply_field() const{
-  vcl_vector<vgl_point_3d<double > > knots = generating_spline_.knots();
+  std::vector<vgl_point_3d<double > > knots = generating_spline_.knots();
   bool closed = generating_spline_.closed();
   double s = generating_spline_.s();
   for(unsigned i = 0; i<generating_spline_.n_knots(); ++i){

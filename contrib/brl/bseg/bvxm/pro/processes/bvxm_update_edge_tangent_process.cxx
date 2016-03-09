@@ -16,7 +16,9 @@
 #include <vpgl/vpgl_camera.h>
 #include <vpgl/algo/vpgl_backproject.h>
 #include <vil/vil_image_view.h>
-#include <vcl_cstdio.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <cstdio>
 
 //: set input and output types
 bool bvxm_update_edge_tangent_process_cons(bprb_func_process& pro)
@@ -29,7 +31,7 @@ bool bvxm_update_edge_tangent_process_cons(bprb_func_process& pro)
   //input[2]: The current edge tangent image
   //input[3]: The camera of a 2nd image used only for init
   //input[4]: The a 2nd edge tangent image used only for init
-  vcl_vector<vcl_string> input_types_(n_inputs_);
+  std::vector<std::string> input_types_(n_inputs_);
   input_types_[0] = "bvxm_voxel_world_sptr";
   input_types_[1] = "vpgl_camera_double_sptr";
   input_types_[2] = "vil_image_view_base_sptr";
@@ -46,7 +48,7 @@ bool bvxm_update_edge_tangent_process_init(bprb_func_process& pro)
 {
   //check inputs
   if (! pro.verify_inputs()) {
-    vcl_cerr << pro.name() << " Invalid inputs\n";
+    std::cerr << pro.name() << " Invalid inputs\n";
     return false;
   }
   // voxel world
@@ -78,7 +80,7 @@ bool bvxm_update_edge_tangent_process(bprb_func_process& pro)
 
   //check inputs
   if (! pro.verify_inputs()) {
-    vcl_cerr << pro.name() << " Invalid inputs\n";
+    std::cerr << pro.name() << " Invalid inputs\n";
     return false;
   }
   // voxel world

@@ -4,7 +4,9 @@
 // \file
 
 #include <vsl/vsl_binary_io.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iostream>
 #include <bvxm/bvxm_voxel_world.h>
 #include <bvxm/bvxm_world_params.h>
 
@@ -15,13 +17,13 @@ void vsl_b_write(vsl_b_ostream & os, bvxm_voxel_world const &world);
 //: Binary load parameters from stream.
 void vsl_b_read(vsl_b_istream & is, bvxm_voxel_world &world);
 
-void vsl_print_summary(vcl_ostream &os, const bvxm_voxel_world &world);
+void vsl_print_summary(std::ostream &os, const bvxm_voxel_world &world);
 
 void vsl_b_read(vsl_b_istream& is, bvxm_voxel_world* p);
 
 void vsl_b_write(vsl_b_ostream& os, const bvxm_voxel_world* &p);
 
-void vsl_print_summary(vcl_ostream& os, const bvxm_voxel_world* &p);
+void vsl_print_summary(std::ostream& os, const bvxm_voxel_world* &p);
 
 #endif
 

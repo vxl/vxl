@@ -1,5 +1,7 @@
 #include <testlib/testlib_test.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iostream>
 #include <vgl/vgl_point_3d.h>
 #include <vpgl/vpgl_perspective_camera.h>
 #include <vpgl/vpgl_affine_camera.h>
@@ -19,7 +21,7 @@ static void test_camera_from_box()
   vgl_point_3d<double> cent = box.centroid();
   TEST("Centroid", cent.x(), 0.5);
   unsigned ni = 150, nj = 100;
-  double sq3 = 1.0/vcl_sqrt(3.0);
+  double sq3 = 1.0/std::sqrt(3.0);
   vgl_vector_3d<double> ray(-sq3, -sq3, -sq3);
   vpgl_affine_camera<double> C = bpgl_camera_from_box::affine_camera_from_box(box, ray, ni, nj);
   vgl_box_2d<double> b2d = bpgl_project::project_bounding_box(C, box);

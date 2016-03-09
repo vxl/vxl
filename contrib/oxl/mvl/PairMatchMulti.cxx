@@ -8,8 +8,10 @@
 #include "PairMatchMulti.h"
 
 #include <vcl_cassert.h>
-#include <vcl_fstream.h>
-#include <vcl_utility.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <fstream>
+#include <utility>
 
 #include <vbl/vbl_sparse_array_2d.h>
 #include <vnl/vnl_matrix.h>
@@ -19,7 +21,7 @@ typedef vbl_sparse_array_2d<double> hack ;
 
 vcl_multimap_uint_uint::iterator vcl_multimap_uint_uint::insert(unsigned key, unsigned value)
 {
-  return base::insert(vcl_pair<const unsigned, unsigned>(key, value));
+  return base::insert(std::pair<const unsigned, unsigned>(key, value));
 }
 
 void vcl_multimap_uint_uint::clear() { base::erase(begin(), end()); }
@@ -30,8 +32,8 @@ PairMatchMulti::PairMatchMulti()
   scores_ = VXL_NULLPTR;
 }
 
-// - Construct and load matches (via operator>>) from vcl_istream.
-PairMatchMulti::PairMatchMulti(vcl_istream& f)
+// - Construct and load matches (via operator>>) from std::istream.
+PairMatchMulti::PairMatchMulti(std::istream& f)
 {
   scores_ = VXL_NULLPTR;
   f >> *this;
@@ -94,7 +96,7 @@ double PairMatchMulti::get_score(int i1, int i2) const
   return *p;
 }
 
-vcl_ostream& operator << (vcl_ostream& s, const PairMatchMulti& pm)
+std::ostream& operator << (std::ostream& s, const PairMatchMulti& pm)
 {
   for (PairMatchMultiIterator p(pm); p; ++p) {
     int i1 = p.get_i1();
@@ -104,7 +106,7 @@ vcl_ostream& operator << (vcl_ostream& s, const PairMatchMulti& pm)
     s << i1 << ' ' << i2;
     if (score != -1)
       s << "   " << score;
-    s << vcl_endl;
+    s << std::endl;
   }
   return s;
 }
@@ -113,11 +115,11 @@ static int dbl2int(double d)
 {
   int i = (int)d;
   if ((double)i != d)
-    vcl_cerr << "PairMatchMulti: WARNING: saw double " << d << ", expected int.\n";
+    std::cerr << "PairMatchMulti: WARNING: saw double " << d << ", expected int.\n";
   return i;
 }
 
-vcl_istream& operator >> (vcl_istream& s, PairMatchMulti& pm)
+std::istream& operator >> (std::istream& s, PairMatchMulti& pm)
 {
   // why do we bother trying to do things properly...
   pm.read_ascii(s);
@@ -125,18 +127,18 @@ vcl_istream& operator >> (vcl_istream& s, PairMatchMulti& pm)
   return s;
 }
 
-bool PairMatchMulti::read_ascii(vcl_istream& s)
+bool PairMatchMulti::read_ascii(std::istream& s)
 {
   vnl_matrix<double> m;
   s >> m;
   if (!(s.good() || s.eof())) {
-    vcl_cerr << "PairMatchMulti load failed\n";
+    std::cerr << "PairMatchMulti load failed\n";
     return false;
   }
 
   int cols = m.columns();
   if (cols != 2 && cols != 3) {
-    vcl_cerr << "PairMatchMulti load failed: Saw " << cols << " data per line, expected 2 or 3\n";
+    std::cerr << "PairMatchMulti load failed: Saw " << cols << " data per line, expected 2 or 3\n";
     return false;
   }
 
@@ -153,7 +155,7 @@ bool PairMatchMulti::read_ascii(vcl_istream& s)
   }
   assert(count() == n);
 
-  // vcl_cerr << "PairMatchMulti load: read " << count() << " matches\n";
+  // std::cerr << "PairMatchMulti load: read " << count() << " matches\n";
 
   return true;
 }
@@ -179,19 +181,19 @@ bool PairMatchMulti::is_superset(PairMatchSet& matches)
   if (allok)
     return true;
   else {
-    vcl_cerr << "PairMatchMulti::is_superset() -- it ain't\n";
+    std::cerr << "PairMatchMulti::is_superset() -- it ain't\n";
     for (PairMatchSet::iterator p = matches; p; ++p) {
       int i1 = p.get_i1();
       int i2 = p.get_i2();
-      vcl_cerr << i1 << ": [" << i2 << "] ";
+      std::cerr << i1 << ": [" << i2 << "] ";
       bool ok = false;
       for (PairMatchMultiIterator i = get_match_12(i1); i; ++i) {
-        vcl_cerr << i.get_i2() << " ";
+        std::cerr << i.get_i2() << " ";
         if (i.get_i2() == i2) ok = true;
       }
       if (!ok)
-        vcl_cerr << "!!!!!";
-      vcl_cerr << vcl_endl;
+        std::cerr << "!!!!!";
+      std::cerr << std::endl;
     }
     return false;
   }
@@ -200,9 +202,9 @@ bool PairMatchMulti::is_superset(PairMatchSet& matches)
 //: load from ascii file
 bool PairMatchMulti::load(char const* filename)
 {
-  vcl_ifstream f(filename);
+  std::ifstream f(filename);
   if (!f.good()) {
-    vcl_cerr << "PairMatchMulti: Error opening " << filename << vcl_endl;
+    std::cerr << "PairMatchMulti: Error opening " << filename << std::endl;
     return false;
   }
   f >> *this;
@@ -210,7 +212,7 @@ bool PairMatchMulti::load(char const* filename)
 }
 
 #ifdef TEST_PairMatchMulti
-#include <vcl_iostream.h>
+#include <iostream>
 
 main()
 {
@@ -224,14 +226,14 @@ main()
   mm.add_match(3,5);
   mm.add_match(3,2);
 
-  vcl_cerr << "All matches, sorted:\n";
+  std::cerr << "All matches, sorted:\n";
   for (PairMatchMulti::match_iterator p(mm); !p.done(); p.next())
-    vcl_cerr << p.get_i1() << " " << p.get_i2() << vcl_endl;
+    std::cerr << p.get_i1() << " " << p.get_i2() << std::endl;
 
   for (int target = 1; target <= 7; ++target) {
-    vcl_cerr << "Matches for " << target << vcl_endl;
+    std::cerr << "Matches for " << target << std::endl;
     for (PairMatchMulti::match_iterator p = mm.get_match_12(target); !p.done(); p.next())
-      vcl_cerr << p.get_i1() << " " << p.get_i2() << vcl_endl;
+      std::cerr << p.get_i1() << " " << p.get_i2() << std::endl;
   }
 }
 #endif

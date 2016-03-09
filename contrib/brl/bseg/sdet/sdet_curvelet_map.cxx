@@ -47,7 +47,7 @@ void
 sdet_curvelet_map
 ::clear_all_curvelets()
 {
-  vcl_set<sdet_curvelet*> deleted;
+  std::set<sdet_curvelet*> deleted;
   //delete all the curvelets in the map
   for (unsigned i=0; i<map_.size(); i++)
   {
@@ -130,7 +130,7 @@ sdet_curvelet_map
 //: does the current curvelet exist?
 sdet_curvelet*
 sdet_curvelet_map
-::does_curvelet_exist(sdet_edgel* e, vcl_deque<sdet_edgel*> & chain)
+::does_curvelet_exist(sdet_edgel* e, std::deque<sdet_edgel*> & chain)
 {
   //go over all the curvelets of the current size formed by the current edgel
   sdet_curvelet_list_iter cv_it = map_[e->id].begin();

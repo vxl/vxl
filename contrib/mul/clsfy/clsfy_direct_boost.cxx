@@ -6,11 +6,13 @@
 
 //=======================================================================
 
-#include <vcl_string.h>
-#include <vcl_iostream.h>
-#include <vcl_vector.h>
+#include <string>
+#include <iostream>
+#include <vector>
 #include <vcl_cassert.h>
-#include <vcl_cmath.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <cmath>
 #include <vsl/vsl_binary_io.h>
 #include <vsl/vsl_binary_loader.h>
 #include <vsl/vsl_vector_io.h>
@@ -83,10 +85,10 @@ bool clsfy_direct_boost::operator==(const clsfy_direct_boost& x) const
 
 //: Set parameters.  Clones taken of *classifier[i]
 void clsfy_direct_boost::set_parameters(
-                      const vcl_vector<clsfy_classifier_1d*>& classifier,
-                      const vcl_vector<double>& threshes,
-                      const vcl_vector<double>& wts,
-                      const vcl_vector<int>& index)
+                      const std::vector<clsfy_classifier_1d*>& classifier,
+                      const std::vector<double>& threshes,
+                      const std::vector<double>& wts,
+                      const std::vector<int>& index)
 {
   delete_stuff();
 
@@ -141,8 +143,8 @@ void clsfy_direct_boost::add_final_threshold(double thresh)
 // Returns either 1 (for positive class) or 0 (for negative class)
 unsigned clsfy_direct_boost::classify(const vnl_vector<double> &v) const
 {
-  //vcl_cout<<"wts_.size()= "<<wts_.size()<<vcl_endl
-  //        <<"n_clfrs_used_= "<<n_clfrs_used_<<vcl_endl;
+  //std::cout<<"wts_.size()= "<<wts_.size()<<std::endl
+  //        <<"n_clfrs_used_= "<<n_clfrs_used_<<std::endl;
   assert ( n_clfrs_used_ >= 0);
   assert ( (unsigned)n_clfrs_used_ <= wts_.size() );
   assert ( n_dims_ >= 0);
@@ -162,11 +164,11 @@ unsigned clsfy_direct_boost::classify(const vnl_vector<double> &v) const
 
 //: Find the posterior probability of the input being in the positive class.
 // The result is outputs(0)
-void clsfy_direct_boost::class_probabilities(vcl_vector<double> &outputs,
+void clsfy_direct_boost::class_probabilities(std::vector<double> &outputs,
                                              const vnl_vector<double> &input) const
 {
   outputs.resize(1);
-  outputs[0] = 1.0 / (1.0 + vcl_exp(-log_l(input)));
+  outputs[0] = 1.0 / (1.0 + std::exp(-log_l(input)));
 }
 
 //=======================================================================
@@ -190,14 +192,14 @@ double clsfy_direct_boost::log_l(const vnl_vector<double> &v) const
 
 //=======================================================================
 
-vcl_string clsfy_direct_boost::is_a() const
+std::string clsfy_direct_boost::is_a() const
 {
-  return vcl_string("clsfy_direct_boost");
+  return std::string("clsfy_direct_boost");
 }
 
 //=======================================================================
 
-bool clsfy_direct_boost::is_class(vcl_string const& s) const
+bool clsfy_direct_boost::is_class(std::string const& s) const
 {
   return s == clsfy_direct_boost::is_a() || clsfy_classifier_base::is_class(s);
 }
@@ -205,7 +207,7 @@ bool clsfy_direct_boost::is_class(vcl_string const& s) const
 //=======================================================================
 
 // required if data is present in this class
-void clsfy_direct_boost::print_summary(vcl_ostream& os) const
+void clsfy_direct_boost::print_summary(std::ostream& os) const
 {
   int n = wts_.size();
   assert( wts_.size() == index_.size() );
@@ -260,8 +262,8 @@ void clsfy_direct_boost::b_read(vsl_b_istream& bfs)
 
       break;
     default:
-      vcl_cerr << "I/O ERROR: clsfy_direct_boost::b_read(vsl_b_istream&)\n"
+      std::cerr << "I/O ERROR: clsfy_direct_boost::b_read(vsl_b_istream&)\n"
                << "           Unknown version number "<< version << '\n';
-      bfs.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
+      bfs.is().clear(std::ios::badbit); // Set an unrecoverable IO error on stream
   }
 }

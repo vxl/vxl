@@ -1,6 +1,8 @@
-#include <vcl_string.h>
-#include <vcl_vector.h>
-#include <vcl_cstdlib.h>
+#include <string>
+#include <vector>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <cstdlib>
 #include <vpl/vpl.h>
 #include <vul/vul_file.h>
 #include <vul/vul_file_iterator.h>
@@ -8,10 +10,10 @@
 #include <vil/vil_image_resource.h>
 #include <vil/vil_new.h>
 
-static void filenames_from_directory(vcl_string const& dirname,
-                                     vcl_vector<vcl_string>& filenames)
+static void filenames_from_directory(std::string const& dirname,
+                                     std::vector<std::string>& filenames)
 {
-  vcl_string s(dirname);
+  std::string s(dirname);
   s += "/*.*";
   for (vul_file_iterator fit = s;fit; ++fit) {
     // check to see if file is a directory.
@@ -21,24 +23,24 @@ static void filenames_from_directory(vcl_string const& dirname,
   }
 }
 
-static bool generate_pyramids(vcl_string const& image_indir,
-                              vcl_string const& image_outdir,
+static bool generate_pyramids(std::string const& image_indir,
+                              std::string const& image_outdir,
                               const unsigned nlevels,
                               const unsigned blocksize)
 {
-  vcl_string slash;
+  std::string slash;
   //generate the temporary dir
 #ifdef VCL_WIN32
   slash =  "\\";
 #else
   slash = "/";
 #endif
-  vcl_string tempdir = image_outdir + slash + "temp";
+  std::string tempdir = image_outdir + slash + "temp";
   vul_file::make_directory(tempdir.c_str());
-  vcl_vector<vcl_string> in_filenames;
+  std::vector<std::string> in_filenames;
   filenames_from_directory(image_indir, in_filenames);
   unsigned n_infiles = in_filenames.size();
-  vcl_string file;
+  std::string file;
   unsigned cnt = 0;
   for (unsigned int i=0; i<n_infiles; ++i)
   {
@@ -57,9 +59,9 @@ static bool generate_pyramids(vcl_string const& image_indir,
     if (!imgr)
       return false;
     cnt++;
-    vcl_string infname = vul_file::strip_directory(file);
+    std::string infname = vul_file::strip_directory(file);
     infname = vul_file::strip_extension(infname);
-    vcl_string outname;
+    std::string outname;
     outname = image_outdir+ '/' + infname + ".tif";
     vil_blocked_image_resource_sptr bim;
     if (blocksize>0)
@@ -78,29 +80,29 @@ int main(int argc,char * argv[])
 {
     if (argc<4)
     {
-      vcl_cout<<"Usage : generate_tiff_pyramids.exe base_image_in_dir pyr_image_out_dir nlevels blocksize\n";
+      std::cout<<"Usage : generate_tiff_pyramids.exe base_image_in_dir pyr_image_out_dir nlevels blocksize\n";
       return -1;
     }
     else
     {
-      vcl_string image_indir(argv[1]);
-      vcl_string image_outdir(argv[2]);
+      std::string image_indir(argv[1]);
+      std::string image_outdir(argv[2]);
 
-      unsigned nlevels = vcl_atoi(argv[3]);
-      vcl_cout << image_indir << vcl_endl
-               << image_outdir << vcl_endl
-               << nlevels << vcl_endl;
+      unsigned nlevels = std::atoi(argv[3]);
+      std::cout << image_indir << std::endl
+               << image_outdir << std::endl
+               << nlevels << std::endl;
       if (nlevels<2)
       {
-        vcl_cout << "Must have at least 2 levels\n";
+        std::cout << "Must have at least 2 levels\n";
         return 0;
       }
       unsigned blocksize = 0;
       if (argc==5)
-        blocksize = vcl_atoi(argv[4]);
+        blocksize = std::atoi(argv[4]);
       if (!generate_pyramids(image_indir, image_outdir, nlevels, blocksize))
       {
-        vcl_cout << "Generate Pyramids failed\n";
+        std::cout << "Generate Pyramids failed\n";
         return -1;
       }
       return 0;

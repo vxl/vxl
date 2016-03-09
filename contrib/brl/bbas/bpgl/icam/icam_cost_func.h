@@ -59,7 +59,7 @@ class icam_cost_func : public vnl_least_squares_function
                double min_allowed_overlap = 0.01);
 
   //: A set of error values for a range of camera parameter values; the \p param_index indicates which parameter is being varied.
-  vcl_vector<double> error(vnl_vector<double> const& x,
+  std::vector<double> error(vnl_vector<double> const& x,
                            unsigned param_index, double pmin,
                            double pmax, double pinc);
   //: The joint probability histogram for source and destination pixel values for a given camera transformation.

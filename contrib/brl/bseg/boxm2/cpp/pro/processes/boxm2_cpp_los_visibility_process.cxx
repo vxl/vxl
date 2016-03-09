@@ -7,7 +7,9 @@
 // \author Vishal Jain
 // \date  3, 2012
 
-#include <vcl_fstream.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <fstream>
 #include <boxm2/io/boxm2_cache.h>
 #include <boxm2/boxm2_scene.h>
 #include <boxm2/boxm2_block.h>
@@ -31,7 +33,7 @@ bool boxm2_cpp_los_visibility_process_cons(bprb_func_process& pro)
     using namespace boxm2_cpp_los_visibility_process_globals;
 
     //process takes 8 inputs:
-    vcl_vector<vcl_string> input_types_(n_inputs_);
+    std::vector<std::string> input_types_(n_inputs_);
     input_types_[0] = "boxm2_scene_sptr";
     input_types_[1] = "boxm2_cache_sptr";
     input_types_[2] = "float";  //x0
@@ -42,7 +44,7 @@ bool boxm2_cpp_los_visibility_process_cons(bprb_func_process& pro)
     input_types_[7] = "float";  //z1
     input_types_[8] = "float";  //paramter to move away from the points.
     // process has 1 output:
-    vcl_vector<vcl_string>  output_types_(n_outputs_);
+    std::vector<std::string>  output_types_(n_outputs_);
     output_types_[0] = "float"; //seg_len
     brdb_value_sptr param  = new brdb_value_t<float>(5.0);
     pro.set_input(8, param);
@@ -55,7 +57,7 @@ bool boxm2_cpp_los_visibility_process(bprb_func_process& pro)
     using namespace boxm2_cpp_los_visibility_process_globals;
 
     if ( pro.n_inputs() < n_inputs_ ) {
-        vcl_cout << pro.name() << ": The input number should be " << n_inputs_<< vcl_endl;
+        std::cout << pro.name() << ": The input number should be " << n_inputs_<< std::endl;
         return false;
     }
     //get the inputs
@@ -82,19 +84,19 @@ bool boxm2_cpp_los_visibility_process(bprb_func_process& pro)
     dir = normalize(dir);
 
 
-    vgl_point_3d<double> p0_adjusted( p0+vcl_min(t,length/2)*dir);
-    vgl_point_3d<double> p1_adjusted( p1-vcl_min(t,length/2)*dir);
+    vgl_point_3d<double> p0_adjusted( p0+std::min(t,length/2)*dir);
+    vgl_point_3d<double> p1_adjusted( p1-std::min(t,length/2)*dir);
     vgl_ray_3d<double> ray_01(p0_adjusted,p1_adjusted);
 
-    vcl_vector<boxm2_block_id> vis_order=boxm2_util::blocks_along_a_ray(scene,p0_adjusted,p1_adjusted);
-    vcl_vector<boxm2_block_id>::iterator id;
+    std::vector<boxm2_block_id> vis_order=boxm2_util::blocks_along_a_ray(scene,p0_adjusted,p1_adjusted);
+    std::vector<boxm2_block_id>::iterator id;
     float vis = 1.0f;
     for (id = vis_order.begin(); id != vis_order.end(); ++id)
     {
-        vcl_cout<<(*id)<<vcl_endl;
+        std::cout<<(*id)<<std::endl;
         boxm2_block *      blk  =  cache->get_block(scene,*id);
         boxm2_data_base *  alph = cache->get_data_base(scene,*id,boxm2_data_traits<BOXM2_ALPHA>::prefix());
-        vcl_vector<boxm2_data_base*> datas;
+        std::vector<boxm2_data_base*> datas;
         datas.push_back(alph);
         boxm2_vis_probe_functor vis_probe_functor;
         vis_probe_functor.init_data(datas, &vis);
@@ -103,10 +105,10 @@ bool boxm2_cpp_los_visibility_process(bprb_func_process& pro)
         scene_info_wrapper->info=scene->get_blk_metadata(*id);
         boxm2_cast_ray_function<boxm2_vis_probe_functor>(ray_01,
                                                          scene_info_wrapper->info,
-                                                         blk,0,0,vis_probe_functor,length-vcl_min(2*t,length));
+                                                         blk,0,0,vis_probe_functor,length-std::min(2*t,length));
     }
 
-    vcl_cout<<"Visibilty is "<<vis<<vcl_endl;
+    std::cout<<"Visibilty is "<<vis<<std::endl;
     // store scene smaprt pointer
     pro.set_output_val<float>(0, vis);
     return true;

@@ -4,7 +4,9 @@
 // \file
 
 #include "bsta_gauss.h" // for gausian parzan window filter
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iostream>
 
 // constructor
 bsta_int_histogram_1d::bsta_int_histogram_1d(unsigned int bins) // const??
@@ -139,7 +141,7 @@ void bsta_int_histogram_1d::parzen(const float sigma)
   if (sigma<=0)
     return;
   double sd = (double)sigma;
-  vcl_vector<double> in(nbins_), out(nbins_);
+  std::vector<double> in(nbins_), out(nbins_);
   for (unsigned int i=0; i<nbins_; i++)
     in[i] = counts_[i];
   bsta_gauss::bsta_1d_gaussian(sd, in, out);
@@ -149,7 +151,7 @@ void bsta_int_histogram_1d::parzen(const float sigma)
 
 // Find the "significant" peaks & vallwys in a histogram.  Here "significant" means there is
 //   a specified difference in height between the peak and the previous valley, or vice versa.
-bool bsta_int_histogram_1d::find_peaks( float perct, int &n_peaks, vcl_vector<unsigned int> &peaks)
+bool bsta_int_histogram_1d::find_peaks( float perct, int &n_peaks, std::vector<unsigned int> &peaks)
 {
   bool success = false;
 
@@ -160,7 +162,7 @@ bool bsta_int_histogram_1d::find_peaks( float perct, int &n_peaks, vcl_vector<un
 
   // The assumption is that 1st "peak" is a valley.  If it isn't, MAJOR ERROR!!
   if (counts_[0] > 0)
-    vcl_cerr << "Warning, counts_[0] in diagonal hist != 0, Major Error!!\n";
+    std::cerr << "Warning, counts_[0] in diagonal hist != 0, Major Error!!\n";
   if (counts_[0] > hysteresis)
     return success;          // if > hysteresis, return failure
 

@@ -19,7 +19,7 @@
 // where the data goes out of scope the image becomes invalid
 bool vil_load_from_ascii_process_cons(bprb_func_process& pro)
 {
-  vcl_vector<vcl_string> input_types;
+  std::vector<std::string> input_types;
   input_types.push_back("vcl_string");
   input_types.push_back("vcl_string");
   return pro.set_input_types(input_types);
@@ -31,18 +31,18 @@ bool vil_load_from_ascii_process(bprb_func_process& pro)
 {
   // Sanity check
   if (pro.n_inputs()< 2) {
-    vcl_cout << "vil_load_from_ascii_process: The number of inputs should be 2" << vcl_endl;
+    std::cout << "vil_load_from_ascii_process: The number of inputs should be 2" << std::endl;
     return false;
   }
 
   // get the inputs
   unsigned i=0;
   //Retrieve image from input
-  vcl_string ascii_file = pro.get_input<vcl_string>(i++);
-  vcl_string img_file = pro.get_input<vcl_string>(i++);
+  std::string ascii_file = pro.get_input<std::string>(i++);
+  std::string img_file = pro.get_input<std::string>(i++);
 
   //read in ascii file
-  vcl_ifstream ifs(ascii_file.c_str());
+  std::ifstream ifs(ascii_file.c_str());
 
   vnl_matrix<float> M;
   ifs >> M;

@@ -17,8 +17,10 @@
 // \endverbatim
 //
 //-----------------------------------------------------------------------------
-#include <vcl_iostream.h>
-#include <vcl_vector.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iostream>
+#include <vector>
 #include <vbl/vbl_array_2d.h>
 #include <vnl/vnl_numeric_traits.h>
 #include <vsol/vsol_digital_curve_2d.h>
@@ -34,7 +36,7 @@ class bwm_reg_edge_champher
   bwm_reg_edge_champher();
   bwm_reg_edge_champher(unsigned col_off, unsigned row_off,
                         unsigned ncols, unsigned nrows,
-                        vcl_vector<vsol_digital_curve_2d_sptr> const& edges);
+                        std::vector<vsol_digital_curve_2d_sptr> const& edges);
   ~bwm_reg_edge_champher();
 
   // Data Access---------------------------------------------------------------
@@ -48,7 +50,7 @@ class bwm_reg_edge_champher
     if ( (col<ncols_-1) && (row<nrows_-1) )
       return (float) distance_[row+1][col+1];
     else {
-      vcl_cout << "failed at(" << col+col_off_ << ' ' << row+row_off_ << '\n';
+      std::cout << "failed at(" << col+col_off_ << ' ' << row+row_off_ << '\n';
       return vnl_numeric_traits<float>::maxval;
     }
   }
@@ -84,7 +86,7 @@ class bwm_reg_edge_champher
   void print_full_distance();
  protected:
   // INTERNALS-----------------------------------------------------------------
-  void initialize_arrays(vcl_vector<vsol_digital_curve_2d_sptr> const& edges);
+  void initialize_arrays(std::vector<vsol_digital_curve_2d_sptr> const& edges);
   void chamfer_34();
   unsigned minimum_5(unsigned,unsigned,unsigned,unsigned,unsigned);
   void forward_chamfer();

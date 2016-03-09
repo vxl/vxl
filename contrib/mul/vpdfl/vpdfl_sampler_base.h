@@ -11,9 +11,9 @@
 // \brief Base class for Multi-Variate random sampler classes.
 
 #include <vnl/vnl_vector.h>
-#include <vcl_string.h>
-#include <vcl_vector.h>
-#include <vcl_iosfwd.h>
+#include <string>
+#include <vector>
+#include <iosfwd>
 
 //=======================================================================
 
@@ -47,7 +47,7 @@ class vpdfl_sampler_base
   virtual void sample(vnl_vector<double>& x)=0;
 
   //: Fill x with samples drawn from distribution
-  virtual void get_samples(vcl_vector<vnl_vector<double> >& x);
+  virtual void get_samples(std::vector<vnl_vector<double> >& x);
 
   //: Fill x with samples possibly chosen so as to represent the distribution
   //  Generate a set of pseudo-random samples, chosen so as to be suitable
@@ -58,42 +58,44 @@ class vpdfl_sampler_base
   //  to the weight for the component.  When small numbers are requested,
   //  this can be done explicitly.
   //  The default is simply to call sample() for each element of x
-  virtual void regular_samples(vcl_vector<vnl_vector<double> >& x);
+  virtual void regular_samples(std::vector<vnl_vector<double> >& x);
 
   //: Fill x with samples possibly chosen so as to represent the distribution
   //  As regular_samples(x), but p[i] is set to p(x[i])
-  virtual void regular_samples_and_prob(vcl_vector<vnl_vector<double> >& x,
+  virtual void regular_samples_and_prob(std::vector<vnl_vector<double> >& x,
                                         vnl_vector<double>& p);
 
   //: Reseeds the internal random number generator
   // To achieve quasi-random initialisation use;
   // \code
-  // #include <vcl_ctime.h>
+  // #include <vcl_compiler.h>
+  // #include <iostream>
+  // #include <ctime>
   // ..
-  // sampler.reseed(vcl_time(0));
+  // sampler.reseed(std::time(0));
   // \endcode
   virtual void reseed(unsigned long)=0;
 
 
   //: Name of the class
-  virtual vcl_string is_a() const;
+  virtual std::string is_a() const;
 
   //: Does the name of the class match the argument?
-  virtual bool is_class(vcl_string const& s) const;
+  virtual bool is_class(std::string const& s) const;
 
   //: Create a copy on the heap and return base class pointer
   virtual vpdfl_sampler_base* clone() const = 0;
 
   //: Print class to os
-  virtual void print_summary(vcl_ostream& os) const;
+  virtual void print_summary(std::ostream& os) const;
 };
 
 
 //: Stream output operator for class reference
-void vsl_print_summary(vcl_ostream& os,const vpdfl_sampler_base& b);
+void vsl_print_summary(std::ostream& os,const vpdfl_sampler_base& b);
 
 //: Stream output operator for class pointer
-void vsl_print_summary(vcl_ostream& os,const vpdfl_sampler_base* b);
+void vsl_print_summary(std::ostream& os,const vpdfl_sampler_base* b);
 
 
 #endif // vpdfl_sampler_base_h

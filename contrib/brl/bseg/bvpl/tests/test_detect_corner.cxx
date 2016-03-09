@@ -16,9 +16,11 @@
 
 #include <vnl/vnl_float_3.h>
 #include <vnl/vnl_math.h>
-#include <vcl_sstream.h>
-#include <vcl_iostream.h>
-#include <vcl_iomanip.h>
+#include <sstream>
+#include <iostream>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iomanip>
 
 typedef bsta_num_obs<bsta_gauss_sf1> gauss_sf1;
 
@@ -45,26 +47,26 @@ bool test_result(bvxm_voxel_grid<gauss_sf1> *grid, unsigned x, unsigned y, unsig
   // iterate through the grid and get the max
 
   bvxm_voxel_grid<gauss_sf1>::iterator grid_it = grid->begin();
-  float max =  vcl_abs(((*grid_it)(0,0)).mean());
+  float max =  std::abs(((*grid_it)(0,0)).mean());
   unsigned max_x =0;
   unsigned max_y =0;
   unsigned max_z =0;
   for (unsigned k=0; grid_it != grid->end(); ++grid_it, ++k) {
     for (unsigned i=0; i<(*grid_it).nx(); ++i) {
       for (unsigned j=0; j < (*grid_it).ny() -3 ; ++j) {
-        if (vcl_abs(((*grid_it)(i,j)).mean())> max){
-          max = vcl_abs(((*grid_it)(i,j)).mean());
+        if (std::abs(((*grid_it)(i,j)).mean())> max){
+          max = std::abs(((*grid_it)(i,j)).mean());
           max_x = i; max_y = j; max_z = k;
         }
       }
     }
   }
-  vcl_cout << "Location of max = " << max_x << max_y << max_z << vcl_endl;
+  std::cout << "Location of max = " << max_x << max_y << max_z << std::endl;
   if ((x!=max_x)||(y!=max_y) || (z!=max_z))
     return false;
 
   bvxm_voxel_grid<gauss_sf1>::iterator grid_it2 = grid->slab_iterator(0,grid->grid_size().z());
-  vcl_cout << "Max response= " << vcl_abs(((*grid_it2)(max_x,max_y, max_z)).mean()) << vcl_endl;
+  std::cout << "Max response= " << std::abs(((*grid_it2)(max_x,max_y, max_z)).mean()) << std::endl;
   return true;
 }
 
@@ -80,15 +82,15 @@ bool test_id_grid(bvxm_voxel_grid<int> *grid,unsigned x, unsigned y, unsigned z,
 
 bool test_non_max_grid(bvxm_voxel_grid<gauss_sf1> *grid)
 {
-  vcl_cout << vcl_endl;
+  std::cout << std::endl;
   bvxm_voxel_grid<gauss_sf1>::iterator grid_it = grid->begin();
   unsigned count = 0;
   for (unsigned k=0; k <grid->grid_size().z()-2; ++grid_it, ++k) {
     for (unsigned i=0; i<(*grid_it).nx(); ++i) {
       for (unsigned j=0; j < (*grid_it).ny() -2; ++j) {
-        if (vcl_abs(((*grid_it)(i,j)).mean())> 1.0e-7){
-          vcl_cout << "Response at " << i << ',' << j << ',' << k << " is " <<vcl_abs(((*grid_it)(i,j)).mean())
-                   << vcl_endl;
+        if (std::abs(((*grid_it)(i,j)).mean())> 1.0e-7){
+          std::cout << "Response at " << i << ',' << j << ',' << k << " is " <<std::abs(((*grid_it)(i,j)).mean())
+                   << std::endl;
           ++count;
         }
       }
@@ -150,7 +152,7 @@ static void test_detect_corner()
   bvxm_voxel_grid<int > *id_grid=new bvxm_voxel_grid<int >(grid->grid_size());
   bvpl_vector_operator vector_oper;
   vector_oper.apply_and_suppress(grid,kernel_vector,&oper,grid_out,id_grid);
-  vcl_cout << vcl_endl;
+  std::cout << std::endl;
   TEST("Id at Corner 1", true, test_id_grid(id_grid,2,4,9,0));
   TEST("Id at Corner 2", true, test_id_grid(id_grid,2,9,9,1));
   TEST("Id at Corner 3", true, test_id_grid(id_grid,2,9,4,2));
@@ -160,7 +162,7 @@ static void test_detect_corner()
   //bvxm_voxel_grid<gauss_sf1> *non_max_grid= new bvxm_voxel_grid<gauss_sf1>(grid->grid_size());
   //bvxm_voxel_grid_copy<gauss_sf1> (grid_out, non_max_grid);
   vector_oper.non_maxima_suppression(grid_out,id_grid,kernel_vector);
-  vcl_cout << vcl_endl;
+  std::cout << std::endl;
   TEST("Number of corners after non_max", true, test_non_max_grid(grid_out));
 }
 

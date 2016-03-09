@@ -7,7 +7,9 @@
 #include <algo/boxm2_multi_render.h>
 
 #include <vcl_where_root_dir.h>
-#include <vcl_algorithm.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <algorithm>
 
 //executable args
 #include <vul/vul_arg.h>
@@ -33,7 +35,7 @@
 void test_render_expected_images(boxm2_scene_sptr scene,
                                  bocl_device_sptr device,
                                  boxm2_opencl_cache1* cache,
-                                 vcl_vector<vpgl_camera_double_sptr>& cams,
+                                 std::vector<vpgl_camera_double_sptr>& cams,
                                  unsigned ni, unsigned nj)
 {
   //register data types and process functions
@@ -71,7 +73,7 @@ void test_render_expected_images(boxm2_scene_sptr scene,
       good = bprb_batch_process_manager::instance()->init_process("boxm2OclRenderExpectedImageProcess");
     }
     if ( !good ) {
-      vcl_cout << "ERROR: couldn't start color render process: " << __FILE__ << __LINE__ << vcl_endl;
+      std::cout << "ERROR: couldn't start color render process: " << __FILE__ << __LINE__ << std::endl;
     }
 
     //set process args
@@ -83,40 +85,40 @@ void test_render_expected_images(boxm2_scene_sptr scene,
                 && bprb_batch_process_manager::instance()->set_input(5, brdb_nj)     // nj for rendered image
                 && bprb_batch_process_manager::instance()->run_process();
     if ( !good ) {
-      vcl_cout << "ERROR: couldn't set process args: " << __FILE__ << __LINE__ << vcl_endl;
+      std::cout << "ERROR: couldn't set process args: " << __FILE__ << __LINE__ << std::endl;
     }
 
     //grab vil_image_view_base_sptr from process
     unsigned int out_img = 0;
     good = good && bprb_batch_process_manager::instance()->commit_output(0, out_img);
     if ( !good ) {
-      vcl_cout << "ERROR: couldn't commit output: " << __FILE__ << __LINE__ << vcl_endl;
+      std::cout << "ERROR: couldn't commit output: " << __FILE__ << __LINE__ << std::endl;
     }
 
     brdb_query_aptr Q = brdb_query_comp_new("id", brdb_query::EQ, out_img);
     brdb_selection_sptr S = DATABASE->select("vil_image_view_base_sptr_data", Q);
     if (S->size()!=1) {
-      vcl_cout << "in bprb_batch_process_manager::set_input_from_db(.) -"
+      std::cout << "in bprb_batch_process_manager::set_input_from_db(.) -"
                << " no selections\n";
     }
     brdb_value_sptr value;
-    if (!S->get_value(vcl_string("value"), value)) {
-      vcl_cout << "in bprb_batch_process_manager::set_input_from_db(.) -"
+    if (!S->get_value(std::string("value"), value)) {
+      std::cout << "in bprb_batch_process_manager::set_input_from_db(.) -"
                << " didn't get value\n";
     }
     vil_image_view_base_sptr out_img_sptr =value->val<vil_image_view_base_sptr>();
-    vcl_stringstream s; s<<"out_single"<<i<<".png";
+    std::stringstream s; s<<"out_single"<<i<<".png";
     vil_save(*out_img_sptr.ptr(),s.str().c_str());
   }
 #ifdef DEBUG
-  vcl_cout<<"Mean render time: "<<mean_time/num_renders<<vcl_endl;
+  std::cout<<"Mean render time: "<<mean_time/num_renders<<std::endl;
 #endif
 }
 
 int main(int argc,  char** argv)
 {
   //init vgui (should choose/determine toolkit)
-  vul_arg<vcl_string> scene_file("-scene", "scene filename", "");
+  vul_arg<std::string> scene_file("-scene", "scene filename", "");
   vul_arg<unsigned>   ni("-ni", "Width of output image", 1280);
   vul_arg<unsigned>   nj("-nj", "Height of output image", 720);
   vul_arg<unsigned>   numFrames("-num", "Maximum number of frames to render", 10);
@@ -133,18 +135,18 @@ int main(int argc,  char** argv)
   boxm2_lru_cache1::create(scene);
 
   if (numGPU() > mgr.gpus_.size()) {
-    vcl_cout<<"-numGPU ("<<numGPU()<<") is too big, only "<<mgr.gpus_.size()<<" available"<<vcl_endl;
+    std::cout<<"-numGPU ("<<numGPU()<<") is too big, only "<<mgr.gpus_.size()<<" available"<<std::endl;
   }
   //make a multicache
-  vcl_vector<bocl_device_sptr> gpus;
+  std::vector<bocl_device_sptr> gpus;
   for (unsigned int i=0; i<numGPU(); ++i)
     gpus.push_back(mgr.gpus_[i]);
   boxm2_multi_cache mcache(scene, gpus);
-  vcl_cout<<"Multi Cache:\n"<<mcache.to_string()<<vcl_endl;
+  std::cout<<"Multi Cache:\n"<<mcache.to_string()<<std::endl;
 
   //generate cameras
   int num_renders = (int) numFrames();
-  vcl_vector<vpgl_camera_double_sptr> cams;
+  std::vector<vpgl_camera_double_sptr> cams;
   for (int i=0; i<num_renders; ++i) {
     double currInc    = 45.0;
     double currRadius = scene->bounding_box().height();
@@ -163,18 +165,18 @@ int main(int argc,  char** argv)
     vul_timer rtimer; rtimer.mark();
     float gpu_time = renderer.render(mcache, out, cams[i]);
     float rtime = (float) rtimer.all();
-    vcl_cout<<"Render "<<i<<" time: "<<rtime<<vcl_endl;
-    vcl_stringstream s; s<<"e:/data/3dModeling/apt/out_"<<i<<".tiff";
+    std::cout<<"Render "<<i<<" time: "<<rtime<<std::endl;
+    std::stringstream s; s<<"e:/data/3dModeling/apt/out_"<<i<<".tiff";
     vil_save(out, s.str().c_str());
     mean_time += rtime;
     gpu_total += gpu_time;
   }
 
-  vcl_cout<<"-----------------------------------------\n"
+  std::cout<<"-----------------------------------------\n"
           <<" RENDERING STATS:\n"
           <<"   Mean render time: "<<mean_time/cams.size()<<'\n'
           <<"   Mean GPU time: "<<gpu_total/cams.size()<<'\n'
-          <<"-----------------------------------------"<<vcl_endl;
+          <<"-----------------------------------------"<<std::endl;
 
   //test scene render on one gpu
   //boxm2_opencl_cache1* opencl_cache = new boxm2_opencl_cache1(scene, mgr.gpus_[0]);

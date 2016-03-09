@@ -6,7 +6,9 @@
 #include <boxm2/boxm2_data_traits.h>
 #include <boct/boct_bit_tree.h>
 #include <vnl/vnl_vector_fixed.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iostream>
 #include <boxm2/io/boxm2_cache.h>
   typedef unsigned char uchar;
   typedef unsigned short ushort;
@@ -24,13 +26,13 @@ class boxm2_refine_block_function_with_labels
   boxm2_refine_block_function_with_labels() {replace_=false;rgb_=false;}
 
   //: initialize generic data base pointers as their data type
-  bool init_data(boxm2_block* blk, vcl_vector<boxm2_data_base*> & datas, float prob_thresh,
-                  vcl_string app_type,vcl_string flow_prefix="resultant");
+  bool init_data(boxm2_block* blk, std::vector<boxm2_data_base*> & datas, float prob_thresh,
+                  std::string app_type,std::string flow_prefix="resultant");
 
   //: refine function;
   bool refine();
 
-  bool refine_deterministic(vcl_vector<boxm2_data_base*>& datas);
+  bool refine_deterministic(std::vector<boxm2_data_base*>& datas);
 
   //: refine bit tree
   boct_bit_tree refine_bit_tree(boct_bit_tree& curr_tree,
@@ -68,7 +70,7 @@ class boxm2_refine_block_function_with_labels
   int max_level_;
   int MAX_INNER_CELLS_;
   int MAX_CELLS_;
-  vcl_string app_type_,flow_prefix_;
+  std::string app_type_,flow_prefix_;
   //max alpha integrated
   float max_alpha_int_;
 
@@ -85,7 +87,7 @@ class boxm2_refine_block_function_with_labels
 //MAIN REFINE FUNCTION
 ////////////////////////////////////////////////////////////////////////////////
 void boxm2_refine_block_with_labels( boxm2_block* blk,
-                         vcl_vector<boxm2_data_base*> & datas,
+                         std::vector<boxm2_data_base*> & datas,
                          float prob_thresh,
                          bool is_random = true);
 

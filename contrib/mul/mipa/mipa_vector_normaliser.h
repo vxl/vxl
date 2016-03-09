@@ -6,9 +6,11 @@
 // \author Martin Roberts
 // \brief Base class for normalisation algorithms for image feature vectors
 
-#include <vcl_string.h>
-#include <vcl_memory.h>
-#include <vcl_iosfwd.h>
+#include <string>
+#include <memory>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iosfwd>
 #include <vsl/vsl_fwd.h>
 #include <vnl/vnl_fwd.h>
 class mbl_read_props_type;
@@ -31,13 +33,13 @@ class mipa_vector_normaliser
                          unsigned /*nfeatures*/) const { normalise(sample); }
 
   //: Name of the class
-  virtual vcl_string is_a() const = 0;
+  virtual std::string is_a() const = 0;
 
   //: Create a copy on the heap and return base class pointer
   virtual mipa_vector_normaliser* clone() const = 0;
 
   //: Print class to os
-  virtual void print_summary(vcl_ostream& /*os*/) const = 0;
+  virtual void print_summary(std::ostream& /*os*/) const = 0;
 
   //: Save class to binary file stream
   virtual void b_write(vsl_b_ostream& /*bfs*/) const = 0;
@@ -46,14 +48,14 @@ class mipa_vector_normaliser
   virtual void b_read(vsl_b_istream& /*bfs*/) = 0;
 
   //: Create a concrete mipa_vector_normaliser-derived object, from a text specification.
-  static vcl_auto_ptr<mipa_vector_normaliser> new_normaliser_from_stream(vcl_istream &is,
+  static std::auto_ptr<mipa_vector_normaliser> new_normaliser_from_stream(std::istream &is,
                                                                          const mbl_read_props_type &extra_props);
 
   //: Initialise from a text stream.
   // The default implementation is for attribute-less normalisers,
   // and throws if it finds any data in the stream.
   virtual void config_from_stream(
-    vcl_istream &is, const mbl_read_props_type &extra_props);
+    std::istream &is, const mbl_read_props_type &extra_props);
 };
 
 //: Allows derived class to be loaded by base-class pointer
@@ -74,16 +76,16 @@ void vsl_b_write(vsl_b_ostream& bfs, const mipa_vector_normaliser& b);
 void vsl_b_read(vsl_b_istream& bfs, mipa_vector_normaliser& b);
 
 //: Stream output operator for class reference
-vcl_ostream& operator<<(vcl_ostream& os,const mipa_vector_normaliser& b);
+std::ostream& operator<<(std::ostream& os,const mipa_vector_normaliser& b);
 
 //: Stream output operator for class pointer
-vcl_ostream& operator<<(vcl_ostream& os,const mipa_vector_normaliser* b);
+std::ostream& operator<<(std::ostream& os,const mipa_vector_normaliser* b);
 
 //: Stream output operator for class reference
-void vsl_print_summary(vcl_ostream& os,const mipa_vector_normaliser& b);
+void vsl_print_summary(std::ostream& os,const mipa_vector_normaliser& b);
 
 //: Stream output operator for class reference
-void vsl_print_summary(vcl_ostream& os,const mipa_vector_normaliser* b);
+void vsl_print_summary(std::ostream& os,const mipa_vector_normaliser* b);
 
 #endif // mipa_vector_normaliser_h_
 

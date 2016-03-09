@@ -13,9 +13,11 @@
 // \endverbatim
 
 #include <vxl_config.h>
-#include <vcl_vector.h>
+#include <vector>
 #include <vcl_cassert.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iostream>
 
 #include <vbl/vbl_ref_count.h>
 
@@ -120,7 +122,7 @@ class vtol_extract_topology_region_type
  private:
 
   //: The list of boundary edges (which are edgel chains)
-  vcl_vector< edgel_chain_sptr > list_;
+  std::vector< edgel_chain_sptr > list_;
 };
 
 //: A node in the graph of vertices.
@@ -215,12 +217,12 @@ class vtol_extract_topology
     // The regions from all child nodes are spatially contained in the
     // region for this node.
     //
-    vcl_vector<chain_tree_node*> children;
+    std::vector<chain_tree_node*> children;
 
     chain_tree_node( region_type_sptr in_region ) : region( in_region ) {}
 
     ~chain_tree_node() {
-      typename vcl_vector<chain_tree_node*>::const_iterator itr;
+      typename std::vector<chain_tree_node*>::const_iterator itr;
       for (itr = children.begin(); itr != children.end(); ++itr ) {
         delete *itr;
       }
@@ -232,7 +234,7 @@ class vtol_extract_topology
     void
     add( region_type_sptr new_region )
     {
-      typename vcl_vector<chain_tree_node*>::iterator itr;
+      typename std::vector<chain_tree_node*>::iterator itr;
 
       // First, determine if it should go further down the tree. If so,
       // add it to the appropriate child and exit immediately.
@@ -268,7 +270,7 @@ class vtol_extract_topology
     vtol_intensity_face_sptr
     make_face( finder_type* find, data_image_type const* img ) const
     {
-      vcl_vector< vtol_one_chain_sptr > face_chains;
+      std::vector< vtol_one_chain_sptr > face_chains;
       face_chains.push_back( region->make_one_chain() );
       for ( unsigned i = 0; i < children.size(); ++i ) {
         face_chains.push_back( children[i]->region->make_one_chain() );
@@ -276,12 +278,12 @@ class vtol_extract_topology
       if ( find ) {
         assert( img );
 
-        vcl_vector<unsigned> ri, rj;
+        std::vector<unsigned> ri, rj;
         find->same_int_region( region->i, region->j, ri, rj );
         assert( ri.size() == rj.size() && !ri.empty() );
 
-        vcl_vector<float> x, y;
-        vcl_vector<unsigned short> intensity;
+        std::vector<float> x, y;
+        std::vector<unsigned short> intensity;
         for ( unsigned c = 0; c < ri.size(); ++c ) {
           x.push_back( static_cast<float>(ri[c]) );
           y.push_back( static_cast<float>(rj[c]) );
@@ -292,14 +294,14 @@ class vtol_extract_topology
       }
       else {
         // create a face without a digital geometry
-        vcl_clog << "Creating region with NO pixels"  << vcl_endl;
+        std::clog << "Creating region with NO pixels"  << std::endl;
         return new vtol_intensity_face( face_chains );
       }
     }
 
 
     void
-    print( vcl_ostream& ostr, unsigned indent ) const
+    print( std::ostream& ostr, unsigned indent ) const
     {
       for ( unsigned i = 0; i < indent; ++i ) {
         ostr << ' ';
@@ -330,7 +332,7 @@ class vtol_extract_topology
 
   //: List of vertices in the segmentation
   //
-  vcl_vector< vtol_vertex_2d_sptr >
+  std::vector< vtol_vertex_2d_sptr >
   vertices() const;
 
   //: List of all the faces in the segmentation
@@ -339,7 +341,7 @@ class vtol_extract_topology
   // function should probably return vtol_face_2d objects, not
   // vtol_intensity_face objects.
   //
-  vcl_vector< vtol_intensity_face_sptr >
+  std::vector< vtol_intensity_face_sptr >
   faces() const;
 
   //: List of all the faces in the segmentation
@@ -347,7 +349,7 @@ class vtol_extract_topology
   // The faces will have digital regions formed using \a data_img.
   // \a data_img must have the same size as the label image.
   //
-  vcl_vector< vtol_intensity_face_sptr >
+  std::vector< vtol_intensity_face_sptr >
   faces( data_image_type const& data_img ) const;
 
   // Adds the faces contained in the tree rooted at node. Essentially,
@@ -359,7 +361,7 @@ class vtol_extract_topology
   //
 
   void
-  add_faces( vcl_vector<vtol_intensity_face_sptr>& faces,
+  add_faces( std::vector<vtol_intensity_face_sptr>& faces,
              finder_type* find,
              data_image_type const* img,
              chain_tree_node* node,
@@ -546,13 +548,13 @@ class vtol_extract_topology
   // value of "false" indicates that a region was not traced.
   //
   bool
-  trace_face_boundary( vcl_vector<unsigned>& markers,
+  trace_face_boundary( std::vector<unsigned>& markers,
                        unsigned index,
                        unsigned dir,
                        region_type& chain,
                        LabelPoint& region_label ) const;
 
-  typedef vcl_vector< vcl_vector< region_type_sptr > > region_collection;
+  typedef std::vector< std::vector< region_type_sptr > > region_collection;
 
   //: Trace the boundary curves and collect up a set of regions.
   //
@@ -576,8 +578,8 @@ class vtol_extract_topology
   // (vdgl_digital_region).
   //
   void
-  compute_faces( vcl_vector< region_type_sptr > const& chains,
-                 vcl_vector< vtol_intensity_face_sptr >& faces,
+  compute_faces( std::vector< region_type_sptr > const& chains,
+                 std::vector< vtol_intensity_face_sptr >& faces,
                  data_image_type const* data_img ) const;
 
  private: // internal data
@@ -592,7 +594,7 @@ class vtol_extract_topology
   LABEL_TYPE min_label_, max_label_;
 
   //: List of vertices (which form the nodes of the graph)
-  vcl_vector< vtol_extract_topology_vertex_node > node_list_;
+  std::vector< vtol_extract_topology_vertex_node > node_list_;
 
   //: Quick conversion from vertex coordinates to vertex node indices
   index_image_type index_img_;

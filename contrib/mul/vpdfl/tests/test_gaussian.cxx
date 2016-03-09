@@ -5,8 +5,10 @@
 // \author Ian Scott
 // \brief test vpdfl_gaussian, building, sampling, saving etc.
 
-#include <vcl_iostream.h>
-#include <vcl_sstream.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iostream>
+#include <sstream>
 #include <vpl/vpl.h> // vpl_unlink()
 
 #include <vsl/vsl_binary_loader.h>
@@ -63,7 +65,7 @@ static void test_gradient_logp(vpdfl_pdf_base& pdf, const vnl_vector<double>& x0
 //: Generate lots of samples using pdf, build new pdf with builder and compare the two
 void test_gaussian()
 {
-  vcl_cout << "************************\n"
+  std::cout << "************************\n"
            << " Testing vpdfl_gaussian\n"
            << "************************\n";
 
@@ -86,14 +88,14 @@ void test_gaussian()
   vnl_matrix<double> evecs(n,n);
   evecs.set_identity();
 
-  vcl_cout<<"Setting evecs: "; vsl_print_summary(vcl_cout, evecs); vcl_cout<<vcl_endl;
+  std::cout<<"Setting evecs: "; vsl_print_summary(std::cout, evecs); std::cout<<std::endl;
 
   pdf.set(mean,evecs,evals);
 
 
   // check probability density against independently calculated value
   vnl_vector<double> v0(n, 0.0);
-  vcl_cout<<"Prob at zero: "<<pdf(v0)<<vcl_endl;
+  std::cout<<"Prob at zero: "<<pdf(v0)<<std::endl;
 
   TEST_NEAR("pdf(0)",pdf(v0),7.748596298e-9,1e-15);
 
@@ -107,7 +109,7 @@ void test_gaussian()
   vpdfl_sampler_base* p_sampler = pdf.new_sampler();
 
 // Generate lots of samples
-  vcl_vector<vnl_vector<double> > data(n_samples);
+  std::vector<vnl_vector<double> > data(n_samples);
   for (int i=0;i<n_samples;++i)
     p_sampler->sample(data[i]);
 
@@ -117,10 +119,10 @@ void test_gaussian()
 
   builder.build(*p_pdf_built,data_array);
 
-  vcl_cout<<"Original PDF: "; vsl_print_summary(vcl_cout, pdf);
-  vcl_cout<<"\nRebuilt PDF: "; vsl_print_summary(vcl_cout, p_pdf_built);
-  vcl_cout<<"\n\nPDF sampler: "; vsl_print_summary(vcl_cout, p_sampler);
-  vcl_cout<<'\n';
+  std::cout<<"Original PDF: "; vsl_print_summary(std::cout, pdf);
+  std::cout<<"\nRebuilt PDF: "; vsl_print_summary(std::cout, p_pdf_built);
+  std::cout<<"\n\nPDF sampler: "; vsl_print_summary(std::cout, p_sampler);
+  std::cout<<'\n';
 
   vpdfl_gaussian& g_pdf1 = static_cast<vpdfl_gaussian&>(*p_pdf_built);
   vpdfl_gaussian g_pdf2;
@@ -139,7 +141,7 @@ void test_gaussian()
   TEST("Variances",vnl_vector_ssd(pdf.variance(), p_pdf_built->variance())<0.1,true);
   TEST("Eigenvalues", vnl_vector_ssd(pdf.eigenvals(),  (static_cast<vpdfl_gaussian*>(p_pdf_built))->eigenvals())<0.1,true);
 
-  vcl_cout<<"\n\n=================Testing I/O:\nSaving data...\n";
+  std::cout<<"\n\n=================Testing I/O:\nSaving data...\n";
   vsl_b_ofstream bfs_out("test_gaussian.bvl.tmp");
   TEST("Created test_gaussian.bvl.tmp for writing", (!bfs_out), false);
 
@@ -167,11 +169,11 @@ void test_gaussian()
   vpl_unlink("test_gaussian.bvl.tmp");
 #endif
 
-  vcl_cout<<"Original PDF: "; vsl_print_summary(vcl_cout, pdf);
-  vcl_cout<<"\nOriginal builder: "; vsl_print_summary(vcl_cout, builder);
-  vcl_cout<<"\n\nLoaded PDF: "; vsl_print_summary(vcl_cout, pdf_in);
-  vcl_cout<<"\nLoaded builder: "; vsl_print_summary(vcl_cout, builder_in);
-  vcl_cout<<"\n\n";
+  std::cout<<"Original PDF: "; vsl_print_summary(std::cout, pdf);
+  std::cout<<"\nOriginal builder: "; vsl_print_summary(std::cout, builder);
+  std::cout<<"\n\nLoaded PDF: "; vsl_print_summary(std::cout, pdf_in);
+  std::cout<<"\nLoaded builder: "; vsl_print_summary(std::cout, builder_in);
+  std::cout<<"\n\n";
 
   TEST("Original Model == Loaded model",
        mbl_test_summaries_are_equal(pdf, pdf_in), true);
@@ -182,12 +184,12 @@ void test_gaussian()
   TEST("Original Builder == Builder loaded by base ptr",
        mbl_test_summaries_are_equal(p_builder, p_base_builder_in), true);
 
-  vcl_cout << "\n\n========Testing PDF Thresholds==========\n";
+  std::cout << "\n\n========Testing PDF Thresholds==========\n";
   vpdfl_sampler_base *p_sampler2 = p_pdf_built->new_sampler();
   unsigned pass=0, fail=0;
   vnl_vector<double> x;
   double thresh = p_pdf_built->log_prob_thresh(0.9);
-  vcl_cout << "log density threshold for passing 90%: " << thresh << vcl_endl;
+  std::cout << "log density threshold for passing 90%: " << thresh << std::endl;
   for (unsigned i=0; i < 1000; i++)
   {
     p_sampler2->sample(x);
@@ -196,11 +198,11 @@ void test_gaussian()
     else
       fail ++;
   }
-  vcl_cout << "In a sample of 1000 vectors " << pass << " passed and " << fail <<  " failed.\n";
+  std::cout << "In a sample of 1000 vectors " << pass << " passed and " << fail <<  " failed.\n";
   TEST("880 < pass < 920", pass > 880 && pass < 920, true);
   pass=0; fail=0;
   thresh = p_pdf_built->log_prob_thresh(0.1);
-  vcl_cout << "\n\nlog density threshold for passing 10%: " << thresh << vcl_endl;
+  std::cout << "\n\nlog density threshold for passing 10%: " << thresh << std::endl;
   for (unsigned i=0; i < 1000; i++)
   {
     p_sampler2->sample(x);
@@ -209,12 +211,12 @@ void test_gaussian()
     else
       fail ++;
   }
-  vcl_cout << "In a sample of 1000 vectors " << pass << " passed and " << fail <<  " failed.\n";
+  std::cout << "In a sample of 1000 vectors " << pass << " passed and " << fail <<  " failed.\n";
   TEST("70 < pass < 130", pass > 70 && pass < 130, true);
   delete p_sampler2;
 
 
-  vcl_cout << "\n\n========Testing PDF Plausible regions==========\n";
+  std::cout << "\n\n========Testing PDF Plausible regions==========\n";
   vnl_vector<double> v2(n);
   vnl_vector<double> mean2(n),evals2(n);
   for (int i=0;i<n;++i)
@@ -231,8 +233,8 @@ void test_gaussian()
   vnl_vector<double>v3(v2);
 
   pdf.nearest_plausible(v3,pd);
-  vcl_cout << "Nearest plausible of v2(" << v2 << ") = v3("
-           << v3 << ')' << vcl_endl;
+  std::cout << "Nearest plausible of v2(" << v2 << ") = v3("
+           << v3 << ')' << std::endl;
   TEST_NEAR("v3 is on Int(Prob)=0.9 boundary", pdf.log_p(v3), pd, 1e-5);
 
   TEST_NEAR("v3 and v2 have identical directions from mean",
@@ -249,20 +251,20 @@ void test_gaussian()
   // -------------------------------------------
   {
     vpdfl_add_all_binary_loaders();
-    vcl_istringstream ss(
+    std::istringstream ss(
           "gaussian\n"
           "{\n"
           "  min_var: 0.1234e-5\n"
           "}\n");
 
-    vcl_auto_ptr<vpdfl_builder_base>
+    std::auto_ptr<vpdfl_builder_base>
             builder = vpdfl_builder_base::new_pdf_builder_from_stream(ss);
 
     TEST("Correct builder",builder->is_a(),"vpdfl_gaussian_builder");
     if (builder->is_a()=="vpdfl_axis_gaussian_builder")
     {
       vpdfl_gaussian_builder &a_builder = static_cast<vpdfl_gaussian_builder&>(*builder);
-      vcl_cout<<a_builder<<vcl_endl;
+      std::cout<<a_builder<<std::endl;
       TEST_NEAR("Min var configured", a_builder.min_var(), 0.1234e-5, 1e-8);
     }
     vsl_delete_all_loaders();

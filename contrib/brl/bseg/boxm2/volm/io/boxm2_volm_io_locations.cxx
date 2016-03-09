@@ -19,10 +19,10 @@ void vsl_b_read(vsl_b_istream & is, boxm2_volm_loc_hypotheses &loc_hyp)
   loc_hyp.b_read(is);
 }
 
-void vsl_print_summary(vcl_ostream &os, const boxm2_volm_loc_hypotheses &loc_hyp)
+void vsl_print_summary(std::ostream &os, const boxm2_volm_loc_hypotheses &loc_hyp)
 {
   // not yet implemented
-  os << "vsl_print_summary for boxm2_volm_loc_hypotheses Not Implemented" << vcl_endl;
+  os << "vsl_print_summary for boxm2_volm_loc_hypotheses Not Implemented" << std::endl;
 }
 
 void vsl_b_read(vsl_b_istream& is, boxm2_volm_loc_hypotheses* p)
@@ -52,7 +52,7 @@ void vsl_b_write(vsl_b_ostream& os, const boxm2_volm_loc_hypotheses* &p)
   }
 }
 
-void vsl_print_summary(vcl_ostream& os, const boxm2_volm_loc_hypotheses* &p)
+void vsl_print_summary(std::ostream& os, const boxm2_volm_loc_hypotheses* &p)
 {
   if (p==VXL_NULLPTR)
     os << "NULL PTR";

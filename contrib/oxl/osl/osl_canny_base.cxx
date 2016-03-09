@@ -4,8 +4,10 @@
 //  \file
 
 #include <osl/osl_canny_port.h>
-#include <vcl_cmath.h>
-#include <vcl_list.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <cmath>
+#include <list>
 #include <vcl_cassert.h>
 
 //--------------------------------------------------------------
@@ -49,9 +51,9 @@ osl_canny_base::~osl_canny_base() {  }
 // and accounts for single pixel gaps in the chains.
 void osl_canny_base::Initial_follow(float * const *thin, int xsize, int ysize, float low,
                                     int x, int y,
-                                    vcl_list<int> *xc,
-                                    vcl_list<int> *yc,
-                                    vcl_list<float> *grad)
+                                    std::list<int> *xc,
+                                    std::list<int> *yc,
+                                    std::list<float> *grad)
 {
   // Make sure that we are not likely to overun the border of the image
   if ( (x<=0) || (x>=xsize-1) || (y<=0) || (y>=ysize-1) )
@@ -90,9 +92,9 @@ void osl_canny_base::Initial_follow(float * const *thin, int xsize, int ysize, f
 // Following routine looking for connectiveness of edgel chains
 // and accounts for single pixel gaps in the chains.
 void osl_canny_base::Final_follow(int x, int y,
-                                  vcl_list<int> *xc,
-                                  vcl_list<int> *yc,
-                                  vcl_list<float> *grad,
+                                  std::list<int> *xc,
+                                  std::list<int> *yc,
+                                  std::list<float> *grad,
                                   int reverse)
 {
   // Make sure that we do not overun the border of the image
@@ -171,8 +173,8 @@ void osl_canny_base::Final_follow(int x, int y,
 //
 void osl_canny_base::Follow_junctions(int * const *junction,
                                       int x, int y,
-                                      vcl_list<int> *xc,
-                                      vcl_list<int> *yc)
+                                      std::list<int> *xc,
+                                      std::list<int> *yc)
 {
   // Add the current junction to the coordinate lists, and delete from
   // the junction image
@@ -204,11 +206,11 @@ void osl_canny_base::Follow_junctions(int * const *junction,
 
 //: Finds which member of the lists lies closest to the centre of gravity of the lists.
 void osl_canny_base::Cluster_centre_of_gravity(int * const *jx, int * const *jy,
-                                               vcl_list<int> &xc,
-                                               vcl_list<int> &yc,
+                                               std::list<int> &xc,
+                                               std::list<int> &yc,
                                                int &x0, int &y0)
 {
-  typedef vcl_list<int>::iterator it;
+  typedef std::list<int>::iterator it;
 
   if ( xc.empty() )
     return;
@@ -228,7 +230,7 @@ void osl_canny_base::Cluster_centre_of_gravity(int * const *jx, int * const *jy,
     //xc.reset(),yc.reset();xc.next(),yc.next();)
     //float newdist = hypot(x- *i/*xc.value()*/,y- *j/*yc.value()*/);
     double newdist;
-    { double dx = x- *i/*xc.value()*/, dy = y- *j/*yc.value()*/; newdist = vcl_sqrt(dx*dx + dy*dy); }
+    { double dx = x- *i/*xc.value()*/, dy = y- *j/*yc.value()*/; newdist = std::sqrt(dx*dx + dy*dy); }
     if ( dist<0 || newdist < dist ) {
       x0 = *i;//xc.value();
       y0 = *j;//yc.value();

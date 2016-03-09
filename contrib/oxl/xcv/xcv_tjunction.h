@@ -29,9 +29,9 @@ class xcv_tjunction : public vgui_tableau
   xcv_tjunction(xcv_mview_manager* the_manager);
   ~xcv_tjunction();
 
-  vcl_string type_name() const;
-  vcl_string file_name() const;
-  vcl_string pretty_name() const;
+  std::string type_name() const;
+  std::string file_name() const;
+  std::string pretty_name() const;
 
   void set_child(vgui_tableau_sptr const& new_child);
   //: Handle events by passing them to the manager and the child tableau.

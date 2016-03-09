@@ -11,11 +11,11 @@
 void test_scene()
 {
   //test xml file
-  vcl_string test_dir  = testlib_root_dir()+ "/contrib/brl/bseg/boxm2/tests/";
-  vcl_string test_file = test_dir + "test.xml";
+  std::string test_dir  = testlib_root_dir()+ "/contrib/brl/bseg/boxm2/tests/";
+  std::string test_file = test_dir + "test.xml";
 
   //create block metadata
-  vcl_map<boxm2_block_id, boxm2_block_metadata> blocks;
+  std::map<boxm2_block_id, boxm2_block_metadata> blocks;
   for (int i=0; i<2; i++) {
     for (int j=0; j<2; j++) {
       double big_block_side = 2.0;
@@ -49,7 +49,7 @@ void test_scene()
 
   //create test scene
   boxm2_scene test_scene_data(test_file);
-  vcl_cout<<test_scene_data<<vcl_endl;
+  std::cout<<test_scene_data<<std::endl;
 
   //delete file created
   vpl_unlink(test_file.c_str());

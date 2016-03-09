@@ -3,12 +3,14 @@
 //:
 // \file
 
-#include <vcl_cmath.h>
+#include <cmath>
 #include <vcl_cassert.h>
-#include <vcl_iostream.h>
-#include <vcl_fstream.h>
-#include <vcl_vector.h>
-#include <vcl_algorithm.h>
+#include <iostream>
+#include <fstream>
+#include <vector>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <algorithm>
 
 #include <vil1/vil1_image_as.h>
 #include <vil1/vil1_copy.h>
@@ -27,12 +29,12 @@ void osl_harris::prepare_buffers(int w, int h)
   image_w = w;
 
   if (params_.verbose)
-    vcl_cerr << "Doing harris on image region " << image_h << " by " << image_w << '\n'
+    std::cerr << "Doing harris on image region " << image_h << " by " << image_w << '\n'
              << "Maximum no of corners                     = " << params_.corner_count_max << '\n'
              << "Gaussian sigma                            = " << params_.gauss_sigma << '\n'
              << "Expected ratio lowest/max corner strength = " << params_.relative_minimum << '\n'
              << "Auto-correlation scale factor             = " << params_.scale_factor << '\n'
-             << "Computing cornerness operator response....\n" << vcl_flush;
+             << "Computing cornerness operator response....\n" << std::flush;
 
   // response images (no realloc performed unless size actually changes).
   image_buf           .resize(image_w, image_h);
@@ -58,7 +60,7 @@ void osl_harris::compute_gradients(vil1_image const &image)
 
   // compute gradients
   if (params_.verbose)
-    vcl_cerr << " gradient\n" << vcl_flush;
+    std::cerr << " gradient\n" << std::flush;
 
   // trim the window
   window_str.row_start_index += 2;
@@ -75,7 +77,7 @@ void osl_harris::compute_2nd_moments()
 {
   // compute 2nd moment matrices
   if (params_.verbose)
-    vcl_cerr << " fxx,fxy,fyy" << vcl_flush;
+    std::cerr << " fxx,fxy,fyy" << std::flush;
   window_str.row_start_index += 2;
   window_str.col_start_index += 2;
   window_str.row_end_index   -= 2;
@@ -93,7 +95,7 @@ void osl_harris::compute_2nd_moments()
 
   // smoothe the 2nd moment matrix maps
   if (params_.verbose)
-    vcl_cerr << " convolution" << vcl_flush;
+    std::cerr << " convolution" << std::flush;
   { // we use the cornerness map as a temporary scratch area.
     vil1_memory_image_of<float> *tmp = &image_cornerness_buf;
     osl_convolve(&window_str, &gauss_mask, &image_fxx_buf, tmp);
@@ -112,7 +114,7 @@ void osl_harris::compute_cornerness()
 {
   // compute cornerness map
   if (params_.verbose)
-    vcl_cerr << " cornerness" << vcl_flush;
+    std::cerr << " cornerness" << std::flush;
   image_cornerness_buf.fill(0);
   corner_max = droid::compute_cornerness (&window_str,
                                           &image_fxx_buf,
@@ -122,7 +124,7 @@ void osl_harris::compute_cornerness()
                                           &image_cornerness_buf);
   //
   if (params_.verbose)
-    vcl_cerr << "------\n  done\n" << vcl_flush;
+    std::cerr << "------\n  done\n" << std::flush;
 }
 
 void osl_harris::compute_corners()
@@ -149,10 +151,10 @@ void osl_harris::compute_corners()
       {
         double x, y;
         if (droid::compute_subpixel_max (&image_cornerness_buf, row, col, x,y, params_.pab_emulate))
-          cc.push_back(vcl_pair<float, float>(float(params_.col_start_index+x),
+          cc.push_back(std::pair<float, float>(float(params_.col_start_index+x),
                                               float(params_.row_start_index+y)));
       }
-  vcl_cerr << "osl_harris: Final corner count " << cc.size() << vcl_endl;
+  std::cerr << "osl_harris: Final corner count " << cc.size() << std::endl;
 }
 
 //--------------------------------------------------------------------------------
@@ -168,7 +170,7 @@ void osl_harris::do_non_adaptive(double *corner_min)
   // iterate if not enough corners.
 
   if (params_.verbose)
-    vcl_cerr << "Found " << maxima_count << " corners\n";
+    std::cerr << "Found " << maxima_count << " corners\n";
 
   if (maxima_count < (float) params_.corner_count_max * 0.9)
     for (int i=0 ; i<10 && maxima_count < (float) params_.corner_count_max * 0.9; i++)
@@ -176,9 +178,9 @@ void osl_harris::do_non_adaptive(double *corner_min)
       params_.relative_minimum *= 0.5f;
       *corner_min = params_.relative_minimum * corner_max;
       if (params_.verbose)
-        vcl_cerr << "Found " << maxima_count
+        std::cerr << "Found " << maxima_count
                  << "... iterating with relmin = " << params_.relative_minimum
-                 << vcl_endl;
+                 << std::endl;
       maxima_count = droid::find_corner_maxima (float(*corner_min),
                                                 &window_str,
                                                 &image_cornerness_buf,
@@ -198,9 +200,9 @@ void osl_harris::do_non_adaptive(double *corner_min)
 
     params_.relative_minimum = float(*corner_min / corner_max);
     if (params_.verbose)
-      vcl_cerr << "osl_harris: Too many: " << maxima_count
+      std::cerr << "osl_harris: Too many: " << maxima_count
                << "... iterating with relmin = " << params_.relative_minimum
-               << vcl_endl;
+               << std::endl;
   }
 }
 
@@ -210,14 +212,14 @@ void osl_harris::do_non_adaptive(double *corner_min)
 void osl_harris::do_adaptive()
 {
   if (params_.verbose)
-    vcl_cerr << "No. of corners before density thresholding= " << params_.corner_count_max << vcl_endl;
+    std::cerr << "No. of corners before density thresholding= " << params_.corner_count_max << std::endl;
 
   double corner_min = params_.relative_minimum * corner_max;
   int maxima_count = droid::find_corner_maxima (float(corner_min),
                                                 &window_str,
                                                 &image_cornerness_buf,
                                                 &image_cornermax_buf);
-  vcl_cerr << "harris: " << maxima_count << " corners with response above " << corner_min << vcl_endl;
+  std::cerr << "harris: " << maxima_count << " corners with response above " << corner_min << std::endl;
 
   // Store all corners in an array.
   int TILE_WIDTH = params_.adaptive_window_size; // 32
@@ -227,8 +229,8 @@ void osl_harris::do_adaptive()
   int col_max = window_str.col_end_index;
 
   // number of tiles to use in the x and y directions.
-  int n_tiles_x = (int) vcl_ceil(double(col_max-col_min) / TILE_WIDTH);
-  int n_tiles_y = (int) vcl_ceil(double(row_max-row_min) / TILE_WIDTH);
+  int n_tiles_x = (int) std::ceil(double(col_max-col_min) / TILE_WIDTH);
+  int n_tiles_y = (int) std::ceil(double(row_max-row_min) / TILE_WIDTH);
 
   double TILE_AREA = TILE_WIDTH*TILE_WIDTH;
 
@@ -237,10 +239,10 @@ void osl_harris::do_adaptive()
   if (params_.corner_count_max == 0)
     IDEAL_NUM_PER_TILE = params_.corner_count_low;
 
-  vcl_cerr << "Tiles " << n_tiles_x << " x " << n_tiles_y
+  std::cerr << "Tiles " << n_tiles_x << " x " << n_tiles_y
            << ", NUM_PER_TILE " << IDEAL_NUM_PER_TILE;
 
-  vcl_vector<double> cornerness(maxima_count, 0.0);
+  std::vector<double> cornerness(maxima_count, 0.0);
 
   vil1_memory_image_of<bool> keep(image_cornermax_buf.width(), image_cornermax_buf.height());
   keep.fill(false);
@@ -250,16 +252,16 @@ void osl_harris::do_adaptive()
   {
     int win_offset = pass * TILE_WIDTH / 2;
     if (params_.verbose)
-      vcl_cerr << vcl_endl << "pass " << pass;
+      std::cerr << std::endl << "pass " << pass;
     for (int tile_y = 0; tile_y < n_tiles_y; ++tile_y)
     {
       int window_row_start_index = tile_y * TILE_WIDTH + row_min + win_offset;
-      int window_row_end_index = vcl_min(window_row_start_index+TILE_WIDTH, row_max);
+      int window_row_end_index = std::min(window_row_start_index+TILE_WIDTH, row_max);
 
       for (int tile_x = 0; tile_x < n_tiles_x; ++tile_x)
       {
         int window_col_start_index = tile_x * TILE_WIDTH + col_min + win_offset;
-        int window_col_end_index = vcl_min(window_col_start_index+TILE_WIDTH, col_max);
+        int window_col_end_index = std::min(window_col_start_index+TILE_WIDTH, col_max);
 
         // get corner strengths in this tile :
         vil1_memory_image_of<bool>        &corner_present  = image_cornermax_buf;
@@ -281,7 +283,7 @@ void osl_harris::do_adaptive()
         if (n > NUM_PER_TILE)
         {
           // Sort corners to get thresholds
-          vcl_sort(cornerness.begin(), cornerness.begin()+n);
+          std::sort(cornerness.begin(), cornerness.begin()+n);
           thresh = cornerness[n-1-NUM_PER_TILE];
         }
 
@@ -294,7 +296,7 @@ void osl_harris::do_adaptive()
       }
     }
   }
-  vcl_cerr << vcl_endl;
+  std::cerr << std::endl;
 
   // Copy keep to present
   vil1_copy(keep,image_cornermax_buf);
@@ -303,12 +305,12 @@ void osl_harris::do_adaptive()
 //-----------------------------------------------------------------------------
 
 // ?? should we append, and not assign ??
-void osl_harris::get_corners(vcl_vector<vcl_pair<float, float> > &cor) const
+void osl_harris::get_corners(std::vector<std::pair<float, float> > &cor) const
 {
   cor = cc;
 }
 
-void osl_harris::get_corners(vcl_vector<float> &corx, vcl_vector<float> &cory) const
+void osl_harris::get_corners(std::vector<float> &corx, std::vector<float> &cory) const
 {
   for (unsigned i=0; i<cc.size(); ++i)
   {
@@ -318,15 +320,15 @@ void osl_harris::get_corners(vcl_vector<float> &corx, vcl_vector<float> &cory) c
 }
 
 //: convenience method
-void osl_harris::save_corners(vcl_ostream &f) const
+void osl_harris::save_corners(std::ostream &f) const
 {
   for (unsigned i=0; i<cc.size(); ++i)
-    f << cc[i].first << ' ' << cc[i].second << vcl_endl;
+    f << cc[i].first << ' ' << cc[i].second << std::endl;
 }
 
 void osl_harris::save_corners(char const *filename) const
 {
-  vcl_ofstream f(filename);
+  std::ofstream f(filename);
   assert(f.good());
   save_corners(f);
   f.close();

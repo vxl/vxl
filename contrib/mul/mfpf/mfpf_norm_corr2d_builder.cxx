@@ -7,8 +7,10 @@
 #include <mfpf/mfpf_norm_corr2d.h>
 #include <vsl/vsl_binary_loader.h>
 #include <vul/vul_string.h>
-#include <vcl_cmath.h>
-#include <vcl_sstream.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <cmath>
+#include <sstream>
 #include <vcl_cassert.h>
 
 #include <mbl/mbl_parse_block.h>
@@ -80,8 +82,8 @@ void mfpf_norm_corr2d_builder::set_region_size(double wi, double wj)
 {
   wi/=step_size();
   wj/=step_size();
-  int ni = vcl_max(1,int(0.99+wi));
-  int nj = vcl_max(1,int(0.99+wj));
+  int ni = std::max(1,int(0.99+wi));
+  int nj = std::max(1,int(0.99+wj));
   set_kernel_size(unsigned(ni),unsigned(nj));
 }
 
@@ -113,15 +115,15 @@ static void normalize(vil_image_view<double>& im)
 
   if (ss<1e-6)
   {
-    vcl_cerr<<"Warning: Almost flat region in mfpf_norm_corr2d_builder\n"
-            <<"         Size: "<<ni<<" x "<<nj<<vcl_endl;
+    std::cerr<<"Warning: Almost flat region in mfpf_norm_corr2d_builder\n"
+            <<"         Size: "<<ni<<" x "<<nj<<std::endl;
   }
 
   // Normalise so that im has zero mean and unit sum of squares.
   double mean=sum/(ni*nj);
   ss-=(mean*mean*ni*nj);
   double s=1.0;
-  if (ss>0) s = vcl_sqrt(1.0/ss);
+  if (ss>0) s = std::sqrt(1.0/ss);
   vil_math_scale_and_offset_values(im,s,-s*mean);
 }
 
@@ -158,7 +160,7 @@ void mfpf_norm_corr2d_builder::add_one_example(const vimt_image_2d_of<float>& im
 void mfpf_norm_corr2d_builder::get_sample_vector(const vimt_image_2d_of<float>& image,
                                                  const vgl_point_2d<double>& p,
                                                  const vgl_vector_2d<double>& u,
-                                                 vcl_vector<double>& v)
+                                                 std::vector<double>& v)
 {
   assert(image.image().size()>0);
 
@@ -204,7 +206,7 @@ void mfpf_norm_corr2d_builder::add_example(const vimt_image_2d_of<float>& image,
   for (int iA=-int(nA_);iA<=(int)nA_;++iA)
   {
     double A = iA*dA_;
-    vgl_vector_2d<double> uA = u*vcl_cos(A)+v*vcl_sin(A);
+    vgl_vector_2d<double> uA = u*std::cos(A)+v*std::sin(A);
     add_one_example(image,p,uA);
   }
 }
@@ -228,11 +230,11 @@ void mfpf_norm_corr2d_builder::build(mfpf_point_finder& pf)
 // Method: set_from_stream
 //=======================================================================
 //: Initialise from a string stream
-bool mfpf_norm_corr2d_builder::set_from_stream(vcl_istream &is)
+bool mfpf_norm_corr2d_builder::set_from_stream(std::istream &is)
 {
   // Cycle through string and produce a map of properties
-  vcl_string s = mbl_parse_block(is);
-  vcl_istringstream ss(s);
+  std::string s = mbl_parse_block(is);
+  std::istringstream ss(s);
   mbl_read_props_type props = mbl_read_props_ws(ss);
 
   set_defaults();
@@ -289,9 +291,9 @@ bool mfpf_norm_corr2d_builder::set_from_stream(vcl_istream &is)
 // Method: is_a
 //=======================================================================
 
-vcl_string mfpf_norm_corr2d_builder::is_a() const
+std::string mfpf_norm_corr2d_builder::is_a() const
 {
-  return vcl_string("mfpf_norm_corr2d_builder");
+  return std::string("mfpf_norm_corr2d_builder");
 }
 
 //: Create a copy on the heap and return base class pointer
@@ -304,7 +306,7 @@ mfpf_point_finder_builder* mfpf_norm_corr2d_builder::clone() const
 // Method: print
 //=======================================================================
 
-void mfpf_norm_corr2d_builder::print_summary(vcl_ostream& os) const
+void mfpf_norm_corr2d_builder::print_summary(std::ostream& os) const
 {
   os << "{ size: " << ni_ << 'x' << nj_
      << " nA: " << nA_ << " dA: " << dA_ <<' ';
@@ -360,9 +362,9 @@ void mfpf_norm_corr2d_builder::b_read(vsl_b_istream& bfs)
       else            vsl_b_read(bfs,overlap_f_);
       break;
     default:
-      vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&)\n"
-               << "           Unknown version number "<< version << vcl_endl;
-      bfs.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
+      std::cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&)\n"
+               << "           Unknown version number "<< version << std::endl;
+      bfs.is().clear(std::ios::badbit); // Set an unrecoverable IO error on stream
       return;
   }
 }

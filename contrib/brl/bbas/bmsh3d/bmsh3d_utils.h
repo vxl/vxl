@@ -6,7 +6,9 @@
 // \date 2004-03-12
 //  Ming: General 3D Utilities
 
-#include <vcl_sstream.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <sstream>
 
 #include "bmsh3d_fuzzy_boolean.h"
 
@@ -42,7 +44,7 @@ class vispt_elm
   const void* vis_pointer() const { return vis_pointer_; }
 
   //: Ming: don't make this function pure virtual. It eats up 4 bytes of mem for each derived object!
-  virtual void getInfo (vcl_ostringstream& /*ostrm*/) {}
+  virtual void getInfo (std::ostringstream& /*ostrm*/) {}
 };
 
 //##########################################################

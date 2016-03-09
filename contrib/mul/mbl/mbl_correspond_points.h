@@ -5,7 +5,9 @@
 // \brief Shapiro & Brady's point correspondence algorithm
 // \author Tim Cootes
 
-#include <vcl_vector.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <vector>
 #include <vnl/vnl_vector.h>
 #include <vnl/vnl_matrix.h>
 #include <vgl/vgl_point_2d.h>
@@ -45,14 +47,14 @@ class mbl_correspond_points
   //  corresponds to points1[i].
   //  Note that there may be a many to one correspondence produced.
   //  \param sigma Scaling factor defining kernel width
-  void correspond(const vcl_vector<vgl_point_2d<double> >& points1,
-                  const vcl_vector<vgl_point_2d<double> >& points2,
-                  vcl_vector<unsigned>& matches, double sigma);
+  void correspond(const std::vector<vgl_point_2d<double> >& points1,
+                  const std::vector<vgl_point_2d<double> >& points2,
+                  std::vector<unsigned>& matches, double sigma);
 
   //: Construct proximity matrix using cosh kernel
   //  On exit, D(i,j) = tanh(pi*d_ij/sigma) * 2/(pi*d_ij)
   //  where d_ij is the distance between points i and j
-  void proximity_by_tanh(const vcl_vector<vgl_point_2d<double> >& points,
+  void proximity_by_tanh(const std::vector<vgl_point_2d<double> >& points,
                          vnl_matrix<double>& H, double sigma);
 
   //: Eigenvalues of proximity matrix 1 in last call to correspond

@@ -5,8 +5,10 @@
 // See sdet_texture_classifier_params.h
 //
 //-----------------------------------------------------------------------------
-#include <vcl_sstream.h>
-#include <vcl_iostream.h>
+#include <sstream>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iostream>
 
 //------------------------------------------------------------------------
 // Constructors
@@ -95,8 +97,8 @@ bool sdet_texture_classifier_params::SanityCheck()
 {
   //  Note that msg << ends seems to restart the string and erase the
   //  previous string. We should only use it as the last call, use
-  //  vcl_endl otherwise.
-  vcl_stringstream msg;
+  //  std::endl otherwise.
+  std::stringstream msg;
   bool valid = true;
 
   if (n_scales_ < 3)
@@ -110,13 +112,13 @@ bool sdet_texture_classifier_params::SanityCheck()
     }
 
 
-  msg << vcl_ends;
+  msg << std::ends;
 
   SetErrorMsg(msg.str().c_str());
   return valid;
 }
 
-vcl_ostream& operator << (vcl_ostream& os, const sdet_texture_classifier_params& dmp)
+std::ostream& operator << (std::ostream& os, const sdet_texture_classifier_params& dmp)
 {
   os << "sdet_texture_classifier_params:\n[---\n"
      << "n scales " << dmp.n_scales_ << " scale interval "
@@ -136,9 +138,9 @@ vcl_ostream& operator << (vcl_ostream& os, const sdet_texture_classifier_params&
   os << "---]\n";
   return os;
 }
-vcl_string sdet_texture_classifier_params::filter_dir_name()
+std::string sdet_texture_classifier_params::filter_dir_name()
 {
-  vcl_stringstream str;
+  std::stringstream str;
   if (signed_response_)
     str << "filter_bank_" << n_scales_ << "_" << lambda0_ << "_" << lambda1_ << "_" << scale_interval_ << "_" << angle_interval_ << "_"
         << laplace_radius_ << "_" << gauss_radius_ << "_" << cutoff_per_ << "_signed";
@@ -191,7 +193,7 @@ void vsl_b_read(vsl_b_istream &is, sdet_texture_classifier_params & tcp)
   vsl_b_read(is,tcp.weight_offset_);
 }
 //: Print human readable summary of object to a stream
-void vsl_print_summary(vcl_ostream& os,
+void vsl_print_summary(std::ostream& os,
                        const sdet_texture_classifier_params & tcp)
 {
   os << tcp;

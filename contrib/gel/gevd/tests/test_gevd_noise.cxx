@@ -11,7 +11,9 @@
 #include <gevd/gevd_noise.h>
 #include <testlib/testlib_test.h>
 #include <vnl/vnl_sample.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iostream>
 
 void
 test_gevd_noise()
@@ -26,8 +28,8 @@ test_gevd_noise()
   bool st = noise_estim.EstimateSensorTexture(sensor_noise, texture_noise);
   TEST("gevd_noise::EstimateSensorTexture()", st, true);
   if (!st) return;
-  vcl_cout << "sensor_noise = " << sensor_noise
-           << ", texture_noise = " << texture_noise << vcl_endl;
+  std::cout << "sensor_noise = " << sensor_noise
+           << ", texture_noise = " << texture_noise << std::endl;
   TEST("sensor  noise cannot be negative", sensor_noise >= 0, true);
   TEST("texture noise cannot be negative", texture_noise >= 0, true);
   TEST_NEAR("sensor  noise", sensor_noise,  0.4975, 0.04);

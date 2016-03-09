@@ -24,14 +24,14 @@ bool brip_image_mutual_info_process_cons(bprb_func_process& pro)
 {
   using namespace brip_image_mutual_info_process_globals;
   // inputs
-  vcl_vector<vcl_string> input_types_(n_inputs_);
+  std::vector<std::string> input_types_(n_inputs_);
   input_types_[0] = "vil_image_view_base_sptr";  // input image 1
   input_types_[1] = "vil_image_view_base_sptr";  // input image 2
   input_types_[2] = "double";                    // histogram min value
   input_types_[3] = "double";                    // histogram max value
   input_types_[4] = "unsigned";                  // number of bins in histogram
   // outputs
-  vcl_vector<vcl_string> output_types_(n_outputs_);
+  std::vector<std::string> output_types_(n_outputs_);
   output_types_[0] = "double";  // mutual information between two input images
 
   return pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
@@ -44,7 +44,7 @@ bool brip_image_mutual_info_process(bprb_func_process& pro)
 
   // sanity check
   if (!pro.verify_inputs()) {
-    vcl_cout << pro.name() << ": Wrong Inputs!!!" << vcl_endl;
+    std::cout << pro.name() << ": Wrong Inputs!!!" << std::endl;
     return false;
   }
 

@@ -5,8 +5,10 @@
 // \file
 
 #include "bsta_gaussian_full.h"
-#include <vcl_algorithm.h>
-#include <vcl_limits.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <algorithm>
+#include <limits>
 #if 0
 #include <vcl_cassert.h>
 #endif
@@ -93,7 +95,7 @@ T
 bsta_gaussian_full<T,n>::sqr_mahalanobis_dist(const vnl_vector_fixed<T,n>& pt) const
 {
   if (det_covar_<=T(0))
-    return vcl_numeric_limits<T>::infinity();
+    return std::numeric_limits<T>::infinity();
   vnl_vector_fixed<T,n> d = bsta_gaussian<T,n>::mean_-pt;
 #if 0
   assert((sqr_mahalanobis_dist<T,n,n>::value(d,diag_covar_)) > 0);
@@ -137,7 +139,7 @@ bsta_gaussian_full<T,n>::inv_covar() const
       // Is this the best way to handle this?
       T lambda = T(0);
       for (unsigned i=0; i<n; ++i)
-        lambda = vcl_max(lambda,C(i,i));
+        lambda = std::max(lambda,C(i,i));
       lambda *= 1e-4f;
       for (unsigned i=0; i<n; ++i)
         C(i,i) += lambda;

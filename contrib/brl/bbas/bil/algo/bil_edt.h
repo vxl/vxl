@@ -17,7 +17,9 @@
 // pixels as interest or not).
 
 #include <vil/vil_image_view.h>
-#include <vcl_vector.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <vector>
 
 
 //: Euclidean Signed Distance Transform
@@ -48,7 +50,7 @@ bool bil_edt_maurer(vil_image_view<vxl_uint_32> &im);
 // \remarks Non-contiguous images not currently supported.
 //
 bool bil_edt_saito(vil_image_view<vxl_uint_32> &im, unsigned plane_idx=0);
-bool bil_edt_saito(vil_image_view<vxl_uint_32> &im, unsigned plane_idx, const vcl_vector<unsigned> &sq);
+bool bil_edt_saito(vil_image_view<vxl_uint_32> &im, unsigned plane_idx, const std::vector<unsigned> &sq);
 bool bil_edt_saito_3D(vil_image_view<vxl_uint_32> &im);
 
 bool bil_edt_brute_force(vil_image_view<vxl_uint_32> &im);

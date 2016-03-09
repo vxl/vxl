@@ -1,7 +1,9 @@
 #include <testlib/testlib_test.h>
-#include <vcl_cmath.h>
-#include <vcl_vector.h>
-#include <vcl_cstdlib.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <cmath>
+#include <vector>
+#include <cstdlib>
 #include <vsph/vsph_unit_sphere.h>
 #include <vsph/vsph_segment_sphere.h>
 #include <vsph/vsph_sph_point_2d.h>
@@ -21,14 +23,14 @@ static void test_sph_cover()
   vsph_sph_box_2d bb_a(p10, p12, p11);
   vsph_sph_box_2d bb_b(p19, p13, p11);
   double area_a = bb_a.area(), area_b = bb_b.area();
-  vcl_vector<vsph_sph_box_2d> boxes_a, boxes_b, boxes_int;
+  std::vector<vsph_sph_box_2d> boxes_a, boxes_b, boxes_int;
   bb_a.sub_divide(boxes_a);
   bb_b.sub_divide(boxes_b);
-  vcl_vector<cover_el> cels_a, cels_b;
-  for (vcl_vector<vsph_sph_box_2d>::iterator bit = boxes_a.begin();
+  std::vector<cover_el> cels_a, cels_b;
+  for (std::vector<vsph_sph_box_2d>::iterator bit = boxes_a.begin();
        bit != boxes_a.end(); ++bit)
     cels_a.push_back(cover_el(*bit, 1.0));
-  for (vcl_vector<vsph_sph_box_2d>::iterator bit = boxes_b.begin();
+  for (std::vector<vsph_sph_box_2d>::iterator bit = boxes_b.begin();
        bit != boxes_b.end(); ++bit)
     cels_b.push_back(cover_el(*bit, 1.0));
   vsph_sph_cover_2d cov_a, cov_b, cov_int;
@@ -37,7 +39,7 @@ static void test_sph_cover()
  intersection(cov_a, cov_b, cov_int);
  intersection(bb_a, bb_b, boxes_int);
  double orig_int_area = 0.0;
- for (vcl_vector<vsph_sph_box_2d>::iterator iit = boxes_int.begin();
+ for (std::vector<vsph_sph_box_2d>::iterator iit = boxes_int.begin();
       iit != boxes_int.end(); ++iit)
  orig_int_area += (*iit).area();
  double cover_int_area = cov_int.area();

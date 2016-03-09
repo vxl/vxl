@@ -11,10 +11,12 @@
 //-----------------------------------------------------------------------------
 #include <gevd/gevd_param_mixin.h>
 #include <gevd/gevd_detector_params.h>
-#include <vcl_iosfwd.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iosfwd>
 
 class gevd_region_proc_params;
-vcl_ostream& operator<<(vcl_ostream& os, const gevd_region_proc_params& rpp);
+std::ostream& operator<<(std::ostream& os, const gevd_region_proc_params& rpp);
 
 class gevd_region_proc_params : public gevd_param_mixin
 {
@@ -30,7 +32,7 @@ class gevd_region_proc_params : public gevd_param_mixin
 
   bool SanityCheck();
   friend
-    vcl_ostream& operator<<(vcl_ostream&, const gevd_region_proc_params& rpp);
+    std::ostream& operator<<(std::ostream&, const gevd_region_proc_params& rpp);
  protected:
   void InitParams(float expand_scale,
                   float burt_adelson_factor,

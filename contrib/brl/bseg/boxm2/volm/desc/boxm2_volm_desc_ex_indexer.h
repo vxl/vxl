@@ -23,12 +23,12 @@
 class volm_desc_ex_indexer : public volm_desc_indexer
 {
 public:
-  static vcl_string&  get_name();
+  static std::string&  get_name();
   //: constructor
-  volm_desc_ex_indexer(vcl_string const& index_folder,
-                       vcl_string const& out_index_folder,
-                       vcl_vector<double> const& radius,
-                       vcl_vector<double> const& depth_interval,
+  volm_desc_ex_indexer(std::string const& index_folder,
+                       std::string const& out_index_folder,
+                       std::vector<double> const& radius,
+                       std::vector<double> const& depth_interval,
                        unsigned index_layer_size,
                        float ind_buffer,
                        unsigned const& norients = 3,
@@ -42,10 +42,10 @@ public:
   virtual bool get_next();
 
   //: extract histogram for a location
-  virtual bool extract(double lat, double lon, double elev, vcl_vector<unsigned char>& values);
+  virtual bool extract(double lat, double lon, double elev, std::vector<unsigned char>& values);
 
   //: get the name of the indexer
-  virtual vcl_string get_index_type_str() { return volm_desc_ex_indexer::get_name(); }
+  virtual std::string get_index_type_str() { return volm_desc_ex_indexer::get_name(); }
 
   //: generate parameter files
   virtual bool write_params_file();
@@ -55,7 +55,7 @@ public:
 
 private:
   //: histogram parameters
-  vcl_vector<double> radius_;
+  std::vector<double> radius_;
   unsigned         norients_;
   unsigned           nlands_;
   unsigned       layer_size_;
@@ -63,7 +63,7 @@ private:
 
 
   //: directory where the previous created indices is stored
-  vcl_string index_folder_;
+  std::string index_folder_;
 
   //: indices
   float  ind_buffer_;
@@ -72,7 +72,7 @@ private:
   boxm2_volm_wr3db_index_sptr ind_comb_;
 
   //: depth interval table
-  vcl_vector<double> depth_interval_;
+  std::vector<double> depth_interval_;
 
 };
 

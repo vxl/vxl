@@ -5,11 +5,13 @@
 #include <bsta/bsta_gaussian_sphere.h>
 #include <bsta/algo/bsta_fit_gaussian.h>
 
-#include <vcl_string.h>
-#include <vcl_iostream.h>
+#include <string>
+#include <iostream>
 #include <bsta/bsta_histogram.h>
 #include <vnl/vnl_random.h>
-#include <vcl_algorithm.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <algorithm>
 
 MAIN( test_rand_sampling)
 {
@@ -26,7 +28,7 @@ MAIN( test_rand_sampling)
   bsta_histogram<float> hc(0.0f,static_cast<float>(n_samples),2*n_samples);
   for (unsigned j = 0; j<n_trials; ++j) {
   // generate samples
-  vcl_vector<float> samples;
+  std::vector<float> samples;
   for (unsigned int n=0; n<ns; ++n) {
     float sample = (float)rand_gen.drand32(0.35, 0.6);
     samples.push_back(sample);
@@ -57,9 +59,9 @@ MAIN( test_rand_sampling)
    h.clear(); ho.clear();
    samples.clear();
   }
-  vcl_cout << "\n histogram of bin population\n";
+  std::cout << "\n histogram of bin population\n";
   for (unsigned b = 0; b<hc.nbins(); ++b)
-    vcl_cout << hc.avg_bin_value(b) << ' ' << hc.counts(b) << '\n';
+    std::cout << hc.avg_bin_value(b) << ' ' << hc.counts(b) << '\n';
 
   return 0;
 }

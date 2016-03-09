@@ -10,9 +10,11 @@
 #include <vgl/vgl_point_2d.h>
 #include <vgl/vgl_point_3d.h>
 
-#include <vcl_iostream.h>
-#include <vcl_fstream.h>
-#include <vcl_algorithm.h>
+#include <iostream>
+#include <fstream>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <algorithm>
 #include <vcl_cassert.h>
 #include <vnl/vnl_double_4.h>
 
@@ -23,7 +25,7 @@ bpgl_bundle_rolling_shutter_adj_lsqr::param_to_motion_matrix(int /*i*/, const do
 
   double omegas[6]={0,0,0,0,0,0};
   omegas[0]=data[6];omegas[1]=data[7];omegas[2]=data[8];
-  double omegasnorm=vcl_sqrt(omegas[0]*omegas[0]+omegas[1]*omegas[1]+omegas[2]*omegas[2]);
+  double omegasnorm=std::sqrt(omegas[0]*omegas[0]+omegas[1]*omegas[1]+omegas[2]*omegas[2]);
 
   vnl_double_3x3 I; I.set_identity();
 
@@ -40,9 +42,9 @@ bpgl_bundle_rolling_shutter_adj_lsqr::param_to_motion_matrix(int /*i*/, const do
   Mtopright=d*t;
   if (omegasnorm!=0.0)
   {
-    double s = vcl_sin(omegasnorm*t)/omegasnorm;
+    double s = std::sin(omegasnorm*t)/omegasnorm;
     double osqrinv=1.0/(omegasnorm*omegasnorm);
-    double c = (1.0-vcl_cos(omegasnorm*t))*osqrinv;
+    double c = (1.0-std::cos(omegasnorm*t))*osqrinv;
     Mtopleft += wx*(I*s+wx*c);
     Mtopright+= wx*(wx*d*(s+t)*osqrinv -d*c);
   }
@@ -59,9 +61,9 @@ bpgl_bundle_rolling_shutter_adj_lsqr::param_to_motion_matrix(int /*i*/, const do
 
 //: Constructor
 bpgl_bundle_rolling_shutter_adj_lsqr::
-  bpgl_bundle_rolling_shutter_adj_lsqr(const vcl_vector<vpgl_calibration_matrix<double> >& K,
-                                       const vcl_vector<vgl_point_2d<double> >& image_points,
-                                       const vcl_vector<vcl_vector<bool> >& mask,
+  bpgl_bundle_rolling_shutter_adj_lsqr(const std::vector<vpgl_calibration_matrix<double> >& K,
+                                       const std::vector<vgl_point_2d<double> >& image_points,
+                                       const std::vector<std::vector<bool> >& mask,
                                        double rolling_rate,
                                        bool use_confidence_weights)
  : vnl_sparse_lst_sqr_function(K.size(),12,mask[0].size(),3,0,mask,2,use_gradient),
@@ -82,10 +84,10 @@ bpgl_bundle_rolling_shutter_adj_lsqr::
 //  Each image point is assigned an inverse covariance (error projector) matrix
 // \note image points are not homogeneous because they require finite points to measure projection error
 bpgl_bundle_rolling_shutter_adj_lsqr::
-bpgl_bundle_rolling_shutter_adj_lsqr(const vcl_vector<vpgl_calibration_matrix<double> >& K,
-                                     const vcl_vector<vgl_point_2d<double> >& image_points,
-                                     const vcl_vector<vnl_matrix<double> >& inv_covars,
-                                     const vcl_vector<vcl_vector<bool> >& mask,
+bpgl_bundle_rolling_shutter_adj_lsqr(const std::vector<vpgl_calibration_matrix<double> >& K,
+                                     const std::vector<vgl_point_2d<double> >& image_points,
+                                     const std::vector<vnl_matrix<double> >& inv_covars,
+                                     const std::vector<std::vector<bool> >& mask,
                                      bool use_confidence_weights)
  : vnl_sparse_lst_sqr_function(K.size(),6,mask[0].size(),3,0,mask,2,use_gradient),
    K_(K),
@@ -104,19 +106,19 @@ bpgl_bundle_rolling_shutter_adj_lsqr(const vcl_vector<vpgl_calibration_matrix<do
   {
     const vnl_matrix<double>& S = inv_covars[i];
     if (S(0,0) > 0.0) {
-      U(0,0) = vcl_sqrt(S(0,0));
+      U(0,0) = std::sqrt(S(0,0));
       U(0,1) = S(0,1)/U(0,0);
       double U11 = S(1,1)-S(0,1)*S(0,1)/S(0,0);
-      U(1,1) = (U11>0.0)?vcl_sqrt(U11):0.0;
+      U(1,1) = (U11>0.0)?std::sqrt(U11):0.0;
     }
     else if (S(1,1) > 0.0) {
       assert(S(0,1) == 0.0);
       U(0,0) = 0.0;
       U(0,1) = 0.0;
-      U(1,1) = vcl_sqrt(S(1,1));
+      U(1,1) = std::sqrt(S(1,1));
     }
     else {
-      vcl_cout << "warning: not positive definite"<<vcl_endl;
+      std::cout << "warning: not positive definite"<<std::endl;
       U.fill(0.0);
     }
     factored_inv_covars_.push_back(U);
@@ -166,8 +168,8 @@ bpgl_bundle_rolling_shutter_adj_lsqr::f(vnl_vector<double> const& a,
       double b=(KRP[2]-KRd[1]/rolling_rate_+KT(2,0));
       double a1=KRd[2]/rolling_rate_;
       double c=-(KRP[1]+KT(1,0));
-      double v_s1=(-b+vcl_sqrt(b*b-4*a1*c))/(2*a1);
-      double v_s2=(-b-vcl_sqrt(b*b-4*a1*c))/(2*a1);
+      double v_s1=(-b+std::sqrt(b*b-4*a1*c))/(2*a1);
+      double v_s2=(-b-std::sqrt(b*b-4*a1*c))/(2*a1);
 
       double v_k=image_points_[k].y();
       if (v_s1>0 && v_s1<1400)
@@ -204,14 +206,14 @@ bpgl_bundle_rolling_shutter_adj_lsqr::f(vnl_vector<double> const& a,
       vnl_vector_ref<double> uw(2,unweighted.data_block()+2*k);
       double update = 2.0*avg_error/uw.rms();
       if (update < 1.0)
-        weights_[k] = vcl_min(weights_[k], update);
+        weights_[k] = std::min(weights_[k], update);
       else
         weights_[k] = 1.0;
-      //vcl_cout << weights_[k] << ' ';
+      //std::cout << weights_[k] << ' ';
       e[2*k]   = unweighted[2*k]   * weights_[k];
       e[2*k+1] = unweighted[2*k+1] * weights_[k];
     }
-    vcl_cout << vcl_endl;
+    std::cout << std::endl;
   }
 }
 
@@ -252,8 +254,8 @@ bpgl_bundle_rolling_shutter_adj_lsqr::fij(int i, int j, vnl_vector<double> const
 //: Compute the sparse Jacobian in block form.
 void
 bpgl_bundle_rolling_shutter_adj_lsqr::jac_blocks(vnl_vector<double> const& a, vnl_vector<double> const& b,
-                                                 vcl_vector<vnl_matrix<double> >& A,
-                                                 vcl_vector<vnl_matrix<double> >& B)
+                                                 std::vector<vnl_matrix<double> >& A,
+                                                 std::vector<vnl_matrix<double> >& B)
 {
   typedef vnl_crs_index::sparse_vector::iterator sv_itr;
   for (unsigned int i=0; i<number_of_a(); ++i)
@@ -356,9 +358,9 @@ bpgl_bundle_rolling_shutter_adj_lsqr::jac_Aij(vnl_double_3x4 const& Pi,
     }
     else
     {
-      double m = vcl_sqrt(m2);  // Rodrigues magnitude = rotation angle
-      double c = vcl_cos(m);
-      double s = vcl_sin(m);
+      double m = std::sqrt(m2);  // Rodrigues magnitude = rotation angle
+      double c = std::cos(m);
+      double s = std::sin(m);
 
       // common trig terms
       double ct = (1-c)/m2;
@@ -438,8 +440,8 @@ bpgl_bundle_rolling_shutter_adj_lsqr::jac_Aij(vnl_double_3x4 const& Pi,
     double b=(KRP[2]-KRd[1]/rolling_rate_+KT(2,0));
     double a=KRd[2]/rolling_rate_;
     double c=-(KRP[1]+KT(1,0));
-    double v_s1=(-b+vcl_sqrt(b*b-4*a*c))/(2*a);
-    double v_s2=(-b-vcl_sqrt(b*b-4*a*c))/(2*a);
+    double v_s1=(-b+std::sqrt(b*b-4*a*c))/(2*a);
+    double v_s2=(-b-std::sqrt(b*b-4*a*c))/(2*a);
 
     if (v_s1>0 && v_s1<1400)
         v_k=v_s1;
@@ -465,7 +467,7 @@ bpgl_bundle_rolling_shutter_adj_lsqr::jac_Aij(vnl_double_3x4 const& Pi,
 
 #if 0
     double ox=ai[6],oy=ai[7],oz=ai[8];
-    double om=vcl_sqrt(ox*ox+oy*oy+oz*oz);
+    double om=std::sqrt(ox*ox+oy*oy+oz*oz);
     vnl_double_3x3 drdox(0.0),drdoy(0.0),drdoz(0.0);
     vnl_double_3x1 dddox(0.0),dddoy(0.0),dddoz(0.0);
 
@@ -500,26 +502,26 @@ bpgl_bundle_rolling_shutter_adj_lsqr::jac_Aij(vnl_double_3x4 const& Pi,
     if (om!=0.0)
     {
       double domdox=ox/om, domdoy=oy/om, domdoz=oz/om;
-      drdox =domdox*t*vcl_sin(om*t)/(om*om)*oc2 -   domdox*vcl_sin(om*t)/(om*om)*oc         + vcl_sin(om*t)/om*docdox
-            +domdox*t*vcl_cos(om*t)/om*oc       - 2*domdox*(1-vcl_cos(om*t))/(om*om*om)*oc2 +(1-vcl_cos(om*t))/(om*om)*doc2dox;
+      drdox =domdox*t*std::sin(om*t)/(om*om)*oc2 -   domdox*std::sin(om*t)/(om*om)*oc         + std::sin(om*t)/om*docdox
+            +domdox*t*std::cos(om*t)/om*oc       - 2*domdox*(1-std::cos(om*t))/(om*om*om)*oc2 +(1-std::cos(om*t))/(om*om)*doc2dox;
 
-      drdoy =domdoy*t*vcl_sin(om*t)/(om*om)*oc2 -   domdoy*vcl_sin(om*t)/(om*om)*oc + vcl_sin(om*t)/om*docdoy
-            +domdoy*t*vcl_cos(om*t)/om*oc       - 2*domdoy*(1-vcl_cos(om*t))/(om*om*om)*oc2+(1-vcl_cos(om*t))/(om*om)*doc2doy;
+      drdoy =domdoy*t*std::sin(om*t)/(om*om)*oc2 -   domdoy*std::sin(om*t)/(om*om)*oc + std::sin(om*t)/om*docdoy
+            +domdoy*t*std::cos(om*t)/om*oc       - 2*domdoy*(1-std::cos(om*t))/(om*om*om)*oc2+(1-std::cos(om*t))/(om*om)*doc2doy;
 
-      drdoz =domdoz*t*vcl_sin(om*t)/(om*om)*oc2 -   domdoz*vcl_sin(om*t)/(om*om)*oc + vcl_sin(om*t)/om*docdoz
-            +domdoz*t*vcl_cos(om*t)/om*oc       - 2*domdoz*(1-vcl_cos(om*t))/(om*om*om)*oc2+(1-vcl_cos(om*t))/(om*om)*doc2doz;
+      drdoz =domdoz*t*std::sin(om*t)/(om*om)*oc2 -   domdoz*std::sin(om*t)/(om*om)*oc + std::sin(om*t)/om*docdoz
+            +domdoz*t*std::cos(om*t)/om*oc       - 2*domdoz*(1-std::cos(om*t))/(om*om*om)*oc2+(1-std::cos(om*t))/(om*om)*doc2doz;
 
-      dddox =-3*domdox*(vcl_sin(om*t)+om*t)/(om*om*om*om)*(oc2*d) + (vcl_sin(om*t)+om*t)/(om*om*om)*(doc2dox*d)
-            -domdox*t*(vcl_sin(om*t))/(om*om)*oc*d + (domdox*t*vcl_cos(om*t)+domdox*t)*(oc2*d)/(om*om*om)
-            +2*domdox*(1-vcl_cos(om*t))/(om*om*om)*(oc*d)- (1-vcl_cos(om*t))/(om*om)*docdox*d;
+      dddox =-3*domdox*(std::sin(om*t)+om*t)/(om*om*om*om)*(oc2*d) + (std::sin(om*t)+om*t)/(om*om*om)*(doc2dox*d)
+            -domdox*t*(std::sin(om*t))/(om*om)*oc*d + (domdox*t*std::cos(om*t)+domdox*t)*(oc2*d)/(om*om*om)
+            +2*domdox*(1-std::cos(om*t))/(om*om*om)*(oc*d)- (1-std::cos(om*t))/(om*om)*docdox*d;
 
-      dddoy =-3*domdoy*(vcl_sin(om*t)+om*t)/(om*om*om*om)*(oc2*d) + (vcl_sin(om*t)+om*t)/(om*om*om)*(doc2doy*d)
-            -domdoy*t*(vcl_sin(om*t))/(om*om)*oc*d + (domdoy*t*vcl_cos(om*t)+domdoy*t)*(oc2*d)/(om*om*om)
-            +2*domdoy*(1-vcl_cos(om*t))/(om*om*om)*(oc*d)- (1-vcl_cos(om*t))/(om*om)*docdoy*d;
+      dddoy =-3*domdoy*(std::sin(om*t)+om*t)/(om*om*om*om)*(oc2*d) + (std::sin(om*t)+om*t)/(om*om*om)*(doc2doy*d)
+            -domdoy*t*(std::sin(om*t))/(om*om)*oc*d + (domdoy*t*std::cos(om*t)+domdoy*t)*(oc2*d)/(om*om*om)
+            +2*domdoy*(1-std::cos(om*t))/(om*om*om)*(oc*d)- (1-std::cos(om*t))/(om*om)*docdoy*d;
 
-      dddoz =-3*domdoz*(vcl_sin(om*t)+om*t)/(om*om*om*om)*(oc2*d) + (vcl_sin(om*t)+om*t)/(om*om*om)*(doc2doz*d)
-            -domdoz*t*(vcl_sin(om*t))/(om*om)*oc*d + (domdoz*t*vcl_cos(om*t)+domdoz*t)*(oc2*d)/(om*om*om)
-            +2*domdoz*(1-vcl_cos(om*t))/(om*om*om)*(oc*d)- (1-vcl_cos(om*t))/(om*om)*docdoz*d;
+      dddoz =-3*domdoz*(std::sin(om*t)+om*t)/(om*om*om*om)*(oc2*d) + (std::sin(om*t)+om*t)/(om*om*om)*(doc2doz*d)
+            -domdoz*t*(std::sin(om*t))/(om*om)*oc*d + (domdoz*t*std::cos(om*t)+domdoz*t)*(oc2*d)/(om*om*om)
+            +2*domdoz*(1-std::cos(om*t))/(om*om*om)*(oc*d)- (1-std::cos(om*t))/(om*om)*docdoz*d;
     }
 
     vnl_double_4x4 dmdox(0.0);
@@ -559,9 +561,9 @@ bpgl_bundle_rolling_shutter_adj_lsqr::jac_Aij(vnl_double_3x4 const& Pi,
     }
     else
     {
-      dtddx= (vcl_sin(om*t)+om*t)/(om*om*om)*oc2*ddddx- (1-vcl_cos(om*t))/(om*om)*(oc*ddddx)+ddddx*t;
-      dtddy= (vcl_sin(om*t)+om*t)/(om*om*om)*oc2*ddddy- (1-vcl_cos(om*t))/(om*om)*(oc*ddddy)+ddddy*t;
-      dtddz= (vcl_sin(om*t)+om*t)/(om*om*om)*oc2*ddddz- (1-vcl_cos(om*t))/(om*om)*(oc*ddddz)+ddddz*t;
+      dtddx= (std::sin(om*t)+om*t)/(om*om*om)*oc2*ddddx- (1-std::cos(om*t))/(om*om)*(oc*ddddx)+ddddx*t;
+      dtddy= (std::sin(om*t)+om*t)/(om*om*om)*oc2*ddddy- (1-std::cos(om*t))/(om*om)*(oc*ddddy)+ddddy*t;
+      dtddz= (std::sin(om*t)+om*t)/(om*om*om)*oc2*ddddz- (1-std::cos(om*t))/(om*om)*(oc*ddddz)+ddddz*t;
     }
     vnl_double_4x4 dmddx(0.0);dmddx.update(dtddx,0,3);
     vnl_double_4x4 dmddy(0.0);dmddy.update(dtddy,0,3);
@@ -632,9 +634,9 @@ bpgl_bundle_rolling_shutter_adj_lsqr::rod_to_matrix(const double* r) const
 {
   double x2 = r[0]*r[0], y2 = r[1]*r[1], z2 = r[2]*r[2];
   double m = x2 + y2 + z2;
-  double theta = vcl_sqrt(m);
-  double s = vcl_sin(theta) / theta;
-  double c = (1 - vcl_cos(theta)) / m;
+  double theta = std::sqrt(m);
+  double s = std::sin(theta) / theta;
+  double c = (1 - std::cos(theta)) / m;
 
   vnl_matrix_fixed<double,3,3> R(0.0);
   R(0,0) = R(1,1) = R(2,2) = 1.0;
@@ -675,8 +677,8 @@ bpgl_bundle_rolling_shutter_adj_lsqr::vector_to_skewmatrix(const double* r) cons
 
 //: Create the parameter vector \p a from a vector of cameras
 vnl_vector<double>
-bpgl_bundle_rolling_shutter_adj_lsqr::create_param_vector(const vcl_vector<vpgl_perspective_camera<double> >& cameras,
-                                                          const vcl_vector<vnl_vector<double> > & motion)
+bpgl_bundle_rolling_shutter_adj_lsqr::create_param_vector(const std::vector<vpgl_perspective_camera<double> >& cameras,
+                                                          const std::vector<vnl_vector<double> > & motion)
 {
   vnl_vector<double> a(12*cameras.size(),0.0);
   for (unsigned int i=0; i<cameras.size(); ++i)
@@ -701,7 +703,7 @@ bpgl_bundle_rolling_shutter_adj_lsqr::create_param_vector(const vcl_vector<vpgl_
 
 //: Create the parameter vector \p b from a vector of 3D points
 vnl_vector<double>
-bpgl_bundle_rolling_shutter_adj_lsqr::create_param_vector(const vcl_vector<vgl_point_3d<double> >& world_points)
+bpgl_bundle_rolling_shutter_adj_lsqr::create_param_vector(const std::vector<vgl_point_3d<double> >& world_points)
 {
   vnl_vector<double> b(3*world_points.size(),0.0);
   for (unsigned int j=0; j<world_points.size(); ++j) {
@@ -733,15 +735,15 @@ bpgl_bundle_rolling_shutter_adjust::~bpgl_bundle_rolling_shutter_adjust()
 
 //: Bundle Adjust
 bool
-bpgl_bundle_rolling_shutter_adjust::optimize(vcl_vector<vpgl_perspective_camera<double> >& cameras,
-                                             vcl_vector<vnl_vector<double> > & motion,
+bpgl_bundle_rolling_shutter_adjust::optimize(std::vector<vpgl_perspective_camera<double> >& cameras,
+                                             std::vector<vnl_vector<double> > & motion,
                                              double & r,
-                                             vcl_vector<vgl_point_3d<double> >& world_points,
-                                             const vcl_vector<vgl_point_2d<double> >& image_points,
-                                             const vcl_vector<vcl_vector<bool> >& mask)
+                                             std::vector<vgl_point_3d<double> >& world_points,
+                                             const std::vector<vgl_point_2d<double> >& image_points,
+                                             const std::vector<std::vector<bool> >& mask)
 {
   // Extract the camera and point parameters
-  vcl_vector<vpgl_calibration_matrix<double> > K;
+  std::vector<vpgl_calibration_matrix<double> > K;
   a_ = bpgl_bundle_rolling_shutter_adj_lsqr::create_param_vector(cameras,motion);
   b_ = bpgl_bundle_rolling_shutter_adj_lsqr::create_param_vector(world_points);
   for (unsigned int i=0; i<cameras.size(); ++i) {
@@ -779,11 +781,11 @@ bpgl_bundle_rolling_shutter_adjust::optimize(vcl_vector<vpgl_perspective_camera<
 
 //: Write cameras and points to a file in VRML 2.0 for debugging
 void
-bpgl_bundle_rolling_shutter_adjust::write_vrml(const vcl_string& filename,
-                                               vcl_vector<vpgl_perspective_camera<double> >& cameras,
-                                               vcl_vector<vgl_point_3d<double> >& world_points)
+bpgl_bundle_rolling_shutter_adjust::write_vrml(const std::string& filename,
+                                               std::vector<vpgl_perspective_camera<double> >& cameras,
+                                               std::vector<vgl_point_3d<double> >& world_points)
 {
-  vcl_ofstream os(filename.c_str());
+  std::ofstream os(filename.c_str());
   os << "#VRML V2.0 utf8\n\n";
 
   for (unsigned int i=0; i<cameras.size(); ++i) {
@@ -793,7 +795,7 @@ bpgl_bundle_rolling_shutter_adjust::write_vrml(const vcl_string& filename,
     //R.set_row(1,-1.0*R.get_row(1));
     //R.set_row(2,-1.0*R.get_row(2));
     vgl_point_3d<double> ctr = cameras[i].get_camera_center();
-    double fov = 2.0*vcl_max(vcl_atan(K[1][2]/K[1][1]), vcl_atan(K[0][2]/K[0][0]));
+    double fov = 2.0*std::max(std::atan(K[1][2]/K[1][1]), std::atan(K[0][2]/K[0][0]));
     os  << "Viewpoint {\n"
         << "  position    "<< ctr.x() << ' ' << ctr.y() << ' ' << ctr.z() << '\n'
         << "  orientation "<< R.axis() << ' '<< R.angle() << '\n'

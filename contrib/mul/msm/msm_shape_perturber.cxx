@@ -20,7 +20,7 @@ void msm_shape_perturber::set_model( const msm_shape_model& in )
   n_params_ = sm_inst_.params().size();
   dparams_.set_size( n_params_ );
 
-  vcl_size_t np = n_pose_ + n_params_;
+  std::size_t np = n_pose_ + n_params_;
 
   all_.set_size( np );
   dall_.set_size( np );
@@ -94,7 +94,7 @@ void msm_shape_perturber::set_max_dp( const vnl_vector<double>& max_dpose, const
   max_dparams_ = max_dparams;
 }
 
-void msm_shape_perturber::set_seed( vcl_size_t s )
+void msm_shape_perturber::set_seed( std::size_t s )
 {
   rand_.reseed( s );
 }

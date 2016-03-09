@@ -7,7 +7,7 @@
 
 struct scorecomp
 {
-    bool operator()( vcl_pair<float,int> const& a, vcl_pair<float,int> const& b) const
+    bool operator()( std::pair<float,int> const& a, std::pair<float,int> const& b) const
     {
         return a.first >b.first;
     }
@@ -32,7 +32,7 @@ boxm2_volm_matcher_p0::boxm2_volm_matcher_p0(volm_camera_space_sptr cam_space,vo
         iter->cam_indices(roll_index,fov_index,head_index,tilt_index);
         volm_spherical_regions_layer q_regions =query_.query_regions(roll_index);
 
-        vcl_vector<vsph_sph_box_2d> xfomred_boxes;
+        std::vector<vsph_sph_box_2d> xfomred_boxes;
         vsph_sph_box_2d imbox;
         for (int i = 0; i< q_regions.size(); ++i)
         {
@@ -72,9 +72,9 @@ bool boxm2_volm_matcher_p0::match(volm_spherical_region_index & index, volm_scor
     spherical_region_attributes attributes_to_match[] = {ORIENTATION,
                                                          NLCD,
                                                          SKY};
-    vcl_vector<vcl_pair<float,int> > scores;
+    std::vector<std::pair<float,int> > scores;
     volm_spherical_regions_layer index_layer = index.index_regions();
-    vcl_vector<volm_spherical_region> i_regions = index_layer.regions();
+    std::vector<volm_spherical_region> i_regions = index_layer.regions();
     int count = 0;
 
     for ( camera_space_iterator iter = cam_space_->begin(); iter != cam_space_->end(); ++iter,++count)
@@ -86,9 +86,9 @@ bool boxm2_volm_matcher_p0::match(volm_spherical_region_index & index, volm_scor
         double score = 0.0;
         iter->cam_indices(roll_index,fov_index,head_index,tilt_index);
         volm_spherical_regions_layer q_regions =query_.query_regions(roll_index);
-        vcl_map<unsigned char, double> scores_by_lcd;
+        std::map<unsigned char, double> scores_by_lcd;
         //this->match_order(index_layer,score,q_regions,iter,imbox_xformed_[count]);
-        vcl_map<unsigned char, int> score_nlcd ;
+        std::map<unsigned char, int> score_nlcd ;
         for (int i = 0; i< q_regions.size(); ++i)
         {
             volm_spherical_region query_region = q_regions.regions()[i];
@@ -99,7 +99,7 @@ bool boxm2_volm_matcher_p0::match(volm_spherical_region_index & index, volm_scor
             {
                 if (!query_region.attribute_value(attributes_to_match[k],qval))
                     continue;
-                vcl_vector<unsigned int> attribute_poly_ids = index_layer.attributed_regions_by_value(attributes_to_match[k],qval);
+                std::vector<unsigned int> attribute_poly_ids = index_layer.attributed_regions_by_value(attributes_to_match[k],qval);
                 for (unsigned j = 0; j< attribute_poly_ids.size(); ++j)
                 {
                     volm_spherical_region index_region = i_regions[attribute_poly_ids[j]];
@@ -117,19 +117,19 @@ bool boxm2_volm_matcher_p0::match(volm_spherical_region_index & index, volm_scor
                 }
             }
         }
-        for (vcl_map<unsigned char, int>::iterator map_iter = score_nlcd.begin(); map_iter!=score_nlcd.end(); ++map_iter)
+        for (std::map<unsigned char, int>::iterator map_iter = score_nlcd.begin(); map_iter!=score_nlcd.end(); ++map_iter)
             score+=(float)map_iter->second;
-        scores.push_back(vcl_make_pair<float,int>((float)score,(*iter).cam_index()));
+        scores.push_back(std::make_pair<float,int>((float)score,(*iter).cam_index()));
     }
-    //vcl_cout<<"Time taken is "<< t.all()<<vcl_endl;
+    //std::cout<<"Time taken is "<< t.all()<<std::endl;
     float max_score = -1e10;
     int max_cam_id = -1;
     int grndtruthindex = cam_space_->closest_index(cam_angles(cam_space_->roll_mid(),cam_space_->top_fovs()[0],cam_space_->head_mid(),cam_space_->tilt_mid()));
-    vcl_cout<<"INDEX of Ground Truth cam "<<grndtruthindex<<" and the score is "<< scores[grndtruthindex].first<<vcl_endl;
+    std::cout<<"INDEX of Ground Truth cam "<<grndtruthindex<<" and the score is "<< scores[grndtruthindex].first<<std::endl;
     //: selecting the top 200 cameras and the best camera location
-    vcl_sort(scores.begin(),scores.end(),scorecomp_obj);
+    std::sort(scores.begin(),scores.end(),scorecomp_obj);
     int cnt = 0;
-    for (vcl_vector<vcl_pair<float,int> >::iterator iter = scores.begin(); iter!=scores.end() && cnt < 1000; ++iter, ++cnt)
+    for (std::vector<std::pair<float,int> >::iterator iter = scores.begin(); iter!=scores.end() && cnt < 1000; ++iter, ++cnt)
     {
         if (iter->first > max_score )
         {
@@ -137,15 +137,15 @@ bool boxm2_volm_matcher_p0::match(volm_spherical_region_index & index, volm_scor
             max_cam_id = iter->second;
         }
         score->cam_id_.push_back(iter->second);
-        //vcl_cout<<' '<<iter->second<<' ' <<iter->first;
+        //std::cout<<' '<<iter->second<<' ' <<iter->first;
     }
     score->max_cam_id_ = max_cam_id;
     score->max_score_ = max_score;
 
-    //vcl_cout<<" BEST CAMERA ";
+    //std::cout<<" BEST CAMERA ";
     //cam_space_->camera_angles(max_cam_id).print();
-    //vcl_cout<<"Total # of cameras "<<scores.size()<<" and the central camera is at "<<scores.size()/2<<vcl_endl;
-    //vcl_cout<<"Closest to Canocnical camera  "<<grndtruthindex;
+    //std::cout<<"Total # of cameras "<<scores.size()<<" and the central camera is at "<<scores.size()/2<<std::endl;
+    //std::cout<<"Closest to Canocnical camera  "<<grndtruthindex;
 
 
     return true;
@@ -156,12 +156,12 @@ bool boxm2_volm_matcher_p0::match_order(volm_spherical_regions_layer & index_lay
 {
     //: compute mean or min depth for each query box
     cam_angles camera = iter->camera_angles();
-    vcl_vector<volm_spherical_region> i_regions = index_layer.regions();
-    vcl_vector<unsigned int> attribute_poly_ids = index_layer.attributed_regions_by_type_only(DEPTH_INTERVAL);
+    std::vector<volm_spherical_region> i_regions = index_layer.regions();
+    std::vector<unsigned int> attribute_poly_ids = index_layer.attributed_regions_by_type_only(DEPTH_INTERVAL);
 
-    vcl_vector<float> depths ;
-    vcl_vector<unsigned char> depth_intervals ;
-    vcl_vector<unsigned int> reduced_attribute_poly_ids;
+    std::vector<float> depths ;
+    std::vector<unsigned char> depth_intervals ;
+    std::vector<unsigned int> reduced_attribute_poly_ids;
     for (unsigned j = 0; j< attribute_poly_ids.size(); ++j)
     {
         volm_spherical_region index_region = i_regions[attribute_poly_ids[j]];
@@ -188,7 +188,7 @@ bool boxm2_volm_matcher_p0::match_order(volm_spherical_regions_layer & index_lay
             float area = intersection_area(qbox_xfomred,index_region.bbox_ref());
             unsigned char ival = (unsigned char)0;
             index_region.attribute_value(DEPTH_INTERVAL,ival);
-            mean_depth+=area*vcl_pow(1.01f,(float)ival);
+            mean_depth+=area*std::pow(1.01f,(float)ival);
             sum_weights+=area;
         }
         mean_depth =sum_weights > 0.0 ? mean_depth/sum_weights: 0.0;

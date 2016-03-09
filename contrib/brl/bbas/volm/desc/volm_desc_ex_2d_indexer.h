@@ -29,40 +29,40 @@
 class volm_desc_ex_2d_indexer : public volm_desc_indexer
 {
 public:
-  static vcl_string& get_name();
+  static std::string& get_name();
 
-  volm_desc_ex_2d_indexer(vcl_string const& input_folder,
-                          vcl_string const& out_index_folder,
-                          vcl_vector<double> const& radius,
+  volm_desc_ex_2d_indexer(std::string const& input_folder,
+                          std::string const& out_index_folder,
+                          std::vector<double> const& radius,
                           unsigned const& nlands = volm_osm_category_io::volm_land_table.size());
 
   // handles any necessary loading during indexing when it switches processing from one leaf to the next leaf
   //  for the case of this class, find the set of volm_img_info that intersects the current leaf
   virtual bool get_next();
 
-  virtual bool extract(double lat, double lon, double elev, vcl_vector<unsigned char>& values);
+  virtual bool extract(double lat, double lon, double elev, std::vector<unsigned char>& values);
 
   //: each driving indexer should overwrite with the size of the descriptor
   virtual unsigned layer_size() { return layer_size_; }
 
-  virtual vcl_string get_index_type_str() { return volm_desc_ex_2d_indexer::get_name(); }
+  virtual std::string get_index_type_str() { return volm_desc_ex_2d_indexer::get_name(); }
 
   //: generate parameter files
   virtual bool write_params_file();
 
 public:
-  vcl_vector<volm_img_info> classification_maps_;  // unsigned char images with id of the land types, the id in the value of entries in volm_label_table
+  std::vector<volm_img_info> classification_maps_;  // unsigned char images with id of the land types, the id in the value of entries in volm_label_table
 
   unsigned nlands_;
   unsigned ndists_;
-  vcl_vector<double> radius_;
+  std::vector<double> radius_;
   unsigned layer_size_;
-  vcl_vector<unsigned> current_leaf_maps_;  // cash the maps of the current leaf
+  std::vector<unsigned> current_leaf_maps_;  // cash the maps of the current leaf
   double largest_rad_;
   double largest_rad_seconds_;
 
-  vcl_map<unsigned, vil_image_view_base_sptr > lon_imgs;  // compute these for the classification maps faster access
-  vcl_map<unsigned, vil_image_view_base_sptr > lat_imgs;
+  std::map<unsigned, vil_image_view_base_sptr > lon_imgs;  // compute these for the classification maps faster access
+  std::map<unsigned, vil_image_view_base_sptr > lat_imgs;
 };
 
 #endif  //volm_desc_ex_2d_indexer_h_

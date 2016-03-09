@@ -7,7 +7,9 @@
 // \author Vishal Jain
 // \date Mar 10, 2011
 
-#include <vcl_fstream.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <fstream>
 #include <bstm/io/bstm_cache.h>
 #include <bstm/io/bstm_lru_cache.h>
 #include <bstm/bstm_scene.h>
@@ -37,7 +39,7 @@ bool bstm_cpp_ingest_boxm2_scene_process_cons(bprb_func_process& pro)
   using namespace bstm_cpp_ingest_boxm2_scene_process_globals;
 
   //process takes 1 input
-  vcl_vector<vcl_string> input_types_(n_inputs_);
+  std::vector<std::string> input_types_(n_inputs_);
 
   input_types_[0] = "bstm_scene_sptr";
   input_types_[1] = "bstm_cache_sptr";
@@ -50,7 +52,7 @@ bool bstm_cpp_ingest_boxm2_scene_process_cons(bprb_func_process& pro)
 
   // process has 1 output:
   // output[0]: scene sptr
-  vcl_vector<vcl_string>  output_types_(n_outputs_);
+  std::vector<std::string>  output_types_(n_outputs_);
 
   bool good = pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
   return good;
@@ -62,7 +64,7 @@ bool bstm_cpp_ingest_boxm2_scene_process(bprb_func_process& pro)
   using namespace bstm_cpp_ingest_boxm2_scene_process_globals;
 
   if ( pro.n_inputs() < n_inputs_ ) {
-    vcl_cout << pro.name() << ": The input number should be " << n_inputs_<< vcl_endl;
+    std::cout << pro.name() << ": The input number should be " << n_inputs_<< std::endl;
     return false;
   }
 
@@ -77,9 +79,9 @@ bool bstm_cpp_ingest_boxm2_scene_process(bprb_func_process& pro)
   double app_threshold =pro.get_input<double>(i++);
 
   //bstm app query
-  vcl_string data_type;
+  std::string data_type;
   int apptypesize;
-  vcl_vector<vcl_string> valid_types;
+  std::vector<std::string> valid_types;
   valid_types.push_back(bstm_data_traits<BSTM_MOG6_VIEW_COMPACT>::prefix());
   valid_types.push_back(bstm_data_traits<BSTM_MOG6_VIEW>::prefix());
   valid_types.push_back(bstm_data_traits<BSTM_MOG3_GREY>::prefix());
@@ -87,13 +89,13 @@ bool bstm_cpp_ingest_boxm2_scene_process(bprb_func_process& pro)
   valid_types.push_back(bstm_data_traits<BSTM_GAUSS_RGB>::prefix());
 
   if ( !bstm_util::verify_appearance( *scene, valid_types, data_type, apptypesize ) ) {
-    vcl_cout<<"bstm_cpp_ingest_boxm2_scene_process ERROR: scene doesn't have BSTM_MOG6_VIEW or BSTM_MOG3_GREY data type"<<vcl_endl;
+    std::cout<<"bstm_cpp_ingest_boxm2_scene_process ERROR: scene doesn't have BSTM_MOG6_VIEW or BSTM_MOG3_GREY data type"<<std::endl;
     return false;
   }
 
-  vcl_string boxm2_data_type;
+  std::string boxm2_data_type;
   int boxm2_apptypesize;
-  vcl_vector<vcl_string> boxm2_valid_types;
+  std::vector<std::string> boxm2_valid_types;
   boxm2_valid_types.push_back(boxm2_data_traits<BOXM2_MOG6_VIEW_COMPACT>::prefix());
   boxm2_valid_types.push_back(boxm2_data_traits<BOXM2_MOG3_GREY>::prefix());
   boxm2_valid_types.push_back(boxm2_data_traits<BOXM2_MOG6_VIEW>::prefix());
@@ -101,16 +103,16 @@ bool bstm_cpp_ingest_boxm2_scene_process(bprb_func_process& pro)
   boxm2_valid_types.push_back(boxm2_data_traits<BOXM2_GAUSS_RGB>::prefix());
 
   if ( !boxm2_util::verify_appearance( *boxm2_scene, boxm2_valid_types, boxm2_data_type, boxm2_apptypesize ) ) {
-    vcl_cout<<"bstm_cpp_ingest_boxm2_scene_process ERROR: boxm2 scene doesn't have BOXM2_MOG3_GREY or BOXM2_MOG3_GREY_16 data type"<<vcl_endl;
+    std::cout<<"bstm_cpp_ingest_boxm2_scene_process ERROR: boxm2 scene doesn't have BOXM2_MOG3_GREY or BOXM2_MOG3_GREY_16 data type"<<std::endl;
     return false;
   }
 
   //next check individual block meta data
-  vcl_map<bstm_block_id, bstm_block_metadata> blocks = scene->blocks();
-  vcl_map<boxm2_block_id, boxm2_block_metadata> boxm2_blocks = boxm2_scene->blocks();
+  std::map<bstm_block_id, bstm_block_metadata> blocks = scene->blocks();
+  std::map<boxm2_block_id, boxm2_block_metadata> boxm2_blocks = boxm2_scene->blocks();
 
   //iter over boxm2 blocks to make sure meta data and id's are consistent
-  vcl_map<boxm2_block_id, boxm2_block_metadata>::const_iterator iter = boxm2_blocks.begin();
+  std::map<boxm2_block_id, boxm2_block_metadata>::const_iterator iter = boxm2_blocks.begin();
   for(; iter != boxm2_blocks.end(); iter++)
   {
     //given a boxm2 block and metadata
@@ -118,7 +120,7 @@ bool bstm_cpp_ingest_boxm2_scene_process(bprb_func_process& pro)
     boxm2_block_metadata boxm2_metadata = iter->second;
 
     //search for it in the bstm scene
-    vcl_map<bstm_block_id, bstm_block_metadata> ::const_iterator bstm_iter = blocks.begin();
+    std::map<bstm_block_id, bstm_block_metadata> ::const_iterator bstm_iter = blocks.begin();
     for(; bstm_iter != blocks.end() ; bstm_iter++)
     {
       bstm_block_id bstm_id = bstm_iter->first;
@@ -128,8 +130,8 @@ bool bstm_cpp_ingest_boxm2_scene_process(bprb_func_process& pro)
         //found same block id, check block metadata
          bstm_block_metadata bstm_metadata = bstm_iter->second;
          if(! (bstm_metadata == boxm2_metadata)) {
-           vcl_cerr << "bstm scene and boxm2 scene are not consistent! block " << boxm2_id << " metadata not consistent!\n";
-           vcl_cerr << "Exiting..." << vcl_endl;
+           std::cerr << "bstm scene and boxm2 scene are not consistent! block " << boxm2_id << " metadata not consistent!\n";
+           std::cerr << "Exiting..." << std::endl;
            return false;
          }
 
@@ -139,7 +141,7 @@ bool bstm_cpp_ingest_boxm2_scene_process(bprb_func_process& pro)
 
 
          //now do the work
-         //vcl_cout << "Ingesting " << boxm2_id << " into " <<  bstm_metadata.id_ << vcl_endl;
+         //std::cout << "Ingesting " << boxm2_id << " into " <<  bstm_metadata.id_ << std::endl;
 
          //get data from bstm scene
          bstm_block* blk = cache->get_block(bstm_metadata.id_);
@@ -148,7 +150,7 @@ bool bstm_cpp_ingest_boxm2_scene_process(bprb_func_process& pro)
          bstm_data_base * mog     = cache->get_data_base(bstm_metadata.id_, data_type);
 
 
-         vcl_map<vcl_string, bstm_data_base*> datas;
+         std::map<std::string, bstm_data_base*> datas;
          datas[bstm_data_traits<BSTM_ALPHA>::prefix()] = alph;
          datas[data_type] = mog;
 
@@ -159,7 +161,7 @@ bool bstm_cpp_ingest_boxm2_scene_process(bprb_func_process& pro)
 
 
 
-         vcl_map<vcl_string, boxm2_data_base*> boxm2_datas;
+         std::map<std::string, boxm2_data_base*> boxm2_datas;
          boxm2_datas[boxm2_data_traits<BOXM2_ALPHA>::prefix()] = boxm2_alph;
          boxm2_datas[boxm2_data_type] = boxm2_mog;
 
@@ -181,12 +183,12 @@ bool bstm_cpp_ingest_boxm2_scene_process(bprb_func_process& pro)
          else if( boxm2_data_type == boxm2_data_traits<BOXM2_GAUSS_RGB_VIEW_COMPACT>::prefix() && data_type == bstm_data_traits<BSTM_GAUSS_RGB_VIEW_COMPACT>::prefix()  )
            bstm_ingest_boxm2_scene_function<BSTM_GAUSS_RGB_VIEW_COMPACT, BOXM2_GAUSS_RGB_VIEW_COMPACT>(blk,blk_t,datas,boxm2_blk,boxm2_datas,local_time, p_threshold, app_threshold);
          else
-           vcl_cout << "bstm_cpp_ingest_boxm2_scene_process ERROR! appearance models do not match, boxm2_data_type: " << boxm2_data_type << " bstm_data_type: " <<  data_type << vcl_endl;
+           std::cout << "bstm_cpp_ingest_boxm2_scene_process ERROR! appearance models do not match, boxm2_data_type: " << boxm2_data_type << " bstm_data_type: " <<  data_type << std::endl;
       }
     }
   }
 
 
-  vcl_cout << "Finished ingesting scene..." << vcl_endl;
+  std::cout << "Finished ingesting scene..." << std::endl;
   return true;
 }

@@ -18,16 +18,18 @@
 #include <bsta/bsta_gaussian_full.h>
 #include <bsta/bsta_mixture.h>
 #include <bsta/bsta_attributes.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iostream>
 
 //: fit a 1D Gaussian distribution to a set of weighted samples
 template <class T>
-void bsta_fit_gaussian(vcl_vector<T> const& samples, vcl_vector<T> const& sample_weights, bsta_gaussian_sphere<T,1>& gaussian)
+void bsta_fit_gaussian(std::vector<T> const& samples, std::vector<T> const& sample_weights, bsta_gaussian_sphere<T,1>& gaussian)
 {
   // sanity check
   if (samples.size() != sample_weights.size()) {
-    vcl_cerr << "bsta_fit_gaussian : error - samples.size == " << samples.size()
-             << ", sample_weights.size == " << sample_weights.size() << vcl_endl;
+    std::cerr << "bsta_fit_gaussian : error - samples.size == " << samples.size()
+             << ", sample_weights.size == " << sample_weights.size() << std::endl;
     return;
   }
 
@@ -70,13 +72,13 @@ void bsta_fit_gaussian(vcl_vector<T> const& samples, vcl_vector<T> const& sample
 
 //: fit a N-D spherical Gaussian distribution to a set of weighted samples
 template <class T, unsigned n>
-void bsta_fit_gaussian(vcl_vector<vnl_vector_fixed<T,n> > const& samples, vcl_vector<T> const& sample_weights,
+void bsta_fit_gaussian(std::vector<vnl_vector_fixed<T,n> > const& samples, std::vector<T> const& sample_weights,
                        bsta_gaussian_sphere<T,n>& gaussian )
 {
   // sanity check
   if (samples.size() != sample_weights.size()) {
-    vcl_cerr << "bsta_fit_gaussian : error - samples.size == " << samples.size()
-             << ", sample_weights.size == " << sample_weights.size() << vcl_endl;
+    std::cerr << "bsta_fit_gaussian : error - samples.size == " << samples.size()
+             << ", sample_weights.size == " << sample_weights.size() << std::endl;
     return;
   }
 
@@ -116,14 +118,14 @@ void bsta_fit_gaussian(vcl_vector<vnl_vector_fixed<T,n> > const& samples, vcl_ve
 
 //: fit a N-D independent Gaussian distribution to a set of weighted samples
 template <class T, unsigned n>
-void bsta_fit_gaussian(vcl_vector<vnl_vector_fixed<T,n> > const& samples, vcl_vector<T> const& sample_weights,
+void bsta_fit_gaussian(std::vector<vnl_vector_fixed<T,n> > const& samples, std::vector<T> const& sample_weights,
                        bsta_gaussian_indep<T,n>& gaussian)
 {
   const unsigned int nobs = samples.size();
   // sanity check
   if (nobs != sample_weights.size()) {
-    vcl_cerr << "bsta_fit_gaussian : error - samples.size == " << samples.size()
-             << ", sample_weights.size == " << sample_weights.size() << vcl_endl;
+    std::cerr << "bsta_fit_gaussian : error - samples.size == " << samples.size()
+             << ", sample_weights.size == " << sample_weights.size() << std::endl;
     return;
   }
 
@@ -161,14 +163,14 @@ void bsta_fit_gaussian(vcl_vector<vnl_vector_fixed<T,n> > const& samples, vcl_ve
 
 //: fit a N-D Gaussian distribution with full covariance to a set of weighted samples
 template <class T, unsigned n>
-void bsta_fit_gaussian(vcl_vector<vnl_vector_fixed<T,n> > const& samples, vcl_vector<T> const& sample_weights,
+void bsta_fit_gaussian(std::vector<vnl_vector_fixed<T,n> > const& samples, std::vector<T> const& sample_weights,
                        bsta_gaussian_full<T,n>& gaussian)
 {
   const unsigned int nobs = static_cast<const unsigned>(samples.size());
   // sanity check
   if (nobs != static_cast<unsigned>(sample_weights.size())) {
-    vcl_cerr << "bsta_fit_gaussian : error - samples.size == " << samples.size()
-             << ", sample_weights.size == " << sample_weights.size() << vcl_endl;
+    std::cerr << "bsta_fit_gaussian : error - samples.size == " << samples.size()
+             << ", sample_weights.size == " << sample_weights.size() << std::endl;
     return;
   }
 
@@ -206,7 +208,7 @@ void bsta_fit_gaussian(vcl_vector<vnl_vector_fixed<T,n> > const& samples, vcl_ve
 // Helper function for clipping covariance matrix
 template<class T>
 T clip_covar(T var, T min_var)
-{ return vcl_max(var,min_var); }
+{ return std::max(var,min_var); }
 
 // Helper function for clipping covariance matrix
 template<class T, unsigned n>
@@ -214,7 +216,7 @@ vnl_vector_fixed<T,n> clip_covar(vnl_vector_fixed<T,n> covar, vnl_vector_fixed<T
 {
   vnl_vector_fixed<T,n> maxval;
   for (unsigned int i=0; i<n; ++i) {
-    maxval[i] = vcl_max(covar[i],min_covar[i]);
+    maxval[i] = std::max(covar[i],min_covar[i]);
   }
   return maxval;
 }
@@ -226,7 +228,7 @@ vnl_matrix_fixed<T,n,n> clip_covar(vnl_matrix_fixed<T,n,n> covar, vnl_matrix_fix
   vnl_matrix_fixed<T,n,n> maxval;
   for (unsigned int i=0; i<n; ++i) {
     for (unsigned int j=0; j<n; ++j) {
-      maxval(i,j) = vcl_max(covar(i,j),min_covar(i,j));
+      maxval(i,j) = std::max(covar(i,j),min_covar(i,j));
     }
   }
   return maxval;
@@ -236,21 +238,21 @@ vnl_matrix_fixed<T,n,n> clip_covar(vnl_matrix_fixed<T,n,n> covar, vnl_matrix_fix
 // Uses EM to compute mean and sigma.
 // min_var prevents EM from converging to degenerate distribution centered around a single sample
 template <class gauss_type>
-void bsta_fit_gaussian(vcl_vector<typename gauss_type::vector_type> const& samples,
-                       vcl_vector<typename gauss_type::math_type> const& sample_probs,
-                       vcl_vector<typename gauss_type::math_type> const& prob_densities_other,
+void bsta_fit_gaussian(std::vector<typename gauss_type::vector_type> const& samples,
+                       std::vector<typename gauss_type::math_type> const& sample_probs,
+                       std::vector<typename gauss_type::math_type> const& prob_densities_other,
                        gauss_type& gaussian, typename gauss_type::covar_type min_covar)
 {
   // sanity checks
   const unsigned int nobs = (unsigned int)samples.size();
   if (nobs != sample_probs.size()) {
-    vcl_cerr << "bsta_fit_gaussian : error - samples.size == " << samples.size()
-             << ", sample_probs.size == " << sample_probs.size() << vcl_endl;
+    std::cerr << "bsta_fit_gaussian : error - samples.size == " << samples.size()
+             << ", sample_probs.size == " << sample_probs.size() << std::endl;
     return;
   }
   if (nobs != prob_densities_other.size()) {
-    vcl_cerr << "bsta_fit_gaussian : error - samples.size == " << samples.size()
-             << ", prob_densities_other.size == " << prob_densities_other.size() << vcl_endl;
+    std::cerr << "bsta_fit_gaussian : error - samples.size == " << samples.size()
+             << ", prob_densities_other.size == " << prob_densities_other.size() << std::endl;
     return;
   }
   if (nobs == 0) {
@@ -261,7 +263,7 @@ void bsta_fit_gaussian(vcl_vector<typename gauss_type::vector_type> const& sampl
   // initialize with estimate of gaussian parameters
   typedef typename gauss_type::math_type T;
 
-  vcl_vector<T> sample_weights = sample_probs;
+  std::vector<T> sample_weights = sample_probs;
   bsta_fit_gaussian(samples, sample_weights, gaussian);
 
   const unsigned int max_its = 100;
@@ -283,7 +285,7 @@ void bsta_fit_gaussian(vcl_vector<typename gauss_type::vector_type> const& sampl
         new_sample_weight = P1 / normalizing_factor;
       }
       // compute delta weight for convergence check
-      T weight_delta = vcl_fabs(sample_weights[n] - new_sample_weight);
+      T weight_delta = std::fabs(sample_weights[n] - new_sample_weight);
       if (weight_delta > max_weight_change) {
         max_weight_change = weight_delta;
       }

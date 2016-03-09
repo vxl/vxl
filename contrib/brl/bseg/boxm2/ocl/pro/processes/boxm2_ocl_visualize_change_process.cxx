@@ -7,9 +7,11 @@
 // \date Oct 10, 2011
 
 #include <bprb/bprb_func_process.h>
-#include <vcl_fstream.h>
-#include <vcl_algorithm.h>
-#include <vcl_sstream.h>
+#include <fstream>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <algorithm>
+#include <sstream>
 #include <boxm2/ocl/boxm2_ocl_util.h>
 #include <boxm2/boxm2_util.h>
 #include <vil/vil_image_view.h>
@@ -28,7 +30,7 @@ bool boxm2_ocl_visualize_change_process_cons(bprb_func_process& pro)
   using namespace boxm2_ocl_visualize_change_process_globals;
 
   //process takes 1 input
-  vcl_vector<vcl_string> input_types_(n_inputs_);
+  std::vector<std::string> input_types_(n_inputs_);
   input_types_[0] = "vil_image_view_base_sptr";   //change image
   input_types_[1] = "vil_image_view_base_sptr";   //original image
   input_types_[2] = "float";                      //threshold value
@@ -36,7 +38,7 @@ bool boxm2_ocl_visualize_change_process_cons(bprb_func_process& pro)
 
   // process has 1 output:
   // output[0]: scene sptr
-  vcl_vector<vcl_string>  output_types_(n_outputs_);
+  std::vector<std::string>  output_types_(n_outputs_);
   output_types_[0] = "vil_image_view_base_sptr";  //prob of change image
   bool good = pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
 
@@ -52,7 +54,7 @@ bool boxm2_ocl_visualize_change_process(bprb_func_process& pro)
 {
   using namespace boxm2_ocl_visualize_change_process_globals;
   if ( pro.n_inputs() < n_inputs_ ) {
-    vcl_cout << pro.name() << ": The input number should be " << n_inputs_<< vcl_endl;
+    std::cout << pro.name() << ": The input number should be " << n_inputs_<< std::endl;
     return false;
   }
 

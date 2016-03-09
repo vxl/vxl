@@ -7,7 +7,9 @@
 // \author fsm
 
 #include "osl_ortho_regress.h"
-#include <vcl_cmath.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <cmath>
 #include <vcl_cassert.h>
 
 // convenience methods
@@ -23,7 +25,7 @@ void osl_ortho_regress::add_points(float const *x, float const *y, unsigned n) {
 }
 
 double osl_ortho_regress::rms_cost(double a, double b, double c) const {
-  return vcl_sqrt( cost(a, b, c) / S1 );
+  return std::sqrt( cost(a, b, c) / S1 );
 }
 
 //--------------------------------------------------------------------------------

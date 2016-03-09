@@ -9,20 +9,22 @@
 
 #include <vul/vul_file.h>
 #include <vnl/vnl_math.h>
-#include <vcl_limits.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <limits>
 
-bool save_occupancy_raw(vcl_string filename, bvxm_voxel_grid<float>* grid)
+bool save_occupancy_raw(std::string filename, bvxm_voxel_grid<float>* grid)
 {
-  vcl_fstream ofs(filename.c_str(),vcl_ios::binary | vcl_ios::out);
+  std::fstream ofs(filename.c_str(),std::ios::binary | std::ios::out);
   if (!ofs.is_open()) {
-    vcl_cerr << "error opening file " << filename << " for write!\n";
+    std::cerr << "error opening file " << filename << " for write!\n";
     return false;
   }
 
   //get the range of the grid
   bvxm_voxel_grid<float>::iterator grid_it = grid->begin();
-  float max = -1.0f * vcl_numeric_limits<float>::infinity();
-  float min = vcl_numeric_limits<float>::infinity();
+  float max = -1.0f * std::numeric_limits<float>::infinity();
+  float min = std::numeric_limits<float>::infinity();
   for (unsigned k=0; grid_it != grid->end(); ++grid_it, ++k) {
     for (unsigned i=0; i<(*grid_it).nx(); ++i) {
       for (unsigned j=0; j < (*grid_it).ny(); ++j) {
@@ -34,8 +36,8 @@ bool save_occupancy_raw(vcl_string filename, bvxm_voxel_grid<float>* grid)
     }
   }
 
-  vcl_cout << "max: " << max <<vcl_endl
-           << "min: " << min <<vcl_endl;
+  std::cout << "max: " << max <<std::endl
+           << "min: " << min <<std::endl;
 
   // write header
 
@@ -56,7 +58,7 @@ bool save_occupancy_raw(vcl_string filename, bvxm_voxel_grid<float>* grid)
 
   bvxm_voxel_grid<float>::iterator ocp_it = grid->begin();
   for (unsigned k=0; ocp_it != grid->end(); ++ocp_it, ++k) {
-    vcl_cout << '.';
+    std::cout << '.';
     for (unsigned i=0; i<(*ocp_it).nx(); ++i) {
       for (unsigned j=0; j < (*ocp_it).ny(); ++j) {
 
@@ -64,7 +66,7 @@ bool save_occupancy_raw(vcl_string filename, bvxm_voxel_grid<float>* grid)
       }
     }
   }
-  vcl_cout << vcl_endl;
+  std::cout << std::endl;
   ofs.write(reinterpret_cast<char*>(ocp_array),sizeof(float)*nx*ny*nz);
 
   ofs.close();
@@ -81,10 +83,10 @@ void vertical_grid(bvxm_voxel_grid<float>* grid, unsigned grid_x, unsigned grid_
   grid->initialize_data(init_val);
 
   // read in each slice, check that init_val was set, and fill with new value
-  vcl_cout << "read/write: ";
+  std::cout << "read/write: ";
   bvxm_voxel_slab_iterator<float> slab_it;
   for (slab_it = grid->begin(); slab_it != grid->end(); ++slab_it) {
-    vcl_cout << '.';
+    std::cout << '.';
     bvxm_voxel_slab<float> vit=*slab_it;
     for (unsigned i=0; i<grid_x/2; i++) {
       for (unsigned j=0; j<grid_y; j++) {
@@ -102,10 +104,10 @@ void horizontal_grid(bvxm_voxel_grid<float>* grid, unsigned grid_x, unsigned gri
   grid->initialize_data(init_val);
 
   // read in each slice, check that init_val was set, and fill with new value
-  vcl_cout << "read/write: ";
+  std::cout << "read/write: ";
   bvxm_voxel_slab_iterator<float> slab_it;
   for (slab_it = grid->begin(); slab_it != grid->end(); ++slab_it) {
-    vcl_cout << '.';
+    std::cout << '.';
     bvxm_voxel_slab<float> vit=*slab_it;
     for (unsigned i=0; i<grid_y/2; i++) {
       for (unsigned j=0; j<grid_x; j++) {
@@ -123,10 +125,10 @@ void diagonal_grid(bvxm_voxel_grid<float>* grid, unsigned grid_x, unsigned grid_
   grid->initialize_data(init_val);
 
   // read in each slice, check that init_val was set, and fill with new value
-  vcl_cout << "read/write: ";
+  std::cout << "read/write: ";
   bvxm_voxel_slab_iterator<float> slab_it;
   for (slab_it = grid->begin(); slab_it != grid->end(); ++slab_it) {
-    vcl_cout << '.';
+    std::cout << '.';
     unsigned x = grid_x;
     bvxm_voxel_slab<float> vit=*slab_it;
     for (unsigned i=0; i<grid_y; i++) {
@@ -146,11 +148,11 @@ void diagonal_grid_z(bvxm_voxel_grid<float>* grid, unsigned grid_x, unsigned gri
   grid->initialize_data(init_val);
 
   // read in each slice, check that init_val was set, and fill with new value
-  vcl_cout << "read/write: ";
+  std::cout << "read/write: ";
   bvxm_voxel_slab_iterator<float> slab_it;
   unsigned x = 0;
   for (slab_it = grid->begin(); slab_it != grid->end() ; ++slab_it) {
-    vcl_cout << '.';
+    std::cout << '.';
     bvxm_voxel_slab<float> vit=*slab_it;
     for (unsigned i=0; i<x && i<grid_x; i++) {
       for (unsigned j=0; j<grid_y; j++) {
@@ -167,8 +169,8 @@ static void test_neighb_oper()
 {
   // create the grid
   // we need temporary disk storage for this test.
-  vcl_string storage_fname("bvxm_voxel_grid_test_temp1a.vox");
-  vcl_string storage_fname2("bvxm_voxel_grid_test_temp1b.vox");
+  std::string storage_fname("bvxm_voxel_grid_test_temp1a.vox");
+  std::string storage_fname2("bvxm_voxel_grid_test_temp1b.vox");
   // remove file if exists from previous test.
   if (vul_file::exists(storage_fname.c_str())) {
     vul_file::delete_file_glob(storage_fname.c_str());
@@ -191,15 +193,15 @@ static void test_neighb_oper()
   bvxm_voxel_grid<float>* grid = new bvxm_voxel_grid<float>(storage_fname,grid_size); // disk storage;
   bvxm_voxel_grid<float>* grid_out = new bvxm_voxel_grid<float>(storage_fname2,grid_size);
   grid_out->initialize_data(0.0e-40);
-  vcl_string test_name;
+  std::string test_name;
 
   // check num_observations
   unsigned nobs = grid->num_observations();
-  vcl_cout << "num_observations = " << nobs << vcl_endl;
+  std::cout << "num_observations = " << nobs << std::endl;
 
   diagonal_grid_z(grid, grid_x, grid_y);
 
-  vcl_cout << "done." << vcl_endl;
+  std::cout << "done." << std::endl;
   save_occupancy_raw("first.raw", grid);
 
   bvpl_edge2d_kernel_factory edge_factory(5, 5);

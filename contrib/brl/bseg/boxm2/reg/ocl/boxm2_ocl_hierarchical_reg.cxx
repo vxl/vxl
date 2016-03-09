@@ -3,7 +3,9 @@
 #include <boct/boct_bit_tree.h>
 #include <vcl_where_root_dir.h>
 #include <vnl/vnl_random.h>
-#include <vcl_algorithm.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <algorithm>
 boxm2_ocl_hierarchical_reg::boxm2_ocl_hierarchical_reg( boxm2_opencl_cache_sptr  & cache,
                                                    boxm2_scene_sptr sceneA,
                                                    boxm2_scene_sptr sceneB,
@@ -18,7 +20,7 @@ bool boxm2_ocl_hierarchical_reg::init(vnl_vector<double> const& mu, vnl_vector<d
     mu_ = mu ;
     cov_= cov;
     mu_cost_ = this->mutual_info(mu_);
-    vcl_cout<<"Mutual Information for current position is "<<mu_cost_<<vcl_endl;
+    std::cout<<"Mutual Information for current position is "<<mu_cost_<<std::endl;
     return true;
 }
 
@@ -31,21 +33,21 @@ bool boxm2_ocl_hierarchical_reg::exhaustive()
     int params_to_vary = mu_.size() ;
     if( !do_vary_scale_ )
         params_to_vary -=1;
-    vcl_map<double,vnl_vector<double> > samples_sorted;
+    std::map<double,vnl_vector<double> > samples_sorted;
     vnl_vector<double> cov = cov_;
     samples_sorted[mu_cost_] =mu_;
     for (unsigned int level =0; level <3; level++)
     {
-        vcl_cout<<"Level #"<<level<<vcl_endl;
+        std::cout<<"Level #"<<level<<std::endl;
         mis.clear();
         samples_.clear();
-        vcl_map<double,vnl_vector<double> >::reverse_iterator iter = samples_sorted.rbegin();
+        std::map<double,vnl_vector<double> >::reverse_iterator iter = samples_sorted.rbegin();
         for(unsigned int j = 0 ; j < numbestparticales[level] && iter!=samples_sorted.rend(); j++,iter++)
         {
-            vcl_cout.flush();
+            std::cout.flush();
             int searchwidth = numsamples_search_width[level];
             vnl_vector<double> best_sample = iter->second;
-            int numsamples_per_best_particle = (int) vcl_pow((float)searchwidth,(float)params_to_vary);
+            int numsamples_per_best_particle = (int) std::pow((float)searchwidth,(float)params_to_vary);
             for(unsigned int sampleno = 0 ; sampleno < numsamples_per_best_particle; sampleno++)
             {
                 int cont=sampleno;
@@ -53,8 +55,8 @@ bool boxm2_ocl_hierarchical_reg::exhaustive()
                 for(unsigned k = 0; k <params_to_vary; k++)
                 {
                     int t = params_to_vary - k - 1;
-                    unsigned int var = cont/(unsigned int)vcl_pow((float)searchwidth,(float)t); // quotient
-                    cont = cont - (unsigned int)vcl_pow((float)searchwidth,(float)t)*var;       // remainder
+                    unsigned int var = cont/(unsigned int)std::pow((float)searchwidth,(float)t); // quotient
+                    cont = cont - (unsigned int)std::pow((float)searchwidth,(float)t)*var;       // remainder
                     double offset = (2*((double)var/((double)searchwidth-1))-1)*cov[t];
                     curr_sample[t] +=  offset;
                 }
@@ -64,12 +66,12 @@ bool boxm2_ocl_hierarchical_reg::exhaustive()
 
             }
         }
-        vcl_cout<<vcl_endl;
+        std::cout<<std::endl;
         samples_sorted.clear();
         for(unsigned i = 0 ; i <mis.size(); i++)
             samples_sorted[mis[i]]=samples_[i];
-        vcl_cout<<"Mutual Infor for Max Sample"<<this->max_sample()-mu_<<" is "<<this->mutual_info(this->max_sample(),level)<<vcl_endl;
-        cov = cov_/vcl_pow((float)2,(float)level+1);
+        std::cout<<"Mutual Infor for Max Sample"<<this->max_sample()-mu_<<" is "<<this->mutual_info(this->max_sample(),level)<<std::endl;
+        cov = cov_/std::pow((float)2,(float)level+1);
     }
     return true;
 }

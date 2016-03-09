@@ -1,8 +1,10 @@
 // This is mul/vimt3d/tests/test_reflect.cxx
 
 #include <testlib/testlib_test.h>
-#include <vcl_ctime.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <ctime>
+#include <iostream>
 #include <vxl_config.h>
 #include <vimt3d/vimt3d_reflect.h>
 #include <vul/vul_ios_state.h>
@@ -13,10 +15,10 @@
 //========================================================================
 static void test_reflect_int()
 {
-  vul_ios_state_saver ios_ss(vcl_cout);
-  vcl_cout.precision(9);
+  vul_ios_state_saver ios_ss(std::cout);
+  std::cout.precision(9);
 
-  vcl_cout << "***********************************\n"
+  std::cout << "***********************************\n"
            << " Testing vimt3d_reflect<vxl_int_32>\n"
            << "***********************************\n";
 
@@ -41,15 +43,15 @@ static void test_reflect_int()
 
 #ifndef NDEBUG
   {
-    vcl_cout << "\nimage:\n";
-    image.print_summary(vcl_cout);
-    vcl_cout << "vimt3d_voxel_size_from_transform: " << vimt3d_voxel_size_from_transform(image) << "\n";
+    std::cout << "\nimage:\n";
+    image.print_summary(std::cout);
+    std::cout << "vimt3d_voxel_size_from_transform: " << vimt3d_voxel_size_from_transform(image) << "\n";
     vgl_box_3d<double> bbox = world_bounding_box(image);
-    vcl_cout << "world_bounding_box: " << bbox << "\n";
-    vcl_cout << "centre: " << bbox.centroid() << "\n";
-    vcl_cout << "world2im.origin: " << image.world2im().origin() << "\n";
-    vcl_cout << "im2world.origin: " << image.world2im().inverse().origin() << "\n";
-    vcl_cout << vcl_endl;
+    std::cout << "world_bounding_box: " << bbox << "\n";
+    std::cout << "centre: " << bbox.centroid() << "\n";
+    std::cout << "world2im.origin: " << image.world2im().origin() << "\n";
+    std::cout << "im2world.origin: " << image.world2im().inverse().origin() << "\n";
+    std::cout << std::endl;
   }
 #endif //NDEBUG
 
@@ -63,37 +65,37 @@ static void test_reflect_int()
 
 #ifndef NDEBUG
   {
-    vcl_cout << "\ntempx:\n";
-    tempx.print_summary(vcl_cout);
-    vcl_cout << "vimt3d_voxel_size_from_transform: " << vimt3d_voxel_size_from_transform(tempx) << "\n";
+    std::cout << "\ntempx:\n";
+    tempx.print_summary(std::cout);
+    std::cout << "vimt3d_voxel_size_from_transform: " << vimt3d_voxel_size_from_transform(tempx) << "\n";
     vgl_box_3d<double> bbox = world_bounding_box(tempx);
-    vcl_cout << "world_bounding_box: " << bbox << "\n";
-    vcl_cout << "centre: " << bbox.centroid() << "\n";
-    vcl_cout << "world2im.origin: " << tempx.world2im().origin() << "\n";
-    vcl_cout << "im2world.origin: " << tempx.world2im().inverse().origin() << "\n";
-    vcl_cout << vcl_endl;
+    std::cout << "world_bounding_box: " << bbox << "\n";
+    std::cout << "centre: " << bbox.centroid() << "\n";
+    std::cout << "world2im.origin: " << tempx.world2im().origin() << "\n";
+    std::cout << "im2world.origin: " << tempx.world2im().inverse().origin() << "\n";
+    std::cout << std::endl;
   }
   {
-    vcl_cout << "\ntempy:\n";
-    tempy.print_summary(vcl_cout);
-    vcl_cout << "vimt3d_voxel_size_from_transform: " << vimt3d_voxel_size_from_transform(tempy) << "\n";
+    std::cout << "\ntempy:\n";
+    tempy.print_summary(std::cout);
+    std::cout << "vimt3d_voxel_size_from_transform: " << vimt3d_voxel_size_from_transform(tempy) << "\n";
     vgl_box_3d<double> bbox = world_bounding_box(tempy);
-    vcl_cout << "world_bounding_box: " << bbox << "\n";
-    vcl_cout << "centre: " << bbox.centroid() << "\n";
-    vcl_cout << "world2im.origin: " << tempy.world2im().origin() << "\n";
-    vcl_cout << "im2world.origin: " << tempy.world2im().inverse().origin() << "\n";
-    vcl_cout << vcl_endl;
+    std::cout << "world_bounding_box: " << bbox << "\n";
+    std::cout << "centre: " << bbox.centroid() << "\n";
+    std::cout << "world2im.origin: " << tempy.world2im().origin() << "\n";
+    std::cout << "im2world.origin: " << tempy.world2im().inverse().origin() << "\n";
+    std::cout << std::endl;
   }
   {
-    vcl_cout << "\ntempz:\n";
-    tempz.print_summary(vcl_cout);
-    vcl_cout << "vimt3d_voxel_size_from_transform: " << vimt3d_voxel_size_from_transform(tempz) << "\n";
+    std::cout << "\ntempz:\n";
+    tempz.print_summary(std::cout);
+    std::cout << "vimt3d_voxel_size_from_transform: " << vimt3d_voxel_size_from_transform(tempz) << "\n";
     vgl_box_3d<double> bbox = world_bounding_box(tempz);
-    vcl_cout << "world_bounding_box: " << bbox << "\n";
-    vcl_cout << "centre: " << bbox.centroid() << "\n";
-    vcl_cout << "world2im.origin: " << tempz.world2im().origin() << "\n";
-    vcl_cout << "im2world.origin: " << tempz.world2im().inverse().origin() << "\n";
-    vcl_cout << vcl_endl;
+    std::cout << "world_bounding_box: " << bbox << "\n";
+    std::cout << "centre: " << bbox.centroid() << "\n";
+    std::cout << "world2im.origin: " << tempz.world2im().origin() << "\n";
+    std::cout << "im2world.origin: " << tempz.world2im().inverse().origin() << "\n";
+    std::cout << std::endl;
   }
 #endif //NDEBUG
 
@@ -120,11 +122,11 @@ static void test_reflect_int()
         // For the x-reflected image, the x-coord of each voxel's world position should be the exact
         // negative of the x-coord of the world position of the opposite voxel in the original image.
         // Similarly for the y- and z- reflected images.
-        refl_i_ok = refl_i_ok && vcl_fabs((tempx.world2im().inverse()(vgl_point_3d<double>(i, j, k))).x() -
+        refl_i_ok = refl_i_ok && std::fabs((tempx.world2im().inverse()(vgl_point_3d<double>(i, j, k))).x() -
           -(image.world2im().inverse()(vgl_point_3d<double>(ri, j, k))).x())<1e-9;
-        refl_j_ok = refl_j_ok && vcl_fabs((tempy.world2im().inverse()(vgl_point_3d<double>(i, j, k))).y() -
+        refl_j_ok = refl_j_ok && std::fabs((tempy.world2im().inverse()(vgl_point_3d<double>(i, j, k))).y() -
           -(image.world2im().inverse()(vgl_point_3d<double>(i, rj, k))).y())<1e-9;
-        refl_k_ok = refl_k_ok && vcl_fabs((tempz.world2im().inverse()(vgl_point_3d<double>(i, j, k))).z() -
+        refl_k_ok = refl_k_ok && std::fabs((tempz.world2im().inverse()(vgl_point_3d<double>(i, j, k))).z() -
           -(image.world2im().inverse()(vgl_point_3d<double>(i, j, rk))).z())<1e-9;
       }
     }

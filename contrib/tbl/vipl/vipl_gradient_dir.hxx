@@ -2,7 +2,9 @@
 #define vipl_gradient_dir_hxx_
 
 #include "vipl_gradient_dir.h"
-#include <vcl_cmath.h> // for atan2()
+#include <vcl_compiler.h>
+#include <iostream>
+#include <cmath> // for atan2()
 
 template <class ImgIn,class ImgOut,class DataIn,class DataOut,class PixelItr>
 bool vipl_gradient_dir <ImgIn,ImgOut,DataIn,DataOut,PixelItr> :: section_applyop()
@@ -19,7 +21,7 @@ bool vipl_gradient_dir <ImgIn,ImgOut,DataIn,DataOut,PixelItr> :: section_applyop
       register double dx = fgetpixel(in, i, j, DataIn(0)) - getpixel(in, i-1, j, DataIn(0));
       register double dy = fgetpixel(in, i, j, DataIn(0)) - getpixel(in, i, j-1, DataIn(0));
       if (dx==0 && dy==0) dx=1.0; // to avoid an atan2() domain error
-      dx = (vcl_atan2( dy, dx ) + shift()) * scale();
+      dx = (std::atan2( dy, dx ) + shift()) * scale();
       fsetpixel(out, i, j, DataOut(dx));
     }
   return true;

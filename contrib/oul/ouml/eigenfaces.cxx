@@ -5,10 +5,12 @@
 
 #include <vnl/algo/vnl_symmetric_eigensystem.h>
 #include <vil1/vil1_save.h>
-#include <vcl_queue.h>
-#include <vcl_fstream.h>
-#include <vcl_cstdio.h> // for sprintf()
-#include <vcl_cstring.h>
+#include <queue>
+#include <fstream>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <cstdio> // for sprintf()
+#include <cstring>
 #include <vcl_cassert.h>
 
 
@@ -27,7 +29,7 @@ EigenFace::~EigenFace()
   delete average_training_image;
 
   // delete contents of the training images vector
-  vcl_vector<vnl_vector<double> *>::iterator iter;
+  std::vector<vnl_vector<double> *>::iterator iter;
   for (iter=training_images.begin();
        iter!=training_images.end(); iter++)
     delete *iter;
@@ -42,7 +44,7 @@ EigenFace::~EigenFace()
     delete *iter;
 
   // delete contents of the training labels
-  vcl_vector<char *>::iterator citer;
+  std::vector<char *>::iterator citer;
   for (citer=training_labels.begin(); citer!=training_labels.end(); citer++)
     delete *citer;
 }
@@ -71,7 +73,7 @@ bool EigenFace::add_training_image(Image *im, const char * label)
     image_size = image_vector->size();
   if (image_size!=image_vector->size())
   {
-    vcl_cerr << "Error adding training image\n"
+    std::cerr << "Error adding training image\n"
              << "Image of incorrect size\n";
     return false;
   }
@@ -79,7 +81,7 @@ bool EigenFace::add_training_image(Image *im, const char * label)
   training_labels.push_back(strdup(label));
   // postconditions: elements actually inserted
   assert(training_images.back()==image_vector);
-  assert(vcl_strcmp(training_labels.back(),label)==0);
+  assert(std::strcmp(training_labels.back(),label)==0);
   return true;
 }
 
@@ -100,8 +102,8 @@ vnl_vector<double> *EigenFace::get_eigenvector(int i)
   assert(i>=0);
   if ((unsigned int)i>=eigenvectors.size())
   {
-    vcl_cerr << "Requesting eigenvector, " << i << " which doesn't exist\n"
-             << "Number of eigenvectors is: " << eigenvectors.size() << vcl_endl;
+    std::cerr << "Requesting eigenvector, " << i << " which doesn't exist\n"
+             << "Number of eigenvectors is: " << eigenvectors.size() << std::endl;
     return VXL_NULLPTR;
   }
   return eigenvectors[i];
@@ -124,8 +126,8 @@ double EigenFace::get_eigenvalue(int i)
   assert(i>=0);
   if ((unsigned int)i>=eigenvalues.size())
   {
-    vcl_cerr << "Requesting eigenvalue, " << i << " which doesn't exist\n"
-             << "Number of eigenvalues is: " << eigenvalues.size() << vcl_endl;
+    std::cerr << "Requesting eigenvalue, " << i << " which doesn't exist\n"
+             << "Number of eigenvalues is: " << eigenvalues.size() << std::endl;
     return 0.0;
   }
   return eigenvalues[i];
@@ -169,26 +171,26 @@ bool EigenFace::calculate_eigenfaces()
 {
   if (training_images.size()<=0)
   {
-    vcl_cerr << "No training images\n";
+    std::cerr << "No training images\n";
     return false;
   }
   // construct the A matrix from the training vectors
   vnl_matrix<double> A(image_size, training_images.size());
 
-  vcl_cout << "cleaning up\n";
+  std::cout << "cleaning up\n";
   cleanup();
   // now calculate the new vectors
   // first calculate the average training image
-  vcl_cout << "Average training image\n"
-           << "ati size = " << average_training_image->size() << vcl_endl;
+  std::cout << "Average training image\n"
+           << "ati size = " << average_training_image->size() << std::endl;
   for (unsigned int i=0; i<training_images.size(); i++)
   {
-    vcl_cout << "adding training image " << i << " size = "
-             << training_images[i]->size() << vcl_endl;
+    std::cout << "adding training image " << i << " size = "
+             << training_images[i]->size() << std::endl;
     *average_training_image += *training_images[i];
   }
   *average_training_image /= (double)training_images.size();
-  vcl_cout << "Populating A\n";
+  std::cout << "Populating A\n";
   for (unsigned int i=0; i<training_images.size(); i++)
   {
     vnl_vector<double> *training = training_images[i];
@@ -196,12 +198,12 @@ bool EigenFace::calculate_eigenfaces()
       A(j, i) = (*training)[j]-(*average_training_image)[j];
   }
 
-  vcl_cout << "AtA\n";
+  std::cout << "AtA\n";
   // now build AtA - then find the eigenvectors of this matrix
   vnl_matrix<double> AtA = A.transpose()*A;
   vnl_symmetric_eigensystem<double> eigen(AtA);
 
-  vcl_cout << "Eigenvectors\n";
+  std::cout << "Eigenvectors\n";
   for (unsigned int i=0; i<training_images.size(); i++)
   {
     vnl_vector<double> *new_vec = new vnl_vector<double>(image_size);
@@ -211,11 +213,11 @@ bool EigenFace::calculate_eigenfaces()
     eigenvalues.push_back(eigen.get_eigenvalue(i));
   }
 
-  vcl_cout << "Eigenvalues are:" ;
-  vcl_vector<double>::iterator val_iter;
+  std::cout << "Eigenvalues are:" ;
+  std::vector<double>::iterator val_iter;
   for (val_iter=eigenvalues.begin(); val_iter!=eigenvalues.end(); val_iter++)
-    vcl_cout << ' ' << (*val_iter);
-  vcl_cout << "\nEncoding training images\n";
+    std::cout << ' ' << (*val_iter);
+  std::cout << "\nEncoding training images\n";
   encode_training_images();
   // should check they are in fact eigenvectors
   return true;
@@ -223,15 +225,15 @@ bool EigenFace::calculate_eigenfaces()
 
 void EigenFace::check_training()
 {
-  vcl_cout << "Check training image\n";
+  std::cout << "Check training image\n";
   if (average_training_image!=VXL_NULLPTR)
-    vcl_cout << "ati size = " << average_training_image->size() << vcl_endl;
+    std::cout << "ati size = " << average_training_image->size() << std::endl;
   else
-    vcl_cout << "ati not set\n";
+    std::cout << "ati not set\n";
   for (unsigned int i=0; i<training_images.size(); i++)
   {
-    vcl_cout << "training image " << i << " size = "
-             << training_images[i]->size() << vcl_endl;
+    std::cout << "training image " << i << " size = "
+             << training_images[i]->size() << std::endl;
   }
 }
 
@@ -275,21 +277,21 @@ bool EigenFace::check_eigenvectors()
 {
   if (eigenvectors.size()<=0) return false;
 
-  vcl_cout << "Eigenvalues are:" ;
-  vcl_vector<double>::iterator val_iter;
+  std::cout << "Eigenvalues are:" ;
+  std::vector<double>::iterator val_iter;
   for (val_iter=eigenvalues.begin(); val_iter!=eigenvalues.end(); val_iter++)
-    vcl_cout << ' ' << (*val_iter);
-  vcl_cout << vcl_endl;
-  vcl_vector<vnl_vector<double> *>::iterator iter1, iter2;
+    std::cout << ' ' << (*val_iter);
+  std::cout << std::endl;
+  std::vector<vnl_vector<double> *>::iterator iter1, iter2;
   for (iter1=eigenvectors.begin(); iter1!=eigenvectors.end(); iter1++)
     for (iter2=iter1+1; iter2!=eigenvectors.end(); iter2++)
       if (!epsilon_equals(dot_product(**iter1, **iter2), 0.0))
       {
-        vcl_cout << "vectors aren't eigenvectors\n"
+        std::cout << "vectors aren't eigenvectors\n"
                  << "offending vectors are: "
-                 << '\t' << **iter1 << vcl_endl
-                 << '\t' << **iter2 << vcl_endl
-                 << "dot product is: " << dot_product(**iter1, **iter2) << vcl_endl;
+                 << '\t' << **iter1 << std::endl
+                 << '\t' << **iter2 << std::endl
+                 << "dot product is: " << dot_product(**iter1, **iter2) << std::endl;
         return false;
       }
   return true;
@@ -309,13 +311,13 @@ void EigenFace::save_as_images(int width, int height)
   assert(width > 0 && height > 0);
   if ((unsigned int)(width*height)!=image_size)
   {
-    vcl_cerr << "width*height must be equal to image size\n"
-             << "image size is: " << image_size << vcl_endl;
+    std::cerr << "width*height must be equal to image size\n"
+             << "image size is: " << image_size << std::endl;
     return;
   }
 
   Image im(width, height);
-  vcl_vector<vnl_vector<double> *>::iterator iter;
+  std::vector<vnl_vector<double> *>::iterator iter;
   char name[100];
   int index=0;
   for (iter=eigenvectors.begin(); iter!=eigenvectors.end(); iter++)
@@ -326,7 +328,7 @@ void EigenFace::save_as_images(int width, int height)
       for (int j=0; j<height; j++)
         im[i][j] = (unsigned char)
           (((**iter)[i+j*width]-min)/(max-min)*255);
-    vcl_sprintf(name, "eigenface%03d.pgm", index++);
+    std::sprintf(name, "eigenface%03d.pgm", index++);
     vil1_save(im, name);
   }
 }
@@ -342,7 +344,7 @@ void EigenFace::save_as_images(int width, int height)
 //----------------------------------------------------------------------
 void EigenFace::encode_training_images()
 {
-  vcl_vector<vnl_vector<double> *>::iterator iter;
+  std::vector<vnl_vector<double> *>::iterator iter;
   for (iter=training_images.begin(); iter!=training_images.end(); iter++)
   {
     encoded_training_images.push_back(encode(*iter));
@@ -430,7 +432,7 @@ vnl_vector<double>* EigenFace::decode(vnl_vector<double> *wts)
 
 char *EigenFace::classify(Image *im, double threshold, int k, int dim)
 {
-  vcl_priority_queue<LabelDist> pq;
+  std::priority_queue<LabelDist> pq;
 
   if (num_vectors()==0) return VXL_NULLPTR;
   if (eigenvectors.size()==0) return VXL_NULLPTR;
@@ -442,14 +444,14 @@ char *EigenFace::classify(Image *im, double threshold, int k, int dim)
   int best=-1;
   char *ret=VXL_NULLPTR;
 #if 0
-  vcl_cout << "rep = " << *rep << vcl_endl;
+  std::cout << "rep = " << *rep << std::endl;
 #endif
   for (int i=0; i<num_vectors(); i++)
   {
     vnl_vector<double> eigenvect=
       encoded_training_images[i]->extract
       (dim, encoded_training_images[i]->size()-dim);
-    // vcl_cout << "vec " << i << " = " << *eigenvect << vcl_endl;
+    // std::cout << "vec " << i << " = " << *eigenvect << std::endl;
     diff = rep - eigenvect;
     double dist=diff.two_norm()/(double)diff.size();
     if ((dist<min_dist)&&(dist!=0.0))
@@ -462,9 +464,9 @@ char *EigenFace::classify(Image *im, double threshold, int k, int dim)
   }
   delete all_rep;
 
-  vcl_cout << "min_dist = " << min_dist << " label = " << get_label(best) << vcl_endl;
+  std::cout << "min_dist = " << min_dist << " label = " << get_label(best) << std::endl;
   // now need to search through queue and find most likely label
-  vcl_map<char *, int, ImageDatabase::ltstr> nns; // nearest neighbours
+  std::map<char *, int, ImageDatabase::ltstr> nns; // nearest neighbours
   for (int i=0; i<k; i++)
   {
     LabelDist t=pq.top();
@@ -472,7 +474,7 @@ char *EigenFace::classify(Image *im, double threshold, int k, int dim)
     if ((t.dist<threshold)&&(t.dist!=0.0))
       nns[t.label]++;
   }
-  vcl_map<char *, int, ImageDatabase::ltstr>::iterator iter;
+  std::map<char *, int, ImageDatabase::ltstr>::iterator iter;
   int max=0;
   for (iter=nns.begin(); iter!=nns.end(); iter++)
   {
@@ -482,11 +484,11 @@ char *EigenFace::classify(Image *im, double threshold, int k, int dim)
       ret = (*iter).first;
     }
   }
-  vcl_cout << "label = " << ret << " num = " << max << vcl_endl;
+  std::cout << "label = " << ret << " num = " << max << std::endl;
   if (max<k/2+1) ret=VXL_NULLPTR;
 #if 0
   char ch;
-  vcl_cin >> ch;
+  std::cin >> ch;
 #endif
   return ret;
 }
@@ -505,30 +507,30 @@ char *EigenFace::classify(Image *im, double threshold, int k, int dim)
 void EigenFace::output_xgobi(char *basefile)
 {
   char filenames[200];
-  vcl_sprintf(filenames, "%s.dat", basefile);
-  vcl_ofstream datfile(filenames);
-  vcl_sprintf(filenames, "%s.glyphs", basefile);
-  vcl_ofstream glyphs(filenames);
-  vcl_sprintf(filenames, "%s.row", basefile);
-  vcl_ofstream rowfile(filenames);
-  vcl_map<char*, int, ImageDatabase::ltstr> glyphmap;
+  std::sprintf(filenames, "%s.dat", basefile);
+  std::ofstream datfile(filenames);
+  std::sprintf(filenames, "%s.glyphs", basefile);
+  std::ofstream glyphs(filenames);
+  std::sprintf(filenames, "%s.row", basefile);
+  std::ofstream rowfile(filenames);
+  std::map<char*, int, ImageDatabase::ltstr> glyphmap;
   int glyphnum=1;
   for (int i=0; i<num_vectors(); i++)
   {
-    datfile << *(encoded_training_images[i]) << vcl_endl;
+    datfile << *(encoded_training_images[i]) << std::endl;
     // no glyph associated
     if (glyphmap.find(training_labels[i])==glyphmap.end())
     {
-      vcl_cout << "Adding training_label " << training_labels[i] << vcl_endl;
+      std::cout << "Adding training_label " << training_labels[i] << std::endl;
       glyphmap[training_labels[i]] = glyphnum;
       glyphnum += 3;
     }
-    glyphs << glyphmap[training_labels[i]] << vcl_endl;
-    rowfile << training_labels[i] << vcl_endl;
+    glyphs << glyphmap[training_labels[i]] << std::endl;
+    rowfile << training_labels[i] << std::endl;
   }
-  vcl_map<char *, int, ImageDatabase::ltstr>::iterator iter;
+  std::map<char *, int, ImageDatabase::ltstr>::iterator iter;
   for (iter=glyphmap.begin(); iter!=glyphmap.end(); iter++)
-    vcl_cout << (*iter).first << vcl_endl;
+    std::cout << (*iter).first << std::endl;
   rowfile.close();
   glyphs.close();
   datfile.close();

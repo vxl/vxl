@@ -15,7 +15,9 @@
 #include <vnl/vnl_vector.h>
 #include <vnl/io/vnl_io_vector.h>
 #include <vnl/io/vnl_io_matrix.h>
-#include <vcl_cmath.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <cmath>
 #include <vcl_cassert.h>
 
 //=======================================================================
@@ -53,7 +55,7 @@ void mfpf_pose_predictor::set_as_box(unsigned ni, unsigned nj,
                                      short norm_method)
 {
   // Set ROI to be a box
-  vcl_vector<mbl_chord> roi(nj);
+  std::vector<mbl_chord> roi(nj);
   for (unsigned j=0;j<nj;++j) roi[j]=mbl_chord(0,ni-1,j);
 
   set(roi,0.5*(ni-1),0.5*(nj-1),norm_method);
@@ -64,14 +66,14 @@ void mfpf_pose_predictor::set_as_box(unsigned ni, unsigned nj,
 void mfpf_pose_predictor::set_as_ellipse(double ri, double rj,
                                          short norm_method)
 {
-  vcl_vector<mbl_chord> roi;
+  std::vector<mbl_chord> roi;
 
   int ni=int(ri+1e-6);
   int nj=int(rj+1e-6);
   for (int j = -nj;j<=nj;++j)
   {
     // Find start and end of line of pixels inside disk
-    int x = int(ri*vcl_sqrt(1.0-j*j/(rj*rj)));
+    int x = int(ri*std::sqrt(1.0-j*j/(rj*rj)));
     roi.push_back(mbl_chord(ni-x,ni+x,nj+j));
   }
 
@@ -91,7 +93,7 @@ mfpf_pose_predictor::~mfpf_pose_predictor()
 }
 
 //: Define region and cost of region
-void mfpf_pose_predictor::set(const vcl_vector<mbl_chord>& roi,
+void mfpf_pose_predictor::set(const std::vector<mbl_chord>& roi,
                               double ref_x, double ref_y,
                               short norm_method)
 {
@@ -142,12 +144,12 @@ double mfpf_pose_predictor::radius() const
 {
   // Compute distance to each corner
   double wx = roi_ni_-1;
-  double x2 = vcl_max(ref_x_*ref_x_,(ref_x_-wx)*(ref_x_-wx));
+  double x2 = std::max(ref_x_*ref_x_,(ref_x_-wx)*(ref_x_-wx));
   double wy = roi_nj_-1;
-  double y2 = vcl_max(ref_y_*ref_y_,(ref_y_-wy)*(ref_y_-wy));
+  double y2 = std::max(ref_y_*ref_y_,(ref_y_-wy)*(ref_y_-wy));
   double r2 = x2+y2;
   if (r2<=1) return 1.0;
-  return vcl_sqrt(r2);
+  return std::sqrt(r2);
 }
 
 
@@ -204,16 +206,16 @@ void mfpf_pose_predictor::new_pose(const vimt_image_2d_of<float>& image,
       break;
     case rigid:
       dpose.p().set(dp[0],dp[1]);
-      dpose.u().set(vcl_cos(dp[2]),vcl_sin(dp[2]));
+      dpose.u().set(std::cos(dp[2]),std::sin(dp[2]));
       break;
     case zoom:
       dpose.p().set(dp[0],dp[1]);
-      dpose.u().set(vcl_exp(dp[2]),0);
+      dpose.u().set(std::exp(dp[2]),0);
       break;
     case similarity:
       dpose.p().set(dp[0],dp[1]);
-      s=vcl_exp(dp[2]);
-      dpose.u().set(s*vcl_cos(dp[3]),s*vcl_sin(dp[3]));
+      s=std::exp(dp[2]);
+      dpose.u().set(s*std::cos(dp[3]),s*std::sin(dp[3]));
       break;
     default: assert(!"Invalid pose_type_"); break;
   }
@@ -225,7 +227,7 @@ void mfpf_pose_predictor::new_pose(const vimt_image_2d_of<float>& image,
 //: Generate points in ref frame that represent boundary
 //  Points of a contour around the shape.
 //  Used for display purposes.
-void mfpf_pose_predictor::get_outline(vcl_vector<vgl_point_2d<double> >& pts) const
+void mfpf_pose_predictor::get_outline(std::vector<vgl_point_2d<double> >& pts) const
 {
   pts.resize(7);
   vgl_vector_2d<double> r(ref_x_,ref_y_);
@@ -243,9 +245,9 @@ void mfpf_pose_predictor::get_outline(vcl_vector<vgl_point_2d<double> >& pts) co
 // Method: is_a
 //=======================================================================
 
-vcl_string mfpf_pose_predictor::is_a() const
+std::string mfpf_pose_predictor::is_a() const
 {
-  return vcl_string("mfpf_pose_predictor");
+  return std::string("mfpf_pose_predictor");
 }
 
 //: Create a copy on the heap and return base class pointer
@@ -258,7 +260,7 @@ mfpf_pose_predictor* mfpf_pose_predictor::clone() const
 // Method: print
 //=======================================================================
 
-void mfpf_pose_predictor::print_summary(vcl_ostream& os) const
+void mfpf_pose_predictor::print_summary(std::ostream& os) const
 {
   os << "{  step_size: "<<step_size_
      <<" pose_type: "<<pose_type_
@@ -273,7 +275,7 @@ void mfpf_pose_predictor::print_summary(vcl_ostream& os) const
   os<<vsl_indent()<<'}';
 }
 
-void mfpf_pose_predictor::print_shape(vcl_ostream& os) const
+void mfpf_pose_predictor::print_shape(std::ostream& os) const
 {
   vil_image_view<vxl_byte> im(roi_ni_,roi_nj_);
   im.fill(0);
@@ -337,9 +339,9 @@ void mfpf_pose_predictor::b_read(vsl_b_istream& bfs)
       vsl_b_read(bfs,dp0_);
       break;
     default:
-      vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&)\n"
-               << "           Unknown version number "<< version << vcl_endl;
-      bfs.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
+      std::cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&)\n"
+               << "           Unknown version number "<< version << std::endl;
+      bfs.is().clear(std::ios::badbit); // Set an unrecoverable IO error on stream
       return;
   }
 }
@@ -347,14 +349,14 @@ void mfpf_pose_predictor::b_read(vsl_b_istream& bfs)
 //: Test equality
 bool mfpf_pose_predictor::operator==(const mfpf_pose_predictor& nc) const
 {
-  if (vcl_fabs(step_size_-nc.step_size_)>1e-6) return false;
+  if (std::fabs(step_size_-nc.step_size_)>1e-6) return false;
   if (pose_type_!=nc.pose_type_) return false;
   if (roi_ni_!=nc.roi_ni_) return false;
   if (roi_nj_!=nc.roi_nj_) return false;
   if (norm_method_!=nc.norm_method_) return false;
   if (n_pixels_!=nc.n_pixels_) return false;
-  if (vcl_fabs(ref_x_-nc.ref_x_)>1e-6) return false;
-  if (vcl_fabs(ref_y_-nc.ref_y_)>1e-6) return false;
+  if (std::fabs(ref_x_-nc.ref_x_)>1e-6) return false;
+  if (std::fabs(ref_y_-nc.ref_y_)>1e-6) return false;
   return true;
 }
 
@@ -380,7 +382,7 @@ void vsl_b_read(vsl_b_istream& bfs, mfpf_pose_predictor& b)
 // Associated function: operator<<
 //=======================================================================
 
-vcl_ostream& operator<<(vcl_ostream& os,const mfpf_pose_predictor& b)
+std::ostream& operator<<(std::ostream& os,const mfpf_pose_predictor& b)
 {
   os << b.is_a() << ": ";
   vsl_indent_inc(os);
@@ -389,7 +391,7 @@ vcl_ostream& operator<<(vcl_ostream& os,const mfpf_pose_predictor& b)
   return os;
 }
 
-vcl_ostream& operator<<(vcl_ostream& os ,const mfpf_pose_type& pt)
+std::ostream& operator<<(std::ostream& os ,const mfpf_pose_type& pt)
 {
   switch (pt)
   {

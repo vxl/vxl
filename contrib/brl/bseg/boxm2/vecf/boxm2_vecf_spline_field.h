@@ -14,9 +14,9 @@ class boxm2_vecf_spline_field{
  public:
   boxm2_vecf_spline_field(){}
   // number of spline knots must equal the number of field knots
- boxm2_vecf_spline_field(vgl_cubic_spline_3d<double> const& spline, vcl_vector<vgl_vector_3d<double> > const& field_knots):
+ boxm2_vecf_spline_field(vgl_cubic_spline_3d<double> const& spline, std::vector<vgl_vector_3d<double> > const& field_knots):
   generating_spline_(spline), field_knots_(field_knots){if(static_cast<unsigned>(field_knots_.size()) != spline.n_knots())
-      vcl_cout << "FATAL! - field knots must be the same size as spline knots\n";
+      std::cout << "FATAL! - field knots must be the same size as spline knots\n";
   }
   //: accessors
   double max_t() const{ return generating_spline_.max_t();}
@@ -30,6 +30,6 @@ class boxm2_vecf_spline_field{
 
  private:
   vgl_cubic_spline_3d<double> generating_spline_;
-  vcl_vector<vgl_vector_3d<double> > field_knots_;
+  std::vector<vgl_vector_3d<double> > field_knots_;
 };
 #endif// boxm2_vecf_spline_field

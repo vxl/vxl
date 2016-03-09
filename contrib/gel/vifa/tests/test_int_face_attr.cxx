@@ -1,5 +1,7 @@
 // This is gel/vifa/tests/test_int_face_attr.cxx
-#include <vcl_ostream.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <ostream>
 #include <vxl_config.h>
 #include <testlib/testlib_test.h>
 #include <sdet/sdet_detector_params.h>
@@ -39,18 +41,18 @@ static void test_int_face_attr(int argc, char* argv[])
                        np.ilow, np.ihigh);
     np.recompute();
 
-    vcl_cout << "Normalization params:\n";
+    std::cout << "Normalization params:\n";
     np.print_info();
 
     // Set up the line fitting parameters
     vdgl_fit_lines_params  flp(5);
 
-    vcl_cout << flp;
+    std::cout << flp;
 
     // Get the detector & region processor parameters
     sdet_detector_params  dp;
     sdet_region_proc_params  rpp(dp, false, false, 1);
-    vcl_cout << rpp;
+    std::cout << rpp;
 
     // Instantiate a region processor & attach the test image
     sdet_region_proc  rp(rpp);
@@ -62,7 +64,7 @@ static void test_int_face_attr(int argc, char* argv[])
     // Get the intensity face list
     iface_list&  region_list = rp.get_regions();
 
-    vcl_cout << region_list.size() << " intensity faces found:\n";
+    std::cout << region_list.size() << " intensity faces found:\n";
 
     // For each intensity face...
     iface_iterator  ifi = region_list.begin();
@@ -71,7 +73,7 @@ static void test_int_face_attr(int argc, char* argv[])
     {
       vtol_intensity_face_sptr  face = (*ifi);
 
-      vcl_cout << "  Intensity Face #" << i << " at ("
+      std::cout << "  Intensity Face #" << i << " at ("
                << face->Xo() << ", " << face->Yo() << "): " << (*face);
 
       // Compute the attributes.  Set the normalization params
@@ -80,27 +82,27 @@ static void test_int_face_attr(int argc, char* argv[])
       if (ifa.ComputeAttributes())
       {
         // Retrieve the attribute vector
-        vcl_vector<float>    attrs;
-        vcl_vector<vcl_string>  attr_names;
+        std::vector<float>    attrs;
+        std::vector<std::string>  attr_names;
         ifa.GetAttributes(attrs);
         ifa.GetAttributeNames(attr_names);
 
-        vcl_cout << attrs.size() << " attributes, "
+        std::cout << attrs.size() << " attributes, "
                  << attr_names.size() << " attribute names:\n";
 
         // Dump the attribute vector
-        vcl_vector<float>::iterator      ai = attrs.begin();
-        vcl_vector<vcl_string>::iterator  ani = attr_names.begin();
+        std::vector<float>::iterator      ai = attrs.begin();
+        std::vector<std::string>::iterator  ani = attr_names.begin();
         for (; (ai != attrs.end()) && (ani != attr_names.end()); ai++, ani++)
-          vcl_cout << (*ani) << ": " << (*ai) << vcl_endl;
+          std::cout << (*ani) << ": " << (*ai) << std::endl;
       }
       else
-        vcl_cout << "vifa_int_face_attr::ComputeAttributes() failed for face #"
+        std::cout << "vifa_int_face_attr::ComputeAttributes() failed for face #"
                  << i << "!\n";
     }
   }
   else
-    vcl_cout << "Could not load image -- aborting!\n";
+    std::cout << "Could not load image -- aborting!\n";
 }
 
 

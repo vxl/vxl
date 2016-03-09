@@ -18,7 +18,7 @@
 // - Returns:       The answer or a default
 // - Description:   Asks question and waits for an answer.
 //                  If the answer is an integer, returns it.
-//                  If the answer is an empty vcl_string (return)
+//                  If the answer is an empty std::string (return)
 //                  then returns default.
 //                  Otherwise waits for another input.
 // - References:    -
@@ -29,8 +29,10 @@
 // \endcode
 
 #include "mbl_read_int.h"
-#include <vcl_cstdio.h> // for fgets()
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <cstdio> // for fgets()
+#include <iostream>
 
 const int MAX_LEN = 20;
 
@@ -43,15 +45,15 @@ int RD_ReadInt1(const char* q_str, int default_int,
   while (true)
   {
     if (min_int==0 && max_int==0)
-      vcl_cout<<q_str<<" ("<<default_int<<") :";
+      std::cout<<q_str<<" ("<<default_int<<") :";
     else
-      vcl_cout<<q_str<<" ["<<min_int<<".."<<max_int<<"] ("<<default_int<<") :";
-    vcl_cout.flush();
+      std::cout<<q_str<<" ["<<min_int<<".."<<max_int<<"] ("<<default_int<<") :";
+    std::cout.flush();
 
-    if (vcl_fgets(reply,MAX_LEN,stdin)!=VXL_NULLPTR)
+    if (std::fgets(reply,MAX_LEN,stdin)!=VXL_NULLPTR)
     {
       int r = default_int;
-      if (reply[0]=='\n' || vcl_sscanf(reply,"%d",&r)>0)
+      if (reply[0]=='\n' || std::sscanf(reply,"%d",&r)>0)
         return r;
     }
   }
@@ -69,9 +71,9 @@ int mbl_read_int(const char* q_str, int default_int,
   {
     int R = RD_ReadInt1(q_str,default_int,min_int,max_int);
     if (R<min_int)
-      vcl_cout<<R<<": must be at least "<<min_int<<"\n";
+      std::cout<<R<<": must be at least "<<min_int<<"\n";
     else if (R>max_int)
-      vcl_cout<<R<<": must be no more than "<<max_int<<"\n";
+      std::cout<<R<<": must be no more than "<<max_int<<"\n";
     else
       return R; // acceptable
   }

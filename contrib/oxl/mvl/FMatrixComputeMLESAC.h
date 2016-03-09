@@ -25,7 +25,9 @@
 #include <vgl/vgl_fwd.h>
 #include <mvl/FMatrixComputeRobust.h>
 #include <mvl/FManifoldProject.h>
-#include <vcl_vector.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <vector>
 
 class FMatrixComputeMLESAC : public FMatrixComputeRobust
 {
@@ -36,7 +38,7 @@ class FMatrixComputeMLESAC : public FMatrixComputeRobust
   FMatrixComputeMLESAC(bool rank2_truncate, double std);
   virtual ~FMatrixComputeMLESAC();
 
-  virtual double calculate_term(vcl_vector<double>& residuals, vcl_vector<bool>& inlier_list, int& count);
+  virtual double calculate_term(std::vector<double>& residuals, std::vector<bool>& inlier_list, int& count);
   virtual double calculate_residual(HomgPoint2D& one, HomgPoint2D& two, FMatrix* F);
   virtual double calculate_residual(vgl_homg_point_2d<double>& one,
                                     vgl_homg_point_2d<double>& two,

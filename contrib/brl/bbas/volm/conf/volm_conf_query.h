@@ -48,9 +48,9 @@ public:
   ~volm_conf_query() {}
 
   //: access
-  vcl_vector<vpgl_perspective_camera<double> >& cameras()  { return cameras_; }
-  vcl_vector<vcl_string>& camera_strings() { return camera_strings_; }
-  vcl_vector<cam_angles>& camera_angles()  { return camera_angles_; }
+  std::vector<vpgl_perspective_camera<double> >& cameras()  { return cameras_; }
+  std::vector<std::string>& camera_strings() { return camera_strings_; }
+  std::vector<cam_angles>& camera_angles()  { return camera_angles_; }
   depth_map_scene_sptr depth_scene() const { return dm_; }
   unsigned ni() const { return ni_; }
   unsigned nj() const { return nj_; }
@@ -58,13 +58,13 @@ public:
   unsigned nobj() const { return nobj_; }
   unsigned nref() const { return nref_; }
   double altitude() const { return altitude_; }
-  vcl_vector<vcl_string>& ref_obj_name() { return ref_obj_name_; }
-  vcl_vector<vcl_map<vcl_string, volm_conf_object_sptr> >& conf_objects() { return conf_objects_; }
-  vcl_vector<vcl_map<vcl_string, vcl_pair<float, float> > >& conf_objects_d_tol() { return conf_objects_d_tol_; }
+  std::vector<std::string>& ref_obj_name() { return ref_obj_name_; }
+  std::vector<std::map<std::string, volm_conf_object_sptr> >& conf_objects() { return conf_objects_; }
+  std::vector<std::map<std::string, std::pair<float, float> > >& conf_objects_d_tol() { return conf_objects_d_tol_; }
 
   //: plot the configuration
-  bool visualize_ref_objs(vcl_string const& in_img_file, vcl_string const& out_folder);
-  //bool generate_top_views(vcl_string const& out_folder,  vcl_string const& filename_pre = "top_view");
+  bool visualize_ref_objs(std::string const& in_img_file, std::string const& out_folder);
+  //bool generate_top_views(std::string const& out_folder,  std::string const& filename_pre = "top_view");
   //: IO
 
 private:
@@ -85,15 +85,15 @@ private:
   int tol_in_pixel_;
 
   //: vector of cameras that satisfies ground plane constraint among all possible camera calibrations
-  vcl_vector<vpgl_perspective_camera<double> > cameras_;
-  vcl_vector<vcl_string> camera_strings_;
-  vcl_vector<cam_angles> camera_angles_;
+  std::vector<vpgl_perspective_camera<double> > cameras_;
+  std::vector<std::string> camera_strings_;
+  std::vector<cam_angles> camera_angles_;
   //: list of reference objects specified in depth scene
-  vcl_vector<vcl_string> ref_obj_name_;
+  std::vector<std::string> ref_obj_name_;
   //: list of configurational objects for each camera
-  vcl_vector<vcl_map<vcl_string, volm_conf_object_sptr> > conf_objects_;
-  vcl_vector<vcl_map<vcl_string, vcl_pair<float, float> > > conf_objects_d_tol_;
-  vcl_vector<vcl_map<vcl_string, vcl_pair<unsigned, unsigned> > > conf_objects_pixels_  ;
+  std::vector<std::map<std::string, volm_conf_object_sptr> > conf_objects_;
+  std::vector<std::map<std::string, std::pair<float, float> > > conf_objects_d_tol_;
+  std::vector<std::map<std::string, std::pair<unsigned, unsigned> > > conf_objects_pixels_  ;
 
   //: construct reference objects list
   bool parse_ref_object(depth_map_scene_sptr depth_scene);
@@ -115,7 +115,7 @@ private:
   //: return the y coordinates given x and a line function
   double line_coord(vgl_line_2d<double> const& line, double const& x);
   //: plot a line into image
-  void plot_line_into_image(vil_image_view<vil_rgb<vxl_byte> >& image, vcl_vector<vgl_point_2d<double> > const& line,
+  void plot_line_into_image(vil_image_view<vil_rgb<vxl_byte> >& image, std::vector<vgl_point_2d<double> > const& line,
                             unsigned char const& r = 255, unsigned char const& g = 255, unsigned char const& b = 255,
                             double const& width = 3.0);
   void plot_dot_into_image(vil_image_view<vil_rgb<vxl_byte> >& image, vgl_point_2d<double> const& pt,

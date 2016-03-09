@@ -7,8 +7,10 @@
 // \author Vishal Jain
 // \date Mar 10, 2011
 
-#include <vcl_fstream.h>
-#include <vcl_algorithm.h>
+#include <fstream>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <algorithm>
 #include <boxm2/ocl/boxm2_opencl_cache.h>
 #include <boxm2/boxm2_scene.h>
 #include <boxm2/boxm2_block.h>
@@ -32,14 +34,14 @@ namespace boxm2_ocl_render_view_dep_expected_image_process_globals
 {
   const unsigned n_inputs_ = 7;
   const unsigned n_outputs_ = 4;
-  vcl_size_t lthreads[2]={8,8};
+  std::size_t lthreads[2]={8,8};
 
-  static vcl_map<vcl_string,vcl_vector<bocl_kernel*> > kernels;
-  void compile_kernel(bocl_device_sptr device,vcl_vector<bocl_kernel*> & vec_kernels, vcl_string opts)
+  static std::map<std::string,std::vector<bocl_kernel*> > kernels;
+  void compile_kernel(bocl_device_sptr device,std::vector<bocl_kernel*> & vec_kernels, std::string opts)
   {
     //gather all render sources... seems like a lot for rendering...
-    vcl_vector<vcl_string> src_paths;
-    vcl_string source_dir = boxm2_ocl_util::ocl_src_root();
+    std::vector<std::string> src_paths;
+    std::string source_dir = boxm2_ocl_util::ocl_src_root();
     src_paths.push_back(source_dir + "scene_info.cl");
     src_paths.push_back(source_dir + "pixel_conversion.cl");
     src_paths.push_back(source_dir + "bit/bit_tree_library_functions.cl");
@@ -52,7 +54,7 @@ namespace boxm2_ocl_render_view_dep_expected_image_process_globals
     src_paths.push_back(source_dir + "bit/cast_ray_bit.cl");
 
     {
-      vcl_string options = opts;
+      std::string options = opts;
       options += "-D RENDER_VIEW_DEP ";
       options += "-D STEP_CELL=step_cell_render(aux_args.mog,aux_args.alpha,data_ptr,aux_args.app_model_weights,d*linfo->block_len,vis,aux_args.expint)";
 
@@ -67,12 +69,12 @@ namespace boxm2_ocl_render_view_dep_expected_image_process_globals
       vec_kernels.push_back(ray_trace_kernel);
 
       //create normalize image kernel
-      vcl_vector<vcl_string> norm_src_paths;
+      std::vector<std::string> norm_src_paths;
       norm_src_paths.push_back(source_dir + "pixel_conversion.cl");
       norm_src_paths.push_back(source_dir + "bit/normalize_kernels.cl");
       bocl_kernel * normalize_render_kernel=new bocl_kernel();
 
-      vcl_string normalize_options = opts;
+      std::string normalize_options = opts;
       normalize_options += "-D RENDER ";
       normalize_render_kernel->create_kernel( &device->context(),
                                               device->device_id(),
@@ -91,7 +93,7 @@ bool boxm2_ocl_render_view_dep_expected_image_process_cons(bprb_func_process& pr
   using namespace boxm2_ocl_render_view_dep_expected_image_process_globals;
 
   //process takes 1 input
-  vcl_vector<vcl_string> input_types_(n_inputs_);
+  std::vector<std::string> input_types_(n_inputs_);
   input_types_[0] = "bocl_device_sptr";
   input_types_[1] = "boxm2_scene_sptr";
   input_types_[2] = "boxm2_opencl_cache_sptr";
@@ -102,7 +104,7 @@ bool boxm2_ocl_render_view_dep_expected_image_process_cons(bprb_func_process& pr
 
   // process has 1 output:
   // output[0]: scene sptr
-  vcl_vector<vcl_string>  output_types_(n_outputs_);
+  std::vector<std::string>  output_types_(n_outputs_);
   output_types_[0] = "vil_image_view_base_sptr";
   output_types_[1] = "vil_image_view_base_sptr";
   output_types_[2] = "float";
@@ -110,7 +112,7 @@ bool boxm2_ocl_render_view_dep_expected_image_process_cons(bprb_func_process& pr
 
   bool good = pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
   // in case the 7th input is not set
-  brdb_value_sptr idx = new brdb_value_t<vcl_string>("");
+  brdb_value_sptr idx = new brdb_value_t<std::string>("");
   pro.set_input(6, idx);
   return good;
 }
@@ -121,7 +123,7 @@ bool boxm2_ocl_render_view_dep_expected_image_process(bprb_func_process& pro)
 
   vul_timer rtime;
   if ( pro.n_inputs() < n_inputs_ ) {
-    vcl_cout << pro.name() << ": The input number should be " << n_inputs_<< vcl_endl;
+    std::cout << pro.name() << ": The input number should be " << n_inputs_<< std::endl;
     return false;
   }
   //get the inputs
@@ -133,20 +135,20 @@ bool boxm2_ocl_render_view_dep_expected_image_process(bprb_func_process& pro)
   vpgl_camera_double_sptr cam= pro.get_input<vpgl_camera_double_sptr>(i++);
   unsigned ni=pro.get_input<unsigned>(i++);
   unsigned nj=pro.get_input<unsigned>(i++);
-  vcl_string ident = pro.get_input<vcl_string>(i++);
+  std::string ident = pro.get_input<std::string>(i++);
 
-  vcl_string data_type;
+  std::string data_type;
   int apptypesize;
-  vcl_vector<vcl_string> valid_types;
+  std::vector<std::string> valid_types;
   valid_types.push_back(boxm2_data_traits<BOXM2_MOG6_VIEW>::prefix());
   valid_types.push_back(boxm2_data_traits<BOXM2_MOG6_VIEW_COMPACT>::prefix());
 
   if ( !boxm2_util::verify_appearance( *scene, valid_types, data_type, apptypesize ) ) {
-     vcl_cout<<"boxm2_ocl_render_gl_view_dep_app_expected_image_process ERROR: scene doesn't have BOXM2_MOG6_VIEW data type"<<vcl_endl;
+     std::cout<<"boxm2_ocl_render_gl_view_dep_app_expected_image_process ERROR: scene doesn't have BOXM2_MOG6_VIEW data type"<<std::endl;
     return false;
   }
 
-  vcl_string options = boxm2_ocl_util::mog_options(data_type);
+  std::string options = boxm2_ocl_util::mog_options(data_type);
 
   if (ident.size() > 0) {
     data_type += "_" + ident;
@@ -157,13 +159,13 @@ bool boxm2_ocl_render_view_dep_expected_image_process(bprb_func_process& pro)
   cl_command_queue queue = clCreateCommandQueue(device->context(),*(device->device_id()),
                                                 CL_QUEUE_PROFILING_ENABLE,&status);
   if (status!=0) return false;
-  vcl_string identifier=device->device_identifier()+options;
+  std::string identifier=device->device_identifier()+options;
 
   // compile the kernel
   if (kernels.find(identifier)==kernels.end())
   {
-    vcl_cout<<"===========Compiling kernels==========="<<vcl_endl;
-    vcl_vector<bocl_kernel*> ks;
+    std::cout<<"===========Compiling kernels==========="<<std::endl;
+    std::vector<bocl_kernel*> ks;
     compile_kernel(device,ks,options);
     kernels[identifier]=ks;
   }
@@ -184,11 +186,11 @@ bool boxm2_ocl_render_view_dep_expected_image_process(bprb_func_process& pro)
 
   // visibility image
   float* vis_buff = new float[cl_ni*cl_nj];
-  vcl_fill(vis_buff, vis_buff + cl_ni*cl_nj, 1.0f);
+  std::fill(vis_buff, vis_buff + cl_ni*cl_nj, 1.0f);
   bocl_mem_sptr vis_image = opencl_cache->alloc_mem(cl_ni*cl_nj*sizeof(float), vis_buff,"vis image buffer");
   vis_image->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
    float* max_omega_buff = new float[cl_ni*cl_nj];
-  vcl_fill(max_omega_buff, max_omega_buff + cl_ni*cl_nj, 0.0f);
+  std::fill(max_omega_buff, max_omega_buff + cl_ni*cl_nj, 0.0f);
   bocl_mem_sptr max_omega_image = opencl_cache->alloc_mem(cl_ni*cl_nj*sizeof(float), max_omega_buff,"vis image buffer");
   max_omega_image->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
   float tnearfar[2] = { 0.0f, 1000000} ;
@@ -203,7 +205,7 @@ bool boxm2_ocl_render_view_dep_expected_image_process(bprb_func_process& pro)
   // normalize
   if (kernels[identifier].size()>1)
   {
-    vcl_size_t gThreads[] = {cl_ni,cl_nj};
+    std::size_t gThreads[] = {cl_ni,cl_nj};
     bocl_kernel* normalize_kern = kernels[identifier][1];
     normalize_kern->set_arg( exp_image.ptr() );
     normalize_kern->set_arg( vis_image.ptr() );
@@ -230,7 +232,7 @@ bool boxm2_ocl_render_view_dep_expected_image_process(bprb_func_process& pro)
     for (unsigned r=0;r<ni;r++)
       (*vis_img_out)(r,c)=vis_buff[c*cl_ni+r];
 #else //option to output a byte image (For easier saving)
-  vcl_cout << "Saving byte image..." << vcl_endl;
+  std::cout << "Saving byte image..." << std::endl;
   vil_image_view<vxl_byte>* exp_img_out=new vil_image_view<vxl_byte>(ni,nj);
     for (unsigned c=0;c<nj;c++)
       for (unsigned r=0;r<ni;r++)
@@ -243,7 +245,7 @@ bool boxm2_ocl_render_view_dep_expected_image_process(bprb_func_process& pro)
 #endif
 
   float all_time = rtime.all();
-  vcl_cout<<"Total Render time: "<< all_time <<" ms"<<vcl_endl;
+  std::cout<<"Total Render time: "<< all_time <<" ms"<<std::endl;
   delete [] vis_buff;
   delete [] buff;
   delete [] max_omega_buff;

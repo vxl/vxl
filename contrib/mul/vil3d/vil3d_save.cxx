@@ -9,8 +9,10 @@
 
 #include "vil3d_save.h"
 
-#include <vcl_cstring.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <cstring>
+#include <iostream>
 #include <vxl_config.h> // for vxl_byte
 
 #include <vil3d/vil3d_new.h>
@@ -29,7 +31,7 @@ bool vil3d_save(const vil3d_image_view_base &im, char const* filename, char cons
                              im.nplanes() * vil_pixel_format_num_components(im.pixel_format()),
                              im.pixel_format(), file_format);
   if (!out) {
-    vcl_cerr << __FILE__ ": (vil3d_save) Cannot save to type [" << file_format << "]\n";
+    std::cerr << __FILE__ ": (vil3d_save) Cannot save to type [" << file_format << "]\n";
     return false;
   }
 
@@ -67,16 +69,16 @@ char const *vil3d_save_guess_file_format(char const* filename)
   char const *file_format;
 
   // find last "."
-  char const *dot = vcl_strrchr(filename, '.');
+  char const *dot = std::strrchr(filename, '.');
   if (!dot) {
     // filename doesn't end in ".anything"
-    vcl_cerr << __FILE__ ": assuming gipl format for \'" << filename << "\'\n";
+    std::cerr << __FILE__ ": assuming gipl format for \'" << filename << "\'\n";
     file_format = "gipl";
   }
   else {
     // translate common extensions into known file formats.
     if (false) { }
-#define macro(ext, fmt) else if (!vcl_strcmp(dot, "." #ext)) file_format = #fmt
+#define macro(ext, fmt) else if (!std::strcmp(dot, "." #ext)) file_format = #fmt
     macro(dcm, dicom);
     macro(gpl, gipl);
 #undef macro
@@ -101,7 +103,7 @@ bool vil3d_save_image_resource(const vil3d_image_resource_sptr &ir, char const* 
                                                            ir->nplanes(),
                                                            ir->pixel_format(), file_format);
   if (!out) {
-    vcl_cerr << __FILE__ ": (vil3d_save) Cannot save type [" << file_format << "] to ["<<filename<<"]\n";
+    std::cerr << __FILE__ ": (vil3d_save) Cannot save type [" << file_format << "] to ["<<filename<<"]\n";
     return false;
   }
   return vil3d_copy_deep(ir, out);
@@ -128,13 +130,13 @@ bool vil3d_save(const vil3d_image_view_base & im,
                              im.nplanes() * vil_pixel_format_num_components(im.pixel_format()),
                              im.pixel_format(), file_format);
   if (!out) {
-    vcl_cerr << __FILE__ ": (vil3d_save) Cannot save to type [" << file_format << "]\n";
+    std::cerr << __FILE__ ": (vil3d_save) Cannot save to type [" << file_format << "]\n";
     return false;
   }
 
   if (!out->set_voxel_size_mm(voxel_width_i,voxel_width_j,voxel_width_k))
   {
-    vcl_cerr << __FILE__ ": (vil3d_save) Cannot save voxel sizes."<<vcl_endl;
+    std::cerr << __FILE__ ": (vil3d_save) Cannot save voxel sizes."<<std::endl;
     return false;
   }
 

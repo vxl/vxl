@@ -7,7 +7,9 @@
 #include <mvl/HomgInterestPointSet.h>
 #include <mvl/PairMatchSetCorner.h>
 #include <mvl/ProjStructure.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iostream>
 
 // Default ctor
 PairMatchSet2D3D::PairMatchSet2D3D()
@@ -20,11 +22,11 @@ PairMatchSet2D3D::PairMatchSet2D3D()
 PairMatchSet2D3D::PairMatchSet2D3D(const PairMatchSet2D3D& that)
   : PairMatchSet(that),
     corners_(new HomgInterestPointSet(*that.corners_)),
-    structure_(new vcl_vector<HomgPoint3D>(*that.structure_))
+    structure_(new std::vector<HomgPoint3D>(*that.structure_))
 {
 }
 
-PairMatchSet2D3D::PairMatchSet2D3D(const HomgInterestPointSet* corners, vcl_vector<HomgPoint3D>* structure)
+PairMatchSet2D3D::PairMatchSet2D3D(const HomgInterestPointSet* corners, std::vector<HomgPoint3D>* structure)
 {
   set(corners, structure);
 }
@@ -32,7 +34,7 @@ PairMatchSet2D3D::PairMatchSet2D3D(const HomgInterestPointSet* corners, vcl_vect
 // Assignment
 PairMatchSet2D3D& PairMatchSet2D3D::operator=(const PairMatchSet2D3D& )
 {
-  vcl_cerr << "PairMatchSet2D3D::operator= not implemented\n";
+  std::cerr << "PairMatchSet2D3D::operator= not implemented\n";
   return *this;
 }
 
@@ -41,14 +43,14 @@ PairMatchSet2D3D::~PairMatchSet2D3D()
 {
 }
 
-void PairMatchSet2D3D::set(const HomgInterestPointSet* corners, vcl_vector<HomgPoint3D>* structure)
+void PairMatchSet2D3D::set(const HomgInterestPointSet* corners, std::vector<HomgPoint3D>* structure)
 {
   corners_ = corners;
   structure_ = structure;
   set_size(corners_->size());
 }
 
-void PairMatchSet2D3D::set(int num_corners, vcl_vector<HomgPoint3D>* structure)
+void PairMatchSet2D3D::set(int num_corners, std::vector<HomgPoint3D>* structure)
 {
   corners_ = VXL_NULLPTR;
   structure_ = structure;
@@ -73,7 +75,7 @@ void PairMatchSet2D3D::set_from(const PairMatchSet2D3D& otherframe_to_3d, const 
 HomgMetric PairMatchSet2D3D::get_conditioner() const
 {
   if (!corners_) {
-    vcl_cerr << "PairMatchSet2D3D::get_conditioner() WARNING corners_ not set!\n";
+    std::cerr << "PairMatchSet2D3D::get_conditioner() WARNING corners_ not set!\n";
     return VXL_NULLPTR;
   }
   return corners_->get_conditioner();
@@ -83,7 +85,7 @@ const HomgPoint2D& PairMatchSet2D3D::get_point_2d(int i1) const
 {
   if (!corners_) {
     static HomgPoint2D dummy;
-    vcl_cerr << "PairMatchSet2D3D::get_point_2d() WARNING corners_ not set!\n";
+    std::cerr << "PairMatchSet2D3D::get_point_2d() WARNING corners_ not set!\n";
     return dummy;
   }
   return corners_->get_homg(i1);
@@ -97,7 +99,7 @@ const HomgPoint3D& PairMatchSet2D3D::get_point_3d(int i2) const
 const HomgInterestPointSet* PairMatchSet2D3D::get_corners() const
 {
   if (!corners_) {
-    vcl_cerr << "PairMatchSet2D3D::get_point_2d() WARNING corners_ not set!\n";
+    std::cerr << "PairMatchSet2D3D::get_point_2d() WARNING corners_ not set!\n";
     return VXL_NULLPTR;
   }
   return corners_;

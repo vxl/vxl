@@ -84,10 +84,10 @@ bxml_data_sptr bxml_find_by_name(const bxml_data_sptr& head,
 }
 
 //: Find all elements that match
-vcl_vector<bxml_data_sptr> bxml_find_all_with_name(const bxml_data_sptr& head,
+std::vector<bxml_data_sptr> bxml_find_all_with_name(const bxml_data_sptr& head,
                                                    const bxml_element& query)
 {
-  vcl_vector<bxml_data_sptr> all_results;
+  std::vector<bxml_data_sptr> all_results;
 
   if (head->type() != bxml_data::ELEMENT)
     return all_results;

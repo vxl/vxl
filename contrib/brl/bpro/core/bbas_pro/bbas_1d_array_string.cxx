@@ -7,7 +7,7 @@ void vsl_b_write(vsl_b_ostream & os, bbas_1d_array_string const& array){
 
 // Binary load 1d array string from stream.
 void vsl_b_read(vsl_b_istream& is, bbas_1d_array_string & array){
-  vbl_array_1d<vcl_string> temp;
+  vbl_array_1d<std::string> temp;
   vsl_b_read(is, temp);
   array.data_array = temp;
 }

@@ -6,13 +6,15 @@
 // \brief Describe an abstract classifier builder for scalar data
 // \author Tim Cootes
 
-#include <vcl_string.h>
-#include <vcl_vector.h>
-#include <vcl_memory.h>
+#include <string>
+#include <vector>
+#include <memory>
 #include <vbl/vbl_triple.h>
 #include <vsl/vsl_binary_io.h>
 #include <vnl/vnl_vector.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iostream>
 
 class clsfy_classifier_1d;
 
@@ -37,7 +39,7 @@ class clsfy_builder_1d
   virtual double build(clsfy_classifier_1d& classifier,
                        const vnl_vector<double>& egs,
                        const vnl_vector<double>& wts,
-                       const vcl_vector<unsigned> &outputs) const = 0;
+                       const std::vector<unsigned> &outputs) const = 0;
 
 
   //: Build a binary_threshold classifier
@@ -63,16 +65,16 @@ class clsfy_builder_1d
                                         const vnl_vector<double>& wts) const = 0;
 
   //: Name of the class
-  virtual vcl_string is_a() const;
+  virtual std::string is_a() const;
 
   //: Name of the class
-  virtual bool is_class(vcl_string const& s) const;
+  virtual bool is_class(std::string const& s) const;
 
   //: Create a copy on the heap and return base class pointer
   virtual clsfy_builder_1d* clone() const = 0;
 
   //: Print class to os
-  virtual void print_summary(vcl_ostream& os) const = 0;
+  virtual void print_summary(std::ostream& os) const = 0;
 
   //: Save class to binary file stream
   virtual void b_write(vsl_b_ostream& bfs) const = 0;
@@ -82,11 +84,11 @@ class clsfy_builder_1d
   virtual void b_read(vsl_b_istream& bfs) = 0;
   //: Initialise the parameters from a text stream.
   // Default case accepts no parameters.
-  virtual void config(vcl_istream &as);
+  virtual void config(std::istream &as);
 
   //: Load description from a text stream
-  static vcl_auto_ptr<clsfy_builder_1d> new_builder(
-    vcl_istream &as);
+  static std::auto_ptr<clsfy_builder_1d> new_builder(
+    std::istream &as);
 };
 
 //: Allows derived class to be loaded by base-class pointer
@@ -99,20 +101,20 @@ void vsl_b_write(vsl_b_ostream& bfs, const clsfy_builder_1d& b);
 void vsl_b_read(vsl_b_istream& bfs, clsfy_builder_1d& b);
 
 //: Stream output operator for class reference
-vcl_ostream& operator<<(vcl_ostream& os,const clsfy_builder_1d& b);
+std::ostream& operator<<(std::ostream& os,const clsfy_builder_1d& b);
 
 //: Stream output operator for class pointer
-vcl_ostream& operator<<(vcl_ostream& os,const clsfy_builder_1d* b);
+std::ostream& operator<<(std::ostream& os,const clsfy_builder_1d* b);
 
 //: Stream output operator for class pointer
-vcl_ostream& operator<<(vcl_ostream& os,const clsfy_builder_1d* b);
+std::ostream& operator<<(std::ostream& os,const clsfy_builder_1d* b);
 
 //! Stream output operator for class reference
-inline void vsl_print_summary(vcl_ostream& os, const clsfy_builder_1d& b)
+inline void vsl_print_summary(std::ostream& os, const clsfy_builder_1d& b)
 { os << b; }
 
 //! Stream output operator for class pointer
-inline void vsl_print_summary(vcl_ostream& os, const clsfy_builder_1d* b)
+inline void vsl_print_summary(std::ostream& os, const clsfy_builder_1d* b)
 { os << b; }
 
 #endif // clsfy_builder_1d_h_

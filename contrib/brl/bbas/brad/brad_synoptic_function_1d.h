@@ -10,8 +10,10 @@
 // \date October 1, 2011
 //
 //----------------------------------------------------------------------------
-#include <vcl_vector.h>
-#include <vcl_string.h>
+#include <vector>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <string>
 #include <vnl/vnl_double_4.h>
 class brad_synoptic_function_1d
 {
@@ -22,22 +24,22 @@ class brad_synoptic_function_1d
     //    max_freq_mean_(0.487648), max_freq_sigma_(0.127436755) {}
     max_freq_mean_(0.487648), max_freq_sigma_(0.2) {}
   //:constructor from batch orbit data
-  brad_synoptic_function_1d(vcl_vector<double> const& elevation,
-                            vcl_vector<double> const& azimuth,
-                            vcl_vector<double> const& vis,
-                            vcl_vector<double> const& intensity):
+  brad_synoptic_function_1d(std::vector<double> const& elevation,
+                            std::vector<double> const& azimuth,
+                            std::vector<double> const& vis,
+                            std::vector<double> const& intensity):
     elev_(elevation),azimuth_(azimuth),vis_(vis),intensity_(intensity),
     inherent_sigma_(0.06), tau_s_(0.25), max_freq_mean_(0.487648),
     //    max_freq_sigma_(0.127436755){this->fit_intensity_cubic();}
     max_freq_sigma_(0.2){this->fit_intensity_cubic();}
   //: set members
-  void set_elevation(vcl_vector<double> const& elevation){
+  void set_elevation(std::vector<double> const& elevation){
     elev_ = elevation;}
-  void set_azimuth(vcl_vector<double> const& azimuth){
+  void set_azimuth(std::vector<double> const& azimuth){
    azimuth_ = azimuth;}
-  void set_vis(vcl_vector<double> const& vis){
+  void set_vis(std::vector<double> const& vis){
    vis_ = vis;}
-  void set_intensity(vcl_vector<double> const& intensity){
+  void set_intensity(std::vector<double> const& intensity){
    intensity_ = intensity;}
   void set_inherent_data_sigma(double sigma){inherent_sigma_=sigma;}
 
@@ -47,7 +49,7 @@ class brad_synoptic_function_1d
   void fit_intensity_cubic();
 
   //:load batch orbit data from a file
-  bool load_samples(vcl_string const& path);
+  bool load_samples(std::string const& path);
 
   //: the number of observations on the orbit
   unsigned size(){return (unsigned)elev_.size();}
@@ -86,7 +88,7 @@ class brad_synoptic_function_1d
   void compute_auto_correlation();
 
   //: autocorrelation function
-  vcl_vector<double> auto_correlation(){return auto_corr_;}
+  std::vector<double> auto_correlation(){return auto_corr_;}
 
   //: fit a linear/constant model to the autocorrelation function
   void fit_linear_const();
@@ -107,7 +109,7 @@ class brad_synoptic_function_1d
   double interp_linear_const(double arc_length);
 
   //: compute frequency components of autocorrelation function
-  void auto_corr_freq_amplitudes(vcl_vector<double>& freq_amplitudes);
+  void auto_corr_freq_amplitudes(std::vector<double>& freq_amplitudes);
 
   //: probability density of the linear/const fit
   double lin_const_fit_prob_density();
@@ -116,15 +118,15 @@ class brad_synoptic_function_1d
   double max_frequency_prob_density();
 
  private:
-  vcl_vector<double> elev_;
-  vcl_vector<double> azimuth_;
-  vcl_vector<double> vis_;
-  vcl_vector<double> intensity_;
+  std::vector<double> elev_;
+  std::vector<double> azimuth_;
+  std::vector<double> vis_;
+  std::vector<double> intensity_;
   vnl_double_4 cubic_coef_int_;
   double cubic_fit_sigma_;
   double inherent_sigma_;
   double effective_n_obs_;
-  vcl_vector<double> auto_corr_;
+  std::vector<double> auto_corr_;
   double tau_s_;
   double alpha_;
   double mu_;

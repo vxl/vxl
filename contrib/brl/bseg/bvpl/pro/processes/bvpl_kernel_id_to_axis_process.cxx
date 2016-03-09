@@ -17,7 +17,9 @@
 #include <bvpl/kernels/bvpl_kernel_factory.h>
 #include <bvpl/bvpl_direction_to_color_map.h>
 #include <vnl/vnl_float_3.h>
-#include <vcl_string.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <string>
 
 namespace bvpl_kernel_id_to_axis_process_globals
 {
@@ -32,13 +34,13 @@ bool bvpl_kernel_id_to_axis_process_cons(bprb_func_process& pro)
   using namespace bvpl_kernel_id_to_axis_process_globals;
 
   // This process has 3 inputs and 1 output
-  vcl_vector<vcl_string> input_types_(n_inputs_);
+  std::vector<std::string> input_types_(n_inputs_);
   unsigned i=0;
   input_types_[i++]="bvxm_voxel_grid_base_sptr"; //the inpud grid
   input_types_[i++]="bvpl_kernel_vector_sptr"; // a vector of kernels
   input_types_[i++]="vcl_string"; //path to output grid
 
-  vcl_vector<vcl_string> output_types_(n_outputs_);
+  std::vector<std::string> output_types_(n_outputs_);
   output_types_[0]="bvxm_voxel_grid_base_sptr"; //the output grid
 
   return pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
@@ -52,16 +54,16 @@ bool bvpl_kernel_id_to_axis_process(bprb_func_process& pro)
   // check number of inputs
   if (pro.input_types().size() != n_inputs_)
   {
-    vcl_cout << pro.name() << "The number of inputs should be " << n_inputs_ << vcl_endl;
+    std::cout << pro.name() << "The number of inputs should be " << n_inputs_ << std::endl;
     return false;
   }
 
   bvxm_voxel_grid_base_sptr grid_base = pro.get_input<bvxm_voxel_grid_base_sptr>(0);
   bvpl_kernel_vector_sptr kernel = pro.get_input<bvpl_kernel_vector_sptr>(1);
-  vcl_string output_world_dir = pro.get_input<vcl_string>(2);
+  std::string output_world_dir = pro.get_input<std::string>(2);
 
   if (!grid_base.ptr())  {
-    vcl_cerr << "In bvpl_kernel_id_to_axis_process -- input grid is not valid!\n";
+    std::cerr << "In bvpl_kernel_id_to_axis_process -- input grid is not valid!\n";
     return false;
   }
   bvxm_voxel_grid<int > *grid
@@ -89,7 +91,7 @@ bool bvpl_kernel_id_to_axis_process(bprb_func_process& pro)
     return true;
   }
   else {
-    vcl_cerr << "datatype not supported\n";
+    std::cerr << "datatype not supported\n";
   }
 
   return false;

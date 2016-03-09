@@ -3,13 +3,15 @@
 #include <brad/brad_sun_pos.h>
 #include <bsta/bsta_spherical_histogram.h>
 #include <vnl/algo/vnl_symmetric_eigensystem.h>
-#include <vcl_cstdlib.h> // for rand()
-#include <vcl_fstream.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <cstdlib> // for rand()
+#include <fstream>
 
 #ifdef DEBUG
 // illumination directions for longitude = 33.331465, latitude =44.376970 deg
 // for images taken over a 7 year period at roughly 07:30Z
-static vcl_vector<vnl_double_3> illum_dirs()
+static std::vector<vnl_double_3> illum_dirs()
 {
   vnl_double_3 ill_dirs[]={
     vnl_double_3(0.344759944,-0.307169525,0.887010408),
@@ -44,7 +46,7 @@ static vcl_vector<vnl_double_3> illum_dirs()
     vnl_double_3(0.200950347,-0.171021944,0.964557128),
     vnl_double_3(0.181560261,-0.207394314,0.961261395)
   };
-  vcl_vector<vnl_double_3> illumination_dirs(ill_dirs, ill_dirs+31);
+  std::vector<vnl_double_3> illumination_dirs(ill_dirs, ill_dirs+31);
   return illumination_dirs;
 }
 #endif
@@ -61,34 +63,34 @@ static void test_sun_hist()
   TEST_NEAR("sun direction histogram", cnts, 115.0, 0.00001);
   double mean_az, mean_el;
   h.mean(mean_az, mean_el);
-  //h.print_to_text(vcl_cout);
+  //h.print_to_text(std::cout);
   vnl_matrix_fixed<double, 2, 2> covar = h.covariance_matrix();
-  vcl_cout << covar << '\n';
+  std::cout << covar << '\n';
   double std_dev_az, std_dev_el;
   h.std_dev(std_dev_az, std_dev_el);
   vnl_symmetric_eigensystem<double> es(covar);
   for (unsigned i = 0; i<2; ++i){
-  vcl_cout <<es.get_eigenvector(i) << '\n'
-           << vcl_sqrt(es.get_eigenvalue(i)) << '\n';
+  std::cout <<es.get_eigenvector(i) << '\n'
+           << std::sqrt(es.get_eigenvalue(i)) << '\n';
   }
-  double er = vcl_fabs(std_dev_az - 16.546094) + vcl_fabs(std_dev_el - 14.13252);
-  er += vcl_fabs(vcl_sqrt(es.get_eigenvalue(0))-5.79397) +
-        vcl_fabs(vcl_sqrt(es.get_eigenvalue(1))-20.9745);
+  double er = std::fabs(std_dev_az - 16.546094) + std::fabs(std_dev_el - 14.13252);
+  er += std::fabs(std::sqrt(es.get_eigenvalue(0))-5.79397) +
+        std::fabs(std::sqrt(es.get_eigenvalue(1))-20.9745);
   TEST_NEAR("sun eigensystem " , er, 0.0, 0.01);
 
 #ifdef DEBUG //for debugging
-  vcl_cout << h << '\n'
+  std::cout << h << '\n'
            << "az  el counts\n";
-  h.print_to_text(vcl_cout);
+  h.print_to_text(std::cout);
   for (unsigned j = 0; j<h.n_elevation(); ++j)
     for (unsigned i = 0; i<h.n_azimuth(); ++i){
       if (h.counts(int(i), int(j))==0) continue;
       double azc = h.azimuth_center(i), elc = h.elevation_center(j);
       double x, y, z;
       h.convert_to_cartesian(azc, elc, x, y, z);
-      vcl_cout << x << ' ' << y << ' ' << z << '\n';
+      std::cout << x << ' ' << y << ' ' << z << '\n';
     }
-  vcl_ofstream os("c:/images/BaghdadBoxm2/sun.wrl");
+  std::ofstream os("c:/images/BaghdadBoxm2/sun.wrl");
   h.print_to_vrml(os);
   os.close();
   bsta_spherical_histogram<double>::ang_units deg =
@@ -99,14 +101,14 @@ static void test_sun_hist()
     bsta_spherical_histogram<double>::B_0_180;
   bsta_spherical_histogram<double> hsun(72, 18, 0, 360.0, 0.0, 90.0, deg,
                                         azbr, elpole);
-  vcl_vector<vnl_double_3> ill_dirs = illum_dirs();
-  for (vcl_vector<vnl_double_3>::iterator iit = ill_dirs.begin();
+  std::vector<vnl_double_3> ill_dirs = illum_dirs();
+  for (std::vector<vnl_double_3>::iterator iit = ill_dirs.begin();
        iit != ill_dirs.end(); ++iit){
     double azimuth, elevation;
     hsun.convert_to_spherical((*iit)[0],(*iit)[1],(*iit)[2],azimuth,elevation);
     hsun.upcount(azimuth, elevation);
   }
-  vcl_ofstream oss("c:/images/BaghdadBoxm2/sun_sat.wrl");
+  std::ofstream oss("c:/images/BaghdadBoxm2/sun_sat.wrl");
   hsun.print_to_vrml(oss);
   oss.close();
 #endif

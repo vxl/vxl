@@ -9,13 +9,15 @@
 #include <bocl/bocl_kernel.h>
 #include <bocl/bocl_mem.h>
 #include <bocl/bocl_device.h>
-#include <vcl_iostream.h>
-#include <vcl_ios.h> // for std::ios::fixed
-#include <vcl_string.h>
-#include <vcl_vector.h>
-#include <vcl_map.h>
-#include <vcl_algorithm.h>
-#include <vcl_cmath.h>
+#include <iostream>
+#include <ios> // for std::ios::fixed
+#include <string>
+#include <vector>
+#include <map>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <algorithm>
+#include <cmath>
 
 #include <bsta/algo/bsta_sigma_normalizer.h>
 #include <boxm2/cpp/algo/boxm2_mog3_grey_processor.h>
@@ -57,7 +59,7 @@ void test_weighted_em()
     vis[i] = (float) 1.0f;
 
   //----- C++ Weighted EM -------------
-  vcl_vector<float> visV, obsV;
+  std::vector<float> visV, obsV;
   for (int i=0; i<50; ++ i) {
     visV.push_back(vis[i]);
     obsV.push_back(obs[i]);
@@ -66,10 +68,10 @@ void test_weighted_em()
   vnl_vector_fixed<vxl_byte, 8> mog;
   boxm2_processor_type<BOXM2_MOG3_GREY>::type::compute_app_model(mog,obsV,visV,n_table,0.03f);
 
-  vcl_cout<<"CPP MOG-------------:\n"
-          <<"  mu0,sigma0,w0: "<<(float) mog[0]/255.0f<<", "<<(float) mog[1]/255.0f<<", "<<(float)mog[2]/255.0f<<vcl_endl
-          <<"  mu1,sigma1,w1: "<<(float) mog[3]/255.0f<<", "<<(float) mog[4]/255.0f<<", "<<(float)mog[5]/255.0f<<vcl_endl
-          <<"  mu2,sigma2,w2: "<<(float) mog[6]/255.0f<<", "<<(float) mog[7]/255.0f<<", "<<(float)(255 - mog[2] - mog[5])/255.0f<<vcl_endl;
+  std::cout<<"CPP MOG-------------:\n"
+          <<"  mu0,sigma0,w0: "<<(float) mog[0]/255.0f<<", "<<(float) mog[1]/255.0f<<", "<<(float)mog[2]/255.0f<<std::endl
+          <<"  mu1,sigma1,w1: "<<(float) mog[3]/255.0f<<", "<<(float) mog[4]/255.0f<<", "<<(float)mog[5]/255.0f<<std::endl
+          <<"  mu2,sigma2,w2: "<<(float) mog[6]/255.0f<<", "<<(float) mog[7]/255.0f<<", "<<(float)(255 - mog[2] - mog[5])/255.0f<<std::endl;
 
   //----- OpenCL Weighted EM -------------
   //load BOCL stuff
@@ -79,11 +81,11 @@ void test_weighted_em()
   bocl_device_sptr device = mgr.gpus_[0];
 
   //compile pyramid test
-  vcl_vector<vcl_string> src_paths;
-  vcl_string source_dir = boxm2_ocl_util::ocl_src_root();
+  std::vector<std::string> src_paths;
+  std::string source_dir = boxm2_ocl_util::ocl_src_root();
   src_paths.push_back(source_dir + "statistics_library_functions.cl");
   src_paths.push_back(source_dir + "stat/weighted_em.cl");
-  vcl_string opts = " -D SAMPLE_GLOBAL_FLOAT -D EM_WEIGHT_GLOBAL_FLOAT ";
+  std::string opts = " -D SAMPLE_GLOBAL_FLOAT -D EM_WEIGHT_GLOBAL_FLOAT ";
   bocl_kernel em_test;
   em_test.create_kernel(&device->context(),device->device_id(), src_paths, "test_weighted_em", opts, "test weighted em kernel");
 
@@ -119,8 +121,8 @@ void test_weighted_em()
   em_test.set_arg( minSigmaMem.ptr() );
 
   //set workspace
-  vcl_size_t lThreads[] = {8, 8};
-  vcl_size_t gThreads[] = {8, 8};
+  std::size_t lThreads[] = {8, 8};
+  std::size_t gThreads[] = {8, 8};
 
   ////execute kernel
   em_test.execute( queue, 2, lThreads, gThreads);
@@ -128,18 +130,18 @@ void test_weighted_em()
   mogMem->read_to_buffer(queue);
 
   //report
-  vcl_cout<<"REAL MOG------------:\n"
+  std::cout<<"REAL MOG------------:\n"
           <<"  mu0,sigma0,w0: (.25, .06, .5)\n"
           <<"  mu0,sigma0,w0: (.75, .1,  .3)\n"
           <<"  mu0,sigma0,w0: (.5 , .15, .2)\n"
           <<"CPP MOG-------------:\n"
-          <<"  mu0,sigma0,w0: "<<(float) mog[0]/255.0f<<", "<<(float) mog[1]/255.0f<<", "<<(float)mog[2]/255.0f<<vcl_endl
-          <<"  mu1,sigma1,w1: "<<(float) mog[3]/255.0f<<", "<<(float) mog[4]/255.0f<<", "<<(float)mog[5]/255.0f<<vcl_endl
-          <<"  mu2,sigma2,w2: "<<(float) mog[6]/255.0f<<", "<<(float) mog[7]/255.0f<<", "<<(float)(255 - mog[2] - mog[5])/255.0f<<vcl_endl
+          <<"  mu0,sigma0,w0: "<<(float) mog[0]/255.0f<<", "<<(float) mog[1]/255.0f<<", "<<(float)mog[2]/255.0f<<std::endl
+          <<"  mu1,sigma1,w1: "<<(float) mog[3]/255.0f<<", "<<(float) mog[4]/255.0f<<", "<<(float)mog[5]/255.0f<<std::endl
+          <<"  mu2,sigma2,w2: "<<(float) mog[6]/255.0f<<", "<<(float) mog[7]/255.0f<<", "<<(float)(255 - mog[2] - mog[5])/255.0f<<std::endl
           <<"OPENCL MOG-------------:\n"
-          <<"  mu0,sigma0,w0: "<<(float) mogBuff[0]/255.0f<<", "<<(float) mogBuff[1]/255.0f<<", "<<(float)mogBuff[2]/255.0f<<vcl_endl
-          <<"  mu1,sigma1,w1: "<<(float) mogBuff[3]/255.0f<<", "<<(float) mogBuff[4]/255.0f<<", "<<(float)mogBuff[5]/255.0f<<vcl_endl
-          <<"  mu2,sigma2,w2: "<<(float) mogBuff[6]/255.0f<<", "<<(float) mogBuff[7]/255.0f<<", "<<(float)(255 - mogBuff[2] - mogBuff[5])/255.0f<<vcl_endl;
+          <<"  mu0,sigma0,w0: "<<(float) mogBuff[0]/255.0f<<", "<<(float) mogBuff[1]/255.0f<<", "<<(float)mogBuff[2]/255.0f<<std::endl
+          <<"  mu1,sigma1,w1: "<<(float) mogBuff[3]/255.0f<<", "<<(float) mogBuff[4]/255.0f<<", "<<(float)mogBuff[5]/255.0f<<std::endl
+          <<"  mu2,sigma2,w2: "<<(float) mogBuff[6]/255.0f<<", "<<(float) mogBuff[7]/255.0f<<", "<<(float)(255 - mogBuff[2] - mogBuff[5])/255.0f<<std::endl;
 }
 
 

@@ -13,11 +13,13 @@
 //
 
 #include "bvgl_intersection.h"
-#include <vcl_limits.h>
+#include <limits>
 #include <vcl_cassert.h>
-#include <vcl_cmath.h>
-#include <vcl_algorithm.h>
-#include <vcl_vector.h>
+#include <cmath>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <algorithm>
+#include <vector>
 
 //helper functions
 namespace bvgl_intersection_helpers
@@ -75,8 +77,8 @@ namespace bvgl_intersection_helpers
   inline bool axisTest(T edge[3], T fedge[3], T v0[3], T v1[3], T boxhalfsize[3]) {
     T p0 = edge[Axis1]*v0[Axis0] - edge[Axis0]*v0[Axis1];
     T p1 = edge[Axis1]*v1[Axis0] - edge[Axis0]*v1[Axis1];
-    T min = vcl_min(p0, p1);
-    T max = vcl_max(p0, p1);
+    T min = std::min(p0, p1);
+    T max = std::max(p0, p1);
     T rad = fedge[Axis1]*boxhalfsize[Axis0] + fedge[Axis0]*boxhalfsize[Axis1];
     return min <= rad && max >= -rad;
   }
@@ -128,19 +130,19 @@ bool bvgl_intersection(vgl_box_3d<T> const& A, bvgl_triangle_3d<T> const& B)
     return false;
 
   //test 3: if plane/box do intersect, test bounds
-  T fe[3] = { vcl_fabs(e0[X]), vcl_fabs(e0[Y]), vcl_fabs(e0[Z]) };
+  T fe[3] = { std::fabs(e0[X]), std::fabs(e0[Y]), std::fabs(e0[Z]) };
   if (!axisTest<Y,Z>(e0, fe, v0, v2, boxhalfsize) ||
       !axisTest<X,Z>(e0, fe, v0, v2, boxhalfsize) ||
       !axisTest<X,Y>(e0, fe, v1, v2, boxhalfsize) )
     return false;
 
-  fe[X]=vcl_fabs(e1[X]); fe[Y]=vcl_fabs(e1[Y]); fe[Z]=vcl_fabs(e1[Z]);
+  fe[X]=std::fabs(e1[X]); fe[Y]=std::fabs(e1[Y]); fe[Z]=std::fabs(e1[Z]);
   if (!axisTest<Y,Z>(e1, fe, v0, v2, boxhalfsize) ||
       !axisTest<X,Z>(e1, fe, v0, v2, boxhalfsize) ||
       !axisTest<X,Y>(e1, fe, v0, v1, boxhalfsize) )
     return false;
 
-  fe[X]=vcl_fabs(e2[X]); fe[Y]=vcl_fabs(e2[Y]); fe[Z]=vcl_fabs(e2[Z]);
+  fe[X]=std::fabs(e2[X]); fe[Y]=std::fabs(e2[Y]); fe[Z]=std::fabs(e2[Z]);
   if (!axisTest<Y,Z>(e2, fe, v0, v1, boxhalfsize) ||
       !axisTest<X,Z>(e2, fe, v0, v1, boxhalfsize) ||
       !axisTest<X,Y>(e2, fe, v1, v2, boxhalfsize) )

@@ -7,7 +7,7 @@
 // \author Vishal Jain
 // \date Mar 10, 2011
 
-#include <vcl_fstream.h>
+#include <fstream>
 #include <boxm2/ocl/boxm2_opencl_cache.h>
 #include <boxm2/boxm2_scene.h>
 #include <boxm2/boxm2_block.h>
@@ -16,7 +16,9 @@
 #include <vil/vil_image_view.h>
 //brdb stuff
 #include <brdb/brdb_value.h>
-#include <vcl_algorithm.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <algorithm>
 //directory utility
 #include <vcl_where_root_dir.h>
 #include <bocl/bocl_device.h>
@@ -30,12 +32,12 @@ namespace boxm2_ocl_render_expected_depth_process_globals
 {
   const unsigned n_inputs_ = 6;
   const unsigned n_outputs_ = 3;
-  vcl_size_t local_threads[2]={8,8};
-  void compile_kernel(bocl_device_sptr device,vcl_vector<bocl_kernel*> & vec_kernels)
+  std::size_t local_threads[2]={8,8};
+  void compile_kernel(bocl_device_sptr device,std::vector<bocl_kernel*> & vec_kernels)
   {
     //gather all render sources... seems like a lot for rendering...
-    vcl_vector<vcl_string> src_paths;
-    vcl_string source_dir = boxm2_ocl_util::ocl_src_root();
+    std::vector<std::string> src_paths;
+    std::string source_dir = boxm2_ocl_util::ocl_src_root();
     src_paths.push_back(source_dir + "scene_info.cl");
     src_paths.push_back(source_dir + "pixel_conversion.cl");
     src_paths.push_back(source_dir + "bit/bit_tree_library_functions.cl");
@@ -47,7 +49,7 @@ namespace boxm2_ocl_render_expected_depth_process_globals
     src_paths.push_back(source_dir + "bit/cast_ray_bit.cl");
 
     //set kernel options
-    vcl_string options = " -D RENDER_DEPTH ";
+    std::string options = " -D RENDER_DEPTH ";
     options +=  "-D DETERMINISTIC";
     options += " -D STEP_CELL=step_cell_render_depth2(tblock,linfo->block_len,aux_args.alpha,data_ptr,d*linfo->block_len,aux_args.vis,aux_args.expdepth,aux_args.expdepthsqr,aux_args.probsum,aux_args.t)";
 
@@ -63,7 +65,7 @@ namespace boxm2_ocl_render_expected_depth_process_globals
     vec_kernels.push_back(ray_trace_kernel);
 
     //create normalize image kernel
-    vcl_vector<vcl_string> norm_src_paths;
+    std::vector<std::string> norm_src_paths;
     norm_src_paths.push_back(source_dir + "scene_info.cl");
 
     norm_src_paths.push_back(source_dir + "pixel_conversion.cl");
@@ -80,7 +82,7 @@ namespace boxm2_ocl_render_expected_depth_process_globals
 
     vec_kernels.push_back(normalize_render_kernel);
   }
-  static vcl_map<vcl_string,vcl_vector<bocl_kernel*> > kernels;
+  static std::map<std::string,std::vector<bocl_kernel*> > kernels;
 }
 
 bool boxm2_ocl_render_expected_depth_process_cons(bprb_func_process& pro)
@@ -88,7 +90,7 @@ bool boxm2_ocl_render_expected_depth_process_cons(bprb_func_process& pro)
   using namespace boxm2_ocl_render_expected_depth_process_globals;
 
   //process takes 1 input
-  vcl_vector<vcl_string> input_types_(n_inputs_);
+  std::vector<std::string> input_types_(n_inputs_);
   input_types_[0] = "bocl_device_sptr";
   input_types_[1] = "boxm2_scene_sptr";
   input_types_[2] = "boxm2_opencl_cache_sptr";
@@ -99,7 +101,7 @@ bool boxm2_ocl_render_expected_depth_process_cons(bprb_func_process& pro)
 
   // process has 1 output:
   // output[0]: scene sptr
-  vcl_vector<vcl_string>  output_types_(n_outputs_);
+  std::vector<std::string>  output_types_(n_outputs_);
   output_types_[0] = "vil_image_view_base_sptr";
   output_types_[1] = "vil_image_view_base_sptr";
   output_types_[2] = "vil_image_view_base_sptr";
@@ -112,7 +114,7 @@ bool boxm2_ocl_render_expected_depth_process(bprb_func_process& pro)
   using namespace boxm2_ocl_render_expected_depth_process_globals;
 
   if ( pro.n_inputs() < n_inputs_ ) {
-    vcl_cout << pro.name() << ": The input number should be " << n_inputs_<< vcl_endl;
+    std::cout << pro.name() << ": The input number should be " << n_inputs_<< std::endl;
     return false;
   }
   float transfer_time=0.0f;
@@ -127,7 +129,7 @@ bool boxm2_ocl_render_expected_depth_process(bprb_func_process& pro)
   unsigned ni=pro.get_input<unsigned>(i++);
   unsigned nj=pro.get_input<unsigned>(i++);
 
-  vcl_string identifier=device->device_identifier();
+  std::string identifier=device->device_identifier();
 
   // create a command queue.
   int status=0;
@@ -141,8 +143,8 @@ bool boxm2_ocl_render_expected_depth_process(bprb_func_process& pro)
   // compile the kernel
   if (kernels.find(identifier)==kernels.end())
   {
-    //vcl_cout<<"===========Compiling kernels==========="<<vcl_endl;
-    vcl_vector<bocl_kernel*> ks;
+    //std::cout<<"===========Compiling kernels==========="<<std::endl;
+    std::vector<bocl_kernel*> ks;
     compile_kernel(device,ks);
     kernels[identifier]=ks;
   }
@@ -200,13 +202,13 @@ bool boxm2_ocl_render_expected_depth_process(bprb_func_process& pro)
       proj_bbox.add(vgl_point_2d<double>(u,v));
       geocam->project(scene_bbox.max_x(), scene_bbox.max_y(), scene_bbox.max_z(), u, v);
       proj_bbox.add(vgl_point_2d<double>(u,v));
-      vcl_cout<<"Scene BBox "<<scene_bbox<<" Proj Box "<<proj_bbox<<vcl_endl;
-      int min_i = int(vcl_max(0.0, vcl_floor(proj_bbox.min_x())));
-      int min_j = int(vcl_max(0.0, vcl_floor(proj_bbox.min_y())));
-      int max_i = int(vcl_min(ni-1.0, vcl_ceil(proj_bbox.max_x())));
-      int max_j = int(vcl_min(nj-1.0, vcl_ceil(proj_bbox.max_y())));
+      std::cout<<"Scene BBox "<<scene_bbox<<" Proj Box "<<proj_bbox<<std::endl;
+      int min_i = int(std::max(0.0, std::floor(proj_bbox.min_x())));
+      int min_j = int(std::max(0.0, std::floor(proj_bbox.min_y())));
+      int max_i = int(std::min(ni-1.0, std::ceil(proj_bbox.max_x())));
+      int max_j = int(std::min(nj-1.0, std::ceil(proj_bbox.max_y())));
       if ((min_i > max_i) || (min_j > max_j)) {
-          vcl_cerr << "Error: boxm2_ocl_ingest_buckeye_dem_process: No overlap between scene and DEM image.\n";
+          std::cerr << "Error: boxm2_ocl_ingest_buckeye_dem_process: No overlap between scene and DEM image.\n";
           return false;
       }
       // initialize ray origin buffer, first and last return buffers
@@ -267,18 +269,18 @@ bool boxm2_ocl_render_expected_depth_process(bprb_func_process& pro)
   lookup->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR);
 
   //2. set workgroup size
-  vcl_size_t lThreads[] = {8, 8};
-  vcl_size_t gThreads[] = {cl_ni,cl_nj};
+  std::size_t lThreads[] = {8, 8};
+  std::size_t gThreads[] = {cl_ni,cl_nj};
   float subblk_dim = 0.0;
   // set arguments
-  vcl_vector<boxm2_block_id> vis_order;
+  std::vector<boxm2_block_id> vis_order;
   if(cam->type_name() == "vpgl_geo_camera" )
       vis_order= scene->get_block_ids(); // order does not matter for a top down orthographic camera  and axis aligned blocks
   else if(cam->type_name() == "vpgl_perspective_camera")
       vis_order= scene->get_vis_blocks_opt((vpgl_perspective_camera<double>*)cam.ptr(),ni,nj);
   else
       vis_order= scene->get_vis_blocks(cam);
-  vcl_vector<boxm2_block_id>::iterator id;
+  std::vector<boxm2_block_id>::iterator id;
   for (id = vis_order.begin(); id != vis_order.end(); ++id)
   {
     //choose correct render kernel

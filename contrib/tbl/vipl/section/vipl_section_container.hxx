@@ -6,7 +6,9 @@
 #include <vipl/filter/vipl_filter_abs.h> // for filter_abs::X_Axis()
 #include <vipl/section/vipl_section_iterator.hxx>
 #include <vipl/section/vipl_section_descriptor.hxx>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iostream>
 
 // The pointer ``the'' is just assigned
 template < class DataType >
@@ -180,35 +182,35 @@ template < class DataType >
 template < class DataType >
   bool vipl_section_container< DataType > ::operator<( const vipl_section_container< DataType >& ) const
 {
-  vcl_cerr << "Warning: called unimplemented method vipl_section_container::operator<\n";
+  std::cerr << "Warning: called unimplemented method vipl_section_container::operator<\n";
   return false;
 }
 
 template < class DataType >
   bool vipl_section_container< DataType > ::operator>( const vipl_section_container< DataType >& ) const
 {
-  vcl_cerr << "Warning: called unimplemented method vipl_section_container::operator>\n";
+  std::cerr << "Warning: called unimplemented method vipl_section_container::operator>\n";
   return false;
 }
 
 template < class DataType >
   bool vipl_section_container< DataType > ::operator<=( const vipl_section_container< DataType >& ) const
 {
-  vcl_cerr << "Warning: called unimplemented method vipl_section_container::operator<=\n";
+  std::cerr << "Warning: called unimplemented method vipl_section_container::operator<=\n";
   return false;
 }
 
 template < class DataType >
   bool vipl_section_container< DataType > ::operator>=( const vipl_section_container< DataType >& ) const
 {
-  vcl_cerr << "Warning: called unimplemented method vipl_section_container::operator>=\n";
+  std::cerr << "Warning: called unimplemented method vipl_section_container::operator>=\n";
   return false;
 }
 
 template < class DataType >
   void vipl_section_container< DataType > ::swap( const vipl_section_container< DataType >& ) const
 {
-  vcl_cerr << "Warning: called unimplemented method vipl_section_container::swap\n";
+  std::cerr << "Warning: called unimplemented method vipl_section_container::swap\n";
 }
 
 // Modifies the passed in descriptor to point to the next section . This is
@@ -334,7 +336,7 @@ template < class DataType >
         image_size(vipl_filter_abs::Y_Axis());
   }
   if (in_out.real_container() == the()) {
-    vcl_cout << "next_section() for 0x" << (void *)&in_out << vcl_endl;
+    std::cout << "next_section() for 0x" << (void *)&in_out << std::endl;
   }
   return incremented_Y | incremented_X;
 }

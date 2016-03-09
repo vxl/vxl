@@ -14,7 +14,9 @@
 #include <vgl/vgl_box_3d.h>
 #include <vgl/vgl_vector_3d.h>
 #include <vil/vil_image_view.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iostream>
 
 
 template <boxm_apm_type APM, class T_aux>
@@ -43,7 +45,7 @@ class boxm_sun_vis_prob_functor
     aux_val.seg_len_ += seg_len;
 
     // current sun visibility
-    const float sun_vis = vcl_exp(-alpha_integral_(i,j));
+    const float sun_vis = std::exp(-alpha_integral_(i,j));
 
     // update sun vis
     aux_val.vis_ +=  sun_vis * seg_len;
@@ -67,7 +69,7 @@ class boxm_sun_vis_prob_functor
 template <class T_loc, class T_data, boxm_aux_type AUX_T>
 void boxm_sun_vis_prob(boxm_scene<boct_tree<T_loc, T_data > > &scene,
                        vgl_vector_3d<double> sun_angle,
-                       vcl_string sun_occ_name)
+                       std::string sun_occ_name)
 {
   // scene bounding box
   vgl_box_3d<double> world_bb = scene.get_world_bbox();
@@ -82,7 +84,7 @@ void boxm_sun_vis_prob(boxm_scene<boct_tree<T_loc, T_data > > &scene,
   typedef typename boxm_aux_traits<AUX_T>::sample_datatype sample_datatype;
   boxm_aux_scene<T_loc, T_data,  sample_datatype> aux_scene(&scene,sun_occ_name, boxm_aux_scene<T_loc, T_data,  sample_datatype>::CLONE);
 
-  vcl_cout<<"Sun visibility"<<vcl_endl;
+  std::cout<<"Sun visibility"<<std::endl;
   // functor to accumulate sun visibility
   typedef boxm_sun_vis_prob_functor<T_data::apm_type, sample_datatype> sun_vis;
 
@@ -94,7 +96,7 @@ void boxm_sun_vis_prob(boxm_scene<boct_tree<T_loc, T_data > > &scene,
 
   // run the functor over the octree
   raytracer_vis.run(sun_vis_functor);
-  vcl_cout<<"Sun Occlusion Done."<<vcl_endl;
+  std::cout<<"Sun Occlusion Done."<<std::endl;
 }
 
 #endif // boxm_sun_vis_prob_functor_h

@@ -11,8 +11,10 @@
 //  Modifications
 //\endverbatim
 
-#include <vcl_vector.h>
-#include <vcl_cmath.h>
+#include <vector>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <cmath>
 
 #include <vbl/vbl_ref_count.h>
 #include <vbl/vbl_array_2d.h>
@@ -34,8 +36,8 @@ public:
   ~sdet_edge(){}
 };
 
-typedef vbl_array_2d<vcl_vector<sdet_edgel*> >::iterator sdet_edgemap_iter;
-typedef vbl_array_2d<vcl_vector<sdet_edgel*> >::const_iterator sdet_edgemap_const_iter;
+typedef vbl_array_2d<std::vector<sdet_edgel*> >::iterator sdet_edgemap_iter;
+typedef vbl_array_2d<std::vector<sdet_edgel*> >::const_iterator sdet_edgemap_const_iter;
 
 //: A bucketing structure to hold the edgel tokens. Currently this is implemented
 //  simply as a 2d array of tokens the same size as the image that gave rise to it.
@@ -47,10 +49,10 @@ class sdet_edgemap : public vbl_ref_count
 public:
 
   //: retinotopic map of edgels
-  vbl_array_2d<vcl_vector<sdet_edgel*> > edge_cells;
+  vbl_array_2d<std::vector<sdet_edgel*> > edge_cells;
 
   //: local list of edgels for easier traversal
-  vcl_vector<sdet_edgel*> edgels;
+  std::vector<sdet_edgel*> edgels;
 
   //: edgel occupancy map (redundant structure)
   vbl_array_2d<bool> occupancy;
@@ -59,7 +61,7 @@ public:
   sdet_edgemap(int width, int height) : edgels(0) { edge_cells.resize(height, width); }
 
   //: constructor2
-  sdet_edgemap(int width, int height, vcl_vector<sdet_edgel*>& edgels) : edgels(0)
+  sdet_edgemap(int width, int height, std::vector<sdet_edgel*>& edgels) : edgels(0)
   {
     edge_cells.resize(height, width);
     for (unsigned i=0; i<edgels.size(); i++)
@@ -89,7 +91,7 @@ public:
   unsigned num_edgels() const { return edgels.size(); } ///< number of edgels in the edgemap
 
   //: read only access
-  const vcl_vector<sdet_edgel*>& cell(int x, int y){ return edge_cells(y, x); }
+  const std::vector<sdet_edgel*>& cell(int x, int y){ return edge_cells(y, x); }
 
   //: put an edgel into the edgemap at the prescribed cell
   void insert(sdet_edgel* e, int xx, int yy)

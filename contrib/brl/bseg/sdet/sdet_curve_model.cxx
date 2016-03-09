@@ -1,10 +1,12 @@
 #include "sdet_curve_model.h"
 
-#include <vcl_iostream.h>
-#include <vcl_fstream.h>
+#include <iostream>
+#include <fstream>
 #include <vcl_cassert.h>
-#include <vcl_deque.h>
-#include <vcl_algorithm.h>
+#include <deque>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <algorithm>
 
 #include <vgl/vgl_polygon.h>
 #include <vgl/vgl_distance.h>
@@ -73,7 +75,7 @@ compute_curve_bundle(sdet_edgel* e1, sdet_edgel* e2, sdet_edgel* ref_e,
   if (edgel_pair_legal(params, e1->tangent, e2->tangent))
   {
     // predict the variation in the intrinsic parameters
-    double alpha = vcl_asin(dpos/params.d);
+    double alpha = std::asin(dpos/params.d);
 
     if (ref_e==e1)
     {
@@ -124,7 +126,7 @@ compute_curve_bundle(sdet_edgel* e1, sdet_edgel* e2, sdet_edgel* ref_e,
 }
 
 //: Compute the best fit curve from the curve bundle
-vgl_point_2d<double>  sdet_simple_linear_curve_model::compute_best_fit(vcl_deque<sdet_edgel*> &/*edgel_chain*/)
+vgl_point_2d<double>  sdet_simple_linear_curve_model::compute_best_fit(std::deque<sdet_edgel*> &/*edgel_chain*/)
 {
   //for 1-d bundle: define theta as the middle of the domain
   if (max_theta<min_theta)
@@ -136,7 +138,7 @@ vgl_point_2d<double>  sdet_simple_linear_curve_model::compute_best_fit(vcl_deque
 }
 
 //: function to check if the curve fit is reasonable
-bool sdet_simple_linear_curve_model::curve_fit_is_reasonable(vcl_deque<sdet_edgel*> &edgel_chain, sdet_edgel* /*ref_e*/, double /*dpos*/)
+bool sdet_simple_linear_curve_model::curve_fit_is_reasonable(std::deque<sdet_edgel*> &edgel_chain, sdet_edgel* /*ref_e*/, double /*dpos*/)
 {
   compute_best_fit(edgel_chain);
   return true;
@@ -223,7 +225,7 @@ compute_curve_bundle(sdet_edgel* e1, sdet_edgel* e2, sdet_edgel* ref_e,
     params.t2-= 2*vnl_math::pi;
 
   // predict the variation in the intrinsic parameters
-  double alpha = vcl_asin(dpos/params.d);
+  double alpha = std::asin(dpos/params.d);
 
   double omega_coords[] = { -dpos,-dtheta,  -dpos,dtheta,  dpos,dtheta,  dpos,-dtheta };
   vgl_polygon<double> omega(omega_coords, 4);
@@ -282,7 +284,7 @@ compute_curve_bundle(sdet_edgel* e1, sdet_edgel* e2, sdet_edgel* ref_e,
 }
 
 //: Compute the best fit curve from the curve bundle
-vgl_point_2d<double>  sdet_linear_curve_model::compute_best_fit(vcl_deque<sdet_edgel*> &/*edgel_chain*/)
+vgl_point_2d<double>  sdet_linear_curve_model::compute_best_fit(std::deque<sdet_edgel*> &/*edgel_chain*/)
 {
   //assign the rough centroid of this bundle as the best estimate
   double dx = 0.0;
@@ -295,14 +297,14 @@ vgl_point_2d<double>  sdet_linear_curve_model::compute_best_fit(vcl_deque<sdet_e
   dt /= cv_bundle.num_vertices();
 
   //extrinsic estimates from the centroid of the bundle
-  pt = vgl_point_2d<double>(ref_pt.x()+dx*vcl_cos(ref_theta+vnl_math::pi_over_2), ref_pt.y()+dx*vcl_sin(ref_theta+vnl_math::pi_over_2));
+  pt = vgl_point_2d<double>(ref_pt.x()+dx*std::cos(ref_theta+vnl_math::pi_over_2), ref_pt.y()+dx*std::sin(ref_theta+vnl_math::pi_over_2));
   theta = ref_theta + dt;
 
   return vgl_point_2d<double>(dx, dt);
 }
 
 //: function to check if the curve fit is reasonable
-bool sdet_linear_curve_model::curve_fit_is_reasonable(vcl_deque<sdet_edgel*> &edgel_chain, sdet_edgel* /*ref_e*/, double /*dpos*/)
+bool sdet_linear_curve_model::curve_fit_is_reasonable(std::deque<sdet_edgel*> &edgel_chain, sdet_edgel* /*ref_e*/, double /*dpos*/)
 {
   compute_best_fit(edgel_chain);
   return true;
@@ -410,7 +412,7 @@ compute_curve_bundle(vgl_polygon<double>& bundle, sdet_int_params &params,
   //create the default bundle (omega: the restricted curve bundle space)
   vgl_polygon<double> omega;
 
-  max_k = vcl_min(max_k, dk);
+  max_k = std::min(max_k, dk);
 
   omega.new_sheet();
   omega.push_back(-(dtheta+1e-3), -max_k);
@@ -430,7 +432,7 @@ compute_curve_bundle(vgl_polygon<double>& bundle, sdet_int_params &params,
   if (first_is_ref)
   {
     // predict the variation in the intrinsic parameters
-    double alpha = vcl_asin(dpos/params.d);
+    double alpha = std::asin(dpos/params.d);
 
     double eps = 1e-5;
     double dphi_min = std::max((-params.t2-dtheta-2*alpha)-params.t1 +eps, -dtheta);
@@ -481,7 +483,7 @@ compute_curve_bundle(vgl_polygon<double>& bundle, sdet_int_params &params,
   else //e2 is the ref
   {
     // predict the variation in the intrinsic parameters
-    double alpha = vcl_asin(dpos/params.d);
+    double alpha = std::asin(dpos/params.d);
 
     double eps = 1e-5;
     double dphi_min = std::max((-params.t1-dtheta-2*alpha)-params.t2 +eps, -dtheta);
@@ -535,7 +537,7 @@ compute_curve_bundle(vgl_polygon<double>& bundle, sdet_int_params &params,
 }
 
 //: Compute the best fit curve from the curve bundle
-vgl_point_2d<double>  sdet_CC_curve_model::compute_best_fit(vcl_deque<sdet_edgel*> &/*edgel_chain*/)
+vgl_point_2d<double>  sdet_CC_curve_model::compute_best_fit(std::deque<sdet_edgel*> &/*edgel_chain*/)
 {
   //assign the rough centroid of this bundle as the best estimate
   double dt = 0.0;
@@ -553,7 +555,7 @@ vgl_point_2d<double>  sdet_CC_curve_model::compute_best_fit(vcl_deque<sdet_edgel
 }
 
 //: function to check if the curve fit is reasonable
-bool sdet_CC_curve_model::curve_fit_is_reasonable(vcl_deque<sdet_edgel*> & edgel_chain, sdet_edgel* /*ref_e*/, double /*dpos*/)
+bool sdet_CC_curve_model::curve_fit_is_reasonable(std::deque<sdet_edgel*> & edgel_chain, sdet_edgel* /*ref_e*/, double /*dpos*/)
 {
   compute_best_fit(edgel_chain);
   return true;
@@ -590,7 +592,7 @@ void sdet_CC_curve_model::report_accuracy(double *estimates, double *min_estimat
 //: print info
 void sdet_CC_curve_model::print_info()
 {
-  vcl_cout << " : (th=" << theta << ", k=" << k << ", gamma=0.0 ";
+  std::cout << " : (th=" << theta << ", k=" << k << ", gamma=0.0 ";
 }
 
 //*****************************************************************************//
@@ -825,7 +827,7 @@ sdet_curve_model* sdet_CC_curve_model_new::consistent_transition(sdet_curve_mode
       int type=-1;
 
       if (cb.num_sheets()==1){
-        cost = vcl_fabs(sdet_k_classes[i]-sdet_k_classes[j]);
+        cost = std::fabs(sdet_k_classes[i]-sdet_k_classes[j]);
         if (i==j) type = 2;
         else      type = 1;
       }
@@ -844,9 +846,9 @@ sdet_curve_model* sdet_CC_curve_model_new::consistent_transition(sdet_curve_mode
             if (cv_bundles[i][0][p].y()<dt2_min) dt2_min = cv_bundles[i][0][p].y();
             if (cv_bundles[i][0][p].y()>dt2_max) dt2_max = cv_bundles[i][0][p].y();
           }
-          double dtheta = vcl_min(vcl_fabs(dt1_min-dt2_max), vcl_fabs(dt2_min-dt1_max));
+          double dtheta = std::min(std::fabs(dt1_min-dt2_max), std::fabs(dt2_min-dt1_max));
 
-          cost = vcl_fabs(sdet_k_classes[i]-sdet_k_classes[j]) +
+          cost = std::fabs(sdet_k_classes[i]-sdet_k_classes[j]) +
                  dtheta;
         }
       }
@@ -996,7 +998,7 @@ compute_curve_bundle(sdet_edgel* e1, sdet_edgel* e2, sdet_edgel* ref_e,
 
   //for each curve class
   for (int i=0; i<NkClasses; i++){
-    if (vcl_fabs(sdet_k_classes[i])<dk){ //only the legal curve classes
+    if (std::fabs(sdet_k_classes[i])<dk){ //only the legal curve classes
 
       //2) transport the bundle from the other edgel to the current edgel
       bool sgn_change;
@@ -1041,7 +1043,7 @@ transport_bundle(const vgl_polygon<double> & cv_bundle, double k,
 
   // transport the hull of the bundle
   trans_CB.new_sheet();
-  vcl_vector<bool> sign(cv_bundle[0].size()); //keep track of the sign changes
+  std::vector<bool> sign(cv_bundle[0].size()); //keep track of the sign changes
   for (unsigned i=0; i<cv_bundle[0].size(); i++){
     bool sgn;
     trans_CB.push_back(transport_CC(cv_bundle[0][i], k, spt, stheta, dpt, dtheta, sgn));
@@ -1097,17 +1099,17 @@ vgl_point_2d<double> sdet_CC_curve_model_new::transport_CC(vgl_point_2d<double>d
   //compute transported model (dx2, dt2)
   double dx2, dt2;
 
-  if (vcl_fabs(k)<1e-5) //constant curvature case:
+  if (std::fabs(k)<1e-5) //constant curvature case:
   {
-    dx2 = dx1 + (DX*-vcl_sin(tT1)+DY*vcl_cos(tT1));
+    dx2 = dx1 + (DX*-std::sin(tT1)+DY*std::cos(tT1));
     dt2 = tT1-T2;
   }
   else { //regular arc
 
-    double a = DX - (dx1-1/k)*vcl_sin(tT1);
-    double b = DY + (dx1-1/k)*vcl_cos(tT1);
+    double a = DX - (dx1-1/k)*std::sin(tT1);
+    double b = DY + (dx1-1/k)*std::cos(tT1);
 
-    double tT2 = vcl_atan2(a, -b);
+    double tT2 = std::atan2(a, -b);
 
     //// alternate solutions based on simple algebra
     //double dx2a = 1/k - A;
@@ -1115,16 +1117,16 @@ vgl_point_2d<double> sdet_CC_curve_model_new::transport_CC(vgl_point_2d<double>d
 
     // alternate solutions (based on tT2)
     double dx2a, dx2b;
-    if (vcl_fabs(vcl_sin(tT2))>1e-5){
-      dx2a = +1/k - a/vcl_sin(tT2);
-      dx2b = -1/k - a/vcl_sin(tT2); //assume tT2 is backwards
+    if (std::fabs(std::sin(tT2))>1e-5){
+      dx2a = +1/k - a/std::sin(tT2);
+      dx2b = -1/k - a/std::sin(tT2); //assume tT2 is backwards
     }
     else {
-      dx2a = +1/k - b/vcl_cos(tT2);
-      dx2b = -1/k - b/vcl_cos(tT2); //assume tT2 is backwards
+      dx2a = +1/k - b/std::cos(tT2);
+      dx2b = -1/k - b/std::cos(tT2); //assume tT2 is backwards
     }
 
-    if (vcl_fabs(dx2a) < vcl_fabs(dx2b)){
+    if (std::fabs(dx2a) < std::fabs(dx2b)){
       dx2 = dx2a;
     }
     else {
@@ -1162,9 +1164,9 @@ vgl_point_2d<double> sdet_CC_curve_model_new::compute_best_fit()
   int best_k_ind = -1;
   double least_cost=10.0;
   for (int i=0; i<NkClasses; i++){
-    if (cv_bundles[i].num_sheets() != 0 && vcl_fabs(sdet_k_classes[i])<least_cost){
+    if (cv_bundles[i].num_sheets() != 0 && std::fabs(sdet_k_classes[i])<least_cost){
       best_k_ind=i;
-      least_cost = vcl_fabs(sdet_k_classes[i]);
+      least_cost = std::fabs(sdet_k_classes[i]);
     }
   }
 
@@ -1181,8 +1183,8 @@ vgl_point_2d<double> sdet_CC_curve_model_new::compute_best_fit()
     dt /= cv_bundles[best_k_ind].num_vertices();
 
     //compute the extrinsic point and tangent of the centroid
-    pt = ref_pt + vgl_vector_2d<double>(-dx*vcl_cos(ref_theta+dt+vnl_math::pi/2),
-                                        -dx*vcl_sin(ref_theta+dt+vnl_math::pi/2));
+    pt = ref_pt + vgl_vector_2d<double>(-dx*std::cos(ref_theta+dt+vnl_math::pi/2),
+                                        -dx*std::sin(ref_theta+dt+vnl_math::pi/2));
     theta = sdet_angle0To2Pi(ref_theta + dt);
     k = sdet_k_classes[best_k_ind];
 
@@ -1194,7 +1196,7 @@ vgl_point_2d<double> sdet_CC_curve_model_new::compute_best_fit()
 
 
 //: Compute the best fit curve from the curve bundle
-vgl_point_2d<double> sdet_CC_curve_model_new::compute_best_fit(vcl_deque<sdet_edgel*> &/*edgel_chain*/)
+vgl_point_2d<double> sdet_CC_curve_model_new::compute_best_fit(std::deque<sdet_edgel*> &/*edgel_chain*/)
 {
   return compute_best_fit(); //no use for the edgel chain in this function
 }
@@ -1206,8 +1208,8 @@ void sdet_CC_curve_model_new::set_best_fit(vgl_point_2d<double> dx_dt, double kk
   double dt = dx_dt.y();
 
   //compute the extrinsic point and tangent of the centroid
-  pt = ref_pt + vgl_vector_2d<double>(-dx*vcl_cos(ref_theta+dt+vnl_math::pi/2),
-                                      -dx*vcl_sin(ref_theta+dt+vnl_math::pi/2));
+  pt = ref_pt + vgl_vector_2d<double>(-dx*std::cos(ref_theta+dt+vnl_math::pi/2),
+                                      -dx*std::sin(ref_theta+dt+vnl_math::pi/2));
   theta = sdet_angle0To2Pi(ref_theta + dt);
 
   k= kk;
@@ -1215,7 +1217,7 @@ void sdet_CC_curve_model_new::set_best_fit(vgl_point_2d<double> dx_dt, double kk
 
 //: function to check if the curve fit is reasonable
 bool sdet_CC_curve_model_new::
-curve_fit_is_reasonable(vcl_deque<sdet_edgel*> & edgel_chain, sdet_edgel* /*ref_e*/, double /*dpos*/)
+curve_fit_is_reasonable(std::deque<sdet_edgel*> & edgel_chain, sdet_edgel* /*ref_e*/, double /*dpos*/)
 {
   //compute LG-ratio and store as the quality
 
@@ -1236,7 +1238,7 @@ report_accuracy(double *estimates, double *min_estimates, double *max_estimates)
       if (sdet_k_classes[i]<k_min) k_min = sdet_k_classes[i];
       if (sdet_k_classes[i]>k_max) k_max = sdet_k_classes[i];
 
-      if (vcl_fabs(sdet_k_classes[i])<least_k) best_k_ind=i;
+      if (std::fabs(sdet_k_classes[i])<least_k) best_k_ind=i;
     }
   }
 
@@ -1265,11 +1267,11 @@ report_accuracy(double *estimates, double *min_estimates, double *max_estimates)
 //: print info
 void sdet_CC_curve_model_new::print_info()
 {
-  vcl_cout << " : k= " << k ;
+  std::cout << " : k= " << k ;
 }
 
 //: print central info to file
-void sdet_CC_curve_model_new::print(vcl_ostream& os)
+void sdet_CC_curve_model_new::print(std::ostream& os)
 {
   os << "[";
   for (int i=0; i<NkClasses; i++){
@@ -1284,7 +1286,7 @@ void sdet_CC_curve_model_new::print(vcl_ostream& os)
 }
 
 //: read central info from file
-void sdet_CC_curve_model_new::read(vcl_istream& is)
+void sdet_CC_curve_model_new::read(std::istream& is)
 {
   double x, y;
   unsigned char dummy;
@@ -1382,8 +1384,8 @@ void sdet_CC_curve_model_perturbed::compute_perturbed_position_of_an_edgel(sdet_
     dp = dpos*(2*per_ind-NperturbPCC+1)/(NperturbPCC-1);
 
   //compute perturbed point and tangent corresponding to this position
-  pt = e->pt + vgl_vector_2d<double>(dp*vcl_cos(e->tangent+vnl_math::pi/2),
-                                     dp*vcl_sin(e->tangent+vnl_math::pi/2));
+  pt = e->pt + vgl_vector_2d<double>(dp*std::cos(e->tangent+vnl_math::pi/2),
+                                     dp*std::sin(e->tangent+vnl_math::pi/2));
 }
 
 //: compute the CC curve bundle for an edgel pair at the ref edgel
@@ -1423,7 +1425,7 @@ compute_curve_bundle(sdet_edgel* e1, sdet_edgel* e2, sdet_edgel* ref_e,
 }
 
 //: Compute the best fit curve from the curve bundle
-vgl_point_2d<double>  sdet_CC_curve_model_perturbed::compute_best_fit(vcl_deque<sdet_edgel*> &/*edgel_chain*/)
+vgl_point_2d<double>  sdet_CC_curve_model_perturbed::compute_best_fit(std::deque<sdet_edgel*> &/*edgel_chain*/)
 {
   //determine the best perturbation of the edgel by looking at the
   //curve bundles produced by each perturbation
@@ -1476,11 +1478,11 @@ vgl_point_2d<double>  sdet_CC_curve_model_perturbed::compute_best_fit(vcl_deque<
 //: print info
 void sdet_CC_curve_model_perturbed::print_info()
 {
-  vcl_cout << " : (th=" << theta << ", k=" << k << ", gamma=0.0" << vcl_endl;
+  std::cout << " : (th=" << theta << ", k=" << k << ", gamma=0.0" << std::endl;
 
   for (int i=0; i<NperturbPCC; i++){
-    vcl_cout << "                             ";
-    vcl_cout << "pos: " << i << " : (th=" << dts[i]+tangent << ", k=" << ks[i] << ", gamma=0.0" << vcl_endl;
+    std::cout << "                             ";
+    std::cout << "pos: " << i << " : (th=" << dts[i]+tangent << ", k=" << ks[i] << ", gamma=0.0" << std::endl;
   }
 }
 
@@ -1562,10 +1564,10 @@ sdet_CC_curve_model_3d(sdet_edgel* ref_e, double dpos, double dtheta, double /*t
   // Also determine the size of the grid necessary to represent the curve bundle
   // given its uncertainty parameters
 
-  Kmin.resize(int(2*vcl_floor(ref_dx/_dx_+0.5)+1), int(2*vcl_floor(ref_dt/_dt_+0.5)+1));
+  Kmin.resize(int(2*std::floor(ref_dx/_dx_+0.5)+1), int(2*std::floor(ref_dt/_dt_+0.5)+1));
   Kmin.fill(-max_k);
 
-  Kmax.resize(int(2*vcl_floor(ref_dx/_dx_+0.5)+1), int(2*vcl_floor(ref_dt/_dt_+0.5)+1));
+  Kmax.resize(int(2*std::floor(ref_dx/_dx_+0.5)+1), int(2*std::floor(ref_dt/_dt_+0.5)+1));
   Kmax.fill(max_k);
 }
 
@@ -1708,8 +1710,8 @@ inline double mycos_precise(double x) {
 
 #else
 
-#define mysin(x) (vcl_sin((x)))
-#define mycos(x) (vcl_cos((x)))
+#define mysin(x) (std::sin((x)))
+#define mycos(x) (std::cos((x)))
 
 #endif
 
@@ -1743,10 +1745,10 @@ compute_curve_bundle(sdet_edgel* e1, sdet_edgel* e2, sdet_edgel* ref_e,
   // Also determine the size of the grid necessary to represent the curve bundle
   // given its uncertainty parameters
 
-  Kmin.resize(2*vcl_floor(ref_dx/_dx_+0.5)+1, 2*vcl_floor(ref_dt/_dt_+0.5)+1);
+  Kmin.resize(2*std::floor(ref_dx/_dx_+0.5)+1, 2*std::floor(ref_dt/_dt_+0.5)+1);
   Kmin.fill((float)-max_k);
 
-  Kmax.resize(2*vcl_floor(ref_dx/_dx_+0.5)+1, 2*vcl_floor(ref_dt/_dt_+0.5)+1);
+  Kmax.resize(2*std::floor(ref_dx/_dx_+0.5)+1, 2*std::floor(ref_dt/_dt_+0.5)+1);
   Kmax.fill((float)max_k);
 
   sdet_edgel* ne=VXL_NULLPTR; //relic of older design req.
@@ -1891,10 +1893,10 @@ compute_curve_bundle(sdet_edgel* e1, sdet_edgel* e2, sdet_edgel* ref_e,
   // Also determine the size of the grid necessary to represent the curve bundle
   // given its uncertainty parameters
 
-  Kmin.resize(int(2*vcl_floor(ref_dx/_dx_+0.5)+1), int(2*vcl_floor(ref_dt/_dt_+0.5)+1));
+  Kmin.resize(int(2*std::floor(ref_dx/_dx_+0.5)+1), int(2*std::floor(ref_dt/_dt_+0.5)+1));
   Kmin.fill(float(-max_k));
 
-  Kmax.resize(int(2*vcl_floor(ref_dx/_dx_+0.5)+1), int(2*vcl_floor(ref_dt/_dt_+0.5)+1));
+  Kmax.resize(int(2*std::floor(ref_dx/_dx_+0.5)+1), int(2*std::floor(ref_dt/_dt_+0.5)+1));
   Kmax.fill(float(max_k));
 
   sdet_edgel* ne=0; //relic of older design req.
@@ -1913,7 +1915,7 @@ compute_curve_bundle(sdet_edgel* e1, sdet_edgel* e2, sdet_edgel* ref_e,
   double DY = ref_e->pt.y() - ne->pt.y();
 
   //if neighboring point is close to the ref edgel, no constraint can be computed of leave it as the default bundle
-  if (vcl_sqrt(DX*DX+DY*DY)<2*dpos)
+  if (std::sqrt(DX*DX+DY*DY)<2*dpos)
     return;
 
   double T0 = ne->tangent;
@@ -1936,13 +1938,13 @@ compute_curve_bundle(sdet_edgel* e1, sdet_edgel* e2, sdet_edgel* ref_e,
       k_dx_min(i,j) = float(-2*(tt-dx-dx2)/(2*dx2*tt - DX*DX - DY*DY + dx*dx - dx2*dx2));
       k_dx_max(i,j) = float(-2*(tt+dx-dx2)/(2*dx2*tt - DX*DX - DY*DY + dx*dx - dx2*dx2));
 
-      if ((DX*vcl_cos(T2)+DY*vcl_sin(T2))<0){
-          k_dt_min(i,j) = float(vcl_sin((T2+dt2)-(T0-dt))/(vcl_sin((T0-dt)-(T2+dt2))*dx2 + DX*vcl_cos(T0-dt) + DY*vcl_sin(T0-dt)));
-          k_dt_max(i,j) = float(vcl_sin((T2+dt2)-(T0+dt))/(vcl_sin((T0+dt)-(T2+dt2))*dx2 + DX*vcl_cos(T0+dt) + DY*vcl_sin(T0+dt)));
+      if ((DX*std::cos(T2)+DY*std::sin(T2))<0){
+          k_dt_min(i,j) = float(std::sin((T2+dt2)-(T0-dt))/(std::sin((T0-dt)-(T2+dt2))*dx2 + DX*std::cos(T0-dt) + DY*std::sin(T0-dt)));
+          k_dt_max(i,j) = float(std::sin((T2+dt2)-(T0+dt))/(std::sin((T0+dt)-(T2+dt2))*dx2 + DX*std::cos(T0+dt) + DY*std::sin(T0+dt)));
       }
       else {
-          k_dt_max(i,j) = float(vcl_sin((T2+dt2)-(T0-dt))/(vcl_sin((T0-dt)-(T2+dt2))*dx2 + DX*vcl_cos(T0-dt) + DY*vcl_sin(T0-dt)));
-          k_dt_min(i,j) = float(vcl_sin((T2+dt2)-(T0+dt))/(vcl_sin((T0+dt)-(T2+dt2))*dx2 + DX*vcl_cos(T0+dt) + DY*vcl_sin(T0+dt)));
+          k_dt_max(i,j) = float(std::sin((T2+dt2)-(T0-dt))/(std::sin((T0-dt)-(T2+dt2))*dx2 + DX*std::cos(T0-dt) + DY*std::sin(T0-dt)));
+          k_dt_min(i,j) = float(std::sin((T2+dt2)-(T0+dt))/(std::sin((T0+dt)-(T2+dt2))*dx2 + DX*std::cos(T0+dt) + DY*std::sin(T0+dt)));
       }
     }
   }
@@ -1979,19 +1981,19 @@ vgl_point_2d<double> sdet_CC_curve_model_3d::transport_CC(vgl_point_2d<double>dx
   //compute transported model (dx2, dt2)
   double dx2, dt2;
 
-  if (vcl_fabs(k)<1e-5) //constant curvature case:
+  if (std::fabs(k)<1e-5) //constant curvature case:
   {
-    dx2 = dx1 + (DX*-vcl_sin(tT1)+DY*vcl_cos(tT1));
+    dx2 = dx1 + (DX*-std::sin(tT1)+DY*std::cos(tT1));
     dt2 = tT1-T2;
   }
   else { //regular arc
 
-    double a = DX - (dx1-1/k)*vcl_sin(tT1);
-    double b = DY + (dx1-1/k)*vcl_cos(tT1);
+    double a = DX - (dx1-1/k)*std::sin(tT1);
+    double b = DY + (dx1-1/k)*std::cos(tT1);
 
-    //double A = vcl_sqrt(a*a + b*b);
-    //double tT2 = -vcl_atan(a/b);
-    double tT2 = vcl_atan2(a, -b);
+    //double A = std::sqrt(a*a + b*b);
+    //double tT2 = -std::atan(a/b);
+    double tT2 = std::atan2(a, -b);
 
     //// alternate solutions based on simple algebra
     //double dx2a = 1/k - A;
@@ -1999,16 +2001,16 @@ vgl_point_2d<double> sdet_CC_curve_model_3d::transport_CC(vgl_point_2d<double>dx
 
     // alternate solutions (based on tT2)
     double dx2a, dx2b;
-    if (vcl_fabs(vcl_sin(tT2))>1e-5){
-      dx2a = +1/k - a/vcl_sin(tT2);
-      dx2b = -1/k - a/vcl_sin(tT2); //assume tT2 is backwards
+    if (std::fabs(std::sin(tT2))>1e-5){
+      dx2a = +1/k - a/std::sin(tT2);
+      dx2b = -1/k - a/std::sin(tT2); //assume tT2 is backwards
     }
     else {
-      dx2a = +1/k - b/vcl_cos(tT2);
-      dx2b = -1/k - b/vcl_cos(tT2); //assume tT2 is backwards
+      dx2a = +1/k - b/std::cos(tT2);
+      dx2b = -1/k - b/std::cos(tT2); //assume tT2 is backwards
     }
 
-    if (vcl_fabs(dx2a) < vcl_fabs(dx2b)){
+    if (std::fabs(dx2a) < std::fabs(dx2b)){
       dx2 = dx2a;
     }
     else {
@@ -2077,7 +2079,7 @@ vgl_point_2d<double> sdet_CC_curve_model_3d::compute_best_fit()
 
 
 //: Compute the best fit curve from the curve bundle
-vgl_point_2d<double> sdet_CC_curve_model_3d::compute_best_fit(vcl_deque<sdet_edgel*> &/*edgel_chain*/)
+vgl_point_2d<double> sdet_CC_curve_model_3d::compute_best_fit(std::deque<sdet_edgel*> &/*edgel_chain*/)
 {
   return compute_best_fit(); //no use for the edgel chain in this function
 }
@@ -2090,13 +2092,13 @@ void sdet_CC_curve_model_3d::set_best_fit(vgl_point_2d<double> dx_dt, double kk)
 
   //compute the extrinsic point and tangent of the centroid
   theta = sdet_angle0To2Pi(ref_theta + dt);
-  pt = ref_pt + vgl_vector_2d<double>(dx*-vcl_sin(theta), dx* vcl_cos(theta));
+  pt = ref_pt + vgl_vector_2d<double>(dx*-std::sin(theta), dx* std::cos(theta));
   k= kk;
 }
 
 //: function to check if the curve fit is reasonable
 bool sdet_CC_curve_model_3d::
-curve_fit_is_reasonable(vcl_deque<sdet_edgel*> & edgel_chain, sdet_edgel* /*ref_e*/, double /*dpos*/)
+curve_fit_is_reasonable(std::deque<sdet_edgel*> & edgel_chain, sdet_edgel* /*ref_e*/, double /*dpos*/)
 {
   //compute LG-ratio and store as the quality
 
@@ -2114,7 +2116,7 @@ bool sdet_CC_curve_model_3d::is_C2_with(sdet_curve_model* cm)
   bool valid = false;
   for (unsigned i=0; i<Kmax.rows(); i++)
     for (unsigned j=0; j<Kmax.cols(); j++)
-        valid = valid || (vcl_min(Kmax(i,j), cm2->Kmax(i,j)) > vcl_max(Kmin(i,j), cm2->Kmin(i,j)));
+        valid = valid || (std::min(Kmax(i,j), cm2->Kmax(i,j)) > std::max(Kmin(i,j), cm2->Kmin(i,j)));
 
   return valid;
 }
@@ -2158,11 +2160,11 @@ report_accuracy(double *estimates, double *min_estimates, double *max_estimates)
 //: print info
 void sdet_CC_curve_model_3d::print_info()
 {
-  vcl_cout << " : k= " << k ;
+  std::cout << " : k= " << k ;
 }
 
 //: print central info to file
-void sdet_CC_curve_model_3d::print(vcl_ostream&  os)
+void sdet_CC_curve_model_3d::print(std::ostream&  os)
 {
   //FIX ME
   os << "[";
@@ -2184,7 +2186,7 @@ void sdet_CC_curve_model_3d::print(vcl_ostream&  os)
 }
 
 //: read central info from file
-void sdet_CC_curve_model_3d::read(vcl_istream& is)
+void sdet_CC_curve_model_3d::read(std::istream& is)
 {
   //double x, y;
   unsigned char dummy;
@@ -2307,7 +2309,7 @@ compute_curve_bundle(vgl_polygon<double>& bundle,
   }
 
   // predict the variation in the intrinsic parameters
-  double alpha = vcl_asin(dpos/params.d);
+  double alpha = std::asin(dpos/params.d);
 
   double t1_1, t1_2, t1_3, t1_4, t2_1, t2_2, t2_3, t2_4;
   if (first_is_ref)
@@ -2373,7 +2375,7 @@ compute_curve_bundle(vgl_polygon<double>& bundle,
 }
 
 //: Compute the best fit curve from the curve bundle
-vgl_point_2d<double>  sdet_ES_curve_model::compute_best_fit(vcl_deque<sdet_edgel*> &/*edgel_chain*/)
+vgl_point_2d<double>  sdet_ES_curve_model::compute_best_fit(std::deque<sdet_edgel*> &/*edgel_chain*/)
 {
   //assign the rough centroid of this bundle as the best estimate
   k = 0.0;
@@ -2390,7 +2392,7 @@ vgl_point_2d<double>  sdet_ES_curve_model::compute_best_fit(vcl_deque<sdet_edgel
 
 
 //: function to check if the curve fit is reasonable
-bool sdet_ES_curve_model::curve_fit_is_reasonable(vcl_deque<sdet_edgel*> &edgel_chain,
+bool sdet_ES_curve_model::curve_fit_is_reasonable(std::deque<sdet_edgel*> &edgel_chain,
                                                    sdet_edgel* ref_e, double dpos)
 {
   //the fit is considered to be reasonable if the length of the interpolating ES
@@ -2424,7 +2426,7 @@ bool sdet_ES_curve_model::curve_fit_is_reasonable(vcl_deque<sdet_edgel*> &edgel_
 
 
 //: compute the distance between edgels and an ES curve
-double sdet_ES_curve_model::compute_distance(vcl_deque<sdet_edgel*> &edgel_chain,
+double sdet_ES_curve_model::compute_distance(std::deque<sdet_edgel*> &edgel_chain,
                                               vgl_point_2d<double>pt, double theta,
                                               double k, double gamma)
 {
@@ -2483,7 +2485,7 @@ void sdet_ES_curve_model::report_accuracy(double *estimates, double *min_estimat
 //: print info
 void sdet_ES_curve_model::print_info()
 {
-  vcl_cout << " : (th=" << theta << ", k=" << k << ", gamma=" << gamma << " ";
+  std::cout << " : (th=" << theta << ", k=" << k << ", gamma=" << gamma << " ";
 }
 
 //*****************************************************************************//
@@ -2558,8 +2560,8 @@ void sdet_ES_curve_model_perturbed::compute_perturbed_position_of_an_edgel(sdet_
     dt = dtheta*(2*pos_j-NpT+1)/(NpT-1);
 
   //compute perturbed point and tangent corresponding to this position
-  pt = e->pt + vgl_vector_2d<double>(dp*vcl_cos(e->tangent+vnl_math::pi/2),
-                                     dp*vcl_sin(e->tangent+vnl_math::pi/2));
+  pt = e->pt + vgl_vector_2d<double>(dp*std::cos(e->tangent+vnl_math::pi/2),
+                                     dp*std::sin(e->tangent+vnl_math::pi/2));
   tangent = e->tangent + dt;
 }
 
@@ -2602,7 +2604,7 @@ compute_curve_bundle(sdet_edgel* e1, sdet_edgel* e2, sdet_edgel* ref_e,
 
 
 //: Compute the best fit curve from the curve bundle
-vgl_point_2d<double>  sdet_ES_curve_model_perturbed::compute_best_fit(vcl_deque<sdet_edgel*> &edgel_chain)
+vgl_point_2d<double>  sdet_ES_curve_model_perturbed::compute_best_fit(std::deque<sdet_edgel*> &edgel_chain)
 {
   //determine the best perturbation of the edgel by looking at the
   //curve bundles produced by each perturbation
@@ -2688,12 +2690,12 @@ vgl_point_2d<double>  sdet_ES_curve_model_perturbed::compute_best_fit(vcl_deque<
 //: print info
 void sdet_ES_curve_model_perturbed::print_info()
 {
-  vcl_cout << " : (th=" << theta << ", k=" << k << ", gamma=" << gamma << " " << vcl_endl;
+  std::cout << " : (th=" << theta << ", k=" << k << ", gamma=" << gamma << " " << std::endl;
 
 
   for (int i=0; i<Nperturb; i++){
-    vcl_cout << "                             ";
-    vcl_cout << "pos: " << i << " : (th=" << tangents[i] << ", k=" << ks[i] << ", gamma=" << gammas[i] << " " << vcl_endl;
+    std::cout << "                             ";
+    std::cout << "pos: " << i << " : (th=" << tangents[i] << ", k=" << ks[i] << ", gamma=" << gammas[i] << " " << std::endl;
   }
 }
 

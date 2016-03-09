@@ -47,7 +47,7 @@ class boxm2_trajectory : public vbl_ref_count
   unsigned size() const { return (unsigned)cams_.size(); }
 
   //: Iterator
-  typedef vcl_vector<vpgl_camera_double_sptr>::iterator iterator;
+  typedef std::vector<vpgl_camera_double_sptr>::iterator iterator;
   iterator begin() { return cams_.begin(); }
   iterator end()   { return cams_.end(); }
 
@@ -63,10 +63,10 @@ class boxm2_trajectory : public vbl_ref_count
  protected:
 
   //list of cams
-  vcl_vector<vpgl_camera_double_sptr> cams_;
+  std::vector<vpgl_camera_double_sptr> cams_;
 
   //next cam
-   vcl_vector<vpgl_camera_double_sptr>::iterator iter_;
+   std::vector<vpgl_camera_double_sptr>::iterator iter_;
 
   //: initialize cameras
   void init_cameras(double incline0, double incline1, double radius, vgl_box_3d<double> bb, unsigned ni, unsigned nj);

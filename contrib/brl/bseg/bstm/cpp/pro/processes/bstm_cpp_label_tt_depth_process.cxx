@@ -7,7 +7,9 @@
 // \author Ali Osman Ulusoy
 // \date Jan 28, 2013
 
-#include <vcl_fstream.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <fstream>
 #include <bstm/io/bstm_cache.h>
 #include <bstm/io/bstm_lru_cache.h>
 #include <bstm/bstm_scene.h>
@@ -33,14 +35,14 @@ bool bstm_cpp_label_tt_depth_process_cons(bprb_func_process& pro)
   using namespace bstm_cpp_label_tt_depth_process_globals;
 
   //process takes 1 input
-  vcl_vector<vcl_string> input_types_(n_inputs_);
+  std::vector<std::string> input_types_(n_inputs_);
 
   input_types_[0] = "bstm_scene_sptr";
   input_types_[1] = "bstm_cache_sptr";
 
   // process has 1 output:
   // output[0]: scene sptr
-  vcl_vector<vcl_string>  output_types_(n_outputs_);
+  std::vector<std::string>  output_types_(n_outputs_);
 
   bool good = pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
   return good;
@@ -51,7 +53,7 @@ bool bstm_cpp_label_tt_depth_process(bprb_func_process& pro)
   using namespace bstm_cpp_label_tt_depth_process_globals;
 
   if ( pro.n_inputs() < n_inputs_ ) {
-    vcl_cout << pro.name() << ": The input number should be " << n_inputs_<< vcl_endl;
+    std::cout << pro.name() << ": The input number should be " << n_inputs_<< std::endl;
     return false;
   }
 
@@ -61,8 +63,8 @@ bool bstm_cpp_label_tt_depth_process(bprb_func_process& pro)
   bstm_cache_sptr cache= pro.get_input<bstm_cache_sptr>(i++);
 
   //iterate over each block/metadata to check if bbox intersects the input bbox
-  vcl_map<bstm_block_id, bstm_block_metadata> blocks = scene->blocks();
-  vcl_map<bstm_block_id, bstm_block_metadata> ::const_iterator bstm_iter = blocks.begin();
+  std::map<bstm_block_id, bstm_block_metadata> blocks = scene->blocks();
+  std::map<bstm_block_id, bstm_block_metadata> ::const_iterator bstm_iter = blocks.begin();
   int max_depth = -1;
   int min_depth = 10;
   for(; bstm_iter != blocks.end() ; bstm_iter++)
@@ -83,7 +85,7 @@ bool bstm_cpp_label_tt_depth_process(bprb_func_process& pro)
     for (time_trees_iter = time_trees.begin(); time_trees_iter != time_trees.end(); ++time_trees_iter)
     {
       bstm_time_tree tt ((unsigned char*) (*time_trees_iter).data_block(), bstm_metadata.max_level_t_);
-      vcl_vector<int> leaves = tt.get_leaf_bits();
+      std::vector<int> leaves = tt.get_leaf_bits();
       for(int i = 0; i < leaves.size(); i++) {
         label_data[tt.get_data_index( leaves[i] ) ] = (bstm_data_traits<BSTM_LABEL>::datatype) tt.depth_at( leaves[i] ) + 1;
         if( tt.depth_at( leaves[i] ) > max_depth)
@@ -93,7 +95,7 @@ bool bstm_cpp_label_tt_depth_process(bprb_func_process& pro)
       }
     }
   }
-  vcl_cout << "Min depth = " << min_depth << " max: " << max_depth << vcl_endl;
+  std::cout << "Min depth = " << min_depth << " max: " << max_depth << std::endl;
   return true;
 
 }

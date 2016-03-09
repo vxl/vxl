@@ -10,26 +10,28 @@
 
 
 #include <vcl_cassert.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iostream>
 
 //: "default" constructor
 template<boxm2_data_type RESPONSE_DATA_TYPE>
 boxm2_apply_filter_function<RESPONSE_DATA_TYPE>::boxm2_apply_filter_function(
-    vcl_string kernel_base_file_name, unsigned id_kernel)
+    std::string kernel_base_file_name, unsigned id_kernel)
 {
-  vcl_string filename;
+  std::string filename;
 
   //compute full kernel file name
-  vcl_stringstream ss;
+  std::stringstream ss;
   ss << kernel_base_file_name << '_' << id_kernel << ".txt";
-  vcl_cout << "Loading " << ss.str() << vcl_endl;
+  std::cout << "Loading " << ss.str() << std::endl;
 
   //load kernel from file
-  vcl_ifstream ifs(ss.str().c_str());
+  std::ifstream ifs(ss.str().c_str());
 
   //check file
   if (!ifs.good()) {
-    vcl_cout << "Problem loading kernels...exiting." << vcl_endl;
+    std::cout << "Problem loading kernels...exiting." << std::endl;
     return;
   }
 
@@ -58,8 +60,8 @@ boxm2_apply_filter_function<RESPONSE_DATA_TYPE>::boxm2_apply_filter_function(
     //insert to kernel
     kernel_[loc_interp] = weight;
   }
-  vcl_cout << "Loaded kernel " << id_kernel << " successfully...\n"
-           << "Kernel extent is from " << min << " to " << max << vcl_endl;
+  std::cout << "Loaded kernel " << id_kernel << " successfully...\n"
+           << "Kernel extent is from " << min << " to " << max << std::endl;
 }
 
 
@@ -79,7 +81,7 @@ void boxm2_apply_filter_function<RESPONSE_DATA_TYPE>::apply_filter(
 
   //iterate through each block, filtering the root level first
   for (unsigned int x = 0; x < trees.get_row1_count(); ++x) {
-    vcl_cout << '[' << x << '/' << trees.get_row1_count() << ']' << vcl_flush;
+    std::cout << '[' << x << '/' << trees.get_row1_count() << ']' << std::flush;
     for (unsigned int y = 0; y < trees.get_row2_count(); ++y) {
       for (unsigned int z = 0; z < trees.get_row3_count(); ++z) {
         //load current block/tree
@@ -87,14 +89,14 @@ void boxm2_apply_filter_function<RESPONSE_DATA_TYPE>::apply_filter(
         boct_bit_tree bit_tree((unsigned char*) tree.data_block(), data.max_level_);
 
         //FOR ALL LEAVES IN CURRENT TREE
-        vcl_vector<int> leafBits = bit_tree.get_leaf_bits();
-        vcl_vector<int>::iterator iter;
+        std::vector<int> leafBits = bit_tree.get_leaf_bits();
+        std::vector<int>::iterator iter;
         for (iter = leafBits.begin(); iter != leafBits.end(); ++iter) {
           int currBitIndex = (*iter);
           int currIdx = bit_tree.get_data_index(currBitIndex);
 
           double side_len = 1.0 / (double) (1 << octree_lvl);
-          float prob = 1.0f - (float)vcl_exp(-alpha_data[currIdx] * side_len * data.sub_block_dim_.x());
+          float prob = 1.0f - (float)std::exp(-alpha_data[currIdx] * side_len * data.sub_block_dim_.x());
 
           response_data[currIdx] = 0.0f;
 
@@ -116,7 +118,7 @@ void boxm2_apply_filter_function<RESPONSE_DATA_TYPE>::apply_filter(
 
 
           //compute neighborhood of cell center
-          vcl_map<vnl_vector_fixed<int,3> , vgl_point_3d<double> > neighborhood;
+          std::map<vnl_vector_fixed<int,3> , vgl_point_3d<double> > neighborhood;
 
           //if at least one kernel cannot be evaluated, don't compute anything and skip voxel
           if (!neighbor_points(cellCenter, side_len, trees, neighborhood))
@@ -134,10 +136,10 @@ void boxm2_apply_filter_function<RESPONSE_DATA_TYPE>::apply_filter(
 template<boxm2_data_type RESPONSE_DATA_TYPE>
 bool boxm2_apply_filter_function<RESPONSE_DATA_TYPE>::neighbor_points(
     const vgl_point_3d<double>& cellCenter, double side_len,
-    const boxm2_array_3d<uchar16>& trees, vcl_map < vnl_vector_fixed<int,3> , vgl_point_3d<double> >& neighborhood)
+    const boxm2_array_3d<uchar16>& trees, std::map < vnl_vector_fixed<int,3> , vgl_point_3d<double> >& neighborhood)
 {
 
-  for (vcl_map< vnl_vector_fixed<int,3> , float>::const_iterator iter = kernel_.begin(); iter != kernel_.end(); iter++) {
+  for (std::map< vnl_vector_fixed<int,3> , float>::const_iterator iter = kernel_.begin(); iter != kernel_.end(); iter++) {
     vnl_vector_fixed<int,3> v = (*iter).first;
     int i = v[0], j = v[1], k = v[2];
 
@@ -148,7 +150,7 @@ bool boxm2_apply_filter_function<RESPONSE_DATA_TYPE>::neighbor_points(
          cellCenter.x() + i*side_len >= 0 &&
          cellCenter.y() + j*side_len >= 0 &&
          cellCenter.z() + k*side_len >= 0) {
-        vcl_pair< vnl_vector_fixed<int,3> , vgl_point_3d<double> >
+        std::pair< vnl_vector_fixed<int,3> , vgl_point_3d<double> >
           mypair(v,
                  vgl_point_3d<double>(cellCenter.x() + i*side_len, cellCenter.y() + j*side_len,  cellCenter.z() + k*side_len));
         neighborhood.insert(mypair);
@@ -186,7 +188,7 @@ float boxm2_apply_filter_function<RESPONSE_DATA_TYPE>::eval_alpha(
       //grab alpha, calculate probability
       boxm2_data_traits<BOXM2_ALPHA>::datatype alpha = alpha_data[idx];
 
-      return 1.0f - (float)vcl_exp(-alpha * side_len * data.sub_block_dim_.x());
+      return 1.0f - (float)std::exp(-alpha * side_len * data.sub_block_dim_.x());
 #else
       //grab alpha
       return alpha_data[idx];
@@ -197,8 +199,8 @@ float boxm2_apply_filter_function<RESPONSE_DATA_TYPE>::eval_alpha(
       //get cell, combine neighborhood to one probability
       boxm2_data_traits<BOXM2_ALPHA>::datatype totalAlphaL = 0.0f;
 
-      vcl_vector<int> subLeafBits = neighborTree.get_leaf_bits(neighborBitIdx);
-      vcl_vector<int>::iterator leafIter;
+      std::vector<int> subLeafBits = neighborTree.get_leaf_bits(neighborBitIdx);
+      std::vector<int>::iterator leafIter;
       for (leafIter = subLeafBits.begin(); leafIter != subLeafBits.end(); ++leafIter) {
         //side length of the cell
         int dataIndex = neighborTree.get_data_index(*leafIter);
@@ -206,7 +208,7 @@ float boxm2_apply_filter_function<RESPONSE_DATA_TYPE>::eval_alpha(
       }
 
 #ifdef PROB
-      return 1.0f - (float)vcl_exp( -totalAlphaL * side_len);
+      return 1.0f - (float)std::exp( -totalAlphaL * side_len);
 #else
       return totalAlphaL;
 #endif
@@ -215,13 +217,13 @@ float boxm2_apply_filter_function<RESPONSE_DATA_TYPE>::eval_alpha(
 
 
 template<boxm2_data_type RESPONSE_DATA_TYPE>
-float boxm2_apply_filter_function<RESPONSE_DATA_TYPE>::eval_filter(vcl_map<vnl_vector_fixed<int,3> , vgl_point_3d<double> > neighbors,
+float boxm2_apply_filter_function<RESPONSE_DATA_TYPE>::eval_filter(std::map<vnl_vector_fixed<int,3> , vgl_point_3d<double> > neighbors,
                                                                    boxm2_block_metadata data, const boct_bit_tree& bit_tree,  const boxm2_array_3d<uchar16>& trees,
                                                                    const boxm2_data_traits<BOXM2_ALPHA>::datatype* alpha_data, int curr_depth)
 {
 
   float sum = 0;
-  for (vcl_map< vnl_vector_fixed<int,3> , float>::const_iterator iter = kernel_.begin(); iter !=kernel_.end(); iter++)
+  for (std::map< vnl_vector_fixed<int,3> , float>::const_iterator iter = kernel_.begin(); iter !=kernel_.end(); iter++)
     sum += (*iter).second * eval_alpha(data, bit_tree, neighbors[(*iter).first], trees, alpha_data, curr_depth);     //add data*filter to sum
 
   return sum;

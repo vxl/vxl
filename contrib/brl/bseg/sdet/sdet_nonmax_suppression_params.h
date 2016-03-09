@@ -11,7 +11,9 @@
 //
 //-----------------------------------------------------------------------------
 #include <gevd/gevd_param_mixin.h>
-#include <vcl_iosfwd.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iosfwd>
 
 // enumeration for the parabola fit type
 enum {PFIT_3_POINTS, PFIT_9_POINTS};
@@ -26,7 +28,7 @@ class sdet_nonmax_suppression_params : public gevd_param_mixin
 
   bool SanityCheck();
   friend
-    vcl_ostream& operator<<(vcl_ostream&,const sdet_nonmax_suppression_params& dp);
+    std::ostream& operator<<(std::ostream&,const sdet_nonmax_suppression_params& dp);
  protected:
   void InitParams(double thresh, int pfit_type);
  public:

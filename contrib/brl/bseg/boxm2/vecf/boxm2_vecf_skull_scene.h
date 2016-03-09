@@ -1,7 +1,9 @@
 #ifndef boxm2_vecf_skull_scene_h_
 #define boxm2_vecf_skull_scene_h_
 
-#include <vcl_string.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <string>
 
 #include <boxm2/boxm2_scene.h>
 #include "boxm2_vecf_mandible_scene.h"
@@ -14,7 +16,7 @@
 class boxm2_vecf_skull_scene : public boxm2_vecf_articulated_scene{
 
 public:
-  boxm2_vecf_skull_scene(vcl_string const& scene_path, vcl_string const& geo_path);
+  boxm2_vecf_skull_scene(std::string const& scene_path, std::string const& geo_path);
   ~boxm2_vecf_skull_scene(){delete mandible_scene_; delete cranium_scene_;}
   void map_to_target(boxm2_scene_sptr target);
 
@@ -26,7 +28,7 @@ private:
   boxm2_vecf_skull_params params_;
   boxm2_vecf_mandible_scene* mandible_scene_;
   boxm2_vecf_cranium_scene* cranium_scene_;
-  vcl_string scene_path;
+  std::string scene_path;
 };
 
 #endif

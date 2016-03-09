@@ -13,7 +13,9 @@
 // \endverbatim
 //
 //-----------------------------------------------------------------------------
-#include <vcl_iosfwd.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iosfwd>
 #include <vbl/vbl_ref_count.h>
 #include <vgl/vgl_point_2d.h>
 
@@ -96,6 +98,6 @@ class brip_region_pixel : public vbl_ref_count
   };
 };
 
-vcl_ostream& operator<<(vcl_ostream& s, brip_region_pixel const& sd);
+std::ostream& operator<<(std::ostream& s, brip_region_pixel const& sd);
 
 #endif // brip_region_pixel_h_

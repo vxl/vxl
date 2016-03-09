@@ -7,8 +7,10 @@
 // \brief Horizontal line used in 3D images, with integer co-ordinates
 
 #include <vsl/vsl_binary_io.h>
-#include <vcl_vector.h>
-#include <vcl_iostream.h>
+#include <vector>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iostream>
 
 //: Horizontal line used in 3D images, with integer co-ordinates
 class vil3d_chord
@@ -53,11 +55,11 @@ public:
 
 //: Computes number of voxels in region
 //  Assumes chords do not overlap
-inline unsigned vil3d_volume(const vcl_vector<vil3d_chord>& chords)
+inline unsigned vil3d_volume(const std::vector<vil3d_chord>& chords)
 {
   if (chords.size()==0) return 0;
   unsigned n=0;
-  vcl_vector<vil3d_chord>::const_iterator c = chords.begin();
+  std::vector<vil3d_chord>::const_iterator c = chords.begin();
   for (;c!=chords.end();++c) n+=c->length();
   return n;
 }
@@ -87,7 +89,7 @@ inline bool vil3d_chord::operator==(const vil3d_chord& c) const
 }
 
 //: Print
-inline vcl_ostream& operator<<(vcl_ostream& os, const vil3d_chord& c)
+inline std::ostream& operator<<(std::ostream& os, const vil3d_chord& c)
 {
   return os<<"(["<<c.start_x()<<","<<c.end_x()<<"],"<<c.y()<<","<<c.z()<<")";
 }
@@ -100,7 +102,7 @@ inline void vsl_b_write(vsl_b_ostream& bfs, const vil3d_chord& t)
 
 //: Save
 inline void vsl_b_write(vsl_b_ostream& bfs,
-                        const vcl_vector<vil3d_chord>& t)
+                        const std::vector<vil3d_chord>& t)
 {
   vsl_b_write(bfs,unsigned(t.size()));
   for (unsigned i=0;i<t.size();++i) t[i].b_write(bfs);
@@ -114,7 +116,7 @@ inline void vsl_b_read(vsl_b_istream& bfs, vil3d_chord& t)
 
 //: Load
 inline void vsl_b_read(vsl_b_istream& bfs,
-                       vcl_vector<vil3d_chord>& t)
+                       std::vector<vil3d_chord>& t)
 {
   unsigned n;
   vsl_b_read(bfs,n);
@@ -123,7 +125,7 @@ inline void vsl_b_read(vsl_b_istream& bfs,
 }
 
 //: Print
-inline void vsl_print_summary(vcl_ostream& os, const vil3d_chord& t)
+inline void vsl_print_summary(std::ostream& os, const vil3d_chord& t)
 {
   os<<t;
 }

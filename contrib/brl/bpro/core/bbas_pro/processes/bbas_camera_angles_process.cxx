@@ -11,8 +11,10 @@
 #include <vpgl/vpgl_camera.h>
 #include <vpgl/vpgl_local_rational_camera.h>
 #include <vpgl/algo/vpgl_backproject.h>
-#include <vcl_vector.h>
-#include <vcl_iostream.h>
+#include <vector>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iostream>
 
 //: set input and output types
 bool bbas_camera_angles_process_cons(bprb_func_process& pro)
@@ -22,7 +24,7 @@ bool bbas_camera_angles_process_cons(bprb_func_process& pro)
   // 1: x position of focus point
   // 2: y position of focus point
   // 3: z position of focus point
-  vcl_vector<vcl_string> input_types_(4);
+  std::vector<std::string> input_types_(4);
   input_types_[0] = "vpgl_camera_double_sptr";
   input_types_[1] = "float";
   input_types_[2] = "float";
@@ -33,7 +35,7 @@ bool bbas_camera_angles_process_cons(bprb_func_process& pro)
   //output
   // 0: camera elevation
   // 1: camera azimuth
-  vcl_vector<vcl_string> output_types_(2);
+  std::vector<std::string> output_types_(2);
   output_types_[0] = "float";
   output_types_[1] = "float";
   return pro.set_output_types(output_types_);
@@ -43,7 +45,7 @@ bool bbas_camera_angles_process(bprb_func_process& pro)
 {
   if (pro.n_inputs()<4)
   {
-    vcl_cout << pro.name() << " The number of inputs should be 4" << vcl_endl;
+    std::cout << pro.name() << " The number of inputs should be 4" << std::endl;
     return false;
   }
 
@@ -93,8 +95,8 @@ bool bbas_camera_angles_process(bprb_func_process& pro)
   normalize(cam_direction);
 
   // NOTE: assumes that local coordinate system has x = east and y = north
-  double cam_az = vcl_atan2(cam_direction.x(), cam_direction.y());
-  double cam_el = vcl_asin(cam_direction.z());
+  double cam_az = std::atan2(cam_direction.x(), cam_direction.y());
+  double cam_el = std::asin(cam_direction.z());
 
   //store azimuth and elevation in range 0,360
   pro.set_output_val<float>(0, float(vnl_math::angle_0_to_2pi(cam_az)*vnl_math::deg_per_rad));

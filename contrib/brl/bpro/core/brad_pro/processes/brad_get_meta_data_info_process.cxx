@@ -12,13 +12,13 @@
 //: set input and output types
 bool brad_get_meta_data_info_process_cons(bprb_func_process& pro)
 {
-  vcl_vector<vcl_string> input_types;
+  std::vector<std::string> input_types;
   input_types.push_back("brad_image_metadata_sptr"); // image name
 
   if (!pro.set_input_types(input_types))
     return false;
 
-  vcl_vector<vcl_string> output_types;
+  std::vector<std::string> output_types;
   output_types.push_back("float"); // sun azimuth angle
   output_types.push_back("float"); // sun elevation
   output_types.push_back("int"); // year
@@ -39,7 +39,7 @@ bool brad_get_meta_data_info_process(bprb_func_process& pro)
 {
   if ( pro.n_inputs() != pro.input_types().size() )
   {
-    vcl_cout << pro.name() << " The number of inputs should be " << pro.input_types().size() << vcl_endl;
+    std::cout << pro.name() << " The number of inputs should be " << pro.input_types().size() << std::endl;
     return false;
   }
 
@@ -55,10 +55,10 @@ bool brad_get_meta_data_info_process(bprb_func_process& pro)
   pro.set_output_val<int>(6, mdata->t_.min);
   pro.set_output_val<int>(7, mdata->t_.sec);
   pro.set_output_val<float>(8, mdata->gsd_);
-  pro.set_output_val<vcl_string>(9, mdata->satellite_name_);
+  pro.set_output_val<std::string>(9, mdata->satellite_name_);
   pro.set_output_val<float>(10, float(mdata->view_azimuth_));
   pro.set_output_val<float>(11, float(mdata->view_elevation_));
-  pro.set_output_val<vcl_string>(12, mdata->band_);
+  pro.set_output_val<std::string>(12, mdata->band_);
   return true;
 }
 

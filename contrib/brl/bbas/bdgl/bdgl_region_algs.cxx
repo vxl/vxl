@@ -1,8 +1,10 @@
 #include "bdgl_region_algs.h"
 //:
 // \file
-#include <vcl_cmath.h>
-#include <vcl_cstdlib.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <cmath>
+#include <cstdlib>
 #include <vdgl/vdgl_digital_region.h>
 
 //:
@@ -28,12 +30,12 @@ mahalanobis_distance(vdgl_digital_region_sptr const& r1,
   if (s1<SMALL) s1 = SMALL;
   if (s2<SMALL) s2 = SMALL;
   float s_sq = (s1*s1*s2*s2)/(s1*s1 + s2*s2);
-  float d = vcl_sqrt((m1-m2)*(m1-m2)/s_sq);
-  vcl_cout << "MDistance||(" << r1->Npix()
+  float d = std::sqrt((m1-m2)*(m1-m2)/s_sq);
+  std::cout << "MDistance||(" << r1->Npix()
            << ")(Xo:" << r1->Xo() << " Yo:" << r1 ->Yo()
            << " Io:" << r1 ->Io() << ")::(" << r2->Npix()
            << " Xo:" << r2->Xo() << " Yo:" << r2 ->Yo()
-           << " Io:" << r2 ->Io() <<")||= " << d << vcl_endl;
+           << " Io:" << r2 ->Io() <<")||= " << d << std::endl;
   return d;
 }
 
@@ -47,15 +49,15 @@ float bdgl_region_algs::intensity_distance(vdgl_digital_region_sptr const& r1,
   if (r1->Npix()<min_npts || r2->Npix()<min_npts)
     return -1.f;
   float m1 = r1->Io(), m2 = r2->Io();
-  if (vcl_fabs(m1-m2)<SMALL)
+  if (std::fabs(m1-m2)<SMALL)
     return 0;
   float msq = (m1+m2)*(m1+m2);
-  double d = 2.0*vcl_sqrt((m1-m2)*(m1-m2)/msq);
-  vcl_cout << "Intensity Distance||(" << r1->Npix()
+  double d = 2.0*std::sqrt((m1-m2)*(m1-m2)/msq);
+  std::cout << "Intensity Distance||(" << r1->Npix()
            << ")(Xo:" << r1->Xo() << " Yo:" << r1 ->Yo()
            << " Io:" << r1 ->Io() << ")::(" << r2->Npix()
            << " Xo:" << r2->Xo() << " Yo:" << r2 ->Yo()
-           << " Io:" << r2 ->Io() <<")||= " << d << vcl_endl;
+           << " Io:" << r2 ->Io() <<")||= " << d << std::endl;
   return float(d);
 }
 
@@ -143,11 +145,11 @@ bdgl_region_algs::earth_mover_distance(vdgl_digital_region_sptr const& r1,
     return -1.f;
   unsigned short *I1 = new unsigned short[n1],
                  *I2 = new unsigned short[n2];
-  vcl_memcpy(I1, r1->Ij(), n1*sizeof(unsigned short));
-  vcl_memcpy(I2, r2->Ij(), n2*sizeof(unsigned short));
+  std::memcpy(I1, r1->Ij(), n1*sizeof(unsigned short));
+  std::memcpy(I2, r2->Ij(), n2*sizeof(unsigned short));
   //Sort the intensities in each region
-  vcl_qsort( (void*)I1, n1, sizeof(unsigned short), increasing_compare );
-  vcl_qsort( (void*)I2, n2, sizeof(unsigned short), decreasing_compare );
+  std::qsort( (void*)I1, n1, sizeof(unsigned short), increasing_compare );
+  std::qsort( (void*)I2, n2, sizeof(unsigned short), decreasing_compare );
   //Match up the smallest intensities in the smaller region with
   //the largest intensities in the larger region.  This provides a
   //measure of the distance between the two regions
@@ -156,16 +158,16 @@ bdgl_region_algs::earth_mover_distance(vdgl_digital_region_sptr const& r1,
   for (unsigned int i = 0; i<n_smaller; ++i)
   {
     double d = double(I1[i]) - double(I2[i]);
-    sum += vcl_sqrt(d*d);
+    sum += std::sqrt(d*d);
   }
   delete[] I1; delete[] I2;
   sum /= n_smaller;
 #ifdef DEBUG
-  vcl_cout << "EarthMover Max Distance||(" << r1->Npix()
+  std::cout << "EarthMover Max Distance||(" << r1->Npix()
            << ")(Xo:"<< r1->Xo() << " Yo:" << r1->Yo()
            << " Io:" << r1->Io() << ")::(" << r2->Npix()
            << " Xo:" << r2->Xo() << " Yo:" << r2->Yo()
-           << " Io:" << r2->Io() << ")||= "<< sum << vcl_endl;
+           << " Io:" << r2->Io() << ")||= "<< sum << std::endl;
 #endif
   return float(sum);
 }

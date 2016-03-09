@@ -36,7 +36,9 @@
 //   9 Jan. 2003, Peter Vanroose - added "copy_geometry()"
 // \endverbatim
 
-#include <vcl_iosfwd.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iosfwd>
 #include <vsol/vsol_region_2d_sptr.h>
 #include <vtol/vtol_face.h>
 
@@ -109,10 +111,10 @@ class vtol_face_2d : public vtol_face
   virtual vsol_spatial_object_2d* clone() const;
 
   //: Return a platform independent string identifying the class
-  virtual vcl_string is_a() const { return vcl_string("vtol_face_2d"); }
+  virtual std::string is_a() const { return std::string("vtol_face_2d"); }
 
   //: Return true if the argument matches the string identifying the class or any parent class
-  virtual bool is_class(const vcl_string& cls) const
+  virtual bool is_class(const std::string& cls) const
   { return cls==is_a() || vtol_face::is_class(cls); }
 
   // Accessors
@@ -144,9 +146,9 @@ class vtol_face_2d : public vtol_face
   bool operator==(const vtol_face &other)const; // virtual of vtol_face
   bool operator==(const vsol_spatial_object_2d& obj) const; // virtual of vsol_spatial_object_2d
 
-  virtual void print(vcl_ostream &strm=vcl_cout) const;
+  virtual void print(std::ostream &strm=std::cout) const;
 
-  virtual void describe(vcl_ostream &strm=vcl_cout, int blanking=0) const;
+  virtual void describe(std::ostream &strm=std::cout, int blanking=0) const;
 
   //:  copy the geometry
   virtual void copy_geometry(const vtol_face &other);

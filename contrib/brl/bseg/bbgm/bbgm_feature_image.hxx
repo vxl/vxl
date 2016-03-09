@@ -6,7 +6,9 @@
 
 #include "bbgm_feature_image.h"
 #include <vbl/io/vbl_io_array_2d.h>
-#include <vcl_typeinfo.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <typeinfo>
 
 //===========================================================================
 // Binary I/O Methods
@@ -15,10 +17,10 @@
 //: Return a string name
 // \note this is probably not portable
 template<class f_type_>
-vcl_string
+std::string
 bbgm_feature_image<f_type_>::is_a() const
 {
-  return "bbgm_feature_image<"+vcl_string(typeid(f_type_).name())+">";
+  return "bbgm_feature_image<"+std::string(typeid(f_type_).name())+">";
 }
 
 
@@ -64,7 +66,7 @@ bbgm_feature_image<f_type_>::b_read(vsl_b_istream &is)
       vsl_b_read(is, data_);
       break;
     default:
-      vcl_cerr << "bbgm_image: unknown I/O version " << ver << '\n';
+      std::cerr << "bbgm_image: unknown I/O version " << ver << '\n';
   }
 }
 

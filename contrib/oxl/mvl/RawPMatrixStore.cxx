@@ -13,8 +13,10 @@
 //-----------------------------------------------------------------------------
 
 #include "RawPMatrixStore.h"
-#include <vcl_fstream.h>
-#include <vcl_string.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <fstream>
+#include <string>
 #include <mvl/PMatrix.h>
 
 #include <mvl/FileNameGenerator.h>
@@ -26,20 +28,20 @@ bool RawPMatrixStore::Load(int image_index)
   if (!check_index(image_index))
     return false;
 
-  vcl_string filename = fng_.frame_name(image_index);
+  std::string filename = fng_.frame_name(image_index);
 
-  vcl_ifstream fin(filename.c_str());
+  std::ifstream fin(filename.c_str());
 
   if (!fin.good())
     {
-      vcl_cerr << "Read PMatrix [" << filename << "] failed\n";
+      std::cerr << "Read PMatrix [" << filename << "] failed\n";
       return false;
     }
 
   pmatrix_[image_index]= new PMatrix;
   pmatrix_[image_index]->read_ascii(fin);
 
-  vcl_cerr << "Read PMatrix [" << filename << "]\n";
+  std::cerr << "Read PMatrix [" << filename << "]\n";
 
   return true;
 }
@@ -47,7 +49,7 @@ bool RawPMatrixStore::Load(int image_index)
 // - Save not implemented
 bool RawPMatrixStore::Save(int)
 {
-  vcl_cerr << "RawPMatrixStore::Save not implemented\n";
+  std::cerr << "RawPMatrixStore::Save not implemented\n";
   return false;
 }
 

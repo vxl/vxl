@@ -16,13 +16,15 @@
 
 #include <bocl/bocl_kernel.h>
 #include <vcl_where_root_dir.h>
-#include <vcl_algorithm.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <algorithm>
 
 typedef vnl_vector_fixed<unsigned char,16> uchar16;
 bool boxm2_vecf_ocl_filter::get_scene_appearance( boxm2_scene_sptr scene,
-          vcl_string&      options)
+          std::string&      options)
 {
-    vcl_vector<vcl_string> apps = scene->appearances();
+    std::vector<std::string> apps = scene->appearances();
     bool foundDataType = false;
     for (unsigned int i=0; i<apps.size(); ++i) {
         if ( apps[i] == boxm2_data_traits<BOXM2_MOG3_GREY>::prefix() )
@@ -39,7 +41,7 @@ bool boxm2_vecf_ocl_filter::get_scene_appearance( boxm2_scene_sptr scene,
         }
     }
     if (!foundDataType) {
-        vcl_cerr<<"ERROR: boxm2_vecf_ocl_filter: unsupported appearance type!" << vcl_endl;
+        std::cerr<<"ERROR: boxm2_vecf_ocl_filter: unsupported appearance type!" << std::endl;
         return false;
     }
     //set apptype size
@@ -68,12 +70,12 @@ boxm2_vecf_ocl_filter::~boxm2_vecf_ocl_filter()
 
 bool boxm2_vecf_ocl_filter::compile_filter_kernel()
 {
-  vcl_string options;
+  std::string options;
   // sets apptypesize_ and app_type
   get_scene_appearance(source_scene_, options);
-  vcl_vector<vcl_string> src_paths;
-  vcl_string source_dir = vcl_string(VCL_SOURCE_ROOT_DIR) + "/contrib/brl/bseg/boxm2/ocl/cl/";
-  vcl_string vecf_source_dir = vcl_string(VCL_SOURCE_ROOT_DIR)+ "/contrib/brl/bseg/boxm2/vecf/ocl/cl/";
+  std::vector<std::string> src_paths;
+  std::string source_dir = std::string(VCL_SOURCE_ROOT_DIR) + "/contrib/brl/bseg/boxm2/ocl/cl/";
+  std::string vecf_source_dir = std::string(VCL_SOURCE_ROOT_DIR)+ "/contrib/brl/bseg/boxm2/vecf/ocl/cl/";
   src_paths.push_back(source_dir     + "scene_info.cl");
   src_paths.push_back(source_dir     + "bit/bit_tree_library_functions.cl");
   src_paths.push_back(vecf_source_dir + "filter_block_six_neighbors.cl");
@@ -110,7 +112,7 @@ bool boxm2_vecf_ocl_filter::init_ocl_filter()
     mog_source = VXL_NULLPTR;
     return true;
 }
-bool boxm2_vecf_ocl_filter::filter(vcl_vector<float> const& weights, unsigned num_iterations)
+bool boxm2_vecf_ocl_filter::filter(std::vector<float> const& weights, unsigned num_iterations)
 {
   // the filter algorithm assumes that the scene is uniformly refined to some depth
   // (for now all cells are at root, i.e., depth = 0)
@@ -129,15 +131,15 @@ bool boxm2_vecf_ocl_filter::filter(vcl_vector<float> const& weights, unsigned nu
   ocl_n_iter = new bocl_mem(device_->context(), &(n), sizeof(int), "  depth of octree " );
   ocl_n_iter->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR );
 
-  vcl_size_t local_threads[1]={64};
-  vcl_size_t global_threads[1]={1};
+  std::size_t local_threads[1]={64};
+  std::size_t global_threads[1]={1};
   // set up all the kernel arguments
-   vcl_vector<boxm2_block_id> blocks_source = source_scene_->get_block_ids();
-   vcl_vector<boxm2_block_id> blocks_temp = temp_scene_->get_block_ids();
+   std::vector<boxm2_block_id> blocks_source = source_scene_->get_block_ids();
+   std::vector<boxm2_block_id> blocks_temp = temp_scene_->get_block_ids();
    if(blocks_temp.size()!=1||blocks_source.size()!=1)
      return false;
-   vcl_vector<boxm2_block_id>::iterator iter_blk_temp = blocks_temp.begin();
-   vcl_vector<boxm2_block_id>::iterator iter_blk_source = blocks_source.begin();
+   std::vector<boxm2_block_id>::iterator iter_blk_temp = blocks_temp.begin();
+   std::vector<boxm2_block_id>::iterator iter_blk_source = blocks_source.begin();
      //Gather information about the temp and setup temp data buffers
    blk_temp       = opencl_cache_->get_block(temp_scene_, *iter_blk_temp);
    alpha_temp     = opencl_cache_->get_data<BOXM2_ALPHA>(temp_scene_, *iter_blk_temp,0,true);
@@ -154,7 +156,7 @@ bool boxm2_vecf_ocl_filter::filter(vcl_vector<float> const& weights, unsigned nu
      mog_temp       = opencl_cache_->get_data<BOXM2_MOG3_GREY_16>(temp_scene_, *iter_blk_temp,0,true);
    }
    else {
-     vcl_cout << "Unknown appearance type for temp_scene " << app_type_ << '\n';
+     std::cout << "Unknown appearance type for temp_scene " << app_type_ << '\n';
      return false;
    }
    global_threads[0] = (unsigned) RoundUp(info_buffer->scene_dims[0]*info_buffer->scene_dims[1]*info_buffer->scene_dims[2],(int)local_threads[0]);
@@ -179,7 +181,7 @@ bool boxm2_vecf_ocl_filter::filter(vcl_vector<float> const& weights, unsigned nu
      app_type_size_ = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_MOG3_GREY_16>::prefix());
    }
    else {
-     vcl_cout << "Unknown appearance type for source_scene " << app_type_ << '\n';
+     std::cout << "Unknown appearance type for source_scene " << app_type_ << '\n';
      return false;
    }
    filter_kern->set_arg(centerX.ptr());
@@ -202,7 +204,7 @@ bool boxm2_vecf_ocl_filter::filter(vcl_vector<float> const& weights, unsigned nu
    filter_kern->set_local_arg(16*local_threads[0]*sizeof(unsigned char)); // neighbor trees
    if(!filter_kern->execute(queue, 1, local_threads, global_threads))
      {
-       vcl_cout<<"Kernel Failed to Execute "<<vcl_endl;
+       std::cout<<"Kernel Failed to Execute "<<std::endl;
        return false;
      }
    int status = clFinish(queue);
@@ -213,8 +215,8 @@ bool boxm2_vecf_ocl_filter::filter(vcl_vector<float> const& weights, unsigned nu
    alpha_source->read_to_buffer(queue);
    mog_temp->read_to_buffer(queue);
    alpha_temp->read_to_buffer(queue);
-   vcl_memcpy(alpha_source->cpu_buffer(),alpha_temp->cpu_buffer(),data_size * sizeof(float));
-   vcl_memcpy(mog_source->cpu_buffer(),mog_temp->cpu_buffer(),data_size * app_type_size_);
+   std::memcpy(alpha_source->cpu_buffer(),alpha_temp->cpu_buffer(),data_size * sizeof(float));
+   std::memcpy(mog_source->cpu_buffer(),mog_temp->cpu_buffer(),data_size * app_type_size_);
    mog_source->write_to_buffer(queue);
    alpha_source->write_to_buffer(queue);
    output->read_to_buffer(queue);//for debug
@@ -226,14 +228,14 @@ bool boxm2_vecf_ocl_filter::filter(vcl_vector<float> const& weights, unsigned nu
    int count = 0;
    for (int i=0;i<data_size;i++){
            if(output_buff[i]!=0){
-                   vcl_cout<<output_buff[i]<<" ";
+                   std::cout<<output_buff[i]<<" ";
                    count++;
            }
            if(count > 1000)
                    break;
 
    }
-   vcl_cout << "Output: " << output_buff[0] <<' ' << output_buff[1] <<' ' << output_buff[2]
+   std::cout << "Output: " << output_buff[0] <<' ' << output_buff[1] <<' ' << output_buff[2]
             << ' ' << output_buff[3] <<' ' << output_buff[4] <<' ' << output_buff[5] << '\n';
 
    boxm2_lru_cache::instance()->write_to_disk(source_scene_);

@@ -14,7 +14,9 @@
 //\endverbatim
 
 #include <vnl/vnl_math.h>
-#include <vcl_cmath.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <cmath>
 #include <vgl/vgl_point_2d.h>
 #include <vgl/vgl_distance.h>
 
@@ -22,7 +24,7 @@
 
 inline int sdet_round(double val)
 {
-  return (int) vcl_floor(val+0.5);
+  return (int) std::floor(val+0.5);
 }
 
 //: Convert an angle to [0, 2Pi) range
@@ -30,9 +32,9 @@ inline double sdet_angle0To2Pi (double angle)
 {
   double a;
   if (angle>=2*vnl_math::pi)
-    a = vcl_fmod (angle,vnl_math::pi*2);
+    a = std::fmod (angle,vnl_math::pi*2);
   else if (angle < 0)
-    a = (2*vnl_math::pi+ vcl_fmod (angle,2*vnl_math::pi));
+    a = (2*vnl_math::pi+ std::fmod (angle,2*vnl_math::pi));
   else
     a= angle;
 
@@ -65,13 +67,13 @@ inline double sdet_CCW (double reference, double angle)
 
 inline double sdet_vPointPoint (vgl_point_2d<double> start, vgl_point_2d<double> end)
 {
-    return sdet_angle0To2Pi (vcl_atan2 (end.y() - start.y(), end.x() - start.x()) );
+    return sdet_angle0To2Pi (std::atan2 (end.y() - start.y(), end.x() - start.x()) );
 }
 
 //: dot product between two vectors
 inline double sdet_dot (double v1, double v2)
 {
-   return vcl_cos(v1)*vcl_cos(v2) + vcl_sin(v1)*vcl_sin(v2);
+   return std::cos(v1)*std::cos(v2) + std::sin(v1)*std::sin(v2);
 }
 
 //: this structure holds the intrinsic params for an edge pair

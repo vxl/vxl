@@ -38,7 +38,7 @@ void mfpf_log_lin_class_cost::set(const vnl_vector<double>& wts,
 double mfpf_log_lin_class_cost::evaluate(const vnl_vector<double>& x)
 {
   double z = bias_-dot_product(wts_,x);
-  return -1*vcl_log(min_p_+(1-min_p_)/(1+vcl_exp(z)));
+  return -1*std::log(min_p_+(1-min_p_)/(1+std::exp(z)));
 }
 
 //: Return the weights
@@ -61,9 +61,9 @@ short mfpf_log_lin_class_cost::version_no() const
 // Method: is_a
 //=======================================================================
 
-vcl_string mfpf_log_lin_class_cost::is_a() const
+std::string mfpf_log_lin_class_cost::is_a() const
 {
-  return vcl_string("mfpf_log_lin_class_cost");
+  return std::string("mfpf_log_lin_class_cost");
 }
 
 //: Create a copy on the heap and return base class pointer
@@ -76,7 +76,7 @@ mfpf_vec_cost* mfpf_log_lin_class_cost::clone() const
 // Method: print
 //=======================================================================
 
-void mfpf_log_lin_class_cost::print_summary(vcl_ostream& os) const
+void mfpf_log_lin_class_cost::print_summary(std::ostream& os) const
 {
   os<<"Size: "<<wts_.size();
 }
@@ -110,9 +110,9 @@ void mfpf_log_lin_class_cost::b_read(vsl_b_istream& bfs)
       vsl_b_read(bfs,min_p_);
       break;
     default:
-      vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&)\n"
-               << "           Unknown version number "<< version << vcl_endl;
-      bfs.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
+      std::cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&)\n"
+               << "           Unknown version number "<< version << std::endl;
+      bfs.is().clear(std::ios::badbit); // Set an unrecoverable IO error on stream
       return;
   }
 }

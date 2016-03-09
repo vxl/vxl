@@ -7,10 +7,12 @@
 // \author crossge@crd.ge.com
 
 #include "gst_vertex_2d.h"
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iostream>
 
 // output
-vcl_ostream &operator <<( vcl_ostream &os, const gst_vertex_2d &v)
+std::ostream &operator <<( std::ostream &os, const gst_vertex_2d &v)
 {
   return os << "[gst_vertex_2d " << v.get_x() << ' ' << v.get_y() << ']';
 }

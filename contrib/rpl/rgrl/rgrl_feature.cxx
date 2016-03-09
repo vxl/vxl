@@ -35,7 +35,7 @@ signature_error_vector( rgrl_feature const& ) const
 
 
 unsigned
-rgrl_feature::signature_error_dimension( vcl_type_info const& ) const
+rgrl_feature::signature_error_dimension( std::type_info const& ) const
 {
   // This rgrl_feature doesn't implement signature_error_dimension()
   // By default, return 0;

@@ -12,7 +12,9 @@
 //   <none yet>
 // \endverbatim
 
-#include <vcl_vector.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <vector>
 
 class boxm_sigma_normalizer
 {
@@ -33,7 +35,7 @@ class boxm_sigma_normalizer
   boxm_sigma_normalizer(){}
 
   static const unsigned int N_PRECOMPUTED_ = 40;
-  vcl_vector<float> unbias_const_;
+  std::vector<float> unbias_const_;
 };
 
 #endif

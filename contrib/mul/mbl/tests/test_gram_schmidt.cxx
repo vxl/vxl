@@ -1,12 +1,14 @@
 // This is mul/mbl/tests/test_gram_schmidt.cxx
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iostream>
 #include <mbl/mbl_mod_gram_schmidt.h>
 #include <vnl/vnl_vector.h>
 #include <testlib/testlib_test.h>
 
 void test_gram_schmidt()
 {
-    vcl_cout << "**************************\n"
+    std::cout << "**************************\n"
              << " Testing mbl_gram_schmidt\n"
              << "**************************\n";
 

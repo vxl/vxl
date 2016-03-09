@@ -4,7 +4,9 @@
 //:
 // \file
 #include <vcl_compiler.h>
-#include <vcl_cstddef.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <cstddef>
 
 #ifdef __OPTIMIZE__
 # define RANGECHECK(i,j,k) ((void)0)
@@ -20,7 +22,7 @@ VCL_TEMPLATE_EXPORT template <class T>
 class boxm2_array_3d
 {
  public:
-  typedef vcl_size_t size_type;
+  typedef std::size_t size_type;
  public:
   typedef T element_type;
   typedef T* iterator;
@@ -131,11 +133,11 @@ class boxm2_array_3d
 //
 // formatted I/O
 //
-#include <vcl_iosfwd.h>
-VCL_TEMPLATE_EXPORT template <class T> vcl_ostream& operator<<(vcl_ostream&,
+#include <iosfwd>
+VCL_TEMPLATE_EXPORT template <class T> std::ostream& operator<<(std::ostream&,
                                                   boxm2_array_3d<T >const&);
 
-VCL_TEMPLATE_EXPORT template <class T> vcl_istream& operator>>(vcl_istream&,
+VCL_TEMPLATE_EXPORT template <class T> std::istream& operator>>(std::istream&,
                                                   boxm2_array_3d<T >&);
 
 #define BOXM2_ARRAY_3D_INSTANTIATE \

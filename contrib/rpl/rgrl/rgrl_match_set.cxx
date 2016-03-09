@@ -12,8 +12,10 @@
 #include <rgrl/rgrl_feature_sptr.h>
 #include <rgrl/rgrl_transformation.h>
 
-#include <vcl_vector.h>
-#include <vcl_algorithm.h>
+#include <vector>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <algorithm>
 #include <vcl_cassert.h>
 
 rgrl_match_set::
@@ -25,7 +27,7 @@ rgrl_match_set(  )
 }
 
 rgrl_match_set::
-rgrl_match_set( const vcl_type_info& feature_type )
+rgrl_match_set( const std::type_info& feature_type )
   : from_type_( &feature_type ),
     to_type_( &feature_type ),
     num_constraints_per_match_( 0 )
@@ -33,8 +35,8 @@ rgrl_match_set( const vcl_type_info& feature_type )
 }
 
 rgrl_match_set::
-rgrl_match_set( const vcl_type_info& from_type,
-                const vcl_type_info& to_type,
+rgrl_match_set( const std::type_info& from_type,
+                const std::type_info& to_type,
                 const rgrl_feature_set_label& from_label,
                 const rgrl_feature_set_label& to_label )
   : from_type_( &from_type ),
@@ -100,9 +102,9 @@ void
 rgrl_match_set ::
 add_feature_and_matches( rgrl_feature_sptr                      from_feature,
                          rgrl_feature_sptr                      mapped_feature,
-                         vcl_vector< rgrl_feature_sptr > const& matching_to )
+                         std::vector< rgrl_feature_sptr > const& matching_to )
 {
-  vcl_vector< rgrl_feature_sptr >::const_iterator to_itr;
+  std::vector< rgrl_feature_sptr >::const_iterator to_itr;
 
   //  Check to make sure all features involve the same feature types
 
@@ -118,7 +120,7 @@ add_feature_and_matches( rgrl_feature_sptr                      from_feature,
 
   // Add matches, with the initial sig weights computed by the from features.
 
-  vcl_vector<match_info> blank;
+  std::vector<match_info> blank;
   matches_and_weights_.push_back( blank );
   for ( to_itr = matching_to.begin(); to_itr != matching_to.end(); ++to_itr )
   {
@@ -132,10 +134,10 @@ void
 rgrl_match_set ::
 add_feature_matches_and_weights( rgrl_feature_sptr                      from_feature,
                                  rgrl_feature_sptr                      mapped_feature,
-                                 vcl_vector< rgrl_feature_sptr > const& matching_to,
-                                 vcl_vector< double > const&            signature_weights )
+                                 std::vector< rgrl_feature_sptr > const& matching_to,
+                                 std::vector< double > const&            signature_weights )
 {
-  vcl_vector< rgrl_feature_sptr >::const_iterator to_itr;
+  std::vector< rgrl_feature_sptr >::const_iterator to_itr;
 
   //  Check to make sure all features involve the same feature types
 
@@ -155,8 +157,8 @@ add_feature_matches_and_weights( rgrl_feature_sptr                      from_fea
 
   // Add matches, with default initial weights.
 
-  vcl_vector<match_info> blank;
-  vcl_vector<double>::const_iterator s_itr;
+  std::vector<match_info> blank;
+  std::vector<double>::const_iterator s_itr;
   matches_and_weights_.push_back( blank );
   matches_and_weights_.back().reserve( matching_to.size() );
   for ( to_itr = matching_to.begin(), s_itr = signature_weights.begin();
@@ -170,12 +172,12 @@ void
 rgrl_match_set ::
 add_feature_matches_and_weights( rgrl_feature_sptr                      from_feature,
                                  rgrl_feature_sptr                      mapped_feature,
-                                 vcl_vector< rgrl_feature_sptr > const& matching_to,
-                                 vcl_vector< double > const&            sig_wgts,
-                                 vcl_vector< double > const&            geo_wgts,
-                                 vcl_vector< double > const&            cum_wgts )
+                                 std::vector< rgrl_feature_sptr > const& matching_to,
+                                 std::vector< double > const&            sig_wgts,
+                                 std::vector< double > const&            geo_wgts,
+                                 std::vector< double > const&            cum_wgts )
 {
-  vcl_vector< rgrl_feature_sptr >::const_iterator to_itr;
+  std::vector< rgrl_feature_sptr >::const_iterator to_itr;
 
   //  Check to make sure all features involve the same feature types
 
@@ -197,9 +199,9 @@ add_feature_matches_and_weights( rgrl_feature_sptr                      from_fea
 
   // Add matches, with default initial weights.
   //
-  vcl_vector<match_info> blank;
+  std::vector<match_info> blank;
   matches_and_weights_.push_back( blank );
-  vcl_vector< vcl_vector< match_info > >::reverse_iterator back_it
+  std::vector< std::vector< match_info > >::reverse_iterator back_it
     = matches_and_weights_.rbegin();
 
   const unsigned size = matching_to.size();
@@ -227,7 +229,7 @@ add_feature_and_match( rgrl_feature_sptr from_feature,
   from_features_.push_back( from_feature );
   xformed_from_features_.push_back( mapped_feature );
 
-  vcl_vector<match_info> match;
+  std::vector<match_info> match;
   match.push_back( match_info( matching_to, wgt, wgt, wgt ) );
   matches_and_weights_.push_back( match );
 }
@@ -239,7 +241,7 @@ remap_from_features( rgrl_transformation const& trans )
 {
   assert ( from_features_.size() == xformed_from_features_.size() );
 
-  vcl_vector<rgrl_feature_sptr>::size_type i = 0;
+  std::vector<rgrl_feature_sptr>::size_type i = 0;
   for ( ; i < from_features_.size(); ++i ) {
     xformed_from_features_[i] = from_features_[i]->transform( trans );
   }
@@ -251,7 +253,7 @@ remap_only_location( rgrl_transformation const& trans )
 {
   assert ( from_features_.size() == xformed_from_features_.size() );
 
-  vcl_vector<rgrl_feature_sptr>::size_type i = 0;
+  std::vector<rgrl_feature_sptr>::size_type i = 0;
   vnl_vector<double> mapped_loc;
   for ( ; i < from_features_.size(); ++i ) {
 
@@ -298,13 +300,13 @@ set_num_constraints_per_match() const
 //: stream output
 void
 rgrl_match_set::
-write( vcl_ostream& os ) const
+write( std::ostream& os ) const
 {
   typedef rgrl_match_set::const_from_iterator FIter;
   typedef FIter::to_iterator TIter;
 
   // size
-  os << this->from_size() << vcl_endl;
+  os << this->from_size() << std::endl;
 
   for( FIter fi=this->from_begin(); fi!=this->from_end(); ++fi ) {
 
@@ -315,17 +317,17 @@ write( vcl_ostream& os ) const
     fi.mapped_from_feature()->write( os );
 
     // to size
-    os << fi.size() << vcl_endl;
+    os << fi.size() << std::endl;
 
     for( TIter ti=fi.begin(); ti!=fi.end(); ++ti )  {
       os << ti.signature_weight() << ' '
          << ti.geometric_weight() << ' '
-         << ti.cumulative_weight() << vcl_endl;
+         << ti.cumulative_weight() << std::endl;
 
       // to feature
       ti.to_feature()->write( os );
     }
-    os << vcl_endl;
+    os << std::endl;
   }
 
   os << "\n\n";
@@ -365,16 +367,16 @@ namespace{
 //: stream output
 void
 rgrl_match_set::
-write_sorted( vcl_ostream& os ) const
+write_sorted( std::ostream& os ) const
 {
-  vcl_vector< sort_node > nodes;
+  std::vector< sort_node > nodes;
 
   for( unsigned i=0; i<from_features_.size(); ++i ){
     nodes.push_back( sort_node( i, from_features_[i] ) );
   }
-  vcl_sort( nodes.begin(), nodes.end() );
+  std::sort( nodes.begin(), nodes.end() );
 
-  os << from_features_.size() << vcl_endl;
+  os << from_features_.size() << std::endl;
 
   unsigned index;
   for( unsigned i=0; i<nodes.size(); ++i ){
@@ -385,20 +387,20 @@ write_sorted( vcl_ostream& os ) const
     from_features_[index]->write( os );
     xformed_from_features_[index]->write( os );
 
-    const vcl_vector<match_info>& this_match = matches_and_weights_[index];
+    const std::vector<match_info>& this_match = matches_and_weights_[index];
     // to size
-    os << this_match.size() << vcl_endl;
+    os << this_match.size() << std::endl;
 
-    typedef vcl_vector<match_info>::const_iterator MIter;
+    typedef std::vector<match_info>::const_iterator MIter;
     for( MIter ti=this_match.begin(); ti!=this_match.end(); ++ti )  {
       os << ti->signature_weight << ' '
          << ti->geometric_weight << ' '
-         << ti->cumulative_weight << vcl_endl;
+         << ti->cumulative_weight << std::endl;
 
       // to feature
       ti->to_feature->write( os );
     }
-    os << vcl_endl;
+    os << std::endl;
   }
 
   os << "\n\n";
@@ -407,11 +409,11 @@ write_sorted( vcl_ostream& os ) const
 //: stream input
 bool
 rgrl_match_set::
-read( vcl_istream& is )
+read( std::istream& is )
 {
   double sig, geo, cum;
-  vcl_vector<double> sig_wgts, geo_wgts, cum_wgts;
-  vcl_vector<rgrl_feature_sptr>  tos;
+  std::vector<double> sig_wgts, geo_wgts, cum_wgts;
+  std::vector<rgrl_feature_sptr>  tos;
   rgrl_feature_sptr from, mapped, one;
   bool to_set_feature_type = true;
 
@@ -419,7 +421,7 @@ read( vcl_istream& is )
   int from_size=-1;
   is >> from_size;
   if( !is || from_size<0 ) {
-    vcl_cerr << "Error(" << __FILE__ <<"): cannot read from size" << vcl_endl;
+    std::cerr << "Error(" << __FILE__ <<"): cannot read from size" << std::endl;
     return false;
   }
 
@@ -431,7 +433,7 @@ read( vcl_istream& is )
     // mapped feature
     mapped = rgrl_feature_reader::read( is );
     if( !is || !from || !mapped ) {
-      vcl_cerr << "Error(" << __FILE__ <<"): cannot read from feature" << vcl_endl;
+      std::cerr << "Error(" << __FILE__ <<"): cannot read from feature" << std::endl;
       return false;
     }
 
@@ -439,7 +441,7 @@ read( vcl_istream& is )
     int to_size=-1;
     is >> to_size;
     if( !is || to_size<0 ) {
-      vcl_cerr << "Error(" << __FILE__ <<"): cannot read to feature size" << vcl_endl;
+      std::cerr << "Error(" << __FILE__ <<"): cannot read to feature size" << std::endl;
       return false;
     }
 
@@ -452,7 +454,7 @@ read( vcl_istream& is )
     for( int i=0; i<to_size; ++i ) {
       is >> sig >> geo >> cum;
       if( !is ) {
-        vcl_cerr << "Error(" << __FILE__ <<"): cannot read wgts" << vcl_endl;
+        std::cerr << "Error(" << __FILE__ <<"): cannot read wgts" << std::endl;
         return false;
       }
 
@@ -462,7 +464,7 @@ read( vcl_istream& is )
 
       one = rgrl_feature_reader( is );
       if( !is || !one ) {
-        vcl_cerr << "Error(" << __FILE__ <<"): cannot read to features" << vcl_endl;
+        std::cerr << "Error(" << __FILE__ <<"): cannot read to features" << std::endl;
         return false;
       }
       tos.push_back( one );
@@ -489,16 +491,16 @@ read( vcl_istream& is )
 }
 
 //: stream output
-vcl_ostream&
-operator<< ( vcl_ostream& os, rgrl_match_set const& set )
+std::ostream&
+operator<< ( std::ostream& os, rgrl_match_set const& set )
 {
   set.write( os );
   return os;
 }
 
 //: stream input
-vcl_istream&
-operator>> ( vcl_istream& is, rgrl_match_set& set )
+std::istream&
+operator>> ( std::istream& is, rgrl_match_set& set )
 {
   bool ret = set.read( is );
   assert( ret );
@@ -635,7 +637,7 @@ mapped_from_feature() const
 
 rgrl_match_set_from_iterator::
 rgrl_match_set_from_iterator( rgrl_match_set* ms,
-                              vcl_vector< rgrl_feature_sptr >::size_type ind )
+                              std::vector< rgrl_feature_sptr >::size_type ind )
   : match_set_( ms ),
     index_( ind )
 {
@@ -848,7 +850,7 @@ mapped_from_feature() const
 
 rgrl_match_set_const_from_iterator::
 rgrl_match_set_const_from_iterator( rgrl_match_set const* ms,
-                                    vcl_vector< rgrl_feature_sptr >::size_type ind )
+                                    std::vector< rgrl_feature_sptr >::size_type ind )
   : match_set_( ms ),
     index_( ind )
 {

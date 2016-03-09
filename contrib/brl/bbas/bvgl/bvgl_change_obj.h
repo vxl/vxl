@@ -12,7 +12,9 @@
 // \endverbatim
 
 #include <vgl/vgl_polygon.h>
-#include <vcl_string.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <string>
 #include <vbl/vbl_ref_count.h>
 #include <vsl/vsl_binary_io.h>
 
@@ -20,7 +22,7 @@ class bvgl_change_obj: public vbl_ref_count
 {
  public:
   bvgl_change_obj(vgl_polygon<double> const& poly) : class_("unknown"), poly_(poly) {}
-  bvgl_change_obj(vgl_polygon<double> const& poly, vcl_string cls) : class_(cls), poly_(poly) {}
+  bvgl_change_obj(vgl_polygon<double> const& poly, std::string cls) : class_(cls), poly_(poly) {}
   bvgl_change_obj(const bvgl_change_obj& other);
   bvgl_change_obj() {}
   ~bvgl_change_obj() {}
@@ -39,11 +41,11 @@ class bvgl_change_obj: public vbl_ref_count
   //: return the centroid of the polygon
   void centroid(double &x, double& y) const;
 
-  vcl_string type() const { return class_; }
+  std::string type() const { return class_; }
   //void xml_read();
   //void xml_write();
  private:
-  vcl_string class_;
+  std::string class_;
   vgl_polygon<double> poly_;
 };
 

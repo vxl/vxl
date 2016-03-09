@@ -1,6 +1,8 @@
 #include <vgui/vgui.h>
 #include <vgui/vgui_shell_tableau.h>
-#include <vcl_cmath.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <cmath>
 
 #include <bgui3d/bgui3d_examiner_tableau.h>
 #include <bgui3d/bgui3d.h>
@@ -29,7 +31,7 @@ void buildScene(SoGroup *root)
 
     int coord_num = 0;
     for ( float t=0.0f; t<=1.0f; t+=0.001f, ++coord_num) {
-      line_coords->point.set1Value(coord_num, float(i*vcl_sin(t*10*(5-i))), float(i*vcl_cos(t*10*(5-i))), 4*t+i);
+      line_coords->point.set1Value(coord_num, float(i*std::sin(t*10*(5-i))), float(i*std::cos(t*10*(5-i))), 4*t+i);
       vertex_material->diffuseColor.set1Value(coord_num, i*0.25f , 1.0f - t, t);
     }
 

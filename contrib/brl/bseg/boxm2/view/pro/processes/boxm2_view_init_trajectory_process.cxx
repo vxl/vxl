@@ -7,7 +7,9 @@
 // \author Andrew Miller
 // \date Mar 10, 2011
 
-#include <vcl_fstream.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <fstream>
 #include <boxm2/boxm2_scene.h>
 #include <boxm2/view/boxm2_trajectory.h>
 #include <vil/vil_image_view.h>
@@ -26,7 +28,7 @@ bool boxm2_view_init_trajectory_process_cons(bprb_func_process& pro)
   using namespace boxm2_view_init_trajectory_process_globals;
 
   //process takes 1 input
-  vcl_vector<vcl_string> input_types_(n_inputs_);
+  std::vector<std::string> input_types_(n_inputs_);
   input_types_[0] = "boxm2_scene_sptr"; //Scene
   input_types_[1] = "double"; //incline 0
   input_types_[2] = "double"; //incline 1
@@ -35,7 +37,7 @@ bool boxm2_view_init_trajectory_process_cons(bprb_func_process& pro)
   input_types_[5] = "unsigned"; // nj image height
 
   // process has 1 output:
-  vcl_vector<vcl_string>  output_types_(n_outputs_);
+  std::vector<std::string>  output_types_(n_outputs_);
   output_types_[0] = "boxm2_trajectory_sptr";     //an initialized trajectory object
 
   return pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
@@ -45,7 +47,7 @@ bool boxm2_view_init_trajectory_process(bprb_func_process& pro)
 {
   using namespace boxm2_view_init_trajectory_process_globals;
   if ( pro.n_inputs() < n_inputs_ ){
-    vcl_cout << pro.name() << ": The input number should be " << n_inputs_<< vcl_endl;
+    std::cout << pro.name() << ": The input number should be " << n_inputs_<< std::endl;
     return false;
   }
 
@@ -81,7 +83,7 @@ bool boxm2_view_init_regular_trajectory_process_cons(bprb_func_process& pro)
   using namespace boxm2_view_init_regular_trajectory_process_globals;
 
   //process takes 1 input
-  vcl_vector<vcl_string> input_types(n_inputs_);
+  std::vector<std::string> input_types(n_inputs_);
   input_types[0] = "unsigned";// ni
   input_types[1] = "unsigned";// nj
   input_types[2] = "double";  // right field of view
@@ -100,7 +102,7 @@ bool boxm2_view_init_regular_trajectory_process_cons(bprb_func_process& pro)
   input_types[14] = "double"; // heading_increment
 
   // process has 1 output:
-  vcl_vector<vcl_string>  output_types(n_outputs_);
+  std::vector<std::string>  output_types(n_outputs_);
   output_types[0] = "boxm2_trajectory_sptr";     //an initialized trajectory object
 
   return pro.set_input_types(input_types) && pro.set_output_types(output_types);
@@ -110,7 +112,7 @@ bool boxm2_view_init_regular_trajectory_process(bprb_func_process& pro)
 {
   using namespace boxm2_view_init_regular_trajectory_process_globals;
   if ( pro.n_inputs() < n_inputs_ ) {
-    vcl_cout << pro.name() << ": The input number should be " << n_inputs_<< vcl_endl;
+    std::cout << pro.name() << ": The input number should be " << n_inputs_<< std::endl;
     return false;
   }
 
@@ -154,7 +156,7 @@ bool boxm2_view_init_height_map_trajectory_process_cons(bprb_func_process& pro)
   using namespace boxm2_view_init_height_map_trajectory_process_globals;
 
   //process takes 1 input
-  vcl_vector<vcl_string> input_types(n_inputs_);
+  std::vector<std::string> input_types(n_inputs_);
   input_types[0] = "boxm2_scene_sptr";
   input_types[1] = "vil_image_view_base_sptr";  // x image -- in local coords of the scene - if lvcs is not rotated (theta = 0) then +x axis points towards East
   input_types[2] = "vil_image_view_base_sptr";  // y image -- in local coords of the scene - if lvcs is not rotated (theta = 0) then +y axis points towards North
@@ -177,7 +179,7 @@ bool boxm2_view_init_height_map_trajectory_process_cons(bprb_func_process& pro)
   input_types[17] = "double"; // heading_increment
 
   // process has 1 output:
-  vcl_vector<vcl_string>  output_types(n_outputs_);
+  std::vector<std::string>  output_types(n_outputs_);
   output_types[0] = "boxm2_trajectory_sptr";     //an initialized trajectory object
 
   return pro.set_input_types(input_types) && pro.set_output_types(output_types);
@@ -187,7 +189,7 @@ bool boxm2_view_init_height_map_trajectory_process(bprb_func_process& pro)
 {
   using namespace boxm2_view_init_height_map_trajectory_process_globals;
   if ( pro.n_inputs() < n_inputs_ ) {
-    vcl_cout << pro.name() << ": The input number should be " << n_inputs_<< vcl_endl;
+    std::cout << pro.name() << ": The input number should be " << n_inputs_<< std::endl;
     return false;
   }
 

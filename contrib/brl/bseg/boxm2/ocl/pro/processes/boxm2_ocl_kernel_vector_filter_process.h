@@ -19,8 +19,10 @@
 
 #include <bvpl/kernels/bvpl_kernel.h>
 
-#include <vcl_string.h>
-#include <vcl_map.h>
+#include <string>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <map>
 
 
 //:global variables
@@ -29,11 +31,11 @@ namespace boxm2_ocl_kernel_vector_filter_process_globals
   const unsigned n_inputs_ = 4;
   const unsigned n_outputs_ = 0;
 
-  bool compile_filter_kernel(bocl_device_sptr device, bocl_kernel * filter_kernel, vcl_string opts);
+  bool compile_filter_kernel(bocl_device_sptr device, bocl_kernel * filter_kernel, std::string opts);
 
   bool process(bocl_device_sptr device, boxm2_scene_sptr scene, boxm2_opencl_cache_sptr opencl_cache, bvpl_kernel_vector_sptr filter);
 
-  static vcl_map<vcl_string, boxm2_ocl_kernel_vector_filter*> engines;
+  static std::map<std::string, boxm2_ocl_kernel_vector_filter*> engines;
 }
 
 

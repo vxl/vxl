@@ -1,7 +1,9 @@
 #include "boxm_to_boxm2.h"
 //:
 // \file
-#include <vcl_queue.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <queue>
 
 //executable args
 #include <vul/vul_arg.h>
@@ -43,10 +45,10 @@ void deconstruct_sample(boxm_sample<BOXM_APM_MOG_GREY> sample,
 
   for (unsigned i=0; i<obs.num_components(); i++) {
     gauss_type_sf1  mf=obs.distribution(i);
-    unsigned char w = (unsigned char)vcl_floor(obs.weight(i)*255.0);
+    unsigned char w = (unsigned char)std::floor(obs.weight(i)*255.0);
     unsigned int  n = (unsigned char)mf.num_observations;
-    unsigned char m = (unsigned char)vcl_floor(mf.mean()*255.0);
-    unsigned char v = (unsigned char)vcl_floor(mf.var()*255.0);
+    unsigned char m = (unsigned char)std::floor(mf.mean()*255.0);
+    unsigned char v = (unsigned char)std::floor(mf.var()*255.0);
     num_obs[i]=n;
     data[i*3]=m;
     data[i*3+1]=v;
@@ -64,7 +66,7 @@ void convert_data(boct_tree_cell<T_loc,T_data>* tree_cell,
                   int& data_idx)
 {
     // go through the tree, in depth first order to collect data
-    vcl_queue<boct_tree_cell<T_loc,T_data>*> Q;
+    std::queue<boct_tree_cell<T_loc,T_data>*> Q;
     Q.push(tree_cell);
     while (!Q.empty()) {
         boct_tree_cell<T_loc,T_data>* ptr = Q.front();
@@ -124,9 +126,9 @@ void convert_to_bittree(boct_tree_cell<T_loc,T_data>* tree_cell, boct_bit_tree*&
 
 int main(int argc, char** argv)
 {
-  vcl_cout << "Converting boxm scene to boxm2 Scene" << vcl_endl;
-  vul_arg<vcl_string> scene_path("-scene", "scene filename", "");
-  vul_arg<vcl_string> out_dir("-out", "output directory", "");
+  std::cout << "Converting boxm scene to boxm2 Scene" << std::endl;
+  vul_arg<std::string> scene_path("-scene", "scene filename", "");
+  vul_arg<std::string> out_dir("-out", "output directory", "");
   vul_arg<unsigned int> sub_block_dim("-dim", "sub block dimensions", 64);
   vul_arg_parse(argc, argv);
 
@@ -144,7 +146,7 @@ int main(int argc, char** argv)
   //initialize a block
   boxm2_lru_cache::create(&new_scene);
 
-  vcl_map<boxm2_block_id, boxm2_block_metadata> new_blocks;
+  std::map<boxm2_block_id, boxm2_block_metadata> new_blocks;
   unsigned int dim=sub_block_dim();
   if (scene.appearence_model() == BOXM_APM_MOG_GREY) {
     boxm_block_iterator<tree_type > iter(&scene);
@@ -153,7 +155,7 @@ int main(int argc, char** argv)
       scene.load_block(idx);
       boxm_block<tree_type >* block = scene.get_block(idx);
       vgl_box_3d<double> block_bb = block->bounding_box();
-      vcl_cout<<block_bb<<vcl_endl;
+      std::cout<<block_bb<<std::endl;
       tree_type * tree = block->get_tree();
 
       // create metadata for the block
@@ -181,9 +183,9 @@ int main(int argc, char** argv)
             vgl_box_3d<double> cell_bb(p, cell_dim, cell_dim, cell_dim, vgl_box_3d<double>::min_pos);
             boct_tree_cell<short,boxm_sample<BOXM_APM_MOG_GREY> >* node = tree->locate_point_at_level(cell_bb.centroid(),3);
             if (!node)
-              vcl_cout << "The node COULD not be FOUND" << vcl_endl;
+              std::cout << "The node COULD not be FOUND" << std::endl;
             else {
-              vcl_vector<boct_tree_cell<short,boxm_sample<BOXM_APM_MOG_GREY> > *> children;
+              std::vector<boct_tree_cell<short,boxm_sample<BOXM_APM_MOG_GREY> > *> children;
               node->all_children(children);
               int n2= children.size()+1;
               data_size += n2;
@@ -211,9 +213,9 @@ int main(int argc, char** argv)
             vgl_box_3d<double> cell_bb(p, cell_dim, cell_dim, cell_dim, vgl_box_3d<double>::min_pos);
             boct_tree_cell<short,boxm_sample<BOXM_APM_MOG_GREY> >* node = tree->locate_point_at_level(cell_bb.centroid(),3);
             if (!node)
-              vcl_cout << "The node COULD not be FOUND" << vcl_endl;
+              std::cout << "The node COULD not be FOUND" << std::endl;
             else {
-              vcl_vector<boct_tree_cell<short,boxm_sample<BOXM_APM_MOG_GREY> > *> children;
+              std::vector<boct_tree_cell<short,boxm_sample<BOXM_APM_MOG_GREY> > *> children;
               node->all_children(children);
               int n2= children.size()+1;
 
@@ -228,8 +230,8 @@ int main(int argc, char** argv)
               boxm2_block::uchar16& t=trees[x][y][z];
               t.set(bit_tree->get_bits());
               if (n1 != n2) {
-                vcl_cout << x << ',' << y << ',' << z << '\n'
-                         << "ERROR! The converted tree is not right, should have " << n1 << " nodes instead of " << n2 << vcl_endl;
+                std::cout << x << ',' << y << ',' << z << '\n'
+                         << "ERROR! The converted tree is not right, should have " << n1 << " nodes instead of " << n2 << std::endl;
               }
             }
           }

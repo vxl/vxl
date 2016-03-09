@@ -1,7 +1,10 @@
 #include <testlib/testlib_test.h>
 #include "../bmdl_processes.h"
 
+#include <vcl_compiler.h>
 #include <vcl_string.h>
+#include <iostream>
+#include <string>
 
 #include <brdb/brdb_value.h>
 #include <brdb/brdb_selection.h>
@@ -23,31 +26,31 @@ static void test_bmdl_generate_mesh_process(int argc, char* argv[])
   REGISTER_DATATYPE(vcl_string);
   REGISTER_DATATYPE(vil_image_view_base_sptr);
 
-  vcl_string image_base;
+  std::string image_base;
   if ( argc >= 2 ) {
     image_base = argv[1];
     image_base += "/";
   }
 
   //create vil_image_view_base_sptr
-  vcl_string label_img_path = image_base + "label.tif";
+  std::string label_img_path = image_base + "label.tif";
   vil_image_view_base_sptr label = vil_load(label_img_path.c_str());
 
-  vcl_string height_img_path = image_base + "height.tif";
+  std::string height_img_path = image_base + "height.tif";
   vil_image_view_base_sptr height = vil_load(height_img_path.c_str());
 
-  vcl_string ground_img_path = image_base + "ground.tif";
+  std::string ground_img_path = image_base + "ground.tif";
   vil_image_view_base_sptr ground = vil_load(ground_img_path.c_str());
 
-  vcl_string polygons_path = "polygons.bin";
-  vcl_string meshes_path = "meshes.obj";
+  std::string polygons_path = "polygons.bin";
+  std::string meshes_path = "meshes.obj";
   vpgl_camera_double_sptr camera = new vpgl_geo_camera();
 
-  brdb_value_sptr v0 = new brdb_value_t<vcl_string>(polygons_path);
+  brdb_value_sptr v0 = new brdb_value_t<std::string>(polygons_path);
   brdb_value_sptr v1 = new brdb_value_t<vil_image_view_base_sptr>(label);
   brdb_value_sptr v2 = new brdb_value_t<vil_image_view_base_sptr>(height);
   brdb_value_sptr v3 = new brdb_value_t<vil_image_view_base_sptr>(ground);
-  brdb_value_sptr v4 = new brdb_value_t<vcl_string>(meshes_path);
+  brdb_value_sptr v4 = new brdb_value_t<std::string>(meshes_path);
   brdb_value_sptr v5 = new brdb_value_t<vpgl_camera_double_sptr>(camera);
 
   bool good = bprb_batch_process_manager::instance()->init_process("bmdlGenerateMeshProcess");

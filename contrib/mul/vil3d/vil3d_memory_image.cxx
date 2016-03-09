@@ -8,7 +8,9 @@
 
 #include "vil3d_memory_image.h"
 #include <vcl_cassert.h>
-#include <vcl_cstdlib.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <cstdlib>
 #include <vxl_config.h> // for vxl_uint_32 etc.
 #include <vil3d/vil3d_image_view.h>
 #include <vil3d/vil3d_copy.h>
@@ -40,9 +42,9 @@ macro(VIL_PIXEL_FORMAT_FLOAT , float )
 macro(VIL_PIXEL_FORMAT_DOUBLE , double )
 #undef macro
   default:
-    vcl_cerr << "ERROR: vil3d_memory_image::vil3d_memory_image\n"
-                "\t unknown format " << format << vcl_endl;
-    vcl_abort();
+    std::cerr << "ERROR: vil3d_memory_image::vil3d_memory_image\n"
+                "\t unknown format " << format << std::endl;
+    std::abort();
   }
 }
 
@@ -137,9 +139,9 @@ bool vil3d_memory_image::put_view(const vil3d_image_view_base& im,
       if (v.memory_chunk() == w.memory_chunk()) \
       { \
         if (&v(i0,j0,k0) != w.origin_ptr()) { \
-          vcl_cerr << "ERROR: vil_memory_image::put_view()\n" \
-            "different window from that used in get_view()" << vcl_endl; \
-          vcl_abort(); } \
+          std::cerr << "ERROR: vil_memory_image::put_view()\n" \
+            "different window from that used in get_view()" << std::endl; \
+          std::abort(); } \
         else return true; /* The user has already modified the data in place. */ \
       } \
       vil3d_copy_to_window(w, v, i0, j0, k0); \
@@ -157,8 +159,8 @@ macro(VIL_PIXEL_FORMAT_DOUBLE , double )
 #undef macro
 
   default:
-    vcl_cerr << "WARNING: vil3d_memory_image::put_view()\n"
-                "\t Unexpected pixel type" << view_->pixel_format() << vcl_endl;
+    std::cerr << "WARNING: vil3d_memory_image::put_view()\n"
+                "\t Unexpected pixel type" << view_->pixel_format() << std::endl;
     return 0;
   }
 }

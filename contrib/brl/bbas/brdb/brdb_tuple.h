@@ -13,7 +13,9 @@
 //    Make it work with the whole database initially based on Matt's sketch.
 // \endverbatim
 
-#include <vcl_vector.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <vector>
 #include <vcl_cassert.h>
 #include <vbl/vbl_ref_count.h>
 #include <brdb/brdb_value.h>
@@ -92,10 +94,10 @@ class brdb_tuple : public vbl_ref_count
   }
 
   //: Constructor using a vector of db value references
-  explicit brdb_tuple(const vcl_vector<brdb_value*>& values);
+  explicit brdb_tuple(const std::vector<brdb_value*>& values);
 
   //: Prototype factory using a vector type name
-  static brdb_tuple_sptr make_prototype(const vcl_vector<vcl_string>& types);
+  static brdb_tuple_sptr make_prototype(const std::vector<std::string>& types);
 
   //: Copy Constructor
   brdb_tuple(const brdb_tuple& other);
@@ -204,7 +206,7 @@ class brdb_tuple : public vbl_ref_count
   //============================== Data Members ===============================
  private:
   //: The values of the attributes
-  vcl_vector<brdb_value_sptr> values_;
+  std::vector<brdb_value_sptr> values_;
 };
 
 

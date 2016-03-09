@@ -4,8 +4,10 @@
 // \author  Gamze Tunali
 // \date    2007-06-10
 //
-#include <vcl_iostream.h>
-#include <vcl_vector.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iostream>
+#include <vector>
 #include <testlib/testlib_test.h>
 
 #include <bwm/algo/bwm_delaunay_tri.h>
@@ -15,9 +17,9 @@
 
 void test_delaunay()
 {
-  vcl_vector<vgl_point_3d<double> > pxyz;
-  vcl_vector<vgl_point_2d<int> > edges;
-  vcl_vector<vgl_point_3d<int> > v;
+  std::vector<vgl_point_3d<double> > pxyz;
+  std::vector<vgl_point_2d<int> > edges;
+  std::vector<vgl_point_3d<int> > v;
   int ntri;
 
   pxyz.push_back(vgl_point_3d<double>(0,0,0));
@@ -29,14 +31,14 @@ void test_delaunay()
   bwm_delaunay_tri tri;
   tri.triangulate(pxyz, v, ntri);
 
-  vcl_cout << "Number of Triangles:" << ntri << vcl_endl;
+  std::cout << "Number of Triangles:" << ntri << std::endl;
   for (int i=0; i<ntri; i++) {
-    vcl_cout << i << "==>" << v[i].x() << ' ' << v[i].y() << ' ' << v[i].z() << vcl_endl;
+    std::cout << i << "==>" << v[i].x() << ' ' << v[i].y() << ' ' << v[i].z() << std::endl;
   }
 
-  vcl_cout << "Number of Edges:" << edges.size() << vcl_endl;
+  std::cout << "Number of Edges:" << edges.size() << std::endl;
   for (unsigned int i=0; i<edges.size(); i++) {
-    vcl_cout << i << "==>" << edges[i] << vcl_endl;
+    std::cout << i << "==>" << edges[i] << std::endl;
   }
 }
 

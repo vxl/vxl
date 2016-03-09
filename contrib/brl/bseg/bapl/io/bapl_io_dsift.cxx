@@ -1,6 +1,8 @@
 // This is brl/bseg/bapl/io/bapl_io_dsift.cxx
 #include "bapl_io_dsift.h"
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iostream>
 
 void vsl_b_read(vsl_b_istream &is, bapl_dsift &dsift)
 {
@@ -37,7 +39,7 @@ void vsl_b_write(vsl_b_ostream &os, const bapl_dsift* p)
   }
 }
 
-void vsl_print_summary(vcl_ostream& os, const bapl_dsift *p)
+void vsl_print_summary(std::ostream& os, const bapl_dsift *p)
 {
-  os << "vsl_print_summary not yet implemented. " << vcl_flush;
+  os << "vsl_print_summary not yet implemented. " << std::flush;
 }

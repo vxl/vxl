@@ -6,8 +6,10 @@
 
 #include "mbl_data_array_wrapper.h"
 
-#include <vcl_iostream.h>
-#include <vcl_cstdlib.h>
+#include <iostream>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <cstdlib>
 #include <vcl_cassert.h>
 
 //: Default constructor
@@ -25,10 +27,10 @@ mbl_data_array_wrapper<T>::mbl_data_array_wrapper(const T* data, unsigned long n
 }
 
 //: Constructor
-// Sets up object to wrap a vcl_vector.
+// Sets up object to wrap a std::vector.
 // The data must be kept in scope, this does not take a copy.
 template<class T>
-mbl_data_array_wrapper<T>::mbl_data_array_wrapper(const vcl_vector<T > &data)
+mbl_data_array_wrapper<T>::mbl_data_array_wrapper(const std::vector<T > &data)
 {
   // There is nothing in the STL standard that says that vector<> has
   // to store its data in a contiguous memory block. However, most
@@ -115,24 +117,24 @@ void mbl_data_array_wrapper<T>::set_index(unsigned long n)
   assert(n != ((unsigned)-1));
   if (n>=n_)
   {
-    vcl_cerr<<"mbl_data_array_wrapper<T>::set_index(n) :\n"
-            <<"  n = "<<n<<" not in range 0<=n<"<<size()<<vcl_endl;
-    vcl_abort();
+    std::cerr<<"mbl_data_array_wrapper<T>::set_index(n) :\n"
+            <<"  n = "<<n<<" not in range 0<=n<"<<size()<<std::endl;
+    std::abort();
   }
 
   index_=n;
 }
 
 template <class T>
-bool mbl_data_array_wrapper<T>::is_class(vcl_string const& s) const
+bool mbl_data_array_wrapper<T>::is_class(std::string const& s) const
 {
   return s==is_a(); // no ref to parent's is_class() since that is pure virtual
 }
 
 
 #define MBL_DATA_ARRAY_WRAPPER_INSTANTIATE(T) \
-VCL_DEFINE_SPECIALIZATION vcl_string mbl_data_array_wrapper<T >::is_a() const \
-{ return vcl_string("mbl_data_array_wrapper<" #T ">"); } \
+VCL_DEFINE_SPECIALIZATION std::string mbl_data_array_wrapper<T >::is_a() const \
+{ return std::string("mbl_data_array_wrapper<" #T ">"); } \
 template class mbl_data_array_wrapper< T >
 
 #endif // mbl_data_array_wrapper_hxx_

@@ -31,7 +31,7 @@ class bwm_world
   unsigned n_objects() const { return objects_.size(); }
 
   //: the set of observable objects in the world such as feature meshes
-  vcl_vector<bwm_observable_sptr> objects() { return objects_; }
+  std::vector<bwm_observable_sptr> objects() { return objects_; }
 
   bool add(bwm_observable_sptr obj);
 
@@ -85,7 +85,7 @@ class bwm_world
   vgl_plane_3d<double> world_plane_;
 
   //: The set of objects in the world such as mesh and vsol
-  vcl_vector<bwm_observable_sptr> objects_;
+  std::vector<bwm_observable_sptr> objects_;
 
   vpgl_lvcs lvcs_;
 

@@ -15,7 +15,9 @@
 //
 //-------------------------------------------------------------------------
 
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iostream>
 #include <vul/vul_printf.h>
 
 //###############################################################
@@ -31,13 +33,13 @@ bool bmsh3d_graph::brute_force_validation ()
 
 #if 0
   //: validate if there's any self A13 loop
-  vcl_map<int, bmsh3d_edge*>::iterator SC_it = edgemap_.begin();
+  std::map<int, bmsh3d_edge*>::iterator SC_it = edgemap_.begin();
   for (; SC_it != edgemap_.end(); SC_it++) {
     bmsh3d_edge* SCurve = (*SC_it).second;
 
     if (SCurve->type() == bmsh3d_edge::SC_TYPE_A13_AXIAL &&
         SCurve->is_self_loop()) {
-      vul_printf (vcl_cerr, "\tA13 scaffold curve (%d: %d-%d) has self-loop\n",
+      vul_printf (std::cerr, "\tA13 scaffold curve (%d: %d-%d) has self-loop\n",
                   SCurve->id(),
                   SCurve->S_Vertex()->id(),
                   SCurve->E_Vertex()->id());
@@ -55,14 +57,14 @@ void bmsh3d_graph::summary_report ()
 //: Remove all loops of the input graph G.
 void remove_graph_loops (bmsh3d_graph* G)
 {
-  vul_printf (vcl_cerr, "remove_graph_loops():\n");
+  vul_printf (std::cerr, "remove_graph_loops():\n");
   unsigned int count = 0;
-  vcl_map<int, bmsh3d_edge*>::iterator it = G->edgemap().begin();
+  std::map<int, bmsh3d_edge*>::iterator it = G->edgemap().begin();
   while (it != G->edgemap().end()) {
     bmsh3d_edge* E = (*it).second;
     if (E->is_self_loop()) {
-      vul_printf (vcl_cerr, "\tremoving graph edge %d.\n", E->id());
-      vcl_map<int, bmsh3d_edge*>::iterator tmp = it;
+      vul_printf (std::cerr, "\tremoving graph edge %d.\n", E->id());
+      std::map<int, bmsh3d_edge*>::iterator tmp = it;
       tmp++;
       count++;
       G->remove_edge (E);
@@ -71,7 +73,7 @@ void remove_graph_loops (bmsh3d_graph* G)
     else
       it++;
   }
-  vul_printf (vcl_cerr, "\tdone. %u loop(s) removed.\n", count);
+  vul_printf (std::cerr, "\tdone. %u loop(s) removed.\n", count);
 }
 
 void clone_graph (bmsh3d_graph* targetG, bmsh3d_graph* inputG)
@@ -79,7 +81,7 @@ void clone_graph (bmsh3d_graph* targetG, bmsh3d_graph* inputG)
   clone_ptset (targetG, inputG);
 
   //Clone all graph edges.
-  vcl_map<int, bmsh3d_edge*>::iterator it = inputG->edgemap().begin();
+  std::map<int, bmsh3d_edge*>::iterator it = inputG->edgemap().begin();
   for (; it != inputG->edgemap().end(); it++) {
     bmsh3d_edge* E = (*it).second;
     bmsh3d_vertex* sV = E->vertices(0);

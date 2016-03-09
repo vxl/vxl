@@ -19,9 +19,11 @@
 
 #include <brdb/brdb_value.h>
 
-#include <vcl_string.h>
-#include <vcl_iostream.h>
-#include <vcl_fstream.h>
+#include <string>
+#include <iostream>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <fstream>
 
 #include <boxm/boxm_scene_parser.h>
 #include <boxm/algo/boxm_compute_scene_difference.h>
@@ -41,13 +43,13 @@ bool boxm_compute_scene_difference_process_cons(bprb_func_process& pro)
 
   // process takes 1 input and no outputs
   //input[0]: The scene
-  vcl_vector<vcl_string> input_types_(n_inputs_);
+  std::vector<std::string> input_types_(n_inputs_);
   input_types_[0] = "boxm_scene_base_sptr";
   input_types_[1] = "boxm_scene_base_sptr";
   input_types_[2] = "boxm_scene_base_sptr";
   input_types_[3] = "float";
 
-  vcl_vector<vcl_string> output_types_(n_outputs_);
+  std::vector<std::string> output_types_(n_outputs_);
   return pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
 }
 
@@ -57,7 +59,7 @@ bool boxm_compute_scene_difference_process(bprb_func_process& pro)
   using namespace boxm_compute_scene_difference_process_globals;
 
   if ( pro.n_inputs() < n_inputs_ ){
-    vcl_cout << pro.name() << "boxm_compute_scene_difference_process: The input number should be " << n_inputs_<< vcl_endl;
+    std::cout << pro.name() << "boxm_compute_scene_difference_process: The input number should be " << n_inputs_<< std::endl;
     return false;
   }
 
@@ -80,7 +82,7 @@ bool boxm_compute_scene_difference_process(bprb_func_process& pro)
     boxm_compute_scene_difference(*scene1,*scene2,*sceneout,t);
   }
   else {
-    vcl_cout << "boxm_compute_scene_difference_process: undefined APM type" << vcl_endl;
+    std::cout << "boxm_compute_scene_difference_process: undefined APM type" << std::endl;
     return false;
   }
 

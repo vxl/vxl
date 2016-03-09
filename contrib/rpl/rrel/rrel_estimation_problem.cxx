@@ -3,7 +3,9 @@
 
 #include <rrel/rrel_wls_obj.h>
 
-#include <vcl_vector.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <vector>
 #include <vcl_cassert.h>
 
 rrel_estimation_problem::rrel_estimation_problem( unsigned int dof,
@@ -30,10 +32,10 @@ rrel_estimation_problem::~rrel_estimation_problem( )
 
 
 void
-rrel_estimation_problem::compute_weights( const vcl_vector<double>& residuals,
+rrel_estimation_problem::compute_weights( const std::vector<double>& residuals,
                                           const rrel_wls_obj* obj,
                                           double scale,
-                                          vcl_vector<double>& weights ) const
+                                          std::vector<double>& weights ) const
 {
   if ( residuals.size() != weights.size())
     weights.resize( residuals.size() );
@@ -55,7 +57,7 @@ rrel_estimation_problem::compute_weights( const vcl_vector<double>& residuals,
 }
 
 
-const vcl_vector<double>&
+const std::vector<double>&
 rrel_estimation_problem::prior_multiple_scales() const
 {
   assert( scale_type_ == MULTIPLE );
@@ -70,10 +72,10 @@ rrel_estimation_problem::prior_scale() const
 }
 
 void
-rrel_estimation_problem::set_prior_multiple_scales( const vcl_vector<double>& scales )
+rrel_estimation_problem::set_prior_multiple_scales( const std::vector<double>& scales )
 {
   if ( ! multiple_scales_ ) {
-    multiple_scales_ = new vcl_vector<double>;
+    multiple_scales_ = new std::vector<double>;
   }
   *multiple_scales_ = scales;
   scale_type_ = MULTIPLE;

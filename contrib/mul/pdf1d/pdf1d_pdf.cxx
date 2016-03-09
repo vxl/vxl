@@ -10,8 +10,10 @@
 // \endverbatim
 
 #include "pdf1d_pdf.h"
-#include <vcl_cstdlib.h>
-#include <vcl_cmath.h>
+#include <cstdlib>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <cmath>
 #include <vcl_cassert.h>
 #include <vsl/vsl_indent.h>
 #include <vsl/vsl_binary_loader.h>
@@ -36,7 +38,7 @@ pdf1d_pdf::~pdf1d_pdf()
 
 double pdf1d_pdf::operator()(double x) const
 {
-  return vcl_exp(log_p(x));
+  return std::exp(log_p(x));
 }
 
 //: Cumulative Probability (P(x'<x) for x' drawn from the distribution)
@@ -83,7 +85,7 @@ double pdf1d_pdf::log_prob_thresh(double pass_proportion) const
   {
     //We want at n_stat samples outside the cut-off.
     pass_proportion = 1 - pass_proportion;
-    nSamples = (unsigned)vcl_ceil((double)n_stat / pass_proportion);
+    nSamples = (unsigned)std::ceil((double)n_stat / pass_proportion);
 
     // Find lowest values
     mbl_priority_bounded_queue<double> lowest(n_stat+1);
@@ -98,10 +100,10 @@ double pdf1d_pdf::log_prob_thresh(double pass_proportion) const
   else
   {
     //We want at n_stat samples inside the cut-off.
-    nSamples = (unsigned)vcl_ceil((double)n_stat / pass_proportion);
+    nSamples = (unsigned)std::ceil((double)n_stat / pass_proportion);
 
     // Find highest values
-    mbl_priority_bounded_queue<double, vcl_vector<double>, vcl_greater<double> >
+    mbl_priority_bounded_queue<double, std::vector<double>, std::greater<double> >
       highest(n_stat+1);
     for (unsigned i=0; i < nSamples; i++)
       highest.push(operator()(sampler->sample()));
@@ -117,8 +119,8 @@ double pdf1d_pdf::log_prob_thresh(double pass_proportion) const
   // check interpolation is not extrapolation.
   assert (0.0 <= pass_proportion*nSamples - n_stat &&
           pass_proportion*nSamples - n_stat <= 1.0);
-  return (n_stat + 1.0 - pass_proportion*nSamples) * vcl_log(left)
-         + (pass_proportion*nSamples - n_stat) * vcl_log(right);
+  return (n_stat + 1.0 - pass_proportion*nSamples) * std::log(left)
+         + (pass_proportion*nSamples - n_stat) * std::log(right);
 }
 
 //=======================================================================
@@ -139,9 +141,9 @@ void pdf1d_pdf::get_samples(vnl_vector<double>& x) const
 //: Write values (x,p(x)) to text file suitable for plotting
 //  Evaluate pdf at n points in range [min_x,max_x] and write a text file,
 //  each line of which is {x p(x)}, suitable for plotting with many graph packages
-bool pdf1d_pdf::write_plot_file(const vcl_string& plot_file, double min_x, double max_x, int n) const
+bool pdf1d_pdf::write_plot_file(const std::string& plot_file, double min_x, double max_x, int n) const
 {
-  vcl_ofstream ofs(plot_file.c_str(),vcl_ios::out);
+  std::ofstream ofs(plot_file.c_str(),std::ios::out);
   if (!ofs) return false;
   assert(n>1);
 
@@ -173,15 +175,15 @@ void vsl_add_to_binary_loader(const pdf1d_pdf& b)
 
 //=======================================================================
 
-vcl_string pdf1d_pdf::is_a() const
+std::string pdf1d_pdf::is_a() const
 {
-  static vcl_string class_name_ = "pdf1d_pdf";
+  static std::string class_name_ = "pdf1d_pdf";
   return class_name_;
 }
 
 //=======================================================================
 
-bool pdf1d_pdf::is_class(vcl_string const& s) const
+bool pdf1d_pdf::is_class(std::string const& s) const
 {
   return s==pdf1d_pdf::is_a();
 }
@@ -189,7 +191,7 @@ bool pdf1d_pdf::is_class(vcl_string const& s) const
 //=======================================================================
 
   // required if data is present in this base class
-void pdf1d_pdf::print_summary(vcl_ostream& os) const
+void pdf1d_pdf::print_summary(std::ostream& os) const
 {
   os << "  Mean: " << mean_
      << "  Variance: " << var_;
@@ -221,9 +223,9 @@ void pdf1d_pdf::b_read(vsl_b_istream& bfs)
       vsl_b_read(bfs,var_);
       break;
     default:
-      vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, pdf1d_pdf &)\n"
+      std::cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, pdf1d_pdf &)\n"
                << "           Unknown version number "<< version << '\n';
-      bfs.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
+      bfs.is().clear(std::ios::badbit); // Set an unrecoverable IO error on stream
       return;
   }
 }
@@ -245,7 +247,7 @@ void vsl_b_read(vsl_b_istream& bfs, pdf1d_pdf& b)
 
 //=======================================================================
 
-void vsl_print_summary(vcl_ostream& os,const pdf1d_pdf& b)
+void vsl_print_summary(std::ostream& os,const pdf1d_pdf& b)
 {
   os << b.is_a() << ": ";
   vsl_indent_inc(os);
@@ -255,7 +257,7 @@ void vsl_print_summary(vcl_ostream& os,const pdf1d_pdf& b)
 
 //=======================================================================
 
-void vsl_print_summary(vcl_ostream& os,const pdf1d_pdf* b)
+void vsl_print_summary(std::ostream& os,const pdf1d_pdf* b)
 {
   if (b)
     vsl_print_summary(os, *b);
@@ -266,7 +268,7 @@ void vsl_print_summary(vcl_ostream& os,const pdf1d_pdf* b)
 //=======================================================================
 
 //: Stream output operator for class reference
-vcl_ostream& operator<<(vcl_ostream& os,const pdf1d_pdf& b)
+std::ostream& operator<<(std::ostream& os,const pdf1d_pdf& b)
 {
   vsl_print_summary(os,b);
   return os;
@@ -275,7 +277,7 @@ vcl_ostream& operator<<(vcl_ostream& os,const pdf1d_pdf& b)
 //=======================================================================
 
 //: Stream output operator for class pointer
-vcl_ostream& operator<<(vcl_ostream& os,const pdf1d_pdf* b)
+std::ostream& operator<<(std::ostream& os,const pdf1d_pdf* b)
 {
   vsl_print_summary(os,b);
   return os;
@@ -293,15 +295,15 @@ double pdf1d_pdf::inverse_cdf(double P) const
   // P[ |x-mean| >= k] <= var/k^2.
     double x_init;
     if (P < 0.5)
-      x_init = mean() - vcl_sqrt(variance() / (2*P));
+      x_init = mean() - std::sqrt(variance() / (2*P));
     else
-      x_init = mean() + vcl_sqrt(variance() / (2*(1-P)));
+      x_init = mean() + std::sqrt(variance() / (2*(1-P)));
 
     double f_init = cdf(x_init);
 
     // guess initial step size assuming a rectangular distribution.
     // slope = 1 / sqrt(12 * variance)
-    double step = 2.0 * vnl_math::abs(f_init - P)*vcl_sqrt(12 * variance());
+    double step = 2.0 * vnl_math::abs(f_init - P)*std::sqrt(12 * variance());
 
     double x_above, x_below;
     if (f_init > P)
@@ -377,8 +379,8 @@ double pdf1d_pdf::inverse_cdf(double P) const
       else
         x_above=x_middle;
     }
-    vcl_cerr << "ERROR: pdf1d_pdf::inverse_cdf() failed to converge.\n";
-    vcl_abort();
+    std::cerr << "ERROR: pdf1d_pdf::inverse_cdf() failed to converge.\n";
+    std::abort();
     return 0.0; // dummy return
   }
   else // Use sampling.
@@ -390,7 +392,7 @@ double pdf1d_pdf::inverse_cdf(double P) const
     if (P < 0.5)
     {
       // we want n_stat samples below P
-      n = vnl_math::rnd(vcl_ceil(n_stat / P));
+      n = vnl_math::rnd(std::ceil(n_stat / P));
 
       // find lowest values
       mbl_priority_bounded_queue<double> lowest(n_stat+1);
@@ -406,10 +408,10 @@ double pdf1d_pdf::inverse_cdf(double P) const
     {
       // we want n_stat samples above P
       P = 1.0 - P;
-      n = vnl_math::rnd(vcl_ceil(n_stat / P));
+      n = vnl_math::rnd(std::ceil(n_stat / P));
 
       // find highest values
-      mbl_priority_bounded_queue<double, vcl_vector<double>, vcl_greater<double> >
+      mbl_priority_bounded_queue<double, std::vector<double>, std::greater<double> >
         highest(n_stat+1);
       for (unsigned i=0; i < n; i++)
         highest.push(sampler->sample());

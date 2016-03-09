@@ -5,16 +5,18 @@
 // \file
 #include "bpgl_list.h"
 
-#include <vcl_fstream.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <fstream>
 
 //-------------------------------------------
 template <class T>
 bool
 bpgl_write_list(
-  const vcl_vector<T>& list,
-  vcl_string file )
+  const std::vector<T>& list,
+  std::string file )
 {
-  vcl_ofstream ofp( file.c_str() );
+  std::ofstream ofp( file.c_str() );
   if ( !ofp.good() )
     return false;
   for ( unsigned int i = 0; i < list.size(); ++i )
@@ -27,10 +29,10 @@ bpgl_write_list(
 template <class T>
 bool
 bpgl_read_list(
-  vcl_vector<T>& list,
-  vcl_string file )
+  std::vector<T>& list,
+  std::string file )
 {
-  vcl_ifstream ifp( file.c_str() );
+  std::ifstream ifp( file.c_str() );
   if ( !ifp.good() )
     return false;
 
@@ -49,7 +51,7 @@ bpgl_read_list(
 }
 
 #define BPGL_LIST_INSTANTIATE(T) \
-template bool bpgl_read_list(vcl_vector<T >&, vcl_string ); \
-template bool bpgl_write_list(const vcl_vector<T >&, vcl_string )
+template bool bpgl_read_list(std::vector<T >&, std::string ); \
+template bool bpgl_write_list(const std::vector<T >&, std::string )
 
 #endif // bpgl_list_hxx_

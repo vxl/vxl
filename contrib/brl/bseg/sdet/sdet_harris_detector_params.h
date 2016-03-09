@@ -11,7 +11,9 @@
 //
 //-----------------------------------------------------------------------------
 #include <gevd/gevd_param_mixin.h>
-#include <vcl_iosfwd.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iosfwd>
 
 class sdet_harris_detector_params : public gevd_param_mixin
 {
@@ -28,7 +30,7 @@ class sdet_harris_detector_params : public gevd_param_mixin
 
   bool SanityCheck();
   friend
-    vcl_ostream& operator<<(vcl_ostream&,const sdet_harris_detector_params& dp);
+    std::ostream& operator<<(std::ostream&,const sdet_harris_detector_params& dp);
  protected:
   void InitParams(float sigma,
                   float thresh,

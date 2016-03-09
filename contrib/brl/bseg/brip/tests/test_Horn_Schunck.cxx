@@ -1,6 +1,8 @@
 // This is brl/bseg/brip/tests/test_Horn_Schunck.cxx
-#include <vcl_iostream.h>
-#include <vcl_iomanip.h>
+#include <iostream>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iomanip>
 #include <vnl/vnl_math.h>
 #include <vil/vil_image_view.h>
 #include <brip/brip_vil_float_ops.h>
@@ -36,9 +38,9 @@ static void test_Horn_Schunck()
 
   for (int y =0; y<h; y++)
     for (int x = 0; x<w; x++)
-      ang(x,y) = float(D_R*vcl_atan2(vy(x,y), vx(x,y)));
+      ang(x,y) = float(D_R*std::atan2(vy(x,y), vx(x,y)));
 
-  vcl_cout << vx(5,5)<<' '<< vx(4,5)<<' '<< vx(5,10)<<' '<< vx(6,11)<< '\n'
+  std::cout << vx(5,5)<<' '<< vx(4,5)<<' '<< vx(5,10)<<' '<< vx(6,11)<< '\n'
            << vy(5,5)<<' '<< vy(4,5)<<' '<< vy(5,10)<<' '<< vy(6,11)<< '\n'
            << vx(10,10)<< ' '<< vx(10,11)<< ' '<< vx(10,5)<<' '<< vx(9,4)<<'\n'
            << vy(10,10)<< ' '<< vy(10,11)<< ' '<< vy(10,5)<<' '<< vy(9,4)<<'\n'
@@ -48,8 +50,8 @@ static void test_Horn_Schunck()
   for (int y =0; y<h; y++)
   {
     for (int x = 0; x<w; x++)
-      vcl_cout << ' ' << vcl_setw(3) << int(ang(x,y));
-    vcl_cout << '\n';
+      std::cout << ' ' << std::setw(3) << int(ang(x,y));
+    std::cout << '\n';
   }
   TEST_NEAR("ang(5,5)", ang(5,5), -175.95 , 0.005);
   TEST_NEAR("ang(4,5)", ang(4,5), -179.709, 0.005);

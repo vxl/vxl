@@ -22,9 +22,11 @@
 // directory utility
 #include <vul/vul_timer.h>
 #include <vcl_where_root_dir.h>
-#include <vcl_fstream.h>
-#include <vcl_algorithm.h>
-#include <vcl_sstream.h>
+#include <fstream>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <algorithm>
+#include <sstream>
 #include <bocl/bocl_device.h>
 #include <bocl/bocl_kernel.h>
 
@@ -39,7 +41,7 @@ bool boxm2_ocl_change_detection_process2_cons(bprb_func_process& pro)
   using namespace boxm2_ocl_change_detection_process2_globals;
 
   // process takes 9 inputs and two outputs
-  vcl_vector<vcl_string> input_types_(n_inputs_);
+  std::vector<std::string> input_types_(n_inputs_);
   input_types_[0] = "bocl_device_sptr";
   input_types_[1] = "boxm2_scene_sptr";
   input_types_[2] = "boxm2_opencl_cache_sptr";
@@ -50,11 +52,11 @@ bool boxm2_ocl_change_detection_process2_cons(bprb_func_process& pro)
   input_types_[7] = "float";                        // near factor ( # of pixels should map to the finest voxel )
   input_types_[8] = "float";                        // far factor (  # of pixels should map to the finest voxel )
 
-  vcl_vector<vcl_string>  output_types_(n_outputs_);
+  std::vector<std::string>  output_types_(n_outputs_);
   output_types_[0] = "vil_image_view_base_sptr";  // prob of change image
   output_types_[1] = "vil_image_view_base_sptr";  // vis image
   bool good = pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
-  brdb_value_sptr identifier        = new brdb_value_t<vcl_string>("");
+  brdb_value_sptr identifier        = new brdb_value_t<std::string>("");
   pro.set_input(5, identifier);
   brdb_value_sptr idx        = new brdb_value_t<bool>(false);
   pro.set_input(6, idx);
@@ -70,7 +72,7 @@ bool boxm2_ocl_change_detection_process2(bprb_func_process& pro)
 {
   using namespace boxm2_ocl_change_detection_process2_globals;
   if ( pro.n_inputs() < n_inputs_ ) {
-    vcl_cout << pro.name() << ": The input number should be " << n_inputs_<< vcl_endl;
+    std::cout << pro.name() << ": The input number should be " << n_inputs_<< std::endl;
     return false;
   }
 
@@ -81,7 +83,7 @@ bool boxm2_ocl_change_detection_process2(bprb_func_process& pro)
   boxm2_opencl_cache_sptr   opencl_cache  = pro.get_input<boxm2_opencl_cache_sptr>(i++);
   vpgl_camera_double_sptr   cam           = pro.get_input<vpgl_camera_double_sptr>(i++);
   vil_image_view_base_sptr  img           = pro.get_input<vil_image_view_base_sptr>(i++);
-  vcl_string identifier = pro.get_input<vcl_string>(i++);
+  std::string identifier = pro.get_input<std::string>(i++);
    bool  max_density           = pro.get_input<bool>(i++);
   float                    nearfactor   = pro.get_input<float>(i++);
   float                    farfactor    = pro.get_input<float>(i++);
@@ -105,7 +107,7 @@ bool boxm2_ocl_change_detection_process2(bprb_func_process& pro)
                                               cam,
                                               img, identifier,
                                               max_density, nearfactor,  farfactor );
-  vcl_cout<<" change time: "<<t.all()<<" ms"<<vcl_endl;
+  std::cout<<" change time: "<<t.all()<<" ms"<<std::endl;
   // set outputs
   i=0;
   pro.set_output_val<vil_image_view_base_sptr>(i++, change_img);

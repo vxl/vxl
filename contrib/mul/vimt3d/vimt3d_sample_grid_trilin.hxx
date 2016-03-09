@@ -97,10 +97,10 @@ inline void vimt3d_sample_grid_trilin_ic_no_checks(
   unsigned nu, unsigned nv, unsigned nw)
 {
   unsigned np = image.nplanes();
-  vcl_ptrdiff_t istep = image.istep();
-  vcl_ptrdiff_t jstep = image.jstep();
-  vcl_ptrdiff_t kstep = image.kstep();
-  vcl_ptrdiff_t pstep = image.planestep();
+  std::ptrdiff_t istep = image.istep();
+  std::ptrdiff_t jstep = image.jstep();
+  std::ptrdiff_t kstep = image.kstep();
+  std::ptrdiff_t pstep = image.planestep();
 
   vec.set_size(nu*nv*nw*np);
   vecType* vc = vec.begin();
@@ -161,10 +161,10 @@ inline void vimt3d_sample_grid_trilin_ic_safe(
   unsigned ni = image.ni();
   unsigned nj = image.nj();
   unsigned nk = image.nk();
-  vcl_ptrdiff_t istep = image.istep();
-  vcl_ptrdiff_t jstep = image.jstep();
-  vcl_ptrdiff_t kstep = image.kstep();
-  vcl_ptrdiff_t pstep = image.planestep();
+  std::ptrdiff_t istep = image.istep();
+  std::ptrdiff_t jstep = image.jstep();
+  std::ptrdiff_t kstep = image.kstep();
+  std::ptrdiff_t pstep = image.planestep();
 
   vec.set_size(nu*nv*nw*np);
   vecType* vc = vec.begin();
@@ -224,10 +224,10 @@ inline void vimt3d_sample_grid_trilin_ic_extend(
   unsigned ni = image.ni();
   unsigned nj = image.nj();
   unsigned nk = image.nk();
-  vcl_ptrdiff_t istep = image.istep();
-  vcl_ptrdiff_t jstep = image.jstep();
-  vcl_ptrdiff_t kstep = image.kstep();
-  vcl_ptrdiff_t pstep = image.planestep();
+  std::ptrdiff_t istep = image.istep();
+  std::ptrdiff_t jstep = image.jstep();
+  std::ptrdiff_t kstep = image.kstep();
+  std::ptrdiff_t pstep = image.planestep();
 
   vec.set_size(nu*nv*nw*np);
   vecType* vc = vec.begin();
@@ -288,10 +288,10 @@ inline void vimt3d_sample_grid_trilin_ic_edgena(
   unsigned ni = image.ni();
   unsigned nj = image.nj();
   unsigned nk = image.nk();
-  vcl_ptrdiff_t istep = image.istep();
-  vcl_ptrdiff_t jstep = image.jstep();
-  vcl_ptrdiff_t kstep = image.kstep();
-  vcl_ptrdiff_t pstep = image.planestep();
+  std::ptrdiff_t istep = image.istep();
+  std::ptrdiff_t jstep = image.jstep();
+  std::ptrdiff_t kstep = image.kstep();
+  std::ptrdiff_t pstep = image.planestep();
 
   vec.set_size(nu*nv*nw*np);
   vecType* vc = vec.begin();

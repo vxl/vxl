@@ -1,6 +1,8 @@
 // This is mul/mbl/tests/test_progress.cxx
-#include <vcl_iostream.h>
-#include <vcl_iomanip.h>
+#include <iostream>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iomanip>
 #include <mbl/mbl_progress_callback.h>
 #include <testlib/testlib_test.h>
 
@@ -10,20 +12,20 @@ static bool monotonic=true;
 static bool below_zero=false;
 void mbl_test_progress_callback(double d)
 {
-  vcl_cout << d;
+  std::cout << d;
   if (d<=last_reported_progress)
   {
     monotonic=false;
-    vcl_cout << " NOT UP";
+    std::cout << " NOT UP";
   }
   if (d<0) below_zero = true;
   last_reported_progress = d;
-  vcl_cout << vcl_endl;
+  std::cout << std::endl;
 }
 
 void test_progress()
 {
-  vcl_cout << "*******************************\n"
+  std::cout << "*******************************\n"
            << " Testing mbl_progress_callback\n"
            << "*******************************\n";
 
@@ -32,29 +34,29 @@ void test_progress()
 
   progress.set_estimated_iterations("L0", 3, "");
 
-  vcl_cout << "inc L0" << vcl_endl;
-  vcl_cout << vcl_setprecision(16);
+  std::cout << "inc L0" << std::endl;
+  std::cout << std::setprecision(16);
   progress.increment_progress("L0");
   progress.set_estimated_iterations("L1a", 9, "");
   for (unsigned i=0; i<5; ++i)
   {
-    vcl_cout << "inc L1a" << vcl_endl;
+    std::cout << "inc L1a" << std::endl;
     progress.increment_progress("L1a");
   }
   TEST_NEAR("Progress is near middle", last_reported_progress, 0.375, 0.05);
   progress.end_progress("L1a");
 
-  vcl_cout << "inc L0" << vcl_endl;
+  std::cout << "inc L0" << std::endl;
   progress.increment_progress("L0");
   progress.set_estimated_iterations("L1b", 10, "");
   for (unsigned i=0; i<15; ++i)
   {
-    vcl_cout << "inc L1b" << vcl_endl;
+    std::cout << "inc L1b" << std::endl;
     progress.increment_progress("L1b");
   }
   progress.end_progress("L1b");
 
-  vcl_cout << "inc L0" << vcl_endl;
+  std::cout << "inc L0" << std::endl;
   progress.increment_progress("L0");
   progress.end_progress("L0");
 

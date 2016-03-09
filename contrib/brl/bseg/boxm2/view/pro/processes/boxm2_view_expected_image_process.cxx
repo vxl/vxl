@@ -9,7 +9,9 @@
 #include <vnl/vnl_math.h>
 
 #include <boxm2/view/boxm2_include_glew.h>
-#include <vcl_fstream.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <fstream>
 #include <boxm2/ocl/boxm2_opencl_cache.h>
 #include <boxm2/boxm2_scene.h>
 #include <boxm2/boxm2_block.h>
@@ -45,7 +47,7 @@ bool boxm2_view_expected_image_process_cons(bprb_func_process& pro)
   using namespace boxm2_view_expected_image_process_globals;
 
   //process takes 1 input
-  vcl_vector<vcl_string> input_types_(n_inputs_);
+  std::vector<std::string> input_types_(n_inputs_);
   input_types_[0] = "bocl_device_sptr";
   input_types_[1] = "boxm2_scene_sptr";
   input_types_[2] = "boxm2_opencl_cache_sptr";
@@ -56,7 +58,7 @@ bool boxm2_view_expected_image_process_cons(bprb_func_process& pro)
 
   // process has 1 output:
   // output[0]: scene sptr
-  vcl_vector<vcl_string>  output_types_(n_outputs_);
+  std::vector<std::string>  output_types_(n_outputs_);
 
   return pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
 }
@@ -66,7 +68,7 @@ bool boxm2_view_expected_image_process(bprb_func_process& pro)
   using namespace boxm2_view_expected_image_process_globals;
 
   if ( pro.n_inputs() < n_inputs_ ) {
-    vcl_cout << pro.name() << ": The input number should be " << n_inputs_<< vcl_endl;
+    std::cout << pro.name() << ": The input number should be " << n_inputs_<< std::endl;
     return false;
   }
 
@@ -90,7 +92,7 @@ bool boxm2_view_expected_image_process(bprb_func_process& pro)
     int my_argc = 1;
     char** my_argv = new char*[1];
     my_argv[0] = new char[13];
-    vcl_strcpy(my_argv[0], "--mfc-use-gl");
+    std::strcpy(my_argv[0], "--mfc-use-gl");
     vgui::init(my_argc, my_argv);
 
     //create window, attach the new tableau and status bar
@@ -100,7 +102,7 @@ bool boxm2_view_expected_image_process(bprb_func_process& pro)
     win->show();
 
     GLboolean bGLEW = glewIsSupported("GL_VERSION_2_0  GL_ARB_pixel_buffer_object");
-    vcl_cout << "GLEW is supported= " << bGLEW << vcl_endl;
+    std::cout << "GLEW is supported= " << bGLEW << std::endl;
     device->context() = boxm2_view_utils::create_clgl_context(*(device->device_id()));
 
     return vgui::run();

@@ -18,7 +18,7 @@
 #include<pop/pop_point_2d.h>
 #include<pop/pop_geometric_object.h>
 #include<pop/pop_vertex.h>
-#include<vcl_list.h>
+#include<std::list.h>
 #include<pop/pop_parameter.h>
 
 //: this is a 2d point with a coordinate system
@@ -27,7 +27,7 @@ class pop_point_2d:public vgl_point_2d<double>, public pop_geometric_object
 {
  public:
   //: constructor
-  pop_point_2d(pop_vertex *coordinate_system,vcl_vector<pop_parameter*> &params);
+  pop_point_2d(pop_vertex *coordinate_system,std::vector<pop_parameter*> &params);
 
   //: constructor
   // this is used when we want to represent a non parametric result

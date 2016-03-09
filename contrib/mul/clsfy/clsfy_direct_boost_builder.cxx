@@ -19,9 +19,11 @@
 #include "clsfy_direct_boost.h"
 #include "clsfy_builder_1d.h"
 
-#include <vcl_iostream.h>
-#include <vcl_cstdlib.h> // for vcl_abort()
-#include <vcl_algorithm.h>
+#include <iostream>
+#include <cstdlib> // for std::abort()
+#include <vcl_compiler.h>
+#include <iostream>
+#include <algorithm>
 #include <vcl_cassert.h>
 #include <mbl/mbl_file_data_collector.h>
 #include <mbl/mbl_data_collector_list.h>
@@ -43,23 +45,23 @@ clsfy_direct_boost_builder::~clsfy_direct_boost_builder()
 
 //=======================================================================
 
-bool clsfy_direct_boost_builder::is_class(vcl_string const& s) const
+bool clsfy_direct_boost_builder::is_class(std::string const& s) const
 {
   return s == clsfy_direct_boost_builder::is_a() || clsfy_builder_base::is_class(s);
 }
 
 //=======================================================================
 
-vcl_string clsfy_direct_boost_builder::is_a() const
+std::string clsfy_direct_boost_builder::is_a() const
 {
-  return vcl_string("clsfy_direct_boost_builder");
+  return std::string("clsfy_direct_boost_builder");
 }
 
 
 //: Calc similarity between two 1d input vectors
 double clsfy_direct_boost_builder::calc_prop_same(
-                   const vcl_vector<bool>& vec1,
-                   const vcl_vector<bool>& vec2) const
+                   const std::vector<bool>& vec1,
+                   const std::vector<bool>& vec2) const
 {
   unsigned n = vec1.size();
   assert( n==vec2.size() );
@@ -76,11 +78,11 @@ double clsfy_direct_boost_builder::calc_prop_same(
 double clsfy_direct_boost_builder::calc_threshold(
                    clsfy_direct_boost& strong_classifier,
                    mbl_data_wrapper<vnl_vector<double> >& inputs,
-                   const vcl_vector<unsigned>& outputs) const
+                   const std::vector<unsigned>& outputs) const
 {
   // calc classification score for each example
   unsigned long n = inputs.size();
-  vcl_vector<double> scores(n);
+  std::vector<double> scores(n);
   inputs.reset();
   for (unsigned long i=0;i<n;++i)
   {
@@ -94,7 +96,7 @@ double clsfy_direct_boost_builder::calc_threshold(
     if ( outputs[i] == 1 ) ++tot_pos;
 
   // then find threshold that gives min_error over training set
-  vcl_vector<int> index;
+  std::vector<int> index;
   mbl_index_sort(scores, index);
 
   unsigned int n_pos=0;
@@ -104,22 +106,22 @@ double clsfy_direct_boost_builder::calc_threshold(
   for (unsigned long i=0;i<n;++i)
   {
 #ifdef DEBUG
-    vcl_cout<<" scores[ index["<<i<<"] ] = "<< scores[ index[i] ]<<" ; "
+    std::cout<<" scores[ index["<<i<<"] ] = "<< scores[ index[i] ]<<" ; "
             <<"outputs[ index["<<i<<"] ] = "<<outputs[ index[i] ]<<'\n';
 #endif
     if ( outputs[ index[i] ] == 0 ) ++n_neg;
     else if ( outputs[ index[i] ] == 1 ) ++n_pos;
     else
     {
-      vcl_cout<<"ERROR: clsfy_direct_boost_basic_builder::calc_threshold()\n"
+      std::cout<<"ERROR: clsfy_direct_boost_basic_builder::calc_threshold()\n"
               <<"Unrecognised output value\n"
               <<"outputs[ index["<<i<<"] ] = outputs["<<index[i]<<"] = "
               <<outputs[index[i]]<<'\n';
-      vcl_abort();
+      std::abort();
     }
 
 #ifdef DEBUG
-    vcl_cout<<"n = "<<n<<", n_pos= "<<n_pos<<", n_neg= "<<n_neg<<'\n';
+    std::cout<<"n = "<<n<<", n_pos= "<<n_pos<<", n_neg= "<<n_neg<<'\n';
 #endif
     unsigned int error= n_neg+(tot_pos-n_pos);
 
@@ -128,14 +130,14 @@ double clsfy_direct_boost_builder::calc_threshold(
       min_error= error;
       min_thresh = scores[ index[i] ] + 0.001 ;
 #ifdef DEBUG
-      vcl_cout<<"error= "<<error<<", min_thresh= "<<min_thresh<<'\n';
+      std::cout<<"error= "<<error<<", min_thresh= "<<min_thresh<<'\n';
 #endif
     }
   }
 
   assert( n_pos + n_neg == n );
 #ifdef DEBUG
-  vcl_cout<<"min_error= "<<min_error<<", min_thresh= "<<min_thresh<<'\n';
+  std::cout<<"min_error= "<<min_error<<", min_thresh= "<<min_thresh<<'\n';
 #endif
 
   return min_thresh;
@@ -148,7 +150,7 @@ double clsfy_direct_boost_builder::calc_threshold(
 double clsfy_direct_boost_builder::build(clsfy_classifier_base& model,
                                          mbl_data_wrapper<vnl_vector<double> >& inputs,
                                          unsigned /* nClasses */,
-                                         const vcl_vector<unsigned> &outputs) const
+                                         const std::vector<unsigned> &outputs) const
 {
   // nb  ignore nClasses=1, ie always binary classifier
 
@@ -159,41 +161,41 @@ double clsfy_direct_boost_builder::build(clsfy_classifier_base& model,
   // check parameters are OK
   if ( max_n_clfrs_ < 0 )
   {
-    vcl_cout<<"Error: clsfy_direct_boost_builder::build\n"
+    std::cout<<"Error: clsfy_direct_boost_builder::build\n"
             <<"max_n_clfrs_ = "<<max_n_clfrs_<<" ie < 0\n"
             <<"set using set_max_n_clfrs()\n";
-    vcl_abort();
+    std::abort();
   }
   else
   {
-    vcl_cout<<"Maximum number of classifiers to be found by Adaboost ="
+    std::cout<<"Maximum number of classifiers to be found by Adaboost ="
             <<max_n_clfrs_<<'\n';
   }
 
   if ( weak_builder_ == VXL_NULLPTR )
   {
-    vcl_cout<<"Error: clsfy_direct_boost_builder::build\n"
+    std::cout<<"Error: clsfy_direct_boost_builder::build\n"
             <<"weak_builder_ pointer has not been set\n"
             <<"need to provide a builder to build each weak classifier\n"
             <<"set using set_weak_builder()\n";
-    vcl_abort();
+    std::abort();
   }
   else
   {
-    vcl_cout<<"Weak learner used by AdaBoost ="
+    std::cout<<"Weak learner used by AdaBoost ="
             <<weak_builder_->is_a()<<'\n';
   }
 
   if ( bs_ < 0 )
   {
-    vcl_cout<<"Error: clsfy_direct_boost_builder::build\n"
+    std::cout<<"Error: clsfy_direct_boost_builder::build\n"
             <<"bs_ = "<<bs_<<" ie < 0\n"
             <<"set using set_batch_size()\n";
-    vcl_abort();
+    std::abort();
   }
   else
   {
-    vcl_cout<<"Batch size when sorting data =" <<bs_<<'\n';
+    std::cout<<"Batch size when sorting data =" <<bs_<<'\n';
   }
 
 
@@ -202,13 +204,13 @@ double clsfy_direct_boost_builder::build(clsfy_classifier_base& model,
   assert (max_n_clfrs_ >= 0);
 
   // first arrange the data in the form
-  // vcl_vector< < vcl_vector< vbl_triple<double,int,int> > > > data
+  // std::vector< < std::vector< vbl_triple<double,int,int> > > > data
   // + vnl_vector wts
   // then sort all data once, then build the classifier
 
   // number of examples
   unsigned long n = inputs.size();
-  //vcl_cout<<"n = "<<n<<vcl_endl;
+  //std::cout<<"n = "<<n<<std::endl;
 
   // Dimensionality of data
   inputs.reset();
@@ -216,9 +218,9 @@ double clsfy_direct_boost_builder::build(clsfy_classifier_base& model,
 
   //need file data wrapper instead of old vector
   //data stored on disk NOT ram
-  //vcl_vector< vcl_vector<vbl_triple<double,int,int> > > data(d);
+  //std::vector< std::vector<vbl_triple<double,int,int> > > data(d);
 
-  vcl_string temp_path= "temp.dat";
+  std::string temp_path= "temp.dat";
   mbl_file_data_collector< vnl_vector<double> >
               file_collector( temp_path );
 
@@ -229,13 +231,13 @@ double clsfy_direct_boost_builder::build(clsfy_classifier_base& model,
 
   if (save_data_to_disk_)
   {
-    vcl_cout<<"saving data to disk!\n";
+    std::cout<<"saving data to disk!\n";
     collector= &file_collector;
   }
   else
   {
     //bs_ = n ;
-    vcl_cout<<"saving data to ram!\n";
+    std::cout<<"saving data to ram!\n";
     collector= &ram_collector;
   }
 
@@ -244,17 +246,17 @@ double clsfy_direct_boost_builder::build(clsfy_classifier_base& model,
   // ie 100 features at once!
 
   //int bs= 100; //batch size
-  vcl_vector< vnl_vector< double > >vec(bs_);
+  std::vector< vnl_vector< double > >vec(bs_);
 
-  vcl_cout<<"d= "<<d<<vcl_endl;
+  std::cout<<"d= "<<d<<std::endl;
   unsigned int b=0;
   while ( b+1<d )
   {
-    int r= vcl_min ( bs_, int(d-b) );
+    int r= std::min ( bs_, int(d-b) );
     assert(r>0);
 
-    vcl_cout<<"arranging weak classifier data = "<<b<<" to "
-            <<(b+r)-1<<" of "<<d<<vcl_endl;
+    std::cout<<"arranging weak classifier data = "<<b<<" to "
+            <<(b+r)-1<<" of "<<d<<std::endl;
 
     // have to resize all vectors
     for (int i=0; i< bs_; ++i)
@@ -302,9 +304,9 @@ double clsfy_direct_boost_builder::build(clsfy_classifier_base& model,
 
   // need to train each weak classifier on the data
   // and record the error and output responses of the weak classifiers
-  vcl_vector< double > errors(0);
-  vcl_vector< vcl_vector<bool> > responses(0);
-  vcl_vector< clsfy_classifier_1d* > classifiers(0);
+  std::vector< double > errors(0);
+  std::vector< std::vector<bool> > responses(0);
+  std::vector< clsfy_classifier_1d* > classifiers(0);
 
   wrapper.reset();
   for (unsigned int i=0; i<d; ++i )
@@ -312,7 +314,7 @@ double clsfy_direct_boost_builder::build(clsfy_classifier_base& model,
     const vnl_vector<double>& vec= wrapper.current();
     double error= weak_builder_->build(*c1d, vec, wts, outputs);
 
-    vcl_vector<bool> resp_vec(n);
+    std::vector<bool> resp_vec(n);
     // now get responses
     for (unsigned long k=0; k<n;++k)
     {
@@ -336,7 +338,7 @@ double clsfy_direct_boost_builder::build(clsfy_classifier_base& model,
   // now use the outputs and errors to define a strong classifier
 
   // create a sorted index of the errors
-  vcl_vector<int> index;
+  std::vector<int> index;
   mbl_index_sort(errors, index);
 
 
@@ -352,7 +354,7 @@ double clsfy_direct_boost_builder::build(clsfy_classifier_base& model,
 
     // store best classifier that is left in list
     int ind= index[0];
-    vcl_cout<<"ind= "<<ind<<", errors["<<ind<<"]= "<<errors[ind]<<'\n';
+    std::cout<<"ind= "<<ind<<", errors["<<ind<<"]= "<<errors[ind]<<'\n';
     if (errors[ind]> 0.5 ) break;
 
     if (errors[ind]==0)
@@ -377,30 +379,30 @@ double clsfy_direct_boost_builder::build(clsfy_classifier_base& model,
 
     // find all classifiers that are similar to the selected
     // classifier i
-    vcl_vector<int> new_index(0);
-    vcl_vector<bool>& i_vec=responses[ind];
+    std::vector<int> new_index(0);
+    std::vector<bool>& i_vec=responses[ind];
     unsigned int m=index.size();
     unsigned int n_rejects=0;
     for (unsigned int j=0; j<m; ++j)
     {
-      vcl_vector<bool>& j_vec=responses[ index[j] ];
+      std::vector<bool>& j_vec=responses[ index[j] ];
       double prop_same= calc_prop_same(i_vec,j_vec);
-      //vcl_cout<<"prop_same= "<<prop_same<<", prop_= "<<prop_<<'\n';
+      //std::cout<<"prop_same= "<<prop_same<<", prop_= "<<prop_<<'\n';
       if ( prop_same < prop_ )
         new_index.push_back( index[j] );
       else
         ++n_rejects;
     }
 
-    vcl_cout<<"number of rejects due to similarity= "<<n_rejects<<vcl_endl;
+    std::cout<<"number of rejects due to similarity= "<<n_rejects<<std::endl;
 
     //for (int p=0; p<new_index.size(); ++p)
-    //  vcl_cout<<"new_index["<<p<<"]= "<<new_index[p]<<vcl_endl;
+    //  std::cout<<"new_index["<<p<<"]= "<<new_index[p]<<std::endl;
 
     index= new_index;
 
     //for (int p=0; p<index.size(); ++p)
-    //  vcl_cout<<"index["<<p<<"]= "<<index[p]<<vcl_endl;
+    //  std::cout<<"index["<<p<<"]= "<<index[p]<<std::endl;
   }
   for (unsigned i =0; i< classifiers.size(); ++i)
     delete classifiers[i];
@@ -413,7 +415,7 @@ double clsfy_direct_boost_builder::build(clsfy_classifier_base& model,
   // does clsfy_test_error balk if have too much data?
   // should be OK because just passes mbl_data_wrapper and evaluates
   // one at a time, so if using mbl_file_data_wrapper should be OK!
-  vcl_cout<<"calculating training error\n";
+  std::cout<<"calculating training error\n";
   return clsfy_test_error(strong_classifier, inputs, outputs);
 }
 
@@ -469,14 +471,14 @@ clsfy_builder_base* clsfy_direct_boost_builder::clone() const
 //=======================================================================
 
 // required if data is present in this base class
-void clsfy_direct_boost_builder::print_summary(vcl_ostream& /*os*/) const
+void clsfy_direct_boost_builder::print_summary(std::ostream& /*os*/) const
 {
 #if 0
   clsfy_builder_base::print_summary(os); // Uncomment this line if it has one.
   vsl_print_summary(os, data_); // Example of data output
 #endif
 
-  vcl_cerr << "clsfy_direct_boost_builder::print_summary() NYI\n";
+  std::cerr << "clsfy_direct_boost_builder::print_summary() NYI\n";
 }
 
 //=======================================================================
@@ -489,7 +491,7 @@ void clsfy_direct_boost_builder::b_write(vsl_b_ostream& /*bfs*/) const
   clsfy_builder_base::b_write(bfs);  // Needed if base has any data
   vsl_b_write(bfs, data_);
 #endif
-  vcl_cerr << "clsfy_direct_boost_builder::b_write() NYI\n";
+  std::cerr << "clsfy_direct_boost_builder::b_write() NYI\n";
 }
 
 //=======================================================================
@@ -497,7 +499,7 @@ void clsfy_direct_boost_builder::b_write(vsl_b_ostream& /*bfs*/) const
 // required if data is present in this base class
 void clsfy_direct_boost_builder::b_read(vsl_b_istream& /*bfs*/)
 {
-  vcl_cerr << "clsfy_direct_boost_builder::b_read() NYI\n";
+  std::cerr << "clsfy_direct_boost_builder::b_read() NYI\n";
 #if 0
   if (!bfs) return;
 
@@ -510,9 +512,9 @@ void clsfy_direct_boost_builder::b_read(vsl_b_istream& /*bfs*/)
     vsl_b_read(bfs,data_);
     break;
    default:
-    vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, clsfy_direct_boost_builder&)\n"
+    std::cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, clsfy_direct_boost_builder&)\n"
              << "           Unknown version number "<< version << '\n';
-    bfs.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
+    bfs.is().clear(std::ios::badbit); // Set an unrecoverable IO error on stream
     return;
   }
 #endif // 0

@@ -13,8 +13,10 @@
 #include <brec/brec_part_gaussian.h>
 #include <bsta/algo/bsta_gaussian_updater.h>
 
-#include <vcl_iostream.h>
-#include <vcl_vector.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iostream>
+#include <vector>
 
 static void test_brec_hierarchy()
 {
@@ -104,14 +106,14 @@ static void test_brec_hierarchy()
   e = new brec_hierarchy_edge(pt_2_0->cast_to_base(), pt_1_0->cast_to_base(), true); pt_2_0->add_outgoing_edge(e); pt_1_0->add_incoming_edge(e);
   e = new brec_hierarchy_edge(pt_2_0->cast_to_base(), pt_1_1->cast_to_base(), false); pt_2_0->add_outgoing_edge(e); pt_1_1->add_incoming_edge(e);
 
-  vcl_vector<double> scores;
+  std::vector<double> scores;
 #if 0 // ????? !!! TODO
   bool result = h->get_score(pt_2_0, scores);
   TEST("hierarchy get_score() " , result, true);
 #endif // 0
-  vcl_cout << "there are " << scores.size() << " similar parts in hierarchy, with scores:\n";
+  std::cout << "there are " << scores.size() << " similar parts in hierarchy, with scores:\n";
   for (unsigned i = 0; i < scores.size(); i++) {
-    vcl_cout << '\t' << scores[i] << '\n';
+    std::cout << '\t' << scores[i] << '\n';
   }
 
   // now create an instance which should not be found in the hierarchy
@@ -138,9 +140,9 @@ static void test_brec_hierarchy()
   TEST("hierarchy get_score() ", result, !true);
 #endif // 0
 
-  vcl_cout << "there are " << scores.size() << " similar parts in hierarchy, with scores:\n";
+  std::cout << "there are " << scores.size() << " similar parts in hierarchy, with scores:\n";
   for (unsigned i = 0; i < scores.size(); i++) {
-    vcl_cout << '\t' << scores[i] << '\n';
+    std::cout << '\t' << scores[i] << '\n';
   }
 
   scores.clear();
@@ -149,9 +151,9 @@ static void test_brec_hierarchy()
   result = h->get_score(pt2_1_0, scores);
   TEST("hierarchy get_score() ", result, true);
 #endif // 0
-  vcl_cout << "there are " << scores.size() << " similar parts in hierarchy, with scores:\n";
+  std::cout << "there are " << scores.size() << " similar parts in hierarchy, with scores:\n";
   for (unsigned i = 0; i < scores.size(); i++) {
-    vcl_cout << '\t' << scores[i] << '\n';
+    std::cout << '\t' << scores[i] << '\n';
   }
 
   scores.clear();

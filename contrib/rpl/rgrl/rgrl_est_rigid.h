@@ -7,7 +7,9 @@
 // \date   March 2004
 
 #include "rgrl_estimator.h"
-#include <vcl_vector.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <vector>
 #include "rgrl_trans_rigid.h"
 
 //: Rigid transform estimator
@@ -42,7 +44,7 @@ class rgrl_est_rigid
             rgrl_transformation const& cur_transform ) const;
 
   //: Type of transformation estimated by this estimator.
-  const vcl_type_info& transformation_type() const;
+  const std::type_info& transformation_type() const;
 
   //: Determine the covariance matrix of this rigid xform given the matches
   void determine_covariance( rgrl_set_of<rgrl_match_set_sptr> const& matches, rgrl_transformation_sptr current_trans) const;
@@ -52,13 +54,13 @@ class rgrl_est_rigid
   //    "determinant of DeltaR before orthonormalization",
   //    "fro norm of orthonormalized DeltaR - I",
   //    "fro norm of DeltaTrans"
-  inline vcl_vector<vcl_vector<double> > const& get_stats() { return this->stats; }
+  inline std::vector<std::vector<double> > const& get_stats() { return this->stats; }
 
   // Defines type-related functions
   rgrl_type_macro( rgrl_est_rigid, rgrl_nonlinear_estimator );
 
  protected:
-  vcl_vector<vcl_vector<double> > stats;
+  std::vector<std::vector<double> > stats;
 };
 
 #endif // rgrl_est_rigid_h_

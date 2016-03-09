@@ -1,7 +1,9 @@
 #include "bvpl_edge2d_kernel_factory.h"
 //:
 // \file
-#include <vcl_algorithm.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <algorithm>
 #include <vnl/vnl_math.h>
 #include <vnl/vnl_float_3.h>
 
@@ -42,24 +44,24 @@ void bvpl_edge2d_kernel_factory::create_canonical()
 {
   if ( !(height_ % 2))
   {
-    vcl_cerr << "Warning, height of kernel is even. It has been increased by one\n";
+    std::cerr << "Warning, height of kernel is even. It has been increased by one\n";
     height_++;
   }
   if (!(width_ % 2))
   {
-    vcl_cerr << "Warning, width of kernel is even. It has been increased by one\n";
+    std::cerr << "Warning, width of kernel is even. It has been increased by one\n";
     width_++;
   }
   //The size of the kernel is limited. If width or height of the kernel is too large,
   //the user should subsample the image/grid
   if (height_ > max_size_)
   {
-    vcl_cerr<< "Warning, height of kernel is too large. It has been set to is max value of" << max_size_ << vcl_endl;
+    std::cerr<< "Warning, height of kernel is too large. It has been set to is max value of" << max_size_ << std::endl;
     height_ = max_size_;
   }
   if (width_ > max_size_)
   {
-    vcl_cerr<< "Warning, weight of kernel is too large. It  has been set to is max value of" << max_size_ << vcl_endl;
+    std::cerr<< "Warning, weight of kernel is too large. It  has been set to is max value of" << max_size_ << std::endl;
     width_ = max_size_;
   }
 
@@ -83,9 +85,9 @@ void bvpl_edge2d_kernel_factory::create_canonical()
     for (int y= min_y; y<= max_y; y++)
     {
       if (y < 0)
-        canonical_kernel_.push_back(vcl_pair<point_3d,dispatch>(point_3d(float(x),float(y),float(z)), dispatch(-1)));
+        canonical_kernel_.push_back(std::pair<point_3d,dispatch>(point_3d(float(x),float(y),float(z)), dispatch(-1)));
       else if (y >  0)
-        canonical_kernel_.push_back(vcl_pair<point_3d,dispatch>(point_3d(float(x),float(y),float(z)), dispatch(1)));
+        canonical_kernel_.push_back(std::pair<point_3d,dispatch>(point_3d(float(x),float(y),float(z)), dispatch(1)));
     }
   }
 
@@ -110,10 +112,10 @@ bvpl_kernel_vector_sptr bvpl_edge2d_kernel_factory::create_kernel_vector()
   float theta_res = float(vnl_math::pi_over_4); //azimuth
   float phi_res = float(vnl_math::pi_over_4);   //zenith  (from the pole)
 
-  vcl_cout << "Crating and vector of 2d-edge kernels\n"
-           << "phi_res: "<< phi_res << vcl_endl
-           << "theta_res: "<< theta_res << vcl_endl
-           << "angle_res: "<< angular_resolution_ << vcl_endl;
+  std::cout << "Crating and vector of 2d-edge kernels\n"
+           << "phi_res: "<< phi_res << std::endl
+           << "theta_res: "<< theta_res << std::endl
+           << "angle_res: "<< angular_resolution_ << std::endl;
   vnl_float_3 axis;
 
   float theta = 0.0f;
@@ -127,7 +129,7 @@ bvpl_kernel_vector_sptr bvpl_edge2d_kernel_factory::create_kernel_vector()
   for (float angle = 0.0f; angle < 2.0f * float(vnl_math::pi); angle+=this->angular_resolution_)
   {
     this->set_angle(angle);
-    kernels->kernels_.push_back(vcl_make_pair(axis*angle , new bvpl_kernel(this->create())));
+    kernels->kernels_.push_back(std::make_pair(axis*angle , new bvpl_kernel(this->create())));
   }
 
   //when zenith is pi/4 travers all hemisphere
@@ -135,14 +137,14 @@ bvpl_kernel_vector_sptr bvpl_edge2d_kernel_factory::create_kernel_vector()
   phi = float(vnl_math::pi_over_4);
   for (;theta < 2.0f*float(vnl_math::pi); theta +=theta_res)
   {
-    axis[0] = vcl_cos(theta) * vcl_sin(phi);
-    axis[1] = vcl_sin(theta) * vcl_sin(phi);
-    axis[2] = vcl_cos(phi);
+    axis[0] = std::cos(theta) * std::sin(phi);
+    axis[1] = std::sin(theta) * std::sin(phi);
+    axis[2] = std::cos(phi);
     this->set_rotation_axis(axis);
     for (float angle = 0.0f; angle < 2.0f * float(vnl_math::pi); angle+=this->angular_resolution_)
     {
       this->set_angle(angle);
-      kernels->kernels_.push_back(vcl_make_pair(axis*angle , new bvpl_kernel(this->create())));
+      kernels->kernels_.push_back(std::make_pair(axis*angle , new bvpl_kernel(this->create())));
     }
   }
 
@@ -152,14 +154,14 @@ bvpl_kernel_vector_sptr bvpl_edge2d_kernel_factory::create_kernel_vector()
   theta =float(vnl_math::pi_over_2);
   for (;theta < float(vnl_math::pi_over_2); theta +=theta_res)
   {
-    axis[0] = float(vcl_cos(theta) * vcl_sin(phi));
-    axis[1] = float(vcl_sin(theta) * vcl_sin(phi));
-    axis[2] = float(vcl_cos(phi));
+    axis[0] = float(std::cos(theta) * std::sin(phi));
+    axis[1] = float(std::sin(theta) * std::sin(phi));
+    axis[2] = float(std::cos(phi));
     this->set_rotation_axis(axis);
     for (float angle = 0.0f; angle < 2.0f * float(vnl_math::pi); angle+=this->angular_resolution_)
     {
       this->set_angle(angle);
-      kernels->kernels_.push_back(vcl_make_pair(axis , new bvpl_kernel(this->create())));
+      kernels->kernels_.push_back(std::make_pair(axis , new bvpl_kernel(this->create())));
     }
   }
   return kernels;

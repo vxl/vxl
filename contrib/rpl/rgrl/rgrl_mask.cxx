@@ -2,7 +2,9 @@
 //:
 // \file
 #include <vcl_cassert.h>
-// not used? #include <vcl_limits.h>
+// not used? #include <vcl_compiler.h>
+#include <iostream>
+#include <limits>
 #include <vnl/vnl_math.h>
 
 rgrl_mask_box
@@ -131,7 +133,7 @@ update_bounding_box()
   const unsigned m = center_.size();
   x0_.set_size( m );
   x1_.set_size( m );
-  double r = vcl_sqrt( radius_sqr_ );
+  double r = std::sqrt( radius_sqr_ );
   for ( unsigned i=0; i<m; ++i ) {
     x0_[i] = center_[i] - r;
     x1_[i] = center_[i] + r;
@@ -205,7 +207,7 @@ operator!=( const rgrl_mask_box& other ) const
   return !( *this == other );
 }
 
-vcl_ostream& operator<<(vcl_ostream& os, const rgrl_mask_box& box)
+std::ostream& operator<<(std::ostream& os, const rgrl_mask_box& box)
 {
   os<< box.x0().size() << "  ";
   if ( box.x0().size() )
@@ -213,7 +215,7 @@ vcl_ostream& operator<<(vcl_ostream& os, const rgrl_mask_box& box)
   return os;
 }
 
-vcl_istream& operator>>(vcl_istream& is, rgrl_mask_box& box)
+std::istream& operator>>(std::istream& is, rgrl_mask_box& box)
 {
   int m = -1;
   is >> m;

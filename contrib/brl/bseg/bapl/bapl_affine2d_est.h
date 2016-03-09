@@ -14,7 +14,9 @@
 //  Modifications
 // \endverbatim
 
-#include <vcl_vector.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <vector>
 #include <vnl/vnl_fwd.h>
 #include <bapl/bapl_lowe_cluster.h>
 
@@ -27,11 +29,11 @@ class bapl_affine2d_est : public rrel_estimation_problem
  public:
 
   //: Constructor from a vector of matches (pairs of keypoint smart pointers)
-  bapl_affine2d_est( const vcl_vector< bapl_keypoint_match > & matches );
+  bapl_affine2d_est( const std::vector< bapl_keypoint_match > & matches );
 
   //: Constructor from vnl_vectors
-  bapl_affine2d_est( const vcl_vector< vnl_vector<double> > & from_pts,
-                     const vcl_vector< vnl_vector<double> > & to_pts );
+  bapl_affine2d_est( const std::vector< vnl_vector<double> > & from_pts,
+                     const std::vector< vnl_vector<double> > & to_pts );
 
   //: Destructor.
   virtual ~bapl_affine2d_est();
@@ -45,32 +47,32 @@ class bapl_affine2d_est : public rrel_estimation_problem
   unsigned int residual_dof() const { return 4; }
 
   //: Generate a parameter estimate from a minimal sample.
-  bool fit_from_minimal_set( const vcl_vector<int>& point_indices,
+  bool fit_from_minimal_set( const std::vector<int>& point_indices,
                              vnl_vector<double>& params ) const;
 
   //: Compute unsigned fit residuals relative to the parameter estimate.
   void compute_residuals( const vnl_vector<double>& params,
-                          vcl_vector<double>& residuals ) const;
+                          std::vector<double>& residuals ) const;
 
   //: Weighted least squares parameter estimate.  The normalized covariance is not yet filled in.
   bool weighted_least_squares_fit( vnl_vector<double>& params,
                                    vnl_matrix<double>& norm_covar,
-                                   const vcl_vector<double>* weights=0 ) const;
+                                   const std::vector<double>* weights=0 ) const;
 
  public:  // testing / debugging utility
     //: \brief Print information as a test utility.
   void print_points() const;
 
  protected:
-  void normalize( const vcl_vector< vnl_vector<double> >& pts,
-                  const vcl_vector< double >& wgts,
-                  vcl_vector< vnl_vector<double> > & norm_pts,
+  void normalize( const std::vector< vnl_vector<double> >& pts,
+                  const std::vector< double >& wgts,
+                  std::vector< vnl_vector<double> > & norm_pts,
                   vnl_vector< double > & center,
                   double &avg_distance ) const;
 
  protected:
-  vcl_vector< vnl_vector< double > > from_pts_;
-  vcl_vector< vnl_vector< double > > to_pts_;
+  std::vector< vnl_vector< double > > from_pts_;
+  std::vector< vnl_vector< double > > to_pts_;
 };
 
 #endif // bapl_affine2d_est_h_

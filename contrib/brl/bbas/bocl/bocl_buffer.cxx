@@ -1,12 +1,14 @@
 #include "bocl_buffer.h"
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iostream>
 
 bocl_buffer::bocl_buffer(const cl_context& context)
 : context_(context)
 {
 }
 
-bool bocl_buffer::create_buffer(const cl_mem_flags& flags,  vcl_size_t size,  void *host_ptr)
+bool bocl_buffer::create_buffer(const cl_mem_flags& flags,  std::size_t size,  void *host_ptr)
 {
   cl_int status = MEM_FAILURE;
   // Create and initialize memory objects
@@ -17,7 +19,7 @@ bool bocl_buffer::create_buffer(const cl_mem_flags& flags,  vcl_size_t size,  vo
 }
 
 bool bocl_buffer::create_image2D(const cl_mem_flags& flags, const cl_image_format *format,
-                                 vcl_size_t width, vcl_size_t height, vcl_size_t row_pitch, void *host_ptr)
+                                 std::size_t width, std::size_t height, std::size_t row_pitch, void *host_ptr)
 {
   cl_int status = MEM_FAILURE;
   // Create and initialize memory objects
@@ -40,7 +42,7 @@ bool bocl_buffer::release_memory()
 int bocl_buffer::check_val(cl_int status, cl_int result, std::string message)
 {
   if (status != result) {
-    vcl_cout << message << '\n';
+    std::cout << message << '\n';
     return 0;
   }
   return 1;

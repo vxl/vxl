@@ -9,8 +9,10 @@
 #include <rgrl/rgrl_transformation.h>
 #include <rgrl/rgrl_view.h>
 #include <rgrl/rgrl_match_set.h>
-#include <vcl_vector.h>
-#include <vcl_algorithm.h>
+#include <vector>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <algorithm>
 
 
 bool
@@ -55,7 +57,7 @@ compute_matches( rgrl_feature_set const&       from_set,
   //  get the features in the current view
   feat_vector from;
   if( !current_view.features_in_region( from, from_set ) ) {
-    DebugMacro( 1, "Cannot get features in current region!!!" << vcl_endl );
+    DebugMacro( 1, "Cannot get features in current region!!!" << std::endl );
     return matches_sptr;
   }
 
@@ -120,7 +122,7 @@ add_one_flipped_match( rgrl_match_set_sptr&      inv_set,
   // compute the distance
   // REMEMBER: the to is from, from is to. Everything is inversed
   //
-  vcl_vector< internal_dist_node > dist_nodes;
+  std::vector< internal_dist_node > dist_nodes;
   dist_nodes.reserve( size );
   for ( nodes_vec_iterator itr = begin_iter; itr!=end_iter; ++itr )
   {
@@ -138,11 +140,11 @@ add_one_flipped_match( rgrl_match_set_sptr&      inv_set,
 
   // Kth element based on distance
   if ( size > k_ )
-    vcl_nth_element( dist_nodes.begin(), dist_nodes.begin()+k_, dist_nodes.end() );
+    std::nth_element( dist_nodes.begin(), dist_nodes.begin()+k_, dist_nodes.end() );
 
   // setup structure
-  vcl_vector< rgrl_feature_sptr > matching_tos;
-  vcl_vector< double >            sig_wgts;
+  std::vector< rgrl_feature_sptr > matching_tos;
+  std::vector< double >            sig_wgts;
   matching_tos.reserve( k_ );
   sig_wgts.reserve( k_ );
 

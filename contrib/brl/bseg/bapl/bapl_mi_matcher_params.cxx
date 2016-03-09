@@ -3,7 +3,9 @@
 //:
 // \file
 
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iostream>
 
 #define BAPL_MIN_SCALE 1.0
 #define BAPL_MAX_SCALE 10.0
@@ -52,7 +54,7 @@ bapl_mi_matcher_params::correct_range()
 
 
 //: Output stream operator for printing the parameter values
-vcl_ostream& operator<<(vcl_ostream& os, bapl_mi_matcher_params const& p)
+std::ostream& operator<<(std::ostream& os, bapl_mi_matcher_params const& p)
 {
   os << "bapl_mi_matcher_params:\n[---\n"
      << "max scale x  " << p.max_sx_ << '\n'
@@ -61,7 +63,7 @@ vcl_ostream& operator<<(vcl_ostream& os, bapl_mi_matcher_params const& p)
      << "max trans y  " << p.max_ty_ << '\n'
      << "max rotation " << p.max_rotation_ang_ << '\n'
      << "max shear    " << p.max_shear_ang_ << '\n'
-     << "---]" << vcl_endl;
+     << "---]" << std::endl;
   return os;
 }
 

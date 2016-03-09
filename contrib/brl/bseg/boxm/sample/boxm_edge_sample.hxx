@@ -6,7 +6,7 @@
 
 // Edge Sample Methods
 template <class OBS_T>
-void boxm_edge_sample<OBS_T>::print(vcl_ostream& os) const
+void boxm_edge_sample<OBS_T>::print(std::ostream& os) const
 {
   os << "(edge_prob=" << edge_prob_ << " num_obs=" << num_obs_ << ')';
 }
@@ -41,9 +41,9 @@ void vsl_b_read(vsl_b_istream & is, boxm_edge_sample<T> &sample)
       vsl_b_read(is, sample.num_obs_);
       break;
     default:
-      vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, boxm_edge_sample<T>&)\n"
+      std::cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, boxm_edge_sample<T>&)\n"
                << "           Unknown version number "<< version << '\n';
-      is.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
+      is.is().clear(std::ios::badbit); // Set an unrecoverable IO error on stream
       break;
   }
 }
@@ -55,7 +55,7 @@ void vsl_b_read(vsl_b_istream & is, boxm_edge_sample<T> *&sample)
 }
 
 template <class T>
-vcl_ostream& operator << (vcl_ostream& os, const boxm_edge_sample<T>& sample)
+std::ostream& operator << (std::ostream& os, const boxm_edge_sample<T>& sample)
 {
   sample.print(os);
   return os;
@@ -63,7 +63,7 @@ vcl_ostream& operator << (vcl_ostream& os, const boxm_edge_sample<T>& sample)
 
 // Auxiliary Edge Sample Methods
 template <class OBS_T>
-void boxm_aux_edge_sample<OBS_T>::print(vcl_ostream& os) const
+void boxm_aux_edge_sample<OBS_T>::print(std::ostream& os) const
 {
   os << "(obs=" << obs_ << " seg_len=" << seg_len_ << ')';
 }
@@ -98,9 +98,9 @@ void vsl_b_read(vsl_b_istream & is, boxm_aux_edge_sample<T> &sample)
       vsl_b_read(is, sample.seg_len_);
       break;
     default:
-      vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, boxm_aux_edge_sample<T>&)\n"
+      std::cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, boxm_aux_edge_sample<T>&)\n"
                << "           Unknown version number "<< version << '\n';
-      is.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
+      is.is().clear(std::ios::badbit); // Set an unrecoverable IO error on stream
       break;
   }
 }
@@ -112,7 +112,7 @@ void vsl_b_read(vsl_b_istream & is, boxm_aux_edge_sample<T> *&sample)
 }
 
 template <class T>
-vcl_ostream& operator << (vcl_ostream& os, const boxm_aux_edge_sample<T>& sample)
+std::ostream& operator << (std::ostream& os, const boxm_aux_edge_sample<T>& sample)
 {
   sample.print(os);
   return os;
@@ -124,7 +124,7 @@ template void vsl_b_write(vsl_b_ostream &, boxm_edge_sample<T > const &); \
 template void vsl_b_write(vsl_b_ostream &, boxm_edge_sample<T > const *&); \
 template void vsl_b_read(vsl_b_istream &, boxm_edge_sample<T > &); \
 template void vsl_b_read(vsl_b_istream &, boxm_edge_sample<T > *&); \
-template vcl_ostream& operator << (vcl_ostream&, const boxm_edge_sample<T >&)
+template std::ostream& operator << (std::ostream&, const boxm_edge_sample<T >&)
 
 #define BOXM_AUX_EDGE_SAMPLE_INSTANTIATE(T) \
 template class boxm_aux_edge_sample<T >; \
@@ -132,6 +132,6 @@ template void vsl_b_write(vsl_b_ostream &, boxm_aux_edge_sample<T > const &); \
 template void vsl_b_write(vsl_b_ostream &, boxm_aux_edge_sample<T > const *&); \
 template void vsl_b_read(vsl_b_istream &, boxm_aux_edge_sample<T > &); \
 template void vsl_b_read(vsl_b_istream &, boxm_aux_edge_sample<T > *&); \
-template vcl_ostream& operator << (vcl_ostream&, const boxm_aux_edge_sample<T >&)
+template std::ostream& operator << (std::ostream&, const boxm_aux_edge_sample<T >&)
 
 #endif

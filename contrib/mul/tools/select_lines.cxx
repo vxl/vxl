@@ -3,11 +3,13 @@
 //  \date 20 October 2008
 //  \brief Select specified lines from a text file.
 
-#include <vcl_exception.h>
-#include <vcl_iostream.h>
-#include <vcl_fstream.h>
-#include <vcl_iterator.h>
-#include <vcl_limits.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <exception>
+#include <iostream>
+#include <fstream>
+#include <iterator>
+#include <limits>
 #include <vul/vul_arg.h>
 #include <mbl/mbl_exception.h>
 #include <mbl/mbl_index_sort.h>
@@ -18,18 +20,18 @@
 //========================================================================
 int main2(int argc, char*argv[])
 {
-  const vcl_string sep="\n";
+  const std::string sep="\n";
 
   // Parse the program arguments
-  vul_arg<vcl_string> in_fname(VXL_NULLPTR, "input filename (or \"-\" for stdin)");
-  vul_arg<vcl_string> out_fname("-o", "output filename (defaults to stdout)", "-");
-  vul_arg<vcl_vector<unsigned> > lines_arg("-l", "List of line ");
-  vul_arg<vcl_string > lines_fname("-f", "Filename containing list of lines ");
+  vul_arg<std::string> in_fname(VXL_NULLPTR, "input filename (or \"-\" for stdin)");
+  vul_arg<std::string> out_fname("-o", "output filename (defaults to stdout)", "-");
+  vul_arg<std::vector<unsigned> > lines_arg("-l", "List of line ");
+  vul_arg<std::string > lines_fname("-f", "Filename containing list of lines ");
   vul_arg<bool > zero_index("-zero", "Index from zero (defaults to 1-indexed) ");
   vul_arg_parse(argc, argv);
 
 
-  vcl_vector<unsigned> lines;
+  std::vector<unsigned> lines;
   if (lines_arg.set())
     lines = lines_arg();
   else if (lines_fname.set())
@@ -41,11 +43,11 @@ int main2(int argc, char*argv[])
 
   if (!zero_index())
   {
-    for (vcl_vector<unsigned>::iterator it=lines.begin(), end=lines.end(); it!=end; ++it)
+    for (std::vector<unsigned>::iterator it=lines.begin(), end=lines.end(); it!=end; ++it)
     {
       if (*it==0)
       {
-        vcl_cerr << "ERROR: Requested line 0, without specifying \"-zero\"\n";
+        std::cerr << "ERROR: Requested line 0, without specifying \"-zero\"\n";
         return 3;
       }
       (*it)--;
@@ -54,10 +56,10 @@ int main2(int argc, char*argv[])
 
 
   // Load the input data
-  vcl_ifstream in_file;
-  vcl_istream *in_stream=VXL_NULLPTR;
+  std::ifstream in_file;
+  std::istream *in_stream=VXL_NULLPTR;
   if (in_fname() == "-")
-    in_stream = &vcl_cin;
+    in_stream = &std::cin;
   else
   {
     in_file.open(in_fname().c_str());
@@ -66,29 +68,29 @@ int main2(int argc, char*argv[])
   }
 
 
-  vcl_vector<unsigned> index;
+  std::vector<unsigned> index;
   mbl_index_sort(lines, index);
 
   const unsigned n = lines.size();
-  vcl_vector<unsigned> ordered_lines(n);
+  std::vector<unsigned> ordered_lines(n);
 
   for (unsigned i=0; i!=n; ++i)
     ordered_lines[i] = lines[index[i]];
 
 // read input into data;
 // if ordered_lines[i] == current line number, put current line into data[index[i]]
-  vcl_vector<vcl_string> data(lines.size());
+  std::vector<std::string> data(lines.size());
   unsigned line_no=0;
   unsigned ii=0;
   while (! !*in_stream)
   {
     if (ordered_lines[ii] != line_no)
     {
-      in_stream->ignore(vcl_numeric_limits<vcl_streamsize>::max(), '\n');
+      in_stream->ignore(std::numeric_limits<std::streamsize>::max(), '\n');
     }
     else
     {
-      vcl_string s;
+      std::string s;
       std::getline(*in_stream, s);
       if (in_stream->eof()) break;
       while (ii<n && ordered_lines[ii] == line_no)
@@ -100,14 +102,14 @@ int main2(int argc, char*argv[])
     }
     ++line_no;
   }
-  if (ii != n) vcl_cerr << "WARNING: input was shorter than requested line numbers\n";
+  if (ii != n) std::cerr << "WARNING: input was shorter than requested line numbers\n";
 
 
   // write data to output
-  vcl_ostream *out_stream=VXL_NULLPTR;
-  vcl_ofstream out_file;
+  std::ostream *out_stream=VXL_NULLPTR;
+  std::ofstream out_file;
   if (out_fname() == "-")
-    out_stream = &vcl_cout;
+    out_stream = &std::cout;
   else
   {
     out_file.open(out_fname().c_str());
@@ -115,7 +117,7 @@ int main2(int argc, char*argv[])
     if (!out_file) mbl_exception_throw_os_error(out_fname(), "Failed to open for writing");
   }
 
-  vcl_copy(data.begin(), data.end(), vcl_ostream_iterator<vcl_string>(*out_stream, "\n"));
+  std::copy(data.begin(), data.end(), std::ostream_iterator<std::string>(*out_stream, "\n"));
 
   return 0;
 }
@@ -130,14 +132,14 @@ int main(int argc, char*argv[])
   {
     return main2(argc, argv);
   }
-  catch (vcl_exception& e)
+  catch (std::exception& e)
   {
-    vcl_cerr << "ERROR: " << e.what() << '\n';
+    std::cerr << "ERROR: " << e.what() << '\n';
     return -1;
   }
   catch (...)
   {
-    vcl_cerr << "ERROR: Caught unknown exception\n";
+    std::cerr << "ERROR: Caught unknown exception\n";
     return -2;
   }
 

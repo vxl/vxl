@@ -11,17 +11,19 @@
 // \author Thomas Pollard
 // \date March 05, 2005
 
-#include <vcl_string.h>
-#include <vcl_vector.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <string>
+#include <vector>
 
 template <class T>
 bool bpgl_read_list(
-  vcl_vector<T>& list,
-  vcl_string file );
+  std::vector<T>& list,
+  std::string file );
 
 template <class T>
 bool bpgl_write_list(
-  const vcl_vector<T>& list,
-  vcl_string file );
+  const std::vector<T>& list,
+  std::string file );
 
 #endif // bpgl_list_h_

@@ -24,8 +24,8 @@ static void test_sigma_normalizer()
     boxm_sigma_normalizer normalizer(under_estimation_prob);
 
     for (unsigned int t=0; t<n_trials; ++t) {
-      vcl_vector<float> samples;
-      vcl_vector<float> weights;
+      std::vector<float> samples;
+      std::vector<float> weights;
       for (unsigned int n=0; n<n_observations; ++n) {
         float sample = true_mean + true_sigma*(float)rand_gen.normal();
         samples.push_back(sample);
@@ -34,7 +34,7 @@ static void test_sigma_normalizer()
       // compute the sample mean and variance
       bsta_gauss_sf1 gauss_model;
       bsta_fit_gaussian(samples, weights, gauss_model);
-      float normalized_sigma = vcl_sqrt(gauss_model.var()) * normalizer.normalization_factor_int(n_observations);
+      float normalized_sigma = std::sqrt(gauss_model.var()) * normalizer.normalization_factor_int(n_observations);
       if (normalized_sigma < true_sigma) {
         ++under_estimates;
       }

@@ -6,10 +6,12 @@
 // \author dac
 // Test construction, IO etc
 
-#include <vcl_iostream.h>
-#include <vcl_string.h>
-#include <vcl_numeric.h>
-#include <vcl_algorithm.h>
+#include <iostream>
+#include <string>
+#include <numeric>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <algorithm>
 #include <vpl/vpl.h> // vpl_unlink()
 #include <clsfy/clsfy_binary_tree.h>
 #include <clsfy/clsfy_binary_tree_builder.h>
@@ -27,7 +29,7 @@
 //: Tests the clsfy_binary_tree class
 void test_binary_tree()
 {
-    vcl_cout << "*******************************************\n"
+    std::cout << "*******************************************\n"
              << " Testing clsfy_binary_tree_builder\n"
              << "*******************************************\n";
 
@@ -66,11 +68,11 @@ void test_binary_tree()
     pdferror_sampler = pdferror.new_sampler();
 
     unsigned NPOINTS=500;
-    vcl_vector<vnl_vector<double > > data(NPOINTS);
+    std::vector<vnl_vector<double > > data(NPOINTS);
 
     vnl_vector<double> xerr(1);
     vnl_vector<double> yerr(1);
-    vcl_vector<unsigned > training_outputs(NPOINTS,0);
+    std::vector<unsigned > training_outputs(NPOINTS,0);
     unsigned label=0;
     vnl_vector<double > data1d(NPOINTS);
     for (unsigned i=0; i<NPOINTS;++i)
@@ -111,7 +113,7 @@ void test_binary_tree()
     clsfy_binary_tree_builder builder;
     clsfy_classifier_base* pBaseClassifier=builder.new_classifier();
     TEST("Type is binary tree",
-         pBaseClassifier->is_a()==vcl_string("clsfy_binary_tree"), true);
+         pBaseClassifier->is_a()==std::string("clsfy_binary_tree"), true);
     clsfy_binary_tree* pClassifier=dynamic_cast<clsfy_binary_tree*>(pBaseClassifier);
     TEST("Can cast to binary tree",pClassifier != VXL_NULLPTR,true);
 
@@ -120,9 +122,9 @@ void test_binary_tree()
                   1,
                   training_outputs);
 
-    vcl_vector<vnl_vector<double > > testData(NPOINTS);
+    std::vector<vnl_vector<double > > testData(NPOINTS);
 
-    vcl_vector<unsigned > test_outputs(NPOINTS,0);
+    std::vector<unsigned > test_outputs(NPOINTS,0);
     const double epsilon=0.01;
     vnl_vector<double > error(1);
     unsigned tp=0;
@@ -186,20 +188,20 @@ void test_binary_tree()
     double testTNR=double (tnr)/dtn;
     double testFNR=double (fnr)/dtp;
 
-    vcl_cout<<"True Positive Rate " <<double(tpr)/dtp<<'\n'
+    std::cout<<"True Positive Rate " <<double(tpr)/dtp<<'\n'
             <<"False Positive Rate "<<double(fpr)/dtn<<'\n'
             <<"True Negative Rate " <<double(tnr)/dtn<<'\n'
-            <<"False Negative Rate "<<double(fnr)/dtp<<vcl_endl;
+            <<"False Negative Rate "<<double(fnr)/dtp<<std::endl;
 
     // simple test for binary threshold
     TEST("tpr>0.9", double (tpr)/dtp>0.9, true);
     TEST("fpr<0.1", double (fpr)/dtn<0.1, true);
 
-    vcl_cout<<"======== TESTING I/O ===========\n";
+    std::cout<<"======== TESTING I/O ===========\n";
 
     // add binary loaders
     vsl_add_to_binary_loader(clsfy_binary_threshold_1d());
-    vcl_string test_path = "test_clsfy_binary_tree.bvl.tmp";
+    std::string test_path = "test_clsfy_binary_tree.bvl.tmp";
 
     vsl_b_ofstream bfs_out(test_path);
     TEST(("Opened " + test_path + " for writing").c_str(), (!bfs_out ), false);
@@ -216,12 +218,12 @@ void test_binary_tree()
     bfs_in.close();
 
     TEST("Type is binary tree",
-         pBaseClassifierIn->is_a()==vcl_string("clsfy_binary_tree"), true);
+         pBaseClassifierIn->is_a()==std::string("clsfy_binary_tree"), true);
     clsfy_binary_tree* pClassifierIn=dynamic_cast<clsfy_binary_tree*>(pBaseClassifierIn);
     TEST("Can cast to binary tree",pClassifierIn != VXL_NULLPTR,true);
 
     {
-        unsigned tp=vcl_count(test_outputs.begin(),test_outputs.end(),1U);
+        unsigned tp=std::count(test_outputs.begin(),test_outputs.end(),1U);
         unsigned tpr=0;
         unsigned tnr=0;
         unsigned fpr=0;
@@ -246,25 +248,25 @@ void test_binary_tree()
         }
         double dtp=double (tp);
         double dtn=double (NPOINTS-tp);
-        vcl_cout<<"True Positive Rate " <<double(tpr)/dtp<<'\n'
+        std::cout<<"True Positive Rate " <<double(tpr)/dtp<<'\n'
                 <<"False Positive Rate "<<double(fpr)/dtn<<'\n'
                 <<"True Negative Rate " <<double(tnr)/dtn<<'\n'
-                <<"False Negative Rate "<<double(fnr)/dtp<<vcl_endl;
+                <<"False Negative Rate "<<double(fnr)/dtp<<std::endl;
 
         // simple test for binary threshold
         double tpr_=double (tpr)/dtp;
         double fpr_=double (fpr)/dtn;
         TEST("tpr>0.7", tpr_>0.9, true);
         TEST("fpr<0.3", fpr_<0.1, true);
-        TEST("Same TPR as pre-IO ",vcl_fabs(testTPR- tpr_)<1.0E-6,true);
-        TEST("Same FPR as pre-IO ",vcl_fabs(testFPR- fpr_)<1.0E-6,true);
+        TEST("Same TPR as pre-IO ",std::fabs(testTPR- tpr_)<1.0E-6,true);
+        TEST("Same FPR as pre-IO ",std::fabs(testFPR- fpr_)<1.0E-6,true);
     }
-    vcl_cout<<"======== TESTING Assignment ===========\n";
+    std::cout<<"======== TESTING Assignment ===========\n";
 
     {
         clsfy_binary_tree treeCopy= *pClassifierIn;
 
-        unsigned tp=vcl_count(test_outputs.begin(),test_outputs.end(),1U);
+        unsigned tp=std::count(test_outputs.begin(),test_outputs.end(),1U);
         unsigned tpr=0;
         unsigned tnr=0;
         unsigned fpr=0;
@@ -289,21 +291,21 @@ void test_binary_tree()
         }
         double dtp=double (tp);
         double dtn=double (NPOINTS-tp);
-        vcl_cout<<"True Positive Rate " <<double(tpr)/dtp<<'\n'
+        std::cout<<"True Positive Rate " <<double(tpr)/dtp<<'\n'
                 <<"False Positive Rate "<<double(fpr)/dtn<<'\n'
                 <<"True Negative Rate " <<double(tnr)/dtn<<'\n'
-                <<"False Negative Rate "<<double(fnr)/dtp<<vcl_endl;
+                <<"False Negative Rate "<<double(fnr)/dtp<<std::endl;
 
         // simple test for binary threshold
         double tpr_=double (tpr)/dtp;
         double fpr_=double (fpr)/dtn;
         TEST("tpr>0.7", tpr_>0.9, true);
         TEST("fpr<0.3", fpr_<0.1, true);
-        TEST("Same TPR as pre-IO ",vcl_fabs(testTPR- tpr_)<1.0E-6,true);
-        TEST("Same FPR as pre-IO ",vcl_fabs(testFPR- fpr_)<1.0E-6,true);
+        TEST("Same TPR as pre-IO ",std::fabs(testTPR- tpr_)<1.0E-6,true);
+        TEST("Same FPR as pre-IO ",std::fabs(testFPR- fpr_)<1.0E-6,true);
     }
 
-    vcl_cout<<"=========swap pos and neg samples round===========\n";
+    std::cout<<"=========swap pos and neg samples round===========\n";
 
     for (unsigned i=0;i<NPOINTS;++i)
     {
@@ -329,7 +331,7 @@ void test_binary_tree()
 
     {
         const int NPOINTS=500;
-        unsigned tp=vcl_count(test_outputs.begin(),test_outputs.end(),1U);
+        unsigned tp=std::count(test_outputs.begin(),test_outputs.end(),1U);
         unsigned tpr=0;
         unsigned tnr=0;
         unsigned fpr=0;
@@ -354,10 +356,10 @@ void test_binary_tree()
         }
         double dtp=double (tp);
         double dtn=double (NPOINTS-tp);
-        vcl_cout<<"True Positive Rate " <<double(tpr)/dtp<<'\n'
+        std::cout<<"True Positive Rate " <<double(tpr)/dtp<<'\n'
                 <<"False Positive Rate "<<double(fpr)/dtn<<'\n'
                 <<"True Negative Rate " <<double(tnr)/dtn<<'\n'
-                <<"False Negative Rate "<<double(fnr)/dtp<<vcl_endl;
+                <<"False Negative Rate "<<double(fnr)/dtp<<std::endl;
 
         TEST("tpr>0.9", double (tpr)/dtp>0.9, true);
         TEST("fpr<0.1", double (fpr)/dtn<0.1, true);
@@ -367,16 +369,16 @@ void test_binary_tree()
         double tnr_=double (tnr)/dtn;
         double fnr_=double (fnr)/dtp;
 
-        TEST("Same TPR as initial TNR",vcl_fabs(testTNR- tpr_)<1.0E-6,true);
-        TEST("Same FPR as initial FNR",vcl_fabs(testFNR- fpr_)<1.0E-6,true);
-        TEST("Same TNR as initial TPR",vcl_fabs(testTPR- tnr_)<1.0E-6,true);
-        TEST("Same FNR as initial FPR",vcl_fabs(testFPR- fnr_)<1.0E-6,true);
+        TEST("Same TPR as initial TNR",std::fabs(testTNR- tpr_)<1.0E-6,true);
+        TEST("Same FPR as initial FNR",std::fabs(testFNR- fpr_)<1.0E-6,true);
+        TEST("Same TNR as initial TPR",std::fabs(testTPR- tnr_)<1.0E-6,true);
+        TEST("Same FNR as initial FPR",std::fabs(testFPR- fnr_)<1.0E-6,true);
     }
 
     {
-        vcl_cout<<"TESTING Circle Data..."<<vcl_endl;
+        std::cout<<"TESTING Circle Data..."<<std::endl;
         const int NPOINTS=2000;
-        vcl_vector<vnl_vector<double > > data(NPOINTS);
+        std::vector<vnl_vector<double > > data(NPOINTS);
 
         pdf1d_gaussian pdferror2(0.0,0.05*0.05);
         pdf1d_sampler* pdferror_sampler2 = pdferror2.new_sampler();;
@@ -384,7 +386,7 @@ void test_binary_tree()
         vnl_vector<double> xerr(1);
         vnl_vector<double> yerr(1);
         vnl_vector<double> zerr(1);
-        vcl_vector<unsigned > training_outputs(NPOINTS,0);
+        std::vector<unsigned > training_outputs(NPOINTS,0);
         unsigned label=0;
         vnl_vector<double > data1d(NPOINTS);
         for (int i=0; i<NPOINTS;++i)
@@ -408,10 +410,10 @@ void test_binary_tree()
             double ry=y-muy;
             double rz=z-muz;
 
-            double r=vcl_sqrt(rx*rx+ry*ry+rz*rz);
+            double r=std::sqrt(rx*rx+ry*ry+rz*rz);
 
             double err= pdferror_sampler2->sample();
-            if (r+err<vcl_sqrt(3.0))
+            if (r+err<std::sqrt(3.0))
                 label=0;
             else
                 label=1;
@@ -426,7 +428,7 @@ void test_binary_tree()
         builder.set_min_node_size(-1);
         clsfy_classifier_base* pBaseClassifier=builder.new_classifier();
         TEST("Type is binary tree",
-             pBaseClassifier->is_a()==vcl_string("clsfy_binary_tree"), true);
+             pBaseClassifier->is_a()==std::string("clsfy_binary_tree"), true);
         clsfy_binary_tree* pClassifier=dynamic_cast<clsfy_binary_tree*>(pBaseClassifier);
         TEST("Can cast to binary tree",pClassifier != VXL_NULLPTR,true);
 
@@ -435,9 +437,9 @@ void test_binary_tree()
                       1,
                       training_outputs);
 
-        vcl_vector<vnl_vector<double > > testData(NPOINTS);
+        std::vector<vnl_vector<double > > testData(NPOINTS);
 
-        vcl_vector<unsigned > test_outputs(NPOINTS,0);
+        std::vector<unsigned > test_outputs(NPOINTS,0);
         vnl_vector<double > error(1);
         unsigned tp=0;
         for (int i=0; i<NPOINTS;++i)
@@ -460,10 +462,10 @@ void test_binary_tree()
             double rx=x-mux;
             double ry=y-muy;
             double rz=z-muz;
-            double r=vcl_sqrt(rx*rx+ry*ry+rz*rz);
+            double r=std::sqrt(rx*rx+ry*ry+rz*rz);
 
             double err= pdferror_sampler2->sample();
-            if (r+err<vcl_sqrt(3.0))
+            if (r+err<std::sqrt(3.0))
                 label=0;
             else
                 label=1;
@@ -474,7 +476,7 @@ void test_binary_tree()
                 ++tp;
         }
 
-        vcl_cout<<"True positives in test = "<<tp<<vcl_endl;
+        std::cout<<"True positives in test = "<<tp<<std::endl;
         unsigned tpr=0;
         unsigned tnr=0;
         unsigned fpr=0;
@@ -504,10 +506,10 @@ void test_binary_tree()
         double testTNR=double (tnr)/dtn;
         double testFNR=double (fnr)/dtp;
 
-        vcl_cout<<"True Positive Rate " <<testTPR<<'\n'
+        std::cout<<"True Positive Rate " <<testTPR<<'\n'
                 <<"False Positive Rate "<<testFPR<<'\n'
                 <<"True Negative Rate " <<testTNR<<'\n'
-                <<"False Negative Rate "<<testFNR<<vcl_endl;
+                <<"False Negative Rate "<<testFNR<<std::endl;
 
         // simple test for binary threshold
         TEST("tpr>0.9", testTPR>0.9, true);
@@ -521,9 +523,9 @@ void test_binary_tree()
                                           neg_samples, neg_wts
                                          );
 
-    b_thresh_clsfr2->print_summary(vcl_cout);
+    b_thresh_clsfr2->print_summary(std::cout);
 
-    vcl_cout<<"error2= "<<error2<<vcl_endl;
+    std::cout<<"error2= "<<error2<<std::endl;
 
     TEST_NEAR("error1 ~= error2", error1, error2, 0.001);
 
@@ -537,19 +539,19 @@ void test_binary_tree()
 
     delete b_thresh_clsfr2;
 
-    vcl_cout<<"Applied to test set (with +ve and -ve other way round:\n";
+    std::cout<<"Applied to test set (with +ve and -ve other way round:\n";
     tpr=(tp*1.0)/n_neg, fpr= (fp*1.0)/n_pos;
-    vcl_cout<<"True positives= "<<tpr<<'\n'
-            <<"False positives= "<<fpr<<vcl_endl;
+    std::cout<<"True positives= "<<tpr<<'\n'
+            <<"False positives= "<<fpr<<std::endl;
 
     te= ((n_neg-tp+fp)*1.0)/(n_pos+n_neg);
-    vcl_cout<<"te= "<<te<<vcl_endl;
+    std::cout<<"te= "<<te<<std::endl;
 
     // simple test for binary threshold
     TEST( "tpr>0.7", tpr>0.7, true );
     TEST( "fpr<0.3", fpr<0.3, true );
 
-    vcl_cout << "***********************************\n"
+    std::cout << "***********************************\n"
              << " Testing clsfy_binary_threshold_1d\n"
              << "***********************************\n";
 
@@ -571,11 +573,11 @@ void test_binary_tree()
 
     // Test loading clsfy_binary_threshold_1d by base class pointer
 
-    vcl_cout<<"======== TESTING I/O ===========\n";
+    std::cout<<"======== TESTING I/O ===========\n";
 
     // add binary loaders
     vsl_add_to_binary_loader(clsfy_binary_threshold_1d());
-    vcl_string test_path = "test_clsfy_simple_adaboost.bvl.tmp";
+    std::string test_path = "test_clsfy_simple_adaboost.bvl.tmp";
 
     vsl_b_ofstream bfs_out(test_path);
     TEST(("Opened " + test_path + " for writing").c_str(), (!bfs_out ), false);
@@ -593,20 +595,20 @@ void test_binary_tree()
     vpl_unlink(test_path.c_str());
 #endif
 
-    vcl_cout<<"Saved :\n"
+    std::cout<<"Saved :\n"
             << *b_thresh_clsfr << '\n'
             <<"Loaded:\n"
-            << classifier_in << vcl_endl;
+            << classifier_in << std::endl;
 
     TEST("saved classifier = loaded classifier",
          b_thresh_clsfr ->params(), classifier_in->params());
 #endif // 85 lines commented out
 
-    vcl_cout<<"Deleting classifiers"<<vcl_endl;
+    std::cout<<"Deleting classifiers"<<std::endl;
     delete pClassifier;
-    vcl_cout<<"Deleting the second classifier"<<vcl_endl;
+    std::cout<<"Deleting the second classifier"<<std::endl;
     delete pClassifier2;
-    vcl_cout<<"have deleted classifiers"<<vcl_endl;
+    std::cout<<"have deleted classifiers"<<std::endl;
 
     delete pClassifierIn;
     vsl_delete_all_loaders();

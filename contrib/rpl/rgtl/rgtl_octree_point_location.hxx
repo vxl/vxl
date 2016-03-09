@@ -11,7 +11,9 @@
 // (See accompanying file rgtl_license_1_0.txt or copy at
 // http://www.boost.org/LICENSE_1_0.txt)
 
-#include <vcl_iosfwd.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iosfwd>
 
 template <unsigned int D> class rgtl_octree_cell_location;
 
@@ -67,7 +69,7 @@ bool operator<(rgtl_octree_point_location<D> const& l,
 
 //: Print a logical point location in a human-readable form.
 template <unsigned int D>
-vcl_ostream& operator<<(vcl_ostream& os,
+std::ostream& operator<<(std::ostream& os,
                         rgtl_octree_point_location<D> const& point);
 
 #endif // rgtl_octree_point_location_hxx

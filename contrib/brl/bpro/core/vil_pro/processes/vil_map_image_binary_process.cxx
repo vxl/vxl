@@ -6,8 +6,10 @@
 #include "../vil_math_functors.h"
 #include <vil/vil_convert.h>
 #include <bprb/bprb_parameters.h>
-#include <vcl_iostream.h>
-#include <vcl_string.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iostream>
+#include <string>
 #include <vil/vil_image_view_base.h>
 #include <vil/vil_transform.h>
 #include <vil/vil_math.h>
@@ -17,7 +19,7 @@ bool vil_map_image_binary_process_cons(bprb_func_process& pro)
 {
   //input
   bool ok=false;
-  vcl_vector<vcl_string> input_types;
+  std::vector<std::string> input_types;
   input_types.push_back("vil_image_view_base_sptr");
   input_types.push_back("vil_image_view_base_sptr");
   input_types.push_back("vcl_string");
@@ -25,7 +27,7 @@ bool vil_map_image_binary_process_cons(bprb_func_process& pro)
   if (!ok) return ok;
 
   //output
-  vcl_vector<vcl_string> output_types;
+  std::vector<std::string> output_types;
   output_types.push_back("vil_image_view_base_sptr");
   ok = pro.set_output_types(output_types);
   if (!ok) return ok;
@@ -38,7 +40,7 @@ bool vil_map_image_binary_process(bprb_func_process& pro)
 {
   // Sanity check
   if (pro.n_inputs()< 3) {
-    vcl_cout << "vil_map_image_binary_process: The input number should be 3" << vcl_endl;
+    std::cout << "vil_map_image_binary_process: The input number should be 3" << std::endl;
     return false;
   }
 
@@ -51,7 +53,7 @@ bool vil_map_image_binary_process(bprb_func_process& pro)
   vil_image_view_base_sptr image2 = pro.get_input<vil_image_view_base_sptr>(i++);
 
   //Retrieve map functor name
-  vcl_string functor = pro.get_input<vcl_string>(i++);
+  std::string functor = pro.get_input<std::string>(i++);
 
   // convert image to float
   vil_image_view_base_sptr fimage1 = vil_convert_cast(float(), image1);
@@ -62,12 +64,12 @@ bool vil_map_image_binary_process(bprb_func_process& pro)
   vil_image_view<float> dest(fimg1.ni(), fimg1.nj(), fimg1.nplanes());
   // apply the functor
   if (functor == "add"){
-    vcl_cout << "in add\n";
+    std::cout << "in add\n";
     vil_math_add_functor af;
     vil_transform(fimg1, fimg2, dest, af);
   }
   else{
-    vcl_cerr << "In vil_map_image_binary_process::execute() - unknown functor "
+    std::cerr << "In vil_map_image_binary_process::execute() - unknown functor "
              << functor << '\n';
     return false;
   }

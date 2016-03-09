@@ -2,10 +2,12 @@
 //:
 // \file
 
-#include <vcl_complex.h>
-#include <vcl_vector.h>
-#include <vcl_cmath.h>
-#include <vcl_cstdlib.h>
+#include <complex>
+#include <vector>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <cmath>
+#include <cstdlib>
 
 #include <vgl/vgl_point_2d.h>
 #include <vgl/vgl_point_3d.h>
@@ -26,10 +28,10 @@ bool bwm_delaunay_tri::CircumCircle(vgl_point_2d<double> p,
   double xc, yc;
 
   // Check for coincident points
-  if (vcl_abs(p1.y()-p2.y()) < EPSILON && vcl_abs(p2.y()-p3.y()) < EPSILON)
+  if (std::abs(p1.y()-p2.y()) < EPSILON && std::abs(p2.y()-p3.y()) < EPSILON)
     return false;
 
-  if (vcl_abs(p2.y()-p1.y()) < EPSILON) {
+  if (std::abs(p2.y()-p1.y()) < EPSILON) {
     m2 = - (p3.x() - p2.x()) / (p3.y() - p2.y());
     mx2 = (p2.x() + p3.x()) / 2.0;
     my2 = (p2.y() + p3.y()) / 2.0;
@@ -37,7 +39,7 @@ bool bwm_delaunay_tri::CircumCircle(vgl_point_2d<double> p,
     yc = m2 * (xc - mx2) + my2;
     c = vgl_point_2d<double> (xc,yc);
   }
-  else if (vcl_abs(p3.y() - p2.y()) < EPSILON) {
+  else if (std::abs(p3.y() - p2.y()) < EPSILON) {
     m1 = - (p2.x() - p1.x()) / (p2.y() - p1.y());
     mx1 = (p1.x() + p2.x()) / 2.0;
     my1 = (p1.y() + p2.y()) / 2.0;
@@ -60,7 +62,7 @@ bool bwm_delaunay_tri::CircumCircle(vgl_point_2d<double> p,
   dx = p2.x() - xc;
   dy = p2.y() - yc;
   rsqr = dx * dx + dy * dy;
-  r = vcl_sqrt(rsqr);
+  r = std::sqrt(rsqr);
   dx = p.x() - xc;
   dy = p.y() - yc;
   drsqr = dx * dx + dy * dy;
@@ -78,13 +80,13 @@ bool bwm_delaunay_tri::CircumCircle(vgl_point_2d<double> p,
 //   qsort(p,nv,sizeof(XYZ),XYZCompare);
 ///////////////////////////////////////////////////////////////////////////////
 
-int bwm_delaunay_tri::triangulate(vcl_vector<vgl_point_3d<double> >& pxyz,
-                                  vcl_vector<vgl_point_3d<int> >& v,
+int bwm_delaunay_tri::triangulate(std::vector<vgl_point_3d<double> >& pxyz,
+                                  std::vector<vgl_point_3d<int> >& v,
                                   int &ntri)
 {
-  vcl_vector<bool> complete;
-  vcl_vector<vgl_point_2d<int> > edges;
-  vcl_vector<vgl_point_2d<int> > p_EdgeTemp;
+  std::vector<bool> complete;
+  std::vector<vgl_point_2d<int> > edges;
+  std::vector<vgl_point_2d<int> > p_EdgeTemp;
   unsigned int nedge = 0;
   unsigned int trimax, emax = 200;
   bool inside;
@@ -95,7 +97,7 @@ int bwm_delaunay_tri::triangulate(vcl_vector<vgl_point_3d<double> >& pxyz,
 
 
   // sort the vertices on X
-  vcl_qsort(&pxyz[0], pxyz.size(), sizeof pxyz[0], &bwm_delaunay_tri::XYZCompare);
+  std::qsort(&pxyz[0], pxyz.size(), sizeof pxyz[0], &bwm_delaunay_tri::XYZCompare);
 
   //Allocate memory for the completeness list, flag for each triangle */
   trimax = 4 * pxyz.size();

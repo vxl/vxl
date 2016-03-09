@@ -159,8 +159,8 @@ double ihog_minfo_cost_func::entropy_diff(vnl_vector<double>& mask_samples, vnl_
   for (unsigned i = 0; i<to_samples.size(); ++i)
     if (mask_samples[i]>0.0) {
       //match the gpu implementation, which does a floor operation
-      unsigned id = static_cast<unsigned>(vcl_floor(from_samples[i]*scl)),
-               is = static_cast<unsigned>(vcl_floor(to_samples[i]*scl));
+      unsigned id = static_cast<unsigned>(std::floor(from_samples[i]*scl)),
+               is = static_cast<unsigned>(std::floor(to_samples[i]*scl));
 
       if (id+1>(unsigned)nbins || is+1>(unsigned)nbins)
         continue;
@@ -183,14 +183,14 @@ double ihog_minfo_cost_func::entropy_diff(vnl_vector<double>& mask_samples, vnl_
   {
     double pr = pmr[c];
     if (pr>0)
-      msum += pr*vcl_log(pr);
+      msum += pr*std::log(pr);
   }
   for (unsigned r = 0; r<nr; ++r)
     for (unsigned c = 0; c<nc; ++c) {
         double prc = h[r][c];
         if (prc>0)
-          jsum+= prc*vcl_log(prc);
+          jsum+= prc*std::log(prc);
     }
   double ent_dif = jsum - msum;
-  return -ent_dif/vcl_log(2.0);
+  return -ent_dif/std::log(2.0);
 }

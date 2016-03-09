@@ -37,7 +37,7 @@ bool bvpl_compute_scene_statistics(boxm_scene< boct_tree<short, vnl_vector_fixed
     ++iterator;
   }
 
-  unsigned int nbins = (unsigned int)vcl_floor(vcl_sqrt(cell_count));
+  unsigned int nbins = (unsigned int)std::floor(std::sqrt(cell_count));
   response_hist = bsta_histogram<float>(min, max, nbins);
 
   iterator.begin();
@@ -77,7 +77,7 @@ bool bvpl_compute_scene_statistics(boxm_scene<boct_tree<T_loc, T_data > >* scene
   }
 
   if (nbins == 0)
-    nbins = (unsigned int)vcl_floor(vcl_sqrt(cell_count));
+    nbins = (unsigned int)std::floor(std::sqrt(cell_count));
   response_hist = bsta_histogram<float>(min, max, nbins);
   scene->unload_active_blocks();
   iterator.begin();

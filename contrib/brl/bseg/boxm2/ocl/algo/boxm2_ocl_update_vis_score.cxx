@@ -1,18 +1,20 @@
 #include "boxm2_ocl_update_vis_score.h"
 
-#include <vcl_vector.h>
+#include <vector>
 #include <boxm2/ocl/boxm2_ocl_util.h>
 #include <boxm2/ocl/algo/boxm2_ocl_camera_converter.h>
-#include <vcl_algorithm.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <algorithm>
 #include <vul/vul_timer.h>
-#include <vcl_stdexcept.h>
+#include <stdexcept>
 
 bool
 boxm2_ocl_update_vis_score
 ::compile_kernels()
 {
-    vcl_vector<vcl_string> src_paths;
-    vcl_string source_dir = boxm2_ocl_util::ocl_src_root();
+    std::vector<std::string> src_paths;
+    std::string source_dir = boxm2_ocl_util::ocl_src_root();
     src_paths.push_back(source_dir + "scene_info.cl");
     src_paths.push_back(source_dir + "pixel_conversion.cl");
     src_paths.push_back(source_dir + "bit/bit_tree_library_functions.cl");
@@ -22,14 +24,14 @@ boxm2_ocl_update_vis_score
     src_paths.push_back(source_dir + "bit/vis_score_kernel.cl");
     src_paths.push_back(source_dir + "bit/cast_ray_bit.cl");
 
-    vcl_vector<vcl_string> src_paths2;
+    std::vector<std::string> src_paths2;
     src_paths2.push_back(source_dir + "scene_info.cl");
     src_paths2.push_back(source_dir + "bit/vis_score_kernel.cl");
 
     //compilation options
-    vcl_string options = "";
+    std::string options = "";
     //seg len pass
-    vcl_string seg_opts = options + " -D RAYTRACE_PASS -D STEP_CELL=step_cell_vis_score(aux_args,data_ptr,llid,d*linfo->block_len) ";
+    std::string seg_opts = options + " -D RAYTRACE_PASS -D STEP_CELL=step_cell_vis_score(aux_args,data_ptr,llid,d*linfo->block_len) ";
     if (use_surface_normals_) {
       seg_opts += "-D USE_SURFACE_NORMALS";
     }
@@ -61,7 +63,7 @@ boxm2_ocl_update_vis_score
 ::run(vpgl_camera_double_sptr cam,
       unsigned ni,
       unsigned nj,
-      vcl_string prefix_name )
+      std::string prefix_name )
 {
   float transfer_time=0.0f;
   float gpu_time=0.0f;
@@ -75,11 +77,11 @@ boxm2_ocl_update_vis_score
   }
 
   //grab input image dimensions - round up to the nearest 8 for OPENCL
-  vcl_size_t local_threads[2]={8,8};
+  std::size_t local_threads[2]={8,8};
   unsigned cl_ni=RoundUp(ni,local_threads[0]);
   unsigned cl_nj=RoundUp(nj,local_threads[1]);
 
-  vcl_size_t global_threads[2]={cl_ni, cl_nj};
+  std::size_t global_threads[2]={cl_ni, cl_nj};
 
   // create all buffers
   cl_float* ray_origins    = new cl_float[4*cl_ni*cl_nj];
@@ -90,7 +92,7 @@ boxm2_ocl_update_vis_score
 
   //create vis, pre, norm and input image buffers
   float* vis_buff  = new float[cl_ni*cl_nj];
-  vcl_fill(vis_buff, vis_buff+cl_ni*cl_nj, 1.0f);
+  std::fill(vis_buff, vis_buff+cl_ni*cl_nj, 1.0f);
 
   bocl_mem_sptr vis_image = ocl_cache_->alloc_mem(cl_ni*cl_nj*sizeof(float), vis_buff,"vis image buffer");
   vis_image->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
@@ -117,12 +119,12 @@ boxm2_ocl_update_vis_score
   lookup->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR);
 
   // set arguments
-  vcl_vector<boxm2_block_id> vis_order = scene_->get_vis_blocks(cam);
-  vcl_vector<boxm2_block_id>::iterator id;
+  std::vector<boxm2_block_id> vis_order = scene_->get_vis_blocks(cam);
+  std::vector<boxm2_block_id>::iterator id;
 
   for (id = vis_order.begin(); id != vis_order.end(); ++id)
   {
-      vcl_cout << "update_vis_score: id = " << id->to_string() << vcl_endl;
+      std::cout << "update_vis_score: id = " << id->to_string() << std::endl;
       //choose correct render kernel
       boxm2_block_metadata mdata = scene_->get_block_metadata(*id);
 
@@ -209,7 +211,7 @@ boxm2_ocl_update_vis_score
   local_threads[1] = 1;
   for (id = vis_order.begin(); id != vis_order.end(); ++id)
   {
-      vcl_cout << "update_vis_score2 : id = " << id->to_string() << vcl_endl;
+      std::cout << "update_vis_score2 : id = " << id->to_string() << std::endl;
       //choose correct render kernel
       boxm2_block_metadata mdata = scene_->get_block_metadata(*id);
 
@@ -224,19 +226,19 @@ boxm2_ocl_update_vis_score
       info_buffer->data_buffer_length = (int) (alpha->num_bytes()/alphaTypeSize);
       blk_info->write_to_buffer((queue));
 
-      //vcl_cout << "getting aux0 and aux1 data " << vcl_endl;
+      //std::cout << "getting aux0 and aux1 data " << std::endl;
       //grab an appropriately sized AUX data buffer
       int auxTypeSize = boxm2_data_info::datasize(boxm2_data_traits<BOXM2_AUX0>::prefix());
       bocl_mem *aux0   = ocl_cache_->get_data<BOXM2_AUX0>(scene_,*id, info_buffer->data_buffer_length*auxTypeSize,true);
       auxTypeSize = boxm2_data_info::datasize(boxm2_data_traits<BOXM2_AUX1>::prefix());
       bocl_mem *aux1   = ocl_cache_->get_data<BOXM2_AUX1>(scene_,*id, info_buffer->data_buffer_length*auxTypeSize,true);
 
-      //vcl_cout << "getting output data: prefix_name = " << prefix_name << vcl_endl;
+      //std::cout << "getting output data: prefix_name = " << prefix_name << std::endl;
       int vis_score_size = boxm2_data_traits<BOXM2_VIS_SCORE>::datasize();
       bocl_mem *vis_score  = ocl_cache_->get_data(scene_,*id, boxm2_data_traits<BOXM2_VIS_SCORE>::prefix(prefix_name),
                                                   info_buffer->data_buffer_length*vis_score_size,false);
 
-      //vcl_cout << "got data. " << vcl_endl;
+      //std::cout << "got data. " << std::endl;
 
       transfer_time += (float) transfer.all();
       update_kernel_.set_arg( blk_info );
@@ -245,7 +247,7 @@ boxm2_ocl_update_vis_score
       update_kernel_.set_arg( vis_score );
       global_threads[0]=RoundUp(info_buffer->data_buffer_length,local_threads[0]);
       global_threads[1]=1;
-      //vcl_cout << "executing kernel " << vcl_endl;
+      //std::cout << "executing kernel " << std::endl;
 
       //execute kernel
       update_kernel_.execute(queue, 2, local_threads, global_threads);
@@ -254,31 +256,31 @@ boxm2_ocl_update_vis_score
           return false;
       gpu_time += update_kernel_.exec_time();
       clFinish(queue);
-      //vcl_cout << "kernel completed" << vcl_endl;
+      //std::cout << "kernel completed" << std::endl;
 
       //clear render kernel args so it can reset em on next execution
       update_kernel_.clear_args();
-      //vcl_cout << "1" << vcl_endl;
+      //std::cout << "1" << std::endl;
       //read info back to host memory
       blk->read_to_buffer(queue);
-      //vcl_cout << "2" << vcl_endl;
-      //vcl_cout << "vis_score cpu_buffer= " << vis_score->cpu_buffer() << vcl_endl;
-      //vcl_cout << "vis_score nbytes = " << vis_score->num_bytes() << vcl_endl;
+      //std::cout << "2" << std::endl;
+      //std::cout << "vis_score cpu_buffer= " << vis_score->cpu_buffer() << std::endl;
+      //std::cout << "vis_score nbytes = " << vis_score->num_bytes() << std::endl;
       vis_score->read_to_buffer(queue);
-      //vcl_cout << "3" << vcl_endl;
+      //std::cout << "3" << std::endl;
       clFinish(queue);
-      //vcl_cout << "4" << vcl_endl;
+      //std::cout << "4" << std::endl;
       //cache->remove_data_base(scene_,*id,boxm2_data_traits<BOXM2_AUX0>::prefix(prefix_name));
-      //vcl_cout << "5" << vcl_endl;
+      //std::cout << "5" << std::endl;
   }
-  vcl_cout<<"Gpu time "<<gpu_time<<" transfer time "<<transfer_time<<vcl_endl;
+  std::cout<<"Gpu time "<<gpu_time<<" transfer time "<<transfer_time<<std::endl;
   clReleaseCommandQueue(queue);
   return true;
 }
 
 void
 boxm2_ocl_update_vis_score
-::reset(vcl_string prefix_name){
+::reset(std::string prefix_name){
   int status=0;
   cl_command_queue queue = clCreateCommandQueue(device_->context(),*(device_->device_id()),
                                                 CL_QUEUE_PROFILING_ENABLE,&status);
@@ -286,8 +288,8 @@ boxm2_ocl_update_vis_score
     return ;
   }
 
-  vcl_vector<boxm2_block_id> block_ids = scene_->get_block_ids();
-  vcl_vector<boxm2_block_id>::iterator id;
+  std::vector<boxm2_block_id> block_ids = scene_->get_block_ids();
+  std::vector<boxm2_block_id>::iterator id;
 
   for(id = block_ids.begin(); id!=block_ids.end(); id++){
     bocl_mem *vis_score  = ocl_cache_->get_data(scene_,*id, boxm2_data_traits<BOXM2_VIS_SCORE>::prefix(prefix_name));

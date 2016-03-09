@@ -18,7 +18,9 @@
 #include <vsl/vsl_binary_io.h>
 #include <vnl/io/vnl_io_vector_fixed.h>
 #include <vsl/vsl_vector_io.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iostream>
 
 //: Binary save bsta_parzen_sphere to stream.
 template <class T, unsigned n>
@@ -29,7 +31,7 @@ vsl_b_write(vsl_b_ostream &os, const bsta_parzen_sphere<T,n>& g)
 
   typedef typename bsta_parzen<T,n>::vector_type vector_;
 
-  vcl_vector<vector_> samples = g.samples();
+  std::vector<vector_> samples = g.samples();
 
   vsl_b_write(os,samples);
 }
@@ -40,7 +42,7 @@ void
 vsl_b_read(vsl_b_istream &is, bsta_parzen_sphere<T,n>& g)
 {
   typedef typename bsta_parzen<T,n>::vector_type vector_;
-  vcl_vector<vector_> samples;
+  std::vector<vector_> samples;
   T bandwidth;
   vsl_b_read(is, bandwidth);
   vsl_b_read(is, samples);
@@ -51,7 +53,7 @@ vsl_b_read(vsl_b_istream &is, bsta_parzen_sphere<T,n>& g)
 //: Print summary
 template <class T, unsigned n>
 void
-vsl_print_summary(vcl_ostream &os, const bsta_parzen_sphere<T,n>& g)
+vsl_print_summary(std::ostream &os, const bsta_parzen_sphere<T,n>& g)
 {
   os << "parzen (sphere) mean:"<<g.mean()<<" n_samples"<<g.size();
 }

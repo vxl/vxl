@@ -25,7 +25,7 @@ bool bvpl_compute_pca_error_block_process_cons(bprb_func_process& pro)
 {
   using namespace bvpl_compute_pca_error_block_process_globals ;
 
-  vcl_vector<vcl_string> input_types_(n_inputs_);
+  std::vector<std::string> input_types_(n_inputs_);
   unsigned i = 0;
   input_types_[i++] = "bvpl_discover_pca_kernels_sptr" ;  //directory path
   input_types_[i++] = "bvpl_pca_error_scenes_sptr";
@@ -35,7 +35,7 @@ bool bvpl_compute_pca_error_block_process_cons(bprb_func_process& pro)
   input_types_[i++] = "unsigned";  //num_components
 
 
-  vcl_vector<vcl_string> output_types_(n_outputs_);
+  std::vector<std::string> output_types_(n_outputs_);
 
   return pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
 }

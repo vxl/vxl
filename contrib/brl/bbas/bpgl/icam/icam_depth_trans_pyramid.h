@@ -20,7 +20,9 @@
 #include <vil/vil_image_view.h>
 #include <vil/vil_pyramid_image_view.h>
 #include <vsl/vsl_binary_io.h>
-#include <vcl_vector.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <vector>
 
 class icam_depth_trans_pyramid
 {
@@ -89,9 +91,9 @@ class icam_depth_trans_pyramid
   unsigned n_params_;
   unsigned n_levels_;
   vil_pyramid_image_view<double> depth_pyramid_;
-  vcl_vector<vnl_matrix_fixed<double, 3, 3> > K_from_;
+  std::vector<vnl_matrix_fixed<double, 3, 3> > K_from_;
   //elements of the 'to' calibration matrix
-  vcl_vector<double> to_scales_;
+  std::vector<double> to_scales_;
   double to_fl_;
   double to_pu_;
   double to_pv_;

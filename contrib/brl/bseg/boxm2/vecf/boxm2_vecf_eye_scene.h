@@ -52,8 +52,10 @@
 #include <boxm2/boxm2_block.h>
 #include <boxm2/boxm2_scene.h>
 #include <boxm2/boxm2_data.h>
-#include <vcl_string.h>
-#include <vcl_vector.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <string>
+#include <vector>
 #include <vgl/algo/vgl_rotation_3d.h>
 #include "boxm2_vecf_eye_params.h"
 class boxm2_vecf_eye_scene : public boxm2_scene
@@ -67,13 +69,13 @@ class boxm2_vecf_eye_scene : public boxm2_scene
 
   //: construct from scene file specification, use exising database unless initialize == true
   // otherwise scan a spherical shell to define the voxel surface
-  boxm2_vecf_eye_scene(vcl_string const& scene_file, bool initialize = false);
+  boxm2_vecf_eye_scene(std::string const& scene_file, bool initialize = false);
 
   //: map eye data to the target scene
-  void map_to_target(boxm2_scene_sptr target_scene, vcl_string const& app_id="");
+  void map_to_target(boxm2_scene_sptr target_scene, std::string const& app_id="");
 
   //: compute an inverse vector field defined at sphere points (debug helper)
-  vcl_vector<vgl_vector_3d<double> > inverse_vector_field(vgl_rotation_3d<double> const& rot) const;
+  std::vector<vgl_vector_3d<double> > inverse_vector_field(vgl_rotation_3d<double> const& rot) const;
 
   boxm2_scene_sptr scene(){ return base_model_;}
 
@@ -86,7 +88,7 @@ private:
   //: set up pointers to source block databases
   void extract_block_data();
   //: set up pointers to target block databases
-  void extract_target_block_data(boxm2_scene_sptr target_scene, vcl_string const& app_id);
+  void extract_target_block_data(boxm2_scene_sptr target_scene, std::string const& app_id);
   //: initialize the source block data
   void fill_block();
   //: initialize the full target block (not currently used )
@@ -110,7 +112,7 @@ private:
   //: closest point in the spherical shell
   vgl_point_3d<double> closest_point_on_shell(vgl_point_3d<double> const& p) const;
   //: scan over target cells and interpolate appearance and alpha from source
-  void apply_vector_field_to_target(vcl_vector<vgl_vector_3d<double> > const& vf);
+  void apply_vector_field_to_target(std::vector<vgl_vector_3d<double> > const& vf);
   boxm2_block* blk_;                     // the source block
   boxm2_block* target_blk_;              // the target block
   boxm2_data<BOXM2_ALPHA>* alpha_data_;  // source alpha database
@@ -126,22 +128,22 @@ private:
   boxm2_data<BOXM2_NUM_OBS>* target_nobs_data_;  //target nobs
 
   boxm2_vecf_eye_params params_;                          // parameter struct
-  vcl_vector<vgl_point_3d<double> > sphere_cell_centers_; // centers of spherical shell voxels
-  vcl_vector<unsigned> sphere_cell_data_index_;           // corresponding data indices
+  std::vector<vgl_point_3d<double> > sphere_cell_centers_; // centers of spherical shell voxels
+  std::vector<unsigned> sphere_cell_data_index_;           // corresponding data indices
     //      cell_index          cell_index
-  vcl_map<unsigned, vcl_vector<unsigned> > cell_neighbor_cell_index_; // neighbors of each shell voxel
+  std::map<unsigned, std::vector<unsigned> > cell_neighbor_cell_index_; // neighbors of each shell voxel
   //     data_index cell_index
-  vcl_map<unsigned, unsigned > data_index_to_cell_index_;             // data index to shell index
+  std::map<unsigned, unsigned > data_index_to_cell_index_;             // data index to shell index
   //      data_index          data_index
-  vcl_map<unsigned, vcl_vector<unsigned> > cell_neighbor_data_index_; // data index to neighbor data indices
+  std::map<unsigned, std::vector<unsigned> > cell_neighbor_data_index_; // data index to neighbor data indices
   //      data_index          distance
-  vcl_map<unsigned, vcl_vector<double> > cell_neighbor_distance_;     // data index to neighbor distances
-  vcl_vector<double> closest_sphere_distance_norm_;                   // closest spherical shell distance/(side length)
+  std::map<unsigned, std::vector<double> > cell_neighbor_distance_;     // data index to neighbor distances
+  std::vector<double> closest_sphere_distance_norm_;                   // closest spherical shell distance/(side length)
 
-  vcl_vector<vgl_point_3d<double> > iris_cell_centers_;               // center of iris cells
-  vcl_vector<unsigned> iris_cell_data_index_;                         // corresponding data index
+  std::vector<vgl_point_3d<double> > iris_cell_centers_;               // center of iris cells
+  std::vector<unsigned> iris_cell_data_index_;                         // corresponding data index
 
-  vcl_vector<vgl_point_3d<double> > pupil_cell_centers_;              // center of pupil cells
-  vcl_vector<unsigned> pupil_cell_data_index_;                        // corresponding data index
+  std::vector<vgl_point_3d<double> > pupil_cell_centers_;              // center of pupil cells
+  std::vector<unsigned> pupil_cell_data_index_;                        // corresponding data index
 };
 #endif // boxm2_vecf_eye_scene_h_

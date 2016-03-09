@@ -46,7 +46,7 @@ namespace boxm_roi_init_process_globals
   const unsigned n_outputs_ = 3;
 
   //functions
-  bool roi_init(vcl_string img_path,
+  bool roi_init(std::string img_path,
                 vpgl_camera_double_sptr camera,
                 vgl_box_3d<double> box,
                 vil_image_view<unsigned char> & roi_img);
@@ -63,7 +63,7 @@ bool boxm_roi_init_process_cons(bprb_func_process& pro)
 
   //this process takes 3 input:
   //the filename of the image, the camera and the voxel world
-  vcl_vector<vcl_string> input_types_(n_inputs_);
+  std::vector<std::string> input_types_(n_inputs_);
   unsigned  i=0;
   input_types_[i++] = "vcl_string";                // image path
   input_types_[i++] = "vpgl_camera_double_sptr";   //  camera
@@ -71,7 +71,7 @@ bool boxm_roi_init_process_cons(bprb_func_process& pro)
 
   //output
   unsigned j = 0;
-  vcl_vector<vcl_string> output_types_(n_outputs_);
+  std::vector<std::string> output_types_(n_outputs_);
   output_types_[j++] = "vpgl_camera_double_sptr"; // unadjusted local rational camera
   output_types_[j++] = "vil_image_view_base_sptr";  // image ROI
   output_types_[j++] = "float"; // uncertainty
@@ -84,17 +84,17 @@ bool boxm_roi_init_process(bprb_func_process& pro)
 {
   using namespace boxm_roi_init_process_globals;
   //static const parameters
-  static const vcl_string error = "error";
+  static const std::string error = "error";
 
   if ( pro.n_inputs() < n_inputs_ ) {
-    vcl_cout << pro.name() << " The input number should be " << n_inputs_<< vcl_endl;
+    std::cout << pro.name() << " The input number should be " << n_inputs_<< std::endl;
     return false;
   }
 
   // get the inputs:
   unsigned i = 0;
   // image
-  vcl_string image_path = pro.get_input<vcl_string>(i++);
+  std::string image_path = pro.get_input<std::string>(i++);
   // camera
   vpgl_camera_double_sptr camera = pro.get_input<vpgl_camera_double_sptr>(i++);
   //voxel_world
@@ -113,7 +113,7 @@ bool boxm_roi_init_process(bprb_func_process& pro)
         bb->add_point(roi_box->max_x(), roi_box->max_y());
         bb = broi.clip_to_image_bounds(bb);
         if (bb->width() <= 0 || bb->height() <= 0) {
-            vcl_cerr << "boxm_roi_init_process::roi_init()-- clipping box is out of image boundaries\n";
+            std::cerr << "boxm_roi_init_process::roi_init()-- clipping box is out of image boundaries\n";
             return false;
         }
         temp->set_size(int(bb->width()),int(bb->height()));
@@ -139,7 +139,7 @@ bool boxm_roi_init_process(bprb_func_process& pro)
 }
 
 //: roi_init function
-bool boxm_roi_init_process_globals::roi_init(vcl_string  img_path,
+bool boxm_roi_init_process_globals::roi_init(std::string  img_path,
                                              vpgl_camera_double_sptr camera,
                                              vgl_box_3d<double> box,
                                              vil_image_view<unsigned char> & roi_img)
@@ -156,7 +156,7 @@ bool boxm_roi_init_process_globals::roi_init(vcl_string  img_path,
         bb->add_point(roi_box->max_x(), roi_box->max_y());
         bb = broi.clip_to_image_bounds(bb);
         if (bb->width() <= 0 || bb->height() <= 0) {
-            vcl_cerr << "boxm_roi_init_process::roi_init()-- clipping box is out of image boundaries\n";
+            std::cerr << "boxm_roi_init_process::roi_init()-- clipping box is out of image boundaries\n";
             return false;
         }
 
@@ -180,7 +180,7 @@ vgl_box_2d<double>* boxm_roi_init_process_globals::project_box( vpgl_camera_doub
                                                                 vgl_box_3d<double> box)
 {
   // create a box with uncertainty
-  vcl_vector<vgl_point_3d<double> > box_corners = boxm_utils::corners_of_box_3d(box);
+  std::vector<vgl_point_3d<double> > box_corners = boxm_utils::corners_of_box_3d(box);
 
   vgl_box_2d<double>* roi = new vgl_box_2d<double>();
 
@@ -188,7 +188,7 @@ vgl_box_2d<double>* boxm_roi_init_process_globals::project_box( vpgl_camera_doub
       double u,v;
       cam->project(box_corners[i].x(),box_corners[i].y(),box_corners[i].z(),u,v);
       vgl_point_2d<double> p2d(u,v);
-      vcl_cout<<u<<' '<<v<<'\n';
+      std::cout<<u<<' '<<v<<'\n';
       roi->add(p2d);
   }
   return roi;

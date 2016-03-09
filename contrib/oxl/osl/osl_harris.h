@@ -23,9 +23,11 @@
 //   J.Mundy     Jan98  slight modified the interface to correspond to new style using parameter blocks and image dispatch
 // \endverbatim
 
-#include <vcl_iosfwd.h>
-#include <vcl_vector.h>
-#include <vcl_utility.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iosfwd>
+#include <vector>
+#include <utility>
 #include <vxl_config.h>
 #include <vil1/vil1_memory_image_of.h>
 #include <osl/osl_harris_params.h>
@@ -45,9 +47,9 @@ class osl_harris
     compute_corners();
   }
 
-  void get_corners(vcl_vector<vcl_pair<float, float> > &) const;
-  void get_corners(vcl_vector<float> &, vcl_vector<float> &) const;
-  void save_corners(vcl_ostream &stream) const;
+  void get_corners(std::vector<std::pair<float, float> > &) const;
+  void get_corners(std::vector<float> &, std::vector<float> &) const;
+  void save_corners(std::ostream &stream) const;
   void save_corners(char const *file) const;
 
   // these buffers persist between invocations so that
@@ -87,7 +89,7 @@ class osl_harris
 
  protected:
   osl_harris_params params_;
-  vcl_vector<vcl_pair<float, float> > cc; // corners
+  std::vector<std::pair<float, float> > cc; // corners
  private:
   // these routines called by compute() :
   void do_non_adaptive(double *corner_min);

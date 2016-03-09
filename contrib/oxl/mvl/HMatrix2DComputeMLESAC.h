@@ -29,7 +29,9 @@
 #include <mvl/HMatrix2DCompute4Point.h>
 #include <mvl/HMatrix2D.h>
 #include <mvl/AffineMetric.h>
-#include <vcl_vector.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <vector>
 
 class HMatrix2DComputeMLESAC : public HMatrix2DComputeRobust
 {
@@ -38,8 +40,8 @@ class HMatrix2DComputeMLESAC : public HMatrix2DComputeRobust
   HMatrix2DComputeMLESAC(double std);
   virtual ~HMatrix2DComputeMLESAC();
 
-  virtual double calculate_term(vcl_vector<double>& residuals,
-                                vcl_vector<bool>& inlier_list,
+  virtual double calculate_term(std::vector<double>& residuals,
+                                std::vector<bool>& inlier_list,
                                 int& count);
   virtual double calculate_residual(HomgPoint2D& one,
                                     HomgPoint2D& two,

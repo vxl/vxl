@@ -2,10 +2,12 @@
 #include "baio.h"
 //:
 // \file
-#include <vcl_iostream.h> //for vcl_cout
-#include <vcl_cstdlib.h>  //includes malloc
-#include <vcl_cstdio.h>   // for std::perror
-#include <vcl_cerrno.h>   // for EINPROGRESS int
+#include <iostream> //for std::cout
+#include <cstdlib>  //includes malloc
+#include <vcl_compiler.h>
+#include <iostream>
+#include <cstdio>   // for std::perror
+#include <cerrno>   // for EINPROGRESS int
 
 //UNIX specific includes
 #include <aio.h>     //for aio_read
@@ -31,13 +33,13 @@ baio::~baio()
 }
 
 //: Opens and reads file asynchronously
-bool baio::read(vcl_string filename, char* buff, long BUFSIZE)
+bool baio::read(std::string filename, char* buff, long BUFSIZE)
 {
   // 1. call c open to get standard file handle
   int fhandle = open(filename.c_str(), O_RDONLY);
   if (fhandle < 0) {
-    vcl_cerr<<"baio (unix)::read could not open file"<<filename<<vcl_endl;
-    vcl_perror("open");
+    std::cerr<<"baio (unix)::read could not open file"<<filename<<std::endl;
+    std::perror("open");
   }
 
   // 2. Zero out the aiocb structure (recommended)
@@ -46,8 +48,8 @@ bool baio::read(vcl_string filename, char* buff, long BUFSIZE)
   // 3. Allocate a data buffer for the aiocb request
   info_->my_aiocb.aio_buf = buff;
   if (!info_->my_aiocb.aio_buf) {
-    vcl_cerr<<"baio (unix)::read could not assign buffer of size "<<BUFSIZE<<vcl_endl;
-    vcl_perror("malloc");
+    std::cerr<<"baio (unix)::read could not assign buffer of size "<<BUFSIZE<<std::endl;
+    std::perror("malloc");
   }
 
   //4.  Initialize the necessary fields in the aiocb
@@ -58,20 +60,20 @@ bool baio::read(vcl_string filename, char* buff, long BUFSIZE)
   //5.  Call AIO_READ using my_aiocb struct
   int STATUS = aio_read( &(info_->my_aiocb) );
   if (STATUS < 0) {
-    vcl_cerr<<"baio (unix)::read throws error on aio_read: "<<STATUS<<vcl_endl;
-    vcl_perror("aio_read");
+    std::cerr<<"baio (unix)::read throws error on aio_read: "<<STATUS<<std::endl;
+    std::perror("aio_read");
   }
   return true;
 }
 
 //: opens and writes file asynchronously
-bool baio::write(vcl_string filename, char* buff, long BUFSIZE)
+bool baio::write(std::string filename, char* buff, long BUFSIZE)
 {
   // 1. call c open to get standard file handle
   int fhandle = open(filename.c_str(), O_WRONLY | O_CREAT, 0666);
   if (fhandle < 0) {
-    vcl_cerr<<"baio (unix)::write could not open file: "<<filename<<vcl_endl;
-    vcl_perror("open");
+    std::cerr<<"baio (unix)::write could not open file: "<<filename<<std::endl;
+    std::perror("open");
   }
 
   // 2. Zero out the aiocb structure (recommended)
@@ -80,8 +82,8 @@ bool baio::write(vcl_string filename, char* buff, long BUFSIZE)
   // 3. Allocate a data buffer for the aiocb request
   info_->my_aiocb.aio_buf = buff;
   if (!info_->my_aiocb.aio_buf) {
-    vcl_cerr<<"baio (unix)::write could not assign buffer of size "<<BUFSIZE<<vcl_endl;
-    vcl_perror("malloc");
+    std::cerr<<"baio (unix)::write could not assign buffer of size "<<BUFSIZE<<std::endl;
+    std::perror("malloc");
   }
 
   //4.  Initialize the necessary fields in the aiocb
@@ -92,8 +94,8 @@ bool baio::write(vcl_string filename, char* buff, long BUFSIZE)
   //5.  Call AIO_READ using my_aiocb struct
   int STATUS = aio_write( &(info_->my_aiocb) );
   if (STATUS < 0) {
-    vcl_cerr<<"baio (unix)::write throws error on aio_read: "<<STATUS<<vcl_endl;
-    vcl_perror("aio_read");
+    std::cerr<<"baio (unix)::write throws error on aio_read: "<<STATUS<<std::endl;
+    std::perror("aio_read");
   }
   return true;
 }

@@ -5,7 +5,9 @@
 // \file
 // \brief A test process
 
-#include <vcl_string.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <string>
 #include <brdb/brdb_database.h>
 #include <bprb/bprb_process.h>
 
@@ -20,7 +22,7 @@ class bprb_test_process : public bprb_process
   virtual bprb_process* clone() const { return new bprb_test_process(*this); }
 
   //: The name of the process
-  virtual vcl_string name() const { return "Process"; }
+  virtual std::string name() const { return "Process"; }
 
   //: Perform any initialization required by the process
   virtual bool init() {return true;}

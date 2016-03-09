@@ -1,10 +1,12 @@
 #include "boxm_quad_scan_iterator.h"
 //:
 // \file
-#include <vcl_vector.h>
-#include <vcl_cmath.h>
-#include <vcl_algorithm.h>
-#include <vcl_iostream.h>
+#include <vector>
+#include <cmath>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <algorithm>
+#include <iostream>
 
 //: constructor
 boxm_quad_scan_iterator::boxm_quad_scan_iterator(double *verts_x, double *verts_y,
@@ -29,8 +31,8 @@ boxm_quad_scan_iterator::boxm_quad_scan_iterator(double *verts_x, double *verts_
   poly_bb_.update(verts_x[v2], verts_y[v2]);
   poly_bb_.update(verts_x[v3], verts_y[v3]);
 
-  int poly_xmin = (int)vcl_floor(poly_bb_.xmin());
-  int poly_xmax = (int)vcl_floor(poly_bb_.xmax()) + 1;
+  int poly_xmin = (int)std::floor(poly_bb_.xmin());
+  int poly_xmax = (int)std::floor(poly_bb_.xmax()) + 1;
   poly_diameter_x_ = (poly_xmax - poly_xmin) + 1;
   aa_vals_ = new float[poly_diameter_x_];
   aa_vals_offset_ = -poly_xmin;
@@ -65,7 +67,7 @@ bool boxm_quad_scan_iterator::next()
   endx_ =  int(poly_bb_.xmin()) - 1;
 
   // compute antialiasing values for each pixel in scanline
-  //vcl_fill(aa_vals_.begin(), aa_vals_.end(), 0.0f);
+  //std::fill(aa_vals_.begin(), aa_vals_.end(), 0.0f);
   for (unsigned int i=0; i<poly_diameter_x_; i++)
     aa_vals_[i] = 0.0f;
 
@@ -77,8 +79,8 @@ bool boxm_quad_scan_iterator::next()
     int super_startx = super_it_->startx();
     int super_endx = super_it_->endx() + 1;
 
-    super_startx = vcl_max(0, super_startx);
-    super_endx = vcl_max(0, super_endx);
+    super_startx = std::max(0, super_startx);
+    super_endx = std::max(0, super_endx);
     // make sure super_startx < super_endx
     if (super_endx > super_startx) {
       int scanline_startx = super_startx / supersample_ratio_;

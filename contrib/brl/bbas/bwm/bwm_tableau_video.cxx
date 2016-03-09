@@ -123,22 +123,22 @@ void bwm_tableau_video::display_selected_world_pt()
 
 void bwm_tableau_video::extract_world_plane()
 {
-  vcl_string path = "";
-  vcl_string ext = "*.pl3d";
+  std::string path = "";
+  std::string ext = "*.pl3d";
   vgui_dialog plane_dlg("Extract World Plane(3 Sel. Corrs.)");
   plane_dlg.file("Plane file", ext, path);
   if (!plane_dlg.ask())
     return;
   vgl_plane_3d<double> plane;
   if (!my_observer_->extract_world_plane(plane)) {
-    vcl_cerr << "extract plane failed\n";
+    std::cerr << "extract plane failed\n";
     return;
   }
   vnl_double_4 pv;
   pv[0]=plane.a();   pv[1]=plane.b();   pv[2]=plane.c();   pv[3]=plane.d();
-  vcl_ofstream os(path.c_str());
+  std::ofstream os(path.c_str());
   if (!os.is_open()) {
-    vcl_cerr << "invalid output path for plane\n";
+    std::cerr << "invalid output path for plane\n";
     return;
   }
   os << pv;
@@ -149,25 +149,25 @@ void bwm_tableau_video::extract_neighborhoods()
 {
   static unsigned radius_x = 1;
   static unsigned radius_y = 1;
-  vcl_string path = "";
-  vcl_string ext = "*.nbh";
+  std::string path = "";
+  std::string ext = "*.nbh";
   vgui_dialog nbh_dlg("Neighborhoods (select 2 corrs)");
   nbh_dlg.file("Neighborhood file", ext, path);
   nbh_dlg.field("Nbhd radius along x ", radius_x);
   nbh_dlg.field("Nbhd radius along y ", radius_y);
   if (!nbh_dlg.ask())
     return;
-  vcl_vector<vcl_vector<vnl_matrix<float> > > nhds;
+  std::vector<std::vector<vnl_matrix<float> > > nhds;
   if (!my_observer_->extract_neighborhoods(radius_x,radius_y,  nhds)) {
-    vcl_cerr << "extract neighborhoods failed\n";
+    std::cerr << "extract neighborhoods failed\n";
     return;
   }
 
   unsigned dimx = 2*radius_x+1;
   unsigned dimy = 2*radius_y+1;
-  vcl_ofstream os(path.c_str());
+  std::ofstream os(path.c_str());
   if (!os.is_open()) {
-    vcl_cerr << "invalid output path for neighborhoods\n";
+    std::cerr << "invalid output path for neighborhoods\n";
     return;
   }
   os << "dim: " << dimx <<' '<<dimy<< '\n';
@@ -195,13 +195,13 @@ void bwm_tableau_video::set_world_pt()
 
 void bwm_tableau_video::extract_histograms()
 {
-  vcl_string path = "";
-  vcl_string ext = "*.*";
+  std::string path = "";
+  std::string ext = "*.*";
   vgui_dialog hist_dlg("Frame histograms");
   hist_dlg.file("Histogram file (binary)", ext, path);
   if (!hist_dlg.ask())
     return;
-  vcl_vector<bsta_histogram<float>  > hists;
+  std::vector<bsta_histogram<float>  > hists;
   if (!my_observer_->extract_histograms(hists))
     return;
   unsigned n = hists.size();
@@ -216,15 +216,15 @@ void bwm_tableau_video::extract_histograms()
 
 void bwm_tableau_video::save_as_image_list()
 {
-  vcl_string path = "";
-  vcl_string ext = "";
+  std::string path = "";
+  std::string ext = "";
   vgui_dialog_extensions save_dlg("Save Video (Image List)");
   save_dlg.dir("Video Directory", ext, path);
   save_dlg.line_break();
   if (!save_dlg.ask())
     return;
   if (!my_observer_->save_as_image_list(path))
-    vcl_cerr << " Unable to save video as image list\n";
+    std::cerr << " Unable to save video as image list\n";
 }
 
 void bwm_tableau_video::clear_all_frames()

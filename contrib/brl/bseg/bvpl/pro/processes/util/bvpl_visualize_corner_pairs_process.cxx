@@ -43,8 +43,8 @@ bool bvpl_visualize_corner_pairs_process_cons(bprb_func_process& pro)
   using namespace bvpl_visualize_corner_pairs_process_globals;
 
   //process takes 5 inputs but has no outputs
-  vcl_vector<vcl_string> input_types_(n_inputs_);
-  vcl_vector<vcl_string> output_types_(n_outputs_);
+  std::vector<std::string> input_types_(n_inputs_);
+  std::vector<std::string> output_types_(n_outputs_);
   input_types_[0] = "bvpl_corner_pairs_sptr";
   input_types_[1] = "unsigned";
   input_types_[2] = "vcl_string";
@@ -60,7 +60,7 @@ bool bvpl_visualize_corner_pairs_process(bprb_func_process& pro)
 
   if (pro.n_inputs() != n_inputs_)
   {
-    vcl_cout << pro.name() << " The input number should be " << n_inputs_<< vcl_endl;
+    std::cout << pro.name() << " The input number should be " << n_inputs_<< std::endl;
     return false;
   }
 
@@ -71,20 +71,20 @@ bool bvpl_visualize_corner_pairs_process(bprb_func_process& pro)
   unsigned lines_id =
 #endif
                          pro.get_input<unsigned>(i++);
-  vcl_string vrml_path = pro.get_input<vcl_string>(i++);
+  std::string vrml_path = pro.get_input<std::string>(i++);
   bool write_header    = pro.get_input<bool>(i++);
   float hue            = pro.get_input<float>(i++)*360.0f;
 
-  vcl_ofstream os;
+  std::ofstream os;
 
   if (write_header) {
     if (vul_file::exists(vrml_path.c_str()))
       vpl_unlink(vrml_path.c_str());
-    os.open(vrml_path.c_str(), vcl_ios::out);
+    os.open(vrml_path.c_str(), std::ios::out);
     bvrml_write::write_vrml_header(os);
   }
   else {
-    os.open(vrml_path.c_str(), vcl_ios::app);
+    os.open(vrml_path.c_str(), std::ios::app);
   }
    float r, g, b;
    vil_colour_space_HSV_to_RGB<float>(hue,1.0f,255.0f,&r,&g,&b);

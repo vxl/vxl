@@ -38,7 +38,7 @@ void vsl_b_read(vsl_b_istream &is, brad_hist_prob_feature_vector& fv)
   fv.set_max(max);
 }
 
-void vsl_print_summary(vcl_ostream &os, brad_hist_prob_feature_vector& fv)
+void vsl_print_summary(std::ostream &os, brad_hist_prob_feature_vector& fv)
 {
   fv.print(os);
 }

@@ -13,7 +13,9 @@
 #include "rgrl_scale_estimator_sptr.h"
 #include "rgrl_mask.h"
 
-#include <vcl_vector.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <vector>
 
 class vnl_random;
 
@@ -112,14 +114,14 @@ class rgrl_initializer_ran_sam
 
   //: Determine the next random sample, filling in the "sample" vector.
   void next_sample( unsigned int taken, unsigned int num_points,
-                    vcl_vector<int>& sample,
+                    std::vector<int>& sample,
                     unsigned int points_per_sample );
 
   //: Extract the matches indexed by the point_indices
-  rgrl_match_set_sptr get_matches(const vcl_vector<int>&  point_indices, unsigned int total_num_matches);
+  rgrl_match_set_sptr get_matches(const std::vector<int>&  point_indices, unsigned int total_num_matches);
 
   //: For debugging
-  void trace_sample( const vcl_vector<int>& point_indices ) const;
+  void trace_sample( const std::vector<int>& point_indices ) const;
 
   //: return number of initializations
   //  -1 stands for unknown

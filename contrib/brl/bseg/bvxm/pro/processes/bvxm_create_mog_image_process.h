@@ -23,7 +23,9 @@
 #include <bvxm/bvxm_voxel_world.h>
 #include <bvxm/grid/bvxm_voxel_slab_base.h>
 
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iostream>
 
 bool bvxm_create_mog_image_process_cons(bprb_func_process& pro);
 
@@ -50,11 +52,11 @@ bool mix_gaussian(bvxm_voxel_world_sptr world,
       done = world->mog_image_with_random_order_sampling<APM_T>(observation, n_samples, mog_image, bin_index, scale_index);
       break;
     default:
-      vcl_cout << "In bvxm_create_mog_image_process::mix_gaussian() - unrecognized option: " << mog_creation_method_ << " to create mog image\n";
+      std::cout << "In bvxm_create_mog_image_process::mix_gaussian() - unrecognized option: " << mog_creation_method_ << " to create mog image\n";
       return false;
   }
   if (!done)
-    vcl_cout << "In bvxm_create_mog_image_process::mix_gaussian() - problems in creating mixture of gaussian image!\n";
+    std::cout << "In bvxm_create_mog_image_process::mix_gaussian() - problems in creating mixture of gaussian image!\n";
 
   return done;
 }

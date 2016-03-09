@@ -8,7 +8,9 @@
 
 #include <rgrl/rgrl_transformation_sptr.h>
 #include <rgrl/rgrl_transformation.h>
-#include <vcl_iosfwd.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iosfwd>
 
 //: A base class that represents a pair of transformation: forward & backward
 //
@@ -85,10 +87,10 @@ class rgrl_trans_couple
   rgrl_transformation_sptr scale_by( double scale ) const;
 
   //: output transformation
-  void write( vcl_ostream& os ) const;
+  void write( std::ostream& os ) const;
 
   //: input transformation
-  bool read( vcl_istream& is );
+  bool read( std::istream& is );
 
   //: make a clone copy
   rgrl_transformation_sptr clone() const;

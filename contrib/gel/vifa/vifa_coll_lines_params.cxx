@@ -3,7 +3,9 @@
 //:
 // \file
 
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iostream>
 
 vifa_coll_lines_params::
 vifa_coll_lines_params(float midpt_distance,
@@ -31,9 +33,9 @@ vifa_coll_lines_params(const vifa_coll_lines_params& old_params)
 void vifa_coll_lines_params::
 print_info(void)
 {
-  vcl_cout << "vifa_coll_lines_params:\n"
-           << "  midpoint distance = " << midpt_distance_ << vcl_endl
-           << "  angle tolerance   = " << angle_tolerance_ << vcl_endl
-           << "  discard threshold = " << discard_threshold_ << vcl_endl
-           << "  endpoint distance = " << endpt_distance_ << vcl_endl;
+  std::cout << "vifa_coll_lines_params:\n"
+           << "  midpoint distance = " << midpt_distance_ << std::endl
+           << "  angle tolerance   = " << angle_tolerance_ << std::endl
+           << "  discard threshold = " << discard_threshold_ << std::endl
+           << "  endpoint distance = " << endpt_distance_ << std::endl;
 }

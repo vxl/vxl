@@ -3,17 +3,19 @@
 
 #include "bstm_refine_blk_in_space_function.h"
 #include <bstm/io/bstm_lru_cache.h>
-#include <vcl_algorithm.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <algorithm>
 
 template <bstm_data_type APM_DATA_TYPE, bstm_data_type NOBS_DATA_TYPE >
-bstm_refine_blk_in_space_function<APM_DATA_TYPE, NOBS_DATA_TYPE>::bstm_refine_blk_in_space_function(bstm_time_block* t_blk, bstm_block* blk, vcl_vector<bstm_data_base*> & datas, float change_prob_t)
+bstm_refine_blk_in_space_function<APM_DATA_TYPE, NOBS_DATA_TYPE>::bstm_refine_blk_in_space_function(bstm_time_block* t_blk, bstm_block* blk, std::vector<bstm_data_base*> & datas, float change_prob_t)
 {
   init_data(t_blk, blk, datas, change_prob_t);
   refine(datas);
 }
 
 template <bstm_data_type APM_DATA_TYPE, bstm_data_type NOBS_DATA_TYPE >
-bool bstm_refine_blk_in_space_function<APM_DATA_TYPE, NOBS_DATA_TYPE>::init_data(bstm_time_block* blk_t, bstm_block* blk, vcl_vector<bstm_data_base*> & datas, float change_prob_t)
+bool bstm_refine_blk_in_space_function<APM_DATA_TYPE, NOBS_DATA_TYPE>::init_data(bstm_time_block* blk_t, bstm_block* blk, std::vector<bstm_data_base*> & datas, float change_prob_t)
 {
   //store block and pointer to uchar16 3d block
    blk_   = blk;
@@ -38,7 +40,7 @@ bool bstm_refine_blk_in_space_function<APM_DATA_TYPE, NOBS_DATA_TYPE>::init_data
 
    //USE rootlevel to determine MAX_INNER and MAX_CELLS
    if (max_level_t_ == 1) {
-     vcl_cout<<"Trying to refine scene with max level 1"<<vcl_endl;
+     std::cout<<"Trying to refine scene with max level 1"<<std::endl;
      return true;
    }
    else if (max_level_t_ == 2) {
@@ -59,7 +61,7 @@ bool bstm_refine_blk_in_space_function<APM_DATA_TYPE, NOBS_DATA_TYPE>::init_data
 
    //USE rootlevel to determine MAX_INNER and MAX_CELLS
    if (max_level_ == 1) {
-     vcl_cout<<"Trying to refine scene with max level 1"<<vcl_endl;
+     std::cout<<"Trying to refine scene with max level 1"<<std::endl;
      return true;
    }
    else if (max_level_ == 2) {
@@ -80,7 +82,7 @@ bool bstm_refine_blk_in_space_function<APM_DATA_TYPE, NOBS_DATA_TYPE>::init_data
 }
 
 template <bstm_data_type APM_DATA_TYPE, bstm_data_type NOBS_DATA_TYPE >
-bool bstm_refine_blk_in_space_function<APM_DATA_TYPE, NOBS_DATA_TYPE>::refine(vcl_vector<bstm_data_base*>& datas)
+bool bstm_refine_blk_in_space_function<APM_DATA_TYPE, NOBS_DATA_TYPE>::refine(std::vector<bstm_data_base*>& datas)
 {
 
   //1. loop over each tree, refine it in place
@@ -104,10 +106,10 @@ bool bstm_refine_blk_in_space_function<APM_DATA_TYPE, NOBS_DATA_TYPE>::refine(vc
       int newSize = refined_tree.num_cells();
 
       //save refined tree to trees_copy
-      vcl_memcpy (trees_copy[currIndex].data_block(), refined_tree.get_bits(), sizeof(uchar16));
+      std::memcpy (trees_copy[currIndex].data_block(), refined_tree.get_bits(), sizeof(uchar16));
       dataSize += newSize;
   }
-  vcl_cout << "Num space cells split: " << num_split_ << vcl_endl;
+  std::cout << "Num space cells split: " << num_split_ << std::endl;
 
 
 
@@ -142,7 +144,7 @@ bool bstm_refine_blk_in_space_function<APM_DATA_TYPE, NOBS_DATA_TYPE>::refine(vc
       newInitCount += this->move_time_trees(old_tree, refined_tree, newTimeBlk,newC_cpy);
 
       //4. store old tree in new tree, swap data out
-      vcl_memcpy(blk_iter, refined_tree.get_bits(), sizeof(uchar16));
+      std::memcpy(blk_iter, refined_tree.get_bits(), sizeof(uchar16));
   }
 
   delete[] trees_copy;
@@ -165,7 +167,7 @@ bool bstm_refine_blk_in_space_function<APM_DATA_TYPE, NOBS_DATA_TYPE>::refine(vc
       int newSize = new_time_tree.num_leaves(); //number of leaves, not all cells.
       dataSize += newSize;
   }
-  vcl_cout << "New data size: " << dataSize << vcl_endl;
+  std::cout << "New data size: " << dataSize << std::endl;
 
   //alloc new buffers
   bstm_data_base* newA = new bstm_data_base(new char[dataSize * bstm_data_traits<BSTM_ALPHA>::datasize() ],
@@ -189,7 +191,7 @@ bool bstm_refine_blk_in_space_function<APM_DATA_TYPE, NOBS_DATA_TYPE>::refine(vc
       //2. correct data ptr
       time_tree.set_data_ptr(dataIndex[currIndex]);
       //3. save it back to newRefinedTimeBlk
-      vcl_memcpy(time_trees_iter, time_tree.get_bits(), TT_NUM_BYTES);
+      std::memcpy(time_trees_iter, time_tree.get_bits(), TT_NUM_BYTES);
       //4. move the data
       this->move_data(old_time_tree, time_tree, alpha_cpy, mog_cpy, numobs_cpy);
   }
@@ -215,9 +217,9 @@ void bstm_refine_blk_in_space_function<APM_DATA_TYPE, NOBS_DATA_TYPE>::move_data
                                                          typename bstm_data_traits<APM_DATA_TYPE>::datatype * mog_cpy,
                                                          typename bstm_data_traits<NOBS_DATA_TYPE>::datatype * numobs_cpy)
 {
-  vcl_vector<int> new_leaves = time_tree.get_leaf_bits();
+  std::vector<int> new_leaves = time_tree.get_leaf_bits();
 
-  for (vcl_vector<int>::iterator iter = new_leaves.begin(); iter != new_leaves.end(); iter++)
+  for (std::vector<int>::iterator iter = new_leaves.begin(); iter != new_leaves.end(); iter++)
   {
     //get new data ptr
     int newDataPtr = time_tree.get_data_index(*iter);

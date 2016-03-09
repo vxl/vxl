@@ -32,7 +32,9 @@
 // \endverbatim
 //
 //-------------------------------------------------------------------------
-#include <vcl_vector.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <vector>
 #include <vnl/vnl_vector.h>
 #include <sdet/sdet_denoise_mrf_params.h>
 #include <vil/vil_image_resource.h>

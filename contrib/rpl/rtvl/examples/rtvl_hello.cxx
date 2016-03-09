@@ -11,7 +11,9 @@
 #include <vnl/vnl_vector_fixed.h>
 #include <vnl/vnl_matrix_fixed.h>
 
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iostream>
 
 int main()
 {
@@ -24,9 +26,9 @@ int main()
 
   // Use "rtvl_tensor" to decompose the matrix.
   rtvl_tensor<2> voter_tensor(voter_matrix);
-  vcl_cout << "voter tensor = " << vcl_endl << voter_matrix;
-  vcl_cout << "voter stickness = " << voter_tensor.saliency(0) << vcl_endl;
-  vcl_cout << "voter ballness = " << voter_tensor.saliency(1) << vcl_endl;
+  std::cout << "voter tensor = " << std::endl << voter_matrix;
+  std::cout << "voter stickness = " << voter_tensor.saliency(0) << std::endl;
+  std::cout << "voter ballness = " << voter_tensor.saliency(1) << std::endl;
 
   // Use "rtvl_voter" to encapsulate a token (location + input tensor).
   rtvl_voter<2> voter(voter_location, voter_tensor);
@@ -39,7 +41,7 @@ int main()
   // Use "rtvl_votee" to encapsulate a site (location + output tensor).
   rtvl_votee<2> votee(votee_location, votee_matrix);
 
-  vcl_cout << vcl_endl;
+  std::cout << std::endl;
 
   // Choose a weight profile, initialized with spatial scale.
   rtvl_weight_smooth<2> tvw(1.0);
@@ -49,9 +51,9 @@ int main()
 
   // Decompose the result.
   rtvl_tensor<2> votee_tensor(votee_matrix);
-  vcl_cout << "votee tensor = " << vcl_endl << votee_matrix;
-  vcl_cout << "votee stickness = " << votee_tensor.saliency(0) << vcl_endl;
-  vcl_cout << "votee ballness = " << votee_tensor.saliency(1) << vcl_endl;
+  std::cout << "votee tensor = " << std::endl << votee_matrix;
+  std::cout << "votee stickness = " << votee_tensor.saliency(0) << std::endl;
+  std::cout << "votee ballness = " << votee_tensor.saliency(1) << std::endl;
 
   return 0;
 }

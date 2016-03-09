@@ -18,7 +18,9 @@
 //
 //-----------------------------------------------------------------------------
 
-#include <vcl_vector.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <vector>
 #include <vnl/vnl_least_squares_function.h>
 #include <vnl/vnl_double_3x3.h>
 #include <vgl/vgl_homg_point_2d.h>
@@ -33,8 +35,8 @@ class FMPlanarNonLinFun : public vnl_least_squares_function
 {
   int data_size_;
 
-  vcl_vector<vgl_homg_point_2d<double> > points1_;
-  vcl_vector<vgl_homg_point_2d<double> > points2_;
+  std::vector<vgl_homg_point_2d<double> > points1_;
+  std::vector<vgl_homg_point_2d<double> > points2_;
 
   HomgNorm2D normalized_;
 
@@ -54,12 +56,12 @@ class FMPlanarNonLinFun : public vnl_least_squares_function
   //  Rejecting points > outlier_distance_squared from epipolar lines
   FMPlanarNonLinFun(const ImageMetric*, const ImageMetric*,
                     double outlier_distance_squared,
-                    vcl_vector<vgl_homg_point_2d<double> >& points1,
-                    vcl_vector<vgl_homg_point_2d<double> >& points2);
+                    std::vector<vgl_homg_point_2d<double> >& points1,
+                    std::vector<vgl_homg_point_2d<double> >& points2);
   FMPlanarNonLinFun(const ImageMetric*, const ImageMetric*,
                     double outlier_distance_squared,
-                    vcl_vector<HomgPoint2D>& points1,
-                    vcl_vector<HomgPoint2D>& points2);
+                    std::vector<HomgPoint2D>& points1,
+                    std::vector<HomgPoint2D>& points2);
 
   bool compute(FMatrixPlanar* F);
 

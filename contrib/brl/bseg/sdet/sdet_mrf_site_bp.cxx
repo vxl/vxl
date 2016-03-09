@@ -3,9 +3,11 @@
 // \file
 
 #include <vnl/vnl_numeric_traits.h>
-#include <vcl_iostream.h>
-#include <vcl_string.h>
-#include <vcl_cmath.h>
+#include <iostream>
+#include <string>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <cmath>
 
 sdet_mrf_site_bp::sdet_mrf_site_bp(unsigned n_labels, float lambda, float truncation_cost)
   : lambda_(lambda), truncation_cost_(truncation_cost), prior_(0),
@@ -47,9 +49,9 @@ void sdet_mrf_site_bp::set_cur_message(unsigned nq, unsigned fp, float msg)
   msg_[1-prior_][nq][fp] = static_cast<short>(msg);
 }
 
-vcl_vector<float> sdet_mrf_site_bp::prior_message(unsigned nq)
+std::vector<float> sdet_mrf_site_bp::prior_message(unsigned nq)
 {
-  vcl_vector<float> temp;
+  std::vector<float> temp;
   for (unsigned i = 0; i< msg_[prior_][nq].size(); i++)
   temp.push_back(msg_[prior_][nq][i]);
   return temp;
@@ -58,20 +60,20 @@ vcl_vector<float> sdet_mrf_site_bp::prior_message(unsigned nq)
 void sdet_mrf_site_bp::print_prior_messages()
 {
   for (unsigned n = 0; n<4; ++n){
-    vcl_cout << "Prior message from neighbor " << n << '\n';
+    std::cout << "Prior message from neighbor " << n << '\n';
     for (unsigned fp = 0; fp<n_labels_; ++fp)
-      vcl_cout << msg_[prior_][n][fp] << ' ';
-    vcl_cout << "\n\n";
+      std::cout << msg_[prior_][n][fp] << ' ';
+    std::cout << "\n\n";
   }
 }
 
 void sdet_mrf_site_bp::print_current_messages()
 {
   for (unsigned n = 0; n<4; ++n){
-    vcl_cout << "Current message from neighbor " << n << '\n';
+    std::cout << "Current message from neighbor " << n << '\n';
     for (unsigned fp = 0; fp<n_labels_; ++fp)
-      vcl_cout << msg_[1-prior_][n][fp] << ' ';
-    vcl_cout << "\n\n";
+      std::cout << msg_[1-prior_][n][fp] << ' ';
+    std::cout << "\n\n";
   }
 }
 
@@ -97,11 +99,11 @@ unsigned sdet_mrf_site_bp::believed_label()
 
 void sdet_mrf_site_bp::print_belief_vector()
 {
-  vcl_cout << "Belief\n";
+  std::cout << "Belief\n";
   for (unsigned fp = 0; fp<n_labels_; ++fp) {
-    vcl_cout << this->b(fp) << ' ';
+    std::cout << this->b(fp) << ' ';
   }
-  vcl_cout << '\n';
+  std::cout << '\n';
 }
 
 void sdet_mrf_site_bp::clear()
@@ -114,7 +116,7 @@ void sdet_mrf_site_bp::clear()
 
 //set the prior message
 void sdet_mrf_site_bp::set_prior_message(unsigned nq,
-                                         vcl_vector<float>const& msg)
+                                         std::vector<float>const& msg)
 {
   for (unsigned i = 0; i<msg.size(); ++i)
     msg_[prior_][nq][i]=static_cast<short>(msg[i]);

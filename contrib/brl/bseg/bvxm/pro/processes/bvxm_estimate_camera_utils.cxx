@@ -52,19 +52,19 @@ vil_image_view<float> bvxm_camera_estimator::convert_to_spherical_coordinates(co
 
   vnl_matrix<double> R(3,3,0.0);
   R(0,0) = 1.0;
-  R(1,1) = vcl_cos(rotate);
-  R(1,2) = vcl_sin(rotate);
-  R(2,1) = -vcl_sin(rotate);
-  R(2,2) = vcl_cos(rotate);
+  R(1,1) = std::cos(rotate);
+  R(1,2) = std::sin(rotate);
+  R(2,1) = -std::sin(rotate);
+  R(2,2) = std::cos(rotate);
 
   for (unsigned i=0; i<imgs.ni(); i++) {
     for (unsigned j=0; j<imgs.nj(); j++) {
       double curr_theta = (0.5*vnl_math::pi) - theta_range_ + (theta_step_*(double)i);
       double curr_phi = -phi_range_ + (phi_step_*(double)j);
 
-      double x = vcl_sin(curr_theta)*vcl_cos(curr_phi);
-      double y = vcl_sin(curr_theta)*vcl_sin(curr_phi);
-      double z = vcl_cos(curr_theta);
+      double x = std::sin(curr_theta)*std::cos(curr_phi);
+      double y = std::sin(curr_theta)*std::sin(curr_phi);
+      double z = std::cos(curr_theta);
 
       vnl_double_3 curr_vector(x,y,z);
       curr_vector = R*curr_vector;
@@ -90,7 +90,7 @@ vil_image_view<float> bvxm_camera_estimator::convert_to_spherical_coordinates(co
   return imgs;
 }
 
-vcl_vector<vgl_point_3d<double> > bvxm_camera_estimator::convert_3d_box_to_3d_points(const vgl_box_3d<double> box_3d)
+std::vector<vgl_point_3d<double> > bvxm_camera_estimator::convert_3d_box_to_3d_points(const vgl_box_3d<double> box_3d)
 {
   double box_x[2],box_y[2],box_z[2];
   box_x[0] = box_3d.min_x();
@@ -100,7 +100,7 @@ vcl_vector<vgl_point_3d<double> > bvxm_camera_estimator::convert_3d_box_to_3d_po
   box_y[1] = box_3d.max_y();
   box_z[1] = box_3d.max_z();
 
-  vcl_vector<vgl_point_3d<double> > box_pts_3d;
+  std::vector<vgl_point_3d<double> > box_pts_3d;
   for (int i=0; i<2; i++) {
     for (int j=0; j<2; j++) {
       for (int k=0; k<2; k++) {
@@ -115,9 +115,9 @@ vcl_vector<vgl_point_3d<double> > bvxm_camera_estimator::convert_3d_box_to_3d_po
 vgl_polygon<double> bvxm_camera_estimator::convert_3d_box_to_2d_polygon(const vgl_box_3d<double> box_3d,
                                                                         const vpgl_perspective_camera<double> *cam)
 {
-  vcl_vector<vgl_point_3d<double> > box_pts_3d = convert_3d_box_to_3d_points(box_3d);
+  std::vector<vgl_point_3d<double> > box_pts_3d = convert_3d_box_to_3d_points(box_3d);
 
-  vcl_vector<vgl_point_2d<double> > box_pts_2d;
+  std::vector<vgl_point_2d<double> > box_pts_2d;
   for (unsigned i=0; i<box_pts_3d.size(); i++) {
     double u,v;
     cam->project(box_pts_3d[i].x(),box_pts_3d[i].y(),box_pts_3d[i].z(),u,v);
@@ -137,9 +137,9 @@ void bvxm_camera_estimator::convert_angles_to_vector(const double theta,
                                                      double &vy,
                                                      double &vz)
 {
-  vx = vcl_sin(theta)*vcl_cos(phi);
-  vy = vcl_sin(theta)*vcl_sin(phi);
-  vz = vcl_cos(theta);
+  vx = std::sin(theta)*std::cos(phi);
+  vy = std::sin(theta)*std::sin(phi);
+  vz = std::cos(theta);
 }
 
 double bvxm_camera_estimator::edge_prob_cross_correlation(const vil_image_view<float> &img1, const vil_image_view<float> &img2)
@@ -267,7 +267,7 @@ void bvxm_camera_estimator::estimate_rotation_iterative(const bvxm_voxel_slab<fl
                                                         vpgl_perspective_camera<double> *cam)
 {
   if ((!estimation_params_set_) || (!world_params_set_)) {
-    vcl_cerr << "Error: world and estimation parameters are not set\n";
+    std::cerr << "Error: world and estimation parameters are not set\n";
     return;
   }
 
@@ -275,7 +275,7 @@ void bvxm_camera_estimator::estimate_rotation_iterative(const bvxm_voxel_slab<fl
   int nj = img_e.nj();
 
   for (int iter=0; iter<max_iter_rot_angle_; iter++) {
-    vcl_cout << '.';
+    std::cout << '.';
     vil_image_view<float> img_eei(ni,nj,1);
     vil_image_view<vxl_byte> img_temp(ni,nj,1);
 

@@ -12,7 +12,7 @@ bprb_test_process::bprb_test_process()
   if ( !parameters()->add( "Param 1" ,      "prm1" ,  4.0f ) ||
        !parameters()->add( "Add/Subtract" , "add_sub" , true ) )
   {
-    vcl_cerr << " Error in adding parameters\n";
+    std::cerr << " Error in adding parameters\n";
   }
   input_data_.resize(2, brdb_value_sptr(VXL_NULLPTR));
   output_data_.resize(1,brdb_value_sptr(VXL_NULLPTR));

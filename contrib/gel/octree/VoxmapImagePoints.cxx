@@ -55,7 +55,7 @@ vnl_double_2 VoxmapImagePoints::GetCentreImage( int x, int y, int z, int d, int 
 vnl_double_2 VoxmapImagePoints::GetCornerImage( int x, int y, int z, int dx, int dy, int dz, int d, int im) const
 {
 #if 0
-  vcl_cout << x << ' ' << y << ' ' << z << vcl_endl;
+  std::cout << x << ' ' << y << ' ' << z << std::endl;
 
   if (d!= depth)
     return GetCornerImage( (x+dx)*2, (y+dy)*2, (z+dz)*2, 0, 0, 0, d+1, im);

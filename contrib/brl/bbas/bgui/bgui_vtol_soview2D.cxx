@@ -1,7 +1,9 @@
 #include "bgui_vtol_soview2D.h"
 //:
 // \file
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iostream>
 #include <vgui/vgui_gl.h>
 #include <vdgl/vdgl_digital_curve.h>
 #include <vdgl/vdgl_interpolator.h>
@@ -14,7 +16,7 @@
 //--------------------------------------------------------------------------
 //: vsol_point_2d view
 //--------------------------------------------------------------------------
-vcl_ostream& bgui_vtol_soview2D_point::print(vcl_ostream& s) const
+std::ostream& bgui_vtol_soview2D_point::print(std::ostream& s) const
 {
   s << "[bgui_vtol_soview2D_point " << x << ',' << y << ' ';
   return vgui_soview2D::print(s) << ']';
@@ -24,7 +26,7 @@ vcl_ostream& bgui_vtol_soview2D_point::print(vcl_ostream& s) const
 //--------------------------------------------------------------------------
 //: vdgl_digital_curve view
 //--------------------------------------------------------------------------
-vcl_ostream& bgui_vtol_soview2D_dotted_digital_curve::print(vcl_ostream& s) const
+std::ostream& bgui_vtol_soview2D_dotted_digital_curve::print(std::ostream& s) const
 {
   return s;
 }
@@ -34,7 +36,7 @@ bgui_vtol_soview2D_dotted_digital_curve(vdgl_digital_curve_sptr const& dc)
 {
   if (!dc)
   {
-    vcl_cout << "In bgui_vtol_soview2D_dotted_digital_curve(..) - null input dc\n";
+    std::cout << "In bgui_vtol_soview2D_dotted_digital_curve(..) - null input dc\n";
     return;
   }
 
@@ -59,7 +61,7 @@ bgui_vtol_soview2D_dotted_digital_curve(vdgl_digital_curve_sptr const& dc)
 
 //: vdgl_digital_curve view
 //--------------------------------------------------------------------------
-vcl_ostream& bgui_vtol_soview2D_digital_curve::print(vcl_ostream& s) const
+std::ostream& bgui_vtol_soview2D_digital_curve::print(std::ostream& s) const
 {
   return s;
 }
@@ -69,7 +71,7 @@ bgui_vtol_soview2D_digital_curve(vdgl_digital_curve_sptr const& dc)
 {
   if (!dc)
   {
-    vcl_cout << "In bgui_vtol_soview2D_digital_curve(..) - null input dc\n";
+    std::cout << "In bgui_vtol_soview2D_digital_curve(..) - null input dc\n";
     return;
   }
 
@@ -104,7 +106,7 @@ bgui_vtol_soview2D_line_seg(vsol_line_2d_sptr const& seg)
 //--------------------------------------------------------------------------
 //: vtol_vertex_2d view
 //--------------------------------------------------------------------------
-vcl_ostream& bgui_vtol_soview2D_vertex::print(vcl_ostream& s) const
+std::ostream& bgui_vtol_soview2D_vertex::print(std::ostream& s) const
 {
   s << "[bgui_vtol_soview2D_vertex " << x << ',' << y << ' ';
   return vgui_soview2D::print(s) << ']';
@@ -114,7 +116,7 @@ vcl_ostream& bgui_vtol_soview2D_vertex::print(vcl_ostream& s) const
 //--------------------------------------------------------------------------
 //: vtol_edge_2d view
 //--------------------------------------------------------------------------
-vcl_ostream& bgui_vtol_soview2D_edge::print(vcl_ostream& s) const
+std::ostream& bgui_vtol_soview2D_edge::print(std::ostream& s) const
 {
   return vgui_soview2D_linestrip::print(s);
 }
@@ -123,7 +125,7 @@ bgui_vtol_soview2D_edge::bgui_vtol_soview2D_edge(vtol_edge_2d_sptr const& e)
 {
   if (!e)
   {
-    vcl_cout << "In bgui_vtol_soview2D_edge(..) - null input edge\n";
+    std::cout << "In bgui_vtol_soview2D_edge(..) - null input edge\n";
     return;
   }
 
@@ -131,7 +133,7 @@ bgui_vtol_soview2D_edge::bgui_vtol_soview2D_edge(vtol_edge_2d_sptr const& e)
   vsol_curve_2d_sptr c = e->curve();
   if (!c)
   {
-    vcl_cout << "In bgui_vtol_soview2D_edge(..) - null curve\n";
+    std::cout << "In bgui_vtol_soview2D_edge(..) - null curve\n";
     return;
   }
   if (c->cast_to_vdgl_digital_curve())
@@ -164,7 +166,7 @@ bgui_vtol_soview2D_edge::bgui_vtol_soview2D_edge(vtol_edge_2d_sptr const& e)
     x[1] = (float)p1->x();  y[1] = (float)p1->y();
     return;
   }
-  vcl_cout << "In bgui_vtol_soview2D_edge(vtol_edge_2d_sptr& e) -"
+  std::cout << "In bgui_vtol_soview2D_edge(vtol_edge_2d_sptr& e) -"
            << " attempt to draw an edge with unknown curve geometry\n";
 }
 
@@ -172,15 +174,15 @@ bgui_vtol_soview2D_edge::bgui_vtol_soview2D_edge(vtol_edge_2d_sptr const& e)
 //: vtol_edge_2d group view
 //--------------------------------------------------------------------------
 
-vcl_ostream& bgui_vtol_soview2D_edge_group::print(vcl_ostream& s) const
+std::ostream& bgui_vtol_soview2D_edge_group::print(std::ostream& s) const
 {
   return vgui_soview2D_group::print(s);
 }
 
 bgui_vtol_soview2D_edge_group::
-bgui_vtol_soview2D_edge_group(vcl_vector<vtol_edge_2d_sptr>& edges)
+bgui_vtol_soview2D_edge_group(std::vector<vtol_edge_2d_sptr>& edges)
 {
-  for (vcl_vector<vtol_edge_2d_sptr>::iterator eit = edges.begin();
+  for (std::vector<vtol_edge_2d_sptr>::iterator eit = edges.begin();
        eit != edges.end(); eit++)
     ls.push_back(new bgui_vtol_soview2D_edge(*eit));
 }
@@ -189,7 +191,7 @@ bgui_vtol_soview2D_edge_group(vcl_vector<vtol_edge_2d_sptr>& edges)
 //: vtol_face_2d view
 //--------------------------------------------------------------------------
 
-vcl_ostream& bgui_vtol_soview2D_face::print(vcl_ostream& s) const
+std::ostream& bgui_vtol_soview2D_face::print(std::ostream& s) const
 {
   return vgui_soview2D_group::print(s);
 }
@@ -199,7 +201,7 @@ bgui_vtol_soview2D_face::bgui_vtol_soview2D_face(vtol_face_2d_sptr const& f)
 {
   if (!f)
   {
-    vcl_cout << "In bgui_vtol_soview2D_face(..) - null input face\n";
+    std::cout << "In bgui_vtol_soview2D_face(..) - null input face\n";
     return;
   }
 

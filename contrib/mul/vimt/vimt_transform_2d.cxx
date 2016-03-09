@@ -6,8 +6,10 @@
 //  \file
 
 #include "vimt_transform_2d.h"
-#include <vcl_cmath.h>
-#include <vcl_cstdlib.h> // for vcl_abort()
+#include <vcl_compiler.h>
+#include <iostream>
+#include <cmath>
+#include <cstdlib> // for std::abort()
 #include <vcl_cassert.h>
 #include <vsl/vsl_indent.h>
 #include <vnl/vnl_vector.h>
@@ -38,8 +40,8 @@ vimt_transform_2d& vimt_transform_2d::set_matrix(const vnl_matrix<double>& M)
 {
     if (M.rows()!=3 || M.cols()!=3)
     {
-        vcl_cerr<<"vimt_transform_2d::set_matrix(mat): mat not 3x3\n";
-        vcl_abort();
+        std::cerr<<"vimt_transform_2d::set_matrix(mat): mat not 3x3\n";
+        std::abort();
     }
 
     form_=Affine;
@@ -70,7 +72,7 @@ void vimt_transform_2d::params_of(vnl_vector<double>& v, Form form) const
             break;
         case (RigidBody):
             v.set_size(3);
-            v(0)=vcl_atan2(-xy_,xx_); // Angle
+            v(0)=std::atan2(-xy_,xx_); // Angle
             v(1)=xt_; v(2)=yt_;
             break;
         case (Reflection):
@@ -99,8 +101,8 @@ void vimt_transform_2d::params_of(vnl_vector<double>& v, Form form) const
             v_data[6]=tx_; v_data[7]=ty_; v_data[8]=tt_;
             break;
         default:
-            vcl_cerr<<"vimt_transform_2d::params() Unexpected form: "<<int(form)<<'\n';
-            vcl_abort();
+            std::cerr<<"vimt_transform_2d::params() Unexpected form: "<<int(form)<<'\n';
+            std::abort();
     }
 }
 
@@ -114,7 +116,7 @@ vimt_transform_2d& vimt_transform_2d::simplify(double tol /*=1e-10*/)
     {
         case Affine:
         {
-            r = vcl_atan2(-xy_,xx_);
+            r = std::atan2(-xy_,xx_);
             double matrix_form[]= {xx_, yx_, xy_, yy_};
             vnl_matrix_fixed<double, 2, 2> X(matrix_form);
             vnl_matrix_fixed<double, 2, 2> S2 = X.transpose() * X;
@@ -126,26 +128,26 @@ vimt_transform_2d& vimt_transform_2d::simplify(double tol /*=1e-10*/)
             // mirroring if det is negative;
             double mirror=vnl_math::sgn(vnl_det(X[0], X[1]));
 
-            sx = vcl_sqrt(vcl_abs(S2(0,0))) * mirror;
-            sy = vcl_sqrt(vcl_abs(S2(1,1))) * mirror;
+            sx = std::sqrt(std::abs(S2(0,0))) * mirror;
+            sy = std::sqrt(std::abs(S2(1,1))) * mirror;
             if (vnl_math::sqr(sx-sy) < tol*tol)
                 return this->set_similarity(sx, r, xt_, yt_ ).simplify();
             else if (r*r < tol*tol)
                 return this->set_zoom_only(sx, sy, xt_, yt_).simplify();
-            else if (vnl_math::sqr(vcl_abs(r) - vnl_math::pi)< tol)
+            else if (vnl_math::sqr(std::abs(r) - vnl_math::pi)< tol)
                 return this->set_zoom_only(-sx, -sy, xt_, yt_).simplify();
             else
                 return *this;
         }
         case Similarity:
-            r = vcl_atan2(-xy_,xx_);
+            r = std::atan2(-xy_,xx_);
 
             det=+xx_*yy_-yx_*xy_;
-            sx=vcl_sqrt(xx_*xx_ + yx_*yx_)* vnl_math::sgn(det);
+            sx=std::sqrt(xx_*xx_ + yx_*yx_)* vnl_math::sgn(det);
 
             if (r*r < tol*tol)
                 return this->set_zoom_only(sx, xt_, yt_).simplify();
-            else if (vnl_math::sqr(vcl_abs(r) - vnl_math::pi)< tol)
+            else if (vnl_math::sqr(std::abs(r) - vnl_math::pi)< tol)
                 return this->set_zoom_only(-sx, xt_, yt_).simplify();
             else if (vnl_math::sqr(sx-1.0) < tol*tol)
                 return this->set_rigid_body(r, xt_, yt_).simplify();
@@ -153,7 +155,7 @@ vimt_transform_2d& vimt_transform_2d::simplify(double tol /*=1e-10*/)
                 return *this;
 
         case RigidBody:
-            r = vcl_atan2(-xy_,xx_);
+            r = std::atan2(-xy_,xx_);
 
             if (r*r < tol*tol)
                 return this->set_translation(xt_, yt_).simplify();
@@ -172,8 +174,8 @@ vimt_transform_2d& vimt_transform_2d::simplify(double tol /*=1e-10*/)
         case Identity:
             return *this;
         default:
-            vcl_cerr << "vimt3d_transform_3d::simplify() Unexpected form:" <<  form_ << '\n';
-            vcl_abort();
+            std::cerr << "vimt3d_transform_3d::simplify() Unexpected form:" <<  form_ << '\n';
+            std::abort();
     }
     return *this;
 }
@@ -181,9 +183,9 @@ vimt_transform_2d& vimt_transform_2d::simplify(double tol /*=1e-10*/)
 void vimt_transform_2d::setCheck(int n1,int n2,const char* str) const
 {
     if (n1==n2) return;
-    vcl_cerr<<"vimt_transform_2d::set() "<<n1<<" parameters required for "
+    std::cerr<<"vimt_transform_2d::set() "<<n1<<" parameters required for "
             <<str<<". Passed "<<n2<<'\n';
-    vcl_abort();
+    std::abort();
 }
 
 vimt_transform_2d& vimt_transform_2d::set(const vnl_vector<double>& v, Form form)
@@ -236,8 +238,8 @@ vimt_transform_2d& vimt_transform_2d::set(const vnl_vector<double>& v, Form form
             tx_ = v_data[6]; ty_ = v_data[7]; tt_ = v_data[8];
             return *this;
         default:
-            vcl_cerr<<"vimt_transform_2d::set() Unexpected form: "<<int(form)<<'\n';
-            vcl_abort();
+            std::cerr<<"vimt_transform_2d::set() Unexpected form: "<<int(form)<<'\n';
+            std::abort();
     }
     return *this;
 }
@@ -333,8 +335,8 @@ vimt_transform_2d& vimt_transform_2d::set_rigid_body(double theta, double t_x, d
     {
         form_=RigidBody;
         inv_uptodate_=false;
-        double a=vcl_cos(theta);
-        double b=vcl_sin(theta);
+        double a=std::cos(theta);
+        double b=std::sin(theta);
         xx_=a;   yx_=b;   tx_=0.0;
         xy_=-b;  yy_=a;   ty_=0.0;
         xt_=t_x; yt_=t_y; tt_=1.0;
@@ -350,8 +352,8 @@ vimt_transform_2d& vimt_transform_2d::set_similarity(double s, double theta, dou
     {
         form_=Similarity;
         inv_uptodate_=false;
-        double a=s*vcl_cos(theta);
-        double b=s*vcl_sin(theta);
+        double a=s*std::cos(theta);
+        double b=s*std::sin(theta);
         xx_=a;   yx_=b;   tx_=0.0;
         xy_=-b;  yy_=a;   ty_=0.0;
         xt_=t_x; yt_=t_y; tt_=1.0;
@@ -388,17 +390,17 @@ vimt_transform_2d& vimt_transform_2d::set_affine(const vnl_matrix<double>& M23) 
 {
     if ((M23.rows()!=2) || (M23.columns()!=3))
     {
-        vcl_cerr<<"vimt_transform_2d::affine : Expect 2x3 matrix, got "<<M23.rows()<<" x "<<M23.columns()<<'\n';
-        vcl_abort();
+        std::cerr<<"vimt_transform_2d::affine : Expect 2x3 matrix, got "<<M23.rows()<<" x "<<M23.columns()<<'\n';
+        std::abort();
     }
 
     const double *const *m_data=M23.data_array();
 
     if (m_data[0][0]*m_data[1][1] < m_data[0][1]*m_data[1][0])
     {
-        vcl_cerr << "vimt_transform_2d::affine :\n"
+        std::cerr << "vimt_transform_2d::affine :\n"
                  << "sub (2x2) matrix should have positive determinant\n";
-        vcl_abort();
+        std::abort();
     }
 
     form_=Affine;
@@ -429,8 +431,8 @@ vimt_transform_2d& vimt_transform_2d::set_projective(const vnl_matrix<double>& M
 {
     if ((M33.rows()!=3) || (M33.columns()!=3))
     {
-        vcl_cerr<<"vimt_transform_2d::projective : Expect 3x3 matrix, got "<<M33.rows()<<" x "<<M33.columns()<<'\n';
-        vcl_abort();
+        std::cerr<<"vimt_transform_2d::projective : Expect 3x3 matrix, got "<<M33.rows()<<" x "<<M33.columns()<<'\n';
+        std::abort();
     }
 
     form_=Projective;
@@ -463,8 +465,8 @@ vgl_point_2d<double>  vimt_transform_2d::operator()(double x, double y) const
             if (z==0) return vgl_point_2d<double> (0,0);   // Or should it be inf,inf?
             else      return vgl_point_2d<double> ((x*xx_+y*xy_+xt_)/z,(x*yx_+y*yy_+yt_)/z);
         default:
-            vcl_cerr<<"vimt_transform_2d::operator() : Unrecognised form:"<<int(form_)<<'\n';
-            vcl_abort();
+            std::cerr<<"vimt_transform_2d::operator() : Unrecognised form:"<<int(form_)<<'\n';
+            std::abort();
     }
 
     return vgl_point_2d<double> (); // To keep over-zealous compilers happy
@@ -487,8 +489,8 @@ vgl_vector_2d<double>  vimt_transform_2d::delta(const vgl_point_2d<double>& p, c
         case Projective :
             return operator()(p+dp)-operator()(p);
         default:
-            vcl_cerr<<"vimt_transform_2d::delta() : Unrecognised form:"<<int(form_)<<'\n';
-            vcl_abort();
+            std::cerr<<"vimt_transform_2d::delta() : Unrecognised form:"<<int(form_)<<'\n';
+            std::abort();
     }
 
     return vgl_vector_2d<double> (); // To keep over-zealous compilers happy
@@ -547,8 +549,8 @@ void vimt_transform_2d::calcInverse()  const
             double det = xx_*yy_-xy_*yx_;
             if (det==0)
             {
-                vcl_cerr<<"vimt_transform_2d::calcInverse() : No inverse exists for this affine transform (det==0)\n";
-                vcl_abort();
+                std::cerr<<"vimt_transform_2d::calcInverse() : No inverse exists for this affine transform (det==0)\n";
+                std::abort();
             }
             xx2_=yy_/det;   xy2_=-xy_/det;
             yx2_=-yx_/det;   yy2_=xx_/det;
@@ -568,8 +570,8 @@ void vimt_transform_2d::calcInverse()  const
             break;
         }
         default:
-            vcl_cerr<<"vimt_transform_2d::calcInverse() : Unrecognised form:"<<int(form_)<<'\n';
-            vcl_abort();
+            std::cerr<<"vimt_transform_2d::calcInverse() : Unrecognised form:"<<int(form_)<<'\n';
+            std::abort();
     }
 
     inv_uptodate_=true;
@@ -723,7 +725,7 @@ vimt_transform_2d operator*(const vimt_transform_2d& L, const vimt_transform_2d&
     return T;
 }
 
-void vimt_transform_2d::print_summary(vcl_ostream& o) const
+void vimt_transform_2d::print_summary(std::ostream& o) const
 {
     o << vsl_indent()<< "Form: ";
     vsl_indent_inc(o);
@@ -745,14 +747,14 @@ void vimt_transform_2d::print_summary(vcl_ostream& o) const
 
         case RigidBody:
             o << "RigidBody\n"
-              << vsl_indent()<< "angle = " << vcl_atan2(yx_,xx_) << '\n'
+              << vsl_indent()<< "angle = " << std::atan2(yx_,xx_) << '\n'
               << vsl_indent()<< "translation = (" << xt_ << ',' << yt_ << ')';
             break;
 
         case Similarity:
             o << "Similarity {"
-              << " s= " << vcl_sqrt(xx_*xx_+xy_*xy_)
-              << " A= " << vcl_atan2(xy_,xx_)
+              << " s= " << std::sqrt(xx_*xx_+xy_*xy_)
+              << " A= " << std::atan2(xy_,xx_)
               << " t= (" << xt_ << ',' << yt_ << " ) }";
             break;
 
@@ -782,7 +784,7 @@ void vimt_transform_2d::print_summary(vcl_ostream& o) const
     vsl_indent_dec(o);
 }
 
-vcl_ostream& operator<<( vcl_ostream& os, const vimt_transform_2d& t )
+std::ostream& operator<<( std::ostream& os, const vimt_transform_2d& t )
 {
     os << "vimt_transform_2d:\n";
     vsl_indent_inc(os);
@@ -819,9 +821,9 @@ void vimt_transform_2d::b_read(vsl_b_istream& bfs)
         vsl_b_read(bfs,tx_); vsl_b_read(bfs,ty_); vsl_b_read(bfs,tt_);
         break;
     default:
-        vcl_cerr << "I/O ERROR: vimt_transform_2d::b_read(vsl_b_istream&)\n"
+        std::cerr << "I/O ERROR: vimt_transform_2d::b_read(vsl_b_istream&)\n"
                  << "           Unknown version number "<< version << '\n';
-        bfs.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
+        bfs.is().clear(std::ios::badbit); // Set an unrecoverable IO error on stream
     }
 }
 
@@ -835,7 +837,7 @@ void vsl_b_write(vsl_b_ostream& bfs,const vimt_transform_2d& t)
     t.b_write(bfs);
 }
 
-void vsl_print_summary(vcl_ostream& os,const vimt_transform_2d& t)
+void vsl_print_summary(std::ostream& os,const vimt_transform_2d& t)
 {
     //os << t.is_a() << ": ";
     vsl_indent_inc(os);

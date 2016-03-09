@@ -6,18 +6,18 @@ int main(int argc, char **argv)
 {
   if (argc<3)
     {
-    vcl_cout << "usage : " << argv[0] << " src_image dest_image" << vcl_endl;
-    vcl_cout << "Loads from file src_image and saves to file dest_image"
-        << vcl_endl;
-    vcl_cout << "The source image can be extracted from an AVI or a SEQUENCE"
-        << vcl_endl;
-    vcl_cout << "by concatenating the frame number to the filename before"
-        << vcl_endl;
-    vcl_cout << "the extension." << vcl_endl;
-    vcl_cout << "Example : " << argv[0] << " ./test_3.avi img.jpg" << vcl_endl;
-    vcl_cout << "copies the third frame of the AVI file ./test.avi to the"
-        << vcl_endl;
-    vcl_cout << "image file img.jpg" << vcl_endl;
+    std::cout << "usage : " << argv[0] << " src_image dest_image" << std::endl;
+    std::cout << "Loads from file src_image and saves to file dest_image"
+        << std::endl;
+    std::cout << "The source image can be extracted from an AVI or a SEQUENCE"
+        << std::endl;
+    std::cout << "by concatenating the frame number to the filename before"
+        << std::endl;
+    std::cout << "the extension." << std::endl;
+    std::cout << "Example : " << argv[0] << " ./test_3.avi img.jpg" << std::endl;
+    std::cout << "copies the third frame of the AVI file ./test.avi to the"
+        << std::endl;
+    std::cout << "image file img.jpg" << std::endl;
     return -1;
     }
 
@@ -31,13 +31,13 @@ int main(int argc, char **argv)
 
   if (!img || img->size()==0)
     {
-    vcl_cout << "Unable to load source image from " << argv[1] << vcl_endl;
+    std::cout << "Unable to load source image from " << argv[1] << std::endl;
     return -1;
     }
 
   if (!vil_save(*img,argv[2]))
     {
-    vcl_cerr << "Unable to save result image to " << argv[2] << vcl_endl;
+    std::cerr << "Unable to save result image to " << argv[2] << std::endl;
     return -1;
     }
 

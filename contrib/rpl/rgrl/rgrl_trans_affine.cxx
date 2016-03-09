@@ -226,13 +226,13 @@ scale_by( double scale ) const
 
 void
 rgrl_trans_affine::
-write( vcl_ostream& os ) const
+write( std::ostream& os ) const
 {
   // tag
   os << "AFFINE\n"
   // parameters
-     << trans_.size() << vcl_endl
-     << A_ << trans_ << ' ' << from_centre_ << vcl_endl;
+     << trans_.size() << std::endl
+     << A_ << trans_ << ' ' << from_centre_ << std::endl;
 
   // parent
   rgrl_transformation::write( os );
@@ -241,13 +241,13 @@ write( vcl_ostream& os ) const
 
 bool
 rgrl_trans_affine::
-read( vcl_istream& is )
+read( std::istream& is )
 {
   // skip empty lines
   rgrl_util_skip_empty_lines( is );
 
-  vcl_string str;
-  vcl_getline( is, str );
+  std::string str;
+  std::getline( is, str );
 
   if ( str.find("AFFINE") != 0 ) {
     WarningMacro( "The tag is not AFFINE. reading is aborted.\n" );

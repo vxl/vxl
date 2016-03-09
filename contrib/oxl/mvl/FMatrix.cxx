@@ -8,8 +8,10 @@
 #include "FMatrix.h"
 
 #include <vcl_cassert.h>
-#include <vcl_iostream.h>
-#include <vcl_fstream.h>
+#include <iostream>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <fstream>
 
 #include <vul/vul_printf.h>
 
@@ -36,9 +38,9 @@ FMatrix::FMatrix()
 
 //--------------------------------------------------------------
 //
-//: Constructor.  Load from vcl_istream.
+//: Constructor.  Load from std::istream.
 
-FMatrix::FMatrix(vcl_istream& f)
+FMatrix::FMatrix(std::istream& f)
 {
   rank2_flag_ = false;
   read_ascii(f);
@@ -93,8 +95,8 @@ FMatrix::~FMatrix()
 }
 
 //---------------------------------------------------------------
-//: Read from ASCII vcl_istream
-bool FMatrix::read_ascii(vcl_istream& s)
+//: Read from ASCII std::istream
+bool FMatrix::read_ascii(std::istream& s)
 {
   s >> f_matrix_;
   if (!(s.good() || s.eof()))
@@ -109,24 +111,24 @@ bool FMatrix::read_ascii(vcl_istream& s)
 
 FMatrix FMatrix::read(char const* filename)
 {
-  vcl_ifstream f(filename);
+  std::ifstream f(filename);
   FMatrix F;
   if (!F.read_ascii(f))
-    vcl_cerr << "FMatrix: Error reading from [" << filename << "]\n";
+    std::cerr << "FMatrix: Error reading from [" << filename << "]\n";
   return F;
 }
 
 //---------------------------------------------------------------
-//: Read from ASCII vcl_istream
-vcl_istream& operator>>(vcl_istream& s, FMatrix& F)
+//: Read from ASCII std::istream
+std::istream& operator>>(std::istream& s, FMatrix& F)
 {
   F.read_ascii(s);
   return s;
 }
 
 //---------------------------------------------------------------
-//: Read from ASCII vcl_istream
-FMatrix FMatrix::read(vcl_istream& s)
+//: Read from ASCII std::istream
+FMatrix FMatrix::read(std::istream& s)
 {
   return FMatrix(s);
 }
@@ -222,8 +224,8 @@ FMatrix::image2_epipolar_distance_squared(HomgPoint2D *point1_ptr,
 }
 
 //---------------------------------------------------------------
-//: Print to vcl_ostream
-vcl_ostream& operator<<(vcl_ostream& os, const FMatrix& F)
+//: Print to std::ostream
+std::ostream& operator<<(std::ostream& os, const FMatrix& F)
 {
   const vnl_double_3x3& m = F.get_matrix();
   for (unsigned long i = 0; i < m.rows(); i++) {    // For each row in matrix
@@ -348,22 +350,22 @@ FMatrix::find_nearest_perfect_match(vgl_homg_point_2d<double> const& point1,
   //-s c y
   // 0 0 1
   vnl_double_3x3 p1_matrix;
-  p1_matrix(0, 0) = vcl_cos (angle1);
-  p1_matrix(0, 1) = vcl_sin (angle1);
+  p1_matrix(0, 0) = std::cos (angle1);
+  p1_matrix(0, 1) = std::sin (angle1);
   p1_matrix(0, 2) = x1;
-  p1_matrix(1, 0)= -vcl_sin (angle1);
-  p1_matrix(1, 1) = vcl_cos (angle1);
+  p1_matrix(1, 0)= -std::sin (angle1);
+  p1_matrix(1, 1) = std::cos (angle1);
   p1_matrix(1, 2) = y1;
   p1_matrix(2, 0) = 0;
   p1_matrix(2, 1) = 0;
   p1_matrix(2, 2) = 1;
 
   vnl_double_3x3 p2_matrix;
-  p2_matrix(0, 0) = vcl_cos (angle2);
-  p2_matrix(0, 1) = vcl_sin (angle2);
+  p2_matrix(0, 0) = std::cos (angle2);
+  p2_matrix(0, 1) = std::sin (angle2);
   p2_matrix(0, 2) = x2;
-  p2_matrix(1, 0)= -vcl_sin (angle2);
-  p2_matrix(1, 1) = vcl_cos (angle2);
+  p2_matrix(1, 0)= -std::sin (angle2);
+  p2_matrix(1, 1) = std::cos (angle2);
   p2_matrix(1, 2) = y2;
   p2_matrix(2, 0) = 0;
   p2_matrix(2, 1) = 0;
@@ -375,8 +377,8 @@ FMatrix::find_nearest_perfect_match(vgl_homg_point_2d<double> const& point1,
   double f2 = -special_f_matrix(2, 0) / special_f_matrix(2, 2);
   double g = -special_f_matrix(0, 1) / special_f_matrix(2, 1);
   double g2 = -special_f_matrix(0, 2) / special_f_matrix(2, 2);
-  if (vcl_fabs ((f-f2) / f) > 0.05 || vcl_fabs ((g-g2) / g) > 0.05)
-    vcl_cerr << "F matrix isn't rank 2.\n";
+  if (std::fabs ((f-f2) / f) > 0.05 || std::fabs ((g-g2) / g) > 0.05)
+    std::cerr << "F matrix isn't rank 2.\n";
 
   // section 4.2 of the paper.
 
@@ -421,7 +423,7 @@ FMatrix::find_nearest_perfect_match(vgl_homg_point_2d<double> const& point1,
     }
 
   if (!real_root_flag) {
-    vcl_cerr << "FMatrix::find_nearest_perfect_match -- no real root\n";
+    std::cerr << "FMatrix::find_nearest_perfect_match -- no real root\n";
     return;
   }
 
@@ -466,22 +468,22 @@ FMatrix::find_nearest_perfect_match(const HomgPoint2D& point1,
   //-s c y
   // 0 0 1
   vnl_double_3x3 p1_matrix;
-  p1_matrix(0, 0) = vcl_cos (angle1);
-  p1_matrix(0, 1) = vcl_sin (angle1);
+  p1_matrix(0, 0) = std::cos (angle1);
+  p1_matrix(0, 1) = std::sin (angle1);
   p1_matrix(0, 2) = x1;
-  p1_matrix(1, 0)= -vcl_sin (angle1);
-  p1_matrix(1, 1) = vcl_cos (angle1);
+  p1_matrix(1, 0)= -std::sin (angle1);
+  p1_matrix(1, 1) = std::cos (angle1);
   p1_matrix(1, 2) = y1;
   p1_matrix(2, 0) = 0;
   p1_matrix(2, 1) = 0;
   p1_matrix(2, 2) = 1;
 
   vnl_double_3x3 p2_matrix;
-  p2_matrix(0, 0) = vcl_cos (angle2);
-  p2_matrix(0, 1) = vcl_sin (angle2);
+  p2_matrix(0, 0) = std::cos (angle2);
+  p2_matrix(0, 1) = std::sin (angle2);
   p2_matrix(0, 2) = x2;
-  p2_matrix(1, 0)= -vcl_sin (angle2);
-  p2_matrix(1, 1) = vcl_cos (angle2);
+  p2_matrix(1, 0)= -std::sin (angle2);
+  p2_matrix(1, 1) = std::cos (angle2);
   p2_matrix(1, 2) = y2;
   p2_matrix(2, 0) = 0;
   p2_matrix(2, 1) = 0;
@@ -493,8 +495,8 @@ FMatrix::find_nearest_perfect_match(const HomgPoint2D& point1,
   double f2 = -special_f_matrix(2, 0) / special_f_matrix(2, 2);
   double g = -special_f_matrix(0, 1) / special_f_matrix(2, 1);
   double g2 = -special_f_matrix(0, 2) / special_f_matrix(2, 2);
-  if (vcl_fabs ((f-f2) / f) > 0.05 || vcl_fabs ((g-g2) / g) > 0.05)
-    vcl_cerr << "F matrix isn't rank 2.\n";
+  if (std::fabs ((f-f2) / f) > 0.05 || std::fabs ((g-g2) / g) > 0.05)
+    std::cerr << "F matrix isn't rank 2.\n";
 
   // section 4.2 of the paper.
 
@@ -539,7 +541,7 @@ FMatrix::find_nearest_perfect_match(const HomgPoint2D& point1,
     }
 
   if (!real_root_flag) {
-    vcl_cerr << "FMatrix::find_nearest_perfect_match -- no real root\n";
+    std::cerr << "FMatrix::find_nearest_perfect_match -- no real root\n";
     return;
   }
 

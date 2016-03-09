@@ -14,7 +14,9 @@
 #include <vnl/vnl_matrix_fixed.txx>
 #include <vnl/vnl_vector_fixed.h>
 
-#include <vcl_cmath.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <cmath>
 #include <vcl_cassert.h>
 
 #define RGTL_SQT_CELL_GEOMETRY_CONE_SPECIALIZE_3
@@ -51,8 +53,8 @@ rgtl_sqt_cell_geometry<D, Face>
   {
     double uLower = bounds.origin(j);
     double uUpper = uLower + bounds.size();
-    dLower[j] = vcl_tan(uLower);
-    dUpper[j] = vcl_tan(uUpper);
+    dLower[j] = std::tan(uLower);
+    dUpper[j] = std::tan(uUpper);
   }
 
   // Now distribute the components into each edge.
@@ -139,7 +141,7 @@ struct rgtl_sqt_cell_geometry_cone
 
     // Return the axis and opening angle.
     nv.copy_out(axis);
-    angle = vcl_acos(dot);
+    angle = std::acos(dot);
   }
 };
 
@@ -187,7 +189,7 @@ struct rgtl_sqt_cell_geometry_cone<3>
     }
 
     // Compute the cone opening angle.
-    angle = vcl_acos(d);
+    angle = std::acos(d);
   }
 
   static double dot(double const u[3], double const v[3])
@@ -202,7 +204,7 @@ struct rgtl_sqt_cell_geometry_cone<3>
   }
   static double normalize(double n[3])
   {
-    double mag = vcl_sqrt(dot(n,n));
+    double mag = std::sqrt(dot(n,n));
     if (mag > 0)
     {
       double mag_inv = 1/mag;
@@ -397,14 +399,14 @@ rgtl_sqt_cell_geometry<D, Face>
     {
     unsigned int j = a;
     dLower[j] = this->edges_[0][a];
-    dMiddle[j] = vcl_tan(upper.origin(j));
+    dMiddle[j] = std::tan(upper.origin(j));
     dUpper[j] = this->edges_[(1<<(D-1))-1][a];
     }
   for (unsigned int a=space::face_axis+1; a < D; ++a)
     {
     unsigned int j = a-1;
     dLower[j] = this->edges_[0][a];
-    dMiddle[j] = vcl_tan(upper.origin(j));
+    dMiddle[j] = std::tan(upper.origin(j));
     dUpper[j] = this->edges_[(1<<(D-1))-1][a];
     }
 

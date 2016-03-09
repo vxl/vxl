@@ -1,18 +1,20 @@
-#ifndef vcl_vector_to_CoolArray_h_
-#define vcl_vector_to_CoolArray_h_
+#ifndef std::vector_to_CoolArray_h_
+#define std::vector_to_CoolArray_h_
 
 #include <cool/Array.h>
-#include <vcl_vector.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <vector>
 
 template <class T>
 inline
-CoolArray<T> vcl_vector_to_CoolArray(vcl_vector<T> const& cl)
+CoolArray<T> std::vector_to_CoolArray(std::vector<T> const& cl)
 {
   CoolArray<T> l;
-  typename vcl_vector<T>::const_iterator it = cl.begin();
+  typename std::vector<T>::const_iterator it = cl.begin();
   for (; !(it == cl.end()); ++it)
     l.push(*it);
   return l;
 }
 
-#endif // vcl_vector_to_CoolArray_h_
+#endif // std::vector_to_CoolArray_h_

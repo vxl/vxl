@@ -6,7 +6,9 @@
 #include <boxm2/boxm2_data.h>
 #include <boxm2/boxm2_data_base.h>
 #include <boxm2/boxm2_data_traits.h>
-#include <vcl_vector.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <vector>
 
 class boxm2_compute_nonsurface_histogram_functor
 {
@@ -50,16 +52,16 @@ class boxm2_compute_nonsurface_histogram_functor
         boxm2_data<BOXM2_MOG3_GREY>::datatype & histo=histo_data_->data()[index];
         boxm2_data<BOXM2_AUX0>::datatype            & entropy_histo=entropy_histo_data_->data()[index];
 
-        vcl_vector<aux0_datatype>  out0   = str_cache_->get_next<BOXM2_AUX0>(id_, index);
-        vcl_vector<aux1_datatype>  out1   = str_cache_->get_next<BOXM2_AUX1>(id_, index);
-        vcl_vector<aux2_datatype>  out2   = str_cache_->get_next<BOXM2_AUX2>(id_, index);
+        std::vector<aux0_datatype>  out0   = str_cache_->get_next<BOXM2_AUX0>(id_, index);
+        std::vector<aux1_datatype>  out1   = str_cache_->get_next<BOXM2_AUX1>(id_, index);
+        std::vector<aux2_datatype>  out2   = str_cache_->get_next<BOXM2_AUX2>(id_, index);
         unsigned nobs = (unsigned)out0.size();
 
-        vcl_vector<float> temp_histogram(8,0.125f);
+        std::vector<float> temp_histogram(8,0.125f);
         for (unsigned i =0; i<histo.size(); ++i) histo[i] = 1;
 
-        vcl_vector<float> Iobs;
-        vcl_vector<float> vis;
+        std::vector<float> Iobs;
+        std::vector<float> vis;
         for (unsigned i=0; i<nobs; ++i)
         {
             if (out0[i]>1e-10f)
@@ -78,9 +80,9 @@ class boxm2_compute_nonsurface_histogram_functor
             unsigned index = i +1;
             if (i == Iobs.size()-1)
                 index =0;
-            float gradI=vcl_fabs(Iobs[i]-Iobs[index]);
+            float gradI=std::fabs(Iobs[i]-Iobs[index]);
 
-            int bin_index  = (int) vcl_floor(gradI*8);
+            int bin_index  = (int) std::floor(gradI*8);
             bin_index = bin_index>7 ? 7:bin_index;
             temp_histogram[bin_index] += (vis[i]+vis[index])/2;
             sum+= (vis[i]+vis[index])/2;
@@ -90,14 +92,14 @@ class boxm2_compute_nonsurface_histogram_functor
 
         // Normalize histogram
         for (unsigned i = 0; i < temp_histogram.size(); i++)
-            histo[i] = (unsigned char)vcl_floor(temp_histogram[i] *255.0f ) ;
+            histo[i] = (unsigned char)std::floor(temp_histogram[i] *255.0f ) ;
 
         entropy_histo  =0.0;
         for (unsigned int i = 0; i<8; ++i)
         {
             double pi = double(histo[i])/255.0;
             if (pi>0)
-                entropy_histo -= float(pi*vcl_log(pi));
+                entropy_histo -= float(pi*std::log(pi));
         }
         entropy_histo *= float(vnl_math::log2e);
 

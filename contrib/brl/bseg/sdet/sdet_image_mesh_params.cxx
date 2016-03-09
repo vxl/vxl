@@ -5,8 +5,10 @@
 // See sdet_image_mesh_params.h
 //
 //-----------------------------------------------------------------------------
-#include <vcl_sstream.h>
-#include <vcl_iostream.h>
+#include <sstream>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iostream>
 
 //------------------------------------------------------------------------
 // Constructors
@@ -50,8 +52,8 @@ bool sdet_image_mesh_params::SanityCheck()
 {
   //  Note that msg << ends seems to restart the string and erase the
   //  previous string. We should only use it as the last call, use
-  //  vcl_endl otherwise.
-  vcl_stringstream msg;
+  //  std::endl otherwise.
+  std::stringstream msg;
   bool valid = true;
 
   if (smooth_ < 0.5f)
@@ -79,20 +81,20 @@ bool sdet_image_mesh_params::SanityCheck()
     msg << "ERROR: infeasible step transition width\n";
     valid = false;
   }
-  msg << vcl_ends;
+  msg << std::ends;
 
   SetErrorMsg(msg.str().c_str());
   return valid;
 }
 
-vcl_ostream& operator << (vcl_ostream& os, const sdet_image_mesh_params& imp)
+std::ostream& operator << (std::ostream& os, const sdet_image_mesh_params& imp)
 {
   return
   os << "sdet_image_mesh_params:\n[---\n"
-     << "smooth sigma" << imp.smooth_ << vcl_endl
-     << "thresh " << imp.thresh_ << vcl_endl
-     << "min fit length " << imp.min_fit_length_ << vcl_endl
-     << "rms distance tolerance" << imp.rms_distance_ << vcl_endl
-     << "step half width" << imp.step_half_width_ << vcl_endl
+     << "smooth sigma" << imp.smooth_ << std::endl
+     << "thresh " << imp.thresh_ << std::endl
+     << "min fit length " << imp.min_fit_length_ << std::endl
+     << "rms distance tolerance" << imp.rms_distance_ << std::endl
+     << "step half width" << imp.step_half_width_ << std::endl
      << "---]\n";
 }

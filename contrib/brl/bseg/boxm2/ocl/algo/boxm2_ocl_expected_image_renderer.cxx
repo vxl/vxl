@@ -7,8 +7,10 @@
 // \date 4 Nov 2014
 #include "boxm2_ocl_expected_image_renderer.h"
 
-#include <vcl_algorithm.h>
-#include <vcl_stdexcept.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <algorithm>
+#include <stdexcept>
 #include <boxm2/ocl/boxm2_opencl_cache.h>
 #include <boxm2/boxm2_scene.h>
 #include <boxm2/boxm2_block.h>
@@ -28,7 +30,7 @@
 boxm2_ocl_expected_image_renderer
 ::boxm2_ocl_expected_image_renderer(boxm2_scene_sptr scene,
                                     boxm2_opencl_cache_sptr ocl_cache,
-                                    vcl_string ident) :
+                                    std::string ident) :
   scene_(scene),
   opencl_cache_(ocl_cache),
   buffers_allocated_(false),
@@ -36,7 +38,7 @@ boxm2_ocl_expected_image_renderer
 {
   device_ = ocl_cache->get_device();
   bool foundDataType = false;
-  vcl_vector<vcl_string> apps = scene->appearances();
+  std::vector<std::string> apps = scene->appearances();
 
   apptypesize_ = 0;
   num_planes_ = 0;
@@ -50,14 +52,14 @@ boxm2_ocl_expected_image_renderer
   for (unsigned int i=0; i<apps.size(); ++i) {
     for (unsigned v = 0; v < num_valid_appearances_grey; ++v) {
       boxm2_data_type valid_apm_type = valid_appearance_types_grey[v];
-      vcl_string valid_apm_prefix = boxm2_data_info::prefix(valid_apm_type, ident);
+      std::string valid_apm_prefix = boxm2_data_info::prefix(valid_apm_type, ident);
       if ( apps[i] == valid_apm_prefix )
       {
         data_type_ = valid_apm_prefix;
         foundDataType = true;
         apptypesize_ = boxm2_data_info::datasize(valid_apm_type);
         num_planes_ = 1;
-        vcl_cout<<"===========Compiling kernels==========="<<vcl_endl;
+        std::cout<<"===========Compiling kernels==========="<<std::endl;
         compile_kernels(device_, kernels_, valid_apm_type);
         break;
       }
@@ -67,14 +69,14 @@ boxm2_ocl_expected_image_renderer
   for (unsigned int i=0; i<apps.size(); ++i) {
     for (unsigned v = 0; v < num_valid_appearances_rgb; ++v) {
       boxm2_data_type valid_apm_type = valid_appearance_types_rgb[v];
-      vcl_string valid_apm_prefix = boxm2_data_info::prefix(valid_apm_type, ident);
+      std::string valid_apm_prefix = boxm2_data_info::prefix(valid_apm_type, ident);
       if ( apps[i] == valid_apm_prefix )
       {
         data_type_ = valid_apm_prefix;
         foundDataType = true;
         apptypesize_ = boxm2_data_info::datasize(valid_apm_type);
         num_planes_ = 4;
-        vcl_cout<<"===========Compiling kernels==========="<<vcl_endl;
+        std::cout<<"===========Compiling kernels==========="<<std::endl;
         compile_kernels(device_, kernels_, valid_apm_type);
         break;
       }
@@ -82,9 +84,9 @@ boxm2_ocl_expected_image_renderer
   }
 
   if (!foundDataType) {
-    vcl_cout<<"BOXM2_OCL_EXPECTED_IMAGE_RENDERER ERROR: scene doesn't have valid appearance type"<<vcl_endl;
-    vcl_cout<<"                                         looking for ident = " << ident << vcl_endl;
-    throw vcl_runtime_error("scene does not have valid appearance type");
+    std::cout<<"BOXM2_OCL_EXPECTED_IMAGE_RENDERER ERROR: scene doesn't have valid appearance type"<<std::endl;
+    std::cout<<"                                         looking for ident = " << ident << std::endl;
+    throw std::runtime_error("scene does not have valid appearance type");
   }
 }
 
@@ -188,7 +190,7 @@ boxm2_ocl_expected_image_renderer
 
   vul_timer rtime;
 
-  vcl_size_t lthreads[2]={8,8};
+  std::size_t lthreads[2]={8,8};
 
   //: create a command queue.
   int status=0;
@@ -221,11 +223,11 @@ boxm2_ocl_expected_image_renderer
   if(camera->type_name() == "vpgl_perspective_camera")
   {
       float f  = ((vpgl_perspective_camera<double> *)camera.ptr())->get_calibration().focal_length()*((vpgl_perspective_camera<double> *)camera.ptr())->get_calibration().x_scale();
-      vcl_cout<<"Focal Length " << f<<vcl_endl;
+      std::cout<<"Focal Length " << f<<std::endl;
       tnearfar_buff_[0] = f* scene_->finest_resolution()/nearfactor ;
       tnearfar_buff_[1] = f* scene_->finest_resolution()*farfactor ;
 
-      vcl_cout<<"Near and Far Clipping planes "<<tnearfar_buff_[0]<<" "<<tnearfar_buff_[1]<<vcl_endl;
+      std::cout<<"Near and Far Clipping planes "<<tnearfar_buff_[0]<<" "<<tnearfar_buff_[1]<<std::endl;
   }
   tnearfar_->write_to_buffer(queue, true);
 
@@ -236,7 +238,7 @@ boxm2_ocl_expected_image_renderer
   // normalize
   if (kernels_.size()>1)
   {
-    vcl_size_t gThreads[] = {cl_ni,cl_nj};
+    std::size_t gThreads[] = {cl_ni,cl_nj};
     bocl_kernel* normalize_kern = kernels_[1];
     normalize_kern->set_arg( exp_image_.ptr() );
     normalize_kern->set_arg( vis_image_.ptr() );
@@ -264,7 +266,7 @@ boxm2_ocl_expected_image_renderer
     }
   }
 
-  vcl_cout<<"Total Render time: "<<rtime.all()<<" ms"<<vcl_endl;
+  std::cout<<"Total Render time: "<<rtime.all()<<" ms"<<std::endl;
   clReleaseCommandQueue(queue);
 
   render_success_ = true;
@@ -273,15 +275,15 @@ boxm2_ocl_expected_image_renderer
 
 bool
 boxm2_ocl_expected_image_renderer
-::compile_kernels(bocl_device_sptr device, vcl_vector<bocl_kernel*> & vec_kernels, boxm2_data_type data_type)
+::compile_kernels(bocl_device_sptr device, std::vector<bocl_kernel*> & vec_kernels, boxm2_data_type data_type)
 {
-  vcl_string options_basic = boxm2_ocl_util::mog_options( boxm2_data_info::prefix(data_type) );
+  std::string options_basic = boxm2_ocl_util::mog_options( boxm2_data_info::prefix(data_type) );
 
   if ( (data_type == BOXM2_MOG3_GREY) ||
        (data_type == BOXM2_MOG3_GREY_16) )
   {
-    vcl_vector<vcl_string> src_paths;
-    vcl_string source_dir = boxm2_ocl_util::ocl_src_root();
+    std::vector<std::string> src_paths;
+    std::string source_dir = boxm2_ocl_util::ocl_src_root();
     src_paths.push_back(source_dir + "scene_info.cl");
     src_paths.push_back(source_dir + "pixel_conversion.cl");
     src_paths.push_back(source_dir + "bit/bit_tree_library_functions.cl");
@@ -292,7 +294,7 @@ boxm2_ocl_expected_image_renderer
     src_paths.push_back(source_dir + "expected_functor.cl");
     src_paths.push_back(source_dir + "bit/cast_ray_bit.cl");
 
-    vcl_string options = options_basic;
+    std::string options = options_basic;
     options += "-D RENDER ";
 
     options += "-D STEP_CELL=step_cell_render(aux_args.mog,aux_args.alpha,data_ptr,d*linfo->block_len,vis,aux_args.expint)";
@@ -308,7 +310,7 @@ boxm2_ocl_expected_image_renderer
     vec_kernels.push_back(ray_trace_kernel);
 
     //create normalize image kernel
-    vcl_vector<vcl_string> norm_src_paths;
+    std::vector<std::string> norm_src_paths;
     norm_src_paths.push_back(source_dir + "pixel_conversion.cl");
     norm_src_paths.push_back(source_dir + "bit/normalize_kernels.cl");
     bocl_kernel * normalize_render_kernel=new bocl_kernel();
@@ -324,8 +326,8 @@ boxm2_ocl_expected_image_renderer
 
   }
   else if (data_type == BOXM2_LABEL_SHORT) {
-    vcl_vector<vcl_string> src_paths;
-    vcl_string source_dir = boxm2_ocl_util::ocl_src_root();
+    std::vector<std::string> src_paths;
+    std::string source_dir = boxm2_ocl_util::ocl_src_root();
     src_paths.push_back(source_dir + "scene_info.cl");
     src_paths.push_back(source_dir + "pixel_conversion.cl");
     src_paths.push_back(source_dir + "bit/bit_tree_library_functions.cl");
@@ -335,9 +337,9 @@ boxm2_ocl_expected_image_renderer
     src_paths.push_back(source_dir + "bit/render_bit_scene.cl");
     src_paths.push_back(source_dir + "expected_functor.cl");
     src_paths.push_back(source_dir + "bit/cast_ray_bit.cl");
-    vcl_cout<<"COMPILING SHORT"<<vcl_endl;
+    std::cout<<"COMPILING SHORT"<<std::endl;
 
-    vcl_string options = options_basic;
+    std::string options = options_basic;
     options += "-D RENDER ";
     options += "-D RENDER_MAX -D STEP_CELL=step_cell_render_max(aux_args.mog,aux_args.alpha,data_ptr,d*linfo->block_len,vis,aux_args.expint,aux_args.maxomega)";
 
@@ -354,8 +356,8 @@ boxm2_ocl_expected_image_renderer
 
   }
   else if (data_type == BOXM2_GAUSS_RGB) {
-    vcl_vector<vcl_string> src_paths;
-    vcl_string source_dir = boxm2_ocl_util::ocl_src_root();
+    std::vector<std::string> src_paths;
+    std::string source_dir = boxm2_ocl_util::ocl_src_root();
     src_paths.push_back(source_dir + "scene_info.cl");
     src_paths.push_back(source_dir + "pixel_conversion.cl");
     src_paths.push_back(source_dir + "bit/bit_tree_library_functions.cl");
@@ -366,7 +368,7 @@ boxm2_ocl_expected_image_renderer
     src_paths.push_back(source_dir + "bit/cast_ray_bit.cl");
 
     //set kernel options
-    vcl_string options = options_basic + " -D RENDER ";
+    std::string options = options_basic + " -D RENDER ";
     options += " -D DETERMINISTIC ";
     options += " -D YUV -D STEP_CELL=step_cell_render(aux_args,data_ptr,llid,d*linfo->block_len)";
 
@@ -381,7 +383,7 @@ boxm2_ocl_expected_image_renderer
     vec_kernels.push_back(ray_trace_kernel);
 
     //create normalize image kernel
-    vcl_vector<vcl_string> norm_src_paths;
+    std::vector<std::string> norm_src_paths;
     norm_src_paths.push_back(source_dir + "pixel_conversion.cl");
     norm_src_paths.push_back(source_dir + "bit/normalize_kernels.cl");
     bocl_kernel * normalize_render_kernel=new bocl_kernel();
@@ -395,8 +397,8 @@ boxm2_ocl_expected_image_renderer
     vec_kernels.push_back(normalize_render_kernel);
   }
   else if (data_type == BOXM2_GAUSS_RGB_VIEW) {
-    vcl_vector<vcl_string> src_paths;
-    vcl_string source_dir = boxm2_ocl_util::ocl_src_root();
+    std::vector<std::string> src_paths;
+    std::string source_dir = boxm2_ocl_util::ocl_src_root();
     src_paths.push_back(source_dir + "scene_info.cl");
     src_paths.push_back(source_dir + "pixel_conversion.cl");
     src_paths.push_back(source_dir + "bit/bit_tree_library_functions.cl");
@@ -408,8 +410,8 @@ boxm2_ocl_expected_image_renderer
     src_paths.push_back(source_dir + "bit/render_view_dep_rgb.cl");
     src_paths.push_back(source_dir + "bit/cast_ray_bit.cl");
 
-      vcl_string options = options_basic + " -D RENDER -D YUV";
-      //vcl_string options = options_basic + " -D RENDER";
+      std::string options = options_basic + " -D RENDER -D YUV";
+      //std::string options = options_basic + " -D RENDER";
       options += " -D RENDER_VIEW_DEP ";
       options += " -D STEP_CELL=step_cell_render(aux_args,data_ptr,d*linfo->block_len)";
 
@@ -423,12 +425,12 @@ boxm2_ocl_expected_image_renderer
       vec_kernels.push_back(ray_trace_kernel);
 
       //create normalize image kernel
-      vcl_vector<vcl_string> norm_src_paths;
+      std::vector<std::string> norm_src_paths;
       norm_src_paths.push_back(source_dir + "pixel_conversion.cl");
       norm_src_paths.push_back(source_dir + "bit/normalize_kernels.cl");
       bocl_kernel * normalize_render_kernel=new bocl_kernel();
 
-      vcl_string normalize_options = options_basic;
+      std::string normalize_options = options_basic;
       normalize_options += " -D RENDER -D YUV";
       //normalize_options += " -D RENDER";
       normalize_render_kernel->create_kernel( &device->context(),
@@ -442,7 +444,7 @@ boxm2_ocl_expected_image_renderer
 
   }
   else {
-    vcl_cerr << "ERROR: boxm2_ocl_expected_image_renderer::compile_kernels(): Unsupported Appearance model type " << data_type << vcl_endl;
+    std::cerr << "ERROR: boxm2_ocl_expected_image_renderer::compile_kernels(): Unsupported Appearance model type " << data_type << std::endl;
     return false;
   }
   return true;

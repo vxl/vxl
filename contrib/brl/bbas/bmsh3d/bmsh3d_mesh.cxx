@@ -14,20 +14,22 @@
 //
 //-------------------------------------------------------------------------
 
-#include <vcl_list.h>
-#include <vcl_set.h>
-#include <vcl_map.h>
-#include <vcl_queue.h>
+#include <list>
+#include <set>
+#include <map>
+#include <queue>
 #include <vcl_cassert.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iostream>
 #include <vgl/vgl_point_3d.h>
 #include <vgl/vgl_distance.h>
 #include <vul/vul_printf.h>
 
 #include "bmsh3d_he_mesh.h"
 
-void move_faces_to_set (vcl_vector<vcl_vector<int> >& from_faces,
-                        vcl_vector<vcl_vector<int> >& to_faces)
+void move_faces_to_set (std::vector<std::vector<int> >& from_faces,
+                        std::vector<std::vector<int> >& to_faces)
 {
   to_faces.insert (to_faces.end(), from_faces.begin(), from_faces.end());
 }
@@ -41,7 +43,7 @@ double bmsh3d_ifs_mesh::get_avg_edge_len_from_F ()
   assert (facemap_.size() != 0);
 
   //Loop through each mesh face and count bnd edge len.
-  vcl_map<int, bmsh3d_face*>::iterator it = facemap_.begin();
+  std::map<int, bmsh3d_face*>::iterator it = facemap_.begin();
   for (; it != facemap_.end(); it++) {
     bmsh3d_face* F = (*it).second;
     int sz = F->vertices().size();
@@ -71,8 +73,8 @@ b_watertight_(mesh.b_watertight_)
 {
 #if 0 // commented out
   // deep copy the edgemap
-  vcl_map<int, bmsh3d_edge* > edgemap = mesh.edgemap_;
-  vcl_map<int, bmsh3d_edge* >::iterator edge_it = edgemap.begin();
+  std::map<int, bmsh3d_edge* > edgemap = mesh.edgemap_;
+  std::map<int, bmsh3d_edge* >::iterator edge_it = edgemap.begin();
   while (edge_it != edgemap.end()) {
     // create new edges
     bmsh3d_edge* edge = edge_it->second;
@@ -88,8 +90,8 @@ b_watertight_(mesh.b_watertight_)
   }
 
   // deep copy the faces
-  vcl_map<int, bmsh3d_face* > facemap = mesh.facemap();
-  vcl_map<int, bmsh3d_edge* >::iterator face_it = facemap.begin();
+  std::map<int, bmsh3d_face* > facemap = mesh.facemap();
+  std::map<int, bmsh3d_edge* >::iterator face_it = facemap.begin();
   while (face_it != facemap.end()) {
     bmsh3d_face* f = new bmsh3d_face(face_it->second);
     this->_add_face(f);
@@ -118,7 +120,7 @@ bmsh3d_halfedge* _connect_F_E_end (bmsh3d_face* F, bmsh3d_edge* E)
 unsigned int bmsh3d_ifs_mesh::_count_faces_indices_ifs()
 {
   unsigned int totalVertices = 0;
-  vcl_map<int, bmsh3d_face*>::iterator it = facemap_.begin();
+  std::map<int, bmsh3d_face*>::iterator it = facemap_.begin();
   for (; it != facemap_.end(); it++) {
     bmsh3d_face* F = (*it).second;
     assert (F->vertices().size() != 0);
@@ -134,7 +136,7 @@ unsigned int bmsh3d_ifs_mesh::_count_faces_indices_ifs()
 unsigned int bmsh3d_ifs_mesh::_count_visited_faces_indices_ifs()
 {
   unsigned int totalVertices = 0;
-  vcl_map<int, bmsh3d_face*>::iterator it = facemap_.begin();
+  std::map<int, bmsh3d_face*>::iterator it = facemap_.begin();
   for (; it != facemap_.end(); it++) {
     bmsh3d_face* F = (*it).second;
     if (! F->b_visited())
@@ -152,7 +154,7 @@ unsigned int bmsh3d_ifs_mesh::_count_visited_faces_indices_ifs()
 //  where the indices of the vertices is known.
 void bmsh3d_ifs_mesh::ifs_assign_Vs_vid_by_id ()
 {
-  vcl_map<int, bmsh3d_face*>::iterator it = facemap_.begin();
+  std::map<int, bmsh3d_face*>::iterator it = facemap_.begin();
   for (; it != facemap_.end(); it++) {
     bmsh3d_face* F = (*it).second;
     F->_ifs_assign_Vs_vid_by_id ();
@@ -177,14 +179,14 @@ void bmsh3d_ifs_mesh::assign_IFS_vertex_vid_by_vertex_order()
 void bmsh3d_ifs_mesh::mark_unmeshed_pts ()
 {
   //Reset the unmeshed flag of each point.
-  vcl_map<int, bmsh3d_vertex*>::iterator vit = vertexmap_.begin();
+  std::map<int, bmsh3d_vertex*>::iterator vit = vertexmap_.begin();
   for (; vit != vertexmap_.end(); vit++) {
     bmsh3d_vertex* V = (*vit).second;
     V->set_meshed (false);
   }
 
   //Go through all mesh faces and mark incident points.
-  vcl_map<int, bmsh3d_face*>::iterator fit = facemap_.begin();
+  std::map<int, bmsh3d_face*>::iterator fit = facemap_.begin();
   for (; fit != facemap_.end(); fit++) {
     bmsh3d_face* F = (*fit).second;
 
@@ -200,7 +202,7 @@ void bmsh3d_ifs_mesh::delete_unmeshed_pts ()
   mark_unmeshed_pts ();
 
   //Go through each point and delete unmeshed ones.
-  vcl_map<int, bmsh3d_vertex*>::iterator vit = vertexmap_.begin();
+  std::map<int, bmsh3d_vertex*>::iterator vit = vertexmap_.begin();
   while (vit != vertexmap_.end()) {
     bmsh3d_vertex* V = (*vit).second;
     if (! V->b_meshed()) {
@@ -224,7 +226,7 @@ double bmsh3d_mesh::get_avg_edge_len_from_F ()
   assert (facemap_.size() != 0);
 
   //Loop through each mesh face and count bnd edge len.
-  vcl_map<int, bmsh3d_face*>::iterator it = facemap_.begin();
+  std::map<int, bmsh3d_face*>::iterator it = facemap_.begin();
   for (; it != facemap_.end(); it++) {
     bmsh3d_face* F = (*it).second;
     assert (F->halfedge());
@@ -256,10 +258,10 @@ unsigned int bmsh3d_mesh::count_faces_indices()
 unsigned int bmsh3d_mesh::_count_faces_indices_mhe()
 {
   unsigned int totalVertices = 0;
-  vcl_map<int, bmsh3d_face*>::iterator it = facemap_.begin();
+  std::map<int, bmsh3d_face*>::iterator it = facemap_.begin();
   for (; it != facemap_.end(); it++) {
     bmsh3d_face* F = (*it).second;
-    vcl_vector<bmsh3d_vertex*> vertices;
+    std::vector<bmsh3d_vertex*> vertices;
     F->get_ordered_Vs (vertices);
     unsigned int nVer = vertices.size();
     nVer = nVer + 1; //the '-1' field
@@ -271,7 +273,7 @@ unsigned int bmsh3d_mesh::_count_faces_indices_mhe()
 //: Add all faces' incident edges and vertices into the map.
 void bmsh3d_mesh::_update_incident_Es_Vs ()
 {
-  vcl_map<int, bmsh3d_face*>::iterator it = facemap_.begin();
+  std::map<int, bmsh3d_face*>::iterator it = facemap_.begin();
   for (; it != facemap_.end(); it++) {
     bmsh3d_face* F = (*it).second;
 
@@ -290,7 +292,7 @@ void bmsh3d_mesh::_update_incident_Es_Vs ()
 void bmsh3d_mesh::remove_F_del_isolated_Es (bmsh3d_face* F)
 {
   //The list of edges to delete.
-  vcl_vector<bmsh3d_edge*> edges_to_del;
+  std::vector<bmsh3d_edge*> edges_to_del;
   bmsh3d_halfedge* HE = F->halfedge();
   do {
     bmsh3d_edge* E = HE->edge();
@@ -308,7 +310,7 @@ void bmsh3d_mesh::remove_F_del_isolated_Es (bmsh3d_face* F)
 }
 
 //: Create and add a mesh face from a given set of ordered edges.
-bmsh3d_face* bmsh3d_mesh::add_new_face (const vcl_vector<bmsh3d_edge*>& ordered_edges)
+bmsh3d_face* bmsh3d_mesh::add_new_face (const std::vector<bmsh3d_edge*>& ordered_edges)
 {
   //Create and add the new face to the structure.
   bmsh3d_face* F = _new_face();
@@ -341,7 +343,7 @@ bmsh3d_face* bmsh3d_mesh::add_new_face (const vcl_vector<bmsh3d_edge*>& ordered_
 
 // ----------------------------------------------------------------------------
 // Print a summary of mesh properties
-void bmsh3d_mesh::print_summary(vcl_ostream& str)
+void bmsh3d_mesh::print_summary(std::ostream& str)
 {
   str << "\n-------------------------------------------------\n"
       << "Mesh info\n"
@@ -352,28 +354,28 @@ void bmsh3d_mesh::print_summary(vcl_ostream& str)
 
 void bmsh3d_mesh::print_topo_summary (void)
 {
-  vul_printf (vcl_cerr, "\nThe reconstructed surface mesh is:\n");
+  vul_printf (std::cerr, "\nThe reconstructed surface mesh is:\n");
 
   bool b_2_manifold;
   unsigned int n_bnd_edges = count_bnd_edges (b_2_manifold);
 
   if (b_2_manifold)
-    vul_printf (vcl_cerr, "\t- 2-manifold\n");
+    vul_printf (std::cerr, "\t- 2-manifold\n");
   else
-    vul_printf (vcl_cerr, "\t- non-2-manifold\n");
+    vul_printf (std::cerr, "\t- non-2-manifold\n");
 
   int max_sides = count_max_polygon_sides ();
 
   if (max_sides == 3)
-    vul_printf (vcl_cerr, "\t- triangular\n");
+    vul_printf (std::cerr, "\t- triangular\n");
   else
-    vul_printf (vcl_cerr, "\t- non-triangular, max %u polygon sides.\n", max_sides);
+    vul_printf (std::cerr, "\t- non-triangular, max %u polygon sides.\n", max_sides);
 
 
   if (n_bnd_edges == 0)
-    vul_printf (vcl_cerr, "\t- closed watertight surface.\n\n");
+    vul_printf (std::cerr, "\t- closed watertight surface.\n\n");
   else
-    vul_printf (vcl_cerr, "\t- non-watertight, %u boundary edges.\n\n", n_bnd_edges);
+    vul_printf (std::cerr, "\t- non-watertight, %u boundary edges.\n\n", n_bnd_edges);
 }
 
 bmsh3d_mesh* clone_mesh_ifs_3d (bmsh3d_mesh* M)
@@ -383,7 +385,7 @@ bmsh3d_mesh* clone_mesh_ifs_3d (bmsh3d_mesh* M)
 
   //Clone all vertices of M.
   //Note: use _new_vertex() to create a new vertex.
-  vcl_map<int, bmsh3d_vertex*>::iterator vit = M->vertexmap().begin();
+  std::map<int, bmsh3d_vertex*>::iterator vit = M->vertexmap().begin();
   for (; vit != M->vertexmap().end(); vit++) {
     bmsh3d_vertex* V = (*vit).second;
     bmsh3d_vertex* newV = newM->_new_vertex (V->id());
@@ -394,7 +396,7 @@ bmsh3d_mesh* clone_mesh_ifs_3d (bmsh3d_mesh* M)
   newM->set_free_objects_in_destructor (M->b_free_objects_in_destructor());
 
   //Clone all faces of M.
-  vcl_map<int, bmsh3d_face*>::iterator fit = M->facemap().begin();
+  std::map<int, bmsh3d_face*>::iterator fit = M->facemap().begin();
   for (; fit != M->facemap().end(); fit++) {
     bmsh3d_face* F = (*fit).second;
     bmsh3d_face* newF = newM->_new_face (F->id());
@@ -410,11 +412,11 @@ bmsh3d_mesh* clone_mesh_ifs_3d (bmsh3d_mesh* M)
   return newM;
 }
 
-bmsh3d_face* add_F_to_M (vcl_vector<int>& vids, bmsh3d_mesh* M)
+bmsh3d_face* add_F_to_M (std::vector<int>& vids, bmsh3d_mesh* M)
 {
   //First find or create the set of order edges of this face.
   //assumption: vids is ordered a circular way.
-  vcl_vector<bmsh3d_edge*> ordered_edges;
+  std::vector<bmsh3d_edge*> ordered_edges;
 
   //Add one more vertex to the end for circulation.
   vids.push_back (vids[0]);
@@ -442,11 +444,11 @@ bmsh3d_face* add_F_to_M (vcl_vector<int>& vids, bmsh3d_mesh* M)
   return newF;
 }
 
-bmsh3d_face* add_F_to_M_check_topo (vcl_vector<int>& vids, bmsh3d_mesh* M)
+bmsh3d_face* add_F_to_M_check_topo (std::vector<int>& vids, bmsh3d_mesh* M)
 {
   //First find or create the set of order edges of this face.
   //assumption: vids is ordered a circular way.
-  vcl_vector<bmsh3d_edge*> ordered_edges;
+  std::vector<bmsh3d_edge*> ordered_edges;
 
   //Add one more vertex to the end for circulation.
   vids.push_back (vids[0]);
@@ -494,12 +496,12 @@ bmsh3d_face* add_F_to_M_check_topo (vcl_vector<int>& vids, bmsh3d_mesh* M)
   return newF;
 }
 
-void add_M_faces_to_IFSset (bmsh3d_mesh* M, vcl_vector<vcl_vector<int> >& faces)
+void add_M_faces_to_IFSset (bmsh3d_mesh* M, std::vector<std::vector<int> >& faces)
 {
-  vcl_map<int, bmsh3d_face*>::iterator fit = M->facemap().begin();
+  std::map<int, bmsh3d_face*>::iterator fit = M->facemap().begin();
   for (; fit != M->facemap().end(); fit++) {
     bmsh3d_face* F = (*fit).second;
-    vcl_vector<int> vids;
+    std::vector<int> vids;
     F->get_ordered_V_ids (vids);
     faces.push_back (vids);
   }
@@ -508,36 +510,36 @@ void add_M_faces_to_IFSset (bmsh3d_mesh* M, vcl_vector<vcl_vector<int> >& faces)
 // ----------------------------------------------------------------------------
 void bmsh3d_mesh_print_object_size ()
 {
-  vul_printf (vcl_cerr, "\n\n");
-  vcl_vector<bmsh3d_edge*> tmp_vector;
-  vcl_cout << "size of vcl_vector: "<< sizeof(tmp_vector) << vcl_endl;
-  vcl_list<bmsh3d_edge*> tmp_list;
-  vcl_cout << "size of vcl_list: "<< sizeof(tmp_list) << vcl_endl;
-  vcl_set<bmsh3d_edge*> tmp_set;
-  vcl_cout << "size of vcl_set: "<< sizeof(tmp_set) << vcl_endl;
-  vcl_set<bmsh3d_edge*> tmp_map;
-  vcl_cout << "size of vcl_map: "<< sizeof(tmp_map) << vcl_endl;
-  vul_printf (vcl_cerr, "\n");
+  vul_printf (std::cerr, "\n\n");
+  std::vector<bmsh3d_edge*> tmp_vector;
+  std::cout << "size of std::vector: "<< sizeof(tmp_vector) << std::endl;
+  std::list<bmsh3d_edge*> tmp_list;
+  std::cout << "size of std::list: "<< sizeof(tmp_list) << std::endl;
+  std::set<bmsh3d_edge*> tmp_set;
+  std::cout << "size of std::set: "<< sizeof(tmp_set) << std::endl;
+  std::set<bmsh3d_edge*> tmp_map;
+  std::cout << "size of std::map: "<< sizeof(tmp_map) << std::endl;
+  vul_printf (std::cerr, "\n");
 
-  vul_printf (vcl_cerr, "    Object          Size (bytes)\n");
-  vul_printf (vcl_cerr, "------------------------------------\n");
-  vul_printf (vcl_cerr, "vispt_elm                %3d\n", sizeof (vispt_elm));
-  vul_printf (vcl_cerr, "bmsh3d_vertex       --  %3d\n", sizeof (bmsh3d_vertex));
-  vul_printf (vcl_cerr, "\n");
-  vul_printf (vcl_cerr, "bmsh3d_halfedge     --  %3d\n", sizeof (bmsh3d_halfedge));
-  vul_printf (vcl_cerr, "bmsh3d_edge         --  %3d\n", sizeof (bmsh3d_edge));
-  vul_printf (vcl_cerr, "\n");
-  vul_printf (vcl_cerr, "bmsh3d_face         --  %3d\n", sizeof (bmsh3d_face));
-  vul_printf (vcl_cerr, "\n");
+  vul_printf (std::cerr, "    Object          Size (bytes)\n");
+  vul_printf (std::cerr, "------------------------------------\n");
+  vul_printf (std::cerr, "vispt_elm                %3d\n", sizeof (vispt_elm));
+  vul_printf (std::cerr, "bmsh3d_vertex       --  %3d\n", sizeof (bmsh3d_vertex));
+  vul_printf (std::cerr, "\n");
+  vul_printf (std::cerr, "bmsh3d_halfedge     --  %3d\n", sizeof (bmsh3d_halfedge));
+  vul_printf (std::cerr, "bmsh3d_edge         --  %3d\n", sizeof (bmsh3d_edge));
+  vul_printf (std::cerr, "\n");
+  vul_printf (std::cerr, "bmsh3d_face         --  %3d\n", sizeof (bmsh3d_face));
+  vul_printf (std::cerr, "\n");
 
-  vul_printf (vcl_cerr, "bmsh3d_pt_set           %3d\n", sizeof (bmsh3d_pt_set));
-  vul_printf (vcl_cerr, "bmsh3d_ifs_mesh         %3d\n", sizeof (bmsh3d_ifs_mesh));
-  vul_printf (vcl_cerr, "bmsh3d_mesh             %3d\n", sizeof (bmsh3d_mesh));
+  vul_printf (std::cerr, "bmsh3d_pt_set           %3d\n", sizeof (bmsh3d_pt_set));
+  vul_printf (std::cerr, "bmsh3d_ifs_mesh         %3d\n", sizeof (bmsh3d_ifs_mesh));
+  vul_printf (std::cerr, "bmsh3d_mesh             %3d\n", sizeof (bmsh3d_mesh));
 }
 
 bool bmsh3d_mesh::is_2_manifold ()
 {
-  vcl_map<int, bmsh3d_edge*>::iterator it = edgemap_.begin();
+  std::map<int, bmsh3d_edge*>::iterator it = edgemap_.begin();
   for (; it != edgemap_.end(); it++) {
     bmsh3d_edge* edge = (*it).second;
     if (edge->n_incident_Fs() > 2)
@@ -549,7 +551,7 @@ bool bmsh3d_mesh::is_2_manifold ()
 unsigned int bmsh3d_mesh::count_max_polygon_sides ()
 {
   unsigned int max_sides = 0;
-  vcl_map<int, bmsh3d_face*>::iterator it = facemap_.begin();
+  std::map<int, bmsh3d_face*>::iterator it = facemap_.begin();
   for (; it != facemap_.end(); it++) {
     bmsh3d_face* F = (*it).second;
 
@@ -566,7 +568,7 @@ unsigned int bmsh3d_mesh::count_max_polygon_sides ()
 unsigned int bmsh3d_mesh::count_ifs_dup_edges ()
 {
   unsigned int count = 0;
-  vcl_map<int, bmsh3d_face*>::iterator it = facemap_.begin();
+  std::map<int, bmsh3d_face*>::iterator it = facemap_.begin();
   for (; it != facemap_.end(); it++) {
     bmsh3d_face* F = (*it).second;
     count += F->vertices().size();
@@ -581,7 +583,7 @@ unsigned int bmsh3d_mesh::count_bnd_edges (bool& b_2_manifold)
   b_2_manifold = true;
   unsigned int bnd_edges = 0;
 
-  vcl_map<int, bmsh3d_edge*>::iterator it = edgemap_.begin();
+  std::map<int, bmsh3d_edge*>::iterator it = edgemap_.begin();
   for (; it != edgemap_.end(); it++) {
     bmsh3d_edge* edge = (*it).second;
 
@@ -601,7 +603,7 @@ double bmsh3d_mesh::get_avg_edge_len ()
   double        sum_length = 0;
 
   assert (edgemap_.size() != 0);
-  vcl_map<int, bmsh3d_edge*>::iterator it = edgemap_.begin();
+  std::map<int, bmsh3d_edge*>::iterator it = edgemap_.begin();
   for (; it != edgemap_.end(); it++) {
     bmsh3d_edge* edge = (*it).second;
 
@@ -622,7 +624,7 @@ double bmsh3d_mesh::get_avg_edge_len ()
 void bmsh3d_mesh::m2_mesh_merge_face (bmsh3d_face* F1, bmsh3d_face* F2 ,bmsh3d_edge* E)
 {
   assert (F1 != F2);
-  vcl_cout << "mesh_merge_faces " << F1->id() << " with " << F2->id() << vcl_endl;
+  std::cout << "mesh_merge_faces " << F1->id() << " with " << F2->id() << std::endl;
 
   bmsh3d_vertex* Vs = E->sV();
   bmsh3d_vertex* Ve = E->eV();
@@ -696,7 +698,7 @@ void manifold_fix_faces_orientation (bmsh3d_mesh* mesh, int sfaceid, bool b_use_
 
   // Propagation of the orientation to all other faces
   // The front here is the halfedge with associated faces to propagate.
-  vcl_queue<bmsh3d_halfedge*> he_queue;
+  std::queue<bmsh3d_halfedge*> he_queue;
 
   // Put all adjacent faces into the queue
   bmsh3d_halfedge* HE = startHE;

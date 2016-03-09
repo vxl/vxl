@@ -3,7 +3,7 @@
 boxm2_vecf_orbit_articulation::boxm2_vecf_orbit_articulation(){
 
   //======================= default articulation =====================
-  vcl_vector<boxm2_vecf_orbit_params> default_articulation;
+  std::vector<boxm2_vecf_orbit_params> default_articulation;
   {
     double ddt = 0.9;
     for(double dt = 0.0;dt<=ddt; dt +=0.1){
@@ -12,7 +12,7 @@ boxm2_vecf_orbit_articulation::boxm2_vecf_orbit_articulation(){
       default_articulation.push_back(params);
     }
     // look left right
-    vcl_vector<vgl_vector_3d<double> > emv;
+    std::vector<vgl_vector_3d<double> > emv;
     emv.push_back(vgl_vector_3d<double>(0.0, 0.0, 1.0));
     emv.push_back(vgl_vector_3d<double>(-0.1736, 0.0, 0.9848));
     emv.push_back(vgl_vector_3d<double>(-0.26, 0.0, 0.968));
@@ -22,7 +22,7 @@ boxm2_vecf_orbit_articulation::boxm2_vecf_orbit_articulation(){
     emv.push_back(vgl_vector_3d<double>(0.26, 0.0, 0.968));
     emv.push_back(vgl_vector_3d<double>(0.1736, 0.0, 0.9848));
     emv.push_back(vgl_vector_3d<double>(0.0, 0.0, 1.0));
-    for(vcl_vector<vgl_vector_3d<double> >::iterator eit = emv.begin();
+    for(std::vector<vgl_vector_3d<double> >::iterator eit = emv.begin();
         eit != emv.end(); eit++){
       boxm2_vecf_orbit_params params;
       params.eyelid_dt_ = ddt;
@@ -31,12 +31,12 @@ boxm2_vecf_orbit_articulation::boxm2_vecf_orbit_articulation(){
     }
 
     // look up
-    vcl_vector<vgl_vector_3d<double> > emv2;
+    std::vector<vgl_vector_3d<double> > emv2;
     emv2.push_back(vgl_vector_3d<double>(0.0, 0.0, 1.0));
     emv2.push_back(vgl_vector_3d<double>(0.0, 0.0871, 0.9962));
     emv2.push_back(vgl_vector_3d<double>(0.0, 0.1736, 0.9848));
     double ddt2 = 0.75;
-    for(vcl_vector<vgl_vector_3d<double> >::iterator eit = emv2.begin();
+    for(std::vector<vgl_vector_3d<double> >::iterator eit = emv2.begin();
         eit != emv2.end(); eit++){
       boxm2_vecf_orbit_params params;
       params.eyelid_dt_ = ddt2;
@@ -58,7 +58,7 @@ boxm2_vecf_orbit_articulation::boxm2_vecf_orbit_articulation(){
   this->set_play_sequence("default") ;
 
  //================== dphi adjustment ==============================
- vcl_vector<boxm2_vecf_orbit_params> dphi_articulation;
+ std::vector<boxm2_vecf_orbit_params> dphi_articulation;
  {
    double brow_angle=2, angle=0;
    for(int i = 0; i<10; ++i){
@@ -73,7 +73,7 @@ boxm2_vecf_orbit_articulation::boxm2_vecf_orbit_articulation(){
  }
  play_sequence_map_["dphi_articulation"] = dphi_articulation;
 //================== crazy rotation ==============================
- vcl_vector<boxm2_vecf_orbit_params> rotation_articulation;
+ std::vector<boxm2_vecf_orbit_params> rotation_articulation;
  {
    unsigned   num_frames  = 30;
    vgl_vector_3d<double> look_dir_cur(0,0,-1);
@@ -100,10 +100,10 @@ boxm2_vecf_orbit_articulation::boxm2_vecf_orbit_articulation(){
  }
  play_sequence_map_["rotation_articulation"] = rotation_articulation;
 
-vcl_vector<boxm2_vecf_orbit_params> template_1;
+std::vector<boxm2_vecf_orbit_params> template_1;
  {
    unsigned   num_frames  = 4;
-   vcl_vector<vgl_vector_3d<double> > emv;
+   std::vector<vgl_vector_3d<double> > emv;
    //4 look directions
     emv.push_back(vgl_vector_3d<double>(-0.26, 0.0, 0.968));
     emv.push_back(vgl_vector_3d<double>(-0.1736, 0.0, 0.9848));
@@ -119,7 +119,7 @@ vcl_vector<boxm2_vecf_orbit_params> template_1;
     }
     //three eyelids
     vgl_vector_3d<double> look_dir_z(0,0,1);
-    vcl_vector<double> dts;
+    std::vector<double> dts;
     dts.push_back(0.5);
     dts.push_back(0);
     dts.push_back(0.95);
@@ -136,7 +136,7 @@ vcl_vector<boxm2_vecf_orbit_params> template_1;
 
   //==============add more articulations here=======================
 
- vcl_vector<boxm2_vecf_orbit_params> new_articulation;
+ std::vector<boxm2_vecf_orbit_params> new_articulation;
  {
 
  }

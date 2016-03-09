@@ -1,12 +1,14 @@
 // This is mul/mbl/tests/test_stats_nd.cxx
-#include <vcl_iostream.h>
-#include <vcl_cmath.h>
+#include <iostream>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <cmath>
 #include <mbl/mbl_stats_nd.h>
 #include <testlib/testlib_test.h>
 
 void test_stats_nd()
 {
-  vcl_cout << "**********************\n"
+  std::cout << "**********************\n"
            << " Testing mbl_stats_nd\n"
            << "**********************\n";
 
@@ -32,12 +34,12 @@ void test_stats_nd()
   TEST_NEAR("sumSq()",vnl_vector_ssd(stats.sumSq(),x), 0.0, 1e-6);
   x.fill(2.5);
   TEST_NEAR("variance()",vnl_vector_ssd(stats.variance(),x), 0.0, 1e-6);
-  x.fill(vcl_sqrt(2.5));
+  x.fill(std::sqrt(2.5));
   TEST_NEAR("sd()",vnl_vector_ssd(stats.sd(),x), 0.0, 1e-6);
-  x.fill(vcl_sqrt(0.5));
+  x.fill(std::sqrt(0.5));
   TEST_NEAR("stdError()",vnl_vector_ssd(stats.stdError(),x), 0.0, 1e-6);
 
-  vcl_cout<<stats<<vcl_endl;
+  std::cout<<stats<<std::endl;
 
   mbl_stats_nd stats2 = stats;
   TEST("Equality operator",stats, stats2);

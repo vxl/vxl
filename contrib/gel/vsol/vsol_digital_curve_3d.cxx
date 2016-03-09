@@ -4,19 +4,21 @@
 // \file
 
 #include <vsol/vsol_point_3d.h>
-#include <vcl_iostream.h>
+#include <iostream>
 #include <vgl/vgl_point_3d.h>
 #include <vgl/vgl_vector_3d.h>
 #include <vgl/vgl_distance.h>
 #include <vsl/vsl_vector_io.h>
-#include <vcl_cmath.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <cmath>
 #include <vcl_cassert.h>
 
 // Copy constructor
 vsol_digital_curve_3d::vsol_digital_curve_3d(const vsol_digital_curve_3d &other)
   : vsol_curve_3d(other), samples_()
 {
-  for (vcl_vector<vsol_point_3d_sptr>::const_iterator itr=other.samples_.begin();
+  for (std::vector<vsol_point_3d_sptr>::const_iterator itr=other.samples_.begin();
        itr != other.samples_.end();  ++itr)
     this->samples_.push_back(new vsol_point_3d(**itr));
 }
@@ -62,12 +64,12 @@ vsol_digital_curve_3d::interp(double index) const
   assert(index >= 0.0);
   assert(index <= double(samples_.size()-1));
 
-  int i1 = (int)vcl_floor(index);
-  if ( vcl_floor(index) == index )
+  int i1 = (int)std::floor(index);
+  if ( std::floor(index) == index )
     return samples_[i1]->get_p();
 
-  int i2 = (int)vcl_ceil(index);
-  double f = index - vcl_floor(index);
+  int i2 = (int)std::ceil(index);
+  double f = index - std::floor(index);
 
   vgl_point_3d<double> p1 = samples_[i1]->get_p();
   vgl_point_3d<double> p2 = samples_[i2]->get_p();
@@ -107,7 +109,7 @@ bool vsol_digital_curve_3d::operator==(vsol_spatial_object_3d const& obj) const
 double vsol_digital_curve_3d::length(void) const
 {
   double curve_length = 0.0;
-  for ( vcl_vector<vsol_point_3d_sptr>::const_iterator itr=samples_.begin();
+  for ( std::vector<vsol_point_3d_sptr>::const_iterator itr=samples_.begin();
         itr+1 != samples_.end();  ++itr )
   {
     curve_length += ((*(itr+1))->get_p() - (*itr)->get_p()).length();
@@ -179,7 +181,7 @@ short vsol_digital_curve_3d::version() const
 }
 
 //: Print an ascii summary to the stream
-void vsol_digital_curve_3d::print_summary(vcl_ostream &os) const
+void vsol_digital_curve_3d::print_summary(std::ostream &os) const
 {
   os << *this;
 }
@@ -219,13 +221,13 @@ vsl_b_read(vsl_b_istream &is, vsol_digital_curve_3d* &p)
     p = VXL_NULLPTR;
 }
 
-void vsol_digital_curve_3d::describe(vcl_ostream &strm, int blanking) const
+void vsol_digital_curve_3d::describe(std::ostream &strm, int blanking) const
 {
   if (blanking < 0) blanking = 0; while (blanking--) strm << ' ';
   strm << "[vsol_digital_curve_3d";
   for (unsigned int i=0; i<size(); ++i)
     strm << ' ' << *(point(i));
-  strm << ']' << vcl_endl;
+  strm << ']' << std::endl;
 }
 
 
@@ -275,7 +277,7 @@ bool split(vsol_digital_curve_3d_sptr const& input,
   if (index <= 0.0 || index >= double(n-1))
     return false;
 
-  vcl_vector<vsol_point_3d_sptr> vec1, vec2;
+  std::vector<vsol_point_3d_sptr> vec1, vec2;
   vgl_point_3d<double> break_point = input->interp(index);
   vec2.push_back(new vsol_point_3d(break_point));
   for (unsigned int i=0; i<n; ++i) {

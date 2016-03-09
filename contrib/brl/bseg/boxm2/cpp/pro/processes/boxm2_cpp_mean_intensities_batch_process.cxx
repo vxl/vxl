@@ -7,7 +7,9 @@
 // \author Ozge C. Ozcanli
 // \date May 12, 2011
 
-#include <vcl_fstream.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <fstream>
 #include <boxm2/io/boxm2_stream_cache.h>
 #include <boxm2/io/boxm2_cache.h>
 #include <boxm2/boxm2_scene.h>
@@ -36,12 +38,12 @@ bool boxm2_cpp_mean_intensities_batch_process_cons(bprb_func_process& pro)
   // 0) scene
   // 2) cache
   // 3) stream cache
-  vcl_vector<vcl_string> input_types_(n_inputs_);
+  std::vector<std::string> input_types_(n_inputs_);
   input_types_[0] = "boxm2_scene_sptr";
   input_types_[1] = "boxm2_cache_sptr";
   input_types_[2] = "boxm2_stream_cache_sptr";
   // process has 0 output:
-  vcl_vector<vcl_string>  output_types_(n_outputs_);
+  std::vector<std::string>  output_types_(n_outputs_);
 
   return pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
 }
@@ -51,7 +53,7 @@ bool boxm2_cpp_mean_intensities_batch_process(bprb_func_process& pro)
   using namespace boxm2_cpp_mean_intensities_batch_process_globals;
 
   if ( pro.n_inputs() < n_inputs_ ){
-    vcl_cout << pro.name() << ": The input number should be " << n_inputs_<< vcl_endl;
+    std::cout << pro.name() << ": The input number should be " << n_inputs_<< std::endl;
     return false;
   }
   //get the inputs
@@ -63,8 +65,8 @@ bool boxm2_cpp_mean_intensities_batch_process(bprb_func_process& pro)
   // assumes that the intensities of each image have been cast into data models of type ALPHA previously
   int alphaTypeSize = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_AUX0>::prefix());
   // iterate the scene block by block and write to output
-  vcl_vector<boxm2_block_id> blk_ids = scene->get_block_ids();
-  vcl_vector<boxm2_block_id>::iterator id;
+  std::vector<boxm2_block_id> blk_ids = scene->get_block_ids();
+  std::vector<boxm2_block_id>::iterator id;
   id = blk_ids.begin();
   for (id = blk_ids.begin(); id != blk_ids.end(); ++id) {
     // we're assuming that we have enough RAM to store the whole output block for alpha
@@ -92,12 +94,12 @@ bool boxm2_cpp_mean_intensities_print_process_cons(bprb_func_process& pro)
   //process takes 3 inputs
   // 0) scene
   // 1) cache
-  vcl_vector<vcl_string> input_types_(n_inputs_);
+  std::vector<std::string> input_types_(n_inputs_);
   input_types_[0] = "boxm2_scene_sptr";
   input_types_[1] = "boxm2_cache_sptr";
   input_types_[2] = "boxm2_stream_cache_sptr";
   // process has 0 output:
-  vcl_vector<vcl_string>  output_types_(n_outputs_);
+  std::vector<std::string>  output_types_(n_outputs_);
 
   return pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
 }
@@ -107,7 +109,7 @@ bool boxm2_cpp_mean_intensities_print_process(bprb_func_process& pro)
   using namespace boxm2_cpp_mean_intensities_print_process_globals;
 
   if ( pro.n_inputs() < n_inputs_ ){
-      vcl_cout << pro.name() << ": The input number should be " << n_inputs_<< vcl_endl;
+      std::cout << pro.name() << ": The input number should be " << n_inputs_<< std::endl;
       return false;
   }
   //get the inputs
@@ -119,8 +121,8 @@ bool boxm2_cpp_mean_intensities_print_process(bprb_func_process& pro)
   // assumes that the intensities of each image have been cast into data models of type ALPHA previously
   int alphaTypeSize = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_AUX0>::prefix());
   // iterate the scene block by block and write to output
-  vcl_vector<boxm2_block_id> blk_ids = scene->get_block_ids();
-  for (vcl_vector<boxm2_block_id>::iterator id = blk_ids.begin(); id != blk_ids.end(); ++id)
+  std::vector<boxm2_block_id> blk_ids = scene->get_block_ids();
+  for (std::vector<boxm2_block_id>::iterator id = blk_ids.begin(); id != blk_ids.end(); ++id)
   {
     // we're assuming that we have enough RAM to store the whole output block for alpha
     boxm2_data_base * output_alph  = cache->get_data_base(scene,*id,boxm2_data_traits<BOXM2_AUX0>::prefix());
@@ -150,13 +152,13 @@ bool boxm2_cpp_data_print_process_cons(bprb_func_process& pro)
   // 1) cache
   // 2) data type string
   // 3) identifier (e.g. img_0)
-  vcl_vector<vcl_string> input_types_(n_inputs_);
+  std::vector<std::string> input_types_(n_inputs_);
   input_types_[0] = "boxm2_scene_sptr";
   input_types_[1] = "boxm2_cache_sptr";
   input_types_[2] = "vcl_string";
   input_types_[3] = "vcl_string";
   // process has 0 output:
-  vcl_vector<vcl_string>  output_types_(n_outputs_);
+  std::vector<std::string>  output_types_(n_outputs_);
 
   return pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
 }
@@ -166,23 +168,23 @@ bool boxm2_cpp_data_print_process(bprb_func_process& pro)
   using namespace boxm2_cpp_data_print_process_globals;
 
   if ( pro.n_inputs() < n_inputs_ ){
-      vcl_cout << pro.name() << ": The input number should be " << n_inputs_<< vcl_endl;
+      std::cout << pro.name() << ": The input number should be " << n_inputs_<< std::endl;
       return false;
   }
   //get the inputs
   unsigned i = 0;
   boxm2_scene_sptr scene =pro.get_input<boxm2_scene_sptr>(i++);
   boxm2_cache_sptr cache =pro.get_input<boxm2_cache_sptr>(i++);
-  vcl_string data_type = pro.get_input<vcl_string>(i++);
-  vcl_string identifier = pro.get_input<vcl_string>(i++);
+  std::string data_type = pro.get_input<std::string>(i++);
+  std::string identifier = pro.get_input<std::string>(i++);
 
 #if 0
-  vcl_size_t TypeSize = boxm2_data_info::datasize(data_type);
-  vcl_string prefix = data_type + "_" + identifier;
+  std::size_t TypeSize = boxm2_data_info::datasize(data_type);
+  std::string prefix = data_type + "_" + identifier;
 
   //: iterate the scene block by block and write to output
-  vcl_vector<boxm2_block_id> blk_ids = scene->get_block_ids();
-  for (vcl_vector<boxm2_block_id>::iterator id = blk_ids.begin(); id != blk_ids.end(); ++id)
+  std::vector<boxm2_block_id> blk_ids = scene->get_block_ids();
+  for (std::vector<boxm2_block_id>::iterator id = blk_ids.begin(); id != blk_ids.end(); ++id)
   {
     boxm2_block * blk = cache->get_block(*id);
     //: we're assuming that we have enough RAM to store the whole output block for alpha

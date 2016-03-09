@@ -7,7 +7,9 @@
 #include <boxm2/ocl/boxm2_ocl_util.h>
 #include <vul/vul_timer.h>
 #include <bstm/cpp/algo/bstm_label_bb_function.h>
-#include <vcl_algorithm.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <algorithm>
 #include <vgl/vgl_sphere_3d.h>
 #include <vnl/algo/vnl_svd.h>
 #include <vnl/vnl_det.h>
@@ -16,22 +18,22 @@
 
 bstm_ocl_particle_filter::bstm_ocl_particle_filter(bocl_device_sptr device, bstm_scene_sptr scene, bstm_cache_sptr cache, bstm_opencl_cache_sptr opencl_cache,
                         unsigned start_t, unsigned end_t, vgl_box_3d<double> initial_bb, int num_particles, double t_sigma, double w_sigma,
-                        vcl_string kernel_opt,int nbins, int track_label, double radius ):
+                        std::string kernel_opt,int nbins, int track_label, double radius ):
                         device_(device), scene_(scene), cache_(cache), opencl_cache_(opencl_cache),num_particles_(num_particles), initial_bb_(initial_bb),
                         t_sigma_(t_sigma), w_sigma_(w_sigma), start_t_(start_t), end_t_(end_t), track_label_(track_label), radius_(radius),
                         kernel_opt_(kernel_opt), app_nbins_(nbins), app_view_dir_num_(4), surf_nbins_(2), rand_(9667566)
 {
   //get blocks that intersect the provided bounding box.
-  //vcl_vector<bstm_block_id> relevant_blocks = scene_->get_block_ids(initial_bb, start_t);
+  //std::vector<bstm_block_id> relevant_blocks = scene_->get_block_ids(initial_bb, start_t);
 
   //initially, each particle is the same bb
-  vcl_vector<vgl_orient_box_3d<double> > initial_bbs;
+  std::vector<vgl_orient_box_3d<double> > initial_bbs;
 
-  vcl_vector< vgl_rotation_3d<double> > empty_r;
-  vcl_vector< vgl_vector_3d<double> >  empty_t;
+  std::vector< vgl_rotation_3d<double> > empty_r;
+  std::vector< vgl_vector_3d<double> >  empty_t;
 
-  vcl_vector< vcl_map<bstm_block_id, vcl_vector<bstm_block_id> > > empty_blk_map;
-  vcl_vector< double > initial_mi;
+  std::vector< std::map<bstm_block_id, std::vector<bstm_block_id> > > empty_blk_map;
+  std::vector< double > initial_mi;
   for(unsigned i = 0; i < num_particles_;i++) {
     initial_bbs.push_back( vgl_orient_box_3d<double>(initial_bb ) );
     initial_mi.push_back(1.0f);
@@ -75,9 +77,9 @@ bstm_ocl_particle_filter::bstm_ocl_particle_filter(bocl_device_sptr device, bstm
 }
 
 
-vcl_vector<double> bstm_ocl_particle_filter::compute_mi_from_hist()
+std::vector<double> bstm_ocl_particle_filter::compute_mi_from_hist()
 {
-  vcl_vector<double> all_mi;
+  std::vector<double> all_mi;
 
   for(unsigned particle_no = 0; particle_no < num_particles_;particle_no++)
   {
@@ -100,17 +102,17 @@ vcl_vector<double> bstm_ocl_particle_filter::compute_mi_from_hist()
 
     float surf_entropyA = 0;
     for (int k = 0; k < surf_nbins_; k++) {
-      surf_entropyA += -(surf_histA_[k]?surf_histA_[k]*vcl_log(surf_histA_[k]):0); // if prob=0 this value is defined as 0
+      surf_entropyA += -(surf_histA_[k]?surf_histA_[k]*std::log(surf_histA_[k]):0); // if prob=0 this value is defined as 0
     }
     float surf_entropyB = 0;
     for (int l = 0; l < surf_nbins_; l++) {
-      surf_entropyB += -(surf_histB_[l]?surf_histB_[l]*vcl_log(surf_histB_[l]):0); // if prob=0 this value is defined as 0
+      surf_entropyB += -(surf_histB_[l]?surf_histB_[l]*std::log(surf_histB_[l]):0); // if prob=0 this value is defined as 0
     }
 
     float surf_entropyAB =  0.0; ;
     for (int k = 0; k < surf_nbins_; k++) {
       for (int l = 0; l < surf_nbins_; l++) {
-        surf_entropyAB += -(surf_joint_histogram_buff_[surf_nbins_*surf_nbins_* particle_no + k*surf_nbins_+l]?surf_joint_histogram_buff_[surf_nbins_*surf_nbins_* particle_no + k*surf_nbins_+l]*vcl_log(surf_joint_histogram_buff_[surf_nbins_*surf_nbins_* particle_no + k*surf_nbins_+l]):0);
+        surf_entropyAB += -(surf_joint_histogram_buff_[surf_nbins_*surf_nbins_* particle_no + k*surf_nbins_+l]?surf_joint_histogram_buff_[surf_nbins_*surf_nbins_* particle_no + k*surf_nbins_+l]*std::log(surf_joint_histogram_buff_[surf_nbins_*surf_nbins_* particle_no + k*surf_nbins_+l]):0);
       }
     }
     float mi_surf  = ( (surf_entropyA + surf_entropyB ) - surf_entropyAB) /vnl_math::ln2;
@@ -152,20 +154,20 @@ vcl_vector<double> bstm_ocl_particle_filter::compute_mi_from_hist()
 
       float app_entropyA = 0;
       for (int k = 0; k < app_nbins_; k++) {
-        app_entropyA += -(app_histA_[k]?app_histA_[k]*vcl_log(app_histA_[k]):0); // if prob=0 this value is defined as 0
+        app_entropyA += -(app_histA_[k]?app_histA_[k]*std::log(app_histA_[k]):0); // if prob=0 this value is defined as 0
       }
 
 
       float app_entropyB = 0;
       for (int l = 0; l < app_nbins_; l++) {
-        app_entropyB += -(app_histB_[l]?app_histB_[l]*vcl_log(app_histB_[l]):0); // if prob=0 this value is defined as 0
+        app_entropyB += -(app_histB_[l]?app_histB_[l]*std::log(app_histB_[l]):0); // if prob=0 this value is defined as 0
       }
 
       float app_entropyAB =  0.0; ;
       for (int k = 0; k < app_nbins_; k++) {
         for (int l = 0; l < app_nbins_; l++) {
           float val = app_hist_[(app_nbins_* app_nbins_*view_dir_num) + k*app_nbins_+l];
-          app_entropyAB += -(val?val*vcl_log(val):0);
+          app_entropyAB += -(val?val*std::log(val):0);
         }
       }
       //float norm = app_entropyA /vnl_math::ln2;
@@ -175,7 +177,7 @@ vcl_vector<double> bstm_ocl_particle_filter::compute_mi_from_hist()
     float mi =  mi_app;
 
     all_mi.push_back(mi);
-    //vcl_cout << R_.back()[particle_no].as_euler_angles() << " " << mi << vcl_endl;
+    //std::cout << R_.back()[particle_no].as_euler_angles() << " " << mi << std::endl;
   }
 
   return all_mi;
@@ -194,8 +196,8 @@ void bstm_ocl_particle_filter::normalize_mi_score(unsigned t)
 
 bool bstm_ocl_particle_filter::compile_kernel()
 {
-  vcl_vector<vcl_string> src_paths;
-  vcl_string source_dir = vcl_string(VCL_SOURCE_ROOT_DIR) + "/contrib/brl/bseg/bstm/ocl/cl/";
+  std::vector<std::string> src_paths;
+  std::string source_dir = std::string(VCL_SOURCE_ROOT_DIR) + "/contrib/brl/bseg/bstm/ocl/cl/";
   src_paths.push_back(source_dir     + "scene_info.cl");
   src_paths.push_back(source_dir     + "bit/bit_tree_library_functions.cl");
   src_paths.push_back(source_dir     + "bit/time_tree_library_functions.cl");
@@ -215,16 +217,16 @@ void bstm_ocl_particle_filter::propagate_particles(unsigned prev_time, unsigned 
   //make an estimate of the velocity of the object
   vgl_vector_3d<double> v = velocity_estimate(prev_time-1,prev_time);
   vgl_rotation_3d<double> w = angular_velocity_estimate(prev_time-1,prev_time);
-  vcl_cerr << "VELOCITY ESTIMATE: " << v.x() << " " << v.y() << " " << v.z() << vcl_endl;
-  vcl_cerr << "ANGULAR VELOCITY ESTIMATE: " << w.as_rodrigues() << vcl_endl;
+  std::cerr << "VELOCITY ESTIMATE: " << v.x() << " " << v.y() << " " << v.z() << std::endl;
+  std::cerr << "ANGULAR VELOCITY ESTIMATE: " << w.as_rodrigues() << std::endl;
 
-  vcl_vector<vgl_orient_box_3d<double> > next_bb;
-  vcl_vector< vgl_rotation_3d<double> > new_R;
-  vcl_vector< vgl_rotation_3d<double> > new_infrot;
-  vcl_vector< vgl_vector_3d<double> >  new_T;
-  vcl_vector< vgl_vector_3d<double> > new_inft;
+  std::vector<vgl_orient_box_3d<double> > next_bb;
+  std::vector< vgl_rotation_3d<double> > new_R;
+  std::vector< vgl_rotation_3d<double> > new_infrot;
+  std::vector< vgl_vector_3d<double> >  new_T;
+  std::vector< vgl_vector_3d<double> > new_inft;
 
-  vcl_vector< vcl_map<bstm_block_id, vcl_vector<bstm_block_id> > > new_blk_map;
+  std::vector< std::map<bstm_block_id, std::vector<bstm_block_id> > > new_blk_map;
   for(unsigned particle_no = 0; particle_no < num_particles_;particle_no++)
   {
     //sample infinitesimal R and T
@@ -253,14 +255,14 @@ void bstm_ocl_particle_filter::propagate_particles(unsigned prev_time, unsigned 
 
     //update R,T estimates
     vgl_rotation_3d<double> new_rotation = inf_rot * R_[prev_time - start_t_][particle_no];
-    //vcl_cout << "OVERALL ROT " << new_rotation.as_rodrigues()[0] << " " << new_rotation.as_rodrigues()[1] << " "<< new_rotation.as_rodrigues()[2] << vcl_endl;
+    //std::cout << "OVERALL ROT " << new_rotation.as_rodrigues()[0] << " " << new_rotation.as_rodrigues()[1] << " "<< new_rotation.as_rodrigues()[2] << std::endl;
 
     vgl_vector_3d<double> new_t = inf_rot * T_[prev_time - start_t_][particle_no] + inf_t;
     //orient the corners of bb to create new AABB
 
     //look into vgl_box_3d to see why corners 0,1,2,4 are taken.
     vgl_orient_box_3d<double> orientedbox( initial_bb_, new_rotation.as_quaternion() );
-    vcl_vector<vgl_point_3d<double> > corners = orientedbox.corners();
+    std::vector<vgl_point_3d<double> > corners = orientedbox.corners();
 
     vgl_point_3d<double> box_min_pt = corners[0] + new_t;
     vgl_point_3d<double> box_min_pt_plus_width  = corners[1] + new_t;
@@ -270,7 +272,7 @@ void bstm_ocl_particle_filter::propagate_particles(unsigned prev_time, unsigned 
     vgl_orient_box_3d<double> new_box( box_min_pt,box_min_pt_plus_width,box_min_pt_plus_depth,box_min_pt_plus_height );
 
     //figure out mapping
-    vcl_map<bstm_block_id, vcl_vector<bstm_block_id> > map;
+    std::map<bstm_block_id, std::vector<bstm_block_id> > map;
     populate_blk_mapping( map, initial_bb_, new_rotation, new_t, start_t_, cur_time);
 
     //save
@@ -295,16 +297,16 @@ void bstm_ocl_particle_filter::eval_obs_density(unsigned prev_time, unsigned cur
   int status=0;
   queue_ = clCreateCommandQueue(device_->context(),*(device_->device_id()), CL_QUEUE_OUT_OF_ORDER_EXEC_MODE_ENABLE ,&status);
   if (status!=0)
-    vcl_cerr << "Command queue cannot be created..." << vcl_endl;
+    std::cerr << "Command queue cannot be created..." << std::endl;
 
   vul_timer timer;
-  vcl_cerr << "EVALUATING OBS DENSITY..."  << vcl_endl;
+  std::cerr << "EVALUATING OBS DENSITY..."  << std::endl;
   gpu_time_ = 0.0f;
 
   write_particle_ocl_info(start_t_,cur_time);
 
   mi_.push_back(eval_mi(prev_time, cur_time) );
-  vcl_cerr << "FINISHED EVALUATING OBS DENSITY...gpu time: " <<  gpu_time_ / (double)1000 << " seconds. Real time: " << timer.real() / double(1000) << " seconds." << vcl_endl;
+  std::cerr << "FINISHED EVALUATING OBS DENSITY...gpu time: " <<  gpu_time_ / (double)1000 << " seconds. Real time: " << timer.real() / double(1000) << " seconds." << std::endl;
 
   //normalize scores to avoid precision problem
   normalize_mi_score(cur_time);
@@ -315,9 +317,9 @@ void bstm_ocl_particle_filter::eval_obs_density(unsigned prev_time, unsigned cur
 void bstm_ocl_particle_filter::write_particle_ocl_info(unsigned prev_time,unsigned cur_time )
 {
 
-  vcl_vector<cl_float> translations;
-  vcl_vector<cl_float> rotations;
-  vcl_vector<cl_float> bbs;
+  std::vector<cl_float> translations;
+  std::vector<cl_float> rotations;
+  std::vector<cl_float> bbs;
 
   for(unsigned particle_no = 0; particle_no < num_particles_;particle_no++)
   {
@@ -350,9 +352,9 @@ void bstm_ocl_particle_filter::write_particle_ocl_info(unsigned prev_time,unsign
     bbs.push_back( initial_bb_.max_z() );
   }
   //copy back vectors to cl_bufs
-  vcl_copy(translations.begin(), translations.end(), translation_buff_);
-  vcl_copy(rotations.begin(), rotations.end(), rotation_buff_);
-  vcl_copy(bbs.begin(), bbs.end(), bb_buf_);
+  std::copy(translations.begin(), translations.end(), translation_buff_);
+  std::copy(rotations.begin(), rotations.end(), rotation_buff_);
+  std::copy(bbs.begin(), bbs.end(), bb_buf_);
 
 
 
@@ -360,7 +362,7 @@ void bstm_ocl_particle_filter::write_particle_ocl_info(unsigned prev_time,unsign
   double local_time1,local_time2;
   scene_->local_time((double)prev_time + 0.5,local_time1);
   scene_->local_time((double)cur_time + 0.5,local_time2);
-  vcl_cout << "Prev time: " << local_time1 << " cur time: " << local_time2 << vcl_endl;
+  std::cout << "Prev time: " << local_time1 << " cur time: " << local_time2 << std::endl;
   times_[0] = (float) local_time1;
   times_[1] = (float) local_time2;
   times_[2] = prev_time;
@@ -385,10 +387,10 @@ vgl_rotation_3d<double> bstm_ocl_particle_filter::sample_rot(vgl_rotation_3d<dou
   //first construct a random sample from a von-mises fisher distribution with mean [0,0,1] and concentration parameter kappa
   double v = 2 * vnl_math::pi * rand_.drand32();
   double u = rand_.drand32();
-  double w = 1 + (1/kappa) * ( vcl_log(u)  + vcl_log(1 - ((u-1)/u)* vcl_exp(-2 * kappa) ) );
+  double w = 1 + (1/kappa) * ( std::log(u)  + std::log(1 - ((u-1)/u)* std::exp(-2 * kappa) ) );
   vnl_vector_fixed<double,3> sample;
-  sample[0] = vcl_sqrt(1-w*w) * vcl_cos(v);
-  sample[1] = vcl_sqrt(1-w*w) * vcl_sin(v);
+  sample[0] = std::sqrt(1-w*w) * std::cos(v);
+  sample[1] = std::sqrt(1-w*w) * std::sin(v);
   sample[2] = w;
 
 
@@ -401,8 +403,8 @@ vgl_rotation_3d<double> bstm_ocl_particle_filter::sample_rot(vgl_rotation_3d<dou
   double new_angle = rot.angle() + rand_.normal() * w_sigma/2;
   //double new_angle = rot.angle() + rand_.drand32(-w_sigma/2,w_sigma/2);
 
-  //vcl_cout << "Axis is " << rot.axis() << " became " << rotated_sample << vcl_endl;
-  //vcl_cout << "Angle is " << rot.angle() << " became " << new_angle << vcl_endl;
+  //std::cout << "Axis is " << rot.axis() << " became " << rotated_sample << std::endl;
+  //std::cout << "Angle is " << rot.angle() << " became " << new_angle << std::endl;
   return vgl_rotation_3d<double>(rotated_sample * new_angle);
 
 }
@@ -411,17 +413,17 @@ void bstm_ocl_particle_filter::resample(unsigned prev_time, unsigned cur_time)
 {
 
   //resampled vectors to replace current ones
-  vcl_vector<vgl_orient_box_3d<double> > resampled_bbs;
-  vcl_vector< vgl_rotation_3d<double> > resampled_r;
-  vcl_vector< vgl_vector_3d<double> >  resampled_t;
-  vcl_vector< vgl_rotation_3d<double> > resampled_infrot;
-  vcl_vector< vgl_vector_3d<double> >  resampled_inft;
+  std::vector<vgl_orient_box_3d<double> > resampled_bbs;
+  std::vector< vgl_rotation_3d<double> > resampled_r;
+  std::vector< vgl_vector_3d<double> >  resampled_t;
+  std::vector< vgl_rotation_3d<double> > resampled_infrot;
+  std::vector< vgl_vector_3d<double> >  resampled_inft;
 
-  vcl_vector< vcl_map<bstm_block_id, vcl_vector<bstm_block_id> > > resampled_blk_map;
-  vcl_vector< double > resampled_mi;
+  std::vector< std::map<bstm_block_id, std::vector<bstm_block_id> > > resampled_blk_map;
+  std::vector< double > resampled_mi;
 
   //build cdf
-  vcl_vector<double> cdf;
+  std::vector<double> cdf;
   double sum = 0.0f;
   cdf.push_back(sum);
 
@@ -487,7 +489,7 @@ double bstm_ocl_particle_filter::survival_diagnostic(unsigned cur_time)
 }
 
 
-vgl_box_3d<double> bstm_ocl_particle_filter::w_mean_bb( vcl_vector<vgl_orient_box_3d<double> > bb,  vcl_vector< double> weights)
+vgl_box_3d<double> bstm_ocl_particle_filter::w_mean_bb( std::vector<vgl_orient_box_3d<double> > bb,  std::vector< double> weights)
 {
   vgl_point_3d<double> min_pt,max_pt;
   float sum_weights = 0;
@@ -507,7 +509,7 @@ vgl_box_3d<double> bstm_ocl_particle_filter::w_mean_bb( vcl_vector<vgl_orient_bo
 
   vgl_box_3d<double> weighted_box(min_pt,max_pt);
 
-  vcl_cerr << "MEAN BB: " << weighted_box.centroid() << " dim " << weighted_box.width() << " " << weighted_box.height() << " " << weighted_box.depth() << vcl_endl;
+  std::cerr << "MEAN BB: " << weighted_box.centroid() << " dim " << weighted_box.width() << " " << weighted_box.height() << " " << weighted_box.depth() << std::endl;
 
   return weighted_box;
 }
@@ -544,9 +546,9 @@ vgl_rotation_3d<double> bstm_ocl_particle_filter::angular_velocity_estimate(unsi
 
 
   vgl_rotation_3d<double> rot_prev2 = mean_rot(R_[prev2_time - start_t_], mi_[prev2_time - start_t_]);
-  vcl_cerr << "ROT PREV2 " << rot_prev2.as_rodrigues() << vcl_endl;
+  std::cerr << "ROT PREV2 " << rot_prev2.as_rodrigues() << std::endl;
   vgl_rotation_3d<double> rot_prev = mean_rot(R_[prev_time - start_t_], mi_[prev_time - start_t_]);
-  vcl_cerr << "ROT PREV " << rot_prev.as_rodrigues() << vcl_endl;
+  std::cerr << "ROT PREV " << rot_prev.as_rodrigues() << std::endl;
   return rot_prev * rot_prev2.transpose();
 
   /*
@@ -564,21 +566,21 @@ vgl_rotation_3d<double> bstm_ocl_particle_filter::angular_velocity_estimate(unsi
       best_r_prev = R_[prev_time - start_t_][particle_no];
     }
   }
-  vcl_cerr << "ROT PREV2 " << best_r_prev2.as_rodrigues() << vcl_endl;
-  vcl_cerr << "ROT PREV " << best_r_prev.as_rodrigues() << vcl_endl;
+  std::cerr << "ROT PREV2 " << best_r_prev2.as_rodrigues() << std::endl;
+  std::cerr << "ROT PREV " << best_r_prev.as_rodrigues() << std::endl;
 
 
   return best_r_prev * best_r_prev2.transpose();
   */
 }
 
-vcl_vector<double> bstm_ocl_particle_filter::eval_mi(unsigned prev_time, unsigned cur_time)
+std::vector<double> bstm_ocl_particle_filter::eval_mi(unsigned prev_time, unsigned cur_time)
 {
-  vcl_size_t local_threads[1]={128};
-  vcl_size_t global_threads[1]={1};
+  std::size_t local_threads[1]={128};
+  std::size_t global_threads[1]={1};
 
   //snap thru each relevant blk and its mapping
-  vcl_set< vcl_pair< bstm_block_id, bstm_block_id> >::const_iterator iter;
+  std::set< std::pair< bstm_block_id, bstm_block_id> >::const_iterator iter;
   for (iter = global_blk_map_.begin(); iter != global_blk_map_.end(); iter++)
   {
     bstm_block_id relevant_blk_id = iter->first;
@@ -638,8 +640,8 @@ vcl_vector<double> bstm_ocl_particle_filter::eval_mi(unsigned prev_time, unsigne
     for(unsigned particle_no = 0; particle_no < num_particles_;particle_no++)
     {
       //first check if the particle needs this blk pair
-      vcl_vector<bstm_block_id> particle_target_blks = blk_map_[cur_time  - start_t_][particle_no][relevant_blk_id] ;
-      vcl_vector<bstm_block_id>::iterator found = vcl_find(particle_target_blks.begin(), particle_target_blks.end(), target_blk_id);
+      std::vector<bstm_block_id> particle_target_blks = blk_map_[cur_time  - start_t_][particle_no][relevant_blk_id] ;
+      std::vector<bstm_block_id>::iterator found = std::find(particle_target_blks.begin(), particle_target_blks.end(), target_blk_id);
       if(found != particle_target_blks.end())  //particle needs this blk mapping!
       {
         kern_->set_arg(blk_info);
@@ -790,7 +792,7 @@ void bstm_ocl_particle_filter::track()
 
 }
 
-vgl_orient_box_3d<double> bstm_ocl_particle_filter::best_bb( vcl_vector<vgl_orient_box_3d<double> > bb,  vcl_vector< double> weights,  vcl_vector< vgl_vector_3d<double> > T,vcl_vector< vgl_rotation_3d<double> > R)
+vgl_orient_box_3d<double> bstm_ocl_particle_filter::best_bb( std::vector<vgl_orient_box_3d<double> > bb,  std::vector< double> weights,  std::vector< vgl_vector_3d<double> > T,std::vector< vgl_rotation_3d<double> > R)
 {
   float best_score = 0;
   vgl_orient_box_3d<double> best_bb;
@@ -805,12 +807,12 @@ vgl_orient_box_3d<double> bstm_ocl_particle_filter::best_bb( vcl_vector<vgl_orie
       best_r = R[particle_no];
     }
   }
-  vcl_cerr << "BEST BB " << best_bb.centroid() << " dim " << best_bb.width() << " " << best_bb.height() << " " << best_bb.depth() << " has MI: " << best_score
-            << " and T: " << best_t << " and R: " << best_r.as_euler_angles() << vcl_endl;
+  std::cerr << "BEST BB " << best_bb.centroid() << " dim " << best_bb.width() << " " << best_bb.height() << " " << best_bb.depth() << " has MI: " << best_score
+            << " and T: " << best_t << " and R: " << best_r.as_euler_angles() << std::endl;
   return best_bb;
 }
 
-vgl_rotation_3d<double> bstm_ocl_particle_filter::mean_rot( vcl_vector< vgl_rotation_3d<double> > rot, vcl_vector< double > weights )
+vgl_rotation_3d<double> bstm_ocl_particle_filter::mean_rot( std::vector< vgl_rotation_3d<double> > rot, std::vector< double > weights )
 {
 
   vnl_matrix_fixed<double,3,3> avg_rot;
@@ -873,10 +875,10 @@ void bstm_ocl_particle_filter::label(unsigned t)
     vgl_vector_3d<double>  mean_T;
     vgl_rotation_3d<double> mean_R;
     mean_state( t, mean_T, mean_R);
-    vcl_cout << "MEAN T: " << mean_T << " and mean R: " << mean_R.as_euler_angles()[0] << " " << mean_R.as_euler_angles()[1] << " "<< mean_R.as_euler_angles()[2] << vcl_endl;
+    std::cout << "MEAN T: " << mean_T << " and mean R: " << mean_R.as_euler_angles()[0] << " " << mean_R.as_euler_angles()[1] << " "<< mean_R.as_euler_angles()[2] << std::endl;
 
     vgl_orient_box_3d<double> orientedbox( initial_bb_, mean_R.as_quaternion() );
-    vcl_vector<vgl_point_3d<double> > corners = orientedbox.corners();
+    std::vector<vgl_point_3d<double> > corners = orientedbox.corners();
 
     vgl_point_3d<double> box_min_pt = corners[0] + mean_T;
     vgl_point_3d<double> box_min_pt_plus_width  = corners[1] + mean_T;
@@ -892,16 +894,16 @@ void bstm_ocl_particle_filter::label(unsigned t)
 
 
   //get best box's aabb
-  vcl_vector<vgl_point_3d<double> > corners = box.corners();
+  std::vector<vgl_point_3d<double> > corners = box.corners();
   vgl_box_3d<double> aabb;
-  for(vcl_vector<vgl_point_3d<double> >::const_iterator pt_iter = corners.begin(); pt_iter != corners.end(); pt_iter++)
+  for(std::vector<vgl_point_3d<double> >::const_iterator pt_iter = corners.begin(); pt_iter != corners.end(); pt_iter++)
     aabb.add(*pt_iter);
-  vcl_cout << "AABB: " << aabb.centroid() << " dim " << aabb.width() << " " << aabb.height() << " " << aabb.depth() << vcl_endl;
+  std::cout << "AABB: " << aabb.centroid() << " dim " << aabb.width() << " " << aabb.height() << " " << aabb.depth() << std::endl;
 
 
   //iterate over each block/metadata to check if bbox intersects the input bbox
-  vcl_map<bstm_block_id, bstm_block_metadata> blocks = scene_->blocks();
-  vcl_map<bstm_block_id, bstm_block_metadata> ::const_iterator bstm_iter = blocks.begin();
+  std::map<bstm_block_id, bstm_block_metadata> blocks = scene_->blocks();
+  std::map<bstm_block_id, bstm_block_metadata> ::const_iterator bstm_iter = blocks.begin();
   for(; bstm_iter != blocks.end() ; bstm_iter++)
   {
     bstm_block_id bstm_id = bstm_iter->first;
@@ -937,16 +939,16 @@ void bstm_ocl_particle_filter::label(unsigned t)
 
 }
 
-void bstm_ocl_particle_filter::populate_blk_mapping(vcl_map<bstm_block_id, vcl_vector<bstm_block_id> > & mapping, const vgl_box_3d<double>& aabb,
+void bstm_ocl_particle_filter::populate_blk_mapping(std::map<bstm_block_id, std::vector<bstm_block_id> > & mapping, const vgl_box_3d<double>& aabb,
                                                           const vgl_rotation_3d<double>& r,const  vgl_vector_3d<double>& t, unsigned prev_time, unsigned curr_time)
 {
   //get relevant blocks from prev time
-  vcl_vector<bstm_block_id> relevant_blocks = scene_->get_block_ids(aabb, prev_time);
+  std::vector<bstm_block_id> relevant_blocks = scene_->get_block_ids(aabb, prev_time);
 
-  vcl_vector<bstm_block_id>::const_iterator iter;
+  std::vector<bstm_block_id>::const_iterator iter;
   for(iter = relevant_blocks.begin(); iter != relevant_blocks.end(); iter++)
   {
-    //vcl_cout << "Processing blk " << *iter << vcl_endl;
+    //std::cout << "Processing blk " << *iter << std::endl;
     vgl_box_3d<double> block_bb =  scene_->get_block_metadata(*iter).bbox();
 
     //intersect with bounding bb
@@ -957,17 +959,17 @@ void bstm_ocl_particle_filter::populate_blk_mapping(vcl_map<bstm_block_id, vcl_v
     //now rotate and translate the box according to R,T
     vgl_orient_box_3d<double> oriented_intersection_box(block_intersection_bb, r.as_quaternion());
     //get the corners of resulting box and insert them to an axis aligned box.
-    vcl_vector<vgl_point_3d<double> > corners = oriented_intersection_box.corners();
+    std::vector<vgl_point_3d<double> > corners = oriented_intersection_box.corners();
     vgl_box_3d<double> aa_intersection_box;
-    vcl_vector<vgl_point_3d<double> >::const_iterator pt_iter;
+    std::vector<vgl_point_3d<double> >::const_iterator pt_iter;
     for(pt_iter = corners.begin(); pt_iter != corners.end(); pt_iter++) {
       aa_intersection_box.add(*pt_iter + t) ;
     }
     //get blocks intersecting this box
-    vcl_vector<bstm_block_id> query_relevant_blocks = scene_->get_block_ids(aa_intersection_box, curr_time);
-    vcl_vector<bstm_block_id>::const_iterator iter_query_blks;
+    std::vector<bstm_block_id> query_relevant_blocks = scene_->get_block_ids(aa_intersection_box, curr_time);
+    std::vector<bstm_block_id>::const_iterator iter_query_blks;
     for(iter_query_blks = query_relevant_blocks.begin(); iter_query_blks != query_relevant_blocks.end(); iter_query_blks++) {
-      vcl_pair<bstm_block_id,bstm_block_id> my_pair(*iter,  *iter_query_blks);
+      std::pair<bstm_block_id,bstm_block_id> my_pair(*iter,  *iter_query_blks);
       global_blk_map_.insert(my_pair);
     }
     //insert into map

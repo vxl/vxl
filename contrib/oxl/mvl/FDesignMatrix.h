@@ -25,7 +25,9 @@
 //-----------------------------------------------------------------------------
 
 #include <vnl/vnl_matrix.h>
-#include <vcl_vector.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <vector>
 #include <mvl/HomgPoint2D.h>
 #include <vgl/vgl_homg_point_2d.h>
 
@@ -35,11 +37,11 @@ class FDesignMatrix : public vnl_matrix<double>
  public:
   // Constructors/Destructors--------------------------------------------------
 
-  FDesignMatrix(vcl_vector<HomgPoint2D> const& points1,
-                vcl_vector<HomgPoint2D> const& points2);
+  FDesignMatrix(std::vector<HomgPoint2D> const& points1,
+                std::vector<HomgPoint2D> const& points2);
 
-  FDesignMatrix(vcl_vector<vgl_homg_point_2d<double> > const& points1,
-                vcl_vector<vgl_homg_point_2d<double> > const& points2);
+  FDesignMatrix(std::vector<vgl_homg_point_2d<double> > const& points1,
+                std::vector<vgl_homg_point_2d<double> > const& points2);
 };
 
 #endif // FDesignMatrix_h_

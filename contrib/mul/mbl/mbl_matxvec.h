@@ -22,7 +22,9 @@
 #include <vnl/vnl_fwd.h>
 
 #if 0 // commented out
-#include <vcl_vector.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <vector>
   //: Compute R = V*M
   //  R is resized to the number of rows of V * cols of M
 void NC_VecXMat(const vnl_vector<double>& V,const vnl_matrix<double>& M,
@@ -48,7 +50,7 @@ void mbl_matxvec_prod_mv_2(const vnl_matrix<double>& M,
 void TC_MatXVec(const vnl_matrix<double>& M,
                 const vnl_vector<double>& V,
                 vnl_vector<double>& R,
-                const vcl_vector<int>& index);
+                const std::vector<int>& index);
 #endif // commented out
 
   //: Fast Compute R = V' * M = ( M.transpose() * V ).transpose()

@@ -4,18 +4,20 @@
 #include <rgrl/rgrl_trans_reader.h>
 #include <rgrl/rgrl_trans_affine.h>
 #include <rgrl/rgrl_cast.h>
-#include <vcl_fstream.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <fstream>
 
 static void test_trans_reader(int argc, char* argv[])
 {
   if ( argc < 2 ) {
-    vcl_cerr << "Please supply one transformation file.\n";
+    std::cerr << "Please supply one transformation file.\n";
     return;
   }
 
-  vcl_ifstream is( argv[1], vcl_ios_in|vcl_ios_binary );
+  std::ifstream is( argv[1], std::ios::in|std::ios::binary );
   if ( !is ) {
-    vcl_cerr << "Cannot open transformation file: " << argv[2] << vcl_endl;
+    std::cerr << "Cannot open transformation file: " << argv[2] << std::endl;
     return;
   }
 
@@ -38,7 +40,7 @@ static void test_trans_reader(int argc, char* argv[])
     TEST_NEAR("Check parameters of affine transformation", (true_t-t).two_norm(), 0, 1e-12 );
 
     // test
-    affine->write( vcl_cout );
+    affine->write( std::cout );
   }
 }
 

@@ -10,7 +10,9 @@
 #include "boxm2_vecf_articulated_params.h"
 #include "boxm2_vecf_mandible_params.h"
 #include "boxm2_vecf_cranium_params.h"
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iostream>
 #include <vgl/vgl_point_3d.h>
 #include <vgl/vgl_vector_3d.h>
 #include <vgl/algo/vgl_h_matrix_3d.h>
@@ -41,7 +43,7 @@ class boxm2_vecf_skull_params : public boxm2_vecf_articulated_params{
   boxm2_vecf_cranium_params cranium_params_;
 };
 // TO DO implement these
-vcl_ostream&  operator << (vcl_ostream& s, boxm2_vecf_skull_params const& pr);
-vcl_istream&  operator >> (vcl_istream& s, boxm2_vecf_skull_params& pr);
+std::ostream&  operator << (std::ostream& s, boxm2_vecf_skull_params const& pr);
+std::istream&  operator >> (std::istream& s, boxm2_vecf_skull_params& pr);
 
 #endif// boxm2_vecf_skull_params

@@ -16,14 +16,14 @@
 #include <vnl/vnl_inverse.h>
 
 vpgl_camera<double>* bwm_observer_geo_cam::
-read_camera(vcl_string cam_path)
+read_camera(std::string cam_path)
 {
-  vcl_string ext = vul_file_extension(cam_path);
+  std::string ext = vul_file_extension(cam_path);
   if (ext == ".tfw")
   {
-    vcl_ifstream cam_stream(cam_path.c_str());
+    std::ifstream cam_stream(cam_path.c_str());
     if (!cam_stream) {
-      vcl_cerr << "In bwm_observer_geo_cam::read_camera(.) -\n"
+      std::cerr << "In bwm_observer_geo_cam::read_camera(.) -\n"
                << " invalid binary camera file " << cam_path.data() << '\n';
       return VXL_NULLPTR;
     }
@@ -36,7 +36,7 @@ read_camera(vcl_string cam_path)
     vnl_vector_fixed<double,4> r2(transinv(1,0),transinv(1,1),0,0);
     vpgl_affine_camera<double> * affine_cam = new vpgl_affine_camera<double>(r1,r2);
 
-    vcl_cout<<*affine_cam;
+    std::cout<<*affine_cam;
     return affine_cam;
   }
   else
@@ -44,9 +44,9 @@ read_camera(vcl_string cam_path)
 }
 
 bwm_observer_geo_cam::bwm_observer_geo_cam(bgui_image_tableau_sptr img,
-                                           vcl_string name,
-                                           vcl_string& image_path,
-                                           vcl_string& cam_path,
+                                           std::string name,
+                                           std::string& image_path,
+                                           std::string& cam_path,
                                            bool display_image_path)
   : bwm_observer_cam(img)
 {
@@ -89,12 +89,12 @@ bool bwm_observer_geo_cam::intersect_ray_and_plane(vgl_point_2d<double> img_poin
   vgl_homg_line_3d_2_points<double> ray = geo_cam->backproject(vgl_homg_point_2d<double>(img_point));
   vgl_homg_operators_3d<double> oper;
   vgl_homg_point_3d<double> p = oper.intersect_line_and_plane(ray,plane);
-  vcl_cout<<"World Point "<<world_point<<'\n';
+  std::cout<<"World Point "<<world_point<<'\n';
   world_point = p;
   return true;
 }
 
-vcl_ostream& bwm_observer_geo_cam::print_camera(vcl_ostream& s)
+std::ostream& bwm_observer_geo_cam::print_camera(std::ostream& s)
 {
   vpgl_affine_camera<double> * geo_cam = static_cast<vpgl_affine_camera<double> * > (camera_);
   s << *geo_cam;

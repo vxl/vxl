@@ -20,7 +20,9 @@ class HMatrix2D;
 class PairMatchSetCorner;
 #include <mvl/HomgPoint2D.h>
 #include <mvl/HomgLine2D.h>
-#include <vcl_vector.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <vector>
 
 class HMatrix2DCompute {
 public:
@@ -34,8 +36,8 @@ public:
   virtual int minimum_number_of_correspondences() const = 0;
 
   // these reduce the size of the method signatures somewhat.
-  typedef vcl_vector<HomgPoint2D> PointArray;
-  typedef vcl_vector<HomgLine2D>  LineArray;
+  typedef std::vector<HomgPoint2D> PointArray;
+  typedef std::vector<HomgLine2D>  LineArray;
 
   // Compute methods :
   //

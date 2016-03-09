@@ -45,8 +45,10 @@
 // \endlatexonly
 
 
-#include <vcl_fstream.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <fstream>
+#include <iostream>
 #include <vnl/vnl_vector_fixed.h>
 
 #include <rgrl/rgrl_feature_based_registration.h>
@@ -69,17 +71,17 @@
 #include <testlib/testlib_test.h>
 void testlib_enter_stealth_mode(); // defined in core/testlib/testlib_main.cxx
 
-typedef vcl_vector< rgrl_feature_sptr >  feature_vector;
+typedef std::vector< rgrl_feature_sptr >  feature_vector;
 typedef vnl_vector_fixed<double,2>       vector_2d;
 
 void
 read_feature_file( const char*     filename,
                    feature_vector& trace_points )
 {
-  vcl_ifstream istr( filename );
+  std::ifstream istr( filename );
 
   if ( !istr ) {
-    vcl_cerr<<"ERROR: Cannot open "<<filename<<'\n';
+    std::cerr<<"ERROR: Cannot open "<<filename<<'\n';
     return;
   }
 
@@ -92,7 +94,7 @@ read_feature_file( const char*     filename,
     else trace_points.push_back( new rgrl_feature_trace_pt(location.as_ref(), direction.as_ref()) );
   }
   istr.close();
-  vcl_cout<<"There are "<<trace_points.size()<<" features"<<vcl_endl;
+  std::cout<<"There are "<<trace_points.size()<<" features"<<std::endl;
 }
 
 // using command/observer pattern
@@ -112,12 +114,12 @@ class command_iteration_update: public rgrl_command
 
     if ( trans->is_type( rgrl_trans_affine::type_id() ) ) {
       rgrl_trans_affine* a_xform = rgrl_cast<rgrl_trans_affine*>(trans);
-      vcl_cout<<"xform: A =\n"<<a_xform->A()<< "t = "<<a_xform->t()<<vcl_endl;
+      std::cout<<"xform: A =\n"<<a_xform->A()<< "t = "<<a_xform->t()<<std::endl;
     }
     else if ( trans->is_type( rgrl_trans_quadratic::type_id() ) ){
       rgrl_trans_quadratic* q_xform = rgrl_cast<rgrl_trans_quadratic*>(trans);
-      vcl_cout<<"xform: Q =\n"<<q_xform->Q()<<"A = "<<q_xform->A()
-              <<"t = "<<q_xform->t()<<vcl_endl;
+      std::cout<<"xform: Q =\n"<<q_xform->Q()<<"A = "<<q_xform->A()
+              <<"t = "<<q_xform->t()<<std::endl;
     }
   }
 };
@@ -126,7 +128,7 @@ int
 main( int argc, char* argv[] )
 {
   if ( argc < 5 ) {
-    vcl_cerr << "Missing Parameters\n"
+    std::cerr << "Missing Parameters\n"
              << "Usage: " << argv[0]
              << " FixedImageFeatureFileHighRes FixedImageFeatureFileLowRes"
              << " MovingImageFeatureFileHighRes MovingImageFeatureFileLowRes\n";
@@ -235,12 +237,12 @@ main( int argc, char* argv[] )
   // Output Results
   //
   if ( reg.has_final_transformation() ) {
-    vcl_cout<<"Final xform:"<<vcl_endl;
+    std::cout<<"Final xform:"<<std::endl;
     rgrl_transformation_sptr trans = reg.final_transformation();
     rgrl_trans_quadratic* q_xform = rgrl_cast<rgrl_trans_quadratic*>(trans);
-    vcl_cout<<"Q =\n"<<q_xform->Q()<<"A = "<<q_xform->A()
-            <<"t = "<<q_xform->t()<<vcl_endl
-            <<"Final alignment error = "<<reg.final_status()->error()<<vcl_endl;
+    std::cout<<"Q =\n"<<q_xform->Q()<<"A = "<<q_xform->A()
+            <<"t = "<<q_xform->t()<<std::endl
+            <<"Final alignment error = "<<reg.final_status()->error()<<std::endl;
   }
 
   // \latexonly

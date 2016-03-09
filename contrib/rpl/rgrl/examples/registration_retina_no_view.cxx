@@ -63,8 +63,10 @@
 // vessel direction with width.
 //
 
-#include <vcl_fstream.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <fstream>
+#include <iostream>
 #include <vnl/vnl_math.h>
 #include <vnl/vnl_vector_fixed.h>
 
@@ -91,9 +93,9 @@
 #include <testlib/testlib_test.h>
 void testlib_enter_stealth_mode(); // defined in core/testlib/testlib_main.cxx
 
-typedef vcl_vector< rgrl_feature_sptr >  feature_vector;
+typedef std::vector< rgrl_feature_sptr >  feature_vector;
 typedef vnl_vector_fixed<double,2>       vector_2d;
-typedef vcl_vector< rgrl_invariant_sptr> landmark_invaraint_vector;
+typedef std::vector< rgrl_invariant_sptr> landmark_invaraint_vector;
 
 // using command/observer pattern
 class command_iteration_update: public rgrl_command
@@ -112,18 +114,18 @@ class command_iteration_update: public rgrl_command
 
     if ( trans->is_type( rgrl_trans_similarity::type_id() ) ) {
       rgrl_trans_similarity* sim_xform = rgrl_cast<rgrl_trans_similarity*>(trans);
-      vcl_cout<<"xform: A =\n"<<sim_xform->A()<<"t = "<<sim_xform->t()<<vcl_endl;}
+      std::cout<<"xform: A =\n"<<sim_xform->A()<<"t = "<<sim_xform->t()<<std::endl;}
     else if ( trans->is_type( rgrl_trans_reduced_quad::type_id() ) ) {
       rgrl_trans_reduced_quad* rq_xform = rgrl_cast<rgrl_trans_reduced_quad*>(trans);
-      vcl_cout<<"xform: Q =\n"<<rq_xform->Q()<<"A = "<<rq_xform->A()
-              <<"t = "<<rq_xform->t()<<vcl_endl;
+      std::cout<<"xform: Q =\n"<<rq_xform->Q()<<"A = "<<rq_xform->A()
+              <<"t = "<<rq_xform->t()<<std::endl;
     }
     else if ( trans->is_type( rgrl_trans_quadratic::type_id() ) ) {
       rgrl_trans_quadratic* q_xform = rgrl_cast<rgrl_trans_quadratic*>(trans);
-      vcl_cout<<"xform: Q =\n"<<q_xform->Q()<<"A = "<<q_xform->A()
-              <<"t = "<<q_xform->t()<<vcl_endl;
+      std::cout<<"xform: Q =\n"<<q_xform->Q()<<"A = "<<q_xform->A()
+              <<"t = "<<q_xform->t()<<std::endl;
     }
-    else vcl_cout<<"Unknown type"<<vcl_endl;
+    else std::cout<<"Unknown type"<<std::endl;
   }
 };
 
@@ -131,10 +133,10 @@ void
 read_feature_file( const char* filename,
                    feature_vector& trace_points )
 {
-  vcl_ifstream istr( filename );
+  std::ifstream istr( filename );
 
   if ( !istr ) {
-    vcl_cerr<<"ERROR: Cannot open "<<filename<<'\n';
+    std::cerr<<"ERROR: Cannot open "<<filename<<'\n';
     return;
   }
 
@@ -149,17 +151,17 @@ read_feature_file( const char* filename,
   }
 
   istr.close();
-  vcl_cout<<"There are "<<trace_points.size()<<" features"<<vcl_endl;
+  std::cout<<"There are "<<trace_points.size()<<" features"<<std::endl;
 }
 
 void
 read_landmark_file( const char* filename,
                     landmark_invaraint_vector&  landmark_inv )
 {
-  vcl_ifstream istr( filename );
+  std::ifstream istr( filename );
 
   if ( !istr ) {
-    vcl_cerr<<"ERROR: Cannot open "<<filename<<'\n';
+    std::cerr<<"ERROR: Cannot open "<<filename<<'\n';
     return;
   }
 
@@ -210,7 +212,7 @@ int
 main( int argc, char* argv[] )
 {
   if ( argc < 6 ) {
-    vcl_cerr << "Missing Parameters\n"
+    std::cerr << "Missing Parameters\n"
              << "Usage: " << argv[0]
              << " FixedImageTraceFile FixedImageLandmarkFile MovingImageTraceFile MovingImageLandmarkFile MaskImage\n";
     return 1;
@@ -275,7 +277,7 @@ main( int argc, char* argv[] )
     new rgrl_initializer_inv_indexing( moving_image_region,
                                        fixed_image_region );
   double angular_std = 5.5*vnl_math::pi_over_180;
-  double nn_radius = angular_std * vcl_sqrt(11.0704);//95% chi-sqr uncertainty bound
+  double nn_radius = angular_std * std::sqrt(11.0704);//95% chi-sqr uncertainty bound
   inv_initializer->add_data( fixed_landmark_set,
                              moving_landmark_set,
                              nn_radius );
@@ -308,11 +310,11 @@ main( int argc, char* argv[] )
   // Output Results
   //
   if ( reg.has_final_transformation() ) {
-    vcl_cout<<"Final xform:"<<vcl_endl;
+    std::cout<<"Final xform:"<<std::endl;
     rgrl_transformation_sptr trans = reg.final_transformation();
     rgrl_trans_quadratic* q_xform = rgrl_cast<rgrl_trans_quadratic*>(trans);
-    vcl_cout<<"Q =\n"<<q_xform->Q()<<"A = "<<q_xform->A()<<"t ="<<q_xform->t()<<'\n'
-            <<"Final alignment error = "<<reg.final_status()->error()<<vcl_endl;
+    std::cout<<"Q =\n"<<q_xform->Q()<<"A = "<<q_xform->A()<<"t ="<<q_xform->t()<<'\n'
+            <<"Final alignment error = "<<reg.final_status()->error()<<std::endl;
   }
 
   // \latexonly

@@ -7,8 +7,10 @@
 // \author Isabel Restrepo (mir@lems.brown.edu)
 // \date August 08, 2008
 //
-#include <vcl_vector.h>
-#include <vcl_string.h>
+#include <vector>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <string>
 
 #include <vgl/vgl_point_2d.h>
 //:
@@ -26,12 +28,12 @@ class bpgl_nitf_camera_coverage
   //   * A vector of vgl_point_3d<double> with the geographic points of interest (x-longitude, y-latitude, z-elevation).
   //   * The filename of a file containing a list of NITF images to go through.
   //   * A filename to write the image for which the points project within the image
-  static bool coverage_list(vcl_vector<vgl_point_2d<double> > geo_pts,
-                            vcl_string camera_list,
-                            vcl_string img_coverage_list);
+  static bool coverage_list(std::vector<vgl_point_2d<double> > geo_pts,
+                            std::string camera_list,
+                            std::string img_coverage_list);
 
   //: Saves an image where the areas covered by the cameras on the "camera_list" file are colored as red
-  static bool compute_coverage_region(vcl_string camera_list, vcl_string out_imfile);
+  static bool compute_coverage_region(std::string camera_list, std::string out_imfile);
 };
 
 

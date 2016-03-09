@@ -8,9 +8,11 @@
 
 #include "boxm2_ocl_change_detection.h"
 
-#include <vcl_fstream.h>
-#include <vcl_algorithm.h>
-#include <vcl_sstream.h>
+#include <fstream>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <algorithm>
+#include <sstream>
 #include <boxm2/ocl/boxm2_opencl_cache.h>
 #include <boxm2/boxm2_scene.h>
 #include <boxm2/boxm2_block.h>
@@ -37,13 +39,13 @@ using namespace boxm2_ocl_change_detection_globals;
 //verifies data type for scene
 //--------------------------------------------------
 bool boxm2_ocl_change_detection_globals::get_scene_appearances( boxm2_scene_sptr scene,
-                                                                vcl_string&      data_type,
-                                                                vcl_string&      num_obs_type,
-                                                                vcl_string&      options,
+                                                                std::string&      data_type,
+                                                                std::string&      num_obs_type,
+                                                                std::string&      options,
                                                                 int&             apptypesize,
-                                                                vcl_string identifier = "")
+                                                                std::string identifier = "")
 {
-    vcl_vector<vcl_string> apps = scene->appearances();
+    std::vector<std::string> apps = scene->appearances();
     bool foundDataType = false, foundNumObsType = false;
     for (unsigned int i=0; i<apps.size(); ++i) {
         if (apps[i] == boxm2_data_traits<BOXM2_MOG3_GREY>::prefix())
@@ -65,11 +67,11 @@ bool boxm2_ocl_change_detection_globals::get_scene_appearances( boxm2_scene_sptr
         }
     }
     if (!foundDataType) {
-        vcl_cout<<"yyboxm2_ocl_change_detection_process ERROR: scene doesn't have BOXM2_MOG3_GREY or BOXM2_MOG3_GREY_16 data type"<<vcl_endl;
+        std::cout<<"yyboxm2_ocl_change_detection_process ERROR: scene doesn't have BOXM2_MOG3_GREY or BOXM2_MOG3_GREY_16 data type"<<std::endl;
         return false;
     }
     if (!foundNumObsType) {
-        vcl_cout<<"boxm2_ocl_change_detection_process ERROR: scene doesn't have BOXM2_NUM_OBS type"<<vcl_endl;
+        std::cout<<"boxm2_ocl_change_detection_process ERROR: scene doesn't have BOXM2_NUM_OBS type"<<std::endl;
         return false;
     }
 
@@ -79,7 +81,7 @@ bool boxm2_ocl_change_detection_globals::get_scene_appearances( boxm2_scene_sptr
 }
 
 //declare static map
-vcl_map<vcl_string, vcl_vector<bocl_kernel*> > boxm2_ocl_change_detection::kernels_;
+std::map<std::string, std::vector<bocl_kernel*> > boxm2_ocl_change_detection::kernels_;
 
 
 //main change detect function
@@ -92,11 +94,11 @@ bool boxm2_ocl_change_detection::change_detect( vil_image_view<float>&    change
                                                 vil_image_view_base_sptr  img,
                                                 vil_image_view_base_sptr  exp_img,
                                                 int                       n,
-                                                vcl_string                norm_type,
+                                                std::string                norm_type,
                                                 bool                      pmax,
-                                                vcl_string                identifier,
-                                                vcl_size_t                startI,
-                                                vcl_size_t                startJ)
+                                                std::string                identifier,
+                                                std::size_t                startI,
+                                                std::size_t                startJ)
 {
     float transfer_time=0.0f;
     float gpu_time=0.0f;
@@ -104,11 +106,11 @@ bool boxm2_ocl_change_detection::change_detect( vil_image_view<float>&    change
     //img dimensions, global and local threads (will be correctly set)
     unsigned ni=img->ni();
     unsigned nj=img->nj();
-    vcl_size_t  local_threads [2] = {8,8};
-    vcl_size_t  global_threads[2] = {8,8};
+    std::size_t  local_threads [2] = {8,8};
+    std::size_t  global_threads[2] = {8,8};
 
     //---- get scene info -----
-    vcl_string data_type,num_obs_type,options;
+    std::string data_type,num_obs_type,options;
     int apptypesize;
     get_scene_appearances(scene, data_type, num_obs_type, options, apptypesize, identifier);
 
@@ -117,7 +119,7 @@ bool boxm2_ocl_change_detection::change_detect( vil_image_view<float>&    change
         options += " -D USE_MAX_MODE  ";
 
     //grab kernel
-    vcl_vector<bocl_kernel*>& kerns = get_kernels(device, options);
+    std::vector<bocl_kernel*>& kerns = get_kernels(device, options);
 
     //create a command queue.
     int status=0;
@@ -214,8 +216,8 @@ bool boxm2_ocl_change_detection::change_detect( vil_image_view<float>&    change
     // STEP ONE: Do 1x1 Change Detection Pass
     //----------------------------------------------------------------------------
     //For each ID in the visibility order, grab that block
-    vcl_vector<boxm2_block_id> vis_order = scene->get_vis_blocks(cam);
-    vcl_vector<boxm2_block_id>::iterator id;
+    std::vector<boxm2_block_id> vis_order = scene->get_vis_blocks(cam);
+    std::vector<boxm2_block_id>::iterator id;
     for (id = vis_order.begin(); id != vis_order.end(); ++id)
     {
         //choose correct render kernel
@@ -314,15 +316,15 @@ bool boxm2_ocl_change_detection::change_detect( vil_image_view<float>&    change
 
                 //create gpu buff for p2_vis
                 float* p2_vis_buff = new float[cl_nj*cl_ni];
-                vcl_fill(p2_vis_buff, p2_vis_buff+cl_nj*cl_ni, 1.0f);
+                std::fill(p2_vis_buff, p2_vis_buff+cl_nj*cl_ni, 1.0f);
                 bocl_mem_sptr p2_vis      = new bocl_mem(device->context(),p2_vis_buff, cl_ni*cl_nj*sizeof(float),"pass one visibility buffer");
                 p2_vis->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
 
                 //create nxn change buffers
                 float* nxn_change_buff       = new float[cl_ni*cl_nj];
                 float* nxn_change_exp_buff   = new float[cl_ni*cl_nj];
-                vcl_fill(nxn_change_buff, nxn_change_buff+cl_nj*cl_ni, 0.0f);
-                vcl_fill(nxn_change_exp_buff, nxn_change_exp_buff+cl_nj*cl_ni, 0.0f);
+                std::fill(nxn_change_buff, nxn_change_buff+cl_nj*cl_ni, 0.0f);
+                std::fill(nxn_change_exp_buff, nxn_change_exp_buff+cl_nj*cl_ni, 0.0f);
                 bocl_mem_sptr nxn_change     = new bocl_mem(device->context(),nxn_change_buff, cl_ni*cl_nj*sizeof(float),"pass two change buffer");
                 bocl_mem_sptr nxn_change_exp = new bocl_mem(device->context(),nxn_change_exp_buff, cl_ni*cl_nj*sizeof(float),"pass two change exp buffer");
                 nxn_change->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
@@ -435,7 +437,7 @@ bool boxm2_ocl_change_detection::change_detect( vil_image_view<float>&    change
     }
     // read out expected image
     change_image->read_to_buffer(queue);
-    vcl_cout<<"Change Detection GPU Time: " << gpu_time << " ms" << vcl_endl;
+    std::cout<<"Change Detection GPU Time: " << gpu_time << " ms" << std::endl;
 
     //----------------------------------------------------------------------------
     //prep output images
@@ -513,20 +515,20 @@ void boxm2_ocl_change_detection::full_pyramid(vil_image_view_base_sptr in_img, f
 //---------------------------------------------------
 // compiles, caches and returns list of kernels
 //---------------------------------------------------
-vcl_vector<bocl_kernel*>& boxm2_ocl_change_detection::get_kernels(bocl_device_sptr device, vcl_string opts)
+std::vector<bocl_kernel*>& boxm2_ocl_change_detection::get_kernels(bocl_device_sptr device, std::string opts)
 {
     // check to see if this device has compiled kernels already
-    vcl_string identifier = device->device_identifier() + opts;
+    std::string identifier = device->device_identifier() + opts;
     if (kernels_.find(identifier) != kernels_.end())
         return kernels_[identifier];
 
     //if not, compile and cache them
-    vcl_cout<<"===========Compiling multi update kernels===========\n"
-            <<"  for device: "<<device->device_identifier()<<vcl_endl;
+    std::cout<<"===========Compiling multi update kernels===========\n"
+            <<"  for device: "<<device->device_identifier()<<std::endl;
 
     //gather all render sources... seems like a lot for rendering...
-    vcl_vector<vcl_string> src_paths;
-    vcl_string source_dir = boxm2_ocl_util::ocl_src_root();
+    std::vector<std::string> src_paths;
+    std::string source_dir = boxm2_ocl_util::ocl_src_root();
     src_paths.push_back(source_dir + "scene_info.cl");
     src_paths.push_back(source_dir + "cell_utils.cl");
     src_paths.push_back(source_dir + "bit/bit_tree_library_functions.cl");
@@ -539,7 +541,7 @@ vcl_vector<bocl_kernel*>& boxm2_ocl_change_detection::get_kernels(bocl_device_sp
 
     //set kernel options
     opts += " -D CHANGE -D DETERMINISTIC ";
-    vcl_string options=opts;
+    std::string options=opts;
     //opts += " -D STEP_CELL=step_cell_change_detection_uchar8_w_expected(aux_args.mog,aux_args.alpha,data_ptr,d*linfo->block_len,vis,aux_args.change,aux_args.change_exp,aux_args.intensity,aux_args.intensity_exp,bit_index) ";
     opts += " -D STEP_CELL=step_cell_change(aux_args,data_ptr,llid,d*linfo->block_len) ";
 
@@ -553,7 +555,7 @@ vcl_vector<bocl_kernel*>& boxm2_ocl_change_detection::get_kernels(bocl_device_sp
                                      "boxm2 1x1 ocl change detection"); //kernel identifier (for error checking)
 
     //create nxn kernel
-    vcl_stringstream pthresh;
+    std::stringstream pthresh;
     pthresh<<" -D PROB_THRESH="<<PROB_THRESH<<"  ";
     opts += pthresh.str();
     bocl_kernel * nxn_kernel = new bocl_kernel();
@@ -565,7 +567,7 @@ vcl_vector<bocl_kernel*>& boxm2_ocl_change_detection::get_kernels(bocl_device_sp
                                "boxm2 nxn ocl change detection kernel");
 
     //create normalize image kernel
-    vcl_vector<vcl_string> norm_src_paths;
+    std::vector<std::string> norm_src_paths;
     norm_src_paths.push_back(source_dir + "pixel_conversion.cl");
     norm_src_paths.push_back(source_dir + "bit/normalize_kernels.cl");
     bocl_kernel * normalize_render_kernel=new bocl_kernel();
@@ -577,7 +579,7 @@ vcl_vector<bocl_kernel*>& boxm2_ocl_change_detection::get_kernels(bocl_device_sp
                                             "normalize change detection kernel"); //kernel identifier (for error checking)
 
     //store in a vector in the map and return
-    vcl_vector<bocl_kernel*> vec_kernels;
+    std::vector<bocl_kernel*> vec_kernels;
     vec_kernels.push_back(ray_trace_kernel);
     vec_kernels.push_back(nxn_kernel);
     vec_kernels.push_back(normalize_render_kernel);
@@ -601,8 +603,8 @@ double boxm2_ocl_change_detection::mutual_information_2d(const vnl_vector<double
     double total_weight = 0.0;
     for (unsigned i = 0; i<X.size(); ++i) {
         //match the gpu implementation, which does a floor opedration
-        unsigned ix = static_cast<unsigned>(vcl_floor(X[i]*scl)),
-            iy = static_cast<unsigned>(vcl_floor(Y[i]*scl));
+        unsigned ix = static_cast<unsigned>(std::floor(X[i]*scl)),
+            iy = static_cast<unsigned>(std::floor(Y[i]*scl));
         if (ix+1>(unsigned)nbins || iy+1>(unsigned)nbins)
             continue;
         p_xy[ix][iy] += 1.0;
@@ -630,14 +632,14 @@ double boxm2_ocl_change_detection::mutual_information_2d(const vnl_vector<double
     for (unsigned c = 0; c<nc; ++c) {
         double prob = px[c];
         if (prob>0.0)
-            H_x += prob*vcl_log(prob);
+            H_x += prob*std::log(prob);
     }
 
     double H_y = 0.0;
     for (unsigned r = 0; r<nr; ++r) {
         double prob = py[r];
         if (prob>0.0)
-            H_y += prob*vcl_log(prob);
+            H_y += prob*std::log(prob);
     }
 
     //calculate joint entropy H(x,y)
@@ -646,20 +648,20 @@ double boxm2_ocl_change_detection::mutual_information_2d(const vnl_vector<double
         for (unsigned c = 0; c<nc; ++c) {
             double prc = p_xy[r][c];
             if (prc>0)
-                H_xy += prc*vcl_log(prc);
+                H_xy += prc*std::log(prc);
         }
     }
 
     //calculate MI = H(X) + H(Y) - H(X,Y)
     double MI = H_x + H_y - H_xy;
-    return -MI/vcl_log(2.0);
+    return -MI/std::log(2.0);
 }
 
 
 //==============================================================================
 //Two pass change detection class methods
 //==============================================================================
-vcl_map<vcl_string, vcl_vector<bocl_kernel*> > boxm2_ocl_two_pass_change::kernels_;
+std::map<std::string, std::vector<bocl_kernel*> > boxm2_ocl_two_pass_change::kernels_;
 
 bool boxm2_ocl_two_pass_change::change_detect(vil_image_view<float>&    change_img,
                                               bocl_device_sptr          device,
@@ -669,7 +671,7 @@ bool boxm2_ocl_two_pass_change::change_detect(vil_image_view<float>&    change_i
                                               vil_image_view_base_sptr  img,
                                               vil_image_view_base_sptr  exp_img,
                                               int                       n,
-                                              vcl_string                norm_type,
+                                              std::string                norm_type,
                                               bool                      pmax )
 {
     float transfer_time=0.0f;
@@ -678,11 +680,11 @@ bool boxm2_ocl_two_pass_change::change_detect(vil_image_view<float>&    change_i
     //img dimensions, global and local threads (will be correctly set)
     unsigned ni=img->ni();
     unsigned nj=img->nj();
-    vcl_size_t  local_threads [2] = {8,8};
-    vcl_size_t  global_threads[2] = {8,8};
+    std::size_t  local_threads [2] = {8,8};
+    std::size_t  global_threads[2] = {8,8};
 
     //---- get scene info -----
-    vcl_string data_type,num_obs_type,options;
+    std::string data_type,num_obs_type,options;
     int apptypesize;
     get_scene_appearances( scene, data_type, num_obs_type, options, apptypesize);
 
@@ -691,7 +693,7 @@ bool boxm2_ocl_two_pass_change::change_detect(vil_image_view<float>&    change_i
         options += " -D USE_MAX_MODE  ";
 
     //grab kernel
-    vcl_vector<bocl_kernel*>& kerns = get_kernels(device, options);
+    std::vector<bocl_kernel*>& kerns = get_kernels(device, options);
 
     //create a command queue.
     int status=0;
@@ -796,8 +798,8 @@ bool boxm2_ocl_two_pass_change::change_detect(vil_image_view<float>&    change_i
     //----------------------------------------------------------------------------
     //--- order offsets so you do 0,0 first -----
     int half = n/2;
-    vcl_vector<int> ois; ois.push_back(0);
-    vcl_vector<int> ojs; ojs.push_back(0);
+    std::vector<int> ois; ois.push_back(0);
+    std::vector<int> ojs; ojs.push_back(0);
     for (int o=-half; o<=half; ++o) {
         if (o==0) continue;
         ois.push_back(o);
@@ -811,7 +813,7 @@ bool boxm2_ocl_two_pass_change::change_detect(vil_image_view<float>&    change_i
         {
             int oi = ois[offi];
             int oj = ojs[offj];
-            vcl_cout<<"CHANGE OFFSET ("<<oi<<','<<oj<<')'<<vcl_endl;
+            std::cout<<"CHANGE OFFSET ("<<oi<<','<<oj<<')'<<std::endl;
             bocl_mem_sptr oi_mem = new bocl_mem(device->context(), &oi, sizeof(int),"offset i buffer");
             bocl_mem_sptr oj_mem = new bocl_mem(device->context(), &oj, sizeof(int),"offset j buffer");
             oi_mem->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
@@ -819,9 +821,9 @@ bool boxm2_ocl_two_pass_change::change_detect(vil_image_view<float>&    change_i
 
             //----- STEP ONE: per cell mean obs pass ---------
             //For each ID in the visibility order, grab that block
-            vcl_vector<boxm2_block_id> vis_order = scene->get_vis_blocks( cam );
-            vcl_vector<boxm2_block_id>::iterator id;
-            vcl_cout<<"  STEP ONE"<<vcl_endl;
+            std::vector<boxm2_block_id> vis_order = scene->get_vis_blocks( cam );
+            std::vector<boxm2_block_id>::iterator id;
+            std::cout<<"  STEP ONE"<<std::endl;
             for (id = vis_order.begin(); id != vis_order.end(); ++id)
             {
                 //choose correct render kernel
@@ -874,7 +876,7 @@ bool boxm2_ocl_two_pass_change::change_detect(vil_image_view<float>&    change_i
             }
 
             //----- STEP TWO: prob background pas --------
-            vcl_cout<<"  STEP TWO CHANGE PASS"<<vcl_endl;
+            std::cout<<"  STEP TWO CHANGE PASS"<<std::endl;
             for (id = vis_order.begin(); id != vis_order.end(); ++id)
             {
                 //choose correct render kernel
@@ -1028,7 +1030,7 @@ bool boxm2_ocl_two_pass_change::change_detect(vil_image_view<float>&    change_i
     }
     // read out expected image
     change_image->read_to_buffer(queue);
-    vcl_cout<<"Change Detection GPU Time: " << gpu_time << " ms" << vcl_endl;
+    std::cout<<"Change Detection GPU Time: " << gpu_time << " ms" << std::endl;
 
     //----------------------------------------------------------------------------
     //prep output images
@@ -1059,20 +1061,20 @@ bool boxm2_ocl_two_pass_change::change_detect(vil_image_view<float>&    change_i
     return true;
 }
 
-vcl_vector<bocl_kernel*>& boxm2_ocl_two_pass_change::get_kernels(bocl_device_sptr device, vcl_string opts)
+std::vector<bocl_kernel*>& boxm2_ocl_two_pass_change::get_kernels(bocl_device_sptr device, std::string opts)
 {
     // check to see if this device has compiled kernels already
-    vcl_string identifier = device->device_identifier() + opts;
+    std::string identifier = device->device_identifier() + opts;
     if (kernels_.find(identifier) != kernels_.end())
         return kernels_[identifier];
 
     //if not, compile and cache them
-    vcl_cout<<"===========Compiling two pass change kernels===========\n"
-            <<"  for device: "<<device->device_identifier()<<vcl_endl;
+    std::cout<<"===========Compiling two pass change kernels===========\n"
+            <<"  for device: "<<device->device_identifier()<<std::endl;
 
     //gather all render sources... seems like a lot for rendering...
-    vcl_vector<vcl_string> src_paths;
-    vcl_string source_dir = boxm2_ocl_util::ocl_src_root();
+    std::vector<std::string> src_paths;
+    std::string source_dir = boxm2_ocl_util::ocl_src_root();
     src_paths.push_back(source_dir + "scene_info.cl");
     src_paths.push_back(source_dir + "cell_utils.cl");
     src_paths.push_back(source_dir + "bit/bit_tree_library_functions.cl");
@@ -1085,7 +1087,7 @@ vcl_vector<bocl_kernel*>& boxm2_ocl_two_pass_change::get_kernels(bocl_device_spt
     src_paths.push_back(source_dir + "bit/cast_ray_bit.cl");
 
     //pass one, seglen
-    vcl_string seg_options = opts + " -D CHANGE_SEGLEN -D STEP_CELL=step_cell_seglen(aux_args,data_ptr,llid,d) ";
+    std::string seg_options = opts + " -D CHANGE_SEGLEN -D STEP_CELL=step_cell_seglen(aux_args,data_ptr,llid,d) ";
     bocl_kernel* seg_len = new bocl_kernel();
     seg_len->create_kernel( &device->context(),
                             device->device_id(),
@@ -1095,7 +1097,7 @@ vcl_vector<bocl_kernel*>& boxm2_ocl_two_pass_change::get_kernels(bocl_device_spt
                             "boxm2 change seg len (pass 1)"); //kernel identifier (for error checking)
 
     //pass two, change detection
-    vcl_string change_options = opts + " -D CHANGE -D STEP_CELL=step_cell_change(aux_args,data_ptr,llid,d) ";
+    std::string change_options = opts + " -D CHANGE -D STEP_CELL=step_cell_change(aux_args,data_ptr,llid,d) ";
     bocl_kernel* change_kernel = new bocl_kernel();
     change_kernel->create_kernel( &device->context(),
                                   device->device_id(),
@@ -1105,7 +1107,7 @@ vcl_vector<bocl_kernel*>& boxm2_ocl_two_pass_change::get_kernels(bocl_device_spt
                                   "boxm2 two pass change kernel (pass 2)"); //kernel identifier (for error checking)
 #if 0
     //create nxn kernel
-    vcl_stringstream pthresh;
+    std::stringstream pthresh;
     pthresh<<" -D PROB_THRESH="<<PROB_THRESH<<"  ";
     opts += pthresh.str();
     bocl_kernel * nxn_kernel = new bocl_kernel();
@@ -1118,10 +1120,10 @@ vcl_vector<bocl_kernel*>& boxm2_ocl_two_pass_change::get_kernels(bocl_device_spt
 #endif // 0
 
     //create normalize image kernel
-    vcl_vector<vcl_string> norm_src_paths;
+    std::vector<std::string> norm_src_paths;
     norm_src_paths.push_back(source_dir + "pixel_conversion.cl");
     norm_src_paths.push_back(source_dir + "bit/normalize_kernels.cl");
-    vcl_string norm_opts = opts + " -D CHANGE ";
+    std::string norm_opts = opts + " -D CHANGE ";
     bocl_kernel * normalize_render_kernel=new bocl_kernel();
     normalize_render_kernel->create_kernel( &device->context(),
                                             device->device_id(),
@@ -1131,7 +1133,7 @@ vcl_vector<bocl_kernel*>& boxm2_ocl_two_pass_change::get_kernels(bocl_device_spt
                                             "normalize change detection kernel");//kernel identifier (for error checking)
 
     //store in a vector in the map and return
-    vcl_vector<bocl_kernel*> vec_kernels;
+    std::vector<bocl_kernel*> vec_kernels;
     vec_kernels.push_back(seg_len);
     vec_kernels.push_back(change_kernel);
     vec_kernels.push_back(normalize_render_kernel);
@@ -1140,7 +1142,7 @@ vcl_vector<bocl_kernel*>& boxm2_ocl_two_pass_change::get_kernels(bocl_device_spt
 }
 
 
-vcl_map<vcl_string, vcl_vector<bocl_kernel*> > boxm2_ocl_aux_pass_change::kernels_;
+std::map<std::string, std::vector<bocl_kernel*> > boxm2_ocl_aux_pass_change::kernels_;
 
 bool boxm2_ocl_aux_pass_change::change_detect(vil_image_view<float>&    change_img,
                                               vil_image_view<float>&    vis_img,
@@ -1149,7 +1151,7 @@ bool boxm2_ocl_aux_pass_change::change_detect(vil_image_view<float>&    change_i
                                               boxm2_opencl_cache_sptr   opencl_cache,
                                               vpgl_camera_double_sptr   cam,
                                               vil_image_view_base_sptr  img,
-                                              vcl_string identifier,
+                                              std::string identifier,
                                               bool max_density,
                                               float nearfactor,
                                               float farfactor)
@@ -1160,17 +1162,17 @@ bool boxm2_ocl_aux_pass_change::change_detect(vil_image_view<float>&    change_i
     //img dimensions, global and local threads (will be correctly set)
     unsigned ni=img->ni();
     unsigned nj=img->nj();
-    vcl_size_t  local_threads [2] = {8,8};
-    vcl_size_t  global_threads[2] = {8,8};
+    std::size_t  local_threads [2] = {8,8};
+    std::size_t  global_threads[2] = {8,8};
 
     //---- get scene info -----
-    vcl_string data_type,num_obs_type,options;
+    std::string data_type,num_obs_type,options;
     int apptypesize;
     get_scene_appearances( scene, data_type, num_obs_type, options, apptypesize);
     if(identifier!= "")
     data_type = data_type + "_"+identifier ;
     //grab kernel
-    vcl_vector<bocl_kernel*>& kerns = get_kernels(device, options,max_density);
+    std::vector<bocl_kernel*>& kerns = get_kernels(device, options,max_density);
 
     //create a command queue.
     int status=0;
@@ -1251,20 +1253,20 @@ bool boxm2_ocl_aux_pass_change::change_detect(vil_image_view<float>&    change_i
          tnearfar[0] = f* scene->finest_resolution()/nearfactor ;
          tnearfar[1] = f* scene->finest_resolution()/farfactor ;
 
-         vcl_cout<<"Near and Far Clipping planes "<<tnearfar[0]<<" "<<tnearfar[1]<<vcl_endl;
+         std::cout<<"Near and Far Clipping planes "<<tnearfar[0]<<" "<<tnearfar[1]<<std::endl;
      }
 
      bocl_mem_sptr tnearfar_mem_ptr = opencl_cache->alloc_mem(2*sizeof(float), tnearfar, "tnearfar  buffer");
      tnearfar_mem_ptr->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
     //----- STEP ONE: per cell mean obs pass ---------
 
-     vcl_vector<boxm2_block_id> vis_order;
+     std::vector<boxm2_block_id> vis_order;
      if(cam->type_name() == "vpgl_perspective_camera")
          vis_order= scene->get_vis_blocks_opt((vpgl_perspective_camera<double>*)cam.ptr(),img_view->ni(),img_view->nj());
      else
          vis_order= scene->get_vis_blocks(cam);
-    vcl_vector<boxm2_block_id>::iterator id;
-    vcl_cout<<"  STEP ONE"<<vcl_endl;
+    std::vector<boxm2_block_id>::iterator id;
+    std::cout<<"  STEP ONE"<<std::endl;
     bocl_kernel* kern =  kerns[0];
     for (id = vis_order.begin(); id != vis_order.end(); ++id)
     {
@@ -1283,7 +1285,7 @@ bool boxm2_ocl_aux_pass_change::change_detect(vil_image_view<float>&    change_i
         // check for invalid parameters
         if( alphaTypeSize == 0 ) //This should never happen, it will result in division by zero later
         {
-            vcl_cout << "ERROR: alphaTypeSize == 0 in " << __FILE__ << __LINE__ << vcl_endl;
+            std::cout << "ERROR: alphaTypeSize == 0 in " << __FILE__ << __LINE__ << std::endl;
             return false;
         }
 
@@ -1332,7 +1334,7 @@ bool boxm2_ocl_aux_pass_change::change_detect(vil_image_view<float>&    change_i
     }
     kern =  kerns[1];
     //----- STEP TWO: prob background pas --------
-    vcl_cout<<"  STEP TWO CHANGE PASS"<<vcl_endl;
+    std::cout<<"  STEP TWO CHANGE PASS"<<std::endl;
     for (id = vis_order.begin(); id != vis_order.end(); ++id)
     {
         //choose correct render kernel
@@ -1417,7 +1419,7 @@ bool boxm2_ocl_aux_pass_change::change_detect(vil_image_view<float>&    change_i
     // read out expected image
     change_image->read_to_buffer(queue);
 #endif // 0
-    vcl_cout<<"Change Detection GPU Time: " << gpu_time << " ms" << vcl_endl;
+    std::cout<<"Change Detection GPU Time: " << gpu_time << " ms" << std::endl;
 
     //----------------------------------------------------------------------------
     //prep output images
@@ -1448,20 +1450,20 @@ bool boxm2_ocl_aux_pass_change::change_detect(vil_image_view<float>&    change_i
     return true;
 }
 
-vcl_vector<bocl_kernel*>& boxm2_ocl_aux_pass_change::get_kernels(bocl_device_sptr device, vcl_string opts, bool maxdensity)
+std::vector<bocl_kernel*>& boxm2_ocl_aux_pass_change::get_kernels(bocl_device_sptr device, std::string opts, bool maxdensity)
 {
     // check to see if this device has compiled kernels already
-    vcl_string identifier = device->device_identifier() + opts;
+    std::string identifier = device->device_identifier() + opts;
     if (kernels_.find(identifier) != kernels_.end())
         return kernels_[identifier];
 
     //if not, compile and cache them
-    vcl_cout<<"===========Compiling two pass change kernels===========\n"
-            <<"  for device: "<<device->device_identifier()<<vcl_endl;
+    std::cout<<"===========Compiling two pass change kernels===========\n"
+            <<"  for device: "<<device->device_identifier()<<std::endl;
 
     //gather all render sources... seems like a lot for rendering...
-    vcl_vector<vcl_string> src_paths;
-    vcl_string source_dir = boxm2_ocl_util::ocl_src_root();
+    std::vector<std::string> src_paths;
+    std::string source_dir = boxm2_ocl_util::ocl_src_root();
     src_paths.push_back(source_dir + "scene_info.cl");
     src_paths.push_back(source_dir + "cell_utils.cl");
     src_paths.push_back(source_dir + "bit/bit_tree_library_functions.cl");
@@ -1476,7 +1478,7 @@ vcl_vector<bocl_kernel*>& boxm2_ocl_aux_pass_change::get_kernels(bocl_device_spt
 
 
     //pass one, seglen
-    vcl_string seg_options = opts + "  -D SEGLEN -D STEP_CELL=step_cell_seglen(aux_args,data_ptr,llid,d) ";
+    std::string seg_options = opts + "  -D SEGLEN -D STEP_CELL=step_cell_seglen(aux_args,data_ptr,llid,d) ";
     bocl_kernel* seg_len = new bocl_kernel();
     seg_len->create_kernel( &device->context(),
                             device->device_id(),
@@ -1487,7 +1489,7 @@ vcl_vector<bocl_kernel*>& boxm2_ocl_aux_pass_change::get_kernels(bocl_device_spt
 
     //pass two, change detection
 
-    vcl_string change_options;
+    std::string change_options;
 
     if (maxdensity)
         change_options = opts + " -D AUX_CHANGE -D STEP_CELL=step_cell_change2_maxdensity(aux_args,data_ptr,llid,d) ";
@@ -1503,10 +1505,10 @@ vcl_vector<bocl_kernel*>& boxm2_ocl_aux_pass_change::get_kernels(bocl_device_spt
                                   "boxm2 aux pass change kernel (pass 2)"); //kernel identifier (for error checking)
 #if 0
     create normalize image kernel
-    vcl_vector<vcl_string> norm_src_paths;
+    std::vector<std::string> norm_src_paths;
     norm_src_paths.push_back(source_dir + "pixel_conversion.cl");
     norm_src_paths.push_back(source_dir + "bit/normalize_kernels.cl");
-    vcl_string norm_opts = opts + " -D CHANGE ";
+    std::string norm_opts = opts + " -D CHANGE ";
     bocl_kernel * normalize_render_kernel=new bocl_kernel();
     normalize_render_kernel->create_kernel( &device->context(),
                                             device->device_id(),
@@ -1517,7 +1519,7 @@ vcl_vector<bocl_kernel*>& boxm2_ocl_aux_pass_change::get_kernels(bocl_device_spt
 #endif
 
     //store in a vector in the map and return
-    vcl_vector<bocl_kernel*> vec_kernels;
+    std::vector<bocl_kernel*> vec_kernels;
     vec_kernels.push_back(seg_len);
     vec_kernels.push_back(change_kernel);
     //vec_kernels.push_back(normalize_render_kernel);

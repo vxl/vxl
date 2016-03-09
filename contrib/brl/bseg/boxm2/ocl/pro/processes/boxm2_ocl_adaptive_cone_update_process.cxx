@@ -7,7 +7,9 @@
 // \author Andrew Miller
 // \date June 1, 2011
 
-#include <vcl_fstream.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <fstream>
 #include <boxm2/ocl/boxm2_opencl_cache.h>
 #include <boxm2/boxm2_scene.h>
 #include <boxm2/boxm2_block.h>
@@ -30,11 +32,11 @@ namespace boxm2_ocl_adaptive_cone_update_process_globals
   const unsigned n_inputs_  = 6;
   const unsigned n_outputs_ = 0;
 
-  void compile_kernel(bocl_device_sptr device,vcl_vector<bocl_kernel*> & vec_kernels,vcl_string opts)
+  void compile_kernel(bocl_device_sptr device,std::vector<bocl_kernel*> & vec_kernels,std::string opts)
   {
     //gather all render sources... seems like a lot for rendering...
-    vcl_vector<vcl_string> src_paths;
-    vcl_string source_dir = boxm2_ocl_util::ocl_src_root();
+    std::vector<std::string> src_paths;
+    std::string source_dir = boxm2_ocl_util::ocl_src_root();
     src_paths.push_back(source_dir + "scene_info.cl");
     src_paths.push_back(source_dir + "backproject.cl");
     src_paths.push_back(source_dir + "basic/linked_list.cl");
@@ -44,16 +46,16 @@ namespace boxm2_ocl_adaptive_cone_update_process_globals
     src_paths.push_back(source_dir + "bit/bit_tree_library_functions.cl");
     src_paths.push_back(source_dir + "statistics_library_functions.cl");
     src_paths.push_back(source_dir + "cone/update_adaptive_cone_kernels.cl");
-    vcl_vector<vcl_string> non_ray_src = vcl_vector<vcl_string>(src_paths);
+    std::vector<std::string> non_ray_src = std::vector<std::string>(src_paths);
     src_paths.push_back(source_dir + "cone/cone_util.cl");
     src_paths.push_back(source_dir + "cone/cast_adaptive_cone_ray.cl");
 
     //compilation options
-    vcl_string options = opts;
+    std::string options = opts;
 
     //proc norm pass computes the proc_norm image, mean_obs for each cell
     bocl_kernel* pass_one = new bocl_kernel();
-    vcl_string one_opts = options + " -D PASSONE ";
+    std::string one_opts = options + " -D PASSONE ";
     one_opts += " -D IMG_TYPE=float ";
     one_opts += " -D STEP_CELL=step_cell(aux_args,data_ptr,intersect_volume) ";
     one_opts += " -D COMPUTE_BALL_PROPERTIES=compute_ball_properties(aux_args)  ";
@@ -62,7 +64,7 @@ namespace boxm2_ocl_adaptive_cone_update_process_globals
 
     //computes bayes ratio for each cell
     bocl_kernel* bayes_main = new bocl_kernel();
-    vcl_string bayes_opt = options + " -D BAYES ";
+    std::string bayes_opt = options + " -D BAYES ";
     bayes_opt += " -D IMG_TYPE=float ";
     bayes_opt += " -D STEP_CELL=step_cell(aux_args,data_ptr,intersect_volume)  ";
     bayes_opt += " -D COMPUTE_BALL_PROPERTIES=compute_ball_properties(aux_args)  ";
@@ -77,7 +79,7 @@ namespace boxm2_ocl_adaptive_cone_update_process_globals
     return ;
   }
 
-  static vcl_map<vcl_string,vcl_vector<bocl_kernel*> > kernels;
+  static std::map<std::string,std::vector<bocl_kernel*> > kernels;
 }
 
 bool boxm2_ocl_adaptive_cone_update_process_cons(bprb_func_process& pro)
@@ -85,7 +87,7 @@ bool boxm2_ocl_adaptive_cone_update_process_cons(bprb_func_process& pro)
   using namespace boxm2_ocl_adaptive_cone_update_process_globals;
 
   //process takes 6 inputs
-  vcl_vector<vcl_string> input_types_(n_inputs_);
+  std::vector<std::string> input_types_(n_inputs_);
   input_types_[0] = "bocl_device_sptr";
   input_types_[1] = "boxm2_scene_sptr";
   input_types_[2] = "boxm2_opencl_cache_sptr";
@@ -98,7 +100,7 @@ bool boxm2_ocl_adaptive_cone_update_process_cons(bprb_func_process& pro)
   // output[0]: scene sptr
 
   // in case the 6th input is not set
-  brdb_value_sptr idx = new brdb_value_t<vcl_string>("");
+  brdb_value_sptr idx = new brdb_value_t<std::string>("");
   pro.set_input(5, idx);
   return good;
 }
@@ -108,7 +110,7 @@ bool boxm2_ocl_adaptive_cone_update_process(bprb_func_process& pro)
   using namespace boxm2_ocl_adaptive_cone_update_process_globals;
 
   if ( pro.n_inputs() < n_inputs_-1 ) {
-    vcl_cout << pro.name() << ": The number of inputsshould be 5 or " << n_inputs_<< vcl_endl;
+    std::cout << pro.name() << ": The number of inputsshould be 5 or " << n_inputs_<< std::endl;
     return false;
   }
 
@@ -119,15 +121,15 @@ bool boxm2_ocl_adaptive_cone_update_process(bprb_func_process& pro)
   boxm2_opencl_cache_sptr opencl_cache= pro.get_input<boxm2_opencl_cache_sptr>(i++);
   vpgl_camera_double_sptr cam= pro.get_input<vpgl_camera_double_sptr>(i++);
   vil_image_view_base_sptr img =pro.get_input<vil_image_view_base_sptr>(i++);
-  vcl_string ident = pro.get_input<vcl_string>(i++);
+  std::string ident = pro.get_input<std::string>(i++);
 
   long binCache = opencl_cache.ptr()->bytes_in_cache();
-  vcl_cout<<"Update MBs in cache: "<<binCache/(1024.0*1024.0)<<vcl_endl;
+  std::cout<<"Update MBs in cache: "<<binCache/(1024.0*1024.0)<<std::endl;
 
   //find scene types
   bool foundDataType = false, foundNumObsType = false;
-  vcl_string data_type,num_obs_type,options;
-  vcl_vector<vcl_string> apps = scene->appearances();
+  std::string data_type,num_obs_type,options;
+  std::vector<std::string> apps = scene->appearances();
   for (unsigned int i=0; i<apps.size(); ++i) {
     if ( apps[i] == boxm2_data_traits<BOXM2_MOG3_GREY>::prefix() )
     {
@@ -150,11 +152,11 @@ bool boxm2_ocl_adaptive_cone_update_process(bprb_func_process& pro)
     }
   }
   if (!foundDataType) {
-    vcl_cout<<"BOXM2_OPENCL_UPDATE_PROCESS ERROR: scene doesn't have BOXM2_MOG3_GREY or BOXM2_MOG3_GREY_16 data type"<<vcl_endl;
+    std::cout<<"BOXM2_OPENCL_UPDATE_PROCESS ERROR: scene doesn't have BOXM2_MOG3_GREY or BOXM2_MOG3_GREY_16 data type"<<std::endl;
     return false;
   }
   if (!foundNumObsType) {
-    vcl_cout<<"BOXM2_OPENCL_UPDATE_PROCESS ERROR: scene doesn't have BOXM2_NUM_OBS type"<<vcl_endl;
+    std::cout<<"BOXM2_OPENCL_UPDATE_PROCESS ERROR: scene doesn't have BOXM2_NUM_OBS type"<<std::endl;
     return false;
   }
   if (ident.size() > 0) {
@@ -169,11 +171,11 @@ bool boxm2_ocl_adaptive_cone_update_process(bprb_func_process& pro)
   if (status!=0) return false;
 
   //: compile the kernel if not already compiled
-  vcl_string identifier=device->device_identifier()+options;
+  std::string identifier=device->device_identifier()+options;
   if (kernels.find(identifier)==kernels.end())
   {
-    vcl_cout<<"===========Compiling kernels==========="<<vcl_endl;
-    vcl_vector<bocl_kernel*> ks;
+    std::cout<<"===========Compiling kernels==========="<<std::endl;
+    std::vector<bocl_kernel*> ks;
     compile_kernel(device,ks,options);
     kernels[identifier]=ks;
   }
@@ -189,7 +191,7 @@ bool boxm2_ocl_adaptive_cone_update_process(bprb_func_process& pro)
                                                   cam ,
                                                   img );
 
-  vcl_cout<<"Gpu time "<<gpu_time<<vcl_endl; //<<" transfer time "<<transfer_time<<vcl_endl;
+  std::cout<<"Gpu time "<<gpu_time<<std::endl; //<<" transfer time "<<transfer_time<<std::endl;
   clReleaseCommandQueue(queue);
   return true;
 }

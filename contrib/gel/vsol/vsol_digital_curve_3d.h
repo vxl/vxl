@@ -14,9 +14,11 @@
 #include <vsol/vsol_curve_3d.h>
 #include <vsol/vsol_point_3d_sptr.h>
 #include <vsol/vsol_digital_curve_3d_sptr.h>
-#include <vcl_vector.h>
-#include <vcl_string.h>
-#include <vcl_iosfwd.h>
+#include <vector>
+#include <string>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iosfwd>
 
 //: Digital curve class, part of the vsol_curve_3d hierarchy
 // The curve is made up of vsol points and has no addition data members
@@ -26,14 +28,14 @@ class vsol_digital_curve_3d : public vsol_curve_3d
 {
  protected:
   //: List of points
-  vcl_vector<vsol_point_3d_sptr> samples_;
+  std::vector<vsol_point_3d_sptr> samples_;
 
  public:
   // Default Constructor
   vsol_digital_curve_3d() : vsol_curve_3d(), samples_() {}
 
   //: Constructor from a list of points
-  vsol_digital_curve_3d(vcl_vector<vsol_point_3d_sptr> const& sample_points)
+  vsol_digital_curve_3d(std::vector<vsol_point_3d_sptr> const& sample_points)
     : vsol_curve_3d(), samples_(sample_points) {}
 
   // Copy constructor
@@ -105,7 +107,7 @@ class vsol_digital_curve_3d : public vsol_curve_3d
   bool valid_index(unsigned int i) const { return i<samples_.size(); }
 
   //: output description to stream
-  void describe(vcl_ostream &strm, int blanking=0) const;
+  void describe(std::ostream &strm, int blanking=0) const;
 
   // ==== Binary IO methods ======
 
@@ -119,13 +121,13 @@ class vsol_digital_curve_3d : public vsol_curve_3d
   short version() const;
 
   //: Print an ascii summary to the stream
-  void print_summary(vcl_ostream &os) const;
+  void print_summary(std::ostream &os) const;
 
   //: Return a platform independent string identifying the class
-  virtual vcl_string is_a() const { return vcl_string("vsol_digital_curve_3d"); }
+  virtual std::string is_a() const { return std::string("vsol_digital_curve_3d"); }
 
   //: Return true if the argument matches the string identifying the class or any parent class
-  virtual bool is_class(vcl_string const& cls) const { return cls==is_a(); }
+  virtual bool is_class(std::string const& cls) const { return cls==is_a(); }
 };
 
 //: Binary save vsol_digital_curve_3d* to stream.

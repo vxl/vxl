@@ -5,7 +5,9 @@
 #include <boxm/boxm_apm_traits.h>
 #include <boxm/basic/boxm_raytrace_function.h>
 #include <boxm/sample/boxm_scalar_sample.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iostream>
 
 
 template <boxm_apm_type APM>
@@ -40,7 +42,7 @@ class boxm_change_3d_functor
     alpha_integral_(i,j) += cell_value.alpha * seg_len;
 
     // compute new visibility probability with updated alpha_integral
-    const float vis_prob_end = vcl_exp(-alpha_integral_(i,j));
+    const float vis_prob_end = std::exp(-alpha_integral_(i,j));
 
     // compute weight for this cell
     const float Omega = vis_img_(i,j) - vis_prob_end;
@@ -72,13 +74,13 @@ template <class T_loc, class T_data>
 void boxm_change_3d(boxm_scene<boct_tree<T_loc, T_data > > &scene,
                     vpgl_camera_double_sptr cam,
                     vil_image_view<float> &change_image,
-                    vcl_string chng_name,
+                    std::string chng_name,
                     float prob_ratio)
 {
   typedef boxm_scalar_sample<float> sample_datatype;
   boxm_aux_scene<T_loc, T_data,  sample_datatype> aux_scene(&scene,chng_name, boxm_aux_scene<T_loc, T_data,  sample_datatype>::CLONE);
 
-  vcl_cout<<"Chng visibility"<<vcl_endl;
+  std::cout<<"Chng visibility"<<std::endl;
   // functor to compute 3-d change prob
   typedef boxm_change_3d_functor<T_data::apm_type> change_functor;
 
@@ -91,7 +93,7 @@ void boxm_change_3d(boxm_scene<boct_tree<T_loc, T_data > > &scene,
   // run the functor over the octree
   raytracer_chng.run(chng_func);
 
-  vcl_cout<<"Change 3-d Done."<<vcl_endl;
+  std::cout<<"Change 3-d Done."<<std::endl;
 }
 
 #endif // boxm_change_3d_functor_h

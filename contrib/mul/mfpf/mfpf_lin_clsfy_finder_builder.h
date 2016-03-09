@@ -10,7 +10,9 @@
 #include <mfpf/mfpf_region_form.h>
 #include <mbl/mbl_chord.h>
 #include <vgl/vgl_fwd.h>
-#include <vcl_iosfwd.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iosfwd>
 
 //: Builds mfpf_region_finder objects which use a linear classifier.
 //  Resulting mfpf_region_finder is set up with a mfpf_log_lin_class_cost
@@ -40,10 +42,10 @@ class mfpf_lin_clsfy_finder_builder : public mfpf_point_finder_builder
   double ref_y_;
 
   //: String defining shape of region, eg "box" or "ellipse"
-  vcl_string shape_;
+  std::string shape_;
 
   //: Chords defining the region of interest
-  vcl_vector<mbl_chord> roi_;
+  std::vector<mbl_chord> roi_;
 
   //: Size of bounding box of region of interest
   unsigned roi_ni_;
@@ -61,10 +63,10 @@ class mfpf_lin_clsfy_finder_builder : public mfpf_point_finder_builder
   double r3_;
 
   //: Training samples
-  vcl_vector<vnl_vector<double> > samples_;
+  std::vector<vnl_vector<double> > samples_;
 
   //: Indicate whether sample is positive (1) or negative (0) example
-  vcl_vector<unsigned> class_id_;
+  std::vector<unsigned> class_id_;
 
   //: Which normalisation to use (0=none, 1=linear)
   short norm_method_;
@@ -96,11 +98,11 @@ class mfpf_lin_clsfy_finder_builder : public mfpf_point_finder_builder
 
   //: Parse stream to set up as a box shape.
   // Expects: "{ ni: 3 nj: 5 ref_x: 1.0 ref_y: 2.0 }
-  void config_as_box(vcl_istream &is);
+  void config_as_box(std::istream &is);
 
   //: Parse stream to set up as an ellipse shape.
   // Expects: "{ ri: 2.1 rj: 5.2 }
-  void config_as_ellipse(vcl_istream &is);
+  void config_as_ellipse(std::istream &is);
 
   //: Add one example to the model
   void add_one_example(const vimt_image_2d_of<float>& image,
@@ -147,7 +149,7 @@ class mfpf_lin_clsfy_finder_builder : public mfpf_point_finder_builder
   unsigned n_pixels() const { return n_pixels_; }
 
   //: String defining shape of region, eg "box" or "ellipse"
-  const vcl_string& shape() const { return shape_; }
+  const std::string& shape() const { return shape_; }
 
   //: Number of dimensions in the model
   virtual unsigned model_dim();
@@ -168,19 +170,19 @@ class mfpf_lin_clsfy_finder_builder : public mfpf_point_finder_builder
   virtual void build(mfpf_point_finder&);
 
   //: Initialise from a string stream
-  virtual bool set_from_stream(vcl_istream &is);
+  virtual bool set_from_stream(std::istream &is);
 
   //: Name of the class
-  virtual vcl_string is_a() const;
+  virtual std::string is_a() const;
 
   //: Create a copy on the heap and return base class pointer
   virtual mfpf_point_finder_builder* clone() const;
 
   //: Print class to os
-  virtual void print_summary(vcl_ostream& os) const;
+  virtual void print_summary(std::ostream& os) const;
 
   //: Prints ASCII representation of shape to os
-  void print_shape(vcl_ostream& os) const;
+  void print_shape(std::ostream& os) const;
 
   //: Version number for I/O
   short version_no() const;

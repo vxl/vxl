@@ -4,11 +4,13 @@
 // \file
 #include "bsta_histogram.h"
 
-#include <vcl_cmath.h> // for log()
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <cmath> // for log()
+#include <iostream>
 #include <vcl_cassert.h>
 #include "bsta_gauss.h"
-#include <vnl/vnl_math.h> // for log2e == 1/vcl_log(2.0)
+#include <vnl/vnl_math.h> // for log2e == 1/std::log(2.0)
 
 template <class T>
 bsta_histogram<T>::bsta_histogram()
@@ -71,7 +73,7 @@ bsta_histogram<T>::bsta_histogram(const unsigned int nbins, const T min, const T
 
 template <class T>
 bsta_histogram<T>::bsta_histogram(const T min, const T max,
-                                  vcl_vector<T> const& data, const T min_prob)
+                                  std::vector<T> const& data, const T min_prob)
   : area_valid_(false), area_(0), delta_(0), min_prob_(min_prob),
     min_(min), max_(max), counts_(data)
 {
@@ -273,7 +275,7 @@ T bsta_histogram<T>::entropy() const
   {
     double pi = this->p(i);
     if (pi>min_prob_)
-      ent -= pi*vcl_log(pi);
+      ent -= pi*std::log(pi);
   }
   ent *= vnl_math::log2e;
   return T(ent);
@@ -289,7 +291,7 @@ T bsta_histogram<T>::renyi_entropy() const
     sum += pi*pi;
   }
   if (sum>min_prob_)
-    ent = - vcl_log(sum)*vnl_math::log2e;
+    ent = - std::log(sum)*vnl_math::log2e;
   return T(ent);
 }
 
@@ -299,7 +301,7 @@ void bsta_histogram<T>::parzen(const T sigma)
   if (sigma<=0)
     return;
   double sd = (double)sigma;
-  vcl_vector<double> in(nbins_), out(nbins_);
+  std::vector<double> in(nbins_), out(nbins_);
   for (unsigned int i=0; i<nbins_; ++i)
     in[i]=counts_[i];
   bsta_gauss::bsta_1d_gaussian(sd, in, out);
@@ -411,7 +413,7 @@ void bsta_histogram<T>::clear()
 }
 
 template <class T>
-void bsta_histogram<T>::print(vcl_ostream& os) const
+void bsta_histogram<T>::print(std::ostream& os) const
 {
   for (unsigned int i=0; i<nbins_; ++i)
     if (p(i) > 0)
@@ -419,7 +421,7 @@ void bsta_histogram<T>::print(vcl_ostream& os) const
 }
 
 template <class T>
-void bsta_histogram<T>::pretty_print(vcl_ostream& os) const
+void bsta_histogram<T>::pretty_print(std::ostream& os) const
 {
   os << "area valid: " << area_valid_ << '\n'
      << "area: " << area_ << '\n'
@@ -437,7 +439,7 @@ void bsta_histogram<T>::pretty_print(vcl_ostream& os) const
 
 //: print as a matlab plot command
 template <class T>
-void bsta_histogram<T>::print_to_m(vcl_ostream& os) const
+void bsta_histogram<T>::print_to_m(std::ostream& os) const
 {
   os << "x = [" << min_;
   for (unsigned int i=1; i<nbins_; ++i)
@@ -452,7 +454,7 @@ void bsta_histogram<T>::print_to_m(vcl_ostream& os) const
 
 //: print x and y arrays
 template <class T>
-void bsta_histogram<T>::print_to_arrays(vcl_ostream& os) const
+void bsta_histogram<T>::print_to_arrays(std::ostream& os) const
 {
   os << min_;
   for (unsigned int i=1; i<nbins_; ++i)
@@ -465,14 +467,14 @@ void bsta_histogram<T>::print_to_arrays(vcl_ostream& os) const
 }
 
 template <class T>
-void bsta_histogram<T>::print_vals_prob(vcl_ostream& os) const
+void bsta_histogram<T>::print_vals_prob(std::ostream& os) const
 {
   for (unsigned i = 0; i<nbins_; ++i)
     os << avg_bin_value(i) << ' ' << p(i) << '\n';
 }
 
 template <class T>
-vcl_ostream& bsta_histogram<T>::write(vcl_ostream& s) const
+std::ostream& bsta_histogram<T>::write(std::ostream& s) const
 {
   s << area_valid_ << ' '
     << area_ << ' '
@@ -489,7 +491,7 @@ vcl_ostream& bsta_histogram<T>::write(vcl_ostream& s) const
 }
 
 template <class T>
-vcl_istream& bsta_histogram<T>::read(vcl_istream& s)
+std::istream& bsta_histogram<T>::read(std::istream& s)
 {
   s >> area_valid_
     >> area_
@@ -507,14 +509,14 @@ vcl_istream& bsta_histogram<T>::read(vcl_istream& s)
 
 //: Write to stream
 template <class T>
-vcl_ostream& operator<<(vcl_ostream& s, bsta_histogram<T> const& h)
+std::ostream& operator<<(std::ostream& s, bsta_histogram<T> const& h)
 {
   return h.write(s);
 }
 
 //: Read from stream
 template <class T>
-vcl_istream& operator>>(vcl_istream& is, bsta_histogram<T>& h)
+std::istream& operator>>(std::istream& is, bsta_histogram<T>& h)
 {
   return h.read(is);
 }
@@ -523,7 +525,7 @@ vcl_istream& operator>>(vcl_istream& is, bsta_histogram<T>& h)
 #undef BSTA_HISTOGRAM_INSTANTIATE
 #define BSTA_HISTOGRAM_INSTANTIATE(T) \
 template class bsta_histogram<T >;\
-template vcl_istream& operator>>(vcl_istream&, bsta_histogram<T >&);\
-template vcl_ostream& operator<<(vcl_ostream&, bsta_histogram<T > const&)
+template std::istream& operator>>(std::istream&, bsta_histogram<T >&);\
+template std::ostream& operator<<(std::ostream&, bsta_histogram<T > const&)
 
 #endif // bsta_histogram_hxx_

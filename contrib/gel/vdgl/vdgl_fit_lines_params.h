@@ -16,7 +16,9 @@
 //
 //-----------------------------------------------------------------------------
 #include <vbl/vbl_ref_count.h>
-#include <vcl_iosfwd.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iosfwd>
 
 class vdgl_fit_lines_params : public vbl_ref_count
 {
@@ -37,6 +39,6 @@ class vdgl_fit_lines_params : public vbl_ref_count
   bool SanityCheck();
 };
 
-vcl_ostream& operator<<(vcl_ostream& os, const vdgl_fit_lines_params& flp);
+std::ostream& operator<<(std::ostream& os, const vdgl_fit_lines_params& flp);
 
 #endif // vdgl_fit_lines_params_h_

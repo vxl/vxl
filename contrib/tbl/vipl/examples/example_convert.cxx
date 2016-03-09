@@ -25,7 +25,9 @@
 // for I/O:
 #include <vil/vil_load.h>
 #include <vil/vil_save.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iostream>
 
 #include <vxl_config.h> // for vxl_byte
 
@@ -33,7 +35,7 @@
 int
 main(int argc, char** argv)
 {
-  if (argc < 3) { vcl_cerr << "Syntax: example_convert file_in file_out\n"; return 1; }
+  if (argc < 3) { std::cerr << "Syntax: example_convert file_in file_out\n"; return 1; }
 
   // The input image:
   vil_image_view_base_sptr in = vil_load(argv[1]);
@@ -46,20 +48,20 @@ main(int argc, char** argv)
       vipl_convert<vil_image_view<vxl_byte>,vil_image_view<vxl_byte>,vxl_byte,vxl_byte> op;
       vil_image_view<vil_rgb<vxl_byte> > tmp = in; vil_image_view<vxl_byte> tmp2 = tmp;
       op.put_in_data_ptr(&tmp2); op.put_out_data_ptr(&out); op.filter();
-      vcl_cout << "vipl_converted ubyte RGB image to PGM image " << argv[2] << vcl_endl;
+      std::cout << "vipl_converted ubyte RGB image to PGM image " << argv[2] << std::endl;
     }
     else {
-      vcl_cerr<<"Not yet implemented conversion for non-8-bit colour pixels\n";
+      std::cerr<<"Not yet implemented conversion for non-8-bit colour pixels\n";
       return 1;
     }
   }
   else if (in->nplanes() != 1) { // not monochrome nore RGB
-    vcl_cerr << "Cannot currently convert image with "<< in->nplanes() <<" planes\n";
+    std::cerr << "Cannot currently convert image with "<< in->nplanes() <<" planes\n";
     return 1;
   }
   else if (in->pixel_format() == VIL_PIXEL_FORMAT_COMPLEX_FLOAT ||
            in->pixel_format() == VIL_PIXEL_FORMAT_COMPLEX_DOUBLE) {
-    vcl_cerr << "Cannot currently convert complex pixel type images\n";
+    std::cerr << "Cannot currently convert complex pixel type images\n";
     return 1;
   }
   else if (vil_pixel_format_component_format(in->pixel_format()) != in->pixel_format()) { // RGB or RGBA
@@ -67,10 +69,10 @@ main(int argc, char** argv)
       vipl_convert<vil_image_view<vxl_byte>,vil_image_view<vxl_byte>,vxl_byte,vxl_byte> op;
       vil_image_view<vil_rgb<vxl_byte> > tmp = in; vil_image_view<vxl_byte> tmp2 = tmp;
       op.put_in_data_ptr(&tmp2); op.put_out_data_ptr(&out); op.filter();
-      vcl_cout << "vipl_converted ubyte RGB image to PGM image " << argv[2] << vcl_endl;
+      std::cout << "vipl_converted ubyte RGB image to PGM image " << argv[2] << std::endl;
     }
     else {
-      vcl_cerr<<"Not yet implemented conversion for non-8-bit colour pixels\n";
+      std::cerr<<"Not yet implemented conversion for non-8-bit colour pixels\n";
       return 1;
     }
   }
@@ -78,42 +80,42 @@ main(int argc, char** argv)
   {
     // no conversion necessary
     out = in;
-    vcl_cout << "vipl_converted ubyte image to PGM image "<< argv[2] <<" (no conversion was necessary)\n";
+    std::cout << "vipl_converted ubyte image to PGM image "<< argv[2] <<" (no conversion was necessary)\n";
   }
   else if (in->pixel_format() == VIL_PIXEL_FORMAT_SBYTE)
   {
     vipl_convert<vil_image_view<vxl_sbyte>,vil_image_view<vxl_byte>,vxl_sbyte,vxl_byte> op;
     vil_image_view<vxl_sbyte> tmp = in;
     op.put_in_data_ptr(&tmp); op.put_out_data_ptr(&out); op.filter();
-    vcl_cout << "vipl_converted sbyte image to PGM image "<< argv[2] << vcl_endl;
+    std::cout << "vipl_converted sbyte image to PGM image "<< argv[2] << std::endl;
   }
   else if (in->pixel_format() == VIL_PIXEL_FORMAT_UINT_16)
   {
     vipl_convert<vil_image_view<vxl_uint_16>,vil_image_view<vxl_byte>,vxl_uint_16,vxl_byte> op;
     vil_image_view<vxl_uint_16> tmp = in;
     op.put_in_data_ptr(&tmp); op.put_out_data_ptr(&out); op.filter();
-    vcl_cout << "vipl_converted uint_16 image to PGM image "<< argv[2] << vcl_endl;
+    std::cout << "vipl_converted uint_16 image to PGM image "<< argv[2] << std::endl;
   }
   else if (in->pixel_format() == VIL_PIXEL_FORMAT_UINT_16)
   {
     vipl_convert<vil_image_view<vxl_int_16>,vil_image_view<vxl_byte>,vxl_int_16,vxl_byte> op;
     vil_image_view<vxl_int_16> tmp = in;
     op.put_in_data_ptr(&tmp); op.put_out_data_ptr(&out); op.filter();
-    vcl_cout << "vipl_converted int_16 image to PGM image "<< argv[2] << vcl_endl;
+    std::cout << "vipl_converted int_16 image to PGM image "<< argv[2] << std::endl;
   }
   else if (in->pixel_format() == VIL_PIXEL_FORMAT_UINT_32)
   {
     vipl_convert<vil_image_view<vxl_uint_32>,vil_image_view<vxl_byte>,vxl_uint_32,vxl_byte> op;
     vil_image_view<vxl_uint_32> tmp = in;
     op.put_in_data_ptr(&tmp); op.put_out_data_ptr(&out); op.filter();
-    vcl_cout << "vipl_converted uint_32 image to PGM image "<< argv[2] << vcl_endl;
+    std::cout << "vipl_converted uint_32 image to PGM image "<< argv[2] << std::endl;
   }
   else if (in->pixel_format() == VIL_PIXEL_FORMAT_UINT_32)
   {
     vipl_convert<vil_image_view<vxl_int_32>,vil_image_view<vxl_byte>,vxl_int_32,vxl_byte> op;
     vil_image_view<vxl_int_32> tmp = in;
     op.put_in_data_ptr(&tmp); op.put_out_data_ptr(&out); op.filter();
-    vcl_cout << "vipl_converted int_32 image to PGM image "<< argv[2] << vcl_endl;
+    std::cout << "vipl_converted int_32 image to PGM image "<< argv[2] << std::endl;
   }
 #if VXL_HAS_INT_64
   else if (in->pixel_format() == VIL_PIXEL_FORMAT_UINT_64)
@@ -121,14 +123,14 @@ main(int argc, char** argv)
     vipl_convert<vil_image_view<vxl_uint_64>,vil_image_view<vxl_byte>,vxl_uint_64,vxl_byte> op;
     vil_image_view<vxl_uint_64> tmp = in;
     op.put_in_data_ptr(&tmp); op.put_out_data_ptr(&out); op.filter();
-    vcl_cout << "vipl_converted uint_64 image to PGM image "<< argv[2] << vcl_endl;
+    std::cout << "vipl_converted uint_64 image to PGM image "<< argv[2] << std::endl;
   }
   else if (in->pixel_format() == VIL_PIXEL_FORMAT_UINT_64)
   {
     vipl_convert<vil_image_view<vxl_int_64>,vil_image_view<vxl_byte>,vxl_int_64,vxl_byte> op;
     vil_image_view<vxl_int_64> tmp = in;
     op.put_in_data_ptr(&tmp); op.put_out_data_ptr(&out); op.filter();
-    vcl_cout << "vipl_converted int_64 image to PGM image "<< argv[2] << vcl_endl;
+    std::cout << "vipl_converted int_64 image to PGM image "<< argv[2] << std::endl;
   }
 #endif
   else if (in->pixel_format() == VIL_PIXEL_FORMAT_FLOAT)
@@ -136,27 +138,27 @@ main(int argc, char** argv)
     vipl_convert<vil_image_view<float>,vil_image_view<vxl_byte>,float,vxl_byte> op;
     vil_image_view<float> tmp = in;
     op.put_in_data_ptr(&tmp); op.put_out_data_ptr(&out); op.filter();
-    vcl_cout << "vipl_converted float image to PGM image "<< argv[2] << vcl_endl;
+    std::cout << "vipl_converted float image to PGM image "<< argv[2] << std::endl;
   }
   else if (in->pixel_format() == VIL_PIXEL_FORMAT_DOUBLE)
   {
     vipl_convert<vil_image_view<double>,vil_image_view<vxl_byte>,double,vxl_byte> op;
     vil_image_view<double> tmp = in;
     op.put_in_data_ptr(&tmp); op.put_out_data_ptr(&out); op.filter();
-    vcl_cout << "vipl_converted double image to PGM image "<< argv[2]<<vcl_endl;
+    std::cout << "vipl_converted double image to PGM image "<< argv[2]<<std::endl;
   }
 #if 0
   else if (in->pixel_format() == VIL_PIXEL_FORMAT_PYRAMID) {
-    vcl_cerr << "Cannot currently convert pyramid images\n";
+    std::cerr << "Cannot currently convert pyramid images\n";
     return 1;
   }
   else if (in->pixel_format() == VIL_PIXEL_FORMAT_BANDED) {
-    vcl_cerr << "Cannot currently convert banded images\n";
+    std::cerr << "Cannot currently convert banded images\n";
     return 1;
   }
 #endif
   else {
-    vcl_cerr << "Never heared of image format "<< int(in->pixel_format())<<'\n';
+    std::cerr << "Never heared of image format "<< int(in->pixel_format())<<'\n';
     return 1;
   }
 

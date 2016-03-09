@@ -8,8 +8,8 @@
 
 #include "vimt3d_gaussian_pyramid_builder_3d.h"
 
-#include <vcl_cstdlib.h>
-#include <vcl_string.h>
+#include <cstdlib>
+#include <string>
 
 #include <vul/vul_sprintf.h>
 #include <vul/vul_file.h>
@@ -19,7 +19,9 @@
 #include <vimt3d/vimt3d_save.h>
 #include <vil3d/algo/vil3d_gauss_reduce.h>
 #include <vcl_cassert.h>
-#include <vcl_cmath.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <cmath>
 #include <mbl/mbl_log.h>
 
 
@@ -55,9 +57,9 @@ void vimt3d_gaussian_pyramid_builder_3d<T>::set_max_levels(int max_l)
 {
   if (max_l<1)
   {
-    vcl_cerr<<"vimt3d_gaussian_pyramid_builder_3d<T>::setMaxLevels() param is "
+    std::cerr<<"vimt3d_gaussian_pyramid_builder_3d<T>::setMaxLevels() param is "
             <<max_l<<", must be >=1\n";
-    vcl_abort();
+    std::abort();
   }
   max_levels_ = max_l;
 }
@@ -159,9 +161,9 @@ void vimt3d_gaussian_pyramid_builder_3d<T>::gauss_reduce(vimt3d_image_3d_of<T>& 
   // Assume filter width is 5 for the moment.
   if (filter_width_!=5)
   {
-    vcl_cerr<<"vimt3d_gaussian_pyramid_builder_3d<T>::gauss_reduce()\n"
+    std::cerr<<"vimt3d_gaussian_pyramid_builder_3d<T>::gauss_reduce()\n"
             <<" Cannot cope with filter width of "<<filter_width_<<'\n';
-    vcl_abort();
+    std::abort();
   }
 
   double dx,dy,dz;
@@ -286,7 +288,7 @@ void vimt3d_gaussian_pyramid_builder_3d<T>::build(vimt_image_pyramid& image_pyr,
   vimt3d_transform_3d im2world = base_image.world2im().inverse();
   vgl_vector_3d<double>  dw = im2world(c1) - im2world(c0);
 
-  double base_pixel_width = dw.length()/vcl_sqrt(3.0);
+  double base_pixel_width = dw.length()/std::sqrt(3.0);
   double scale_step = 2.0;
 
   image_pyr.set_widths(base_pixel_width,scale_step);
@@ -300,11 +302,11 @@ void vimt3d_gaussian_pyramid_builder_3d<T>::build(vimt_image_pyramid& image_pyr,
     for (int i=0;i<max_levels;++i)
     {
       const vimt3d_image_3d_of<T>& level_im = static_cast<const vimt3d_image_3d_of<T>&>(image_pyr(i));
-      vcl_string filename = vul_sprintf("%s_count%d_level%d.v3i",images_logger().dump_prefix().c_str(),count,i);
+      std::string filename = vul_sprintf("%s_count%d_level%d.v3i",images_logger().dump_prefix().c_str(),count,i);
       vimt3d_save(filename.c_str(),level_im);
     }
 
-    vcl_string filename = vul_sprintf("%s_count%d.v3i",images_logger().dump_prefix().c_str(),count);
+    std::string filename = vul_sprintf("%s_count%d.v3i",images_logger().dump_prefix().c_str(),count);
     const vimt3d_image_3d_of<T>& orig_im = static_cast<const vimt3d_image_3d_of<T>&>(im);
     vimt3d_save(filename.c_str(),orig_im);
 
@@ -370,7 +372,7 @@ void vimt3d_gaussian_pyramid_builder_3d<T>::extend(vimt_image_pyramid& image_pyr
 //=======================================================================
 
 template<class T>
-bool vimt3d_gaussian_pyramid_builder_3d<T>::is_class(vcl_string const& s) const
+bool vimt3d_gaussian_pyramid_builder_3d<T>::is_class(std::string const& s) const
 {
   return s==vimt3d_gaussian_pyramid_builder_3d<T>::is_a() || vimt_image_pyramid_builder::is_class(s);
 }
@@ -394,7 +396,7 @@ vimt_image_pyramid_builder* vimt3d_gaussian_pyramid_builder_3d<T>::clone() const
 //=======================================================================
 
 template<class T>
-void vimt3d_gaussian_pyramid_builder_3d<T>::print_summary(vcl_ostream&) const
+void vimt3d_gaussian_pyramid_builder_3d<T>::print_summary(std::ostream&) const
 {
 }
 
@@ -426,17 +428,17 @@ void vimt3d_gaussian_pyramid_builder_3d<T>::b_read(vsl_b_istream& bfs)
     vsl_b_read(bfs,filter_width_);
     break;
   default:
-    vcl_cerr << "I/O ERROR: vimt3d_gaussian_pyramid_builder_3d<T>::b_read(vsl_b_istream&)\n"
+    std::cerr << "I/O ERROR: vimt3d_gaussian_pyramid_builder_3d<T>::b_read(vsl_b_istream&)\n"
              << "           Unknown version number "<< version << '\n';
-    bfs.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
+    bfs.is().clear(std::ios::badbit); // Set an unrecoverable IO error on stream
     return;
   }
 }
 
 #undef VIMT3D_GAUSSIAN_PYRAMID_BUILDER_3D_INSTANTIATE
 #define VIMT3D_GAUSSIAN_PYRAMID_BUILDER_3D_INSTANTIATE(T) \
-VCL_DEFINE_SPECIALIZATION vcl_string vimt3d_gaussian_pyramid_builder_3d<T >::is_a() const \
-{ return vcl_string("vimt3d_gaussian_pyramid_builder_3d<" #T ">"); } \
+VCL_DEFINE_SPECIALIZATION std::string vimt3d_gaussian_pyramid_builder_3d<T >::is_a() const \
+{ return std::string("vimt3d_gaussian_pyramid_builder_3d<" #T ">"); } \
 template class vimt3d_gaussian_pyramid_builder_3d<T >
 
 #endif // vimt3d_gaussian_pyramid_builder_3d_hxx_

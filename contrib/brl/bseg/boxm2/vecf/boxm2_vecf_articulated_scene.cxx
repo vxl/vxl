@@ -2,15 +2,15 @@
 #include <boxm2/io/boxm2_lru_cache.h>
 
 double boxm2_vecf_articulated_scene::gauss(double d, double sigma){
-  return vcl_exp((-0.5*d*d)/(sigma*sigma));
+  return std::exp((-0.5*d*d)/(sigma*sigma));
 }
 
 void boxm2_vecf_articulated_scene::clear_target(boxm2_scene_sptr target_scene){
-  vcl_string gray_APM_prefix  = boxm2_data_traits<BOXM2_MOG3_GREY>::prefix();
-  vcl_string color_APM_prefix = boxm2_data_traits<BOXM2_GAUSS_RGB>::prefix();
-  vcl_string alpha_prefix     = boxm2_data_traits<BOXM2_ALPHA>::prefix();
+  std::string gray_APM_prefix  = boxm2_data_traits<BOXM2_MOG3_GREY>::prefix();
+  std::string color_APM_prefix = boxm2_data_traits<BOXM2_GAUSS_RGB>::prefix();
+  std::string alpha_prefix     = boxm2_data_traits<BOXM2_ALPHA>::prefix();
 
-  vcl_vector<boxm2_block_id> blocks = target_scene->get_block_ids();
+  std::vector<boxm2_block_id> blocks = target_scene->get_block_ids();
   boxm2_data_base* alpha_db     = boxm2_cache::instance()->get_data_base(target_scene, blocks[0], alpha_prefix);
   boxm2_data_base* gray_app_db  = boxm2_cache::instance()->get_data_base(target_scene, blocks[0], gray_APM_prefix);
   boxm2_data_base* color_app_db = boxm2_cache::instance()->get_data_base(target_scene, blocks[0], color_APM_prefix + "_" + (this->color_apm_id_));

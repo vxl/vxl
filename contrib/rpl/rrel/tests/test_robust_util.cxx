@@ -1,15 +1,17 @@
 // This is rpl/rrel/tests/test_robust_util.cxx
-#include <vcl_cmath.h>
-#include <vcl_vector.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <cmath>
+#include <vector>
 #include <vnl/vnl_math.h>
 
 #include <rrel/rrel_util.h>
 #include <testlib/testlib_test.h>
 
-inline bool is_sorted( vcl_vector<double>::iterator first, vcl_vector<double>::iterator last )
+inline bool is_sorted( std::vector<double>::iterator first, std::vector<double>::iterator last )
 {
   bool ok=true;
-  vcl_vector<double>::iterator i, j;
+  std::vector<double>::iterator i, j;
   for ( i=first, j=first+1; ok && j!=last; ++i,++j)
     ok = ! ( *j < *i );
   return ok;
@@ -22,7 +24,7 @@ static void test_robust_util()
   //
   double test_arr[] = { -1.0, -2.0, 3.0, -4.0, -1.5, -11.0, 14.1,
                         -56.0, -2.4, 3.1, 1.1, 2.15, -2.1, -0.8 };
-  vcl_vector<double> test_vec( test_arr, test_arr+14 );
+  std::vector<double> test_vec( test_arr, test_arr+14 );
   const double target=3.0*1.4826*(1+5.0/11);
   double res = rrel_util_median_abs_dev_scale( test_vec.begin(), test_vec.end(), 3 );
   TEST_NEAR("rrel_util_median_abs_dev_scale", res, target , 1e-6);
@@ -31,9 +33,9 @@ static void test_robust_util()
   //  rrel_util_weighted_scale
   //
   double wgt_arr[] = { 0.5, 0.75, 0.8,  0,  0.25, 0.4, 0.6, 0.9, 0.8, 0.75 };
-  vcl_vector<double> wgt(10); for (int i=0; i<10; ++i) wgt[i]=wgt_arr[i];
+  std::vector<double> wgt(10); for (int i=0; i<10; ++i) wgt[i]=wgt_arr[i];
   double rs_arr[] =  { 2,   4,    0.5,  7,  6,    5,   3,   2,   5,   2    };
-  vcl_vector<double> rs(10); for (int i=0; i<10; ++i) rs[i]=rs_arr[i];
+  std::vector<double> rs(10); for (int i=0; i<10; ++i) rs[i]=rs_arr[i];
   double sum_wr = 0;
   double sum_w = 0;
   for ( int i=0; i<10; ++i ) {
@@ -43,7 +45,7 @@ static void test_robust_util()
   int num = 10;
   int dof = 1;
   double est_wgted_scale = rrel_util_weighted_scale( rs.begin(), rs.end(), wgt.begin(), dof, (double*)VXL_NULLPTR );
-  double corr_wgted_scale = vcl_sqrt( sum_wr / ( sum_w * (num-dof) / num ) );
+  double corr_wgted_scale = std::sqrt( sum_wr / ( sum_w * (num-dof) / num ) );
   TEST_NEAR("rrel_util_weighted_scale", est_wgted_scale, corr_wgted_scale, 1e-6);
 
   //
@@ -52,7 +54,7 @@ static void test_robust_util()
   double test_arr4[] = { -1.0, -2.0, 1.2, -4.0, -1.5, -11.0, 14.1, 2.2,
                          56.0, -2.4, 3.1,  1.1,  2.1,  -2.1, -0.8, 0.6,
                          13.1,  6.2, 55.8 };
-  vcl_vector<double> test_vect4( test_arr4, test_arr4+18 );
+  std::vector<double> test_vect4( test_arr4, test_arr4+18 );
   double median, scale;
   const double corr_median = 1.1;
   dof = 1;
@@ -69,7 +71,7 @@ static void test_robust_util()
   //
   double test_arr2[] = { -1.0, -2.0, 1.2, -4.0, -1.5, -11.0, 14.1, 2.2,
                          -56.0, -2.4, 3.1,  1.1,  2.1,  -2.1, -0.8, 0.6 };
-  vcl_vector<double> test_vect2( test_arr2, test_arr2+16 );
+  std::vector<double> test_vect2( test_arr2, test_arr2+16 );
   double center, half_width;
   const double corr_center=-0.45, corr_half_width=1.65;
   rrel_util_intercept_adjustment( test_vect2.begin(), test_vect2.end(), center, half_width, 1 );
@@ -86,7 +88,7 @@ static void test_robust_util()
   double mean, std, frac;
   double test_arr3[] = { -1.0, -2.0, 1.2, -4.0, -1.5, -11.0, 14.1, 2.2,
                          -56.0, -2.4, 3.1,  1.1,  2.1,  -2.1, -0.8, 0.6 };
-  vcl_vector<double> test_vec3( test_arr3, test_arr3+16 );
+  std::vector<double> test_vec3( test_arr3, test_arr3+16 );
   const double corr_mean=-0.2692307, corr_std=2.140632, corr_frac = 0.8125;
   rrel_util_intercept_adjust_stats_copy( test_vec3.begin(), test_vec3.end(), mean, std, frac, 1 );
   TEST_NEAR("rrel_util_intercept_adjust_stats_copy ", mean,corr_mean, 1e-6);

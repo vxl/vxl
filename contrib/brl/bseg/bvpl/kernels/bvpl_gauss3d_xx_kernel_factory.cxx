@@ -2,8 +2,10 @@
 //:
 // \file
 
-#include <vcl_algorithm.h>
-#include <vcl_cmath.h> // for std::sqrt() and std::exp()
+#include <vcl_compiler.h>
+#include <iostream>
+#include <algorithm>
+#include <cmath> // for std::sqrt() and std::exp()
 #include <vnl/vnl_math.h>
 #include <vnl/vnl_float_3.h>
 
@@ -69,7 +71,7 @@ void bvpl_gauss3d_xx_kernel_factory::create_canonical()
   //the user should subsample the image/grid
   if ( (sigma1_ > max_size_) || (sigma2_ > max_size_) || (sigma3_ > max_size_) )
   {
-    vcl_cerr<< "Warning, kernel is too large. You should subsample image. Processing may take a long time.\n";
+    std::cerr<< "Warning, kernel is too large. You should subsample image. Processing may take a long time.\n";
   }
 
   typedef vgl_point_3d<float> point_3d;
@@ -85,7 +87,7 @@ void bvpl_gauss3d_xx_kernel_factory::create_canonical()
   // Compute the first entry on the Hessian of an independent Gaussian with variances (v1, v, v)
 
   //constant expressions
-  float w = vcl_sqrt(third_power(2.0f*float(vnl_math::pi))*(1.0f/var1*var2*var3));
+  float w = std::sqrt(third_power(2.0f*float(vnl_math::pi))*(1.0f/var1*var2*var3));
   float one_over_v1= 1.0f/var1;
   for (int x=min_x; x<= max_x; x++)
   {
@@ -96,8 +98,8 @@ void bvpl_gauss3d_xx_kernel_factory::create_canonical()
     {
       for (int z= min_z; z<= max_z; z++)
       {
-        float exponential = vcl_exp( -0.5f * (x_2_over_v1 + second_power(float(y))/var2 + second_power(float(z))/var3));
-        canonical_kernel_.push_back(vcl_pair<point_3d,dispatch>(point_3d(float(x),float(y),float(z)), dispatch((exponential/w)*diff_term)));
+        float exponential = std::exp( -0.5f * (x_2_over_v1 + second_power(float(y))/var2 + second_power(float(z))/var3));
+        canonical_kernel_.push_back(std::pair<point_3d,dispatch>(point_3d(float(x),float(y),float(z)), dispatch((exponential/w)*diff_term)));
       }
     }
   }
@@ -134,17 +136,17 @@ bvpl_kernel_vector_sptr bvpl_gauss3d_xx_kernel_factory::create_kernel_vector()
   axis[1] =0.0f;
   axis[2] =1.0f;
   this->set_rotation_axis(axis);
-  kernels->kernels_.push_back(vcl_make_pair(axis , new bvpl_kernel(this->create())));
+  kernels->kernels_.push_back(std::make_pair(axis , new bvpl_kernel(this->create())));
 
   //when zenith is pi/4 traverse all hemisphere
   phi = float(vnl_math::pi_over_4);
   for (;theta < 2.0f*float(vnl_math::pi)-1e-5; theta +=theta_res)
   {
-    axis[0] = vcl_cos(theta) * vcl_sin(phi);
-    axis[1] = vcl_sin(theta) * vcl_sin(phi);
-    axis[2] = vcl_cos(phi);
+    axis[0] = std::cos(theta) * std::sin(phi);
+    axis[1] = std::sin(theta) * std::sin(phi);
+    axis[2] = std::cos(phi);
     this->set_rotation_axis(axis);
-    kernels->kernels_.push_back(vcl_make_pair(axis , new bvpl_kernel(this->create())));
+    kernels->kernels_.push_back(std::make_pair(axis , new bvpl_kernel(this->create())));
   }
 
   //when zenith is pi/2 we only traverse half a hemisphere
@@ -152,11 +154,11 @@ bvpl_kernel_vector_sptr bvpl_gauss3d_xx_kernel_factory::create_kernel_vector()
   theta =0.0f;
   for (;theta < float(vnl_math::pi)-1e-5; theta +=theta_res)
   {
-    axis[0] = float(vcl_cos(theta) * vcl_sin(phi));
-    axis[1] = float(vcl_sin(theta) * vcl_sin(phi));
-    axis[2] = float(vcl_cos(phi));
+    axis[0] = float(std::cos(theta) * std::sin(phi));
+    axis[1] = float(std::sin(theta) * std::sin(phi));
+    axis[2] = float(std::cos(phi));
     this->set_rotation_axis(axis);
-    kernels->kernels_.push_back(vcl_make_pair(axis , new bvpl_kernel(this->create())));
+    kernels->kernels_.push_back(std::make_pair(axis , new bvpl_kernel(this->create())));
    }
 
   return kernels;

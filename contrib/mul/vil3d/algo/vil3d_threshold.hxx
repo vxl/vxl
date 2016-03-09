@@ -15,10 +15,10 @@ void vil3d_threshold_above(const vil3d_image_view<srcT>& src,
   unsigned ni = src.ni(),nj = src.nj(),nk = src.nk(),np = src.nplanes();
   dest.set_size(ni,nj,nk,np);
 
-  vcl_ptrdiff_t istepA=src.istep(),jstepA=src.jstep(),kstepA=src.kstep();
-  vcl_ptrdiff_t pstepA = src.planestep();
-  vcl_ptrdiff_t istepB=dest.istep(),jstepB=dest.jstep(),kstepB=dest.kstep();
-  vcl_ptrdiff_t pstepB = dest.planestep();
+  std::ptrdiff_t istepA=src.istep(),jstepA=src.jstep(),kstepA=src.kstep();
+  std::ptrdiff_t pstepA = src.planestep();
+  std::ptrdiff_t istepB=dest.istep(),jstepB=dest.jstep(),kstepB=dest.kstep();
+  std::ptrdiff_t pstepB = dest.planestep();
   const srcT* planeA = src.origin_ptr();
   bool* planeB = dest.origin_ptr();
   for (unsigned p=0;p<np;++p,planeA += pstepA,planeB += pstepB)
@@ -48,10 +48,10 @@ void vil3d_threshold_below(const vil3d_image_view<srcT>& src,
   unsigned ni = src.ni(),nj = src.nj(),nk = src.nk(),np = src.nplanes();
   dest.set_size(ni,nj,nk,np);
 
-  vcl_ptrdiff_t istepA=src.istep(),jstepA=src.jstep(),kstepA=src.kstep();
-  vcl_ptrdiff_t pstepA = src.planestep();
-  vcl_ptrdiff_t istepB=dest.istep(),jstepB=dest.jstep(),kstepB=dest.kstep();
-  vcl_ptrdiff_t pstepB = dest.planestep();
+  std::ptrdiff_t istepA=src.istep(),jstepA=src.jstep(),kstepA=src.kstep();
+  std::ptrdiff_t pstepA = src.planestep();
+  std::ptrdiff_t istepB=dest.istep(),jstepB=dest.jstep(),kstepB=dest.kstep();
+  std::ptrdiff_t pstepB = dest.planestep();
   const srcT* planeA = src.origin_ptr();
   bool* planeB = dest.origin_ptr();
   for (unsigned p=0;p<np;++p,planeA += pstepA,planeB += pstepB)
@@ -81,10 +81,10 @@ void vil3d_threshold_inside(const vil3d_image_view<srcT>& src,
   unsigned ni = src.ni(),nj = src.nj(),nk = src.nk(),np = src.nplanes();
   dest.set_size(ni,nj,nk,np);
 
-  vcl_ptrdiff_t istepA=src.istep(),jstepA=src.jstep(),kstepA=src.kstep();
-  vcl_ptrdiff_t pstepA = src.planestep();
-  vcl_ptrdiff_t istepB=dest.istep(),jstepB=dest.jstep(),kstepB=dest.kstep();
-  vcl_ptrdiff_t pstepB = dest.planestep();
+  std::ptrdiff_t istepA=src.istep(),jstepA=src.jstep(),kstepA=src.kstep();
+  std::ptrdiff_t pstepA = src.planestep();
+  std::ptrdiff_t istepB=dest.istep(),jstepB=dest.jstep(),kstepB=dest.kstep();
+  std::ptrdiff_t pstepB = dest.planestep();
   const srcT* planeA = src.origin_ptr();
   bool* planeB = dest.origin_ptr();
   for (unsigned p=0;p<np;++p,planeA += pstepA,planeB += pstepB)
@@ -114,10 +114,10 @@ void vil3d_threshold_outside(const vil3d_image_view<srcT>& src,
   unsigned ni = src.ni(),nj = src.nj(),nk = src.nk(),np = src.nplanes();
   dest.set_size(ni,nj,nk,np);
 
-  vcl_ptrdiff_t istepA=src.istep(),jstepA=src.jstep(),kstepA=src.kstep();
-  vcl_ptrdiff_t pstepA = src.planestep();
-  vcl_ptrdiff_t istepB=dest.istep(),jstepB=dest.jstep(),kstepB=dest.kstep();
-  vcl_ptrdiff_t pstepB = dest.planestep();
+  std::ptrdiff_t istepA=src.istep(),jstepA=src.jstep(),kstepA=src.kstep();
+  std::ptrdiff_t pstepA = src.planestep();
+  std::ptrdiff_t istepB=dest.istep(),jstepB=dest.jstep(),kstepB=dest.kstep();
+  std::ptrdiff_t pstepB = dest.planestep();
   const srcT* planeA = src.origin_ptr();
   bool* planeB = dest.origin_ptr();
   for (unsigned p=0;p<np;++p,planeA += pstepA,planeB += pstepB)

@@ -3,9 +3,11 @@
 // \file
 
 #include "bapl_lowe_cluster.h"
-#include <vcl_cmath.h>
-#include <vcl_algorithm.h>
-#include <vcl_iostream.h>
+#include <cmath>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <algorithm>
+#include <iostream>
 #include <vnl/vnl_math.h>
 
 #include <bapl/bapl_lowe_keypoint.h>
@@ -20,7 +22,7 @@ bapl_lowe_clusterer::bapl_lowe_clusterer( int max_image_dim1,
                                           int max_image_dim2,
                                           double max_scale )
 {
-  max_scale_ = int(vcl_log(max_scale)/vcl_log(2.0))+1;
+  max_scale_ = int(std::log(max_scale)/std::log(2.0))+1;
   trans_step_ = max_image_dim1/4;
   max_trans_ = (max_image_dim1+max_image_dim2)/trans_step_;
 
@@ -47,7 +49,7 @@ bapl_lowe_clusterer::hash(const bapl_keypoint_match& match)
   if ( j_bin < 0 ) j_bin = 0;
   if ( j_bin > 2*max_trans_-1 ) j_bin = 2*max_trans_-1;
 
-  int s_bin = int(vcl_log(d_scale)/vcl_log(2.0)) + max_scale_;
+  int s_bin = int(std::log(d_scale)/std::log(2.0)) + max_scale_;
   if ( s_bin < 0 ) s_bin = 0;
   if ( s_bin > 2*max_scale_-1 ) s_bin = 2*max_scale_-1;
 
@@ -62,18 +64,18 @@ bapl_lowe_clusterer::hash(const bapl_keypoint_match& match)
         }
 }
 
-bool sort_by_size( const vcl_vector< bapl_keypoint_match > & lhs,
-                   const vcl_vector< bapl_keypoint_match > & rhs )
+bool sort_by_size( const std::vector< bapl_keypoint_match > & lhs,
+                   const std::vector< bapl_keypoint_match > & rhs )
 {
   return lhs.size() > rhs.size();
 }
 
 //: Fill \param clusters with the clusters sorted by cluster size
-vcl_vector< vcl_vector< bapl_keypoint_match > >
+std::vector< std::vector< bapl_keypoint_match > >
 bapl_lowe_clusterer::get_sorted_clusters() const
 {
-  vcl_vector< vcl_vector< bapl_keypoint_match > > clusters(hash_);
-  vcl_sort(clusters.begin(), clusters.end(), sort_by_size);
+  std::vector< std::vector< bapl_keypoint_match > > clusters(hash_);
+  std::sort(clusters.begin(), clusters.end(), sort_by_size);
   int last_valid = -1;
   while ( !clusters[++last_valid].empty() );
   clusters.resize(last_valid);
@@ -83,10 +85,10 @@ bapl_lowe_clusterer::get_sorted_clusters() const
 
 //: Estimate a 2D affine transform from the clusters
 bool
-bapl_lowe_clusterer::estimate_all_affine( vcl_vector< bapl_affine_transform >& transforms,
-                                          vcl_vector< bapl_keypoint_match >& inliers ) const
+bapl_lowe_clusterer::estimate_all_affine( std::vector< bapl_affine_transform >& transforms,
+                                          std::vector< bapl_keypoint_match >& inliers ) const
 {
-  vcl_vector< vcl_vector< bapl_keypoint_match > > clusters = this->get_sorted_clusters();
+  std::vector< std::vector< bapl_keypoint_match > > clusters = this->get_sorted_clusters();
 
   transforms.clear();
   inliers.clear();
@@ -94,17 +96,17 @@ bapl_lowe_clusterer::estimate_all_affine( vcl_vector< bapl_affine_transform >& t
   p[0] = p[3] = 1.0;
 
   for (unsigned c=0; c<clusters.size() && clusters[c].size()>2; ++c){
-    vcl_cout << "testing cluster "<<c<<vcl_endl;
+    std::cout << "testing cluster "<<c<<std::endl;
 
     bapl_affine_transform A;
-    vcl_vector< bapl_keypoint_match >& matches = clusters[c];
+    std::vector< bapl_keypoint_match >& matches = clusters[c];
 
     // Get an initial estimate and remove outliers
     if ( !this->estimate_affine(A, matches) ) continue;
 
     // Add all matches that agree with the estimate
     matches.clear();
-    for ( vcl_vector< bapl_keypoint_match >::const_iterator itr = all_matches_.begin();
+    for ( std::vector< bapl_keypoint_match >::const_iterator itr = all_matches_.begin();
           itr != all_matches_.end(); ++itr ) {
       if ( this->is_inlier(A, *itr) )
         matches.push_back(*itr);
@@ -115,10 +117,10 @@ bapl_lowe_clusterer::estimate_all_affine( vcl_vector< bapl_affine_transform >& t
 
     transforms.push_back(A);
     // for now, merge matches into inliers
-    for ( vcl_vector< bapl_keypoint_match >::iterator m_itr = matches.begin();
+    for ( std::vector< bapl_keypoint_match >::iterator m_itr = matches.begin();
           m_itr != matches.end();  ++m_itr ) {
       bool already_found = false;
-      for ( vcl_vector< bapl_keypoint_match >::iterator i_itr = inliers.begin();
+      for ( std::vector< bapl_keypoint_match >::iterator i_itr = inliers.begin();
             i_itr != inliers.end();  ++i_itr ) {
         if ( m_itr->second == i_itr->second ){
           already_found = true;
@@ -127,9 +129,9 @@ bapl_lowe_clusterer::estimate_all_affine( vcl_vector< bapl_affine_transform >& t
       }
       if ( !already_found ) inliers.push_back(*m_itr);
     }
-    vcl_cout << "current inliers size: "<<matches.size() << vcl_endl;
+    std::cout << "current inliers size: "<<matches.size() << std::endl;
   }
-  vcl_cout << "estimated "<<transforms.size()<<" transforms"<<vcl_endl;
+  std::cout << "estimated "<<transforms.size()<<" transforms"<<std::endl;
   if (transforms.empty())
     inliers = all_matches_;
 
@@ -140,13 +142,13 @@ bapl_lowe_clusterer::estimate_all_affine( vcl_vector< bapl_affine_transform >& t
 //: Estimate a 2D affine transform from the matches
 bool
 bapl_lowe_clusterer::estimate_affine( bapl_affine_transform& transform,
-                                      vcl_vector< bapl_keypoint_match >& matches ) const
+                                      std::vector< bapl_keypoint_match >& matches ) const
 {
   unsigned num_inliers = 0;
   while ( num_inliers!=matches.size() ) {
     num_inliers = matches.size();
 
-    //vcl_cout << " # of inliers = " << inliers.size() << vcl_endl;
+    //std::cout << " # of inliers = " << inliers.size() << std::endl;
     bapl_affine2d_est est( matches );
 
     vnl_vector<double> p;
@@ -157,7 +159,7 @@ bapl_lowe_clusterer::estimate_affine( bapl_affine_transform& transform,
     else {
       transform = bapl_affine_transform(p[0], p[1], p[2], p[3], p[4], p[5]);
 
-      for ( vcl_vector< bapl_keypoint_match >::iterator itr = matches.begin();
+      for ( std::vector< bapl_keypoint_match >::iterator itr = matches.begin();
             itr != matches.end();  ++itr ) {
         if ( !this->is_inlier(transform, *itr) ){
           matches.erase(itr);
@@ -182,8 +184,8 @@ bapl_lowe_clusterer::is_inlier( const bapl_affine_transform& A,
   double y_obj = match.first->location_j();
   double o_obj = match.first->orientation();
   double s_obj = match.first->scale();
-  double x2_obj = x_obj + s_obj*(vcl_cos(o_obj));
-  double y2_obj = y_obj + s_obj*(vcl_sin(o_obj));
+  double x2_obj = x_obj + s_obj*(std::cos(o_obj));
+  double y2_obj = y_obj + s_obj*(std::sin(o_obj));
 
   double x_tgt = match.second->location_i();
   double y_tgt = match.second->location_j();
@@ -196,17 +198,17 @@ bapl_lowe_clusterer::is_inlier( const bapl_affine_transform& A,
 
   double dx = x2_map - x_map;
   double dy = y2_map - y_map;
-  double s_map = vcl_sqrt(dx*dx + dy*dy);
-  double o_map = vcl_atan2(dy,dx);
+  double s_map = std::sqrt(dx*dx + dy*dy);
+  double o_map = std::atan2(dy,dx);
 
   double err_x = x_tgt - x_map;
   double err_y = y_tgt - y_map;
-  double err_s = vcl_log(s_tgt/s_map)*vnl_math::log2e; // i.e., the base-2 log of s_tgt/s_map
+  double err_s = std::log(s_tgt/s_map)*vnl_math::log2e; // i.e., the base-2 log of s_tgt/s_map
   double err_o = vnl_math::angle_minuspi_to_pi(o_tgt-o_map);
 
-  return vcl_fabs(err_o) < 0.25 &&
-         vcl_fabs(err_s) < 0.5 &&
-         vcl_fabs(err_x) < trans_step_*0.25 &&
-         vcl_fabs(err_y) < trans_step_*0.25;
+  return std::fabs(err_o) < 0.25 &&
+         std::fabs(err_s) < 0.5 &&
+         std::fabs(err_x) < trans_step_*0.25 &&
+         std::fabs(err_y) < trans_step_*0.25;
 }
 

@@ -12,8 +12,10 @@
 
 #include <vnl/io/vnl_io_vector.h>
 #include <vsl/vsl_binary_io.h>
-#include <vcl_string.h>
-#include <vcl_iosfwd.h>
+#include <string>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iosfwd>
 
 //=======================================================================
 
@@ -98,16 +100,16 @@ class vpdfl_pdf_base
   short version_no() const;
 
   //: Name of the class
-  virtual vcl_string is_a() const;
+  virtual std::string is_a() const;
 
   //: Does the name of the class match the argument?
-  virtual bool is_class(vcl_string const& s) const;
+  virtual bool is_class(std::string const& s) const;
 
   //: Create a copy on the heap and return base class pointer
   virtual vpdfl_pdf_base* clone() const = 0;
 
   //: Print class to os
-  virtual void print_summary(vcl_ostream& os) const = 0;
+  virtual void print_summary(std::ostream& os) const = 0;
 
   //: Save class to binary file stream
   virtual void b_write(vsl_b_ostream& bfs) const = 0;
@@ -134,15 +136,15 @@ void vsl_b_write(vsl_b_ostream& bfs, const vpdfl_pdf_base& b);
 void vsl_b_read(vsl_b_istream& bfs, vpdfl_pdf_base& b);
 
 //: Stream output operator for class reference
-void vsl_print_summary(vcl_ostream& os,const vpdfl_pdf_base& b);
+void vsl_print_summary(std::ostream& os,const vpdfl_pdf_base& b);
 
 //: Stream output operator for class pointer
-void vsl_print_summary(vcl_ostream& os,const vpdfl_pdf_base* b);
+void vsl_print_summary(std::ostream& os,const vpdfl_pdf_base* b);
 
 //: Stream output operator for class reference
-vcl_ostream& operator<<(vcl_ostream& os,const vpdfl_pdf_base& b);
+std::ostream& operator<<(std::ostream& os,const vpdfl_pdf_base& b);
 
 //: Stream output operator for class pointer
-vcl_ostream& operator<<(vcl_ostream& os,const vpdfl_pdf_base* b);
+std::ostream& operator<<(std::ostream& os,const vpdfl_pdf_base* b);
 
 #endif // vpdfl_pdf_base_h

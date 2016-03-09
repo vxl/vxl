@@ -9,7 +9,9 @@
 
 #include <vimt/vimt_image_pyramid_builder.h>
 #include <vimt/vimt_image_2d_of.h>
-#include <vcl_iosfwd.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iosfwd>
 
 //: Build pyramids of vimt_image_2d_of<vxl_byte> at any scale step
 template <class T>
@@ -83,11 +85,11 @@ class vimt_scale_pyramid_builder_2d : public vimt_image_pyramid_builder
   //: Smooth and subsample src_im to produce dest_im
   //  Applies 5 element FIR filter in x and y, then samples
   //  Assumes dest_im has sufficient data allocated
-  void scale_reduce(T* dest_im, vcl_ptrdiff_t dest_ystep,
+  void scale_reduce(T* dest_im, std::ptrdiff_t dest_ystep,
                     const T* src_im,
                     int src_nx, int src_ny,
                     int dest_nx, int dest_ny,
-                    vcl_ptrdiff_t src_istep, vcl_ptrdiff_t src_jstep) const;
+                    std::ptrdiff_t src_istep, std::ptrdiff_t src_jstep) const;
 
   vimt_image_pyramid_builder* clone() const;
 
@@ -95,13 +97,13 @@ class vimt_scale_pyramid_builder_2d : public vimt_image_pyramid_builder
   short version_no() const;
 
   //: Name of the class
-  virtual vcl_string is_a() const;
+  virtual std::string is_a() const;
 
   //: Does the name of the class match the argument?
-  virtual bool is_class(vcl_string const& s) const;
+  virtual bool is_class(std::string const& s) const;
 
   //: Print class to os
-  virtual void print_summary(vcl_ostream&) const;
+  virtual void print_summary(std::ostream&) const;
 
   //: Save class to binary file stream
   virtual void b_write(vsl_b_ostream& bfs) const;

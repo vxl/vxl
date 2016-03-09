@@ -5,7 +5,9 @@
 //    constitute the articulation of the model.  The articulation
 //    is initiatied/paused by pressing the 'v' key in a toggle mode
 //
-#include <vcl_fstream.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <fstream>
 // Utilities, OpenCL and system includes
 #include <GL/glew.h>
 #include <bocl/bocl_cl.h>
@@ -57,84 +59,84 @@ int main(int argc, char ** argv)
   for (int i=0; i<argc; i++)
     my_argv[i] = argv[i];
   my_argv[argc] = new char[13];
-  vcl_strcpy(my_argv[argc], "--mfc-use-gl");
+  std::strcpy(my_argv[argc], "--mfc-use-gl");
   vgui::init(my_argc, my_argv);
 #else
     //init vgui (should choose/determine toolkit)
     vgui::init(argc, argv);
 #endif
   vul_arg_info_list arglist;
-  vul_arg<vcl_string> base_dir_path_arg(arglist, "-bdir", "Base model directory", "");
-  vul_arg<vcl_string> model_path_arg(arglist, "-model", "model_xml_file", "");
-  vul_arg<vcl_string> target_path_arg(arglist, "-target", "target_xml_file", "");
-  vul_arg<vcl_string> geo_path_arg(arglist, "-geo", "geometry_data_file", "");
-  vul_arg<vcl_string> camera_path_arg(arglist, "-cam", "default camera", "");
-  vul_arg<vcl_string> background_arg(arglist, "-bkgnd", "dark background", "true");
-  vul_arg<vcl_string> scene_arg(arglist, "-scene_t", " which scene ", "eye");
+  vul_arg<std::string> base_dir_path_arg(arglist, "-bdir", "Base model directory", "");
+  vul_arg<std::string> model_path_arg(arglist, "-model", "model_xml_file", "");
+  vul_arg<std::string> target_path_arg(arglist, "-target", "target_xml_file", "");
+  vul_arg<std::string> geo_path_arg(arglist, "-geo", "geometry_data_file", "");
+  vul_arg<std::string> camera_path_arg(arglist, "-cam", "default camera", "");
+  vul_arg<std::string> background_arg(arglist, "-bkgnd", "dark background", "true");
+  vul_arg<std::string> scene_arg(arglist, "-scene_t", " which scene ", "eye");
   vul_arg<unsigned> gpu_idx(arglist, "-platform", " platform index ", 0);
 
   arglist.parse(argc, argv, false);
-  vcl_string base_dir_path = base_dir_path_arg();
-  vcl_string model_path = model_path_arg();
-  vcl_string target_path = target_path_arg();
-  vcl_string geo_path = geo_path_arg();
-  vcl_string cam_path = camera_path_arg();
+  std::string base_dir_path = base_dir_path_arg();
+  std::string model_path = model_path_arg();
+  std::string target_path = target_path_arg();
+  std::string geo_path = geo_path_arg();
+  std::string cam_path = camera_path_arg();
   bool dark_background = background_arg()=="true";
-  vcl_string scene_t = scene_arg();
+  std::string scene_t = scene_arg();
   unsigned device_id = gpu_idx();
 
   // check if base directory exists
   bool good = vul_file::exists(base_dir_path);
   if(!good){
-    vcl_cout << base_dir_path << " is not valid\n";
+    std::cout << base_dir_path << " is not valid\n";
     return -1;
   }
-  vcl_string articulated_scene_path = base_dir_path + model_path;
-  vcl_string target_scene_path = base_dir_path + target_path;
-  vcl_string geometry_path = base_dir_path + geo_path;
-  vcl_string eye_model_path = base_dir_path + "eye/eye.xml";
-  vcl_string default_cam_path = base_dir_path + cam_path;
+  std::string articulated_scene_path = base_dir_path + model_path;
+  std::string target_scene_path = base_dir_path + target_path;
+  std::string geometry_path = base_dir_path + geo_path;
+  std::string eye_model_path = base_dir_path + "eye/eye.xml";
+  std::string default_cam_path = base_dir_path + cam_path;
   // check for valid file paths
   good = vul_file::exists(articulated_scene_path);
   if(!good){
-    vcl_cout << articulated_scene_path << " is not valid\n";
+    std::cout << articulated_scene_path << " is not valid\n";
     return -1;
   }
   good = vul_file::exists(target_scene_path);
   if(!good){
-    vcl_cout << target_scene_path << " is not valid\n";
+    std::cout << target_scene_path << " is not valid\n";
     return -1;
   }
 
   good = (geo_path != "") && vul_file::exists(geometry_path);
   if(!good){
-    vcl_cout << geometry_path << " is not valid\n";
+    std::cout << geometry_path << " is not valid\n";
     return -1;
   }
 
   bool cam_path_exists = vul_file::exists(default_cam_path)&&cam_path!="";
 
   unsigned ni = 1280, nj = 720;
-  vcl_string device_name = "gpu";
+  std::string device_name = "gpu";
     bocl_device_sptr  device( NULL );
     //make bocl manager
     bocl_manager_child &mgr =bocl_manager_child::instance();
     if(device_name=="gpu" || device_name =="")
     {
-        vcl_vector<bocl_device_sptr> devices;
+        std::vector<bocl_device_sptr> devices;
         for(unsigned i = 0; i < mgr.gpus_.size(); i++)
           devices.push_back( mgr.gpus_[i] );
         if(device_id >= devices.size()){
-            vcl_cout << "GPU index out of bounds" << vcl_endl;
+            std::cout << "GPU index out of bounds" << std::endl;
             return -1;
         }
-        vcl_string device_ident = devices[device_id]->device_identifier();
-        if(device_ident.find("NVIDIA") != vcl_string::npos)
+        std::string device_ident = devices[device_id]->device_identifier();
+        if(device_ident.find("NVIDIA") != std::string::npos)
           device = devices[device_id];
         else
           return -1;
     }
-    vcl_cout << "Using: " << *device;
+    std::cout << "Using: " << *device;
 
     boxm2_scene_sptr target_scene = new boxm2_scene(target_scene_path);
 
@@ -149,9 +151,9 @@ int main(int argc, char ** argv)
                                         target_scene->bounding_box(), false);
     }else{
     pcam = new vpgl_perspective_camera<double>();
-    vcl_ifstream istr(default_cam_path.c_str());
+    std::ifstream istr(default_cam_path.c_str());
     if(!istr.is_open()){
-      vcl_cout << default_cam_path << " is not a valid camera path\n";
+      std::cout << default_cam_path << " is not a valid camera path\n";
       return -1;
     }
     istr >> *pcam;
@@ -242,7 +244,7 @@ int main(int argc, char ** argv)
 
     //set vgui off
     GLboolean bGLEW = glewIsSupported("GL_VERSION_2_0  GL_ARB_pixel_buffer_object");
-    vcl_cout << "GLEW is supported= " << bGLEW << vcl_endl;
+    std::cout << "GLEW is supported= " << bGLEW << std::endl;
 
     return vgui::run();
 }

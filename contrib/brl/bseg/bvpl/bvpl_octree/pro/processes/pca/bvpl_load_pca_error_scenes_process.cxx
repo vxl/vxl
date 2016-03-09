@@ -23,13 +23,13 @@ bool bvpl_load_pca_error_scenes_process_cons(bprb_func_process& pro)
 {
   using namespace bvpl_load_pca_error_scenes_process_globals ;
 
-  vcl_vector<vcl_string> input_types_(n_inputs_);
+  std::vector<std::string> input_types_(n_inputs_);
   unsigned i =0;
   input_types_[i++] = "boxm_scene_base_sptr";  //data scene
   input_types_[i++] = "vcl_string";   //pca path
   input_types_[i++] = "unsigned";   //dimension pca feture
 
-  vcl_vector<vcl_string> output_types_(n_outputs_);
+  std::vector<std::string> output_types_(n_outputs_);
   output_types_[0] = "bvpl_pca_error_scenes_sptr" ;
 
   return pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
@@ -44,7 +44,7 @@ bool bvpl_load_pca_error_scenes_process(bprb_func_process& pro)
   //get inputs
   unsigned i = 0;
   boxm_scene_base_sptr data_scene_base = pro.get_input<boxm_scene_base_sptr>(i++);
-  vcl_string pca_path = pro.get_input<vcl_string>(i++);
+  std::string pca_path = pro.get_input<std::string>(i++);
   unsigned feature_dim = pro.get_input<unsigned>(i++);
 
   if (!data_scene_base)

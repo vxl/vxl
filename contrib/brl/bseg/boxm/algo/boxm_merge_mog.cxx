@@ -2,10 +2,12 @@
 //:
 // \file
 
-#include <vcl_vector.h>
+#include <vector>
 #include <boxm/boxm_scene.h>
 #include <vcl_cassert.h>
-#include <vcl_limits.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <limits>
 #include <vnl/vnl_math.h> // for vnl_math::sqr()
 
 #include <boxm/sample/algo/boxm_mog_grey_processor.h>
@@ -34,7 +36,7 @@ void boxm_merge_mog::kl_merge(mix_gauss_type const& mixture,bsta_gauss_sf1 &gaus
                                 vnl_math::sqr(mixture.distribution(i).mean()));
   }
   if (var <  vnl_math::sqr(mean))
-    vcl_cout<< "This should not happen: " << mixture << vcl_endl;
+    std::cout<< "This should not happen: " << mixture << std::endl;
   var -= vnl_math::sqr(mean);
   assert(var >= 0);
 
@@ -74,11 +76,11 @@ bool boxm_merge_mog::kl_merge_octree(boct_tree<short, mix_gauss_type> *mog_tree,
                                      boct_tree<short, gauss_type> *gauss_tree)
 {
   // iterate through the trees
-  vcl_vector<mog_cell_type*> mog_cells = mog_tree->all_cells();
-  vcl_vector<gauss_cell_type*> gauss_cells = gauss_tree->all_cells();
+  std::vector<mog_cell_type*> mog_cells = mog_tree->all_cells();
+  std::vector<gauss_cell_type*> gauss_cells = gauss_tree->all_cells();
 
   if (mog_cells.size()!=gauss_cells.size() ) {
-    vcl_cerr << "Different size vectors in boxm_merge_mog::kl_merge_octree\n";
+    std::cerr << "Different size vectors in boxm_merge_mog::kl_merge_octree\n";
     return false;
   }
 
@@ -99,7 +101,7 @@ bool compute_differential_entropy(boxm_scene<boct_tree<short, bsta_num_obs<bsta_
 {
   typedef bsta_num_obs<bsta_gauss_sf1> gauss_type;
 
-  scene_in.clone_blocks_to_type<boct_tree<short, float > >(scene_out, vcl_numeric_limits<float>::min());
+  scene_in.clone_blocks_to_type<boct_tree<short, float > >(scene_out, std::numeric_limits<float>::min());
 
   //iterate through the leaf cells computing entropy
   boxm_cell_iterator<boct_tree<short, gauss_type > > it_in =
@@ -120,13 +122,13 @@ bool compute_differential_entropy(boxm_scene<boct_tree<short, bsta_num_obs<bsta_
 
     //if level and location code of cells isn't the same then continue
     if ((cell_in->level() != cell_out->level()) || !(in_code.isequal(&out_code))) {
-      vcl_cerr << " Input and output cells don't have the same structure\n";
+      std::cerr << " Input and output cells don't have the same structure\n";
       ++it_in;
       ++it_out;
       continue;
     }
 
-    double h = 0.5*vcl_log(vnl_math::pi*vnl_math::e*2*cell_in->data().var());
+    double h = 0.5*std::log(vnl_math::pi*vnl_math::e*2*cell_in->data().var());
     cell_out->set_data(float(h));
     ++it_in;
     ++it_out;
@@ -140,7 +142,7 @@ bool compute_differential_entropy(boxm_scene<boct_tree<short, bsta_num_obs<bsta_
 bool compute_expected_color(boxm_scene<boct_tree<short, boxm_sample<BOXM_APM_MOG_GREY> > >& scene_in, boxm_scene<boct_tree<short, float > >& scene_out, float grey_offset)
 {
   typedef boct_tree<short, boxm_sample<BOXM_APM_MOG_GREY> > scene_tree_type;
-  scene_in.clone_blocks_to_type<boct_tree<short, float > >(scene_out, vcl_numeric_limits<float>::min());
+  scene_in.clone_blocks_to_type<boct_tree<short, float > >(scene_out, std::numeric_limits<float>::min());
 
   //iterate through the leaf cells computing mean appearance
   boxm_cell_iterator<scene_tree_type > it_in =
@@ -161,7 +163,7 @@ bool compute_expected_color(boxm_scene<boct_tree<short, boxm_sample<BOXM_APM_MOG
 
     //if level and location code of cells isn't the same then continue
     if ((cell_in->level() != cell_out->level()) || !(in_code.isequal(&out_code))) {
-      vcl_cerr << " Input and output cells don't have the same structure\n";
+      std::cerr << " Input and output cells don't have the same structure\n";
       ++it_in;
       ++it_out;
       continue;
@@ -169,7 +171,7 @@ bool compute_expected_color(boxm_scene<boct_tree<short, boxm_sample<BOXM_APM_MOG
 
     float mean_color = boxm_mog_grey_processor::expected_color(cell_in->data().appearance());
     // update alpha integral
-    float vis_color = float(1.0 - vcl_exp(- cell_in->data().alpha * it_in.length()))*(mean_color+grey_offset);
+    float vis_color = float(1.0 - std::exp(- cell_in->data().alpha * it_in.length()))*(mean_color+grey_offset);
     cell_out->set_data(vis_color);
     ++it_in;
     ++it_out;
@@ -188,7 +190,7 @@ bool compute_expected_color(boxm_scene<boct_tree<short, boxm_sample<BOXM_APM_MOG
 bool compute_expected_color(boxm_scene<boct_tree<short, boxm_sample<BOXM_APM_MOG_GREY> > >& scene_in, boxm_scene<boct_tree<short, float > >& scene_out)
 {
   typedef boct_tree<short, boxm_sample<BOXM_APM_MOG_GREY> > scene_tree_type;
-  scene_in.clone_blocks_to_type<boct_tree<short, float > >(scene_out, vcl_numeric_limits<float>::min());
+  scene_in.clone_blocks_to_type<boct_tree<short, float > >(scene_out, std::numeric_limits<float>::min());
 
   //iterate through the leaf cells computing mean appearance
   boxm_cell_iterator<scene_tree_type > it_in =
@@ -210,7 +212,7 @@ bool compute_expected_color(boxm_scene<boct_tree<short, boxm_sample<BOXM_APM_MOG
 
     //if level and location code of cells isn't the same then continue
     if ((cell_in->level() != cell_out->level()) || !(in_code.isequal(&out_code))) {
-      vcl_cerr << " Input and output cells don't have the same structure\n";
+      std::cerr << " Input and output cells don't have the same structure\n";
       ++it_in;
       ++it_out;
       continue;
@@ -218,7 +220,7 @@ bool compute_expected_color(boxm_scene<boct_tree<short, boxm_sample<BOXM_APM_MOG
 
     float mean_color = boxm_mog_grey_processor::expected_color(cell_in->data().appearance());
     //alpha integral
-    float vis = vcl_exp(- cell_in->data().alpha * it_in.length());
+    float vis = std::exp(- cell_in->data().alpha * it_in.length());
     float vis_color = (1.0f - vis) *mean_color;
     float invis_color = vis * 0.5f; // E(I| X !\in S) = 127.5/255
     cell_out->set_data(vis_color + invis_color);

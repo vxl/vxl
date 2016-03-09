@@ -7,8 +7,10 @@
 // \author Ali Osman Ulusoy
 // \date May 10, 2013
 
-#include <vcl_fstream.h>
-#include <vcl_algorithm.h>
+#include <fstream>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <algorithm>
 #include <bstm/ocl/bstm_opencl_cache.h>
 #include <bstm/bstm_scene.h>
 #include <bstm/bstm_block.h>
@@ -26,7 +28,7 @@
 
 #include <vil/vil_save.h>
 //: Map of kernels should persist between process executions
-vcl_map<vcl_string,vcl_vector<bocl_kernel*> > bstm_ocl_update_color::kernels_;
+std::map<std::string,std::vector<bocl_kernel*> > bstm_ocl_update_color::kernels_;
 
 //Main public method, updates color model
 bool bstm_ocl_update_color::update(bstm_scene_sptr         scene,
@@ -51,8 +53,8 @@ bool bstm_ocl_update_color::update(bstm_scene_sptr         scene,
    };
    float transfer_time=0.0f;
    float gpu_time=0.0f;
-   vcl_size_t local_threads[2]={8,8};
-   vcl_size_t global_threads[2]={8,8};
+   std::size_t local_threads[2]={8,8};
+   std::size_t global_threads[2]={8,8};
 
    //catch a "null" mask (not really null because that throws an error)
    bool use_mask = false;
@@ -64,19 +66,19 @@ bool bstm_ocl_update_color::update(bstm_scene_sptr         scene,
    if (use_mask) {
      mask_map = dynamic_cast<vil_image_view<unsigned char> *>(mask_sptr.ptr());
      if (!mask_map) {
-       vcl_cout<<"bstm_update_process:: mask map is not an unsigned char map"<<vcl_endl;
+       std::cout<<"bstm_update_process:: mask map is not an unsigned char map"<<std::endl;
        return false;
      }
-     vcl_cout << "Update using mask..." << vcl_endl;
+     std::cout << "Update using mask..." << std::endl;
    }
 
 
    //cache size sanity check
-   vcl_size_t binCache = opencl_cache.ptr()->bytes_in_cache();
-   vcl_cout<<"Update MBs in cache: "<<binCache/(1024.0*1024.0)<<vcl_endl;
+   std::size_t binCache = opencl_cache.ptr()->bytes_in_cache();
+   std::cout<<"Update MBs in cache: "<<binCache/(1024.0*1024.0)<<std::endl;
 
    //make correct data types are here
-   vcl_string data_type, num_obs_type,options = "";
+   std::string data_type, num_obs_type,options = "";
    int appTypeSize;
    if (!validate_appearances(scene, data_type, appTypeSize, num_obs_type, options))
      return false;
@@ -88,12 +90,12 @@ bool bstm_ocl_update_color::update(bstm_scene_sptr         scene,
      return false;
 
    // compile the kernel if not already compiled
-   vcl_vector<bocl_kernel*>& kernels = get_kernels(device, options);
+   std::vector<bocl_kernel*>& kernels = get_kernels(device, options);
 
    //grab input image, establish cl_ni, cl_nj (so global size is divisible by local size)
    vil_image_view_base_sptr float_img = bstm_util::prepare_input_image(img, false);
    if ( float_img->pixel_format() != VIL_PIXEL_FORMAT_RGBA_BYTE ) {
-     vcl_cout<<"bstm_ocl_update_color_process::using a non RGBA image!!"<<vcl_endl;
+     std::cout<<"bstm_ocl_update_color_process::using a non RGBA image!!"<<std::endl;
      return false;
    }
 
@@ -230,8 +232,8 @@ bool bstm_ocl_update_color::update(bstm_scene_sptr         scene,
 
 
    // set arguments
-   vcl_vector<bstm_block_id> vis_order = scene->get_vis_blocks(cam);
-   vcl_vector<bstm_block_id>::iterator id;
+   std::vector<bstm_block_id> vis_order = scene->get_vis_blocks(cam);
+   std::vector<bstm_block_id>::iterator id;
    for (unsigned int i=0; i<kernels.size(); ++i)
    {
      if ( i == UPDATE_PROC ) {
@@ -496,7 +498,7 @@ bool bstm_ocl_update_color::update(bstm_scene_sptr         scene,
    opencl_cache->unref_mem(ray_o_buff.ptr());
    opencl_cache->unref_mem(ray_d_buff.ptr());
 
-   vcl_cout<<"Gpu time "<<gpu_time<<" transfer time "<<transfer_time<<vcl_endl;
+   std::cout<<"Gpu time "<<gpu_time<<" transfer time "<<transfer_time<<std::endl;
    clReleaseCommandQueue(queue);
    return true;
 
@@ -504,18 +506,18 @@ bool bstm_ocl_update_color::update(bstm_scene_sptr         scene,
 
 
 //Returns vector of color update kernels (and caches them per device
-vcl_vector<bocl_kernel*>& bstm_ocl_update_color::get_kernels(bocl_device_sptr device, vcl_string opts, bool isRGB)
+std::vector<bocl_kernel*>& bstm_ocl_update_color::get_kernels(bocl_device_sptr device, std::string opts, bool isRGB)
 {
   // compile kernels if not already compiled
-  vcl_string identifier = device->device_identifier() + opts;
+  std::string identifier = device->device_identifier() + opts;
   if (kernels_.find(identifier) != kernels_.end())
     return kernels_[identifier];
 
   //otherwise compile the kernels
-  vcl_cout<<"=== bstm_ocl_update_color::compiling kernels on device "<<identifier<<"==="<<vcl_endl;
+  std::cout<<"=== bstm_ocl_update_color::compiling kernels on device "<<identifier<<"==="<<std::endl;
 
-  vcl_vector<vcl_string> src_paths;
-  vcl_string source_dir = vcl_string(VCL_SOURCE_ROOT_DIR) + "/contrib/brl/bseg/bstm/ocl/cl/";
+  std::vector<std::string> src_paths;
+  std::string source_dir = std::string(VCL_SOURCE_ROOT_DIR) + "/contrib/brl/bseg/bstm/ocl/cl/";
   src_paths.push_back(source_dir + "scene_info.cl");
   src_paths.push_back(source_dir + "pixel_conversion.cl");
   src_paths.push_back(source_dir + "bit/bit_tree_library_functions.cl");
@@ -523,49 +525,49 @@ vcl_vector<bocl_kernel*>& bstm_ocl_update_color::get_kernels(bocl_device_sptr de
   src_paths.push_back(source_dir + "backproject.cl");
   src_paths.push_back(source_dir + "statistics_library_functions.cl");
   src_paths.push_back(source_dir + "bit/update_color.cl");
-  vcl_vector<vcl_string> non_ray_src = vcl_vector<vcl_string>(src_paths);
+  std::vector<std::string> non_ray_src = std::vector<std::string>(src_paths);
 
   //push ray trace files
   src_paths.push_back(source_dir + "update_color_functors.cl");
   src_paths.push_back(source_dir + "bit/cast_ray_bit.cl");
 
   //compilation options
-  vcl_string options = opts ;
+  std::string options = opts ;
 
   //populate vector of kernels
-  vcl_vector<bocl_kernel*> vec_kernels;
+  std::vector<bocl_kernel*> vec_kernels;
 
   //seg len pass
   bocl_kernel* seg_len = new bocl_kernel();
-  vcl_string seg_opts = options + " -D SEGLEN -D STEP_CELL=step_cell_seglen(aux_args,data_ptr,data_ptr_tt,d)";
+  std::string seg_opts = options + " -D SEGLEN -D STEP_CELL=step_cell_seglen(aux_args,data_ptr,data_ptr_tt,d)";
   seg_len->create_kernel(&device->context(), device->device_id(), src_paths, "seg_len_main", seg_opts, "update::seg_len");
   vec_kernels.push_back(seg_len);
 
   //create  compress rgb pass
   bocl_kernel* comp = new bocl_kernel();
-  vcl_string comp_opts = options + " -D COMPRESS_RGB ";
+  std::string comp_opts = options + " -D COMPRESS_RGB ";
   comp->create_kernel(&device->context(), device->device_id(), non_ray_src, "compress_rgb", comp_opts, "update_color::compress_rgb");
   vec_kernels.push_back(comp);
 
   bocl_kernel* pre_inf = new bocl_kernel();
-  vcl_string pre_opts = options + " -D PREINF -D STEP_CELL=step_cell_preinf(aux_args,data_ptr,data_ptr_tt,d)";
+  std::string pre_opts = options + " -D PREINF -D STEP_CELL=step_cell_preinf(aux_args,data_ptr,data_ptr_tt,d)";
   pre_inf->create_kernel(&device->context(), device->device_id(), src_paths, "pre_inf_main", pre_opts, "update::pre_inf");
   vec_kernels.push_back(pre_inf);
 
   //may need DIFF LIST OF SOURCES FOR THIS GUY
   bocl_kernel* proc_img = new bocl_kernel();
-  vcl_string proc_opts = options + " -D PROC_NORM ";
+  std::string proc_opts = options + " -D PROC_NORM ";
   proc_img->create_kernel(&device->context(), device->device_id(), non_ray_src, "proc_norm_image", proc_opts, "update::proc_norm_image");
   vec_kernels.push_back(proc_img);
 
   //push back cast_ray_bit
   bocl_kernel* bayes_main = new bocl_kernel();
-  vcl_string bayes_opt = options + " -D BAYES -D STEP_CELL=step_cell_bayes(aux_args,data_ptr,data_ptr_tt,d)";
+  std::string bayes_opt = options + " -D BAYES -D STEP_CELL=step_cell_bayes(aux_args,data_ptr,data_ptr_tt,d)";
   bayes_main->create_kernel(&device->context(), device->device_id(), src_paths, "bayes_main", bayes_opt, "update::bayes_main");
   vec_kernels.push_back(bayes_main);
 
   bocl_kernel* update = new bocl_kernel();
-  vcl_string update_opts = options + " -D UPDATE_BIT_SCENE_MAIN ";
+  std::string update_opts = options + " -D UPDATE_BIT_SCENE_MAIN ";
   update->create_kernel(&device->context(), device->device_id(), non_ray_src, "update_bit_scene_main", update_opts, "update::update_main");
   vec_kernels.push_back(update);
 
@@ -577,12 +579,12 @@ vcl_vector<bocl_kernel*>& bstm_ocl_update_color::get_kernels(bocl_device_sptr de
 
 //makes sure appearance types correspond correctly
 bool bstm_ocl_update_color::validate_appearances(bstm_scene_sptr scene,
-                                            vcl_string& data_type,
+                                            std::string& data_type,
                                             int& appTypeSize,
-                                            vcl_string& num_obs_type,
-                                            vcl_string& options)
+                                            std::string& num_obs_type,
+                                            std::string& options)
 {
-  vcl_vector<vcl_string> apps = scene->appearances();
+  std::vector<std::string> apps = scene->appearances();
   bool foundDataType = false, foundNumObsType = false;
   for (unsigned int i=0; i<apps.size(); ++i) {
     if ( apps[i] == bstm_data_traits<BSTM_GAUSS_RGB >::prefix() )
@@ -600,11 +602,11 @@ bool bstm_ocl_update_color::validate_appearances(bstm_scene_sptr scene,
     }
   }
   if (!foundDataType) {
-    vcl_cout<<"BSTM_OPENCL_UPDATE_PROCESS ERROR: scene doesn't have BSTM_GAUSS_RGB data type"<<vcl_endl;
+    std::cout<<"BSTM_OPENCL_UPDATE_PROCESS ERROR: scene doesn't have BSTM_GAUSS_RGB data type"<<std::endl;
     return false;
   }
   if (!foundNumObsType) {
-    vcl_cout<<"BSTM_OPENCL_UPDATE_PROCESS ERROR: scene doesn't have BSTM_NUM_OBS_SINGLE data type"<<vcl_endl;
+    std::cout<<"BSTM_OPENCL_UPDATE_PROCESS ERROR: scene doesn't have BSTM_NUM_OBS_SINGLE data type"<<std::endl;
     return false;
   }
   return true;

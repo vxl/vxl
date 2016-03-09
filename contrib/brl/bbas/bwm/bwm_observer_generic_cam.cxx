@@ -18,10 +18,10 @@
 #define DEBUG
 
 bwm_observer_generic_cam::bwm_observer_generic_cam(bgui_image_tableau_sptr img,
-                                                   vcl_string name,
-                                                   vcl_string& image_path,
-                                                   vcl_string& cam_path,
-                                                   vcl_string& subtype,
+                                                   std::string name,
+                                                   std::string& image_path,
+                                                   std::string& cam_path,
+                                                   std::string& subtype,
                                                    bool display_image_path)
 : bwm_observer_cam(img)
 {

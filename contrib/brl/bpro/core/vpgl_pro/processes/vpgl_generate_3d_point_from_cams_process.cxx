@@ -8,8 +8,10 @@
 #include <bprb/bprb_parameters.h>
 #include <bprb/bprb_macros.h>
 
-#include <vcl_iostream.h>
-#include <vcl_fstream.h>
+#include <iostream>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <fstream>
 #include <vpgl/vpgl_camera.h>
 #include <vpgl/vpgl_perspective_camera.h>
 #include <vpgl/algo/vpgl_triangulate_points.h>
@@ -29,12 +31,12 @@ bool vpgl_generate_3d_point_from_cams_process_cons(bprb_func_process& pro)
   using namespace vpgl_generate_3d_point_from_cams_process_globals;
 
   //process takes 2 inputs
-  vcl_vector<vcl_string> input_types_(n_inputs_);
+  std::vector<std::string> input_types_(n_inputs_);
   input_types_[0] = "bbas_1d_array_unsigned_sptr";
   input_types_[1] = "bbas_1d_array_int_sptr"; // points
 
   // process has 3 outputs
-  vcl_vector<vcl_string>  output_types_(n_outputs_);
+  std::vector<std::string>  output_types_(n_outputs_);
   output_types_[0] = "float"; //X
   output_types_[1] = "float"; //Y
   output_types_[2] = "float"; //Z
@@ -49,7 +51,7 @@ bool vpgl_generate_3d_point_from_cams_process(bprb_func_process& pro)
 {
   // Sanity check
   if (!pro.verify_inputs()) {
-    vcl_cerr << "vpgl_generate_3d_point_from_cams_process: Invalid inputs\n";
+    std::cerr << "vpgl_generate_3d_point_from_cams_process: Invalid inputs\n";
     return false;
   }
 
@@ -59,19 +61,19 @@ bool vpgl_generate_3d_point_from_cams_process(bprb_func_process& pro)
   bbas_1d_array_int_sptr      imgPoints   = pro.get_input<bbas_1d_array_int_sptr>(i++);
 
   //vector of cams, vector of points
-  vcl_vector<vpgl_perspective_camera<double> > cams;
+  std::vector<vpgl_perspective_camera<double> > cams;
   vbl_array_1d<unsigned>& cam_ids = cam_ids_ptr->data_array;
   for (unsigned int i=0; i<cam_ids.size(); ++i) {
     unsigned cam_id = cam_ids[i];
     brdb_query_aptr Q = brdb_query_comp_new("id", brdb_query::EQ, cam_id);
     brdb_selection_sptr S = DATABASE->select("vpgl_camera_double_sptr_data", Q);
     if (S->size()!=1) {
-      vcl_cout << "in vpgl_generate_3d_point_from_cams_process - bad input value\n";
+      std::cout << "in vpgl_generate_3d_point_from_cams_process - bad input value\n";
       return false;
     }
     brdb_value_sptr value;
-    if (!S->get_value(vcl_string("value"), value)) {
-      vcl_cout << "in vpgl_generate_3d_from_cams- bad input value\n";
+    if (!S->get_value(std::string("value"), value)) {
+      std::cout << "in vpgl_generate_3d_from_cams- bad input value\n";
       return false;
     }
     vpgl_camera_double_sptr          cam_sptr = value->val<vpgl_camera_double_sptr>();
@@ -80,7 +82,7 @@ bool vpgl_generate_3d_point_from_cams_process(bprb_func_process& pro)
   }
 
   //gather image points
-  vcl_vector<vgl_point_2d<double> > points;
+  std::vector<vgl_point_2d<double> > points;
   vbl_array_1d<int>& pts = imgPoints->data_array;
   for (unsigned int i=0; i<pts.size(); i+=2)
     points.push_back( vgl_point_2d<double>(pts[i], pts[i+1]) );
@@ -93,7 +95,7 @@ bool vpgl_generate_3d_point_from_cams_process(bprb_func_process& pro)
   // the sum of squared errors.
   vgl_point_3d<double> point_3d;
   double error = vpgl_triangulate_points::triangulate( points, cams, point_3d );
-  vcl_cout<<"RAYS INTERSECT AT POINT: "<<point_3d<< " with error "<<error<<vcl_endl;
+  std::cout<<"RAYS INTERSECT AT POINT: "<<point_3d<< " with error "<<error<<std::endl;
 
   pro.set_output_val<float>(0, (float)point_3d.x());
   pro.set_output_val<float>(1, (float)point_3d.y());

@@ -7,7 +7,9 @@
 
 #include "HomgLine3D.h"
 #include <mvl/Homg3D.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iostream>
 
 //--------------------------------------------------------------
 //
@@ -67,8 +69,8 @@ HomgLine3D::~HomgLine3D()
 
 //-----------------------------------------------------------------------------
 //
-//: print to vcl_ostream
-vcl_ostream& operator<<(vcl_ostream& s, const HomgLine3D& l)
+//: print to std::ostream
+std::ostream& operator<<(std::ostream& s, const HomgLine3D& l)
 {
   return s << "<HomgLine3D " << l.get_point_finite() << " dir " << l.get_point_infinite() << ">";
 }
@@ -83,8 +85,8 @@ vnl_double_3 HomgLine3D::dir() const
 {
   const vnl_vector<double>& d = point_infinite_.get_vector().as_ref();
   if (d[3] != 0) {
-    vcl_cerr << *this;
-    vcl_cerr << "*** HomgLine3D: Infinite point not at infinity!! ***\n";
+    std::cerr << *this;
+    std::cerr << "*** HomgLine3D: Infinite point not at infinity!! ***\n";
   }
   return vnl_double_3(d[0], d[1], d[2]);
 }

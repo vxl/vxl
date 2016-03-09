@@ -3,7 +3,7 @@
 //:
 // \file
 
-bstm_time_block::bstm_time_block(bstm_block_id id, bstm_block_metadata data, char* buffer, vcl_size_t length)
+bstm_time_block::bstm_time_block(bstm_block_id id, bstm_block_metadata data, char* buffer, std::size_t length)
 {
   //data has already been read, save length
   byte_count_ = length;
@@ -88,7 +88,7 @@ bool bstm_time_block::init_empty_block()
       tree_index += 32;
     }
     else
-      vcl_cerr << "Init lvl " << init_level_t_ << " not supported. Only init level 1 or 6 is supported for time trees currently...\n";
+      std::cerr << "Init lvl " << init_level_t_ << " not supported. Only init level 1 or 6 is supported for time trees currently...\n";
 
     //store this tree in the buffer
     for (int i=0; i<TT_NUM_BYTES; i++)
@@ -125,7 +125,7 @@ void bstm_time_block::set_cell_all_tt(int cell_data_offset, const boxm2_array_1d
 unsigned bstm_time_block::tree_index(double local_time)
 {
   //compute the index of the time tree that contains local_time
-  return (unsigned)vcl_floor(local_time);
+  return (unsigned)std::floor(local_time);
 }
 
 void bstm_time_block::octree_num_cell_calc(bstm_block_metadata& data, long& num_cells)
@@ -167,7 +167,7 @@ long bstm_time_block::calc_byte_count(bstm_block_metadata& data)
 
 
 //------------ I/O -------------------------------------------------------------
-vcl_ostream& operator <<(vcl_ostream &s, bstm_time_block& block)
+std::ostream& operator <<(std::ostream &s, bstm_time_block& block)
 {
   return
   s << "Block ID=" << block.block_id() << '\n'
@@ -175,7 +175,7 @@ vcl_ostream& operator <<(vcl_ostream &s, bstm_time_block& block)
     << "Init level=" << block.init_level() << '\n'
     << "Max level=" << block.max_level() << '\n'
     << "Read only=" << block.read_only() << '\n'
-    << "Sub Block Num=" << block.sub_block_num()<< vcl_endl;
+    << "Sub Block Num=" << block.sub_block_num()<< std::endl;
 }
 
 //: Binary write bstm_time_block to stream.

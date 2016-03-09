@@ -2,7 +2,9 @@
 
 #include <bvpl/bvpl_direction_to_color_map.h>
 #include <vgl/vgl_point_3d.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iostream>
 
 // Test changes
 static void test_direction_to_color_map()
@@ -10,7 +12,7 @@ static void test_direction_to_color_map()
   double theta_res = vnl_math::pi_over_4;
   double phi_res = vnl_math::pi_over_4;
 
-  vcl_vector<vgl_point_3d<double> >  samples;
+  std::vector<vgl_point_3d<double> >  samples;
   samples.push_back(vgl_point_3d<double>(0.0,0.0,1.0));
   samples.push_back(vgl_point_3d<double>(0.0,0.0,-1.0));
 
@@ -19,7 +21,7 @@ static void test_direction_to_color_map()
   {
     for (double theta=0.0;theta<vnl_math::twopi-theta_res*0.5;theta+=theta_res)
     {
-      samples.push_back(vgl_point_3d<double>(vcl_cos(theta) * vcl_sin(phi),vcl_sin(theta) * vcl_sin(phi),vcl_cos(phi)));
+      samples.push_back(vgl_point_3d<double>(std::cos(theta) * std::sin(phi),std::sin(theta) * std::sin(phi),std::cos(phi)));
     }
   }
   bvpl_direction_to_color_map color_map(samples,"random");

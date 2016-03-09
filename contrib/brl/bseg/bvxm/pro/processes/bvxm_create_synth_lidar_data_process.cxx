@@ -11,13 +11,15 @@
 
 #include <vil/vil_image_view.h>
 
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iostream>
 
 //:sets input and output types
 bool bvxm_create_synth_lidar_data_process_cons(bprb_func_process& pro)
 {
   using namespace bvxm_create_synth_lidar_data_process_globals;
-  vcl_vector<vcl_string> output_types_(n_outputs_);
+  std::vector<std::string> output_types_(n_outputs_);
   // this process takes no input
   // output:
   // 1. lidar image
@@ -30,7 +32,7 @@ bool bvxm_create_synth_lidar_data_process_cons(bprb_func_process& pro)
 }
 
 bool gen_lidar_view(int x, int y, int z,
-                    vcl_vector<vgl_box_3d<double> > boxes,
+                    std::vector<vgl_box_3d<double> > boxes,
                     vil_image_view_base_sptr& lidar,
                     vpgl_camera_double_sptr& cam,
                     vpgl_lvcs_sptr& lvcs)
@@ -88,18 +90,18 @@ bool bvxm_create_synth_lidar_data_process(bprb_func_process& pro)
   pro.parameters()->get_value(param_box_min_z_, minz);
 
   // lvcs parameters
-  vcl_string lvcs_path;
+  std::string lvcs_path;
   if (!pro.parameters()->get_value(param_lvcs_, lvcs_path)) {
-    vcl_cout << "bvxm_create_voxel_world_process::execute() -- problem in retrieving parameter lvcs_path\n";
+    std::cout << "bvxm_create_voxel_world_process::execute() -- problem in retrieving parameter lvcs_path\n";
     return false;
   }
 
   vpgl_lvcs_sptr lvcs = new vpgl_lvcs();
   if (lvcs_path != "") {
-    vcl_ifstream is(lvcs_path.c_str());
+    std::ifstream is(lvcs_path.c_str());
     if (!is)
     {
-      vcl_cerr << " Error opening file  " << lvcs_path << vcl_endl;
+      std::cerr << " Error opening file  " << lvcs_path << std::endl;
       return false;
     }
     lvcs->read(is);
@@ -108,7 +110,7 @@ bool bvxm_create_synth_lidar_data_process(bprb_func_process& pro)
   // generate boxes, lidar image
   vil_image_view_base_sptr lidar_img;
   vpgl_camera_double_sptr lidar_cam;
-  vcl_vector<vgl_box_3d<double> > boxes;
+  std::vector<vgl_box_3d<double> > boxes;
   bvxm_util::generate_test_boxes((double)minx, (double)miny, (double)minz,
                                  (double)dimx, (double)dimy, (double)dimz,
                                  (double)v_dimx, (double)v_dimy, (double)v_dimz, boxes);

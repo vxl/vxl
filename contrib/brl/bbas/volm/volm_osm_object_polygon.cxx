@@ -4,10 +4,10 @@
 
 void volm_osm_object_polygon::print()
 {
-  vcl_cout << " object property: ";
+  std::cout << " object property: ";
   prop_.print();
-  vcl_cout << " polygon: ";
-  poly_.print(vcl_cout);
+  std::cout << " polygon: ";
+  poly_.print(std::cout);
 }
 
 void volm_osm_object_polygon::b_write(vsl_b_ostream& os)
@@ -34,7 +34,7 @@ void volm_osm_object_polygon::b_read(vsl_b_istream& is)
   vsl_b_read(is, ver);
   if (ver == 1) {
     unsigned char id, level;
-    vcl_string name;
+    std::string name;
     double width;
     unsigned n_sheet;
     vsl_b_read(is, id);
@@ -59,7 +59,7 @@ void volm_osm_object_polygon::b_read(vsl_b_istream& is)
       prop_ = volm_land_layer(id, name, level, width);
   }
   else {
-    vcl_cout << "volm_osm_object_polygon -- unknown binary io version " << ver << '\n';
+    std::cout << "volm_osm_object_polygon -- unknown binary io version " << ver << '\n';
     return;
   }
 }

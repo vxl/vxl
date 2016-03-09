@@ -7,7 +7,9 @@
 // Apr 4th, 2007
 // make it work with the database initially
 
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iostream>
 #include <vcl_cassert.h>
 
 
@@ -15,7 +17,7 @@
 
 
 //: Constructor using a vector of db value references
-brdb_tuple::brdb_tuple(const vcl_vector<brdb_value*>& values)
+brdb_tuple::brdb_tuple(const std::vector<brdb_value*>& values)
 : values_(values.size(),VXL_NULLPTR)
 {
   for (unsigned int i=0; i<values.size(); ++i){
@@ -26,18 +28,18 @@ brdb_tuple::brdb_tuple(const vcl_vector<brdb_value*>& values)
 
 //: Prototype factory using a vector type name
 brdb_tuple_sptr
-brdb_tuple::make_prototype(const vcl_vector<vcl_string>& types)
+brdb_tuple::make_prototype(const std::vector<std::string>& types)
 {
-  typedef vcl_map<vcl_string, const brdb_value*> reg_t;
+  typedef std::map<std::string, const brdb_value*> reg_t;
   const reg_t& reg =  brdb_value::registry();
 
-  vcl_vector<brdb_value* > values(types.size(),VXL_NULLPTR);
+  std::vector<brdb_value* > values(types.size(),VXL_NULLPTR);
   for (unsigned int i=0; i<types.size(); ++i){
     reg_t::const_iterator f = reg.find(types[i]);
     if (f != reg.end())
       values[i] = f->second->clone();
     else{
-      vcl_cerr << "brdb_tuple: can not create instance of unknown type: "<< types[i] << vcl_endl;
+      std::cerr << "brdb_tuple: can not create instance of unknown type: "<< types[i] << std::endl;
       return VXL_NULLPTR;
     }
   }
@@ -164,7 +166,7 @@ brdb_tuple::print() const
   {
     values_[i]->print();
   }
-  vcl_cout<< vcl_endl;
+  std::cout<< std::endl;
 }
 
 
@@ -173,7 +175,7 @@ brdb_tuple::print() const
 void
 brdb_tuple::b_read_values(vsl_b_istream &is)
 {
-  for (vcl_vector<brdb_value_sptr>::iterator i=values_.begin();
+  for (std::vector<brdb_value_sptr>::iterator i=values_.begin();
        i!=values_.end(); ++i)
     (*i)->b_read_value(is);
 }
@@ -184,7 +186,7 @@ brdb_tuple::b_read_values(vsl_b_istream &is)
 void
 brdb_tuple::b_write_values(vsl_b_ostream &os) const
 {
-  for (vcl_vector<brdb_value_sptr>::const_iterator i=values_.begin();
+  for (std::vector<brdb_value_sptr>::const_iterator i=values_.begin();
        i!=values_.end(); ++i)
     (*i)->b_write_value(os);
 }

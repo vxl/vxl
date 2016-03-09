@@ -14,7 +14,9 @@
 //   10 Sep. 2004 Peter Vanroose  Inlined all 1-line methods in class decl
 // \endverbatim
 
-#include <vcl_string.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <string>
 #include <vxl_config.h>
 #include <vil/vil_image_view.h>
 
@@ -36,7 +38,7 @@ class mvl2_video_writer
 
   //: Initialize the file (format can be Grey, RGB, or more complex)
   virtual bool  open( int width, int height,
-                      vcl_string format, vcl_string file_name)=0;
+                      std::string format, std::string file_name)=0;
 
   //: Tidy up and close the file
   virtual void  close() {}
@@ -66,7 +68,7 @@ class mvl2_video_writer
   virtual void write_frame(vil_image_view<vxl_byte>& image)=0;
 
   //: Name of the class
-  virtual vcl_string is_a() const { return vcl_string("mvl2_video_writer"); }
+  virtual std::string is_a() const { return std::string("mvl2_video_writer"); }
 
   //: Create a copy on the heap and return base class pointer
   virtual mvl2_video_writer* clone() const=0;

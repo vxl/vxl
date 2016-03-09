@@ -6,10 +6,12 @@
 //  \file
 
 #include "ClosestImagePointFinder.h"
-#include <vcl_vector.h>
-#include <vcl_map.h>
-#include <vcl_functional.h>
-#include <vcl_utility.h>
+#include <vector>
+#include <map>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <functional>
+#include <utility>
 
 #include <vgl/vgl_box_2d.h>
 #include <vgl/vgl_homg_point_2d.h>
@@ -17,9 +19,9 @@
 
 #include <mvl/HomgInterestPointSet.h>
 
-class vcl_multimap_double_int : public vcl_multimap<double, int, vcl_less <double> >
+class vcl_multimap_double_int : public std::multimap<double, int, std::less <double> >
 {
-  typedef vcl_multimap<double, int, vcl_less <double> > base;
+  typedef std::multimap<double, int, std::less <double> > base;
  public:
   iterator insert(double key, int value);
   void clear();
@@ -27,8 +29,8 @@ class vcl_multimap_double_int : public vcl_multimap<double, int, vcl_less <doubl
 
 vcl_multimap_double_int::iterator vcl_multimap_double_int::insert(double key, int value)
 {
-  //vcl_cerr << " ins \t" << value << '\t' << key << '\n';
-  return base::insert(vcl_pair<const double, int>(key, value));
+  //std::cerr << " ins \t" << value << '\t' << key << '\n';
+  return base::insert(std::pair<const double, int>(key, value));
 }
 
 void vcl_multimap_double_int::clear() { base::erase(begin(), end()); }
@@ -51,7 +53,7 @@ ClosestImagePointFinder::ClosestImagePointFinder(const HomgInterestPointSet& cor
 }
 
 //: Initialize to allow fast lookups of corners in the given set.
-ClosestImagePointFinder::ClosestImagePointFinder(vcl_vector<vgl_homg_point_2d<double> > const& corners)
+ClosestImagePointFinder::ClosestImagePointFinder(std::vector<vgl_homg_point_2d<double> > const& corners)
  : px_(corners.size()), py_(corners.size())
 {
   y2i_ = new vcl_multimap_double_int;
@@ -68,21 +70,21 @@ ClosestImagePointFinder::~ClosestImagePointFinder()
   delete y2i_;
 }
 
-void ClosestImagePointFinder::get_all_within_search_region(double cx, double cy, double w, double h, vcl_vector<int>* out)
+void ClosestImagePointFinder::get_all_within_search_region(double cx, double cy, double w, double h, std::vector<int>* out)
 {
   get_all_within_search_region(vgl_box_2d<double>(cx - w, cx + w, cy - h, cy + h), out);
 }
 
-void ClosestImagePointFinder::get_all_within_search_region(vgl_box_2d<double> const& disparity_bounds, vcl_vector<int>* out)
+void ClosestImagePointFinder::get_all_within_search_region(vgl_box_2d<double> const& disparity_bounds, std::vector<int>* out)
 {
   // Look at `point2's between y0 and y1
   vcl_multimap_double_int::iterator potential = y2i_->lower_bound(disparity_bounds.min_y());
   vcl_multimap_double_int::iterator end =       y2i_->upper_bound(disparity_bounds.max_y() + 1);
 #if 0
-  vcl_cerr << "map:";
+  std::cerr << "map:";
   for (vcl_multimap_double_int::iterator p = y2i_->begin(); p != y2i_->end(); ++p)
-    vcl_cerr << ' '<< (*p).second << '[' << (*p).first << ']';
-  vcl_cerr << '\n';
+    std::cerr << ' '<< (*p).second << '[' << (*p).first << ']';
+  std::cerr << '\n';
 #endif // 0
   out->erase(out->begin(), out->end());
   for (; potential != end; ++potential) {

@@ -40,13 +40,13 @@ bool boxm_scene_to_bvxm_grid_process_cons(bprb_func_process& pro)
 {
   using namespace boxm_scene_to_bvxm_grid_process_globals;
 
-  vcl_vector<vcl_string> input_types_(n_inputs_);
+  std::vector<std::string> input_types_(n_inputs_);
   input_types_[0] = "boxm_scene_base_sptr";
   input_types_[1] = "vcl_string";
   input_types_[2] = "unsigned";
   input_types_[3] = "bool";
 
-  vcl_vector<vcl_string> output_types_(n_outputs_);
+  std::vector<std::string> output_types_(n_outputs_);
   output_types_[0] = "bvxm_voxel_grid_base_sptr";
 
   return pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
@@ -58,14 +58,14 @@ bool boxm_scene_to_bvxm_grid_process(bprb_func_process& pro)
 
   if (pro.n_inputs() != n_inputs_)
   {
-    vcl_cerr << pro.name() << ": the input number should be " << n_inputs_
-             << " but instead it is " << pro.n_inputs() << vcl_endl;
+    std::cerr << pro.name() << ": the input number should be " << n_inputs_
+             << " but instead it is " << pro.n_inputs() << std::endl;
     return false;
   }
 
   //get inputs:
   boxm_scene_base_sptr scene_base = pro.get_input<boxm_scene_base_sptr>(0);
-  vcl_string filepath = pro.get_input<vcl_string>(1);
+  std::string filepath = pro.get_input<std::string>(1);
   unsigned resolution_level = pro.get_input<short>(2);
   bool enforce_level = pro.get_input<bool>(3);
 
@@ -76,7 +76,7 @@ bool boxm_scene_to_bvxm_grid_process(bprb_func_process& pro)
   //check input's validity
   if (!scene_base.ptr())
   {
-    vcl_cerr << pro.name() << ": -- Input scene is not valid!\n";
+    std::cerr << pro.name() << ": -- Input scene is not valid!\n";
     return false;
   }
 
@@ -101,7 +101,7 @@ bool boxm_scene_to_bvxm_grid_process(bprb_func_process& pro)
   }
   else
   {
-    vcl_cerr << "It's not possible to convert input scene to a bvxm grid\n";
+    std::cerr << "It's not possible to convert input scene to a bvxm grid\n";
     return false;
   }
 }

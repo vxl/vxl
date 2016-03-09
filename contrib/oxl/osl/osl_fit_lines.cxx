@@ -4,8 +4,10 @@
 //  \file
 
 #include <vcl_cassert.h>
-#include <vcl_iostream.h>
-#include <vcl_list.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iostream>
+#include <list>
 
 #include <vnl/vnl_math.h>
 
@@ -13,9 +15,9 @@
 
 #define warn_if_empty(e) \
 if (true && e->size()==0) \
-  vcl_cerr << __FILE__ ": " << __LINE__ << " edge \'" #e "' has zero length\n";
+  std::cerr << __FILE__ ": " << __LINE__ << " edge \'" #e "' has zero length\n";
 
-#define WARN if (false) { } else (vcl_cerr << __FILE__ ": " << __LINE__ << ' ')
+#define WARN if (false) { } else (std::cerr << __FILE__ ": " << __LINE__ << ' ')
 
 //--------------------------------------------------------------------------------
 
@@ -44,12 +46,12 @@ osl_fit_lines::~osl_fit_lines()
 // When used in conjunction with BreakLines, it mimics Paul Beardsley's
 // old straight line fitting code.
 //
-void osl_fit_lines::simple_fit_to_list(vcl_list<osl_edge *> *myedges,
-                                       vcl_list<osl_edge *> *outedges)
+void osl_fit_lines::simple_fit_to_list(std::list<osl_edge *> *myedges,
+                                       std::list<osl_edge *> *outedges)
 {
   int edge_no = 0;
-  vcl_list<osl_edgel_chain*> curves;
-  for (vcl_list<osl_edge*>::iterator i=myedges->begin(); i!=myedges->end(); ++i)
+  std::list<osl_edgel_chain*> curves;
+  for (std::list<osl_edge*>::iterator i=myedges->begin(); i!=myedges->end(); ++i)
   {
     osl_edge *edge = *i;
 
@@ -122,16 +124,16 @@ void osl_fit_lines::simple_fit_to_list(vcl_list<osl_edge *> *myedges,
 
 //-----------------------------------------------------------------------------
 //:
-// Method that takes a vcl_list<Edge*>* that represents the
+// Method that takes a std::list<Edge*>* that represents the
 // current segmentation and breaks off each Edge for further
 // investigation. An incremental fitting process is applied to
 // the osl_edgel_chain in each osl_edge. The resultant segmentation
 // is then written to output (with edges destroyed).
-void osl_fit_lines::incremental_fit_to_list(vcl_list<osl_edge *> *myedges,
-                                            vcl_list<osl_edge *> *outedges)
+void osl_fit_lines::incremental_fit_to_list(std::list<osl_edge *> *myedges,
+                                            std::list<osl_edge *> *outedges)
 {
 #ifdef DEBUG
-  vcl_cout << "Fitting lines to Edge(s), threshold = " << threshold_ << vcl_endl;
+  std::cout << "Fitting lines to Edge(s), threshold = " << threshold_ << std::endl;
 #endif
   int edge_no = 0;
   int vertex_no = 1000;
@@ -139,12 +141,12 @@ void osl_fit_lines::incremental_fit_to_list(vcl_list<osl_edge *> *myedges,
   // a number of straight lines to it
 
   outedges->clear();
-  for (vcl_list<osl_edge*>::iterator iter=myedges->begin(); iter!=myedges->end(); ++iter)
+  for (std::list<osl_edge*>::iterator iter=myedges->begin(); iter!=myedges->end(); ++iter)
   {
     osl_edge *edge = *iter;
     ++edge_no;
 
-    vcl_list<osl_edgel_chain*> curves;
+    std::list<osl_edgel_chain*> curves;
     if (use_square_fit_)
       SquareIncrementalFit(&curves, edge);
     else
@@ -199,9 +201,9 @@ void osl_fit_lines::incremental_fit_to_list(vcl_list<osl_edge *> *myedges,
 // This method is used to fit lines incrementally using the mean
 // absolute error instead of the mean square error. The difference
 // between this and SquareIncrementalFit is very small.
-void osl_fit_lines::MeanIncrementalFit(vcl_list<osl_edgel_chain*> *curves_, osl_edge *edge)
+void osl_fit_lines::MeanIncrementalFit(std::list<osl_edgel_chain*> *curves_, osl_edge *edge)
 {
-  //vcl_cerr << "MeanIncrementalFit()\n";
+  //std::cerr << "MeanIncrementalFit()\n";
   float new_cost, new_est_cost;
   // Get the digital curve
   osl_edgel_chain *dc = edge;//->GetCurve()->CastToDigitalCurve();
@@ -260,7 +262,7 @@ void osl_fit_lines::MeanIncrementalFit(vcl_list<osl_edgel_chain*> *curves_, osl_
           // currently fitted line
           double distance =
             data_->GetA()*dc->GetX(finish) + data_->GetB()*dc->GetY(finish) + data_->GetC();
-          new_est_cost = float(segment_length*new_est_cost + vcl_abs(distance)) / (segment_length+1);
+          new_est_cost = float(segment_length*new_est_cost + std::abs(distance)) / (segment_length+1);
 
           // If this residual is low enough, include the point within
           // the orthogonal regression data class
@@ -374,10 +376,10 @@ void osl_fit_lines::MeanIncrementalFit(vcl_list<osl_edgel_chain*> *curves_, osl_
 // and its associated DigitalCurve, and fits lines using
 // orthogonal regression with mean square error residual and incremental
 // fitting.
-void osl_fit_lines::SquareIncrementalFit(vcl_list<osl_edgel_chain*> *curves_, osl_edge *edge)
+void osl_fit_lines::SquareIncrementalFit(std::list<osl_edgel_chain*> *curves_, osl_edge *edge)
 {
 #ifdef DEBUG
-  vcl_cerr << "SquareIncrementalFit()\n";
+  std::cerr << "SquareIncrementalFit()\n";
 #endif
   // Get the digital curve
   osl_edgel_chain *dc = edge;//->GetCurve()->CastToDigitalCurve();
@@ -520,7 +522,7 @@ void osl_fit_lines::SquareIncrementalFit(vcl_list<osl_edgel_chain*> *curves_, os
 //-----------------------------------------------------------------------------
 //
 //: Output the fitted line.
-void osl_fit_lines::OutputLine(vcl_list<osl_edgel_chain*> *curves_,
+void osl_fit_lines::OutputLine(std::list<osl_edgel_chain*> *curves_,
                                int start, int finish,
                                osl_edgel_chain *dc,
                                float /*cost*/)
@@ -558,7 +560,7 @@ void osl_fit_lines::OutputLine(vcl_list<osl_edgel_chain*> *curves_,
 
 //-----------------------------------------------------------------------------
 //:
-// Takes the top two lines from the vcl_list<ImplicitDigitalLine*>
+// Takes the top two lines from the std::list<ImplicitDigitalLine*>
 // and tests whether a single line fit would satisfy them both. The
 // process involves fitting a single line to the other two lines by
 // minimising the integral of the Euclidean distance between the
@@ -566,7 +568,7 @@ void osl_fit_lines::OutputLine(vcl_list<osl_edgel_chain*> *curves_,
 // should be done using the underlying edgel data, *** BUT THIS IS
 // NOT YET IMPLEMENTED ***
 //
-void osl_fit_lines::MergeLines(vcl_list<osl_edgel_chain*> *curves_)
+void osl_fit_lines::MergeLines(std::list<osl_edgel_chain*> *curves_)
 {
   if ( curves_->size() < 2 )
     return;
@@ -629,12 +631,12 @@ void osl_fit_lines::MergeLines(vcl_list<osl_edgel_chain*> *curves_)
   // We have problems later if either of the lines are vertical. Therefore
   // rotate all of the points by phi which is defined in the following way
   // (we have to undo this rotation later):
-  float xstart = vcl_min( vcl_min(x1[0],x1[1]), vcl_min(x2[0],x2[1]) );
-  float xfinish= vcl_max( vcl_max(x1[0],x1[1]), vcl_max(x2[0],x2[1]) );
-  float ystart = vcl_min( vcl_min(y1[0],y1[1]), vcl_min(y2[0],y2[1]) );
-  float yfinish= vcl_max( vcl_max(y1[0],y1[1]), vcl_max(y2[0],y2[1]) );
-  float phi = vcl_atan2(yfinish-ystart,xfinish-xstart);
-  double cp = vcl_cos(phi), sp = vcl_sin(phi);
+  float xstart = std::min( std::min(x1[0],x1[1]), std::min(x2[0],x2[1]) );
+  float xfinish= std::max( std::max(x1[0],x1[1]), std::max(x2[0],x2[1]) );
+  float ystart = std::min( std::min(y1[0],y1[1]), std::min(y2[0],y2[1]) );
+  float yfinish= std::max( std::max(y1[0],y1[1]), std::max(y2[0],y2[1]) );
+  float phi = std::atan2(yfinish-ystart,xfinish-xstart);
+  double cp = std::cos(phi), sp = std::sin(phi);
 
   for (int i=0;i<2;i++)
   {
@@ -656,14 +658,14 @@ void osl_fit_lines::MergeLines(vcl_list<osl_edgel_chain*> *curves_)
     b[i] = x2[i] - x1[i];
     c[i] = x1[i]*y2[i] - x2[i]*y1[i];
 
-    double m = vcl_sqrt(a[i]*a[i] + b[i]*b[i]);
+    double m = std::sqrt(a[i]*a[i] + b[i]*b[i]);
     if ( b[i] > 0 ) m = -m;
 
     a[i] /= m;  b[i] /= m;  c[i] /= m;
   }
 
   // Check the angle between the lines, if it is too great return
-  double theta = 180.0*vcl_acos(a[0]*a[1]+b[0]*b[1])/M_PI;
+  double theta = 180.0*std::acos(a[0]*a[1]+b[0]*b[1])/M_PI;
   // Best we can do is eliminate cases that don't double
   // back on themselves
   if ( theta > 90.0 )
@@ -713,21 +715,21 @@ void osl_fit_lines::MergeLines(vcl_list<osl_edgel_chain*> *curves_)
       Si = (x2_3-x1_3)/3.0*S1i;
       Si += (x2_2-x1_2)*S2i;
       Si += (x2[i]-x1[i])*S3i;
-      double s = vcl_fabs(b[i]);
+      double s = std::fabs(b[i]);
       Si *= (1.0/s);
     }
     else
     {
       Si = ((x1_3-x2_3)*S1i/3.0+(x1_2-x2_2)*S2i+
             (x1[i]-x2[i])*S3i);
-      Si *= 1/vcl_fabs(b[i]);
+      Si *= 1/std::fabs(b[i]);
     }
 
     // and add this to the total scatter matrix
     S += Si;
 
     // Adjust the normaliser (denonimator of the algebraic distance)
-    normaliser += vcl_fabs((x2[i]-x1[i])/b[i]);
+    normaliser += std::fabs((x2[i]-x1[i])/b[i]);
   }
 
   // Form the sub-partitioned scatter matrices
@@ -773,13 +775,13 @@ void osl_fit_lines::MergeLines(vcl_list<osl_edgel_chain*> *curves_)
     return;
   }
   else
-    WARN << "Lines merged with a cost " << vcl_sqrt(cost) << vcl_endl;
+    WARN << "Lines merged with a cost " << std::sqrt(cost) << std::endl;
 
   // We now have the parameters for the re-fitted line
   vec3 = - (1.0/S22) * S12.transpose() * eigenvector;
   double la,lb,lc;
   la = eigenvector.get(0,0);  lb = eigenvector.get(1,0);  lc = vec3(0,0);
-  double m = vcl_sqrt(la*la+lb*lb);
+  double m = std::sqrt(la*la+lb*lb);
   // Make sure that b >= 0 to be consistent with osl_OrthogRegress - though
   // we don't actually store {a,b,c}
   if ( lb < 0.0 )
@@ -845,7 +847,7 @@ float osl_fit_lines::MyGetCost(osl_OrthogRegress const *fitter,
   float distance = 0;
 
   for (int i = start; i < finish; i ++)
-    distance += (float)vcl_fabs(A*dc->GetX(i) + B*dc->GetY(i) + C);
+    distance += (float)std::fabs(A*dc->GetX(i) + B*dc->GetY(i) + C);
 
   return distance / (finish - start);
 }

@@ -4,8 +4,10 @@
 // \file
 
 #include <boxm2/io/boxm2_stream_cache.h>
-#include <vcl_vector.h>
-#include <vcl_algorithm.h>
+#include <vector>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <algorithm>
 #include <brad/brad_phongs_model_est.h>
 #include <boxm2/cpp/algo/boxm2_phongs_model_processor.h>
 #include <bsta/bsta_histogram.h>
@@ -43,10 +45,10 @@ class boxm2_compute_phongs_model_functor
     inline bool process_cell(int index, bool is_leaf = false, float side_len = 0.0)
     {
         boxm2_data<BOXM2_FLOAT8>::datatype & phongs_model=phongs_model_data_->data()[index];
-        vcl_vector<aux0_datatype>  aux0_raw   = str_cache_->get_next<BOXM2_AUX0>(id_, index);
-        vcl_vector<aux1_datatype>  aux1_raw   = str_cache_->get_next<BOXM2_AUX1>(id_, index);
-        vcl_vector<aux2_datatype>  aux2_raw   = str_cache_->get_next<BOXM2_AUX2>(id_, index);
-        vcl_vector<aux3_datatype>  aux3_raw   = str_cache_->get_next<BOXM2_AUX3>(id_, index);
+        std::vector<aux0_datatype>  aux0_raw   = str_cache_->get_next<BOXM2_AUX0>(id_, index);
+        std::vector<aux1_datatype>  aux1_raw   = str_cache_->get_next<BOXM2_AUX1>(id_, index);
+        std::vector<aux2_datatype>  aux2_raw   = str_cache_->get_next<BOXM2_AUX2>(id_, index);
+        std::vector<aux3_datatype>  aux3_raw   = str_cache_->get_next<BOXM2_AUX3>(id_, index);
         for (unsigned m = 0; m < aux0_raw.size(); m++) {
             if (aux0_raw[m]>1e-10f)
             {
@@ -63,11 +65,11 @@ class boxm2_compute_phongs_model_functor
 
         int half_m = aux0_raw.size()/2;
 
-        vcl_vector<aux1_datatype> Iobs;
-        vcl_vector<aux2_datatype> vis;
-        vcl_vector<aux1_datatype> xdir;
-        vcl_vector<aux2_datatype> ydir;
-        vcl_vector<aux3_datatype> zdir;
+        std::vector<aux1_datatype> Iobs;
+        std::vector<aux2_datatype> vis;
+        std::vector<aux1_datatype> xdir;
+        std::vector<aux2_datatype> ydir;
+        std::vector<aux3_datatype> zdir;
 
         Iobs.insert(Iobs.begin(), aux1_raw.begin(), aux1_raw.begin()+half_m);
         vis.insert(vis.begin(), aux2_raw.begin(), aux2_raw.begin()+half_m);
@@ -75,7 +77,7 @@ class boxm2_compute_phongs_model_functor
         xdir.insert(xdir.begin(), aux1_raw.begin()+half_m, aux1_raw.end());
         ydir.insert(ydir.begin(), aux2_raw.begin()+half_m, aux2_raw.end());
         zdir.insert(zdir.begin(), aux3_raw.begin()+half_m, aux3_raw.end());
-        vcl_vector<vnl_double_3>  viewing_dirs;
+        std::vector<vnl_double_3>  viewing_dirs;
         float sum_weights = 0.0f ;
         for (unsigned i=0;i<Iobs.size();i++)
         {
