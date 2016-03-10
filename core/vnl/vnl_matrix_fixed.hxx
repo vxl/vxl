@@ -160,7 +160,8 @@ vnl_matrix_fixed<T,nrows,ncols>::print(vcl_ostream& os) const
 
 template <class T, unsigned nrows, unsigned ncols>
 vnl_matrix_fixed<T,nrows,ncols>
-vnl_matrix_fixed<T,nrows,ncols>::apply(T (*f)(T const&)) const
+vnl_matrix_fixed<T,nrows,ncols>
+::apply(T (*f)(T const&)) const
 {
   vnl_matrix_fixed<T,nrows,ncols> ret;
   vnl_c_vector<T>::apply(this->data_[0], rows()*cols(), f, ret.data_block());
@@ -169,11 +170,36 @@ vnl_matrix_fixed<T,nrows,ncols>::apply(T (*f)(T const&)) const
 
 template <class T, unsigned nrows, unsigned ncols>
 vnl_matrix_fixed<T,nrows,ncols>
-vnl_matrix_fixed<T,nrows,ncols>::apply(T (*f)(T)) const
+vnl_matrix_fixed<T,nrows,ncols>
+::apply(T (*f)(T)) const
 {
   vnl_matrix_fixed<T,nrows,ncols> ret;
   vnl_c_vector<T>::apply(this->data_[0], rows()*cols(), f, ret.data_block());
   return ret;
+}
+
+//: Make a vector by applying a function across rows.
+template <class T, unsigned nrows, unsigned ncols>
+vnl_vector_fixed<T,nrows>
+vnl_matrix_fixed<T,nrows,ncols>
+::apply_rowwise(T (*f)(vnl_vector_fixed<T,ncols> const&)) const
+{
+  vnl_vector_fixed<T,nrows> v;
+  for (unsigned int i = 0; i < nrows; ++i)
+    v.put(i,f(this->get_row(i)));
+  return v;
+}
+
+//: Make a vector by applying a function across columns.
+template <class T, unsigned nrows, unsigned ncols>
+vnl_vector_fixed<T,ncols>
+vnl_matrix_fixed<T,nrows,ncols>
+::apply_columnwise(T (*f)(vnl_vector_fixed<T,nrows> const&)) const
+{
+  vnl_vector_fixed<T,ncols> v;
+  for (unsigned int i = 0; i < ncols; ++i)
+    v.put(i,f(this->get_column(i)));
+  return v;
 }
 
 ////--------------------------- Additions------------------------------------
