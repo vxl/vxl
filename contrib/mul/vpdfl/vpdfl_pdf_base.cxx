@@ -13,6 +13,9 @@
 #include <vcl_compiler.h>
 #include <iostream>
 #include <cmath>
+#include <algorithm>
+#include <functional>
+#include <queue>
 #include <vcl_cassert.h>
 #include <vsl/vsl_indent.h>
 #include <vsl/vsl_binary_loader.h>
