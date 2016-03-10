@@ -4,6 +4,12 @@ project(expat C)
 include( ${BRL_MODULE_PATH}/FindEXPAT.cmake )
 if(NOT VXL_USING_NATIVE_EXPAT)
 
+  if(WIN32)
+    if(NOT VXL_BUILD_SHARED_LIBS)
+      set(CM_EXPAT_STATIC 1)
+    endif()
+  endif()
+
 vxl_configure_file(${expat_SOURCE_DIR}/expatConfig.h.in
                   ${expat_BINARY_DIR}/expatConfig.h include/vxl/contrib/brl/b3p/expat)
 vxl_configure_file(${expat_SOURCE_DIR}/expatDllConfig.h.in
@@ -32,12 +38,6 @@ configure_file(${expat_SOURCE_DIR}/.NoDartCoverage ${expat_BINARY_DIR}/.NoDartCo
   TEST_BIG_ENDIAN(expat_BIGENDIAN)
 
   include_directories(${CMAKE_CURRENT_BINARY_DIR})
-
-  if(WIN32)
-    if(NOT VXL_BUILD_SHARED_LIBS)
-      set(CM_EXPAT_STATIC 1)
-    endif()
-  endif()
 
   vxl_add_library(LIBRARY_NAME expat LIBRARY_SOURCES ${expat_sources})
 
