@@ -75,7 +75,7 @@ bool opj_event_msg(opj_event_mgr_t * p_event_mgr, OPJ_INT32 event_type, const OP
 
         if ((fmt != 00) && (p_event_mgr != 00)) {
                 va_list arg;
-                OPJ_INT32 str_length/*, i, j*/; /* UniPG */
+                //OPJ_INT32 str_length/*, i, j*/; /* UniPG */
                 OPJ_CHAR message[MSG_SIZE];
                 memset(message, 0, MSG_SIZE);
                 /* initialize the optional parameter list */
