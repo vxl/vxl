@@ -30,7 +30,6 @@ RUN curl -O https://cmake.org/files/v2.8/cmake-2.8.9.tar.gz && \
 RUN useradd -m vxl
 
 
-
 USER vxl
 
 RUN mkdir -p /home/vxl/vxl
