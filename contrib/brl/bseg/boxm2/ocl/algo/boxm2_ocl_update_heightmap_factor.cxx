@@ -578,7 +578,7 @@ vcl_vector<bocl_kernel*>& boxm2_ocl_compute_heightmap_pre_post::get_pre_kernels(
     src_paths.push_back(source_dir + "atomics_util.cl");
     src_paths.push_back(source_dir + "statistics_library_functions.cl");
     src_paths.push_back(source_dir + "ray_bundle_library_opt.cl");
-    src_paths.push_back(source_dir + "bit/update_kernels.cl");
+    src_paths.push_back(source_dir + "bit/update_bp_kernels.cl");
     vcl_vector<vcl_string> non_ray_src = vcl_vector<vcl_string>(src_paths);
     src_paths.push_back(source_dir + "update_functors.cl");
     src_paths.push_back(source_dir + "bit/cast_ray_bit.cl");
@@ -619,7 +619,7 @@ vcl_vector<bocl_kernel*>& boxm2_ocl_compute_heightmap_pre_post::get_post_kernels
     src_paths.push_back(source_dir + "atomics_util.cl");
     src_paths.push_back(source_dir + "statistics_library_functions.cl");
     src_paths.push_back(source_dir + "ray_bundle_library_opt.cl");
-    src_paths.push_back(source_dir + "bit/update_kernels.cl");
+    src_paths.push_back(source_dir + "bit/update_bp_kernels.cl");
     vcl_vector<vcl_string> non_ray_src = vcl_vector<vcl_string>(src_paths);
     src_paths.push_back(source_dir + "bit/cast_ray_bit.cl");
 
@@ -661,15 +661,15 @@ vcl_vector<bocl_kernel*>& boxm2_ocl_update_heightmap_factor::get_update_heightma
     src_paths.push_back(source_dir + "atomics_util.cl");
     src_paths.push_back(source_dir + "statistics_library_functions.cl");
     src_paths.push_back(source_dir + "ray_bundle_library_opt.cl");
-    src_paths.push_back(source_dir + "bit/update_kernels.cl");
+    src_paths.push_back(source_dir + "bit/update_bp_kernels.cl");
 
     //compilation options
-    vcl_string options = "-D ATOMIC_FLOAT -D COMPUTEZ";
+    vcl_string options = "-D ATOMIC_FLOAT -D ADD_SUBTRACT_FACTOR";
     //populate vector of kernels
     vcl_vector<bocl_kernel*> vec_kernels;
     bocl_kernel* computez = new bocl_kernel();
     vcl_string computez_opts = options;
-    computez->create_kernel(&device->context(), device->device_id(), src_paths, "computeZ_main", computez_opts, "update::computez");
+    computez->create_kernel(&device->context(), device->device_id(), src_paths, "add_subtract_factor_main", computez_opts, "update::add_subtract_factor_main");
     vec_kernels.push_back(computez);
 
     //store and return
@@ -953,7 +953,7 @@ get_smooth_heightmap_pdata_kernels(bocl_device_sptr device, vcl_string opts)
     src_paths.push_back(source_dir + "atomics_util.cl");
     src_paths.push_back(source_dir + "statistics_library_functions.cl");
     src_paths.push_back(source_dir + "ray_bundle_library_opt.cl");
-    src_paths.push_back(source_dir + "bit/update_kernels.cl");
+    src_paths.push_back(source_dir + "bit/update_bp_kernels.cl");
     vcl_vector<vcl_string> non_ray_src = vcl_vector<vcl_string>(src_paths);
     src_paths.push_back(source_dir + "update_functors.cl");
     src_paths.push_back(source_dir + "bit/cast_ray_bit.cl");
@@ -964,8 +964,8 @@ get_smooth_heightmap_pdata_kernels(bocl_device_sptr device, vcl_string opts)
     vcl_vector<bocl_kernel*> vec_kernels;
     //seg len pass
     bocl_kernel* seg_len = new bocl_kernel();
-    vcl_string seg_opts = options + " -D SEGLEN_HMAP_CELL  -D STEP_CELL=step_cell_seglen_hmap(aux_args,data_ptr,llid,d,tblock)";
-    seg_len->create_kernel(&device->context(), device->device_id(), src_paths, "seglen_hmap_main", seg_opts, "update::seglen_hmap_main");
+    vcl_string seg_opts = options + " -D HMAP_DENSITY_CELL  -D STEP_CELL=step_cell_hmap_density(aux_args,data_ptr,llid,d,tblock)";
+    seg_len->create_kernel(&device->context(), device->device_id(), src_paths, "compute_hmap_density_main", seg_opts, "update::hmap_density_main");
     vec_kernels.push_back(seg_len);
 
     //store and return

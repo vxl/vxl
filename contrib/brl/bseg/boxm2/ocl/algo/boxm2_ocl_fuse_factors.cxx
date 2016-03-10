@@ -164,6 +164,7 @@ bool boxm2_ocl_fuse_factors::fuse_factors(boxm2_scene_sptr         scene,
         kern->set_arg(lookup.ptr());
         kern->set_local_arg(ltr[0] * ltr[1] * ltr[2] * 10 * sizeof(cl_uchar));
         kern->set_local_arg(ltr[0] * ltr[1] * ltr[2] * sizeof(cl_uchar16));
+
         //execute kernel
         kern->execute(queue, 3, ltr, gtr);
         int status = clFinish(queue);
@@ -200,6 +201,7 @@ vcl_vector<bocl_kernel*>& boxm2_ocl_fuse_factors::get_fuse_factors_kernels(bocl_
     src_paths.push_back(source_dir + "statistics_library_functions.cl");
     src_paths.push_back(source_dir + "ray_bundle_library_opt.cl");
     src_paths.push_back(source_dir + "bit/update_kernels.cl");
+    src_paths.push_back(source_dir + "bit/update_bp_kernels.cl");
     //populate vector of kernels
     vcl_vector<bocl_kernel*> vec_kernels;
 

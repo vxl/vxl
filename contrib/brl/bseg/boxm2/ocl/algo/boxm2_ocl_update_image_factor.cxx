@@ -247,6 +247,7 @@ vcl_vector<bocl_kernel*>& boxm2_ocl_compute_image_term::get_image_kernels(bocl_d
     src_paths.push_back(source_dir + "statistics_library_functions.cl");
     src_paths.push_back(source_dir + "ray_bundle_library_opt.cl");
     src_paths.push_back(source_dir + "bit/update_kernels.cl");
+    src_paths.push_back(source_dir + "bit/update_bp_kernels.cl");
     vcl_vector<vcl_string> non_ray_src = vcl_vector<vcl_string>(src_paths);
     src_paths.push_back(source_dir + "update_functors.cl");
     src_paths.push_back(source_dir + "bit/cast_ray_bit.cl");
@@ -807,7 +808,7 @@ vcl_vector<bocl_kernel*>& boxm2_ocl_compute_pre_post::get_pre_kernels(bocl_devic
     src_paths.push_back(source_dir + "atomics_util.cl");
     src_paths.push_back(source_dir + "statistics_library_functions.cl");
     src_paths.push_back(source_dir + "ray_bundle_library_opt.cl");
-    src_paths.push_back(source_dir + "bit/update_kernels.cl");
+    src_paths.push_back(source_dir + "bit/update_bp_kernels.cl");
     vcl_vector<vcl_string> non_ray_src = vcl_vector<vcl_string>(src_paths);
     src_paths.push_back(source_dir + "bit/cast_ray_bit.cl");
 
@@ -847,7 +848,7 @@ vcl_vector<bocl_kernel*>& boxm2_ocl_compute_pre_post::get_post_kernels(bocl_devi
     src_paths.push_back(source_dir + "atomics_util.cl");
     src_paths.push_back(source_dir + "statistics_library_functions.cl");
     src_paths.push_back(source_dir + "ray_bundle_library_opt.cl");
-    src_paths.push_back(source_dir + "bit/update_kernels.cl");
+    src_paths.push_back(source_dir + "bit/update_bp_kernels.cl");
     vcl_vector<vcl_string> non_ray_src = vcl_vector<vcl_string>(src_paths);
     src_paths.push_back(source_dir + "bit/cast_ray_bit.cl");
 
@@ -890,15 +891,15 @@ vcl_vector<bocl_kernel*>& boxm2_ocl_update_image_factor::get_update_image_factor
     src_paths.push_back(source_dir + "atomics_util.cl");
     src_paths.push_back(source_dir + "statistics_library_functions.cl");
     src_paths.push_back(source_dir + "ray_bundle_library_opt.cl");
-    src_paths.push_back(source_dir + "bit/update_kernels.cl");
+    src_paths.push_back(source_dir + "bit/update_bp_kernels.cl");
 
     //compilation options
-    vcl_string options = "-D ATOMIC_FLOAT -D COMPUTEZ";
+    vcl_string options = "-D ATOMIC_FLOAT -D ADD_SUBTRACT_FACTOR";
     //populate vector of kernels
     vcl_vector<bocl_kernel*> vec_kernels;
     bocl_kernel* computez = new bocl_kernel();
     vcl_string computez_opts = options;
-    computez->create_kernel(&device->context(), device->device_id(), src_paths, "computeZ_main", computez_opts, "update::computez");
+    computez->create_kernel(&device->context(), device->device_id(), src_paths, "add_subtract_factor_main", computez_opts, "update::add_subtract_factor_main");
     vec_kernels.push_back(computez);
 
     //store and return
