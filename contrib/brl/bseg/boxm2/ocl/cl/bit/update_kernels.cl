@@ -1290,11 +1290,12 @@ void computeZ_main(__constant RenderSceneInfo    * info,
 		float pige  = aux2_pre[gid] + aux3_pre[gid]* aux2_post[gid];
         if (pige > 0.0)
         {
-            float u = max(1e-10, pigs / pige);
-            if ( sum[0] == 1)
-                aux0_Z[gid] = aux0_Z[gid] + log(u);
-            if ( sum[0] == 0)
-                aux0_Z[gid] = aux0_Z[gid] - log(u);
+          float small = 1e-10;
+          float u = max(small, (pigs / pige));
+          if ( sum[0] == 1)
+            aux0_Z[gid] = aux0_Z[gid] + log(u);
+          if ( sum[0] == 0)
+            aux0_Z[gid] = aux0_Z[gid] - log(u);
         }
 
 		}
