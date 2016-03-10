@@ -405,6 +405,12 @@ class vnl_matrix_fixed
   //: Make a new matrix by applying function to each element.
   vnl_matrix_fixed apply(T (*f)(T const&)) const;
 
+  //: Make a vector by applying a function across rows.
+  vnl_vector_fixed<T,num_rows> apply_rowwise(T (*f)(vnl_vector_fixed<T,num_cols> const&)) const;
+
+  //: Make a vector by applying a function across columns.
+  vnl_vector_fixed<T,num_cols> apply_columnwise(T (*f)(vnl_vector_fixed<T,num_rows> const&)) const;
+
   //: Return transpose
   vnl_matrix_fixed<T,num_cols,num_rows> transpose() const;
 

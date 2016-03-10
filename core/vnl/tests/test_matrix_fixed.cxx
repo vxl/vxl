@@ -33,6 +33,10 @@ int malloc_count = 0;
 # define check_count TEST("mallocs",malloc_count<=1,true)
 #endif
 
+// This function is used in testing later.
+template< typename T, unsigned int n >
+T sum_vector(const vnl_vector_fixed<T,n> &v) { return v.sum(); }
+
 static
 void
 test_size()
@@ -452,6 +456,16 @@ void test_double()
   vnl_double_2x2 d8(d8values);
   d8 = d8.apply(vcl_sqrt);
   TEST("apply(sqrt)", d8[0][0]==0 && d8[0][1]==1 && d8[1][0]==3 && d8[1][1]==4, true);
+
+  {
+  vnl_matrix_fixed<double,4,20> m(1.);
+  vnl_vector_fixed<double,4> vr = m.apply_rowwise(sum_vector);
+  for (unsigned int i = 0; i < vr.size(); ++i)
+    TEST("vr.apply_rowwise(sum_vector)", vr.get(i), 20.);
+  vnl_vector_fixed<double,20> vc = m.apply_columnwise(sum_vector);
+  for (unsigned int i = 0; i < vc.size(); ++i)
+    TEST("vc.apply_columnwise(sum_vector)", vc.get(i), 4.);
+  }
 
   // normalizations
   d8.normalize_rows();
