@@ -1,5 +1,7 @@
 #include <testlib/testlib_test.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iostream>
 
 #include <vpgl/algo/vpgl_fm_compute_8_point.h>
 #include <vpgl/algo/vpgl_fm_compute_2_point.h>
@@ -24,7 +26,7 @@ static void test_fm_compute()
 
   bpgl_fm_compute_affine_ransac_params params_aff;
   bpgl_fm_compute_affine_ransac R( &params_aff );
-  vcl_vector< vgl_point_2d<double> > lp_aff, rp_aff;
+  std::vector< vgl_point_2d<double> > lp_aff, rp_aff;
   for ( int i = 0; i < 10; i++ )
   {
     vgl_homg_point_3d<double> world_point;
@@ -52,7 +54,7 @@ static void test_fm_compute()
 
   vpgl_affine_fundamental_matrix<double> fm_aff_est1;
   R.compute( rp_aff, lp_aff, fm_aff_est1 );
-  vcl_cerr << "True registered fundamental matrix:\n" << fm_aff1.get_matrix()
+  std::cerr << "True registered fundamental matrix:\n" << fm_aff1.get_matrix()
            << "Estimated registered fundamental matrix:\n" << fm_aff_est1.get_matrix();
 
 
@@ -63,7 +65,7 @@ static void test_fm_compute()
   vpgl_proj_camera<double> C2l( random_list2l );
   vpgl_fundamental_matrix<double> fm2( C2r, C2l );
 
-  vcl_vector< vgl_homg_point_3d<double> > p2w;
+  std::vector< vgl_homg_point_3d<double> > p2w;
   p2w.push_back( vgl_homg_point_3d<double>( 2, -1, 5 ) );
   p2w.push_back( vgl_homg_point_3d<double>( 1, 10, 0 ) );
   p2w.push_back( vgl_homg_point_3d<double>( -5, -7, 1 ) );
@@ -77,7 +79,7 @@ static void test_fm_compute()
   p2w.push_back( vgl_homg_point_3d<double>( -2, 8, 6 ) );
   p2w.push_back( vgl_homg_point_3d<double>( 6, 8, -5 ) );
 
-  vcl_vector< vgl_point_2d<double> > p2r, p2l;
+  std::vector< vgl_point_2d<double> > p2r, p2l;
   for ( unsigned i = 0; i < p2w.size(); i++ ) {
     p2r.push_back( vgl_point_2d<double>( C2r.project( p2w[i] ) ) );
     p2l.push_back( vgl_point_2d<double>( C2l.project( p2w[i] ) ) );
@@ -110,7 +112,7 @@ static void test_fm_compute()
   vnl_double_3x3 fm2est_vnl = fm2est.get_matrix();
   fm2est_vnl/=fm2est_vnl(0,0);
 
-  vcl_cerr << "\nTrue fundamental matrix:\n" << fm2_vnl << '\n'
+  std::cerr << "\nTrue fundamental matrix:\n" << fm2_vnl << '\n'
            << "\nEstimated fundamental matrix:\n" << fm2est_vnl << '\n';
   TEST_NEAR( "fm compute ransac from perfect correspondences",
              (fm2_vnl-fm2est_vnl).frobenius_norm(), 0, 2.5 );

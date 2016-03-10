@@ -18,7 +18,8 @@
 // 2002.9.20  Ian Scott       Copied into vil1, renamed and simplified.
 // \endverbatim
 
-#include <vcl_iosfwd.h>
+#include <vcl_compiler.h>
+#include <iosfwd>
 
 //: A templated smart pointer class
 // This class requires that the class being templated over has
@@ -155,11 +156,11 @@ inline bool operator!= (T const* p, vil_smart_ptr<T> const& a)
   return a.as_pointer() != p;
 }
 
-// GCC need a vcl_ostream operator. It need not be inline
+// GCC need a std::ostream operator. It need not be inline
 // because if you're about to make a system call you can afford the
 // cost of a function call.
 template <class T>
-vcl_ostream& operator<< (vcl_ostream&, vil_smart_ptr<T> const&);
+std::ostream& operator<< (std::ostream&, vil_smart_ptr<T> const&);
 
 #define VIL_SMART_PTR_INSTANTIATE(T) \
 extern "please include vil/vil_smart_ptr.txx instead"

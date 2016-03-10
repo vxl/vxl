@@ -25,7 +25,7 @@ class rgrl_est_homo2d_proj
   using rgrl_nonlinear_estimator::estimate;
 
   //: Type of transformation estimated by this estimator.
-  const vcl_type_info& transformation_type() const;
+  const std::type_info& transformation_type() const;
 
   // Defines type-related functions
   rgrl_type_macro( rgrl_est_homo2d_proj, rgrl_nonlinear_estimator );

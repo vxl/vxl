@@ -23,8 +23,9 @@
 //   Lianqing Yu 02-JAN-2010  Added push button.
 // \endverbatim
 
-#include <vcl_string.h>
-#include <vcl_vector.h>
+#include <vcl_compiler.h>
+#include <string>
+#include <vector>
 #include <vgui/vgui_tableau.h>
 #include <vgui/vgui_command_sptr.h>
 
@@ -33,7 +34,7 @@ class vgui_dialog_field;
 //: vgui_dialog_impl is the abstract base class for dialog implementation.
 //
 //  It contains methods for adding fields corresponding to those in
-//  vgui_dialog. It also contains a vcl_vector of elements which are tuples of
+//  vgui_dialog. It also contains a std::vector of elements which are tuples of
 //  vgui_dialog_field and a variable indicating what type of field they are. The
 //  elements also contain void* for implementors to add any gui specific
 //  information/class to the element.
@@ -61,26 +62,26 @@ class vgui_dialog_impl
   //: Add a double field to the dialog box.
   void double_field(const char*, double&);
 
-  //: Add a vcl_string field to the dialog box.
-  void string_field(const char*, vcl_string&);
+  //: Add a std::string field to the dialog box.
+  void string_field(const char*, std::string&);
 
   //: Add a choice (selection box) to the dialog box.
-  void choice_field(const char*, const vcl_vector<vcl_string>&, int&);
+  void choice_field(const char*, const std::vector<std::string>&, int&);
 
   //: Add a text message to the dialog box.
   void text_message(const char*);
 
   //: Add a popup file browser to the dialog box.
-  void file_browser(const char*, vcl_string&, vcl_string&);
+  void file_browser(const char*, std::string&, std::string&);
 
   //: Add an inline file browser to the dialog box.
-  void inline_file_browser(const char *, vcl_string&, vcl_string&);
+  void inline_file_browser(const char *, std::string&, std::string&);
 
   //: Add a popup colour chooser to the dialog box.
-  void color_chooser(const char*, vcl_string&);
+  void color_chooser(const char*, std::string&);
 
   //: Add an inline colour chooser to the dialog box.
-  void inline_color_chooser(const char*, vcl_string&);
+  void inline_color_chooser(const char*, std::string&);
 
   //: Add a tableau (OpenGL area) to the dialog box.
   void inline_tab(const vgui_tableau_sptr tab, unsigned width, unsigned height);
@@ -107,25 +108,25 @@ class vgui_dialog_impl
   virtual void* double_field_widget(const char*, double&);
 
   //: Pointer to a GUI widget for a string field.
-  virtual void* string_field_widget(const char*, vcl_string&);
+  virtual void* string_field_widget(const char*, std::string&);
 
   //: Pointer to a GUI widget for a choice field.
-  virtual void* choice_field_widget(const char*, const vcl_vector<vcl_string>&, int&);
+  virtual void* choice_field_widget(const char*, const std::vector<std::string>&, int&);
 
   //: Pointer to a GUI widget for a text message.
   virtual void* text_message_widget(const char*);
 
   //: Pointer to a GUI widget for a file browser.
-  virtual void* file_browser_widget(const char*, vcl_string&, vcl_string&);
+  virtual void* file_browser_widget(const char*, std::string&, std::string&);
 
   //: Pointer to a GUI widget for an inline file browser.
-  virtual void* inline_file_browser_widget(const char *,vcl_string&, vcl_string&);
+  virtual void* inline_file_browser_widget(const char *,std::string&, std::string&);
 
   //: Pointer to a GUI widget for a colour chooser.
-  virtual void* color_chooser_widget(const char*, vcl_string&);
+  virtual void* color_chooser_widget(const char*, std::string&);
 
   //: Pointer to a GUI widget for an inline colour chooser.
-  virtual void* inline_color_chooser_widget(const char *,vcl_string&);
+  virtual void* inline_color_chooser_widget(const char *,std::string&);
 
   //: Pointer to a GUI widget for a tableau (OpenGL area).
   virtual void* inline_tableau_widget(const vgui_tableau_sptr tab, unsigned width, unsigned height);
@@ -177,10 +178,10 @@ class vgui_dialog_impl
   };
 
  protected:
-  vcl_string name;
-  vcl_vector<element> elements;
-  vcl_string cancel_button_text_;
-  vcl_string ok_button_text_;
+  std::string name;
+  std::vector<element> elements;
+  std::string cancel_button_text_;
+  std::string ok_button_text_;
 
   bool use_line_break;
 };

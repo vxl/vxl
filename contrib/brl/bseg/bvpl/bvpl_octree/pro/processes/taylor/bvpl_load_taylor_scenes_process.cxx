@@ -26,7 +26,7 @@ bool bvpl_load_taylor_scenes_process_cons(bprb_func_process& pro)
 {
   using namespace bvpl_load_taylor_scenes_process_globals ;
 
-  vcl_vector<vcl_string> input_types_(n_inputs_);
+  std::vector<std::string> input_types_(n_inputs_);
   unsigned i = 0;
   input_types_[i++] = "vcl_string";  //dir to Taylor scenes
   input_types_[i++] = "int";         // min and max of Taylor kernel
@@ -35,7 +35,7 @@ bool bvpl_load_taylor_scenes_process_cons(bprb_func_process& pro)
   input_types_[i++] = "int";
   input_types_[i++] = "int";
   input_types_[i++] = "int";
-  vcl_vector<vcl_string> output_types_(n_outputs_);
+  std::vector<std::string> output_types_(n_outputs_);
   i = 0;
   output_types_[i++] = "bvpl_taylor_scenes_map_sptr";
 
@@ -50,7 +50,7 @@ bool bvpl_load_taylor_scenes_process(bprb_func_process& pro)
 
   //get inputs
   unsigned i = 0;
-  vcl_string taylor_dir = pro.get_input<vcl_string>(i++);
+  std::string taylor_dir = pro.get_input<std::string>(i++);
   int min_x = pro.get_input<int>(i++);
   int min_y = pro.get_input<int>(i++);
   int min_z = pro.get_input<int>(i++);
@@ -59,7 +59,7 @@ bool bvpl_load_taylor_scenes_process(bprb_func_process& pro)
   int max_z = pro.get_input<int>(i++);
 
   if (!vul_file::is_directory(taylor_dir)) {
-    vcl_cerr<<"Error in bvpl_load_taylor_scenes_process_process: Taylor directory doesn't exist\n";
+    std::cerr<<"Error in bvpl_load_taylor_scenes_process_process: Taylor directory doesn't exist\n";
   }
 
   bvpl_taylor_basis_loader loader(taylor_dir, vgl_point_3d<int>(min_x,min_y, min_z), vgl_point_3d<int>(max_x, max_y, max_z));

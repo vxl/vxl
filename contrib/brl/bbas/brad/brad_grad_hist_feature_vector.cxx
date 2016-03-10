@@ -16,7 +16,7 @@ operator()(vil_image_view<float> const& view) const
       dx += view(i+1, j-1) + 2.0f*view(i+1, j) + view(i+1, j+1);
       float dy = -(view(i-1, j-1) + 2.0f*view(i, j-1) + view(i+1, j-1));
       dy += view(i-1, j+1) + 2.0f*view(i, j+1) + view(i+1, j+1);
-      float mag = vcl_sqrt(dx*dx + dy*dy);
+      float mag = std::sqrt(dx*dx + dy*dy);
       mag/=6.0f;
       h.upcount(mag, 1.0f);
     }
@@ -46,7 +46,7 @@ void vsl_b_read(vsl_b_istream &is, brad_grad_hist_feature_vector& fv)
   fv.set_max(max);
 }
 
-void vsl_print_summary(vcl_ostream &os, brad_grad_hist_feature_vector& fv)
+void vsl_print_summary(std::ostream &os, brad_grad_hist_feature_vector& fv)
 {
   fv.print(os);
 }

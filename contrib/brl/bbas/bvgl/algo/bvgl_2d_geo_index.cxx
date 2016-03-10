@@ -8,7 +8,7 @@
 #include <vgl/vgl_line_segment_2d.h>
 
 // function to check whether the given box intersect with a line defined by a vector of points
-static bool is_intersect(vgl_box_2d<double> const& box, vcl_vector<vgl_point_2d<double> > const& line)
+static bool is_intersect(vgl_box_2d<double> const& box, std::vector<vgl_point_2d<double> > const& line)
 {
   if (box.min_x() == 0.375 && box.min_y() == 0.5)
   // FIXME: There is a warning here due to the unused variable i.
@@ -71,7 +71,7 @@ bool bvgl_2d_geo_index::convert_box(vgl_box_2d<double> const& in, vgl_box_2d<flo
 }
 
 // write node and its children to kml
-void bvgl_2d_geo_index::write_to_kml_node(vcl_ofstream& ofs, bvgl_2d_geo_index_node_sptr n, unsigned const& current_depth, unsigned const& depth, vcl_string explanation)
+void bvgl_2d_geo_index::write_to_kml_node(std::ofstream& ofs, bvgl_2d_geo_index_node_sptr n, unsigned const& current_depth, unsigned const& depth, std::string explanation)
 {
   if (!n)
     return;
@@ -91,16 +91,16 @@ void bvgl_2d_geo_index::write_to_kml_node(vcl_ofstream& ofs, bvgl_2d_geo_index_n
 }
 
 // write the quadtree node structure at certain depth
-void bvgl_2d_geo_index::write_to_kml(bvgl_2d_geo_index_node_sptr root, unsigned const& depth, vcl_string const& kml_file, vcl_string explanation)
+void bvgl_2d_geo_index::write_to_kml(bvgl_2d_geo_index_node_sptr root, unsigned const& depth, std::string const& kml_file, std::string explanation)
 {
-  vcl_ofstream ofs(kml_file.c_str());
+  std::ofstream ofs(kml_file.c_str());
   bkml_write::open_document(ofs);
   write_to_kml_node(ofs, root, 0, depth, explanation);
   bkml_write::close_document(ofs);
 }
 
 // write node and its children to kml for quadtree having non geo coordinates
-void bvgl_2d_geo_index::write_to_kml_node(vcl_ofstream& ofs, bvgl_2d_geo_index_node_sptr n, unsigned const& current_depth, unsigned const& depth, vpgl_lvcs_sptr const& lvcs, vcl_string explanation)
+void bvgl_2d_geo_index::write_to_kml_node(std::ofstream& ofs, bvgl_2d_geo_index_node_sptr n, unsigned const& current_depth, unsigned const& depth, vpgl_lvcs_sptr const& lvcs, std::string explanation)
 {
   if (!n)
     return;
@@ -121,9 +121,9 @@ void bvgl_2d_geo_index::write_to_kml_node(vcl_ofstream& ofs, bvgl_2d_geo_index_n
   }
 }
 
-void bvgl_2d_geo_index::write_to_kml(bvgl_2d_geo_index_node_sptr root, unsigned const& depth, vcl_string const& kml_file, vpgl_lvcs_sptr const& lvcs, vcl_string explanation)
+void bvgl_2d_geo_index::write_to_kml(bvgl_2d_geo_index_node_sptr root, unsigned const& depth, std::string const& kml_file, vpgl_lvcs_sptr const& lvcs, std::string explanation)
 {
-  vcl_ofstream ofs(kml_file.c_str());
+  std::ofstream ofs(kml_file.c_str());
   bkml_write::open_document(ofs);
   write_to_kml_node(ofs, root, 0, depth, lvcs, explanation);
   bkml_write::close_document(ofs);
@@ -146,12 +146,12 @@ unsigned bvgl_2d_geo_index::depth(bvgl_2d_geo_index_node_sptr node)
 }
 
 // write the tree structure
-void write_to_text(vcl_ofstream& ofs, bvgl_2d_geo_index_node_sptr n)
+void write_to_text(std::ofstream& ofs, bvgl_2d_geo_index_node_sptr n)
 {
-  ofs << vcl_setprecision(8) << vcl_fixed << n->extent_.min_point().x() << ' '
-      << vcl_setprecision(8) << vcl_fixed << n->extent_.min_point().y() << ' '
-      << vcl_setprecision(8) << vcl_fixed << n->extent_.max_point().x() << ' '
-      << vcl_setprecision(8) << vcl_fixed << n->extent_.max_point().y() << '\n'
+  ofs << std::setprecision(8) << std::fixed << n->extent_.min_point().x() << ' '
+      << std::setprecision(8) << std::fixed << n->extent_.min_point().y() << ' '
+      << std::setprecision(8) << std::fixed << n->extent_.max_point().x() << ' '
+      << std::setprecision(8) << std::fixed << n->extent_.max_point().y() << '\n'
       << n->children_.size() << '\n';
   for (unsigned i = 0; i < n->children_.size(); i++) {
     if (!n->children_[i]) ofs << " 0";
@@ -164,24 +164,24 @@ void write_to_text(vcl_ofstream& ofs, bvgl_2d_geo_index_node_sptr n)
   }
 }
 
-void bvgl_2d_geo_index::write(bvgl_2d_geo_index_node_sptr root, vcl_string const& file_name, double const& min_size)
+void bvgl_2d_geo_index::write(bvgl_2d_geo_index_node_sptr root, std::string const& file_name, double const& min_size)
 {
-  vcl_ofstream ofs(file_name.c_str());
+  std::ofstream ofs(file_name.c_str());
   ofs << min_size << '\n';
   write_to_text(ofs, root);
 }
 
 // write the tree structure using lvcs
-void write_to_text(vcl_ofstream& ofs, bvgl_2d_geo_index_node_sptr n, vpgl_lvcs_sptr const& lvcs)
+void write_to_text(std::ofstream& ofs, bvgl_2d_geo_index_node_sptr n, vpgl_lvcs_sptr const& lvcs)
 {
   // transfer the extents
   double min_lon, min_lat, max_lon, max_lat, gz;
   lvcs->local_to_global(n->extent_.min_point().x(), n->extent_.min_point().y(), 0.0, vpgl_lvcs::wgs84, min_lon, min_lat, gz);
   lvcs->local_to_global(n->extent_.max_point().x(), n->extent_.max_point().y(), 0.0, vpgl_lvcs::wgs84, max_lon, max_lat, gz);
-  ofs << vcl_setprecision(6) << vcl_fixed << min_lon << ' '
-      << vcl_setprecision(6) << vcl_fixed << min_lat << ' '
-      << vcl_setprecision(6) << vcl_fixed << max_lon << ' '
-      << vcl_setprecision(6) << vcl_fixed << max_lat << ' '
+  ofs << std::setprecision(6) << std::fixed << min_lon << ' '
+      << std::setprecision(6) << std::fixed << min_lat << ' '
+      << std::setprecision(6) << std::fixed << max_lon << ' '
+      << std::setprecision(6) << std::fixed << max_lat << ' '
       << n->children_.size() << '\n';
   for (unsigned i = 0; i < n->children_.size(); i++) {
     if (!n->children_[i]) ofs << " 0";
@@ -194,9 +194,9 @@ void write_to_text(vcl_ofstream& ofs, bvgl_2d_geo_index_node_sptr n, vpgl_lvcs_s
   }
 }
 
-void bvgl_2d_geo_index::write(bvgl_2d_geo_index_node_sptr root, vcl_string const& file_name, double const& min_size, vpgl_lvcs_sptr const& lvcs)
+void bvgl_2d_geo_index::write(bvgl_2d_geo_index_node_sptr root, std::string const& file_name, double const& min_size, vpgl_lvcs_sptr const& lvcs)
 {
-  vcl_ofstream ofs(file_name.c_str());
+  std::ofstream ofs(file_name.c_str());
   double min_size_x, min_size_y, gz;
   lvcs->local_to_global(min_size, min_size, 0.0, vpgl_lvcs::wgs84, min_size_x, min_size_y, gz);
   ofs << min_size_x << '\n';
@@ -227,7 +227,7 @@ bool bvgl_2d_geo_index::prune_tree(bvgl_2d_geo_index_node_sptr root, vgl_polygon
 }
 
 // return all the leaves
-void bvgl_2d_geo_index::get_leaves(bvgl_2d_geo_index_node_sptr root, vcl_vector<bvgl_2d_geo_index_node_sptr>& leaves)
+void bvgl_2d_geo_index::get_leaves(bvgl_2d_geo_index_node_sptr root, std::vector<bvgl_2d_geo_index_node_sptr>& leaves)
 {
   if (!root)
     return;
@@ -249,7 +249,7 @@ void bvgl_2d_geo_index::get_leaves(bvgl_2d_geo_index_node_sptr root, vcl_vector<
 }
 
 // return the leaves that intersect with given rectangular region
-void bvgl_2d_geo_index::get_leaves(bvgl_2d_geo_index_node_sptr root, vcl_vector<bvgl_2d_geo_index_node_sptr>& leaves, vgl_box_2d<double> const& area)
+void bvgl_2d_geo_index::get_leaves(bvgl_2d_geo_index_node_sptr root, std::vector<bvgl_2d_geo_index_node_sptr>& leaves, vgl_box_2d<double> const& area)
 {
   if (!root)  // empty tree
     return;
@@ -273,7 +273,7 @@ void bvgl_2d_geo_index::get_leaves(bvgl_2d_geo_index_node_sptr root, vcl_vector<
   }
 }
 
-void bvgl_2d_geo_index::get_leaves(bvgl_2d_geo_index_node_sptr root, vcl_vector<bvgl_2d_geo_index_node_sptr>& leaves, vgl_box_2d<float> const& area)
+void bvgl_2d_geo_index::get_leaves(bvgl_2d_geo_index_node_sptr root, std::vector<bvgl_2d_geo_index_node_sptr>& leaves, vgl_box_2d<float> const& area)
 {
   vgl_box_2d<double> box_double;
   bvgl_2d_geo_index::convert_box(area, box_double);
@@ -281,7 +281,7 @@ void bvgl_2d_geo_index::get_leaves(bvgl_2d_geo_index_node_sptr root, vcl_vector<
 }
 
 // return all leaves that intersect with polygon
-void bvgl_2d_geo_index::get_leaves(bvgl_2d_geo_index_node_sptr root, vcl_vector<bvgl_2d_geo_index_node_sptr>& leaves, vgl_polygon<double> const& poly)
+void bvgl_2d_geo_index::get_leaves(bvgl_2d_geo_index_node_sptr root, std::vector<bvgl_2d_geo_index_node_sptr>& leaves, vgl_polygon<double> const& poly)
 {
   if (!root) // the node is empty
     return;
@@ -307,14 +307,14 @@ void bvgl_2d_geo_index::get_leaves(bvgl_2d_geo_index_node_sptr root, vcl_vector<
   }
 }
 
-void bvgl_2d_geo_index::get_leaves(bvgl_2d_geo_index_node_sptr root, vcl_vector<bvgl_2d_geo_index_node_sptr>& leaves, vgl_polygon<float> const& poly)
+void bvgl_2d_geo_index::get_leaves(bvgl_2d_geo_index_node_sptr root, std::vector<bvgl_2d_geo_index_node_sptr>& leaves, vgl_polygon<float> const& poly)
 {
   vgl_polygon<double> poly_double;
   bvgl_2d_geo_index::convert_polygon(poly, poly_double);
   get_leaves(root, leaves, poly_double);
 }
 
-void bvgl_2d_geo_index::get_leaves(bvgl_2d_geo_index_node_sptr root, vcl_vector<bvgl_2d_geo_index_node_sptr>& leaves, vcl_vector<vgl_point_2d<double> > const& line)
+void bvgl_2d_geo_index::get_leaves(bvgl_2d_geo_index_node_sptr root, std::vector<bvgl_2d_geo_index_node_sptr>& leaves, std::vector<vgl_point_2d<double> > const& line)
 {
   if (!root) // the tree is empty
     return;
@@ -339,9 +339,9 @@ void bvgl_2d_geo_index::get_leaves(bvgl_2d_geo_index_node_sptr root, vcl_vector<
   }
 }
 
-void bvgl_2d_geo_index::get_leaves(bvgl_2d_geo_index_node_sptr root, vcl_vector<bvgl_2d_geo_index_node_sptr>& leaves, vcl_vector<vgl_point_2d<float> > const& line)
+void bvgl_2d_geo_index::get_leaves(bvgl_2d_geo_index_node_sptr root, std::vector<bvgl_2d_geo_index_node_sptr>& leaves, std::vector<vgl_point_2d<float> > const& line)
 {
-  vcl_vector<vgl_point_2d<double> > line_double;
+  std::vector<vgl_point_2d<double> > line_double;
   unsigned num_pts = (unsigned)line.size();
   for (unsigned i = 0; i < num_pts; i++)
     line_double.push_back(vgl_point_2d<double>((double)line[i].x(), (double)line[i].y()));

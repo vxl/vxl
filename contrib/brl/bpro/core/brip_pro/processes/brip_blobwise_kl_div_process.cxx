@@ -24,7 +24,7 @@ namespace brip_blobwise_kl_div_process_globals
     //then it's an RGB image (assumes byte image...)
     if (loaded_image->nplanes() == 3 || loaded_image->nplanes() == 4)
     {
-      vcl_cout<<"preparing rgb as input to grey scale float image"<<vcl_endl;
+      std::cout<<"preparing rgb as input to grey scale float image"<<std::endl;
 
       //load image from file and format it into grey
       vil_image_view<vxl_byte>* inimg    = dynamic_cast<vil_image_view<vxl_byte>* >(loaded_image.ptr());
@@ -40,7 +40,7 @@ namespace brip_blobwise_kl_div_process_globals
     //else if loaded planes is just one...
     if (loaded_image->nplanes() == 1)
     {
-      vcl_cout<<"Preparing grey scale image"<<vcl_endl;
+      std::cout<<"Preparing grey scale image"<<std::endl;
 
       //preapre floatimg for stretched img
       vil_image_view<float>* floatimg;
@@ -59,13 +59,13 @@ namespace brip_blobwise_kl_div_process_globals
         return img_float;
       }
       else {
-        vcl_cerr << "Failed to load image\n";
+        std::cerr << "Failed to load image\n";
         return VXL_NULLPTR;
       }
       return floatimg;
     }
     //otherwise it's messed up, return a null pointer
-    vcl_cerr<<"Failed to recognize input image type\n";
+    std::cerr<<"Failed to recognize input image type\n";
     return VXL_NULLPTR;
   }
 };
@@ -76,7 +76,7 @@ bool brip_blobwise_kl_div_process_cons(bprb_func_process& pro)
   using namespace brip_blobwise_kl_div_process_globals;
 
   //input
-  vcl_vector<vcl_string> input_types(n_inputs_);
+  std::vector<std::string> input_types(n_inputs_);
   input_types[0] = "vil_image_view_base_sptr"; // img1
   input_types[1] = "vil_image_view_base_sptr"; // img2
   input_types[2] = "vil_image_view_base_sptr"; // blob/mask image
@@ -89,7 +89,7 @@ bool brip_blobwise_kl_div_process_cons(bprb_func_process& pro)
   pro.set_input(3, thresh);
 
   //output
-  vcl_vector<vcl_string> output_types(n_outputs_);
+  std::vector<std::string> output_types(n_outputs_);
   output_types[0] = "vil_image_view_base_sptr";  // KL Div image (kl div in each blobs place)
   output_types[1] = "vil_image_view_base_sptr";  // new blob image (thresholded by percentage of KL)
   return pro.set_output_types(output_types);
@@ -103,7 +103,7 @@ bool brip_blobwise_kl_div_process(bprb_func_process& pro)
 
   // Sanity check
   if (pro.n_inputs() < n_inputs_) {
-    vcl_cout << "brip_blobwise_kl_div_process: The input number should be " << n_inputs_ << vcl_endl;
+    std::cout << "brip_blobwise_kl_div_process: The input number should be " << n_inputs_ << std::endl;
     return false;
   }
 

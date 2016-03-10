@@ -11,8 +11,10 @@
 // \author Ali Osman Ulusoy
 // \date Nov 20, 2012
 
-#include <vcl_fstream.h>
-#include <vcl_algorithm.h>
+#include <fstream>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <algorithm>
 #include <boxm2/ocl/boxm2_opencl_cache.h>
 #include <boxm2/boxm2_scene.h>
 #include <boxm2/boxm2_block.h>
@@ -46,7 +48,7 @@ bool boxm2_ocl_update_view_dep_app_color_process_cons(bprb_func_process& pro)
   using namespace boxm2_ocl_update_view_dep_app_color_process_globals;
 
   //process takes 9 inputs (of which the four last ones are optional):
-  vcl_vector<vcl_string> input_types_(n_inputs_);
+  std::vector<std::string> input_types_(n_inputs_);
   input_types_[0] = "bocl_device_sptr";
   input_types_[1] = "boxm2_scene_sptr";
   input_types_[2] = "boxm2_opencl_cache_sptr";
@@ -58,11 +60,11 @@ bool boxm2_ocl_update_view_dep_app_color_process_cons(bprb_func_process& pro)
   input_types_[8] = "float";                        //variance value? if 0.0 or less, then use variable variance
 
   // process has no outputs
-  vcl_vector<vcl_string>  output_types_(n_outputs_);
+  std::vector<std::string>  output_types_(n_outputs_);
   bool good = pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
 
   // default 5, 6 and 7 and 8 inputs
-  brdb_value_sptr idx        = new brdb_value_t<vcl_string>("");
+  brdb_value_sptr idx        = new brdb_value_t<std::string>("");
   brdb_value_sptr empty_mask = new brdb_value_t<vil_image_view_base_sptr>(new vil_image_view<unsigned char>(1,1));
   brdb_value_sptr up_alpha   = new brdb_value_t<bool>(true);  //by default update alpha
   brdb_value_sptr def_var    = new brdb_value_t<float>(-1.0f);
@@ -77,12 +79,12 @@ bool boxm2_ocl_update_view_dep_app_color_process(bprb_func_process& pro)
 {
   using namespace boxm2_ocl_update_view_dep_app_color_process_globals;
 #if 0 // unused!
-  vcl_size_t local_threads[2]={8,8};
-  vcl_size_t global_threads[2]={8,8};
+  std::size_t local_threads[2]={8,8};
+  std::size_t global_threads[2]={8,8};
 #endif
   //sanity check inputs
   if ( pro.n_inputs() < n_inputs_ ) {
-    vcl_cout << pro.name() << ": The input number should be " << n_inputs_<< vcl_endl;
+    std::cout << pro.name() << ": The input number should be " << n_inputs_<< std::endl;
     return false;
   }
   //get the inputs
@@ -92,7 +94,7 @@ bool boxm2_ocl_update_view_dep_app_color_process(bprb_func_process& pro)
   boxm2_opencl_cache_sptr  opencl_cache = pro.get_input<boxm2_opencl_cache_sptr>(i++);
   vpgl_camera_double_sptr  cam          = pro.get_input<vpgl_camera_double_sptr>(i++);
   vil_image_view_base_sptr img          = pro.get_input<vil_image_view_base_sptr>(i++);
-  vcl_string               ident        = pro.get_input<vcl_string>(i++);
+  std::string               ident        = pro.get_input<std::string>(i++);
   vil_image_view_base_sptr mask_sptr    = pro.get_input<vil_image_view_base_sptr>(i++);
   bool                     update_alpha = pro.get_input<bool>(i++);
   float                    mog_var      = pro.get_input<float>(i++);

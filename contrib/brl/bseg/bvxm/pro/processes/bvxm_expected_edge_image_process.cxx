@@ -12,7 +12,9 @@
 #include <brip/brip_vil_float_ops.h>
 #include <sdet/sdet_img_edge.h>
 #include <vpgl/algo/vpgl_backproject.h>
-#include <vcl_cstdio.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <cstdio>
 
 //: set input and output types
 bool bvxm_expected_edge_image_process_cons(bprb_func_process& pro)
@@ -26,7 +28,7 @@ bool bvxm_expected_edge_image_process_cons(bprb_func_process& pro)
   //input[3]: nj
   //input[4]: Scale of the image
 
-  vcl_vector<vcl_string> input_types_(n_inputs_);
+  std::vector<std::string> input_types_(n_inputs_);
   input_types_[0] = "bvxm_voxel_world_sptr";
   input_types_[1] = "vpgl_camera_double_sptr";
   input_types_[2] = "unsigned";
@@ -38,7 +40,7 @@ bool bvxm_expected_edge_image_process_cons(bprb_func_process& pro)
   // process has 2 outputs:
   // output[0]: Expected edge image (probabilities between 0 and 1, float)
   // output[1]: Expected edge image (normalized for display purposes, vxl_byte)
-  vcl_vector<vcl_string> output_types_(n_outputs_);
+  std::vector<std::string> output_types_(n_outputs_);
   output_types_[0] = "vil_image_view_base_sptr";
   output_types_[1] = "vil_image_view_base_sptr";
   return pro.set_output_types(output_types_);
@@ -51,7 +53,7 @@ bool bvxm_expected_edge_image_process(bprb_func_process& pro)
 
   //check number of inputs
   if ( !pro.verify_inputs()) {
-    vcl_cout << pro.name() << " - invalid inputs " << vcl_endl;
+    std::cout << pro.name() << " - invalid inputs " << std::endl;
     return false;
   }
 
@@ -73,10 +75,10 @@ bool bvxm_expected_edge_image_process(bprb_func_process& pro)
   unsigned scale = pro.get_input<unsigned>(4);
 
   int num_observations = vox_world->num_observations<EDGES>(0,scale);
-  vcl_cout << "Number of observations in curren edge world: " << num_observations << '\n';
+  std::cout << "Number of observations in curren edge world: " << num_observations << '\n';
 
   float n_normal = vox_world->get_params()->edges_n_normal();
-  vcl_cout << "n_normal: " << n_normal << '\n';
+  std::cout << "n_normal: " << n_normal << '\n';
 
   // render the expected edge image
   vil_image_view_base_sptr dummy_img;

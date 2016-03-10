@@ -1,8 +1,10 @@
 #include <testlib/testlib_test.h>
 #include "../bmdl_processes.h"
 
+#include <vcl_compiler.h>
 #include <vcl_string.h>
-#include <vcl_iostream.h>
+#include <iostream>
+#include <string>
 
 #include <brdb/brdb_value.h>
 #include <brdb/brdb_selection.h>
@@ -22,14 +24,14 @@ bool get_image(unsigned int id, vil_image_view_base_sptr& image)
 
   brdb_selection_sptr S_img = DATABASE->select("vil_image_view_base_sptr_data", Q_img);
   if (S_img->size()!=1){
-    vcl_cout << "in bprb_batch_process_manager::set_input_from_db(.) -"
+    std::cout << "in bprb_batch_process_manager::set_input_from_db(.) -"
              << " no selections\n";
     return false;
   }
 
   brdb_value_sptr value_img;
-  if (!S_img->get_value(vcl_string("value"), value_img)) {
-    vcl_cout << "in bprb_batch_process_manager::set_input_from_db(.) -"
+  if (!S_img->get_value(std::string("value"), value_img)) {
+    std::cout << "in bprb_batch_process_manager::set_input_from_db(.) -"
              << " didn't get value\n";
     return false;
   }
@@ -66,7 +68,7 @@ static void test_bmdl_classify_process()
             && bprb_batch_process_manager::instance()->run_process();
 
   unsigned int label_img_id, height_img_id;
-  vcl_string type;
+  std::string type;
   bool good2 = bprb_batch_process_manager::instance()->commit_output(0, label_img_id, type);
   bool good3 = bprb_batch_process_manager::instance()->commit_output(1, height_img_id, type);
   TEST("run classify process", good1 && good2 && good3, true);

@@ -11,10 +11,11 @@
 
 #include <vidl/vidl_dshow.h>
 
-#include <vcl_iostream.h>
-#include <vcl_iomanip.h>
-#include <vcl_sstream.h>
-#include <vcl_utility.h>
+#include <iostream>
+#include <vcl_compiler.h>
+#include <iomanip>
+#include <sstream>
+#include <utility>
 #if 0
 #include <vcl_cassert.h>
 #endif
@@ -28,11 +29,11 @@ namespace
   const int w1 = 25;
   const int w2 = 8;
 
-  vcl_map<vcl_string,vpa_property_wrap> vpa_properties(void)
+  std::map<std::string,vpa_property_wrap> vpa_properties(void)
   {
-    typedef vcl_pair<vcl_string,vpa_property_wrap> pair;
+    typedef std::pair<std::string,vpa_property_wrap> pair;
 
-    vcl_map<vcl_string,vpa_property_wrap> properties;
+    std::map<std::string,vpa_property_wrap> properties;
 
     // IAMVideoProcAmp interface
     properties.insert(pair("brightness",             vpa_property_wrap(VideoProcAmp_Brightness)           ));
@@ -50,12 +51,12 @@ namespace
   }
 
   void print_help(const CComPtr<IAMVideoProcAmp>& am_video_proc_amp,
-                  const vcl_string& prop_tag)
+                  const std::string& prop_tag)
   {
-    vcl_map<vcl_string,vpa_property_wrap> prop = vpa_properties();
+    std::map<std::string,vpa_property_wrap> prop = vpa_properties();
     long val, min, max, step, def, flag;
 
-    vcl_cout << vcl_setw(w1) << prop_tag;
+    std::cout << std::setw(w1) << prop_tag;
     if (SUCCEEDED(am_video_proc_amp->GetRange(prop[prop_tag].key,
                                               &min,
                                               &max,
@@ -64,12 +65,12 @@ namespace
                                               &flag)))
     {
       am_video_proc_amp->Get(prop[prop_tag].key, &val, &flag);
-      vcl_cout << vcl_setw(w2) << val
-               << vcl_setw(w2) << min
-               << vcl_setw(w2) << max
-               << vcl_setw(w2) << step
-               << vcl_setw(w2) << def
-               << vcl_setw(w2)
+      std::cout << std::setw(w2) << val
+               << std::setw(w2) << min
+               << std::setw(w2) << max
+               << std::setw(w2) << step
+               << std::setw(w2) << def
+               << std::setw(w2)
                << (flag == 0x0001
                    ? "auto"
                    : flag == 0x0002
@@ -79,7 +80,7 @@ namespace
     }
     else
     {
-      vcl_cout << " ...Not Supported...\n";
+      std::cout << " ...Not Supported...\n";
     }
   }
 
@@ -96,13 +97,13 @@ namespace
 #endif
 
     DSHOW_ERROR_IF_FAILED(asc->GetFormat(&amt));
-    vcl_cout << vcl_setw(w1) << "output_format"
+    std::cout << std::setw(w1) << "output_format"
              << ' ' << vidl_dshow::get_guid_name(amt->subtype) << '\n';
     vidl_dshow::delete_media_type(*amt);
     amt = 0;
 
-    vcl_cout << vcl_string(w1, ' ') << " Supported output formats\n"
-             << vcl_string(w1, ' ') << " ------------------------\n";
+    std::cout << std::string(w1, ' ') << " Supported output formats\n"
+             << std::string(w1, ' ') << " ------------------------\n";
     for (int i = 0; i < count; i++)
     {
       DSHOW_ERROR_IF_FAILED(
@@ -110,15 +111,15 @@ namespace
 
       double max_frame_interval = static_cast<double>(vscc->MaxFrameInterval);
       double min_frame_interval = static_cast<double>(vscc->MinFrameInterval);
-      vcl_cout << vcl_setw(w1) << i
-               << vcl_setw(3*w2)
+      std::cout << std::setw(w1) << i
+               << std::setw(3*w2)
                << vidl_dshow::get_guid_name(amt->subtype)
                << " ("
-               << vcl_setw(4) << vscc->InputSize.cx << 'x'
-               << vcl_setw(4) << vscc->InputSize.cy
+               << std::setw(4) << vscc->InputSize.cx << 'x'
+               << std::setw(4) << vscc->InputSize.cy
                << ") "
-               << vcl_setprecision(2) << 1.0 / (max_frame_interval * 100.0e-9) << '-'
-               << vcl_setprecision(2) << 1.0 / (min_frame_interval * 100.0e-9) << " fps\n";
+               << std::setprecision(2) << 1.0 / (max_frame_interval * 100.0e-9) << '-'
+               << std::setprecision(2) << 1.0 / (min_frame_interval * 100.0e-9) << " fps\n";
 
       vidl_dshow::delete_media_type(*amt);
       amt = 0;
@@ -129,11 +130,11 @@ namespace
 
   template <typename T> struct from_string_to
   {
-    T operator()(const vcl_string& str) const
+    T operator()(const std::string& str) const
     {
       T val;
 
-      vcl_istringstream iss(str);
+      std::istringstream iss(str);
       iss >> val;
 
       return val;
@@ -142,7 +143,7 @@ namespace
 
   template <> struct from_string_to<bool>
   {
-    bool operator()(const vcl_string& str) const
+    bool operator()(const std::string& str) const
     {
       if      (str == "t" || str == "true"  || str == "1")
       {
@@ -185,7 +186,7 @@ void vidl_dshow_istream_params::configure_filter(
   if (SUCCEEDED(source->QueryInterface(
     IID_IAMVideoProcAmp, reinterpret_cast<void**>(&am_video_proc_amp))))
   {
-    vcl_map<vcl_string,vpa_property_wrap>::const_iterator iter
+    std::map<std::string,vpa_property_wrap>::const_iterator iter
       = vpa_properties_.begin();
     for (; iter != vpa_properties_.end(); iter++)
     {
@@ -247,7 +248,7 @@ void vidl_dshow_istream_params::configure_filter(
   }
 }
 
-void vidl_dshow_istream_params::print_parameter_help(const vcl_string& name)
+void vidl_dshow_istream_params::print_parameter_help(const std::string& name)
 {
   vidl_dshow::initialize_com();
 
@@ -262,7 +263,7 @@ void vidl_dshow_istream_params::print_parameter_help(const vcl_string& name)
 
 void vidl_dshow_istream_params::print_parameter_help(const CComPtr<IBaseFilter>& filter)
 {
-  vcl_cout << "\n\nDirectShow Parameters\n"
+  std::cout << "\n\nDirectShow Parameters\n"
            << "---------------------\n"
            << "1. IAMVideoProcAmp interface:\n\n";
 
@@ -271,16 +272,16 @@ void vidl_dshow_istream_params::print_parameter_help(const CComPtr<IBaseFilter>&
   if (SUCCEEDED(filter->QueryInterface(
     IID_IAMVideoProcAmp, reinterpret_cast<void**>(&am_video_proc_amp))))
   {
-    vcl_cout << vcl_string(w1, ' ')
-             << vcl_setw(w2) << "curr"
-             << vcl_setw(w2) << "min"
-             << vcl_setw(w2) << "max"
-             << vcl_setw(w2) << "step"
-             << vcl_setw(w2) << "default"
-             << vcl_setw(w2) << "flags"
+    std::cout << std::string(w1, ' ')
+             << std::setw(w2) << "curr"
+             << std::setw(w2) << "min"
+             << std::setw(w2) << "max"
+             << std::setw(w2) << "step"
+             << std::setw(w2) << "default"
+             << std::setw(w2) << "flags"
              << '\n'
-             << vcl_string(w1, ' ')
-             << vcl_string(6*w2, '-') << '\n';
+             << std::string(w1, ' ')
+             << std::string(6*w2, '-') << '\n';
 
     print_help(am_video_proc_amp, "brightness"            );
     print_help(am_video_proc_amp, "contrast"              );
@@ -292,9 +293,9 @@ void vidl_dshow_istream_params::print_parameter_help(const CComPtr<IBaseFilter>&
     print_help(am_video_proc_amp, "white_balance"         );
     print_help(am_video_proc_amp, "backlight_compensation");
     print_help(am_video_proc_amp, "gain"                  );
-    vcl_cout << '\n';
+    std::cout << '\n';
   }
-  else { vcl_cout << "...Not Supported...\n"; }
+  else { std::cout << "...Not Supported...\n"; }
 
   // IAMStreamConfig interface.
   CComPtr<ICaptureGraphBuilder2> graph_builder;
@@ -302,7 +303,7 @@ void vidl_dshow_istream_params::print_parameter_help(const CComPtr<IBaseFilter>&
     graph_builder.CoCreateInstance(CLSID_CaptureGraphBuilder2));
   CComPtr<IAMStreamConfig> am_stream_config;
 
-  vcl_cout << "\n2.1 IAMStreamConfig interface (Capture Pin):\n\n";
+  std::cout << "\n2.1 IAMStreamConfig interface (Capture Pin):\n\n";
 
   if (SUCCEEDED(graph_builder->FindInterface(
     &PIN_CATEGORY_CAPTURE,
@@ -313,9 +314,9 @@ void vidl_dshow_istream_params::print_parameter_help(const CComPtr<IBaseFilter>&
   {
     print_output_format_help(am_stream_config);
   }
-  else { vcl_cout << "...Not Supported...\n"; }
+  else { std::cout << "...Not Supported...\n"; }
 
-  vcl_cout << "\n2.2 IAMStreamConfig interface (Preview Pin):\n\n";
+  std::cout << "\n2.2 IAMStreamConfig interface (Preview Pin):\n\n";
 
   am_stream_config.Release();
   if (SUCCEEDED(graph_builder->FindInterface(
@@ -327,21 +328,21 @@ void vidl_dshow_istream_params::print_parameter_help(const CComPtr<IBaseFilter>&
   {
     print_output_format_help(am_stream_config);
   }
-  else { vcl_cout << "...Not Supported...\n"; }
+  else { std::cout << "...Not Supported...\n"; }
 
-  vcl_cout << '\n' << vcl_endl;
+  std::cout << '\n' << std::endl;
 }
 
 //: Set properties from a map(string,value).
 // \sa mul/mbl/mbl_read_props.h
 vidl_dshow_istream_params&
 vidl_dshow_istream_params
-::set_properties(const vcl_map<vcl_string,vcl_string>& props)
+::set_properties(const std::map<std::string,std::string>& props)
 {
-  vcl_map<vcl_string,vcl_string>::const_iterator iter;
+  std::map<std::string,std::string>::const_iterator iter;
   for (iter = props.begin(); iter != props.end(); iter++)
   {
-    vcl_map<vcl_string,vpa_property_wrap>::iterator property
+    std::map<std::string,vpa_property_wrap>::iterator property
       = vpa_properties_.find(iter->first);
     if (property != vpa_properties_.end())
     {
@@ -386,8 +387,8 @@ vidl_dshow_istream_params
       }
       else
       {
-        vcl_cerr << "DSHOW: vidl_dshow_istream_params param not valid: "
-                 << iter->first << vcl_endl;
+        std::cerr << "DSHOW: vidl_dshow_istream_params param not valid: "
+                 << iter->first << std::endl;
       }
     }
   }
@@ -417,21 +418,21 @@ vidl_dshow_istream_params::set_run_when_ready(bool val)
 }
 
 /* inline */ vidl_dshow_istream_params&
-vidl_dshow_istream_params::set_save_graph_to(const vcl_string& name)
+vidl_dshow_istream_params::set_save_graph_to(const std::string& name)
 {
   save_graph_to_ = name;
   return *this;
 }
 
 /* inline */ vidl_dshow_istream_params&
-vidl_dshow_istream_params::set_device_name(const vcl_string& name)
+vidl_dshow_istream_params::set_device_name(const std::string& name)
 {
   device_name_ = name;
   return *this;
 }
 
 /* inline */ vidl_dshow_istream_params&
-vidl_dshow_istream_params::set_output_filename(const vcl_string& name)
+vidl_dshow_istream_params::set_output_filename(const std::string& name)
 {
   output_filename_ = name;
   return *this;

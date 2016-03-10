@@ -6,14 +6,15 @@
 #endif
 //:
 // \file
-// \brief A vil1_stream implementation using vcl_fstream
+// \brief A vil1_stream implementation using std::fstream
 // \author    awf@robots.ox.ac.uk
 // \date 16 Feb 00
 
-#include <vcl_fstream.h>
+#include <vcl_compiler.h>
+#include <fstream>
 #include <vil1/vil1_stream.h>
 
-//: A vil1_stream implementation using vcl_fstream
+//: A vil1_stream implementation using std::fstream
 class vil1_stream_fstream : public vil1_stream
 {
  public:
@@ -30,8 +31,8 @@ class vil1_stream_fstream : public vil1_stream
   ~vil1_stream_fstream();
 
  private:
-  vcl_ios_openmode flags_;
-  mutable vcl_fstream f_;
+  std::ios::openmode flags_;
+  mutable std::fstream f_;
   int id_;
 };
 

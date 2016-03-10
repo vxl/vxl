@@ -7,7 +7,9 @@
 
 #include "HMatrix2DAffineCompute.h"
 //
-#include <vcl_vector.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <vector>
 #include <vcl_cassert.h>
 #include <vnl/vnl_matrix.h>
 #include <mvl/HMatrix2D.h>
@@ -23,8 +25,8 @@
 
 // Compute the 2D affine transformation (the actual implementation)
 //
-static bool tmp_fun(vcl_vector<vgl_homg_point_2d<double> > const& pts1,
-                    vcl_vector<vgl_homg_point_2d<double> > const& pts2,
+static bool tmp_fun(std::vector<vgl_homg_point_2d<double> > const& pts1,
+                    std::vector<vgl_homg_point_2d<double> > const& pts2,
                     HMatrix2D& H)
 {
   // Points on the affine manifold in the joint image satisfy
@@ -65,8 +67,8 @@ static bool tmp_fun(vcl_vector<vgl_homg_point_2d<double> > const& pts1,
   return true;
 }
 
-static bool tmp_fun(vcl_vector<HomgPoint2D> const& pts1,
-                    vcl_vector<HomgPoint2D> const& pts2,
+static bool tmp_fun(std::vector<HomgPoint2D> const& pts1,
+                    std::vector<HomgPoint2D> const& pts2,
                     HMatrix2D& H)
 {
   // Points on the affine manifold in the joint image satisfy
@@ -110,8 +112,8 @@ static bool tmp_fun(vcl_vector<HomgPoint2D> const& pts1,
 HMatrix2D
 HMatrix2DAffineCompute::compute(const PairMatchSetCorner &matches)
 {
- vcl_vector<HomgPoint2D> pts1(matches.count());
- vcl_vector<HomgPoint2D> pts2(matches.count());
+ std::vector<HomgPoint2D> pts1(matches.count());
+ std::vector<HomgPoint2D> pts2(matches.count());
  matches.extract_matches(pts1, pts2);
  HMatrix2D H;
  tmp_fun(pts1,pts2,H);
@@ -119,8 +121,8 @@ HMatrix2DAffineCompute::compute(const PairMatchSetCorner &matches)
 }
 
 HMatrix2D
-HMatrix2DAffineCompute::compute(const vcl_vector<vgl_homg_point_2d<double> >&p1,
-                                const vcl_vector<vgl_homg_point_2d<double> >&p2)
+HMatrix2DAffineCompute::compute(const std::vector<vgl_homg_point_2d<double> >&p1,
+                                const std::vector<vgl_homg_point_2d<double> >&p2)
 {
   HMatrix2D H;
   tmp_fun(p1,p2,H);
@@ -128,8 +130,8 @@ HMatrix2DAffineCompute::compute(const vcl_vector<vgl_homg_point_2d<double> >&p1,
 }
 
 HMatrix2D
-HMatrix2DAffineCompute::compute(const vcl_vector<HomgPoint2D>&p1,
-                                const vcl_vector<HomgPoint2D>&p2)
+HMatrix2DAffineCompute::compute(const std::vector<HomgPoint2D>&p1,
+                                const std::vector<HomgPoint2D>&p2)
 {
   HMatrix2D H;
   tmp_fun(p1,p2,H);
@@ -137,8 +139,8 @@ HMatrix2DAffineCompute::compute(const vcl_vector<HomgPoint2D>&p1,
 }
 
 bool
-HMatrix2DAffineCompute::compute_p(const vcl_vector<HomgPoint2D> &pts1,
-                                  const vcl_vector<HomgPoint2D> &pts2,
+HMatrix2DAffineCompute::compute_p(const std::vector<HomgPoint2D> &pts1,
+                                  const std::vector<HomgPoint2D> &pts2,
                                   HMatrix2D *H)
 {
   return tmp_fun(pts1,pts2,*H);
@@ -146,7 +148,7 @@ HMatrix2DAffineCompute::compute_p(const vcl_vector<HomgPoint2D> &pts1,
 
 //--------------------------------------------------------------------------------
 
-NonHomg::NonHomg(vcl_vector<vgl_homg_point_2d<double> > const& A)
+NonHomg::NonHomg(std::vector<vgl_homg_point_2d<double> > const& A)
   : vnl_matrix<double>(A.size(),2)
 {
   vnl_matrix<double> &X = *this;
@@ -156,7 +158,7 @@ NonHomg::NonHomg(vcl_vector<vgl_homg_point_2d<double> > const& A)
     X(i,1) = A[i].y()/A[i].w();
 }
 
-NonHomg::NonHomg(const vcl_vector<HomgPoint2D> &A)
+NonHomg::NonHomg(const std::vector<HomgPoint2D> &A)
   : vnl_matrix<double>(A.size(),2)
 {
   vnl_matrix<double> &X = *this;

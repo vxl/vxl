@@ -7,7 +7,8 @@
 #include "vgl_fit_conics_2d.h"
 #include <vgl/vgl_vector_2d.h>
 #include <vgl/algo/vgl_conic_2d_regression.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <iostream>
 #include <vcl_cassert.h>
 
 //--------------------------------------------------------------
@@ -27,7 +28,7 @@ void vgl_fit_conics_2d<T>::add_point(vgl_point_2d<T> const& p)
 {
   curve_.push_back(p);
 #ifdef DEBUG
-  vcl_cout << p << '\n';
+  std::cout << p << '\n';
 #endif
 }
 
@@ -56,7 +57,7 @@ void vgl_fit_conics_2d<T>::output(const unsigned start_index,
   vgl_homg_point_2d<T> center = conic.centre();
   if (center.ideal(static_cast<T>(1e-06)))
   {
-    vcl_cout << "Can't output a conic at infinity in vgl_fit_conics<T>\n";
+    std::cout << "Can't output a conic at infinity in vgl_fit_conics<T>\n";
     return;
   }
 
@@ -87,7 +88,7 @@ void vgl_fit_conics_2d<T>::output(const unsigned start_index,
   //   unsigned i1=start_index, i2 = end_index-1;
   vgl_conic_segment_2d<T> e_seg(curve_[i1], curve_[i2], conic);
 #ifdef DEBUG
-  vcl_cout << "output " << e_seg << '\n';
+  std::cout << "output " << e_seg << '\n';
 #endif
   segs_.push_back(e_seg);
 }
@@ -97,7 +98,7 @@ bool vgl_fit_conics_2d<T>::fit()
 {
   if (curve_.size()<min_length_)
   {
-    vcl_cout << "In vgl_fit_conics_2d<T>::fit() - number of points < min_length "
+    std::cout << "In vgl_fit_conics_2d<T>::fit() - number of points < min_length "
              << min_length_ << '\n';
     return false;
   }
@@ -120,7 +121,7 @@ bool vgl_fit_conics_2d<T>::fit()
         return true;
       }
 #ifdef DEBUG
-      vcl_cout << "Initial fit error " << reg.get_rms_sampson_error()
+      std::cout << "Initial fit error " << reg.get_rms_sampson_error()
                << " for\n" << reg.conic() << '\n';
 #endif
       bool below_error_tol = true;
@@ -137,7 +138,7 @@ bool vgl_fit_conics_2d<T>::fit()
           data_added = true;
           nf++;
 #ifdef DEBUG
-          vcl_cout << "Adding point " << p << "with estimated error "
+          std::cout << "Adding point " << p << "with estimated error "
                    << error << '\n';
 #endif
         }

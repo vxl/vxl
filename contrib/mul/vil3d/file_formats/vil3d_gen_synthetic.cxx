@@ -31,7 +31,7 @@ vil3d_image_resource_sptr vil3d_gen_synthetic_format::make_input_image(const cha
   vil_pixel_format pf = vil_pixel_format_from_string(re.match(4).c_str());
   if (pf == VIL_PIXEL_FORMAT_UNKNOWN)
   {
-    vcl_cerr << "ERROR: vil3d_gen_synthetic_format unknown pixel format " << re.match(4) << vcl_endl;
+    std::cerr << "ERROR: vil3d_gen_synthetic_format unknown pixel format " << re.match(4) << std::endl;
     return VXL_NULLPTR;
   }
 
@@ -66,7 +66,7 @@ vil3d_image_resource_sptr vil3d_gen_synthetic_format::make_input_image(const cha
     pv.double_value = vul_string_atof(re.match(5));
     break;
    default:
-    vcl_cerr << "ERROR: vil3d_gen_synthetic_format Cannot handle pixel format " << re.match(4) << vcl_endl;
+    std::cerr << "ERROR: vil3d_gen_synthetic_format Cannot handle pixel format " << re.match(4) << std::endl;
     return VXL_NULLPTR;
   }
 
@@ -83,7 +83,7 @@ vil3d_image_resource_sptr vil3d_gen_synthetic_format::make_output_image(const ch
                                                                         unsigned /*nk*/, unsigned /*nplanes*/,
                                                                         enum vil_pixel_format /*format*/) const
 {
-  vcl_cerr << "ERROR: Cannot write to generated synthetic images.\n";
+  std::cerr << "ERROR: Cannot write to generated synthetic images.\n";
   return VXL_NULLPTR;
 }
 
@@ -205,8 +205,8 @@ vil3d_image_view_base_sptr vil3d_gen_synthetic_image::get_copy_view(
       return p;
     }
     default:
-    vcl_cout<<"ERROR: vil3d_gen_synthetic_format::get_image_data()\n"
-            <<"Can't deal with pixel type " << pixel_format() << vcl_endl;
+    std::cout<<"ERROR: vil3d_gen_synthetic_format::get_image_data()\n"
+            <<"Can't deal with pixel type " << pixel_format() << std::endl;
     return VXL_NULLPTR;
   }
 }
@@ -220,7 +220,7 @@ bool vil3d_gen_synthetic_image::get_property(char const *, void *) const
 bool vil3d_gen_synthetic_image::put_view(const vil3d_image_view_base&,
                                          unsigned, unsigned, unsigned)
 {
-  vcl_cerr << "ERROR: Cannot write to generated synthetic images.\n";
+  std::cerr << "ERROR: Cannot write to generated synthetic images.\n";
   return false;
 }
 

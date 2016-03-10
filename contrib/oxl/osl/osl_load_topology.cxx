@@ -8,21 +8,23 @@
 
 #include "osl_load_topology.h"
 #include <vcl_cassert.h>
-#include <vcl_cstring.h>
-#include <vcl_cstdio.h> // sscanf()
-#include <vcl_fstream.h>
-#include <vcl_vector.h>
+#include <cstring>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <cstdio> // sscanf()
+#include <fstream>
+#include <vector>
 
-void osl_load_topology(char const *f, vcl_list<osl_edge*> &e, vcl_list<osl_vertex*> &v)
+void osl_load_topology(char const *f, std::list<osl_edge*> &e, std::list<osl_vertex*> &v)
 {
-  vcl_ifstream file(f);
+  std::ifstream file(f);
   osl_load_topology(file, e, v);
 }
 
 #define streamok \
-{ if (f.bad()) { vcl_cerr << __FILE__ ":" << __LINE__ << " stream bad at this point\n"; return; } }
+{ if (f.bad()) { std::cerr << __FILE__ ":" << __LINE__ << " stream bad at this point\n"; return; } }
 
-void osl_load_topology(vcl_istream &f, vcl_list<osl_edge*> &es, vcl_list<osl_vertex*> &vs)
+void osl_load_topology(std::istream &f, std::list<osl_edge*> &es, std::list<osl_vertex*> &vs)
 {
   es.clear();
   vs.clear();
@@ -31,32 +33,32 @@ void osl_load_topology(vcl_istream &f, vcl_list<osl_edge*> &es, vcl_list<osl_ver
   char tmp[1024];
 
   // check version string
-  f >> vcl_ws;
+  f >> std::ws;
   f.getline(buf, sizeof(buf));
-  if (vcl_strcmp("osl_save_topology 1.0", buf) != 0) {
-    vcl_cerr << __FILE__ ": version string mismatch\n";
+  if (std::strcmp("osl_save_topology 1.0", buf) != 0) {
+    std::cerr << __FILE__ ": version string mismatch\n";
     return;
   }
   streamok;
 
   // read number of vertices :
-  f >> vcl_ws;
+  f >> std::ws;
   f.getline(buf, sizeof(buf));
   int numverts = -1;
-  if (vcl_sscanf(buf, "%d%[ ]vertices", &numverts, tmp) != 2) {
-    vcl_cerr << __FILE__ ": error reading number of vertices\n";
+  if (std::sscanf(buf, "%d%[ ]vertices", &numverts, tmp) != 2) {
+    std::cerr << __FILE__ ": error reading number of vertices\n";
     return;
   }
   assert(numverts >= 0);
   streamok;
   // read vertices :
-  vcl_cerr << "reading " << numverts << " vertices...\n";
-  vcl_vector<osl_vertex*> vert(numverts+1, (osl_vertex*)VXL_NULLPTR);
+  std::cerr << "reading " << numverts << " vertices...\n";
+  std::vector<osl_vertex*> vert(numverts+1, (osl_vertex*)VXL_NULLPTR);
   for (int i=0; i<numverts; ++i) {
     unsigned int stashid;
     int id;
     float x, y;
-    f >> vcl_ws >> vcl_hex >> stashid >> vcl_dec >> id >> x >> y;
+    f >> std::ws >> std::hex >> stashid >> std::dec >> id >> x >> y;
     assert(stashid<vert.size() && !vert[stashid]);
     vert[stashid] = new osl_vertex(x, y, id);
 
@@ -65,25 +67,25 @@ void osl_load_topology(vcl_istream &f, vcl_list<osl_edge*> &es, vcl_list<osl_ver
   streamok;
 
   // read number of edges :
-  f >> vcl_ws;
+  f >> std::ws;
   f.getline(buf, sizeof(buf));
   int numedges = -1;
-  if (vcl_sscanf(buf, "%d%[ ]edges", &numedges, tmp) != 2) {
-    vcl_cerr << __FILE__ ": error reading number of edges\n";
+  if (std::sscanf(buf, "%d%[ ]edges", &numedges, tmp) != 2) {
+    std::cerr << __FILE__ ": error reading number of edges\n";
     return;
   }
   assert(numedges >= 0);
   streamok;
   // read edges :
-  vcl_cerr << "reading " << numedges << " edges...\n";
+  std::cerr << "reading " << numedges << " edges...\n";
   for (int i=0; i<numedges; ++i) {
     unsigned int stashid1 = vert.size(), stashid2 = vert.size();
-    f >> vcl_ws >> vcl_hex >> stashid1 >> stashid2 >> vcl_dec;
+    f >> std::ws >> std::hex >> stashid1 >> stashid2 >> std::dec;
     assert(stashid1<vert.size() && vert[stashid1]);
     assert(stashid2<vert.size() && vert[stashid2]);
 
     int id; // edge id
-    f >> vcl_ws >> id;
+    f >> std::ws >> id;
 
     osl_edge *e = new osl_edge(2/*dummy*/, vert[stashid1], vert[stashid2]);
     e->SetId(id);

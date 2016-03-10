@@ -15,8 +15,10 @@
 // \endverbatim
 //------------------------------------------------------------------------------
 
-#include <vcl_vector.h>
-#include <vcl_list.h>
+#include <vector>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <list>
 
 #include <vil/vil_image_view.h>
 
@@ -35,7 +37,7 @@ class bil_wshed_2d
   double max_mean_intensity_;
   double min_mean_intensity_;
   //struct bil_wshed_2d_region *wshed_regions_;
-  vcl_vector<struct bil_wshed_2d_region> wshed_regions_;
+  std::vector<struct bil_wshed_2d_region> wshed_regions_;
  protected:
 
   vil_image_view< unsigned char > input_img_;
@@ -59,8 +61,8 @@ class bil_wshed_2d
   int *sorted_pixels_x_; //holds the x position of the pixel
   int *sorted_pixels_y_; //holds the y position of the pixel
 
-  vcl_list< int > queue_x;
-  vcl_list< int > queue_y;
+  std::list< int > queue_x;
+  std::list< int > queue_y;
 
  public:
 
@@ -74,7 +76,7 @@ class bil_wshed_2d
   // (min_x,min_y) and (max_x,max_y) specify the region of the image that the algorithm is to be applied
   // All boundary values are set to zero as default, in which case the algorithm is applied on the whole image
   // The necessary boundary checks are also performed
-  vcl_vector< vil_image_view< unsigned char > >
+  std::vector< vil_image_view< unsigned char > >
   bil_wshed_2d_main(vil_image_view< unsigned char> src_img,
                     double gsigma1, double gsigma2, int min_x, int min_y, int max_x, int max_y);
 

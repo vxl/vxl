@@ -12,7 +12,8 @@
 #include <vpgl/vpgl_perspective_camera.h>
 #include <vpgl/vpgl_proj_camera.h>
 #include <vpgl/vpgl_affine_camera.h>
-#include <vcl_vector.h>
+#include <vcl_compiler.h>
+#include <vector>
 #include <vgl/vgl_fwd.h>
 #include <vnl/vnl_fwd.h>
 
@@ -23,14 +24,14 @@ class vpgl_proj_camera_compute
   //: Compute from two sets of corresponding points.
   // Put the resulting camera into \p camera
   // \return true if successful.
-  static bool compute( const vcl_vector< vgl_homg_point_2d<double> >& image_pts,
-                       const vcl_vector< vgl_homg_point_3d<double> >& world_pts,
+  static bool compute( const std::vector< vgl_homg_point_2d<double> >& image_pts,
+                       const std::vector< vgl_homg_point_3d<double> >& world_pts,
                        vpgl_proj_camera<double>& camera );
   //: Compute from two sets of corresponding points.
   // Put the resulting camera into \p camera
   // \return true if successful.
-  static bool compute( const vcl_vector< vgl_point_2d<double> >& image_pts,
-                       const vcl_vector< vgl_point_3d<double> >& world_pts,
+  static bool compute( const std::vector< vgl_point_2d<double> >& image_pts,
+                       const std::vector< vgl_point_3d<double> >& world_pts,
                        vpgl_proj_camera<double>& camera );
  private:
   //:default constructor (is private)
@@ -45,8 +46,8 @@ class vpgl_affine_camera_compute
   //: Compute from two sets of corresponding points.
   // Put the resulting camera into \p camera
   // \return true if successful.
-  static bool compute( const vcl_vector< vgl_point_2d<double> >& image_pts,
-                       const vcl_vector< vgl_point_3d<double> >& world_pts,
+  static bool compute( const std::vector< vgl_point_2d<double> >& image_pts,
+                       const std::vector< vgl_point_3d<double> >& world_pts,
                        vpgl_affine_camera<double>& camera );
  private:
   vpgl_affine_camera_compute();
@@ -60,8 +61,8 @@ class vpgl_perspective_camera_compute
   //: Compute from two sets of corresponding points.
   // Put the resulting camera into \p camera
   // \return true if successful.
-  static bool compute( const vcl_vector< vgl_point_2d<double> >& image_pts,
-                       const vcl_vector< vgl_point_3d<double> >& world_pts,
+  static bool compute( const std::vector< vgl_point_2d<double> >& image_pts,
+                       const std::vector< vgl_point_3d<double> >& world_pts,
                        const vpgl_calibration_matrix<double>& K,
                        vpgl_perspective_camera<double>& camera );
 
@@ -75,8 +76,8 @@ class vpgl_perspective_camera_compute
   // \returns true if successful.
   // \p err is filled with the two-norm of the projection error vector.
   // \p camera is filled with the perspective decomposition of the projection matrix.
-  static bool compute_dlt ( const vcl_vector< vgl_point_2d<double> >& image_pts,
-                            const vcl_vector< vgl_point_3d<double> >& world_pts,
+  static bool compute_dlt ( const std::vector< vgl_point_2d<double> >& image_pts,
+                            const std::vector< vgl_point_3d<double> >& world_pts,
                             vpgl_perspective_camera<double> &camera,
                             double &err);
 
@@ -86,8 +87,8 @@ class vpgl_perspective_camera_compute
   // This computation is simpler than the general case above and only requires 4 points
   // Put the resulting camera into \p camera
   // \return true if successful.
-  static bool compute( const vcl_vector< vgl_point_2d<double> >& image_pts,
-                       const vcl_vector< vgl_point_2d<double> >& ground_pts,
+  static bool compute( const std::vector< vgl_point_2d<double> >& image_pts,
+                       const std::vector< vgl_point_2d<double> >& ground_pts,
                        vpgl_perspective_camera<double>& camera );
 
  private:

@@ -4,7 +4,9 @@
 
 #include <bprb/bprb_func_process.h>
 
-#include <vcl_fstream.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <fstream>
 #include <boxm2/boxm2_scene.h>
 #include <boxm2/boxm2_util.h>
 #include <boxm2/boxm2_data_traits.h>
@@ -20,12 +22,12 @@ bool boxm2_compactify_mog6_view_process_cons(bprb_func_process& pro)
   using namespace boxm2_compactify_mog6_view_process_globals;
 
   //process takes 1 input
-  vcl_vector<vcl_string> input_types_(n_inputs_);
+  std::vector<std::string> input_types_(n_inputs_);
   input_types_[0] = "boxm2_scene_sptr";
   input_types_[1] = "boxm2_cache_sptr";
 
   // process has 2 outputs:
-  vcl_vector<vcl_string>  output_types_(n_outputs_);
+  std::vector<std::string>  output_types_(n_outputs_);
   return pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
 }
 
@@ -34,29 +36,29 @@ bool boxm2_compactify_mog6_view_process(bprb_func_process& pro)
   using namespace boxm2_compactify_mog6_view_process_globals;
 
   if ( pro.n_inputs() < n_inputs_ ){
-    vcl_cout << pro.name() << ": The input number should be " << n_inputs_<< vcl_endl;
+    std::cout << pro.name() << ": The input number should be " << n_inputs_<< std::endl;
     return false;
   }
   //get the inputs
   boxm2_scene_sptr scene = pro.get_input<boxm2_scene_sptr>(0);
   if (!scene){
-    vcl_cout << " null scene in boxm2_compactify_mog6_view_process\n";
+    std::cout << " null scene in boxm2_compactify_mog6_view_process\n";
     return false;
   }
   boxm2_cache_sptr  cache = pro.get_input<boxm2_cache_sptr>(1);
 
 
   //verifies that a scene has a valid appearance, spits out data type and appearance type size
-  vcl_vector<vcl_string> valid_types;
+  std::vector<std::string> valid_types;
   valid_types.push_back(boxm2_data_traits<BOXM2_MOG6_VIEW>::prefix());
   valid_types.push_back(boxm2_data_traits<BOXM2_GAUSS_RGB_VIEW>::prefix());
-  vcl_string data_type;
+  std::string data_type;
   int appTypeSize;
   boxm2_util::verify_appearance(*scene, valid_types, data_type, appTypeSize);
-  vcl_cout<<"DATA_TYPE:"<<data_type<<vcl_endl;
+  std::cout<<"DATA_TYPE:"<<data_type<<std::endl;
 
-  vcl_map<boxm2_block_id, boxm2_block_metadata> blocks = scene->blocks();
-  vcl_map<boxm2_block_id, boxm2_block_metadata>::const_iterator iter;
+  std::map<boxm2_block_id, boxm2_block_metadata> blocks = scene->blocks();
+  std::map<boxm2_block_id, boxm2_block_metadata>::const_iterator iter;
   for(iter = blocks.begin(); iter != blocks.end(); iter++)
   {
     if(data_type == boxm2_data_traits<BOXM2_MOG6_VIEW>::prefix())

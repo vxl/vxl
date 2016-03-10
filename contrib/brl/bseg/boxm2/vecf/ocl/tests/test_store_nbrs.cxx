@@ -5,7 +5,9 @@
 
 
 #include <testlib/testlib_test.h>
-#include <vcl_fstream.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <fstream>
 #include <vil/vil_image_view.h>
 #include <vil/vil_save.h>
 #include <vil/vil_load.h>
@@ -22,13 +24,13 @@ typedef vnl_vector_fixed<unsigned char, 16> uchar16;
 void test_store_nbrs()
 {
   // Set up the scenes
-  vcl_string base_dir_path = "c:/Users/mundy/VisionSystems/Janus/experiments/vector_flow/eye/";
-  //  vcl_string base_dir_path = "c:/Users/mundy/VisionSystems/Janus/experiments/vector_flow/mean_face/";
-  //vcl_string source_scene_path = base_dir_path + "source_scene.xml";
-    vcl_string source_scene_path = base_dir_path + "eye.xml";
+  std::string base_dir_path = "c:/Users/mundy/VisionSystems/Janus/experiments/vector_flow/eye/";
+  //  std::string base_dir_path = "c:/Users/mundy/VisionSystems/Janus/experiments/vector_flow/mean_face/";
+  //std::string source_scene_path = base_dir_path + "source_scene.xml";
+    std::string source_scene_path = base_dir_path + "eye.xml";
   if(!vul_file::exists(source_scene_path))
   {
-      vcl_cout<<"source scene file does not exist"<<vcl_endl;
+      std::cout<<"source scene file does not exist"<<std::endl;
       return;
   }
   boxm2_scene_sptr source_scene = new boxm2_scene(source_scene_path);

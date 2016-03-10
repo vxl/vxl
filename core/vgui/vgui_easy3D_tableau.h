@@ -36,7 +36,7 @@ class vgui_easy3D_tableau : public vgui_displaylist3D_tableau
   vgui_easy3D_tableau();
 
   //: Returns the tableau name.
-  vcl_string type_name() const { return "vgui_easy3D_tableau"; }
+  std::string type_name() const { return "vgui_easy3D_tableau"; }
 
   //: Add the given vgui_soview3D to the display.
   void add(vgui_soview3D*);

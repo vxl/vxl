@@ -7,17 +7,19 @@
 // \author Ian Scott
 
 #include "vimt_scale_pyramid_builder_2d.h"
-#include <vcl_cstdlib.h>
+#include <cstdlib>
 #include <vcl_cassert.h>
-#include <vcl_string.h>
-#include <vcl_iostream.h>
+#include <string>
+#include <iostream>
 #include <vil/vil_bilin_interp.h>
 #include <vgl/vgl_point_2d.h>
 #include <vgl/vgl_vector_2d.h>
 #include <vimt/vimt_image_2d_of.h>
 #include <vimt/vimt_image_pyramid.h>
 #include <vsl/vsl_indent.h>
-#include <vcl_cmath.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <cmath>
 #include <vimt/vimt_crop.h>
 
 //=======================================================================
@@ -53,8 +55,8 @@ void vimt_scale_pyramid_builder_2d<T>::scale_reduce(
   int src_nj = src_im.image().nj();
   int dest_ni = dest_im.image().ni();
   int dest_nj = dest_im.image().nj();
-  vcl_ptrdiff_t istep = src_im.image().istep();
-  vcl_ptrdiff_t jstep = src_im.image().jstep();
+  std::ptrdiff_t istep = src_im.image().istep();
+  std::ptrdiff_t jstep = src_im.image().jstep();
   int n_planes = src_im.image().nplanes();
 
   // Reduce plane-by-plane
@@ -69,10 +71,10 @@ void vimt_scale_pyramid_builder_2d<T>::scale_reduce(
     scale_reduce(&dest_im.image()(0,0,i),dest_im.image().jstep(),
                  &src_im.image()(0,0,i),src_ni,src_nj,dest_ni,dest_nj,istep,jstep);
 #if 0
-  vsl_indent_inc(vcl_cout);
-  vcl_cout << vsl_indent() << "Work image B\n";
-  workb_.print_all(vcl_cout);
-  vsl_indent_dec(vcl_cout);
+  vsl_indent_inc(std::cout);
+  std::cout << vsl_indent() << "Work image B\n";
+  workb_.print_all(std::cout);
+  vsl_indent_dec(std::cout);
 #endif
 
     // Sort out world to image transformation for destination image
@@ -121,10 +123,10 @@ inline float l_round (double x, float )
 
 template <class T>
 void vimt_scale_pyramid_builder_2d<T>::scale_reduce(
-           T* dest_im, vcl_ptrdiff_t dest_jstep,
+           T* dest_im, std::ptrdiff_t dest_jstep,
            const T* src_im,
            int src_ni, int src_nj, int dest_ni, int dest_nj,
-           vcl_ptrdiff_t src_istep, vcl_ptrdiff_t src_jstep) const
+           std::ptrdiff_t src_istep, std::ptrdiff_t src_jstep) const
 {
   T* dest_row = dest_im;
 
@@ -242,7 +244,7 @@ void vimt_scale_pyramid_builder_2d<T>::build(
   vimt_transform_2d im2world = base_image.world2im().inverse();
   vgl_vector_2d<double>  dw = im2world(c1) - im2world(c0);
 
-  double base_pixel_width = vcl_sqrt(0.5*(dw.x()*dw.x() + dw.y()*dw.y()));
+  double base_pixel_width = std::sqrt(0.5*(dw.x()*dw.x() + dw.y()*dw.y()));
 
   im_pyr.set_widths(base_pixel_width,scale_step());
 }
@@ -279,7 +281,7 @@ void vimt_scale_pyramid_builder_2d<T>::extend(vimt_image_pyramid& image_pyr) con
   {
     image_pyr.data().resize(max_lev);
 
-    s = vcl_pow(scale_step(), oldsize);
+    s = std::pow(scale_step(), oldsize);
     for (int i=oldsize;i<max_lev;i++)
     {
       image_pyr.data()[i] = new vimt_image_2d_of<T>;
@@ -301,9 +303,9 @@ void vimt_scale_pyramid_builder_2d<T>::set_max_levels(int max_l)
 {
   if (max_l<1)
   {
-    vcl_cerr << "vimt_gaussian_pyramid_builder_2d<T>::set_max_levels() "
+    std::cerr << "vimt_gaussian_pyramid_builder_2d<T>::set_max_levels() "
              << "Must be >=1, not " << max_l << '\n';
-    vcl_abort();
+    std::abort();
   }
   max_levels_ = max_l;
 }
@@ -329,16 +331,16 @@ vimt_image_pyramid* vimt_scale_pyramid_builder_2d<T>::new_image_pyramid() const
 //=======================================================================
 #if 0
 template <class T>
-vcl_string vimt_scale_pyramid_builder_2d<T>::is_a() const
+std::string vimt_scale_pyramid_builder_2d<T>::is_a() const
 {
-  return vcl_string("vimt_scale_pyramid_builder_2d<T>");
+  return std::string("vimt_scale_pyramid_builder_2d<T>");
 }
 #endif
 
 //=======================================================================
 
 template <class T>
-bool vimt_scale_pyramid_builder_2d<T>::is_class(vcl_string const& s) const
+bool vimt_scale_pyramid_builder_2d<T>::is_class(std::string const& s) const
 {
   return s==vimt_scale_pyramid_builder_2d<T>::is_a() || vimt_scale_pyramid_builder_2d<T>::is_class(s);
 }
@@ -362,9 +364,9 @@ vimt_image_pyramid_builder* vimt_scale_pyramid_builder_2d<T>::clone() const
 //=======================================================================
 
 template <class T>
-void vimt_scale_pyramid_builder_2d<T>::print_summary(vcl_ostream& /*os*/) const
+void vimt_scale_pyramid_builder_2d<T>::print_summary(std::ostream& /*os*/) const
 {
-  vcl_cerr << "vimt_scale_pyramid_builder_2d<T>::print_summary() NYI\n";
+  std::cerr << "vimt_scale_pyramid_builder_2d<T>::print_summary() NYI\n";
 }
 
 //=======================================================================
@@ -394,16 +396,16 @@ void vimt_scale_pyramid_builder_2d<T>::b_read(vsl_b_istream& bfs)
     set_scale_step(scale);
     break;
   default:
-    vcl_cerr << "I/O ERROR: vimt_scale_pyramid_builder_2d<T>::b_read(vsl_b_istream&)\n"
+    std::cerr << "I/O ERROR: vimt_scale_pyramid_builder_2d<T>::b_read(vsl_b_istream&)\n"
              << "           Unknown version number "<< version << '\n';
-    bfs.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
+    bfs.is().clear(std::ios::badbit); // Set an unrecoverable IO error on stream
     return;
   }
 }
 
 #define VIMT_SCALE_PYRAMID_BUILDER_2D_INSTANTIATE(T) \
-VCL_DEFINE_SPECIALIZATION vcl_string vimt_scale_pyramid_builder_2d<T >::is_a() const \
-{  return vcl_string("vimt_scale_pyramid_builder_2d<" #T ">"); }\
+VCL_DEFINE_SPECIALIZATION std::string vimt_scale_pyramid_builder_2d<T >::is_a() const \
+{  return std::string("vimt_scale_pyramid_builder_2d<" #T ">"); }\
 template class vimt_scale_pyramid_builder_2d<T >
 
 #endif // vimt_scale_pyramid_builder_2d_hxx_

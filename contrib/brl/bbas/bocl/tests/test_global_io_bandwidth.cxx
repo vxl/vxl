@@ -4,7 +4,7 @@
 
 bool test_atom_cmpxchg(unsigned len, float & bandwidth)
 {
-  vcl_string root_dir = testlib_root_dir();
+  std::string root_dir = testlib_root_dir();
   bocl_global_memory_bandwidth_manager &mgr = bocl_global_memory_bandwidth_manager::instance();
   if (!mgr.image_support())
     return false;
@@ -24,7 +24,7 @@ bool test_atom_cmpxchg(unsigned len, float & bandwidth)
 
   cl_int * result_array=(cl_int*)mgr.result_array();
   for (unsigned i=0;i<len;++i)
-    vcl_cout<<result_array[i]<<' ';
+    std::cout<<result_array[i]<<' ';
 
   mgr.clean_array();
   mgr.clean_result_array();
@@ -34,7 +34,7 @@ bool test_atom_cmpxchg(unsigned len, float & bandwidth)
 
 bool test_locking_mechanism(unsigned len, float & bandwidth)
 {
-  vcl_string root_dir = testlib_root_dir();
+  std::string root_dir = testlib_root_dir();
   bocl_global_memory_bandwidth_manager &mgr = bocl_global_memory_bandwidth_manager::instance();
   if (!mgr.image_support())
     return false;
@@ -46,7 +46,7 @@ bool test_locking_mechanism(unsigned len, float & bandwidth)
 
   cl_float * result_array=mgr.result_array();
   for (unsigned i=0;i<128;++i)
-    vcl_cout<<result_array[i]<<' ';
+    std::cout<<result_array[i]<<' ';
 
   mgr.clean_array();
   mgr.clean_result_array();
@@ -55,7 +55,7 @@ bool test_locking_mechanism(unsigned len, float & bandwidth)
 
 bool test_single_thread_read_bandwidth_image(unsigned len, float & bandwidth)
 {
-  vcl_string root_dir = testlib_root_dir();
+  std::string root_dir = testlib_root_dir();
   bocl_global_memory_bandwidth_manager &mgr = bocl_global_memory_bandwidth_manager::instance();
   if (!mgr.image_support())
     return false;
@@ -91,7 +91,7 @@ bool test_single_thread_read_bandwidth_image(unsigned len, float & bandwidth)
 
 bool test_workgroup_coalesced_read_bandwidth_image(unsigned len, float & bandwidth)
 {
-  vcl_string root_dir = testlib_root_dir();
+  std::string root_dir = testlib_root_dir();
   bocl_global_memory_bandwidth_manager &mgr=bocl_global_memory_bandwidth_manager::instance();
   if (!mgr.image_support())
     return false;
@@ -128,7 +128,7 @@ bool test_workgroup_coalesced_read_bandwidth_image(unsigned len, float & bandwid
 
 bool test_single_thread_read_bandwidth(unsigned len, float & bandwidth)
 {
-  vcl_string root_dir = testlib_root_dir();
+  std::string root_dir = testlib_root_dir();
   bocl_global_memory_bandwidth_manager &mgr = bocl_global_memory_bandwidth_manager::instance();
   mgr.setup_array(len);
   mgr.setup_result_array();
@@ -163,7 +163,7 @@ bool test_single_thread_read_bandwidth(unsigned len, float & bandwidth)
 
 bool test_workgroup_uncoalesced_read_bandwidth(unsigned len, float & bandwidth)
 {
-  vcl_string root_dir = testlib_root_dir();
+  std::string root_dir = testlib_root_dir();
   bocl_global_memory_bandwidth_manager &mgr = bocl_global_memory_bandwidth_manager::instance();
   mgr.setup_array(len);
   mgr.setup_result_array();
@@ -182,7 +182,7 @@ bool test_workgroup_uncoalesced_read_bandwidth(unsigned len, float & bandwidth)
   cl_float * result_array=mgr.result_array();
   for (unsigned i=0;i<len;++i) {
     //if (result_array[i] > 0)
-    //  vcl_cout << i << ' ' << result_array[i] << vcl_endl;
+    //  std::cout << i << ' ' << result_array[i] << std::endl;
     sum+=result_array[i];
   }
   mgr.clean_array();
@@ -198,7 +198,7 @@ bool test_workgroup_uncoalesced_read_bandwidth(unsigned len, float & bandwidth)
 
 bool test_workgroup_coalesced_read_bandwidth(unsigned len, float & bandwidth)
 {
-  vcl_string root_dir = testlib_root_dir();
+  std::string root_dir = testlib_root_dir();
   bocl_global_memory_bandwidth_manager& mgr=bocl_global_memory_bandwidth_manager::instance();
   mgr.setup_array(len);
   mgr.setup_result_array();
@@ -233,7 +233,7 @@ bool test_workgroup_coalesced_read_bandwidth(unsigned len, float & bandwidth)
 
 bool test_single_thread_read_bandwidth_local_meory(unsigned len, float & bandwidth)
 {
-  vcl_string root_dir = testlib_root_dir();
+  std::string root_dir = testlib_root_dir();
   bocl_global_memory_bandwidth_manager &mgr=bocl_global_memory_bandwidth_manager::instance();
   mgr.setup_array(len);
   mgr.setup_result_array();
@@ -270,7 +270,7 @@ bool test_single_thread_read_bandwidth_local_meory(unsigned len, float & bandwid
 
 bool test_workgroup_uncoalesced_read_bandwidth_local_meory(unsigned len, float & bandwidth)
 {
-  vcl_string root_dir = testlib_root_dir();
+  std::string root_dir = testlib_root_dir();
   bocl_global_memory_bandwidth_manager &mgr=bocl_global_memory_bandwidth_manager::instance();
   mgr.setup_array(len);
   mgr.setup_result_array();
@@ -305,7 +305,7 @@ bool test_workgroup_uncoalesced_read_bandwidth_local_meory(unsigned len, float &
 
 bool test_workgroup_coalesced_read_bandwidth_local_memory(unsigned len, float & bandwidth)
 {
-  vcl_string root_dir = testlib_root_dir();
+  std::string root_dir = testlib_root_dir();
   bocl_global_memory_bandwidth_manager &mgr = bocl_global_memory_bandwidth_manager::instance();
   mgr.setup_array(len);
   mgr.setup_result_array();
@@ -342,7 +342,7 @@ bool test_workgroup_coalesced_read_bandwidth_local_memory(unsigned len, float & 
 
 bool test_workgroup_prefetch_bandwidth_local_memory(int len, float & bandwidth)
 {
-  vcl_string root_dir = testlib_root_dir();
+  std::string root_dir = testlib_root_dir();
   bocl_global_memory_bandwidth_manager &mgr=bocl_global_memory_bandwidth_manager::instance();
   mgr.setup_array(len);
   mgr.setup_result_array();
@@ -385,26 +385,26 @@ static void test_global_io_bandwidth()
   //test_atom_cmpxchg(4096,bandwidth);
   //test_locking_mechanism(1024,bandwidth);
 
-  vcl_cout<<"BANDWIDTH IN MB/s"<<vcl_endl;
+  std::cout<<"BANDWIDTH IN MB/s"<<std::endl;
   if (test_single_thread_read_bandwidth(len,bandwidth))
-    vcl_cout<<" test_single_thread_read_bandwidth "<<bandwidth<<vcl_endl;
+    std::cout<<" test_single_thread_read_bandwidth "<<bandwidth<<std::endl;
   if (test_workgroup_uncoalesced_read_bandwidth(len,bandwidth))
-    vcl_cout<<" test_workgroup_uncoalesced_read_bandwidth "<<bandwidth<<vcl_endl;
+    std::cout<<" test_workgroup_uncoalesced_read_bandwidth "<<bandwidth<<std::endl;
   if (test_workgroup_coalesced_read_bandwidth(len,bandwidth))
-    vcl_cout<<" test_workgroup_coalesced_read_bandwidth "<<bandwidth<<vcl_endl;
+    std::cout<<" test_workgroup_coalesced_read_bandwidth "<<bandwidth<<std::endl;
   if (test_single_thread_read_bandwidth_local_meory(len,bandwidth))
-    vcl_cout<<" test_single_thread_read_bandwidth_local_meory "<<bandwidth<<vcl_endl;
+    std::cout<<" test_single_thread_read_bandwidth_local_meory "<<bandwidth<<std::endl;
   if (test_workgroup_uncoalesced_read_bandwidth_local_meory(len,bandwidth))
-    vcl_cout<<" test_workgroup_uncoalesced_read_bandwidth_local_meory "<<bandwidth<<vcl_endl;
+    std::cout<<" test_workgroup_uncoalesced_read_bandwidth_local_meory "<<bandwidth<<std::endl;
   if (test_workgroup_coalesced_read_bandwidth_local_memory(len,bandwidth))
-    vcl_cout<<" test_workgroup_coalesced_read_bandwidth_local_memory "<<bandwidth<<vcl_endl;
+    std::cout<<" test_workgroup_coalesced_read_bandwidth_local_memory "<<bandwidth<<std::endl;
 
   if (test_single_thread_read_bandwidth_image(len,bandwidth))
-    vcl_cout<<" test_single_thread_read_bandwidth_image "<<bandwidth<<vcl_endl;
+    std::cout<<" test_single_thread_read_bandwidth_image "<<bandwidth<<std::endl;
   if (test_workgroup_coalesced_read_bandwidth_image(len,bandwidth))
-    vcl_cout<<" test_workgroup_coalesced_read_bandwidth_image "<<bandwidth<<vcl_endl;
+    std::cout<<" test_workgroup_coalesced_read_bandwidth_image "<<bandwidth<<std::endl;
   if (test_workgroup_prefetch_bandwidth_local_memory(len,bandwidth))
-    vcl_cout<<" test_workgroup_prefetch_bandwidth_local_memory "<<bandwidth<<vcl_endl;
+    std::cout<<" test_workgroup_prefetch_bandwidth_local_memory "<<bandwidth<<std::endl;
 }
 
 TESTMAIN(test_global_io_bandwidth);

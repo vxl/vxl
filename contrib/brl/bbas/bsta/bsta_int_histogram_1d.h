@@ -30,13 +30,15 @@
 // \endverbatim
 //-----------------------------------------------------------------------------
 
-#include <vcl_vector.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <vector>
 
 class bsta_int_histogram_1d
 {
  private:
   unsigned int nbins_;
-  vcl_vector<long int> counts_;
+  std::vector<long int> counts_;
 
  public:
 
@@ -85,7 +87,7 @@ class bsta_int_histogram_1d
 
   // Find the "significant peaks & vallwys in a histogram.  Here "significant" means there is
   //   a specified difference in height between the peak and the previous valley, or vice versa.
-  bool find_peaks( float perct, int &n_peaks, vcl_vector<unsigned int> &peaks);
+  bool find_peaks( float perct, int &n_peaks, std::vector<unsigned int> &peaks);
 };
 
 #endif // BSTA_INT_HISTOGRAM_1D_H_

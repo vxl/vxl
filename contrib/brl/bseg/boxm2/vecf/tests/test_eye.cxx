@@ -5,7 +5,9 @@
 
 
 #include <testlib/testlib_test.h>
-#include <vcl_fstream.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <fstream>
 #include <vgl/vgl_box_3d.h>
 #include <vnl/vnl_vector_fixed.h>
 #include <vil/vil_image_view.h>
@@ -24,12 +26,12 @@ typedef vnl_vector_fixed<unsigned char, 16> uchar16;
 void test_eye()
 {
   // Set up the scenes
-  vcl_string base_dir_path = "c:/Users/mundy/VisionSystems/Janus/experiments/vector_flow/eye/";
-  vcl_string eye_scene_path = base_dir_path + "eye.xml";
-  vcl_string target_scene_path = base_dir_path + "target_eye.xml";
+  std::string base_dir_path = "c:/Users/mundy/VisionSystems/Janus/experiments/vector_flow/eye/";
+  std::string eye_scene_path = base_dir_path + "eye.xml";
+  std::string target_scene_path = base_dir_path + "target_eye.xml";
   if(!vul_file::exists(eye_scene_path))
   {
-      vcl_cout<<"eye scene file) does not exist"<<vcl_endl;
+      std::cout<<"eye scene file) does not exist"<<std::endl;
       return;
   }
   bool init = false;
@@ -49,13 +51,13 @@ void test_eye()
   double ang =0.0;
   vnl_vector_fixed<double, 3> rod(0.0, ang, 0.0);
   vgl_rotation_3d<double> rot(rod);
-  vcl_vector<vgl_vector_3d<double> > invf = eye.inverse_vector_field(rot);
+  std::vector<vgl_vector_3d<double> > invf = eye.inverse_vector_field(rot);
   eye.apply_vector_field_to_self(invf);
 
   vul_timer t;
   for(unsigned i = 0; i<500; ++i)
     eye.rotate(rot);
-  vcl_cout << "time = " << t.real()/1000.0 << '\n'<< vcl_flush;
+  std::cout << "time = " << t.real()/1000.0 << '\n'<< std::flush;
   boxm2_vecf_eye eye;
   eye.initialize_scene(eye_scene_path);
   eye.create_eye();
@@ -65,13 +67,13 @@ void test_eye()
   vul_timer t;
   for(unsigned i = 0; i<500; ++i)
     eye.rotate(rot);
-  vcl_cout << "time = " << t.real()/1000.0 << '\n'<< vcl_flush;
+  std::cout << "time = " << t.real()/1000.0 << '\n'<< std::flush;
   boxm2_cache::instance()->write_to_disk();
 
   boxm2_scene_sptr eye_scene = new boxm2_scene(eye_scene_path);
   boxm2_lru_cache::create(eye_scene);
-  vcl_vector<boxm2_block_id> blocks = eye_scene->get_block_ids();
-  vcl_vector<boxm2_block_id>::iterator iter_blk = blocks.begin();
+  std::vector<boxm2_block_id> blocks = eye_scene->get_block_ids();
+  std::vector<boxm2_block_id>::iterator iter_blk = blocks.begin();
   boxm2_block_sptr blk = boxm2_cache::instance()->get_block(eye_scene, *iter_blk);
   vgl_point_3d<double> p(0.0, 0.0, 0.0);
   unsigned indx, depth;

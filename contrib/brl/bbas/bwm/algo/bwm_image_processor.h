@@ -1,7 +1,9 @@
 #ifndef bwm_image_proc_h_
 #define bwm_image_proc_h_
 
-#include <vcl_vector.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <vector>
 
 #include <vgl/vgl_polygon.h>
 
@@ -30,19 +32,19 @@ class bwm_image_processor
 #if 0
   static bool step_edges_vd(bgui_image_tableau_sptr const& img,
                             vsol_box_2d_sptr const& roi,
-                            vcl_vector<vdgl_digital_curve_sptr>& edges);
+                            std::vector<vdgl_digital_curve_sptr>& edges);
 #endif
 
   static bool step_edges_vd(bgui_image_tableau_sptr const& img,
                             vsol_box_2d_sptr const& roi,
-                            vcl_vector<vsol_digital_curve_2d_sptr>& edges);
+                            std::vector<vsol_digital_curve_2d_sptr>& edges);
 
   static bool lines_vd(bgui_image_tableau_sptr const& img,
                        vsol_box_2d_sptr const& roi,
-                       vcl_vector<vsol_line_2d_sptr>& edges);
+                       std::vector<vsol_line_2d_sptr>& edges);
 
   static void scan_regions(bgui_image_tableau_sptr const& img,
-                           vcl_vector<vgl_polygon<double> > const& regions);
+                           std::vector<vgl_polygon<double> > const& regions);
 
   static bool crop_to_box(bgui_image_tableau_sptr const& img,
                           vsol_box_2d_sptr const& roi,

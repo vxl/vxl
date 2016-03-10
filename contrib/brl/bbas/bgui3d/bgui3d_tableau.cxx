@@ -62,7 +62,7 @@ bgui3d_tableau::~bgui3d_tableau()
 }
 
 
-vcl_string bgui3d_tableau::type_name() const {return "bgui3d_tableau";}
+std::string bgui3d_tableau::type_name() const {return "bgui3d_tableau";}
 
 
 //: Set up OpenGL for rendering
@@ -290,10 +290,10 @@ bgui3d_tableau::set_camera(const vpgl_proj_camera<double>& /*camera*/)
 
 //: Get the scene camera
 // creates a vpgl camera (either perspective or affine) from the graphics camera
-vcl_auto_ptr<vpgl_proj_camera<double> >
+std::auto_ptr<vpgl_proj_camera<double> >
 bgui3d_tableau::camera() const
 {
-  return vcl_auto_ptr<vpgl_proj_camera<double> >(NULL);
+  return std::auto_ptr<vpgl_proj_camera<double> >(NULL);
 }
 
 

@@ -2,9 +2,11 @@
 //:
 // \file
 #include <vsl/vsl_vector_io.h>
-#include <vcl_algorithm.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <algorithm>
 
-unsigned volm_desc_ex_land_only::locate_idx(double const& target, vcl_vector<double> const& arr) const
+unsigned volm_desc_ex_land_only::locate_idx(double const& target, std::vector<double> const& arr) const
 {
   // simple binary search to locate the dist_id and height_id given dist value or height values
   assert(target >= 0 && "given object dists/height is smaller than 0");
@@ -22,7 +24,7 @@ unsigned volm_desc_ex_land_only::locate_idx(double const& target, vcl_vector<dou
 }
 
 volm_desc_ex_land_only::volm_desc_ex_land_only(depth_map_scene_sptr const& dms,
-                                               vcl_vector<double> const& radius,
+                                               std::vector<double> const& radius,
                                                unsigned const& nlands,
                                                unsigned char const& initial_mag)
 {
@@ -34,7 +36,7 @@ volm_desc_ex_land_only::volm_desc_ex_land_only(depth_map_scene_sptr const& dms,
   else
     radius_ = radius;
   // sort the radius to ensure the bin order
-  vcl_sort(radius_.begin(), radius_.end());
+  std::sort(radius_.begin(), radius_.end());
   ndists_ = (unsigned)radius.size() + 1;
   nbins_ = ndists_ * nlands_;
   h_.resize(nbins_);
@@ -43,28 +45,28 @@ volm_desc_ex_land_only::volm_desc_ex_land_only(depth_map_scene_sptr const& dms,
   // ingest depth_map_scene into histogram
   // sky (land id = 0, distant = 1E6)
   if (!dms->sky().empty()) {
-    vcl_vector<depth_map_region_sptr> sky = dms->sky();
+    std::vector<depth_map_region_sptr> sky = dms->sky();
     for (unsigned s_idx = 0; s_idx < sky.size(); s_idx++)
       this->set_count(sky[s_idx]->min_depth(), sky[s_idx]->land_id(), (unsigned char)1);
   }
   // ground
   if (!dms->ground_plane().empty()) {
-    vcl_vector<depth_map_region_sptr> grd = dms->ground_plane();
+    std::vector<depth_map_region_sptr> grd = dms->ground_plane();
     for (unsigned g_idx = 0; g_idx < grd.size(); g_idx++)
       this->set_count(grd[g_idx]->min_depth(), grd[g_idx]->land_id(), (unsigned char)1);
   }
   // other objects
   if (!dms->scene_regions().empty()) {
-    vcl_vector<depth_map_region_sptr> obj = dms->scene_regions();
+    std::vector<depth_map_region_sptr> obj = dms->scene_regions();
     for (unsigned o_idx = 0; o_idx < obj.size(); o_idx++)
       this->set_count(obj[o_idx]->min_depth(), obj[o_idx]->land_id(), (unsigned char)1);
   }
 }
 
-volm_desc_ex_land_only::volm_desc_ex_land_only(vcl_vector<unsigned char> const& index_dst,
-                                               vcl_vector<unsigned char> const& index_combined,
-                                               vcl_vector<double> depth_interval,
-                                               vcl_vector<double> const& radius,
+volm_desc_ex_land_only::volm_desc_ex_land_only(std::vector<unsigned char> const& index_dst,
+                                               std::vector<unsigned char> const& index_combined,
+                                               std::vector<double> depth_interval,
+                                               std::vector<double> const& radius,
                                                unsigned const& nlands,
                                                unsigned char const& initial_mag)
 {
@@ -76,7 +78,7 @@ volm_desc_ex_land_only::volm_desc_ex_land_only(vcl_vector<unsigned char> const& 
   else
     radius_ = radius;
   // sort the radius to ensure the bin order
-  vcl_sort(radius_.begin(), radius_.end());
+  std::sort(radius_.begin(), radius_.end());
   ndists_ = (unsigned)radius.size() + 1;
   nbins_ = ndists_ * nlands_;
   h_.resize(nbins_);
@@ -147,19 +149,19 @@ void volm_desc_ex_land_only::set_count(double const& dist, unsigned const& land,
 
 void volm_desc_ex_land_only::print() const
 {
-  vcl_cout << "descriptor name: " << name_ << '\n';
-  vcl_cout << "number of depth bins: " << ndists_ << '\n'
+  std::cout << "descriptor name: " << name_ << '\n';
+  std::cout << "number of depth bins: " << ndists_ << '\n'
      << "radius interval: ";
   for (unsigned ridx = 0; ridx < radius_.size(); ridx++)
-    vcl_cout << radius_[ridx] << ' ';
-  vcl_cout << '\n'
+    std::cout << radius_[ridx] << ' ';
+  std::cout << '\n'
            << "number of land bins: " << nlands_ << '\n'
            << "histogram info:\n";
-  vcl_cout << "number of total bins:" << nbins_ << '\n'
+  std::cout << "number of total bins:" << nbins_ << '\n'
            << "counts: ";
   for (unsigned i = 0; i < nbins_; i++)
-    vcl_cout << (int)h_[i] << ' ';
-  vcl_cout << vcl_endl;
+    std::cout << (int)h_[i] << ' ';
+  std::cout << std::endl;
 }
 
 float volm_desc_ex_land_only::similarity(volm_desc_sptr other)
@@ -169,7 +171,7 @@ float volm_desc_ex_land_only::similarity(volm_desc_sptr other)
   // calculate the intersection
   float intersec = 0.0f;
   for (unsigned idx = 0; idx < nbins_; idx++) {
-    intersec += (float)vcl_min(this->count(idx), other->count(idx));
+    intersec += (float)std::min(this->count(idx), other->count(idx));
   }
   // normalize by current histogram area
   return intersec/this->get_area();
@@ -201,7 +203,7 @@ void volm_desc_ex_land_only::b_read(vsl_b_istream& is)
     vsl_b_read(is, h_);
   }
   else {
-    vcl_cout << "volm_descriptor -- unknown binary io version " << ver << '\n';
+    std::cout << "volm_descriptor -- unknown binary io version " << ver << '\n';
     return;
   }
 }

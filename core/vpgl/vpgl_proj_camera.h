@@ -52,7 +52,8 @@
 #include <vgl/vgl_homg_plane_3d.h>
 #include <vgl/algo/vgl_h_matrix_2d.h>
 #include <vgl/algo/vgl_h_matrix_3d.h>
-#include <vcl_iosfwd.h>
+#include <vcl_compiler.h>
+#include <iosfwd>
 
 
 
@@ -80,7 +81,7 @@ class vpgl_proj_camera : public vpgl_camera<T>
   //: Copy constructor.
   vpgl_proj_camera( const vpgl_proj_camera& cam );
 
-  virtual vcl_string type_name() const { return "vpgl_proj_camera"; }
+  virtual std::string type_name() const { return "vpgl_proj_camera"; }
 
   //: Clone `this': creation of a new object and initialization
   //  See Prototype pattern
@@ -165,7 +166,7 @@ class vpgl_proj_camera : public vpgl_camera<T>
   // --------------------- I/O :---------------------
 
   //: Save in ascii format
-  virtual void save(vcl_string cam_path);
+  virtual void save(std::string cam_path);
 
  private:
   //: The internal representation of the get_matrix.
@@ -227,19 +228,19 @@ vgl_point_3d<T> triangulate_3d_point(const vpgl_proj_camera<T>& c1,
 //  The returned matrices map a differential change in 3D
 //  to a differential change in the 2D image at each specified 3D point
 template <class T>
-vcl_vector<vnl_matrix_fixed<T,2,3> >
+std::vector<vnl_matrix_fixed<T,2,3> >
 image_jacobians(const vpgl_proj_camera<T>& camera,
-                const vcl_vector<vgl_point_3d<T> >& pts);
+                const std::vector<vgl_point_3d<T> >& pts);
 
 
 // I/O ---
 
 //: Write vpgl_perspective_camera to stream
 template <class Type>
-vcl_ostream&  operator<<(vcl_ostream& s, vpgl_proj_camera<Type> const& p);
+std::ostream&  operator<<(std::ostream& s, vpgl_proj_camera<Type> const& p);
 
 //: Read vpgl_perspective_camera  from stream
 template <class Type>
-vcl_istream&  operator>>(vcl_istream& s, vpgl_proj_camera<Type>& p);
+std::istream&  operator>>(std::istream& s, vpgl_proj_camera<Type>& p);
 
 #endif // vpgl_proj_camera_h_

@@ -37,13 +37,13 @@ bool bvpl_find_pairs_process_process_cons(bprb_func_process& pro)
 {
   using namespace bvpl_find_pairs_process_globals;
 
-  vcl_vector<vcl_string> input_types_(n_inputs_);
+  std::vector<std::string> input_types_(n_inputs_);
   input_types_[0] = "bvxm_voxel_grid_base_sptr";
   input_types_[1] = "int";
   input_types_[2] = "bvpl_kernel_vector_sptr";
   input_types_[3] = "vcl_string";
 
-  vcl_vector<vcl_string> output_types_(n_outputs_);
+  std::vector<std::string> output_types_(n_outputs_);
   output_types_[0] = "bvpl_corner_pairs_sptr";
   output_types_[1] = "bvxm_voxel_grid_base_sptr";
 
@@ -56,7 +56,7 @@ bool bvpl_find_pairs_process_process(bprb_func_process& pro)
 
   if (pro.n_inputs() != n_inputs_)
   {
-    vcl_cout << pro.name() << " The input number should be " << n_inputs_<< vcl_endl;
+    std::cout << pro.name() << " The input number should be " << n_inputs_<< std::endl;
     return false;
   }
 
@@ -64,11 +64,11 @@ bool bvpl_find_pairs_process_process(bprb_func_process& pro)
   bvxm_voxel_grid_base_sptr pair_grid_base = pro.get_input<bvxm_voxel_grid_base_sptr>(0);
   int opposite_angle = pro.get_input<int>(1);
   bvpl_kernel_vector_sptr search_kernels = pro.get_input<bvpl_kernel_vector_sptr>(2);
-  vcl_string out_path = pro.get_input<vcl_string>(3);
+  std::string out_path = pro.get_input<std::string>(3);
 
 
   if (!pair_grid_base.ptr() || !search_kernels.ptr()) {
-    vcl_cout <<  " :-- One of the inputs is invalid\n";
+    std::cout <<  " :-- One of the inputs is invalid\n";
     return false;
   }
   //cast grid

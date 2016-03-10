@@ -4,9 +4,11 @@
 #include <boxm2/boxm2_data_traits.h>
 #include <vgl/vgl_vector_3d.h>
 #include <vnl/vnl_math.h>
-#include <vcl_vector.h>
-#include <vcl_algorithm.h>
-#include <vcl_iostream.h>
+#include <vector>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <algorithm>
+#include <iostream>
 #include <vnl/vnl_erf.h>
 
 #include <brad/brad_image_metadata.h>
@@ -15,8 +17,8 @@
 
 #include "boxm2_compute_normal_albedo_functor.h"
 
-bool boxm2_compute_normal_albedo_functor::init_data(vcl_vector<brad_image_metadata> const& metadata,
-                                                    vcl_vector<brad_atmospheric_parameters> const& atm_params,
+bool boxm2_compute_normal_albedo_functor::init_data(std::vector<brad_image_metadata> const& metadata,
+                                                    std::vector<brad_atmospheric_parameters> const& atm_params,
                                                     boxm2_stream_cache_sptr str_cache,
                                                     boxm2_data_base * alpha_data,
                                                     boxm2_data_base * normal_albedo_model)
@@ -42,7 +44,7 @@ bool boxm2_compute_normal_albedo_functor::init_data(vcl_vector<brad_image_metada
    num_images_ = metadata.size();
    // sanity check on atmospheric parameters
    if (atm_params_.size() != num_images_) {
-      vcl_cerr << "ERROR: boxm2_compute_normal_albedo_functor: image metadata.size() = "
+      std::cerr << "ERROR: boxm2_compute_normal_albedo_functor: image metadata.size() = "
                << num_images_ << ", atm_params_.size() = " << atm_params_.size() << '\n';
       return false;
    }
@@ -62,9 +64,9 @@ bool boxm2_compute_normal_albedo_functor::init_data(vcl_vector<brad_image_metada
       // convert sun and view az,el into 3d vectors
       double az = metadata_[m].sun_azimuth_ * vnl_math::pi_over_180; //convert to radians
       double el = metadata_[m].sun_elevation_ * vnl_math::pi_over_180; //convert to radians
-      double x = vcl_sin(az)*vcl_cos(el);
-      double y = vcl_cos(az)*vcl_cos(el);
-      double z = vcl_sin(el);
+      double x = std::sin(az)*std::cos(el);
+      double y = std::cos(az)*std::cos(el);
+      double z = std::sin(el);
       sun_positions_[m] = vgl_vector_3d<double>(x,y,z);
 
       reflectance_scales_[m].resize(num_normals_);
@@ -101,19 +103,19 @@ bool boxm2_compute_normal_albedo_functor::init_data(vcl_vector<brad_image_metada
 bool boxm2_compute_normal_albedo_functor::process_cell(unsigned int index, bool is_leaf, float side_len)
 {
    if (index >= naa_model_data_->data().size()) {
-      vcl_cerr << "ERROR: index = " << index << ", naa_model_data_->data().size = " << naa_model_data_->data().size() << '\n'
+      std::cerr << "ERROR: index = " << index << ", naa_model_data_->data().size = " << naa_model_data_->data().size() << '\n'
                << "   alpha_data_->data().size() = " << alpha_data_->data().size() << '\n';
       return false;
    }
    if (index >= alpha_data_->data().size()) {
-      vcl_cerr << "ERROR: index = " << index << ", alpha_data_->data().size = " << alpha_data_->data().size() << '\n';
+      std::cerr << "ERROR: index = " << index << ", alpha_data_->data().size = " << alpha_data_->data().size() << '\n';
       return false;
    }
    boxm2_data<BOXM2_NORMAL_ALBEDO_ARRAY>::datatype & naa_model = naa_model_data_->data()[index];
-   vcl_vector<aux0_datatype> aux0_raw = str_cache_->get_next<BOXM2_AUX0>(id_, index); // seg_len
-   vcl_vector<aux1_datatype> aux1_raw = str_cache_->get_next<BOXM2_AUX1>(id_, index); // mean_obs
-   vcl_vector<aux2_datatype> aux2_raw = str_cache_->get_next<BOXM2_AUX2>(id_, index); // vis
-   vcl_vector<aux3_datatype> aux3_raw = str_cache_->get_next<BOXM2_AUX3>(id_, index); // pre
+   std::vector<aux0_datatype> aux0_raw = str_cache_->get_next<BOXM2_AUX0>(id_, index); // seg_len
+   std::vector<aux1_datatype> aux1_raw = str_cache_->get_next<BOXM2_AUX1>(id_, index); // mean_obs
+   std::vector<aux2_datatype> aux2_raw = str_cache_->get_next<BOXM2_AUX2>(id_, index); // vis
+   std::vector<aux3_datatype> aux3_raw = str_cache_->get_next<BOXM2_AUX3>(id_, index); // pre
 
    for (unsigned m = 0; m < aux0_raw.size(); ++m) {
       if (aux0_raw[m]>1e-10f)
@@ -129,14 +131,14 @@ bool boxm2_compute_normal_albedo_functor::process_cell(unsigned int index, bool 
       }
    }
 
-   vcl_vector<aux1_datatype> radiances;
-   vcl_vector<aux2_datatype> vis_vals;
+   std::vector<aux1_datatype> radiances;
+   std::vector<aux2_datatype> vis_vals;
 
    vis_vals.insert(vis_vals.begin(), aux2_raw.begin(), aux2_raw.end());
    radiances.insert(radiances.begin(), aux1_raw.begin(), aux1_raw.end());
 
    if (radiances.size() != num_images_) {
-      vcl_cerr << "ERROR: boxm2_compute_normal_albedo_functor: aux data size does not match number of images" << '\n';
+      std::cerr << "ERROR: boxm2_compute_normal_albedo_functor: aux data size does not match number of images" << '\n';
       return false;
    }
 
@@ -151,7 +153,7 @@ bool boxm2_compute_normal_albedo_functor::process_cell(unsigned int index, bool 
    double prob_sum = 0.0;
 
    // for each normal, compute optimal reflectance
-   vcl_vector<double> obs_probs(num_normals_);
+   std::vector<double> obs_probs(num_normals_);
    for (unsigned int n=0; n<num_normals_; ++n) {
       vgl_vector_3d<double> normal = normals_[n];
       double numerator = 0.0;
@@ -171,10 +173,10 @@ bool boxm2_compute_normal_albedo_functor::process_cell(unsigned int index, bool 
          }
          double pred_var = radiance_var_scales_[m][n]*rho*rho + radiance_var_offsets_[m][n];
          if (!(pred_var > 0.1)) {
-            vcl_cerr << "------- ERROR: prediction variance = " << pred_var << '\n';
+            std::cerr << "------- ERROR: prediction variance = " << pred_var << '\n';
             pred_var = 1.0;
          }
-         double weight = vis_vals[m] / (1.0 + vcl_sqrt(pred_var));
+         double weight = vis_vals[m] / (1.0 + std::sqrt(pred_var));
          numerator += weight*rho;
          denominator += weight;
       }
@@ -191,13 +193,13 @@ bool boxm2_compute_normal_albedo_functor::process_cell(unsigned int index, bool 
          double prediction_var = radiance_var_scales_[m][n]*albedo*albedo + radiance_var_offsets_[m][n];
          if (prediction_var < 1e-6) {
             prediction_var = 1e-6;
-            vcl_cerr << "ERROR: boxm2_compute_normal_albedo_functor: prediction variance = " << prediction_var << vcl_endl;
+            std::cerr << "ERROR: boxm2_compute_normal_albedo_functor: prediction variance = " << prediction_var << std::endl;
          }
          double weight = vis_vals[m];
          double radiance = radiances[m];
          double intensity_diff = predicted - radiance;
-         double gauss_norm = vnl_math::one_over_sqrt2pi / vcl_sqrt(prediction_var);
-         double intensity_prob = gauss_norm * vcl_exp((-intensity_diff*intensity_diff)/(2.0*prediction_var));
+         double gauss_norm = vnl_math::one_over_sqrt2pi / std::sqrt(prediction_var);
+         double intensity_prob = gauss_norm * std::exp((-intensity_diff*intensity_diff)/(2.0*prediction_var));
          double airlight_mean = radiance_offsets_[m][n];
          double marginal_density;
          if (radiance_scales_[m][n] > 1.0) {
@@ -212,18 +214,18 @@ bool boxm2_compute_normal_albedo_functor::process_cell(unsigned int index, bool 
             // assume radiance is Gaussian distributed around airlight
             const double diff = radiance - airlight_mean;
             const double sigma = boxm2_normal_albedo_array_constants::sigma_airlight;
-            marginal_density = vnl_math::one_over_sqrt2pi / sigma * vcl_exp(-diff*diff/(2*sigma*sigma));
+            marginal_density = vnl_math::one_over_sqrt2pi / sigma * std::exp(-diff*diff/(2*sigma*sigma));
          }
          double prob = weight * intensity_prob + (1.0 - weight)*marginal_density;
          if (!(prob > 1e-4)) {
             prob = 1e-4;
          }
-         log_pred_prob += vcl_log(prob);
+         log_pred_prob += std::log(prob);
          if (!(log_pred_prob <= 0)){
-            vcl_cerr << "error\n";
+            std::cerr << "error\n";
          }
       }
-      double pred_prob = vcl_exp(log_pred_prob);
+      double pred_prob = std::exp(log_pred_prob);
       obs_probs[n] = pred_prob;
       prob_sum += pred_prob;
    }
@@ -236,7 +238,7 @@ bool boxm2_compute_normal_albedo_functor::process_cell(unsigned int index, bool 
       for (unsigned int n=0; n<num_normals_; ++n) {
          double normal_prob = obs_probs[n]/prob_sum;
          if (!(normal_prob >= 0)) {
-            vcl_cerr << "ERROR: normal_prob[" << n << "] = " << normal_prob << '\n';
+            std::cerr << "ERROR: normal_prob[" << n << "] = " << normal_prob << '\n';
             normal_prob = 0.0;
          }
          naa_model.set_probability(n,(float)normal_prob);
@@ -245,12 +247,12 @@ bool boxm2_compute_normal_albedo_functor::process_cell(unsigned int index, bool 
 #if 0
    boxm2_data<BOXM2_ALPHA>::datatype & alpha = alpha_data_->data()[index];
    if (update_alpha_) {
-      const double surface_prior = 1.0 - vcl_exp(-alpha*side_len);
+      const double surface_prior = 1.0 - std::exp(-alpha*side_len);
       double total_obs_prob = surface_prior * surface_obs_density + (1.0-surface_prior)*empty_obs_density; // uniform density for "empty" model
       double vox_prob = surface_prior*surface_obs_density/total_obs_prob;
-      double uncertainty = vcl_min(vox_prob,1.0-vox_prob)*2.0;
+      double uncertainty = std::min(vox_prob,1.0-vox_prob)*2.0;
       double belief = vox_prob - uncertainty/2.0;
-      alpha = -vcl_log(1.0 - belief) / side_len;
+      alpha = -std::log(1.0 - belief) / side_len;
       }
 #endif
    return true;

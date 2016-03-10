@@ -3,7 +3,9 @@
 #define vmap_2_map_hxx_
 
 #include "vmap_2_map.h"
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iostream>
 
 template <class D>
 vmap_2_map<D>::vmap_2_map(self_type const& m) : dart_sequence(m)
@@ -64,7 +66,7 @@ bool vmap_2_map<D>::valid() const
 }
 
 template <class D>
-void vmap_2_map<D>::read_structure(vcl_istream & stream)
+void vmap_2_map<D>::read_structure(std::istream & stream)
 {
   int tmp;
   stream>>tmp;
@@ -77,20 +79,20 @@ void vmap_2_map<D>::read_structure(vcl_istream & stream)
 }
 
 template <class D>
-void vmap_2_map<D>::write_structure(vcl_ostream & stream) const
+void vmap_2_map<D>::write_structure(std::ostream & stream) const
 {
-  stream<<nb_darts()<<vcl_endl ;
+  stream<<nb_darts()<<std::endl ;
   for (int i=0; i<nb_darts(); i++)
   {
     stream<<sigma(i)<<"   " ;
   }
-  stream<<vcl_endl ;
+  stream<<std::endl ;
 }
 
 template <class D>
 void vmap_2_map<D>::setDualStructure()
 {
-  vcl_vector<int> tmp_phi ;
+  std::vector<int> tmp_phi ;
   int nbd= nb_darts() ;
   tmp_phi.resize(nb_darts()) ;
   for (int i=0;i<nbd; ++i)
@@ -203,7 +205,7 @@ void vmap_2_map<D>::suppress_from_sequence(dart_type * d)
   int i=sequence_index(*d) ;
   dart_sequence::swap(i,nb_darts()-1) ;
 #if 0
-  vcl_swap(get_dart_pointer(i),dart_sequence::last()) ;
+  std::swap(get_dart_pointer(i),dart_sequence::last()) ;
   get_dart_pointer(i)->set_sequence_index(i) ;
   delete_dart(d);
   dart_sequence::pop_back();

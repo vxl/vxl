@@ -33,9 +33,9 @@ void vil_sobel_3x3(const vil_image_view<srcT>& src,
 //  1 pixel border around grad images is set to zero
 template<class srcT, class destT>
 void vil_sobel_3x3_1plane(const srcT* src,
-                          vcl_ptrdiff_t s_istep, vcl_ptrdiff_t s_jstep,
-                          destT* gi, vcl_ptrdiff_t gi_istep, vcl_ptrdiff_t gi_jstep,
-                          destT* gj, vcl_ptrdiff_t gj_istep, vcl_ptrdiff_t gj_jstep,
+                          std::ptrdiff_t s_istep, std::ptrdiff_t s_jstep,
+                          destT* gi, std::ptrdiff_t gi_istep, std::ptrdiff_t gi_jstep,
+                          destT* gj, std::ptrdiff_t gj_istep, std::ptrdiff_t gj_jstep,
                           unsigned ni, unsigned nj);
 
 //: Compute gradients of single plane of 2D data using 3x3 Sobel filters
@@ -43,9 +43,9 @@ void vil_sobel_3x3_1plane(const srcT* src,
 //  1 pixel border around grad images is set to zero
 VCL_DEFINE_SPECIALIZATION
 void vil_sobel_3x3_1plane(const unsigned char* src,
-                          vcl_ptrdiff_t s_istep, vcl_ptrdiff_t s_jstep,
-                          float* gi, vcl_ptrdiff_t gi_istep, vcl_ptrdiff_t gi_jstep,
-                          float* gj, vcl_ptrdiff_t gj_istep, vcl_ptrdiff_t gj_jstep,
+                          std::ptrdiff_t s_istep, std::ptrdiff_t s_jstep,
+                          float* gi, std::ptrdiff_t gi_istep, std::ptrdiff_t gi_jstep,
+                          float* gj, std::ptrdiff_t gj_istep, std::ptrdiff_t gj_jstep,
                           unsigned ni, unsigned nj);
 
 //: Compute gradients of single plane of 2D data using 3x3 Sobel filters
@@ -53,9 +53,9 @@ void vil_sobel_3x3_1plane(const unsigned char* src,
 //  1 pixel border around grad images is set to zero
 VCL_DEFINE_SPECIALIZATION
 void vil_sobel_3x3_1plane(const unsigned char* src,
-                          vcl_ptrdiff_t s_istep, vcl_ptrdiff_t s_jstep,
-                          double* gi, vcl_ptrdiff_t gi_istep, vcl_ptrdiff_t gi_jstep,
-                          double* gj, vcl_ptrdiff_t gj_istep, vcl_ptrdiff_t gj_jstep,
+                          std::ptrdiff_t s_istep, std::ptrdiff_t s_jstep,
+                          double* gi, std::ptrdiff_t gi_istep, std::ptrdiff_t gi_jstep,
+                          double* gj, std::ptrdiff_t gj_istep, std::ptrdiff_t gj_jstep,
                           unsigned ni, unsigned nj);
 
 //: Compute gradients of single plane of 2D data using 3x3 Sobel filters
@@ -63,9 +63,9 @@ void vil_sobel_3x3_1plane(const unsigned char* src,
 //  1 pixel border around grad images is set to zero
 VCL_DEFINE_SPECIALIZATION
 void vil_sobel_3x3_1plane(const float* src,
-                          vcl_ptrdiff_t s_istep, vcl_ptrdiff_t s_jstep,
-                          float* gi, vcl_ptrdiff_t gi_istep, vcl_ptrdiff_t gi_jstep,
-                          float* gj, vcl_ptrdiff_t gj_istep, vcl_ptrdiff_t gj_jstep,
+                          std::ptrdiff_t s_istep, std::ptrdiff_t s_jstep,
+                          float* gi, std::ptrdiff_t gi_istep, std::ptrdiff_t gi_jstep,
+                          float* gj, std::ptrdiff_t gj_istep, std::ptrdiff_t gj_jstep,
                           unsigned ni, unsigned nj);
 
 //: Compute gradients of single plane of 2D data using 3x3 Sobel filters
@@ -73,9 +73,9 @@ void vil_sobel_3x3_1plane(const float* src,
 //  1 pixel border around grad images is set to zero
 VCL_DEFINE_SPECIALIZATION
 void vil_sobel_3x3_1plane(const double* src,
-                          vcl_ptrdiff_t s_istep, vcl_ptrdiff_t s_jstep,
-                          double* gi, vcl_ptrdiff_t gi_istep, vcl_ptrdiff_t gi_jstep,
-                          double* gj, vcl_ptrdiff_t gj_istep, vcl_ptrdiff_t gj_jstep,
+                          std::ptrdiff_t s_istep, std::ptrdiff_t s_jstep,
+                          double* gi, std::ptrdiff_t gi_istep, std::ptrdiff_t gi_jstep,
+                          double* gj, std::ptrdiff_t gj_istep, std::ptrdiff_t gj_jstep,
                           unsigned ni, unsigned nj);
 
 #endif // vil_sobel_3x3_h_

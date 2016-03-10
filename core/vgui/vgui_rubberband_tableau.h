@@ -154,7 +154,7 @@ class vgui_rubberband_tableau : public vgui_tableau
 //vgui_rubberband_tableau(vgui_easy2D_tableau_sptr const& e) { init(new vgui_rubberband_tableau_easy2D_client(e)); }
 
   //: Return the type of this tableau ('vgui_rubberband_tableau').
-  vcl_string type_name() const { return "vgui_rubberband_tableau"; }
+  std::string type_name() const { return "vgui_rubberband_tableau"; }
 
   // These describe what the user has to do to use the rubberbanding gesture.
   vgui_event_condition gesture0;
@@ -199,7 +199,7 @@ class vgui_rubberband_tableau : public vgui_tableau
   bool active;
   static object_type obj_type;
   float lastx, lasty;   // position where mouse was last seen.
-  vcl_vector<float>x_coords, y_coords;
+  std::vector<float>x_coords, y_coords;
 };
 
 //-----------------------------------------------------------------------------

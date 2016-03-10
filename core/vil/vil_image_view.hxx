@@ -19,15 +19,16 @@
 // \endverbatim
 
 #include "vil_image_view.h"
-#include <vcl_string.h>
+#include <string>
 #include <vcl_cassert.h>
-#include <vcl_cstdlib.h>
-#include <vcl_cmath.h>
-#include <vcl_ostream.h>
+#include <vcl_compiler.h>
+#include <cstdlib>
+#include <cmath>
+#include <ostream>
 #include <vil/vil_pixel_format.h>
 #include <vil/vil_exception.h>
-#include <vcl_cstring.h>
-#include <vcl_algorithm.h>
+#include <cstring>
+#include <algorithm>
 
 //=======================================================================
 
@@ -47,7 +48,7 @@ vil_image_view<T>::vil_image_view(unsigned n_i, unsigned n_j, unsigned n_planes,
 //: Set this view to look at someone else's memory data.
 template<class T>
 vil_image_view<T>::vil_image_view(const T* top_left, unsigned n_i, unsigned n_j, unsigned n_planes,
-                                  vcl_ptrdiff_t i_step, vcl_ptrdiff_t j_step, vcl_ptrdiff_t plane_step)
+                                  std::ptrdiff_t i_step, std::ptrdiff_t j_step, std::ptrdiff_t plane_step)
 {
   set_to_memory(top_left,n_i,n_j,n_planes,i_step,j_step,plane_step);
 }
@@ -57,7 +58,7 @@ vil_image_view<T>::vil_image_view(const T* top_left, unsigned n_i, unsigned n_j,
 template<class T>
 vil_image_view<T>::vil_image_view(vil_memory_chunk_sptr const& mem_chunk,
                                   const T* top_left, unsigned n_i, unsigned n_j, unsigned n_planes,
-                                  vcl_ptrdiff_t i_step, vcl_ptrdiff_t j_step, vcl_ptrdiff_t plane_step)
+                                  std::ptrdiff_t i_step, std::ptrdiff_t j_step, std::ptrdiff_t plane_step)
  : vil_image_view_base(n_i, n_j, n_planes)
  , top_left_(const_cast<T*>(top_left))
  , istep_(i_step), jstep_(j_step)
@@ -69,7 +70,7 @@ vil_image_view<T>::vil_image_view(vil_memory_chunk_sptr const& mem_chunk,
   if (mem_chunk) // if we are doing a view transform on a non-owned image, then mem_chunk will be 0.
   {
     if ( mem_chunk->size() < n_planes*n_i*n_j*sizeof(T) )
-      vcl_cerr << "mem_chunk->size()=" << mem_chunk->size() << '\n'
+      std::cerr << "mem_chunk->size()=" << mem_chunk->size() << '\n'
                << "nplanes=" << n_planes << '\n'
                << "n_i=" << n_i << '\n'
                << "n_j=" << n_j << '\n'
@@ -78,7 +79,7 @@ vil_image_view<T>::vil_image_view(vil_memory_chunk_sptr const& mem_chunk,
     assert(mem_chunk->size() >= n_planes*n_i*n_j*sizeof(T));
     if (top_left  < reinterpret_cast<const T*>(mem_chunk->data()) ||
         top_left >= reinterpret_cast<const T*>(reinterpret_cast<const char*>(mem_chunk->data()) + mem_chunk->size()))
-      vcl_cerr << "top_left at " << static_cast<const void*>(top_left) << ", memory_chunk at "
+      std::cerr << "top_left at " << static_cast<const void*>(top_left) << ", memory_chunk at "
                << reinterpret_cast<const void*>(mem_chunk->data()) << ", size " << mem_chunk->size()
                << ", size of data type " << sizeof(T) << '\n';
     assert(top_left >= reinterpret_cast<const T*>(mem_chunk->data()) &&
@@ -129,7 +130,7 @@ void vil_image_view<T>::deep_copy(const vil_image_view<T>& src)
     istep_=src.istep_; jstep_= src.jstep_; planestep_ = src.planestep_;
     if (src.istep()>0 && src.jstep()>0 && src.planestep()>=0)
     {
-      vcl_memcpy(top_left_,src.top_left_ptr(),src.size()*sizeof(T));
+      std::memcpy(top_left_,src.top_left_ptr(),src.size()*sizeof(T));
       return;
     }
     const_iterator s_it = src.begin();
@@ -139,9 +140,9 @@ void vil_image_view<T>::deep_copy(const vil_image_view<T>& src)
     return;
   }
 
-  const vcl_ptrdiff_t s_planestep = src.planestep();
-  const vcl_ptrdiff_t s_istep = src.istep();
-  const vcl_ptrdiff_t s_jstep = src.jstep();
+  const std::ptrdiff_t s_planestep = src.planestep();
+  const std::ptrdiff_t s_istep = src.istep();
+  const std::ptrdiff_t s_jstep = src.jstep();
 
   // Do a deep copy
   // This is potentially inefficient
@@ -190,7 +191,7 @@ inline bool convert_components_from_planes(vil_image_view<T> &lhs,
   {
     const vil_image_view<comp_type> &rhs = static_cast<const vil_image_view<comp_type>&>(rhs_base);
     // Check that the steps are suitable for viewing as components
-    if (rhs.planestep() != 1 || vcl_abs((int)rhs.istep())<ncomp || vcl_abs((int)rhs.jstep())<ncomp ) return false;
+    if (rhs.planestep() != 1 || std::abs((int)rhs.istep())<ncomp || std::abs((int)rhs.jstep())<ncomp ) return false;
     lhs = vil_image_view<T >(rhs.memory_chunk(),
                              reinterpret_cast<T const*>(rhs.top_left_ptr()),
                              rhs.ni(),rhs.nj(),1,
@@ -613,7 +614,7 @@ bool vil_image_view<T>::is_contiguous() const
   // Sort the step sizes in ascending order, and keep the
   // corresponding widths.
 
-  vcl_ptrdiff_t s1, s2, s3;
+  std::ptrdiff_t s1, s2, s3;
   unsigned n1, n2;
   if ( istep_ < jstep_ )
     if ( jstep_ < planestep_ )
@@ -688,7 +689,7 @@ void vil_image_view<T>::set_size(unsigned n_i, unsigned n_j, unsigned n_planes)
 template<class T>
 void vil_image_view<T>::set_to_memory(const T* top_left,
                                       unsigned n_i, unsigned n_j, unsigned n_planes,
-                                      vcl_ptrdiff_t i_step, vcl_ptrdiff_t j_step, vcl_ptrdiff_t plane_step)
+                                      std::ptrdiff_t i_step, std::ptrdiff_t j_step, std::ptrdiff_t plane_step)
 {
   release_memory();
   top_left_ = const_cast<T*>(top_left);  // Remove const, as view may end up manipulating data
@@ -711,7 +712,7 @@ void vil_image_view<T>::fill(T value)
 
   if (is_contiguous())
   {
-    vcl_fill(begin(), end(), value);
+    std::fill(begin(), end(), value);
     return;
   }
 
@@ -757,7 +758,7 @@ void vil_image_view<T>::fill(T value)
 //=======================================================================
 
 template<class T>
-bool vil_image_view<T>::is_class(vcl_string const& s) const
+bool vil_image_view<T>::is_class(std::string const& s) const
 {
   return s==vil_image_view<T>::is_a() || vil_image_view_base::is_class(s);
 }
@@ -765,7 +766,7 @@ bool vil_image_view<T>::is_class(vcl_string const& s) const
 //=======================================================================
 
 template<class T>
-void vil_image_view<T>::print(vcl_ostream& os) const
+void vil_image_view<T>::print(std::ostream& os) const
 {
   os<<nplanes_<<" planes, each "<<ni_<<" x "<<nj_;
 }
@@ -872,17 +873,17 @@ bool vil_image_view_deep_equality(const vil_image_view<T> &lhs,
 // defined, and each requires a specialization, we define the primary
 // template of is_a to call a function that will be declared and
 // specialized only in the instantiation translation units.
-template <class T> vcl_string vil_image_view_type_name(T*);
+template <class T> std::string vil_image_view_type_name(T*);
 
 template <class T>
-vcl_string vil_image_view<T>::is_a() const
+std::string vil_image_view<T>::is_a() const
 {
   return vil_image_view_type_name(static_cast<T*>(0));
 }
 
 #define VIL_IMAGE_VIEW_INSTANTIATE(T) \
-VCL_DEFINE_SPECIALIZATION vcl_string vil_image_view_type_name(T*) \
-{ return vcl_string("vil_image_view<" #T ">"); } \
+VCL_DEFINE_SPECIALIZATION std::string vil_image_view_type_name(T*) \
+{ return std::string("vil_image_view<" #T ">"); } \
 template class vil_image_view<T >; \
 template bool vil_image_view_deep_equality(const vil_image_view<T >&, \
                                            const vil_image_view<T >&)

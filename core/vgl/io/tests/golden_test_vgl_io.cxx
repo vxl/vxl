@@ -20,8 +20,10 @@
 //   23 Oct.2003 - Peter Vanroose - made the program more readable by adding overloads for almost_equal() for all geom types
 // \endverbatim
 
-#include <vcl_string.h>
-#include <vcl_cstdlib.h> // for vcl_exit()
+#include <vcl_compiler.h>
+#include <string>
+#include <iostream>
+#include <cstdlib> // for std::exit()
 #include <vsl/vsl_binary_io.h>
 #include <vsl/vsl_indent.h>
 #include <testlib/testlib_root_dir.h>
@@ -49,7 +51,7 @@ void golden_test_vgl_io(bool save_file=false);
   MAIN_ARGS( golden_test_vgl_io )
   {
     START("golden_test_all_vgl_io");
-    golden_test_vgl_io(argc==2 && vcl_string(argv[1])==vcl_string("create"));
+    golden_test_vgl_io(argc==2 && std::string(argv[1])==std::string("create"));
     SUMMARY();
   }
 #else
@@ -77,9 +79,9 @@ bool almost_equal_helper(const T& real1, const T& real2)
   result=((max-min)<=factor*(max>0?max:-max));
   if (!result)
   {
-    vcl_cout << factor << " : " << min << " -- " << max << " -- "
+    std::cout << factor << " : " << min << " -- " << max << " -- "
              << (max>0?max:-max) << " -- "
-             << max-min << " -- " << factor*(max>0?max:-max) << vcl_endl;
+             << max-min << " -- " << factor*(max>0?max:-max) << std::endl;
   }
   return result;
 }
@@ -218,7 +220,7 @@ void golden_test_vgl_io(bool save_file)
   //------------------------------------------------------------------------
 
 
-  vcl_cout << "***********************************************************\n"
+  std::cout << "***********************************************************\n"
            << " Testing a golden data file for cross platform consistency\n"
            << "***********************************************************\n";
 
@@ -365,8 +367,8 @@ void golden_test_vgl_io(bool save_file)
     TEST("Opened golden_vgl_io_test.bvl for writing", (!bfs_out), false);
     if (!bfs_out)
     {
-      vcl_cerr<<"Problems opening file for output\n";
-      vcl_exit(1);
+      std::cerr<<"Problems opening file for output\n";
+      std::exit(1);
     }
     vsl_b_write(bfs_out, double_point_2d_out);
     vsl_b_write(bfs_out, double_point_2d_out2);
@@ -406,7 +408,7 @@ void golden_test_vgl_io(bool save_file)
   }
 
   // Read in file to each class in turn
-  vcl_string gold_path=testlib_root_dir()+"/core/vgl/io/tests/golden_vgl_io_test.bvl";
+  std::string gold_path=testlib_root_dir()+"/core/vgl/io/tests/golden_vgl_io_test.bvl";
   vsl_b_ifstream bfs_in(gold_path.c_str());
   TEST("Opened golden_vgl_io_test.bvl for reading", (!bfs_in), false);
   vsl_b_read(bfs_in, double_point_2d_in);

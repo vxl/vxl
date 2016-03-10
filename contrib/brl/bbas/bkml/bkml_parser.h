@@ -40,9 +40,11 @@
  #define _LIB
 #endif
 #include <expatpp.h>
-#include <vcl_string.h>
-#include <vcl_vector.h>
-#include <vcl_utility.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <string>
+#include <vector>
+#include <utility>
 #include <vgl/vgl_point_3d.h>
 #include <vgl/vgl_polygon.h>
 
@@ -56,19 +58,19 @@ class bkml_parser : public expatpp
 
 
   //: parser to load the points defined in kml file
-  static vcl_vector<vgl_point_3d<double> > parse_points(vcl_string kml_file);
+  static std::vector<vgl_point_3d<double> > parse_points(std::string kml_file);
 
   //: parser to load the outer boundary of all defined polygons in the kml file (only parse the lat(y) and lon(x), elev ignored)
-  static vgl_polygon<double> parse_polygon(vcl_string poly_kml_file);
+  static vgl_polygon<double> parse_polygon(std::string poly_kml_file);
 
   //: parser to load the outer and inner boundary, the first n_out sheets are the outer boundary
   //  and the following n_in sheets are the inner boundary
-  static vgl_polygon<double> parse_polygon_with_inner(vcl_string poly_kml_file, vgl_polygon<double>& outer, vgl_polygon<double>& inter,
+  static vgl_polygon<double> parse_polygon_with_inner(std::string poly_kml_file, vgl_polygon<double>& outer, vgl_polygon<double>& inter,
                                                       unsigned& n_out, unsigned& n_in);
 
-  static bool parse_location_from_kml(vcl_string kml_file, double& lat, double& lon);
+  static bool parse_location_from_kml(std::string kml_file, double& lat, double& lon);
 
-  static void trim_string(vcl_string& s);
+  static void trim_string(std::string& s);
 
   // results of parse
   double longitude_;
@@ -85,24 +87,24 @@ class bkml_parser : public expatpp
   double roll_dev_;
   double right_fov_dev_;
   double top_fov_dev_;
-  vcl_vector<vcl_vector<vgl_point_3d<double> > > polyouter_;
-  vcl_vector<vcl_vector<vgl_point_3d<double> > > polyinner_;
-  vcl_vector<vcl_vector<vgl_point_3d<double> > > linecord_;
-  vcl_vector<vgl_point_3d<double> > points_;
+  std::vector<std::vector<vgl_point_3d<double> > > polyouter_;
+  std::vector<std::vector<vgl_point_3d<double> > > polyinner_;
+  std::vector<std::vector<vgl_point_3d<double> > > linecord_;
+  std::vector<vgl_point_3d<double> > points_;
 
-  vcl_string current_name_;
+  std::string current_name_;
  private:
 
   virtual void startElement(const XML_Char* name, const XML_Char** atts);
   virtual void endElement(const XML_Char* name);
   virtual void charData(const XML_Char* s, int len);
   void handleAtts(const XML_Char** atts);
-  void cdataHandler(vcl_string name, vcl_string data);
+  void cdataHandler(std::string name, std::string data);
   void init_params();
 
   //element parser
-  vcl_string last_tag;
-  vcl_string cord_tag_;
+  std::string last_tag;
+  std::string cord_tag_;
 
 };
 

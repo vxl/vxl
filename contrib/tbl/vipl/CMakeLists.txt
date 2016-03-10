@@ -44,7 +44,7 @@ set(vipl_sources
  section/vipl_filterable_section_container_generator_vcl_vector.hxx
 
  # Image accessors (getpixel, setpixel)
- accessors/vipl_accessors_vcl_vector.hxx     accessors/vipl_accessors_vcl_vector.h
+ accessors/vipl_accessors_vcl_vector.h     accessors/vipl_accessors_vcl_vector.h
  vipl_with_section/vipl_filterable_section_container_generator_section.hxx
  vipl_with_section/accessors/vipl_accessors_section.hxx  vipl_with_section/accessors/vipl_accessors_section.h
 )

@@ -17,7 +17,9 @@
 //   Peter Vanroose - 11 Mar 97 - added operator==
 // \endverbatim
 
-#include <vcl_iosfwd.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iosfwd>
 #include <mvl/Homg2D.h>
 
 class HomgLineSeg2D;
@@ -56,6 +58,6 @@ class HomgLine2D : public Homg2D
   void get_2_points_on_line(HomgPoint2D* p1, HomgPoint2D* p2) const;
 };
 
-vcl_ostream& operator<<(vcl_ostream& s, const HomgLine2D& );
+std::ostream& operator<<(std::ostream& s, const HomgLine2D& );
 
 #endif // HomgLine2D_h_

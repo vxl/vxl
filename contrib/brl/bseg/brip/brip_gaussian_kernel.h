@@ -14,14 +14,16 @@
 
 #include <brip/brip_kernel.h>
 #include <vnl/vnl_math.h>
-#include <vcl_vector.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <vector>
 
 //: Gaussian derivative kernel base class
 class brip_gaussian_kernel : public brip_kernel
 {
  public:
   int khs;                     //kernel half size
-  vcl_vector<double> K_x, K_y; //separated kernels to minimize computation
+  std::vector<double> K_x, K_y; //separated kernels to minimize computation
 
  protected:
   double sigma; ///< operator sigma
@@ -29,8 +31,8 @@ class brip_gaussian_kernel : public brip_kernel
  public:
   //: constructor given sigma and shifts
   brip_gaussian_kernel(double sigma_, double dx_=0.0, double dy_=0.0, double theta_=0.0):
-    brip_kernel((unsigned)(2*vcl_ceil(4*sigma_)+1), (unsigned)(2*vcl_ceil(4*sigma_)+1), dx_, dy_, theta_),
-    khs((int) vcl_ceil(4*sigma_)), K_x(2*khs+1, 0.0), K_y(2*khs+1, 0.0), sigma(sigma_)
+    brip_kernel((unsigned)(2*std::ceil(4*sigma_)+1), (unsigned)(2*std::ceil(4*sigma_)+1), dx_, dy_, theta_),
+    khs((int) std::ceil(4*sigma_)), K_x(2*khs+1, 0.0), K_y(2*khs+1, 0.0), sigma(sigma_)
   {
     compute_kernel();
   }
@@ -69,15 +71,15 @@ class brip_G_Lhalf_kernel : public brip_gaussian_kernel
     for (int x = -khs; x <= khs; x++){
       for (int y = -khs; y <= khs; y++){
 
-        double xx = x* vcl_cos(theta) + y*vcl_sin(theta) - dx;
-        double yy = x*-vcl_sin(theta) + y*vcl_cos(theta) - dy;
+        double xx = x* std::cos(theta) + y*std::sin(theta) - dx;
+        double yy = x*-std::sin(theta) + y*std::cos(theta) - dy;
 
         //only one half is a Gaussian (the other half is zeros)
         if (yy>=0)
           top_left_[(x+khs)*istep_+ (y+khs)*jstep_] = 0.0;
         else
-          //top_left_[(x+khs)*istep_+ (y+khs)*jstep_] = 2*vcl_exp(-xx*xx/(2*ssq))*vcl_exp(-yy*yy/(2*ssq))/pisig2;
-          top_left_[(x+khs)*istep_+ (y+khs)*jstep_] = vcl_exp(-xx*xx/(2*ssq))*yy*-vcl_exp(-yy*yy/(2*ssq))/cc;
+          //top_left_[(x+khs)*istep_+ (y+khs)*jstep_] = 2*std::exp(-xx*xx/(2*ssq))*std::exp(-yy*yy/(2*ssq))/pisig2;
+          top_left_[(x+khs)*istep_+ (y+khs)*jstep_] = std::exp(-xx*xx/(2*ssq))*yy*-std::exp(-yy*yy/(2*ssq))/cc;
       }
     }
   }
@@ -102,15 +104,15 @@ class brip_G_Rhalf_kernel : public brip_gaussian_kernel
     for (int x = -khs; x <= khs; x++){
       for (int y = -khs; y <= khs; y++){
 
-        double xx = x* vcl_cos(theta) + y*vcl_sin(theta) - dx;
-        double yy = x*-vcl_sin(theta) + y*vcl_cos(theta) - dy;
+        double xx = x* std::cos(theta) + y*std::sin(theta) - dx;
+        double yy = x*-std::sin(theta) + y*std::cos(theta) - dy;
 
         //only one half is a Gaussian (the other half is zeros)
         if (yy<0)
           top_left_[(x+khs)*istep_+ (y+khs)*jstep_] = 0.0;
         else
-          //top_left_[(x+khs)*istep_+ (y+khs)*jstep_] = 2*vcl_exp(-xx*xx/(2*ssq))*vcl_exp(-yy*yy/(2*ssq))/pisig2;
-          top_left_[(x+khs)*istep_+ (y+khs)*jstep_] = vcl_exp(-xx*xx/(2*ssq))*yy*vcl_exp(-yy*yy/(2*ssq))/cc;
+          //top_left_[(x+khs)*istep_+ (y+khs)*jstep_] = 2*std::exp(-xx*xx/(2*ssq))*std::exp(-yy*yy/(2*ssq))/pisig2;
+          top_left_[(x+khs)*istep_+ (y+khs)*jstep_] = std::exp(-xx*xx/(2*ssq))*yy*std::exp(-yy*yy/(2*ssq))/cc;
       }
     }
   }
@@ -132,9 +134,9 @@ class brip_G_kernel : public brip_gaussian_kernel
 
     //1-d kernels
     for (int x = -khs; x <= khs; x++)
-      K_x[x+khs] = vcl_exp(-(x-dx)*(x-dx)/(2*ssq))/sq2pisig;
+      K_x[x+khs] = std::exp(-(x-dx)*(x-dx)/(2*ssq))/sq2pisig;
     for (int y = -khs; y <= khs; y++)
-      K_y[y+khs] = vcl_exp(-(y-dy)*(y-dy)/(2*ssq))/sq2pisig;
+      K_y[y+khs] = std::exp(-(y-dy)*(y-dy)/(2*ssq))/sq2pisig;
 
     if (!separated_kernels_only){
       for (unsigned i=0; i<ni_; i++){
@@ -162,9 +164,9 @@ class brip_Gx_kernel : public brip_gaussian_kernel
 
     //1-d kernels
     for (int x = -khs; x <= khs; x++)
-      K_x[x+khs] = -(x-dx)*vcl_exp(-(x-dx)*(x-dx)/(2*ssq))/(sq2pisig*ssq);
+      K_x[x+khs] = -(x-dx)*std::exp(-(x-dx)*(x-dx)/(2*ssq))/(sq2pisig*ssq);
     for (int y = -khs; y <= khs; y++)
-      K_y[y+khs] = vcl_exp(-(y-dy)*(y-dy)/(2*ssq))/sq2pisig;
+      K_y[y+khs] = std::exp(-(y-dy)*(y-dy)/(2*ssq))/sq2pisig;
 
     if (!separated_kernels_only){
       for (unsigned i=0; i<ni_; i++){
@@ -192,9 +194,9 @@ class brip_Gy_kernel : public brip_gaussian_kernel
 
     //1-d kernels
     for (int x = -khs; x <= khs; x++)
-      K_x[x+khs] = vcl_exp(-(x-dx)*(x-dx)/(2*ssq))/sq2pisig;
+      K_x[x+khs] = std::exp(-(x-dx)*(x-dx)/(2*ssq))/sq2pisig;
     for (int y = -khs; y <= khs; y++)
-      K_y[y+khs] = -(y-dy)*vcl_exp(-(y-dy)*(y-dy)/(2*ssq))/(sq2pisig*ssq);
+      K_y[y+khs] = -(y-dy)*std::exp(-(y-dy)*(y-dy)/(2*ssq))/(sq2pisig*ssq);
 
     if (!separated_kernels_only){
       for (unsigned i=0; i<ni_; i++){
@@ -222,9 +224,9 @@ class brip_Gxx_kernel : public brip_gaussian_kernel
 
     //1-d kernels
     for (int x = -khs; x <= khs; x++)
-      K_x[x+khs] = ((x-dx)*(x-dx)-ssq)*vcl_exp(-(x-dx)*(x-dx)/(2*ssq))/(sq2pisig*ssq*ssq);
+      K_x[x+khs] = ((x-dx)*(x-dx)-ssq)*std::exp(-(x-dx)*(x-dx)/(2*ssq))/(sq2pisig*ssq*ssq);
     for (int y = -khs; y <= khs; y++)
-      K_y[y+khs] = vcl_exp(-(y-dy)*(y-dy)/(2*ssq))/sq2pisig;
+      K_y[y+khs] = std::exp(-(y-dy)*(y-dy)/(2*ssq))/sq2pisig;
 
     if (!separated_kernels_only){
       for (unsigned i=0; i<ni_; i++){
@@ -252,9 +254,9 @@ class brip_Gxy_kernel : public brip_gaussian_kernel
 
     //1-d kernels
     for (int x = -khs; x <= khs; x++)
-      K_x[x+khs] = -(x-dx)*vcl_exp(-(x-dx)*(x-dx)/(2*ssq))/(sq2pisig*ssq);
+      K_x[x+khs] = -(x-dx)*std::exp(-(x-dx)*(x-dx)/(2*ssq))/(sq2pisig*ssq);
     for (int y = -khs; y <= khs; y++)
-      K_y[y+khs] = -(y-dy)*vcl_exp(-(y-dy)*(y-dy)/(2*ssq))/(sq2pisig*ssq);
+      K_y[y+khs] = -(y-dy)*std::exp(-(y-dy)*(y-dy)/(2*ssq))/(sq2pisig*ssq);
 
     if (!separated_kernels_only){
       for (unsigned i=0; i<ni_; i++){
@@ -282,9 +284,9 @@ class brip_Gyy_kernel : public brip_gaussian_kernel
 
     //1-d kernels
     for (int x = -khs; x <= khs; x++)
-      K_x[x+khs] = vcl_exp(-(x-dx)*(x-dx)/(2*ssq))/sq2pisig;
+      K_x[x+khs] = std::exp(-(x-dx)*(x-dx)/(2*ssq))/sq2pisig;
     for (int y = -khs; y <= khs; y++)
-      K_y[y+khs] = ((y-dy)*(y-dy)-ssq)*vcl_exp(-(y-dy)*(y-dy)/(2*ssq))/(sq2pisig*ssq*ssq);
+      K_y[y+khs] = ((y-dy)*(y-dy)-ssq)*std::exp(-(y-dy)*(y-dy)/(2*ssq))/(sq2pisig*ssq*ssq);
 
     if (!separated_kernels_only){
       for (unsigned i=0; i<ni_; i++){
@@ -312,9 +314,9 @@ class brip_Gxxx_kernel : public brip_gaussian_kernel
 
     //1-d kernels
     for (int x = -khs; x <= khs; x++)
-      K_x[x+khs] = (x-dx)*(3*ssq -(x-dx)*(x-dx))*vcl_exp(-(x-dx)*(x-dx)/(2*ssq))/(sq2pisig*ssq*ssq*ssq);
+      K_x[x+khs] = (x-dx)*(3*ssq -(x-dx)*(x-dx))*std::exp(-(x-dx)*(x-dx)/(2*ssq))/(sq2pisig*ssq*ssq*ssq);
     for (int y = -khs; y <= khs; y++)
-      K_y[y+khs] = vcl_exp(-(y-dy)*(y-dy)/(2*ssq))/sq2pisig;
+      K_y[y+khs] = std::exp(-(y-dy)*(y-dy)/(2*ssq))/sq2pisig;
 
     if (!separated_kernels_only){
       for (unsigned i=0; i<ni_; i++){
@@ -342,9 +344,9 @@ class brip_Gxxy_kernel : public brip_gaussian_kernel
 
     //1-d kernels
     for (int x = -khs; x <= khs; x++)
-      K_x[x+khs] = ((x-dx)*(x-dx)-ssq)*vcl_exp(-(x-dx)*(x-dx)/(2*ssq))/(sq2pisig*ssq*ssq);
+      K_x[x+khs] = ((x-dx)*(x-dx)-ssq)*std::exp(-(x-dx)*(x-dx)/(2*ssq))/(sq2pisig*ssq*ssq);
     for (int y = -khs; y <= khs; y++)
-      K_y[y+khs] = -(y-dy)*vcl_exp(-(y-dy)*(y-dy)/(2*ssq))/(sq2pisig*sigma*ssq);
+      K_y[y+khs] = -(y-dy)*std::exp(-(y-dy)*(y-dy)/(2*ssq))/(sq2pisig*sigma*ssq);
 
     if (!separated_kernels_only){
       for (unsigned i=0; i<ni_; i++){
@@ -372,9 +374,9 @@ class brip_Gxyy_kernel : public brip_gaussian_kernel
 
     //1-d kernels
     for (int x = -khs; x <= khs; x++)
-      K_x[x+khs] = -(x-dx)*vcl_exp(-(x-dx)*(x-dx)/(2*ssq))/(sq2pisig*ssq);
+      K_x[x+khs] = -(x-dx)*std::exp(-(x-dx)*(x-dx)/(2*ssq))/(sq2pisig*ssq);
     for (int y = -khs; y <= khs; y++)
-      K_y[y+khs] = ((y-dy)*(y-dy)-ssq)*vcl_exp(-(y-dy)*(y-dy)/(2*ssq))/(sq2pisig*ssq*ssq);
+      K_y[y+khs] = ((y-dy)*(y-dy)-ssq)*std::exp(-(y-dy)*(y-dy)/(2*ssq))/(sq2pisig*ssq*ssq);
 
     if (!separated_kernels_only){
       for (unsigned i=0; i<ni_; i++){
@@ -402,9 +404,9 @@ class brip_Gyyy_kernel : public brip_gaussian_kernel
 
     //1-d kernels
     for (int x = -khs; x <= khs; x++)
-      K_x[x+khs] = vcl_exp(-(x-dx)*(x-dx)/(2*ssq))/sq2pisig;
+      K_x[x+khs] = std::exp(-(x-dx)*(x-dx)/(2*ssq))/sq2pisig;
     for (int y = -khs; y <= khs; y++)
-      K_y[y+khs] = (y-dy)*(3*ssq -(y-dy)*(y-dy))*vcl_exp(-(y-dy)*(y-dy)/(2*ssq))/(sq2pisig*ssq*ssq*ssq);
+      K_y[y+khs] = (y-dy)*(3*ssq -(y-dy)*(y-dy))*std::exp(-(y-dy)*(y-dy)/(2*ssq))/(sq2pisig*ssq*ssq*ssq);
 
     if (!separated_kernels_only){
       for (unsigned i=0; i<ni_; i++){

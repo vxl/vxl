@@ -4,8 +4,10 @@
 
 #include <vnl/vnl_math.h>
 
-#include <vcl_algorithm.h>
-#include <vcl_vector.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <algorithm>
+#include <vector>
 
 #include <vcl_cassert.h>
 
@@ -43,7 +45,7 @@ rrel_lms_obj::fcn( vect_const_iter begin, vect_const_iter end,
   // compute the squared residuals are unlikely to seriously affect
   // anything.
 
-  vcl_vector<double> sq_res;
+  std::vector<double> sq_res;
   sq_res.reserve( end - begin );
   for ( ; begin != end; ++begin ) {
     sq_res.push_back( (*begin) * (*begin) );
@@ -62,8 +64,8 @@ rrel_lms_obj::fcn( vect_const_iter begin, vect_const_iter end,
   if ( index >= num_residuals ) index = num_residuals-1;
 
   // 3. Sort the squared residuals and extract the "median".
-  vcl_vector<double>::iterator loc = sq_res.begin() + index;
-  vcl_nth_element( sq_res.begin(), loc, sq_res.end() );
+  std::vector<double>::iterator loc = sq_res.begin() + index;
+  std::nth_element( sq_res.begin(), loc, sq_res.end() );
 
   return *loc;
 }
@@ -73,7 +75,7 @@ rrel_lms_obj::scale( vect_const_iter begin, vect_const_iter end ) const
 {
   // Work on a copy of the vector, since the MAD scale estimator
   // will change the content of the vector
-  vcl_vector<double> vec_copy;
+  std::vector<double> vec_copy;
   vec_copy.reserve( end - begin );
   for ( ; begin != end; ++begin ) {
     vec_copy.push_back( *begin);

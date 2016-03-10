@@ -13,8 +13,9 @@
 //   <none>
 // \endverbatim
 //
-#include <vcl_string.h>
-#include <vcl_vector.h>
+#include <vcl_compiler.h>
+#include <string>
+#include <vector>
 #include <vil/vil_image_resource_sptr.h>
 
 class vil_image_list
@@ -24,16 +25,16 @@ class vil_image_list
   ~vil_image_list(){}
 
   //: finds all the files in the directory, regardless of extension
-  vcl_vector<vcl_string> files();
+  std::vector<std::string> files();
 
   //: finds all the image files in the directory, regardless of extension
-  vcl_vector<vil_image_resource_sptr> resources();
+  std::vector<vil_image_resource_sptr> resources();
 
   //: finds all the blocked image files in the directory, regardless of extension
-  vcl_vector<vil_image_resource_sptr> blocked_resources();
+  std::vector<vil_image_resource_sptr> blocked_resources();
 
   //: finds all the pyramid files in the directory, regardless of extension
-  vcl_vector<vil_image_resource_sptr> pyramids();
+  std::vector<vil_image_resource_sptr> pyramids();
 
   //: utility functions
 
@@ -41,13 +42,13 @@ class vil_image_list
   static bool vil_is_directory(char const*);
 
   //:remove a file
-  bool remove_file(vcl_string& filename );
+  bool remove_file(std::string& filename );
 
   //: cleans the directory, i.e. removes all the files
   bool clean_directory();
 
  private:
-  vcl_string directory_;
+  std::string directory_;
 };
 
 #endif // vil_image_list_h_

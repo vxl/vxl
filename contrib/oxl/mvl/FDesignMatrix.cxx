@@ -26,8 +26,8 @@
 // }
 //
 
-FDesignMatrix::FDesignMatrix(vcl_vector<HomgPoint2D> const& points1,
-                             vcl_vector<HomgPoint2D> const& points2):
+FDesignMatrix::FDesignMatrix(std::vector<HomgPoint2D> const& points1,
+                             std::vector<HomgPoint2D> const& points2):
   base(points1.size(), 9)
 {
   unsigned int n = points1.size();
@@ -48,8 +48,8 @@ FDesignMatrix::FDesignMatrix(vcl_vector<HomgPoint2D> const& points1,
   }
 }
 
-FDesignMatrix::FDesignMatrix(vcl_vector<vgl_homg_point_2d<double> > const& points1,
-                             vcl_vector<vgl_homg_point_2d<double> > const& points2):
+FDesignMatrix::FDesignMatrix(std::vector<vgl_homg_point_2d<double> > const& points1,
+                             std::vector<vgl_homg_point_2d<double> > const& points2):
   base(points1.size(), 9)
 {
   unsigned int n = points1.size();

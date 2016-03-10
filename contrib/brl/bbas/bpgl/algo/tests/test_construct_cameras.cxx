@@ -1,6 +1,8 @@
 #include <testlib/testlib_test.h>
-#include <vcl_iostream.h>
-#include <vcl_cmath.h> // for std::abs
+#include <iostream>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <cmath> // for std::abs
 
 #include <bpgl/algo/bpgl_construct_cameras.h>
 #include <vgl/vgl_point_2d.h>
@@ -20,7 +22,7 @@ static void test_construct_cameras()
     P2.set_camera_center( t_true );
     P2.set_rotation( R_true );
 
-    vcl_vector< vgl_point_2d<double> > points1, points2;
+    std::vector< vgl_point_2d<double> > points1, points2;
     for (int i = 0; i < 8; i++)
     {
       vgl_homg_point_3d<double> wp;
@@ -43,7 +45,7 @@ static void test_construct_cameras()
     bpgl_construct_cameras testcase(points1,points2,&K);
     testcase.construct();
 
-    vcl_cout << "\nTrue rotation:\n" << R_true.as_matrix()
+    std::cout << "\nTrue rotation:\n" << R_true.as_matrix()
              << "\n\nEstimated rotation:\n"
              << testcase.get_camera2().get_rotation().as_matrix()
              << '\n';
@@ -52,13 +54,13 @@ static void test_construct_cameras()
     double r1 = t_true.x()/t_est.x(),
            r2 = t_true.y()/t_est.y(),
            r3 = t_true.z()/t_est.z();
-    vcl_cout << "\nTrue camera center:\n" << t_true
+    std::cout << "\nTrue camera center:\n" << t_true
              << "\n\nEstimated camera center (up to scale):\n" << t_est << '\n';
 
     TEST_NEAR( "rotation matrix equivalent",
                (testcase.get_camera2().get_rotation().as_matrix()-R_true.as_matrix()).frobenius_norm(), 0, .1 );
     TEST_NEAR( "camera center proper direction",
-               vcl_abs(r1-r2)+vcl_abs(r2-r3)+vcl_abs(r3-r1), 0, .1 );
+               std::abs(r1-r2)+std::abs(r2-r3)+std::abs(r3-r1), 0, .1 );
     TEST( "camera center proper sign", r1 > 0 && r2 > 0 && r3 > 0, true );
 }
 

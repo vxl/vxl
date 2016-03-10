@@ -7,7 +7,8 @@ croak
 #endif
 
 #include "vil1_convolve.h"
-#include <vcl_cstdlib.h> // for vcl_abort()
+#include <vcl_compiler.h>
+#include <cstdlib> // for std::abort()
 
 template <class I1, class I2, class AC, class O>
 void vil1_convolve_1d_y(vil1_convolve_signal_1d<I1 const> const &kernel,
@@ -69,7 +70,7 @@ void vil1_convolve_1d_y(vil1_convolve_signal_1d<I1 const> const &kernel,
         case vil1_convolve_trim:
           break;
         default:
-          vcl_abort();
+          std::abort();
           break;
         }
 
@@ -95,7 +96,7 @@ void vil1_convolve_1d_y(vil1_convolve_signal_1d<I1 const> const &kernel,
         case vil1_convolve_trim:
           break;
         default:
-          vcl_abort();
+          std::abort();
           break;
         }
 

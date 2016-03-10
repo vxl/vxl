@@ -6,7 +6,9 @@
 // \author Tim Cootes
 
 #include <mfpf/mfpf_vec_cost.h>
-#include <vcl_iosfwd.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iosfwd>
 
 //: Computes log prob based on output of a linear classifier
 //  Linear classifier gives output z = w.x - bias
@@ -48,13 +50,13 @@ class mfpf_log_lin_class_cost : public mfpf_vec_cost
   short version_no() const;
 
   //: Name of the class
-  virtual vcl_string is_a() const;
+  virtual std::string is_a() const;
 
   //: Create a copy on the heap and return base class pointer
   virtual mfpf_vec_cost* clone() const;
 
   //: Print class to os
-  virtual void print_summary(vcl_ostream& os) const;
+  virtual void print_summary(std::ostream& os) const;
 
   //: Save class to binary file stream
   virtual void b_write(vsl_b_ostream& bfs) const;

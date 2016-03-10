@@ -4,7 +4,9 @@
 // \file
 #include "boct_tree_cell.h"
 
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iostream>
 #include <vgl/vgl_intersection.h>
 
 #ifdef DEBUG_LEAKS
@@ -220,7 +222,7 @@ void boct_tree_cell<T_loc,T_data>::delete_children()
     for (unsigned i=0; i<8; i++) {
       children_[i].delete_children();
 #ifdef DEBUG
-      vcl_cout << "Deleting children" << vcl_endl;
+      std::cout << "Deleting children" << std::endl;
 #endif
     }
     delete [] children_;
@@ -307,7 +309,7 @@ bool boct_tree_cell<T_loc,T_data>::split()
     // make sure that it does not go below level 0, which is the min possible level
     if (child_level < 0) {
 #ifdef DEBUG
-      vcl_cout << "boct_tree_cell: Cannot split the cell, already at the min level" << vcl_endl;
+      std::cout << "boct_tree_cell: Cannot split the cell, already at the min level" << std::endl;
 #endif
       return false;
     }
@@ -356,14 +358,14 @@ bool boct_tree_cell<T_loc,T_data>::insert_subtree( boct_tree_cell<T_loc,T_data>*
 {
   // make sure it is leaf
   if (!this->is_leaf()) {
-    vcl_cout << "ERROR! boct_tree_cell<T_loc,T_data>::insert_subtree -- subtree cannot be inserted, the node is not leaf" << vcl_endl;
+    std::cout << "ERROR! boct_tree_cell<T_loc,T_data>::insert_subtree -- subtree cannot be inserted, the node is not leaf" << std::endl;
     return false;
   }
 
   //check if the levels are going to be exceeded
   int sl=subtree->level();
   if (sl > this->code_.level) {
-    vcl_cout << "ERROR! boct_tree_cell<T_loc,T_data>::insert_subtree -- subtree exceeds the max levels" << vcl_endl;
+    std::cout << "ERROR! boct_tree_cell<T_loc,T_data>::insert_subtree -- subtree exceeds the max levels" << std::endl;
     return false;
   }
   children_ = subtree->children();
@@ -395,7 +397,7 @@ boct_tree_cell<T_loc,T_data>* boct_tree_cell<T_loc,T_data>::get_common_ancestor(
 
 template<class T_loc,class T_data>
 void  boct_tree_cell<T_loc,T_data>::find_neighbors(boct_face_idx face,
-                                                   vcl_vector<boct_tree_cell<T_loc,T_data>*> & neighbors,
+                                                   std::vector<boct_tree_cell<T_loc,T_data>*> & neighbors,
                                                    short root_level)
 {
   short cellsize=1<<this->level();
@@ -429,7 +431,7 @@ void  boct_tree_cell<T_loc,T_data>::find_neighbors(boct_face_idx face,
         // TODO code to get the cells which are further down the tree.
         // This is naive implementation of getting all the leaf nodes from a node and
         // test each of them if  they are neighbors.
-        vcl_vector<boct_tree_cell<T_loc,T_data>*> leafnodes;
+        std::vector<boct_tree_cell<T_loc,T_data>*> leafnodes;
         neighborcell->leaf_children(leafnodes);
 
         for (unsigned int i=0;i<leafnodes.size();i++)
@@ -466,7 +468,7 @@ void  boct_tree_cell<T_loc,T_data>::find_neighbors(boct_face_idx face,
         // TODO code to get the cells which are further down the tree.
         // This is naive implementation of getting all the leaf nodes from a node and
         // test each of them if  they are neighbors.
-        vcl_vector<boct_tree_cell<T_loc,T_data>*> leafnodes;
+        std::vector<boct_tree_cell<T_loc,T_data>*> leafnodes;
         neighborcell->leaf_children(leafnodes);
 
         for (unsigned int i=0;i<leafnodes.size();i++)
@@ -502,7 +504,7 @@ void  boct_tree_cell<T_loc,T_data>::find_neighbors(boct_face_idx face,
         // TODO code to get the cells which are further down the tree.
         // This is naive implementation of getting all the leaf nodes from a node and
         // test each of them if  they are neighbors.
-        vcl_vector<boct_tree_cell<T_loc,T_data>*> leafnodes;
+        std::vector<boct_tree_cell<T_loc,T_data>*> leafnodes;
         neighborcell->leaf_children(leafnodes);
 
         for (unsigned int i=0;i<leafnodes.size();i++)
@@ -539,7 +541,7 @@ void  boct_tree_cell<T_loc,T_data>::find_neighbors(boct_face_idx face,
         // TODO code to get the cells which are further down the tree.
         // This is naive implementation of getting all the leaf nodes from a node and
         // test each of them if  they are neighbors.
-        vcl_vector<boct_tree_cell<T_loc,T_data>*> leafnodes;
+        std::vector<boct_tree_cell<T_loc,T_data>*> leafnodes;
         neighborcell->leaf_children(leafnodes);
 
         for (unsigned int i=0;i<leafnodes.size();i++)
@@ -574,7 +576,7 @@ void  boct_tree_cell<T_loc,T_data>::find_neighbors(boct_face_idx face,
         // TODO code to get the cells which are further down the tree.
         // This is naive implementation of getting all the leaf nodes from a node and
         // test each of them if  they are neighbors.
-        vcl_vector<boct_tree_cell<T_loc,T_data>*> leafnodes;
+        std::vector<boct_tree_cell<T_loc,T_data>*> leafnodes;
         neighborcell->leaf_children(leafnodes);
 
         for (unsigned int i=0;i<leafnodes.size();i++)
@@ -611,7 +613,7 @@ void  boct_tree_cell<T_loc,T_data>::find_neighbors(boct_face_idx face,
         // TODO code to get the cells which are further down the tree.
         // This is naive implementation of getting all the leaf nodes from a node and
         // test each of them if  they are neighbors.
-        vcl_vector<boct_tree_cell<T_loc,T_data>*> leafnodes;
+        std::vector<boct_tree_cell<T_loc,T_data>*> leafnodes;
         neighborcell->leaf_children(leafnodes);
 
         for (unsigned int i=0;i<leafnodes.size();i++)
@@ -761,7 +763,7 @@ bool  boct_tree_cell<T_loc,T_data>::find_neighbor(boct_face_idx face,
 
 //: adds a pointer for each leaf children to v
 template<class T_loc,class T_data>
-void boct_tree_cell<T_loc,T_data>::leaf_children(vcl_vector<boct_tree_cell<T_loc,T_data>*>& v)
+void boct_tree_cell<T_loc,T_data>::leaf_children(std::vector<boct_tree_cell<T_loc,T_data>*>& v)
 {
   // the cell itself is a leaf
   if (!children_)
@@ -779,7 +781,7 @@ void boct_tree_cell<T_loc,T_data>::leaf_children(vcl_vector<boct_tree_cell<T_loc
 
 //: adds a pointer to vector v, for each leaf children at a particular level
 template<class T_loc,class T_data>
-void boct_tree_cell<T_loc,T_data>::leaf_children_at_level(vcl_vector<boct_tree_cell<T_loc,T_data>*>& v, short target_level)
+void boct_tree_cell<T_loc,T_data>::leaf_children_at_level(std::vector<boct_tree_cell<T_loc,T_data>*>& v, short target_level)
 {
   short curr_level = code_.level;
 
@@ -805,7 +807,7 @@ void boct_tree_cell<T_loc,T_data>::leaf_children_at_level(vcl_vector<boct_tree_c
 
 //: adds a pointer to vector v, for each children at a particular level
 template<class T_loc,class T_data>
-void boct_tree_cell<T_loc,T_data>::children_at_level(vcl_vector<boct_tree_cell<T_loc,T_data>*>& v, short target_level)
+void boct_tree_cell<T_loc,T_data>::children_at_level(std::vector<boct_tree_cell<T_loc,T_data>*>& v, short target_level)
 {
   short curr_level = code_.level;
 
@@ -826,14 +828,14 @@ void boct_tree_cell<T_loc,T_data>::children_at_level(vcl_vector<boct_tree_cell<T
   }
   else
   {
-    vcl_cerr << "Inconsintent case in cell::children_at_level\n";
+    std::cerr << "Inconsintent case in cell::children_at_level\n";
     return;
   }
 }
 
 //: adds a pointer to vector v, for each children in a recursive fashion
 template<class T_loc,class T_data>
-void boct_tree_cell<T_loc,T_data>::all_children(vcl_vector<boct_tree_cell<T_loc,T_data>*>& v)
+void boct_tree_cell<T_loc,T_data>::all_children(std::vector<boct_tree_cell<T_loc,T_data>*>& v)
 {
   if (this-> is_leaf())
     return;
@@ -858,15 +860,15 @@ void boct_tree_cell<T_loc,T_data>::set_data_to_avg_children()
 template<class T_loc,class T_data>
 void boct_tree_cell<T_loc,T_data>::print()
 {
-  vcl_cout << "LEVEL=" << this->level()
+  std::cout << "LEVEL=" << this->level()
            << " code=" << code_
            << " parent=" << parent_
            << " data=" << data_;
 
   if (is_leaf())
-    vcl_cout << " LEAF" << vcl_endl;
+    std::cout << " LEAF" << std::endl;
   else {
-    vcl_cout << vcl_endl;
+    std::cout << std::endl;
     for (unsigned i=0; i<8; i++) {
       children_[i].print();
     }
@@ -922,15 +924,15 @@ void vsl_b_read(vsl_b_istream & is, boct_tree_cell<T_loc,T_data>& c, boct_tree_c
     break;
    }
    default:
-    vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, boct_tree<T>&)\n"
+    std::cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, boct_tree<T>&)\n"
              << "           Unknown version number "<< version << '\n';
-    is.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
+    is.is().clear(std::ios::badbit); // Set an unrecoverable IO error on stream
     return;
   }
 }
 
 template<class T_loc,class T_data>
-vcl_ostream& operator <<(vcl_ostream &s, boct_tree_cell<T_loc,T_data>& cell)
+std::ostream& operator <<(std::ostream &s, boct_tree_cell<T_loc,T_data>& cell)
 {
   s <<  cell.code_ ;
   return s;
@@ -938,7 +940,7 @@ vcl_ostream& operator <<(vcl_ostream &s, boct_tree_cell<T_loc,T_data>& cell)
 
 #define BOCT_TREE_CELL_INSTANTIATE(T_loc,T_data) \
 template class boct_tree_cell<T_loc,T_data >; \
-template vcl_ostream& operator <<(vcl_ostream &s, boct_tree_cell<T_loc,T_data >& cell);\
+template std::ostream& operator <<(std::ostream &s, boct_tree_cell<T_loc,T_data >& cell);\
 template void vsl_b_read(vsl_b_istream &, boct_tree_cell<T_loc,T_data >&, boct_tree_cell<T_loc,T_data >*); \
 template void vsl_b_write(vsl_b_ostream &, boct_tree_cell<T_loc,T_data >&); \
 template class boct_cell_vis_graph_node<T_loc,T_data >

@@ -10,7 +10,9 @@
 // \brief A wrapper to provide access to C-arrays of objects
 
 #include <mbl/mbl_data_wrapper.h>
-#include <vcl_vector.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <vector>
 
 //: A wrapper to provide access to C-arrays of objects
 template<class T>
@@ -29,9 +31,9 @@ class mbl_data_array_wrapper : public mbl_data_wrapper<T>
   mbl_data_array_wrapper(const T* data, unsigned long n);
 
   //: Constructor
-  // Sets up object to wrap a vcl_vector.
+  // Sets up object to wrap a std::vector.
   // The data must be kept in scope, this does not take a copy.
-  mbl_data_array_wrapper(const vcl_vector<T > &data);
+  mbl_data_array_wrapper(const std::vector<T > &data);
 
   //: Copy Constructor
   // The copy will point to the same data as the original.
@@ -73,10 +75,10 @@ class mbl_data_array_wrapper : public mbl_data_wrapper<T>
   virtual mbl_data_wrapper< T >* clone() const;
 
   //: Name of the class
-  virtual vcl_string is_a() const;
+  virtual std::string is_a() const;
 
   //: True if this is (or is derived from) class named s
-  virtual bool is_class(vcl_string const& s) const;
+  virtual bool is_class(std::string const& s) const;
 };
 
 #endif // mbl_data_array_wrapper_h

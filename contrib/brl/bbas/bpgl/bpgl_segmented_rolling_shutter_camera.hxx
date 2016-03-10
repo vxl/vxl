@@ -4,8 +4,10 @@
 //:
 // \file
 #include "bpgl_segmented_rolling_shutter_camera.h"
-#include <vcl_vector.hxx>
-#include <vcl_fstream.h>
+#include <vector>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <fstream>
 #include <vgl/vgl_point_2d.h>
 #include <vgl/vgl_point_3d.h>
 //--------------------------------------
@@ -107,18 +109,18 @@ bool bpgl_segmented_rolling_shutter_camera<T>::update_camera(unsigned int v, vpg
 
 //: print the camera parameters
 template <class T>
-void bpgl_segmented_rolling_shutter_camera<T>::print(vcl_ostream& s) const
+void bpgl_segmented_rolling_shutter_camera<T>::print(std::ostream& s) const
 {
   s << "<bpgl_segmented_rolling_shutter_camera>";
 }
 
 template <class T>
-bool bpgl_segmented_rolling_shutter_camera<T>::save(vcl_string cam_path)
+bool bpgl_segmented_rolling_shutter_camera<T>::save(std::string cam_path)
 {
-  vcl_ofstream file_out;
+  std::ofstream file_out;
   file_out.open(cam_path.c_str());
   if (!file_out.good()) {
-    vcl_cerr << "error: bad filename: " << cam_path << vcl_endl;
+    std::cerr << "error: bad filename: " << cam_path << std::endl;
     return false;
   }
   else
@@ -144,14 +146,14 @@ b_write(vsl_b_ostream &os) const
 
 // read from a file
 template <class T>
-bpgl_segmented_rolling_shutter_camera<T>* read_segmented_rolling_shutter_camera(vcl_string cam_path)
+bpgl_segmented_rolling_shutter_camera<T>* read_segmented_rolling_shutter_camera(std::string cam_path)
 {
   return new bpgl_segmented_rolling_shutter_camera<T>();
 }
 
 //: read from an open istream
 template <class T>
-bpgl_segmented_rolling_shutter_camera<T>* read_segmented_rolling_shutter_camera(vcl_istream& istr)
+bpgl_segmented_rolling_shutter_camera<T>* read_segmented_rolling_shutter_camera(std::istream& istr)
 {
   return new bpgl_segmented_rolling_shutter_camera<T>();
 }
@@ -159,7 +161,7 @@ bpgl_segmented_rolling_shutter_camera<T>* read_segmented_rolling_shutter_camera(
 
 //: Write to stream
 template <class T>
-vcl_ostream&  operator<<(vcl_ostream& s, const bpgl_segmented_rolling_shutter_camera<T>& c )
+std::ostream&  operator<<(std::ostream& s, const bpgl_segmented_rolling_shutter_camera<T>& c )
 {
   c.print(s);
   return s;
@@ -170,8 +172,8 @@ vcl_ostream&  operator<<(vcl_ostream& s, const bpgl_segmented_rolling_shutter_ca
 #undef BPGL_SEGMENTED_ROLLING_SHUTTER_CAMERA_INSTANTIATE
 #define BPGL_SEGMENTED_ROLLING_SHUTTER_CAMERA_INSTANTIATE(T) \
 template class bpgl_segmented_rolling_shutter_camera<T >; \
-template vcl_ostream& operator<<(vcl_ostream&, const bpgl_segmented_rolling_shutter_camera<T >&); \
-template bpgl_segmented_rolling_shutter_camera<T >* read_segmented_rolling_shutter_camera(vcl_string); \
-template bpgl_segmented_rolling_shutter_camera<T >* read_segmented_rolling_shutter_camera(vcl_istream&)
+template std::ostream& operator<<(std::ostream&, const bpgl_segmented_rolling_shutter_camera<T >&); \
+template bpgl_segmented_rolling_shutter_camera<T >* read_segmented_rolling_shutter_camera(std::string); \
+template bpgl_segmented_rolling_shutter_camera<T >* read_segmented_rolling_shutter_camera(std::istream&)
 
 #endif // bpgl_segmented_rolling_shutter_camera_hxx_

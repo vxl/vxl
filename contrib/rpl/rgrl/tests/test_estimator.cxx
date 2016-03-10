@@ -1,11 +1,13 @@
 #include <testlib/testlib_test.h>
 //:
 // \file
-#include <vcl_vector.h>
-#include <vcl_iostream.h>
-#include <vcl_iterator.h>
-#include <vcl_algorithm.h>
-#include <vcl_cmath.h>
+#include <vector>
+#include <iostream>
+#include <iterator>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <algorithm>
+#include <cmath>
 #include <vcl_cassert.h>
 
 #include <vnl/vnl_matrix.h>
@@ -119,9 +121,9 @@ namespace {
 
   // This computes the weighted least squares one dimension at a time.
   void
-  weighted_least_squares( vcl_vector< vnl_vector<double> > const& from,
-                          vcl_vector< vnl_vector<double> > const& to,
-                          vcl_vector< double > const& wgt,
+  weighted_least_squares( std::vector< vnl_vector<double> > const& from,
+                          std::vector< vnl_vector<double> > const& to,
+                          std::vector< double > const& wgt,
                           vnl_matrix< double >& A,
                           vnl_vector< double >& t,
                           vnl_matrix< double >& covar )
@@ -178,7 +180,7 @@ namespace {
                                     vnl_vector<double>( 3, 0.0 ),
                                     vnl_matrix<double>( 12, 12, 0.0 ) );
 
-    vcl_cout << "Estimate affine transformation with point-to-point correspondences\n";
+    std::cout << "Estimate affine transformation with point-to-point correspondences\n";
     // Test zero error case
     {
       vnl_matrix<double> A( 3, 3 );
@@ -192,8 +194,8 @@ namespace {
       t[1] = -4.0;
       t[2] =  1.0;
 
-      vcl_vector< rgrl_feature_sptr > from_pts;
-      vcl_vector< rgrl_feature_sptr > to_pts;
+      std::vector< rgrl_feature_sptr > from_pts;
+      std::vector< rgrl_feature_sptr > to_pts;
 
       {
         vnl_vector<double> v = vec3d( 2.0, 3.0, 5.0 );
@@ -225,7 +227,7 @@ namespace {
         TEST("Underconstrained (not enough correspondences)", !trans, true);
         if ( trans ) {
           rgrl_trans_affine* aff_trans = dynamic_cast<rgrl_trans_affine*>(trans.as_pointer());
-          vcl_cout << "Estimated (shouldn't have):\nA=\n"<<aff_trans->A()<<"\nt="<<aff_trans->t()<<'\n';
+          std::cout << "Estimated (shouldn't have):\nA=\n"<<aff_trans->A()<<"\nt="<<aff_trans->t()<<'\n';
         }
       }
 
@@ -240,7 +242,7 @@ namespace {
         TEST("Underconstrained (samples not independent)", !trans, true);
         if ( trans ) {
           rgrl_trans_affine* aff_trans = dynamic_cast<rgrl_trans_affine*>(trans.as_pointer());
-          vcl_cout << "Estimated (shouldn't have):\nA=\n"<<aff_trans->A()<<"\nt="<<aff_trans->t()<<'\n';
+          std::cout << "Estimated (shouldn't have):\nA=\n"<<aff_trans->A()<<"\nt="<<aff_trans->t()<<'\n';
         }
       }
 
@@ -263,8 +265,8 @@ namespace {
           TEST("Result is affine (is_type())", trans->is_type(rgrl_trans_affine::type_id()) , true);
           rgrl_trans_affine* aff_trans = dynamic_cast<rgrl_trans_affine*>(trans.as_pointer());
           TEST("Result is affine (dynamic_cast)", !aff_trans, false);
-          vcl_cout << "Estimated:\nA=\n"<<aff_trans->A()<<"\nt="<<aff_trans->t()
-                   << "\n\nTrue:\nA=\n"<<A<<"\nt="<<t<<vcl_endl;
+          std::cout << "Estimated:\nA=\n"<<aff_trans->A()<<"\nt="<<aff_trans->t()
+                   << "\n\nTrue:\nA=\n"<<A<<"\nt="<<t<<std::endl;
           TEST("A is close", close( aff_trans->A(), A), true);
           TEST("t is close", close( aff_trans->t(), t), true);
         }
@@ -300,8 +302,8 @@ namespace {
           TEST("Result is affine (is_type())", trans->is_type(rgrl_trans_affine::type_id()) , true);
           rgrl_trans_affine* aff_trans = dynamic_cast<rgrl_trans_affine*>(trans.as_pointer());
           TEST("Result is affine (dynamic_cast)", !aff_trans, false);
-          vcl_cout << "Estimated:\nA=\n"<<aff_trans->A()<<"\nt="<<aff_trans->t()
-                   << "\n\nTrue:\nA=\n"<<A<<"\nt="<<t<<vcl_endl;
+          std::cout << "Estimated:\nA=\n"<<aff_trans->A()<<"\nt="<<aff_trans->t()
+                   << "\n\nTrue:\nA=\n"<<A<<"\nt="<<t<<std::endl;
           TEST("A is close", close( aff_trans->A(), A), true);
           TEST("t is close", close( aff_trans->t(), t), true);
         }
@@ -327,8 +329,8 @@ namespace {
           TEST("Result is affine (is_type())", trans->is_type(rgrl_trans_affine::type_id()) , true);
           rgrl_trans_affine* aff_trans = dynamic_cast<rgrl_trans_affine*>(trans.as_pointer());
           TEST("Result is affine (dynamic_cast)", !aff_trans, false);
-          vcl_cout << "Estimated:\nA=\n"<<aff_trans->A()<<"\nt="<<aff_trans->t()
-                   << "\n\nTrue:\nA=\n"<<A<<"\nt="<<t<<vcl_endl;
+          std::cout << "Estimated:\nA=\n"<<aff_trans->A()<<"\nt="<<aff_trans->t()
+                   << "\n\nTrue:\nA=\n"<<A<<"\nt="<<t<<std::endl;
           TEST("A is close", close( aff_trans->A(), A), true);
           TEST("t is close", close( aff_trans->t(), t), true);
         }
@@ -337,9 +339,9 @@ namespace {
 
     // Weighted least squares
     {
-      vcl_vector< vnl_vector<double> > from;
-      vcl_vector< vnl_vector<double> > to;
-      vcl_vector< double > wgt;
+      std::vector< vnl_vector<double> > from;
+      std::vector< vnl_vector<double> > to;
+      std::vector< double > wgt;
 
       from.   push_back( vec3d( 0.0, 0.0, 0.0 ) );
       to.     push_back( vec3d( 0.0, 0.0, 0.0 ) );
@@ -389,21 +391,21 @@ namespace {
         TEST("Result is affine (is_type())", trans->is_type(rgrl_trans_affine::type_id()), true );
         rgrl_trans_affine* aff_trans = dynamic_cast<rgrl_trans_affine*>(trans.as_pointer());
         TEST("Result is affine (dynamic_cast)", !aff_trans, false);
-        vcl_cout << "Estimated:\nA=\n"<<aff_trans->A()<<"\nt="<<aff_trans->t()<<"\ncovar="<<aff_trans->covar()
-                 << "\n\nTrue:\nA=\n"<<A<<"\nt="<<t<<"\ncovar="<<covar<<vcl_endl;
+        std::cout << "Estimated:\nA=\n"<<aff_trans->A()<<"\nt="<<aff_trans->t()<<"\ncovar="<<aff_trans->covar()
+                 << "\n\nTrue:\nA=\n"<<A<<"\nt="<<t<<"\ncovar="<<covar<<std::endl;
         TEST("A is close", close( aff_trans->A(), A, 1e-4), true);
         TEST("t is close", close( aff_trans->t(), t, 1e-4), true);
         TEST("covar is close", close_det( aff_trans->covar(), covar), true );
       }
     }
-    vcl_cout << "--------------------------------------------------------------------------------\n";
+    std::cout << "--------------------------------------------------------------------------------\n";
   }
 
 
   void
-  add_point_on_line( vcl_vector< vnl_vector<double> >& from,
-                     vcl_vector< vnl_vector<double> >& to,
-                     vcl_vector< vnl_vector<double> >& to_tang,
+  add_point_on_line( std::vector< vnl_vector<double> >& from,
+                     std::vector< vnl_vector<double> >& to,
+                     std::vector< vnl_vector<double> >& to_tang,
                      vnl_matrix<double> const& A,
                      vnl_vector<double> const& trans,
                      vnl_vector<double> const& v,
@@ -418,10 +420,10 @@ namespace {
 
 
   void
-  add_point_on_line( vcl_vector< vnl_vector<double> >& from,
-                     vcl_vector< vnl_vector<double> >& to,
-                     vcl_vector< vnl_vector<double> >& to_tang,
-                     vcl_vector< double >            & wgt,
+  add_point_on_line( std::vector< vnl_vector<double> >& from,
+                     std::vector< vnl_vector<double> >& to,
+                     std::vector< vnl_vector<double> >& to_tang,
+                     std::vector< double >            & wgt,
                      vnl_vector<double> const& f,
                      vnl_vector<double> const& t,
                      vnl_vector<double> const& tan,
@@ -440,10 +442,10 @@ namespace {
   // time. It adds a single constraint per point based on the normal
   // error.
   void
-  weighted_least_squares_to_line( vcl_vector< vnl_vector<double> > const& from,
-                                  vcl_vector< vnl_vector<double> > const& to,
-                                  vcl_vector< vnl_vector<double> > const& tang,
-                                  vcl_vector< double > const& wgt,
+  weighted_least_squares_to_line( std::vector< vnl_vector<double> > const& from,
+                                  std::vector< vnl_vector<double> > const& to,
+                                  std::vector< vnl_vector<double> > const& tang,
+                                  std::vector< double > const& wgt,
                                   vnl_matrix< double >& A,
                                   vnl_vector< double >& t,
                                   vnl_matrix< double >& covar )
@@ -476,7 +478,7 @@ namespace {
       vnl_vector<double> norm( 2 );
       norm[0] = -tang[r][1];
       norm[1] =  tang[r][0];
-      assert ( vcl_abs( norm.two_norm() - 1 ) < 1e-6 );
+      assert ( std::abs( norm.two_norm() - 1 ) < 1e-6 );
 
       // build LHS [ [ x y 1 ] * nx  [ x y 1 ] * ny ]
       for ( unsigned dim=0; dim < m; ++dim ) {
@@ -509,7 +511,7 @@ namespace {
   void
   test_est_affine_pt_to_line()
   {
-    vcl_cout << "Estimate affine transformation with point-to-line correspondences\n";
+    std::cout << "Estimate affine transformation with point-to-line correspondences\n";
 
     rgrl_trans_affine null2d_trans( vnl_matrix<double>( 2, 2, 0.0 ),
                                     vnl_vector<double>( 2, 0.0 ),
@@ -527,9 +529,9 @@ namespace {
       t[0] =  3.0;
       t[1] = -4.0;
 
-      vcl_vector< vnl_vector<double> > from;
-      vcl_vector< vnl_vector<double> > to;
-      vcl_vector< vnl_vector<double> > to_tang;
+      std::vector< vnl_vector<double> > from;
+      std::vector< vnl_vector<double> > to;
+      std::vector< vnl_vector<double> > to_tang;
 
       add_point_on_line( from, to, to_tang, A, t,
                          vec2d( 2.0, 3.0 ), vec2d( 1.0, 2.0 ) );
@@ -556,7 +558,7 @@ namespace {
         TEST("Underconstrained (not enough correspondences)", !trans, true);
         if ( trans ) {
           rgrl_trans_affine* aff_trans = dynamic_cast<rgrl_trans_affine*>(trans.as_pointer());
-          vcl_cout << "Estimated (shouldn't have):\nA=\n"<<aff_trans->A()<<"\nt="<<aff_trans->t()<<'\n';
+          std::cout << "Estimated (shouldn't have):\nA=\n"<<aff_trans->A()<<"\nt="<<aff_trans->t()<<'\n';
         }
       }
 
@@ -571,7 +573,7 @@ namespace {
         TEST("Underconstrained (samples not independent)", !trans, true);
         if ( trans ) {
           rgrl_trans_affine* aff_trans = dynamic_cast<rgrl_trans_affine*>(trans.as_pointer());
-          vcl_cout << "Estimated (shouldn't have):\nA=\n"<<aff_trans->A()<<"\nt="<<aff_trans->t()<<'\n';
+          std::cout << "Estimated (shouldn't have):\nA=\n"<<aff_trans->A()<<"\nt="<<aff_trans->t()<<'\n';
         }
       }
 
@@ -591,8 +593,8 @@ namespace {
           TEST("Result is affine (is_type())", trans->is_type(rgrl_trans_affine::type_id()), true );
           rgrl_trans_affine* aff_trans = dynamic_cast<rgrl_trans_affine*>(trans.as_pointer());
           TEST("Result is affine (dynamic_cast)", !aff_trans, false);
-          vcl_cout << "Estimated:\nA=\n"<<aff_trans->A()<<"\nt="<<aff_trans->t()
-                   << "\n\nTrue:\nA=\n"<<A<<"\nt="<<t<<vcl_endl;
+          std::cout << "Estimated:\nA=\n"<<aff_trans->A()<<"\nt="<<aff_trans->t()
+                   << "\n\nTrue:\nA=\n"<<A<<"\nt="<<t<<std::endl;
           TEST("A is close", close( aff_trans->A(), A), true);
           TEST("t is close", close( aff_trans->t(), t), true);
         }
@@ -619,8 +621,8 @@ namespace {
           TEST("Result is affine (is_type())", trans->is_type(rgrl_trans_affine::type_id()) , true);
           rgrl_trans_affine* aff_trans = dynamic_cast<rgrl_trans_affine*>(trans.as_pointer());
           TEST("Result is affine (dynamic_cast)", !aff_trans, false);
-          vcl_cout << "Estimated:\nA=\n"<<aff_trans->A()<<"\nt="<<aff_trans->t()
-                   << "\n\nTrue:\nA=\n"<<A<<"\nt="<<t<<vcl_endl;
+          std::cout << "Estimated:\nA=\n"<<aff_trans->A()<<"\nt="<<aff_trans->t()
+                   << "\n\nTrue:\nA=\n"<<A<<"\nt="<<t<<std::endl;
           TEST("A is close", close( aff_trans->A(), A), true);
           TEST("t is close", close( aff_trans->t(), t), true);
         }
@@ -646,8 +648,8 @@ namespace {
           TEST("Result is affine (is_type())", trans->is_type(rgrl_trans_affine::type_id()), true );
           rgrl_trans_affine* aff_trans = dynamic_cast<rgrl_trans_affine*>(trans.as_pointer());
           TEST("Result is affine (dynamic_cast)", !aff_trans, false);
-          vcl_cout << "Estimated:\nA=\n"<<aff_trans->A()<<"\nt="<<aff_trans->t()
-                   << "\n\nTrue:\nA=\n"<<A<<"\nt="<<t<<vcl_endl;
+          std::cout << "Estimated:\nA=\n"<<aff_trans->A()<<"\nt="<<aff_trans->t()
+                   << "\n\nTrue:\nA=\n"<<A<<"\nt="<<t<<std::endl;
           TEST("A is close", close( aff_trans->A(), A), true);
           TEST("t is close", close( aff_trans->t(), t), true);
         }
@@ -656,10 +658,10 @@ namespace {
 
     // Weighted least squares
     {
-      vcl_vector< vnl_vector<double> > from;
-      vcl_vector< vnl_vector<double> > to;
-      vcl_vector< vnl_vector<double> > to_tang;
-      vcl_vector< double >             wgt;
+      std::vector< vnl_vector<double> > from;
+      std::vector< vnl_vector<double> > to;
+      std::vector< vnl_vector<double> > to_tang;
+      std::vector< double >             wgt;
 
       add_point_on_line( from, to, to_tang, wgt,
                          vec2d( 0.0, 0.0 ),
@@ -725,14 +727,14 @@ namespace {
         TEST("Result is affine (is_type())", trans->is_type(rgrl_trans_affine::type_id()), true );
         rgrl_trans_affine* aff_trans = dynamic_cast<rgrl_trans_affine*>(trans.as_pointer());
         TEST("Result is affine (dynamic_cast)", !aff_trans, false);
-        vcl_cout << "Estimated:\nA=\n"<<aff_trans->A()<<"\nt="<<aff_trans->t()<<"\ncovar="<<aff_trans->covar()
-                 << "\n\nTrue:\nA=\n"<<A<<"\nt="<<t<<"\ncovar="<<covar<<vcl_endl;
+        std::cout << "Estimated:\nA=\n"<<aff_trans->A()<<"\nt="<<aff_trans->t()<<"\ncovar="<<aff_trans->covar()
+                 << "\n\nTrue:\nA=\n"<<A<<"\nt="<<t<<"\ncovar="<<covar<<std::endl;
         TEST("A is close", close( aff_trans->A(), A), true);
         TEST("t is close", close( aff_trans->t(), t), true);
         TEST("covar is close", close_det( aff_trans->covar(), covar), true );
       }
     }
-    vcl_cout << "--------------------------------------------------------------------------------\n";
+    std::cout << "--------------------------------------------------------------------------------\n";
   }
 
 
@@ -742,8 +744,8 @@ namespace {
   {
     vnl_matrix<double> m( 3, 3 );
     m(0,0) = 1;   m(1,0) =  0;               m(2,0) = 0;
-    m(1,0) = 0;   m(1,1) =  vcl_cos(angle);  m(1,2) = -vcl_sin(angle);
-    m(2,0) = 0;   m(2,1) =  vcl_sin(angle);  m(2,2) =  vcl_cos(angle);
+    m(1,0) = 0;   m(1,1) =  std::cos(angle);  m(1,2) = -std::sin(angle);
+    m(2,0) = 0;   m(2,1) =  std::sin(angle);  m(2,2) =  std::cos(angle);
     return m;
   }
 
@@ -751,9 +753,9 @@ namespace {
   rot3d_y( double angle )
   {
     vnl_matrix<double> m( 3, 3 );
-    m(0,0) =  vcl_cos(angle);    m(0,1) = 0;   m(0,2) =  vcl_sin(angle);
+    m(0,0) =  std::cos(angle);    m(0,1) = 0;   m(0,2) =  std::sin(angle);
     m(1,0) =  0;                 m(1,1) = 1;   m(1,2) = 0;
-    m(2,0) = -vcl_sin(angle);    m(2,1) = 0;   m(2,2) =  vcl_cos(angle);
+    m(2,0) = -std::sin(angle);    m(2,1) = 0;   m(2,2) =  std::cos(angle);
     return m;
   }
 
@@ -762,8 +764,8 @@ namespace {
   rot3d_z( double angle )
   {
     vnl_matrix<double> m( 3, 3 );
-    m(0,0) =  vcl_cos(angle);  m(0,1) = -vcl_sin(angle);   m(0,2) = 0;
-    m(1,0) =  vcl_sin(angle);  m(1,1) =  vcl_cos(angle);   m(1,2) = 0;
+    m(0,0) =  std::cos(angle);  m(0,1) = -std::sin(angle);   m(0,2) = 0;
+    m(1,0) =  std::sin(angle);  m(1,1) =  std::cos(angle);   m(1,2) = 0;
     m(2,0) =  0;               m(2,1) = 0;                 m(2,2) = 1;
     return m;
   }
@@ -790,7 +792,7 @@ namespace {
 
       rgrl_trans_similarity sim( smallR, smallT, vnl_matrix<double>( 7, 7, 0.0 ) );
 
-      vcl_vector< vnl_vector<double> > from;
+      std::vector< vnl_vector<double> > from;
       from.push_back( vec3d(  0.0,  0.0,  0.0 ) );
       from.push_back( vec3d( 10.0, 50.0, 90.0 ) );
       from.push_back( vec3d( 23.0, 74.0, 19.0 ) );
@@ -815,8 +817,8 @@ namespace {
           TEST("Result is similarity (is_type())", trans->is_type(rgrl_trans_similarity::type_id()), true );
           rgrl_trans_similarity* sim_trans = dynamic_cast<rgrl_trans_similarity*>(trans.as_pointer());
           TEST("Result is similarity (dynamic_cast)", !sim_trans, false);
-          vcl_cout << "Estimated:\nA=\n"<<sim_trans->A()<<"\nt="<<sim_trans->t()
-                   << "\n\nTrue:\nA=\n"<<smallR<<"\nt="<<smallT<<vcl_endl;
+          std::cout << "Estimated:\nA=\n"<<sim_trans->A()<<"\nt="<<sim_trans->t()
+                   << "\n\nTrue:\nA=\n"<<smallR<<"\nt="<<smallT<<std::endl;
           TEST("A is close", close( sim_trans->A(), smallR ), true);
           TEST("t is close", close( sim_trans->t(), smallT ), true);
         }
@@ -831,20 +833,20 @@ namespace {
           rgrl_trans_similarity* sim_trans = dynamic_cast<rgrl_trans_similarity*>(trans.as_pointer());
           TEST("Result is similarity (dynamic_cast)", !sim_trans, false);
           // should probably check the residual error, not the parameters.
-          vcl_cout << "Estimated:\nA=\n"<<sim_trans->A()<<"\nt="<<sim_trans->t()
-                   << "\n\nTrue:\nA=\n"<<smallR<<"\nt="<<smallT<<vcl_endl;
+          std::cout << "Estimated:\nA=\n"<<sim_trans->A()<<"\nt="<<sim_trans->t()
+                   << "\n\nTrue:\nA=\n"<<smallR<<"\nt="<<smallT<<std::endl;
           TEST("A is close", close( sim_trans->A(), smallR, 0.1 ), true);
           TEST("t is close", close( sim_trans->t(), smallT, 1.0 ), true);
 
-          vcl_cout << "---------\n"
+          std::cout << "---------\n"
                    << "True:\nR=\n" << smallR << "\nt=\n"<<smallT
                    << "\n\nEstimated:\nR=\n"<< sim_trans->A() << "\nt=\n" << sim_trans->t()
                    << "\n\nMappings: From, To real, To est\n";
           for ( unsigned i=0; i < from.size(); ++i ) {
-            vcl_cout << from[i] << "    " << (smallR*from[i] + smallT) << "    "
-                     << (sim_trans->A()*from[i] + sim_trans->t()) << vcl_endl;
+            std::cout << from[i] << "    " << (smallR*from[i] + smallT) << "    "
+                     << (sim_trans->A()*from[i] + sim_trans->t()) << std::endl;
           }
-          vcl_cout << "---------\n\n";
+          std::cout << "---------\n\n";
         }
       }
 
@@ -866,24 +868,24 @@ namespace {
           TEST("Result is similarity (is_type())", trans->is_type(rgrl_trans_similarity::type_id()), true );
           rgrl_trans_similarity* sim_trans = dynamic_cast<rgrl_trans_similarity*>(trans.as_pointer());
           TEST("Result is similarity (dynamic_cast)", !sim_trans, false);
-          vcl_cout << "Estimated:\nA=\n"<<sim_trans->A()<<"\nt="<<sim_trans->t()
-                   << "\n\nTrue:\nA=\n"<<smallR<<"\nt="<<smallT<<vcl_endl;
+          std::cout << "Estimated:\nA=\n"<<sim_trans->A()<<"\nt="<<sim_trans->t()
+                   << "\n\nTrue:\nA=\n"<<smallR<<"\nt="<<smallT<<std::endl;
           TEST("A is close", close( sim_trans->A(), smallR ), true);
           TEST("t is close", close( sim_trans->t(), smallT ), true);
 
-          vcl_cout << "---------\n"
+          std::cout << "---------\n"
                    << "True:\nR=\n" << smallR << "\nt=\n"<<smallT
                    << "\n\nEstimated:\nR=\n"<< sim_trans->A() << "\nt=\n" << sim_trans->t()
                    << "\n\nMappings: From, To real, To est\n";
           for ( unsigned i=0; i < from.size(); ++i ) {
-            vcl_cout << from[i] << "    " << (smallR*from[i] + smallT) << "    "
-                     << (sim_trans->A()*from[i] + sim_trans->t()) << vcl_endl;
+            std::cout << from[i] << "    " << (smallR*from[i] + smallT) << "    "
+                     << (sim_trans->A()*from[i] + sim_trans->t()) << std::endl;
           }
-          vcl_cout << "---------\n\n";
+          std::cout << "---------\n\n";
         }
       }
     }
-    vcl_cout << "--------------------------------------------------------------------------------\n";
+    std::cout << "--------------------------------------------------------------------------------\n";
   }
 #endif //0 // no similarity yet
 
@@ -892,19 +894,19 @@ namespace {
   test_est_spline()
   {
     for ( unsigned dim=1; dim<=3; ++dim ) {
-      vcl_cout << "Estimate " << dim << "-D spline transformation\n";
+      std::cout << "Estimate " << dim << "-D spline transformation\n";
       // create n n-D splines
       vnl_vector< unsigned > m( dim, 1 );
       rgrl_spline_sptr spline = new rgrl_spline( m );
       unsigned dof = spline->num_of_control_points();
       vnl_vector<double> c( dof );
-      vcl_vector<rgrl_spline_sptr> splines;
+      std::vector<rgrl_spline_sptr> splines;
       for ( unsigned j=0; j<dim; ++j ) {
         for ( unsigned i=0; i<dof; ++i )
           c[ i ] = random.drand32( 0, 5 );
         spline->set_control_points( c );
         splines.push_back( spline );
-        vcl_cout << "true control points: " << c << '\n';
+        std::cout << "true control points: " << c << '\n';
       }
 
       // roi
@@ -921,7 +923,7 @@ namespace {
       unsigned num_data_pts = c.size();
 
       // generating random from_points
-      vcl_vector< vnl_vector<double> > pts;
+      std::vector< vnl_vector<double> > pts;
       vnl_vector<double> from_pt( dim );
       for ( unsigned i=0; i<num_data_pts; ++i ) {
         for ( unsigned j=0; j<dim; ++j ) {
@@ -931,7 +933,7 @@ namespace {
       }
 
       // Computing to_points
-      vcl_vector< vnl_vector<double> > to_pts;
+      std::vector< vnl_vector<double> > to_pts;
       rgrl_match_set_sptr match_set = new rgrl_match_set(rgrl_feature_point::type_id());
       vnl_vector<double> to_pt( dim );
       for ( unsigned i=0; i<num_data_pts; ++i ) {
@@ -958,14 +960,14 @@ namespace {
           trans_sptr->map_location( pts[i], map_to );
           double error = (map_to - to_pts[i]).two_norm();
           if ( error > 1e-4 ) {
-            vcl_cout << " point (" << pts[i] << ") is transformed to (" << map_to << ")\n"
-                     << " true mapping points is (" << to_pts[i] << ')' << vcl_endl;
+            std::cout << " point (" << pts[i] << ") is transformed to (" << map_to << ")\n"
+                     << " true mapping points is (" << to_pts[i] << ')' << std::endl;
             test_pass = false;
           }
           err_sum += error;
         }
         TEST("Test random points",  test_pass, true);
-        vcl_cout << " sum of error : " << err_sum << '\n';
+        std::cout << " sum of error : " << err_sum << '\n';
         vnl_vector<double> from_pt( dim );
         for ( unsigned i=0; i<dim; ++i )
           from_pt[ i ] = random.drand32( 0, m[i] );
@@ -977,16 +979,16 @@ namespace {
         double error = ( map_to - true_to ).two_norm() ;
         if ( error > 1e-4 ) {
           test_pass = false;
-          vcl_cout << " point (" << from_pt << ") is transformed to (" << map_to << ")\n"
+          std::cout << " point (" << from_pt << ") is transformed to (" << map_to << ")\n"
                    << " true mapping points is (" << true_to << ")\n";
         }
         TEST("Test random point", test_pass, true);
 
         // Use the estimated result as cur_xform to estimate refined splines.
 
-        vcl_cout << "\nTest the refinement estimation.\n";
+        std::cout << "\nTest the refinement estimation.\n";
         rgrl_spline tmp_spline( m*2 );
-        vcl_cout << "number of control points: " << tmp_spline.num_of_control_points() << '\n';
+        std::cout << "number of control points: " << tmp_spline.num_of_control_points() << '\n';
         rgrl_est_spline est_spline2( tmp_spline.num_of_control_points(), roi, delta/2, m*2 );
         rgrl_transformation_sptr trans_sptr2 = est_spline2.estimate( set, *trans_sptr );
         err_sum = 0;
@@ -995,14 +997,14 @@ namespace {
           trans_sptr2->map_location( pts[i], map_to );
           double error = (map_to - to_pts[i]).two_norm();
           if ( error > 1e-4 ) {
-            vcl_cout << " point (" << pts[i] << ") is transformed to (" << map_to << ")\n"
-                     << " true mapping points is (" << to_pts[i] << ')' << vcl_endl;
+            std::cout << " point (" << pts[i] << ") is transformed to (" << map_to << ")\n"
+                     << " true mapping points is (" << to_pts[i] << ')' << std::endl;
             test_pass = false;
           }
           err_sum += error;
         }
         TEST("Test estimated mapping points",  test_pass, true);
-        vcl_cout << " sum of error : " << err_sum << '\n';
+        std::cout << " sum of error : " << err_sum << '\n';
         for ( unsigned i=0; i<dim; ++i )
           from_pt[ i ] = random.drand32( 0.1, m[i]-0.1 );
         trans_sptr2->map_location( from_pt, map_to );
@@ -1012,26 +1014,26 @@ namespace {
         test_pass = true;
         if ( error > 5e-1 ) {
           test_pass = false;
-          vcl_cout << " point (" << from_pt << ") is transformed to (" << map_to << ")\n"
+          std::cout << " point (" << from_pt << ") is transformed to (" << map_to << ")\n"
                    << " true mapping points is (" << true_to << ")\n";
         }
         TEST("Test a random point inside the range",  test_pass, true);
       }
     }
-    vcl_cout << "--------------------------------------------------------------------------------\n";
+    std::cout << "--------------------------------------------------------------------------------\n";
   }
 
   void
   test_est_spline_reduce_dof()
   {
     unsigned dim = 3;
-    vcl_cout << "Estimate " << dim << "-D spline transformation with dof reduced\n";
+    std::cout << "Estimate " << dim << "-D spline transformation with dof reduced\n";
     // create n n-D splines
     // The m of roi
     vnl_vector< unsigned > m1( dim, 1 );
     // The m of the whole region
     vnl_vector< unsigned > m2( dim, 2 );
-    vcl_vector<rgrl_spline_sptr> splines;
+    std::vector<rgrl_spline_sptr> splines;
 
     rgrl_spline tmp( m2 );
     unsigned dof2 = tmp.num_of_control_points();
@@ -1045,7 +1047,7 @@ namespace {
         }
       }
     }
-    vcl_cout << "true control points: " << c << '\n';
+    std::cout << "true control points: " << c << '\n';
     for ( unsigned m=0; m<dim; ++m ) {
       rgrl_spline_sptr spline2 = new rgrl_spline( m2 );
       spline2->set_control_points( c );
@@ -1067,7 +1069,7 @@ namespace {
     rgrl_trans_spline cur_trans( splines, p, delta );
     unsigned num_data_pts = c.size();
 
-    vcl_vector< vnl_vector<double> > pts;
+    std::vector< vnl_vector<double> > pts;
     vnl_vector<double> from_pt( dim );
     // generating points in roi
     for ( unsigned i=0; i<num_data_pts; ++i ) {
@@ -1085,7 +1087,7 @@ namespace {
     }
 
     // Computing to_points
-    vcl_vector< vnl_vector<double> > to_pts;
+    std::vector< vnl_vector<double> > to_pts;
     rgrl_match_set_sptr match_set = new rgrl_match_set(rgrl_feature_point::type_id());
     vnl_vector<double> to_pt( dim );
     for ( unsigned i=0; i<num_data_pts; ++i ) {
@@ -1114,13 +1116,13 @@ namespace {
         double error = (map_to - to_pts[i]).two_norm();
         if ( error > 1e-4 ) {
           test_pass = false;
-          vcl_cout << " point (" << pts[i] << ") is transformed to (" << map_to << ")\n"
-                   << " true mapping points is (" << to_pts[i] << ')' << vcl_endl;
+          std::cout << " point (" << pts[i] << ") is transformed to (" << map_to << ")\n"
+                   << " true mapping points is (" << to_pts[i] << ')' << std::endl;
         }
         err_sum += error;
       }
         TEST("Test estimated mapping points",  test_pass, true);
-      vcl_cout << " sum of error : " << err_sum << '\n';
+      std::cout << " sum of error : " << err_sum << '\n';
       vnl_vector<double> from_pt( dim );
       for ( unsigned i=0; i<dim; ++i )
         from_pt[ i ] = random.drand32( m1[i], m2[i] );
@@ -1130,14 +1132,14 @@ namespace {
         true_to[ i ] = from_pt[ i ] + splines[i]->f_x( from_pt );
       test_pass = ((map_to - true_to).two_norm()<1e-5);
       if ( !test_pass ) {
-        vcl_cout << " point (" << from_pt << ") is transformed to (" << map_to << ")\n"
+        std::cout << " point (" << from_pt << ") is transformed to (" << map_to << ")\n"
                  << " true mapping points is (" << true_to << ")\n";
       }
       TEST("Test random point", test_pass, true);
 
-      vcl_cout << "\nTest the refinement estimation.\n";
+      std::cout << "\nTest the refinement estimation.\n";
       rgrl_spline tmp_spline( m2*2 );
-      vcl_cout << "number of control points: " << tmp_spline.num_of_control_points() << '\n';
+      std::cout << "number of control points: " << tmp_spline.num_of_control_points() << '\n';
       rgrl_est_spline est_spline2( tmp_spline.num_of_control_points(), roi, delta/2, m2*2 );
       rgrl_transformation_sptr trans_sptr2 = est_spline2.estimate( set, *trans_sptr );
       err_sum = 0;
@@ -1147,13 +1149,13 @@ namespace {
         double error = (map_to - to_pts[i]).two_norm();
         if ( error > 1e-4 ) {
           test_pass = false;
-          vcl_cout << " point (" << pts[i] << ") is transformed to (" << map_to << ")\n"
-                   << " true mapping points is (" << to_pts[i] << ')' << vcl_endl;
+          std::cout << " point (" << pts[i] << ") is transformed to (" << map_to << ")\n"
+                   << " true mapping points is (" << to_pts[i] << ')' << std::endl;
         }
         err_sum += error;
       }
       TEST("Test estimated mapping points",  test_pass, true);
-      vcl_cout << " sum of error : " << err_sum << '\n';
+      std::cout << " sum of error : " << err_sum << '\n';
       for ( unsigned i=0; i<dim; ++i )
         from_pt[ i ] = random.drand32( m1[i], m2[i] );
       trans_sptr2->map_location( from_pt, map_to );
@@ -1161,12 +1163,12 @@ namespace {
         true_to[ i ] = from_pt[ i ] + splines[i]->f_x( from_pt );
       test_pass = (map_to - true_to).two_norm() < 0.01;
       if ( !test_pass ) {
-        vcl_cout << " point (" << from_pt << ") is transformed to (" << map_to << ")\n"
+        std::cout << " point (" << from_pt << ") is transformed to (" << map_to << ")\n"
                  << " true mapping points is (" << true_to << ")\n";
       }
       TEST("Test random point", test_pass, true);
     }
-    vcl_cout << "--------------------------------------------------------------------------------\n";
+    std::cout << "--------------------------------------------------------------------------------\n";
   }
 
   void
@@ -1192,15 +1194,15 @@ namespace {
     rgrl_estimator_sptr est = new rgrl_est_quadratic(2);
     rgrl_trans_quadratic quadratic_trans(Q, A, t, covar);
 
-    vcl_vector< rgrl_feature_sptr > from_pts;
-    vcl_vector< rgrl_feature_sptr > to_pts;
+    std::vector< rgrl_feature_sptr > from_pts;
+    std::vector< rgrl_feature_sptr > to_pts;
 
     for ( unsigned i=0; i < 9; ++i ) {
       vnl_vector<double> v = random_2d_vector();
       from_pts.   push_back( pf( v ) );
       to_pts.     push_back( pf( quadratic_trans.map_location(v)
                                  + random_2d_normal_error()/1000.0 ) );
-      vcl_cout << "Datum " << i << ":   " << from_pts.back()->location() << "    --->   " << to_pts.back()->location() << '\n';
+      std::cout << "Datum " << i << ":   " << from_pts.back()->location() << "    --->   " << to_pts.back()->location() << '\n';
     }
 
     {
@@ -1216,14 +1218,14 @@ namespace {
         TEST("Result is quadratic (is_type())", trans->is_type(rgrl_trans_quadratic::type_id()), true );
         rgrl_trans_quadratic* q_trans = dynamic_cast<rgrl_trans_quadratic*>(trans.as_pointer());
         TEST("Result is quadratic (dynamic_cast)", !q_trans, false );
-        vcl_cout << "Estimated:\nQ=\n"<<q_trans->Q()<<"\nA=\n"<<q_trans->A()<<"\nt="<<q_trans->t()
-                 << "\n\nTrue:\nQ=\n"<<Q<<"\nA=\n"<<A<<"\nt="<<t<<vcl_endl;
+        std::cout << "Estimated:\nQ=\n"<<q_trans->Q()<<"\nA=\n"<<q_trans->A()<<"\nt="<<q_trans->t()
+                 << "\n\nTrue:\nQ=\n"<<Q<<"\nA=\n"<<A<<"\nt="<<t<<std::endl;
         TEST("Q is close", close( q_trans->Q(), Q, 0.01), true);
         TEST("A is close", close( q_trans->A(), A, 0.01), true);
         TEST("t is close", close( q_trans->t(), t, 0.01), true);
       }
     }
-    vcl_cout << "--------------------------------------------------------------------------------\n";
+    std::cout << "--------------------------------------------------------------------------------\n";
   }
 
   void
@@ -1244,15 +1246,15 @@ namespace {
     rgrl_estimator_sptr est = new rgrl_est_similarity2d(2);
     rgrl_trans_similarity similarity_trans(A, t, covar);
 
-    vcl_vector< rgrl_feature_sptr > from_pts;
-    vcl_vector< rgrl_feature_sptr > to_pts;
+    std::vector< rgrl_feature_sptr > from_pts;
+    std::vector< rgrl_feature_sptr > to_pts;
 
     for ( unsigned i=0; i < 9; ++i ) {
       vnl_vector<double> v = random_2d_vector();
       from_pts.   push_back( pf( v ) );
       to_pts.     push_back( pf( similarity_trans.map_location(v)
                                  + random_2d_normal_error()/1000.0 ) );
-      vcl_cout << "Datum " << i << ":   " << from_pts.back()->location() << "    --->   " << to_pts.back()->location() << '\n';
+      std::cout << "Datum " << i << ":   " << from_pts.back()->location() << "    --->   " << to_pts.back()->location() << '\n';
     }
 
     {
@@ -1268,13 +1270,13 @@ namespace {
         TEST("Result is similarity (is_type())", trans->is_type(rgrl_trans_similarity::type_id()), true );
         rgrl_trans_similarity* s_trans = dynamic_cast<rgrl_trans_similarity*>(trans.as_pointer());
         TEST("Result is similarity (dynamic_cast)", !s_trans, false );
-        vcl_cout << "Estimated:\nA=\n"<<s_trans->A()<<"\nt="<<s_trans->t()
-                 << "\n\nTrue:\nA=\n"<<A<<"\nt="<<t<<vcl_endl;
+        std::cout << "Estimated:\nA=\n"<<s_trans->A()<<"\nt="<<s_trans->t()
+                 << "\n\nTrue:\nA=\n"<<A<<"\nt="<<t<<std::endl;
         TEST("A is close", close( s_trans->A(), A, 0.01), true);
         TEST("t is close", close( s_trans->t(), t, 0.01), true);
       }
     }
-    vcl_cout << "--------------------------------------------------------------------------------\n";
+    std::cout << "--------------------------------------------------------------------------------\n";
   }
 
   void
@@ -1300,8 +1302,8 @@ namespace {
     rgrl_estimator_sptr est = new rgrl_est_reduced_quad2d(2);
     rgrl_trans_reduced_quad quadratic_trans(Q, A, t, covar);
 
-    vcl_vector< rgrl_feature_sptr > from_pts;
-    vcl_vector< rgrl_feature_sptr > to_pts;
+    std::vector< rgrl_feature_sptr > from_pts;
+    std::vector< rgrl_feature_sptr > to_pts;
 
     { //pt 1
       vnl_vector<double> v = vec2d( 2.0, 0.0);
@@ -1353,8 +1355,8 @@ namespace {
         TEST("Result is quadratic (is_type())", trans->is_type(rgrl_trans_reduced_quad::type_id()), true );
         rgrl_trans_reduced_quad* q_trans = dynamic_cast<rgrl_trans_reduced_quad*>(trans.as_pointer());
         TEST("Result is quadratic (dynamic_cast)", !q_trans, false);
-        vcl_cout << "Estimated:\nQ=\n"<<q_trans->Q()<<"\nA=\n"<<q_trans->A()<<"\nt="<<q_trans->t()
-                 << "\n\nTrue:\nQ=\n"<<Q<<"\nA=\n"<<A<<"\nt="<<t<<vcl_endl;
+        std::cout << "Estimated:\nQ=\n"<<q_trans->Q()<<"\nA=\n"<<q_trans->A()<<"\nt="<<q_trans->t()
+                 << "\n\nTrue:\nQ=\n"<<Q<<"\nA=\n"<<A<<"\nt="<<t<<std::endl;
         TEST("Q is close", close( q_trans->Q(), Q, 0.01), true);
         TEST("A is close", close( q_trans->A(), A, 0.01), true);
         TEST("t is close", close( q_trans->t(), t, 0.01), true);
@@ -1367,16 +1369,16 @@ namespace {
   void
   test_est_rigid()
   {
-    vcl_cerr<<"----Testing rigid xform estimator----\n";
+    std::cerr<<"----Testing rigid xform estimator----\n";
     vnl_matrix<double> A( 3, 3 );
     vnl_vector<double> t( 3 );
     vnl_matrix<double> covar( 6, 6 );
 
     // rotations around {x,y,z} axes have angles {phi,alpha,theta} { aaa, bbb,c,}
     double theta=1.2, alpha=0, phi=0, ttxx=0, ttyy=0, ttzz=0;
-    double cos_a = vcl_cos(alpha), sin_a = vcl_sin(alpha),
-           cos_t = vcl_cos(theta), sin_t = vcl_sin(theta),
-           cos_p = vcl_cos(phi),   sin_p = vcl_sin(phi);
+    double cos_a = std::cos(alpha), sin_a = std::sin(alpha),
+           cos_t = std::cos(theta), sin_t = std::sin(theta),
+           cos_p = std::cos(phi),   sin_p = std::sin(phi);
 
     A(0,0) = cos_a*cos_t ;                   A(0,1) =-cos_a*sin_t;                    A(0,2) = sin_a;
     A(1,0) = cos_t*sin_a*sin_p+cos_p*sin_t;  A(1,1) =-sin_a*sin_p*sin_t+cos_p*cos_t;  A(1,2) =-cos_a*sin_p;
@@ -1386,7 +1388,7 @@ namespace {
     t[1] =  ttyy;
     t[2] =  ttzz;
 
-    vcl_cerr<<"Goal rotation is\n---\n"<<A<<"\n----\n\n"
+    std::cerr<<"Goal rotation is\n---\n"<<A<<"\n----\n\n"
             <<"Goal translation is\n---\n"<<t<<"\n----\n\n";
 
     covar.set_identity();
@@ -1395,8 +1397,8 @@ namespace {
     rgrl_estimator_sptr est = new rgrl_est_rigid(3);
     rgrl_trans_rigid rigid_trans(A, t, covar);
 
-    vcl_vector< rgrl_feature_sptr > from_pts;
-    vcl_vector< rgrl_feature_sptr > to_pts;
+    std::vector< rgrl_feature_sptr > from_pts;
+    std::vector< rgrl_feature_sptr > to_pts;
 
     vnl_vector<double> temp(3);
     temp[0]=0;
@@ -1436,7 +1438,7 @@ namespace {
       from_pts.   push_back( pf( v ) );
       to_pts.     push_back( pf( rigid_trans.map_location(v)
                                  + random_3d_normal_error()/1000.0 ) );
-      vcl_cout << "Datum " << i << ":   " << from_pts.back()->location() << "    --->   " << to_pts.back()->location() << '\n';
+      std::cout << "Datum " << i << ":   " << from_pts.back()->location() << "    --->   " << to_pts.back()->location() << '\n';
     }
 #endif
 
@@ -1455,8 +1457,8 @@ namespace {
         TEST("Result is rigid (is_type())", trans->is_type(rgrl_trans_rigid::type_id()), true );
         rgrl_trans_rigid* s_trans = dynamic_cast<rgrl_trans_rigid*>(trans.as_pointer());
         TEST("Result is rigid (dynamic_cast)", !s_trans, false);
-        vcl_cout << "Estimated:\nR=\n"<<s_trans->R()<<"\nt="<<s_trans->t()
-                 << "\n\nTrue:\nR=\n"<<A<<"\nt="<<t<<vcl_endl;
+        std::cout << "Estimated:\nR=\n"<<s_trans->R()<<"\nt="<<s_trans->t()
+                 << "\n\nTrue:\nR=\n"<<A<<"\nt="<<t<<std::endl;
         TEST("R is close", close( s_trans->R(), A), true);
         TEST("t is close", close( s_trans->t(), t), true);
       }
@@ -1467,9 +1469,9 @@ namespace {
   {
     vnl_double_3x3 H(0.0), est_H(0.0);
     vnl_matrix<double> cofact;
-    vcl_vector <int> indices;
-    vcl_vector <vnl_double_3 > p,q;
-    vcl_vector <vnl_double_2 > d2_p,d2_q;
+    std::vector <int> indices;
+    std::vector <vnl_double_3 > p,q;
+    std::vector <vnl_double_2 > d2_p,d2_q;
     vnl_vector<double> param(9,0.0);
     vnl_vector<double> true_param(9,0.0), est_param(9,0.0);
     const double pi = vnl_math::pi;
@@ -1536,7 +1538,7 @@ namespace {
     H(0,2) = -4;
     H(1,2) = 2;
     H(2,2) = 1;
-    H(0,0) = 2*vcl_cos(pi/3);
+    H(0,0) = 2*std::cos(pi/3);
     H(0,1) = -5; H(1,1) = -1.5;
     H(1,0) = -H(0,1);
     H(2,0) = 0.05; H(2,1) = -.2;
@@ -1545,7 +1547,7 @@ namespace {
       for (int j=0;j<3;j++)
         true_param[i*3+j] = H(i,j);
     true_param /= true_param.two_norm();
-    vcl_cout<<"Original H = "<<true_param<<vcl_endl;
+    std::cout<<"Original H = "<<true_param<<std::endl;
 
     {
       // generate the corresponding points
@@ -1573,7 +1575,7 @@ namespace {
       est_param /= est_param.two_norm();
       if ( est_param[0] < 0 ) est_param *= -1;
 
-      vcl_cout<<"Estimated H = "<<est_param<<vcl_endl;
+      std::cout<<"Estimated H = "<<est_param<<std::endl;
       TEST("Estimation of Projective xform", (est_param-true_param).two_norm() <tol ||
                                              (est_param+true_param).two_norm() <tol, true);
 
@@ -1583,7 +1585,7 @@ namespace {
       vnl_vector<double> from(2,5);
       vnl_vector<double> from_next_est;
       homo_est->inv_map( d2_q[3].as_ref(), initialize_next, to_delta, from, from_next_est);
-      vcl_cout<<"from = "<<from<<vcl_endl;
+      std::cout<<"from = "<<from<<std::endl;
       TEST("Test incremental inverse mapping", (from-d2_p[3]).two_norm() <0.1, true);
       homo_est->inv_map( d2_q[3].as_ref(), from);
       TEST("Test inverse mapping", (from-d2_p[3]).two_norm() <tol, true);
@@ -1594,9 +1596,9 @@ namespace {
   {
     vnl_double_3x3 H(0.0), est_H(0.0);
     vnl_matrix<double> cofact;
-    vcl_vector <int> indices;
-    vcl_vector <vnl_double_3 > p,q;
-    vcl_vector <vnl_double_2 > d2_p,d2_q;
+    std::vector <int> indices;
+    std::vector <vnl_double_3 > p,q;
+    std::vector <vnl_double_2 > d2_p,d2_q;
     vnl_vector<double> param(9,0.0);
     vnl_vector<double> true_param(9,0.0), est_param(9,0.0);
     const double pi = vnl_math::pi;
@@ -1663,13 +1665,13 @@ namespace {
     H(0,2) = -4;
     H(1,2) = 2;
     H(2,2) = 1;
-    H(0,0) = 2*vcl_cos(pi/3);
+    H(0,0) = 2*std::cos(pi/3);
     H(0,1) = -5; H(1,1) = -1.5;
     H(1,0) = -H(0,1);
     H(2,0) = 0.5; H(2,1) = -2;
     H /= H.array_two_norm();
 
-    vcl_cout<<"Original H =\n"<< H <<vcl_endl;
+    std::cout<<"Original H =\n"<< H <<std::endl;
 
     {
       // generate the corresponding points
@@ -1697,13 +1699,13 @@ namespace {
         est_H /= est_H.array_two_norm();
         if ( est_H(0,0) < 0 ) est_H *= -1;
 
-        vcl_cout<<"Estimated H =\n"<<est_H<<vcl_endl;
+        std::cout<<"Estimated H =\n"<<est_H<<std::endl;
         TEST_NEAR("[Fixed error in (0,0)] Estimation of Projective xform", (est_H-H).array_two_norm(), 0.0, tol);
 
         // test on transfer error
         vnl_vector<double> pt(2);
         vnl_double_2x2 trans_error = est->transfer_error_covar( inhomo(p[2].as_ref()) );
-        vcl_cout << "transfer error at this point:" << trans_error << vcl_endl;
+        std::cout << "transfer error at this point:" << trans_error << std::endl;
       }
       // error STD = 0.5
       {
@@ -1719,7 +1721,7 @@ namespace {
         est_H /= est_H.array_two_norm();
         if ( est_H(0,0) < 0 ) est_H *= -1;
 
-        vcl_cout<<"Estimated H =\n"<<est_H<<vcl_endl;
+        std::cout<<"Estimated H =\n"<<est_H<<std::endl;
         TEST_NEAR("[Random error with scale 0.5] Estimation of Projective xform",
                   (est_H-H).array_two_norm(), 0.0, tol);
       }
@@ -1737,7 +1739,7 @@ namespace {
         est_H /= est_H.array_two_norm();
         if ( est_H(0,0) < 0 ) est_H *= -1;
 
-        vcl_cout<<"Estimated H =\n"<<est_H<<vcl_endl;
+        std::cout<<"Estimated H =\n"<<est_H<<std::endl;
         TEST_NEAR("[Random error with scale 1] Estimation of Projective xform",
                   (est_H-H).array_two_norm(), 0.0, tol);
       }
@@ -1755,7 +1757,7 @@ namespace {
         est_H /= est_H.array_two_norm();
         if ( est_H(0,0) < 0 ) est_H *= -1;
 
-        vcl_cout<<"Estimated H =\n"<<est_H<<vcl_endl;
+        std::cout<<"Estimated H =\n"<<est_H<<std::endl;
         TEST_NEAR("[Random error with scale 50] Estimation of Projective xform",
                   (est_H-H).array_two_norm(), 0.0, tol);
       }
@@ -1787,15 +1789,15 @@ namespace {
     H(0,2) = -4;
     H(1,2) = 2;
     H(2,2) = 1;
-    H(0,0) = 2*vcl_cos(vnl_math::pi/3);
+    H(0,0) = 2*std::cos(vnl_math::pi/3);
     H(0,1) = -5; H(1,1) = -1.5;
     H(1,0) = -H(0,1);
     H(2,0) = 0.5; H(2,1) = -3;
     H /= H.array_two_norm();
 
-    vcl_cout<<"Original H =\n"<< H <<vcl_endl;
+    std::cout<<"Original H =\n"<< H <<std::endl;
 
-    vcl_vector< vnl_double_2 > p, q;
+    std::vector< vnl_double_2 > p, q;
 
 
     vnl_double_2 pt, mapped;
@@ -1804,7 +1806,7 @@ namespace {
 
     for ( unsigned int num=20; num<200; num+=16 )
     {
-      vcl_cout << "num of points = " << num << "   ";
+      std::cout << "num of points = " << num << "   ";
 
       //reset points
       p.clear();
@@ -1812,8 +1814,8 @@ namespace {
       // create points on a circle
       for ( unsigned int i=0; i<num; ++i ) {
         const double angle = vnl_math::twopi*double(i)/double(num);
-        pt[0] = c*vcl_cos(angle);
-        pt[1] = c*vcl_sin(angle);
+        pt[0] = c*std::cos(angle);
+        pt[1] = c*std::sin(angle);
         p.push_back(pt);
         // Map point
         inhomo_map( mapped, H, pt );
@@ -1844,7 +1846,7 @@ namespace {
         est_H /= est_H.array_two_norm();
         if ( est_H(0,0) < 0 ) est_H *= -1;
         if ( (est_H-H).array_two_norm() > tol) {
-          vcl_cout<<"Estimated H = "<<est_H<<vcl_endl;
+          std::cout<<"Estimated H = "<<est_H<<std::endl;
           xform_is_good = false;
         }
       }
@@ -1863,20 +1865,20 @@ namespace {
     H(0,2) = -4;
     H(1,2) = 2;
     H(2,2) = 1;
-    H(0,0) = 2*vcl_cos(vnl_math::pi/3);
+    H(0,0) = 2*std::cos(vnl_math::pi/3);
     H(0,1) = -5; H(1,1) = -1.5;
     H(1,0) = -H(0,1);
     H(2,0) = 0.5; H(2,1) = -3;
      H /= H.array_two_norm();
 
-    vcl_vector<double> radk( 1, 1e-4 );
+    std::vector<double> radk( 1, 1e-4 );
 
-    vcl_cout<<"Original H =\n"<< H
+    std::cout<<"Original H =\n"<< H
             << "with k: " << radk[0]
             << " at camera centre " << camera_centre
-            <<vcl_endl;
+            <<std::endl;
 
-    vcl_vector< vnl_double_2 > p, q;
+    std::vector< vnl_double_2 > p, q;
 
 
     vnl_double_2 pt, mapped, centre_mapped;
@@ -1885,7 +1887,7 @@ namespace {
 
     for ( unsigned int num=12; num<100; num+=16 )
     {
-      vcl_cout << "num of points = " << num << "   ";
+      std::cout << "num of points = " << num << "   ";
 
       //reset points
       p.clear();
@@ -1893,8 +1895,8 @@ namespace {
       // create points on a circle
       for ( unsigned int i=0; i<num; ++i ) {
         const double angle = vnl_math::twopi*double(i)/double(num);
-        pt[0] = c*vcl_cos(angle);
-        pt[1] = c*vcl_sin(angle);
+        pt[0] = c*std::cos(angle);
+        pt[1] = c*std::sin(angle);
         p.push_back(pt);
         // Map point
         inhomo_map( mapped, H, pt );
@@ -1929,14 +1931,14 @@ namespace {
         if ( est_H(0,0) < 0 ) est_H *= -1;
 
         if ( (est_H-H).array_two_norm() > tol) {
-          vcl_cout<<"Incorrect estimated H = "<<est_H<<vcl_endl;
+          std::cout<<"Incorrect estimated H = "<<est_H<<std::endl;
           xform_is_good = false;
         }
-        vcl_vector<double> radk_est = homo_est->radial_params();
-        if ( radk_est.size() != radk.size() || vcl_abs( radk_est[0] - radk[0]) > tol ) {
-          vcl_cout << "Incorrect estimated k1 = ";
-          vcl_copy( radk_est.begin(), radk_est.end(), vcl_ostream_iterator<double>( vcl_cout, " " ) );
-          vcl_cout << vcl_endl;
+        std::vector<double> radk_est = homo_est->radial_params();
+        if ( radk_est.size() != radk.size() || std::abs( radk_est[0] - radk[0]) > tol ) {
+          std::cout << "Incorrect estimated k1 = ";
+          std::copy( radk_est.begin(), radk_est.end(), std::ostream_iterator<double>( std::cout, " " ) );
+          std::cout << std::endl;
 
           xform_is_good = false;
         }
@@ -1958,9 +1960,9 @@ namespace {
     H(1,1) = 1.5;
     H /= H.array_two_norm();
 
-    vcl_cout<<"Original H =\n"<< H <<vcl_endl;
+    std::cout<<"Original H =\n"<< H <<std::endl;
 
-    vcl_vector< vnl_double_2 > p, q;
+    std::vector< vnl_double_2 > p, q;
 
     vnl_double_2 pt, mapped;
     const double c = 20;
@@ -1968,7 +1970,7 @@ namespace {
     bool homography_is_good = true;
     for ( unsigned int num=12; num<200; num+=16 )
     {
-      vcl_cout << "using " << num << " out of 200 correspondences.\n";
+      std::cout << "using " << num << " out of 200 correspondences.\n";
       //reset points
       p.clear();
       q.clear();
@@ -1977,8 +1979,8 @@ namespace {
       for ( unsigned int i=0; i<num; ++i )
       {
         const double angle = vnl_math::twopi*double(i)/double(num);
-        pt[0] = c*vcl_cos(angle);
-        pt[1] = c*vcl_sin(angle);
+        pt[0] = c*std::cos(angle);
+        pt[1] = c*std::sin(angle);
         p.push_back(pt);
 
         // Map point
@@ -2024,7 +2026,7 @@ namespace {
         // check homography transform
         homography_is_good = homography_is_good && (est_H-H).array_two_norm() < tol_xform;
         if ( !homography_is_good ) {
-          vcl_cout << "transformation is incorrect!\n" << est_H << '\n' << H << vcl_endl;
+          std::cout << "transformation is incorrect!\n" << est_H << '\n' << H << std::endl;
         }
 
         // test on transfer error on 4 canonical directions
@@ -2033,31 +2035,31 @@ namespace {
 
         trans_error = est->transfer_error_covar( p[0].as_ref() );
         ratio = trans_error(0,0);  // this constant shall be the same
-        vcl_cout << "transfer error(1):\n" << trans_error << vcl_endl;
+        std::cout << "transfer error(1):\n" << trans_error << std::endl;
         if ((ratio*iid_cov-trans_error).array_two_norm() > tol_trans_error) {
           cov_is_good = false;
-          vcl_cout << "*** correct=\n"<< ratio*iid_cov << vcl_endl;
+          std::cout << "*** correct=\n"<< ratio*iid_cov << std::endl;
         }
 
         trans_error = est->transfer_error_covar( p[num/4].as_ref() );
-        vcl_cout << "transfer error(1):\n" << trans_error << vcl_endl;
+        std::cout << "transfer error(1):\n" << trans_error << std::endl;
         if ((ratio*iid_cov-trans_error).array_two_norm() > tol_trans_error) {
           cov_is_good = false;
-          vcl_cout << "*** correct=\n"<< ratio*iid_cov << vcl_endl;
+          std::cout << "*** correct=\n"<< ratio*iid_cov << std::endl;
         }
 
         trans_error = est->transfer_error_covar( p[num/2].as_ref() );
-        vcl_cout << "transfer error(1):\n" << trans_error << vcl_endl;
+        std::cout << "transfer error(1):\n" << trans_error << std::endl;
         if ((ratio*iid_cov-trans_error).array_two_norm() > tol_trans_error) {
           cov_is_good = false;
-          vcl_cout << "*** correct=\n"<< ratio*iid_cov << vcl_endl;
+          std::cout << "*** correct=\n"<< ratio*iid_cov << std::endl;
         }
 
         trans_error = est->transfer_error_covar( p[num*3/4].as_ref() );
-        vcl_cout << "transfer error(1):\n" << trans_error << vcl_endl;
+        std::cout << "transfer error(1):\n" << trans_error << std::endl;
         if ((ratio*iid_cov-trans_error).array_two_norm() > tol_trans_error) {
           cov_is_good = false;
-          vcl_cout << "*** correct=\n"<< ratio*iid_cov << ", error= "<< trans_error<< vcl_endl;
+          std::cout << "*** correct=\n"<< ratio*iid_cov << ", error= "<< trans_error<< std::endl;
         }
       }
     }
@@ -2115,58 +2117,58 @@ static void test_estimator()
   test_similarity_pt_to_pt();
 #endif // 0
 
-  vcl_cout << "\n=== test_rad_dis_homo2d_lm ===\n";
+  std::cout << "\n=== test_rad_dis_homo2d_lm ===\n";
   test_rad_dis_homo2d_lm();
-  vcl_cout << "\n=== test_est_spline ===\n";
+  std::cout << "\n=== test_est_spline ===\n";
   test_est_spline();
-  vcl_cout << "\n=== test_est_spline_reduce_dof ===\n";
+  std::cout << "\n=== test_est_spline_reduce_dof ===\n";
   test_est_spline_reduce_dof();
-  vcl_cout << "\n=== test_est_quadratic ===\n";
+  std::cout << "\n=== test_est_quadratic ===\n";
   test_est_quadratic();
-  vcl_cout << "\n=== test_est_similarity2d ===\n";
+  std::cout << "\n=== test_est_similarity2d ===\n";
   test_est_similarity2d();
-  vcl_cout << "\n=== test_est_reduced_quad2d ===\n";
+  std::cout << "\n=== test_est_reduced_quad2d ===\n";
   test_est_reduced_quad2d();
-  vcl_cout << "\n=== test_est_rigid ===\n";
+  std::cout << "\n=== test_est_rigid ===\n";
   test_est_rigid();
-  vcl_cout << "\n=== test_homography2d ===\n";
+  std::cout << "\n=== test_homography2d ===\n";
   test_homography2d();
 
   // old homography estimator
   {
-    vcl_cout << "\n=== (old) test_homography2d_lm ===\n";
+    std::cout << "\n=== (old) test_homography2d_lm ===\n";
     rgrl_estimator_sptr estimator = new rgrl_est_homo2d_lm();
     estimator->set_debug_flag(5);
     test_homography2d_lm( estimator );
 
-    vcl_cout << "\n=== test_homography2d_points_on_circle ===\n";
+    std::cout << "\n=== test_homography2d_points_on_circle ===\n";
     test_homography2d_points_on_circle( estimator );
-    vcl_cout << "\n=== test_homography2d_points_on_circle_w_noise ===\n";
+    std::cout << "\n=== test_homography2d_points_on_circle_w_noise ===\n";
     test_homography2d_points_on_circle_w_noise(estimator, 0.0, 1e-9, 1e-9);
-    vcl_cout << "\n=== test_homography2d_points_on_circle_w_noise ===\n";
+    std::cout << "\n=== test_homography2d_points_on_circle_w_noise ===\n";
     test_homography2d_points_on_circle_w_noise(estimator, 0.1, 0.1, 0.005);
   }
 
   // new homography estimator
   {
-    vcl_cout << "\n=== (new) test_homography2d_lm ===\n";
+    std::cout << "\n=== (new) test_homography2d_lm ===\n";
     rgrl_estimator_sptr estimator = new rgrl_est_homo2d_proj();
     //estimator->set_debug_flag(5);
     test_homography2d_lm( estimator);
 
-    vcl_cout << "\n=== test_homography2d_points_on_circle ===\n";
+    std::cout << "\n=== test_homography2d_points_on_circle ===\n";
     test_homography2d_points_on_circle( estimator );
-    vcl_cout << "\n=== test_homography2d_points_on_circle_w_noise ===\n";
+    std::cout << "\n=== test_homography2d_points_on_circle_w_noise ===\n";
     test_homography2d_points_on_circle_w_noise(estimator, 0.0, 1e-9, 1e-9);
-    vcl_cout << "\n=== test_homography2d_points_on_circle_w_noise ===\n";
+    std::cout << "\n=== test_homography2d_points_on_circle_w_noise ===\n";
     test_homography2d_points_on_circle_w_noise(estimator, 0.1, 0.1, 0.005);
   }
 
   // new homography+radial distortion estimator
   {
-    vcl_cout << "\n=== (new) test_homo2d_rad_points_on_circle ===\n";
+    std::cout << "\n=== (new) test_homo2d_rad_points_on_circle ===\n";
     vnl_double_2 camera_centre( 0.0, 0.0 );
-    vcl_cout << "using camera centre " << camera_centre << vcl_endl;
+    std::cout << "using camera centre " << camera_centre << std::endl;
 
     rgrl_est_homo2d_proj_rad* homo2d_rad_est
       = new rgrl_est_homo2d_proj_rad( 1, camera_centre );
@@ -2179,9 +2181,9 @@ static void test_estimator()
   }
   // new homography+radial distortion estimator
   {
-    vcl_cout << "\n=== (new) test_homo2d_rad_points_on_circle ===\n";
+    std::cout << "\n=== (new) test_homo2d_rad_points_on_circle ===\n";
     vnl_double_2 camera_centre( 5.0, 10.0 );
-    vcl_cout << "using camera centre " << camera_centre << vcl_endl;
+    std::cout << "using camera centre " << camera_centre << std::endl;
 
     rgrl_est_homo2d_proj_rad* homo2d_rad_est
       = new rgrl_est_homo2d_proj_rad( 1, camera_centre );

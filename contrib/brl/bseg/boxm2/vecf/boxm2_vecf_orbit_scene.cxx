@@ -7,9 +7,11 @@
 #include <vgl/vgl_closest_point.h>
 #include <boxm2/boxm2_util.h>
 #include <boxm2/io/boxm2_lru_cache.h>
-#include <vcl_algorithm.h>
-#include <vcl_limits.h>
-#include <vcl_set.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <algorithm>
+#include <limits>
+#include <set>
 #include <vul/vul_timer.h>
 
 typedef boxm2_data_traits<BOXM2_PIXEL>::datatype pixtype;
@@ -77,9 +79,9 @@ boxm2_vecf_orbit_scene
 ::extract_block_data()
 {
 
-  vcl_vector<boxm2_block_id> blocks = base_model_->get_block_ids();
+  std::vector<boxm2_block_id> blocks = base_model_->get_block_ids();
 
-  vcl_vector<boxm2_block_id>::iterator iter_blk = blocks.begin();
+  std::vector<boxm2_block_id>::iterator iter_blk = blocks.begin();
   blk_ = boxm2_cache::instance()->get_block(base_model_, *iter_blk);
   sigma_ = static_cast<float>(blk_->sub_block_dim().x());
   boxm2_data_base *  alpha_base  = boxm2_cache::instance()->get_data_base(base_model_,*iter_blk,boxm2_data_traits<BOXM2_ALPHA>::prefix());
@@ -128,8 +130,8 @@ boxm2_vecf_orbit_scene
 ::extract_target_block_data(boxm2_scene_sptr target_scene)
 {
 
-  vcl_vector<boxm2_block_id> blocks = target_scene->get_block_ids();
-  vcl_vector<boxm2_block_id>::iterator iter_blk = blocks.begin();
+  std::vector<boxm2_block_id> blocks = target_scene->get_block_ids();
+  std::vector<boxm2_block_id>::iterator iter_blk = blocks.begin();
   target_blk_ = boxm2_cache::instance()->get_block(target_scene, *iter_blk);
 
   boxm2_data_base *  alpha_base  = boxm2_cache::instance()->get_data_base(target_scene,*iter_blk,boxm2_data_traits<BOXM2_ALPHA>::prefix());
@@ -153,7 +155,7 @@ boxm2_vecf_orbit_scene
   color_base->enable_write();
   target_color_data_=new boxm2_data<BOXM2_GAUSS_RGB>(color_base->data_buffer(),color_base->buffer_length(),color_base->block_id());
   if(has_background_){
-    vcl_cout<< " Darkening background "<<vcl_endl;
+    std::cout<< " Darkening background "<<std::endl;
     this->fill_target_block();
   }
   this->determine_target_box_cell_centers(); // get cell centers in target corresponding to the source block (blk_)
@@ -224,12 +226,12 @@ boxm2_vecf_orbit_scene
       }
     }
   }
-  vcl_cout << "Reset indices " << static_cast<double>(t.real())/1000.0 << " sec.\n";
+  std::cout << "Reset indices " << static_cast<double>(t.real())/1000.0 << " sec.\n";
 }
 
 // main constructor
 boxm2_vecf_orbit_scene
-::boxm2_vecf_orbit_scene(vcl_string const& scene_file,
+::boxm2_vecf_orbit_scene(std::string const& scene_file,
                          bool is_single_instance,
                          bool is_right) :
   boxm2_vecf_articulated_scene(scene_file),
@@ -257,8 +259,8 @@ boxm2_vecf_orbit_scene
  }
 
 boxm2_vecf_orbit_scene
-::boxm2_vecf_orbit_scene(vcl_string const& scene_file,
-                         vcl_string params_file_name,
+::boxm2_vecf_orbit_scene(std::string const& scene_file,
+                         std::string params_file_name,
                          bool is_single_instance,
                          bool is_right ) :
   boxm2_vecf_articulated_scene(scene_file),
@@ -271,11 +273,11 @@ boxm2_vecf_orbit_scene
   pupil_(VXL_NULLPTR),
   target_blk_(VXL_NULLPTR)
 {
-  vcl_ifstream params_file(params_file_name.c_str());
+  std::ifstream params_file(params_file_name.c_str());
 
   if (!params_file)
     {
-    vcl_cout<<" could not open params file : "<<params_file_name<<vcl_endl;
+    std::cout<<" could not open params file : "<<params_file_name<<std::endl;
     }
   else
     {
@@ -298,7 +300,7 @@ boxm2_vecf_orbit_scene
 {
   if (this->extrinsic_only_)
     {
-    vcl_cout<<" warning! rebuild called but scene accepts only extrinsic articulations!"<<vcl_endl;
+    std::cout<<" warning! rebuild called but scene accepts only extrinsic articulations!"<<std::endl;
     return;
     }
     this->params_.init_sphere();
@@ -340,8 +342,8 @@ boxm2_vecf_orbit_scene
   bb.add(vgl_point_3d<double>(0.0, -y0, +rmax));
   vgl_sphere_3d<double> sp(0.0, -y0, 0.0, params_.eye_radius_);
    // cell in a box centers are in global coordinates
-  vcl_vector<cell_info> ccs = blk_->cells_in_box(bb);
-  for(vcl_vector<cell_info>::iterator cit = ccs.begin();
+  std::vector<cell_info> ccs = blk_->cells_in_box(bb);
+  for(std::vector<cell_info>::iterator cit = ccs.begin();
       cit != ccs.end(); ++cit){
     const vgl_point_3d<double>& cell_center = cit->cell_center_;
     unsigned indx = cit->data_index_;
@@ -353,7 +355,7 @@ boxm2_vecf_orbit_scene
         data_index_to_cell_index_[indx]=static_cast<unsigned>(sphere_cell_centers_.size())-1;
         ;
         float blending_factor = static_cast<float>(gauss(d,sigma_));
-        alpha_data_->data()[indx]= - vcl_log(1.0f - ( 0.95f ))/ static_cast<float>(this->subblock_len()) * blending_factor;
+        alpha_data_->data()[indx]= - std::log(1.0f - ( 0.95f ))/ static_cast<float>(this->subblock_len()) * blending_factor;
         sphere_->data()[indx] = static_cast<pixtype>(true);
       }
     }
@@ -368,9 +370,9 @@ boxm2_vecf_orbit_scene
   iris_cell_data_index_.clear();
   double pi = vnl_math::pi;
   double two_pi = 2.0*pi;
-  double iris_half_ang = vcl_atan(params_.iris_radius_/params_.eye_radius_);
+  double iris_half_ang = std::atan(params_.iris_radius_/params_.eye_radius_);
   vgl_sphere_3d<double> sph(0.0, -params_.y_off_, 0.0, params_.eye_radius_);
-  for(vcl_vector<vgl_point_3d<double> >::iterator cit = sphere_cell_centers_.begin();
+  for(std::vector<vgl_point_3d<double> >::iterator cit = sphere_cell_centers_.begin();
       cit != sphere_cell_centers_.end(); ++cit){
     const vgl_point_3d<double>& cell_center = *cit;
     double az = 0.0, el =0.0;
@@ -378,7 +380,7 @@ boxm2_vecf_orbit_scene
     if(el<=iris_half_ang){
       unsigned sp_i = static_cast<unsigned>(cit-sphere_cell_centers_.begin());
       // add it to the base set
-      vcl_vector<vgl_point_3d<double> >::iterator iit = vcl_find(iris_cell_centers_.begin(), iris_cell_centers_.end(), cell_center);
+      std::vector<vgl_point_3d<double> >::iterator iit = std::find(iris_cell_centers_.begin(), iris_cell_centers_.end(), cell_center);
       if(iit==iris_cell_centers_.end()){
         iris_cell_centers_.push_back(cell_center);
         unsigned indx = sphere_cell_data_index_[sp_i];
@@ -397,24 +399,24 @@ boxm2_vecf_orbit_scene
   pupil_cell_data_index_.clear();
   double pi = vnl_math::pi;
   double two_pi = 2.0*pi;
-  double pupil_half_ang = vcl_atan(params_.pupil_radius_/params_.eye_radius_);
+  double pupil_half_ang = std::atan(params_.pupil_radius_/params_.eye_radius_);
   vgl_sphere_3d<double> sph(0.0, -params_.y_off_, 0.0, params_.eye_radius_);
-  for(vcl_vector<vgl_point_3d<double> >::iterator cit = sphere_cell_centers_.begin();
+  for(std::vector<vgl_point_3d<double> >::iterator cit = sphere_cell_centers_.begin();
       cit != sphere_cell_centers_.end(); ++cit){
     const vgl_point_3d<double>& cell_center = *cit;
     double az = 0.0, el =0.0;
     sph.cartesian_to_spherical(cell_center, el, az);
     if(el<=pupil_half_ang){
       //check if the point is in the iris set
-      vcl_vector<vgl_point_3d<double> >::iterator iit;
-      iit = vcl_find(iris_cell_centers_.begin(), iris_cell_centers_.end(), cell_center);
+      std::vector<vgl_point_3d<double> >::iterator iit;
+      iit = std::find(iris_cell_centers_.begin(), iris_cell_centers_.end(), cell_center);
       if(iit==iris_cell_centers_.end())
         continue;
       //if so, see if the point is allready in the base pupil set
-      iit = vcl_find(pupil_cell_centers_.begin(), pupil_cell_centers_.end(), cell_center);
+      iit = std::find(pupil_cell_centers_.begin(), pupil_cell_centers_.end(), cell_center);
       if(iit==pupil_cell_centers_.end()){
-        vcl_vector<vgl_point_3d<double> >::iterator jit;
-        jit = vcl_find(sphere_cell_centers_.begin(), sphere_cell_centers_.end(), cell_center);
+        std::vector<vgl_point_3d<double> >::iterator jit;
+        jit = std::find(sphere_cell_centers_.begin(), sphere_cell_centers_.end(), cell_center);
         unsigned sp_i = static_cast<unsigned>(jit-sphere_cell_centers_.begin());
         unsigned indx = sphere_cell_data_index_[sp_i];
         pupil_->data()[indx] = static_cast<pixtype>(true);
@@ -435,23 +437,23 @@ boxm2_vecf_orbit_scene
   for(unsigned i = 0; i<sphere_cell_centers_.size(); i++){
       vgl_point_3d<double>& p = sphere_cell_centers_[i];
       unsigned indx_i = sphere_cell_data_index_[i];
-      vcl_vector<vgl_point_3d<double> > nbrs = blk_->sub_block_neighbors(p, distance);
+      std::vector<vgl_point_3d<double> > nbrs = blk_->sub_block_neighbors(p, distance);
       for(unsigned j =0; j<nbrs.size(); ++j){
         vgl_point_3d<double>& q = nbrs[j];
         unsigned indx_n;
         if(!blk_->data_index(q, indx_n))
           continue;
-        vcl_map<unsigned, unsigned >::iterator iit= data_index_to_cell_index_.find(indx_n);
+        std::map<unsigned, unsigned >::iterator iit= data_index_to_cell_index_.find(indx_n);
         if(iit == data_index_to_cell_index_.end())
           continue;
         if(iit->second==i)
                 continue;
         cell_neighbor_cell_index_[i].push_back(iit->second);
-        vcl_vector<unsigned>& indices = cell_neighbor_data_index_[indx_i];
+        std::vector<unsigned>& indices = cell_neighbor_data_index_[indx_i];
         indices.push_back(indx_n);
       }
   }
-  vcl_cout << "Find sphere cell neighborhoods in " << static_cast<double>(t.real())/1000.0 << " sec.\n";
+  std::cout << "Find sphere cell neighborhoods in " << static_cast<double>(t.real())/1000.0 << " sec.\n";
 }
 
 //run through all the sphere points (sclera) and paint them white
@@ -471,7 +473,7 @@ boxm2_vecf_orbit_scene
 #if 0
     float d = static_cast<float>(closest_sphere_distance_norm_[i]);
     if(d >0.0f)
-      alpha_data_->data()[indx]= -5.0f*vcl_log(d);//factor of 5 to increase occlusion
+      alpha_data_->data()[indx]= -5.0f*std::log(d);//factor of 5 to increase occlusion
         else
 #endif
           //          float intensity  = ( float ) (params_.app_[0] ) * blending_factor;
@@ -525,7 +527,7 @@ boxm2_vecf_orbit_scene
   this->paint_sclera();
   this->paint_iris();
   this->paint_pupil();
-  //  vcl_cout << "Create eye in " << t.real()/1000.0 << " sec.\n";
+  //  std::cout << "Create eye in " << t.real()/1000.0 << " sec.\n";
 }
 
 void
@@ -578,7 +580,7 @@ boxm2_vecf_orbit_scene
   if (!success)
     {
     //#if _DEBUG
-    //    vcl_cout<<"point "<<global_pt<< " was out of eye scene bounding box "<<vcl_endl;
+    //    std::cout<<"point "<<global_pt<< " was out of eye scene bounding box "<<std::endl;
     //#endif
     return false;
     }
@@ -593,9 +595,9 @@ boxm2_vecf_orbit_scene
    double dr = 2*r;
    vgl_point_3d<double> org = blk_->local_origin();
    vgl_vector_3d<double> loc = (probe-org)/r;
-   double x0 = vcl_floor(loc.x()), y0 = vcl_floor(loc.y()), z0 = vcl_floor(loc.z());
+   double x0 = std::floor(loc.x()), y0 = std::floor(loc.y()), z0 = std::floor(loc.z());
    x0 = x0*r + org.x();   y0 = y0*r + org.y();  z0 = z0*r + org.z();
-   double dmin = vcl_numeric_limits<double>::max();
+   double dmin = std::numeric_limits<double>::max();
    data_indx = 0;
    unsigned data_index_min = 0;
    for(double x = (x0-dr); x<=(x0+dr); x+=r)
@@ -623,8 +625,8 @@ boxm2_vecf_orbit_scene
 void
 boxm2_vecf_orbit_scene
 ::inverse_vector_field_eye(vgl_rotation_3d<double> const& rot,
-                           vcl_vector<vgl_vector_3d<double> >& vf,
-                           vcl_vector<bool>& valid) const
+                           std::vector<vgl_vector_3d<double> >& vf,
+                           std::vector<bool>& valid) const
 {
 
   vul_timer t;
@@ -668,8 +670,8 @@ boxm2_vecf_orbit_scene
     vgl_point_3d<double> rp = inv_rot * p;
     vf[i].set(rp.x() - p.x(), rp.y() - p.y(), rp.z() - p.z());
   }
-  // vcl_cout << "computed " << cnt << " pts out of "<< nt << " for eye vector field in " << t.real()/1000.0 << " sec.\n";
-  // vcl_cout << ncont << " were inside smin\n";
+  // std::cout << "computed " << cnt << " pts out of "<< nt << " for eye vector field in " << t.real()/1000.0 << " sec.\n";
+  // std::cout << ncont << " were inside smin\n";
 }
 
 void
@@ -698,23 +700,23 @@ boxm2_vecf_orbit_scene
   for(unsigned i = 0; i<eyelid_cell_centers_.size(); i++){
       vgl_point_3d<double>& p = eyelid_cell_centers_[i];
       unsigned indx_i = eyelid_cell_data_index_[i];
-      vcl_vector<vgl_point_3d<double> > nbrs = blk_->sub_block_neighbors(p, distance);
+      std::vector<vgl_point_3d<double> > nbrs = blk_->sub_block_neighbors(p, distance);
       for(unsigned j =0; j<nbrs.size(); ++j){
         vgl_point_3d<double>& q = nbrs[j];
         unsigned indx_n;
         if(!blk_->data_index(q, indx_n))
           continue;
-        vcl_map<unsigned, unsigned >::iterator iit= eyelid_data_index_to_cell_index_.find(indx_n);
+        std::map<unsigned, unsigned >::iterator iit= eyelid_data_index_to_cell_index_.find(indx_n);
         if(iit == eyelid_data_index_to_cell_index_.end())
           continue;
         if(iit->second==i)
                 continue;
         eyelid_cell_neighbor_cell_index_[i].push_back(iit->second);
-        vcl_vector<unsigned>& indices = eyelid_cell_neighbor_data_index_[indx_i];
+        std::vector<unsigned>& indices = eyelid_cell_neighbor_data_index_[indx_i];
         indices.push_back(indx_n);
       }
   }
-  vcl_cout << "Find eyelid cell neighborhoods in " << static_cast<double>(t.real())/1000.0 << " sec.\n";
+  std::cout << "Find eyelid cell neighborhoods in " << static_cast<double>(t.real())/1000.0 << " sec.\n";
 }
 
 void
@@ -728,8 +730,8 @@ boxm2_vecf_orbit_scene
   d_thresh = margin;
   vgl_box_3d<double> bb = eyelid_geo_.bounding_box(margin);
   // cells in  box centers are in global coordinates
-  vcl_vector<cell_info> ccs = blk_->cells_in_box(bb);
-  for(vcl_vector<cell_info>::iterator cit = ccs.begin();
+  std::vector<cell_info> ccs = blk_->cells_in_box(bb);
+  for(std::vector<cell_info>::iterator cit = ccs.begin();
       cit != ccs.end(); ++cit){
     const vgl_point_3d<double>& cell_center = cit->cell_center_;
     unsigned indx = cit->data_index_;
@@ -744,7 +746,7 @@ boxm2_vecf_orbit_scene
         eyelid_->data()[indx] = static_cast<pixtype>(true);
         eyelid_data_index_to_cell_index_[indx]=static_cast<unsigned>(eyelid_cell_centers_.size())-1;
         float blending_factor = static_cast<float>(gauss(d,sigma_));
-        alpha_data_->data()[indx]= - vcl_log(1.0f - ( 0.95f ))/ static_cast<float>(this->subblock_len()) * blending_factor;
+        alpha_data_->data()[indx]= - std::log(1.0f - ( 0.95f ))/ static_cast<float>(this->subblock_len()) * blending_factor;
       }
     }
   }
@@ -794,23 +796,23 @@ boxm2_vecf_orbit_scene
   for(unsigned i = 0; i<lower_eyelid_cell_centers_.size(); i++){
       vgl_point_3d<double>& p = lower_eyelid_cell_centers_[i];
       unsigned indx_i = lower_eyelid_cell_data_index_[i];
-      vcl_vector<vgl_point_3d<double> > nbrs = blk_->sub_block_neighbors(p, distance);
+      std::vector<vgl_point_3d<double> > nbrs = blk_->sub_block_neighbors(p, distance);
       for(unsigned j =0; j<nbrs.size(); ++j){
         vgl_point_3d<double>& q = nbrs[j];
         unsigned indx_n;
         if(!blk_->data_index(q, indx_n))
           continue;
-        vcl_map<unsigned, unsigned >::iterator iit= lower_eyelid_data_index_to_cell_index_.find(indx_n);
+        std::map<unsigned, unsigned >::iterator iit= lower_eyelid_data_index_to_cell_index_.find(indx_n);
         if(iit == lower_eyelid_data_index_to_cell_index_.end())
           continue;
         if(iit->second==i)
                 continue;
         lower_eyelid_cell_neighbor_cell_index_[i].push_back(iit->second);
-        vcl_vector<unsigned>& indices = lower_eyelid_cell_neighbor_data_index_[indx_i];
+        std::vector<unsigned>& indices = lower_eyelid_cell_neighbor_data_index_[indx_i];
         indices.push_back(indx_n);
       }
   }
-  vcl_cout << "Find lower_eyelid cell neighborhoods in " << static_cast<double>(t.real())/1000.0 << " sec.\n";
+  std::cout << "Find lower_eyelid cell neighborhoods in " << static_cast<double>(t.real())/1000.0 << " sec.\n";
 }
 
 //: scan dense set of points on the spherical shell to define surface voxels
@@ -824,8 +826,8 @@ boxm2_vecf_orbit_scene
   ;
   vgl_box_3d<double> bb = lower_eyelid_geo_.bounding_box();
  // cells in  box centers are in global coordinates
-  vcl_vector<cell_info> ccs = blk_->cells_in_box(bb);
-  for(vcl_vector<cell_info>::iterator cit = ccs.begin();
+  std::vector<cell_info> ccs = blk_->cells_in_box(bb);
+  for(std::vector<cell_info>::iterator cit = ccs.begin();
       cit != ccs.end(); ++cit){
     const vgl_point_3d<double>& cell_center = cit->cell_center_;
     unsigned indx = cit->data_index_;
@@ -840,7 +842,7 @@ boxm2_vecf_orbit_scene
           lower_eyelid_data_index_to_cell_index_[indx]=
             static_cast<unsigned>(lower_eyelid_cell_centers_.size())-1;
           float blending_factor = static_cast<float>(gauss(d,sigma_));
-          alpha_data_->data()[indx]= - vcl_log(1.0f - ( 0.95f ))/ static_cast<float>(this->subblock_len()) * blending_factor;
+          alpha_data_->data()[indx]= - std::log(1.0f - ( 0.95f ))/ static_cast<float>(this->subblock_len()) * blending_factor;
         }
     }
   }
@@ -892,23 +894,23 @@ boxm2_vecf_orbit_scene
   for(unsigned i = 0; i<eyelid_crease_cell_centers_.size(); i++){
       vgl_point_3d<double>& p = eyelid_crease_cell_centers_[i];
       unsigned indx_i = eyelid_crease_cell_data_index_[i];
-      vcl_vector<vgl_point_3d<double> > nbrs = blk_->sub_block_neighbors(p, distance);
+      std::vector<vgl_point_3d<double> > nbrs = blk_->sub_block_neighbors(p, distance);
       for(unsigned j =0; j<nbrs.size(); ++j){
         vgl_point_3d<double>& q = nbrs[j];
         unsigned indx_n;
         if(!blk_->data_index(q, indx_n))
           continue;
-        vcl_map<unsigned, unsigned >::iterator iit= eyelid_crease_data_index_to_cell_index_.find(indx_n);
+        std::map<unsigned, unsigned >::iterator iit= eyelid_crease_data_index_to_cell_index_.find(indx_n);
         if(iit == eyelid_crease_data_index_to_cell_index_.end())
           continue;
         if(iit->second==i)
                 continue;
         eyelid_crease_cell_neighbor_cell_index_[i].push_back(iit->second);
-        vcl_vector<unsigned>& indices = eyelid_crease_cell_neighbor_data_index_[indx_i];
+        std::vector<unsigned>& indices = eyelid_crease_cell_neighbor_data_index_[indx_i];
         indices.push_back(indx_n);
       }
   }
-  vcl_cout << "Find eyelid_crease cell neighborhoods in " << static_cast<double>(t.real())/1000.0 << " sec.\n";
+  std::cout << "Find eyelid_crease cell neighborhoods in " << static_cast<double>(t.real())/1000.0 << " sec.\n";
 }
 
 //: scan dense set of points on the spherical shell to define surface voxels
@@ -922,8 +924,8 @@ boxm2_vecf_orbit_scene
 
   vgl_box_3d<double> bb = eyelid_crease_geo_.bounding_box();
   // cells in  box centers are in global coordinates
-  vcl_vector<cell_info> ccs = blk_->cells_in_box(bb);
-  for(vcl_vector<cell_info>::iterator cit = ccs.begin();
+  std::vector<cell_info> ccs = blk_->cells_in_box(bb);
+  for(std::vector<cell_info>::iterator cit = ccs.begin();
       cit != ccs.end(); ++cit){
     const vgl_point_3d<double>& cell_center = cit->cell_center_;
     unsigned indx = cit->data_index_;
@@ -937,7 +939,7 @@ boxm2_vecf_orbit_scene
         eyelid_crease_cell_data_index_.push_back(indx);
         eyelid_crease_->data()[indx] = static_cast<pixtype>(true);
         float blending_factor = static_cast<float>(gauss(d,sigma_));
-        alpha_data_->data()[indx]= - vcl_log(1.0f - ( 0.95f ))/ static_cast<float>(this->subblock_len()) * blending_factor;
+        alpha_data_->data()[indx]= - std::log(1.0f - ( 0.95f ))/ static_cast<float>(this->subblock_len()) * blending_factor;
         eyelid_crease_data_index_to_cell_index_[indx]=
           static_cast<unsigned>(eyelid_crease_cell_centers_.size())-1;
       }
@@ -971,7 +973,7 @@ boxm2_vecf_orbit_scene
 
 void
 boxm2_vecf_orbit_scene
-::inverse_vector_field_eyelid(double dt, vcl_vector<vgl_vector_3d<double> >& vfield, vcl_vector<unsigned char>& valid) const
+::inverse_vector_field_eyelid(double dt, std::vector<vgl_vector_3d<double> >& vfield, std::vector<unsigned char>& valid) const
 {
   vul_timer t;
 
@@ -1004,12 +1006,12 @@ boxm2_vecf_orbit_scene
     vfield[i]=eyelid_geo_.vf(p.x(),tc, -dt);
     valid[i]=static_cast<unsigned char>(2);
   }
-  //  vcl_cout << "Create eyelid vector field in " << t.real()/1000.0 << " sec.\n";
+  //  std::cout << "Create eyelid vector field in " << t.real()/1000.0 << " sec.\n";
 }
 
 void
 boxm2_vecf_orbit_scene
-::inverse_vector_field_lower_eyelid(vcl_vector<vgl_vector_3d<double> >& vfield, vcl_vector<bool>& valid) const
+::inverse_vector_field_lower_eyelid(std::vector<vgl_vector_3d<double> >& vfield, std::vector<bool>& valid) const
 {
   vul_timer t;
   unsigned nt = static_cast<unsigned>(box_cell_centers_.size());
@@ -1035,12 +1037,12 @@ boxm2_vecf_orbit_scene
    // no movement of the lower lid for now
     valid[i]=true;
   }
-  //  vcl_cout << "Create eyelid vector field in " << t.real()/1000.0 << " sec.\n";
+  //  std::cout << "Create eyelid vector field in " << t.real()/1000.0 << " sec.\n";
 }
 
 void
 boxm2_vecf_orbit_scene
-::inverse_vector_field_eyelid_crease(vcl_vector<vgl_vector_3d<double> >& vfield, vcl_vector<bool>& valid) const
+::inverse_vector_field_eyelid_crease(std::vector<vgl_vector_3d<double> >& vfield, std::vector<bool>& valid) const
 {
   vul_timer t;
 
@@ -1065,7 +1067,7 @@ boxm2_vecf_orbit_scene
    // no movement of the crease for now
     valid[i]=true;
   }
-  //  vcl_cout << "Create eyelid vector field in " << t.real()/1000.0 << " sec.\n";
+  //  std::cout << "Create eyelid vector field in " << t.real()/1000.0 << " sec.\n";
 }
 
 //
@@ -1078,9 +1080,9 @@ boxm2_vecf_orbit_scene
                            unsigned sindx,
                            unsigned dindx,
                            unsigned tindx,
-                           vcl_vector<vgl_point_3d<double> > & cell_centers,
-                           vcl_map<unsigned, vcl_vector<unsigned> >& cell_neighbor_cell_index,
-                           vcl_map<unsigned, vcl_vector<unsigned> >&cell_neighbor_data_index)
+                           std::vector<vgl_point_3d<double> > & cell_centers,
+                           std::map<unsigned, std::vector<unsigned> >& cell_neighbor_cell_index,
+                           std::map<unsigned, std::vector<unsigned> >&cell_neighbor_data_index)
 {
   boxm2_data_traits<BOXM2_MOG3_GREY>::datatype app;
   boxm2_data_traits<BOXM2_GAUSS_RGB>::datatype color_app;
@@ -1096,8 +1098,8 @@ boxm2_vecf_orbit_scene
   double sig = params_.gauss_sigma()*subblock_len();
   // interpolate using Gaussian weights based on distance to the source point
   double dc = vgl_distance(scell, src);
-  const vcl_vector<unsigned>& nbr_cells = cell_neighbor_cell_index[sindx];
-  const vcl_vector<unsigned>& nbr_data = cell_neighbor_data_index[dindx];
+  const std::vector<unsigned>& nbr_cells = cell_neighbor_cell_index[sindx];
+  const std::vector<unsigned>& nbr_data = cell_neighbor_data_index[dindx];
   double sumw = gauss(dc, sig), sumint = app[0]*sumw, sumalpha = alpha0*sumw;
   double8 sumcolor= sumw * curr_color;
   for(unsigned k = 0; k<nbr_cells.size(); ++k){
@@ -1127,8 +1129,8 @@ boxm2_vecf_orbit_scene
 
 void
 boxm2_vecf_orbit_scene
-::apply_eye_vector_field_to_target(vcl_vector<vgl_vector_3d<double> > const& vf,
-                                   vcl_vector<bool> const& valid)
+::apply_eye_vector_field_to_target(std::vector<vgl_vector_3d<double> > const& vf,
+                                   std::vector<bool> const& valid)
 {
   //  boxm2_data_traits<BOXM2_MOG3_GREY>::datatype app;
   vnl_vector_fixed<unsigned char,8> color = random_color();
@@ -1162,13 +1164,13 @@ boxm2_vecf_orbit_scene
                                    sphere_cell_centers_, cell_neighbor_cell_index_,
                                    cell_neighbor_data_index_);
   }
-  //  vcl_cout << "Apply eye vector field in " << t.real()/1000.0 << " sec.\n";
+  //  std::cout << "Apply eye vector field in " << t.real()/1000.0 << " sec.\n";
 }
 
 void
 boxm2_vecf_orbit_scene
-::apply_eyelid_vector_field_to_target(vcl_vector<vgl_vector_3d<double> > const& vf,
-                                      vcl_vector<unsigned char> const& valid)
+::apply_eyelid_vector_field_to_target(std::vector<vgl_vector_3d<double> > const& vf,
+                                      std::vector<unsigned char> const& valid)
 {
   vul_timer t;
   boxm2_data_traits<BOXM2_MOG3_GREY>::datatype app;
@@ -1215,13 +1217,13 @@ boxm2_vecf_orbit_scene
     interpolate_vector_field(src, sindx, dindx, tindx,eyelid_cell_centers_,
                              eyelid_cell_neighbor_cell_index_,eyelid_cell_neighbor_data_index_);
   }
-  //  vcl_cout << "Apply eyelid vector field in " << t.real()/1000.0 << " sec.\n";
+  //  std::cout << "Apply eyelid vector field in " << t.real()/1000.0 << " sec.\n";
 }
 
 void
 boxm2_vecf_orbit_scene
-::apply_lower_eyelid_vector_field_to_target(vcl_vector<vgl_vector_3d<double> > const& vf,
-                                            vcl_vector<bool> const& valid)
+::apply_lower_eyelid_vector_field_to_target(std::vector<vgl_vector_3d<double> > const& vf,
+                                            std::vector<bool> const& valid)
 {
 
    vul_timer t;
@@ -1251,20 +1253,20 @@ boxm2_vecf_orbit_scene
     unsigned sindx=0, dindx=0;
     if(!find_nearest_data_index(LOWER_LID, src, dindx))
       continue;
-    //    vcl_cout<<(int)app_data_->data()[dindx][0]<<" ";
+    //    std::cout<<(int)app_data_->data()[dindx][0]<<" ";
     sindx = lower_eyelid_data_index_to_cell_index_[dindx];
     //    target_color_data_->data()[tindx] = color;
     //    target_vis_score_data_->data()[tindx] = 1;
     interpolate_vector_field(src, sindx, dindx, tindx, lower_eyelid_cell_centers_,
                              lower_eyelid_cell_neighbor_cell_index_,lower_eyelid_cell_neighbor_data_index_);
   }
-  //  vcl_cout << "Apply lower lower_eyelid vector field in " << t.real()/1000.0 << " sec.\n";
+  //  std::cout << "Apply lower lower_eyelid vector field in " << t.real()/1000.0 << " sec.\n";
 }
 
 void
 boxm2_vecf_orbit_scene
-::apply_eyelid_crease_vector_field_to_target(vcl_vector<vgl_vector_3d<double> > const& vf,
-                                             vcl_vector<bool> const& valid)
+::apply_eyelid_crease_vector_field_to_target(std::vector<vgl_vector_3d<double> > const& vf,
+                                             std::vector<bool> const& valid)
 {
 
   vul_timer t;
@@ -1300,7 +1302,7 @@ boxm2_vecf_orbit_scene
     interpolate_vector_field(src, sindx, dindx, tindx, eyelid_crease_cell_centers_,
                              eyelid_crease_cell_neighbor_cell_index_,eyelid_crease_cell_neighbor_data_index_);
   }
-  //  vcl_cout << "Apply lower eyelid_crease vector field in " << t.real()/1000.0 << " sec.\n";
+  //  std::cout << "Apply lower eyelid_crease vector field in " << t.real()/1000.0 << " sec.\n";
 }
 
 void
@@ -1326,9 +1328,9 @@ boxm2_vecf_orbit_scene
                                      params_.eye_pointing_dir_.y(),
                                      params_.eye_pointing_dir_.z());
   vgl_rotation_3d<double> rot(Z, to_dir);
-  vcl_vector<vgl_vector_3d<double> > invf, invf_lid, invf_lower_lid, invf_eyelid_crease;
-  vcl_vector<bool> valid, valid_lower_lid, valid_eyelid_crease;
-  vcl_vector<unsigned char> valid_lid;
+  std::vector<vgl_vector_3d<double> > invf, invf_lid, invf_lower_lid, invf_eyelid_crease;
+  std::vector<bool> valid, valid_lower_lid, valid_eyelid_crease;
+  std::vector<unsigned char> valid_lid;
 
   this->inverse_vector_field_eyelid(-params_.eyelid_dt_, invf_lid, valid_lid);
   this->apply_eyelid_vector_field_to_target(invf_lid, valid_lid);
@@ -1354,14 +1356,14 @@ boxm2_vecf_orbit_scene
     intrinsic_change_ = this->vfield_params_change_check(params_ref); // assuming intrinsic parameters changed,i.e. eye color and the orbit scene needs to be rebuilt and repainted
     params_ =boxm2_vecf_orbit_params(params_ref);
 #if _DEBUG
-    vcl_cout<< "intrinsic change? "<<intrinsic_change_<<vcl_endl;
+    std::cout<< "intrinsic change? "<<intrinsic_change_<<std::endl;
 #endif
     if(intrinsic_change_){
       this->rebuild();
     }
     return true;
   }catch(std::exception e){
-    vcl_cout<<" Can't downcast orbit parameters! PARAMATER ASSIGNMENT PHAILED!"<<vcl_endl;
+    std::cout<<" Can't downcast orbit parameters! PARAMATER ASSIGNMENT PHAILED!"<<std::endl;
     return false;
   }
 }
@@ -1423,7 +1425,7 @@ void
 boxm2_vecf_orbit_scene
 ::reset_buffers(bool color_only)
 {
-  vcl_vector<boxm2_block_id> blocks = base_model_->get_block_ids();
+  std::vector<boxm2_block_id> blocks = base_model_->get_block_ids();
   boxm2_block_metadata mdata = base_model_->get_block_metadata_const(blocks[0]);
 
 
@@ -1485,6 +1487,6 @@ boxm2_vecf_orbit_scene
   if(target_blk_){
     box_cell_centers_ = target_blk_->cells_in_box(offset_box);
     // vgl_box_3d<double> target_box = target_blk_->bounding_box_global();
-    // vcl_cout<< "fraction of cells  " << ((float)box_cell_centers_.size())/(target_blk_->cells_in_box(target_box).size())<<vcl_endl;
+    // std::cout<< "fraction of cells  " << ((float)box_cell_centers_.size())/(target_blk_->cells_in_box(target_box).size())<<std::endl;
   }
  }

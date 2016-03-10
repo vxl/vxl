@@ -2,9 +2,10 @@
 #include "vgui_win32_adaptor.h"
 #include "vgui_win32_utils.h"
 
-#include <vcl_iostream.h>
-#include <vcl_cstring.h> // for vcl_memset
-#include <vcl_utility.h> // for vcl_pair
+#include <iostream>
+#include <cstring> // for std::memset
+#include <vcl_compiler.h>
+#include <utility> // for std::pair
 #include <vgui/vgui_gl.h>
 #include <vgui/vgui_event.h>
 #include <vgui/vgui_macro.h>
@@ -60,12 +61,12 @@ vgui_win32_adaptor::~vgui_win32_adaptor()
 
 void vgui_win32_adaptor::post_timer(float timeout, int name)
 {
-  vcl_map<unsigned int, vgui_win32_internal_timer>::iterator it = timers_.find(name);
+  std::map<unsigned int, vgui_win32_internal_timer>::iterator it = timers_.find(name);
   if ( it == timers_.end() ) { // Create at timer if it does rxist
     unsigned int tid = SetTimer(hwnd_, name, (unsigned int)timeout, NULL);
     if ( tid ) { // function fails to create a timer if tid==0
       vgui_win32_internal_timer it(tid, NULL);
-      timers_.insert(vcl_pair<unsigned int, vgui_win32_internal_timer>(name, it));
+      timers_.insert(std::pair<unsigned int, vgui_win32_internal_timer>(name, it));
     }
   }
 }
@@ -120,7 +121,7 @@ void vgui_win32_adaptor::post_destroy()
 // kill an existing timer
 void vgui_win32_adaptor::kill_timer(int name)
 {
-  vcl_map<unsigned int, vgui_win32_internal_timer>::iterator it = timers_.find(name);
+  std::map<unsigned int, vgui_win32_internal_timer>::iterator it = timers_.find(name);
   if ( it == timers_.end() ) // return if such a timer does not exist
     return;
 
@@ -154,14 +155,14 @@ HGLRC vgui_win32_adaptor::setup_for_gl(HDC hdc)
   if ( selected_pf == 0 ) {
     MessageBox(NULL, TEXT("Failed to ChoosePixelFormat"), TEXT("Error"),
                MB_ICONERROR | MB_OK);
-    vcl_cerr << "Failed to ChoosePixelFormat (error code:" << GetLastError() << ")\n";
+    std::cerr << "Failed to ChoosePixelFormat (error code:" << GetLastError() << ")\n";
     return 0;
   }
 
   if ( !SetPixelFormat(hdc, selected_pf, &pfd) ) {
     MessageBox(NULL, TEXT("Failed to SetPixelFormat"), TEXT("Error"),
                MB_ICONERROR | MB_OK);
-    vcl_cerr << "Failed to SetPixelFormat (error code:" << GetLastError() << ")\n";
+    std::cerr << "Failed to SetPixelFormat (error code:" << GetLastError() << ")\n";
     return 0;
   }
 
@@ -171,7 +172,7 @@ HGLRC vgui_win32_adaptor::setup_for_gl(HDC hdc)
   if ( !hglrc ) {
     MessageBox(NULL, TEXT("wglCreateContext failed"), TEXT("Error"),
                MB_ICONERROR | MB_OK);
-    vcl_cerr << "wglCreateContext failed (error code:" << GetLastError() << ")\n";
+    std::cerr << "wglCreateContext failed (error code:" << GetLastError() << ")\n";
     return 0;
   }
 
@@ -179,7 +180,7 @@ HGLRC vgui_win32_adaptor::setup_for_gl(HDC hdc)
   if ( !wglMakeCurrent(hdc, hglrc) ) {
     MessageBox(NULL, TEXT("wglMakeCurrent failed"), TEXT("Error"),
                MB_ICONERROR | MB_OK);
-    vcl_cerr << "wglMakeCurrent failed (error code:" << GetLastError() << ")\n";
+    std::cerr << "wglMakeCurrent failed (error code:" << GetLastError() << ")\n";
     return 0;
   }
 
@@ -217,11 +218,11 @@ BOOL vgui_win32_adaptor::OnCmdMsg(UINT message, WPARAM wParam, LPARAM lParam)
       break;
     case WM_KEYDOWN:
       OnKeyDown(wParam, lParam);
-      //vcl_cerr << "tableau: message WM_KEYDOWN received.\n";
+      //std::cerr << "tableau: message WM_KEYDOWN received.\n";
       return TRUE;
     case WM_KEYUP:
       OnKeyUp(wParam, lParam);
-      //vcl_cerr << "tableau: message WM_KEYUP received.\n";
+      //std::cerr << "tableau: message WM_KEYUP received.\n";
       return TRUE;
     case WM_LBUTTONDOWN:
       OnLButtonDown(wParam, lParam);
@@ -247,7 +248,7 @@ BOOL vgui_win32_adaptor::OnCmdMsg(UINT message, WPARAM wParam, LPARAM lParam)
 #ifdef WM_MOUSEWHEEL
     case WM_MOUSEWHEEL:
       OnMouseWheel(wParam, lParam);
-      //vcl_cerr << "tableau: message WM_MOUSEWHEEL received.\n";
+      //std::cerr << "tableau: message WM_MOUSEWHEEL received.\n";
       return TRUE;
 #endif
     case WM_COMMAND: // child window and menu message
@@ -580,8 +581,8 @@ void vgui_win32_adaptor::translate_key(UINT nChar, UINT nFlags,
   {
     unsigned short buf[1024];
     unsigned char lpKeyState[256];
-    vcl_memset(lpKeyState, 0, 256);
-    vcl_memset(buf, 0, 256);
+    std::memset(lpKeyState, 0, 256);
+    std::memset(buf, 0, 256);
 
     int is_ok = ToAscii(nChar, nFlags & 0xff, lpKeyState, buf, 0);
     if (is_ok == 1)

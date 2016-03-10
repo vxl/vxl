@@ -15,7 +15,9 @@
 #include <bvxm/bvxm_voxel_world_sptr.h>
 #include <bvxm/bvxm_image_metadata.h>
 #include <bvxm/bvxm_von_mises_tangent_processor.h>
-#include <vcl_string.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <string>
 
 class  bvxm_edge_ray_processor
 {
@@ -47,10 +49,10 @@ class  bvxm_edge_ray_processor
   bool expected_edge_image_and_heights(bvxm_image_metadata const& camera,vil_image_view_base_sptr &expected, vil_image_view_base_sptr &height_img, float n_normal, unsigned scale_idx=0);
 
   //: save the edge probability grid in a ".raw" format readable by Drishti volume rendering software
-  bool save_edges_raw(vcl_string filename, float n_normal, unsigned scale_idx=0);
+  bool save_edges_raw(std::string filename, float n_normal, unsigned scale_idx=0);
 
   //: save the edge probability grid as a 3-d tiff image
-  bool save_edges_vff(vcl_string filename, unsigned scale_idx=0);
+  bool save_edges_vff(std::string filename, unsigned scale_idx=0);
 
   //: initialize a von_mises edge tangent world from two images
   bool init_von_mises_edge_tangents(bvxm_image_metadata const& metadata0,
@@ -69,11 +71,11 @@ class  bvxm_edge_ray_processor
                                       unsigned scale=0);
 
   //: Display edge tangent world as vrml
-  void display_edge_tangent_world_vrml(vcl_string const& vrml_path);
+  void display_edge_tangent_world_vrml(std::string const& vrml_path);
 
   //: Display manually constructed ground truth
-  void display_ground_truth(vcl_string const& gnd_truth_path,
-                            vcl_string const& vrml_path);
+  void display_ground_truth(std::string const& gnd_truth_path,
+                            std::string const& vrml_path);
 
  private:
   bvxm_voxel_world_sptr world_;

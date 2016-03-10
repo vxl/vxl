@@ -8,10 +8,11 @@
 
 #include "vgui_section_render.h"
 
-#include <vcl_cmath.h>
+#include <vcl_compiler.h>
+#include <cmath>
 #include <vcl_cassert.h>
 #include <vcl_climits.h> // for UCHAR_MAX
-// not used? #include <vcl_iostream.h>
+// not used? #include <iostream>
 #include <vgui/internals/vgui_rasterpos.h>
 #include <vgui/internals/vgui_accelerate.h>
 
@@ -21,7 +22,7 @@ static inline float fsm_min(float x, float y) { return x<y ? x : y; }
 // Set to 1 for verbose debugging.
 #if 0
 # include <vcl_cstdio.h>
-# define fsm_debug vcl_printf
+# define fsm_debug std::printf
 #else
 static inline void fsm_debug(char const *, ...) { }
 #endif
@@ -121,8 +122,8 @@ static bool clamped_viewport(float x0, float y0, float x1, float y1,
   // outside the viewport. vgui_rasterpos wraps the appropriate
   // trickery.
 
-  int i_x0 = int(vcl_floor(x0)), i_y0 = int(vcl_floor(y0));
-  int i_x1 = int(vcl_ceil (x1)), i_y1 = int(vcl_ceil (y1));
+  int i_x0 = int(std::floor(x0)), i_y0 = int(std::floor(y0));
+  int i_x1 = int(std::ceil (x1)), i_y1 = int(std::ceil (y1));
   //Set the raster position
   vgui_rasterpos2i( i_x0, i_y0 );
   //return the view parameters

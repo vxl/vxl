@@ -1,17 +1,19 @@
 // This is mul/mmn/tests/test_parse_arcs.cxx
 #include <testlib/testlib_test.h>
-#include <vcl_vector.h>
+#include <vector>
 #include <mmn/mmn_parse_arcs.h>
-#include <vcl_sstream.h>
-#include <vcl_algorithm.h>
-#include <vcl_iterator.h>
+#include <sstream>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <algorithm>
+#include <iterator>
 
 
 void test_parse_arcs_a()
 {
-  vcl_cout<<"========= test_parse_arcs =========\n" << vcl_endl;
+  std::cout<<"========= test_parse_arcs =========\n" << std::endl;
 
-  vcl_vector<vcl_string> nodeNames;
+  std::vector<std::string> nodeNames;
   nodeNames.push_back("L1_top_post");
   nodeNames.push_back("L1_top_ant");
   nodeNames.push_back("L1_bot_post");
@@ -24,7 +26,7 @@ void test_parse_arcs_a()
   nodeNames.push_back("L2_bot_ant");
   nodeNames.push_back("L2_pedicle");
 
-  vcl_string testStreamStr= "{\n"
+  std::string testStreamStr= "{\n"
       "arc: { L1_top_post L1_top_ant }\n"
       "arc: { L1_top_post L1_bot_post }\n"
       "arc: { L1_bot_post L1_bot_ant }\n"
@@ -43,8 +45,8 @@ void test_parse_arcs_a()
       "}"
       ;
 
-  vcl_istringstream ss(testStreamStr);
-  vcl_vector<mmn_arc> arcs;
+  std::istringstream ss(testStreamStr);
+  std::vector<mmn_arc> arcs;
   mmn_parse_arcs(ss,nodeNames,arcs);
 
   TEST("Test arc numbers",arcs.size()==15,true);
@@ -52,10 +54,10 @@ void test_parse_arcs_a()
   TEST("Test second arc ",arcs[1].v1==0 && arcs[1].v2==2,true );
   TEST("Test last arc ",arcs.back().v1==9 && arcs.back().v2==5,true );
 
-  vcl_cout<<"Arc set follows:"<<vcl_endl;
-  vcl_copy(arcs.begin(),arcs.end(),
-           vcl_ostream_iterator<mmn_arc>(vcl_cout,"\t"));
-  vcl_cout<<"\n\n========= end test_parse_arcs =========\n"<<vcl_endl;
+  std::cout<<"Arc set follows:"<<std::endl;
+  std::copy(arcs.begin(),arcs.end(),
+           std::ostream_iterator<mmn_arc>(std::cout,"\t"));
+  std::cout<<"\n\n========= end test_parse_arcs =========\n"<<std::endl;
 }
 
 void test_parse_arcs()

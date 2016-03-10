@@ -3,8 +3,9 @@
 #define vil1_resample_image_hxx_
 
 #include "vil1_resample_image.h"
-#include <vcl_vector.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <vector>
+#include <iostream>
 #include <vcl_cassert.h>
 
 #include <vil1/vil1_image.h>
@@ -33,9 +34,9 @@ bool vil1_resample_image(vil1_image const &base, unsigned new_width, unsigned ne
   unsigned base_h = base_y1 - base_y0 + 1;
 
   // make buffer for, and get, region needed from base image.
-  vcl_vector<T> base_buf(base_w * base_h);
+  std::vector<T> base_buf(base_w * base_h);
   if (! base.get_section(/* xxx */&base_buf[0], base_x0, base_y0, base_w, base_h)) {
-    vcl_cerr << __FILE__ ": get_section() failed on base image " << base <<'\n';
+    std::cerr << __FILE__ ": get_section() failed on base image " << base <<'\n';
     return false;
   }
 

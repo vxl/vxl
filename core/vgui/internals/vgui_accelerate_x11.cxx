@@ -18,11 +18,12 @@
 //   XMesaGetCurrentBuffer (function)
 //   XMesaGetBackBuffer (function)
 
-#include <vcl_iostream.h>
-#include <vcl_cmath.h>
+#include <iostream>
+#include <vcl_compiler.h>
+#include <cmath>
 #include <vcl_cassert.h>
-#include <vcl_cstring.h>
-#include <vcl_algorithm.h>
+#include <cstring>
+#include <algorithm>
 
 #include <X11/Xlib.h>
 #include <X11/Xutil.h>
@@ -73,10 +74,10 @@ const int number_of_accelerated_formats = sizeof(gl_to_hermes_formats) / sizeof(
 
 vgui_accelerate_x11::vgui_accelerate_x11()
 {
-  vcl_cerr << __FILE__ ": Initializing Mesa/X11 accelerator\n";
+  std::cerr << __FILE__ ": Initializing Mesa/X11 accelerator\n";
 
 #ifdef HAS_HERMES
-  vcl_cerr << __FILE__ ": Initializing Hermes\n";
+  std::cerr << __FILE__ ": Initializing Hermes\n";
   Hermes_Init();
   hermes_clearer = Hermes_ClearerInstance();
   hermes_converter = Hermes_ConverterInstance(HERMES_CONVERT_NORMAL);
@@ -88,7 +89,7 @@ vgui_accelerate_x11::vgui_accelerate_x11()
 
 vgui_accelerate_x11::~vgui_accelerate_x11()
 {
-  vcl_cerr << __FILE__ ": Destroying Mesa/X11 accelerator\n";
+  std::cerr << __FILE__ ": Destroying Mesa/X11 accelerator\n";
 
   delete[] aux_buffer;
 
@@ -125,10 +126,10 @@ bool vgui_accelerate_x11::vgui_glClear( GLbitfield mask )
         if (scissor_enabled) {
           GLint scissor_box[4];
           glGetIntegerv(GL_SCISSOR_BOX, scissor_box);
-          x_min = vcl_max(scissor_box[0], 0);
-          y_min = vcl_max(scissor_box[1], 0);
-          x_max = vcl_min(scissor_box[0] + scissor_box[2], backbuffer->width);
-          y_max = vcl_min(scissor_box[1] + scissor_box[3], backbuffer->height);
+          x_min = std::max(scissor_box[0], 0);
+          y_min = std::max(scissor_box[1], 0);
+          x_max = std::min(scissor_box[0] + scissor_box[2], backbuffer->width);
+          y_max = std::min(scissor_box[1] + scissor_box[3], backbuffer->height);
         } else {
           x_min = 0;
           y_min = 0;
@@ -227,16 +228,16 @@ bool vgui_accelerate_x11::vgui_glDrawPixels( GLsizei width, GLsizei height,
         glGetIntegerv (GL_UNPACK_SKIP_ROWS, &skip_rows);
 
 #if 0 // commented out
-        vcl_cerr << "bb width " << backbuffer->width << vcl_endl
-                 << "bb height " << backbuffer->height << vcl_endl
+        std::cerr << "bb width " << backbuffer->width << std::endl
+                 << "bb height " << backbuffer->height << std::endl
                  << "raspos " << raster_pos[0] << ' ' << raster_pos[1]
-                 << ' ' << raster_pos[2] << ' ' << raster_pos[3] << vcl_endl
-                 << "pz x " << pixel_zoom_x << vcl_endl
-                 << "pz y " << pixel_zoom_y << vcl_endl
-                 << "skip x " << skip_pixels << vcl_endl
-                 << "skip y " << skip_rows << vcl_endl
-                 << "width " << width << vcl_endl
-                 << "height " << height << vcl_endl;
+                 << ' ' << raster_pos[2] << ' ' << raster_pos[3] << std::endl
+                 << "pz x " << pixel_zoom_x << std::endl
+                 << "pz y " << pixel_zoom_y << std::endl
+                 << "skip x " << skip_pixels << std::endl
+                 << "skip y " << skip_rows << std::endl
+                 << "width " << width << std::endl
+                 << "height " << height << std::endl;
 #endif
 
         // Find the OUTERMOST boundary of the scaled src image in window coords
@@ -257,8 +258,8 @@ bool vgui_accelerate_x11::vgui_glDrawPixels( GLsizei width, GLsizei height,
         }
 
 #if 0 // commented out
-        vcl_cerr << dest_x_min << ' ' << dest_x_max << vcl_endl
-                 << dest_y_min << ' ' << dest_y_max << vcl_endl;
+        std::cerr << dest_x_min << ' ' << dest_x_max << std::endl
+                 << dest_y_min << ' ' << dest_y_max << std::endl;
 #endif
 
         float window_x_min, window_y_min, window_x_max, window_y_max;
@@ -267,10 +268,10 @@ bool vgui_accelerate_x11::vgui_glDrawPixels( GLsizei width, GLsizei height,
         if (scissor_enabled) {
           GLint scissor_box[4];
           glGetIntegerv (GL_SCISSOR_BOX, scissor_box);
-          window_x_min = vcl_max(scissor_box[0], 0);
-          window_y_min = vcl_max(scissor_box[1], 0);
-          window_x_max = vcl_min(scissor_box[0] + scissor_box[2], backbuffer->width);
-          window_y_max = vcl_min(scissor_box[1] + scissor_box[3], backbuffer->height);
+          window_x_min = std::max(scissor_box[0], 0);
+          window_y_min = std::max(scissor_box[1], 0);
+          window_x_max = std::min(scissor_box[0] + scissor_box[2], backbuffer->width);
+          window_y_max = std::min(scissor_box[1] + scissor_box[3], backbuffer->height);
         } else {
           window_x_min = 0.0;
           window_y_min = 0.0;
@@ -283,37 +284,37 @@ bool vgui_accelerate_x11::vgui_glDrawPixels( GLsizei width, GLsizei height,
         int src_x_max = width;
         int src_y_max = height;
 
-        float abs_px_x = vcl_fabs(pixel_zoom_x);
-        float abs_px_y = vcl_fabs(pixel_zoom_y);
+        float abs_px_x = std::fabs(pixel_zoom_x);
+        float abs_px_y = std::fabs(pixel_zoom_y);
 
         if (dest_x_min < window_x_min) {
-          int dw = (int)vcl_ceil((window_x_min - dest_x_min)/abs_px_x);
+          int dw = (int)std::ceil((window_x_min - dest_x_min)/abs_px_x);
           src_x_min += dw;
           dest_x_min += dw * abs_px_x;
         }
         if (dest_x_max > window_x_max) {
-          int dw = (int)vcl_ceil((dest_x_max - window_x_max)/abs_px_x);
+          int dw = (int)std::ceil((dest_x_max - window_x_max)/abs_px_x);
           src_x_max -= dw;
           dest_x_max -= dw * abs_px_x;
         }
         if (dest_y_min < window_y_min) {
-          int dh = (int)vcl_ceil((window_y_min - dest_y_min)/abs_px_y);
+          int dh = (int)std::ceil((window_y_min - dest_y_min)/abs_px_y);
           src_y_min += dh;
           dest_y_min += dh * abs_px_y;
         }
         if (dest_y_max > window_y_max) {
-          int dh = (int)vcl_ceil((dest_y_max - window_y_max)/abs_px_y);
+          int dh = (int)std::ceil((dest_y_max - window_y_max)/abs_px_y);
           src_y_max -= dh;
           dest_y_max -= dh * abs_px_y;
         }
 
 #if 0 // commented out
-        vcl_cerr << "clipped dest -\n"
-                 << dest_x_min << ' ' << dest_x_max << vcl_endl
-                 << dest_y_min << ' ' << dest_y_max << vcl_endl
+        std::cerr << "clipped dest -\n"
+                 << dest_x_min << ' ' << dest_x_max << std::endl
+                 << dest_y_min << ' ' << dest_y_max << std::endl
                  << "clipped src -\n"
-                 << src_x_min << ' ' << src_x_max << vcl_endl
-                 << src_y_min << ' ' << src_y_max << vcl_endl;
+                 << src_x_min << ' ' << src_x_max << std::endl
+                 << src_y_min << ' ' << src_y_max << std::endl;
 #endif
 
         // Okay, the destination rectangle should be correct. Now lets adjust skip_pixels and skip_rows,
@@ -334,7 +335,7 @@ bool vgui_accelerate_x11::vgui_glDrawPixels( GLsizei width, GLsizei height,
         if (row_length == 0) row_length = width;
         GLint unpack_alignment;
         glGetIntegerv (GL_UNPACK_ALIGNMENT, &unpack_alignment);
-        int src_pitch = (int)vcl_ceil(double(row_length) * (src_format->bits >> 3) / unpack_alignment);
+        int src_pitch = (int)std::ceil(double(row_length) * (src_format->bits >> 3) / unpack_alignment);
 
         // Now choose a renderer depending on the sign of pixel_zoom_y
         if (pixel_zoom_y > 0) {
@@ -436,14 +437,14 @@ bool vgui_accelerate_x11::vgui_copy_back_to_aux ()
       int blit_size = backbuffer->bytes_per_line * backbuffer->height;
       // resize the aux_buffer if necessary
 #ifdef DEBUG
-      vcl_cerr << "blit_size = " << blit_size << '\n';
+      std::cerr << "blit_size = " << blit_size << '\n';
 #endif
       if (blit_size != aux_buffer_size) {
         delete[] aux_buffer;
         aux_buffer = new char[blit_size];
         aux_buffer_size = blit_size;
       }
-      vcl_memcpy(aux_buffer, backbuffer->data, blit_size);
+      std::memcpy(aux_buffer, backbuffer->data, blit_size);
       return true;
     }
 #endif
@@ -467,7 +468,7 @@ bool vgui_accelerate_x11::vgui_copy_aux_to_back ()
       XMesaGetBackBuffer(mesabuf, &p_dummy, &backbuffer);
       int blit_size = backbuffer->bytes_per_line * backbuffer->height;
       assert(aux_buffer_size > 0);
-      vcl_memcpy(backbuffer->data, aux_buffer, blit_size);
+      std::memcpy(backbuffer->data, aux_buffer, blit_size);
     }
     return true;
   }

@@ -39,7 +39,7 @@ vtol_face_2d::vtol_face_2d(vtol_face_2d_sptr const& other)
     vtol_topology_object_sptr V2 = newverts[e->v2()->get_id()];
     if (!V1 || !V2)
     {
-      vcl_cerr << "Inconsistent topology in vtol_face_2d pseudo copy constructor\n";
+      std::cerr << "Inconsistent topology in vtol_face_2d pseudo copy constructor\n";
       link_inferior(new vtol_one_chain);
       return;
      }
@@ -135,7 +135,7 @@ vtol_face_2d::vtol_face_2d(vertex_list const& verts)
   vertex_list::const_iterator vi=verts.begin();
   vtol_vertex_sptr v01=(*vi);
   edge_list elist;
-  vcl_vector<signed char> directions;
+  std::vector<signed char> directions;
 
   while (!done)
   {
@@ -280,7 +280,7 @@ bool vtol_face_2d::operator==(const vsol_spatial_object_2d& obj) const
 // Inferiors.  The blanking argument is used to indent the output in
 // a clear fashion.
 
-void vtol_face_2d::describe(vcl_ostream &strm,
+void vtol_face_2d::describe(std::ostream &strm,
                             int blanking) const
 {
   for (int j=0; j<blanking; ++j) strm << ' ';
@@ -297,7 +297,7 @@ void vtol_face_2d::describe(vcl_ostream &strm,
 //:
 // This method prints out a simple text representation for the vtol_face_2d which
 // includes its address in memory.
-void vtol_face_2d::print(vcl_ostream &strm) const
+void vtol_face_2d::print(std::ostream &strm) const
 {
   strm << "<vtol_face_2d ";
 

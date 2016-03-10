@@ -21,14 +21,14 @@ vil1_crop_image_impl::~vil1_crop_image_impl()
 }
 
 //: Return the name of the class;
-vcl_string vil1_crop_image_impl::is_a() const
+std::string vil1_crop_image_impl::is_a() const
 {
-  static const vcl_string class_name_="vil1_crop_image_impl";
+  static const std::string class_name_="vil1_crop_image_impl";
   return class_name_;
 }
 
 //: Return true if the name of the class matches the argument
-bool vil1_crop_image_impl::is_class(vcl_string const& s) const
+bool vil1_crop_image_impl::is_class(std::string const& s) const
 {
   return s==vil1_crop_image_impl::is_a() || vil1_image_impl::is_class(s);
 }

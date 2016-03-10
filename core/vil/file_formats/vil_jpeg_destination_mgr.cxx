@@ -12,18 +12,19 @@
 
 #include "vil_jpeg_destination_mgr.h"
 #include <vcl_cassert.h>
-#include <vcl_cstddef.h> // for vcl_size_t
+#include <vcl_compiler.h>
+#include <cstddef> // for std::size_t
 #include <vil/vil_stream.h>
 
 #define STATIC /*static*/
 
-// In ANSI C, and indeed any rational implementation, vcl_size_t is also the
+// In ANSI C, and indeed any rational implementation, std::size_t is also the
 // type returned by sizeof().  However, it seems there are some irrational
 // implementations out there, in which sizeof() returns an int even though
-// vcl_size_t is defined as long or unsigned long.  To ensure consistent results
+// std::size_t is defined as long or unsigned long.  To ensure consistent results
 // we always use this SIZEOF() macro in place of using sizeof() directly.
 
-#define SIZEOF(object) ((vcl_size_t) sizeof(object))
+#define SIZEOF(object) ((std::size_t) sizeof(object))
 
 // Implement a jpeg_destination_manager for vil_stream *.
 // Adapted by fsm from the FILE * version in jdatadst.c
@@ -76,7 +77,7 @@ vil_jpeg_empty_output_buffer (j_compress_ptr cinfo)
 {
   vil_jpeg_dstptr dest = (vil_jpeg_dstptr) cinfo->dest; // cast to derived class
 
-  if (dest->stream->write(dest->buffer, vil_jpeg_OUTPUT_BUF_SIZE) != (vcl_size_t) vil_jpeg_OUTPUT_BUF_SIZE)
+  if (dest->stream->write(dest->buffer, vil_jpeg_OUTPUT_BUF_SIZE) != (std::size_t) vil_jpeg_OUTPUT_BUF_SIZE)
     ERREXIT(cinfo, JERR_FILE_WRITE);
 
   dest->base.next_output_byte = dest->buffer;
@@ -95,7 +96,7 @@ void
 vil_jpeg_term_destination (j_compress_ptr cinfo)
 {
   vil_jpeg_dstptr dest = (vil_jpeg_dstptr) cinfo->dest; // cast to derived class
-  vcl_size_t datacount = vil_jpeg_OUTPUT_BUF_SIZE - dest->base.free_in_buffer;
+  std::size_t datacount = vil_jpeg_OUTPUT_BUF_SIZE - dest->base.free_in_buffer;
 
   // Write any data remaining in the buffer
   if (datacount > 0) {

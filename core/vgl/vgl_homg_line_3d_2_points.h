@@ -15,7 +15,8 @@
 //   Peter Vanroose - 15 July 2002 - Added concurrent(), coplanar() and intersection()
 // \endverbatim
 
-#include <vcl_iosfwd.h>
+#include <vcl_compiler.h>
+#include <iosfwd>
 #include <vgl/vgl_homg_point_3d.h> // data member of this class
 
 //:Represents a homogeneous 3D line using two points
@@ -151,12 +152,12 @@ inline bool concurrent(l const& l1, l const& l2, l const& l3)
 //: Write to stream (verbose)
 // \relatesalso vgl_homg_line_3d_2_points
 template <class Type>
-vcl_ostream &operator<<(vcl_ostream&s, l const& p);
+std::ostream &operator<<(std::ostream&s, l const& p);
 
 //: Read parameters from stream
 // \relatesalso vgl_homg_line_3d_2_points
 template <class Type>
-vcl_istream &operator>>(vcl_istream &is, l &p);
+std::istream &operator>>(std::istream &is, l &p);
 
 #undef l
 

@@ -42,14 +42,14 @@ bool brec_create_mog_image_process_cons(bprb_func_process& pro)
 {
   //inputs
   bool ok=false;
-  vcl_vector<vcl_string> input_types;
+  std::vector<std::string> input_types;
   input_types.push_back("bvxm_voxel_slab_base_sptr");
   input_types.push_back("vcl_string");
   ok = pro.set_input_types(input_types);
   if (!ok) return ok;
 
   //output
-  vcl_vector<vcl_string> output_types;
+  std::vector<std::string> output_types;
   output_types.push_back("bbgm_image_sptr");  // output mog image as a bbgm distribution image
   ok = pro.set_output_types(output_types);
   return ok;
@@ -59,14 +59,14 @@ bool brec_create_mog_image_process(bprb_func_process& pro)
 {
   // Sanity check
   if (pro.n_inputs() < 2) {
-    vcl_cerr << "brec_create_hierarchy_process - invalid inputs\n";
+    std::cerr << "brec_create_hierarchy_process - invalid inputs\n";
     return false;
   }
 
   // get input
   unsigned i = 0;
   bvxm_voxel_slab_base_sptr v_slab = pro.get_input<bvxm_voxel_slab_base_sptr>(i++);
-  vcl_string voxel_type = pro.get_input<vcl_string>(i++);
+  std::string voxel_type = pro.get_input<std::string>(i++);
 
   // turn the bvxm_slab into a bbgm_image_of instance for binary io (i.e. use processes in bbgm_pro)
   bbgm_image_sptr out_img;
@@ -77,12 +77,12 @@ bool brec_create_mog_image_process(bprb_func_process& pro)
   else if (voxel_type == "apm_mog_mc_4_3")
     out_img = create_bbgm_image<APM_MOG_MC_4_3>(v_slab);
   else {
-    vcl_cout << "In brec_create_mog_image_process -- input appearance model: " << voxel_type << " is not supported\n";
+    std::cout << "In brec_create_mog_image_process -- input appearance model: " << voxel_type << " is not supported\n";
     return false;
   }
 
   if (!out_img) {
-    vcl_cout << "In brec_create_mog_image_process - problems in creating mixture of gaussian image!\n";
+    std::cout << "In brec_create_mog_image_process - problems in creating mixture of gaussian image!\n";
     return false;
   }
 

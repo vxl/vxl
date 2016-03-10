@@ -3,8 +3,10 @@
 //:
 // \file
 #include "bvpl_edge2d_functor.h"
-#include <vcl_cmath.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <cmath>
+#include <iostream>
 
 
 // Default constructor
@@ -35,21 +37,21 @@ void bvpl_edge2d_functor<T>::apply(T& val, bvpl_kernel_dispatch& d)
 {
 
   if (d.c_ == 1) {
-    P_ += vcl_log(val);
-    //P_norm += vcl_log(min_P_);
+    P_ += std::log(val);
+    //P_norm += std::log(min_P_);
   }
   else if (d.c_ == -1){
-    P_ += vcl_log(T(1.0)-val);
-    //P_norm += vcl_log(T(1.0) - min_P_);
+    P_ += std::log(T(1.0)-val);
+    //P_norm += std::log(T(1.0) - min_P_);
   }
 
-  //P1_ += vcl_log(val);
-  //P0_ += vcl_log(T(1.0)-val);
-  //P05_ += vcl_log(T(0.5));
+  //P1_ += std::log(val);
+  //P0_ += std::log(T(1.0)-val);
+  //P05_ += std::log(T(0.5));
 
-  //vcl_cerr << val << " and " << int(d.c_) <<" P " <<P_ << " P0 " <<P0_ << " P1 " <<P1_ << vcl_endl ;
-  //P1_norm += vcl_log(min_P_);
-  //P0_norm += vcl_log(T(1.0)-min_P_);
+  //std::cerr << val << " and " << int(d.c_) <<" P " <<P_ << " P0 " <<P0_ << " P1 " <<P1_ << std::endl ;
+  //P1_norm += std::log(min_P_);
+  //P0_norm += std::log(T(1.0)-min_P_);
   n_++;
 }
 
@@ -66,11 +68,11 @@ T bvpl_edge2d_functor<T>::result()
 
   P_/=(T)n_;
   //normalize w.r.t other configurations
-  //T t1 = vcl_exp(P1_ - P_);
-  //T t2 = vcl_exp(P0_ - P_);
-  //T t3 = vcl_exp(P05_ - P_);
+  //T t1 = std::exp(P1_ - P_);
+  //T t2 = std::exp(P0_ - P_);
+  //T t3 = std::exp(P05_ - P_);
 
-  T result = vcl_exp(P_);
+  T result = std::exp(P_);
 
   //reset all variables
   init();

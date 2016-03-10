@@ -12,10 +12,12 @@
 // \endverbatim
 #include "bocl_cl.h"
 #include "bocl_utils.h"
-#include <vcl_string.h>
-#include <vcl_vector.h>
-#include <vcl_cstddef.h> // for std::size_t
-#include <vcl_iosfwd.h>
+#include <string>
+#include <vector>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <cstddef> // for std::size_t
+#include <iosfwd>
 
 //Just in case NVIDIA extensions are not defined
 #ifndef CL_DEVICE_COMPUTE_CAPABILITY_MAJOR_NV
@@ -42,17 +44,17 @@ class bocl_device_info
     cl_device_id* device_;
 
     //: device info
-    vcl_string device_name_;
-    vcl_string device_vendor_;
-    vcl_string extensions_supported_;
-    vcl_string platform_name_;
-    vcl_string platform_version_;
-    vcl_string driver_version_;
+    std::string device_name_;
+    std::string device_vendor_;
+    std::string extensions_supported_;
+    std::string platform_name_;
+    std::string platform_version_;
+    std::string driver_version_;
     cl_device_type device_type_;
     cl_uint addr_bits_;                     //!< Device Address Bits (pointer size)
-    vcl_size_t max_work_group_size_;        //!< Max allowed work-items in a group
+    std::size_t max_work_group_size_;        //!< Max allowed work-items in a group
     cl_uint max_dimensions_;                //!< Max group dimensions allowed
-    vcl_size_t max_work_item_sizes_[3];      //!< Max work-items sizes in each dimension
+    std::size_t max_work_item_sizes_[3];      //!< Max work-items sizes in each dimension
     cl_ulong max_mem_alloc_size_;           //!< Max memory alloc size for a buffer
     cl_ulong max_parameter_size_;           //!< Max buffer size that can be passed to a kernel
     cl_ulong total_local_memory_;           //!< Max local memory allowed
@@ -62,11 +64,11 @@ class bocl_device_info
     cl_uint vector_width_float_;            //!< Ideal float vector size
     cl_uint max_clock_freq_;                //!< Maximum clock frequency
     cl_bool image_support_;                 //!< image support
-    vcl_size_t image2d_max_width_;          //!< Image2d Max Width
-    vcl_size_t image2d_max_height_;         //!< Image2d Max Height
-    vcl_size_t image3d_max_width_;          //!< Image3d Max Width
-    vcl_size_t image3d_max_height_;         //!< Image3d Max Height
-    vcl_size_t image3d_max_depth_;          //!< Image3d Max Depth
+    std::size_t image2d_max_width_;          //!< Image2d Max Width
+    std::size_t image2d_max_height_;         //!< Image2d Max Height
+    std::size_t image3d_max_width_;          //!< Image3d Max Width
+    std::size_t image3d_max_height_;         //!< Image3d Max Height
+    std::size_t image3d_max_depth_;          //!< Image3d Max Depth
 
 
     //NVIDIA Specific Properties
@@ -81,6 +83,6 @@ class bocl_device_info
 };
 
 //:  output stream
-vcl_ostream& operator <<(vcl_ostream &s, bocl_device_info& info);
+std::ostream& operator <<(std::ostream &s, bocl_device_info& info);
 
 #endif

@@ -4,8 +4,9 @@
 // \author Peter Vanroose
 // \date   March 2003
 
-#include <vcl_cstdlib.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <cstdlib>
+#include <iostream>
 #include <vil/vil_load.h>
 #include <vil/vil_image_view.h>
 #include <vgui/vgui.h>
@@ -35,7 +36,7 @@ class example_flim_tableau : public vgui_tableau
     else
       return false;
   }
-  vcl_string type_name() const { return "example_flim_tableau"; }
+  std::string type_name() const { return "example_flim_tableau"; }
 };
 
 typedef vgui_tableau_sptr_t<example_flim_tableau> example_flim_tableau_sptr;
@@ -53,14 +54,14 @@ int main (int argc, char** argv)
   vgui::init(argc, argv);
 
   if (argc < 2) {
-    vcl_cerr << __FILE__ " : image_file argument required\n";
-    vcl_abort();
+    std::cerr << __FILE__ " : image_file argument required\n";
+    std::abort();
   }
 
   vil_image_view<vxl_byte> img = vil_load(argv[1]);
   if (!img) {
-    vcl_cerr << __FILE__ " : cannot load image from " << argv[1] << '\n';
-    vcl_abort();
+    std::cerr << __FILE__ " : cannot load image from " << argv[1] << '\n';
+    std::abort();
   }
 
   vgui_image_tableau_new img_tab(img);
@@ -80,7 +81,7 @@ int main (int argc, char** argv)
 
   main_window->get_statusbar()->write("statusbar-text");
 
-  vgui_text_graph(vcl_cerr);
+  vgui_text_graph(std::cerr);
 
   return vgui::run();
 }

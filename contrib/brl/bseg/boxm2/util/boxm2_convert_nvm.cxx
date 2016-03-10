@@ -15,9 +15,9 @@
 
 //: Main boxm2_convert_nvm function
 //  Takes in bundle.out file and image directory that created img_dir
-void boxm2_util_convert_nvm(vcl_string nvm_file,
-                            vcl_string img_dir,
-                            vcl_map<vcl_string, vpgl_perspective_camera<double>* >& cams,vcl_vector<vgl_point_3d<double> >  & pts,
+void boxm2_util_convert_nvm(std::string nvm_file,
+                            std::string img_dir,
+                            std::map<std::string, vpgl_perspective_camera<double>* >& cams,std::vector<vgl_point_3d<double> >  & pts,
                             vgl_box_3d<double>& bbox,
                             double& resolution,bool axis_align)
 {
@@ -28,13 +28,13 @@ void boxm2_util_convert_nvm(vcl_string nvm_file,
 
     pts = b2s.get_points();
 
-    vcl_cout<<"# of pts "<<pts.size()<<vcl_endl;
+    std::cout<<"# of pts "<<pts.size()<<std::endl;
 
 
 }
 
 // reads bundler file and populates list of cameras, and a scene bounding box
-boxm2_convert_nvm::boxm2_convert_nvm(vcl_string nvm_file, vcl_string img_dir,bool axis_align)
+boxm2_convert_nvm::boxm2_convert_nvm(std::string nvm_file, std::string img_dir,bool axis_align)
 {
     img_dir_ = img_dir;
     nvm_file_ = nvm_file;
@@ -42,13 +42,13 @@ boxm2_convert_nvm::boxm2_convert_nvm(vcl_string nvm_file, vcl_string img_dir,boo
     // verify image dir
     if (!vul_file::is_directory(img_dir.c_str()))
     {
-        vcl_cout<<"boxm2_convert_nvm::Image directory does not exist"<<vcl_endl;
+        std::cout<<"boxm2_convert_nvm::Image directory does not exist"<<std::endl;
         return;
     }
     vidl_image_list_istream imgstream(img_dir+"/*");
     if (!imgstream.is_open())
     {
-        vcl_cout<<"boxm2_convert_nvm::Invalid image stream"<<vcl_endl;
+        std::cout<<"boxm2_convert_nvm::Invalid image stream"<<std::endl;
         return;
     }
 
@@ -58,18 +58,18 @@ boxm2_convert_nvm::boxm2_convert_nvm(vcl_string nvm_file, vcl_string img_dir,boo
 
     // central point of the image
     vgl_point_2d<double> ppoint((double)ni/2,(double)nj/2);
-    vcl_cout<<"principal point for cams: "<<ppoint<<vcl_endl;
+    std::cout<<"principal point for cams: "<<ppoint<<std::endl;
 
     // open the bundler file
-    vcl_ifstream bfile( nvm_file.c_str() );
+    std::ifstream bfile( nvm_file.c_str() );
     if (!bfile)
     {
-        vcl_cout<<"boxm2_convert_nvm::Error Opening Bundler output file"<<vcl_endl;
+        std::cout<<"boxm2_convert_nvm::Error Opening Bundler output file"<<std::endl;
         return;
     }
     this->read_cameras(bfile, ppoint);
     this->read_points(bfile, ppoint);
-    vcl_cout<<"NVM file out projection error:"<<vcl_endl;
+    std::cout<<"NVM file out projection error:"<<std::endl;
     boxm2_point_util::calc_projection_error(cams_, bad_cams_, corrs_, view_error_map_, view_count_map_);
 
     //--------------------------------------------------------------------------
@@ -90,19 +90,19 @@ boxm2_convert_nvm::boxm2_convert_nvm(vcl_string nvm_file, vcl_string img_dir,boo
     // Filter out the cams with very high error
     //------------------------------------------------------------------------
     boxm2_point_util::report_error(view_error_map_, view_count_map_, bad_cams_, 7.5f);
-    vcl_cout<<"Num bad cams: "<<bad_cams_.size()<<vcl_endl;
+    std::cout<<"Num bad cams: "<<bad_cams_.size()<<std::endl;
 
     //------------------------------------------------------------------------
     // Save camera and corresponding image file
     //------------------------------------------------------------------------
     for (unsigned i = 0; i < cams_.size(); ++i) {
         if ( !bad_cams_.count(i) ) {
-            vcl_string path = img_dir + "/" + names_[i]; // was: +vul_file::strip_extension(names_[i])+".png";
-            // was: imgstream.seek_frame(i); vcl_string path = imgstream.current_path();
+            std::string path = img_dir + "/" + names_[i]; // was: +vul_file::strip_extension(names_[i])+".png";
+            // was: imgstream.seek_frame(i); std::string path = imgstream.current_path();
             CamType* cam = new CamType(cams_[i]);
             final_cams_[path] = cam;
 #ifdef DEBUG
-            vcl_cout<<"Final cam: "<<path<<vcl_endl;
+            std::cout<<"Final cam: "<<path<<std::endl;
 #endif
         }
     }//end camera write
@@ -120,11 +120,11 @@ boxm2_convert_nvm::boxm2_convert_nvm(vcl_string nvm_file, vcl_string img_dir,boo
     }
 
     // Dimensions of the World
-    vcl_cout<<"Full Point Bounding Box "<<bounding_box<<vcl_endl;
+    std::cout<<"Full Point Bounding Box "<<bounding_box<<std::endl;
     vgl_point_3d<double> c = centre(pts_3d_);
-    vcl_cout<<"Center of Gravity "<< c <<vcl_endl;
+    std::cout<<"Center of Gravity "<< c <<std::endl;
     vnl_double_3 sigma = boxm2_point_util::stddev(pts_3d_);
-    vcl_cout<<"Point stddev "<< sigma <<vcl_endl;
+    std::cout<<"Point stddev "<< sigma <<std::endl;
 
     //--------------------------------------------------------------------------
     // Define dimensions to be used for a boxm scene
@@ -141,7 +141,7 @@ boxm2_convert_nvm::boxm2_convert_nvm(vcl_string nvm_file, vcl_string img_dir,boo
     int good_cam = 0;
     while ( bad_cams_.count(good_cam) > 0 ) good_cam++;
 #ifdef DEBUG
-    vcl_cout<<"Determining resolution of cells with cam: "<< good_cam << vcl_endl;
+    std::cout<<"Determining resolution of cells with cam: "<< good_cam << std::endl;
 #endif
 
     vgl_ray_3d<double> cone_axis;
@@ -150,22 +150,22 @@ boxm2_convert_nvm::boxm2_convert_nvm(vcl_string nvm_file, vcl_string img_dir,boo
     vgl_point_3d<double> cc = cams_[good_cam].camera_center();
     resolution_ = (cc-centre(pts_3d_)).length()*cone_half_angle/4;
 #ifdef DEBUG
-    vcl_cout<<"Resolution     "<<resolution_<<vcl_endl;
+    std::cout<<"Resolution     "<<resolution_<<std::endl;
 #endif
 }
 
 //------------------------------------------------------------------------
 // reading the cameras from nvm file
 //------------------------------------------------------------------------
-bool boxm2_convert_nvm::read_cameras(vcl_ifstream& in, vgl_point_2d<double> ppoint)
+bool boxm2_convert_nvm::read_cameras(std::ifstream& in, vgl_point_2d<double> ppoint)
 {
     int rotation_parameter_num = 4;
-    vcl_string token;
+    std::string token;
     bool format_r9t = false;
     if (in.peek() == 'N')
     {
-        vcl_getline(in, token); // was: in >> token; //file header
-        if (vcl_strstr(token.c_str(), "R9T"))
+        std::getline(in, token); // was: in >> token; //file header
+        if (std::strstr(token.c_str(), "R9T"))
         {
             rotation_parameter_num = 9;  //rotation as 3x3 matrix
             format_r9t = true;
@@ -176,10 +176,10 @@ bool boxm2_convert_nvm::read_cameras(vcl_ifstream& in, vgl_point_2d<double> ppoi
     int ncam = 0;
     in >> ncam;
     if (ncam <= 1) {
-        vcl_cout<<"Found fewer than 1 camera in NVM file (" << ncam<<')' <<vcl_endl;
+        std::cout<<"Found fewer than 1 camera in NVM file (" << ncam<<')' <<std::endl;
         return false;
     }
-    vcl_cout<<"Found "<<ncam<<" cameras in nvm file"<<vcl_endl;
+    std::cout<<"Found "<<ncam<<" cameras in nvm file"<<std::endl;
 
     //read the camera parameters
     cams_.resize(ncam); // allocate the camera data
@@ -219,11 +219,11 @@ bool boxm2_convert_nvm::read_cameras(vcl_ifstream& in, vgl_point_2d<double> ppoi
         }
 
         //scrub name
-        vcl_size_t found = 0;
-        while ( (found=token.find("\\")) != vcl_string::npos )
+        std::size_t found = 0;
+        while ( (found=token.find("\\")) != std::string::npos )
             token.replace(found, 1, "/");
 #ifdef DEBUG
-        vcl_cout<<"Scrubbed filename: "<<token<<vcl_endl;
+        std::cout<<"Scrubbed filename: "<<token<<std::endl;
 #endif
         names_[i] = vul_file::strip_directory(token);
     }
@@ -233,15 +233,15 @@ bool boxm2_convert_nvm::read_cameras(vcl_ifstream& in, vgl_point_2d<double> ppoi
 //------------------------------------------------------------------------
 // Read points into vector of bwm_video_corr_sptrs
 //------------------------------------------------------------------------
-bool boxm2_convert_nvm::read_points(vcl_ifstream& in, vgl_point_2d<double> ppoint)
+bool boxm2_convert_nvm::read_points(std::ifstream& in, vgl_point_2d<double> ppoint)
 {
     int npoint;
     in >> npoint;
     if (npoint <= 0) {
-        vcl_cout<<"Found 0 points in nvm file, exiting"<<vcl_endl;
+        std::cout<<"Found 0 points in nvm file, exiting"<<std::endl;
         return false;
     }
-    vcl_cout<<"Found "<<npoint<<" points in nvm file."<<vcl_endl;
+    std::cout<<"Found "<<npoint<<" points in nvm file."<<std::endl;
 
     //read image projections and 3D points.
     for (int i = 0; i < npoint; ++i)

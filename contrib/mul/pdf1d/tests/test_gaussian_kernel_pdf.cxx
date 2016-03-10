@@ -5,7 +5,9 @@
 // \author Ian Scott
 // \brief test pdf1d_gaussian_kernel_pdf, building, sampling, saving etc.
 
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iostream>
 #include <vpl/vpl.h> // vpl_unlink()
 #include <vsl/vsl_binary_loader.h>
 #include <mbl/mbl_data_array_wrapper.h>
@@ -30,7 +32,7 @@ class pdf1d_test_gaussian_kernel_pdf_test_sample_inverse_cdf : public pdf1d_gaus
 //: Generate lots of samples using pdf, build new pdf with builder and compare the two
 void test_gaussian_kernel_pdf()
 {
-  vcl_cout << "***********************************\n"
+  std::cout << "***********************************\n"
            << " Testing pdf1d_gaussian_kernel_pdf\n"
            << "***********************************\n";
 
@@ -47,7 +49,7 @@ void test_gaussian_kernel_pdf()
   pdf1d_sampler* datagen_samp = datagen.new_sampler();
 
 // Generate lots of samples
-  vcl_vector<double> data(n_samples);
+  std::vector<double> data(n_samples);
   for (int i=0;i<n_samples;++i)
     data[i] = datagen_samp->sample();
 
@@ -61,10 +63,10 @@ void test_gaussian_kernel_pdf()
 
   pdf1d_sampler *p_sampler = p_pdf_built->new_sampler();
 
-  vcl_cout<<"Original PDF: "; vsl_print_summary(vcl_cout, datagen);
-  vcl_cout<<"\nRebuilt PDF: "; vsl_print_summary(vcl_cout, p_pdf_built);
-  vcl_cout<<"\n\nPDF sampler: "; vsl_print_summary(vcl_cout, p_sampler);
-  vcl_cout<<'\n';
+  std::cout<<"Original PDF: "; vsl_print_summary(std::cout, datagen);
+  std::cout<<"\nRebuilt PDF: "; vsl_print_summary(std::cout, p_pdf_built);
+  std::cout<<"\n\nPDF sampler: "; vsl_print_summary(std::cout, p_sampler);
+  std::cout<<'\n';
 
 // Test the IO ================================================
 
@@ -73,7 +75,7 @@ void test_gaussian_kernel_pdf()
   TEST_NEAR("Mean of built model",datagen.mean(),p_pdf_built->mean(),0.1);
   TEST_NEAR("Variances",datagen.variance(),p_pdf_built->variance(),0.1);
 
-  vcl_cout<<"\n\n=================Testing I/O:\nSaving data...\n";
+  std::cout<<"\n\n=================Testing I/O:\nSaving data...\n";
   vsl_b_ofstream bfs_out("test_gaussian_kernel_pdf.bvl.tmp");
   TEST("Created test_gaussian_kernel_pdf.bvl.tmp for writing", (!bfs_out), false);
 
@@ -98,11 +100,11 @@ void test_gaussian_kernel_pdf()
   vpl_unlink("test_gaussian_kernel_pdf.bvl.tmp");
 #endif
 
-  vcl_cout<<"Original PDF: "; vsl_print_summary(vcl_cout, p_pdf_built);
-  vcl_cout<<"\nOriginal builder: "; vsl_print_summary(vcl_cout, builder);
-  vcl_cout<<"\n\nLoaded PDF: "; vsl_print_summary(vcl_cout, p_pdf_in);
-  vcl_cout<<"\nLoaded builder: "; vsl_print_summary(vcl_cout, builder_in);
-  vcl_cout<<"\n\n";
+  std::cout<<"Original PDF: "; vsl_print_summary(std::cout, p_pdf_built);
+  std::cout<<"\nOriginal builder: "; vsl_print_summary(std::cout, builder);
+  std::cout<<"\n\nLoaded PDF: "; vsl_print_summary(std::cout, p_pdf_in);
+  std::cout<<"\nLoaded builder: "; vsl_print_summary(std::cout, builder_in);
+  std::cout<<"\n\n";
 
   TEST("Original Model == model loaded by base ptr",
        p_pdf_built->mean()==p_pdf_in->mean() &&
@@ -119,7 +121,7 @@ void test_gaussian_kernel_pdf()
        builder.is_class(p_builder_in->is_a()),
        true);
 
-  vcl_cout << "\n\n========Testing PDF Thresholds==========\n";
+  std::cout << "\n\n========Testing PDF Thresholds==========\n";
   pdf1d_sampler *p_sampler2 = p_pdf_built->new_sampler();
   unsigned pass, fail, sample_pass, sample_fail;
   double thresh, sample_thresh;
@@ -132,9 +134,9 @@ void test_gaussian_kernel_pdf()
 
   pass=0; fail=0; sample_pass=0; sample_fail=0;
   thresh = p_pdf_built->inverse_cdf(0.9);
-  vcl_cout << "\nSample value threshold for passing 90%:                   " << thresh;
+  std::cout << "\nSample value threshold for passing 90%:                   " << thresh;
   sample_thresh  = test_sample_inverse_cdf.pdf1d_pdf::inverse_cdf(0.9);
-  vcl_cout << "\nThreshold calculated using sample method for passing 90%: " << sample_thresh << vcl_endl;
+  std::cout << "\nThreshold calculated using sample method for passing 90%: " << sample_thresh << std::endl;
   for (unsigned i=0; i < 1000; i++)
   {
     double x = p_sampler2->sample();
@@ -143,19 +145,19 @@ void test_gaussian_kernel_pdf()
     if (x < sample_thresh) sample_pass ++;
     else sample_fail ++;
   }
-  vcl_cout << "In a sample of 1000 vectors " << pass << " passed and "
+  std::cout << "In a sample of 1000 vectors " << pass << " passed and "
            << fail <<  " failed using normal method.\n";
   TEST("880 < pass < 920", pass > 880 && pass < 920, true);
-  vcl_cout << "In a sample of 1000 vectors " << sample_pass << " passed and "
+  std::cout << "In a sample of 1000 vectors " << sample_pass << " passed and "
            << sample_fail <<  " failed using sample method.\n";
   TEST("860 < pass < 930", sample_pass > 880 && sample_pass < 920, true);
 
 
   pass=0; fail=0; sample_pass=0; sample_fail=0;
   thresh = p_pdf_built->inverse_cdf(0.1);
-  vcl_cout << "\nSample value threshold for passing 10%:                   " << thresh;
+  std::cout << "\nSample value threshold for passing 10%:                   " << thresh;
   sample_thresh  = test_sample_inverse_cdf.pdf1d_pdf::inverse_cdf(0.1);
-  vcl_cout << "\nThreshold calculated using sample method for passing 10%: " << sample_thresh << vcl_endl;
+  std::cout << "\nThreshold calculated using sample method for passing 10%: " << sample_thresh << std::endl;
   for (unsigned i=0; i < 1000; i++)
   {
     double x = p_sampler2->sample();
@@ -164,17 +166,17 @@ void test_gaussian_kernel_pdf()
     if (x < sample_thresh) sample_pass ++;
     else sample_fail ++;
   }
-  vcl_cout << "In a sample of 1000 vectors " << pass << " passed and "
+  std::cout << "In a sample of 1000 vectors " << pass << " passed and "
            << fail <<  " failed using normal method.\n";
   TEST("80 < pass < 120", pass > 80 && pass < 120, true);
-  vcl_cout << "In a sample of 1000 vectors " << sample_pass << " passed and "
+  std::cout << "In a sample of 1000 vectors " << sample_pass << " passed and "
            << sample_fail <<  " failed using sample method.\n";
   TEST("80 < pass < 120", sample_pass > 60 && sample_pass < 140, true);
 
 
   pass=0, fail=0;
   thresh = p_pdf_built->log_prob_thresh(0.9);
-  vcl_cout << "\nlog density threshold for passing 90%: " << thresh << vcl_endl;
+  std::cout << "\nlog density threshold for passing 90%: " << thresh << std::endl;
   for (unsigned i=0; i < 1000; i++)
   {
     double x = p_sampler2->sample();
@@ -183,12 +185,12 @@ void test_gaussian_kernel_pdf()
     else
       fail ++;
   }
-  vcl_cout << "In a sample of 1000 vectors " << pass << " passed and " << fail <<  " failed.\n";
+  std::cout << "In a sample of 1000 vectors " << pass << " passed and " << fail <<  " failed.\n";
   TEST("880 < pass < 920", pass > 880 && pass < 920, true);
 
   pass=0; fail=0;
   thresh = p_pdf_built->log_prob_thresh(0.1);
-  vcl_cout <<  "\nlog density threshold for passing 10%: " << thresh << vcl_endl;
+  std::cout <<  "\nlog density threshold for passing 10%: " << thresh << std::endl;
   for (unsigned i=0; i < 1000; i++)
   {
     double x = p_sampler2->sample();
@@ -197,7 +199,7 @@ void test_gaussian_kernel_pdf()
     else
       fail ++;
   }
-  vcl_cout << "In a sample of 1000 vectors " << pass << " passed and " << fail <<  " failed.\n";
+  std::cout << "In a sample of 1000 vectors " << pass << " passed and " << fail <<  " failed.\n";
   TEST("70 < pass < 130", pass > 70 && pass < 130, true);
 
   delete p_sampler2;

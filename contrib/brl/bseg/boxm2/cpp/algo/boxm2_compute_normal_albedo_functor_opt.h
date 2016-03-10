@@ -8,7 +8,9 @@
 #include <boxm2/boxm2_data.h>
 #include <boxm2/basic/boxm2_block_id.h>
 #include <boxm2/io/boxm2_stream_cache.h>
-#include <vcl_vector.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <vector>
 #include <vnl/vnl_cost_function.h>
 
 #include <brad/brad_image_metadata.h>
@@ -17,12 +19,12 @@
 class boxm2_compute_normal_albedo_cost_function : public vnl_cost_function
 {
  public:
-   boxm2_compute_normal_albedo_cost_function(vcl_vector<double> const& radiances,
-                                             vcl_vector<double> const& visibilities,
-                                             vcl_vector<double> const& radiance_scales,
-                                             vcl_vector<double> const& radiance_offsets,
-                                             vcl_vector<double> const& radiance_var_scales,
-                                             vcl_vector<double> const& radiance_var_offsets)
+   boxm2_compute_normal_albedo_cost_function(std::vector<double> const& radiances,
+                                             std::vector<double> const& visibilities,
+                                             std::vector<double> const& radiance_scales,
+                                             std::vector<double> const& radiance_offsets,
+                                             std::vector<double> const& radiance_var_scales,
+                                             std::vector<double> const& radiance_var_offsets)
    : vnl_cost_function(1),
      num_images_(radiances.size()),
      radiances_(radiances),
@@ -39,16 +41,16 @@ class boxm2_compute_normal_albedo_cost_function : public vnl_cost_function
  private:
   unsigned int num_images_;
 
-  vcl_vector<double> const& radiances_;
-  vcl_vector<double> const& visibilities_;
+  std::vector<double> const& radiances_;
+  std::vector<double> const& visibilities_;
 
   // cache scale and offset values for expected radiance and expected radiance variance
   // expected radiance = scale * reflectance + offset
-  vcl_vector<double> const& radiance_scales_;
-  vcl_vector<double> const& radiance_offsets_;
+  std::vector<double> const& radiance_scales_;
+  std::vector<double> const& radiance_offsets_;
   // radiance variance = scale*reflectance*reflectance + offset
-  vcl_vector<double> const& radiance_var_scales_;
-  vcl_vector<double> const& radiance_var_offsets_;
+  std::vector<double> const& radiance_var_scales_;
+  std::vector<double> const& radiance_var_offsets_;
 };
 
 
@@ -65,8 +67,8 @@ class boxm2_compute_normal_albedo_functor_opt
   //: standard constructor
   boxm2_compute_normal_albedo_functor_opt(bool update_alpha)  : update_alpha_(update_alpha) {}
 
-  bool init_data(vcl_vector<brad_image_metadata> const& metadata,
-                 vcl_vector<brad_atmospheric_parameters> const& atm_params,
+  bool init_data(std::vector<brad_image_metadata> const& metadata,
+                 std::vector<brad_atmospheric_parameters> const& atm_params,
                  boxm2_stream_cache_sptr str_cache,
                  boxm2_data_base * alpha_data,
                  boxm2_data_base * normal_albedo_model);
@@ -79,8 +81,8 @@ class boxm2_compute_normal_albedo_functor_opt
 
   boxm2_stream_cache_sptr str_cache_;
   boxm2_block_id id_;
-  vcl_vector<brad_image_metadata> metadata_;
-  vcl_vector<brad_atmospheric_parameters> atm_params_;
+  std::vector<brad_image_metadata> metadata_;
+  std::vector<brad_atmospheric_parameters> atm_params_;
 
   unsigned int num_normals_;
   unsigned int num_images_;
@@ -88,11 +90,11 @@ class boxm2_compute_normal_albedo_functor_opt
 
   // cache scale and offset values for expected radiance, and expected radiance variance
   // expected radiance = scale * reflectance + offset
-  vcl_vector<vcl_vector<double> > radiance_scales_;
-  vcl_vector<vcl_vector<double> > radiance_offsets_;
+  std::vector<std::vector<double> > radiance_scales_;
+  std::vector<std::vector<double> > radiance_offsets_;
   // radiance variance = scale*reflectance*reflectance + offset
-  vcl_vector<vcl_vector<double> > radiance_var_scales_;
-  vcl_vector<vcl_vector<double> > radiance_var_offsets_;
+  std::vector<std::vector<double> > radiance_var_scales_;
+  std::vector<std::vector<double> > radiance_var_offsets_;
 };
 
 #endif // boxm2_compute_normal_albedo_functor_opt_h_

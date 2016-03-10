@@ -4,7 +4,9 @@
 //  \file
 
 #include <vcl_cassert.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iostream>
 #include <vnl/vnl_vector.h>
 
 rsdl_point::rsdl_point( )
@@ -132,21 +134,21 @@ rsdl_point::resize( unsigned int Nc, unsigned int Na )
   }
 }
 
-vcl_ostream& operator<< ( vcl_ostream& ostr, const rsdl_point& pt )
+std::ostream& operator<< ( std::ostream& ostr, const rsdl_point& pt )
 {
   int Nc = pt.num_cartesian();
   int Na = pt.num_angular();
   int i;
-  vcl_cout << "Cartesian: [";
+  std::cout << "Cartesian: [";
   for ( i=0; i<Nc; ++i ) {
-    vcl_cout << pt.cartesian(i);
-    if ( i<Nc-1 ) vcl_cout << ",";
+    std::cout << pt.cartesian(i);
+    if ( i<Nc-1 ) std::cout << ",";
   }
-  vcl_cout << "];  Angular: [";
+  std::cout << "];  Angular: [";
   for ( i=0; i<Na; ++i ) {
-    vcl_cout << pt.angular(i);
-    if ( i<Na-1 ) vcl_cout << ",";
+    std::cout << pt.angular(i);
+    if ( i<Na-1 ) std::cout << ",";
   }
-  vcl_cout << "]";
+  std::cout << "]";
   return ostr;
 }

@@ -1,6 +1,7 @@
 // This is core/vil/algo/tests/test_algo_gauss_reduce.cxx
 #include <testlib/testlib_test.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <iostream>
 #include <vxl_config.h> // for vxl_byte
 #include <vnl/vnl_math.h>
 #include <vil/vil_print.h>
@@ -12,16 +13,16 @@ inline void print_out(vil_image_view<T> const& orig,
                       const char* msg,
                       vil_image_view<T> const& modif)
 {
-  vcl_cout << "Original: ";
-  vil_print_all(vcl_cout,orig);
-  vcl_cout << '\n' << msg << " : ";
-  vil_print_all(vcl_cout,modif);
-  vcl_cout << '\n';
+  std::cout << "Original: ";
+  vil_print_all(std::cout,orig);
+  std::cout << '\n' << msg << " : ";
+  vil_print_all(std::cout,modif);
+  std::cout << '\n';
 }
 
 static void test_algo_gauss_reduce_byte(unsigned nx)
 {
-  vcl_cout << "*********************************************\n"
+  std::cout << "*********************************************\n"
            << " Testing vil_algo_gauss_reduce (byte) (nx="<<nx<<")\n"
            << "*********************************************\n";
 
@@ -76,7 +77,7 @@ static void test_algo_gauss_reduce_byte(unsigned nx)
 
 static void test_algo_gauss_reduce_int_32(unsigned nx)
 {
-  vcl_cout << "***********************************************\n"
+  std::cout << "***********************************************\n"
            << " Testing vil_algo_gauss_reduce (int_32) (nx="<<nx<<")\n"
            << "***********************************************\n";
 
@@ -131,7 +132,7 @@ static void test_algo_gauss_reduce_int_32(unsigned nx)
 
 static void test_algo_gauss_reduce_uint_16(unsigned nx)
 {
-  vcl_cout << "************************************************\n"
+  std::cout << "************************************************\n"
            << " Testing vil_algo_gauss_reduce (uint_16) (nx="<<nx<<")\n"
            << "************************************************\n";
 
@@ -204,7 +205,7 @@ static void test_algo_gauss_reduce_uint_16(unsigned nx)
 
 static void test_algo_gauss_reduce_float(unsigned int nx)
 {
-  vcl_cout << "**********************************************\n"
+  std::cout << "**********************************************\n"
            << " Testing vil_algo_gauss_reduce (float) (nx="<<nx<<")\n"
            << "**********************************************\n";
 
@@ -240,7 +241,7 @@ static void test_algo_gauss_reduce_float(unsigned int nx)
 
 static void test_algo_gauss_reduce_121_byte(unsigned nx, unsigned ny)
 {
-  vcl_cout << "*******************************************************\n"
+  std::cout << "*******************************************************\n"
            << " Testing vil_algo_gauss_reduce_121 (byte) (nx="<<nx<<", ny="<<ny<<")\n"
            << "*******************************************************\n";
 
@@ -280,13 +281,13 @@ static void test_algo_gauss_reduce_121_byte(unsigned nx, unsigned ny)
                               image0.istep(),image0.jstep(),
                               test2.top_left_ptr(),test2.istep(),test2.jstep());
   TEST("Smoothing correct", test2(1,1), 17);
-  vcl_cout << "Value at (1,1):" << int(test2(1,1)) << '\n';
+  std::cout << "Value at (1,1):" << int(test2(1,1)) << '\n';
 }
 
 
 static void test_algo_gauss_reduce_121_int_32(unsigned nx, unsigned ny)
 {
-  vcl_cout << "********************************************************\n"
+  std::cout << "********************************************************\n"
            << " Testing vil_algo_gauss_reduce_121 (int32) (nx="<<nx<<", ny="<<ny<<")\n"
            << "********************************************************\n";
 
@@ -326,12 +327,12 @@ static void test_algo_gauss_reduce_121_int_32(unsigned nx, unsigned ny)
                               image0.istep(),image0.jstep(),
                               test2.top_left_ptr(),test2.istep(),test2.jstep());
   TEST("Smoothing correct", test2(1,1), 17);
-  vcl_cout << "Value at (1,1):" << int(test2(1,1)) << '\n';
+  std::cout << "Value at (1,1):" << int(test2(1,1)) << '\n';
 }
 
 static void test_algo_gauss_reduce_121_uint_16(unsigned nx, unsigned ny)
 {
-  vcl_cout << "**********************************************************\n"
+  std::cout << "**********************************************************\n"
            << " Testing vil_algo_gauss_reduce_121 (uint_16) (nx="<<nx<<", ny="<<ny<<")\n"
            << "**********************************************************\n";
 
@@ -372,13 +373,13 @@ static void test_algo_gauss_reduce_121_uint_16(unsigned nx, unsigned ny)
                               image0.istep(),image0.jstep(),
                               test2.top_left_ptr(),test2.istep(),test2.jstep());
   TEST("Smoothing correct", test2(1,1), 32000);
-  vcl_cout << "Value at (1,1):" << int(test2(1,1)) << '\n';
+  std::cout << "Value at (1,1):" << int(test2(1,1)) << '\n';
 }
 
 
 static void test_algo_gauss_reduce_121_float(unsigned nx, unsigned ny)
 {
-  vcl_cout << "********************************************************\n"
+  std::cout << "********************************************************\n"
            << " Testing vil_algo_gauss_reduce_121 (float) (nx="<<nx<<", ny="<<ny<<")\n"
            << "********************************************************\n";
 
@@ -418,12 +419,12 @@ static void test_algo_gauss_reduce_121_float(unsigned nx, unsigned ny)
                               image0.istep(),image0.jstep(),
                               test2.top_left_ptr(),test2.istep(),test2.jstep());
   TEST_NEAR("Smoothing correct", test2(1,1), 1.7f, 1e-6);
-  vcl_cout << "Value at (1,1):" << float(test2(1,1)) << '\n';
+  std::cout << "Value at (1,1):" << float(test2(1,1)) << '\n';
 }
 
 static void test_algo_gauss_reduce_121_byte_multiplane(unsigned nx, unsigned ny, unsigned np)
 {
-  vcl_cout << "*************************************************************\n"
+  std::cout << "*************************************************************\n"
            << " Testing vil_algo_gauss_reduce_121 (byte) (nx="<<nx
            <<", ny="<<ny<<", np="<<np<<")\n"
            << "*************************************************************\n";
@@ -439,7 +440,7 @@ static void test_algo_gauss_reduce_121_byte_multiplane(unsigned nx, unsigned ny,
   print_out(image0,"reduced_x",reduced_x);                              \
                                                                         \
   for ( unsigned p = 0; p < np; ++p ) {                                 \
-    vcl_cout << "Test plane " << p << '\n';                             \
+    std::cout << "Test plane " << p << '\n';                             \
     TEST("First element",reduced_x(0,1,p),image0(0,2,p));               \
     TEST("Next element",reduced_x(1,1,p),image0(2,2,p));                \
     unsigned Lx = (nx+1)/2;                                             \
@@ -449,7 +450,7 @@ static void test_algo_gauss_reduce_121_byte_multiplane(unsigned nx, unsigned ny,
   } // end macro TEST_BODY
 
   {
-    vcl_cout << "Src planar, dest planar\n";
+    std::cout << "Src planar, dest planar\n";
     vil_image_view<vxl_byte> image0;
     image0.set_size(nx,ny,np);
     vil_image_view<vxl_byte> reduced_x;
@@ -461,7 +462,7 @@ static void test_algo_gauss_reduce_121_byte_multiplane(unsigned nx, unsigned ny,
 
 static void test_algo_gauss_reduce_2_3_float(unsigned nx, unsigned ny)
 {
-  vcl_cout << "********************************************************\n"
+  std::cout << "********************************************************\n"
            << " Testing vil_algo_gauss_reduce_2_3 (float) (nx="<<nx<<", ny="<<ny<<")\n"
            << "********************************************************\n";
 
@@ -490,7 +491,7 @@ static void test_algo_gauss_reduce_2_3_float(unsigned nx, unsigned ny)
 
 static void test_algo_gauss_reduce_byte_2d()
 {
-  vcl_cout << "*************************\n"
+  std::cout << "*************************\n"
            << " Testing reduction in 2D\n"
            << "*************************\n";
 
@@ -517,7 +518,7 @@ static void test_algo_gauss_reduce_byte_2d()
 
 static void test_algo_gauss_reduce_byte_3planes()
 {
-  vcl_cout << "*************************************\n"
+  std::cout << "*************************************\n"
            << " Testing reduction in 3-plane images\n"
            << "*************************************\n";
 
@@ -552,7 +553,7 @@ static void test_algo_gauss_reduce_byte_3planes()
 
 static void test_algo_gauss_reduce_2_3_byte_2d()
 {
-  vcl_cout << "*****************************\n"
+  std::cout << "*****************************\n"
            << " Testing 2/3 reduction in 2D\n"
            << "*****************************\n";
 

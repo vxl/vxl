@@ -16,7 +16,9 @@
 #include <vnl/vnl_double_3.h>
 #include <vnl/vnl_double_3x3.h>
 
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iostream>
 #include <vsl/vsl_binary_io.h>
 
 
@@ -43,7 +45,7 @@ public:
   vnl_double_3x3 H;
 };
 
-vcl_ostream& operator << (vcl_ostream& os, const bvpl_taylor_basis2_sample& sample);
+std::ostream& operator << (std::ostream& os, const bvpl_taylor_basis2_sample& sample);
 
 void vsl_b_write(vsl_b_ostream & os, bvpl_taylor_basis2_sample const &sample);
 

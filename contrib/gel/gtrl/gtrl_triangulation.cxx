@@ -40,7 +40,7 @@ void gtrl_triangulation::run()
   //   like starting at 0
   const int offset = 100;
 
-  vcl_vector<gtrl_vertex_sptr> pointlist;
+  std::vector<gtrl_vertex_sptr> pointlist;
 
   for (int i=0; i< poly_.size(); i++)
     {

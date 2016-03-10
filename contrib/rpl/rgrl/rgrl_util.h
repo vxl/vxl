@@ -13,8 +13,10 @@
 #include <rgrl/rgrl_mask_sptr.h>
 
 #include <vnl/vnl_vector.h>
-#include <vcl_iosfwd.h>
-#include <vcl_vector.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iosfwd>
+#include <vector>
 #include <rgrl/rgrl_fwd.h>
 
 class rgrl_match_set;
@@ -63,9 +65,9 @@ rgrl_util_geometric_scaling_factors( rgrl_match_set const& current_match_set,
 //  basis_dirs are unit vectors and normal to each other.
 void
 rgrl_util_extract_region_locations( vnl_vector< double >             const& center,
-                                    vcl_vector< vnl_vector<double> > const& basis_dirs,
+                                    std::vector< vnl_vector<double> > const& basis_dirs,
                                     vnl_vector< double >             const& basis_radii,
-                                    vcl_vector< vnl_vector<int> >         & pixel_locations );
+                                    std::vector< vnl_vector<int> >         & pixel_locations );
 
 //: A simplified version of irls w/o scale re-estimation.
 //  This takes single match set
@@ -92,7 +94,7 @@ rgrl_util_irls( rgrl_match_set_sptr              match_set,
 bool
 rgrl_util_irls( rgrl_set_of<rgrl_match_set_sptr> const& match_sets,
                 rgrl_set_of<rgrl_scale_sptr>     const& scales,
-                vcl_vector<rgrl_weighter_sptr>   const& weighters,
+                std::vector<rgrl_weighter_sptr>   const& weighters,
                 rgrl_convergence_tester          const& conv_tester,
                 rgrl_estimator_sptr              estimator,
                 rgrl_transformation_sptr&        estimate,
@@ -101,7 +103,7 @@ rgrl_util_irls( rgrl_set_of<rgrl_match_set_sptr> const& match_sets,
 
 //: skip empty lines in input stream
 void
-rgrl_util_skip_empty_lines( vcl_istream& is );
+rgrl_util_skip_empty_lines( std::istream& is );
 
 
 #endif // rgrl_util_h_

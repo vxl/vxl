@@ -5,7 +5,9 @@
 // \brief Implements sampling for a mixture model (a set of individual pdfs + weights)
 // \author Tim Cootes and Ian Scott
 
-#include <vcl_vector.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <vector>
 #include <pdf1d/pdf1d_sampler.h>
 #include <vnl/vnl_random.h>
 class pdf1d_mixture;
@@ -15,7 +17,7 @@ class pdf1d_mixture;
 class pdf1d_mixture_sampler : public pdf1d_sampler
 {
   //: workspace
-  vcl_vector<pdf1d_sampler*> inst_;
+  std::vector<pdf1d_sampler*> inst_;
 
   void init();
   void delete_stuff();
@@ -52,10 +54,10 @@ class pdf1d_mixture_sampler : public pdf1d_sampler
   short version_no() const;
 
   //: Name of the class
-  virtual vcl_string is_a() const;
+  virtual std::string is_a() const;
 
   //: Does the name of the class match the argument?
-  virtual bool is_class(vcl_string const& s) const;
+  virtual bool is_class(std::string const& s) const;
 
   //: Create a copy on the heap and return base class pointer
   virtual pdf1d_sampler* clone() const;

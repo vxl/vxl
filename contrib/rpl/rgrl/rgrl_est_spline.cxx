@@ -18,7 +18,9 @@
 #include <vnl/algo/vnl_amoeba.h>
 #include <vnl/algo/vnl_powell.h>
 #include <vnl/algo/vnl_lbfgs.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iostream>
 #include <vul/vul_timer.h>
 #include <vcl_cassert.h>
 
@@ -27,10 +29,10 @@ namespace{
   struct spline_least_squares_func : public vnl_least_squares_function
   {
     spline_least_squares_func( rgrl_spline_sptr spline,
-                               vcl_vector< vnl_vector< double > > const& pts,
+                               std::vector< vnl_vector< double > > const& pts,
                                vnl_diag_matrix<double> const& wgt,    // ( num of residuals ) x ( num of residuals )
                                vnl_vector<double> const& displacement, // ( num of residuals ) x 1
-                               vcl_vector<unsigned> const& free_control_pt_index )
+                               std::vector<unsigned> const& free_control_pt_index )
         : vnl_least_squares_function( free_control_pt_index.size(), pts.size(), use_gradient ),
                                 //number of unknowns, number of residuals, has gradient function or not
                                 spline_( spline ),
@@ -55,7 +57,7 @@ namespace{
       assert( fx.size() == pts_.size() );
       for ( unsigned i = 0; i < pts_.size(); ++i ) {
         fx[ i ] = ( displacement_[ i ] - spline_->f_x( pts_[ i ] ) )
-          * vcl_sqrt( wgt_[ i ] );
+          * std::sqrt( wgt_[ i ] );
       }
     }
 
@@ -72,23 +74,23 @@ namespace{
       for ( unsigned i = 0; i < pts_.size(); ++i ) {
         spline_->basis_response( pts_[i], gr );
         for ( unsigned j = 0; j < x.size(); ++j )
-          jacobian[ i ][ j ] = - gr[ free_control_pt_index_[j] ]  * vcl_sqrt( wgt_[ i ] );
+          jacobian[ i ][ j ] = - gr[ free_control_pt_index_[j] ]  * std::sqrt( wgt_[ i ] );
       }
     }
 
    private:
     rgrl_spline_sptr spline_;
-    vcl_vector< vnl_vector< double > >  pts_;
+    std::vector< vnl_vector< double > >  pts_;
     vnl_diag_matrix< double > wgt_;
     vnl_vector< double > displacement_;
-    vcl_vector< unsigned > free_control_pt_index_;
+    std::vector< unsigned > free_control_pt_index_;
   };
 
   // for Conjugate Gradient and other optimizers
   struct spline_cost_function : public vnl_cost_function
   {
     spline_cost_function( rgrl_spline_sptr spline,
-                          vcl_vector< vnl_vector< double > >  pts,
+                          std::vector< vnl_vector< double > >  pts,
                           vnl_diag_matrix<double> wgt,    // ( num of residuals ) x ( num of residuals )
                           vnl_vector<double> displacement ) // ( num of residuals ) x 1
       : vnl_cost_function( spline->num_of_control_points() ),  //number of unknowns
@@ -125,7 +127,7 @@ namespace{
 
    private:
     rgrl_spline_sptr spline_;
-    vcl_vector< vnl_vector< double > > pts_;
+    std::vector< vnl_vector< double > > pts_;
     vnl_diag_matrix< double > wgt_;
     vnl_vector< double > displacement_;
   };
@@ -169,7 +171,7 @@ rgrl_est_spline( unsigned dof,
   for ( unsigned i=0; i<m.size(); ++i )
     num_control *= m[i] + 3;
 
-  vcl_cerr << "rgrl_est_spline.cxx : number of control points: " << num_control << ", dof=" << dof << '\n';
+  std::cerr << "rgrl_est_spline.cxx : number of control points: " << num_control << ", dof=" << dof << '\n';
   assert( num_control == dof );
 }
 
@@ -207,10 +209,10 @@ estimate( rgrl_set_of<rgrl_match_set_sptr> const& matches,
     }
   }
 
-  vcl_vector< rgrl_spline_sptr > splines( dim );
+  std::vector< rgrl_spline_sptr > splines( dim );
   if ( cur_transform.is_type( rgrl_trans_spline::type_id() ) ) {
     rgrl_trans_spline const& cur_trans_spline = dynamic_cast< rgrl_trans_spline const& >(cur_transform);
-    vcl_cerr << "delta_: " << delta_ << '\n'
+    std::cerr << "delta_: " << delta_ << '\n'
              << "current transformation's delta_: " << cur_trans_spline.get_delta() << '\n';
     if ( ( delta_ - cur_trans_spline.get_delta()/2 ).two_norm() < 1e-5 ) {
       for ( unsigned i=0; i<dim; ++i ) {
@@ -243,16 +245,16 @@ estimate( rgrl_set_of<rgrl_match_set_sptr> const& matches,
 
   // from points in the spline coordinates
   vnl_vector< double > tmp( dim, 0.0 );
-  vcl_vector< vnl_vector< double > > from_pts_in_knots( num_match, tmp );
+  std::vector< vnl_vector< double > > from_pts_in_knots( num_match, tmp );
 
   // The index of control points that have constraints.
   // Used for reducing the degree of freedom
-  vcl_vector< unsigned > free_control_pt_index;
+  std::vector< unsigned > free_control_pt_index;
   // calculate weight, displacement for each match
   {
     unsigned i=0;
-    vcl_vector< double > score_constraint( num_control, 0.0 );
-    vcl_vector< bool > control_point_constraint( num_control, false );
+    std::vector< double > score_constraint( num_control, 0.0 );
+    std::vector< bool > control_point_constraint( num_control, false );
     for ( unsigned ms=0; ms < matches.size(); ++ms ) {
       rgrl_match_set const& match_set = *matches[ms];
       DebugMacro_abv(2, "rgrl_est_spline.cxx: from_pt \t to_pt \t displacement\n");
@@ -303,8 +305,8 @@ estimate( rgrl_set_of<rgrl_match_set_sptr> const& matches,
     }
   }
 
-  vcl_cerr << "\nafter reduce dof, dof=" << free_control_pt_index.size() << '\n';
-  DebugMacro( 1,  "\nafter reduce dof, dof=" << free_control_pt_index.size()<< vcl_endl );
+  std::cerr << "\nafter reduce dof, dof=" << free_control_pt_index.size() << '\n';
+  DebugMacro( 1,  "\nafter reduce dof, dof=" << free_control_pt_index.size()<< std::endl );
 
   vul_timer timer;
   // Levenberg Marquardt
@@ -314,9 +316,9 @@ estimate( rgrl_set_of<rgrl_match_set_sptr> const& matches,
     vnl_matrix< double > covar;
 
     if (this->debug_flag() > 1) {
-      vcl_cout << "rgrl_est_spline.cxx: displacement \t weight\n";
+      std::cout << "rgrl_est_spline.cxx: displacement \t weight\n";
       for ( unsigned i=0; i<displacement.rows(); ++i )
-        vcl_cout << i << "    " << displacement.get_row( i ) << " \t " << wgt[i] << '\n';
+        std::cout << i << "    " << displacement.get_row( i ) << " \t " << wgt[i] << '\n';
     }
 
     for ( unsigned i = 0; i < dim ; ++i ) {
@@ -329,15 +331,15 @@ estimate( rgrl_set_of<rgrl_match_set_sptr> const& matches,
         x[ j ] = c[ free_control_pt_index[ j ] ];
       if (this->debug_flag() > 1 ) timer.mark();
       minimizer.minimize( x );
-      minimizer.diagnose_outcome(vcl_cout);
+      minimizer.diagnose_outcome(std::cout);
       if (this->debug_flag() > 1 ) {
-        timer.print( vcl_cout );
-        vcl_cout << "computing covariance\n";
+        timer.print( std::cout );
+        std::cout << "computing covariance\n";
         timer.mark();
         if ( i==0 )
           covar = minimizer.get_JtJ();
-        timer.print( vcl_cout );
-        vcl_cout << "covariance " << covar.rows() << 'x' << covar.columns() << vcl_endl;
+        timer.print( std::cout );
+        std::cout << "covariance " << covar.rows() << 'x' << covar.columns() << std::endl;
       }
 
       // Convert x back to control points
@@ -345,7 +347,7 @@ estimate( rgrl_set_of<rgrl_match_set_sptr> const& matches,
       for ( unsigned j=0; j<x.size(); ++j )
         c[ free_control_pt_index[ j ] ] = x[ j ];
       splines[i]->set_control_points( c );
-      DebugMacro( 1, "control points:\n" << c << vcl_endl );
+      DebugMacro( 1, "control points:\n" << c << std::endl );
     }
     return new rgrl_trans_spline( splines, vnl_vector<double>(dim,0.0), delta_, global_xform_ );
   }
@@ -361,7 +363,7 @@ estimate( rgrl_set_of<rgrl_match_set_sptr> const& matches,
       splines[i]->set_control_points( c );
       DebugMacro( 1, "control points:\n" << c << '\n' );
       }
-    if ( this->debug_flag() > 1) timer.print( vcl_cout );
+    if ( this->debug_flag() > 1) timer.print( std::cout );
     return new rgrl_trans_spline( splines, vnl_vector<double>(dim,0.0), delta_, global_xform_ );
   }
   else if ( optimize_method_ == RGRL_AMOEBA ) {
@@ -376,7 +378,7 @@ estimate( rgrl_set_of<rgrl_match_set_sptr> const& matches,
       splines[i]->set_control_points( c );
       DebugMacro( 1, "control points:\n" << c << '\n' );
     }
-    if (this->debug_flag() > 1) timer.print( vcl_cout );
+    if (this->debug_flag() > 1) timer.print( std::cout );
     return new rgrl_trans_spline( splines, vnl_vector<double>(dim,0.0), delta_, global_xform_ );
   }
   else if ( optimize_method_ == RGRL_POWELL ) {
@@ -391,7 +393,7 @@ estimate( rgrl_set_of<rgrl_match_set_sptr> const& matches,
       splines[i]->set_control_points( c );
       DebugMacro( 1, "control points:\n" << c << '\n' );
     }
-    if (this->debug_flag() > 1) timer.print( vcl_cout );
+    if (this->debug_flag() > 1) timer.print( std::cout );
     return new rgrl_trans_spline( splines, vnl_vector<double>(dim,0.0), delta_, global_xform_ );
   }
   else if ( optimize_method_ == RGRL_LBFGS ) {
@@ -406,7 +408,7 @@ estimate( rgrl_set_of<rgrl_match_set_sptr> const& matches,
       splines[i]->set_control_points( c );
       DebugMacro( 1, "control points:\n" << c << '\n' );
     }
-    if (this->debug_flag()> 1) timer.print( vcl_cout );
+    if (this->debug_flag()> 1) timer.print( std::cout );
     return new rgrl_trans_spline( splines, vnl_vector<double>(dim,0.0), delta_, global_xform_ );
   }
   else {   //    // No approximation
@@ -417,7 +419,7 @@ estimate( rgrl_set_of<rgrl_match_set_sptr> const& matches,
     // Cost = (Z - G*C)^T * W * (Z - G*C) + C^T * K * C,
     // where K is the symmetric thin-plate regularization
     // => C = (G^T * W * G + \lambda * K)^{-1} * G^T * W * Z
-    //DBG( vcl_cout << "No approximation\n" );
+    //DBG( std::cout << "No approximation\n" );
     DebugMacro( 1, "No approximation\n" );
 
     vnl_matrix<double> X0;
@@ -455,7 +457,7 @@ estimate( rgrl_set_of<rgrl_match_set_sptr> const& matches,
       vnl_vector<double> c = displacement.get_column( j ).pre_multiply( X0 );
       splines[j]->set_control_points(c);
     }
-    if (this->debug_flag()>1) timer.print( vcl_cout );
+    if (this->debug_flag()>1) timer.print( std::cout );
     return new rgrl_trans_spline( splines, vnl_vector<double>(dim,0.0), delta_, covar, global_xform_ );
   }
 }
@@ -469,7 +471,7 @@ estimate( rgrl_match_set_sptr matches,
   return rgrl_estimator::estimate( matches, cur_transform );
 }
 
-const vcl_type_info&
+const std::type_info&
 rgrl_est_spline::
 transformation_type() const
 {

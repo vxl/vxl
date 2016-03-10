@@ -12,12 +12,14 @@
 #include <vnl/vnl_quaternion.h>
 #include <vgl/algo/vgl_p_matrix.h>
 #include <bsta/bsta_random_wrapper.h>
-#include <vcl_iostream.h>
-#include <vcl_limits.h>
-#include <vcl_fstream.h>
-#include <vcl_ctime.h>
+#include <iostream>
+#include <limits>
+#include <fstream>
+#include <ctime>
 #if 0
-#include <vcl_cmath.h> // for std::tan()
+#include <vcl_compiler.h>
+#include <iostream>
+#include <cmath> // for std::tan()
 #endif
 
 struct ang_pair {
@@ -29,18 +31,18 @@ struct ang_pair {
 // The mean vector is along the z axis.
 ang_pair sample_3d(double kappa)
 {
-  vnl_random rng(vcl_clock());
+  vnl_random rng(std::clock());
   ang_pair ap;
   ap.phi = vnl_math::twopi*rng.drand32();
   double p = rng.drand32();
-  double exk = vcl_exp(2.0*kappa);
-  //double exk = vcl_exp(2.0*kappa);
+  double exk = std::exp(2.0*kappa);
+  //double exk = std::exp(2.0*kappa);
   double t1 = exk-1.0;
   double t2 =exk/t1;
-  double t3 = vcl_log(t1*(t2-p));
+  double t3 = std::log(t1*(t2-p));
   double temp_sum = -kappa + t3;
   double ratio = temp_sum/kappa;
-  ap.theta = vcl_acos(ratio);
+  ap.theta = std::acos(ratio);
   return ap;
 }
 
@@ -57,13 +59,13 @@ bool vpgl_perturb_persp_cam_orient_process_cons(bprb_func_process& pro)
   using namespace vpgl_perturb_persp_cam_orient_process_globals;
 
   //process takes 3 inputs
-  vcl_vector<vcl_string> input_types_(n_inputs_);
+  std::vector<std::string> input_types_(n_inputs_);
   input_types_[0] = "vpgl_camera_double_sptr";
   input_types_[1] = "float";  // kappa value, its standard deviation if normal distribution is used
   input_types_[2] = "bsta_random_wrapper_sptr";
 
   // process has 3 outputs
-  vcl_vector<vcl_string>  output_types_(n_outputs_);
+  std::vector<std::string>  output_types_(n_outputs_);
   output_types_[0] = "vpgl_camera_double_sptr"; // perturbed cam
   output_types_[1] = "float";  // theta
   output_types_[2] = "float";  // phi
@@ -77,7 +79,7 @@ bool vpgl_perturb_persp_cam_orient_process(bprb_func_process& pro)
 {
   // Sanity check
   if (!pro.verify_inputs()) {
-    vcl_cerr << "vpgl_get_view_direction_at_point_process: Invalid inputs\n";
+    std::cerr << "vpgl_get_view_direction_at_point_process: Invalid inputs\n";
     return false;
   }
   // get the inputs
@@ -88,7 +90,7 @@ bool vpgl_perturb_persp_cam_orient_process(bprb_func_process& pro)
 
   vpgl_perspective_camera<double>* cam = dynamic_cast<vpgl_perspective_camera<double>*>(cam_ptr.ptr());
   if (!cam) {
-    vcl_cerr << "vpgl_get_view_direction_at_point_process: couldn't cast camera\n";
+    std::cerr << "vpgl_get_view_direction_at_point_process: couldn't cast camera\n";
     return false;
   }
 # if 0
@@ -101,12 +103,12 @@ bool vpgl_perturb_persp_cam_orient_process(bprb_func_process& pro)
   // normalize the distribution by throwing away samples that are out of valid bounds and resampling
   while (ap.theta > vnl_math::pi || ap.theta < -vnl_math::pi) {
     ap.theta = rngw->rng_.normal64()*(kappa/180.0*vnl_math::pi);
-    vcl_cout << "..." << vcl_endl;
+    std::cout << "..." << std::endl;
   }
   // second angle is the amount of turn around z axis (up vector of camera is y axis)
   ap.phi = (rngw->rng_.drand64(0.0, 360.0)/180.0)*vnl_math::pi;
 
-  vcl_cout << "sampled theta: " << 180.0*(ap.theta/vnl_math::pi) << " phi: " << 180.0*(ap.phi/vnl_math::pi) << vcl_endl;
+  std::cout << "sampled theta: " << 180.0*(ap.theta/vnl_math::pi) << " phi: " << 180.0*(ap.phi/vnl_math::pi) << std::endl;
 
   vgl_vector_3d<double> y_vec(0.0, 1.0, 0.0);
   vgl_rotation_3d<double> R2(0.0, 0.0, ap.phi);
@@ -125,17 +127,17 @@ bool vpgl_perturb_persp_cam_orient_process(bprb_func_process& pro)
   // calculate delta_x on ground
   double h = cam->get_camera_center().z();  // actually ground plane of the scene is not necessarily z = 0
   double tan_gamma = cam->get_camera_center().x()/h;
-  vcl_cout << " cam h: " << h << " x: " << cam->get_camera_center().x() << " tan_gamma: " << tan_gamma << vcl_endl;
+  std::cout << " cam h: " << h << " x: " << cam->get_camera_center().x() << " tan_gamma: " << tan_gamma << std::endl;
   double theta = kappa/180.0*vnl_math::pi;
-  double tan_theta = vcl_tan(theta);
-  vcl_cout << "theta in deg: " << kappa << " in rad: " << theta << " tan_theta: " << tan_theta << vcl_endl;
+  double tan_theta = std::tan(theta);
+  std::cout << "theta in deg: " << kappa << " in rad: " << theta << " tan_theta: " << tan_theta << std::endl;
   double h_in_cm = 30400;
-  double delta_x = h_in_cm*(vcl_pow(tan_gamma, 2.0)*tan_theta+tan_theta)/(1+tan_gamma*tan_theta);
-  vcl_cout << "delta_x with theta: " << kappa << " at height: " << h << " is: " << delta_x << " cm." << vcl_endl;
+  double delta_x = h_in_cm*(std::pow(tan_gamma, 2.0)*tan_theta+tan_theta)/(1+tan_gamma*tan_theta);
+  std::cout << "delta_x with theta: " << kappa << " at height: " << h << " is: " << delta_x << " cm." << std::endl;
 
-  tan_theta = vcl_tan(ap.theta);
-  delta_x = h_in_cm*(vcl_pow(tan_gamma, 2.0)*tan_theta+tan_theta)/(1+tan_gamma*tan_theta);
-  vcl_cout << "delta_x with sampled theta: " << ap.theta << " at height: " << h << " is: " << delta_x << " cm." << vcl_endl;
+  tan_theta = std::tan(ap.theta);
+  delta_x = h_in_cm*(std::pow(tan_gamma, 2.0)*tan_theta+tan_theta)/(1+tan_gamma*tan_theta);
+  std::cout << "delta_x with sampled theta: " << ap.theta << " at height: " << h << " is: " << delta_x << " cm." << std::endl;
 #endif
   pro.set_output_val<vpgl_camera_double_sptr>(0, new vpgl_perspective_camera<double>(out_cam));
   pro.set_output_val<float>(1,float(ap.theta));
@@ -157,13 +159,13 @@ bool vpgl_rotate_persp_cam_process_cons(bprb_func_process& pro)
   using namespace vpgl_rotate_persp_cam_process_globals;
 
   //process takes 3 inputs
-  vcl_vector<vcl_string> input_types_(n_inputs_);
+  std::vector<std::string> input_types_(n_inputs_);
   input_types_[0] = "vpgl_camera_double_sptr";
   input_types_[1] = "float";  // theta, rotation aroun y axis
   input_types_[2] = "float";  // phi, rotation around z axis
 
   // process has 1 output
-  vcl_vector<vcl_string>  output_types_(n_outputs_);
+  std::vector<std::string>  output_types_(n_outputs_);
   output_types_[0] = "vpgl_camera_double_sptr"; // rotated cam
 
   return pro.set_input_types(input_types_) &&
@@ -175,7 +177,7 @@ bool vpgl_rotate_persp_cam_process(bprb_func_process& pro)
 {
    // Sanity check
   if (!pro.verify_inputs()) {
-    vcl_cerr << "vpgl_get_view_direction_at_point_process: Invalid inputs\n";
+    std::cerr << "vpgl_get_view_direction_at_point_process: Invalid inputs\n";
     return false;
   }
   // get the inputs
@@ -187,7 +189,7 @@ bool vpgl_rotate_persp_cam_process(bprb_func_process& pro)
 
   vpgl_perspective_camera<double>* cam = dynamic_cast<vpgl_perspective_camera<double>*>(cam_ptr.ptr());
   if (!cam) {
-    vcl_cerr << "vpgl_get_view_direction_at_point_process: couldn't cast camera\n";
+    std::cerr << "vpgl_get_view_direction_at_point_process: couldn't cast camera\n";
     return false;
   }
 
@@ -222,13 +224,13 @@ bool vpgl_perturb_loc_persp_cam_orient_process_cons(bprb_func_process& pro)
   using namespace vpgl_perturb_loc_persp_cam_orient_process_globals;
 
   //process takes 3 inputs
-  vcl_vector<vcl_string> input_types_(n_inputs_);
+  std::vector<std::string> input_types_(n_inputs_);
   input_types_[0] = "vpgl_camera_double_sptr";
   input_types_[1] = "float";  // variance of normal distribution
   input_types_[2] = "bsta_random_wrapper_sptr";
 
   // process has 1 output
-  vcl_vector<vcl_string>  output_types_(n_outputs_);
+  std::vector<std::string>  output_types_(n_outputs_);
   output_types_[0] = "vpgl_camera_double_sptr"; // perturbed cam
 
   return pro.set_input_types(input_types_) &&
@@ -240,7 +242,7 @@ bool vpgl_perturb_persp_loc_cam_orient_process(bprb_func_process& pro)
 {
    // Sanity check
   if (!pro.verify_inputs()) {
-    vcl_cerr << "vpgl_get_view_direction_at_point_process: Invalid inputs\n";
+    std::cerr << "vpgl_get_view_direction_at_point_process: Invalid inputs\n";
     return false;
   }
   // get the inputs
@@ -251,7 +253,7 @@ bool vpgl_perturb_persp_loc_cam_orient_process(bprb_func_process& pro)
 
   vpgl_perspective_camera<double>* cam = dynamic_cast<vpgl_perspective_camera<double>*>(cam_ptr.ptr());
   if (!cam) {
-    vcl_cerr << "vpgl_get_view_direction_at_point_process: couldn't cast camera\n";
+    std::cerr << "vpgl_get_view_direction_at_point_process: couldn't cast camera\n";
     return false;
   }
   double x = rngw->rng_.normal64()*var;
@@ -283,13 +285,13 @@ bool vpgl_perturb_uniform_persp_cam_orient_process_cons(bprb_func_process& pro)
   using namespace vpgl_perturb_uniform_persp_cam_orient_process_globals;
 
   //process takes 3 inputs
-  vcl_vector<vcl_string> input_types_(n_inputs_);
+  std::vector<std::string> input_types_(n_inputs_);
   input_types_[0] = "vpgl_camera_double_sptr";
   input_types_[1] = "float";  // range of uniform distribution for the angle
   input_types_[2] = "bsta_random_wrapper_sptr";
 
   // process has 3 outputs
-  vcl_vector<vcl_string>  output_types_(n_outputs_);
+  std::vector<std::string>  output_types_(n_outputs_);
   output_types_[0] = "vpgl_camera_double_sptr"; // perturbed cam
   output_types_[1] = "float";  // theta
   output_types_[2] = "float";  // phi
@@ -303,7 +305,7 @@ bool vpgl_perturb_uniform_persp_cam_orient_process(bprb_func_process& pro)
 {
    // Sanity check
   if (!pro.verify_inputs()) {
-    vcl_cerr << "vpgl_get_view_direction_at_point_process: Invalid inputs\n";
+    std::cerr << "vpgl_get_view_direction_at_point_process: Invalid inputs\n";
     return false;
   }
   // get the inputs
@@ -314,7 +316,7 @@ bool vpgl_perturb_uniform_persp_cam_orient_process(bprb_func_process& pro)
 
   vpgl_perspective_camera<double>* cam = dynamic_cast<vpgl_perspective_camera<double>*>(cam_ptr.ptr());
   if (!cam) {
-    vcl_cerr << "vpgl_get_view_direction_at_point_process: couldn't cast camera\n";
+    std::cerr << "vpgl_get_view_direction_at_point_process: couldn't cast camera\n";
     return false;
   }
 
@@ -324,7 +326,7 @@ bool vpgl_perturb_uniform_persp_cam_orient_process(bprb_func_process& pro)
   // second angle is the amount of turn around z axis (up vector of camera is y axis)
   ap.phi = (rngw->rng_.drand64(0.0, 360.0)/180.0)*vnl_math::pi;
 
-  vcl_cout << "sampled theta: " << 180.0*(ap.theta/vnl_math::pi) << " phi: " << 180.0*(ap.phi/vnl_math::pi) << vcl_endl;
+  std::cout << "sampled theta: " << 180.0*(ap.theta/vnl_math::pi) << " phi: " << 180.0*(ap.phi/vnl_math::pi) << std::endl;
 
   vgl_vector_3d<double> y_vec(0.0, 1.0, 0.0);
   vgl_rotation_3d<double> R2(0.0, 0.0, ap.phi);

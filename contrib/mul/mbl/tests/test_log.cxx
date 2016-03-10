@@ -1,10 +1,12 @@
 // This is mul/mbl/tests/test_log.cxx
-#include <vcl_sstream.h>
-#include <vcl_fstream.h>
-#include <vcl_vector.h>
-#include <vcl_string.h>
-#include <vcl_cstddef.h>
-#include <vcl_iomanip.h>
+#include <sstream>
+#include <fstream>
+#include <vector>
+#include <string>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <cstddef>
+#include <iomanip>
 #include <vsl/vsl_vector_io.h>
 #include <vsl/vsl_string_io.h>
 #include <mbl/mbl_log.h>
@@ -15,10 +17,10 @@ namespace
 {
   // This class stores log messages in a vector of strings - one log entry per element.
   // The last element should be empty and unused.
-  class test_streambuf: public vcl_streambuf
+  class test_streambuf: public std::streambuf
   {
    public:
-    vcl_vector<vcl_string> messages;
+    std::vector<std::string> messages;
     test_streambuf(): messages(1) {}
     virtual int sync ()
     {
@@ -27,7 +29,7 @@ namespace
       if (n)
         messages.back().append(pbase(), n);
       if (!messages.back().empty()) // Ignore flushes on empty messages
-        messages.push_back(vcl_string());
+        messages.push_back(std::string());
 
       pbump(-n);  // Reset pptr().
       return 0;
@@ -49,7 +51,7 @@ namespace
       return ch;
     }
 
-    virtual vcl_streamsize xsputn(const char *ptr, vcl_streamsize nchar)
+    virtual std::streamsize xsputn(const char *ptr, std::streamsize nchar)
     {
       // Output anything already in buffer
       int n = static_cast<int>(pptr() - pbase()); // Can't be larger than int. See pbump in c++ standard
@@ -66,7 +68,7 @@ namespace
 
 void test_log()
 {
-  vcl_cout << "*****************\n"
+  std::cout << "*****************\n"
            << " Testing mbl_log\n"
            << "*****************\n";
   {
@@ -75,34 +77,34 @@ void test_log()
   }
 
 
-  vcl_ostringstream output;  // Standard test output
+  std::ostringstream output;  // Standard test output
 
   test_streambuf my_test_streambuf; // Special test output
-  vcl_ostream special_output(&my_test_streambuf);
+  std::ostream special_output(&my_test_streambuf);
 
   {
-    vcl_ofstream cfg_file("mbl_log.properties");
+    std::ofstream cfg_file("mbl_log.properties");
     cfg_file <<
       "root: { level: INFO stream_output: test }\n"
       "obj3: { level: INFO stream_output: cout dump_prefix: ./ }\n"
       "obj4: { level: INFO stream_output: test_streambuf }\n"
       "mul.mbl.log: { level: NOTICE stream_output: test_streambuf }\n";
   }
-  vcl_map<vcl_string, vcl_ostream*> registered_streams;
+  std::map<std::string, std::ostream*> registered_streams;
   registered_streams["test"] = &output;
   registered_streams["test_streambuf"] = &special_output;
 
   mbl_logger::root().load_log_config_file(registered_streams);
-  mbl_logger::root().categories().print(vcl_cout);
+  mbl_logger::root().categories().print(std::cout);
 
   mbl_logger current("wibble1");
   mbl_logger current2("wibble2");
 
   if (current.level() >= mbl_logger::INFO)
-    current.log(mbl_logger::INFO) << "Output this whatever" << vcl_endl;
+    current.log(mbl_logger::INFO) << "Output this whatever" << std::endl;
 
   MBL_LOG(WARN, current, "Also this number " << 54 <<
-          " and" << vcl_endl << "multiline message" << vcl_setprecision(16));
+          " and" << std::endl << "multiline message" << std::setprecision(16));
 
 
   MBL_LOG( WARN, current2, "Check the precision changes do not propagate: " << 1.0/3.0 <<
@@ -113,13 +115,13 @@ void test_log()
 //  {
 //    current.mtstart(mbl_logger:: WARN, __FILE__, __LINE__);
 //    current.mtlog() << "Also this number " << 54
-//                    << " and" << vcl_endl << "multiline message" << vcl_endl;
+//                    << " and" << std::endl << "multiline message" << std::endl;
 //    current.mtstop();
 //  }
 
-  current.log(mbl_logger::DEBUG) << "But not this " << vcl_endl;
+  current.log(mbl_logger::DEBUG) << "But not this " << std::endl;
 
-  vcl_cout << "LOG OUTPUT:\n\""<<output.str()<<'\"' <<vcl_endl;
+  std::cout << "LOG OUTPUT:\n\""<<output.str()<<'\"' <<std::endl;
 
   TEST("Log output is as expected", output.str(),
        "INFO: wibble1 Output this whatever\n"
@@ -128,7 +130,7 @@ void test_log()
 
 
   mbl_logger obj3("obj3");
-  vcl_cout << "Print some random stuff with no flush\n";
+  std::cout << "Print some random stuff with no flush\n";
   MBL_LOG(WARN, obj3, "and check that this message doesn't preceed the direct output to cout");
 
 
@@ -142,11 +144,11 @@ void test_log()
   // Check that it is possible to use a custom streambuf as the output destination, and
   // that flushes indicate a terminating log message.
   mbl_logger obj4("obj4");
-  MBL_LOG(WARN, obj4, "A split line" << vcl_endl << "message");
-  obj4.log(mbl_logger::NOTICE) << "A second message" << vcl_endl;
+  MBL_LOG(WARN, obj4, "A split line" << std::endl << "message");
+  obj4.log(mbl_logger::NOTICE) << "A second message" << std::endl;
 
-  vcl_cout << "Special output messages: ";
-  vsl_print_summary(vcl_cout, my_test_streambuf.messages);
+  std::cout << "Special output messages: ";
+  vsl_print_summary(std::cout, my_test_streambuf.messages);
 
   // Test for one extra due to class invariant.
   TEST ("Special output got 2 messages", my_test_streambuf.messages.size(), 3);
@@ -159,10 +161,10 @@ void test_log()
   TEST ("obj4.dump", obj4.dump(), false);
   TEST ("current2.dump", current2.dump(), false);
 
-  vcl_cout << "\n\n";
+  std::cout << "\n\n";
 
   {
-    vcl_ofstream cfg_file("mbl_log.properties");
+    std::ofstream cfg_file("mbl_log.properties");
     cfg_file <<
       "AA.11.bb: { level: CRIT stream_output: cerr dump_prefix: ./logdump1_ }\n"
       "AA.22.aa.ii: { level: WARN file_output: test1.log }\n"
@@ -174,8 +176,8 @@ void test_log()
   }
 
   mbl_logger::root().load_log_config_file();
-  mbl_logger::root().categories().print(vcl_cout);
-  vcl_cout << "\n\n";
+  mbl_logger::root().categories().print(std::cout);
+  std::cout << "\n\n";
 
   TEST("AA.11.dd", mbl_logger::root().categories().get("AA.11.dd").level, mbl_logger::ERR);
   TEST("AA.11.dd dump", mbl_logger::root().categories().get("AA.11.dd").dump_prefix, "./logdump2_");

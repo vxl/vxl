@@ -22,7 +22,9 @@
 #include <vgl/vgl_homg_line_2d.h>
 #include <mvl/PMatrix.h>
 #include <vgl/vgl_homg_point_2d.h>
-#include <vcl_iosfwd.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iosfwd>
 #include <vgl/algo/vgl_p_matrix.h>
 
 #include <vnl/vnl_double_3x3.h>
@@ -39,7 +41,7 @@ class FMatrix
   // Constructors/Initializers/Destructors----------------------------------
 
   FMatrix();
-  FMatrix(vcl_istream& f);
+  FMatrix(std::istream& f);
   FMatrix(const double *f_matrix);
   FMatrix(const vnl_double_3x3& f_matrix);
   FMatrix(const PMatrix& P1, const PMatrix& P2);
@@ -48,7 +50,7 @@ class FMatrix
   virtual ~FMatrix();
 
   static FMatrix read(char const* filename);
-  static FMatrix read(vcl_istream& s);
+  static FMatrix read(std::istream& s);
 
   // Operations------------------------------------------------------------
 
@@ -129,10 +131,10 @@ class FMatrix
   bool get_rank2_flag (void) const;
   void set_rank2_flag (bool rank2_flag);
 
-friend vcl_ostream& operator<<(vcl_ostream& s, const FMatrix& F);
-friend vcl_istream& operator>>(vcl_istream& s, FMatrix& F);
+friend std::ostream& operator<<(std::ostream& s, const FMatrix& F);
+friend std::istream& operator>>(std::istream& s, FMatrix& F);
 
-  bool read_ascii(vcl_istream& f);
+  bool read_ascii(std::istream& f);
 
   // INTERNALS---------------------------------------------------------------
 

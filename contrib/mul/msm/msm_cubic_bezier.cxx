@@ -4,8 +4,8 @@
 // \author Tim Cootes
 
 #include "msm_cubic_bezier.h"
-#include <vcl_iostream.h>
-#include <vcl_sstream.h>
+#include <iostream>
+#include <sstream>
 #include <vsl/vsl_indent.h>
 #include <vsl/vsl_binary_io.h>
 #include <vsl/vsl_vector_io.h>
@@ -13,7 +13,9 @@
 #include <vgl/io/vgl_io_point_2d.h>
 #include <vgl/io/vgl_io_vector_2d.h>
 #include <vnl/algo/vnl_cholesky.h>
-#include <vcl_cstdlib.h>  // for vcl_abort()
+#include <vcl_compiler.h>
+#include <iostream>
+#include <cstdlib>  // for std::abort()
 
 //: Return position at t (in [0,1]) given end point q
 vgl_point_2d<double> msm_cubic_bezier_node::point(double t, const vgl_point_2d<double>& q) const
@@ -64,7 +66,7 @@ inline bool is_in_box(const vgl_vector_2d<double>& r, const vgl_vector_2d<double
   if (rd<0 || rd>L2) return false;
 
   double re=r.y()*d.x()-r.x()*d.y();
-  return  (vcl_fabs(re)<=t*L2);
+  return  (std::fabs(re)<=t*L2);
 }
 
 //: True if sufficiently straight, assuming q is end point.
@@ -94,13 +96,13 @@ msm_cubic_bezier::msm_cubic_bezier()
 }
 
 //: Construct from set of points. Curve will pass through these.
-msm_cubic_bezier::msm_cubic_bezier(const vcl_vector<vgl_point_2d<double> >&pts, bool closed)
+msm_cubic_bezier::msm_cubic_bezier(const std::vector<vgl_point_2d<double> >&pts, bool closed)
 {
   set_points(pts,closed);
 }
 
 //: Construct from set of points. Curve will pass through these.
-void msm_cubic_bezier::set_points(const vcl_vector<vgl_point_2d<double> >&pts, bool closed)
+void msm_cubic_bezier::set_points(const std::vector<vgl_point_2d<double> >&pts, bool closed)
 {
   bnode_.resize(pts.size());
   for (unsigned i=0;i<pts.size();++i) bnode_[i].p=pts[i];
@@ -151,7 +153,7 @@ void msm_cubic_bezier::smooth_closed()
   // "A new method for solving symmetric circulant tridiagonal systems of linear equations"
   // O. Rojo, Com.Math Applications, Vol.20, No.12 pp.61-67 1990
 
-  double mu=-2.0-vcl_sqrt(3.0);
+  double mu=-2.0-std::sqrt(3.0);
 
   // Set up right hand sides to solve for control point 1
   vnl_vector<double> rx(n),ry(n);
@@ -221,7 +223,7 @@ void msm_cubic_bezier::smooth_closed()
 //: Compute control points so as to generate a smooth closed curve
 void msm_cubic_bezier::smooth_closed()
 {
-  vcl_cout<<"Slow"<<vcl_endl;
+  std::cout<<"Slow"<<std::endl;
   unsigned n = bnode_.size();
   if (n==1) return;
 
@@ -433,12 +435,12 @@ void msm_cubic_bezier::smooth_open()
 //  For closed curves, use wrap-around (so if end<start, assume it wraps round)
 //  To do the integration, each curve approximated by pieces of length no more than min_len
 void msm_cubic_bezier::equal_space(unsigned start, unsigned end, unsigned n_pts, double min_len,
-                  vcl_vector<vgl_point_2d<double> >& new_pts) const
+                  std::vector<vgl_point_2d<double> >& new_pts) const
 {
   if (!closed_ && end<start)
   {
-    vcl_cerr<<"msm_cubic_bezier::equal_space() Can't have start>end for open curve."<<vcl_endl;
-    vcl_abort();
+    std::cerr<<"msm_cubic_bezier::equal_space() Can't have start>end for open curve."<<std::endl;
+    std::abort();
   }
   unsigned n_nodes=bnode_.size();
   assert(start<n_nodes);
@@ -450,7 +452,7 @@ void msm_cubic_bezier::equal_space(unsigned start, unsigned end, unsigned n_pts,
   // Split curve into multiple small fragments, to allow integration
 
   // Count number of points at which to evaluate each segment, each of which should be approx min_len long
-  vcl_vector<unsigned> n_per_seg(n);
+  std::vector<unsigned> n_per_seg(n);
   unsigned n_total=1;
   for (unsigned i=0;i<n;++i)
   {
@@ -460,8 +462,8 @@ void msm_cubic_bezier::equal_space(unsigned start, unsigned end, unsigned n_pts,
   }
 
   // Create lookup table such that point(index(j),t(j)) is curve length length(j) around from start
-  vcl_vector<unsigned> index(n_total);
-  vcl_vector<double> length(n_total), t(n_total);
+  std::vector<unsigned> index(n_total);
+  std::vector<double> length(n_total), t(n_total);
 
   index[0]=start; t[0]= 0.0; length[0]=0.0;
   vgl_point_2d<double> p1=point(start);
@@ -517,9 +519,9 @@ void msm_cubic_bezier::equal_space(unsigned start, unsigned end, unsigned n_pts,
 // \param new_normals[i] the normal to the curve at new_pts[i]
 // \param control_pt_index[i] gives element of new_pts for control point i
 void msm_cubic_bezier::get_extra_points(double approx_sep,
-                        vcl_vector<vgl_point_2d<double> >& new_pts,
-                        vcl_vector<vgl_vector_2d<double> >& new_normals,
-                        vcl_vector<unsigned>& control_pt_index) const
+                        std::vector<vgl_point_2d<double> >& new_pts,
+                        std::vector<vgl_vector_2d<double> >& new_normals,
+                        std::vector<unsigned>& control_pt_index) const
 {
   // Compute number in each segment
   unsigned n_nodes = size();
@@ -528,7 +530,7 @@ void msm_cubic_bezier::get_extra_points(double approx_sep,
 
   unsigned n=n_nodes;
   if (!closed_) n--;
-  vcl_vector<unsigned> n_per_seg(n);
+  std::vector<unsigned> n_per_seg(n);
   unsigned n_new_pts=1;
   for (unsigned i=0;i<n;++i)
   {
@@ -546,7 +548,7 @@ void msm_cubic_bezier::get_extra_points(double approx_sep,
 
   // Create lookup table s.t. length[i] gives dist around segment for t[i]
   unsigned n_in_seg=5;
-  vcl_vector<double> length(n_in_seg+1),t(n_in_seg+1);
+  std::vector<double> length(n_in_seg+1),t(n_in_seg+1);
   length[0]=0.0;t[0]=0.0;
   double dt=1.0/n_in_seg;
   unsigned index=0;
@@ -600,7 +602,7 @@ void msm_cubic_bezier::get_extra_points(double approx_sep,
 // Method: print
 //=======================================================================
 
-void msm_cubic_bezier::print_summary(vcl_ostream& os) const
+void msm_cubic_bezier::print_summary(std::ostream& os) const
 {
   if (closed_) os<<" Closed curve.";
   else         os<<" Open curve.";
@@ -646,9 +648,9 @@ void msm_cubic_bezier::b_read(vsl_b_istream& bfs)
       }
       break;
     default:
-      vcl_cerr << "msm_cubic_bezier::b_read() :\n"
+      std::cerr << "msm_cubic_bezier::b_read() :\n"
                << "Unexpected version number " << version << '\n';
-      bfs.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
+      bfs.is().clear(std::ios::badbit); // Set an unrecoverable IO error on stream
       return;
   }
 }
@@ -676,14 +678,14 @@ void vsl_b_read(vsl_b_istream& bfs, msm_cubic_bezier& b)
 // Associated function: operator<<
 //=======================================================================
 
-vcl_ostream& operator<<(vcl_ostream& os,const msm_cubic_bezier& b)
+std::ostream& operator<<(std::ostream& os,const msm_cubic_bezier& b)
 {
   b.print_summary(os);
   return os;
 }
 
 //: Stream output operator for class reference
-void vsl_print_summary(vcl_ostream& os,const msm_cubic_bezier& b)
+void vsl_print_summary(std::ostream& os,const msm_cubic_bezier& b)
 {
  os << b;
 }

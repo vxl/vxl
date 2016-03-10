@@ -7,10 +7,12 @@
 #include <boxm2/boxm2_util.h>
 #include <boxm2/io/boxm2_lru_cache.h>
 #include <boct/boct_bit_tree.h>
-#include <vcl_algorithm.h>
-#include <vcl_limits.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <algorithm>
+#include <limits>
 
-boxm2_vecf_head_model::boxm2_vecf_head_model(vcl_string const& scene_file,vcl_string color_apm_ident):
+boxm2_vecf_head_model::boxm2_vecf_head_model(std::string const& scene_file,std::string color_apm_ident):
   boxm2_vecf_articulated_scene(scene_file,color_apm_ident),
   scale_(1.0, 1.0, 1.0)
 {
@@ -42,7 +44,7 @@ bool boxm2_vecf_head_model::get_data(boxm2_scene_sptr scene, boxm2_block_id cons
 }
 
   bool get_color_data(boxm2_scene_sptr scene, boxm2_block_id const& blk_id,
-                      vcl_string app_id, boxm2_data_base **color_data){
+                      std::string app_id, boxm2_data_base **color_data){
     *color_data = boxm2_cache::instance()->get_data_base(scene, blk_id, app_id);
     if (color_data)
       return true;
@@ -53,10 +55,10 @@ void boxm2_vecf_head_model::map_to_target(boxm2_scene_sptr target_scene)
 {
   intrinsic_change_ = false;
   // for each block of the target scene
-  vcl_vector<boxm2_block_id> target_blocks = target_scene->get_block_ids();
-  vcl_vector<boxm2_block_id> source_blocks = base_model_->get_block_ids();
+  std::vector<boxm2_block_id> target_blocks = target_scene->get_block_ids();
+  std::vector<boxm2_block_id> source_blocks = base_model_->get_block_ids();
 
-  for (vcl_vector<boxm2_block_id>::iterator tblk = target_blocks.begin();
+  for (std::vector<boxm2_block_id>::iterator tblk = target_blocks.begin();
        tblk != target_blocks.end(); ++tblk) {
 
     boxm2_block *target_blk = boxm2_cache::instance()->get_block(target_scene, *tblk);
@@ -66,7 +68,7 @@ void boxm2_vecf_head_model::map_to_target(boxm2_scene_sptr target_scene)
     boxm2_data_base *target_nobs;
     boxm2_data_base *target_color = boxm2_cache::instance()->get_data_base(target_scene, *tblk, boxm2_data_traits<BOXM2_GAUSS_RGB>::prefix(color_apm_id_));
     if (!get_data(target_scene, *tblk, &target_alpha, &target_app, &target_nobs)) {
-      vcl_cerr << "ERROR: boxm2_vecf_head_model::map_to_target(): error getting target block data block=" << tblk->to_string() << vcl_endl;
+      std::cerr << "ERROR: boxm2_vecf_head_model::map_to_target(): error getting target block data block=" << tblk->to_string() << std::endl;
       return;
     }
     target_alpha->enable_write();
@@ -81,7 +83,7 @@ void boxm2_vecf_head_model::map_to_target(boxm2_scene_sptr target_scene)
     boxm2_data_traits<BOXM2_NUM_OBS>::datatype *target_nobs_data = reinterpret_cast<boxm2_data_traits<BOXM2_NUM_OBS>::datatype*>(target_nobs->data_buffer());
     boxm2_data_traits<BOXM2_GAUSS_RGB>::datatype *target_color_data = reinterpret_cast<boxm2_data_traits<BOXM2_GAUSS_RGB>::datatype*>(target_color->data_buffer());
     // for each block of the base model
-    for (vcl_vector<boxm2_block_id>::iterator sblk = source_blocks.begin();
+    for (std::vector<boxm2_block_id>::iterator sblk = source_blocks.begin();
          sblk != source_blocks.end(); ++sblk) {
 
       boxm2_block *source_blk = boxm2_cache::instance()->get_block(base_model_, *sblk);
@@ -92,7 +94,7 @@ void boxm2_vecf_head_model::map_to_target(boxm2_scene_sptr target_scene)
 
       boxm2_data_base* source_color = boxm2_cache::instance()->get_data_base(base_model_, *sblk, boxm2_data_traits<BOXM2_GAUSS_RGB>::prefix(color_apm_id_));
       if (!get_data(base_model_, *sblk, &source_alpha, &source_app, &source_nobs)) {
-        vcl_cerr << "ERROR: boxm2_vecf_head_model::map_to_source(): error getting source block data block=" << sblk->to_string() << vcl_endl;
+        std::cerr << "ERROR: boxm2_vecf_head_model::map_to_source(): error getting source block data block=" << sblk->to_string() << std::endl;
         return ;
       }
       boxm2_data_traits<BOXM2_ALPHA>::datatype *source_alpha_data = reinterpret_cast<boxm2_data_traits<BOXM2_ALPHA>::datatype*>(source_alpha->data_buffer());
@@ -109,8 +111,8 @@ void boxm2_vecf_head_model::map_to_target(boxm2_scene_sptr target_scene)
             boct_bit_tree bit_tree((unsigned char*) tree.data_block(), target_blk->max_level());
 
             //FOR ALL LEAVES IN CURRENT TREE
-            vcl_vector<int> leafBits = bit_tree.get_leaf_bits();
-            vcl_vector<int>::iterator iter;
+            std::vector<int> leafBits = bit_tree.get_leaf_bits();
+            std::vector<int>::iterator iter;
             for (iter = leafBits.begin(); iter != leafBits.end(); ++iter) {
               int bit_idx = (*iter);
               int data_idx = bit_tree.get_data_index(bit_idx);
@@ -140,7 +142,7 @@ void boxm2_vecf_head_model::map_to_target(boxm2_scene_sptr target_scene)
                 unsigned source_data_idx;
                 source_blk->data_index( inv_scaled_cell_center, source_data_idx);
                 float alpha = source_alpha_data[source_data_idx];
-                double prob = 1 - vcl_exp(-alpha*side_len);
+                double prob = 1 - std::exp(-alpha*side_len);
                 const double prob_thresh = 0.0;
 
                   // get data can copy from source to target
@@ -162,7 +164,7 @@ void boxm2_vecf_head_model::map_to_target(boxm2_scene_sptr target_scene)
 
 
                 vgl_vector_3d<double> dP = inv_scaled_cell_center - abs_source_cell_center;
-                //                vcl_cout<<inv_scaled_cell_center<<" "<<abs_cell_center_vec<<" "<<dP<<" "<<side_len /source_blk->sub_block_dim().x() <<vcl_endl;
+                //                std::cout<<inv_scaled_cell_center<<" "<<abs_cell_center_vec<<" "<<dP<<" "<<side_len /source_blk->sub_block_dim().x() <<std::endl;
                 double cell_len_rw  = side_len;
                 if(dP.x() >= 0){ //source point is to the right of the cell center along x
                   abs_neighbors[0].x() = abs_neighbors[1].x() =abs_neighbors[4].x() = abs_neighbors[5].x() = abs_source_cell_center.x(); // x-left neighbor is the cell center
@@ -231,9 +233,9 @@ void boxm2_vecf_head_model::map_to_target(boxm2_scene_sptr target_scene)
 void boxm2_vecf_head_model::clear_target(boxm2_scene_sptr target_scene)
 {
   // for each block of the target scene
-  vcl_vector<boxm2_block_id> target_blocks = target_scene->get_block_ids();
+  std::vector<boxm2_block_id> target_blocks = target_scene->get_block_ids();
 
-  for (vcl_vector<boxm2_block_id>::iterator tblk = target_blocks.begin();
+  for (std::vector<boxm2_block_id>::iterator tblk = target_blocks.begin();
        tblk != target_blocks.end(); ++tblk) {
 
     boxm2_block *target_blk = boxm2_cache::instance()->get_block(target_scene, *tblk);
@@ -243,7 +245,7 @@ void boxm2_vecf_head_model::clear_target(boxm2_scene_sptr target_scene)
     boxm2_data_base *target_nobs;
     boxm2_data_base * target_color = boxm2_cache::instance()->get_data_base(target_scene, *tblk, boxm2_data_traits<BOXM2_GAUSS_RGB>::prefix(color_apm_id_));
     if (!get_data(target_scene, *tblk, &target_alpha, &target_app, &target_nobs)) {
-      vcl_cerr << "ERROR: boxm2_vecf_head_model::map_to_target(): error getting target block data block=" << tblk->to_string() << vcl_endl;
+      std::cerr << "ERROR: boxm2_vecf_head_model::map_to_target(): error getting target block data block=" << tblk->to_string() << std::endl;
       return ;
     }
     target_alpha->enable_write();
@@ -266,8 +268,8 @@ void boxm2_vecf_head_model::clear_target(boxm2_scene_sptr target_scene)
           boct_bit_tree bit_tree((unsigned char*) tree.data_block(), target_blk->max_level());
 
           //FOR ALL LEAVES IN CURRENT TREE
-          vcl_vector<int> leafBits = bit_tree.get_leaf_bits();
-          vcl_vector<int>::iterator iter;
+          std::vector<int> leafBits = bit_tree.get_leaf_bits();
+          std::vector<int>::iterator iter;
           for (iter = leafBits.begin(); iter != leafBits.end(); ++iter) {
             int bit_idx = (*iter);
             int data_idx = bit_tree.get_data_index(bit_idx);

@@ -16,8 +16,10 @@
 //-------------------------------------------------------------------------
 
 #include <vcl_cassert.h>
-#include <vcl_cstdio.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <cstdio>
+#include <iostream>
 
 #include <vgl/vgl_point_3d.h>
 #include <vgl/vgl_vector_3d.h>
@@ -163,7 +165,7 @@ bmsh3d_halfedge* bmsh3d_edge::get_HE_of_F(bmsh3d_face* F) const
   }
 }
 
-void bmsh3d_edge::get_incident_Fs(vcl_vector<bmsh3d_face*>& incident_faces) const
+void bmsh3d_edge::get_incident_Fs(std::vector<bmsh3d_face*>& incident_faces) const
 {
   //If there's no associated halfedge
   if (halfedge_ == VXL_NULLPTR) {
@@ -235,7 +237,7 @@ bmsh3d_face* bmsh3d_edge::incident_F_given_V(bmsh3d_vertex* incident_V) const
 //  Else, return NULL.
 bmsh3d_face* bmsh3d_edge::is_2_incident_to_one_S() const
 {
-  vcl_vector<bmsh3d_face*> incident_faces;
+  std::vector<bmsh3d_face*> incident_faces;
   get_incident_Fs(incident_faces);
   if (incident_faces.size() == 2) {
     //Only handle the regular 2-incidence internal edge of a sheet.
@@ -251,7 +253,7 @@ bmsh3d_face* bmsh3d_edge::is_2_incident_to_one_S() const
 //: Check if E is 3-incident to one sheet.
 bmsh3d_face* bmsh3d_edge::is_3_incident_to_one_S() const
 {
-  vcl_vector<bmsh3d_face*> incident_faces;
+  std::vector<bmsh3d_face*> incident_faces;
   get_incident_Fs(incident_faces);
   if (incident_faces.size() == 3) {
     //Only handle the regular 2-incidence internal edge of a sheet.
@@ -370,7 +372,7 @@ void bmsh3d_edge::_disconnect_HE(bmsh3d_halfedge* inputHE)
   inputHE->set_pair(VXL_NULLPTR);
 }
 
-void bmsh3d_edge::disconnect_all_Fs(vcl_vector<bmsh3d_face*>& disconn_faces)
+void bmsh3d_edge::disconnect_all_Fs(std::vector<bmsh3d_face*>& disconn_faces)
 {
   // Repeatedly disconnect all incident faces until finish.
   bmsh3d_halfedge* HE = halfedge_;
@@ -423,7 +425,7 @@ bmsh3d_face* bmsh3d_edge::m2_other_face(bmsh3d_face* inputF)
 //###### Other functions ######
 //###############################################################
 
-void bmsh3d_edge::getInfo(vcl_ostringstream& ostrm)
+void bmsh3d_edge::getInfo(std::ostringstream& ostrm)
 {
   ostrm << "\n==============================\n"
         << "bmsh3d_edge id: " << id_

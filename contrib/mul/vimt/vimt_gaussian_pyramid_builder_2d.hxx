@@ -8,8 +8,10 @@
 
 #include "vimt_gaussian_pyramid_builder_2d.h"
 
-#include <vcl_cstdlib.h>
-#include <vcl_string.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <cstdlib>
+#include <string>
 
 #include <vcl_cassert.h>
 #include <vnl/vnl_math.h> // for sqrt2
@@ -44,9 +46,9 @@ void vimt_gaussian_pyramid_builder_2d<T>::set_max_levels(int max_l)
 {
   if (max_l<1)
   {
-    vcl_cerr << "vimt_gaussian_pyramid_builder_2d<T>::setMaxLevels() "
+    std::cerr << "vimt_gaussian_pyramid_builder_2d<T>::setMaxLevels() "
              << "Must be >=1\n";
-    vcl_abort();
+    std::abort();
   }
   max_levels_ = max_l;
 }
@@ -98,9 +100,9 @@ void vimt_gaussian_pyramid_builder_2d<T>::gauss_reduce(const vimt_image_2d_of<T>
       vil_gauss_reduce(src_im.image(),dest_im.image(),work_im_.image());
       break;
     default:
-      vcl_cerr << "vimt_gaussian_pyramid_builder_2d<T>::gauss_reduce() "
+      std::cerr << "vimt_gaussian_pyramid_builder_2d<T>::gauss_reduce() "
                << "cannot cope with filter width of "<<filter_width_<<'\n';
-      vcl_abort();
+      std::abort();
   }
 
   // Sort out world to image transformation for destination image
@@ -250,16 +252,16 @@ void vimt_gaussian_pyramid_builder_2d<T>::extend(vimt_image_pyramid& image_pyr) 
 
 #if 0
 template<class T>
-vcl_string vimt_gaussian_pyramid_builder_2d<T>::is_a() const
+std::string vimt_gaussian_pyramid_builder_2d<T>::is_a() const
 {
-  return vcl_string("vimt_gaussian_pyramid_builder_2d<T>");
+  return std::string("vimt_gaussian_pyramid_builder_2d<T>");
 }
 #endif
 
 //=======================================================================
 
 template<class T>
-bool vimt_gaussian_pyramid_builder_2d<T>::is_class(vcl_string const& s) const
+bool vimt_gaussian_pyramid_builder_2d<T>::is_class(std::string const& s) const
 {
   return s==vimt_gaussian_pyramid_builder_2d<T>::is_a() || vimt_image_pyramid_builder::is_class(s);
 }
@@ -283,7 +285,7 @@ vimt_image_pyramid_builder* vimt_gaussian_pyramid_builder_2d<T>::clone() const
 //=======================================================================
 
 template<class T>
-void vimt_gaussian_pyramid_builder_2d<T>::print_summary(vcl_ostream&) const
+void vimt_gaussian_pyramid_builder_2d<T>::print_summary(std::ostream&) const
 {
 }
 
@@ -314,16 +316,16 @@ void vimt_gaussian_pyramid_builder_2d<T>::b_read(vsl_b_istream& bfs)
     vsl_b_read(bfs,filter_width_);
     break;
   default:
-    vcl_cerr << "I/O ERROR: vimt_gaussian_pyramid_builder_2d<T>::b_read(vsl_b_istream&)\n"
+    std::cerr << "I/O ERROR: vimt_gaussian_pyramid_builder_2d<T>::b_read(vsl_b_istream&)\n"
              << "           Unknown version number "<< version << '\n';
-    bfs.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
+    bfs.is().clear(std::ios::badbit); // Set an unrecoverable IO error on stream
     return;
   }
 }
 
 #define VIMT_GAUSSIAN_PYRAMID_BUILDER_2D_INSTANTIATE(T) \
-VCL_DEFINE_SPECIALIZATION vcl_string vimt_gaussian_pyramid_builder_2d<T >::is_a() const \
-{  return vcl_string("vimt_gaussian_pyramid_builder_2d<" #T ">"); }\
+VCL_DEFINE_SPECIALIZATION std::string vimt_gaussian_pyramid_builder_2d<T >::is_a() const \
+{  return std::string("vimt_gaussian_pyramid_builder_2d<" #T ">"); }\
 template class vimt_gaussian_pyramid_builder_2d<T >
 
 #endif // vimt_gaussian_pyramid_builder_2d_hxx_

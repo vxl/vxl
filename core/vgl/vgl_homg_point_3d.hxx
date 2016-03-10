@@ -4,7 +4,8 @@
 
 #include "vgl_homg_point_3d.h"
 #include <vgl/vgl_homg_plane_3d.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <iostream>
 
 // Note that the given planes must be distinct and not have a line in common!
 template <class Type>
@@ -75,7 +76,7 @@ double cross_ratio(vgl_homg_point_3d<T>const& p1, vgl_homg_point_3d<T>const& p2,
 }
 
 template <class Type>
-vcl_ostream& operator<<(vcl_ostream& s, vgl_homg_point_3d<Type> const& p)
+std::ostream& operator<<(std::ostream& s, vgl_homg_point_3d<Type> const& p)
 {
   return s << " <vgl_homg_point_3d ("
            << p.x() << ',' << p.y() << ','
@@ -83,7 +84,7 @@ vcl_ostream& operator<<(vcl_ostream& s, vgl_homg_point_3d<Type> const& p)
 }
 
 template <class Type>
-vcl_istream& operator>>(vcl_istream& s, vgl_homg_point_3d<Type>& p)
+std::istream& operator>>(std::istream& s, vgl_homg_point_3d<Type>& p)
 {
   Type x, y, z, w;
   s >> x >> y >> z >> w;
@@ -97,7 +98,7 @@ template class vgl_homg_point_3d<T >; \
 template bool collinear(vgl_homg_point_3d<T >const&,vgl_homg_point_3d<T >const&,vgl_homg_point_3d<T >const&); \
 template double cross_ratio(vgl_homg_point_3d<T >const&, vgl_homg_point_3d<T >const&, \
                             vgl_homg_point_3d<T >const&, vgl_homg_point_3d<T >const&); \
-template vcl_ostream& operator<<(vcl_ostream&, vgl_homg_point_3d<T >const&); \
-template vcl_istream& operator>>(vcl_istream&, vgl_homg_point_3d<T >&)
+template std::ostream& operator<<(std::ostream&, vgl_homg_point_3d<T >const&); \
+template std::istream& operator>>(std::istream&, vgl_homg_point_3d<T >&)
 
 #endif // vgl_homg_point_3d_hxx_

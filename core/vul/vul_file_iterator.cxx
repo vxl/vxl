@@ -4,7 +4,8 @@
 #endif
 
 #include "vul_file_iterator.h"
-#include <vcl_string.h>
+#include <vcl_compiler.h>
+#include <string>
 #include <vcl_cassert.h>
 
 #include <vul/vul_file.h>
@@ -31,10 +32,10 @@ struct vul_file_iterator_data
 #endif
   handle_type handle_;
 
-  vcl_string found_;
+  std::string found_;
   char const* name_;
   vul_reg_exp reg_exp_;
-  vcl_string original_dirname_;
+  std::string original_dirname_;
 
   handle_type find_first(const char* dirname, struct _finddata_t* data)
   {
@@ -88,11 +89,11 @@ vul_file_iterator_data::vul_file_iterator_data(char const* glob)
   original_dirname_ = vul_file::dirname(glob);
   handle_ = find_first((original_dirname_ + "\\*").c_str(), &data_);
 
-  vcl_string baseglob = vul_file::basename(glob);
-  vcl_string::iterator i = baseglob.begin();
+  std::string baseglob = vul_file::basename(glob);
+  std::string::iterator i = baseglob.begin();
   bool prev_slash=false, in_sqr_brackets=false;
   //assemble the Regexp string
-  vcl_string re = "^"; // match the start of the string
+  std::string re = "^"; // match the start of the string
   while (i != baseglob.end())
   {
     if (*i=='\\' && !prev_slash)
@@ -148,10 +149,10 @@ vul_file_iterator_data::vul_file_iterator_data(char const* glob)
 
 struct vul_file_iterator_data
 {
-  vcl_string original_dirname_;
+  std::string original_dirname_;
   DIR* dir_handle_;
   dirent* de_;
-  vcl_string found_;
+  std::string found_;
   char const* name_;
   vul_reg_exp reg_exp_;
 
@@ -204,11 +205,11 @@ vul_file_iterator_data::vul_file_iterator_data(char const* glob)
 {
   original_dirname_ = vul_file::dirname(glob) + "/";
 
-  vcl_string baseglob = vul_file::basename(glob);
-  vcl_string::iterator i = baseglob.begin();
+  std::string baseglob = vul_file::basename(glob);
+  std::string::iterator i = baseglob.begin();
   bool prev_slash=false, in_sqr_brackets=false;
   //assemble the Regexp string
-  vcl_string re = "^"; // match the start of the string
+  std::string re = "^"; // match the start of the string
   while (i != baseglob.end())
   {
     if (*i=='\\' && !prev_slash)
@@ -258,7 +259,7 @@ vul_file_iterator::vul_file_iterator(char const* glob)
   reset(glob);
 }
 
-vul_file_iterator::vul_file_iterator(vcl_string const& glob)
+vul_file_iterator::vul_file_iterator(std::string const& glob)
 {
   p = VXL_NULLPTR;
   reset(glob.c_str());

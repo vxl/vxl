@@ -7,8 +7,9 @@
 
 #include "vgl_triangle_scan_iterator.h"
 
-#include <vcl_cmath.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <cmath>
+#include <iostream>
 
 template <class T>
 static inline
@@ -80,26 +81,26 @@ void vgl_triangle_scan_iterator<T>::reset()
   T min, max;
 
   min_n_max(a.x, b.x, c.x, &min, &max);
-  x0 = (int) vcl_ceil (min);
-  x1 = (int) vcl_floor(max);
+  x0 = (int) std::ceil (min);
+  x1 = (int) std::floor(max);
 #ifdef DEBUG
-  vcl_cerr << "x0 x1 = " << x0 << ' ' << x1 << '\n';
+  std::cerr << "x0 x1 = " << x0 << ' ' << x1 << '\n';
 #endif
 
   min_n_max(a.y, b.y, c.y, &min, &max);
-  y0 = (int) vcl_ceil (min);
-  y1 = (int) vcl_floor(max);
+  y0 = (int) std::ceil (min);
+  y1 = (int) std::floor(max);
 #ifdef DEBUG
-  vcl_cerr << "y0 y1 = " << y0 << ' ' << y1 << '\n';
+  std::cerr << "y0 y1 = " << y0 << ' ' << y1 << '\n';
 #endif
 
   scany_ = y0 - 1;
 
   // compute centroid
-  g.x = vcl_floor((a.x + b.x + c.x)/3);
-  g.y = vcl_floor((a.y + b.y + c.y)/3);
+  g.x = std::floor((a.x + b.x + c.x)/3);
+  g.y = std::floor((a.y + b.y + c.y)/3);
 #ifdef DEBUG
-  vcl_cerr << "g = " << g.x << ' ' << g.y << '\n';
+  std::cerr << "g = " << g.x << ' ' << g.y << '\n';
 #endif
 
   //
@@ -122,13 +123,13 @@ void vgl_triangle_scan_iterator<T>::reset()
       data[i][j] *= f;
   }
 #if 0
-  vcl_cerr << "data:\n";
+  std::cerr << "data:\n";
   for (int i=0; i<3; ++i) {
     for (int j=0; j<3; ++j)
-      vcl_cerr << ' ' << data[i][j];
-    vcl_cerr << vcl_endl;
+      std::cerr << ' ' << data[i][j];
+    std::cerr << std::endl;
   }
-  vcl_cerr << vcl_endl;
+  std::cerr << std::endl;
 #endif
 #endif // use_polygon_scan_iterator
 }
@@ -153,7 +154,7 @@ bool vgl_triangle_scan_iterator<T>::next()
   T maxx = x1 - g.x;
 
 #ifdef DEBUG
-  vcl_cerr << "minx maxx = " << minx << ' ' << maxx << '\n';
+  std::cerr << "minx maxx = " << minx << ' ' << maxx << '\n';
 #endif
   for (int i=0; i<3; ++i) {
     T a_ = data[i][0];
@@ -174,12 +175,12 @@ bool vgl_triangle_scan_iterator<T>::next()
       }
     }
 #ifdef DEBUG
-    vcl_cerr << "minx maxx = " << minx << ' ' << maxx << '\n';
+    std::cerr << "minx maxx = " << minx << ' ' << maxx << '\n';
 #endif
   }
 
-  startx_ = (int) vcl_ceil (minx + g.x);
-  endx_   = (int) vcl_floor(maxx + g.x);
+  startx_ = (int) std::ceil (minx + g.x);
+  endx_   = (int) std::floor(maxx + g.x);
 
   // can not use (scany_ == y0) || (startx_ <= endx_)
   // for early scan termination because some triangles may have

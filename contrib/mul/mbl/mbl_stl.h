@@ -16,13 +16,15 @@
 //    Added quite a few little functors mainly to do with iterating through maps
 //    for example a version of the non-standard select1st and select2nd
 
-#include <vcl_functional.h>
-#include <vcl_vector.h>
-#include <vcl_ostream.h>
-#include <vcl_utility.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <functional>
+#include <vector>
+#include <ostream>
+#include <utility>
 
 //: Fill an output sequence with incrementing values.
-// A bit like vcl_fill, but after each assignment, the value is incremented.
+// A bit like std::fill, but after each assignment, the value is incremented.
 // \return the next value in the sequence.
 template<class Out, class T>
 inline T mbl_stl_increments(Out first, Out last, T init)
@@ -32,7 +34,7 @@ inline T mbl_stl_increments(Out first, Out last, T init)
 }
 
 //: Fill the first n values of an output sequence with incrementing values.
-// A bit like vcl_fill_n, but after each assignment,
+// A bit like std::fill_n, but after each assignment,
 // the value is incremented.
 // \return the next value in the sequence.
 template<class Out, class Size, class T>
@@ -46,7 +48,7 @@ inline T mbl_stl_increments_n(Out first, Size n, T init)
 // The value produced at a given step is a function of the previous value.
 // E.g. the following is equivalent to using mbl_stl_increments
 // \code
-// mbl_stl_sequence(A.begin(), A.end(), vcl_bind1st(vcl_plus<unsigned>(), 1u), 0u);
+// mbl_stl_sequence(A.begin(), A.end(), std::bind1st(std::plus<unsigned>(), 1u), 0u);
 // \endcode
 // \return the next value in the sequence.
 template<class Out, class T, class UnOp>
@@ -107,7 +109,7 @@ template<typename InputIterator,
 //NB something like this is in the SGI extension to the STL but is not included in the standard VCL
 //However this is very useful with map iterators so include it here
 template <class Pair>
-struct mbl_stl_select1st : public vcl_unary_function<Pair, typename Pair::first_type>
+struct mbl_stl_select1st : public std::unary_function<Pair, typename Pair::first_type>
 {
   inline typename Pair::first_type const & operator()(Pair const & pair) const
   {
@@ -119,7 +121,7 @@ struct mbl_stl_select1st : public vcl_unary_function<Pair, typename Pair::first_
 //NB something like this is in the SGI extension to the STL but is not included in the standard VCL
 //However this is very useful with map iterators so include it here
 template <class Pair>
-struct mbl_stl_select2nd : public vcl_unary_function<Pair, typename Pair::second_type>
+struct mbl_stl_select2nd : public std::unary_function<Pair, typename Pair::second_type>
 {
   inline typename Pair::second_type const & operator()(Pair const & pair) const
   {
@@ -129,7 +131,7 @@ struct mbl_stl_select2nd : public vcl_unary_function<Pair, typename Pair::second
 
 //Accumulate the second elements of a pair (e.g. for accumulating values through a map)
 template <class Pair>
-struct mbl_stl_add2nd : public vcl_binary_function<typename Pair::second_type, Pair, typename Pair::second_type>
+struct mbl_stl_add2nd : public std::binary_function<typename Pair::second_type, Pair, typename Pair::second_type>
 {
   inline typename Pair::second_type  operator()(typename Pair::second_type partSum, Pair const & x2 ) const
   {
@@ -144,10 +146,10 @@ struct mbl_stl_add2nd : public vcl_binary_function<typename Pair::second_type, P
 //For use in eg STL transform algorithm to extract out required subset of (indexed) objects into a working vector
 //e.g. given vector of indices and vector of values, copy out the required subset thus
 // \code
-// vcl_vector<T> subset
+// std::vector<T> subset
 // subset.reserve(indices.size());
-// vcl_transform(indices.begin(),indices.end(),
-//               vcl_back_inserter(subset),
+// std::transform(indices.begin(),indices.end(),
+//               std::back_inserter(subset),
 //               mbl_stl_index_functor(values));
 // \endcode
 template <class T>
@@ -158,10 +160,10 @@ class mbl_stl_index_functor
   //No bounds checking is done
  private:
   //:const reference to vector used to store the objects indexed
-  const vcl_vector<T >& vec_;
+  const std::vector<T >& vec_;
 
  public:
-  mbl_stl_index_functor(const vcl_vector<T >& vec): vec_(vec) {}
+  mbl_stl_index_functor(const std::vector<T >& vec): vec_(vec) {}
   inline const T& operator()(unsigned index) const { return vec_[index]; }
 };
 
@@ -179,7 +181,7 @@ class mbl_stl_output_t1
 
 //: implementation function for use with mbl_stl_output
 template <class Cont> inline
-vcl_ostream& operator<<(vcl_ostream& s, const mbl_stl_output_t1<Cont>& t)
+std::ostream& operator<<(std::ostream& s, const mbl_stl_output_t1<Cont>& t)
 {
   if (t.c.empty()) return s;
   typename Cont::const_iterator it=t.c.begin(), end=t.c.end();
@@ -192,10 +194,10 @@ vcl_ostream& operator<<(vcl_ostream& s, const mbl_stl_output_t1<Cont>& t)
 
 //: Allow easy stream output of STL container contents.
 // \verbatim
-// vcl_vector<int> c;
+// std::vector<int> c;
 // ...
-// vcl_cout << "The contents of c using normal << notation" <<
-//   mbl_stl_output(c) << vcl_endl;
+// std::cout << "The contents of c using normal << notation" <<
+//   mbl_stl_output(c) << std::endl;
 // \endverbatim
 template <class Cont> inline
 mbl_stl_output_t1<Cont> mbl_stl_output(const Cont &c, const char * sep=" ")
@@ -208,10 +210,10 @@ mbl_stl_output_t1<Cont> mbl_stl_output(const Cont &c, const char * sep=" ")
 // \return pair. Either *pair.first == *pair.second, or pair.first == finish1 && pair.second == finish2 if
 // no matches are found.
 template <class IT1, class IT2>
-inline vcl_pair<IT1, IT2>
+inline std::pair<IT1, IT2>
   mbl_stl_find_common_value(IT1 start1, IT1 finish1, IT2 start2, IT2 finish2)
 {
-  vcl_pair<IT1, IT2> its(start1, start2);
+  std::pair<IT1, IT2> its(start1, start2);
   while (true)
   {
     if (its.first == finish1 || its.second == finish2) return make_pair(finish1, finish2);
@@ -229,10 +231,10 @@ inline vcl_pair<IT1, IT2>
 // \return pair. Either *pair.first == *pair.second, or pair.first == finish1 && pair.second == finish2 if
 // no matches are found.
 template <class IT1, class IT2, class CMP>
-inline vcl_pair<IT1, IT2>
+inline std::pair<IT1, IT2>
   mbl_stl_find_common_value(IT1 start1, IT1 finish1, IT2 start2, IT2 finish2, CMP comp = CMP())
 {
-  vcl_pair<IT1, IT2> its(start1, start2);
+  std::pair<IT1, IT2> its(start1, start2);
   while (true)
   {
     if (its.first == finish1 || its.second == finish2) return make_pair(finish1, finish2);

@@ -12,7 +12,9 @@
 //   Ozge C. Ozcanli - moved from boxm/util to bsta/algo
 // \endverbatim
 
-#include <vcl_vector.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <vector>
 #include <vbl/vbl_ref_count.h>
 #include <vbl/vbl_smart_ptr.h>
 #include <vsl/vsl_binary_io.h>
@@ -36,7 +38,7 @@ class bsta_sigma_normalizer : public vbl_ref_count
   bsta_sigma_normalizer(){}
 
   unsigned int N_PRECOMPUTED_;
-  vcl_vector<float> unbias_const_;
+  std::vector<float> unbias_const_;
 };
 
 typedef vbl_smart_ptr<bsta_sigma_normalizer> bsta_sigma_normalizer_sptr;

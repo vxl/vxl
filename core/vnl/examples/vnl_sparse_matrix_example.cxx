@@ -2,8 +2,9 @@
 #include <vnl/algo/vnl_sparse_symmetric_eigensystem.h>
 #include <vnl/vnl_random.h>
 
-#include <vcl_iostream.h>
-#include <vcl_cstdlib.h>
+#include <iostream>
+#include <vcl_compiler.h>
+#include <cstdlib>
 
 int main()
 {
@@ -26,16 +27,16 @@ int main()
 
   if (b == 0)
   {
-    vcl_cout<<s.get_eigenvalue(0)<<vcl_endl;
-    vcl_cout<<s.get_eigenvector(0)<<vcl_endl;
+    std::cout<<s.get_eigenvalue(0)<<std::endl;
+    std::cout<<s.get_eigenvector(0)<<std::endl;
 
-    vcl_cout<<s.get_eigenvalue(1)<<vcl_endl;
-    vcl_cout<<s.get_eigenvector(1)<<vcl_endl;
+    std::cout<<s.get_eigenvalue(1)<<std::endl;
+    std::cout<<s.get_eigenvector(1)<<std::endl;
 
   }
   else
   {
-    vcl_cerr<<"b = " << b << vcl_endl;
+    std::cerr<<"b = " << b << std::endl;
   }
 
   return 0;

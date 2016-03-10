@@ -13,8 +13,10 @@
 //   10 Sep. 2004 Peter Vanroose  Inlined all 1-line methods in class decl
 // \endverbatim
 
-#include <vcl_iosfwd.h>
-#include <vcl_string.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iosfwd>
+#include <string>
 #include <vbl/vbl_ref_count.h>
 
 class gmvl_node_cache;
@@ -35,10 +37,10 @@ class gmvl_node : public vbl_ref_count
   virtual ~gmvl_node() {}
 
   // getter
-  vcl_string &type() { return type_; }
+  std::string &type() { return type_; }
 
   // input output
-  friend vcl_ostream &operator<<( vcl_ostream &os, gmvl_node &node);
+  friend std::ostream &operator<<( std::ostream &os, gmvl_node &node);
 
   // to allow the cache to access ref
   friend class gmvl_node_cache;
@@ -46,12 +48,12 @@ class gmvl_node : public vbl_ref_count
 
  protected:
   // type name (name of class)
-  vcl_string type_;
+  std::string type_;
 
   // reference number (used by caches)
   int ref_;
 };
 
-vcl_ostream &operator<<(vcl_ostream &os, gmvl_node &node);
+std::ostream &operator<<(std::ostream &os, gmvl_node &node);
 
 #endif // gmvl_node_h_

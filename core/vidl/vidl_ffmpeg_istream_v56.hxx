@@ -20,8 +20,9 @@
 #include "vidl_frame.h"
 #include "vidl_ffmpeg_convert.h"
 
-#include <vcl_string.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <string>
+#include <iostream>
 
 extern "C" {
 #if FFMPEG_IN_SEVERAL_DIRECTORIES
@@ -115,7 +116,7 @@ vidl_ffmpeg_istream()
 
 //: Constructor - from a filename
 vidl_ffmpeg_istream::
-vidl_ffmpeg_istream(const vcl_string& filename)
+vidl_ffmpeg_istream(const std::string& filename)
   : is_( new vidl_ffmpeg_istream::pimpl )
 {
   vidl_ffmpeg_init();
@@ -134,7 +135,7 @@ vidl_ffmpeg_istream::
 //: Open a new stream using a filename
 bool
 vidl_ffmpeg_istream::
-open(const vcl_string& filename)
+open(const std::string& filename)
 {
   // Close any currently opened file
   close();
@@ -186,7 +187,7 @@ open(const vcl_string& filename)
   // stream, so the dts of the last packet (stored in last_dts) is
   // actually the next frame's dts.
   if ( is_->vid_str_->codec->codec_id == AV_CODEC_ID_MPEG2VIDEO &&
-       vcl_string("avi") == is_->fmt_cxt_->iformat->name ) {
+       std::string("avi") == is_->fmt_cxt_->iformat->name ) {
     is_->frame_number_offset_ = 1;
   }
 
@@ -406,7 +407,7 @@ advance()
       if ( avcodec_decode_video2( codec,
                                   is_->frame_, &got_picture,
                                   &is_->packet_ ) < 0 ) {
-        vcl_cerr << "vidl_ffmpeg_istream: Error decoding packet!\n";
+        std::cerr << "vidl_ffmpeg_istream: Error decoding packet!\n";
         return false;
       }
       else
@@ -497,7 +498,7 @@ vidl_ffmpeg_istream::current_frame()
         NULL, NULL, NULL );
 
       if ( is_->sws_context_ == NULL ) {
-        vcl_cerr << "vidl_ffmpeg_istream: couldn't create conversion context\n";
+        std::cerr << "vidl_ffmpeg_istream: couldn't create conversion context\n";
         return vidl_frame_sptr();
       }
 
@@ -582,7 +583,7 @@ seek_frame(unsigned int frame)
     }
     if ( is_->last_dts >= req_timestamp ) {
       if ( is_->last_dts > req_timestamp ) {
-        vcl_cerr << "Warning: seek went into the future!\n";
+        std::cerr << "Warning: seek went into the future!\n";
         return false;
       }
       return true;

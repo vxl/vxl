@@ -10,9 +10,10 @@
 // \author Ian Scott, Manchester ISBE
 // \date   10 April 2001
 
-#include <vcl_functional.h>
-#include <vcl_map.h>
-#include <vcl_cstddef.h>
+#include <functional>
+#include <vcl_compiler.h>
+#include <map>
+#include <cstddef>
 
 //: A fully featured sparse array which devolves indexing to its templated type
 // If you just want an ordinary sparse array use vbl_sparse_array_1d,
@@ -38,13 +39,13 @@ class vbl_sparse_array_base
 {
  protected:
   //: The type of the storage
-  typedef vcl_map<Index, T, vcl_less<Index> > Map;
+  typedef std::map<Index, T, std::less<Index> > Map;
   //: This stores a compact list of the values.
   Map storage_;
 
  public:
 
-  typedef vcl_size_t size_type;
+  typedef std::size_t size_type;
 
   //: Return contents at (i)
   T      & operator () (Index i) { return storage_[i]; }
@@ -80,7 +81,7 @@ class vbl_sparse_array_base
   typedef T T_type;
 
   //: The type of values of the controlled sequence
-  // The value_type is a vcl_pair<Index_type, typename T_type>
+  // The value_type is a std::pair<Index_type, typename T_type>
   typedef typename Map::value_type sequence_value_type;
 
   //: A bidirectional iterator pointing at the first non-empty element

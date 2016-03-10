@@ -17,7 +17,9 @@
 #include <bsta/bsta_parzen.h>
 #include <vsl/vsl_binary_io.h>
 #include <vnl/io/vnl_io_vector_fixed.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iostream>
 
 //: Binary save bsta_von_mises to stream.
 template <class T, unsigned n>
@@ -45,7 +47,7 @@ vsl_b_read(vsl_b_istream &is, bsta_von_mises<T,n>& vm)
 //: Print summary
 template <class T, unsigned n>
 void
-vsl_print_summary(vcl_ostream &os, const bsta_von_mises<T,n>& vm)
+vsl_print_summary(std::ostream &os, const bsta_von_mises<T,n>& vm)
 {
   os << "von_mises  mean:"<<vm.mean()<<" n_samples"<<vm.size();
 }

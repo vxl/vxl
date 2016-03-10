@@ -12,12 +12,14 @@
 #include <boxm/sample/algo/boxm_mog_grey_processor.h>
 
 #include <vnl/vnl_random.h>
-#include <vcl_vector.h>
-#include <vcl_string.h>
+#include <vector>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <string>
 
 template <class T_loc, boxm_apm_type APM, boxm_apm_type AUX_APM>
 boxm_opt3_optimizer<T_loc,APM,AUX_APM>::boxm_opt3_optimizer(boxm_scene<boct_tree<T_loc, boxm_sample<APM> > > &scene,
-                                                            vcl_vector<vcl_string> const& image_ids)
+                                                            std::vector<std::string> const& image_ids)
                                                             : image_ids_(image_ids), scene_(scene), max_cell_P_(0.995f), min_cell_P_(0.0001f)
 {}
 
@@ -35,16 +37,16 @@ bool boxm_opt3_optimizer<T_loc,APM,AUX_APM>::optimize_cells()
 
   typedef typename boxm_apm_traits<APM>::obs_datatype obs_t;
 
-  vcl_vector<boxm_aux_scene<T_loc,  boxm_sample<APM>, aux_type> > aux_scenes;
+  std::vector<boxm_aux_scene<T_loc,  boxm_sample<APM>, aux_type> > aux_scenes;
   for (unsigned int i=0; i<image_ids_.size(); ++i) {
     boxm_aux_scene<T_loc, boxm_sample<APM>, aux_type> aux_scene(&scene_,image_ids_[i],boxm_aux_scene<T_loc, boxm_sample<APM>, aux_type>::LOAD, APM);
     aux_scenes.push_back(aux_scene);
   }
 
-  vcl_vector<float> vis_vector;
-  vcl_vector<obs_t> obs_vector;
+  std::vector<float> vis_vector;
+  std::vector<obs_t> obs_vector;
   vnl_random rand_gen;
-  vcl_vector<boxm_opt3_sample<AUX_APM> > aux_samples;
+  std::vector<boxm_opt3_sample<AUX_APM> > aux_samples;
 
   // for each block
   boxm_block_iterator<tree_type> iter(&scene_);
@@ -54,10 +56,10 @@ bool boxm_opt3_optimizer<T_loc,APM,AUX_APM>::optimize_cells()
     scene_.load_block(iter.index());
     boxm_block<tree_type>* block = *iter;
     boct_tree<T_loc, boxm_sample<APM> >* tree = block->get_tree();
-    vcl_vector<boct_tree_cell<T_loc,boxm_sample<APM> >*> cells = tree->leaf_cells();
+    std::vector<boct_tree_cell<T_loc,boxm_sample<APM> >*> cells = tree->leaf_cells();
 
     // get a vector of incremental readers for each aux scene.
-    vcl_vector<boct_tree_cell_reader<T_loc, aux_type>* > aux_readers(aux_scenes.size());
+    std::vector<boct_tree_cell_reader<T_loc, aux_type>* > aux_readers(aux_scenes.size());
     for (unsigned int i=0; i<aux_scenes.size(); ++i) {
       aux_readers[i] = aux_scenes[i].get_block_incremental(iter.index());
     }
@@ -73,12 +75,12 @@ bool boxm_opt3_optimizer<T_loc,APM,AUX_APM>::optimize_cells()
         boct_tree_cell<T_loc, aux_type> temp_cell;
 
         if (!aux_readers[j]->next(temp_cell)) {
-          vcl_cerr << "error: incremental reader returned false.\n";
+          std::cerr << "error: incremental reader returned false.\n";
           return false;
         }
         //boxm_opt_sample<typename boxm_apm_traits<APM>::obs_datatype> aux_cell = temp_cell.data();
         if (!temp_cell.code_.isequal(&(cell->code_))) {
-          vcl_cerr << "error: temp_cell idx does not match cell idx.\n";
+          std::cerr << "error: temp_cell idx does not match cell idx.\n";
           return false;
         }
         aux_samples.push_back(temp_cell.data());
@@ -106,20 +108,20 @@ bool boxm_opt3_optimizer<T_loc,APM,AUX_APM>::optimize_cells()
             vis_vector.push_back(obs_vis);
           }
           double alpha_s = -aux_samples[s].log_pass_prob_sum_ / total_seg_len;
-          log_alpha_sum += vcl_log(alpha_s);
+          log_alpha_sum += std::log(alpha_s);
         }
       }
       float alpha_new = 0.0f;
       if (n_actual_observations > 0) {
-        //vcl_cout << "cell IN " << data.alpha << ' ' << data.appearance_<< vcl_endl;
+        //std::cout << "cell IN " << data.alpha << ' ' << data.appearance_<< std::endl;
         // compute new alpha value
-        alpha_new = (float)vcl_exp(log_alpha_sum / n_actual_observations);
+        alpha_new = (float)std::exp(log_alpha_sum / n_actual_observations);
 
         // do bounds check on new alpha value
         vgl_box_3d<double> cell_bb = tree->cell_bounding_box(cell);
         const float cell_len = float(cell_bb.width());
-        const float max_alpha = -vcl_log(1.0f - max_cell_P_)/cell_len;
-        const float min_alpha = -vcl_log(1.0f - min_cell_P_)/cell_len;
+        const float max_alpha = -std::log(1.0f - max_cell_P_)/cell_len;
+        const float min_alpha = -std::log(1.0f - min_cell_P_)/cell_len;
         if (alpha_new > max_alpha) {
           alpha_new = max_alpha;
         }
@@ -127,7 +129,7 @@ bool boxm_opt3_optimizer<T_loc,APM,AUX_APM>::optimize_cells()
           alpha_new = min_alpha;
         }
         if (!((alpha_new >= min_alpha) && (alpha_new <= max_alpha)) ){
-          vcl_cerr << vcl_endl << "error: alpha_new = " << alpha_new << '\n'
+          std::cerr << std::endl << "error: alpha_new = " << alpha_new << '\n'
                    << "n_actual_observations = " << n_actual_observations << " log_alpha_sum = " << log_alpha_sum << '\n';
           alpha_new = min_alpha;
         }
@@ -135,12 +137,12 @@ bool boxm_opt3_optimizer<T_loc,APM,AUX_APM>::optimize_cells()
           data.alpha = alpha_new;
         }
         // update with new appearance
-        //vcl_cout << obs_vector.size() << ' ' << vcl_endl;
+        //std::cout << obs_vector.size() << ' ' << std::endl;
         if (obs_vector.size() != n_samples_per_obs * n_actual_observations) {
-          vcl_cerr << "error: n_samples_per_obs = " << n_samples_per_obs << " n_actual_observations = " << n_actual_observations << " obs_vector.size() " << obs_vector.size() << '\n';
+          std::cerr << "error: n_samples_per_obs = " << n_samples_per_obs << " n_actual_observations = " << n_actual_observations << " obs_vector.size() " << obs_vector.size() << '\n';
         }
         boxm_apm_traits<APM>::apm_processor::compute_appearance(obs_vector, vis_vector, data.appearance_, 0.025f);
-        //vcl_cout << "cell OUT " << data.alpha << data.appearance_ << vcl_endl << vcl_endl;
+        //std::cout << "cell OUT " << data.alpha << data.appearance_ << std::endl << std::endl;
         cell->set_data(data);
       }
     }
@@ -151,7 +153,7 @@ bool boxm_opt3_optimizer<T_loc,APM,AUX_APM>::optimize_cells()
     iter++;
   }
 #ifdef DEBUG
-  vcl_cout << "done with all cells" << vcl_endl;
+  std::cout << "done with all cells" << std::endl;
 #endif
   // clear the aux scenes so that its starts with the refined scene next time
   for (unsigned i=0; i<aux_scenes.size(); i++) {

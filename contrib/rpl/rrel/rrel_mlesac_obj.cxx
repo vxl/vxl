@@ -3,8 +3,10 @@
 
 #include <vnl/vnl_math.h>
 
-#include <vcl_cstdlib.h>
-#include <vcl_cmath.h>
+#include <cstdlib>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <cmath>
 
 
 namespace {
@@ -36,13 +38,13 @@ rrel_mlesac_obj::fcn( vect_const_iter begin, vect_const_iter end,
   const double EPS = 0.01;
 
   //EM algorithm to get outlier_frac, the mixing parameter
-  while ( new_inlier_frac > EPS && vcl_abs((new_inlier_frac - inlier_frac) / inlier_frac) > EPS) {
+  while ( new_inlier_frac > EPS && std::abs((new_inlier_frac - inlier_frac) / inlier_frac) > EPS) {
     begin = begin0;
     inlier_frac = new_inlier_frac;
     new_inlier_frac = 0;
     for  (; begin != end; ++begin, ++scale) {
-      double const1 = vcl_pow(mult1 / (*scale), (int)residual_dof_) ;
-      pi = inlier_frac * const1 * vcl_exp( - sqr(*begin) / ( 2.0 * sqr(*scale) ) );
+      double const1 = std::pow(mult1 / (*scale), (int)residual_dof_) ;
+      pi = inlier_frac * const1 * std::exp( - sqr(*begin) / ( 2.0 * sqr(*scale) ) );
       p0 = (1 - inlier_frac) / outlier_sigma_;
       zi = pi / ( pi + p0 );
       new_inlier_frac += zi;
@@ -53,10 +55,10 @@ rrel_mlesac_obj::fcn( vect_const_iter begin, vect_const_iter end,
   begin = begin0;
   //the negative log likelihood
   for ( ; begin != end; ++begin) {
-    double const1 = vcl_pow(mult1 / (*scale), (int)residual_dof_) ;
-    pi = new_inlier_frac * const1 * vcl_exp( - sqr(*begin) / ( 2.0 * sqr(*scale) ) );
+    double const1 = std::pow(mult1 / (*scale), (int)residual_dof_) ;
+    pi = new_inlier_frac * const1 * std::exp( - sqr(*begin) / ( 2.0 * sqr(*scale) ) );
     p0= ( 1 - new_inlier_frac ) / outlier_sigma_;
-    value -= vcl_log( pi + p0 );
+    value -= std::log( pi + p0 );
   }
 
   return value;
@@ -75,18 +77,18 @@ rrel_mlesac_obj::fcn( vect_const_iter begin, vect_const_iter end,
   double inlier_frac = 1.0;
   double new_inlier_frac = 1 - outlier_frac_;
   double mult1 = vnl_math::one_over_sqrt2pi / scale;
-  double const1 = vcl_pow(mult1, (int)residual_dof_) ;
+  double const1 = std::pow(mult1, (int)residual_dof_) ;
   double exp_mult2 = -1.0 / (2.0 * sqr(scale));
 
   const double EPS = 0.01;
 
   //EM algorithm to get outlier_frac, the mixing parameter
-  while ( new_inlier_frac > EPS && vcl_abs((new_inlier_frac - inlier_frac) / inlier_frac) > EPS) {
+  while ( new_inlier_frac > EPS && std::abs((new_inlier_frac - inlier_frac) / inlier_frac) > EPS) {
     begin = begin0;
     inlier_frac = new_inlier_frac;
     new_inlier_frac = 0;
     for  (; begin != end; ++begin) {
-      pi = inlier_frac * const1 * vcl_exp( sqr(*begin) * exp_mult2 );
+      pi = inlier_frac * const1 * std::exp( sqr(*begin) * exp_mult2 );
       p0 = (1 - inlier_frac) / outlier_sigma_;
       zi = pi / ( pi + p0 );
       new_inlier_frac += zi;
@@ -97,9 +99,9 @@ rrel_mlesac_obj::fcn( vect_const_iter begin, vect_const_iter end,
   begin = begin0;
   //the negative log likelihood
   for ( ; begin != end; ++begin) {
-    pi = new_inlier_frac * const1 * vcl_exp( sqr(*begin) * exp_mult2 );
+    pi = new_inlier_frac * const1 * std::exp( sqr(*begin) * exp_mult2 );
     p0= ( 1 - new_inlier_frac ) / outlier_sigma_;
-    value -= vcl_log( pi + p0 );
+    value -= std::log( pi + p0 );
   }
 
   return value;

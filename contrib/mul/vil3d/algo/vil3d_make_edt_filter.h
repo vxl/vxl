@@ -15,6 +15,6 @@ void vil3d_make_edt_filter(double width_i,
                            double width_k,
                            int r,
                            vil3d_structuring_element& se,
-                           vcl_vector<double>& f);
+                           std::vector<double>& f);
 
 #endif // vil3d_make_edt_filter_h_

@@ -13,7 +13,8 @@
 #include <vgl/vgl_point_3d.h>
 #include <vgl/vgl_homg_point_3d.h>
 #include <vgl/algo/vgl_rotation_3d.h>
-#include <vcl_iosfwd.h>
+#include <vcl_compiler.h>
+#include <iosfwd>
 #include "vpgl_proj_camera.h"
 
 
@@ -138,7 +139,7 @@ bool extract_left_camera(const vpgl_essential_matrix<T>& E,
     if (!p_right.is_behind_camera(ph3d) && !p_left.is_behind_camera(ph3d))
       break;
     if ( c == 3 ) {
-      vcl_cerr << "ERROR: extract_left_camera in vpgl_essential_matrix failed.\n";
+      std::cerr << "ERROR: extract_left_camera in vpgl_essential_matrix failed.\n";
       return false;
     }
   }
@@ -147,7 +148,7 @@ bool extract_left_camera(const vpgl_essential_matrix<T>& E,
 }
 
 template <class T>
-vcl_ostream&  operator<<(vcl_ostream& s, vpgl_essential_matrix<T> const& p)
+std::ostream&  operator<<(std::ostream& s, vpgl_essential_matrix<T> const& p)
 {
   s << p.get_matrix();
   return s;
@@ -155,7 +156,7 @@ vcl_ostream&  operator<<(vcl_ostream& s, vpgl_essential_matrix<T> const& p)
 
 //: Read vpgl_perspective_camera  from stream
 template <class T>
-vcl_istream&  operator>>(vcl_istream& s, vpgl_essential_matrix<T>& p)
+std::istream&  operator>>(std::istream& s, vpgl_essential_matrix<T>& p)
 {
   vnl_matrix_fixed<T, 3, 3> m;
   s >> m;
@@ -172,8 +173,8 @@ template bool extract_left_camera(const vpgl_essential_matrix<T >& E, \
                                   const vgl_point_2d<T >& right_corr, \
                                   vpgl_perspective_camera<T >& p_left, \
                                   const T translation_mag); \
-template vcl_ostream& operator<<(vcl_ostream&, const vpgl_essential_matrix<T >&); \
-template vcl_istream& operator>>(vcl_istream&, vpgl_essential_matrix<T >&)
+template std::ostream& operator<<(std::ostream&, const vpgl_essential_matrix<T >&); \
+template std::istream& operator>>(std::istream&, vpgl_essential_matrix<T >&)
 
 
 #endif // vpgl_essential_matrix_hxx_

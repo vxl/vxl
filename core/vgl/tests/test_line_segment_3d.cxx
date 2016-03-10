@@ -1,8 +1,9 @@
 // Some tests for vgl_line_segment_3d
 // Kevin de Souza, Aug 2005.
 
-#include <vcl_iostream.h>
-// not used? #include <vcl_limits.h>
+#include <iostream>
+// not used? #include <vcl_compiler.h>
+#include <limits>
 #include <testlib/testlib_test.h>
 #include <vgl/vgl_line_segment_3d.h>
 
@@ -33,7 +34,7 @@ static void test_parametric_point()
 
 void test_line_segment_3d()
 {
-  vcl_cout << "*****************************\n"
+  std::cout << "*****************************\n"
            << " Testing vgl_line_segment_3d\n"
            << "*****************************\n\n";
 

@@ -14,7 +14,9 @@
 // for I/O:
 #include <vil/vil_load.h>
 #include <vil/vil_save.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iostream>
 
 #include <vil/vil_rgb.h>
 #include <vxl_config.h> // for vxl_byte
@@ -25,22 +27,22 @@ main(int argc, char** argv)
 {
   if (argc < 3)
   {
-    vcl_cerr << "Syntax: example_x_gradient file_in file_out\n";
+    std::cerr << "Syntax: example_x_gradient file_in file_out\n";
     return 1;
   }
 
   // The input image:
   vil_image_resource_sptr in = vil_load_image_resource(argv[1]);
-  if (!in) { vcl_cerr<< "Please use a colour ubyte image as input\n"; return 2;}
+  if (!in) { std::cerr<< "Please use a colour ubyte image as input\n"; return 2;}
 
   // The filter:
   vil_image_resource_sptr out = vepl_x_gradient(in);
 
   // Write output:
   if (vil_save_image_resource(out, argv[2], "pnm"))
-    vcl_cout << "Written x-gradient image to PNM image "<< argv[2]<< '\n';
+    std::cout << "Written x-gradient image to PNM image "<< argv[2]<< '\n';
   else
-    vcl_cout << "Could not write x-gradient image as PNM to " << argv[2] << '\n';
+    std::cout << "Could not write x-gradient image as PNM to " << argv[2] << '\n';
 
   return 0;
 }

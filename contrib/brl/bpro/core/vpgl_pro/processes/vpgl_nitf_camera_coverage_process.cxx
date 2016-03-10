@@ -4,7 +4,9 @@
 // \file
 
 #include <bprb/bprb_parameters.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iostream>
 #include <bpgl/algo/bpgl_nitf_camera_coverage.h>
 
 //: initialization
@@ -18,7 +20,7 @@ bool vpgl_nitf_camera_coverage_process_cons(bprb_func_process& pro)
   //    x-coord2 y-coord2
   //    Caution: Don't forget that in geo coordinates. x-coord = longitude, y-coord =latitude
   // 3: the filename for output coverage list
-  vcl_vector<vcl_string> input_types;
+  std::vector<std::string> input_types;
   input_types.push_back("vcl_string");
   input_types.push_back("vcl_string");
   input_types.push_back("vcl_string");
@@ -26,10 +28,10 @@ bool vpgl_nitf_camera_coverage_process_cons(bprb_func_process& pro)
 }
 
 // Get regions from a file.
-void  get_regions(vcl_string file, vcl_vector< vgl_point_2d<double> > &region)
+void  get_regions(std::string file, std::vector< vgl_point_2d<double> > &region)
 {
   region.clear();
-  vcl_ifstream ifs( file.c_str() );
+  std::ifstream ifs( file.c_str() );
   while (!ifs.eof())
   {
     double x, y;
@@ -42,23 +44,23 @@ void  get_regions(vcl_string file, vcl_vector< vgl_point_2d<double> > &region)
 bool vpgl_nitf_camera_coverage_process(bprb_func_process& pro)
 {
   if (pro.n_inputs()< 3) {
-    vcl_cout << "vpgl_nitf_camera_coverage_process: The number of inputs should be 3" << vcl_endl;
+    std::cout << "vpgl_nitf_camera_coverage_process: The number of inputs should be 3" << std::endl;
     return false;
   }
 
   // get the inputs
   unsigned i=0;
-  vcl_string in_img_list = pro.get_input<vcl_string>(i++);
-  vcl_string region_file = pro.get_input<vcl_string>(i++);
-  vcl_string out_img_list = pro.get_input<vcl_string>(i++);
+  std::string in_img_list = pro.get_input<std::string>(i++);
+  std::string region_file = pro.get_input<std::string>(i++);
+  std::string out_img_list = pro.get_input<std::string>(i++);
 
-  vcl_vector<vgl_point_2d<double> > regions;
+  std::vector<vgl_point_2d<double> > regions;
 
   get_regions(region_file, regions);
 
   if (!bpgl_nitf_camera_coverage::coverage_list(regions,in_img_list, out_img_list))
   {
-    vcl_cerr << "Error vpgl_nitf_camera_coverage_process: Failed to get coverage list\n";
+    std::cerr << "Error vpgl_nitf_camera_coverage_process: Failed to get coverage list\n";
     return false;
   };
 

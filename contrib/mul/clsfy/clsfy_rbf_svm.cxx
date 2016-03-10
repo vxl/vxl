@@ -7,9 +7,11 @@
 // \author Ian Scott
 // \date Jan 2001
 
-#include <vcl_string.h>
+#include <string>
 #include <vcl_cassert.h>
-#include <vcl_cstdlib.h> // for vcl_abort()
+#include <vcl_compiler.h>
+#include <iostream>
+#include <cstdlib> // for std::abort()
 #include <vsl/vsl_indent.h>
 #include <vsl/vsl_vector_io.h>
 #include <vnl/io/vnl_io_vector.h>
@@ -33,7 +35,7 @@ clsfy_rbf_svm::~clsfy_rbf_svm()
 double clsfy_rbf_svm::kernel(const vnl_vector<double> &v1,
                              const vnl_vector<double> &v2) const
 {
-  return vcl_exp(gamma_*vnl_vector_ssd(v1, v2));
+  return std::exp(gamma_*vnl_vector_ssd(v1, v2));
 }
 
 //=======================================================================
@@ -53,20 +55,20 @@ unsigned clsfy_rbf_svm::classify(const vnl_vector<double> &input) const
     const double l = lagrangians_[i];
     if (l <0) upper_target += l;
     else lower_target += l;
-    sum += l * vcl_exp(gamma_*localEuclideanDistanceSq(input, supports_[i]));
+    sum += l * std::exp(gamma_*localEuclideanDistanceSq(input, supports_[i]));
     if (sum > upper_target) return 1u;
     else if (sum < lower_target) return 0u;
   }
-  vcl_cerr << "ERROR: clsfy_rbf_svm::classify"
+  std::cerr << "ERROR: clsfy_rbf_svm::classify"
            << " Should not have reached here\n";
-  vcl_abort();
+  std::abort();
   return 0u;
 }
 
 //=======================================================================
 
 //: Log likelihood of being in class (binary classifiers only).
-// class probability = vcl_exp(logL) / (1+vcl_exp(logL))
+// class probability = std::exp(logL) / (1+std::exp(logL))
 // This is not a strict log likelihood value, since SVMs do not give Bayesian
 // outputs. However its properties fit the requirements of a log likelihood value.
 double clsfy_rbf_svm::log_l(const vnl_vector<double> &input) const
@@ -74,7 +76,7 @@ double clsfy_rbf_svm::log_l(const vnl_vector<double> &input) const
   int n = supports_.size();
   double sum =0.0;
   for (int i =0; i<n; i++)
-    sum += lagrangians_[i] * vcl_exp(gamma_*vnl_vector_ssd(input, supports_[i]));
+    sum += lagrangians_[i] * std::exp(gamma_*vnl_vector_ssd(input, supports_[i]));
   return sum - bias_;
 }
 
@@ -85,11 +87,11 @@ double clsfy_rbf_svm::log_l(const vnl_vector<double> &input) const
 // is in class i;
 // This are not strict probability values, since SVMs do not give Bayesian outputs. However
 // their properties fit the requirements of a probability.
-void clsfy_rbf_svm::class_probabilities(vcl_vector<double> &outputs,
+void clsfy_rbf_svm::class_probabilities(std::vector<double> &outputs,
                                         const vnl_vector<double> &input) const
 {
   outputs.resize(1);
-  double Likely = vcl_exp(log_l(input));
+  double Likely = std::exp(log_l(input));
   if (Likely == vnl_huge_val(double()))
     outputs[0] = 1;
   else
@@ -117,9 +119,9 @@ void clsfy_rbf_svm::calculate_targets()
 //=======================================================================
 
 //: Set the internal values defining the classifier.
-void clsfy_rbf_svm::set( const vcl_vector<vnl_vector<double> > &supportVectors,
-                         const vcl_vector<double> &lagrangianAlphas,
-                         const vcl_vector<unsigned> &labels,
+void clsfy_rbf_svm::set( const std::vector<vnl_vector<double> > &supportVectors,
+                         const std::vector<double> &lagrangianAlphas,
+                         const std::vector<unsigned> &labels,
                          double RBFWidth, double bias)
 {
   unsigned int n = supportVectors.size();
@@ -140,14 +142,14 @@ void clsfy_rbf_svm::set( const vcl_vector<vnl_vector<double> > &supportVectors,
 
 //=======================================================================
 
-vcl_string clsfy_rbf_svm::is_a() const
+std::string clsfy_rbf_svm::is_a() const
 {
-  return vcl_string("clsfy_rbf_svm");
+  return std::string("clsfy_rbf_svm");
 }
 
 //=======================================================================
 
-bool clsfy_rbf_svm::is_class(vcl_string const& s) const
+bool clsfy_rbf_svm::is_class(std::string const& s) const
 {
   return s == clsfy_rbf_svm::is_a() || clsfy_classifier_base::is_class(s);
 }
@@ -168,12 +170,12 @@ clsfy_classifier_base* clsfy_rbf_svm::clone() const
 
 //=======================================================================
 
-void clsfy_rbf_svm::print_summary(vcl_ostream& os) const
+void clsfy_rbf_svm::print_summary(std::ostream& os) const
 {
   os << vsl_indent() << "bias=" << bias_ << "  sigma=" << rbf_width()
      << "  nSupportVectors=" << n_support_vectors() << '\n'
      << vsl_indent() <<"  Starting targets are  " << upper_target_
-     << ", " << lower_target_ << vcl_endl;
+     << ", " << lower_target_ << std::endl;
 }
 
 //=======================================================================
@@ -199,7 +201,7 @@ void clsfy_rbf_svm::b_read(vsl_b_istream& bfs)
   switch (version)
   {
    case 1:
-    vcl_cerr << "WARNING: clsfy_rbf_svm::b_read().\n"
+    std::cerr << "WARNING: clsfy_rbf_svm::b_read().\n"
              << "Version 1 shouldn't really be loaded into this class.\n";
 
     vsl_b_read(bfs,bias_);
@@ -218,9 +220,9 @@ void clsfy_rbf_svm::b_read(vsl_b_istream& bfs)
     calculate_targets();
     break;
    default:
-    vcl_cerr << "I/O ERROR: clsfy_rbf_svm::b_read(vsl_b_istream&)\n"
+    std::cerr << "I/O ERROR: clsfy_rbf_svm::b_read(vsl_b_istream&)\n"
              << "           Unknown version number "<< version << '\n';
-    bfs.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
+    bfs.is().clear(std::ios::badbit); // Set an unrecoverable IO error on stream
     return;
   }
 }

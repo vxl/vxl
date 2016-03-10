@@ -11,8 +11,10 @@
 //  Modifications
 //\endverbatim
 
-#include <vcl_vector.h>
-#include <vcl_list.h>
+#include <vector>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <list>
 
 #include "sdet_edgel.h"
 #include "sdet_curvelet.h"
@@ -27,7 +29,7 @@ struct sdet_link {
   int deg_overlap;                  ///< to keep track of the degree of overlap
   bool flag;                        ///< a falg for miscellaneous purposes
 
-  vcl_list<sdet_curvelet*> curvelets; ///< list of curvelets containing this link
+  std::list<sdet_curvelet*> curvelets; ///< list of curvelets containing this link
 
   //: constructor
   sdet_link(sdet_edgel* e1, sdet_edgel* e2): pe(e1), ce(e2), vote(0.0), deg_overlap(0), flag(false), curvelets(0){}
@@ -65,8 +67,8 @@ struct sdet_link {
 
 };
 
-typedef vcl_list<sdet_link*> sdet_link_list;
-typedef vcl_list<sdet_link*>::iterator sdet_link_list_iter;
+typedef std::list<sdet_link*> sdet_link_list;
+typedef std::list<sdet_link*>::iterator sdet_link_list_iter;
 
 //: This class represents the link graph formed from the edgels
 //  The links are described by an adjacency list organized by the id of the
@@ -74,13 +76,13 @@ typedef vcl_list<sdet_link*>::iterator sdet_link_list_iter;
 class sdet_edgel_link_graph
 {
 public:
-  vcl_vector<sdet_link_list> cLinks; ///< child links
-  vcl_vector<sdet_link_list> pLinks; ///< parent links
-  vcl_vector<bool> linked;            ///< flag to signal whether this edgel has been linked already
+  std::vector<sdet_link_list> cLinks; ///< child links
+  std::vector<sdet_link_list> pLinks; ///< parent links
+  std::vector<bool> linked;            ///< flag to signal whether this edgel has been linked already
 
   //temporary link graph created for finding selected edgel chains
-  vcl_vector<sdet_link_list> cLinks2; ///< child links
-  vcl_vector<sdet_link_list> pLinks2; ///< parent links
+  std::vector<sdet_link_list> cLinks2; ///< child links
+  std::vector<sdet_link_list> pLinks2; ///< parent links
 
   //: constructor
   sdet_edgel_link_graph(int size=0): cLinks(size), pLinks(size), linked(size), cLinks2(size), pLinks2(size){}

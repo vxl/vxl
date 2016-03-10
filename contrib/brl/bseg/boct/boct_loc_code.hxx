@@ -74,7 +74,7 @@ short boct_loc_code<T>::child_index(short this_level)
 }
 
 template <class T>
-vcl_ostream& operator <<(vcl_ostream &s, boct_loc_code<T>& code)
+std::ostream& operator <<(std::ostream &s, boct_loc_code<T>& code)
 {
   s << '[' << code.x_loc_ << ',' << code.y_loc_ << ',' << code.z_loc_ << "] ";
   return s;
@@ -176,9 +176,9 @@ void vsl_b_read(vsl_b_istream & is, boct_loc_code<T>& c)
     break;
 
   default:
-    vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, boct_loc_code&)\n"
+    std::cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, boct_loc_code&)\n"
              << "           Unknown version number "<< v << '\n';
-    is.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
+    is.is().clear(std::ios::badbit); // Set an unrecoverable IO error on stream
     return;
   }
 }
@@ -187,6 +187,6 @@ void vsl_b_read(vsl_b_istream & is, boct_loc_code<T>& c)
 template class boct_loc_code<T >; \
 template void vsl_b_write(vsl_b_ostream & os,const boct_loc_code<T >&); \
 template void vsl_b_read(vsl_b_istream & is,  boct_loc_code<T >&); \
-template vcl_ostream& operator <<(vcl_ostream &s, boct_loc_code<T >& )
+template std::ostream& operator <<(std::ostream &s, boct_loc_code<T >& )
 
 #endif

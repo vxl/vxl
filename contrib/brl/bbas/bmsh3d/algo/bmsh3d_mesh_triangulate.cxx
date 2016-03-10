@@ -10,7 +10,9 @@
 #include <vgl/vgl_point_3d.h>
 #include <vgl/vgl_vector_3d.h>
 #ifdef DEBUG
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iostream>
 #endif
 
 //: Triangulate the input mesh face F into a set of triangular faces.
@@ -21,12 +23,12 @@
 //               ids of the original face F, e.g.,
 //               f0: (v0, v1, v2), f1: (v0, v1, v2), ..., etc.
 //
-bool bmsh3d_triangulate_face (const bmsh3d_face* F, vcl_vector<vcl_vector<int> >& tri_faces)
+bool bmsh3d_triangulate_face (const bmsh3d_face* F, std::vector<std::vector<int> >& tri_faces)
 {
   // triangulate the face
   Vector2dVector face_polygon;
 
-  vcl_vector<bmsh3d_vertex*> vertices;
+  std::vector<bmsh3d_vertex*> vertices;
   if (F->vertices().size() != 0) {
     // Face in IFS
     for (unsigned int i=0; i<F->vertices().size(); i++)
@@ -82,7 +84,7 @@ bool bmsh3d_triangulate_face (const bmsh3d_face* F, vcl_vector<vcl_vector<int> >
     const Vector2d &p2 = result[i*3+1];
     const Vector2d &p3 = result[i*3+2];
 #ifdef DEBUG
-    vcl_cerr << "Triangle " << i+1 << " => ("
+    std::cerr << "Triangle " << i+1 << " => ("
              << p1.GetX() << ", " << p1.GetY() << ") ("
              << p2.GetX() << ", " << p2.GetY() << ") ("
              << p3.GetX() << ", " << p3.GetY() << ")\n"
@@ -90,7 +92,7 @@ bool bmsh3d_triangulate_face (const bmsh3d_face* F, vcl_vector<vcl_vector<int> >
              << p1.id_ << "], v[" << p2.id_ << "], v[" << p3.id_ << "]\n";
 #endif // DEBUG
     // For each triangle, add as a new face
-    vcl_vector<int> tri;
+    std::vector<int> tri;
     tri.clear();
     tri.push_back (p1.id_);
     tri.push_back (p2.id_);
@@ -106,7 +108,7 @@ bmsh3d_mesh* generate_tri_mesh (bmsh3d_mesh* M)
   bmsh3d_mesh* triM = new bmsh3d_mesh;
 
   // Put all existing vertices into the new triM
-  vcl_map<int, bmsh3d_vertex*>::iterator vit = M->vertexmap().begin();
+  std::map<int, bmsh3d_vertex*>::iterator vit = M->vertexmap().begin();
   for (; vit != M->vertexmap().end(); vit++) {
     bmsh3d_vertex* V = (*vit).second;
 
@@ -117,12 +119,12 @@ bmsh3d_mesh* generate_tri_mesh (bmsh3d_mesh* M)
   }
 
   // Triangulate each face of the mesh
-  vcl_map<int, bmsh3d_face*>::iterator it = M->facemap().begin();
+  std::map<int, bmsh3d_face*>::iterator it = M->facemap().begin();
   for (; it != M->facemap().end(); it++) {
     bmsh3d_face* F = (*it).second;
 
     // If the input face is already a triangle, make a new triangular face.
-    vcl_vector<bmsh3d_vertex*> vertices;
+    std::vector<bmsh3d_vertex*> vertices;
     F->get_ordered_Vs (vertices);
     if (vertices.size() < 4) {
       assert (vertices.size() == 3);
@@ -140,7 +142,7 @@ bmsh3d_mesh* generate_tri_mesh (bmsh3d_mesh* M)
     }
     else {
       // triangulate the polygonal face F
-      vcl_vector<vcl_vector<int> > tri_faces;
+      std::vector<std::vector<int> > tri_faces;
       bmsh3d_triangulate_face (F, tri_faces);
 
       // For each resulting triangle, add a new face.

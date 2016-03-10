@@ -1,7 +1,9 @@
 // This is mul/vimt/tests/test_image_bounds_and_centre_2d.cxx
 
 #include <testlib/testlib_test.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iostream>
 #include <vimt/vimt_transform_2d.h>
 #include <vimt/vimt_image_2d_of.h>
 #include <vgl/vgl_point_2d.h>
@@ -9,7 +11,7 @@
 
 static void test_world_bounding_box()
 {
-  vcl_cout << "---------------------------\n"
+  std::cout << "---------------------------\n"
            << "test_world_bounding_box():\n"
            << "---------------------------\n";
 
@@ -55,7 +57,7 @@ static void test_world_bounding_box()
 
 static void test_centre_image_at_origin()
 {
-  vcl_cout << "-------------------------------\n"
+  std::cout << "-------------------------------\n"
            << "test_centre_image_at_origin():\n"
            << "-------------------------------\n";
 

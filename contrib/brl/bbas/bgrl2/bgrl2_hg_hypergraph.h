@@ -11,7 +11,9 @@
 //   Ozge C. Ozcanli 11/15/08  Moved up to vxl
 // \endverbatim
 
-#include <vcl_map.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <map>
 
 #include <bgrl2/bgrl2_hg_graph.h>
 #include <bgrl2/bgrl2_hg_hyperedge.h>
@@ -19,15 +21,15 @@
 class bgrl2_hg_hypergraph : public bgrl2_hg_graph
 {
  protected:
-  vcl_map<int, bgrl2_hg_hyperedge*> hyperedges_;
+  std::map<int, bgrl2_hg_hyperedge*> hyperedges_;
 
  public:
   //: ====== Hypergraph query functions ======
-  vcl_map<int, bgrl2_hg_hyperedge*>& hyperedges() {
+  std::map<int, bgrl2_hg_hyperedge*>& hyperedges() {
     return hyperedges_;
   }
   bgrl2_hg_hyperedge* hyperedges(const int i) {
-    vcl_map<int, bgrl2_hg_hyperedge*>::iterator H_it = hyperedges_.find(i);
+    std::map<int, bgrl2_hg_hyperedge*>::iterator H_it = hyperedges_.find(i);
     if (H_it == hyperedges_.end())
       return NULL;
 

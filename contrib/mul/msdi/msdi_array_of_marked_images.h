@@ -31,13 +31,13 @@ private:
   bool image_pyr_ok_;
 
   //: Image directory
-  vcl_string image_dir_;
+  std::string image_dir_;
 
   //: Pointer to external vector of images
-  const vcl_vector<vil_image_view<vxl_byte> > *images_;
+  const std::vector<vil_image_view<vxl_byte> > *images_;
 
   //: Pointer to external vector of points
-  const vcl_vector<msm_points> *points_;
+  const std::vector<msm_points> *points_;
 
   //: Index of current image
   int index_;
@@ -57,14 +57,14 @@ public:
     //: Construct with external vectors of images and points
     //  Pointers retained to both - they must stay in scope.
   msdi_array_of_marked_images(
-                 const vcl_vector<vil_image_view<vxl_byte> >& images,
-                 const vcl_vector<msm_points>& points,
+                 const std::vector<vil_image_view<vxl_byte> >& images,
+                 const std::vector<msm_points>& points,
                  bool grey_only=true);
 
     //: Initialise with external vectors of images and points
     //  Pointers retained to both - they must stay in scope.
-  void set(const vcl_vector<vil_image_view<vxl_byte> >& images,
-           const vcl_vector<msm_points>& points,
+  void set(const std::vector<vil_image_view<vxl_byte> >& images,
+           const std::vector<msm_points>& points,
            bool grey_only=true);
 
     //: Destructor
@@ -93,10 +93,10 @@ public:
   virtual const msm_points& points();
 
     //: Return current image file name
-  virtual vcl_string image_name() const;
+  virtual std::string image_name() const;
 
     //: Return current points file name
-  virtual vcl_string points_name() const;
+  virtual std::string points_name() const;
 };
 
 #endif // msdi_array_of_marked_images_h_

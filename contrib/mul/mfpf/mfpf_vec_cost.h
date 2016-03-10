@@ -7,8 +7,10 @@
 
 #include <vnl/vnl_vector.h>
 #include <vsl/vsl_binary_io.h>
-#include <vcl_string.h>
-#include <vcl_iosfwd.h>
+#include <string>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iosfwd>
 
 //: Cost functions to evaluate vector of pixel samples
 //  Derived functions return some form of sum of differences
@@ -36,13 +38,13 @@ class mfpf_vec_cost
   short version_no() const;
 
   //: Name of the class
-  virtual vcl_string is_a() const;
+  virtual std::string is_a() const;
 
   //: Create a copy on the heap and return base class pointer
   virtual mfpf_vec_cost* clone() const = 0;
 
   //: Print class to os
-  virtual void print_summary(vcl_ostream& os) const =0;
+  virtual void print_summary(std::ostream& os) const =0;
 
   //: Save class to binary file stream
   virtual void b_write(vsl_b_ostream& bfs) const =0;
@@ -61,9 +63,9 @@ void vsl_b_write(vsl_b_ostream& bfs, const mfpf_vec_cost& b);
 void vsl_b_read(vsl_b_istream& bfs, mfpf_vec_cost& b);
 
 //: Stream output operator for class reference
-vcl_ostream& operator<<(vcl_ostream& os,const mfpf_vec_cost& b);
+std::ostream& operator<<(std::ostream& os,const mfpf_vec_cost& b);
 
 //: Stream output operator for class pointer
-vcl_ostream& operator<<(vcl_ostream& os,const mfpf_vec_cost* b);
+std::ostream& operator<<(std::ostream& os,const mfpf_vec_cost* b);
 
 #endif // mfpf_vec_cost_h_

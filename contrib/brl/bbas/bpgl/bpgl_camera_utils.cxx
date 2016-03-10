@@ -1,11 +1,13 @@
 #include "bpgl_camera_utils.h"
 //:
 // \file
-#include <vcl_cmath.h>
-#include <vcl_vector.h>
-#include <vcl_algorithm.h>
-#include <vcl_iostream.h>
-#include <vcl_fstream.h>
+#include <cmath>
+#include <vector>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <algorithm>
+#include <iostream>
+#include <fstream>
 #include <vul/vul_file.h>
 #include <vul/vul_file_iterator.h>
 #include <vgl/vgl_point_2d.h>
@@ -30,7 +32,7 @@ camera_from_horizon(double focal_length, double principal_pt_u,
   // of a vertical line from the principal point and the
   // horizon line. The distance from the principal point to the
   // vanishing point defines the rotation about the x axis of the camera
-  double norm = vcl_sqrt(a*a + b*b);
+  double norm = std::sqrt(a*a + b*b);
   vgl_line_2d<double> line(a/norm, b/norm, c/norm);
   vgl_vector_2d<double> line_dir = line.direction();
   line_dir = normalize(line_dir);
@@ -49,7 +51,7 @@ camera_from_horizon(double focal_length, double principal_pt_u,
   double tempu2 =(vp2[0]-pp.x())/focal_length;
   double tempv2 =(vp2[1]-pp.y())/focal_length;
   double lambda_2 = 1.0 + tempu2*tempu2 + tempv2*tempv2;
-  lambda_2 = vcl_sqrt(1.0/lambda_2);
+  lambda_2 = std::sqrt(1.0/lambda_2);
   // vanishing point 3 can now be computed
   m[0][0]=(vp2[0]-pp.x()); m[0][1]=(vp2[1]-pp.y());
   w[0]=(vp2[0]-pp.x())*pp.x()+
@@ -59,7 +61,7 @@ camera_from_horizon(double focal_length, double principal_pt_u,
   double tempu3 = (vp3[0]-pp.x())/focal_length;
   double tempv3 =(vp3[1]-pp.y())/focal_length;
   double lambda_3 = 1.0 + tempu3*tempu3 + tempv3*tempv3;
-  lambda_3 = vcl_sqrt(1.0/lambda_3);
+  lambda_3 = std::sqrt(1.0/lambda_3);
   // lambda_3 is negative if the horizon is above the
   // principal point and positive if below
   double sign = (pp.x()*line.a()) + (pp.y()*line.b()) + line.c();
@@ -87,7 +89,7 @@ vpgl_perspective_camera<double> bpgl_camera_utils::
   // right_fov = atan(ppu/f), top_fov = atan(ppv/f)
 
   double dtor = vnl_math::pi_over_180;
-  double tr = vcl_tan(right_fov*dtor), tt = vcl_tan(top_fov*dtor);
+  double tr = std::tan(right_fov*dtor), tt = std::tan(top_fov*dtor);
   double fr = ppu/tr, ft=ppv/tt;
   double f = 0.5*(fr+ft);
 
@@ -97,7 +99,7 @@ vpgl_perspective_camera<double> bpgl_camera_utils::
   vnl_vector_fixed<double,3> z_axis(0.0, 0.0, 1.0);//z axis
 
   // camera principal ray direction considering tilt
-  double c_tilt = vcl_cos(tilt*dtor), s_tilt = vcl_sin(tilt*dtor);
+  double c_tilt = std::cos(tilt*dtor), s_tilt = std::sin(tilt*dtor);
   vnl_vector_fixed<double,3> principal_ray(0.0, s_tilt, -c_tilt);
 
   //the rotation that moves z to the principal ray direction
@@ -118,7 +120,7 @@ vpgl_perspective_camera<double> bpgl_camera_utils::
   vgl_point_3d<double> c(0.0,0.0,altitude);
   cam.set_camera_center(c);
 #ifdef DEBUG
-  vcl_cout << "axis Rotation\n " << R_axis.as_matrix() << '\n'
+  std::cout << "axis Rotation\n " << R_axis.as_matrix() << '\n'
            << "roll Rotation\n " << Rr.as_matrix() << '\n'
            << "R_cam\n " << R_cam.as_matrix() << '\n'
            << "cam center " << cam.get_camera_center()<< '\n';
@@ -127,34 +129,34 @@ vpgl_perspective_camera<double> bpgl_camera_utils::
 }
 
 //: returns a list of cameras from specified directory
-vcl_vector<vpgl_perspective_camera<double>* > bpgl_camera_utils::cameras_from_directory(vcl_string dir)
+std::vector<vpgl_perspective_camera<double>* > bpgl_camera_utils::cameras_from_directory(std::string dir)
 {
-    vcl_vector<vpgl_perspective_camera<double>* > toReturn;
+    std::vector<vpgl_perspective_camera<double>* > toReturn;
     if (!vul_file::is_directory(dir.c_str()) ) {
-        vcl_cerr<<"Cam dir is not a directory\n";
+        std::cerr<<"Cam dir is not a directory\n";
         return toReturn;
     }
 
     //get all of the cam and image files, sort them
-    vcl_string camglob=dir+"/*.txt";
+    std::string camglob=dir+"/*.txt";
     vul_file_iterator file_it(camglob.c_str());
-    vcl_vector<vcl_string> cam_files;
+    std::vector<std::string> cam_files;
     while (file_it) {
-        vcl_string camName(file_it());
+        std::string camName(file_it());
         cam_files.push_back(camName);
         ++file_it;
     }
-    vcl_sort(cam_files.begin(), cam_files.end());
+    std::sort(cam_files.begin(), cam_files.end());
 
     //take sorted lists and load from file
-    vcl_vector<vcl_string>::iterator iter;
+    std::vector<std::string>::iterator iter;
     for (iter = cam_files.begin(); iter != cam_files.end(); ++iter)
     {
         //load camera from file
-        vcl_ifstream ifs(iter->c_str());
+        std::ifstream ifs(iter->c_str());
         vpgl_perspective_camera<double>* pcam =new vpgl_perspective_camera<double>;
         if (!ifs.is_open()) {
-            vcl_cerr << "Failed to open file " << *iter << '\n';
+            std::cerr << "Failed to open file " << *iter << '\n';
             return toReturn;
         }
         else  {
@@ -179,9 +181,9 @@ horizon(vpgl_perspective_camera<double> const& cam)
   return hor_line;
 }
 
-vcl_string bpgl_camera_utils::get_string(double ni, double nj, double right_f, double top_f, double alt, double head, double tilt, double roll)
+std::string bpgl_camera_utils::get_string(double ni, double nj, double right_f, double top_f, double alt, double head, double tilt, double roll)
 {
-  vcl_stringstream str;
+  std::stringstream str;
   str << "_h_" << head << "_t_" << tilt << "_r_" << roll << "_top_fov_" << top_f;
   return str.str();
 }

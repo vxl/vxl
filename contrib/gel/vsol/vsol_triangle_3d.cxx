@@ -3,7 +3,9 @@
 //:
 // \file
 #include <vcl_cassert.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iostream>
 #include <vsol/vsol_point_3d.h>
 #include <vgl/vgl_vector_3d.h>
 #include <vnl/vnl_math.h>
@@ -19,7 +21,7 @@ vsol_triangle_3d::vsol_triangle_3d(vsol_point_3d_sptr const& new_p0,
                                    vsol_point_3d_sptr const& new_p1,
                                    vsol_point_3d_sptr const& new_p2)
 {
-  storage_=new vcl_vector<vsol_point_3d_sptr>(3);
+  storage_=new std::vector<vsol_point_3d_sptr>(3);
   (*storage_)[0]=new_p0;
   (*storage_)[1]=new_p1;
   (*storage_)[2]=new_p2;
@@ -118,7 +120,7 @@ double vsol_triangle_3d::area(void) const
   double dx12=(*storage_)[1]->x()-(*storage_)[2]->x();
   double dy12=(*storage_)[1]->y()-(*storage_)[2]->y();
   double dz12=(*storage_)[1]->z()-(*storage_)[2]->z();
-  return vcl_sqrt( vnl_math::sqr(dy02*dz12-dy12*dz02)
+  return std::sqrt( vnl_math::sqr(dy02*dz12-dy12*dz02)
                  + vnl_math::sqr(dz02*dx12-dz12*dx02)
                  + vnl_math::sqr(dx02*dy12-dx12*dy02))/2;
 }
@@ -160,7 +162,7 @@ void vsol_triangle_3d::set_p2(vsol_point_3d_sptr const& new_p2)
 //---------------------------------------------------------------------------
 bool vsol_triangle_3d::in(vsol_point_3d_sptr const& ) const
 {
-  vcl_cerr << "Warning: vsol_triangle_3d::in() has not been implemented yet\n";
+  std::cerr << "Warning: vsol_triangle_3d::in() has not been implemented yet\n";
   return true;
 }
 
@@ -187,13 +189,13 @@ vsol_triangle_3d::normal_at_point(vsol_point_3d_sptr const& p) const
   return normalized(cross_product(v1,v2));
 }
 
-inline void vsol_triangle_3d::describe(vcl_ostream &strm, int blanking) const
+inline void vsol_triangle_3d::describe(std::ostream &strm, int blanking) const
 {
   if (blanking < 0) blanking = 0; while (blanking--) strm << ' ';
   strm << "<vsol_triangle_3d with corners";
   for (unsigned int i=0; i<size(); ++i)
     strm << ' ' << *(vertex(i));
-  strm << '>' << vcl_endl;
+  strm << '>' << std::endl;
 }
 
 //----------------------------------------------------------------
@@ -219,17 +221,17 @@ void vsol_triangle_3d::b_read(vsl_b_istream &is)
    case 1:
     vsol_polygon_3d::b_read(is);
     if (storage_->size()!=3) {
-      vcl_cerr << "I/O ERROR: vsol_triangle_3d::b_read(vsl_b_istream&)\n"
+      std::cerr << "I/O ERROR: vsol_triangle_3d::b_read(vsl_b_istream&)\n"
                << "           Incorrect number of vertices: "<< storage_->size() << '\n';
-      is.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
+      is.is().clear(std::ios::badbit); // Set an unrecoverable IO error on stream
       return;
     }
     break;
 
    default:
-    vcl_cerr << "I/O ERROR: vsol_triangle_3d::b_read(vsl_b_istream&)\n"
+    std::cerr << "I/O ERROR: vsol_triangle_3d::b_read(vsl_b_istream&)\n"
              << "           Unknown version number "<< ver << '\n';
-    is.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
+    is.is().clear(std::ios::badbit); // Set an unrecoverable IO error on stream
     return;
   }
 }
@@ -240,7 +242,7 @@ short vsol_triangle_3d::version() const
 }
 
 //: Print an ascii summary to the stream
-void vsol_triangle_3d::print_summary(vcl_ostream &os) const
+void vsol_triangle_3d::print_summary(std::ostream &os) const
 {
   os << *this;
 }

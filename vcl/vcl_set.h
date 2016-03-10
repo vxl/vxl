@@ -2,14 +2,16 @@
 #define vcl_set_h_
 
 #include "vcl_compiler.h"
-
-// vcl_less<> is a default argument to vcl_set<> and vcl_multiset<>
-// so we need this for compilers where vcl_less is a macro.
-#include "vcl_functional.h"
-#include "iso/vcl_set.h"
-
-#define VCL_SET_INSTANTIATE extern "you must include vcl_set.hxx first"
-#define VCL_MULTISET_INSTANTIATE extern "you must include vcl_set.hxx first"
-#include "vcl_set.hxx"
+#include <set>
+/* The following includes are needed to preserve backwards
+   compatilibility for external applications.  Previously
+   definitions were defined in multiple headers with conditional
+   ifndef guards, but we now include a reference header
+   instead */
+//no dependancies remove comment above
+//vcl alias names to std names
+#define vcl_set std::set
+#define vcl_multiset std::multiset
+#define vcl_swap std::swap
 
 #endif // vcl_set_h_

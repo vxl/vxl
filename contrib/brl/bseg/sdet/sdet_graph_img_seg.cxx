@@ -1,9 +1,11 @@
 #include "sdet_graph_img_seg.h"
 #include "sdet_graph_img_seg_sptr.h"
 //
-#include <vcl_cstdlib.h> // for std::rand()
-#include <vcl_iostream.h>
-#include <vcl_algorithm.h>
+#include <cstdlib> // for std::rand()
+#include <iostream>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <algorithm>
 #include <vcl_cassert.h>
 #include <vil/vil_load.h>
 #include <vil/vil_math.h>
@@ -20,7 +22,7 @@ sdet_graph_img_seg::sdet_graph_img_seg(unsigned ni, unsigned nj, unsigned margin
   for (int i = margin; i < inner_i; i++)
     for (int j = margin; j < inner_j; j++) {
       pixel_ids_(i,j) = node_cnt_;
-      id_to_pix_[node_cnt_] = vcl_pair<unsigned, unsigned>(i,j);
+      id_to_pix_[node_cnt_] = std::pair<unsigned, unsigned>(i,j);
       node_cnt_++;
     }
 
@@ -57,7 +59,7 @@ sdet_graph_img_seg::sdet_graph_img_seg(unsigned ni, unsigned nj, unsigned margin
 
 }
 
-void sdet_graph_img_seg::create_colors(vcl_vector<vil_rgb<vxl_byte> >& colors, int n_segments)
+void sdet_graph_img_seg::create_colors(std::vector<vil_rgb<vxl_byte> >& colors, int n_segments)
 {
   /*// create random colors for each set
   vnl_random rng;
@@ -97,7 +99,7 @@ void sdet_segment_img2(vil_image_view<float> const& img1, vil_image_view<float> 
 {
   // check if the input images are of the same size
   if (img2.ni() != img1.ni() || img2.nj() != img1.nj()) {
-    vcl_cerr << "Input height image does not have the same size as the input image to be segmented!\n";
+    std::cerr << "Input height image does not have the same size as the input image to be segmented!\n";
     return;
   }
 
@@ -124,23 +126,23 @@ void sdet_segment_img2(vil_image_view<float> const& img1, vil_image_view<float> 
 
 
   // set up the edge costs as difference in color and height space
-  vcl_vector<vbl_edge>& edges = ss->get_edges();
+  std::vector<vbl_edge>& edges = ss->get_edges();
   for (unsigned i = 0; i < edges.size(); i++) {
-    vcl_pair<unsigned, unsigned> pix0 = ss->get_pixel(edges[i].v0_);
+    std::pair<unsigned, unsigned> pix0 = ss->get_pixel(edges[i].v0_);
     double c0 = (double)smoothed1(pix0.first, pix0.second);
-    vcl_pair<unsigned, unsigned> pix1 = ss->get_pixel(edges[i].v1_);
+    std::pair<unsigned, unsigned> pix1 = ss->get_pixel(edges[i].v1_);
     double c1 = (double)smoothed1(pix1.first, pix1.second);
-    double dif = vcl_abs(c1-c0);
+    double dif = std::abs(c1-c0);
 
     double h0 = (double)smoothed2(pix0.first, pix0.second);
     double h1 = (double)smoothed2(pix1.first, pix1.second);
-    double dif2 = vcl_abs(h0-h1);
+    double dif2 = std::abs(h0-h1);
 
-    edges[i].w_ = (float)vcl_sqrt(dif*dif + dif2*dif2);
+    edges[i].w_ = (float)std::sqrt(dif*dif + dif2*dif2);
     /*if (dif < dif2)
-      edges[i].w_ = (float)vcl_sqrt(dif*dif);
+      edges[i].w_ = (float)std::sqrt(dif*dif);
     else
-      edges[i].w_ = (float)vcl_sqrt(dif2*dif2);*/
+      edges[i].w_ = (float)std::sqrt(dif2*dif2);*/
   }
 
   vbl_disjoint_sets ds;
@@ -158,19 +160,19 @@ void sdet_segment_img2(vil_image_view<float> const& img1, vil_image_view<float> 
     if ((v0 != v1) && ((ds.size(v0) < min_size) || (ds.size(v1) < min_size)))
       ds.set_union(v0, v1);
     }
-  vcl_cout << " segmentation resulted in " << ds.num_sets() << " segments!\n";
+  std::cout << " segmentation resulted in " << ds.num_sets() << " segments!\n";
 
   out_img.set_size(img1.ni(), img1.nj());
   out_img.fill(vil_rgb<vxl_sbyte>(0,0,0));
 
   int n_segments = ds.num_elements();  // the number of colors need to be in the number of initial number of nodes, cause the final segment ids are the ids of the nodes
-  vcl_vector<vil_rgb<vxl_byte> > colors;
+  std::vector<vil_rgb<vxl_byte> > colors;
   // create unique colors for each set
   sdet_graph_img_seg::create_colors(colors, n_segments);
 
   for (unsigned i = 0; i<ss->node_cnt(); i++) {
     int comp = ds.find_set(i);
-    vcl_pair<unsigned, unsigned> pix = ss->get_pixel(i);
+    std::pair<unsigned, unsigned> pix = ss->get_pixel(i);
     out_img(pix.first, pix.second) = colors[comp];
   }
 
@@ -182,7 +184,7 @@ void sdet_segment_img2_using_edges(vil_image_view<float> const& img1, vil_image_
 {
     // check if the input images are of the same size
   if (img2.ni() != img1.ni() || img2.nj() != img1.nj()) {
-    vcl_cerr << "Input height image does not have the same size as the input image to be segmented!\n";
+    std::cerr << "Input height image does not have the same size as the input image to be segmented!\n";
     return;
   }
 
@@ -208,11 +210,11 @@ void sdet_segment_img2_using_edges(vil_image_view<float> const& img1, vil_image_
   }
 
   // set up the edge costs as difference in color and height space
-  vcl_vector<vbl_edge>& edges = ss->get_edges();
+  std::vector<vbl_edge>& edges = ss->get_edges();
   for (unsigned i = 0; i < edges.size(); i++) {
-    vcl_pair<unsigned, unsigned> pix0 = ss->get_pixel(edges[i].v0_);
+    std::pair<unsigned, unsigned> pix0 = ss->get_pixel(edges[i].v0_);
     double c0 = (double)smoothed1(pix0.first, pix0.second);
-    vcl_pair<unsigned, unsigned> pix1 = ss->get_pixel(edges[i].v1_);
+    std::pair<unsigned, unsigned> pix1 = ss->get_pixel(edges[i].v1_);
     double c1 = (double)smoothed1(pix1.first, pix1.second);
     double dif = c1-c0;
 
@@ -220,12 +222,12 @@ void sdet_segment_img2_using_edges(vil_image_view<float> const& img1, vil_image_
     double h1 = (double)smoothed2(pix1.first, pix1.second);
     double dif2 = h0-h1;
 
-    edges[i].w_ = (float)vcl_sqrt(dif*dif + dif2*dif2);
+    edges[i].w_ = (float)std::sqrt(dif*dif + dif2*dif2);
 
     double e0 = (double)edge_img(pix0.first, pix0.second);
     double e1 = (double)edge_img(pix1.first, pix1.second);
     edges[i].w_ += ( e0 > e1 ? e0 : e1);
-    //edges[i].w_ = (float)vcl_sqrt(dif*dif + dif2*dif2 + 100*(e0-e1)*(e0-e1));
+    //edges[i].w_ = (float)std::sqrt(dif*dif + dif2*dif2 + 100*(e0-e1)*(e0-e1));
   }
 
   vbl_disjoint_sets ds;
@@ -243,19 +245,19 @@ void sdet_segment_img2_using_edges(vil_image_view<float> const& img1, vil_image_
     if ((v0 != v1) && ((ds.size(v0) < min_size) || (ds.size(v1) < min_size)))
       ds.set_union(v0, v1);
     }
-  vcl_cout << " segmentation resulted in " << ds.num_sets() << " segments!\n";
+  std::cout << " segmentation resulted in " << ds.num_sets() << " segments!\n";
 
   out_img.set_size(img1.ni(), img1.nj());
   out_img.fill(vil_rgb<vxl_sbyte>(0,0,0));
 
   int n_segments = ds.num_elements();  // the number of colors need to be in the number of initial number of nodes, cause the final segment ids are the ids of the nodes
-  vcl_vector<vil_rgb<vxl_byte> > colors;
+  std::vector<vil_rgb<vxl_byte> > colors;
   // create unique colors for each set
   sdet_graph_img_seg::create_colors(colors, n_segments);
 
   for (unsigned i = 0; i<ss->node_cnt(); i++) {
     int comp = ds.find_set(i);
-    vcl_pair<unsigned, unsigned> pix = ss->get_pixel(i);
+    std::pair<unsigned, unsigned> pix = ss->get_pixel(i);
     out_img(pix.first, pix.second) = colors[comp];
   }
 

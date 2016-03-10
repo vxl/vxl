@@ -15,7 +15,9 @@
 #include <bvpl/kernels/bvpl_kernel.h>
 #include <boxm/boxm_scene.h>
 #include "bvpl_octree_kernel_operator.h"
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iostream>
 
 class bvpl_scene_kernel_operator
 {
@@ -57,7 +59,7 @@ class bvpl_scene_kernel_operator
 
       // output tree has the same shape but is initialized to have response zero
       T_data zero_val = T_data();
-      vcl_cout << "Response tree is initialized to: " << zero_val << vcl_endl;
+      std::cout << "Response tree is initialized to: " << zero_val << std::endl;
       tree_out->init_cells(zero_val);
 
       bvpl_octree_kernel_operator<T_data> oper(tree_in);
@@ -79,7 +81,7 @@ void bvpl_scene_kernel_operator::operate(boxm_scene<boct_tree<short, T_data > > 
 {
   double cell_length = kernel->voxel_length();
   short finest_level = scene_in.finest_level();
-  vcl_cout << "bvpl_scene_kernel_operator: Operating on cells at level: " << finest_level << " and length: " << cell_length << vcl_endl;
+  std::cout << "bvpl_scene_kernel_operator: Operating on cells at level: " << finest_level << " and length: " << cell_length << std::endl;
 
   scene_in.clone_blocks(scene_out, T_data());
 
@@ -101,7 +103,7 @@ void bvpl_scene_kernel_operator::operate(boxm_scene<boct_tree<short, T_data > > 
 
     //if level and location code of cells isn't the same then continue
     if ((center_cell->level() != out_center_cell->level()) || !(in_code.isequal(&out_code))){
-      vcl_cerr << " Input and output cells don't have the same structure\n";
+      std::cerr << " Input and output cells don't have the same structure\n";
       ++iterator;
       ++out_iter;
       continue;

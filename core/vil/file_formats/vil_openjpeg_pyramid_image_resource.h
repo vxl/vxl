@@ -14,7 +14,8 @@
 // Approved for public Release, distribution unlimited
 // DISTAR Case 14074
 //
-#include <vcl_vector.h>
+#include <vcl_compiler.h>
+#include <vector>
 #include <vil/vil_pyramid_image_resource.h>
 #include <vil/file_formats/vil_openjpeg.h>
 

@@ -8,9 +8,11 @@
 
 #include "bstm_ocl_change_detection.h"
 
-#include <vcl_fstream.h>
-#include <vcl_algorithm.h>
-#include <vcl_sstream.h>
+#include <fstream>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <algorithm>
+#include <sstream>
 #include <bstm/ocl/bstm_opencl_cache.h>
 #include <bstm/bstm_scene.h>
 #include <bstm/bstm_block.h>
@@ -33,7 +35,7 @@ using namespace bstm_ocl_change_detection_globals;
 
 
 //declare static map
-vcl_map<vcl_string, vcl_vector<bocl_kernel*> > bstm_ocl_change_detection::kernels_;
+std::map<std::string, std::vector<bocl_kernel*> > bstm_ocl_change_detection::kernels_;
 
 
 //main change detect function
@@ -44,7 +46,7 @@ bool bstm_ocl_change_detection::change_detect( vil_image_view<float>&    change_
                                                 vpgl_camera_double_sptr   cam,
                                                 vil_image_view_base_sptr  img,
                                                 vil_image_view_base_sptr  mask_sptr,
-                                                vcl_string                norm_type,
+                                                std::string                norm_type,
                                                 float                     time)
 {
     float transfer_time=0.0f;
@@ -53,25 +55,25 @@ bool bstm_ocl_change_detection::change_detect( vil_image_view<float>&    change_
     //img dimensions, global and local threads (will be correctly set)
     unsigned ni=img->ni();
     unsigned nj=img->nj();
-    vcl_size_t  local_threads [2] = {8,8};
-    vcl_size_t  global_threads[2] = {8,8};
+    std::size_t  local_threads [2] = {8,8};
+    std::size_t  global_threads[2] = {8,8};
 
     //---- get scene info -----
-    vcl_string data_type,label_data_type;
+    std::string data_type,label_data_type;
     int apptypesize,label_apptypesize;
-    vcl_vector<vcl_string> valid_types;
+    std::vector<std::string> valid_types;
     valid_types.push_back(bstm_data_traits<BSTM_MOG6_VIEW_COMPACT>::prefix());
     valid_types.push_back(bstm_data_traits<BSTM_MOG3_GREY>::prefix());
     valid_types.push_back(bstm_data_traits<BSTM_GAUSS_RGB>::prefix());
     if ( !bstm_util::verify_appearance( *scene, valid_types, data_type, apptypesize ) ) {
-      vcl_cout<<"bstm_ocl_change_detection ERROR: scene doesn't have correct appearance model data type"<<vcl_endl;
+      std::cout<<"bstm_ocl_change_detection ERROR: scene doesn't have correct appearance model data type"<<std::endl;
       return false;
     }
-    vcl_string options = bstm_ocl_util::mog_options(data_type);
+    std::string options = bstm_ocl_util::mog_options(data_type);
     bool isColor = (data_type == bstm_data_traits<BSTM_GAUSS_RGB>::prefix());
 
     //grab kernel
-    vcl_vector<bocl_kernel*>& kerns = get_kernels(device, options, isColor);
+    std::vector<bocl_kernel*>& kerns = get_kernels(device, options, isColor);
 
     //create a command queue.
     int status=0;
@@ -83,14 +85,14 @@ bool bstm_ocl_change_detection::change_detect( vil_image_view<float>&    change_
     //catch a "null" mask (not really null because that throws an error)
     bool use_mask = false;
     if ( mask_sptr->ni() == img->ni() && mask_sptr->nj() == img->nj() ) {
-      vcl_cout<<"Change detection using mask."<<vcl_endl;
+      std::cout<<"Change detection using mask."<<std::endl;
       use_mask = true;
     }
     vil_image_view<unsigned char >* mask_map = VXL_NULLPTR;
     if (use_mask) {
       mask_map = dynamic_cast<vil_image_view<unsigned char> *>(mask_sptr.ptr());
       if (!mask_map) {
-        vcl_cout<<"bstm_ocl_change_detection:: mask map is not an unsigned char map"<<vcl_endl;
+        std::cout<<"bstm_ocl_change_detection:: mask map is not an unsigned char map"<<std::endl;
         return false;
       }
     }
@@ -134,7 +136,7 @@ bool bstm_ocl_change_detection::change_detect( vil_image_view<float>&    change_
     {
       vil_image_view_base_sptr float_img = bstm_util::prepare_input_image(img, false);
       if ( float_img->pixel_format() != VIL_PIXEL_FORMAT_RGBA_BYTE ) {
-        vcl_cout<<"bstm_ocl_update_color_process::using a non RGBA image!!"<<vcl_endl;
+        std::cout<<"bstm_ocl_update_color_process::using a non RGBA image!!"<<std::endl;
         return false;
       }
       vil_image_view<vil_rgba<vxl_byte> >* img_view = static_cast<vil_image_view<vil_rgba<vxl_byte> >* >(float_img.ptr());
@@ -239,8 +241,8 @@ bool bstm_ocl_change_detection::change_detect( vil_image_view<float>&    change_
     // STEP ONE: Do 1x1 Change Detection Pass
     //----------------------------------------------------------------------------
     //For each ID in the visibility order, grab that block
-    vcl_vector<bstm_block_id> vis_order = scene->get_vis_blocks(cam);
-    vcl_vector<bstm_block_id>::iterator id;
+    std::vector<bstm_block_id> vis_order = scene->get_vis_blocks(cam);
+    std::vector<bstm_block_id>::iterator id;
     for (id = vis_order.begin(); id != vis_order.end(); ++id)
     {
         //choose correct render kernel
@@ -317,7 +319,7 @@ bool bstm_ocl_change_detection::change_detect( vil_image_view<float>&    change_
     }
     // read out expected image
     change_image->read_to_buffer(queue);
-    vcl_cout<<"Change Detection GPU Time: " << gpu_time << " ms" << vcl_endl;
+    std::cout<<"Change Detection GPU Time: " << gpu_time << " ms" << std::endl;
 
     //----------------------------------------------------------------------------
     //prep output images
@@ -348,20 +350,20 @@ bool bstm_ocl_change_detection::change_detect( vil_image_view<float>&    change_
 //---------------------------------------------------
 // compiles, caches and returns list of kernels
 //---------------------------------------------------
-vcl_vector<bocl_kernel*>& bstm_ocl_change_detection::get_kernels(bocl_device_sptr device, vcl_string opts, bool isColor)
+std::vector<bocl_kernel*>& bstm_ocl_change_detection::get_kernels(bocl_device_sptr device, std::string opts, bool isColor)
 {
     // check to see if this device has compiled kernels already
-    vcl_string identifier = device->device_identifier() + opts;
+    std::string identifier = device->device_identifier() + opts;
     if (kernels_.find(identifier) != kernels_.end())
         return kernels_[identifier];
 
     //if not, compile and cache them
-    vcl_cout<<"===========Compiling change detection kernels===========\n"
-            <<"  for device: "<<device->device_identifier()<<vcl_endl;
+    std::cout<<"===========Compiling change detection kernels===========\n"
+            <<"  for device: "<<device->device_identifier()<<std::endl;
 
     //gather all render sources... seems like a lot for rendering...
-    vcl_vector<vcl_string> src_paths;
-    vcl_string source_dir = vcl_string(VCL_SOURCE_ROOT_DIR) + "/contrib/brl/bseg/bstm/ocl/cl/";
+    std::vector<std::string> src_paths;
+    std::string source_dir = std::string(VCL_SOURCE_ROOT_DIR) + "/contrib/brl/bseg/bstm/ocl/cl/";
     src_paths.push_back(source_dir + "scene_info.cl");
     src_paths.push_back(source_dir + "bit/bit_tree_library_functions.cl");
     src_paths.push_back(source_dir + "bit/time_tree_library_functions.cl");
@@ -377,7 +379,7 @@ vcl_vector<bocl_kernel*>& bstm_ocl_change_detection::get_kernels(bocl_device_spt
     opts += " -D CHANGE_DETECT ";
     if(isColor)
       opts += " -D COLOR ";
-    vcl_string options=opts;
+    std::string options=opts;
     opts += " -D STEP_CELL=step_cell_change(aux_args,data_ptr_tt,d*linfo->block_len) ";
 
     //have kernel construct itself using the context and device
@@ -392,7 +394,7 @@ vcl_vector<bocl_kernel*>& bstm_ocl_change_detection::get_kernels(bocl_device_spt
 
 
     //create normalize image kernel
-    vcl_vector<vcl_string> norm_src_paths;
+    std::vector<std::string> norm_src_paths;
     norm_src_paths.push_back(source_dir + "pixel_conversion.cl");
     norm_src_paths.push_back(source_dir + "bit/normalize_kernels.cl");
     bocl_kernel * normalize_render_kernel=new bocl_kernel();
@@ -404,7 +406,7 @@ vcl_vector<bocl_kernel*>& bstm_ocl_change_detection::get_kernels(bocl_device_spt
                                             "normalize change detection kernel"); //kernel identifier (for error checking)
 
     //store in a vector in the map and return
-    vcl_vector<bocl_kernel*> vec_kernels;
+    std::vector<bocl_kernel*> vec_kernels;
     vec_kernels.push_back(ray_trace_kernel);
     vec_kernels.push_back(normalize_render_kernel);
     kernels_[identifier] = vec_kernels;
@@ -413,7 +415,7 @@ vcl_vector<bocl_kernel*>& bstm_ocl_change_detection::get_kernels(bocl_device_spt
 
 
 
-vcl_map<vcl_string, vcl_vector<bocl_kernel*> > bstm_ocl_aux_pass_change::kernels_;
+std::map<std::string, std::vector<bocl_kernel*> > bstm_ocl_aux_pass_change::kernels_;
 
 bool bstm_ocl_aux_pass_change::change_detect(vil_image_view<float>&    change_img,
                                               bocl_device_sptr          device,
@@ -430,23 +432,23 @@ bool bstm_ocl_aux_pass_change::change_detect(vil_image_view<float>&    change_im
     //img dimensions, global and local threads (will be correctly set)
     unsigned ni=img->ni();
     unsigned nj=img->nj();
-    vcl_size_t  local_threads [2] = {8,8};
-    vcl_size_t  global_threads[2] = {8,8};
+    std::size_t  local_threads [2] = {8,8};
+    std::size_t  global_threads[2] = {8,8};
 
     //---- get scene info -----
-    vcl_string data_type,label_data_type;
+    std::string data_type,label_data_type;
     int apptypesize,label_apptypesize;
-    vcl_vector<vcl_string> valid_types;
+    std::vector<std::string> valid_types;
     valid_types.push_back(bstm_data_traits<BSTM_MOG6_VIEW_COMPACT>::prefix());
     valid_types.push_back(bstm_data_traits<BSTM_MOG3_GREY>::prefix());
     if ( !bstm_util::verify_appearance( *scene, valid_types, data_type, apptypesize ) ) {
-      vcl_cout<<"bstm_ocl_render_gl_expected_image_process ERROR: scene doesn't have correct appearance model data type"<<vcl_endl;
+      std::cout<<"bstm_ocl_render_gl_expected_image_process ERROR: scene doesn't have correct appearance model data type"<<std::endl;
       return false;
     }
-    vcl_string options = bstm_ocl_util::mog_options(data_type);
+    std::string options = bstm_ocl_util::mog_options(data_type);
 
     //grab kernel
-    vcl_vector<bocl_kernel*>& kerns = get_kernels(device, options);
+    std::vector<bocl_kernel*>& kerns = get_kernels(device, options);
 
     //create a command queue.
     int status=0;
@@ -463,14 +465,14 @@ bool bstm_ocl_aux_pass_change::change_detect(vil_image_view<float>&    change_im
     //catch a "null" mask (not really null because that throws an error)
     bool use_mask = false;
     if ( mask_sptr->ni() == img->ni() && mask_sptr->nj() == img->nj() ) {
-      vcl_cout<<"Change detection using mask."<<vcl_endl;
+      std::cout<<"Change detection using mask."<<std::endl;
       use_mask = true;
     }
     vil_image_view<unsigned char >* mask_map = VXL_NULLPTR;
     if (use_mask) {
       mask_map = dynamic_cast<vil_image_view<unsigned char> *>(mask_sptr.ptr());
       if (!mask_map) {
-        vcl_cout<<"bstm_ocl_change_detection:: mask map is not an unsigned char map"<<vcl_endl;
+        std::cout<<"bstm_ocl_change_detection:: mask map is not an unsigned char map"<<std::endl;
         return false;
       }
     }
@@ -555,8 +557,8 @@ bool bstm_ocl_aux_pass_change::change_detect(vil_image_view<float>&    change_im
 
     //----- STEP ONE: per cell mean obs pass ---------
     //For each ID in the visibility order, grab that block
-    vcl_vector<bstm_block_id> vis_order = scene->get_vis_blocks(cam);
-    vcl_vector<bstm_block_id>::iterator id;
+    std::vector<bstm_block_id> vis_order = scene->get_vis_blocks(cam);
+    std::vector<bstm_block_id>::iterator id;
     bocl_kernel* kern =  kerns[0];
     for (id = vis_order.begin(); id != vis_order.end(); ++id)
     {
@@ -586,7 +588,7 @@ bool bstm_ocl_aux_pass_change::change_detect(vil_image_view<float>&    change_im
         // check for invalid parameters
         if( alphaTypeSize == 0 ) //This should never happen, it will result in division by zero later
         {
-            vcl_cout << "ERROR: alphaTypeSize == 0 in " << __FILE__ << __LINE__ << vcl_endl;
+            std::cout << "ERROR: alphaTypeSize == 0 in " << __FILE__ << __LINE__ << std::endl;
             return false;
         }
 
@@ -657,7 +659,7 @@ bool bstm_ocl_aux_pass_change::change_detect(vil_image_view<float>&    change_im
         // check for invalid parameters
         if( alphaTypeSize == 0 ) //This should never happen, it will result in division by zero later
         {
-            vcl_cout << "ERROR: alphaTypeSize == 0 in " << __FILE__ << __LINE__ << vcl_endl;
+            std::cout << "ERROR: alphaTypeSize == 0 in " << __FILE__ << __LINE__ << std::endl;
             return false;
         }
 
@@ -720,7 +722,7 @@ bool bstm_ocl_aux_pass_change::change_detect(vil_image_view<float>&    change_im
     }
     change_image->read_to_buffer(queue);
 
-    vcl_cout<<"Change Detection GPU Time: " << gpu_time << " ms" << vcl_endl;
+    std::cout<<"Change Detection GPU Time: " << gpu_time << " ms" << std::endl;
 
     //store change image
     for (unsigned c=0;c<nj;c++)
@@ -746,20 +748,20 @@ bool bstm_ocl_aux_pass_change::change_detect(vil_image_view<float>&    change_im
     return true;
 }
 
-vcl_vector<bocl_kernel*>& bstm_ocl_aux_pass_change::get_kernels(bocl_device_sptr device, vcl_string opts)
+std::vector<bocl_kernel*>& bstm_ocl_aux_pass_change::get_kernels(bocl_device_sptr device, std::string opts)
 {
     // check to see if this device has compiled kernels already
-    vcl_string identifier = device->device_identifier() + opts;
+    std::string identifier = device->device_identifier() + opts;
     if (kernels_.find(identifier) != kernels_.end())
         return kernels_[identifier];
 
     //if not, compile and cache them
-    vcl_cout<<"===========Compiling two pass change kernels===========\n"
-            <<"  for device: "<<device->device_identifier()<<vcl_endl;
+    std::cout<<"===========Compiling two pass change kernels===========\n"
+            <<"  for device: "<<device->device_identifier()<<std::endl;
 
     //gather all render sources... seems like a lot for rendering...
-    vcl_vector<vcl_string> src_paths;
-    vcl_string source_dir = vcl_string(VCL_SOURCE_ROOT_DIR) + "/contrib/brl/bseg/bstm/ocl/cl/";
+    std::vector<std::string> src_paths;
+    std::string source_dir = std::string(VCL_SOURCE_ROOT_DIR) + "/contrib/brl/bseg/bstm/ocl/cl/";
     src_paths.push_back(source_dir + "scene_info.cl");
     src_paths.push_back(source_dir + "bit/bit_tree_library_functions.cl");
     src_paths.push_back(source_dir + "backproject.cl");
@@ -770,7 +772,7 @@ vcl_vector<bocl_kernel*>& bstm_ocl_aux_pass_change::get_kernels(bocl_device_sptr
     src_paths.push_back(source_dir + "bit/cast_ray_bit.cl");
 
     //pass one, seglen
-    vcl_string seg_options = opts + "  -D CHANGE_SEGLEN -D STEP_CELL=step_cell_seglen(aux_args,data_ptr,data_ptr_tt,d) ";
+    std::string seg_options = opts + "  -D CHANGE_SEGLEN -D STEP_CELL=step_cell_seglen(aux_args,data_ptr,data_ptr_tt,d) ";
     bocl_kernel* seg_len = new bocl_kernel();
     seg_len->create_kernel( &device->context(),
                             device->device_id(),
@@ -780,10 +782,10 @@ vcl_vector<bocl_kernel*>& bstm_ocl_aux_pass_change::get_kernels(bocl_device_sptr
                             "bstm accumulate intensity (pass 1)"); //kernel identifier (for error checking)
 
     //pass two, change detection
-    vcl_string change_options;
+    std::string change_options;
     change_options = opts + " -D AUX_CHANGE -D STEP_CELL=step_cell_change2(aux_args,data_ptr,data_ptr_tt,d) ";
 
-    vcl_cout << "CHANGE OPTIONS: " << change_options << vcl_endl;
+    std::cout << "CHANGE OPTIONS: " << change_options << std::endl;
     bocl_kernel* change_kernel = new bocl_kernel();
     change_kernel->create_kernel( &device->context(),
                                   device->device_id(),
@@ -794,7 +796,7 @@ vcl_vector<bocl_kernel*>& bstm_ocl_aux_pass_change::get_kernels(bocl_device_sptr
 
 
     //create normalize image kernel
-    vcl_vector<vcl_string> norm_src_paths;
+    std::vector<std::string> norm_src_paths;
     norm_src_paths.push_back(source_dir + "pixel_conversion.cl");
     norm_src_paths.push_back(source_dir + "bit/normalize_kernels.cl");
     bocl_kernel * normalize_render_kernel=new bocl_kernel();
@@ -806,7 +808,7 @@ vcl_vector<bocl_kernel*>& bstm_ocl_aux_pass_change::get_kernels(bocl_device_sptr
                                             "normalize change detection kernel"); //kernel identifier (for error checking)
 
     //store in a vector in the map and return
-    vcl_vector<bocl_kernel*> vec_kernels;
+    std::vector<bocl_kernel*> vec_kernels;
     vec_kernels.push_back(seg_len);
     vec_kernels.push_back(change_kernel);
     vec_kernels.push_back(normalize_render_kernel);
@@ -820,7 +822,7 @@ vcl_vector<bocl_kernel*>& bstm_ocl_aux_pass_change::get_kernels(bocl_device_sptr
 
 
 //declare static map
-vcl_map<vcl_string, vcl_vector<bocl_kernel*> > bstm_ocl_update_change::kernels_;
+std::map<std::string, std::vector<bocl_kernel*> > bstm_ocl_update_change::kernels_;
 
 
 //main change detect function
@@ -839,26 +841,26 @@ bool bstm_ocl_update_change::update_change(vil_image_view<float>&    change_img,
     //img dimensions, global and local threads (will be correctly set)
     unsigned ni=img->ni();
     unsigned nj=img->nj();
-    vcl_size_t  local_threads [2] = {8,8};
-    vcl_size_t  global_threads[2] = {8,8};
+    std::size_t  local_threads [2] = {8,8};
+    std::size_t  global_threads[2] = {8,8};
 
     //---- get scene info -----
-    vcl_string data_type,label_data_type;
+    std::string data_type,label_data_type;
     int apptypesize,label_apptypesize;
-    vcl_vector<vcl_string> valid_types;
+    std::vector<std::string> valid_types;
     valid_types.push_back(bstm_data_traits<BSTM_MOG6_VIEW_COMPACT>::prefix());
     valid_types.push_back(bstm_data_traits<BSTM_MOG3_GREY>::prefix());
     valid_types.push_back(bstm_data_traits<BSTM_GAUSS_RGB>::prefix());
     if ( !bstm_util::verify_appearance( *scene, valid_types, data_type, apptypesize ) ) {
-      vcl_cout<<"bstm_ocl_update_change_process ERROR: scene doesn't have correct appearance model data type"<<vcl_endl;
+      std::cout<<"bstm_ocl_update_change_process ERROR: scene doesn't have correct appearance model data type"<<std::endl;
       return false;
     }
 
-    vcl_string options = bstm_ocl_util::mog_options(data_type);
+    std::string options = bstm_ocl_util::mog_options(data_type);
     bool isColor = (data_type == bstm_data_traits<BSTM_GAUSS_RGB>::prefix());
 
     //grab kernel
-    vcl_vector<bocl_kernel*>& kerns = get_kernels(device, options, isColor);
+    std::vector<bocl_kernel*>& kerns = get_kernels(device, options, isColor);
     //create a command queue.
     int status=0;
     cl_command_queue queue = clCreateCommandQueue(device->context(),*(device->device_id()),
@@ -869,14 +871,14 @@ bool bstm_ocl_update_change::update_change(vil_image_view<float>&    change_img,
     //catch a "null" mask (not really null because that throws an error)
     bool use_mask = false;
     if ( mask_sptr->ni() == img->ni() && mask_sptr->nj() == img->nj() ) {
-      vcl_cout<<"Change detection using mask."<<vcl_endl;
+      std::cout<<"Change detection using mask."<<std::endl;
       use_mask = true;
     }
     vil_image_view<unsigned char >* mask_map = VXL_NULLPTR;
     if (use_mask) {
       mask_map = dynamic_cast<vil_image_view<unsigned char> *>(mask_sptr.ptr());
       if (!mask_map) {
-        vcl_cout<<"bstm_ocl_update_change:: mask map is not an unsigned char map"<<vcl_endl;
+        std::cout<<"bstm_ocl_update_change:: mask map is not an unsigned char map"<<std::endl;
         return false;
       }
     }
@@ -921,7 +923,7 @@ bool bstm_ocl_update_change::update_change(vil_image_view<float>&    change_img,
     {
       vil_image_view_base_sptr float_img = bstm_util::prepare_input_image(img, false);
       if ( float_img->pixel_format() != VIL_PIXEL_FORMAT_RGBA_BYTE ) {
-        vcl_cout<<"bstm_ocl_update_color_process::using a non RGBA image!!"<<vcl_endl;
+        std::cout<<"bstm_ocl_update_color_process::using a non RGBA image!!"<<std::endl;
         return false;
       }
       vil_image_view<vil_rgba<vxl_byte> >* img_view = static_cast<vil_image_view<vil_rgba<vxl_byte> >* >(float_img.ptr());
@@ -1029,8 +1031,8 @@ bool bstm_ocl_update_change::update_change(vil_image_view<float>&    change_img,
     // STEP ONE: Do 1x1 Change Detection Pass
     //----------------------------------------------------------------------------
     //For each ID in the visibility order, grab that block
-    vcl_vector<bstm_block_id> vis_order = scene->get_vis_blocks(cam);
-    vcl_vector<bstm_block_id>::iterator id;
+    std::vector<bstm_block_id> vis_order = scene->get_vis_blocks(cam);
+    std::vector<bstm_block_id>::iterator id;
     for (id = vis_order.begin(); id != vis_order.end(); ++id)
     {
         //choose correct render kernel
@@ -1115,7 +1117,7 @@ bool bstm_ocl_update_change::update_change(vil_image_view<float>&    change_img,
     //vil_image_view<float> orig_img(image);
     vil_image_view<float>* out_img =  new vil_image_view<float>(ni, nj);
     out_img->fill(0.0f);
-    vcl_vector<int> strel_vec_i, strel_vec_j;
+    std::vector<int> strel_vec_i, strel_vec_j;
     for (int i=-medfilt_halfsize; i <= medfilt_halfsize; ++i)
       for (int j=-medfilt_halfsize; j <= medfilt_halfsize; ++j) {
         strel_vec_i.push_back(i);
@@ -1348,20 +1350,20 @@ bool bstm_ocl_update_change::update_change(vil_image_view<float>&    change_img,
 //---------------------------------------------------
 // compiles, caches and returns list of kernels
 //---------------------------------------------------
-vcl_vector<bocl_kernel*>& bstm_ocl_update_change::get_kernels(bocl_device_sptr device, vcl_string opts, bool isColor)
+std::vector<bocl_kernel*>& bstm_ocl_update_change::get_kernels(bocl_device_sptr device, std::string opts, bool isColor)
 {
     // check to see if this device has compiled kernels already
-    vcl_string identifier = device->device_identifier() + opts;
+    std::string identifier = device->device_identifier() + opts;
     if (kernels_.find(identifier) != kernels_.end())
         return kernels_[identifier];
 
     //if not, compile and cache them
-    vcl_cout<<"===========Compiling change detection kernels===========\n"
-            <<"  for device: "<<device->device_identifier()<<vcl_endl;
+    std::cout<<"===========Compiling change detection kernels===========\n"
+            <<"  for device: "<<device->device_identifier()<<std::endl;
 
     //gather all render sources... seems like a lot for rendering...
-    vcl_vector<vcl_string> src_paths;
-    vcl_string source_dir = vcl_string(VCL_SOURCE_ROOT_DIR) + "/contrib/brl/bseg/bstm/ocl/cl/";
+    std::vector<std::string> src_paths;
+    std::string source_dir = std::string(VCL_SOURCE_ROOT_DIR) + "/contrib/brl/bseg/bstm/ocl/cl/";
     src_paths.push_back(source_dir + "scene_info.cl");
     src_paths.push_back(source_dir + "bit/bit_tree_library_functions.cl");
     src_paths.push_back(source_dir + "bit/time_tree_library_functions.cl");
@@ -1376,14 +1378,14 @@ vcl_vector<bocl_kernel*>& bstm_ocl_update_change::get_kernels(bocl_device_sptr d
     src_paths.push_back(source_dir + "bit/cast_ray_bit.cl");
 
     //set kernel options
-    vcl_string change_options=opts;
+    std::string change_options=opts;
     change_options += " -D CHANGE_DETECT ";
     if(isColor)
       change_options += " -D COLOR ";
 
     change_options += " -D STEP_CELL=step_cell_change(aux_args,data_ptr_tt,d*linfo->block_len) ";
 
-    vcl_cout << "Compiling with options " << change_options << vcl_endl;
+    std::cout << "Compiling with options " << change_options << std::endl;
     //have kernel construct itself using the context and device
     bocl_kernel * ray_trace_kernel = new bocl_kernel();
     ray_trace_kernel->create_kernel( &device->context(),
@@ -1396,8 +1398,8 @@ vcl_vector<bocl_kernel*>& bstm_ocl_update_change::get_kernels(bocl_device_sptr d
 
 
     //create normalize image kernel
-    vcl_string norm_options=opts;
-    vcl_vector<vcl_string> norm_src_paths;
+    std::string norm_options=opts;
+    std::vector<std::string> norm_src_paths;
     norm_src_paths.push_back(source_dir + "pixel_conversion.cl");
     norm_src_paths.push_back(source_dir + "bit/normalize_kernels.cl");
     bocl_kernel * normalize_render_kernel=new bocl_kernel();
@@ -1410,7 +1412,7 @@ vcl_vector<bocl_kernel*>& bstm_ocl_update_change::get_kernels(bocl_device_sptr d
 
 
     //set kernel options
-    vcl_string accum_options=opts;
+    std::string accum_options=opts;
     accum_options += " -D CHANGE_ACCUM ";
     accum_options += " -D STEP_CELL=step_cell_update(aux_args,data_ptr,data_ptr_tt,d) ";
 
@@ -1423,8 +1425,8 @@ vcl_vector<bocl_kernel*>& bstm_ocl_update_change::get_kernels(bocl_device_sptr d
                                      accum_options,              //options
                                      "bstm 1x1 ocl change detection"); //kernel identifier (for error checking)
 
-    vcl_string update_options=opts;
-    vcl_vector<vcl_string> update_paths;
+    std::string update_options=opts;
+    std::vector<std::string> update_paths;
     update_paths.push_back(source_dir + "scene_info.cl");
     update_paths.push_back(source_dir + "change/change_detection.cl");
     bocl_kernel * update_kernel=new bocl_kernel();
@@ -1437,7 +1439,7 @@ vcl_vector<bocl_kernel*>& bstm_ocl_update_change::get_kernels(bocl_device_sptr d
 
 
     //store in a vector in the map and return
-    vcl_vector<bocl_kernel*> vec_kernels;
+    std::vector<bocl_kernel*> vec_kernels;
     vec_kernels.push_back(ray_trace_kernel);
     vec_kernels.push_back(normalize_render_kernel);
     vec_kernels.push_back(accum_kernel);

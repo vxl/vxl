@@ -11,7 +11,9 @@
 //  Modifications
 //   <none yet>
 // \endverbatim
-#include <vcl_fstream.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <fstream>
 #include <vul/vul_file.h>
 #include <boxm2/boxm2_scene.h>
 #include <bkml/bkml_parser.h>
@@ -19,7 +21,7 @@
 #include <vgl/vgl_polygon.h>
 #include <vgl/vgl_line_2d.h>
 #include <vpgl/vpgl_lvcs_sptr.h>
-#include <vcl_iomanip.h>
+#include <iomanip>
 
 namespace boxm2_create_camera_from_kml_path_process_globals
 {
@@ -31,13 +33,13 @@ bool boxm2_create_camera_from_kml_path_process_cons(bprb_func_process& pro)
 {
   using namespace boxm2_create_camera_from_kml_path_process_globals;
   //process takes 4 inputs
-  vcl_vector<vcl_string> input_types_(n_inputs_);
+  std::vector<std::string> input_types_(n_inputs_);
   input_types_[0] = "vcl_string";      // kml filename where camera path is stored
   input_types_[1] = "vpgl_lvcs_sptr";  // scene local coordinates
   input_types_[2] = "unsigned";        // number of camera position along each path segment
   input_types_[3] = "vcl_string";      // output txt file which contains camera coordinates on the ground
   // process has 0 output
-  vcl_vector<vcl_string>  output_types_(n_outputs_);
+  std::vector<std::string>  output_types_(n_outputs_);
   return pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
 }
 
@@ -46,49 +48,49 @@ bool boxm2_create_camera_from_kml_path_process(bprb_func_process& pro)
   using namespace boxm2_create_camera_from_kml_path_process_globals;
 
   if(pro.n_inputs() < n_inputs_ ){
-    vcl_cout << pro.name() << ": The input number should be " << n_inputs_ << vcl_endl;
+    std::cout << pro.name() << ": The input number should be " << n_inputs_ << std::endl;
     return false;
   }
 
   // get the inputs
   unsigned i = 0;
-  vcl_string cam_path = pro.get_input<vcl_string>(i++);
+  std::string cam_path = pro.get_input<std::string>(i++);
   vpgl_lvcs_sptr lvcs = pro.get_input<vpgl_lvcs_sptr>(i++);
      unsigned cam_num = pro.get_input<unsigned>(i++);
-  vcl_string out_path = pro.get_input<vcl_string>(i++);
+  std::string out_path = pro.get_input<std::string>(i++);
 
   // read the path from kml file
   bkml_parser* parser = new bkml_parser();
-  vcl_FILE* kmlFile = vcl_fopen(cam_path.c_str(), "r");
+  std::FILE* kmlFile = std::fopen(cam_path.c_str(), "r");
   if(!kmlFile){
-    vcl_cerr << cam_path.c_str() << " error on opening the input kml file\n";
+    std::cerr << cam_path.c_str() << " error on opening the input kml file\n";
     delete parser;
     return false;
   }
   if(!parser->parseFile(kmlFile)){
-    vcl_cerr << XML_ErrorString(parser->XML_GetErrorCode()) << " at line "
+    std::cerr << XML_ErrorString(parser->XML_GetErrorCode()) << " at line "
          << parser->XML_GetCurrentLineNumber() << '\n';
     delete parser;
     return false;
   }
   if(parser->linecord_[0].size()<2){
-    vcl_cerr << "error: input kml has NO path\n";
+    std::cerr << "error: input kml has NO path\n";
     delete parser;
     return false;
   }
   // transfer from global wgs84 to local lvcs
-  vcl_vector<vgl_point_2d<double> > vp;
+  std::vector<vgl_point_2d<double> > vp;
 
   for(unsigned i=0; i<(unsigned)parser->linecord_[0].size(); i++){
     double local_x, local_y, local_z;
-    vcl_cout << " geo_coord = " << parser->linecord_[0][i] << vcl_endl;
+    std::cout << " geo_coord = " << parser->linecord_[0][i] << std::endl;
     lvcs->global_to_local(parser->linecord_[0][i].x(),parser->linecord_[0][i].y(), parser->linecord_[0][i].z(),
       vpgl_lvcs::wgs84, local_x, local_y, local_z);
     vp.push_back(vgl_point_2d<double>(local_x, local_y));
   }
 
   // calculate the camera position along the path
-  vcl_vector<vgl_point_2d<double> > cam_pos;
+  std::vector<vgl_point_2d<double> > cam_pos;
   for(unsigned int i=0; i<((unsigned int)vp.size()-1);i++){
     vgl_point_2d<double> startp = vp[i];
     vgl_point_2d<double> endp = vp[i+1];
@@ -102,9 +104,9 @@ bool boxm2_create_camera_from_kml_path_process(bprb_func_process& pro)
   cam_pos.push_back(vp[vp.size()-1]);
 
   // write it into the txt file
-  vcl_ofstream ofs(out_path.c_str());
+  std::ofstream ofs(out_path.c_str());
   for(unsigned int i=0; i<(unsigned int)cam_pos.size(); i++){
-    ofs << vcl_setprecision(10) << vcl_setw(15) << cam_pos[i].x() << "     " << cam_pos[i].y() << vcl_endl;
+    ofs << std::setprecision(10) << std::setw(15) << cam_pos[i].x() << "     " << cam_pos[i].y() << std::endl;
   }
 
   ofs.close();

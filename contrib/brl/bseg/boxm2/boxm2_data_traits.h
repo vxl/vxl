@@ -7,10 +7,12 @@
 // \author Vishal Jain
 // \date nov 17, 2010
 
-#include <vcl_string.h>
-#include <vcl_cstddef.h> // for std::size_t
+#include <string>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <cstddef> // for std::size_t
 #include <vnl/vnl_vector_fixed.h>
-#include <vcl_iostream.h>
+#include <iostream>
 
 #include "boxm2_normal_albedo_array.h"
 #include "boxm2_feature_vector.h"
@@ -75,7 +77,7 @@ class boxm2_mog6_view_compact_processor;
   X(BOXM2_VECF_EYELID, "boxm2_vecf_eyelid", (vnl_vector_fixed<float, 16>))
 
 // The following two lines are a workaround that allows passing in of types that include
-// commas as macro arguments, as long as you enclose them in parentheses, e.g. (vcl_map<int,int>)
+// commas as macro arguments, as long as you enclose them in parentheses, e.g. (std::map<int,int>)
 template<typename T> struct argument_type;
 template<typename T, typename U> struct argument_type<T(U)> { typedef U type; };
 
@@ -98,9 +100,9 @@ class boxm2_data_traits;
   { \
   public: \
     typedef argument_type<void(datatype_val)>::type datatype; \
-    static vcl_size_t datasize() { return sizeof(datatype); } \
-    static vcl_string prefix(const vcl_string& identifier = "") \
-    { if (!identifier.size()) return string_val; else return string_val + vcl_string("_") + identifier; } \
+    static std::size_t datasize() { return sizeof(datatype); } \
+    static std::string prefix(const std::string& identifier = "") \
+    { if (!identifier.size()) return string_val; else return string_val + std::string("_") + identifier; } \
   };
 BOXM2_DATATYPE_TABLE
 #undef X
@@ -115,7 +117,7 @@ public:
 // note that some prefixes are substrings of others.
 // this could be made more efficient by requiring that the table is sorted
 // such that types that are substrings are listed last, but that is probably asking for trouble.
-static boxm2_data_type data_type(vcl_string const& prefix) {
+static boxm2_data_type data_type(std::string const& prefix) {
   boxm2_data_type retval = BOXM2_UNKNOWN;
 #define X(enum_val, string_val, datatype_val) \
   if (prefix.find(boxm2_data_traits<enum_val>::prefix()) == 0) {\
@@ -127,7 +129,7 @@ static boxm2_data_type data_type(vcl_string const& prefix) {
 }
 
 // map enum val to string prefix
-static vcl_string prefix(boxm2_data_type data_type, vcl_string const& identifier="") {
+static std::string prefix(boxm2_data_type data_type, std::string const& identifier="") {
   switch(data_type) {
 #define X(enum_val, string_val, datatype_val) \
     case enum_val: \
@@ -143,7 +145,7 @@ static vcl_string prefix(boxm2_data_type data_type, vcl_string const& identifier
 }
 
 // map enum to datasize
-static vcl_size_t datasize(boxm2_data_type data_type) {
+static std::size_t datasize(boxm2_data_type data_type) {
   switch (data_type) {
 #define X(enum_val, string_val, datatype_val) \
     case enum_val: \
@@ -159,43 +161,43 @@ static vcl_size_t datasize(boxm2_data_type data_type) {
 };
 
 // map string prefix to datasize
-static vcl_size_t datasize(vcl_string const& prefix) {
+static std::size_t datasize(std::string const& prefix) {
   return datasize(data_type(prefix));
 }
 
 
 // TODO: create a table mapping enum to print function, or just require that all types have a stream operator.
-static void print_data(vcl_string const& prefix, char *cell)
+static void print_data(std::string const& prefix, char *cell)
 {
-  if (prefix.find(boxm2_data_traits<BOXM2_ALPHA>::prefix()) != vcl_string::npos) {
-    vcl_cout <<  reinterpret_cast<boxm2_data_traits<BOXM2_ALPHA>::datatype*>(cell)[0];
+  if (prefix.find(boxm2_data_traits<BOXM2_ALPHA>::prefix()) != std::string::npos) {
+    std::cout <<  reinterpret_cast<boxm2_data_traits<BOXM2_ALPHA>::datatype*>(cell)[0];
     return;
   }
-  if (prefix.find(boxm2_data_traits<BOXM2_AUX0>::prefix()) != vcl_string::npos) {
-    vcl_cout <<  reinterpret_cast<boxm2_data_traits<BOXM2_AUX0>::datatype*>(cell)[0];
+  if (prefix.find(boxm2_data_traits<BOXM2_AUX0>::prefix()) != std::string::npos) {
+    std::cout <<  reinterpret_cast<boxm2_data_traits<BOXM2_AUX0>::datatype*>(cell)[0];
     return;
   }
-  if (prefix.find(boxm2_data_traits<BOXM2_AUX>::prefix()) != vcl_string::npos) {
-    vcl_cout <<  reinterpret_cast<boxm2_data_traits<BOXM2_AUX>::datatype*>(cell)[0];
-    return;
-  }
-
-  if (prefix.find(boxm2_data_traits<BOXM2_INTENSITY>::prefix()) != vcl_string::npos) {
-    vcl_cout <<  reinterpret_cast<boxm2_data_traits<BOXM2_INTENSITY>::datatype*>(cell)[0];
+  if (prefix.find(boxm2_data_traits<BOXM2_AUX>::prefix()) != std::string::npos) {
+    std::cout <<  reinterpret_cast<boxm2_data_traits<BOXM2_AUX>::datatype*>(cell)[0];
     return;
   }
 
-  if (prefix.find(boxm2_data_traits<BOXM2_POINT>::prefix()) != vcl_string::npos) {
-    vcl_cout <<  reinterpret_cast<boxm2_data_traits<BOXM2_POINT>::datatype*>(cell)[0];
+  if (prefix.find(boxm2_data_traits<BOXM2_INTENSITY>::prefix()) != std::string::npos) {
+    std::cout <<  reinterpret_cast<boxm2_data_traits<BOXM2_INTENSITY>::datatype*>(cell)[0];
     return;
   }
 
-  if (prefix.find(boxm2_data_traits<BOXM2_COVARIANCE>::prefix()) != vcl_string::npos) {
-    vcl_cout <<  reinterpret_cast<boxm2_data_traits<BOXM2_COVARIANCE>::datatype*>(cell)[0];
+  if (prefix.find(boxm2_data_traits<BOXM2_POINT>::prefix()) != std::string::npos) {
+    std::cout <<  reinterpret_cast<boxm2_data_traits<BOXM2_POINT>::datatype*>(cell)[0];
     return;
   }
 
-  vcl_cerr << "In boxm2_data_info::print_data() -- type: " << prefix << " could not be identified!\n";
+  if (prefix.find(boxm2_data_traits<BOXM2_COVARIANCE>::prefix()) != std::string::npos) {
+    std::cout <<  reinterpret_cast<boxm2_data_traits<BOXM2_COVARIANCE>::datatype*>(cell)[0];
+    return;
+  }
+
+  std::cerr << "In boxm2_data_info::print_data() -- type: " << prefix << " could not be identified!\n";
   return;
 }
 

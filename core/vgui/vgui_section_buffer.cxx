@@ -26,7 +26,8 @@
 #include "vgui_section_buffer.h"
 
 #include <vcl_cassert.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <iostream>
 #include <vbl/vbl_array_1d.h>
 #include <vil1/vil1_image.h>
 #include <vil1/vil1_pixel.h>
@@ -60,7 +61,7 @@ namespace
   bool
   convert_buffer( vil_image_view<InT> const& in,
                   vgui_range_map_params_sptr const& rmp,
-                  OutT* out, vcl_ptrdiff_t hstep )
+                  OutT* out, std::ptrdiff_t hstep )
   {
     bool params_but_not_mappable = false;
     if (rmp&&rmp->n_components_==in.nplanes())
@@ -283,7 +284,7 @@ namespace
   bool
   convert_image( vil_image_view<InT> const& in,
                  vgui_range_map_params_sptr const& rmp,
-                 void* out, vcl_ptrdiff_t hstep,
+                 void* out, std::ptrdiff_t hstep,
                  GLenum format, GLenum type )
   {
     bool result = false;
@@ -354,7 +355,7 @@ vgui_section_buffer( unsigned in_x, unsigned in_y,
   ConditionListBegin;
   ConditionListBody( format_, type_ );
   ConditionListFail {
-    vcl_cerr << __FILE__ << ": " << __LINE__ << ": unknown GL format ("
+    std::cerr << __FILE__ << ": " << __LINE__ << ": unknown GL format ("
              << format_ << ") and type (" << type_ << ").\n"
              << "You can probably easily add support here.\n";
     assert( false );
@@ -427,7 +428,7 @@ apply( vil_image_resource_sptr const& image_in,
     DoCase( VIL_PIXEL_FORMAT_DOUBLE )
     DoCase( VIL_PIXEL_FORMAT_BOOL )
     default:
-      vcl_cerr << __FILE__ << ": " << __LINE__
+      std::cerr << __FILE__ << ": " << __LINE__
                << ": can't handle image pixel format "
                << component_format << '\n';
   }
@@ -435,7 +436,7 @@ apply( vil_image_resource_sptr const& image_in,
 #undef DoCase
 
   if ( !conversion_okay ) {
-    vcl_cerr << __FILE__ << ": " << __LINE__ << ": conversion failed\n";
+    std::cerr << __FILE__ << ": " << __LINE__ << ": conversion failed\n";
   }
 
   buffer_ok_ = conversion_okay;
@@ -485,7 +486,7 @@ apply( vil1_image const& image,
     DoCase( VIL1_RGB_DOUBLE, double,      3 )
     DoCase( VIL1_RGBA_BYTE,  vxl_byte,    4 )
     default:
-      vcl_cerr << __FILE__ << ": " << __LINE__
+      std::cerr << __FILE__ << ": " << __LINE__
                << ": can't handle image pixel format "
                << vil1_print( pixel_format ) << '\n';
   }
@@ -493,11 +494,11 @@ apply( vil1_image const& image,
 #undef DoCase
 
   if ( !conversion_ok ) {
-    vcl_cerr << __FILE__ << ": " << __LINE__ << ": conversion failed\n";
+    std::cerr << __FILE__ << ": " << __LINE__ << ": conversion failed\n";
   }
 
   if (debug || !section_ok)
-    vcl_cerr << (section_ok ? "section ok" : "section bad") << vcl_endl;
+    std::cerr << (section_ok ? "section ok" : "section bad") << std::endl;
 
   buffer_ok_ = section_ok && conversion_ok;
 }

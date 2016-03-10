@@ -4,21 +4,23 @@
 #include <vgl/io/vgl_io_point_3d.h>
 #include <vnl/io/vnl_io_vector.h>
 
-#include <vcl_cstdlib.h> // for std::exit()
-#include <vcl_iterator.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <cstdlib> // for std::exit()
+#include <iterator>
 
-void bvpl_bundler_features_2d::write_feature_txt( vcl_string const& filename ) const
+void bvpl_bundler_features_2d::write_feature_txt( std::string const& filename ) const
 {
-    vcl_ofstream of(filename.c_str());
+    std::ofstream of(filename.c_str());
 
     if (!of)
     {
-        vcl_cerr << "----ERROR---- bvpl_bundler_features_2d::write_txt\n"
+        std::cerr << "----ERROR---- bvpl_bundler_features_2d::write_txt\n"
                  << "\tCOULD NOT OPEN FILE: " << filename
                  << " for writing.\n"
                  << __FILE__ << '\n'
-                 << __LINE__ << '\n' << vcl_flush;
-        vcl_exit(-1);
+                 << __LINE__ << '\n' << std::flush;
+        std::exit(-1);
     }
 
     point_view_feature_map_type::const_iterator
@@ -28,7 +30,7 @@ void bvpl_bundler_features_2d::write_feature_txt( vcl_string const& filename ) c
     for ( p_itr = this->pt_view_feature_map.begin();
           p_itr != p_end; ++p_itr )
     {
-        vcl_map<unsigned, vnl_vector<double> >::const_iterator
+        std::map<unsigned, vnl_vector<double> >::const_iterator
             v_itr, v_end = p_itr->second.end();
 
         for ( v_itr = p_itr->second.begin();
@@ -40,18 +42,18 @@ void bvpl_bundler_features_2d::write_feature_txt( vcl_string const& filename ) c
 
 }//end bvpl_bundler_features_2d::write_mfile
 
-void bvpl_bundler_features_2d::write_txt( vcl_string const& filename ) const
+void bvpl_bundler_features_2d::write_txt( std::string const& filename ) const
 {
-  vcl_ofstream feature_file(filename.c_str());
+  std::ofstream feature_file(filename.c_str());
 
   if (!feature_file)
   {
-    vcl_cerr << "----ERROR---- bvpl_bundler_features_2d::write_txt\n"
+    std::cerr << "----ERROR---- bvpl_bundler_features_2d::write_txt\n"
              << "\tCOULD NOT OPEN FILE: " << filename
              << " for writing.\n"
              << __FILE__ << '\n'
-             << __LINE__ << '\n' << vcl_flush;
-    vcl_exit(-1);
+             << __LINE__ << '\n' << std::flush;
+    std::exit(-1);
   }
 
   point_view_feature_map_type::const_iterator
@@ -63,7 +65,7 @@ void bvpl_bundler_features_2d::write_txt( vcl_string const& filename ) const
     //output the 3d point
     feature_file << p_itr->first << '\n';
 
-    vcl_map<unsigned, vnl_vector<double> >::const_iterator
+    std::map<unsigned, vnl_vector<double> >::const_iterator
       v_itr, v_end = p_itr->second.end();
 
     //output the number of views
@@ -103,7 +105,7 @@ void bvpl_bundler_features_2d::b_write( vsl_b_ostream& os ) const
     //write the number of views
     vsl_b_write(os, pt_itr->second.size());
 
-    vcl_map<unsigned, vnl_vector<double> >::const_iterator
+    std::map<unsigned, vnl_vector<double> >::const_iterator
       v_itr, v_end = pt_itr->second.end();
 
     for ( v_itr = pt_itr->second.begin();
@@ -132,22 +134,22 @@ void bvpl_bundler_features_2d::b_read( vsl_b_istream& is )
    case 1:
     {
       //read the number of points
-      vcl_size_t npoints;
+      std::size_t npoints;
       vsl_b_read(is,npoints);
 
-      for ( vcl_size_t i = 0; i < npoints; ++i )
+      for ( std::size_t i = 0; i < npoints; ++i )
       {
         //read the point
         vgl_point_3d<double> pt;
         vsl_b_read(is,pt);
 
         //read the number of views
-        vcl_size_t nviews;
+        std::size_t nviews;
         vsl_b_read(is,nviews);
 
-        vcl_map<unsigned,vnl_vector<double> > view_feature_map;
+        std::map<unsigned,vnl_vector<double> > view_feature_map;
 
-        for ( vcl_size_t j = 0; j < nviews; ++j )
+        for ( std::size_t j = 0; j < nviews; ++j )
         {
           //read the view number
           unsigned view_number;
@@ -157,21 +159,21 @@ void bvpl_bundler_features_2d::b_read( vsl_b_istream& is )
           vnl_vector<double> v;
           vsl_b_read(is,v);
 
-          view_feature_map.insert(vcl_make_pair(view_number,v));
+          view_feature_map.insert(std::make_pair(view_number,v));
         }//end view iteration
 
-        this->pt_view_feature_map.insert(vcl_make_pair(pt,view_feature_map));
+        this->pt_view_feature_map.insert(std::make_pair(pt,view_feature_map));
       }//end point iteration
       break;
     }//end case 1
    default:
     {
-      vcl_cerr << "----ERROR---- bof_bundler_features_2d::b_read\n"
+      std::cerr << "----ERROR---- bof_bundler_features_2d::b_read\n"
                << "\tUNKNOWN I/O VERSION\n"
                << __FILE__ << '\n'
                << __LINE__ << '\n'
-               << vcl_flush;
-      vcl_exit(-1);
+               << std::flush;
+      std::exit(-1);
     }//end default
   }//end switch
 

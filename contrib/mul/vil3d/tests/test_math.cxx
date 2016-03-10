@@ -1,13 +1,15 @@
 // This is mul/vil3d/tests/test_math.cxx
 #include <testlib/testlib_test.h>
-#include <vcl_iostream.h>
-// not used? #include <vcl_iomanip.h>
+#include <iostream>
+// not used? #include <vcl_compiler.h>
+#include <iostream>
+#include <iomanip>
 #include <vil3d/vil3d_math.h>
 
 
 static void test_image_view_maths_float()
 {
-  vcl_cout << "********************************\n"
+  std::cout << "********************************\n"
            << " Testing vil3d_image_view_maths\n"
            << "********************************\n";
 
@@ -40,7 +42,7 @@ static void test_image_view_maths_float()
 
 static void test_math_value_range()
 {
-  vcl_cout << "********************************\n"
+  std::cout << "********************************\n"
            << " Testing vil3d_math_value_range\n"
            << "********************************\n";
 
@@ -88,8 +90,8 @@ static void test_math_value_range()
 
   // Test several percentiles at once
   unsigned int nfrac = 9;
-  vcl_vector<double> fraction(nfrac);
-  vcl_vector<double> true_value(nfrac);
+  std::vector<double> fraction(nfrac);
+  std::vector<double> true_value(nfrac);
   fraction[0] = 0.000;  true_value[0] =    1;
   fraction[1] = 0.050;  true_value[1] =   50;
   fraction[2] = 0.100;  true_value[2] =  100;
@@ -99,7 +101,7 @@ static void test_math_value_range()
   fraction[6] = 0.900;  true_value[6] =  900;
   fraction[7] = 0.950;  true_value[7] =  950;
   fraction[8] = 1.000;  true_value[8] = 1000;
-  vcl_vector<int> value;
+  std::vector<int> value;
   vil3d_math_value_range_percentiles(img, fraction, value);
   bool all_correct = true;
   for (unsigned f=0; f<nfrac; ++f)
@@ -114,7 +116,7 @@ static void test_math_value_range()
 
 static void test_math_integral_image()
 {
-  vcl_cout << "***********************************\n"
+  std::cout << "***********************************\n"
            << " Testing vil3d_math_integral_image\n"
            << "***********************************\n";
   // create a 3x3x3 image
@@ -158,17 +160,17 @@ static void test_math_integral_image()
   // print out values if test failed
   if (!all_correct)
   {
-    vcl_cout << "Expected and obtained values for integral image\n";
+    std::cout << "Expected and obtained values for integral image\n";
     for (unsigned k=0; k<n1; k++)
     {
       for (unsigned j=0; j<n1; j++)
       {
         for (unsigned i=0; i<n1; i++)
-          vcl_cout << im_sum1(i,j,k) << ' ';
-        vcl_cout << "\t\t";
+          std::cout << im_sum1(i,j,k) << ' ';
+        std::cout << "\t\t";
         for (unsigned i=0; i<n1; i++)
-          vcl_cout << im_sum2(i,j,k) << ' ';
-        vcl_cout << vcl_endl;
+          std::cout << im_sum2(i,j,k) << ' ';
+        std::cout << std::endl;
       }
     }
   }
@@ -176,7 +178,7 @@ static void test_math_integral_image()
 
 static void test_math_integral_image_sqr()
 {
-  vcl_cout << "***************************************\n"
+  std::cout << "***************************************\n"
            << " Testing vil3d_math_integral_image_sqr\n"
            << "***************************************\n";
   // create a 3x3x3 image
@@ -236,17 +238,17 @@ static void test_math_integral_image_sqr()
   // print out values if test failed
   if (!all_correct)
   {
-    vcl_cout << "Expected and obtained values for sum integral image\n";
+    std::cout << "Expected and obtained values for sum integral image\n";
     for (unsigned k=0; k<n1; k++)
     {
       for (unsigned j=0; j<n1; j++)
       {
         for (unsigned i=0; i<n1; i++)
-          vcl_cout << im_sum1(i,j,k) << ' ';
-        vcl_cout << "\t\t";
+          std::cout << im_sum1(i,j,k) << ' ';
+        std::cout << "\t\t";
         for (unsigned i=0; i<n1; i++)
-          vcl_cout << im_sum2(i,j,k) << ' ';
-        vcl_cout << vcl_endl;
+          std::cout << im_sum2(i,j,k) << ' ';
+        std::cout << std::endl;
       }
     }
   }
@@ -264,17 +266,17 @@ static void test_math_integral_image_sqr()
   // print out values if test failed
   if (!all_correct)
   {
-    vcl_cout << "Expected and obtained values for sum_sq integral image\n";
+    std::cout << "Expected and obtained values for sum_sq integral image\n";
     for (unsigned k=0; k<n1; k++)
     {
       for (unsigned j=0; j<n1; j++)
       {
         for (unsigned i=0; i<n1; i++)
-          vcl_cout << im_sum1_sq(i,j,k) << ' ';
-        vcl_cout << "\t\t";
+          std::cout << im_sum1_sq(i,j,k) << ' ';
+        std::cout << "\t\t";
         for (unsigned i=0; i<n1; i++)
-          vcl_cout << im_sum2_sq(i,j,k) << ' ';
-        vcl_cout << vcl_endl;
+          std::cout << im_sum2_sq(i,j,k) << ' ';
+        std::cout << std::endl;
       }
     }
   }

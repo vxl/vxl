@@ -26,8 +26,10 @@
 
 #include <vpgl/vpgl_lvcs.h>
 
-#include <vcl_cmath.h>
-#include <vcl_cstdio.h> // for std::sprintf
+#include <vcl_compiler.h>
+#include <iostream>
+#include <cmath>
+#include <cstdio> // for std::sprintf
 
 //Minimum number of correspondences on a frame to compute cameras
 //static const unsigned min_corrs = 10;
@@ -37,7 +39,7 @@ static const unsigned min_corrs = 6;
 // image
 static void extract_window(float u, float v, int radius,
                            vil_image_view<float> image,
-                           vcl_vector<float>& pixels)
+                           std::vector<float>& pixels)
 {
   pixels.clear();
   float umin = u-radius, umax = u+radius;
@@ -56,7 +58,7 @@ static void extract_window(float u, float v, int radius,
 bwm_video_corr_lsqr_cost_func::
 bwm_video_corr_lsqr_cost_func(vil_image_view<float> const& base_image,
                               unsigned match_radius,
-                              vcl_vector<float> corr_window_ab
+                              std::vector<float> corr_window_ab
                              )
   : vnl_least_squares_function(1,1), base_image_(base_image),
     match_radius_(match_radius), corr_window_ab_(corr_window_ab)
@@ -76,7 +78,7 @@ void bwm_video_corr_lsqr_cost_func::f(vnl_vector<double> const& x,
 {
   float u = static_cast<float>(x[0]);
   float v = static_cast<float>(x[1]);
-  vcl_vector<float> pixels;
+  std::vector<float> pixels;
   extract_window(u, v, match_radius_, base_image_, pixels);
   unsigned msq = pixels.size();
   for (unsigned k = 0; k<msq; ++k)
@@ -85,19 +87,19 @@ void bwm_video_corr_lsqr_cost_func::f(vnl_vector<double> const& x,
     else
       fx[k] = corr_window_ab_[k] - pixels[k];
 #if 0
-  vcl_cout << "\nX = (" << x[0] << ' ' << x[1] << '\n'
+  std::cout << "\nX = (" << x[0] << ' ' << x[1] << '\n'
            << "f\n";
-  vcl_cout.precision(3);
+  std::cout.precision(3);
   for (unsigned i = 0; i< fx.size(); ++i)
-    vcl_cout<< fx[i] << ' ';
-  vcl_cout << '\n';
+    std::cout<< fx[i] << ' ';
+  std::cout << '\n';
 #endif
 }
 
 bwm_video_corr_cost_function::
 bwm_video_corr_cost_function(vil_image_view<float> const& base_image,
                              unsigned match_radius,
-                             vcl_vector<float> corr_window_ab)
+                             std::vector<float> corr_window_ab)
   : vnl_cost_function(2), base_image_(base_image),
     match_radius_(match_radius), corr_window_ab_(corr_window_ab)
 {}
@@ -107,7 +109,7 @@ double bwm_video_corr_cost_function::f(vnl_vector<double> const& x)
   float u = static_cast<float>(x[0]);
   float v = static_cast<float>(x[1]);
   double r = 0;
-  vcl_vector<float> pixels;
+  std::vector<float> pixels;
   extract_window(u, v, match_radius_, base_image_, pixels);
   unsigned msq = pixels.size();
   for (unsigned k = 0; k<msq; ++k)
@@ -120,7 +122,7 @@ double bwm_video_corr_cost_function::f(vnl_vector<double> const& x)
   return r;
 }
 
-bool bwm_video_corr_processor::open_video_stream(vcl_string const& video_path)
+bool bwm_video_corr_processor::open_video_stream(std::string const& video_path)
 {
   if (video_path=="")
     return false;
@@ -133,34 +135,34 @@ bool bwm_video_corr_processor::open_video_stream(vcl_string const& video_path)
 }
 
 bool bwm_video_corr_processor::
-open_camera_istream(vcl_string const& camera_path)
+open_camera_istream(std::string const& camera_path)
 {
   if (camera_path=="")
     return false;
   cam_istr_ = new bwm_video_cam_istream(camera_path);
   bool open = cam_istr_->is_open();
   if (open) {
-    vcl_cout << "in bwm_video_corr_processor::open_camera_istream() -- input stream: " << camera_path << " is opened!\n";
+    std::cout << "in bwm_video_corr_processor::open_camera_istream() -- input stream: " << camera_path << " is opened!\n";
     cam_istr_->seek_camera(0);
   }
   else {
-    vcl_cout << "in bwm_video_corr_processor::open_camera_istream() -- input stream: " << camera_path << " can NOT be opened!\n";
+    std::cout << "in bwm_video_corr_processor::open_camera_istream() -- input stream: " << camera_path << " can NOT be opened!\n";
   }
   return open;
 }
 
 bool bwm_video_corr_processor::
-open_camera_ostream(vcl_string const& camera_path)
+open_camera_ostream(std::string const& camera_path)
 {
   if (camera_path=="")
     return false;
   cam_ostr_ = new bwm_video_cam_ostream(camera_path);
   bool open = cam_ostr_->is_open();
   if (open) {
-    vcl_cout << "in bwm_video_corr_processor::open_camera_ostream() -- output stream: " << camera_path << " is opened!\n";
+    std::cout << "in bwm_video_corr_processor::open_camera_ostream() -- output stream: " << camera_path << " is opened!\n";
   }
   else {
-    vcl_cout << "in bwm_video_corr_processor::open_camera_ostream() -- output stream: " << camera_path << " can NOT be opened!\n";
+    std::cout << "in bwm_video_corr_processor::open_camera_ostream() -- output stream: " << camera_path << " can NOT be opened!\n";
   }
   return open;
 }
@@ -176,14 +178,14 @@ void bwm_video_corr_processor::close_camera_istream()
 }
 
 
-void remove_dir(vcl_string const& dir)
+void remove_dir(std::string const& dir)
 {
-  vcl_string glob = dir + "/*";
+  std::string glob = dir + "/*";
   vul_file::delete_file_glob(glob.c_str());
   vpl_unlink(dir.c_str());
 }
 
-bool bwm_video_corr_processor::open_video_site(vcl_string const& site_path,
+bool bwm_video_corr_processor::open_video_site(std::string const& site_path,
                                                bool cameras_exist)
 {
   if (!site_io_.open(site_path))
@@ -199,7 +201,7 @@ bool bwm_video_corr_processor::open_video_site(vcl_string const& site_path,
       return false;
   }
   else {
-    vcl_string dir = vul_file::dirname(site_path)+"/cameras";
+    std::string dir = vul_file::dirname(site_path)+"/cameras";
     if (vul_file::exists(dir))
       remove_dir(dir);
     if (!vul_file::make_directory_path(dir))
@@ -208,7 +210,7 @@ bool bwm_video_corr_processor::open_video_site(vcl_string const& site_path,
     if (!this->open_camera_ostream(dir))
       return false;
   }
-  vcl_vector<bwm_video_corr_sptr> corrs = site_io_.corrs();
+  std::vector<bwm_video_corr_sptr> corrs = site_io_.corrs();
   if (!corrs.size())
     return false;
   this->set_correspondences(corrs);
@@ -216,18 +218,18 @@ bool bwm_video_corr_processor::open_video_site(vcl_string const& site_path,
 }
 
 void bwm_video_corr_processor::
-set_world_pts(vcl_vector<vgl_point_3d<double> > const& pts)
+set_world_pts(std::vector<vgl_point_3d<double> > const& pts)
 {
-  vcl_vector<vgl_point_3d<double> >::const_iterator pit = pts.begin();
-  for (vcl_vector<bwm_video_corr_sptr>::iterator cit = corrs_.begin();
+  std::vector<vgl_point_3d<double> >::const_iterator pit = pts.begin();
+  for (std::vector<bwm_video_corr_sptr>::iterator cit = corrs_.begin();
        cit != corrs_.end()&&pit!=pts.end(); ++cit, ++pit)
     (*cit)->set_world_pt(*pit);
 }
 
-vcl_vector<vgl_point_3d<double> > bwm_video_corr_processor::world_pts()
+std::vector<vgl_point_3d<double> > bwm_video_corr_processor::world_pts()
 {
-  vcl_vector<vgl_point_3d<double> > pts;
-  for (vcl_vector<bwm_video_corr_sptr>::iterator cit = corrs_.begin();
+  std::vector<vgl_point_3d<double> > pts;
+  for (std::vector<bwm_video_corr_sptr>::iterator cit = corrs_.begin();
        cit != corrs_.end(); ++cit)
     if ((*cit)->world_pt_valid())
       pts.push_back((*cit)->world_pt());
@@ -237,7 +239,7 @@ vcl_vector<vgl_point_3d<double> > bwm_video_corr_processor::world_pts()
 //: if the world coordinates are given in global coordinates of satellite cameras, convert them to local coordinate frame of the given lvcs
 void bwm_video_corr_processor::convert_world_pts_to_local(vpgl_lvcs_sptr lvcs)
 {
-  for (vcl_vector<bwm_video_corr_sptr>::iterator cit = corrs_.begin();
+  for (std::vector<bwm_video_corr_sptr>::iterator cit = corrs_.begin();
        cit != corrs_.end(); ++cit)
   {
     if ((*cit)->world_pt_valid()) {
@@ -245,13 +247,13 @@ void bwm_video_corr_processor::convert_world_pts_to_local(vpgl_lvcs_sptr lvcs)
       double x,y,z;
       lvcs->global_to_local(pt.x(), pt.y(), pt.z(), lvcs->get_cs_name(), x,y,z);
       vgl_point_3d<double> new_pt(x,y,z);
-      vcl_cout << "world pt: " << pt << " converted to " << new_pt << vcl_endl;
+      std::cout << "world pt: " << pt << " converted to " << new_pt << std::endl;
       (*cit)->set_world_pt(new_pt);
     }
   }
 }
 
-bool bwm_video_corr_processor::write_video_site(vcl_string const& site_path)
+bool bwm_video_corr_processor::write_video_site(std::string const& site_path)
 {
   if (site_name_ == "")
     return false;
@@ -264,16 +266,16 @@ bool bwm_video_corr_processor::write_video_site(vcl_string const& site_path)
   return true;
 }
 
-void bwm_video_corr_processor::write_cameras_txt(vcl_string const& cam_txt_dir, vcl_vector<vpgl_perspective_camera<double> > const& cameras)
+void bwm_video_corr_processor::write_cameras_txt(std::string const& cam_txt_dir, std::vector<vpgl_perspective_camera<double> > const& cameras)
 {
   char filename[1024];
   if (vul_file::is_directory(cam_txt_dir.c_str()))
   {
-    vcl_cout << "writing " << cameras.size() << " cams to: " << cam_txt_dir << vcl_endl;
+    std::cout << "writing " << cameras.size() << " cams to: " << cam_txt_dir << std::endl;
     for (unsigned i=0;i<cameras.size();i++)
     {
-      vcl_sprintf(filename,"%s/camera%05d.txt",cam_txt_dir.c_str(),i);
-      vcl_ofstream ofile(filename);
+      std::sprintf(filename,"%s/camera%05d.txt",cam_txt_dir.c_str(),i);
+      std::ofstream ofile(filename);
       if (ofile)
       {
         ofile<<cameras[i].get_calibration().get_matrix()<<'\n'
@@ -285,9 +287,9 @@ void bwm_video_corr_processor::write_cameras_txt(vcl_string const& cam_txt_dir, 
 }
 
 bool bwm_video_corr_processor::
-interpolate_cameras(vcl_vector<vpgl_perspective_camera<double> > known_cams,
-                    vcl_vector<bool> unknown,
-                    vcl_vector<vpgl_perspective_camera<double> >& interp_cams)
+interpolate_cameras(std::vector<vpgl_perspective_camera<double> > known_cams,
+                    std::vector<bool> unknown,
+                    std::vector<vpgl_perspective_camera<double> >& interp_cams)
 {
   unsigned ncameras = unknown.size();
   interp_cams.resize(ncameras);
@@ -316,7 +318,7 @@ interpolate_cameras(vcl_vector<vpgl_perspective_camera<double> > known_cams,
             fi = j;
           }
         if (!found){
-          vcl_cerr << "Shouldn't happen\n";
+          std::cerr << "Shouldn't happen\n";
           return false;}
       }
       // case 2 - i == ne-1 (the last row)
@@ -333,19 +335,19 @@ interpolate_cameras(vcl_vector<vpgl_perspective_camera<double> > known_cams,
         if (!unknown[ki])
           found = true;
       if (!found){
-        vcl_cerr << "Shouldn't happen\n";
+        std::cerr << "Shouldn't happen\n";
         return false;}
       // get the cameras at fi-1 and next solved camera
       vpgl_perspective_camera<double> c0 = interp_cams[fi-1];
       vpgl_perspective_camera<double> c1 = interp_cams[ki-1];
-      vcl_vector<vpgl_perspective_camera<double> > icams;
+      std::vector<vpgl_perspective_camera<double> > icams;
       unsigned n_interp = ki-fi-1;
       if (verbose_)
-        vcl_cout << "Interpolating between frames[" << fi-1
+        std::cout << "Interpolating between frames[" << fi-1
                  << ':' << ki-1 << "]\n";
       if (!bpgl_interpolate::interpolate(c0, c1, n_interp, icams))
       {
-        vcl_cerr << "Interpolation failed\n";
+        std::cerr << "Interpolation failed\n";
         return false;
       }
       for (unsigned c = 0; c<icams.size(); ++c)
@@ -354,22 +356,22 @@ interpolate_cameras(vcl_vector<vpgl_perspective_camera<double> > known_cams,
     }
   }
   if (verbose_){
-    vcl_cout << "Solved and Interpolated Cameras\n";
+    std::cout << "Solved and Interpolated Cameras\n";
     for (unsigned c = 0; c<ncameras; ++c){
       vgl_point_3d<double> p =interp_cams[c].get_camera_center();
       vgl_rotation_3d<double> R = interp_cams[c].get_rotation();
-      vcl_cout << "C[" << c << "]("<< R << '|' << p.x() << ' ' << p.y() << ' '
+      std::cout << "C[" << c << "]("<< R << '|' << p.x() << ' ' << p.y() << ' '
                << p.z() <<  ")\n"; }
   }
   return true;
 }
 
-void min_max_frame(vcl_vector<bwm_video_corr_sptr> const& corrs,
+void min_max_frame(std::vector<bwm_video_corr_sptr> const& corrs,
                    unsigned& min_frame, unsigned& max_frame)
 {
   min_frame = vnl_numeric_traits<unsigned>::maxval;
   max_frame = 0;
-  for (vcl_vector<bwm_video_corr_sptr>::const_iterator cit = corrs.begin();
+  for (std::vector<bwm_video_corr_sptr>::const_iterator cit = corrs.begin();
        cit != corrs.end(); ++cit)
     {
       unsigned minf = (*cit)->min_frame();
@@ -388,7 +390,7 @@ unsigned bwm_video_corr_processor::get_ncameras(unsigned& min_frame, unsigned& m
   //get the start and end frame numbers. assume contiguous frames inbetween
   min_max_frame(corrs_, min_frame, max_frame);
   if (verbose_)
-    vcl_cout << "Start frame = " << min_frame << " End frame = " << max_frame << '\n';
+    std::cout << "Start frame = " << min_frame << " End frame = " << max_frame << '\n';
   return max_frame-min_frame +1;
 }
 
@@ -396,11 +398,11 @@ unsigned bwm_video_corr_processor::get_ncameras(unsigned& min_frame, unsigned& m
 // The mask is m x n , where m = number of cameras and
 // n = number of world points (corrs)
 void bwm_video_corr_processor::mask(unsigned& min_frame, unsigned& max_frame,
-                                    vcl_vector<vcl_vector<bool> >& mask)
+                                    std::vector<std::vector<bool> >& mask)
 {
   unsigned ncameras = get_ncameras(min_frame, max_frame);
   unsigned npoints = corrs_.size();
-  vcl_vector<bool> init(npoints);
+  std::vector<bool> init(npoints);
   mask.resize(ncameras, init);
 
   for (unsigned w = 0; w<npoints; ++w){
@@ -418,7 +420,7 @@ initialize_world_pts_and_cameras(vpgl_calibration_matrix<double> const& K,
                                  double initial_depth)
 {
   unsigned min_frame =0, max_frame = 0;
-  vcl_vector<vcl_vector<bool> > mask;
+  std::vector<std::vector<bool> > mask;
   this->mask(min_frame, max_frame, mask);
   //The implementation is not general enough yet to handle
   //a non-zero start frame
@@ -427,9 +429,9 @@ initialize_world_pts_and_cameras(vpgl_calibration_matrix<double> const& K,
   unsigned ncameras = max_frame-min_frame +1;
   unsigned npoints = corrs_.size();
   if (verbose_)
-    vcl_cout << "Initializing " << ncameras << " cameras on " << npoints
+    std::cout << "Initializing " << ncameras << " cameras on " << npoints
              << " correspondences\n";
-  vcl_vector<vgl_point_2d<double> > image_points(ncameras*npoints);
+  std::vector<vgl_point_2d<double> > image_points(ncameras*npoints);
   for (unsigned w = 0; w<npoints; ++w)
   {
     unsigned f_rel = 0;//relative frame num == 0 at min_frame
@@ -442,7 +444,7 @@ initialize_world_pts_and_cameras(vpgl_calibration_matrix<double> const& K,
   }
   //find the number of rows that are completely masked and
   //remove them creating a smaller problem
-  vcl_vector<bool> unknown_frames(ncameras, false);
+  std::vector<bool> unknown_frames(ncameras, false);
   int filled_rows = 0;
   for (unsigned f_rel = 0; f_rel<ncameras; ++f_rel){
     bool empty = true;
@@ -454,12 +456,12 @@ initialize_world_pts_and_cameras(vpgl_calibration_matrix<double> const& K,
       ++filled_rows;
   }
   if (verbose_)
-    vcl_cout << "Executing bundle adjustment on " << filled_rows
+    std::cout << "Executing bundle adjustment on " << filled_rows
              << " cameras\n";
   //create a new mask array and image point vector for the smaller problem
-  vcl_vector<bool> init(npoints);
-  vcl_vector<vcl_vector<bool> > cmask(filled_rows, init);
-  vcl_vector<vgl_point_2d<double> > cimage_points;
+  std::vector<bool> init(npoints);
+  std::vector<std::vector<bool> > cmask(filled_rows, init);
+  std::vector<vgl_point_2d<double> > cimage_points;
   unsigned ff = 0;
   for (unsigned f = 0; f<ncameras; ++f)
     if (!unknown_frames[f])
@@ -471,13 +473,13 @@ initialize_world_pts_and_cameras(vpgl_calibration_matrix<double> const& K,
         cimage_points.push_back(image_points[f*npoints + w]);}
       }
       if (cnt<min_corrs){
-        vcl_cout << "NCorrs[" << f << "]= " << cnt << '\n';
+        std::cout << "NCorrs[" << f << "]= " << cnt << '\n';
         for (unsigned w = 0; w<npoints; ++w)
           if (mask[f][w])
           {
             vgl_point_2d<double> pt;
             if (corrs_[w]->match(f, pt))
-              vcl_cout << "bad corr " << pt << '\n';
+              std::cout << "bad corr " << pt << '\n';
           }
       }
       ++ff;
@@ -488,7 +490,7 @@ initialize_world_pts_and_cameras(vpgl_calibration_matrix<double> const& K,
   for (unsigned ff = 0; ff<filled_rows; ++ff)
     for (unsigned w = 0; w<npoints; ++w)
       if (cmask[ff][w]){
-        vcl_cout << "Image Point[" << ff << "][" << w
+        std::cout << "Image Point[" << ff << "][" << w
                  << "]=" << cimage_points[kk] << '\n';
         kk++;
       }
@@ -498,11 +500,11 @@ initialize_world_pts_and_cameras(vpgl_calibration_matrix<double> const& K,
   vgl_homg_point_3d<double> center(0.0, 0.0, -initial_depth);
   vpgl_perspective_camera<double> default_camera(K, center, I);
 
-  vcl_vector<vpgl_perspective_camera<double> > unknown_cameras(filled_rows,
+  std::vector<vpgl_perspective_camera<double> > unknown_cameras(filled_rows,
                                                                default_camera);
   // initialize unknown world points
   vgl_point_3d<double> pun(0.0, 0.0, 0.0);
-  vcl_vector<vgl_point_3d<double> > unknown_world(npoints,pun);
+  std::vector<vgl_point_3d<double> > unknown_world(npoints,pun);
 
   // execute the bundle adjustment
   vpgl_bundle_adjust adj;
@@ -540,7 +542,7 @@ bool bwm_video_corr_processor::frame_at_index(unsigned frame_index,
   vidl_frame_sptr frame = video_istr_->current_frame();
   if (!frame)
   {
-    vcl_cerr << "Failed to seek to frame " << frame_index << '\n';
+    std::cerr << "Failed to seek to frame " << frame_index << '\n';
     return false;
   }
   else if (frame->pixel_format() == VIDL_PIXEL_FORMAT_MONO_16){
@@ -548,7 +550,7 @@ bool bwm_video_corr_processor::frame_at_index(unsigned frame_index,
     if (vidl_convert_to_view(*frame,img))
       view = brip_vil_float_ops::convert_to_float(img);
     else{
-      vcl_cerr << "Failed to convert frame to vil_image_view\n";
+      std::cerr << "Failed to convert frame to vil_image_view\n";
       return false;
     }
   }
@@ -558,7 +560,7 @@ bool bwm_video_corr_processor::frame_at_index(unsigned frame_index,
       view = brip_vil_float_ops::convert_to_float(img);
     }
     else{
-      vcl_cerr << "Failed to convert frame to vil_image_view\n";
+      std::cerr << "Failed to convert frame to vil_image_view\n";
       return false;
     }
   }
@@ -569,13 +571,13 @@ bool bwm_video_corr_processor::frame_at_index(unsigned frame_index,
 // at the start frame and end frame of a tracking interval (a, b).
 void bwm_video_corr_processor::
 compute_ab_corr_windows(unsigned match_radius,
-                        vcl_vector<bool> const& mask_a,
-                        vcl_vector<bool> const& mask_b)
+                        std::vector<bool> const& mask_a,
+                        std::vector<bool> const& mask_b)
 {
   //n is the number of correspondences to find, i.e. determine (u, v) for each.
   unsigned n = corrs_.size();
   vgl_point_2d<double> ini(-1, -1);
-  vcl_vector<vgl_point_2d<double> > corrs_a(n, ini), corrs_b(n, ini);
+  std::vector<vgl_point_2d<double> > corrs_a(n, ini), corrs_b(n, ini);
   for (unsigned i = 0; i<n; ++i){
     if (!(mask_a[i]&&mask_b[i])) continue;
     bwm_video_corr_sptr c = corrs_[i];
@@ -595,11 +597,11 @@ compute_ab_corr_windows(unsigned match_radius,
       continue;
     float ua = static_cast<float>(ipta.x());
     float va = static_cast<float>(ipta.y());
-    vcl_vector<float> pixels_a;
+    std::vector<float> pixels_a;
     extract_window(ua, va, match_radius, image_a_, pixels_a);
     float ub = static_cast<float>(iptb.x());
     float vb = static_cast<float>(iptb.y());
-    vcl_vector<float> pixels_b;
+    std::vector<float> pixels_b;
     extract_window(ub, vb, match_radius, image_b_, pixels_b);
     corr_windows_a_.push_back(pixels_a);
     corr_windows_b_.push_back(pixels_b);
@@ -607,7 +609,7 @@ compute_ab_corr_windows(unsigned match_radius,
 }
 
 void bwm_video_corr_processor::
-set_correspondences(vcl_vector<bwm_video_corr_sptr> const& corrs)
+set_correspondences(std::vector<bwm_video_corr_sptr> const& corrs)
 {
   corrs_ = corrs;
 }
@@ -617,7 +619,7 @@ exhaustive_init(vnl_vector<double>& position,
                 unsigned win_radius,
                 unsigned search_radius,
                 vil_image_view<float> const& base,
-                vcl_vector<float> corr_win,
+                std::vector<float> corr_win,
                 double& start_error,
                 double& end_error)
 {
@@ -636,7 +638,7 @@ exhaustive_init(vnl_vector<double>& position,
   for (float v = vmin; v<=vmax; ++v)
     for (float u = umin; u<=umax; ++u)
     {
-      vcl_vector<float> pixels;
+      std::vector<float> pixels;
       extract_window(u, v, win_radius, base, pixels);
       unsigned msq = pixels.size();
       double r = 0;
@@ -653,13 +655,13 @@ exhaustive_init(vnl_vector<double>& position,
       else
         return;
       if (u == u0&&v == v0)
-        start_error = vcl_sqrt(r);
+        start_error = std::sqrt(r);
       if (r<rmin){
         rmin = r;
         uf = u; vf = v;
       }
     }
-  end_error = vcl_sqrt(rmin);
+  end_error = std::sqrt(rmin);
   if (uf == umin || uf == umax || vf == vmin || vf == vmax)
     end_error = -1.0;
 
@@ -673,9 +675,9 @@ exhaustive_init(vnl_vector<double>& position,
 // The search starts at the projected world point location in each
 // between frame
 bool bwm_video_corr_processor::find_missing_corrs(unsigned frame_index_a,
-                                                  vcl_vector<bool> mask_a,
+                                                  std::vector<bool> mask_a,
                                                   unsigned frame_index_b,
-                                                  vcl_vector<bool> mask_b,
+                                                  std::vector<bool> mask_b,
                                                   unsigned frame_index_x,
                                                   unsigned win_radius,
                                                   unsigned search_radius,
@@ -697,7 +699,7 @@ bool bwm_video_corr_processor::find_missing_corrs(unsigned frame_index_a,
     }
   }
   if (!world_pts_valid_){
-    vcl_cerr << " world points not valid\n";
+    std::cerr << " world points not valid\n";
       return false;
   }
   //check for index bounds consistency
@@ -722,7 +724,7 @@ bool bwm_video_corr_processor::find_missing_corrs(unsigned frame_index_a,
     compute_ab = true;
   }
   if (verbose_)
-    vcl_cout << "Finding correspondences in frame interval ["
+    std::cout << "Finding correspondences in frame interval ["
              << frame_index_a << ':' << frame_index_b << "]\n";
   if (compute_ab)
     this->compute_ab_corr_windows(win_radius, mask_a, mask_b);
@@ -731,11 +733,11 @@ bool bwm_video_corr_processor::find_missing_corrs(unsigned frame_index_a,
     return false;
   //get the camera at frame x
   if (!cam_istr_) {
-    vcl_cerr << "No camera stream\n";
+    std::cerr << "No camera stream\n";
     return false;
   }
   if (!cam_istr_->seek_camera(frame_index_x)){
-    vcl_cerr << "Can't seek to camera frame " << frame_index_x << '\n';
+    std::cerr << "Can't seek to camera frame " << frame_index_x << '\n';
     return false;
   }
   vpgl_perspective_camera<double>* camx = cam_istr_->current_camera();
@@ -754,16 +756,16 @@ bool bwm_video_corr_processor::find_missing_corrs(unsigned frame_index_a,
     vgl_point_2d<double> ip = (*camx).project(world_pts_[i]);
     unknowns[0] = ip.x(); unknowns[1] = ip.y();
     double sr = 0, er = 0;
-    vcl_vector<float> cwin = corr_windows_a_[i];
+    std::vector<float> cwin = corr_windows_a_[i];
     if (db<da)
       cwin = corr_windows_b_[i];
     this->exhaustive_init(unknowns,win_radius, search_radius,
                           fvx, cwin, sr, er);
     if (verbose_)
-      vcl_cout << "c["<<i <<"]:f[" << frame_index_x << "] Bf(" << ip.x()
+      std::cout << "c["<<i <<"]:f[" << frame_index_x << "] Bf(" << ip.x()
                << ' ' << ip.y() << ") Af("  << unknowns[0] << ' '
                << unknowns[1] << ")ier "
-               << sr << ':' << er << '\n' << vcl_flush;
+               << sr << ':' << er << '\n' << std::flush;
 #if 0
     double xb = unknowns[0], yb = unknowns[1];
     if (use_lmq){
@@ -773,23 +775,23 @@ bool bwm_video_corr_processor::find_missing_corrs(unsigned frame_index_a,
       //a good initial guess for the unknown correspondences is
       //the projection of the world points in frame x
       lmq.minimize(unknowns);
-      sr = vcl_sqrt(lmq.get_start_error()/nres);
-      er = vcl_sqrt(lmq.get_end_error()/nres);
+      sr = std::sqrt(lmq.get_start_error()/nres);
+      er = std::sqrt(lmq.get_end_error()/nres);
     }
     else // amoeba
     {
       bwm_video_corr_cost_function vcf(fvx, win_radius,
                                        cwin);
       vnl_amoeba a(vcf);
-      sr = vcl_sqrt(vcf.f(unknowns)/nres);
+      sr = std::sqrt(vcf.f(unknowns)/nres);
       a.minimize(unknowns);
-      er = vcl_sqrt(vcf.f(unknowns)/nres);
+      er = std::sqrt(vcf.f(unknowns)/nres);
     }
     if (verbose_)
-      vcl_cout << "c["<<i <<"]:f[" << frame_index_x << "] Bf(" << xb
+      std::cout << "c["<<i <<"]:f[" << frame_index_x << "] Bf(" << xb
                << ' ' << yb << ") Af("  << unknowns[0] << ' '
                << unknowns[1] << ")f "
-               << sr << ':' << er << '\n' << vcl_flush;
+               << sr << ':' << er << '\n' << std::flush;
 #endif
     bwm_video_corr_sptr c = corrs_[i];
     if (er>0)
@@ -806,22 +808,22 @@ find_missing_correspondences(unsigned win_radius,
 {
   unsigned n = corrs_.size();
   if (!n){
-    vcl_cerr << "No correspondences\n";
+    std::cerr << "No correspondences\n";
     return false;
   }
   n_failures_.resize(n, 0);
   //get the start and end frame numbers
   unsigned min_frame =0, max_frame = 0;
-  vcl_vector<vcl_vector<bool> > mask;
+  std::vector<std::vector<bool> > mask;
   this->mask(min_frame, max_frame, mask);
   //implementation not yet general enough to handle non_zero start frame
   if (min_frame){
-    vcl_cerr << "start frame not zero\n";
+    std::cerr << "start frame not zero\n";
     return false;
   }
   unsigned nframes = max_frame - min_frame +1;
   corrs_per_frame_.resize(nframes, 0);
-  vcl_vector<unsigned> frame_intervals;
+  std::vector<unsigned> frame_intervals;
   for (unsigned f = min_frame; f<=max_frame; ++f)
   {
     //number of correspondences on frame
@@ -834,15 +836,15 @@ find_missing_correspondences(unsigned win_radius,
   }
   unsigned nfi = frame_intervals.size();
   if (nfi<2){
-    vcl_cerr << " not at least two frame bounds\n";
+    std::cerr << " not at least two frame bounds\n";
       return false;
   }
   for (unsigned i = 0; i<nfi-1; ++i)
   {
     unsigned frame_a = frame_intervals[i];
     unsigned frame_b = frame_intervals[i+1];
-    vcl_vector<bool> mask_a = mask[frame_a];
-    vcl_vector<bool> mask_b = mask[frame_b];
+    std::vector<bool> mask_a = mask[frame_a];
+    std::vector<bool> mask_b = mask[frame_b];
     for (unsigned ix = frame_a +1; ix<frame_b; ++ix){
       if (!this->find_missing_corrs(frame_a, mask_a,
                                     frame_b, mask_b,
@@ -851,13 +853,13 @@ find_missing_correspondences(unsigned win_radius,
     }
   }
   for (unsigned ic = 0; ic<n; ++ic)
-    vcl_cout << "nf[" << ic << "]= " << n_failures_[ic]<< '\n';
+    std::cout << "nf[" << ic << "]= " << n_failures_[ic]<< '\n';
   for (unsigned f = min_frame; f<=max_frame; ++f)
   {
     for (unsigned ic=0; ic<n; ++ic)
       if (corrs_[ic]->match(f))
         corrs_per_frame_[f]++;
-    vcl_cout << "Nc[" << f << "]= " << corrs_per_frame_[f] << '\n';
+    std::cout << "Nc[" << f << "]= " << corrs_per_frame_[f] << '\n';
   }
   return true;
 }
@@ -866,25 +868,25 @@ bool bwm_video_corr_processor::refine_world_pts_and_cameras()
 {
   //get the start and end frame numbers
   unsigned min_frame =0, max_frame = 0;
-  vcl_vector<vcl_vector<bool> > mask;
+  std::vector<std::vector<bool> > mask;
   this->mask(min_frame, max_frame, mask);
   //The implementation is not general enough yet to handle
   //a non-zero start frame
   if (min_frame){
-    vcl_cerr << "Can't handle a non-zero start frame\n";
+    std::cerr << "Can't handle a non-zero start frame\n";
     return false;
   }
   unsigned ncameras = max_frame-min_frame +1;
   unsigned npoints = corrs_.size();
   if (verbose_)
-    vcl_cout << "Refining " << ncameras << " cameras on " << npoints
+    std::cout << "Refining " << ncameras << " cameras on " << npoints
              << " correspondences\n";
 
   //next populate the image points and the mask array
   //the mask appears to be m x n ,
   // where m = number of cameras and n = number of world points (corrs)
   //
-  vcl_vector<vgl_point_2d<double> > image_points(ncameras*npoints);
+  std::vector<vgl_point_2d<double> > image_points(ncameras*npoints);
   for (unsigned w = 0; w<npoints; ++w)
     for (unsigned f = min_frame; f<=max_frame; ++f)
     {
@@ -892,13 +894,13 @@ bool bwm_video_corr_processor::refine_world_pts_and_cameras()
       if (corrs_[w]->match(f, pt))
         image_points[f*npoints + w] = pt;
       else if (mask[f][w]){
-        vcl_cerr << "fatal[" << f << "][" << w << "]\n";
+        std::cerr << "fatal[" << f << "][" << w << "]\n";
         return false;
       }
     }
   //find the number of rows that have insufficient correspondences
   //remove them creating a smaller problem
-  vcl_vector<bool> unknown_frames(ncameras, false);
+  std::vector<bool> unknown_frames(ncameras, false);
   int filled_rows = 0;
   for (unsigned f = 0; f<ncameras; ++f){
     unsigned nc = 0;
@@ -910,13 +912,13 @@ bool bwm_video_corr_processor::refine_world_pts_and_cameras()
       ++filled_rows;
   }
   if (verbose_)
-    vcl_cout << "Executing bundle adjustment on " << filled_rows
+    std::cout << "Executing bundle adjustment on " << filled_rows
              << " cameras\n";
   //create a new mask array and image point vector for the smaller problem
-  vcl_vector<bool> init(npoints);
-  vcl_vector<vcl_vector<bool> > cmask(filled_rows, init);
-  vcl_vector<vgl_point_2d<double> > cimage_points;
-  vcl_vector<vpgl_perspective_camera<double> > unknown_cameras;
+  std::vector<bool> init(npoints);
+  std::vector<std::vector<bool> > cmask(filled_rows, init);
+  std::vector<vgl_point_2d<double> > cimage_points;
+  std::vector<vpgl_perspective_camera<double> > unknown_cameras;
   if (!cam_istr_)
     return false;
   unsigned ff = 0;
@@ -928,7 +930,7 @@ bool bwm_video_corr_processor::refine_world_pts_and_cameras()
           cimage_points.push_back(image_points[f*npoints + w]);
 
       if (!cam_istr_->seek_camera(f)){
-        vcl_cerr << "Can't seek camera at frame " << f << '\n';
+        std::cerr << "Can't seek camera at frame " << f << '\n';
         return false;
       }
       unknown_cameras.push_back(*(cam_istr_->current_camera()));
@@ -936,7 +938,7 @@ bool bwm_video_corr_processor::refine_world_pts_and_cameras()
     }
   // initialize unknown world points
   vgl_point_3d<double> pun(0.0, 0.0, 0.0);
-  vcl_vector<vgl_point_3d<double> > unknown_world(npoints,pun);
+  std::vector<vgl_point_3d<double> > unknown_world(npoints,pun);
   for (unsigned w = 0; w<npoints; ++w)
     if (corrs_[w]->world_pt_valid())
       unknown_world[w]=corrs_[w]->world_pt();
@@ -952,7 +954,7 @@ bool bwm_video_corr_processor::refine_world_pts_and_cameras()
     vgl_point_3d<double> pt = unknown_world[w];
     corrs_[w]->set_world_pt(pt);
   }
-  vcl_vector<vpgl_perspective_camera<double> > interp_cameras;
+  std::vector<vpgl_perspective_camera<double> > interp_cameras;
   if (!this->interpolate_cameras(unknown_cameras, unknown_frames,
                                  interp_cameras))
     return false;
@@ -994,12 +996,12 @@ print_frame_alignment_quality(unsigned start_frame, unsigned end_frame)
       if (d>5.0) h.upcount(5.0, 1.0);
       else h.upcount(d, 1.0);
     }
-    vcl_cout.precision(2);
-    vcl_cout << "frame[" << f << "](" << min_error << '<' << max_error
+    std::cout.precision(2);
+    std::cout << "frame[" << f << "](" << min_error << '<' << max_error
              << "):c(" << h.p(0.5)+h.p(1.5) << ") p[";
     for (double x = 0.5; x<=5.5; x+=1.0)
-      vcl_cout << h.p(x) << ' ';
-    vcl_cout << "]\n";
+      std::cout << h.p(x) << ' ';
+    std::cout << "]\n";
   }
 }
 

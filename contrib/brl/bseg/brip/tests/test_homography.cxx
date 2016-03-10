@@ -31,10 +31,10 @@ static void test_homography()
   M[1][0]= 0.8; M[1][1]=  0.6; M[1][2]= 0;
   M[2][0]= 0;   M[2][1]= 0;    M[2][2]= 1;
   vgl_h_matrix_2d<double> H(M);
-  vcl_cout << "H\n" << H << vcl_endl;
+  std::cout << "H\n" << H << std::endl;
   if (!brip_vil1_float_ops::homography(input, H, out))
   {
-    vcl_cout << "homography failed\n";
+    std::cout << "homography failed\n";
     return;
   }
 
@@ -52,15 +52,15 @@ static void test_homography()
   A[3][0]= 2;   A[3][1]= 2.1 ; A[3][2]= 0.0;
   vnl_svd<double> SVD(A);
   vnl_matrix_fixed<double, 4,3> U = SVD.U();
-  vcl_cout << "U\n" << U << '\n';
+  std::cout << "U\n" << U << '\n';
 
   vnl_matrix_fixed<double, 3,3> W = SVD.W();
-  vcl_cout << "Sigma\n" << W << '\n';
+  std::cout << "Sigma\n" << W << '\n';
 
   vnl_matrix_fixed<double, 3,3> V = SVD.V();
-  vcl_cout << "V\n" << V << '\n';
+  std::cout << "V\n" << V << '\n';
   vnl_vector_fixed<double, 3> nv = SVD.nullvector() ;
-  vcl_cout << "Nullvector " << nv << '\n'
+  std::cout << "Nullvector " << nv << '\n'
            << "nullresidue " << A*nv << '\n';
 #endif
 }

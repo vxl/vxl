@@ -1,7 +1,9 @@
 #include <testlib/testlib_test.h>
 #include <vul/vul_file.h>
 #include <vpl/vpl.h>
-#include <vcl_cstdlib.h> // for rand()
+#include <vcl_compiler.h>
+#include <iostream>
+#include <cstdlib> // for rand()
 #include <vgl/vgl_point_3d.h>
 #include <vgl/vgl_vector_3d.h>
 #include <vgl/vgl_infinite_line_3d.h>
@@ -22,7 +24,7 @@
 
 static double ran()
 {
-  return 2.0*double(vcl_rand()/(RAND_MAX+1.0)) - 1.0;
+  return 2.0*double(std::rand()/(RAND_MAX+1.0)) - 1.0;
 }
 
 bool tangent_image(vpgl_perspective_camera<double> const* cam, vgl_infinite_line_3d<double> const& line_3d, double image_error_radius, vil_image_view<float>* tan_image)
@@ -39,7 +41,7 @@ bool tangent_image(vpgl_perspective_camera<double> const* cam, vgl_infinite_line
   double noise_y = 0.5*image_error_radius*(ran()-ran());
   a += noise_x; b +=noise_y;
   c += image_error_radius*ran();
-  double mg = vcl_sqrt(a*a + b*b);
+  double mg = std::sqrt(a*a + b*b);
   //renormalize the line
   a/= mg; b/= mg; c/= mg;
   // perturb the line with noise
@@ -73,7 +75,7 @@ static void test_tangent_update()
   //
   //============= test ray processor with perfect data ======================
   //
-  vcl_string model_dir("test_tangent_world_dir");
+  std::string model_dir("test_tangent_world_dir");
   if (vul_file::is_directory(model_dir))
     vpl_rmdir(model_dir.c_str());  //use this instead of vul since some MS versions hang on on Y/N?
   else if (vul_file::exists(model_dir))
@@ -104,7 +106,7 @@ static void test_tangent_update()
   vgl_infinite_line_3d<double> l3d(p0, p1);
   vgl_point_3d<double> org(2.5, 2.5, 0);
   if (l3d.contains(org))
-    vcl_cout << "Test Line intersects (2.5, 2.5, 0)\n";
+    std::cout << "Test Line intersects (2.5, 2.5, 0)\n";
   //create synthetic cameras
   vnl_matrix_fixed<double,3,3> temp;
   temp.fill(0.0);
@@ -126,7 +128,7 @@ static void test_tangent_update()
   c2->look_at(vgl_homg_point_3d<double>(2.5, 2.5,0.0),
               vgl_vector_3d<double>(0.0, 1.0, 0.0) );
   //print cameras
-  vcl_cout << "**camera 0**\n" << c0->get_matrix() << '\n'
+  std::cout << "**camera 0**\n" << c0->get_matrix() << '\n'
            << "**camera 1**\n" << c1->get_matrix() << '\n'
            << "**camera 2**\n" << c2->get_matrix() << '\n'
            << "camera 0 *center* " << c0->get_camera_center() << '\n'
@@ -144,7 +146,7 @@ static void test_tangent_update()
   tangent_image(c1, l3d, 0.0, v1);
   tangent_image(c2, l3d, 0.0, v2);
   vgl_homg_point_3d<double> c00(0,0,0), c10(5,0,0), c01(0,5,0), c11(5,5,0);
-  vcl_cout << "voxel world corners in camera 0\n"
+  std::cout << "voxel world corners in camera 0\n"
            << "(0,0,0)->" << vgl_point_2d<double>(c0->project(c00)) << '\n'
            << "(5,0,0)->" << vgl_point_2d<double>(c0->project(c10)) << '\n'
            << "(0,5,0)->" << vgl_point_2d<double>(c0->project(c01)) << '\n'
@@ -161,26 +163,26 @@ static void test_tangent_update()
            << "(5,5,0)->" << vgl_point_2d<double>(c2->project(c11)) << '\n';
 
   // print tangent images
-  vcl_cout << "view 0\n";
+  std::cout << "view 0\n";
   for (unsigned j = 0; j<v0->nj(); j++) {
-    vcl_cout.precision(1);
+    std::cout.precision(1);
     for (unsigned i = 0; i<v0->ni(); i++)
-      vcl_cout << '(' << (*v0)(i,j,0) << ' ' << (*v0)(i,j,1) << ' ' << (*v0)(i,j,2) << ')';
-    vcl_cout << '\n';
+      std::cout << '(' << (*v0)(i,j,0) << ' ' << (*v0)(i,j,1) << ' ' << (*v0)(i,j,2) << ')';
+    std::cout << '\n';
   }
-  vcl_cout << "view 1\n";
+  std::cout << "view 1\n";
   for (unsigned j = 0; j<v1->nj(); j++) {
-    vcl_cout.precision(1);
+    std::cout.precision(1);
     for (unsigned i = 0; i<v1->ni(); i++)
-      vcl_cout << '(' << (*v1)(i,j,0) << ' ' << (*v1)(i,j,1) << ' ' << (*v1)(i,j,2) << ')';
-    vcl_cout << '\n';
+      std::cout << '(' << (*v1)(i,j,0) << ' ' << (*v1)(i,j,1) << ' ' << (*v1)(i,j,2) << ')';
+    std::cout << '\n';
   }
-  vcl_cout << "view 2\n";
+  std::cout << "view 2\n";
   for (unsigned j = 0; j<v2->nj(); j++) {
-    vcl_cout.precision(1);
+    std::cout.precision(1);
     for (unsigned i = 0; i<v2->ni(); i++)
-      vcl_cout << '(' << (*v2)(i,j,0) << ' ' << (*v2)(i,j,1) << ' ' << (*v2)(i,j,2) << ')';
-    vcl_cout << '\n';
+      std::cout << '(' << (*v2)(i,j,0) << ' ' << (*v2)(i,j,1) << ' ' << (*v2)(i,j,2) << ')';
+    std::cout << '\n';
   }
 
   //create metadata:
@@ -212,8 +214,8 @@ static void test_tangent_update()
   bvxm_voxel_grid<udir_dist_t>::iterator up_dir_dist_it = up_dir_dist_grid->begin();
   upos_dist_t up_pos_dist = (*up_pos_dist_it)(2,2);
   udir_dist_t up_dir_dist = (*up_dir_dist_it)(2,2);
-  vcl_cout.precision(4);
-  vcl_cout << up_pos_dist << '\n' << up_dir_dist << '\n';
+  std::cout.precision(4);
+  std::cout << up_pos_dist << '\n' << up_dir_dist << '\n';
   upos_t mup = up_pos_dist.mean();
   float var = up_pos_dist.var();
   float nobsp = up_pos_dist.num_observations;
@@ -236,21 +238,21 @@ static void test_tangent_update()
       update_success = edge_proc.update_von_mises_edge_tangents(obs2);
     }
 #if 0
-    vcl_cout << "grid contents after " << j << " noisy updates\n";
+    std::cout << "grid contents after " << j << " noisy updates\n";
     for (unsigned r=0; r<5; ++r) {
       for (unsigned c=0; c<5; ++c) {
         up_pos_dist = (*up_pos_dist_it)(c,r);
         up_dir_dist = (*up_dir_dist_it)(c,r);
-        vcl_cout << '(' << up_pos_dist.num_observations << ' '
+        std::cout << '(' << up_pos_dist.num_observations << ' '
                  << up_dir_dist.num_observations << ") ";
       }
-      vcl_cout << '\n';
+      std::cout << '\n';
     }
 #endif
-    vcl_cout.precision(4);
+    std::cout.precision(4);
     up_pos_dist = (*up_pos_dist_it)(2,2);
     up_dir_dist = (*up_dir_dist_it)(2,2);
-    vcl_cout << "iteration: " << j << '\n' << up_pos_dist << '\n' << up_dir_dist << '\n';
+    std::cout << "iteration: " << j << '\n' << up_pos_dist << '\n' << up_dir_dist << '\n';
   }
   mup = up_pos_dist.mean();
   var = up_pos_dist.var();
@@ -262,7 +264,7 @@ static void test_tangent_update()
   //  TEST_NEAR("test updated direction distribution", mud[0] + mud[1] + mud[2]+ 1.0f/kappa,1.732050807+nobsd-2.0f,1e-6);
 #endif
   /// test with actual observed backprojected tangent planes
-  vcl_list<vgl_plane_3d<double> > planes;
+  std::list<vgl_plane_3d<double> > planes;
   planes.push_back(vgl_plane_3d<double>(-0.5285, 0.458072, 0.714743, 43.7552));
   planes.push_back(vgl_plane_3d<double>(-0.522202, 0.435534, 0.733222, 42.5723));
   planes.push_back(vgl_plane_3d<double>(-0.501778, 0.444072, 0.742307, 42.0312));
@@ -352,7 +354,7 @@ static void test_tangent_update()
   vgl_point_3d<double> pline = l3d_int.point();
   dir/=static_cast<double>(dir.length());
   unsigned cnt = 0;
-  for (vcl_list<vgl_plane_3d<double> >::iterator pit = planes.begin();
+  for (std::list<vgl_plane_3d<double> >::iterator pit = planes.begin();
        pit != planes.end(); ++pit)
   {
     cnt++;
@@ -364,11 +366,11 @@ static void test_tangent_update()
     vgl_point_3d<double> cp = vgl_closest_point((*pit), pline);
     vgl_vector_3d<double> dv = cp-pline;
     vgl_vector_3d<double> d0 = dv-dot_product(dir,dv)*dir;
-    vcl_cout << vcl_acos(dp)*vnl_math::deg_per_rad << ' ' << vsum.length()/cnt
+    std::cout << std::acos(dp)*vnl_math::deg_per_rad << ' ' << vsum.length()/cnt
              << ' ' << d0.length() << '\n';
   }
   double final = vsum.length()/cnt;
-  vcl_cout << "Final: " << final << '\n';
+  std::cout << "Final: " << final << '\n';
 }
 
 TESTMAIN( test_tangent_update );

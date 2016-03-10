@@ -21,8 +21,10 @@
 // estimate_normals_3d first to generate the normals.
 //
 
-#include <vcl_fstream.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <fstream>
+#include <iostream>
 #include <vnl/vnl_math.h>
 #include <vnl/vnl_vector_fixed.h>
 
@@ -51,7 +53,7 @@
 #include <testlib/testlib_test.h>
 void testlib_enter_stealth_mode(); // defined in core/testlib/testlib_main.cxx
 
-typedef vcl_vector< rgrl_feature_sptr >  feature_vector;
+typedef std::vector< rgrl_feature_sptr >  feature_vector;
 typedef vnl_vector_fixed<double,3>       vector_3d;
 
 // BeginLatex
@@ -67,10 +69,10 @@ read_feature_file( const char* filename,
                    feature_vector& feature_points,
                    int sample_spacing )
 {
-  vcl_ifstream istr( filename );
+  std::ifstream istr( filename );
 
   if ( !istr ) {
-    vcl_cerr<<"ERROR: Cannot open "<<filename<<'\n';
+    std::cerr<<"ERROR: Cannot open "<<filename<<'\n';
     return;
   }
 
@@ -90,7 +92,7 @@ read_feature_file( const char* filename,
 
   istr.close();
 
-  vcl_cout<<"There are "<<feature_points.size()<<" features"<<vcl_endl;
+  std::cout<<"There are "<<feature_points.size()<<" features"<<std::endl;
 }
 
 // using command/observer pattern
@@ -108,7 +110,7 @@ class command_iteration_update: public rgrl_command
       dynamic_cast<const rgrl_feature_based_registration*>(caller);
     rgrl_transformation_sptr trans = reg_engine->current_transformation();
     rgrl_trans_affine* a_xform = rgrl_cast<rgrl_trans_affine*>(trans);
-    vcl_cout<<"xform: A = "<<a_xform->A()<<"t = "<<a_xform->t()<<vcl_endl;
+    std::cout<<"xform: A = "<<a_xform->A()<<"t = "<<a_xform->t()<<std::endl;
   }
 };
 
@@ -116,7 +118,7 @@ int
 main( int argc, char* argv[] )
 {
   if ( argc < 2 ) {
-    vcl_cerr << "Missing Parameters\n"
+    std::cerr << "Missing Parameters\n"
              << "Usage: " << argv[0]
              << " ImageFeatureFile\n";
     return 1;
@@ -174,20 +176,20 @@ main( int argc, char* argv[] )
   //y_dir
   vnl_matrix<double> Ay(3,3,vnl_matrix_identity);
   double y_angle = 5*vnl_math::pi_over_180;
-  Ay(0,0) = vcl_cos(y_angle); Ay(0,2) = vcl_sin(y_angle);
-  Ay(2,0) = -vcl_sin(y_angle); Ay(2,2) = vcl_cos(y_angle);
+  Ay(0,0) = std::cos(y_angle); Ay(0,2) = std::sin(y_angle);
+  Ay(2,0) = -std::sin(y_angle); Ay(2,2) = std::cos(y_angle);
 
   //x_dir
   vnl_matrix<double> Ax(3,3,vnl_matrix_identity);
   double x_angle = 0*vnl_math::pi_over_180;
-  Ax(1,1) = vcl_cos(x_angle); Ax(1,2) = -vcl_sin(x_angle);
-  Ax(2,1) = vcl_sin(x_angle); Ax(2,2) = vcl_cos(x_angle);
+  Ax(1,1) = std::cos(x_angle); Ax(1,2) = -std::sin(x_angle);
+  Ax(2,1) = std::sin(x_angle); Ax(2,2) = std::cos(x_angle);
 
   //z_dir
   vnl_matrix<double> Az(3,3,vnl_matrix_identity);
   double z_angle = 10*vnl_math::pi_over_180;
-  Az(0,0) = vcl_cos(z_angle); Az(0,1) = -vcl_sin(z_angle);
-  Az(1,0) = vcl_sin(z_angle); Az(1,1) =  vcl_cos(z_angle);
+  Az(0,0) = std::cos(z_angle); Az(0,1) = -std::sin(z_angle);
+  Az(1,0) = std::sin(z_angle); Az(1,1) =  std::cos(z_angle);
 
   A = Ax*Ay*Az;
 #if 0 // commented out
@@ -221,11 +223,11 @@ main( int argc, char* argv[] )
 
   // Output Results
   if ( reg.has_final_transformation() ) {
-    vcl_cout<<"Final xform:"<<vcl_endl;
+    std::cout<<"Final xform:"<<std::endl;
     rgrl_transformation_sptr final_trans = reg.final_transformation();
     rgrl_trans_affine* a_xform = rgrl_cast<rgrl_trans_affine*>(final_trans);
-    vcl_cout<<"Final xform: A =\n"<<a_xform->A()<<"t = "<<a_xform->t()<<vcl_endl
-            <<"Final alignment error = "<<reg.final_status()->error()<<vcl_endl;
+    std::cout<<"Final xform: A =\n"<<a_xform->A()<<"t = "<<a_xform->t()<<std::endl
+            <<"Final alignment error = "<<reg.final_status()->error()<<std::endl;
   }
 
   // BeginLatex

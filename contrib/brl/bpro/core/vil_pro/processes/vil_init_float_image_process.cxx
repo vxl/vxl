@@ -4,8 +4,10 @@
 // \file
 
 #include <bprb/bprb_parameters.h>
-#include <vcl_iostream.h>
-#include <vcl_string.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iostream>
+#include <string>
 #include <vil/vil_image_view.h>
 #include <vil/vil_image_view_base.h>
 
@@ -14,7 +16,7 @@ bool vil_init_float_image_process_cons(bprb_func_process& pro)
 {
   //input
   bool ok=false;
-  vcl_vector<vcl_string> input_types;
+  std::vector<std::string> input_types;
   input_types.push_back("unsigned");//ni
   input_types.push_back("unsigned");//nj
   input_types.push_back("unsigned");//np
@@ -29,7 +31,7 @@ bool vil_init_float_image_process_cons(bprb_func_process& pro)
   pro.set_input(3, brdb_value_sptr(new brdb_value_t<float>(0.0)));
 
   //output
-  vcl_vector<vcl_string> output_types;
+  std::vector<std::string> output_types;
   output_types.push_back("vil_image_view_base_sptr");
   ok = pro.set_output_types(output_types);
   if (!ok) return ok;
@@ -42,7 +44,7 @@ bool vil_init_float_image_process(bprb_func_process& pro)
   unsigned int num_inputs = static_cast<int>(pro.input_types().size());
   // Sanity check
   if (pro.n_inputs() != num_inputs) {
-    vcl_cout << "vil_load_image_view_binary_process: The number of inputs should be " << num_inputs << vcl_endl;
+    std::cout << "vil_load_image_view_binary_process: The number of inputs should be " << num_inputs << std::endl;
     return false;
   }
 

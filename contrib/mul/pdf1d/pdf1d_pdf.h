@@ -8,7 +8,9 @@
 // \author Tim Cootes
 
 #include <vsl/vsl_binary_io.h>
-#include <vcl_string.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <string>
 #include <vnl/vnl_vector.h> // HACK: IMS: don't replace this with vnl_fwd.h
 
 //=======================================================================
@@ -104,16 +106,16 @@ class pdf1d_pdf
   short version_no() const;
 
   //: Name of the class
-  virtual vcl_string is_a() const;
+  virtual std::string is_a() const;
 
   //: Does the name of the class match the argument?
-  virtual bool is_class(vcl_string const& s) const;
+  virtual bool is_class(std::string const& s) const;
 
   //: Create a copy on the heap and return base class pointer
   virtual pdf1d_pdf* clone() const = 0;
 
   //: Print class to os
-  virtual void print_summary(vcl_ostream& os) const = 0;
+  virtual void print_summary(std::ostream& os) const = 0;
 
   //: Save class to binary file stream
   virtual void b_write(vsl_b_ostream& bfs) const = 0;
@@ -124,7 +126,7 @@ class pdf1d_pdf
   //: Write values (x,p(x)) to text file suitable for plotting
   //  Evaluate pdf at n points in range [min_x,max_x] and write a text file,
   //  each line of which is {x p(x)}, suitable for plotting with many graph packages
-  bool write_plot_file(const vcl_string& plot_file, double min_x, double max_x, int n) const;
+  bool write_plot_file(const std::string& plot_file, double min_x, double max_x, int n) const;
 };
 
 //: Allows derived class to be loaded by base-class pointer
@@ -145,15 +147,15 @@ void vsl_b_write(vsl_b_ostream& bfs, const pdf1d_pdf& b);
 void vsl_b_read(vsl_b_istream& bfs, pdf1d_pdf& b);
 
 //: Stream output operator for class reference
-void vsl_print_summary(vcl_ostream& os,const pdf1d_pdf& b);
+void vsl_print_summary(std::ostream& os,const pdf1d_pdf& b);
 
 //: Stream output operator for class pointer
-void vsl_print_summary(vcl_ostream& os,const pdf1d_pdf* b);
+void vsl_print_summary(std::ostream& os,const pdf1d_pdf* b);
 
 //: Stream output operator for class reference
-vcl_ostream& operator<<(vcl_ostream& os,const pdf1d_pdf& b);
+std::ostream& operator<<(std::ostream& os,const pdf1d_pdf& b);
 
 //: Stream output operator for class pointer
-vcl_ostream& operator<<(vcl_ostream& os,const pdf1d_pdf* b);
+std::ostream& operator<<(std::ostream& os,const pdf1d_pdf* b);
 
 #endif // pdf1d_pdf_h

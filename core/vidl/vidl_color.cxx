@@ -5,7 +5,8 @@
 // \author Matt Leotta
 //
 
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <iostream>
 
 //: The total number of pixel datatypes
 const unsigned int num_types = 5;
@@ -105,7 +106,7 @@ struct table_init<0>
 template <int Fmt>
 struct type_table_init
 {
-  static inline void populate(const vcl_type_info* type_table[num_types])
+  static inline void populate(const std::type_info* type_table[num_types])
   {
     typedef typename vidl_pixel_traits_of<static_cast<vidl_pixel_format>(Fmt)>::type dtype;
     type_table[type_index<dtype>::index] = &typeid(dtype);
@@ -118,7 +119,7 @@ struct type_table_init
 VCL_DEFINE_SPECIALIZATION
 struct type_table_init<0>
 {
-  static inline void populate(const vcl_type_info* type_table[num_types])
+  static inline void populate(const std::type_info* type_table[num_types])
   {
     typedef vidl_pixel_traits_of<static_cast<vidl_pixel_format>(0)>::type dtype;
     type_table[type_index<dtype>::index] = &typeid(dtype);
@@ -139,34 +140,34 @@ class converter
 #if 0
     for (unsigned int i=0; i<num_types; ++i){
       if (type_table[i])
-        vcl_cout << "type "<<i<<" is "<<type_table[i]->name() << vcl_endl;
+        std::cout << "type "<<i<<" is "<<type_table[i]->name() << std::endl;
     }
 #endif // 0
   }
 
   //: Apply the conversion
-  vidl_color_conv_fptr operator()(vidl_pixel_color in_C, const vcl_type_info& in_type,
-                                  vidl_pixel_color out_C, const vcl_type_info& out_type) const
+  vidl_color_conv_fptr operator()(vidl_pixel_color in_C, const std::type_info& in_type,
+                                  vidl_pixel_color out_C, const std::type_info& out_type) const
   {
     unsigned int in_idx = type_index(in_type);
     unsigned int out_idx = type_index(out_type);
     return table[in_C][out_C][in_idx][out_idx];
   }
 
-  unsigned int type_index(const vcl_type_info& t) const
+  unsigned int type_index(const std::type_info& t) const
   {
     for (unsigned int i=0; i<num_types; ++i)
     {
       if ( type_table[i] && t == *type_table[i] )
         return i;
     }
-    vcl_cerr << "error: unregistered pixel data type - "<<t.name()<<vcl_endl;
+    std::cerr << "error: unregistered pixel data type - "<<t.name()<<std::endl;
     return static_cast<unsigned int>(-1);
   }
  private:
   //: Table of color conversion functions
   vidl_color_conv_fptr table[VIDL_PIXEL_COLOR_ENUM_END][VIDL_PIXEL_COLOR_ENUM_END][num_types][num_types];
-  const vcl_type_info* type_table[num_types];
+  const std::type_info* type_table[num_types];
 };
 
 //: Instantiate a global conversion function table
@@ -181,8 +182,8 @@ converter conversion_table;
 // may actually reinterpret the data as other types (i.e. bool* or
 // vxl_uint_16*) via reinterpret_cast
 vidl_color_conv_fptr
-vidl_color_converter_func( vidl_pixel_color in_C, const vcl_type_info& in_type,
-                           vidl_pixel_color out_C, const vcl_type_info& out_type)
+vidl_color_converter_func( vidl_pixel_color in_C, const std::type_info& in_type,
+                           vidl_pixel_color out_C, const std::type_info& out_type)
 {
   return conversion_table(in_C, in_type, out_C, out_type);
 }

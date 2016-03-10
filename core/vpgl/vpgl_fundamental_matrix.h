@@ -28,7 +28,8 @@
 
 #include <vnl/vnl_fwd.h>
 #include <vgl/vgl_fwd.h>
-#include <vcl_iosfwd.h>
+#include <vcl_compiler.h>
+#include <iosfwd>
 
 #include "vpgl_proj_camera.h"
 
@@ -95,8 +96,8 @@ class vpgl_fundamental_matrix
   // This is not a robust algorithm but this shouldn't be a problem
   // as these correspondences will usually be picked by hand.
   vpgl_proj_camera<T> extract_left_camera(
-    const vcl_vector< vgl_point_3d<T> >& world_points,
-    const vcl_vector< vgl_point_2d<T> >& image_points ) const;
+    const std::vector< vgl_point_3d<T> >& world_points,
+    const std::vector< vgl_point_2d<T> >& image_points ) const;
 
   // Getters and Setters:----------------
 
@@ -122,10 +123,10 @@ class vpgl_fundamental_matrix
 
 //: Write vpgl_fundamental_matrix to stream
 template <class T>
-vcl_ostream&  operator<<(vcl_ostream& s, vpgl_fundamental_matrix<T> const& p);
+std::ostream&  operator<<(std::ostream& s, vpgl_fundamental_matrix<T> const& p);
 
 //: Read vpgl_fundamental_matrix from stream
 template <class T>
-vcl_istream&  operator>>(vcl_istream& s, vpgl_fundamental_matrix<T>& p);
+std::istream&  operator>>(std::istream& s, vpgl_fundamental_matrix<T>& p);
 
 #endif // vpgl_fundamental_matrix_h_

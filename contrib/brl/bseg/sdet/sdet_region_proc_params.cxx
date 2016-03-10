@@ -6,8 +6,10 @@
 //
 //-----------------------------------------------------------------------------
 
-#include <vcl_iostream.h>
-#include <vcl_sstream.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iostream>
+#include <sstream>
 
 //------------------------------------------------------------------------
 // Constructors
@@ -50,10 +52,10 @@ void sdet_region_proc_params::InitParams(const sdet_detector_params& dp,
 //:   Checks that parameters are within acceptable bounds
 //    Note that msg << ends seems to restart the string and erase the
 //    previous string. We should only use it as the last call, use
-//    vcl_endl otherwise.
+//    std::endl otherwise.
 bool sdet_region_proc_params::SanityCheck()
 {
-  vcl_stringstream msg;
+  std::stringstream msg;
   bool valid = true;
 
   if (array_scale_<2)
@@ -63,19 +65,19 @@ bool sdet_region_proc_params::SanityCheck()
   }
 
   valid = valid && dp_.SanityCheck();
-  msg << dp_.GetErrorMsg() << vcl_ends;
+  msg << dp_.GetErrorMsg() << std::ends;
 
   SetErrorMsg(msg.str().c_str());
   return valid;
 }
 
-vcl_ostream& operator << (vcl_ostream& os, const sdet_region_proc_params& rpp)
+std::ostream& operator << (std::ostream& os, const sdet_region_proc_params& rpp)
 {
   return
   os << "sdet_region_proc_params:\n[---\n"
      << rpp.dp_ << "\n  ---\n"
-     << "debug " << rpp.debug_ << vcl_endl
-     << "verbose " << rpp.verbose_ << vcl_endl
-     << "label array scale " << rpp.array_scale_ << vcl_endl
-     << "---]" << vcl_endl;
+     << "debug " << rpp.debug_ << std::endl
+     << "verbose " << rpp.verbose_ << std::endl
+     << "label array scale " << rpp.array_scale_ << std::endl
+     << "---]" << std::endl;
 }

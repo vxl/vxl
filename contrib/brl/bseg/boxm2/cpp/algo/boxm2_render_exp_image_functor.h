@@ -15,7 +15,7 @@ class boxm2_render_vis_image_functor
   // "default" constructor
   boxm2_render_vis_image_functor() {}
 
-  bool init_data(vcl_vector<boxm2_data_base*> & datas,  vil_image_view<float>* vis_img)
+  bool init_data(std::vector<boxm2_data_base*> & datas,  vil_image_view<float>* vis_img)
   {
     alpha_data_=new boxm2_data<BOXM2_ALPHA>(datas[0]->data_buffer(),datas[0]->buffer_length(),datas[0]->block_id());
     vis_img_   =vis_img;
@@ -26,7 +26,7 @@ class boxm2_render_vis_image_functor
   {
     boxm2_data<BOXM2_ALPHA>::datatype alpha=alpha_data_->data()[index];
     float vis=(*vis_img_)(i,j);
-    vis*=vcl_exp(-alpha*seg_len);
+    vis*=std::exp(-alpha*seg_len);
     (*vis_img_)(i,j)=vis;
     return true;
   }
@@ -43,7 +43,7 @@ class boxm2_render_exp_image_functor
   // "default" constructor
   boxm2_render_exp_image_functor() {}
 
-  inline bool init_data(vcl_vector<boxm2_data_base*> & datas, vil_image_view<float> * expected, vil_image_view<float>* vis_img)
+  inline bool init_data(std::vector<boxm2_data_base*> & datas, vil_image_view<float> * expected, vil_image_view<float>* vis_img)
   {
     alpha_data_=new boxm2_data<BOXM2_ALPHA>(datas[0]->data_buffer(),datas[0]->buffer_length(),datas[0]->block_id());
     mog3_data_=new boxm2_data<APM_TYPE>(datas[1]->data_buffer(),datas[1]->buffer_length(),datas[1]->block_id());
@@ -57,11 +57,11 @@ class boxm2_render_exp_image_functor
     boxm2_data<BOXM2_ALPHA>::datatype alpha=alpha_data_->data()[index];
     float vis=(*vis_img_)(i,j);
     float exp_int=(*expected_img_)(i,j);
-    float curr_p=(1-vcl_exp(-alpha*seg_len))*vis;
+    float curr_p=(1-std::exp(-alpha*seg_len))*vis;
     float exp_color = boxm2_processor_type<APM_TYPE>::type::expected_color(mog3_data_->data()[index]);
     exp_int += curr_p * exp_color;
     (*expected_img_)(i,j)=exp_int;
-    vis*=vcl_exp(-alpha*seg_len);
+    vis*=std::exp(-alpha*seg_len);
     (*vis_img_)(i,j)=vis;
     return true;
   }

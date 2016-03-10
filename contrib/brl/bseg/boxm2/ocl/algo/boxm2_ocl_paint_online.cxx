@@ -15,16 +15,18 @@
 #include <brdb/brdb_value.h>
 
 //directory utility
-#include <vcl_fstream.h>
+#include <fstream>
 #include <vcl_where_root_dir.h>
 #include <bocl/bocl_device.h>
 #include <bocl/bocl_kernel.h>
 #include <vul/vul_timer.h>
-#include <vcl_algorithm.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <algorithm>
 #include <vil/vil_image_view.h>
 
 //: Declare kernels
-vcl_map<vcl_string, vcl_vector<bocl_kernel*> > boxm2_ocl_paint_online::kernels_;
+std::map<std::string, std::vector<bocl_kernel*> > boxm2_ocl_paint_online::kernels_;
 
 //paint block
 bool boxm2_ocl_paint_online::paint_scene(boxm2_scene_sptr          scene,
@@ -32,7 +34,7 @@ bool boxm2_ocl_paint_online::paint_scene(boxm2_scene_sptr          scene,
                                          boxm2_opencl_cache_sptr    opencl_cache,
                                          vil_image_view_base_sptr   img,
                                          vpgl_camera_double_sptr    cam,
-                                         vcl_string const& apm_id)
+                                         std::string const& apm_id)
 {
   vil_image_view<float> weights(img->ni(), img->nj());
   weights.fill(1.0f);
@@ -45,7 +47,7 @@ bool boxm2_ocl_paint_online::paint_scene_with_weights(boxm2_scene_sptr          
                                                       vil_image_view_base_sptr   img,
                                                       vil_image_view<float> const& weights,
                                                       vpgl_camera_double_sptr    cam,
-                                                      vcl_string const& apm_id)
+                                                      std::string const& apm_id)
 {
   typedef boxm2_data_traits<BOXM2_AUX0>::datatype aux0_datatype;
   typedef boxm2_data_traits<BOXM2_AUX1>::datatype aux1_datatype;
@@ -56,12 +58,12 @@ bool boxm2_ocl_paint_online::paint_scene_with_weights(boxm2_scene_sptr          
 
   //cache size sanity check
   long binCache = opencl_cache.ptr()->bytes_in_cache();
-  vcl_cout<<"Update MBs in cache: "<<binCache/(1024.0*1024.0)<<vcl_endl;
+  std::cout<<"Update MBs in cache: "<<binCache/(1024.0*1024.0)<<std::endl;
 
   //make correct data types are here
   bool foundDataType = false, foundNumObsType = false;
-  vcl_string data_type, num_obs_type;
-  vcl_vector<vcl_string> apps = scene->appearances();
+  std::string data_type, num_obs_type;
+  std::vector<std::string> apps = scene->appearances();
   for (unsigned int i=0; i<apps.size(); ++i) {
     if ( apps[i] == boxm2_data_traits<BOXM2_MOG3_GREY>::prefix(apm_id) )
     {
@@ -83,11 +85,11 @@ bool boxm2_ocl_paint_online::paint_scene_with_weights(boxm2_scene_sptr          
     }
   }
   if (!foundDataType) {
-    vcl_cout<<"BOXM2_OPENCL_UPDATE_PROCESS ERROR: scene doesn't have BOXM2_MOG3_GREY or BOXM2_MOG3_GREY_16 data type"<<vcl_endl;
+    std::cout<<"BOXM2_OPENCL_UPDATE_PROCESS ERROR: scene doesn't have BOXM2_MOG3_GREY or BOXM2_MOG3_GREY_16 data type"<<std::endl;
     return false;
   }
   if (!foundNumObsType) {
-    vcl_cout<<"BOXM2_OPENCL_UPDATE_PROCESS ERROR: scene doesn't have BOXM2_NUM_OBS type"<<vcl_endl;
+    std::cout<<"BOXM2_OPENCL_UPDATE_PROCESS ERROR: scene doesn't have BOXM2_NUM_OBS type"<<std::endl;
     return false;
   }
 
@@ -105,8 +107,8 @@ bool boxm2_ocl_paint_online::paint_scene_with_weights(boxm2_scene_sptr          
   vil_image_view<float>* img_view = static_cast<vil_image_view<float>* >(float_img.ptr());
 
 
-  vcl_size_t local_threads[2]={8,8};
-  vcl_size_t global_threads[2]={8,8};
+  std::size_t local_threads[2]={8,8};
+  std::size_t global_threads[2]={8,8};
   unsigned cl_ni=(unsigned)RoundUp(img_view->ni(),(int)local_threads[0]);
   unsigned cl_nj=(unsigned)RoundUp(img_view->nj(),(int)local_threads[1]);
 
@@ -164,15 +166,15 @@ bool boxm2_ocl_paint_online::paint_scene_with_weights(boxm2_scene_sptr          
   lookup->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR);
 
   // set arguments
-  vcl_vector<boxm2_block_id> vis_order = scene->get_vis_blocks(cam);
-  vcl_vector<boxm2_block_id>::iterator id;
-  vcl_string opts = boxm2_ocl_util::mog_options( data_type );
-  vcl_vector<bocl_kernel* > kerns = compile_kernels(device, opts);
+  std::vector<boxm2_block_id> vis_order = scene->get_vis_blocks(cam);
+  std::vector<boxm2_block_id>::iterator id;
+  std::string opts = boxm2_ocl_util::mog_options( data_type );
+  std::vector<bocl_kernel* > kerns = compile_kernels(device, opts);
 
   //set masked values
   for (id = vis_order.begin(); id != vis_order.end(); ++id)
   {
-    vcl_cout<<*id;
+    std::cout<<*id;
     //choose correct render kernel
     boxm2_block_metadata mdata = scene->get_block_metadata(*id);
     bocl_kernel* kern =  kerns[0];
@@ -285,27 +287,27 @@ bool boxm2_ocl_paint_online::paint_scene_with_weights(boxm2_scene_sptr          
   delete [] ray_origins;
   delete [] ray_directions;
 
-  vcl_cout<<"Gpu time "<<gpu_time<<" transfer time "<<transfer_time<<vcl_endl;
+  std::cout<<"Gpu time "<<gpu_time<<" transfer time "<<transfer_time<<std::endl;
   clReleaseCommandQueue(queue);
   return true;
 }
 
 
 //: Keeps track of already compiled kernels, and returns matching ones
-vcl_vector< bocl_kernel* > boxm2_ocl_paint_online::compile_kernels( bocl_device_sptr device,
-                                                                    vcl_string opts )
+std::vector< bocl_kernel* > boxm2_ocl_paint_online::compile_kernels( bocl_device_sptr device,
+                                                                    std::string opts )
 {
   //make id out of device
-  vcl_string identifier = device->device_identifier();
+  std::string identifier = device->device_identifier();
   if ( kernels_.find(identifier) != kernels_.end() )
     return kernels_[identifier];
 
-  vcl_vector<bocl_kernel * > kernels;
+  std::vector<bocl_kernel * > kernels;
 
-  vcl_cout<<"===========Compiling kernels==========="<<vcl_endl;
+  std::cout<<"===========Compiling kernels==========="<<std::endl;
   //gather all render sources... seems like a lot for rendering...
-  vcl_vector<vcl_string> src_paths;
-  vcl_string source_dir = boxm2_ocl_util::ocl_src_root();
+  std::vector<std::string> src_paths;
+  std::string source_dir = boxm2_ocl_util::ocl_src_root();
   src_paths.push_back(source_dir + "scene_info.cl");
   src_paths.push_back(source_dir + "cell_utils.cl");
   src_paths.push_back(source_dir + "bit/bit_tree_library_functions.cl");
@@ -318,11 +320,11 @@ vcl_vector< bocl_kernel* > boxm2_ocl_paint_online::compile_kernels( bocl_device_
   //compilation options
   bocl_kernel* kernel = new bocl_kernel();
 
-  vcl_string updt_opts = opts +  " -D AUX_LEN_INT_VIS -D STEP_CELL=step_cell_aux_len_int_vis(aux_args,data_ptr,llid,d) ";
+  std::string updt_opts = opts +  " -D AUX_LEN_INT_VIS -D STEP_CELL=step_cell_aux_len_int_vis(aux_args,data_ptr,llid,d) ";
   kernel->create_kernel(&device->context(),device->device_id(), src_paths, "aux_len_int_vis_main", updt_opts, "online_paint::aux_len_int_vis_main");
   kernels.push_back(kernel);
 
-  vcl_vector<vcl_string> second_src_paths;
+  std::vector<std::string> second_src_paths;
   second_src_paths.push_back(source_dir + "scene_info.cl");
   second_src_paths.push_back(source_dir + "cell_utils.cl");
   second_src_paths.push_back(source_dir + "statistics_library_functions.cl");
@@ -330,7 +332,7 @@ vcl_vector< bocl_kernel* > boxm2_ocl_paint_online::compile_kernels( bocl_device_
   second_src_paths.push_back(source_dir + "bit/update_kernels.cl");
 
   bocl_kernel* kernel1 = new bocl_kernel();
-  vcl_string app_opts = opts +  " -D UPDATE_APP_GREY";
+  std::string app_opts = opts +  " -D UPDATE_APP_GREY";
   kernel1->create_kernel(&device->context(),device->device_id(), second_src_paths, "update_mog3_main", app_opts, "online_paint::update_mog3_main");
   kernels.push_back(kernel1);
 

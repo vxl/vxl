@@ -7,7 +7,9 @@
 // \author Ian Scott
 // \date 2 Sep 2009
 
-#include <vcl_iosfwd.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iosfwd>
 #include <mbl/mbl_cloneable_ptr.h>
 #include <clsfy/clsfy_classifier_base.h>
 #include <clsfy/clsfy_classifier_1d.h>
@@ -25,7 +27,7 @@ class clsfy_binary_1d_wrapper : public clsfy_classifier_base
 
   //: Find the posterior probability of the input being in the positive class.
   // The result is outputs(0)
-  virtual void class_probabilities(vcl_vector<double> &outputs, const vnl_vector<double> &input) const
+  virtual void class_probabilities(std::vector<double> &outputs, const vnl_vector<double> &input) const
   { return classifier_1d_->class_probabilities(outputs, input(0)); }
 
   //: Classify the input vector.
@@ -56,13 +58,13 @@ class clsfy_binary_1d_wrapper : public clsfy_classifier_base
   virtual unsigned n_classes() const { return 1u; }
 
   //: Name of the class
-  virtual vcl_string is_a() const;
+  virtual std::string is_a() const;
 
   //: Name of the class
-  virtual bool is_class(vcl_string const& s) const;
+  virtual bool is_class(std::string const& s) const;
 
   //: Print class to os
-  virtual void print_summary(vcl_ostream& os) const;
+  virtual void print_summary(std::ostream& os) const;
 
   //: Save class to a binary File Stream
   virtual void b_write(vsl_b_ostream& bfs) const;

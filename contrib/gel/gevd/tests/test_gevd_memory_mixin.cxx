@@ -8,7 +8,9 @@
 // 1.0     |2002/04/05| Luis E. Galup            |Creation
 //*****************************************************************************
 
-#include <vcl_cstring.h> // memcpy
+#include <vcl_compiler.h>
+#include <iostream>
+#include <cstring> // memcpy
 #include <testlib/testlib_test.h>
 #include <gevd/gevd_memory_mixin.h>
 
@@ -41,7 +43,7 @@ test_gevd_memory_mixin()
   //now use the other constructor, and do the same stuff.
   char buf[8];
   const char * testwrd = "hickory";
-  vcl_memcpy(buf,testwrd,8);
+  std::memcpy(buf,testwrd,8);
   gmm = new gevd_memory_mixin(8,(void*)buf);
 
   off = gmm->GetOffset();

@@ -15,16 +15,16 @@ void mipa_l2norm_vector_normaliser::normalise(vnl_vector<double>& v) const
 
     const double epsilon=1.0E-4;//lower bound to avoid divide by zero in flat regions
 
-    double L2norm=vcl_sqrt(v.squared_magnitude()+epsilon);
+    double L2norm=std::sqrt(v.squared_magnitude()+epsilon);
     double L2inv=1.0/L2norm;
     v *= L2inv;
 }
 
 //=======================================================================
 
-vcl_string mipa_l2norm_vector_normaliser::is_a() const
+std::string mipa_l2norm_vector_normaliser::is_a() const
 {
-    return vcl_string("mipa_l2norm_vector_normaliser");
+    return std::string("mipa_l2norm_vector_normaliser");
 }
 
 //: Create a copy on the heap and return base class pointer
@@ -34,7 +34,7 @@ mipa_vector_normaliser* mipa_l2norm_vector_normaliser::clone() const
 }
 
 //: Print class to os
-void mipa_l2norm_vector_normaliser::print_summary(vcl_ostream& os) const
+void mipa_l2norm_vector_normaliser::print_summary(std::ostream& os) const
 {
     os<<is_a()<<'\n';
 }

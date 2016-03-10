@@ -6,11 +6,13 @@
 //:
 // \file
 
-#include <vcl_utility.h>
-#include <vcl_fstream.h>
-#include <vcl_sstream.h>
+#include <utility>
+#include <fstream>
+#include <sstream>
 #include <bocl/bocl_utils.h>
-#include <vcl_cstdio.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <cstdio>
 #if !defined (_WIN32) && !defined(__APPLE__)
 #include <malloc.h> // for memalign()
 #endif
@@ -60,21 +62,21 @@ bool bocl_manager<T>::initialize_cl()
   cl_uint num_platforms = 0;
   status = clGetPlatformIDs(0, NULL, &num_platforms);
   if (status != CL_SUCCESS) {
-    vcl_cerr << "bocl_manager: clGetPlatformIDs (call 1) returned " << status << '\n';
+    std::cerr << "bocl_manager: clGetPlatformIDs (call 1) returned " << status << '\n';
     return false;
   }
   if (num_platforms == 0) {
-    vcl_cerr << "bocl_manager: 0 OpenCL platforms found!\n";
+    std::cerr << "bocl_manager: 0 OpenCL platforms found!\n";
     return false;
   }
   if (num_platforms > 1) {
-    vcl_cerr << "bocl_manager: warning: found " << num_platforms << " OpenCL platforms. Using the first\n";
+    std::cerr << "bocl_manager: warning: found " << num_platforms << " OpenCL platforms. Using the first\n";
   }
   // Get the first platform ID
   cl_platform_id* platform_id = new cl_platform_id[num_platforms];
   status = clGetPlatformIDs (num_platforms, platform_id, NULL);
   if (status != CL_SUCCESS) {
-    vcl_cerr << "bocl_manager: clGetPlatformIDs (call 2) returned " << status << '\n';
+    std::cerr << "bocl_manager: clGetPlatformIDs (call 2) returned " << status << '\n';
     delete [] platform_id;
     return false;
   }
@@ -82,16 +84,16 @@ bool bocl_manager<T>::initialize_cl()
   //////////////////////////////////////////////////////////////////////////////
   // Get devices from platforms
   //////////////////////////////////////////////////////////////////////////////
-  const vcl_size_t MAX_GPUS = 16;
-  const vcl_size_t MAX_CPUS = 16;
+  const std::size_t MAX_GPUS = 16;
+  const std::size_t MAX_CPUS = 16;
   char platform_name[256];
-  vcl_size_t ret_size;
+  std::size_t ret_size;
 
   // First checking for GPU
   bool gpu_found=false;
   for (unsigned i=0;i<num_platforms;i++)
   {
-    vcl_cout<<"PLatform number; "<<i<<vcl_endl;
+    std::cout<<"PLatform number; "<<i<<std::endl;
 
     //grab device id's for type GPU
     cl_device_id gpu_ids[MAX_GPUS];
@@ -100,7 +102,7 @@ bool bocl_manager<T>::initialize_cl()
     {
       clGetPlatformInfo(platform_id[i],CL_PLATFORM_NAME,sizeof(platform_name),platform_name,&ret_size);
       gpu_found=true;
-      vcl_cout<<"Found "<<numGpus<<" GPUs"<<vcl_endl;
+      std::cout<<"Found "<<numGpus<<" GPUs"<<std::endl;
 
       //create device objects, push them onto gpu list
       for (unsigned int i=0; i<numGpus; ++i) {
@@ -115,12 +117,12 @@ bool bocl_manager<T>::initialize_cl()
   bool cpu_found=false;
   for (unsigned i=0;i<num_platforms;i++)
   {
-    vcl_cout<<"PLatform number; "<<i<<vcl_endl;
+    std::cout<<"PLatform number; "<<i<<std::endl;
     cl_device_id cpu_ids[MAX_CPUS];
     cl_uint numCpus;
     if ( clGetDeviceIDs(platform_id[i], CL_DEVICE_TYPE_CPU, MAX_CPUS, cpu_ids, &numCpus)== CL_SUCCESS)
     {
-      vcl_cout<<"FOUND "<<numCpus<<" CPUs"<<vcl_endl;
+      std::cout<<"FOUND "<<numCpus<<" CPUs"<<std::endl;
       cpu_found=true;
 
       //create device objects, push them onto gpu list
@@ -132,7 +134,7 @@ bool bocl_manager<T>::initialize_cl()
     }
   }
   if (!gpu_found && !cpu_found) {
-    vcl_cout<<"bocl_manager:: No devices (GPU or CPU) found, manager is invalid"<<vcl_endl;
+    std::cout<<"bocl_manager:: No devices (GPU or CPU) found, manager is invalid"<<std::endl;
     delete [] platform_id;
     return false;
   }
@@ -147,7 +149,7 @@ bool bocl_manager<T>::initialize_cl()
     return false;
   context_ = curr_device_->context();
 #ifdef VERBOSE
-  vcl_cout<<"Default device: "<<*curr_device_<<vcl_endl;
+  std::cout<<"Default device: "<<*curr_device_<<std::endl;
 #endif
   //////////////////////////////////////////////////////////////////////////////
   delete [] platform_id;
@@ -164,7 +166,7 @@ cl_context bocl_manager<T>::create_context(cl_device_id* device, int num_devices
 {
   //create device info for this device
   bocl_device_info info(device);
-  vcl_cout<<"creating context on device: "<<info<<vcl_endl;
+  std::cout<<"creating context on device: "<<info<<std::endl;
 
   //Create a context from the device ID
   int status = 1;
@@ -174,7 +176,7 @@ cl_context bocl_manager<T>::create_context(cl_device_id* device, int num_devices
   }
 
 #if 0 //below is the old method of storing devices - seemed roundabout
-  vcl_size_t device_list_size = 0;
+  std::size_t device_list_size = 0;
 
   // First, get the size of device list data
   status = clGetContextInfo(context,
@@ -189,7 +191,7 @@ cl_context bocl_manager<T>::create_context(cl_device_id* device, int num_devices
   // Now allocate memory for device list based on the size we got earlier
   devices_ = (cl_device_id *)malloc(device_list_size);
   if (devices_==NULL) {
-    vcl_cout << "Failed to allocate memory (devices).\n";
+    std::cout << "Failed to allocate memory (devices).\n";
     return false;
   }
   // Now, get the device list data
@@ -206,17 +208,17 @@ cl_context bocl_manager<T>::create_context(cl_device_id* device, int num_devices
 }
 
 template<class T>
-bool bocl_manager<T>::load_kernel_source(vcl_string const& path)
+bool bocl_manager<T>::load_kernel_source(std::string const& path)
 {
   prog_ = "";
-  vcl_ifstream is(path.c_str());
+  std::ifstream is(path.c_str());
   if (!is.is_open())
     return false;
   char temp[256];
-  vcl_ostringstream ostr;
+  std::ostringstream ostr;
   while (!is.eof()) {
     is.getline(temp, 256);
-    vcl_string s(temp);
+    std::string s(temp);
     ostr << s << '\n';
   }
   prog_ =  ostr.str();
@@ -224,16 +226,16 @@ bool bocl_manager<T>::load_kernel_source(vcl_string const& path)
 }
 
 template<class T>
-bool bocl_manager<T>::append_process_kernels(vcl_string const& path)
+bool bocl_manager<T>::append_process_kernels(std::string const& path)
 {
-  vcl_ifstream is(path.c_str());
+  std::ifstream is(path.c_str());
   if (!is.is_open())
     return false;
   char temp[256];
-  vcl_ostringstream ostr;
+  std::ostringstream ostr;
   while (!is.eof()) {
     is.getline(temp, 256);
-    vcl_string s(temp);
+    std::string s(temp);
     ostr << s << '\n';
   }
   prog_ += ostr.str();
@@ -241,9 +243,9 @@ bool bocl_manager<T>::append_process_kernels(vcl_string const& path)
 }
 
 template<class T>
-bool bocl_manager<T>::write_program(vcl_string const& path)
+bool bocl_manager<T>::write_program(std::string const& path)
 {
-  vcl_ofstream os(path.c_str());
+  std::ofstream os(path.c_str());
   if (!os.is_open())
     return false;
   os << prog_;
@@ -251,7 +253,7 @@ bool bocl_manager<T>::write_program(vcl_string const& path)
 }
 
 template <class T>
-void* bocl_manager<T>::allocate_host_mem(vcl_size_t size)
+void* bocl_manager<T>::allocate_host_mem(std::size_t size)
 {
 #if defined (_WIN32)
   return _aligned_malloc(size, 16);
@@ -263,10 +265,10 @@ void* bocl_manager<T>::allocate_host_mem(vcl_size_t size)
 }
 
 template<class T>
-int bocl_manager<T>::build_kernel_program(cl_program & program, vcl_string options)
+int bocl_manager<T>::build_kernel_program(cl_program & program, std::string options)
 {
   cl_int status = CL_SUCCESS;
-  vcl_size_t sourceSize[] = { this->prog_.size() };
+  std::size_t sourceSize[] = { this->prog_.size() };
   if (!sourceSize[0]) return SDK_FAILURE;
   if (program) {
     status = clReleaseProgram(program);
@@ -293,11 +295,11 @@ int bocl_manager<T>::build_kernel_program(cl_program & program, vcl_string optio
                           NULL);
   if (!check_val(status, CL_SUCCESS, error_to_string(status)))
   {
-    vcl_size_t len;
+    std::size_t len;
     char buffer[2048];
     clGetProgramBuildInfo(program, this->devices()[0],
                           CL_PROGRAM_BUILD_LOG, sizeof(buffer), buffer, &len);
-    vcl_printf("%s\n", buffer);
+    std::printf("%s\n", buffer);
     return SDK_FAILURE;
   }
   else
@@ -321,7 +323,7 @@ bool bocl_manager<T>::free_buffer(void* buffer)
 }
 
 template<class T>
-bool bocl_manager<T>::create_buffer(void** buffer,vcl_string type, int elm_size, int length)
+bool bocl_manager<T>::create_buffer(void** buffer,std::string type, int elm_size, int length)
 {
   if (type.compare("cl_int") == 0) {
 #if defined (_WIN32)
@@ -360,7 +362,7 @@ bool bocl_manager<T>::create_buffer(void** buffer,vcl_string type, int elm_size,
 #endif
   }
   else {
-    vcl_cout << "Buffer of type (" << type << "*) is not defined yet!" << vcl_endl;
+    std::cout << "Buffer of type (" << type << "*) is not defined yet!" << std::endl;
     return false;
   }
   return true;

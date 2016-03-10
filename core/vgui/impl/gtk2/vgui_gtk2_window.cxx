@@ -46,7 +46,7 @@ vgui_gtk2_window::vgui_gtk2_window(int w, int h, const char* title)
   , statusbar(new vgui_gtk2_statusbar)
   , last_menubar(new vgui_menu)
 {
-  if (debug) vcl_cerr << "vgui_gtk2_window::vgui_gtk2_window\n";
+  if (debug) std::cerr << "vgui_gtk2_window::vgui_gtk2_window\n";
 
   window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
   gtk_window_set_title(GTK_WINDOW(window), title);
@@ -70,7 +70,7 @@ vgui_gtk2_window::vgui_gtk2_window(int w, int h, const vgui_menu& menu, const ch
   , statusbar(new vgui_gtk2_statusbar)
   , last_menubar(new vgui_menu)
 {
-  if (debug) vcl_cerr << "vgui_gtk2_window::vgui_gtk2_window\n";
+  if (debug) std::cerr << "vgui_gtk2_window::vgui_gtk2_window\n";
 
   window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
   gtk_window_set_title(GTK_WINDOW(window), title);
@@ -138,7 +138,7 @@ void vgui_gtk2_window::init()
 //: Puts the given menubar onto the window.
 void vgui_gtk2_window::set_menubar(const vgui_menu &menu)
 {
-  if (debug) vcl_cerr << "vgui_gtk2_window::set_menubar\n";
+  if (debug) std::cerr << "vgui_gtk2_window::set_menubar\n";
 
   use_menubar = true;
 
@@ -158,22 +158,22 @@ void vgui_gtk2_window::set_menubar(const vgui_menu &menu)
 void vgui_gtk2_window::show()
 {
 
-  if (debug) vcl_cerr << "vgui_gtk2_window::show\n";
+  if (debug) std::cerr << "vgui_gtk2_window::show\n";
   gtk_widget_show(window);
 }
 
 void vgui_gtk2_window::hide()
 {
-  if (debug) vcl_cerr << "vgui_gtk2_window::hide\n";
+  if (debug) std::cerr << "vgui_gtk2_window::hide\n";
 }
 
 void vgui_gtk2_window::reshape(unsigned w, unsigned h)
 {
-  if (debug) vcl_cerr << "vgui_gtk2_window::reshape\n";
+  if (debug) std::cerr << "vgui_gtk2_window::reshape\n";
   gtk_widget_set_size_request(window,w,h);
 }
 
-void vgui_gtk2_window::set_title(vcl_string const &title)
+void vgui_gtk2_window::set_title(std::string const &title)
 {
   gtk_window_set_title(GTK_WINDOW(window), title.c_str());
 }

@@ -7,7 +7,9 @@
 //-----------------------------------------------------------------------------
 
 #include <vil1/vil1_image.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iostream>
 #include "gevd_pixel.h"
 #include "gevd_float_operators.h"
 #include "gevd_step.h"
@@ -98,7 +100,7 @@ bool  gevd_detector::DoContour()
   if (edges && vertices) return true;
 
   if (!DoStep()) {
-    vcl_cout << "***Fail on DoContour.\n";
+    std::cout << "***Fail on DoContour.\n";
     return false;
   }
   gevd_contour::ClearNetwork(edges, vertices);       // delete vertices/edges
@@ -108,17 +110,17 @@ bool  gevd_detector::DoContour()
                                 junctionx, junctiony,   // chains/cycles
                                 edges, vertices);
   if (!t) {
-    vcl_cout << "***Fail on FindNetwork.\n";
+    std::cout << "***Fail on FindNetwork.\n";
     return false;
   }
 
-  vcl_vector<vtol_edge_2d_sptr>::iterator edge;
-  vcl_cout << "IN DoContour before SubPixelAccuracy\n";
-  this->print(vcl_cout);
+  std::vector<vtol_edge_2d_sptr>::iterator edge;
+  std::cout << "IN DoContour before SubPixelAccuracy\n";
+  this->print(std::cout);
   for ( edge = edges->begin() ; edge != edges->end(); ++edge)
     {
-    vcl_cout << "Edgel output from DoContour:";
-    (*edge)->describe(vcl_cout, 2);
+    std::cout << "Edgel output from DoContour:";
+    (*edge)->describe(std::cout, 2);
     }
 
   contour.SubPixelAccuracy(*edges, *vertices, // insert subpixel
@@ -147,7 +149,7 @@ bool  gevd_detector::DoFoldContour()
   if (edges && vertices) return true;
 
 //   if (!DoFold()) {
-//     vcl_cout << "***Fail on DoFoldContour.\n";
+//     std::cout << "***Fail on DoFoldContour.\n";
 //     return false;
 //   }
   gevd_contour::ClearNetwork(edges, vertices);       // delete vertices/edges
@@ -159,7 +161,7 @@ bool  gevd_detector::DoFoldContour()
                                 junctionx, junctiony,   // chains/cycles
                                 edges, vertices);
   if (!t) {
-    vcl_cout << "***Fail on FindNetwork.\n";
+    std::cout << "***Fail on FindNetwork.\n";
     return false;
   }
   contour.SubPixelAccuracy(*edges, *vertices, // insert subpixel
@@ -189,7 +191,7 @@ bool gevd_detector::DoStep()
 
   const gevd_bufferxy* source = GetBufferFromImage();
   if (!source) {
-    vcl_cout << " cannot get image buffer\n";
+    std::cout << " cannot get image buffer\n";
     return false;
   }
 
@@ -224,7 +226,7 @@ bool gevd_detector::DoFold()
 
   const BufferXY* source = GetBufferFromImage();
   if (!source) {
-    vcl_cout << " cannot get image buffer\n";
+    std::cout << " cannot get image buffer\n";
     return false;
   }
 
@@ -262,7 +264,7 @@ gevd_bufferxy* gevd_detector::GetBufferFromImage()
 
   if (!image)
   {
-    vcl_cout << "No image\n";
+    std::cout << "No image\n";
     return VXL_NULLPTR;
   }
 
@@ -322,34 +324,34 @@ void gevd_detector::SetImage(vil1_image img)
   if (junctiony) delete [] junctiony;
 }
 
-void gevd_detector::print(vcl_ostream &strm) const
+void gevd_detector::print(std::ostream &strm) const
 {
   strm << "gevd_Detector:\n"
-       << "    noise " << noise << vcl_endl
-       << "    njunction " << njunction << vcl_endl
-       << "    num vertices " << vertices->size() << vcl_endl
-       << "    num edges " << edges->size() << vcl_endl
-       << "    filterfactor " << filterFactor << vcl_endl
-       << "    hysteresisfactor " << hysteresisFactor << vcl_endl
-       << "    noiseThreshold " << noiseThreshold << vcl_endl
-       << "    smooth " <<   smooth << vcl_endl // Smoothing kernel sigma
-       << "    noise_weight " <<   noise_weight << vcl_endl //The weight between sensor noise and texture noise
-       << "    noise_multiplier " <<   noise_multiplier << vcl_endl // The overal noise threshold scale factor
-       << "    automatic_threshold " <<   automatic_threshold << vcl_endl // Determine the threshold values from image
-       << "    aggressive_junction_closure " <<   aggressive_junction_closure << vcl_endl //Close junctions aggressively
-       << "    minLength " <<   minLength << vcl_endl          // minimum chain length
-       << "    contourFactor " <<   contourFactor << vcl_endl  // Threshold along contours
-       << "    junctionFactor " <<   junctionFactor << vcl_endl //Threshold at junctions
-       << "    filterFactor " <<   filterFactor << vcl_endl    // ratio of sensor to texture noise
-       << "    junctionp " <<   junctionp << vcl_endl // recover missing junctions
-       << "    minJump " <<   minJump << vcl_endl  // change in strength at junction
-       << "    maxGap " <<   maxGap << vcl_endl   // Bridge small gaps up to max_gap across.
-       << "    spacingp " <<   spacingp << vcl_endl  // equalize spacing?
-       << "    borderp " <<   borderp << vcl_endl   // insert virtual border for closure?
-       << "    corner_angle " <<   corner_angle << vcl_endl // smallest angle at corner
-       << "    separation " <<   separation << vcl_endl // |mean1-mean2|/sigma
-       << "    min_corner_length " <<   min_corner_length << vcl_endl // min length to find corners
-       << "    cycle " <<   cycle << vcl_endl // number of corners in a cycle
-       << "    ndimension " <<   ndimension << vcl_endl // spatial dimension of edgel chains.
-       << vcl_endl;
+       << "    noise " << noise << std::endl
+       << "    njunction " << njunction << std::endl
+       << "    num vertices " << vertices->size() << std::endl
+       << "    num edges " << edges->size() << std::endl
+       << "    filterfactor " << filterFactor << std::endl
+       << "    hysteresisfactor " << hysteresisFactor << std::endl
+       << "    noiseThreshold " << noiseThreshold << std::endl
+       << "    smooth " <<   smooth << std::endl // Smoothing kernel sigma
+       << "    noise_weight " <<   noise_weight << std::endl //The weight between sensor noise and texture noise
+       << "    noise_multiplier " <<   noise_multiplier << std::endl // The overal noise threshold scale factor
+       << "    automatic_threshold " <<   automatic_threshold << std::endl // Determine the threshold values from image
+       << "    aggressive_junction_closure " <<   aggressive_junction_closure << std::endl //Close junctions aggressively
+       << "    minLength " <<   minLength << std::endl          // minimum chain length
+       << "    contourFactor " <<   contourFactor << std::endl  // Threshold along contours
+       << "    junctionFactor " <<   junctionFactor << std::endl //Threshold at junctions
+       << "    filterFactor " <<   filterFactor << std::endl    // ratio of sensor to texture noise
+       << "    junctionp " <<   junctionp << std::endl // recover missing junctions
+       << "    minJump " <<   minJump << std::endl  // change in strength at junction
+       << "    maxGap " <<   maxGap << std::endl   // Bridge small gaps up to max_gap across.
+       << "    spacingp " <<   spacingp << std::endl  // equalize spacing?
+       << "    borderp " <<   borderp << std::endl   // insert virtual border for closure?
+       << "    corner_angle " <<   corner_angle << std::endl // smallest angle at corner
+       << "    separation " <<   separation << std::endl // |mean1-mean2|/sigma
+       << "    min_corner_length " <<   min_corner_length << std::endl // min length to find corners
+       << "    cycle " <<   cycle << std::endl // number of corners in a cycle
+       << "    ndimension " <<   ndimension << std::endl // spatial dimension of edgel chains.
+       << std::endl;
 }

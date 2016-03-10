@@ -8,7 +8,8 @@
 
 #include "vgui_glut_popup_impl.h"
 #include "vgui_glut_adaptor.h"
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <iostream>
 #include <vgui/vgui_macro.h>
 #include <vgui/vgui_command.h>
 #include <vgui/vgui_glut.h>
@@ -16,12 +17,12 @@
 vgui_glut_popup_impl::vgui_glut_popup_impl()
 {
 #ifdef DEBUG
-  vcl_cerr << "popup_impl ctor\n";
+  std::cerr << "popup_impl ctor\n";
 #endif
   int old_id = glutGetMenu();
   menu_id = glutCreateMenu(command_func);
 #ifdef DEBUG
-  vcl_cerr << "created menu_id = " << menu_id << '\n';
+  std::cerr << "created menu_id = " << menu_id << '\n';
 #endif
 
   //vgui_macro_warning << "before\n";
@@ -39,7 +40,7 @@ void vgui_glut_popup_impl::clear()
   //
   unsigned n = glutGet(GLenum(GLUT_MENU_NUM_ITEMS));
 #ifdef DEBUG
-  vcl_cerr << "removing " << n << " items in menu\n";
+  std::cerr << "removing " << n << " items in menu\n";
 #endif
   for (int i=n; i>=1; --i)
     glutRemoveMenuItem(i);
@@ -59,7 +60,7 @@ void vgui_glut_popup_impl::clear()
 vgui_glut_popup_impl::~vgui_glut_popup_impl()
 {
 #ifdef DEBUG
-  vcl_cerr << "popup_impl dtor\n";
+  std::cerr << "popup_impl dtor\n";
 #endif
   clear();
   glutDestroyMenu( menu_id );
@@ -75,7 +76,7 @@ void vgui_glut_popup_impl::build(vgui_menu const &m)
   tmp_menu = m;
 
 #ifdef DEBUG
-  vcl_cerr << "popup_impl::build : m =\n" << m << '\n';
+  std::cerr << "popup_impl::build : m =\n" << m << '\n';
 #endif
   this->build_internal(m);
 }
@@ -113,7 +114,7 @@ void vgui_glut_popup_impl::build_internal(vgui_menu const &m)
 
     else {
       vgui_macro_warning << "unknown menu item\n"
-                         << "menu =\n" << m << vcl_endl;
+                         << "menu =\n" << m << std::endl;
     }
   }
 
@@ -137,7 +138,7 @@ void vgui_glut_popup_impl::command_func(int value)
   if (value == 0)
     vgui_macro_warning << "null command\n";
   else if (value == 1)
-    vcl_cerr << "[that's a separator]\n";
+    std::cerr << "[that's a separator]\n";
   else {
     int win = glutGetWindow();
     vgui_glut_adaptor *a = vgui_glut_adaptor::get_adaptor(win);

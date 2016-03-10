@@ -3,7 +3,9 @@
 //:
 // \file
 
-#include <vcl_string.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <string>
 #include <boxm/sample/boxm_vis_implicit_sample.h>
 #include <boxm/sample/boxm_update_sample.h>
 
@@ -35,7 +37,7 @@ class boxm_aux_traits<BOXM_AUX_VIS_IMPLICIT>
  public:
   typedef boxm_vis_implicit_sample sample_datatype;
 
-  static vcl_string storage_subdir() { return "vis_implicit"; }
+  static std::string storage_subdir() { return "vis_implicit"; }
 };
 
 template<>
@@ -44,7 +46,7 @@ class boxm_aux_traits<BOXM_AUX_UPDATE>
  public:
   typedef boxm_update_sample sample_datatype;
 
-  static vcl_string storage_subdir() { return "update_work";}
+  static std::string storage_subdir() { return "update_work";}
 };
 
 //: traits for a null sample
@@ -54,7 +56,7 @@ class boxm_aux_traits<BOXM_AUX_NULL>
  public:
   typedef float sample_datatype;
 
-  static vcl_string storage_subdir() { return "null"; }
+  static std::string storage_subdir() { return "null"; }
 };
 template<>
 class boxm_aux_traits<BOXM_AUX_SCALAR_SAMPLE>
@@ -62,7 +64,7 @@ class boxm_aux_traits<BOXM_AUX_SCALAR_SAMPLE>
  public:
   typedef float sample_datatype;
 
-  static vcl_string storage_subdir() { return "scalar"; }
+  static std::string storage_subdir() { return "scalar"; }
 };
 
 

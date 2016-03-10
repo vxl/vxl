@@ -1,18 +1,20 @@
 #ifndef bmdl_defs_h_
 #define bmdl_defs_h_
 
-#include <vcl_string.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <string>
 #include <vil/vil_image_resource.h>
 #include <vil/vil_image_view_base.h>
 #include <vil/vil_image_resource_sptr.h>
 #include <vpgl/file_formats/vpgl_geo_camera.h>
 
-bool generate_mesh(vcl_string fpath_poly, vil_image_view_base_sptr label_img,
+bool generate_mesh(std::string fpath_poly, vil_image_view_base_sptr label_img,
                    vil_image_view_base_sptr height_img, vil_image_view_base_sptr ground_img,
-                   vcl_string fpath_mesh, vpgl_geo_camera* const lidar_cam, unsigned& num_of_buildings);
+                   std::string fpath_mesh, vpgl_geo_camera* const lidar_cam, unsigned& num_of_buildings);
 
 
-bool trace_boundaries(vil_image_view_base_sptr label_img, vcl_string fpath);
+bool trace_boundaries(vil_image_view_base_sptr label_img, std::string fpath);
 
 bool classify(vil_image_view_base_sptr lidar_first,
               vil_image_view_base_sptr lidar_last,

@@ -8,7 +8,9 @@
 
 #include "rgrl_initializer.h"
 
-#include <vcl_vector.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <vector>
 
 #include "rgrl_view_sptr.h"
 #include "rgrl_mask.h"
@@ -49,8 +51,8 @@ class rgrl_initializer_inv_indexing
   //
   //  \param nn_radius  nearest-neighbors in nn_radius.
   //  \param k   k-nearest neighbor(s)
-  void add_data( vcl_vector<rgrl_invariant_sptr> const& fixed_set,
-                 vcl_vector<rgrl_invariant_sptr> const& moving_set,
+  void add_data( std::vector<rgrl_invariant_sptr> const& fixed_set,
+                 std::vector<rgrl_invariant_sptr> const& moving_set,
                  double nn_radius = 0,
                  unsigned int k_nn = 1 );
 
@@ -62,8 +64,8 @@ class rgrl_initializer_inv_indexing
   //
   //  \param nn_radius nearest-neighbors in nn_radius.
   //  \param k_nn k-nearest-neighbor(s)
-  virtual void add_multiple_data( vcl_vector<rgrl_invariant_sptr> const& fixed_set,
-                                  vcl_vector<vcl_vector<rgrl_invariant_sptr> > const& moving_sets,
+  virtual void add_multiple_data( std::vector<rgrl_invariant_sptr> const& fixed_set,
+                                  std::vector<std::vector<rgrl_invariant_sptr> > const& moving_sets,
                                   double nn_radius = 0,
                                   unsigned int k_nn = 1);
 
@@ -71,7 +73,7 @@ class rgrl_initializer_inv_indexing
   void set_current_moving_image( unsigned int moving_image_index);
 
   //: Return the matches for the given \a moving_image_index.
-  const vcl_vector<rgrl_invariant_match_sptr>& matches_for_moving_image( unsigned int moving_image_index);
+  const std::vector<rgrl_invariant_match_sptr>& matches_for_moving_image( unsigned int moving_image_index);
 
   //: Get and remove the next initial estimate from the end of the list for the current moving_set
   bool next_initial( rgrl_view_sptr  & view,
@@ -89,7 +91,7 @@ class rgrl_initializer_inv_indexing
   rgrl_type_macro( rgrl_initializer_inv_indexing, rgrl_initializer );
 
  protected:
-  vcl_vector<vcl_vector<rgrl_invariant_match_sptr> > matches_;
+  std::vector<std::vector<rgrl_invariant_match_sptr> > matches_;
   rgrl_view_sptr view_;
   bool should_estimate_global_region_;
   unsigned int current_moving_image_ind_;

@@ -15,7 +15,8 @@
 
 #include "vgui_enhance_tableau.h"
 
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <iostream>
 
 #include <vnl/vnl_matrix_fixed.h>
 
@@ -64,8 +65,8 @@ void vgui_enhance_tableau::set_child(vgui_tableau_sptr const&t)
   slot1 = vgui_parent_child_link(this, t);
 }
 
-vcl_string vgui_enhance_tableau::file_name() const {return slot1->file_name();}
-vcl_string vgui_enhance_tableau::type_name() const {return "vgui_enhance_tableau";}
+std::string vgui_enhance_tableau::file_name() const {return slot1->file_name();}
+std::string vgui_enhance_tableau::type_name() const {return "vgui_enhance_tableau";}
 
 
 bool vgui_enhance_tableau::handle(const vgui_event& e)
@@ -109,12 +110,12 @@ bool vgui_enhance_tableau::handle(const vgui_event& e)
       return true;
      case '{':
       zoom_factor -= 0.1f;
-      vcl_cerr << "enhance : zoom_factor = " << zoom_factor << vcl_endl;
+      std::cerr << "enhance : zoom_factor = " << zoom_factor << std::endl;
       post_redraw();
       return true;
      case '}':
       zoom_factor += 0.1f;
-      vcl_cerr << "enhance : zoom_factor = " << zoom_factor << vcl_endl;
+      std::cerr << "enhance : zoom_factor = " << zoom_factor << std::endl;
       post_redraw();
       return true;
      default:

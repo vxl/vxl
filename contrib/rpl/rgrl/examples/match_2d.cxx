@@ -5,10 +5,12 @@
 // estimation in true multi-resolution framework, please run
 // match_2d_pseudo.
 
-#include <vcl_fstream.h>
-#include <vcl_iostream.h>
-#include <vcl_algorithm.h>
-#include <vcl_cstdlib.h> // for exit()
+#include <fstream>
+#include <iostream>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <algorithm>
+#include <cstdlib> // for exit()
 
 #include <vnl/vnl_double_2.h>
 
@@ -65,16 +67,16 @@ class command_iteration_update: public rgrl_command
   {
     const rgrl_feature_based_registration* reg_engine =
       dynamic_cast<const rgrl_feature_based_registration*>(caller);
-    vcl_cout <<"Current stage = " << reg_engine->current_stage() << vcl_endl;
+    std::cout <<"Current stage = " << reg_engine->current_stage() << std::endl;
     rgrl_transformation_sptr trans = reg_engine->current_transformation();
 
     if ( trans->is_type( rgrl_trans_affine::type_id() ) ) {
       rgrl_trans_affine* final = rgrl_cast<rgrl_trans_affine*>(trans);
-      vcl_cout << final->A() << final->t() << vcl_endl << vcl_endl;
+      std::cout << final->A() << final->t() << std::endl << std::endl;
     }
     else {
       rgrl_trans_quadratic* final = rgrl_cast<rgrl_trans_quadratic*>(trans);
-      vcl_cout << final->Q() << final->A() << final->t() << vcl_endl << vcl_endl;
+      std::cout << final->Q() << final->A() << final->t() << std::endl << std::endl;
     }
   }
 };
@@ -114,27 +116,27 @@ make_mask_box_hold( rgrl_mask_box& box,
 //
 void
 read_feature_file( char const* filename,
-                   vcl_vector< rgrl_feature_sptr >& features,
+                   std::vector< rgrl_feature_sptr >& features,
                    rgrl_mask_sptr &roi,
                    unsigned spacing )
 {
   // when spacing==1, it means every other point
   spacing++;
 
-  vcl_ifstream istr( filename );
+  std::ifstream istr( filename );
   if ( !istr ) {
-    vcl_cerr << "Cannot open file to read: " << filename << vcl_endl;
-    vcl_exit(3);
+    std::cerr << "Cannot open file to read: " << filename << std::endl;
+    std::exit(3);
   }
 
   const double min_sigma=1.3; // don't want to take the lowest sigma=1
   const double max_sigma=6;   // stop after the 5th resolution
-  vcl_string type_str;
-  vcl_getline( istr, type_str );
+  std::string type_str;
+  std::getline( istr, type_str );
   vbl_bounding_box<double, 2> box;
 
   if ( type_str=="face" ) { // for face features
-    vcl_string s;
+    std::string s;
     double sigma;
     int num_of_features;
     // obtain features of various scale until end of file
@@ -153,10 +155,10 @@ read_feature_file( char const* filename,
         break;
       if ( sigma < min_sigma ) {
         // skip the rest of the line
-        vcl_getline( istr, s );
+        std::getline( istr, s );
         // have to skip the records
         for ( int i=0; i<num_of_features; ++i )
-          vcl_getline( istr, s );
+          std::getline( istr, s );
         continue;
       }
 
@@ -182,7 +184,7 @@ read_feature_file( char const* filename,
     istr.close();
   } else {
     // the point, or trace feature is to be implemented.
-    vcl_cerr << "this feature type(" << type_str << ") is not yet implemented.\n";
+    std::cerr << "this feature type(" << type_str << ") is not yet implemented.\n";
   }
 
   // update mask box
@@ -204,26 +206,26 @@ read_feature_file( char const* filename,
 void
 read_affine_trans_2d( const char* trans_file, vnl_matrix< double > & A, vnl_vector< double > & T )
 {
-  vcl_cerr << "reading transformation file " << trans_file << '\n';
+  std::cerr << "reading transformation file " << trans_file << '\n';
   A.set_size( 2, 2 );
   T.set_size( 2 );
 
-  vcl_ifstream ifs( trans_file );
+  std::ifstream ifs( trans_file );
   if ( !ifs ) {
-    vcl_cerr << "Cannot open file to read: " << trans_file << vcl_endl;
-    vcl_exit(2);
+    std::cerr << "Cannot open file to read: " << trans_file << std::endl;
+    std::exit(2);
   }
-  vcl_string str;
+  std::string str;
   for ( unsigned i=0; i<A.rows(); ++i ) {
     for ( unsigned j=0; j<A.columns(); ++j ) {
       ifs >> A( i, j ) ;
     }
   }
-  vcl_cerr << A << '\n';
+  std::cerr << A << '\n';
   for ( unsigned i=0; i<T.size(); ++i ) {
     ifs >> T( i );
   }
-  vcl_cerr << T << '\n';
+  std::cerr << T << '\n';
 
   ifs.close();
 }
@@ -241,29 +243,29 @@ main( int argc, char* argv[] )
   vul_arg< const char* > model( "-model", "Final model (affine, quadratic)", "quadratic" );
 
   vul_arg_parse( argc, argv );
-  vcl_cout << feature_file() << vcl_endl << from_files() << vcl_endl << to_files() << vcl_endl;
+  std::cout << feature_file() << std::endl << from_files() << std::endl << to_files() << std::endl;
 
   // Don't allow Visual Studio to open critical error dialog boxes
   testlib_enter_stealth_mode();
 
   // Load images
   //
-  vcl_cout << "reading from images..." << vcl_endl;
+  std::cout << "reading from images..." << std::endl;
   vil_image_view< pixel_type > from_image, to_image;
   {
     from_image = vil_load( from_files() );
     if ( !from_image ) {
-      vcl_cerr << "reading from images failed\n";
+      std::cerr << "reading from images failed\n";
       return 1;
     }
-    vcl_cout << "from image size: " << from_image.ni() << ' ' << from_image.nj() << ' ' << from_image.nplanes() << '\n'
-             << "reading to images..." << vcl_endl;
+    std::cout << "from image size: " << from_image.ni() << ' ' << from_image.nj() << ' ' << from_image.nplanes() << '\n'
+             << "reading to images..." << std::endl;
     to_image = vil_load( to_files() );
     if ( !to_image ) {
-      vcl_cerr << "reading to images failed\n";
+      std::cerr << "reading to images failed\n";
       return 1;
     }
-    vcl_cout << "to image size: " << to_image.ni() << ' ' << to_image.nj() << ' ' << to_image.nplanes() << vcl_endl;
+    std::cout << "to image size: " << to_image.ni() << ' ' << to_image.nj() << ' ' << to_image.nplanes() << std::endl;
   }
 
   // load the mask image. If not supplied, assume valid in image dimension
@@ -272,14 +274,14 @@ main( int argc, char* argv[] )
   if ( mask_file.set() ) {
     mask_image = vil_load( mask_file() );
     if ( !mask_image.ni() || !mask_image.nj() ) {
-      vcl_cerr << "Error: Cannot loading mask file: " << mask_file() << vcl_endl;
+      std::cerr << "Error: Cannot loading mask file: " << mask_file() << std::endl;
       return 2;
     } else {
-      vcl_cout << "mask image size: " << mask_image.ni() << ' ' << mask_image.nj() << vcl_endl;
+      std::cout << "mask image size: " << mask_image.ni() << ' ' << mask_image.nj() << std::endl;
     }
   } else {
     // no mask is supplied.
-    vcl_cout << "Warning: NO mask is supplied. Assume valid range is the image dimension\n" << vcl_endl;
+    std::cout << "Warning: NO mask is supplied. Assume valid range is the image dimension\n" << std::endl;
     mask_image.set_size( from_image.ni(), from_image.nj() );
     mask_image.fill( vxl_byte(1) );
   }
@@ -291,9 +293,9 @@ main( int argc, char* argv[] )
   rgrl_mask_sptr from_roi, to_roi;
   {
     // "From" feature set
-    vcl_vector<rgrl_feature_sptr> from_pts, to_pts( 1 );
+    std::vector<rgrl_feature_sptr> from_pts, to_pts( 1 );
     read_feature_file( feature_file(), from_pts, from_roi, spacing() );
-    vcl_cout << "Num from_pts = " << from_pts.size() << vcl_endl;
+    std::cout << "Num from_pts = " << from_pts.size() << std::endl;
 
     // "To" feature set. We leave to_pts to be generated in pseudo matcher
     //
@@ -305,8 +307,8 @@ main( int argc, char* argv[] )
       to_pts[0] = new rgrl_feature_face_region
         ( vnl_vector< double > ( 2, 0.0 ), vnl_vector< double > (2, 0.0), 0.0, 0.0 );
     else {
-      vcl_cerr << " Wrong type of feature points!\n";
-      vcl_exit(1);
+      std::cerr << " Wrong type of feature points!\n";
+      std::exit(1);
     }
 
     // Feature sets of "from" and "to"
@@ -315,7 +317,7 @@ main( int argc, char* argv[] )
     to_set = new rgrl_feature_set_location<2>( to_pts );
 
     if ( !from_set || !to_set) {
-      vcl_cerr << "Couldn't read data\n";
+      std::cerr << "Couldn't read data\n";
       return 1;
     }
   }
@@ -329,20 +331,20 @@ main( int argc, char* argv[] )
   rgrl_estimator_sptr est_p;
   rgrl_initializer_sptr initializer;
   {
-    if ( model() == vcl_string("quadratic") )
+    if ( model() == std::string("quadratic") )
       est_p = new rgrl_est_quadratic( 2 );
-    else if ( model() == vcl_string("affine") )
+    else if ( model() == std::string("affine") )
       est_p = new rgrl_est_affine( 2 );
     else {
-      vcl_cerr<<"Unknown model "<<model()<<vcl_endl;
-      vcl_exit(1);
+      std::cerr<<"Unknown model "<<model()<<std::endl;
+      std::exit(1);
     }
 
     vnl_matrix<double> A( 2, 2, vnl_matrix_identity );
     vnl_vector<double> t( 2, 0.0 );
     if ( trans_file.set() )
       read_affine_trans_2d( trans_file(), A, t );
-    vcl_cout << "A =\n" << A << ", T = " << t << vcl_endl;
+    std::cout << "A =\n" << A << ", T = " << t << std::endl;
     rgrl_transformation_sptr init_trans = new rgrl_trans_affine( A, t, vnl_matrix<double>( 6, 6, 0.0 ) );
 
     unsigned resolution = 0;
@@ -369,7 +371,7 @@ main( int argc, char* argv[] )
   //
   rgrl_weighter_sptr wgter;
   {
-    vcl_auto_ptr< rrel_m_est_obj > m_est_obj( new rrel_tukey_obj(4) );
+    std::auto_ptr< rrel_m_est_obj > m_est_obj( new rrel_tukey_obj(4) );
     wgter = new rgrl_weighter_m_est( m_est_obj, true, true) ;
   }
 
@@ -381,7 +383,7 @@ main( int argc, char* argv[] )
   rgrl_scale_estimator_wgted_sptr wgted_scale_est;
   {
     // muse and unwgted_scale_est are not used
-    vcl_auto_ptr<rrel_objective> obj( new rrel_muset_obj( 1 ) );
+    std::auto_ptr<rrel_objective> obj( new rrel_muset_obj( 1 ) );
     unwgted_scale_est = new rgrl_scale_est_closest( obj );
     wgted_scale_est = new rgrl_scale_est_all_weights( );
   }
@@ -408,7 +410,7 @@ main( int argc, char* argv[] )
   reg.add_observer( new rgrl_event_iteration(), new command_iteration_update());
   // Get an estimate
   //
-  vcl_cerr << "Start registering...\n\n";
+  std::cerr << "Start registering...\n\n";
   reg.run( initializer );
 
   // Output the xform
@@ -416,36 +418,36 @@ main( int argc, char* argv[] )
   rgrl_transformation_sptr final_trans = reg.final_transformation();
   rgrl_scale_sptr final_scale = reg.final_scale();
 
-  vcl_cout << "Final objective = " << reg.final_status()->objective_value() << vcl_endl;
+  std::cout << "Final objective = " << reg.final_status()->objective_value() << std::endl;
 
   if ( output_xform.set() ) {
-    vcl_ofstream ofs( output_xform() );
+    std::ofstream ofs( output_xform() );
 
     if ( final_trans->is_type( rgrl_trans_affine::type_id() ) ) {
       rgrl_trans_affine* final = rgrl_cast<rgrl_trans_affine*>(final_trans);
-      ofs << final->A() << final->t() << vcl_endl << vcl_endl;
+      ofs << final->A() << final->t() << std::endl << std::endl;
     }
     else {
       rgrl_trans_quadratic* final = rgrl_cast<rgrl_trans_quadratic*>(final_trans);
-      ofs << final->Q() << final->A() << final->t() << vcl_endl << vcl_endl;
+      ofs << final->Q() << final->A() << final->t() << std::endl << std::endl;
     }
 
     ofs << final_scale->geometric_scale() << '\n' << 0 ;
     ofs.close();
   }
   else { // output_xform not set, so dump to the std output
-    vcl_cout << "Final transform:" << vcl_endl;
+    std::cout << "Final transform:" << std::endl;
 
     if ( final_trans->is_type( rgrl_trans_affine::type_id() ) ) {
       rgrl_trans_affine* final = rgrl_cast<rgrl_trans_affine*>(final_trans);
-      vcl_cout << final->A() << final->t() << vcl_endl << vcl_endl;
+      std::cout << final->A() << final->t() << std::endl << std::endl;
     }
     else {
       rgrl_trans_quadratic* final = rgrl_cast<rgrl_trans_quadratic*>(final_trans);
-      vcl_cout << final->Q() << final->A() << final->t() << vcl_endl << vcl_endl;
+      std::cout << final->Q() << final->A() << final->t() << std::endl << std::endl;
     }
 
-    vcl_cout << final_scale->geometric_scale() << "\n\n";
+    std::cout << final_scale->geometric_scale() << "\n\n";
   }
 
   // Compute errors
@@ -454,7 +456,7 @@ main( int argc, char* argv[] )
     rgrl_match_set const& ms = *reg.final_match_set();
     bool use_signature_only = true;
     scale = wgted_scale_est->estimate_weighted( ms, scale, use_signature_only );
-    vcl_vector< double > d;
+    std::vector< double > d;
     double sum = 0.0;
     unsigned num = 0;
     typedef rgrl_match_set::const_from_iterator from_iter;
@@ -470,12 +472,12 @@ main( int argc, char* argv[] )
     }
 
     double e;
-    vcl_nth_element( d.begin(), d.begin()+d.size()/2, d.end() );
+    std::nth_element( d.begin(), d.begin()+d.size()/2, d.end() );
     e = d[d.size()/2];
 
-    vcl_cout << "CP match set from size = " << ms.from_size() << vcl_endl
-             << "Final median of alignment error: " << e << vcl_endl
-             << "Final average of alignment error: " << sum / num << vcl_endl;
+    std::cout << "CP match set from size = " << ms.from_size() << std::endl
+             << "Final median of alignment error: " << e << std::endl
+             << "Final average of alignment error: " << sum / num << std::endl;
   }
 
   // Perform testing

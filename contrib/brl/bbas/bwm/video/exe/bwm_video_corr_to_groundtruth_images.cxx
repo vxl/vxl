@@ -1,27 +1,29 @@
-#include <vcl_iostream.h>
-#include <vcl_iomanip.h>
-#include <vcl_sstream.h>
-#include <vcl_string.h>
-#include <vcl_algorithm.h>
+#include <iostream>
+#include <iomanip>
+#include <sstream>
+#include <string>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <algorithm>
 #include <vul/vul_file.h>
 #include <vul/vul_file_iterator.h>
 #include <vul/vul_arg.h>
-#include <vcl_vector.h>
+#include <vector>
 #include <vil/vil_load.h>
 #include <vil/vil_save.h>
 #include <vil/vil_image_view.h>
 
 #include <vsol/vsol_box_2d.h>
 #include <vgl/vgl_point_2d.h>
-#include <vcl_cmath.h>
+#include <cmath>
 #include <bwm/video/bwm_video_site_io.h>
 #include <bwm/video/bwm_video_corr.h>
 
 int main(int argc, char** argv)
 {
   //Input arguments
-  vul_arg<vcl_string> site   ("-sitename", "Site Filename", "");
-  vul_arg<vcl_string> gtdir  ("-gtdir", "Directory to store the ground truth", "");
+  vul_arg<std::string> site   ("-sitename", "Site Filename", "");
+  vul_arg<std::string> gtdir  ("-gtdir", "Directory to store the ground truth", "");
   vul_arg<int>        radiusx("-radiusx", "Radius along X direction", 3);
   vul_arg<int>        radiusy("-radiusy", "Radius along Y direction", 3);
   vul_arg_parse(argc, argv);
@@ -29,22 +31,22 @@ int main(int argc, char** argv)
   bwm_video_site_io video_site;
 
   video_site.open(site());
-  vcl_string video_path=video_site.video_path();
-  vcl_cout<<"Video Path "<<video_path<<vcl_endl;
+  std::string video_path=video_site.video_path();
+  std::cout<<"Video Path "<<video_path<<std::endl;
 
   int rx=radiusx();
   int ry=radiusy();
 
-  vcl_string frame_glob=vul_file::dirname(video_path)+"/*.??*";
-  vcl_vector<bwm_video_corr_sptr> corrs=video_site.corrs();
+  std::string frame_glob=vul_file::dirname(video_path)+"/*.??*";
+  std::vector<bwm_video_corr_sptr> corrs=video_site.corrs();
   vul_file_iterator img_file_it(frame_glob.c_str());
-  vcl_vector<vcl_string> img_files;
+  std::vector<std::string> img_files;
   while (img_file_it) {
-    vcl_string imgName(img_file_it());
+    std::string imgName(img_file_it());
     img_files.push_back(imgName);
     ++img_file_it;
   }
-  vcl_sort(img_files.begin(), img_files.end());
+  std::sort(img_files.begin(), img_files.end());
 
   for (unsigned i=0;i<img_files.size();i++)
   {
@@ -56,8 +58,8 @@ int main(int argc, char** argv)
       vgl_point_2d<double> point2d;
       if (corrs[j]->match(i,point2d))
       {
-        int u=(int)vcl_floor(point2d.x());
-        int v=(int)vcl_floor(point2d.y());
+        int u=(int)std::floor(point2d.x());
+        int v=(int)std::floor(point2d.y());
 
         for (int i=u-rx;i<=u+rx;i++)
           for (int j=v-ry;j<=v+ry;j++)
@@ -65,7 +67,7 @@ int main(int argc, char** argv)
               outimg(i,j)=255;
       }
     }
-    vcl_string outfile=gtdir()+"/"+vul_file::strip_extension(vul_file::basename(img_files[i]))+".tiff";
+    std::string outfile=gtdir()+"/"+vul_file::strip_extension(vul_file::basename(img_files[i]))+".tiff";
     vil_save(outimg,outfile.c_str());
   }
   return 0;

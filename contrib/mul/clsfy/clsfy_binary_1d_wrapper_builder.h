@@ -8,7 +8,9 @@
 // \author Ian Scott
 // \date 2 Sep 2009
 
-#include <vcl_iosfwd.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iosfwd>
 #include <mbl/mbl_cloneable_ptr.h>
 #include <clsfy/clsfy_binary_1d_wrapper.h>
 #include <clsfy/clsfy_builder_1d.h>
@@ -40,24 +42,24 @@ class clsfy_binary_1d_wrapper_builder : public clsfy_builder_base
   // Return the mean error over the training set.
   double build(clsfy_classifier_base &classifier,
                mbl_data_wrapper<vnl_vector<double> > &inputs,
-               const vcl_vector<unsigned> &outputs) const;
+               const std::vector<unsigned> &outputs) const;
 
   //: Build a linear classifier, with the given data.
   // Return the mean error over the training set.
   // n_classes must be 1
   double build(clsfy_classifier_base &classifier,
                mbl_data_wrapper<vnl_vector<double> > &inputs,
-               unsigned n_classes, const vcl_vector<unsigned> &outputs) const;
+               unsigned n_classes, const std::vector<unsigned> &outputs) const;
 
 
   //: Name of the class
-  vcl_string is_a() const;
+  std::string is_a() const;
 
   //: Name of the class
-  virtual bool is_class(vcl_string const& s) const;
+  virtual bool is_class(std::string const& s) const;
 
   //: Print class to os
-  void print_summary(vcl_ostream& os) const;
+  void print_summary(std::ostream& os) const;
 
   //: Create a deep copy.
   // client is responsible for deleting returned object.
@@ -68,7 +70,7 @@ class clsfy_binary_1d_wrapper_builder : public clsfy_builder_base
   virtual void b_read(vsl_b_istream &);
 
   //: Initialise the parameters from a text stream.
-  void config(vcl_istream &as);
+  void config(std::istream &as);
 
 };
 

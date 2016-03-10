@@ -44,9 +44,11 @@
 // \author
 //   Peter Vanroose, ESAT/KULeuven, december 1996.
 
-#include <vcl_cstddef.h>  // for size_t
+#include <vcl_compiler.h>
+#include <iostream>
+#include <cstddef>  // for size_t
 #include <vcl_cassert.h>
-#include <vcl_cstring.h>  // for memcpy()
+#include <cstring>  // for memcpy()
 
 typedef unsigned int uint;
 
@@ -74,7 +76,7 @@ template <class T, uint N> class section : public section_<T>
  private:
   uint   size[N];    // size[0] to size[N-1]. Dimension 0 is run through
                      // first; the `slowest' increasing dimension is N-1
-  vcl_size_t offset[N+1];// offset[i] gives the pointer difference between two
+  std::size_t offset[N+1];// offset[i] gives the pointer difference between two
                      // neighbour pixels that only differ in the i dimension.
                      // In addition, offset[N] gives the allocated size.
   bool   allocated;  // whether buffer is (to be) allocated by this class
@@ -87,8 +89,8 @@ template <class T, uint N> class section : public section_<T>
   uint   Size(uint i)     const { assert(i<N); return size[i]; }
   uint   width()          const { return size[0]; }
   uint   height()         const { return size[1]; }
-  vcl_size_t Offset(uint i)   const { assert(i<=N); return offset[i]; }
-  vcl_size_t GetSize()        const { return offset[N]; }
+  std::size_t Offset(uint i)   const { assert(i<=N); return offset[i]; }
+  std::size_t GetSize()        const { return offset[N]; }
   T      Value(const uint pos[N]) const { return buffer[Position(pos)]; }
   T      Value(uint pos0) const { assert(N==1); return buffer[pos0*offset[0]]; }
   T      Value(uint pos0,uint pos1) const { assert(N==2); return buffer[pos0*offset[0]+pos1*offset[1]]; }
@@ -97,11 +99,11 @@ template <class T, uint N> class section : public section_<T>
   void   Set(T const& val,uint pos0) { assert(N==1); buffer[pos0*offset[0]]=val; }
   void   Set(T const& val,uint pos0,uint pos1) { assert(N==2); buffer[pos0*offset[0]+pos1*offset[1]]=val; }
   void   Set(T const& val,uint pos0,uint pos1,uint pos2) { assert(N==3); buffer[pos0*offset[0]+pos1*offset[1]+pos2*offset[2]]=val; }
-  vcl_size_t Position(const uint pos[N])  const { vcl_size_t p = 0; for (uint i=0; i<N; ++i) p += pos[i]*Offset(i); return p; }
-  void   Position(uint ret[N], const vcl_size_t pos)  const { for (uint i=0; i<N; ++i) ret[i] = Position(pos,i); }
-  uint   Position(const vcl_size_t pos, const uint i)  const { vcl_size_t p = pos % Offset(i+1); p /= Offset(i); return uint(p); }
-  vcl_size_t ROI_start_pos()  const { return Position(ROI_start); }
-  vcl_size_t ROI_end_pos()  const { return Position(ROI_end); }
+  std::size_t Position(const uint pos[N])  const { std::size_t p = 0; for (uint i=0; i<N; ++i) p += pos[i]*Offset(i); return p; }
+  void   Position(uint ret[N], const std::size_t pos)  const { for (uint i=0; i<N; ++i) ret[i] = Position(pos,i); }
+  uint   Position(const std::size_t pos, const uint i)  const { std::size_t p = pos % Offset(i+1); p /= Offset(i); return uint(p); }
+  std::size_t ROI_start_pos()  const { return Position(ROI_start); }
+  std::size_t ROI_end_pos()  const { return Position(ROI_end); }
 
   const T* begin() const {return buffer;}
   T*       begin()       {return buffer;}
@@ -118,7 +120,7 @@ template <class T, uint N> class section : public section_<T>
   section(uint sz0, uint sz1, T* b=0) { assert(N==2); uint sz[2]={sz0,sz1}; init(sz,b); }
   section(uint sz0, uint sz1, uint sz2, T* b=0) { assert(N==3); uint sz[3]={sz0,sz1,sz2}; init(sz,b); }
   section(section<T,N> const& s) {
-    init(s.Size(),0); vcl_memcpy(buffer,s.buffer,offset[N]*sizeof(T));
+    init(s.Size(),0); std::memcpy(buffer,s.buffer,offset[N]*sizeof(T));
     for (uint i=0; i<N; ++i)ROI_start[i]=s.ROI_start[i],ROI_end[i]=s.ROI_end[i];
   }
 
@@ -156,7 +158,7 @@ template <class T, uint N> class section : public section_<T>
   //: Returns a newly allocated copy of this section.
   section<T,N> Copy() const {
     T* buf = new T[GetSize()];
-    vcl_memcpy(buf, buffer, GetSize()*sizeof(T));
+    std::memcpy(buf, buffer, GetSize()*sizeof(T));
     section<T,N> t(Size(),buf);
     for (uint i=0; i<N; ++i)t.ROI_start[i]=ROI_start[i],t.ROI_end[i]=ROI_end[i];
     return t; }
@@ -169,7 +171,7 @@ bool section<T,N>::operator== (section<T,N> const& s) const
   {for (uint i=0; i<N; ++i) if (ROI_start[i] != s.ROI_start[i]) return false;}
   {for (uint i=0; i<N; ++i) if (ROI_end[i] != s.ROI_end[i]) return false;}
   if (buffer == s.buffer) return true;
-  for (vcl_size_t i=0; i<GetSize(); ++i) if (!(buffer[i]==s.buffer[i])) return false;
+  for (std::size_t i=0; i<GetSize(); ++i) if (!(buffer[i]==s.buffer[i])) return false;
   return true;
 }
 
@@ -177,7 +179,7 @@ template <class T, uint N>
 section<T,N>& section<T,N>::operator= (section<T,N> const& s)
 {
   if (allocated) delete[] buffer;
-  init(s.Size(),0); vcl_memcpy(buffer,s.buffer,offset[N]*sizeof(T));
+  init(s.Size(),0); std::memcpy(buffer,s.buffer,offset[N]*sizeof(T));
   for (uint i=0; i<N; ++i) ROI_start[i]=s.ROI_start[i], ROI_end[i]=s.ROI_end[i];
   return *this;
 }
@@ -196,16 +198,16 @@ section<T,N-1> Project(section<T,N> const& s, uint slice=0, int d=-1, bool copy=
   uint i=0;
   for (; i<dim; ++i) size[i] = s.Size(i);
   for (; i<N-1; ++i) size[i] = s.Size(i+1);
-  vcl_size_t off = slice * s.Offset(dim);
+  std::size_t off = slice * s.Offset(dim);
   if (dim == N-1) { // this is the simplest (and preferred) situation
                     // because no copying needs to be done.
     section<T,N-1> t(size, s.buffer+off);
     if (!copy) return t; else return t.Copy();
   }
-  vcl_size_t len = s.Offset(dim);
+  std::size_t len = s.Offset(dim);
   T* buf = new T[s.GetSize()/s.Size(dim)]; T* nptr = buf;
   for (T* optr=s.buffer+off; optr<s.buffer+s.GetSize(); nptr+=len,optr+=s.Offset(dim+1))
-    vcl_memcpy(nptr, optr, len*sizeof(T));
+    std::memcpy(nptr, optr, len*sizeof(T));
   section<T,N-1> t(size, buf);
   for (i=0; i<dim; ++i) t.ROI_start[i]=s.ROI_start[i],t.ROI_end[i]=s.ROI_end[i];
   for (; i<N-1; ++i)t.ROI_start[i]=s.ROI_start[i+1],t.ROI_end[i]=s.ROI_end[i+1];
@@ -219,22 +221,22 @@ template <class T, uint N> class section_iterator
   friend class section<T,N>;
  protected:
   section<T,N>* data;
-  vcl_size_t pos;
+  std::size_t pos;
 
  public:
   section_iterator(section<T,N>& s) : data(&s), pos(s.ROI_start_pos()) {}
   T operator*() const { return data->buffer[pos]; }
-  operator vcl_size_t() const { return pos; }
+  operator std::size_t() const { return pos; }
 
-  bool operator==(const section_iterator<T,N>& x) const { return pos == vcl_size_t(x); }
+  bool operator==(const section_iterator<T,N>& x) const { return pos == std::size_t(x); }
   bool operator==(const uint p[N]) const { return pos == data->Position(p); }
-  bool operator==(const vcl_size_t p) const { return pos == p; }
-  bool operator<(const section_iterator<T,N>& x) const { return pos < vcl_size_t(x); }
+  bool operator==(const std::size_t p) const { return pos == p; }
+  bool operator<(const section_iterator<T,N>& x) const { return pos < std::size_t(x); }
   bool operator<(const uint p[N]) const { return pos < data->Position(p); }
-  bool operator<(const vcl_size_t p) const { return pos < p; }
-  bool operator>(const section_iterator<T,N>& x) const { return pos > vcl_size_t(x); }
+  bool operator<(const std::size_t p) const { return pos < p; }
+  bool operator>(const section_iterator<T,N>& x) const { return pos > std::size_t(x); }
   bool operator>(const uint p[N]) const { return pos > data->Position(p); }
-  bool operator>(const vcl_size_t p) const { return pos > p; }
+  bool operator>(const std::size_t p) const { return pos > p; }
 
   section_iterator<T,N>& operator++() { ++pos;
     for (uint i=0; i<N; ++i) if (data->Position(pos,i) >= data->ROI_end[i])

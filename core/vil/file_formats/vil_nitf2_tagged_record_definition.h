@@ -7,8 +7,9 @@
 #ifndef VIL_NITF2_TAGGED_RECORD_DEFINITION_H
 #define VIL_NITF2_TAGGED_RECORD_DEFINITION_H
 
-#include <vcl_map.h>
-#include <vcl_string.h>
+#include <vcl_compiler.h>
+#include <map>
+#include <string>
 
 #include "vil_nitf2_field_functor.h"
 
@@ -36,12 +37,12 @@ class vil_nitf2_tagged_record_definition
 
   //: Factory method. Assumes ownership of optional pointer argument.
   static vil_nitf2_tagged_record_definition& define(
-    vcl_string name, vcl_string pretty_name);
+    std::string name, std::string pretty_name);
 
   //: Define a field. Assumes ownership of pointer arguments.
   vil_nitf2_tagged_record_definition& field(
-    vcl_string field_name,
-    vcl_string pretty_name,
+    std::string field_name,
+    std::string pretty_name,
     vil_nitf2_field_formatter* formatter,
     // whether this field may be unspecified (all blank)
     bool blanks_ok = false,
@@ -50,8 +51,8 @@ class vil_nitf2_tagged_record_definition
     // predicate that returns whether this conditional field is present;
     // 0 for required fields
     vil_nitf2_field_functor<bool>* condition_functor = 0,
-    vcl_string units = "",
-    vcl_string description = "");
+    std::string units = "",
+    std::string description = "");
 
   //: Define a repeat node. Assumes ownership of pointer argument.
   vil_nitf2_tagged_record_definition& repeat(
@@ -60,7 +61,7 @@ class vil_nitf2_tagged_record_definition
 
   //: Convenience overload where repeat count is simply the value of a tag.
   vil_nitf2_tagged_record_definition& repeat(
-    vcl_string int_tag,
+    std::string int_tag,
     vil_nitf2_field_definitions& field_definitions);
 
   //: Convenience overload where repeat count is a fixed value.
@@ -72,15 +73,15 @@ class vil_nitf2_tagged_record_definition
   void end();
 
   //: Look up a record definition
-  static vil_nitf2_tagged_record_definition* find(vcl_string name);
+  static vil_nitf2_tagged_record_definition* find(std::string name);
 
   //: Look up a field definition
-  vil_nitf2_field_definition* find_field(vcl_string name);
+  vil_nitf2_field_definition* find_field(std::string name);
 
   // Destructor
   ~vil_nitf2_tagged_record_definition();
 
-  typedef vcl_map<vcl_string, vil_nitf2_tagged_record_definition*>
+  typedef std::map<std::string, vil_nitf2_tagged_record_definition*>
           tagged_record_definition_map;
   //: All tagged record definitions
   static tagged_record_definition_map& all_definitions();
@@ -90,7 +91,7 @@ class vil_nitf2_tagged_record_definition
     return *m_field_definitions; }
 
   //: Undefines a TRE. Returns whether TRE with specified name was found.
-  static bool undefine(vcl_string name);
+  static bool undefine(std::string name);
 
   //: Registers some TREs for testing
   static void register_test_tre();
@@ -103,7 +104,7 @@ class vil_nitf2_tagged_record_definition
   vil_nitf2_tagged_record_definition& operator=(const vil_nitf2_tagged_record_definition&);
 
   // Constructor
-  vil_nitf2_tagged_record_definition(vcl_string name, vcl_string pretty_name,
+  vil_nitf2_tagged_record_definition(std::string name, std::string pretty_name,
                                      vil_nitf2_field_definitions* defs = 0);
 
 #if 0
@@ -111,8 +112,8 @@ class vil_nitf2_tagged_record_definition
   virtual bool validate(const vil_nitf2_tagged_record*) const;
 #endif
 
-  vcl_string m_name;
-  vcl_string m_pretty_name;
+  std::string m_name;
+  std::string m_pretty_name;
   vil_nitf2_field_definitions* m_field_definitions;
   bool m_definition_completed;
 };

@@ -5,7 +5,9 @@
 // \file
 #include "bsta_sample_set.h"
 
-#include <vcl_map.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <map>
 
 //: Compute the mean in a window around the given pt, the window size is the bandwidth
 //  If there are no points within bandwidth of the input \a pt, return false
@@ -14,8 +16,8 @@ bool
 bsta_sample_set<T,n>::mean(typename bsta_parzen_sphere<T,n>::vector_type const& pt, typename bsta_parzen_sphere<T,n>::vector_type& out)
 {
   typedef typename bsta_parzen_sphere<T,n>::vector_type vect_t;
-  typedef typename vcl_vector<vect_t >::const_iterator sit_t;
-  typedef typename vcl_vector<T >::const_iterator wit_t;
+  typedef typename std::vector<vect_t >::const_iterator sit_t;
+  typedef typename std::vector<T >::const_iterator wit_t;
 
   vect_t sum(T(0));
   sit_t sit = bsta_parzen<T,n>::samples_.begin();
@@ -45,12 +47,12 @@ bool
 bsta_sample_set<T,n>::mode_mean(int mode, vector_& out) const
 {
   typedef typename bsta_parzen_sphere<T,n>::vector_type vect_t;
-  typedef typename vcl_vector<vect_t >::const_iterator sit_t;
-  typedef typename vcl_vector<T >::const_iterator wit_t;
-  typedef typename vcl_vector<int >::const_iterator ait_t;
+  typedef typename std::vector<vect_t >::const_iterator sit_t;
+  typedef typename std::vector<T >::const_iterator wit_t;
+  typedef typename std::vector<int >::const_iterator ait_t;
 
   if (bsta_parzen<T,n>::samples_.size() != weights_.size() || bsta_parzen<T,n>::samples_.size() != assignments_.size()) {
-    vcl_cout << "Error in - bsta_sample_set<T,n>::mean() : assignments not initialized!\n";
+    std::cout << "Error in - bsta_sample_set<T,n>::mean() : assignments not initialized!\n";
     return false;
   }
 
@@ -81,7 +83,7 @@ template <class T, unsigned n>
 int
 bsta_sample_set<T,n>::mode_size(int mode) const
 {
-  typedef typename vcl_vector<int >::const_iterator ait_t;
+  typedef typename std::vector<int >::const_iterator ait_t;
   ait_t ait = assignments_.begin();
   int cnt = 0;
   for (; ait != assignments_.end(); ++ait) {
@@ -97,8 +99,8 @@ template <class T, unsigned n>
 T
 bsta_sample_set<T,n>::mode_weight(int mode) const
 {
-  typedef typename vcl_vector<int >::const_iterator ait_t;
-  typedef typename vcl_vector<T >::const_iterator wit_t;
+  typedef typename std::vector<int >::const_iterator ait_t;
+  typedef typename std::vector<T >::const_iterator wit_t;
 
   ait_t ait = assignments_.begin();
   wit_t wit = weights_.begin();
@@ -117,7 +119,7 @@ template <class T, unsigned n>
 T
 bsta_sample_set<T,n>::total_weight() const
 {
-  typedef typename vcl_vector<T >::const_iterator wit_t;
+  typedef typename std::vector<T >::const_iterator wit_t;
 
   wit_t wit = weights_.begin();
 
@@ -134,11 +136,11 @@ template <class T, unsigned n>
 unsigned
 bsta_sample_set<T,n>::mode_cnt() const
 {
-  typedef typename vcl_vector<int >::const_iterator ait_t;
+  typedef typename std::vector<int >::const_iterator ait_t;
   ait_t ait = assignments_.begin();
-  vcl_map<int, bool> modes;
+  std::map<int, bool> modes;
   for (; ait != assignments_.end(); ++ait) {
-    vcl_map<int, bool>::iterator it = modes.find(*ait);
+    std::map<int, bool>::iterator it = modes.find(*ait);
     if (it == modes.end()) {
       modes[*ait] = true;
     }
@@ -178,7 +180,7 @@ void
 bsta_sample_set<T,n>::initialize_assignments()
 {
   assignments_.clear();
-  assignments_ = vcl_vector<int>(bsta_parzen<T,n>::samples_.size(), -1);
+  assignments_ = std::vector<int>(bsta_parzen<T,n>::samples_.size(), -1);
 }
 
 #define BSTA_SAMPLE_SET_INSTANTIATE(T,n) \

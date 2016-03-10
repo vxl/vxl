@@ -10,13 +10,14 @@
 #include <vnl/algo/vnl_svd.h>
 #include <vnl/algo/vnl_determinant.h>
 #include <vnl/vnl_matrix.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <iostream>
 #include <vcl_cassert.h>
 
 template <class T>
 vgl_compute_similarity_3d<T>::
-vgl_compute_similarity_3d(vcl_vector<vgl_point_3d<T> > const& points1,
-                          vcl_vector<vgl_point_3d<T> > const& points2)
+vgl_compute_similarity_3d(std::vector<vgl_point_3d<T> > const& points1,
+                          std::vector<vgl_point_3d<T> > const& points2)
 : points1_(points1),
   points2_(points2)
 {
@@ -43,7 +44,7 @@ void vgl_compute_similarity_3d<T>::clear()
 //: center all the points at the origin, and return the applied translation
 template <class T>
 void vgl_compute_similarity_3d<T>::
-center_points(vcl_vector<vgl_point_3d<T> >& pts,
+center_points(std::vector<vgl_point_3d<T> >& pts,
               vgl_vector_3d<T>& t) const
 {
   t.set(0,0,0);
@@ -64,7 +65,7 @@ center_points(vcl_vector<vgl_point_3d<T> >& pts,
 //  The average distance from the origin will be sqrt(3)
 template <class T>
 void vgl_compute_similarity_3d<T>::
-scale_points(vcl_vector<vgl_point_3d<T> >& pts,
+scale_points(std::vector<vgl_point_3d<T> >& pts,
              T& s) const
 {
   s = 0.0;
@@ -73,7 +74,7 @@ scale_points(vcl_vector<vgl_point_3d<T> >& pts,
   {
     s += (pts[i]-origin).length();
   }
-  s = vcl_sqrt(3.0)*pts.size()/s;
+  s = std::sqrt(3.0)*pts.size()/s;
   for (unsigned i=0; i<pts.size(); ++i)
   {
     vgl_point_3d<T>& p = pts[i];
@@ -86,7 +87,7 @@ template <class T>
 bool vgl_compute_similarity_3d<T>::estimate()
 {
   vgl_vector_3d<T> t1, t2;
-  vcl_vector<vgl_point_3d<T> > pts1(points1_), pts2(points2_);
+  std::vector<vgl_point_3d<T> > pts1(points1_), pts2(points2_);
   center_points(pts1, t1);
   center_points(pts2, t2);
 

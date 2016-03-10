@@ -28,8 +28,8 @@ PairMatchSetLineSeg::~PairMatchSetLineSeg()
 }
 
 //: Extract the point vectors for only the valid matches.
-void PairMatchSetLineSeg::extract_matches(vcl_vector <HomgLineSeg2D>& linesegs1,
-                                          vcl_vector <HomgLineSeg2D>& linesegs2) const
+void PairMatchSetLineSeg::extract_matches(std::vector <HomgLineSeg2D>& linesegs1,
+                                          std::vector <HomgLineSeg2D>& linesegs2) const
 {
   unsigned n = count();
   linesegs1.resize(n);

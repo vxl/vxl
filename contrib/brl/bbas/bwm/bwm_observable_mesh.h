@@ -27,7 +27,7 @@ class bwm_observable_mesh : public bwm_observable
 
   typedef enum { BWM_MESH_IMAGE_PROCESSING, BWM_MESH_FEATURE, BWM_MESH_TERRAIN } BWM_MESH_TYPES;
 
-  virtual vcl_string type_name() const { return "bwm_observable_mesh"; }
+  virtual std::string type_name() const { return "bwm_observable_mesh"; }
 
   //: constructors
   bwm_observable_mesh();
@@ -84,20 +84,20 @@ class bwm_observable_mesh : public bwm_observable
 
   void attach_inner_face(unsigned face_id, vsol_polygon_3d_sptr poly);
 
-  vcl_map<int, vsol_polygon_3d_sptr> extract_faces();
+  std::map<int, vsol_polygon_3d_sptr> extract_faces();
 
   vsol_polygon_3d_sptr extract_face(bmsh3d_face_mc* face,
-                                    vcl_vector<bmsh3d_vertex*> &vertices);
+                                    std::vector<bmsh3d_vertex*> &vertices);
 
   vsol_polygon_3d_sptr extract_face(unsigned i);
 
-  vcl_map<int, vsol_line_3d_sptr> extract_edges();
+  std::map<int, vsol_line_3d_sptr> extract_edges();
 
-  vcl_vector<vsol_point_3d_sptr> extract_vertices();
+  std::vector<vsol_point_3d_sptr> extract_vertices();
 
-  vcl_map<int, vsol_polygon_3d_sptr> extract_inner_faces(bmsh3d_face_mc* face);
+  std::map<int, vsol_polygon_3d_sptr> extract_inner_faces(bmsh3d_face_mc* face);
 
-  vcl_map<int, vsol_polygon_3d_sptr> extract_inner_faces(int face_id);
+  std::map<int, vsol_polygon_3d_sptr> extract_inner_faces(int face_id);
 
   vsol_polygon_3d_sptr extract_bottom_face(void);
 
@@ -121,37 +121,37 @@ class bwm_observable_mesh : public bwm_observable
 
   void triangulate();
 
-  void create_mesh_surface(vcl_vector<vgl_point_3d<double> > vertices,
-                           vcl_vector<vgl_point_3d<int> > triangles);
+  void create_mesh_surface(std::vector<vgl_point_3d<double> > vertices,
+                           std::vector<vgl_point_3d<int> > triangles);
 
   //SoSeparator* convert_coin3d(bool b_shape_hints, float transp, int colorcode);
 
   bwm_observable_sptr global_to_local(vpgl_lvcs* lvcs, double& min_z);
 
-  bool load_from(vcl_string filename);
+  bool load_from(std::string filename);
 
   void save(const char* filename, vpgl_lvcs* lvcs);
 
   void save(const char* filename);
 
  protected:
-  void notify_observers(vcl_string message_type);
+  void notify_observers(std::string message_type);
 
   //:useful for adjusting  the face vertices
   bool single_face_with_vertices(unsigned face_id, vsol_polygon_3d_sptr& poly,
-                                 vcl_vector<bmsh3d_vertex*>& verts);
+                                 std::vector<bmsh3d_vertex*>& verts);
   bmsh3d_mesh_mc* object_;
 
   bmsh3d_face_mc* current_extr_face;
 
   // the pair is <face_id, inner_face_id> and it is mapped to the polygon id from the UI
-  //vcl_map<unsigned, vcl_pair<unsigned, unsigned> > inner_ids_;
+  //std::map<unsigned, std::pair<unsigned, unsigned> > inner_ids_;
 
-  vcl_map<unsigned, BWM_FACE_LABEL> labels_;
+  std::map<unsigned, BWM_FACE_LABEL> labels_;
 
   BWM_MESH_TYPES mesh_type_;
 
-  void create_mesh_HE(vsol_polygon_3d_sptr polygon, double dist, vcl_map<int, vsol_polygon_3d_sptr> inner_faces);
+  void create_mesh_HE(vsol_polygon_3d_sptr polygon, double dist, std::map<int, vsol_polygon_3d_sptr> inner_faces);
 
   bmsh3d_face* create_inner_face(vsol_polygon_3d_sptr polygon);
 

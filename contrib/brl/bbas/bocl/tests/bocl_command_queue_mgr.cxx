@@ -8,8 +8,8 @@ bool bocl_command_queue_mgr::init_kernel()
   memHalf_ = memLength_/2;
 
   //set up kernels
-  vcl_vector<vcl_string> src_paths;
-  vcl_string source_dir = vcl_string(VCL_SOURCE_ROOT_DIR) + "/contrib/brl/bbas/bocl/tests/";
+  std::vector<std::string> src_paths;
+  std::string source_dir = std::string(VCL_SOURCE_ROOT_DIR) + "/contrib/brl/bbas/bocl/tests/";
   src_paths.push_back(source_dir + "test_command_queue.cl");
   kernel_a_.create_kernel(  &this->context(),
                             &this->devices()[0],
@@ -92,8 +92,8 @@ bool bocl_command_queue_mgr::test_async_command_queue()
   offset->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR);
 
   //2. set workgroup size
-  vcl_size_t lThreads[] = {8, 8};
-  vcl_size_t gThreads[] = {1024, 1024};
+  std::size_t lThreads[] = {8, 8};
+  std::size_t gThreads[] = {1024, 1024};
 
   //3. EXECUTE once because opencl overhead tacks on a few milliseconds
   pinned_in_->write_to_buffer( queue_a_ );
@@ -112,13 +112,13 @@ bool bocl_command_queue_mgr::test_async_command_queue()
       break;
     }
   }
-  vcl_cout<<"kernel calculated squres: "<<good<<vcl_endl;
+  std::cout<<"kernel calculated squres: "<<good<<std::endl;
   //////////////////////////////////////////////////////////////////////////////
   //4. execute 50 trials (warm up GPU)
   //////////////////////////////////////////////////////////////////////////////
-  vcl_cout<<"--------------------------------------\n"
+  std::cout<<"--------------------------------------\n"
           <<"EXECUTING SERIAL KERNEL/WRITE\n"
-          <<"--------------------------------------"<<vcl_endl;
+          <<"--------------------------------------"<<std::endl;
   pinned_in_->write_to_buffer( queue_a_ );
   vul_timer t;
   int numTrials = 50;
@@ -129,9 +129,9 @@ bool bocl_command_queue_mgr::test_async_command_queue()
     pinned_in_->write_to_buffer( queue_a_ );
     clFinish(queue_a_);
   }
-  vcl_cout<<"One Queue WALL CLOCK TIME: "<<t.all()/numTrials<<" ms\n"
+  std::cout<<"One Queue WALL CLOCK TIME: "<<t.all()/numTrials<<" ms\n"
           <<"Test kernel time: "<<kernel_a_.exec_time()<<" ms\n"
-          <<"Test write buffer time: "<<pinned_in_->exec_time()<<" ms"<<vcl_endl;
+          <<"Test write buffer time: "<<pinned_in_->exec_time()<<" ms"<<std::endl;
   pinned_out_->read_to_buffer( queue_a_ );
   clFinish(queue_a_);
 
@@ -144,9 +144,9 @@ bool bocl_command_queue_mgr::test_async_command_queue()
   //////////////////////////////////////////////////////////////////////////////
   //do 100 trials overlapping
   //////////////////////////////////////////////////////////////////////////////
-  vcl_cout<<"--------------------------------------\n"
+  std::cout<<"--------------------------------------\n"
           <<"EXECUTING OVERLAPPING KERNEL/WRITE\n"
-          <<"--------------------------------------"<<vcl_endl;
+          <<"--------------------------------------"<<std::endl;
   //create start boclmem
   int incr = memLength_/NUM_QUEUES;
   for (int i=0; i<NUM_QUEUES; i++)
@@ -181,15 +181,15 @@ bool bocl_command_queue_mgr::test_async_command_queue()
     }
   }
   for (int i=0; i<NUM_QUEUES; i++) clFinish(queues_[i]);
-  vcl_cout<<"WALL CLOCK TIME: "<<t.all()/numTrials<<" ms\n"
+  std::cout<<"WALL CLOCK TIME: "<<t.all()/numTrials<<" ms\n"
           <<"Test kernel time: "<<kernel_a_.exec_time()<<" ms\n"
-          <<"Test write buffer time: "<<pinned_in_->exec_time()<<" ms"<<vcl_endl;
+          <<"Test write buffer time: "<<pinned_in_->exec_time()<<" ms"<<std::endl;
 
   //VERIFY OUTPUT
   out = (float*) pinned_out_->cpu_buffer();
   for (int i=0; i<memLength_; i++) {
     if (control[i] != out[i]) {
-      vcl_cout<<"CONTROL: "<<control[i]<<" != OUT: "<<out[i]<<vcl_endl;
+      std::cout<<"CONTROL: "<<control[i]<<" != OUT: "<<out[i]<<std::endl;
       break;
     }
   }

@@ -2,7 +2,8 @@
 //
 // Author: Peter Vanroose, KULeuven/ESAT, December 1999
 
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <iostream>
 #include <vil1/vil1_rgb.h>
 typedef vil1_rgb<unsigned char> vil1_rgb_cell;
 
@@ -21,13 +22,13 @@ int main(int /*argc*/, char** /*argv*/)
   // Conversely, a vil1_rgb_cell can be converted to its ubyte grey equivalent:
   unsigned char orange_grey = orange.grey();
 
-  // Write to a vcl_ostream: the output as the format [R G B].
-  vcl_cout << "/* XPM */\n"
+  // Write to a std::ostream: the output as the format [R G B].
+  std::cout << "/* XPM */\n"
            << "/* " << orange << black << white << grey
            << (int)orange_grey << " */\n";
 
   // And now an .xpm file using these vil1_rgb_cells, and the function as_hex:
-  vcl_cout << "static char* example_rgb[] = {\n\"20 8 4 1\",\n"
+  std::cout << "static char* example_rgb[] = {\n\"20 8 4 1\",\n"
            << "\" \tc " << as_hex(white) << "\",\n"
            << "\"*\tc " << as_hex(black) << "\",\n"
            << "\".\tc " << as_hex(orange)<< "\",\n"

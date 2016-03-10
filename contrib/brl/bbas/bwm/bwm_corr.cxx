@@ -4,13 +4,15 @@
 #include "bwm_observer_cam.h"
 #include "io/bwm_io_structs.h"
 #include <vgl/vgl_distance.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iostream>
 #include <vsl/vsl_basic_xml_element.h>
 #include <vsol/vsol_point_2d.h>
 
 bool bwm_corr::match(bwm_observer_cam* obs, vgl_point_2d<double> &pt)
 {
-  vcl_map<bwm_observer_cam*, vgl_point_2d<double> >::iterator iter = matches_.begin();
+  std::map<bwm_observer_cam*, vgl_point_2d<double> >::iterator iter = matches_.begin();
 
   iter = matches_.find(obs);
   if (iter != matches_.end()) {
@@ -18,7 +20,7 @@ bool bwm_corr::match(bwm_observer_cam* obs, vgl_point_2d<double> &pt)
     return true;
   }
 
-  vcl_cerr << "Correspondent point is not found for this observer\n";
+  std::cerr << "Correspondent point is not found for this observer\n";
   return false;
 }
 //need to use a tolerance to check equality of points
@@ -32,7 +34,7 @@ point_equal(vgl_point_2d<double> const & a, vgl_point_2d<double> const & b)
 
 bool bwm_corr::update_match(bwm_observer_cam* obs, vgl_point_2d<double> old_pt, vgl_point_2d<double> new_pt)
 {
-  vcl_map<bwm_observer_cam*, vgl_point_2d<double> >::iterator
+  std::map<bwm_observer_cam*, vgl_point_2d<double> >::iterator
     iter = matches_.find(obs);
 
   if (iter != matches_.end()) {
@@ -49,7 +51,7 @@ bool bwm_corr::update_match(bwm_observer_cam* obs, vgl_point_2d<double> old_pt, 
 void bwm_corr::set_match(bwm_observer_cam* obs, const double x, const double y)
 {
   vgl_point_2d<double> pt(x, y);
-  //vcl_pair<bwm_observer_cam*, vgl_point_2d<double> > pair(obs, pt);
+  //std::pair<bwm_observer_cam*, vgl_point_2d<double> > pair(obs, pt);
   matches_[obs] = pt;
 }
 
@@ -59,10 +61,10 @@ void bwm_corr::erase(bwm_observer_cam* obs)
   matches_.erase(obs);
 }
 
-vcl_vector<bwm_observer_cam*> bwm_corr::observers()
+std::vector<bwm_observer_cam*> bwm_corr::observers()
 {
-  vcl_vector<bwm_observer_cam*>  obs(0);
-  vcl_map<bwm_observer_cam*, vgl_point_2d<double> >::iterator iter = matches_.begin();
+  std::vector<bwm_observer_cam*>  obs(0);
+  std::map<bwm_observer_cam*, vgl_point_2d<double> >::iterator iter = matches_.begin();
   while (iter != matches_.end()) {
     obs.push_back(iter->first);
     iter++;
@@ -72,7 +74,7 @@ vcl_vector<bwm_observer_cam*> bwm_corr::observers()
 
 bool bwm_corr::obs_in(bwm_observer_cam* obs, vgl_point_2d<double> &corr)
 {
-  vcl_map<bwm_observer_cam*, vgl_point_2d<double> >::iterator iter = matches_.begin();
+  std::map<bwm_observer_cam*, vgl_point_2d<double> >::iterator iter = matches_.begin();
   while (iter != matches_.end()) {
     if (obs == iter->first) {
       corr = iter->second;
@@ -84,16 +86,16 @@ bool bwm_corr::obs_in(bwm_observer_cam* obs, vgl_point_2d<double> &corr)
 }
 
 //external functions
-vcl_ostream& operator<<(vcl_ostream& s, bwm_corr const& c)
+std::ostream& operator<<(std::ostream& s, bwm_corr const& c)
 {
   s << "Number of Cameras: " << c.matches_.size() << '\n';
   int i=0;
-  vcl_map<bwm_observer_cam*, vgl_point_2d<double> >::const_iterator
+  std::map<bwm_observer_cam*, vgl_point_2d<double> >::const_iterator
     iter = c.matches_.begin();
 
   // first write down the camera info
   while (iter != c.matches_.end()) {
-    s << "Camera " << i++ << " :" << iter->first->camera_path() << vcl_endl;
+    s << "Camera " << i++ << " :" << iter->first->camera_path() << std::endl;
   }
 
   iter = c.matches_.begin();
@@ -110,7 +112,7 @@ vcl_ostream& operator<<(vcl_ostream& s, bwm_corr const& c)
   return s;
 }
 
-void bwm_corr::x_write(vcl_ostream &os)
+void bwm_corr::x_write(std::ostream &os)
 {
    vsl_basic_xml_element corr(CORRESPONDENCES_TAG);
    corr.x_write_open(os);
@@ -123,7 +125,7 @@ void bwm_corr::x_write(vcl_ostream &os)
     xml_element.x_write(os);
    }
 
-   vcl_map<bwm_observer_cam*, vgl_point_2d<double> >::const_iterator
+   std::map<bwm_observer_cam*, vgl_point_2d<double> >::const_iterator
    iter = matches_.begin();
    while (iter != matches_.end()) {
      vsl_basic_xml_element corr_elm(CORRESP_ELM_TAG);
@@ -143,12 +145,12 @@ void bwm_corr::x_write(vcl_ostream &os)
    corr.x_write_close(os);
 }
 
-vcl_vector<vcl_pair<vcl_string, vsol_point_2d> > bwm_corr::match_list()
+std::vector<std::pair<std::string, vsol_point_2d> > bwm_corr::match_list()
 {
-  vcl_vector<vcl_pair<vcl_string, vsol_point_2d> > list;
-  vcl_map<bwm_observer_cam*, vgl_point_2d<double> >::iterator iter = matches_.begin();
+  std::vector<std::pair<std::string, vsol_point_2d> > list;
+  std::map<bwm_observer_cam*, vgl_point_2d<double> >::iterator iter = matches_.begin();
   while (iter != matches_.end()) {
-   vcl_pair<vcl_string, vsol_point_2d> pair;
+   std::pair<std::string, vsol_point_2d> pair;
    pair.first = iter->first->tab_name();
    pair.second = vsol_point_2d(iter->second.x(), iter->second.y());
    list.push_back(pair);

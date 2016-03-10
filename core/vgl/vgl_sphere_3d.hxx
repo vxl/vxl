@@ -9,8 +9,9 @@
 // \author Ian Scott
 
 #include "vgl_sphere_3d.h"
-#include <vcl_cmath.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <cmath>
+#include <iostream>
 #include <vgl/vgl_point_3d.h>
 #include <vgl/vgl_closest_point.h>
 #include <vgl/vgl_line_3d_2_points.h>
@@ -38,7 +39,7 @@ bool vgl_sphere_3d<T>::clip(const vgl_line_3d_2_points<T> & line,
   T cp_sqr_len = (cp - c_).sqr_length();
   if (cp_sqr_len > r_*r_) return false;
   double arg = static_cast<double>(r_*r_ - cp_sqr_len);//for VC10
-  T half_chord_len = static_cast<T>(vcl_sqrt(arg));
+  T half_chord_len = static_cast<T>(std::sqrt(arg));
 
   vgl_vector_3d<T> linevec = line.direction();
   linevec *= half_chord_len / linevec.length();
@@ -52,7 +53,7 @@ bool vgl_sphere_3d<T>::clip(const vgl_line_3d_2_points<T> & line,
 
 //: Writes "<vgl_sphere_3d centre=vgl_point_3d<x,y,z> radius=r)>" to stream
 template <class T>
-vcl_ostream& vgl_sphere_3d<T>::print(vcl_ostream& os) const
+std::ostream& vgl_sphere_3d<T>::print(std::ostream& os) const
 {
   return os << "<vgl_sphere_3d centre=" << c_
             << "radius=" << r_ << '>';
@@ -64,24 +65,24 @@ vcl_ostream& vgl_sphere_3d<T>::print(vcl_ostream& os) const
 //  or reads 4 comma-separated numbers,
 //  or reads 4 numbers in parenthesized form "(123, 321, 567, 890)"
 template <class T>
-vcl_istream& vgl_sphere_3d<T>::read(vcl_istream& is)
+std::istream& vgl_sphere_3d<T>::read(std::istream& is)
 {
   if (! is.good()) return is; // (TODO: should throw an exception)
   bool paren = false;
   T cx, cy, cz, r;
-  is >> vcl_ws; // jump over any leading whitespace
+  is >> std::ws; // jump over any leading whitespace
   if (is.eof()) return is; // nothing to be set because of EOF (TODO: should throw an exception)
   if (is.peek() == '(') { is.ignore(); paren=true; }
-  is >> vcl_ws >> cx >> vcl_ws;
+  is >> std::ws >> cx >> std::ws;
   if (is.eof()) return is;
   if (is.peek() == ',') is.ignore();
-  is >> vcl_ws >> cy >> vcl_ws;
+  is >> std::ws >> cy >> std::ws;
   if (is.eof()) return is;
   if (is.peek() == ',') is.ignore();
-  is >> vcl_ws >> cz >> vcl_ws;
+  is >> std::ws >> cz >> std::ws;
   if (is.eof()) return is;
   if (is.peek() == ',') is.ignore();
-  is >> vcl_ws >> r >> vcl_ws;
+  is >> std::ws >> r >> std::ws;
   if (paren) {
     if (is.eof()) return is;
     if (is.peek() == ')') is.ignore();
@@ -99,8 +100,8 @@ void vgl_sphere_3d<Type>::spherical_to_cartesian(Type elevation_rad, Type azimut
   double el = static_cast<double>(elevation_rad), az = static_cast<double>(azimuth_rad);
   double cx = static_cast<double>(c_.x()),cy =static_cast<double>(c_.y()), cz = static_cast<double>(c_.z());
   double r = static_cast<double>(r_);
-  double se = vcl_sin(el), ce = vcl_cos(el);
-  double sa = vcl_sin(az), ca = vcl_cos(az);
+  double se = std::sin(el), ce = std::cos(el);
+  double sa = std::sin(az), ca = std::cos(az);
 
   x = static_cast<Type>((r*se*ca)+cx);
   y = static_cast<Type>((r*se*sa)+cy);
@@ -120,9 +121,9 @@ void vgl_sphere_3d<Type>::spherical_to_cartesian(Type elevation_rad, Type azimut
 template <class Type>
 void vgl_sphere_3d<Type>::cartesian_to_spherical(Type x, Type y, Type z, Type& elevation_rad, Type& azimuth_rad) const{
   double xd = static_cast<double>(x-c_.x()), yd = static_cast<double>(y-c_.y()), zd = static_cast<double>(z-c_.z());
-  double r  = vcl_sqrt(xd*xd + yd*yd +zd*zd);
-  elevation_rad = static_cast<Type>(vcl_acos(zd/r));
-  azimuth_rad = static_cast<Type>(vcl_atan2(yd,xd));
+  double r  = std::sqrt(xd*xd + yd*yd +zd*zd);
+  elevation_rad = static_cast<Type>(std::acos(zd/r));
+  azimuth_rad = static_cast<Type>(std::atan2(yd,xd));
 }
 template <class Type>
 void vgl_sphere_3d<Type>::cartesian_to_spherical(vgl_point_3d<Type> const& pt, Type& elevation_rad, Type& azimuth_rad) const{
@@ -131,7 +132,7 @@ void vgl_sphere_3d<Type>::cartesian_to_spherical(vgl_point_3d<Type> const& pt, T
 
 //: Writes "<vgl_sphere_3d centre=vgl_point_3d<x,y,z> radius=r)>" to stream
 template <class T>
-vcl_ostream& operator<<(vcl_ostream& os, const vgl_sphere_3d<T>& sph)
+std::ostream& operator<<(std::ostream& os, const vgl_sphere_3d<T>& sph)
 {
   return sph.print(os);
 }
@@ -142,7 +143,7 @@ vcl_ostream& operator<<(vcl_ostream& os, const vgl_sphere_3d<T>& sph)
 //  or reads 4 comma-separated numbers,
 //  or reads 4 numbers in parenthesized form "(123, 321, 567, 890)"
 template <class T>
-vcl_istream& operator>>(vcl_istream& is, vgl_sphere_3d<T>& sph)
+std::istream& operator>>(std::istream& is, vgl_sphere_3d<T>& sph)
 {
   return sph.read(is);
 }
@@ -151,8 +152,8 @@ vcl_istream& operator>>(vcl_istream& is, vgl_sphere_3d<T>& sph)
 #undef VGL_SPHERE_3D_INSTANTIATE
 #define VGL_SPHERE_3D_INSTANTIATE(T) \
 template class vgl_sphere_3d<T >; \
-template vcl_ostream& operator<<(vcl_ostream&, vgl_sphere_3d<T >const&); \
-template vcl_istream& operator>>(vcl_istream&, vgl_sphere_3d<T >&)
+template std::ostream& operator<<(std::ostream&, vgl_sphere_3d<T >const&); \
+template std::istream& operator>>(std::istream&, vgl_sphere_3d<T >&)
 
 
 #endif // vgl_sphere_3d_hxx_

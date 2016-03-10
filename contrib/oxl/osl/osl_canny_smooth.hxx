@@ -8,7 +8,9 @@
 // \author fsm
 
 #include "osl_canny_smooth.h"
-#include <vcl_cmath.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <cmath>
 #include <vil1/vil1_rgb.h>
 #include <vil1/vil1_memory_image_of.h>
 
@@ -94,7 +96,7 @@ void osl_canny_smooth_rothwell_adaptive(T const * const *image_, int /*xsize_*/,
   // and grad
   for (int x=width_; x<image_size-width_; ++x)
     for (int y=width_; y<image_size-width_; ++y)
-      grad[x][y] = vcl_sqrt(dx[x][y]*dx[x][y] + dy[x][y]*dy[x][y]);
+      grad[x][y] = std::sqrt(dx[x][y]*dx[x][y] + dy[x][y]*dy[x][y]);
 }
 
 

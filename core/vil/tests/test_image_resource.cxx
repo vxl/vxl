@@ -1,17 +1,18 @@
 // This is core/vil/tests/test_image_resource.cxx
 #include <testlib/testlib_test.h>
 
-#include <vcl_complex.h>
+#include <vcl_compiler.h>
+#include <complex>
 
 // These are "dummy" operator< for complex<T>.  These functions are never
 // to be actually called, but declaring these makes it possible to use a
 // single template implementation for test_image_resource().  - PVr
-static inline bool operator< (vcl_complex<float> const&, vcl_complex<float> const&) { return false; }
-static inline bool operator< (vcl_complex<double>const&, vcl_complex<double>const&) { return false; }
-static inline bool operator> (vcl_complex<float> const&, vcl_complex<float> const&) { return false; }
-static inline bool operator> (vcl_complex<double>const&, vcl_complex<double>const&) { return false; }
+static inline bool operator< (std::complex<float> const&, std::complex<float> const&) { return false; }
+static inline bool operator< (std::complex<double>const&, std::complex<double>const&) { return false; }
+static inline bool operator> (std::complex<float> const&, std::complex<float> const&) { return false; }
+static inline bool operator> (std::complex<double>const&, std::complex<double>const&) { return false; }
 
-#include <vcl_iostream.h>
+#include <iostream>
 #include <vil/vil_image_resource.h>
 #include <vil/vil_math.h>
 #include <vil/vil_new.h>
@@ -23,9 +24,9 @@ static inline bool operator> (vcl_complex<double>const&, vcl_complex<double>cons
 #include <vil/vil_decimate.h>
 
 template <class T>
-void test_image_resource(vcl_string type, vil_pixel_format format, T /*dummy*/)
+void test_image_resource(std::string type, vil_pixel_format format, T /*dummy*/)
 {
-  vcl_cout << "*****************************************************************\n"
+  std::cout << "*****************************************************************\n"
            << " Testing vil_image_resource objects with pixel type = " << type << '\n'
            << "*****************************************************************\n";
 
@@ -59,7 +60,7 @@ void test_image_resource(vcl_string type, vil_pixel_format format, T /*dummy*/)
   TEST("vil_memory_image::put_view(copy)", crop->put_view(view2,0,0), true);
 
   view1 = mem->get_view(0, mem->ni(), 0, mem->nj());
-  vil_print_all(vcl_cout, view1);
+  vil_print_all(std::cout, view1);
 
   if (format!=VIL_PIXEL_FORMAT_COMPLEX_FLOAT &&
       format!=VIL_PIXEL_FORMAT_COMPLEX_DOUBLE)
@@ -71,7 +72,7 @@ void test_image_resource(vcl_string type, vil_pixel_format format, T /*dummy*/)
 
     vil_image_resource_sptr clamp = vil_clamp(mem, 1.0, 9.0); // arguments of type double, not T
     view1 = clamp->get_view(0, clamp->ni(), 0, clamp->nj());
-    vil_print_all(vcl_cout, view1);
+    vil_print_all(std::cout, view1);
     vil_math_value_range(view1, v1, v2);
     TEST("Value range after clamping is 1,9", v1 == T(1) && v2 == T(9), true);
 
@@ -121,7 +122,7 @@ void test_image_resource(vcl_string type, vil_pixel_format format, T /*dummy*/)
   TEST("vil_decimate::get_view", view1?true:false, true);
   TEST("vil_decimate::get_copy_view", dec->get_copy_view(0,dec->ni()/2,0,dec->nj()/2)?true:false, true);
   TEST("vil_decimate::get_view sizes", view1.ni() == 5 && view1.nj() == 2, true);
-  vcl_cout << "view1: " << view1(0,1) << ',' << view1(1,1) << ',' << view1(1,0) << '\n';
+  std::cout << "view1: " << view1(0,1) << ',' << view1(1,1) << ',' << view1(1,0) << '\n';
   TEST("vil_decimate::get_view pixels",
        view1(0,1) == T(20) && view1(1,1) == T(10) && view1(1,0) == T(0), true);
 #if 0 // vil_decimate::put_view has been disabled because it doesn't behave as we might expect.
@@ -149,8 +150,8 @@ void test_image_resource()
   test_image_resource("vxl_int_64", VIL_PIXEL_FORMAT_INT_64, vxl_int_64());
   test_image_resource("vxl_uint_64", VIL_PIXEL_FORMAT_UINT_64, vxl_uint_64());
 #endif
-  test_image_resource("vcl_complex<float>", VIL_PIXEL_FORMAT_COMPLEX_FLOAT, vcl_complex<float>());
-  test_image_resource("vcl_complex<double>", VIL_PIXEL_FORMAT_COMPLEX_DOUBLE, vcl_complex<double>());
+  test_image_resource("std::complex<float>", VIL_PIXEL_FORMAT_COMPLEX_FLOAT, std::complex<float>());
+  test_image_resource("std::complex<double>", VIL_PIXEL_FORMAT_COMPLEX_DOUBLE, std::complex<double>());
 }
 
 TESTMAIN(test_image_resource);

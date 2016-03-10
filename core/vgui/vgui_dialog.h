@@ -22,8 +22,9 @@
 //   02-JAN-2010 Lianqing Yu - Added controls including push button.
 // \endverbatim
 
-#include <vcl_string.h>
-#include <vcl_vector.h>
+#include <vcl_compiler.h>
+#include <string>
+#include <vector>
 #include <vgui/vgui_tableau.h>
 #include <vgui/vgui_command_sptr.h>
 
@@ -32,7 +33,7 @@ class vgui_dialog_impl;
 //: Abstract dialog class
 //
 // vgui_dialog allows the user to build a dialog from a collection of fields.
-// A field in this context consists of a vcl_string label and a variable.
+// A field in this context consists of a std::string label and a variable.
 // The dialog is then posted using the ask() method. If ask returns true then
 // any changes to the fields in the dialog are used to update the variables.
 // Each vgui_dialog contains an instance of a concrete subclass of
@@ -75,7 +76,7 @@ class vgui_dialog
   void field(const char*, long&);
   void field(const char*, float&);
   void field(const char*, double&);
-  void field(const char*, vcl_string&);
+  void field(const char*, std::string&);
 
   //: Multiple choice - with two options.
   void choice(const char* label, const char* option1,
@@ -86,22 +87,22 @@ class vgui_dialog
               const char* option2, const char* option3, int& chosen);
 
   //: Multiple choice - with the list of options given.
-  void choice(const char*, const vcl_vector<vcl_string>&, int &);
+  void choice(const char*, const std::vector<std::string>&, int &);
 
-  void choice(const char*s, const vcl_vector<vcl_string>&v, unsigned &r)
+  void choice(const char*s, const std::vector<std::string>&v, unsigned &r)
   { choice(s,v,*reinterpret_cast<int*>(&r)); }
 
   //: File browsers
-  void file (const char* label, vcl_string& regexp, vcl_string& filepath);
+  void file (const char* label, std::string& regexp, std::string& filepath);
 
   //: inline file browser
-  void inline_file(const char* label, vcl_string& regexp,vcl_string& filepath);
+  void inline_file(const char* label, std::string& regexp,std::string& filepath);
 
   //: Color chooser
-  void color (const char* label, vcl_string&);
+  void color (const char* label, std::string&);
 
   //: Inline color chooser
-  void inline_color(const char *label, vcl_string &);
+  void inline_color(const char *label, std::string &);
 
   //: Text message
   void message(const char*);

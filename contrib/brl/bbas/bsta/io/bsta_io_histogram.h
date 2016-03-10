@@ -21,7 +21,9 @@
 #include <vbl/io/vbl_io_array_2d.h>
 #include <vbl/vbl_array_3d.h>
 #include <vbl/io/vbl_io_array_3d.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iostream>
 
 //: Binary save bsta_histogram to stream.
 template <class T>
@@ -36,8 +38,8 @@ vsl_b_write(vsl_b_ostream &os, const bsta_histogram<T>& h)
   T min = h.min();
   T max = h.max();
   T min_prob = h.min_prob();
-  vcl_vector<T> values = h.value_array();
-  vcl_vector<T> counts = h.count_array();
+  std::vector<T> values = h.value_array();
+  std::vector<T> counts = h.count_array();
   vsl_b_write(os, itype);
   vsl_b_write(os, nbins);
   vsl_b_write(os, min);
@@ -62,7 +64,7 @@ vsl_b_read(vsl_b_istream &is, bsta_histogram<T>& h, bool skip = false)
   }
   int nbins;
   T min, max, min_prob;
-  vcl_vector<T> values, counts;
+  std::vector<T> values, counts;
   vsl_b_read(is, nbins);
   vsl_b_read(is, min);
   vsl_b_read(is, max);
@@ -78,7 +80,7 @@ vsl_b_read(vsl_b_istream &is, bsta_histogram<T>& h, bool skip = false)
 //: Print summary
 template <class T>
 void
-vsl_print_summary(vcl_ostream &os, const bsta_histogram<T>& h)
+vsl_print_summary(std::ostream &os, const bsta_histogram<T>& h)
 {
   os << "bsta_histogram\n";
   h.print(os);
@@ -159,7 +161,7 @@ vsl_b_read(vsl_b_istream &is, bsta_joint_histogram<T>& h,
 //: Print summary
 template <class T>
 void
-vsl_print_summary(vcl_ostream &os, const bsta_joint_histogram<T>& h)
+vsl_print_summary(std::ostream &os, const bsta_joint_histogram<T>& h)
 {
   os << "bsta_joint_histogram\n";
   h.print(os);
@@ -249,7 +251,7 @@ vsl_b_read(vsl_b_istream &is,  bsta_joint_histogram_3d<T>& h,
 //: Print summary
 template <class T>
 void
-vsl_print_summary(vcl_ostream &os, const bsta_joint_histogram_3d<T>& h)
+vsl_print_summary(std::ostream &os, const bsta_joint_histogram_3d<T>& h)
 {
   os << "bsta_joint_histogram_3d\n";
   h.print(os);

@@ -4,7 +4,9 @@
 
 #include "vipl_filter_2d.h"
 #include <vcl_compiler.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iostream>
 
 // Main constructor for this abstract class. If dst_image
 // (by default) the output will be generated automatically when
@@ -65,7 +67,7 @@ template < class ImgIn,class ImgOut,class DataIn,class DataOut, class PixelItr >
   // assuming that the coordinate space of input, intermediate and output are
   // "locked" by sectioning
   if (!this->ref_outf()) {
-    vcl_cerr << "Warning: empty output image in vipl_filter_2d::applyop, returning without processing\n";
+    std::cerr << "Warning: empty output image in vipl_filter_2d::applyop, returning without processing\n";
     return false;
   }
   // the name of the section container generator.
@@ -74,14 +76,14 @@ template < class ImgIn,class ImgOut,class DataIn,class DataOut, class PixelItr >
     this->ref_dst_section() = vipl_filterable_section_container_generator(*this->ref_outf(),(DataOut*)0);
   }
   if (!this->ref_dst_section()) {
-    vcl_cerr << "Warning: empty dst section in vipl_filter_2d::applyop, returning without processing\n";
+    std::cerr << "Warning: empty dst section in vipl_filter_2d::applyop, returning without processing\n";
     return false;
   }
   if (!this->ref_src_section()) {
     this->ref_src_section() = vipl_filterable_section_container_generator(*this->ref_inf()[0],(DataIn*)0);
   }
   if (!this->ref_src_section()) {
-    vcl_cerr << "Warning: empty src section in vipl_filter_2d::applyop, presuming output driving but cannot be ptr safe\n";
+    std::cerr << "Warning: empty src section in vipl_filter_2d::applyop, presuming output driving but cannot be ptr safe\n";
   }
   this->preop(); // virtual function call
   this->ref_dst_section()->ref_overlap()[0] = this->image_border_size();
@@ -106,7 +108,7 @@ template < class ImgIn,class ImgOut,class DataIn,class DataOut, class PixelItr >
     for (iter_in it = (*this->ref_src_section()).begin(); it != enditr; ++it)
     {
       if (dstitr ==enddstitr) {
-        vcl_cerr << "Warning: In vipl_filter_2d, output iter ran out of items before input.  resetting to beginning\n";
+        std::cerr << "Warning: In vipl_filter_2d, output iter ran out of items before input.  resetting to beginning\n";
         dstitr = (*this->ref_dst_section()).begin();
       }
       vipl_filter<ImgIn,ImgOut,DataIn,DataOut,2,PixelItr>::put_secp( new vipl_section_descriptor<DataOut> (*dstitr));
@@ -135,7 +137,7 @@ template < class ImgIn,class ImgOut,class DataIn,class DataOut, class PixelItr >
     for (iter_out it = (*this->ref_dst_section()).begin(); it != enditr; ++it)
     {
       if (srcitr == endsrcitr) {
-        vcl_cerr << "Warning: In vipl_filter_2d, input iter ran out of items before output.  resetting to beginning\n";
+        std::cerr << "Warning: In vipl_filter_2d, input iter ran out of items before output.  resetting to beginning\n";
         srcitr = (*this->ref_src_section()).begin();
       }
       vipl_filter<ImgIn,ImgOut,DataIn,DataOut,2,PixelItr>::put_secp( new vipl_section_descriptor<DataOut> (*it));

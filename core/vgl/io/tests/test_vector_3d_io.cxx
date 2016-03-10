@@ -1,5 +1,6 @@
 // This is core/vgl/io/tests/test_vector_3d_io.cxx
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <iostream>
 #include <vgl/vgl_vector_3d.h>
 #include <vsl/vsl_indent.h>
 #include <vgl/io/vgl_io_vector_3d.h>
@@ -8,7 +9,7 @@
 
 void test_vector_3d_double_io()
 {
-  vcl_cout << "********************************\n"
+  std::cout << "********************************\n"
            << "Testing vgl_vector_3d<double> io\n"
            << "********************************\n";
 
@@ -32,13 +33,13 @@ void test_vector_3d_double_io()
 
   TEST ("v_out == v_in", v_out, v_in);
 
-  vsl_print_summary(vcl_cout, v_out);
-  vcl_cout << vcl_endl;
+  vsl_print_summary(std::cout, v_out);
+  std::cout << std::endl;
 }
 
 void test_vector_3d_float_io()
 {
-  vcl_cout << "*******************************\n"
+  std::cout << "*******************************\n"
            << "Testing vgl_vector_3d<float> io\n"
            << "*******************************\n";
 
@@ -62,13 +63,13 @@ void test_vector_3d_float_io()
 
   TEST ("v_out == v_in", v_out, v_in);
 
-  vsl_print_summary(vcl_cout, v_out);
-  vcl_cout << vcl_endl;
+  vsl_print_summary(std::cout, v_out);
+  std::cout << std::endl;
 }
 
 void test_vector_3d_int_io()
 {
-  vcl_cout << "*****************************\n"
+  std::cout << "*****************************\n"
            << "Testing vgl_vector_3d<int> io\n"
            << "*****************************\n";
 
@@ -92,8 +93,8 @@ void test_vector_3d_int_io()
 
   TEST ("v_out == v_in", v_out, v_in);
 
-  vsl_print_summary(vcl_cout, v_out);
-  vcl_cout << vcl_endl;
+  vsl_print_summary(std::cout, v_out);
+  std::cout << std::endl;
 }
 
 void test_vector_3d_io()

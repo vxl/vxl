@@ -1,5 +1,7 @@
 // This is mul/mbl/tests/test_correspond_points.cxx
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iostream>
 #include <mbl/mbl_correspond_points.h>
 #include <vnl/vnl_random.h>
 #include <vgl/vgl_point_2d.h>
@@ -8,7 +10,7 @@
 
 void test_correspond_points()
 {
-  vcl_cout << "*******************************\n"
+  std::cout << "*******************************\n"
            << " Testing mbl_correspond_points\n"
            << "*******************************\n";
 
@@ -16,7 +18,7 @@ void test_correspond_points()
   vnl_random mz_random(325746);
 
   unsigned n1 = 10;
-  vcl_vector<vgl_point_2d<double> > points1(n1),points2(n1),points3(n1),points4(n1),points5(n1);
+  std::vector<vgl_point_2d<double> > points1(n1),points2(n1),points3(n1),points4(n1),points5(n1);
 
   for (unsigned i=0;i<n1;++i)
   {
@@ -29,13 +31,13 @@ void test_correspond_points()
     points5[i] = points1[i] + 0.005*n;
   }
 
-  vcl_vector<unsigned> matches;
+  std::vector<unsigned> matches;
   double sigma = 0.05;
   cp.correspond(points1,points1,matches,sigma);
 
   unsigned int n_correct = 0;
   for (unsigned i=0;i<matches.size();++i) if (matches[i]==i) n_correct++;
-  vcl_cout<<n_correct<<" out of "<<n1<<vcl_endl;
+  std::cout<<n_correct<<" out of "<<n1<<std::endl;
 
   TEST("All matches correct (pts1-pts1)",n_correct,n1);
 
@@ -43,7 +45,7 @@ void test_correspond_points()
 
   n_correct = 0;
   for (unsigned i=0;i<matches.size();++i) if (matches[i]==i) n_correct++;
-  vcl_cout<<n_correct<<" out of "<<n1<<vcl_endl;
+  std::cout<<n_correct<<" out of "<<n1<<std::endl;
 
   TEST("All matches correct (invariant to translation)",n_correct,n1);
 
@@ -51,7 +53,7 @@ void test_correspond_points()
 
   n_correct = 0;
   for (unsigned i=0;i<matches.size();++i) if (matches[i]==i) n_correct++;
-  vcl_cout<<n_correct<<" out of "<<n1<<vcl_endl;
+  std::cout<<n_correct<<" out of "<<n1<<std::endl;
 
   TEST("All matches correct (invariant to translation+scale)",n_correct,n1);
 
@@ -61,7 +63,7 @@ void test_correspond_points()
   {
     if (matches[i]==n1-1-i) n_correct++;
   }
-  vcl_cout<<n_correct<<" out of "<<n1<<vcl_endl;
+  std::cout<<n_correct<<" out of "<<n1<<std::endl;
   TEST("All matches correct (data reversed)",n_correct,n1);
 
   cp.correspond(points1,points5,matches,sigma);
@@ -70,12 +72,12 @@ void test_correspond_points()
   {
     if (matches[i]==i) n_correct++;
   }
-  vcl_cout<<n_correct<<" out of "<<n1<<vcl_endl;
+  std::cout<<n_correct<<" out of "<<n1<<std::endl;
   TEST("All matches correct (gaussian noise)",n_correct,n1);
-  vcl_cout<<"Evals1: "<<cp.evals1()<<vcl_endl
-          <<"Evals2: "<<cp.evals2()<<vcl_endl;
+  std::cout<<"Evals1: "<<cp.evals1()<<std::endl
+          <<"Evals2: "<<cp.evals2()<<std::endl;
 
-  vcl_cout<<"Add one clutter point and move it around\n";
+  std::cout<<"Add one clutter point and move it around\n";
   points2.push_back(vgl_point_2d<double>(0,0));
 
   for (unsigned i=0;i<5;++i)
@@ -86,12 +88,12 @@ void test_correspond_points()
     cp.correspond(points1,points2,matches,sigma);
     n_correct = 0;
     for (unsigned i=0;i<matches.size();++i) if (matches[i]==i) n_correct++;
-    vcl_cout<<n_correct<<" out of "<<n1<<vcl_endl
-            <<"Evals1: "<<cp.evals1()<<vcl_endl
-            <<"Evals2: "<<cp.evals2()<<vcl_endl;
+    std::cout<<n_correct<<" out of "<<n1<<std::endl
+            <<"Evals1: "<<cp.evals1()<<std::endl
+            <<"Evals2: "<<cp.evals2()<<std::endl;
   }
 
-  vcl_cout<<"Add two clutter points and move them around\n";
+  std::cout<<"Add two clutter points and move them around\n";
   points2.push_back(vgl_point_2d<double>(0,0));
 
   for (unsigned i=0;i<5;++i)
@@ -104,9 +106,9 @@ void test_correspond_points()
     cp.correspond(points1,points2,matches,sigma);
     n_correct = 0;
     for (unsigned i=0;i<matches.size();++i) if (matches[i]==i) n_correct++;
-    vcl_cout<<n_correct<<" out of "<<n1<<vcl_endl
-            <<"Evals1: "<<cp.evals1()<<vcl_endl
-            <<"Evals2: "<<cp.evals2()<<vcl_endl;
+    std::cout<<n_correct<<" out of "<<n1<<std::endl
+            <<"Evals1: "<<cp.evals1()<<std::endl
+            <<"Evals2: "<<cp.evals2()<<std::endl;
   }
 
 #if 0

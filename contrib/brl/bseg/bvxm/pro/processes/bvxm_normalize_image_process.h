@@ -23,7 +23,9 @@
 // \endverbatim
 
 #include <bprb/bprb_func_process.h>
-#include <vcl_string.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <string>
 
 #include <vil/vil_image_view_base.h>
 #include <vil/vil_image_view.h>
@@ -37,13 +39,13 @@ namespace bvxm_normalize_image_process_globals
   const unsigned n_outputs_ = 3;
 
   // normalized image = a*(original_image) +b;
-  const vcl_string param_a_start_= "a_start";
-  const vcl_string param_a_inc_ = "a_inc";
-  const vcl_string param_a_end_ = "a_end";
-  const vcl_string param_b_start_ = "b_start";
-  const vcl_string param_b_end_ = "b_end";
-  const vcl_string param_b_ratio_ = "b_ration";
-  const vcl_string param_verbose_ = "verbose";
+  const std::string param_a_start_= "a_start";
+  const std::string param_a_inc_ = "a_inc";
+  const std::string param_a_end_ = "a_end";
+  const std::string param_b_start_ = "b_start";
+  const std::string param_b_end_ = "b_end";
+  const std::string param_b_ratio_ = "b_ration";
+  const std::string param_verbose_ = "verbose";
 
   // initialize variables that hold paramerters.
   float a_start_ = 0.6f;

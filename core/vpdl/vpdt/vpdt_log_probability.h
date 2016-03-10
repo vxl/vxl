@@ -18,7 +18,8 @@
 
 #include <vpdl/vpdt/vpdt_dist_traits.h>
 #include <vnl/vnl_math.h>
-#include <vcl_limits.h>
+#include <vcl_compiler.h>
+#include <limits>
 
 //: Compute the log of the unnormalized density
 template <class dist>
@@ -29,9 +30,9 @@ vpdt_log_density(const dist& d,
   typedef typename vpdt_dist_traits<dist>::scalar_type T;
   T density = d.density(pt);
   if (density <= T(0))
-    return vcl_numeric_limits<T>::infinity();
+    return std::numeric_limits<T>::infinity();
 
-  return static_cast<T>(vcl_log(density));
+  return static_cast<T>(std::log(density));
 }
 
 
@@ -44,9 +45,9 @@ vpdt_log_prob_density(const dist& d,
   typedef typename vpdt_dist_traits<dist>::scalar_type T;
   T norm = d.norm_const();
   if (vnl_math::isinf(norm))
-    return -vcl_numeric_limits<T>::infinity();
+    return -std::numeric_limits<T>::infinity();
 
-  return static_cast<T>(vcl_log(norm) + vpdt_log_density(d,pt));
+  return static_cast<T>(std::log(norm) + vpdt_log_density(d,pt));
 }
 
 
@@ -61,11 +62,11 @@ vpdt_gradient_log_density(const dist& d,
   T density = d.gradient_density(pt,g);
   if (density <= T(0)) {
     vpdt_fill(g,T(0));
-    return vcl_numeric_limits<T>::infinity();
+    return std::numeric_limits<T>::infinity();
   }
 
   g /= density;
-  return static_cast<T>(vcl_log(density));
+  return static_cast<T>(std::log(density));
 }
 
 

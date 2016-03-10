@@ -7,8 +7,10 @@
 // \author Vishal Jain
 // \date Mar 25, 2011
 
-#include <vcl_fstream.h>
-#include <vcl_algorithm.h>
+#include <fstream>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <algorithm>
 #include <boxm2/ocl/boxm2_opencl_cache.h>
 #include <boxm2/boxm2_scene.h>
 #include <boxm2/boxm2_block.h>
@@ -25,7 +27,7 @@
 #include <bocl/bocl_kernel.h>
 
 //: Map of kernels should persist between process executions
-vcl_map<vcl_string,vcl_vector<bocl_kernel*> > boxm2_ocl_update_auxQ::kernels_;
+std::map<std::string,std::vector<bocl_kernel*> > boxm2_ocl_update_auxQ::kernels_;
 
 //Main public method, updates color model
 bool boxm2_ocl_update_auxQ::update_auxQ(boxm2_scene_sptr         scene,
@@ -33,8 +35,8 @@ bool boxm2_ocl_update_auxQ::update_auxQ(boxm2_scene_sptr         scene,
                               boxm2_opencl_cache_sptr  opencl_cache,
                               vpgl_camera_double_sptr  cam,
                               vil_image_view_base_sptr img,
-                              vcl_string               app_ident,
-                              vcl_string               view_ident,
+                              std::string               app_ident,
+                              std::string               view_ident,
                               float resnearfactor ,
                               float resfarfactor )
 {
@@ -47,15 +49,15 @@ bool boxm2_ocl_update_auxQ::update_auxQ(boxm2_scene_sptr         scene,
   };
   float transfer_time=0.0f;
   float gpu_time=0.0f;
-  vcl_size_t local_threads[2]={8,8};
-  vcl_size_t global_threads[2]={8,8};
+  std::size_t local_threads[2]={8,8};
+  std::size_t global_threads[2]={8,8};
   view_ident = view_ident +"_curr";
   //cache size sanity check
-  vcl_size_t binCache = opencl_cache.ptr()->bytes_in_cache();
-  vcl_cout<<"Update MBs in cache: "<<binCache/(1024.0*1024.0)<<vcl_endl;
+  std::size_t binCache = opencl_cache.ptr()->bytes_in_cache();
+  std::cout<<"Update MBs in cache: "<<binCache/(1024.0*1024.0)<<std::endl;
 
   //make correct data types are here
-  vcl_string data_type, num_obs_type,options;
+  std::string data_type, num_obs_type,options;
 
   int appTypeSize;
   bool isRGB = false;
@@ -74,7 +76,7 @@ bool boxm2_ocl_update_auxQ::update_auxQ(boxm2_scene_sptr         scene,
   if (status!=0)
     return false;
   // compile the kernel if not already compiled
-  vcl_vector<bocl_kernel*>& kernels = get_kernels(device, options);
+  std::vector<bocl_kernel*>& kernels = get_kernels(device, options);
 
   //grab input image, establish cl_ni, cl_nj (so global size is divisible by local size)
   vil_image_view_base_sptr float_img = boxm2_util::prepare_input_image(img, true);
@@ -96,10 +98,10 @@ bool boxm2_ocl_update_auxQ::update_auxQ(boxm2_scene_sptr         scene,
   {
 
       float f  = ((vpgl_perspective_camera<double> *)cam.ptr())->get_calibration().focal_length()*((vpgl_perspective_camera<double> *)cam.ptr())->get_calibration().x_scale();
-      vcl_cout<<"Focal Length " << f<<vcl_endl;
+      std::cout<<"Focal Length " << f<<std::endl;
       tnearfar[0] = f* scene->finest_resolution()/resnearfactor ;
       tnearfar[1] = f* scene->finest_resolution()*resfarfactor ;
-      vcl_cout<<"Near and Far Clipping planes "<<tnearfar[0]<<" "<<tnearfar[1]<<vcl_endl;
+      std::cout<<"Near and Far Clipping planes "<<tnearfar[0]<<" "<<tnearfar[1]<<std::endl;
   }
   bocl_mem_sptr tnearfar_mem_ptr = opencl_cache->alloc_mem(2*sizeof(float), tnearfar, "tnearfar  buffer");
   tnearfar_mem_ptr->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
@@ -168,12 +170,12 @@ bool boxm2_ocl_update_auxQ::update_auxQ(boxm2_scene_sptr         scene,
   app_density->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
 
   // set arguments
-  vcl_vector<boxm2_block_id> vis_order;
+  std::vector<boxm2_block_id> vis_order;
   //if(cam->type_name() == "vpgl_perspective_camera")
   //    vis_order= scene->get_vis_blocks_opt((vpgl_perspective_camera<double>*)cam.ptr(),img_view->ni(),img_view->nj());
   //else
       vis_order= scene->get_vis_blocks(cam);
-  vcl_vector<boxm2_block_id>::iterator id;
+  std::vector<boxm2_block_id>::iterator id;
   for (unsigned int i=0; i<kernels.size(); ++i)
   {
     if ( i == UPDATE_PROC ) {
@@ -342,10 +344,10 @@ bool boxm2_ocl_update_auxQ::update_auxQ(boxm2_scene_sptr         scene,
       }
       else if (i==CONVERT_AUX_INT_FLOAT)
       {
-          vcl_size_t ltr[2];
+          std::size_t ltr[2];
           ltr[0] = 64;
           ltr[1] = 1;
-          vcl_size_t gt[2];
+          std::size_t gt[2];
           gt[0] = RoundUp(info_buffer->data_buffer_length,ltr[0]);
           gt[1] = 1;
           kern->set_arg( blk_info );
@@ -396,25 +398,25 @@ bool boxm2_ocl_update_auxQ::update_auxQ(boxm2_scene_sptr         scene,
   opencl_cache->unref_mem(ray_o_buff.ptr());
   opencl_cache->unref_mem(ray_d_buff.ptr());
   opencl_cache->unref_mem(tnearfar_mem_ptr.ptr());
-  vcl_cout<<"Gpu time "<<gpu_time<<" transfer time "<<transfer_time<<vcl_endl;
+  std::cout<<"Gpu time "<<gpu_time<<" transfer time "<<transfer_time<<std::endl;
   clReleaseCommandQueue(queue);
   return true;
 }
 
 
 //Returns vector of color update kernels (and caches them per device
-vcl_vector<bocl_kernel*>& boxm2_ocl_update_auxQ::get_kernels(bocl_device_sptr device, vcl_string opts)
+std::vector<bocl_kernel*>& boxm2_ocl_update_auxQ::get_kernels(bocl_device_sptr device, std::string opts)
 {
   // compile kernels if not already compiled
-  vcl_string identifier = device->device_identifier() + opts;
+  std::string identifier = device->device_identifier() + opts;
   if (kernels_.find(identifier) != kernels_.end())
     return kernels_[identifier];
 
   //otherwise compile the kernels
-  vcl_cout<<"=== boxm2_ocl_update_process::compiling kernels on device "<<identifier<<"==="<<vcl_endl;
+  std::cout<<"=== boxm2_ocl_update_process::compiling kernels on device "<<identifier<<"==="<<std::endl;
 
-  vcl_vector<vcl_string> src_paths;
-  vcl_string source_dir = boxm2_ocl_util::ocl_src_root();
+  std::vector<std::string> src_paths;
+  std::string source_dir = boxm2_ocl_util::ocl_src_root();
   src_paths.push_back(source_dir + "scene_info.cl");
   src_paths.push_back(source_dir + "pixel_conversion.cl");
   src_paths.push_back(source_dir + "bit/bit_tree_library_functions.cl");
@@ -423,42 +425,42 @@ vcl_vector<bocl_kernel*>& boxm2_ocl_update_auxQ::get_kernels(bocl_device_sptr de
   src_paths.push_back(source_dir + "statistics_library_functions.cl");
   src_paths.push_back(source_dir + "ray_bundle_library_opt.cl");
     src_paths.push_back(source_dir + "bit/update_kernels.cl");
-  vcl_vector<vcl_string> non_ray_src = vcl_vector<vcl_string>(src_paths);
+  std::vector<std::string> non_ray_src = std::vector<std::string>(src_paths);
 
     src_paths.push_back(source_dir + "update_functors.cl");
   src_paths.push_back(source_dir + "bit/cast_ray_bit.cl");
 
   //compilation options
-  vcl_string options = /*"-D ATOMIC_FLOAT " +*/ opts;
+  std::string options = /*"-D ATOMIC_FLOAT " +*/ opts;
 
   //populate vector of kernels
-  vcl_vector<bocl_kernel*> vec_kernels;
+  std::vector<bocl_kernel*> vec_kernels;
 
   //seg len pass
   bocl_kernel* seg_len = new bocl_kernel();
-  vcl_string seg_opts = options + " -D SEGLEN  -D STEP_CELL=step_cell_seglen(aux_args,data_ptr,llid,d)";
+  std::string seg_opts = options + " -D SEGLEN  -D STEP_CELL=step_cell_seglen(aux_args,data_ptr,llid,d)";
   seg_len->create_kernel(&device->context(), device->device_id(), src_paths, "seg_len_main", seg_opts, "update::seg_len");
   vec_kernels.push_back(seg_len);
 
 
   bocl_kernel* pre_inf = new bocl_kernel();
-  vcl_string pre_opts = options + " -D PREINF  -D STEP_CELL=step_cell_preinf(aux_args,data_ptr,llid,d)";
+  std::string pre_opts = options + " -D PREINF  -D STEP_CELL=step_cell_preinf(aux_args,data_ptr,llid,d)";
   pre_inf->create_kernel(&device->context(), device->device_id(), src_paths, "pre_inf_main", pre_opts, "update::pre_inf");
   vec_kernels.push_back(pre_inf);
 
   //may need DIFF LIST OF SOURCES FOR THIS GUY
   bocl_kernel* proc_img = new bocl_kernel();
-  vcl_string proc_opts = options + " -D PROC_NORM ";
+  std::string proc_opts = options + " -D PROC_NORM ";
   proc_img->create_kernel(&device->context(), device->device_id(), non_ray_src, "proc_norm_image", proc_opts, "update::proc_norm_image");
   vec_kernels.push_back(proc_img);
 
   //push back cast_ray_bit
   bocl_kernel* bayes_main = new bocl_kernel();
-  vcl_string bayes_opt = options + " -D BAYES  -D STEP_CELL=step_cell_bayes(aux_args,data_ptr,llid,d)";
+  std::string bayes_opt = options + " -D BAYES  -D STEP_CELL=step_cell_bayes(aux_args,data_ptr,llid,d)";
   bayes_main->create_kernel(&device->context(), device->device_id(), src_paths, "bayes_main", bayes_opt, "update::bayes_main");
   vec_kernels.push_back(bayes_main);
 
-  vcl_vector<vcl_string> src_paths_4;
+  std::vector<std::string> src_paths_4;
   src_paths_4.push_back(source_dir + "scene_info.cl");
   src_paths_4.push_back(source_dir + "bit/batch_update_kernels.cl");
   //convert aux buffer int values to float (just divide by SEGLENFACTOR
@@ -472,13 +474,13 @@ vcl_vector<bocl_kernel*>& boxm2_ocl_update_auxQ::get_kernels(bocl_device_sptr de
 }
 //makes sure appearance types correspond correctly
 bool boxm2_ocl_update_auxQ::validate_appearances(boxm2_scene_sptr scene,
-                                            vcl_string& data_type,
+                                            std::string& data_type,
                                             int& appTypeSize,
-                                            vcl_string& num_obs_type,
-                                            vcl_string& options,
+                                            std::string& num_obs_type,
+                                            std::string& options,
                                             bool& isRGB)
 {
-  vcl_vector<vcl_string> apps = scene->appearances();
+  std::vector<std::string> apps = scene->appearances();
   bool foundDataType = false, foundNumObsType = false;
   for (unsigned int i=0; i<apps.size(); ++i) {
     if ( apps[i] == boxm2_data_traits<BOXM2_MOG3_GREY>::prefix() )
@@ -502,28 +504,28 @@ bool boxm2_ocl_update_auxQ::validate_appearances(boxm2_scene_sptr scene,
     }
   }
   if (!foundDataType) {
-    vcl_cout<<"BOXM2_OPENCL_UPDATE_PROCESS ERROR: scene doesn't have BOXM2_MOG3_GREY or BOXM2_MOG3_GREY_16 data type"<<vcl_endl;
+    std::cout<<"BOXM2_OPENCL_UPDATE_PROCESS ERROR: scene doesn't have BOXM2_MOG3_GREY or BOXM2_MOG3_GREY_16 data type"<<std::endl;
     return false;
   }
   if (!foundNumObsType) {
-    vcl_cout<<"BOXM2_OPENCL_UPDATE_PROCESS ERROR: scene doesn't have BOXM2_NUM_OBS type"<<vcl_endl;
+    std::cout<<"BOXM2_OPENCL_UPDATE_PROCESS ERROR: scene doesn't have BOXM2_NUM_OBS type"<<std::endl;
     return false;
   }
   return true;
 }
 
 
-vcl_map<vcl_string, vcl_vector<bocl_kernel*> > boxm2_ocl_update_PusingQ::kernels_;
+std::map<std::string, std::vector<bocl_kernel*> > boxm2_ocl_update_PusingQ::kernels_;
 
 bool boxm2_ocl_update_PusingQ::init_product(boxm2_scene_sptr scene, boxm2_cache_sptr cache)
 {
-    vcl_vector<boxm2_block_id> vis_order = scene->get_block_ids();
-    vcl_vector<boxm2_block_id>::iterator id;
+    std::vector<boxm2_block_id> vis_order = scene->get_block_ids();
+    std::vector<boxm2_block_id>::iterator id;
     for (id = vis_order.begin(); id != vis_order.end(); ++id)
     {
         boxm2_data_base *  aux3 = cache->get_data_base(scene, *id,boxm2_data_traits<BOXM2_AUX3>::prefix(),0,false);
         boxm2_data_traits<BOXM2_AUX3>::datatype *   aux3_data = reinterpret_cast<boxm2_data_traits<BOXM2_AUX3>::datatype*> ( aux3->data_buffer());
-        vcl_fill_n(aux3_data,aux3->buffer_length()/boxm2_data_traits<BOXM2_AUX3>::datasize(),1);
+        std::fill_n(aux3_data,aux3->buffer_length()/boxm2_data_traits<BOXM2_AUX3>::datasize(),1);
         cache->remove_data_base(scene,*id,boxm2_data_traits<BOXM2_AUX3>::prefix());
     }
     return true;
@@ -532,13 +534,13 @@ bool boxm2_ocl_update_PusingQ::init_product(boxm2_scene_sptr scene, boxm2_cache_
 bool boxm2_ocl_update_PusingQ::accumulate_product(boxm2_scene_sptr         scene,
                                                   bocl_device_sptr         device,
                                                   boxm2_opencl_cache_sptr  opencl_cache,
-                                                  vcl_string identifier)
+                                                  std::string identifier)
 {
   float transfer_time=0.0f;
   float gpu_time=0.0f;
   //cache size sanity check
-  vcl_size_t binCache = opencl_cache.ptr()->bytes_in_cache();
-  vcl_cout<<"Update MBs in cache: "<<binCache/(1024.0*1024.0)<<vcl_endl;
+  std::size_t binCache = opencl_cache.ptr()->bytes_in_cache();
+  std::cout<<"Update MBs in cache: "<<binCache/(1024.0*1024.0)<<std::endl;
   // create a command queue.
   int status=0;
   cl_command_queue queue = clCreateCommandQueue( device->context(),*(device->device_id()),CL_QUEUE_PROFILING_ENABLE,&status);
@@ -546,15 +548,15 @@ bool boxm2_ocl_update_PusingQ::accumulate_product(boxm2_scene_sptr         scene
       return false;
 
   // compile the kernel if not already compiled
-  vcl_vector<bocl_kernel*>& kernels = get_kernels(device,"");
+  std::vector<bocl_kernel*>& kernels = get_kernels(device,"");
   // bit lookup buffer
   cl_uchar lookup_arr[256];
   boxm2_ocl_util::set_bit_lookup(lookup_arr);
   bocl_mem_sptr lookup=new bocl_mem(device->context(), lookup_arr, sizeof(cl_uchar)*256, "bit lookup buffer");
   lookup->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR);
   // set arguments
-  vcl_vector<boxm2_block_id> vis_order = scene->get_block_ids();
-  vcl_vector<boxm2_block_id>::iterator id;
+  std::vector<boxm2_block_id> vis_order = scene->get_block_ids();
+  std::vector<boxm2_block_id>::iterator id;
   bocl_kernel * kern=kernels[0];
   for (id = vis_order.begin(); id != vis_order.end(); ++id)
   {
@@ -576,8 +578,8 @@ bool boxm2_ocl_update_PusingQ::accumulate_product(boxm2_scene_sptr         scene
       bocl_mem *aux0_curr   = opencl_cache->get_data(scene,*id, boxm2_data_traits<BOXM2_AUX0>::prefix(identifier+"_curr"),info_buffer->data_buffer_length*auxTypeSize,false);
       transfer_time += (float) transfer.all();
       //set workspace
-      vcl_size_t ltr[] = {64};
-      vcl_size_t gtr[] = { RoundUp(info_buffer->data_buffer_length, ltr[0]) };
+      std::size_t ltr[] = {64};
+      std::size_t gtr[] = { RoundUp(info_buffer->data_buffer_length, ltr[0]) };
       kern->set_arg( blk_info );
       kern->set_arg( aux3_prev );
       kern->set_arg( aux3_curr );
@@ -597,7 +599,7 @@ bool boxm2_ocl_update_PusingQ::accumulate_product(boxm2_scene_sptr         scene
   }
   //read image out to buffer (from gpu)
   clFinish(queue);
-  vcl_cout<<"Gpu time "<<gpu_time<<" transfer time "<<transfer_time<<vcl_endl;
+  std::cout<<"Gpu time "<<gpu_time<<" transfer time "<<transfer_time<<std::endl;
   clReleaseCommandQueue(queue);
   return true;
 }
@@ -609,8 +611,8 @@ bool boxm2_ocl_update_PusingQ::compute_probability(boxm2_scene_sptr         scen
   float transfer_time=0.0f;
   float gpu_time=0.0f;
   //cache size sanity check
-  vcl_size_t binCache = opencl_cache.ptr()->bytes_in_cache();
-  vcl_cout<<"Update MBs in cache: "<<binCache/(1024.0*1024.0)<<vcl_endl;
+  std::size_t binCache = opencl_cache.ptr()->bytes_in_cache();
+  std::cout<<"Update MBs in cache: "<<binCache/(1024.0*1024.0)<<std::endl;
   // create a command queue.
   int status=0;
   cl_command_queue queue = clCreateCommandQueue( device->context(),*(device->device_id()),CL_QUEUE_PROFILING_ENABLE,&status);
@@ -620,15 +622,15 @@ bool boxm2_ocl_update_PusingQ::compute_probability(boxm2_scene_sptr         scen
 
 
   // compile the kernel if not already compiled
-  vcl_vector<bocl_kernel*>& kernels = get_kernels(device,"");
+  std::vector<bocl_kernel*>& kernels = get_kernels(device,"");
   // bit lookup buffer
   cl_uchar lookup_arr[256];
   boxm2_ocl_util::set_bit_lookup(lookup_arr);
   bocl_mem_sptr lookup=new bocl_mem(device->context(), lookup_arr, sizeof(cl_uchar)*256, "bit lookup buffer");
   lookup->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR);
   // set arguments
-  vcl_vector<boxm2_block_id> vis_order = scene->get_block_ids();
-  vcl_vector<boxm2_block_id>::iterator id;
+  std::vector<boxm2_block_id> vis_order = scene->get_block_ids();
+  std::vector<boxm2_block_id>::iterator id;
   bocl_kernel * kern=kernels[1];
   for (id = vis_order.begin(); id != vis_order.end(); ++id)
   {
@@ -648,7 +650,7 @@ bool boxm2_ocl_update_PusingQ::compute_probability(boxm2_scene_sptr         scen
       // check for invalid parameters
       if( alphaTypeSize == 0 ) //This should never happen, it will result in division by zero later
       {
-          vcl_cout << "ERROR: alphaTypeSize == 0 in " << __FILE__ << __LINE__ << vcl_endl;
+          std::cout << "ERROR: alphaTypeSize == 0 in " << __FILE__ << __LINE__ << std::endl;
           return false;
       }
 
@@ -660,8 +662,8 @@ bool boxm2_ocl_update_PusingQ::compute_probability(boxm2_scene_sptr         scen
       transfer_time += (float) transfer.all();
 
       //set workspace
-      vcl_size_t ltr[] = {4, 4, 4};
-      vcl_size_t gtr[] = { RoundUp(mdata.sub_block_num_.x(), ltr[0]),
+      std::size_t ltr[] = {4, 4, 4};
+      std::size_t gtr[] = { RoundUp(mdata.sub_block_num_.x(), ltr[0]),
                            RoundUp(mdata.sub_block_num_.y(), ltr[1]),
                            RoundUp(mdata.sub_block_num_.z(), ltr[2])};
 
@@ -691,44 +693,44 @@ bool boxm2_ocl_update_PusingQ::compute_probability(boxm2_scene_sptr         scen
   }
   //read image out to buffer (from gpu)
   clFinish(queue);
-  vcl_cout<<"Gpu time "<<gpu_time<<" transfer time "<<transfer_time<<vcl_endl;
+  std::cout<<"Gpu time "<<gpu_time<<" transfer time "<<transfer_time<<std::endl;
   clReleaseCommandQueue(queue);
 
   return true;
 }
 
-vcl_vector<bocl_kernel*>& boxm2_ocl_update_PusingQ::get_kernels(bocl_device_sptr device, vcl_string opts)
+std::vector<bocl_kernel*>& boxm2_ocl_update_PusingQ::get_kernels(bocl_device_sptr device, std::string opts)
 {
   // compile kernels if not already compiled
-  vcl_string identifier = device->device_identifier() + opts;
+  std::string identifier = device->device_identifier() + opts;
   if (kernels_.find(identifier) != kernels_.end())
     return kernels_[identifier];
 
   //otherwise compile the kernels
-  vcl_cout<<"=== boxm2_ocl_update_auxQ_process::compiling kernels on device "<<identifier<<"==="<<vcl_endl;
-  vcl_vector<vcl_string> src_paths;
-  vcl_string source_dir = boxm2_ocl_util::ocl_src_root();
+  std::cout<<"=== boxm2_ocl_update_auxQ_process::compiling kernels on device "<<identifier<<"==="<<std::endl;
+  std::vector<std::string> src_paths;
+  std::string source_dir = boxm2_ocl_util::ocl_src_root();
   src_paths.push_back(source_dir + "scene_info.cl");
   src_paths.push_back(source_dir + "bit/bit_tree_library_functions.cl");
   src_paths.push_back(source_dir + "bit/update_kernels.cl");
-  vcl_vector<vcl_string> non_ray_src = vcl_vector<vcl_string>(src_paths);
+  std::vector<std::string> non_ray_src = std::vector<std::string>(src_paths);
 
   //populate vector of kernels
-  vcl_vector<bocl_kernel*> vec_kernels;
+  std::vector<bocl_kernel*> vec_kernels;
 
 
   //push back cast_ray_bit
   bocl_kernel* apply_beta = new bocl_kernel();
-  vcl_string apply_beta_opts = opts + " -D APPLYBETA";
+  std::string apply_beta_opts = opts + " -D APPLYBETA";
   apply_beta->create_kernel(&device->context(), device->device_id(), non_ray_src, "apply_beta", apply_beta_opts, "update::apply_beta");
   vec_kernels.push_back(apply_beta);
 
   bocl_kernel* compute_product_Q = new bocl_kernel();
-  vcl_string product_q = opts + " -D PRODUCTQ";
+  std::string product_q = opts + " -D PRODUCTQ";
   compute_product_Q->create_kernel(&device->context(), device->device_id(), non_ray_src, "compute_product_Q", product_q, "update::compute_product_Q");
   vec_kernels.push_back(compute_product_Q);
   bocl_kernel* update_P = new bocl_kernel();
-  vcl_string update_q_opts = opts + " -D UPDATEP";
+  std::string update_q_opts = opts + " -D UPDATEP";
   update_P->create_kernel(&device->context(), device->device_id(), non_ray_src, "update_P_using_Q", update_q_opts, "update::update_P_using_Q");
   vec_kernels.push_back(update_P);
 

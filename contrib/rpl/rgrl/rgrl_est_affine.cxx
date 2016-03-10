@@ -191,7 +191,7 @@ estimate( rgrl_set_of<rgrl_match_set_sptr> const& matches,
     factor0 = std::max(XtWX(2,2),XtWX(5,5));
     factor1 = std::max(std::max(XtWX(0,0), XtWX(1,1)),
                            std::max(XtWX(3,3), XtWX(4,4)));
-    double scale = vcl_sqrt( (factor1 > 0 && factor0 > 0) ? factor1 / factor0 : 1 );   // neither should be 0
+    double scale = std::sqrt( (factor1 > 0 && factor0 > 0) ? factor1 / factor0 : 1 );   // neither should be 0
     s(2) = s(5) = scale;
   }
   else {
@@ -202,7 +202,7 @@ estimate( rgrl_set_of<rgrl_match_set_sptr> const& matches,
                                           std::max( std::max( XtWX(5,5), XtWX(6,6) ),
                                                         std::max( XtWX(8,8), XtWX(9,9) ) ) ),
                             XtWX(10,10) );
-    double scale = vcl_sqrt( (factor1 > 0 && factor0 > 0) ? factor1 / factor0 : 1 );   // neither should be 0
+    double scale = std::sqrt( (factor1 > 0 && factor0 > 0) ? factor1 / factor0 : 1 );   // neither should be 0
     s(3) = s(7) = s(11) = scale;
     DebugMacro(1, "rgrl_est_affine: scale factors = " << s << '\n' );
   }
@@ -277,7 +277,7 @@ estimate( rgrl_match_set_sptr matches,
   return rgrl_estimator::estimate( matches, cur_transform );
 }
 
-const vcl_type_info&
+const std::type_info&
 rgrl_est_affine::
 transformation_type() const
 {

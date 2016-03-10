@@ -13,9 +13,10 @@
 #include "vidl_frame.h"
 #include "vidl_ffmpeg_convert.h"
 
-#include <vcl_cstring.h>
-#include <vcl_string.h>
-#include <vcl_iostream.h>
+#include <cstring>
+#include <vcl_compiler.h>
+#include <string>
+#include <iostream>
 
 extern "C" {
 #if FFMPEG_IN_SEVERAL_DIRECTORIES
@@ -91,7 +92,7 @@ vidl_ffmpeg_istream()
 
 //: Constructor - from a filename
 vidl_ffmpeg_istream::
-vidl_ffmpeg_istream(const vcl_string& filename)
+vidl_ffmpeg_istream(const std::string& filename)
   : is_( new vidl_ffmpeg_istream::pimpl )
 {
   vidl_ffmpeg_init();
@@ -110,7 +111,7 @@ vidl_ffmpeg_istream::
 //: Open a new stream using a filename
 bool
 vidl_ffmpeg_istream::
-open(const vcl_string& filename)
+open(const std::string& filename)
 {
   // Close any currently opened file
   close();
@@ -421,7 +422,7 @@ advance()
           is_->raw_video_memory_ = new vil_memory_chunk(pkt.size, VIL_PIXEL_FORMAT_BYTE);
         else
           is_->raw_video_memory_->set_size(pkt.size, VIL_PIXEL_FORMAT_BYTE);
-        vcl_memcpy(is_->raw_video_memory_->data(), pkt.data, pkt.size);
+        std::memcpy(is_->raw_video_memory_->data(), pkt.data, pkt.size);
 
         avpicture_fill( (AVPicture*)is_->frame_,
                         reinterpret_cast<uint8_t*>(is_->raw_video_memory_->data()),
@@ -553,7 +554,7 @@ vidl_ffmpeg_istream::current_frame()
   // packet (stored in last_dts) is actually the next frame's
   // dts.
   if ( enc->codec_id == CODEC_ID_MPEG2VIDEO &&
-       vcl_string("avi") == is_->fmt_cxt_->iformat->name ) {
+       std::string("avi") == is_->fmt_cxt_->iformat->name ) {
     is_->frame_number_offset_ = 1;
   }
 
@@ -606,7 +607,7 @@ seek_frame(unsigned int frame)
     }
     if ( is_->last_dts >= req_timestamp ) {
       if ( is_->last_dts >= req_timestamp + frame_size ) {
-        vcl_cerr << "Warning: seek went into the future!\n";
+        std::cerr << "Warning: seek went into the future!\n";
         return false;
       }
       return true;

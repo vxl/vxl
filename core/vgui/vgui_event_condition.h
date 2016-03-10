@@ -19,7 +19,8 @@
 //   05-DEC-2002 K.Y.McGaul - Added Awf's comments from mailing list.
 // \endverbatim
 
-#include <vcl_string.h>
+#include <vcl_compiler.h>
+#include <string>
 #include <vgui/vgui_key.h>
 #include <vgui/vgui_button.h>
 #include <vgui/vgui_modifier.h>
@@ -119,7 +120,7 @@ struct vgui_event_condition
 
   //: Text representation such as "shift-middle" or "ctrl-K".
   // If field_width is supplied, pad to that width.
-  vcl_string as_string(int field_width = 0) const;
+  std::string as_string(int field_width = 0) const;
 };
 
 #endif // vgui_event_condition_h_

@@ -11,7 +11,9 @@
 #include <vnl/io/vnl_io_vector.h>
 #include <vnl/io/vnl_io_matrix.h>
 #include <mbl/mbl_data_wrapper.h>
-#include <vcl_iosfwd.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iosfwd>
 
 //: Class to perform general Component Analysis
 //  After an initial component analysis, this rotates pairs of
@@ -41,7 +43,7 @@ class mcal_general_ca : public mcal_component_analyzer
                                 vnl_vector<double>& mode2);
 
   //: Optimise the mode vectors so as to minimise the cost function
-  double optimise_one_pass(vcl_vector<vnl_vector<double> >& proj,
+  double optimise_one_pass(std::vector<vnl_vector<double> >& proj,
                                 vnl_matrix<double>& modes);
 
   //: Optimise the mode vectors so as to minimise the cost function
@@ -55,7 +57,7 @@ class mcal_general_ca : public mcal_component_analyzer
   void compute_projections(mbl_data_wrapper<vnl_vector<double> >& data,
                            const vnl_vector<double>& mean,
                            vnl_matrix<double>& modes,
-                           vcl_vector<vnl_vector<double> >& proj);
+                           std::vector<vnl_vector<double> >& proj);
 
   //: Set parameters to default values
   void set_defaults();
@@ -89,13 +91,13 @@ class mcal_general_ca : public mcal_component_analyzer
   short version_no() const;
 
     //: Name of the class
-  virtual vcl_string is_a() const;
+  virtual std::string is_a() const;
 
     //: Create a copy on the heap and return base class pointer
   virtual  mcal_component_analyzer*  clone()  const;
 
     //: Print class to os
-  virtual void print_summary(vcl_ostream& os) const;
+  virtual void print_summary(std::ostream& os) const;
 
     //: Save class to binary file stream
   virtual void b_write(vsl_b_ostream& bfs) const;
@@ -114,7 +116,7 @@ class mcal_general_ca : public mcal_component_analyzer
   // }
   // \endverbatim
   // \throw mbl_exception_parse_error if the parse fails.
-  virtual void config_from_stream(vcl_istream & is);
+  virtual void config_from_stream(std::istream & is);
 };
 
 #endif // mcal_general_ca_h_

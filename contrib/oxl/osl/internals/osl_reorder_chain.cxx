@@ -8,7 +8,9 @@
 
 #include "osl_reorder_chain.h"
 
-#include <vcl_vector.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <vector>
 #include <vnl/vnl_math.h>
 #include <osl/osl_edgel_chain.h>
 #include <osl/osl_OrthogRegress.h>
@@ -60,7 +62,7 @@ void osl_reorder_chain(osl_edgel_chain *dc)
       dot = 1.0;
     if ( dot < -1.0 )
       dot = -1.0;
-    diff = vcl_acos(dot);
+    diff = std::acos(dot);
     if ( diff > MPIby2)
       diff = vnl_math::pi - diff;
     if ( diff > max ) {
@@ -77,10 +79,10 @@ void osl_reorder_chain(osl_edgel_chain *dc)
 
   // The curve should now begin at start - shuffle the points around.
   // Buffer the points first, then move.
-  vcl_vector<float> x(size);
-  vcl_vector<float> y(size);
-  vcl_vector<float> grad(size);
-  vcl_vector<float> theta(size);
+  std::vector<float> x(size);
+  std::vector<float> y(size);
+  std::vector<float> grad(size);
+  std::vector<float> theta(size);
 
   for (i=0; i<size; ++i)  {
     x[i] = dc->GetX(i);

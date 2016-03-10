@@ -8,7 +8,9 @@
 
 #include <msm/msm_points.h>
 #include <msm/msm_curve.h>
-#include <vcl_algorithm.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <algorithm>
 
 //: Return square of distance to closest point on line segment [pt0-pt1]
 inline double msm_sqr_dist_to_line_segment(const vgl_point_2d<double>& pt0,
@@ -24,7 +26,7 @@ inline double msm_sqr_dist_to_line_segment(const vgl_point_2d<double>& pt0,
 
   // pt is closest to some point between pt0 and pt1
   // Use pythagorus  :   dp^2 = d^2 + sqr(pu/u.length)
-  return vcl_max(dp.sqr_length() - (pu*pu)/Lu2,0.0);
+  return std::max(dp.sqr_length() - (pu*pu)/Lu2,0.0);
 }
 
 //: Compute the distance between pt and nearest point on given curve
@@ -55,7 +57,7 @@ inline double msm_dist_to_curve(const msm_points& all_points,
     if (d2<min_d2) min_d2=d2;
   }
 
-  return vcl_sqrt(min_d2);
+  return std::sqrt(min_d2);
 }
 
 //: Compute the distance between pt and nearest point on any of the curves through points

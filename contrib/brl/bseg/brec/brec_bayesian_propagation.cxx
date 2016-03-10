@@ -14,19 +14,21 @@
 #include <vil/vil_image_view.h>
 #include <vil/vil_copy.h>
 #include <bsta/bsta_joint_histogram.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iostream>
 
 bool helper_function(double p_b_current, double p_f_current,
                      double p_b_current1, double p_f_current1,
                      double p_ff, double p_fb, double p_bf, double p_bb, float& out) {
   //: now compute 4 multipliers
-  double m_ff_d = (p_bf*p_b_current + p_ff*p_f_current); if (vcl_abs(m_ff_d) < 0.000001) return false;
+  double m_ff_d = (p_bf*p_b_current + p_ff*p_f_current); if (std::abs(m_ff_d) < 0.000001) return false;
   double m_ff = p_ff/m_ff_d;
-  double m_bb_d = (p_bb*p_b_current + p_fb*p_f_current); if (vcl_abs(m_bb_d) < 0.000001) return false;
+  double m_bb_d = (p_bb*p_b_current + p_fb*p_f_current); if (std::abs(m_bb_d) < 0.000001) return false;
   double m_bb = p_bb/m_bb_d;
-  double m_fb_d = (p_bb*p_b_current + p_fb*p_f_current); if (vcl_abs(m_fb_d) < 0.000001) return false;
+  double m_fb_d = (p_bb*p_b_current + p_fb*p_f_current); if (std::abs(m_fb_d) < 0.000001) return false;
   double m_fb = p_fb/m_fb_d;
-  double m_bf_d = (p_bf*p_b_current + p_ff*p_f_current); if (vcl_abs(m_bf_d) < 0.000001) return false;
+  double m_bf_d = (p_bf*p_b_current + p_ff*p_f_current); if (std::abs(m_bf_d) < 0.000001) return false;
   double m_bf = p_bf/m_bf_d;
 
   //: find the probs for each hypothesis:
@@ -147,63 +149,63 @@ brec_bayesian_propagation::horizontal_pass_using_prob_density_as_bgp(brec_fg_pai
 
 #if 0
       if (i == 572 && j == 335) {
-        vcl_cout << "--------- 572, 335 -----------\n"
-                 << "p_b_current: " << p_b_current << " p_f_current: " << p_f_current << vcl_endl
-                 << "p_b_current1: " << p_b_current1 << " p_f_current1: " << p_f_current1 << vcl_endl
+        std::cout << "--------- 572, 335 -----------\n"
+                 << "p_b_current: " << p_b_current << " p_f_current: " << p_f_current << std::endl
+                 << "p_b_current1: " << p_b_current1 << " p_f_current1: " << p_f_current1 << std::endl
                  << " p_ff: " << p_ff << " p_fb: " << p_fb
-                 << " p_bf: " << p_bf << " p_bb: " << p_bb << vcl_endl
-                 << " m_ff: " << m_ff << " m_bb: " << m_bb << " m_fb: " << m_fb << " m_bf: " << m_bf << vcl_endl
-                 << " p_h_bb: " << p_h_bb << " p_h_bf: " << p_h_bf << " p_h_fb: " << p_h_fb << " p_h_ff: " << p_h_ff << vcl_endl
+                 << " p_bf: " << p_bf << " p_bb: " << p_bb << std::endl
+                 << " m_ff: " << m_ff << " m_bb: " << m_bb << " m_fb: " << m_fb << " m_bf: " << m_bf << std::endl
+                 << " p_h_bb: " << p_h_bb << " p_h_bf: " << p_h_bf << " p_h_fb: " << p_h_fb << " p_h_ff: " << p_h_ff << std::endl
                  << "the highest prob hypothesis was: ";
         if (p_h_bb >= p_h_bf && p_h_bb >= p_h_ff && p_h_bb >= p_h_fb)
-          vcl_cout << " p_h_bb\n";
+          std::cout << " p_h_bb\n";
         else if (p_h_bf >= p_h_bb && p_h_bf >= p_h_ff && p_h_bf >= p_h_fb)
-          vcl_cout << " p_h_bf\n";
+          std::cout << " p_h_bf\n";
         else if (p_h_fb >= p_h_bb && p_h_fb >= p_h_ff && p_h_fb >= p_h_bf)
-          vcl_cout << " p_h_fb\n";
+          std::cout << " p_h_fb\n";
         else // m_ff is greater than all
-          vcl_cout << " p_h_ff\n";
-        vcl_cout << " new p_b: " << bg_map_(i,j) << " hence p_f: " << 1-bg_map_(i,j) << vcl_endl
+          std::cout << " p_h_ff\n";
+        std::cout << " new p_b: " << bg_map_(i,j) << " hence p_f: " << 1-bg_map_(i,j) << std::endl
                  << "----------------------------\n";
       }
       if (i == 606 && j == 343) {
-        vcl_cout << "--------- 606, 343 -----------\n"
-                 << "p_b_current: " << p_b_current << " p_f_current: " << p_f_current << vcl_endl
-                 << "p_b_current1: " << p_b_current1 << " p_f_current1: " << p_f_current1 << vcl_endl
+        std::cout << "--------- 606, 343 -----------\n"
+                 << "p_b_current: " << p_b_current << " p_f_current: " << p_f_current << std::endl
+                 << "p_b_current1: " << p_b_current1 << " p_f_current1: " << p_f_current1 << std::endl
                  << " p_ff: " << p_ff << " p_fb: " << p_fb
-                 << " p_bf: " << p_bf << " p_bb: " << p_bb << vcl_endl
-                 << " m_ff: " << m_ff << " m_bb: " << m_bb << " m_fb: " << m_fb << " m_bf: " << m_bf << vcl_endl
-                 << " p_h_bb: " << p_h_bb << " p_h_bf: " << p_h_bf << " p_h_fb: " << p_h_fb << " p_h_ff: " << p_h_ff << vcl_endl
+                 << " p_bf: " << p_bf << " p_bb: " << p_bb << std::endl
+                 << " m_ff: " << m_ff << " m_bb: " << m_bb << " m_fb: " << m_fb << " m_bf: " << m_bf << std::endl
+                 << " p_h_bb: " << p_h_bb << " p_h_bf: " << p_h_bf << " p_h_fb: " << p_h_fb << " p_h_ff: " << p_h_ff << std::endl
                  << "the highest prob hypothesis was: ";
         if (p_h_bb >= p_h_bf && p_h_bb >= p_h_ff && p_h_bb >= p_h_fb)
-          vcl_cout << " p_h_bb\n";
+          std::cout << " p_h_bb\n";
         else if (p_h_bf >= p_h_bb && p_h_bf >= p_h_ff && p_h_bf >= p_h_fb)
-          vcl_cout << " p_h_bf\n";
+          std::cout << " p_h_bf\n";
         else if (p_h_fb >= p_h_bb && p_h_fb >= p_h_ff && p_h_fb >= p_h_bf)
-          vcl_cout << " p_h_fb\n";
+          std::cout << " p_h_fb\n";
         else // m_ff is greater than all
-          vcl_cout << " p_h_ff\n";
-        vcl_cout << " new p_b: " << bg_map_(i,j) << " hence p_f: " << 1-bg_map_(i,j) << vcl_endl
+          std::cout << " p_h_ff\n";
+        std::cout << " new p_b: " << bg_map_(i,j) << " hence p_f: " << 1-bg_map_(i,j) << std::endl
                  << "----------------------------\n";
       }
       if (i == 596 && j == 360) {
-        vcl_cout << "--------- 596, 360 -----------\n"
-                 << "p_b_current: " << p_b_current << " p_f_current: " << p_f_current << vcl_endl
-                 << "p_b_current1: " << p_b_current1 << " p_f_current1: " << p_f_current1 << vcl_endl
+        std::cout << "--------- 596, 360 -----------\n"
+                 << "p_b_current: " << p_b_current << " p_f_current: " << p_f_current << std::endl
+                 << "p_b_current1: " << p_b_current1 << " p_f_current1: " << p_f_current1 << std::endl
                  << " p_ff: " << p_ff << " p_fb: " << p_fb
-                 << " p_bf: " << p_bf << " p_bb: " << p_bb << vcl_endl
-                 << " m_ff: " << m_ff << " m_bb: " << m_bb << " m_fb: " << m_fb << " m_bf: " << m_bf << vcl_endl
-                 << " p_h_bb: " << p_h_bb << " p_h_bf: " << p_h_bf << " p_h_fb: " << p_h_fb << " p_h_ff: " << p_h_ff << vcl_endl
+                 << " p_bf: " << p_bf << " p_bb: " << p_bb << std::endl
+                 << " m_ff: " << m_ff << " m_bb: " << m_bb << " m_fb: " << m_fb << " m_bf: " << m_bf << std::endl
+                 << " p_h_bb: " << p_h_bb << " p_h_bf: " << p_h_bf << " p_h_fb: " << p_h_fb << " p_h_ff: " << p_h_ff << std::endl
                  << "the highest prob hypothesis was: ";
         if (p_h_bb >= p_h_bf && p_h_bb >= p_h_ff && p_h_bb >= p_h_fb)
-          vcl_cout << " p_h_bb\n";
+          std::cout << " p_h_bb\n";
         else if (p_h_bf >= p_h_bb && p_h_bf >= p_h_ff && p_h_bf >= p_h_fb)
-          vcl_cout << " p_h_bf\n";
+          std::cout << " p_h_bf\n";
         else if (p_h_fb >= p_h_bb && p_h_fb >= p_h_ff && p_h_fb >= p_h_bf)
-          vcl_cout << " p_h_fb\n";
+          std::cout << " p_h_fb\n";
         else // m_ff is greater than all
-          vcl_cout << " p_h_ff\n";
-        vcl_cout << " new p_b: " << bg_map_(i,j) << " hence p_f: " << 1-bg_map_(i,j) << vcl_endl
+          std::cout << " p_h_ff\n";
+        std::cout << " new p_b: " << bg_map_(i,j) << " hence p_f: " << 1-bg_map_(i,j) << std::endl
                  << "----------------------------\n";
       }
 #endif
@@ -316,13 +318,13 @@ bool helper_function2(double p_b_current, double p_f_current,
                       double p_bb, double p_bf, double p_fb, double p_ff,
                       double& out1, double& out2, double& out3, double& out4) {
   //: now compute 4 multipliers
-  double m_ff_d = (p_bf*p_b_current + p_ff*p_f_current); if (vcl_abs(m_ff_d) < 0.000001) return false;
+  double m_ff_d = (p_bf*p_b_current + p_ff*p_f_current); if (std::abs(m_ff_d) < 0.000001) return false;
   double m_ff = p_ff/m_ff_d;
-  double m_bb_d = (p_bb*p_b_current + p_fb*p_f_current); if (vcl_abs(m_bb_d) < 0.000001) return false;
+  double m_bb_d = (p_bb*p_b_current + p_fb*p_f_current); if (std::abs(m_bb_d) < 0.000001) return false;
   double m_bb = p_bb/m_bb_d;
-  double m_fb_d = (p_bb*p_b_current + p_fb*p_f_current); if (vcl_abs(m_fb_d) < 0.000001) return false;
+  double m_fb_d = (p_bb*p_b_current + p_fb*p_f_current); if (std::abs(m_fb_d) < 0.000001) return false;
   double m_fb = p_fb/m_fb_d;
-  double m_bf_d = (p_bf*p_b_current + p_ff*p_f_current); if (vcl_abs(m_bf_d) < 0.000001) return false;
+  double m_bf_d = (p_bf*p_b_current + p_ff*p_f_current); if (std::abs(m_bf_d) < 0.000001) return false;
   double m_bf = p_bf/m_bf_d;
 
   //if (p_h_bb >= p_h_bf && p_h_bb >= p_h_ff && p_h_bb >= p_h_fb)
@@ -338,7 +340,7 @@ bool helper_function2(double p_b_current, double p_f_current,
 }
 
 inline bool
-hyp_more(const vcl_pair<double, double>& p1, const vcl_pair<double, double>& p2)
+hyp_more(const std::pair<double, double>& p1, const std::pair<double, double>& p2)
 {
   return p1.first >= p2.first;
 }
@@ -356,7 +358,7 @@ brec_bayesian_propagation::pass_using_prob_density_as_bgp(brec_fg_pair_density& 
       double p_f_current = 1.0-bg_map_(i,j);
 
       //: consider 8 neighborhood
-      vcl_vector<vcl_pair<double, double> > values(32, vcl_pair<double, double>(0.0f,0.0f));
+      std::vector<std::pair<double, double> > values(32, std::pair<double, double>(0.0f,0.0f));
       unsigned count = 0;
       double best_hyp = 0;
       double best_out = 0;
@@ -401,12 +403,12 @@ brec_bayesian_propagation::pass_using_prob_density_as_bgp(brec_fg_pair_density& 
         }
       }
       if (count != 8) {
-        vcl_cout << "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!Count is not 8!!!\n";
+        std::cout << "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!Count is not 8!!!\n";
         return false;
       }
 
       //: sort values with respect to hypothesis
-      //vcl_sort(values.begin(), values.end(), hyp_more);
+      //std::sort(values.begin(), values.end(), hyp_more);
       //bg_map_(i,j) = (float)values[0].second;
       //bg_map_(i,j) > 1.0 ? 1.0 : bg_map_(i,j);
       //bg_map_(i,j) < 0.0 ? 0.0 : bg_map_(i,j);

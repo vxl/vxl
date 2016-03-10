@@ -6,8 +6,10 @@
 
 #include "mbl_data_wrapper_mixer.h"
 
-#include <vcl_iostream.h>
-#include <vcl_cstdlib.h>
+#include <iostream>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <cstdlib>
 #include <vcl_cassert.h>
 
 //: Default constructor
@@ -26,7 +28,7 @@ mbl_data_wrapper_mixer<T>::mbl_data_wrapper_mixer(mbl_data_wrapper<T> **wrapper,
 
 //: Constructor
 template<class T>
-mbl_data_wrapper_mixer<T>::mbl_data_wrapper_mixer(vcl_vector<mbl_data_wrapper<T> *> wrapper)
+mbl_data_wrapper_mixer<T>::mbl_data_wrapper_mixer(std::vector<mbl_data_wrapper<T> *> wrapper)
 {
   set(&wrapper[0],wrapper.size());
 }
@@ -36,7 +38,7 @@ template<class T>
 mbl_data_wrapper_mixer<T>::mbl_data_wrapper_mixer(mbl_data_wrapper<T>& wrapper1,
                                                   mbl_data_wrapper<T>& wrapper2)
 {
-  vcl_vector<mbl_data_wrapper<T>*> w(2);
+  std::vector<mbl_data_wrapper<T>*> w(2);
   w[0] = &wrapper1;
   w[1] = &wrapper2;
   set(&w[0],w.size());
@@ -131,9 +133,9 @@ void mbl_data_wrapper_mixer<T>::set_index(unsigned long n)
   assert(n != ((unsigned)-1));
   if (n>=n_)
   {
-    vcl_cerr<<"mbl_data_wrapper_mixer<T>::set_index(n) :\n"
-            <<"  n = "<<n<<" not in range 0<=n<"<<size()<<vcl_endl;
-    vcl_abort();
+    std::cerr<<"mbl_data_wrapper_mixer<T>::set_index(n) :\n"
+            <<"  n = "<<n<<" not in range 0<=n<"<<size()<<std::endl;
+    std::abort();
   }
 
   index_=n;
@@ -148,7 +150,7 @@ void mbl_data_wrapper_mixer<T>::set_index(unsigned long n)
 }
 
 template <class T>
-bool mbl_data_wrapper_mixer<T>::is_class(vcl_string const& s) const
+bool mbl_data_wrapper_mixer<T>::is_class(std::string const& s) const
 {
   return s==is_a(); // no ref to parent's is_class() since that is pure virtual
 }
@@ -156,8 +158,8 @@ bool mbl_data_wrapper_mixer<T>::is_class(vcl_string const& s) const
 
 #undef MBL_DATA_WRAPPER_MIXER_INSTANTIATE
 #define MBL_DATA_WRAPPER_MIXER_INSTANTIATE(T) \
-VCL_DEFINE_SPECIALIZATION vcl_string mbl_data_wrapper_mixer<T >::is_a() const \
-{ return vcl_string("mbl_data_wrapper_mixer<" #T ">"); } \
+VCL_DEFINE_SPECIALIZATION std::string mbl_data_wrapper_mixer<T >::is_a() const \
+{ return std::string("mbl_data_wrapper_mixer<" #T ">"); } \
 template class mbl_data_wrapper_mixer< T >
 
 #endif // mbl_data_wrapper_mixer_hxx_

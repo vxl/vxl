@@ -1,42 +1,44 @@
 #include "bvxm_illum_util.h"
 
-#include <vcl_fstream.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <fstream>
 #include <vcl_cassert.h>
 #include <vnl/algo/vnl_svd.h>
-#include <vcl_iostream.h>
+#include <iostream>
 bool bvxm_illum_util::
-load_surface_nhbds(vcl_string const& path,
-                   vcl_vector<vcl_vector<vnl_matrix<float> > >& nhds)
+load_surface_nhbds(std::string const& path,
+                   std::vector<std::vector<vnl_matrix<float> > >& nhds)
 {
-  vcl_ifstream is(path.c_str());
+  std::ifstream is(path.c_str());
   if (!is.is_open())
   {
-    vcl_cerr << "In bvxm_illum_util::load_surface_nhbds(.) - "
+    std::cerr << "In bvxm_illum_util::load_surface_nhbds(.) - "
              <<"neighborhood path is not valid\n";
     return false;
   }
 
   unsigned dim, ntracks;
-  vcl_string temp;
+  std::string temp;
   is >> temp;
   if (temp!="dim:"){
-    vcl_cerr << "In bvxm_illum_util::load_surface_nhbds(.) - "
+    std::cerr << "In bvxm_illum_util::load_surface_nhbds(.) - "
              <<"file parse error\n";
     return false;
   }
   is >> dim;
   is >> temp;
   if (temp!="n_tracks:"){
-    vcl_cerr << "In bvxm_illum_util::load_surface_nhbds(.) - "
+    std::cerr << "In bvxm_illum_util::load_surface_nhbds(.) - "
              <<"file parse error\n";
     return false;
   }
   is >> ntracks;
   for (unsigned i = 0; i<ntracks; ++i){
-    vcl_vector<vnl_matrix<float> > nbs;
+    std::vector<vnl_matrix<float> > nbs;
     is >> temp;
     if (temp!="n_i:") {
-      vcl_cerr << "In bvxm_illum_util::load_surface_nhbds(.) - "
+      std::cerr << "In bvxm_illum_util::load_surface_nhbds(.) - "
                <<"file parse error\n";
       return false;
     }
@@ -54,22 +56,22 @@ load_surface_nhbds(vcl_string const& path,
 }
 
 bool
-bvxm_illum_util::load_illumination_dirs(vcl_string const& path,
-                                        vcl_vector<vnl_double_3>& ill_dirs)
+bvxm_illum_util::load_illumination_dirs(std::string const& path,
+                                        std::vector<vnl_double_3>& ill_dirs)
 {
-  vcl_ifstream is(path.c_str());
+  std::ifstream is(path.c_str());
   if (!is.is_open())
   {
-    vcl_cerr << "In bvxm_illum_util::load_illumination_dirs(.) - "
+    std::cerr << "In bvxm_illum_util::load_illumination_dirs(.) - "
              <<"illumination dir path is not valid\n";
     return false;
   }
   ill_dirs.clear();
-  vcl_string temp;
+  std::string temp;
   is >> temp;
   if (temp != "n_dirs:")
   {
-    vcl_cerr << "In bvxm_illum_util::load_illumination_dirs(.) - "
+    std::cerr << "In bvxm_illum_util::load_illumination_dirs(.) - "
              <<"invalid file syntax\n";
     return false;
   }
@@ -85,15 +87,15 @@ bvxm_illum_util::load_illumination_dirs(vcl_string const& path,
 }
 
 bool bvxm_illum_util::
-solve_lambertian_model(vcl_vector<vnl_double_3> const& ill_dirs,
-                       vcl_vector<double> const& intensities,
+solve_lambertian_model(std::vector<vnl_double_3> const& ill_dirs,
+                       std::vector<double> const& intensities,
                        vnl_double_4& model_params,
                        double& fitting_error)
 {
   // form the "A" and "b" matrices
   unsigned m = ill_dirs.size(), n = 3;
   if (m<4) {
-    vcl_cerr << "In bvxm_illum_util::solve_lambertian_model(.) - "
+    std::cerr << "In bvxm_illum_util::solve_lambertian_model(.) - "
              <<"insufficient number of illumination dirs\n";
     return false;
   }
@@ -127,7 +129,7 @@ solve_lambertian_model(vcl_vector<vnl_double_3> const& ill_dirs,
   vnl_matrix<double> Ainv = svd.inverse();
 
   vnl_diag_matrix<double> D = svd.W();
-  vcl_cout << "Singular values\n" << D << '\n';
+  std::cout << "Singular values\n" << D << '\n';
 
   model_params = Ainv*b;
 
@@ -141,7 +143,7 @@ solve_lambertian_model(vcl_vector<vnl_double_3> const& ill_dirs,
     double Io = intensities[j];
     var += (Im-Io)*(Im-Io);
   }
-  fitting_error = vcl_sqrt(var/m);
+  fitting_error = std::sqrt(var/m);
   return true;
 }
 

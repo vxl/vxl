@@ -4,11 +4,13 @@
 #include <vnl/vnl_vector.h>
 #include <vnl/algo/vnl_svd.h>
 
-#include <vcl_iostream.h>
-#include <vcl_vector.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iostream>
+#include <vector>
 #include <vcl_cassert.h>
 
-rrel_linear_regression::rrel_linear_regression( const vcl_vector< vnl_vector<double> >& pts,
+rrel_linear_regression::rrel_linear_regression( const std::vector< vnl_vector<double> >& pts,
                                                 bool use_intercept )
   : rand_vars_( pts.size() ),
     ind_vars_( pts.size() )
@@ -47,7 +49,7 @@ rrel_linear_regression::rrel_linear_regression( const vcl_vector< vnl_vector<dou
     }
   }
   if ( param_dof() > num_pts ) {
-    vcl_cerr << "\nrrel_linear_regression::rrel_linear_regression  WARNING:  DoF is greater than\n"
+    std::cerr << "\nrrel_linear_regression::rrel_linear_regression  WARNING:  DoF is greater than\n"
              << "the number of data points.  An infinite set of equally valid\n"
              << "solutions exists.\n";
   }
@@ -55,13 +57,13 @@ rrel_linear_regression::rrel_linear_regression( const vcl_vector< vnl_vector<dou
 }
 
 // ctor that just copies the independent and dependent variables vectors.
-rrel_linear_regression::rrel_linear_regression( const vcl_vector< vnl_vector<double> >& ind_vars,
-                                                const vcl_vector< double >& dep_vars )
+rrel_linear_regression::rrel_linear_regression( const std::vector< vnl_vector<double> >& ind_vars,
+                                                const std::vector< double >& dep_vars )
   : rand_vars_(dep_vars), ind_vars_(ind_vars)
 {
   set_param_dof( ind_vars_[0].size() );
   if ( param_dof() > ind_vars.size() ) {
-    vcl_cerr << "rrel_linear_regression::rrel_linear_regression  WARNING:  DoF is greater than\n"
+    std::cerr << "rrel_linear_regression::rrel_linear_regression  WARNING:  DoF is greater than\n"
              << "the number of data points.  An infinite set of solutions exists.\n";
   }
   set_num_samples_for_fit( param_dof() );
@@ -85,11 +87,11 @@ rrel_linear_regression::num_samples( ) const
 //  is returned.  Otherwise, params = A^{-1} b and true is returned.
 //
 bool
-rrel_linear_regression::fit_from_minimal_set( const vcl_vector<int>& point_indices,
+rrel_linear_regression::fit_from_minimal_set( const std::vector<int>& point_indices,
                                               vnl_vector<double>& params ) const
 {
   if ( point_indices.size() != param_dof() ) {
-    vcl_cerr << "rrel_linear_regression::fit_from_minimal_sample  The number of point "
+    std::cerr << "rrel_linear_regression::fit_from_minimal_sample  The number of point "
              << "indices must agree with the fit degrees of freedom.\n";
     return false;
   }
@@ -116,7 +118,7 @@ rrel_linear_regression::fit_from_minimal_set( const vcl_vector<int>& point_indic
 
 void
 rrel_linear_regression::compute_residuals( const vnl_vector<double>& params,
-                                           vcl_vector<double>& residuals ) const
+                                           std::vector<double>& residuals ) const
 {
   assert( residuals.size() == rand_vars_.size() );
 
@@ -129,7 +131,7 @@ rrel_linear_regression::compute_residuals( const vnl_vector<double>& params,
 bool
 rrel_linear_regression::weighted_least_squares_fit( vnl_vector<double>& params,
                                                     vnl_matrix<double>& norm_covar,
-                                                    const vcl_vector<double>* weights ) const
+                                                    const std::vector<double>* weights ) const
 {
   // If params and cofact are NULL pointers and the fit is successful,
   // this function will allocate a new vector and a new
@@ -168,7 +170,7 @@ rrel_linear_regression::weighted_least_squares_fit( vnl_vector<double>& params,
 
   vnl_svd<double> svd( sumProds, 1.0e-8 );
   if ( (unsigned int)svd.rank() < param_dof() ) {
-    vcl_cerr << "rrel_linear_regression::WeightedLeastSquaresFit --- singularity!\n";
+    std::cerr << "rrel_linear_regression::WeightedLeastSquaresFit --- singularity!\n";
     return false;
   }
   else {
@@ -184,12 +186,12 @@ rrel_linear_regression::weighted_least_squares_fit( vnl_vector<double>& params,
 void
 rrel_linear_regression::print_points() const
 {
-  vcl_cout << "\nrrel_linear_regression::print_points:\n"
+  std::cout << "\nrrel_linear_regression::print_points:\n"
            << "  param_dof() = " << param_dof() << '\n'
            << "  num_pts = " << rand_vars_.size() << "\n\n"
            << " i   rand_vars_   ind_vars_\n"
            << " =   ==========   =========\n";
   for ( unsigned int i=0; i<rand_vars_.size(); ++i ) {
-    vcl_cout << ' ' << i << "   " << rand_vars_[i] << "    " << ind_vars_[i] << '\n';
+    std::cout << ' ' << i << "   " << rand_vars_[i] << "    " << ind_vars_[i] << '\n';
   }
 }

@@ -35,7 +35,9 @@
 //  Note: It should be fairly simple to provide an iterator type object
 //  which steps through the examples in a standard STL way by using this class.
 
-#include <vcl_string.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <string>
 
 template<class T>
 class mbl_data_wrapper
@@ -74,10 +76,10 @@ class mbl_data_wrapper
   virtual mbl_data_wrapper< T >* clone() const = 0;
 
   //: Name of the class
-  virtual vcl_string is_a() const =0;
+  virtual std::string is_a() const =0;
 
   //: True if this is (or is derived from) class named s
-  virtual bool is_class(vcl_string const& s) const =0;
+  virtual bool is_class(std::string const& s) const =0;
 };
 
 #endif // mbl_data_wrapper_h

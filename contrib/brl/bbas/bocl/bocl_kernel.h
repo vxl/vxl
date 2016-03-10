@@ -10,9 +10,11 @@
 //  Modifications
 //   Andrew Miller - 7 Dec 2010 - moved to BOCL, added some more functionality
 // \endverbatim
-#include <vcl_string.h>
-#include <vcl_vector.h>
-#include <vcl_cstddef.h> // for std::size_t
+#include <string>
+#include <vector>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <cstddef> // for std::size_t
 #include "bocl_cl.h"
 #include "bocl_utils.h"
 
@@ -21,15 +23,15 @@ class bocl_mem;
 //:  High level wrapper for an Opencl cl_kernel object.
 //  - keeps ref to the context and device_id for which this kernel is created
 //  - can create a kernel from source and device like the following:
-//    bocl_kernel render(context, device_id, vcl_vector<string> render_srcs, "render_kernel", "-DNVIDIA", "render_kernel");
+//    bocl_kernel render(context, device_id, std::vector<string> render_srcs, "render_kernel", "-DNVIDIA", "render_kernel");
 //  - for each arg... render.set_arg(bocl_mem_buffer)
 //  - for each local arg... render.set_local_arg(bocl_mem_buffer)
 //  - render.execute(cmdQueue, localThreads, globalThreads);
 //
 //  NOTE: local memory arguments must come after bocl_mem arguments;
-//        this could be fixed with a vcl_map<bocl_mem*, vcl_size_t> object
+//        this could be fixed with a std::map<bocl_mem*, std::size_t> object
 //        that just interprets null keys as local memory args instead of the two
-//        vcl_vectors currently implemented
+//        std::vectors currently implemented
 
 class bocl_kernel
 {
@@ -41,30 +43,30 @@ class bocl_kernel
   //: create kernel from a list of sources, and a kernel name, and an ID
   bool create_kernel( cl_context* context,
                       cl_device_id* device,
-                      vcl_vector<vcl_string> src_paths,
-                      vcl_string const& kernel_name,
-                      vcl_string options,
-                      vcl_string id);
+                      std::vector<std::string> src_paths,
+                      std::string const& kernel_name,
+                      std::string options,
+                      std::string id);
 
   //: create kernel from string source
   bool create_kernel( const cl_context& context,
                       cl_device_id* device,
-                      vcl_string const& src,
-                      vcl_string const& kernel_name,
-                      vcl_string options,
-                      vcl_string id );
+                      std::string const& src,
+                      std::string const& kernel_name,
+                      std::string options,
+                      std::string id );
 
   //: execute this kernel on given command queue with given workspace size
   bool execute(const cl_command_queue& cmd_queue, cl_uint dim,
-               vcl_size_t* local_threads,
-               vcl_size_t* global_threads,
-               vcl_size_t* global_offsets=NULL);
+               std::size_t* local_threads,
+               std::size_t* global_threads,
+               std::size_t* global_offsets=NULL);
 
   //: set a bocl_mem buffer arg (pushes it on the back)
   bool set_arg(bocl_mem* buffer);
 
   //: sets a local arg of size "size"
-  bool set_local_arg(vcl_size_t size);
+  bool set_local_arg(std::size_t size);
 
   bool clear_args() { args_.clear(); local_args_.clear(); return true; }
 
@@ -72,7 +74,7 @@ class bocl_kernel
   cl_kernel& kernel() { return kernel_; }
 
   //: returns the string ID
-  vcl_string id() const { return id_; }
+  std::string id() const { return id_; }
 
   //: returns the number of arguments that you've given this kernel
   int arg_cnt() const { return (int)args_.size() + (int)local_args_.size(); }
@@ -88,14 +90,14 @@ class bocl_kernel
   //: returns local memory used by a single instance of kernel
   unsigned long local_mem_size();
   //: returns maximal workgroup size for this kernel
-  vcl_size_t workgroup_size();
+  std::size_t workgroup_size();
   //: returns a string of the build log for this program.
-  vcl_string build_log();
+  std::string build_log();
   //: returns program binary associated with kernel (NVIDIA case returns PTX string)
-  vcl_string program_binaries();
+  std::string program_binaries();
 
   //: return program source code - makes interpreting build errors easier
-  vcl_string source() { return prog_; }
+  std::string source() { return prog_; }
 
  private:
 
@@ -109,16 +111,16 @@ class bocl_kernel
   cl_event  ceEvent_;
 
   //: pointers to bocl_mem buffers that this kernel was most recently passed
-  vcl_vector<bocl_mem*> args_;
+  std::vector<bocl_mem*> args_;
 
   //: list of local args
-  vcl_vector<vcl_size_t> local_args_;
+  std::vector<std::size_t> local_args_;
 
   //: ID for error printing
-  vcl_string id_;
+  std::string id_;
 
   //: source string
-  vcl_string prog_;
+  std::string prog_;
 
   //: OpenCL context (reference)
   cl_context* context_;
@@ -127,9 +129,9 @@ class bocl_kernel
   cl_device_id* device_;
 
   //: for creating kernels from a list of sources
-  bool load_kernel_source(vcl_string const& path);
-  bool append_process_kernels(vcl_string const& path);
-  bool build_kernel_program(cl_program &program, vcl_string options);
+  bool load_kernel_source(std::string const& path);
+  bool append_process_kernels(std::string const& path);
+  bool build_kernel_program(cl_program &program, std::string options);
 };
 
 #endif

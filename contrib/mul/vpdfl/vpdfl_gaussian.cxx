@@ -16,9 +16,11 @@
 #include "vpdfl_gaussian.h"
 
 #include <vcl_cassert.h>
-#include <vcl_cstdlib.h>
-#include <vcl_string.h>
-#include <vcl_cmath.h>
+#include <cstdlib>
+#include <string>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <cmath>
 
 #include <vsl/vsl_indent.h>
 #include <vnl/vnl_math.h>
@@ -84,9 +86,9 @@ void vpdfl_gaussian::calcLogK()
   const double *v_data = evals_.data_block();
   int n = n_dims();
   double log_v_sum = 0.0;
-  for (int i=0;i<n;i++) log_v_sum+=vcl_log(v_data[i]);
+  for (int i=0;i<n;i++) log_v_sum+=std::log(v_data[i]);
 
-  log_k_ = -0.5 * (n*vcl_log(vnl_math::twopi) + log_v_sum);
+  log_k_ = -0.5 * (n*std::log(vnl_math::twopi) + log_v_sum);
 }
 
 //: Initialise safely
@@ -203,9 +205,9 @@ double vpdfl_gaussian::dx_sigma_dx(const vnl_vector<double>& x) const
  #ifndef NDEBUG
   if (n!=x.size())
   {
-    vcl_cerr<<"ERROR: vpdfl_gaussian::dx_sigma_dx: Target vector has "
+    std::cerr<<"ERROR: vpdfl_gaussian::dx_sigma_dx: Target vector has "
             <<n<<" dimensions, not the required "<<n_dims()<<'\n';
-    vcl_abort();
+    std::abort();
   }
 #endif
 
@@ -268,7 +270,7 @@ void vpdfl_gaussian::gradient(vnl_vector<double>& g,
     b_data[i]/=v_data[i];
   }
 
-  p = vcl_exp(log_k() - 0.5*sum);
+  p = std::exp(log_k() - 0.5*sum);
 
   b_*=(-1.0*p);
 
@@ -299,7 +301,7 @@ void vpdfl_gaussian::nearest_plausible(vnl_vector<double>& x, double log_p_min) 
 
   if (sd_limit_sqr >= x_dist_sqr) return;
 
-  const double corrective_factor = vcl_sqrt(sd_limit_sqr / x_dist_sqr);
+  const double corrective_factor = std::sqrt(sd_limit_sqr / x_dist_sqr);
 
   for (unsigned i=0;i<n;++i)
     x(i) = ((x(i)-mean()(i)) * corrective_factor) + mean()(i);
@@ -309,9 +311,9 @@ void vpdfl_gaussian::nearest_plausible(vnl_vector<double>& x, double log_p_min) 
 // Method: is_a
 //=======================================================================
 
-vcl_string vpdfl_gaussian::is_a() const
+std::string vpdfl_gaussian::is_a() const
 {
-  static vcl_string class_name_ = "vpdfl_gaussian";
+  static std::string class_name_ = "vpdfl_gaussian";
   return class_name_;
 }
 
@@ -319,7 +321,7 @@ vcl_string vpdfl_gaussian::is_a() const
 // Method: is_class
 //=======================================================================
 
-bool vpdfl_gaussian::is_class(vcl_string const& s) const
+bool vpdfl_gaussian::is_class(std::string const& s) const
 {
   return vpdfl_pdf_base::is_class(s) || s==vpdfl_gaussian::is_a();
 }
@@ -347,7 +349,7 @@ vpdfl_pdf_base* vpdfl_gaussian::clone() const
 //=======================================================================
 
 #if 0 // commented out
-static void ShowStartVec(vcl_ostream& os, const vnl_vector<double>& v)
+static void ShowStartVec(std::ostream& os, const vnl_vector<double>& v)
 {
   int n = 3;
   if (n>v.size()) n=v.size();
@@ -357,7 +359,7 @@ static void ShowStartVec(vcl_ostream& os, const vnl_vector<double>& v)
   os<<")\n";
 }
 
-static void ShowStartMat(vcl_ostream& os, const vnl_matrix<double>& A)
+static void ShowStartMat(std::ostream& os, const vnl_matrix<double>& A)
 {
   os << A.rows() << " by " << A.cols() << " Matrix\n";
 
@@ -381,7 +383,7 @@ static void ShowStartMat(vcl_ostream& os, const vnl_matrix<double>& A)
 }
 #endif // commented out
 
-void vpdfl_gaussian::print_summary(vcl_ostream& os) const
+void vpdfl_gaussian::print_summary(std::ostream& os) const
 {
   vpdfl_pdf_base::print_summary(os);
   os << '\n';
@@ -415,14 +417,14 @@ void vpdfl_gaussian::b_read(vsl_b_istream& bfs)
 {
   if (!bfs) return;
 
-  vcl_string name;
+  std::string name;
   vsl_b_read(bfs,name);
   if (name != is_a())
   {
-    vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, vpdfl_gaussian &)\n"
+    std::cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, vpdfl_gaussian &)\n"
              << "           Attempted to load object of type "
              << name <<" into object of type " << is_a() << '\n';
-    bfs.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
+    bfs.is().clear(std::ios::badbit); // Set an unrecoverable IO error on stream
     return;
   }
 
@@ -437,9 +439,9 @@ void vpdfl_gaussian::b_read(vsl_b_istream& bfs)
       vsl_b_read(bfs,log_k_);
       break;
     default:
-      vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, vpdfl_gaussian &)\n"
+      std::cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, vpdfl_gaussian &)\n"
                << "           Unknown version number "<< version << '\n';
-      bfs.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
+      bfs.is().clear(std::ios::badbit); // Set an unrecoverable IO error on stream
       return;
   }
 }

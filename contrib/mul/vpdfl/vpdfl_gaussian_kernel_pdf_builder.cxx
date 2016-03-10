@@ -5,7 +5,9 @@
 
 #include "vpdfl_gaussian_kernel_pdf_builder.h"
 
-#include <vcl_string.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <string>
 
 #include <vpdfl/vpdfl_gaussian_kernel_pdf.h>
 
@@ -36,16 +38,16 @@ vpdfl_pdf_base* vpdfl_gaussian_kernel_pdf_builder::new_model() const
 // Method: is_a
 //=======================================================================
 
-vcl_string vpdfl_gaussian_kernel_pdf_builder::is_a() const
+std::string vpdfl_gaussian_kernel_pdf_builder::is_a() const
 {
-  return vcl_string("vpdfl_gaussian_kernel_pdf_builder");
+  return std::string("vpdfl_gaussian_kernel_pdf_builder");
 }
 
 //=======================================================================
 // Method: is_class
 //=======================================================================
 
-bool vpdfl_gaussian_kernel_pdf_builder::is_class(vcl_string const& s) const
+bool vpdfl_gaussian_kernel_pdf_builder::is_class(std::string const& s) const
 {
   return vpdfl_kernel_pdf_builder::is_class(s) || s==vpdfl_gaussian_kernel_pdf_builder::is_a();
 }

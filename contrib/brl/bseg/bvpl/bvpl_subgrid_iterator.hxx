@@ -44,7 +44,7 @@ bvpl_subgrid_iterator<T>& bvpl_subgrid_iterator<T>::operator++()
     if (++y + y_r == int(grid_->grid_size().y())) {
       y=offset_.y();
       // time to move to the next slab
-      vcl_cout << ". " ;
+      std::cout << ". " ;
       ++iter_;
       ++ global_z;
     }
@@ -57,7 +57,7 @@ bvpl_subgrid_iterator<T>& bvpl_subgrid_iterator<T>::operator++()
 template <class T>
 bvpl_subgrid_iterator<T>& bvpl_subgrid_iterator<T>::operator--()
 {
-  vcl_cout << "Warning in  bvpl_subgrid_iterator::operator--: this operator has not been tested\n";
+  std::cout << "Warning in  bvpl_subgrid_iterator::operator--: this operator has not been tested\n";
 
   int x_r = (min_point_.x()<0)?min_point_.x():0;
   int y_r = (min_point_.y()<0)?min_point_.y():0;

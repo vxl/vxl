@@ -4,20 +4,21 @@
 
 #include "vbl_array_2d.h"
 
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <iostream>
 
 template<class T>
-vcl_ostream& operator<<(vcl_ostream &os, vbl_array_2d<T> const &array)
+std::ostream& operator<<(std::ostream &os, vbl_array_2d<T> const &array)
 {
   typedef typename vbl_array_2d<T>::size_type size_type;
   os << "vbl_array_2d [";
   for ( size_type i=0; i< array.rows(); i++)
   {
-    os << vcl_endl << "   ";
+    os << std::endl << "   ";
     for ( size_type j=0; j< array.columns(); j++)
       os << ' ' << array(i,j);
   }
-  os << "\n             ]" << vcl_endl;
+  os << "\n             ]" << std::endl;
 
   return os;
 }
@@ -25,6 +26,6 @@ vcl_ostream& operator<<(vcl_ostream &os, vbl_array_2d<T> const &array)
 #undef VBL_ARRAY_2D_INSTANTIATE
 #define VBL_ARRAY_2D_INSTANTIATE(type) \
 template class vbl_array_2d<type >;\
-template vcl_ostream& operator<< (vcl_ostream& , vbl_array_2d<type > const& )
+template std::ostream& operator<< (std::ostream& , vbl_array_2d<type > const& )
 
 #endif // vbl_array_2d_hxx_

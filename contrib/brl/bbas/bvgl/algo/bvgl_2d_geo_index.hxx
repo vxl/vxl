@@ -99,7 +99,7 @@ void construct_sub_tree_poly(bvgl_2d_geo_index_node_sptr parent, double const& m
 template <class Type>
 bvgl_2d_geo_index_node_sptr bvgl_2d_geo_index::construct_tree(vgl_box_2d<double> const& bbox, double const& min_size)
 {
-  vcl_cout << "bounding box for bvgl_2d_geo_index root: " << bbox << vcl_endl;
+  std::cout << "bounding box for bvgl_2d_geo_index root: " << bbox << std::endl;
   bvgl_2d_geo_index_node_sptr root = new bvgl_2d_geo_index_node<Type>(bbox);
   // recursively add children
   construct_sub_tree<Type>(root, min_size);
@@ -109,7 +109,7 @@ bvgl_2d_geo_index_node_sptr bvgl_2d_geo_index::construct_tree(vgl_box_2d<double>
 template <class Type>
 bvgl_2d_geo_index_node_sptr bvgl_2d_geo_index::construct_tree(vgl_box_2d<float> const& bbox, float const& min_size)
 {
-  vcl_cout << "bounding box for bvgl_2d_geo_index root: " << bbox << vcl_endl;
+  std::cout << "bounding box for bvgl_2d_geo_index root: " << bbox << std::endl;
   vgl_box_2d<double> bbox_double;
   bvgl_2d_geo_index::convert_box(bbox, bbox_double);
   bvgl_2d_geo_index_node_sptr root = new bvgl_2d_geo_index_node<Type>(bbox_double);
@@ -124,12 +124,12 @@ bvgl_2d_geo_index_node_sptr bvgl_2d_geo_index::construct_tree(vgl_box_2d<double>
 {
   bvgl_2d_geo_index_node_sptr root;
   if (vgl_intersection(bbox, poly)) {
-    vcl_cout << "bounding box for bvgl_2d_geo_index root: " << bbox << vcl_endl;
+    std::cout << "bounding box for bvgl_2d_geo_index root: " << bbox << std::endl;
     root = new bvgl_2d_geo_index_node<Type>(bbox);
     construct_sub_tree_poly<Type>(root, min_size, poly);
   }
   else
-    vcl_cout << "bounding box " << bbox << " and polygon does not intersect, return an empty tree" << vcl_endl;
+    std::cout << "bounding box " << bbox << " and polygon does not intersect, return an empty tree" << std::endl;
   return root;
 }
 
@@ -138,7 +138,7 @@ bvgl_2d_geo_index_node_sptr bvgl_2d_geo_index::construct_tree(vgl_box_2d<float> 
 {
   bvgl_2d_geo_index_node_sptr root;
   if (vgl_intersection(bbox, poly)) {
-    vcl_cout << "bounding box for bvgl_2d_geo_index root: " << bbox << vcl_endl;
+    std::cout << "bounding box for bvgl_2d_geo_index root: " << bbox << std::endl;
     vgl_box_2d<double> bbox_double;
     vgl_polygon<double> poly_double;
     double min_sz_double = (double)min_size;
@@ -148,13 +148,13 @@ bvgl_2d_geo_index_node_sptr bvgl_2d_geo_index::construct_tree(vgl_box_2d<float> 
     construct_sub_tree_poly<Type>(root, min_sz_double, poly_double);
   }
   else
-    vcl_cout << "bounding box " << bbox << " and polygon does not intersect, return an empty tree" << vcl_endl;
+    std::cout << "bounding box " << bbox << " and polygon does not intersect, return an empty tree" << std::endl;
   return root;
 }
 
 // construct a tree from text file
 template <class Type>
-bvgl_2d_geo_index_node_sptr read_and_construct_node(vcl_ifstream& ifs, bvgl_2d_geo_index_node_sptr parent)
+bvgl_2d_geo_index_node_sptr read_and_construct_node(std::ifstream& ifs, bvgl_2d_geo_index_node_sptr parent)
 {
   double x, y;
   ifs >> x;  ifs >> y;  vgl_point_2d<double> min_pt(x, y);
@@ -163,7 +163,7 @@ bvgl_2d_geo_index_node_sptr read_and_construct_node(vcl_ifstream& ifs, bvgl_2d_g
   bvgl_2d_geo_index_node_sptr node = new bvgl_2d_geo_index_node<Type>(bbox, parent);
   unsigned nc;
   ifs >> nc;
-  vcl_vector<unsigned> existence(nc);
+  std::vector<unsigned> existence(nc);
   for (unsigned i = 0; i < nc; i++)
     ifs >> existence[i];
   for (unsigned i = 0; i < nc; i++) {
@@ -176,9 +176,9 @@ bvgl_2d_geo_index_node_sptr read_and_construct_node(vcl_ifstream& ifs, bvgl_2d_g
 }
 
 template <class Type>
-bvgl_2d_geo_index_node_sptr bvgl_2d_geo_index::read_and_construct(vcl_string const& file_name, double& min_size)
+bvgl_2d_geo_index_node_sptr bvgl_2d_geo_index::read_and_construct(std::string const& file_name, double& min_size)
 {
-  vcl_ifstream ifs(file_name.c_str());
+  std::ifstream ifs(file_name.c_str());
   ifs >> min_size;
   bvgl_2d_geo_index_node_sptr dummy_parent;
   bvgl_2d_geo_index_node_sptr root = read_and_construct_node<Type>(ifs, dummy_parent);
@@ -191,6 +191,6 @@ template bvgl_2d_geo_index_node_sptr bvgl_2d_geo_index::construct_tree<T>(vgl_bo
 template bvgl_2d_geo_index_node_sptr bvgl_2d_geo_index::construct_tree<T>(vgl_box_2d<float> const& bbox, float const& min_size);\
 template bvgl_2d_geo_index_node_sptr bvgl_2d_geo_index::construct_tree<T>(vgl_box_2d<double> const& bbox, double const& min_size, vgl_polygon<double> const& poly);\
 template bvgl_2d_geo_index_node_sptr bvgl_2d_geo_index::construct_tree<T>(vgl_box_2d<float> const& bbox, float const& min_size, vgl_polygon<float> const& poly);\
-template bvgl_2d_geo_index_node_sptr bvgl_2d_geo_index::read_and_construct<T>(vcl_string const& file_name, double& min_size);
+template bvgl_2d_geo_index_node_sptr bvgl_2d_geo_index::read_and_construct<T>(std::string const& file_name, double& min_size);
 
 #endif // bvgl_2d_geo_index_hxx_

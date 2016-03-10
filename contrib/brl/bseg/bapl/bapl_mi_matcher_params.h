@@ -12,7 +12,9 @@
 //   <none>
 // \endverbatim
 
-#include <vcl_iosfwd.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iosfwd>
 
 //:A block of parameters for the bapl_mi_matcher class
 // The member variable are kept public here for easy access,
@@ -57,6 +59,6 @@ class bapl_mi_matcher_params
 };
 
 //: Output stream operator for printing the parameter values
-vcl_ostream& operator<<(vcl_ostream& os, const bapl_mi_matcher_params& params);
+std::ostream& operator<<(std::ostream& os, const bapl_mi_matcher_params& params);
 
 #endif // bapl_mi_matcher_params_h_

@@ -1,4 +1,5 @@
-#include <vcl_cmath.h>
+#include <vcl_compiler.h>
+#include <cmath>
 
 #include <vgui/vgui_gl.h>
 #include <vgui/vgui_glut.h>
@@ -16,8 +17,8 @@ void display()
 {
   int counter = 0;
   while (true) {
-    load->set_image(int(512*(1+0.5*vcl_cos(counter/10.0))),
-                    int(512*(1+0.5*vcl_sin(counter/ 7.0))));
+    load->set_image(int(512*(1+0.5*std::cos(counter/10.0))),
+                    int(512*(1+0.5*std::sin(counter/ 7.0))));
     ++counter;
 
     shell->handle(vgui_DRAW);

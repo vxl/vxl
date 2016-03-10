@@ -1,7 +1,8 @@
 // Some tests for vgl_ray_3d
 // J.L. Mundy Sept. 17, 2010
 
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <iostream>
 #include <testlib/testlib_test.h>
 #include <vgl/vgl_ray_3d.h>
 #include <vgl/vgl_closest_point.h>
@@ -37,7 +38,7 @@ static void test_operations()
 
 void test_ray_3d()
 {
-  vcl_cout << "*****************************\n"
+  std::cout << "*****************************\n"
            << " Testing vgl_ray_3d\n"
            << "*****************************\n\n";
 

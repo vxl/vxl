@@ -17,9 +17,11 @@
 #include <bvxm/grid/bvxm_opinion.h>
 #include <bsta/bsta_gauss_sf1.h>
 #include <bsta/bsta_attributes.h>
-#include <vcl_limits.h>
+#include <limits>
 #ifdef DEBUG
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iostream>
 #endif
 
 template <class T>
@@ -93,7 +95,7 @@ void bvpl_local_max_functor<T>::apply(T& val, bvpl_kernel_dispatch& /*d*/) // TO
   if (greater_than(val,max_)) {
     max_=val;
 #ifdef DEBUG
-    vcl_cout << "New Max " << val;
+    std::cout << "New Max " << val;
 #endif
   }
 }
@@ -120,7 +122,7 @@ T bvpl_local_max_functor<T>::result( T cur_val)
 template <class T>
 bool bvpl_local_max_functor<T>::greater_than(const T& val1, const T& val2)
 {
-  return val1-val2 > vcl_numeric_limits<T>::epsilon();
+  return val1-val2 > std::numeric_limits<T>::epsilon();
 }
 
 //: Min value

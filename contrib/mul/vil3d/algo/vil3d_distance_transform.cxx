@@ -10,7 +10,9 @@
 #include <vil3d/vil3d_slice.h>
 #include <vil/vil_fill.h>
 #include <vcl_cassert.h>
-#include <vcl_algorithm.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <algorithm>
 
 //: Compute signed distance transform in 3d from zeros in original image.
 //  Image is assumed to be filled with max_dist
@@ -33,8 +35,8 @@ void vil3d_signed_distance_transform(vil3d_image_view<float>& image, const float
   vil3d_distance_transform(image,distance_link_i,distance_link_j,distance_link_k);
 
   // set all voxels in mask to negative values
-  vcl_ptrdiff_t istep0 = image.istep();
-  vcl_ptrdiff_t istep2 = image2.istep();
+  std::ptrdiff_t istep0 = image.istep();
+  std::ptrdiff_t istep2 = image2.istep();
   float *p0 = image.origin_ptr();
   bool *p1 = image2.origin_ptr();
 
@@ -53,8 +55,8 @@ template<class T> void print_values(const vil_image_view<T> &img)
     for (int j = 0; j < img.nj(); j++)
     {
       for (int i = 0; i < img.ni(); i++)
-        vcl_cout << img(i,j) << ' ';
-      vcl_cout << vcl_endl;
+        std::cout << img(i,j) << ' ';
+      std::cout << std::endl;
     }
 }
 
@@ -64,8 +66,8 @@ template<class T> void print_values(const vil3d_image_view<T> &img)
     for (int j = 0; j < img.nj(); j++)
     {
       for (int i = 0; i < img.ni(); i++)
-        vcl_cout << img(i,j,k) << ' ';
-      vcl_cout << vcl_endl;
+        std::cout << img(i,j,k) << ' ';
+      std::cout << std::endl;
     }
 }
 
@@ -196,18 +198,18 @@ void vil3d_distance_transform_one_way(vil3d_image_view<float>& image,
   unsigned ni2 = ni-2;
   unsigned nj2 = nj-2;
 
-  vcl_ptrdiff_t istep = image.istep(), jstep = image.jstep(), kstep = image.kstep();
-  vcl_ptrdiff_t o1 = -istep, o2 = -jstep-istep, o3 = -jstep, o4 = -jstep+istep;
-  vcl_ptrdiff_t o5 = -kstep, o6 = -kstep-istep, o7 = -kstep-jstep-istep;
-  vcl_ptrdiff_t o8 = -kstep-jstep, o9 = -kstep-jstep+istep, o10 = -kstep+istep;
-  vcl_ptrdiff_t o11 = -kstep+jstep+istep, o12 = -kstep+jstep, o13 = -kstep+jstep-istep;
+  std::ptrdiff_t istep = image.istep(), jstep = image.jstep(), kstep = image.kstep();
+  std::ptrdiff_t o1 = -istep, o2 = -jstep-istep, o3 = -jstep, o4 = -jstep+istep;
+  std::ptrdiff_t o5 = -kstep, o6 = -kstep-istep, o7 = -kstep-jstep-istep;
+  std::ptrdiff_t o8 = -kstep-jstep, o9 = -kstep-jstep+istep, o10 = -kstep+istep;
+  std::ptrdiff_t o11 = -kstep+jstep+istep, o12 = -kstep+jstep, o13 = -kstep+jstep-istep;
 
   float *page0 = image.origin_ptr();
 
-  const float distance_link_ij=vcl_sqrt(distance_link_i*distance_link_i+distance_link_j*distance_link_j);
-  const float distance_link_ik=vcl_sqrt(distance_link_i*distance_link_i+distance_link_k*distance_link_k);
-  const float distance_link_jk=vcl_sqrt(distance_link_j*distance_link_j+distance_link_k*distance_link_k);
-  const float distance_link_ijk=vcl_sqrt(distance_link_i*distance_link_i+distance_link_j*distance_link_j+distance_link_k*distance_link_k);
+  const float distance_link_ij=std::sqrt(distance_link_i*distance_link_i+distance_link_j*distance_link_j);
+  const float distance_link_ik=std::sqrt(distance_link_i*distance_link_i+distance_link_k*distance_link_k);
+  const float distance_link_jk=std::sqrt(distance_link_j*distance_link_j+distance_link_k*distance_link_k);
+  const float distance_link_ijk=std::sqrt(distance_link_i*distance_link_i+distance_link_j*distance_link_j+distance_link_k*distance_link_k);
 
   // Process the first page
   float *p0 = page0 + istep;
@@ -215,7 +217,7 @@ void vil3d_distance_transform_one_way(vil3d_image_view<float>& image,
   // Process the first row of first page
   for (unsigned i=0;i<=ni2;++i,p0+=istep)
   {
-    *p0 = vcl_min(p0[-istep]+distance_link_i,*p0);
+    *p0 = std::min(p0[-istep]+distance_link_i,*p0);
   }
 
   // Process subsequent rows of first page
@@ -224,23 +226,23 @@ void vil3d_distance_transform_one_way(vil3d_image_view<float>& image,
   for (unsigned j=1;j<nj;++j,row0+=jstep)
   {
     // for first column - special case
-    *row0 = vcl_min(row0[o3]+distance_link_j,*row0);
-    *row0 = vcl_min(row0[o4]+distance_link_ij,*row0);
+    *row0 = std::min(row0[o3]+distance_link_j,*row0);
+    *row0 = std::min(row0[o4]+distance_link_ij,*row0);
 
     // for subsequent columns
     float *p0 = row0+istep;
     for (unsigned i=0;i<ni2;i++,p0+=istep)
     {
-      *p0 = vcl_min(p0[o1]+distance_link_i ,*p0);  // (-1,0)
-      *p0 = vcl_min(p0[o2]+distance_link_ij,*p0);  // (-1,-1)
-      *p0 = vcl_min(p0[o3]+distance_link_j ,*p0);  // (0,-1)
-      *p0 = vcl_min(p0[o4]+distance_link_ij,*p0);  // (1,-1)
+      *p0 = std::min(p0[o1]+distance_link_i ,*p0);  // (-1,0)
+      *p0 = std::min(p0[o2]+distance_link_ij,*p0);  // (-1,-1)
+      *p0 = std::min(p0[o3]+distance_link_j ,*p0);  // (0,-1)
+      *p0 = std::min(p0[o4]+distance_link_ij,*p0);  // (1,-1)
     }
 
     // for last column - special case
-    *p0 = vcl_min(p0[o1]+distance_link_i ,*p0);  // (-1,0)
-    *p0 = vcl_min(p0[o2]+distance_link_ij,*p0);  // (-1,-1)
-    *p0 = vcl_min(p0[o3]+distance_link_j ,*p0);  // (0,-1)
+    *p0 = std::min(p0[o1]+distance_link_i ,*p0);  // (-1,0)
+    *p0 = std::min(p0[o2]+distance_link_ij,*p0);  // (-1,-1)
+    *p0 = std::min(p0[o3]+distance_link_j ,*p0);  // (0,-1)
   }
 
   // process subsequent pages
@@ -250,30 +252,30 @@ void vil3d_distance_transform_one_way(vil3d_image_view<float>& image,
     row0 = page0;
 
     // first row is still special, and this is first column of first row
-    *row0 = vcl_min(row0[o5] +distance_link_k, *row0);
-    *row0 = vcl_min(row0[o10]+distance_link_ik,*row0);
-    *row0 = vcl_min(row0[o11]+distance_link_ijk,*row0);
-    *row0 = vcl_min(row0[o12]+distance_link_jk,*row0);
+    *row0 = std::min(row0[o5] +distance_link_k, *row0);
+    *row0 = std::min(row0[o10]+distance_link_ik,*row0);
+    *row0 = std::min(row0[o11]+distance_link_ijk,*row0);
+    *row0 = std::min(row0[o12]+distance_link_jk,*row0);
 
     float *p0 = row0+istep;
     // subsequent columns of first row
     for (unsigned i=0;i<ni2;i++,p0+=istep)
     {
-      *p0 = vcl_min(p0[o1] +distance_link_i ,*p0);
-      *p0 = vcl_min(p0[o5] +distance_link_k ,*p0);
-      *p0 = vcl_min(p0[o6] +distance_link_ik,*p0);
-      *p0 = vcl_min(p0[o10]+distance_link_ik,*p0);
-      *p0 = vcl_min(p0[o11]+distance_link_ijk,*p0);
-      *p0 = vcl_min(p0[o12]+distance_link_jk,*p0);
-      *p0 = vcl_min(p0[o13]+distance_link_ijk,*p0);
+      *p0 = std::min(p0[o1] +distance_link_i ,*p0);
+      *p0 = std::min(p0[o5] +distance_link_k ,*p0);
+      *p0 = std::min(p0[o6] +distance_link_ik,*p0);
+      *p0 = std::min(p0[o10]+distance_link_ik,*p0);
+      *p0 = std::min(p0[o11]+distance_link_ijk,*p0);
+      *p0 = std::min(p0[o12]+distance_link_jk,*p0);
+      *p0 = std::min(p0[o13]+distance_link_ijk,*p0);
     }
 
     // last column of first row
-    *p0 = vcl_min(p0[o1] +distance_link_i ,*p0);
-    *p0 = vcl_min(p0[o5] +distance_link_k ,*p0);
-    *p0 = vcl_min(p0[o6] +distance_link_ik,*p0);
-    *p0 = vcl_min(p0[o12]+distance_link_jk,*p0);
-    *p0 = vcl_min(p0[o13]+distance_link_ijk,*p0);
+    *p0 = std::min(p0[o1] +distance_link_i ,*p0);
+    *p0 = std::min(p0[o5] +distance_link_k ,*p0);
+    *p0 = std::min(p0[o6] +distance_link_ik,*p0);
+    *p0 = std::min(p0[o12]+distance_link_jk,*p0);
+    *p0 = std::min(p0[o13]+distance_link_ijk,*p0);
 
     // process subsequent rows
     row0 += jstep;
@@ -281,80 +283,80 @@ void vil3d_distance_transform_one_way(vil3d_image_view<float>& image,
     for (unsigned j=0;j<nj2;j++,row0+=jstep)
     {
       // again first column is special case
-      *row0 = vcl_min(row0[o3] +distance_link_j, *row0);
-      *row0 = vcl_min(row0[o4] +distance_link_ij,*row0);
-      *row0 = vcl_min(row0[o5] +distance_link_k, *row0);
-      *row0 = vcl_min(row0[o8] +distance_link_jk,*row0);
-      *row0 = vcl_min(row0[o9] +distance_link_ijk,*row0);
-      *row0 = vcl_min(row0[o10]+distance_link_ik,*row0);
-      *row0 = vcl_min(row0[o11]+distance_link_ijk,*row0);
-      *row0 = vcl_min(row0[o12]+distance_link_jk,*row0);
+      *row0 = std::min(row0[o3] +distance_link_j, *row0);
+      *row0 = std::min(row0[o4] +distance_link_ij,*row0);
+      *row0 = std::min(row0[o5] +distance_link_k, *row0);
+      *row0 = std::min(row0[o8] +distance_link_jk,*row0);
+      *row0 = std::min(row0[o9] +distance_link_ijk,*row0);
+      *row0 = std::min(row0[o10]+distance_link_ik,*row0);
+      *row0 = std::min(row0[o11]+distance_link_ijk,*row0);
+      *row0 = std::min(row0[o12]+distance_link_jk,*row0);
 
       // process subsequent columns
       p0 = row0 + istep;
       for (unsigned i=0;i<ni2;i++,p0+=istep)
       {
-        *p0 = vcl_min(p0[o1] +distance_link_i, *p0);
-        *p0 = vcl_min(p0[o2] +distance_link_ij,*p0);
-        *p0 = vcl_min(p0[o3] +distance_link_j, *p0);
-        *p0 = vcl_min(p0[o4] +distance_link_ij,*p0);
-        *p0 = vcl_min(p0[o5] +distance_link_k, *p0);
-        *p0 = vcl_min(p0[o6] +distance_link_ik,*p0);
-        *p0 = vcl_min(p0[o7] +distance_link_ijk,*p0);
-        *p0 = vcl_min(p0[o8] +distance_link_jk,*p0);
-        *p0 = vcl_min(p0[o9] +distance_link_ijk,*p0);
-        *p0 = vcl_min(p0[o10]+distance_link_ik,*p0);
-        *p0 = vcl_min(p0[o11]+distance_link_ijk,*p0);
-        *p0 = vcl_min(p0[o12]+distance_link_jk,*p0);
-        *p0 = vcl_min(p0[o13]+distance_link_ijk,*p0);
+        *p0 = std::min(p0[o1] +distance_link_i, *p0);
+        *p0 = std::min(p0[o2] +distance_link_ij,*p0);
+        *p0 = std::min(p0[o3] +distance_link_j, *p0);
+        *p0 = std::min(p0[o4] +distance_link_ij,*p0);
+        *p0 = std::min(p0[o5] +distance_link_k, *p0);
+        *p0 = std::min(p0[o6] +distance_link_ik,*p0);
+        *p0 = std::min(p0[o7] +distance_link_ijk,*p0);
+        *p0 = std::min(p0[o8] +distance_link_jk,*p0);
+        *p0 = std::min(p0[o9] +distance_link_ijk,*p0);
+        *p0 = std::min(p0[o10]+distance_link_ik,*p0);
+        *p0 = std::min(p0[o11]+distance_link_ijk,*p0);
+        *p0 = std::min(p0[o12]+distance_link_jk,*p0);
+        *p0 = std::min(p0[o13]+distance_link_ijk,*p0);
       }
 
       // last column
-      *p0 = vcl_min(p0[o1] +distance_link_i, *p0);
-      *p0 = vcl_min(p0[o2] +distance_link_ij,*p0);
-      *p0 = vcl_min(p0[o3] +distance_link_j, *p0);
-      *p0 = vcl_min(p0[o5] +distance_link_k, *p0);
-      *p0 = vcl_min(p0[o6] +distance_link_ik,*p0);
-      *p0 = vcl_min(p0[o7] +distance_link_ijk,*p0);
-      *p0 = vcl_min(p0[o8] +distance_link_jk,*p0);
-      *p0 = vcl_min(p0[o12]+distance_link_jk,*p0);
-      *p0 = vcl_min(p0[o13]+distance_link_ijk,*p0);
+      *p0 = std::min(p0[o1] +distance_link_i, *p0);
+      *p0 = std::min(p0[o2] +distance_link_ij,*p0);
+      *p0 = std::min(p0[o3] +distance_link_j, *p0);
+      *p0 = std::min(p0[o5] +distance_link_k, *p0);
+      *p0 = std::min(p0[o6] +distance_link_ik,*p0);
+      *p0 = std::min(p0[o7] +distance_link_ijk,*p0);
+      *p0 = std::min(p0[o8] +distance_link_jk,*p0);
+      *p0 = std::min(p0[o12]+distance_link_jk,*p0);
+      *p0 = std::min(p0[o13]+distance_link_ijk,*p0);
     }
 
     // process last row
 
     // process fist column of last row
-    *row0 = vcl_min(row0[o3] +distance_link_j, *row0);
-    *row0 = vcl_min(row0[o4] +distance_link_ij,*row0);
-    *row0 = vcl_min(row0[o5] +distance_link_k, *row0);
-    *row0 = vcl_min(row0[o8] +distance_link_jk,*row0);
-    *row0 = vcl_min(row0[o9] +distance_link_ijk,*row0);
-    *row0 = vcl_min(row0[o10]+distance_link_ik,*row0);
+    *row0 = std::min(row0[o3] +distance_link_j, *row0);
+    *row0 = std::min(row0[o4] +distance_link_ij,*row0);
+    *row0 = std::min(row0[o5] +distance_link_k, *row0);
+    *row0 = std::min(row0[o8] +distance_link_jk,*row0);
+    *row0 = std::min(row0[o9] +distance_link_ijk,*row0);
+    *row0 = std::min(row0[o10]+distance_link_ik,*row0);
 
     // subsequent columns of last row
     p0 = row0 + istep;
     for (unsigned i=0;i<ni2;i++,p0+=istep)
     {
-      *p0 = vcl_min(p0[o1] +distance_link_i, *p0);
-      *p0 = vcl_min(p0[o2] +distance_link_ij,*p0);
-      *p0 = vcl_min(p0[o3] +distance_link_j, *p0);
-      *p0 = vcl_min(p0[o4] +distance_link_ij,*p0);
-      *p0 = vcl_min(p0[o5] +distance_link_k, *p0);
-      *p0 = vcl_min(p0[o6] +distance_link_ik,*p0);
-      *p0 = vcl_min(p0[o7] +distance_link_ijk,*p0);
-      *p0 = vcl_min(p0[o8] +distance_link_jk,*p0);
-      *p0 = vcl_min(p0[o9] +distance_link_ijk,*p0);
-      *p0 = vcl_min(p0[o10]+distance_link_ik,*p0);
+      *p0 = std::min(p0[o1] +distance_link_i, *p0);
+      *p0 = std::min(p0[o2] +distance_link_ij,*p0);
+      *p0 = std::min(p0[o3] +distance_link_j, *p0);
+      *p0 = std::min(p0[o4] +distance_link_ij,*p0);
+      *p0 = std::min(p0[o5] +distance_link_k, *p0);
+      *p0 = std::min(p0[o6] +distance_link_ik,*p0);
+      *p0 = std::min(p0[o7] +distance_link_ijk,*p0);
+      *p0 = std::min(p0[o8] +distance_link_jk,*p0);
+      *p0 = std::min(p0[o9] +distance_link_ijk,*p0);
+      *p0 = std::min(p0[o10]+distance_link_ik,*p0);
     }
 
     // last column of last row
-    *p0 = vcl_min(p0[o1] +distance_link_i, *p0);
-    *p0 = vcl_min(p0[o2] +distance_link_ij,*p0);
-    *p0 = vcl_min(p0[o3] +distance_link_j, *p0);
-    *p0 = vcl_min(p0[o5] +distance_link_k, *p0);
-    *p0 = vcl_min(p0[o6] +distance_link_ik,*p0);
-    *p0 = vcl_min(p0[o7] +distance_link_ijk,*p0);
-    *p0 = vcl_min(p0[o8] +distance_link_jk,*p0);
+    *p0 = std::min(p0[o1] +distance_link_i, *p0);
+    *p0 = std::min(p0[o2] +distance_link_ij,*p0);
+    *p0 = std::min(p0[o3] +distance_link_j, *p0);
+    *p0 = std::min(p0[o5] +distance_link_k, *p0);
+    *p0 = std::min(p0[o6] +distance_link_ik,*p0);
+    *p0 = std::min(p0[o7] +distance_link_ijk,*p0);
+    *p0 = std::min(p0[o8] +distance_link_jk,*p0);
   }
 }
 
@@ -364,7 +366,7 @@ float vil3d_min_comp(float const& a, float const& b, bool& comp)
     comp=true;
   else
     comp=false;
-  return vcl_min(a,b);
+  return std::min(a,b);
 }
 
 //: Compute directed 3D distance function from zeros in original image.
@@ -390,27 +392,27 @@ void vil3d_distance_transform_one_way_with_dir(vil3d_image_view<float>& image,
   unsigned ni2 = ni-2;
   unsigned nj2 = nj-2;
 
-  vcl_ptrdiff_t istep = image.istep(), jstep = image.jstep(), kstep = image.kstep();
-  vcl_ptrdiff_t orient_istep = orient.istep(), orient_jstep = orient.jstep(), orient_kstep = orient.kstep();
+  std::ptrdiff_t istep = image.istep(), jstep = image.jstep(), kstep = image.kstep();
+  std::ptrdiff_t orient_istep = orient.istep(), orient_jstep = orient.jstep(), orient_kstep = orient.kstep();
 
-  vcl_ptrdiff_t o1 = -istep, o2 = -jstep-istep, o3 = -jstep, o4 = -jstep+istep;
-  vcl_ptrdiff_t o5 = -kstep, o6 = -kstep-istep, o7 = -kstep-jstep-istep;
-  vcl_ptrdiff_t o8 = -kstep-jstep, o9 = -kstep-jstep+istep, o10 = -kstep+istep;
-  vcl_ptrdiff_t o11 = -kstep+jstep+istep, o12 = -kstep+jstep, o13 = -kstep+jstep-istep;
+  std::ptrdiff_t o1 = -istep, o2 = -jstep-istep, o3 = -jstep, o4 = -jstep+istep;
+  std::ptrdiff_t o5 = -kstep, o6 = -kstep-istep, o7 = -kstep-jstep-istep;
+  std::ptrdiff_t o8 = -kstep-jstep, o9 = -kstep-jstep+istep, o10 = -kstep+istep;
+  std::ptrdiff_t o11 = -kstep+jstep+istep, o12 = -kstep+jstep, o13 = -kstep+jstep-istep;
 
-  vcl_ptrdiff_t oo1 = -orient_istep;
-  vcl_ptrdiff_t oo2 = -orient_jstep-orient_istep;
-  vcl_ptrdiff_t oo3 = -orient_jstep;
-  vcl_ptrdiff_t oo4 = -orient_jstep+orient_istep;
-  vcl_ptrdiff_t oo5 = -orient_kstep;
-  vcl_ptrdiff_t oo6 = -orient_kstep-orient_istep;
-  vcl_ptrdiff_t oo7 = -orient_kstep-orient_jstep-orient_istep;
-  vcl_ptrdiff_t oo8 = -orient_kstep-orient_jstep;
-  vcl_ptrdiff_t oo9 = -orient_kstep-orient_jstep+orient_istep;
-  vcl_ptrdiff_t oo10 = -orient_kstep+orient_istep;
-  vcl_ptrdiff_t oo11 = -orient_kstep+orient_jstep+orient_istep;
-  vcl_ptrdiff_t oo12 = -orient_kstep+orient_jstep;
-  vcl_ptrdiff_t oo13 = -orient_kstep+orient_jstep-orient_istep;
+  std::ptrdiff_t oo1 = -orient_istep;
+  std::ptrdiff_t oo2 = -orient_jstep-orient_istep;
+  std::ptrdiff_t oo3 = -orient_jstep;
+  std::ptrdiff_t oo4 = -orient_jstep+orient_istep;
+  std::ptrdiff_t oo5 = -orient_kstep;
+  std::ptrdiff_t oo6 = -orient_kstep-orient_istep;
+  std::ptrdiff_t oo7 = -orient_kstep-orient_jstep-orient_istep;
+  std::ptrdiff_t oo8 = -orient_kstep-orient_jstep;
+  std::ptrdiff_t oo9 = -orient_kstep-orient_jstep+orient_istep;
+  std::ptrdiff_t oo10 = -orient_kstep+orient_istep;
+  std::ptrdiff_t oo11 = -orient_kstep+orient_jstep+orient_istep;
+  std::ptrdiff_t oo12 = -orient_kstep+orient_jstep;
+  std::ptrdiff_t oo13 = -orient_kstep+orient_jstep-orient_istep;
 
 
   // distance vectors to the neighbors of a pixel
@@ -431,10 +433,10 @@ void vil3d_distance_transform_one_way_with_dir(vil3d_image_view<float>& image,
   float *page0 = image.origin_ptr();
   vil_rgb<float> *orient_page0 = orient.origin_ptr();
 
-  const float distance_link_ij=vcl_sqrt(distance_link_i*distance_link_i+distance_link_j*distance_link_j);
-  const float distance_link_ik=vcl_sqrt(distance_link_i*distance_link_i+distance_link_k*distance_link_k);
-  const float distance_link_jk=vcl_sqrt(distance_link_j*distance_link_j+distance_link_k*distance_link_k);
-  const float distance_link_ijk=vcl_sqrt(distance_link_i*distance_link_i+distance_link_j*distance_link_j+distance_link_k*distance_link_k);
+  const float distance_link_ij=std::sqrt(distance_link_i*distance_link_i+distance_link_j*distance_link_j);
+  const float distance_link_ik=std::sqrt(distance_link_i*distance_link_i+distance_link_k*distance_link_k);
+  const float distance_link_jk=std::sqrt(distance_link_j*distance_link_j+distance_link_k*distance_link_k);
+  const float distance_link_ijk=std::sqrt(distance_link_i*distance_link_i+distance_link_j*distance_link_j+distance_link_k*distance_link_k);
 
   // Process the first page
   float *p0 = page0 + istep;

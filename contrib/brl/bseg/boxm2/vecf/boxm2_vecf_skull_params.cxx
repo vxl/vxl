@@ -14,8 +14,8 @@ void boxm2_vecf_skull_params::compute_auxillary_pts(){
   vgl_plane_3d<double> pl(mid_forehead_normal_, mid_forehead_);
   bool success = vgl_intersection(ray, pl, forehead_intersection_);
   if(!success){
-    vcl_cout << "Intersection of ray with forehead plane - failed\n";
+    std::cout << "Intersection of ray with forehead plane - failed\n";
   }
 }
-vcl_ostream&  operator << (vcl_ostream& s, boxm2_vecf_skull_params const& pr){return s;}
-vcl_istream&  operator >> (vcl_istream& s, boxm2_vecf_skull_params& pr){return s;}
+std::ostream&  operator << (std::ostream& s, boxm2_vecf_skull_params const& pr){return s;}
+std::istream&  operator >> (std::istream& s, boxm2_vecf_skull_params& pr){return s;}

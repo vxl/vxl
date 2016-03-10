@@ -7,7 +7,9 @@
 // \author fsm
 
 #include "osl_canny_gradient.h"
-#include <vcl_cmath.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <cmath>
 
 // smooth_  is the (smoothed, presumably) input image.
 // dx_, dy_ are the output x, y gradient images.
@@ -60,7 +62,7 @@ void osl_canny_gradient(int xsize_, int ysize_,
   //  Magnitude for entire image
   for (int y=0; y<ysize_; ++y)
     for (int x=0; x<xsize_; ++x)
-      grad_[x][y] = (float)vcl_sqrt(dx_[x][y]*dx_[x][y] + dy_[x][y]*dy_[x][y]);
+      grad_[x][y] = (float)std::sqrt(dx_[x][y]*dx_[x][y] + dy_[x][y]*dy_[x][y]);
 }
 
 // taken from osl_canny_rothwell.cxx
@@ -74,7 +76,7 @@ void osl_canny_gradient_central(int xsize_, int ysize_,
     for (int y=1; y<ysize_-1; ++y) {
       dx_[x][y] = smooth_[x+1][y] - smooth_[x-1][y];
       dy_[x][y] = smooth_[x][y+1] - smooth_[x][y-1];
-      grad_[x][y] = (float)vcl_sqrt(dx_[x][y]*dx_[x][y] + dy_[x][y]*dy_[x][y]);
+      grad_[x][y] = (float)std::sqrt(dx_[x][y]*dx_[x][y] + dy_[x][y]*dy_[x][y]);
     }
   }
 }

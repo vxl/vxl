@@ -8,7 +8,9 @@
 
 #include <bprb/bprb_func_process.h>
 
-#include <vcl_fstream.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <fstream>
 #include <boxm2/boxm2_scene.h>
 #include <bocl/bocl_device.h>
 #include <boxm2/ocl/boxm2_opencl_cache1.h>
@@ -24,12 +26,12 @@ bool boxm2_create_opencl_cache1_process_cons(bprb_func_process& pro)
   using namespace boxm2_create_opencl_cache1_process_globals;
 
   //process takes 2 inputs
-  vcl_vector<vcl_string> input_types_(n_inputs_);
+  std::vector<std::string> input_types_(n_inputs_);
   input_types_[0] = "bocl_device_sptr";
   input_types_[1] = "boxm2_scene_sptr";
 
   // process has 1 output
-  vcl_vector<vcl_string>  output_types_(n_outputs_);
+  std::vector<std::string>  output_types_(n_outputs_);
   output_types_[0] = "boxm2_opencl_cache1_sptr";
 
   return pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
@@ -40,7 +42,7 @@ bool boxm2_create_opencl_cache1_process(bprb_func_process& pro)
   using namespace boxm2_create_opencl_cache1_process_globals;
 
   if ( pro.n_inputs() < n_inputs_ ){
-    vcl_cout << pro.name() << ": The input number should be " << n_inputs_<< vcl_endl;
+    std::cout << pro.name() << ": The input number should be " << n_inputs_<< std::endl;
     return false;
   }
   //get the inputs
@@ -65,12 +67,12 @@ bool boxm2_create_opencl_cache_process_cons(bprb_func_process& pro)
   using namespace boxm2_create_opencl_cache_process_globals;
 
   //process takes 1 inputs
-  vcl_vector<vcl_string> input_types_(n_inputs_);
+  std::vector<std::string> input_types_(n_inputs_);
   input_types_[0] = "bocl_device_sptr";
 
 
   // process has 1 output
-  vcl_vector<vcl_string>  output_types_(n_outputs_);
+  std::vector<std::string>  output_types_(n_outputs_);
   output_types_[0] = "boxm2_opencl_cache_sptr";
 
   return pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
@@ -81,7 +83,7 @@ bool boxm2_create_opencl_cache_process(bprb_func_process& pro)
   using namespace boxm2_create_opencl_cache_process_globals;
 
   if ( pro.n_inputs() < n_inputs_ ){
-    vcl_cout << pro.name() << ": The input number should be " << n_inputs_<< vcl_endl;
+    std::cout << pro.name() << ": The input number should be " << n_inputs_<< std::endl;
     return false;
   }
   //get the inputs

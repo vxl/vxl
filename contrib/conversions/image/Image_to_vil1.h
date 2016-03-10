@@ -8,7 +8,9 @@
 #include <vil1/vil1_load.h>
 #include <vil1/vil1_memory_image.h>
 
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iostream>
 
 inline vil1_image Image_to_vil1(Image const* im)
 {
@@ -30,7 +32,7 @@ inline vil1_image Image_to_vil1(Image const* im)
     (im->GetFormat() == 'Y') ? VIL1_COMPONENT_FORMAT_COMPLEX :
                                VIL1_COMPONENT_FORMAT_UNSIGNED_INT;
   if (im->GetBitsPixel() != bpc * cmpts)
-    { vcl_cerr << "Image_to_vil1: Error: pixel size\n"; return 0; }
+    { std::cerr << "Image_to_vil1: Error: pixel size\n"; return 0; }
 
   vil1_memory_image imo(width, height, cmpts, bpc, format);
 

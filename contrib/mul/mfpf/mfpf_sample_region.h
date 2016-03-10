@@ -8,20 +8,22 @@
 
 #include <mbl/mbl_chord.h>
 #include <vnl/vnl_vector.h>
-#include <vcl_vector.h>
-#include <vcl_cstddef.h> // for std::ptrdiff_t
+#include <vector>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <cstddef> // for std::ptrdiff_t
 
 //: Sample vector from image, assuming istep==np, pstep=1
 //  Assumes vector already correct size, and region completely
 //  within image.  Assumes vec has been sized to np*n_pixels.
 template <class T>
 inline void mfpf_sample_region(const T* image,
-                               vcl_ptrdiff_t jstep, unsigned np,
-                               const vcl_vector<mbl_chord>& roi,
+                               std::ptrdiff_t jstep, unsigned np,
+                               const std::vector<mbl_chord>& roi,
                                vnl_vector<double>& vec)
 {
   double *v = vec.data_block();
-  vcl_vector<mbl_chord>::const_iterator c=roi.begin();
+  std::vector<mbl_chord>::const_iterator c=roi.begin();
   for (;c!=roi.end();++c)
   {
     const T* im_row  = image+c->y()*jstep;

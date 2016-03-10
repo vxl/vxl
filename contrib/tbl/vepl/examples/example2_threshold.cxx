@@ -16,33 +16,35 @@
 // for I/O:
 #include <vil/vil_load.h>
 #include <vil/vil_save.h>
-#include <vcl_iostream.h>
-#include <vcl_cstdlib.h> // for atoi()
+#include <iostream>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <cstdlib> // for atoi()
 
 int
 main(int argc, char** argv)
 {
   if (argc < 3)
   {
-    vcl_cerr << "Syntax: example2_threshold file_in file_out [threshold]\n";
+    std::cerr << "Syntax: example2_threshold file_in file_out [threshold]\n";
     return 1;
   }
 
   // The input image:
   vil_image_resource_sptr in = vil_load_image_resource(argv[1]);
-  if (!in) { vcl_cerr << "Please use a ubyte image as input\n"; return 2; }
+  if (!in) { std::cerr << "Please use a ubyte image as input\n"; return 2; }
 
   // The threshold value:
-  vxl_byte threshold = (argc < 4) ? 128 : vxl_byte(vcl_atoi(argv[3]));
+  vxl_byte threshold = (argc < 4) ? 128 : vxl_byte(std::atoi(argv[3]));
 
   // perform thresholding:
   vil_image_resource_sptr out = vepl_threshold(in,threshold,0,255);
 
   // Write output:
   if (vil_save_image_resource(out, argv[2], "pnm"))
-    vcl_cout << "Written thresholded image of type PNM to " << argv[2] << '\n';
+    std::cout << "Written thresholded image of type PNM to " << argv[2] << '\n';
   else
-    vcl_cout << "Could not write thresholded image as PNM to "<< argv[2]<<'\n';
+    std::cout << "Could not write thresholded image as PNM to "<< argv[2]<<'\n';
 
   return 0;
 }

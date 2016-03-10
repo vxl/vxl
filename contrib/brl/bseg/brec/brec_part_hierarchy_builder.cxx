@@ -4,8 +4,10 @@
 // \author Ozge C Ozcanli (ozge at lems dot brown dot edu)
 // \date Oct. 16, 2008
 
-#include <vcl_vector.h>
-#include <vcl_algorithm.h>
+#include <vector>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <algorithm>
 
 #include "brec_part_hierarchy.h"
 #include "brec_part_base_sptr.h"
@@ -565,7 +567,7 @@ brec_part_hierarchy_builder::construct_eight_detector()
   float a1, a2, d1, d2;
   e_1_0_to_second->calculate_dist_angle(pi_0_1->cast_to_instance(), sample1, d1, a1);
   e_1_0_to_second->calculate_dist_angle(pi_0_1->cast_to_instance(), sample2, d2, a2);
-  vcl_cout << "p_1_0 edge to second part training d1: " << d1 << " angle: " << a1*vnl_math::deg_per_rad << " degrees\n"
+  std::cout << "p_1_0 edge to second part training d1: " << d1 << " angle: " << a1*vnl_math::deg_per_rad << " degrees\n"
            << "p_1_0 edge to second part training d2: " << d2 << " angle: " << a2*vnl_math::deg_per_rad << " degrees\n";
   e_1_0_to_second->update_dist_model(d1);
   e_1_0_to_second->update_dist_model(d2);
@@ -590,7 +592,7 @@ brec_part_hierarchy_builder::construct_eight_detector()
   h_8->add_edge(e_2_0_to_second);
   vnl_vector_fixed<float,2> sample3(-1.0f,8.0f); // measured from the 8 sample
   e_2_0_to_second->calculate_dist_angle(pi_0_1->cast_to_instance(), sample3, d1, a1); // using pi_0_1 as it is still the center of p_1_0
-  vcl_cout << "p_2_0 edge to second part training d: " << d1 << " angle: " << a1*vnl_math::deg_per_rad << " degrees\n";
+  std::cout << "p_2_0 edge to second part training d: " << d1 << " angle: " << a1*vnl_math::deg_per_rad << " degrees\n";
   e_2_0_to_second->update_dist_model(d1);
   e_2_0_to_second->update_angle_model(a1);
 

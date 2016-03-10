@@ -10,7 +10,9 @@
 // \author Tim Cootes, Ian Scott.
 
 #include <vcl_cassert.h>
-#include <vcl_algorithm.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <algorithm>
 #include <vil3d/vil3d_image_view.h>
 
 
@@ -28,7 +30,7 @@ inline void vil3d_transform(const vil3d_image_view<inP >&src, vil3d_image_view<o
 
   if (src.is_contiguous() && dest.is_contiguous())
   {
-    vcl_transform(src.begin(), src.end(), dest.begin(), functor);
+    std::transform(src.begin(), src.end(), dest.begin(), functor);
   }
   else
   {
@@ -37,9 +39,9 @@ inline void vil3d_transform(const vil3d_image_view<inP >&src, vil3d_image_view<o
       for (unsigned j = 0; j < nj; ++j)
       {
         const inP* src_p = &src(0,j,k,p);
-        vcl_ptrdiff_t src_step = src.istep();
+        std::ptrdiff_t src_step = src.istep();
         outP* dest_p = &dest(0,j,k,p);
-        vcl_ptrdiff_t dest_step = dest.istep();
+        std::ptrdiff_t dest_step = dest.istep();
 
         for (int i = ni+1; --i != 0; src_p+=src_step, dest_p+=dest_step)
           *dest_p = functor(*src_p);

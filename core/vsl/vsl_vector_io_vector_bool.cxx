@@ -6,7 +6,8 @@
 
 #include "vsl_vector_io.h"
 #include <vsl/vsl_binary_io.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <iostream>
 #include <vcl_deprecated.h>
 
 //====================================================================================
@@ -15,7 +16,7 @@
 // If no-one complains about the name change to this code, or otherwise asks for it
 // to be kept, then it should be removed after the release of VXL 1.18. The name change will
 // however remain, to avoid overriding normal performance of vsl(vec<vec<bool>>) IMS July 2012.
-void vsl_b_read_vec_vec_bool_old(vsl_b_istream& is, vcl_vector<vcl_vector<bool> >& v)
+void vsl_b_read_vec_vec_bool_old(vsl_b_istream& is, std::vector<std::vector<bool> >& v)
 {
   if (!is) return;
 
@@ -41,9 +42,9 @@ void vsl_b_read_vec_vec_bool_old(vsl_b_istream& is, vcl_vector<vcl_vector<bool> 
     break;
 
   default:
-    vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, vcl_vector<vcl_vector<T> >&)\n"
+    std::cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, std::vector<std::vector<T> >&)\n"
              << "           Unknown version number "<< ver << '\n';
-    is.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
+    is.is().clear(std::ios::badbit); // Set an unrecoverable IO error on stream
     return;
   }
 }

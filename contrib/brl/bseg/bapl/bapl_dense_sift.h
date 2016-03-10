@@ -23,9 +23,11 @@
 #include <vil/vil_image_resource_sptr.h>
 
 
-#include <vcl_cmath.h>
-#include <vcl_map.h>
-#include <vcl_vector.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <cmath>
+#include <map>
+#include <vector>
 
 class bapl_dense_sift:public vbl_ref_count
 {
@@ -46,15 +48,15 @@ class bapl_dense_sift:public vbl_ref_count
 
   //output := keypoints
   //parameters := istep,jstep
-  bool make_dense_keypoints(vcl_vector<bapl_lowe_keypoint_sptr>& keypoints, unsigned const istep = 1, unsigned const jstep = 1 );
+  bool make_dense_keypoints(std::vector<bapl_lowe_keypoint_sptr>& keypoints, unsigned const istep = 1, unsigned const jstep = 1 );
 
   //output := keypoints
   //parameters := target image locations (vgl_point_2d<unsigned> > pts)
-  bool make_keypoints( vcl_vector<bapl_lowe_keypoint_sptr>& keypoints, vcl_vector<vgl_point_2d<unsigned> > const& pts );
+  bool make_keypoints( std::vector<bapl_lowe_keypoint_sptr>& keypoints, std::vector<vgl_point_2d<unsigned> > const& pts );
 
   //input := vector of keypoints with locations specified in the keypoint
   //output := the modified keypoints
-  bool make_keypoints( vcl_vector<bapl_lowe_keypoint_sptr>& keypoints );
+  bool make_keypoints( std::vector<bapl_lowe_keypoint_sptr>& keypoints );
 
   bapl_lowe_pyramid_set_sptr pyramid_sptr() {return this->pyramid_sptr_;}
 

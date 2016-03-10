@@ -32,14 +32,14 @@ bool boxm_ray_statistics_process_cons(bprb_func_process& pro)
 
   //process takes 2 input
   //input[0]: scene binary file
-  vcl_vector<vcl_string> input_types_(n_inputs_);
+  std::vector<std::string> input_types_(n_inputs_);
   input_types_[0] = "boxm_scene_base_sptr";
   input_types_[1] = "vpgl_camera_double_sptr";
   input_types_[2] = "unsigned";  //ni
   input_types_[3] = "unsigned";  //nj
 
   // process has 1 output:
-  vcl_vector<vcl_string>  output_types_(n_outputs_);
+  std::vector<std::string>  output_types_(n_outputs_);
   output_types_[0] = "bsta_histogram_sptr"; // No of rays per cell Histogram
   //output_types_[1] = "bsta_histogram_sptr"; // Sigma Histogram
   //output_types_[2] = "bsta_histogram_sptr"; // Level Histogram
@@ -61,7 +61,7 @@ bool boxm_ray_statistics_process(bprb_func_process& pro)
   using namespace boxm_ray_statistics_process_globals;
 
   if ( !pro.verify_inputs() ) {
-    vcl_cerr << pro.name() << ": invalid inputs\n";
+    std::cerr << pro.name() << ": invalid inputs\n";
     return false;
   }
   // assign tree type
@@ -82,7 +82,7 @@ bool boxm_ray_statistics_process(bprb_func_process& pro)
       pro.set_output_val<bsta_histogram_sptr>(0, new bsta_histogram<float>(num_rays_hist));    }
     else
     {
-      vcl_cerr<<"boxm_ray_statistics_process not yet implemented for multi-bin/Gaussian mixture\n";
+      std::cerr<<"boxm_ray_statistics_process not yet implemented for multi-bin/Gaussian mixture\n";
       return false;
     }
   }
@@ -98,7 +98,7 @@ bool boxm_ray_statistics_process(bprb_func_process& pro)
       pro.set_output_val<bsta_histogram_sptr>(0, new bsta_histogram<float>(num_rays_hist));
     }
     else {
-      vcl_cerr<<"boxm_ray_statistics_process not yet implemented for multi-bin/simple_grey\n";
+      std::cerr<<"boxm_ray_statistics_process not yet implemented for multi-bin/simple_grey\n";
       return false;
     }
   }

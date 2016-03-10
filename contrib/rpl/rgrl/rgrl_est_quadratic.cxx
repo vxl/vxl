@@ -212,8 +212,8 @@ estimate( rgrl_set_of<rgrl_match_set_sptr> const& matches,
     factor2 = std::max(std::max(XtWX(0,0), XtWX(1,1)),
                            std::max(XtWX(6,6), XtWX(7,7)));
 
-    double scale0 = vcl_sqrt( (factor0 > 0 && factor2 > 0) ? factor2 / factor0 : 1 ); // neither should be 0
-    double scale1 = vcl_sqrt( (factor1 > 0 && factor2 > 0) ? factor2 / factor1 : 1 );
+    double scale0 = std::sqrt( (factor0 > 0 && factor2 > 0) ? factor2 / factor0 : 1 ); // neither should be 0
+    double scale1 = std::sqrt( (factor1 > 0 && factor2 > 0) ? factor2 / factor1 : 1 );
 
     s(3) = s(4) = s(9) = s(10) = scale1;
     s(5) = s(11) = scale0;
@@ -228,8 +228,8 @@ estimate( rgrl_set_of<rgrl_match_set_sptr> const& matches,
                                  XtWX(10,10), XtWX(11,11), XtWX(12,12),
                                  XtWX(20,20), XtWX(21,21), XtWX(22,22) );
 
-    double scale0 = vcl_sqrt( (factor0 > 0 && factor2 > 0) ? factor2 / factor0 : 1 ); // neither should be 0
-    double scale1 = vcl_sqrt( (factor1 > 0 && factor2 > 0) ? factor2 / factor1 : 1 );
+    double scale0 = std::sqrt( (factor0 > 0 && factor2 > 0) ? factor2 / factor0 : 1 ); // neither should be 0
+    double scale1 = std::sqrt( (factor1 > 0 && factor2 > 0) ? factor2 / factor1 : 1 );
 
     s(6) = s(7) = s(8) = s(16) = s(17) = s(18) = s(26) = s(27) = s(28) = scale1;
     s(9) = s(19) = s(29) = scale0;
@@ -316,7 +316,7 @@ estimate( rgrl_match_set_sptr matches,
   return rgrl_estimator::estimate( matches, cur_transform );
 }
 
-const vcl_type_info&
+const std::type_info&
 rgrl_est_quadratic::
 transformation_type() const
 {

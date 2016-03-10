@@ -1,6 +1,8 @@
 #ifndef boxm2_ocl_aggregate_normal_from_filter_h_included_
 #define boxm2_ocl_aggregate_normal_from_filter_h_included_
-#include <vcl_string.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <string>
 
 #include <boxm2/boxm2_data_traits.h>
 #include <boxm2/ocl/boxm2_opencl_cache.h>
@@ -25,7 +27,7 @@ class boxm2_ocl_aggregate_normal_from_filter_vector
 
   private:
 
-    bool compile_kernel(bocl_kernel &aggregate_kernel, vcl_string opts);
+    bool compile_kernel(bocl_kernel &aggregate_kernel, std::string opts);
 
     bocl_kernel kernel_;
 

@@ -1,4 +1,6 @@
-#include <vcl_vector.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <vector>
 #include <rrel/rrel_util.txx>
 
 #if defined(VCL_GCC) || defined(VCL_ICC)
@@ -9,7 +11,7 @@
 // symbols(V type) generated. But they did not
 // get through linking stage.
 //
-typedef vcl_vector<float>::iterator Iter;
+typedef std::vector<float>::iterator Iter;
 RREL_UTIL_INSTANTIATE_RAN_ITER(float, Iter);
 
 #else
@@ -28,8 +30,8 @@ RREL_UTIL_INSTANTIATE_RAN_ITER(float, Iter);
 void
 rrel_util_vector_float_iterator_instantiation_tickler()
 {
-  vcl_vector<float> v;
-  typedef vcl_vector<float>::iterator Iter;
+  std::vector<float> v;
+  typedef std::vector<float>::iterator Iter;
   Iter itr = v.begin(); // to avoid compiler warning on uninitialised variable
   float val = 0.0;
 

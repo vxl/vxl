@@ -15,9 +15,10 @@
 #include <vpdl/vpdt/vpdt_dist_traits.h>
 #include <vpdl/vpdt/vpdt_probability.h>
 #include <vcl_cassert.h>
-#include <vcl_vector.h>
-#include <vcl_algorithm.h>
-#include <vcl_memory.h>
+#include <vector>
+#include <algorithm>
+#include <vcl_compiler.h>
+#include <memory>
 
 // forward declarations
 template<class dist_t> class vpdt_mixture_of;
@@ -107,7 +108,7 @@ class vpdt_mixture_of
   };
 
   //: The vector of components
-  vcl_vector<component*> components_;
+  std::vector<component*> components_;
 
  public:
   // Default Constructor
@@ -207,7 +208,7 @@ class vpdt_mixture_of
   //: Compute the unnormalized density at this point
   T density(const F& pt) const
   {
-    typedef typename vcl_vector<component*>::const_iterator comp_itr;
+    typedef typename std::vector<component*>::const_iterator comp_itr;
     T prob = 0;
     for (comp_itr i = components_.begin(); i != components_.end(); ++i) {
       // must use prob_density here to get meaningful results
@@ -225,7 +226,7 @@ class vpdt_mixture_of
     const unsigned int d = this->dimension();
     vpdt_set_size(g,d);
     vpdt_fill(g,T(0));
-    typedef typename vcl_vector<component*>::const_iterator comp_itr;
+    typedef typename std::vector<component*>::const_iterator comp_itr;
     T dens = 0;
     for (comp_itr i = components_.begin(); i != components_.end(); ++i) {
       vector g_i;
@@ -242,7 +243,7 @@ class vpdt_mixture_of
   // (in all dimensions) to the point in question
   T cumulative_prob(const F& pt) const
   {
-    typedef typename vcl_vector<component*>::const_iterator comp_itr;
+    typedef typename std::vector<component*>::const_iterator comp_itr;
     T prob = 0;
     T sum_w = 0;
     for (comp_itr i = components_.begin(); i != components_.end(); ++i) {
@@ -261,7 +262,7 @@ class vpdt_mixture_of
     vpdt_set_size(mean,d);
     vpdt_fill(mean,T(0));
 
-    typedef typename vcl_vector<component*>::const_iterator comp_itr;
+    typedef typename std::vector<component*>::const_iterator comp_itr;
     F cmp_mean;
     T sum_w = T(0);
     for (comp_itr i = components_.begin(); i != components_.end(); ++i) {
@@ -284,7 +285,7 @@ class vpdt_mixture_of
     vpdt_set_size(mean,d);
     vpdt_fill(mean,T(0));
 
-    typedef typename vcl_vector<component*>::const_iterator comp_itr;
+    typedef typename std::vector<component*>::const_iterator comp_itr;
     F cmp_mean;
     matrix cmp_covar;
     T sum_w = T(0);
@@ -309,7 +310,7 @@ class vpdt_mixture_of
   // norm_const() is reciprocal of the integral of density over the entire field
   T norm_const() const
   {
-    typedef typename vcl_vector<component*>::const_iterator comp_itr;
+    typedef typename std::vector<component*>::const_iterator comp_itr;
     T sum = 0;
     for (comp_itr i = components_.begin(); i != components_.end(); ++i)
       sum += (*i)->weight;
@@ -320,18 +321,18 @@ class vpdt_mixture_of
   //: Normalize the weights of the components to add to 1.
   void normalize_weights()
   {
-    typedef typename vcl_vector<component*>::iterator comp_itr;
+    typedef typename std::vector<component*>::iterator comp_itr;
     T norm = norm_const();
     for (comp_itr i = components_.begin(); i != components_.end(); ++i)
       (*i)->weight *= norm;
   }
 
   //: Sort the components in order of decreasing weight
-  void sort() { vcl_sort(components_.begin(), components_.end(), sort_weight() ); }
+  void sort() { std::sort(components_.begin(), components_.end(), sort_weight() ); }
 
   //: Sort the components in the range \a idx1 to \a idx2 in order of decreasing weight
   void sort(unsigned int idx1, unsigned int idx2)
-  { vcl_sort(components_.begin()+idx1, components_.begin()+idx2+1, sort_weight() ); }
+  { std::sort(components_.begin()+idx1, components_.begin()+idx2+1, sort_weight() ); }
 
   //: Sort the components using any StrictWeakOrdering function
   // The prototype should be
@@ -342,12 +343,12 @@ class vpdt_mixture_of
   // \endcode
   template <class comp_type_>
   void sort(comp_type_ comp)
-  { vcl_sort(components_.begin(), components_.end(), sort_adaptor<comp_type_>(comp)); }
+  { std::sort(components_.begin(), components_.end(), sort_adaptor<comp_type_>(comp)); }
 
   //: Sort the components in the range \a idx1 to \a idx2 using any StrictWeakOrdering function
   template <class comp_type_>
   void sort(comp_type_ comp, unsigned int idx1, unsigned int idx2)
-  { vcl_sort(components_.begin()+idx1, components_.begin()+idx2+1, sort_adaptor<comp_type_>(comp)); }
+  { std::sort(components_.begin()+idx1, components_.begin()+idx2+1, sort_adaptor<comp_type_>(comp)); }
 
   friend T vpdt_box_prob<dist_t>(const vpdt_mixture_of<dist_t>& d, const F& min_pt, const F& max_pt);
 };
@@ -363,7 +364,7 @@ vpdt_box_prob(const vpdt_mixture_of<dist>& d,
               const typename vpdt_dist_traits<vpdt_mixture_of<dist> >::field_type& max_pt)
 {
   typedef typename vpdt_dist_traits<vpdt_mixture_of<dist> >::scalar_type T;
-  typedef typename vcl_vector<typename vpdt_mixture_of<dist>::component*>::const_iterator comp_itr;
+  typedef typename std::vector<typename vpdt_mixture_of<dist>::component*>::const_iterator comp_itr;
   T prob = 0;
   T sum_w = 0;
   for (comp_itr i = d.components_.begin(); i != d.components_.end(); ++i) {

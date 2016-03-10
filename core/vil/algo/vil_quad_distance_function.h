@@ -6,15 +6,16 @@
 //  \author Tim Cootes
 
 #include <vil/vil_image_view.h>
-#include <vcl_vector.h>
+#include <vcl_compiler.h>
+#include <vector>
 #include <vcl_cassert.h>
 
 //: Add parabola y=y0+(x-x0)^2 to lower envelope defined by (x,y,z)
 //  Parabolas are  y' = y[i]+a(x'-x[i])^2
 //  Parabola i defines the envelope in the range (z[i],z[i+1]).
-inline void vil_update_parabola_set(vcl_vector<double>& x,
-                                    vcl_vector<double>& y,
-                                    vcl_vector<double>& z, double a,
+inline void vil_update_parabola_set(std::vector<double>& x,
+                                    std::vector<double>& y,
+                                    std::vector<double>& z, double a,
                                     double x0, double y0, double n)
 {
   unsigned int k=x.size()-1;
@@ -53,11 +54,11 @@ inline void vil_update_parabola_set(vcl_vector<double>& x,
 //  Parabola i defines the envelope in the range (z[i],z[i+1]).
 //  Thus z.size()==x.size()+1
 template<class srcT>
-inline void vil_quad_envelope(const srcT* src,vcl_ptrdiff_t s_step,
+inline void vil_quad_envelope(const srcT* src,std::ptrdiff_t s_step,
                               unsigned int n,
-                              vcl_vector<double>& x,
-                              vcl_vector<double>& y,
-                              vcl_vector<double>& z, double a)
+                              std::vector<double>& x,
+                              std::vector<double>& y,
+                              std::vector<double>& z, double a)
 {
   x.resize(1);  x[0]=0.0;
   y.resize(1);  y[0]=double(*src);
@@ -75,10 +76,10 @@ inline void vil_quad_envelope(const srcT* src,vcl_ptrdiff_t s_step,
 //  Parabola i defines the envelope in the range (z[i],z[i+1]).
 //  Thus z.size()==x.size()+1
 template<class destT>
-inline void vil_sample_quad_envelope(const vcl_vector<double>& x,
-                                     const vcl_vector<double>& y,
-                                     const vcl_vector<double>& z, double a,
-                                     destT* dest, vcl_ptrdiff_t d_step,
+inline void vil_sample_quad_envelope(const std::vector<double>& x,
+                                     const std::vector<double>& y,
+                                     const std::vector<double>& z, double a,
+                                     destT* dest, std::ptrdiff_t d_step,
                                      unsigned int n)
 {
   unsigned int k=0;
@@ -98,13 +99,13 @@ inline void vil_sample_quad_envelope(const vcl_vector<double>& x,
 //  On exit, pos[i*p_step] gives the x position of the parabola
 //  used to compute the envelope at position i.
 template<class destT, class iT>
-inline void vil_sample_quad_envelope_with_pos(const vcl_vector<double>& x,
-                                              const vcl_vector<double>& y,
-                                              const vcl_vector<double>& z,
+inline void vil_sample_quad_envelope_with_pos(const std::vector<double>& x,
+                                              const std::vector<double>& y,
+                                              const std::vector<double>& z,
                                               double a,
-                                              destT* dest, vcl_ptrdiff_t d_step,
+                                              destT* dest, std::ptrdiff_t d_step,
                                               unsigned int n,
-                                              iT* pos, vcl_ptrdiff_t p_step)
+                                              iT* pos, std::ptrdiff_t p_step)
 {
   unsigned int k=0;
   for (unsigned int i=0;i<n;++i,dest+=d_step,pos+=p_step)
@@ -122,12 +123,12 @@ inline void vil_sample_quad_envelope_with_pos(const vcl_vector<double>& x,
 //
 //  dest(x) = dest[x*d_step], src(x)=src[x*s_step]
 template<class srcT, class destT>
-inline void vil_quad_distance_function_1D(const srcT* src,vcl_ptrdiff_t s_step,
+inline void vil_quad_distance_function_1D(const srcT* src,std::ptrdiff_t s_step,
                                           unsigned int n,
                                           double a,
-                                          destT* dest, vcl_ptrdiff_t d_step)
+                                          destT* dest, std::ptrdiff_t d_step)
 {
-  vcl_vector<double> x,y,z;
+  std::vector<double> x,y,z;
   vil_quad_envelope(src,s_step,n,x,y,z,a);
   vil_sample_quad_envelope(x,y,z,a,dest,d_step,n);
 }
@@ -140,13 +141,13 @@ inline void vil_quad_distance_function_1D(const srcT* src,vcl_ptrdiff_t s_step,
 //
 //  dest(x) = dest[x*d_step], src(x)=src[x*s_step], pos(x)=pos[x*p_step]
 template<class srcT, class destT, class posT>
-inline void vil_quad_distance_function_1D(const srcT* src,vcl_ptrdiff_t s_step,
+inline void vil_quad_distance_function_1D(const srcT* src,std::ptrdiff_t s_step,
                                           unsigned int n,
                                           double a,
-                                          destT* dest, vcl_ptrdiff_t d_step,
-                                          posT* pos, vcl_ptrdiff_t p_step)
+                                          destT* dest, std::ptrdiff_t d_step,
+                                          posT* pos, std::ptrdiff_t p_step)
 {
-  vcl_vector<double> x,y,z;
+  std::vector<double> x,y,z;
   vil_quad_envelope(src,s_step,n,x,y,z,a);
   vil_sample_quad_envelope_with_pos(x,y,z,a,dest,d_step,n, pos,p_step);
 }
@@ -164,14 +165,14 @@ inline void vil_quad_distance_function(const vil_image_view<srcT>& src,
   unsigned int ni=src.ni(),nj=src.nj();
   dest.set_size(ni,nj);
   vil_image_view<destT> tmp(ni,nj);  // Intermediate result
-  vcl_ptrdiff_t s_istep = src.istep(),   s_jstep = src.jstep();
-  vcl_ptrdiff_t t_istep = tmp.istep(),   t_jstep = tmp.jstep();
-  vcl_ptrdiff_t d_istep = dest.istep(),  d_jstep = dest.jstep();
+  std::ptrdiff_t s_istep = src.istep(),   s_jstep = src.jstep();
+  std::ptrdiff_t t_istep = tmp.istep(),   t_jstep = tmp.jstep();
+  std::ptrdiff_t d_istep = dest.istep(),  d_jstep = dest.jstep();
 
   const srcT* s_row = src.top_left_ptr();
   destT* t_row = tmp.top_left_ptr();
 
-  vcl_vector<double> x,y,z;
+  std::vector<double> x,y,z;
 
   // Apply transform along i direction to get tmp
   for (unsigned int j=0;j<nj;++j, s_row+=s_jstep, t_row+=t_jstep)
@@ -206,17 +207,17 @@ inline void vil_quad_distance_function(const vil_image_view<srcT>& src,
   pos.set_size(ni,nj,2);
   vil_image_view<destT> tmp(ni,nj);  // Intermediate result
   vil_image_view<posT> tmp_pos(ni,nj); // Intermediate result
-  vcl_ptrdiff_t  s_istep = src.istep(),      s_jstep = src.jstep();
-  vcl_ptrdiff_t  t_istep = tmp.istep(),      t_jstep = tmp.jstep();
-  vcl_ptrdiff_t  d_istep = dest.istep(),     d_jstep = dest.jstep();
-  vcl_ptrdiff_t tp_istep = tmp_pos.istep(), tp_jstep = tmp_pos.jstep();
-  vcl_ptrdiff_t  p_istep = pos.istep(),      p_jstep = pos.jstep();
+  std::ptrdiff_t  s_istep = src.istep(),      s_jstep = src.jstep();
+  std::ptrdiff_t  t_istep = tmp.istep(),      t_jstep = tmp.jstep();
+  std::ptrdiff_t  d_istep = dest.istep(),     d_jstep = dest.jstep();
+  std::ptrdiff_t tp_istep = tmp_pos.istep(), tp_jstep = tmp_pos.jstep();
+  std::ptrdiff_t  p_istep = pos.istep(),      p_jstep = pos.jstep();
 
   const srcT* s_row = src.top_left_ptr();
   destT* t_row = tmp.top_left_ptr();
   posT* tp_row  = tmp_pos.top_left_ptr();
 
-  vcl_vector<double> x,y,z;
+  std::vector<double> x,y,z;
 
   // Apply transform along i direction to get tmp
   for (unsigned int j=0;j<nj;++j,s_row+=s_jstep,t_row+=t_jstep,tp_row+=tp_jstep)

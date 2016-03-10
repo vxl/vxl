@@ -1,6 +1,8 @@
 // This is mul/vil3d/tests/test_resample.cxx
 #include <testlib/testlib_test.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iostream>
 #include <vil3d/vil3d_resample_simple.h>
 #include <vil3d/vil3d_resample_trilinear.h>
 #include <vil3d/vil3d_resample_tricubic.h>
@@ -12,7 +14,7 @@
 //==============================================================================
 static void test_resample_simple()
 {
-  vcl_cout << "*******************************\n"
+  std::cout << "*******************************\n"
            << " Testing vil3d_resample_simple\n"
            << "*******************************\n";
 
@@ -34,8 +36,8 @@ static void test_resample_simple()
   vil3d_resample_simple(src, dst, 2, 2, 2);
 
   // Testing
-  vil3d_print_all(vcl_cout, src);
-  vil3d_print_all(vcl_cout, dst);
+  vil3d_print_all(std::cout, src);
+  vil3d_print_all(std::cout, dst);
   ///
 
   bool all_voxs_correct = true;
@@ -49,7 +51,7 @@ static void test_resample_simple()
 
 static void test_resample_tricubic()
 {
-  vcl_cout << "*******************************\n"
+  std::cout << "*******************************\n"
            << " Testing vil3d_resample_tricubic\n"
            << "*******************************\n";
 
@@ -69,10 +71,10 @@ static void test_resample_tricubic()
   unsigned dnk = dst.nk();
 
   // Testing
-  vcl_cout << "src image:" << vcl_endl;
-  vil3d_print_all(vcl_cout, src);
-  vcl_cout << "dst image:" << vcl_endl;
-  vil3d_print_all(vcl_cout, dst);
+  std::cout << "src image:" << std::endl;
+  vil3d_print_all(std::cout, src);
+  std::cout << "dst image:" << std::endl;
+  vil3d_print_all(std::cout, dst);
   ///
 
   bool all_voxs_correct = true;
@@ -89,7 +91,7 @@ static void test_resample_tricubic()
 //==============================================================================
 static void test_resample_trilinear()
 {
-  vcl_cout << "**********************************\n"
+  std::cout << "**********************************\n"
            << " Testing vil3d_resample_trilinear\n"
            << "**********************************\n";
 
@@ -109,8 +111,8 @@ static void test_resample_trilinear()
   unsigned dnk = dst.nk();
 
   // Testing
-  vil3d_print_all(vcl_cout, src);
-  vil3d_print_all(vcl_cout, dst);
+  vil3d_print_all(std::cout, src);
+  vil3d_print_all(std::cout, dst);
   ///
 
   bool all_voxs_correct = true;
@@ -126,7 +128,7 @@ static void test_resample_trilinear()
 //==============================================================================
 static void test_resample_trilinear_edge_extend()
 {
-  vcl_cout << "**********************************************\n"
+  std::cout << "**********************************************\n"
            << " Testing vil3d_resample_trilinear_edge_extend\n"
            << "**********************************************\n";
 
@@ -152,8 +154,8 @@ static void test_resample_trilinear_edge_extend()
   unsigned dnk = dst.nk();
 
   // Testing
-  vil3d_print_all(vcl_cout, src);
-  vil3d_print_all(vcl_cout, dst);
+  vil3d_print_all(std::cout, src);
+  vil3d_print_all(std::cout, dst);
   ///
 
   bool all_voxs_correct = true;
@@ -170,7 +172,7 @@ static void test_resample_trilinear_edge_extend()
 //==============================================================================
 static void test_resample_trilinear_scale_2()
 {
-  vcl_cout << "******************************************\n"
+  std::cout << "******************************************\n"
            << " Testing vil3d_resample_trilinear_scale_2\n"
            << "******************************************\n";
 
@@ -190,8 +192,8 @@ static void test_resample_trilinear_scale_2()
   unsigned dnk = dst.nk();
 
   // Testing
-  vil3d_print_all(vcl_cout, src);
-  vil3d_print_all(vcl_cout, dst);
+  vil3d_print_all(std::cout, src);
+  vil3d_print_all(std::cout, dst);
   ///
 
   bool all_voxs_correct = true;

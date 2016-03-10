@@ -28,7 +28,7 @@ struct vgui_glut_window : public vgui_window
   void iconify();
   void reshape(unsigned, unsigned);
   void reposition(int, int);
-  void set_title(vcl_string const &);
+  void set_title(std::string const &);
 
  private:
   bool pending_reshape;

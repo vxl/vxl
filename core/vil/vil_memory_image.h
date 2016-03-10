@@ -15,7 +15,8 @@
 #include <vil/vil_image_resource.h>
 #include <vil/vil_image_view_base.h>
 #include <vil/vil_property.h>
-#include <vcl_cstring.h>
+#include <vcl_compiler.h>
+#include <cstring>
 
 //: Generic image implementation for PNM files
 // You can't create one of these yourself - use vil_new_image_resource() instead.
@@ -79,7 +80,7 @@ class vil_memory_image : public vil_image_resource
   //: Declare that this is an in-memory image which is not read-only
   bool get_property(char const * tag, void * prop = 0) const
   {
-    if (0==vcl_strcmp(tag, vil_property_memory))
+    if (0==std::strcmp(tag, vil_property_memory))
       return prop ? (*static_cast<bool*>(prop)) = true : true;
 
     return false;

@@ -2,7 +2,9 @@
 // \file
 #include <testlib/testlib_test.h>
 #include <brad/brad_sun_pos.h>
-#include <vcl_cmath.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <cmath>
 
 //: Test the sun_pos class
 static void test_sun_pos()
@@ -19,11 +21,11 @@ static void test_sun_pos()
 
   double sun_azimuth, sun_elevation;
   brad_sun_pos(year, month, day, hours, minutes, seconds, lon, lat, sun_azimuth, sun_elevation);
-  double er = vcl_abs(sun_azimuth-127.482) + vcl_abs(sun_elevation-71.266);
+  double er = std::abs(sun_azimuth-127.482) + std::abs(sun_elevation-71.266);
   TEST_NEAR("sun_angles_test1", er, 0, 0.01);
 
   double dist = brad_sun_distance(year, month, day, hours, minutes, seconds);
-  double dist_er = vcl_abs(dist - 1.012804);
+  double dist_er = std::abs(dist - 1.012804);
   TEST_NEAR("sun_distance_test1", dist_er, 0, 1e-4);
 
   year = 2003;
@@ -36,11 +38,11 @@ static void test_sun_pos()
   lat = 35.76930165;
   brad_sun_pos(year, month, day, hours, minutes, seconds, lon, lat, sun_azimuth, sun_elevation);
 
-  er = vcl_abs(sun_azimuth-115.428) + vcl_abs(sun_elevation-64.495);
+  er = std::abs(sun_azimuth-115.428) + std::abs(sun_elevation-64.495);
   TEST_NEAR("sun_angles_test2", er, 0, 0.01);
 
   dist = brad_sun_distance(year, month, day, hours, minutes, seconds);
-  dist_er = vcl_abs(dist - 1.016613);
+  dist_er = std::abs(dist - 1.016613);
   TEST_NEAR("sun_distance_test2", dist_er, 0, 1e-4);
 
   lon = -71.39600021;
@@ -53,11 +55,11 @@ static void test_sun_pos()
   seconds = 42;
 
   brad_sun_pos(year, month, day, hours, minutes, seconds, lon, lat, sun_azimuth, sun_elevation);
-  er = vcl_abs(sun_azimuth-155.745) + vcl_abs(sun_elevation-42.766);
+  er = std::abs(sun_azimuth-155.745) + std::abs(sun_elevation-42.766);
   TEST_NEAR("sun_angles_test3", er, 0, 0.01);
 
   dist = brad_sun_distance(year, month, day, hours, minutes, seconds);
-  dist_er = vcl_abs(dist - 0.994044);
+  dist_er = std::abs(dist - 0.994044);
   TEST_NEAR("sun_distance_test3", dist_er, 0, 1e-4);
 
   year = 2004;
@@ -69,11 +71,11 @@ static void test_sun_pos()
   lon = 44.29977956;
   lat = 33.14200153;
   brad_sun_pos(year, month, day, hours, minutes, seconds, lon, lat, sun_azimuth, sun_elevation);
-  er = vcl_fabs(sun_azimuth-117.9) + vcl_fabs(sun_elevation-68.7);
+  er = std::fabs(sun_azimuth-117.9) + std::fabs(sun_elevation-68.7);
   TEST_NEAR("sun_angles_test4", er, 0, 0.15);
 
   dist = brad_sun_distance(year, month, day, hours, minutes, seconds);
-  dist_er = vcl_abs(dist - 1.016471);
+  dist_er = std::abs(dist - 1.016471);
   TEST_NEAR("sun_distance_test4", dist_er, 0, 1e-4);
 
   // Test Earth-Sun Distance for a future date
@@ -84,7 +86,7 @@ static void test_sun_pos()
   minutes = 47;
   seconds = 41;
   dist = brad_sun_distance(year, month, day, hours, minutes, seconds);
-  dist_er = vcl_abs(dist - 0.988733426);
+  dist_er = std::abs(dist - 0.988733426);
   TEST_NEAR("sun_distance_test5", dist_er, 0, 1e-4);
 
 }

@@ -19,32 +19,34 @@
 //----------------------------------------------------------------------
 
 #include "frame_grabber_v4l.h"
-#include <vcl_cstring.h> // for memcpy()
-#include <vcl_cstdlib.h> // for exit()
-#include <vcl_cstdio.h>
+#include <cstring> // for memcpy()
+#include <cstdlib> // for exit()
+#include <vcl_compiler.h>
+#include <iostream>
+#include <cstdio>
 
 FrameGrabberV4lGrey::FrameGrabberV4lGrey(int width_, int height_,
                                          bool debug_, char *devname)
   : current(0), width(width_), height(height_), debug(debug_)
 {
   if (debug)
-    vcl_cout << "V4lGrey constructor, current = " << current << vcl_endl;
+    std::cout << "V4lGrey constructor, current = " << current << std::endl;
   // now setup the input stream
   fd = open(devname, O_RDWR);
   if (fd<0)
   {
-    vcl_cerr << "Error: couldn't open device " << devname << vcl_endl;
-    vcl_perror("Couldn't open device");
-    vcl_exit(-1);
+    std::cerr << "Error: couldn't open device " << devname << std::endl;
+    std::perror("Couldn't open device");
+    std::exit(-1);
   }
   // check the video capability stuff
   struct video_capability vcap;
   ioctl(fd, VIDIOCGCAP, &vcap);
   if (debug)
   {
-    vcl_cout << "camera name = " << vcap.name << vcl_endl
+    std::cout << "camera name = " << vcap.name << std::endl
              << "max image size = " << vcap.maxwidth << ' '
-             << vcap.maxheight << vcl_endl;
+             << vcap.maxheight << std::endl;
   }
 
   // now set the default parameters for the camera set the format to
@@ -57,13 +59,13 @@ FrameGrabberV4lGrey::FrameGrabberV4lGrey(int width_, int height_,
   struct video_picture vp;
   ioctl(fd, VIDIOCGPICT, &vp);
   if (debug)
-    vcl_cout << "vp.pallette = " << vp.palette << vcl_endl;
+    std::cout << "vp.pallette = " << vp.palette << std::endl;
   vp.palette = VIDEO_PALETTE_YUV420P;
   if (ioctl(fd, VIDIOCSPICT, &vp)>=0)
-    vcl_cout << "Successfully set palette to YUV420P\n";
+    std::cout << "Successfully set palette to YUV420P\n";
   else
   {
-    vcl_cerr << "Error setting pallette\n"
+    std::cerr << "Error setting pallette\n"
              << "Capture may not work\n";
   }
 
@@ -73,8 +75,8 @@ FrameGrabberV4lGrey::FrameGrabberV4lGrey(int width_, int height_,
   vw.width = width;
   vw.height = height;
   if (debug)
-    vcl_cout << "trying to set to window = " << vw.x << ' ' << vw.y
-             << ' ' << vw.width << ' ' << vw.height << vcl_endl;
+    std::cout << "trying to set to window = " << vw.x << ' ' << vw.y
+             << ' ' << vw.width << ' ' << vw.height << std::endl;
 #if 0
   // set the fps to 30 fps
   vw.flags &= ~PWC_FPS_FRMASK;
@@ -85,8 +87,8 @@ FrameGrabberV4lGrey::FrameGrabberV4lGrey(int width_, int height_,
   // now read the actual size back
   ioctl(fd, VIDIOCGWIN, &vw);
   if (debug)
-    vcl_cout << "actually setting window to = " << vw.x << ' ' << vw.y
-             << ' ' << vw.width << ' ' << vw.height << vcl_endl;
+    std::cout << "actually setting window to = " << vw.x << ' ' << vw.y
+             << ' ' << vw.width << ' ' << vw.height << std::endl;
   // set the size to the actual size
   width = vw.width;
   height = vw.height;
@@ -99,7 +101,7 @@ FrameGrabberV4lGrey::FrameGrabberV4lGrey(int width_, int height_,
 
   // aio = new AsyncIO(fd);
   if (debug)
-    vcl_cout << "V4lGrey constructor end, current = " << current << vcl_endl;
+    std::cout << "V4lGrey constructor end, current = " << current << std::endl;
 }
 
 //----------------------------------------------------------------------
@@ -134,11 +136,11 @@ FrameGrabberV4lGrey::~FrameGrabberV4lGrey()
 void FrameGrabberV4lGrey::acquire_frame_synch()
 {
   if (debug)
-    vcl_cout << "acquire_frame_synch, current = " << current << vcl_endl;
+    std::cout << "acquire_frame_synch, current = " << current << std::endl;
   if (!read(fd, (void*)contents[current], width*height*3))
     return;
   if (debug)
-    vcl_cout << "acquire_frame_synch end, current = " << current << vcl_endl;
+    std::cout << "acquire_frame_synch end, current = " << current << std::endl;
 #if 0
   current = (current+1)%2;
   aio->read(contents[current], width*height*sizeof(ImageContents));
@@ -172,11 +174,11 @@ void FrameGrabberV4lGrey::acquire_frame_synch()
 void FrameGrabberV4lGrey::acquire_frame_asynch()
 {
   if (debug)
-    vcl_cout << "acquire_frame_asynch: currently equivalent to synch\n";
+    std::cout << "acquire_frame_asynch: currently equivalent to synch\n";
   if (!read(fd, (void*)contents[current], width*height*3))
     return;
   if (debug)
-    vcl_cout << "acquire_frame_asynch end\n";
+    std::cout << "acquire_frame_asynch end\n";
 #if 0
   // first need to wait for any previous acquire to finish
   aio->wait_for_completion();
@@ -209,11 +211,11 @@ void FrameGrabberV4lGrey::acquire_frame_asynch()
 vil1_memory_image *FrameGrabberV4lGrey::get_current_and_acquire()
 {
   if (debug)
-    vcl_cout << "get_current_and_acquire\n";
+    std::cout << "get_current_and_acquire\n";
   acquire_frame_asynch();
   return get_current_frame();
   if (debug)
-    vcl_cout << "get_current_and_acquire end\n";
+    std::cout << "get_current_and_acquire end\n";
 }
 
 //----------------------------------------------------------------------
@@ -233,9 +235,9 @@ void FrameGrabberV4lGrey::flip_current()
   ImageContents *temp_mem = new ImageContents[im[current]->width()];
   for (int i=0; i<limit; i++)
   {
-    vcl_memcpy(temp_mem, contents[current]+i*width, length);
-    vcl_memcpy(contents[current]+i*width, contents[current]+(height-i-1)*width, length);
-    vcl_memcpy(contents[current]+(height-i-1)*width, temp_mem, length);
+    std::memcpy(temp_mem, contents[current]+i*width, length);
+    std::memcpy(contents[current]+i*width, contents[current]+(height-i-1)*width, length);
+    std::memcpy(contents[current]+(height-i-1)*width, temp_mem, length);
   }
   delete[] temp_mem;
 }

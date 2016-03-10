@@ -9,12 +9,14 @@
 
 #include "vimt3d_vil3d_v3m.h"
 //
-#include <vcl_cstdlib.h> // for vcl_abort()
-#include <vcl_cstring.h> // for vcl_strcmp()
-#include <vcl_sstream.h>
+#include <cstdlib> // for std::abort()
+#include <cstring> // for std::strcmp()
+#include <sstream>
 #include <vcl_cassert.h>
-#include <vcl_ios.h>
-#include <vcl_algorithm.h>
+#include <ios>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <algorithm>
 #include <vsl/vsl_binary_loader.h>
 #include <vsl/vsl_block_binary_rle.h>
 #include <vgl/vgl_point_3d.h>
@@ -33,7 +35,7 @@ unsigned vimt3d_vil3d_v3m_format::magic_number()
 
 vil3d_image_resource_sptr vimt3d_vil3d_v3m_format::make_input_image(const char *filename) const
 {
-  vcl_auto_ptr<vcl_fstream> file(new vcl_fstream(filename, vcl_ios_in | vcl_ios_binary ));
+  std::auto_ptr<std::fstream> file(new std::fstream(filename, std::ios::in | std::ios::binary ));
   if (!file.get() || !file->is_open())
     return VXL_NULLPTR;
 
@@ -63,17 +65,17 @@ vil3d_image_resource_sptr vimt3d_vil3d_v3m_format::make_output_image
        format != VIL_PIXEL_FORMAT_FLOAT && format != VIL_PIXEL_FORMAT_DOUBLE &&
        format != VIL_PIXEL_FORMAT_BOOL)
   {
-    vcl_cerr << "vimt3d_vil3d_v3m_format::make_output_image() WARNING\n"
-             << "  Unable to deal with file format : " << format << vcl_endl;
+    std::cerr << "vimt3d_vil3d_v3m_format::make_output_image() WARNING\n"
+             << "  Unable to deal with file format : " << format << std::endl;
     return VXL_NULLPTR;
   }
 
-  vcl_auto_ptr<vcl_fstream> of(
-    new vcl_fstream(filename, vcl_ios_out | vcl_ios_binary | vcl_ios_trunc) );
+  std::auto_ptr<std::fstream> of(
+    new std::fstream(filename, std::ios::out | std::ios::binary | std::ios::trunc) );
   if (!of.get() || !of->is_open())
   {
-    vcl_cerr << "vimt3d_vil3d_v3m_format::make_output_image() WARNING\n"
-             << "  Unable to open file: " << filename << vcl_endl;
+    std::cerr << "vimt3d_vil3d_v3m_format::make_output_image() WARNING\n"
+             << "  Unable to open file: " << filename << std::endl;
     return VXL_NULLPTR;
   }
 
@@ -101,7 +103,7 @@ void vimt3d_vil3d_v3m_image::load_full_image() const
   if (magic != vimt3d_vil3d_v3m_format::magic_number())
   {
     im_ =VXL_NULLPTR;
-    is.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
+    is.is().clear(std::ios::badbit); // Set an unrecoverable IO error on stream
     vil_exception_warning(vil_exception_corrupt_image_file(
       "vimt3d_vil3d_v3m_image::load_full_image", "vimt3d_vil3d_v3m_image", "", "Incorrect v3m magic number detected"));
     return;
@@ -121,7 +123,7 @@ void vimt3d_vil3d_v3m_image::load_full_image() const
       vsl_b_read(is, v);
       header_.pixel_format = static_cast<vil_pixel_format>(v);
       vsl_b_read(is, header_.w2i);
-      vcl_size_t size = static_cast<vcl_size_t>(header_.ni) * header_.nj *
+      std::size_t size = static_cast<std::size_t>(header_.ni) * header_.nj *
         header_.nk * header_.nplanes;
       vil_memory_chunk_sptr chunk_ptr( new vil_memory_chunk(
         size * vil_pixel_format_sizeof_components(header_.pixel_format), header_.pixel_format) );
@@ -131,7 +133,7 @@ void vimt3d_vil3d_v3m_image::load_full_image() const
 #define macro( F , T ) \
        case F : \
         { \
-          vcl_ptrdiff_t istep=0, jstep=0, kstep=0, pstep=0; \
+          std::ptrdiff_t istep=0, jstep=0, kstep=0, pstep=0; \
           T* origin_ptr=static_cast<T*>(chunk_ptr->data()); \
           if (size) \
           { \
@@ -140,7 +142,7 @@ void vimt3d_vil3d_v3m_image::load_full_image() const
             vsl_b_read(is, jstep); \
             vsl_b_read(is, kstep); \
             vsl_b_read(is, pstep); \
-            vcl_ptrdiff_t offset; \
+            std::ptrdiff_t offset; \
             vsl_b_read(is, offset); \
             origin_ptr += offset; \
           } \
@@ -163,7 +165,7 @@ macro(VIL_PIXEL_FORMAT_DOUBLE , double )
        case  VIL_PIXEL_FORMAT_INT_32 :
         {
           vxl_int_32* origin_ptr=static_cast<vxl_int_32*>(chunk_ptr->data());
-          vcl_ptrdiff_t istep=0, jstep=0, kstep=0, pstep=0;
+          std::ptrdiff_t istep=0, jstep=0, kstep=0, pstep=0;
           if (size)
           {
             vsl_block_binary_rle_read(is, static_cast<vxl_int_32 *>(chunk_ptr->data()), size);
@@ -171,7 +173,7 @@ macro(VIL_PIXEL_FORMAT_DOUBLE , double )
             vsl_b_read(is, jstep);
             vsl_b_read(is, kstep);
             vsl_b_read(is, pstep);
-            vcl_ptrdiff_t offset;
+            std::ptrdiff_t offset;
             vsl_b_read(is, offset);
             origin_ptr += offset;
           }
@@ -191,8 +193,8 @@ macro(VIL_PIXEL_FORMAT_DOUBLE , double )
 
    default:
     im_ =VXL_NULLPTR;
-    is.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
-    vcl_ostringstream oss;
+    is.is().clear(std::ios::badbit); // Set an unrecoverable IO error on stream
+    std::ostringstream oss;
     oss << "I/O ERROR: vimt3d_vil3d_v3m_image::load_full_image()\n"
         << "           Unknown version number "<< version << '\n';
     vil_exception_warning(vil_exception_invalid_version(
@@ -210,7 +212,7 @@ macro(VIL_PIXEL_FORMAT_DOUBLE , double )
 
 //: Private constructor, use vil3d_load instead.
 // This object takes ownership of the file, for reading.
-vimt3d_vil3d_v3m_image::vimt3d_vil3d_v3m_image(vcl_auto_ptr<vcl_fstream> file):
+vimt3d_vil3d_v3m_image::vimt3d_vil3d_v3m_image(std::auto_ptr<std::fstream> file):
   file_(file.release()), im_(VXL_NULLPTR), dirty_(false)
 {
   file_->seekg(0);
@@ -220,7 +222,7 @@ vimt3d_vil3d_v3m_image::vimt3d_vil3d_v3m_image(vcl_auto_ptr<vcl_fstream> file):
   vsl_b_read(is, magic);
   if (magic != vimt3d_vil3d_v3m_format::magic_number())
   {
-    is.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
+    is.is().clear(std::ios::badbit); // Set an unrecoverable IO error on stream
     vil_exception_warning(vil_exception_corrupt_image_file(
       "vimt3d_vil3d_v3m_image constructor", "vimt3d_vil3d_v3m_image", "", "Incorrect v3m magic number detected"));
     return;
@@ -245,7 +247,7 @@ vimt3d_vil3d_v3m_image::vimt3d_vil3d_v3m_image(vcl_auto_ptr<vcl_fstream> file):
         break;
       }
     default:
-      vcl_ostringstream oss;
+      std::ostringstream oss;
       oss << "I/O ERROR: vimt3d_vil3d_v3m_image::vimt3d_vil3d_v3m_image()\n"
           << "           Unknown version number "<< version << '\n';
       vil_exception_warning(vil_exception_invalid_version("vimt3d_vil3d_v3m_image constructor", "vimt3d_vil3d_v3m_image", "", oss.str()));
@@ -261,7 +263,7 @@ vimt3d_vil3d_v3m_image::vimt3d_vil3d_v3m_image(vcl_auto_ptr<vcl_fstream> file):
 
 //: Private constructor, use vil3d_save instead.
 // This object takes ownership of the file, for writing.
-vimt3d_vil3d_v3m_image::vimt3d_vil3d_v3m_image(vcl_auto_ptr<vcl_fstream> file, unsigned ni,
+vimt3d_vil3d_v3m_image::vimt3d_vil3d_v3m_image(std::auto_ptr<std::fstream> file, unsigned ni,
                                                unsigned nj, unsigned nk,
                                                unsigned nplanes,
                                                vil_pixel_format format):
@@ -332,7 +334,7 @@ vimt3d_vil3d_v3m_image::~vimt3d_vil3d_v3m_image()
           vsl_b_write(os, image.jstep()); \
           vsl_b_write(os, image.kstep()); \
           vsl_b_write(os, image.planestep()); \
-          vcl_ptrdiff_t offset = (image.origin_ptr() - \
+          std::ptrdiff_t offset = (image.origin_ptr() - \
                                   reinterpret_cast<const T*>(image.memory_chunk()->data())); \
           vsl_b_write(os, offset); \
         } \
@@ -363,7 +365,7 @@ macro(VIL_PIXEL_FORMAT_DOUBLE , double )
           vsl_b_write(os, image.jstep());
           vsl_b_write(os, image.kstep());
           vsl_b_write(os, image.planestep());
-          vcl_ptrdiff_t offset = (image.origin_ptr() -
+          std::ptrdiff_t offset = (image.origin_ptr() -
                                   reinterpret_cast<const vxl_int_32*>(image.memory_chunk()->data()));
           vsl_b_write(os, offset);
         }
@@ -419,7 +421,7 @@ enum vil_pixel_format vimt3d_vil3d_v3m_image::pixel_format() const
 //: Get the properties (of the first slice)
 bool vimt3d_vil3d_v3m_image::get_property(char const *key, void * value) const
 {
-  if (vcl_strcmp(vil3d_property_voxel_size, key)==0)
+  if (std::strcmp(vil3d_property_voxel_size, key)==0)
   {
     vimt3d_transform_3d i2w=header_.w2i.inverse();
 
@@ -430,7 +432,7 @@ bool vimt3d_vil3d_v3m_image::get_property(char const *key, void * value) const
     return true;
   }
 
-  if (vcl_strcmp(vil3d_property_origin_offset, key)==0)
+  if (std::strcmp(vil3d_property_origin_offset, key)==0)
   {
     vgl_point_3d<double> origin = header_.w2i.origin();
     float* array =  static_cast<float*>(value);

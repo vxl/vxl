@@ -4,7 +4,9 @@
 // \file
 
 #include <bprb/bprb_parameters.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iostream>
 #include <vpgl/vpgl_lvcs.h>
 #include <vpgl/vpgl_lvcs_sptr.h>
 
@@ -17,7 +19,7 @@ bool vpgl_convert_to_local_coordinates_process_cons(bprb_func_process& pro)
   // 2: (float)  longitude
   // 3: (float)  elevation
   bool ok=false;
-  vcl_vector<vcl_string> input_types;
+  std::vector<std::string> input_types;
   input_types.push_back("vcl_string");
   input_types.push_back("float");
   input_types.push_back("float");
@@ -29,7 +31,7 @@ bool vpgl_convert_to_local_coordinates_process_cons(bprb_func_process& pro)
   // 0: (float) x
   // 1: (float) y
   // 2: (float) z
-  vcl_vector<vcl_string> output_types;
+  std::vector<std::string> output_types;
   output_types.push_back("float");
   output_types.push_back("float");
   output_types.push_back("float");
@@ -44,20 +46,20 @@ bool vpgl_convert_to_local_coordinates_process_cons(bprb_func_process& pro)
 bool vpgl_convert_to_local_coordinates_process(bprb_func_process& pro)
 {
   if (pro.n_inputs() != pro.input_types().size()) {
-    vcl_cout << "vpgl_convert_to_local_coordinates_process: The number of inputs should be " << pro.input_types().size() << vcl_endl;
+    std::cout << "vpgl_convert_to_local_coordinates_process: The number of inputs should be " << pro.input_types().size() << std::endl;
     return false;
   }
 
   // get the inputs
-  vcl_string lvcs_filename = pro.get_input<vcl_string>(0);
+  std::string lvcs_filename = pro.get_input<std::string>(0);
   float lat = pro.get_input<float>(1);
   float lon = pro.get_input<float>(2);
   float el = pro.get_input<float>(3);
 
   vpgl_lvcs lvcs;
-  vcl_ifstream ifs(lvcs_filename.c_str());
+  std::ifstream ifs(lvcs_filename.c_str());
   if(!ifs.good()) {
-    vcl_cerr << "Error opening lvcs filename " << lvcs_filename << vcl_endl;
+    std::cerr << "Error opening lvcs filename " << lvcs_filename << std::endl;
     return false;
   }
 
@@ -82,7 +84,7 @@ bool vpgl_convert_to_local_coordinates_process2_cons(bprb_func_process& pro)
   // 2: (float)  longitude
   // 3: (float)  elevation
   bool ok=false;
-  vcl_vector<vcl_string> input_types;
+  std::vector<std::string> input_types;
   input_types.push_back("vpgl_lvcs_sptr");
   input_types.push_back("float");
   input_types.push_back("float");
@@ -94,7 +96,7 @@ bool vpgl_convert_to_local_coordinates_process2_cons(bprb_func_process& pro)
   // 0: (float) x
   // 1: (float) y
   // 2: (float) z
-  vcl_vector<vcl_string> output_types;
+  std::vector<std::string> output_types;
   output_types.push_back("float");
   output_types.push_back("float");
   output_types.push_back("float");
@@ -109,7 +111,7 @@ bool vpgl_convert_to_local_coordinates_process2_cons(bprb_func_process& pro)
 bool vpgl_convert_to_local_coordinates_process2(bprb_func_process& pro)
 {
   if (pro.n_inputs() != pro.input_types().size()) {
-    vcl_cout << "vpgl_convert_to_local_coordinates_process: The number of inputs should be " << pro.input_types().size() << vcl_endl;
+    std::cout << "vpgl_convert_to_local_coordinates_process: The number of inputs should be " << pro.input_types().size() << std::endl;
     return false;
   }
 

@@ -13,7 +13,9 @@
 // \endverbatim
 
 #include "bvpl_kernel_factory.h"
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iostream>
 
 //: A class to generate kernels of corners with thickness.
 // The general form of the corner is of the following type

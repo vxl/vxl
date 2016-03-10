@@ -5,7 +5,9 @@
 // \file
 
 #include "bapl_lowe_pyramid.h"
-#include <vcl_cmath.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <cmath>
 #include <vcl_cassert.h>
 
 //: Constructor
@@ -14,7 +16,7 @@ bapl_lowe_pyramid<T>::bapl_lowe_pyramid(unsigned octave_size, unsigned num_octav
  : octave_size_(octave_size)
 {
   for (unsigned i=0; i<num_octaves; ++i){
-    vcl_vector< vil_image_view< T > > octave( octave_size, vil_image_view< T >() );
+    std::vector< vil_image_view< T > > octave( octave_size, vil_image_view< T >() );
     data_.push_back(octave);
   }
 }
@@ -26,7 +28,7 @@ void
 bapl_lowe_pyramid<T>::resize(unsigned num_octaves)
 {
   // an empty octave
-  vcl_vector< vil_image_view< T > > octave( octave_size_, vil_image_view< T >() );
+  std::vector< vil_image_view< T > > octave( octave_size_, vil_image_view< T >() );
   data_.resize(num_octaves, octave);
 }
 

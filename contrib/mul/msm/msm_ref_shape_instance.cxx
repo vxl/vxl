@@ -10,8 +10,10 @@
 #include <vnl/algo/vnl_cholesky.h>
 #include <vnl/algo/vnl_svd.h>
 
-#include <vcl_cstdlib.h>  // for vcl_atoi() & vcl_abort()
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <cstdlib>  // for std::atoi() & std::abort()
+#include <iostream>
 #include <vcl_cassert.h>
 
 #include <msm/msm_ref_shape_model.h>
@@ -156,7 +158,7 @@ void msm_calc_WP(const vnl_matrix<double>& P,
 
 // Premultiply P by block diagonal composed of wt_mat
 void msm_calc_WP(const vnl_matrix<double>& P,
-                 const vcl_vector<msm_wt_mat_2d>& wt_mat,
+                 const std::vector<msm_wt_mat_2d>& wt_mat,
                  unsigned n_modes,
                  vnl_matrix<double>& WP)
 {
@@ -166,7 +168,7 @@ void msm_calc_WP(const vnl_matrix<double>& P,
 
   double const*const* PData = P.data_array();
   double ** WPData = WP.data_array();
-  vcl_vector<msm_wt_mat_2d>::const_iterator w=wt_mat.begin();
+  std::vector<msm_wt_mat_2d>::const_iterator w=wt_mat.begin();
 
   for (unsigned i=0;i<nr;i+=2,++w)
   {
@@ -233,7 +235,7 @@ void msm_solve_for_b(const vnl_matrix<double>& P,
 // W is block diagonal, with blocks wt_mat[i] (symmetrix 2x2)
 void msm_solve_for_b(const vnl_matrix<double>& P,
                      const vnl_vector<double>& var,
-                     const vcl_vector<msm_wt_mat_2d>& wt_mat,
+                     const std::vector<msm_wt_mat_2d>& wt_mat,
                      const vnl_vector<double>& dx,
                      unsigned n_modes,
                      vnl_vector<double>& b, bool use_prior)
@@ -291,7 +293,7 @@ void msm_transform_wt_mat(const vnl_double_2x2& W,
 //: Finds parameters and pose to best match to points
 //  Errors on point i are weighted by wt_mat[i] in target frame
 void msm_ref_shape_instance::fit_to_points_wt_mat(const msm_points& pts,
-                                                  const vcl_vector<msm_wt_mat_2d>& wt_mat)
+                                                  const std::vector<msm_wt_mat_2d>& wt_mat)
 {
   // Catch case when fitting to self
   if (&pts == &points_) return;
@@ -326,9 +328,9 @@ short msm_ref_shape_instance::version_no() const
 // Method: is_a
 //=======================================================================
 
-vcl_string msm_ref_shape_instance::is_a() const
+std::string msm_ref_shape_instance::is_a() const
 {
-  return vcl_string("msm_ref_shape_instance");
+  return std::string("msm_ref_shape_instance");
 }
 
 //=======================================================================
@@ -336,7 +338,7 @@ vcl_string msm_ref_shape_instance::is_a() const
 //=======================================================================
 
   // required if data is present in this class
-void msm_ref_shape_instance::print_summary(vcl_ostream& os) const
+void msm_ref_shape_instance::print_summary(std::ostream& os) const
 {
   os << is_a();
 }
@@ -371,9 +373,9 @@ void msm_ref_shape_instance::b_read(vsl_b_istream& bfs)
       vsl_b_read(bfs,use_prior_);
       break;
     default:
-      vcl_cerr << "msm_ref_shape_instance::b_read() :\n"
-               << "Unexpected version number " << version << vcl_endl;
-      bfs.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
+      std::cerr << "msm_ref_shape_instance::b_read() :\n"
+               << "Unexpected version number " << version << std::endl;
+      bfs.is().clear(std::ios::badbit); // Set an unrecoverable IO error on stream
       return;
   }
 
@@ -404,7 +406,7 @@ void vsl_b_read(vsl_b_istream& bfs, msm_ref_shape_instance& b)
 // Associated function: operator<<
 //=======================================================================
 
-vcl_ostream& operator<<(vcl_ostream& os,const msm_ref_shape_instance& b)
+std::ostream& operator<<(std::ostream& os,const msm_ref_shape_instance& b)
 {
   os << b.is_a() << ": ";
   vsl_indent_inc(os);
@@ -414,7 +416,7 @@ vcl_ostream& operator<<(vcl_ostream& os,const msm_ref_shape_instance& b)
 }
 
 //: Stream output operator for class reference
-void vsl_print_summary(vcl_ostream& os,const msm_ref_shape_instance& b)
+void vsl_print_summary(std::ostream& os,const msm_ref_shape_instance& b)
 {
  os << b;
 }

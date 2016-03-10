@@ -1,18 +1,20 @@
-#ifndef vcl_list_to_CoolList_h_
-#define vcl_list_to_CoolList_h_
+#ifndef std::list_to_CoolList_h_
+#define std::list_to_CoolList_h_
 
 #include <cool/List.h>
-#include <vcl_list.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <list>
 
 template <class T>
 inline
-CoolList<T> vcl_list_to_CoolList(vcl_list<T> const& cl)
+CoolList<T> std::list_to_CoolList(std::list<T> const& cl)
 {
   CoolList<T> l;
-  typename vcl_list<T>::const_iterator it = cl.begin();
+  typename std::list<T>::const_iterator it = cl.begin();
   for (; !(it == cl.end()); ++it)
     l.push_end(*it);
   return l;
 }
 
-#endif // vcl_list_to_CoolList_h_
+#endif // std::list_to_CoolList_h_

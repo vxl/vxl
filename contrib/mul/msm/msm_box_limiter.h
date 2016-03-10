@@ -7,7 +7,9 @@
 
 #include <msm/msm_param_limiter.h>
 #include <vnl/vnl_vector.h>
-#include <vcl_iosfwd.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iosfwd>
 
 //: Apply limits to each parameter independently
 //  Each parameter is forced to lie in range [-k*s_i,+k*s_i],
@@ -49,13 +51,13 @@ class msm_box_limiter : public msm_param_limiter
 
 
   //: Name of the class
-  virtual vcl_string is_a() const;
+  virtual std::string is_a() const;
 
   //: Create a copy on the heap and return base class pointer
   virtual msm_param_limiter* clone() const;
 
   //: Print class to os
-  virtual void print_summary(vcl_ostream& os) const;
+  virtual void print_summary(std::ostream& os) const;
 
   //: Save class to binary file stream
   virtual void b_write(vsl_b_ostream& bfs) const;
@@ -66,7 +68,7 @@ class msm_box_limiter : public msm_param_limiter
   //: Initialise from a text stream.
   // The default implementation is for attribute-less normalisers,
   // and throws if it finds any data in the stream.
-  virtual void config_from_stream(vcl_istream &is);
+  virtual void config_from_stream(std::istream &is);
 };
 
 #endif // msm_box_limiter_h_

@@ -14,12 +14,14 @@
 //:
 // \file
 #include <vnl/vnl_math.h>
-#include <vcl_cmath.h> //for fabs
+#include <vcl_compiler.h>
+#include <iostream>
+#include <cmath> //for fabs
 #include <vsol/vsol_rectangle_2d.h>
 #include <vsol/vsol_rectangle_2d_sptr.h>
 #include <vsol/vsol_point_2d.h>
 #include <vsol/vsol_point_2d_sptr.h>
-bool near_eq(double x, double y){return vcl_fabs(x-y)<1e-06;}
+bool near_eq(double x, double y){return std::fabs(x-y)<1e-06;}
 bool near_eq(vsol_point_2d_sptr const& a, vsol_point_2d_sptr const& b)
 {
   bool eq = near_eq(a->x(), b->x())&&near_eq(a->y(), b->y());
@@ -29,7 +31,7 @@ bool near_eq(vsol_point_2d_sptr const& a, vsol_point_2d_sptr const& b)
 void test_vsol_rectangle_2d()
 {
   //test normal constructor
-  vcl_cout << "Test vsol_rectangle_2d(p,q,r,s)" <<'\n';
+  std::cout << "Test vsol_rectangle_2d(p,q,r,s)" <<'\n';
   vsol_point_2d_sptr p=new vsol_point_2d(0,0);
   vsol_point_2d_sptr q=new vsol_point_2d(1,0);
   vsol_point_2d_sptr r=new vsol_point_2d(1,1);
@@ -44,7 +46,7 @@ void test_vsol_rectangle_2d()
   TEST("vsol_rectangle_2d::area()", t->area(), 1);
 
   //test three-point constructor
-  vcl_cout << "Test vsol_rectangle_2d(center, half_width_vector, half_height_vector)" <<'\n';
+  std::cout << "Test vsol_rectangle_2d(center, half_width_vector, half_height_vector)" <<'\n';
   vsol_point_2d_sptr center = new vsol_point_2d(0.5,0.5);
   vsol_point_2d_sptr half_width_vector =  new vsol_point_2d(0.5,0);
   vsol_point_2d_sptr half_height_vector = new vsol_point_2d(0.0,0.5);
@@ -57,7 +59,7 @@ void test_vsol_rectangle_2d()
   TEST("vsol_rectangle_2d::p3()", *(t1->p3()), *s);
 
   //test center, width, height, angle constructor
-  vcl_cout << "Test vsol_rectangle_2d(center, half_width, half_height, angle, true)" <<'\n';
+  std::cout << "Test vsol_rectangle_2d(center, half_width, half_height, angle, true)" <<'\n';
   double half_width = 0.5, half_height = 0.5, angle = 45.0;
   vsol_rectangle_2d_sptr t2=
     new vsol_rectangle_2d(center, half_width, half_height, angle, true);

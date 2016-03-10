@@ -1,12 +1,14 @@
 // This is mul/mbl/tests/test_stats_1d.cxx
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iostream>
 #include <mbl/mbl_stats_1d.h>
 #include <testlib/testlib_test.h>
 #include <vnl/vnl_math.h>
 
 void test_stats_1d()
 {
-  vcl_cout << "**********************\n"
+  std::cout << "**********************\n"
            << " Testing mbl_stats_1d\n"
            << "**********************\n";
 
@@ -19,7 +21,7 @@ void test_stats_1d()
     stats.obs(i);
 
   TEST("nObs()",stats.nObs()==5,true);
-  vcl_cout<<stats<<vcl_endl;
+  std::cout<<stats<<std::endl;
   TEST_NEAR("mean()", stats.mean(),  2, 1e-9);
   TEST_NEAR("sd()"  , stats.sd()  , vnl_math::sqrt2, 1e-9);
   TEST_NEAR("sum()" , stats.sum() , 10, 1e-9);

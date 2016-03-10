@@ -16,13 +16,15 @@
 #include <boxm2/boxm2_scene.h>
 #include <boxm2/boxm2_data.h>
 #include <boxm2/boxm2_data_base.h>
-#include <vcl_string.h>
-#include <vcl_vector.h>
+#include <string>
+#include <vector>
 #include <vgl/algo/vgl_rotation_3d.h>
 #include "boxm2_vecf_mandible_params.h"
 #include "boxm2_vecf_mandible.h"
 #include <vgl/vgl_point_3d.h>
-#include <vcl_set.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <set>
 
 class boxm2_vecf_mandible_scene : public boxm2_vecf_articulated_scene
 {
@@ -36,17 +38,17 @@ class boxm2_vecf_mandible_scene : public boxm2_vecf_articulated_scene
 
   //: construct from scene file specification, use exising database unless initialize == true
   // otherwise compute voxel contents from the mandible parameters
-  boxm2_vecf_mandible_scene(vcl_string const& scene_file, vcl_string const& geometry_file);
+  boxm2_vecf_mandible_scene(std::string const& scene_file, std::string const& geometry_file);
 
-  boxm2_vecf_mandible_scene(vcl_string const& scene_file, vcl_string const& geometry_file, vcl_string const& params_file);
+  boxm2_vecf_mandible_scene(std::string const& scene_file, std::string const& geometry_file, std::string const& params_file);
 
 
   //: map mandible data to the target scene
   void map_to_target(boxm2_scene_sptr target_scene);
 
   //: compute an inverse vector field for rotation of mandible
-  void inverse_vector_field(vgl_rotation_3d<double> const& rot, vcl_vector<vgl_vector_3d<double> >& vfield,
-                            vcl_vector<bool>& valid) const;
+  void inverse_vector_field(vgl_rotation_3d<double> const& rot, std::vector<vgl_vector_3d<double> >& vfield,
+                            std::vector<bool>& valid) const;
 
   //: refine target cells to match the refinement level of the source block
   void prerefine_target(boxm2_scene_sptr target_scene,vgl_rotation_3d<double> const& rot);
@@ -72,12 +74,12 @@ class boxm2_vecf_mandible_scene : public boxm2_vecf_articulated_scene
  void fill_target_block();
  //: interpolate the alpha and appearance data around the vector field source location
  void interpolate_vector_field(vgl_point_3d<double> const& src, unsigned sindx, unsigned dindx, unsigned tindx,
-                                vcl_vector<vgl_point_3d<double> > & cell_centers,
-                                vcl_map<unsigned, vcl_vector<unsigned> >& cell_neighbor_cell_index,
-                               vcl_map<unsigned, vcl_vector<unsigned> >&cell_neighbor_data_index);
+                                std::vector<vgl_point_3d<double> > & cell_centers,
+                                std::map<unsigned, std::vector<unsigned> >& cell_neighbor_cell_index,
+                               std::map<unsigned, std::vector<unsigned> >&cell_neighbor_data_index);
 
 
- void apply_vector_field_to_target(vcl_vector<vgl_vector_3d<double> > const& vf, vcl_vector<bool> const& valid);
+ void apply_vector_field_to_target(std::vector<vgl_vector_3d<double> > const& vf, std::vector<bool> const& valid);
 
  // find nearest cell and return the data index of the nearest cell
  bool find_nearest_data_index(boxm2_vecf_mandible_scene::anat_type type, vgl_point_3d<double> const& probe, double cell_len, unsigned& data_indx,
@@ -162,7 +164,7 @@ class boxm2_vecf_mandible_scene : public boxm2_vecf_articulated_scene
   boxm2_data<BOXM2_MOG3_GREY>::datatype* target_app_data_; //target appearance database
   boxm2_data<BOXM2_NUM_OBS>::datatype* target_nobs_data_;  //target nobs
 
-  vcl_vector<cell_info> box_cell_centers_;       // cell centers in the target block
+  std::vector<cell_info> box_cell_centers_;       // cell centers in the target block
 
   boxm2_vecf_mandible_params params_;               // parameter struct
   // =============  mandible ===============
@@ -175,64 +177,64 @@ class boxm2_vecf_mandible_scene : public boxm2_vecf_articulated_scene
   boxm2_data<BOXM2_PIXEL>* right_ramus_;     // is voxel a right_ramus point
 
   //manible
-  vcl_vector<vgl_point_3d<double> > mandible_cell_centers_; // centers of mandible voxels
-  vcl_vector<unsigned> mandible_cell_data_index_;           // corresponding data indices
+  std::vector<vgl_point_3d<double> > mandible_cell_centers_; // centers of mandible voxels
+  std::vector<unsigned> mandible_cell_data_index_;           // corresponding data indices
   //      cell_index          cell_index
-  vcl_map<unsigned, vcl_vector<unsigned> > cell_neighbor_cell_index_; // neighbors of each mandible voxel
+  std::map<unsigned, std::vector<unsigned> > cell_neighbor_cell_index_; // neighbors of each mandible voxel
   //     data_index cell_index
-  vcl_map<unsigned, unsigned > data_index_to_cell_index_;             // data index to cell index
+  std::map<unsigned, unsigned > data_index_to_cell_index_;             // data index to cell index
   //      data_index          data_index
-  vcl_map<unsigned, vcl_vector<unsigned> > cell_neighbor_data_index_; // data index to neighbor data indices
+  std::map<unsigned, std::vector<unsigned> > cell_neighbor_data_index_; // data index to neighbor data indices
 
   // left_ramus
-  vcl_vector<vgl_point_3d<double> > left_ramus_cell_centers_; // centers of left_ramus voxels
-  vcl_vector<unsigned> left_ramus_cell_data_index_;           // corresponding data indices
+  std::vector<vgl_point_3d<double> > left_ramus_cell_centers_; // centers of left_ramus voxels
+  std::vector<unsigned> left_ramus_cell_data_index_;           // corresponding data indices
     //      cell_index          cell_index
-  vcl_map<unsigned, vcl_vector<unsigned> > left_ramus_cell_neighbor_cell_index_; // neighbors of each left_ramus voxel
+  std::map<unsigned, std::vector<unsigned> > left_ramus_cell_neighbor_cell_index_; // neighbors of each left_ramus voxel
   //     data_index cell_index
-  vcl_map<unsigned, unsigned > left_ramus_data_index_to_cell_index_;             // data index to left_ramus index
+  std::map<unsigned, unsigned > left_ramus_data_index_to_cell_index_;             // data index to left_ramus index
   //      data_index          data_index
-  vcl_map<unsigned, vcl_vector<unsigned> > left_ramus_cell_neighbor_data_index_; // data index to neighbor data indices
+  std::map<unsigned, std::vector<unsigned> > left_ramus_cell_neighbor_data_index_; // data index to neighbor data indices
 
   // left_angle
-  vcl_vector<vgl_point_3d<double> > left_angle_cell_centers_; // centers of left_angle voxels
-  vcl_vector<unsigned> left_angle_cell_data_index_;           // corresponding data indices
+  std::vector<vgl_point_3d<double> > left_angle_cell_centers_; // centers of left_angle voxels
+  std::vector<unsigned> left_angle_cell_data_index_;           // corresponding data indices
     //      cell_index          cell_index
-  vcl_map<unsigned, vcl_vector<unsigned> > left_angle_cell_neighbor_cell_index_; // neighbors of each left_angle voxel
+  std::map<unsigned, std::vector<unsigned> > left_angle_cell_neighbor_cell_index_; // neighbors of each left_angle voxel
   //     data_index cell_index
-  vcl_map<unsigned, unsigned > left_angle_data_index_to_cell_index_;             // data index to left_angle index
+  std::map<unsigned, unsigned > left_angle_data_index_to_cell_index_;             // data index to left_angle index
   //      data_index          data_index
-  vcl_map<unsigned, vcl_vector<unsigned> > left_angle_cell_neighbor_data_index_; // data index to neighbor data indices
+  std::map<unsigned, std::vector<unsigned> > left_angle_cell_neighbor_data_index_; // data index to neighbor data indices
 
   // body
-  vcl_vector<vgl_point_3d<double> > body_cell_centers_; // centers of body voxels
-  vcl_vector<unsigned> body_cell_data_index_;           // corresponding data indices
+  std::vector<vgl_point_3d<double> > body_cell_centers_; // centers of body voxels
+  std::vector<unsigned> body_cell_data_index_;           // corresponding data indices
     //      cell_index          cell_index
-  vcl_map<unsigned, vcl_vector<unsigned> > body_cell_neighbor_cell_index_; // neighbors of each body voxel
+  std::map<unsigned, std::vector<unsigned> > body_cell_neighbor_cell_index_; // neighbors of each body voxel
   //     data_index cell_index
-  vcl_map<unsigned, unsigned > body_data_index_to_cell_index_;             // data index to body index
+  std::map<unsigned, unsigned > body_data_index_to_cell_index_;             // data index to body index
   //      data_index          data_index
-  vcl_map<unsigned, vcl_vector<unsigned> > body_cell_neighbor_data_index_; // data index to neighbor data indices
+  std::map<unsigned, std::vector<unsigned> > body_cell_neighbor_data_index_; // data index to neighbor data indices
 
   // right_angle
-  vcl_vector<vgl_point_3d<double> > right_angle_cell_centers_; // centers of right_angle voxels
-  vcl_vector<unsigned> right_angle_cell_data_index_;           // corresponding data indices
+  std::vector<vgl_point_3d<double> > right_angle_cell_centers_; // centers of right_angle voxels
+  std::vector<unsigned> right_angle_cell_data_index_;           // corresponding data indices
     //      cell_index          cell_index
-  vcl_map<unsigned, vcl_vector<unsigned> > right_angle_cell_neighbor_cell_index_; // neighbors of each right_angle voxel
+  std::map<unsigned, std::vector<unsigned> > right_angle_cell_neighbor_cell_index_; // neighbors of each right_angle voxel
   //     data_index cell_index
-  vcl_map<unsigned, unsigned > right_angle_data_index_to_cell_index_;             // data index to right_angle index
+  std::map<unsigned, unsigned > right_angle_data_index_to_cell_index_;             // data index to right_angle index
   //      data_index          data_index
-  vcl_map<unsigned, vcl_vector<unsigned> > right_angle_cell_neighbor_data_index_; // data index to neighbor data indices
+  std::map<unsigned, std::vector<unsigned> > right_angle_cell_neighbor_data_index_; // data index to neighbor data indices
 
   // right_ramus
-  vcl_vector<vgl_point_3d<double> > right_ramus_cell_centers_; // centers of right_ramus voxels
-  vcl_vector<unsigned> right_ramus_cell_data_index_;           // corresponding data indices
+  std::vector<vgl_point_3d<double> > right_ramus_cell_centers_; // centers of right_ramus voxels
+  std::vector<unsigned> right_ramus_cell_data_index_;           // corresponding data indices
     //      cell_index          cell_index
-  vcl_map<unsigned, vcl_vector<unsigned> > right_ramus_cell_neighbor_cell_index_; // neighbors of each right_ramus voxel
+  std::map<unsigned, std::vector<unsigned> > right_ramus_cell_neighbor_cell_index_; // neighbors of each right_ramus voxel
   //     data_index cell_index
-  vcl_map<unsigned, unsigned > right_ramus_data_index_to_cell_index_;             // data index to right_ramus index
+  std::map<unsigned, unsigned > right_ramus_data_index_to_cell_index_;             // data index to right_ramus index
   //      data_index          data_index
-  vcl_map<unsigned, vcl_vector<unsigned> > right_ramus_cell_neighbor_data_index_; // data index to neighbor data indices
+  std::map<unsigned, std::vector<unsigned> > right_ramus_cell_neighbor_data_index_; // data index to neighbor data indices
 
 private:
   bool extrinsic_only_;

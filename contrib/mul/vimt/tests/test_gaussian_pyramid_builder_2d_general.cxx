@@ -1,5 +1,7 @@
 // This is mul/vimt/tests/test_gaussian_pyramid_builder_2d_general.cxx
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iostream>
 #include <vpl/vpl.h> // vpl_unlink()
 #include <vimt/vimt_image_2d_of.h>
 #include <vimt/vimt_gaussian_pyramid_builder_2d_general.h>
@@ -24,7 +26,7 @@ bool all_pixels_equal_to(const vil_image_view<T>& in, T v)
 static void test_gaussian_pyramid_builder_2d_general()
 {
   unsigned ni = 20, nj = 20;
-  vcl_cout << "****************************************************************\n"
+  std::cout << "****************************************************************\n"
            << " Testing vimt_gaussian_pyramid_builder_2d_general (byte)(ni="<<ni<<")\n"
            << "****************************************************************\n";
 
@@ -56,8 +58,8 @@ static void test_gaussian_pyramid_builder_2d_general()
 
   builder.build(image_pyr,image0);
 
-  vcl_cout<<"Result:\n";
-  image_pyr.print_all(vcl_cout);
+  std::cout<<"Result:\n";
+  image_pyr.print_all(std::cout);
 
   TEST("Found correct number of levels", image_pyr.n_levels(), 2);
 
@@ -70,8 +72,8 @@ static void test_gaussian_pyramid_builder_2d_general()
 
   builder.set_max_levels(default_n_levels);
   builder.extend(image_pyr);
-  vcl_cout<<"\n\n\nTesting builder.extend():\n";
-  image_pyr.print_all(vcl_cout);
+  std::cout<<"\n\n\nTesting builder.extend():\n";
+  image_pyr.print_all(std::cout);
 
   TEST("Found correct number of levels", image_pyr.n_levels(), 9);
 
@@ -104,13 +106,13 @@ static void test_gaussian_pyramid_builder_2d_general()
        all_pixels_equal_to(vil_plane(view_l1,1), vxl_byte(20)) &&
        all_pixels_equal_to(vil_plane(view_l1,2), vxl_byte(200)), true);
 
-  image_pyr.print_all(vcl_cout);
+  image_pyr.print_all(std::cout);
 
-  vcl_cout<<"\n\n======== TESTING I/O ===========\n";
+  std::cout<<"\n\n======== TESTING I/O ===========\n";
 
   vsl_add_to_binary_loader(vimt_gaussian_pyramid_builder_2d_general<vxl_byte>());
 
-  vcl_string test_path = "test_gaussian_pyramid_builder_2d_general.bvl.tmp";
+  std::string test_path = "test_gaussian_pyramid_builder_2d_general.bvl.tmp";
   vsl_b_ofstream bfs_out(test_path);
   TEST(("Created " + test_path + " for writing").c_str(), (!bfs_out), false);
   vsl_b_write(bfs_out, builder);

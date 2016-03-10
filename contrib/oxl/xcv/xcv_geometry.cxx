@@ -5,10 +5,12 @@
 // See xcv_geometry.h for a description of this file.
 // \author K.Y.McGaul
 
-#include <vcl_iostream.h>
-#include <vcl_fstream.h>
-#include <vcl_vector.h>
-#include <vcl_cmath.h>
+#include <iostream>
+#include <fstream>
+#include <vector>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <cmath>
 
 #include <vgl/vgl_polygon.h>
 #include <vgl/vgl_clip.h>
@@ -27,14 +29,14 @@
 
 //static bool debug = true;
 extern void get_current(unsigned*, unsigned*);
-extern vcl_vector<vgui_easy2D_tableau_sptr> get_easy2D_list();
+extern std::vector<vgui_easy2D_tableau_sptr> get_easy2D_list();
 extern vgui_rubberband_tableau_sptr get_rubberbander_at(unsigned, unsigned);
 extern vgui_easy2D_tableau_sptr get_easy2D_at(unsigned, unsigned);
 extern vgui_easy2D_tableau_sptr get_current_easy2D();
 
 // Filename for save and load
-static vcl_string filename = "/tmp/temp.gx";
-static vcl_string regexp = "*.*";
+static std::string filename = "/tmp/temp.gx";
+static std::string regexp = "*.*";
 
 //-----------------------------------------------------------------------------
 //: Draw a point onto the currently selected tableau.
@@ -113,17 +115,17 @@ void xcv_geometry::create_infinite_line()
 //-----------------------------------------------------------------------------
 void xcv_geometry::change_sel_color()
 {
-  static vcl_string color_value = "yellow";
+  static std::string color_value = "yellow";
   vgui_dialog color_dl("Colour of selected objects");
   color_dl.inline_color("New colour for selected objects:", color_value);
   if (!color_dl.ask())
     return;
 
-  vcl_vector<vgui_easy2D_tableau_sptr> easy_list = get_easy2D_list();
+  std::vector<vgui_easy2D_tableau_sptr> easy_list = get_easy2D_list();
   for (unsigned i=0; i<easy_list.size(); i++)
   {
-    vcl_vector<vgui_soview*> sel_objs = easy_list[i]->get_selected_soviews();
-    for (vcl_vector<vgui_soview*>::iterator iter = sel_objs.begin();
+    std::vector<vgui_soview*> sel_objs = easy_list[i]->get_selected_soviews();
+    for (std::vector<vgui_soview*>::iterator iter = sel_objs.begin();
          iter != sel_objs.end(); iter++)
     {
       vgui_soview* sv = (vgui_soview*)(*iter);
@@ -146,11 +148,11 @@ void xcv_geometry::change_sel_radius()
   if (!radius_dl.ask())
     return;
 
-  vcl_vector<vgui_easy2D_tableau_sptr> easy_list = get_easy2D_list();
+  std::vector<vgui_easy2D_tableau_sptr> easy_list = get_easy2D_list();
   for (unsigned i=0; i<easy_list.size(); i++)
   {
-    vcl_vector<vgui_soview*> sel_objs = easy_list[i]->get_selected_soviews();
-    for (vcl_vector<vgui_soview*>::iterator it = sel_objs.begin(); it != sel_objs.end(); it++)
+    std::vector<vgui_soview*> sel_objs = easy_list[i]->get_selected_soviews();
+    for (std::vector<vgui_soview*>::iterator it = sel_objs.begin(); it != sel_objs.end(); it++)
     {
       vgui_soview* sv = (vgui_soview*)(*it);
       if (sv->type_name() == "vgui_soview2D_point")
@@ -172,11 +174,11 @@ void xcv_geometry::change_sel_width()
   if (!width_dl.ask())
     return;
 
-  vcl_vector<vgui_easy2D_tableau_sptr> easy_list = get_easy2D_list();
+  std::vector<vgui_easy2D_tableau_sptr> easy_list = get_easy2D_list();
   for (unsigned i=0; i<easy_list.size(); i++)
   {
-    vcl_vector<vgui_soview*> sel_objs = easy_list[i]->get_selected_soviews();
-    for (vcl_vector<vgui_soview*>::iterator it = sel_objs.begin(); it != sel_objs.end(); it++)
+    std::vector<vgui_soview*> sel_objs = easy_list[i]->get_selected_soviews();
+    for (std::vector<vgui_soview*>::iterator it = sel_objs.begin(); it != sel_objs.end(); it++)
     {
       vgui_soview* sv = (vgui_soview*)(*it);
       if (sv->type_name() != "vgui_soview2D_point")
@@ -199,11 +201,11 @@ void xcv_geometry::delete_sel_objs()
   if (!del_dl.ask())
     return;
 
-  vcl_vector<vgui_easy2D_tableau_sptr> easy_list = get_easy2D_list();
+  std::vector<vgui_easy2D_tableau_sptr> easy_list = get_easy2D_list();
   for (unsigned i=0; i<easy_list.size(); i++)
   {
-    vcl_vector<vgui_soview*> sel_objs = easy_list[i]->get_selected_soviews();
-    for (vcl_vector<vgui_soview*>::iterator j = sel_objs.begin(); j != sel_objs.end(); j++)
+    std::vector<vgui_soview*> sel_objs = easy_list[i]->get_selected_soviews();
+    for (std::vector<vgui_soview*>::iterator j = sel_objs.begin(); j != sel_objs.end(); j++)
       easy_list[i]->remove((vgui_soview*)(*j));
   }
 }
@@ -230,8 +232,8 @@ void xcv_geometry::delete_all()
     return;
   }
 
-  vcl_vector<vgui_soview*> sel_objs = easy_tab->get_all();
-  for (vcl_vector<vgui_soview*>::iterator i = sel_objs.begin(); i != sel_objs.end(); i++)
+  std::vector<vgui_soview*> sel_objs = easy_tab->get_all();
+  for (std::vector<vgui_soview*>::iterator i = sel_objs.begin(); i != sel_objs.end(); i++)
   {
     easy_tab->remove((vgui_soview*)(*i));
   }
@@ -257,8 +259,8 @@ void xcv_geometry::delete_points()
     vgui_macro_warning << "Unable to get current easy2D to delete points\n";
     return;
   }
-  vcl_vector<vgui_soview*> all_objs = easy_tab->get_all();
-  for (vcl_vector<vgui_soview*>::iterator i = all_objs.begin(); i != all_objs.end(); i++)
+  std::vector<vgui_soview*> all_objs = easy_tab->get_all();
+  for (std::vector<vgui_soview*>::iterator i = all_objs.begin(); i != all_objs.end(); i++)
   {
     if ((*i)->type_name() == "vgui_soview2D_point")
         easy_tab->remove((vgui_soview*)(*i));
@@ -285,8 +287,8 @@ void xcv_geometry::delete_lines()
     vgui_macro_warning << "Unable to get current easy2D to delete lines\n";
     return;
   }
-  vcl_vector<vgui_soview*> all_objs = easy_tab->get_all();
-  for (vcl_vector<vgui_soview*>::iterator i = all_objs.begin(); i != all_objs.end(); i++)
+  std::vector<vgui_soview*> all_objs = easy_tab->get_all();
+  for (std::vector<vgui_soview*>::iterator i = all_objs.begin(); i != all_objs.end(); i++)
   {
     if ((*i)->type_name() == "vgui_soview2D_lineseg")
         easy_tab->remove((vgui_soview*)(*i));
@@ -313,8 +315,8 @@ void xcv_geometry::delete_inf_lines()
     vgui_macro_warning << "Unable to get current easy2D to delete infinite lines?\n";
     return;
   }
-  vcl_vector<vgui_soview*> all_objs = easy_tab->get_all();
-  for (vcl_vector<vgui_soview*>::iterator i = all_objs.begin(); i != all_objs.end(); i++)
+  std::vector<vgui_soview*> all_objs = easy_tab->get_all();
+  for (std::vector<vgui_soview*>::iterator i = all_objs.begin(); i != all_objs.end(); i++)
   {
     if ((*i)->type_name() == "vgui_soview2D_infinite_line")
         easy_tab->remove((vgui_soview*)(*i));
@@ -341,8 +343,8 @@ void xcv_geometry::delete_circles()
     vgui_macro_warning << "Unable to get current easy2D to delete circles?\n";
     return;
   }
-  vcl_vector<vgui_soview*> all_objs = easy_tab->get_all();
-  for (vcl_vector<vgui_soview*>::iterator i = all_objs.begin(); i != all_objs.end(); i++)
+  std::vector<vgui_soview*> all_objs = easy_tab->get_all();
+  for (std::vector<vgui_soview*>::iterator i = all_objs.begin(); i != all_objs.end(); i++)
   {
     if ((*i)->type_name() == "vgui_soview2D_circle")
         easy_tab->remove((vgui_soview*)(*i));
@@ -369,8 +371,8 @@ void xcv_geometry::delete_linestrips()
     vgui_macro_warning << "Unable to get current easy2D to delete linestrips\n";
     return;
   }
-  vcl_vector<vgui_soview*> all_objs = easy_tab->get_all();
-  for (vcl_vector<vgui_soview*>::iterator i = all_objs.begin(); i != all_objs.end(); i++)
+  std::vector<vgui_soview*> all_objs = easy_tab->get_all();
+  for (std::vector<vgui_soview*>::iterator i = all_objs.begin(); i != all_objs.end(); i++)
   {
     if ((*i)->type_name() == "vgui_soview2D_linestrip")
         easy_tab->remove((vgui_soview*)(*i));
@@ -384,13 +386,13 @@ void xcv_geometry::delete_linestrips()
 //-----------------------------------------------------------------------------
 void xcv_geometry::change_default_color()
 {
-  static vcl_string color_value = "yellow";
+  static std::string color_value = "yellow";
   vgui_dialog color_dl("Default colour");
   color_dl.inline_color("New default color:", color_value);
   if (!color_dl.ask())
     return;
 
-  vcl_vector<vgui_easy2D_tableau_sptr> easy_list = get_easy2D_list();
+  std::vector<vgui_easy2D_tableau_sptr> easy_list = get_easy2D_list();
   for (unsigned i=0; i<easy_list.size(); i++)
   {
     easy_list[i]->set_foreground(red_value(color_value),
@@ -412,7 +414,7 @@ void xcv_geometry::change_default_radius()
   if (!radius_dl.ask())
     return;
 
-  vcl_vector<vgui_easy2D_tableau_sptr> easy_list = get_easy2D_list();
+  std::vector<vgui_easy2D_tableau_sptr> easy_list = get_easy2D_list();
   for (unsigned i=0; i<easy_list.size(); i++)
   {
     easy_list[i]->set_point_radius(point_radius);
@@ -432,7 +434,7 @@ void xcv_geometry::change_default_width()
   if (!width_dl.ask())
     return;
 
-  vcl_vector<vgui_easy2D_tableau_sptr> easy_list = get_easy2D_list();
+  std::vector<vgui_easy2D_tableau_sptr> easy_list = get_easy2D_list();
   for (unsigned i=0; i<easy_list.size(); i++)
     easy_list[i]->set_line_width(line_width);
 }
@@ -447,12 +449,12 @@ void xcv_geometry::save(const char *object_type,const char *dialog_name)
   vgui_easy2D_tableau_sptr easy_tab = get_easy2D_at(col, row);
   vgui_dialog save_dl(dialog_name);
   save_dl.inline_file("Filename: ", regexp, filename);
-  vcl_ofstream fs;
+  std::ofstream fs;
   if (save_dl.ask())
   {
     fs.open(filename.c_str());
-    vcl_vector<vgui_soview*> all_objs = easy_tab->get_all();
-    for (vcl_vector<vgui_soview*>::iterator i = all_objs.begin(); i != all_objs.end(); i++)
+    std::vector<vgui_soview*> all_objs = easy_tab->get_all();
+    for (std::vector<vgui_soview*>::iterator i = all_objs.begin(); i != all_objs.end(); i++)
     {
       vgui_soview* sv = (vgui_soview*)(*i);
       if (!sv)
@@ -461,32 +463,32 @@ void xcv_geometry::save(const char *object_type,const char *dialog_name)
         return;
       }
       bool matched = (object_type == VXL_NULLPTR) || (sv->type_name() == object_type);
-      vcl_string svtype = sv->type_name();
+      std::string svtype = sv->type_name();
       vgui_style_sptr style = sv->get_style();
       if (style)
-        fs << "c " << style->rgba[0] << ' ' << style->rgba[1] <<  ' ' << style->rgba[2] << vcl_endl
-           << "r " << style->point_size << vcl_endl
-           << "w " << style->line_width << vcl_endl;
+        fs << "c " << style->rgba[0] << ' ' << style->rgba[1] <<  ' ' << style->rgba[2] << std::endl
+           << "r " << style->point_size << std::endl
+           << "w " << style->line_width << std::endl;
 
       if (svtype == "vgui_soview2D_point" && matched)
       {
         vgui_soview2D_point* pt = (vgui_soview2D_point*)sv;
-        fs<<"p "<<pt->x<<' '<<pt->y<< vcl_endl;
+        fs<<"p "<<pt->x<<' '<<pt->y<< std::endl;
       }
       else if (svtype == "vgui_soview2D_circle" && matched)
       {
         vgui_soview2D_circle* circ = (vgui_soview2D_circle*)sv;
-        fs<<"circle "<<circ->x<<' '<<circ->y<<' '<<circ->r<< vcl_endl;
+        fs<<"circle "<<circ->x<<' '<<circ->y<<' '<<circ->r<< std::endl;
       }
       else if (svtype == "vgui_soview2D_lineseg" && matched)
       {
         vgui_soview2D_lineseg* line = (vgui_soview2D_lineseg*)sv;
-        fs<<"l "<<line->x0<<' '<<line->y0<<' '<<line->x1<<' '<<line->y1<< vcl_endl;
+        fs<<"l "<<line->x0<<' '<<line->y0<<' '<<line->x1<<' '<<line->y1<< std::endl;
       }
       else if (svtype == "vgui_soview2D_infinite_line" && matched)
       {
         vgui_soview2D_infinite_line* line = (vgui_soview2D_infinite_line*)sv;
-        fs<<"il "<<line->a<<' '<<line->b<<' '<<line->c<< vcl_endl;
+        fs<<"il "<<line->a<<' '<<line->b<<' '<<line->c<< std::endl;
       }
       else if (svtype == "vgui_soview2D_linestrip" && matched)
       {
@@ -494,7 +496,7 @@ void xcv_geometry::save(const char *object_type,const char *dialog_name)
         fs<<"L "<<linestrip->n;
         for (unsigned int ii = 0; ii<linestrip->n; ++ii)
           fs<<' '<<linestrip->x[ii]<<' '<<linestrip->y[ii];
-        fs << vcl_endl;
+        fs << std::endl;
       }
       else if (svtype == "vgui_soview2D_polygon" && matched)
       {
@@ -502,7 +504,7 @@ void xcv_geometry::save(const char *object_type,const char *dialog_name)
         fs<<"y "<<polygon->n;
         for (unsigned int ii = 0; ii<polygon->n; ++ii)
           fs<<' '<<polygon->x[ii]<<' '<<polygon->y[ii];
-        fs << vcl_endl;
+        fs << std::endl;
       }
     }
   }
@@ -550,7 +552,7 @@ void xcv_geometry::load(const char *object_type,const char *dialog_name)
   if (!easy_tab) return;
   vgui_dialog load_dl(dialog_name);
   load_dl.inline_file("Filename: ", regexp, filename);
-  vcl_ifstream fs;
+  std::ifstream fs;
   if (load_dl.ask())
   {
     fs.open(filename.c_str());
@@ -561,55 +563,55 @@ void xcv_geometry::load(const char *object_type,const char *dialog_name)
 
     while (!fs.eof())
     {
-      vcl_string tag;
-      fs >> tag >> vcl_ws;
-      if (tag == "c" && (object_type == VXL_NULLPTR || tag==vcl_string(object_type)))
+      std::string tag;
+      fs >> tag >> std::ws;
+      if (tag == "c" && (object_type == VXL_NULLPTR || tag==std::string(object_type)))
       {
         // colour
         float r,g,b;
         fs>>r>>g>>b;
         easy_tab->set_foreground(r,g,b);
       }
-      else if (tag == "w" && (object_type == VXL_NULLPTR || tag==vcl_string(object_type)))
+      else if (tag == "w" && (object_type == VXL_NULLPTR || tag==std::string(object_type)))
       {
         // line width
         float w;
         fs>>w;
         easy_tab->set_line_width(w);
       }
-      else if (tag == "r" && (object_type == VXL_NULLPTR || tag==vcl_string(object_type)))
+      else if (tag == "r" && (object_type == VXL_NULLPTR || tag==std::string(object_type)))
       {
         // point radius
         float w;
         fs>>w;
         easy_tab->set_point_radius(w);
       }
-      else if (tag == "p" && (object_type == VXL_NULLPTR || tag==vcl_string(object_type)))
+      else if (tag == "p" && (object_type == VXL_NULLPTR || tag==std::string(object_type)))
       {
         float x,y;
         fs>>x;
         fs>>y;
         easy_tab->add_point(x,y);
       }
-      else if (tag == "circle" && (object_type == VXL_NULLPTR || tag==vcl_string(object_type)))
+      else if (tag == "circle" && (object_type == VXL_NULLPTR || tag==std::string(object_type)))
       {
         float x,y,r;
         fs>>x>>y>>r;
         easy_tab->add_circle(x,y,r);
       }
-      else if (tag == "l" && (object_type == VXL_NULLPTR || tag==vcl_string(object_type)))
+      else if (tag == "l" && (object_type == VXL_NULLPTR || tag==std::string(object_type)))
       {
         float x0,y0,x1,y1;
         fs>>x0>>y0>>x1>>y1;
         easy_tab->add_line(x0,y0,x1,y1);
       }
-      else if (tag == "il" && (object_type == VXL_NULLPTR || tag==vcl_string(object_type)))
+      else if (tag == "il" && (object_type == VXL_NULLPTR || tag==std::string(object_type)))
       {
         float a,b,c;
         fs>>a>>b>>c;
         easy_tab->add_infinite_line(a,b,c);
       }
-      else if (tag == "L" && (object_type == VXL_NULLPTR || tag==vcl_string(object_type)))
+      else if (tag == "L" && (object_type == VXL_NULLPTR || tag==std::string(object_type)))
       {
         int n;
         fs>>n;
@@ -624,17 +626,17 @@ void xcv_geometry::load(const char *object_type,const char *dialog_name)
           y0 = y1;
         }
       }
-      else if (tag == "y" && (object_type == VXL_NULLPTR || tag==vcl_string(object_type)))
+      else if (tag == "y" && (object_type == VXL_NULLPTR || tag==std::string(object_type)))
       {
         int n;
         fs>>n;
-        vcl_vector<float> x(n);
-        vcl_vector<float> y(n);
+        std::vector<float> x(n);
+        std::vector<float> y(n);
         for (int i = 0; i<n; i++)
           fs>>x[i]>>y[i];
         easy_tab->add_polygon(n, &x[0], &y[0]);
       }
-      else vcl_cerr << "Unrecognised tag " << tag << " in file " << filename
+      else std::cerr << "Unrecognised tag " << tag << " in file " << filename
                     << "\nencountered in xcv_geometry::load(" << object_type << ")\n";
     }
   }
@@ -664,14 +666,14 @@ static void add(vgl_polygon<float> const& p)
 //:  Intersect two polygons to get a set of non-intersecting polygons.
 void xcv_geometry::polygon_intersect()
 {
-  vcl_vector<vgl_polygon<float> > all_polys;
+  std::vector<vgl_polygon<float> > all_polys;
 
-  vcl_vector<vgui_easy2D_tableau_sptr> easy_list = get_easy2D_list();
-  vcl_vector<vgui_soview*> all_soviews;
+  std::vector<vgui_easy2D_tableau_sptr> easy_list = get_easy2D_list();
+  std::vector<vgui_soview*> all_soviews;
   for (unsigned i=0; i<easy_list.size(); i++)
   {
-    vcl_vector<vgui_soview*> sel_objs = easy_list[i]->get_selected_soviews();
-    for (vcl_vector<vgui_soview*>::iterator it = sel_objs.begin(); it != sel_objs.end(); it++)
+    std::vector<vgui_soview*> sel_objs = easy_list[i]->get_selected_soviews();
+    for (std::vector<vgui_soview*>::iterator it = sel_objs.begin(); it != sel_objs.end(); it++)
     {
       vgui_soview* sv = (vgui_soview*)(*it);
       if (sv->type_name() == "vgui_soview2D_polygon") {
@@ -721,8 +723,8 @@ static void xcv_geometry_explode_geometry()
   double cx = 0;
   double cy = 0;
   double ca = 0;
-  vcl_vector<vgui_soview*> sel_objs = easy_tab->get_all();
-  for (vcl_vector<vgui_soview*>::iterator i = sel_objs.begin(); i != sel_objs.end(); i++)
+  std::vector<vgui_soview*> sel_objs = easy_tab->get_all();
+  for (std::vector<vgui_soview*>::iterator i = sel_objs.begin(); i != sel_objs.end(); i++)
   {
     vgui_soview2D* sv = (vgui_soview2D*)*i;
     float x,y;
@@ -735,14 +737,14 @@ static void xcv_geometry_explode_geometry()
   cy /= ca;
 
   // Translate
-  for (vcl_vector<vgui_soview*>::iterator i = sel_objs.begin(); i != sel_objs.end(); i++)
+  for (std::vector<vgui_soview*>::iterator i = sel_objs.begin(); i != sel_objs.end(); i++)
   {
     vgui_soview2D* sv = (vgui_soview2D*)*i;
     float x,y;
     sv->get_centroid(&x, &y);
     double dx = x - cx;
     double dy = y - cy;
-    double r = vcl_sqrt(dx*dx+dy*dy);
+    double r = std::sqrt(dx*dx+dy*dy);
     double s = d / r;
     dx *= s;
     dy *= s;

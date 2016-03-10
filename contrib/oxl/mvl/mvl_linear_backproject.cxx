@@ -1,11 +1,13 @@
 #include "mvl_linear_backproject.h"
-#include <vcl_iostream.h>
-#include <vcl_cstdlib.h>
+#include <iostream>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <cstdlib>
 #include <vnl/algo/vnl_svd.h>
 
 vnl_vector<double> mvl_linear_backproject(
           // camera matrices:
-          vcl_vector<PMatrix> Ps,
+          std::vector<PMatrix> Ps,
           // image coordinates
           HomgPoint2D const *imgcoords,
           // world point:
@@ -78,8 +80,8 @@ vnl_vector<double> mvl_linear_backproject(
   }
   else
   {
-    vcl_cerr << "\nError: mvl_linear_backproject method must be 'e' or 'l'\n";
-    vcl_exit(0);
+    std::cerr << "\nError: mvl_linear_backproject method must be 'e' or 'l'\n";
+    std::exit(0);
   }
 
   return weights;

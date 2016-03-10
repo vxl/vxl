@@ -7,7 +7,9 @@
 // \author Ozge C. Ozcanli
 // \date May 12, 2011
 
-#include <vcl_fstream.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <fstream>
 #include <boxm2/io/boxm2_stream_cache.h>
 #include <boxm2/io/boxm2_cache.h>
 #include <boxm2/boxm2_scene.h>
@@ -35,12 +37,12 @@ bool boxm2_cpp_batch_compute_shadow_model_process_cons(bprb_func_process& pro)
   // 0) scene
   // 1) cache
   // 2) stream cache
-  vcl_vector<vcl_string> input_types_(n_inputs_);
+  std::vector<std::string> input_types_(n_inputs_);
   input_types_[0] = "boxm2_scene_sptr";
   input_types_[1] = "boxm2_cache_sptr";
   input_types_[2] = "boxm2_stream_cache_sptr";
   // process has 1 output (ambient light)
-  vcl_vector<vcl_string>  output_types_(n_outputs_);
+  std::vector<std::string>  output_types_(n_outputs_);
   output_types_[0] = "float";
 
   return pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
@@ -51,7 +53,7 @@ bool boxm2_cpp_batch_compute_shadow_model_process(bprb_func_process& pro)
   using namespace boxm2_cpp_batch_compute_shadow_model_process_globals;
 
   if ( pro.n_inputs() < n_inputs_ ) {
-      vcl_cout << pro.name() << ": The number of inputs should be " << n_inputs_<< vcl_endl;
+      std::cout << pro.name() << ": The number of inputs should be " << n_inputs_<< std::endl;
       return false;
   }
   //get the inputs
@@ -60,9 +62,9 @@ bool boxm2_cpp_batch_compute_shadow_model_process(bprb_func_process& pro)
   boxm2_cache_sptr cache= pro.get_input<boxm2_cache_sptr>(i++);
   boxm2_stream_cache_sptr str_cache = pro.get_input<boxm2_stream_cache_sptr>(i++);
 
-  vcl_string data_type;
+  std::string data_type;
   bool foundDataType = false;
-  vcl_vector<vcl_string> apps = scene->appearances();
+  std::vector<std::string> apps = scene->appearances();
   for (unsigned int i=0; i<apps.size(); ++i) {
     if ( apps[i] == boxm2_data_traits<BOXM2_MOG3_GREY>::prefix() )
     {
@@ -72,14 +74,14 @@ bool boxm2_cpp_batch_compute_shadow_model_process(bprb_func_process& pro)
     }
   }
   if (!foundDataType) {
-    vcl_cout<<"boxm2_cpp_batch_compute_shadow_model_process ERROR: scene doesn't have BOXM2_MOG3_GREY or BOXM2_MOG3_GREY_16 data type"<<vcl_endl;
+    std::cout<<"boxm2_cpp_batch_compute_shadow_model_process ERROR: scene doesn't have BOXM2_MOG3_GREY or BOXM2_MOG3_GREY_16 data type"<<std::endl;
     return false;
   }
 
   // assumes that the data of each image has been created in the data models previously
   // iterate the scene block by block and write to output
-  vcl_vector<boxm2_block_id> blk_ids = scene->get_block_ids();
-  vcl_vector<boxm2_block_id>::iterator id;
+  std::vector<boxm2_block_id> blk_ids = scene->get_block_ids();
+  std::vector<boxm2_block_id>::iterator id;
   id = blk_ids.begin();
 
   float weights=0.0;
@@ -89,7 +91,7 @@ bool boxm2_cpp_batch_compute_shadow_model_process(bprb_func_process& pro)
     boxm2_block     *  blk   = cache->get_block(scene,*id);
     // pass num_bytes = 0 to make sure disc is read if not already in memory
     boxm2_data_base *  sunvis  = cache->get_data_base(scene,*id,boxm2_data_traits<BOXM2_AUX0>::prefix("sunvis"),0,true);
-    //vcl_cout << "buffer length of sunvis: " << sunvis->buffer_length() << '\n';
+    //std::cout << "buffer length of sunvis: " << sunvis->buffer_length() << '\n';
     boxm2_compute_ambient_functor data_functor;
     data_functor.init_data(sunvis, str_cache,weights,weighted_intensities, float(blk->sub_block_dim().x()), blk->max_level());
     int sunvisTypeSize = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_AUX0>::prefix());

@@ -7,14 +7,16 @@
 // \author J.L. Mundy
 // \date   28 May 2015
 //
-#include <vcl_string.h>
-#include <vcl_iostream.h>
-#include <vcl_fstream.h>
+#include <string>
+#include <iostream>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <fstream>
 #include "boxm2_vecf_labeled_point.h"
 #include "boxm2_vecf_orbit_params.h"
 #include <vgl/vgl_point_3d.h>
 #include <vgl/vgl_sphere_3d.h>
-#include <vcl_map.h>
+#include <map>
 
 class boxm2_vecf_fit_orbit{
  public:
@@ -28,10 +30,10 @@ class boxm2_vecf_fit_orbit{
 
   //: read a 3-d anchor file:
   // lateral, medial canthi, inferior/superior margins, superior crease
-  bool read_anchor_file(vcl_string const& path);
+  bool read_anchor_file(std::string const& path);
 
   //: read a 2-d dlib part file (uses tree regression)
-  bool read_dlib_part_file(vcl_string const& path, bool image_data = true);
+  bool read_dlib_part_file(std::string const& path, bool image_data = true);
 
   //: find initial orbit parameters for the left orbit
   bool fit_left();
@@ -60,13 +62,13 @@ class boxm2_vecf_fit_orbit{
     left_params_.medial_socket_radius_coef_ = med_rad_coef;
   }
 
-  bool left_eye_inferior_lid_thickness(vcl_string const& data_desc, double& dr);
+  bool left_eye_inferior_lid_thickness(std::string const& data_desc, double& dr);
   void set_left_eye_inferior_lid_thickness(double dr){left_params_.inferior_lid_radius_offset_=dr;}
 
   bool left_trans_y_from_lateral_canthus( double& tr_y);
   void set_left_trans_y(double tr_y){left_params_.trans_y_=tr_y;}
 
-  bool left_trans_z_from_sclera(vcl_string const& data_desc, double& tr_z);
+  bool left_trans_z_from_sclera(std::string const& data_desc, double& tr_z);
   void set_left_trans_z(double tr_z){left_params_.trans_z_=tr_z;}
 
   bool left_trans_x_from_lateral_canthus(double& trx);
@@ -120,8 +122,8 @@ class boxm2_vecf_fit_orbit{
   // determine the canthus angles (either left or right) from inf and sup polynomial crossing points
   void set_canthus_angle(bool is_right);
 
-  bool fit_sclera(vcl_string const& data_desc);
-  bool max_sclera_z(vcl_string const& data_desc, double r, double& max_z);
+  bool fit_sclera(std::string const& data_desc);
+  bool max_sclera_z(std::string const& data_desc, double r, double& max_z);
 
 
   //: Right orbit parameter fitting
@@ -136,7 +138,7 @@ class boxm2_vecf_fit_orbit{
     right_params_.medial_socket_radius_coef_ = med_rad_coef;
   }
 
-  bool right_eye_inferior_lid_thickness(vcl_string const& data_desc, double& dr);
+  bool right_eye_inferior_lid_thickness(std::string const& data_desc, double& dr);
   void set_right_eye_inferior_lid_thickness(double dr){right_params_.inferior_lid_radius_offset_=dr;}
 
   bool right_trans_x_from_lateral_canthus(double& trx);
@@ -148,7 +150,7 @@ class boxm2_vecf_fit_orbit{
   bool right_trans_y_from_lateral_canthus( double& tr_y);
   void set_right_trans_y(double tr_y){right_params_.trans_y_=tr_y;}
 
-  bool right_trans_z_from_sclera(vcl_string const& data_desc, double& tr_z);
+  bool right_trans_z_from_sclera(std::string const& data_desc, double& tr_z);
   void set_right_trans_z(double tr_z){right_params_.trans_z_=tr_z;}
 
   bool right_eye_x_scale(double& right_x_scale);
@@ -200,14 +202,14 @@ class boxm2_vecf_fit_orbit{
   void set_right_ang_rad(double& ang_rad);
 
   // Testing the fit
-  bool load_orbit_data(vcl_string const& data_desc, vcl_string const& path, bool error_msg = true);
-  bool plot_orbit_data(vcl_string const& data_desc, vcl_vector<vgl_point_3d<double> >& data);
-  bool display_anchors(vcl_ofstream& ostr, bool is_right);
-  bool display_orbit_vrml(vcl_ofstream& ostr, bool is_right, bool show_model = true);
-  bool display_left_right_orbit_model_vrml(vcl_ofstream& os);
+  bool load_orbit_data(std::string const& data_desc, std::string const& path, bool error_msg = true);
+  bool plot_orbit_data(std::string const& data_desc, std::vector<vgl_point_3d<double> >& data);
+  bool display_anchors(std::ofstream& ostr, bool is_right);
+  bool display_orbit_vrml(std::ofstream& ostr, bool is_right, bool show_model = true);
+  bool display_left_right_orbit_model_vrml(std::ofstream& os);
 
 
-  bool fitting_error(vcl_string const& data_desc);
+  bool fitting_error(std::string const& data_desc);
 
   // Accessors
   //: add a labeled point to lpts_
@@ -227,11 +229,11 @@ class boxm2_vecf_fit_orbit{
   double right_dphi_rad() const {return right_dphi_rad_;}
   void set_right_dphi_rad(double dphi_rad){right_dphi_rad_ = dphi_rad;}
 
-  vcl_vector<vgl_point_3d<double> >& orbit_data(vcl_string const& data_desc){
+  std::vector<vgl_point_3d<double> >& orbit_data(std::string const& data_desc){
     return orbit_data_[smid_map_[data_desc]];}
 
-  bool lab_point(vcl_string const& data_desc, vgl_point_3d<double>& pt){
-    vcl_map<mids, boxm2_vecf_labeled_point>::iterator lit;
+  bool lab_point(std::string const& data_desc, vgl_point_3d<double>& pt){
+    std::map<mids, boxm2_vecf_labeled_point>::iterator lit;
     lit = lpts_.find(smid_map_[data_desc]);
     if(lit == lpts_.end())
       return false;
@@ -241,10 +243,10 @@ class boxm2_vecf_fit_orbit{
   void set_has_inferior_surface(bool has_surface){has_inferior_surface_pts_ = has_surface;}
   //: helpers for parsing the dlib part file
 
-  bool add_dlib_anchor_part(vcl_map<vcl_string, vcl_vector<vgl_point_2d<double> > > const& parts,
-                            vcl_string const& dlabel, vcl_string const& olabel);
-  bool add_dlib_orbit_data(vcl_map<vcl_string, vcl_vector<vgl_point_2d<double> > > const& parts,
-                           vcl_string const& dlabel, vcl_string const& olabel);
+  bool add_dlib_anchor_part(std::map<std::string, std::vector<vgl_point_2d<double> > > const& parts,
+                            std::string const& dlabel, std::string const& olabel);
+  bool add_dlib_orbit_data(std::map<std::string, std::vector<vgl_point_2d<double> > > const& parts,
+                           std::string const& dlabel, std::string const& olabel);
 
   //setters required for dlib fit.
   void set_only_2d_data(bool is_from_dlib){this->only_2d_data_= is_from_dlib; }
@@ -256,13 +258,13 @@ class boxm2_vecf_fit_orbit{
 
 
   //: map a string label to the correspondingenum value
-  vcl_map<vcl_string, mids> smid_map_;
+  std::map<std::string, mids> smid_map_;
   //: a map of labeled points, e.g. left_eye_lateral_canthus
-  vcl_map<mids, boxm2_vecf_labeled_point> lpts_;
+  std::map<mids, boxm2_vecf_labeled_point> lpts_;
 
   //: a map of contour point data,
   // e.g. points along the inferior margin
-  vcl_map<mids, vcl_vector<vgl_point_3d<double> > > orbit_data_;
+  std::map<mids, std::vector<vgl_point_3d<double> > > orbit_data_;
 
   //: the current paramter estimates
   boxm2_vecf_orbit_params left_params_;

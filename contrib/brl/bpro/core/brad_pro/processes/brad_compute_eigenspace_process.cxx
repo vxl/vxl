@@ -2,8 +2,10 @@
 #include <bprb/bprb_func_process.h>
 #include <brad/brad_eigenspace.h>
 #include <bpro/core/bbas_pro/bbas_1d_array_string.h>
-#include <vcl_vector.h>
-#include <vcl_string.h>
+#include <vector>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <string>
 #include <vil/vil_load.h>
 //:
 // \file
@@ -18,7 +20,7 @@ namespace bbas_core_brad_compute
   {
     unsigned n = paths.data_array.size();
 
-    vcl_vector<vil_image_resource_sptr> resources;
+    std::vector<vil_image_resource_sptr> resources;
     for (unsigned i  = 0; i < n; ++i) {
       vil_image_resource_sptr temp =
         vil_load_image_resource(paths.data_array[i].c_str());
@@ -40,14 +42,14 @@ bool brad_compute_eigenspace_process_cons(bprb_func_process& pro)
 {
   using namespace bbas_core_brad_compute;
   //input
-  vcl_vector<vcl_string> input_types(5);
+  std::vector<std::string> input_types(5);
   input_types[0]="brad_eigenspace_sptr"; //eigenspace
   input_types[1]="bbas_1d_array_string_sptr"; //input images
   input_types[2]="double"; //fraction of image area to process
   input_types[3]="unsigned";//number of cols in a tile
   input_types[4]="unsigned";//number of rows in a tile
   //output
-  vcl_vector<vcl_string> output_types; // no outputs
+  std::vector<std::string> output_types; // no outputs
   return pro.set_input_types(input_types)
       && pro.set_output_types(output_types);
 }
@@ -58,12 +60,12 @@ bool brad_compute_eigenspace_process(bprb_func_process& pro)
   using namespace bbas_core_brad_compute;
   // Sanity check
   if (pro.n_inputs()< 5) {
-    vcl_cout << "brad_compute_eigenspace_process: The number of inputs should be 5" << vcl_endl;
+    std::cout << "brad_compute_eigenspace_process: The number of inputs should be 5" << std::endl;
     return false;
   }
    brad_eigenspace_sptr es_ptr = pro.get_input<brad_eigenspace_sptr>(0);
   if (!es_ptr) {
-    vcl_cout << "in compute_eigenspace_process, null eigenspace pointer\n";
+    std::cout << "in compute_eigenspace_process, null eigenspace pointer\n";
     return false;
   }
   bbas_1d_array_string_sptr paths =pro.get_input<bbas_1d_array_string_sptr>(1);
@@ -76,7 +78,7 @@ bool brad_compute_eigenspace_process(bprb_func_process& pro)
   unsigned njt = pro.get_input<unsigned>(4);
   CAST_CALL_EIGENSPACE(es_ptr, eigen_training_process(*paths, frac, nit, njt, *ep),
                        "in compute_eigenspace_process-creating eigenspace failed")
-  vcl_cout << "in compute_eigenspace_process - unknown eigenspace type\n";
+  std::cout << "in compute_eigenspace_process - unknown eigenspace type\n";
   return true;
 }
 

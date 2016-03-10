@@ -6,10 +6,11 @@
 
 #include "vgl_homg_operators_2d.h"
 
-#include <vcl_iostream.h>
-#include <vcl_limits.h> // for infinity
+#include <iostream>
+#include <vcl_compiler.h>
+#include <limits> // for infinity
 #include <vcl_cassert.h>
-#include <vcl_cmath.h> // for vcl_sqrt()
+#include <cmath> // for std::sqrt()
 #include <vgl/vgl_homg_line_2d.h>
 #include <vgl/vgl_homg_point_2d.h>
 #include <vgl/vgl_point_2d.h>
@@ -85,10 +86,10 @@ vnl_vector_fixed<T,6> vgl_homg_operators_2d<T>::get_vector(vgl_conic<T> const& c
 template <class T>
 void vgl_homg_operators_2d<T>::unitize(vgl_homg_point_2d<T>& a)
 {
-  double norm = vcl_sqrt (a.x()*a.x() + a.y()*a.y() + a.w()*a.w());
+  double norm = std::sqrt (a.x()*a.x() + a.y()*a.y() + a.w()*a.w());
 
   if (norm == 0.0) {
-    vcl_cerr << "vgl_homg_operators_2d<T>::unitize() -- Zero length vector\n";
+    std::cerr << "vgl_homg_operators_2d<T>::unitize() -- Zero length vector\n";
     return;
   }
   norm = 1.0/norm;
@@ -102,7 +103,7 @@ T
 vgl_homg_operators_2d<T>::distance(const vgl_homg_point_2d<T>& point1,
                                    const vgl_homg_point_2d<T>& point2)
 {
-  return vcl_sqrt(vgl_homg_operators_2d<T>::distance_squared(point1,point2));
+  return std::sqrt(vgl_homg_operators_2d<T>::distance_squared(point1,point2));
 }
 
 template <class T>
@@ -113,8 +114,8 @@ vgl_homg_operators_2d<T>::distance_squared(const vgl_homg_point_2d<T>& p1,
   if (p1 == p2) return T(0); // quick return if possible
 
   if (p1.w() == 0 || p2.w() == 0) {
-    vcl_cerr << "vgl_homg_operators_2d<T>::distance_squared() -- point at infinity\n";
-    return vcl_numeric_limits<T>::infinity();
+    std::cerr << "vgl_homg_operators_2d<T>::distance_squared() -- point at infinity\n";
+    return std::numeric_limits<T>::infinity();
   }
 
   return vnl_math::sqr (p1.x() / p1.w() - p2.x() / p2.w()) +
@@ -133,7 +134,7 @@ vgl_homg_operators_2d<T>::perp_dist_squared(const vgl_homg_point_2d<T>& point,
                                             const vgl_homg_line_2d<T>& line)
 {
   if ((line.a()==0 && line.b()== 0) || point.w()==0) {
-    vcl_cerr << "vgl_homg_operators_2d<T>::perp_dist_squared() -- line or point at infinity\n";
+    std::cerr << "vgl_homg_operators_2d<T>::perp_dist_squared() -- line or point at infinity\n";
     return vgl_homg<T>::infinity;
   }
 
@@ -152,7 +153,7 @@ template <class T>
 double
 vgl_homg_operators_2d<T>::line_angle(const vgl_homg_line_2d<T>& line)
 {
-  return vcl_atan2 (line.b(), line.a());
+  return std::atan2 (line.b(), line.a());
 }
 
 //-----------------------------------------------------------------------------
@@ -169,7 +170,7 @@ vgl_homg_operators_2d<T>::abs_angle(const vgl_homg_line_2d<T>& line1,
   if (diff >  vnl_math::pi_over_2) diff -= vnl_math::pi;
   if (diff < -vnl_math::pi_over_2) diff += vnl_math::pi;
 
-  return vcl_fabs(diff);
+  return std::fabs(diff);
 }
 
 //-----------------------------------------------------------------------------
@@ -185,7 +186,7 @@ double
 vgl_homg_operators_2d<T>::angle_between_oriented_lines(const vgl_homg_line_2d<T>& line1,
                                                        const vgl_homg_line_2d<T>& line2)
 {
-  return vcl_fmod(line_angle(line2)-line_angle(line1), vnl_math::twopi);
+  return std::fmod(line_angle(line2)-line_angle(line1), vnl_math::twopi);
 }
 
 //  JOINS/INTERSECTIONS
@@ -283,11 +284,11 @@ vgl_homg_operators_2d<T>::midpoint(const vgl_homg_point_2d<T>& p1,
 // - Kanatani sect 2.2.2.
 template <class T>
 vnl_vector_fixed<T,3>
-vgl_homg_operators_2d<T>::most_orthogonal_vector(const vcl_vector<vgl_homg_line_2d<T> >& inpoints)
+vgl_homg_operators_2d<T>::most_orthogonal_vector(const std::vector<vgl_homg_line_2d<T> >& inpoints)
 {
   vnl_scatter_3x3<T> scatter_matrix;
 
-  for (typename vcl_vector<vgl_homg_line_2d<T> >::const_iterator i = inpoints.begin();
+  for (typename std::vector<vgl_homg_line_2d<T> >::const_iterator i = inpoints.begin();
        i != inpoints.end(); ++i)
     scatter_matrix.add_outer_product(get_vector(*i));
 
@@ -298,17 +299,17 @@ vgl_homg_operators_2d<T>::most_orthogonal_vector(const vcl_vector<vgl_homg_line_
 
 template <class T>
 vnl_vector_fixed<T,3>
-vgl_homg_operators_2d<T>::most_orthogonal_vector_svd(const vcl_vector<vgl_homg_line_2d<T> >& lines)
+vgl_homg_operators_2d<T>::most_orthogonal_vector_svd(const std::vector<vgl_homg_line_2d<T> >& lines)
 {
   vnl_matrix<T> D(lines.size(), 3);
 
-  typename vcl_vector<vgl_homg_line_2d<T> >::const_iterator i = lines.begin();
+  typename std::vector<vgl_homg_line_2d<T> >::const_iterator i = lines.begin();
   for (unsigned j = 0; i != lines.end(); ++i,++j)
     D.set_row(j, get_vector(*i).as_ref());
 
   vnl_svd<T> svd(D);
 #ifdef DEBUG
-  vcl_cout << "[movrank " << svd.W() << ']';
+  std::cout << "[movrank " << svd.W() << ']';
 #endif
 
   return svd.nullvector();
@@ -322,7 +323,7 @@ vgl_homg_operators_2d<T>::most_orthogonal_vector_svd(const vcl_vector<vgl_homg_l
 // compute the nullspace of $\tt L^\top \tt L$.
 template <class T>
 vgl_homg_point_2d<T>
-vgl_homg_operators_2d<T>::lines_to_point(const vcl_vector<vgl_homg_line_2d<T> >& lines)
+vgl_homg_operators_2d<T>::lines_to_point(const std::vector<vgl_homg_line_2d<T> >& lines)
 {
   // ho_triveccam_aspect_lines_to_point
   assert(lines.size() >= 2);
@@ -370,7 +371,7 @@ double vgl_homg_operators_2d<T>::cross_ratio(const vgl_homg_point_2d<T>& a,
   double n = (x>y) ? (x1*w3-x3*w1)*(x2*w4-x4*w2) : (y1*w3-y3*w1)*(y2*w4-y4*w2);
   double m = (x>y) ? (x1*w4-x4*w1)*(x2*w3-x3*w2) : (y1*w4-y4*w1)*(y2*w3-y3*w2);
   if (n == 0 && m == 0)
-    vcl_cerr << "cross ratio not defined: three of the given points coincide\n";
+    std::cerr << "cross ratio not defined: three of the given points coincide\n";
   return n/m;
 }
 
@@ -449,16 +450,16 @@ vgl_homg_operators_2d<T>::matrix_from_dual_conic(vgl_conic<T> const& c)
 // This function is called from within intersection(vgl_conic<T>,vgl_conic<T>).
 // The two conics passed to this function MUST NOT be degenerate!
 template <class T>
-vcl_list<vgl_homg_point_2d<T> >
+std::list<vgl_homg_point_2d<T> >
 vgl_homg_operators_2d<T>::do_intersect(vgl_conic<T> const& c1,
                                        vgl_conic<T> const& c2)
 {
   if (c1==c2)
   {
-    vcl_cerr << __FILE__
+    std::cerr << __FILE__
              << "Warning: the intersection of two identical conics is not a finite set of points.\n"
              << "Returning an empty list.\n";
-    return vcl_list<vgl_homg_point_2d<T> >();
+    return std::list<vgl_homg_point_2d<T> >();
   }
   T A=c1.a(),B=c1.b(),C=c1.c(),D=c1.d(),E=c1.e(),F=c1.f();
   T a=c2.a(),b=c2.b(),c=c2.c(),d=c2.d(),e=c2.e(),f=c2.f();
@@ -499,18 +500,18 @@ vgl_homg_operators_2d<T>::do_intersect(vgl_conic<T> const& c1,
   // [  0    0    1    0 ]
 
   if (coef(0) == 0 && coef(1) == 0) { // The equation is actually of 2nd degree
-    if (coef(2) == 0 && coef(3) == 0) return vcl_list<vgl_homg_point_2d<T> >(); // no real solutions.
+    if (coef(2) == 0 && coef(3) == 0) return std::list<vgl_homg_point_2d<T> >(); // no real solutions.
     T dis = coef(3)*coef(3)-4*coef(2)*coef(4); // discriminant
-    if (dis < 0) return vcl_list<vgl_homg_point_2d<T> >(); // no real solutions.
+    if (dis < 0) return std::list<vgl_homg_point_2d<T> >(); // no real solutions.
     T y;
     if (coef(2) == 0) dis=0, y = - coef(4) / coef(3);
     else                     y = - coef(3) / coef(2) / 2;
     T w = y*ab+ad;
     T x = -(y*y*ac+y*ae+af);
     if (x == 0 && w == 0) x = w = 1;
-    if (dis == 0) {return vcl_list<vgl_homg_point_2d<T> >(2,vgl_homg_point_2d<T>(x,y*w,w));}
-    dis = vcl_sqrt(dis) / coef(2) / 2;
-    vcl_list<vgl_homg_point_2d<T> > solutions;
+    if (dis == 0) {return std::list<vgl_homg_point_2d<T> >(2,vgl_homg_point_2d<T>(x,y*w,w));}
+    dis = std::sqrt(dis) / coef(2) / 2;
+    std::list<vgl_homg_point_2d<T> > solutions;
     y -= dis; w = y*ab+ad; x = -(y*y*ac+y*ae+af);
     if (x == 0 && w == 0) x = w = 1;
     solutions.push_back(vgl_homg_point_2d<T>(x,y*w,w));
@@ -524,11 +525,11 @@ vgl_homg_operators_2d<T>::do_intersect(vgl_conic<T> const& c1,
     double data[]={coef(2),coef(3),coef(4), 1,0,0, 0,1,0};
     vnl_matrix<double> M(data,3,3);
     vnl_real_eigensystem eig(M);
-    vnl_diag_matrix<vcl_complex<double> >  polysolutions = eig.D;
-    vcl_list<vgl_homg_point_2d<T> > solutions;
+    vnl_diag_matrix<std::complex<double> >  polysolutions = eig.D;
+    std::list<vgl_homg_point_2d<T> > solutions;
     for (int i=0;i<3;++i)
-      if (vcl_abs(vcl_imag(polysolutions(i))) < 1e-3) {// only want the real solutions
-        T y = (T)vcl_real(polysolutions(i));
+      if (std::abs(std::imag(polysolutions(i))) < 1e-3) {// only want the real solutions
+        T y = (T)std::real(polysolutions(i));
         T w = y*ab+ad;
         T x = -(y*y*ac+y*ae+af);
         if (x == 0 && w == 0) x = w = 1;
@@ -542,21 +543,21 @@ vgl_homg_operators_2d<T>::do_intersect(vgl_conic<T> const& c1,
   vnl_matrix<double> M(data,4,4);
   vnl_real_eigensystem eig(M);
 
-  vnl_diag_matrix<vcl_complex<double> >  polysolutions = eig.D;
+  vnl_diag_matrix<std::complex<double> >  polysolutions = eig.D;
 
   // Ignore imaginary solutions: place just the real solutions in yvals:
-  vcl_list<T> yvals;
+  std::list<T> yvals;
   for (int i=0;i<4;++i)
-    if (vcl_abs(vcl_imag(polysolutions(i))) < 1e-7)
-      yvals.push_back((T)vcl_real(polysolutions(i)));
+    if (std::abs(std::imag(polysolutions(i))) < 1e-7)
+      yvals.push_back((T)std::real(polysolutions(i)));
 
   // These are only the solutions of the fourth order equation.
   // The solutions of the intersection of the two conics are:
 
-  vcl_list<vgl_homg_point_2d<T> > solutions;
+  std::list<vgl_homg_point_2d<T> > solutions;
 
   // Special case: two or more y values of intersection points are identical:
-  typename vcl_list<T>::const_iterator it = yvals.begin();
+  typename std::list<T>::const_iterator it = yvals.begin();
 #if 0
   if (yvals(0) == yvals(1) || yvals(1) == yvals(2) || yvals(2) == yvals(3))
   {
@@ -577,7 +578,7 @@ vgl_homg_operators_2d<T>::do_intersect(vgl_conic<T> const& c1,
 // This function is called from within intersection(vgl_conic<T>,vgl_homg_line_2d<T>).
 // The conic passed to this function MUST NOT be degenerate!
 template <class T>
-vcl_list<vgl_homg_point_2d<T> >
+std::list<vgl_homg_point_2d<T> >
 vgl_homg_operators_2d<T>::do_intersect(vgl_conic<T> const& q,
                                        vgl_homg_line_2d<T> const& l)
 {
@@ -586,31 +587,31 @@ vgl_homg_operators_2d<T>::do_intersect(vgl_conic<T> const& q,
 
   if (a==0 && b==0) { // line at infinity
     if (A==0)
-      return vcl_list<vgl_homg_point_2d<T> >(2,vgl_homg_point_2d<T>(1,0,0));
+      return std::list<vgl_homg_point_2d<T> >(2,vgl_homg_point_2d<T>(1,0,0));
     T d = B*B-4*A*C; // discriminant
-    if (d < 0) return vcl_list<vgl_homg_point_2d<T> >(); // no solutions
+    if (d < 0) return std::list<vgl_homg_point_2d<T> >(); // no solutions
     if (d == 0)
-      return vcl_list<vgl_homg_point_2d<T> >(2,vgl_homg_point_2d<T>(-B,2*A,0));
-    d = vcl_sqrt(d);
-    vcl_list<vgl_homg_point_2d<T> > v(1, vgl_homg_point_2d<T>(-B+d, 2*A, 0));
+      return std::list<vgl_homg_point_2d<T> >(2,vgl_homg_point_2d<T>(-B,2*A,0));
+    d = std::sqrt(d);
+    std::list<vgl_homg_point_2d<T> > v(1, vgl_homg_point_2d<T>(-B+d, 2*A, 0));
     v.push_back(vgl_homg_point_2d<T>(-B-d, 2*A, 0));
     return v;
   }
   if (a==0) { // write y in terms of w and solve for (x,w)
     T y = -c/b; B = B*y+D;
     T d = B*B-4*A*(C*y*y+E*y+F); // discriminant
-    if (d < 0) return vcl_list<vgl_homg_point_2d<T> >(); // no solutions
+    if (d < 0) return std::list<vgl_homg_point_2d<T> >(); // no solutions
     if (d == 0 && A == 0)
-      return vcl_list<vgl_homg_point_2d<T> >(2,vgl_homg_point_2d<T>(1,0,0));
+      return std::list<vgl_homg_point_2d<T> >(2,vgl_homg_point_2d<T>(1,0,0));
     if (d == 0)
-      return vcl_list<vgl_homg_point_2d<T> >(2,vgl_homg_point_2d<T>(-B,y*2*A,2*A));
+      return std::list<vgl_homg_point_2d<T> >(2,vgl_homg_point_2d<T>(-B,y*2*A,2*A));
     if (A == 0) {
-      vcl_list<vgl_homg_point_2d<T> > v(1, vgl_homg_point_2d<T>(1,0,0));
+      std::list<vgl_homg_point_2d<T> > v(1, vgl_homg_point_2d<T>(1,0,0));
       v.push_back(vgl_homg_point_2d<T>(C*y*y+E*y+F, -y*B, -B));
       return v;
     }
-    d = vcl_sqrt(d);
-    vcl_list<vgl_homg_point_2d<T> > v(1, vgl_homg_point_2d<T>(-B+d, y*2*A, 2*A));
+    d = std::sqrt(d);
+    std::list<vgl_homg_point_2d<T> > v(1, vgl_homg_point_2d<T>(-B+d, y*2*A, 2*A));
     v.push_back(vgl_homg_point_2d<T>(-B-d, y*2*A, 2*A));
     return v;
   }
@@ -618,25 +619,25 @@ vgl_homg_operators_2d<T>::do_intersect(vgl_conic<T> const& q,
   T AA = A*b*b+B*b+C;
   B = 2*A*b*c+B*c+D*b+E;
   T d = B*B-4*AA*(A*c*c+D*c+F); // discriminant
-  if (d < 0) return vcl_list<vgl_homg_point_2d<T> >(); // no solutions
+  if (d < 0) return std::list<vgl_homg_point_2d<T> >(); // no solutions
   if (d == 0 && AA == 0)
-    return vcl_list<vgl_homg_point_2d<T> >(2,vgl_homg_point_2d<T>(b,1,0));
+    return std::list<vgl_homg_point_2d<T> >(2,vgl_homg_point_2d<T>(b,1,0));
   if (d == 0)
-    return vcl_list<vgl_homg_point_2d<T> >(2,vgl_homg_point_2d<T>(c*2*AA-b*B,-B,2*AA));
+    return std::list<vgl_homg_point_2d<T> >(2,vgl_homg_point_2d<T>(c*2*AA-b*B,-B,2*AA));
   if (AA == 0) {
-    vcl_list<vgl_homg_point_2d<T> > v(1, vgl_homg_point_2d<T>(b,1,0));
+    std::list<vgl_homg_point_2d<T> > v(1, vgl_homg_point_2d<T>(b,1,0));
     v.push_back(vgl_homg_point_2d<T>(b*A*c*c+b*D*c+b*F-c*B, A*c*c+D*c+F, -B));
     return v;
   }
-  d = vcl_sqrt(d);
-  vcl_list<vgl_homg_point_2d<T> > v(1, vgl_homg_point_2d<T>(c*2*AA-b*B+b*d, -B+d, 2*AA));
+  d = std::sqrt(d);
+  std::list<vgl_homg_point_2d<T> > v(1, vgl_homg_point_2d<T>(c*2*AA-b*B+b*d, -B+d, 2*AA));
   v.push_back(vgl_homg_point_2d<T>(c*2*AA-b*B-b*d, -B-d, 2*AA));
   return v;
 }
 
 //: Return the (real) intersection points of a conic and a line.
 template <class T>
-vcl_list<vgl_homg_point_2d<T> >
+std::list<vgl_homg_point_2d<T> >
 vgl_homg_operators_2d<T>::intersection(vgl_conic<T> const& c,
                                        vgl_homg_line_2d<T> const& l)
 {
@@ -645,17 +646,17 @@ vgl_homg_operators_2d<T>::intersection(vgl_conic<T> const& c,
       c.type()==vgl_conic<T>::complex_intersecting_lines ||
       c.type()==vgl_conic<T>::imaginary_ellipse ||
       c.type()==vgl_conic<T>::imaginary_circle)
-    return vcl_list<vgl_homg_point_2d<T> >(); // empty list
+    return std::list<vgl_homg_point_2d<T> >(); // empty list
   // let's hope the intersection point of the two complex lines is not on the line..
 
   if (c.type() == vgl_conic<T>::coincident_lines) {
     vgl_homg_point_2d<T> p = intersection(l, c.components().front());
-    vcl_list<vgl_homg_point_2d<T> > list(2, p); // intersection is *two* coincident points
+    std::list<vgl_homg_point_2d<T> > list(2, p); // intersection is *two* coincident points
     return list;
   }
 
   if (c.type() == vgl_conic<T>::real_intersecting_lines || c.type() == vgl_conic<T>::real_parallel_lines) {
-    vcl_list<vgl_homg_point_2d<T> > list;
+    std::list<vgl_homg_point_2d<T> > list;
     list.push_back(intersection(l, c.components().front()));
     list.push_back(intersection(l, c.components().back()));
     return list;
@@ -664,29 +665,29 @@ vgl_homg_operators_2d<T>::intersection(vgl_conic<T> const& c,
 }
 
 template <class T>
-vcl_list<vgl_homg_point_2d<T> >
+std::list<vgl_homg_point_2d<T> >
 vgl_homg_operators_2d<T>::intersection(vgl_conic<T> const& c1, vgl_conic<T> const& c2)
 {
   if ((c1.type()==vgl_conic<T>::complex_parallel_lines ||
        c1.type()==vgl_conic<T>::complex_intersecting_lines)
       && c2.contains(c1.centre()))
-    return vcl_list<vgl_homg_point_2d<T> >(2, c1.centre()); // double intersection point
+    return std::list<vgl_homg_point_2d<T> >(2, c1.centre()); // double intersection point
   if ((c2.type()==vgl_conic<T>::complex_parallel_lines ||
        c2.type()==vgl_conic<T>::complex_intersecting_lines)
       && c1.contains(c2.centre()))
-    return vcl_list<vgl_homg_point_2d<T> >(2, c2.centre()); // double intersection point
+    return std::list<vgl_homg_point_2d<T> >(2, c2.centre()); // double intersection point
   if (c1.type() == vgl_conic<T>::no_type   ||  c2.type() == vgl_conic<T>::no_type ||
       c1.type()==vgl_conic<T>::complex_parallel_lines||c2.type()==vgl_conic<T>::complex_parallel_lines ||
       c1.type()==vgl_conic<T>::complex_intersecting_lines||c2.type()==vgl_conic<T>::complex_intersecting_lines ||
       c1.type() == vgl_conic<T>::imaginary_ellipse|| c2.type() == vgl_conic<T>::imaginary_ellipse ||
       c1.type() == vgl_conic<T>::imaginary_circle || c2.type() == vgl_conic<T>::imaginary_circle)
-    return vcl_list<vgl_homg_point_2d<T> >(); // empty list
+    return std::list<vgl_homg_point_2d<T> >(); // empty list
 
   if (c1.type() == vgl_conic<T>::coincident_lines ||
       c1.type() == vgl_conic<T>::real_intersecting_lines ||
       c1.type() == vgl_conic<T>::real_parallel_lines) {
-    vcl_list<vgl_homg_point_2d<T> > l1=intersection(c2,c1.components().front());
-    vcl_list<vgl_homg_point_2d<T> > l2=intersection(c2,c1.components().back());
+    std::list<vgl_homg_point_2d<T> > l1=intersection(c2,c1.components().front());
+    std::list<vgl_homg_point_2d<T> > l2=intersection(c2,c1.components().back());
     l1.insert(l1.end(), l2.begin(), l2.end()); // append l2 to l1
     return l1;
   }
@@ -694,8 +695,8 @@ vgl_homg_operators_2d<T>::intersection(vgl_conic<T> const& c1, vgl_conic<T> cons
   if (c2.type() == vgl_conic<T>::coincident_lines ||
       c2.type() == vgl_conic<T>::real_intersecting_lines ||
       c2.type() == vgl_conic<T>::real_parallel_lines) {
-    vcl_list<vgl_homg_point_2d<T> > l1=intersection(c1,c2.components().front());
-    vcl_list<vgl_homg_point_2d<T> > l2=intersection(c1,c2.components().back());
+    std::list<vgl_homg_point_2d<T> > l1=intersection(c1,c2.components().front());
+    std::list<vgl_homg_point_2d<T> > l2=intersection(c1,c2.components().back());
     l1.insert(l1.end(), l2.begin(), l2.end()); // append l2 to l1
     return l1;
   }
@@ -712,28 +713,28 @@ vgl_homg_operators_2d<T>::intersection(vgl_conic<T> const& c1, vgl_conic<T> cons
 // on the conic (in which case the component is returned to which it belongs,
 // or even both components in the exclusive case that the point is the centre).
 template <class T>
-vcl_list<vgl_homg_line_2d<T> >
+std::list<vgl_homg_line_2d<T> >
 vgl_homg_operators_2d<T>::tangent_from(vgl_conic<T> const& c,
                                        vgl_homg_point_2d<T> const& p)
 {
   if (c.is_degenerate()) {
-    if (!c.contains(p)) return vcl_list<vgl_homg_line_2d<T> >();
-    vcl_list<vgl_homg_line_2d<T> > v = c.components();
+    if (!c.contains(p)) return std::list<vgl_homg_line_2d<T> >();
+    std::list<vgl_homg_line_2d<T> > v = c.components();
     if (c.type() == vgl_conic<T>::coincident_lines || p == c.centre())
       return v;
     if (v.size() > 0 && dot(v.front(),p) == 0)
-      return vcl_list<vgl_homg_line_2d<T> >(1,v.front());
+      return std::list<vgl_homg_line_2d<T> >(1,v.front());
     else if (v.size() > 1 && dot(v.back(),p) == 0)
-      return vcl_list<vgl_homg_line_2d<T> >(1,v.back());
+      return std::list<vgl_homg_line_2d<T> >(1,v.back());
     else
-      return vcl_list<vgl_homg_line_2d<T> >();
+      return std::list<vgl_homg_line_2d<T> >();
   }
 
   vgl_conic<T> C = c.dual_conic();
   vgl_homg_line_2d<T>  l(p.x(),p.y(),p.w()); // dual line
-  vcl_list<vgl_homg_point_2d<T> > dualpts = intersection(C,l);
-  vcl_list<vgl_homg_line_2d<T> > v;
-  typename vcl_list<vgl_homg_point_2d<T> >::iterator it = dualpts.begin();
+  std::list<vgl_homg_point_2d<T> > dualpts = intersection(C,l);
+  std::list<vgl_homg_line_2d<T> > v;
+  typename std::list<vgl_homg_point_2d<T> >::iterator it = dualpts.begin();
   for (; !(it == dualpts.end()); ++it)
     v.push_back(vgl_homg_line_2d<T>((*it).x(), (*it).y(), (*it).w()));
   return v;
@@ -744,19 +745,19 @@ vgl_homg_operators_2d<T>::tangent_from(vgl_conic<T> const& c,
 // which are the duals of the common tangent lines.
 // If one of the conics is degenerate, an empty list is returned.
 template <class T>
-vcl_list<vgl_homg_line_2d<T> >
+std::list<vgl_homg_line_2d<T> >
 vgl_homg_operators_2d<T>::common_tangents(vgl_conic<T> const& c1,
                                           vgl_conic<T> const& c2)
 {
   if ((c1.type() != vgl_conic<T>::parabola && ! c1.is_central())  ||
       (c2.type() != vgl_conic<T>::parabola && ! c2.is_central()))
-    return vcl_list<vgl_homg_line_2d<T> >();//empty list: degenerate conic has no dual
+    return std::list<vgl_homg_line_2d<T> >();//empty list: degenerate conic has no dual
 
   vgl_conic<T> C1 = c1.dual_conic();
   vgl_conic<T> C2 = c2.dual_conic();
-  vcl_list<vgl_homg_point_2d<T> > dualpts = intersection(C1,C2);
-  vcl_list<vgl_homg_line_2d<T> > v;
-  typename vcl_list<vgl_homg_point_2d<T> >::iterator it = dualpts.begin();
+  std::list<vgl_homg_point_2d<T> > dualpts = intersection(C1,C2);
+  std::list<vgl_homg_line_2d<T> > v;
+  typename std::list<vgl_homg_point_2d<T> >::iterator it = dualpts.begin();
   for (; !(it == dualpts.end()); ++it)
     v.push_back(vgl_homg_line_2d<T>((*it).x(), (*it).y(), (*it).w()));
   return v;
@@ -774,7 +775,7 @@ vgl_homg_operators_2d<T>::closest_point(vgl_conic<T> const& c,
   // The nearest point must have a polar line which is orthogonal to its
   // connection line with the given point; all points with this property form
   // a certain conic  (actually an orthogonal hyperbola) :
-  vcl_list<vgl_homg_point_2d<T> > candidates; // all intersection points
+  std::list<vgl_homg_point_2d<T> > candidates; // all intersection points
   if (pt.w() == 0) // given point is at infinity
   {
     // ==> degenerate hyperbola: line + line at infinity
@@ -808,12 +809,12 @@ vgl_homg_operators_2d<T>::closest_point(vgl_conic<T> const& c,
   }
   if (candidates.size() == 0)
   {
-    vcl_cerr << "Warning: vgl_homg_operators_2d<T>::closest_point: no intersection\n";
+    std::cerr << "Warning: vgl_homg_operators_2d<T>::closest_point: no intersection\n";
     return vgl_homg_point_2d<T>(0,0,0);
   }
 
   // And find the intersection point closest to the given location:
-  typename vcl_list<vgl_homg_point_2d<T> >::iterator it = candidates.begin();
+  typename std::list<vgl_homg_point_2d<T> >::iterator it = candidates.begin();
   vgl_homg_point_2d<T> p = (*it);
   T dist = vgl_homg_operators_2d<T>::distance_squared(*it,pt);
   for (++it; it != candidates.end(); ++it) {
@@ -858,7 +859,7 @@ vgl_homg_operators_2d<T>::compute_bounding_box(vgl_conic<T> const& c)
       c.real_type() == "coincident lines")
   {
     // find out if these lines happen to be horizontal or vertical
-    vcl_list<vgl_homg_line_2d<T> > l = c.components();
+    std::list<vgl_homg_line_2d<T> > l = c.components();
     if (l.front().a() == 0) // horizontal lines
       return vgl_box_2d<T>(vgl_point_2d<T>(T(1e33),-l.front().c()/l.front().b()),
                            vgl_point_2d<T>(T(-1e33),-l.back().c()/l.back().b()));
@@ -876,8 +877,8 @@ vgl_homg_operators_2d<T>::compute_bounding_box(vgl_conic<T> const& c)
   vgl_homg_point_2d<T> px (1,0,0); // point at infinity of the X axis
   vgl_homg_point_2d<T> py (0,1,0); // point at infinity of the Y axis
 
-  vcl_list<vgl_homg_line_2d<T> > lx = vgl_homg_operators_2d<T>::tangent_from(c, px);
-  vcl_list<vgl_homg_line_2d<T> > ly = vgl_homg_operators_2d<T>::tangent_from(c, py);
+  std::list<vgl_homg_line_2d<T> > lx = vgl_homg_operators_2d<T>::tangent_from(c, px);
+  std::list<vgl_homg_line_2d<T> > ly = vgl_homg_operators_2d<T>::tangent_from(c, py);
 
   T y1 = - lx.front().c() / lx.front().b(); // lx are two horizontal lines
   T y2 = - lx.back().c() / lx.back().b();

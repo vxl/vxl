@@ -21,7 +21,7 @@ enum { rgtl_compact_tree_policy_leaf_data,
 class rgtl_node_data_value_policy_base
 {
  public:
-  typedef vcl_size_t index_type;
+  typedef std::size_t index_type;
   enum { policy_type = rgtl_compact_tree_policy_node_data };
 };
 
@@ -29,7 +29,7 @@ class rgtl_node_data_value_policy_base
 class rgtl_leaf_data_value_policy_base
 {
  public:
-  typedef vcl_size_t index_type;
+  typedef std::size_t index_type;
   enum { policy_type = rgtl_compact_tree_policy_leaf_data };
 };
 

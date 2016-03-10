@@ -1,6 +1,8 @@
 #include "bwm_image_processor.h"
 
-#include <vcl_cstdio.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <cstdio>
 #include <vcl_cassert.h>
 #include <vgui/vgui_range_map_params.h>
 #include <bgui/bgui_graph_tableau.h>
@@ -25,14 +27,14 @@ void bwm_image_processor::hist_plot(bgui_image_tableau_sptr img,
 {
   if (!img)
   {
-    vcl_cout << "intensity_histogram() - no image tableau\n";
+    std::cout << "intensity_histogram() - no image tableau\n";
     return;
   }
 
   vil_image_resource_sptr res = img->get_image_resource();
   if (!res)
   {
-    vcl_cout << "intensity_histogram() - the tableau does not have an image resource\n";
+    std::cout << "intensity_histogram() - the tableau does not have an image resource\n";
     return;
   }
 
@@ -40,13 +42,13 @@ void bwm_image_processor::hist_plot(bgui_image_tableau_sptr img,
   bgui_graph_tableau_sptr g = iu.hist_graph();
 
   if (!g)
-    { vcl_cout << "In intensity_histogram()- histogram failed\n";
+    { std::cout << "In intensity_histogram()- histogram failed\n";
     return;
   }
 
   //popup a profile graph
   char location[100];
-  vcl_sprintf(location, "Intensity Histogram");
+  std::sprintf(location, "Intensity Histogram");
   vgui_dialog* ip_dialog = g->popup_graph(location);
 
   if (!ip_dialog->ask())
@@ -66,21 +68,21 @@ void bwm_image_processor::intensity_profile(bgui_image_tableau_sptr img,
     unsigned n_p = img->get_image_resource()->nplanes();
     bgui_graph_tableau_sptr g = bgui_graph_tableau_new(512, 512);
     if (n_p==1) {
-      vcl_vector<double> pos, vals;
+      std::vector<double> pos, vals;
       img->image_line(start_col, start_row, end_col, end_row, pos, vals);
       g->update(pos, vals);
     }
     else if ( n_p ==3 || n_p == 4)
     {
-      vcl_vector<double> pos;
-      vcl_vector<vcl_vector<double> > vals;
+      std::vector<double> pos;
+      std::vector<std::vector<double> > vals;
       img->image_line(start_col, start_row, end_col, end_row, pos, vals);
-      vcl_vector<vcl_vector<double> > mpos(n_p, pos);
+      std::vector<std::vector<double> > mpos(n_p, pos);
       g->update(mpos, vals);
     }
     //popup a profile graph
     char location[100];
-    vcl_sprintf(location, "scan:(%d, %d)<->(%d, %d)",
+    std::sprintf(location, "scan:(%d, %d)<->(%d, %d)",
                 static_cast<unsigned>(start_col),
                 static_cast<unsigned>(start_row),
                 static_cast<unsigned>(end_col),
@@ -136,7 +138,7 @@ void bwm_image_processor::range_map(bgui_image_tableau_sptr img)
     rmp_dialog.field("B Gamma ",new_rmp->gamma_B_);
   }
   if (nc==4) {
-    vcl_vector<vcl_string> choices;
+    std::vector<std::string> choices;
     for (unsigned c = 0; c<vgui_range_map_params::END_m; ++c)
     choices.push_back(vgui_range_map_params::bmap[c]);
     rmp_dialog.choice("Band Map", choices, choice);
@@ -171,7 +173,7 @@ void bwm_image_processor::range_map(bgui_image_tableau_sptr img)
 bool bwm_image_processor::
 step_edges_vd(bgui_image_tableau_sptr const& img,
               vsol_box_2d_sptr const& roi,
-              vcl_vector<vsol_digital_curve_2d_sptr>& edges)
+              std::vector<vsol_digital_curve_2d_sptr>& edges)
 {
   if (!img) return false;
   static sdet_detector_params dp;
@@ -189,7 +191,7 @@ step_edges_vd(bgui_image_tableau_sptr const& img,
   vil_image_resource_sptr image = img->get_image_resource();
   if (!image||!image->ni()||!image->nj())
   {
-    vcl_cerr << "In bwm_observer_img::step_edges_vd() - no image\n";
+    std::cerr << "In bwm_observer_img::step_edges_vd() - no image\n";
     return false;
   }
   sdet_detector det(dp);
@@ -201,7 +203,7 @@ step_edges_vd(bgui_image_tableau_sptr const& img,
   det.DoContour();
   if (!det.get_vsol_edges(edges))
   {
-    vcl_cerr << "In bwm_observer_img::step_edges_vd() - edge detection failed\n";
+    std::cerr << "In bwm_observer_img::step_edges_vd() - edge detection failed\n";
     return false;
   }
   return true;
@@ -209,7 +211,7 @@ step_edges_vd(bgui_image_tableau_sptr const& img,
 
 bool bwm_image_processor::lines_vd(bgui_image_tableau_sptr const& img,
                                    vsol_box_2d_sptr const& roi,
-                                   vcl_vector<vsol_line_2d_sptr>& lines)
+                                   std::vector<vsol_line_2d_sptr>& lines)
 {
   if (!img) return false;
 
@@ -234,7 +236,7 @@ bool bwm_image_processor::lines_vd(bgui_image_tableau_sptr const& img,
   vil_image_resource_sptr image = img->get_image_resource();
   if (!image||!image->ni()||!image->nj())
   {
-    vcl_cerr << "In bwm_image_processor::lines_vd() - no image\n";
+    std::cerr << "In bwm_image_processor::lines_vd() - no image\n";
     return false;
   }
   brip_roi broi(image->ni(), image->nj());
@@ -244,17 +246,17 @@ bool bwm_image_processor::lines_vd(bgui_image_tableau_sptr const& img,
 
   det.DoContour();
 
-  vcl_vector<vtol_edge_2d_sptr>* edges = det.GetEdges();
+  std::vector<vtol_edge_2d_sptr>* edges = det.GetEdges();
   if (!edges)
   {
-    vcl_cout << "bwm_image_processor::lines_vd() - no edges to fit lines\n";
+    std::cout << "bwm_image_processor::lines_vd() - no edges to fit lines\n";
     return false;
   }
   sdet_fit_lines fl(flp);
   fl.set_edges(*edges);
   if (!fl.fit_lines())
   {
-    vcl_cout << "bwm_image_processor::lines_vd() - lit fitting failed\n";
+    std::cout << "bwm_image_processor::lines_vd() - lit fitting failed\n";
     return false;
   }
   fl.get_line_segs(lines);
@@ -263,23 +265,23 @@ bool bwm_image_processor::lines_vd(bgui_image_tableau_sptr const& img,
 
 void bwm_image_processor::
 scan_regions(  bgui_image_tableau_sptr const& img,
-               vcl_vector<vgl_polygon<double> > const& regions)
+               std::vector<vgl_polygon<double> > const& regions)
 {
   vil_image_resource_sptr image = img->get_image_resource();
   if (!image||!image->ni()||!image->nj())
   {
-    vcl_cerr << "In bwm_image_processor::scan_regions() - no image\n";
+    std::cerr << "In bwm_image_processor::scan_regions() - no image\n";
     return ;
   }
 
   unsigned n_regions = regions.size();
   if (!n_regions)
   {
-    vcl_cerr << "In bwm_image_processor::scan_regions() - no regions to scan\n";
+    std::cerr << "In bwm_image_processor::scan_regions() - no regions to scan\n";
     return;
   }
 
-  vcl_vector<vcl_vector<float > > temp(n_regions);
+  std::vector<std::vector<float > > temp(n_regions);
   float gmin, gmax;
   temp[0] = brip_vil_float_ops::scan_region(image, regions[0], gmin, gmax);
   for (unsigned r = 1; r< n_regions; ++r)
@@ -302,21 +304,21 @@ scan_regions(  bgui_image_tableau_sptr const& img,
     nbins = range;
   else nbins = maxbins;
   double delta_2 = range/(2.0*nbins);
-  vcl_vector<vcl_vector<double > > pos(n_regions);
-  vcl_vector<vcl_vector<double > > vls(n_regions);
+  std::vector<std::vector<double > > pos(n_regions);
+  std::vector<std::vector<double > > vls(n_regions);
   for (unsigned r = 0; r< regions.size(); ++r)
   {
     bsta_histogram<double> h(min_ten, max_ten, nbins);
     for (unsigned i = 0; i<temp[r].size(); ++i)
       h.upcount(temp[r][i], 1.0);
 
-    vcl_vector<double> val = h.value_array();
+    std::vector<double> val = h.value_array();
     //subtract off the bin mid-value
 
-    for (vcl_vector<double>::iterator vit = val.begin();
+    for (std::vector<double>::iterator vit = val.begin();
          vit != val.end(); ++vit)
       (*vit)-=delta_2;
-    vcl_vector<double> count = h.count_array();
+    std::vector<double> count = h.count_array();
     pos[r]=val;
     vls[r]=count;
   }
@@ -324,7 +326,7 @@ scan_regions(  bgui_image_tableau_sptr const& img,
   g->update(pos, vls);
 
   char location[100];
-  vcl_sprintf(location, "Region Data");
+  std::sprintf(location, "Region Data");
   vgui_dialog* ip_dialog = g->popup_graph(location);
   if (!ip_dialog->ask())
   {
@@ -342,19 +344,19 @@ bool bwm_image_processor::crop_to_box(bgui_image_tableau_sptr const& img,
   vil_image_resource_sptr image = img->get_image_resource();
   if (!image||!image->ni()||!image->nj())
   {
-    vcl_cerr << "In bwm_observer_img::step_edges_vd() - no image\n";
+    std::cerr << "In bwm_observer_img::step_edges_vd() - no image\n";
     return false;
   }
   double xmin = roi->get_min_x(), xmax = roi->get_max_x(),
     ymin = roi->get_min_y(), ymax=roi->get_max_y();
-  vcl_cout << "croping subset of image(" << image->ni() << ' '
+  std::cout << "croping subset of image(" << image->ni() << ' '
            << image->nj() << ")->org(" << xmin << ' ' << ymin << "):size("
-           << xmax-xmin << ' ' << ymax-ymin << ")\n" << vcl_flush;
+           << xmax-xmin << ' ' << ymax-ymin << ")\n" << std::flush;
   brip_roi_sptr roi_ptr = new brip_roi(image->ni(), image->nj());
   roi_ptr->add_region(roi);
   if (!brip_vil_float_ops::chip(image, roi_ptr, chip))
   {
-    vcl_cout << "Crop operation failed\n";
+    std::cout << "Crop operation failed\n";
     return false;
   }
   return true;

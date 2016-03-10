@@ -3,14 +3,16 @@
 //:
 // \file
 
-#include <vcl_utility.h>
-#include <vcl_iostream.h>
+#include <utility>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iostream>
 #include <bxml/bxml_read.h>
 #include <bxml/bxml_find.h>
 #include <bxml/bxml_write.h>
 
 //: Output stream operator for bprb_params
-vcl_ostream& operator<<(vcl_ostream& os, const bprb_param& p)
+std::ostream& operator<<(std::ostream& os, const bprb_param& p)
 {
   os << "parameter{\n  Description: " << p.description();
   if (p.has_bounds())
@@ -32,7 +34,7 @@ bprb_parameters::bprb_parameters()
 //: Destructor
 bprb_parameters::~bprb_parameters()
 {
-  for ( vcl_vector< bprb_param * >::iterator it = param_list_.begin();
+  for ( std::vector< bprb_param * >::iterator it = param_list_.begin();
         it != param_list_.end();
         it++ ) {
     delete *it;
@@ -42,7 +44,7 @@ bprb_parameters::~bprb_parameters()
 //: Deep copy constructor
 bprb_parameters::bprb_parameters(const bprb_parameters_sptr& old_params)
 {
-  for ( vcl_vector< bprb_param * >::iterator it = old_params->param_list_.begin();
+  for ( std::vector< bprb_param * >::iterator it = old_params->param_list_.begin();
         it != old_params->param_list_.end();
         it++ ) {
 
@@ -50,16 +52,16 @@ bprb_parameters::bprb_parameters(const bprb_parameters_sptr& old_params)
     bprb_param * new_param = (*it)->clone();
 
     param_list_.push_back( new_param );
-    name_param_map_.insert( vcl_pair< vcl_string , bprb_param* >( new_param->name() , new_param ) );
+    name_param_map_.insert( std::pair< std::string , bprb_param* >( new_param->name() , new_param ) );
   }
 }
 
 
 //: Returns true if a parameter exists with \p flag
 bool
-bprb_parameters::valid_parameter( const vcl_string& name ) const
+bprb_parameters::valid_parameter( const std::string& name ) const
 {
-  vcl_map< vcl_string , bprb_param * >::const_iterator itr = name_param_map_.find( name );
+  std::map< std::string , bprb_param * >::const_iterator itr = name_param_map_.find( name );
   return itr != name_param_map_.end();
 }
 
@@ -72,23 +74,23 @@ bprb_parameters::valid_parameter( const vcl_string& name ) const
 //   .
 //   .
 // </ProcessName>
-bool bprb_parameters::parse_XML(const vcl_string& xml_path,
-                                const vcl_string& root_tag)
+bool bprb_parameters::parse_XML(const std::string& xml_path,
+                                const std::string& root_tag)
 {
   // open the XML document
   if (xml_path.size() == 0) {
-    vcl_cout << "bprb_parameters::parse_XML -- xml file path is not set" << vcl_endl;
+    std::cout << "bprb_parameters::parse_XML -- xml file path is not set" << std::endl;
     return false;
   }
 
   bxml_document xml_doc_ = bxml_read(xml_path);
   if (!xml_doc_.root_element()) {
-    vcl_cout << "bprb_parameters::parse_XML -- xml root not found" << vcl_endl;
+    std::cout << "bprb_parameters::parse_XML -- xml root not found" << std::endl;
     return false;
   }
 
   if (xml_doc_.root_element()->type() != bxml_data::ELEMENT) {
-    vcl_cout << "bprb_parameters::parse_XML params root is not ELEMENT" << vcl_endl;
+    std::cout << "bprb_parameters::parse_XML params root is not ELEMENT" << std::endl;
     return false;
   }
 
@@ -102,7 +104,7 @@ bool bprb_parameters::parse_XML(const vcl_string& xml_path,
     //root = static_cast<bxml_element*> (bxml_find_by_name(xml_doc_.root_element(), query).as_pointer());
     root = bxml_find_by_name(xml_doc_.root_element(), query);
     if (!root) {
-      vcl_cout << "bprb_parameters::parse_XML root tag: " << root_tag << " is not found" << vcl_endl;
+      std::cout << "bprb_parameters::parse_XML root tag: " << root_tag << " is not found" << std::endl;
       return false;
     }
   }
@@ -114,9 +116,9 @@ bool bprb_parameters::parse_XML(const vcl_string& xml_path,
     if (elm->type() == bxml_data::ELEMENT) {
       bxml_element* param = static_cast<bxml_element*> (elm.as_pointer());
       if (param) {
-        vcl_string value = param->attribute("value");
-        vcl_string type = param->attribute("type");
-        vcl_string desc = param->attribute("desc");
+        std::string value = param->attribute("value");
+        std::string type = param->attribute("type");
+        std::string desc = param->attribute("desc");
         bprb_param* p=VXL_NULLPTR;
         if (!type.compare("float")) {
           p =  new bprb_param_type<float>(param->name(), desc, 0);
@@ -125,13 +127,13 @@ bool bprb_parameters::parse_XML(const vcl_string& xml_path,
         } else if (!type.compare("int")) {
           p =  new bprb_param_type<int>(param->name(), desc, 0);
         } else if (!type.compare("string")) {
-          p =  new bprb_param_type<vcl_string>(param->name(), desc, "");
+          p =  new bprb_param_type<std::string>(param->name(), desc, "");
         } else if (!type.compare("bool")) {
           p =  new bprb_param_type<bool>(param->name(), desc, false);
         } else if (!type.compare("double")) {
           p =  new bprb_param_type<double>(param->name(), desc, false);
         } else {
-          vcl_cerr << "Parsing Error: Unknown parameter type \"" << type << "\"" << vcl_endl;
+          std::cerr << "Parsing Error: Unknown parameter type \"" << type << "\"" << std::endl;
           continue; // maybe should abort and return false here?
         }
         p->parse_value_str(value);
@@ -145,17 +147,17 @@ bool bprb_parameters::parse_XML(const vcl_string& xml_path,
 }
 
 //: prints the default parameter values to an XML document
-void bprb_parameters::print_def_XML(const vcl_string& root_tag,
-                                    const vcl_string& xml_path)
+void bprb_parameters::print_def_XML(const std::string& root_tag,
+                                    const std::string& xml_path)
 {
   bxml_element* root = new bxml_element(root_tag);
   root->append_text("\n");
   // iterate over each parameter, and get the default ones
-  for ( vcl_vector< bprb_param * >::iterator it = param_list_.begin();
+  for ( std::vector< bprb_param * >::iterator it = param_list_.begin();
         it != param_list_.end();
         it++ ) {
-    vcl_string name = (*it)->name();
-    vcl_string def_value = (*it)->default_str();
+    std::string name = (*it)->name();
+    std::string def_value = (*it)->default_str();
     bxml_element* param_elem = new bxml_element(name);
     param_elem->set_attribute("type", (*it)->type_str());
     param_elem->set_attribute("desc", (*it)->description());
@@ -169,17 +171,17 @@ void bprb_parameters::print_def_XML(const vcl_string& root_tag,
 }
 
 //: prints the currently used parameter values to an XML document
-void bprb_parameters::print_current_XML(const vcl_string& root_tag,
-                                        const vcl_string& xml_path)
+void bprb_parameters::print_current_XML(const std::string& root_tag,
+                                        const std::string& xml_path)
 {
   bxml_element* root = new bxml_element(root_tag);
   root->append_text("\n");
   // iterate over each parameter, and get the default ones
-  for ( vcl_vector< bprb_param * >::iterator it = param_list_.begin();
+  for ( std::vector< bprb_param * >::iterator it = param_list_.begin();
         it != param_list_.end();
         it++ ) {
-    vcl_string name = (*it)->name();
-    vcl_string value = (*it)->value_str();
+    std::string name = (*it)->name();
+    std::string value = (*it)->value_str();
     bxml_element* param_elem = new bxml_element(name);
     param_elem->set_attribute("type", (*it)->type_str());
     param_elem->set_attribute("desc", (*it)->description());
@@ -196,7 +198,7 @@ void bprb_parameters::print_current_XML(const vcl_string& root_tag,
 bool
 bprb_parameters::reset_all()
 {
-  for ( vcl_vector< bprb_param * >::iterator it = param_list_.begin();
+  for ( std::vector< bprb_param * >::iterator it = param_list_.begin();
         it != param_list_.end();
         it++ ) {
     (*it)->reset();
@@ -207,9 +209,9 @@ bprb_parameters::reset_all()
 
 //: Reset the parameter named \p name to its default value
 bool
-bprb_parameters::reset( const vcl_string& name )
+bprb_parameters::reset( const std::string& name )
 {
-  vcl_map< vcl_string , bprb_param * >::iterator it = name_param_map_.find( name );
+  std::map< std::string , bprb_param * >::iterator it = name_param_map_.find( name );
   if ( it == name_param_map_.end() ) {
     return false;
   }
@@ -221,7 +223,7 @@ bprb_parameters::reset( const vcl_string& name )
 
 
 //: Return a vector of base class pointers to the parameters
-vcl_vector< bprb_param* >
+std::vector< bprb_param* >
 bprb_parameters::get_param_list() const
 {
   return param_list_;
@@ -229,10 +231,10 @@ bprb_parameters::get_param_list() const
 
 
 //: Return the description of the parameter named \p name
-vcl_string
-bprb_parameters::get_desc( const vcl_string& name ) const
+std::string
+bprb_parameters::get_desc( const std::string& name ) const
 {
-  vcl_map< vcl_string , bprb_param * >::const_iterator it = name_param_map_.find( name );
+  std::map< std::string , bprb_param * >::const_iterator it = name_param_map_.find( name );
   if ( it == name_param_map_.end() ) {
     return "";
   }
@@ -242,9 +244,9 @@ bprb_parameters::get_desc( const vcl_string& name ) const
 
 //: Print all parameters to \p os
 void
-bprb_parameters::print_all(vcl_ostream& os) const
+bprb_parameters::print_all(std::ostream& os) const
 {
-  for ( vcl_vector< bprb_param * >::const_iterator it = param_list_.begin();
+  for ( std::vector< bprb_param * >::const_iterator it = param_list_.begin();
         it != param_list_.end();
         it++ ) {
     os << *it;
@@ -258,8 +260,8 @@ bprb_parameters::add( bprb_param* param )
 {
   if ( !param )
     return false;
-  vcl_string name = param->name();
-  vcl_string desc = param->description();
+  std::string name = param->name();
+  std::string desc = param->description();
   if ( name_param_map_.find( name ) != name_param_map_.end() ||
        desc == "" || name == "" ) {
     delete param;
@@ -267,7 +269,7 @@ bprb_parameters::add( bprb_param* param )
   }
 
   param_list_.push_back( param );
-  name_param_map_.insert( vcl_pair< vcl_string , bprb_param* >( name , param ) );
+  name_param_map_.insert( std::pair< std::string , bprb_param* >( name , param ) );
 
   return true;
 }
@@ -287,14 +289,14 @@ bool operator<=( const bprb_filepath& lhs, const bprb_filepath& rhs )
 }
 
 //: Output stream operator for bprb_filepath objects
-vcl_ostream& operator<<( vcl_ostream& strm, const bprb_filepath& fp )
+std::ostream& operator<<( std::ostream& strm, const bprb_filepath& fp )
 {
-  strm << fp.path << '\n' << fp.ext << vcl_ends;
+  strm << fp.path << '\n' << fp.ext << std::ends;
   return strm;
 }
 
 //: Input stream operator for bprb_filepath objects
-vcl_istream& operator>>( vcl_istream& strm, bprb_filepath& fp )
+std::istream& operator>>( std::istream& strm, bprb_filepath& fp )
 {
   strm >> fp.path >> fp.ext;
   return strm;

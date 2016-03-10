@@ -12,7 +12,7 @@
 
 static void test_one_chain()
 {
-  vcl_cout << "testing one_chain\n";
+  std::cout << "testing one_chain\n";
 
   vtol_vertex_2d_sptr v1 = new vtol_vertex_2d(0.0,0.0);
   vtol_vertex_2d_sptr v2 = new vtol_vertex_2d(1.0,1.0);
@@ -25,9 +25,9 @@ static void test_one_chain()
   vtol_edge_sptr e34 = new vtol_edge_2d(v3,v4); e_list.push_back(e34);
   vtol_edge_sptr e41 = new vtol_edge_2d(v4,v1); e_list.push_back(e41);
   vtol_one_chain_sptr oc1 = new vtol_one_chain(e_list);
-  oc1->describe(vcl_cout,8);
+  oc1->describe(std::cout,8);
 
-  vcl_vector<signed char> dirs;
+  std::vector<signed char> dirs;
   dirs.push_back(1);
   dirs.push_back(1);
   dirs.push_back(1);
@@ -42,7 +42,7 @@ static void test_one_chain()
   TEST("vtol_one_chain deep copy (pseudo copy constructor)", *oc2, *oc3);
 
   vsol_spatial_object_2d_sptr so_oc_clone = oc3->clone();
-  so_oc_clone->describe(vcl_cout,8);
+  so_oc_clone->describe(std::cout,8);
   vtol_one_chain_sptr oc3_clone = so_oc_clone->cast_to_topology_object()->cast_to_one_chain();
   TEST("vtol_one_chain::clone()", *oc3_clone, *oc3);
 
@@ -59,11 +59,11 @@ static void test_one_chain()
   delete v_list;
 
   zero_chain_list *z_list = oc1->outside_boundary_zero_chains();
-  oc1->describe(vcl_cout,8);
+  oc1->describe(std::cout,8);
 
-  vcl_cout<<"outside_boundary_zero_chains()->size() = "<< z_list->size()<<'\n';
+  std::cout<<"outside_boundary_zero_chains()->size() = "<< z_list->size()<<'\n';
   for (unsigned int i=0; i<z_list->size(); ++i)
-    (*z_list)[i]->describe(vcl_cout,8);
+    (*z_list)[i]->describe(std::cout,8);
 
   TEST("vtol_one_chain::outside_boundary_zero_chains()", z_list->size(), 4);
   delete z_list;
@@ -139,7 +139,7 @@ static void test_one_chain()
   edge_list edges;
   edges.push_back(e0);   edges.push_back(e1);   edges.push_back(e2);
   vtol_one_chain_sptr onch = new vtol_one_chain(edges, true);
-  vcl_cout << "one chain bounds (" << onch->get_min_x() << ' ' << onch->get_min_y()
+  std::cout << "one chain bounds (" << onch->get_min_x() << ' ' << onch->get_min_y()
            << '|' << onch->get_max_x() << ' ' << onch->get_max_y() << ")\n";
   TEST("vtol_one_chain::get_max_x()", onch->get_max_x()==5&&onch->get_max_y()==5, true);
 }

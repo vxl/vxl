@@ -3,8 +3,10 @@
 #include <vil/vil_image_view.h>
 #include <brip/brip_vil_float_ops.h>
 #include <testlib/testlib_test.h>
-#include <vcl_iostream.h>
-#include <vcl_iomanip.h>
+#include <iostream>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iomanip>
 
 static void test_extrema()
 {
@@ -18,8 +20,8 @@ static void test_extrema()
   unsigned cc = (nck45-1)/2, rc= (nrk45-1)/2;
   for (int k = -3; k<=3; ++k){
     for (int m = -3; m<=3; ++m)
-      vcl_cout << kernel45[rc+k][cc+m] << ' ';
-    vcl_cout << '\n';
+      std::cout << kernel45[rc+k][cc+m] << ' ';
+    std::cout << '\n';
   }
 #endif
   vbl_array_2d<float> kernel135;
@@ -33,7 +35,7 @@ static void test_extrema()
     for (unsigned r = 0; r<nrk45; ++r)
       for (unsigned c = 0; c<nck45; ++c)
         sum += kernel45[r][c]-kernel135[c][r];
-  good = good && vcl_fabs(sum)<1e-5;
+  good = good && std::fabs(sum)<1e-5;
   TEST("mask kernel ", good, true);
 
   int ni = 33, nj = 33;
@@ -79,99 +81,99 @@ static void test_extrema()
   lambda1 = 1.5f;
   im.fill(0.0f);
   im(16,16) = 1.0f;
-  vcl_cout << "lambda0 = " << lambda0 << "  lambda1 = " << lambda1 << '\n';
-  vcl_cout.precision(3);
+  std::cout << "lambda0 = " << lambda0 << "  lambda1 = " << lambda1 << '\n';
+  std::cout.precision(3);
 
-  vcl_cout << " 2:1 theta = 0\n";
+  std::cout << " 2:1 theta = 0\n";
   vil_image_view<float> res =
     brip_vil_float_ops::fast_extrema(im, lambda0, lambda1, 0.0f);
   float max = 0;
   for(unsigned j = 14; j<18; ++j){
     for(unsigned i = 13; i<19; ++i){
-      vcl_cout << vcl_fixed << res(i,j) << ' ';
+      std::cout << std::fixed << res(i,j) << ' ';
       if(res(i,j)>max) max = res(i,j);
     }
-    vcl_cout << '\n';
+    std::cout << '\n';
   }
   float rf = max; max = 0;
-  vcl_cout << " 2:1 theta = 0, non-decomposed\n";
+  std::cout << " 2:1 theta = 0, non-decomposed\n";
   res = brip_vil_float_ops::extrema(im, lambda0, lambda1, 0.0f);
   for(unsigned j = 14; j<18; ++j){
     for(unsigned i = 13; i<19; ++i){
-      vcl_cout << vcl_fixed << res(i,j) << ' ';
+      std::cout << std::fixed << res(i,j) << ' ';
       if(res(i,j)>max) max = res(i,j);
     }
-    vcl_cout << '\n';
+    std::cout << '\n';
   }
   float rc = max; max = 0;
   TEST_NEAR("O degrees fast vs. composed", rf, rc, 0.01);
 
-  vcl_cout << " 2:1 theta = 90\n";
+  std::cout << " 2:1 theta = 90\n";
   res = brip_vil_float_ops::fast_extrema(im, lambda0, lambda1, 90.0f);
   for(unsigned j = 14; j<18; ++j){
     for(unsigned i = 13; i<19; ++i){
-      vcl_cout << vcl_fixed << res(i,j) << ' ';
+      std::cout << std::fixed << res(i,j) << ' ';
       if(res(i,j)>max) max = res(i,j);
     }
-    vcl_cout << '\n';
+    std::cout << '\n';
   }
   rf = max; max =0;
-  vcl_cout << " 2:1 theta = 90 non-decomposed\n";
+  std::cout << " 2:1 theta = 90 non-decomposed\n";
   res = brip_vil_float_ops::extrema(im, lambda0, lambda1, 90.0f);
   for(unsigned j = 14; j<18; ++j){
     for(unsigned i = 13; i<19; ++i){
-      vcl_cout << vcl_fixed << res(i,j) << ' ';
+      std::cout << std::fixed << res(i,j) << ' ';
       if(res(i,j)>max) max = res(i,j);
     }
-    vcl_cout << '\n';
+    std::cout << '\n';
   }
   rc = max; max = 0;
   TEST_NEAR("9O degrees fast vs. composed", rf, rc, 0.01);
 
-  vcl_cout << " 2:1 theta = 45\n";
+  std::cout << " 2:1 theta = 45\n";
   res = brip_vil_float_ops::fast_extrema(im, lambda0, lambda1, 45.0f);
   for(unsigned j = 14; j<18; ++j){
     for(unsigned i = 13; i<19; ++i){
-      vcl_cout << vcl_fixed << res(i,j) << ' ';
+      std::cout << std::fixed << res(i,j) << ' ';
       if(res(i,j)>max) max = res(i,j);
     }
-    vcl_cout << '\n';
+    std::cout << '\n';
   }
   rf = max; max = 0;
-  vcl_cout << " 2:1 theta = 45 non-decomposed\n";
+  std::cout << " 2:1 theta = 45 non-decomposed\n";
   res = brip_vil_float_ops::extrema(im, lambda0, lambda1, 45.0f);
   for(unsigned j = 14; j<18; ++j){
     for(unsigned i = 13; i<19; ++i){
-      vcl_cout << vcl_fixed << res(i,j) << ' ';
+      std::cout << std::fixed << res(i,j) << ' ';
       if(res(i,j)>max) max = res(i,j);
     }
-    vcl_cout << '\n';
+    std::cout << '\n';
   }
   rc = max; max = 0;
   TEST_NEAR("45 degrees fast vs. composed", rf, rc, 0.05);
-  vcl_cout << " 2:1 theta = -45\n";
+  std::cout << " 2:1 theta = -45\n";
   res = brip_vil_float_ops::fast_extrema(im, lambda0, lambda1, -45.0f);
   for(unsigned j = 14; j<18; ++j){
     for(unsigned i = 13; i<19; ++i){
-      vcl_cout << vcl_fixed << res(i,j) << ' ';
+      std::cout << std::fixed << res(i,j) << ' ';
       if(res(i,j)>max) max = res(i,j);
     }
-    vcl_cout << '\n';
+    std::cout << '\n';
   }
   rf = max; max = 0;
-  vcl_cout << " 2:1 theta = -45 non-decomposed\n";
+  std::cout << " 2:1 theta = -45 non-decomposed\n";
   res = brip_vil_float_ops::extrema(im, lambda0, lambda1, -45.0f);
   for(unsigned j = 14; j<18; ++j){
     for(unsigned i = 13; i<19; ++i){
-      vcl_cout << vcl_fixed << res(i,j) << ' ';
+      std::cout << std::fixed << res(i,j) << ' ';
       if(res(i,j)>max) max = res(i,j);
     }
-    vcl_cout << '\n';
+    std::cout << '\n';
   }
   rc = max;
   TEST_NEAR("-45 degrees fast vs. composed", rf, rc, 0.01);
 
-  vcl_cout << " test rotational extrema\n";
+  std::cout << " test rotational extrema\n";
 
   im.fill(0.0f);
   im(13,14) = 1.0f;  im(14,14) = 1.0f;   im(15,14) = 1.0f;
@@ -182,20 +184,20 @@ static void test_extrema()
 
   for(unsigned j = 13; j<20; ++j){
     for(unsigned i = 12; i<20; ++i){
-      vcl_cout << vcl_fixed << im(i,j) << ' ';
+      std::cout << std::fixed << im(i,j) << ' ';
     }
-    vcl_cout << '\n';
+    std::cout << '\n';
   }
-  vcl_cout << "----------\n";
+  std::cout << "----------\n";
   lambda0 = 3.0f; lambda1 = 1.0f;
   vil_image_view<float> output = brip_vil_float_ops::extrema_rotational(im, lambda0, lambda1, 15.0f, true);
   for(unsigned j = 13; j<20; ++j){
     for(unsigned i = 12; i<20; ++i){
-      vcl_cout << vcl_fixed << output(i,j,1) << ' ';
+      std::cout << std::fixed << output(i,j,1) << ' ';
     }
-    vcl_cout << '\n';
+    std::cout << '\n';
   }
-  vcl_cout << "----------\n";
+  std::cout << "----------\n";
 }
 
 

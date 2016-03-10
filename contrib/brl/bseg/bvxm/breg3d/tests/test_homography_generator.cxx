@@ -1,8 +1,10 @@
 #include <testlib/testlib_test.h>
 #include <testlib/testlib_root_dir.h>
-#include <vcl_iostream.h>
-#include <vcl_string.h>
-#include <vcl_vector.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iostream>
+#include <string>
+#include <vector>
 
 #include <vgl/vgl_vector_2d.h>
 #include <vgl/vgl_point_2d.h>
@@ -27,13 +29,13 @@ static void test_homography_generator()
 {
   START("breg3d_homography_generator test");
 
-  vcl_string root_dir = testlib_root_dir();
-  vcl_string image_file =
+  std::string root_dir = testlib_root_dir();
+  std::string image_file =
     root_dir + "/contrib/gel/mrc/vpgl/ihog/tests/dalmation.tif";
 
   vil_image_view_base_sptr img0_base = vil_load(image_file.c_str());
   if (!img0_base) {
-    vcl_cerr << "error loading image.\n";
+    std::cerr << "error loading image.\n";
     TEST("FAILED TO LOAD TEST IMAGE",false,true);
     return;
   }
@@ -48,8 +50,8 @@ static void test_homography_generator()
   vnl_matrix_fixed<double,2,3> HA;
   double rot_angle = 0.1;
 
-  HA(0,0) = vcl_cos(rot_angle);    HA(0,1) = vcl_sin(rot_angle);  HA(0,2) =  -20.0;
-  HA(1,0) = -vcl_sin(rot_angle);  HA(1,1) = vcl_cos(rot_angle) ; HA(1,2) = 30.0;
+  HA(0,0) = std::cos(rot_angle);    HA(0,1) = std::sin(rot_angle);  HA(0,2) =  -20.0;
+  HA(1,0) = -std::sin(rot_angle);  HA(1,1) = std::cos(rot_angle) ; HA(1,2) = 30.0;
 
   ihog_transform_2d xform_in;
   xform_in.set_affine(HA);
@@ -109,12 +111,12 @@ static void test_homography_generator()
   vil_convert_cast(warped_img2,byte_image);
   vil_save(byte_image,"img1_db.tiff");
 
-  vcl_cout << "original homography:\n"
+  std::cout << "original homography:\n"
            << xform_in.get_matrix() << '\n' << '\n'
            << "lm generated homography:\n"
            << xform_out1.get_matrix() << '\n' << '\n'
            << "db generated homography:\n"
-           << xform_out2.get_matrix() << '\n' << vcl_endl;
+           << xform_out2.get_matrix() << '\n' << std::endl;
 
   return;
 }

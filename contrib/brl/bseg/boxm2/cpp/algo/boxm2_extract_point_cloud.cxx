@@ -1,5 +1,7 @@
 #include "boxm2_extract_point_cloud.h"
-#include <vcl_map.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <map>
 #include <boxm2/boxm2_data_traits.h>
 #include <boxm2/basic/boxm2_array_3d.h>
 #include <boxm2/boxm2_util.h>
@@ -12,8 +14,8 @@ bool boxm2_extract_point_cloud::extract_point_cloud(boxm2_scene_sptr scene, boxm
   typedef vnl_vector_fixed<unsigned char, 16> uchar16;
 
   //zip through each block
-  vcl_map<boxm2_block_id, boxm2_block_metadata> blocks = scene->blocks();
-  vcl_map<boxm2_block_id, boxm2_block_metadata>::iterator blk_iter;
+  std::map<boxm2_block_id, boxm2_block_metadata> blocks = scene->blocks();
+  std::map<boxm2_block_id, boxm2_block_metadata>::iterator blk_iter;
   for (blk_iter = blocks.begin(); blk_iter != blocks.end(); ++blk_iter)
   {
     boxm2_block_id id = blk_iter->first;
@@ -22,12 +24,12 @@ bool boxm2_extract_point_cloud::extract_point_cloud(boxm2_scene_sptr scene, boxm
     //get data from cache
     boxm2_data_base * alpha = cache->get_data_base(scene, id,boxm2_data_traits<BOXM2_ALPHA>::prefix());
 
-    vcl_size_t alphaTypeSize = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_ALPHA>::prefix());
-    vcl_size_t pointTypeSize = boxm2_data_info::datasize(boxm2_data_traits<BOXM2_POINT>::prefix());
+    std::size_t alphaTypeSize = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_ALPHA>::prefix());
+    std::size_t pointTypeSize = boxm2_data_info::datasize(boxm2_data_traits<BOXM2_POINT>::prefix());
 
     if( alphaTypeSize == 0 ) //this should never happen, it results in division by 0 in later calculations
     {
-      vcl_cout << "ERROR alphaTypeSize == 0 " << __FILE__ << __LINE__ << vcl_endl;
+      std::cout << "ERROR alphaTypeSize == 0 " << __FILE__ << __LINE__ << std::endl;
       return false;
     }
 
@@ -45,7 +47,7 @@ bool boxm2_extract_point_cloud::extract_point_cloud(boxm2_scene_sptr scene, boxm
     }
     //iterate through each tree
     for (unsigned int x = 0; x < trees.get_row1_count(); ++x) {
-      //vcl_cout << '[' << x << '/' << trees.get_row1_count() << ']' << vcl_flush;
+      //std::cout << '[' << x << '/' << trees.get_row1_count() << ']' << std::flush;
       for (unsigned int y = 0; y < trees.get_row2_count(); ++y) {
        for (unsigned int z = 0; z < trees.get_row3_count(); ++z) {
          //load current block/tree
@@ -53,8 +55,8 @@ bool boxm2_extract_point_cloud::extract_point_cloud(boxm2_scene_sptr scene, boxm
          boct_bit_tree bit_tree((unsigned char*) tree.data_block(), data.max_level_);
 
          //iterate through leaves of the tree
-         vcl_vector<int> leafBits = bit_tree.get_leaf_bits(0,depth);
-         vcl_vector<int>::iterator iter;
+         std::vector<int> leafBits = bit_tree.get_leaf_bits(0,depth);
+         std::vector<int>::iterator iter;
          for (iter = leafBits.begin(); iter != leafBits.end(); ++iter) {
            int currBitIndex = (*iter);
            int currIdx = bit_tree.get_data_index(currBitIndex); //data index
@@ -62,7 +64,7 @@ bool boxm2_extract_point_cloud::extract_point_cloud(boxm2_scene_sptr scene, boxm
            //compute probability
            int curr_depth = bit_tree.depth_at(currBitIndex);
            double side_len = 1.0 / (double) (1<<curr_depth);
-           float prob = 1.0f - (float)vcl_exp(-alpha_data[currIdx] * side_len * data.sub_block_dim_.x());
+           float prob = 1.0f - (float)std::exp(-alpha_data[currIdx] * side_len * data.sub_block_dim_.x());
            if (prob < prob_thresh)
            {
              points_data[currIdx][3] = -1.0f;

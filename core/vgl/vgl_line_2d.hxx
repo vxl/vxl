@@ -5,9 +5,10 @@
 // \file
 
 #include "vgl_line_2d.h"
-#include <vcl_cmath.h>     // vcl_sqrt()
+#include <vcl_compiler.h>
+#include <cmath>     // std::sqrt()
 #include <vcl_cassert.h>
-#include <vcl_iostream.h>
+#include <iostream>
 #include <vgl/vgl_point_2d.h>
 #include <vgl/vgl_homg_line_2d.h>
 
@@ -56,20 +57,20 @@ void vgl_line_2d<Type>::get_two_points(vgl_point_2d<Type> &p1, vgl_point_2d<Type
 template <class Type>
 double vgl_line_2d<Type>::slope_degrees() const
 {
-  static const double deg_per_rad = 45.0/vcl_atan2(1.0,1.0);
+  static const double deg_per_rad = 45.0/std::atan2(1.0,1.0);
   // do special cases separately, to avoid rounding errors:
   if (a() == 0) return b()<0 ? 0.0 : 180.0;
   if (b() == 0) return a()<0 ? -90.0 : 90.0;
   if (a() == b()) return a()<0 ? -45.0 : 135.0;
   if (a()+b() == 0) return a()<0 ? -135.0 : 45.0;
   // general case:
-  return deg_per_rad * vcl_atan2(double(a()),-double(b()));
+  return deg_per_rad * std::atan2(double(a()),-double(b()));
 }
 
 template <class Type>
 double vgl_line_2d<Type>::slope_radians() const
 {
-  return vcl_atan2(double(a()),-double(b()));
+  return std::atan2(double(a()),-double(b()));
 }
 
 template <class Type>
@@ -78,7 +79,7 @@ bool vgl_line_2d<Type>::normalize()
   double mag = a_*a_ + b_*b_;
   if (mag==1.0) return true;
   if (mag==0.0) return false;
-  mag = 1.0/vcl_sqrt(mag);
+  mag = 1.0/std::sqrt(mag);
   a_ = Type(a_*mag);
   b_ = Type(b_*mag);
   c_ = Type(c_*mag);
@@ -94,7 +95,7 @@ bool vgl_line_2d<Type>::normalize()
 
 //: Write line description to stream: "<vgl_line_2d ax+by+c=0>"
 template <class Type>
-vcl_ostream&  operator<<(vcl_ostream& os, vgl_line_2d<Type> const& l)
+std::ostream&  operator<<(std::ostream& os, vgl_line_2d<Type> const& l)
 {
   os << "<vgl_line_2d"; vp(os,l.a(),"x"); vp(os,l.b(),"y"); vp(os,l.c(),"");
   return os << " = 0 >";
@@ -108,20 +109,20 @@ vcl_ostream&  operator<<(vcl_ostream& os, vgl_line_2d<Type> const& l)
 //  or reads three numbers in parenthesized form "(123, 321, 567)"
 //  or reads the formatted form "123x+321y+567=0"
 template <class Type>
-vcl_istream&  operator>>(vcl_istream& is, vgl_line_2d<Type>& line)
+std::istream&  operator>>(std::istream& is, vgl_line_2d<Type>& line)
 {
   if (! is.good()) return is; // (TODO: should throw an exception)
   bool paren = false;
   bool formatted = false;
   Type a, b, c;
-  is >> vcl_ws; // jump over any leading whitespace
+  is >> std::ws; // jump over any leading whitespace
   if (is.eof()) return is; // nothing to be set because of EOF (TODO: should throw an exception)
   if (is.peek() == '(') { is.ignore(); paren=true; }
-  is >> vcl_ws >> a >> vcl_ws;
+  is >> std::ws >> a >> std::ws;
   if (is.eof()) return is;
   if (is.peek() == ',') is.ignore();
   else if (is.peek() == 'x') { is.ignore(); formatted=true; }
-  is >> vcl_ws >> b >> vcl_ws;
+  is >> std::ws >> b >> std::ws;
   if (is.eof()) return is;
   if (formatted) {
     if (is.eof()) return is;
@@ -129,7 +130,7 @@ vcl_istream&  operator>>(vcl_istream& is, vgl_line_2d<Type>& line)
     else                  return is; // formatted input incorrect (TODO: throw an exception)
   }
   else if (is.peek() == ',') is.ignore();
-  is >> vcl_ws >> c >> vcl_ws;
+  is >> std::ws >> c >> std::ws;
   if (paren) {
     if (is.eof()) return is;
     if (is.peek() == ')') is.ignore();
@@ -139,7 +140,7 @@ vcl_istream&  operator>>(vcl_istream& is, vgl_line_2d<Type>& line)
     if (is.eof()) return is;
     if (is.peek() == '=') is.ignore();
     else                  return is; // closing parenthesis is missing (TODO: throw an exception)
-    is >> vcl_ws;
+    is >> std::ws;
     if (is.peek() == '0') is.ignore();
     else                  return is; // closing parenthesis is missing (TODO: throw an exception)
   }
@@ -150,7 +151,7 @@ vcl_istream&  operator>>(vcl_istream& is, vgl_line_2d<Type>& line)
 #undef VGL_LINE_2D_INSTANTIATE
 #define VGL_LINE_2D_INSTANTIATE(T) \
 template class vgl_line_2d<T >; \
-template vcl_ostream& operator<<(vcl_ostream&, vgl_line_2d<T >const&); \
-template vcl_istream& operator>>(vcl_istream&, vgl_line_2d<T >&)
+template std::ostream& operator<<(std::ostream&, vgl_line_2d<T >const&); \
+template std::istream& operator>>(std::istream&, vgl_line_2d<T >&)
 
 #endif // vgl_line_2d_hxx_

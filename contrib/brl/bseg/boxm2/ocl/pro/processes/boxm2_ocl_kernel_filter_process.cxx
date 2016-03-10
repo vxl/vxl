@@ -12,19 +12,21 @@
 #include <boxm2/ocl/boxm2_ocl_util.h>
 
 #include <vul/vul_timer.h>
-#include <vcl_fstream.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <fstream>
 
 
-bool boxm2_ocl_kernel_filter_process_globals::compile_filter_kernel(bocl_device_sptr device, bocl_kernel * filter_kernel, vcl_string opts)
+bool boxm2_ocl_kernel_filter_process_globals::compile_filter_kernel(bocl_device_sptr device, bocl_kernel * filter_kernel, std::string opts)
 {
-  vcl_vector<vcl_string> src_paths;
-  vcl_string source_dir = boxm2_ocl_util::ocl_src_root();
+  std::vector<std::string> src_paths;
+  std::string source_dir = boxm2_ocl_util::ocl_src_root();
   src_paths.push_back(source_dir + "scene_info.cl");
   src_paths.push_back(source_dir + "bit/bit_tree_library_functions.cl");
   src_paths.push_back(source_dir + "bit/kernel_filter_block.cl");
 
   //compilation options
-  vcl_string options = opts;
+  std::string options = opts;
 
   return filter_kernel->create_kernel(  &device->context(), device->device_id(),
                                         src_paths, "kernel_filter_block", options ,
@@ -42,15 +44,15 @@ bool boxm2_ocl_kernel_filter_process_globals::process(bocl_device_sptr device, b
                                                 *(device->device_id()),
                                                 CL_QUEUE_PROFILING_ENABLE,&status);
   if (status!=0) {
-    vcl_cerr<<"ERROR in initializing a queue\n";
+    std::cerr<<"ERROR in initializing a queue\n";
     return false;
   }
-  vcl_string identifier = device->device_identifier();
+  std::string identifier = device->device_identifier();
 
   // compile the kernel
   if (kernels.find(identifier)==kernels.end())
   {
-    vcl_cout<<"===========Compiling kernels==========="<<vcl_endl;
+    std::cout<<"===========Compiling kernels==========="<<std::endl;
     bocl_kernel* filter_kernel = new bocl_kernel();
     if (!compile_filter_kernel(device,filter_kernel, ""))
       return false;
@@ -72,7 +74,7 @@ bool boxm2_ocl_kernel_filter_process_globals::process(bocl_device_sptr device, b
   centerZ->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR);
 
   //set up the filter and filter buffer
-  vcl_vector<vcl_pair<vgl_point_3d<float>, bvpl_kernel_dispatch> >::iterator kit = filter->float_kernel_.begin();
+  std::vector<std::pair<vgl_point_3d<float>, bvpl_kernel_dispatch> >::iterator kit = filter->float_kernel_.begin();
   unsigned ci=0;
   cl_float4* filter_coeff = new cl_float4 [filter->float_kernel_.size()];
   for (; kit!= filter->float_kernel_.end(); kit++, ci++)
@@ -101,8 +103,8 @@ bool boxm2_ocl_kernel_filter_process_globals::process(bocl_device_sptr device, b
   filter_size_buffer->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
 
   //iterate through all blocks
-  vcl_map<boxm2_block_id, boxm2_block_metadata> blocks = scene->blocks();
-  vcl_map<boxm2_block_id, boxm2_block_metadata>::iterator blk_iter;
+  std::map<boxm2_block_id, boxm2_block_metadata> blocks = scene->blocks();
+  std::map<boxm2_block_id, boxm2_block_metadata>::iterator blk_iter;
   for (blk_iter = blocks.begin(); blk_iter != blocks.end(); ++blk_iter)
   {
     //clear cache
@@ -110,7 +112,7 @@ bool boxm2_ocl_kernel_filter_process_globals::process(bocl_device_sptr device, b
     boxm2_block_metadata data = blk_iter->second;
     boxm2_block_id id = blk_iter->first;
 
-    vcl_cout<<"Filtering Block"<< id << vcl_endl;
+    std::cout<<"Filtering Block"<< id << std::endl;
 
     //grab appropriate kernel
     bocl_kernel* kern = kernels[identifier];
@@ -118,10 +120,10 @@ bool boxm2_ocl_kernel_filter_process_globals::process(bocl_device_sptr device, b
     //set up input data (currently hard-coded to be alpha)
     vul_timer transfer;
     bocl_mem* data_in = opencl_cache->get_data<BOXM2_ALPHA>(scene, id, 0, false);
-    vcl_size_t dataSize = data_in->num_bytes();
+    std::size_t dataSize = data_in->num_bytes();
 
     //set up output_data
-    vcl_stringstream filter_ident; filter_ident << filter->name() << '_' << filter->id();
+    std::stringstream filter_ident; filter_ident << filter->name() << '_' << filter->id();
     bocl_mem* filter_response = opencl_cache->get_data_new(scene, id, boxm2_data_traits<BOXM2_FLOAT>::prefix(filter_ident.str()), dataSize, false);
 
     //grab the block out of the cache as well
@@ -129,8 +131,8 @@ bool boxm2_ocl_kernel_filter_process_globals::process(bocl_device_sptr device, b
     bocl_mem* blk_info = opencl_cache->loaded_block_info();
 
     //set workspace
-    vcl_size_t lThreads[] = {4, 4, 4};
-    vcl_size_t gThreads[] = { RoundUp(data.sub_block_num_.x(), lThreads[0]),
+    std::size_t lThreads[] = {4, 4, 4};
+    std::size_t gThreads[] = { RoundUp(data.sub_block_num_.x(), lThreads[0]),
                               RoundUp(data.sub_block_num_.y(), lThreads[1]),
                               RoundUp(data.sub_block_num_.z(), lThreads[2]) };
 
@@ -170,7 +172,7 @@ bool boxm2_ocl_kernel_filter_process_globals::process(bocl_device_sptr device, b
   }  //end block iter for
   delete [] filter_coeff;
 
-  vcl_cout<<"Scene kernel filter time: "<< gpu_time <<" ms"<<vcl_endl;
+  std::cout<<"Scene kernel filter time: "<< gpu_time <<" ms"<<std::endl;
 
   return true;
 }
@@ -180,14 +182,14 @@ bool boxm2_ocl_kernel_filter_process_cons(bprb_func_process& pro)
 {
   using namespace boxm2_ocl_kernel_filter_process_globals ;
 
-  vcl_vector<vcl_string> input_types_(n_inputs_);
+  std::vector<std::string> input_types_(n_inputs_);
   unsigned i=0;
   input_types_[i++] = "bocl_device_sptr";
   input_types_[i++] = "boxm2_scene_sptr";
   input_types_[i++] = "boxm2_opencl_cache_sptr";
   input_types_[i++] = "bvpl_kernel_sptr";
 
-  vcl_vector<vcl_string> output_types_(n_outputs_);
+  std::vector<std::string> output_types_(n_outputs_);
 
   return pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
 }
@@ -199,7 +201,7 @@ bool boxm2_ocl_kernel_filter_process(bprb_func_process& pro)
   using namespace boxm2_ocl_kernel_filter_process_globals;
 
   if ( pro.n_inputs() < n_inputs_ ) {
-    vcl_cout << pro.name() << ": The input number should be " << n_inputs_<< vcl_endl;
+    std::cout << pro.name() << ": The input number should be " << n_inputs_<< std::endl;
     return false;
   }
 

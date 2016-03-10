@@ -1,5 +1,7 @@
 #include "osl_fit_lines_params.h"
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iostream>
 //:
 // \file
 
@@ -25,17 +27,17 @@ bool osl_fit_lines_params::SanityCheck()
   bool valid = true;
 
   if (min_fit_length_ < 3) {
-    vcl_cerr << "ERROR: Min fit length too short: "<< min_fit_length_<<" < 3\0";
+    std::cerr << "ERROR: Min fit length too short: "<< min_fit_length_<<" < 3\0";
     valid = false;
   }
 
   if (threshold_ > 1.0) {
-    vcl_cerr << "ERROR: Fit error is quite large: " << threshold_ << " > 1\0";
+    std::cerr << "ERROR: Fit error is quite large: " << threshold_ << " > 1\0";
     valid = false;
   }
 
   if (theta_ > 15) {
-    vcl_cerr << "ERROR: Value of angle tolerance is too large: "
+    std::cerr << "ERROR: Value of angle tolerance is too large: "
              << theta_ << " > 15\0";
     valid = false;
   }

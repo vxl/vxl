@@ -2,7 +2,9 @@
 #include "sdet_region_edge.h"
 //:
 // \file
-#include <vcl_algorithm.h> // find
+#include <vcl_compiler.h>
+#include <iostream>
+#include <algorithm> // find
 #include <vtol/vtol_edge_2d.h>
 
 sdet_region_edge::sdet_region_edge(vtol_edge_2d_sptr e)
@@ -22,7 +24,7 @@ bool sdet_region_edge::is_vertex() const
 bool sdet_region_edge::SetNewLabel(unsigned int label)
 {
   if (label == 0) return false;
-  if (vcl_find(labels_.begin(), labels_.end(), label) == labels_.end())
+  if (std::find(labels_.begin(), labels_.end(), label) == labels_.end())
     labels_.push_back(label);
   return true;
 }
@@ -34,7 +36,7 @@ unsigned int sdet_region_edge::NumLabels(unsigned int max_label) const
     return n;
   else
   {
-    vcl_cout << "In sdet_region_edge::NumLabels(..) - # labels exceeds max label\n";
+    std::cout << "In sdet_region_edge::NumLabels(..) - # labels exceeds max label\n";
     return 0;
   }
 }

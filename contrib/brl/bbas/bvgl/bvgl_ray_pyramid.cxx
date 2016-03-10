@@ -6,7 +6,7 @@
 bvgl_ray_pyramid::bvgl_ray_pyramid(vbl_array_2d<vgl_ray_3d<float> >& finest_level, unsigned numLevels)
 {
   if (finest_level.rows() != finest_level.cols()) {
-    vcl_cerr << "bvgl_ray_pyramid input not square\n";
+    std::cerr << "bvgl_ray_pyramid input not square\n";
   }
 
   //side length
@@ -23,7 +23,7 @@ bvgl_ray_pyramid::bvgl_ray_pyramid(vbl_array_2d<vgl_ray_3d<float> >& finest_leve
 vbl_array_2d<vgl_ray_3d<float> > bvgl_ray_pyramid::scale_down(vbl_array_2d<vgl_ray_3d<float> >& toScale)
 {
   //initialize new half size ray image
-  vcl_size_t side_len = toScale.rows()/2;
+  std::size_t side_len = toScale.rows()/2;
   vbl_array_2d<vgl_ray_3d<float> > scaled(side_len, side_len);
 
   //go through and average the vectors

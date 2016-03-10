@@ -5,7 +5,9 @@
 // \file
 
 #include <vil/vil_image_view.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iostream>
 #include <bvgl/bvgl_changes.h>
 #include <bvgl/bvgl_changes_sptr.h>
 #define NI "ni"
@@ -15,7 +17,7 @@
 bool bvgl_generate_mask_process_cons(bprb_func_process& pro)
 {
   //input
-  vcl_vector<vcl_string> input_types, output_types;
+  std::vector<std::string> input_types, output_types;
   input_types.resize(2);
   input_types[0]= "vcl_string"; //name of the binary file to read bvgl_changes object
   input_types[1]= "vcl_string"; //type of change
@@ -36,18 +38,18 @@ bvgl_generate_mask_process(bprb_func_process& pro)
 {
   // Sanity check
   if (!pro.verify_inputs()) {
-    vcl_cerr << "In bvgl_generate_mask_process::execute() - invalid inputs\n";
+    std::cerr << "In bvgl_generate_mask_process::execute() - invalid inputs\n";
     return false;
   }
 
-  vcl_string file_name = pro.get_input<vcl_string>(0);
-  vcl_string change_type = pro.get_input<vcl_string>(1);
+  std::string file_name = pro.get_input<std::string>(0);
+  std::string change_type = pro.get_input<std::string>(1);
 
   unsigned ni=0, nj=0; // dummy initialisation, to avoid compiler warning
   if (!pro.parameters()->get_value(NI, ni) ||
       !pro.parameters()->get_value(NJ, nj))
   {
-      vcl_cerr << "In bvgl_generate_mask_process - failed to get parameters\n";
+      std::cerr << "In bvgl_generate_mask_process - failed to get parameters\n";
       return false;
   }
 
@@ -56,7 +58,7 @@ bvgl_generate_mask_process(bprb_func_process& pro)
   bvgl_changes_sptr objs = new bvgl_changes();
   objs->b_read(bif);
   bif.close();
-  vcl_cout << "In bvgl_generate_mask_process(), the size of the change objects is: " << objs->size() << vcl_endl;
+  std::cout << "In bvgl_generate_mask_process(), the size of the change objects is: " << objs->size() << std::endl;
 
   vil_image_view_base_sptr out = objs->create_mask_from_objs(ni, nj, change_type);
 
@@ -79,7 +81,7 @@ bvgl_generate_mask_process(bprb_func_process& pro)
 bool bvgl_set_change_type_process_cons(bprb_func_process& pro)
 {
   //input
-  vcl_vector<vcl_string> input_types, output_types;
+  std::vector<std::string> input_types, output_types;
   input_types.resize(3);
   input_types[0]= "vcl_string"; //name of the binary file to read bvgl_changes object
   input_types[1]= "vcl_string"; //type of change
@@ -98,20 +100,20 @@ bool bvgl_set_change_type_process(bprb_func_process& pro)
 {
   // Sanity check
   if (!pro.verify_inputs()) {
-    vcl_cerr << "In bvgl_set_change_type_mask_process::execute() - invalid inputs\n";
+    std::cerr << "In bvgl_set_change_type_mask_process::execute() - invalid inputs\n";
     return false;
   }
 
-  vcl_string file_name = pro.get_input<vcl_string>(0);
-  vcl_string change_type = pro.get_input<vcl_string>(1);
-  vcl_string output_file_name = pro.get_input<vcl_string>(2);
+  std::string file_name = pro.get_input<std::string>(0);
+  std::string change_type = pro.get_input<std::string>(1);
+  std::string output_file_name = pro.get_input<std::string>(2);
 
   // read the object
   vsl_b_ifstream bif(file_name);
   bvgl_changes_sptr objs = new bvgl_changes();
   objs->b_read(bif);
   bif.close();
-  vcl_cout << "In bvgl_set_change_type_mask_process(), the size of the change objects is: " << objs->size() << vcl_endl;
+  std::cout << "In bvgl_set_change_type_mask_process(), the size of the change objects is: " << objs->size() << std::endl;
 
   bvgl_changes_sptr objs_new = new bvgl_changes();
   for (unsigned int i = 0; i < objs->size(); i++) {
@@ -119,7 +121,7 @@ bool bvgl_set_change_type_process(bprb_func_process& pro)
     bvgl_change_obj_sptr new_obj = new bvgl_change_obj(obj->poly(), change_type);
     objs_new->add_obj(new_obj);
   }
-  vcl_cout << "In bvgl_set_change_type_mask_process(), the size of the output change objects is: " << objs_new->size() << vcl_endl;
+  std::cout << "In bvgl_set_change_type_mask_process(), the size of the output change objects is: " << objs_new->size() << std::endl;
 
   vsl_b_ofstream bof(output_file_name);
   objs_new->b_write(bof);
@@ -131,7 +133,7 @@ bool bvgl_set_change_type_process(bprb_func_process& pro)
 bool bvgl_generate_mask_process2_cons(bprb_func_process& pro)
 {
   //input
-  vcl_vector<vcl_string> input_types, output_types;
+  std::vector<std::string> input_types, output_types;
   input_types.resize(4);
   input_types[0]= "vcl_string"; //name of the binary file to read bvgl_changes object
   input_types[1]= "vcl_string"; //type of change
@@ -155,12 +157,12 @@ bvgl_generate_mask_process2(bprb_func_process& pro)
 {
   // Sanity check
   if (!pro.verify_inputs()) {
-    vcl_cerr << "In bvgl_generate_mask_process::execute() - invalid inputs\n";
+    std::cerr << "In bvgl_generate_mask_process::execute() - invalid inputs\n";
     return false;
   }
 
-  vcl_string file_name = pro.get_input<vcl_string>(0);
-  vcl_string change_type = pro.get_input<vcl_string>(1);
+  std::string file_name = pro.get_input<std::string>(0);
+  std::string change_type = pro.get_input<std::string>(1);
 
   unsigned ni=0, nj=0; // dummy initialisation, to avoid compiler warning
   ni = pro.get_input<unsigned>(2);

@@ -6,7 +6,7 @@
 class bwm_observable_mesh_circular : public bwm_observable_mesh
 {
  public:
-  virtual vcl_string type_name() const {return "bwm_observable_mesh_circular"; }
+  virtual std::string type_name() const {return "bwm_observable_mesh_circular"; }
 
   bwm_observable_mesh_circular(bwm_observable_mesh const &mesh,
                                double r, vgl_point_2d<double> center)

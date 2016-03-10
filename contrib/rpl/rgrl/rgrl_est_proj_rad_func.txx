@@ -20,7 +20,9 @@
 #include <vnl/algo/vnl_levenberg_marquardt.h>
 #include <vnl/algo/vnl_svd.h>
 
-#include <vcl_vector.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <vector>
 #include <vcl_cassert.h>
 
 template <unsigned int Tdim, unsigned int Fdim>
@@ -64,7 +66,7 @@ void
 rgrl_est_proj_rad_func<Tdim, Fdim>::
 convert_parameters( vnl_vector<double>& params,
                     vnl_matrix_fixed<double, Tdim+1, Fdim+1>const&  proj_matrix,
-                    vcl_vector<double>             const& rad_dist,
+                    std::vector<double>             const& rad_dist,
                     vnl_vector_fixed<double, Fdim> const& fc,
                     vnl_vector_fixed<double, Tdim> const& tc,
                     vnl_vector_fixed<double, Tdim> const& camera_centre )
@@ -105,7 +107,7 @@ void
 rgrl_est_proj_rad_func<Tdim, Fdim>::
 apply_radial_distortion( vnl_vector_fixed<double, Tdim>      & mapped,
                          vnl_vector_fixed<double, Tdim> const& p,
-                         vcl_vector<double> const& radk ) const
+                         std::vector<double> const& radk ) const
 {
   assert( radk.size() == camera_dof_ );
 
@@ -126,7 +128,7 @@ void
 rgrl_est_proj_rad_func<Tdim, Fdim>::
 reduced_proj_rad_jacobian( vnl_matrix<double>                            & base_jac,
                            vnl_matrix_fixed<double, Tdim+1, Fdim+1> const& proj,
-                           vcl_vector<double>                       const& rad_k,
+                           std::vector<double>                       const& rad_k,
                            vnl_vector_fixed<double, Fdim>           const& from ) const
 {
   assert( rad_k.size() == camera_dof_ );
@@ -208,7 +210,7 @@ void
 rgrl_est_proj_rad_func<Tdim, Fdim>::
 full_proj_rad_jacobian( vnl_matrix<double>                            & base_jac,
                         vnl_matrix_fixed<double, Tdim+1, Fdim+1> const& proj,
-                        vcl_vector<double>                       const& rad_k,
+                        std::vector<double>                       const& rad_k,
                         vnl_vector_fixed<double, Fdim>           const& from ) const
 {
   assert( rad_k.size() == camera_dof_ );
@@ -290,7 +292,7 @@ void
 rgrl_est_proj_rad_func<Tdim, Fdim>::
 proj_jac_wrt_loc( vnl_matrix_fixed<double, Tdim, Fdim>          & jac_loc,
                   vnl_matrix_fixed<double, Tdim+1, Fdim+1> const& proj,
-                  vcl_vector<double>                       const& rad_k,
+                  std::vector<double>                       const& rad_k,
                   vnl_vector_fixed<double, Fdim>           const& from ) const
 {
   // dP / dx
@@ -376,7 +378,7 @@ f(vnl_vector<double> const& x, vnl_vector<double>& fx)
         for ( TIter ti=fi.begin(); ti!=fi.end(); ++ti ) {
           vnl_vector_fixed<double, Tdim> to = ti.to_feature()->location();
           error_proj_sqrt = ti.to_feature()->error_projector_sqrt();
-          double const wgt = vcl_sqrt(ti.cumulative_weight());
+          double const wgt = std::sqrt(ti.cumulative_weight());
           vnl_vector_fixed<double, Tdim> diff = error_proj_sqrt * (distorted - to);
 
           // fill in
@@ -429,7 +431,7 @@ gradf(vnl_vector<double> const& x, vnl_matrix<double>& jacobian)
         for ( TIter ti=fi.begin(); ti!=fi.end(); ++ti ) {
           //vnl_double_2 to = ti.to_feature()->location();
           error_proj_sqrt = ti.to_feature()->error_projector_sqrt();
-          double const wgt = vcl_sqrt(ti.cumulative_weight());
+          double const wgt = std::sqrt(ti.cumulative_weight());
           jac = error_proj_sqrt * base_jac;
           jac *= wgt;
 
@@ -448,7 +450,7 @@ template <unsigned int Tdim, unsigned int Fdim>
 bool
 rgrl_est_proj_rad_func<Tdim, Fdim>::
 projective_estimate(  vnl_matrix_fixed<double, Tdim+1, Fdim+1>& proj,
-                      vcl_vector<double>& rad_dist,
+                      std::vector<double>& rad_dist,
                       vnl_matrix<double>& full_covar,
                       vnl_vector_fixed<double, Fdim>& from_centre,
                       vnl_vector_fixed<double, Tdim>& to_centre,
@@ -483,15 +485,15 @@ projective_estimate(  vnl_matrix_fixed<double, Tdim+1, Fdim+1>& proj,
   else
     ret = lm.minimize_without_gradient(p);
   if ( !ret ) {
-    vcl_cerr <<  "Levenberg-Marquardt failed\n";
-    lm.diagnose_outcome(vcl_cerr);
+    std::cerr <<  "Levenberg-Marquardt failed\n";
+    lm.diagnose_outcome(std::cerr);
     return false;
   }
-  // lm.diagnose_outcome(vcl_cout);
+  // lm.diagnose_outcome(std::cout);
 
   // convert parameters back into matrix form
   this->restored_centered_proj( proj, p );
-  //vcl_cout << "Final params=" << proj << vcl_endl;
+  //std::cout << "Final params=" << proj << std::endl;
 
   // copy distortion parameters
   const unsigned int index_shift = this->proj_size_-1;
@@ -510,9 +512,9 @@ projective_estimate(  vnl_matrix_fixed<double, Tdim+1, Fdim+1>& proj,
   // Jac = U W V^\top
   vnl_svd<double> svd( jac, this->zero_svd_thres_ );
   if ( svd.rank()+1 < param_num ) {
-    vcl_cerr <<  "The covariance of projection matrix ranks less than "
+    std::cerr <<  "The covariance of projection matrix ranks less than "
              << param_num-1 << "!\n"
-             << "  The singular values are " << svd.W() << vcl_endl;
+             << "  The singular values are " << svd.W() << std::endl;
     return false;
   }
 

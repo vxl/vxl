@@ -63,13 +63,13 @@ void bil_perform_tensor_decomposition( const vil_image_view<T>& k11,
   for (int j = 0; j < static_cast<int>(nj); j++) {
     for (int i = 0; i < static_cast<int>(ni); i++) {
       if (b(i,j) != 0) {
-        theta = vcl_atan2( (double)(ab2(i,j)-a(i,j)), (double)b(i,j) );
+        theta = std::atan2( (double)(ab2(i,j)-a(i,j)), (double)b(i,j) );
       }
       else {
         theta = vnl_math::pi_over_2;
       }
-      e1(i,j,0) =  T(vcl_cos(theta));
-      e1(i,j,1) =  T(vcl_sin(theta));
+      e1(i,j,0) =  T(std::cos(theta));
+      e1(i,j,1) =  T(std::sin(theta));
       e2(i,j,0) = -e1(i,j,1);
       e2(i,j,1) =  e1(i,j,0);
     }

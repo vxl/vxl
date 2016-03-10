@@ -1,5 +1,7 @@
 #include <testlib/testlib_test.h>
-#include <vcl_vector.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <vector>
 #include <vnl/vnl_double_3x3.h>
 #include <vnl/vnl_double_3.h>
 #include <vnl/vnl_vector.h>
@@ -8,7 +10,7 @@
 
 static void test_shift2d_est()
 {
-  vcl_vector <vnl_vector<double> > p;
+  std::vector <vnl_vector<double> > p;
   vnl_double_3 t(0,0,1);
 
   p.push_back(t.as_ref());
@@ -57,7 +59,7 @@ static void test_shift2d_est()
 
   // ----------------------------------------------------------------
   int n = p.size();
-  vcl_vector<vnl_vector<double> > q(n);
+  std::vector<vnl_vector<double> > q(n);
 
   // Test points to instantiate
   {
@@ -79,7 +81,7 @@ static void test_shift2d_est()
       q[i] = H *p[i];
     rrel_shift2d_est shift_est(p,q);
 
-    vcl_vector<int> indices(1);
+    std::vector<int> indices(1);
     indices[0] = 1;
     vnl_vector<double> param(2,0.0);
     TEST("fit_from_minimal_set()", shift_est.fit_from_minimal_set(indices, param), true);

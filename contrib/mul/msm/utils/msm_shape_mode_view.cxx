@@ -6,10 +6,12 @@
 
 #include "msm_shape_mode_view.h"
 #include <msm/msm_ref_shape_model.h>
-#include <vcl_cmath.h>
+#include <cmath>
 #include <vsl/vsl_indent.h>
 #include <vcl_cassert.h>
-#include <vcl_algorithm.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <algorithm>
 
 //=======================================================================
 // Dflt ctor
@@ -46,7 +48,7 @@ void msm_shape_mode_view::set_shape_model(const msm_ref_shape_model& sm)
   sm_inst_.set_shape_model(*shape_model_);
 
   b_sd_ = sm.mode_var();
-  for (unsigned i=0;i<b_sd_.size();i++) b_sd_[i]=vcl_sqrt(b_sd_[i]);
+  for (unsigned i=0;i<b_sd_.size();i++) b_sd_[i]=std::sqrt(b_sd_[i]);
 
   if (b_sd_.size()>0)
     set_mode(1);
@@ -144,11 +146,11 @@ void msm_shape_mode_view::compute_shapes(unsigned n_shapes,
   // Estimate scaling required to fit into window
 
   // Assumes shapes have origin at CoG
-//  double sw = 0.5*w_width/vcl_max(-bbox.min_x(),bbox.max_x());
-//  double sh = 0.5*w_height/vcl_max(-bbox.min_y(),bbox.max_y());
+//  double sw = 0.5*w_width/std::max(-bbox.min_x(),bbox.max_x());
+//  double sh = 0.5*w_height/std::max(-bbox.min_y(),bbox.max_y());
   double sw = w_width/(bbox.max_x()-bbox.min_x());
   double sh = w_height/(bbox.max_y()-bbox.min_y());
-  double s = vcl_min(sw,sh)*rel_scale_;
+  double s = std::min(sw,sh)*rel_scale_;
 
   // Scale each example
   for (unsigned i=0;i<n_shapes;++i)

@@ -13,8 +13,10 @@
 #include <bvgl/bvgl_triangle_3d.h>
 #include <vnl/vnl_vector_fixed.h>
 #include <vgl/vgl_box_3d.h>
-#include <vcl_vector.h>
-#include <vcl_cmath.h>
+#include <vector>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <cmath>
 
 class boxm2_points_to_volume
 {
@@ -34,26 +36,26 @@ class boxm2_points_to_volume
   void fillVolume();
 
   //populates data_base with appropriate alphas
-  void fillBlockByTri(boxm2_block_metadata& data, boxm2_block* blk, vcl_vector<vcl_vector<float> >& alphas);
+  void fillBlockByTri(boxm2_block_metadata& data, boxm2_block* blk, std::vector<std::vector<float> >& alphas);
 
   //refines tree given a triangle that intersects with it
   void refine_tree(boct_bit_tree& tree,
                    vgl_box_3d<double>& treeBox,
                    bvgl_triangle_3d<double>& tri,
-                   vcl_vector<float>& alpha);
+                   std::vector<float>& alpha);
 
   //grab triangles that intersect a bounding box
-  vcl_vector<bvgl_triangle_3d<double> >
+  std::vector<bvgl_triangle_3d<double> >
   tris_in_box(const imesh_mesh& mesh, vgl_box_3d<double>& box);
-  vcl_vector<bvgl_triangle_3d<double> >
-  tris_in_box(vcl_vector<bvgl_triangle_3d<double> >& tris, vgl_box_3d<double>& box);
+  std::vector<bvgl_triangle_3d<double> >
+  tris_in_box(std::vector<bvgl_triangle_3d<double> >& tris, vgl_box_3d<double>& box);
 
   //uses axis aligned bounding boxes to speed up collision detection
   void tris_in_box(const vgl_box_3d<double>& bbox,
-                   const vcl_vector<bvgl_triangle_3d<double> >& tris,
-                   const vcl_vector<vgl_box_3d<double> >& bboxes,
-                   vcl_vector<bvgl_triangle_3d<double> >& int_tris,
-                   vcl_vector<vgl_box_3d<double> >& int_boxes);
+                   const std::vector<bvgl_triangle_3d<double> >& tris,
+                   const std::vector<vgl_box_3d<double> >& bboxes,
+                   std::vector<bvgl_triangle_3d<double> >& int_tris,
+                   std::vector<vgl_box_3d<double> >& int_boxes);
 
  private:
   //: scene reference
@@ -63,14 +65,14 @@ class boxm2_points_to_volume
   boxm2_cache_sptr cache_;
 
   //: tris and their boxes
-  vcl_vector<vgl_box_3d<double> > triBoxes_;
-  vcl_vector<bvgl_triangle_3d<double> > tris_;
+  std::vector<vgl_box_3d<double> > triBoxes_;
+  std::vector<bvgl_triangle_3d<double> > tris_;
 
   //: points reference
   imesh_mesh& points_;
 
   //---- Private Helpers ---------//
-  inline float alphaProb(float prob, float len) { return -vcl_log(1.0f-prob) / len; }
+  inline float alphaProb(float prob, float len) { return -std::log(1.0f-prob) / len; }
 
   //quick boolean intersection test
   inline bool bbox_intersect(vgl_box_3d<double> const& b1,

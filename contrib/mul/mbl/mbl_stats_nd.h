@@ -6,7 +6,9 @@
 // \brief Simple statistics (mean, variance) on vectors.
 // \author Tim Cootes
 
-#include <vcl_iosfwd.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iosfwd>
 #include <vsl/vsl_binary_io.h>
 #include <vnl/vnl_vector.h>
 
@@ -47,7 +49,7 @@ class mbl_stats_nd
 
   //: Add statistics together
   mbl_stats_nd& operator+=(const mbl_stats_nd& s1);
-  void print_summary(vcl_ostream& os) const;
+  void print_summary(std::ostream& os) const;
   //: Version number for I/O
   short version_no() const;
   void b_write(vsl_b_ostream& bfs) const;
@@ -67,9 +69,9 @@ void vsl_b_write(vsl_b_ostream& bfs, const mbl_stats_nd& b);
 void vsl_b_read(vsl_b_istream& bfs, mbl_stats_nd& b);
 
 //: Stream output operator for class reference
-vcl_ostream& operator<<(vcl_ostream& os,const mbl_stats_nd& stats);
+std::ostream& operator<<(std::ostream& os,const mbl_stats_nd& stats);
 
 //: Stream output operator for class reference
-void vsl_print_summary(vcl_ostream& os,const mbl_stats_nd& stats);
+void vsl_print_summary(std::ostream& os,const mbl_stats_nd& stats);
 
 #endif

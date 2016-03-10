@@ -1,5 +1,7 @@
 #include "boxm2_import_triangle_mesh.h"
-#include <vcl_map.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <map>
 #include <vnl/vnl_vector_fixed.h>
 #include <vgl/vgl_point_3d.h>
 #include <vgl/vgl_vector_3d.h>
@@ -21,12 +23,12 @@ bool boxm2_import_triangle_mesh(boxm2_scene_sptr scene, boxm2_cache_sptr cache, 
   const imesh_face_array_base& mesh_faces = mesh.faces();
   const imesh_vertex_array_base& mesh_verts = mesh.vertices();
 
-  vcl_cout << "mesh has " << mesh_faces.size() << " faces." << vcl_endl;
-  vcl_cout << "mesh has " << mesh_verts.size() << " vertices." << vcl_endl;
+  std::cout << "mesh has " << mesh_faces.size() << " faces." << std::endl;
+  std::cout << "mesh has " << mesh_verts.size() << " vertices." << std::endl;
 
-  vcl_map<boxm2_block_id, boxm2_block_metadata> blocks = scene->blocks();
+  std::map<boxm2_block_id, boxm2_block_metadata> blocks = scene->blocks();
 
-  for (vcl_map<boxm2_block_id, boxm2_block_metadata>::iterator iter = blocks.begin(); iter!= blocks.end(); iter ++)
+  for (std::map<boxm2_block_id, boxm2_block_metadata>::iterator iter = blocks.begin(); iter!= blocks.end(); iter ++)
   {
     boxm2_block_id id = iter->first;
     boxm2_block_metadata mdata = iter->second;
@@ -52,7 +54,7 @@ bool boxm2_import_triangle_mesh(boxm2_scene_sptr scene, boxm2_cache_sptr cache, 
 
     // iterate over every triangle in the mesh
     for (unsigned f=0; f<mesh_faces.size(); ++f) {
-      vcl_vector<vgl_point_3d<double> > tri_verts(3);
+      std::vector<vgl_point_3d<double> > tri_verts(3);
       vgl_box_3d<double> tri_bbox;
       for (unsigned v=0; v<3; ++v) {
         int vert_idx = mesh_faces(f,v);
@@ -65,16 +67,16 @@ bool boxm2_import_triangle_mesh(boxm2_scene_sptr scene, boxm2_cache_sptr cache, 
       bvgl_triangle_3d<double> triangle(tri_verts[0], tri_verts[1], tri_verts[2]);
 
       // compute subblock min and max based on triangle bounding box
-      int ix_min = vcl_max(0,int(vcl_floor((tri_bbox.min_x() - block_origin.x())/subblock_len)));
-      int iy_min = vcl_max(0,int(vcl_floor((tri_bbox.min_y() - block_origin.y())/subblock_len)));
-      int iz_min = vcl_max(0,int(vcl_floor((tri_bbox.min_z() - block_origin.z())/subblock_len)));
-      int ix_max = vcl_min(int(num_subblocks.x()-1),int(vcl_floor((tri_bbox.max_x() - block_origin.x())/subblock_len)));
-      int iy_max = vcl_min(int(num_subblocks.y()-1),int(vcl_floor((tri_bbox.max_y() - block_origin.y())/subblock_len)));
-      int iz_max = vcl_min(int(num_subblocks.z()-1),int(vcl_floor((tri_bbox.max_z() - block_origin.z())/subblock_len)));
+      int ix_min = std::max(0,int(std::floor((tri_bbox.min_x() - block_origin.x())/subblock_len)));
+      int iy_min = std::max(0,int(std::floor((tri_bbox.min_y() - block_origin.y())/subblock_len)));
+      int iz_min = std::max(0,int(std::floor((tri_bbox.min_z() - block_origin.z())/subblock_len)));
+      int ix_max = std::min(int(num_subblocks.x()-1),int(std::floor((tri_bbox.max_x() - block_origin.x())/subblock_len)));
+      int iy_max = std::min(int(num_subblocks.y()-1),int(std::floor((tri_bbox.max_y() - block_origin.y())/subblock_len)));
+      int iz_max = std::min(int(num_subblocks.z()-1),int(std::floor((tri_bbox.max_z() - block_origin.z())/subblock_len)));
 
       // for each subblock
       if((ix_min > ix_max) && (iy_min > iy_max) && (iz_min > iz_max)) {
-        vcl_cout << "^^^^^^^^^^^ ERROR: triangle does not intersect any subblocks" << vcl_endl;
+        std::cout << "^^^^^^^^^^^ ERROR: triangle does not intersect any subblocks" << std::endl;
       }
       for (int iz=iz_min; iz<=iz_max; ++iz) {
         for (int iy=iy_min; iy<=iy_max; ++iy) {
@@ -89,8 +91,8 @@ bool boxm2_import_triangle_mesh(boxm2_scene_sptr scene, boxm2_cache_sptr cache, 
             boct_bit_tree bit_tree((unsigned char*) tree.data_block(), mdata.max_level_);
 
             //iterate through leaves of the tree
-            vcl_vector<int> leafBits = bit_tree.get_leaf_bits();
-            for (vcl_vector<int>::iterator iter = leafBits.begin(); iter != leafBits.end(); ++iter) {
+            std::vector<int> leafBits = bit_tree.get_leaf_bits();
+            for (std::vector<int>::iterator iter = leafBits.begin(); iter != leafBits.end(); ++iter) {
               int currBitIndex = (*iter);
               int data_offset = bit_tree.get_data_index(currBitIndex); //data index
 
@@ -99,7 +101,7 @@ bool boxm2_import_triangle_mesh(boxm2_scene_sptr scene, boxm2_cache_sptr cache, 
               bool vert_in_box = cell_box.contains(tri_verts[0]) || cell_box.contains(tri_verts[1]) || cell_box.contains(tri_verts[2]);
               if (vert_in_box || bvgl_intersection(cell_box, triangle)) {
                 double side_len = cell_box.width();
-                double alpha = -vcl_log(1.0 - occupied_prob) / side_len;
+                double alpha = -std::log(1.0 - occupied_prob) / side_len;
                 alpha_data->data()[data_offset] = alpha;
               }
             }

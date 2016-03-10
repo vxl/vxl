@@ -3,20 +3,21 @@
 #define vsl_deque_io_hxx_
 //:
 // \file
-// \brief  binary IO functions for vcl_deque<T>
+// \brief  binary IO functions for std::deque<T>
 // \author K.Y.McGaul
 //
 // Implementation
 
 #include "vsl_deque_io.h"
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <iostream>
 #include <vsl/vsl_binary_io.h>
 #include <vsl/vsl_indent.h>
 
 //====================================================================================
 //: Write deque to binary stream
 template <class T>
-void vsl_b_write(vsl_b_ostream& s, const vcl_deque<T>& v)
+void vsl_b_write(vsl_b_ostream& s, const std::deque<T>& v)
 {
   const short version_no = 1;
   vsl_b_write(s, version_no);
@@ -28,7 +29,7 @@ void vsl_b_write(vsl_b_ostream& s, const vcl_deque<T>& v)
 //====================================================================================
 //: Read deque from binary stream
 template <class T>
-void vsl_b_read(vsl_b_istream& is, vcl_deque<T>& v)
+void vsl_b_read(vsl_b_istream& is, std::deque<T>& v)
 {
   if (!is) return;
 
@@ -44,9 +45,9 @@ void vsl_b_read(vsl_b_istream& is, vcl_deque<T>& v)
       vsl_b_read(is,v[i]);
     break;
   default:
-    vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, vcl_deque<T>&)\n"
+    std::cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, std::deque<T>&)\n"
              << "           Unknown version number "<< ver << '\n';
-    is.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
+    is.is().clear(std::ios::badbit); // Set an unrecoverable IO error on stream
     return;
   }
 }
@@ -54,7 +55,7 @@ void vsl_b_read(vsl_b_istream& is, vcl_deque<T>& v)
 //====================================================================================
 //: Output a human readable summary to the stream
 template <class T>
-void vsl_print_summary(vcl_ostream& os, const vcl_deque<T> &v)
+void vsl_print_summary(std::ostream& os, const std::deque<T> &v)
 {
   os << "Deque length: " << v.size() << '\n';
   for (unsigned int i=0; i<v.size() && i<5; i++)
@@ -71,8 +72,8 @@ void vsl_print_summary(vcl_ostream& os, const vcl_deque<T> &v)
 
 
 #define VSL_DEQUE_IO_INSTANTIATE(T) \
-template void vsl_print_summary(vcl_ostream&, const vcl_deque<T >&); \
-template void vsl_b_write(vsl_b_ostream& s, const vcl_deque<T >& v); \
-template void vsl_b_read(vsl_b_istream& s, vcl_deque<T >& v)
+template void vsl_print_summary(std::ostream&, const std::deque<T >&); \
+template void vsl_b_write(vsl_b_ostream& s, const std::deque<T >& v); \
+template void vsl_b_read(vsl_b_istream& s, std::deque<T >& v)
 
 #endif // vsl_deque_io_hxx_

@@ -8,7 +8,9 @@
 #include <mfpf/mfpf_draw_pose_lines.h>
 #include <mfpf/mfpf_pose_set.h>
 #include <vgl/vgl_point_2d.h>
-#include <vcl_algorithm.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <algorithm>
 #include <vimt/vimt_convert.h>
 
 //: Draws first n_draw matches (defined by poses) into out_image
@@ -21,9 +23,9 @@ void mfpf_draw_matches(const mfpf_point_finder& pf,
 {
   vimt_convert_cast(image,out_image);
 
-  unsigned nd = vcl_min(n_draw,unsigned(matches.poses.size()));
+  unsigned nd = std::min(n_draw,unsigned(matches.poses.size()));
   double f = 250.0/nd;
-  vcl_vector<vgl_point_2d<double> > m_pts;
+  std::vector<vgl_point_2d<double> > m_pts;
   pf.get_outline(m_pts);
   mfpf_pose scale(0,0,pf.step_size(),0);
   for (unsigned j=0;j<nd;++j)

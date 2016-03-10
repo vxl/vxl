@@ -36,8 +36,10 @@
 //   22 Sep.2004, Peter Vanroose - added cast_to_intensity_face()
 // \endverbatim
 
-#include <vcl_iosfwd.h>
-#include <vcl_vector.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iosfwd>
+#include <vector>
 #include <vtol/vtol_topology_object.h>
 #include <vtol/vtol_one_chain.h>
 #include <vtol/vtol_two_chain.h>
@@ -140,18 +142,18 @@ class vtol_face : public vtol_topology_object
   // \warning these methods should not be used by clients
   // The returned pointers must be deleted after use.
 
-  virtual vcl_vector<vtol_vertex*> *compute_vertices();
-  virtual vcl_vector<vtol_edge*> *compute_edges();
-  virtual vcl_vector<vtol_zero_chain*> *compute_zero_chains();
-  virtual vcl_vector<vtol_one_chain*> *compute_one_chains();
-  virtual vcl_vector<vtol_face*> *compute_faces();
-  virtual vcl_vector<vtol_two_chain*> *compute_two_chains();
-  virtual vcl_vector<vtol_block*> *compute_blocks();
+  virtual std::vector<vtol_vertex*> *compute_vertices();
+  virtual std::vector<vtol_edge*> *compute_edges();
+  virtual std::vector<vtol_zero_chain*> *compute_zero_chains();
+  virtual std::vector<vtol_one_chain*> *compute_one_chains();
+  virtual std::vector<vtol_face*> *compute_faces();
+  virtual std::vector<vtol_two_chain*> *compute_two_chains();
+  virtual std::vector<vtol_block*> *compute_blocks();
 
-  virtual vcl_vector<vtol_vertex*> *outside_boundary_compute_vertices();
-  virtual vcl_vector<vtol_zero_chain*> *outside_boundary_compute_zero_chains();
-  virtual vcl_vector<vtol_edge*> *outside_boundary_compute_edges();
-  virtual vcl_vector<vtol_one_chain*> *outside_boundary_compute_one_chains();
+  virtual std::vector<vtol_vertex*> *outside_boundary_compute_vertices();
+  virtual std::vector<vtol_zero_chain*> *outside_boundary_compute_zero_chains();
+  virtual std::vector<vtol_edge*> *outside_boundary_compute_edges();
+  virtual std::vector<vtol_one_chain*> *outside_boundary_compute_one_chains();
  public:
 
   // Editing Functions
@@ -181,9 +183,9 @@ class vtol_face : public vtol_topology_object
   //: determine bounding box from bounding boxes of underlying edges
   virtual void compute_bounding_box() const;
 
-  virtual void print(vcl_ostream &strm=vcl_cout) const;
+  virtual void print(std::ostream &strm=std::cout) const;
 
-  virtual void describe(vcl_ostream &strm=vcl_cout,
+  virtual void describe(std::ostream &strm=std::cout,
                         int blanking=0) const;
   //---------------------------------------------------------------------------
   //: Does `this' share an edge with `f' ?
@@ -198,10 +200,10 @@ class vtol_face : public vtol_topology_object
   virtual bool compare_geometry(const vtol_face &other) const =0;
 
   //: Return a platform independent string identifying the class
-  virtual vcl_string is_a() const { return vcl_string("vtol_face"); }
+  virtual std::string is_a() const { return std::string("vtol_face"); }
 
   //: Return true if the argument matches the string identifying the class or any parent class
-  virtual bool is_class(const vcl_string& cls) const { return cls==is_a(); }
+  virtual bool is_class(const std::string& cls) const { return cls==is_a(); }
 };
 
 #endif // vtol_face_h_

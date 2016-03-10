@@ -25,7 +25,9 @@
 //=======================================================================
 
 #include "gevd_memory_mixin.h"
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iostream>
 #include <vil1/vil1_image.h>
 #include <vil/vil_image_resource.h>
 
@@ -77,7 +79,7 @@ class gevd_bufferxy : public gevd_memory_mixin
   void dump(const char* filename); // write to file
   gevd_bufferxy(const char* filename);  // read from file
 
-  friend vcl_ostream& operator<<(vcl_ostream& os, gevd_bufferxy const& b) {
+  friend std::ostream& operator<<(std::ostream& os, gevd_bufferxy const& b) {
     return os << "gevd_bufferxy(width=" << b.GetSizeX() << ",height="
               << b.GetSizeY() << ",bits_per_pixel=" << b.GetBitsPixel() << ")";
   }

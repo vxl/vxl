@@ -8,7 +8,9 @@
 #include <vnl/vnl_vector.h>
 #include <vgl/vgl_point_2d.h>
 #include <vgl/vgl_vector_2d.h>
-#include <vcl_cmath.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <cmath>
 
 #include <vimt/vimt_bilin_interp.h>
 #include <vimt/vimt_sample_profile_bilin.h>
@@ -38,7 +40,7 @@ double mfpf_edge_finder::radius() const
 //: Generate points in ref frame that represent boundary
 //  Points of a closed contour around the shape.
 //  Used for display purposes.
-void mfpf_edge_finder::get_outline(vcl_vector<vgl_point_2d<double> >& pts) const
+void mfpf_edge_finder::get_outline(std::vector<vgl_point_2d<double> >& pts) const
 {
   pts.resize(2);
   pts[0]=vgl_point_2d<double>(-0.5,0);
@@ -54,7 +56,7 @@ double mfpf_edge_finder::evaluate(const vimt_image_2d_of<float>& image,
 {
   double v1 = vimt_bilin_interp_safe(image,p+0.5*step_size_*u);
   double v2 = vimt_bilin_interp_safe(image,p-0.5*step_size_*u);
-  return -1.0*vcl_fabs(v1-v2);
+  return -1.0*std::fabs(v1-v2);
 }
 
    //: Evaluate match at in a region around p
@@ -79,7 +81,7 @@ void mfpf_edge_finder::evaluate_region(
   double* r = response.image().top_left_ptr();
   for (int i=0;i<n;++i,++r)
   {
-    *r = -1*vcl_fabs(v[i+1]-v[i]);
+    *r = -1*std::fabs(v[i+1]-v[i]);
   }
 
   // Set up transformation parameters
@@ -109,10 +111,10 @@ double mfpf_edge_finder::search_one_pose(
   const vgl_point_2d<double> p0 = p-(search_ni_+0.5)*u1;
   vimt_sample_profile_bilin(v,image,p0,u1,n+1);
   int best_i=0;
-  double best_e = vcl_fabs(v[1]-v[0]);
+  double best_e = std::fabs(v[1]-v[0]);
   for (int i=1;i<n;++i)
   {
-    double e = vcl_fabs(v[i+1]-v[i]);
+    double e = std::fabs(v[i+1]-v[i]);
     if (e>best_e) { best_e=e; best_i=i; }
   }
   new_p = p+(best_i-search_ni_)*u1;
@@ -123,9 +125,9 @@ double mfpf_edge_finder::search_one_pose(
 // Method: is_a
 //=======================================================================
 
-vcl_string mfpf_edge_finder::is_a() const
+std::string mfpf_edge_finder::is_a() const
 {
-  return vcl_string("mfpf_edge_finder");
+  return std::string("mfpf_edge_finder");
 }
 
 //: Create a copy on the heap and return base class pointer
@@ -138,7 +140,7 @@ mfpf_point_finder* mfpf_edge_finder::clone() const
 // Method: print
 //=======================================================================
 
-void mfpf_edge_finder::print_summary(vcl_ostream& os) const
+void mfpf_edge_finder::print_summary(std::ostream& os) const
 {
   os<<"{ ";
   mfpf_point_finder::print_summary(os);
@@ -172,9 +174,9 @@ void mfpf_edge_finder::b_read(vsl_b_istream& bfs)
       mfpf_point_finder::b_read(bfs);  // Load in baseclass
       break;
     default:
-      vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&)\n"
-               << "           Unknown version number "<< version << vcl_endl;
-      bfs.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
+      std::cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&)\n"
+               << "           Unknown version number "<< version << std::endl;
+      bfs.is().clear(std::ios::badbit); // Set an unrecoverable IO error on stream
       return;
   }
 }

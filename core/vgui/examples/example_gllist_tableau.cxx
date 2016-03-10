@@ -55,7 +55,7 @@ class basic_manager : public vgui_wrapper_tableau
     // This does not in gtk2 impl. of vgui, up to version 1.14.0
     listName = glGenLists(1);
     if ( listName == 0 )
-       vcl_cerr << "Fail to generate opengl list.\n";
+       std::cerr << "Fail to generate opengl list.\n";
     else {
       // Create a red triangle
       glNewList(listName, GL_COMPILE);

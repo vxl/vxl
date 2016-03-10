@@ -13,7 +13,9 @@
 // \endverbatim
 
 #include "vdtop_neighborhood.h"
-#include <vcl_vector.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <vector>
 
 #define BORDER_PIXEL (vxl_byte)2
 #define FALSE_PIXEL (vxl_byte)0
@@ -44,7 +46,7 @@ void vdtop_kernel(vil_image_view<T> & img, TPredicate & pred)
   vdtop_set_image_border(included,1, BORDER_PIXEL) ;
 
   typedef typename vil_image_view<T>::iterator It;
-  vcl_vector<It> current, next ;
+  std::vector<It> current, next ;
 
   vil_image_view<vxl_byte>::iterator ii=included.begin();
 
@@ -84,7 +86,7 @@ void vdtop_kernel(vil_image_view<T> & img, TPredicate & pred)
       }
       current.pop_back() ;
     }
-    for (typename vcl_vector<It>::iterator i=next.begin() ; i!=next.end(); ++i)
+    for (typename std::vector<It>::iterator i=next.begin() ; i!=next.end(); ++i)
     {
       *(included.top_left_ptr()+(*i-img.top_left_ptr()))=FALSE_PIXEL;
     }

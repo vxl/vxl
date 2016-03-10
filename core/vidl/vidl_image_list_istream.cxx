@@ -12,7 +12,8 @@
 #include "vidl_image_list_istream.h"
 #include "vidl_frame.h"
 #include "vidl_convert.h"
-#include <vcl_algorithm.h>
+#include <vcl_compiler.h>
+#include <algorithm>
 #include <vul/vul_file_iterator.h>
 #include <vul/vul_file.h>
 #include <vil/vil_image_resource_sptr.h>
@@ -37,7 +38,7 @@ vidl_image_list_istream()
 
 //: Constructor
 vidl_image_list_istream::
-vidl_image_list_istream(const vcl_string& glob)
+vidl_image_list_istream(const std::string& glob)
   : index_(INIT_INDEX),
     ni_(0), nj_(0),
     format_(VIDL_PIXEL_FORMAT_UNKNOWN),
@@ -48,7 +49,7 @@ vidl_image_list_istream(const vcl_string& glob)
 
 //: Constructor
 vidl_image_list_istream::
-vidl_image_list_istream(const vcl_vector<vcl_string>& paths)
+vidl_image_list_istream(const std::vector<std::string>& paths)
   : index_(INIT_INDEX),
     ni_(0), nj_(0),
     format_(VIDL_PIXEL_FORMAT_UNKNOWN),
@@ -61,9 +62,9 @@ vidl_image_list_istream(const vcl_vector<vcl_string>& paths)
 // \note files are loaded in alphanumeric order by path name
 bool
 vidl_image_list_istream::
-open(const vcl_string& glob)
+open(const std::string& glob)
 {
-  vcl_vector<vcl_string> filenames;
+  std::vector<std::string> filenames;
 
   for (vul_file_iterator fit=glob; fit; ++fit) {
     // check to see if file is a directory.
@@ -74,20 +75,20 @@ open(const vcl_string& glob)
 
   // no matching filenames
   if (filenames.empty()) {
-    vcl_cerr << "In vidl_image_list_istream(.) - no files to open\n";
+    std::cerr << "In vidl_image_list_istream(.) - no files to open\n";
     return false;
   }
   // Sort - because the file iterator uses readdir() it does not
   //        iterate over files in alphanumeric order
-  vcl_sort(filenames.begin(),filenames.end());
+  std::sort(filenames.begin(),filenames.end());
 
   bool can_open = open(filenames);
 
   if (!can_open) {
-    vcl_cerr << "In vidl_image_list_istream(.) -can't open files as images\n";
-    for (vcl_vector<vcl_string>::iterator fit = filenames.begin();
+    std::cerr << "In vidl_image_list_istream(.) -can't open files as images\n";
+    for (std::vector<std::string>::iterator fit = filenames.begin();
          fit != filenames.end(); ++fit)
-      vcl_cerr << *fit << '\n';
+      std::cerr << *fit << '\n';
     return false;
   }
   this->image_paths_ = filenames;
@@ -98,11 +99,11 @@ open(const vcl_string& glob)
 //: Open a new stream using a vector of file paths
 bool
 vidl_image_list_istream::
-open(const vcl_vector<vcl_string>& paths)
+open(const std::vector<std::string>& paths)
 {
   image_paths_.clear();
   // test each file to ensure it exists and is a supported image format
-  for (vcl_vector<vcl_string>::const_iterator i = paths.begin(); i!=paths.end(); ++i)
+  for (std::vector<std::string>::const_iterator i = paths.begin(); i!=paths.end(); ++i)
   {
     vil_image_resource_sptr img = vil_load_image_resource(i->c_str());
     if (img)
@@ -177,7 +178,7 @@ vidl_image_list_istream::current_frame()
 
 
 //: Return the path to the current image in the stream
-vcl_string
+std::string
 vidl_image_list_istream::current_path() const
 {
   if (is_valid()) {

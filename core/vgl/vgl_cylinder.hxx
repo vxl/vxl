@@ -4,7 +4,8 @@
 // \file
 
 #include "vgl_cylinder.h"
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <iostream>
 
 template <class T>
 bool vgl_cylinder<T>::operator==(vgl_cylinder<T> const& cyl) const
@@ -17,7 +18,7 @@ bool vgl_cylinder<T>::operator==(vgl_cylinder<T> const& cyl) const
 }
 
 template <class T>
-vcl_ostream& vgl_cylinder<T>::print(vcl_ostream& s) const
+std::ostream& vgl_cylinder<T>::print(std::ostream& s) const
 {
   return s << "<vgl_cylinder center=" << center_ << ','
            << " radius=" << radius_ << ", length =" << length_
@@ -25,13 +26,13 @@ vcl_ostream& vgl_cylinder<T>::print(vcl_ostream& s) const
 }
 
 template <class T>
-vcl_ostream& operator<<(vcl_ostream& os, const vgl_cylinder<T>& cyl)
+std::ostream& operator<<(std::ostream& os, const vgl_cylinder<T>& cyl)
 {
   return cyl.print(os);
 }
 
 template <class T>
-vcl_istream& operator>>(vcl_istream& s, vgl_cylinder<T>& cyl)
+std::istream& operator>>(std::istream& s, vgl_cylinder<T>& cyl)
 {
   T center_x, center_y, center_z, radius, length, orient_x, orient_y, orient_z;
   s >> center_x >> center_y >> center_z >> radius >> length >> orient_x >> orient_y >> orient_z;
@@ -45,7 +46,7 @@ vcl_istream& operator>>(vcl_istream& s, vgl_cylinder<T>& cyl)
 #undef VGL_CYLINDER_INSTANTIATE
 #define VGL_CYLINDER_INSTANTIATE(T) \
 template class vgl_cylinder<T >; \
-template vcl_ostream& operator<<(vcl_ostream&, vgl_cylinder<T >const&); \
-template vcl_istream& operator>>(vcl_istream&, vgl_cylinder<T >&)
+template std::ostream& operator<<(std::ostream&, vgl_cylinder<T >const&); \
+template std::istream& operator>>(std::istream&, vgl_cylinder<T >&)
 
 #endif // vgl_cylinder_hxx_

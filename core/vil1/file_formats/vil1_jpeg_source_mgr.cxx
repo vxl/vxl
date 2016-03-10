@@ -8,18 +8,19 @@
 
 #include "vil1_jpeg_source_mgr.h"
 #include <vcl_cassert.h>
-#include <vcl_cstddef.h> // for vcl_size_t
+#include <vcl_compiler.h>
+#include <cstddef> // for std::size_t
 #include <vil1/vil1_stream.h>
 
 #define STATIC /*static*/
 
-// In ANSI C, and indeed any rational implementation, vcl_size_t is also the
+// In ANSI C, and indeed any rational implementation, std::size_t is also the
 // type returned by sizeof().  However, it seems there are some irrational
 // implementations out there, in which sizeof() returns an int even though
-// vcl_size_t is defined as long or unsigned long.  To ensure consistent results
+// std::size_t is defined as long or unsigned long.  To ensure consistent results
 // we always use this SIZEOF() macro in place of using sizeof() directly.
 //
-#define SIZEOF(object) ((vcl_size_t) sizeof(object))
+#define SIZEOF(object) ((std::size_t) sizeof(object))
 
 // Implement a jpeg_source_manager for vil1_stream *.
 // Adapted by fsm from the FILE * version in jdatasrc.c
@@ -37,7 +38,7 @@ vil1_jpeg_init_source (j_decompress_ptr cinfo)
   vil1_jpeg_srcptr src = ( vil1_jpeg_srcptr )( cinfo->src );
 
 #ifdef DEBUG
-  vcl_cerr << "vil1_jpeg_init_source() " << src << '\n';
+  std::cerr << "vil1_jpeg_init_source() " << src << '\n';
 #endif
 
   // We reset the empty-input-file flag for each image,
@@ -126,8 +127,8 @@ vil1_jpeg_skip_input_data (j_decompress_ptr cinfo, long num_bytes)
       // note we assume that fill_input_buffer will never return FALSE,
       // so suspension need not be handled.
     }
-    src->base.next_input_byte += (vcl_size_t) num_bytes;
-    src->base.bytes_in_buffer -= (vcl_size_t) num_bytes;
+    src->base.next_input_byte += (std::size_t) num_bytes;
+    src->base.bytes_in_buffer -= (std::size_t) num_bytes;
   }
 }
 
@@ -158,7 +159,7 @@ vil1_jpeg_stream_src_set (j_decompress_ptr cinfo, vil1_stream *vs)
   { assert(!"this function must be called only once on each cinfo"); }
 
 #ifdef DEBUG
-  vcl_cerr << "vil1_jpeg_stream_src() : creating new data source\n";
+  std::cerr << "vil1_jpeg_stream_src() : creating new data source\n";
 #endif
 
   vil1_jpeg_srcptr src = (vil1_jpeg_srcptr) // allocate

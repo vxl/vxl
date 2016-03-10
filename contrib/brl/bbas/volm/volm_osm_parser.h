@@ -16,15 +16,17 @@
 //
 
 #include <expatpplib.h>
-#include <vcl_string.h>
-#include <vcl_iostream.h>
-#include <vcl_map.h>
+#include <string>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iostream>
+#include <map>
 #include <vgl/vgl_point_2d.h>
 #include <vgl/vgl_point_3d.h>
 #include <vgl/vgl_polygon.h>
 #include <vgl/vgl_box_2d.h>
-#include <vcl_vector.h>
-#include <vcl_utility.h>
+#include <vector>
+#include <utility>
 
 // Tags for OSM
 #define OSM_NODE "node"
@@ -44,40 +46,40 @@ public:
   ~volm_osm_parser(void) {}
 
   //: parse meaningful location points from open street map (point with defined keys), return loc points are in x = lon and y = lat
-  static void parse_points(vcl_vector<vgl_point_2d<double> >& points,
-                           vcl_vector<vcl_vector<vcl_pair<vcl_string, vcl_string> > >& keys,
-                           vcl_string const& osm_file);
+  static void parse_points(std::vector<vgl_point_2d<double> >& points,
+                           std::vector<std::vector<std::pair<std::string, std::string> > >& keys,
+                           std::string const& osm_file);
 
   //: parse bounding box of the give osm file
-  static vgl_box_2d<double> parse_bbox(vcl_string const& osm_file);
+  static vgl_box_2d<double> parse_bbox(std::string const& osm_file);
 
   //: parse 3d location points from osm
-  static void parse_points_3d(vcl_vector<vgl_point_3d<double> >& points,
-                              vcl_string const& osm_file);
+  static void parse_points_3d(std::vector<vgl_point_3d<double> >& points,
+                              std::string const& osm_file);
 
   //: parse polylines from open street map (line can be ways, return lines with points having x = lon and y = lat
-  static void parse_lines(vcl_vector<vcl_vector<vgl_point_2d<double> > >& lines,
-                          vcl_vector<vcl_vector<vcl_pair<vcl_string, vcl_string> > >& keys,
-                          vcl_string const& osm_file);
+  static void parse_lines(std::vector<std::vector<vgl_point_2d<double> > >& lines,
+                          std::vector<std::vector<std::pair<std::string, std::string> > >& keys,
+                          std::string const& osm_file);
 
   //: parse polygons from open street map (polygon can be from ways and relation elements)
-  static void parse_polygons(vcl_vector<vgl_polygon<double> >& polys,
-                             vcl_vector<vcl_vector<vcl_pair<vcl_string, vcl_string> > >& keys,
-                             vcl_string const& osm_file);
+  static void parse_polygons(std::vector<vgl_polygon<double> >& polys,
+                             std::vector<std::vector<std::pair<std::string, std::string> > >& keys,
+                             std::string const& osm_file);
 
   //: node list from osm  (key is the node id and the point is arranged as x = lon, y = lat)
-  vcl_map<unsigned long long, vgl_point_2d<double> > nodes_;
-  vcl_map<unsigned long long, vcl_vector<vcl_pair<vcl_string, vcl_string> > > node_keys_;
-  vcl_map<unsigned long long, vgl_point_3d<double> > nodes_3d_;
+  std::map<unsigned long long, vgl_point_2d<double> > nodes_;
+  std::map<unsigned long long, std::vector<std::pair<std::string, std::string> > > node_keys_;
+  std::map<unsigned long long, vgl_point_3d<double> > nodes_3d_;
 
   //: way list from osm
-  vcl_map<unsigned long long, vcl_vector<unsigned long long> > ways_;
-  vcl_map<unsigned long long, vcl_vector<vcl_pair<vcl_string, vcl_string> > > way_keys_;
+  std::map<unsigned long long, std::vector<unsigned long long> > ways_;
+  std::map<unsigned long long, std::vector<std::pair<std::string, std::string> > > way_keys_;
 
   //: relation list from osm
-  vcl_map<unsigned long long, vcl_vector<vcl_pair<vcl_string, unsigned long long> > > relations_;
-  vcl_map<unsigned long long, vcl_vector<vcl_pair<vcl_string, vcl_string> > > relation_keys_;
-  vcl_map<unsigned long long, vcl_string> relation_types_;
+  std::map<unsigned long long, std::vector<std::pair<std::string, unsigned long long> > > relations_;
+  std::map<unsigned long long, std::vector<std::pair<std::string, std::string> > > relation_keys_;
+  std::map<unsigned long long, std::string> relation_types_;
 
   //: boundary of current open street map
   vgl_box_2d<double> bbox_;
@@ -91,7 +93,7 @@ private:
   void init_params();
 
   //: element parser
-  vcl_pair<vcl_string, unsigned long long> parent_;
+  std::pair<std::string, unsigned long long> parent_;
 
 };
 

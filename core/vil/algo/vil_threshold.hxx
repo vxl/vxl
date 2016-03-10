@@ -15,8 +15,8 @@ void vil_threshold_above(const vil_image_view<srcT>& src,
   unsigned ni = src.ni(),nj = src.nj(),np = src.nplanes();
   dest.set_size(ni,nj,np);
 
-  vcl_ptrdiff_t istepA=src.istep(),jstepA=src.jstep(),pstepA = src.planestep();
-  vcl_ptrdiff_t istepB=dest.istep(),jstepB=dest.jstep(),pstepB = dest.planestep();
+  std::ptrdiff_t istepA=src.istep(),jstepA=src.jstep(),pstepA = src.planestep();
+  std::ptrdiff_t istepB=dest.istep(),jstepB=dest.jstep(),pstepB = dest.planestep();
   const srcT* planeA = src.top_left_ptr();
   bool* planeB = dest.top_left_ptr();
   for (unsigned p=0;p<np;++p,planeA += pstepA,planeB += pstepB)
@@ -41,8 +41,8 @@ void vil_threshold_below(const vil_image_view<srcT>& src,
   unsigned ni = src.ni(),nj = src.nj(),np = src.nplanes();
   dest.set_size(ni,nj,np);
 
-  vcl_ptrdiff_t istepA=src.istep(),jstepA=src.jstep(),pstepA = src.planestep();
-  vcl_ptrdiff_t istepB=dest.istep(),jstepB=dest.jstep(),pstepB = dest.planestep();
+  std::ptrdiff_t istepA=src.istep(),jstepA=src.jstep(),pstepA = src.planestep();
+  std::ptrdiff_t istepB=dest.istep(),jstepB=dest.jstep(),pstepB = dest.planestep();
   const srcT* planeA = src.top_left_ptr();
   bool* planeB = dest.top_left_ptr();
   for (unsigned p=0;p<np;++p,planeA += pstepA,planeB += pstepB)
@@ -67,8 +67,8 @@ void vil_threshold_inside(const vil_image_view<srcT>& src,
   unsigned ni = src.ni(),nj = src.nj(),np = src.nplanes();
   dest.set_size(ni,nj,np);
 
-  vcl_ptrdiff_t istepA=src.istep(),jstepA=src.jstep(),pstepA = src.planestep();
-  vcl_ptrdiff_t istepB=dest.istep(),jstepB=dest.jstep(),pstepB = dest.planestep();
+  std::ptrdiff_t istepA=src.istep(),jstepA=src.jstep(),pstepA = src.planestep();
+  std::ptrdiff_t istepB=dest.istep(),jstepB=dest.jstep(),pstepB = dest.planestep();
   const srcT* planeA = src.top_left_ptr();
   bool* planeB = dest.top_left_ptr();
   for (unsigned p=0;p<np;++p,planeA += pstepA,planeB += pstepB)
@@ -93,8 +93,8 @@ void vil_threshold_outside(const vil_image_view<srcT>& src,
   unsigned ni = src.ni(),nj = src.nj(),np = src.nplanes();
   dest.set_size(ni,nj,np);
 
-  vcl_ptrdiff_t istepA=src.istep(),jstepA=src.jstep(),pstepA = src.planestep();
-  vcl_ptrdiff_t istepB=dest.istep(),jstepB=dest.jstep(),pstepB = dest.planestep();
+  std::ptrdiff_t istepA=src.istep(),jstepA=src.jstep(),pstepA = src.planestep();
+  std::ptrdiff_t istepB=dest.istep(),jstepB=dest.jstep(),pstepB = dest.planestep();
   const srcT* planeA = src.top_left_ptr();
   bool* planeB = dest.top_left_ptr();
   for (unsigned p=0;p<np;++p,planeA += pstepA,planeB += pstepB)

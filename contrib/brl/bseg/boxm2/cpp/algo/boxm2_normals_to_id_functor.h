@@ -3,7 +3,9 @@
 //:
 // \file
 
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iostream>
 
 class boxm2_normals_to_id_functor
 {
@@ -17,7 +19,7 @@ class boxm2_normals_to_id_functor
   //: "default" constructor
   boxm2_normals_to_id_functor() {}
 
-  bool init_data(vcl_vector<boxm2_data_base *> & datas, float nmag_t, float vis_t)
+  bool init_data(std::vector<boxm2_data_base *> & datas, float nmag_t, float vis_t)
   {
     alpha_data_=new boxm2_data<BOXM2_ALPHA>(datas[0]->data_buffer(),datas[0]->buffer_length(),datas[0]->block_id());
     point_data_=new boxm2_data<BOXM2_POINT>(datas[1]->data_buffer(),datas[1]->buffer_length(),datas[1]->block_id());
@@ -42,13 +44,13 @@ class boxm2_normals_to_id_functor
 
     if (normal[3] >= nmag_t_ && /*vis_score >= vis_t_ && */ point[3] != -1)
     {
-        if ( vcl_fabs(normal[2]) > vcl_cos(vnl_math::pi/4)) // horizontal surface
+        if ( std::fabs(normal[2]) > std::cos(vnl_math::pi/4)) // horizontal surface
         {
             label_short = 1;
         }
-        else if (  vcl_fabs(normal[2]) <  vcl_cos(vnl_math::pi/4)) // vertical surface
+        else if (  std::fabs(normal[2]) <  std::cos(vnl_math::pi/4)) // vertical surface
         {
-            int thetaindex = (int)vcl_floor((vcl_atan2(normal[1],normal[0]) + vnl_math::pi)/(vnl_math::pi/4));
+            int thetaindex = (int)std::floor((std::atan2(normal[1],normal[0]) + vnl_math::pi)/(vnl_math::pi/4));
             label_short = 2+(short)thetaindex;
         }
         else        // neither

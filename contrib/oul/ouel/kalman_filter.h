@@ -32,7 +32,9 @@
 //----------------------------------------------------------------------
 
 #include <vnl/vnl_matrix.h>
-#include <vcl_iosfwd.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iosfwd>
 
 class KalmanFilter
 {
@@ -119,7 +121,7 @@ class KalmanFilter
   // return the current signal prediction
   inline vnl_matrix<double> prediction() const {return x_pred;}
 
-  friend vcl_ostream &operator<<(vcl_ostream &os, const KalmanFilter &kf);
+  friend std::ostream &operator<<(std::ostream &os, const KalmanFilter &kf);
 };
 
 #endif // OTAGO_kalman_filter__h_INCLUDED

@@ -1,6 +1,8 @@
 #include <vcl_where_root_dir.h>
 #include <testlib/testlib_test.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iostream>
 #include <vnl/vnl_matrix.h>
 #include <vnl/algo/vnl_cholesky.h>
 #include <vnl/vnl_inverse.h>
@@ -18,12 +20,12 @@ void compute_ocl_cholesky(vnl_matrix<float>  A, vnl_vector<float>  b, vnl_vector
   if (mgr.gpus_.size()==0)   return;
   bocl_device_sptr device = mgr.gpus_[0];
 
-  vcl_cout<<device->info();
+  std::cout<<device->info();
 
   vnl_matrix<float> Acopy = A;
   //compile pyramid test
-  vcl_vector<vcl_string> src_paths;
-  vcl_string source_dir = vcl_string(VCL_SOURCE_ROOT_DIR) + "/contrib/brl/bseg/boxm2/ocl/cl/";
+  std::vector<std::string> src_paths;
+  std::string source_dir = std::string(VCL_SOURCE_ROOT_DIR) + "/contrib/brl/bseg/boxm2/ocl/cl/";
   src_paths.push_back(source_dir + "onl/cholesky_decomposition.cl");
   src_paths.push_back(source_dir + "onl/test_onl_cholesky.cl");
 
@@ -49,8 +51,8 @@ void compute_ocl_cholesky(vnl_matrix<float>  A, vnl_vector<float>  b, vnl_vector
   bocl_mem_sptr nbuff = new bocl_mem( device->context(), &n, sizeof(int), "dimension of square matrix");
   nbuff->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
   //set workspace
-  vcl_size_t lThreads[] = {16};
-  vcl_size_t gThreads[] = {16};
+  std::size_t lThreads[] = {16};
+  std::size_t gThreads[] = {16};
   //set first kernel args
   cholesky_test.set_arg( matbuff.ptr() );
   cholesky_test.set_arg( invmatbuff.ptr() );
@@ -63,7 +65,7 @@ void compute_ocl_cholesky(vnl_matrix<float>  A, vnl_vector<float>  b, vnl_vector
 
   vnl_matrix<float> AL( A.rows(), A.cols());
   AL.fill(0.0);
-  vcl_cout<<"====== L Matrix  ======"<<vcl_endl;
+  std::cout<<"====== L Matrix  ======"<<std::endl;
   for (unsigned i = 0 ; i < Acopy.rows(); i ++)
     for (unsigned j = 0 ; j <= i ; j ++)
       AL(i,j) = odata[i*Acopy.cols() + j];

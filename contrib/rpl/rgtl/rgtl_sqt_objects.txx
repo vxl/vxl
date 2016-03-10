@@ -26,10 +26,12 @@
 #include <vnl/vnl_vector_fixed.h>
 
 #include <vcl_cassert.h>
-#include <vcl_limits.h>
-#include <vcl_memory.h>
-#include <vcl_cstdlib.h>
-#include <vcl_cmath.h>
+#include <limits>
+#include <memory>
+#include <cstdlib>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <cmath>
 
 // TODO: During tree construction we should check the set of objects
 // in the current node.  Those with no boundary inside the node should
@@ -43,8 +45,8 @@
 #if defined(RGTL_SQT_OBJECTS_DEBUG_BUILD) || \
     defined(RGTL_SQT_OBJECTS_DEBUG_BUILD2) || \
     defined(RGTL_SQT_OBJECTS_DEBUG_QUERY) || 0
-# include <vcl_iostream.h>
-# include <vcl_exception.h>
+# include <std::iostream.h>
+# include <std::exception.h>
 #endif
 
 //----------------------------------------------------------------------------
@@ -150,7 +152,7 @@ class rgtl_sqt_objects_face_base
   typedef typename internal_type::object_array_type object_array_type;
 
   // Type of pointer to set of objects during construction.
-  typedef vcl_auto_ptr< rgtl_sqt_object_set<D> > sqt_object_set_ptr;
+  typedef std::auto_ptr< rgtl_sqt_object_set<D> > sqt_object_set_ptr;
 
   // Construct with reference to main internal representation.
   rgtl_sqt_objects_face_base(internal_type& intern): internal_(intern) {}
@@ -182,7 +184,7 @@ class rgtl_sqt_objects_face_base
 
   // Leaf data stores index ranges into this array which maps to the
   // object ids in each leaf.
-  vcl_vector<int> object_ids_;
+  std::vector<int> object_ids_;
 
  private:
   friend class rgtl_serialize_access;
@@ -219,10 +221,10 @@ class rgtl_sqt_objects_face: public rgtl_sqt_objects_face_base<D>
   rgtl_sqt_objects_face(internal_type& intern): derived(intern) {}
 
   // Pointer type for object set base class.
-  typedef vcl_auto_ptr< rgtl_sqt_object_set<D> > sqt_object_set_ptr;
+  typedef std::auto_ptr< rgtl_sqt_object_set<D> > sqt_object_set_ptr;
 
   // Pointer type for object set representation in this face.
-  typedef vcl_auto_ptr< rgtl_sqt_object_set_face<D, Face> >
+  typedef std::auto_ptr< rgtl_sqt_object_set_face<D, Face> >
   sqt_object_set_face_ptr;
 
   // Spatial parameterization for this face.
@@ -256,7 +258,7 @@ class rgtl_sqt_objects_face: public rgtl_sqt_objects_face_base<D>
     {
       if (std::uncaught_exception())
       {
-        vcl_cerr << "  " << cell_ << " (" << this->sz1_
+        std::cerr << "  " << cell_ << " (" << this->sz1_
                  << ") " << this->msg_ << '\n';
       }
     }
@@ -364,12 +366,12 @@ class rgtl_sqt_objects_internal
 
   // Type holding SQT-specific representation of object array.
   typedef rgtl_sqt_object_array<D> sqt_object_array_type;
-  typedef vcl_auto_ptr<sqt_object_array_type> sqt_object_array_ptr;
+  typedef std::auto_ptr<sqt_object_array_type> sqt_object_array_ptr;
 
   // Type holding SQT-specific representation of object set during
   // cell construction.
   typedef rgtl_sqt_object_set<D> sqt_object_set_type;
-  typedef vcl_auto_ptr<sqt_object_set_type> sqt_object_set_ptr;
+  typedef std::auto_ptr<sqt_object_set_type> sqt_object_set_ptr;
 
   // Default constructor.
   rgtl_sqt_objects_internal(object_array_type const& original_objs);
@@ -507,7 +509,7 @@ void rgtl_sqt_objects_internal<D>::build(sqt_object_array_type const& objs,
   }
 
   int n = this->number_of_objects();
-  vcl_vector<int> ids(n);
+  std::vector<int> ids(n);
   for (int i=0; i < n; ++i)
   {
     ids[i] = i;
@@ -555,19 +557,19 @@ class rgtl_sqt_objects_query_closest
       rgtl_sqt_space_base<D>::direction_to_face(this->center_direction_);
     this->internal_.face(this->center_face_).direction_to_parameters(
       this->center_direction_, this->center_parameters_);
-    this->center_depth_ = vcl_sqrt(this->center_depth_squared_);
+    this->center_depth_ = std::sqrt(this->center_depth_squared_);
     this->set_bound(bound_squared);
 #ifdef RGTL_SQT_OBJECTS_DEBUG_QUERY
     if (this->internal_.query_closest_debug_)
     {
-      vcl_cout << "Querying point (";
+      std::cout << "Querying point (";
       const char* sep = "";
       for (unsigned int a=0; a < D; ++a)
       {
-        vcl_cout << sep << p[a];
+        std::cout << sep << p[a];
         sep = ", ";
       }
-      vcl_cout << ") with initial bound " << this->bound_ << vcl_endl;
+      std::cout << ") with initial bound " << this->bound_ << std::endl;
     }
 #endif
   }
@@ -619,7 +621,7 @@ class rgtl_sqt_objects_query_closest
   static double compute_distance(double const p[D],
                                  double const q[D])
   {
-    return vcl_sqrt(compute_distance_squared(p, q));
+    return std::sqrt(compute_distance_squared(p, q));
   }
 
   // The internal sqt objects representation.
@@ -627,7 +629,7 @@ class rgtl_sqt_objects_query_closest
 
   // Keep a sorted list of the best k squared distances.  Use -1 to
   // indicate no object yet found.
-  vcl_vector<closest_object_entry> best_;
+  std::vector<closest_object_entry> best_;
 
   // Keep track of the current squared distance bound.
   double bound_;
@@ -658,7 +660,7 @@ rgtl_sqt_objects_query_closest<D>
   ++this->checked_count_;
   if (this->internal_.query_closest_debug_)
   {
-    vcl_cout << "  checking object id " << id << vcl_endl;
+    std::cout << "  checking object id " << id << std::endl;
   }
 #endif
   // Get the squared distance to this object and use it only
@@ -670,13 +672,13 @@ rgtl_sqt_objects_query_closest<D>
        distance_squared <= this->bound_))
   {
     // Insert this object into our sorted list of k objects.
-    vcl_vector<closest_object_entry>& best = this->best_;
+    std::vector<closest_object_entry>& best = this->best_;
     closest_object_entry obj(id, distance_squared, q);
     for (int j=0; j < k && obj.distance_squared >= 0; ++j)
     {
       if (best[j].distance_squared < 0 || obj < best[j])
       {
-        vcl_swap(obj, best[j]);
+        std::swap(obj, best[j]);
       }
     }
 
@@ -694,13 +696,13 @@ rgtl_sqt_objects_query_closest<D>
 #ifdef RGTL_SQT_OBJECTS_DEBUG_QUERY
   if (this->internal_.query_closest_debug_)
   {
-    vcl_cout << " Checked " << this->checked_count_
+    std::cout << " Checked " << this->checked_count_
              << " of " << this->internal_.number_of_objects()
-             << " objects." << vcl_endl;
+             << " objects." << std::endl;
   }
 #endif
   // Copy the final object id list to the output.
-  vcl_vector<closest_object_entry>& best = this->best_;
+  std::vector<closest_object_entry>& best = this->best_;
   for (int i=0; i < k; ++i)
   {
     if (best[i].distance_squared >= 0)
@@ -708,9 +710,9 @@ rgtl_sqt_objects_query_closest<D>
 #ifdef RGTL_SQT_OBJECTS_DEBUG_QUERY
       if (this->internal_.query_closest_debug_)
       {
-        vcl_cout << i
+        std::cout << i
                  << ": id " << best[i].id
-                 << ", d  " << vcl_sqrt(best[i].distance_squared) << vcl_endl;
+                 << ", d  " << std::sqrt(best[i].distance_squared) << std::endl;
       }
 #endif
       if (ids)
@@ -744,7 +746,7 @@ rgtl_sqt_objects_query_closest<D>
 ::set_bound(double bound)
 {
   this->bound_ = bound;
-  this->radius_ = vcl_sqrt(bound);
+  this->radius_ = std::sqrt(bound);
 }
 
 //----------------------------------------------------------------------------
@@ -759,7 +761,7 @@ rgtl_sqt_objects_query_closest<D>
 #ifdef RGTL_SQT_OBJECTS_DEBUG_QUERY
     if (this->internal_.query_closest_debug_)
     {
-      vcl_cout << " Reduced bound to " << this->bound_ << vcl_endl;
+      std::cout << " Reduced bound to " << this->bound_ << std::endl;
     }
 #endif
   }
@@ -827,7 +829,7 @@ rgtl_sqt_objects_query_closest_face<D, Face>
 #ifdef RGTL_SQT_OBJECTS_DEBUG_QUERY
   if (this->internal_.query_closest_debug_)
   {
-    vcl_cout << "Considering cell " << cell << vcl_endl;
+    std::cout << "Considering cell " << cell << std::endl;
   }
 #endif
 
@@ -844,7 +846,7 @@ rgtl_sqt_objects_query_closest_face<D, Face>
 #ifdef RGTL_SQT_OBJECTS_DEBUG_QUERY
         if (this->internal_.query_closest_debug_)
         {
-          vcl_cout << " node is disjoint" << vcl_endl;
+          std::cout << " node is disjoint" << std::endl;
         }
 #endif
         return;
@@ -852,7 +854,7 @@ rgtl_sqt_objects_query_closest_face<D, Face>
     }
     else
     {
-      vcl_abort();
+      std::abort();
     }
 
     // This is a node.  Compute the child containing the ray, if any.
@@ -893,7 +895,7 @@ rgtl_sqt_objects_query_closest_face<D, Face>
 #ifdef RGTL_SQT_OBJECTS_DEBUG_QUERY
       if (this->internal_.query_closest_debug_)
       {
-        vcl_cout << " leaf is disjoint" << vcl_endl;
+        std::cout << " leaf is disjoint" << std::endl;
       }
 #endif
       return;
@@ -904,11 +906,11 @@ rgtl_sqt_objects_query_closest_face<D, Face>
     {
       if (ld->index_begin < ld->index_end)
       {
-        vcl_cout << " checking objects" << vcl_endl;
+        std::cout << " checking objects" << std::endl;
       }
       else
       {
-        vcl_cout << " no objects" << vcl_endl;
+        std::cout << " no objects" << std::endl;
       }
     }
 #endif
@@ -939,8 +941,8 @@ rgtl_sqt_objects_query_closest_face<D, Face>
   // plane.  If the query point is outside the cylinder it is closest
   // to the disc boundary.  Otherwise it is closest to the disc
   // interior.
-  double query_r = vcl_sin(query_angle)*query_distance;
-  double cylinder_r = vcl_tan(cone_angle)*clip_depth;
+  double query_r = std::sin(query_angle)*query_distance;
+  double cylinder_r = std::tan(cone_angle)*clip_depth;
   double distance_to_plane = query_depth - clip_depth;
   double distance_squared = distance_to_plane*distance_to_plane;
   if (query_r > cylinder_r)
@@ -979,7 +981,7 @@ rgtl_sqt_objects_query_closest_face<D, Face>
 
   // Test the current bounding sphere against the cell bounding cone.
   double const beta = cell_data->cone_angle;
-  double const theta = vcl_acos(a_dot_c / this->qc_.center_depth_);
+  double const theta = std::acos(a_dot_c / this->qc_.center_depth_);
   if (theta <= beta)
   {
     // The sphere center is inside the cone.
@@ -1032,7 +1034,7 @@ rgtl_sqt_objects_query_closest_face<D, Face>
   // The sphere center is closest to the cone surface.
   double c_dot_c = this->qc_.center_depth_squared_;
   double distance_to_cone_surface =
-    (vcl_cos(phi)*a_dot_c + vcl_sin(phi)*vcl_sqrt(c_dot_c - a_dot_c*a_dot_c));
+    (std::cos(phi)*a_dot_c + std::sin(phi)*std::sqrt(c_dot_c - a_dot_c*a_dot_c));
   if (this->qc_.radius_ < distance_to_cone_surface)
   {
     // The sphere is outside the cone.
@@ -1043,19 +1045,19 @@ rgtl_sqt_objects_query_closest_face<D, Face>
     // The sphere center is outside the cone.
     // Test against the far normal cone.
     double const alpha = vnl_math::pi/2 - beta;
-    double cos_beta = vcl_cos(beta);
+    double cos_beta = std::cos(beta);
     double cos_beta_2 = cos_beta * cos_beta;
     double scale_far = cell_data->depth_max / cos_beta_2;
     double cos_gamma_far =
       ((scale_far - a_dot_c) /
-       vcl_sqrt(c_dot_c - 2*scale_far*a_dot_c + scale_far*scale_far));
-    double gamma_far = vcl_acos(cos_gamma_far);
+       std::sqrt(c_dot_c - 2*scale_far*a_dot_c + scale_far*scale_far));
+    double gamma_far = std::acos(cos_gamma_far);
     if (gamma_far > alpha)
     {
       // Query point is behind the far normal cone and outside the
       // primal cone.  It is closest to the far disc boundary.
-      double query_r = vcl_sin(theta)*this->qc_.center_depth_;
-      double cylinder_r = vcl_tan(beta)*cell_data->depth_max;
+      double query_r = std::sin(theta)*this->qc_.center_depth_;
+      double cylinder_r = std::tan(beta)*cell_data->depth_max;
       double distance_to_far_plane = a_dot_c - cell_data->depth_max;
       double distance_to_far_cylinder = query_r - cylinder_r;
       nearest_squared =
@@ -1068,8 +1070,8 @@ rgtl_sqt_objects_query_closest_face<D, Face>
       double scale_near = cell_data->depth_min / cos_beta_2;
       double cos_gamma_near =
         ((scale_near - a_dot_c) /
-         vcl_sqrt(c_dot_c - 2*scale_near*a_dot_c + scale_near*scale_near));
-      double gamma_near = vcl_acos(cos_gamma_near);
+         std::sqrt(c_dot_c - 2*scale_near*a_dot_c + scale_near*scale_near));
+      double gamma_near = std::acos(cos_gamma_near);
       if (gamma_near < alpha)
       {
         // Query point is in front of the near normal cone and outside
@@ -1102,12 +1104,12 @@ rgtl_sqt_objects_internal<D>
   // Setup initial query sphere radius.
   if (bound_squared < 0)
   {
-    bound_squared = vcl_numeric_limits<double>::infinity();
+    bound_squared = std::numeric_limits<double>::infinity();
   }
 #ifdef RGTL_SQT_OBJECTS_DEBUG_QUERY
   else if (this->query_closest_debug_)
   {
-    vcl_cout << "User initial bound " << bound_squared << vcl_endl;
+    std::cout << "User initial bound " << bound_squared << std::endl;
   }
 #endif
 
@@ -1155,8 +1157,8 @@ rgtl_sqt_objects_face<D, Face>
   exception_stack es(cell); (void)es;
 #endif
 #ifdef RGTL_SQT_OBJECTS_DEBUG_BUILD
-  vcl_cout << "Considering " << oa->number_of_objects()
-           << " objects in cell " << cell << vcl_endl;
+  std::cout << "Considering " << oa->number_of_objects()
+           << " objects in cell " << cell << std::endl;
 #endif
   bool tooDeep = cell.level() >= this->internal_.max_level();
   bool tooMany = oa->number_of_objects() > this->internal_.max_per_leaf();
@@ -1199,8 +1201,8 @@ rgtl_sqt_objects_face<D, Face>
     // We will not divide this cell further.
     // Store the objects for this cell.
 #ifdef RGTL_SQT_OBJECTS_DEBUG_BUILD
-    vcl_cout << "Storing " << oa->number_of_objects() << " objects in cell "
-             << cell << vcl_endl;
+    std::cout << "Storing " << oa->number_of_objects() << " objects in cell "
+             << cell << std::endl;
 #endif
     typedef typename leaf_data_type::index_type index_type;
     index_type index_begin = index_type(this->object_ids_.size());
@@ -1267,7 +1269,7 @@ rgtl_sqt_objects_face<D, Face>::query_ray(cell_location_type const& cell,
   {
     // Test the objects in this leaf.
     bool found = false;
-    double min_s = vcl_numeric_limits<double>::infinity();
+    double min_s = std::numeric_limits<double>::infinity();
     typedef typename leaf_data_type::index_type index_type;
     for (index_type i=ld->index_begin; i != ld->index_end; ++i)
     {

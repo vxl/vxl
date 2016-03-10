@@ -16,7 +16,9 @@
 //
 
 #include "bsta_distribution.h"
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iostream>
 #include <vpdl/vpdt/vpdt_dist_traits.h>
 
 //: Adds number of observations
@@ -41,7 +43,7 @@ class bsta_num_obs : public dist_
 };
 
 template <class dist_>
-inline vcl_ostream& operator<< (vcl_ostream& os,
+inline std::ostream& operator<< (std::ostream& os,
                                 bsta_num_obs<dist_> const& no)
 {
   dist_ const& dist = static_cast<dist_ const&>(no);
@@ -82,7 +84,7 @@ class bsta_vsum_num_obs : public dist_
 };
 
 template <class dist_>
-inline vcl_ostream& operator<< (vcl_ostream& os,
+inline std::ostream& operator<< (std::ostream& os,
                                 bsta_vsum_num_obs<dist_> const& vno)
 {
   dist_ const& dist = static_cast<dist_ const&>(vno);

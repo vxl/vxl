@@ -1,7 +1,7 @@
 #include "boxm2_vecf_ocl_transform_scene.h"
 //:
 // \file
-#include <vcl_stdexcept.h>
+#include <stdexcept>
 #include <vnl/vnl_vector_fixed.h>
 #include <bocl/bocl_cl.h>
 #include <vgl/vgl_box_3d.h>
@@ -18,15 +18,17 @@
 #include <boct/boct_bit_tree.h>
 #include <bocl/bocl_kernel.h>
 #include <vcl_where_root_dir.h>
-#include <vcl_algorithm.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <algorithm>
 #include <vnl/vnl_vector_fixed.h>
 typedef vnl_vector_fixed<unsigned char,16> uchar16;
 static bool transform_scene_compiled = false;
 bool boxm2_vecf_ocl_transform_scene::get_scene_appearance( boxm2_scene_sptr scene,
-          vcl_string&      options)
+          std::string&      options)
 {
 
-    vcl_vector<vcl_string> apps = scene->appearances();
+    std::vector<std::string> apps = scene->appearances();
     bool foundDataType = false;
     for (unsigned int i=0; i<apps.size(); ++i) {
       boxm2_data_type app_type = boxm2_data_info::data_type(apps[i]);
@@ -44,7 +46,7 @@ bool boxm2_vecf_ocl_transform_scene::get_scene_appearance( boxm2_scene_sptr scen
         }
     }
     if (!foundDataType) {
-        vcl_cout<<"ERROR: boxm2_vecf_ocl_transform_scene: unsupported gray appearance type" << vcl_endl;
+        std::cout<<"ERROR: boxm2_vecf_ocl_transform_scene: unsupported gray appearance type" << std::endl;
         return false;
     }
 
@@ -53,7 +55,7 @@ bool boxm2_vecf_ocl_transform_scene::get_scene_appearance( boxm2_scene_sptr scen
     if ( apps[i] == boxm2_data_traits<BOXM2_GAUSS_RGB>::prefix(color_app_id_) )
     {
       color_app_type_id_ = boxm2_data_traits<BOXM2_GAUSS_RGB>::prefix(color_app_id_);
-      vcl_cout<<"found color data type "<<color_app_type_id_<< " in source scene"<<vcl_endl;
+      std::cout<<"found color data type "<<color_app_type_id_<< " in source scene"<<std::endl;
       options +="-D HAS_RGB ";
     }
 
@@ -68,8 +70,8 @@ bool boxm2_vecf_ocl_transform_scene::get_scene_appearance( boxm2_scene_sptr scen
 boxm2_vecf_ocl_transform_scene::boxm2_vecf_ocl_transform_scene(boxm2_scene_sptr source_scene,
                                                                boxm2_scene_sptr target_scene,
                                                                boxm2_opencl_cache_sptr ocl_cache,
-                                                               vcl_string gray_app_id,
-                                                               vcl_string color_app_id,
+                                                               std::string gray_app_id,
+                                                               std::string color_app_id,
                                                                bool do_alpha,
                                                                bool do_interp)
 
@@ -87,13 +89,13 @@ boxm2_vecf_ocl_transform_scene::boxm2_vecf_ocl_transform_scene(boxm2_scene_sptr 
   this->compile_compute_cell_centers_kernel();
   this->init_ocl_trans();
   if(!this->init_target_scene_buffers(this->target_scene_))
-    vcl_cout<<"target scene buffers failed to initialize"<<vcl_endl;
+    std::cout<<"target scene buffers failed to initialize"<<std::endl;
 }
 
 boxm2_vecf_ocl_transform_scene::boxm2_vecf_ocl_transform_scene(boxm2_scene_sptr source_scene,
                                                                boxm2_opencl_cache_sptr ocl_cache,
-                                                               vcl_string gray_app_id,
-                                                               vcl_string color_app_id,
+                                                               std::string gray_app_id,
+                                                               std::string color_app_id,
                                                                bool do_alpha,
                                                                bool do_interp)
 
@@ -138,16 +140,16 @@ bool boxm2_vecf_ocl_transform_scene::init_target_scene_buffers(boxm2_scene_sptr 
 {
   bool good_buffers = true;
   target_scene_ = target_scene;
-  vcl_string options;
+  std::string options;
   // common stuff
-  vcl_vector<boxm2_block_id> blocks_target = target_scene ->get_block_ids();
-  vcl_vector<boxm2_block_id> blocks_source = source_scene_->get_block_ids();
+  std::vector<boxm2_block_id> blocks_target = target_scene ->get_block_ids();
+  std::vector<boxm2_block_id> blocks_source = source_scene_->get_block_ids();
   if(blocks_target.size()!=1||blocks_source.size()!=1) {
     std::cerr << "Error: boxm2_vecf_ocl_transform_scene: number of blocks > 1" << std::endl;
     return false;
   }
-  vcl_vector<boxm2_block_id>::iterator iter_blk_target = blocks_target.begin();
-  vcl_vector<boxm2_block_id>::iterator iter_blk_source = blocks_source.begin();
+  std::vector<boxm2_block_id>::iterator iter_blk_target = blocks_target.begin();
+  std::vector<boxm2_block_id>::iterator iter_blk_source = blocks_source.begin();
   blk_target_       = opencl_cache_->get_block(target_scene, *iter_blk_target);
   boxm2_block* tblock = opencl_cache_->get_cpu_cache()->get_block(target_scene, *iter_blk_target);
     octree_depth_buff_ = 3;
@@ -181,7 +183,7 @@ bool boxm2_vecf_ocl_transform_scene::init_target_scene_buffers(boxm2_scene_sptr 
     mog_target_       = opencl_cache_->get_data<BOXM2_MOG3_GREY_16>(target_scene, *iter_blk_target,0,false);
   }
   else {
-    vcl_cout << "Unknown appearance type for target_scene " << app_type_ << '\n';
+    std::cout << "Unknown appearance type for target_scene " << app_type_ << '\n';
     return false;
   }
   if( color_app_type_id_ !="")
@@ -194,13 +196,13 @@ bool boxm2_vecf_ocl_transform_scene::init_target_scene_buffers(boxm2_scene_sptr 
 
 bool boxm2_vecf_ocl_transform_scene::compile_trans_interp_kernel()
 {
-  vcl_string options;
+  std::string options;
   // sets apptypesize_ and app_type
   get_scene_appearance(source_scene_, options);
-  vcl_cout<<" compiling trans kernel "<<vcl_endl;
-  vcl_vector<vcl_string> src_paths;
-  vcl_string source_dir = vcl_string(VCL_SOURCE_ROOT_DIR) + "/contrib/brl/bseg/boxm2/ocl/cl/";
-  vcl_string vecf_source_dir = vcl_string(VCL_SOURCE_ROOT_DIR)+ "/contrib/brl/bseg/boxm2/vecf/ocl/cl/";
+  std::cout<<" compiling trans kernel "<<std::endl;
+  std::vector<std::string> src_paths;
+  std::string source_dir = std::string(VCL_SOURCE_ROOT_DIR) + "/contrib/brl/bseg/boxm2/ocl/cl/";
+  std::string vecf_source_dir = std::string(VCL_SOURCE_ROOT_DIR)+ "/contrib/brl/bseg/boxm2/vecf/ocl/cl/";
   src_paths.push_back(source_dir     + "scene_info.cl");
   src_paths.push_back(source_dir     + "bit/bit_tree_library_functions.cl");
   src_paths.push_back(vecf_source_dir + "transform_scene_with_interpolation.cl");
@@ -210,35 +212,35 @@ bool boxm2_vecf_ocl_transform_scene::compile_trans_interp_kernel()
 
 bool boxm2_vecf_ocl_transform_scene::compile_trans_interp_trilin_kernel()
 {
-  vcl_string options;
+  std::string options;
   // sets apptypesize_ and app_type
   get_scene_appearance(source_scene_, options);
   if (do_alpha_)
     options+=" -D DO_ALPHA ";
   if(do_interp_)
     options+=" -D DO_INTERP ";
-  vcl_cout<<" compiling trans kernel with options "<<options<< vcl_endl;
-  vcl_vector<vcl_string> src_paths;
-  vcl_string source_dir = vcl_string(VCL_SOURCE_ROOT_DIR) + "/contrib/brl/bseg/boxm2/ocl/cl/";
-  vcl_string vecf_source_dir = vcl_string(VCL_SOURCE_ROOT_DIR)+ "/contrib/brl/bseg/boxm2/vecf/ocl/cl/";
+  std::cout<<" compiling trans kernel with options "<<options<< std::endl;
+  std::vector<std::string> src_paths;
+  std::string source_dir = std::string(VCL_SOURCE_ROOT_DIR) + "/contrib/brl/bseg/boxm2/ocl/cl/";
+  std::string vecf_source_dir = std::string(VCL_SOURCE_ROOT_DIR)+ "/contrib/brl/bseg/boxm2/vecf/ocl/cl/";
   src_paths.push_back(source_dir     + "scene_info.cl");
   src_paths.push_back(source_dir     + "bit/bit_tree_library_functions.cl");
   src_paths.push_back(source_dir     + "boxm2_ocl_helpers.cl");
   src_paths.push_back(vecf_source_dir + "interp_helpers.cl");
   src_paths.push_back(vecf_source_dir + "warp_and_resample_trilinear.cl");
 
-  vcl_cout<<"compiling trans_interp_similarity_trilin kernel with "<<options<<vcl_endl;
+  std::cout<<"compiling trans_interp_similarity_trilin kernel with "<<options<<std::endl;
   this->trans_interp_trilin_kern = new bocl_kernel();
   return trans_interp_trilin_kern->create_kernel(&device_->context(),device_->device_id(), src_paths, "warp_and_resample_trilinear_similarity", options, "trans_interp_similarity_trilin_scene");
 }
 
 bool boxm2_vecf_ocl_transform_scene::compile_compute_cell_centers_kernel()
 {
-  vcl_string options;
-  vcl_cout<<" compiling compute_cell_centers kernel "<<vcl_endl;
-  vcl_vector<vcl_string> src_paths;
-  vcl_string source_dir = vcl_string(VCL_SOURCE_ROOT_DIR) + "/contrib/brl/bseg/boxm2/ocl/cl/";
-  vcl_string vecf_source_dir = vcl_string(VCL_SOURCE_ROOT_DIR)+ "/contrib/brl/bseg/boxm2/vecf/ocl/cl/";
+  std::string options;
+  std::cout<<" compiling compute_cell_centers kernel "<<std::endl;
+  std::vector<std::string> src_paths;
+  std::string source_dir = std::string(VCL_SOURCE_ROOT_DIR) + "/contrib/brl/bseg/boxm2/ocl/cl/";
+  std::string vecf_source_dir = std::string(VCL_SOURCE_ROOT_DIR)+ "/contrib/brl/bseg/boxm2/vecf/ocl/cl/";
   src_paths.push_back(source_dir     + "scene_info.cl");
   src_paths.push_back(source_dir     + "bit/bit_tree_library_functions.cl");
   src_paths.push_back(source_dir     + "boxm2_ocl_helpers.cl");
@@ -250,13 +252,13 @@ bool boxm2_vecf_ocl_transform_scene::compile_compute_cell_centers_kernel()
 
 bool boxm2_vecf_ocl_transform_scene::compile_trans_interp_vecf_trilin_kernel()
 {
-  vcl_string options;
+  std::string options;
   // sets apptypesize_ and app_type
   get_scene_appearance(source_scene_, options);
-  vcl_cout<<" compiling trans kernel "<<vcl_endl;
-  vcl_vector<vcl_string> src_paths;
-  vcl_string source_dir = vcl_string(VCL_SOURCE_ROOT_DIR) + "/contrib/brl/bseg/boxm2/ocl/cl/";
-  vcl_string vecf_source_dir = vcl_string(VCL_SOURCE_ROOT_DIR)+ "/contrib/brl/bseg/boxm2/vecf/ocl/cl/";
+  std::cout<<" compiling trans kernel "<<std::endl;
+  std::vector<std::string> src_paths;
+  std::string source_dir = std::string(VCL_SOURCE_ROOT_DIR) + "/contrib/brl/bseg/boxm2/ocl/cl/";
+  std::string vecf_source_dir = std::string(VCL_SOURCE_ROOT_DIR)+ "/contrib/brl/bseg/boxm2/vecf/ocl/cl/";
   src_paths.push_back(source_dir     + "scene_info.cl");
   src_paths.push_back(source_dir     + "bit/bit_tree_library_functions.cl");
   src_paths.push_back(source_dir     + "boxm2_ocl_helpers.cl");
@@ -325,7 +327,7 @@ bool boxm2_vecf_ocl_transform_scene::transform_1_blk_interp(vgl_rotation_3d<doub
                                                             vgl_vector_3d<double> scale,
                                                             bool finish){
   if(!target_scene_){
-    vcl_cout<< "Error: target scene is not set!"<<vcl_endl;
+    std::cout<< "Error: target scene is not set!"<<std::endl;
     return false;
   }
 #if 1
@@ -364,8 +366,8 @@ bool boxm2_vecf_ocl_transform_scene::transform_1_blk_interp(vgl_rotation_3d<doub
      if(!good_write)
        return false;
    }
-   vcl_size_t local_threads[1]={64};
-   static vcl_size_t global_threads[1]={1};
+   std::size_t local_threads[1]={64};
+   static std::size_t global_threads[1]={1};
   // set up all the kernel arguments
   // subsequent calls don't need to do this initialization
    if(first){
@@ -383,12 +385,12 @@ bool boxm2_vecf_ocl_transform_scene::transform_1_blk_interp(vgl_rotation_3d<doub
      trans_interp_kern->set_arg(centerZ_.ptr());
      trans_interp_kern->set_arg(lookup_.ptr());
 
-     vcl_vector<boxm2_block_id> blocks_target = target_scene_->get_block_ids();
-     vcl_vector<boxm2_block_id> blocks_source = source_scene_->get_block_ids();
+     std::vector<boxm2_block_id> blocks_target = target_scene_->get_block_ids();
+     std::vector<boxm2_block_id> blocks_source = source_scene_->get_block_ids();
      if(blocks_target.size()!=1||blocks_source.size()!=1)
        return false;
-     vcl_vector<boxm2_block_id>::iterator iter_blk_target = blocks_target.begin();
-     vcl_vector<boxm2_block_id>::iterator iter_blk_source = blocks_source.begin();
+     std::vector<boxm2_block_id>::iterator iter_blk_target = blocks_target.begin();
+     std::vector<boxm2_block_id>::iterator iter_blk_source = blocks_source.begin();
 
      vgl_box_3d<float> box_target(info_buffer_->scene_origin[0],info_buffer_->scene_origin[1],info_buffer_->scene_origin[2],
       info_buffer_->scene_origin[0]+info_buffer_->scene_dims[0]*info_buffer_->block_len,
@@ -427,7 +429,7 @@ bool boxm2_vecf_ocl_transform_scene::transform_1_blk_interp(vgl_rotation_3d<doub
    // check for invalid parameters
    if( alphaTypeSize == 0 ) //This should never happen, it will result in division by zero later
    {
-     vcl_cout << "ERROR: alphaTypeSize == 0 in " << __FILE__ << __LINE__ << vcl_endl;
+     std::cout << "ERROR: alphaTypeSize == 0 in " << __FILE__ << __LINE__ << std::endl;
      return false;
    }
 
@@ -445,10 +447,10 @@ bool boxm2_vecf_ocl_transform_scene::transform_1_blk_interp(vgl_rotation_3d<doub
      mog_source = opencl_cache_->get_data<BOXM2_GAUSS_RGB>(source_scene_, *iter_blk_source,0,true);
    }
    else {
-     vcl_cout << "ERROR: boxm2_vecf_ocl_transform_scene: Unsupported appearance type for source_scene " << boxm2_data_info::prefix(app_type_) << '\n';
+     std::cout << "ERROR: boxm2_vecf_ocl_transform_scene: Unsupported appearance type for source_scene " << boxm2_data_info::prefix(app_type_) << '\n';
      return false;
    }
-   vcl_cout<<"This is the transform scene Kernel"<<vcl_endl;
+   std::cout<<"This is the transform scene Kernel"<<std::endl;
    //   nobs_source = opencl_cache_->get_data<BOXM2_NUM_OBS>(source_scene_, *iter_blk_source,0,false);
    nbr_exint = opencl_cache_->get_data<BOXM2_CHAR8>(source_scene_, *iter_blk_source,0,true, "nbr_exint");
    nbr_exists = opencl_cache_->get_data<BOXM2_CHAR8>(source_scene_, *iter_blk_source,0,true, "nbr_exist");
@@ -477,7 +479,7 @@ bool boxm2_vecf_ocl_transform_scene::transform_1_blk_interp(vgl_rotation_3d<doub
    }
    if(!trans_interp_kern->execute(queue_, 1, local_threads, global_threads))
      {
-       vcl_cout<<"Kernel Failed to Execute "<<vcl_endl;
+       std::cout<<"Kernel Failed to Execute "<<std::endl;
        return false;
     }
    int status = clFinish(queue_);
@@ -500,22 +502,22 @@ transform_1_blk_interp_trilin(boxm2_vecf_ocl_vector_field &vec_field,
                               bool finish)
 {
   if(!target_scene_){
-    vcl_cout<< "Error: target scene is not set!"<<vcl_endl;
+    std::cout<< "Error: target scene is not set!"<<std::endl;
     return false;
   }
-  vcl_size_t local_threads[1]={64};
+  std::size_t local_threads[1]={64};
 
-  static vcl_size_t global_threads[1]={1};
+  static std::size_t global_threads[1]={1};
   // set up all the kernel arguments
   // subsequent calls don't need to do this initialization
 
-  vcl_vector<boxm2_block_id> blocks_target = target_scene_->get_block_ids();
-  vcl_vector<boxm2_block_id> blocks_source = source_scene_->get_block_ids();
+  std::vector<boxm2_block_id> blocks_target = target_scene_->get_block_ids();
+  std::vector<boxm2_block_id> blocks_source = source_scene_->get_block_ids();
   if(blocks_target.size()!=1||blocks_source.size()!=1) {
-    throw vcl_runtime_error("transform_1_block_interl_trilin() only implemented for single block");
+    throw std::runtime_error("transform_1_block_interl_trilin() only implemented for single block");
   }
-  vcl_vector<boxm2_block_id>::iterator iter_blk_target = blocks_target.begin();
-  vcl_vector<boxm2_block_id>::iterator iter_blk_source = blocks_source.begin();
+  std::vector<boxm2_block_id>::iterator iter_blk_target = blocks_target.begin();
+  std::vector<boxm2_block_id>::iterator iter_blk_source = blocks_source.begin();
 
   bocl_mem* target_pts = opencl_cache_->get_data<BOXM2_POINT>(target_scene_, *iter_blk_target, 0, false, "target");
 
@@ -535,7 +537,7 @@ transform_1_blk_interp_trilin(boxm2_vecf_ocl_vector_field &vec_field,
 
   if(!compute_cell_centers_kern->execute(queue_, 1, local_threads, global_threads))
   {
-    vcl_cout<<"Compute Cell Centers Kernel Failed to Execute "<<vcl_endl;
+    std::cout<<"Compute Cell Centers Kernel Failed to Execute "<<std::endl;
     return false;
   }
   int status = clFinish(queue_);
@@ -547,7 +549,7 @@ transform_1_blk_interp_trilin(boxm2_vecf_ocl_vector_field &vec_field,
 
   bocl_mem* source_pts = opencl_cache_->get_data<BOXM2_POINT>(target_scene_, *iter_blk_target, 0, false, "source");
   if(!vec_field.compute_inverse_transform(target_scene_, *iter_blk_target, target_pts, source_pts, queue_)) {
-    vcl_cout << "ERROR: boxm2_vecf_ocl_transform_scene::transform_1_blk_interp_trilin(): Error computing inverse transform!" << vcl_endl;
+    std::cout << "ERROR: boxm2_vecf_ocl_transform_scene::transform_1_blk_interp_trilin(): Error computing inverse transform!" << std::endl;
     return false;
   }
 
@@ -561,7 +563,7 @@ transform_1_blk_interp_trilin(boxm2_vecf_ocl_vector_field &vec_field,
   // check for invalid parameters
   if( alphaTypeSize == 0 ) //This should never happen, it will result in division by zero later
   {
-    vcl_cout << "ERROR: alphaTypeSize == 0 in " << __FILE__ << __LINE__ << vcl_endl;
+    std::cout << "ERROR: alphaTypeSize == 0 in " << __FILE__ << __LINE__ << std::endl;
     return false;
   }
 
@@ -581,11 +583,11 @@ transform_1_blk_interp_trilin(boxm2_vecf_ocl_vector_field &vec_field,
     mog_source = opencl_cache_->get_data<BOXM2_GAUSS_RGB>(source_scene_, *iter_blk_source,0,true);
   }
   else {
-    vcl_cout << "ERROR: boxm2_vecf_ocl_transform_scene: Unsupported appearance type for source_scene " << boxm2_data_info::prefix(app_type_) << '\n';
+    std::cout << "ERROR: boxm2_vecf_ocl_transform_scene: Unsupported appearance type for source_scene " << boxm2_data_info::prefix(app_type_) << '\n';
     return false;
   }
 
-  vcl_cout<<"This is the transform scene Kernel with arbitrary vector field and trilinear interp"<<vcl_endl;
+  std::cout<<"This is the transform scene Kernel with arbitrary vector field and trilinear interp"<<std::endl;
   //   nobs_source = opencl_cache_->get_data<BOXM2_NUM_OBS>(source_scene_, *iter_blk_source,0,false);
 
   trans_interp_vecf_trilin_kern->set_arg(lookup_.ptr());
@@ -606,7 +608,7 @@ transform_1_blk_interp_trilin(boxm2_vecf_ocl_vector_field &vec_field,
 
   if(!trans_interp_vecf_trilin_kern->execute(queue_, 1, local_threads, global_threads))
   {
-    vcl_cout<<"Kernel Failed to Execute "<<vcl_endl;
+    std::cout<<"Kernel Failed to Execute "<<std::endl;
     return false;
   }
   status = clFinish(queue_);
@@ -623,7 +625,7 @@ transform_1_blk_interp_trilin(boxm2_vecf_ocl_vector_field &vec_field,
   opencl_cache_->unref_mem(blk_info_source_loc.ptr());
 
   bool good_read = check_val(status, CL_SUCCESS, "READ FROM GPU FAILED: " + error_to_string(status));
-  vcl_cout<<"good read is "<<good_read<<vcl_endl;
+  std::cout<<"good read is "<<good_read<<std::endl;
   if(!good_read)
     return false;
   return true;
@@ -637,7 +639,7 @@ bool boxm2_vecf_ocl_transform_scene::transform_1_blk_interp_trilin(boxm2_scene_s
 {
   //  if(!target_initialized_)
     if(!  this->init_target_scene_buffers(target_scene)){
-      vcl_cout<<"failed to initialize target scene buffers"<<vcl_endl;
+      std::cout<<"failed to initialize target scene buffers"<<std::endl;
       return false;
     }
   // set up the buffers the first time the function is called
@@ -664,8 +666,8 @@ bool boxm2_vecf_ocl_transform_scene::transform_1_blk_interp_trilin(boxm2_scene_s
    int statusw =0;
    // just copy the transformation parameters to gpu memory
 
-   vcl_size_t local_threads[1]={64};
-   static vcl_size_t global_threads[1]={1};
+   std::size_t local_threads[1]={64};
+   static std::size_t global_threads[1]={1};
   // set up all the kernel arguments
   // subsequent calls don't need to do this initialization
    bocl_mem_sptr translation_l = new bocl_mem(device_->context(), translation_buff, sizeof(float)*4, " translation " );
@@ -682,10 +684,10 @@ bool boxm2_vecf_ocl_transform_scene::transform_1_blk_interp_trilin(boxm2_scene_s
      if(!good_write)
        return false;
 
-     vcl_vector<boxm2_block_id> blocks_target = target_scene_->get_block_ids();
-     vcl_vector<boxm2_block_id> blocks_source = source_scene_->get_block_ids();
-     vcl_vector<boxm2_block_id>::iterator iter_blk_target = blocks_target.begin();
-     vcl_vector<boxm2_block_id>::iterator iter_blk_source = blocks_source.begin();
+     std::vector<boxm2_block_id> blocks_target = target_scene_->get_block_ids();
+     std::vector<boxm2_block_id> blocks_source = source_scene_->get_block_ids();
+     std::vector<boxm2_block_id>::iterator iter_blk_target = blocks_target.begin();
+     std::vector<boxm2_block_id>::iterator iter_blk_source = blocks_source.begin();
 
      if(blocks_target.size()!=1||blocks_source.size()!=1)
        return false;
@@ -728,12 +730,12 @@ bool boxm2_vecf_ocl_transform_scene::transform_1_blk_interp_trilin(boxm2_scene_s
    // check for invalid parameters
    if( alphaTypeSize == 0 ) //This should never happen, it will result in division by zero later
    {
-    vcl_cout << "ERROR: alphaTypeSize == 0 in " << __FILE__ << __LINE__ << vcl_endl;
+    std::cout << "ERROR: alphaTypeSize == 0 in " << __FILE__ << __LINE__ << std::endl;
     return false;
    }
 
    info_buffer_source->data_buffer_length = (int) (alpha_source->num_bytes()/alphaTypeSize);
-   vcl_size_t data_size_target = static_cast<vcl_size_t>(info_buffer_->data_buffer_length);
+   std::size_t data_size_target = static_cast<std::size_t>(info_buffer_->data_buffer_length);
 
    bocl_mem_sptr blk_info_source_l  = new bocl_mem(device_->context(), info_buffer_source, sizeof(boxm2_scene_info), " Scene Info Source" );
    blk_info_source_l->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR);
@@ -746,7 +748,7 @@ bool boxm2_vecf_ocl_transform_scene::transform_1_blk_interp_trilin(boxm2_scene_s
      mog_source       = opencl_cache_->get_data<BOXM2_MOG3_GREY_16>(source_scene_, *iter_blk_source,0,true);
    }
    else {
-     vcl_cout << "ERROR: boxm2_vecf_ocl_transform_scene: Unsupported appearance type for source_scene " << boxm2_data_info::prefix(app_type_) << '\n';
+     std::cout << "ERROR: boxm2_vecf_ocl_transform_scene: Unsupported appearance type for source_scene " << boxm2_data_info::prefix(app_type_) << '\n';
      return false;
    }
    bocl_mem* rgb_source = VXL_NULLPTR;
@@ -782,7 +784,7 @@ bool boxm2_vecf_ocl_transform_scene::transform_1_blk_interp_trilin(boxm2_scene_s
 
    if(!trans_interp_trilin_kern->execute(queue_, 1, local_threads, global_threads))
      {
-       vcl_cout<<"Kernel Failed to Execute "<<vcl_endl;
+       std::cout<<"Kernel Failed to Execute "<<std::endl;
        return false;
     }
    int status = clFinish(queue_);
@@ -801,7 +803,7 @@ bool boxm2_vecf_ocl_transform_scene::transform_1_blk_interp_trilin(boxm2_scene_s
    // int out_count = 0;
    // for(int i = 0; i<data_size * 8; i += 8)
    //   if (out_count < 100 && cpu_buff[i+0] != 0){
-   //     vcl_cout << cpu_buff[i] << ' ' << cpu_buff[i+1] << ' '
+   //     std::cout << cpu_buff[i] << ' ' << cpu_buff[i+1] << ' '
    //              << cpu_buff[i+2] << ' ' << cpu_buff[i+3] << ' '
    //              << cpu_buff[i+4] << ' ' << cpu_buff[i+5] << ' '
    //              << cpu_buff[i+6] << ' ' << cpu_buff[i+7] << '\n';
@@ -810,7 +812,7 @@ bool boxm2_vecf_ocl_transform_scene::transform_1_blk_interp_trilin(boxm2_scene_s
 
 
    bool good_read = check_val(status, CL_SUCCESS, "READ FROM GPU FAILED: " + error_to_string(status));
-   vcl_cout<<"good read is "<<good_read<<vcl_endl;
+   std::cout<<"good read is "<<good_read<<std::endl;
    if(!good_read)
      return false;
    return true;

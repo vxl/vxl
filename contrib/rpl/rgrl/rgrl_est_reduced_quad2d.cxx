@@ -156,8 +156,8 @@ estimate( rgrl_set_of<rgrl_match_set_sptr> const& matches,
   double factor0 = std::max(XtWX(4,4), XtWX(5,5));
   double factor1 = std::max(XtWX(2,2), XtWX(3,3));
   double factor2 = std::max(XtWX(1,1), XtWX(0,0));
-  double scale0 = vcl_sqrt( (factor0 > 0 && factor2 > 0) ? factor2 / factor0 : 1);   // neither should be 0
-  double scale1 = vcl_sqrt( (factor1 > 0 && factor2 > 0) ? factor2 / factor1 : 1 );
+  double scale0 = std::sqrt( (factor0 > 0 && factor2 > 0) ? factor2 / factor0 : 1);   // neither should be 0
+  double scale1 = std::sqrt( (factor1 > 0 && factor2 > 0) ? factor2 / factor1 : 1 );
 
   vnl_vector_fixed<double, 6> s;
   s(0) = s(1) = 1; s(2) = s(3) = scale1;
@@ -236,7 +236,7 @@ estimate( rgrl_match_set_sptr matches,
   return rgrl_estimator::estimate( matches, cur_transform );
 }
 
-const vcl_type_info&
+const std::type_info&
 rgrl_est_reduced_quad2d::
 transformation_type() const
 {

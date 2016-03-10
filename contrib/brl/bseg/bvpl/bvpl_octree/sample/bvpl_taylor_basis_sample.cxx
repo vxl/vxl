@@ -7,9 +7,9 @@
 #include <vnl/io/vnl_io_matrix_fixed.h>
 #include <vnl/io/vnl_io_vector_fixed.h>
 
-vcl_ostream& operator << (vcl_ostream& os, const bvpl_taylor_basis2_sample& sample)
+std::ostream& operator << (std::ostream& os, const bvpl_taylor_basis2_sample& sample)
 {
-  os << "I0 = " << sample.I0 << ", G= " <<sample.G<< ", H=" << sample.H << vcl_endl;
+  os << "I0 = " << sample.I0 << ", G= " <<sample.G<< ", H=" << sample.H << std::endl;
   return os;
 }
 
@@ -44,9 +44,9 @@ void vsl_b_read(vsl_b_istream & is, bvpl_taylor_basis2_sample &sample)
       vsl_b_read(is, sample.H);
       break;
     default:
-      vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, boxm_sample<T>&)\n"
+      std::cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, boxm_sample<T>&)\n"
       << "           Unknown version number "<< version << '\n';
-      is.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
+      is.is().clear(std::ios::badbit); // Set an unrecoverable IO error on stream
       break;
   }
 

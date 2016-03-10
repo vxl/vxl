@@ -13,7 +13,8 @@
 // \endverbatim
 //=========================================================================
 
-#include <vcl_string.h>
+#include <vcl_compiler.h>
+#include <string>
 #include <vbl/vbl_ref_count.h>
 
 //-------------------------------------------------------------------------
@@ -26,10 +27,10 @@ public:
   vgui_font() { }
 
   //: Draw a string of font symbols.
-  virtual void draw(const vcl_string& str) const = 0;
+  virtual void draw(const std::string& str) const = 0;
 
   //: Draw a string of font symbols.
-  virtual void draw(const vcl_string& str, unsigned int size) const;
+  virtual void draw(const std::string& str, unsigned int size) const;
 
 //protected:
   //: Destructor.

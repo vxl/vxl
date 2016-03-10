@@ -143,7 +143,7 @@ bounding_box() const
   return bounding_box_;
 }
 
-const vcl_type_info&
+const std::type_info&
 rgrl_feature_set_bins_2d::
 type() const
 {

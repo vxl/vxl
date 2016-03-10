@@ -4,7 +4,9 @@
 // \author Chuck Stewart
 // \date   Feb 2003
 
-#include <vcl_cmath.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <cmath>
 #include <vcl_cassert.h>
 #include <vnl/vnl_matrix.h>
 #include <vnl/vnl_math.h>
@@ -15,7 +17,7 @@
 #include "rgrl_transformation.h"
 
 rgrl_weighter_m_est::
-rgrl_weighter_m_est( vcl_auto_ptr<rrel_m_est_obj>  m_est,
+rgrl_weighter_m_est( std::auto_ptr<rrel_m_est_obj>  m_est,
                      bool                          use_signature_error,
                      bool                          use_precomputed_signature_wgt )
   : m_est_( m_est ),
@@ -89,7 +91,7 @@ compute_weights( rgrl_scale const&  scales,
         assert ( error_vector.size() > 0 &&
                  error_vector.size() == signature_inv_covar.rows() &&
                  error_vector.size() == signature_inv_covar.cols());
-        double signature_err = vcl_sqrt( dot_product( error_vector * signature_inv_covar, error_vector ) );
+        double signature_err = std::sqrt( dot_product( error_vector * signature_inv_covar, error_vector ) );
         // CS: we may need to add some chi-squared normalization
         // here for large signature vectors.
         signature_wgt = m_est_->wgt( signature_err );  // already normalized at this point
@@ -97,7 +99,7 @@ compute_weights( rgrl_scale const&  scales,
 
       double cumul_wgt = geometric_wgt * signature_wgt;
 
-      DebugMacro_abv(1, cumul_wgt << vcl_endl );
+      DebugMacro_abv(1, cumul_wgt << std::endl );
 
       titr.set_geometric_weight( geometric_wgt );
       if ( !signature_precomputed_ ) titr.set_signature_weight( signature_wgt );
@@ -229,8 +231,8 @@ aux_neg_log_likelihood( rgrl_scale const&  scale,
 
   double sum_rho_values = aux_sum_rho_values(scale, match_set, xform);
   const double geometric_scale = scale.geometric_scale();
-  //vcl_cout << "    rho_value: " << sum_rho_values << vcl_endl;
-  return n*vcl_log(geometric_scale) + sum_rho_values;
+  //std::cout << "    rho_value: " << sum_rho_values << std::endl;
+  return n*std::log(geometric_scale) + sum_rho_values;
 }
 
 double
@@ -255,6 +257,6 @@ aux_avg_neg_log_likelihood( rgrl_scale const&  scale,
 
   double sum_rho_values = aux_sum_rho_values(scale, match_set, xform);
   const double geometric_scale = scale.geometric_scale();
-  //vcl_cout << "    rho_value: " << sum_rho_values << vcl_endl;
-  return vcl_log(geometric_scale) + sum_rho_values/double(n);
+  //std::cout << "    rho_value: " << sum_rho_values << std::endl;
+  return std::log(geometric_scale) + sum_rho_values/double(n);
 }

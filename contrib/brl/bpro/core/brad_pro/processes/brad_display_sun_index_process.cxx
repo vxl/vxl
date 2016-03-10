@@ -4,14 +4,16 @@
 //:
 // \file
 
-#include <vcl_fstream.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <fstream>
 
 //: Constructor
 bool brad_display_sun_index_process_cons(bprb_func_process& pro)
 {
   //input
   bool ok=false;
-  vcl_vector<vcl_string> input_types;
+  std::vector<std::string> input_types;
   input_types.push_back("vcl_string"); // vrml output file name
   input_types.push_back("float");      // longitude (degrees)
   input_types.push_back("float");      // latitude (degrees)
@@ -23,7 +25,7 @@ bool brad_display_sun_index_process_cons(bprb_func_process& pro)
   if (!ok) return ok;
 
   //output
-  vcl_vector<vcl_string> output_types; // no outputs
+  std::vector<std::string> output_types; // no outputs
   ok = pro.set_output_types(output_types);
   if (!ok) return ok;
   return true;
@@ -34,17 +36,17 @@ bool brad_display_sun_index_process(bprb_func_process& pro)
 {
   // Sanity check
   if (pro.n_inputs()< 7) {
-    vcl_cout << "brad_display_sun_index_process: The input number should be 7" << vcl_endl;
+    std::cout << "brad_display_sun_index_process: The input number should be 7" << std::endl;
     return false;
   }
 
   // get the inputs
   unsigned i=0;
   //output file name
-  vcl_string out_file = pro.get_input<vcl_string>(i++);
-  vcl_ofstream os(out_file.c_str());
+  std::string out_file = pro.get_input<std::string>(i++);
+  std::ofstream os(out_file.c_str());
   if (!os.is_open()) {
-    vcl_cout << "in display_sun_index_process, couldn't open output file stream\n";
+    std::cout << "in display_sun_index_process, couldn't open output file stream\n";
     return false;
   }
   double longitude = pro.get_input<float>(i++);

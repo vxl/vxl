@@ -48,7 +48,7 @@ unsigned vsph_view_sphere<T>::add_view(T view, unsigned ni, unsigned nj)
   vpgl_calibration_matrix<double> K(1871.0,pp);
   cam->set_calibration(K);
   vgl_vector_3d<double> up(0.0, 1.0, 0.0);
-  if (vcl_fabs(p.theta_)<1.0e-3)
+  if (std::fabs(p.theta_)<1.0e-3)
     cam->look_at(vgl_homg_point_3d<double>(coord_sys_->origin()), up);
   else
     cam->look_at(vgl_homg_point_3d<double>(coord_sys_->origin()));
@@ -63,13 +63,13 @@ unsigned vsph_view_sphere<T>::add_view(T view, unsigned ni, unsigned nj)
 template <class T>
 bool vsph_view_sphere<T>::view_point(unsigned uid, T*& vp)
 {
-  typename vcl_map<unsigned, T>::iterator it = views_.find(uid);
+  typename std::map<unsigned, T>::iterator it = views_.find(uid);
   if (it != views_.end()) {
     vp = &(it->second);
     return true;
   }
   else {
-    vcl_cerr << " vsph_view_sphere<T>::view_point(uid) -- View with ID=" << uid << "does not exist\n";
+    std::cerr << " vsph_view_sphere<T>::view_point(uid) -- View with ID=" << uid << "does not exist\n";
     return false;
   }
 }
@@ -93,7 +93,7 @@ void vsph_view_sphere<T>::add_uniform_views(double cap_angle, double point_angle
   double radius = coord_sys_->radius();
   vgl_point_3d<double> center = coord_sys_->origin();
 
-  vcl_vector<vgl_point_3d<double> > verts;
+  std::vector<vgl_point_3d<double> > verts;
   vgl_point_3d<double> v1(center.x(),center.y(),center.z()+radius); verts.push_back(v1);
   vgl_point_3d<double> v2(center.x(),center.y(),center.z()-radius); verts.push_back(v2);
   vgl_point_3d<double> v3(center.x()+radius,center.y(),center.z()); verts.push_back(v3);
@@ -102,30 +102,30 @@ void vsph_view_sphere<T>::add_uniform_views(double cap_angle, double point_angle
   vgl_point_3d<double> v6(center.x(),center.y()-radius,center.z()); verts.push_back(v6);
 
   // vector of triangles (vector of 3 points, only indices of the vertices kept)
-  vcl_vector<vcl_vector<int> > triangles;
+  std::vector<std::vector<int> > triangles;
 
-  vcl_vector<int> tri1;
+  std::vector<int> tri1;
   tri1.push_back(0); tri1.push_back(2); tri1.push_back(4); triangles.push_back(tri1);
 
-  vcl_vector<int> tri2;
+  std::vector<int> tri2;
   tri2.push_back(0); tri2.push_back(4); tri2.push_back(3); triangles.push_back(tri2);
 
-  vcl_vector<int> tri3;
+  std::vector<int> tri3;
   tri3.push_back(0); tri3.push_back(3); tri3.push_back(5); triangles.push_back(tri3);
 
-  vcl_vector<int> tri4;
+  std::vector<int> tri4;
   tri4.push_back(0); tri4.push_back(5); tri4.push_back(2); triangles.push_back(tri4);
 
-  vcl_vector<int> tri5;
+  std::vector<int> tri5;
   tri5.push_back(1); tri5.push_back(2); tri5.push_back(4); triangles.push_back(tri5);
 
-  vcl_vector<int> tri6;
+  std::vector<int> tri6;
   tri6.push_back(1); tri6.push_back(3); tri6.push_back(4); triangles.push_back(tri6);
 
-  vcl_vector<int> tri7;
+  std::vector<int> tri7;
   tri7.push_back(1); tri7.push_back(5); tri7.push_back(3); triangles.push_back(tri7);
 
-  vcl_vector<int> tri8;
+  std::vector<int> tri8;
   tri8.push_back(1); tri8.push_back(2); tri8.push_back(5); triangles.push_back(tri8);
 
   // iteratively refine the triangles
@@ -136,10 +136,10 @@ void vsph_view_sphere<T>::add_uniform_views(double cap_angle, double point_angle
 
   bool done=false;
   while (!done) {
-    vcl_vector<vcl_vector<int> >  new_triangles;
+    std::vector<std::vector<int> >  new_triangles;
     int ntri=triangles.size();
     for (int i=0; i<ntri; i++) {
-      vcl_vector<int> points;
+      std::vector<int> points;
       for (int j=0; j<3; j++) {
         // find the mid points of edges
         int next=j+1; if (next == 3) next=0;
@@ -174,10 +174,10 @@ void vsph_view_sphere<T>::add_uniform_views(double cap_angle, double point_angle
            -------------------
       *******************************/
       done=true;
-      vcl_vector<int> list(3); list[0]=points[0]; list[1]=points[5]; list[2]=points[1];
+      std::vector<int> list(3); list[0]=points[0]; list[1]=points[5]; list[2]=points[1];
       new_triangles.push_back(list);
       // check for point_angles
-      vcl_vector<vgl_point_3d<double> > triangle;
+      std::vector<vgl_point_3d<double> > triangle;
       triangle.push_back(verts[list[0]]); triangle.push_back(verts[list[1]]); triangle.push_back(verts[list[2]]);
       if (!min_angle(triangle, point_angle)) done=false;
 
@@ -247,7 +247,7 @@ bool vsph_view_sphere<T>::remove_view(unsigned id)
 template <class T>
 T vsph_view_sphere<T>::find_closest(unsigned id, int& uid, double& dist)
 {
-  typename vcl_map<unsigned, T>::iterator it = views_.find(id);
+  typename std::map<unsigned, T>::iterator it = views_.find(id);
   if (it != views_.end()) {
     vsph_sph_point_3d vp = it->second.view_point();
     vgl_point_3d<double> p = coord_sys_->cart_coord(vp);
@@ -279,7 +279,7 @@ T vsph_view_sphere<T>::find_closest(unsigned id, int& uid, double& dist)
 template <class T>
 T vsph_view_sphere<T>::find_closest(vgl_point_3d<double> p, int &uid, double& dist)
 {
-  typename vcl_map<unsigned, T>::iterator it = views_.begin();
+  typename std::map<unsigned, T>::iterator it = views_.begin();
   double min_dist=1e20;
   uid=-1;
 
@@ -301,16 +301,16 @@ T vsph_view_sphere<T>::find_closest(vgl_point_3d<double> p, int &uid, double& di
 }
 
 template <class T>
-void vsph_view_sphere<T>::print(vcl_ostream& os) const
+void vsph_view_sphere<T>::print(std::ostream& os) const
 {
-  os << "vsph_view_sphere: " << size() << vcl_endl;
+  os << "vsph_view_sphere: " << size() << std::endl;
   const_iterator it = views_.begin();
 
   while (it != views_.end()) {
-    os << '(' << it->first << ") " << it->second << vcl_endl;
+    os << '(' << it->first << ") " << it->second << std::endl;
     it++;
   }
-  os << vcl_endl;
+  os << std::endl;
 }
 
 template <class T>
@@ -320,7 +320,7 @@ print_relative_cams(vpgl_camera_double_sptr const& target_cam,
 {
   vpgl_perspective_camera<double>* pcam=
     dynamic_cast<vpgl_perspective_camera<double>*>(target_cam.as_pointer());
-  typename vcl_map<unsigned, T>::iterator it = views_.begin();
+  typename std::map<unsigned, T>::iterator it = views_.begin();
   vgl_point_3d<double> t = pcam->camera_center();
   while (it != views_.end()) {
     vgl_rotation_3d<double> rel_rot;
@@ -333,23 +333,23 @@ print_relative_cams(vpgl_camera_double_sptr const& target_cam,
       (it->second).relative_transf(target_cam, rel_rot, rel_trans);
       vnl_vector_fixed<double, 3> rod = rel_rot.as_rodrigues();
       const double deg_per_rad = vnl_math::deg_per_rad;
-      vcl_cout <<"***************************************\n"
+      std::cout <<"***************************************\n"
                << "Viewpoint " << vp_id << '\n'
                << vp.theta_*deg_per_rad << ' ' << vp.phi_*deg_per_rad<< '\n'
                << "Rel Rot[ " << rod.magnitude() <<" ]= " << rod << '\n'
                << "Rel trans[ "<< rel_trans.length()<<" ]= "<< rel_trans << '\n'
-               <<"***************************************" << vcl_endl;
+               <<"***************************************" << std::endl;
     }
     it++;
   }
 }
 
 template <class T>
-void vsph_view_sphere<T>::find_neighbors(unsigned id, vcl_vector<T >& neighbors)
+void vsph_view_sphere<T>::find_neighbors(unsigned id, std::vector<T >& neighbors)
 {
-  typename vcl_map<unsigned, T>::iterator it = views_.find(id);
+  typename std::map<unsigned, T>::iterator it = views_.find(id);
   int closest_uid=-1;
-  vcl_map<unsigned,double> distances;
+  std::map<unsigned,double> distances;
   double min_dist=1e20;
 
   if (it != views_.end()) {
@@ -374,7 +374,7 @@ void vsph_view_sphere<T>::find_neighbors(unsigned id, vcl_vector<T >& neighbors)
   }
   if (closest_uid > -1) {
     // examine the list of distances collected, add the ones close enough to the resulting vector
-    vcl_map<unsigned,double>::iterator it = distances.begin();
+    std::map<unsigned,double>::iterator it = distances.begin();
     double threshold=min_dist/3.0;
     while (it != distances.end()) {
       double diff = it->second - min_dist; // this should be positive
@@ -401,7 +401,7 @@ vsph_view_sphere<T>& vsph_view_sphere<T>::operator=(vsph_view_sphere<T> const& r
 }
 
 template <class T>
-bool vsph_view_sphere<T>::min_angle(vcl_vector<vgl_point_3d<double> > list, double point_angle)
+bool vsph_view_sphere<T>::min_angle(std::vector<vgl_point_3d<double> > list, double point_angle)
 {
   if (list.size() < 2)
     return false;
@@ -441,9 +441,9 @@ void vsph_view_sphere<T>::b_read(vsl_b_istream& is)
       break;
     }
    default:
-    vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, vsph_view_sphere<T>&)\n"
+    std::cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, vsph_view_sphere<T>&)\n"
              << "           Unknown version number "<< version << '\n';
-    is.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
+    is.is().clear(std::ios::badbit); // Set an unrecoverable IO error on stream
     break;
   }
 }
@@ -454,7 +454,7 @@ void vsph_view_sphere<T>::b_write(vsl_b_ostream& os) const
   vsl_b_write(os, version());
   coord_sys_->b_write(os);
 
-  typename vcl_map<unsigned, T>::const_iterator it = views_.begin();
+  typename std::map<unsigned, T>::const_iterator it = views_.begin();
 
   // write each view point
   vsl_b_write(os, size());
@@ -481,7 +481,7 @@ void vsl_b_write(vsl_b_ostream& os, vsph_view_sphere<T> const& vs)
 }
 
 template <class T>
-vcl_ostream& operator<<(vcl_ostream& os, vsph_view_sphere<T> const& vs)
+std::ostream& operator<<(std::ostream& os, vsph_view_sphere<T> const& vs)
 {
   vs.print(os);
   return os;
@@ -491,6 +491,6 @@ vcl_ostream& operator<<(vcl_ostream& os, vsph_view_sphere<T> const& vs)
 template class vsph_view_sphere<T >; \
 template void vsl_b_read(vsl_b_istream&, vsph_view_sphere<T >&); \
 template void vsl_b_write(vsl_b_ostream&, vsph_view_sphere<T > const&); \
-template vcl_ostream& operator<<(vcl_ostream&, vsph_view_sphere<T > const&)
+template std::ostream& operator<<(std::ostream&, vsph_view_sphere<T > const&)
 
 #endif  //vsph_view_sphere_hxx_

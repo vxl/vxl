@@ -8,7 +8,9 @@
 #include <vdgl/vdgl_edgel.h>
 #include <vdgl/vdgl_edgel_chain.h>
 #include <vdgl/vdgl_edgel_chain_sptr.h>
-#include <vcl_cmath.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <cmath>
 
 //-----------------------------------------------------------------------------
 void bdgl_curve_region::init(vdgl_edgel_chain_sptr curve)
@@ -33,12 +35,12 @@ void bdgl_curve_region::init(vdgl_edgel_chain_sptr curve)
   radius_ = 0.0;
   for (int i = 0; i<N; i++) {
     ed = curve->edgel(i);
-    dist = vcl_sqrt( (center_.x()-ed.get_x())*(center_.x()-ed.get_x())
+    dist = std::sqrt( (center_.x()-ed.get_x())*(center_.x()-ed.get_x())
       + (center_.y()-ed.get_y())*(center_.y()-ed.get_y()) );
     if (dist > radius_) radius_ = dist;
   }
 
-  //vcl_cout<<" region: ["<<floor(center_.x())<<','<<floor(center_.y())<<"] "<<radius_<<'\n';
+  //std::cout<<" region: ["<<floor(center_.x())<<','<<floor(center_.y())<<"] "<<radius_<<'\n';
 
   return;
 }

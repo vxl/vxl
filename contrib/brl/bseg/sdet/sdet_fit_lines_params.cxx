@@ -5,8 +5,10 @@
 // See sdet_fit_lines_params.h
 //
 //-----------------------------------------------------------------------------
-#include <vcl_sstream.h>
-#include <vcl_iostream.h>
+#include <sstream>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iostream>
 
 //------------------------------------------------------------------------
 // Constructors
@@ -41,8 +43,8 @@ bool sdet_fit_lines_params::SanityCheck()
 {
   //  Note that msg << ends seems to restart the string and erase the
   //  previous string. We should only use it as the last call, use
-  //  vcl_endl otherwise.
-  vcl_stringstream msg;
+  //  std::endl otherwise.
+  std::stringstream msg;
   bool valid = true;
 
   if (min_fit_length_<3)
@@ -55,17 +57,17 @@ bool sdet_fit_lines_params::SanityCheck()
     msg << "ERROR: a line fit should be better than one pixel rms\n";
     valid = false;
   }
-  msg << vcl_ends;
+  msg << std::ends;
 
   SetErrorMsg(msg.str().c_str());
   return valid;
 }
 
-vcl_ostream& operator << (vcl_ostream& os, const sdet_fit_lines_params& flp)
+std::ostream& operator << (std::ostream& os, const sdet_fit_lines_params& flp)
 {
   return
   os << "sdet_fit_lines_params:\n[---\n"
-     << "min fit length " << flp.min_fit_length_ << vcl_endl
-     << "rms distance tolerance" << flp.rms_distance_ << vcl_endl
+     << "min fit length " << flp.min_fit_length_ << std::endl
+     << "rms distance tolerance" << flp.rms_distance_ << std::endl
      << "---]\n";
 }

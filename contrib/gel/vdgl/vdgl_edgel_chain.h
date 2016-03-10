@@ -16,8 +16,10 @@
 //   10-Sep-2004 Peter Vanroose Added copy ctor with explicit vbl_ref_count init
 // \endverbatim
 
-#include <vcl_iosfwd.h>
-#include <vcl_vector.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iosfwd>
+#include <vector>
 #include <vul/vul_timestamp.h>
 #include <vbl/vbl_ref_count.h>
 #include <vsl/vsl_binary_io.h>
@@ -32,7 +34,7 @@ class vdgl_edgel_chain : public vul_timestamp,
 
   // Constructors/Destructors--------------------------------------------------
   vdgl_edgel_chain() {}
-  vdgl_edgel_chain(vcl_vector<vdgl_edgel> const& edgels) : es_( edgels) {}
+  vdgl_edgel_chain(std::vector<vdgl_edgel> const& edgels) : es_( edgels) {}
 
   //: make a straight edgel chain from p0 to p1.
   //  Useful for boundary filling and debugging
@@ -45,7 +47,7 @@ class vdgl_edgel_chain : public vul_timestamp,
   // Operators----------------------------------------------------------------
 
   bool add_edgel( const vdgl_edgel &e);
-  bool add_edgels( const vcl_vector<vdgl_edgel> &es, const int index);
+  bool add_edgels( const std::vector<vdgl_edgel> &es, const int index);
   bool set_edgel( const int index, const vdgl_edgel &e);
   //: return a new edgel_chain, containing the edgels numbered start up to end.
   vdgl_edgel_chain_sptr extract_subchain(int start, int end);
@@ -53,7 +55,7 @@ class vdgl_edgel_chain : public vul_timestamp,
   bool split( double x, double y,
               vdgl_edgel_chain_sptr &ec1, vdgl_edgel_chain_sptr &ec2);
 
-  friend vcl_ostream& operator<<(vcl_ostream& s, const vdgl_edgel_chain& p);
+  friend std::ostream& operator<<(std::ostream& s, const vdgl_edgel_chain& p);
   friend bool operator==( const vdgl_edgel_chain &ec1, const vdgl_edgel_chain &ec2);
   friend bool operator!=( const vdgl_edgel_chain &ec1, const vdgl_edgel_chain &ec2);
   // Data Access---------------------------------------------------------------
@@ -79,13 +81,13 @@ class vdgl_edgel_chain : public vul_timestamp,
   short version() const;
 
   //: Print an ascii summary to the stream
-  void print_summary(vcl_ostream &os) const;
+  void print_summary(std::ostream &os) const;
 
   //: Return a platform independent string identifying the class
-  virtual vcl_string is_a() const { return vcl_string("vdgl_edgel_chain"); }
+  virtual std::string is_a() const { return std::string("vdgl_edgel_chain"); }
 
   //: Return true if the argument matches the string identifying the class or any parent class
-  virtual bool is_class(vcl_string const& cls) const { return cls==is_a(); }
+  virtual bool is_class(std::string const& cls) const { return cls==is_a(); }
 
   // INTERNALS-----------------------------------------------------------------
  protected:
@@ -98,11 +100,11 @@ class vdgl_edgel_chain : public vul_timestamp,
 
   // Data Members--------------------------------------------------------------
 
-  vcl_vector<vdgl_edgel> es_;
+  std::vector<vdgl_edgel> es_;
 };
 
 //: Stream operator
-vcl_ostream& operator<<(vcl_ostream& s, const vdgl_edgel_chain& e);
+std::ostream& operator<<(std::ostream& s, const vdgl_edgel_chain& e);
 
 //: Binary save vdgl_edgel_chain* to stream.
 void vsl_b_write(vsl_b_ostream &os, const vdgl_edgel_chain* e);
@@ -111,7 +113,7 @@ void vsl_b_write(vsl_b_ostream &os, const vdgl_edgel_chain* e);
 void vsl_b_read(vsl_b_istream &is, vdgl_edgel_chain* &e);
 
 //: Print human readable summary of vdgl_edgel_chain* to a stream.
-void vsl_print_summary(vcl_ostream &os, const vdgl_edgel_chain* e);
+void vsl_print_summary(std::ostream &os, const vdgl_edgel_chain* e);
 
 
 #endif // vdgl_edgel_chain_h

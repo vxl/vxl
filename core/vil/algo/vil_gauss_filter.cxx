@@ -5,10 +5,11 @@
 // \brief Functions to smooth an image
 // \author Ian Scott
 
-#include <vcl_cmath.h>
+#include <vcl_compiler.h>
+#include <cmath>
 #include <vcl_cassert.h>
-#include <vcl_algorithm.h>
-#include <vcl_functional.h>
+#include <algorithm>
+#include <functional>
 #include <vnl/vnl_erf.h>
 #include <vnl/vnl_double_2.h>
 #include <vnl/vnl_real_polynomial.h>
@@ -16,7 +17,7 @@
 vil_gauss_filter_5tap_params::vil_gauss_filter_5tap_params(double val_sigma)
 {
   sigma_ = val_sigma;
-  const double z = 1/(vcl_sqrt(2.0)*val_sigma);
+  const double z = 1/(std::sqrt(2.0)*val_sigma);
   filt0_ = vnl_erf(0.5 * z) - vnl_erf(-0.5 * z);
   filt1_ = vnl_erf(1.5 * z) - vnl_erf(0.5 * z);
   filt2_ = vnl_erf(2.5 * z) - vnl_erf(1.5 * z);
@@ -63,15 +64,15 @@ vil_gauss_filter_5tap_params::vil_gauss_filter_5tap_params(double val_sigma)
 // want filter.size() ~= sd*7, which will avoid significant truncation,
 // without wasting the outer taps on near-zero values.
 void vil_gauss_filter_gen_ntap(double sd, unsigned diff,
-                               vcl_vector<double> &filter)
+                               std::vector<double> &filter)
 {
-  vcl_size_t centre = filter.size()/2; // or just past centre if even length
+  std::size_t centre = filter.size()/2; // or just past centre if even length
   double sum=0.0; // area under sampled curve.
   double tap; // workspace
 
   if (diff==0)
   {
-    const double z = 1/(vcl_sqrt(2.0)*sd);
+    const double z = 1/(std::sqrt(2.0)*sd);
     if (filter.size() % 2 == 0)  // even length filter - off-centre
     {
       for (unsigned i=0 ; i<centre; ++i)
@@ -111,9 +112,9 @@ void vil_gauss_filter_gen_ntap(double sd, unsigned diff,
 
     for (int i=-(int)centre ; i+centre<filter.size(); ++i)
     {
-      tap = poly.evaluate(i+1.0+offset)*vcl_exp(eta*(i+1.0+offset)*(i+1.0+offset))
-          - poly.evaluate(i+    offset)*vcl_exp(eta*(i+    offset)*(i+    offset));
-      sum += vcl_abs(tap);
+      tap = poly.evaluate(i+1.0+offset)*std::exp(eta*(i+1.0+offset)*(i+1.0+offset))
+          - poly.evaluate(i+    offset)*std::exp(eta*(i+    offset)*(i+    offset));
+      sum += std::abs(tap);
       filter[centre+i] = tap;
     }
   }
@@ -121,6 +122,6 @@ void vil_gauss_filter_gen_ntap(double sd, unsigned diff,
   // normalise the result
   assert(sum >= 0.0);
   double norm = 1.0 / sum;
-  vcl_transform(filter.begin(), filter.end(), filter.begin(),
-                vcl_bind2nd(vcl_multiplies<double>(), norm));
+  std::transform(filter.begin(), filter.end(), filter.begin(),
+                std::bind2nd(std::multiplies<double>(), norm));
 }

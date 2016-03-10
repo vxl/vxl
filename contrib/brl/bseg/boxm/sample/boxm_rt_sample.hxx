@@ -5,7 +5,7 @@
 
 
 template <class OBS_T>
-void boxm_rt_sample<OBS_T>::print(vcl_ostream& os) const
+void boxm_rt_sample<OBS_T>::print(std::ostream& os) const
 {
   os << "(obs=" << obs_ << " pre=" << pre_ << " vis=" << vis_ << " PI=" << PI_ << " seg_len=" << seg_len_ << " Beta=" << Beta_ << ')';
 }
@@ -50,9 +50,9 @@ void vsl_b_read(vsl_b_istream & is, boxm_rt_sample<T> &sample)
     vsl_b_read(is, sample.Beta_);
     break;
    default:
-    vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, boxm_rt_sample<T>&)\n"
+    std::cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, boxm_rt_sample<T>&)\n"
              << "           Unknown version number "<< version << '\n';
-    is.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
+    is.is().clear(std::ios::badbit); // Set an unrecoverable IO error on stream
     break;
   }
 }
@@ -64,7 +64,7 @@ void vsl_b_read(vsl_b_istream & is, boxm_rt_sample<T> *&sample)
 }
 
 template <class T>
-vcl_ostream &operator << (vcl_ostream& os, const boxm_rt_sample<T>& sample)
+std::ostream &operator << (std::ostream& os, const boxm_rt_sample<T>& sample)
 {
   sample.print(os);
   return os;
@@ -76,6 +76,6 @@ template void vsl_b_write(vsl_b_ostream &, boxm_rt_sample<T > const &); \
 template void vsl_b_write(vsl_b_ostream &, boxm_rt_sample<T > const *&); \
 template void vsl_b_read(vsl_b_istream &, boxm_rt_sample<T > &); \
 template void vsl_b_read(vsl_b_istream &, boxm_rt_sample<T > *&); \
-template vcl_ostream& operator << (vcl_ostream&, const boxm_rt_sample<T >&)
+template std::ostream& operator << (std::ostream&, const boxm_rt_sample<T >&)
 
 #endif

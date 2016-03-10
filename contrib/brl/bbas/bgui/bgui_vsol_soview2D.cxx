@@ -2,7 +2,9 @@
 // \file
 #include "bgui_vsol_soview2D.h"
 
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iostream>
 #include <vnl/vnl_math.h>
 
 #include <vgui/vgui_gl.h>
@@ -31,7 +33,7 @@ bgui_vsol_soview2D::bgui_vsol_soview2D( vsol_spatial_object_2d_sptr const & pt)
 {
 }
 
-vcl_ostream& bgui_vsol_soview2D::print(vcl_ostream& s) const
+std::ostream& bgui_vsol_soview2D::print(std::ostream& s) const
 {
   this->sptr_->describe(s);
   return vgui_soview2D::print(s);
@@ -168,11 +170,11 @@ void bgui_vsol_soview2D_conic_seg::draw() const
   glBegin(GL_LINE_STRIP);
   for (double phi = start_angle_; phi<=end_angle_; phi+=one_degree)
   {
-    px = major_axis_*vcl_cos(angle_)*vcl_cos(phi)
-      - minor_axis_*vcl_sin(angle_)*vcl_sin(phi);
+    px = major_axis_*std::cos(angle_)*std::cos(phi)
+      - minor_axis_*std::sin(angle_)*std::sin(phi);
 
-    py = minor_axis_*vcl_cos(angle_)*vcl_sin(phi)
-      + major_axis_*vcl_sin(angle_)*vcl_cos(phi);
+    py = minor_axis_*std::cos(angle_)*std::sin(phi)
+      + major_axis_*std::sin(angle_)*std::cos(phi);
 
     glVertex2d(xc_+px, yc_+py);
   }

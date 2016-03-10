@@ -4,8 +4,9 @@
 #include <vil/vil_memory_chunk.h>
 #include <vil/io/vil_io_memory_chunk.h>
 #include <vil/io/vil_io_smart_ptr.h>
-#include <vcl_iostream.h>
-#include <vcl_cstring.h> // for memset()
+#include <vcl_compiler.h>
+#include <iostream>
+#include <cstring> // for memset()
 #include <vxl_config.h>
 #include <vpl/vpl.h> // vpl_unlink()
 
@@ -16,12 +17,12 @@
 template<class T>
 inline void test_memory_chunk_io_as(T value)
 {
-  vcl_cout<<"Testing IO as type "<<vil_pixel_format_of(T())<<vcl_endl;
+  std::cout<<"Testing IO as type "<<vil_pixel_format_of(T())<<std::endl;
   vil_pixel_format fmt = vil_pixel_format_of(T());
   vil_memory_chunk chunk1(35*sizeof(T),
                           vil_pixel_format_component_format(fmt));
   T* data1 = reinterpret_cast<T*>(chunk1.data());
-  vcl_memset(data1,0,35*sizeof(T)); // avoid "UMR" on subsequent vsl_b_write()
+  std::memset(data1,0,35*sizeof(T)); // avoid "UMR" on subsequent vsl_b_write()
   data1[3]= value;
   vil_memory_chunk_sptr chunk_sptr1 = new vil_memory_chunk(chunk1);
 
@@ -36,7 +37,7 @@ inline void test_memory_chunk_io_as(T value)
 
   vsl_b_ifstream bfs_in("vil_memory_chunk_test_io.bvl.tmp");
   TEST("Opened vil_memory_chunk_test_io.bvl.tmp for reading", (!bfs_in), false);
-  vsl_b_read(bfs_in, chunk2); vcl_cout<<"Read in chunk2\n";
+  vsl_b_read(bfs_in, chunk2); std::cout<<"Read in chunk2\n";
   vsl_b_read(bfs_in, chunk_sptr2);
   TEST("Finished reading file successfully", (!bfs_in), false);
   bfs_in.close();
@@ -50,14 +51,14 @@ inline void test_memory_chunk_io_as(T value)
   TEST("Type OK", chunk1.pixel_format(),chunk2.pixel_format());
   TEST_NEAR("Data",(double)(data1[3]-data2[3]),0,1e-6);
 
-  vcl_cout<<"Testing IO using smart pointer\n";
+  std::cout<<"Testing IO using smart pointer\n";
   TEST("Size OK",chunk_sptr2->size()==chunk1.size(),true);
   TEST("Type OK", chunk_sptr2->pixel_format(),chunk1.pixel_format());
 }
 
 void test_memory_chunk_io()
 {
-  vcl_cout << "*********************************\n"
+  std::cout << "*********************************\n"
            << " Testing IO for vil_memory_chunk\n"
            << "*********************************\n";
 

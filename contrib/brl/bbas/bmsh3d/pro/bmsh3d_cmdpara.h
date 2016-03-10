@@ -176,7 +176,7 @@ extern vul_arg<char const*>   bmsh3d_cmd_gen_rand_box;
 //#####################################################################
 
 //: bmsh3d_cmdproc process parameters.
-extern vcl_string             bmsh3d_app_window_title;
+extern std::string             bmsh3d_app_window_title;
 extern bool                   bmsh3d_pro_continue;
 
 #endif // bmsh3d_cmdpara_h_

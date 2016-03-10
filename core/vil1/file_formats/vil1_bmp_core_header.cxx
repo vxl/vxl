@@ -8,7 +8,8 @@
 
 #include "vil1_bmp_core_header.h"
 
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <iostream>
 
 #include <vil1/vil1_stream.h>
 #include <vil1/vil1_16bit.h>
@@ -42,12 +43,12 @@ void vil1_bmp_core_header::write(vil1_stream *s) const
   vil1_16bit_write_little_endian(s, bitsperpixel);
 }
 
-void vil1_bmp_core_header::print(vcl_ostream &s) const
+void vil1_bmp_core_header::print(std::ostream &s) const
 {
   s << "vil1_bmp_core_header:\n"
-    << "  header_size  : " << header_size  << vcl_endl
-    << "  width        : " << width        << vcl_endl
-    << "  height       : " << height       << vcl_endl
-    << "  planes       : " << planes       << vcl_endl
-    << "  bitsperpixel : " << bitsperpixel << vcl_endl << vcl_endl;
+    << "  header_size  : " << header_size  << std::endl
+    << "  width        : " << width        << std::endl
+    << "  height       : " << height       << std::endl
+    << "  planes       : " << planes       << std::endl
+    << "  bitsperpixel : " << bitsperpixel << std::endl << std::endl;
 }

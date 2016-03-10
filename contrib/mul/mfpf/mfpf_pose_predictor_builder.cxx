@@ -5,8 +5,10 @@
 // \author Tim Cootes
 
 #include <vsl/vsl_binary_loader.h>
-#include <vcl_cmath.h>
-#include <vcl_algorithm.h>
+#include <cmath>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <algorithm>
 #include <vcl_cassert.h>
 #include <vnl/algo/vnl_svd.h>
 
@@ -97,7 +99,7 @@ void mfpf_pose_predictor_builder::add_example(
     poses_(ci_,1)=dy;
 
     double max_dA_ = 0.25;  // radians
-    double max_ds = vcl_log(1.2);
+    double max_ds = std::log(1.2);
 
     switch (sampler_.pose_type())
     {
@@ -125,8 +127,8 @@ void mfpf_pose_predictor_builder::add_example(
         break;
     }
 
-    dpose=mfpf_pose(dx,dy,vcl_exp(s)*vcl_cos(A),
-                          vcl_exp(s)*vcl_sin(A));
+    dpose=mfpf_pose(dx,dy,std::exp(s)*std::cos(A),
+                          std::exp(s)*std::sin(A));
 
     mfpf_pose pose = pose0*dpose;
     sampler_.get_sample_vector(image,pose.p(),pose.u(),vec);
@@ -165,7 +167,7 @@ void mfpf_pose_predictor_builder::build(mfpf_pose_predictor& p)
   {
     // May not be enough samples to train properly, so
     // use a reduced dimensional subspace
-    unsigned rank = vcl_max(nv,unsigned(samples_.cols()/3));
+    unsigned rank = std::max(nv,unsigned(samples_.cols()/3));
     vnl_matrix<double> R1 = svd.pinverse(rank)*poses_;
     unsigned np=R1.rows();
     p=sampler_;  // Define sampling
@@ -179,9 +181,9 @@ void mfpf_pose_predictor_builder::build(mfpf_pose_predictor& p)
 // Method: is_a
 //=======================================================================
 
-vcl_string mfpf_pose_predictor_builder::is_a() const
+std::string mfpf_pose_predictor_builder::is_a() const
 {
-  return vcl_string("mfpf_pose_predictor_builder");
+  return std::string("mfpf_pose_predictor_builder");
 }
 
 //: Create a copy on the heap and return base class pointer
@@ -194,7 +196,7 @@ mfpf_pose_predictor_builder* mfpf_pose_predictor_builder::clone() const
 // Method: print
 //=======================================================================
 
-void mfpf_pose_predictor_builder::print_summary(vcl_ostream& os) const
+void mfpf_pose_predictor_builder::print_summary(std::ostream& os) const
 {
   os << "{  sampler: "<<sampler_ << '\n'
      << vsl_indent() << '}';
@@ -229,9 +231,9 @@ void mfpf_pose_predictor_builder::b_read(vsl_b_istream& bfs)
       vsl_b_read(bfs,n_per_eg_);
       break;
     default:
-      vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&)\n"
-               << "           Unknown version number "<< version << vcl_endl;
-      bfs.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
+      std::cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&)\n"
+               << "           Unknown version number "<< version << std::endl;
+      bfs.is().clear(std::ios::badbit); // Set an unrecoverable IO error on stream
       return;
   }
 }
@@ -266,7 +268,7 @@ void vsl_b_read(vsl_b_istream& bfs, mfpf_pose_predictor_builder& b)
 // Associated function: operator<<
 //=======================================================================
 
-vcl_ostream& operator<<(vcl_ostream& os,const mfpf_pose_predictor_builder& b)
+std::ostream& operator<<(std::ostream& os,const mfpf_pose_predictor_builder& b)
 {
   os << b.is_a() << ": ";
   vsl_indent_inc(os);

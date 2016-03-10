@@ -9,7 +9,7 @@
 
 static void test_edge_2d()
 {
-  vcl_cout << "testing edge 2d\n";
+  std::cout << "testing edge 2d\n";
 
   vtol_vertex_2d_sptr v1 = new vtol_vertex_2d(0.0,0.0);
   vtol_vertex_2d_sptr v2 = new vtol_vertex_2d(1.0,1.0);
@@ -18,13 +18,13 @@ static void test_edge_2d()
 
   vtol_edge_2d_sptr e1= new vtol_edge_2d(v1,v2);
   vtol_edge_2d_sptr e1a = new vtol_edge_2d(e1);
-  e1a->describe(vcl_cout,8);
+  e1a->describe(std::cout,8);
 
   TEST("vtol_edge_2d equality", *e1, *e1a);
   TEST("vtol_edge_2d::cast_to_edge()", e1->cast_to_edge()==VXL_NULLPTR, false);
 
   vtol_zero_chain_sptr zc2 = new vtol_zero_chain(v2,v3);
-  zc2->describe(vcl_cout,8);
+  zc2->describe(std::cout,8);
 
   vtol_edge_2d_sptr e2 = new vtol_edge_2d(zc2);
   TEST("vtol_edge_2d inequality", *e2==*e1, false);
@@ -42,9 +42,9 @@ static void test_edge_2d()
 
   vtol_edge_2d_sptr e4 = new vtol_edge_2d(3.0,3.0,4.0,4.0);
   vsol_spatial_object_2d_sptr so_clone = e4->clone();
-  so_clone->describe(vcl_cout,8);
+  so_clone->describe(std::cout,8);
   vtol_topology_object_sptr to_clone = so_clone->cast_to_topology_object();
-  to_clone->describe(vcl_cout,8);
+  to_clone->describe(std::cout,8);
   vtol_edge_2d_sptr e4_clone = to_clone->cast_to_edge()->cast_to_edge_2d();
 
   TEST("vtol_edge_2d::clone()", *e4, *e4_clone);

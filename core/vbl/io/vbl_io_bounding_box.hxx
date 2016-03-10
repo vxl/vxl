@@ -4,6 +4,7 @@
 //:
 // \file
 
+#include <iostream>
 #include "vbl_io_bounding_box.h"
 #include <vsl/vsl_binary_io.h>
 
@@ -48,9 +49,9 @@ void vsl_b_read(vsl_b_istream &is, vbl_bounding_box_base<T, DIM_> & p)
     break;
 
    default:
-    vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, vbl_bounding_box_base<T, DIM_>&)\n"
+    std::cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, vbl_bounding_box_base<T, DIM_>&)\n"
              << "           Unknown version number "<< v << '\n';
-    is.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
+    is.is().clear(std::ios::badbit); // Set an unrecoverable IO error on stream
     return;
   }
 }
@@ -59,7 +60,7 @@ void vsl_b_read(vsl_b_istream &is, vbl_bounding_box_base<T, DIM_> & p)
 //===========================================================================
 //: Output a human readable summary to the stream
 template<class T, class DIM_>
-void vsl_print_summary(vcl_ostream& os,const vbl_bounding_box_base<T, DIM_> & p)
+void vsl_print_summary(std::ostream& os,const vbl_bounding_box_base<T, DIM_> & p)
 {
     os << '\n';
     if (p.empty())
@@ -79,7 +80,7 @@ void vsl_print_summary(vcl_ostream& os,const vbl_bounding_box_base<T, DIM_> & p)
 }
 
 #define VBL_IO_BOUNDING_BOX_INSTANTIATE(T, DIM) \
-template void vsl_print_summary(vcl_ostream&,const vbl_bounding_box_base<T, vbl_bounding_box_DIM<DIM > >&);\
+template void vsl_print_summary(std::ostream&,const vbl_bounding_box_base<T, vbl_bounding_box_DIM<DIM > >&);\
 template void vsl_b_read(vsl_b_istream &, vbl_bounding_box_base<T, vbl_bounding_box_DIM<DIM > > &); \
 template void vsl_b_write(vsl_b_ostream &, const vbl_bounding_box_base<T, vbl_bounding_box_DIM<DIM >  > &)
 

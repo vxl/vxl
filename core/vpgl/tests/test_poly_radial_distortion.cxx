@@ -1,6 +1,7 @@
 #include <testlib/testlib_test.h>
-#include <vcl_iostream.h>
-#include <vcl_exception.h>
+#include <iostream>
+#include <vcl_compiler.h>
+#include <exception>
 
 #include <vpgl/vpgl_poly_radial_distortion.h>
 #include <vgl/vgl_point_2d.h>
@@ -9,12 +10,12 @@
 static void test_poly_radial_distortion_constructors()
 {
     bool did_construct = false;
-    vcl_try
+    try
     {
         vpgl_poly_radial_distortion<double,3> lens (vgl_point_2d<double>(100.0,100.0), VXL_NULLPTR );
         did_construct = true;
     }
-    vcl_catch( std::exception& exception )
+    catch( std::exception& exception )
     {
     }
     TEST( "Centre & Coefficients Constructor with NULL pointer", did_construct, true );
@@ -39,8 +40,8 @@ static void test_poly_radial_distortion()
 
 
   vgl_homg_point_2d<double> pt(101.0, 101.0);
-  vcl_cout << "distort point "<<rd.distort(pt) << vcl_endl;
-  vcl_cout << "undistort point "<<rd.undistort(pt) << vcl_endl;
+  std::cout << "distort point "<<rd.distort(pt) << std::endl;
+  std::cout << "undistort point "<<rd.undistort(pt) << std::endl;
 }
 
 

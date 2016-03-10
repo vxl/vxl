@@ -13,7 +13,9 @@
 // \endverbatim
 
 #include <boxm/boxm_scene.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iostream>
 
 //: A class to combine children cells and fill intermediate nodes
 template <class T_data>
@@ -30,7 +32,7 @@ class boxm_fill_internal_cells
     boxm_scene<tree_type> *scene_out = new boxm_scene<tree_type>(scene_in->lvcs(), scene_in->origin(), scene_in->block_dim(),
                                                                  scene_in->world_dim(), scene_in->max_level(), scene_in->init_level(),
                                                                  false, save_internal_nodes);
-    vcl_string block_pref = scene_in->block_prefix() + "_all_nodes";
+    std::string block_pref = scene_in->block_prefix() + "_all_nodes";
     scene_out->set_paths(scene_in->path(), block_pref);
     scene_out->set_appearance_model(scene_in->appearence_model());
 
@@ -53,7 +55,7 @@ class boxm_fill_internal_cells
       tree_type *tree_out = tree_in->clone();
       this->traverse_and_fill(tree_out);
       (*iter_out)->init_tree(tree_out);
-      vcl_cout << "writing block: " << iter_out.index() <<vcl_endl;
+      std::cout << "writing block: " << iter_out.index() <<std::endl;
       scene_out->write_active_block();
 
       iter_in++; iter_out++;

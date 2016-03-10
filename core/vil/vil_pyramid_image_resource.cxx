@@ -6,8 +6,9 @@
 //:
 // \file
 #include <vcl_cassert.h>
-#include <vcl_cstring.h>
-#include <vcl_vector.h>
+#include <cstring>
+#include <vcl_compiler.h>
+#include <vector>
 #include <vil/vil_property.h>
 #include <vil/vil_convert.h>
 #include <vil/vil_blocked_image_resource.h>
@@ -25,14 +26,14 @@ vil_pyramid_image_resource::~vil_pyramid_image_resource()
 
 bool vil_pyramid_image_resource::get_property(char const* tag, void* /*value*/) const
 {
-  return vcl_strcmp(vil_property_pyramid, tag)==0;
+  return std::strcmp(vil_property_pyramid, tag)==0;
 }
 
 
 //: return a decimated block.  The input is a 2x2 2d array of blocks.
 //  Assume all the data is valid
 static vil_image_view<float>
-decimate_block(vcl_vector<vcl_vector<vil_image_view<float> > > const& blocks)
+decimate_block(std::vector<std::vector<vil_image_view<float> > > const& blocks)
 {
   vil_image_view<float> blk = blocks[0][0];
   unsigned int sbi = blk.ni(), sbj = blk.nj();
@@ -65,7 +66,7 @@ decimate_block(vcl_vector<vcl_vector<vil_image_view<float> > > const& blocks)
 
 static
 bool convert_multi_plane_to_float(vil_image_view_base_sptr& blk,
-                                  vcl_vector<vil_image_view<float> >& fblk)
+                                  std::vector<vil_image_view<float> >& fblk)
 {
   if (!blk) return false;
   fblk.clear();
@@ -100,7 +101,7 @@ bool convert_multi_plane_to_float(vil_image_view_base_sptr& blk,
 }
 
 static
-void convert_multi_plane_from_float(vcl_vector<vil_image_view<float> >& fblk,
+void convert_multi_plane_from_float(std::vector<vil_image_view<float> >& fblk,
                                     vil_image_view<unsigned char>& blk)
 {
   unsigned int ni = fblk[0].ni(), nj = fblk[0].nj();
@@ -112,7 +113,7 @@ void convert_multi_plane_from_float(vcl_vector<vil_image_view<float> >& fblk,
 }
 
 static
-void convert_multi_plane_from_float(vcl_vector<vil_image_view<float> >& fblk,
+void convert_multi_plane_from_float(std::vector<vil_image_view<float> >& fblk,
                                     vil_image_view<unsigned short>& blk)
 {
   unsigned int ni = fblk[0].ni(), nj = fblk[0].nj();
@@ -163,11 +164,11 @@ blocked_decimate(vil_blocked_image_resource_sptr const& brsc,
   {
     case 1: //grey scale images
     {
-      vcl_vector<vcl_vector<vil_image_view<float> > > buf(2), nbrhd(2);
+      std::vector<std::vector<vil_image_view<float> > > buf(2), nbrhd(2);
       for (unsigned int k =0; k<2; ++k)
       {
-        buf[k] = vcl_vector<vil_image_view<float> >(nbi);
-        nbrhd[k] = vcl_vector<vil_image_view<float> >(2);
+        buf[k] = std::vector<vil_image_view<float> >(nbi);
+        nbrhd[k] = std::vector<vil_image_view<float> >(2);
       }
       vil_image_view<float> dec_blk;
       for (unsigned int bj=0; bj<nbj; bj+=2)
@@ -227,12 +228,12 @@ blocked_decimate(vil_blocked_image_resource_sptr const& brsc,
     case 3:
     case 4:
     {
-      vcl_vector<vcl_vector<vcl_vector<vil_image_view<float> > > > buf(2);
-      vcl_vector<vcl_vector<vil_image_view<float> > > nbrhd(2);
+      std::vector<std::vector<std::vector<vil_image_view<float> > > > buf(2);
+      std::vector<std::vector<vil_image_view<float> > > nbrhd(2);
       for (unsigned int k =0; k<2; ++k)
       {
-        buf[k] = vcl_vector<vcl_vector<vil_image_view<float> > >(nbi);
-        nbrhd[k] = vcl_vector<vil_image_view<float> >(2);
+        buf[k] = std::vector<std::vector<vil_image_view<float> > >(nbi);
+        nbrhd[k] = std::vector<vil_image_view<float> >(2);
       }
 
       // The color planes of a block are separated into
@@ -243,7 +244,7 @@ blocked_decimate(vil_blocked_image_resource_sptr const& brsc,
         for (unsigned int bi = 0; bi<nbi; ++bi)
         {
           vil_image_view_base_sptr bij = brsc->get_block(bi,bj);
-          vcl_vector<vil_image_view<float> > fbij;
+          std::vector<vil_image_view<float> > fbij;
           //convert to float
           if (!convert_multi_plane_to_float(bij, fbij)) return false;
           buf[0][bi]=fbij;
@@ -259,7 +260,7 @@ blocked_decimate(vil_blocked_image_resource_sptr const& brsc,
         }
         for (unsigned int bi=0; bi<nbi; bi+=2)
         {
-          vcl_vector<vil_image_view<float> >dec_fblk(np);
+          std::vector<vil_image_view<float> >dec_fblk(np);
           //create decimated blocks for each plane
           for (unsigned int p = 0; p<np; ++p){
             for (unsigned int r = 0; r<2; ++r)
@@ -320,14 +321,14 @@ decimate(vil_image_resource_sptr const& resc, char const* filename,
     case VIL_PIXEL_FORMAT_DOUBLE:
       break;
     default:
-      vcl_cout << "unrecognized pixel format in vil_pyramid_image_resource::decimate()\n";
+      std::cout << "unrecognized pixel format in vil_pyramid_image_resource::decimate()\n";
       return VXL_NULLPTR;
   }
   //first determine if the resource is blocked, if not create a facade
   vil_blocked_image_resource_sptr brsc = blocked_image_resource(resc);
   if (brsc&&(brsc->size_block_i()%2!=0||brsc->size_block_j()%2!=0))
   {
-    vcl_cout << "Blocked pyramid images must have even block sizes\n";
+    std::cout << "Blocked pyramid images must have even block sizes\n";
     return VXL_NULLPTR;
   }
   if (!brsc)

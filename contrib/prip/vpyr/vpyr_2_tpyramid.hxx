@@ -4,7 +4,9 @@
 
 #include "vpyr_2_tpyramid.h"
 #include <vmap/vbl_controlled_partition.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iostream>
 
 template <class TLevel>
 vpyr_2_tpyramid<TLevel>::vpyr_2_tpyramid()
@@ -73,19 +75,19 @@ void vpyr_2_tpyramid<TLevel>::clear()
 }
 
 template <class TLevel>
-void vpyr_2_tpyramid<TLevel>::read_structure(vcl_istream &)
+void vpyr_2_tpyramid<TLevel>::read_structure(std::istream &)
 {
-  vcl_cerr << "vpyr_2_tpyramid<TLevel>::read_structure NYI\n";
+  std::cerr << "vpyr_2_tpyramid<TLevel>::read_structure NYI\n";
 }
 
 template <class TLevel>
-void vpyr_2_tpyramid<TLevel>::write_structure(vcl_ostream &) const
+void vpyr_2_tpyramid<TLevel>::write_structure(std::ostream &) const
 {
-  vcl_cerr << "vpyr_2_tpyramid<TLevel>::write_structure NYI\n";
+  std::cerr << "vpyr_2_tpyramid<TLevel>::write_structure NYI\n";
 }
 
 template <class TLevel>
-void vpyr_2_tpyramid<TLevel>::down_projection_vertices(vmap_level_index arg_level,vcl_vector<vmap_vertex_index> & res) const
+void vpyr_2_tpyramid<TLevel>::down_projection_vertices(vmap_level_index arg_level,std::vector<vmap_vertex_index> & res) const
 {
   vbl_controlled_partition h ;
   vmap_vertex_index v ;
@@ -125,7 +127,7 @@ void vpyr_2_tpyramid<TLevel>::down_projection_vertices(vmap_level_index arg_leve
 }
 
 template <class TLevel>
-void vpyr_2_tpyramid<TLevel>::down_projection_faces(vmap_level_index arg_level,vcl_vector<vmap_face_index> & res) const
+void vpyr_2_tpyramid<TLevel>::down_projection_faces(vmap_level_index arg_level,std::vector<vmap_face_index> & res) const
 {
   vbl_controlled_partition h ;
   vmap_face_index v ;

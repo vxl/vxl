@@ -6,8 +6,10 @@
 // \author Martin Roberts
 
 #include <mmn/mmn_arc.h>
-#include <vcl_istream.h>
-#include <vcl_vector.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <istream>
+#include <vector>
 
 // Expects "{ arc: { name1 name2 } arc: { name3 name 4 } }"
 //Format
@@ -24,9 +26,9 @@
  //Assumes names in node_names are in order of associated node numbers in
  //graph defined by these arcs
  //
-void  mmn_parse_arcs(vcl_istream& is,
-                     const vcl_vector<vcl_string>& node_names,
-                     vcl_vector<mmn_arc>& arcs);
+void  mmn_parse_arcs(std::istream& is,
+                     const std::vector<std::string>& node_names,
+                     std::vector<mmn_arc>& arcs);
 
 #endif // mmn_parse_arcs_h_
 

@@ -7,12 +7,14 @@
 // \author J.L. Mundy
 // \date   3 November 2015
 //
-#include <vcl_iostream.h>
-#include <vcl_fstream.h>
+#include <iostream>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <fstream>
 #include <vcl_cassert.h>
-#include <vcl_vector.h>
-#include <vcl_string.h>
-#include <vcl_map.h>
+#include <vector>
+#include <string>
+#include <map>
 #include <vgl/vgl_vector_3d.h>
 #include <vgl/vgl_cubic_spline_3d.h>
 #include <vgl/vgl_pointset_3d.h>
@@ -21,16 +23,16 @@
 class bvgl_gen_cylinder{
  public:
  bvgl_gen_cylinder(): cross_section_interval_(0.5){}
-  bvgl_gen_cylinder(vgl_cubic_spline_3d<double> const& axis, vcl_vector<bvgl_cross_section> const& cross_sects, double cross_section_interval=0.5);
+  bvgl_gen_cylinder(vgl_cubic_spline_3d<double> const& axis, std::vector<bvgl_cross_section> const& cross_sects, double cross_section_interval=0.5);
 
   //:read the generalized cylinder axis
- void read_axis_spline(vcl_ifstream& istr){
+ void read_axis_spline(std::ifstream& istr){
    istr >> axis_;
  }
  //: construct cross sections (planes are defined at each knot perpendicular to the axis curve)
  // input is a pointset for the entire generalized cylinder. max_distance is how far a point
  // can be from the axis and be included in cross section pointset.
- void load_cross_section_pointsets(vcl_ifstream& istr);
+ void load_cross_section_pointsets(std::ifstream& istr);
 
  //: accessors
  const vgl_cubic_spline_3d<double>& axis() const {return axis_;}
@@ -45,7 +47,7 @@ class bvgl_gen_cylinder{
  }
  //: geometric queries
  //: which cross_sections contain the point (can be more than one)
- vcl_vector<unsigned> cross_section_contains(vgl_point_3d<double> const& p) const;
+ std::vector<unsigned> cross_section_contains(vgl_point_3d<double> const& p) const;
 
  //: the point contained in a cross_section closest to p
  bool closest_point(vgl_point_3d<double> const& p, vgl_point_3d<double>& pc, double dist_thresh) const;
@@ -58,16 +60,16 @@ class bvgl_gen_cylinder{
 
  //: displays for debugging purposes
  // may be specialized to segment the cylinder into regions
- virtual void display_axis_spline(vcl_ofstream& ostr) const;
+ virtual void display_axis_spline(std::ofstream& ostr) const;
 
- void display_cross_section_planes(vcl_ofstream& ostr) const;
- void display_cross_section_pointsets(vcl_ofstream& ostr) const;
- void display_surface_disks(vcl_ofstream& ostr) const;
+ void display_cross_section_planes(std::ofstream& ostr) const;
+ void display_cross_section_pointsets(std::ofstream& ostr) const;
+ void display_surface_disks(std::ofstream& ostr) const;
 
  protected:
  double cross_section_interval_;
   vgl_cubic_spline_3d<double> axis_;
-  vcl_vector<bvgl_cross_section> cross_sections_;
+  std::vector<bvgl_cross_section> cross_sections_;
   vgl_box_3d<double> bbox_;
 };
 #endif// bvgl_gen_cylinder

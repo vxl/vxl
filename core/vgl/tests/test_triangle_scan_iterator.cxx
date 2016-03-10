@@ -1,13 +1,14 @@
 #include <testlib/testlib_test.h>
 
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <iostream>
 
 #include <vgl/vgl_triangle_scan_iterator.h>
 #include <vgl/vgl_polygon_scan_iterator.h>
 
 static void test_triangle_scan_iterator()
 {
-  vcl_cout << "Test triangle scan iterator\n";
+  std::cout << "Test triangle scan iterator\n";
 
   {
     float x[3] = { 10.23f, 20.12f, 30.73f };

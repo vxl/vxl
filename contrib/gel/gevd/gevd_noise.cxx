@@ -3,7 +3,9 @@
 //:
 // \file
 
-#include <vcl_cmath.h> // for vcl_fabs()
+#include <vcl_compiler.h>
+#include <iostream>
+#include <cmath> // for std::fabs()
 
 #include "gevd_pixel.h"
 #include "gevd_float_operators.h"
@@ -24,7 +26,7 @@ gevd_noise::gevd_noise(const float* data, const int n, // data in typical region
   range /= n;                   // sensor < texture < mean
   binsize = range/(nbin-1);     // first guess value
 #ifdef DEBUG
-  vcl_cout << "Find mean of h(x) at: " << range << vcl_endl;
+  std::cout << "Find mean of h(x) at: " << range << std::endl;
 #endif
 
   // 2. Search for visible peak in histogram
@@ -44,8 +46,8 @@ gevd_noise::gevd_noise(const float* data, const int n, // data in typical region
         peaki = i;
       }
 #ifdef DEBUG
-    vcl_cout << "Find peak of h(x) at: " << peaki*binsize
-             << "  " << peakh << vcl_endl;
+    std::cout << "Find peak of h(x) at: " << peaki*binsize
+             << "  " << peakh << std::endl;
 #endif
     if (peaki < 10) {           // narrow range a whole lot
       range /= 10.0f, binsize /= 10.0f;
@@ -69,8 +71,8 @@ gevd_noise::gevd_noise(const float* data, const int n, // data in typical region
   gevd_float_operators::RunningSum(hist, hist, nbin, KRADIUS); // smooth by default
 #ifdef DEBUG
   for (int i = 0; i < nbin; i++)    // points of smoothed h(x)
-    vcl_cout << hist[i] << ' ';
-  vcl_cout << vcl_endl << vcl_endl;
+    std::cout << hist[i] << ' ';
+  std::cout << std::endl << std::endl;
 #endif
 }
 
@@ -99,10 +101,10 @@ gevd_noise::EdgelsInCenteredROI(const gevd_bufferxy& magnitude,
 #ifdef MINROI
   int area = magnitude.GetSizeX() * magnitude.GetSizeY();
   if (area < roiArea) {
-    vcl_cerr << "Image is smaller than minimum ROI\n";
+    std::cerr << "Image is smaller than minimum ROI\n";
     return NULL;
   }
-  float k = vcl_sqrt(float(roiArea) / area); // reduction factor
+  float k = std::sqrt(float(roiArea) / area); // reduction factor
 #else
   float k = 1.0;
 #endif
@@ -185,20 +187,20 @@ gevd_noise::EstimateSensorTexture(float& sensor, float& texture) const
          gevd_float_operators::RunningSum(dhist, dhist, nbin, KRADIUS);
 #ifdef DEBUG
   for (int i = 0; i < nbin; i++)        // points of smoothed dh(x)
-    vcl_cout << dhist[i]/mag << ' ';
-  vcl_cout << vcl_endl << vcl_endl;
+    std::cout << dhist[i]/mag << ' ';
+  std::cout << std::endl << std::endl;
 #endif
 
   // 2. Estimate sensor from first downward slope of dh(x)
   if (!WouldBeZeroCrossing(dhist, nbin, sensor)) {
-    vcl_cerr << "Can not estimate sensor\n";
+    std::cerr << "Can not estimate sensor\n";
     return false;
   }
   sensor *= binsize;
 
   // 3. Find texture as zero-crossing of dh(x)
   if (!RealZeroCrossing(dhist, nbin, texture)) {
-    vcl_cerr << "Can not estimate texture\n";
+    std::cerr << "Can not estimate texture\n";
     return false;
   }
   texture *= binsize;
@@ -230,7 +232,7 @@ gevd_noise::WouldBeZeroCrossing(const float* dhist, const int nbin,
   if (imax == INVALID)          // can not find maximum in dh(x)
     return false;
 #ifdef DEBUG
-  vcl_cout << "Find max of dh(x) at: " << imax << vcl_endl;
+  std::cout << "Find max of dh(x) at: " << imax << std::endl;
 #endif
   for (int i = imax; i < nbin; i++) // going forward to min
     if (dhist[i] < 0.5*maxdh) {
@@ -241,7 +243,7 @@ gevd_noise::WouldBeZeroCrossing(const float* dhist, const int nbin,
   if (i2 == INVALID)            // range of histogram is too small
     return false;
 #ifdef DEBUG
-  vcl_cout << "Find end of downward dh(x) at: " << i2 << ", " << dh2 << vcl_endl;
+  std::cout << "Find end of downward dh(x) at: " << i2 << ", " << dh2 << std::endl;
 #endif
   for (int i = i2; i > 0; i--)              // going backward to max
     if (dhist[i] > 0.9*maxdh) {
@@ -252,14 +254,14 @@ gevd_noise::WouldBeZeroCrossing(const float* dhist, const int nbin,
   if (i1 == INVALID)            // can not first pt of downward slope
     return false;
 #ifdef DEBUG
-  vcl_cout << "Find start of downward dh(x) at: " << i1 << ", " << dh1 << vcl_endl;
+  std::cout << "Find start of downward dh(x) at: " << i1 << ", " << dh1 << std::endl;
 #endif
   if (i1 >= i2 || dh1 <= dh2)   // downward slope is too short
     index = 0;
   else                          // from fitting the downward slope, find
     index = i2 + (i2-i1)*dh2/(dh1-dh2); // would-be zc
 #ifdef DEBUG
-  vcl_cout << "Find would be zero-crossing dh(x) at: " << index << vcl_endl;
+  std::cout << "Find would be zero-crossing dh(x) at: " << index << std::endl;
 #endif
   return true;
 }
@@ -283,7 +285,7 @@ gevd_noise::RealZeroCrossing(const float* dhist, const int nbin,
   if (imin == INVALID)          // can not find minimum in dh(x)
     return false;
 #ifdef DEBUG
-  vcl_cout << "Find min of dh(x) at: " << imin << vcl_endl;
+  std::cout << "Find min of dh(x) at: " << imin << std::endl;
 #endif
   for (int i = imin; i > 0; i--) // going backward from minimum
     if (dhist[i] >= 0) {
@@ -296,11 +298,11 @@ gevd_noise::RealZeroCrossing(const float* dhist, const int nbin,
   index = (float)i3;
   if (dh3 > 0) {                // interpolate zero-crossing
     int i4 = i3+1;
-    float dh4 = (float)vcl_fabs(dhist[i4]);
+    float dh4 = (float)std::fabs(dhist[i4]);
     index = (i3*dh4 + i4*dh3) / (dh3 + dh4);
   }
 #ifdef DEBUG
-  vcl_cout << "Find real zero-crossing dh(x) at: " << index << vcl_endl;
+  std::cout << "Find real zero-crossing dh(x) at: " << index << std::endl;
 #endif
   return true;
 }

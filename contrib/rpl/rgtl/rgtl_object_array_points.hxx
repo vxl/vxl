@@ -17,7 +17,9 @@
 #include "rgtl_serialize_stl_vector.hxx"
 
 #include <vnl/vnl_vector_fixed.h>
-#include <vcl_vector.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <vector>
 
 //----------------------------------------------------------------------------
 template <unsigned int D>
@@ -31,7 +33,7 @@ public:
   rgtl_object_array_points(int n = 0);
 
   //: Construct to hold the points given.
-  rgtl_object_array_points(vcl_vector<point_type> const& points);
+  rgtl_object_array_points(std::vector<point_type> const& points);
 
   //: Set the number of points stored.
   void set_number_of_points(int n);
@@ -77,7 +79,7 @@ public:
   //: Compute an axis-aligned bounding box around the objects.
   virtual void compute_bounds(double bounds[D][2]) const;
 private:
-  vcl_vector<point_type> points_;
+  std::vector<point_type> points_;
 
   friend class rgtl_serialize_access;
   template <class Serializer>

@@ -3,7 +3,9 @@
 //:
 // \file
 
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iostream>
 #include <vsol/vsol_box_3d.h>
 #include <vsl/vsl_binary_loader.h>
 
@@ -165,9 +167,9 @@ vsol_spatial_object_3d::b_read(vsl_b_istream &is)
     break;
 
    default:
-    vcl_cerr << "I/O ERROR: vsol_spatial_object_3d::b_read(vsl_b_istream&)\n"
+    std::cerr << "I/O ERROR: vsol_spatial_object_3d::b_read(vsl_b_istream&)\n"
              << "           Unknown version number "<< ver << '\n';
-    is.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
+    is.is().clear(std::ios::badbit); // Set an unrecoverable IO error on stream
     return;
   }
 }

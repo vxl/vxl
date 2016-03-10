@@ -3,7 +3,8 @@
 // \brief Example of using rgb views and automatic conversion.
 // \author Ian Scott
 
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <iostream>
 #include <vxl_config.h> // for vxl_byte
 #include <vil/vil_load.h>
 #include <vil/vil_image_view.h>
@@ -13,11 +14,11 @@ int main(int argc, char** argv)
 {
   if (argc < 3)
   {
-    vcl_cerr << "Usage: vil_file_example4 rgb_file grey_file\n";
+    std::cerr << "Usage: vil_file_example4 rgb_file grey_file\n";
     return 3;
   }
 
-  vcl_cout<<"Load " << argv[1] << " into an image data object\n";
+  std::cout<<"Load " << argv[1] << " into an image data object\n";
 
 
   // This is how we quickly load an rgb image view.
@@ -26,21 +27,21 @@ int main(int argc, char** argv)
 
   if (!b_im)
   {
-    vcl_cerr << "Couldn't load " << argv[1] <<vcl_endl;
+    std::cerr << "Couldn't load " << argv[1] <<std::endl;
     return 3;
   }
 
-  vil_print_all(vcl_cout, b_im);
+  vil_print_all(std::cout, b_im);
 
   // Note that if we try assign an image to a non compatible view type,
   // then the view will be set to empty.
 
-  vcl_cout<<"\n\n\nTry to load greyscale file " << argv[2] << " into an rgb image object.\nIt should fail.\n";
+  std::cout<<"\n\n\nTry to load greyscale file " << argv[2] << " into an rgb image object.\nIt should fail.\n";
 
   b_im = vil_load(argv[2]);
 
 
-  vil_print_all(vcl_cout, b_im);
+  vil_print_all(std::cout, b_im);
 
   return 0;
 }

@@ -16,14 +16,14 @@ bool bvxm_get_grid_process_cons(bprb_func_process& pro)
   //input[1]: the grid type
   //input[2]: bin index
   //input[3]: scale
-  vcl_vector<vcl_string> input_types_(n_inputs_);
+  std::vector<std::string> input_types_(n_inputs_);
   input_types_[0] = "bvxm_voxel_world_sptr";
   input_types_[1] = "vcl_string";
   input_types_[2] = "unsigned";
   input_types_[3] = "unsigned";
 
   //output[0]: The grid
-  vcl_vector<vcl_string> output_types_(1);
+  std::vector<std::string> output_types_(1);
   output_types_[0]="bvxm_voxel_grid_base_sptr";
   if (!pro.set_input_types(input_types_))
     return false;
@@ -39,21 +39,21 @@ bool bvxm_get_grid_process(bprb_func_process& pro)
   //input[0]: The voxel world
   if (pro.n_inputs()<n_inputs_)
   {
-    vcl_cout << pro.name() <<" : The input number should be "<< n_inputs_ << vcl_endl;
+    std::cout << pro.name() <<" : The input number should be "<< n_inputs_ << std::endl;
     return false;
   }
 
   //get the inputs:
   unsigned i=0;
   bvxm_voxel_world_sptr world = pro.get_input<bvxm_voxel_world_sptr>(i++);
-  vcl_string voxeltype =  pro.get_input<vcl_string>(i++);
+  std::string voxeltype =  pro.get_input<std::string>(i++);
   unsigned index =  pro.get_input<unsigned>(i++);
   unsigned scale =  pro.get_input<unsigned>(i++);
 
   //check inputs validity
   i = 0;
   if (!world){
-    vcl_cout << pro.name() <<" :--  Input " << i++ << " is not valid!\n";
+    std::cout << pro.name() <<" :--  Input " << i++ << " is not valid!\n";
     return false;
   }
 
@@ -71,7 +71,7 @@ bool bvxm_get_grid_process(bprb_func_process& pro)
     bvxm_voxel_grid_base_sptr grid = world->get_grid<APM_MOG_GREY>(index, scale);
   }
   else {
-    vcl_cerr << "datatype not supported\n";
+    std::cerr << "datatype not supported\n";
     return false;
   }
 

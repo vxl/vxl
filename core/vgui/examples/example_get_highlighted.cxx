@@ -5,7 +5,8 @@
 // When this program is run, highlighting a line on the display by passing
 // the mouse pointer close to it will print a message saying its start point.
 
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <iostream>
 #include <vgui/vgui.h>
 #include <vgui/vgui_easy2D_tableau.h>
 #include <vgui/vgui_viewer2D_tableau.h>
@@ -31,7 +32,7 @@ struct my_tab : public vgui_easy2D_tableau
         {
           vgui_soview2D_lineseg* my_line = (vgui_soview2D_lineseg*)my_so;
           // cout its startpoint
-          vcl_cout << my_line->x0 << "," << my_line->y0 << vcl_endl;
+          std::cout << my_line->x0 << "," << my_line->y0 << std::endl;
           old_so = my_so;
         }
       }

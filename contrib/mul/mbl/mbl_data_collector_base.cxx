@@ -33,14 +33,14 @@ void vsl_add_to_binary_loader(const mbl_data_collector_base& b)
 
 //=======================================================================
 
-vcl_string mbl_data_collector_base::is_a() const
+std::string mbl_data_collector_base::is_a() const
 {
-  return vcl_string("mbl_data_collector_base");
+  return std::string("mbl_data_collector_base");
 }
 
 //=======================================================================
 
-bool mbl_data_collector_base::is_class(vcl_string const& s) const
+bool mbl_data_collector_base::is_class(std::string const& s) const
 {
   return s==mbl_data_collector_base::is_a();
 }
@@ -61,7 +61,7 @@ void vsl_b_read(vsl_b_istream& bfs, mbl_data_collector_base& b)
 
 //=======================================================================
 
-vcl_ostream& operator<<(vcl_ostream& os,const mbl_data_collector_base& b)
+std::ostream& operator<<(std::ostream& os,const mbl_data_collector_base& b)
 {
   os << b.is_a() << ": ";
   vsl_indent_inc(os);
@@ -72,7 +72,7 @@ vcl_ostream& operator<<(vcl_ostream& os,const mbl_data_collector_base& b)
 
 //=======================================================================
 
-vcl_ostream& operator<<(vcl_ostream& os,const mbl_data_collector_base* b)
+std::ostream& operator<<(std::ostream& os,const mbl_data_collector_base* b)
 {
   if (b)
     return os << *b;

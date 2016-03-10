@@ -12,8 +12,10 @@
 #include <brip/brip_vil_float_ops.h>
 #include <bsta/algo/bsta_gaussian_updater.h>
 
-#include <vcl_iostream.h>
-#include <vcl_vector.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iostream>
+#include <vector>
 
 static void test_brec_hierarchy_edge()
 {
@@ -29,7 +31,7 @@ static void test_brec_hierarchy_edge()
 
   float a, d;
   e->calculate_dist_angle(p0->cast_to_instance(), sample, d, a);
-  vcl_cout << "a: " << a << " d: " << d << vcl_endl;
+  std::cout << "a: " << a << " d: " << d << std::endl;
 }
 
 TESTMAIN( test_brec_hierarchy_edge );

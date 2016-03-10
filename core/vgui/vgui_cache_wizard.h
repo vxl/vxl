@@ -18,9 +18,10 @@
 //   Feb.2002 - Peter Vanroose - brief doxygen comment placed on single line
 // \endverbatim
 
-#include <vcl_vector.h>
-#include <vcl_list.h>
-#include <vcl_utility.h>
+#include <vector>
+#include <list>
+#include <vcl_compiler.h>
+#include <utility>
 
 #include <vil1/vil1_image.h>
 #include <vgui/vgui_gl.h>
@@ -30,9 +31,9 @@ class vgui_cache_wizard
 {
  public:
   //: Each image consists of MxN quadrants. M,N is to be determined on runtime
-  typedef vcl_vector <GLuint> image_cache_quadrants;
-  typedef vcl_pair<vil1_image,image_cache_quadrants *> wizard_image;
-  typedef vcl_pair<int,int> dimension;
+  typedef std::vector <GLuint> image_cache_quadrants;
+  typedef std::pair<vil1_image,image_cache_quadrants *> wizard_image;
+  typedef std::pair<int,int> dimension;
 
   //: Loads an image into the memory
   int load_image(vil1_image);
@@ -62,10 +63,10 @@ class vgui_cache_wizard
 
  private:
   //: Hold a vector of images that have been loaded
-  vcl_vector <wizard_image *> images_;
+  std::vector <wizard_image *> images_;
 
   //: Dimensions of images in quadrants units
-  vcl_vector <dimension *>  dimensions_;
+  std::vector <dimension *>  dimensions_;
 
   //:
   int quadrant_width_;
@@ -81,7 +82,7 @@ class vgui_cache_wizard
   GLuint *texture_names_;
 
   //: Cache queue
-  vcl_list <GLuint> cache_queue_;
+  std::list <GLuint> cache_queue_;
 };
 
 #endif // vgui_cache_wizard_h_

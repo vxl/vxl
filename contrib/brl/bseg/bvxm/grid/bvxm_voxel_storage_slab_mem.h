@@ -15,7 +15,9 @@
 
 #include "bvxm_voxel_storage.h"
 #include <vgl/vgl_vector_3d.h>
-#include <vcl_vector.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <vector>
 
 
 template <class T>
@@ -36,7 +38,7 @@ class bvxm_voxel_storage_slab_mem : public bvxm_voxel_storage<T>
   virtual void zero_observations(){nobservations_=0;}
 
  private:
-  vcl_vector<bvxm_memory_chunk_sptr> mem_;
+  std::vector<bvxm_memory_chunk_sptr> mem_;
   unsigned nobservations_;
   unsigned nslabs_;
 };

@@ -6,8 +6,10 @@
 // \author Gehua Yang
 // \date 16 Feb 2005
 
-#include <vcl_vector.h>
-#include <vcl_iosfwd.h>
+#include <vector>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iosfwd>
 
 #include <rgrl/rgrl_initializer.h>
 #include <rgrl/rgrl_scale_sptr.h>
@@ -21,7 +23,7 @@ class rgrl_initializer_reader
 {
  public:
   //: Initialize with a view
-  rgrl_initializer_reader( vcl_istream& istr,
+  rgrl_initializer_reader( std::istream& istr,
                            rgrl_mask_sptr             const& from_image_roi,
                            rgrl_mask_sptr             const& to_image_roi,
                            rgrl_scale_sptr            const& prior_scale=0,
@@ -57,7 +59,7 @@ class rgrl_initializer_reader
   };
 
   //: Initializations read from a stream
-  vcl_vector< init_record >           init_records_;
+  std::vector< init_record >           init_records_;
 
   //: Index pointing into initialization in init_records_ vector that will be used
   unsigned int xform_index_;

@@ -4,7 +4,8 @@
 // \file
 // \brief Ref. counted block of data on the heap
 // \author Tim Cootes
-#include <vcl_cstring.h>
+#include <vcl_compiler.h>
+#include <cstring>
 #include <vcl_cassert.h>
 
 //: Dflt ctor
@@ -14,7 +15,7 @@ vil_memory_chunk::vil_memory_chunk()
 }
 
 //: Allocate n bytes of memory
-vil_memory_chunk::vil_memory_chunk(vcl_size_t n, vil_pixel_format pixel_form)
+vil_memory_chunk::vil_memory_chunk(std::size_t n, vil_pixel_format pixel_form)
 : data_(new char[n]), size_(n), pixel_format_(pixel_form), ref_count_(0)
 {
   assert(vil_pixel_format_num_components(pixel_form)==1
@@ -31,7 +32,7 @@ vil_memory_chunk::~vil_memory_chunk()
 vil_memory_chunk::vil_memory_chunk(const vil_memory_chunk& d)
 : data_(new char[d.size()]), size_(d.size()), pixel_format_(d.pixel_format_), ref_count_(0)
 {
-  vcl_memcpy(data_,d.data_,size_);
+  std::memcpy(data_,d.data_,size_);
 }
 
 //: Assignment operator
@@ -40,7 +41,7 @@ vil_memory_chunk& vil_memory_chunk::operator=(const vil_memory_chunk& d)
   if (this==&d) return *this;
 
   set_size(d.size(),d.pixel_format());
-  vcl_memcpy(data_,d.data_,size_);
+  std::memcpy(data_,d.data_,size_);
   return *this;
 }
 

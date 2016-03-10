@@ -6,7 +6,9 @@
 #include <bapl/bapl_dense_sift_sptr.h>
 #include <bapl/bapl_lowe_keypoint_sptr.h>
 
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iostream>
 #include <vil/vil_image_view.h>
 #include <vil/vil_convert.h>
 #include <vil/vil_load.h>

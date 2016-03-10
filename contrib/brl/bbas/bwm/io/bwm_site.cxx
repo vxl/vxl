@@ -2,7 +2,9 @@
 //:
 // \file
 
-#include <vcl_utility.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <utility>
 #include <vcl_cassert.h>
 #include <vsl/vsl_basic_xml_element.h>
 #include <vsol/vsol_point_2d.h>
@@ -17,10 +19,10 @@ bwm_site::~bwm_site()
   }
 }
 
-void bwm_site::add(vcl_vector<vcl_string> images,
-                   vcl_vector<bool> is_pyr, vcl_vector<bool> is_act,
-                   vcl_vector<vcl_string> levels,
-                   vcl_vector<vcl_pair<vcl_string, vcl_string> > objects,
+void bwm_site::add(std::vector<std::string> images,
+                   std::vector<bool> is_pyr, std::vector<bool> is_act,
+                   std::vector<std::string> levels,
+                   std::vector<std::pair<std::string, std::string> > objects,
                    vsol_point_3d_sptr lvcs)
 {
   image_paths_ = images;
@@ -36,7 +38,7 @@ void bwm_site::add(vcl_vector<vcl_string> images,
   lvcs_ = lvcs;
 }
 
-void bwm_site::x_write(vcl_ostream& s)
+void bwm_site::x_write(std::ostream& s)
 {
   vsl_basic_xml_element site(SITE_TAG);
   site.add_attribute("name", name_);
@@ -137,13 +139,13 @@ void bwm_site::x_write(vcl_ostream& s)
       xml_element.x_write(s);
      }
 
-     vcl_vector<vcl_pair<vcl_string, vsol_point_2d> > c_list = corresp_[i];
+     std::vector<std::pair<std::string, vsol_point_2d> > c_list = corresp_[i];
 
      for (unsigned c=0; c<c_list.size(); c++) {
        vsl_basic_xml_element corr_elm(CORRESP_ELM_TAG);
        corr_elm.x_write_open(s);
 
-       vcl_pair<vcl_string, vsol_point_2d> pair = c_list[c];
+       std::pair<std::string, vsol_point_2d> pair = c_list[c];
        vsl_basic_xml_element corr_tab(CORR_CAMERA_TAG);
        corr_tab.append_cdata(pair.first);
        corr_tab.x_write(s);

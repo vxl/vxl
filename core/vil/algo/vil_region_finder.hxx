@@ -52,8 +52,8 @@ template <class pix_type, class predicate_type>
 void
 vil_region_finder<pix_type, predicate_type>::
 same_int_region( unsigned i, unsigned j,
-                 vcl_vector<unsigned>& ri,
-                 vcl_vector<unsigned>& rj )
+                 std::vector<unsigned>& ri,
+                 std::vector<unsigned>& rj )
 {
   // get the pixel intensity
   pix_type p = image_(i,j);
@@ -70,8 +70,8 @@ template <class pix_type, class predicate_type>
 void
 vil_region_finder<pix_type, predicate_type>::
 same_int_region( unsigned i, unsigned j, pix_type p,
-                 vcl_vector<unsigned>& ri,
-                 vcl_vector<unsigned>& rj )
+                 std::vector<unsigned>& ri,
+                 std::vector<unsigned>& rj )
 {
   // early stop if this pixel has already been processed
   if ( processed_(i,j) )

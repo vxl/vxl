@@ -26,19 +26,19 @@ vil_rgb<vxl_byte> pier_color = vil_rgb<vxl_byte>(0, 105, 101);
 
 int main(int argc,  char** argv)
 {
-  vul_arg<vcl_string> builds_file("-builds", "folder with building files", "");
-  vul_arg<vcl_string> nlcd_folder("-nlcd", "folder with nlcd images", "");
-  vul_arg<vcl_string> sme_folder("-sme", "folder with sme object files", "");
-  vul_arg<vcl_string> lidar_file("-lidar", "path to lidar image", "");
-  vul_arg<vcl_string> class_folder("-class", "folder with classification outputs of lidar images", "");
-  vul_arg<vcl_string> out_folder("-out", "prefix for names of output x y z images", "");
+  vul_arg<std::string> builds_file("-builds", "folder with building files", "");
+  vul_arg<std::string> nlcd_folder("-nlcd", "folder with nlcd images", "");
+  vul_arg<std::string> sme_folder("-sme", "folder with sme object files", "");
+  vul_arg<std::string> lidar_file("-lidar", "path to lidar image", "");
+  vul_arg<std::string> class_folder("-class", "folder with classification outputs of lidar images", "");
+  vul_arg<std::string> out_folder("-out", "prefix for names of output x y z images", "");
   vul_arg<float> pier_prob_threshold("-pier_prob", "threshold for pier probability", 0.0010f);
   vul_arg_parse(argc, argv);
 
-  vcl_cout << "argc: " << argc << vcl_endl;
+  std::cout << "argc: " << argc << std::endl;
   if (builds_file().compare("") == 0 || out_folder().compare("") == 0 || class_folder().compare("") == 0 ||
     lidar_file().compare("") == 0 || nlcd_folder().compare("") == 0) {
-    vcl_cerr << "EXE_ARGUMENT_ERROR!\n";
+    std::cerr << "EXE_ARGUMENT_ERROR!\n";
     vul_arg_display_usage_and_exit();
     return 0;
   }
@@ -52,33 +52,33 @@ int main(int argc,  char** argv)
   unsigned char dev_id3 = volm_label_table::land_id[volm_label_table::DEVELOPED_HIGH].id_;
 
   // iterate over NLCD images and find the ones that overlap
-  vcl_vector<vcl_pair<vil_image_view<vxl_byte>, vpgl_geo_camera*> > nlcd_imgs;
-  vcl_vector<volm_img_info> nlcd_img_infos;
+  std::vector<std::pair<vil_image_view<vxl_byte>, vpgl_geo_camera*> > nlcd_imgs;
+  std::vector<volm_img_info> nlcd_img_infos;
   volm_io_tools::load_nlcd_imgs(nlcd_folder(), nlcd_img_infos);
   for (unsigned i = 0; i < nlcd_img_infos.size(); i++) {
     if (vgl_intersection(lidar_img_info.bbox, nlcd_img_infos[i].bbox).area() > 0) {
 
       if (nlcd_img_infos[i].img_r->pixel_format() != VIL_PIXEL_FORMAT_BYTE) {
-        vcl_cout << "NLCD Input image pixel format is not VIL_PIXEL_FORMAT_BYTE!\n";
+        std::cout << "NLCD Input image pixel format is not VIL_PIXEL_FORMAT_BYTE!\n";
         return -1;
       }
       vil_image_view<vxl_byte> img(nlcd_img_infos[i].img_r);
 
-      vcl_pair<vil_image_view<vxl_byte>, vpgl_geo_camera*> pair(img, nlcd_img_infos[i].cam);
+      std::pair<vil_image_view<vxl_byte>, vpgl_geo_camera*> pair(img, nlcd_img_infos[i].cam);
       nlcd_imgs.push_back(pair);
     }
   }
-  vcl_cout << "there are " << nlcd_imgs.size() << " nlcd images that intersect the lidar image!\n";
+  std::cout << "there are " << nlcd_imgs.size() << " nlcd images that intersect the lidar image!\n";
 
   // load the LIDAR classification images
   vil_image_view<float> lidar_img(lidar_img_info.img_r);
 
-  vcl_string name = vul_file::strip_directory(lidar_file());
+  std::string name = vul_file::strip_directory(lidar_file());
   name = vul_file::strip_extension(name);
-  vcl_string name1 = class_folder() + name + "_outmap.png";
-  vcl_string name2 = class_folder() + name + "_outmap.tif";
+  std::string name1 = class_folder() + name + "_outmap.png";
+  std::string name2 = class_folder() + name + "_outmap.tif";
   if (!vul_file::exists(name1) || !vul_file::exists(name2)) {
-    vcl_cerr << " cannot load img: " << name1 << " or " << name2 << vcl_endl;
+    std::cerr << " cannot load img: " << name1 << " or " << name2 << std::endl;
     return 0;
   }
 
@@ -97,7 +97,7 @@ int main(int argc,  char** argv)
   vil_rgb<vxl_byte> fort_pixel_color = volm_label_table::land_id[volm_label_table::FORT].color_;
   vil_rgb<vxl_byte> building_tall_pixel_color = volm_label_table::land_id[volm_label_table::BUILDING_TALL].color_;
 
-  vcl_cout << "pier color is: " << pier_color << " water id: " << (int)water_id << " sand id: " << (int)sand_id << " pier_id: " << (int)pier_id << "\n";
+  std::cout << "pier color is: " << pier_color << " water id: " << (int)water_id << " sand id: " << (int)sand_id << " pier_id: " << (int)pier_id << "\n";
 
    // prepare an image for the finest resolution
   int ni = lidar_img.ni();
@@ -122,8 +122,8 @@ int main(int argc,  char** argv)
       for (unsigned k = 0; k < nlcd_imgs.size(); k++) {
         double u, v;
         nlcd_imgs[k].second->global_to_img(lon, lat, 0, u, v);
-        unsigned uu = (unsigned)vcl_floor(u + 0.5);
-        unsigned vv = (unsigned)vcl_floor(v + 0.5);
+        unsigned uu = (unsigned)std::floor(u + 0.5);
+        unsigned vv = (unsigned)std::floor(v + 0.5);
         if (uu > 0 && vv > 0 && uu < nlcd_imgs[k].first.ni() && vv < nlcd_imgs[k].first.nj()) {
           label = (nlcd_imgs[k].first)(uu, vv);
           break;
@@ -147,13 +147,13 @@ int main(int argc,  char** argv)
 
 
   // read the sme labels
-  vcl_string glob = sme_folder() + "/*.csv";
-  vcl_vector<vcl_pair<vgl_point_2d<double>, int> > objects;
-  vcl_cout << "\t\t reading: " << glob << vcl_endl;
+  std::string glob = sme_folder() + "/*.csv";
+  std::vector<std::pair<vgl_point_2d<double>, int> > objects;
+  std::cout << "\t\t reading: " << glob << std::endl;
   for (vul_file_iterator fit = glob;fit; ++fit)
     volm_io::read_sme_file(fit(), objects);
 
-  vcl_cout << " read a total of " << objects.size() << " sme objects!\n";
+  std::cout << " read a total of " << objects.size() << " sme objects!\n";
 
   // mark the forts
   double fort_rad = 500.0; // forts have radius about this much around ground truth location
@@ -162,8 +162,8 @@ int main(int argc,  char** argv)
       if (lidar_img_info.bbox.contains(objects[kk].first)) { // the scene contains this bbox
         double lu, lv;
         lidar_img_info.cam->global_to_img(-(objects[kk].first.x()), objects[kk].first.y(), 0.0, lu, lv); // WARNING: W is hard coded in vpgl_geo_camera so use -lon !!!!!
-        int i = (int)vcl_floor(lu+0.5);
-        int j = (int)vcl_floor(lv+0.5);
+        int i = (int)std::floor(lu+0.5);
+        int j = (int)std::floor(lv+0.5);
         for (int ii = i - fort_rad; ii < i + fort_rad; ii++)
           for (int jj = j - fort_rad; jj < j + fort_rad; jj++) {
             if (ii >= 0 && jj >= 0 && ii < (int)out_img_label.ni() && jj < (int)out_img_label.nj() && out_img_label(ii,jj) != water_id) {
@@ -243,13 +243,13 @@ int main(int argc,  char** argv)
   vnl_random rng;
   // read the buildings
   glob = builds_file() + "/*.csv";
-  vcl_vector<vcl_pair<vgl_polygon<double>, vgl_point_2d<double> > > polys;
-  vcl_vector<double> heights;
-  vcl_cout << "\t\t reading: " << glob << vcl_endl;
+  std::vector<std::pair<vgl_polygon<double>, vgl_point_2d<double> > > polys;
+  std::vector<double> heights;
+  std::cout << "\t\t reading: " << glob << std::endl;
   for (vul_file_iterator fit = glob;fit; ++fit) {
     volm_io::read_building_file(fit(), polys, heights);
   }
-  vcl_cout << " read a total of " << polys.size() << " buildings!\n";
+  std::cout << " read a total of " << polys.size() << " buildings!\n";
 
   // mark the buildings in the images
   for (unsigned ii = 0; ii < polys.size(); ii++) {
@@ -319,10 +319,10 @@ int main(int argc,  char** argv)
     }
   }
   name = name.substr(name.find_first_of('_')+1, name.size());
-  vcl_stringstream out_prefix; out_prefix << out_folder() << "/class_" << name;
+  std::stringstream out_prefix; out_prefix << out_folder() << "/class_" << name;
   vil_save(out_class_img, (out_prefix.str() + ".png").c_str());
   vil_save(out_img_label, (out_prefix.str() + ".tiff").c_str());
 
-  vcl_cout << "returning SUCCESS!\n";
+  std::cout << "returning SUCCESS!\n";
   return volm_io::SUCCESS;
 }

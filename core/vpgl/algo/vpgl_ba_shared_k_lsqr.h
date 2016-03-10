@@ -21,17 +21,17 @@ class vpgl_ba_shared_k_lsqr : public vpgl_bundle_adjust_lsqr
   // \note image points are not homogeneous because they require finite points
   //       to measure projection error
   vpgl_ba_shared_k_lsqr(const vpgl_calibration_matrix<double>& K,
-                        const vcl_vector<vgl_point_2d<double> >& image_points,
-                        const vcl_vector<vcl_vector<bool> >& mask);
+                        const std::vector<vgl_point_2d<double> >& image_points,
+                        const std::vector<std::vector<bool> >& mask);
 
   //: Constructor
   //  Each image point is assigned an inverse covariance (error projector) matrix
   // \note image points are not homogeneous because they require finite points
   //       to measure projection error
   vpgl_ba_shared_k_lsqr(const vpgl_calibration_matrix<double>& K,
-                        const vcl_vector<vgl_point_2d<double> >& image_points,
-                        const vcl_vector<vnl_matrix<double> >& inv_covars,
-                        const vcl_vector<vcl_vector<bool> >& mask);
+                        const std::vector<vgl_point_2d<double> >& image_points,
+                        const std::vector<vnl_matrix<double> >& inv_covars,
+                        const std::vector<std::vector<bool> >& mask);
 
   // Destructor
   virtual ~vpgl_ba_shared_k_lsqr() {}
@@ -91,13 +91,13 @@ class vpgl_ba_shared_k_lsqr : public vpgl_bundle_adjust_lsqr
 
   //: Create the parameter vectors \p a and \p c from a vector of cameras
   static void
-  create_param_vector(const vcl_vector<vpgl_perspective_camera<double> >& cameras,
+  create_param_vector(const std::vector<vpgl_perspective_camera<double> >& cameras,
                       vnl_vector<double>& a,
                       vnl_vector<double>& c);
 
   //: Create the parameter vector \p b from a vector of 3D points
   static vnl_vector<double>
-  create_param_vector(const vcl_vector<vgl_point_3d<double> >& world_points);
+  create_param_vector(const std::vector<vgl_point_3d<double> >& world_points);
 
 
  protected:

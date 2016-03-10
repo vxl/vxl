@@ -12,7 +12,7 @@ boxm2_cache1_destroyer boxm2_cache1::destroyer_;
 boxm2_cache1_sptr boxm2_cache1::instance()
 {
   if (!instance_)
-    vcl_cerr<<"warning: boxm2_cache1:: instance has not been created\n";
+    std::cerr<<"warning: boxm2_cache1:: instance has not been created\n";
   return instance_;
 }
 

@@ -7,8 +7,9 @@
 #ifndef VIL_NITF2_TYPED_ARRAY_FIELD_H
 #define VIL_NITF2_TYPED_ARRAY_FIELD_H
 
-#include <vcl_map.h>
-#include <vcl_iosfwd.h>
+#include <vcl_compiler.h>
+#include <map>
+#include <iosfwd>
 
 #include "vil_nitf2_array_field.h"
 #include "vil_nitf2.h"
@@ -54,7 +55,7 @@ class vil_nitf2_typed_array_field : public vil_nitf2_array_field
 
   //: Output in human-readable form.
   // Implementation provides an example of how to iterate over all elements.
-  virtual vcl_ostream& output(vcl_ostream& os) const;
+  virtual std::ostream& output(std::ostream& os) const;
 
   //: Destructor (overridden below for instantiations where T is a pointer)
   ~vil_nitf2_typed_array_field() {}
@@ -63,7 +64,7 @@ class vil_nitf2_typed_array_field : public vil_nitf2_array_field
   // Helper method for output() method above. Iterates over one
   // dimension of vector field, recursively printing all defined elements
   // to output stream.
-  void output_dimension_iterate(vcl_ostream& os, vil_nitf2_index_vector indexes,
+  void output_dimension_iterate(std::ostream& os, vil_nitf2_index_vector indexes,
                                 bool& output_yet) const;
 
  private:
@@ -73,7 +74,7 @@ class vil_nitf2_typed_array_field : public vil_nitf2_array_field
   // (1) this single class can represent a vector of any dimensionality;
   // (2) due to conditional and blank nodes, a vector may be sparsely
   // populated; and (3) a multi-dimensional vector's dimensions may vary.
-  vcl_map<vil_nitf2_index_vector, T> m_value_map;
+  std::map<vil_nitf2_index_vector, T> m_value_map;
 };
 
 //==============================================================================
@@ -90,10 +91,10 @@ bool vil_nitf2_typed_array_field<T>::value(
   const vil_nitf2_index_vector& indexes, T& out_value) const
 {
   if ((int)indexes.size() != m_num_dimensions) {
-    vcl_cerr << "vil_nitf2_typed_array_field index vector wrong length\n";
+    std::cerr << "vil_nitf2_typed_array_field index vector wrong length\n";
     return false;
   }
-  typename vcl_map<vil_nitf2_index_vector, T>::const_iterator element = m_value_map.find(indexes);
+  typename std::map<vil_nitf2_index_vector, T>::const_iterator element = m_value_map.find(indexes);
   if (element != m_value_map.end()) {
     out_value = element->second;
     return true;
@@ -109,7 +110,7 @@ read_vector_element(vil_nitf2_istream& input, const vil_nitf2_index_vector& inde
   VIL_NITF2_LOG(log_debug) << "Reading " << tag() << indexes << ": ";
   bool is_blank;
   if (!check_index(indexes)) {
-    VIL_NITF2_LOG(log_debug) << "invalid index!" << vcl_endl;
+    VIL_NITF2_LOG(log_debug) << "invalid index!" << std::endl;
     return false;
   }
   vil_nitf2_field_formatter* formatter = m_definition->formatter;
@@ -124,17 +125,17 @@ read_vector_element(vil_nitf2_istream& input, const vil_nitf2_index_vector& inde
   bool value_read = typed_formatter->read(input, val, is_blank);
   typed_formatter->field_width = saved_field_width;
   if (value_read) {
-    VIL_NITF2_LOG(log_debug) << val << vcl_endl;
+    VIL_NITF2_LOG(log_debug) << val << std::endl;
     m_value_map[indexes] = val;
   }
   else if (is_blank && !m_definition->blanks_ok) {
-    VIL_NITF2_LOG(log_debug) << "not specified, but required!" << vcl_endl;
+    VIL_NITF2_LOG(log_debug) << "not specified, but required!" << std::endl;
   }
   else if (is_blank) {
-    VIL_NITF2_LOG(log_debug) << "(unspecified)" << vcl_endl;
+    VIL_NITF2_LOG(log_debug) << "(unspecified)" << std::endl;
   }
   else {
-    VIL_NITF2_LOG(log_debug) << "failed!" << vcl_endl;
+    VIL_NITF2_LOG(log_debug) << "failed!" << std::endl;
     return false;
   }
   return true;
@@ -147,7 +148,7 @@ write_vector_element(vil_nitf2_ostream& output, const vil_nitf2_index_vector& in
 {
   VIL_NITF2_LOG(log_debug) << "Writing tag " << tag() << indexes << ' ';
   if (!check_index(indexes)) {
-    VIL_NITF2_LOG(log_debug) << ": invalid index!" << vcl_endl;
+    VIL_NITF2_LOG(log_debug) << ": invalid index!" << std::endl;
     return false;
   }
   T val;
@@ -157,19 +158,19 @@ write_vector_element(vil_nitf2_ostream& output, const vil_nitf2_index_vector& in
   if (variable_width > 0) typed_formatter->field_width = variable_width;
   bool value_defined = value(indexes, val);
   if (value_defined) {
-    VIL_NITF2_LOG(log_debug) << vcl_endl;
+    VIL_NITF2_LOG(log_debug) << std::endl;
     return typed_formatter->write(output, val);
   }
   else {
     if (!m_definition->blanks_ok) {
-      VIL_NITF2_LOG(log_debug) << ": required value undefined at this index; writing blanks." << vcl_endl;
+      VIL_NITF2_LOG(log_debug) << ": required value undefined at this index; writing blanks." << std::endl;
     }
     return typed_formatter->write_blank(output);
   }
 }
 
 template<class T>
-vcl_ostream& vil_nitf2_typed_array_field<T>::output(vcl_ostream& os) const
+std::ostream& vil_nitf2_typed_array_field<T>::output(std::ostream& os) const
 {
   bool output_yet = false;
   output_dimension_iterate(os, vil_nitf2_index_vector(), output_yet);
@@ -178,7 +179,7 @@ vcl_ostream& vil_nitf2_typed_array_field<T>::output(vcl_ostream& os) const
 
 template<class T>
 void vil_nitf2_typed_array_field<T>::output_dimension_iterate(
-  vcl_ostream& os, vil_nitf2_index_vector indexes, bool& output_yet) const
+  std::ostream& os, vil_nitf2_index_vector indexes, bool& output_yet) const
 {
   if ((int)indexes.size()==m_num_dimensions) {
     T val;
@@ -201,13 +202,13 @@ void vil_nitf2_typed_array_field<T>::output_dimension_iterate(
       next_indexes.push_back(i);
       output_dimension_iterate(os, next_indexes, output_yet);
     }
-    os << vcl_endl;
+    os << std::endl;
     output_yet = false;
   }
 }
 
 template<class T>
-vcl_ostream& operator << (vcl_ostream& os, const vil_nitf2_typed_array_field<T>& field)
+std::ostream& operator << (std::ostream& os, const vil_nitf2_typed_array_field<T>& field)
 {
   return field->output(os);
 };
@@ -216,7 +217,7 @@ vcl_ostream& operator << (vcl_ostream& os, const vil_nitf2_typed_array_field<T>&
 template<>
 inline vil_nitf2_typed_array_field<void*>::~vil_nitf2_typed_array_field()
 {
-  for (vcl_map<vil_nitf2_index_vector, void*>::iterator it = m_value_map.begin();
+  for (std::map<vil_nitf2_index_vector, void*>::iterator it = m_value_map.begin();
        it != m_value_map.end(); ++it)
   {
     // vector delete corresponds to new char[] for binary data
@@ -228,7 +229,7 @@ inline vil_nitf2_typed_array_field<void*>::~vil_nitf2_typed_array_field()
 template<>
 inline vil_nitf2_typed_array_field<vil_nitf2_location*>::~vil_nitf2_typed_array_field()
 {
-  for (vcl_map<vil_nitf2_index_vector, vil_nitf2_location*>::iterator it = m_value_map.begin();
+  for (std::map<vil_nitf2_index_vector, vil_nitf2_location*>::iterator it = m_value_map.begin();
        it != m_value_map.end(); ++it)
   {
     delete it->second;

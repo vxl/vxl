@@ -1,7 +1,9 @@
 // This is mul/vil3d/io/tests/test_image_view_io.cxx
 #include <testlib/testlib_test.h>
 
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iostream>
 #include <vxl_config.h>
 #include <vpl/vpl.h> // vpl_unlink()
 #include <vil3d/vil3d_image_view.h>
@@ -14,7 +16,7 @@
 template<class T>
 inline void test_image_view_io_as(T value1, T value2)
 {
-  vcl_cout<<"Testing IO of images of type "<<vil_pixel_format_of(T())<<vcl_endl;
+  std::cout<<"Testing IO of images of type "<<vil_pixel_format_of(T())<<std::endl;
   vil3d_image_view<T> image1(8,7,3,2);
   image1.fill(value1);
   image1(4,3,2,1) = value2;
@@ -46,7 +48,7 @@ inline void test_image_view_io_as(T value1, T value2)
 
 static void test_image_view_io()
 {
-  vcl_cout << "*********************************\n"
+  std::cout << "*********************************\n"
            << " Testing IO for vil3d_image_view\n"
            << "*********************************\n";
 

@@ -4,11 +4,13 @@
 // \file
 
 #include <bvgl/bvgl_labelme_parser.h>
-#include <vcl_iostream.h>
-#include <vcl_fstream.h>
+#include <iostream>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <fstream>
 #include <vul/vul_file.h>
 
-static vcl_string test_xml_file()
+static std::string test_xml_file()
 {
   return  "\
 <annotation>\
@@ -69,25 +71,25 @@ static vcl_string test_xml_file()
 //: Test changes
 static void test_bvgl_labelme_parser()
 {
-  vcl_string filename = "labelme_test.xml";
-  vcl_cout<<"Testing label me parser on synthetic data"<<vcl_endl;
-  vcl_ofstream file;
+  std::string filename = "labelme_test.xml";
+  std::cout<<"Testing label me parser on synthetic data"<<std::endl;
+  std::ofstream file;
   file.open (filename.c_str());
-  file << test_xml_file() << vcl_endl;
+  file << test_xml_file() << std::endl;
   file.close();
 
   //Use parser
   bvgl_labelme_parser parser(filename);
-  vcl_vector<vgl_polygon<double> > polys = parser.polygons();
+  std::vector<vgl_polygon<double> > polys = parser.polygons();
   TEST("Number of polygons returned", 2, polys.size());
 
   //ground truth
-  vcl_vector<vgl_point_2d<double> > poly0;
+  std::vector<vgl_point_2d<double> > poly0;
   poly0.push_back(vgl_point_2d<double>(335, 183));
   poly0.push_back(vgl_point_2d<double>(333, 220));
   poly0.push_back(vgl_point_2d<double>(332, 234));
 
-  vcl_vector<vgl_point_2d<double> > poly1;
+  std::vector<vgl_point_2d<double> > poly1;
   poly1.push_back(vgl_point_2d<double>(544, 200));
   poly1.push_back(vgl_point_2d<double>(501, 211));
   poly1.push_back(vgl_point_2d<double>(497, 224));
@@ -109,7 +111,7 @@ static void test_bvgl_labelme_parser()
   TEST("Testing filename tag", "andy_eze.jpg", parser.image_name());
 
   //test each object name
-  vcl_vector<vcl_string> names = parser.obj_names();
+  std::vector<std::string> names = parser.obj_names();
   TEST("Testing object name", names[0], "mouth");
   TEST("Testing object name", names[1], "Sunglasses");
 

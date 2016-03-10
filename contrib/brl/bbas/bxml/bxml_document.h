@@ -16,10 +16,12 @@
 //   Ricardo Fabbri (Brown) - October 18, 2009 - specialized get_attribute for strings
 // \endverbatim
 
-#include <vcl_string.h>
-#include <vcl_sstream.h>
-#include <vcl_map.h>
-#include <vcl_vector.h>
+#include <string>
+#include <sstream>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <map>
+#include <vector>
 #include <vbl/vbl_ref_count.h>
 #include <vbl/vbl_smart_ptr.h>
 #include <vsl/vsl_binary_io.h>
@@ -50,7 +52,7 @@ class bxml_text : public bxml_data
 {
  public:
   //: Constructor
-  bxml_text(const vcl_string& data) : data_(data) {}
+  bxml_text(const std::string& data) : data_(data) {}
 
   //: Destructor
   virtual ~bxml_text() {}
@@ -59,13 +61,13 @@ class bxml_text : public bxml_data
   datatype type() const { return TEXT; }
 
   //: Access the text data
-  vcl_string data() const { return data_; }
+  std::string data() const { return data_; }
 
   //: Set the text data
-  void set_data(const vcl_string& data) { data_ = data; }
+  void set_data(const std::string& data) { data_ = data; }
 
  private:
-  vcl_string data_;
+  std::string data_;
 };
 
 
@@ -73,14 +75,14 @@ class bxml_text : public bxml_data
 class bxml_element : public bxml_data
 {
  public:
-  typedef vcl_vector<bxml_data_sptr>::const_iterator const_data_iterator;
-  typedef vcl_map<vcl_string,vcl_string>::const_iterator const_attr_iterator;
+  typedef std::vector<bxml_data_sptr>::const_iterator const_data_iterator;
+  typedef std::map<std::string,std::string>::const_iterator const_attr_iterator;
 
   //: Constructor - default
   bxml_element() {}
 
   //: Constructor
-  bxml_element(const vcl_string& name) : name_(name) {}
+  bxml_element(const std::string& name) : name_(name) {}
 
   //: Destructor
   virtual ~bxml_element() {}
@@ -89,24 +91,24 @@ class bxml_element : public bxml_data
   datatype type() const { return ELEMENT; }
 
   //: Return the name of the element
-  vcl_string name() const { return name_; }
+  std::string name() const { return name_; }
 
   //: Return the value of an attribute
-  vcl_string attribute(const vcl_string& attr_name) const;
+  std::string attribute(const std::string& attr_name) const;
 
-  //: Specialization for vcl_string.
-  bool get_attribute(const vcl_string& attr_name, vcl_string& value) const
+  //: Specialization for std::string.
+  bool get_attribute(const std::string& attr_name, std::string& value) const
   {
     value = this->attribute(attr_name);
     return true;
   }
 
   //: Return the value of an attribute.
-  // \see specialization for vcl_string.
+  // \see specialization for std::string.
   template <class T>
-  bool get_attribute(const vcl_string& attr_name, T& value) const
+  bool get_attribute(const std::string& attr_name, T& value) const
   {
-    vcl_stringstream s(this->attribute(attr_name));
+    std::stringstream s(this->attribute(attr_name));
     if (s.str() == "")
       return false;
     s >> value;
@@ -115,24 +117,24 @@ class bxml_element : public bxml_data
 
 
   //: Return the values of all attributes with a given name
-  vcl_vector<vcl_string> attributes(const vcl_string& attr_name) const;
+  std::vector<std::string> attributes(const std::string& attr_name) const;
 
-  //: Specialization for vcl_string.
-  bool get_attributea(const vcl_string& attr_name, vcl_vector<vcl_string>& values) const
+  //: Specialization for std::string.
+  bool get_attributea(const std::string& attr_name, std::vector<std::string>& values) const
   {
     values = this->attributes(attr_name);
     return true;
   }
 
   //: Return the value of an attribute.
-  // \see specialization for vcl_string.
+  // \see specialization for std::string.
   template <class T>
-  bool get_attributes(const vcl_string& attr_name, vcl_vector<T>& values) const
+  bool get_attributes(const std::string& attr_name, std::vector<T>& values) const
   {
     values.clear();
-    vcl_vector<vcl_string> values_str = attributes(attr_name);
+    std::vector<std::string> values_str = attributes(attr_name);
     for (unsigned vi=0; vi<values_str.size(); vi++) {
-      vcl_stringstream s(values_str[vi]);
+      std::stringstream s(values_str[vi]);
       if (s.str() == "")
         return false;
       T value_t;
@@ -162,7 +164,7 @@ class bxml_element : public bxml_data
   const_data_iterator data_end() const { return data_.end(); }
 
   //: Append text in this element
-  void append_text(const vcl_string& text);
+  void append_text(const std::string& text);
 
   //: Append data (typically another element) in this element
   void append_data(const bxml_data_sptr& el)
@@ -170,26 +172,26 @@ class bxml_element : public bxml_data
 
   //: Set attribute with and optional precision.
   template <class T>
-  void set_attribute(const vcl_string& attr_name, const T& attr_value, unsigned p = 5)
+  void set_attribute(const std::string& attr_name, const T& attr_value, unsigned p = 5)
   {
-    vcl_stringstream s;
+    std::stringstream s;
     s.precision(p);
     s << attr_value;
     attributes_[attr_name] = s.str();
   }
-  //: Specialization for vcl_string below.
-  void set_attribute(const vcl_string& attr_name, const vcl_string& attr_value)
+  //: Specialization for std::string below.
+  void set_attribute(const std::string& attr_name, const std::string& attr_value)
   { attributes_[attr_name] = attr_value; }
 
  private:
   //: The name of the element
-  vcl_string name_;
+  std::string name_;
 
   //: The map of attributes to values
-  vcl_map<vcl_string,vcl_string> attributes_;
+  std::map<std::string,std::string> attributes_;
 
   //: The character data.
-  vcl_vector<bxml_data_sptr> data_;
+  std::vector<bxml_data_sptr> data_;
 };
 
 
@@ -211,10 +213,10 @@ class bxml_document : public vbl_ref_count
   bxml_data_sptr root_element() const {return root_element_;}
 
   //: Return the version string
-  vcl_string version() const { return version_; }
+  std::string version() const { return version_; }
 
   //: Return the encoding string
-  vcl_string encoding() const { return encoding_; }
+  std::string encoding() const { return encoding_; }
 
   //: Return the standalone bit
   bool standalone() const { return standalone_; }
@@ -224,10 +226,10 @@ class bxml_document : public vbl_ref_count
   { root_element_ = root; }
 
   //: Set the version string
-  void set_version(const vcl_string& version) { version_ = version; }
+  void set_version(const std::string& version) { version_ = version; }
 
   //: Set the encoding string
-  void set_encoding(const vcl_string& encoding) { encoding_ = encoding; }
+  void set_encoding(const std::string& encoding) { encoding_ = encoding; }
 
   //: Set the standalone bit
   void set_standalone(bool standalone) { standalone_ = standalone; }
@@ -236,8 +238,8 @@ class bxml_document : public vbl_ref_count
   //: The root element
   bxml_data_sptr root_element_;
 
-  vcl_string version_;
-  vcl_string encoding_;
+  std::string version_;
+  std::string encoding_;
   bool standalone_;
 };
 

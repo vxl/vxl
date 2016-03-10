@@ -14,7 +14,7 @@ class boxm2_batch_update_phongs_pass1_functor
     //: "default" constructor
     boxm2_batch_update_phongs_pass1_functor() {}
 
-    bool init_data(vcl_vector<boxm2_data_base*> & datas,
+    bool init_data(std::vector<boxm2_data_base*> & datas,
                    vil_image_view<float>* pre_img,
                    vil_image_view<float>* vis_img,
                    float sun_elev,
@@ -67,7 +67,7 @@ class boxm2_batch_update_phongs_pass1_functor
 
         boxm2_data<BOXM2_ALPHA>::datatype alpha=alpha_data_->data()[index];
 
-        float temp = vcl_exp(-alpha * seg_len);
+        float temp = std::exp(-alpha * seg_len);
         pre += vis*(1-temp)*PI;
         vis *= temp;
 
@@ -104,7 +104,7 @@ class boxm2_batch_update_opt2_phongs_pass2_functor
     //: "default" constructor
     boxm2_batch_update_opt2_phongs_pass2_functor() {}
 
-    bool init_data(vcl_vector<boxm2_data_base*> & datas,
+    bool init_data(std::vector<boxm2_data_base*> & datas,
                    vil_image_view<float>* pre_img,
                    vil_image_view<float>* vis_img,
                    float sun_elev,
@@ -178,21 +178,21 @@ class boxm2_batch_update_opt2_phongs_pass2_functor
         if (beta_denom > 1e-5f) {
             beta =  beta_num / beta_denom;
         }
-        const float old_PQ = (float)(1.0 - vcl_exp(-alpha*seg_len));
+        const float old_PQ = (float)(1.0 - std::exp(-alpha*seg_len));
         const float new_PQ = old_PQ * beta;
         const float pass_prob_old = 1.0f - old_PQ;
         float pass_prob = 1.0f - new_PQ;
 
         // compute expected information gained from update
-        const float weight = new_PQ * vcl_log(new_PQ / old_PQ) + pass_prob * vcl_log(pass_prob / pass_prob_old);
+        const float weight = new_PQ * std::log(new_PQ / old_PQ) + pass_prob * std::log(pass_prob / pass_prob_old);
         // ensure log doesn't go to infinity
         if (pass_prob < 1e-5f) {
             pass_prob = 1e-5f;
         }
-        aux[2] += vcl_log(pass_prob) * weight/seg_len;
+        aux[2] += std::log(pass_prob) * weight/seg_len;
         aux[3] += weight;
 
-        float temp = vcl_exp(-alpha * seg_len);
+        float temp = std::exp(-alpha * seg_len);
         pre += vis*(1-temp)*PI;
         vis *= temp;
 
@@ -256,12 +256,12 @@ class boxm2_batch_update_opt2_phongs_functor
         boxm2_data<BOXM2_FLOAT8>::datatype & phongs_model  =phongs_data_->data()[index];
 
         //: this has image data and view directions mixed.
-        vcl_vector<aux0_datatype> aux0_raw = str_cache1_->get_next<BOXM2_AUX0>(id_, index);
-        vcl_vector<aux1_datatype> aux1_raw = str_cache1_->get_next<BOXM2_AUX1>(id_, index);
-        vcl_vector<aux0_datatype> aux2_raw = str_cache1_->get_next<BOXM2_AUX2>(id_, index);
-        vcl_vector<aux1_datatype> aux3_raw = str_cache1_->get_next<BOXM2_AUX3>(id_, index);
+        std::vector<aux0_datatype> aux0_raw = str_cache1_->get_next<BOXM2_AUX0>(id_, index);
+        std::vector<aux1_datatype> aux1_raw = str_cache1_->get_next<BOXM2_AUX1>(id_, index);
+        std::vector<aux0_datatype> aux2_raw = str_cache1_->get_next<BOXM2_AUX2>(id_, index);
+        std::vector<aux1_datatype> aux3_raw = str_cache1_->get_next<BOXM2_AUX3>(id_, index);
 
-        vcl_vector<aux_datatype>  aux  = str_cache2_->get_next<BOXM2_AUX> (id_, index);
+        std::vector<aux_datatype>  aux  = str_cache2_->get_next<BOXM2_AUX> (id_, index);
 
         for (unsigned m = 0; m < aux0_raw.size(); m++) {
             if (aux0_raw[m]>1e-10f)
@@ -278,12 +278,12 @@ class boxm2_batch_update_opt2_phongs_functor
         }
 
         int half_m = aux0_raw.size()/2;
-        vcl_vector<aux0_datatype> cum_len;
-        vcl_vector<aux0_datatype> Iobs;
-        vcl_vector<aux0_datatype> vis;
-        vcl_vector<aux0_datatype> xdir;
-        vcl_vector<aux0_datatype> ydir;
-        vcl_vector<aux0_datatype> zdir;
+        std::vector<aux0_datatype> cum_len;
+        std::vector<aux0_datatype> Iobs;
+        std::vector<aux0_datatype> vis;
+        std::vector<aux0_datatype> xdir;
+        std::vector<aux0_datatype> ydir;
+        std::vector<aux0_datatype> zdir;
         cum_len.insert(cum_len.begin(), aux0_raw.begin(), aux0_raw.begin()+half_m);
         Iobs.insert(Iobs.begin(), aux1_raw.begin(), aux1_raw.begin()+half_m);
         vis.insert(vis.begin(), aux2_raw.begin(), aux2_raw.begin()+half_m);
@@ -291,7 +291,7 @@ class boxm2_batch_update_opt2_phongs_functor
         xdir.insert(xdir.begin(), aux1_raw.begin()+half_m, aux1_raw.end());
         ydir.insert(ydir.begin(), aux2_raw.begin()+half_m, aux2_raw.end());
         zdir.insert(zdir.begin(), aux3_raw.begin()+half_m, aux3_raw.end());
-        vcl_vector<vnl_double_3>  viewing_dirs;
+        std::vector<vnl_double_3>  viewing_dirs;
         for (unsigned i=0;i<Iobs.size();i++)
         {
             if (Iobs[i] < 0.0 || Iobs[i] > 1.0 ) vis[i] = 0.0;
@@ -381,7 +381,7 @@ class boxm2_batch_update_nonray_phongs_functor
           ratio = phongs_model[6]/1.0f;
 
         alpha *= ratio;
-        uncertain_model = 1/vcl_max(ratio,1/ratio);
+        uncertain_model = 1/std::max(ratio,1/ratio);
 
         return true;
     }

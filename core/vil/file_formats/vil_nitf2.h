@@ -39,8 +39,8 @@ class vil_nitf2
                          type_location, type_date_time,
                          type_tagged_record_sequence };
 
-  // Controls the level of detail of logging to vcl_cout.
-  // All errors are logged to vcl_cerr, irrespective of log level.
+  // Controls the level of detail of logging to std::cout.
+  // All errors are logged to std::cerr, irrespective of log level.
   enum enum_log_level { log_none=0, log_info, log_debug };
 
   // Logging level for all vil_nitf classes. This could be generalized to an
@@ -61,6 +61,6 @@ class vil_nitf2
 
 
 #define VIL_NITF2_LOG(LEVEL) \
-  if (vil_nitf2::s_log_level < vil_nitf2::LEVEL) ; else vcl_cout
+  if (vil_nitf2::s_log_level < vil_nitf2::LEVEL) ; else std::cout
 
 #endif // VIL_NITF2_H

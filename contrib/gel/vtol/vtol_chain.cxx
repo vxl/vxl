@@ -47,7 +47,7 @@ vtol_chain::chain_superiors(void) const
 {
   chain_list *result=new chain_list;
   result->reserve(chain_superiors_.size());
-  vcl_list<vtol_chain*>::const_iterator i;
+  std::list<vtol_chain*>::const_iterator i;
   for (i=chain_superiors_.begin();i!=chain_superiors_.end();i++)
     result->push_back(*i);
   return result;
@@ -78,7 +78,7 @@ vtol_chain::is_chain_inferior(vtol_chain_sptr chain_inferior) const
 bool
 vtol_chain::is_chain_superior(vtol_chain const* chain_superior) const
 {
-  vcl_list<vtol_chain*>::const_iterator i;
+  std::list<vtol_chain*>::const_iterator i;
   for (i=chain_superiors_.begin();
        i!=chain_superiors_.end() && (*i)!=chain_superior;
        ++i)
@@ -120,7 +120,7 @@ void vtol_chain::unlink_chain_inferior(vtol_chain_sptr chain_inferior)
   assert(is_chain_inferior(chain_inferior));
   assert(chain_inferior->is_chain_superior(this));
 
-  vcl_list<vtol_chain*>::iterator i=chain_inferior->chain_superiors_.begin();
+  std::list<vtol_chain*>::iterator i=chain_inferior->chain_superiors_.begin();
   while ( i!=chain_inferior->chain_superiors_.end() && *i!=this ) ++i;
   // check presence in "chain_superiors_" list of chain_inferior:
   assert(*i==this);

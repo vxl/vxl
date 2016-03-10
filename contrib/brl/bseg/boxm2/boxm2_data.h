@@ -10,7 +10,9 @@
 #include <boxm2/boxm2_data_base.h>
 #include <boxm2/basic/boxm2_array_1d.h>
 #include <boxm2/boxm2_data_traits.h>
-#include <vcl_cstring.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <cstring>
 
 //: Specific, templated derived class for data blocks
 template <boxm2_data_type T>
@@ -21,7 +23,7 @@ class boxm2_data: public boxm2_data_base
     typedef typename boxm2_data_traits<T>::datatype datatype;
 
     //: creates boxm2_data object from byte buffer and id
-    boxm2_data(char * data_buffer, vcl_size_t length, boxm2_block_id id);
+    boxm2_data(char * data_buffer, std::size_t length, boxm2_block_id id);
 
     //: destructor
     virtual ~boxm2_data();

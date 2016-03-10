@@ -1,7 +1,9 @@
 // This is brl/bseg/sdet/tests/test_region_proc.cxx
-#include <vcl_vector.h>
-#include <vcl_string.h>
-#include <vcl_iostream.h>
+#include <vector>
+#include <string>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iostream>
 #include <vil/vil_image_resource.h>
 #include <vil/vil_load.h>
 #include <vtol/vtol_intensity_face.h>
@@ -13,9 +15,9 @@
 #include <testlib/testlib_root_dir.h>
 static void test_region_proc(int argc, char * argv[])
 {
-  vcl_string root = testlib_root_dir();
-  vcl_string image_path = root + "/contrib/brl/bseg/sdet/tests/jar-closeup.tif";
-  vcl_cout << "Loading Image " << image_path << '\n';
+  std::string root = testlib_root_dir();
+  std::string image_path = root + "/contrib/brl/bseg/sdet/tests/jar-closeup.tif";
+  std::cout << "Loading Image " << image_path << '\n';
   vil_image_resource_sptr image = vil_load_image_resource(image_path.c_str());
   if (image)
   {
@@ -26,7 +28,7 @@ static void test_region_proc(int argc, char * argv[])
     sdet_region_proc rp(rpp);
     rp.set_image_resource(image);
     rp.extract_regions();
-    vcl_vector<vtol_intensity_face_sptr>& regions = rp.get_regions();
+    std::vector<vtol_intensity_face_sptr>& regions = rp.get_regions();
     int n = regions.size();
     TEST_NEAR("nregions", n, 190, 5);
     if (n>0)

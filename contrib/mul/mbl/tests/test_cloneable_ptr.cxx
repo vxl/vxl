@@ -1,5 +1,7 @@
 #include <testlib/testlib_test.h>
-// not used? #include <vcl_iostream.h>
+// not used? #include <vcl_compiler.h>
+#include <iostream>
+#include <iostream>
 #include <mbl/mbl_cloneable_ptr.h>
 
 struct some_class

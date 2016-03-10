@@ -16,13 +16,15 @@
 // \endverbatim
 
 #include "bxml_document.h"
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iostream>
 
 //: Read the entire contents of \p filepath into an XML document class
-bxml_document bxml_read(const vcl_string& filepath);
+bxml_document bxml_read(const std::string& filepath);
 
 //: Read the entire data stream \p is into an XML document class
-bxml_document bxml_read(vcl_istream& is);
+bxml_document bxml_read(std::istream& is);
 
 //: Read an XML stream one element at a time
 class bxml_stream_read
@@ -39,7 +41,7 @@ class bxml_stream_read
   void reset();
 
   //: Read the next element
-  bxml_data_sptr next_element(vcl_istream& is, unsigned int& depth);
+  bxml_data_sptr next_element(std::istream& is, unsigned int& depth);
 
  private: // Private implementation
   class pimpl;

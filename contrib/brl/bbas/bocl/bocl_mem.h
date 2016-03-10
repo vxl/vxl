@@ -14,9 +14,11 @@
 #include "bocl_cl.h"
 #include "bocl_utils.h"
 #include "bocl_kernel.h"
-#include <vcl_string.h>
-#include <vcl_cstddef.h>
-#include <vcl_iosfwd.h>
+#include <string>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <cstddef>
+#include <iosfwd>
 
 //makes a bocl_mem a sptr
 #include <vbl/vbl_ref_count.h>
@@ -33,7 +35,7 @@ class bocl_mem : public vbl_ref_count
  public:
 
   //: constructor that takes the context to start with
-  bocl_mem(const cl_context& context, void* buffer, unsigned num_bytes, vcl_string id);
+  bocl_mem(const cl_context& context, void* buffer, unsigned num_bytes, std::string id);
   ~bocl_mem();
 
   //: creates the memory for buffer (create from command queue as welll)
@@ -42,7 +44,7 @@ class bocl_mem : public vbl_ref_count
 
   //: create an image buffer
   bool create_image_buffer(const cl_mem_flags& flags, const cl_image_format* format,
-                           vcl_size_t width, vcl_size_t height);
+                           std::size_t width, std::size_t height);
 
   //: releases buffer memory
   bool release_memory();
@@ -52,8 +54,8 @@ class bocl_mem : public vbl_ref_count
   bool read_to_buffer(const cl_command_queue& cmd_queue, bool blocking=true);
 
   //: read/write buffers of arbitrary size (smaller than existing gpu mem)
-  bool write_to_gpu_mem(const cl_command_queue& cmd_queue, void* buff, vcl_size_t size, bool blocking=true);
-  bool read_from_gpu_mem(const cl_command_queue& cmd_queue, void* buff, vcl_size_t size, bool blocking=true);
+  bool write_to_gpu_mem(const cl_command_queue& cmd_queue, void* buff, std::size_t size, bool blocking=true);
+  bool read_from_gpu_mem(const cl_command_queue& cmd_queue, void* buff, std::size_t size, bool blocking=true);
 
   //: write to buffer asynchronously
   bool write_to_buffer_async(const cl_command_queue& cmd_queue);
@@ -65,7 +67,7 @@ class bocl_mem : public vbl_ref_count
 
   //: fill gpu buffer with value (shouldn't use any CPU mem
   template<class T>
-  bool fill(const cl_command_queue& cmd_queue, T val, vcl_string type_string, bool blocking=false);
+  bool fill(const cl_command_queue& cmd_queue, T val, std::string type_string, bool blocking=false);
 
   //: zeros out GPU buffer
   bool zero_gpu_buffer(const cl_command_queue& cmd_queue, bool blocking=false) {
@@ -73,7 +75,7 @@ class bocl_mem : public vbl_ref_count
   }
 
   //: initializes GPU buffer with a constant value
-  bool init_gpu_buffer(void const* init_val, vcl_size_t value_size, cl_command_queue& cmd_queue);
+  bool init_gpu_buffer(void const* init_val, std::size_t value_size, cl_command_queue& cmd_queue);
 
   //: returns a reference to the buffer
   cl_mem& buffer()        { return buffer_; }
@@ -83,10 +85,10 @@ class bocl_mem : public vbl_ref_count
   void set_cpu_buffer(void* buff) { cpu_buf_ = buff; }
 
   //: returns number of bytes in buffer
-  vcl_size_t num_bytes()  const { return num_bytes_; }
+  std::size_t num_bytes()  const { return num_bytes_; }
 
   //: returns id
-  vcl_string id()         const { return id_; }
+  std::string id()         const { return id_; }
 
   //: set buffer used when a clCreateGLBuffer is called..
   bool set_gl_buffer(cl_mem buff) { buffer_ = buff; is_gl_=true; return true; }
@@ -105,7 +107,7 @@ class bocl_mem : public vbl_ref_count
   cl_command_queue* queue_;
 
   //: number of bytes this buffer points to
-  vcl_size_t num_bytes_;
+  std::size_t num_bytes_;
 
   //: OpenCL context (reference)
   const cl_context& context_;
@@ -114,7 +116,7 @@ class bocl_mem : public vbl_ref_count
   cl_event event_;
 
   //: string identifier for error messages
-  vcl_string id_;
+  std::string id_;
 
   //: event for profiling info
   cl_event ceEvent_;
@@ -123,21 +125,21 @@ class bocl_mem : public vbl_ref_count
   bool is_gl_;
 
   //compile kernels and cache
-  bocl_kernel* get_set_kernel(cl_device_id dev_id, cl_context context, vcl_string type="float");
+  bocl_kernel* get_set_kernel(cl_device_id dev_id, cl_context context, std::string type="float");
 
   //map keeps track of all kernels compiled and cached
-  static vcl_map<vcl_string, bocl_kernel*> set_kernels_;
+  static std::map<std::string, bocl_kernel*> set_kernels_;
 };
 
 
 //Templated fill method
 template<class T>
-bool bocl_mem::fill(const cl_command_queue& cmd_queue, T val, vcl_string type_string, bool blocking)
+bool bocl_mem::fill(const cl_command_queue& cmd_queue, T val, std::string type_string, bool blocking)
 {
   //buffer length
   cl_uint len = static_cast<cl_uint>(this->num_bytes_) / static_cast<unsigned>(sizeof(val));
-  vcl_size_t lThreads[2] = {64,1};
-  vcl_size_t gThreads[2] = {RoundUp(static_cast<size_t>(len), static_cast<int>(lThreads[0])), 1};
+  std::size_t lThreads[2] = {64,1};
+  std::size_t gThreads[2] = {RoundUp(static_cast<size_t>(len), static_cast<int>(lThreads[0])), 1};
 
   //get command queue info
   cl_device_id dev_id;
@@ -170,7 +172,7 @@ bool bocl_mem::fill(const cl_command_queue& cmd_queue, T val, vcl_string type_st
 typedef vbl_smart_ptr<bocl_mem> bocl_mem_sptr;
 
 //: output stream
-vcl_ostream& operator <<(vcl_ostream &s, bocl_mem& scene);
+std::ostream& operator <<(std::ostream &s, bocl_mem& scene);
 
 //: Binary write boxm_update_bit_scene_manager scene to stream
 void vsl_b_write(vsl_b_ostream& os, bocl_mem const& scene);

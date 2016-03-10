@@ -1,11 +1,13 @@
 // This is mul/mbl/tests/test_gamma.cxx
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iostream>
 #include <mbl/mbl_gamma.h>
 #include <testlib/testlib_test.h>
 
 void test_gamma()
 {
-  vcl_cout << "*******************\n"
+  std::cout << "*******************\n"
            << " Testing mbl_gamma\n"
            << "*******************\n";
 

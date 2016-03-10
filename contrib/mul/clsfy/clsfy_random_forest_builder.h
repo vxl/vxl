@@ -11,10 +11,12 @@
 
 #include <clsfy/clsfy_builder_base.h>
 #include <clsfy/clsfy_random_forest.h>
-#include <vcl_vector.h>
-#include <vcl_set.h>
-#include <vcl_string.h>
-#include <vcl_iosfwd.h>
+#include <vector>
+#include <set>
+#include <string>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iosfwd>
 #include <vnl/vnl_vector.h>
 #include <vnl/vnl_random.h>
 
@@ -41,13 +43,13 @@ class clsfy_random_forest_builder : public clsfy_builder_base
   virtual double build(clsfy_classifier_base& classifier,
                        mbl_data_wrapper<vnl_vector<double> >& inputs,
                        unsigned nClasses,
-                       const vcl_vector<unsigned> &outputs) const;
+                       const std::vector<unsigned> &outputs) const;
 
   //: Name of the class
-  virtual vcl_string is_a() const;
+  virtual std::string is_a() const;
 
   //: Name of the class
-  virtual bool is_class(vcl_string const& s) const;
+  virtual bool is_class(std::string const& s) const;
 
   //: IO Version number
   short version_no() const;
@@ -56,7 +58,7 @@ class clsfy_random_forest_builder : public clsfy_builder_base
   virtual clsfy_builder_base* clone() const;
 
   //: Print class to os
-  virtual void print_summary(vcl_ostream& os) const;
+  virtual void print_summary(std::ostream& os) const;
 
   //: Save class to binary file stream
   virtual void b_write(vsl_b_ostream& bfs) const;
@@ -98,7 +100,7 @@ class clsfy_random_forest_builder : public clsfy_builder_base
   void set_calc_test_error(bool on) {calc_test_error_=on;}
 
   //: Save a pointer to storage for out of bag indices
-  void set_oob_indices( vcl_vector<vcl_vector<unsigned > >* poobIndices)
+  void set_oob_indices( std::vector<std::vector<unsigned > >* poobIndices)
   {poob_indices_=poobIndices;}
 
  protected:
@@ -107,10 +109,10 @@ class clsfy_random_forest_builder : public clsfy_builder_base
   virtual unsigned select_nbranch_params(unsigned ndims) const;
 
   //: Pick a random data subset (with replacement)
-  virtual void select_data(vcl_vector<vnl_vector<double> >& inputs,
-                           const vcl_vector<unsigned> &outputs,
-                           vcl_vector<vnl_vector<double> >& bootstrapped_inputs,
-                           vcl_vector<unsigned> & bootstrapped_outputs) const;
+  virtual void select_data(std::vector<vnl_vector<double> >& inputs,
+                           const std::vector<unsigned> &outputs,
+                           std::vector<vnl_vector<double> >& bootstrapped_inputs,
+                           std::vector<unsigned> & bootstrapped_outputs) const;
 
   virtual unsigned long get_tree_builder_seed() const;
 
@@ -135,7 +137,7 @@ class clsfy_random_forest_builder : public clsfy_builder_base
   // Can be used for out of bag estimates
   // Saves for tree i the indices of all points used in its training
   // Note the storage is supplied from outside this class, as this is a kind of bolt-on
-  vcl_vector<vcl_vector<unsigned > >* poob_indices_;
+  std::vector<std::vector<unsigned > >* poob_indices_;
  private:
   //: Does the builder calculate the error on the training set?
   bool calc_test_error_;

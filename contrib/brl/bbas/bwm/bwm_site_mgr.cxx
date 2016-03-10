@@ -23,8 +23,10 @@
 #include <vgl/algo/vgl_rotation_3d.h>
 #include <vnl/vnl_double_3.h>
 #include <vnl/vnl_quaternion.h>
-#include <vcl_cstdio.h>
-#include <vcl_sstream.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <cstdio>
+#include <sstream>
 
 #include <vul/vul_file.h>
 #include <vul/vul_string.h>
@@ -96,17 +98,17 @@ void bwm_site_mgr::init_site()
 }
 
 void bwm_site_mgr::create_site_dialog(vgui_dialog_extensions &site_dialog,
-                                      vcl_string &site_name,
-                                      vcl_string &site_dir,
-                                      vcl_string &pyr_exe_dir,
-                                      vcl_vector<vcl_string> &files,
+                                      std::string &site_name,
+                                      std::string &site_dir,
+                                      std::string &pyr_exe_dir,
+                                      std::vector<std::string> &files,
                                       bool* pyr_v, bool* act_v,
-                                      vcl_vector<vcl_string> &pyr_levels,
-                                      vcl_vector<vcl_string> &objs,
+                                      std::vector<std::string> &pyr_levels,
+                                      std::vector<std::string> &objs,
                                       int* choices,
                                       double &lat, double &lon, double &elev)
 {
-  vcl_string ext;
+  std::string ext;
   site_dialog.field("SITE NAME:", site_name);
   site_dialog.line_break();
   site_dialog.dir("DIRECTORY:", ext, site_dir);
@@ -130,7 +132,7 @@ void bwm_site_mgr::create_site_dialog(vgui_dialog_extensions &site_dialog,
   site_dialog.message("Please Choose the objects to add to the site:");
   site_dialog.line_break();
 
-  vcl_vector<vcl_string> obj_types(4);
+  std::vector<std::string> obj_types(4);
   for (unsigned i=0; i<objs.size(); i++) {
     site_dialog.file("Enter input object:", ext, objs[i]);
     site_dialog.choice("Type:", object_types_, choices[i]);
@@ -153,16 +155,16 @@ void bwm_site_mgr::create_site()
 {
   vgui_dialog_extensions site_dialog("CrossCut Site Creation");
 
-  vcl_string site_name, site_dir, pyr_exe_path;
+  std::string site_name, site_dir, pyr_exe_path;
 
   int num_images = 3;
-  vcl_vector<vcl_string> files(num_images);
+  std::vector<std::string> files(num_images);
   bool pyr[3] = {false, false, false};
   bool act[3] = {true, true, true};
-  vcl_vector<vcl_string> levels(num_images, "7");
+  std::vector<std::string> levels(num_images, "7");
 
   int num_objs = 3;
-  vcl_vector<vcl_string> objs(num_objs);
+  std::vector<std::string> objs(num_objs);
   int choices[3] = {0, 0, 0};
   double lat=0.0, lon=0.0, elev=0.0;
 
@@ -175,8 +177,8 @@ void bwm_site_mgr::create_site()
   else
   {
     // collect the parameters
-    vcl_cout << "name:" << site_name << '\n'
-             << "dir:" << site_dir << vcl_endl;
+    std::cout << "name:" << site_name << '\n'
+             << "dir:" << site_dir << std::endl;
 
     // make sure site name is filled
     while (site_name.size() == 0) {
@@ -220,16 +222,16 @@ void bwm_site_mgr::create_site()
     }
   }
 
-  vcl_vector<bool> pyramid;
-  vcl_vector<bool> active;
+  std::vector<bool> pyramid;
+  std::vector<bool> active;
   for (unsigned j=0; j<files.size(); j++) {
     pyramid.push_back(pyr[j]);
     active.push_back(act[j]);
   }
 
-  vcl_vector<vcl_pair<vcl_string, vcl_string> > objects;
+  std::vector<std::pair<std::string, std::string> > objects;
   for (unsigned obj=0; obj<objs.size(); obj++) {
-    vcl_pair<vcl_string, vcl_string> pair(objs[obj], object_types_[choices[obj]]);
+    std::pair<std::string, std::string> pair(objs[obj], object_types_[choices[obj]]);
     objects.push_back(pair);
   }
 
@@ -247,7 +249,7 @@ void bwm_site_mgr::create_site()
   error.ask();
   if (! site_dialog.ask())
     return;
-  vcl_cout << "Site is not created MFC (Windows) is needed for this task!" << vcl_endl;
+  std::cout << "Site is not created MFC (Windows) is needed for this task!" << std::endl;
 #endif
 }
 
@@ -257,7 +259,7 @@ void bwm_site_mgr::edit_site()
   bwm_io_config_parser* parser = VXL_NULLPTR;
   parser = parse_config();
   if (parser == VXL_NULLPTR) {
-    vcl_cerr << "Site File is not a valid XML site!\n";
+    std::cerr << "Site File is not a valid XML site!\n";
     return;
   }
 
@@ -266,27 +268,27 @@ void bwm_site_mgr::edit_site()
 
   // new creation vars
   int num_images = 3;
-  vcl_vector<vcl_string> files(num_images);
+  std::vector<std::string> files(num_images);
   bool pyr[3] = {false, false, false};
   bool act[3] = {true, true, true};
-  vcl_vector<vcl_string> levels(num_images, "7");
+  std::vector<std::string> levels(num_images, "7");
 
   int num_objs = 3;
-  vcl_vector<vcl_string> objs(num_objs);
+  std::vector<std::string> objs(num_objs);
   int choices[3] = {0, 0, 0};
   double lat=0.0, lon=0.0, elev=0.0;
 
   // previously created obj vars
   bool act_old[30];
   bool tab_remove[30];
-  vcl_vector<vcl_string> cam;
-  vcl_string ext;
+  std::vector<std::string> cam;
+  std::string ext;
 
   site_edit_dialog.file("Pyramid Exe Path:", ext, site->pyr_exe_path_);
   site_edit_dialog.line_break();
 
   // first place the existing tableaux on the dialog
-  vcl_vector<bwm_io_tab_config* > tableaus;
+  std::vector<bwm_io_tab_config* > tableaus;
   site->tableaus(tableaus);
   cam.resize(tableaus.size());
   if (tableaus.size() > 0)
@@ -301,15 +303,15 @@ void bwm_site_mgr::edit_site()
       {
         bwm_io_tab_config_img* img_tab = static_cast<bwm_io_tab_config_img* > (t);
         bool active = img_tab->status;
-        vcl_string name = img_tab->name;
-        vcl_string path = img_tab->img_path;
+        std::string name = img_tab->name;
+        std::string path = img_tab->img_path;
         site_edit_dialog.message((" -- "+path).c_str());
         tab_remove[i] = false;
         site_edit_dialog.checkbox("Remove", tab_remove[i]);
         act_old[i] = active;
         site_edit_dialog.checkbox("Active", act_old[i]);
 #if 0
-        vcl_string ext = "*.RPG";
+        std::string ext = "*.RPG";
         site_edit_dialog.file("Add Camera:", ext, cam[i]);
 #endif // 0
         site_edit_dialog.line_break();
@@ -332,7 +334,7 @@ void bwm_site_mgr::edit_site()
   site_edit_dialog.message("ADD NEW:");
   site_edit_dialog.line_break();
   for (unsigned i=0; i<files.size(); i++) {
-    vcl_string ext;
+    std::string ext;
     site_edit_dialog.file("Image Path:", ext, files[i]);
     site_edit_dialog.checkbox("Do Pyramid?", pyr[i]);
     site_edit_dialog.field("Levels:", levels[i]);
@@ -343,7 +345,7 @@ void bwm_site_mgr::edit_site()
   site_edit_dialog.line_break();
 
   // put the existing objects
-  vcl_vector<vcl_pair<vcl_string, vcl_string> > object_paths;
+  std::vector<std::pair<std::string, std::string> > object_paths;
   bool obj_remove[30];
   parser->site()->objects(object_paths);
 
@@ -353,7 +355,7 @@ void bwm_site_mgr::edit_site()
 
     for (unsigned i=0; i<object_paths.size(); i++) {
       site_edit_dialog.message((" -- " + object_paths[i].first).c_str());
-      vcl_string object_type = object_paths[i].second;
+      std::string object_type = object_paths[i].second;
       site_edit_dialog.message(("Type: " + object_type).c_str());
       obj_remove[i] = false;
       site_edit_dialog.checkbox("Remove ", obj_remove[i]);
@@ -394,7 +396,7 @@ void bwm_site_mgr::edit_site()
     // check if the level values are integer
 
     // create a removal list for the tableaux that are marked for removal
-    vcl_vector<unsigned> removal;
+    std::vector<unsigned> removal;
     for (unsigned t=0; t<tableaus.size(); t++) {
       tableaus[t]->status = act_old[t];
       if (tab_remove[t])
@@ -403,7 +405,7 @@ void bwm_site_mgr::edit_site()
     site->remove_ = removal;
 
     // delete objects that are marked for removal
-    vcl_vector<vcl_pair<vcl_string, vcl_string> > undeleted_objs;
+    std::vector<std::pair<std::string, std::string> > undeleted_objs;
     bool deleted = false;
     for (unsigned i=0; i<object_paths.size(); i++) {
       if (!obj_remove[i]) {
@@ -418,20 +420,20 @@ void bwm_site_mgr::edit_site()
     }
 
     // create an updated site
-    vcl_vector<bool> pyramid;
-    vcl_vector<bool> active;
+    std::vector<bool> pyramid;
+    std::vector<bool> active;
     for (unsigned j=0; j<files.size(); j++) {
       pyramid.push_back(pyr[j]);
       active.push_back(act[j]);
     }
 
-    vcl_vector<vcl_pair<vcl_string, vcl_string> > objects;
+    std::vector<std::pair<std::string, std::string> > objects;
     for (unsigned obj=0; obj<objs.size(); obj++) {
-      vcl_pair<vcl_string, vcl_string> pair(objs[obj], object_types_[choices[obj]]);
+      std::pair<std::string, std::string> pair(objs[obj], object_types_[choices[obj]]);
       objects.push_back(pair);
     }
 #if 0
-    vcl_vector<vcl_vector<vcl_pair<vcl_string, vsol_point_2d> > > corr = parser->correspondences();
+    std::vector<std::vector<std::pair<std::string, vsol_point_2d> > > corr = parser->correspondences();
     for (unsigned i=0; i<corr.size(); i++) {
       bwm_corr_sptr c = new bwm_corr();
       if (parser->corresp_mode().compare("IMAGE_TO_IMAGE") == 0)
@@ -443,7 +445,7 @@ void bwm_site_mgr::edit_site()
     }
     site->corresp_mode = parser->corresp_mode();
     site->corr_type_ = parser->corresp_type();
-    // vcl_vector<vsol_point_3d> corresp_world_pts() {return corresp_world_pts_; }
+    // std::vector<vsol_point_3d> corresp_world_pts() {return corresp_world_pts_; }
 #endif // 0
 
     site->add(files, pyramid, active, levels, objects, new vsol_point_3d(lat, lon, elev));
@@ -463,7 +465,7 @@ void bwm_site_mgr::load_site()
   {
     init_site();
     bwm_site_sptr site = parser->site();
-    vcl_vector<bwm_io_tab_config* > tableaus;
+    std::vector<bwm_io_tab_config* > tableaus;
     site->tableaus(tableaus);
 
     site_name_ = site->name_;
@@ -497,25 +499,25 @@ void bwm_site_mgr::load_site()
     }
 
     // create the correspondences
-    vcl_vector<vcl_vector<vcl_pair<vcl_string, vsol_point_2d> > > corresp;
+    std::vector<std::vector<std::pair<std::string, vsol_point_2d> > > corresp;
     corresp = site->corresp_;
     if (corresp.size() > 0) {
-      vcl_string mode = site->corr_mode_;
-      vcl_string type = site->corr_type_;
+      std::string mode = site->corr_mode_;
+      std::string type = site->corr_type_;
 
       if (type.compare("MULTIPLE") == 0)
         bwm_observer_mgr::instance()->set_n_corrs(bwm_observer_mgr::MULTIPLE_CORRS);
       else if (type.compare("SINGLE") == 0)
         bwm_observer_mgr::instance()->set_n_corrs(bwm_observer_mgr::SINGLE_PT_CORR);
       else
-        vcl_cerr << "ERROR: Undefined Correspondence type=" << type << '\n';
+        std::cerr << "ERROR: Undefined Correspondence type=" << type << '\n';
 
       if (mode == "WORLD_TO_IMAGE") {
         if (corresp.size() > 0) {
           if (site->corresp_world_pts_.size() > 0)
             bwm_world::instance()->set_world_pt(site->corresp_world_pts_[0].get_p());
           else
-            vcl_cerr << "There is something wrong, the more is W-to-I but there is no world point\n";
+            std::cerr << "There is something wrong, the more is W-to-I but there is no world point\n";
         }
         bwm_observer_mgr::instance()->set_corr_mode(bwm_observer_mgr::WORLD_TO_IMAGE);
       }
@@ -526,7 +528,7 @@ void bwm_site_mgr::load_site()
       for (unsigned i=0; i<corresp.size(); i++)
       {
         bwm_corr_sptr corr = new bwm_corr();
-        vcl_vector<vcl_pair<vcl_string, vsol_point_2d> > elm = corresp[i];
+        std::vector<std::pair<std::string, vsol_point_2d> > elm = corresp[i];
 
         if (mode == "WORLD_TO_IMAGE") {
           corr->set_mode(false);
@@ -538,7 +540,7 @@ void bwm_site_mgr::load_site()
           corr->set_mode(true);
         }
 
-        vcl_string tab_name;
+        std::string tab_name;
         double X, Y;
         for (unsigned j=0; j<elm.size(); j++) {
           tab_name = elm[j].first;
@@ -564,16 +566,16 @@ void bwm_site_mgr::load_site()
       }
     }
     // create the objects
-    vcl_vector<vcl_pair<vcl_string, vcl_string> > objs;
+    std::vector<std::pair<std::string, std::string> > objs;
     site->objects(objs);
     for (unsigned i=0; i<objs.size(); i++)
     {
-      vcl_string path = objs[i].first;
-      vcl_string type = objs[i].second;
+      std::string path = objs[i].first;
+      std::string type = objs[i].second;
       if (path.size() > 0)
       {
         if (!vul_file::exists(path))
-          vcl_cerr << "ERROR: The object file \"" << path << "\" could not be found!\n";
+          std::cerr << "ERROR: The object file \"" << path << "\" could not be found!\n";
         else {
           if (type.compare(object_types_[VSOL]) == 0) {
             // will be implemented later!!!
@@ -627,7 +629,7 @@ void bwm_site_mgr::save_site()
   else
   {
     // ask the path for saving the site
-    vcl_string site_name, site_dir, pyr_exe, ext;
+    std::string site_name, site_dir, pyr_exe, ext;
     vgui_dialog_extensions d("Save the Site!");
     d.field("Site name:", site_name);
     d.line_break();
@@ -640,7 +642,7 @@ void bwm_site_mgr::save_site()
       return;
 
     if (!vul_file::is_directory(site_dir)) {
-      vcl_cerr << "Please enter a directory for the site\n";
+      std::cerr << "Please enter a directory for the site\n";
       return;
     }
 
@@ -650,16 +652,16 @@ void bwm_site_mgr::save_site()
   }
 
   long time = timer_.real();
-  vcl_stringstream strm;
-  strm << vcl_fixed << time;
-  vcl_string str(strm.str());
-  vcl_string site_path = site_dir_ + "\\" + site_name_ + "_v" + str + ".xml";
-  vcl_ofstream s(site_path.data());
+  std::stringstream strm;
+  strm << std::fixed << time;
+  std::string str(strm.str());
+  std::string site_path = site_dir_ + "\\" + site_name_ + "_v" + str + ".xml";
+  std::ofstream s(site_path.data());
 
   // get the tableaux
   for (unsigned i=0; i<active_tableaus_.size(); i++) {
     if (active_tableaus_[i]->type_name.compare("CameraTableau") == 0) {
-      vcl_string new_cam_path = bwm_tableau_mgr::instance()->save_camera(active_tableaus_[i]->name);
+      std::string new_cam_path = bwm_tableau_mgr::instance()->save_camera(active_tableaus_[i]->name);
       bwm_io_tab_config_cam* t  = static_cast<bwm_io_tab_config_cam*> (active_tableaus_[i]);
       t->cam_path = new_cam_path;
     }
@@ -684,7 +686,7 @@ void bwm_site_mgr::save_site()
   else
     site->corr_type_ = "SINGLE";
 
-  vcl_vector<bwm_corr_sptr> c_list = bwm_observer_mgr::instance()->correspondences();
+  std::vector<bwm_corr_sptr> c_list = bwm_observer_mgr::instance()->correspondences();
   for (unsigned i=0; i<c_list.size(); i++) {
     site->corresp_.push_back(c_list[i]->match_list());
     site->corresp_world_pts_.push_back(c_list[i]->world_pt());
@@ -692,17 +694,17 @@ void bwm_site_mgr::save_site()
 
   // add the objects
   // ask one camera tableau to save its objects
-  vcl_vector<bwm_observable_sptr> objs = bwm_world::instance()->objects();
-  vcl_string obj_path = site_dir_ + "\\" + site_name_ + "_objects\\";
+  std::vector<bwm_observable_sptr> objs = bwm_world::instance()->objects();
+  std::string obj_path = site_dir_ + "\\" + site_name_ + "_objects\\";
   vul_file::make_directory(obj_path);
   for (unsigned i=0; i<objs.size(); i++) {
     if (objs[i]) {
-      vcl_stringstream strm;
-      strm << vcl_fixed << i;
-      vcl_string str(strm.str());
-      vcl_string fname = obj_path + "mesh_" + str + ".ply";
+      std::stringstream strm;
+      strm << std::fixed << i;
+      std::string str(strm.str());
+      std::string fname = obj_path + "mesh_" + str + ".ply";
       objs[i]->save(fname.c_str());
-      site->objects_.push_back(vcl_pair<vcl_string, vcl_string>(fname, object_types_[MESH_FEATURE]));
+      site->objects_.push_back(std::pair<std::string, std::string>(fname, object_types_[MESH_FEATURE]));
     }
   }
 
@@ -711,22 +713,22 @@ void bwm_site_mgr::save_site()
 
 void bwm_site_mgr::load_video_site()
 {
-  vcl_string site_path = bwm_utils::select_file();
+  std::string site_path = bwm_utils::select_file();
   if (!site_path.size())
   {
-    vcl_cerr << "In bwm_site_mgr::load_video_site() - no site path specified\n";
+    std::cerr << "In bwm_site_mgr::load_video_site() - no site path specified\n";
     return;
   }
 
   bwm_video_site_io cio;
   if (!cio.open(site_path))
   {
-    vcl_cerr << "In bwm_site_mgr::load_video_site() - load failed in XML parse\n";
+    std::cerr << "In bwm_site_mgr::load_video_site() - load failed in XML parse\n";
     return;
   }
   site_name_ = cio.name();
-  vcl_string frame_glob = cio.video_path();
-  vcl_string camera_glob = cio.camera_path();
+  std::string frame_glob = cio.video_path();
+  std::string camera_glob = cio.camera_path();
   bwm_io_tab_config_video* v = new bwm_io_tab_config_video(site_name_, true, frame_glob, camera_glob);
   active_tableaus_.push_back(v);
   bwm_tableau_img* t = tableau_factory_.create_tableau(v);
@@ -739,8 +741,8 @@ void bwm_site_mgr::load_video_site()
   site_dir_ = cio.site_directory();
   video_path_ = cio.video_path();
   camera_path_ = cio.camera_path();
-  vcl_vector<vcl_string> obj_types = cio.object_types();
-  vcl_vector<vcl_string> obj_paths = cio.object_paths();
+  std::vector<std::string> obj_types = cio.object_types();
+  std::vector<std::string> obj_paths = cio.object_paths();
   unsigned nobj = obj_types.size();
   if (!nobj) return;
   bwm_tableau_mgr::instance()->set_draw_mode_face();
@@ -770,11 +772,11 @@ void bwm_site_mgr::save_video_site()
   // it is not clear where an object directory path should go bwm_world?
 
   bool found = false;
-  vcl_vector<bwm_observer_cam*> obsvs =
+  std::vector<bwm_observer_cam*> obsvs =
     bwm_observer_mgr::instance()->observers_cam();
   bwm_observer_video* obv = VXL_NULLPTR;
 
-  for (vcl_vector<bwm_observer_cam*>::iterator oit = obsvs.begin();
+  for (std::vector<bwm_observer_cam*>::iterator oit = obsvs.begin();
        oit != obsvs.end()&&!found; ++oit)
     if ((*oit)->type_name()=="bwm_observer_video")
     {
@@ -784,7 +786,7 @@ void bwm_site_mgr::save_video_site()
 
   if (!found)
   {
-    vcl_cerr << "In bwm_site_mgr::save_video_site() - no observer of type video\n";
+    std::cerr << "In bwm_site_mgr::save_video_site() - no observer of type video\n";
     return;
   }
 
@@ -809,7 +811,7 @@ void bwm_site_mgr::save_video_site()
   else
   {
     // ask the path for saving the site
-    vcl_string ext = "png";
+    std::string ext = "png";
     vgui_dialog_extensions d("Save the Video Site!"); //Still will NOT work in Linux!
     d.field("Video Site Name:", this->site_name_);
     d.line_break();
@@ -819,7 +821,7 @@ void bwm_site_mgr::save_video_site()
     if (!d.ask())
       return;
     if (!vul_file::is_directory(this->site_dir_)) {
-      vcl_cerr << "Please enter a directory for the video site\n";
+      std::cerr << "Please enter a directory for the video site\n";
       return;
     }
 
@@ -829,42 +831,42 @@ void bwm_site_mgr::save_video_site()
     vio.set_camera_path(obv->camera_path());
   }
 
-  vcl_vector<bwm_observable_sptr> objs = bwm_world::instance()->objects();
-  vcl_vector<vcl_string> obj_types;
-  vcl_vector<vcl_string> obj_paths;
-  vcl_string obj_dir = site_dir_ + "/" + site_name_ + "_objects/";
+  std::vector<bwm_observable_sptr> objs = bwm_world::instance()->objects();
+  std::vector<std::string> obj_types;
+  std::vector<std::string> obj_paths;
+  std::string obj_dir = site_dir_ + "/" + site_name_ + "_objects/";
   vul_file::make_directory(obj_dir);
   unsigned iobj = 0;
-  for (vcl_vector<bwm_observable_sptr>::iterator oit = objs.begin();
+  for (std::vector<bwm_observable_sptr>::iterator oit = objs.begin();
        oit != objs.end(); ++oit, ++iobj)
     if ((*oit)->type_name()=="bwm_observable_mesh") {
-      vcl_stringstream strm;
-      strm << vcl_fixed << iobj;
-      vcl_string str(strm.str());
-      vcl_string path = obj_dir + "mesh_" + str + ".ply";
+      std::stringstream strm;
+      strm << std::fixed << iobj;
+      std::string str(strm.str());
+      std::string path = obj_dir + "mesh_" + str + ".ply";
       obj_types.push_back("mesh_feature");
       obj_paths.push_back(path);
       (*oit)->save(path.c_str());
     }
     else
-      vcl_cout << "Can't save object of type " << (*oit)->type_name() << '\n';
+      std::cout << "Can't save object of type " << (*oit)->type_name() << '\n';
   vio.set_object_types(obj_types);
   vio.set_object_paths(obj_paths);
 
-  vcl_vector<bwm_video_corr_sptr> corrs = obv->corrs();
+  std::vector<bwm_video_corr_sptr> corrs = obv->corrs();
   vio.set_corrs(corrs);
   long time = timer_.real();
-  vcl_stringstream strm;
-  strm << vcl_fixed << time;
-  vcl_string ver(strm.str());
-  vcl_string site_path = site_dir_ + "/" + site_name_ + "_v" + ver + ".xml";
+  std::stringstream strm;
+  strm << std::fixed << time;
+  std::string ver(strm.str());
+  std::string site_path = site_dir_ + "/" + site_name_ + "_v" + ver + ".xml";
   vio.x_write(site_path);
 }
 
 void bwm_site_mgr::load_img_tableau()
 {
   vgui_dialog/*_extensions*/ params ("Image Tableau");
-  vcl_string ext, name, img_file, empty="";
+  std::string ext, name, img_file, empty="";
   params.field("Tableau Name", name);
   // params.line_break();
   params.file("Image...", ext, img_file);
@@ -887,10 +889,10 @@ void bwm_site_mgr::load_img_tableau()
 void bwm_site_mgr::load_video_tableau()
 {
   vgui_dialog_extensions params ("Video Tableau");
-  static vcl_string video_path = "";
-  static vcl_string camera_glob = "";
-  vcl_string name = "none";
-  vcl_string ext = "";
+  static std::string video_path = "";
+  static std::string camera_glob = "";
+  std::string name = "none";
+  std::string ext = "";
   params.field("Tableau Name", name);
   params.line_break();
   params.dir("Frame Glob or File", ext, video_path);
@@ -915,11 +917,11 @@ void bwm_site_mgr::load_video_tableau()
 void bwm_site_mgr::load_cam_tableau()
 {
   vgui_dialog_extensions params ("Camera Tableau");
-  vcl_string ext, name, img_file, cam_file, empty="";
-  //vcl_string ext, name, cam_file, empty="";
-  //static vcl_string img_file = "";
+  std::string ext, name, img_file, cam_file, empty="";
+  //std::string ext, name, cam_file, empty="";
+  //static std::string img_file = "";
   static int camera_type = 0;
-  vcl_vector<vcl_string> types;
+  std::vector<std::string> types;
   types.push_back("generic");
   types.push_back("rational");
   types.push_back("projective");
@@ -945,7 +947,7 @@ void bwm_site_mgr::load_cam_tableau()
     return;
   }
 
-  vcl_string cam_str;
+  std::string cam_str;
   switch (camera_type)
   {
    case 0:
@@ -978,30 +980,30 @@ void bwm_site_mgr::load_cam_tableau()
 
 bwm_io_config_parser* bwm_site_mgr::parse_config()
 {
-  vcl_string fname = bwm_utils::select_file();
+  std::string fname = bwm_utils::select_file();
 
   if (fname.size() == 0)
     return VXL_NULLPTR;
 
   bwm_io_config_parser* parser = new bwm_io_config_parser();
-  vcl_FILE* xmlFile = vcl_fopen(fname.c_str(), "r");
+  std::FILE* xmlFile = std::fopen(fname.c_str(), "r");
   if (!xmlFile) {
-    vcl_cerr << fname.c_str() << " error on opening\n";
+    std::cerr << fname.c_str() << " error on opening\n";
     delete parser;
     return VXL_NULLPTR;
   }
   if (!parser->parseFile(xmlFile)) {
-    vcl_cerr << XML_ErrorString(parser->XML_GetErrorCode()) << " at line "
+    std::cerr << XML_ErrorString(parser->XML_GetErrorCode()) << " at line "
              << parser->XML_GetCurrentLineNumber() << '\n';
 
     delete parser;
     return VXL_NULLPTR;
   }
-  vcl_cout << "finished!" << vcl_endl;
+  std::cout << "finished!" << std::endl;
   return parser;
 }
 
-static void write_vrml_header(vcl_ofstream& str)
+static void write_vrml_header(std::ofstream& str)
 {
   str << "#VRML V2.0 utf8\n"
       << "Background {\n"
@@ -1010,8 +1012,8 @@ static void write_vrml_header(vcl_ofstream& str)
       << "}\n";
 }
 
-static void write_vrml_points(vcl_ofstream& str,
-                              vcl_vector<vgl_point_3d<double> > const& pts3d, double rad=2.0)
+static void write_vrml_points(std::ofstream& str,
+                              std::vector<vgl_point_3d<double> > const& pts3d, double rad=2.0)
 {
   int n = pts3d.size();
   for (int i =0; i<n; i++)
@@ -1037,8 +1039,8 @@ static void write_vrml_points(vcl_ofstream& str,
 }
 
 static void
-write_vrml_cameras(vcl_ofstream& str,
-                   vcl_vector<vpgl_perspective_camera<double> > const& cams, double rad=2.0)
+write_vrml_cameras(std::ofstream& str,
+                   std::vector<vpgl_perspective_camera<double> > const& cams, double rad=2.0)
 {
   str << "#VRML V2.0 utf8\n"
       << "Background {\n"
@@ -1068,13 +1070,13 @@ write_vrml_cameras(vcl_ofstream& str,
         <<  " ]\n"
         << "}\n";
     vgl_vector_3d<double> r = cams[i].principal_axis();
-    vcl_cout<<"principal axis :" <<r<<vcl_endl;
+    std::cout<<"principal axis :" <<r<<std::endl;
     vnl_double_3 yaxis(0.0, 1.0, 0.0), pvec(r.x(), r.y(), r.z());
     vgl_rotation_3d<double> rot(yaxis, pvec);
     vnl_quaternion<double> q = rot.as_quaternion();
 
     vnl_double_3 axis = q.axis();
-    vcl_cout<<"quaternion "<<axis<< " angle "<<q.angle()<<"\n\n";
+    std::cout<<"quaternion "<<axis<< " angle "<<q.angle()<<"\n\n";
     double ang = q.angle();
     str <<  "Transform {\n"
         << " translation " << cent.x()+6*rad*r.x() << ' ' << cent.y()+6*rad*r.y()
@@ -1102,7 +1104,7 @@ write_vrml_cameras(vcl_ofstream& str,
 
 #ifdef DEBUG
 static void
-write_vrml_box(vcl_ofstream& str,vgl_box_3d<double> box)
+write_vrml_box(std::ofstream& str,vgl_box_3d<double> box)
 {
   str << "#VRML V2.0 utf8\n"
       << "Background {\n"
@@ -1132,14 +1134,14 @@ write_vrml_box(vcl_ofstream& str,vgl_box_3d<double> box)
 }
 #endif
 
-static void save_video_world_points_vrml_impl(vcl_ofstream& os)
+static void save_video_world_points_vrml_impl(std::ofstream& os)
 {
   bool found = false;
-  vcl_vector<bwm_observer_cam*> obsvs =
+  std::vector<bwm_observer_cam*> obsvs =
     bwm_observer_mgr::instance()->observers_cam();
   bwm_observer_video* obv = VXL_NULLPTR;
 
-  for (vcl_vector<bwm_observer_cam*>::iterator oit = obsvs.begin();
+  for (std::vector<bwm_observer_cam*>::iterator oit = obsvs.begin();
        oit != obsvs.end()&&!found; ++oit)
     if ((*oit)->type_name()=="bwm_observer_video")
     {
@@ -1149,12 +1151,12 @@ static void save_video_world_points_vrml_impl(vcl_ofstream& os)
 
   if (!found)
   {
-    vcl_cerr << "In bwm_site_mgr::save_video_world_points_vrml() - no observer of type video\n";
+    std::cerr << "In bwm_site_mgr::save_video_world_points_vrml() - no observer of type video\n";
     return;
   }
-  vcl_vector<vgl_point_3d<double> > pts;
-  vcl_vector<bwm_video_corr_sptr> corrs = obv->corrs();
-  for (vcl_vector<bwm_video_corr_sptr>::iterator cit = corrs.begin();
+  std::vector<vgl_point_3d<double> > pts;
+  std::vector<bwm_video_corr_sptr> corrs = obv->corrs();
+  for (std::vector<bwm_video_corr_sptr>::iterator cit = corrs.begin();
        cit!= corrs.end(); ++cit)
   {
     bwm_video_corr_sptr corr = *cit;
@@ -1168,14 +1170,14 @@ static void save_video_world_points_vrml_impl(vcl_ofstream& os)
   write_vrml_points(os, pts);
 }
 
-static void save_video_world_points_vrml_impl(vcl_ofstream& os, vgl_box_3d<double> & box, double res)
+static void save_video_world_points_vrml_impl(std::ofstream& os, vgl_box_3d<double> & box, double res)
 {
   bool found = false;
-  vcl_vector<bwm_observer_cam*> obsvs =
+  std::vector<bwm_observer_cam*> obsvs =
     bwm_observer_mgr::instance()->observers_cam();
   bwm_observer_video* obv = VXL_NULLPTR;
 
-  for (vcl_vector<bwm_observer_cam*>::iterator oit = obsvs.begin();
+  for (std::vector<bwm_observer_cam*>::iterator oit = obsvs.begin();
        oit != obsvs.end()&&!found; ++oit)
     if ((*oit)->type_name()=="bwm_observer_video")
     {
@@ -1185,13 +1187,13 @@ static void save_video_world_points_vrml_impl(vcl_ofstream& os, vgl_box_3d<doubl
 
   if (!found)
   {
-    vcl_cerr << "In bwm_site_mgr::save_video_world_points_vrml() - no observer of type video\n";
+    std::cerr << "In bwm_site_mgr::save_video_world_points_vrml() - no observer of type video\n";
     return;
   }
-  vcl_vector<vgl_point_3d<double> > pts;
-  vcl_vector<bwm_video_corr_sptr> corrs = obv->corrs();
+  std::vector<vgl_point_3d<double> > pts;
+  std::vector<bwm_video_corr_sptr> corrs = obv->corrs();
   int cnt=0;
-  for (vcl_vector<bwm_video_corr_sptr>::iterator cit = corrs.begin();
+  for (std::vector<bwm_video_corr_sptr>::iterator cit = corrs.begin();
        cit!= corrs.end(); ++cit)
   {
     if ((++cnt)%10==0)
@@ -1211,24 +1213,24 @@ static void save_video_world_points_vrml_impl(vcl_ofstream& os, vgl_box_3d<doubl
 
 void bwm_site_mgr::save_video_world_points_vrml()
 {
-  vcl_string ext = ".wrl";
-  vcl_string path;
+  std::string ext = ".wrl";
+  std::string path;
   vgui_dialog vrml_dialog("Write World Points");
   vrml_dialog.file("VRML file", ext, path);
   if (!vrml_dialog.ask())
     return;
-  vcl_ofstream os(path.c_str());
+  std::ofstream os(path.c_str());
   save_video_world_points_vrml_impl(os);
 }
 
-static void save_video_cameras_vrml_impl(vcl_ofstream& os)
+static void save_video_cameras_vrml_impl(std::ofstream& os)
 {
   bool found = false;
-  vcl_vector<bwm_observer_cam*> obsvs =
+  std::vector<bwm_observer_cam*> obsvs =
     bwm_observer_mgr::instance()->observers_cam();
   bwm_observer_video* obv = VXL_NULLPTR;
 
-  for (vcl_vector<bwm_observer_cam*>::iterator oit = obsvs.begin();
+  for (std::vector<bwm_observer_cam*>::iterator oit = obsvs.begin();
        oit != obsvs.end()&&!found; ++oit)
     if ((*oit)->type_name()=="bwm_observer_video")
     {
@@ -1238,18 +1240,18 @@ static void save_video_cameras_vrml_impl(vcl_ofstream& os)
 
   if (!found)
   {
-    vcl_cerr << "In bwm_site_mgr::save_video_cameras_vrml() - no observer of type video\n";
+    std::cerr << "In bwm_site_mgr::save_video_cameras_vrml() - no observer of type video\n";
     return;
   }
   bwm_video_cam_istream_sptr cam_istr = obv->camera_stream();
   if (!cam_istr||!cam_istr->is_valid()||!cam_istr->is_seekable()) {
-    vcl_cerr << "Invalid or non-seekable camera stream\n";
+    std::cerr << "Invalid or non-seekable camera stream\n";
     return;
   }
   //to return to starting state
   unsigned cam_number = cam_istr->camera_number();
   cam_istr->seek_camera(0);
-  vcl_vector<vpgl_perspective_camera<double> > cams;
+  std::vector<vpgl_perspective_camera<double> > cams;
   while (true) {
     vpgl_perspective_camera<double>* cam = cam_istr->current_camera();
     cams.push_back(*cam);
@@ -1263,14 +1265,14 @@ static void save_video_cameras_vrml_impl(vcl_ofstream& os)
   write_vrml_cameras(os, cams);
 }
 
-static void save_video_cameras_vrml_impl(vcl_ofstream& os, vgl_box_3d<double> box, double res)
+static void save_video_cameras_vrml_impl(std::ofstream& os, vgl_box_3d<double> box, double res)
 {
   bool found = false;
-  vcl_vector<bwm_observer_cam*> obsvs =
+  std::vector<bwm_observer_cam*> obsvs =
     bwm_observer_mgr::instance()->observers_cam();
   bwm_observer_video* obv = VXL_NULLPTR;
 
-  for (vcl_vector<bwm_observer_cam*>::iterator oit = obsvs.begin();
+  for (std::vector<bwm_observer_cam*>::iterator oit = obsvs.begin();
        oit != obsvs.end()&&!found; ++oit)
     if ((*oit)->type_name()=="bwm_observer_video")
     {
@@ -1280,22 +1282,22 @@ static void save_video_cameras_vrml_impl(vcl_ofstream& os, vgl_box_3d<double> bo
 
   if (!found)
   {
-    vcl_cerr << "In bwm_site_mgr::save_video_cameras_vrml() - no observer of type video\n";
+    std::cerr << "In bwm_site_mgr::save_video_cameras_vrml() - no observer of type video\n";
     return;
   }
   bwm_video_cam_istream_sptr cam_istr = obv->camera_stream();
   if (!cam_istr||!cam_istr->is_valid()||!cam_istr->is_seekable()) {
-    vcl_cerr << "Invalid or non-seekable camera stream\n";
+    std::cerr << "Invalid or non-seekable camera stream\n";
     return;
   }
   //to return to starting state
   unsigned cam_number = cam_istr->camera_number();
   cam_istr->seek_camera(0);
-  vcl_vector<vpgl_perspective_camera<double> > cams;
+  std::vector<vpgl_perspective_camera<double> > cams;
   int cnt=0;
   while (true) {
     vpgl_perspective_camera<double>* cam = cam_istr->current_camera();
-    vcl_cout<<cam->get_camera_center();
+    std::cout<<cam->get_camera_center();
     if (cnt++>170 )
       if (box.contains(cam->get_camera_center()))
         cams.push_back(*cam);
@@ -1312,21 +1314,21 @@ static void save_video_cameras_vrml_impl(vcl_ofstream& os, vgl_box_3d<double> bo
 
 void bwm_site_mgr::save_video_cameras_vrml()
 {
-  vcl_string ext = ".wrl";
-  vcl_string path;
+  std::string ext = ".wrl";
+  std::string path;
   vgui_dialog vrml_dialog("Write World Points");
   vrml_dialog.file("VRML file", ext, path);
   if (!vrml_dialog.ask())
     return;
-  vcl_ofstream os(path.c_str());
+  std::ofstream os(path.c_str());
   write_vrml_header(os);
   save_video_cameras_vrml_impl(os);
 }
 
 void bwm_site_mgr::save_video_cams_and_world_pts_vrml()
 {
-  vcl_string ext = ".wrl";
-  vcl_string path;
+  std::string ext = ".wrl";
+  std::string path;
   vgui_dialog vrml_dialog("Write World Points");
   vrml_dialog.file("VRML file", ext, path);
   vrml_dialog.checkbox("Default Params for saving ", defaultparam_);
@@ -1341,7 +1343,7 @@ void bwm_site_mgr::save_video_cams_and_world_pts_vrml()
   if (!vrml_dialog.ask())
     return;
   vgl_box_3d<double> box(xmin_,ymin_,zmin_,xmax_,ymax_,zmax_);
-  vcl_ofstream os(path.c_str());
+  std::ofstream os(path.c_str());
   write_vrml_header(os);
   if (defaultparam_)
   {
@@ -1361,8 +1363,8 @@ void bwm_site_mgr::save_video_cams_and_world_pts_vrml()
 //: compute 3-d parameters, site bounding box and GSD
 void bwm_site_mgr::compute_3d_world_params()
 {
-  vcl_string path = "";
-  vcl_string ext = "*.txt";
+  std::string path = "";
+  std::string ext = "*.txt";
   vgui_dialog par_dlg("World Params");
   par_dlg.file("Param File", ext, path);
   if (!par_dlg.ask())
@@ -1371,11 +1373,11 @@ void bwm_site_mgr::compute_3d_world_params()
   double gsd = 0;
 
   bool found = false;
-  vcl_vector<bwm_observer_cam*> obsvs =
+  std::vector<bwm_observer_cam*> obsvs =
     bwm_observer_mgr::instance()->observers_cam();
   bwm_observer_video* obv = VXL_NULLPTR;
 
-  for (vcl_vector<bwm_observer_cam*>::iterator oit = obsvs.begin();
+  for (std::vector<bwm_observer_cam*>::iterator oit = obsvs.begin();
        oit != obsvs.end()&&!found; ++oit)
     if ((*oit)->type_name()=="bwm_observer_video")
     {
@@ -1385,21 +1387,21 @@ void bwm_site_mgr::compute_3d_world_params()
 
   if (!found)
   {
-    vcl_cerr << "In bwm_site_mgr::compute_world_params() - no observer of type video\n";
+    std::cerr << "In bwm_site_mgr::compute_world_params() - no observer of type video\n";
     return;
   }
-  vcl_vector<bwm_video_corr_sptr> corrs = obv->corrs();
+  std::vector<bwm_video_corr_sptr> corrs = obv->corrs();
   if (!corrs.size()) {
-    vcl_cerr << "In bwm_site_mgr::compute_world_params() - no correspondences\n";
+    std::cerr << "In bwm_site_mgr::compute_world_params() - no correspondences\n";
     return;
   }
   bwm_video_cam_istream_sptr cam_istr = obv->camera_stream();
   if (!cam_istr || !cam_istr->is_valid() || !cam_istr->is_seekable()) {
-    vcl_cerr << "In bwm_site_mgr::compute_world_params() - no correspondences\n";
+    std::cerr << "In bwm_site_mgr::compute_world_params() - no correspondences\n";
     return;
   }
   //Add world points to bounding box
-  vcl_vector<bwm_video_corr_sptr>::iterator cit = corrs.begin();
+  std::vector<bwm_video_corr_sptr>::iterator cit = corrs.begin();
   for (; cit != corrs.end(); ++cit)
   {
     bwm_video_corr_sptr c = *cit;
@@ -1415,14 +1417,14 @@ void bwm_site_mgr::compute_3d_world_params()
   vgl_box_2d<double> bb_2d = bpgl_project::project_bounding_box(*cam, bb);
   //get the number of pixels on the diagonal
   double w = bb_2d.width(), h = bb_2d.height();
-  double diag2 = vcl_sqrt(w*w + h*h);
+  double diag2 = std::sqrt(w*w + h*h);
   //get the length of the 3-d bb diagonal
   double w3 = bb.width(), h3 = bb.height(), d3 = bb.depth();
-  double diag3 = vcl_sqrt(w3*w3 + h3*h3 + d3*d3);
+  double diag3 = std::sqrt(w3*w3 + h3*h3 + d3*d3);
   gsd = diag3/diag2;
-  vcl_ofstream os(path.c_str());
+  std::ofstream os(path.c_str());
   if (!os.is_open()) {
-    vcl_cerr << "In bwm_site_mgr::compute_world_params() - invalid parameter output path\n";
+    std::cerr << "In bwm_site_mgr::compute_world_params() - invalid parameter output path\n";
     return;
   }
   os << "World Bounding Box\n"
@@ -1439,22 +1441,22 @@ void bwm_site_mgr::compute_3d_world_params()
 
 void bwm_site_mgr::load_depth_map_scene()
 {
-  vcl_string path = bwm_utils::select_file();
-  vcl_string dir = vul_file::dirname(path);
+  std::string path = bwm_utils::select_file();
+  std::string dir = vul_file::dirname(path);
   depth_map_scene scene;
   vsl_b_ifstream is(path.c_str());
   if (!is) {
-    vcl_cout << "invalid binary stream for path " << path << vcl_endl;
+    std::cout << "invalid binary stream for path " << path << std::endl;
     return;
   }
   scene.b_read(is);
-  vcl_string name = "depth_map";
-  vcl_string ifile = scene.image_path();
-  vcl_string ipath;
+  std::string name = "depth_map";
+  std::string ifile = scene.image_path();
+  std::string ipath;
   if (!vul_file::exists(ifile)) {
     // loaded depth_map_scene doesn't have image path, use the jpg having same name instead
-    vcl_cerr << "\n WARNING: loaded depth_map_scene does not have image path" << vcl_endl;
-    vcl_string temp = vul_file::strip_extension(vul_file::strip_directory(path.c_str())) + ".jpg";
+    std::cerr << "\n WARNING: loaded depth_map_scene does not have image path" << std::endl;
+    std::string temp = vul_file::strip_extension(vul_file::strip_directory(path.c_str())) + ".jpg";
     scene.set_image_path(temp);
     ipath = dir + '/' + temp;
   }
@@ -1473,5 +1475,5 @@ void bwm_site_mgr::load_depth_map_scene()
 
 void bwm_site_mgr::save_depth_map_scene()
 {
-  vcl_cerr << "bwm_site_mgr::save_depth_map_scene() not yet implemented!!!\n";
+  std::cerr << "bwm_site_mgr::save_depth_map_scene() not yet implemented!!!\n";
 }

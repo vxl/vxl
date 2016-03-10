@@ -11,7 +11,9 @@
 //   <none yet>
 // \endverbatim
 
-#include <vcl_fstream.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <fstream>
 #include <boxm/boxm_scene_base.h>
 #include <boxm/boxm_scene.h>
 #include <boxm/algo/rt/boxm_render_expected_image_functor.h>
@@ -37,7 +39,7 @@ bool boxm_render_expected_rt_process_cons(bprb_func_process& pro)
   //input[2]: ni of the expected image
   //input[3]: nj of the expected image
   //input[4]: black background?
-  vcl_vector<vcl_string> input_types_(n_inputs_);
+  std::vector<std::string> input_types_(n_inputs_);
   input_types_[0] = "boxm_scene_base_sptr";
   input_types_[1] = "vpgl_camera_double_sptr";
   input_types_[2] = "unsigned";
@@ -47,7 +49,7 @@ bool boxm_render_expected_rt_process_cons(bprb_func_process& pro)
   // process has 2 outputs:
   // output[0]: rendered image
   // output[0]: mask
-  vcl_vector<vcl_string>  output_types_(n_outputs_);
+  std::vector<std::string>  output_types_(n_outputs_);
   output_types_[0] = "vil_image_view_base_sptr";
   output_types_[1] = "vil_image_view_base_sptr";
 
@@ -59,7 +61,7 @@ bool boxm_render_expected_rt_process(bprb_func_process& pro)
   using namespace boxm_render_expected_rt_process_globals;
 
   if ( pro.n_inputs() < n_inputs_ ){
-    vcl_cout << pro.name() << ": The input number should be " << n_inputs_<< vcl_endl;
+    std::cout << pro.name() << ": The input number should be " << n_inputs_<< std::endl;
     return false;
   }
 
@@ -85,7 +87,7 @@ bool boxm_render_expected_rt_process(bprb_func_process& pro)
     }
     else
     {
-       vcl_cout<<"Ray tracing version not yet implemented"<<vcl_endl;
+       std::cout<<"Ray tracing version not yet implemented"<<std::endl;
        return false;
     }
     img_mask = new vil_image_view<float>(mask);
@@ -104,7 +106,7 @@ bool boxm_render_expected_rt_process(bprb_func_process& pro)
     }
     else
     {
-       vcl_cout<<"Ray tracing version not yet implemented"<<vcl_endl;
+       std::cout<<"Ray tracing version not yet implemented"<<std::endl;
        return false;
     }
   //img = new vil_image_view<boxm_apm_traits<BOXM_APM_MOG_GREY>::obs_datatype>(expected);
@@ -128,7 +130,7 @@ bool boxm_render_expected_rt_process(bprb_func_process& pro)
     vil_convert_stretch_range_limited(expected,*expected_byte, 0.0f, 1.0f);
     img = expected_byte;
   } else {
-    vcl_cout << "boxm_render_expected_process: undefined APM type" << vcl_endl;
+    std::cout << "boxm_render_expected_process: undefined APM type" << std::endl;
     return false;
   }
 

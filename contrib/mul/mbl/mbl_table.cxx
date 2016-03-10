@@ -5,9 +5,11 @@
 // \date 05-Aug-2004
 // \brief Container for tabulated data suitable for reading/writing to delimited text files
 
-#include <vcl_cstdlib.h>
-#include <vcl_iostream.h>
-#include <vcl_cmath.h>
+#include <cstdlib>
+#include <iostream>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <cmath>
 
 
 // Tolerance used to determine whether table entries are equal
@@ -33,7 +35,7 @@ mbl_table::mbl_table(const char delim)
 //: Constructor
 //========================================================================
 mbl_table::mbl_table(const char delim,
-                     const vcl_vector<vcl_string>& headers)
+                     const std::vector<std::string>& headers)
   : delimiter_(delim),
     column_headers_(headers)
 {
@@ -74,10 +76,10 @@ unsigned mbl_table::num_rows() const
 //========================================================================
 // Returns true if column exists
 //========================================================================
-bool mbl_table::column_exists(const vcl_string& header) const
+bool mbl_table::column_exists(const std::string& header) const
 {
     // Does the map contain this header?
-    vcl_map<vcl_string, unsigned>::const_iterator iter =
+    std::map<std::string, unsigned>::const_iterator iter =
         header_to_column_index_.find(header);
 
     return  iter != header_to_column_index_.end();
@@ -86,14 +88,14 @@ bool mbl_table::column_exists(const vcl_string& header) const
 //========================================================================
 // Get the column of data corresponding to a particular heading.
 //========================================================================
-bool mbl_table::get_column(const vcl_string& header,
-                           vcl_vector<double>& column) const
+bool mbl_table::get_column(const std::string& header,
+                           std::vector<double>& column) const
 {
   bool success = false;
   column.clear();
 
   // Does the map contain this header?
-  vcl_map<vcl_string, unsigned>::const_iterator iter =
+  std::map<std::string, unsigned>::const_iterator iter =
     header_to_column_index_.find(header);
 
   if (iter != header_to_column_index_.end())
@@ -104,7 +106,7 @@ bool mbl_table::get_column(const vcl_string& header,
   }
   else
   {
-    vcl_cerr << "ERROR: mbl_table::get_column(): column \""
+    std::cerr << "ERROR: mbl_table::get_column(): column \""
              << header << "\" does not exist in the table.\n";
   }
 
@@ -116,7 +118,7 @@ bool mbl_table::get_column(const vcl_string& header,
 // Get a specified row of data.
 //========================================================================
 bool mbl_table::get_row(const unsigned& r,
-                        vcl_vector<double>& row) const
+                        std::vector<double>& row) const
 {
   // Clear output data
   row.clear();
@@ -134,7 +136,7 @@ bool mbl_table::get_row(const unsigned& r,
   }
   else
   {
-    vcl_cerr << "ERROR: mbl_table::get_row(): row "
+    std::cerr << "ERROR: mbl_table::get_row(): row "
              << r << " does not exist in the table.\n";
     return false;
   }
@@ -144,7 +146,7 @@ bool mbl_table::get_row(const unsigned& r,
 //========================================================================
 // Get the list of column headers (in column order).
 //========================================================================
-void mbl_table::get_column_headers(vcl_vector<vcl_string>& headers) const
+void mbl_table::get_column_headers(std::vector<std::string>& headers) const
 {
   headers = column_headers_;
 }
@@ -153,20 +155,20 @@ void mbl_table::get_column_headers(vcl_vector<vcl_string>& headers) const
 //========================================================================
 // Set the value of an existing element.
 //========================================================================
-bool mbl_table::set_element(const vcl_string& header,
+bool mbl_table::set_element(const std::string& header,
                             const unsigned r,
                             const double value)
 {
   bool success = false;
 
   // Does the map contain this column header?
-  vcl_map<vcl_string, unsigned>::const_iterator iter =
+  std::map<std::string, unsigned>::const_iterator iter =
     header_to_column_index_.find(header);
 
   if (iter != header_to_column_index_.end())
   {
     // Does the column have sufficient rows?
-    vcl_vector<double>& col = columns_[iter->second];
+    std::vector<double>& col = columns_[iter->second];
     if (col.size()>r)
     {
       // Set the value
@@ -175,13 +177,13 @@ bool mbl_table::set_element(const vcl_string& header,
     }
     else
     {
-      vcl_cerr << "ERROR: mbl_table::set_element(): row "
+      std::cerr << "ERROR: mbl_table::set_element(): row "
                << r << " does not exist in the table.\n";
     }
   }
   else
   {
-    vcl_cerr << "ERROR: mbl_table::set_element(): column \""
+    std::cerr << "ERROR: mbl_table::set_element(): column \""
              << header << "\" does not exist in the table.\n";
   }
 
@@ -192,7 +194,7 @@ bool mbl_table::set_element(const vcl_string& header,
 //========================================================================
 // Get the value of an existing element.
 //========================================================================
-double mbl_table::get_element(const vcl_string& header,
+double mbl_table::get_element(const std::string& header,
                               const unsigned r,
                               bool* success/*=0*/) const
 {
@@ -201,13 +203,13 @@ double mbl_table::get_element(const vcl_string& header,
     *success = false;
 
   // Does the map contain this column header?
-  vcl_map<vcl_string, unsigned>::const_iterator iter =
+  std::map<std::string, unsigned>::const_iterator iter =
     header_to_column_index_.find(header);
 
   if (iter != header_to_column_index_.end())
   {
     // Does the column have sufficient rows?
-    const vcl_vector<double>& col = columns_[iter->second];
+    const std::vector<double>& col = columns_[iter->second];
     if (col.size()>r)
     {
       // Get the value
@@ -217,13 +219,13 @@ double mbl_table::get_element(const vcl_string& header,
     }
     else
     {
-      vcl_cerr << "ERROR: mbl_table::get_element(): row "
+      std::cerr << "ERROR: mbl_table::get_element(): row "
                << r << " does not exist in the table.\n";
     }
   }
   else
   {
-    vcl_cerr << "ERROR: mbl_table::get_element(): column \""
+    std::cerr << "ERROR: mbl_table::get_element(): column \""
              << header << "\" does not exist in the table.\n";
   }
 
@@ -234,8 +236,8 @@ double mbl_table::get_element(const vcl_string& header,
 //========================================================================
 // Append a column of data with its own heading.
 //========================================================================
-bool mbl_table::append_column(const vcl_string& header,
-                              const vcl_vector<double>& column)
+bool mbl_table::append_column(const std::string& header,
+                              const std::vector<double>& column)
 {
   // Check whether there is already a column with this heading
   if (header_to_column_index_.find(header) == header_to_column_index_.end())
@@ -250,7 +252,7 @@ bool mbl_table::append_column(const vcl_string& header,
     }
     else
     {
-      vcl_cerr << "ERROR: mbl_table::append_column(): "
+      std::cerr << "ERROR: mbl_table::append_column(): "
                << "new column is different length from existing columns.\n"
                << "Column not appended.\n";
       return false;
@@ -258,7 +260,7 @@ bool mbl_table::append_column(const vcl_string& header,
   }
   else
   {
-    vcl_cerr << "ERROR: mbl_table::append_column(): a column with header \""
+    std::cerr << "ERROR: mbl_table::append_column(): a column with header \""
              << header << "\" already exists.\n"
              << "Column not appended.\n";
     return false;
@@ -269,7 +271,7 @@ bool mbl_table::append_column(const vcl_string& header,
 //========================================================================
 //: Append an empty column with its own heading.
 //========================================================================
-bool mbl_table::append_column(const vcl_string& header,
+bool mbl_table::append_column(const std::string& header,
                               const double val/*=0*/)
 {
   // Check whether there is already a column with this heading
@@ -279,13 +281,13 @@ bool mbl_table::append_column(const vcl_string& header,
     column_headers_.push_back(header);
     unsigned c = columns_.size();
     header_to_column_index_[header] = c;
-    columns_.push_back(vcl_vector<double>());
+    columns_.push_back(std::vector<double>());
     columns_[c].resize(num_rows(), val);
     return true;
   }
   else
   {
-    vcl_cerr << "ERROR: mbl_table::append_column(): a column with header \""
+    std::cerr << "ERROR: mbl_table::append_column(): a column with header \""
              << header << "\" already exists.\n"
              << "Column not appended.\n";
     return false;
@@ -296,7 +298,7 @@ bool mbl_table::append_column(const vcl_string& header,
 //========================================================================
 // Append a row of data.
 //========================================================================
-bool mbl_table::append_row(const vcl_vector<double>& row)
+bool mbl_table::append_row(const std::vector<double>& row)
 {
   // Check that the length of the new row matches the existing rows
   unsigned ncols = num_cols();
@@ -310,7 +312,7 @@ bool mbl_table::append_row(const vcl_vector<double>& row)
   }
   else
   {
-    vcl_cerr << "ERROR: mbl_table::append_row(): "
+    std::cerr << "ERROR: mbl_table::append_row(): "
              << "new row is different length from existing row.\n"
              << "Row not appended.\n";
     return false;
@@ -337,7 +339,7 @@ bool mbl_table::append_row(const double val/*=0*/)
 //========================================================================
 // Load this table's data from specified text stream.
 //========================================================================
-bool mbl_table::read(vcl_istream& is)
+bool mbl_table::read(std::istream& is)
 {
   bool success = false;
 
@@ -349,13 +351,13 @@ bool mbl_table::read(vcl_istream& is)
     unsigned col = 0;
     while (!eol && !eof)
     {
-      vcl_string str;
+      std::string str;
       if (read_delimited_string(is, str, eol, eof))
       {
         // Create an empty column vector and enter it into the map
         column_headers_.push_back(str);
         header_to_column_index_[str] = col;
-        columns_.push_back(vcl_vector<double>(0));
+        columns_.push_back(std::vector<double>(0));
 
         col++;
       }
@@ -371,11 +373,11 @@ bool mbl_table::read(vcl_istream& is)
 
       while (!eol && !eof)
       {
-        vcl_string str;
+        std::string str;
         if (read_delimited_string(is, str, eol, eof))
         {
           // Convert string to double (NB sets to 0 if string is non-numeric)
-          double val = vcl_atof(str.c_str());
+          double val = std::atof(str.c_str());
 
           // Add this double value to the current column vector
           columns_[col].push_back(val);
@@ -397,7 +399,7 @@ bool mbl_table::read(vcl_istream& is)
 //========================================================================
 // Save this table's data to specified text stream.
 //========================================================================
-void mbl_table::write(vcl_ostream& os) const
+void mbl_table::write(std::ostream& os) const
 {
   // How many columns are there?
   unsigned int ncols = num_cols();
@@ -425,7 +427,7 @@ void mbl_table::write(vcl_ostream& os) const
 //========================================================================
 //: Create a new table with as subset of columns defined by headers
 //========================================================================
-bool mbl_table::subtable(mbl_table &new_table,  const vcl_vector<vcl_string> &headers) const
+bool mbl_table::subtable(mbl_table &new_table,  const std::vector<std::string> &headers) const
 {
     bool ret = true;
 
@@ -436,7 +438,7 @@ bool mbl_table::subtable(mbl_table &new_table,  const vcl_vector<vcl_string> &he
     for (unsigned c=0; c<headers.size(); ++c)
     {
         // get the column for the header if available
-        vcl_map<vcl_string, unsigned>::const_iterator iter =
+        std::map<std::string, unsigned>::const_iterator iter =
             header_to_column_index_.find(headers[c]);
 
         if (iter != header_to_column_index_.end())
@@ -456,8 +458,8 @@ bool mbl_table::subtable(mbl_table &new_table,  const vcl_vector<vcl_string> &he
 //========================================================================
 // Read a series of characters from the stream until a delimiter character or eol.
 //========================================================================
-bool mbl_table::read_delimited_string(vcl_istream& is,
-                                      vcl_string& str,
+bool mbl_table::read_delimited_string(std::istream& is,
+                                      std::string& str,
                                       bool& eol,
                                       bool& eof)
 {
@@ -507,7 +509,7 @@ bool mbl_table::operator==(const mbl_table& rhs) const
   if (this == &rhs)
   {
     if (verbosity_>0)
-      vcl_cout << "Both tables are actually the same memory object!" << vcl_endl;
+      std::cout << "Both tables are actually the same memory object!" << std::endl;
     return true;
   }
 
@@ -515,7 +517,7 @@ bool mbl_table::operator==(const mbl_table& rhs) const
   if (delimiter_ != rhs.delimiter_)
   {
     if (verbosity_>0)
-      vcl_cout << "Tables have different delimiter characters" << vcl_endl;
+      std::cout << "Tables have different delimiter characters" << std::endl;
     return false;
   }
 
@@ -523,7 +525,7 @@ bool mbl_table::operator==(const mbl_table& rhs) const
   if (column_headers_ != rhs.column_headers_)
   {
     if (verbosity_>0)
-      vcl_cout << "Tables have different column headers" << vcl_endl;
+      std::cout << "Tables have different column headers" << std::endl;
     return false;
   }
 
@@ -531,7 +533,7 @@ bool mbl_table::operator==(const mbl_table& rhs) const
   if (header_to_column_index_ != rhs.header_to_column_index_)
   {
     if (verbosity_>0)
-      vcl_cout << "Tables have different header-to-column index map" << vcl_endl;
+      std::cout << "Tables have different header-to-column index map" << std::endl;
     return false;
   }
 
@@ -540,7 +542,7 @@ bool mbl_table::operator==(const mbl_table& rhs) const
   if (ncols != rhs.columns_.size())
   {
     if (verbosity_>0)
-      vcl_cout << "Tables have different number of columns" << vcl_endl;
+      std::cout << "Tables have different number of columns" << std::endl;
     return false;
   }
 
@@ -553,8 +555,8 @@ bool mbl_table::operator==(const mbl_table& rhs) const
     if (nrows != rhs.columns_[c].size())
     {
       if (verbosity_>0)
-        vcl_cout << "Tables have different number of elements in some columns"
-                 << vcl_endl;
+        std::cout << "Tables have different number of elements in some columns"
+                 << std::endl;
       return false;
     }
 
@@ -566,15 +568,15 @@ bool mbl_table::operator==(const mbl_table& rhs) const
       {
         diff /= columns_[c][r];
       }
-      if (vcl_fabs(diff) > tolerance_)
+      if (std::fabs(diff) > tolerance_)
       {
         if (verbosity_>0)
-          vcl_cout << "Tables have different values in column " << c
+          std::cout << "Tables have different values in column " << c
                    << " (" << column_headers_[c] << "), row " << r
                    << ":  " << columns_[c][r] << ",  "
                    << rhs.columns_[c][r]
                    << "  (diff=" << diff << ") "
-                   << vcl_endl;
+                   << std::endl;
 
         if (verbosity_<=1)
           return false;     // Don't bother checking any more elements

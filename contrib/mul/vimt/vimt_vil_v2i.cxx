@@ -4,9 +4,11 @@
 #include "vimt_vil_v2i.h"
 
 #include <vcl_cassert.h>
-#include <vcl_cstring.h>
-#include <vcl_typeinfo.h>
-#include <vcl_fstream.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <cstring>
+#include <typeinfo>
+#include <fstream>
 
 #include <vxl_config.h> // for VXL_BIG_ENDIAN and vxl_byte
 
@@ -30,7 +32,7 @@ const unsigned V2I_MAGIC = 987123872U;
 class vimt_vil_fstream: vil_stream_fstream
 {
  protected:
-  vcl_fstream& underlying_stream() { return vil_stream_fstream::underlying_stream(); }
+  std::fstream& underlying_stream() { return vil_stream_fstream::underlying_stream(); }
   friend class vimt_vil_v2i_format;
   friend class vimt_vil_v2i_image;
  private:
@@ -44,7 +46,7 @@ vil_image_resource_sptr vimt_vil_v2i_format::make_input_image(vil_stream* vs)
   // vcl_stream, in order to create a vsl_b_stream
   if (typeid(*vs) != typeid(vil_stream_fstream))
   {
-    vcl_cerr << "vimt_vil_v2i_format::make_input_image() WARNING\n"
+    std::cerr << "vimt_vil_v2i_format::make_input_image() WARNING\n"
              << "  Unable to deal with stream type\n";
 
     return VXL_NULLPTR;
@@ -121,7 +123,7 @@ vil_image_resource_sptr vimt_vil_v2i_format::make_output_image(vil_stream* vs,
   // ccl_stream, in order to create a vsl_b_stream
   if (typeid(*vs) != typeid(vil_stream_fstream))
   {
-    vcl_cerr << "vimt_vil_v2i_format::make_output_image() WARNING\n"
+    std::cerr << "vimt_vil_v2i_format::make_output_image() WARNING\n"
              << "  Unable to deal with stream type\n";
 
     return VXL_NULLPTR;
@@ -132,8 +134,8 @@ vil_image_resource_sptr vimt_vil_v2i_format::make_output_image(vil_stream* vs,
        format != VIL_PIXEL_FORMAT_FLOAT && format != VIL_PIXEL_FORMAT_DOUBLE &&
        format != VIL_PIXEL_FORMAT_BOOL)
   {
-    vcl_cerr << "vimt_vil_v2i_format::make_output_image() WARNING\n"
-             << "  Unable to deal with file format : " << format << vcl_endl;
+    std::cerr << "vimt_vil_v2i_format::make_output_image() WARNING\n"
+             << "  Unable to deal with file format : " << format << std::endl;
     return VXL_NULLPTR;
   }
   return new vimt_vil_v2i_image(vs, ni, nj, nplanes, format);
@@ -173,7 +175,7 @@ vimt_vil_v2i_image::vimt_vil_v2i_image(vil_stream* vs):
     break;
    }
    default:
-    vcl_cerr << "I/O ERROR: vimt_vil_v2i_image::vimt_vil_v2i_image()\n"
+    std::cerr << "I/O ERROR: vimt_vil_v2i_image::vimt_vil_v2i_image()\n"
              << "           Unknown version number "<< version << '\n';
     return;
   }
@@ -222,7 +224,7 @@ bool vimt_vil_v2i_image::get_property(char const * key, void * value) const
 {
   const vimt_transform_2d &tr = im_->world2im();
 
-  if (vcl_strcmp(vil_property_pixel_size, key)==0)
+  if (std::strcmp(vil_property_pixel_size, key)==0)
   {
     vgl_vector_2d<double> p11 = tr.inverse()(1.0, 1.0) - tr.inverse().origin();
     //Assume no rotation or shearing.
@@ -233,7 +235,7 @@ bool vimt_vil_v2i_image::get_property(char const * key, void * value) const
     return true;
   }
 
-  if (vcl_strcmp(vil_property_offset, key)==0)
+  if (std::strcmp(vil_property_offset, key)==0)
   {
     vgl_point_2d<double> origin = tr.origin();
     float* array =  static_cast<float*>(value);
@@ -268,9 +270,9 @@ macro(VIL_PIXEL_FORMAT_FLOAT , float )
 macro(VIL_PIXEL_FORMAT_DOUBLE , double )
 #undef macro
    default:
-    vcl_cerr << "I/O ERROR: vimt_vil_v2i_image::vimt_vil_v2i_image()\n"
+    std::cerr << "I/O ERROR: vimt_vil_v2i_image::vimt_vil_v2i_image()\n"
              << "           Unknown vil_pixel_format "<< format << '\n';
-    vcl_abort();
+    std::abort();
   }
 }
 
@@ -428,13 +430,13 @@ bool vimt_vil_v2i_image::put_view(const vil_image_view_base& vv,
 {
   if (!view_fits(vv, i0, j0))
   {
-    vcl_cerr << "ERROR: " << __FILE__ << ":\n view does not fit\n";
+    std::cerr << "ERROR: " << __FILE__ << ":\n view does not fit\n";
     return false;
   }
 
   if (vv.pixel_format() != im_->image_base().pixel_format())
   {
-    vcl_cerr << "ERROR: vimt_vil_v2i_image::put_view(). Pixel formats do not match\n";
+    std::cerr << "ERROR: vimt_vil_v2i_image::put_view(). Pixel formats do not match\n";
     return false;
   }
 

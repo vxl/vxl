@@ -9,13 +9,13 @@ bool volm_conf_indexer::write_params_file()
   return true;
 }
 
-bool volm_conf_indexer::load_loc_hypos(vcl_string const& geo_hypo_folder, unsigned const& tile_id)
+bool volm_conf_indexer::load_loc_hypos(std::string const& geo_hypo_folder, unsigned const& tile_id)
 {
   tile_id_ = tile_id;
-  vcl_stringstream file_name_pre;
+  std::stringstream file_name_pre;
   file_name_pre << geo_hypo_folder << "/geo_index_tile_" << tile_id_;
   if (!vul_file::exists(file_name_pre.str() + ".txt")) {
-    vcl_cerr << "In volm_conf_indexer::load_tile_hypos() -- location file does not exist: " << file_name_pre.str() << ".txt!\n";
+    std::cerr << "In volm_conf_indexer::load_tile_hypos() -- location file does not exist: " << file_name_pre.str() << ".txt!\n";
     return false;
   }
 
@@ -29,7 +29,7 @@ bool volm_conf_indexer::load_loc_hypos(vcl_string const& geo_hypo_folder, unsign
   volm_geo_index::get_leaves_with_hyps(loc_root_, loc_leaves_);
   // check
   if (!loc_leaves_.size()) {
-    vcl_cerr << "In volm_conf_indexer::load_tile_hypos() -- location geo index has 0 leaves with a hypos!\n";
+    std::cerr << "In volm_conf_indexer::load_tile_hypos() -- location geo index has 0 leaves with a hypos!\n";
     return false;
   }
   // clear previous out_file_name_pre_
@@ -43,56 +43,56 @@ bool volm_conf_indexer::index(float const& buffer_capacity, int const& min_leaf_
 {
   // write a parameter file
   if (!this->write_params_file()) {
-    vcl_cerr << "In volm_conf_indexer::index -- can not write params file to " << out_file_name_pre_.str() + ".params!\n";
+    std::cerr << "In volm_conf_indexer::index -- can not write params file to " << out_file_name_pre_.str() + ".params!\n";
     return false;
   }
   // loop over each leaf to construct index in each location
   for (current_leaf_id_ = 0; current_leaf_id_ < loc_leaves_.size(); current_leaf_id_++)
   {
-    //vcl_cout << " current_leaf_id = " << current_leaf_id_ << " min_leaf_id = " << min_leaf_id << ", max_leaf_id = " << max_leaf_id << vcl_endl;
+    //std::cout << " current_leaf_id = " << current_leaf_id_ << " min_leaf_id = " << min_leaf_id << ", max_leaf_id = " << max_leaf_id << std::endl;
     if ((int)current_leaf_id_ < min_leaf_id || (int)current_leaf_id_ >= max_leaf_id)
       continue;
-    vcl_cout << " current_leaf_id = " << current_leaf_id_ << " satisfies " << loc_leaves_[current_leaf_id_]->extent_ << vcl_endl;
+    std::cout << " current_leaf_id = " << current_leaf_id_ << " satisfies " << loc_leaves_[current_leaf_id_]->extent_ << std::endl;
 
     if (!this->get_next()) {
-      vcl_cerr << "In volm_conf_indexer::index -- get next database failed!\n";
+      std::cerr << "In volm_conf_indexer::index -- get next database failed!\n";
       return false;
     }
 
     // create a binary index file for each hypo set in a  leaf
     volm_conf_buffer<volm_conf_object> ind(buffer_capacity);
 
-    vcl_string out_file_name = out_file_name_pre_.str() + "_" + loc_leaves_[current_leaf_id_]->get_string() + "_" + this->get_index_name() + ".bin";
-    vcl_cout << "out_file_name: " << out_file_name << vcl_endl;
+    std::string out_file_name = out_file_name_pre_.str() + "_" + loc_leaves_[current_leaf_id_]->get_string() + "_" + this->get_index_name() + ".bin";
+    std::cout << "out_file_name: " << out_file_name << std::endl;
     if (!ind.initialize_write(out_file_name)) {
-      vcl_cerr << "In volm_conf_indexer::index -- can not initialize " << out_file_name << " for write!\n";
+      std::cerr << "In volm_conf_indexer::index -- can not initialize " << out_file_name << " for write!\n";
       return false;
     }
-    vcl_cout << loc_leaves_[current_leaf_id_]->hyps_->locs_.size() << " locations in current leaf" << vcl_endl;
+    std::cout << loc_leaves_[current_leaf_id_]->hyps_->locs_.size() << " locations in current leaf" << std::endl;
     unsigned indexed_cnt = 0;
     vgl_point_3d<double> h_pt;
     while ( loc_leaves_[current_leaf_id_]->hyps_->get_next(0, 1, h_pt) )
     {
-      vcl_vector<volm_conf_object> values;
+      std::vector<volm_conf_object> values;
       if ( !this->extract(h_pt.x(), h_pt.y(), h_pt.z(), values) ) {
-        vcl_cerr << "In volm_conf_indexer::index -- extract index from location " << h_pt << " failed!\n";
+        std::cerr << "In volm_conf_indexer::index -- extract index from location " << h_pt << " failed!\n";
         return false;
       }
       // create a invalid index for location has no values to ensure index size consistent with location size
       if (values.empty())
         values.push_back(volm_conf_object(0.0f, 0.0f, -1.0f, 0));
       if (!ind.add_to_index(values)) {
-        vcl_cerr << "In volm_conf_indexer::index -- add index to buffer failed for location " << h_pt << " failed!\n";
+        std::cerr << "In volm_conf_indexer::index -- add index to buffer failed for location " << h_pt << " failed!\n";
         return false;
       }
 #if 0
-      vcl_cout << "\t indexed_cnt " << indexed_cnt << ", loc: " << h_pt.x() << ", " << h_pt.y() << " has " << values.size() << " land_objects. " << vcl_endl;
+      std::cout << "\t indexed_cnt " << indexed_cnt << ", loc: " << h_pt.x() << ", " << h_pt.y() << " has " << values.size() << " land_objects. " << std::endl;
       for (unsigned i = 0; i < values.size(); i++) {
-        vcl_cout << "\t\t";  values[i].print(vcl_cout);
+        std::cout << "\t\t";  values[i].print(std::cout);
       }
 #endif
       indexed_cnt++;
-      if (indexed_cnt%1000==0)  vcl_cerr << indexed_cnt << '.' << vcl_flush;
+      if (indexed_cnt%1000==0)  std::cerr << indexed_cnt << '.' << std::flush;
     }
     // finalize the index
    ind.finalize();

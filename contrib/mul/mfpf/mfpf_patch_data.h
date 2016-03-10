@@ -8,7 +8,9 @@
 #include <mfpf/mfpf_point_finder_builder.h>
 #include <mfpf/mfpf_region_definer.h>
 #include <mbl/mbl_cloneable_ptr.h>
-#include <vcl_iosfwd.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iosfwd>
 
 //: Defines region size, shape, and form of model to use
 //  Object to hold information about how to set up an
@@ -34,7 +36,7 @@ class mfpf_patch_data
 {
  protected:
   //: Name of this patch
-  vcl_string name_;
+  std::string name_;
 
   //: Minimum number of samples along one dimension of patch
   unsigned min_width_;
@@ -56,7 +58,7 @@ class mfpf_patch_data
   virtual ~mfpf_patch_data();
 
   //: Name of this patch
-  vcl_string name() const { return name_; }
+  std::string name() const { return name_; }
 
   //: Minimum number of samples along one dimension of patch
   unsigned min_width() const { return min_width_; }
@@ -71,16 +73,16 @@ class mfpf_patch_data
   mfpf_point_finder_builder& builder() { return builder_; }
 
   //: Initialise from a text stream
-  bool set_from_stream(vcl_istream &is);
+  bool set_from_stream(std::istream &is);
 
     //: Version number for I/O
   short version_no() const;
 
     //: Name of the class
-  virtual vcl_string is_a() const;
+  virtual std::string is_a() const;
 
     //: Print class to os
-  virtual void print_summary(vcl_ostream& os) const;
+  virtual void print_summary(std::ostream& os) const;
 
     //: Save class to binary file stream
   virtual void b_write(vsl_b_ostream& bfs) const;
@@ -90,7 +92,7 @@ class mfpf_patch_data
 };
 
 //: Stream output operator for class reference
-vcl_ostream& operator<<(vcl_ostream& os,const mfpf_patch_data& b);
+std::ostream& operator<<(std::ostream& os,const mfpf_patch_data& b);
 
 //: Binary file stream output operator for class reference
 void vsl_b_write(vsl_b_ostream& bfs, const mfpf_patch_data& b);
@@ -103,7 +105,7 @@ void vsl_b_read(vsl_b_istream& bfs, mfpf_patch_data& b);
 //: Reads in a list of mfpf_patch_data objects from a text stream
 //  Format: "{ region: { ... } region: { ... } .... }"
 //  Throws an mbl_exception_parse_error if it fails.
-void mfpf_read_from_stream(vcl_istream &is,
-                           vcl_vector<mfpf_patch_data>& data);
+void mfpf_read_from_stream(std::istream &is,
+                           std::vector<mfpf_patch_data>& data);
 
 #endif // mfpf_patch_data_h_

@@ -4,7 +4,9 @@
 
 #include <bvpl/kernels/bvpl_corner2d_kernel_factory.h>
 #include <vnl/vnl_math.h>
-#include <vcl_algorithm.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <algorithm>
 
 // Default Constructor
 bvpl_corner2d_kernel_factory::bvpl_corner2d_kernel_factory()
@@ -42,7 +44,7 @@ void bvpl_corner2d_kernel_factory::create_canonical()
   //the user should subsample the image/grid
   if ( (length_ > max_size_) || (width_ > max_size_) || (thickness_ > max_size_) )
   {
-    vcl_cerr<< "Warning, kernel is too large. You should subsample world. Processing may take a long time.\n";
+    std::cerr<< "Warning, kernel is too large. You should subsample world. Processing may take a long time.\n";
   }
 
   typedef vgl_point_3d<float> point_3d;
@@ -81,13 +83,13 @@ void bvpl_corner2d_kernel_factory::create_canonical()
       for (int y=min_y+1; y<=max_y; y++)
       {
         //if ((y==0) && (z==0))
-        //  canonical_kernel_.push_back(vcl_pair<point_3d,dispatch>(point_3d(float(x),float(y),float(z)), dispatch(0.0f)));
+        //  canonical_kernel_.push_back(std::pair<point_3d,dispatch>(point_3d(float(x),float(y),float(z)), dispatch(0.0f)));
         if (z <= 0)
-          canonical_kernel_.push_back(vcl_pair<point_3d,dispatch>(point_3d(float(x),float(y),float(z)), dispatch(1.0f/float(n1))));
+          canonical_kernel_.push_back(std::pair<point_3d,dispatch>(point_3d(float(x),float(y),float(z)), dispatch(1.0f/float(n1))));
         else if (y <= 0)
-          canonical_kernel_.push_back(vcl_pair<point_3d,dispatch>(point_3d(float(x),float(y),float(z)), dispatch(1.0f/float(n1))));
+          canonical_kernel_.push_back(std::pair<point_3d,dispatch>(point_3d(float(x),float(y),float(z)), dispatch(1.0f/float(n1))));
         else
-          canonical_kernel_.push_back(vcl_pair<point_3d,dispatch>(point_3d(float(x),float(y),float(z)), dispatch(-1.0f/float(n0))));
+          canonical_kernel_.push_back(std::pair<point_3d,dispatch>(point_3d(float(x),float(y),float(z)), dispatch(-1.0f/float(n0))));
       }
     }
   }

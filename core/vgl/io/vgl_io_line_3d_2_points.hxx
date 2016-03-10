@@ -6,6 +6,7 @@
 // \author Peter Vanroose
 // \date 24 Oct 2002
 
+#include <iostream>
 #include "vgl_io_line_3d_2_points.h"
 #include <vgl/io/vgl_io_point_3d.h>
 
@@ -38,9 +39,9 @@ void vsl_b_read(vsl_b_istream &is, vgl_line_3d_2_points<T> & p)
    }
 
    default:
-    vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, vgl_line_3d_2_points<T>&)\n"
+    std::cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, vgl_line_3d_2_points<T>&)\n"
              << "           Unknown version number "<< v << '\n';
-    is.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
+    is.is().clear(std::ios::badbit); // Set an unrecoverable IO error on stream
     return;
   }
 }
@@ -49,7 +50,7 @@ void vsl_b_read(vsl_b_istream &is, vgl_line_3d_2_points<T> & p)
 //============================================================================
 //: Output a human readable summary to the stream
 template<class T>
-void vsl_print_summary(vcl_ostream& os, vgl_line_3d_2_points<T> const& p)
+void vsl_print_summary(std::ostream& os, vgl_line_3d_2_points<T> const& p)
 {
   os<<'('; vsl_print_summary(os,p.point1());
   os<<','; vsl_print_summary(os,p.point2());
@@ -57,7 +58,7 @@ void vsl_print_summary(vcl_ostream& os, vgl_line_3d_2_points<T> const& p)
 }
 
 #define VGL_IO_LINE_3D_2_POINTS_INSTANTIATE(T) \
-template void vsl_print_summary(vcl_ostream&, vgl_line_3d_2_points<T > const&);\
+template void vsl_print_summary(std::ostream&, vgl_line_3d_2_points<T > const&);\
 template void vsl_b_read(vsl_b_istream&, vgl_line_3d_2_points<T > &); \
 template void vsl_b_write(vsl_b_ostream&, vgl_line_3d_2_points<T > const&)
 

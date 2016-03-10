@@ -14,7 +14,9 @@
 // \endverbatim
 
 #include <vgl/vgl_point_3d.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iostream>
 #include <vsl/vsl_binary_io.h>
 
 template <typename T>
@@ -83,7 +85,7 @@ class boct_loc_code
 };
 
 template<class T>
-vcl_ostream& operator <<(vcl_ostream &s, boct_loc_code<T>& code);
+std::ostream& operator <<(std::ostream &s, boct_loc_code<T>& code);
 
 template<class T>
 void vsl_b_write(vsl_b_ostream & os, const boct_loc_code<T>& c);

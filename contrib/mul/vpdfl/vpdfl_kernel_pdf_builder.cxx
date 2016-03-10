@@ -10,11 +10,13 @@
 #include "vpdfl_kernel_pdf_builder.h"
 //
 #include <vcl_cassert.h>
-#include <vcl_string.h>
-#include <vcl_sstream.h>
-#include <vcl_cstdlib.h> // vcl_abort()
-#include <vcl_cmath.h>
-#include <vcl_vector.h>
+#include <string>
+#include <sstream>
+#include <cstdlib> // std::abort()
+#include <vcl_compiler.h>
+#include <iostream>
+#include <cmath>
+#include <vector>
 
 #include <mbl/mbl_data_wrapper.h>
 #include <mbl/mbl_data_array_wrapper.h>
@@ -103,9 +105,9 @@ void vpdfl_kernel_pdf_builder::build(vpdfl_pdf_base& model,
 {
   vpdfl_kernel_pdf& kpdf = kernel_pdf(model);
 
-  vcl_vector<vnl_vector<double> >m(1);
+  std::vector<vnl_vector<double> >m(1);
   m[0] = mean;
-  kpdf.set_centres(&m[0],1,vcl_sqrt(min_var_));
+  kpdf.set_centres(&m[0],1,std::sqrt(min_var_));
 }
 
 //: Build kernel_pdf from n elements in data[i]
@@ -116,8 +118,8 @@ void vpdfl_kernel_pdf_builder::build_from_array(vpdfl_pdf_base& model,
 
   if (n<1)
   {
-    vcl_cerr<<"vpdfl_kernel_pdf_builder::build() No examples available.\n";
-    vcl_abort();
+    std::cerr<<"vpdfl_kernel_pdf_builder::build() No examples available.\n";
+    std::abort();
   }
 
   switch (build_type_)
@@ -135,8 +137,8 @@ void vpdfl_kernel_pdf_builder::build_from_array(vpdfl_pdf_base& model,
     build_adaptive(kpdf,data,n);
     break;
     default:
-    vcl_cerr<<"vpdfl_kernel_pdf_builder::build_from_array() Unknown build type.\n";
-    vcl_abort();
+    std::cerr<<"vpdfl_kernel_pdf_builder::build_from_array() Unknown build type.\n";
+    std::abort();
   }
 }
 
@@ -148,8 +150,8 @@ void vpdfl_kernel_pdf_builder::build(vpdfl_pdf_base& model, mbl_data_wrapper<vnl
 
   if (n<1L)
   {
-    vcl_cerr<<"vpdfl_kernel_pdf_builder::build() No examples available.\n";
-    vcl_abort();
+    std::cerr<<"vpdfl_kernel_pdf_builder::build() No examples available.\n";
+    std::abort();
   }
 
   if (data.is_class("mbl_data_array_wrapper<T>"))
@@ -161,7 +163,7 @@ void vpdfl_kernel_pdf_builder::build(vpdfl_pdf_base& model, mbl_data_wrapper<vnl
   }
 
   // Fill array with data
-  vcl_vector<vnl_vector<double> >x(n);
+  std::vector<vnl_vector<double> >x(n);
   data.reset();
   for (unsigned long i=0;i<n;++i)
   {
@@ -174,9 +176,9 @@ void vpdfl_kernel_pdf_builder::build(vpdfl_pdf_base& model, mbl_data_wrapper<vnl
 
 void vpdfl_kernel_pdf_builder::weighted_build(vpdfl_pdf_base& model,
                                               mbl_data_wrapper<vnl_vector<double> >& data,
-                                              const vcl_vector<double>& /*wts*/) const
+                                              const std::vector<double>& /*wts*/) const
 {
-  vcl_cerr<<"vpdfl_kernel_pdf_builder::weighted_build() Ignoring weights.\n";
+  std::cerr<<"vpdfl_kernel_pdf_builder::weighted_build() Ignoring weights.\n";
   build(model,data);
 }
 
@@ -204,8 +206,8 @@ void vpdfl_kernel_pdf_builder::build_select_equal_width(vpdfl_kernel_pdf& kpdf,
   double d = data[0].size();
 
   // See Silverman, p88-89 : This is suitable for Gaussian kernels
-  double k_var = mean_var*vcl_pow(4.0/(n*(d+2)),2.0/(d+4));
-  double w = vcl_sqrt(k_var);
+  double k_var = mean_var*std::pow(4.0/(n*(d+2)),2.0/(d+4));
+  double w = std::sqrt(k_var);
 
   build_fixed_width(kpdf,data,n,w);
 }
@@ -222,7 +224,7 @@ void vpdfl_kernel_pdf_builder::build_width_from_separation(vpdfl_kernel_pdf& kpd
   for (int i=0;i<n;++i)
   {
 #if 0
-    mbl_priority_bounded_queue<double,vcl_vector<double>,vcl_less<double> > d_sq(k);
+    mbl_priority_bounded_queue<double,std::vector<double>,std::less<double> > d_sq(k);
 #endif
 
     // Number of repeats of the point
@@ -247,12 +249,12 @@ void vpdfl_kernel_pdf_builder::build_width_from_separation(vpdfl_kernel_pdf& kpd
 
     // Width set to distance to k-th nearest neighbour
 #if 0
-    w[i] = vcl_sqrt(d_sq.top());
+    w[i] = std::sqrt(d_sq.top());
 #endif
 
     //: Width to nearest neighbour, allowing for repeats
     if (min_d2<min_var_) min_d2=min_var_;
-    w[i] = vcl_sqrt(min_d2)/(n_repeats+1);
+    w[i] = std::sqrt(min_d2)/(n_repeats+1);
   }
 
   kpdf.set_centres(data,n,width);
@@ -282,7 +284,7 @@ void vpdfl_kernel_pdf_builder::build_adaptive(vpdfl_kernel_pdf& kpdf,
   {
     // Scale each inversely by sqrt(prob)
     // Check: Should there be a power of d in there?
-    new_width[i] *= vcl_exp(-0.5*(log_p[i]-log_mean));
+    new_width[i] *= std::exp(-0.5*(log_p[i]-log_mean));
   }
 
   kpdf.set_centres(data,n,new_width);
@@ -292,16 +294,16 @@ void vpdfl_kernel_pdf_builder::build_adaptive(vpdfl_kernel_pdf& kpdf,
 // Method: is_a
 //=======================================================================
 
-vcl_string vpdfl_kernel_pdf_builder::is_a() const
+std::string vpdfl_kernel_pdf_builder::is_a() const
 {
-  return vcl_string("vpdfl_kernel_pdf_builder");
+  return std::string("vpdfl_kernel_pdf_builder");
 }
 
 //=======================================================================
 // Method: is_class
 //=======================================================================
 
-bool vpdfl_kernel_pdf_builder::is_class(vcl_string const& s) const
+bool vpdfl_kernel_pdf_builder::is_class(std::string const& s) const
 {
   return vpdfl_builder_base::is_class(s) || s==vpdfl_kernel_pdf_builder::is_a();
 }
@@ -319,7 +321,7 @@ short vpdfl_kernel_pdf_builder::version_no() const
 // Method: print
 //=======================================================================
 
-void vpdfl_kernel_pdf_builder::print_summary(vcl_ostream& os) const
+void vpdfl_kernel_pdf_builder::print_summary(std::ostream& os) const
 {
   os << "Min. var.: "<< min_var_;
 }
@@ -350,9 +352,9 @@ void vpdfl_kernel_pdf_builder::b_read(vsl_b_istream& bfs)
       vsl_b_read(bfs,min_var_);
       break;
     default:
-      vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, vpdfl_kernel_pdf_builder &)\n"
-               << "           Unknown version number "<< version << vcl_endl;
-      bfs.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
+      std::cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, vpdfl_kernel_pdf_builder &)\n"
+               << "           Unknown version number "<< version << std::endl;
+      bfs.is().clear(std::ios::badbit); // Set an unrecoverable IO error on stream
       return;
   }
 }
@@ -369,11 +371,11 @@ void vpdfl_kernel_pdf_builder::b_read(vsl_b_istream& bfs)
 // }
 // \endverbatim
 // \throw mbl_exception_parse_error if the parse fails.
-void vpdfl_kernel_pdf_builder::config_from_stream(vcl_istream & is)
+void vpdfl_kernel_pdf_builder::config_from_stream(std::istream & is)
 {
-  vcl_string s = mbl_parse_block(is);
+  std::string s = mbl_parse_block(is);
 
-  vcl_istringstream ss(s);
+  std::istringstream ss(s);
   mbl_read_props_type props = mbl_read_props_ws(ss);
 
   double mv=1.0e-6;
@@ -396,7 +398,7 @@ void vpdfl_kernel_pdf_builder::config_from_stream(vcl_istream & is)
     if (props["kernel_widths"]=="adaptive") bt=adaptive;
     else
     {
-      vcl_string msg="Unknown kernel_width type : "+props["kernel_widths"];
+      std::string msg="Unknown kernel_width type : "+props["kernel_widths"];
       throw mbl_exception_parse_error(msg);
     }
     props.erase("kernel_widths");

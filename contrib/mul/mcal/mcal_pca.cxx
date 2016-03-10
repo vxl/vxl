@@ -1,11 +1,13 @@
 #include "mcal_pca.h"
 //:
 // \file
-#include <vcl_cstdlib.h>
-#include <vcl_string.h>
-#include <vcl_vector.h>
-#include <vcl_cmath.h>
-#include <vcl_sstream.h>
+#include <cstdlib>
+#include <string>
+#include <vector>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <cmath>
+#include <sstream>
 
 #include <vsl/vsl_indent.h>
 #include <vsl/vsl_binary_io.h>
@@ -166,7 +168,7 @@ void mcal_pca::build_evecs_ns_smaller(mbl_data_wrapper<vnl_vector<double> >& dat
   if (!use_chunks_ && n_chunks>1 && !message_given_before)
   {
     message_given_before=true;
-    vcl_cerr<<"\n"
+    std::cerr<<"\n"
             <<"WARNING - mcal_pca:  The size of the matrix is\n"
             <<"  possibly too large for the memory. If the build fails, try\n"
             <<"  setting set_use_chunks to true in the mcal_pca.\n\n";
@@ -190,11 +192,11 @@ void mcal_pca::build_evecs_ns_smaller(mbl_data_wrapper<vnl_vector<double> >& dat
   }
   else
   {
-    vcl_cout<<vsl_indent()<<"mcal_pca:  Constructing DD_t in "
-            <<n_chunks<<" passes."<<vcl_endl;
+    std::cout<<vsl_indent()<<"mcal_pca:  Constructing DD_t in "
+            <<n_chunks<<" passes."<<std::endl;
 
     // Set up indices for chunks
-    vcl_vector<int> start(n_chunks),end(n_chunks);
+    std::vector<int> start(n_chunks),end(n_chunks);
     start[0] = 0;
     end[0] = vnl_math::rnd(chunk_size)-1;
     for (unsigned int i=1;i<n_chunks;i++)
@@ -321,7 +323,7 @@ void mcal_pca::build_evecs_ns_smaller(mbl_data_wrapper<vnl_vector<double> >& dat
     for (unsigned int j=0;j<n_modes;++j)
       cs[j]+=row[j]*row[j];
   }
-  for (unsigned int j=0;j<n_modes;++j) cs[j]=1.0/vcl_sqrt(cs[j]);
+  for (unsigned int j=0;j<n_modes;++j) cs[j]=1.0/std::sqrt(cs[j]);
   for (unsigned int k=0;k<n_dims;k++)
   {
     double* row = ev_data[k];
@@ -415,15 +417,15 @@ void mcal_pca::build_about_mean(mbl_data_wrapper<vnl_vector<double> >& data,
 {
   if (data.size()==0)
   {
-    vcl_cerr<<"mcal_pca::build_about_mean() No samples supplied.\n";
-    vcl_abort();
+    std::cerr<<"mcal_pca::build_about_mean() No samples supplied.\n";
+    std::abort();
   }
 
   data.reset();
 
   if (data.current().size()==0)
   {
-    vcl_cerr<<"mcal_pca::build_about_mean()\n"
+    std::cerr<<"mcal_pca::build_about_mean()\n"
             <<"Warning: Samples claim to have zero dimensions.\n"
             <<"Constructing empty model.\n";
 
@@ -444,9 +446,9 @@ void mcal_pca::build_about_mean(mbl_data_wrapper<vnl_vector<double> >& data,
 // Method: is_a
 //=======================================================================
 
-vcl_string  mcal_pca::is_a() const
+std::string  mcal_pca::is_a() const
 {
-  return vcl_string("mcal_pca");
+  return std::string("mcal_pca");
 }
 
 //=======================================================================
@@ -471,7 +473,7 @@ mcal_component_analyzer* mcal_pca::clone() const
 // Method: print
 //=======================================================================
 
-void mcal_pca::print_summary(vcl_ostream& os) const
+void mcal_pca::print_summary(std::ostream& os) const
 {
   os<<'\n'
     <<vsl_indent()<<"min_modes: "<<min_modes_<<'\n'
@@ -513,9 +515,9 @@ void mcal_pca::b_read(vsl_b_istream& bfs)
       vsl_b_read(bfs,use_chunks_);
       break;
     default:
-      vcl_cerr << "mcal_pca::b_read()\n"
-               << "Unexpected version number " << version << vcl_endl;
-      vcl_abort();
+      std::cerr << "mcal_pca::b_read()\n"
+               << "Unexpected version number " << version << std::endl;
+      std::abort();
   }
 }
 
@@ -532,11 +534,11 @@ void mcal_pca::b_read(vsl_b_istream& bfs)
 // }
 // \endverbatim
 // \throw mbl_exception_parse_error if the parse fails.
-void mcal_pca::config_from_stream(vcl_istream & is)
+void mcal_pca::config_from_stream(std::istream & is)
 {
-  vcl_string s = mbl_parse_block(is);
+  std::string s = mbl_parse_block(is);
 
-  vcl_istringstream ss(s);
+  std::istringstream ss(s);
   mbl_read_props_type props = mbl_read_props_ws(ss);
 
   {

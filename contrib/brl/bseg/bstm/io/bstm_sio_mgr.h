@@ -9,7 +9,9 @@
 #include <bstm/bstm_data_base.h>
 #include <bstm/basic/bstm_block_id.h>
 #include <bstm/bstm_data_traits.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iostream>
 
 //: disk level storage class.
 //  handles all of the synchronous IO read and write requests
@@ -17,24 +19,24 @@ class bstm_sio_mgr
 {
   public:
     //: loads block from disk
-    static bstm_block* load_block(vcl_string dir, bstm_block_id block_id,bstm_block_metadata data );
+    static bstm_block* load_block(std::string dir, bstm_block_id block_id,bstm_block_metadata data );
 
     //: saves block to disk
-    static void           save_block(vcl_string dir, bstm_block* block);
+    static void           save_block(std::string dir, bstm_block* block);
 
     //: loads time block from disk
-    static bstm_time_block* load_time_block(vcl_string dir, bstm_block_id block_id,bstm_block_metadata data );
+    static bstm_time_block* load_time_block(std::string dir, bstm_block_id block_id,bstm_block_metadata data );
 
     //: saves time block to disk
-    static void           save_time_block(vcl_string dir, bstm_time_block* block);
+    static void           save_time_block(std::string dir, bstm_time_block* block);
 
     //: load data generically
     // loads a generic bstm_data_base* from disk (given data_type string prefix)
-    static bstm_data_base*  load_block_data_generic(vcl_string dir, bstm_block_id id, vcl_string data_type);
+    static bstm_data_base*  load_block_data_generic(std::string dir, bstm_block_id id, std::string data_type);
 
     //: saves data generically
     // generically saves data_base * to disk (given prefix)
-    static void save_block_data_base(vcl_string dir, bstm_block_id block_id, bstm_data_base* data, vcl_string prefix);
+    static void save_block_data_base(std::string dir, bstm_block_id block_id, bstm_data_base* data, std::string prefix);
 };
 
 

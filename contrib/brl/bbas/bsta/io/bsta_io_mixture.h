@@ -14,7 +14,9 @@
 
 #include <bsta/bsta_mixture.h>
 #include <vsl/vsl_binary_io.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iostream>
 
 //: Binary save bsta_mixture to stream.
 template <class comp_>
@@ -51,7 +53,7 @@ vsl_b_read(vsl_b_istream &is, bsta_mixture<comp_>& m)
 //: Print summary
 template <class comp_>
 void
-vsl_print_summary(vcl_ostream &os, const bsta_mixture<comp_>& m)
+vsl_print_summary(std::ostream &os, const bsta_mixture<comp_>& m)
 {
   unsigned size = m.num_components();
   os << "mixture with "<<size<<" components\n";

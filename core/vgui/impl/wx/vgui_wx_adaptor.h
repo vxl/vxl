@@ -20,7 +20,8 @@
 #include <wx/glcanvas.h>
 class wxMenu;
 
-#include <vcl_map.h>
+#include <vcl_compiler.h>
+#include <map>
 
 //-------------------------------------------------------------------------
 //: wxWidgets implementation of vgui_adaptor.
@@ -174,7 +175,7 @@ class vgui_wx_adaptor
   bool destroy_posted_;
 
   int last_key_down_;
-  vcl_map<int,int> ascii_code_;
+  std::map<int,int> ascii_code_;
 };
 
 #endif // vgui_wx_adaptor_h_

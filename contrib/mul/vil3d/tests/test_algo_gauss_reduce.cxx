@@ -1,7 +1,9 @@
 // This is mul/vil3d/tests/test_algo_gauss_reduce.cxx
 #include <testlib/testlib_test.h>
-#include <vcl_iostream.h>
-#include <vcl_iomanip.h>
+#include <iostream>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iomanip>
 #include <vil3d/vil3d_image_view.h>
 #include <vil3d/algo/vil3d_gauss_reduce.h>
 #include <vil3d/vil3d_print.h>
@@ -11,7 +13,7 @@ static void test_algo_gauss_reduce_float(vil3d_image_view<float>& image,
                                          vil3d_image_view<float>& dest)
 {
   unsigned ni = image.ni(), nj = image.nj(), nk = image.nk(), np=image.nplanes();
-  vcl_cout<<"Image Size: "<<ni<<" x "<<nj<<" x "<<nk<< " x " << np << "planes" << vcl_endl;
+  std::cout<<"Image Size: "<<ni<<" x "<<nj<<" x "<<nk<< " x " << np << "planes" << std::endl;
 
 
   for (unsigned p=0;p<image.nplanes();++p)
@@ -33,7 +35,7 @@ static void test_algo_gauss_reduce_float(vil3d_image_view<float>& image,
   TEST("nplanes", dest.nplanes(), np);
   for (unsigned p=0; p<np; ++p)
   {
-    vcl_cout << "\n plane " << p << vcl_endl;
+    std::cout << "\n plane " << p << std::endl;
     TEST_NEAR("Pixel (0,0,0)", dest(0,0,0,p), 4.5409f + p*100.0f, 1e-4f);
     TEST_NEAR("Pixel (1,1,1)", dest(1,1,1,p), old_image222 + p*100.0f, 1e-4f);
     TEST_NEAR("Pixel (2,3,3)", dest(2,3,3,p), 54.4f + p*100.0f, 1e-4f);
@@ -44,12 +46,12 @@ static void test_algo_gauss_reduce_float(vil3d_image_view<float>& image,
 // Check in-homogeneous smoothing option (ie onlj smooth in i,j but not k on some levels)
 static void test_algo_gauss_reduce_ij(unsigned np)
 {
-  vcl_cout << "**************************************\n"
+  std::cout << "**************************************\n"
            << " Testing vil3d_gauss_reduce_ij<float>\n"
            << "**************************************\n";
 
   unsigned ni = 10, nj = 20, nk = 30;
-  vcl_cout<<"Image Size: "<<ni<<" x "<<nj<<" x "<<nk<< " x " << np << "planes" << vcl_endl;
+  std::cout<<"Image Size: "<<ni<<" x "<<nj<<" x "<<nk<< " x " << np << "planes" << std::endl;
 
   vil3d_image_view<float> image0;
   image0.set_size(ni, nj, nk, np);
@@ -74,7 +76,7 @@ static void test_algo_gauss_reduce_ij(unsigned np)
 
   for (unsigned p=0; p<np; ++p)
   {
-    vcl_cout << "\n plane " << p << vcl_endl;
+    std::cout << "\n plane " << p << std::endl;
     TEST_NEAR("Pixel (0,0,0)", image1(0,0,0,p), -0.4491f + p*100.0, 1e-4f);
     TEST_NEAR("Pixel (1,1,1)", image1(1,1,2,p), image0(2,2,2) + p*100.0, 1e-4f);
     TEST_NEAR("Pixel (2,3,3)", image1(2,3,3,p), 24.4f + p*100.0, 1e-4f);
@@ -85,12 +87,12 @@ static void test_algo_gauss_reduce_ij(unsigned np)
 // Check in-homogeneous smoothing option (ie onlj smooth in i,k but not j on some levels)
 static void test_algo_gauss_reduce_ik(unsigned np)
 {
-  vcl_cout << "**************************************\n"
+  std::cout << "**************************************\n"
            << " Testing vil3d_gauss_reduce_ik<float>\n"
            << "**************************************\n";
 
   unsigned ni = 10, nj = 20, nk = 30;
-  vcl_cout<<"Image Size: "<<ni<<" x "<<nj<<" x "<<nk<< " x " << np << "planes" << vcl_endl;
+  std::cout<<"Image Size: "<<ni<<" x "<<nj<<" x "<<nk<< " x " << np << "planes" << std::endl;
 
   vil3d_image_view<float> image0;
   image0.set_size(ni,nj,nk, np);
@@ -114,7 +116,7 @@ static void test_algo_gauss_reduce_ik(unsigned np)
 
   for (unsigned p=0; p<np; ++p)
   {
-    vcl_cout << "\n plane " << p << vcl_endl;
+    std::cout << "\n plane " << p << std::endl;
     TEST_NEAR("Pixel (0,0,0)", image1(0,0,0,p), 5.039900f + p*100.0, 1e-4f);
     TEST_NEAR("Pixel (1,1,1)", image1(1,2,1,p), image0(2,2,2) + p*100.0, 1e-4f);
     TEST_NEAR("Pixel (2,3,3)", image1(2,3,3,p), 57.4f + p*100.0, 1e-4f);
@@ -125,12 +127,12 @@ static void test_algo_gauss_reduce_ik(unsigned np)
 // Check in-homogeneous smoothing option (ie onlj smooth in j,k but not i on some levels)
 static void test_algo_gauss_reduce_jk(unsigned np)
 {
-  vcl_cout << "**************************************\n"
+  std::cout << "**************************************\n"
            << " Testing vil3d_gauss_reduce_jk<float>\n"
            << "**************************************\n";
 
   unsigned ni = 10, nj = 20, nk = 30;
-  vcl_cout<<"Image Size: "<<ni<<" x "<<nj<<" x "<<nk<< " x " << np << "planes" << vcl_endl;
+  std::cout<<"Image Size: "<<ni<<" x "<<nj<<" x "<<nk<< " x " << np << "planes" << std::endl;
 
   vil3d_image_view<float> image0;
   image0.set_size(ni,nj,nk, np);
@@ -154,7 +156,7 @@ static void test_algo_gauss_reduce_jk(unsigned np)
 
   for (unsigned p=0; p<np; ++p)
   {
-    vcl_cout << "\n plane " << p << vcl_endl;
+    std::cout << "\n plane " << p << std::endl;
     TEST_NEAR("Pixel (0,0,0)", image1(0,0,0,p), 4.491f + p*100.0, 1e-4f);
     TEST_NEAR("Pixel (1,1,1)", image1(2,1,1,p), image0(2,2,2) + p*100.0, 1e-4f);
     TEST_NEAR("Pixel (2,3,3)", image1(2,3,3,p), 54.2f + p*100.0, 1e-4f);
@@ -164,12 +166,12 @@ static void test_algo_gauss_reduce_jk(unsigned np)
 
 static void test_algo_gauss_reduce_int()
 {
-  vcl_cout << "*********************************\n"
+  std::cout << "*********************************\n"
            << " Testing vil3d_gauss_reduce<int>\n"
            << "*********************************\n";
 
   unsigned ni = 10, nj = 20, nk = 30;
-  vcl_cout<<"Image Size: "<<ni<<" x "<<nj<<" k "<<nk<<vcl_endl;
+  std::cout<<"Image Size: "<<ni<<" x "<<nj<<" k "<<nk<<std::endl;
 
   vil3d_image_view<int> image0;
   image0.set_size(ni,nj,nk);
@@ -185,8 +187,8 @@ static void test_algo_gauss_reduce_int()
   vil3d_image_view<int> image1,work_im1,work_im2;
   vil3d_gauss_reduce(image0,image1,work_im1,work_im2);
 
-  vil3d_print_all(vcl_cout, vil3d_crop(image0, 0, 6, 0, 6, 0, 6));
-  vil3d_print_all(vcl_cout, vil3d_crop(image1, 0, 3, 0, 3, 0, 3));
+  vil3d_print_all(std::cout, vil3d_crop(image0, 0, 6, 0, 6, 0, 6));
+  vil3d_print_all(std::cout, vil3d_crop(image1, 0, 3, 0, 3, 0, 3));
 
   TEST("size i",image1.ni(),ni2);
   TEST("size j",image1.nj(),nj2);
@@ -207,24 +209,24 @@ static void test_algo_gauss_reduce_int()
 
 static void test_algo_gauss_reduce()
 {
-  vcl_cout << "***********************************\n"
+  std::cout << "***********************************\n"
            << " Testing vil3d_gauss_reduce<float>\n"
            << "***********************************\n"
-           << vcl_setprecision(10);
+           << std::setprecision(10);
 
   vil3d_image_view<float> image(10, 20, 30);
   vil3d_image_view<float> dest;
 
   test_algo_gauss_reduce_float(image, dest);
-  vcl_cout<<"Test non-contiguous image\n";
+  std::cout<<"Test non-contiguous image\n";
   vil3d_image_view<float> image2(20, 30, 41);
   vil3d_image_view<float> crop_image = vil3d_crop(image2,2,10,3,20,4,30);
   test_algo_gauss_reduce_float(crop_image, dest);
-  vcl_cout<<"Test input image = output_image\n";
+  std::cout<<"Test input image = output_image\n";
   test_algo_gauss_reduce_float(image, image);
 
   vil3d_image_view<float> image3(10, 20, 30,3);
-  vcl_cout<<"Test multiplane image\n";
+  std::cout<<"Test multiplane image\n";
   test_algo_gauss_reduce_float(image3, dest);
 
   test_algo_gauss_reduce_ij(1);

@@ -20,7 +20,9 @@
 // has precedence over \a use_signature_error.
 //
 
-#include <vcl_memory.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <memory>
 class rrel_m_est_obj;
 class rgrl_transformation;
 
@@ -31,7 +33,7 @@ class rgrl_weighter_m_est
 {
  public:
   //:  constructor takes a pointer to M estimator objective function
-  rgrl_weighter_m_est( vcl_auto_ptr<rrel_m_est_obj>  m_est,
+  rgrl_weighter_m_est( std::auto_ptr<rrel_m_est_obj>  m_est,
                        bool                          use_signature_error,
                        bool                          use_precomputed_signature_wgt = false );
 
@@ -73,7 +75,7 @@ class rgrl_weighter_m_est
                               rgrl_transformation const&  xform );
 
  protected:
-  vcl_auto_ptr<rrel_m_est_obj> m_est_;
+  std::auto_ptr<rrel_m_est_obj> m_est_;
   bool use_signature_error_;
   bool signature_precomputed_;
   bool weight_more_on_distinct_match_;

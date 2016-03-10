@@ -1,5 +1,7 @@
-#include <vcl_map.h>
-#include <vcl_iostream.h>
+#include <map>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iostream>
 #include <vnl/vnl_vector_fixed.h>
 #include <vgl/vgl_point_3d.h>
 #include <vgl/vgl_vector_3d.h>
@@ -12,11 +14,11 @@
 #include <boxm2/cpp/algo/boxm2_refine_block_multi_data.h>
 
 template <class D>
-void boxm2_surface_distance_refine(D const& dist_functor, boxm2_scene_sptr scene, vcl_vector<vcl_string> const& prefixes,
+void boxm2_surface_distance_refine(D const& dist_functor, boxm2_scene_sptr scene, std::vector<std::string> const& prefixes,
                                    double distance_thresh, bool zero_model, float occupied_prob){
-  vcl_map<boxm2_block_id, boxm2_block_metadata> blocks = scene->blocks();
+  std::map<boxm2_block_id, boxm2_block_metadata> blocks = scene->blocks();
   // iterate over the scene blocks
-  for (vcl_map<boxm2_block_id, boxm2_block_metadata>::iterator iter = blocks.begin(); iter!= blocks.end(); iter ++)
+  for (std::map<boxm2_block_id, boxm2_block_metadata>::iterator iter = blocks.begin(); iter!= blocks.end(); iter ++)
     {
       boxm2_block_id id = iter->first;
       boxm2_block_metadata mdata = iter->second;
@@ -51,8 +53,8 @@ void boxm2_surface_distance_refine(D const& dist_functor, boxm2_scene_sptr scene
             vnl_vector_fixed<unsigned char, 16>  tree = trees(ix, iy, iz);
             boct_bit_tree bit_tree((unsigned char*) tree.data_block(), mdata.max_level_);
             //iterate through leaves of the tree
-            vcl_vector<int> leafBits = bit_tree.get_leaf_bits();
-            for (vcl_vector<int>::iterator iter = leafBits.begin(); iter != leafBits.end(); ++iter) {
+            std::vector<int> leafBits = bit_tree.get_leaf_bits();
+            for (std::vector<int>::iterator iter = leafBits.begin(); iter != leafBits.end(); ++iter) {
               int currBitIndex = (*iter);
               int data_offset = bit_tree.get_data_index(currBitIndex); //data index
               vgl_point_3d<double> cell_pos = bit_tree.cell_center(currBitIndex);
@@ -63,7 +65,7 @@ void boxm2_surface_distance_refine(D const& dist_functor, boxm2_scene_sptr scene
               double tol = distance_thresh*side_len*dims.x();
               bool near = dist_functor(pos)<=tol;
               if(near){//if a tree leaf is near the surface set alpha
-                double alpha = -vcl_log(1.0 - occupied_prob)/ side_len;
+                double alpha = -std::log(1.0 - occupied_prob)/ side_len;
                 alpha_data->data()[data_offset] = static_cast<float>(alpha);
               }
             }
@@ -75,4 +77,4 @@ void boxm2_surface_distance_refine(D const& dist_functor, boxm2_scene_sptr scene
 }
 #undef BOXM2_SURFACE_DISTANCE_REFINE_INSTANTIATE
 #define BOXM2_SURFACE_DISTANCE_REFINE_INSTANTIATE(D) \
-  template void boxm2_surface_distance_refine(D const&, boxm2_scene_sptr, vcl_vector<vcl_string> const&, double , bool , float )
+  template void boxm2_surface_distance_refine(D const&, boxm2_scene_sptr, std::vector<std::string> const&, double , bool , float )

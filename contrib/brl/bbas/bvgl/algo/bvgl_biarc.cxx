@@ -35,8 +35,8 @@ bvgl_biarc::
 bvgl_biarc(vgl_point_2d< double > start, vgl_vector_2d<double > start_tangent,
            vgl_point_2d< double > end, vgl_vector_2d<double > end_tangent )
 {
-  double start_angle = vcl_atan2(start_tangent.y(), start_tangent.x());
-  double end_angle = vcl_atan2(end_tangent.y(), end_tangent.x());
+  double start_angle = std::atan2(start_tangent.y(), start_tangent.x());
+  double end_angle = std::atan2(end_tangent.y(), end_tangent.x());
 
   this->set_start_params(start, start_angle);
   this->set_end_params(end, end_angle);
@@ -58,7 +58,7 @@ bvgl_biarc(vgl_point_2d< double > start, vgl_vector_2d<double > start_tangent,
 //: Set the start angle, converted to the range [0, 2*pi)
 void bvgl_biarc::
 set_start_angle( double start_angle ){
-  double theta = vcl_fmod(start_angle, vnl_math::pi * 2);
+  double theta = std::fmod(start_angle, vnl_math::pi * 2);
   if (theta < 0.0)
     theta = theta + vnl_math::pi * 2;
   this->start_angle_ = theta;
@@ -67,7 +67,7 @@ set_start_angle( double start_angle ){
 //: Set end angle of the biarc, converted to the range [0, 2*pi)
 void bvgl_biarc::
 set_end_angle( double end_angle ){
-  double theta = vcl_fmod(end_angle, vnl_math::pi * 2);
+  double theta = std::fmod(end_angle, vnl_math::pi * 2);
   if (theta < 0.0)
     theta = theta + vnl_math::pi * 2;
   this->end_angle_ = theta;
@@ -87,8 +87,8 @@ is_consistent() const
 
   // check end tangent
   vgl_vector_2d<double > t_end = this->tangent_at(len);
-  vgl_vector_2d<double > expected_t_end(vcl_cos(this->end_angle()), vcl_sin(this->end_angle()));
-  double diff = vcl_abs( signed_angle(t_end, expected_t_end) );
+  vgl_vector_2d<double > expected_t_end(std::cos(this->end_angle()), std::sin(this->end_angle()));
+  double diff = std::abs( signed_angle(t_end, expected_t_end) );
 
   return ( diff < 1e-3);
 }
@@ -101,7 +101,7 @@ double bvgl_biarc::
 r1() const
 {
   if (this->k1() == 0) return vnl_huge_val(this->k1());
-  return 1.0/vcl_fabs(this->k1());
+  return 1.0/std::fabs(this->k1());
 }
 
 //: Return radius of the second arc
@@ -109,7 +109,7 @@ double bvgl_biarc::
 r2() const
 {
   if (this->k2() == 0) return vnl_huge_val(this->k2());
-  return 1.0/vcl_fabs(this->k2());
+  return 1.0/std::fabs(this->k2());
 }
 
 
@@ -118,15 +118,15 @@ vgl_point_2d< double > bvgl_biarc::
 mid_pt() const
 {
   // curvature of the first arc is non-zero
-  if (vcl_abs(this->k1()) >= bvgl_biarc_e_k){
+  if (std::abs(this->k1()) >= bvgl_biarc_e_k){
     double dt = this->len1() * this->k1(); //params.L1*params.K1;
     double angle = this->start_angle() + vnl_math::pi_over_2 + dt;
-    vgl_vector_2d < double > t(vcl_cos(angle), vcl_sin(angle));
+    vgl_vector_2d < double > t(std::cos(angle), std::sin(angle));
     return this->center1() - t * (this->r1() * this->dir1());
   }
   // the first arc is a line segment
   else {
-    vgl_vector_2d< double > t(vcl_cos(this->start_angle()), vcl_sin(this->start_angle()));
+    vgl_vector_2d< double > t(std::cos(this->start_angle()), std::sin(this->start_angle()));
     return this->start() + t * this->len1();
   }
 }
@@ -136,7 +136,7 @@ vgl_point_2d< double > bvgl_biarc::
 center1() const
 {
   double angle = this->start_angle()- vnl_math::pi_over_2;
-  vgl_vector_2d< double > t(vcl_cos(angle), vcl_sin(angle));
+  vgl_vector_2d< double > t(std::cos(angle), std::sin(angle));
   return this->start() - t * (this->r1() * this->dir1()) ;
 }
 
@@ -145,7 +145,7 @@ vgl_point_2d< double > bvgl_biarc::
 center2() const
 {
   double angle = this->end_angle()-vnl_math::pi_over_2;
-  vgl_vector_2d< double > t(vcl_cos(angle), vcl_sin(angle));
+  vgl_vector_2d< double > t(std::cos(angle), std::sin(angle));
   return this->end() - t * (this->r2() * this->dir2()) ;
 }
 
@@ -161,30 +161,30 @@ point_at( double s) const
 
   if ( s <= this->len1() ){
     // curvature of the first arc is non-zero
-    if (vcl_abs(this->k1()) >= bvgl_biarc_e_k){
+    if (std::abs(this->k1()) >= bvgl_biarc_e_k){
       double dt = s * this->k1();
       double angle = this->start_angle() + vnl_math::pi_over_2 + dt;
-      vgl_vector_2d < double > t(vcl_cos(angle), vcl_sin(angle));
+      vgl_vector_2d < double > t(std::cos(angle), std::sin(angle));
       return this->center1() - t * (this->r1() * this->dir1());
     }
     // the first arc is a line segment
     else {
-      vgl_vector_2d< double > t(vcl_cos(this->start_angle()), vcl_sin(this->start_angle()));
+      vgl_vector_2d< double > t(std::cos(this->start_angle()), std::sin(this->start_angle()));
       return this->start() + t * s;
     }
   }
   else{ //if ( s <= this->len() ){
     // if curvature of the second arc is non-zero
-    if (vcl_abs(this->k2()) >= bvgl_biarc_e_k){
+    if (std::abs(this->k2()) >= bvgl_biarc_e_k){
       double angle = this->start_angle() + this->len1()*this->k1() + (s-this->len1())*this->k2()
         + vnl_math::pi_over_2;
-      vgl_vector_2d < double > t(vcl_cos(angle), vcl_sin(angle));
+      vgl_vector_2d < double > t(std::cos(angle), std::sin(angle));
       return this->center2() - t * (this->r2() * this->dir2());
     }
     // the second arc is a line segment
     else {
       double angle = this->start_angle() + this->len1()*this->k1();
-      vgl_vector_2d< double > t(vcl_cos(angle), vcl_sin(angle));
+      vgl_vector_2d< double > t(std::cos(angle), std::sin(angle));
       return this->mid_pt() + t * (s-this->len1());
     }
   }
@@ -201,7 +201,7 @@ tangent_at( double s) const
     angle = this->start_angle() + s * this->k1();
   else //if ( s <= this->len() )
     angle = this->start_angle() + this->len1() * this->k1() + (s - this->len1()) * this->k2();
-  return vgl_vector_2d< double >(vcl_cos(angle), vcl_sin(angle));
+  return vgl_vector_2d< double >(std::cos(angle), std::sin(angle));
 }
 
 //: Return curvature of a point on the biarc with s arclength away from starting point
@@ -254,7 +254,7 @@ compute_biarc_params(){
     return false;
   }
 
-  double psi = vcl_atan2(v.y(), v.x());
+  double psi = std::atan2(v.y(), v.x());
 
   if ( psi < 0 )
     psi += 2 * vnl_math::pi;
@@ -266,14 +266,14 @@ compute_biarc_params(){
   // if (abs(mod(psi -(t2+t0)/2, pi))<bvgl_biarc_e_angle) % this condition is not correct
 
   double tdiff = psi-(t2+t0)/2;
-  tdiff = vcl_fmod(vcl_fabs(tdiff), vnl_math::pi*2);
+  tdiff = std::fmod(std::fabs(tdiff), vnl_math::pi*2);
 
-  if ( (vcl_fabs(tdiff) < bvgl_biarc_e_angle) ||
-    (vcl_fabs(tdiff - vnl_math::pi) < bvgl_biarc_e_angle) ||
-    (vcl_fabs(tdiff - 2*vnl_math::pi) < bvgl_biarc_e_angle) )
+  if ( (std::fabs(tdiff) < bvgl_biarc_e_angle) ||
+    (std::fabs(tdiff - vnl_math::pi) < bvgl_biarc_e_angle) ||
+    (std::fabs(tdiff - 2*vnl_math::pi) < bvgl_biarc_e_angle) )
   {
     // straight line (still need to check mod 2*pi)
-    if (vcl_fabs(vcl_fmod(psi-t0,2*vnl_math::pi)) < bvgl_biarc_e_angle){
+    if (std::fabs(std::fmod(psi-t0,2*vnl_math::pi)) < bvgl_biarc_e_angle){
       k1 = 0;
       k2 = 0;
       d1 = d;
@@ -281,9 +281,9 @@ compute_biarc_params(){
     }
     // single arc
     else {
-      k1 = -4*vcl_sin((3*t0+t2)/4 - psi)* vcl_cos((t2-t0)/4)/d;
+      k1 = -4*std::sin((3*t0+t2)/4 - psi)* std::cos((t2-t0)/4)/d;
       // special case when start_angle == end_angle = psi-pi : no solution
-      if (vcl_fabs(k1) < bvgl_biarc_e_k){
+      if (std::fabs(k1) < bvgl_biarc_e_k){
         this->set_len1(vnl_huge_val((double) 1));
         return false;
       }
@@ -301,19 +301,19 @@ compute_biarc_params(){
   else {
     this->flag_ = 1;   //truly a biarc
 
-    k1 = -4*vcl_sin((3*t0+t2)/4 - psi)*vcl_cos((t2-t0)/4)/d;
-    k2 = 4*vcl_sin((t0+3*t2)/4 - psi)*vcl_cos((t2-t0)/4)/d;
+    k1 = -4*std::sin((3*t0+t2)/4 - psi)*std::cos((t2-t0)/4)/d;
+    k2 = 4*std::sin((t0+3*t2)/4 - psi)*std::cos((t2-t0)/4)/d;
 
-    if (vcl_fabs(k1)<bvgl_biarc_e_k){
+    if (std::fabs(k1)<bvgl_biarc_e_k){
       k1 = 0;
-      d1 = d * vcl_sin((t2+t0)/2-psi) / vcl_sin((t2-t0)/2);
+      d1 = d * std::sin((t2+t0)/2-psi) / std::sin((t2-t0)/2);
       d2 = this->compute_arclength(t0,t2,k2);
     }
 
     else{
-      if ( vcl_fabs(k2)<bvgl_biarc_e_k ){
+      if ( std::fabs(k2)<bvgl_biarc_e_k ){
         k2 = 0;
-        d2 = d*vcl_sin((t2+t0)/2-psi)/vcl_sin((t0-t2)/2);
+        d2 = d*std::sin((t2+t0)/2-psi)/std::sin((t0-t2)/2);
         d1 = this->compute_arclength(t0,t2,k1);
       }
       else {
@@ -328,21 +328,21 @@ compute_biarc_params(){
     d3 = -10;
     d4 = -10;
 
-    k3 = 4 * vcl_cos((3*t0+t2)/4 - psi) * vcl_sin((t2-t0)/4)/d;
-    k4 = 4 * vcl_cos((t0+3*t2)/4 - psi)* vcl_sin((t2-t0)/4)/d;
+    k3 = 4 * std::cos((3*t0+t2)/4 - psi) * std::sin((t2-t0)/4)/d;
+    k4 = 4 * std::cos((t0+3*t2)/4 - psi)* std::sin((t2-t0)/4)/d;
 
     // since this solution picks the biarc with the bigger turn
     // the curvature solutions can still be close to zero
-    if ( ((vcl_fabs(k3) > bvgl_biarc_e_k) || (vcl_fabs(k4)>bvgl_biarc_e_k)) && vcl_fabs(k4-k3) > bvgl_biarc_e_k ){
-      if (vcl_fabs(k3)<bvgl_biarc_e_k){
+    if ( ((std::fabs(k3) > bvgl_biarc_e_k) || (std::fabs(k4)>bvgl_biarc_e_k)) && std::fabs(k4-k3) > bvgl_biarc_e_k ){
+      if (std::fabs(k3)<bvgl_biarc_e_k){
         k3 = 0;
-        d3 = d * vcl_sin((t2+t0)/2-psi)/ vcl_sin((t2-t0)/2);
+        d3 = d * std::sin((t2+t0)/2-psi)/ std::sin((t2-t0)/2);
         d4 = this->compute_arclength(t0,t2,k4);
       }
       else {
-        if (vcl_fabs(k4) < bvgl_biarc_e_k){
+        if (std::fabs(k4) < bvgl_biarc_e_k){
           k4 = 0;
-          d4 = d*vcl_sin((t2+t0)/2-psi)/vcl_sin((t0-t2)/2);
+          d4 = d*std::sin((t2+t0)/2-psi)/std::sin((t0-t2)/2);
           d3 = this->compute_arclength(t0,t2,k3);
         }
         else {
@@ -401,8 +401,8 @@ compute_biarc_params(const vgl_point_2d< double >& start,
                      const vgl_point_2d< double >& end,
                      const vgl_vector_2d<double >& end_tangent )
 {
-  double start_angle = vcl_atan2(start_tangent.y(), start_tangent.x());
-  double end_angle = vcl_atan2(end_tangent.y(), end_tangent.x());
+  double start_angle = std::atan2(start_tangent.y(), start_tangent.x());
+  double end_angle = std::atan2(end_tangent.y(), end_tangent.x());
 
   this->set_start_params(start, start_angle);
   this->set_end_params(end, end_angle);
@@ -422,10 +422,10 @@ compute_join_theta (double k1, double k2){
   double t0 = this->start_angle();
   double t2 = this->end_angle();
 
-  double sin_join_theta = ( k1*k2*(x2-x0) + k2*vcl_sin(t0) - k1*vcl_sin(t2) )/(k2-k1);
-  double cos_join_theta = ( -k1*k2*(y2-y0) + k2*vcl_cos(t0) - k1*vcl_cos(t2))/(k2-k1);
+  double sin_join_theta = ( k1*k2*(x2-x0) + k2*std::sin(t0) - k1*std::sin(t2) )/(k2-k1);
+  double cos_join_theta = ( -k1*k2*(y2-y0) + k2*std::cos(t0) - k1*std::cos(t2))/(k2-k1);
 
-  double join_theta = vcl_atan2(sin_join_theta, cos_join_theta);
+  double join_theta = std::atan2(sin_join_theta, cos_join_theta);
   if (join_theta<0)
     join_theta += 2*vnl_math::pi;
 
@@ -449,16 +449,16 @@ compute_arclength(double t0, double t1, double k){
 // ---------------- MISCELLANEOUS ----------------------
 //: Print parameters of the biarc
 void bvgl_biarc::
-print(vcl_ostream &os ) const
+print(std::ostream &os ) const
 {
-  os << vcl_endl << "Start parameters" << vcl_endl;
-  os << "Start point : ( "<< this->start().x() << " , " << this->start().y() << " )" << vcl_endl;
-  os << "Start angle : " << this->start_angle() << vcl_endl;
-  os << "End parameters" << vcl_endl;
-  os << "End point : ( "<< this->end().x() << " , " << this->end().y() << " )" << vcl_endl;
-  os << "End angle : " << this->end_angle() << vcl_endl;
-  os << "k1 = " << this->k1() << vcl_endl;
-  os << "len1 = " << this->len1() << vcl_endl;
-  os << "k2 = " << this->k2() << vcl_endl;
-  os << "len2 = " << this->len2() << vcl_endl;
+  os << std::endl << "Start parameters" << std::endl;
+  os << "Start point : ( "<< this->start().x() << " , " << this->start().y() << " )" << std::endl;
+  os << "Start angle : " << this->start_angle() << std::endl;
+  os << "End parameters" << std::endl;
+  os << "End point : ( "<< this->end().x() << " , " << this->end().y() << " )" << std::endl;
+  os << "End angle : " << this->end_angle() << std::endl;
+  os << "k1 = " << this->k1() << std::endl;
+  os << "len1 = " << this->len1() << std::endl;
+  os << "k2 = " << this->k2() << std::endl;
+  os << "len2 = " << this->len2() << std::endl;
 }

@@ -23,7 +23,7 @@ rgrl_invariant_match( rgrl_invariant_sptr from,
   const vnl_vector<double>& to_inv_ang = to->angular_invariants();
   double dist_angular = vnl_vector_ssd(from_inv_ang, to_inv_ang);
 
-  distance_ = vcl_sqrt(dist_cartesian + dist_angular);
+  distance_ = std::sqrt(dist_cartesian + dist_angular);
 }
 
 rgrl_transformation_sptr

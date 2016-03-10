@@ -22,8 +22,9 @@
 #include <vgl/vgl_polygon.h>
 #include <vgl/vgl_closest_point.h>
 #include <vcl_cassert.h>
-#include <vcl_cmath.h> // for vcl_sqrt()
-#include <vcl_utility.h> // for vcl_pair<T,U>
+#include <cmath> // for std::sqrt()
+#include <vcl_compiler.h>
+#include <utility> // for std::pair<T,U>
 
 template <class T>
 static inline T square_of(T x) { return x*x; }
@@ -33,7 +34,7 @@ double vgl_distance_to_linesegment(T x1, T y1,
                                    T x2, T y2,
                                    T x, T y)
 {
-  return vcl_sqrt(vgl_distance2_to_linesegment(x1, y1, x2, y2, x, y));
+  return std::sqrt(vgl_distance2_to_linesegment(x1, y1, x2, y2, x, y));
 }
 
 template <class T>
@@ -68,7 +69,7 @@ double vgl_distance_to_linesegment(T x1, T y1, T z1,
                                    T x2, T y2, T z2,
                                    T x, T y, T z)
 {
-  return vcl_sqrt(vgl_distance2_to_linesegment(x1, y1, z1, x2, y2, z2, x, y, z));
+  return std::sqrt(vgl_distance2_to_linesegment(x1, y1, z1, x2, y2, z2, x, y, z));
 }
 
 template <class T>
@@ -172,49 +173,49 @@ template <class T>
 double vgl_distance_origin(vgl_homg_line_2d<T> const& l)
 {
   if (l.c() == 0) return 0.0; // no call to sqrt if not necessary
-  else return vcl_abs(static_cast<double>(l.c())) / vcl_sqrt(static_cast<double>( l.a()*l.a()+l.b()*l.b() ));
+  else return std::abs(static_cast<double>(l.c())) / std::sqrt(static_cast<double>( l.a()*l.a()+l.b()*l.b() ));
 }
 
 template <class T>
 double vgl_distance_origin(vgl_line_2d<T> const& l)
 {
   if (l.c() == 0) return 0.0; // no call to sqrt if not necessary
-  else return vcl_abs(static_cast<double>(l.c())) / vcl_sqrt(static_cast<double>( l.a()*l.a()+l.b()*l.b() ));
+  else return std::abs(static_cast<double>(l.c())) / std::sqrt(static_cast<double>( l.a()*l.a()+l.b()*l.b() ));
 }
 
 template <class T>
 double vgl_distance_origin(vgl_homg_plane_3d<T> const& pl)
 {
   if (pl.d() == 0) return 0.0; // no call to sqrt if not necessary
-  else return vcl_abs(static_cast<double>(pl.d())) / vcl_sqrt(static_cast<double>( pl.a()*pl.a()+pl.b()*pl.b()+pl.c()*pl.c()) );
+  else return std::abs(static_cast<double>(pl.d())) / std::sqrt(static_cast<double>( pl.a()*pl.a()+pl.b()*pl.b()+pl.c()*pl.c()) );
 }
 
 template <class T>
 double vgl_distance_origin(vgl_plane_3d<T> const& pl)
 {
   if (pl.d() == 0) return 0.0; // no call to sqrt if not necessary
-  else return vcl_abs(static_cast<double>(pl.d())) / vcl_sqrt(static_cast<double>( pl.a()*pl.a()+pl.b()*pl.b()+pl.c()*pl.c()) );
+  else return std::abs(static_cast<double>(pl.d())) / std::sqrt(static_cast<double>( pl.a()*pl.a()+pl.b()*pl.b()+pl.c()*pl.c()) );
 }
 
 template <class T>
 double vgl_distance_origin(vgl_homg_line_3d_2_points<T> const& l)
 {
   vgl_homg_point_3d<T> q = vgl_closest_point_origin(l);
-  return vcl_sqrt(static_cast<double>(square_of(q.x())+square_of(q.y())+square_of(q.z())))/q.w();
+  return std::sqrt(static_cast<double>(square_of(q.x())+square_of(q.y())+square_of(q.z())))/q.w();
 }
 
 template <class T>
 double vgl_distance_origin(vgl_line_3d_2_points<T> const& l)
 {
   vgl_point_3d<T> q = vgl_closest_point_origin(l);
-  return vcl_sqrt(static_cast<double>(square_of(q.x())+square_of(q.y())+square_of(q.z())));
+  return std::sqrt(static_cast<double>(square_of(q.x())+square_of(q.y())+square_of(q.z())));
 }
 
 template <class T>
 double vgl_distance(vgl_homg_point_1d<T>const& p1,
                     vgl_homg_point_1d<T>const& p2)
 {
-  return vcl_abs(static_cast<double>(p1.x()/p1.w() - p2.x()/p2.w()));
+  return std::abs(static_cast<double>(p1.x()/p1.w() - p2.x()/p2.w()));
 }
 
 template <class T>
@@ -222,7 +223,7 @@ double vgl_distance(vgl_line_2d<T> const& l, vgl_point_2d<T> const& p)
 {
   T num = l.a()*p.x() + l.b()*p.y() + l.c();
   if (num == 0) return 0.0; // no call to sqrt if not necessary
-  else return vcl_abs(static_cast<double>(num)) / vcl_sqrt(static_cast<double>(l.a()*l.a() + l.b()*l.b()));
+  else return std::abs(static_cast<double>(num)) / std::sqrt(static_cast<double>(l.a()*l.a() + l.b()*l.b()));
 }
 
 template <class T>
@@ -230,7 +231,7 @@ double vgl_distance(vgl_homg_line_2d<T> const& l, vgl_homg_point_2d<T> const& p)
 {
   T num = l.a()*p.x() + l.b()*p.y() + l.c()*p.w();
   if (num == 0) return 0.0; // always return 0 when point on line, even at infinity
-  else return vcl_abs(static_cast<double>(num)) / vcl_sqrt(static_cast<double>(l.a()*l.a() + l.b()*l.b())) / p.w(); // could be inf
+  else return std::abs(static_cast<double>(num)) / std::sqrt(static_cast<double>(l.a()*l.a() + l.b()*l.b())) / p.w(); // could be inf
 }
 
 template <class T>
@@ -238,7 +239,7 @@ double vgl_distance(vgl_plane_3d<T> const& l, vgl_point_3d<T> const& p)
 {
   T num = l.nx()*p.x() + l.ny()*p.y() + l.nz()*p.z() + l.d();
   if (num == 0) return 0.0; // no call to sqrt if not necessary
-  else return vcl_abs(static_cast<double>(num)) / vcl_sqrt(static_cast<double>(l.nx()*l.nx() + l.ny()*l.ny() + l.nz()*l.nz()));
+  else return std::abs(static_cast<double>(num)) / std::sqrt(static_cast<double>(l.nx()*l.nx() + l.ny()*l.ny() + l.nz()*l.nz()));
 }
 
 template <class T>
@@ -246,7 +247,7 @@ double vgl_distance(vgl_homg_plane_3d<T> const& l, vgl_homg_point_3d<T> const& p
 {
   T num = l.nx()*p.x() + l.ny()*p.y() + l.nz()*p.z() + l.d()*p.w();
   if (num == 0) return 0.0; // always return 0 when point on plane, even at infinity
-  else return vcl_abs(static_cast<double>(num/p.w())) / vcl_sqrt(static_cast<double>(l.nx()*l.nx() + l.ny()*l.ny() + l.nz()*l.nz()));
+  else return std::abs(static_cast<double>(num/p.w())) / std::sqrt(static_cast<double>(l.nx()*l.nx() + l.ny()*l.ny() + l.nz()*l.nz()));
 }
 template <class T>
 double vgl_distance(vgl_point_3d<T> const& p,
@@ -254,7 +255,7 @@ double vgl_distance(vgl_point_3d<T> const& p,
   double r = static_cast<double>(s.radius());
   vgl_point_3d<T> c = s.centre();
   double d = vgl_distance<T>(p,c);
-  return vcl_fabs(d-r);
+  return std::fabs(d-r);
 }
 
 template <class T>
@@ -263,7 +264,7 @@ double vgl_distance(vgl_polygon<T> const& poly, vgl_point_2d<T> const& point, bo
   double dist = -1;
   for ( unsigned int s=0; s < poly.num_sheets(); ++s )
   {
-    const vcl_vector<vgl_point_2d<T> > &sheet = poly[s];
+    const std::vector<vgl_point_2d<T> > &sheet = poly[s];
     unsigned int n = (unsigned int)(sheet.size());
     assert( n > 1 );
     double dd = closed ?
@@ -290,7 +291,7 @@ template <class T>
 double vgl_distance(vgl_homg_line_3d_2_points<T> const& line1,
                     vgl_homg_line_3d_2_points<T> const& line2)
 {
-  vcl_pair<vgl_homg_point_3d<T>, vgl_homg_point_3d<T> > pp =
+  std::pair<vgl_homg_point_3d<T>, vgl_homg_point_3d<T> > pp =
     vgl_closest_points(line1, line2);
   if (pp.first.w() != 0)
     return vgl_distance(pp.first,pp.second);

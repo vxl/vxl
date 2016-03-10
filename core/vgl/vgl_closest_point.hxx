@@ -1,7 +1,8 @@
 // This is core/vgl/vgl_closest_point.hxx
 #ifndef vgl_closest_point_hxx_
 #define vgl_closest_point_hxx_
-#include <vcl_limits.h>
+#include <vcl_compiler.h>
+#include <limits>
 //:
 // \file
 // \author Peter Vanroose, KULeuven, ESAT/PSI
@@ -26,7 +27,7 @@
 #include <vgl/vgl_ray_3d.h>
 #include <vgl/vgl_pointset_3d.h>
 #include <vcl_cassert.h>
-#include <vcl_cmath.h> // for std::abs(double)
+#include <cmath> // for std::abs(double)
 
 template <class T>
 static inline T square(T x) { return x*x; }
@@ -314,11 +315,11 @@ vgl_point_2d<T> vgl_closest_point(vgl_polygon<T> const& poly,
 }
 
 template <class T>
-vcl_pair<vgl_homg_point_3d<T>, vgl_homg_point_3d<T> >
+std::pair<vgl_homg_point_3d<T>, vgl_homg_point_3d<T> >
 vgl_closest_points(vgl_homg_line_3d_2_points<T> const& line1,
                    vgl_homg_line_3d_2_points<T> const& line2)
 {
-  vcl_pair<vgl_homg_point_3d<T>, vgl_homg_point_3d<T> > ret;
+  std::pair<vgl_homg_point_3d<T>, vgl_homg_point_3d<T> > ret;
   // parallel or equal lines
   if ((line1==line2)||(line1.point_infinite()==line2.point_infinite()))
   {
@@ -418,12 +419,12 @@ vgl_point_3d<T> vgl_closest_point(vgl_line_3d_2_points<T> const& l,
 
 //: Return the points of closest approach on 2 3D lines.
 template <class T>
-vcl_pair<vgl_point_3d<T>, vgl_point_3d<T> >
+std::pair<vgl_point_3d<T>, vgl_point_3d<T> >
 vgl_closest_points(const vgl_line_3d_2_points<T>& l1,
                    const vgl_line_3d_2_points<T>& l2,
                    bool* unique/*=0*/)
 {
-  vcl_pair<vgl_point_3d<T>, vgl_point_3d<T> > ret;
+  std::pair<vgl_point_3d<T>, vgl_point_3d<T> > ret;
 
   // Get the parametric equation of each line
   // l1: p(s) = p1 + su;  u = p2 - p1
@@ -476,12 +477,12 @@ vgl_point_3d<T> vgl_closest_point(vgl_point_3d<T> const& p,
 
 //: Return the points of closest approach on 2 3D line segments.
 template <class T>
-vcl_pair<vgl_point_3d<T>, vgl_point_3d<T> >
+std::pair<vgl_point_3d<T>, vgl_point_3d<T> >
 vgl_closest_points(vgl_line_segment_3d<T> const& l1,
                    vgl_line_segment_3d<T> const& l2,
                    bool* unique/*=0*/)
 {
-  vcl_pair<vgl_point_3d<T>, vgl_point_3d<T> > ret;
+  std::pair<vgl_point_3d<T>, vgl_point_3d<T> > ret;
 
   // Get the parametric equation of each line
   // l1: p(s) = p1 + su;  u = p2 - p1
@@ -578,8 +579,8 @@ vgl_closest_points(vgl_line_segment_3d<T> const& l1,
   }
 
   // Now calculate the required values of (s,t)
-  double s = (vcl_abs(s_numer) < SMALL_DOUBLE ? 0.0 : s_numer / s_denom);
-  double t = (vcl_abs(t_numer) < SMALL_DOUBLE ? 0.0 : t_numer / t_denom);
+  double s = (std::abs(s_numer) < SMALL_DOUBLE ? 0.0 : s_numer / s_denom);
+  double t = (std::abs(t_numer) < SMALL_DOUBLE ? 0.0 : t_numer / t_denom);
 
   // Need to verify whether returned closest points are unique
   // in the case of parallel/collinear line segments
@@ -625,9 +626,9 @@ vgl_point_3d<T> vgl_closest_point(vgl_sphere_3d<T> const& s,
   // offset p by sphere center
   double vx = static_cast<double>(p.x()-c.x()), vy = static_cast<double>(p.y()-c.y()),
     vz = static_cast<double>(p.z()-c.z());
-  double radius = vcl_sqrt(vx*vx + vy*vy + vz*vz);
-  T azimuth = static_cast<T>(vcl_atan2(vy, vx));
-  T elevation = static_cast<T>(vcl_acos(vz/radius));
+  double radius = std::sqrt(vx*vx + vy*vy + vz*vz);
+  T azimuth = static_cast<T>(std::atan2(vy, vx));
+  T elevation = static_cast<T>(std::acos(vz/radius));
   vgl_point_3d<T> ret;
   s.spherical_to_cartesian(elevation, azimuth, ret);
   return ret;
@@ -654,7 +655,7 @@ vgl_point_3d<T> vgl_closest_point(vgl_pointset_3d<T> const& ptset,
     return pc;
   const vgl_vector_3d<T>& norm = ptset.n(iclose);
   //otherwise construct the plane and find closest point on that
-  if(vcl_numeric_limits<T>::is_integer){
+  if(std::numeric_limits<T>::is_integer){
     // closest point can be templated over int so cast to double for plane computations
     vgl_point_3d<double> pd(static_cast<double>(p.x()), static_cast<double>(p.y()), static_cast<double>(p.z()));
     vgl_point_3d<double> pcd(static_cast<double>(pc.x()), static_cast<double>(pc.y()), static_cast<double>(pc.z()));
@@ -706,13 +707,13 @@ template vgl_point_3d<T > vgl_closest_point(vgl_point_3d<T >const&,vgl_plane_3d<
 template vgl_homg_point_3d<T > vgl_closest_point(vgl_homg_plane_3d<T >const&,vgl_homg_point_3d<T >const&); \
 template vgl_homg_point_3d<T > vgl_closest_point(vgl_homg_point_3d<T >const&,vgl_homg_plane_3d<T >const&); \
 template vgl_point_2d<T > vgl_closest_point(vgl_polygon<T >const&,vgl_point_2d<T >const&,bool); \
-template vcl_pair<vgl_homg_point_3d<T >,vgl_homg_point_3d<T > > \
+template std::pair<vgl_homg_point_3d<T >,vgl_homg_point_3d<T > > \
          vgl_closest_points(vgl_homg_line_3d_2_points<T >const&,vgl_homg_line_3d_2_points<T >const&); \
 template vgl_homg_point_3d<T > vgl_closest_point(vgl_homg_line_3d_2_points<T >const&,vgl_homg_point_3d<T >const&); \
 template vgl_homg_point_3d<T > vgl_closest_point(vgl_homg_point_3d<T >const&,vgl_homg_line_3d_2_points<T >const&); \
-template vcl_pair<vgl_point_3d<T >,vgl_point_3d<T > > \
+template std::pair<vgl_point_3d<T >,vgl_point_3d<T > > \
          vgl_closest_points(vgl_line_3d_2_points<T >const&, vgl_line_3d_2_points<T >const&, bool*); \
-template vcl_pair<vgl_point_3d<T >,vgl_point_3d<T > > \
+template std::pair<vgl_point_3d<T >,vgl_point_3d<T > > \
          vgl_closest_points(vgl_line_segment_3d<T >const&, vgl_line_segment_3d<T >const&, bool*); \
 template vgl_point_2d<T > vgl_closest_point(vgl_line_segment_2d<T > const&, vgl_point_2d<T > const&); \
 template vgl_point_3d<T > vgl_closest_point(vgl_line_segment_3d<T > const&, vgl_point_3d<T > const&); \

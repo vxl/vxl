@@ -1,10 +1,12 @@
-#include <vcl_string.h>
+#include <string>
 #include <vgui/vgui.h>
 #include <vgui/vgui_adaptor.h>
 #include <vgui/vgui_window.h>
 #include <segv/segv_vil_menus.h>
 #include <segv/segv_vil_segmentation_manager.h>
-#include <vcl_cstring.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <cstring>
 
 int main(int argc, char* argv[])
 {
@@ -12,7 +14,7 @@ int main(int argc, char* argv[])
   char** my_argv = new char*[argc+1];
   my_argv[1] = new char[13];
   char* temp = my_argv[1];
-  vcl_strcpy(my_argv[1], "--mfc-use-gl");
+  std::strcpy(my_argv[1], "--mfc-use-gl");
   my_argv[0] = argv[0];
   for (int i=1; i<argc; ++i)
     my_argv[i+1] = argv[i];
@@ -26,7 +28,7 @@ int main(int argc, char* argv[])
 #endif
   vgui_menu menubar = segv_vil_menus::get_menu();
   unsigned w = 400, h = 340;
-  vcl_string title = "SEG_VIL";
+  std::string title = "SEG_VIL";
   vgui_window* win = vgui::produce_window(w, h, menubar, title);
   segv_vil_segmentation_manager* segm=segv_vil_segmentation_manager::instance();
   segm->set_window(win);
@@ -36,7 +38,7 @@ int main(int argc, char* argv[])
   if(argc>=2)
     for(int i = 1; i<argc; ++i){
       char* file = argv[i];
-      vcl_string path(file);
+      std::string path(file);
       segm->load_image_nomenu(path);
     }
   win->set_statusbar(true);

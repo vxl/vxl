@@ -8,10 +8,11 @@
 #include <vgl/algo/vgl_norm_trans_3d.h>
 #include <vnl/algo/vnl_svd.h>
 #include <vnl/vnl_matrix.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <iostream>
 
 template <class T>
-vgl_fit_plane_3d<T>::vgl_fit_plane_3d(vcl_vector<vgl_homg_point_3d<T> > points)
+vgl_fit_plane_3d<T>::vgl_fit_plane_3d(std::vector<vgl_homg_point_3d<T> > points)
 : points_(points)
 {
 }
@@ -35,7 +36,7 @@ void vgl_fit_plane_3d<T>::add_point(const T x, const T y, const T z)
 }
 
  template <class T>
- bool vgl_fit_plane_3d<T>::fit(const T error_marg, vcl_ostream* errstream/*=0*/)
+ bool vgl_fit_plane_3d<T>::fit(const T error_marg, std::ostream* errstream/*=0*/)
 {
 
   T min = this->fit(errstream);
@@ -48,7 +49,7 @@ void vgl_fit_plane_3d<T>::add_point(const T x, const T y, const T z)
 }
 
 template <class T>
-T vgl_fit_plane_3d<T>::fit(vcl_ostream* errstream)
+T vgl_fit_plane_3d<T>::fit(std::ostream* errstream)
 {
     // normalize the points
   vgl_norm_trans_3d<T> norm;

@@ -54,8 +54,8 @@ vil_pyramid_image_view<T>::vil_pyramid_image_view(vil_image_view_base_sptr image
 }
 
 template <class T>
-vil_pyramid_image_view<T>::vil_pyramid_image_view(vcl_vector<vil_image_view_base_sptr> const& images,
-                                                  vcl_vector<double> const& scales)
+vil_pyramid_image_view<T>::vil_pyramid_image_view(std::vector<vil_image_view_base_sptr> const& images,
+                                                  std::vector<double> const& scales)
 {
   nlevels_=(unsigned int)(images.size());
   images_.resize(nlevels_);
@@ -80,8 +80,8 @@ void vil_pyramid_image_view<T>::add_view(vil_image_view_base_sptr &image, double
 {
   // find the place of the image based on the ordered scales
   unsigned i=0;
-  vcl_vector<vil_image_view_base_sptr>::iterator image_iter=images_.begin();
-  vcl_vector<double>::iterator scale_iter= scales_.begin();
+  std::vector<vil_image_view_base_sptr>::iterator image_iter=images_.begin();
+  std::vector<double>::iterator scale_iter= scales_.begin();
   while (i<nlevels_ && scale<scales_[i]) {
     i++;
     image_iter++;

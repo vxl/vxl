@@ -1,8 +1,10 @@
 #include <testlib/testlib_test.h>
 #include <bxml/bxml_read.h>
 #include <bxml/bxml_write.h>
-#include <vcl_iostream.h>
-#include <vcl_sstream.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iostream>
+#include <sstream>
 
 
 bxml_document make_simple_doc()
@@ -48,7 +50,7 @@ bxml_document make_long_doc()
       bxml_element * data = new bxml_element("data");
       frame->append_text("\n    ");
       frame->append_data(data);
-      vcl_stringstream s;
+      std::stringstream s;
       s << "This is data element "<<i<<", "<<j;
       data->append_text(s.str());
     }
@@ -61,7 +63,7 @@ bxml_document make_long_doc()
 
 static void test_io(int argc, char* argv[])
 {
-  vcl_string path_base;
+  std::string path_base;
   if ( argc >= 2 ) {
     path_base = argv[1];
     path_base += "/";
@@ -70,9 +72,9 @@ static void test_io(int argc, char* argv[])
   {
     bxml_document doc = make_simple_doc();
 
-    vcl_cout << "\n---- start of document ----"<<vcl_endl;
-    bxml_write(vcl_cout,doc);
-    vcl_cout << "\n----  end of document  ----\n"<<vcl_endl;
+    std::cout << "\n---- start of document ----"<<std::endl;
+    bxml_write(std::cout,doc);
+    std::cout << "\n----  end of document  ----\n"<<std::endl;
 
     bxml_write("text_out.xml",doc);
 
@@ -83,12 +85,12 @@ static void test_io(int argc, char* argv[])
 
   {
     bxml_document doc = make_long_doc();
-    vcl_stringstream s;
+    std::stringstream s;
     bxml_write(s,doc);
 
     bxml_stream_read str_reader;
 
-    //vcl_ifstream file("text_out.xml");
+    //std::ifstream file("text_out.xml");
     unsigned int depth = 0;
     bxml_data_sptr data = VXL_NULLPTR;
     bool fail = false;

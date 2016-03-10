@@ -8,44 +8,46 @@
 #include <boxm2/boxm2_data.h>
 #include <boxm2/basic/boxm2_block_id.h>
 
-#include <vcl_fstream.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <fstream>
 
 #include <vbl/vbl_ref_count.h>
 #include <vbl/vbl_smart_ptr.h>
 
 class boxm2_stream_scene_cache: public vbl_ref_count
 {
-    typedef vcl_string data_type;
-    typedef vcl_string identifier;
+    typedef std::string data_type;
+    typedef std::string identifier;
 
     typedef vnl_vector_fixed<unsigned char, 16> uchar16;
 
   public:
     //: hidden constructor (singleton class)
     boxm2_stream_scene_cache(boxm2_scene_sptr scene,
-                             vcl_vector<data_type> data_types,
-                             vcl_vector<identifier> identifiers);
+                             std::vector<data_type> data_types,
+                             std::vector<identifier> identifiers);
 
     bool clear();
 
     ~boxm2_stream_scene_cache();
 
     //: map to store various info about each datatype
-    vcl_map<data_type, char *> data_buffers_;
-    vcl_map<data_type, vcl_vector<unsigned long> > offsets_;
+    std::map<data_type, char *> data_buffers_;
+    std::map<data_type, std::vector<unsigned long> > offsets_;
 
     uchar16 * blk_buffer_;
-    vcl_vector<unsigned long> blk_offsets_;
+    std::vector<unsigned long> blk_offsets_;
 
     unsigned long total_bytes_per_block_;
-    vcl_map<data_type,unsigned long> total_bytes_per_data_;
+    std::map<data_type,unsigned long> total_bytes_per_data_;
 
     boxm2_scene_sptr scene(){return scene_ ;}
 
   protected:
     boxm2_scene_sptr scene_;
-    vcl_vector<data_type> data_types_;
-    vcl_vector<identifier> identifiers_;
+    std::vector<data_type> data_types_;
+    std::vector<identifier> identifiers_;
 };
 
 typedef vbl_smart_ptr<boxm2_stream_scene_cache> boxm2_stream_scene_cache_sptr;

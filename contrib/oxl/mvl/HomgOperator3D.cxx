@@ -2,11 +2,13 @@
 //:
 //  \file
 
-#include <vcl_cmath.h>
-#include <vcl_iostream.h>
-#include <vcl_vector.h>
-#include <vcl_utility.h>
-#include <vcl_algorithm.h>
+#include <cmath>
+#include <iostream>
+#include <vector>
+#include <utility>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <algorithm>
 
 #include <vnl/algo/vnl_svd.h>
 #include <vnl/vnl_matrix_fixed.h>
@@ -35,12 +37,12 @@ HomgOperator3D::sort_points(HomgPoint3D* points, int n)
     }
   }
   if (num_finite < n) {
-    vcl_cerr << "WARNING HomgOperator3D::sort_points -- "
+    std::cerr << "WARNING HomgOperator3D::sort_points -- "
              << (n - num_finite) << " points at infinity\n";
   }
 
   if (num_finite == 0) {
-    vcl_cerr << "HomgOperator3D::sort_points: all points at infinity - no action\n";
+    std::cerr << "HomgOperator3D::sort_points: all points at infinity - no action\n";
     return;
   }
 
@@ -67,9 +69,9 @@ HomgOperator3D::sort_points(HomgPoint3D* points, int n)
   vnl_double_3 faraway_trivec = finite_trivec + 2.0 * distance_max * dir;
   HomgPoint3D faraway(faraway_trivec[0], faraway_trivec[1], faraway_trivec[2], 1.0);
 
-  typedef vcl_pair<float, int> pair_float_int;
-  vcl_vector< pair_float_int > sort_table(n);
-  vcl_vector< HomgPoint3D > tempoints(points, points + n);
+  typedef std::pair<float, int> pair_float_int;
+  std::vector< pair_float_int > sort_table(n);
+  std::vector< HomgPoint3D > tempoints(points, points + n);
 
   for (int p_index = 0; p_index < n; p_index++) {
     HomgPoint3D* p = &points[p_index];
@@ -79,7 +81,7 @@ HomgOperator3D::sort_points(HomgPoint3D* points, int n)
     }
   }
 
-  vcl_sort(sort_table.begin(), sort_table.end());
+  std::sort(sort_table.begin(), sort_table.end());
 
   for (int sort_index = 0; sort_index < n; sort_index++) {
     pair_float_int* sort = &sort_table[sort_index];
@@ -102,8 +104,8 @@ HomgOperator3D::angle_between_oriented_lines (const HomgLine3D& l1, const HomgLi
   double n = dir1.x()*dir1.x()+dir1.y()*dir1.y()+dir1.z()*dir1.z();
   n       *= dir2.x()*dir2.x()+dir2.y()*dir2.y()+dir2.z()*dir2.z();
   // dot product of unit direction vectors:
-  n = (dir1.x()*dir2.x()+dir1.y()*dir2.y()+dir1.z()*dir2.z())/vcl_sqrt(n);
-  return vcl_acos(n);
+  n = (dir1.x()*dir2.x()+dir1.y()*dir2.y()+dir1.z()*dir2.z())/std::sqrt(n);
+  return std::acos(n);
 }
 
 
@@ -150,7 +152,7 @@ HomgOperator3D::intersect_line_and_plane (const HomgLine3D &line, const HomgPlan
 HomgPoint3D
 HomgOperator3D::lines_to_point (const HomgLine3D& , const HomgLine3D& )
 {
-  vcl_cerr << "Warning: HomgOperator3D::lines_to_point() not yet implemented\n";
+  std::cerr << "Warning: HomgOperator3D::lines_to_point() not yet implemented\n";
   return HomgPoint3D();
 }
 
@@ -160,9 +162,9 @@ HomgOperator3D::lines_to_point (const HomgLine3D& , const HomgLine3D& )
 // - Compute the best fit intersection point of the lines
 //
 HomgPoint3D
-HomgOperator3D::lines_to_point (const vcl_vector<HomgLine3D>& )
+HomgOperator3D::lines_to_point (const std::vector<HomgLine3D>& )
 {
-  vcl_cerr << "Warning: HomgOperator3D::lines_to_point() not yet implemented\n";
+  std::cerr << "Warning: HomgOperator3D::lines_to_point() not yet implemented\n";
   return HomgPoint3D();
 }
 
@@ -173,7 +175,7 @@ HomgOperator3D::lines_to_point (const vcl_vector<HomgLine3D>& )
 double
 HomgOperator3D::perp_dist_squared (const HomgPoint3D& , const HomgLine3D& )
 {
-  vcl_cerr << "Warning: HomgOperator3D::perp_dist_squared() not yet implemented\n";
+  std::cerr << "Warning: HomgOperator3D::perp_dist_squared() not yet implemented\n";
   return 0;
 }
 
@@ -194,7 +196,7 @@ HomgOperator3D::perp_line_through_point (const HomgLine3D& , const HomgPoint3D& 
 HomgPoint3D
 HomgOperator3D::perp_projection (const HomgLine3D& , const HomgPoint3D& )
 {
-  vcl_cerr << "Warning: HomgOperator3D::perp_projection() not yet implemented\n";
+  std::cerr << "Warning: HomgOperator3D::perp_projection() not yet implemented\n";
   return HomgPoint3D();
 }
 
@@ -222,9 +224,9 @@ HomgOperator3D::planes_to_line (const HomgPlane3D& plane1, const HomgPlane3D& pl
 // - Compute the best-fit intersection line of the planes
 //
 HomgLine3D
-HomgOperator3D::planes_to_line (const vcl_vector<HomgPlane3D>&)
+HomgOperator3D::planes_to_line (const std::vector<HomgPlane3D>&)
 {
-  vcl_cerr << "Warning: HomgOperator3D::planes_to_line() not yet implemented\n";
+  std::cerr << "Warning: HomgOperator3D::planes_to_line() not yet implemented\n";
   return HomgLine3D();
 }
 
@@ -236,7 +238,7 @@ HomgOperator3D::planes_to_line (const vcl_vector<HomgPlane3D>&)
 HomgLine3D
 HomgOperator3D::points_to_line (const HomgPoint3D&, const HomgPoint3D&)
 {
-  vcl_cerr << "Warning: HomgOperator3D::points_to_line() not yet implemented\n";
+  std::cerr << "Warning: HomgOperator3D::points_to_line() not yet implemented\n";
   return HomgLine3D();
 }
 
@@ -245,9 +247,9 @@ HomgOperator3D::points_to_line (const HomgPoint3D&, const HomgPoint3D&)
 // - Compute the best-fit line through the points
 //
 HomgLine3D
-HomgOperator3D::points_to_line (const vcl_vector<HomgPoint3D>&)
+HomgOperator3D::points_to_line (const std::vector<HomgPoint3D>&)
 {
-  vcl_cerr << "Warning: HomgOperator3D::points_to_line() not yet implemented\n";
+  std::cerr << "Warning: HomgOperator3D::points_to_line() not yet implemented\n";
   return HomgLine3D();
 }
 
@@ -258,7 +260,7 @@ HomgOperator3D::points_to_line (const vcl_vector<HomgPoint3D>&)
 HomgPlane3D
 HomgOperator3D::points_to_plane (const HomgPoint3D&, const HomgPoint3D&, const HomgPoint3D&)
 {
-  vcl_cerr << "Warning: HomgOperator3D::points_to_plane() not yet implemented\n";
+  std::cerr << "Warning: HomgOperator3D::points_to_plane() not yet implemented\n";
   return HomgPlane3D();
 }
 
@@ -268,9 +270,9 @@ HomgOperator3D::points_to_plane (const HomgPoint3D&, const HomgPoint3D&, const H
 // - Compute the best-fit plane through the points
 //
 HomgPlane3D
-HomgOperator3D::points_to_plane (const vcl_vector<HomgPoint3D>&)
+HomgOperator3D::points_to_plane (const std::vector<HomgPoint3D>&)
 {
-  vcl_cerr << "Warning: HomgOperator3D::points_to_plane() not yet implemented\n";
+  std::cerr << "Warning: HomgOperator3D::points_to_plane() not yet implemented\n";
   return HomgPlane3D();
 }
 
@@ -300,7 +302,7 @@ HomgOperator3D::intersection_point (const HomgPlane3D& plane1, const HomgPlane3D
 }
 
 HomgPoint3D
-HomgOperator3D::intersection_point (const vcl_vector<HomgPlane3D>& planes)
+HomgOperator3D::intersection_point (const std::vector<HomgPlane3D>& planes)
 {
   int n = planes.size();
   vnl_matrix<double> A(planes.size(), 4);
@@ -349,6 +351,6 @@ double HomgOperator3D::CrossRatio(const Homg3D& a, const Homg3D& b, const Homg3D
              (y>z)        ? (y1*w4-y4*w1)*(y2*w3-y3*w2) :
                             (z1*w4-z4*w1)*(z2*w3-z3*w2);
   if (n == 0 && m == 0)
-    vcl_cerr << "CrossRatio not defined: three of the given points coincide\n";
+    std::cerr << "CrossRatio not defined: three of the given points coincide\n";
   return n/m;
 }

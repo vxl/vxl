@@ -8,11 +8,12 @@
 #include "vil_pnm.h"
 
 #include <vcl_cassert.h>
-#include <vcl_cstdio.h> // for sprintf
-#include <vcl_vector.h>
+#include <cstdio> // for sprintf
+#include <vcl_compiler.h>
+#include <vector>
 
-#include <vcl_iostream.h>
-#include <vcl_cstring.h>
+#include <iostream>
+#include <cstring>
 
 #include <vxl_config.h> // for VXL_BIG_ENDIAN and vxl_byte
 
@@ -79,7 +80,7 @@ vil_pnm_image::vil_pnm_image(vil_stream* vs):
 
 bool vil_pnm_image::get_property(char const * tag, void * value) const
 {
-  if (vcl_strcmp(vil_property_quantisation_depth, tag)==0)
+  if (std::strcmp(vil_property_quantisation_depth, tag)==0)
   {
     if (value)
       *static_cast<unsigned int*>(value) = bits_per_component_;
@@ -290,13 +291,13 @@ bool vil_pnm_image::write_header()
   vs_->seek(0L);
 
   char buf[1024];
-  vcl_sprintf(buf, "P%d\n#vil pnm image, #c=%u, bpc=%u\n%u %u\n",
+  std::sprintf(buf, "P%d\n#vil pnm image, #c=%u, bpc=%u\n%u %u\n",
               magic_, ncomponents_, bits_per_component_, ni_, nj_);
-  vs_->write(buf, vcl_strlen(buf));
+  vs_->write(buf, std::strlen(buf));
   if (magic_ != 1 && magic_ != 4)
   {
-    vcl_sprintf(buf, "%lu\n", maxval_);
-    vs_->write(buf, vcl_strlen(buf));
+    std::sprintf(buf, "%lu\n", maxval_);
+    vs_->write(buf, std::strlen(buf));
   }
   start_of_data_ = vs_->tell();
   return true;
@@ -358,7 +359,7 @@ vil_image_view_base_sptr vil_pnm_image::get_copy_view(
     }
     if ( bytes_per_sample > 2 )
     {
-      vcl_cerr << "ERROR: pnm: reading rawbits format with > 16bit samples\n";
+      std::cerr << "ERROR: pnm: reading rawbits format with > 16bit samples\n";
       return VXL_NULLPTR;
     }
 #if VXL_LITTLE_ENDIAN
@@ -468,7 +469,7 @@ vil_image_view_base_sptr vil_pnm_image::get_copy_view(
 
 static void operator<<(vil_stream& vs, int a)
 {
-  char buf[128]; vcl_sprintf(buf, " %d\n", a); vs.write(buf,vcl_strlen(buf));
+  char buf[128]; std::sprintf(buf, " %d\n", a); vs.write(buf,std::strlen(buf));
 }
 
 bool vil_pnm_image::put_view(const vil_image_view_base& view,
@@ -490,7 +491,7 @@ bool vil_pnm_image::put_view(const vil_image_view_base& view,
        view.pixel_format() == VIL_PIXEL_FORMAT_DOUBLE ||
        view.pixel_format() == VIL_PIXEL_FORMAT_FLOAT )
   {
-    vcl_cerr << "ERROR: " << __FILE__ << ":\n Can't fit view into pnm component size\n";
+    std::cerr << "ERROR: " << __FILE__ << ":\n Can't fit view into pnm component size\n";
     return false;
   }
 
@@ -509,7 +510,7 @@ bool vil_pnm_image::put_view(const vil_image_view_base& view,
     qb = &static_cast<const vil_image_view<vxl_uint_32>& >(view);
   else
   {
-    vcl_cerr << "ERROR: " << __FILE__ << ":\n Do not support putting "
+    std::cerr << "ERROR: " << __FILE__ << ":\n Do not support putting "
              << view.is_a() << " views into pnm image_resource objects\n";
     return false;
   }
@@ -547,12 +548,12 @@ bool vil_pnm_image::put_view(const vil_image_view_base& view,
       // Little endian host; must convert words to have MSB first.
       //
       // Convert line by line to avoid duplicating a potentially large image.
-      vcl_vector<vxl_byte> tempbuf(byte_out_width);
+      std::vector<vxl_byte> tempbuf(byte_out_width);
       assert(pb!=VXL_NULLPTR);
       for (unsigned y = 0; y < view.nj(); ++y)
       {
         vs_->seek(byte_start);
-        vcl_memcpy(&tempbuf[0], pb->top_left_ptr() + y * pb->jstep(), byte_out_width);
+        std::memcpy(&tempbuf[0], pb->top_left_ptr() + y * pb->jstep(), byte_out_width);
 #if VXL_LITTLE_ENDIAN
         ConvertHostToMSB(&tempbuf[0], view.ni());
 #endif
@@ -561,7 +562,7 @@ bool vil_pnm_image::put_view(const vil_image_view_base& view,
       }
     }
     else { // This should never occur...
-      vcl_cerr << "ERROR: pgm: writing rawbits format with > 16bit samples\n";
+      std::cerr << "ERROR: pgm: writing rawbits format with > 16bit samples\n";
       return false;
     }
   }
@@ -578,7 +579,7 @@ bool vil_pnm_image::put_view(const vil_image_view_base& view,
 
       // capes_at_robots - Modified to write a scan-line at once. Writing single bytes
       // to disk was extremely slow.
-      vcl_vector<vxl_byte> scanline( byte_width );
+      std::vector<vxl_byte> scanline( byte_width );
 
       for (unsigned y = 0; y < view.nj(); ++y)
       {
@@ -610,7 +611,7 @@ bool vil_pnm_image::put_view(const vil_image_view_base& view,
       }
     }
     else { // This should never occur...
-      vcl_cerr << "ERROR: pgm: writing rawbits format with > 16bit samples\n";
+      std::cerr << "ERROR: pgm: writing rawbits format with > 16bit samples\n";
       return false;
     }
   }

@@ -17,7 +17,9 @@
 #include <bsta/bsta_gauss_sf1.h>
 #include <vnl/vnl_float_3.h>
 #include <vnl/vnl_float_4.h>
-#include <vcl_string.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <string>
 
 //: set input and output types
 bool bvxm_combine_grids_process_cons(bprb_func_process& pro)
@@ -27,7 +29,7 @@ bool bvxm_combine_grids_process_cons(bprb_func_process& pro)
   // 1. grid2
   // 2. Path to output grid
 
-  vcl_vector<vcl_string> input_types_(3);
+  std::vector<std::string> input_types_(3);
   input_types_[0] = "bvxm_voxel_grid_base_sptr";
   input_types_[1] = "bvxm_voxel_grid_base_sptr";
   input_types_[2] = "vcl_string";
@@ -35,7 +37,7 @@ bool bvxm_combine_grids_process_cons(bprb_func_process& pro)
 
   // Outputs
   // 0. grid
-  vcl_vector<vcl_string> output_types_(1);
+  std::vector<std::string> output_types_(1);
   output_types_[0] = "bvxm_voxel_grid_base_sptr";
   if (!pro.set_input_types(input_types_))
     return false;
@@ -53,13 +55,13 @@ bool bvxm_combine_grids_process(bprb_func_process& pro)
   // check number of inputs
   if (pro.n_inputs() != 3)
   {
-    vcl_cout << pro.name() << "The number of inputs should be " << 3<< vcl_endl;
+    std::cout << pro.name() << "The number of inputs should be " << 3<< std::endl;
     return false;
   }
 
   bvxm_voxel_grid_base_sptr grid1_base = pro.get_input< bvxm_voxel_grid_base_sptr>(0);
   bvxm_voxel_grid_base_sptr grid2_base = pro.get_input< bvxm_voxel_grid_base_sptr>(1);
-  vcl_string output_path = pro.get_input<vcl_string>(2);
+  std::string output_path = pro.get_input<std::string>(2);
 
   //get  and create the grids
 
@@ -68,7 +70,7 @@ bool bvxm_combine_grids_process(bprb_func_process& pro)
   if (bvxm_voxel_grid<float> *grid2 =dynamic_cast<bvxm_voxel_grid<float >* > (grid2_base.ptr()))
   {
     if (grid1->grid_size()!=grid2->grid_size()) {
-      vcl_cerr << "Input grids must be of same size\n";
+      std::cerr << "Input grids must be of same size\n";
       return false;
     }
     bvxm_voxel_grid<vnl_float_4> *grid_out = new bvxm_voxel_grid<vnl_float_4>(output_path, grid1->grid_size());
@@ -97,7 +99,7 @@ bool bvxm_combine_grids_process(bprb_func_process& pro)
   else if (bvxm_voxel_grid<bsta_num_obs<bsta_gauss_sf1> > *grid2 =dynamic_cast<bvxm_voxel_grid<bsta_num_obs<bsta_gauss_sf1> >* > (grid2_base.ptr()))
   {
     if (grid1->grid_size()!=grid2->grid_size()) {
-      vcl_cerr << "Input grids must be of same size\n";
+      std::cerr << "Input grids must be of same size\n";
       return false;
     }
     bvxm_voxel_grid<vnl_float_4> *grid_out = new bvxm_voxel_grid<vnl_float_4>(output_path, grid1->grid_size());
@@ -115,7 +117,7 @@ bool bvxm_combine_grids_process(bprb_func_process& pro)
 
       for (; out_slab_it!=(*grid_out_it).end(); ++out_slab_it, ++slab2_it, ++slab1_it)
       {
-        vnl_float_4 this_feature( (*slab1_it)[0], (*slab1_it)[1], (*slab1_it)[2], vcl_abs(slab2_it->mean()));
+        vnl_float_4 this_feature( (*slab1_it)[0], (*slab1_it)[1], (*slab1_it)[2], std::abs(slab2_it->mean()));
         *out_slab_it = this_feature;
       }
     }

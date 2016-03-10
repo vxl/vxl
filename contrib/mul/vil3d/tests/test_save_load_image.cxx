@@ -6,8 +6,10 @@
 // \date 18 Dec 2007
 //
 
-#include <vcl_string.h>
-#include <vcl_iostream.h>
+#include <string>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iostream>
 
 #include <vxl_config.h> // for vxl_byte
 
@@ -46,24 +48,24 @@ bool test_image_equal(char const* type_name,
   TEST("Loaded image can be viewed as same type as saved image", !pimage2, false);
   if (!pimage2)
   {
-    vcl_cout << "read back image type has pixel type " << pimage2->pixel_format()
-             << " instead of (as written) " << image.pixel_format() << '\n' << vcl_flush;
+    std::cout << "read back image type has pixel type " << pimage2->pixel_format()
+             << " instead of (as written) " << image.pixel_format() << '\n' << std::flush;
     return false;
   }
 
   TEST("Image dimensions", sizex == sizex2 && sizey == sizey2 && sizey == sizey2, true);
   if (sizex != sizex2 || sizey != sizey2)
   {
-    vcl_cout << type_name << ": sizes are " << sizex2 << " x " << sizey2
-             << " instead of " << sizex << " x " << sizey << '\n' << vcl_flush;
+    std::cout << type_name << ": sizes are " << sizex2 << " x " << sizey2
+             << " instead of " << sizex << " x " << sizey << '\n' << std::flush;
     return false;
   }
 
   TEST("Number of planes", planes, planes2);
   if (planes != planes2)
   {
-    vcl_cout << type_name << ": nplanes are " << planes2
-             << " instead of " << planes << '\n' << vcl_flush;
+    std::cout << type_name << ": nplanes are " << planes2
+             << " instead of " << planes << '\n' << std::flush;
     return false;
   }
 
@@ -89,14 +91,14 @@ bool test_image_equal(char const* type_name,
     #ifndef NDEBUG
           if (++bad < 20)
           {
-            vcl_cout << "pixel (" << i << ',' << j << ',' << p <<  ") differs:\t";
-            vil_print_value(vcl_cout, image(i,j,p));
-            vcl_cout << "---> ";
-            vil_print_value(vcl_cout,image2(i,j,p));
-            vcl_cout << '\n';
+            std::cout << "pixel (" << i << ',' << j << ',' << p <<  ") differs:\t";
+            vil_print_value(std::cout, image(i,j,p));
+            std::cout << "---> ";
+            vil_print_value(std::cout,image2(i,j,p));
+            std::cout << '\n';
           }
     #else
-          ++bad; vcl_cout << '.' << vcl_flush;
+          ++bad; std::cout << '.' << std::flush;
     #endif
         }
       }
@@ -106,8 +108,8 @@ bool test_image_equal(char const* type_name,
   TEST("pixelwise comparison", bad, 0);
   if (bad)
   {
-    vcl_cout << type_name << ": number of unequal pixels: "  << bad
-             << " out of " << planes *sizex * sizey << '\n' << vcl_flush;
+    std::cout << type_name << ": number of unequal pixels: "  << bad
+             << " out of " << planes *sizex * sizey << '\n' << std::flush;
     return false;
   }
 
@@ -130,17 +132,17 @@ void vil3d_test_image_type(char const* type_name, // type for image to read and 
                            bool exact = true,  // require read back image identical
                            bool fail_save = false) // expect fail on save if true
 {
-  vcl_cout << "=== Start testing " << type_name << " ===\n" << vcl_flush;
+  std::cout << "=== Start testing " << type_name << " ===\n" << std::flush;
 
   // Step 1) Write the image out to disk
   //
   // create a file name
-  vcl_string fname = vul_temp_filename();
+  std::string fname = vul_temp_filename();
   fname += ".";
   if (type_name) fname += type_name;
 
-  vcl_cout << "vil3d_test_image_type: Save " << image.is_a()
-           << " to [" << fname << "]\n" << vcl_flush;
+  std::cout << "vil3d_test_image_type: Save " << image.is_a()
+           << " to [" << fname << "]\n" << std::flush;
   {
     // Write image to disk
     bool success = false;

@@ -18,15 +18,17 @@
 #include <vgl/vgl_intersection.h>
 #include <vgl/algo/vgl_intersection.h>
 
-#include <vcl_vector.h>
-#include <vcl_string.h>
+#include <vector>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <string>
 
 #include <bsta/bsta_histogram.h>
 
 template <class T_loc, class APM, class AUX>
 boxm_edge_tangent_updater<T_loc,APM,AUX>::boxm_edge_tangent_updater(boxm_scene<boct_tree<T_loc,
                                                                     boxm_inf_line_sample<APM> > > &scene,
-                                                                    vcl_vector<vcl_string> const& image_ids,
+                                                                    std::vector<std::string> const& image_ids,
                                                                     bool use_ransac,
                                                                     float ransac_ortho_thres,
                                                                     float ransac_volume_ratio,
@@ -43,7 +45,7 @@ bool boxm_edge_tangent_updater<T_loc,APM,AUX>::add_cells()
   typedef boct_tree<T_loc, boxm_inf_line_sample<APM> > tree_type;
   typedef boct_tree<T_loc, boxm_edge_tangent_sample<AUX> > aux_tree_type;
 
-  vcl_vector<boxm_aux_scene<T_loc,  boxm_inf_line_sample<APM>, boxm_edge_tangent_sample<AUX> > > aux_scenes;
+  std::vector<boxm_aux_scene<T_loc,  boxm_inf_line_sample<APM>, boxm_edge_tangent_sample<AUX> > > aux_scenes;
   for (unsigned int i=0; i<image_ids_.size(); ++i) {
     boxm_aux_scene<T_loc, boxm_inf_line_sample<APM>, boxm_edge_tangent_sample<AUX> >
     aux_scene(&scene_,image_ids_[i],boxm_aux_scene<T_loc, boxm_inf_line_sample<APM>,
@@ -51,7 +53,7 @@ bool boxm_edge_tangent_updater<T_loc,APM,AUX>::add_cells()
     aux_scenes.push_back(aux_scene);
   }
 
-  vcl_vector<boxm_edge_tangent_sample<APM> > aux_samples;
+  std::vector<boxm_edge_tangent_sample<APM> > aux_samples;
 
   // for each block
   boxm_block_iterator<tree_type> iter(&scene_);
@@ -61,17 +63,17 @@ bool boxm_edge_tangent_updater<T_loc,APM,AUX>::add_cells()
     scene_.load_block(iter.index());
     boxm_block<tree_type>* block = *iter;
     boct_tree<T_loc, boxm_inf_line_sample<APM> >* tree = block->get_tree();
-    vcl_vector<boct_tree_cell<T_loc,boxm_inf_line_sample<APM> >*> cells = tree->leaf_cells();
+    std::vector<boct_tree_cell<T_loc,boxm_inf_line_sample<APM> >*> cells = tree->leaf_cells();
     int nums=0;
     // get a vector of incremental readers for each aux scene.
-    vcl_vector<boct_tree_cell_reader<T_loc, boxm_edge_tangent_sample<AUX> > *> aux_readers(aux_scenes.size());
-    vcl_vector<unsigned> aux_samples_num(aux_scenes.size());
+    std::vector<boct_tree_cell_reader<T_loc, boxm_edge_tangent_sample<AUX> > *> aux_readers(aux_scenes.size());
+    std::vector<unsigned> aux_samples_num(aux_scenes.size());
     for (unsigned int i=0; i<aux_scenes.size(); ++i) {
       aux_readers[i] = aux_scenes[i].get_block_incremental(iter.index());
       aux_samples_num[i] = 0;
     }
     //int a;
-    //vcl_cin>>a;
+    //std::cin>>a;
     // iterate over cells
     for (unsigned i=0; i<cells.size(); ++i)
     {
@@ -85,12 +87,12 @@ bool boxm_edge_tangent_updater<T_loc,APM,AUX>::add_cells()
         boct_tree_cell<T_loc, boxm_edge_tangent_sample<AUX> > temp_cell;
 
         if (!aux_readers[j]->next(temp_cell)) {
-          vcl_cerr << "error: incremental reader returned false.\n";
+          std::cerr << "error: incremental reader returned false.\n";
           return false;
         }
 
         if (!temp_cell.code_.isequal(&(cell->code_))) {
-          vcl_cerr << "error: temp_cell idx does not match cell idx.\n";
+          std::cerr << "error: temp_cell idx does not match cell idx.\n";
           return false;
         }
         if (temp_cell.data().num_obs()>0)
@@ -102,8 +104,8 @@ bool boxm_edge_tangent_updater<T_loc,APM,AUX>::add_cells()
 
       if (aux_samples.size() > 1)
       {
-        vcl_vector<vgl_plane_3d<AUX> > planes;
-        vcl_vector<AUX> weights;
+        std::vector<vgl_plane_3d<AUX> > planes;
+        std::vector<AUX> weights;
 
         for (unsigned int k=0;k<aux_samples.size(); ++k) {
           boxm_edge_tangent_sample<APM> s = aux_samples[k];
@@ -177,7 +179,7 @@ bool boxm_edge_tangent_updater<T_loc,APM,AUX>::add_cells()
     iter++;
   }
 #ifdef DEBUG
-  vcl_cout << "done with all cells" << vcl_endl;
+  std::cout << "done with all cells" << std::endl;
 #endif
 #if 0
   // clear the aux scenes so that its starts with the refined scene next time
@@ -191,15 +193,15 @@ bool boxm_edge_tangent_updater<T_loc,APM,AUX>::add_cells()
 template <class T_loc, class APM, class AUX>
 boxm_edge_tangent_refine_updates<T_loc,APM,AUX>::boxm_edge_tangent_refine_updates(boxm_scene<boct_tree<T_loc, boxm_inf_line_sample<APM> > > &scene,
                                                                                   int consensus_cnt,
-                                                                                  vcl_vector<vil_image_view<float> > const& edge_images,
-                                                                                  vcl_vector<vpgl_camera_double_sptr> const& cameras)
+                                                                                  std::vector<vil_image_view<float> > const& edge_images,
+                                                                                  std::vector<vpgl_camera_double_sptr> const& cameras)
 : edge_images_(edge_images), cameras_(cameras), consensus_cnt_(consensus_cnt), scene_(scene)
 {}
 
 template <class T_loc, class APM, class AUX>
 bool boxm_edge_tangent_refine_updates<T_loc,APM,AUX>::refine_cells()
 {
-  vcl_cout << "using " << edge_images_.size() << " images to refine edge world!" << vcl_endl;
+  std::cout << "using " << edge_images_.size() << " images to refine edge world!" << std::endl;
 
   typedef boct_tree<T_loc, boxm_inf_line_sample<APM> > tree_type;
 
@@ -211,7 +213,7 @@ bool boxm_edge_tangent_refine_updates<T_loc,APM,AUX>::refine_cells()
     scene_.load_block(iter.index());
     boxm_block<tree_type>* block = *iter;
     boct_tree<T_loc, boxm_inf_line_sample<APM> >* tree = block->get_tree();
-    vcl_vector<boct_tree_cell<T_loc,boxm_inf_line_sample<APM> >*> cells = tree->leaf_cells();
+    std::vector<boct_tree_cell<T_loc,boxm_inf_line_sample<APM> >*> cells = tree->leaf_cells();
 
     // iterate over cells
     for (unsigned i=0; i<cells.size(); ++i)
@@ -234,7 +236,7 @@ bool boxm_edge_tangent_refine_updates<T_loc,APM,AUX>::refine_cells()
           cameras_[k]->project(p1.x(),p1.y(),p1.z(),u1,v1);
           cameras_[k]->project(p2.x(),p2.y(),p2.z(),u2,v2);
 
-          double line_angle = vnl_math::angle_0_to_2pi(vcl_atan2(v2-v1, -(u2-u1)));
+          double line_angle = vnl_math::angle_0_to_2pi(std::atan2(v2-v1, -(u2-u1)));
           double line_angle2 = vnl_math::angle_0_to_2pi(line_angle + vnl_math::pi); // line segment is symmetric
 
           // find mid point of line seg
@@ -259,7 +261,7 @@ bool boxm_edge_tangent_refine_updates<T_loc,APM,AUX>::refine_cells()
             }
           }
           if (dist < 10.0)
-            if (vcl_abs(angle_of_min - line_angle) < vnl_math::pi/16.0 || vcl_abs(angle_of_min - line_angle2) < vnl_math::pi/16.0)
+            if (std::abs(angle_of_min - line_angle) < vnl_math::pi/16.0 || std::abs(angle_of_min - line_angle2) < vnl_math::pi/16.0)
               cnt++;
         }
 

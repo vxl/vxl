@@ -1,17 +1,19 @@
 // This is mul/mbl/tests/test_index_sort.cxx
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iostream>
 #include <mbl/mbl_index_sort.h>
 #include <testlib/testlib_test.h>
 
 void test_index_sort()
 {
-  vcl_cout << "**********************\n"
+  std::cout << "**********************\n"
            << "Testing mbl_index_sort\n"
            << "**********************\n";
 
   const unsigned int n = 20;
-  vcl_vector<double> x(n);
-  vcl_vector<int> index;
+  std::vector<double> x(n);
+  std::vector<int> index;
 
   for (unsigned int i=0;i<n;++i) x[i]=n-i;
 
@@ -44,12 +46,12 @@ void test_index_sort()
 
   TEST("Order correct",order_ok,true);
 
-  vcl_vector<unsigned int> index2(n/2);
+  std::vector<unsigned int> index2(n/2);
   for (unsigned int i=0;i<n/2;++i)
     index2[i] = i*2;
 
-  vcl_sort(index2.begin(), index2.end(),
-    mbl_index_sort_cmp<double, unsigned int, vcl_vector<double> >(x));
+  std::sort(index2.begin(), index2.end(),
+    mbl_index_sort_cmp<double, unsigned int, std::vector<double> >(x));
   TEST("Correct number of elements",index2.size(),n/2);
 
   order_ok = true;

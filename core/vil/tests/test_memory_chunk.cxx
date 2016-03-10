@@ -1,11 +1,12 @@
 // This is core/vil/tests/test_memory_chunk.cxx
 #include <testlib/testlib_test.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <iostream>
 #include <vil/vil_memory_chunk.h>
 
 static void test_memory_chunk()
 {
-  vcl_cout << "**************************\n"
+  std::cout << "**************************\n"
            << " Testing vil_memory_chunk\n"
            << "**************************\n";
 

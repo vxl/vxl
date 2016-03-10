@@ -26,8 +26,9 @@
 // Texas Instruments Incorporated provides this software "as is" without
 // express or implied warranty.
 
-#include <vcl_string.h>
-#include <vcl_cstddef.h> // for vcl_ptrdiff_t
+#include <vcl_compiler.h>
+#include <string>
+#include <cstddef> // for std::ptrdiff_t
 
 const int vul_reg_exp_nsubexp = 10;
 
@@ -51,7 +52,7 @@ const int vul_reg_exp_nsubexp = 10;
 // \code
 //     vul_reg_exp re("([a-z]+)\\.cc");
 //     re.find(filename);
-//     vcl_cout << re.match(1);
+//     std::cout << re.match(1);
 // \endcode
 //
 //  The regular expression class provides a convenient mechanism for
@@ -107,11 +108,11 @@ class vul_reg_exp
   //: true if regexp in char* arg
   bool find(char const*);
   //: true if regexp in char* arg
-  bool find(vcl_string const&);
+  bool find(std::string const&);
   //: Returns the start index of the last item found.
-  inline vcl_ptrdiff_t start() const { return this->startp[0] - searchstring; }
+  inline std::ptrdiff_t start() const { return this->startp[0] - searchstring; }
   //: Returns the end index of the last item found.
-  inline vcl_ptrdiff_t end()   const { return this->endp[0] - searchstring; }
+  inline std::ptrdiff_t end()   const { return this->endp[0] - searchstring; }
   //: Equality operator
   bool operator==(vul_reg_exp const&) const;
   //: Inequality operator
@@ -125,14 +126,14 @@ class vul_reg_exp
 
   //: Return start index of nth submatch.
   // start(0) is the start of the full match.
-  inline vcl_ptrdiff_t start(long n) const { return this->startp[n] - searchstring; }
+  inline std::ptrdiff_t start(long n) const { return this->startp[n] - searchstring; }
   //: Return end index of nth submatch.
   // end(0) is the end of the full match.
-  inline vcl_ptrdiff_t end(long n)   const { return this->endp[n] - searchstring; }
+  inline std::ptrdiff_t end(long n)   const { return this->endp[n] - searchstring; }
   //: Return nth submatch as a string.
-  vcl_string match(int n) const {
-    return this->endp[n] == this->startp[n] ? vcl_string("") :
-           vcl_string(this->startp[n], this->endp[n] - this->startp[n]);
+  std::string match(int n) const {
+    return this->endp[n] == this->startp[n] ? std::string("") :
+           std::string(this->startp[n], this->endp[n] - this->startp[n]);
   }
   //: Return an expression that will match precisely c
   // The returned string is owned by the function, and

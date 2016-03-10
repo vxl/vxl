@@ -7,17 +7,19 @@
 
 #include "mbl_load_text_file.h"
 #include <mbl/mbl_exception.h>
-#include <vcl_fstream.h>
-#include <vcl_iterator.h>
-#include <vcl_algorithm.h>
-#include <vcl_cerrno.h>
+#include <fstream>
+#include <iterator>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <algorithm>
+#include <cerrno>
 
 //: Load vector from file with format "v1 v2 .. vn"
 // \throws on error, or returns false if exceptions are disabled.
 template <class T>
-bool mbl_load_text_file(vcl_vector<T>& v, const vcl_string& path)
+bool mbl_load_text_file(std::vector<T>& v, const std::string& path)
 {
-  vcl_ifstream ifs(path.c_str());
+  std::ifstream ifs(path.c_str());
   if (!ifs)
     mbl_exception_throw_os_error(path, "Whilst trying to open data file for reading.");
 
@@ -39,7 +41,7 @@ bool mbl_load_text_file(vcl_vector<T>& v, const vcl_string& path)
 //: Load vector from file with format "v1 v2 .. vn"
 // \throws on error, or returns false if exceptions are disabled.
 template <class T>
-bool mbl_load_text_file(vcl_vector<T>& v, vcl_istream& is)
+bool mbl_load_text_file(std::vector<T>& v, std::istream& is)
 {
   v.resize(0);
 
@@ -49,8 +51,8 @@ bool mbl_load_text_file(vcl_vector<T>& v, vcl_istream& is)
     return false;
   }
 
-  vcl_copy(vcl_istream_iterator<T> (is), vcl_istream_iterator<T>(),
-           vcl_back_insert_iterator< vcl_vector<T> > (v) );
+  std::copy(std::istream_iterator<T> (is), std::istream_iterator<T>(),
+           std::back_insert_iterator< std::vector<T> > (v) );
   if (!is.eof())
   {
     mbl_exception_warning( mbl_exception_parse_error( "mbl_load_text_file: failed to finished loading" ));
@@ -68,9 +70,9 @@ bool mbl_load_text_file(vcl_vector<T>& v, vcl_istream& is)
 
 #undef MBL_LOAD_TEXT_FILE_INSTANTIATE_PATH
 #define MBL_LOAD_TEXT_FILE_INSTANTIATE_PATH(T ) \
-template bool mbl_load_text_file(vcl_vector<T >& v, const vcl_string& path)
+template bool mbl_load_text_file(std::vector<T >& v, const std::string& path)
 #undef MBL_LOAD_TEXT_FILE_INSTANTIATE_STREAM
 #define MBL_LOAD_TEXT_FILE_INSTANTIATE_STREAM(T ) \
-template bool mbl_load_text_file(vcl_vector<T >& v, vcl_istream& is)
+template bool mbl_load_text_file(std::vector<T >& v, std::istream& is)
 
 #endif //mbl_load_text_file_hxx_

@@ -3,7 +3,8 @@
 #pragma implementation
 #endif
 #include "vgui_key.h"
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <iostream>
 //:
 // \file
 // \brief  See vgui_key.h for a description of this file.
@@ -19,7 +20,7 @@ vgui_key vgui_key_CTRL(int character)
 }
 
 //----------------------------------------------------------------------------
-vcl_ostream& operator<<(vcl_ostream& s, vgui_key k)
+std::ostream& operator<<(std::ostream& s, vgui_key k)
 {
   int ik = int(k);
   s << ik << '/';

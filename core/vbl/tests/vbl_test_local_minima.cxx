@@ -1,13 +1,14 @@
 // This is core/vbl/tests/vbl_test_local_minima.cxx
 #include <testlib/testlib_test.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <iostream>
 #include <vbl/vbl_array_1d.h>
 #include <vbl/vbl_array_2d.h>
 #include <vbl/vbl_array_3d.h>
 #include <vbl/vbl_local_minima.h>
 static void vbl_test_local_minima_1d()
 {
-  vcl_cout << "\n Testing vbl_local_minima 1d\n+++++++++++++++++++++++++\n\n";
+  std::cout << "\n Testing vbl_local_minima 1d\n+++++++++++++++++++++++++\n\n";
   unsigned n = 10;
   vbl_array_1d<double> v(n,1.0);
   double thresh = 0.01;
@@ -16,8 +17,8 @@ static void vbl_test_local_minima_1d()
   vbl_array_1d<double> minima = vbl_local_minima(v, thresh);
   bool success = !minima.empty();
   for (unsigned i = 0; i<minima.size(); ++i)
-    vcl_cout << minima[i] << ' ';
-  vcl_cout << '\n';
+    std::cout << minima[i] << ' ';
+  std::cout << '\n';
   success = success && minima[0]>0 && minima[n/2]>0 && minima[n-1]>0;
   TEST("1d minima double", success, true);
   vbl_array_1d<unsigned> vi(n, 1);
@@ -27,15 +28,15 @@ static void vbl_test_local_minima_1d()
   vbl_array_1d<unsigned> minun = vbl_local_minima(vi, tu);
   success = !minun.empty();
   for (unsigned i = 0; i<minun.size(); ++i)
-    vcl_cout << minun[i] << ' ';
-  vcl_cout << '\n';
+    std::cout << minun[i] << ' ';
+  std::cout << '\n';
   success = success && minun[0]>0 && minun[n/2]>0 && minun[n-1]>0;
   TEST("1d minima unsigned", success, true);
 }
 
 static void vbl_test_local_minima_2d()
 {
-  vcl_cout << "\n Testing vbl_local_minima 2d\n+++++++++++++++++++++++++\n\n";
+  std::cout << "\n Testing vbl_local_minima 2d\n+++++++++++++++++++++++++\n\n";
   unsigned nr = 10, nc = 5;
   vbl_array_2d<double> v(nr, nc, 1.0);
 
@@ -55,10 +56,10 @@ static void vbl_test_local_minima_2d()
   bool success = minima.rows() > 0;
   for (unsigned r = 0; r<minima.rows(); ++r) {
     for (unsigned c = 0; c<minima.cols(); ++c)
-      vcl_cout << minima[r][c] << ' ';
-    vcl_cout << '\n';
+      std::cout << minima[r][c] << ' ';
+    std::cout << '\n';
   }
-  vcl_cout << '\n';
+  std::cout << '\n';
   success = success && minima[0][nc/2] > 0 &&  minima[nr/2][0] > 0 &&
     minima[nr-1][nc/2] > 0 && minima[nr/2][nc-1] > 0 && minima[0][0] > 0 &&
     minima[nr-1][0] > 0 &&  minima[0][nc-1] > 0 && minima[nr-1][nc-1] > 0 ;
@@ -77,8 +78,8 @@ static void vbl_test_local_minima_2d()
   TEST("vbl_local_minima rows", minima2r.rows() > 0, true);
   for (unsigned r = 0; r<minima2r.rows(); ++r) {
     for (unsigned c = 0; c<minima2r.cols(); ++c)
-      vcl_cout << minima2r[r][c] << ' ';
-    vcl_cout << '\n';
+      std::cout << minima2r[r][c] << ' ';
+    std::cout << '\n';
   }
   success = minima2r[nr-1][0]&&minima2r[0][nc-1]&&minima2r[nr-1][nc/2];
   TEST("test 2-d minima with two rows", success, true);
@@ -86,7 +87,7 @@ static void vbl_test_local_minima_2d()
 
 static void vbl_test_local_minima_3d()
 {
-  vcl_cout << "\n Testing vbl_local_minima 3d\n+++++++++++++++++++++++++\n\n";
+  std::cout << "\n Testing vbl_local_minima 3d\n+++++++++++++++++++++++++\n\n";
   double thresh = 0.01;
   unsigned n1 = 5, n2 = 7, n3 = 9;
   vbl_array_3d<double> v(n1, n2, n3, 1.0);
@@ -111,13 +112,13 @@ static void vbl_test_local_minima_3d()
   vbl_array_3d<double> minima = vbl_local_minima(v, thresh);
   bool success = minima.get_row1_count() > 0;
   for (unsigned x1 = 0; x1<minima.get_row1_count(); ++x1) {
-    vcl_cout << "\n************************\n";
+    std::cout << "\n************************\n";
     for (unsigned x2 = 0; x2<minima.get_row2_count(); ++x2) {
       for (unsigned x3 = 0; x3<minima.get_row3_count(); ++x3)
-        vcl_cout << minima[x1][x2][x3] << ' ';
-      vcl_cout << '\n';
+        std::cout << minima[x1][x2][x3] << ' ';
+      std::cout << '\n';
     }
-    vcl_cout << "************************\n";
+    std::cout << "************************\n";
   }
   success = success && minima[n1/2][n2/2][n3/2]>0
     && minima[0][0][0] > 0 && minima[n1-1][0][0] > 0 && minima[0][n2-1][0] > 0

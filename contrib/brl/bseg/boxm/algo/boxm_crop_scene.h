@@ -15,7 +15,9 @@
 
 #include <vgl/vgl_box_3d.h>
 #include <boxm/boxm_scene.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iostream>
 
 
 template <class T_data>
@@ -24,7 +26,7 @@ boxm_scene<boct_tree<short, T_data> > *  boxm_crop_scene(boxm_scene<boct_tree<sh
   //only one-block scenes are supported for now
   if (!(scene_in->world_dim().x() == 1 && scene_in->world_dim().y()==1 && scene_in->world_dim().z()==1))
   {
-    vcl_cerr << "In bvxm_crop_scene -- Input scene has more than one block, which is not supported\n";
+    std::cerr << "In bvxm_crop_scene -- Input scene has more than one block, which is not supported\n";
     return 0;
   }
 

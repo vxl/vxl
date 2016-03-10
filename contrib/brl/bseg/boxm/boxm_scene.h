@@ -20,9 +20,11 @@
 #include <vbl/vbl_array_3d.h>
 #include <vpgl/vpgl_lvcs.h>
 #include <boct/boct_tree.h>
-#include <vcl_string.h>
-#include <vcl_iosfwd.h>
-#include <vcl_set.h>
+#include <string>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iosfwd>
+#include <set>
 #include <vcl_cassert.h>
 
 class boxm_scene_parser;
@@ -121,7 +123,7 @@ class boxm_scene :public boxm_scene_base
   vgl_point_3d<int> active_block() const { return active_block_; }
 
   //: Returns the indices of active neighbors;
-  vcl_set<vgl_point_3d<int>, bvgl_point_3d_cmp<int> >& active_blocks() { return active_blocks_; }
+  std::set<vgl_point_3d<int>, bvgl_point_3d_cmp<int> >& active_blocks() { return active_blocks_; }
 
   vpgl_lvcs lvcs() const { return lvcs_; }
 
@@ -150,11 +152,11 @@ class boxm_scene :public boxm_scene_base
     return vgl_vector_3d<unsigned>(x,y,z);
   }
 
-  vcl_string path() const { return scene_path_; }
+  std::string path() const { return scene_path_; }
 
-  vcl_string block_prefix() const { return block_pref_; }
+  std::string block_prefix() const { return block_pref_; }
 
-  void set_path(vcl_string path, vcl_string block_prefix) { scene_path_=path; block_pref_= block_prefix; }
+  void set_path(std::string path, std::string block_prefix) { scene_path_=path; block_pref_= block_prefix; }
 
   void b_read(vsl_b_istream & s);
 
@@ -176,23 +178,23 @@ class boxm_scene :public boxm_scene_base
   const boxm_block<T>* get_block_read_only(unsigned i, unsigned j, unsigned k) { return blocks_(i,j,k); }
 
   //: Return all leaf cells in a region
-  void leaves_in_region(vgl_box_3d<double>, vcl_vector<boct_tree_cell<loc_type, datatype>* >& cells);
+  void leaves_in_region(vgl_box_3d<double>, std::vector<boct_tree_cell<loc_type, datatype>* >& cells);
 
   //: Return the level of the smallest cell entirely containing the 3d region
   short level_region(vgl_box_3d<double> box);
 
   //: Return all leaf_data in a region - data is copied to new memory location
-  void leaves_data_in_region(vgl_box_3d<double> box, vcl_vector<boct_cell_data<loc_type, datatype> > &cell_data);
+  void leaves_data_in_region(vgl_box_3d<double> box, std::vector<boct_cell_data<loc_type, datatype> > &cell_data);
 
   //: Returns the data of all cells at a given level, that are contained in the specified region
-  void cell_data_in_region(vgl_box_3d<double> box, vcl_vector<boct_cell_data<loc_type, datatype> > &cell_data, unsigned level);
+  void cell_data_in_region(vgl_box_3d<double> box, std::vector<boct_cell_data<loc_type, datatype> > &cell_data, unsigned level);
 
   //: Return all leaf cells between an inner box and an outter box
-  void leaves_in_hollow_region(vgl_box_3d<double> outer_box, vgl_box_3d<double> inner_box, vcl_vector<boct_tree_cell<loc_type, datatype>* >& cells);
+  void leaves_in_hollow_region(vgl_box_3d<double> outer_box, vgl_box_3d<double> inner_box, std::vector<boct_tree_cell<loc_type, datatype>* >& cells);
 
   //: Locates and modifies the value of all cells within a 3d region, which coordinates are given in scene coordinates
   void change_leaves_in_region(vgl_box_3d<double> box, const datatype &cell_data);
-  void change_leaves_in_regions(vcl_vector<vgl_box_3d<double> > boxes, const vcl_vector<datatype> &all_data);
+  void change_leaves_in_regions(std::vector<vgl_box_3d<double> > boxes, const std::vector<datatype> &all_data);
 
   //: Locate point in scene coordinates. Assumes that the block containing the point is already loaded into memory
   boct_tree_cell<loc_type, datatype>* locate_point_in_memory(vgl_point_3d<double> &p, unsigned level = 0);
@@ -208,12 +210,12 @@ class boxm_scene :public boxm_scene_base
   void set_block(int i, int j, int k , boxm_block<T>* block) { set_block(vgl_point_3d<int>(i,j,k), block); }
 
   //: Write scene xml file at the scenes' path
-  void write_scene(vcl_string filename = "scene.xml");
+  void write_scene(std::string filename = "scene.xml");
 
   //: Write scene xml file at the location indicated by path
-  void write_scene(vcl_string path, vcl_string filename);
+  void write_scene(std::string path, std::string filename);
 
-  void load_scene(vcl_string filename);
+  void load_scene(std::string filename);
 
   void load_scene(boxm_scene_parser& parser);
 
@@ -263,7 +265,7 @@ class boxm_scene :public boxm_scene_base
   vgl_box_3d<double> get_block_bbox(int x, int y, int z) const;
 
   //: generates a name for the block binary file based on the 3D vector index
-  vcl_string gen_block_path(int x, int y, int z) const;
+  std::string gen_block_path(int x, int y, int z) const;
 
   void clean_scene();
 
@@ -277,7 +279,7 @@ class boxm_scene :public boxm_scene_base
   template <class T_out>
   void clone_blocks_to_type(boxm_scene<T_out> &scene_out, typename boxm_scene<T_out>::datatype data )
   {
-    vcl_cout << "Clone blocks to type\n";
+    std::cout << "Clone blocks to type\n";
     boxm_block_iterator<T> iter(this);
     boxm_block_iterator<T_out> iter_out = scene_out.iterator();
     iter.begin();
@@ -300,7 +302,7 @@ class boxm_scene :public boxm_scene_base
   void clone_blocks_to_vector(boxm_scene<boct_tree<short, vnl_vector_fixed<datatype, DIM> > > &scene_out)
   {
     typedef boct_tree<short, vnl_vector_fixed<datatype, DIM> > type_tree_out;
-    vcl_cout << "Clone blocks to type\n";
+    std::cout << "Clone blocks to type\n";
     boxm_block_iterator<T> iter(this);
     boxm_block_iterator<type_tree_out> iter_out = scene_out.iterator();
     iter.begin();
@@ -367,7 +369,7 @@ class boxm_scene :public boxm_scene_base
   mutable vgl_point_3d<int> active_block_;
 
   //: if neighbors of the active block are loaded into memory, their indices are stored in this set
-  mutable vcl_set<vgl_point_3d<int>, bvgl_point_3d_cmp<int> >  active_blocks_;
+  mutable std::set<vgl_point_3d<int>, bvgl_point_3d_cmp<int> >  active_blocks_;
 
   float pinit_;
 
@@ -387,7 +389,7 @@ class boxm_scene :public boxm_scene_base
   void create_blocks(const vgl_vector_3d<double>& block_dim, const vgl_vector_3d<unsigned>& world_dim);
   bool parse_config(boxm_scene_parser& parser);
 
-  bool parse_xml_string(vcl_string xml, boxm_scene_parser& parser);
+  bool parse_xml_string(std::string xml, boxm_scene_parser& parser);
 
   //: Load all blocks in between min-max indices. This method is private and the user needs to take care of unloading the blocks
   bool load_blocks(vgl_point_3d<int> min_idx, vgl_point_3d<int> max_idx);
@@ -397,9 +399,9 @@ class boxm_scene :public boxm_scene_base
 
 
   //: A helper function to generate the indices of neighboring blocks
-  vcl_set<vgl_point_3d<int>, bvgl_point_3d_cmp<int> >  neighboring_blocks(vgl_point_3d<int> idx)
+  std::set<vgl_point_3d<int>, bvgl_point_3d_cmp<int> >  neighboring_blocks(vgl_point_3d<int> idx)
   {
-    vcl_set<vgl_point_3d<int>, bvgl_point_3d_cmp<int> > neighbors;
+    std::set<vgl_point_3d<int>, bvgl_point_3d_cmp<int> > neighbors;
     for (int i = -1; i <= 1; i++)
     {
       int active_i = idx.x() + i;
@@ -527,8 +529,8 @@ class boxm_cell_iterator
  private:
 
   boxm_block_iterator<T> block_iterator_;
-  vcl_vector<boct_tree_cell<loc_type ,datatype >* > cells_;
-  typename vcl_vector< boct_tree_cell<loc_type , datatype >* >::const_iterator cells_iterator_;
+  std::vector<boct_tree_cell<loc_type ,datatype >* > cells_;
+  typename std::vector< boct_tree_cell<loc_type , datatype >* >::const_iterator cells_iterator_;
   ptr2constfunc block_loading_func_;
   bool read_only_;
   bool use_internal_cells_;
@@ -537,7 +539,7 @@ class boxm_cell_iterator
 
 //: generates an XML file from the member variables
 template <class T>
-void x_write(vcl_ostream &os, boxm_scene<T>& scene, vcl_string name="boxm_scene");
+void x_write(std::ostream &os, boxm_scene<T>& scene, std::string name="boxm_scene");
 
 template <class T>
 void vsl_b_write(vsl_b_ostream & os, boxm_scene<T> const &scene);

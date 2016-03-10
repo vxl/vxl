@@ -7,7 +7,9 @@
 #define m23d_select_basis_views_h_
 
 #include <vnl/vnl_matrix.h>
-#include <vcl_vector.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <vector>
 
 //: Select a subset most suitable for use as a basis set
 //  Data matrix is 2ns x np (ns= number of samples, np = number of points)
@@ -17,7 +19,7 @@
 //  Randomly generates n_tries possible bases and selects the best.
 //  Note: First view (1st two rows) always included, as this often defines
 //  the default viewing angle.
-vcl_vector<unsigned> m23d_select_basis_views(const vnl_matrix<double>& P2D,
+std::vector<unsigned> m23d_select_basis_views(const vnl_matrix<double>& P2D,
                                              unsigned n_modes,
                                              unsigned n_tries=1000);
 
@@ -27,7 +29,7 @@ vcl_vector<unsigned> m23d_select_basis_views(const vnl_matrix<double>& P2D,
 //  Form a basis from the pairs of rows defined by selected, and compute
 //  a measure of how independent the rows are - the smallest SV/largest SV
 double m23d_evaluate_basis(const vnl_matrix<double>& P2D,
-                           const vcl_vector<unsigned>& selected);
+                           const std::vector<unsigned>& selected);
 
 #endif // m23d_select_basis_views_h_
 

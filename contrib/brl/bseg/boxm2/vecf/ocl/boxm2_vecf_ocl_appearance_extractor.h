@@ -94,8 +94,8 @@ class boxm2_vecf_ocl_appearance_extractor{
   float max_t_color;
   vis_score_t * current_vis_score_;
   boxm2_vecf_ocl_composite_head_model& head_model_;
-  vcl_vector<unsigned> vis_cells_;
+  std::vector<unsigned> vis_cells_;
   boxm2_opencl_cache_sptr opencl_cache_;
   bocl_device_sptr device_;
-  vcl_vector<bocl_kernel*> kernels_;
+  std::vector<bocl_kernel*> kernels_;
 };

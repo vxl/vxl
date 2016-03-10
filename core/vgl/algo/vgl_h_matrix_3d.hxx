@@ -3,12 +3,13 @@
 #define vgl_h_matrix_3d_hxx_
 
 #include "vgl_h_matrix_3d.h"
-#include <vcl_iostream.h>
-#include <vcl_fstream.h>
-#include <vcl_cmath.h>
-#include <vcl_limits.h>
+#include <iostream>
+#include <fstream>
+#include <cmath>
+#include <limits>
 #include <vcl_cassert.h>
-#include <vcl_cstdlib.h> // for exit()
+#include <vcl_compiler.h>
+#include <cstdlib> // for exit()
 #include <vgl/vgl_plane_3d.h>
 #include <vnl/vnl_inverse.h>
 #include <vnl/vnl_numeric_traits.h>
@@ -18,16 +19,16 @@
 # include <vcl_deprecated.h>
 
 template <class T>
-vgl_h_matrix_3d<T>::vgl_h_matrix_3d(vcl_vector<vgl_homg_point_3d<T> > const& points1,
-                                    vcl_vector<vgl_homg_point_3d<T> > const& points2)
+vgl_h_matrix_3d<T>::vgl_h_matrix_3d(std::vector<vgl_homg_point_3d<T> > const& points1,
+                                    std::vector<vgl_homg_point_3d<T> > const& points2)
 {
   vnl_matrix<T> W;
   assert(points1.size() == points2.size());
   unsigned int numpoints = static_cast<int>( points1.size());
   if (numpoints < 5)
   {
-    vcl_cerr << "\nvhl_h_matrix_3d - minimum of 5 points required\n";
-    vcl_exit(0);
+    std::cerr << "\nvhl_h_matrix_3d - minimum of 5 points required\n";
+    std::exit(0);
   }
 
   W.set_size(3*numpoints, 16);
@@ -58,7 +59,7 @@ vgl_h_matrix_3d<T>::vgl_h_matrix_3d(vcl_vector<vgl_homg_point_3d<T> > const& poi
 }
 
 template <class T>
-vgl_h_matrix_3d<T>::vgl_h_matrix_3d(vcl_istream& s)
+vgl_h_matrix_3d<T>::vgl_h_matrix_3d(std::istream& s)
 {
   t12_matrix_.read_ascii(s);
 }
@@ -66,9 +67,9 @@ vgl_h_matrix_3d<T>::vgl_h_matrix_3d(vcl_istream& s)
 template <class T>
 vgl_h_matrix_3d<T>::vgl_h_matrix_3d(char const* filename)
 {
-  vcl_ifstream f(filename);
+  std::ifstream f(filename);
   if (!f.good())
-    vcl_cerr << "vgl_h_matrix_3d::read: Error opening " << filename << vcl_endl;
+    std::cerr << "vgl_h_matrix_3d::read: Error opening " << filename << std::endl;
   else
     t12_matrix_.read_ascii(f);
 }
@@ -104,8 +105,8 @@ vgl_pointset_3d<T> vgl_h_matrix_3d<T>::operator()(vgl_pointset_3d<T> const& ptse
   vgl_pointset_3d<T> ret;
   bool has_norms = ptset.has_normals();
   unsigned np = ptset.npts();
-  vcl_vector<vgl_point_3d<T> > pts;
-  vcl_vector<vgl_vector_3d<T> > normals;
+  std::vector<vgl_point_3d<T> > pts;
+  std::vector<vgl_vector_3d<T> > normals;
   for(unsigned i =0; i<np; ++i){
     vgl_homg_point_3d<T> hp = (*this)(vgl_homg_point_3d<T>(ptset.p(i)));
     pts.push_back(vgl_point_3d<T>(hp));
@@ -171,13 +172,13 @@ vgl_h_matrix_3d<T>::operator()(vgl_homg_plane_3d<T> const& l) const
 }
 
 template <class T>
-vcl_ostream& operator<<(vcl_ostream& s, vgl_h_matrix_3d<T> const& h)
+std::ostream& operator<<(std::ostream& s, vgl_h_matrix_3d<T> const& h)
 {
   return s << h.get_matrix();
 }
 
 template <class T>
-bool vgl_h_matrix_3d<T>::read(vcl_istream& s)
+bool vgl_h_matrix_3d<T>::read(std::istream& s)
 {
   t12_matrix_.read_ascii(s);
   return s.good() || s.eof();
@@ -186,9 +187,9 @@ bool vgl_h_matrix_3d<T>::read(vcl_istream& s)
 template <class T>
 bool vgl_h_matrix_3d<T>::read(char const* filename)
 {
-  vcl_ifstream f(filename);
+  std::ifstream f(filename);
   if (!f.good())
-    vcl_cerr << "vgl_h_matrix_3d::read: Error opening " << filename << vcl_endl;
+    std::cerr << "vgl_h_matrix_3d::read: Error opening " << filename << std::endl;
   return read(f);
 }
 
@@ -245,16 +246,16 @@ vgl_h_matrix_3d<T>::set (vnl_matrix_fixed<T,4,4> const& H)
 }
 
 template <class T>
-bool vgl_h_matrix_3d<T>::projective_basis(vcl_vector<vgl_homg_point_3d<T> > const& /*five_points*/)
+bool vgl_h_matrix_3d<T>::projective_basis(std::vector<vgl_homg_point_3d<T> > const& /*five_points*/)
 {
-  vcl_cerr << "vgl_h_matrix_3d<T>::projective_basis(5pts) not yet implemented\n";
+  std::cerr << "vgl_h_matrix_3d<T>::projective_basis(5pts) not yet implemented\n";
   return false;
 }
 
 template <class T>
-bool vgl_h_matrix_3d<T>::projective_basis(vcl_vector<vgl_homg_plane_3d<T> > const& /*five_planes*/)
+bool vgl_h_matrix_3d<T>::projective_basis(std::vector<vgl_homg_plane_3d<T> > const& /*five_planes*/)
 {
-  vcl_cerr << "vgl_h_matrix_3d<T>::projective_basis(5planes) not yet implemented\n";
+  std::cerr << "vgl_h_matrix_3d<T>::projective_basis(5planes) not yet implemented\n";
   return false;
 }
 
@@ -318,9 +319,9 @@ vgl_h_matrix_3d<T>::set_rotation_roll_pitch_yaw(T yaw, T pitch, T roll)
   typedef typename vnl_numeric_traits<T>::real_t real_t;
   real_t ax = yaw/2, ay = pitch/2, az = roll/2;
 
-  vnl_quaternion<T> qx((T)vcl_sin(ax),0,0,(T)vcl_cos(ax));
-  vnl_quaternion<T> qy(0,(T)vcl_sin(ay),0,(T)vcl_cos(ay));
-  vnl_quaternion<T> qz(0,0,(T)vcl_sin(az),(T)vcl_cos(az));
+  vnl_quaternion<T> qx((T)std::sin(ax),0,0,(T)std::cos(ax));
+  vnl_quaternion<T> qy(0,(T)std::sin(ay),0,(T)std::cos(ay));
+  vnl_quaternion<T> qz(0,0,(T)std::sin(az),(T)std::cos(az));
   vnl_quaternion<T> q = qz*qy*qx;
 
   vnl_matrix_fixed<T,3,3> R = q.rotation_matrix_transpose();
@@ -338,9 +339,9 @@ vgl_h_matrix_3d<T>::set_rotation_euler(T rz1, T ry, T rz2)
   typedef typename vnl_numeric_traits<T>::real_t real_t;
   real_t az1 = rz1/2, ay = ry/2, az2 = rz2/2;
 
-  vnl_quaternion<T> qz1(0,0,T(vcl_sin(az1)),T(vcl_cos(az1)));
-  vnl_quaternion<T> qy(0,T(vcl_sin(ay)),0,T(vcl_cos(ay)));
-  vnl_quaternion<T> qz2(0,0,T(vcl_sin(az2)),T(vcl_cos(az2)));
+  vnl_quaternion<T> qz1(0,0,T(std::sin(az1)),T(std::cos(az1)));
+  vnl_quaternion<T> qy(0,T(std::sin(ay)),0,T(std::cos(ay)));
+  vnl_quaternion<T> qz2(0,0,T(std::sin(az2)),T(std::cos(az2)));
   vnl_quaternion<T> q = qz2*qy*qz1;
 
   vnl_matrix_fixed<T,3,3> R = q.rotation_matrix_transpose();
@@ -397,11 +398,11 @@ bool vgl_h_matrix_3d<T>::is_rotation() const
 template <class T>
 bool vgl_h_matrix_3d<T>::is_euclidean() const
 {
-  T eps = 10*vcl_numeric_limits<T>::epsilon();
+  T eps = 10*std::numeric_limits<T>::epsilon();
   if ( t12_matrix_.get(3,0) != (T)0 ||
        t12_matrix_.get(3,1) != (T)0 ||
        t12_matrix_.get(3,2) != (T)0 ||
-       vcl_fabs(t12_matrix_.get(3,3)-T(1)) > eps)
+       std::fabs(t12_matrix_.get(3,3)-T(1)) > eps)
     return false; // should not have a projective part
 
   // use an error tolerance on the orthonormality constraint
@@ -418,7 +419,7 @@ bool vgl_h_matrix_3d<T>::is_affine() const{
   if ( t12_matrix_.get(3,0) != (T)0 ||
        t12_matrix_.get(3,1) != (T)0 ||
        t12_matrix_.get(3,2) != (T)0 ||
-       vcl_fabs(t12_matrix_.get(3,3)) > 10*vcl_numeric_limits<T>::epsilon())
+       std::fabs(t12_matrix_.get(3,3)) > 10*std::numeric_limits<T>::epsilon())
     return false; // should not have a projective part
   return !(this->is_euclidean());
 }
@@ -494,7 +495,7 @@ vgl_h_matrix_3d<T>::get_translation_vector() const
 #undef VGL_H_MATRIX_3D_INSTANTIATE
 #define VGL_H_MATRIX_3D_INSTANTIATE(T) \
 template class vgl_h_matrix_3d<T >; \
-template vcl_ostream& operator<<(vcl_ostream&, vgl_h_matrix_3d<T > const& ); \
-template vcl_istream& operator>>(vcl_istream&, vgl_h_matrix_3d<T >& )
+template std::ostream& operator<<(std::ostream&, vgl_h_matrix_3d<T > const& ); \
+template std::istream& operator>>(std::istream&, vgl_h_matrix_3d<T >& )
 
 #endif // vgl_h_matrix_3d_hxx_

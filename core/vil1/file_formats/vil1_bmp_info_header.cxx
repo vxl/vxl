@@ -8,7 +8,8 @@
 
 #include "vil1_bmp_info_header.h"
 
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <iostream>
 
 #include <vil1/vil1_stream.h>
 #include <vil1/vil1_32bit.h>
@@ -43,13 +44,13 @@ void vil1_bmp_info_header::write(vil1_stream *s) const
   vil1_32bit_write_little_endian(s, colorcount);
 }
 
-void vil1_bmp_info_header::print(vcl_ostream &s) const
+void vil1_bmp_info_header::print(std::ostream &s) const
 {
   s << "vil1_bmp_info_header:\n"
-    << "  compression  : " << compression << vcl_endl
-    << "  bitmap_size  : " << bitmap_size << vcl_endl
-    << "  horiz_res    : " << horiz_res << vcl_endl
-    << "  verti_res    : " << verti_res << vcl_endl
-    << "  colormapsize : " << colormapsize << vcl_endl
-    << "  colorcount   : " << colorcount << vcl_endl << vcl_endl;
+    << "  compression  : " << compression << std::endl
+    << "  bitmap_size  : " << bitmap_size << std::endl
+    << "  horiz_res    : " << horiz_res << std::endl
+    << "  verti_res    : " << verti_res << std::endl
+    << "  colormapsize : " << colormapsize << std::endl
+    << "  colorcount   : " << colorcount << std::endl << std::endl;
 }

@@ -16,7 +16,7 @@ bool bvxm_heightmap_process_cons(bprb_func_process& pro)
   //input[2]: number of pixels (y)
   //input[3]: The voxel world
   //input[4]: The option to generate a negated depth map, i.e., an absolute height map
-  vcl_vector<vcl_string> input_types_(n_inputs_);
+  std::vector<std::string> input_types_(n_inputs_);
   int i=0;
   input_types_[i++] = "vpgl_camera_double_sptr";  // camera
   input_types_[i++] = "unsigned";
@@ -27,7 +27,7 @@ bool bvxm_heightmap_process_cons(bprb_func_process& pro)
     return false;
 
   //output
-  vcl_vector<vcl_string> output_types_(n_outputs_);
+  std::vector<std::string> output_types_(n_outputs_);
   output_types_[0] = "vil_image_view_base_sptr";
   return pro.set_output_types(output_types_);
 }
@@ -39,7 +39,7 @@ bool bvxm_heightmap_process(bprb_func_process& pro)
 
   if (pro.n_inputs()<n_inputs_)
   {
-    vcl_cout << pro.name() << " The input number should be " << n_inputs_<< vcl_endl;
+    std::cout << pro.name() << " The input number should be " << n_inputs_<< std::endl;
     return false;
   }
 
@@ -63,12 +63,12 @@ bool bvxm_heightmap_process(bprb_func_process& pro)
 
    //check inputs validity
   if (!camera) {
-    vcl_cout << pro.name() <<" :--  Input 0  is not valid!\n";
+    std::cout << pro.name() <<" :--  Input 0  is not valid!\n";
     return false;
   }
    //check inputs validity
   if (!voxel_world) {
-    vcl_cout << pro.name() <<" :--  Input 3  is not valid!\n";
+    std::cout << pro.name() <<" :--  Input 3  is not valid!\n";
     return false;
   }
 
@@ -88,7 +88,7 @@ bool bvxm_heightmap_process(bprb_func_process& pro)
     lvcs->local_to_global(ray_trace_end.x(), ray_trace_end.y(), ray_trace_end.z(), vpgl_lvcs::wgs84, lon, lat, base_elev);
     // obtain the scene height
     float h = box.depth();
-    vcl_cout << "Using scene height: " << h << " and scene floor elevation: " << base_elev << " to negate the depth map!\n";
+    std::cout << "Using scene height: " << h << " and scene floor elevation: " << base_elev << " to negate the depth map!\n";
     unsigned ni = hmap->ni();
     unsigned nj = hmap->nj();
     unsigned np = hmap->nplanes();

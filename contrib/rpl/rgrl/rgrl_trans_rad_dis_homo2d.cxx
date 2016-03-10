@@ -387,7 +387,7 @@ inverse_transform( ) const
 // for output CENTERED transformation,
 void
 rgrl_trans_rad_dis_homo2d::
-write(vcl_ostream& os ) const
+write(std::ostream& os ) const
 {
   //vnl_vector<double> origin(from_centre_.size(), 0.0);
 
@@ -398,7 +398,7 @@ write(vcl_ostream& os ) const
      << H_
      << from_centre_ << "  " << to_centre_ << '\n'
      << k1_from_ << "  " <<  k1_to_
-     << vcl_endl;
+     << std::endl;
 
   // parent
   rgrl_transformation::write( os );
@@ -407,15 +407,15 @@ write(vcl_ostream& os ) const
 // for input
 bool
 rgrl_trans_rad_dis_homo2d::
-read(vcl_istream& is )
+read(std::istream& is )
 {
   int dim;
 
   // skip empty lines
   rgrl_util_skip_empty_lines( is );
 
-  vcl_string str;
-  vcl_getline( is, str );
+  std::string str;
+  std::getline( is, str );
 
   // The token should appear at the beginning of line
   if ( str.find( "HOMOGRAPHY2D_WITH_RADIAL_DISTORTION" ) != 0 ) {

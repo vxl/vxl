@@ -1,5 +1,6 @@
 // This is core/vsl/tests/test_list_io.cxx
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <iostream>
 #include <vsl/vsl_binary_io.h>
 #include <vsl/vsl_list_io.h>
 #include <testlib/testlib_test.h>
@@ -7,15 +8,15 @@
 
 void test_list_io()
 {
-  vcl_cout << "**************************\n"
-           << "Testing vcl_list binary io\n"
+  std::cout << "**************************\n"
+           << "Testing std::list binary io\n"
            << "**************************\n";
 
   int n = 10;
-  vcl_list<int> l_int_out;
+  std::list<int> l_int_out;
   for (int i=0;i<n;++i)
     l_int_out.push_back(i);
-  vcl_list<float> l_float_out;
+  std::list<float> l_float_out;
   for (int i=0;i<n;++i)
     l_float_out.push_back(0.1f*i);
 
@@ -25,8 +26,8 @@ void test_list_io()
   vsl_b_write(bfs_out, l_float_out);
   bfs_out.close();
 
-  vcl_list<int> l_int_in;
-  vcl_list<float> l_float_in;
+  std::list<int> l_int_in;
+  std::list<float> l_float_in;
 
   vsl_b_ifstream bfs_in("vsl_list_io_test.bvl.tmp");
   TEST("Opened vsl_list_io_test.bvl.tmp for reading", (!bfs_in), false);
@@ -37,11 +38,11 @@ void test_list_io()
 
   vpl_unlink ("vsl_list_io_test.bvl.tmp");
 
-  TEST("vcl_list<int> out == vcl_list<int> in", l_int_out, l_int_in);
-  TEST("vcl_list<float> out == vcl_list<float> in", l_float_out, l_float_in);
+  TEST("std::list<int> out == std::list<int> in", l_int_out, l_int_in);
+  TEST("std::list<float> out == std::list<float> in", l_float_out, l_float_in);
 
-  vsl_print_summary(vcl_cout, l_int_in);
-  vcl_cout << vcl_endl;
+  vsl_print_summary(std::cout, l_int_in);
+  std::cout << std::endl;
 }
 
 TESTMAIN(test_list_io);

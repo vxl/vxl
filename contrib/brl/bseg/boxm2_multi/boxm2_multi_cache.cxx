@@ -1,16 +1,18 @@
 #include "boxm2_multi_cache.h"
 //:
 // \file
-#include <vcl_sstream.h>
+#include <sstream>
 #include <vgl/vgl_distance.h>
 #include <vgl/vgl_box_3d.h>
 #include <vgl/vgl_intersection.h>
-#include <vcl_algorithm.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <algorithm>
 #include <vsph/vsph_camera_bounds.h>
 
 //: init opencl cache for each device
 boxm2_multi_cache::boxm2_multi_cache(boxm2_scene_sptr             scene,
-                               const vcl_vector<bocl_device_sptr> &devices)
+                               const std::vector<bocl_device_sptr> &devices)
 {
   scene_ = scene;
   boxm2_lru_cache1::create(scene);
@@ -37,13 +39,13 @@ boxm2_multi_cache::boxm2_multi_cache(boxm2_scene_sptr             scene,
   vgl_point_3d<double> min_origin, max_origin;
   scene->min_block_index(min_ids, min_origin);
   scene->max_block_index(max_ids, max_origin);
-  vcl_cout<<"Min ids, max ids: "<<min_ids<<','<<max_ids<<vcl_endl;
+  std::cout<<"Min ids, max ids: "<<min_ids<<','<<max_ids<<std::endl;
 
   //check if scene dimensions will work
   int groupSizeX = 1, groupSizeY = 1;
   if (sub_scenes_.size() == 2) {
     if (scene_dim.y() % sub_scenes_.size() != 0) {
-      vcl_cerr<<"  Boxm2_multi_cache::scene y dimension is not divisible by num devices\n"
+      std::cerr<<"  Boxm2_multi_cache::scene y dimension is not divisible by num devices\n"
               <<"  "<<scene_dim.y()<<" blocks by "<<sub_scenes_.size()<<" devices\n";
       throw -1;
     }
@@ -52,7 +54,7 @@ boxm2_multi_cache::boxm2_multi_cache(boxm2_scene_sptr             scene,
   }
   else if (sub_scenes_.size() == 4) {
     if (scene_dim.y() % 2 != 0 || scene_dim.x() % 2 != 0) {
-      vcl_cerr<<"  Boxm2_multi_cache::scene x/y dimension not divisible by 2\n"
+      std::cerr<<"  Boxm2_multi_cache::scene x/y dimension not divisible by 2\n"
               <<"  "<<scene_dim.y()<<" blocks by "<<scene_dim.x()<<'\n';
       throw -1;
     }
@@ -72,7 +74,7 @@ boxm2_multi_cache::boxm2_multi_cache(boxm2_scene_sptr             scene,
         for (int j=0; j<groupSizeY; ++j) {
           for (int k=min_ids.z(); k<max_ids.z()+1; ++k) {
             boxm2_block_id id(i+startX, j+startY, k);
-            vcl_cout<<"Attempting to add block id: "<<id<<vcl_endl;
+            std::cout<<"Attempting to add block id: "<<id<<std::endl;
             if (scene->block_exists(id)) {
               boxm2_block_metadata md = scene->get_block_metadata(id);
               grp->add_block(md, ocl_caches_[dev_id]);
@@ -88,7 +90,7 @@ boxm2_multi_cache::boxm2_multi_cache(boxm2_scene_sptr             scene,
   }
 
   for (unsigned int i=0; i<groups_.size(); ++i)
-    vcl_cout<<"Group "<<i<<": "<<groups_[i]<<vcl_endl;
+    std::cout<<"Group "<<i<<": "<<groups_[i]<<std::endl;
 #endif
 #if 0
   //partition the scene into smaller (continuous) scenes
@@ -98,19 +100,19 @@ boxm2_multi_cache::boxm2_multi_cache(boxm2_scene_sptr             scene,
   scene->max_block_index(max_ids, max_origin);
 
   //divide by half in each direction (take ceiling)
-  vgl_point_3d<int> incr_ids( (int) vcl_ceil( (float)(max_ids.x()+1)/devices.size() ),
-                              (int) vcl_ceil( (float)(max_ids.y()+1)/devices.size() ),
-                              (int) vcl_ceil( (float)(max_ids.z()+1)/devices.size() ) );
+  vgl_point_3d<int> incr_ids( (int) std::ceil( (float)(max_ids.x()+1)/devices.size() ),
+                              (int) std::ceil( (float)(max_ids.y()+1)/devices.size() ),
+                              (int) std::ceil( (float)(max_ids.z()+1)/devices.size() ) );
 
   //for each device create a new scene
   unsigned int blocksAdded = 0;
   for (unsigned int dev_id=0; dev_id<devices.size(); ++dev_id)
   {
-    vcl_map<boxm2_block_id, boxm2_block_metadata> sub_scene_blocks;
+    std::map<boxm2_block_id, boxm2_block_metadata> sub_scene_blocks;
 
     //figure out which blocks to add to it...
-    vcl_map<boxm2_block_id, boxm2_block_metadata>& blocks = scene->blocks();
-    vcl_map<boxm2_block_id, boxm2_block_metadata>::iterator iter;
+    std::map<boxm2_block_id, boxm2_block_metadata>& blocks = scene->blocks();
+    std::map<boxm2_block_id, boxm2_block_metadata>::iterator iter;
     for (iter=blocks.begin(); iter!=blocks.end(); ++iter)
     {
       boxm2_block_id id = iter->first;
@@ -119,7 +121,7 @@ boxm2_multi_cache::boxm2_multi_cache(boxm2_scene_sptr             scene,
       if (id.i() >= lower && id.i() < upper) {
         boxm2_block_metadata md = iter->second;
         sub_scene_blocks[id] = md;
-        vcl_cout<<" added: "<<id<<" to dev "<<dev_id<<vcl_endl;
+        std::cout<<" added: "<<id<<" to dev "<<dev_id<<std::endl;
         ++blocksAdded;
       }
     }
@@ -138,9 +140,9 @@ boxm2_multi_cache::boxm2_multi_cache(boxm2_scene_sptr             scene,
   }
 #endif
   if ( blocksAdded != scene->blocks().size() ) {
-    vcl_cout<<"boxm2_multi_cache blocks added not equal to number of blocks in original scene:\n"
+    std::cout<<"boxm2_multi_cache blocks added not equal to number of blocks in original scene:\n"
             <<"  Num gpus: "<<devices.size()<< '\n'
-            <<"  blocks added: "<<blocksAdded<<" != "<<scene->blocks().size()<<vcl_endl;
+            <<"  blocks added: "<<blocksAdded<<" != "<<scene->blocks().size()<<std::endl;
     throw -1;
   }
 }
@@ -156,11 +158,11 @@ boxm2_multi_cache::~boxm2_multi_cache()
     if (groups_[i]) delete groups_[i];
 }
 
-vcl_vector<boxm2_opencl_cache1*> boxm2_multi_cache::get_vis_sub_scenes(vpgl_perspective_camera<double>* cam)
+std::vector<boxm2_opencl_cache1*> boxm2_multi_cache::get_vis_sub_scenes(vpgl_perspective_camera<double>* cam)
 {
-  vcl_vector<boxm2_opencl_cache1*> vis_order;
+  std::vector<boxm2_opencl_cache1*> vis_order;
   if (!cam) {
-    vcl_cout << "null camera in boxm2_scene::get_vis_blocks(.)\n";
+    std::cout << "null camera in boxm2_scene::get_vis_blocks(.)\n";
     return vis_order;
   }
   //get camera center and order blocks distance from the cam center
@@ -172,14 +174,14 @@ vcl_vector<boxm2_opencl_cache1*> boxm2_multi_cache::get_vis_sub_scenes(vpgl_pers
   return this->get_vis_order_from_pt(cam_center);
 }
 
-vcl_vector<boxm2_opencl_cache1*>
+std::vector<boxm2_opencl_cache1*>
 boxm2_multi_cache::get_vis_sub_scenes(vpgl_generic_camera<double>* cam)
 {
   vgl_point_3d<double> cam_center = cam->max_ray_origin();
   return this->get_vis_order_from_pt(cam_center);
 }
 
-vcl_vector<boxm2_opencl_cache1*>
+std::vector<boxm2_opencl_cache1*>
 boxm2_multi_cache::get_vis_sub_scenes(vpgl_camera_double_sptr cam)
 {
   if ( cam->type_name() == "vpgl_generic_camera" )
@@ -187,19 +189,19 @@ boxm2_multi_cache::get_vis_sub_scenes(vpgl_camera_double_sptr cam)
   else if ( cam->type_name() == "vpgl_perspective_camera" )
     return this->get_vis_sub_scenes( (vpgl_perspective_camera<double>*) cam.ptr() );
   else
-    vcl_cout<<"boxm2_scene::get_vis_blocks doesn't support camera type "<<cam->type_name()<<vcl_endl;
+    std::cout<<"boxm2_scene::get_vis_blocks doesn't support camera type "<<cam->type_name()<<std::endl;
 
   //else return empty
-  vcl_vector<boxm2_opencl_cache1*> empty;
+  std::vector<boxm2_opencl_cache1*> empty;
   return empty;
 }
 
-vcl_vector<boxm2_opencl_cache1*>
+std::vector<boxm2_opencl_cache1*>
 boxm2_multi_cache::get_vis_order_from_pt(vgl_point_3d<double> const& pt)
 {
   //Map of distance, id
   typedef boxm2_dist_pair<boxm2_opencl_cache1*> Pair;
-  vcl_vector<Pair> distances;
+  std::vector<Pair> distances;
 
   //iterate through each block
   for (unsigned int idx=0; idx<ocl_caches_.size(); ++idx) {
@@ -212,11 +214,11 @@ boxm2_multi_cache::get_vis_order_from_pt(vgl_point_3d<double> const& pt)
   }
 
   //sort distances
-  vcl_sort(distances.begin(), distances.end());
+  std::sort(distances.begin(), distances.end());
 
   //put blocks in "vis_order"
-  vcl_vector<boxm2_opencl_cache1*>   vis_order;
-  vcl_vector<Pair>::iterator di;
+  std::vector<boxm2_opencl_cache1*>   vis_order;
+  std::vector<Pair>::iterator di;
   for (di = distances.begin(); di != distances.end(); ++di)
     vis_order.push_back(di->dat_);
   return vis_order;
@@ -225,7 +227,7 @@ boxm2_multi_cache::get_vis_order_from_pt(vgl_point_3d<double> const& pt)
 //----------------------------------------------
 // Cache block group visibility order functions
 //----------------------------------------------
-vcl_vector<boxm2_multi_cache_group*>
+std::vector<boxm2_multi_cache_group*>
 boxm2_multi_cache::get_vis_groups(vpgl_camera_double_sptr cam)
 {
   vgl_point_3d<double> center;
@@ -246,19 +248,19 @@ boxm2_multi_cache::get_vis_groups(vpgl_camera_double_sptr cam)
     camBox.add(highBox);
   }
   else {
-    vcl_cout<<"boxm2_scene::get_vis_blocks doesn't support camera type "<<cam->type_name()<<vcl_endl;
-    return vcl_vector<boxm2_multi_cache_group*>();
+    std::cout<<"boxm2_scene::get_vis_blocks doesn't support camera type "<<cam->type_name()<<std::endl;
+    return std::vector<boxm2_multi_cache_group*>();
   }
   return this->group_order_from_pt(center, camBox);
 }
 
-vcl_vector<boxm2_multi_cache_group*>
+std::vector<boxm2_multi_cache_group*>
 boxm2_multi_cache::group_order_from_pt(vgl_point_3d<double> const& pt,
                                        vgl_box_2d<double> const& camBox)
 {
   //Map of distance, id
   typedef boxm2_dist_pair<boxm2_multi_cache_group*> Pair;
-  vcl_vector<Pair> distances;
+  std::vector<Pair> distances;
 
   //iterate through each group
   for (unsigned int i=0; i<groups_.size(); ++i) {
@@ -276,24 +278,24 @@ boxm2_multi_cache::group_order_from_pt(vgl_point_3d<double> const& pt,
   }
 
   //sort distances
-  vcl_sort(distances.begin(), distances.end());
+  std::sort(distances.begin(), distances.end());
 
   //put blocks in "vis_order"
-  vcl_vector<boxm2_multi_cache_group*>   vis_order;
-  vcl_vector<Pair>::iterator di;
+  std::vector<boxm2_multi_cache_group*>   vis_order;
+  std::vector<Pair>::iterator di;
   for (di = distances.begin(); di != distances.end(); ++di)
     vis_order.push_back(di->dat_);
   return vis_order;
 }
 
-vcl_string boxm2_multi_cache::to_string()
+std::string boxm2_multi_cache::to_string()
 {
-  vcl_stringstream s;
+  std::stringstream s;
   s <<"******* boxm2_multi_cache ************************************\n"
     <<" num sub scenes: "<<sub_scenes_.size()<<'\n';
   for (unsigned int i=0; i<sub_scenes_.size(); ++i) {
     s << "Sub Scene "<<i<<":\n"
-      <<(*sub_scenes_[i])<<vcl_endl;
+      <<(*sub_scenes_[i])<<std::endl;
   }
   return s.str();
 }
@@ -307,7 +309,7 @@ void boxm2_multi_cache::clear()
 //----------------------- stream io----------------------------------------//
 
 //: shows elements in cache
-vcl_ostream& operator<<(vcl_ostream &s, boxm2_multi_cache& cache)
+std::ostream& operator<<(std::ostream &s, boxm2_multi_cache& cache)
 {
   s << cache.to_string();
   return s;

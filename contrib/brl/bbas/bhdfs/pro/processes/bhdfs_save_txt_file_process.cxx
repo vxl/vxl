@@ -13,8 +13,10 @@
 //   <none yet>
 // \endverbatim
 
-#include <vcl_iostream.h>
-#include <vcl_fstream.h>
+#include <iostream>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <fstream>
 
 
 #include <bhdfs/bhdfs_manager.h>
@@ -25,13 +27,13 @@ bool bhdfs_save_txt_file_process_cons(bprb_func_process& pro)
 {
   //this process takes one input: the filename
   bool ok=false;
-  vcl_vector<vcl_string> input_types;
+  std::vector<std::string> input_types;
   input_types.push_back("vcl_string"); // string to save
   input_types.push_back("vcl_string"); // filename
   ok = pro.set_input_types(input_types);
   if (!ok) return ok;
 
-  vcl_vector<vcl_string> output_types;
+  std::vector<std::string> output_types;
   ok = pro.set_output_types(output_types);
   if (!ok) return ok;
 
@@ -42,18 +44,18 @@ bool bhdfs_save_txt_file_process_cons(bprb_func_process& pro)
 bool bhdfs_save_txt_file_process(bprb_func_process& pro)
 {
   if (pro.n_inputs()< 1) {
-    vcl_cout << "bhdfs_save_txt_file_process: The input number should be 1" << vcl_endl;
+    std::cout << "bhdfs_save_txt_file_process: The input number should be 1" << std::endl;
     return false;
   }
 
   // get the inputs
-  vcl_string data = pro.get_input<vcl_string>(0);
-  vcl_string filename = pro.get_input<vcl_string>(1);
+  std::string data = pro.get_input<std::string>(0);
+  std::string filename = pro.get_input<std::string>(1);
   // read projection matrix from the file.
   if (!bhdfs_manager::exists())
-    bhdfs_manager::create(vcl_string("default"),0);
+    bhdfs_manager::create(std::string("default"),0);
   bhdfs_manager_sptr mgr = bhdfs_manager::instance();
-  vcl_cerr << "The working directory is: [" << mgr->get_working_dir() << "]" << vcl_endl;
+  std::cerr << "The working directory is: [" << mgr->get_working_dir() << "]" << std::endl;
   bhdfs_fstream_sptr fs = new bhdfs_fstream(filename, "a");
   fs->write(data.c_str(),data.size());
   fs->close();

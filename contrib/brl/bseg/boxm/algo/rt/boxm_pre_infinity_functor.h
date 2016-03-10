@@ -8,7 +8,9 @@
 #include <boxm/sample/algo/boxm_mog_grey_processor.h>
 #include <boxm/sample/algo/boxm_simple_grey_processor.h>
 #include <vil/vil_image_view.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iostream>
 
 template <boxm_apm_type APM, class T_aux>
 class boxm_pre_infinity_functor
@@ -41,7 +43,7 @@ class boxm_pre_infinity_functor
     // update alpha integral
     alpha_integral_(i,j) += cell_value.alpha * seg_len;
     // compute new visibility probability with updated alpha_integral
-    const float vis_prob_end = vcl_exp(-alpha_integral_(i,j));
+    const float vis_prob_end = std::exp(-alpha_integral_(i,j));
     // compute weight for this cell
     const float Omega = vis_img_(i,j) - vis_prob_end;
     // and update pre

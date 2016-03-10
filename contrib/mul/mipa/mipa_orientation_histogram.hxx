@@ -6,7 +6,9 @@
 // \author Tim Cootes
 
 #include "mipa_orientation_histogram.h"
-#include <vcl_cmath.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <cmath>
 #include <vnl/vnl_math.h> // for pi
 #include <vcl_cassert.h>
 
@@ -58,12 +60,12 @@ void mipa_orientation_histogram(const vil_image_view<srcT>& src,
   const double wrapNeg = full360 ? vnl_math::twopi : vnl_math::pi;
   // Process each block
   const srcT* s_row = &src(1,1);
-  vcl_ptrdiff_t si_step = src.istep();
-  vcl_ptrdiff_t sj_step = src.jstep();
+  std::ptrdiff_t si_step = src.istep();
+  std::ptrdiff_t sj_step = src.jstep();
 
   sumT *h_row=&hog_image(0,0);
-  vcl_ptrdiff_t hi_step = hog_image.istep();
-  vcl_ptrdiff_t hj_step = hog_image.jstep();
+  std::ptrdiff_t hi_step = hog_image.istep();
+  std::ptrdiff_t hj_step = hog_image.jstep();
   const sumT* h_row_end = h_row+h_nj*hj_step;
   for (;h_row!=h_row_end;h_row+=hj_step)
   {
@@ -82,8 +84,8 @@ void mipa_orientation_histogram(const vil_image_view<srcT>& src,
           // Compute angle from gradient
           sumT gi = sumT(s[si_step]-s[-si_step]);
           sumT gj = sumT(s[sj_step]-s[-sj_step]);
-          double theta=vcl_atan2(gj,gi);
-          double magwt=vcl_sqrt(gi*gi+gj*gj);
+          double theta=std::atan2(gj,gi);
+          double magwt=std::sqrt(gi*gi+gj*gj);
           if (!bilin_interp)
           {
             unsigned A = unsigned((theta+dA)*sA);
@@ -105,7 +107,7 @@ void mipa_orientation_histogram(const vil_image_view<srcT>& src,
             double b0 = centre0+double(iA)*binwid; //bin centres
             double d0 = theta-b0; //distances to bin centres
             bool nextUp=(d0>0.0) ? true : false;
-            double w0 = 1.0-vcl_fabs(d0)*sA; //interpolation weights
+            double w0 = 1.0-std::fabs(d0)*sA; //interpolation weights
             double w1 = 1.0-w0;
 
             h[iA%n_angles]+=sumT(magwt*w0);

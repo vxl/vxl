@@ -16,7 +16,9 @@
 //   Ozge C. Ozcanli Nov 15, 2008  Moved up to vxl, minor fixes
 // \endverbatim
 
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iostream>
 #include <vbl/vbl_ref_count.h>
 #include <vbl/vbl_smart_ptr.h>
 
@@ -57,7 +59,7 @@ class bgrl2_edge : public vbl_ref_count
   V_sptr shared_vertex(const bgrl2_edge<V >& other) const;
 
   //: Print an ascii summary to the stream
-  virtual void print_summary(vcl_ostream &os) const;
+  virtual void print_summary(std::ostream &os) const;
 
  protected:
 

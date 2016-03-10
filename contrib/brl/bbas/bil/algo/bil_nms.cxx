@@ -9,8 +9,10 @@
 #include <vgl/vgl_homg_point_2d.h>
 #include <vgl/vgl_point_2d.h>
 #include <vgl/algo/vgl_homg_operators_2d.h>
-#include <vcl_cstdio.h>
-#include <vcl_cmath.h>   // for vcl_abs(double)
+#include <cstdio>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <cmath>   // for std::abs(double)
 #include <vcl_cassert.h>
 
 static const vil_image_view<double> img_d; // dummy local variables, used to initialise
@@ -62,11 +64,11 @@ bil_nms::bil_nms(const bil_nms_params& nsp, const vil_image_view<double>& dir_x,
 void bil_nms::apply()
 {
   double f[3], s_list[3];
-  vcl_vector<vgl_point_2d<double> > loc;
-  vcl_vector<double> orientation;
-  vcl_vector<double> d2f;
+  std::vector<vgl_point_2d<double> > loc;
+  std::vector<double> orientation;
+  std::vector<double> d2f;
 
-  vcl_vector<vgl_point_2d<int> > pix_loc;
+  std::vector<vgl_point_2d<int> > pix_loc;
   // run non-maximum suppression at every point inside the margins
   assert(&grad_mag_ != &img_f); // should no longer be what it was initialised to
   for (unsigned x = margin_; x < grad_mag_.ni()-margin_; ++x) {
@@ -82,7 +84,7 @@ void bil_nms::apply()
       normalize(direction);
 
       // The gradient has to be non-degenerate
-      if (vcl_abs(direction.x()) < 10e-6 && vcl_abs(direction.y()) < 10e-6)
+      if (std::abs(direction.x()) < 10e-6 && std::abs(direction.y()) < 10e-6)
         continue;
 
       // now compute the values orthogonal to the edge and fit a parabola
@@ -100,12 +102,12 @@ void bil_nms::apply()
       // compute location of extrema
       double s_star = (parabola_fit_type_ == bil_nms_params::PFIT_3_POINTS) ?
                           subpixel_s(s_list, f, max_val, grad_val) : subpixel_s(x, y, direction, max_val);
-      if (vcl_fabs(s_star)< 0.7)
+      if (std::fabs(s_star)< 0.7)
       {
         // record this edgel
         x_(y,x) = x + s_star * direction.x();
         y_(y,x) = y + s_star * direction.y();
-        dir_(y,x) = vcl_atan2(direction.x(), -direction.y());
+        dir_(y,x) = std::atan2(direction.x(), -direction.y());
         mag_(x,y) = float(max_val); // the mag at the max of the parabola
         deriv_(y,x) = grad_val;
       }
@@ -124,21 +126,21 @@ int bil_nms::intersected_face_number(const vgl_vector_2d<double>& direction)
   }
   else if (direction.x() < 0 && direction.y() >= 0)
   {
-    if (vcl_abs(direction.x()) < direction.y())
+    if (std::abs(direction.x()) < direction.y())
       return 3;
     else
       return 4;
   }
   else if (direction.x() < 0 && direction.y() < 0)
   {
-    if (vcl_abs(direction.x()) >= vcl_abs(direction.y()))
+    if (std::abs(direction.x()) >= std::abs(direction.y()))
       return 5;
     else
       return 6;
   }
   else if (direction.x() >= 0 && direction.y() < 0)
   {
-    if (direction.x() < vcl_abs(direction.y()))
+    if (direction.x() < std::abs(direction.y()))
       return 7;
     else
       return 8;
@@ -269,7 +271,7 @@ double bil_nms::subpixel_s(double *s, double *f, double &max_f, double &max_d)
       // derivatives at f+ and f-
       double d2fp = 2*A*s[2] + B;
       double d2fm = 2*A*s[0] + B;
-      if (vcl_fabs(d2fp)>rel_thresh_ || vcl_fabs(d2fm)>rel_thresh_)
+      if (std::fabs(d2fp)>rel_thresh_ || std::fabs(d2fm)>rel_thresh_)
         return s_star;
 #endif // 0
       if (d2f<-rel_thresh_) // d2f is always negative at a maximum
@@ -303,7 +305,7 @@ double bil_nms::subpixel_s(int x, int y, const vgl_vector_2d<double>& direction,
     {
       find_distance_s_and_f_for_point(i, j, line1, d, s, direction);
       f = grad_mag_(x+i,y+j);
-      A(index, 0) = vcl_pow(s,2.0);
+      A(index, 0) = std::pow(s,2.0);
       A(index, 1) = s;
       A(index, 2) = 1.0;
       B(index, 0) = f;

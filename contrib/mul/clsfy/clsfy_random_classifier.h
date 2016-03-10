@@ -19,9 +19,9 @@
 #include <vnl/vnl_vector.h>
 #include <vnl/vnl_random.h>
 #include <vsl/vsl_binary_io.h>
-#include <vcl_vector.h>
-#include <vcl_string.h>
-#include <vcl_iosfwd.h>
+#include <vector>
+#include <string>
+#include <iosfwd>
 
 //:  A common interface for 1-out-of-N classifiers
 // This class takes a vector and classifies into one of
@@ -41,7 +41,7 @@ class clsfy_random_classifier : public clsfy_classifier_base
 
   //: Return the probability the input being in each class.
   // output(i) i<nClasses, contains the probability that the input is in class i
-  virtual void class_probabilities(vcl_vector<double> &outputs, const vnl_vector<double> &input) const;
+  virtual void class_probabilities(std::vector<double> &outputs, const vnl_vector<double> &input) const;
 
   //: Log likelihood of being in class (binary classifiers only)
   // class probability = 1 / (1+exp(-log_l))
@@ -55,16 +55,16 @@ class clsfy_random_classifier : public clsfy_classifier_base
   virtual unsigned n_dims() const;
 
   //: Name of the class
-  virtual vcl_string is_a() const;
+  virtual std::string is_a() const;
 
   //: Name of the class
-  virtual bool is_class(vcl_string const& s) const;
+  virtual bool is_class(std::string const& s) const;
 
   //: Create a copy on the heap and return base class pointer
   virtual clsfy_classifier_base* clone() const;
 
   //: Print class to os
-  virtual void print_summary(vcl_ostream& os) const;
+  virtual void print_summary(std::ostream& os) const;
 
   //: Save class to binary file stream
   virtual void b_write(vsl_b_ostream& bfs) const;
@@ -73,11 +73,11 @@ class clsfy_random_classifier : public clsfy_classifier_base
   virtual void b_read(vsl_b_istream& bfs);
 
   //: The probabilities of returning a value in each class.
-  const vcl_vector<double> & probs() const;
+  const std::vector<double> & probs() const;
 
   //: Set the prior probabilities of each class
   // The values are normalised to sum to 1.
-  void set_probs(const vcl_vector<double> &);
+  void set_probs(const std::vector<double> &);
 
   //: Set the number of dimensions the classifier reports that it uses.
   // The classifier itself pays no attention to this value, but it
@@ -97,9 +97,11 @@ class clsfy_random_classifier : public clsfy_classifier_base
   //: Reseeds the internal random number generator
   // To achieve quasi-random initialisation use
   // \code
-  // #include <vcl_ctime.h>
+  // #include <vcl_compiler.h>
+  // #include <iostream>
+  // #include <ctime>
   // ..
-  // sampler.reseed(vcl_time(0));
+  // sampler.reseed(std::time(0));
   // \endcode
   virtual void reseed(unsigned long);
 
@@ -110,7 +112,7 @@ class clsfy_random_classifier : public clsfy_classifier_base
   //: The probabilities of each class.
   // The values will always sum to 1.
   // If the vector is empty then the builder will use the prior probability
-  vcl_vector<double> probs_;
+  std::vector<double> probs_;
 
   //: The mean confidence noise added to class probabilities
   double confidence_;
@@ -122,13 +124,13 @@ class clsfy_random_classifier : public clsfy_classifier_base
   mutable vnl_vector<double> last_inputs_;
 
   //: The last class probabilities calculated.
-  mutable vcl_vector<double> last_outputs_;
+  mutable std::vector<double> last_outputs_;
 
   //: The random number generator used to sample classes.
   mutable vnl_random rng_;
 
   //: The minimum value each class probability needs to be biased by to win.
-  vcl_vector<double> min_to_win_;
+  std::vector<double> min_to_win_;
 };
 
 #endif // clsfy_random_classifier_h_

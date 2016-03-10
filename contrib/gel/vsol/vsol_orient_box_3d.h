@@ -64,10 +64,10 @@ class vsol_orient_box_3d : public vsol_volume_3d
   void add_point(double x, double y, double z);
 
   //: Return a platform independent string identifying the class
-  virtual vcl_string is_a() const { return vcl_string("vsol_orient_box_3d"); }
+  virtual std::string is_a() const { return std::string("vsol_orient_box_3d"); }
 
   //: Return true if the argument matches the string identifying the class or any parent class
-  virtual bool is_class(const vcl_string& cls) const { return cls==is_a(); }
+  virtual bool is_class(const std::string& cls) const { return cls==is_a(); }
 };
 
 

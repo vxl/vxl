@@ -10,10 +10,12 @@
 // \author Tim Cootes
 // \brief test mcal_pca
 
-#include <vcl_iostream.h>
-#include <vcl_sstream.h>
+#include <iostream>
+#include <sstream>
 #include <vsl/vsl_binary_loader.h>
-#include <vcl_cmath.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <cmath>
 #include <vnl/vnl_math.h>
 #include <mbl/mbl_cloneables_factory.h>
 #include <mcal/mcal_add_all_loaders.h>
@@ -29,9 +31,9 @@ void test_pca1(unsigned nd, unsigned ns)
   for (unsigned i=0;i<nd;++i)
   {
     mean[i] = i;
-    v1[i] = vcl_cos(i*0.17);
-    v2[i] = vcl_cos(i*0.37+2);
-    v3[i] = vcl_cos(i*0.47+1.2);
+    v1[i] = std::cos(i*0.17);
+    v2[i] = std::cos(i*0.37+2);
+    v3[i] = std::cos(i*0.47+1.2);
   }
   v1.normalize();
 
@@ -43,12 +45,12 @@ void test_pca1(unsigned nd, unsigned ns)
   v3-=(v2*dot_product(v3,v2));
   v3.normalize();
 
-  vcl_vector<vnl_vector<double> > data(ns);
+  std::vector<vnl_vector<double> > data(ns);
   for (unsigned i=0; i<ns; ++i)
   {
     double A = vnl_math::twopi/ns*i;
     // Third term introduces small "noise"
-    data[i] = mean + v1*(30*vcl_cos(A)) + v2*(10*vcl_sin(A)) + v3*(0.01*vcl_sin(3*A+0.1));
+    data[i] = mean + v1*(30*std::cos(A)) + v2*(10*std::sin(A)) + v3*(0.01*std::sin(3*A+0.1));
   }
 
   vnl_matrix<double> EVecs;
@@ -58,32 +60,32 @@ void test_pca1(unsigned nd, unsigned ns)
   pca.set_var_prop(0.98);
   pca.build_from_array(&data[0],ns,m,EVecs,evals);
 
-  vcl_cout<<"evals: "<<evals<<vcl_endl;
+  std::cout<<"evals: "<<evals<<std::endl;
   TEST("Two modes",evals.size(),2);
 
   TEST_NEAR("Error on Mean",(m-mean).rms(),0,1e-6);
 
-  vcl_cout<<"Check direction of eigenvectors"<<vcl_endl;
+  std::cout<<"Check direction of eigenvectors"<<std::endl;
   vnl_vector<double> b1= EVecs.transpose()*v1;
   // Should be [+/-1,0]
-  TEST_NEAR("EVec 1",vcl_fabs(b1[0]),1,1e-5);
+  TEST_NEAR("EVec 1",std::fabs(b1[0]),1,1e-5);
 
   vnl_vector<double> b2= EVecs.transpose()*v2;
   // Should be [0,+/-1]
-  TEST_NEAR("EVec 2",vcl_fabs(b2[1]),1,1e-5);
+  TEST_NEAR("EVec 2",std::fabs(b2[1]),1,1e-5);
 }
 
 void test_pca()
 {
-  vcl_cout << "***********************\n"
+  std::cout << "***********************\n"
            << " Testing mcal_pca\n"
            << "***********************\n";
 
   vsl_add_to_binary_loader(mcal_pca());
 
-  vcl_cout<<"== Run test with more examples than dimensions =="<<vcl_endl;
+  std::cout<<"== Run test with more examples than dimensions =="<<std::endl;
   test_pca1(7,16);
-  vcl_cout<<"== Run test with fewer examples than dimensions =="<<vcl_endl;
+  std::cout<<"== Run test with fewer examples than dimensions =="<<std::endl;
   test_pca1(15,4);
 
   vsl_delete_all_loaders();
@@ -94,7 +96,7 @@ void test_pca()
   {
     mbl_cloneables_factory<mcal_component_analyzer>::add(mcal_pca());
 
-    vcl_istringstream ss(
+    std::istringstream ss(
           "mcal_pca\n"
           "{\n"
           "  min_modes: 1\n"
@@ -104,14 +106,14 @@ void test_pca()
           "  use_chunks:  true\n"
           "}\n");
 
-    vcl_auto_ptr<mcal_component_analyzer>
+    std::auto_ptr<mcal_component_analyzer>
             ca = mcal_component_analyzer::create_from_stream(ss);
 
     TEST("Correct component analyzer",ca->is_a(),"mcal_pca");
     if (ca->is_a()=="mcal_pca")
     {
       mcal_pca &a_ca = static_cast<mcal_pca&>(*ca);
-      vcl_cout<<a_ca<<vcl_endl;
+      std::cout<<a_ca<<std::endl;
       TEST("min_modes configured",a_ca.min_modes(),1);
       TEST("max_modes configured",a_ca.max_modes(),7);
       TEST_NEAR("var_prop configured",a_ca.var_prop(),0.93,1e-6);

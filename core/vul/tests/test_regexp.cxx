@@ -9,11 +9,12 @@
 // History: Adapted from the original Texas Instruments COOL test suite,
 //          but with lots of tests added.
 
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <iostream>
 
 void test_regexp()
 {
-  vcl_cout << "\n\tGENERAL TESTS OF MEMBER FUNCTIONS FOR REGEXP CLASS.\n";
+  std::cout << "\n\tGENERAL TESTS OF MEMBER FUNCTIONS FOR REGEXP CLASS.\n";
 
   // Test the vul_reg_exp(char*) constructor [and thus also the compile(char*)
   // member function], and do a very basic test on the find(char*) function.
@@ -83,7 +84,7 @@ void test_regexp()
 
   // THIS COMPLETES THE GENERAL TESTS OF THE MEMBER FUNCTIONS.
 
-  vcl_cout << "\n\tTESTS FOR compile AND find WITH VARIOUS REGULAR EXPRESSIONS.\n";
+  std::cout << "\n\tTESTS FOR compile AND find WITH VARIOUS REGULAR EXPRESSIONS.\n";
 
 //:
 // A regular expression allows a programmer to specify complex patterns that
@@ -118,7 +119,7 @@ void test_regexp()
 // for very unusual matching.  There are a few examples of this type of
 // use in the following tests.
 
-  vcl_cout << "\nTESTS FOR REGULAR EXPRESSIONS WITH ^\n";
+  std::cout << "\nTESTS FOR REGULAR EXPRESSIONS WITH ^\n";
 
   const char * s = "str at front";
   vul_reg_exp rxp("^str");
@@ -130,7 +131,7 @@ void test_regexp()
   TEST("rxp.find(\"not at front: str\")", rxp.find("not at front: str"), false);
   TEST("rxp.find(\"not at front: \\nstr\")", rxp.find("not at front: \nstr"), false);
 
-  vcl_cout << "\nTESTS FOR REGULAR EXPRESSIONS WITH $\n";
+  std::cout << "\nTESTS FOR REGULAR EXPRESSIONS WITH $\n";
 
   rxp.compile("str$");
   TEST("rxp.compile(\"str$\")", 0, 0);
@@ -141,7 +142,7 @@ void test_regexp()
   TEST("rxp.start() == 7", rxp.start(), 7);
   TEST("rxp.end() == 10", rxp.end(), 10);
 
-  vcl_cout << "\nTESTS FOR REGULAR EXPRESSIONS WITH .\n";
+  std::cout << "\nTESTS FOR REGULAR EXPRESSIONS WITH .\n";
 
   rxp.compile("s..t.r");
   TEST("rxp.compile(\"s..t.r\")", 0, 0);
@@ -150,7 +151,7 @@ void test_regexp()
   TEST("rxp.find(\"dl 32 s*\\nt0r ugh\")", rxp.find("dl 32 s*\nt0r ugh"), true);
   TEST("rxp.find(\"too far s  t  r\")", rxp.find("too far s  t  r"), false);
 
-  vcl_cout << "\nTESTS FOR REGULAR EXPRESSIONS WITH []\n";
+  std::cout << "\nTESTS FOR REGULAR EXPRESSIONS WITH []\n";
 
   rxp.compile("[b1-9]");
   TEST("rxp.compile(\"[b1-9]\")", 0, 0);
@@ -167,7 +168,7 @@ void test_regexp()
   TEST("rxp.start() == 4", rxp.start(), 4);
   TEST("rxp.end() == 14", rxp.end(), 14);
 
-  vcl_cout << "TESTS FOR REGULAR EXPRESSIONS WITH [^]\n";
+  std::cout << "TESTS FOR REGULAR EXPRESSIONS WITH [^]\n";
 
   rxp.compile("[^ab1-9]");
   TEST("rxp.compile(\"[^ab1-9]\")", 0, 0);
@@ -186,7 +187,7 @@ void test_regexp()
   TEST("rxp.start() == 0 (not 5!)", rxp.start(), 0);
   TEST("rxp.end() == 0", rxp.end(), 0);
 
-  vcl_cout << "\nTESTS FOR REGULAR EXPRESSIONS WITH * + ?\n";
+  std::cout << "\nTESTS FOR REGULAR EXPRESSIONS WITH * + ?\n";
 
   rxp.compile("a *l");
   TEST("rxp.compile(\"a *l\")", 0, 0);
@@ -213,7 +214,7 @@ void test_regexp()
   TEST("rxp.find(\"hello there\")", rxp.find("hello there"), false);
   TEST("rxp.find(\"hallo there\")", rxp.find("hallo there"), true);
 
-  vcl_cout << "\nTESTS FOR REGULAR EXPRESSIONS WITH TEMPORARY STORAGE USING ()\n";
+  std::cout << "\nTESTS FOR REGULAR EXPRESSIONS WITH TEMPORARY STORAGE USING ()\n";
 
   // finds an expression ending with pb and beginning with whatever
   // the two characters before the first p encountered in the line were.

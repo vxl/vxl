@@ -3,7 +3,9 @@
 #include <boxm/boxm_block.hxx>
 #include <boxm/boxm_scene.hxx>
 #include <vbl/vbl_array_3d.hxx>
-#include <vcl_string.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <string>
 
 typedef boct_tree<short, bvpl_octree_sample<float> > tree_type;
 

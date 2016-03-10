@@ -7,14 +7,15 @@
 #include <vgl/vgl_point_2d.h>
 #include <vgl/vgl_point_3d.h>
 #include <vgl/vgl_plane_3d.h>
-#include <vcl_iostream.h>
-#include <vcl_algorithm.h> // for vcl_min()
+#include <iostream>
+#include <vcl_compiler.h>
+#include <algorithm> // for std::min()
 
 static void test_backproject()
 {
   //Make the rational camera
   //Rational polynomial coefficients
-  vcl_vector<double> neu_u(20,0.0), den_u(20,0.0), neu_v(20,0.0), den_v(20,0.0);
+  std::vector<double> neu_u(20,0.0), den_u(20,0.0), neu_v(20,0.0), den_v(20,0.0);
   neu_u[0]=0.1; neu_u[10]=.071; neu_u[ 7]=.01; neu_u[9]=0.3; neu_u[15]=1.0; neu_u[18]=1.0, neu_u[19]=.75;
   den_u[0]=0.1; den_u[10]=0.05; den_u[17]=.01; den_u[9]=1.0; den_u[15]=1.0; den_u[18]=1.0; den_u[19]=1.0;
   neu_v[0]=.02; neu_v[10]=.014; neu_v[ 7]=0.1; neu_v[9]=0.4; neu_v[15]=0.5; neu_v[18]=.01; neu_v[19]=.33;
@@ -38,7 +39,7 @@ static void test_backproject()
   vgl_point_2d<double> test_point3 = rcam.project(p3); // equals test_point0 !!!
   vgl_point_2d<double> test_point4 = rcam.project(p4); // equals test_point0 !!!
 
-  vcl_cout << "Projection of " << p0 << "is " << test_point0 << '\n'
+  std::cout << "Projection of " << p0 << "is " << test_point0 << '\n'
            << "Projection of " << p1 << "is " << test_point1 << '\n'
            << "Projection of " << p2 << "is " << test_point2 << '\n'
            << "Projection of " << p3 << "is " << test_point3 << '\n'
@@ -53,38 +54,38 @@ static void test_backproject()
   vnl_double_4 plane(0.0, 0.0, 1.0, -10.0); // plane z=10
 
   vnl_double_3 initial_guess(200.0, 150.0, 10.0);
-  vcl_cout << "Initial X-Y Guess (" << initial_guess << ")\n";
+  std::cout << "Initial X-Y Guess (" << initial_guess << ")\n";
 
   vnl_double_3 world_point;
   bool success = vpgl_backproject::bproj_plane(rcam, image_point, plane,
                                                initial_guess, world_point);
 
-  vcl_cout << "X-Y Solution ("<< world_point <<") should be "<<p3<< '\n';
+  std::cout << "X-Y Solution ("<< world_point <<") should be "<<p3<< '\n';
   TEST("X-Y plane backprojection convergence", success, true);
   vgl_point_3d<double> wp; wp.set(world_point[0],world_point[1],world_point[2]);
   // beware: both p0 and p3 project to image_point
-  TEST_NEAR("test simple backprojection x-y plane", vcl_min((wp-p0).length(), (wp-p3).length()), 0, 1e-8);
+  TEST_NEAR("test simple backprojection x-y plane", std::min((wp-p0).length(), (wp-p3).length()), 0, 1e-8);
 
   plane = vnl_double_4(1.0, 0.0, 0.0, -150.0); // plane x=150
   initial_guess = vnl_double_3(150.0, 150.0, 15.0);
-  vcl_cout << "Initial Y-Z Guess (" << initial_guess << ")\n";
+  std::cout << "Initial Y-Z Guess (" << initial_guess << ")\n";
   success = vpgl_backproject::bproj_plane(rcam, image_point, plane,
                                           initial_guess, world_point);
-  vcl_cout << "Y-Z Solution ("<< world_point <<") should be "<<p0<< '\n';
+  std::cout << "Y-Z Solution ("<< world_point <<") should be "<<p0<< '\n';
   TEST("Y-Z plane backprojection convergence", success, true);
   wp.set(world_point[0],world_point[1],world_point[2]);
-  TEST_NEAR("test simple backprojection y-z plane", vcl_min((wp-p0).length(), (wp-p3).length()), 0, 1e-8);
+  TEST_NEAR("test simple backprojection y-z plane", std::min((wp-p0).length(), (wp-p3).length()), 0, 1e-8);
 
   plane = vnl_double_4(0.0, 1.0, 0.0, -100.0); // plane y=100
   initial_guess = vnl_double_3(125.0, 100.0, 8.0);
-  vcl_cout << "Initial X-Z Guess (" << initial_guess << ")\n";
+  std::cout << "Initial X-Z Guess (" << initial_guess << ")\n";
   success = vpgl_backproject::bproj_plane(rcam, image_point, plane,
                                           initial_guess, world_point);
-  vcl_cout << "X-Z Solution ("<< world_point <<") should be "<<p4<< '\n';
+  std::cout << "X-Z Solution ("<< world_point <<") should be "<<p4<< '\n';
   TEST("X-Z plane backprojection convergence", success, true);
   wp.set(world_point[0],world_point[1],world_point[2]);
   // beware: both p0 and p4 project to image_point
-  TEST_NEAR("test simple backprojection x-z plane", vcl_min((wp-p0).length(), (wp-p4).length()), 0, 1e-8);
+  TEST_NEAR("test simple backprojection x-z plane", std::min((wp-p0).length(), (wp-p4).length()), 0, 1e-8);
 
   // Test with a plane not oriented on one of the axes
 

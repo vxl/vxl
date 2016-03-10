@@ -8,8 +8,10 @@
 #include "pdf1d_exponential.h"
 
 #include <vcl_cassert.h>
-#include <vcl_string.h>
-#include <vcl_cmath.h>
+#include <string>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <cmath>
 
 #include <pdf1d/pdf1d_exponential_sampler.h>
 #include <pdf1d/pdf1d_sampler.h>
@@ -39,7 +41,7 @@ void pdf1d_exponential::set_lambda(double lambda)
 {
   assert(lambda>0);
   lambda_ = lambda;
-  log_lambda_ = vcl_log(lambda_);
+  log_lambda_ = std::log(lambda_);
 
   pdf1d_pdf::set_mean(1.0/lambda);
   pdf1d_pdf::set_variance(1.0/(lambda*lambda));
@@ -60,7 +62,7 @@ pdf1d_sampler* pdf1d_exponential::new_sampler() const
 double pdf1d_exponential::operator()(double x) const
 {
   if (x<0) return 0;
-  return lambda_ * vcl_exp(-1*lambda_*x);
+  return lambda_ * std::exp(-1*lambda_*x);
 }
 
 
@@ -74,7 +76,7 @@ double pdf1d_exponential::log_p(double x) const
 //: Cumulative Probability (P(x'<x) for x' drawn from the distribution)
 double pdf1d_exponential::cdf(double x) const
 {
-  return 1.0 - vcl_exp(-1*lambda_*x);
+  return 1.0 - std::exp(-1*lambda_*x);
 }
 
 //: Return true if cdf() uses an analytic implementation
@@ -95,7 +97,7 @@ double pdf1d_exponential::gradient(double x,
     return 0;
   }
 
-  p = lambda_ * vcl_exp(-1*lambda_*x);
+  p = lambda_ * std::exp(-1*lambda_*x);
   return -1.0*lambda_*p;
 }
 
@@ -126,9 +128,9 @@ double pdf1d_exponential::nearest_plausible(double x, double log_p_min) const
 // Method: is_a
 //=======================================================================
 
-vcl_string pdf1d_exponential::is_a() const
+std::string pdf1d_exponential::is_a() const
 {
-  static vcl_string class_name_ = "pdf1d_exponential";
+  static std::string class_name_ = "pdf1d_exponential";
   return class_name_;
 }
 
@@ -136,7 +138,7 @@ vcl_string pdf1d_exponential::is_a() const
 // Method: is_class
 //=======================================================================
 
-bool pdf1d_exponential::is_class(vcl_string const& s) const
+bool pdf1d_exponential::is_class(std::string const& s) const
 {
   return pdf1d_pdf::is_class(s) || s==pdf1d_exponential::is_a();
 }
@@ -164,7 +166,7 @@ pdf1d_pdf* pdf1d_exponential::clone() const
 //=======================================================================
 
 
-void pdf1d_exponential::print_summary(vcl_ostream& os) const
+void pdf1d_exponential::print_summary(std::ostream& os) const
 {
   os<<"Lambda="<<lambda_;
 }
@@ -188,14 +190,14 @@ void pdf1d_exponential::b_read(vsl_b_istream& bfs)
 {
   if (!bfs) return;
 
-  vcl_string name;
+  std::string name;
   vsl_b_read(bfs,name);
   if (name != is_a())
   {
-    vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, pdf1d_exponential &)\n";
-    vcl_cerr << "           Attempted to load object of type ";
-    vcl_cerr << name <<" into object of type " << is_a() << vcl_endl;
-    bfs.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
+    std::cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, pdf1d_exponential &)\n";
+    std::cerr << "           Attempted to load object of type ";
+    std::cerr << name <<" into object of type " << is_a() << std::endl;
+    bfs.is().clear(std::ios::badbit); // Set an unrecoverable IO error on stream
     return;
   }
 
@@ -207,9 +209,9 @@ void pdf1d_exponential::b_read(vsl_b_istream& bfs)
       vsl_b_read(bfs,lambda_);
       break;
     default:
-      vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, pdf1d_exponential &)\n";
-      vcl_cerr << "           Unknown version number "<< version << vcl_endl;
-      bfs.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
+      std::cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, pdf1d_exponential &)\n";
+      std::cerr << "           Unknown version number "<< version << std::endl;
+      bfs.is().clear(std::ios::badbit); // Set an unrecoverable IO error on stream
       return;
   }
 

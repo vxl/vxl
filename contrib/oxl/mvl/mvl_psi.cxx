@@ -8,9 +8,11 @@
 
 #include "mvl_psi.h"
 
-#include <vcl_cmath.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <cmath>
 #include <vcl_cassert.h>
-#include <vcl_cstdlib.h>
+#include <cstdlib>
 
 #if 0
 # define mvl_psi_temp_name(l, r) U l = r
@@ -151,7 +153,7 @@ void mvl_psi_invert_direct(U const abcde[5], U XYZT[4], int which)
     break;
 
   default:
-    vcl_abort();
+    std::abort();
   };
 }
 
@@ -170,12 +172,12 @@ void mvl_psi_invert_direct(U const abcde[5], U XYZT[4])
   // b - e          a - d
   // a - c          e
   // b - c          d
-  bool cd_b  = vcl_abs(c - d) <= vcl_abs(b);
-  bool ce_a  = vcl_abs(c - e) <= vcl_abs(a);
-  bool de_ab = vcl_abs(d - e) <= vcl_abs(a - b);
-  bool be_ad = vcl_abs(b - e) <= vcl_abs(a - d);
-  bool ac_e  = vcl_abs(a - c) <= vcl_abs(e);
-  bool bc_d  = vcl_abs(b - c) <= vcl_abs(d);
+  bool cd_b  = std::abs(c - d) <= std::abs(b);
+  bool ce_a  = std::abs(c - e) <= std::abs(a);
+  bool de_ab = std::abs(d - e) <= std::abs(a - b);
+  bool be_ad = std::abs(b - e) <= std::abs(a - d);
+  bool ac_e  = std::abs(a - c) <= std::abs(e);
+  bool bc_d  = std::abs(b - c) <= std::abs(d);
 
   if (false)
     { }
@@ -243,5 +245,5 @@ template void mvl_psi_invert_design(U const [5], U [4]); \
 template void mvl_psi_invert(U const [5], U [4])
 
 instantiate(double);
-//instantiate(vcl_complex<double>);
+//instantiate(std::complex<double>);
 #undef instantiate

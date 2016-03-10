@@ -14,7 +14,8 @@
 // \endverbatim
 //-----------------------------------------------------------------------------
 
-#include <vcl_vector.h>
+#include <vcl_compiler.h>
+#include <vector>
 // Disjoint Set Data Structure
 // Author: Emil Stefanov
 // Date: 03/28/06
@@ -70,7 +71,7 @@ class vbl_disjoint_sets
 
   int num_elements_; // the number of elements
   int num_sets_; // the number of sets
-  vcl_vector<node*> nodes_; // the list of nodes representing the elements
+  std::vector<node*> nodes_; // the list of nodes representing the elements
 };
 
 #endif // vbl_disjoint_sets_h_

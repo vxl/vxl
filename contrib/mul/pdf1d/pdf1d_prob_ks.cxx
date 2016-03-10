@@ -5,7 +5,9 @@
 // \author Tim Cootes
 // \brief Probability used in Kolmogorov-Smirnov test
 
-#include <vcl_cmath.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <cmath>
 
 const double f1 = 0.001;
 const double f2 = 1.0e-8;
@@ -20,11 +22,11 @@ double pdf1d_prob_ks(double x)
   double a2 = -2.0*x*x;
   for (int j=1;j<=100;j++)
   {
-    term=k*vcl_exp(a2*j*j);
+    term=k*std::exp(a2*j*j);
     sum += term;
-    if (vcl_fabs(term) <= f1*previous_term || vcl_fabs(term) <= f2*sum) return sum;
+    if (std::fabs(term) <= f1*previous_term || std::fabs(term) <= f2*sum) return sum;
     k = -k;
-    previous_term=vcl_fabs(term);
+    previous_term=std::fabs(term);
   }
   return 1.0;
 }

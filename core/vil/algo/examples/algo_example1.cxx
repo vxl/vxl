@@ -3,7 +3,8 @@
 // \brief Example of computing gradients of a vil_image_view<T>.
 // \author Tim Cootes - Manchester
 
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <iostream>
 #include <vxl_config.h> // for vxl_byte
 #include <vil/vil_image_view.h>
 #include <vil/vil_print.h>
@@ -21,19 +22,19 @@ int main()
       for (unsigned i=0;i<ni;++i)
         image(i,j,p) = vxl_byte(i+10*j+100*p);
 
-  vcl_cout<<"Original image:\n";
-  vil_print_all(vcl_cout,image);
+  std::cout<<"Original image:\n";
+  vil_print_all(std::cout,image);
 
     // Objects to hold gradients
   vil_image_view<float> grad_i,grad_j;
 
   vil_sobel_3x3(image,grad_i,grad_j);
 
-  vcl_cout<<"\nSobel I Gradient:\n";
-  vil_print_all(vcl_cout,grad_i);
+  std::cout<<"\nSobel I Gradient:\n";
+  vil_print_all(std::cout,grad_i);
 
-  vcl_cout<<"\nSobel J Gradient:\n";
-  vil_print_all(vcl_cout,grad_j);
+  std::cout<<"\nSobel J Gradient:\n";
+  vil_print_all(std::cout,grad_j);
 
   return 0;
 }

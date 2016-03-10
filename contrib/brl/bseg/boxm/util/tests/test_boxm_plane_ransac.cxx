@@ -15,7 +15,9 @@
 #include <vgl/vgl_plane_3d.h>
 #include <vgl/vgl_infinite_line_3d.h>
 #include <vnl/vnl_random.h>
-#include <vcl_vector.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <vector>
 
 static const unsigned int test_num=10;
 static const unsigned int test_set=10;
@@ -27,7 +29,7 @@ static void test_boxm_plane_ransac()
   vgl_point_3d<float> p2(30,20,10);
   vgl_infinite_line_3d<float> line(p1,p2);
 
-  vcl_vector<boxm_edge_tangent_sample<float> > planes;
+  std::vector<boxm_edge_tangent_sample<float> > planes;
   vnl_random rand;
   // get two points from the line, and create a random 3rd point to define a plane
 
@@ -56,9 +58,9 @@ static void test_boxm_plane_ransac()
     planes.push_back(sample);
   }
 
-  vcl_cout << " planes size: " << planes.size() << vcl_endl;
+  std::cout << " planes size: " << planes.size() << std::endl;
 
-  vcl_vector<float> weights(test_set,1);
+  std::vector<float> weights(test_set,1);
   int threshold=2;
   float residual;
   vgl_infinite_line_3d<float> l;

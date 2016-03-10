@@ -1,8 +1,9 @@
 // This is core/vil/tests/test_blocked_image_resource.cxx
 #include <testlib/testlib_test.h>
 #include <testlib/testlib_root_dir.h>
-#include <vcl_iostream.h>
-#include <vcl_string.h>
+#include <iostream>
+#include <vcl_compiler.h>
+#include <string>
 #include <vil/vil_new.h>
 #include <vil/vil_load.h>
 #include <vil/vil_property.h>
@@ -12,11 +13,11 @@
 #include <vil/vil_block_cache.h>
 #include <vul/vul_file.h>
 
-static vcl_string image_file;
+static std::string image_file;
 static bool exists;
 static void test_blocked_image_resource()
 {
-  vcl_cout << "************************************\n"
+  std::cout << "************************************\n"
            << " Testing vil_blocked_image_resource\n"
            << "************************************\n";
   // Test Resource
@@ -29,10 +30,10 @@ static void test_blocked_image_resource()
       image(i,j) = (unsigned short)(i + ni*j);
   vil_image_resource_sptr ir = vil_new_image_resource_of_view(image);
 
-  vcl_string path("test_blocked_tiff.tif");
+  std::string path("test_blocked_tiff.tif");
   unsigned sbi = 16, sbj = 32;
   unsigned nbi = (ni+sbi-1)/sbi, nbj = (nj+sbj-1)/sbj;
-  vcl_cout << "Creating new blocked resource " << path << '\n';
+  std::cout << "Creating new blocked resource " << path << '\n';
   { // scope for resource
     vil_blocked_image_resource_sptr bir =
       vil_new_blocked_image_resource(path.c_str(),
@@ -52,7 +53,7 @@ static void test_blocked_image_resource()
   vil_image_resource_sptr lir = vil_load_image_resource(path.c_str());
   vil_blocked_image_resource_sptr bir = blocked_image_resource(lir);
   if (bir) {
-    vcl_cout << "Blocked Image Parameters\n"
+    std::cout << "Blocked Image Parameters\n"
              << "ni = " << bir->ni() << " nj = " << bir->nj()
              << " nplanes = "  << bir->nplanes() << '\n'
              << "size_block_i = " << bir->size_block_i()
@@ -76,10 +77,10 @@ static void test_blocked_image_resource()
     for (unsigned j = 0; j<lview.nj(); ++j)
     {
       for (unsigned i = 0; i<lview.ni(); ++i)
-        vcl_cout << lview(i,j) << ' ' ;
-      vcl_cout << '\n';
+        std::cout << lview(i,j) << ' ' ;
+      std::cout << '\n';
     }
-    vcl_cout << '\n';
+    std::cout << '\n';
 #endif
     // value in upper left corner of last block
     unsigned last_block_val = ni*(nbj-1)*sbj+(nbi-1)*sbi;
@@ -91,8 +92,8 @@ static void test_blocked_image_resource()
   }
 
   ///////-------- ----- Test Copying Blocks -------------------------///////
-  vcl_cout << "Start test for copying blocks\n";
-  vcl_string path2("test_blocked_tiff2.tif");
+  std::cout << "Start test for copying blocks\n";
+  std::string path2("test_blocked_tiff2.tif");
   bool good_copy = true;
   { // scope to close bir2
     vil_blocked_image_resource_sptr bir2 =
@@ -114,18 +115,18 @@ static void test_blocked_image_resource()
           if (blk)
           {
             vil_image_view<unsigned short> bv = blk;
-            vcl_cout << "Block from resource(" << i << ' ' << j << ")["
+            std::cout << "Block from resource(" << i << ' ' << j << ")["
                      <<  bv.ni() << ' ' << bv.nj() <<  "]\n";
             for (unsigned bj = 0; bj<bv.nj(); ++bj)
             {
               for (unsigned bi = 0; bi<bv.ni(); ++bi)
               {
-                vcl_cout << bv(bi,bj) << ' ';
+                std::cout << bv(bi,bj) << ' ';
               }
-              vcl_cout << '\n';
+              std::cout << '\n';
             }
           }
-          vcl_cout << '\n';
+          std::cout << '\n';
 #endif
           if (!bir2->put_block(i, j, *blk))
             good_copy = false;
@@ -136,7 +137,7 @@ static void test_blocked_image_resource()
       TEST("Copy blocks", false, true);
   } // end of bir2 scope
 
-  vcl_cout << "Loading resource from " << path2 << '\n';
+  std::cout << "Loading resource from " << path2 << '\n';
   vil_image_resource_sptr bir2 = vil_load_image_resource(path2.c_str());
   if (bir2&&good_copy)
   {
@@ -147,7 +148,7 @@ static void test_blocked_image_resource()
       {
         good_copy = good_copy && v(i,j)==v2(i,j);
         if (v(i,j)!=v2(i,j))
-          vcl_cout << "v(" << i << ' ' << j <<  ") = " << v(i,j)
+          std::cout << "v(" << i << ' ' << j <<  ") = " << v(i,j)
                    << "vs. " << v2(i,j) << '\n';
       }
   }
@@ -159,12 +160,12 @@ static void test_blocked_image_resource()
   //
   /////////---------------Test the facade -----------------------///////
   //
-  vcl_cout << "Start testing the facade\n";
+  std::cout << "Start testing the facade\n";
   vil_blocked_image_resource_sptr bif =
     vil_new_blocked_image_facade(ir, sbi, sbj);
   if (bif)
   {
-    vcl_cout << "Blocked Image Parameters\n"
+    std::cout << "Blocked Image Parameters\n"
              << "ni = " << bif->ni() << " nj = " << bif->nj()
              << " nplanes = "  << bif->nplanes() << '\n'
              << "size_block_i = " << bif->size_block_i()
@@ -182,13 +183,13 @@ static void test_blocked_image_resource()
       for (unsigned i = 0; i<slbi; ++i)
       {
         good = good && block(i,j)==image((nbi-1)*sbi+i, (nbj-1)*sbj +j);
-        vcl_cout << block(i,j) << ' ';
+        std::cout << block(i,j) << ' ';
       }
-      vcl_cout << '\n';
+      std::cout << '\n';
     }
     TEST("Test lower right corner block", good, true);
   }
-  vcl_cout << "Test copying from one facade to another\n";
+  std::cout << "Test copying from one facade to another\n";
   vil_image_view<unsigned short> dest;
   image.set_size(ni,nj);
   unsigned dsbi = 3, dsbj = 7;
@@ -197,7 +198,7 @@ static void test_blocked_image_resource()
     vil_new_blocked_image_facade(dir, dsbi, dsbj);
   if (dbif)
   {
-    vcl_cout << "Destination Blocked Image Parameters\n"
+    std::cout << "Destination Blocked Image Parameters\n"
              << "size_block_i = " << dbif->size_block_i()
              << "   size_block_j = " << dbif->size_block_j()
              << "   n_block_i = " << dbif->n_block_i()
@@ -267,7 +268,7 @@ static void test_blocked_image_resource()
   //
   /////////--------------Test the cached resource--------------------///////
   //
-  vcl_cout << "Start test of cached resource\n";
+  std::cout << "Start test of cached resource\n";
   sbj = 32;
   vil_blocked_image_resource_sptr cflbir = vil_new_cached_image_resource(bir);
   vil_blocked_image_resource_sptr cfabir = vil_new_cached_image_resource(fabir);
@@ -309,7 +310,7 @@ static void test_blocked_image_resource()
   //
   ///////--------------------- Test NITF Blocked Resource ---------------////
   if(exists){
-    vcl_string nitf_path = image_file + "ff_nitf_16bit.nitf";
+    std::string nitf_path = image_file + "ff_nitf_16bit.nitf";
     vil_image_resource_sptr imgr = vil_load_image_resource(nitf_path.c_str());
     if (imgr)
       {
@@ -328,7 +329,7 @@ static void test_blocked_image_resource()
         vil_image_view<unsigned short> view = bimgr->get_block(0, 0);
         for (unsigned bi = 0; bi<sbi; ++bi)
           for (unsigned bj = 0; bj<sbj; ++bj)
-            vcl_cout << "NITF v(" << bi << ' ' << bj << ")=" << view(bi,bj) << '\n';
+            std::cout << "NITF v(" << bi << ' ' << bj << ")=" << view(bi,bj) << '\n';
         TEST("Test NITF ", view(1,0)==8191&&sbi==2, true);
       }
     else
@@ -344,18 +345,18 @@ int
 test_blocked_image_resource_main( int argc, char* argv[] )
 {
 
-  vcl_cout << "test_blocked_image_resource main\n";
+  std::cout << "test_blocked_image_resource main\n";
   // Alternative if CMake does not pass in the data path as argv[1]
   exists = false;
   if ( argc >= 2 ) {
     image_file = argv[1];
   }else{
-    vcl_string root = testlib_root_dir();
+    std::string root = testlib_root_dir();
     image_file = root + "/core/vil/tests/file_read_data";
   }
   exists = vul_file::is_directory(image_file);
   image_file += "/";
-  vcl_cout << "Start test process\n";
+  std::cout << "Start test process\n";
   test_blocked_image_resource();
   return 0;
 }

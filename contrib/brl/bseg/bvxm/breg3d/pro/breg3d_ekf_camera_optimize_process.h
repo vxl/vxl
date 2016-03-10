@@ -11,7 +11,9 @@
 //  Modifications
 //   Aug 09 2010 jlm  moved to brl/bseg/bvxm/breg3d/pro
 // \endverbatim
-#include <vcl_string.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <string>
 #include <bprb/bprb_process.h>
 
 #include <vil/vil_image_view.h>
@@ -33,7 +35,7 @@ class breg3d_ekf_camera_optimize_process : public bprb_process
   //: Clone the process
   virtual breg3d_ekf_camera_optimize_process* clone() const {return new breg3d_ekf_camera_optimize_process(*this);}
 
-  virtual vcl_string name() const {return "breg3dEkfCameraOptimize";}
+  virtual std::string name() const {return "breg3dEkfCameraOptimize";}
 
   bool init() { return true; }
   bool execute();

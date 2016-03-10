@@ -23,9 +23,11 @@
 // directory utility
 #include <vul/vul_timer.h>
 #include <vcl_where_root_dir.h>
-#include <vcl_fstream.h>
-#include <vcl_algorithm.h>
-#include <vcl_sstream.h>
+#include <fstream>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <algorithm>
+#include <sstream>
 #include <bocl/bocl_device.h>
 #include <bocl/bocl_kernel.h>
 #include <boxm2/util/boxm2_detect_change_blobs.h>
@@ -41,7 +43,7 @@ bool bstm_ocl_change_detection_process_cons(bprb_func_process& pro)
   using namespace bstm_ocl_change_detection_process_globals;
 
   // process takes 9 inputs and two outputs
-  vcl_vector<vcl_string> input_types_(n_inputs_);
+  std::vector<std::string> input_types_(n_inputs_);
   input_types_[0] = "bocl_device_sptr";
   input_types_[1] = "bstm_scene_sptr";
   input_types_[2] = "bstm_opencl_cache_sptr";
@@ -52,7 +54,7 @@ bool bstm_ocl_change_detection_process_cons(bprb_func_process& pro)
   input_types_[7] = "bool";       // true to use max mode probability
   input_types_[8] = "float";       // time
 
-  vcl_vector<vcl_string>  output_types_(n_outputs_);
+  std::vector<std::string>  output_types_(n_outputs_);
   output_types_[0] = "vil_image_view_base_sptr";  // prob of change image
   bool good = pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
 
@@ -68,7 +70,7 @@ bool bstm_ocl_change_detection_process(bprb_func_process& pro)
 {
   using namespace bstm_ocl_change_detection_process_globals;
   if ( pro.n_inputs() < n_inputs_ ) {
-    vcl_cout << pro.name() << ": The input number should be " << n_inputs_<< vcl_endl;
+    std::cout << pro.name() << ": The input number should be " << n_inputs_<< std::endl;
     return false;
   }
 
@@ -80,7 +82,7 @@ bool bstm_ocl_change_detection_process(bprb_func_process& pro)
   vpgl_camera_double_sptr  cam           = pro.get_input<vpgl_camera_double_sptr>(i++);
   vil_image_view_base_sptr img           = pro.get_input<vil_image_view_base_sptr>(i++);
   vil_image_view_base_sptr mask_img      = pro.get_input<vil_image_view_base_sptr>(i++);
-  vcl_string               norm_type     = pro.get_input<vcl_string>(i++);
+  std::string               norm_type     = pro.get_input<std::string>(i++);
   bool                     pmax         = pro.get_input<bool>(i++);
   float                    time         = pro.get_input<float>(i++);
 
@@ -115,17 +117,17 @@ bool bstm_ocl_change_detection_process(bprb_func_process& pro)
                                                norm_type,
                                                time);
   }
-  vcl_cout<<" change time: "<<t.all()<<" ms"<<vcl_endl;
+  std::cout<<" change time: "<<t.all()<<" ms"<<std::endl;
 
 //  float thresh = 0.3;
 //  //detect change blobs
-//  vcl_vector<boxm2_change_blob> blobs;
+//  std::vector<boxm2_change_blob> blobs;
 //  boxm2_util_detect_change_blobs( *change_img,thresh,blobs );
 //
 //  //create a blob image
 //  vil_image_view<float>* blobImg = new vil_image_view<float>(change_img->ni(), change_img->nj());
 //  blobImg->fill(0.0f);
-//  vcl_vector<boxm2_change_blob>::iterator iter;
+//  std::vector<boxm2_change_blob>::iterator iter;
 //  for (iter=blobs.begin(); iter!=blobs.end(); ++iter)
 //  {
 //    //paint each blob pixel white

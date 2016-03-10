@@ -9,9 +9,11 @@
 #include <boct/boct_bit_tree.h>
 #include <boxm2/basic/boxm2_array_3d.h>
 #include <vnl/vnl_vector_fixed.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iostream>
 #include <bstm/io/bstm_cache.h>
-#include <vcl_map.h>
+#include <map>
 #include <vgl/vgl_box_3d.h>
 #include <vgl/algo/vgl_orient_box_3d.h>
 #include <vgl/vgl_intersection.h>
@@ -45,8 +47,8 @@ inline void bstm_label_bb(bstm_block* blk, bstm_block_metadata blk_data, bstm_ti
        if(!vgl_intersection<double>(tree_box,box).is_empty())
        {
          //iterate through leaves of the tree
-         vcl_vector<int> leafBits = bit_tree.get_leaf_bits();
-         vcl_vector<int>::iterator iter;
+         std::vector<int> leafBits = bit_tree.get_leaf_bits();
+         std::vector<int>::iterator iter;
          for (iter = leafBits.begin(); iter != leafBits.end(); ++iter) {
            int currBitIndex = (*iter);
 
@@ -75,7 +77,7 @@ inline void bstm_label_bb(bstm_block* blk, bstm_block_metadata blk_data, bstm_ti
              int bit_index_t = time_tree.traverse(local_time - blk_t->tree_index(local_time) );
              int data_offset_t = time_tree.get_data_index(bit_index_t);
 
-             float prob = 1.0f - (float)vcl_exp(-alpha[data_offset_t] * side_len * blk_data.sub_block_dim_.x());
+             float prob = 1.0f - (float)std::exp(-alpha[data_offset_t] * side_len * blk_data.sub_block_dim_.x());
              //set the label if prob is high enough
              if(prob > p_threshold)
                labels[data_offset_t] = label;
@@ -91,9 +93,9 @@ inline void bstm_label_bb(bstm_block* blk, bstm_block_metadata blk_data, bstm_ti
 inline void bstm_label_oriented_bb(bstm_block* blk, bstm_block_metadata blk_data, bstm_time_block* blk_t, bstm_data_traits<BSTM_LABEL>::datatype *labels,
                     bstm_data_traits<BSTM_ALPHA>::datatype * alpha, double local_time, unsigned char label, vgl_orient_box_3d<double> box, float p_threshold)
 {
-  vcl_vector<vgl_point_3d<double> > corners = box.corners();
+  std::vector<vgl_point_3d<double> > corners = box.corners();
   vgl_box_3d<double> aabb;
-  for(vcl_vector<vgl_point_3d<double> >::const_iterator pt_iter = corners.begin(); pt_iter != corners.end(); pt_iter++)
+  for(std::vector<vgl_point_3d<double> >::const_iterator pt_iter = corners.begin(); pt_iter != corners.end(); pt_iter++)
     aabb.add(*pt_iter);
 
 
@@ -121,8 +123,8 @@ inline void bstm_label_oriented_bb(bstm_block* blk, bstm_block_metadata blk_data
        if(!vgl_intersection<double>(tree_box,aabb ).is_empty())
        {
          //iterate through leaves of the tree
-         vcl_vector<int> leafBits = bit_tree.get_leaf_bits();
-         vcl_vector<int>::iterator iter;
+         std::vector<int> leafBits = bit_tree.get_leaf_bits();
+         std::vector<int>::iterator iter;
          for (iter = leafBits.begin(); iter != leafBits.end(); ++iter) {
            int currBitIndex = (*iter);
 
@@ -147,7 +149,7 @@ inline void bstm_label_oriented_bb(bstm_block* blk, bstm_block_metadata blk_data
              int bit_index_t = time_tree.traverse(local_time - blk_t->tree_index(local_time) );
              int data_offset_t = time_tree.get_data_index(bit_index_t);
 
-             float prob = 1.0f - (float)vcl_exp(-alpha[data_offset_t] * side_len * blk_data.sub_block_dim_.x());
+             float prob = 1.0f - (float)std::exp(-alpha[data_offset_t] * side_len * blk_data.sub_block_dim_.x());
              //set the label if prob is high enough
              if(prob >= p_threshold)
                labels[data_offset_t] = label;
@@ -186,8 +188,8 @@ inline void bstm_label_ball(bstm_block* blk, bstm_block_metadata blk_data, bstm_
        if(bvgl_volume_of_intersection(tree_sphere, sphere) )
        {
          //iterate through leaves of the tree
-         vcl_vector<int> leafBits = bit_tree.get_leaf_bits();
-         vcl_vector<int>::iterator iter;
+         std::vector<int> leafBits = bit_tree.get_leaf_bits();
+         std::vector<int>::iterator iter;
          for (iter = leafBits.begin(); iter != leafBits.end(); ++iter) {
            int currBitIndex = (*iter);
 
@@ -212,7 +214,7 @@ inline void bstm_label_ball(bstm_block* blk, bstm_block_metadata blk_data, bstm_
              int bit_index_t = time_tree.traverse(local_time - blk_t->tree_index(local_time) );
              int data_offset_t = time_tree.get_data_index(bit_index_t);
 
-             float prob = 1.0f - (float)vcl_exp(-alpha[data_offset_t] * side_len * blk_data.sub_block_dim_.x());
+             float prob = 1.0f - (float)std::exp(-alpha[data_offset_t] * side_len * blk_data.sub_block_dim_.x());
              //set the label if prob is high enough
              if(prob > p_threshold)
                labels[data_offset_t] = label;

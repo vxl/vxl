@@ -15,20 +15,22 @@
 #include <boxm/boxm_scene.h>
 #include <bvxm/grid/bvxm_voxel_grid.h>
 #include <bvxm/grid/bvxm_voxel_grid_basic_ops.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iostream>
 #include <boxm/util/boxm_cell_data_traits.h>
 
 template <class T_loc, class T_data>
 bvxm_voxel_grid<T_data>* boxm_scene_to_bvxm_grid(boxm_scene<boct_tree<T_loc, T_data > > &scene,
-                                                 vcl_string input_path,
+                                                 std::string input_path,
                                                  unsigned int resolution_level,
                                                  bool enforce_level = false )
 {
   //Print a little reminder that no inter/extra-polation happens in this function
-  vcl_cout << "Convertion boxm_scene to bvxm_grid\n"
+  std::cout << "Convertion boxm_scene to bvxm_grid\n"
            << "Current resolution level: " << resolution_level << '\n'
            << "Enforcing only level cells ? " << enforce_level << '\n'
-           << "Is grid saving internal nodes? " <<scene.save_internal_nodes() << vcl_endl;
+           << "Is grid saving internal nodes? " <<scene.save_internal_nodes() << std::endl;
 
   typedef boct_tree<T_loc, T_data > tree_type;
 
@@ -72,7 +74,7 @@ bvxm_voxel_grid<T_data>* boxm_scene_to_bvxm_grid(boxm_scene<boct_tree<T_loc, T_d
     tree_type* tree = block->get_tree();
     if (tree->root_level() != root_level)
     {
-      vcl_cerr << "Error converting boxm_scene to bvxm_grid: blocks have different root level\n";
+      std::cerr << "Error converting boxm_scene to bvxm_grid: blocks have different root level\n";
     }
     iter++;
   }
@@ -81,7 +83,7 @@ bvxm_voxel_grid<T_data>* boxm_scene_to_bvxm_grid(boxm_scene<boct_tree<T_loc, T_d
   // same tree max_level definitions
   unsigned int ncells = 1 << (root_level - (int)resolution_level);
 
-  vcl_cout << "Number of cells per grid side: " << ncells << '\n';
+  std::cout << "Number of cells per grid side: " << ncells << '\n';
 
   //create the regular grid
   vgl_vector_3d<unsigned> dim = scene.world_dim(); //number of blocks in the scene
@@ -92,8 +94,8 @@ bvxm_voxel_grid<T_data>* boxm_scene_to_bvxm_grid(boxm_scene<boct_tree<T_loc, T_d
   T_data data_init(boxm_zero_val<T_loc, T_data>());
   grid->initialize_data(data_init);
 
-  vcl_cout << "Grid Size: " << vgl_vector_3d<unsigned>(dimx,dimy,dimz) << '\n'
-           << "In boxm_scene_to_bxm_grid, default voxel value for the grid is: " << data_init << vcl_endl;
+  std::cout << "Grid Size: " << vgl_vector_3d<unsigned>(dimx,dimy,dimz) << '\n'
+           << "In boxm_scene_to_bxm_grid, default voxel value for the grid is: " << data_init << std::endl;
 
   //iterate through grid, locate corresponding position in the octree
   typename bvxm_voxel_grid<T_data>::iterator grid_it=grid->begin();
@@ -113,7 +115,7 @@ bvxm_voxel_grid<T_data>* boxm_scene_to_bvxm_grid(boxm_scene<boct_tree<T_loc, T_d
   for (unsigned z=0; z<dimz; ++grid_it, ++z)
   {
     bvxm_voxel_slab<T_data> slab = (*grid_it);
-    vcl_cout << '.' <<vcl_flush ;
+    std::cout << '.' <<std::flush ;
     for (unsigned y=0; y<dimy;++y)
     {
       for (unsigned x=0; x<dimx; ++x)
@@ -123,7 +125,7 @@ bvxm_voxel_grid<T_data>* boxm_scene_to_bvxm_grid(boxm_scene<boct_tree<T_loc, T_d
         boct_tree_cell<T_loc,T_data>* this_cell = tree->locate_point_at_level(p, resolution_level,true);
 
         if (!this_cell) {
-          vcl_cerr << "In boxm_scene_to_bvxm_grid: cell out of bounds\n";
+          std::cerr << "In boxm_scene_to_bvxm_grid: cell out of bounds\n";
           continue;
         }
 
@@ -131,7 +133,7 @@ bvxm_voxel_grid<T_data>* boxm_scene_to_bvxm_grid(boxm_scene<boct_tree<T_loc, T_d
         T_data cell_val = this_cell->data();
 
         if (level < resolution_level)
-          vcl_cerr << "In boxm_scene_to_bvxm_grid: current level smaller than target level\n";
+          std::cerr << "In boxm_scene_to_bvxm_grid: current level smaller than target level\n";
 
         //if enfoce level is true, there is no iter/extrapolation
         if ((enforce_level)&& (level != resolution_level))
@@ -142,7 +144,7 @@ bvxm_voxel_grid<T_data>* boxm_scene_to_bvxm_grid(boxm_scene<boct_tree<T_loc, T_d
       }
     }
   }
-  vcl_cout << '\n';
+  std::cout << '\n';
   return grid;
 }
 

@@ -250,7 +250,7 @@ jacobian_wrt_loc( vnl_matrix<double>& jacobian, vnl_vector<double> const& from_l
 // for output CENTERED transformation
 void
 rgrl_trans_homography2d::
-write(vcl_ostream& os ) const
+write(std::ostream& os ) const
 {
   //vnl_vector<double> origin(from_centre_.size(), 0.0);
 
@@ -258,7 +258,7 @@ write(vcl_ostream& os ) const
   os << "HOMOGRAPHY2D\n"
   // parameters
      << 2 << '\n'
-     << H_ << from_centre_ << "  " << to_centre_ << vcl_endl;
+     << H_ << from_centre_ << "  " << to_centre_ << std::endl;
 
   // parent
   rgrl_transformation::write( os );
@@ -267,15 +267,15 @@ write(vcl_ostream& os ) const
 // for input
 bool
 rgrl_trans_homography2d::
-read(vcl_istream& is )
+read(std::istream& is )
 {
   int dim;
 
   // skip empty lines
   rgrl_util_skip_empty_lines( is );
 
-  vcl_string str;
-  vcl_getline( is, str );
+  std::string str;
+  std::getline( is, str );
 
   // The token should appear at the beginning of line
   if ( str.find( "HOMOGRAPHY2D" ) != 0 ) {

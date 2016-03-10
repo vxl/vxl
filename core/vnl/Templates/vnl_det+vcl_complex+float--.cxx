@@ -1,4 +1,5 @@
-#include <vcl_complex.h>
+#include <vcl_compiler.h>
+#include <complex>
 #include <vnl/vnl_det.hxx>
 
-VNL_DET_INSTANTIATE(vcl_complex<float>);
+VNL_DET_INSTANTIATE(std::complex<float>);

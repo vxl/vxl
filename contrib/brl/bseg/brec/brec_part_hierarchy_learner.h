@@ -39,8 +39,10 @@
 // \endverbatim
 
 #include <vbl/vbl_ref_count.h>
-#include <vcl_vector.h>
-#include <vcl_iostream.h>
+#include <vector>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iostream>
 #include <vsl/vsl_binary_io.h>
 
 #include <vil/vil_image_view.h>
@@ -51,7 +53,7 @@
 #include <brec/brec_part_base_sptr.h>
 #include <brec/brec_part_hierarchy_sptr.h>
 #include <brec/brec_part_hierarchy_detector_sptr.h>
-#include <vcl_utility.h>
+#include <utility>
 
 
 class brec_part_hierarchy_learner : public vbl_ref_count
@@ -62,11 +64,11 @@ class brec_part_hierarchy_learner : public vbl_ref_count
    typedef bsta_sample_set<double,2> sample_set;
    typedef bsta_histogram<double>* hist_ptr;
    typedef bsta_histogram<double> hist;
-   //typedef vcl_pair<sample_set_ptr,sample_set_ptr> sample_set_ptr_pair;
-   typedef vcl_pair<hist_ptr, hist_ptr> hist_ptr_pair;
-   //typedef vcl_map<unsigned, vcl_map<vcl_pair<unsigned, unsigned>, vcl_pair<brec_part_instance_sptr, vcl_pair<hist_ptr_pair, sample_set_ptr_pair> > >* > layer_n_map;
-   typedef vcl_map<unsigned, vcl_map<vcl_pair<unsigned, unsigned>, vcl_pair<brec_part_instance_sptr, vcl_pair<hist_ptr_pair, sample_set_ptr> > >* > layer_n_map;
-   typedef vcl_map<vcl_pair<unsigned, unsigned>, vcl_pair<brec_part_instance_sptr, vcl_pair<hist_ptr_pair, sample_set_ptr> > > class_map;
+   //typedef std::pair<sample_set_ptr,sample_set_ptr> sample_set_ptr_pair;
+   typedef std::pair<hist_ptr, hist_ptr> hist_ptr_pair;
+   //typedef std::map<unsigned, std::map<std::pair<unsigned, unsigned>, std::pair<brec_part_instance_sptr, std::pair<hist_ptr_pair, sample_set_ptr_pair> > >* > layer_n_map;
+   typedef std::map<unsigned, std::map<std::pair<unsigned, unsigned>, std::pair<brec_part_instance_sptr, std::pair<hist_ptr_pair, sample_set_ptr> > >* > layer_n_map;
+   typedef std::map<std::pair<unsigned, unsigned>, std::pair<brec_part_instance_sptr, std::pair<hist_ptr_pair, sample_set_ptr> > > class_map;
 
    brec_part_hierarchy_learner() : n_(10) {}
 
@@ -124,18 +126,18 @@ class brec_part_hierarchy_learner : public vbl_ref_count
   //  Replaces the histograms with the fitted distributions' histograms
   bool layer_n_fit_distributions(unsigned class_id, unsigned layer_id, unsigned M);
 
-  vcl_vector<vcl_pair<brec_part_instance_sptr, bsta_histogram<float>*> >& stats_layer0() { return stats_layer0_; }
+  std::vector<std::pair<brec_part_instance_sptr, bsta_histogram<float>*> >& stats_layer0() { return stats_layer0_; }
 
-  void print_to_m_file_layer0(vcl_string file_name);
-  void print_to_m_file_layer0_fitted_dists(vcl_string file_name);
+  void print_to_m_file_layer0(std::string file_name);
+  void print_to_m_file_layer0_fitted_dists(std::string file_name);
   void print_layer0();
 
-  void print_to_m_file_layer_n(vcl_string file_name, unsigned class_id, bool print_set);
+  void print_to_m_file_layer_n(std::string file_name, unsigned class_id, bool print_set);
 
  public:
 
   // collect stats for each type of primitive part types
-  vcl_vector<vcl_pair<brec_part_instance_sptr, bsta_histogram<float>*> > stats_layer0_;
+  std::vector<std::pair<brec_part_instance_sptr, bsta_histogram<float>*> > stats_layer0_;
 
   //: for each class, collect stats
   layer_n_map stats_layer_n_;
@@ -151,7 +153,7 @@ class brec_part_hierarchy_learner : public vbl_ref_count
   brec_part_hierarchy_sptr h_; // keep the current hierarchy for visualization purposes.
 
   //: create a hierarchy instance for each class
-  vcl_map<unsigned, brec_part_hierarchy_sptr> h_map_;
+  std::map<unsigned, brec_part_hierarchy_sptr> h_map_;
 };
 
 // Binary io, NOT IMPLEMENTED, signatures defined to use brec_part_hierarchy_learner as a brdb_value

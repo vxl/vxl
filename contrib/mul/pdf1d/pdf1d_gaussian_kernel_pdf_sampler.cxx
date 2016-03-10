@@ -7,7 +7,9 @@
 //
 //=======================================================================
 
-#include <vcl_string.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <string>
 #include <vnl/vnl_vector.h>
 #include <pdf1d/pdf1d_sampler.h>
 
@@ -95,14 +97,14 @@ void pdf1d_gaussian_kernel_pdf_sampler::reseed(unsigned long seed)
 
 //=======================================================================
 
-vcl_string pdf1d_gaussian_kernel_pdf_sampler::is_a() const
+std::string pdf1d_gaussian_kernel_pdf_sampler::is_a() const
 {
-  return vcl_string("pdf1d_gaussian_kernel_pdf_sampler");
+  return std::string("pdf1d_gaussian_kernel_pdf_sampler");
 }
 
 //=======================================================================
 
-bool pdf1d_gaussian_kernel_pdf_sampler::is_class(vcl_string const& s) const
+bool pdf1d_gaussian_kernel_pdf_sampler::is_class(std::string const& s) const
 {
   return pdf1d_sampler::is_class(s) || s==pdf1d_gaussian_kernel_pdf_sampler::is_a();
 }

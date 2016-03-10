@@ -7,7 +7,9 @@
 
 #include "vimt3d_image_3d_of.h"
 
-#include <vcl_string.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <string>
 #include <vcl_cassert.h>
 #include <vsl/vsl_indent.h>
 #include <vsl/vsl_vector_io.h>
@@ -52,7 +54,7 @@ void vimt3d_image_3d_of<T>::set_valid_region(int i0, unsigned ni,
 
 //=======================================================================
 template<class T>
-bool vimt3d_image_3d_of<T>::is_class(vcl_string const& s) const
+bool vimt3d_image_3d_of<T>::is_class(std::string const& s) const
 {
   return s==vimt3d_image_3d_of<T>::is_a() || vimt3d_image_3d::is_class(s);
 }
@@ -78,7 +80,7 @@ vimt_image* vimt3d_image_3d_of<T>::deep_clone() const
 
 //=======================================================================
 template<class T>
-void vimt3d_image_3d_of<T>::print_summary(vcl_ostream& os) const
+void vimt3d_image_3d_of<T>::print_summary(std::ostream& os) const
 {
   os << vsl_indent() << "Transform: " << world2im_
     << vsl_indent() << " Image: " << image_ << '\n';
@@ -88,7 +90,7 @@ void vimt3d_image_3d_of<T>::print_summary(vcl_ostream& os) const
 //=======================================================================
 //: print all data to os
 template<class T>
-void vimt3d_image_3d_of<T>::print_all(vcl_ostream& os) const
+void vimt3d_image_3d_of<T>::print_all(std::ostream& os) const
 {
   os<<vsl_indent();
   vil3d_print_all(os,image_);
@@ -121,9 +123,9 @@ void vimt3d_image_3d_of<T>::b_read(vsl_b_istream& bfs)
     vsl_b_read(bfs,world2im_);
     break;
   default:
-    vcl_cerr << "I/O ERROR: vimt3d_image_3d_of<T>::b_read(vsl_b_istream&)\n"
+    std::cerr << "I/O ERROR: vimt3d_image_3d_of<T>::b_read(vsl_b_istream&)\n"
              << "           Unknown version number "<< version << '\n';
-    bfs.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
+    bfs.is().clear(std::ios::badbit); // Set an unrecoverable IO error on stream
     return;
   }
 }
@@ -165,8 +167,8 @@ bool vimt3d_image_3d_deep_equality(const vimt3d_image_3d_of<T>& lhs,
 
 
 #define VIMT3D_IMAGE_3D_OF_INSTANTIATE(T) \
-VCL_DEFINE_SPECIALIZATION vcl_string vimt3d_image_3d_of<T >::is_a() const \
-{ return vcl_string("vimt3d_image_3d_of<" #T ">"); } \
+VCL_DEFINE_SPECIALIZATION std::string vimt3d_image_3d_of<T >::is_a() const \
+{ return std::string("vimt3d_image_3d_of<" #T ">"); } \
 template class vimt3d_image_3d_of<T >; \
 template bool vimt3d_image_3d_deep_equality(const vimt3d_image_3d_of<T >& lhs, \
                                             const vimt3d_image_3d_of<T >& rhs)

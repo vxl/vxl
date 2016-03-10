@@ -1,7 +1,8 @@
 #include <vidl/vidl_dshow_file_istream.h>
 #include <vidl/vidl_image_list_ostream.h>
 
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <iostream>
 
 int main()
 {
@@ -15,7 +16,7 @@ int main()
   int i = 10;
   while (test1.advance() && test2.advance() && --i)
   {
-    vcl_cout << "Frame: " << i << vcl_endl;
+    std::cout << "Frame: " << i << std::endl;
     test_out1.write_frame(test1.current_frame());
     test_out1.write_frame(test2.current_frame());
     test3.advance();

@@ -4,9 +4,11 @@
 // \author Tim Cootes
 
 #include "clsfy_classifier_1d.h"
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iostream>
 #include <vcl_cassert.h>
-#include <vcl_vector.h>
+#include <vector>
 #include <vsl/vsl_indent.h>
 #include <vsl/vsl_binary_loader.h>
 
@@ -28,7 +30,7 @@ unsigned clsfy_classifier_1d::classify(double input) const
 {
   unsigned N = n_classes();
 
-  vcl_vector<double> probs;
+  std::vector<double> probs;
   class_probabilities(probs, input);
 
   if (N == 1) // This is a binary classifier
@@ -58,7 +60,7 @@ unsigned clsfy_classifier_1d::classify(double input) const
 
 //=======================================================================
 
-void clsfy_classifier_1d::classify_many(vcl_vector<unsigned> &outputs, mbl_data_wrapper<double> &inputs) const
+void clsfy_classifier_1d::classify_many(std::vector<unsigned> &outputs, mbl_data_wrapper<double> &inputs) const
 {
   outputs.resize(inputs.size());
 
@@ -73,19 +75,19 @@ void clsfy_classifier_1d::classify_many(vcl_vector<unsigned> &outputs, mbl_data_
 
 //=======================================================================
 
-vcl_string clsfy_classifier_1d::is_a() const
+std::string clsfy_classifier_1d::is_a() const
 {
-  return vcl_string("clsfy_classifier_1d");
+  return std::string("clsfy_classifier_1d");
 }
 
-bool clsfy_classifier_1d::is_class(vcl_string const& s) const
+bool clsfy_classifier_1d::is_class(std::string const& s) const
 {
   return s == clsfy_classifier_1d::is_a();
 }
 
 //=======================================================================
 
-vcl_ostream& operator<<(vcl_ostream& os, clsfy_classifier_1d const& b)
+std::ostream& operator<<(std::ostream& os, clsfy_classifier_1d const& b)
 {
   os << b.is_a() << ": ";
   vsl_indent_inc(os);
@@ -96,7 +98,7 @@ vcl_ostream& operator<<(vcl_ostream& os, clsfy_classifier_1d const& b)
 
 //=======================================================================
 
-vcl_ostream& operator<<(vcl_ostream& os,const clsfy_classifier_1d* b)
+std::ostream& operator<<(std::ostream& os,const clsfy_classifier_1d* b)
 {
   if (b)
     return os << *b;
@@ -129,11 +131,11 @@ void vsl_b_read(vsl_b_istream& bfs, clsfy_classifier_1d& b)
 //: Calculate the fraction of test samples which are classified incorrectly
 double clsfy_test_error(const clsfy_classifier_1d &classifier,
                         mbl_data_wrapper<double> & test_inputs,
-                        const vcl_vector<unsigned> & test_outputs)
+                        const std::vector<unsigned> & test_outputs)
 {
   assert(test_inputs.size() == test_outputs.size());
 
-  vcl_vector<unsigned> results;
+  std::vector<unsigned> results;
   classifier.classify_many(results, test_inputs);
   unsigned sum_diff = 0;
   const unsigned n = results.size();

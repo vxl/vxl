@@ -12,7 +12,8 @@
 //    Yi Dong  Jun-2015  added new function to optimize the Lev-Marq refinement with given initial 3-d point, height range and search diameter
 // \endverbatim
 
-#include <vcl_vector.h>
+#include <vcl_compiler.h>
+#include <vector>
 #include <vnl/vnl_vector.h>
 #include <vnl/vnl_least_squares_function.h>
 #include <vpgl/vpgl_rational_camera.h>
@@ -32,10 +33,10 @@ class vpgl_cam_trans_search_lsqr : public vnl_least_squares_function
 {
  public:
   //: Constructor
-  vpgl_cam_trans_search_lsqr(vcl_vector<vpgl_rational_camera<double> > const& cams,
-                             vcl_vector<float> const& cam_weights,
-                             vcl_vector< vcl_vector<vgl_point_2d<double> > > const& image_pts,  // for each 3D corr, an array of 2D corrs for each camera
-                             vcl_vector< vgl_point_3d<double> > const& initial_pts);
+  vpgl_cam_trans_search_lsqr(std::vector<vpgl_rational_camera<double> > const& cams,
+                             std::vector<float> const& cam_weights,
+                             std::vector< std::vector<vgl_point_2d<double> > > const& image_pts,  // for each 3D corr, an array of 2D corrs for each camera
+                             std::vector< vgl_point_3d<double> > const& initial_pts);
   //: Destructor
   virtual ~vpgl_cam_trans_search_lsqr() {}
 
@@ -45,15 +46,15 @@ class vpgl_cam_trans_search_lsqr : public vnl_least_squares_function
   virtual void f(vnl_vector<double> const& translation,   // size is 2*cams.size()
                  vnl_vector<double>& projection_errors);  // size is cams.size()*image_pts.size() --> compute a residual for each 3D corr point in each image
 
-  void get_finals(vcl_vector<vgl_point_3d<double> >& finals);
+  void get_finals(std::vector<vgl_point_3d<double> >& finals);
 
  protected:
   vpgl_cam_trans_search_lsqr();//not valid
-  vcl_vector<vgl_point_3d<double> > initial_pts_;
-  vcl_vector<vpgl_rational_camera<double> > cameras_; //cameras
-  vcl_vector<float> cam_weights_; // should sum up to 1
-  vcl_vector<vcl_vector<vgl_point_2d<double> > > corrs_;
-  vcl_vector<vgl_point_3d<double> > finals_;
+  std::vector<vgl_point_3d<double> > initial_pts_;
+  std::vector<vpgl_rational_camera<double> > cameras_; //cameras
+  std::vector<float> cam_weights_; // should sum up to 1
+  std::vector<std::vector<vgl_point_2d<double> > > corrs_;
+  std::vector<vgl_point_3d<double> > finals_;
 };
 
 class vpgl_rational_adjust_multiple_pts
@@ -62,29 +63,29 @@ class vpgl_rational_adjust_multiple_pts
   ~vpgl_rational_adjust_multiple_pts() {}
 
   //: exhaustively searches the parameter space to find the best parameter setting
-  static bool adjust(vcl_vector<vpgl_rational_camera<double> > const& cams,
-                     vcl_vector<float> const& cam_weights,
-                     vcl_vector<vcl_vector< vgl_point_2d<double> > > const& corrs,  // a vector of correspondences for each cam
+  static bool adjust(std::vector<vpgl_rational_camera<double> > const& cams,
+                     std::vector<float> const& cam_weights,
+                     std::vector<std::vector< vgl_point_2d<double> > > const& corrs,  // a vector of correspondences for each cam
                      double radius, int n,       // divide radius into n intervals to generate camera translation space
-                     vcl_vector<vgl_vector_2d<double> >& cam_translations,          // output translations for each cam
-                     vcl_vector<vgl_point_3d<double> >& intersections);             // output 3d locations for each correspondence
+                     std::vector<vgl_vector_2d<double> >& cam_translations,          // output translations for each cam
+                     std::vector<vgl_point_3d<double> >& intersections);             // output 3d locations for each correspondence
 
   //: run Lev-Marq optimization to search the param space to find the best parameter setting
-  static bool adjust_lev_marq(vcl_vector<vpgl_rational_camera<double> > const& cams,
-                              vcl_vector<float> const& cam_weights,
-                              vcl_vector<vcl_vector< vgl_point_2d<double> > > const& corrs, // a vector of correspondences for each cam
-                              vcl_vector<vgl_vector_2d<double> >& cam_translations, // output translations for each cam
-                              vcl_vector<vgl_point_3d<double> >& intersections);    // output 3d locations for each correspondence
+  static bool adjust_lev_marq(std::vector<vpgl_rational_camera<double> > const& cams,
+                              std::vector<float> const& cam_weights,
+                              std::vector<std::vector< vgl_point_2d<double> > > const& corrs, // a vector of correspondences for each cam
+                              std::vector<vgl_vector_2d<double> >& cam_translations, // output translations for each cam
+                              std::vector<vgl_point_3d<double> >& intersections);    // output 3d locations for each correspondence
 
   //: run Lev-Marq optimization to search the param space to find the best parameter setting, with a initial guess and relative diameter given for back-projection
-  static bool adjust_lev_marq(vcl_vector<vpgl_rational_camera<double> > const& cams,          // cameras that will be corrected
-                              vcl_vector<float> const& cam_weights,                           // camera weight parameters
-                              vcl_vector<vcl_vector<vgl_point_2d<double> > > const& corrs,    // a vector of correspondences for each cam
+  static bool adjust_lev_marq(std::vector<vpgl_rational_camera<double> > const& cams,          // cameras that will be corrected
+                              std::vector<float> const& cam_weights,                           // camera weight parameters
+                              std::vector<std::vector<vgl_point_2d<double> > > const& corrs,    // a vector of correspondences for each cam
                               vgl_point_3d<double> const& initial_pt,                         // initial 3-d point for back-projection
                               double const& zmin,                                             // minimum allowed height of the 3-d intersection point
                               double const& zmax,                                             // maximum allowed height of the 3-d intersection point
-                              vcl_vector<vgl_vector_2d<double> >& cam_translations,           // output translations for each camera
-                              vcl_vector<vgl_point_3d<double> >& intersections,               // output 3-d locations for each correspondence
+                              std::vector<vgl_vector_2d<double> >& cam_translations,           // output translations for each camera
+                              std::vector<vgl_point_3d<double> >& intersections,               // output 3-d locations for each correspondence
                               double const relative_diameter = 1.0);                          // relative diameter used in back-projection
 
  protected:

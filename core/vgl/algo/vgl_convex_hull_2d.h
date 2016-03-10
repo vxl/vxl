@@ -14,7 +14,8 @@
 //                  from code by Ken Clarkson (see .txx file for details)
 // \endverbatim
 
-#include <vcl_vector.h>
+#include <vcl_compiler.h>
+#include <vector>
 #include <vgl/vgl_point_2d.h>
 #include <vgl/vgl_polygon.h>
 
@@ -22,14 +23,14 @@ template <class T>
 class vgl_convex_hull_2d
 {
  public:
-  vgl_convex_hull_2d (vcl_vector<vgl_point_2d<T> > const& points);
+  vgl_convex_hull_2d (std::vector<vgl_point_2d<T> > const& points);
   ~vgl_convex_hull_2d () {}
   vgl_polygon<T>  hull();
  private:
   vgl_convex_hull_2d();
   bool hull_valid_;
   void compute_hull();
-  vcl_vector<vgl_point_2d<T> > points_;
+  std::vector<vgl_point_2d<T> > points_;
   vgl_polygon<T> hull_;
 };
 

@@ -41,7 +41,7 @@ class boxm2_ocl_render_trajectory_tableau : public boxm2_cam_ground_trajectory_t
             boxm2_scene_sptr scene,
             unsigned ni,
             unsigned nj,
-            vpgl_perspective_camera<double>* cam, vcl_string identifier = "",vcl_list<vgl_point_3d<double> > waypoints= vcl_list<vgl_point_3d<double> >(0), vcl_string second_scene_file="");
+            vpgl_perspective_camera<double>* cam, std::string identifier = "",std::list<vgl_point_3d<double> > waypoints= std::list<vgl_point_3d<double> >(0), std::string second_scene_file="");
 
   //: virtual function handles mouse and keyboard actions
   virtual bool handle( vgui_event const& e );
@@ -65,7 +65,7 @@ class boxm2_ocl_render_trajectory_tableau : public boxm2_cam_ground_trajectory_t
   unsigned ni_;
   unsigned nj_;
   vgui_statusbar* status_;
-  vcl_string identifier_;
+  std::string identifier_;
 
   //: shared GL_CL image buffer
   GLuint pbuffer_;

@@ -12,8 +12,10 @@
 #include <rgtl/rgtl_octree_cell_bounds.hxx>
 #include <vnl/vnl_random.h>
 #include <vul/vul_timer.h>
-#include <vcl_iostream.h>
-#include <vcl_cmath.h>
+#include <iostream>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <cmath>
 
 static void test_octree_objects()
 {
@@ -64,14 +66,14 @@ static void test_octree_objects()
                                 closest_distances_squared, 0);
   testlib_test_perform(count == 4);
 
-  double radius = vcl_sqrt(closest_distances_squared[count-1]);
-  vcl_vector<int> sphere_ids;
+  double radius = std::sqrt(closest_distances_squared[count-1]);
+  std::vector<int> sphere_ids;
   testlib_test_begin("query sphere");
   count = objects.query_sphere(p, radius, sphere_ids);
   testlib_test_perform(count == 4);
 
-  vcl_cout << "  octree construction took " << (ct_ms*0.001) << "s\n"
-           << "  distance transform took " << (df_ms*0.001) << 's' << vcl_endl;
+  std::cout << "  octree construction took " << (ct_ms*0.001) << "s\n"
+           << "  distance transform took " << (df_ms*0.001) << 's' << std::endl;
 }
 
 TESTMAIN(test_octree_objects);

@@ -8,10 +8,12 @@
 // IEEE Trans on Pattern Recog & Machine Intell, July 2007
 
 #include <mmn/mmn_csp_solver.h>
-#include <vcl_algorithm.h>
-#include <vcl_iterator.h>
-#include <vcl_sstream.h>
-#include <vcl_cmath.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <algorithm>
+#include <iterator>
+#include <sstream>
+#include <cmath>
 #include <vnl/vnl_vector_ref.h>
 #include <mbl/mbl_exception.h>
 #include <mbl/mbl_stl.h>
@@ -30,7 +32,7 @@ mmn_diffusion_solver::mmn_diffusion_solver()
 }
 
 //: Construct with arcs
-mmn_diffusion_solver::mmn_diffusion_solver(unsigned num_nodes,const vcl_vector<mmn_arc>& arcs)
+mmn_diffusion_solver::mmn_diffusion_solver(unsigned num_nodes,const std::vector<mmn_arc>& arcs)
 : max_iterations_(2000), min_iterations_(200), epsilon_(1.0E-5), verbose_(false)
 {
     init();
@@ -46,7 +48,7 @@ void mmn_diffusion_solver::init()
 }
 
 //: Pass in the arcs, which are then used to build the graph object
-void mmn_diffusion_solver::set_arcs(unsigned num_nodes,const vcl_vector<mmn_arc>& arcs)
+void mmn_diffusion_solver::set_arcs(unsigned num_nodes,const std::vector<mmn_arc>& arcs)
 {
     nnodes_=num_nodes;
     arcs_ = arcs;
@@ -54,11 +56,11 @@ void mmn_diffusion_solver::set_arcs(unsigned num_nodes,const vcl_vector<mmn_arc>
     unsigned max_node=0;
     for (unsigned i=0; i<arcs.size();++i)
     {
-        max_node=vcl_max(max_node,arcs[i].max_v());
+        max_node=std::max(max_node,arcs[i].max_v());
     }
     if (nnodes_ != max_node+1)
     {
-        vcl_cerr<<"Arcs appear to be inconsistent with number of nodes in mmn_diffusion_solver::set_arcs\n"
+        std::cerr<<"Arcs appear to be inconsistent with number of nodes in mmn_diffusion_solver::set_arcs\n"
                 <<"Max node in Arcs is: "<<max_node<<" but number of nodes= "<<nnodes_ << '\n';
     }
 
@@ -83,14 +85,14 @@ void mmn_diffusion_solver::set_arcs(unsigned num_nodes,const vcl_vector<mmn_arc>
 }
 
 //: Run the algorithm
-vcl_pair<bool,double> mmn_diffusion_solver::operator()(const vcl_vector<vnl_vector<double> >& node_costs,
-                                  const vcl_vector<vnl_matrix<double> >& pair_costs,
-                                  vcl_vector<unsigned>& x)
+std::pair<bool,double> mmn_diffusion_solver::operator()(const std::vector<vnl_vector<double> >& node_costs,
+                                  const std::vector<vnl_matrix<double> >& pair_costs,
+                                  std::vector<unsigned>& x)
 {
     init();
 
     x.resize(nnodes_);
-    vcl_fill(x.begin(),x.end(),0);
+    std::fill(x.begin(),x.end(),0);
 
     node_costs_.resize(nnodes_);
     for (unsigned i=0;i<nnodes_;++i)
@@ -100,12 +102,12 @@ vcl_pair<bool,double> mmn_diffusion_solver::operator()(const vcl_vector<vnl_vect
     }
     node_costs_phi_ = node_costs_;
     //Initialise potential structure and neighbourhood cost representation
-    const vcl_vector<vcl_vector<vcl_pair<unsigned,unsigned> > >& neighbourhoods=graph_.node_data();
+    const std::vector<std::vector<std::pair<unsigned,unsigned> > >& neighbourhoods=graph_.node_data();
     for (unsigned inode=0; inode<neighbourhoods.size();++inode)
     {
-        const vcl_vector<vcl_pair<unsigned,unsigned> >& neighbours=neighbourhoods[inode];
-        vcl_vector<vcl_pair<unsigned,unsigned> >::const_iterator neighIter=neighbours.begin();
-        vcl_vector<vcl_pair<unsigned,unsigned> >::const_iterator neighIterEnd=neighbours.end();
+        const std::vector<std::pair<unsigned,unsigned> >& neighbours=neighbourhoods[inode];
+        std::vector<std::pair<unsigned,unsigned> >::const_iterator neighIter=neighbours.begin();
+        std::vector<std::pair<unsigned,unsigned> >::const_iterator neighIterEnd=neighbours.end();
         while (neighIter != neighIterEnd) //do all neighbours of this node
         {
             unsigned arcId=neighIter->second;
@@ -117,11 +119,11 @@ vcl_pair<bool,double> mmn_diffusion_solver::operator()(const vcl_vector<vnl_vect
             unsigned minv=arc.min_v();
             if (inode!=v1 && inode!=v2)
             {
-                vcl_string msg("Graph inconsistency in mmn_diffusion_solver::operator()\n");
-                vcl_ostringstream os;
+                std::string msg("Graph inconsistency in mmn_diffusion_solver::operator()\n");
+                std::ostringstream os;
                 os <<"Source node is "<<inode<<" but arc to alleged neighbour joins nodes "<<v1<<"\t to "<<v2<<'\n';
                 msg+= os.str();
-                vcl_cerr<<msg<<vcl_endl;
+                std::cerr<<msg<<std::endl;
                 throw mbl_exception_abort(msg);
             }
 
@@ -150,12 +152,12 @@ vcl_pair<bool,double> mmn_diffusion_solver::operator()(const vcl_vector<vnl_vect
     phi_upd_ = phi_;
 
     //Now keep repeating node-pencil averaging
-    vcl_vector<unsigned > random_indices(nnodes_,0);
+    std::vector<unsigned > random_indices(nnodes_,0);
     mbl_stl_increments(random_indices.begin(),random_indices.end(),0);
     do
     {
         max_delta_=-1.0;
-        vcl_random_shuffle(random_indices.begin(),random_indices.end());
+        std::random_shuffle(random_indices.begin(),random_indices.end());
         //Randomise the order of pencils
         for (unsigned knode=0; knode<nnodes_;++knode)
         {
@@ -170,7 +172,7 @@ vcl_pair<bool,double> mmn_diffusion_solver::operator()(const vcl_vector<vnl_vect
 
         if (verbose_)
         {
-            vcl_cout<<"Max potential delta at iteration "<<count_<<"\t is "<<max_delta_<<vcl_endl;
+            std::cout<<"Max potential delta at iteration "<<count_<<"\t is "<<max_delta_<<std::endl;
         }
     }
     while (continue_diffusion());
@@ -178,7 +180,7 @@ vcl_pair<bool,double> mmn_diffusion_solver::operator()(const vcl_vector<vnl_vect
     //Now check final "trivial" solution is arc consistent
     bool ok = arc_consistent_solution(x);
 
-    return vcl_pair<bool,double>(ok,-solution_cost(x));
+    return std::pair<bool,double>(ok,-solution_cost(x));
 }
 
 void mmn_diffusion_solver::transform_costs()
@@ -196,10 +198,10 @@ void mmn_diffusion_solver::transform_costs(unsigned inode)
     unsigned nStates=node_costs_[inode].size();
     for (unsigned xlabel=0; xlabel<nStates;++xlabel) //Loop over labels of node
     {
-        const vcl_vector<vcl_pair<unsigned,unsigned> >& neighbours=graph_.node_data()[inode];
+        const std::vector<std::pair<unsigned,unsigned> >& neighbours=graph_.node_data()[inode];
 
-        vcl_vector<vcl_pair<unsigned,unsigned> >::const_iterator neighIter=neighbours.begin();
-        vcl_vector<vcl_pair<unsigned,unsigned> >::const_iterator neighIterEnd=neighbours.end();
+        std::vector<std::pair<unsigned,unsigned> >::const_iterator neighIter=neighbours.begin();
+        std::vector<std::pair<unsigned,unsigned> >::const_iterator neighIterEnd=neighbours.end();
         double phiTot=0.0; //total added to node cost
         while (neighIter != neighIterEnd) //Loop over all my neighbours
         {
@@ -221,14 +223,14 @@ void mmn_diffusion_solver::transform_costs(unsigned inode)
     } //labels of this node
 }
 
-double mmn_diffusion_solver::solution_cost(vcl_vector<unsigned>& x)
+double mmn_diffusion_solver::solution_cost(std::vector<unsigned>& x)
 {
     //: Calculate objective function for solution x
     double sumNodes=0.0;
     //Sum over all nodes
-    vcl_vector<vnl_vector<double> >::const_iterator nodeIter=node_costs_.begin();
-    vcl_vector<vnl_vector<double> >::const_iterator nodeIterEnd=node_costs_.end();
-    vcl_vector<unsigned >::const_iterator stateIter=x.begin();
+    std::vector<vnl_vector<double> >::const_iterator nodeIter=node_costs_.begin();
+    std::vector<vnl_vector<double> >::const_iterator nodeIterEnd=node_costs_.end();
+    std::vector<unsigned >::const_iterator stateIter=x.begin();
     while (nodeIter != nodeIterEnd)
     {
         const vnl_vector<double>& ncosts = *nodeIter;
@@ -237,8 +239,8 @@ double mmn_diffusion_solver::solution_cost(vcl_vector<unsigned>& x)
     }
 
     // Sum over all arcs
-    vcl_vector<mmn_arc>::const_iterator arcIter=arcs_.begin();
-    vcl_vector<mmn_arc>::const_iterator arcIterEnd=arcs_.end();
+    std::vector<mmn_arc>::const_iterator arcIter=arcs_.begin();
+    std::vector<mmn_arc>::const_iterator arcIterEnd=arcs_.end();
     double sumArcs=0.0;
     while (arcIter != arcIterEnd)
     {
@@ -256,11 +258,11 @@ void mmn_diffusion_solver::update_potentials_to_neighbours(unsigned inode,
 {
     //Update all potentials from this node to its neighbours
     unsigned nStates=node_cost.size();
-    const vcl_vector<vcl_pair<unsigned,unsigned> >& neighbours=graph_.node_data()[inode];
+    const std::vector<std::pair<unsigned,unsigned> >& neighbours=graph_.node_data()[inode];
     for (unsigned xlabel=0; xlabel<nStates;++xlabel) //loop over my labels (i.e. each pencil)
     {
-        vcl_vector<vcl_pair<unsigned,unsigned> >::const_iterator neighIter=neighbours.begin();
-        vcl_vector<vcl_pair<unsigned,unsigned> >::const_iterator neighIterEnd=neighbours.end();
+        std::vector<std::pair<unsigned,unsigned> >::const_iterator neighIter=neighbours.begin();
+        std::vector<std::pair<unsigned,unsigned> >::const_iterator neighIterEnd=neighbours.end();
         double du=node_cost[xlabel];
         while (neighIter != neighIterEnd) //Loop over all my neighbours
         {
@@ -268,7 +270,7 @@ void mmn_diffusion_solver::update_potentials_to_neighbours(unsigned inode,
             vnl_vector<double>& uToNeigh = u_[inode][neighIter->first];
             vnl_matrix<double>& linkCosts = arc_costs_phi_[inode][neighIter->first];
             double* pgRow=linkCosts[xlabel];
-            uToNeigh[xlabel] = *(vcl_max_element(pgRow,pgRow+linkCosts.cols())); //max arc cost of pencil
+            uToNeigh[xlabel] = *(std::max_element(pgRow,pgRow+linkCosts.cols())); //max arc cost of pencil
 
             du += uToNeigh[xlabel];
             ++neighIter;
@@ -283,34 +285,34 @@ void mmn_diffusion_solver::update_potentials_to_neighbours(unsigned inode,
             vnl_vector<double>& uToNeigh = u_[inode][neighIter->first];
             double delta = (uToNeigh[xlabel] - du);
             phi_upd_[inode][neighIter->first][xlabel] += delta;
-            max_delta_ = vcl_max(max_delta_,delta);
+            max_delta_ = std::max(max_delta_,delta);
             ++neighIter;
         }
     }
 }
 
-bool mmn_diffusion_solver::arc_consistent_solution(vcl_vector<unsigned>& x)
+bool mmn_diffusion_solver::arc_consistent_solution(std::vector<unsigned>& x)
 {
     // Find for each node the maximum label(s), and the maximal connecting arcs
     // Check if this set form an arc consistent solution
     // If so set x to kernel
     // Otherwise x is set to the first maximal node label
 
-    vcl_vector<mmn_csp_solver::label_subset_t > node_labels_subset(nnodes_);
-    vcl_vector<mmn_csp_solver::arc_labels_subset_t > links_subset(arcs_.size());
+    std::vector<mmn_csp_solver::label_subset_t > node_labels_subset(nnodes_);
+    std::vector<mmn_csp_solver::arc_labels_subset_t > links_subset(arcs_.size());
 
     const double epsilon_cost = 1.0E-6;
     for (unsigned inode=0; inode<nnodes_;++inode) //Loop over nodes
     {
         vnl_vector<double> labelCosts=node_costs_phi_[inode];
         //: Find (possibly non-unique) maximal label value
-        double lmax=*vcl_max_element(labelCosts.begin(),labelCosts.end());
+        double lmax=*std::max_element(labelCosts.begin(),labelCosts.end());
         //: Then compile vector of all node indices with label value "near" this
-        vcl_vector<unsigned  > index(labelCosts.size(),0) ;
+        std::vector<unsigned  > index(labelCosts.size(),0) ;
         mbl_stl_increments(index.begin(),index.end(),0);
         //Insert all indices of elements = (or very close to) max value
         mbl_stl_copy_if(index.begin(),index.end(),
-                        vcl_inserter(node_labels_subset[inode],node_labels_subset[inode].end()),
+                        std::inserter(node_labels_subset[inode],node_labels_subset[inode].end()),
                         mbl_stl_pred_create_index_adapter(labelCosts,
                                                           mbl_stl_pred_is_near(lmax,epsilon_cost)));
     }
@@ -328,23 +330,23 @@ bool mmn_diffusion_solver::arc_consistent_solution(vcl_vector<unsigned>& x)
         for (unsigned xlabel=0; xlabel<nStates;++xlabel) //Loop over labels of source node
         {
             double* pgRow=linkCosts[xlabel];
-            double u = *(vcl_max_element(pgRow,pgRow+linkCosts.cols())); //max arc cost of pencil
+            double u = *(std::max_element(pgRow,pgRow+linkCosts.cols())); //max arc cost of pencil
             //And now look for max cost pencil
-            umax = vcl_max(u,umax);
+            umax = std::max(u,umax);
             uToNeigh[xlabel] = u;
         }
 
 
-        vcl_vector<unsigned  > xindex(linkCosts.rows(),0) ;
+        std::vector<unsigned  > xindex(linkCosts.rows(),0) ;
         mbl_stl_increments(xindex.begin(),xindex.end(),0);
-        vcl_vector<unsigned> maxRows;
+        std::vector<unsigned> maxRows;
         //Insert all indices of elements (source node labels) = (or very close to) max value
         mbl_stl_copy_if(xindex.begin(),xindex.end(),
-                        vcl_back_inserter(maxRows),
+                        std::back_inserter(maxRows),
                         mbl_stl_pred_create_index_adapter(uToNeigh,
                                                           mbl_stl_pred_is_near(umax,epsilon_cost)));
-        vcl_vector<unsigned>::iterator rowIter=maxRows.begin();
-        vcl_vector<unsigned>::iterator rowIterEnd=maxRows.end();
+        std::vector<unsigned>::iterator rowIter=maxRows.begin();
+        std::vector<unsigned>::iterator rowIterEnd=maxRows.end();
         while (rowIter != rowIterEnd)
         {
             //And for each such pencil locate the index of the maximising label to which it connects
@@ -355,7 +357,7 @@ bool mmn_diffusion_solver::arc_consistent_solution(vcl_vector<unsigned>& x)
             {
                 if (nearMax(row[xprime]))
                 {
-                    links_subset[arcId].insert(vcl_pair<unsigned ,unsigned >(xlabel,xprime));
+                    links_subset[arcId].insert(std::pair<unsigned ,unsigned >(xlabel,xprime));
                 }
             }
 
@@ -368,7 +370,7 @@ bool mmn_diffusion_solver::arc_consistent_solution(vcl_vector<unsigned>& x)
     bool arcConsistent=cspSolver(node_labels_subset,links_subset);
     if (arcConsistent)
     {
-        const vcl_vector<mmn_csp_solver::label_subset_t >& kernel_node_labels=cspSolver.kernel_node_labels();
+        const std::vector<mmn_csp_solver::label_subset_t >& kernel_node_labels=cspSolver.kernel_node_labels();
         for (unsigned inode=0; inode<nnodes_;++inode)
         {
             x[inode]=*(kernel_node_labels[inode].begin());
@@ -401,17 +403,17 @@ bool mmn_diffusion_solver::continue_diffusion()
         //So periodically check if we have reached an arc consistent top layer solution with non-increasing value
         if (count_ % gACS_CHECK_PERIOD==0)
         {
-            vcl_vector<unsigned> x(nnodes_,0);
+            std::vector<unsigned> x(nnodes_,0);
             bool ok = arc_consistent_solution(x);
             if (ok)
             {
                 double soln_val=solution_cost(x);
                 if (verbose_)
                 {
-                    vcl_cout<<"Arc consistent solution reached. "
-                            <<"\tSolution value= "<<soln_val<<"\tprev soln val= "<<soln_val_prev_<<vcl_endl;
+                    std::cout<<"Arc consistent solution reached. "
+                            <<"\tSolution value= "<<soln_val<<"\tprev soln val= "<<soln_val_prev_<<std::endl;
                 }
-                if (vcl_fabs(soln_val-soln_val_prev_)<epsilon_)
+                if (std::fabs(soln_val-soln_val_prev_)<epsilon_)
                 {
                     ++nConverging_;
                     if (nConverging_>gNCONVERGED)
@@ -430,7 +432,7 @@ bool mmn_diffusion_solver::continue_diffusion()
             {
                 if (verbose_)
                 {
-                    vcl_cout<<"Solution is not yet arc consistent."<<vcl_endl;
+                    std::cout<<"Solution is not yet arc consistent."<<std::endl;
                 }
                 nConverging_=0;
             }

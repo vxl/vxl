@@ -2,12 +2,14 @@
 #define boxm2_bounding_box_parser_h_
 
 #include <expatpplib.h>
-#include <vcl_string.h>
+#include <string>
 
 #include <boxm2/basic/boxm2_block_id.h>
 #include <boxm2/boxm2_block_metadata.h>
 #include <vgl/vgl_point_3d.h>
-#include <vcl_map.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <map>
 
 //block level metadata
 #define DATASET_TAG "dataSet"
@@ -22,15 +24,15 @@ class boxm2_bounding_box_parser : public expatpp
   ~boxm2_bounding_box_parser(void) {}
 
    // ACCESSORS for parser info
-   vcl_string dataset() const { return dataset_; }
+   std::string dataset() const { return dataset_; }
    int entity_id() const { return entity_id_; }
    int volume_id() const { return volume_id_; }
-   vcl_vector< vgl_point_3d<double> >  verts(int entity_id, int volume_id)  {return verts_[entity_id][volume_id];}
+   std::vector< vgl_point_3d<double> >  verts(int entity_id, int volume_id)  {return verts_[entity_id][volume_id];}
 
 
    int version(){return version_;}
-  vcl_map<int, vcl_map<int, vcl_vector< vgl_point_3d<double> > > > verts_;
-  vcl_map<int, vcl_map<int,double> > heights_;
+  std::map<int, std::map<int, std::vector< vgl_point_3d<double> > > > verts_;
+  std::map<int, std::map<int,double> > heights_;
  private:
   virtual void startElement(const XML_Char* name, const XML_Char** atts);
   virtual void endElement(const XML_Char* /*name*/) {}
@@ -38,7 +40,7 @@ class boxm2_bounding_box_parser : public expatpp
 
   void init_params();
 
-  vcl_string dataset_;
+  std::string dataset_;
   int entity_id_;
   int volume_id_;
   double height_;

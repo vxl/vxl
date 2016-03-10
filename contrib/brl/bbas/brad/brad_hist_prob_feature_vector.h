@@ -15,7 +15,9 @@
 //   <none yet>
 // \endverbatim
 
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iostream>
 #include <vnl/vnl_vector.h>
 #include <vil/vil_image_view.h>
 #include <vsl/vsl_binary_io.h>
@@ -37,7 +39,7 @@ class brad_hist_prob_feature_vector
   unsigned size() const { return nbins_+1;}
 
   //: the type name
-  vcl_string type() const {return "brad_hist_prob_feature_vector";}
+  std::string type() const {return "brad_hist_prob_feature_vector";}
 
   //: accessors, setters
   unsigned nbins() const { return nbins_;}
@@ -47,7 +49,7 @@ class brad_hist_prob_feature_vector
   void set_min(float minval) {min_ = minval;}
   void set_max(float maxval) {max_ = maxval;}
   //: print
-  void print(vcl_ostream& os = vcl_cout) const {
+  void print(std::ostream& os = std::cout) const {
     os << "nbins = " << nbins_ << " min = "
        << min_ << " max = " << max_ << '\n';
   }
@@ -61,7 +63,7 @@ void vsl_b_write(vsl_b_ostream &os, const brad_hist_prob_feature_vector& fv);
 
 void vsl_b_read(vsl_b_istream &is, brad_hist_prob_feature_vector& fv);
 
-void vsl_print_summary(vcl_ostream &os, brad_hist_prob_feature_vector& fv);
+void vsl_print_summary(std::ostream &os, brad_hist_prob_feature_vector& fv);
 
 
 #endif // brad_hist_prob_feature_vector_h

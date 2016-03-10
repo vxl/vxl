@@ -14,7 +14,8 @@
 #include <vgui/vgui_command.h>
 #include <vgui/vgui_dialog.h>
 #include <vgui/internals/vgui_accelerate.h>
-#include <vcl_sstream.h>
+#include <vcl_compiler.h>
+#include <sstream>
 
 //-----------------------------------------------------------------------------
 //: Constructor - don't use this, use vgui_clear_tableau_new.
@@ -78,7 +79,7 @@ void vgui_clear_tableau::add_popup(vgui_menu &menu)
   menu.add("Configure",
            new vgui_command_simple<vgui_clear_tableau>(this, &vgui_clear_tableau::config_dialog));
 
-  vcl_string clear_label("Toggle clearing ");
+  std::string clear_label("Toggle clearing ");
   if (clearing_) clear_label+="[on]";
   else clear_label+="[off]";
 
@@ -109,9 +110,9 @@ void vgui_clear_tableau::config_dialog()
   mydialog.checkbox("Accum", accum_val);
   mydialog.checkbox("Stencil", stencil_val);
 
-  vcl_stringstream color_stm;
+  std::stringstream color_stm;
   color_stm << colour[0] << ' ' << colour[1] << ' ' << colour[2];
-  vcl_string color = color_stm.str();
+  std::string color = color_stm.str();
   mydialog.inline_color("Clear Colour",color);
   mydialog.field("Alpha", colour[3] );
 

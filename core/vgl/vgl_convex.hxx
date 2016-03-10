@@ -4,9 +4,10 @@
 //:
 // \file
 #include "vgl_convex.h"
-#include <vcl_limits.h>
-#include <vcl_cmath.h>
-#include <vcl_list.h>
+#include <vcl_compiler.h>
+#include <limits>
+#include <cmath>
+#include <list>
 
 
 //: Calculate the negative cosine of the angle from dir to next - current.
@@ -19,8 +20,8 @@ static T get_nc_angle(const vgl_vector_2d<T> &last_dir,
                       const vgl_point_2d<T> &next)
 {
   vgl_vector_2d<T> v = next - current;
-  double eps = vcl_sqrt(current.x() * current.x() + current.y() * current.y())
-    * vcl_numeric_limits<T>::epsilon();
+  double eps = std::sqrt(current.x() * current.x() + current.y() * current.y())
+    * std::numeric_limits<T>::epsilon();
 
   //if the two points are on top of each other, pretend it is a very bad angle.
   // Use an illegal cosine value to indicate this.
@@ -29,15 +30,15 @@ static T get_nc_angle(const vgl_vector_2d<T> &last_dir,
 }
 
 template <class T>
-vgl_polygon<T> vgl_convex_hull(vcl_vector<vgl_point_2d<T> > const& points)
+vgl_polygon<T> vgl_convex_hull(std::vector<vgl_point_2d<T> > const& points)
 {
   vgl_polygon<T> hull(1);
   if (points.empty()) return hull;
 
-  typedef typename vcl_list<vgl_point_2d<T> >::iterator ITER;
+  typedef typename std::list<vgl_point_2d<T> >::iterator ITER;
 
   // A list of points still not used.
-  vcl_list<vgl_point_2d<T> > pts(points.begin(), points.end());
+  std::list<vgl_point_2d<T> > pts(points.begin(), points.end());
 
   // Find left most point.
   ITER start = pts.begin();
@@ -91,7 +92,7 @@ vgl_polygon<T> vgl_convex_hull(vcl_vector<vgl_point_2d<T> > const& points)
 
 #undef VGL_CONVEX_INSTANTIATE
 #define VGL_CONVEX_INSTANTIATE(T) \
-template vgl_polygon<T > vgl_convex_hull(const vcl_vector<vgl_point_2d<T > >&)
+template vgl_polygon<T > vgl_convex_hull(const std::vector<vgl_point_2d<T > >&)
 
 
 #endif // vgl_convex_hxx_

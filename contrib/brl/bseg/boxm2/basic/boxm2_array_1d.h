@@ -2,10 +2,12 @@
 #define boxm2_array_1d_h_
 //:
 // \file
-#include <vcl_new.h>
+#include <new>
 #include <vcl_cassert.h>
-#include <vcl_iosfwd.h>
-#include <vcl_cstddef.h> // for ptrdiff_t and size_t
+#include <iosfwd>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <cstddef> // for ptrdiff_t and size_t
 
 //: A simple wrapper for a buffer.
 //  This class does not have ownership over data,
@@ -13,7 +15,7 @@
 template <class T>
 struct boxm2_array_1d
 {
-    typedef vcl_size_t size_type;
+    typedef std::size_t size_type;
     typedef T element_type;
 
     typedef T       *iterator;
@@ -62,7 +64,7 @@ struct boxm2_array_1d
 
     //: Get the ith element.
     // #define NDEBUG to turn bounds checking off.
-    reference       operator[](vcl_ptrdiff_t i)
+    reference       operator[](std::ptrdiff_t i)
     {
       assert (i >= 0 && i < end_ - begin_);
       return begin_[i];
@@ -70,7 +72,7 @@ struct boxm2_array_1d
 
     //: Get the ith element.
     // #define NDEBUG to turn bounds checking off.
-    const_reference operator[](vcl_ptrdiff_t i) const
+    const_reference operator[](std::ptrdiff_t i) const
     {
       assert (i >= 0 && i < end_ - begin_);
       return begin_[i];
@@ -84,6 +86,6 @@ struct boxm2_array_1d
 };
 
 VCL_TEMPLATE_EXPORT template <class T>
-vcl_ostream& operator<<(vcl_ostream &, boxm2_array_1d<T> const &);
+std::ostream& operator<<(std::ostream &, boxm2_array_1d<T> const &);
 
 #endif // boxm2_array_1d_h_

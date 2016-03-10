@@ -7,7 +7,9 @@
 // \author Ali Osman Ulusoy
 // \date October 20, 2013
 
-#include <vcl_fstream.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <fstream>
 #include <bstm/io/bstm_cache.h>
 #include <bstm/io/bstm_lru_cache.h>
 #include <bstm/bstm_scene.h>
@@ -30,7 +32,7 @@ bool bstm_cpp_copy_data_to_future_process_cons(bprb_func_process& pro)
   using namespace bstm_cpp_copy_data_to_future_process_globals;
 
   //process takes 1 input
-  vcl_vector<vcl_string> input_types_(n_inputs_);
+  std::vector<std::string> input_types_(n_inputs_);
 
   input_types_[0] = "bstm_scene_sptr";
   input_types_[1] = "bstm_cache_sptr";
@@ -39,7 +41,7 @@ bool bstm_cpp_copy_data_to_future_process_cons(bprb_func_process& pro)
 
   // process has 0 output:
   // output[0]: scene sptr
-  vcl_vector<vcl_string>  output_types_(n_outputs_);
+  std::vector<std::string>  output_types_(n_outputs_);
 
   bool good = pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
   return good;
@@ -51,7 +53,7 @@ bool bstm_cpp_copy_data_to_future_process(bprb_func_process& pro)
   using namespace bstm_cpp_copy_data_to_future_process_globals;
 
   if ( pro.n_inputs() < n_inputs_ ) {
-    vcl_cout << pro.name() << ": The input number should be " << n_inputs_<< vcl_endl;
+    std::cout << pro.name() << ": The input number should be " << n_inputs_<< std::endl;
     return false;
   }
 
@@ -63,34 +65,34 @@ bool bstm_cpp_copy_data_to_future_process(bprb_func_process& pro)
 
 
   //bstm app query
-  vcl_string app_data_type;
+  std::string app_data_type;
   int apptypesize;
-  vcl_vector<vcl_string> valid_types;
+  std::vector<std::string> valid_types;
   valid_types.push_back(bstm_data_traits<BSTM_MOG6_VIEW_COMPACT>::prefix());
   valid_types.push_back(bstm_data_traits<BSTM_MOG3_GREY>::prefix());
   valid_types.push_back(bstm_data_traits<BSTM_GAUSS_RGB>::prefix());
   if ( !bstm_util::verify_appearance( *scene, valid_types, app_data_type, apptypesize ) ) {
-    vcl_cout<<"bstm_cpp_copy_data_to_future_process ERROR: scene doesn't have BSTM_MOG6_VIEW_COMPACT or BSTM_MOG3_GREY or BSTM_GAUSS_RGB data type"<<vcl_endl;
+    std::cout<<"bstm_cpp_copy_data_to_future_process ERROR: scene doesn't have BSTM_MOG6_VIEW_COMPACT or BSTM_MOG3_GREY or BSTM_GAUSS_RGB data type"<<std::endl;
     return false;
   }
 
-  vcl_string nobs_data_type;
+  std::string nobs_data_type;
   int nobstypesize;
   valid_types.empty();
   valid_types.push_back(bstm_data_traits<BSTM_NUM_OBS>::prefix());
   valid_types.push_back(bstm_data_traits<BSTM_NUM_OBS_VIEW_COMPACT>::prefix());
   valid_types.push_back(bstm_data_traits<BSTM_NUM_OBS_SINGLE>::prefix());
   if ( !bstm_util::verify_appearance( *scene, valid_types, nobs_data_type, nobstypesize ) ) {
-    vcl_cout<<"bstm_cpp_copy_data_to_future_process ERROR: scene doesn't have BSTM_NUM_OBS or BSTM_NUM_OBS_VIEW_COMPACT or BSTM_NUM_OBS_SINGLE data type"<<vcl_endl;
+    std::cout<<"bstm_cpp_copy_data_to_future_process ERROR: scene doesn't have BSTM_NUM_OBS or BSTM_NUM_OBS_VIEW_COMPACT or BSTM_NUM_OBS_SINGLE data type"<<std::endl;
     return false;
   }
 
 
-  vcl_cout<<"Copying data to future..."<<vcl_endl;
+  std::cout<<"Copying data to future..."<<std::endl;
 
 
-  vcl_map<bstm_block_id, bstm_block_metadata> blocks = scene->blocks();
-  vcl_map<bstm_block_id, bstm_block_metadata>::iterator blk_iter;
+  std::map<bstm_block_id, bstm_block_metadata> blocks = scene->blocks();
+  std::map<bstm_block_id, bstm_block_metadata>::iterator blk_iter;
   for (blk_iter = blocks.begin(); blk_iter != blocks.end(); ++blk_iter)
   {
     bstm_block_id id = blk_iter->first;
@@ -100,7 +102,7 @@ bool bstm_cpp_copy_data_to_future_process(bprb_func_process& pro)
     double local_time;
     if(!mdata.contains_t(time,local_time))
       continue;
-    vcl_cout<<"Processsing Block: "<<id<<vcl_endl;
+    std::cout<<"Processsing Block: "<<id<<std::endl;
 
     bstm_block     * blk     = cache->get_block(id);
     bstm_time_block* blk_t   = cache->get_time_block(id);
@@ -109,7 +111,7 @@ bool bstm_cpp_copy_data_to_future_process(bprb_func_process& pro)
     bstm_data_base * mog     = cache->get_data_base(id, app_data_type, apptypesize * num_el);
     bstm_data_base * num_obs = cache->get_data_base(id, nobs_data_type,nobstypesize * num_el );
 
-    vcl_vector<bstm_data_base*> datas;
+    std::vector<bstm_data_base*> datas;
     datas.push_back(alph);
     datas.push_back(mog);
     datas.push_back(num_obs);
@@ -122,11 +124,11 @@ bool bstm_cpp_copy_data_to_future_process(bprb_func_process& pro)
     else if (app_data_type == bstm_data_traits<BSTM_GAUSS_RGB>::prefix() &&  nobs_data_type == bstm_data_traits<BSTM_NUM_OBS_SINGLE>::prefix()  )
       bstm_copy_data_to_future_function<BSTM_GAUSS_RGB, BSTM_NUM_OBS_SINGLE> ( blk_t, blk, datas, local_time);
     else {
-      vcl_cerr << "bstm_cpp_copy_data_to_future_process ERROR! Types don't match...." << vcl_endl;
-      vcl_cerr << "App type: " << app_data_type << " and nobs: " << nobs_data_type << vcl_endl;
+      std::cerr << "bstm_cpp_copy_data_to_future_process ERROR! Types don't match...." << std::endl;
+      std::cerr << "App type: " << app_data_type << " and nobs: " << nobs_data_type << std::endl;
     }
   }
 
-  vcl_cout << "Finished copying data scene..." << vcl_endl;
+  std::cout << "Finished copying data scene..." << std::endl;
   return true;
 }

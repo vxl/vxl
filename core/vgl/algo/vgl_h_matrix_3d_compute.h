@@ -15,7 +15,8 @@
 //   <none yet>
 // \endverbatim
 
-#include <vcl_vector.h>
+#include <vcl_compiler.h>
+#include <vector>
 #include <vgl/vgl_homg_point_3d.h>
 #include <vgl/algo/vgl_h_matrix_3d.h>
 
@@ -35,8 +36,8 @@ class vgl_h_matrix_3d_compute
   // They are implemented in terms of the pure virtual compute_ methods.
 
   //: homography from matched points
-  bool compute(vcl_vector<vgl_homg_point_3d<double> > const& points1,
-               vcl_vector<vgl_homg_point_3d<double> > const& points2,
+  bool compute(std::vector<vgl_homg_point_3d<double> > const& points1,
+               std::vector<vgl_homg_point_3d<double> > const& points2,
                vgl_h_matrix_3d<double>& H)
   {
     return compute_p(points1, points2, H);
@@ -44,14 +45,14 @@ class vgl_h_matrix_3d_compute
 
   //: homography from matched points - return h_matrix
   vgl_h_matrix_3d<double>
-  compute(vcl_vector<vgl_homg_point_3d<double> > const& p1,
-          vcl_vector<vgl_homg_point_3d<double> > const& p2)
+  compute(std::vector<vgl_homg_point_3d<double> > const& p1,
+          std::vector<vgl_homg_point_3d<double> > const& p2)
   { vgl_h_matrix_3d<double> H; compute_p(p1, p2, H); return H; }
 
  protected:
   bool verbose_;
-  virtual bool compute_p(vcl_vector<vgl_homg_point_3d<double> > const& points1,
-                         vcl_vector<vgl_homg_point_3d<double> > const& points2,
+  virtual bool compute_p(std::vector<vgl_homg_point_3d<double> > const& points1,
+                         std::vector<vgl_homg_point_3d<double> > const& points2,
                          vgl_h_matrix_3d<double>& H) = 0;
 };
 

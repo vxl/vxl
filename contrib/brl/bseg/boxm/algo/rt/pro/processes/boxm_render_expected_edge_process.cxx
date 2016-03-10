@@ -20,7 +20,9 @@
 #include <boxm/sample/boxm_sample_multi_bin.h>
 #include <boxm/sample/boxm_inf_line_sample.h>
 #include <vil/vil_image_view.h>
-#include <vcl_fstream.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <fstream>
 
 namespace boxm_render_expected_edge_process_globals
 {
@@ -40,7 +42,7 @@ bool boxm_render_expected_edge_process_cons(bprb_func_process& pro)
   //input[4]: n_normal
   //input[5]: num samples used for update
   //input[6]: Threshold for edges
-  vcl_vector<vcl_string> input_types_(n_inputs_);
+  std::vector<std::string> input_types_(n_inputs_);
   input_types_[0] = "boxm_scene_base_sptr";
   input_types_[1] = "vpgl_camera_double_sptr";
   input_types_[2] = "unsigned";
@@ -52,7 +54,7 @@ bool boxm_render_expected_edge_process_cons(bprb_func_process& pro)
   // process has 2 outputs:
   // output[0]: rendered image
   // output[1]: mask
-  vcl_vector<vcl_string>  output_types_(n_outputs_);
+  std::vector<std::string>  output_types_(n_outputs_);
   output_types_[0] = "vil_image_view_base_sptr";
   output_types_[1] = "vil_image_view_base_sptr";
 
@@ -64,7 +66,7 @@ bool boxm_render_expected_edge_process(bprb_func_process& pro)
   using namespace boxm_render_expected_edge_process_globals;
 
   if ( pro.n_inputs() < n_inputs_ ) {
-    vcl_cerr << pro.name() << ": The input number should be " << n_inputs_<< vcl_endl;
+    std::cerr << pro.name() << ": The input number should be " << n_inputs_<< std::endl;
     return false;
   }
 
@@ -90,14 +92,14 @@ bool boxm_render_expected_edge_process(bprb_func_process& pro)
       typedef boct_tree<short, boxm_edge_sample<float> > type;
       boxm_scene<type>* scene = dynamic_cast<boxm_scene<type>*> (scene_ptr.as_pointer());
       if (!scene) {
-        vcl_cerr << "boxm_render_expected_edge_process: the scene is not of expected type\n";
+        std::cerr << "boxm_render_expected_edge_process: the scene is not of expected type\n";
         return false;
       }
       boxm_render_edge_image_rt<short, boxm_edge_sample<float> >(*scene, camera, expected, mask,n_normal,num_updates);
     }
     else
     {
-      vcl_cerr << "Ray tracing version not yet implemented\n";
+      std::cerr << "Ray tracing version not yet implemented\n";
       return false;
     }
     img_mask = new vil_image_view<float>(mask);
@@ -132,7 +134,7 @@ bool boxm_render_expected_edge_process(bprb_func_process& pro)
       typedef boct_tree<short, boxm_inf_line_sample<float> > type;
       boxm_scene<type>* scene = dynamic_cast<boxm_scene<type>*> (scene_ptr.as_pointer());
       if (!scene) {
-        vcl_cerr << "boxm_render_expected_edge_process: the scene is not of expected type\n";
+        std::cerr << "boxm_render_expected_edge_process: the scene is not of expected type\n";
         return false;
       }
       boxm_render_edge_tangent_image_rt<short, boxm_inf_line_sample<float> >(*scene, camera, expected);//, n_normal,num_updates, threshold);
@@ -147,12 +149,12 @@ bool boxm_render_expected_edge_process(bprb_func_process& pro)
     }
     else
     {
-      vcl_cerr << "Ray tracing version not yet implemented\n";
+      std::cerr << "Ray tracing version not yet implemented\n";
       return false;
     }
   }
   else {
-    vcl_cerr << "boxm_render_expected_edge_process: undefined APM type\n";
+    std::cerr << "boxm_render_expected_edge_process: undefined APM type\n";
     return false;
   }
 }

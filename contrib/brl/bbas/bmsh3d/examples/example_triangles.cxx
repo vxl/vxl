@@ -8,14 +8,16 @@
 //  \author Ming-Ching Chang
 //  \date Oct 03, 2006.
 
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iostream>
 #include <vgl/vgl_point_3d.h>
 #include <bmsh3d/bmsh3d_mesh.h>
 #include <bmsh3d/algo/bmsh3d_fileio.h>
 
 int main()
 {
-  vcl_cout << "This example program demonstrates how to use the bmsh3d mesh library\n"
+  std::cout << "This example program demonstrates how to use the bmsh3d mesh library\n"
            << "  to create a mesh of two triangular faces as follows:\n"
            << '\n'
            << "   v2\n"
@@ -32,7 +34,7 @@ int main()
            << "  and 3 edges e01, e12, e20, and finally add the face f0 to the mesh->\n"
            << "  The second step is to create the vertex v3 and two edges e23 and e13,\n"
            << "  and then add the face f1 to the mesh->\n"
-           << "  The result is saved into a PLY2 file example_triangles.ply2." << vcl_endl;
+           << "  The result is saved into a PLY2 file example_triangles.ply2." << std::endl;
 
   bmsh3d_mesh* mesh = new bmsh3d_mesh ();
 

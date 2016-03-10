@@ -4,7 +4,9 @@
 // \file
 #include <bpro/core/bbas_pro/bbas_1d_array_float.h>
 #include <brad/brad_synoptic_function_1d.h>
-#include <vcl_algorithm.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <algorithm>
 
 namespace brad_estimate_synoptic_function_1d_process_globals
 {
@@ -18,14 +20,14 @@ bool brad_estimate_synoptic_function_1d_process_cons(bprb_func_process& pro)
 {
   using namespace brad_estimate_synoptic_function_1d_process_globals;
 
-  vcl_vector<vcl_string> input_types_(n_inputs_);
+  std::vector<std::string> input_types_(n_inputs_);
   input_types_[0] = "bbas_1d_array_float_sptr";
   input_types_[1] = "bbas_1d_array_float_sptr";
   input_types_[2] = "bbas_1d_array_float_sptr";
   input_types_[3] = "bbas_1d_array_float_sptr";
   input_types_[4] = "bool";  // 1 for surface 0 for air
 
-  vcl_vector<vcl_string>  output_types_(n_outputs_);
+  std::vector<std::string>  output_types_(n_outputs_);
   output_types_[0] = "bbas_1d_array_float_sptr";
   output_types_[1] = "float";
 
@@ -46,10 +48,10 @@ bool brad_estimate_synoptic_function_1d_process(bprb_func_process& pro)
   bool surface = pro.get_input<bool>(i++);
 
   unsigned num_samples=(unsigned)intensities->data_array.size();
-  vcl_vector<double> samples(num_samples,0.0f);
-  vcl_vector<double> vis(num_samples,0.0f);
-  vcl_vector<double> camera_elev(num_samples,0.0f);
-  vcl_vector<double> camera_azim(num_samples,0.0f);
+  std::vector<double> samples(num_samples,0.0f);
+  std::vector<double> vis(num_samples,0.0f);
+  std::vector<double> camera_elev(num_samples,0.0f);
+  std::vector<double> camera_azim(num_samples,0.0f);
 
   float mean_intensities = 0.0f ;
   float sum_weights = 0.0f ;
@@ -70,7 +72,7 @@ bool brad_estimate_synoptic_function_1d_process(bprb_func_process& pro)
   if (surface)
   {
     f.fit_intensity_cubic();
-    vcl_cout<<"Cubic Interpolation Model: "<<f.cubic_coef_int()<<" prob density "<<f.cubic_fit_prob_density()<<vcl_endl;
+    std::cout<<"Cubic Interpolation Model: "<<f.cubic_coef_int()<<" prob density "<<f.cubic_fit_prob_density()<<std::endl;
     bbas_1d_array_float_sptr new_obs = new bbas_1d_array_float(num_samples);
     for (unsigned i=0;i<num_samples;++i)
       new_obs->data_array[i]=float(f.cubic_interp_inten(f.arc_length(i)));
@@ -81,7 +83,7 @@ bool brad_estimate_synoptic_function_1d_process(bprb_func_process& pro)
   else
   {
     f.compute_auto_correlation();
-    vcl_vector<double> amps;
+    std::vector<double> amps;
     f.auto_corr_freq_amplitudes(amps);
     bbas_1d_array_float_sptr new_obs = new bbas_1d_array_float(amps.size());
     for (unsigned i=0;i<amps.size();++i)

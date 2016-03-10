@@ -2,25 +2,27 @@
 //:
 // \file
 #include <vgl/vgl_box_3d.h>
-#include <vcl_new.h>
-#include <vcl_iostream.h>
+#include <new>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iostream>
 
 boxm2_stream_scene_cache::boxm2_stream_scene_cache(boxm2_scene_sptr scene,
-                                                   vcl_vector<vcl_string> data_types,
-                                                   vcl_vector<vcl_string> identifiers)
+                                                   std::vector<std::string> data_types,
+                                                   std::vector<std::string> identifiers)
 : blk_buffer_(VXL_NULLPTR), scene_(scene), data_types_(data_types), identifiers_(identifiers)
 {
-  vcl_map<boxm2_block_id, boxm2_block_metadata> blocks = scene->blocks();
-  vcl_map<boxm2_block_id, boxm2_block_metadata>::iterator blk_iter;
+  std::map<boxm2_block_id, boxm2_block_metadata> blocks = scene->blocks();
+  std::map<boxm2_block_id, boxm2_block_metadata>::iterator blk_iter;
   total_bytes_per_block_ = 0;
   for (blk_iter = blocks.begin(); blk_iter != blocks.end(); ++blk_iter)
   {
     boxm2_block_id id = blk_iter->first;
-    vcl_string filename= scene_->data_path() + blk_iter->first.to_string() + ".bin";
+    std::string filename= scene_->data_path() + blk_iter->first.to_string() + ".bin";
     unsigned long filesize= vul_file::size(filename);
     char * temp_buff = new char[filesize];
-    vcl_ifstream ifs;
-    ifs.open(filename.c_str(), vcl_ios::in | vcl_ios::binary);
+    std::ifstream ifs;
+    ifs.open(filename.c_str(), std::ios::in | std::ios::binary);
     if (!ifs)  continue;
     ifs.read(temp_buff, filesize);
     ifs.close();
@@ -33,7 +35,7 @@ boxm2_stream_scene_cache::boxm2_stream_scene_cache(boxm2_scene_sptr scene,
   blk_buffer_ = new(std::nothrow)  uchar16[total_bytes_per_block_];
   if (blk_buffer_ == VXL_NULLPTR)
   {
-    vcl_cout<<"Failed to Allocate Memory"<<vcl_endl;
+    std::cout<<"Failed to Allocate Memory"<<std::endl;
     return ;
   }
   total_bytes_per_block_*=16;
@@ -45,12 +47,12 @@ boxm2_stream_scene_cache::boxm2_stream_scene_cache(boxm2_scene_sptr scene,
       for (int k = bounding_blk_ids.min_z(); k <= bounding_blk_ids.max_z(); ++k)
       {
         boxm2_block_id id(i,j,k);
-        vcl_string filename= scene_->data_path() + id.to_string() + ".bin";
+        std::string filename= scene_->data_path() + id.to_string() + ".bin";
         unsigned long filesize= vul_file::size(filename);
         char * temp_buff = new char[filesize];
 
-        vcl_ifstream ifs;
-        ifs.open(filename.c_str(), vcl_ios::in | vcl_ios::binary);
+        std::ifstream ifs;
+        ifs.open(filename.c_str(), std::ios::in | std::ios::binary);
         if (!ifs) continue;
         ifs.read(temp_buff, filesize);
         ifs.close();
@@ -59,7 +61,7 @@ boxm2_stream_scene_cache::boxm2_stream_scene_cache(boxm2_scene_sptr scene,
 
         int cnt = (int)blk.tree_buff_length();
 
-        vcl_cout.flush();          vcl_memcpy(&blk_buffer_[global_index],blk.trees().data_block(),cnt*16);
+        std::cout.flush();          std::memcpy(&blk_buffer_[global_index],blk.trees().data_block(),cnt*16);
         blk_offsets_.push_back(global_index);
         global_index+=cnt;
       }
@@ -69,12 +71,12 @@ boxm2_stream_scene_cache::boxm2_stream_scene_cache(boxm2_scene_sptr scene,
   {
     unsigned long total_bytes_per_data_type = 0;
 
-    vcl_string identifier = identifiers_[data_type_index];
-    vcl_string data_type  = data_types_[data_type_index];
+    std::string identifier = identifiers_[data_type_index];
+    std::string data_type  = data_types_[data_type_index];
     for (blk_iter = blocks.begin(); blk_iter != blocks.end(); ++blk_iter)
     {
       boxm2_block_id id = blk_iter->first;
-      vcl_string filename = scene_->data_path() + data_type  + "_" + identifier
+      std::string filename = scene_->data_path() + data_type  + "_" + identifier
                           + (identifier=="" ? "" : "_") + blk_iter->first.to_string() + ".bin";
       total_bytes_per_data_type += vul_file::size(filename);
     }
@@ -83,21 +85,21 @@ boxm2_stream_scene_cache::boxm2_stream_scene_cache(boxm2_scene_sptr scene,
     char * data_buffer = new(std::nothrow)  char[total_bytes_per_data_type];
     if (data_buffer == VXL_NULLPTR)
     {
-      vcl_cout<<"Failed to Allocate Memory"<<vcl_endl;
+      std::cout<<"Failed to Allocate Memory"<<std::endl;
       return ;
     }
     unsigned long global_index = 0;
-    vcl_vector<unsigned long> offsets;
+    std::vector<unsigned long> offsets;
     for (int i = bounding_blk_ids.min_x(); i <= bounding_blk_ids.max_x(); ++i) {
       for (int j = bounding_blk_ids.min_y(); j <= bounding_blk_ids.max_y(); ++j) {
         for (int k = bounding_blk_ids.min_z(); k <= bounding_blk_ids.max_z(); ++k)
         {
           boxm2_block_id id(i,j,k);
-          vcl_string filename = scene_->data_path() + data_type  + "_" + identifier
+          std::string filename = scene_->data_path() + data_type  + "_" + identifier
                               + (identifier=="" ? "" : "_") + id.to_string() + ".bin";
           unsigned long filesize= vul_file::size(filename);
-          vcl_ifstream ifs;
-          ifs.open(filename.c_str(), vcl_ios::in | vcl_ios::binary);
+          std::ifstream ifs;
+          ifs.open(filename.c_str(), std::ios::in | std::ios::binary);
           if (!ifs) continue;
           ifs.read(&data_buffer[global_index], (int) filesize);
           int cnt = (int)ifs.gcount();
@@ -116,7 +118,7 @@ boxm2_stream_scene_cache::boxm2_stream_scene_cache(boxm2_scene_sptr scene,
 boxm2_stream_scene_cache::~boxm2_stream_scene_cache()
 {
   delete [] blk_buffer_;
-  vcl_map<data_type, char *>::iterator iter;
+  std::map<data_type, char *>::iterator iter;
   for (iter = data_buffers_.begin(); iter!= data_buffers_.end(); ++iter)
     delete [] iter->second;
 }

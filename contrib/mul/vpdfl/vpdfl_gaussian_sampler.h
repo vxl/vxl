@@ -10,8 +10,8 @@
 // \date 19-Apr-2001
 // \brief Sampler class for Multi-Variate Gaussian.
 
-#include <vcl_string.h>
-#include <vcl_iosfwd.h>
+#include <string>
+#include <iosfwd>
 #include <vnl/vnl_fwd.h>
 #include <vnl/vnl_random.h>
 #include <vpdfl/vpdfl_sampler_base.h>
@@ -41,9 +41,11 @@ class vpdfl_gaussian_sampler :public vpdfl_sampler_base
   //: Reseeds the internal random number generator
   // To achieve quasi-random initialisation use;
   // \code
-  // #include <vcl_ctime.h>
+  // #include <vcl_compiler.h>
+  // #include <iostream>
+  // #include <ctime>
   // ..
-  // sampler.reseed(vcl_time(0));
+  // sampler.reseed(std::time(0));
   // \endcode
   virtual void reseed(unsigned long);
 
@@ -52,19 +54,19 @@ class vpdfl_gaussian_sampler :public vpdfl_sampler_base
   const vpdfl_gaussian& gaussian() const;
 
   //: Name of the class
-  virtual vcl_string is_a() const;
+  virtual std::string is_a() const;
 
   //: Does the name of the class match the argument?
-  virtual bool is_class(vcl_string const& s) const;
+  virtual bool is_class(std::string const& s) const;
 
   //: Create a copy on the heap and return base class pointer
   virtual vpdfl_sampler_base* clone() const;
 };
 
 //: Stream output operator for class reference
-vcl_ostream& operator<<(vcl_ostream& os,const vpdfl_gaussian_sampler& b);
+std::ostream& operator<<(std::ostream& os,const vpdfl_gaussian_sampler& b);
 
 //: Stream output operator for class pointer
-vcl_ostream& operator<<(vcl_ostream& os,const vpdfl_gaussian_sampler* b);
+std::ostream& operator<<(std::ostream& os,const vpdfl_gaussian_sampler* b);
 
 #endif // vpdfl_gaussian_sampler_h

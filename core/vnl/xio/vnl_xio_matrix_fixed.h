@@ -22,20 +22,21 @@
 // \endverbatim
 
 #include <vnl/vnl_matrix_fixed.h>
-#include <vcl_string.h>
-#include <vcl_iosfwd.h>
+#include <string>
+#include <vcl_compiler.h>
+#include <iosfwd>
 
 //: XML save vnl_matrix_fixed to stream.
 // \relatesalso vnl_matrix_fixed
 template <class T, unsigned m, unsigned n>
-void x_write(vcl_ostream & os, vnl_matrix_fixed<T,m,n> const& v,
-             vcl_string name="vnl_matrix_fixed");
+void x_write(std::ostream & os, vnl_matrix_fixed<T,m,n> const& v,
+             std::string name="vnl_matrix_fixed");
 
 //: XML save vnl_matrix_fixed as a 3-level tree to stream.
 // \relatesalso vnl_matrix_fixed
 template <class T, unsigned m, unsigned n>
-void x_write_tree(vcl_ostream & os, vnl_matrix_fixed<T,m,n> const& v,
-                  vcl_string name="vnl_matrix_fixed");
+void x_write_tree(std::ostream & os, vnl_matrix_fixed<T,m,n> const& v,
+                  std::string name="vnl_matrix_fixed");
 
 #define VNL_XIO_MATRIX_FIXED_INSTANTIATE(T) extern "Please #include <vnl/xio/vnl_xio_matrix_fixed.hxx> first"
 

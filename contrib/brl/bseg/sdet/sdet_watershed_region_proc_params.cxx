@@ -6,18 +6,20 @@
 //
 //-----------------------------------------------------------------------------
 
-#include <vcl_iostream.h>
-#include <vcl_sstream.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iostream>
+#include <sstream>
 
 //-----------------------------------------------------------------------------
 //
 //:   Checks that parameters are within acceptable bounds
 //    Note that msg << ends seems to restart the string and erase the
 //    previous string. We should only use it as the last call, use
-//    vcl_endl otherwise.
+//    std::endl otherwise.
 bool sdet_watershed_region_proc_params::SanityCheck()
 {
-  vcl_stringstream msg;
+  std::stringstream msg;
   bool valid = true;
 
   if (min_area_<2)
@@ -27,13 +29,13 @@ bool sdet_watershed_region_proc_params::SanityCheck()
   }
 
   valid = valid && wp_.SanityCheck();
-  msg << wp_.GetErrorMsg() << vcl_ends;
+  msg << wp_.GetErrorMsg() << std::ends;
 
   SetErrorMsg(msg.str().c_str());
   return valid;
 }
 
-vcl_ostream& operator << (vcl_ostream& os, const sdet_watershed_region_proc_params& p)
+std::ostream& operator << (std::ostream& os, const sdet_watershed_region_proc_params& p)
 {
   return
   os << "sdet_watershed_region_proc_params:\n[---\n" << p.wp_

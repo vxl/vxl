@@ -19,7 +19,9 @@
 // \endverbatim
 //
 //-----------------------------------------------------------------------------
-#include <vcl_vector.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <vector>
 #include <vsol/vsol_digital_curve_2d.h>
 #include <bsta/bsta_histogram.h>
 #include "bwm_reg_edge_champher.h"
@@ -32,10 +34,10 @@ class bwm_reg_matcher
 
   // Constructors/Initializers/Destructors-------------------------------------
 
-  bwm_reg_matcher(vcl_vector<vsol_digital_curve_2d_sptr> const& model_edges,
+  bwm_reg_matcher(std::vector<vsol_digital_curve_2d_sptr> const& model_edges,
                   unsigned search_col_origin, unsigned search_row_origin,
                   unsigned search_cols, unsigned search_rows,
-                  vcl_vector<vsol_digital_curve_2d_sptr> const& search_edges
+                  std::vector<vsol_digital_curve_2d_sptr> const& search_edges
                  );
   ~bwm_reg_matcher(){}
 
@@ -50,7 +52,7 @@ class bwm_reg_matcher
   //: Filter out model edges whose samples  don't lie within the specified distance of some search edge point
   bool close_edges(double filter_distance, double angle_threshold,
                    unsigned min_curve_length,
-                   vcl_vector<vsol_digital_curve_2d_sptr>& close_edges);
+                   std::vector<vsol_digital_curve_2d_sptr>& close_edges);
 
   //: Debug
   void print_hist(){min_hist_.print();}
@@ -82,11 +84,11 @@ class bwm_reg_matcher
   unsigned model_rows_;
 
   //: the model edges
-  vcl_vector<vsol_digital_curve_2d_sptr> model_edges_;
+  std::vector<vsol_digital_curve_2d_sptr> model_edges_;
 
 
   //: the edges to search for a match
-  vcl_vector<vsol_digital_curve_2d_sptr> search_edges_;
+  std::vector<vsol_digital_curve_2d_sptr> search_edges_;
 
   //: the index for efficient search
   bwm_reg_edge_champher champh_;

@@ -3,8 +3,10 @@
 
 #include <vnl/vnl_math.h>
 
-#include <vcl_algorithm.h>
-#include <vcl_vector.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <algorithm>
+#include <vector>
 
 #include <vcl_cassert.h>
 
@@ -42,7 +44,7 @@ rrel_lts_obj::fcn( vect_const_iter begin, vect_const_iter end,
   // compute the squared residuals are unlikely to seriously affect
   // anything.
 
-  vcl_vector<double> sq_res;
+  std::vector<double> sq_res;
   sq_res.reserve( end - begin );
   for ( ; begin != end; ++begin ) {
     sq_res.push_back( (*begin) * (*begin) );
@@ -62,8 +64,8 @@ rrel_lts_obj::fcn( vect_const_iter begin, vect_const_iter end,
 
   // 3. Sort the squared residuals so that all the smallest residuals
   // are in positions less than index.
-  vcl_vector<double>::iterator loc = sq_res.begin() + index;
-  vcl_nth_element( sq_res.begin(), loc, sq_res.end() );
+  std::vector<double>::iterator loc = sq_res.begin() + index;
+  std::nth_element( sq_res.begin(), loc, sq_res.end() );
 
   // 4. Sum them up.
   double sum=0;

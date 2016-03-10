@@ -6,7 +6,9 @@
 // \author Tim Cootes
 
 #include "vimt_image_2d_of.h"
-#include <vcl_string.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <string>
 #include <vcl_cassert.h>
 #include <vsl/vsl_indent.h>
 #include <vsl/vsl_vector_io.h>
@@ -43,7 +45,7 @@ void vimt_image_2d_of<T>::set_valid_region(int x0, unsigned nx, int y0, unsigned
 }
 
 template<class T>
-bool vimt_image_2d_of<T>::is_class(vcl_string const& s) const
+bool vimt_image_2d_of<T>::is_class(std::string const& s) const
 {
   return s==vimt_image_2d_of<T>::is_a() || vimt_image_2d::is_class(s);
 }
@@ -68,7 +70,7 @@ vimt_image* vimt_image_2d_of<T>::deep_clone() const
 //=======================================================================
 
 template<class T>
-void vimt_image_2d_of<T>::print_summary(vcl_ostream& os) const
+void vimt_image_2d_of<T>::print_summary(std::ostream& os) const
 {
   os<< vsl_indent() << "Transform: " << world2im_ << " Image: "
     << image_<< '\n';
@@ -77,7 +79,7 @@ void vimt_image_2d_of<T>::print_summary(vcl_ostream& os) const
 //=======================================================================
 //: print all data to os
 template<class T>
-void vimt_image_2d_of<T>::print_all(vcl_ostream& os) const
+void vimt_image_2d_of<T>::print_all(std::ostream& os) const
 {
   os<<vsl_indent();
   vil_print_all(os,image_);
@@ -111,9 +113,9 @@ void vimt_image_2d_of<T>::b_read(vsl_b_istream& bfs)
     vsl_b_read(bfs,world2im_);
     break;
   default:
-    vcl_cerr << "I/O ERROR: vimt_image_2d_of<T>::b_read(vsl_b_istream&)\n"
+    std::cerr << "I/O ERROR: vimt_image_2d_of<T>::b_read(vsl_b_istream&)\n"
              << "           Unknown version number "<< version << '\n';
-    bfs.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
+    bfs.is().clear(std::ios::badbit); // Set an unrecoverable IO error on stream
     return;
   }
 }
@@ -130,8 +132,8 @@ bool vimt_image_2d_of<T>::operator==(const vimt_image_2d_of<T> &other) const
 }
 
 #define VIMT_IMAGE_2D_OF_INSTANTIATE(T) \
-VCL_DEFINE_SPECIALIZATION vcl_string vimt_image_2d_of<T >::is_a() const \
-{ return vcl_string("vimt_image_2d_of<" #T ">"); }\
+VCL_DEFINE_SPECIALIZATION std::string vimt_image_2d_of<T >::is_a() const \
+{ return std::string("vimt_image_2d_of<" #T ">"); }\
 template class vimt_image_2d_of<T >
 
 #endif // vimt_image_2d_of_hxx_

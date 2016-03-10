@@ -1,9 +1,10 @@
 // This is core/vgui/impl/win32/vgui_win32_utils.cxx
 
 #include "vgui_win32_utils.h"
-#include <vcl_iostream.h>
+#include <iostream>
 #include <vcl_cassert.h>
-#include <vcl_cstddef.h> // for vcl_size_t
+#include <vcl_compiler.h>
+#include <cstddef> // for std::size_t
 
 // (Create if necessary and) return singleton instance of this class.
 vgui_win32_utils* vgui_win32_utils::instance()
@@ -16,7 +17,7 @@ vgui_win32_utils* vgui_win32_utils::instance()
 // Convert a vgui_menu to equivalent MENUTEMPLATE structure used by
 // Win32 function LoadMenuIndirect.
 HMENU vgui_win32_utils::vgui_menu_to_win32(vgui_menu const &vguimenu,
-                                           vcl_vector<vgui_command_sptr> &callbacks_, HACCEL *hAccel, bool isPopup)
+                                           std::vector<vgui_command_sptr> &callbacks_, HACCEL *hAccel, bool isPopup)
 {
   HMENU hMenu;
   MENUITEMTEMPLATEHEADER *pMenuHeader;
@@ -34,13 +35,13 @@ HMENU vgui_win32_utils::vgui_menu_to_win32(vgui_menu const &vguimenu,
 
   pMenu = (unsigned char *)malloc(sizeof(MENUITEMTEMPLATEHEADER) + menu_capacity);
   if ( pMenu == NULL ) {
-    vcl_cerr << "Memory allocation error\n";
+    std::cerr << "Memory allocation error\n";
     return NULL;
   }
 
   pAccel = (ACCEL *)malloc(sizeof(ACCEL)*accel_capacity);
   if ( pAccel == NULL )
-    vcl_cerr << "Memory allocation error\n";
+    std::cerr << "Memory allocation error\n";
 
   // Fill up the MENUITEMTEMPLATEHEADER structure.
   pMenuHeader = (MENUITEMTEMPLATEHEADER *)pMenu;
@@ -80,7 +81,7 @@ int vgui_win32_utils::addMenuItems(vgui_menu const &vguimenu, int offset_in, boo
 
   MENUITEMTEMPLATE *pMenuItem;
   WCHAR *pMenuItemText;
-  vcl_string menuItemText;
+  std::string menuItemText;
   int stride, offset; // in unit of unsigned char
 
   // Loop over all menu items and convert them into MENUITEMTEMPLATE
@@ -110,7 +111,7 @@ int vgui_win32_utils::addMenuItems(vgui_menu const &vguimenu, int offset_in, boo
       addAccelerator(menuItemText, vguimenu[i], menuItemID);
 
       // Copy the menu item text.
-      vcl_size_t j;
+      std::size_t j;
       pMenuItemText = pMenuItem->mtString;
       for ( j = 0; j < menuItemText.size(); j++ )
         *(pMenuItemText+j) = (WCHAR)menuItemText.c_str()[j];
@@ -124,7 +125,7 @@ int vgui_win32_utils::addMenuItems(vgui_menu const &vguimenu, int offset_in, boo
       pMenuItem->mtOption |= MF_POPUP;
 
       menuItemText = vguimenu[i].name;
-      vcl_size_t j;
+      std::size_t j;
       // Note that the MENUITEMTEMPLATE structure for an item that opens a
       // drop-down menu or submenu does not contain the mtID member.
       pMenuItemText = (WCHAR *)&pMenuItem->mtID;
@@ -148,7 +149,7 @@ int vgui_win32_utils::addMenuItems(vgui_menu const &vguimenu, int offset_in, boo
       menu_capacity <<= 1; // double the capacity.
       pMenu = (unsigned char *)realloc(pMenu, sizeof(MENUITEMTEMPLATEHEADER)+menu_capacity);
       if ( pMenu == NULL ) {
-        vcl_cerr << "Memory allocation error\n";
+        std::cerr << "Memory allocation error\n";
         return 0;
       }
     }
@@ -160,7 +161,7 @@ int vgui_win32_utils::addMenuItems(vgui_menu const &vguimenu, int offset_in, boo
 // Convert a vgui_menu to equivalent extended MENUTEMPLATE structure used by
 // Win32 function LoadMenuIndirect.
 HMENU vgui_win32_utils::vgui_menu_to_win32ex(vgui_menu const &vguimenu,
-                                             vcl_vector<vgui_command_sptr> &callbacks_, HACCEL *hAccel, bool isPopup)
+                                             std::vector<vgui_command_sptr> &callbacks_, HACCEL *hAccel, bool isPopup)
 {
   HMENU hMenu;
   MENUEX_TEMPLATE_HEADER *pMenuHeader;
@@ -179,13 +180,13 @@ HMENU vgui_win32_utils::vgui_menu_to_win32ex(vgui_menu const &vguimenu,
 
   pMenu = (unsigned char *)malloc(sizeof(MENUEX_TEMPLATE_HEADER) + menu_capacity);
   if ( pMenu == NULL ) {
-    vcl_cerr << "Memory allocation error\n";
+    std::cerr << "Memory allocation error\n";
     return NULL;
   }
 
   pAccel = (ACCEL *)malloc(sizeof(ACCEL)*accel_capacity);
   if ( pAccel == NULL )
-    vcl_cerr << "Memory allocation error\n";
+    std::cerr << "Memory allocation error\n";
 
   // Fill up the MENUEX_TEMPLATE_HEADER structure.
   pMenuHeader = (MENUEX_TEMPLATE_HEADER *)pMenu;
@@ -233,7 +234,7 @@ int vgui_win32_utils::addMenuItemsEx(vgui_menu const &vguimenu, int offset_in, b
 
   MENUEX_TEMPLATE_ITEM *pMenuItem;
   WCHAR *pMenuItemText;
-  vcl_string menuItemText;
+  std::string menuItemText;
   int stride, offset;
   bool last_item;
 
@@ -278,7 +279,7 @@ int vgui_win32_utils::addMenuItemsEx(vgui_menu const &vguimenu, int offset_in, b
 
       // Copy the menu item text.
       pMenuItemText = (WCHAR *)&pMenuItem->szText;
-      vcl_size_t j;
+      std::size_t j;
       for ( j = 0; j < menuItemText.size(); j++ )
         *(pMenuItemText+j) = menuItemText.c_str()[j];
       *(pMenuItemText+j) = 0;
@@ -299,7 +300,7 @@ int vgui_win32_utils::addMenuItemsEx(vgui_menu const &vguimenu, int offset_in, b
 
       menuItemText = vguimenu[i].name;
       pMenuItemText = (WCHAR *)&pMenuItem->szText;
-      vcl_size_t j;
+      std::size_t j;
       for ( j = 0; j < menuItemText.size(); j++ )
         *(pMenuItemText+j) = menuItemText.c_str()[j];
       *(pMenuItemText+j) = 0;
@@ -318,7 +319,7 @@ int vgui_win32_utils::addMenuItemsEx(vgui_menu const &vguimenu, int offset_in, b
       stride += addMenuItemsEx(*vguimenu[i].menu, offset+stride, is_popup);
     }
     else if (vguimenu[i].is_toggle_button()) {
-      vcl_cerr << "vgui_win32_utils: toggle button is not converted\n";
+      std::cerr << "vgui_win32_utils: toggle button is not converted\n";
     }
 
     offset += stride;
@@ -332,7 +333,7 @@ int vgui_win32_utils::addMenuItemsEx(vgui_menu const &vguimenu, int offset_in, b
       menu_capacity <<= 1; // double the capacity.
       pMenu = (unsigned char *)realloc(pMenu, sizeof(MENUEX_TEMPLATE_HEADER) + menu_capacity);
       if ( pMenu == NULL ) {
-        vcl_cerr << "Memory allocation error\n";
+        std::cerr << "Memory allocation error\n";
         return NULL;
       }
     }
@@ -341,7 +342,7 @@ int vgui_win32_utils::addMenuItemsEx(vgui_menu const &vguimenu, int offset_in, b
   return offset-offset_in;
 }
 
-inline void vgui_win32_utils::addAccelerator(vcl_string &menuItemText,
+inline void vgui_win32_utils::addAccelerator(std::string &menuItemText,
                                              vgui_menu_item const &vguimenu, int menuItemId)
 {
   ACCEL *pa = pAccel+accel_count;
@@ -383,15 +384,15 @@ inline void vgui_win32_utils::addAccelerator(vcl_string &menuItemText,
       accel_capacity <<= 1; // double the capacity.
       pAccel = (ACCEL *)realloc(pAccel, sizeof(ACCEL)*accel_capacity);
       if ( pAccel == NULL )
-        vcl_cerr << "Memory allocation error\n";
+        std::cerr << "Memory allocation error\n";
     }
   }
 }
 
 
-inline vcl_string vgui_win32_utils::vgui_key_to_string(vgui_key key)
+inline std::string vgui_win32_utils::vgui_key_to_string(vgui_key key)
 {
-  vcl_string str;
+  std::string str;
 
   switch ( key ) {
     // Function keys
@@ -505,5 +506,5 @@ void vgui_win32_utils::ShowErrorMessage(DWORD dwErrorNo)
                  (LPTSTR) & lpBuffer,
                  0 ,
                  NULL);
-  vcl_cerr << lpBuffer;
+  std::cerr << lpBuffer;
 }

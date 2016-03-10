@@ -41,14 +41,14 @@ class vgui_qt_dialog_impl :
    void* long_field_widget(const char*, long&);
    void* float_field_widget(const char*, float&);
    void* double_field_widget(const char*, double&);
-   void* string_field_widget(const char*, vcl_string&);
-   void* choice_field_widget(const char*, const vcl_vector<vcl_string>&, int&);
+   void* string_field_widget(const char*, std::string&);
+   void* choice_field_widget(const char*, const std::vector<std::string>&, int&);
 
    void* text_message_widget(const char*);
-   void* file_browser_widget(const char*, vcl_string&, vcl_string&);
-   void* inline_file_browser_widget(const char *,vcl_string&, vcl_string&);
-   void* color_chooser_widget(const char *,vcl_string&);//, vcl_string&);
-   void* inline_color_chooser_widget(const char *,vcl_string&);//, vcl_string&);
+   void* file_browser_widget(const char*, std::string&, std::string&);
+   void* inline_file_browser_widget(const char *,std::string&, std::string&);
+   void* color_chooser_widget(const char *,std::string&);//, std::string&);
+   void* inline_color_chooser_widget(const char *,std::string&);//, std::string&);
    void* inline_tableau_widget(const vgui_tableau_sptr tab,
                                unsigned int width, unsigned int height);
    void  modal(bool m);
@@ -62,17 +62,17 @@ class vgui_qt_filebrowser_impl : public QGroupBox
 {
    Q_OBJECT
  public:
-   vgui_qt_filebrowser_impl(QWidget* parent, const vcl_string& t, const vcl_string& f, const vcl_string& s);
+   vgui_qt_filebrowser_impl(QWidget* parent, const std::string& t, const std::string& f, const std::string& s);
   ~vgui_qt_filebrowser_impl() {}
 
-  vcl_string  file() const { return vcl_string(edit_->text().toLatin1()); }
+  std::string  file() const { return std::string(edit_->text().toLatin1()); }
 
  public slots:
    void get_a_file();
 
  private:
-   vcl_string title_;
-   vcl_string filter_;
+   std::string title_;
+   std::string filter_;
    QLineEdit*  edit_;
 };
 
@@ -80,10 +80,10 @@ class vgui_qt_colorchooser_impl : public QGroupBox
 {
    Q_OBJECT
  public:
-   vgui_qt_colorchooser_impl(QWidget* parent, const char*, vcl_string&);
+   vgui_qt_colorchooser_impl(QWidget* parent, const char*, std::string&);
   ~vgui_qt_colorchooser_impl() {}
 
-  vcl_string  color() const { return value_; }
+  std::string  color() const { return value_; }
 
  private:
   void update_color_string();
@@ -96,7 +96,7 @@ class vgui_qt_colorchooser_impl : public QGroupBox
   void change_alpha(int);
 
  private:
-   vcl_string& value_;
+   std::string& value_;
    QColor      color_;
    QFrame*     frame_;
    QSpinBox   *rbox_, *gbox_, *bbox_, *abox_;

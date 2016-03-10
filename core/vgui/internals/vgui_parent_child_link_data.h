@@ -11,7 +11,8 @@
 //   10 Sep. 2004 Peter Vanroose  Inlined all 1-line methods in class decl
 // \endverbatim
 
-#include <vcl_vector.h>
+#include <vcl_compiler.h>
+#include <vector>
 
 struct vgui_parent_child_link_impl;
 struct vgui_parent_child_link;
@@ -20,7 +21,7 @@ class vgui_tableau;
 //: Cache of parents of a tableau (makes posting redraws more efficient).
 class vgui_parent_child_link_data
 {
-  vcl_vector<vgui_tableau*> parents;
+  std::vector<vgui_tableau*> parents;
   friend struct vgui_parent_child_link_impl;
   friend struct vgui_parent_child_link;
 };

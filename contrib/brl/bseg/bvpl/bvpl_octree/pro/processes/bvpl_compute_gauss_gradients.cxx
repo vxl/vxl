@@ -31,11 +31,11 @@ bool bvpl_compute_gauss_gradients_cons(bprb_func_process& pro)
 {
   using namespace bvpl_compute_gauss_gradients_globals ;
 
-  vcl_vector<vcl_string> input_types_(n_inputs_);
+  std::vector<std::string> input_types_(n_inputs_);
   input_types_[0] = "boxm_scene_base_sptr";  //input scene
   input_types_[1] = "vcl_string";            //output path
 
-  vcl_vector<vcl_string> output_types_(n_outputs_);
+  std::vector<std::string> output_types_(n_outputs_);
   output_types_[0] = "boxm_scene_base_sptr";  //output scene
 
   return pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
@@ -50,7 +50,7 @@ bool bvpl_compute_gauss_gradients(bprb_func_process& pro)
   //get inputs:
   unsigned i = 0;
   boxm_scene_base_sptr scene_base = pro.get_input<boxm_scene_base_sptr>(i++);
-  vcl_string output_path = pro.get_input<vcl_string>(i++);
+  std::string output_path = pro.get_input<std::string>(i++);
 
   //Create the factory and get the vector of kernels
   bvpl_gauss3d_x_kernel_factory factory(1.0f,1.0f,1.0f);
@@ -79,7 +79,7 @@ bool bvpl_compute_gauss_gradients(bprb_func_process& pro)
 
     bsta_histogram<float> magnitude_hist;
     bvpl_compute_scene_statistics(scene_out, magnitude_hist);
-    vcl_cout << "Histogram:\n" << magnitude_hist << vcl_endl;
+    std::cout << "Histogram:\n" << magnitude_hist << std::endl;
   }
 
   return true;

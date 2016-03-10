@@ -8,7 +8,9 @@
 #include "bvxm_memory_chunk.h"
 
 #include <vgl/vgl_vector_3d.h>
-#include <vcl_vector.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <vector>
 #include <vcl_cassert.h>
 
 template <class T>

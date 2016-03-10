@@ -10,7 +10,9 @@
 #include <vil3d/algo/vil3d_fill_border.h>
 #include <vil3d/vil3d_transform.h>
 #include <vil3d/vil3d_plane.h>
-#include <vcl_cmath.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <cmath>
 #include <vcl_cassert.h>
 
 //: Functor class to scale by s
@@ -71,13 +73,13 @@ void vil3d_world_gradients(const vil3d_image_view<srcT>& grad_i,
   // Fill 1 voxel border with zero
   vil3d_fill_border(grad_mag,1,1,1,destT(0));
 
-  const vcl_ptrdiff_t gi_istep = w_grad_i.istep(), gi_jstep = w_grad_i.jstep(),
+  const std::ptrdiff_t gi_istep = w_grad_i.istep(), gi_jstep = w_grad_i.jstep(),
                       gi_kstep = w_grad_i.kstep();
-  const vcl_ptrdiff_t gj_istep = w_grad_j.istep(), gj_jstep = w_grad_j.jstep(),
+  const std::ptrdiff_t gj_istep = w_grad_j.istep(), gj_jstep = w_grad_j.jstep(),
                       gj_kstep = w_grad_j.kstep();
-  const vcl_ptrdiff_t gk_istep = w_grad_k.istep(), gk_jstep = w_grad_k.jstep(),
+  const std::ptrdiff_t gk_istep = w_grad_k.istep(), gk_jstep = w_grad_k.jstep(),
                       gk_kstep = w_grad_k.kstep();
-  const vcl_ptrdiff_t gm_istep = grad_mag.istep(), gm_jstep = grad_mag.jstep(),
+  const std::ptrdiff_t gm_istep = grad_mag.istep(), gm_jstep = grad_mag.jstep(),
                       gm_kstep = grad_mag.kstep();
 
   unsigned ihi=ni-2;
@@ -113,7 +115,7 @@ void vil3d_world_gradients(const vil3d_image_view<srcT>& grad_i,
       for (unsigned i=2; i<=ihi; ++i, pgi+=gi_istep, pgj+=gj_istep,
                                       pgk+=gk_istep, pgm+=gm_istep)
       {
-        *pgm=destT(vcl_sqrt(double(c2i*pgi[0]*pgi[0] + c2j*pgj[0]*pgj[0] + c2k*pgk[0]*pgk[0])));
+        *pgm=destT(std::sqrt(double(c2i*pgi[0]*pgi[0] + c2j*pgj[0]*pgj[0] + c2k*pgk[0]*pgk[0])));
       }
     }
   }

@@ -15,15 +15,17 @@
 //
 //-------------------------------------------------------------------------
 
-#include <vcl_sstream.h>
+#include <sstream>
 #include <vcl_cassert.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iostream>
 
 #include "bmsh3d_edge.h"
 #include "bmsh3d_face.h"
 
 //: function to return all incident faces of this vertex
-int bmsh3d_vertex::get_incident_Fs(vcl_set<bmsh3d_face*>& face_set)
+int bmsh3d_vertex::get_incident_Fs(std::set<bmsh3d_face*>& face_set)
 {
   //: loop through all incident edges and put all faces into the set.
   for (bmsh3d_ptr_node* cur = E_list_; cur != VXL_NULLPTR; cur = cur->next()) {
@@ -170,7 +172,7 @@ const bmsh3d_edge* bmsh3d_vertex::find_unvisited_E_() const
   return VXL_NULLPTR;
 }
 
-void bmsh3d_vertex::getInfo(vcl_ostringstream& ostrm)
+void bmsh3d_vertex::getInfo(std::ostringstream& ostrm)
 {
   ostrm << "\n==============================\nbmsh3d_vertex id: " << id_
         << " (" << this->pt().x()
@@ -191,17 +193,17 @@ void bmsh3d_vertex::getInfo(vcl_ostringstream& ostrm)
   }
 
   //: the incident edges
-  vcl_set<void const*> incident_Es;
+  std::set<void const*> incident_Es;
   get_incident_Es(incident_Es);
   ostrm << "\n " << incident_Es.size() << " incident edges (unordered): ";
-  vcl_set<void const*>::iterator it = incident_Es.begin();
+  std::set<void const*>::iterator it = incident_Es.begin();
   for (; it != incident_Es.end(); it++) {
     bmsh3d_edge const* E = (bmsh3d_edge const*)(*it);
     ostrm << E->id() << ' ';
   }
 
   //: the ordered incident faces (for 2-manifold mesh)
-  vcl_vector<const bmsh3d_halfedge*> ordered_halfedges;
+  std::vector<const bmsh3d_halfedge*> ordered_halfedges;
   m2_get_ordered_HEs(ordered_halfedges);
 
   ostrm << "\n (2-manifold) " << ordered_halfedges.size() << " ordered incident faces: ";
@@ -216,7 +218,7 @@ void bmsh3d_vertex::getInfo(vcl_ostringstream& ostrm)
     ostrm << HE->edge()->id() << ' ';
   }
 
-  ostrm << vcl_endl;
+  ostrm << std::endl;
 }
 
 const bmsh3d_halfedge* bmsh3d_vertex::get_1st_bnd_HE() const
@@ -231,7 +233,7 @@ const bmsh3d_halfedge* bmsh3d_vertex::get_1st_bnd_HE() const
 }
 
 //: for 2-manifold mesh, return all incident halfedges (without duplicate pairs) in order return the last halfedge
-bmsh3d_halfedge* bmsh3d_vertex::m2_get_ordered_HEs(vcl_vector<const bmsh3d_halfedge*>& ordered_halfedges) const
+bmsh3d_halfedge* bmsh3d_vertex::m2_get_ordered_HEs(std::vector<const bmsh3d_halfedge*>& ordered_halfedges) const
 {
   const bmsh3d_halfedge* startHE = get_1st_bnd_HE();
 
@@ -294,7 +296,7 @@ bool bmsh3d_vertex::m2_is_on_bnd(bmsh3d_halfedge* inputHE) const
 //: return the sum_theta at this vertex
 double bmsh3d_vertex::m2_sum_theta() const
 {
-  vcl_vector<const bmsh3d_halfedge*> ordered_halfedges;
+  std::vector<const bmsh3d_halfedge*> ordered_halfedges;
   m2_get_ordered_HEs(ordered_halfedges);
   double sum_theta = 0;
 
@@ -319,13 +321,13 @@ bmsh3d_edge* E_sharing_2V(const bmsh3d_vertex* V1,
   return VXL_NULLPTR;
 }
 
-bmsh3d_face* find_F_sharing_Vs(vcl_vector<bmsh3d_vertex*>& vertices)
+bmsh3d_face* find_F_sharing_Vs(std::vector<bmsh3d_vertex*>& vertices)
 {
   bmsh3d_vertex* G = vertices[0];
-  vcl_set<bmsh3d_face*> incident_faces;
+  std::set<bmsh3d_face*> incident_faces;
   G->get_incident_Fs(incident_faces);
 
-  vcl_set<bmsh3d_face*>::iterator it = incident_faces.begin();
+  std::set<bmsh3d_face*>::iterator it = incident_faces.begin();
   for (unsigned int i=0; i<incident_faces.size(); i++) {
     bmsh3d_face* F = (*it);
     if (F->all_Vs_incident(vertices))

@@ -21,7 +21,9 @@
 #include <vil/vil_save.h>
 #include <bkml/bkml_write.h>
 
-#include <vcl_fstream.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <fstream>
 #include <boxm2/ocl/boxm2_opencl_cache.h>
 #include <boxm2/boxm2_block.h>
 #include <boxm2/boxm2_data_base.h>
@@ -36,11 +38,11 @@ namespace boxm2_create_index_process_globals
   const unsigned n_inputs_ = 14;
   const unsigned n_outputs_ = 0;
 
-  void compile_kernel(bocl_device_sptr device,vcl_vector<bocl_kernel*> & vec_kernels)
+  void compile_kernel(bocl_device_sptr device,std::vector<bocl_kernel*> & vec_kernels)
   {
     //gather all render sources... seems like a lot for rendering...
-    vcl_vector<vcl_string> src_paths;
-    vcl_string source_dir = boxm2_ocl_util::ocl_src_root();
+    std::vector<std::string> src_paths;
+    std::string source_dir = boxm2_ocl_util::ocl_src_root();
     src_paths.push_back(source_dir + "scene_info.cl");
     src_paths.push_back(source_dir + "cell_utils.cl");
     src_paths.push_back(source_dir + "bit/bit_tree_library_functions.cl");
@@ -52,8 +54,8 @@ namespace boxm2_create_index_process_globals
     src_paths.push_back(source_dir + "bit/cast_ray_bit.cl");
 
     //set kernel options
-    //vcl_string options = " -D RENDER_DEPTH -D COMPINDEX ";
-    vcl_string options = " -D COMPINDEX -D DETERMINISTIC";
+    //std::string options = " -D RENDER_DEPTH -D COMPINDEX ";
+    std::string options = " -D COMPINDEX -D DETERMINISTIC";
     options += " -D RENDER_VISIBILITY ";
     options += " -D STEP_CELL=step_cell_compute_index(tblock,aux_args.alpha,data_ptr,d*linfo->block_len,aux_args.vis,aux_args.expdepth,aux_args.expdepthsqr,aux_args.probsum,aux_args.t)";
     bocl_kernel* compute_index = new bocl_kernel();
@@ -64,9 +66,9 @@ namespace boxm2_create_index_process_globals
     //create normalize image kernel
     bocl_kernel * norm_kernel=new bocl_kernel();
     if (!norm_kernel) {
-      vcl_cout << " cannot allocate kernel object!" << vcl_endl; }
+      std::cout << " cannot allocate kernel object!" << std::endl; }
     else
-      vcl_cout << " got a new kernel object!" << vcl_endl;
+      std::cout << " got a new kernel object!" << std::endl;
 
     norm_kernel->create_kernel(&device->context(),device->device_id(), src_paths, "normalize_index_depth_kernel", options,
                                "normalize_index_depth_kernel"); //kernel identifier (for error checking)
@@ -76,14 +78,14 @@ namespace boxm2_create_index_process_globals
 
     return ;
   }
-  static vcl_map<vcl_string,vcl_vector<bocl_kernel*> > kernels;
+  static std::map<std::string,std::vector<bocl_kernel*> > kernels;
 }
 
 bool boxm2_create_index_process_cons(bprb_func_process& pro)
 {
   using namespace boxm2_create_index_process_globals;
 
-  vcl_vector<vcl_string> input_types_(n_inputs_);
+  std::vector<std::string> input_types_(n_inputs_);
   input_types_[0] = "bocl_device_sptr";
   input_types_[1] = "boxm2_scene_sptr";
   input_types_[2] = "boxm2_opencl_cache_sptr";
@@ -99,7 +101,7 @@ bool boxm2_create_index_process_cons(bprb_func_process& pro)
   input_types_[12] = "float"; // visibility threshold to declare a ray a sky ray, it's strictly very small if occupied, so could be as small as 0.3f
   input_types_[13] = "float"; // buffer capacity on CPU RAM for the indices to be cached before being written to disc in chunks
 
-  vcl_vector<vcl_string>  output_types_(n_outputs_);
+  std::vector<std::string>  output_types_(n_outputs_);
 
   return pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
 }
@@ -108,32 +110,32 @@ bool boxm2_create_index_process(bprb_func_process& pro)
 {
   using namespace boxm2_create_index_process_globals;
 
-  vcl_size_t local_threads[2]={8,1};
-  vcl_size_t global_threads[2]={0,1};  // global threads size is to be determined later
+  std::size_t local_threads[2]={8,1};
+  std::size_t global_threads[2]={0,1};  // global threads size is to be determined later
 
   //sanity check inputs
   if ( pro.n_inputs() < n_inputs_ ) {
-    vcl_cout << pro.name() << ": The input number should be " << n_inputs_<< vcl_endl;
+    std::cout << pro.name() << ": The input number should be " << n_inputs_<< std::endl;
     return false;
   }
   float transfer_time=0.0f;
   float gpu_time=0.0f;
 
   if ( pro.n_inputs() < n_inputs_ ){
-    vcl_cout << pro.name() << ": The input number should be " << n_inputs_<< vcl_endl;
+    std::cout << pro.name() << ": The input number should be " << n_inputs_<< std::endl;
     return false;
   }
   //get the inputs
   unsigned i = 0;
   bocl_device_sptr device = pro.get_input<bocl_device_sptr>(i++);
-  vcl_cout << " device: " << device->info().device_name_ << " total memory: " << device->info().total_global_memory_ << '\n'
+  std::cout << " device: " << device->info().device_name_ << " total memory: " << device->info().total_global_memory_ << '\n'
            << " max allowed work items in a group: " << device->info().max_work_group_size_ << '\n'
-           << " max work item sizes in each dimensions: " << device->info().max_work_item_sizes_ << vcl_endl;
+           << " max work item sizes in each dimensions: " << device->info().max_work_item_sizes_ << std::endl;
   boxm2_scene_sptr scene = pro.get_input<boxm2_scene_sptr>(i++);
   vpgl_lvcs lvcs = scene->lvcs();
   boxm2_opencl_cache_sptr  opencl_cache = pro.get_input<boxm2_opencl_cache_sptr>(i++);
   //boxm2_volm_loc_hypotheses_sptr hyp = pro.get_input<boxm2_volm_loc_hypotheses_sptr>(i++);
-  vcl_string hyp_file = pro.get_input<vcl_string>(i++);
+  std::string hyp_file = pro.get_input<std::string>(i++);
   boxm2_volm_wr3db_index_params params;
   params.start = pro.get_input<unsigned>(i++);
   params.skip = pro.get_input<unsigned>(i++);
@@ -141,24 +143,24 @@ bool boxm2_create_index_process(bprb_func_process& pro)
   params.vmin = pro.get_input<float>(i++);
   params.dmax = pro.get_input<float>(i++);
   params.solid_angle = pro.get_input<float>(i++);
-  vcl_string ray_file = pro.get_input<vcl_string>(i++);
-  vcl_string index_file = pro.get_input<vcl_string>(i++);
+  std::string ray_file = pro.get_input<std::string>(i++);
+  std::string index_file = pro.get_input<std::string>(i++);
   float vis_thres = pro.get_input<float>(i++);
   float buffer_capacity = pro.get_input<float>(i++);
 
   volm_spherical_container_sptr sph2 = new volm_spherical_container(params.solid_angle,params.vmin,params.dmax);
-  vcl_cout << "number of depth intervals in container: " << sph2->get_depth_offset_map().size()
+  std::cout << "number of depth intervals in container: " << sph2->get_depth_offset_map().size()
            << " with solid angle: " << params.solid_angle
-           << " vmin: " << params.vmin << " dmax: " << params.dmax << vcl_endl;
+           << " vmin: " << params.vmin << " dmax: " << params.dmax << std::endl;
 
   //: read the location hypotheses
   if (!vul_file::exists(hyp_file)) {
-    vcl_cerr << "Cannot find: " << hyp_file << "!\n";
+    std::cerr << "Cannot find: " << hyp_file << "!\n";
     return false;
   }
 
   volm_loc_hyp hyp(hyp_file);
-  vcl_cout << hyp.size() << " hypotheses read from: " << hyp_file << vcl_endl;
+  std::cout << hyp.size() << " hypotheses read from: " << hyp_file << std::endl;
 
   // read spherical shell container
   vsl_b_ifstream ifs(ray_file);
@@ -171,12 +173,12 @@ bool boxm2_create_index_process(bprb_func_process& pro)
 
   boxm2_volm_wr3db_index_sptr ind = new boxm2_volm_wr3db_index(params.layer_size, buffer_capacity);
   if (!ind->initialize_write(index_file)) {
-    vcl_cerr << "Cannot initialize " << index_file << " for write!\n";
+    std::cerr << "Cannot initialize " << index_file << " for write!\n";
     return false;
   }
 
   if (!params.write_params_file(index_file)) {
-    vcl_cerr << "Cannot write params file for " << index_file << "!\n";
+    std::cerr << "Cannot write params file for " << index_file << "!\n";
     return false;
   }
 
@@ -186,11 +188,11 @@ bool boxm2_create_index_process(bprb_func_process& pro)
     dmax = (float)(scene->bounding_box().height()+scene->bounding_box().width());
 
   global_threads[0] = RoundUp(layer_size, (int)local_threads[0]);
-  vcl_cout << "layer_size: " << layer_size << ", # of global threads: " << global_threads[0] << vcl_endl;
+  std::cout << "layer_size: " << layer_size << ", # of global threads: " << global_threads[0] << std::endl;
 
   //cache size sanity check
   long binCache = (long)(opencl_cache.ptr()->bytes_in_cache());
-  vcl_cout<<"Update MBs in cache: "<<binCache/(1024.0*1024.0)<<vcl_endl;
+  std::cout<<"Update MBs in cache: "<<binCache/(1024.0*1024.0)<<std::endl;
 
   // create a command queue.
   int status=0;
@@ -202,10 +204,10 @@ bool boxm2_create_index_process(bprb_func_process& pro)
     return false;
 
   // compile the kernel if not already compiled
-  vcl_string identifier=device->device_identifier();
+  std::string identifier=device->device_identifier();
   if (kernels.find(identifier)==kernels.end()) {
-    vcl_cout<<"===========Compiling kernels==========="<<vcl_endl;
-    vcl_vector<bocl_kernel*> ks;
+    std::cout<<"===========Compiling kernels==========="<<std::endl;
+    std::vector<bocl_kernel*> ks;
     compile_kernel(device,ks);
     kernels[identifier]=ks;
   }
@@ -218,7 +220,7 @@ bool boxm2_create_index_process(bprb_func_process& pro)
 
   // create directions buffer
   cl_float* ray_dirs = new cl_float[4*layer_size];
-  vcl_vector<vgl_point_3d<double> > cart_points = sph_shell->cart_points();
+  std::vector<vgl_point_3d<double> > cart_points = sph_shell->cart_points();
   for (int i = 0; i < layer_size; ++i) {
     ray_dirs[4*i  ] = (cl_float)cart_points[i].x();
     ray_dirs[4*i+1] = (cl_float)cart_points[i].y();
@@ -234,19 +236,19 @@ bool boxm2_create_index_process(bprb_func_process& pro)
 
   bocl_mem* max_dist = new bocl_mem(device->context(), &(params.dmax), sizeof(int), "max distance to shoot rays");
   max_dist->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR );
-  vcl_cout << " will stop ray casting at distance: " << params.dmax << vcl_endl;
+  std::cout << " will stop ray casting at distance: " << params.dmax << std::endl;
 
-  vcl_map<boxm2_block_id, boxm2_block_metadata>& blocks = scene->blocks();
-  vcl_cout << "number of blocks: " << blocks.size() << vcl_endl;
-  vcl_cout.flush();
+  std::map<boxm2_block_id, boxm2_block_metadata>& blocks = scene->blocks();
+  std::cout << "number of blocks: " << blocks.size() << std::endl;
+  std::cout.flush();
   //: get subblk dimension
   boxm2_block_metadata mdata = scene->get_block_metadata(blocks.begin()->first);
   float subblk_dim = (float)mdata.sub_block_dim_.x();
-  vcl_cout << "subblk_dim: " << subblk_dim << vcl_endl;
+  std::cout << "subblk_dim: " << subblk_dim << std::endl;
   bocl_mem*  subblk_dim_mem=new bocl_mem(device->context(), &(subblk_dim), sizeof(float), "sub block dim buffer");
   subblk_dim_mem->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR );
 
-  vcl_map<boxm2_block_id, vcl_vector<boxm2_block_id> > order_cache;
+  std::map<boxm2_block_id, std::vector<boxm2_block_id> > order_cache;
 
   boxm2_block_id curr_block;
 
@@ -256,15 +258,15 @@ bool boxm2_create_index_process(bprb_func_process& pro)
   while (hyp.get_next(params.start, params.skip, h_pt))
   {
 #ifdef DEBUG
-    vcl_cout << "Processing hypothesis: " << hi
+    std::cout << "Processing hypothesis: " << hi
              << " x: " << hyp->locs_[hi].x() << " y: " << hyp->locs_[hi].y() << " z: " << hyp->locs_[hi].z() << '\n'
              << "Processing hypothesis: " << hyp.current_-skip
-             << " x: " << h_pt.x() << " y: " << h_pt.y() << " z: " << h_pt.z() << vcl_endl;
+             << " x: " << h_pt.x() << " y: " << h_pt.y() << " z: " << h_pt.z() << std::endl;
 #endif
-    if (indexed_cnt%1000 == 0) vcl_cout << indexed_cnt << '.';
+    if (indexed_cnt%1000 == 0) std::cout << indexed_cnt << '.';
     double lx, ly, lz;
     lvcs.global_to_local(h_pt.x(), h_pt.y(), h_pt.z(), vpgl_lvcs::wgs84, lx, ly, lz);
-    lz = 2.0*(vcl_ceil(lz/2.0)); // round to next multiple of 2 meters // this is the height in the voxel model
+    lz = 2.0*(std::ceil(lz/2.0)); // round to next multiple of 2 meters // this is the height in the voxel model
     lz = lz - elev_dif;  // this is where the camera is
     vgl_point_3d<double> local_h_pt_d(lx, ly, lz);
 
@@ -301,9 +303,9 @@ bool boxm2_create_index_process(bprb_func_process& pro)
     if (!scene->block_contains(local_h_pt_d, curr_block, local))
     {
       if (!scene->contains(local_h_pt_d, curr_block, local)) {
-        vcl_cerr << " Scene does not contain hypothesis: " << hyp.current_-params.skip
+        std::cerr << " Scene does not contain hypothesis: " << hyp.current_-params.skip
                  << ' ' << local_h_pt_d << " writing empty array for it!\n";
-        vcl_vector<unsigned char> values(layer_size, 0);
+        std::vector<unsigned char> values(layer_size, 0);
         ind->add_to_index(values);
         ++indexed_cnt;
         // release the device and host memories
@@ -315,7 +317,7 @@ bool boxm2_create_index_process(bprb_func_process& pro)
         status = clFinish(queue);
         check_val(status, MEM_FAILURE, "release memory FAILED: " + error_to_string(status));
         if (!buff)
-          vcl_cout << "buff is zero after release mem!" << vcl_endl;
+          std::cout << "buff is zero after release mem!" << std::endl;
         delete [] buff;
         delete [] vis_buff;
         delete [] prob_buff;
@@ -324,19 +326,19 @@ bool boxm2_create_index_process(bprb_func_process& pro)
       }
     }
 
-    vcl_map<boxm2_block_id, vcl_vector<boxm2_block_id> >::iterator ord_iter = order_cache.find(curr_block);
+    std::map<boxm2_block_id, std::vector<boxm2_block_id> >::iterator ord_iter = order_cache.find(curr_block);
     if (!(ord_iter != order_cache.end())) {
       order_cache[curr_block] =  boxm2_util::order_about_a_block(scene, curr_block, dmax);
       if (order_cache.size() > 100) {// kick the first one
-        vcl_map<boxm2_block_id, vcl_vector<boxm2_block_id> >::iterator to_kick = order_cache.begin();
+        std::map<boxm2_block_id, std::vector<boxm2_block_id> >::iterator to_kick = order_cache.begin();
         if (to_kick->first != curr_block)
           order_cache.erase(to_kick);
         else { ++to_kick; order_cache.erase(to_kick); }
       }
     }
-    vcl_vector<boxm2_block_id>& vis_blocks = order_cache[curr_block];
+    std::vector<boxm2_block_id>& vis_blocks = order_cache[curr_block];
 
-    vcl_vector<boxm2_block_id>::iterator blk_iter_inner;
+    std::vector<boxm2_block_id>::iterator blk_iter_inner;
 
     for (blk_iter_inner = vis_blocks.begin(); blk_iter_inner != vis_blocks.end(); ++blk_iter_inner) {
       boxm2_block_id id_inner = *blk_iter_inner;
@@ -369,12 +371,12 @@ bool boxm2_create_index_process(bprb_func_process& pro)
 
       //execute kernel
       if (!kern->execute(queue, 2, local_threads, global_threads)) {
-        vcl_cerr << "INDEX KERNEL EXECUTE FAILED!\n";
+        std::cerr << "INDEX KERNEL EXECUTE FAILED!\n";
         return false;
       }
       int status = clFinish(queue);
       if (status != 0) {
-        vcl_cerr << "status: " << status << "  INDEX EXECUTE FAILED: " + error_to_string(status) << '\n';
+        std::cerr << "status: " << status << "  INDEX EXECUTE FAILED: " + error_to_string(status) << '\n';
         return false;
       }
       gpu_time += kern->exec_time();
@@ -412,14 +414,14 @@ bool boxm2_create_index_process(bprb_func_process& pro)
       check_val(status, MEM_FAILURE, "read to output buffers FAILED: " + error_to_string(status));
     }
 #if 0
-    vcl_cout << "exp depths after normalization:\n";
+    std::cout << "exp depths after normalization:\n";
     for (unsigned i = 0; i < layer_size; ++i) {
-      vcl_cout << buff[i] << " (" << vis_buff[i] << ") ";
+      std::cout << buff[i] << " (" << vis_buff[i] << ") ";
     }
-    vcl_cout << vcl_endl;
+    std::cout << std::endl;
 #endif
     // find each depth interval using spherical container
-    vcl_vector<unsigned char> values;
+    std::vector<unsigned char> values;
     for (int i = 0; i < layer_size; ++i) {
       // check if sky
       if (vis_buff[i] > vis_thres) {
@@ -432,11 +434,11 @@ bool boxm2_create_index_process(bprb_func_process& pro)
         values.push_back(sph2->get_depth_interval((double)buff[i]));
     }
 #if 0
-    vcl_cout << "values array:\n";
+    std::cout << "values array:\n";
     for (unsigned i = 0; i < layer_size; i++) {
-      vcl_cout << (int)values[i] << ' ';
+      std::cout << (int)values[i] << ' ';
     }
-    vcl_cout << vcl_endl;
+    std::cout << std::endl;
     sph_shell->draw_template("./test.vrml", values, 254);
 #endif
     // add to index
@@ -454,7 +456,7 @@ bool boxm2_create_index_process(bprb_func_process& pro)
     check_val(status, MEM_FAILURE, "release memory FAILED: " + error_to_string(status));
 
     if (!buff)
-      vcl_cout << "buff is zero after release mem!" << vcl_endl;
+      std::cout << "buff is zero after release mem!" << std::endl;
     delete [] buff;
     delete [] vis_buff;
     delete [] prob_buff;
@@ -471,13 +473,13 @@ bool boxm2_create_index_process(bprb_func_process& pro)
 
   delete [] ray_dirs;
 
-  vcl_cout<<"\nGPU Execute time "<<gpu_time<<" ms = " << gpu_time/(1000.0*60.0) << " secs.\n"
-          <<"GPU Transfer time "<<transfer_time<<" ms = " << transfer_time/(1000.0*60.0) << " secs." << vcl_endl;
+  std::cout<<"\nGPU Execute time "<<gpu_time<<" ms = " << gpu_time/(1000.0*60.0) << " secs.\n"
+          <<"GPU Transfer time "<<transfer_time<<" ms = " << transfer_time/(1000.0*60.0) << " secs." << std::endl;
   clReleaseCommandQueue(queue);
 
   //cache size sanity check
   binCache = (long)(opencl_cache.ptr()->bytes_in_cache());
-  vcl_cout<<"At the end of process MBs in cache: "<<binCache/(1024.0*1024.0)<<vcl_endl;
+  std::cout<<"At the end of process MBs in cache: "<<binCache/(1024.0*1024.0)<<std::endl;
 
   ind->finalize();
   boxm2_volm_wr3db_index_params::write_size_file(index_file, indexed_cnt);
@@ -494,7 +496,7 @@ bool boxm2_visualize_index_process_cons(bprb_func_process& pro)
 {
   using namespace boxm2_visualize_index_process_globals;
 
-  vcl_vector<vcl_string> input_types_(n_inputs_);
+  std::vector<std::string> input_types_(n_inputs_);
   input_types_[0] = "vcl_string"; // index file
   input_types_[1] = "float"; // buffer capacity for the index
   input_types_[2] = "unsigned";  // start id of the indices to visualize
@@ -502,7 +504,7 @@ bool boxm2_visualize_index_process_cons(bprb_func_process& pro)
   input_types_[4] = "vcl_string";  // prefix for the output files
   input_types_[5] = "vcl_string"; // ray array binary file
 
-  vcl_vector<vcl_string>  output_types_(n_outputs_);
+  std::vector<std::string>  output_types_(n_outputs_);
   return pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
 }
 
@@ -511,28 +513,28 @@ bool boxm2_visualize_index_process(bprb_func_process& pro)
   using namespace boxm2_visualize_index_process_globals;
 
   if ( pro.n_inputs() < n_inputs_ ){
-    vcl_cout << pro.name() << ": The input number should be " << n_inputs_<< vcl_endl;
+    std::cout << pro.name() << ": The input number should be " << n_inputs_<< std::endl;
     return false;
   }
   unsigned i = 0;
-  vcl_string index_file = pro.get_input<vcl_string>(i++);
+  std::string index_file = pro.get_input<std::string>(i++);
   float buffer_capacity = pro.get_input<float>(i++);
   unsigned si = pro.get_input<unsigned>(i++);
   unsigned ei = pro.get_input<unsigned>(i++);
-  vcl_string prefix = pro.get_input<vcl_string>(i++);
-  vcl_string ray_file = pro.get_input<vcl_string>(i++);
+  std::string prefix = pro.get_input<std::string>(i++);
+  std::string ray_file = pro.get_input<std::string>(i++);
 
-  vcl_string param_file = vul_file::strip_extension(index_file) + ".params";
+  std::string param_file = vul_file::strip_extension(index_file) + ".params";
   boxm2_volm_wr3db_index_params params;
   if (!params.read_params_file(param_file)) {
-    vcl_cerr << "cannot read: " << param_file << '\n';
+    std::cerr << "cannot read: " << param_file << '\n';
     return false;
   }
   if (ei == 0) {
     unsigned long eis;
-    vcl_string size_file = vul_file::strip_extension(index_file) + ".txt";
+    std::string size_file = vul_file::strip_extension(index_file) + ".txt";
     params.read_size_file(size_file, eis);
-    vcl_cout << " ei was zero so made it size of the index file: " << eis << vcl_endl;
+    std::cout << " ei was zero so made it size of the index file: " << eis << std::endl;
     ei = (unsigned)eis;
   }
 
@@ -545,28 +547,28 @@ bool boxm2_visualize_index_process(bprb_func_process& pro)
   unsigned layer_size = (unsigned)sph_shell->get_container_size();
   boxm2_volm_wr3db_index_sptr ind = new boxm2_volm_wr3db_index(layer_size, buffer_capacity);
   if (!ind->initialize_read(index_file)) {
-    vcl_cerr << "Cannot initialize index from file: " << index_file << '\n';
+    std::cerr << "Cannot initialize index from file: " << index_file << '\n';
     return false;
   }
 
-  vcl_vector<unsigned char> values(layer_size);
+  std::vector<unsigned char> values(layer_size);
   for (unsigned j = 0; j < si; ++j)
     ind->get_next(values);
   for (unsigned j = si; j < ei; ++j) {
-    vcl_stringstream str; str << prefix << '_' << j;
-    vcl_string temp_name = str.str() + ".vrml";
+    std::stringstream str; str << prefix << '_' << j;
+    std::string temp_name = str.str() + ".vrml";
     ind->get_next(values);
 #if 0
-    vcl_cout << "j: " << j << " values array:\n";
+    std::cout << "j: " << j << " values array:\n";
     for (unsigned i = 0; i < layer_size; i++) {
-      vcl_cout << (int)values[i] << ' ';
+      std::cout << (int)values[i] << ' ';
     }
-    vcl_cout << vcl_endl;
+    std::cout << std::endl;
 #endif
     sph_shell->draw_template(temp_name, values, (unsigned char)254);
     vil_image_view<vil_rgb<vxl_byte> > img;
     sph_shell->panaroma_img(img, values);
-    vcl_string img_name = str.str() + ".png";
+    std::string img_name = str.str() + ".png";
     vil_save(img, img_name.c_str());
   }
   return true;
@@ -585,7 +587,7 @@ bool boxm2_visualize_index_process2_cons(bprb_func_process& pro)
 {
   using namespace boxm2_visualize_index_process2_globals;
 
-  vcl_vector<vcl_string> input_types_(n_inputs_);
+  std::vector<std::string> input_types_(n_inputs_);
   input_types_[0] = "vcl_string"; // geo index hyp folder
   input_types_[1] = "vcl_string"; // visibility index folder
   input_types_[2] = "vcl_string"; // ray array binary file
@@ -594,7 +596,7 @@ bool boxm2_visualize_index_process2_cons(bprb_func_process& pro)
   input_types_[5] = "float";  // lon
   input_types_[6] = "int"; // 0: visualize depth interval, 1: class labels, 2: orientation labels (in this case, identifier for the data blocks is assumed to "orientation")
 
-  vcl_vector<vcl_string>  output_types_(n_outputs_);
+  std::vector<std::string>  output_types_(n_outputs_);
   return pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
 }
 
@@ -603,44 +605,44 @@ bool boxm2_visualize_index_process2(bprb_func_process& pro)
   using namespace boxm2_visualize_index_process2_globals;
 
   if ( pro.n_inputs() < n_inputs_ ){
-    vcl_cout << pro.name() << ": The input number should be " << n_inputs_<< vcl_endl;
+    std::cout << pro.name() << ": The input number should be " << n_inputs_<< std::endl;
     return false;
   }
   unsigned i = 0;
-  vcl_string geo_index_hyp_folder = pro.get_input<vcl_string>(i++);
-  vcl_string visibility_index_folder = pro.get_input<vcl_string>(i++);
-  vcl_string ray_file = pro.get_input<vcl_string>(i++);
+  std::string geo_index_hyp_folder = pro.get_input<std::string>(i++);
+  std::string visibility_index_folder = pro.get_input<std::string>(i++);
+  std::string ray_file = pro.get_input<std::string>(i++);
   unsigned tile_id = pro.get_input<unsigned>(i++);
   float lat = pro.get_input<float>(i++);
   float lon = pro.get_input<float>(i++);
   int data_type = pro.get_input<int>(i++);
 
-  vcl_stringstream file_name_pre; file_name_pre << geo_index_hyp_folder << "geo_index_tile_" << tile_id;
-  vcl_cout << "constructing: " << file_name_pre.str() << vcl_endl;
+  std::stringstream file_name_pre; file_name_pre << geo_index_hyp_folder << "geo_index_tile_" << tile_id;
+  std::cout << "constructing: " << file_name_pre.str() << std::endl;
   float min_size;
   volm_geo_index_node_sptr root = volm_geo_index::read_and_construct(file_name_pre.str() + ".txt", min_size);
   volm_geo_index::read_hyps(root, file_name_pre.str());
   unsigned size = volm_geo_index::hypo_size(root);
 
   if (!size) {
-    vcl_cout << " there are no hypos in this tile!.. returning!" << vcl_endl;
+    std::cout << " there are no hypos in this tile!.. returning!" << std::endl;
     return true;
   }
   else
-    vcl_cout << " there are " << size << " hyps in this tile!" << vcl_endl;
+    std::cout << " there are " << size << " hyps in this tile!" << std::endl;
 
   unsigned hyp_id;
   volm_geo_index_node_sptr leaf = volm_geo_index::get_closest(root, lat, lon, hyp_id);
   if (!leaf) {
-    vcl_cerr << " the geo index: " << geo_index_hyp_folder <<" do not contain any hyp close to " << lat << ", " << lon << '\n';
+    std::cerr << " the geo index: " << geo_index_hyp_folder <<" do not contain any hyp close to " << lat << ", " << lon << '\n';
     return true;
   }
-  vcl_cout << "hyp " << lat << ", " << lon << " is in leaf: " << leaf->extent_ << vcl_endl;
-  vcl_cout << "\t closest to hyp: " << leaf->hyps_->locs_[hyp_id].y() << ", " << leaf->hyps_->locs_[hyp_id].x() << vcl_endl;
+  std::cout << "hyp " << lat << ", " << lon << " is in leaf: " << leaf->extent_ << std::endl;
+  std::cout << "\t closest to hyp: " << leaf->hyps_->locs_[hyp_id].y() << ", " << leaf->hyps_->locs_[hyp_id].x() << std::endl;
 
 
-  vcl_stringstream file_name_pre2; file_name_pre2 << visibility_index_folder << "geo_index_tile_" << tile_id;
-  vcl_string index_file;
+  std::stringstream file_name_pre2; file_name_pre2 << visibility_index_folder << "geo_index_tile_" << tile_id;
+  std::string index_file;
   if (data_type == 0)
     index_file = leaf->get_index_name(file_name_pre2.str());
   else if (data_type == 1)
@@ -664,43 +666,43 @@ bool boxm2_visualize_index_process2(bprb_func_process& pro)
   ////////////////////////////////////////////////////////////////////////////////////////
   ////////////////////////// visualize depth interval index //////////////////////////////
   ////////////////////////////////////////////////////////////////////////////////////////
-  vcl_string param_file;
-  vcl_string in_dir = visibility_index_folder + "/*.params";
+  std::string param_file;
+  std::string in_dir = visibility_index_folder + "/*.params";
   for (vul_file_iterator fn = in_dir.c_str(); fn; ++fn) {
     param_file = fn();
     break;
   }
   boxm2_volm_wr3db_index_params params;
   if (!params.read_params_file(param_file)) {
-    vcl_cerr << "cannot read: " << param_file << '\n';
+    std::cerr << "cannot read: " << param_file << '\n';
     return false;
   }
 #if 0
-  vcl_string param_file;
+  std::string param_file;
   if (data_type < 3) {
     param_file = vul_file::strip_extension(index_file) + ".params";
   }
   else {
-    vcl_string dir_name = vul_file::dirname(index_file);
-    vcl_string in_dir = dir_name + "/*.params";
+    std::string dir_name = vul_file::dirname(index_file);
+    std::string in_dir = dir_name + "/*.params";
     for (vul_file_iterator fn = in_dir.c_str(); fn; ++fn) {
       param_file = fn();
-      vcl_cout << "reading from params file: " << param_file << '\n';
+      std::cout << "reading from params file: " << param_file << '\n';
       break;
     }
   }
   boxm2_volm_wr3db_index_params params;
   if (!params.read_params_file(param_file)) {
-    vcl_cerr << "cannot read: " << param_file << '\n';
+    std::cerr << "cannot read: " << param_file << '\n';
     return false;
   }
 #endif
 #if 0
-  vcl_string size_file = vul_file::strip_extension(index_file) + ".txt";
+  std::string size_file = vul_file::strip_extension(index_file) + ".txt";
   unsigned long eis;
   params.read_size_file(size_file, eis);
   if ((unsigned long)hyp_id >= eis) {
-    vcl_cerr << " the hyp id is: " << hyp_id
+    std::cerr << " the hyp id is: " << hyp_id
              << " which is invalid for the index with: " << eis
              << "; indices read from: " << size_file << '\n';
     return false;
@@ -709,28 +711,28 @@ bool boxm2_visualize_index_process2(bprb_func_process& pro)
 
   boxm2_volm_wr3db_index_sptr ind = new boxm2_volm_wr3db_index(params.layer_size, 1);
   if (!ind->initialize_read(index_file)) {
-    vcl_cerr << "Cannot initialize index from file: " << index_file << '\n';
+    std::cerr << "Cannot initialize index from file: " << index_file << '\n';
     return false;
   }
 
-  vcl_vector<unsigned char> values(params.layer_size);
+  std::vector<unsigned char> values(params.layer_size);
   for (unsigned j = 0; j < hyp_id; ++j)
     ind->get_next(values);
   ind->get_next(values);  // this one is the hyp_id'th one
 
-  vcl_string prefix = vul_file::strip_extension(index_file);
-  vcl_stringstream str;
+  std::string prefix = vul_file::strip_extension(index_file);
+  std::stringstream str;
   str << prefix << "_hyp_" << leaf->hyps_->locs_[hyp_id].y()
       << '_' << leaf->hyps_->locs_[hyp_id].x() << '_' << leaf->hyps_->locs_[hyp_id].z();
 
-  vcl_string txt_name = str.str() + ".txt";
-  vcl_ofstream ofs(txt_name.c_str());
+  std::string txt_name = str.str() + ".txt";
+  std::ofstream ofs(txt_name.c_str());
   ofs << params.layer_size << '\n';
   for (unsigned ii = 0; ii < params.layer_size; ii++)
     ofs << (int)values[ii] << '\n';
   ofs.close();
 
-  vcl_string temp_name = str.str() + ".vrml";
+  std::string temp_name = str.str() + ".vrml";
   sph_shell->draw_template(temp_name, values, (unsigned char)254);
 
   vil_image_view<vil_rgb<vxl_byte> > img;
@@ -743,21 +745,21 @@ bool boxm2_visualize_index_process2(bprb_func_process& pro)
   else {
    vil_image_view<vil_rgb<vxl_byte> > img_orientation;
    sph_shell->panaroma_images_from_combined(img_orientation, img, values);
-   vcl_stringstream str;
+   std::stringstream str;
    str << prefix << "_orientation_hyp_" << leaf->hyps_->locs_[hyp_id].y()
        << '_' << leaf->hyps_->locs_[hyp_id].x() << '_' << leaf->hyps_->locs_[hyp_id].z();
-   vcl_string img_name = str.str() + ".png";
-   vcl_cout << "saving image to: " << img_name << vcl_endl;
+   std::string img_name = str.str() + ".png";
+   std::cout << "saving image to: " << img_name << std::endl;
    vil_save(img_orientation, img_name.c_str());
   }
-  vcl_string img_name;
+  std::string img_name;
   if (data_type == 0)
     img_name = str.str() + "_depth.png";
   else if (data_type == 1)
     img_name = str.str() + "_land.png";
   else if (data_type == 2)
     img_name = str.str() + "_orientation.png";
-  vcl_cout << "saving image to: " << img_name << vcl_endl;
+  std::cout << "saving image to: " << img_name << std::endl;
   vil_save(img, img_name.c_str());
 
   return true;

@@ -7,7 +7,9 @@
 // \author Vishal Jain
 // \date Mar 10, 2011
 
-#include <vcl_fstream.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <fstream>
 #include <boxm2/io/boxm2_cache.h>
 #include <boxm2/boxm2_scene.h>
 #include <boxm2/boxm2_block.h>
@@ -32,7 +34,7 @@ bool boxm2_cpp_query_cell_data_process_cons(bprb_func_process& pro)
   using namespace boxm2_cpp_query_cell_data_process_globals;
 
   //process takes 1 input
-  vcl_vector<vcl_string> input_types_(n_inputs_);
+  std::vector<std::string> input_types_(n_inputs_);
   input_types_[0] = "boxm2_scene_sptr";
   input_types_[1] = "boxm2_cache_sptr";
   input_types_[2] = "float"; //x
@@ -40,7 +42,7 @@ bool boxm2_cpp_query_cell_data_process_cons(bprb_func_process& pro)
   input_types_[4] = "float"; //z
 
 
-  vcl_vector<vcl_string>  output_types_(n_outputs_);
+  std::vector<std::string>  output_types_(n_outputs_);
   for (unsigned i=0;i<2;i++) output_types_[i] = "float";
 
   return pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
@@ -51,7 +53,7 @@ bool  boxm2_cpp_query_cell_data_process(bprb_func_process& pro)
   using namespace boxm2_cpp_query_cell_data_process_globals;
 
   if ( pro.n_inputs() < n_inputs_ ) {
-    vcl_cout << pro.name() << ": The input number should be " << n_inputs_<< vcl_endl;
+    std::cout << pro.name() << ": The input number should be " << n_inputs_<< std::endl;
     return false;
   }
   //get the inputs
@@ -70,9 +72,9 @@ bool  boxm2_cpp_query_cell_data_process(bprb_func_process& pro)
   //if (!scene->contains(vgl_point_3d<double>(x, y, z), id, local))
     //return false;
 
-  //int index_x=(int)vcl_floor(local.x());
-  //int index_y=(int)vcl_floor(local.y());
-  //int index_z=(int)vcl_floor(local.z());
+  //int index_x=(int)std::floor(local.x());
+  //int index_y=(int)std::floor(local.y());
+  //int index_z=(int)std::floor(local.z());
   //boxm2_block * blk=cache->get_block(id);
   //boxm2_block_metadata mdata = scene->get_block_metadata_const(id);
   //vnl_vector_fixed<unsigned char,16> treebits=blk->trees()(index_x,index_y,index_z);
@@ -91,8 +93,8 @@ bool  boxm2_cpp_query_cell_data_process(bprb_func_process& pro)
   //float alpha=alpha_data_array[data_offset];
 
   //float side_len=static_cast<float>(mdata.sub_block_dim_.x()/((float)(1<<depth)));
-  ////vcl_cout<<" DATA OFFSET "<<side_len<<vcl_endl;
-  //p=1.0f-vcl_exp(-alpha*side_len);
+  ////std::cout<<" DATA OFFSET "<<side_len<<std::endl;
+  //p=1.0f-std::exp(-alpha*side_len);
   //boxm2_data_base *  int_base  = cache->get_data_base(id,boxm2_data_traits<BOXM2_MOG3_GREY>::prefix());
   //boxm2_data<BOXM2_MOG3_GREY> *int_data=new boxm2_data<BOXM2_MOG3_GREY>(int_base->data_buffer(),int_base->buffer_length(),int_base->block_id());
 

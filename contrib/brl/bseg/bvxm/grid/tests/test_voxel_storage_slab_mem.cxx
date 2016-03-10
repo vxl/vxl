@@ -1,5 +1,7 @@
 #include <testlib/testlib_test.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iostream>
 
 #include <vgl/vgl_vector_3d.h>
 
@@ -29,7 +31,7 @@ static void test_voxel_storage_slab_mem()
     for (vit = slab.begin(); vit != slab.end(); vit++, cnt++) {
       if (*vit != init_val) {
 #ifdef DEBUG
-        vcl_cerr << "error: read in value does not match init value! slice = " << i << ", count = " << cnt << vcl_endl;
+        std::cerr << "error: read in value does not match init value! slice = " << i << ", count = " << cnt << std::endl;
 #endif
         init_check = false;
       }
@@ -49,7 +51,7 @@ static void test_voxel_storage_slab_mem()
     for (vit = slab.begin(); vit != slab.end(); vit++, cnt++) {
       if (*vit != static_cast<float>(cnt)) {
 #ifdef DEBUG
-        vcl_cerr << "error: read in value does not match written value! slice = " << i << ", count = " << cnt << vcl_endl;
+        std::cerr << "error: read in value does not match written value! slice = " << i << ", count = " << cnt << std::endl;
 #endif
         write_read_check = false;
       }

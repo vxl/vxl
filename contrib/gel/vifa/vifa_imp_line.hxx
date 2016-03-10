@@ -6,7 +6,9 @@
 //:
 // \file
 
-#include <vcl_cmath.h>  // for vcl_sqrt()
+#include <vcl_compiler.h>
+#include <iostream>
+#include <cmath>  // for std::sqrt()
 #include <vcl_cassert.h>
 #include <vgl/vgl_line_2d.h>
 
@@ -107,7 +109,7 @@ project_2d_pt(const Type& p,
   double  c = this->c();
   double  a2 = a * a;
   double  b2 = b * b;
-  double  m = vcl_sqrt(a2 + b2);
+  double  m = std::sqrt(a2 + b2);
 
   a /= m;
   b /= m;

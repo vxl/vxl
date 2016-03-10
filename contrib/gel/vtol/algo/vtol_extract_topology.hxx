@@ -5,7 +5,9 @@
 //:
 // \file
 
-#include <vcl_iosfwd.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iosfwd>
 #include <vcl_cassert.h>
 
 #include <vgl/vgl_point_2d.h>
@@ -25,7 +27,7 @@
 #include <vdgl/vdgl_digital_curve.h>
 
 #ifndef NDEBUG
-#  include <vcl_iostream.h>
+#  include <iostream>
 #  define DBG( x ) x;
 #else
 #  define DBG( x ) /*debugging removed*/ do {} while (false)
@@ -70,13 +72,13 @@ vtol_extract_topology( label_image_type const& in_image,
 //                                                                    vertices
 
 template< typename T >
-vcl_vector< vtol_vertex_2d_sptr >
+std::vector< vtol_vertex_2d_sptr >
 vtol_extract_topology<T>::
 vertices() const
 {
-  typedef vcl_vector< vertex_node >::const_iterator vertex_iterator_t;
+  typedef std::vector< vertex_node >::const_iterator vertex_iterator_t;
 
-  vcl_vector< vtol_vertex_2d_sptr > verts;
+  std::vector< vtol_vertex_2d_sptr > verts;
 
   for ( vertex_iterator_t i = node_list_.begin();
         i != node_list_.end(); ++i ) {
@@ -91,7 +93,7 @@ vertices() const
 //                                                                       faces
 
 template< typename T >
-vcl_vector< vtol_intensity_face_sptr >
+std::vector< vtol_intensity_face_sptr >
 vtol_extract_topology<T>::
 faces( data_image_type const& data_img ) const
 {
@@ -101,7 +103,7 @@ faces( data_image_type const& data_img ) const
   // Generate faces for each label. A given label may generate more
   // than one face based on containment, etc.
   //
-  vcl_vector< vtol_intensity_face_sptr > faces;
+  std::vector< vtol_intensity_face_sptr > faces;
   for ( unsigned i = 0; i < region_list.size(); ++i ) {
     if ( ! region_list[i].empty() ) {
       compute_faces( region_list[i], faces, &data_img );
@@ -113,7 +115,7 @@ faces( data_image_type const& data_img ) const
 
 
 template< typename T >
-vcl_vector< vtol_intensity_face_sptr >
+std::vector< vtol_intensity_face_sptr >
 vtol_extract_topology<T>::
 faces( ) const
 {
@@ -123,7 +125,7 @@ faces( ) const
   // Generate faces for each label. A given label may generate more
   // than one face based on containment, etc.
   //
-  vcl_vector< vtol_intensity_face_sptr > faces;
+  std::vector< vtol_intensity_face_sptr > faces;
   for ( unsigned i = 0; i < region_list.size(); ++i ) {
     if ( ! region_list[i].empty() ) {
       compute_faces( region_list[i], faces, 0 );
@@ -578,7 +580,7 @@ construct_topology( )
         unsigned nbr = node(index).link[dir];
         unsigned back_dir = node(index).back_dir[dir];
         if ( node(nbr).link[back_dir] != index ) {
-          vcl_cerr << "Bad back link on vertex " << index << " ("<<node(index).i
+          std::cerr << "Bad back link on vertex " << index << " ("<<node(index).i
                    << ',' << node(index).j << " in dir " << dir << '\n'
                    << "  link     " << dir << " = " << node(index).link[dir] << ";\n"
                    << "  back_dir " << dir << " = " << node(index).back_dir[dir] << '\n';
@@ -597,7 +599,7 @@ construct_topology( )
 template< typename LABEL_TYPE >
 bool
 vtol_extract_topology< LABEL_TYPE >::
-trace_face_boundary( vcl_vector<unsigned>& markers,
+trace_face_boundary( std::vector<unsigned>& markers,
                      unsigned index,
                      unsigned dir,
                      region_type& chain_list,
@@ -609,13 +611,13 @@ trace_face_boundary( vcl_vector<unsigned>& markers,
                start_left, region_label );
 
 #ifdef DEBUG
-  vcl_cout << "start left, region label: " << (int) start_left << ' '
+  std::cout << "start left, region label: " << (int) start_left << ' '
            << (int)region_label << " ; i,j: " << node(index).i << ' '
            << node(index).j << " ; index,dir " << index << ' '
            << dir << " ; label(i,j) = "
-           << (int)label_img_(node(index).i, node(index).j) << vcl_endl;
+           << (int)label_img_(node(index).i, node(index).j) << std::endl;
   if ( region_label + 1 == min_label_ ) {
-    vcl_cout << "exiting" << vcl_endl;
+    std::cout << "exiting" << std::endl;
     return false;
   }
 #endif
@@ -635,8 +637,8 @@ trace_face_boundary( vcl_vector<unsigned>& markers,
   chain_list.j = node(index).j + delta_j[dir];
 
 #ifdef DEBUG
-  vcl_cout << "index " << index << " dir " << dir << "  node " << node(index).i
-           << " delta " << delta_i[dir] << vcl_endl;
+  std::cout << "index " << index << " dir " << dir << "  node " << node(index).i
+           << " delta " << delta_i[dir] << std::endl;
 #endif
   assert( chain_list.i < label_img_.ni() );
   assert( chain_list.j < label_img_.nj() );
@@ -699,7 +701,7 @@ collect_regions( region_collection& region_list ) const
   // Use put marks about which nodes (vertices) and directions have
   // been processed.
   //
-  vcl_vector< unsigned > markers( node_list_.size(), 0 );
+  std::vector< unsigned > markers( node_list_.size(), 0 );
 
   region_list.resize( max_label_ - min_label_ + 1 );
 
@@ -745,8 +747,8 @@ collect_regions( region_collection& region_list ) const
 template< typename T >
 void
 vtol_extract_topology<T>::
-compute_faces( vcl_vector< region_type_sptr > const& chains,
-               vcl_vector< vtol_intensity_face_sptr >& faces,
+compute_faces( std::vector< region_type_sptr > const& chains,
+               std::vector< vtol_intensity_face_sptr >& faces,
                data_image_type const* data_img ) const
 {
   assert( chains.size() > 0 );
@@ -779,7 +781,7 @@ compute_faces( vcl_vector< region_type_sptr > const& chains,
 template <typename T>
 void
 vtol_extract_topology<T>::
-add_faces( vcl_vector<vtol_intensity_face_sptr>& faces,
+add_faces( std::vector<vtol_intensity_face_sptr>& faces,
            typename vtol_extract_topology<T>::finder_type* find,
            data_image_type const* img,
            typename vtol_extract_topology<T>::chain_tree_node* node,
@@ -900,7 +902,7 @@ smooth_chain( vdgl_edgel_chain_sptr chain,
   }
   assert( reg.get_n_pts() + 1 == num_pts );
   if ( !reg.fit_constrained( chain->edgel(0).x(), chain->edgel(0).y() ) ) {
-    vcl_cerr << "line fit failed at start\n";
+    std::cerr << "line fit failed at start\n";
   }
 
   // Project the first half of the points used in estimating the line
@@ -931,7 +933,7 @@ smooth_chain( vdgl_edgel_chain_sptr chain,
     // Estimate a new line
     //
     if ( !reg.fit() ) {
-      vcl_cerr << "line fit failed at " << fit_start << '-' << fit_end << '\n';
+      std::cerr << "line fit failed at " << fit_start << '-' << fit_end << '\n';
     }
 
     // Project the current point onto the line to get the smoothed position
@@ -975,7 +977,7 @@ smooth_chain( vdgl_edgel_chain_sptr chain,
   //
   if ( !reg.fit_constrained( chain->edgel(fit_end).x(),
                             chain->edgel(fit_end).y() ) ) {
-    vcl_cerr << "line fit failed at end\n";
+    std::cerr << "line fit failed at end\n";
   }
 
   dir = reg.get_line().direction();

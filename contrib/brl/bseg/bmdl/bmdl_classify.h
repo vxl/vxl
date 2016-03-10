@@ -8,7 +8,9 @@
 // \author Matt Leotta
 // \date Oct. 14, 2008
 
-#include <vcl_vector.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <vector>
 #include <vil/vil_image_view.h>
 
 template <class T>
@@ -113,9 +115,9 @@ class bmdl_classify
   //: Access the resulting height image
   const vil_image_view<T>& heights() const { return heights_; }
   //: Access the mean building heights
-  const vcl_vector<T>& mean_heights() const { return building_mean_hgt_; }
+  const std::vector<T>& mean_heights() const { return building_mean_hgt_; }
   //: Access the building areas in pixels
-  const vcl_vector<unsigned int>& building_area() const { return building_area_; }
+  const std::vector<unsigned int>& building_area() const { return building_area_; }
 
  private:
   //: A helper class to manage merging of buildings
@@ -132,7 +134,7 @@ class bmdl_classify
     void merge(unsigned int idx1, unsigned int idx2);
    private:
     bmdl_classify<T>* classifier_;
-    vcl_vector<unsigned int> idx_map_;
+    std::vector<unsigned int> idx_map_;
   };
 
   friend class merge_map;
@@ -144,12 +146,12 @@ class bmdl_classify
 
   //: Compute a histogram of the data
   // Does not reset the initial bin values to zero
-  void histogram(const vcl_vector<T>& data, vcl_vector<unsigned int>& bins,
+  void histogram(const std::vector<T>& data, std::vector<unsigned int>& bins,
                  T minv, T maxv) const;
 
   //: Find the maximum peak in the data and fit a gaussian to it
   // Search in the range \a minv to \a maxv
-  void fit_gaussian_to_peak(const vcl_vector<T>& data, T minv, T maxv,
+  void fit_gaussian_to_peak(const std::vector<T>& data, T minv, T maxv,
                             T& mean, T& stdev) const;
 
   //: Expand the range (minv, maxv) with the data in \a image
@@ -159,15 +161,15 @@ class bmdl_classify
 
   //: Search for nearby pixel that can be added to each building
   //  Return true if any changes are made
-  bool expand_buildings(vcl_vector<T>& means,
-                        vcl_vector<unsigned int>& sizes);
+  bool expand_buildings(std::vector<T>& means,
+                        std::vector<unsigned int>& sizes);
 
   //: Group building pixel by height into bins of size \a binsize
   vil_image_view<unsigned int> bin_heights(T binsize = 0.5);
 
 
   //: Morphological clean up on each building independently
-  vcl_vector<bool> close_buildings(unsigned int num_labels);
+  std::vector<bool> close_buildings(unsigned int num_labels);
 
   //: first return image
   vil_image_view<T> first_return_;
@@ -192,9 +194,9 @@ class bmdl_classify
   T last_min_, last_max_;
 
   //: The mean height of each building
-  vcl_vector<T> building_mean_hgt_;
+  std::vector<T> building_mean_hgt_;
   //: The area in pixels of each building
-  vcl_vector<unsigned int> building_area_;
+  std::vector<unsigned int> building_area_;
 
   //: computed segmentation labels
   vil_image_view<unsigned int> labels_;

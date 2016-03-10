@@ -1,7 +1,9 @@
 //:
 // \file
 #include "mcal_component_analyzer.h"
-#include <vcl_cstdlib.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <cstdlib>
 #include <mbl/mbl_data_array_wrapper.h>
 #include <mbl/mbl_exception.h>
 #include <mbl/mbl_cloneables_factory.h>
@@ -73,30 +75,30 @@ void vsl_add_to_binary_loader(const mcal_component_analyzer& b)
 
 //=======================================================================
 
-vcl_string  mcal_component_analyzer::is_a() const
+std::string  mcal_component_analyzer::is_a() const
 {
-  return vcl_string("mcal_component_analyzer");
+  return std::string("mcal_component_analyzer");
 }
 
 
 //: Create a concrete mcal_component_analyzer object, from a text specification.
-vcl_auto_ptr<mcal_component_analyzer>
-  mcal_component_analyzer::create_from_stream(vcl_istream &is)
+std::auto_ptr<mcal_component_analyzer>
+  mcal_component_analyzer::create_from_stream(std::istream &is)
 {
-  vcl_string name;
+  std::string name;
   is >> name;
 
-  vcl_auto_ptr<mcal_component_analyzer> mca;
+  std::auto_ptr<mcal_component_analyzer> mca;
   try
   {
     mca = mbl_cloneables_factory<mcal_component_analyzer>::get_clone(name);
   }
   catch (const mbl_exception_no_name_in_factory & e)
   {
-      vcl_cerr<<"ERROR in mcal_component_analyzer::new_vm_builder_from_stream\n"
+      std::cerr<<"ERROR in mcal_component_analyzer::new_vm_builder_from_stream\n"
               <<"\tRequired vector model builder of "<<name<<" is not in the factory. Further exception details follow:\n"
-              <<'\t'<<e.what()<<vcl_endl;
-      vcl_abort();
+              <<'\t'<<e.what()<<std::endl;
+      std::abort();
   }
   mca->config_from_stream(is);
   return mca;
@@ -105,9 +107,9 @@ vcl_auto_ptr<mcal_component_analyzer>
 //: Read initialisation settings from a stream.
 // The default implementation merely checks that no properties have
 // been specified.
-void mcal_component_analyzer::config_from_stream(vcl_istream& is)
+void mcal_component_analyzer::config_from_stream(std::istream& is)
 {
-  vcl_string s = mbl_parse_block(is);
+  std::string s = mbl_parse_block(is);
   if (s.empty() || s=="{}") return;
 
   throw mbl_exception_parse_error(
@@ -138,7 +140,7 @@ void vsl_b_read(vsl_b_istream& bfs, mcal_component_analyzer& b)
 // Associated function: operator<<
 //=======================================================================
 
-vcl_ostream& operator<<(vcl_ostream& os,const mcal_component_analyzer& b)
+std::ostream& operator<<(std::ostream& os,const mcal_component_analyzer& b)
 {
   os << b.is_a() << ": ";
   vsl_indent_inc(os);
@@ -151,7 +153,7 @@ vcl_ostream& operator<<(vcl_ostream& os,const mcal_component_analyzer& b)
 // Associated function: operator<<
 //=======================================================================
 
-vcl_ostream& operator<<(vcl_ostream& os,const mcal_component_analyzer* b)
+std::ostream& operator<<(std::ostream& os,const mcal_component_analyzer* b)
 {
     if (b)
     return os << *b;

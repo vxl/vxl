@@ -1,7 +1,7 @@
 #include "boxm2_vecf_ocl_composite_head_model.h"
 // #include "boxm2_vecf_eye_params.h"
 
-boxm2_vecf_ocl_composite_head_model::boxm2_vecf_ocl_composite_head_model( vcl_string const& head_model_path, vcl_string const& eye_model_path,bocl_device_sptr device, boxm2_opencl_cache_sptr opencl_cache)
+boxm2_vecf_ocl_composite_head_model::boxm2_vecf_ocl_composite_head_model( std::string const& head_model_path, std::string const& eye_model_path,bocl_device_sptr device, boxm2_opencl_cache_sptr opencl_cache)
   : boxm2_vecf_ocl_head_model(head_model_path,device,opencl_cache),
   params_()
 {
@@ -22,7 +22,7 @@ bool boxm2_vecf_ocl_composite_head_model::set_params(boxm2_vecf_articulated_para
     boxm2_vecf_composite_head_parameters const& params_ref = dynamic_cast<boxm2_vecf_composite_head_parameters const &>(params);
     params_ =boxm2_vecf_composite_head_parameters(params_ref);
   }catch(std::exception e){
-    vcl_cout<<" Can't downcast to composite head parameters! PARAMATER ASSIGNMENT PHAILED!"<<vcl_endl;
+    std::cout<<" Can't downcast to composite head parameters! PARAMATER ASSIGNMENT PHAILED!"<<std::endl;
     return false;
   }
 
@@ -58,7 +58,7 @@ bool boxm2_vecf_ocl_composite_head_model::set_params(boxm2_vecf_articulated_para
 
 void boxm2_vecf_ocl_composite_head_model::map_to_target(boxm2_scene_sptr target)
 {
-  //  vcl_cout << "@@@@@@@@@@@@@@@  clearing and re-mapping head model " << vcl_endl;
+  //  std::cout << "@@@@@@@@@@@@@@@  clearing and re-mapping head model " << std::endl;
   // clear target
 
   if (boxm2_vecf_ocl_head_model::intrinsic_change_){
@@ -76,9 +76,9 @@ void boxm2_vecf_ocl_composite_head_model::map_to_target(boxm2_scene_sptr target)
 void boxm2_vecf_ocl_composite_head_model::update_gpu_target(boxm2_scene_sptr target_scene)
 {
   // for each block of the target scene
-  vcl_vector<boxm2_block_id> target_blocks = target_scene->get_block_ids();
+  std::vector<boxm2_block_id> target_blocks = target_scene->get_block_ids();
 
-  for (vcl_vector<boxm2_block_id>::iterator tblk = target_blocks.begin();
+  for (std::vector<boxm2_block_id>::iterator tblk = target_blocks.begin();
        tblk != target_blocks.end(); ++tblk) {
     bocl_mem* color_app_db =  opencl_cache_->get_data(target_scene, *tblk, boxm2_data_traits<BOXM2_GAUSS_RGB>::prefix(color_apm_id_));
     bocl_mem* vis_score    =  opencl_cache_->get_data(target_scene, *tblk, boxm2_data_traits<BOXM2_VIS_SCORE>::prefix(color_apm_id_));

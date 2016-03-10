@@ -1,6 +1,7 @@
 // This is core/vpgl/algo/vpgl_calibration_matrix_compute.cxx
 #include <vpgl/algo/vpgl_calibration_matrix_compute.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <iostream>
 #include <vnl/vnl_matrix_fixed.h>
 #include <vnl/vnl_vector_fixed.h>
 #include <vnl/vnl_det.h>
@@ -32,7 +33,7 @@ vpgl_calibration_matrix_compute::natural(const vgl_h_matrix_2d<double>& homograp
 
   if ( vnl_det( H ) < 0 )
   {
-    vcl_cerr << "compute::natural input homography is an inversion" << vcl_endl;
+    std::cerr << "compute::natural input homography is an inversion" << std::endl;
     return false;
   }
 
@@ -57,11 +58,11 @@ vpgl_calibration_matrix_compute::natural(const vgl_h_matrix_2d<double>& homograp
   double f2 = x - u0 * u0 - v0 * v0;
   if ( f2 < 0 )
   {
-    vcl_cout << "suspicious square focal length: " << f2 << vcl_endl;
+    std::cout << "suspicious square focal length: " << f2 << std::endl;
     return false;
   }
 
-  double f = vcl_sqrt( f2 );
+  double f = std::sqrt( f2 );
 
   // Done
   K = vpgl_calibration_matrix<double>( f, principal_point );
@@ -70,27 +71,27 @@ vpgl_calibration_matrix_compute::natural(const vgl_h_matrix_2d<double>& homograp
 }
 
 bool
-vpgl_calibration_matrix_compute::natural(const vcl_vector< vgl_point_2d<double> >& image_pts,
-                                         const vcl_vector< vgl_point_2d<double> >& ground_pts,
+vpgl_calibration_matrix_compute::natural(const std::vector< vgl_point_2d<double> >& image_pts,
+                                         const std::vector< vgl_point_2d<double> >& ground_pts,
                                          const vgl_point_2d<double>& principal_point,
                                          vpgl_calibration_matrix<double>& K)
 {
   if ( image_pts.size() != ground_pts.size() )
   {
-    vcl_cerr << "number of image and ground points must be the same" << vcl_endl;
+    std::cerr << "number of image and ground points must be the same" << std::endl;
     return false;
   }
 
   if ( image_pts.size() < 4 )
   {
-    vcl_cerr << "at least four point correspondences are required" << vcl_endl;
+    std::cerr << "at least four point correspondences are required" << std::endl;
     return false;
   }
 
 
   // convert to homogeneous coords to estimate homography
-  vcl_vector< vgl_homg_point_2d<double> > homg_image_pts;
-  vcl_vector< vgl_homg_point_2d<double> > homg_ground_pts;
+  std::vector< vgl_homg_point_2d<double> > homg_image_pts;
+  std::vector< vgl_homg_point_2d<double> > homg_ground_pts;
   for ( unsigned int k = 0; k < image_pts.size(); ++k )
   {
     homg_image_pts.push_back( vgl_homg_point_2d<double>( image_pts[k] ) );
@@ -101,7 +102,7 @@ vpgl_calibration_matrix_compute::natural(const vcl_vector< vgl_point_2d<double> 
   vgl_h_matrix_2d<double> H;
   if ( vgl_h_matrix_2d_compute_linear().compute( homg_ground_pts, homg_image_pts, H ) == false )
   {
-    vcl_cerr << "failed to compute homography" << vcl_endl;
+    std::cerr << "failed to compute homography" << std::endl;
     return false;
   }
 

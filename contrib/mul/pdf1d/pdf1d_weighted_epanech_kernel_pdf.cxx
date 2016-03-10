@@ -7,9 +7,11 @@
 
 #include "pdf1d_weighted_epanech_kernel_pdf.h"
 
-#include <vcl_cstdlib.h>
-#include <vcl_string.h>
-#include <vcl_cmath.h>
+#include <cstdlib>
+#include <string>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <cmath>
 
 #include <pdf1d/pdf1d_weighted_epanech_kernel_sampler.h>
 #include <pdf1d/pdf1d_sampler.h>
@@ -48,7 +50,7 @@ pdf1d_sampler* pdf1d_weighted_epanech_kernel_pdf::new_sampler() const
   return i;
 }
 
-static const double root5 = 2.23606797749978970; //vcl_sqrt(5);
+static const double root5 = 2.23606797749978970; //std::sqrt(5);
 
 //=======================================================================
 //: Probability density at x
@@ -78,7 +80,7 @@ double pdf1d_weighted_epanech_kernel_pdf::operator()(double x0) const
 
 double pdf1d_weighted_epanech_kernel_pdf::log_p(double x) const
 {
-  return vcl_log(pdf1d_weighted_epanech_kernel_pdf::operator()(x));
+  return std::log(pdf1d_weighted_epanech_kernel_pdf::operator()(x));
 }
 
 //=======================================================================
@@ -149,22 +151,22 @@ double pdf1d_weighted_epanech_kernel_pdf::gradient(double x0,
 
 double pdf1d_weighted_epanech_kernel_pdf::nearest_plausible(double /*x*/, double /*log_p_min*/) const
 {
-  vcl_cerr<<"pdf1d_weighted_epanech_kernel_pdf::nearest_plausible() not yet implemented.\n";
-  vcl_abort();
+  std::cerr<<"pdf1d_weighted_epanech_kernel_pdf::nearest_plausible() not yet implemented.\n";
+  std::abort();
   return 0.0;
 }
 
 //=======================================================================
 
-vcl_string pdf1d_weighted_epanech_kernel_pdf::is_a() const
+std::string pdf1d_weighted_epanech_kernel_pdf::is_a() const
 {
-  static vcl_string class_name_ = "pdf1d_weighted_epanech_kernel_pdf";
+  static std::string class_name_ = "pdf1d_weighted_epanech_kernel_pdf";
   return class_name_;
 }
 
 //=======================================================================
 
-bool pdf1d_weighted_epanech_kernel_pdf::is_class(vcl_string const& s) const
+bool pdf1d_weighted_epanech_kernel_pdf::is_class(std::string const& s) const
 {
   return pdf1d_weighted_kernel_pdf::is_class(s) || s==pdf1d_weighted_epanech_kernel_pdf::is_a();
 }

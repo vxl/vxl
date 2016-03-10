@@ -1,5 +1,6 @@
 // This is core/vgl/io/tests/test_homg_point_1d_io.cxx
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <iostream>
 #include <vgl/vgl_homg_point_1d.h>
 #include <vsl/vsl_indent.h>
 #include <vgl/io/vgl_io_homg_point_1d.h>
@@ -8,7 +9,7 @@
 
 void test_homg_point_1d_float_io()
 {
-  vcl_cout << "***********************************\n"
+  std::cout << "***********************************\n"
            << "Testing vgl_homg_point_1d<float> io\n"
            << "***********************************\n";
 
@@ -34,8 +35,8 @@ void test_homg_point_1d_float_io()
   TEST ("p_out.w() == p_in.w()", p_out.w(), p_in.w());
   TEST ("p_out == p_in", p_out, p_in);
 
-  vsl_print_summary(vcl_cout, p_out);
-  vcl_cout << '\n';
+  vsl_print_summary(std::cout, p_out);
+  std::cout << '\n';
   vsl_indent_clear_all_data();
 }
 

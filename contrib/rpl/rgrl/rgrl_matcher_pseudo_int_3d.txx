@@ -22,7 +22,7 @@ static const double rgrl_matcher_pseudo_int_3d_max_response_value = 1.0e30;
 
 //#define MY_DEBUG
 #if defined ( MY_DEBUG )
-#  include <vcl_iostream.h>
+#  include <std::iostream.h>
 #  define DBGi(x) x
 #else
 #  define DBGi(x)
@@ -83,7 +83,7 @@ rgrl_matcher_pseudo_int_3d_pixel_in_range( vil3d_image_view< PixelType > const& 
     for ( unsigned i = 0; i < 2; ++i )
       loc_dbl[ i ] = double(location[ i ]);
 
-//    vcl_cout << "mask pixel loc: " << loc_dbl << '\n';
+//    std::cout << "mask pixel loc: " << loc_dbl << '\n';
     if (  !mask->inside( loc_dbl ) )
       return false;
   }
@@ -150,9 +150,9 @@ compute_matches( rgrl_feature_set const&    from_set,
                  rgrl_scale          const& current_scale,
                  rgrl_match_set_sptr const& /*old_matches*/ )
 {
-  vcl_cerr << "compute_matches()\n";
+  std::cerr << "compute_matches()\n";
 
-  typedef vcl_vector<rgrl_feature_sptr> f_vector_type;
+  typedef std::vector<rgrl_feature_sptr> f_vector_type;
   typedef f_vector_type::iterator f_iterator_type;
 
   //  Build an empty match set
@@ -168,7 +168,7 @@ compute_matches( rgrl_feature_set const&    from_set,
 
   //  Vectors for matched features and weights.
   f_vector_type matched_to_features;
-  vcl_vector<double> match_weights;
+  std::vector<double> match_weights;
 
   // reserve space
   matches_sptr->reserve( from.size() );
@@ -188,8 +188,8 @@ compute_matches( rgrl_feature_set const&    from_set,
      // set the weight = 0
      if ( !rgrl_matcher_pseudo_int_3d_physical_in_range( to_image_, mask_, mapped_feature->location(), to_spacing_ratio_ ) ) {
        //  Make a dummy vector of intensity weights.
-       // vcl_vector< double > dummy_intensity_weights( 0 ); //CT: not needed now
-       // vcl_vector< double > match_weights( 0 );
+       // std::vector< double > dummy_intensity_weights( 0 ); //CT: not needed now
+       // std::vector< double > match_weights( 0 );
 
        //  Add the feature and its matches and weights to the match set
        matches_sptr
@@ -207,22 +207,22 @@ compute_matches( rgrl_feature_set const&    from_set,
 
      DBGi(
        if ( (*fitr)->is_type( rgrl_feature_trace_region::type_id() ) ) {
-         vcl_cout << "\nfrom :\n" << (*fitr)->location()
+         std::cout << "\nfrom :\n" << (*fitr)->location()
                   << " normal: "
                   << rgrl_cast<rgrl_feature_trace_region *> ( *fitr )->normal_subspace().get_column(0)
                   << "\nto :\n" << mapped_feature->location()
                   << " normal: "
                   << rgrl_cast<rgrl_feature_trace_region *> ( mapped_feature )->normal_subspace().get_column(0)
-                  << vcl_endl;
+                  << std::endl;
        }
        else if ( (*fitr)->is_type( rgrl_feature_face_region::type_id() ) ) {
-         vcl_cout << "\nfrom :\n" << (*fitr)->location()
+         std::cout << "\nfrom :\n" << (*fitr)->location()
                   << " normal: "
                   << rgrl_cast<rgrl_feature_face_region *> ( *fitr )->normal()
                   << "\nto :\n" << mapped_feature->location()
                   << " normal: "
                   << rgrl_cast<rgrl_feature_face_region *> ( mapped_feature )->normal()
-                  << vcl_endl;
+                  << std::endl;
        }
      );
 
@@ -231,16 +231,16 @@ compute_matches( rgrl_feature_set const&    from_set,
      // if there is no mapped pixels in the valid region, no matcher is created
      if ( mapped_pixels.size() == 0 ) {
        //  Make a dummy vector of intensity weights.
-       // vcl_vector< double > dummy_intensity_weights( 0 ); //CT: not needed now
-       // vcl_vector< double > match_weights( 0 );
+       // std::vector< double > dummy_intensity_weights( 0 ); //CT: not needed now
+       // std::vector< double > match_weights( 0 );
 
        //  Add the feature and its matches and weights to the match set
        matches_sptr
          -> add_feature_matches_and_weights( *fitr, mapped_feature, matched_to_features,
                                              match_weights );
-       vcl_cout << " from point : " << (*fitr)->location()
+       std::cout << " from point : " << (*fitr)->location()
                 << " to point : " << mapped_feature->location()
-                << " doesn't have proper matches\n" << vcl_endl;
+                << " doesn't have proper matches\n" << std::endl;
        continue;
      }
 
@@ -248,14 +248,14 @@ compute_matches( rgrl_feature_set const&    from_set,
                            matched_to_features, match_weights );
 
      //  Make a dummy vector of intensity weights.
-     //vcl_vector< double > dummy_intensity_weights( match_weights.size(), 1.0 );
+     //std::vector< double > dummy_intensity_weights( match_weights.size(), 1.0 );
 
      //  Add the feature and its matches and weights to the match set
      matches_sptr
        -> add_feature_matches_and_weights( *fitr, mapped_feature, matched_to_features, match_weights );
    }
 
-  vcl_cout << " number of from points : " << matches_sptr->from_size() << vcl_endl;
+  std::cout << " number of from points : " << matches_sptr->from_size() << std::endl;
   assert( matches_sptr->from_size() == from.size() );
   return matches_sptr;
 }
@@ -288,12 +288,12 @@ map_region_intensities( rgrl_transformation      const& trans,
 template <class PixelType>
 void
 rgrl_matcher_pseudo_int_3d<PixelType> ::
-map_region_intensities( vcl_vector< vnl_vector<int> > const& pixel_locations,
+map_region_intensities( std::vector< vnl_vector<int> > const& pixel_locations,
                         rgrl_transformation           const& trans,
                         rgrl_feature_sptr                    feature_sptr,
                         rgrl_mapped_pixel_vector_type      & mapped_pixels) const
 {
-  DebugMacro( 1, "   number of pixel coorindates: " << pixel_locations.size() << vcl_endl );
+  DebugMacro( 1, "   number of pixel coorindates: " << pixel_locations.size() << std::endl );
   // check
   if ( pixel_locations.empty() ) return;
 
@@ -307,7 +307,7 @@ map_region_intensities( vcl_vector< vnl_vector<int> > const& pixel_locations,
   vbl_bounding_box<double,3> box;
   mapped_info   mapped_pt;
   mapped_pt.pixel_ = vnl_double_3( 0.0, 0.0, 0.0 );   // not used field
-  vcl_vector< mapped_info >  direct_mapped_pts;
+  std::vector< mapped_info >  direct_mapped_pts;
   direct_mapped_pts.reserve( pixel_locations.size() );
   for ( unsigned int i=0; i<pixel_locations.size(); ++i )
   {
@@ -342,14 +342,14 @@ map_region_intensities( vcl_vector< vnl_vector<int> > const& pixel_locations,
   if ( box.empty() )   return;
   // the dimension of a smallest image that encapsulate the bounding box
   vnl_int_3 origin, dim;
-  origin[0] = (int)vcl_floor(box.xmin());
-  origin[1] = (int)vcl_floor(box.ymin());
-  origin[2] = (int)vcl_floor(box.zmin());
-  dim[0] = 1+(int)vcl_ceil(box.xmax()) - (int)vcl_floor(box.xmin());
-  dim[1] = 1+(int)vcl_ceil(box.ymax()) - (int)vcl_floor(box.ymin());
-  dim[2] = 1+(int)vcl_ceil(box.zmax()) - (int)vcl_floor(box.zmin());
+  origin[0] = (int)std::floor(box.xmin());
+  origin[1] = (int)std::floor(box.ymin());
+  origin[2] = (int)std::floor(box.zmin());
+  dim[0] = 1+(int)std::ceil(box.xmax()) - (int)std::floor(box.xmin());
+  dim[1] = 1+(int)std::ceil(box.ymax()) - (int)std::floor(box.ymin());
+  dim[2] = 1+(int)std::ceil(box.zmax()) - (int)std::floor(box.zmin());
 
-  DebugMacro( 1, "Origin: " << origin << " Dim: " << dim << vcl_endl );
+  DebugMacro( 1, "Origin: " << origin << " Dim: " << dim << std::endl );
   // create a 3D image with this dim
   vbl_array_3d<double> wgted_sum( dim[0], dim[1], dim[2] ); // 1 plane
   vbl_array_3d<double> wgts( dim[0], dim[1], dim[2] ); // 1 plane
@@ -365,13 +365,13 @@ map_region_intensities( vcl_vector< vnl_vector<int> > const& pixel_locations,
   // The choice I made is to use pixel coordinate, because I want the weight
   // to have smooth transition between 1.0(coincide with the point) and 0.0
   // (one pixel away).
-  for (typename vcl_vector<mapped_info>::const_iterator it=direct_mapped_pts.begin();
+  for (typename std::vector<mapped_info>::const_iterator it=direct_mapped_pts.begin();
        it!=direct_mapped_pts.end(); ++it) {
     vnl_int_3 ceil, floor;
     vnl_double_3 diff_floor;
     for (unsigned i=0; i<3; i++) {
-      floor[i] = (int)vcl_floor( it->pixel_[i] ) - origin[i];
-      ceil [i] = (int)vcl_ceil ( it->pixel_[i] ) - origin[i];
+      floor[i] = (int)std::floor( it->pixel_[i] ) - origin[i];
+      ceil [i] = (int)std::ceil ( it->pixel_[i] ) - origin[i];
       diff_floor[i] = it->pixel_[i] - origin[i] - floor[i];
     }
 
@@ -381,9 +381,9 @@ map_region_intensities( vcl_vector< vnl_vector<int> > const& pixel_locations,
         for (int k=floor[2]; k<=ceil[2]; k++) {
           // ceil(x) is not equivalent to floor(x)+1, try x=4,
           // or any integer pos
-          wgt = vcl_abs( floor[0]+1-i-diff_floor(0) ) *
-                vcl_abs( floor[1]+1-j-diff_floor(1) ) *
-                vcl_abs( floor[2]+1-k-diff_floor(2) );
+          wgt = std::abs( floor[0]+1-i-diff_floor(0) ) *
+                std::abs( floor[1]+1-j-diff_floor(1) ) *
+                std::abs( floor[2]+1-k-diff_floor(2) );
           wgts(i,j,k) += wgt;
           wgted_sum(i,j,k) += wgt* double(it->in_);
         }
@@ -402,14 +402,14 @@ map_region_intensities( vcl_vector< vnl_vector<int> > const& pixel_locations,
           mapped_pixel.location[1] = j + origin[1];
           mapped_pixel.location[2] = k + origin[2];
 
-          //DebugMacro(2, "mapped pixel loc: " << mapped_pixel.location << " intensity: " << mapped_pixel.intensity <<vcl_endl )
+          //DebugMacro(2, "mapped pixel loc: " << mapped_pixel.location << " intensity: " << mapped_pixel.intensity <<std::endl )
           mapped_pixels.push_back( mapped_pixel );
         }
-  DebugMacro(1, "Total mapped pixels at integer locations: " << mapped_pixels.size() << vcl_endl );
+  DebugMacro(1, "Total mapped pixels at integer locations: " << mapped_pixels.size() << std::endl );
 }
 
 inline double
-rgrl_matcher_pseudo_int_3d_sub_pixel( vcl_vector< double > const& responses )
+rgrl_matcher_pseudo_int_3d_sub_pixel( std::vector< double > const& responses )
 {
   assert( 0 ); // no need to use SVD
   assert( responses.size() == 3 );
@@ -443,7 +443,7 @@ rgrl_matcher_pseudo_int_3d_sub_pixel( vcl_vector< double > const& responses )
   // r = -b / 2a
   double best_index =  -X[ 1 ][ 0 ] / ( 2 * X[ 0 ][ 0 ] );
 
-  DBGi( vcl_cout << " best_index = " << best_index << '\n' ) ;
+  DBGi( std::cout << " best_index = " << best_index << '\n' ) ;
 
   assert( best_index <= 1 && best_index >= -1 );
 
@@ -458,15 +458,15 @@ rgrl_matcher_pseudo_int_3d<PixelType> ::
 slide_window(rgrl_feature_sptr         mapped_feature,
              rgrl_mapped_pixel_vector_type const & mapped_pixels,
              rgrl_scale                    const & current_scale,
-             vcl_vector< rgrl_feature_sptr >     & matched_to_features,
-             vcl_vector< double >                & match_weights ) const
+             std::vector< rgrl_feature_sptr >     & matched_to_features,
+             std::vector< double >                & match_weights ) const
 {
   //  At this point, find the most similar region within the sliding window
   unsigned int dim = mapped_feature -> location().size();
 
   const double scale_multiplier = 4;   // magic number.  frown.
 
-  DebugMacro(2, " geometric scale = " << current_scale.geometric_scale() << vcl_endl );
+  DebugMacro(2, " geometric scale = " << current_scale.geometric_scale() << std::endl );
 
   vnl_matrix< double > normal_space;
 
@@ -501,7 +501,7 @@ slide_window(rgrl_feature_sptr         mapped_feature,
     rgrl_matcher_pseudo_int_3d_physical_to_pixel( physical_basis, pixel_basis, to_spacing_ratio_ );
 
     // sample pixel(integer) locations
-    vcl_vector< discrete_shift_node > discrete_offsets;
+    std::vector< discrete_shift_node > discrete_offsets;
     // ASSUME known structure of the return offsets,
     // that is symmetric around origin
     // such as:  -4 -3 -2 -1 0 1 2 3 4
@@ -514,7 +514,7 @@ slide_window(rgrl_feature_sptr         mapped_feature,
     // the shifts are symmetric around origin
     const int max_offset = (discrete_offsets.size()-1)/2;
 
-    vcl_vector<double> responses( 2*max_offset+1, 0.0 );
+    std::vector<double> responses( 2*max_offset+1, 0.0 );
     bool is_best_initialized = false;
     int best_offset = 0;
 
@@ -527,7 +527,7 @@ slide_window(rgrl_feature_sptr         mapped_feature,
         int i = offset + max_offset;
         responses[i] = this -> compute_response( mapped_pixels, discrete_offsets[i].shift_ );
         DebugMacro(2, " response at offset " << discrete_offsets[i].shift_
-                   << " ( i = " << i << " ) : " << responses[ i ] << vcl_endl );
+                   << " ( i = " << i << " ) : " << responses[ i ] << std::endl );
 
         // We don't want to use the responses of the offsets that shift
         // the box across the boundary.
@@ -542,11 +542,11 @@ slide_window(rgrl_feature_sptr         mapped_feature,
       } while ( offset < 0 );
     }
 
-    DebugMacro(2, " the best offset = " << discrete_offsets[best_offset+max_offset].shift_ << vcl_endl );
+    DebugMacro(2, " the best offset = " << discrete_offsets[best_offset+max_offset].shift_ << std::endl );
     if ( !is_best_initialized )
     {
       DebugMacro(1, "For mapped feature: " << mapped_feature->location()
-                 << ", the slide window is invalid." << vcl_endl );
+                 << ", the slide window is invalid." << std::endl );
       return;
     }
 
@@ -558,14 +558,14 @@ slide_window(rgrl_feature_sptr         mapped_feature,
     if ( deriv_loc == -max_offset ) ++ deriv_loc;
     else if ( deriv_loc == max_offset ) -- deriv_loc;
     int index = deriv_loc + max_offset;
-    DebugMacro(3, " the proper offset = " << deriv_loc << vcl_endl );
+    DebugMacro(3, " the proper offset = " << deriv_loc << std::endl );
 
     // update the best matched location
     const vnl_int_3& best = discrete_offsets[best_offset+max_offset].shift_;
     match_location = mapped_feature->location();
     for (unsigned int i=0; i<3; i++)
       match_location[i] += double(best[i]);
-    DebugMacro(2, "best match :\n" << match_location << vcl_endl );
+    DebugMacro(2, "best match :\n" << match_location << std::endl );
 
     // Now compute the second derivative
     // Note that these discrete points are not evenly distributed.
@@ -599,7 +599,7 @@ slide_window(rgrl_feature_sptr         mapped_feature,
       a2 = -2.0/(d1*d2);
       // take abs value, for it can be shifted for the boundary response,
       // or invalid points
-      second_derivative = vcl_abs( a1*responses[ index-1 ] +
+      second_derivative = std::abs( a1*responses[ index-1 ] +
                                    a2*responses[ index ] +
                                    a3*responses[ index + 1] );
       DebugMacro(3, "  2nd Derivative(at " << index
@@ -609,7 +609,7 @@ slide_window(rgrl_feature_sptr         mapped_feature,
                  << "\n        res1 " << responses[ index-1 ]
                  << "  res2 " << responses[ index ]
                  << "  res3 " << responses[ index+1 ]
-                 << "\n        deriv=" << second_derivative << vcl_endl ) ;
+                 << "\n        deriv=" << second_derivative << std::endl ) ;
     }
     else
     {
@@ -626,18 +626,18 @@ slide_window(rgrl_feature_sptr         mapped_feature,
     vnl_vector<double> basis1 = normal_space . get_column(0);
     vnl_vector<double> basis2 = normal_space . get_column(1);
 
-    DebugMacro(2, "normal basis :\n" << basis1 << " and " << basis2 << vcl_endl );
+    DebugMacro(2, "normal basis :\n" << basis1 << " and " << basis2 << std::endl );
 
     // sample pixels along basis directions.
-    vcl_vector< discrete_shift_node > offset1, offset2;
+    std::vector< discrete_shift_node > offset1, offset2;
     // NOTE: the returned shift vector is symmetric around origin
     // for details, look at the face session(above)
     sample_pixels_along_direction( offset1, basis1, max_length );
     sample_pixels_along_direction( offset2, basis2, max_length );
     const int max_offset1 = (offset1.size()-1) / 2;
     const int max_offset2 = (offset2.size()-1) / 2;
-    //vcl_vector<double> temp( 2*max_offset+1, 0.0 );
-    //vcl_vector< vcl_vector<double> > responses( 2*max_offset+1, temp );
+    //std::vector<double> temp( 2*max_offset+1, 0.0 );
+    //std::vector< std::vector<double> > responses( 2*max_offset+1, temp );
     vbl_array_2d<double> responses( 2*max_offset1+1, 2*max_offset2+1, 0.0 );
     bool is_best_initialized = false;
     int best_off1 = 0, best_off2 = 0;
@@ -664,7 +664,7 @@ slide_window(rgrl_feature_sptr         mapped_feature,
     if ( !is_best_initialized )
     {
       DebugMacro(1, "For mapped feature: " << mapped_feature->location()
-                 << ", the slide window is invalid." << vcl_endl );
+                 << ", the slide window is invalid." << std::endl );
       return;
     }
 
@@ -706,7 +706,7 @@ slide_window(rgrl_feature_sptr         mapped_feature,
     }
     else
     {
-      vcl_vector< double > responses_for_sub_pixel( 3 );
+      std::vector< double > responses_for_sub_pixel( 3 );
       responses_for_sub_pixel[ 0 ] = responses[ idx1 - 1 ][ idx2 ];
       responses_for_sub_pixel[ 1 ] = responses[ idx1 ][ idx2 ];
       responses_for_sub_pixel[ 2 ] = responses[ idx1 + 1 ][ idx2 ];
@@ -715,8 +715,8 @@ slide_window(rgrl_feature_sptr         mapped_feature,
       // if it's outside
       if ( sub_offset1 < -max_offset ) sub_offset1 = -max_offset;
       if ( sub_offset1 > max_offset ) sub_offset1 = max_offset;
-      DBGi( vcl_cout << " sub_offset1 = " << sub_offset1 << " in [ "
-                     << -max_offset << " , " << max_offset << " ]" << vcl_endl );
+      DBGi( std::cout << " sub_offset1 = " << sub_offset1 << " in [ "
+                     << -max_offset << " , " << max_offset << " ]" << std::endl );
     }
 
     double second_d1 = vnl_math::abs( responses[ idx1-1 ][ idx2 ] + responses[ idx1+1 ][ idx2 ]
@@ -737,15 +737,15 @@ slide_window(rgrl_feature_sptr         mapped_feature,
     }
     else
     {
-      vcl_vector< double > responses_for_sub_pixel( 3 );
+      std::vector< double > responses_for_sub_pixel( 3 );
       responses_for_sub_pixel[ 0 ] = responses[ idx1 ][ idx2 - 1 ];
       responses_for_sub_pixel[ 1 ] = responses[ idx1 ][ idx2 ];
       responses_for_sub_pixel[ 2 ] = responses[ idx1 ][ idx2 + 1 ];
       sub_offset2 = rgrl_matcher_pseudo_int_3d_sub_pixel( responses_for_sub_pixel ) + idx2 - max_offset;
       if ( sub_offset2 < -max_offset ) sub_offset2 = -max_offset;
       if ( sub_offset2 > max_offset ) sub_offset2 = max_offset;
-      DBGi( vcl_cout << " sub_offset2 = " << sub_offset2 << " in [ "
-                     << -max_offset << " , " << max_offset << " ]" << vcl_endl; );
+      DBGi( std::cout << " sub_offset2 = " << sub_offset2 << " in [ "
+                     << -max_offset << " , " << max_offset << " ]" << std::endl; );
     }
 
     double second_d2 = vnl_math::abs( responses[ idx1 ][ idx2-1 ] + responses[ idx1 ][ idx2+1 ]
@@ -753,11 +753,11 @@ slide_window(rgrl_feature_sptr         mapped_feature,
 
     second_derivative = std::min( second_d1, second_d2 );
     match_location = mapped_location + basis1 * sub_offset1 + basis2 * sub_offset2;
-    DBGi( vcl_cout << "best match :\n" << match_location << vcl_endl );
+    DBGi( std::cout << "best match :\n" << match_location << std::endl );
 #endif // 0
   }
   else {
-    vcl_cerr << "Code doesn't handle a normal subspace of greater than two dimenions.\n";
+    std::cerr << "Code doesn't handle a normal subspace of greater than two dimenions.\n";
     assert( false );
   }
   matched_to_features . clear();
@@ -782,7 +782,7 @@ slide_window(rgrl_feature_sptr         mapped_feature,
   assert( weight >= 0.0 );
 
   DebugMacro(2, "second derivative: " << second_derivative
-             << "\nmin_response: " << min_response << "\nweight : " << weight << vcl_endl );
+             << "\nmin_response: " << min_response << "\nweight : " << weight << std::endl );
   match_weights.push_back( weight );
 }
 
@@ -797,9 +797,9 @@ compute_response( rgrl_mapped_pixel_vector_type const& mapped_pixels,
   //  Extract the intensities at the mapped locations.  Make sure
   //  they are inside the image.
 
-  vcl_vector< double > a;
-  vcl_vector< double > b;
-  vcl_vector< double > weights;
+  std::vector< double > a;
+  std::vector< double > b;
+  std::vector< double > weights;
   double intensity;
   vnl_int_3 loc;
 
@@ -838,7 +838,7 @@ compute_response( rgrl_mapped_pixel_vector_type const& mapped_pixels,
 template<class PixelType>
 void
 rgrl_matcher_pseudo_int_3d<PixelType>::
-sample_pixels_along_direction( vcl_vector<discrete_shift_node>& two_dir_shifts,
+sample_pixels_along_direction( std::vector<discrete_shift_node>& two_dir_shifts,
                                vnl_double_3 dir,
                                double max_length ) const
 {
@@ -850,14 +850,14 @@ sample_pixels_along_direction( vcl_vector<discrete_shift_node>& two_dir_shifts,
   dir /= 2.0 * dir.magnitude();
   max_length *= 2.0;
 
-  DebugMacro(2, "normal basis :\n" << dir << vcl_endl );
+  DebugMacro(2, "normal basis :\n" << dir << std::endl );
 
   // the idea is to find the smallest delta length added to the current one,
   // in order to get to the nearest pixel location
   vnl_int_3 prev, current;
   double len;
   double abs_ele;
-  vcl_vector<discrete_shift_node> locs;
+  std::vector<discrete_shift_node> locs;
   locs.reserve( int(2*max_length) );
 
   // init
@@ -865,19 +865,19 @@ sample_pixels_along_direction( vcl_vector<discrete_shift_node>& two_dir_shifts,
   const double min_step_size = 1.0/(2*max_length);
   prev=vnl_int_3(0, 0, 0);
   locs.push_back( discrete_shift_node(prev, 0) );
-  len = 1e-10; // has to be larger than zero, otherwise, vcl_ceil(0) = 0
+  len = 1e-10; // has to be larger than zero, otherwise, std::ceil(0) = 0
   while ( len < max_length )
   {
     double delta_len, min_delta_len = 1e10;
     int min_index = 0;
     for (unsigned i=0; i<3; i++) {
-      abs_ele = vcl_abs( dir[i] );
+      abs_ele = std::abs( dir[i] );
       // don't want to divide by too small a number
       if ( abs_ele < min_step_size )
         continue;
 
       // find the smallest step to next integer location
-      delta_len = vcl_ceil( len * abs_ele ) / abs_ele - len;
+      delta_len = std::ceil( len * abs_ele ) / abs_ele - len;
       if ( delta_len < min_delta_len && delta_len > 0 ) //prevent delta_len==0
       {
         min_index = i;

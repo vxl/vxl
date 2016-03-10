@@ -27,8 +27,10 @@
 #include <vgl/vgl_homg_line_2d.h>
 #include <vgl/vgl_line_segment_2d.h>
 #include <vsl/vsl_binary_io.h>
-#include <vcl_string.h>
-#include <vcl_iosfwd.h>
+#include <string>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iosfwd>
 
 class vsol_line_2d : public vsol_curve_2d
 {
@@ -230,18 +232,18 @@ class vsol_line_2d : public vsol_curve_2d
   short version() const;
 
   //: Print an ascii summary to the stream
-  void print_summary(vcl_ostream &os) const;
+  void print_summary(std::ostream &os) const;
 
   //: Return a platform independent string identifying the class
-  virtual vcl_string is_a() const { return vcl_string("vsol_line_2d"); }
+  virtual std::string is_a() const { return std::string("vsol_line_2d"); }
 
   //: Return true if the argument matches the string identifying the class or any parent class
-  virtual bool is_class(vcl_string const& cls) const { return cls==is_a(); }
+  virtual bool is_class(std::string const& cls) const { return cls==is_a(); }
 
   //---------------------------------------------------------------------------
   //: output description to stream
   //---------------------------------------------------------------------------
-  void describe(vcl_ostream &strm, int blanking=0) const;
+  void describe(std::ostream &strm, int blanking=0) const;
 };
 
 //: Binary save vsol_line_2d* to stream.

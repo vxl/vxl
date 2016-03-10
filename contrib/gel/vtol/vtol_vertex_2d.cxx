@@ -131,15 +131,15 @@ void vtol_vertex_2d::set_y(const double new_y)
 //    Print Functions
 
 //: This method outputs a simple text representation of the vertex including its address in memory.
-void vtol_vertex_2d::print(vcl_ostream &strm) const
+void vtol_vertex_2d::print(std::ostream &strm) const
 {
   strm<<"<vtol_vertex_2d "<<x()<<','<<y()<<','<<(void const *)this<<"> with id "
-      <<get_id()<<vcl_endl;
+      <<get_id()<<std::endl;
 }
 
 
 //: This method outputs a detailed description of the vertex including the inferiors and superiors.
-void vtol_vertex_2d::describe(vcl_ostream &strm,
+void vtol_vertex_2d::describe(std::ostream &strm,
                               int blanking) const
 {
   for (int i=0; i<blanking; ++i)
@@ -173,12 +173,12 @@ vtol_edge_sptr vtol_vertex_2d::new_edge(vtol_vertex_2d_sptr const& other)
   // Scan Zero Chains
   bool found = false;
   vtol_vertex_sptr v = other->cast_to_vertex();
-  vcl_list<vtol_topology_object*>::const_iterator zp;
+  std::list<vtol_topology_object*>::const_iterator zp;
   for (zp=superiors_.begin();zp!=superiors_.end()&&!found;++zp)
   {
     // Scan superiors of ZChain (i.e. edges)
-    const vcl_list<vtol_topology_object*> *sups=(*zp)->superiors_list();
-    vcl_list<vtol_topology_object*>::const_iterator ep;
+    const std::list<vtol_topology_object*> *sups=(*zp)->superiors_list();
+    std::list<vtol_topology_object*>::const_iterator ep;
     for (ep=sups->begin();ep!=sups->end()&&!found;++ep)
     {
       vtol_edge_sptr e=(*ep)->cast_to_edge();

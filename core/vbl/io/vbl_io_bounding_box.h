@@ -8,7 +8,8 @@
 
 #include <vsl/vsl_fwd.h>
 #include <vbl/vbl_bounding_box.h>
-#include <vcl_iosfwd.h>
+#include <vcl_compiler.h>
+#include <iosfwd>
 
 //: Binary save vbl_bounding_box to stream.
 template <class T, class DIM_>
@@ -20,6 +21,6 @@ void vsl_b_read(vsl_b_istream &is, vbl_bounding_box_base<T, DIM_> & p);
 
 //: Print human readable summary of object to a stream
 template <class T, class DIM_>
-void vsl_print_summary(vcl_ostream& os,const vbl_bounding_box_base<T, DIM_> & p);
+void vsl_print_summary(std::ostream& os,const vbl_bounding_box_base<T, DIM_> & p);
 
 #endif // vbl_io_bounding_box_h

@@ -13,7 +13,9 @@
 //   J.L. Mundy November 28, 2002    Initial version.
 // \endverbatim
 //--------------------------------------------------------------------------------
-#include <vcl_vector.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <vector>
 #include <vtol/vtol_vertex_2d.h>
 #include <vtol/vtol_edge_2d.h>
 #include <vtol/vtol_vertex_2d_sptr.h>
@@ -47,7 +49,7 @@ class segv_vtol2D_tableau : public vgui_easy2D_tableau
   segv_vtol_soview2D_vertex* add_vertex(vtol_vertex_2d_sptr& v);
   segv_vtol_soview2D_edge* add_edge(vtol_edge_2d_sptr& e);
 
-  segv_vtol_soview2D_edge_group* add_edge_group(vcl_vector<vtol_edge_2d_sptr>&
+  segv_vtol_soview2D_edge_group* add_edge_group(std::vector<vtol_edge_2d_sptr>&
                                                 edges);
   segv_vtol_soview2D_face* add_face(vtol_face_2d_sptr& f);
 };

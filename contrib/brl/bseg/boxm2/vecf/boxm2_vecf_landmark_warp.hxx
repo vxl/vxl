@@ -8,17 +8,19 @@
 #include <boxm2/io/boxm2_lru_cache.h>
 #include <boct/boct_bit_tree.h>
 #include <vgl/vgl_point_3d.h>
-#include <vcl_stdexcept.h>
-#include <vcl_vector.h>
-#include <vcl_utility.h> // for make_pair
+#include <vcl_compiler.h>
+#include <iostream>
+#include <stdexcept>
+#include <vector>
+#include <utility> // for make_pair
 #include <rsdl/rsdl_kd_tree.h>
 #include <rsdl/rsdl_point.h>
 
 
-vcl_vector<rsdl_point> convert_vgl_to_rsdl(vcl_vector<vgl_point_3d<double> > const& pts)
+std::vector<rsdl_point> convert_vgl_to_rsdl(std::vector<vgl_point_3d<double> > const& pts)
 {
-  vcl_vector<rsdl_point> pts_out;
-  for (vcl_vector<vgl_point_3d<double> >::const_iterator pit = pts.begin(); pit != pts.end(); ++pit) {
+  std::vector<rsdl_point> pts_out;
+  for (std::vector<vgl_point_3d<double> >::const_iterator pit = pts.begin(); pit != pts.end(); ++pit) {
     rsdl_point point(vnl_vector_fixed<double,3>(pit->x(), pit->y(), pit->z()), vnl_vector<double>());
     pts_out.push_back(point);
   }
@@ -27,8 +29,8 @@ vcl_vector<rsdl_point> convert_vgl_to_rsdl(vcl_vector<vgl_point_3d<double> > con
 
 template<class F>
 boxm2_vecf_landmark_mapper<F>::
-boxm2_vecf_landmark_mapper(vcl_vector<vgl_point_3d<double> > const& control_pts_source,
-                           vcl_vector<vgl_point_3d<double> > const& control_pts_target,
+boxm2_vecf_landmark_mapper(std::vector<vgl_point_3d<double> > const& control_pts_source,
+                           std::vector<vgl_point_3d<double> > const& control_pts_target,
                            F weight_function,
                            int n_nearest
                            )
@@ -53,8 +55,8 @@ template <class F>
 vgl_point_3d<double> boxm2_vecf_landmark_mapper<F>::operator() (vgl_point_3d<double> const& x) const
 {
   rsdl_point query_point(vnl_vector_fixed<double,3>(x.x(), x.y(), x.z()), vnl_vector<double>());
-  vcl_vector< rsdl_point > closest_points;
-  vcl_vector< int > indices;
+  std::vector< rsdl_point > closest_points;
+  std::vector< int > indices;
   bool use_heap = true;
   int max_leaves = -1;
   source_kd_tree_->n_nearest( query_point, n_nearest_, closest_points, indices, use_heap, max_leaves );
@@ -89,8 +91,8 @@ boxm2_vecf_landmark_warp<F>::make_inverse_mapper(boxm2_scene_sptr source, boxm2_
 }
 
 template <class F>
-boxm2_vecf_landmark_warp<F>::boxm2_vecf_landmark_warp(vcl_vector<vgl_point_3d<double> > const& control_pts_source,
-                                                      vcl_vector<vgl_point_3d<double> > const& control_pts_target,
+boxm2_vecf_landmark_warp<F>::boxm2_vecf_landmark_warp(std::vector<vgl_point_3d<double> > const& control_pts_source,
+                                                      std::vector<vgl_point_3d<double> > const& control_pts_target,
                                                       F weight_function)
 : control_pts_source_(control_pts_source),
   control_pts_target_(control_pts_target),

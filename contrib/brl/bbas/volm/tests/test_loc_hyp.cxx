@@ -1,5 +1,7 @@
 #include <testlib/testlib_test.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iostream>
 #include <vpl/vpl.h>
 #include <vil/vil_image_view.h>
 #include <vil/vil_load.h>
@@ -26,11 +28,11 @@ static void test_loc_hyp()
   hyp.add(37.7084999084, -117.416664124, 1863.23205566);
   hyp.add(37.7082748413, -117.416511536, 1860.99194336);
 
-  vcl_cout << "number of hypotheses: " << hyp.size() << " approx size on RAM: " << hyp.size()*sizeof(float)*3.0/(1024.0) << " KBs. " << vcl_endl;
+  std::cout << "number of hypotheses: " << hyp.size() << " approx size on RAM: " << hyp.size()*sizeof(float)*3.0/(1024.0) << " KBs. " << std::endl;
 
   // io test
-  vcl_string hyp_file_name = "./loc_hyp_test.bin";
-  vcl_string hyp_file_kml  = "./loc_hyp_test.kml";
+  std::string hyp_file_name = "./loc_hyp_test.bin";
+  std::string hyp_file_kml  = "./loc_hyp_test.kml";
   hyp.write_hypotheses(hyp_file_name);
   hyp.write_to_kml(hyp_file_kml, 0, true);
 
@@ -40,11 +42,11 @@ static void test_loc_hyp()
   // point fetch methods
   vgl_point_3d<double> pt;
   hyp2.get_next(pt);
-  vcl_cout << " first point is: " << pt << vcl_endl;
+  std::cout << " first point is: " << pt << std::endl;
   for (unsigned i = 1; i < hyp2.size(); i++)
     hyp2.get_next(pt);
   hyp2.get_next(pt);
-  vcl_cout << " last point is:  " << pt << vcl_endl;
+  std::cout << " last point is:  " << pt << std::endl;
   TEST("got all points", hyp2.get_next(pt), false);
 
   // get the closest point
@@ -53,7 +55,7 @@ static void test_loc_hyp()
   unsigned hyp_id;
   vgl_point_3d<double> closest_loc;
   hyp3.get_closest(lat, lon, closest_loc, hyp_id);
-  vcl_cout << " closest point to location " << lon << ", " << lat << " is: " << closest_loc << " (hyp id is " << hyp_id << ')' << vcl_endl;
+  std::cout << " closest point to location " << lon << ", " << lat << " is: " << closest_loc << " (hyp id is " << hyp_id << ')' << std::endl;
   TEST("closest locs", hyp_id, 2);
 
 

@@ -5,7 +5,9 @@
 #include <imesh/imesh_vertex.h>
 #include <vgl/vgl_box_3d.h>
 #include <vgl/vgl_vector_3d.h>
-#include <vcl_list.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <list>
 
 //: function to convert a mesh in global coordinates to a mesh in local coordinates
 void covert_global_mesh_to_local(imesh_mesh & inmesh,vpgl_lvcs& lvcs)
@@ -27,7 +29,7 @@ bool bvxm_load_mesh_normals_into_grid(bvxm_voxel_grid<vnl_vector_fixed<float,3> 
 
   for (unsigned i=0; i < fs.size(); ++i)
   {
-    vcl_list<vgl_point_3d<double> > v_list;
+    std::list<vgl_point_3d<double> > v_list;
     imesh_vertex_array<3>& vertices = mesh.vertices<3>();
     vgl_box_3d<double> bb;
     for (unsigned j=0; j<fs.num_verts(i); ++j) {
@@ -77,14 +79,14 @@ bool bvxm_voxel_grid_compare(bvxm_voxel_grid<float> * dt_grid,
   // check the grids exist
   if ( !dt_grid || !op_grid || !grid_out)
   {
-    vcl_cerr << "One of the input voxels is of the wrong type\n";
+    std::cerr << "One of the input voxels is of the wrong type\n";
     return false;
   }
 
   // check sizes are the same
   if ( dt_grid->grid_size() != op_grid->grid_size() ||  dt_grid->grid_size() != grid_out->grid_size() )
   {
-    vcl_cerr << "Grids are not of the same size\n";
+    std::cerr << "Grids are not of the same size\n";
     return false;
   }
 

@@ -6,7 +6,9 @@
 // \author Gehua yang
 // \date 21 Oct. 2004
 
-#include <vcl_vector.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <vector>
 #include <vnl/vnl_vector.h>
 
 class rgrl_transformation;
@@ -27,11 +29,11 @@ class rgrl_feature_region
   rgrl_type_macro( rgrl_feature_region, rgrl_feature );
 #endif // 0
 
-  virtual const vcl_vector< vnl_vector<int> >&
+  virtual const std::vector< vnl_vector<int> >&
   pixel_coordinates();
 
   //: get pixels coordinates within the region
-  virtual const vcl_vector< vnl_vector<int> >&
+  virtual const std::vector< vnl_vector<int> >&
   pixel_coordinates_ratio( vnl_vector< double > const& spacing_ratio );
 
   //: generate pixels coordinates within the region
@@ -43,7 +45,7 @@ class rgrl_feature_region
   //  they are needed and then cached.  This is safe the location of
   //  the feature does not change.
   bool pixel_coordinates_cached_;
-  vcl_vector< vnl_vector<int> > pixel_coordinates_;
+  std::vector< vnl_vector<int> > pixel_coordinates_;
   vnl_vector< double >          spacing_ratio_;
 };
 

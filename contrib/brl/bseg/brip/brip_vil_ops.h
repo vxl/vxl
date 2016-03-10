@@ -15,7 +15,9 @@
 //  Modifications
 // \endverbatim
 
-#include <vcl_cmath.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <cmath>
 #include <vcl_cassert.h>
 #include <vil/vil_image_view.h>
 #include <vil/vil_math.h>
@@ -73,7 +75,7 @@ brip_sqrt_grad_singular_values(const vil_image_view<T>& input, vil_image_view<T>
 
 //: Filter an image with a gaussian kernel
 // This is an ntap alternative to vil_gauss_filter_5tap
-// The kernel is generated using vcl_exp instead of vnl_erf
+// The kernel is generated using std::exp instead of vnl_erf
 // \param sigma The width of the gaussian
 // \param k_size The number of elements in the 1D filter
 // \param option The boundary option applied at all boundaries (see vil_convolve_1d)
@@ -94,7 +96,7 @@ inline void brip_gauss_filter( const vil_image_view<srcT>& src_im,
   double *kernel = new double[k_size];
   for (unsigned int i=0; i<k_size; ++i){
     double val = ((double(i)+0.5)-double(k_size)/2.0);
-    kernel[i] = vcl_exp(-(val*val)/(2.0*sigma*sigma));
+    kernel[i] = std::exp(-(val*val)/(2.0*sigma*sigma));
   }
   double sum = 0.0;
   for (unsigned int i=0; i<k_size; ++i) sum += kernel[i];

@@ -14,11 +14,11 @@
 int main(int argc, char** argv)
 {
   if (argc <2) {
-    vcl_cerr << "Please specify the path to scene file (IV or VRML)\n";
+    std::cerr << "Please specify the path to scene file (IV or VRML)\n";
     return -1;
   }
 
-  vcl_vector<vcl_string> files;
+  std::vector<std::string> files;
   for(int i=1; i<argc; ++i)
     files.push_back(argv[i]);
 

@@ -9,9 +9,11 @@
 #include <vgl/vgl_fwd.h>
 
 #include <vsl/vsl_binary_io.h>
-#include <vcl_string.h>
-#include <vcl_memory.h>
-#include <vcl_iosfwd.h>
+#include <string>
+#include <memory>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iosfwd>
 
 class mfpf_point_finder;
 class mbl_read_props_type;
@@ -109,7 +111,7 @@ class mfpf_point_finder_builder
   virtual void get_sample_vector(const vimt_image_2d_of<float>& image,
                                  const vgl_point_2d<double>& p,
                                  const vgl_vector_2d<double>& u,
-                                 vcl_vector<double>& v);
+                                 std::vector<double>& v);
 
   //: Add one example to the model
   virtual void add_example(const vimt_image_2d_of<float>& image,
@@ -120,19 +122,19 @@ class mfpf_point_finder_builder
   virtual void build(mfpf_point_finder&)=0;
 
   //: Initialise from a string stream
-  virtual bool set_from_stream(vcl_istream &is);
+  virtual bool set_from_stream(std::istream &is);
 
   //: Version number for I/O
   short version_no() const;
 
   //: Name of the class
-  virtual vcl_string is_a() const;
+  virtual std::string is_a() const;
 
   //: Create a copy on the heap and return base class pointer
   virtual mfpf_point_finder_builder* clone() const = 0;
 
   //: Print class to os
-  virtual void print_summary(vcl_ostream& os) const ;
+  virtual void print_summary(std::ostream& os) const ;
 
   //: Save class to binary file stream
   virtual void b_write(vsl_b_ostream& bfs) const;
@@ -141,7 +143,7 @@ class mfpf_point_finder_builder
   virtual void b_read(vsl_b_istream& bfs);
 
   //: Create a concrete object, from a text specification.
-  static vcl_auto_ptr<mfpf_point_finder_builder> create_from_stream(vcl_istream &is);
+  static std::auto_ptr<mfpf_point_finder_builder> create_from_stream(std::istream &is);
 };
 
 //: Allows derived class to be loaded by base-class pointer
@@ -154,9 +156,9 @@ void vsl_b_write(vsl_b_ostream& bfs, const mfpf_point_finder_builder& b);
 void vsl_b_read(vsl_b_istream& bfs, mfpf_point_finder_builder& b);
 
 //: Stream output operator for class reference
-vcl_ostream& operator<<(vcl_ostream& os,const mfpf_point_finder_builder& b);
+std::ostream& operator<<(std::ostream& os,const mfpf_point_finder_builder& b);
 
 //: Stream output operator for class pointer
-vcl_ostream& operator<<(vcl_ostream& os,const mfpf_point_finder_builder* b);
+std::ostream& operator<<(std::ostream& os,const mfpf_point_finder_builder* b);
 
 #endif // mfpf_point_finder_builder_h_

@@ -1,8 +1,9 @@
 #include <testlib/testlib_test.h>
 #include <vpl/vpl.h>
-#include <vcl_iostream.h>
-#include <vcl_vector.h>
-#include <vcl_cmath.h>
+#include <iostream>
+#include <vcl_compiler.h>
+#include <vector>
+#include <cmath>
 #include <vpgl/vpgl_rational_camera.h>
 #include <vnl/vnl_matrix_fixed.h>
 
@@ -24,7 +25,7 @@ static void test_rational_camera()
   double act_v[8]={365., 327.82, 405.854, 379.412, 378.572, 376.955, 400.635, 397.414};
 
   //Rational polynomial coefficients
-  vcl_vector<double> neu_u(20,0.0), den_u(20,0.0), neu_v(20,0.0), den_v(20,0.0);
+  std::vector<double> neu_u(20,0.0), den_u(20,0.0), neu_v(20,0.0), den_v(20,0.0);
   neu_u[0]=0.1; neu_u[10]=0.071; neu_u[7]=0.01;  neu_u[9]=0.3;
   neu_u[15]=1.0; neu_u[18]=1.0, neu_u[19]=0.75;
 
@@ -52,16 +53,16 @@ static void test_rational_camera()
   for (unsigned i = 0; i<8; ++i)
   {
     rcam.project(act_x[i], act_y[i], act_z[i], u, v);
-    vcl_cout << '(' << act_x[i]<< ' '<< act_y[i]<< ' '<<act_z[i]
+    std::cout << '(' << act_x[i]<< ' '<< act_y[i]<< ' '<<act_z[i]
              << ")-> (" << u << ' ' << v << ")\n";
-    double eu = vcl_fabs(u-act_u[i]), ev = vcl_fabs(v-act_v[i]);
-    vcl_cout << "error = (" << eu << ' ' << ev << ")\n";
+    double eu = std::fabs(u-act_u[i]), ev = std::fabs(v-act_v[i]);
+    std::cout << "error = (" << eu << ' ' << ev << ")\n";
     good = good && eu<0.01 && ev < 0.01;
   }
   TEST("test rational camera projection", good, true);
   //Test various constructors
   // Set values on default constructor
-  vcl_vector<vcl_vector<double> > coeff_array;
+  std::vector<std::vector<double> > coeff_array;
   coeff_array.push_back(neu_u);
   coeff_array.push_back(den_u);
   coeff_array.push_back(neu_v);
@@ -82,8 +83,8 @@ static void test_rational_camera()
   for (unsigned i = 0; i<8; ++i)
   {
     icam.project(act_x[i], act_y[i], act_z[i], u, v);
-    double eu = vcl_fabs(u-act_u[i]), ev = vcl_fabs(v-act_v[i]);
-    vcl_cout << "error = (" << eu << ' ' << ev << ")\n";
+    double eu = std::fabs(u-act_u[i]), ev = std::fabs(v-act_v[i]);
+    std::cout << "error = (" << eu << ' ' << ev << ")\n";
     good = good && eu<0.01 && ev < 0.01;
   }
   TEST("test default constructor with member setting", good, true);
@@ -92,7 +93,7 @@ static void test_rational_camera()
   vpgl_scale_offset<double> soz(sz, oz);
   vpgl_scale_offset<double> sou(su, ou);
   vpgl_scale_offset<double> sov(sv, ov);
-  vcl_vector<vpgl_scale_offset<double> > soffs;
+  std::vector<vpgl_scale_offset<double> > soffs;
   soffs.push_back(sox);   soffs.push_back(soy);   soffs.push_back(soz);
   soffs.push_back(sou);   soffs.push_back(sov);
   vpgl_rational_camera<double> rcam1(coeff_array, soffs);
@@ -100,8 +101,8 @@ static void test_rational_camera()
   for (unsigned i = 0; i<8; ++i)
   {
     rcam1.project(act_x[i], act_y[i], act_z[i], u, v);
-    double eu = vcl_fabs(u-act_u[i]), ev = vcl_fabs(v-act_v[i]);
-    vcl_cout << "error = (" << eu << ' ' << ev << ")\n";
+    double eu = std::fabs(u-act_u[i]), ev = std::fabs(v-act_v[i]);
+    std::cout << "error = (" << eu << ' ' << ev << ")\n";
     good = good && eu<0.01 && ev < 0.01;
   }
   TEST("test constructor with coeff array and vector of vpgl_scale_offset instances", good, true);
@@ -119,8 +120,8 @@ static void test_rational_camera()
   for (unsigned i = 0; i<8; ++i)
   {
     rcam2.project(act_x[i], act_y[i], act_z[i], u, v);
-    double eu = vcl_fabs(u-act_u[i]), ev = vcl_fabs(v-act_v[i]);
-    vcl_cout << "error = (" << eu << ' ' << ev << ")\n";
+    double eu = std::fabs(u-act_u[i]), ev = std::fabs(v-act_v[i]);
+    std::cout << "error = (" << eu << ' ' << ev << ")\n";
     good = good && eu<0.01 && ev < 0.01;
   }
   TEST("test constructor with coeff matrix and vector of vpgl_scale_offset instances", good, true);
@@ -135,7 +136,7 @@ static void test_rational_camera()
 
   //test getting the coefficient array
   good = true;
-  vcl_vector<vcl_vector<double> > coefficients = rcam1.coefficients();
+  std::vector<std::vector<double> > coefficients = rcam1.coefficients();
   for (unsigned j=0; j<4; ++j)
     for (unsigned i=0; i<20; ++i)
       good = good && coefficients[j][i]==coeff_matrix[j][i];

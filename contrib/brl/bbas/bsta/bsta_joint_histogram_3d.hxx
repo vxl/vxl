@@ -4,11 +4,13 @@
 // \file
 #include "bsta_joint_histogram_3d.h"
 
-#include <vcl_cmath.h> // for log()
+#include <vcl_compiler.h>
+#include <iostream>
+#include <cmath> // for log()
 #include<vcl_cstdlib.h>//for div
-#include <vcl_iostream.h>
+#include <iostream>
 #include "bsta_gauss.h"
-#include <vnl/vnl_math.h> // for log2e == 1/vcl_log(2.0)
+#include <vnl/vnl_math.h> // for log2e == 1/std::log(2.0)
 template <class T>
 bsta_joint_histogram_3d<T>::bsta_joint_histogram_3d()
   : volume_valid_(false), volume_(0),
@@ -279,7 +281,7 @@ bool bsta_joint_histogram_3d<T>::avg_and_variance_bin_for_row_a(const unsigned a
   var = 0;
   for (unsigned b =0; b<nbins_b_; b++) {
     T dif = (b+1)*delta_b_/2-avg;
-    var += vcl_pow(dif, T(2.0))*(counts_[a][b]/sum);
+    var += std::pow(dif, T(2.0))*(counts_[a][b]/sum);
   }
 
   return true;
@@ -303,7 +305,7 @@ T bsta_joint_histogram_3d<T>::entropy() const
       {
         T pijk = this->p(i,j,k);
         if (pijk>min_prob_)
-          ent -= pijk*T(vcl_log(pijk));
+          ent -= pijk*T(std::log(pijk));
       }
   ent *= (T)vnl_math::log2e;
   return ent;
@@ -359,7 +361,7 @@ void bsta_joint_histogram_3d<T>::clear()
 }
 
 template <class T>
-void bsta_joint_histogram_3d<T>::print(vcl_ostream& os) const
+void bsta_joint_histogram_3d<T>::print(std::ostream& os) const
 {
   for (unsigned a = 0; a<nbins_a_; a++)
     for (unsigned b = 0; b<nbins_b_; b++)
@@ -369,7 +371,7 @@ void bsta_joint_histogram_3d<T>::print(vcl_ostream& os) const
 }
 
 template <class T>
-void bsta_joint_histogram_3d<T>::print_to_vrml(vcl_ostream& os,
+void bsta_joint_histogram_3d<T>::print_to_vrml(std::ostream& os,
                                                bool relative_prob_scale,
                                                T red, T green, T blue) const
 {
@@ -488,7 +490,7 @@ void bsta_joint_histogram_3d<T>::print_to_vrml(vcl_ostream& os,
 
 #if 0
 template <class T>
-void bsta_joint_histogram_3d<T>::print_to_m(vcl_ostream& os) const
+void bsta_joint_histogram_3d<T>::print_to_m(std::ostream& os) const
 {
   os << "y = zeros(" << nbins_a_ << ", " << nbins_b_ << ");\n";
   for (unsigned a = 0; a<nbins_a_; a++) {
@@ -506,7 +508,7 @@ void bsta_joint_histogram_3d<T>::print_to_m(vcl_ostream& os) const
 #endif // 0
 
 template <class T>
-void bsta_joint_histogram_3d<T>::print_to_text(vcl_ostream& os) const
+void bsta_joint_histogram_3d<T>::print_to_text(std::ostream& os) const
 {
   os << "nbins_a \t nbins_b \t nbins_c\n"
      << nbins_a_ << '\t' << nbins_b_ << '\t' << nbins_c_ << '\n';

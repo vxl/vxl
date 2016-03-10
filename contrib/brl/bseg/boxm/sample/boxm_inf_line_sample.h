@@ -3,7 +3,9 @@
 //:
 // \file
 
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iostream>
 #include <vsl/vsl_binary_io.h>
 #include <vgl/vgl_infinite_line_3d.h>
 #include <vgl/vgl_line_3d_2_points.h>
@@ -23,7 +25,7 @@ class boxm_inf_line_sample
   boxm_inf_line_sample(vgl_infinite_line_3d<T> line,unsigned num_obs=0) : residual_(1e6),line_(line),num_obs_(num_obs) {}
   ~boxm_inf_line_sample() {}
   static short version_no() { return 1; }
-  void print(vcl_ostream& os) { os << "(line=" << line_ << ')';  }
+  void print(std::ostream& os) { os << "(line=" << line_ << ')';  }
   bool operator==(const boxm_inf_line_sample &rhs) const;
   typedef boxm_inf_line_sample<T> value_type;
   // public members
@@ -46,7 +48,7 @@ template <class T>
 void vsl_b_read(vsl_b_istream & is, boxm_inf_line_sample<T> *&sample);
 
 template <class T>
-vcl_ostream& operator << (vcl_ostream& os, boxm_inf_line_sample<T>& sample);
+std::ostream& operator << (std::ostream& os, boxm_inf_line_sample<T>& sample);
 
 
 #endif // boxm_inf_line_sample_h_

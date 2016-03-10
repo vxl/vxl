@@ -4,7 +4,9 @@
 // \file
 // \brief boxm2_opencl_scene_streamer assists the processor in streaming blocks
 #include <boxm2/boxm2_scene.h>
-#include <vcl_vector.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <vector>
 #include <boxm2/ocl/boxm2_opencl_cache1.h>
 
 //open cl includes
@@ -19,8 +21,8 @@ class boxm2_multi_util
 
     // Helper to pick out data type
     static bool get_scene_appearances( boxm2_scene_sptr    scene,
-                                       vcl_string&         data_type,
-                                       vcl_string&         options,
+                                       std::string&         data_type,
+                                       std::string&         options,
                                        int&                apptypesize);
 };
 

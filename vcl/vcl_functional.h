@@ -2,47 +2,67 @@
 #define vcl_functional_h_
 
 #include "vcl_compiler.h"
-
-// -------------------- gcc with non-standard library
-#if defined(VCL_GCC) && !defined(VCL_CXX_HAS_HEADER_FUNCTIONAL)
-# include <function.h>
-# define vcl_functional_h_STD ::
-
-// -------------------- iso
-#else
-# include "iso/vcl_functional.h"
-# define vcl_alloc std::alloc
-#endif
-
-// Now #define vcl_blah to std::blah (except for emulation) :
-#if defined(vcl_functional_h_STD)
-# define  vcl_unary_function      vcl_functional_h_STD unary_function
-# define  vcl_binary_function     vcl_functional_h_STD binary_function
-# define  vcl_plus                vcl_functional_h_STD plus
-# define  vcl_minus               vcl_functional_h_STD minus
-# define  vcl_multiplies          vcl_functional_h_STD multiplies
-# define  vcl_divides             vcl_functional_h_STD divides
-# define  vcl_modulus             vcl_functional_h_STD modulus
-# define  vcl_negate              vcl_functional_h_STD negate
-# define  vcl_equal_to            vcl_functional_h_STD equal_to
-# define  vcl_not_equal_to        vcl_functional_h_STD not_equal_to
-# define  vcl_greater             vcl_functional_h_STD greater
-# define  vcl_less                vcl_functional_h_STD less
-# define  vcl_greater_equal       vcl_functional_h_STD greater_equal
-# define  vcl_less_equal          vcl_functional_h_STD less_equal
-# define  vcl_logical_and         vcl_functional_h_STD logical_and
-# define  vcl_logical_or          vcl_functional_h_STD logical_or
-# define  vcl_logical_not         vcl_functional_h_STD logical_not
-# define  vcl_identity            vcl_functional_h_STD identity
-//nonstd # define  vcl_select1st           vcl_functional_h_STD select1st
-//nonstd # define  vcl_select2nd           vcl_functional_h_STD select2nd
-# define  vcl_project1st          vcl_functional_h_STD project1st
-# define  vcl_project2nd          vcl_functional_h_STD project2nd
-# define  vcl_constant_void_fun   vcl_functional_h_STD constant_void_fun
-# define  vcl_constant_unary_fun  vcl_functional_h_STD constant_unary_fun
-# define  vcl_constant_binary_fun vcl_functional_h_STD constant_binary_fun
-#endif
-
-#include "vcl_functional.hxx"
+#include <functional>
+/* The following includes are needed to preserve backwards
+   compatilibility for external applications.  Previously
+   definitions were defined in multiple headers with conditional
+   ifndef guards, but we now include a reference header
+   instead */
+//no dependancies remove comment above
+//vcl alias names to std names
+#define vcl_unary_function std::unary_function
+#define vcl_binary_function std::binary_function
+#define vcl_plus std::plus
+#define vcl_minus std::minus
+#define vcl_multiplies std::multiplies
+#define vcl_divides std::divides
+#define vcl_modulus std::modulus
+#define vcl_negate std::negate
+#define vcl_equal_to std::equal_to
+#define vcl_not_equal_to std::not_equal_to
+#define vcl_greater std::greater
+#define vcl_less std::less
+#define vcl_greater_equal std::greater_equal
+#define vcl_less_equal std::less_equal
+#define vcl_logical_and std::logical_and
+#define vcl_logical_or std::logical_or
+#define vcl_logical_not std::logical_not
+#define vcl_unary_negate std::unary_negate
+#define vcl_not1 std::not1
+#define vcl_binary_negate std::binary_negate
+#define vcl_not2 std::not2
+#define vcl_binder1st std::binder1st
+#define vcl_bind1st std::bind1st
+#define vcl_binder2nd std::binder2nd
+#define vcl_bind2nd std::bind2nd
+#define vcl_pointer_to_unary_function std::pointer_to_unary_function
+#define vcl_ptr_fun std::ptr_fun
+#define vcl_pointer_to_binary_function std::pointer_to_binary_function
+#define vcl_mem_fun_t std::mem_fun_t
+#define vcl_mem_fun std::mem_fun
+#define vcl_mem_fun1_t std::mem_fun1_t
+#define vcl_mem_fun1 std::mem_fun1
+#define vcl_mem_fun_ref_t std::mem_fun_ref_t
+#define vcl_mem_fun_ref std::mem_fun_ref
+#define vcl_mem_fun1_ref_t std::mem_fun1_ref_t
+#define vcl_mem_fun1_ref std::mem_fun1_ref
+#define vcl_const_mem_fun_t std::const_mem_fun_t
+#define vcl_const_mem_fun std::const_mem_fun
+#define vcl_const_mem_fun1_t std::const_mem_fun1_t
+#define vcl_const_mem_fun1 std::const_mem_fun1
+#define vcl_const_mem_fun_ref_t std::const_mem_fun_ref_t
+#define vcl_const_mem_fun_ref std::const_mem_fun_ref
+#define vcl_const_mem_fun1_ref_t std::const_mem_fun1_ref_t
+#define vcl_const_mem_fun1_ref std::const_mem_fun1_ref
+#define vcl_transform std::transform
+//not in the standard:
+// @identity
+// @select1st
+// @select2nd
+// @project1st
+// @project2nd
+// @constant_void_fun
+// @constant_unary_fun
+// @constant_binary_fun
 
 #endif // vcl_functional_h_

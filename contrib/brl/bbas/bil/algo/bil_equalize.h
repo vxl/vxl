@@ -19,10 +19,10 @@ inline void bil_equalize_linear_vals(const vil_image_view<mT>& model,
   unsigned ni = model.ni(), nj = model.nj(), np = model.nplanes();
   assert(data.ni()==ni && data.nj()==nj && data.nplanes()==np);
 
-  vcl_ptrdiff_t istepM=model.istep(),
+  std::ptrdiff_t istepM=model.istep(),
                 jstepM=model.jstep(),
                 pstepM=model.planestep();
-  vcl_ptrdiff_t istepD=data.istep(),
+  std::ptrdiff_t istepD=data.istep(),
                 jstepD=data.jstep(),
                 pstepD=data.planestep();
   const mT* planeM = model.top_left_ptr();
@@ -102,9 +102,9 @@ inline void bil_equalize_linear_vals(const vil_image_view<mT>& model,
   assert(data.ni()==ni && data.nj()==nj && data.nplanes()==np);
   assert(mask.ni()==ni && mask.nj()==nj && mask.nplanes()==1 );
 
-  vcl_ptrdiff_t istepM=model.istep(),jstepM=model.jstep(),pstepM = model.planestep();
-  vcl_ptrdiff_t istepD=data.istep(),jstepD=data.jstep(),pstepD = data.planestep();
-  vcl_ptrdiff_t istepB=mask.istep(),jstepB=mask.jstep();
+  std::ptrdiff_t istepM=model.istep(),jstepM=model.jstep(),pstepM = model.planestep();
+  std::ptrdiff_t istepD=data.istep(),jstepD=data.jstep(),pstepD = data.planestep();
+  std::ptrdiff_t istepB=mask.istep(),jstepB=mask.jstep();
   const mT* planeM = model.top_left_ptr();
   const dT* planeD = data.top_left_ptr();
 

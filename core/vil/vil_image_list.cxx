@@ -2,7 +2,8 @@
 //:
 // \file
 #include <sys/stat.h>
-#include <vcl_cstdlib.h>
+#include <vcl_compiler.h>
+#include <cstdlib>
 #include <vil/vil_image_resource.h>
 #include <vil/vil_blocked_image_resource.h>
 #include <vil/vil_pyramid_image_resource.h>
@@ -17,9 +18,9 @@ bool vil_image_list::vil_is_directory(char const* fn)
 
 #if defined(VCL_WIN32) && !defined(__CYGWIN__)
 #include <io.h>
-vcl_vector<vcl_string> vil_image_list::files()
+std::vector<std::string> vil_image_list::files()
 {
-  vcl_vector<vcl_string> temp;
+  std::vector<std::string> temp;
   if (!this->vil_is_directory(directory_.c_str()))
     return temp;
   // This mess should go away soon.
@@ -34,8 +35,8 @@ vcl_vector<vcl_string> vil_image_list::files()
   handle = _findfirst((directory_+"\\*").c_str(), &data);
   if (handle<0)
     return temp;
-  vcl_string s = data.name;
-  vcl_string filename = directory_+ "\\" + s;
+  std::string s = data.name;
+  std::string filename = directory_+ "\\" + s;
   vil_image_resource_sptr resc;
   if (!this->vil_is_directory(filename.c_str()))
     temp.push_back(filename);
@@ -56,9 +57,9 @@ vcl_vector<vcl_string> vil_image_list::files()
 #else // !defined(VCL_WIN32) || defined(__CYGWIN__)
 
 #include <dirent.h>
-vcl_vector<vcl_string> vil_image_list::files()
+std::vector<std::string> vil_image_list::files()
 {
-  vcl_vector<vcl_string> temp;
+  std::vector<std::string> temp;
   if (!this->vil_is_directory(directory_.c_str()))
     return temp;
   DIR* dir_handle = opendir(directory_.c_str());
@@ -66,12 +67,12 @@ vcl_vector<vcl_string> vil_image_list::files()
   de = readdir(dir_handle);
   if (de==VXL_NULLPTR)
     return temp;
-  vcl_string s = de->d_name;
-  vcl_string filename = directory_+ "/" + s;
+  std::string s = de->d_name;
+  std::string filename = directory_+ "/" + s;
   if (!this->vil_is_directory(filename.c_str()))
   {
 #ifdef IL_DEBUG
-    vcl_cout << "Found File(0) " << filename << '\n';
+    std::cout << "Found File(0) " << filename << '\n';
 #endif
     temp.push_back(filename);
   }
@@ -87,7 +88,7 @@ vcl_vector<vcl_string> vil_image_list::files()
     if (!this->vil_is_directory(filename.c_str()))
     {
 #ifdef IL_DEBUG
-      vcl_cout << "Found File " << filename << '\n';
+      std::cout << "Found File " << filename << '\n';
 #endif
       temp.push_back(filename);
     }
@@ -96,11 +97,11 @@ vcl_vector<vcl_string> vil_image_list::files()
 }
 
 #endif // !defined(VCL_WIN32) || defined(__CYGWIN__)
-vcl_vector<vil_image_resource_sptr> vil_image_list::resources()
+std::vector<vil_image_resource_sptr> vil_image_list::resources()
 {
-  vcl_vector<vil_image_resource_sptr>  temp;
-  vcl_vector<vcl_string> fs = this->files();
-  for (vcl_vector<vcl_string>::iterator fit = fs.begin();
+  std::vector<vil_image_resource_sptr>  temp;
+  std::vector<std::string> fs = this->files();
+  for (std::vector<std::string>::iterator fit = fs.begin();
        fit != fs.end(); ++fit)
   {
     vil_image_resource_sptr resc = vil_load_image_resource((*fit).c_str(), il_verbose);
@@ -110,11 +111,11 @@ vcl_vector<vil_image_resource_sptr> vil_image_list::resources()
   return temp;
 }
 
-vcl_vector<vil_image_resource_sptr> vil_image_list::blocked_resources()
+std::vector<vil_image_resource_sptr> vil_image_list::blocked_resources()
 {
-  vcl_vector<vil_image_resource_sptr>  temp;
-  vcl_vector<vcl_string> fs = this->files();
-  for (vcl_vector<vcl_string>::iterator fit = fs.begin();
+  std::vector<vil_image_resource_sptr>  temp;
+  std::vector<std::string> fs = this->files();
+  for (std::vector<std::string>::iterator fit = fs.begin();
        fit != fs.end(); ++fit)
   {
     vil_image_resource_sptr resc = vil_load_image_resource((*fit).c_str(), il_verbose);
@@ -125,11 +126,11 @@ vcl_vector<vil_image_resource_sptr> vil_image_list::blocked_resources()
   return temp;
 }
 
-vcl_vector<vil_image_resource_sptr> vil_image_list::pyramids()
+std::vector<vil_image_resource_sptr> vil_image_list::pyramids()
 {
-  vcl_vector<vil_image_resource_sptr>  temp;
-  vcl_vector<vcl_string> fs = this->files();
-  for (vcl_vector<vcl_string>::iterator fit = fs.begin();
+  std::vector<vil_image_resource_sptr>  temp;
+  std::vector<std::string> fs = this->files();
+  for (std::vector<std::string>::iterator fit = fs.begin();
        fit != fs.end(); ++fit)
   {
     vil_pyramid_image_resource_sptr pyr =
@@ -140,26 +141,26 @@ vcl_vector<vil_image_resource_sptr> vil_image_list::pyramids()
   return temp;
 }
 //:remove a file
-bool vil_image_list::remove_file(vcl_string& filename)
+bool vil_image_list::remove_file(std::string& filename)
 {
 #if defined(VCL_WIN32) && !defined(__CYGWIN__)
-  vcl_string command = "del " + filename;
+  std::string command = "del " + filename;
 #else
-  vcl_string command = "rm " + filename;
+  std::string command = "rm " + filename;
 #endif
-  return vcl_system(command.c_str())==0;
+  return std::system(command.c_str())==0;
 }
 
 //:removes all files from the directory. sub-directories are not touched
 bool vil_image_list::clean_directory()
 {
-  vcl_vector<vcl_string> filez = this->files();
+  std::vector<std::string> filez = this->files();
   bool good = true;
-  vcl_cout << "starting to remove ..\n";
-  for (vcl_vector<vcl_string>::iterator fit = filez.begin();
+  std::cout << "starting to remove ..\n";
+  for (std::vector<std::string>::iterator fit = filez.begin();
        fit != filez.end(); ++fit)
     if (!this->remove_file(*fit))
       good = false;
-  vcl_cout << "finished remove ..\n";
+  std::cout << "finished remove ..\n";
   return good;
 }

@@ -4,10 +4,12 @@
 // \file
 #include "bsta_joint_histogram.h"
 
-#include <vcl_cmath.h> // for log()
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <cmath> // for log()
+#include <iostream>
 #include "bsta_gauss.h"
-#include <vnl/vnl_math.h> // for log2e == 1/vcl_log(2.0)
+#include <vnl/vnl_math.h> // for log2e == 1/std::log(2.0)
 template <class T>
 bsta_joint_histogram<T>::bsta_joint_histogram()
   : volume_valid_(false), volume_(0),
@@ -192,7 +194,7 @@ bool bsta_joint_histogram<T>::avg_and_variance_bin_for_row_a(const unsigned int 
   var = 0;
   for (unsigned int b =0; b<nbins_b_; b++) {
     T dif = (b+1)*delta_b_/2-avg;
-    var += vcl_pow(dif, T(2.0))*(counts_[a][b]/sum);
+    var += std::pow(dif, T(2.0))*(counts_[a][b]/sum);
   }
 
   return true;
@@ -215,7 +217,7 @@ T bsta_joint_histogram<T>::entropy() const
     {
       T pij = this->p(i,j);
       if (pij>min_prob_)
-        ent -= pij*T(vcl_log(pij));
+        ent -= pij*T(std::log(pij));
     }
   ent *= (T)vnl_math::log2e;
   return ent;
@@ -227,7 +229,7 @@ T bsta_joint_histogram<T>::mutual_information() const
   T mi = T(0);
 
   //calculate marginal distributions
-  vcl_vector<T> pa(nbins_a_,T(0)), pb(nbins_b_,T(0));
+  std::vector<T> pa(nbins_a_,T(0)), pb(nbins_b_,T(0));
   for (unsigned a = 0; a < nbins_a_; ++a)
     for (unsigned b = 0; b < nbins_b_; ++b){
       pa[a] += this->p(a,b);
@@ -239,7 +241,7 @@ T bsta_joint_histogram<T>::mutual_information() const
     for (unsigned b = 0; b < nbins_b_; ++b)
       if (p(a,b) > min_prob_ && pa[a] > min_prob_ && pb[b] > min_prob_)
         mi += (this->p(a,b)*
-          (vcl_log(this->p(a,b)) - vcl_log(pa[a]) - vcl_log(pb[b])));
+          (std::log(this->p(a,b)) - std::log(pa[a]) - std::log(pb[b])));
 
   //convert from natural log to base 2
   mi *= (T)vnl_math::log2e;
@@ -258,7 +260,7 @@ T bsta_joint_histogram<T>::renyi_entropy() const
       sum += pij*pij;
     }
   if (sum>min_prob_)
-    ent = - T(vcl_log(sum))*(T)vnl_math::log2e;
+    ent = - T(std::log(sum))*(T)vnl_math::log2e;
   return ent;
 }
 
@@ -266,7 +268,7 @@ template <class T>
 T bsta_joint_histogram<T>::entropy_marginal_a() const
 {
   T ent = 0;
-  vcl_vector<T> counts_a(nbins_a_, T(0));
+  std::vector<T> counts_a(nbins_a_, T(0));
   T count_a_sum = T(0);
   for (unsigned int i = 0; i<nbins_a_; ++i)
     for (unsigned int j = 0; j <nbins_b_; ++j)
@@ -278,7 +280,7 @@ T bsta_joint_histogram<T>::entropy_marginal_a() const
   for (unsigned int i = 0; i <nbins_a_; ++i) {
     T pi = counts_a[i]/count_a_sum;
     if (pi>min_prob_)
-      ent -= pi*T(vcl_log(pi));
+      ent -= pi*T(std::log(pi));
   }
   ent *= (T)vnl_math::log2e;
   return ent;
@@ -320,7 +322,7 @@ void bsta_joint_histogram<T>::clear()
 }
 
 template <class T>
-void bsta_joint_histogram<T>::print(vcl_ostream& os) const
+void bsta_joint_histogram<T>::print(std::ostream& os) const
 {
   for (unsigned int a = 0; a<nbins_a_; a++)
     for (unsigned int b = 0; b<nbins_b_; b++)
@@ -329,7 +331,7 @@ void bsta_joint_histogram<T>::print(vcl_ostream& os) const
 }
 
 template <class T>
-void bsta_joint_histogram<T>::print_to_vrml(vcl_ostream& os) const
+void bsta_joint_histogram<T>::print_to_vrml(std::ostream& os) const
 {
   // we need to scale the display, find magnitude of largest value
   T max = (T)0;
@@ -414,7 +416,7 @@ void bsta_joint_histogram<T>::print_to_vrml(vcl_ostream& os) const
 }
 
 template <class T>
-void bsta_joint_histogram<T>::print_to_m(vcl_ostream& os) const
+void bsta_joint_histogram<T>::print_to_m(std::ostream& os) const
 {
   os << "y = zeros(" << nbins_a_ << ", " << nbins_b_ << ");\n";
   for (unsigned int a = 0; a<nbins_a_; a++) {
@@ -431,7 +433,7 @@ void bsta_joint_histogram<T>::print_to_m(vcl_ostream& os) const
 }
 
 template <class T>
-void bsta_joint_histogram<T>::print_to_text(vcl_ostream& os) const
+void bsta_joint_histogram<T>::print_to_text(std::ostream& os) const
 {
   os << nbins_a_ << '\t' << nbins_b_ << '\n';
   for (unsigned int a = 0; a<nbins_a_; a++)

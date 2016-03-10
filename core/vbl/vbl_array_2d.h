@@ -17,15 +17,16 @@
 // PDA (Manchester) 21/03/2001: Tidied up the documentation
 // \endverbatim
 
-#include <vcl_iosfwd.h>
-#include <vcl_cstddef.h>
+#include <vcl_compiler.h>
+#include <iosfwd>
+#include <cstddef>
 
 //: simple 2D array
 template <class T>
 class vbl_array_2d
 {
  public:
-  typedef vcl_size_t size_type;
+  typedef std::size_t size_type;
   typedef T element_type;
 
  private:
@@ -171,7 +172,7 @@ class vbl_array_2d
 };
 
 VCL_TEMPLATE_EXPORT template <class T>
-vcl_ostream& operator<<(vcl_ostream &, vbl_array_2d<T> const &);
+std::ostream& operator<<(std::ostream &, vbl_array_2d<T> const &);
 
 #define VBL_ARRAY_2D_INSTANTIATE \
 extern "please include vbl/vbl_array_2d.txx instead"

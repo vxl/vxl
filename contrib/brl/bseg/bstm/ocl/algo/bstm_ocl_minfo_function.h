@@ -16,7 +16,7 @@ class bstm_ocl_minfo_function
  public:
   bstm_ocl_minfo_function(bocl_device_sptr device, bstm_scene_sptr scene, bstm_opencl_cache_sptr opencl_cache,
                               vgl_box_3d<double> bb, vgl_rotation_3d<double> rot, vgl_vector_3d<double> T,
-                              float time1, float time2, vcl_string kernel_opt, int nbins );
+                              float time1, float time2, std::string kernel_opt, int nbins );
 
   float evaluate();
 
@@ -37,8 +37,8 @@ class bstm_ocl_minfo_function
   float time1_;
   float time2_;
 
-  vcl_vector<bstm_block_id> relevant_blocks_;
-  vcl_map<bstm_block_id, vcl_vector<bstm_block_id> > relevant_block_mapping_;
+  std::vector<bstm_block_id> relevant_blocks_;
+  std::map<bstm_block_id, std::vector<bstm_block_id> > relevant_block_mapping_;
 
   bocl_mem_sptr centerX_;
   bocl_mem_sptr centerY_;
@@ -77,7 +77,7 @@ class bstm_ocl_minfo_function
   vgl_vector_3d<double> T_;
 
 
-  vcl_string kernel_opt_;
+  std::string kernel_opt_;
   bocl_kernel * kern_;
 };
 

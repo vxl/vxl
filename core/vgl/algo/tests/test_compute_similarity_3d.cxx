@@ -1,17 +1,18 @@
 #include <testlib/testlib_test.h>
 #include <vgl/algo/vgl_compute_similarity_3d.h>
 #include <vgl/vgl_vector_3d.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <iostream>
 #include <vnl/vnl_random.h>
 
 
-vcl_vector<vgl_point_3d<double> >
-transform_points(const vcl_vector<vgl_point_3d<double> >& points,
+std::vector<vgl_point_3d<double> >
+transform_points(const std::vector<vgl_point_3d<double> >& points,
                  double s,
                  vgl_rotation_3d<double> R,
                  vgl_vector_3d<double> t)
 {
-  vcl_vector<vgl_point_3d<double> > t_pts;
+  std::vector<vgl_point_3d<double> > t_pts;
   for (unsigned i=0; i<points.size(); ++i)
   {
     vgl_point_3d<double> p = R*points[i];
@@ -22,7 +23,7 @@ transform_points(const vcl_vector<vgl_point_3d<double> >& points,
   return t_pts;
 }
 
-void add_noise(vcl_vector<vgl_point_3d<double> >& points, double sigma)
+void add_noise(std::vector<vgl_point_3d<double> >& points, double sigma)
 {
   vnl_random r;
   for ( unsigned i=0; i<points.size(); ++i )
@@ -33,21 +34,21 @@ void add_noise(vcl_vector<vgl_point_3d<double> >& points, double sigma)
 }
 
 // compute the RMS error between two sets of points
-double alignment_error(const vcl_vector<vgl_point_3d<double> >& points1,
-                       const vcl_vector<vgl_point_3d<double> >& points2)
+double alignment_error(const std::vector<vgl_point_3d<double> >& points1,
+                       const std::vector<vgl_point_3d<double> >& points2)
 {
   double error = 0.0;
   for ( unsigned i=0; i<points1.size(); ++i )
   {
     error += (points1[i] - points2[i]).sqr_length();
   }
-  return vcl_sqrt(error/points1.size());
+  return std::sqrt(error/points1.size());
 }
 
 
 static void test_compute_similarity_3d()
 {
-  vcl_vector<vgl_point_3d<double> > points1;
+  std::vector<vgl_point_3d<double> > points1;
   points1.push_back(vgl_point_3d<double>(10.5, 200.0, -340.5));
   points1.push_back(vgl_point_3d<double>(23.0, 250.0, -310.2));
   points1.push_back(vgl_point_3d<double>(15.0, 260.0, -315.7));
@@ -59,7 +60,7 @@ static void test_compute_similarity_3d()
   vgl_vector_3d<double> t(100, -200, 200);
   vgl_rotation_3d<double> R(3.0, -1.0, 0.5);
 
-  vcl_vector<vgl_point_3d<double> > points2 = transform_points(points1,s,R,t);
+  std::vector<vgl_point_3d<double> > points2 = transform_points(points1,s,R,t);
 
   vgl_compute_similarity_3d<double> est_sim(points1, points2);
   est_sim.estimate();

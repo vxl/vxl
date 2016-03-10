@@ -10,9 +10,10 @@
 
 #include "vgui_gtk_dialog_impl.h"
 
-#include <vcl_string.h>
-#include <vcl_vector.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <string>
+#include <vector>
+#include <iostream>
 #include <vul/vul_sprintf.h>
 
 #include <vgui/vgui_gl.h>
@@ -46,7 +47,7 @@ vgui_gtk_dialog_impl::~vgui_gtk_dialog_impl()
 
 struct vgui_gtk_dialog_impl_choice
 {
-  vcl_vector<vcl_string> names;
+  std::vector<std::string> names;
   int index;
 };
 
@@ -54,7 +55,7 @@ struct vgui_gtk_dialog_impl_choice
 //--------------------------------------------------------------------------------
 //: Make a choice widget
 void* vgui_gtk_dialog_impl::choice_field_widget(const char* /*txt*/,
-                                                const vcl_vector<vcl_string>& labels,
+                                                const std::vector<std::string>& labels,
                                                 int& val)
 {
   vgui_gtk_dialog_impl_choice *ch = new vgui_gtk_dialog_impl_choice;
@@ -87,7 +88,7 @@ static
 void accept_cb(GtkWidget* /*widget*/,
                gpointer   data)
 {
-  if (debug) vcl_cerr << "accept\n";
+  if (debug) std::cerr << "accept\n";
   vgui_gtk_dialog_impl::status_type* d = static_cast<vgui_gtk_dialog_impl::status_type*>(data);
   *d = vgui_gtk_dialog_impl::OK;
 }
@@ -96,7 +97,7 @@ static
 void cancel_cb(GtkWidget* /*widget*/,
                gpointer data)
 {
-  if (debug) vcl_cerr << "cancel\n";
+  if (debug) std::cerr << "cancel\n";
   vgui_gtk_dialog_impl::status_type* d = static_cast<vgui_gtk_dialog_impl::status_type*>(data);
   *d = vgui_gtk_dialog_impl::CANCEL;
 }
@@ -106,7 +107,7 @@ gint close_window_cb(GtkWidget* /*widget*/,
                      GdkEvent* /*event*/,
                      gpointer data)
 {
-  if (debug) vcl_cerr << "close window\n";
+  if (debug) std::cerr << "close window\n";
   vgui_gtk_dialog_impl::status_type* d = static_cast<vgui_gtk_dialog_impl::status_type*>(data);
   *d = vgui_gtk_dialog_impl::CLOSE;
   return FALSE; // propagate as necessary
@@ -124,7 +125,7 @@ void choose_cb(GtkWidget* /*widget*/,
 {
   vgui_gtk_dialog_impl_int_pair *ip = (vgui_gtk_dialog_impl_int_pair*) data;
   *(ip->val) = ip->tmp;
-  if (debug) vcl_cerr << "choose " << (ip->tmp) << vcl_endl;
+  if (debug) std::cerr << "choose " << (ip->tmp) << std::endl;
 }
 
 } // extern "C"
@@ -141,17 +142,17 @@ void vgui_gtk_dialog_impl::modal(const bool m)
 void vgui_gtk_dialog_impl::set_ok_button(const char* txt)
 {
   if (txt)
-    ok_text = vcl_string(txt);
+    ok_text = std::string(txt);
   else
-    ok_text = vcl_string("REMOVEBUTTON");
+    ok_text = std::string("REMOVEBUTTON");
 }
 
 void vgui_gtk_dialog_impl::set_cancel_button(const char* txt)
 {
   if (txt)
-    cancel_text = vcl_string(txt);
+    cancel_text = std::string(txt);
   else
-    cancel_text = vcl_string("REMOVEBUTTON");
+    cancel_text = std::string("REMOVEBUTTON");
 }
 
 extern "C" {
@@ -222,7 +223,7 @@ void color_changed_cb(GtkColorSelection *colorsel, GtkEntry* color_entry)
 
 struct cancel_color_data
 {
-  vcl_string* orig_color;
+  std::string* orig_color;
   GtkEntry* color_entry;
   GtkColorSelectionDialog* colord;
 };
@@ -258,7 +259,7 @@ void choose_color(GtkWidget* /*w*/, GtkEntry* color_entry)
   gtk_widget_hide( GTK_WIDGET(colord->help_button) );
 
   cancel_color_data* data = new cancel_color_data;
-  data->orig_color = new vcl_string(gtk_entry_get_text(GTK_ENTRY(color_entry)));
+  data->orig_color = new std::string(gtk_entry_get_text(GTK_ENTRY(color_entry)));
   data->color_entry = color_entry;
   data->colord = colord;
 
@@ -313,15 +314,15 @@ bool vgui_gtk_dialog_impl::ask()
                      &dialog_status_);
 
   // list of widgets used to extract values
-  vcl_vector<GtkWidget*> wlist;
+  std::vector<GtkWidget*> wlist;
 
   // to delete the adaptors associated with inline tableaux
-  vcl_vector<vgui_gtk_adaptor*> adaptor_list;
+  std::vector<vgui_gtk_adaptor*> adaptor_list;
 
   // to delete the file selection dialog for the inline selection
-  vcl_vector<GtkWidget*> delete_wlist;
+  std::vector<GtkWidget*> delete_wlist;
 
-  for (vcl_vector<element>::iterator e_iter = elements.begin();
+  for (std::vector<element>::iterator e_iter = elements.begin();
        e_iter != elements.end(); ++e_iter) {
 
     element l = *e_iter;
@@ -373,7 +374,7 @@ bool vgui_gtk_dialog_impl::ask()
       vgui_gtk_dialog_impl_choice *ch = (vgui_gtk_dialog_impl_choice*)l.widget;
 
       int count = 0;
-      for (vcl_vector<vcl_string>::iterator s_iter =  ch->names.begin();
+      for (std::vector<std::string>::iterator s_iter =  ch->names.begin();
            s_iter != ch->names.end(); ++s_iter, ++count) {
 
         GtkWidget* item = gtk_menu_item_new_with_label(s_iter->c_str());
@@ -512,7 +513,7 @@ bool vgui_gtk_dialog_impl::ask()
       adaptor_list.push_back( adapt );
     }
     else
-      vcl_cerr << "Unknown type = " << int(l.type) << vcl_endl;
+      std::cerr << "Unknown type = " << int(l.type) << std::endl;
   }
 
   gtk_widget_show(dialog);
@@ -528,7 +529,7 @@ bool vgui_gtk_dialog_impl::ask()
   // the associated glarea should be destroyed by the time this
   // function call ends. That is, by the time further iterations of
   // the gtk main loop occur.
-  for ( vcl_vector<vgui_gtk_adaptor*>::iterator iter = adaptor_list.begin();
+  for ( std::vector<vgui_gtk_adaptor*>::iterator iter = adaptor_list.begin();
         iter != adaptor_list.end(); ++iter ) {
     delete *iter;
   }
@@ -542,8 +543,8 @@ bool vgui_gtk_dialog_impl::ask()
   }
   else if (dialog_status_ == OK)  // OK button has been pressed
   {
-    vcl_vector<GtkWidget*>::iterator w_iter = wlist.begin();
-    for (vcl_vector<element>::iterator e_iter = elements.begin();
+    std::vector<GtkWidget*>::iterator w_iter = wlist.begin();
+    for (std::vector<element>::iterator e_iter = elements.begin();
          e_iter != elements.end(); ++e_iter, ++w_iter) {
       element l = *e_iter;
       if (l.type == int_elem ||
@@ -583,7 +584,7 @@ bool vgui_gtk_dialog_impl::ask()
   }
 
   // Destroy widgets that weren't inserted into this dialog
-  for ( vcl_vector<GtkWidget*>::iterator iter = delete_wlist.begin();
+  for ( std::vector<GtkWidget*>::iterator iter = delete_wlist.begin();
         iter != delete_wlist.end(); ++iter ) {
     gtk_widget_destroy( *iter );
   }

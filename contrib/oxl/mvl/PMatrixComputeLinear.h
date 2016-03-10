@@ -25,9 +25,9 @@ class PMatrix;
 class PMatrixComputeLinear : public PMatrixCompute
 {
  public:
-  bool compute(vcl_vector<HomgPoint2D> const& points1, vcl_vector<HomgPoint3D> const& points2, PMatrix *P);
-  bool compute(vcl_vector<vgl_homg_point_2d<double> > const& points1,
-               vcl_vector<vgl_homg_point_3d<double> > const& points2,
+  bool compute(std::vector<HomgPoint2D> const& points1, std::vector<HomgPoint3D> const& points2, PMatrix *P);
+  bool compute(std::vector<vgl_homg_point_2d<double> > const& points1,
+               std::vector<vgl_homg_point_3d<double> > const& points2,
                PMatrix *P);
 };
 

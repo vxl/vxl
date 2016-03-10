@@ -4,7 +4,9 @@
 // \file
 // \brief A process to register two images by finding the best translational mapping.
 
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iostream>
 #include <ihog/ihog_minimizer.h>
 #include <ihog/ihog_world_roi.h>
 #include <vil/vil_convert.h>
@@ -17,13 +19,13 @@ bool ihog_register_translational_process_cons(bprb_func_process& pro)
   //  0) image 0
   //  1) image 1
   //  2) int        radius for an exhaustive search at the beginning, no exhaustive search if passed as 0
-  vcl_vector<vcl_string> input_types;
+  std::vector<std::string> input_types;
   input_types.push_back("vil_image_view_base_sptr");
   input_types.push_back("vil_image_view_base_sptr");
   input_types.push_back("vil_image_view_base_sptr");
   input_types.push_back("int");
 
-  vcl_vector<vcl_string> output_types;
+  std::vector<std::string> output_types;
   output_types.push_back("double");
   output_types.push_back("double");
 
@@ -35,7 +37,7 @@ bool ihog_register_translational_process_cons(bprb_func_process& pro)
 bool ihog_register_translational_process(bprb_func_process& pro)
 {
   if (pro.n_inputs()!= pro.input_types().size()) {
-    vcl_cout << "ihog_register_translational_process: The number of inputs should be " << pro.input_types().size() << vcl_endl;
+    std::cout << "ihog_register_translational_process: The number of inputs should be " << pro.input_types().size() << std::endl;
     return false;
   }
   // get the inputs
@@ -72,15 +74,15 @@ bool ihog_register_translational_process(bprb_func_process& pro)
 
   minimizer.minimize_exhaustive_minfo(radius, init_xform);
   double error = minimizer.get_end_error();
-  vcl_cout << "end_error = " << error << '\n'
+  std::cout << "end_error = " << error << '\n'
            << "lm generated homography:\n"
-           << init_xform.get_matrix() << vcl_endl << vcl_endl;
+           << init_xform.get_matrix() << std::endl << std::endl;
   //test result
   vgl_point_2d<double> p0 = init_xform.origin();
 
   //: sanity check
-  if (vcl_abs(p0.x()) > radius || vcl_abs(p0.y()) > radius) {
-    vcl_cout << "FAILED SANITY CHECK: TX = " << p0.x() << " TY = " << p0.y() << vcl_endl;
+  if (std::abs(p0.x()) > radius || std::abs(p0.y()) > radius) {
+    std::cout << "FAILED SANITY CHECK: TX = " << p0.x() << " TY = " << p0.y() << std::endl;
     pro.set_output_val<double>(0, 0.0);
     pro.set_output_val<double>(1, 0.0);
   }

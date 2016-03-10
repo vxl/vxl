@@ -21,8 +21,8 @@ class boxm2_multi_update_cell
     //static float update_cells(boxm2_multi_cache& cache,
     //                          const vil_image_view<float>& img,
     //                          vpgl_camera_double_sptr cam,
-    //                          vcl_map<bocl_device*, float*>& vis_map,
-    //                          vcl_map<bocl_device*, float*>& pre_map,
+    //                          std::map<bocl_device*, float*>& vis_map,
+    //                          std::map<bocl_device*, float*>& pre_map,
     //                          float*                         norm_image,
     //                          boxm2_multi_update_helper& helper);
     static float update_cells(boxm2_multi_cache& cache,
@@ -37,7 +37,7 @@ class boxm2_multi_update_cell
                                     boxm2_scene_sptr    scene,
                                     boxm2_opencl_cache1* opencl_cache,
                                     cl_command_queue&   queue,
-                                    vcl_string          data_type,
+                                    std::string          data_type,
                                     bocl_kernel*        kern,
                                     bocl_mem_sptr&      vis_image,
                                     bocl_mem_sptr&      pre_image,
@@ -48,18 +48,18 @@ class boxm2_multi_update_cell
                     bocl_mem_sptr&      tnearfarptr,
                                     bocl_mem_sptr&      cl_output,
                                     bocl_mem_sptr&      lookup,
-                                    vcl_size_t*         lthreads,
-                                    vcl_size_t*         gThreads);
+                                    std::size_t*         lthreads,
+                                    std::size_t*         gThreads);
 
     static float calc_beta_reduce( boxm2_multi_cache& mcache,
                                    vpgl_camera_double_sptr cam,
                                    boxm2_multi_update_helper& helper);
 
     //map keeps track of all kernels compiled and cached
-    static vcl_map<vcl_string, vcl_vector<bocl_kernel*> > kernels_;
+    static std::map<std::string, std::vector<bocl_kernel*> > kernels_;
 
     //compile kernels and cache
-    static vcl_vector<bocl_kernel*>& get_kernels(bocl_device_sptr device, vcl_string opts);
+    static std::vector<bocl_kernel*>& get_kernels(bocl_device_sptr device, std::string opts);
 };
 
 #endif

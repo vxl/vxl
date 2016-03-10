@@ -2,9 +2,11 @@
 #include "bstm_scene.h"
 //:
 // \file
-#include <vcl_iostream.h>
-#include <vcl_string.h>
-#include <vcl_algorithm.h>
+#include <iostream>
+#include <string>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <algorithm>
 
 /* xml includes */
 #include <vsl/vsl_basic_xml_element.h>
@@ -21,9 +23,9 @@
 //vsph include
 #include <vsph/vsph_camera_bounds.h>
 
-#include <vcl_limits.h>
+#include <limits>
 
-bstm_scene::bstm_scene(vcl_string data_path, vgl_point_3d<double> const& origin, int version)
+bstm_scene::bstm_scene(std::string data_path, vgl_point_3d<double> const& origin, int version)
 {
     local_origin_=origin;
     data_path_   = data_path;
@@ -32,23 +34,23 @@ bstm_scene::bstm_scene(vcl_string data_path, vgl_point_3d<double> const& origin,
 }
 
 //: initializes Scene from XML file
-bstm_scene::bstm_scene(vcl_string filename)
+bstm_scene::bstm_scene(std::string filename)
 {
     //xml parser
     xml_path_ = filename;
     bstm_scene_parser parser;
     if (filename.size() > 0) {
-      vcl_FILE* xmlFile = vcl_fopen(filename.c_str(), "r");
+      std::FILE* xmlFile = std::fopen(filename.c_str(), "r");
       if (!xmlFile) {
-        vcl_cerr << filename.c_str() << " error on opening\n";
+        std::cerr << filename.c_str() << " error on opening\n";
         return;
       }
       if (!parser.parseFile(xmlFile)) {
-        vcl_cerr << XML_ErrorString(parser.XML_GetErrorCode()) << " at line "
+        std::cerr << XML_ErrorString(parser.XML_GetErrorCode()) << " at line "
                  << parser.XML_GetCurrentLineNumber() << '\n';
         return;
       }
-      vcl_fclose(xmlFile);
+      std::fclose(xmlFile);
     }
 
     //store data path
@@ -76,26 +78,26 @@ void bstm_scene::add_block_metadata(bstm_block_metadata data)
 {
   if ( blocks_.find(data.id_) != blocks_.end() )
   {
-    vcl_cout<<"Boxm2 SCENE: Overwriting block metadata for id: "<<data.id_<<vcl_endl;
+    std::cout<<"Boxm2 SCENE: Overwriting block metadata for id: "<<data.id_<<std::endl;
   }
   blocks_[data.id_] = data;
 }
 
 
-vcl_vector<bstm_block_id> bstm_scene::get_block_ids() const
+std::vector<bstm_block_id> bstm_scene::get_block_ids() const
 {
-  vcl_map<bstm_block_id, bstm_block_metadata>::const_iterator iter;
-  vcl_vector<bstm_block_id> block_ids;
+  std::map<bstm_block_id, bstm_block_metadata>::const_iterator iter;
+  std::vector<bstm_block_id> block_ids;
   for (iter = blocks_.begin(); iter != blocks_.end(); ++iter) {
     block_ids.push_back(iter->first);
   }
   return block_ids;
 }
 
-vcl_vector<bstm_block_id> bstm_scene::get_block_ids(vgl_box_3d<double> bb, float time) const
+std::vector<bstm_block_id> bstm_scene::get_block_ids(vgl_box_3d<double> bb, float time) const
 {
-  vcl_map<bstm_block_id, bstm_block_metadata>::const_iterator iter;
-  vcl_vector<bstm_block_id> block_ids;
+  std::map<bstm_block_id, bstm_block_metadata>::const_iterator iter;
+  std::vector<bstm_block_id> block_ids;
   for (iter = blocks_.begin(); iter != blocks_.end(); ++iter) {
 
     vgl_point_3d<double>  blk_o = (iter->second).local_origin_;
@@ -115,22 +117,22 @@ vcl_vector<bstm_block_id> bstm_scene::get_block_ids(vgl_box_3d<double> bb, float
 bstm_block_metadata bstm_scene::
 get_block_metadata_const(bstm_block_id id) const
 {
-  vcl_map<bstm_block_id, bstm_block_metadata>::const_iterator iter;
+  std::map<bstm_block_id, bstm_block_metadata>::const_iterator iter;
   for (iter = blocks_.begin(); iter != blocks_.end(); ++iter)
     if ((*iter).first == id)
       return (*iter).second;
   return bstm_block_metadata();
 }
 
-vcl_vector<bstm_block_id> bstm_scene::get_vis_blocks(vpgl_generic_camera<double>* cam)
+std::vector<bstm_block_id> bstm_scene::get_vis_blocks(vpgl_generic_camera<double>* cam)
 {
-  vcl_vector<bstm_block_id> vis_order;
-  vcl_vector<bstm_dist_id_pair> distances;
+  std::vector<bstm_block_id> vis_order;
+  std::vector<bstm_dist_id_pair> distances;
   if (!cam) {
-    vcl_cout << "null camera in boxm2_scene::get_vis_blocks(.)\n";
+    std::cout << "null camera in boxm2_scene::get_vis_blocks(.)\n";
     return vis_order;
   }
-  vcl_map<bstm_block_id, bstm_block_metadata>::iterator iter;
+  std::map<bstm_block_id, bstm_block_metadata>::iterator iter;
   for (iter = blocks_.begin(); iter != blocks_.end(); ++iter) {
     vgl_point_3d<double>&    blk_o   = (iter->second).local_origin_;
     vgl_vector_3d<double>&   blk_dim = (iter->second).sub_block_dim_;
@@ -164,20 +166,20 @@ vcl_vector<bstm_block_id> bstm_scene::get_vis_blocks(vpgl_generic_camera<double>
   }
 
   //sort distances
-  vcl_sort(distances.begin(), distances.end());
+  std::sort(distances.begin(), distances.end());
 
   //put blocks in "vis_order"
-  vcl_vector<bstm_dist_id_pair>::iterator di;
+  std::vector<bstm_dist_id_pair>::iterator di;
   for (di = distances.begin(); di != distances.end(); ++di)
     vis_order.push_back(di->id_);
   return vis_order;
 }
 
-vcl_vector<bstm_block_id> bstm_scene::get_vis_blocks(vpgl_perspective_camera<double>* cam)
+std::vector<bstm_block_id> bstm_scene::get_vis_blocks(vpgl_perspective_camera<double>* cam)
 {
-  vcl_vector<bstm_block_id> vis_order;
+  std::vector<bstm_block_id> vis_order;
   if (!cam) {
-    vcl_cout << "null camera in bstm_scene::get_vis_blocks(.)\n";
+    std::cout << "null camera in bstm_scene::get_vis_blocks(.)\n";
     return vis_order;
   }
 
@@ -197,18 +199,18 @@ vcl_vector<bstm_block_id> bstm_scene::get_vis_blocks(vpgl_perspective_camera<dou
   return get_vis_order_from_pt(cam_center, camBox);
 }
 
-vcl_vector<bstm_block_id>
+std::vector<bstm_block_id>
 bstm_scene::get_vis_order_from_pt(vgl_point_3d<double> const& pt,
                                   vgl_box_2d<double> camBox)
 {
   //Map of distance, id
-  vcl_vector<bstm_block_id> vis_order;
-  vcl_vector<bstm_dist_id_pair> distances;
+  std::vector<bstm_block_id> vis_order;
+  std::vector<bstm_dist_id_pair> distances;
 
   //get camera center and order blocks distance from the cam center
   //for non-projective cameras there may not be a single center of projection
   //so instead get the ray origin farthest from the scene origin.
-  vcl_map<bstm_block_id, bstm_block_metadata>::iterator iter;
+  std::map<bstm_block_id, bstm_block_metadata>::iterator iter;
   for (iter = blocks_.begin(); iter != blocks_.end(); ++iter) {
     vgl_point_3d<double>&    blk_o   = (iter->second).local_origin_;
     vgl_vector_3d<double>&   blk_dim = (iter->second).sub_block_dim_;
@@ -230,10 +232,10 @@ bstm_scene::get_vis_order_from_pt(vgl_point_3d<double> const& pt,
   }
 
   //sort distances
-  vcl_sort(distances.begin(), distances.end());
+  std::sort(distances.begin(), distances.end());
 
   //put blocks in "vis_order"
-  vcl_vector<bstm_dist_id_pair>::iterator di;
+  std::vector<bstm_dist_id_pair>::iterator di;
   for (di = distances.begin(); di != distances.end(); ++di)
     vis_order.push_back(di->id_);
   return vis_order;
@@ -245,8 +247,8 @@ bstm_scene::get_vis_order_from_pt(vgl_point_3d<double> const& pt,
 bool bstm_scene::contains(vgl_point_3d<double> const& p, bstm_block_id& bid,
                           vgl_point_3d<double>& local_coords, double const t, double& local_time) const
 {
-    vcl_vector<bstm_block_id> block_ids = this->get_block_ids();
-    for (vcl_vector<bstm_block_id>::iterator id = block_ids.begin();
+    std::vector<bstm_block_id> block_ids = this->get_block_ids();
+    for (std::vector<bstm_block_id>::iterator id = block_ids.begin();
          id != block_ids.end(); ++id)
     {
       bstm_block_metadata md = this->get_block_metadata_const(*id);
@@ -277,7 +279,7 @@ bool bstm_scene::contains(vgl_point_3d<double> const& p, bstm_block_id& bid,
 //  Local coordinates are also returned
 bool bstm_scene::local_time(double const t,  double& local_time) const
 {
-  vcl_map<bstm_block_id, bstm_block_metadata>::const_iterator iter;
+  std::map<bstm_block_id, bstm_block_metadata>::const_iterator iter;
   for (iter = blocks_.begin(); iter != blocks_.end(); ++iter) {
     if ((iter->second).contains_t(t,local_time))
       return true;
@@ -292,7 +294,7 @@ bool bstm_scene::local_time(double const t,  double& local_time) const
 void bstm_scene::save_scene()
 {
   //write out to XML file
-  vcl_ofstream xmlstrm(xml_path_.c_str());
+  std::ofstream xmlstrm(xml_path_.c_str());
   x_write(xmlstrm, (*this), "scene");
   xmlstrm.close();
 }
@@ -301,7 +303,7 @@ void bstm_scene::bounding_box_t(double& min_t, double& max_t) const
 {
   min_t = 10e10; max_t=-10e10;
 
-  vcl_map<bstm_block_id, bstm_block_metadata>::const_iterator iter;
+  std::map<bstm_block_id, bstm_block_metadata>::const_iterator iter;
   for (iter = blocks_.begin(); iter != blocks_.end(); ++iter)
   {
     double blk_min, blk_max;
@@ -317,10 +319,10 @@ void bstm_scene::bounding_box_t(double& min_t, double& max_t) const
 //: gets a tight bounding box of the block ids
 void  bstm_scene::blocks_ids_bounding_box_t(unsigned& min_block_id, unsigned& max_block_id) const
 {
-  min_block_id = vcl_numeric_limits<unsigned>::max() ;
-  max_block_id = vcl_numeric_limits<unsigned>::min() ;
+  min_block_id = std::numeric_limits<unsigned>::max() ;
+  max_block_id = std::numeric_limits<unsigned>::min() ;
 
-  vcl_map<bstm_block_id, bstm_block_metadata>::const_iterator iter;
+  std::map<bstm_block_id, bstm_block_metadata>::const_iterator iter;
   for (iter = blocks_.begin(); iter != blocks_.end(); ++iter)
   {
     if (iter->first.t_ < (int)min_block_id)
@@ -339,7 +341,7 @@ vgl_box_3d<double> bstm_scene::bounding_box() const
   double zmin=10e10, zmax=-10e10;
 
   //iterate through each block
-  vcl_map<bstm_block_id, bstm_block_metadata>::const_iterator iter;
+  std::map<bstm_block_id, bstm_block_metadata>::const_iterator iter;
   for (iter = blocks_.begin(); iter != blocks_.end(); ++iter)
   {
     //determine xmin, ymin, zmin using block_o
@@ -372,7 +374,7 @@ vgl_box_3d<int> bstm_scene::bounding_box_blk_ids() const
 {
   vgl_box_3d<int> bbox;
   //iterate through each block
-  vcl_map<bstm_block_id, bstm_block_metadata>::const_iterator iter;
+  std::map<bstm_block_id, bstm_block_metadata>::const_iterator iter;
   for (iter = blocks_.begin(); iter != blocks_.end(); ++iter)
     bbox.add(vgl_point_3d<int> ( iter->first.i(),iter->first.j(), iter->first.k()) ) ;
 
@@ -381,7 +383,7 @@ vgl_box_3d<int> bstm_scene::bounding_box_blk_ids() const
 
 vgl_vector_3d<unsigned int>  bstm_scene::scene_dimensions() const
 {
-  vcl_vector<bstm_block_id> ids = this->get_block_ids();
+  std::vector<bstm_block_id> ids = this->get_block_ids();
 
   if (ids.empty())
     return vgl_vector_3d<unsigned int>(0,0,0);
@@ -410,7 +412,7 @@ vgl_vector_3d<unsigned int>  bstm_scene::scene_dimensions() const
 }
 
 //: returns true if the scene has specified data type (simple linear search)
-bool bstm_scene::has_data_type(vcl_string data_type)
+bool bstm_scene::has_data_type(std::string data_type)
 {
   for (unsigned int i=0; i<appearances_.size(); ++i)
     if ( appearances_[i] == data_type )
@@ -422,7 +424,7 @@ bool bstm_scene::has_data_type(vcl_string data_type)
 // NON CLASS FUNCTIONS
 //---------------------------------------------------------------------
 //------------XML WRITE------------------------------------------------
-void x_write(vcl_ostream &os, bstm_scene& scene, vcl_string name)
+void x_write(std::ostream &os, bstm_scene& scene, std::string name)
 {
   //open root tag
   vsl_basic_xml_element scene_elm(name);
@@ -434,7 +436,7 @@ void x_write(vcl_ostream &os, bstm_scene& scene, vcl_string name)
   x_write(os, scene.local_origin(), LOCAL_ORIGIN_TAG);
 
   //write scene path for (needs to know where blocks are)
-  vcl_string path = scene.data_path();
+  std::string path = scene.data_path();
   vsl_basic_xml_element paths(SCENE_PATHS_TAG);
   paths.add_attribute("path", path + '/');
   paths.x_write(os);
@@ -445,7 +447,7 @@ void x_write(vcl_ostream &os, bstm_scene& scene, vcl_string name)
 
   //write list of appearance models
 
-  vcl_vector<vcl_string> apps = scene.appearances();
+  std::vector<std::string> apps = scene.appearances();
   for (unsigned int i=0; i<apps.size(); ++i)
   {
     vsl_basic_xml_element apms(APM_TAG);
@@ -454,8 +456,8 @@ void x_write(vcl_ostream &os, bstm_scene& scene, vcl_string name)
   }
 
   //write block information for each block
-  vcl_map<bstm_block_id, bstm_block_metadata> blocks = scene.blocks();
-  vcl_map<bstm_block_id, bstm_block_metadata>::iterator iter;
+  std::map<bstm_block_id, bstm_block_metadata> blocks = scene.blocks();
+  std::map<bstm_block_id, bstm_block_metadata>::iterator iter;
   for (iter = blocks.begin(); iter != blocks.end(); ++iter) {
     bstm_block_id id = iter->first;
     bstm_block_metadata data = iter->second;
@@ -511,7 +513,7 @@ void x_write(vcl_ostream &os, bstm_scene& scene, vcl_string name)
 }
 
 //------------IO Stream------------------------------------------------
-vcl_ostream& operator <<(vcl_ostream &s, bstm_scene& scene)
+std::ostream& operator <<(std::ostream &s, bstm_scene& scene)
 {
   s <<"--- bstm_scene -----------------------------\n"
     <<"xml_path:         "<<scene.xml_path()<<'\n'
@@ -520,7 +522,7 @@ vcl_ostream& operator <<(vcl_ostream &s, bstm_scene& scene)
     <<"list of APMs:     "<<'\n';
 
   //list appearance models for this scene
-  vcl_vector<vcl_string> apps = scene.appearances();
+  std::vector<std::string> apps = scene.appearances();
   for (unsigned int i=0; i<apps.size(); ++i)
     s << "    " << apps[i] << ", ";
   s << '\n';
@@ -536,9 +538,9 @@ vcl_ostream& operator <<(vcl_ostream &s, bstm_scene& scene)
   //list of block ids for this scene....
   vgl_vector_3d<unsigned> dims = scene.scene_dimensions();
   s << "block array dims(" << dims.x() << ' ' << dims.y() << ' ' << dims.z() << ")\n";
-  vcl_map<bstm_block_id, bstm_block_metadata>& blk = scene.blocks();
+  std::map<bstm_block_id, bstm_block_metadata>& blk = scene.blocks();
   s << " blocks:==>\n";
-  for (vcl_map<bstm_block_id, bstm_block_metadata>::iterator bit=blk.begin(); bit != blk.end(); ++bit) {
+  for (std::map<bstm_block_id, bstm_block_metadata>::iterator bit=blk.begin(); bit != blk.end(); ++bit) {
     s << (*bit).second.id_ << ' ';
     vgl_point_3d<double> org = (*bit).second.local_origin_;
     s << ", org( " << org.x() << ' ' << org.y() << ' ' << org.z() << ' ' << (*bit).second.local_origin_t_  << ") ";

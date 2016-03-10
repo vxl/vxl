@@ -11,7 +11,7 @@
 bool vil_two_planes_composite_process_cons(bprb_func_process& pro)
 {
   bool ok=false;
-  vcl_vector<vcl_string> input_types(4);
+  std::vector<std::string> input_types(4);
   input_types[0] = "vil_image_view_base_sptr"; //base image
   input_types[1] = "vil_image_view_base_sptr"; //colorizing image
   input_types[2] = "bool"; //use complement
@@ -20,7 +20,7 @@ bool vil_two_planes_composite_process_cons(bprb_func_process& pro)
   if (!ok) return ok;
 
   //this process has one output
-  vcl_vector<vcl_string> output_types(1);
+  std::vector<std::string> output_types(1);
   output_types[0] = "vil_image_view_base_sptr";
   ok = pro.set_output_types(output_types);
   if (!ok) return ok;
@@ -32,7 +32,7 @@ bool vil_two_planes_composite_process(bprb_func_process& pro)
 {
   // Sanity check
   if (!pro.verify_inputs()) {
-    vcl_cout << "vil_two_planes_composite_process: bad inputs" << vcl_endl;
+    std::cout << "vil_two_planes_composite_process: bad inputs" << std::endl;
     return false;
   }
 
@@ -58,7 +58,7 @@ bool vil_two_planes_composite_process(bprb_func_process& pro)
 #endif
   if (!(img_1->ni()==img_2->ni() && img_1->nj()==img_2->nj()))
   {
-    vcl_cout<<"The images have different dimensions"<<vcl_endl;
+    std::cout<<"The images have different dimensions"<<std::endl;
     return false;
   }
 

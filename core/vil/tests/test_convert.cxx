@@ -1,6 +1,7 @@
 // This is core/vil/tests/test_convert.cxx
 #include <vxl_config.h> // for vxl_byte
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <iostream>
 #include <vul/vul_file.h>
 #include <vil/vil_convert.h>
 #include <vil/vil_image_view.h>
@@ -12,32 +13,32 @@
 #include <testlib/testlib_root_dir.h>
 static void test_convert1(const char * golden_data_dir)
 {
-  vcl_cout << "*******************************************\n"
+  std::cout << "*******************************************\n"
            << " Testing vil_convert*(vil_image_view<T>..)\n"
            << "*******************************************\n";
 
- vcl_string datadir = golden_data_dir;
+ std::string datadir = golden_data_dir;
  if (*golden_data_dir) datadir += "/";
   vil_image_view<vxl_byte> image1 = vil_convert_to_grey_using_rgb_weighting(
     vil_load((datadir + "ff_grey8bit_raw.pgm").c_str()));
   TEST("vil_convert_to_grey_using_rgb_weighting(vil_load(grey_image))", image1?true:false, true);
 
-  vil_print_all(vcl_cout, image1);
+  vil_print_all(std::cout, image1);
 
   vil_image_view<vxl_byte> image2 = vil_convert_to_grey_using_average(
     vil_load((datadir + "ff_rgb8bit_ascii.ppm").c_str()));
   TEST("vil_convert_to_grey_using_average(vil_load(rgb_image))", image2?true:false, true);
 
-  vil_print_all(vcl_cout, image2);
+  vil_print_all(std::cout, image2);
 }
 
 static void test_convert_diff_types(const char * golden_data_dir)
 {
-  vcl_cout << "******************************************************\n"
+  std::cout << "******************************************************\n"
            << " Testing vil_convert_cast(T,vil_image_view_base_sptr)\n"
            << "******************************************************\n";
 
-  vcl_string datadir = golden_data_dir;
+  std::string datadir = golden_data_dir;
   if (*golden_data_dir) datadir += "/";
 
   vil_image_view<vxl_byte> image1 = vil_load((datadir + "ff_grey8bit_raw.pgm").c_str());
@@ -51,61 +52,61 @@ static void test_convert_diff_types(const char * golden_data_dir)
   vil_convert_cast( image1, image_16_1 );
   TEST("Converting explicitly 8bit grey to 16bit grey", image_16_1(3,0), vxl_uint_16(image1(3,0)));
 
-  vil_print_all(vcl_cout, image1);
+  vil_print_all(std::cout, image1);
   if ( image_16_1 )
-    vil_print_all(vcl_cout, image_16_1);
+    vil_print_all(std::cout, image_16_1);
   else
-    vcl_cout << "(no dump)\n";
+    std::cout << "(no dump)\n";
 
   vil_image_view<vxl_uint_16> image_16_2 = vil_convert_cast(vxl_uint_16(), image_base1 );
   TEST("Converting implicitly 8bit grey to 16bit grey", image_16_2(4,2), vxl_uint_16(image1(4,2)));
 
-  vil_print_all(vcl_cout, image_base1);
+  vil_print_all(std::cout, image_base1);
   if ( image_16_2 )
-    vil_print_all(vcl_cout, image_16_2);
+    vil_print_all(std::cout, image_16_2);
   else
-    vcl_cout << "(no dump)\n";
+    std::cout << "(no dump)\n";
 
   vil_image_view<vxl_byte> image_8_2 = vil_convert_cast( vxl_byte(), image2 );
   vil_image_view<vxl_uint_16> image_2 = image2;
   TEST("Converting implicitly 16bit grey to 8bit grey", image_8_2(4,2), vxl_byte(image_2(4,2)));
 
-  vil_print_all(vcl_cout, image2);
+  vil_print_all(std::cout, image2);
   if ( image_8_2 )
-    vil_print_all(vcl_cout, image_8_2);
+    vil_print_all(std::cout, image_8_2);
   else
-    vcl_cout << "(no dump)\n";
+    std::cout << "(no dump)\n";
 
   vil_image_view<vxl_byte> image_3 = image3;
   vil_image_view<vxl_byte> image_8_3;
   vil_convert_planes_to_grey( image_3, image_8_3 );
   TEST("Converting explicitly 8bit RGB to 8bit grey", image_8_3(1,0), image_3(1,0,1)); // accidentally a grey pixel ...
 
-  vil_print_all(vcl_cout, image3);
+  vil_print_all(std::cout, image3);
   if ( image_8_3 )
-    vil_print_all(vcl_cout, image_8_3);
+    vil_print_all(std::cout, image_8_3);
   else
-    vcl_cout << "(no dump)\n";
+    std::cout << "(no dump)\n";
 
   vil_image_view<vxl_byte> image_8_4 = vil_convert_cast( vxl_byte(), image4 );
   vil_image_view<vxl_uint_16> image_4 = image4;
   TEST("Converting implicitly 16bit RGB to 8bit grey", image_8_4(1,0), vxl_byte(image_4(1,0,1)));
 
-  vil_print_all(vcl_cout, image4);
+  vil_print_all(std::cout, image4);
   if ( image_8_4 )
-    vil_print_all(vcl_cout, image_8_4);
+    vil_print_all(std::cout, image_8_4);
   else
-    vcl_cout << "(no dump)\n";
+    std::cout << "(no dump)\n";
 }
 
 static void test_convert_stretch_range()
 {
-  vcl_cout<<"testing vil_convert_stretch_range(src,dest):\n";
+  std::cout<<"testing vil_convert_stretch_range(src,dest):\n";
   vil_image_view<float> f_image(10,10);
   for (unsigned j=0;j<f_image.nj();++j)
     for (unsigned i=0;i<f_image.ni();++i)  f_image(i,j)=0.1f*i+0.01f*j+5.f;
 
-//  vil_print_all(vcl_cout, f_image) ;
+//  vil_print_all(std::cout, f_image) ;
 
   vil_image_view<vxl_byte> b_image;
   vil_convert_stretch_range(f_image,b_image);
@@ -120,16 +121,16 @@ static void test_convert_stretch_range()
 
 static void test_convert_stretch_range_limited()
 {
-  vcl_cout<<"testing test_convert_stretch_range_limited(src,dest):\n";
+  std::cout<<"testing test_convert_stretch_range_limited(src,dest):\n";
   vil_image_view<float> f_image(10, 10);
   for (unsigned j=0; j<f_image.nj(); ++j)
     for (unsigned i=0; i<f_image.ni(); ++i) f_image(i,j)=0.1f*i + 0.01f*j + 5.f;
 #if 0
   float min_f, max_f;
   vil_math_value_range(f_image, min_f, max_f );
-  vcl_cout << "Min f value: " << min_f << '\n'
+  std::cout << "Min f value: " << min_f << '\n'
            << "Max f value: " << max_f << '\n';
-  vil_print_all(vcl_cout, f_image) ;
+  vil_print_all(std::cout, f_image) ;
 #endif // 0
 
   float slo=5.2f, shi=5.8f;
@@ -143,13 +144,13 @@ static void test_convert_stretch_range_limited()
   TEST("Min. value", min_b, dlo);
   TEST("Max. value", max_b, dhi);
 #ifdef DEBUG
-  vil_print_all(vcl_cout, b_image) ;
+  vil_print_all(std::cout, b_image) ;
 #endif // DEBUG
 
   float f55 = f_image(5,5);
   vxl_byte b55 = vxl_byte(dlo + (f55-slo)*(dhi-dlo)/(shi-slo) + 0.5);
 #if 0
-  vcl_cout << "f55= " << f55 << '\n'
+  std::cout << "f55= " << f55 << '\n'
            << "b55= " << (int)b55 << '\n'
            << "b_image(5,5)" << (int)b_image(5,5) << '\n';
 #endif // 0
@@ -159,7 +160,7 @@ static void test_convert_stretch_range_limited()
 static void test_convert_to_n_planes()
 {
   const unsigned n=10;
-  vcl_cout<<"testing test_convert_to_n_planes(src,dest):\n";
+  std::cout<<"testing test_convert_to_n_planes(src,dest):\n";
   vil_image_view<float> f_image(n,n,2);
   vil_image_view<float> f_image_expected(n,n,3);
   vil_image_view<vxl_uint_16> u16_image_expected(n,n,3);
@@ -177,7 +178,7 @@ static void test_convert_to_n_planes()
     }
 
 #ifdef DEBUG
-  vil_print_all(vcl_cout, f_image);
+  vil_print_all(std::cout, f_image);
 #endif // DEBUG
 
   vil_image_view_base_sptr f_image_ref = new vil_image_view<float>(f_image);
@@ -207,7 +208,7 @@ static void test_convert_to_n_planes()
   catch (const vil_exception_pixel_formats_incompatible &e)
   {
     caught_exception = true;
-    vcl_cout << "Exception: " << e.what() << vcl_endl;
+    std::cout << "Exception: " << e.what() << std::endl;
   }
   TEST("Plane image cannot be directly converted to components", caught_exception, true);
   caught_exception = false;
@@ -219,7 +220,7 @@ static void test_convert_to_n_planes()
   catch (const vil_exception_pixel_formats_incompatible &e)
   {
     caught_exception = true;
-    vcl_cout << "Exception: " << e.what() << vcl_endl;
+    std::cout << "Exception: " << e.what() << std::endl;
   }
   TEST("implict vil_convert_to_component_order API", caught_exception, false);
 #else
@@ -234,9 +235,9 @@ static void test_convert_to_n_planes()
        vil_image_view_deep_equality(vil_image_view<float>(rgb_image), f_image_dest),
        true);
 #ifdef DEBUG
-  vil_print_all(vcl_cout, image_16_3_stretched);
-  vil_print_all(vcl_cout, image_16_3);
-  vil_print_all(vcl_cout, u16_image_expected);
+  vil_print_all(std::cout, image_16_3_stretched);
+  vil_print_all(std::cout, image_16_3);
+  vil_print_all(std::cout, u16_image_expected);
 #endif // DEBUG
 }
 
@@ -246,20 +247,20 @@ static void test_simple_pixel_conversions()
     vil_convert_round_pixel<float, int> op;
     int out;
     op(5.5f, out);
-    vcl_cout << out << vcl_endl;
+    std::cout << out << std::endl;
     TEST("round_pixel float->int", out, 6);
     op(5.4f, out);
-    vcl_cout << out << vcl_endl;
+    std::cout << out << std::endl;
     TEST("round_pixel float->int", out, 5);
   }
   {
     vil_convert_round_pixel<double, unsigned short> op;
     unsigned short out;
     op(5.5f, out);
-    vcl_cout << out << vcl_endl;
+    std::cout << out << std::endl;
     TEST("round_pixel double->ushort", out, 6);
     op(5.4f, out);
-    vcl_cout << out << vcl_endl;
+    std::cout << out << std::endl;
     TEST("round_pixel double->ushort", out, 5);
   }
 }
@@ -267,11 +268,11 @@ static void test_simple_pixel_conversions()
 
 static void test_convert(int argc, char* argv[])
 {
-  vcl_string path;
+  std::string path;
   if(argc>1){
     path = argv[1];
   }else{
-    vcl_string root = testlib_root_dir();
+    std::string root = testlib_root_dir();
     path = root + "/core/vil/tests/file_read_data";
   }
   bool exists = vul_file::is_directory(path);
@@ -281,7 +282,7 @@ static void test_convert(int argc, char* argv[])
     test_convert_diff_types(path.c_str());
   }else{
     TEST("test data exists", false, true);
-    vcl_cout << "Failed path: " << path << '\n';
+    std::cout << "Failed path: " << path << '\n';
   }
   test_convert_to_n_planes();
  // test data path is not passed into argv - JLM

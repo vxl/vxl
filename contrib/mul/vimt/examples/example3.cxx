@@ -8,7 +8,9 @@
 #include <vimt/vimt_image_2d_of.h>
 #include <vimt/vimt_sample_profile_bilin.h>
 #include <vxl_config.h> // for vxl_byte
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iostream>
 #include <vnl/vnl_vector.h>
 #include <vgl/vgl_point_2d.h>
 #include <vgl/vgl_vector_2d.h>
@@ -30,16 +32,16 @@ int main()
   vimt_image_pyramid image_pyr;
   builder.build(image_pyr,base_image);
 
-  image_pyr.print_all(vcl_cout);
+  image_pyr.print_all(std::cout);
 
   vgl_point_2d<double> p0(3,3);
   vgl_vector_2d<double> u(0.5,0.25);
   vnl_vector<double> v;
-  vcl_cout<<"\nSampling along (0.5,0.25) starting at (3,3) :\n";
+  std::cout<<"\nSampling along (0.5,0.25) starting at (3,3) :\n";
   vimt_sample_profile_bilin(v,static_cast<const vimt_image_2d_of<vxl_byte>&>( image_pyr(0)),p0,u,7);
-  vcl_cout<<"Level 0: "<<v<<vcl_endl;
+  std::cout<<"Level 0: "<<v<<std::endl;
   vimt_sample_profile_bilin(v,static_cast<const vimt_image_2d_of<vxl_byte>&>(image_pyr(1)),p0,u,7);
-  vcl_cout<<"Level 1: "<<v<<vcl_endl
+  std::cout<<"Level 1: "<<v<<std::endl
           <<"Notice that the projection of the world coordinates "
           <<"into image coordinates is all handled for us.\n";
   return 0;

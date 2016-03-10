@@ -4,7 +4,8 @@
 
 #include "vgl_homg_point_2d.h"
 #include <vgl/vgl_homg_line_2d.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <iostream>
 
 // Note that the given lines must be distinct!
 template <class Type>
@@ -30,14 +31,14 @@ double cross_ratio(vgl_homg_point_2d<T>const& p1, vgl_homg_point_2d<T>const& p2,
 }
 
 template <class Type>
-vcl_ostream& operator<<(vcl_ostream& s, vgl_homg_point_2d<Type> const& p)
+std::ostream& operator<<(std::ostream& s, vgl_homg_point_2d<Type> const& p)
 {
   return s << " <vgl_homg_point_2d ("
            << p.x() << ',' << p.y() << ',' << p.w() << ") >";
 }
 
 template <class Type>
-vcl_istream& operator>>(vcl_istream& s, vgl_homg_point_2d<Type>& p)
+std::istream& operator>>(std::istream& s, vgl_homg_point_2d<Type>& p)
 {
   Type x, y, w;
   s >> x >> y >> w;
@@ -50,7 +51,7 @@ vcl_istream& operator>>(vcl_istream& s, vgl_homg_point_2d<Type>& p)
 template class vgl_homg_point_2d<T >; \
 template double cross_ratio(vgl_homg_point_2d<T >const&, vgl_homg_point_2d<T >const&, \
                             vgl_homg_point_2d<T >const&, vgl_homg_point_2d<T >const&); \
-template vcl_ostream& operator<<(vcl_ostream&, vgl_homg_point_2d<T >const&); \
-template vcl_istream& operator>>(vcl_istream&, vgl_homg_point_2d<T >&)
+template std::ostream& operator<<(std::ostream&, vgl_homg_point_2d<T >const&); \
+template std::istream& operator>>(std::istream&, vgl_homg_point_2d<T >&)
 
 #endif // vgl_homg_point_2d_hxx_

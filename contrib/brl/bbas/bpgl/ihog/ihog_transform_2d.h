@@ -17,7 +17,9 @@
 #include <vnl/vnl_double_3x3.h>
 #include <vnl/vnl_double_2x3.h>
 #include <vsl/vsl_binary_io.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iostream>
 
 //: A quadrilateral region of an image
 class ihog_transform_2d : public vgl_h_matrix_2d<double>, public vbl_ref_count
@@ -172,7 +174,7 @@ inline void vsl_b_read(vsl_b_istream &is, ihog_transform_2d* &t)
 
 
 //: Print an ASCII summary to the stream
-inline void vsl_print_summary(vcl_ostream &os, const ihog_transform_2d* t)
+inline void vsl_print_summary(std::ostream &os, const ihog_transform_2d* t)
 {
   os << *t;
 }

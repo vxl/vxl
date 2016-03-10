@@ -6,10 +6,11 @@
 
 #include "vgl_box_3d.h"
 #include <vgl/vgl_point_3d.h>
-#include <vcl_iostream.h>
-#include <vcl_algorithm.h>
+#include <iostream>
+#include <algorithm>
 #include <vcl_cassert.h>
-#include <vcl_cmath.h>
+#include <vcl_compiler.h>
+#include <cmath>
 
 // Constructors/Destructor---------------------------------------------------
 
@@ -204,7 +205,7 @@ inline void set_dim_3d(int& minv, int& maxv, int spread)
 {
   int sum = minv + maxv;
   sum = sum | (spread&1); // if width is odd, then make sum odd
-  minv = int(vcl_floor((sum-spread)/2.0));
+  minv = int(std::floor((sum-spread)/2.0));
   maxv = minv+spread;
 }
 
@@ -309,7 +310,7 @@ void vgl_box_3d<Type>::set_max_point(vgl_point_3d<Type> const& max_pt)
 }
 
 template <class Type>
-vcl_ostream& vgl_box_3d<Type>::print(vcl_ostream& s) const
+std::ostream& vgl_box_3d<Type>::print(std::ostream& s) const
 {
   if (is_empty())
     return s << "<vgl_box_3d (empty)>";
@@ -334,10 +335,10 @@ vgl_point_3d<Type> vgl_box_3d<Type>::max_point() const
 }
 
 template <class Type>
-vcl_vector<vgl_point_3d<Type> > vgl_box_3d<Type>::vertices() const
+std::vector<vgl_point_3d<Type> > vgl_box_3d<Type>::vertices() const
 {
   assert(!is_empty());
-  vcl_vector<vgl_point_3d<Type> > vertices;
+  std::vector<vgl_point_3d<Type> > vertices;
   vertices.push_back(vgl_point_3d<Type>(min_pos_[0], min_pos_[1], min_pos_[2]));
   vertices.push_back(vgl_point_3d<Type>(max_pos_[0], min_pos_[1], min_pos_[2]));
   vertices.push_back(vgl_point_3d<Type>(max_pos_[0], max_pos_[1], min_pos_[2]));
@@ -350,14 +351,14 @@ vcl_vector<vgl_point_3d<Type> > vgl_box_3d<Type>::vertices() const
 }
 
 template <class Type>
-vcl_ostream& vgl_box_3d<Type>::write(vcl_ostream& s) const
+std::ostream& vgl_box_3d<Type>::write(std::ostream& s) const
 {
   return s << min_pos_[0] << ' ' << min_pos_[1] << ' ' << min_pos_[2] << ' '
            << max_pos_[0] << ' ' << max_pos_[1] << ' ' << max_pos_[2] << '\n';
 }
 
 template <class Type>
-vcl_istream& vgl_box_3d<Type>::read(vcl_istream& s)
+std::istream& vgl_box_3d<Type>::read(std::istream& s)
 {
   return s >> min_pos_[0] >> min_pos_[1] >> min_pos_[2]
            >> max_pos_[0] >> max_pos_[1] >> max_pos_[2];
@@ -424,14 +425,14 @@ void vgl_box_3d<Type>::empty()
 
 //: Write box to stream
 template <class Type>
-vcl_ostream&  operator<<(vcl_ostream& s, vgl_box_3d<Type> const& p)
+std::ostream&  operator<<(std::ostream& s, vgl_box_3d<Type> const& p)
 {
   return p.print(s);
 }
 
 //: Read box from stream
 template <class Type>
-vcl_istream&  operator>>(vcl_istream& is,  vgl_box_3d<Type>& p)
+std::istream&  operator>>(std::istream& is,  vgl_box_3d<Type>& p)
 {
   return p.read(is);
 }
@@ -439,7 +440,7 @@ vcl_istream&  operator>>(vcl_istream& is,  vgl_box_3d<Type>& p)
 #undef VGL_BOX_3D_INSTANTIATE
 #define VGL_BOX_3D_INSTANTIATE(Type) \
 template class vgl_box_3d<Type >;\
-template vcl_ostream& operator<<(vcl_ostream&, vgl_box_3d<Type > const& p);\
-template vcl_istream& operator>>(vcl_istream&, vgl_box_3d<Type >& p)
+template std::ostream& operator<<(std::ostream&, vgl_box_3d<Type > const& p);\
+template std::istream& operator>>(std::istream&, vgl_box_3d<Type >& p)
 
 #endif // vgl_box_3d_hxx_

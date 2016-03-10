@@ -5,9 +5,11 @@
 // \author Tim Cootes
 
 #include <vsl/vsl_binary_loader.h>
-#include <vcl_cmath.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <cmath>
 #include <vcl_cassert.h>
-#include <vcl_cstdlib.h>
+#include <cstdlib>
 
 #include <vnl/io/vnl_io_vector.h>
 
@@ -36,8 +38,8 @@ void mfpf_sad_vec_cost::set(const vnl_vector<double>& mean,
   wts_ =wts;
   if (wts.mean()>9999)
   {
-    vcl_cerr<<"Mean weights excessive: "<<wts.mean()<<vcl_endl;
-    vcl_abort();
+    std::cerr<<"Mean weights excessive: "<<wts.mean()<<std::endl;
+    std::abort();
   }
 }
 
@@ -47,7 +49,7 @@ double mfpf_sad_vec_cost::evaluate(const vnl_vector<double>& v)
   double sum=0;
   for (unsigned i=0;i<v.size();++i)
   {
-    sum += wts_[i]*vcl_fabs(v[i]-mean_[i]);
+    sum += wts_[i]*std::fabs(v[i]-mean_[i]);
   }
   return sum;
 }
@@ -71,9 +73,9 @@ short mfpf_sad_vec_cost::version_no() const
 // Method: is_a
 //=======================================================================
 
-vcl_string mfpf_sad_vec_cost::is_a() const
+std::string mfpf_sad_vec_cost::is_a() const
 {
-  return vcl_string("mfpf_sad_vec_cost");
+  return std::string("mfpf_sad_vec_cost");
 }
 
 //: Create a copy on the heap and return base class pointer
@@ -86,7 +88,7 @@ mfpf_vec_cost* mfpf_sad_vec_cost::clone() const
 // Method: print
 //=======================================================================
 
-void mfpf_sad_vec_cost::print_summary(vcl_ostream& os) const
+void mfpf_sad_vec_cost::print_summary(std::ostream& os) const
 {
   os<<"Size: "<<mean_.size()
     <<" mean.sum():"<<mean_.sum()
@@ -120,9 +122,9 @@ void mfpf_sad_vec_cost::b_read(vsl_b_istream& bfs)
       vsl_b_read(bfs,wts_);
       break;
     default:
-      vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&)\n"
-               << "           Unknown version number "<< version << vcl_endl;
-      bfs.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
+      std::cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&)\n"
+               << "           Unknown version number "<< version << std::endl;
+      bfs.is().clear(std::ios::badbit); // Set an unrecoverable IO error on stream
       return;
   }
 }

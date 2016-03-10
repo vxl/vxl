@@ -3,7 +3,8 @@
 #define vgl_ellipse_scan_iterator_hxx_
 
 #include "vgl_ellipse_scan_iterator.h"
-#include <vcl_cmath.h>
+#include <vcl_compiler.h>
+#include <cmath>
 
 // Helper functions
 namespace {
@@ -32,17 +33,17 @@ void vgl_ellipse_scan_iterator<T>::reset()
 {
   // The max value.
   T y0;
-  if ( vcl_sin( theta_ ) == 0.0 ) {
-    y0 = vcl_sqrt(ry_);
+  if ( std::sin( theta_ ) == 0.0 ) {
+    y0 = std::sqrt(ry_);
   }
   else {
-    T t = vcl_atan2( vcl_sqrt(ry_) , vcl_sqrt(rx_) * vcl_tan( theta_ ) );
-    y0 = vcl_sqrt(rx_) * vcl_cos( t ) * vcl_sin( theta_ ) + vcl_sqrt(ry_) * vcl_sin( t ) * vcl_cos( theta_ );
+    T t = std::atan2( std::sqrt(ry_) , std::sqrt(rx_) * std::tan( theta_ ) );
+    y0 = std::sqrt(rx_) * std::cos( t ) * std::sin( theta_ ) + std::sqrt(ry_) * std::sin( t ) * std::cos( theta_ );
   }
   if ( y0 < 0 ) y0 = -y0;
 
-  y_ = int( vcl_floor( yc_ + y0 ) ) + 1;
-  min_y_ = int( vcl_ceil( yc_ - y0 ) );
+  y_ = int( std::floor( yc_ + y0 ) ) + 1;
+  min_y_ = int( std::ceil( yc_ - y0 ) );
 }
 
 template <class T>
@@ -51,8 +52,8 @@ bool vgl_ellipse_scan_iterator<T>::next()
   --y_;
   if ( y_ < min_y_ ) return false;
 
-  T st = vcl_sin( -theta_ );
-  T ct = vcl_cos( -theta_ );
+  T st = std::sin( -theta_ );
+  T ct = std::cos( -theta_ );
   T A = rx_ * st * st + ry_ * ct * ct;
 
   T x0, x1; // the intersection points of the scan line; x0 >= x1
@@ -65,18 +66,18 @@ bool vgl_ellipse_scan_iterator<T>::next()
     T D = rx_*ry_*(rx_*st*st + ry_*ct*ct - (y_-yc_)*(y_-yc_)); // = B*B-A*C
     if (D < 0) D=0; // could be slightly < 0 due to rounding errors
 
-    x0 = (-B + vcl_sqrt( D )) / A;
-    x1 = (-B - vcl_sqrt( D )) / A;
+    x0 = (-B + std::sqrt( D )) / A;
+    x1 = (-B - std::sqrt( D )) / A;
   }
   else {
     // "ellipse" is a horizontal line or a point
     //
-    x0 = vcl_sqrt( my_max(rx_,ry_) );
+    x0 = std::sqrt( my_max(rx_,ry_) );
     x1 = -x0;
   }
 
-  start_x_= int( vcl_ceil( xc_ + x1 - 1e-9 ) ); // avoid problems with rounding
-  end_x_ = int( vcl_floor( xc_ + x0 + 1e-9 ) ); // by slightly shifting.
+  start_x_= int( std::ceil( xc_ + x1 - 1e-9 ) ); // avoid problems with rounding
+  end_x_ = int( std::floor( xc_ + x0 + 1e-9 ) ); // by slightly shifting.
 
   if ( start_x_ > end_x_ ) {
     // Could happen with very thin ellipses, near the end points

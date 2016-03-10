@@ -4,11 +4,13 @@
 // \author Lee, Ying-Lin (Bess)
 // \date   Sept 2003
 
-#include <vcl_cmath.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <cmath>
+#include <iostream>
 #include <vcl_cassert.h>
 #include <vnl/vnl_math.h>
-#include <vcl_vector.h>
+#include <vector>
 
 static double g( int a1, int a2, int m );
 static double g_prime( int a1, int a2, int m );
@@ -112,8 +114,8 @@ jacobian( vnl_vector< double > const& point ) const
   vnl_vector< int > max( dim );
 
   for ( unsigned n=0; n<dim; ++n ) {
-    floor[n] = (int)vcl_floor( point[n] ) ;
-    ceil[n] = (int)vcl_ceil( point[n] );
+    floor[n] = (int)std::floor( point[n] ) ;
+    ceil[n] = (int)std::ceil( point[n] );
     u[n] = point[n] - floor[n];
     min[ n ] = ( floor[n] < 0 ) ? 0 : floor[n];
     max[ n ] = ( ceil[n] > (int)m_[n] ) ? m_[n] + 2 : ceil[n]+2;
@@ -199,8 +201,8 @@ basis_response_helper( vnl_vector<double> const& point, vnl_vector<double>& br, 
   vnl_vector< int > max( dim );
 
   for ( unsigned n=0; n<dim; ++n ) {
-    floor[n] = (int)vcl_floor( point[n] ) ;
-    ceil[n] = (int)vcl_ceil( point[n] );
+    floor[n] = (int)std::floor( point[n] ) ;
+    ceil[n] = (int)std::ceil( point[n] );
     u[n] = point[n] - floor[n];
     min[ n ] = ( floor[n] < 0 ) ? 0 : floor[n];
     max[ n ] = ( ceil[n] > (int)m_[n] ) ? m_[n] + 2 : ceil[n]+2;
@@ -409,7 +411,7 @@ bspline_basis_function( int i, double u )
     b = u*u*u / 6;
     break;
    default:
-    vcl_cerr << "rgrl_spline::basis_function: wrong index for basis functions : " << i << '\n';
+    std::cerr << "rgrl_spline::basis_function: wrong index for basis functions : " << i << '\n';
   }
   return b;
 }
@@ -436,7 +438,7 @@ bspline_basis_prime_function( int i, double u )
     b = u*u / 2;
     break;
    default:
-    vcl_cerr << "rgrl_spline::basis_function: wrong index for basis functions\n";
+    std::cerr << "rgrl_spline::basis_function: wrong index for basis functions\n";
   }
   return b;
 }
@@ -688,9 +690,9 @@ refinement( vnl_vector< unsigned > const& m ) const
   }
   else if ( dim == 2 )
   {
-    vcl_vector< double > tmp( m_[1] + 3, 0.0 );
-    vcl_vector< vcl_vector< double > > v2( m_[0] + 1, tmp );
-    vcl_vector< vcl_vector< double > > v1( m_[0] + 2, tmp );
+    std::vector< double > tmp( m_[1] + 3, 0.0 );
+    std::vector< std::vector< double > > v2( m_[0] + 1, tmp );
+    std::vector< std::vector< double > > v1( m_[0] + 2, tmp );
     unsigned a = m_[0]+3;
 
     for ( unsigned i=0; i<m_[0]+2; ++i ) {
@@ -721,16 +723,16 @@ refinement( vnl_vector< unsigned > const& m ) const
   }
   else if ( dim == 3 )
   {
-    vcl_vector< double > tmp( m_[2] + 3, 0.0 );
-    vcl_vector< vcl_vector< double > > tmp1( m_[1] + 3, tmp );
-    vcl_vector< vcl_vector< double > > tmp2( m_[1] + 1, tmp );
-    vcl_vector< vcl_vector< double > > tmp3( m_[1] + 2, tmp );
-    vcl_vector< vcl_vector< vcl_vector< double > > > v2( m_[0] + 1, tmp1 );
-    vcl_vector< vcl_vector< vcl_vector< double > > > v1( m_[0] + 2, tmp1 );
-    vcl_vector< vcl_vector< vcl_vector< double > > > v12( m_[0]+2, tmp2 );
-    vcl_vector< vcl_vector< vcl_vector< double > > > v22( m_[0]+1, tmp2 );
-    vcl_vector< vcl_vector< vcl_vector< double > > > v11( m_[0]+2, tmp3 );
-    vcl_vector< vcl_vector< vcl_vector< double > > > v21( m_[0]+1, tmp3 );
+    std::vector< double > tmp( m_[2] + 3, 0.0 );
+    std::vector< std::vector< double > > tmp1( m_[1] + 3, tmp );
+    std::vector< std::vector< double > > tmp2( m_[1] + 1, tmp );
+    std::vector< std::vector< double > > tmp3( m_[1] + 2, tmp );
+    std::vector< std::vector< std::vector< double > > > v2( m_[0] + 1, tmp1 );
+    std::vector< std::vector< std::vector< double > > > v1( m_[0] + 2, tmp1 );
+    std::vector< std::vector< std::vector< double > > > v12( m_[0]+2, tmp2 );
+    std::vector< std::vector< std::vector< double > > > v22( m_[0]+1, tmp2 );
+    std::vector< std::vector< std::vector< double > > > v11( m_[0]+2, tmp3 );
+    std::vector< std::vector< std::vector< double > > > v21( m_[0]+1, tmp3 );
 
     unsigned b = m_[1]+3;
     unsigned a = m_[0]+3;
@@ -831,19 +833,19 @@ refinement( vnl_vector< unsigned > const& m ) const
     assert ( !"dim should be 1, 2 or 3" );
 
 #ifdef DEBUG
-  vcl_cout << "rgrl_spline.cxx: refinement set_control_points: " << w << vcl_endl;
+  std::cout << "rgrl_spline.cxx: refinement set_control_points: " << w << std::endl;
 #endif
   refined_spline->set_control_points( w );
   return refined_spline;
 }
 
 
-vcl_ostream&
-operator<< (vcl_ostream& os, rgrl_spline const& spline )
+std::ostream&
+operator<< (std::ostream& os, rgrl_spline const& spline )
 {
   // output m(# of intervals) vector
   os << spline.m_.size() << ' '
-     << spline.m_ << vcl_endl;
+     << spline.m_ << std::endl;
 
   // control points
   os << spline.c_.size() << '\n'
@@ -853,8 +855,8 @@ operator<< (vcl_ostream& os, rgrl_spline const& spline )
   return os;
 }
 
-vcl_istream&
-operator>> (vcl_istream& is, rgrl_spline& spline )
+std::istream&
+operator>> (std::istream& is, rgrl_spline& spline )
 {
   int s;
 
@@ -888,8 +890,8 @@ is_support( vnl_vector< double > const& pt, unsigned index )
   vnl_vector< int > ceil(dim);
 
   for ( unsigned n=0; n<dim; ++n ) {
-    floor[n] = (int)vcl_floor( pt[n] ) ;
-    ceil[n] = (int)vcl_ceil( pt[n] );
+    floor[n] = (int)std::floor( pt[n] ) ;
+    ceil[n] = (int)std::ceil( pt[n] );
   }
 
   // 3D case

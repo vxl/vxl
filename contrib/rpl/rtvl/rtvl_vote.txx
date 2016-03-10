@@ -89,7 +89,7 @@ rtvl_vote_internal<N>
   // Compute the vector pointing from voter to votee.
   v = votee_location - voter_location;
   vlen_squared = v.squared_magnitude();
-  vlen = vcl_sqrt(vlen_squared);
+  vlen = std::sqrt(vlen_squared);
   vhat = v;
   if(vlen > 0) { vhat = vhat / vlen; }
 
@@ -132,7 +132,7 @@ void rtvl_vote_internal<N>::compute(vnl_matrix_fixed<double, N, N>& vote)
   double vnu_mag2 = vnu.squared_magnitude();
   if(vnu_mag2 > 1e-16*vlen_squared)
     {
-    vn = vnu; vn /= vcl_sqrt(vnu_mag2);
+    vn = vnu; vn /= std::sqrt(vnu_mag2);
     vt = vtu; vt.normalize();
     sin_theta = dot_product(vhat, vn);
     if(sin_theta < 0) { sin_theta = 0; }

@@ -19,7 +19,9 @@
 // \endverbatim
 
 #include <bprb/bprb_func_process.h>
-#include <vcl_string.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <string>
 
 //: globals variables/functions
 namespace bvxm_pmap_ratio_process_globals
@@ -28,7 +30,7 @@ namespace bvxm_pmap_ratio_process_globals
   const unsigned n_outputs_ = 0;
 
   // functions
-  bool compute(vcl_string pmap1,vcl_string pmap2, vcl_string path);
+  bool compute(std::string pmap1,std::string pmap2, std::string path);
 }
 
 //: set input and output types

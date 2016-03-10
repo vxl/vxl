@@ -6,9 +6,10 @@
 #include "vil_nitf2_field_definition.h"
 #include "vil_nitf2_index_vector.h"
 
-#include <vcl_cstddef.h> // for size_t
-#include <vcl_sstream.h>
-#include <vcl_cstdlib.h>
+#include <cstddef> // for size_t
+#include <sstream>
+#include <vcl_compiler.h>
+#include <cstdlib>
 #include <vil/vil_stream_core.h>
 
 int vil_nitf2_array_field::num_dimensions() const
@@ -19,7 +20,7 @@ int vil_nitf2_array_field::num_dimensions() const
 int vil_nitf2_array_field::
 next_dimension(const vil_nitf2_index_vector& index) const
 {
-  vcl_map<vil_nitf2_index_vector,int>::const_iterator dimension_bounds_entry = m_dimensions_map.find(index);
+  std::map<vil_nitf2_index_vector,int>::const_iterator dimension_bounds_entry = m_dimensions_map.find(index);
   if (dimension_bounds_entry != m_dimensions_map.end()) {
     return dimension_bounds_entry->second;
   } else {
@@ -31,12 +32,12 @@ void vil_nitf2_array_field::
 set_next_dimension(const vil_nitf2_index_vector& index, int bound)
 {
   if ((int)index.size() >= m_num_dimensions) {
-    vcl_cerr << "vil_nitf2_array_field::set_next_dimension"
+    std::cerr << "vil_nitf2_array_field::set_next_dimension"
              << index << ": invalid partial index!\n";
     return;
   }
   if (next_dimension(index) > 0) {
-    vcl_cerr << "vil_nitf2_array_field::set_next_dimension"
+    std::cerr << "vil_nitf2_array_field::set_next_dimension"
              << index << ": bound previously set!\n";
   }
   m_dimensions_map[index] = bound;
@@ -46,7 +47,7 @@ bool vil_nitf2_array_field::
 check_index(const vil_nitf2_index_vector& indexes) const
 {
   if ((int)indexes.size() != m_num_dimensions) {
-    vcl_cerr << "index length does not match value dimensions!\n";
+    std::cerr << "index length does not match value dimensions!\n";
     return false;
   }
   // Remove the last element from index and look it up in the dimensions map.
@@ -62,38 +63,38 @@ check_index(const vil_nitf2_index_vector& indexes) const
   if (last_index < dimension_bound) {
     return true;
   } else {
-    vcl_cerr << "Tag " << tag() << indexes << ": index out of bounds!\n";
+    std::cerr << "Tag " << tag() << indexes << ": index out of bounds!\n";
     return false;
   }
 }
 
-vcl_string int_to_string( int i )
+std::string int_to_string( int i )
 {
-  vcl_stringstream s;
+  std::stringstream s;
   s << i;
   return s.str();
 }
 
-vcl_string index_string( const vil_nitf2_index_vector& indices )
+std::string index_string( const vil_nitf2_index_vector& indices )
 {
-  vcl_string ret_val = "";
+  std::string ret_val = "";
   for ( unsigned int i = 0 ; i < indices.size() ; i++ ){
     ret_val += "[" + int_to_string( indices[i] ) + "]";
   }
   return ret_val;
 }
 
-vcl_string vil_nitf2_array_field::get_value_string(const vil_nitf2_index_vector& in_indices) const
+std::string vil_nitf2_array_field::get_value_string(const vil_nitf2_index_vector& in_indices) const
 {
   vil_stream_core* str = new vil_stream_core;
   write_vector_element( *str, in_indices, -1 );
   vil_streampos num_to_read = str->tell();
   str->seek( 0 );
   char* buffer;
-  buffer = (char*)vcl_malloc( (vcl_size_t) num_to_read+1 );
+  buffer = (char*)std::malloc( (std::size_t) num_to_read+1 );
   str->read( (void*)buffer, num_to_read );
-  buffer[(vcl_size_t) num_to_read] = 0;
-  return vcl_string( buffer );
+  buffer[(std::size_t) num_to_read] = 0;
+  return std::string( buffer );
 }
 
 void vil_nitf2_array_field::do_dimension( const vil_nitf2_index_vector& in_indices,
@@ -107,9 +108,9 @@ void vil_nitf2_array_field::do_dimension( const vil_nitf2_index_vector& in_indic
     curr_indices.push_back( i );
     //create our tree node and add it to inTree's child list
     vil_nitf2_field::field_tree* tr = new vil_nitf2_field::field_tree;
-    vcl_string tag_str = tag();
-    vcl_string index_str = index_string( curr_indices );
-    vcl_string p_name;
+    std::string tag_str = tag();
+    std::string index_str = index_string( curr_indices );
+    std::string p_name;
     if ( index_str == "" ) p_name = pretty_name();
     else p_name = "";
     tr->columns.push_back( tag_str + index_str );

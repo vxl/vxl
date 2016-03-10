@@ -115,7 +115,7 @@ class vgui_shell_tableau : public vgui_composite_tableau
                      vgui_tableau_sptr const &);
 
   bool handle(vgui_event const &);
-  vcl_string type_name() const { return "vgui_shell_tableau"; }
+  std::string type_name() const { return "vgui_shell_tableau"; }
 
   void get_popup(vgui_popup_params const &, vgui_menu &);
   void set_quit(bool on);

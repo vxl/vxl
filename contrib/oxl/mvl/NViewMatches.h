@@ -22,7 +22,7 @@
 // \verbatim
 // Modifications:
 //     970517 AWF Initial version.
-//     270897 PRV Moved vcl_vector<NViewMatch> instantiation to Templates package
+//     270897 PRV Moved std::vector<NViewMatch> instantiation to Templates package
 //     151097 AWF Added OffsetNViewMatch.
 //     280498 David Capel made minimum match overlap user-definable,
 //            allowed merging of consistent multiple-match tracks.
@@ -33,8 +33,10 @@
 //-----------------------------------------------------------------------------
 
 #include <vnl/vnl_vector.h>
-#include <vcl_vector.h>
-#include <vcl_iosfwd.h>
+#include <vector>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iosfwd>
 
 struct NViewMatch : public vnl_vector<int>
 {
@@ -52,9 +54,9 @@ struct NViewMatch : public vnl_vector<int>
   int count_observations() const;
 };
 
-vcl_ostream& operator<<(vcl_ostream& s, const NViewMatch& c);
+std::ostream& operator<<(std::ostream& s, const NViewMatch& c);
 
-class NViewMatches : public vcl_vector<NViewMatch>
+class NViewMatches : public std::vector<NViewMatch>
 {
   // Data Members--------------------------------------------------------------
   int nviews_;
@@ -63,7 +65,7 @@ class NViewMatches : public vcl_vector<NViewMatch>
  public:
   // Constructors/Destructors--------------------------------------------------
   NViewMatches();
-  NViewMatches(vcl_istream& s);
+  NViewMatches(std::istream& s);
   NViewMatches(const char* filename);
   NViewMatches(int nviews, int min_overlap = 2);
   ~NViewMatches();
@@ -74,16 +76,16 @@ class NViewMatches : public vcl_vector<NViewMatch>
   // Operations----------------------------------------------------------------
   int nviews() const { return nviews_; }
 
-  bool load(vcl_istream&);
+  bool load(std::istream&);
   bool load(const char* filename);
 
-  bool save(vcl_ostream&);
+  bool save(std::ostream&);
   bool save(const char* filename);
 
   void clear();
 
   int count_matches(const NViewMatch& match);
-  vcl_vector<int> get_matches(const NViewMatch& match);
+  std::vector<int> get_matches(const NViewMatch& match);
   int incorporate_triplet(int base_view, int c1, int c2, int c3);
   int incorporate(const NViewMatch& matches);
   void remove_inconsistencies();

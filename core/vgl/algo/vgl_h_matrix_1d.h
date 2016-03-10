@@ -27,8 +27,9 @@
 
 #include <vnl/vnl_matrix_fixed.h>
 #include <vgl/vgl_homg_point_1d.h>
-#include <vcl_vector.h>
-#include <vcl_iosfwd.h>
+#include <vector>
+#include <vcl_compiler.h>
+#include <iosfwd>
 
 //:
 // A class to hold a line-to-line projective transformation matrix
@@ -56,12 +57,12 @@ class vgl_h_matrix_1d
   //: Constructor from 2x2 C-array
   explicit vgl_h_matrix_1d(T const* M) : t12_matrix_(M) {}
   //: Constructor from istream
-  explicit vgl_h_matrix_1d(vcl_istream& s);
+  explicit vgl_h_matrix_1d(std::istream& s);
   //: Constructor from file
   explicit vgl_h_matrix_1d(char const* filename);
   //: Constructor - calculate homography between two sets of 1D points (minimum 3)
-  vgl_h_matrix_1d(vcl_vector<vgl_homg_point_1d<T> > const& points1,
-                  vcl_vector<vgl_homg_point_1d<T> > const& points2);
+  vgl_h_matrix_1d(std::vector<vgl_homg_point_1d<T> > const& points1,
+                  std::vector<vgl_homg_point_1d<T> > const& points2);
 
   // Operations----------------------------------------------------------------
 
@@ -110,7 +111,7 @@ class vgl_h_matrix_1d
   //     1   0   1
   //     0   1   1
   // \endverbatim
-  bool projective_basis(vcl_vector<vgl_homg_point_1d<T> > const& three_points);
+  bool projective_basis(std::vector<vgl_homg_point_1d<T> > const& three_points);
 
   //: initialize the transformation to identity
   vgl_h_matrix_1d& set_identity();
@@ -142,14 +143,14 @@ class vgl_h_matrix_1d
 
   //: Read H from file
   bool read(char const* filename);
-  //: Read H from vcl_istream
-  bool read(vcl_istream& s);
+  //: Read H from std::istream
+  bool read(std::istream& s);
 };
 
-//: Print H on vcl_ostream
-template <class T> vcl_ostream& operator<<(vcl_ostream& s, vgl_h_matrix_1d<T> const& H);
-//: Read H from vcl_istream
-template <class T> vcl_istream& operator>>(vcl_istream& s, vgl_h_matrix_1d<T>&       H)
+//: Print H on std::ostream
+template <class T> std::ostream& operator<<(std::ostream& s, vgl_h_matrix_1d<T> const& H);
+//: Read H from std::istream
+template <class T> std::istream& operator>>(std::istream& s, vgl_h_matrix_1d<T>&       H)
 { H.read(s); return s; }
 
 

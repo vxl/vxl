@@ -1,7 +1,9 @@
 // This is mul/vimt/tests/test_dog_pyramid_builder_2d.cxx
 #include <testlib/testlib_test.h>
 
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iostream>
 #include <vpl/vpl.h> // vpl_unlink()
 #include <vimt/vimt_dog_pyramid_builder_2d.h>
 #include <vimt/vimt_image_pyramid.h>
@@ -16,7 +18,7 @@
 static void test_dog_pyramid_builder_2d_build(vimt_dog_pyramid_builder_2d<float>& builder)
 {
   unsigned ni = 57, nj = 63;
-  vcl_cout<<"Image Size: "<<ni<<" x "<<nj<<'\n';
+  std::cout<<"Image Size: "<<ni<<" x "<<nj<<'\n';
 
   vimt_image_2d_of<float> image0;
   image0.image().set_size(ni,nj);
@@ -43,14 +45,14 @@ static void test_dog_pyramid_builder_2d_build(vimt_dog_pyramid_builder_2d<float>
 
     vgl_point_2d<double> p = vimt_find_max(imageL);
 
-    vcl_cout<<"Level "<<L<<" smoothed peak point is at "<<p<<vcl_endl;
+    std::cout<<"Level "<<L<<" smoothed peak point is at "<<p<<std::endl;
 
     const vimt_image_2d_of<float>& dogL =
              static_cast<const vimt_image_2d_of<float>&>(dog_pyr(L));
 
     vgl_point_2d<double> q = vimt_find_max(dogL);
 
-    vcl_cout<<"Level "<<L<<" peak DoG response is at   "<<q<<vcl_endl;
+    std::cout<<"Level "<<L<<" peak DoG response is at   "<<q<<std::endl;
 
     TEST("Peak DoG Response", p, q);
 
@@ -60,18 +62,18 @@ static void test_dog_pyramid_builder_2d_build(vimt_dog_pyramid_builder_2d<float>
 
 static void test_dog_pyramid_builder_2d()
 {
-  vcl_cout << "********************************************\n"
+  std::cout << "********************************************\n"
            << " Testing vimt_dog_pyramid_builder_2d (byte)\n"
            << "********************************************\n";
 
   vimt_dog_pyramid_builder_2d<float> builder;
   test_dog_pyramid_builder_2d_build(builder);
 
-  vcl_cout<<"\n\n======== TESTING I/O ===========\n";
+  std::cout<<"\n\n======== TESTING I/O ===========\n";
 
   vsl_add_to_binary_loader(vimt_dog_pyramid_builder_2d<float>());
 
-  vcl_string test_path = "test_dog_pyramid_builder_2d.bvl.tmp";
+  std::string test_path = "test_dog_pyramid_builder_2d.bvl.tmp";
   vsl_b_ofstream bfs_out(test_path);
   TEST(("Created " + test_path + " for writing").c_str(), (!bfs_out), false);
   vsl_b_write(bfs_out, builder);

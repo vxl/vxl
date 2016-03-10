@@ -10,7 +10,8 @@
 
 #include "vgui_simple_field.h"
 
-#include <vcl_sstream.h>
+#include <vcl_compiler.h>
+#include <sstream>
 
 
 template <class T>
@@ -26,17 +27,17 @@ vgui_simple_field<T>::~vgui_simple_field()
 }
 
 template <class T>
-vcl_string vgui_simple_field<T>::current_value() const
+std::string vgui_simple_field<T>::current_value() const
 {
-  vcl_stringstream ss;
+  std::stringstream ss;
   ss << T(var) << '\0';
   return ss.str();
 }
 
 template <class T>
-bool vgui_simple_field<T>::update_value(const vcl_string &s)
+bool vgui_simple_field<T>::update_value(const std::string &s)
 {
-  vcl_stringstream ss(s);
+  std::stringstream ss(s);
   ss >> var;
   return ss.eof();
 }

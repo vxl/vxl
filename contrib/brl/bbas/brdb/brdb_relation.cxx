@@ -7,9 +7,11 @@
 // \date Apr 4th, 2007
 // Make it work with the whole database initially based on Matt's sketch.
 
-#include <vcl_set.h>
+#include <set>
 #include <vcl_cassert.h>
-#include <vcl_algorithm.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <algorithm>
 #include <vsl/vsl_vector_io.h>
 #include <brdb/brdb_value.h>
 #include <brdb/brdb_tuple.h>
@@ -28,8 +30,8 @@ brdb_relation::brdb_relation()
 }
 
 //: Constructor - create an empty relation but define the columns
-brdb_relation::brdb_relation( const vcl_vector<vcl_string>& names,
-                              const vcl_vector<vcl_string>& types )
+brdb_relation::brdb_relation( const std::vector<std::string>& names,
+                              const std::vector<std::string>& types )
  : names_(names), types_(types)
 {
   assert(this->is_valid());
@@ -38,9 +40,9 @@ brdb_relation::brdb_relation( const vcl_vector<vcl_string>& names,
 }
 
 //: Constructor - create a relation populated with tuples
-brdb_relation::brdb_relation( const vcl_vector<vcl_string>& names,
-                              const vcl_vector<brdb_tuple_sptr>& tuples,
-                              const vcl_vector<vcl_string>& types )
+brdb_relation::brdb_relation( const std::vector<std::string>& names,
+                              const std::vector<brdb_tuple_sptr>& tuples,
+                              const std::vector<std::string>& types )
  : names_(names), types_(types), tuples_(tuples)
 {
   // if no types are specified infer them from the data
@@ -77,7 +79,7 @@ brdb_relation::is_valid() const
   if (names_.size() != types_.size())
     return false;
   // check that all names are unique
-  if (vcl_set<vcl_string>(names_.begin(), names_.end()).size() != names_.size())
+  if (std::set<std::string>(names_.begin(), names_.end()).size() != names_.size())
     return false;
 
   // check for valid type names
@@ -113,7 +115,7 @@ brdb_relation::is_valid(const brdb_tuple_sptr& tuple) const
 
 //: Set a value by name
 bool
-brdb_relation::set_value(vcl_vector<brdb_tuple_sptr>::iterator pos, const vcl_string& name, const brdb_value& value)
+brdb_relation::set_value(std::vector<brdb_tuple_sptr>::iterator pos, const std::string& name, const brdb_value& value)
 {
   update_timestamp();
 
@@ -123,7 +125,7 @@ brdb_relation::set_value(vcl_vector<brdb_tuple_sptr>::iterator pos, const vcl_st
 //: Convenience function for setting a value by name
 template<class T>
 bool
-brdb_relation::set( vcl_vector<brdb_tuple_sptr>::iterator pos, const vcl_string& name , const T& value )
+brdb_relation::set( std::vector<brdb_tuple_sptr>::iterator pos, const std::string& name , const T& value )
 {
   return set_value(pos, name, brdb_value_t<T>(value) );
 }
@@ -131,7 +133,7 @@ brdb_relation::set( vcl_vector<brdb_tuple_sptr>::iterator pos, const vcl_string&
 
 //: Get a value by name
 bool
-brdb_relation::get_value(vcl_vector<brdb_tuple_sptr>::iterator pos, const vcl_string& name, brdb_value& value) const
+brdb_relation::get_value(std::vector<brdb_tuple_sptr>::iterator pos, const std::string& name, brdb_value& value) const
 {
   return (*pos)->get_value(index(name), value);
 }
@@ -140,7 +142,7 @@ brdb_relation::get_value(vcl_vector<brdb_tuple_sptr>::iterator pos, const vcl_st
 //: Convenience function for getting a value by name
 template<class T>
 bool
-brdb_relation::get(vcl_vector<brdb_tuple_sptr>::iterator pos, const vcl_string& name, const T& value)
+brdb_relation::get(std::vector<brdb_tuple_sptr>::iterator pos, const std::string& name, const T& value)
 {
   return get_value(pos, name, brdb_value_t<T>(value) );
 }
@@ -151,7 +153,7 @@ brdb_relation::get(vcl_vector<brdb_tuple_sptr>::iterator pos, const vcl_string& 
 
 //: Return the name for \p index
 // \note returns the empty string if the index is out of range
-vcl_string
+std::string
 brdb_relation::name(unsigned int index) const
 {
   if (index < names_.size())
@@ -163,21 +165,21 @@ brdb_relation::name(unsigned int index) const
 //: Return the index for the attribute with \p name
 // \note returns the arity (max index + 1) if name is not found
 unsigned int
-brdb_relation::index(const vcl_string& name) const
+brdb_relation::index(const std::string& name) const
 {
-  vcl_vector<vcl_string>::const_iterator itr = vcl_find(names_.begin(), names_.end(), name);
+  std::vector<std::string>::const_iterator itr = std::find(names_.begin(), names_.end(), name);
   return itr - names_.begin();
 }
 
 //: Return the type by attribute name
-vcl_string
-brdb_relation::type(const vcl_string& name) const
+std::string
+brdb_relation::type(const std::string& name) const
 {
   return types_[index(name)];
 }
 
 //: Return the type by index
-vcl_string
+std::string
 brdb_relation::type(unsigned int index) const
 {
   return types_[index];
@@ -185,9 +187,9 @@ brdb_relation::type(unsigned int index) const
 
 //: Return true if there is an attribute in the relation with such a name
 bool
-brdb_relation::exists(const vcl_string& name) const
+brdb_relation::exists(const std::string& name) const
 {
-  if (vcl_find(names_.begin(), names_.end(), name) == names_.end())
+  if (std::find(names_.begin(), names_.end(), name) == names_.end())
     return false;
   else
     return true;
@@ -196,7 +198,7 @@ brdb_relation::exists(const vcl_string& name) const
 
 //: Sort the tuples by a certain attribute name
 bool
-brdb_relation::order_by(const vcl_string& name, bool ascending)
+brdb_relation::order_by(const std::string& name, bool ascending)
 {
    update_timestamp();
    return this->order_by(this->index(name), ascending);
@@ -210,9 +212,9 @@ brdb_relation::order_by(unsigned int index, bool ascending)
 
   if (index < names_.size()){
     if (ascending)
-      vcl_sort(tuples_.begin(), tuples_.end(), brdb_tuple_less(index));
+      std::sort(tuples_.begin(), tuples_.end(), brdb_tuple_less(index));
     else
-      vcl_sort(tuples_.begin(), tuples_.end(), brdb_tuple_greater(index));
+      std::sort(tuples_.begin(), tuples_.end(), brdb_tuple_greater(index));
     return true;
   }
   return false;
@@ -238,7 +240,7 @@ brdb_relation::add_tuple(const brdb_tuple_sptr& new_tuple)
 
 //: Add one tuple to relation
 bool
-brdb_relation::insert_tuple(const brdb_tuple_sptr& new_tuple, const vcl_vector<brdb_tuple_sptr>::iterator& pos)
+brdb_relation::insert_tuple(const brdb_tuple_sptr& new_tuple, const std::vector<brdb_tuple_sptr>::iterator& pos)
 {
   update_timestamp();
 
@@ -256,7 +258,7 @@ brdb_relation::insert_tuple(const brdb_tuple_sptr& new_tuple, const vcl_vector<b
 
 //: remove a tuple at certain position from the relation
 bool
-brdb_relation::remove_tuple(const vcl_vector<brdb_tuple_sptr>::iterator& pos)
+brdb_relation::remove_tuple(const std::vector<brdb_tuple_sptr>::iterator& pos)
 {
   update_timestamp();
 
@@ -273,9 +275,9 @@ brdb_relation::print() const
   // print the attributes name and type
   for (unsigned int i=0; i<arity(); i++)
   {
-    vcl_cout << name(i) << '(' << type(i) << ")   ";
+    std::cout << name(i) << '(' << type(i) << ")   ";
   }
-  vcl_cout << vcl_endl;
+  std::cout << std::endl;
 
   for (unsigned int i=0; i<size(); i++)
   {
@@ -390,7 +392,7 @@ brdb_relation::is_compatible(const brdb_relation_sptr& other) const
   if (this->arity() != other->arity())
   {
 #ifndef NDEBUG
-    vcl_cerr << "Relations are not compatible because they have different arity.\n";
+    std::cerr << "Relations are not compatible because they have different arity.\n";
 #endif
     return false;
   }
@@ -401,9 +403,9 @@ brdb_relation::is_compatible(const brdb_relation_sptr& other) const
     if (this->name(attribute_itr) != other->name(attribute_itr))
     {
 #ifndef NDEBUG
-      vcl_cerr << "Relations are not compatible because they have different "
+      std::cerr << "Relations are not compatible because they have different "
                << "attribute names: " << this->name(attribute_itr) << " and "
-               << other->name(attribute_itr) << vcl_endl;
+               << other->name(attribute_itr) << std::endl;
 #endif
       return false;
     }
@@ -411,9 +413,9 @@ brdb_relation::is_compatible(const brdb_relation_sptr& other) const
     if (this->type(attribute_itr) != other->type(attribute_itr))
     {
 #ifndef NDEBUG
-      vcl_cerr << "Relations are not compatible because they have different "
+      std::cerr << "Relations are not compatible because they have different "
                << "types: "<< this->type(attribute_itr) << " and "
-               << other->type(attribute_itr) << vcl_endl;
+               << other->type(attribute_itr) << std::endl;
 #endif
       return false;
     }
@@ -429,7 +431,7 @@ brdb_relation::merge(const brdb_relation_sptr& other)
   if (!other || !this->is_compatible(other))
     return false;
 
-  for (vcl_vector<brdb_tuple_sptr>::const_iterator itr = other->tuples_.begin();
+  for (std::vector<brdb_tuple_sptr>::const_iterator itr = other->tuples_.begin();
        itr != other->tuples_.end(); ++itr)
   {
     tuples_.push_back(new brdb_tuple(**itr));
@@ -445,8 +447,8 @@ brdb_relation_sptr
 brdb_join(const brdb_relation_sptr& r1, const brdb_relation_sptr& r2)
 {
     // compose name and type list;
-    vcl_vector<vcl_string> names;
-    vcl_vector<vcl_string> types;
+    std::vector<std::string> names;
+    std::vector<std::string> types;
 
     // first add all r1 attributes
     for (unsigned int i=0; i<r1->arity(); i++)
@@ -456,26 +458,26 @@ brdb_join(const brdb_relation_sptr& r1, const brdb_relation_sptr& r2)
     }
 
     unsigned int common_attribute_count = 0;
-    vcl_vector<vcl_string> common_attribute;
-    vcl_vector<unsigned int> r1_common_attribute_index;
-    vcl_vector<unsigned int> r2_common_attribute_index;
-    vcl_vector<unsigned int> r1_non_common_attribute_index;
-    vcl_vector<unsigned int> r2_non_common_attribute_index;
+    std::vector<std::string> common_attribute;
+    std::vector<unsigned int> r1_common_attribute_index;
+    std::vector<unsigned int> r2_common_attribute_index;
+    std::vector<unsigned int> r1_non_common_attribute_index;
+    std::vector<unsigned int> r2_non_common_attribute_index;
 
     // add the non-common attributes from r2;
     for (unsigned int i=0; i<r2->arity(); i++)
     {
-      vcl_string name = r2->name(i);
-      vcl_string type = r2->type(i);
+      std::string name = r2->name(i);
+      std::string type = r2->type(i);
 
       if (r1->exists(name))
       {
         // check whether the type matches
-        vcl_string type1 = r1->type(name);
-        vcl_string type2 = r2->type(name);
+        std::string type1 = r1->type(name);
+        std::string type2 = r2->type(name);
         if (type1 != type2)
         {
-          vcl_cerr << "join: trying to join relations which having same name "
+          std::cerr << "join: trying to join relations which having same name "
                    << "attributes with different types!\n";
           return VXL_NULLPTR;
         }
@@ -514,7 +516,7 @@ brdb_join(const brdb_relation_sptr& r1, const brdb_relation_sptr& r2)
         ((r1_non_common_attribute_index.size() + r1_common_attribute_index.size()) != r1->arity()) ||
         ((r2_non_common_attribute_index.size() + r2_common_attribute_index.size()) != r2->arity()))
     {
-      vcl_cerr << "join: trying to join relations which don't have any "
+      std::cerr << "join: trying to join relations which don't have any "
                << "common attributes.\n";
       return VXL_NULLPTR;
     }
@@ -527,10 +529,10 @@ brdb_join(const brdb_relation_sptr& r1, const brdb_relation_sptr& r2)
     unsigned int arity2 = r2->arity();
 
     // go through all tuples in r1
-    for (vcl_vector<brdb_tuple_sptr>::iterator itr_1 = r1->begin(); itr_1<r1->end(); ++itr_1)
+    for (std::vector<brdb_tuple_sptr>::iterator itr_1 = r1->begin(); itr_1<r1->end(); ++itr_1)
     {
       // go through all tuples in r2
-      for (vcl_vector<brdb_tuple_sptr>::iterator itr_2 = r2->begin(); itr_2<r2->end(); ++itr_2)
+      for (std::vector<brdb_tuple_sptr>::iterator itr_2 = r2->begin(); itr_2<r2->end(); ++itr_2)
       {
         bool isMatched = true;
         for (unsigned int k=0; k<common_attribute_count; k++)
@@ -569,7 +571,7 @@ brdb_join(const brdb_relation_sptr& r1, const brdb_relation_sptr& r2)
           // add the new tuple into the resulting relation
           if (!new_relation->add_tuple(new_tup))
           {
-            vcl_cerr << "join: failed to add tuple.\n";
+            std::cerr << "join: failed to add tuple.\n";
             return VXL_NULLPTR;
           }
         }

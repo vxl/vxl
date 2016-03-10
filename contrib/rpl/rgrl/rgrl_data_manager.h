@@ -18,9 +18,11 @@
 #include <rgrl/rgrl_weighter.h>
 #include <rgrl/rgrl_object.h>
 
-#include <vcl_vector.h>
-#include <vcl_map.h>
-#include <vcl_string.h>
+#include <vector>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <map>
+#include <string>
 
 // ---------------------------------------------------------------------------
 //                                                                   data item
@@ -38,7 +40,7 @@ class rgrl_data_manager_data_item
                                rgrl_weighter_sptr                 in_weighter,
                                rgrl_scale_estimator_unwgted_sptr  in_unwgted_scale_est,
                                rgrl_scale_estimator_wgted_sptr    in_wgted_scale_est,
-                               const vcl_string&                  in_label = vcl_string() )
+                               const std::string&                  in_label = std::string() )
     : from_set( in_from_set ),
       to_set( in_to_set ),
       matcher( in_matcher ),
@@ -55,7 +57,7 @@ class rgrl_data_manager_data_item
   rgrl_scale_estimator_unwgted_sptr unwgted_scale_est;
   rgrl_scale_estimator_wgted_sptr   wgted_scale_est;
   rgrl_weighter_sptr                weighter;
-  vcl_string                        label;
+  std::string                        label;
 };
 
 // ---------------------------------------------------------------------------
@@ -67,10 +69,10 @@ class rgrl_data_manager_data_item
 class rgrl_data_manager_data_storage
 {
  public:
-  typedef vcl_vector< rgrl_data_manager_data_item >  data_vector;
-  typedef vcl_map< unsigned, data_vector >  data_map;
-  typedef vcl_vector< rgrl_estimator_sptr >  estimator_vector;
-  typedef vcl_map< unsigned, estimator_vector >  estimator_map;
+  typedef std::vector< rgrl_data_manager_data_item >  data_vector;
+  typedef std::map< unsigned, data_vector >  data_map;
+  typedef std::vector< rgrl_estimator_sptr >  estimator_vector;
+  typedef std::map< unsigned, estimator_vector >  estimator_map;
 
   //: same as std::map[]
   data_vector& operator[]( unsigned i )
@@ -123,7 +125,7 @@ class rgrl_data_manager_data_storage
  private:
   data_map map_;
   estimator_map estimators_;
-  vcl_map< unsigned, double >  dim_increase_for_next_stage_;
+  std::map< unsigned, double >  dim_increase_for_next_stage_;
 };
 
 // ---------------------------------------------------------------------------
@@ -164,7 +166,7 @@ class rgrl_data_manager: public rgrl_object
                  rgrl_weighter_sptr                       weighter = 0,
                  rgrl_scale_estimator_unwgted_sptr        unwgted_scale_est = 0,
                  rgrl_scale_estimator_wgted_sptr          wgted_scale_est = 0,
-                 const vcl_string&                        label = vcl_string() );
+                 const std::string&                        label = std::string() );
 
   //: Add a data item to a single-stage data storage.
   //
@@ -176,7 +178,7 @@ class rgrl_data_manager: public rgrl_object
                  rgrl_weighter_sptr                       weighter = 0,
                  rgrl_scale_estimator_unwgted_sptr        unwgted_scale_est = 0,
                  rgrl_scale_estimator_wgted_sptr          wgted_scale_est = 0,
-                 const vcl_string&                        label = vcl_string() );
+                 const std::string&                        label = std::string() );
 
   //: Add an estimator to a multi-stage data storage.
   void add_estimator( unsigned                           stage,
@@ -205,13 +207,13 @@ class rgrl_data_manager: public rgrl_object
   //
   void
   get_data_at_stage( unsigned stage,
-                     vcl_vector<rgrl_feature_set_sptr>             & from_sets,
-                     vcl_vector<rgrl_feature_set_sptr>             & to_sets,
-                     vcl_vector<rgrl_matcher_sptr>                 & matchers,
-                     vcl_vector<rgrl_weighter_sptr>                & weighters,
-                     vcl_vector<rgrl_scale_estimator_unwgted_sptr> & unwgted_scale_ests,
-                     vcl_vector<rgrl_scale_estimator_wgted_sptr>   & wgted_scale_ests,
-                     vcl_vector<rgrl_estimator_sptr>               & estimators) const;
+                     std::vector<rgrl_feature_set_sptr>             & from_sets,
+                     std::vector<rgrl_feature_set_sptr>             & to_sets,
+                     std::vector<rgrl_matcher_sptr>                 & matchers,
+                     std::vector<rgrl_weighter_sptr>                & weighters,
+                     std::vector<rgrl_scale_estimator_unwgted_sptr> & unwgted_scale_ests,
+                     std::vector<rgrl_scale_estimator_wgted_sptr>   & wgted_scale_ests,
+                     std::vector<rgrl_estimator_sptr>               & estimators) const;
 
   //: Return the a single data_item and the set of estimators from a multi-stage data storage.
   //
@@ -223,19 +225,19 @@ class rgrl_data_manager: public rgrl_object
                      rgrl_weighter_sptr                & weighters,
                      rgrl_scale_estimator_unwgted_sptr & unwgted_scale_ests,
                      rgrl_scale_estimator_wgted_sptr   & wgted_scale_ests,
-                     vcl_vector<rgrl_estimator_sptr>   & estimators) const;
+                     std::vector<rgrl_estimator_sptr>   & estimators) const;
 
   //: Return the set of data_items and estimators from a single-stage data storage.
   //
   //  The stage is assumed to be 0.
   void
-  get_data( vcl_vector<rgrl_feature_set_sptr>             & from_sets,
-            vcl_vector<rgrl_feature_set_sptr>             & to_sets,
-            vcl_vector<rgrl_matcher_sptr>                 & matchers,
-            vcl_vector<rgrl_weighter_sptr>                & weighters,
-            vcl_vector<rgrl_scale_estimator_unwgted_sptr> & unwgted_scale_ests,
-            vcl_vector<rgrl_scale_estimator_wgted_sptr>   & wgted_scale_ests,
-            vcl_vector<rgrl_estimator_sptr>               & estimators) const;
+  get_data( std::vector<rgrl_feature_set_sptr>             & from_sets,
+            std::vector<rgrl_feature_set_sptr>             & to_sets,
+            std::vector<rgrl_matcher_sptr>                 & matchers,
+            std::vector<rgrl_weighter_sptr>                & weighters,
+            std::vector<rgrl_scale_estimator_unwgted_sptr> & unwgted_scale_ests,
+            std::vector<rgrl_scale_estimator_wgted_sptr>   & wgted_scale_ests,
+            std::vector<rgrl_estimator_sptr>               & estimators) const;
 
   //: Return the a single data_item and the set of estimators from a single-stage data storage.
   //
@@ -247,13 +249,13 @@ class rgrl_data_manager: public rgrl_object
             rgrl_weighter_sptr                & weighters,
             rgrl_scale_estimator_unwgted_sptr & unwgted_scale_ests,
             rgrl_scale_estimator_wgted_sptr   & wgted_scale_ests,
-            vcl_vector<rgrl_estimator_sptr>   & estimators) const;
+            std::vector<rgrl_estimator_sptr>   & estimators) const;
 
   //: Return labels
-  void get_label( unsigned stage, vcl_vector<vcl_string>& labels ) const;
+  void get_label( unsigned stage, std::vector<std::string>& labels ) const;
 
   //: Return labels
-  void get_label( vcl_vector<vcl_string>& labels ) const;
+  void get_label( std::vector<std::string>& labels ) const;
 
   //: Return true if certain stage exists with data
   bool has_stage(unsigned i ) const;

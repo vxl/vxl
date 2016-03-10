@@ -7,7 +7,9 @@
 
 #include "HomgPlane3D.h"
 
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iostream>
 #include <vnl/vnl_double_3.h>
 #include <mvl/Homg3D.h>
 #include <mvl/HomgPoint3D.h>
@@ -77,7 +79,7 @@ double HomgPlane3D::distance(const HomgPoint3D& p) const
 }
 
 //: print
-vcl_ostream& operator<<(vcl_ostream& s, const HomgPlane3D& P)
+std::ostream& operator<<(std::ostream& s, const HomgPlane3D& P)
 {
   return s << P.get_vector();
 }

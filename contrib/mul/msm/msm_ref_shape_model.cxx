@@ -4,12 +4,14 @@
 // \brief Contains mean/modes etc of a shape model
 // \author Tim Cootes
 
-#include <vcl_iostream.h>
+#include <iostream>
 #include <vsl/vsl_indent.h>
 #include <vsl/vsl_binary_io.h>
 #include <vnl/io/vnl_io_vector.h>
 #include <vnl/io/vnl_io_matrix.h>
-#include <vcl_cstdlib.h>  // for vcl_atoi() & vcl_abort()
+#include <vcl_compiler.h>
+#include <iostream>
+#include <cstdlib>  // for std::atoi() & std::abort()
 #include <vcl_cassert.h>
 
 
@@ -60,10 +62,10 @@ bool msm_ref_shape_model::operator==(const msm_ref_shape_model& model) const
   const double epsilon = 1e-3;
 
   double ssd1=vnl_vector_ssd(model.mean_.vector(),mean_.vector());
-  if (vcl_fabs(ssd1/mean_.size())>epsilon) return false;
+  if (std::fabs(ssd1/mean_.size())>epsilon) return false;
 
   double ssd2=vnl_vector_ssd(model.mode_var_,mode_var_);
-  if (vcl_fabs(ssd2/mode_var_.size())>epsilon) return false;
+  if (std::fabs(ssd2/mode_var_.size())>epsilon) return false;
 
   double max_d = (modes_-model.modes_).absolute_value_max();
   if (max_d>epsilon) return false;
@@ -85,9 +87,9 @@ short msm_ref_shape_model::version_no() const
 // Method: is_a
 //=======================================================================
 
-vcl_string msm_ref_shape_model::is_a() const
+std::string msm_ref_shape_model::is_a() const
 {
-  return vcl_string("msm_ref_shape_model");
+  return std::string("msm_ref_shape_model");
 }
 
 //=======================================================================
@@ -95,14 +97,14 @@ vcl_string msm_ref_shape_model::is_a() const
 //=======================================================================
 
   // required if data is present in this class
-void msm_ref_shape_model::print_summary(vcl_ostream& os) const
+void msm_ref_shape_model::print_summary(std::ostream& os) const
 {
-  os << "n_pts: "<<size()<<" n_modes: "<<n_modes()<<vcl_endl;
+  os << "n_pts: "<<size()<<" n_modes: "<<n_modes()<<std::endl;
   vsl_indent_inc(os);
-  os << vcl_endl << vsl_indent() << " param_limiter: ";
+  os << std::endl << vsl_indent() << " param_limiter: ";
   if (param_limiter_.isDefined())
     os<<param_limiter_; else os<<"-";
-  os<<vcl_endl;
+  os<<std::endl;
   vsl_indent_dec(os);
 }
 
@@ -138,9 +140,9 @@ void msm_ref_shape_model::b_read(vsl_b_istream& bfs)
       vsl_b_read(bfs,param_limiter_);
       break;
     default:
-      vcl_cerr << "msm_ref_shape_model::b_read() :\n"
-               << "Unexpected version number " << version << vcl_endl;
-      bfs.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
+      std::cerr << "msm_ref_shape_model::b_read() :\n"
+               << "Unexpected version number " << version << std::endl;
+      bfs.is().clear(std::ios::badbit); // Set an unrecoverable IO error on stream
       return;
   }
 
@@ -170,7 +172,7 @@ void vsl_b_read(vsl_b_istream& bfs, msm_ref_shape_model& b)
 // Associated function: operator<<
 //=======================================================================
 
-vcl_ostream& operator<<(vcl_ostream& os,const msm_ref_shape_model& b)
+std::ostream& operator<<(std::ostream& os,const msm_ref_shape_model& b)
 {
   vsl_indent_inc(os);
   b.print_summary(os);
@@ -179,7 +181,7 @@ vcl_ostream& operator<<(vcl_ostream& os,const msm_ref_shape_model& b)
 }
 
 //: Stream output operator for class reference
-void vsl_print_summary(vcl_ostream& os,const msm_ref_shape_model& b)
+void vsl_print_summary(std::ostream& os,const msm_ref_shape_model& b)
 {
  os << b;
 }

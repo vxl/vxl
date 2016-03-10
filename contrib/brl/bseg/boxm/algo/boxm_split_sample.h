@@ -15,7 +15,9 @@
 #include <boxm/boxm_scene.h>
 #include <boxm/sample/boxm_sample.h>
 #include <boxm/boxm_apm_traits.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iostream>
 
 template<boxm_apm_type APM_MODEL>
 class boxm_split_sample
@@ -81,12 +83,12 @@ template<boxm_apm_type APM_MODEL>
 void boxm_split_sample<APM_MODEL>::split_tree(sample_tree_type *tree_in, apm_tree_type *apm_tree, alpha_tree_type *alpha_tree)
 {
   //iterate through the trees
-  vcl_vector<sample_cell_type*> sample_cells = tree_in->all_cells();
-  vcl_vector<apm_cell_type*> apm_cells = apm_tree->all_cells();
-  vcl_vector<alpha_cell_type*> alpha_cells = alpha_tree->all_cells();
+  std::vector<sample_cell_type*> sample_cells = tree_in->all_cells();
+  std::vector<apm_cell_type*> apm_cells = apm_tree->all_cells();
+  std::vector<alpha_cell_type*> alpha_cells = alpha_tree->all_cells();
 
   if (sample_cells.size()!=apm_cells.size() || apm_cells.size()!=alpha_cells.size()){
-    vcl_cerr << "Different size vectors in split_sample_scene::split_tree\n";
+    std::cerr << "Different size vectors in split_sample_scene::split_tree\n";
     return;
   }
 

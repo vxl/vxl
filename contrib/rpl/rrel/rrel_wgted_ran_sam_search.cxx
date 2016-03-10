@@ -4,10 +4,12 @@
 #include <rrel/rrel_estimation_problem.h>
 #include <rrel/rrel_util.h>
 
-#include <vcl_iostream.h>
-#include <vcl_vector.h>
+#include <iostream>
+#include <vector>
 #include <vcl_cassert.h>
-#include <vcl_algorithm.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <algorithm>
 
 rrel_wgted_ran_sam_search::~rrel_wgted_ran_sam_search( )
 {
@@ -23,7 +25,7 @@ rrel_wgted_ran_sam_search::estimate( const rrel_estimation_problem * problem,
 {
   // assume the weights are already sorted.
   // get similarity weights
-  const vcl_vector<double>& wgts = problem->similarity_weights();
+  const std::vector<double>& wgts = problem->similarity_weights();
   if ( !wgts.empty() )
   {
     is_sim_wgt_set_ = true;
@@ -56,10 +58,10 @@ rrel_wgted_ran_sam_search::estimate( const rrel_estimation_problem * problem,
 void
 rrel_wgted_ran_sam_search::next_sample( unsigned int taken,
                                         unsigned int num_points,
-                                        vcl_vector<int>& sample,
+                                        std::vector<int>& sample,
                                         unsigned int points_per_sample )
 {
-  typedef vcl_vector<prob_interval>::iterator interval_iter;
+  typedef std::vector<prob_interval>::iterator interval_iter;
 
   if ( generate_all_ || !is_sim_wgt_set_ ) {
     rrel_ran_sam_search::next_sample( taken, num_points, sample, points_per_sample );
@@ -76,7 +78,7 @@ rrel_wgted_ran_sam_search::next_sample( unsigned int taken,
     while ( k<points_per_sample ) // This might be an infinite loop!
     {
       one.upper_ = generator_->drand32();
-      iter = vcl_lower_bound( intervals_.begin(), intervals_.end(), one );
+      iter = std::lower_bound( intervals_.begin(), intervals_.end(), one );
       // though this should not happen
       if ( iter == intervals_.end() )
         continue;
@@ -91,7 +93,7 @@ rrel_wgted_ran_sam_search::next_sample( unsigned int taken,
         sample[k++] = id, counter = 0;
       else if (counter > 1000)
       {
-        vcl_cerr << "rrel_wgted_ran_sam_search::next_sample --- WARNING: "
+        std::cerr << "rrel_wgted_ran_sam_search::next_sample --- WARNING: "
                  << "drand32() generated 1000x the same value "<< id
                  << " from the range [0," << num_points-1 << "]\n"
                  << " prob is " << one.lower_ << " in range [" << iter->lower_

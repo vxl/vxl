@@ -7,7 +7,9 @@
 // \author Ozge C. Ozcanli
 // \date May 3, 2011
 
-#include <vcl_fstream.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <fstream>
 #include <boxm2/io/boxm2_cache.h>
 #include <boxm2/boxm2_scene.h>
 #include <boxm2/boxm2_block.h>
@@ -25,7 +27,7 @@ namespace boxm2_cpp_render_expected_depth_process_globals
 {
   const unsigned n_inputs_ = 5;
   const unsigned n_outputs_ = 1;
-  vcl_size_t lthreads[2]={8,8};
+  std::size_t lthreads[2]={8,8};
 }
 
 bool boxm2_cpp_render_expected_depth_process_cons(bprb_func_process& pro)
@@ -33,7 +35,7 @@ bool boxm2_cpp_render_expected_depth_process_cons(bprb_func_process& pro)
   using namespace boxm2_cpp_render_expected_depth_process_globals;
 
   //process takes 1 input
-  vcl_vector<vcl_string> input_types_(n_inputs_);
+  std::vector<std::string> input_types_(n_inputs_);
   input_types_[0] = "boxm2_scene_sptr";
   input_types_[1] = "boxm2_cache_sptr";
   input_types_[2] = "vpgl_camera_double_sptr";
@@ -43,7 +45,7 @@ bool boxm2_cpp_render_expected_depth_process_cons(bprb_func_process& pro)
 
   // process has 1 output:
   // output[0]: scene sptr
-  vcl_vector<vcl_string>  output_types_(n_outputs_);
+  std::vector<std::string>  output_types_(n_outputs_);
   output_types_[0] = "vil_image_view_base_sptr";
 
   return pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
@@ -54,7 +56,7 @@ bool boxm2_cpp_render_expected_depth_process(bprb_func_process& pro)
   using namespace boxm2_cpp_render_expected_depth_process_globals;
 
   if ( pro.n_inputs() < n_inputs_ ) {
-    vcl_cout << pro.name() << ": The input number should be " << n_inputs_<< vcl_endl;
+    std::cout << pro.name() << ": The input number should be " << n_inputs_<< std::endl;
     return false;
   }
   //get the inputs
@@ -72,11 +74,11 @@ bool boxm2_cpp_render_expected_depth_process(bprb_func_process& pro)
   exp_img->fill(0.0f);
   vis_img->fill(1.0f);
   len_img->fill(0.0f);
-  vcl_vector<boxm2_block_id> vis_order=scene->get_vis_blocks((vpgl_generic_camera<double>*)(cam.ptr()));
-  vcl_vector<boxm2_block_id>::iterator id;
+  std::vector<boxm2_block_id> vis_order=scene->get_vis_blocks((vpgl_generic_camera<double>*)(cam.ptr()));
+  std::vector<boxm2_block_id>::iterator id;
   for (id = vis_order.begin(); id != vis_order.end(); ++id)
   {
-    vcl_cout<<"Block Id "<<(*id)<<vcl_endl;
+    std::cout<<"Block Id "<<(*id)<<std::endl;
     boxm2_block *     blk  =  cache->get_block(scene,*id);
     boxm2_data_base *  alph = cache->get_data_base(scene,*id,boxm2_data_traits<BOXM2_ALPHA>::prefix());
 

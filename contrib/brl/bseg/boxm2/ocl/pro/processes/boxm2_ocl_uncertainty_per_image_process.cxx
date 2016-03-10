@@ -8,7 +8,9 @@
 
 #include <bprb/bprb_func_process.h>
 
-#include <vcl_fstream.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <fstream>
 #include <boxm2/ocl/boxm2_opencl_cache.h>
 #include <boxm2/boxm2_scene.h>
 #include <boxm2/boxm2_block.h>
@@ -38,11 +40,11 @@ namespace boxm2_ocl_uncertainty_per_image_process_globals
         UPDATE_AVG_RATIO_EMPTY_SURFACE  = 3,
         CONVERT_AUX_INT_FLOAT = 4
     };
-    void compile_kernel(bocl_device_sptr device,vcl_vector<bocl_kernel*> & vec_kernels,vcl_string opts)
+    void compile_kernel(bocl_device_sptr device,std::vector<bocl_kernel*> & vec_kernels,std::string opts)
     {
         //gather all render sources... seems like a lot for rendering...
-        vcl_vector<vcl_string> src_paths;
-        vcl_string source_dir = boxm2_ocl_util::ocl_src_root();
+        std::vector<std::string> src_paths;
+        std::string source_dir = boxm2_ocl_util::ocl_src_root();
         src_paths.push_back(source_dir + "scene_info.cl");
         src_paths.push_back(source_dir + "cell_utils.cl");
         src_paths.push_back(source_dir + "bit/bit_tree_library_functions.cl");
@@ -51,33 +53,33 @@ namespace boxm2_ocl_uncertainty_per_image_process_globals
         src_paths.push_back(source_dir + "ray_bundle_library_opt.cl");
         src_paths.push_back(source_dir + "bit/batch_update_kernels.cl");
         src_paths.push_back(source_dir + "bit/update_kernels.cl");
-        vcl_vector<vcl_string> non_ray_src = vcl_vector<vcl_string>(src_paths);
+        std::vector<std::string> non_ray_src = std::vector<std::string>(src_paths);
         src_paths.push_back(source_dir + "batch/synoptic_function_kernels.cl");
         src_paths.push_back(source_dir + "update_functors.cl");
         src_paths.push_back(source_dir + "update_cubic_functors.cl");
         src_paths.push_back(source_dir + "bit/cast_ray_bit.cl");
         //compilation options
-        vcl_string options = opts;
+        std::string options = opts;
         bocl_kernel* seg_len = new bocl_kernel();
-        vcl_string seg_opts = options + " -D SEGLEN -D STEP_CELL=step_cell_seglen(aux_args,data_ptr,llid,d) ";
+        std::string seg_opts = options + " -D SEGLEN -D STEP_CELL=step_cell_seglen(aux_args,data_ptr,llid,d) ";
         seg_len->create_kernel(&device->context(),device->device_id(), src_paths, "seg_len_main", seg_opts, "update::seg_len");
         vec_kernels.push_back(seg_len);
 
         bocl_kernel* pre_inf = new bocl_kernel();
-        vcl_string pre_opts = options + " -D PREINF -D PREINF_CUBIC -D STEP_CELL=step_cell_preinf_cubic(aux_args,data_ptr,llid,d) ";
+        std::string pre_opts = options + " -D PREINF -D PREINF_CUBIC -D STEP_CELL=step_cell_preinf_cubic(aux_args,data_ptr,llid,d) ";
         pre_inf->create_kernel(&device->context(),device->device_id(), src_paths, "pre_inf_main", pre_opts, "update::pre_inf");
         vec_kernels.push_back(pre_inf);
 
         //may need DIFF LIST OF SOURCES FOR THIS GUY
         bocl_kernel* proc_img = new bocl_kernel();
-        vcl_string proc_norm_opts =options+ " -D PROC_NORM ";
+        std::string proc_norm_opts =options+ " -D PROC_NORM ";
 
         proc_img->create_kernel(&device->context(),device->device_id(), non_ray_src, "proc_norm_image", proc_norm_opts, "update::proc_norm_image");
         vec_kernels.push_back(proc_img);
 
         //push back cast_ray_bit
         bocl_kernel* avg_surface_empty_ratio_main = new bocl_kernel();
-        vcl_string avg_surface_empty_ratio_opt = options + "-D AVG_SURFACE_EMPTY_RATIO -D JOINT -D STEP_CELL=step_cell_avg_ratio_cubic(aux_args,data_ptr,llid,d) ";
+        std::string avg_surface_empty_ratio_opt = options + "-D AVG_SURFACE_EMPTY_RATIO -D JOINT -D STEP_CELL=step_cell_avg_ratio_cubic(aux_args,data_ptr,llid,d) ";
         avg_surface_empty_ratio_main->create_kernel(&device->context(),device->device_id(), src_paths, "avg_surface_empty_ratio_main", avg_surface_empty_ratio_opt, "update::avg_surface_empty_ratio_main");
         vec_kernels.push_back(avg_surface_empty_ratio_main);
 
@@ -88,7 +90,7 @@ namespace boxm2_ocl_uncertainty_per_image_process_globals
         return ;
     }
 
-    static vcl_map<vcl_string,vcl_vector<bocl_kernel*> > kernels;
+    static std::map<std::string,std::vector<bocl_kernel*> > kernels;
 }
 
 bool boxm2_ocl_uncertainty_per_image_process_cons(bprb_func_process& pro)
@@ -96,7 +98,7 @@ bool boxm2_ocl_uncertainty_per_image_process_cons(bprb_func_process& pro)
     using namespace boxm2_ocl_uncertainty_per_image_process_globals;
 
     //process takes 1 input
-    vcl_vector<vcl_string> input_types_(n_inputs_);
+    std::vector<std::string> input_types_(n_inputs_);
     input_types_[0] = "bocl_device_sptr";
     input_types_[1] = "boxm2_scene_sptr";
     input_types_[2] = "boxm2_opencl_cache_sptr";
@@ -106,10 +108,10 @@ bool boxm2_ocl_uncertainty_per_image_process_cons(bprb_func_process& pro)
 
     // process has 1 output:
     // output[0]: scene sptr
-    vcl_vector<vcl_string>  output_types_(n_outputs_);
+    std::vector<std::string>  output_types_(n_outputs_);
     bool good = pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
     // default 6 and 7 inputs
-    brdb_value_sptr idx        = new brdb_value_t<vcl_string>("");
+    brdb_value_sptr idx        = new brdb_value_t<std::string>("");
     pro.set_input(5, idx);
     return good;
 }
@@ -117,12 +119,12 @@ bool boxm2_ocl_uncertainty_per_image_process_cons(bprb_func_process& pro)
 bool boxm2_ocl_uncertainty_per_image_process(bprb_func_process& pro)
 {
     using namespace boxm2_ocl_uncertainty_per_image_process_globals;
-    vcl_size_t local_threads[2]={8,8};
-    vcl_size_t global_threads[2]={8,8};
+    std::size_t local_threads[2]={8,8};
+    std::size_t global_threads[2]={8,8};
 
     //sanity check inputs
     if ( pro.n_inputs() < n_inputs_ ) {
-        vcl_cout << pro.name() << ": The input number should be " << n_inputs_<< vcl_endl;
+        std::cout << pro.name() << ": The input number should be " << n_inputs_<< std::endl;
         return false;
     }
     float transfer_time=0.0f;
@@ -135,15 +137,15 @@ bool boxm2_ocl_uncertainty_per_image_process(bprb_func_process& pro)
     boxm2_opencl_cache_sptr  opencl_cache = pro.get_input<boxm2_opencl_cache_sptr>(i++);
     vpgl_camera_double_sptr  cam          = pro.get_input<vpgl_camera_double_sptr>(i++);
     vil_image_view_base_sptr img          = pro.get_input<vil_image_view_base_sptr>(i++);
-    vcl_string               ident        = pro.get_input<vcl_string>(i++);                //viewpoint identifier
+    std::string               ident        = pro.get_input<std::string>(i++);                //viewpoint identifier
     //cache size sanity check
     long binCache = opencl_cache.ptr()->bytes_in_cache();
-    vcl_cout<<"Update MBs in cache: "<<binCache/(1024.0*1024.0)<<vcl_endl;
+    std::cout<<"Update MBs in cache: "<<binCache/(1024.0*1024.0)<<std::endl;
 
     //make correct data types are here
     bool foundDataType = false;
-    vcl_string data_type,num_obs_type="boxm2_num_obs",options;
-    vcl_vector<vcl_string> apps = scene->appearances();
+    std::string data_type,num_obs_type="boxm2_num_obs",options;
+    std::vector<std::string> apps = scene->appearances();
     int appTypeSize;
     for (unsigned int i=0; i<apps.size(); ++i) {
         if ( apps[i] == boxm2_data_traits<BOXM2_FLOAT8>::prefix() )
@@ -155,7 +157,7 @@ bool boxm2_ocl_uncertainty_per_image_process(bprb_func_process& pro)
         }
     }
     if (!foundDataType) {
-        vcl_cout<<"BOXM2_OPENCL_UPDATE_PROCESS ERROR: scene doesn't have BOXM2_FLOAT8 data type"<<vcl_endl;
+        std::cout<<"BOXM2_OPENCL_UPDATE_PROCESS ERROR: scene doesn't have BOXM2_FLOAT8 data type"<<std::endl;
         return false;
     }
     data_type += "_cubic_model";
@@ -167,10 +169,10 @@ bool boxm2_ocl_uncertainty_per_image_process(bprb_func_process& pro)
         return false;
 
     // compile the kernel if not already compiled
-    vcl_string identifier=device->device_identifier()+options;
+    std::string identifier=device->device_identifier()+options;
     if (kernels.find(identifier)==kernels.end()) {
-        vcl_cout<<"===========Compiling kernels==========="<<vcl_endl;
-        vcl_vector<bocl_kernel*> ks;
+        std::cout<<"===========Compiling kernels==========="<<std::endl;
+        std::vector<bocl_kernel*> ks;
         compile_kernel(device,ks,options);
         kernels[identifier]=ks;
     }
@@ -259,11 +261,11 @@ bool boxm2_ocl_uncertainty_per_image_process(bprb_func_process& pro)
     lookup->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR);
 
     // set arguments
-    vcl_vector<boxm2_block_id> vis_order = scene->get_vis_blocks(cam);
-    vcl_vector<boxm2_block_id>::iterator id;
+    std::vector<boxm2_block_id> vis_order = scene->get_vis_blocks(cam);
+    std::vector<boxm2_block_id>::iterator id;
     for (unsigned int i=0; i<kernels[identifier].size(); ++i)
     {
-        vcl_cout<<"Pass : "<<i<<vcl_endl;
+        std::cout<<"Pass : "<<i<<std::endl;
         if (i==UPDATE_SEGLEN)
         {
             for (id = vis_order.begin(); id != vis_order.end(); ++id)
@@ -512,7 +514,7 @@ bool boxm2_ocl_uncertainty_per_image_process(bprb_func_process& pro)
     opencl_cache->unref_mem(ray_o_buff.ptr());
     opencl_cache->unref_mem(ray_d_buff.ptr());
 
-    vcl_cout<<"Gpu time "<<gpu_time<<" transfer time "<<transfer_time<<vcl_endl;
+    std::cout<<"Gpu time "<<gpu_time<<" transfer time "<<transfer_time<<std::endl;
     clReleaseCommandQueue(queue);
     return true;
 }

@@ -4,7 +4,9 @@
 // \file
 
 #include "vdtop_set_4_veinerization_structure.h"
-#include <vcl_limits.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <limits>
 
 //: The 3 in 1 function.
 // It computes upper masks, removes non maximal directions, and compute the down-left version of the symmetric
@@ -16,15 +18,15 @@ void vdtop_compute_4_veinerization_mask(vil_image_view<T> & img,
   unsigned ni = img.ni(),nj = img.nj(),np = img.nplanes(), nil=ni-1, njl=nj-1;
   //const vxl_byte dir_order[8]={7,6,4,1,2,3,5,8} ;
   const vxl_byte dir_order[8]={5,3,2,1,4,6,7,8} ;
-  T max_value=vcl_numeric_limits<T>::max();
+  T max_value=std::numeric_limits<T>::max();
   masks.set_size(ni, nj, np) ;
   masks.fill(vdtop_8_neighborhood_mask(0)) ;
   nb_vertices=nb_edges=0 ;
 
   // Precompute steps
-  vcl_ptrdiff_t istepI=img.istep(),jstepI=img.jstep(),pstepI = img.planestep();
-  vcl_ptrdiff_t istepM=masks.istep(),jstepM=masks.jstep(),pstepM = masks.planestep();
-  vcl_ptrdiff_t movesI[8], movesM[8] ;
+  std::ptrdiff_t istepI=img.istep(),jstepI=img.jstep(),pstepI = img.planestep();
+  std::ptrdiff_t istepM=masks.istep(),jstepM=masks.jstep(),pstepM = masks.planestep();
+  std::ptrdiff_t movesI[8], movesM[8] ;
   movesI[0]=istepI ;
   movesI[1]=-jstepI+istepI ;
   movesI[2]=-jstepI ;

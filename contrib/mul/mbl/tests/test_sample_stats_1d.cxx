@@ -1,8 +1,10 @@
 // Test program fpr test_sample_stats_1d
 #include <testlib/testlib_test.h>
-#include <vcl_algorithm.h>
-#include <vcl_iostream.h>
-#include <vcl_cmath.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <algorithm>
+#include <iostream>
+#include <cmath>
 #include <mbl/mbl_sample_stats_1d.h>
 
 
@@ -26,7 +28,7 @@ void test_original()
   TEST_NEAR("max()",stats.max(),4,1e-6);
   TEST_NEAR("median()",stats.median(),2.0,1e-6);
   TEST_NEAR("sum_squares()",stats.sum_squares(),30,1e-6);
-  TEST_NEAR("rms()",stats.rms(),vcl_sqrt(6.0),1e-6);
+  TEST_NEAR("rms()",stats.rms(),std::sqrt(6.0),1e-6);
 
   // check mean_of_absolutes
   mbl_sample_stats_1d stats_moa = stats;
@@ -39,7 +41,7 @@ void test_original()
   TEST("Equality operator",stats_i,stats);
 
   // check construct with samples
-  vcl_vector<double> samples;
+  std::vector<double> samples;
   for (int i=0;i<5;++i)
     samples.push_back(i);
   mbl_sample_stats_1d stats_c(samples);
@@ -62,7 +64,7 @@ void test_original()
   {
     TEST_NEAR("median() - 1",stats.median(),4.5,1e-6);
 
-    vcl_vector<double> data;
+    std::vector<double> data;
     data.push_back( 4 );
     data.push_back( 4 );
     data.push_back( 4 );
@@ -130,14 +132,14 @@ void test_original()
   TEST_NEAR("median()",stats4.median(),100,1e-6);
 
   // test convenience functions
-  vcl_vector<double> vec5;
+  std::vector<double> vec5;
   vec5.push_back(1);
   vec5.push_back(2);
   vec5.push_back(3);
   vec5.push_back(4);
   vec5.push_back(5);
 
-  vcl_vector<double> mask1;
+  std::vector<double> mask1;
   mask1.push_back(0);
   mask1.push_back(1);
   mask1.push_back(0);
@@ -145,7 +147,7 @@ void test_original()
   mask1.push_back(1);
   mbl_sample_stats_1d stats5(mbl_apply_mask(vec5,mask1));
   TEST_NEAR("Masked stats correct",stats5.mean(),0.5*(2+5),0.001);
-  vcl_vector<int> mask2;
+  std::vector<int> mask2;
   mask2.push_back(1);
   mask2.push_back(0);
   mask2.push_back(0);
@@ -161,14 +163,14 @@ void test_quantile()
 {
   // using "{}" blocks for higher autonomy and reusablility of variables
   {
-    vcl_cout << "test_quantile(): odd number of samples (nsamples=5)\n";
+    std::cout << "test_quantile(): odd number of samples (nsamples=5)\n";
     const unsigned ns=5;
     mbl_sample_stats_1d stats;
     for (unsigned int i=0; i<ns; ++i)
       stats.add_sample(i);
 
     const unsigned nq = 10; // will actually calculate nq+1 quantiles
-    vcl_vector<double> quantiles;
+    std::vector<double> quantiles;
     for (unsigned j=0; j<=nq; ++j)
     {
       double q = static_cast<double>(j)/static_cast<double>(nq);
@@ -181,14 +183,14 @@ void test_quantile()
     TEST("median()==quantile(0.5)?", stats.median(), stats.quantile(0.5));
   }
   {
-    vcl_cout << "test_quantile(): even number of samples (nsamples=6)\n";
+    std::cout << "test_quantile(): even number of samples (nsamples=6)\n";
     const unsigned ns=6;
     mbl_sample_stats_1d stats;
     for (unsigned int i=0; i<ns; ++i)
       stats.add_sample(i);
 
     const unsigned nq = 10; // will actually calculate nq+1 quantiles
-    vcl_vector<double> quantiles;
+    std::vector<double> quantiles;
     for (unsigned j=0; j<=nq; ++j)
     {
       double q = static_cast<double>(j)/static_cast<double>(nq);
@@ -199,8 +201,8 @@ void test_quantile()
     TEST("quantile(1.0)==ordered_sample(n-1)?", quantiles[nq]==stats.samples()[ns-1], true);
 
     {
-      vcl_vector<double> samples_cpy = stats.samples();
-      vcl_sort( samples_cpy.begin() ,samples_cpy.end() );
+      std::vector<double> samples_cpy = stats.samples();
+      std::sort( samples_cpy.begin() ,samples_cpy.end() );
       double temp = (samples_cpy[ns/2 -1] + samples_cpy[ns/2])/2.0;
       TEST("quantile(0.5)==mean of 2 adj samples?", quantiles[nq/2]==temp, true);
     }
@@ -212,7 +214,7 @@ void test_quantile()
 //=============================================================================
 void test_sample_stats_1d()
 {
-  vcl_cout << "*****************************\n"
+  std::cout << "*****************************\n"
            << " Testing mbl_sample_stats_1d\n"
            << "*****************************\n";
 

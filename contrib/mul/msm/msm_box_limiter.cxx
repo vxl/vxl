@@ -9,7 +9,9 @@
 #include <mbl/mbl_parse_block.h>
 #include <mbl/mbl_read_props.h>
 #include <vul/vul_string.h>
-#include <vcl_sstream.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <sstream>
 #include <vcl_cassert.h>
 
 //=======================================================================
@@ -28,7 +30,7 @@ void msm_box_limiter::set_n_sds(double n_sds)
 void msm_box_limiter::set_param_var(const vnl_vector<double>& v)
 {
   mode_sd_.set_size(v.size());
-  for (unsigned i=0;i<v.size();++i) mode_sd_[i]=vcl_sqrt(v[i]);
+  for (unsigned i=0;i<v.size();++i) mode_sd_[i]=std::sqrt(v[i]);
   set_acceptance(accept_prop_);
 }
 
@@ -43,12 +45,12 @@ void msm_box_limiter::set_acceptance(double prop, unsigned n_modes)
 
   // Assume independence and estimate proportion,p, to pass in each
   // dimension, thus prop = p^n;
-  double p = vcl_pow(prop,1.0/n_modes);
+  double p = std::pow(prop,1.0/n_modes);
 
   // In each dimension x^2 is distributed as chi-squared with one d.o.f.
   double t = msm_chi2_for_cum_prob(p,1);
 
-  set_n_sds(vcl_sqrt(t));
+  set_n_sds(std::sqrt(t));
 }
 
 
@@ -66,7 +68,7 @@ void msm_box_limiter::apply_limit(vnl_vector<double>& b) const
 
 //=======================================================================
 //: Print class to os
-void msm_box_limiter::print_summary(vcl_ostream& os) const
+void msm_box_limiter::print_summary(std::ostream& os) const
 {
   os<<"{ n_sds: "<<n_sds_
     <<" accept_prop: "<<accept_prop_<<" } ";
@@ -97,16 +99,16 @@ void msm_box_limiter::b_read(vsl_b_istream& bfs)
       vsl_b_read(bfs,n_sds_);
       break;
     default:
-      vcl_cerr << "msm_box_limiter::b_read() :\n"
+      std::cerr << "msm_box_limiter::b_read() :\n"
                << "Unexpected version number " << version << '\n';
-      bfs.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
+      bfs.is().clear(std::ios::badbit); // Set an unrecoverable IO error on stream
       return;
   }
 }
 
-vcl_string msm_box_limiter::is_a() const
+std::string msm_box_limiter::is_a() const
 {
-  return vcl_string("msm_box_limiter");
+  return std::string("msm_box_limiter");
 }
 
 //: Create a copy on the heap and return base class pointer
@@ -119,11 +121,11 @@ msm_param_limiter* msm_box_limiter::clone() const
 //: Initialise from a text stream.
 // The default implementation is for attribute-less normalisers,
 // and throws if it finds any data in the stream.
-void msm_box_limiter::config_from_stream(vcl_istream &is)
+void msm_box_limiter::config_from_stream(std::istream &is)
 {
-  vcl_string s = mbl_parse_block(is);
+  std::string s = mbl_parse_block(is);
 
-  vcl_istringstream ss(s);
+  std::istringstream ss(s);
   mbl_read_props_type props = mbl_read_props_ws(ss);
 
   accept_prop_=vul_string_atof(props.get_optional_property("accept_prop","0.98"));

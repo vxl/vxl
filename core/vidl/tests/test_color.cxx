@@ -2,7 +2,8 @@
 #include <testlib/testlib_test.h>
 //:
 // \file
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <iostream>
 #include <vidl/vidl_color.h>
 #include <vcl_cassert.h>
 
@@ -19,7 +20,7 @@ typedef void (*vidl_color_conv_fptr_1_1)(const bool* in, bool* out);
 
 static void test_color()
 {
-  vcl_cout << "********************\n"
+  std::cout << "********************\n"
            << " Testing vidl_color\n"
            << "********************\n";
 

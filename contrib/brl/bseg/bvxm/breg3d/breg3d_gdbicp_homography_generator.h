@@ -12,7 +12,9 @@
 //   Aug 09 2010 jlm  moved to brl/bseg/bvxm/breg3d
 // \endverbatim
 
-#include <vcl_string.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <string>
 #include <ihog/ihog_transform_2d.h>
 
 #include "breg3d_homography_generator.h"
@@ -26,7 +28,7 @@ class breg3d_gdbicp_homography_generator : public breg3d_homography_generator
   virtual ihog_transform_2d compute_homography();
 
  private:
-  ihog_transform_2d parse_gdbicp_output(vcl_string filename);
+  ihog_transform_2d parse_gdbicp_output(std::string filename);
 };
 
 

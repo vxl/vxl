@@ -12,7 +12,9 @@
 //-----------------------------------------------------------------------------
 
 
-#include <vcl_iosfwd.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iosfwd>
 
 struct Voxel
 {
@@ -30,7 +32,7 @@ struct Voxel
 bool operator==( const Voxel &a, const Voxel &b) { return a.depth==b.depth && a.x==b.x && a.y==b.y && a.z==b.z; }
 #endif // 0
 
-vcl_ostream &operator<<( vcl_ostream &os, const Voxel &a);
+std::ostream &operator<<( std::ostream &os, const Voxel &a);
 
 bool operator<( Voxel &v1, Voxel &v2);
 

@@ -11,7 +11,9 @@
 //   Aug 13 2009 added support for Gaussian grids
 // \endverbatim
 
-#include <vcl_string.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <string>
 #include <bprb/bprb_parameters.h>
 #include <bvxm/grid/bvxm_voxel_grid.h>
 #include <bvxm/grid/bvxm_opinion.h>
@@ -33,12 +35,12 @@ bool bvxm_crop_grid_process_cons(bprb_func_process& pro)
   using namespace bvpl_crop_grid_process_globals;
 
   // process takes 2 inputs and has 1 output.
-  vcl_vector<vcl_string> input_types_(n_inputs_);
+  std::vector<std::string> input_types_(n_inputs_);
   input_types_[0]="bvxm_voxel_grid_base_sptr"; //the input grid
   input_types_[1]="vcl_string"; //the path for output grid
 
   //The output grid
-  vcl_vector<vcl_string> output_types_(n_outputs_);
+  std::vector<std::string> output_types_(n_outputs_);
   output_types_[0]="bvxm_voxel_grid_base_sptr";
 
   return pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
@@ -54,7 +56,7 @@ bool bvxm_crop_grid_process(bprb_func_process& pro)
   // check number of inputs
   if (pro.n_inputs() != n_inputs_)
   {
-    vcl_cout << pro.name() << "The number of inputs should be " <<n_inputs_ << vcl_endl;
+    std::cout << pro.name() << "The number of inputs should be " <<n_inputs_ << std::endl;
     return false;
   }
 
@@ -75,10 +77,10 @@ bool bvxm_crop_grid_process(bprb_func_process& pro)
 
   unsigned i=0;
   bvxm_voxel_grid_base_sptr input_grid = pro.get_input<bvxm_voxel_grid_base_sptr>(i++);
-  vcl_string output_path = pro.get_input<vcl_string>(i++);
+  std::string output_path = pro.get_input<std::string>(i++);
 
   if (vul_file::is_directory(output_path)) {
-    vcl_cerr << "In bvxm_crop_grid_process -- output directory "<< output_path << "is not valid!\n";
+    std::cerr << "In bvxm_crop_grid_process -- output directory "<< output_path << "is not valid!\n";
     return false;
   }
 
@@ -102,7 +104,7 @@ bool bvxm_crop_grid_process(bprb_func_process& pro)
           (*grid_out_it)(x-corner_x, y-corner_y) = (* grid_in_it)(x,y);
     }
 
-    vcl_cout << "Cropping done." << vcl_endl;
+    std::cout << "Cropping done." << std::endl;
     pro.set_output_val<bvxm_voxel_grid_base_sptr>(0, grid_out);
     return true;
   }
@@ -121,7 +123,7 @@ bool bvxm_crop_grid_process(bprb_func_process& pro)
           (*grid_out_it)(x-corner_x, y-corner_y) = (* grid_in_it)(x,y);
     }
 
-    vcl_cout << "Cropping done." << vcl_endl;
+    std::cout << "Cropping done." << std::endl;
     pro.set_output_val<bvxm_voxel_grid_base_sptr>(0, grid_out);
     return true;
   }
@@ -140,7 +142,7 @@ bool bvxm_crop_grid_process(bprb_func_process& pro)
           (*grid_out_it)(x-corner_x, y-corner_y) = (* grid_in_it)(x,y);
     }
 
-    vcl_cout << "Cropping done." << vcl_endl;
+    std::cout << "Cropping done." << std::endl;
     pro.set_output_val<bvxm_voxel_grid_base_sptr>(0, grid_out);
     return true;
   }
@@ -159,7 +161,7 @@ bool bvxm_crop_grid_process(bprb_func_process& pro)
           (*grid_out_it)(x-corner_x, y-corner_y) = (* grid_in_it)(x,y);
     }
 
-    vcl_cout << "Cropping done." << vcl_endl;
+    std::cout << "Cropping done." << std::endl;
     pro.set_output_val<bvxm_voxel_grid_base_sptr>(0, grid_out);
     return true;
   }
@@ -177,7 +179,7 @@ bool bvxm_crop_grid_process(bprb_func_process& pro)
           (*grid_out_it)(x-corner_x, y-corner_y) = (* grid_in_it)(x,y);
     }
 
-    vcl_cout<<"Cropping done."<<vcl_endl;
+    std::cout<<"Cropping done."<<std::endl;
     pro.set_output_val<bvxm_voxel_grid_base_sptr>(0, grid_out);
     return true;
   }

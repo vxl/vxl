@@ -3,7 +3,9 @@
 #include "bsta_int_histogram_2d.h"
 //:
 // \file
-#include <vcl_cmath.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <cmath>
 // for gausian parzan window filter
 #include "bsta_gauss.h"
 #include "bsta_int_histogram_1d.h"
@@ -13,14 +15,14 @@ bsta_int_histogram_2d::bsta_int_histogram_2d(const unsigned int nbins_x, const u
 {
   nbins_x_ = nbins_x;
   nbins_y_ = nbins_y;
-  float diag_lgth = vcl_sqrt( static_cast<float>(nbins_x_*nbins_x_) + static_cast<float>(nbins_y_*nbins_y_));
+  float diag_lgth = std::sqrt( static_cast<float>(nbins_x_*nbins_x_) + static_cast<float>(nbins_y_*nbins_y_));
   diag_ = static_cast<long int>(diag_lgth) + 2;
 
 // create the array for histogram nbins_x_ by nbins_y_ wide
   counts_.resize(nbins_y_);
   for (unsigned row =0; row<nbins_y_; ++row)
   {
-    vcl_vector<long int> temp(nbins_x_, 0); // zero out all bins (always a good idea)
+    std::vector<long int> temp(nbins_x_, 0); // zero out all bins (always a good idea)
     counts_[row]=temp;
   }
 }
@@ -104,15 +106,15 @@ void bsta_int_histogram_2d::profile_histogram( bsta_int_histogram_1d &phist,
   float slope = static_cast<float>(nbins_y_)/static_cast<float>(nbins_x_);
   float inverse_slope = 1.0f/slope;
 #if 0 // unused variables ?!
-  float diag_lgth = vcl_sqrt(1.0f + (inverse_slope*inverse_slope));
+  float diag_lgth = std::sqrt(1.0f + (inverse_slope*inverse_slope));
   float deltay = inverse_slope/diag_lgth;
   float deltax = 1.0f/diag_lgth;
 #endif
   // find intercepts of slopes and calculate box that must be examined
-  float dxintcpt = vcl_sqrt(1 + (slope*slope));
-  float dyintcpt = vcl_sqrt(1 + (inverse_slope*inverse_slope));
-  unsigned int xbox = static_cast<unsigned int>(vcl_ceil(dxintcpt));
-  unsigned int ybox = static_cast<unsigned int>(vcl_ceil(dyintcpt));
+  float dxintcpt = std::sqrt(1 + (slope*slope));
+  float dyintcpt = std::sqrt(1 + (inverse_slope*inverse_slope));
+  unsigned int xbox = static_cast<unsigned int>(std::ceil(dxintcpt));
+  unsigned int ybox = static_cast<unsigned int>(std::ceil(dyintcpt));
 
   // For each bucket in the diagonal histogram, search normal to the diagonal
   //   in the 2D histogram for a "max" value.
@@ -124,8 +126,8 @@ void bsta_int_histogram_2d::profile_histogram( bsta_int_histogram_1d &phist,
   for (unsigned int i=0; i<diag_; i++)
   {
     phist.set_count(i, 0);                // starting value for normal line
-    float xaxis_proj = vcl_sqrt((i*i) + ((i*slope)+(i*slope)));
-    float yaxis_proj = vcl_sqrt((i*i) + ((i/slope)+(i/slope)));
+    float xaxis_proj = std::sqrt((i*i) + ((i*slope)+(i*slope)));
+    float yaxis_proj = std::sqrt((i*i) + ((i/slope)+(i/slope)));
 
     // starting position on X axis
     float xpos = xaxis_proj;            // start on X axis and step up to Y axis
@@ -135,8 +137,8 @@ void bsta_int_histogram_2d::profile_histogram( bsta_int_histogram_1d &phist,
     //   At the high end of phist[] most projections will fall out of range.
     while (xpos >= 0.0 && ypos < yaxis_proj)
     {
-      unsigned int xindex = static_cast<int>(vcl_floor(xpos));        // integer projection onto 2D axis
-      unsigned int yindex = static_cast<int>(vcl_floor(ypos));
+      unsigned int xindex = static_cast<int>(std::floor(xpos));        // integer projection onto 2D axis
+      unsigned int yindex = static_cast<int>(std::floor(ypos));
 
       // The integer diagonal normal line will miss some buckets in the 2D hist
       //   unless a "box" of buckets is tested for each bucket on the normal of
@@ -183,7 +185,7 @@ void bsta_int_histogram_2d::profile_histogram( bsta_int_histogram_1d &phist,
   if (peak_height == 0) return success;                // exit if peak is zero
   long int limit = static_cast<long int>(peak_height * edge_pct);    // Value to reach to determine edge
 
-  float diag_lgth = vcl_sqrt(1.0f + (newslope*newslope));
+  float diag_lgth = std::sqrt(1.0f + (newslope*newslope));
   float delta_x = 1.0f / diag_lgth;
   float delta_y = newslope / diag_lgth;
 

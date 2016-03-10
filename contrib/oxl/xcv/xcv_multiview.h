@@ -20,7 +20,9 @@
 
 #include "xcv_twoview_manager.h"
 #include "xcv_threeview_manager.h"
-#include <vcl_vector.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <vector>
 
 class vgui_menu;
 
@@ -73,15 +75,15 @@ class xcv_multiview
 
  protected:
   //: Gets a twoview_manager between the tableaux at the given positions.
-  static xcv_twoview_manager* get_twoview_manager(vcl_vector<int>& cols, vcl_vector<int>& rows);
-  static vcl_vector<vgui_rubberband_tableau_sptr> twoview_rubber0, twoview_rubber1;
-  static vcl_vector<xcv_twoview_manager*> twoview_mgrs;
+  static xcv_twoview_manager* get_twoview_manager(std::vector<int>& cols, std::vector<int>& rows);
+  static std::vector<vgui_rubberband_tableau_sptr> twoview_rubber0, twoview_rubber1;
+  static std::vector<xcv_twoview_manager*> twoview_mgrs;
 
   //: Gets a threeview_manager between the tableaux at the given positions.
-  static xcv_threeview_manager* get_threeview_manager(vcl_vector<int>& cols, vcl_vector<int>& rows);
-  static vcl_vector<vgui_rubberband_tableau_sptr> threeview_rubber0, threeview_rubber1,
+  static xcv_threeview_manager* get_threeview_manager(std::vector<int>& cols, std::vector<int>& rows);
+  static std::vector<vgui_rubberband_tableau_sptr> threeview_rubber0, threeview_rubber1,
     threeview_rubber2;
-  static vcl_vector<xcv_threeview_manager*> threeview_mgrs;
+  static std::vector<xcv_threeview_manager*> threeview_mgrs;
 };
 
 #endif // xcv_multiview_h_

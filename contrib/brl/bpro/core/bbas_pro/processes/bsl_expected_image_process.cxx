@@ -6,9 +6,11 @@
 
 #include <bprb/bprb_parameters.h>
 
-#include <vcl_string.h>
+#include <string>
 #ifdef DEBUG
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iostream>
 #endif
 
 #include <brdb/brdb_value.h>
@@ -19,12 +21,12 @@
 bool bsl_expected_image_process_cons(bprb_func_process& pro)
 {
   //inputs
-  vcl_vector<vcl_string> input_types_(2);
+  std::vector<std::string> input_types_(2);
   input_types_[0] = "vil_image_view_base_sptr";
   input_types_[1] = "float"; // atomicity - same for all pixels
 
   //output
-  vcl_vector<vcl_string> output_types_(1);
+  std::vector<std::string> output_types_(1);
   output_types_[0] = "vil_image_view_base_sptr";
 
   return pro.set_input_types(input_types_) &&
@@ -36,7 +38,7 @@ bool bsl_expected_image_process(bprb_func_process& pro)
   // check number of inputs
   if (!pro.verify_inputs())
   {
-    vcl_cout << pro.name() << ": Invalid inputs" << vcl_endl;
+    std::cout << pro.name() << ": Invalid inputs" << std::endl;
     return false;
   }
 

@@ -18,7 +18,8 @@
 
 #include <vil1/vil1_image_impl.h>
 #include <vil1/vil1_memory_image.h>
-#include <vcl_string.h>
+#include <vcl_compiler.h>
+#include <string>
 
 //: Implementation class for vil1_memory_image.
 class vil1_memory_image_impl : public vil1_image_impl
@@ -56,10 +57,10 @@ class vil1_memory_image_impl : public vil1_image_impl
               vil1_component_format format);
 
   //: Return the name of the class;
-  virtual vcl_string is_a() const;
+  virtual std::string is_a() const;
 
   //: Return true if the name of the class matches the argument
-  virtual bool is_class(vcl_string const&) const;
+  virtual bool is_class(std::string const&) const;
 
   //: Constructor from previously allocated memory.
   // This memory is not deallocated on destruction.

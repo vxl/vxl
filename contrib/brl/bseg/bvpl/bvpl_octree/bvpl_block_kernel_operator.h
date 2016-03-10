@@ -17,7 +17,9 @@
 #include <bvpl/kernels/bvpl_kernel.h>
 #include <boxm/boxm_scene.h>
 #include "bvpl_octree_kernel_operator.h"
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iostream>
 
 //: A class which operates a kernel on a boxm_block.
 // This class differes from bvpl_octree_kernel_operator in that it loads neighbor block to process blocks appropriately.
@@ -48,7 +50,7 @@ void bvpl_block_kernel_operator::operate(boxm_scene<boct_tree<short, T_data > > 
   typedef boct_tree<short, T_data> tree_type;
   typedef boct_tree_cell<short,T_data> cell_type;
 
-  vcl_cout << "bvpl_block_kernel_operator: Operating on cells of length: " << cell_length << vcl_endl;
+  std::cout << "bvpl_block_kernel_operator: Operating on cells of length: " << cell_length << std::endl;
 
   //scene_in.clone_blocks(scene_out, T_data());
 
@@ -62,14 +64,14 @@ void bvpl_block_kernel_operator::operate(boxm_scene<boct_tree<short, T_data > > 
   tree_type *tree_out = tree_in->clone();
   boct_tree<short, bool> *valid_tree = tree_in->template clone_to_type<bool>();
 
-  vcl_vector<cell_type* > cells_in = tree_in->leaf_cells();
-  vcl_vector<cell_type* > cells_out = tree_out->leaf_cells();
-  vcl_vector<boct_tree_cell<short, bool> * > valid_cells = valid_tree->leaf_cells();
+  std::vector<cell_type* > cells_in = tree_in->leaf_cells();
+  std::vector<cell_type* > cells_out = tree_out->leaf_cells();
+  std::vector<boct_tree_cell<short, bool> * > valid_cells = valid_tree->leaf_cells();
 
   //iterators
-  typename vcl_vector<cell_type* >::iterator it_in = cells_in.begin();
-  typename vcl_vector<cell_type* >::iterator it_out = cells_out.begin();
-  typename vcl_vector<boct_tree_cell<short, bool> * >::iterator valid_it = valid_cells.begin();
+  typename std::vector<cell_type* >::iterator it_in = cells_in.begin();
+  typename std::vector<cell_type* >::iterator it_out = cells_out.begin();
+  typename std::vector<boct_tree_cell<short, bool> * >::iterator valid_it = valid_cells.begin();
   bvpl_kernel_iterator kernel_iter = kernel->iterator();
 
   for (; (it_in!=cells_in.end())&&(it_out!= cells_out.end())&& (valid_it!=valid_cells.end()); it_in++, it_out++, valid_it++)
@@ -85,7 +87,7 @@ void bvpl_block_kernel_operator::operate(boxm_scene<boct_tree<short, T_data > > 
 
     //if level and location code of cells isn't the same then continue
     if ((center_cell->level() != out_center_cell->level()) || !(in_code.isequal(&out_code))){
-      vcl_cerr << " Input and output cells don't have the same structure\n";
+      std::cerr << " Input and output cells don't have the same structure\n";
       continue;
     }
 #endif
@@ -121,7 +123,7 @@ void bvpl_block_kernel_operator::operate(boxm_scene<boct_tree<short, T_data > > 
   }
 
   //write the output block
-  vcl_cout << "Writing scenes\n";
+  std::cout << "Writing scenes\n";
   scene_out.get_block(block_i, block_j, block_k)->init_tree(tree_out);
   scene_out.write_active_block();
   valid_scene.get_block(block_i, block_j, block_k)->init_tree(valid_tree);

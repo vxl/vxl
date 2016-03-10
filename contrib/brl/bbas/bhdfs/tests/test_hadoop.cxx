@@ -14,7 +14,9 @@
 //  ${HADOOP_HOME}/bin/hadoop dfs -cat ${USER_HOME_ON_HADOOP}/testfile.txt  --> should see Hello, World!
 
 #include <testlib/testlib_test.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iostream>
 
 #include "hdfs.h"
 
@@ -24,13 +26,13 @@ void test_hadoop()
   hdfsFS fs = hdfsConnect("default", 0);
   char buffer[256];
   hdfsGetWorkingDirectory(fs, buffer, sizeof(buffer));
-  vcl_cout << "working directory is: " << buffer << vcl_endl;
-  vcl_string writePath = vcl_string(buffer) + "/testfile.txt";
+  std::cout << "working directory is: " << buffer << std::endl;
+  std::string writePath = std::string(buffer) + "/testfile.txt";
   hdfsFile writeFile = hdfsOpenFile(fs, writePath.c_str(), O_WRONLY|O_CREAT, 0, 0, 0);
 
   TEST("open file ", !writeFile, false);
 
-  vcl_string buffer2 = "Hello, World!";
+  std::string buffer2 = "Hello, World!";
   tSize num_written_bytes = hdfsWrite(fs, writeFile, (void*)buffer2.c_str(), buffer2.length());
 
   TEST("flush buffer into the file ", !hdfsFlush(fs, writeFile), true);

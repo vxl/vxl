@@ -10,8 +10,10 @@
 #include <boxm2/util/boxm2_detect_change_blobs.h>
 #include <vil/vil_image_view.h>
 #include <vil/vil_save.h>
-#include <vcl_vector.h>
-#include <vcl_string.h>
+#include <vector>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <string>
 
 namespace boxm2_blob_change_detection_process_globals
 {
@@ -26,7 +28,7 @@ bool boxm2_blob_change_detection_process_cons(bprb_func_process& pro)
   using namespace boxm2_blob_change_detection_process_globals;
 
   //process takes 4 inputs
-  vcl_vector<vcl_string> input_types_(n_inputs_);
+  std::vector<std::string> input_types_(n_inputs_);
   input_types_[0] = "vil_image_view_base_sptr";
   input_types_[1] = "float";
   //two default args - depth maps from two scenes (will be combined to form mask)
@@ -40,7 +42,7 @@ bool boxm2_blob_change_detection_process_cons(bprb_func_process& pro)
   pro.set_input(3, empty_img2);
 
   // process has 1 output
-  vcl_vector<vcl_string>  output_types_(n_outputs_);
+  std::vector<std::string>  output_types_(n_outputs_);
   output_types_[0] = "vil_image_view_base_sptr";
   return pro.set_input_types(input_types_) &&
          pro.set_output_types(output_types_);
@@ -50,7 +52,7 @@ bool boxm2_blob_change_detection_process(bprb_func_process& pro)
 {
   using namespace boxm2_blob_change_detection_process_globals;
   if ( pro.n_inputs() < n_inputs_ ){
-    vcl_cout << pro.name() << ": The number of inputs should be " << n_inputs_<< vcl_endl;
+    std::cout << pro.name() << ": The number of inputs should be " << n_inputs_<< std::endl;
     return false;
   }
   //get the inputs
@@ -63,17 +65,17 @@ bool boxm2_blob_change_detection_process(bprb_func_process& pro)
   //cast to float image
   vil_image_view<float>* change = dynamic_cast<vil_image_view<float>*>(change_img.ptr());
   if ( !change ) {
-    vcl_cout<<"Detection Map cannot be converted to float image"<<vcl_endl;
+    std::cout<<"Detection Map cannot be converted to float image"<<std::endl;
     return false;
   }
   vil_image_view<float>* depth1 = dynamic_cast<vil_image_view<float>*>(depth_img1.ptr());
   if ( !depth1 ) {
-    vcl_cout<<"Detection Map cannot be converted to float image"<<vcl_endl;
+    std::cout<<"Detection Map cannot be converted to float image"<<std::endl;
     return false;
   }
   vil_image_view<float>* depth2 = dynamic_cast<vil_image_view<float>*>(depth_img2.ptr());
   if ( !depth2 ) {
-    vcl_cout<<"Detection Map cannot be converted to float image"<<vcl_endl;
+    std::cout<<"Detection Map cannot be converted to float image"<<std::endl;
     return false;
   }
 
@@ -82,7 +84,7 @@ bool boxm2_blob_change_detection_process(bprb_func_process& pro)
   //view.  If there is a large discrepency in depth, the change detection algorithm
   //will not use these pixels.
   if (depth1->ni() == depth2->ni() && depth1->ni() == change->ni()) {
-    vcl_cout<<"boxm2_blob_change_detection_process::using depth maps for mask"<<vcl_endl;
+    std::cout<<"boxm2_blob_change_detection_process::using depth maps for mask"<<std::endl;
     for (unsigned int i=0; i<change->ni(); ++i)
       for (unsigned int j=0; j<change->nj(); ++j)
         if ( (*depth1)(i,j) - (*depth2)(i,j) > EPSILON ||
@@ -93,13 +95,13 @@ bool boxm2_blob_change_detection_process(bprb_func_process& pro)
 
 
   //detect change blobs
-  vcl_vector<boxm2_change_blob> blobs;
+  std::vector<boxm2_change_blob> blobs;
   boxm2_util_detect_change_blobs( *change,thresh,blobs );
 
   //create a blob image
   vil_image_view<vxl_byte>* blobImg = new vil_image_view<vxl_byte>(change_img->ni(), change_img->nj());
   blobImg->fill(0);
-  vcl_vector<boxm2_change_blob>::iterator iter;
+  std::vector<boxm2_change_blob>::iterator iter;
   for (iter=blobs.begin(); iter!=blobs.end(); ++iter)
   {
     //paint each blob pixel white
@@ -113,7 +115,7 @@ bool boxm2_blob_change_detection_process(bprb_func_process& pro)
 #if 0
     }
     else {
-      vcl_cout<<"Skipping blob of size "<<iter->blob_size()<<vcl_endl;
+      std::cout<<"Skipping blob of size "<<iter->blob_size()<<std::endl;
     }
 #endif
   }

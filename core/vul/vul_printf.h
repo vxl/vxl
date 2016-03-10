@@ -20,13 +20,14 @@
 // PDA (Manchester) 21/03/2001: Tidied up the documentation
 // \endverbatim
 
-#include <vcl_iosfwd.h>
+#include <vcl_compiler.h>
+#include <iosfwd>
 
 //: Print using printf format specifiers to an ostream.
 // E.g.
 // \code
 // vul_printf(cout, "%d\n", 12);
 // \endcode
-vcl_ostream& vul_printf(vcl_ostream&, char const* fmt, ...);
+std::ostream& vul_printf(std::ostream&, char const* fmt, ...);
 
 #endif // vul_printf_h_

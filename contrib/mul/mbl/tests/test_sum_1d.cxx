@@ -1,11 +1,13 @@
 // This is mul/mbl/tests/test_sum_1d.cxx
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iostream>
 #include <mbl/mbl_sum_1d.h>
 #include <testlib/testlib_test.h>
 
 void test_sum_1d()
 {
-  vcl_cout << "********************\n"
+  std::cout << "********************\n"
            << " Testing mbl_sum_1d\n"
            << "********************\n";
 
@@ -23,7 +25,7 @@ void test_sum_1d()
   TEST("nObs()",stats.nObs(), 5);
   TEST_NEAR("mean()",stats.mean(), 2, 1e-6);
 
-  vcl_cout<<stats<<vcl_endl;
+  std::cout<<stats<<std::endl;
 
   mbl_sum_1d stats3 = stats;
   TEST("Equality operator",stats, stats3);

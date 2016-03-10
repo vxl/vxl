@@ -23,7 +23,7 @@ T bugl_gaussian_point_3d<T>::prob_at(vgl_point_3d<T> const& p) const
   vnl_vector_fixed<T, 3> d(p.x() - this->x(), p.y() - this->y(), p.z() - this->z());
 
   const double pi = vnl_math::pi;
-  return vcl_exp(-0.5*(dot_product(d, sigma_inv_*d)))/vcl_sqrt(8*pi)/pi/det_;
+  return std::exp(-0.5*(dot_product(d, sigma_inv_*d)))/std::sqrt(8*pi)/pi/det_;
 }
 
 #if 0

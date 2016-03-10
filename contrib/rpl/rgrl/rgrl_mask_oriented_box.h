@@ -12,7 +12,9 @@
 // Modifications
 // \endverbatim
 
-#include <vcl_iosfwd.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iosfwd>
 #include <vnl/vnl_vector.h>
 #include <vnl/vnl_matrix.h>
 
@@ -99,9 +101,9 @@ class rgrl_mask_oriented_box
 };
 
 //: An output operator for displaying a mask_box
-vcl_ostream& operator<<(vcl_ostream& os, const rgrl_mask_oriented_box& box);
+std::ostream& operator<<(std::ostream& os, const rgrl_mask_oriented_box& box);
 
 //: An output operator for displaying a mask_box
-vcl_istream& operator>>(vcl_istream& is, rgrl_mask_oriented_box& box);
+std::istream& operator>>(std::istream& is, rgrl_mask_oriented_box& box);
 
 #endif

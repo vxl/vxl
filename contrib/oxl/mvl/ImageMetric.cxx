@@ -7,7 +7,9 @@
 
 #include "ImageMetric.h"
 
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iostream>
 #include <vcl_cassert.h>
 #include <vnl/vnl_double_2.h>
 #include <vnl/vnl_double_3x3.h>
@@ -22,9 +24,9 @@
 #include <mvl/HomgLineSeg2D.h>
 #include <mvl/HomgOperator2D.h>
 
-static vcl_ostream& warning(char const * fn)
+static std::ostream& warning(char const * fn)
 {
-  return vcl_cerr << fn << " WARNING: ";
+  return std::cerr << fn << " WARNING: ";
 }
 
 // TRANSFORMATIONS
@@ -193,7 +195,7 @@ vgl_homg_point_2d<double> ImageMetric::perp_projection(vgl_homg_line_2d<double> 
                                                        vgl_homg_point_2d<double> const& p) const
 {
   if (l.ideal())
-    vcl_cerr << "ImageMetric::perp_projection -- line at infinity\n";
+    std::cerr << "ImageMetric::perp_projection -- line at infinity\n";
 
   return vgl_homg_operators_2d<double>::perp_projection(homg_to_image_line(l), homg_to_imagehomg(p));
 }
@@ -201,11 +203,11 @@ vgl_homg_point_2d<double> ImageMetric::perp_projection(vgl_homg_line_2d<double> 
 HomgPoint2D ImageMetric::perp_projection(const HomgLine2D & l, const HomgPoint2D & p) const
 {
   if (p.ideal()) {
-    vcl_cerr << "ImageMetric::perp_projection -- point at infinity\n";
+    std::cerr << "ImageMetric::perp_projection -- point at infinity\n";
   }
 
   if (l.ideal()) {
-    vcl_cerr << "ImageMetric::perp_projection -- line at infinity\n";
+    std::cerr << "ImageMetric::perp_projection -- line at infinity\n";
   }
 
   return HomgOperator2D::perp_projection(homg_to_image_line(l), homg_to_imagehomg(p));
@@ -318,7 +320,7 @@ FMatrix ImageMetric::decondition(const FMatrix& F, const ImageMetric* c1, const 
   return FMatrix( C1inv.transpose() * F.get_matrix() * C2inv );
 }
 
-vcl_ostream & ImageMetric::print(vcl_ostream& s) const
+std::ostream & ImageMetric::print(std::ostream& s) const
 {
   return s << "Empty ImageMetric";
 }

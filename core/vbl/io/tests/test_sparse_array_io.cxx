@@ -1,5 +1,6 @@
 // This is core/vbl/io/tests/test_sparse_array_io.cxx
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <iostream>
 #include <vbl/io/vbl_io_sparse_array_2d.h>
 #include <vsl/vsl_binary_io.h>
 #include <vsl/vsl_indent.h>
@@ -9,7 +10,7 @@
 
 void test_sparse_array_io()
 {
-  vcl_cout << "**************************************\n"
+  std::cout << "**************************************\n"
            << "Testing vbl_sparse_array_2d<double> io\n"
            << "**************************************\n";
 
@@ -56,8 +57,8 @@ void test_sparse_array_io()
   }
   TEST("v_out == v_in", test_result, true);
 
-  vsl_print_summary(vcl_cout, v_in);
-  vcl_cout << vcl_endl;
+  vsl_print_summary(std::cout, v_in);
+  std::cout << std::endl;
   vsl_indent_clear_all_data ();
 }
 

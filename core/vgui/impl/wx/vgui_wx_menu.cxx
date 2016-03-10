@@ -17,7 +17,8 @@
     (wxObjectEventFunction)(wxEventFunction)wxStaticCastEvent(wxCommandEventFunction, &func)
 #endif
 
-#include <vcl_cctype.h>  // for vcl_toupper
+#include <vcl_compiler.h>
+#include <cctype>  // for std::toupper
 #include <vcl_cassert.h>
 
 //-------------------------------------------------------------------------
@@ -70,7 +71,7 @@ wxMenuBar* vgui_wx_menu::create_wx_menubar(const vgui_menu& menu)
     else if (menu[i].is_command())
     {
 #ifdef DEBUG
-      vcl_cerr << __FILE__ ":command as top level menu item!\n";
+      std::cerr << __FILE__ ":command as top level menu item!\n";
 #endif
       // create a submenu and add this top-level command to it
       vgui_menu submenu;
@@ -114,7 +115,7 @@ wxMenu* vgui_wx_menu::create_wx_submenu(const vgui_menu& menu)
     else if (menu[i].is_command())
     {
       // add menu accelerators
-      vcl_string menu_item = menu[i].name
+      std::string menu_item = menu[i].name
                            + create_accelerator_string(menu[i]);
 
       popup->Append(menu_id, wxString(menu_item.c_str(),wxConvUTF8));
@@ -139,31 +140,31 @@ wxMenu* vgui_wx_menu::create_wx_submenu(const vgui_menu& menu)
 }
 
 //: Create the accelerator substring to add to the menu item name.
-vcl_string
+std::string
 vgui_wx_menu::create_accelerator_string(const vgui_menu_item& item) const
 {
   if ( item.short_cut.key == vgui_KEY_NULL )
   {
-    return vcl_string("");
+    return std::string("");
   }
 
-  vcl_string accelerator("\t");
+  std::string accelerator("\t");
 
   // ***** taken from mfc impl, but what about combinations??
   if (item.short_cut.mod == vgui_CTRL)
   {
-    accelerator += vcl_string("Ctrl+");
+    accelerator += std::string("Ctrl+");
   }
   else if (item.short_cut.mod == vgui_SHIFT)
   {
-    accelerator += vcl_string("Shift+");
+    accelerator += std::string("Shift+");
   }
   else if (item.short_cut.mod == vgui_ALT)
   {
-    accelerator += vcl_string("Alt+");
+    accelerator += std::string("Alt+");
   }
 
-  accelerator += vcl_toupper(item.short_cut.key);
+  accelerator += std::toupper(item.short_cut.key);
 
   return accelerator;
 }
@@ -171,7 +172,7 @@ vgui_wx_menu::create_accelerator_string(const vgui_menu_item& item) const
 //: Disconnect the event handlers from the event table.
 void vgui_wx_menu::disconnect_handlers()
 {
-  vcl_map<int,vgui_command_sptr>::const_iterator iter = handlers_.begin();
+  std::map<int,vgui_command_sptr>::const_iterator iter = handlers_.begin();
   for (; iter != handlers_.end(); iter++)
   {
     Disconnect(iter->first, wxEVT_COMMAND_MENU_SELECTED);

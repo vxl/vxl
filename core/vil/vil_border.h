@@ -10,7 +10,8 @@
 // \author Nicolas Burrus - Paris
 
 #include <vcl_cassert.h>
-// not used? #include <vcl_limits.h>
+// not used? #include <vcl_compiler.h>
+#include <limits>
 
 //: Vil border modes.
 enum vil_border_mode

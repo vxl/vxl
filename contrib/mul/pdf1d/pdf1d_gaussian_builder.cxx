@@ -4,8 +4,10 @@
 // \file
 
 #include <vcl_cassert.h>
-#include <vcl_string.h>
-#include <vcl_cstdlib.h> // vcl_abort()
+#include <string>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <cstdlib> // std::abort()
 
 #include <mbl/mbl_data_wrapper.h>
 #include <mbl/mbl_data_array_wrapper.h>
@@ -43,9 +45,9 @@ pdf1d_pdf* pdf1d_gaussian_builder::new_model() const
   return new pdf1d_gaussian;
 }
 
-vcl_string pdf1d_gaussian_builder::new_model_type() const
+std::string pdf1d_gaussian_builder::new_model_type() const
 {
-  return vcl_string("pdf1d_gaussian");
+  return std::string("pdf1d_gaussian");
 }
 
 //=======================================================================
@@ -75,8 +77,8 @@ void pdf1d_gaussian_builder::build_from_array(pdf1d_pdf& model, const double* da
 {
   if (n<2)
   {
-    vcl_cerr<<"pdf1d_gaussian_builder::build_from_array() Too few samples available.\n";
-    vcl_abort();
+    std::cerr<<"pdf1d_gaussian_builder::build_from_array() Too few samples available.\n";
+    std::abort();
   }
 
   double m,v;
@@ -96,8 +98,8 @@ void pdf1d_gaussian_builder::build(pdf1d_pdf& model, mbl_data_wrapper<double>& d
 
   if (n_samples<2)
   {
-    vcl_cerr<<"pdf1d_gaussian_builder::build() Too few samples available.\n";
-    vcl_abort();
+    std::cerr<<"pdf1d_gaussian_builder::build() Too few samples available.\n";
+    std::abort();
   }
 
   if (data.is_class("mbl_data_array_wrapper<T>"))
@@ -129,7 +131,7 @@ void pdf1d_gaussian_builder::build(pdf1d_pdf& model, mbl_data_wrapper<double>& d
 
 void pdf1d_gaussian_builder::weighted_build(pdf1d_pdf& model,
                                             mbl_data_wrapper<double>& data,
-                                            const vcl_vector<double>& wts) const
+                                            const std::vector<double>& wts) const
 {
   pdf1d_gaussian& g = gaussian(model);
 
@@ -137,8 +139,8 @@ void pdf1d_gaussian_builder::weighted_build(pdf1d_pdf& model,
 
   if (n_samples<2)
   {
-    vcl_cerr<<"pdf1d_gaussian_builder::build() Too few samples available.\n";
-    vcl_abort();
+    std::cerr<<"pdf1d_gaussian_builder::build() Too few samples available.\n";
+    std::abort();
   }
 
   double sum = 0;
@@ -172,16 +174,16 @@ void pdf1d_gaussian_builder::weighted_build(pdf1d_pdf& model,
 // Method: is_a
 //=======================================================================
 
-vcl_string pdf1d_gaussian_builder::is_a() const
+std::string pdf1d_gaussian_builder::is_a() const
 {
-  return vcl_string("pdf1d_gaussian_builder");
+  return std::string("pdf1d_gaussian_builder");
 }
 
 //=======================================================================
 // Method: is_class
 //=======================================================================
 
-bool pdf1d_gaussian_builder::is_class(vcl_string const& s) const
+bool pdf1d_gaussian_builder::is_class(std::string const& s) const
 {
   return pdf1d_builder::is_class(s) || s==pdf1d_gaussian_builder::is_a();
 }
@@ -208,7 +210,7 @@ pdf1d_builder* pdf1d_gaussian_builder::clone() const
 // Method: print
 //=======================================================================
 
-void pdf1d_gaussian_builder::print_summary(vcl_ostream& os) const
+void pdf1d_gaussian_builder::print_summary(std::ostream& os) const
 {
   os << "Min. var.: "<< min_var_;
 }
@@ -239,9 +241,9 @@ void pdf1d_gaussian_builder::b_read(vsl_b_istream& bfs)
       vsl_b_read(bfs,min_var_);
       break;
     default:
-      vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, pdf1d_gaussian_builder &)\n"
+      std::cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, pdf1d_gaussian_builder &)\n"
                << "           Unknown version number "<< version << '\n';
-      bfs.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
+      bfs.is().clear(std::ios::badbit); // Set an unrecoverable IO error on stream
       return;
   }
 }

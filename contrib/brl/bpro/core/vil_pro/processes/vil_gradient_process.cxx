@@ -13,13 +13,13 @@ bool vil_gradient_process_cons(bprb_func_process& pro)
 {
   //input
   bool ok=false;
-  vcl_vector<vcl_string> input_types;
+  std::vector<std::string> input_types;
   input_types.push_back("vil_image_view_base_sptr"); // input image
   ok = pro.set_input_types(input_types);
   if (!ok) return ok;
 
   //output
-  vcl_vector<vcl_string> output_types;
+  std::vector<std::string> output_types;
   output_types.push_back("vil_image_view_base_sptr"); // dI/dx
   output_types.push_back("vil_image_view_base_sptr"); // dI/dy
   output_types.push_back("vil_image_view_base_sptr"); // Sqrt((dI/dx)^2 + (dI/dy)^2)
@@ -33,7 +33,7 @@ bool vil_gradient_process(bprb_func_process& pro)
 {
   // Sanity check
   if (pro.n_inputs()< 1) {
-    vcl_cout << "vil_gradient_process: The input number should be 1" << vcl_endl;
+    std::cout << "vil_gradient_process: The input number should be 1" << std::endl;
     return false;
   }
 
@@ -78,7 +78,7 @@ bool vil_gradient_process(bprb_func_process& pro)
 
         Ix(i,j,p) = gx*scale;
         Iy(i,j,p) = gy*scale;
-        mag(i,j,p) = vcl_sqrt(gx*gx+gy*gy)*scale;
+        mag(i,j,p) = std::sqrt(gx*gx+gy*gy)*scale;
       }
   }
 

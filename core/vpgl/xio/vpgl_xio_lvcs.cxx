@@ -4,7 +4,7 @@
 #include <vsl/vsl_basic_xml_element.h>
 
 //=================================================================================
-void x_write(vcl_ostream & os, vpgl_lvcs const& v, vcl_string element_name)
+void x_write(std::ostream & os, vpgl_lvcs const& v, std::string element_name)
 {
   vsl_basic_xml_element xml_element(element_name);
   xml_element.add_attribute("cs_name", v.cs_name_strings[ v.get_cs_name() ]);
@@ -20,7 +20,7 @@ void x_write(vcl_ostream & os, vpgl_lvcs const& v, vcl_string element_name)
   xml_element.add_attribute("lon_scale", lon_scale);
   xml_element.add_attribute("lat_scale", lat_scale);
 
-  vcl_string len_u = "meters", ang_u="degrees";
+  std::string len_u = "meters", ang_u="degrees";
   if (v.local_length_unit() == v.FEET)
     len_u = "feet";
   if (v.geo_angle_unit() == v.RADIANS)

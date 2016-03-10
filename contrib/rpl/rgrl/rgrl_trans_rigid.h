@@ -6,7 +6,9 @@
 // \date   March 2004
 
 #include "rgrl_transformation.h"
-#include <vcl_iosfwd.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iosfwd>
 
 //: Represents a rigid transformation.
 //
@@ -100,10 +102,10 @@ class rgrl_trans_rigid
   rgrl_type_macro( rgrl_trans_rigid, rgrl_transformation )
 
   // for output
-  void write(vcl_ostream& os ) const;
+  void write(std::ostream& os ) const;
 
   // for input
-  bool read(vcl_istream& is );
+  bool read(std::istream& is );
 
   //: make a clone copy
   rgrl_transformation_sptr clone() const;

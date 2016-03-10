@@ -16,7 +16,7 @@ void vmap_permutation_kernel<TPermutation>::initialise()
 template <class TPermutation>
 bool vmap_permutation_kernel<TPermutation>::valid() const
 {
-  vcl_vector<bool> v(p_.nb_cycles(), false) ;
+  std::vector<bool> v(p_.nb_cycles(), false) ;
   for (unsigned int i=0; i<this->size(); ++i)
   {
     dart_iterator d=this->dart(i) ;
@@ -34,7 +34,7 @@ bool vmap_permutation_kernel<TPermutation>::valid() const
 template <class TPermutation>
 void vmap_permutation_kernel<TPermutation>::add_1_cycles()
 {
-  vcl_vector<bool> mark(p_.nb_elements(),false),
+  std::vector<bool> mark(p_.nb_elements(),false),
                    markV(p_.nb_cycles(),false) ;
 
   element_iterator v ;
@@ -65,7 +65,7 @@ void vmap_permutation_kernel<TPermutation>::add_1_cycles()
 template <class TPermutation>
 void vmap_permutation_kernel<TPermutation>::add_2_cycles()
 {
-  vcl_vector<bool> mark(p_.nb_elements(),false),
+  std::vector<bool> mark(p_.nb_elements(),false),
                    markV(p_.nb_cycles(),false) ;
 
   element_iterator v ;

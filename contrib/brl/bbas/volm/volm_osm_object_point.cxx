@@ -4,9 +4,9 @@
 
 void volm_osm_object_point::print()
 {
-  vcl_cout << " object property ";
+  std::cout << " object property ";
   prop_.print();
-  vcl_cout << " loc: " << loc_ << vcl_endl;
+  std::cout << " loc: " << loc_ << std::endl;
 }
 
 void volm_osm_object_point::b_write(vsl_b_ostream& os)
@@ -26,7 +26,7 @@ void volm_osm_object_point::b_read(vsl_b_istream& is)
   vsl_b_read(is, ver);
   if (ver == 1) {
     unsigned char id, level;
-    vcl_string name;
+    std::string name;
     double width, x, y;
     vsl_b_read(is, id);
     vsl_b_read(is, name);
@@ -41,7 +41,7 @@ void volm_osm_object_point::b_read(vsl_b_istream& is)
     loc_ = vgl_point_2d<double>(x,y);
   }
   else {
-    vcl_cout << "volm_osm_object_point -- unknown binary io version " << ver << '\n';
+    std::cout << "volm_osm_object_point -- unknown binary io version " << ver << '\n';
     return;
   }
 }

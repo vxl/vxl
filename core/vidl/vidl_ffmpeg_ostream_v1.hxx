@@ -13,7 +13,8 @@
 #include "vidl_ffmpeg_convert.h"
 #include "vidl_frame.h"
 #include "vidl_convert.h"
-#include <vcl_cstring.h>
+#include <vcl_compiler.h>
+#include <cstring>
 #include <vil/vil_memory_chunk.h>
 
 extern "C" {
@@ -70,7 +71,7 @@ vidl_ffmpeg_ostream::
 
 //: Constructor - opens a stream
 vidl_ffmpeg_ostream::
-vidl_ffmpeg_ostream(const vcl_string& filename,
+vidl_ffmpeg_ostream(const std::string& filename,
                     const vidl_ffmpeg_ostream_params& params)
   : os_( new vidl_ffmpeg_ostream::pimpl ),
     filename_(filename), params_(params)
@@ -97,7 +98,7 @@ open()
   if ( params_.file_format_ == vidl_ffmpeg_ostream_params::GUESS ) {
     file_oformat = guess_format(NULL, filename_.c_str(), NULL);
     if (!file_oformat) {
-      vcl_cerr << "ffmpeg: Unable for find a suitable output format for "
+      std::cerr << "ffmpeg: Unable for find a suitable output format for "
                << filename_ << '\n';
       close();
       return false;
@@ -114,7 +115,7 @@ open()
   // Create stream
   AVStream* st = av_new_stream( os_->fmt_cxt_, 1 );
   if ( !st ) {
-    vcl_cerr << "ffmpeg: could not alloc stream\n";
+    std::cerr << "ffmpeg: could not alloc stream\n";
     close();
     return false;
   }
@@ -127,9 +128,9 @@ open()
   AVCodecContext *video_enc = st->codec;
 #endif
 
-  if ( vcl_strcmp(file_oformat->name, "mp4") != 0 ||
-       vcl_strcmp(file_oformat->name, "mov") != 0 ||
-       vcl_strcmp(file_oformat->name, "3gp") != 0 )
+  if ( std::strcmp(file_oformat->name, "mp4") != 0 ||
+       std::strcmp(file_oformat->name, "mov") != 0 ||
+       std::strcmp(file_oformat->name, "3gp") != 0 )
     video_enc->flags |= CODEC_FLAG_GLOBAL_HEADER;
 
   switch ( params_.encoder_ )
@@ -159,14 +160,14 @@ open()
     video_enc->codec_id = CODEC_ID_DVVIDEO;
     break;
    default:
-    vcl_cout << "ffmpeg: Unknown encoder type\n";
+    std::cout << "ffmpeg: Unknown encoder type\n";
     return false;
   }
 
   AVCodec* codec = avcodec_find_encoder( video_enc->codec_id );
   if ( !codec )
   {
-    vcl_cerr << "ffmpeg_writer:: couldn't find encoder for " << video_enc->codec_id << '\n';
+    std::cerr << "ffmpeg_writer:: couldn't find encoder for " << video_enc->codec_id << '\n';
     return false;
   }
 
@@ -346,7 +347,7 @@ open()
 
   // delete when the stream is closed
   os_->video_rc_eq_ = new char[params_.video_rc_eq_.length()+1];
-  vcl_strcpy(os_->video_rc_eq_, params_.video_rc_eq_.c_str());
+  std::strcpy(os_->video_rc_eq_, params_.video_rc_eq_.c_str());
   video_enc->rc_eq = os_->video_rc_eq_;
 
   video_enc->debug = params_.debug_;
@@ -414,21 +415,21 @@ open()
   os_->fmt_cxt_->copyright[0] = '\0';
   os_->fmt_cxt_->comment[0] = '\0';
 
-  vcl_strncpy( os_->fmt_cxt_->filename, filename_.c_str(), 1023 );
+  std::strncpy( os_->fmt_cxt_->filename, filename_.c_str(), 1023 );
 
   if ( url_fopen( &os_->fmt_cxt_->pb, filename_.c_str(), URL_WRONLY) < 0 )
   {
-    vcl_cerr << "ffmpeg: couldn't open " << filename_ << " for writing\n";
+    std::cerr << "ffmpeg: couldn't open " << filename_ << " for writing\n";
     close();
     return false;
   }
   os_->file_opened_ = true;
 
   AVFormatParameters fmt_param;
-  vcl_memset( &fmt_param, 0, sizeof(fmt_param) );
+  std::memset( &fmt_param, 0, sizeof(fmt_param) );
   if ( av_set_parameters( os_->fmt_cxt_, &fmt_param ) < 0 )
   {
-    vcl_cerr << "ffmpeg: invalid encoding parameter\n";
+    std::cerr << "ffmpeg: invalid encoding parameter\n";
     close();
     return false;
   }
@@ -437,7 +438,7 @@ open()
 
   if ( avcodec_open( video_enc, codec ) < 0 )
   {
-    vcl_cerr << "ffmpeg: couldn't open codec\n";
+    std::cerr << "ffmpeg: couldn't open codec\n";
     close();
     return false;
   }
@@ -445,7 +446,7 @@ open()
 
   if ( av_write_header( os_->fmt_cxt_ ) < 0 )
   {
-    vcl_cerr << "ffmpeg: couldn't write header\n";
+    std::cerr << "ffmpeg: couldn't write header\n";
     close();
     return false;
   }
@@ -525,7 +526,7 @@ write_frame(const vidl_frame_sptr& frame)
 
   if ( unsigned( codec->width ) != frame->ni() ||
        unsigned( codec->height ) != frame->nj() ) {
-    vcl_cerr << "ffmpeg: Input image has wrong size. Expecting ("
+    std::cerr << "ffmpeg: Input image has wrong size. Expecting ("
              << codec->width << 'x' << codec->height << "), got ("
              << frame->ni() << 'x' << frame->nj() << ")\n";
     return false;
@@ -559,7 +560,7 @@ write_frame(const vidl_frame_sptr& frame)
     if (!vidl_ffmpeg_convert(frame, temp_frame)) {
       // try conversion with vidl functions
       if (!vidl_convert_frame(*frame, *temp_frame)) {
-        vcl_cout << "unable to convert " << frame->pixel_format() << " to "<<target_fmt<<vcl_endl;
+        std::cout << "unable to convert " << frame->pixel_format() << " to "<<target_fmt<<std::endl;
         return false;
       }
     }

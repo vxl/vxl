@@ -8,7 +8,9 @@
 
 #include <vnl/vnl_vector.h>
 #include <vnl/vnl_matrix.h>
-#include <vcl_iosfwd.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iosfwd>
 
 #include <rgrl/rgrl_object.h>
 #include <rgrl/rgrl_set_of.h>
@@ -153,10 +155,10 @@ class rgrl_transformation
   virtual rgrl_transformation_sptr scale_by( double scale ) const = 0;
 
   //: output transformation
-  virtual void write( vcl_ostream& os ) const;
+  virtual void write( std::ostream& os ) const;
 
   //: input transformation
-  virtual bool read( vcl_istream& is );
+  virtual bool read( std::istream& is );
 
   //: make a clone copy
   virtual rgrl_transformation_sptr clone() const=0;
@@ -214,7 +216,7 @@ class rgrl_transformation
   vnl_vector<double> scaling_factors_;
 };
 
-vcl_ostream&
-operator<< (vcl_ostream& os, rgrl_transformation const& xform );
+std::ostream&
+operator<< (std::ostream& os, rgrl_transformation const& xform );
 
 #endif

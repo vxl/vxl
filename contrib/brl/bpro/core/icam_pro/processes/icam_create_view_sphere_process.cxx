@@ -17,9 +17,11 @@
 #include <brdb/brdb_value.h>
 
 #include <vpgl/vpgl_perspective_camera.h>
-#include <vcl_string.h>
-#include <vcl_iostream.h>
-#include <vcl_sstream.h>
+#include <string>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iostream>
+#include <sstream>
 
 #include <icam/icam_view_sphere.h>
 #include <icam/icam_view_metadata.h>
@@ -36,9 +38,9 @@ namespace icam_create_view_sphere_process_globals
 bool icam_create_view_sphere_process_cons(bprb_func_process& pro)
 {
   using namespace icam_create_view_sphere_process_globals;
-  vcl_vector<vcl_string> input_types_(n_inputs_);
+  std::vector<std::string> input_types_(n_inputs_);
 
-  vcl_vector<vcl_string> output_types_(n_outputs_);
+  std::vector<std::string> output_types_(n_outputs_);
   output_types_[0] = "vcl_string"; // the text file that contains the paths for the view point cameras
   output_types_[1] = "icam_view_sphere_sptr"; // view sphere smart pointer
 
@@ -49,7 +51,7 @@ bool icam_create_view_sphere_process_cons(bprb_func_process& pro)
 bool icam_create_view_sphere_process(bprb_func_process& pro)
 {
   if (!pro.verify_inputs()) {
-    vcl_cout << pro.name() << "icam_create_view_sphere_process: invalid inputs" << vcl_endl;
+    std::cout << pro.name() << "icam_create_view_sphere_process: invalid inputs" << std::endl;
     return false;
   }
   using namespace icam_create_view_sphere_process_globals;
@@ -57,7 +59,7 @@ bool icam_create_view_sphere_process(bprb_func_process& pro)
   double elevation=0.0, view_angle=0.0, radius=0.0;
   double dim_x=0.0, dim_y=0.0, dim_z=0.0,orig_x=0.0, orig_y=0.0, orig_z=0.0;
   unsigned ni=0, nj=0;
-  vcl_string path="";
+  std::string path="";
   // with dummy initialisations to avoid compiler warnings
   if (!pro.parameters()->get_value("elevation", elevation)) return false;
   if (!pro.parameters()->get_value("view_angle", view_angle)) return false;
@@ -78,38 +80,38 @@ bool icam_create_view_sphere_process(bprb_func_process& pro)
   // generate the view points-cameras
   view_sphere->create_view_points(elevation, view_angle, ni, nj);
 
-  vcl_map<unsigned, vpgl_camera_double_sptr> cameras;
+  std::map<unsigned, vpgl_camera_double_sptr> cameras;
   view_sphere->cameras(cameras);
 
-  vcl_ofstream file(path.c_str());
+  std::ofstream file(path.c_str());
   if (!file.is_open()) {
-    vcl_cerr << "Failed to open file " << path << '\n';
+    std::cerr << "Failed to open file " << path << '\n';
     return false;
   }
 
-  vcl_map<unsigned, vpgl_camera_double_sptr>::iterator it=cameras.begin();
+  std::map<unsigned, vpgl_camera_double_sptr>::iterator it=cameras.begin();
   while (it != cameras.end()) {
     unsigned uid=it->first;
     vpgl_camera_double_sptr cam = it->second;
     vpgl_perspective_camera<double>* pers_cam = dynamic_cast<vpgl_perspective_camera<double>*>(cam.as_pointer());
 
-    vcl_stringstream cam_path;
+    std::stringstream cam_path;
     cam_path << "camera" << uid << ".txt";
-    vcl_ofstream ofs(cam_path.str().c_str());
+    std::ofstream ofs(cam_path.str().c_str());
     if (!file.is_open()) {
-      vcl_cerr << "Failed to open file " << path << '\n';
+      std::cerr << "Failed to open file " << path << '\n';
       return false;
     }
     ofs << *pers_cam;
     ofs.close();
 
-    file << uid << ' ' << cam_path.str() << vcl_endl;
+    file << uid << ' ' << cam_path.str() << std::endl;
     it++;
   }
   file.close();
 
   // return the txt file (the lidt of camera paths)
-  pro.set_output_val<vcl_string>(0,path);
+  pro.set_output_val<std::string>(0,path);
   pro.set_output_val<icam_view_sphere_sptr>(1, view_sphere);
   return true;
 }

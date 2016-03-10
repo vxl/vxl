@@ -7,7 +7,7 @@
 //: Binary save parameters to stream.
 void vsl_b_write(vsl_b_ostream & /*os*/, bvpl_kernel const & /*kernel*/)
 {
-  vcl_cerr << "Error: Trying to save but binary io not implemented\n";
+  std::cerr << "Error: Trying to save but binary io not implemented\n";
   return;
 }
 
@@ -15,13 +15,13 @@ void vsl_b_write(vsl_b_ostream & /*os*/, bvpl_kernel const & /*kernel*/)
 //: Binary load parameters from stream.
 void vsl_b_read(vsl_b_istream & /*is*/, bvpl_kernel & /*kernel*/)
 {
-  vcl_cerr << "Error: Trying to save but binary io not implemented\n";
+  std::cerr << "Error: Trying to save but binary io not implemented\n";
   return;
 }
 
-void vsl_print_summary(vcl_ostream & /*os*/, const bvpl_kernel & /*kernel*/)
+void vsl_print_summary(std::ostream & /*os*/, const bvpl_kernel & /*kernel*/)
 {
-  vcl_cerr << "Error: Trying to save but binary io not implemented\n";
+  std::cerr << "Error: Trying to save but binary io not implemented\n";
   return;
 }
 
@@ -52,7 +52,7 @@ void vsl_b_write(vsl_b_ostream& os, const bvpl_kernel* &p)
   }
 }
 
-void vsl_print_summary(vcl_ostream& os, const bvpl_kernel* &p)
+void vsl_print_summary(std::ostream& os, const bvpl_kernel* &p)
 {
   if (p==VXL_NULLPTR)
     os << "NULL PTR";
@@ -67,7 +67,7 @@ void vsl_print_summary(vcl_ostream& os, const bvpl_kernel* &p)
 //: Binary save parameters to stream.
 void vsl_b_write(vsl_b_ostream & /*os*/, bvpl_kernel_vector const & /*kernel*/)
 {
-  vcl_cerr << "Error: Trying to save but binary io not implemented\n";
+  std::cerr << "Error: Trying to save but binary io not implemented\n";
   return;
 }
 
@@ -75,13 +75,13 @@ void vsl_b_write(vsl_b_ostream & /*os*/, bvpl_kernel_vector const & /*kernel*/)
 //: Binary load parameters from stream.
 void vsl_b_read(vsl_b_istream & /*is*/, bvpl_kernel_vector & /*kernel*/)
 {
-  vcl_cerr << "Error: Trying to save but binary io not implemented\n";
+  std::cerr << "Error: Trying to save but binary io not implemented\n";
   return;
 }
 
-void vsl_print_summary(vcl_ostream & /*os*/, const bvpl_kernel_vector & /*kernel*/)
+void vsl_print_summary(std::ostream & /*os*/, const bvpl_kernel_vector & /*kernel*/)
 {
-  vcl_cerr << "Error: Trying to save but binary io not implemented\n";
+  std::cerr << "Error: Trying to save but binary io not implemented\n";
   return;
 }
 
@@ -112,7 +112,7 @@ void vsl_b_write(vsl_b_ostream& os, const bvpl_kernel_vector* &p)
   }
 }
 
-void vsl_print_summary(vcl_ostream& os, const bvpl_kernel_vector* &p)
+void vsl_print_summary(std::ostream& os, const bvpl_kernel_vector* &p)
 {
   if (p==VXL_NULLPTR)
     os << "NULL PTR";

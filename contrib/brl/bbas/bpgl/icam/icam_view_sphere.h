@@ -24,19 +24,19 @@ class icam_view_sphere : public vbl_ref_count
   void create_view_points(double cap_angle, double view_angle, unsigned ni, unsigned nj);
 
   //: returns the cameras of the view points, associated with the view point id
-  void cameras(vcl_map<unsigned, vpgl_camera_double_sptr> &cameras);
+  void cameras(std::map<unsigned, vpgl_camera_double_sptr> &cameras);
 
-  void set_cameras(vcl_map<unsigned, vpgl_camera_double_sptr> const &cameras);
+  void set_cameras(std::map<unsigned, vpgl_camera_double_sptr> const &cameras);
 
   //: sets the images and depth images, associated with the view point id
-  virtual void set_images(vcl_map<unsigned, /*vil_image_view<float>**/vcl_string>& images,
-                          vcl_map<unsigned, /*vil_image_view<double>**/vcl_string>& depth_images);
+  virtual void set_images(std::map<unsigned, /*vil_image_view<float>**/std::string>& images,
+                          std::map<unsigned, /*vil_image_view<double>**/std::string>& depth_images);
 
   //: computes the camera registration errors for a given image
   virtual void register_image(vil_image_view<float> const& source_img, icam_minimizer_params const& params);
 
   //: computes the camera registration errors local minima for a given image
-  void find_local_minima(vcl_vector<vsph_view_point<icam_view_metadata> >& local_minima);
+  void find_local_minima(std::vector<vsph_view_point<icam_view_metadata> >& local_minima);
 
   //: given a camera, find the relative camera rotation and translations for each view point
   void camera_transf(vpgl_perspective_camera<double> const& cam);

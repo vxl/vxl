@@ -30,26 +30,26 @@ class fhs_searcher
  private:
   //: Arcs defining neighbour relationships between features
   //  Ordered so that parents precede children
-  vcl_vector<fhs_arc> arc_;
+  std::vector<fhs_arc> arc_;
 
   //: Scaling applied to shape cost (default 1.0)
   double geom_wt_;
 
   //: arc_to_j_[j] gives index of arc ending at given j
-  vcl_vector<unsigned> arc_to_j_;
+  std::vector<unsigned> arc_to_j_;
 
   //: children_[i] gives list of child nodes of node i in tree
-  vcl_vector<vcl_vector<unsigned> > children_;
+  std::vector<std::vector<unsigned> > children_;
 
   //: Workspace for accumulated sum of responses
-  vcl_vector<vimt_image_2d_of<float> > sum_im_;
+  std::vector<vimt_image_2d_of<float> > sum_im_;
 
   //: Workspace for sum of responses, transformed by distance function
-  vcl_vector<vimt_image_2d_of<float> > dist_im_;
+  std::vector<vimt_image_2d_of<float> > dist_im_;
 
   //: pos_[i](x,y,0),pos_[i](x,y,1) is position of best response for (x,y)
   //  Result is in image co-ordinates.
-  vcl_vector<vimt_image_2d_of<int> > pos_im_;
+  std::vector<vimt_image_2d_of<int> > pos_im_;
 
   //: Combine responses for image im_index, given supplied feature_response for that node
   void combine_responses(unsigned im_index,
@@ -62,7 +62,7 @@ class fhs_searcher
   //: Set tree defining relationships between features
   //  Input arcs define neighbour relationships in any order.
   //  root_node defines which feature to be used as the root
-  void set_tree(const vcl_vector<fhs_arc>& arcs, unsigned root_node);
+  void set_tree(const std::vector<fhs_arc>& arcs, unsigned root_node);
 
     //: Set scaling applied to shape cost (default 1.0)
   void set_geom_wt(double geom_wt);
@@ -83,17 +83,17 @@ class fhs_searcher
   //  After calling search(), results can be obtained using
   //  points() and best_points() etc
   //  \param geom_wt is the weighting applied to the geometric component of the cost.
-  void search(const vcl_vector<vimt_image_2d_of<float> >& feature_response);
+  void search(const std::vector<vimt_image_2d_of<float> >& feature_response);
 
   //: Compute optimal position of all points given position of root
   //  Assumes search() has been called first
   void points_from_root(const vgl_point_2d<double>& root_pt,
-                        vcl_vector<vgl_point_2d<double> >& pts) const;
+                        std::vector<vgl_point_2d<double> >& pts) const;
 
   //: Compute optimal position of all points
   //  Assumes search() has been called first
   //  Returns cost at optimal position
-  double best_points(vcl_vector<vgl_point_2d<double> >& pts) const;
+  double best_points(std::vector<vgl_point_2d<double> >& pts) const;
 
   //: Return final total cost image for root
   const vimt_image_2d_of<float>& root_cost_image() const;

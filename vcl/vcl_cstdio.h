@@ -1,63 +1,106 @@
 #ifndef vcl_cstdio_h_
 #define vcl_cstdio_h_
-/*
-  fsm
-*/
 
 #include "vcl_compiler.h"
+#include <cstdio>
+/* The following includes are needed to preserve backwards
+   compatilibility for external applications.  Previously
+   definitions were defined in multiple headers with conditional
+   ifndef guards, but we now include a reference header
+   instead */
+#include "vcl_cstddef.h"
+//vcl alias names to std names
+// [27.8.2.1]
+//
+// macros:
+//   BUFSIZ        FOPEN_MAX SEEK_CUR TMP_MAX _IONBF stdout
+//   EOF           L_tmpnam  SEEK_END _IOFBF  stderr
+//   FILENAME_MAX  NULL      SEEK_SET _IOLBF  stdin
 
-#if !VCL_CXX_HAS_HEADER_CSTDIO
-# include <stdio.h>
-# define vcl_generic_cstdio_STD /* */
-# include "generic/vcl_cstdio.h"
-#elif defined(VCL_CYGWIN_GCC)
-# define vcl_snprintf snprintf
-# include "vcl_cstddef.h" // for size_t
-# include "iso/vcl_cstdio.h"
-#elif defined(VCL_VC_9) || defined(VCL_VC_10) || defined(VCL_VC_11)
-# define vcl_snprintf _snprintf
-# include "vcl_cstddef.h" // for size_t
-# include "iso/vcl_cstdio.h"
+#define vcl_FILE std::FILE
+#define vcl_fpos_t std::fpos_t
+// NB: size_t is declared in <cstddef>, not <cstdio>
+#define vcl_fopen std::fopen
+#define vcl_fclose std::fclose
+#define vcl_feof std::feof
+#define vcl_ferror std::ferror
+#define vcl_fflush std::fflush
+#define vcl_fgetc std::fgetc
+#define vcl_fgetpos std::fgetpos
+#define vcl_fgets std::fgets
+#define vcl_fwrite std::fwrite
+#define vcl_fread std::fread
+#define vcl_fseek std::fseek
+#define vcl_ftell std::ftell
+#define vcl_perror std::perror
+#define vcl_clearerr std::clearerr
+#define vcl_rename std::rename
+#define vcl_fputc std::fputc
+#define vcl_fputs std::fputs
+#define vcl_freopen std::freopen
+#define vcl_fsetpos std::fsetpos
+#define vcl_getc std::getc
+#define vcl_getchar std::getchar
+#define vcl_gets std::gets
+#define vcl_putc std::putc
+#define vcl_putchar std::putchar
+#define vcl_puts std::puts
+#define vcl_remove std::remove
+#define vcl_rewind std::rewind
+#define vcl_setbuf std::setbuf
+#define vcl_setvbuf std::setvbuf
+#define vcl_tmpfile std::tmpfile
+#define vcl_tmpnam std::tmpnam
+#define vcl_ungetc std::ungetc
+
+// printf() family
+#define vcl_printf std::printf
+#define vcl_sprintf std::sprintf
+#define vcl_fprintf std::fprintf
+#define vcl_vprintf std::vprintf
+#define vcl_vsprintf std::vsprintf
+#define vcl_vfprintf std::vfprintf
+
+// Adapted from
+// http://stackoverflow.com/questions/2915672/snprintf-and-visual-studio-2010
+//
+// Microsoft has finally implemented snprintf in Visual Studio 2015. On earlier
+// versions you can simulate it as below.
+#if defined(_MSC_VER) && _MSC_VER < 1900
+#include <cstdarg>
+__inline int c99_vsnprintf(char *outBuf, size_t size, const char *format, va_list ap)
+{
+    int count = -1;
+
+    if (size != 0)
+        count = _vsnprintf_s(outBuf, size, _TRUNCATE, format, ap);
+    if (count == -1)
+        count = _vscprintf(format, ap);
+
+    return count;
+}
+
+__inline int vcl_snprintf(char *outBuf, size_t size, const char *format, ...)
+{
+    int count;
+    va_list ap;
+
+    va_start(ap, format);
+    count = c99_vsnprintf(outBuf, size, format, ap);
+    va_end(ap);
+
+    return count;
+}
 #else
-# include "vcl_cstddef.h" // for size_t
-# include "iso/vcl_cstdio.h"
+#define vcl_snprintf std::snprintf
 #endif
 
-// Some compilers (gcc 2.95.3, SGI CC) seem to define these as macros. Sigh.
-#ifdef putchar
-# undef vcl_putchar
-inline int vcl_putchar(int x) { return putchar(x); }
-# define vcl_putchar vcl_putchar
-#endif
-#ifdef putc
-# undef vcl_putc
-inline int vcl_putc(int x, vcl_FILE* f) { return putc(x,f); }
-# define vcl_putc vcl_putc
-#endif
-#ifdef getchar
-# undef vcl_getchar
-inline int vcl_getchar(void) { return getchar(); }
-# define vcl_getchar vcl_getchar
-#endif
-#ifdef getc
-# undef vcl_getc
-inline int vcl_getc(vcl_FILE* f) { return getc(f); }
-# define vcl_getc vcl_getc
-#endif
-#ifdef feof
-# undef vcl_feof
-inline int vcl_feof(vcl_FILE* f) { return feof(f); }
-# define vcl_feof vcl_feof
-#endif
-#ifdef ferror
-# undef vcl_ferror
-inline int vcl_ferror(vcl_FILE* f) { return ferror(f); }
-# define vcl_ferror vcl_ferror
-#endif
-#ifdef clearerr
-# undef vcl_clearerr
-inline void vcl_clearerr(vcl_FILE* f) { clearerr(f); }
-# define vcl_clearerr vcl_clearerr
-#endif
+// scanf() family
+#define vcl_scanf std::scanf
+#define vcl_sscanf std::sscanf
+#define vcl_fscanf std::fscanf
+#define vcl_vscanf std::vscanf
+#define vcl_vsscanf std::vsscanf
+#define vcl_vfscanf std::vfscanf
 
 #endif // vcl_cstdio_h_

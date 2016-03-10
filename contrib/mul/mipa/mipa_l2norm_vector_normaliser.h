@@ -5,8 +5,10 @@
 // \author Martin Roberts
 // \brief L2norm v->v/(||v||_2 + epsilon)
 
-#include <vcl_string.h>
-#include <vcl_iosfwd.h>
+#include <string>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iosfwd>
 #include <vsl/vsl_fwd.h>
 #include <vnl/vnl_fwd.h>
 #include <mipa/mipa_vector_normaliser.h>
@@ -24,13 +26,13 @@ class mipa_l2norm_vector_normaliser : public mipa_vector_normaliser
   virtual void normalise(vnl_vector<double>& sample) const;
 
   //: Name of the class
-  virtual vcl_string is_a() const;
+  virtual std::string is_a() const;
 
   //: Create a copy on the heap and return base class pointer
   virtual mipa_vector_normaliser* clone() const;
 
   //: Print class to os
-  virtual void print_summary(vcl_ostream& os) const;
+  virtual void print_summary(std::ostream& os) const;
 
   //: Save class to binary file stream
   virtual void b_write(vsl_b_ostream& bfs) const;

@@ -16,7 +16,8 @@
 // \endverbatim
 //-----------------------------------------------------------------------------
 
-#include <vcl_iosfwd.h>
+#include <vcl_compiler.h>
+#include <iosfwd>
 
 //: simple 2D bit array
 // essentially identical to vbl_array_2d<bool> but more efficiently stored
@@ -84,6 +85,6 @@ class vbl_bit_array_2d
   void index( unsigned int x, unsigned int y, unsigned long &byteindex, unsigned int &bitindex) const;
 };
 
-vcl_ostream& operator<< (vcl_ostream& os, const vbl_bit_array_2d &v);
+std::ostream& operator<< (std::ostream& os, const vbl_bit_array_2d &v);
 
 #endif // vbl_bit_array_2d_h_

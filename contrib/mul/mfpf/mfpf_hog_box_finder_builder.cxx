@@ -7,8 +7,8 @@
 #include <mfpf/mfpf_hog_box_finder.h>
 #include <vsl/vsl_binary_loader.h>
 #include <vul/vul_string.h>
-#include <vcl_cmath.h>
-#include <vcl_sstream.h>
+#include <cmath>
+#include <sstream>
 #include <vcl_cassert.h>
 
 #include <mbl/mbl_parse_block.h>
@@ -21,7 +21,9 @@
 #include <vil/vil_image_view.h>
 #include <vsl/vsl_vector_io.h>
 #include <vsl/vsl_indent.h>
-#include <vcl_algorithm.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <algorithm>
 
 #include <mipa/mipa_orientation_histogram.h>
 #include <mipa/mipa_sample_histo_boxes.h>
@@ -98,8 +100,8 @@ void mfpf_hog_box_finder_builder::set_region_size(double wi, double wj)
 {
   wi/=(2*nc_*step_size());
   wj/=(2*nc_*step_size());
-  int ni = vcl_max(2,int(0.99+wi));
-  int nj = vcl_max(2,int(0.99+wj));
+  int ni = std::max(2,int(0.99+wi));
+  int nj = std::max(2,int(0.99+wj));
   set_as_box(unsigned(ni),unsigned(nj),0.5*(ni-1),0.5*(nj-1));
 }
 
@@ -198,7 +200,7 @@ void mfpf_hog_box_finder_builder::add_example(const vimt_image_2d_of<float>& ima
   for (int iA=-int(nA_);iA<=(int)nA_;++iA)
   {
     double A = iA*dA_;
-    vgl_vector_2d<double> uA = u*vcl_cos(A)+v*vcl_sin(A);
+    vgl_vector_2d<double> uA = u*std::cos(A)+v*std::sin(A);
     add_one_example(image,p,uA);
   }
 }
@@ -218,7 +220,7 @@ void mfpf_hog_box_finder_builder::build(mfpf_point_finder& pf)
   set_base_parameters(rp);
   rp.set_overlap_f(overlap_f_);
 
-vcl_cout<<"Model: "<<rp<<vcl_endl;
+std::cout<<"Model: "<<rp<<std::endl;
 
   // Tidy up
   delete cost;
@@ -229,11 +231,11 @@ vcl_cout<<"Model: "<<rp<<vcl_endl;
 // Method: set_from_stream
 //=======================================================================
 //: Initialise from a string stream
-bool mfpf_hog_box_finder_builder::set_from_stream(vcl_istream &is)
+bool mfpf_hog_box_finder_builder::set_from_stream(std::istream &is)
 {
   // Cycle through string and produce a map of properties
-  vcl_string s = mbl_parse_block(is);
-  vcl_istringstream ss(s);
+  std::string s = mbl_parse_block(is);
+  std::istringstream ss(s);
   mbl_read_props_type props = mbl_read_props_ws(ss);
 
   set_defaults();
@@ -250,9 +252,9 @@ bool mfpf_hog_box_finder_builder::set_from_stream(vcl_istream &is)
   bool reonfigureNormaliser=false;
   if (props.find("norm")!=props.end())
   {
-    vcl_istringstream ss2(props["norm"]);
+    std::istringstream ss2(props["norm"]);
     mbl_read_props_type dummy_extra_props;
-    vcl_auto_ptr<mipa_vector_normaliser> norm = mipa_vector_normaliser::new_normaliser_from_stream(ss2, dummy_extra_props);
+    std::auto_ptr<mipa_vector_normaliser> norm = mipa_vector_normaliser::new_normaliser_from_stream(ss2, dummy_extra_props);
     normaliser_=norm.release();
     reonfigureNormaliser=true;
 #if 0
@@ -295,8 +297,8 @@ bool mfpf_hog_box_finder_builder::set_from_stream(vcl_istream &is)
 
   if (props.find("cost_builder")!=props.end())
   {
-    vcl_istringstream b_ss(props["cost_builder"]);
-    vcl_auto_ptr<mfpf_vec_cost_builder> bb =
+    std::istringstream b_ss(props["cost_builder"]);
+    std::auto_ptr<mfpf_vec_cost_builder> bb =
       mfpf_vec_cost_builder::create_from_stream(b_ss);
     cost_builder_ = bb->clone();
     props.erase("cost_builder");
@@ -330,7 +332,7 @@ void mfpf_hog_box_finder_builder::reconfigure_normaliser()
       }
       else
       {
-        vcl_cerr<<"WARNING from fpf_hog_box_finder_builder::reconfigure_normaliser...\n"
+        std::cerr<<"WARNING from fpf_hog_box_finder_builder::reconfigure_normaliser...\n"
                 <<"The normaliser may not be multi-scale but this HOG Builder uses multi-scale histograms\n";
       }
     }
@@ -340,9 +342,9 @@ void mfpf_hog_box_finder_builder::reconfigure_normaliser()
 // Method: is_a
 //=======================================================================
 
-vcl_string mfpf_hog_box_finder_builder::is_a() const
+std::string mfpf_hog_box_finder_builder::is_a() const
 {
-  return vcl_string("mfpf_hog_box_finder_builder");
+  return std::string("mfpf_hog_box_finder_builder");
 }
 
 //: Create a copy on the heap and return base class pointer
@@ -355,7 +357,7 @@ mfpf_point_finder_builder* mfpf_hog_box_finder_builder::clone() const
 // Method: print
 //=======================================================================
 
-void mfpf_hog_box_finder_builder::print_summary(vcl_ostream& os) const
+void mfpf_hog_box_finder_builder::print_summary(std::ostream& os) const
 {
   os << "{ "<<'\n';
   vsl_indent_inc(os);
@@ -364,7 +366,7 @@ void mfpf_hog_box_finder_builder::print_summary(vcl_ostream& os) const
      << " ref_pt: (" << ref_x_ << ',' << ref_y_ << ')' <<'\n';
   if (full360_) os<<vsl_indent()<<"Angle range: 0-360"<<'\n';
   else          os<<vsl_indent()<<"Angle range: 0-180"<<'\n';
-  vcl_cout<<"The HOG's normaliser is:"<<'\n';
+  std::cout<<"The HOG's normaliser is:"<<'\n';
   normaliser_->print_summary(os);
   //if (norm_method_==0) os<<vsl_indent()<<"norm: none"<<'\n';
   //else                 os<<vsl_indent()<<"norm: linear"<<'\n';
@@ -433,9 +435,9 @@ void mfpf_hog_box_finder_builder::b_read(vsl_b_istream& bfs)
       else            vsl_b_read(bfs,overlap_f_);
       break;
     default:
-      vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&)\n"
+      std::cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&)\n"
                << "           Unknown version number "<< version << '\n';
-      bfs.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
+      bfs.is().clear(std::ios::badbit); // Set an unrecoverable IO error on stream
       return;
   }
 }

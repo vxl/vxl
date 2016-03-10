@@ -4,7 +4,9 @@
 // \file
 #include <vbl/io/vbl_io_smart_ptr.h>
 #include <vsol/vsol_point_2d.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iostream>
 
 //***************************************************************************
 // Initialization
@@ -185,15 +187,15 @@ void vsol_triangle_2d::b_read(vsl_b_istream &is)
    case 1:
     vsol_polygon_2d::b_read(is);
     if (storage_->size()!=3) {
-      vcl_cerr << "I/O ERROR: vsol_triangle_2d::b_read(vsl_b_istream&)\n"
+      std::cerr << "I/O ERROR: vsol_triangle_2d::b_read(vsl_b_istream&)\n"
                << "           Incorrect number of vertices: "<< storage_->size() << '\n';
-      is.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
+      is.is().clear(std::ios::badbit); // Set an unrecoverable IO error on stream
     }
     break;
    default:
-    vcl_cerr << "I/O ERROR: vsol_triangle_2d::b_read(vsl_b_istream&)\n"
+    std::cerr << "I/O ERROR: vsol_triangle_2d::b_read(vsl_b_istream&)\n"
              << "           Unknown version number "<< ver << '\n';
-    is.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
+    is.is().clear(std::ios::badbit); // Set an unrecoverable IO error on stream
   }
 }
 
@@ -204,7 +206,7 @@ short vsol_triangle_2d::version() const
 }
 
 //: Print an ascii summary to the stream
-void vsol_triangle_2d::print_summary(vcl_ostream &os) const
+void vsol_triangle_2d::print_summary(std::ostream &os) const
 {
   os << *this;
 }
@@ -240,12 +242,12 @@ vsl_b_read(vsl_b_istream &is, vsol_triangle_2d* &t)
 }
 
 
-inline void vsol_triangle_2d::describe(vcl_ostream &strm, int blanking) const
+inline void vsol_triangle_2d::describe(std::ostream &strm, int blanking) const
 {
   if (blanking < 0) blanking = 0; while (blanking--) strm << ' ';
   strm << "<vsol_triangle_2d with corners";
   for (unsigned int i=0; i<size(); ++i)
     strm << ' ' << *(vertex(i));
-  strm << '>' << vcl_endl;
+  strm << '>' << std::endl;
 }
 

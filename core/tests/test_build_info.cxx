@@ -4,12 +4,13 @@
 // \file
 // Based on ITK, Testing/Code/Common/itkSystemInformationTest.cxx
 
-#include <vcl_ios.h>
-#include <vcl_iostream.h>
-#include <vcl_fstream.h>
-#include <vcl_string.h>
-#include <vcl_map.h>
-#include <vcl_ctime.h>
+#include <ios>
+#include <iostream>
+#include <fstream>
+#include <string>
+#include <vcl_compiler.h>
+#include <map>
+#include <ctime>
 #include <testlib/testlib_test.h>
 
 // Construct the name of the notes file.
@@ -17,24 +18,24 @@
   vxl_BUILD_DIR "/Testing/HTML/TestingResults/Sites/" \
   vxl_SITE "/" vxl_BUILD_NAME "/BuildNameNotes.xml"
 
-static vcl_string
+static std::string
 get_current_date_time (const char * format)
 {
   char buf[1024];
-  vcl_time_t t;
-  vcl_time (&t);
-  vcl_strftime (buf, sizeof(buf), format, vcl_localtime(&t));
+  std::time_t t;
+  std::time (&t);
+  std::strftime (buf, sizeof(buf), format, std::localtime(&t));
   return buf;
 }
 
 static void
-system_information_print_file (const char * name, vcl_ostream & os,
+system_information_print_file (const char * name, std::ostream & os,
                                bool note = false )
 {
   if ( ! note)
     os << "================================\n";
 
-  vcl_ifstream fin (name, vcl_ios::in);
+  std::ifstream fin (name, std::ios::in);
 
   if (fin)
   {
@@ -47,10 +48,10 @@ system_information_print_file (const char * name, vcl_ostream & os,
     // performance critical code, so it's probably okay. Besides,
     // the output stream is buffered, which should help.
 
-    vcl_string buffer;
+    std::string buffer;
 
     // Assume the string encoding is ASCII
-    vcl_map<char, char const*> mapping;
+    std::map<char, char const*> mapping;
     mapping['&'] = "&amp;";
     mapping['<'] = "&lt;";
     mapping['>'] = "&gt;";
@@ -63,7 +64,7 @@ system_information_print_file (const char * name, vcl_ostream & os,
 
     while ( fin )
     {
-      vcl_getline( fin, buffer );
+      std::getline( fin, buffer );
       for ( unsigned i = 0; i < buffer.size(); ++i )
       {
         char const& c = buffer[i];
@@ -80,7 +81,7 @@ system_information_print_file (const char * name, vcl_ostream & os,
         else
           os << buffer[i];
       }
-      os << '\n'; // the "\n" is not stored by vcl_getline
+      os << '\n'; // the "\n" is not stored by std::getline
     }
     os.flush();
   }
@@ -109,12 +110,12 @@ static void test_build_info()
   };
 
   for (const char** f = files; *f; f++)
-    system_information_print_file (*f, vcl_cout);
+    system_information_print_file (*f, std::cout);
 
-  vcl_ofstream outf (vxl_BUILD_INFO_NOTES, vcl_ios::out);
+  std::ofstream outf (vxl_BUILD_INFO_NOTES, std::ios::out);
   if (outf)
   {
-    vcl_cout << "Also writing this information to file "
+    std::cout << "Also writing this information to file "
              << vxl_BUILD_INFO_NOTES << '\n';
 
     outf << "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
@@ -141,7 +142,7 @@ static void test_build_info()
   }
   else
   {
-    vcl_cout << "Error writing this information to file "
+    std::cout << "Error writing this information to file "
              << vxl_BUILD_INFO_NOTES << '\n';
     TEST("ofstream", true, false);
   }

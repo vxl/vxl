@@ -22,7 +22,7 @@ vil1_rgb<unsigned char>::vil1_rgb(const vil1_rgb_double& r)
 #endif // 0
 
 VCL_DEFINE_SPECIALIZATION
-vcl_ostream& operator<<(vcl_ostream& s, const vil1_rgb<unsigned char>& rgb)
+std::ostream& operator<<(std::ostream& s, const vil1_rgb<unsigned char>& rgb)
 {
  return s << '[' << (int)rgb.r << ' ' << (int)rgb.g << ' ' << (int)rgb.b << ']';
 }

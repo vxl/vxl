@@ -15,9 +15,11 @@
 //                                  the version number will be 2 and one may switch to previous version temporarily and rebuilt to read the previous version and write back in version two
 // \endverbatim
 
-#include <vcl_string.h>
-#include <vcl_iostream.h>
-#include <vcl_cmath.h>
+#include <string>
+#include <iostream>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <cmath>
 #include <vbl/vbl_smart_ptr.h>
 #include <vbl/vbl_ref_count.h>
 #include <vgl/vgl_point_3d.h>
@@ -40,7 +42,7 @@ class bvxm_world_params : public vbl_ref_count
   //enum appearance_model_type { apm_unknown, mog_grey, mog_rgb };
 
   void set_params(
-    const vcl_string& model_dir,
+    const std::string& model_dir,
     const vgl_point_3d<float>& corner,
     const vgl_vector_3d<unsigned int>& num_voxels,
     float voxel_length,
@@ -52,7 +54,7 @@ class bvxm_world_params : public vbl_ref_count
     vgl_vector_3d<float> basey = vgl_vector_3d<float>(0.0f,1.0f,0.0f),
     vgl_vector_3d<float> basez = vgl_vector_3d<float>(0.0f,0.0f,1.0f));
 
-  inline vcl_string model_dir() const { return model_dir_; }
+  inline std::string model_dir() const { return model_dir_; }
   inline vgl_point_3d<float> corner() const { return corner_; }
   inline void set_corner(vgl_point_3d<float>& new_c) { corner_ = new_c; }
 
@@ -87,7 +89,7 @@ class bvxm_world_params : public vbl_ref_count
   inline void set_base_y(vgl_vector_3d<float>& basey) { base_y_ = basey; }
   inline void set_base_z(vgl_vector_3d<float>& basez) { base_z_ = basez; }
 
-  inline void set_model_dir(vcl_string model_dir) {model_dir_ = model_dir;}
+  inline void set_model_dir(std::string model_dir) {model_dir_ = model_dir;}
 
   inline float min_occupancy_prob() const { return min_occupancy_prob_; }
   inline float max_occupancy_prob() const { return max_occupancy_prob_; }
@@ -111,11 +113,11 @@ class bvxm_world_params : public vbl_ref_count
   void b_read(vsl_b_istream & is);
 
   //: write as xml file to be passed to bvxm_create_world process
-  void write_xml(vcl_string const& filename, vcl_string const& lvcs_filename);
+  void write_xml(std::string const& filename, std::string const& lvcs_filename);
 
  protected:
 
-  vcl_string model_dir_;
+  std::string model_dir_;
   vgl_point_3d<float> corner_;
   vgl_point_3d<float> rpc_origin_;
   vgl_vector_3d<unsigned int> num_voxels_;
@@ -133,12 +135,12 @@ class bvxm_world_params : public vbl_ref_count
 
  private:
 
-  friend vcl_ostream&  operator << (vcl_ostream& os, bvxm_world_params const& params);
-  friend vcl_istream& operator >> (vcl_istream& is, bvxm_world_params &params);
+  friend std::ostream&  operator << (std::ostream& os, bvxm_world_params const& params);
+  friend std::istream& operator >> (std::istream& is, bvxm_world_params &params);
 };
 
-vcl_ostream&  operator << (vcl_ostream& os, bvxm_world_params const& params);
-vcl_istream& operator >> (vcl_istream& is, bvxm_world_params &params);
+std::ostream&  operator << (std::ostream& os, bvxm_world_params const& params);
+std::istream& operator >> (std::istream& is, bvxm_world_params &params);
 
 typedef vbl_smart_ptr<bvxm_world_params> bvxm_world_params_sptr;
 

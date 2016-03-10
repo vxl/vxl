@@ -5,11 +5,13 @@
 // \brief Random forest classifier
 // \author Martin Roberts
 
-#include <vcl_string.h>
-#include <vcl_deque.h>
-#include <vcl_algorithm.h>
-#include <vcl_iterator.h>
-#include <vcl_cmath.h>
+#include <string>
+#include <deque>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <algorithm>
+#include <iterator>
+#include <cmath>
 #include <vcl_cassert.h>
 #include <vsl/vsl_binary_io.h>
 #include <vsl/vsl_vector_io.h>
@@ -26,15 +28,15 @@ clsfy_random_forest::clsfy_random_forest()
 unsigned clsfy_random_forest::classify(const vnl_vector<double> &input) const
 {
 #if 1 //Accumulate probabilities (impure final nodes may not return 0 or 1)
-    vcl_vector<double > classProbs(1,0.0);
+    std::vector<double > classProbs(1,0.0);
     class_probabilities(classProbs,input);
     return (classProbs[0]>=0.5) ? 1 : 0;
 #else // just accumulate number in each class rather than probs
 
-    vcl_vector<mbl_cloneable_ptr<clsfy_classifier_base> >::const_iterator treeIter=trees_.begin();
-    vcl_vector<mbl_cloneable_ptr<clsfy_classifier_base> >::const_iterator treeIterEnd=trees_.end();
+    std::vector<mbl_cloneable_ptr<clsfy_classifier_base> >::const_iterator treeIter=trees_.begin();
+    std::vector<mbl_cloneable_ptr<clsfy_classifier_base> >::const_iterator treeIterEnd=trees_.end();
 
-    vcl_vector<unsigned > classCount(2,0);
+    std::vector<unsigned > classCount(2,0);
 
     unsigned i=0;
     while (treeIter != treeIterEnd)
@@ -54,16 +56,16 @@ unsigned clsfy_random_forest::classify(const vnl_vector<double> &input) const
 //=======================================================================
 //: Return a probability like value that the input being in each class.
 // output(i) i<<nClasses, contains the probability that the input is in class i
-void clsfy_random_forest::class_probabilities(vcl_vector<double>& outputs,
+void clsfy_random_forest::class_probabilities(std::vector<double>& outputs,
                                               vnl_vector<double>const& input) const
 {
     outputs.resize(1);
 
-    vcl_vector<mbl_cloneable_ptr<clsfy_classifier_base> >::const_iterator treeIter=trees_.begin();
-    vcl_vector<mbl_cloneable_ptr<clsfy_classifier_base> >::const_iterator treeIterEnd=trees_.end();
+    std::vector<mbl_cloneable_ptr<clsfy_classifier_base> >::const_iterator treeIter=trees_.begin();
+    std::vector<mbl_cloneable_ptr<clsfy_classifier_base> >::const_iterator treeIterEnd=trees_.end();
 
-    vcl_vector<double > classProbs(1,0.0);
-    vcl_vector<double > meanProbs(1,0.0);
+    std::vector<double > classProbs(1,0.0);
+    std::vector<double > meanProbs(1,0.0);
 
     while (treeIter != treeIterEnd)
     {
@@ -84,37 +86,37 @@ double clsfy_random_forest::log_l(const vnl_vector<double> &input) const
     //Retain logistic function relation to prob
     //i.e. invert the above relation
     double epsilon=1.0E-8;
-    vcl_vector<double > probs(1,0.5);
+    std::vector<double > probs(1,0.5);
     class_probabilities(probs,input);
     double p=probs[0];
     double d=(1.0/p)-1.0;
     double x=1.0;
     if (d>epsilon)
-        x=-vcl_log(d);
+        x=-std::log(d);
     else
-        x=-vcl_log(epsilon);
+        x=-std::log(epsilon);
 
     return x;
 }
 
 //======================= Out of Bag add-ons ==============================
-void clsfy_random_forest::class_probabilities_oob(vcl_vector<double> &outputs,
+void clsfy_random_forest::class_probabilities_oob(std::vector<double> &outputs,
                                                   const vnl_vector<double> &input,
-                                                  const vcl_vector<vcl_vector<unsigned > >& oobIndices,
+                                                  const std::vector<std::vector<unsigned > >& oobIndices,
                                                   unsigned this_index) const
 {
     outputs.resize(1);
 
-    vcl_vector<mbl_cloneable_ptr<clsfy_classifier_base> >::const_iterator treeIter=trees_.begin();
-    vcl_vector<mbl_cloneable_ptr<clsfy_classifier_base> >::const_iterator treeIterEnd=trees_.end();
+    std::vector<mbl_cloneable_ptr<clsfy_classifier_base> >::const_iterator treeIter=trees_.begin();
+    std::vector<mbl_cloneable_ptr<clsfy_classifier_base> >::const_iterator treeIterEnd=trees_.end();
 
-    vcl_vector<double > classProbs(1,0.0);
-    vcl_vector<double > meanProbs(1,0.0);
-    vcl_vector<vcl_vector<unsigned > >::const_iterator oobIndexIter=oobIndices.begin() ;
+    std::vector<double > classProbs(1,0.0);
+    std::vector<double > meanProbs(1,0.0);
+    std::vector<std::vector<unsigned > >::const_iterator oobIndexIter=oobIndices.begin() ;
     unsigned noob=0;
     while (treeIter != treeIterEnd)
     {
-        if (vcl_find(oobIndexIter->begin(),oobIndexIter->end(),this_index)==oobIndexIter->end())
+        if (std::find(oobIndexIter->begin(),oobIndexIter->end(),this_index)==oobIndexIter->end())
         {
             //Not found this_index, so Out of Bag - accumulate this tree's vote
             const clsfy_classifier_base* pTree=(*treeIter).ptr();
@@ -133,10 +135,10 @@ void clsfy_random_forest::class_probabilities_oob(vcl_vector<double> &outputs,
 //: Return the classification of the given probe vector using out of bag trees only.
 // See also class_probabilities_oob
 unsigned clsfy_random_forest::classify_oob(const vnl_vector<double> &input,
-                                           const vcl_vector<vcl_vector<unsigned > >& oobIndices,
+                                           const std::vector<std::vector<unsigned > >& oobIndices,
                                            unsigned this_index) const
 {
-    vcl_vector<double > classProbs(1,0.0);
+    std::vector<double > classProbs(1,0.0);
     class_probabilities_oob(classProbs,input,oobIndices,this_index);
     return (classProbs[0]>=0.5) ? 1 : 0;
 }
@@ -144,14 +146,14 @@ unsigned clsfy_random_forest::classify_oob(const vnl_vector<double> &input,
 
 //=======================================================================
 
-vcl_string clsfy_random_forest::is_a() const
+std::string clsfy_random_forest::is_a() const
 {
-    return vcl_string("clsfy_random_forest");
+    return std::string("clsfy_random_forest");
 }
 
 //=======================================================================
 
-bool clsfy_random_forest::is_class(vcl_string const& s) const
+bool clsfy_random_forest::is_class(std::string const& s) const
 {
     return s == clsfy_random_forest::is_a() || clsfy_classifier_base::is_class(s);
 }
@@ -172,16 +174,16 @@ clsfy_classifier_base* clsfy_random_forest::clone() const
 
 //=======================================================================
 
-void clsfy_random_forest::print_summary(vcl_ostream& os) const
+void clsfy_random_forest::print_summary(std::ostream& os) const
 {
-    os<<"clsfy_random_forest\t has "<<trees_.size()<<" trees"<<vcl_endl;
+    os<<"clsfy_random_forest\t has "<<trees_.size()<<" trees"<<std::endl;
 }
 
 //=======================================================================
 
 void clsfy_random_forest::b_write(vsl_b_ostream& bfs) const
 {
-    vcl_cout<<"clsfy_random_forest::b_write"<<vcl_endl;
+    std::cout<<"clsfy_random_forest::b_write"<<std::endl;
     vsl_b_write(bfs,version_no());
     unsigned n=trees_.size();
     vsl_b_write(bfs,n);
@@ -206,11 +208,11 @@ void clsfy_random_forest::b_read(vsl_b_istream& bfs)
         {
             unsigned n;
             vsl_b_read(bfs,n);
-            vcl_cout<<"Am attemptig to read in "<<n<<"\t trees"<<vcl_endl;
+            std::cout<<"Am attemptig to read in "<<n<<"\t trees"<<std::endl;
             trees_.reserve(n);
             for (unsigned i=0; i<n;++i)
             {
-//                vcl_cout<<"reading tree "<<i<<vcl_endl;
+//                std::cout<<"reading tree "<<i<<std::endl;
                 mbl_cloneable_ptr< clsfy_classifier_base> tree(new clsfy_binary_tree);
                 trees_.push_back(tree);
                 trees_.back()->b_read(bfs);
@@ -219,9 +221,9 @@ void clsfy_random_forest::b_read(vsl_b_istream& bfs)
         }
 
         default:
-            vcl_cerr << "I/O ERROR: clsfy_random_forest::b_read(vsl_b_istream&)\n"
+            std::cerr << "I/O ERROR: clsfy_random_forest::b_read(vsl_b_istream&)\n"
                      << "           Unknown version number "<< version << '\n';
-            bfs.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
+            bfs.is().clear(std::ios::badbit); // Set an unrecoverable IO error on stream
     }
 }
 
@@ -257,11 +259,11 @@ clsfy_random_forest& clsfy_random_forest::operator+=(const clsfy_random_forest& 
 //============ Friend functions for merging stuff ====================
 
 //: Merge the sub-forests in the input filenames into a single larger one
-void merge_sub_forests(const vcl_vector<vcl_string>& filenames,
+void merge_sub_forests(const std::vector<std::string>& filenames,
                        clsfy_random_forest& large_forest)
 {
-    vcl_vector<vcl_string>::const_iterator fileIter=filenames.begin();
-    vcl_vector<vcl_string>::const_iterator fileIterEnd=filenames.end();
+    std::vector<std::string>::const_iterator fileIter=filenames.begin();
+    std::vector<std::string>::const_iterator fileIterEnd=filenames.end();
     while (fileIter != fileIterEnd)
     {
         vsl_b_ifstream bfs_in(*fileIter);
@@ -276,11 +278,11 @@ void merge_sub_forests(const vcl_vector<vcl_string>& filenames,
 }
 
 //: Merge the sub-forests pointed to the input vector a single larger one
-void merge_sub_forests(const vcl_vector< clsfy_random_forest*>& sub_forests,
+void merge_sub_forests(const std::vector< clsfy_random_forest*>& sub_forests,
                        clsfy_random_forest& large_forest)
 {
-    vcl_vector<clsfy_random_forest*>::const_iterator subForestIter=sub_forests.begin();
-    vcl_vector<clsfy_random_forest*>::const_iterator subForestIterEnd=sub_forests.end();
+    std::vector<clsfy_random_forest*>::const_iterator subForestIter=sub_forests.begin();
+    std::vector<clsfy_random_forest*>::const_iterator subForestIterEnd=sub_forests.end();
     while (subForestIter != subForestIterEnd)
     {
         const clsfy_random_forest& subForest=**subForestIter;

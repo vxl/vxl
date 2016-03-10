@@ -9,7 +9,9 @@
 
 #include "bsta_von_mises.h"
 #include <vcl_cassert.h>
-#include <vcl_limits.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <limits>
 #include <vnl/vnl_math.h> // for pi
 
 namespace
@@ -53,14 +55,14 @@ namespace
     Q1=0.39894228; Q2=0.1328592e-1; Q3=0.225319e-2;
     Q4=-0.157565e-2; Q5=0.916281e-2; Q6=-0.2057706e-1;
     Q7=0.2635537e-1; Q8=-0.1647633e-1; Q9=0.392377e-2;
-    if (vcl_fabs(X) < 3.75) {
+    if (std::fabs(X) < 3.75) {
       Y=(X/3.75)*(X/3.75);
       return P1+Y*(P2+Y*(P3+Y*(P4+Y*(P5+Y*(P6+Y*P7)))));
     }
     else {
-      AX=vcl_fabs(X);
+      AX=std::fabs(X);
       Y=3.75/AX;
-      BX=vcl_exp(AX)/vcl_sqrt(AX);
+      BX=std::exp(AX)/std::sqrt(AX);
       AX=Q1+Y*(Q2+Y*(Q3+Y*(Q4+Y*(Q5+Y*(Q6+Y*(Q7+Y*(Q8+Y*Q9)))))));
       return AX*BX;
     }
@@ -74,8 +76,8 @@ T bsta_von_mises<T,3>::prob_density( typename bsta_von_mises<T,3>::vector_type c
   T dpt = bsta_von_mises_compute_dot<T,3,3>::value(mean_, v);
   double dp = static_cast<double>(dpt);
   double k = static_cast<double>(kappa_);
-  double ex = vcl_exp(k*dp);
-  double norm = k/(vcl_exp(k)-vcl_exp(-k));
+  double ex = std::exp(k*dp);
+  double norm = k/(std::exp(k)-std::exp(-k));
   norm /= vnl_math::twopi;
   return static_cast<T>(norm*ex);
 }
@@ -90,19 +92,19 @@ T bsta_von_mises<T,3>::probability(typename bsta_von_mises<T,3>::vector_type con
   double cos_gam = static_cast<double>(bsta_von_mises_compute_dot<T,3,3>::value(mean_, nv));
   if (cos_gam>1.0) cos_gam=1.0;
   if (cos_gam<-1.0) cos_gam=-1.0;
-  double gam = vcl_acos(cos_gam);
-  double sin_gam = vcl_sin(gam),cos_2_gam = vcl_cos(2.0*gam);
-  double cos_4_gam = vcl_cos(4.0*gam), tan_gam = sin_gam/cos_gam;
+  double gam = std::acos(cos_gam);
+  double sin_gam = std::sin(gam),cos_2_gam = std::cos(2.0*gam);
+  double cos_4_gam = std::cos(4.0*gam), tan_gam = sin_gam/cos_gam;
   double cos_gam_3 = cos_gam*cos_gam*cos_gam;
-  double cos_theta_m = vcl_cos(theta_max);
-  double cos_2_theta_m = vcl_cos(2.0*theta_max);
+  double cos_theta_m = std::cos(theta_max);
+  double cos_2_theta_m = std::cos(2.0*theta_max);
   double kap = static_cast<double>(kappa_);
   double prob = 0.0;
   if (kap<25) {
-    double e_kap = vcl_exp(kap);
+    double e_kap = std::exp(kap);
     double e_2_kap = e_kap*e_kap;
-    double e_kap_cos_gam = vcl_exp(kap*cos_gam);
-    double e_kap_cgam_cthm = vcl_exp(kap*cos_gam*cos_theta_m);
+    double e_kap_cos_gam = std::exp(kap*cos_gam);
+    double e_kap_cgam_cthm = std::exp(kap*cos_gam*cos_theta_m);
     double t1 = -1.0/(64.0*(e_2_kap -1));
     double t2 = (e_kap_cos_gam - e_kap_cgam_cthm);
     double t3 = (e_kap_cos_gam - cos_2_theta_m*e_kap_cgam_cthm);
@@ -115,8 +117,8 @@ T bsta_von_mises<T,3>::probability(typename bsta_von_mises<T,3>::vector_type con
     prob = t1*t8;
   }
   else {
-    double e_kap_cos_gam = vcl_exp(kap*(cos_gam-1.0));
-    double e_kap_cgam_cthm = vcl_exp(kap*(cos_gam*cos_theta_m-1.0));
+    double e_kap_cos_gam = std::exp(kap*(cos_gam-1.0));
+    double e_kap_cgam_cthm = std::exp(kap*(cos_gam*cos_theta_m-1.0));
     double t1 = -1.0/(64.0);
     double t2 = (e_kap_cos_gam - e_kap_cgam_cthm);
     double t3 = (e_kap_cos_gam - cos_2_theta_m*e_kap_cgam_cthm);
@@ -140,7 +142,7 @@ T bsta_von_mises<T,2>::prob_density(typename bsta_von_mises<T,2>::vector_type co
   T dpt = bsta_von_mises_compute_dot<T,2,2>::value(mean_, v);
   double dp = static_cast<double>(dpt);
   double k = static_cast<double>(kappa_);
-  double ex = vcl_exp(k*dp);
+  double ex = std::exp(k*dp);
   double i0 = I0(k);
   double norm = 1.0/i0;
   norm /= vnl_math::twopi;

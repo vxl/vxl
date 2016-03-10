@@ -8,8 +8,10 @@
 // \file
 // \author crossge@crd.ge.com
 
-#include <vcl_iosfwd.h>
-#include <vcl_vector.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iosfwd>
+#include <vector>
 #include <vbl/vbl_ref_count.h>
 #include "gst_edge_2d_sptr.h"
 
@@ -43,13 +45,13 @@ class gst_polygon_2d : public vbl_ref_count
   double area() const;
 
   // output
-  friend vcl_ostream &operator<<( vcl_ostream &os, gst_polygon_2d &p);
+  friend std::ostream &operator<<( std::ostream &os, gst_polygon_2d &p);
 
  protected:
   //: unordered, but oriented, list of edges
-  vcl_vector<gst_edge_2d_sptr> edges_;
+  std::vector<gst_edge_2d_sptr> edges_;
 };
 
-vcl_ostream &operator<<( vcl_ostream &os, gst_polygon_2d &p);
+std::ostream &operator<<( std::ostream &os, gst_polygon_2d &p);
 
 #endif // gst_polygon_2d_h_

@@ -12,7 +12,7 @@
 //-----------------------------------------------------------------------------
 
 #include <vcl_climits.h>  // for CHAR_BIT, number of bits in a char.
-#include <vcl_complex_fwd.h>
+#include <complex>
 
 #include <vil1/vil1_memory_image.h>
 #include <vil1/vil1_rgb.h>
@@ -53,7 +53,7 @@ struct vil1_memory_image_of_format<double> : public vil1_memory_image_format
 };
 
 VCL_DEFINE_SPECIALIZATION
-struct vil1_memory_image_of_format<vcl_complex<float> > : public vil1_memory_image_format
+struct vil1_memory_image_of_format<std::complex<float> > : public vil1_memory_image_format
 {
   vil1_memory_image_of_format()
   {
@@ -64,7 +64,7 @@ struct vil1_memory_image_of_format<vcl_complex<float> > : public vil1_memory_ima
 };
 
 VCL_DEFINE_SPECIALIZATION
-struct vil1_memory_image_of_format<vcl_complex<double> > : public vil1_memory_image_format
+struct vil1_memory_image_of_format<std::complex<double> > : public vil1_memory_image_format
 {
   vil1_memory_image_of_format()
   {

@@ -9,14 +9,16 @@
 #include <vnl/algo/vnl_amoeba.h>
 #include <vnl/algo/vnl_levenberg_marquardt.h>
 #include <vnl/algo/vnl_powell.h>
-#include <vcl_cstdlib.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <cstdlib>
 
 // generate a pyramid of transforms corresponding to the vil_image_pyramid
-static  vcl_vector<ihog_transform_2d>
+static  std::vector<ihog_transform_2d>
 w2img_pyramid(ihog_transform_2d const& w2img, int n_levels)
 {
   ihog_transform_2d temp = w2img;
-  vcl_vector<ihog_transform_2d> ret;
+  std::vector<ihog_transform_2d> ret;
   ret.push_back(w2img);
   ihog_transform_2d scaling;
   scaling.set_zoom_only(0.5,0,0);
@@ -279,13 +281,13 @@ void ihog_minimizer::minimize_exhaustive_minfo(int radius, ihog_transform_2d& xf
   for (int L=from_pyramid_.nlevels()-1; L>=0; --L)
   {
 #ifdef DEBUG
-    vcl_cout << "-- L: " << L << vcl_endl;
+    std::cout << "-- L: " << L << std::endl;
 #endif
     xform.set_origin( vgl_point_2d<double>(xform.origin().x()*2.0,
                                            xform.origin().y()*2.0) );
     scaled_radius = scaled_radius*2.0;
 #ifdef DEBUG
-    vcl_cout << "--- scaled_radius: " << scaled_radius << vcl_endl;
+    std::cout << "--- scaled_radius: " << scaled_radius << std::endl;
 #endif
     undo_xform = undo_xform * undo_step;
     ihog_image<float> image1(from_pyramid_(L),w2img1_[L]);
@@ -339,7 +341,7 @@ void ihog_minimizer::minimize_exhaustive_minfo(int radius, ihog_transform_2d& xf
         iy = int(xform.get_translation().y()),
         r  = int(scaled_radius/(from_pyramid_.nlevels()-L));
 #ifdef DEBUG
-    vcl_cout << "--- r: " << r << vcl_endl;
+    std::cout << "--- r: " << r << std::endl;
 #endif
     for (int tx = ix-r; tx < ix + r+1; tx++) {
       for (int ty = iy-r; ty < iy + r+1; ty++) {
@@ -353,7 +355,7 @@ void ihog_minimizer::minimize_exhaustive_minfo(int radius, ihog_transform_2d& xf
       }
     }
 #ifdef DEBUG
-    vcl_cout << "min_tx: " << min_tx << " min_ty: " << min_ty << vcl_endl;
+    std::cout << "min_tx: " << min_tx << " min_ty: " << min_ty << std::endl;
 #endif
     xform.set_translation_only(min_tx, min_ty);
 
@@ -389,7 +391,7 @@ void ihog_minimizer::minimize_using_minfo(ihog_transform_2d& xform)
   xform.set_origin( vgl_point_2d<double>(xform.origin().x()*init_scale,
                                          xform.origin().y()*init_scale) );
 
-  vcl_cout << "initial:\n\txform,"
+  std::cout << "initial:\n\txform,"
            << " ox: " << xform.origin().x()
            << " oy: " << xform.origin().y()
            << " tx: " << xform.get_translation().x()
@@ -397,7 +399,7 @@ void ihog_minimizer::minimize_using_minfo(ihog_transform_2d& xform)
 
   for (int L=from_pyramid_.nlevels()-1; L>=0; --L)
   {
-    vcl_cout << "BEGIN level L: " << L << "\n\txform,"
+    std::cout << "BEGIN level L: " << L << "\n\txform,"
              << " ox: " << xform.origin().x()
              << " oy: " << xform.origin().y()
              << " tx: " << xform.get_translation().x()
@@ -406,7 +408,7 @@ void ihog_minimizer::minimize_using_minfo(ihog_transform_2d& xform)
     xform.set_origin( vgl_point_2d<double>(xform.origin().x()*2.0,
                                            xform.origin().y()*2.0) );
 
-    vcl_cout << "BEGIN level L after ADJUSTMENT: " << L << "\n\txform,"
+    std::cout << "BEGIN level L after ADJUSTMENT: " << L << "\n\txform,"
              << " ox: " << xform.origin().x()
              << " oy: " << xform.origin().y()
              << " tx: " << xform.get_translation().x()
@@ -468,13 +470,13 @@ void ihog_minimizer::minimize_using_minfo(ihog_transform_2d& xform)
     end_error_ = minimizer.get_end_error();
     xform.set(param,form);
     delete cost;
-    vcl_cout << "END level L: " << L << "\n\txform,"
+    std::cout << "END level L: " << L << "\n\txform,"
              << " ox: " << xform.origin().x()
              << " oy: " << xform.origin().y()
              << " tx: " << xform.get_translation().x()
              << " ty: " << xform.get_translation().y() << '\n';
   }
-  vcl_cout << "FINAL:\n\txform,"
+  std::cout << "FINAL:\n\txform,"
            << " ox: " << xform.origin().x()
            << " oy: " << xform.origin().y()
            << " tx: " << xform.get_translation().x()

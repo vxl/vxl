@@ -17,8 +17,10 @@
 //
 //\endverbatim
 
-#include <vcl_vector.h>
-#include <vcl_list.h>
+#include <vector>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <list>
 
 #include "sdet_edgel.h"
 #include "sdet_curvelet.h"
@@ -62,7 +64,7 @@ public:
     token_len_(token_len),
     max_k_(max_k),
     max_gamma_(max_gamma),
-    nrad_((unsigned) vcl_ceil(rad)+1),
+    nrad_((unsigned) std::ceil(rad)+1),
     gap_(gap),
     maxN_(2*nrad_),
     centered_(centered),
@@ -85,10 +87,10 @@ public:
   sdet_curvelet_params params_;
 
   //: The curvelet map, indexed by edgel IDs
-  vcl_vector<cvlet_list > map_;
+  std::vector<cvlet_list > map_;
 
   //: The curvelet map for the other direction (only for DHT mode)
-  vcl_vector<cvlet_list > map2_;
+  std::vector<cvlet_list > map2_;
 
   //: constructor
   sdet_curvelet_map(sdet_edgemap_sptr EM=0, sdet_curvelet_params params=sdet_curvelet_params());
@@ -130,7 +132,7 @@ public:
   void delete_all_curvelets(sdet_edgel* e);
 
   //: does this curvelet exist at this edgel?
-  sdet_curvelet* does_curvelet_exist(sdet_edgel* e, vcl_deque<sdet_edgel*> & chain);
+  sdet_curvelet* does_curvelet_exist(sdet_edgel* e, std::deque<sdet_edgel*> & chain);
 
   //: does the given pair exist on the ref edgel?
   sdet_curvelet* find_pair(sdet_edgel* ref, sdet_edgel* eA, sdet_edgel* eB);

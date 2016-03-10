@@ -10,7 +10,8 @@
 #include <vnl/vnl_numeric_traits.h>
 #include <vnl/vnl_vector.h>
 #include <vnl/vnl_double_3.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <iostream>
 #include <vpgl/vpgl_camera.h>
 
 template<typename T>
@@ -18,8 +19,8 @@ class vpgl_ray_intersect_lsqr : public vnl_least_squares_function
 {
 public:
     //: Constructor
-    vpgl_ray_intersect_lsqr(vcl_vector<const vpgl_camera<T>* > const& cams,
-                            vcl_vector<vgl_point_2d<T> > const& image_pts,
+    vpgl_ray_intersect_lsqr(std::vector<const vpgl_camera<T>* > const& cams,
+                            std::vector<vgl_point_2d<T> > const& image_pts,
                             unsigned num_residuals);
 
     //: Destructor
@@ -38,14 +39,14 @@ public:
 
 protected:
     vpgl_ray_intersect_lsqr();//not valid
-    vcl_vector<const vpgl_camera<T>* > f_cameras_; //cameras
-    vcl_vector<vgl_point_2d<T> > f_image_pts_; //image points
+    std::vector<const vpgl_camera<T>* > f_cameras_; //cameras
+    std::vector<vgl_point_2d<T> > f_image_pts_; //image points
 };
 
 template<typename T>
 vpgl_ray_intersect_lsqr<T>::
-vpgl_ray_intersect_lsqr(vcl_vector<const vpgl_camera<T>* > const& cams,
-                        vcl_vector<vgl_point_2d<T> > const& image_pts,
+vpgl_ray_intersect_lsqr(std::vector<const vpgl_camera<T>* > const& cams,
+                        std::vector<vgl_point_2d<T> > const& image_pts,
                         unsigned num_residuals) :
 vnl_least_squares_function(3, num_residuals,
                            vnl_least_squares_function::no_gradient ),
@@ -75,7 +76,7 @@ void vpgl_ray_intersect_lsqr<T>::f(vnl_vector<double> const& intersection_point,
     double intersection_point_y =  intersection_point[1];
     double intersection_point_z =  intersection_point[2];
 #ifdef RAY_INT_DEBUG
-    vcl_cout << "Error Vector (" << intersection_point_x << ", "
+    std::cout << "Error Vector (" << intersection_point_x << ", "
     << intersection_point_y << ", " << intersection_point_z << ") = ";
 #endif
 
@@ -95,7 +96,7 @@ void vpgl_ray_intersect_lsqr<T>::f(vnl_vector<double> const& intersection_point,
         image_errors.put(2*image_no+1,
                          (cur_image_v - image_v));
 #ifdef RAY_INT_DEBUG
-        vcl_cout << " x_err = " << cur_image_u << '-' << image_u << '='
+        std::cout << " x_err = " << cur_image_u << '-' << image_u << '='
         << image_errors[2*image_no]
         << " y_err = " << cur_image_v << '-' << image_v << '='
         << image_errors[2*image_no+1];
@@ -103,7 +104,7 @@ void vpgl_ray_intersect_lsqr<T>::f(vnl_vector<double> const& intersection_point,
 
 
 #ifdef RAY_INT_DEBUG
-        vcl_cout << '\n';
+        std::cout << '\n';
 #endif
     }
 }
@@ -118,15 +119,15 @@ vpgl_ray_intersect<T>::vpgl_ray_intersect(unsigned dim): dim_(dim)
 // Returns true if successful, else false
 template<typename T>
 bool vpgl_ray_intersect<T>::
-intersect(vcl_vector<const vpgl_camera<T>* > const& cams,
-          vcl_vector<vgl_point_2d<T> > const& image_pts,
+intersect(std::vector<const vpgl_camera<T>* > const& cams,
+          std::vector<vgl_point_2d<T> > const& image_pts,
           vgl_point_3d<T> const& initial_intersection,
           vgl_point_3d<T>& intersection)
 {
   // Make sure the dimension is at least 2
   if (dim_ < 2)
   {
-    vcl_cerr << "The dimension is too small.  There must be at least 2 images"
+    std::cerr << "The dimension is too small.  There must be at least 2 images"
              << '\n';
     return false;
   }
@@ -134,14 +135,14 @@ intersect(vcl_vector<const vpgl_camera<T>* > const& cams,
   // Make sure there are correct number of cameras
   if (cams.size() != dim_)
   {
-    vcl_cerr << "Please provide correct number of cameras" << '\n';
+    std::cerr << "Please provide correct number of cameras" << '\n';
     return false;
   }
 
   // Make sure there are correct number of image points
   if (image_pts.size() != dim_)
   {
-    vcl_cerr << "Please provide correct number of image points" << '\n';
+    std::cerr << "Please provide correct number of image points" << '\n';
     return false;
   }
 
@@ -153,7 +154,7 @@ intersect(vcl_vector<const vpgl_camera<T>* > const& cams,
   vpgl_ray_intersect_lsqr<T> lqf(cams, image_pts, 2*dim_);
   vnl_levenberg_marquardt levmarq(lqf);
 #ifdef RAY_INT_DEBUG
-  vcl_cout << "Created LevenbergMarquardt minimizer ... setting tolerances\n";
+  std::cout << "Created LevenbergMarquardt minimizer ... setting tolerances\n";
   levmarq.set_verbose(true);
 #endif
   // Set the x-tolerance.  When the length of the steps taken in X (variables)
@@ -175,7 +176,7 @@ intersect(vcl_vector<const vpgl_camera<T>* > const& cams,
   intersection_pt[2]=initial_intersection.z();
 
 #ifdef RAY_INT_DEBUG
-  vcl_cout << "Initialized the intersection point " << intersection_pt
+  std::cout << "Initialized the intersection point " << intersection_pt
            << " ... minimizing\n";
 #endif
 
@@ -184,7 +185,7 @@ intersect(vcl_vector<const vpgl_camera<T>* > const& cams,
 
   // Summarize the results
 #ifdef RAY_INT_DEBUG
-  vcl_cout << "Min error of " << levmarq.get_end_error() << " at "
+  std::cout << "Min error of " << levmarq.get_end_error() << " at "
            << '(' << intersection_pt[0] << ", " << intersection_pt[1]
            << ", " << intersection_pt[2] << ")\n"
            << "Iterations: " << levmarq.get_num_iterations() << "    "

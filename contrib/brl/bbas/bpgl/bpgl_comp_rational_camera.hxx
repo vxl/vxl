@@ -4,9 +4,11 @@
 //:
 // \file
 #include "bpgl_comp_rational_camera.h"
-#include <vcl_cmath.h>
-#include <vcl_vector.hxx>
-#include <vcl_fstream.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <cmath>
+#include <vector>
+#include <fstream>
 #include <vgl/vgl_point_2d.h>
 #include <vgl/vgl_point_3d.h>
 //--------------------------------------
@@ -66,18 +68,18 @@ bpgl_comp_rational_camera(const T tu, const T tv, const T angle_in_radians,
 
 //: read from a file
 template <class T>
-bpgl_comp_rational_camera<T>::bpgl_comp_rational_camera(vcl_string cam_path)
+bpgl_comp_rational_camera<T>::bpgl_comp_rational_camera(std::string cam_path)
 {
   vpgl_rational_camera<T> *rcam = read_rational_camera<T >(cam_path);
 
-  vcl_ifstream file_inp;
+  std::ifstream file_inp;
   file_inp.open(cam_path.c_str());
   if (!file_inp.good()) {
-    vcl_cout << "error: bad filename: " << cam_path << vcl_endl;
+    std::cout << "error: bad filename: " << cam_path << std::endl;
     return;
   }
   vnl_matrix_fixed<T, 3,3> M;
-  vcl_string input;
+  std::string input;
   bool good = false;
   while (!file_inp.eof()&&!good) {
     file_inp >> input;
@@ -89,7 +91,7 @@ bpgl_comp_rational_camera<T>::bpgl_comp_rational_camera(vcl_string cam_path)
   }
   if  (!good)
   {
-    vcl_cout << "error: not a composite rational camera file\n";
+    std::cout << "error: not a composite rational camera file\n";
     return;
   }
   *this = bpgl_comp_rational_camera<T>(M, *rcam);
@@ -139,7 +141,7 @@ vgl_point_2d<T> bpgl_comp_rational_camera<T>::project(vgl_point_3d<T> world_poin
 
 //: print the camera parameters
 template <class T>
-void bpgl_comp_rational_camera<T>::print(vcl_ostream& s) const
+void bpgl_comp_rational_camera<T>::print(std::ostream& s) const
 {
   vpgl_scale_offset<T> sox = this->scale_offsets()[this->X_INDX];
   vpgl_scale_offset<T> soy = this->scale_offsets()[this->Y_INDX];
@@ -254,12 +256,12 @@ void bpgl_comp_rational_camera<T>::print(vcl_ostream& s) const
 }
 
 template <class T>
-bool bpgl_comp_rational_camera<T>::save(vcl_string cam_path)
+bool bpgl_comp_rational_camera<T>::save(std::string cam_path)
 {
-  vcl_ofstream file_out;
+  std::ofstream file_out;
   file_out.open(cam_path.c_str());
   if (!file_out.good()) {
-    vcl_cerr << "error: bad filename: " << cam_path << vcl_endl;
+    std::cerr << "error: bad filename: " << cam_path << std::endl;
     return false;
   }
   file_out.precision(12);
@@ -357,7 +359,7 @@ bpgl_comp_rational_camera<T>::set_trans_rotation(const T tu, const T tv,
                                                  const T angle_in_radians)
 {
   double theta_d = static_cast<double>(angle_in_radians);
-  double c = vcl_cos(theta_d), s = vcl_sin(theta_d);
+  double c = std::cos(theta_d), s = std::sin(theta_d);
   T ct = static_cast<T>(c), st = static_cast<T>(s);
   matrix_[0][0] = ct; matrix_[0][1] = -st; matrix_[0][2] = tu;
   matrix_[1][0] = st; matrix_[1][1] = ct;  matrix_[1][2] = tv;
@@ -370,7 +372,7 @@ bpgl_comp_rational_camera<T>::set_all(const T tu, const T tv,
                                       const T su, const T sv)
 {
   double theta_d = static_cast<double>(angle_in_radians);
-  double c = vcl_cos(theta_d), s = vcl_sin(theta_d);
+  double c = std::cos(theta_d), s = std::sin(theta_d);
   T ct = static_cast<T>(c), st = static_cast<T>(s);
   matrix_[0][0] = ct*su; matrix_[0][1] = -st*sv; matrix_[0][2] = tu;
   matrix_[1][0] = st*su; matrix_[1][1] = ct*sv;  matrix_[1][2] = tv;
@@ -394,7 +396,7 @@ T bpgl_comp_rational_camera<T>::rotation_in_radians()
 {
   double y = static_cast<double>(matrix_[1][0]);
   double x = static_cast<double>(matrix_[0][0]);
-  double angle = vcl_atan2(y, x);
+  double angle = std::atan2(y, x);
   return static_cast<T>(angle);
 }
 
@@ -406,15 +408,15 @@ void bpgl_comp_rational_camera<T>::image_scale(T& su, T& sv)
                                      matrix_[1][0]*matrix_[1][0]);
   double sv_sq = static_cast<double>(matrix_[0][1]*matrix_[0][1] +
                                      matrix_[1][1]*matrix_[1][1]);
-  double sud = vcl_sqrt(su_sq);
-  double svd = vcl_sqrt(sv_sq);
+  double sud = std::sqrt(su_sq);
+  double svd = std::sqrt(sv_sq);
   su = static_cast<T>(sud);
   sv = static_cast<T>(svd);
 }
 
 //: Write to stream
 template <class T>
-vcl_ostream&  operator<<(vcl_ostream& s, const bpgl_comp_rational_camera<T >& c )
+std::ostream&  operator<<(std::ostream& s, const bpgl_comp_rational_camera<T >& c )
 {
   c.print(s);
   return s;
@@ -425,7 +427,7 @@ vcl_ostream&  operator<<(vcl_ostream& s, const bpgl_comp_rational_camera<T >& c 
 #undef BPGL_COMP_RATIONAL_CAMERA_INSTANTIATE
 #define BPGL_COMP_RATIONAL_CAMERA_INSTANTIATE(T) \
 template class bpgl_comp_rational_camera<T >; \
-template vcl_ostream& operator<<(vcl_ostream&, const bpgl_comp_rational_camera<T >&)
+template std::ostream& operator<<(std::ostream&, const bpgl_comp_rational_camera<T >&)
 
 
 #endif // bpgl_comp_rational_camera_hxx_

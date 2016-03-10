@@ -20,7 +20,8 @@
 #include <vpdl/vpdt/vpdt_eigen_sym_matrix.h>
 #include <vpdl/vpdt/vpdt_norm_metric.h>
 #include <vnl/vnl_math.h> // for twopi
-#include <vcl_limits.h>
+#include <vcl_compiler.h>
+#include <limits>
 #include <vnl/vnl_erf.h>
 
 
@@ -72,7 +73,7 @@ class vpdt_gaussian
   // This must be multiplied by norm_const() to integrate to 1
   T density(const F& pt) const
   {
-    return static_cast<T>(vcl_exp(-sqr_mahal_dist(pt)/2));
+    return static_cast<T>(std::exp(-sqr_mahal_dist(pt)/2));
   }
 
   //: Compute the gradient of the density function, returned in \a g
@@ -80,7 +81,7 @@ class vpdt_gaussian
   T gradient_density(const F& pt, vector& g) const
   {
     T d = Metric::sqr_distance_deriv(pt,mean,covar,g);
-    d = vcl_exp(-d/2);
+    d = std::exp(-d/2);
     g *= -d/2;
     return d;
   }
@@ -176,7 +177,7 @@ struct vpdt_gaussian_integrator<F, typename vpdt_eigen_sym_matrix_gen<F>::type,
     for (unsigned int i=1; i<d; ++i)
       two_pi_n *= two_pi;
 
-    return static_cast<T>(vcl_sqrt(two_pi_n*Metric::covar_det(g.mean,g.covar)));
+    return static_cast<T>(std::sqrt(two_pi_n*Metric::covar_det(g.mean,g.covar)));
   }
 
   //: integrate from -infinity to \c pt
@@ -184,7 +185,7 @@ struct vpdt_gaussian_integrator<F, typename vpdt_eigen_sym_matrix_gen<F>::type,
   {
     // FIXME: implement this
     // probably requires numerical integration
-    return vcl_numeric_limits<T>::quiet_NaN();
+    return std::numeric_limits<T>::quiet_NaN();
   }
 };
 
@@ -206,7 +207,7 @@ struct vpdt_gaussian_integrator<F,F,vpdt_norm_metric<F,F>,
     for (unsigned int i=0; i<d; ++i)
       val *= two_pi*g.covar[i];
 
-    return static_cast<T>(vcl_sqrt(val));
+    return static_cast<T>(std::sqrt(val));
   }
 
   //: integrate from -infinity to \c pt
@@ -222,7 +223,7 @@ struct vpdt_gaussian_integrator<F,F,vpdt_norm_metric<F,F>,
           return T(0);
       }
       else{
-        double s2 = vcl_sqrt(2.0*vpdt_index(g.covar,i));
+        double s2 = std::sqrt(2.0*vpdt_index(g.covar,i));
         val *= 0.5*vnl_erf((vpdt_index(pt,i)-vpdt_index(g.mean,i))/s2) + 0.5;
       }
     }
@@ -250,7 +251,7 @@ struct vpdt_gaussian_integrator<F,typename vpdt_field_traits<F>::scalar_type,
     for (unsigned int i=0; i<d; ++i)
       val *= two_pi*g.covar;
 
-    return static_cast<T>(vcl_sqrt(val));
+    return static_cast<T>(std::sqrt(val));
   }
 
   //: integrate from -infinity to \c pt
@@ -264,7 +265,7 @@ struct vpdt_gaussian_integrator<F,typename vpdt_field_traits<F>::scalar_type,
           return T(0);
       return T(1);
     }
-    double s2 = 1/vcl_sqrt(2.0*g.covar);
+    double s2 = 1/std::sqrt(2.0*g.covar);
     double val = 1.0;
     for (unsigned int i=0; i<d; ++i)
     {
@@ -286,7 +287,7 @@ typename vpdt_field_traits<F>::type_is_scalar>
   //: integrate over the entire domain
   static inline T domain_integral(const vpdt_gaussian<F,F>& g)
   {
-    return static_cast<T>(vcl_sqrt(vnl_math::twopi*g.covar));
+    return static_cast<T>(std::sqrt(vnl_math::twopi*g.covar));
   }
 
   //: integrate from -infinity to \c pt
@@ -298,7 +299,7 @@ typename vpdt_field_traits<F>::type_is_scalar>
         return T(0);
       return T(1);
     }
-    double val = 0.5*vnl_erf((pt-g.mean)/vcl_sqrt(2.0*g.covar)) + 0.5;
+    double val = 0.5*vnl_erf((pt-g.mean)/std::sqrt(2.0*g.covar)) + 0.5;
     return static_cast<T>(val);
   }
 };

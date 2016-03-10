@@ -5,7 +5,9 @@
 
 #include <boxm2/cpp/algo/boxm2_cast_ray_function.h>
 #include <vil/vil_image_view.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iostream>
 
 class boxm2_cast_intensities_functor
 {
@@ -37,7 +39,7 @@ class boxm2_data_print_functor
   //: "default" constructor
   boxm2_data_print_functor() {}
 
-  bool init_data(boxm2_data_base* data, vcl_size_t data_size, vcl_string prefix)
+  bool init_data(boxm2_data_base* data, std::size_t data_size, std::string prefix)
   {
     buf_ = data;
     data_size_ = data_size;
@@ -53,8 +55,8 @@ class boxm2_data_print_functor
 
  private:
   boxm2_data_base *buf_;
-  vcl_size_t data_size_;
-  vcl_string prefix_;
+  std::size_t data_size_;
+  std::string prefix_;
 };
 
 #endif

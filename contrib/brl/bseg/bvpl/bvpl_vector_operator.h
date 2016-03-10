@@ -16,8 +16,10 @@
 #include "bvpl_combined_neighb_operator.h"
 #include <bvpl/kernels/bvpl_kernel_factory.h>
 #include <bvpl/functors/bvpl_local_max_functor.h>
-#include <vcl_iostream.h>
-#include <vcl_limits.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iostream>
+#include <limits>
 #include <vpl/vpl.h>
 
 class bvpl_vector_operator
@@ -82,7 +84,7 @@ void bvpl_vector_operator::non_maxima_suppression(bvxm_voxel_grid<T>* grid_in,
       if (!((idx.x() == 0) && (idx.y() == 0) && (idx.z() == 0)))
         if (subgrid.voxel(idx, val)) {
 #if 0
-          vcl_cout << "val" << val << "at " << idx <<vcl_endl;
+          std::cout << "val" << val << "at " << idx <<std::endl;
 #endif
           bvpl_kernel_dispatch d = *kernel_iter;
           func_max.apply(val, d);
@@ -126,7 +128,7 @@ void bvpl_vector_operator::local_non_maxima_suppression(bvxm_voxel_grid<T>* grid
         if (subgrid.voxel(idx, val) && id_subgrid.voxel(idx, id_val)) {
           if (id_val == index){
 #if 0
-            vcl_cout << "val" << val << "at " << idx <<vcl_endl;
+            std::cout << "val" << val << "at " << idx <<std::endl;
 #endif
             bvpl_kernel_dispatch d = *kernel_iter;
             func_max.apply(val, d);
@@ -160,9 +162,9 @@ void bvpl_vector_operator::apply_and_suppress(bvxm_voxel_grid<T>* grid,
   {
     bvpl_kernel_sptr kernel = kernel_vector->kernels_[id];
 #if 0
-    vcl_cout << "Processing axis: "  << kernel->axis() << vcl_endl
-             << "Processing angle: " << kernel->angle() << vcl_endl;
-             << "Processing scale: " << kernel->scale() << vcl_endl;
+    std::cout << "Processing axis: "  << kernel->axis() << std::endl
+             << "Processing angle: " << kernel->angle() << std::endl;
+             << "Processing scale: " << kernel->scale() << std::endl;
 #endif
     oper->operate(grid, kernel, &temp_grid);
     get_max_orientation_grid(out_grid, &temp_grid, id_grid, id);

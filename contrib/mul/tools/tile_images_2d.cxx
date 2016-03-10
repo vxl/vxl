@@ -1,9 +1,11 @@
 //: \file
 //  \brief Program to tile several 2D images onto a single large 2D image
 
-#include <vcl_exception.h>
-#include <vcl_cstdlib.h>
-#include <vcl_iostream.h>
+#include <exception>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <cstdlib>
+#include <iostream>
 #include <vul/vul_arg.h>
 #include <mbl/mbl_log.h>
 #include <vil/vil_convert.h>
@@ -28,18 +30,18 @@ static mbl_logger& logger()
 //: Read a list of filenames from a file
 // \param filename The name of a file containing a list of filenames
 // \retval list The list of filenames (any previous contents will be overwritten)
-static bool load_file_list(const vcl_string& filename,
-                           vcl_vector<vcl_string>& list)
+static bool load_file_list(const std::string& filename,
+                           std::vector<std::string>& list)
 {
   list.clear();
 
-  vcl_ifstream ifs(filename.c_str());
+  std::ifstream ifs(filename.c_str());
   if (!ifs || ifs.bad())
     return false;
 
   while (!ifs.eof() && ifs.good())
   {
-    vcl_string str;
+    std::string str;
     ifs >> str;
     if (ifs.good() && !str.empty())
       list.push_back(str);
@@ -53,7 +55,7 @@ static bool load_file_list(const vcl_string& filename,
 //========================================================================
 //: Load a 2D image
 // \note Currently only implemented for 3-plane, byte images -> rgb<byte>
-static unsigned load_image_2d(const vcl_string& filename,
+static unsigned load_image_2d(const std::string& filename,
                               vil_image_view<vil_rgb<vxl_byte> >& img_rgb)
 {
   vil_image_resource_sptr ir = vil_load_image_resource(filename.c_str());
@@ -71,9 +73,9 @@ static unsigned load_image_2d(const vcl_string& filename,
   }
   else
   {
-    vcl_cerr << "Image type not supported: "
+    std::cerr << "Image type not supported: "
              << "format=" << ir->pixel_format()
-             << ", nplanes=" << ir->nplanes() << vcl_endl;
+             << ", nplanes=" << ir->nplanes() << std::endl;
     return 2;
   }
 
@@ -89,21 +91,21 @@ int main2(int argc, char*argv[])
   vimt_add_all_binary_loaders();
 
   // Parse the program arguments
-  vul_arg<vcl_string> image_list_file(VXL_NULLPTR, "file containing a list of input image filenames");
-  vul_arg<vcl_string> output_image_filename(VXL_NULLPTR, "output image filename");
+  vul_arg<std::string> image_list_file(VXL_NULLPTR, "file containing a list of input image filenames");
+  vul_arg<std::string> output_image_filename(VXL_NULLPTR, "output image filename");
   vul_arg_parse(argc, argv);
 
   // Load the list of image filenames
-  vcl_vector<vcl_string> image_list;
+  std::vector<std::string> image_list;
   if (!load_file_list(image_list_file(), image_list))
   {
-    vcl_cerr << "Failed to load image list file\n";
+    std::cerr << "Failed to load image list file\n";
     return 1;
   }
 
   // Load the images
   const unsigned nimgs = image_list.size();
-  vcl_vector<vil_image_view<vil_rgb<vxl_byte> > > imgs(nimgs);
+  std::vector<vil_image_view<vil_rgb<vxl_byte> > > imgs(nimgs);
   for (unsigned t=0; t<nimgs; ++t)
   {
     load_image_2d(image_list[t], imgs[t]);
@@ -118,7 +120,7 @@ int main2(int argc, char*argv[])
   {
     if (imgs[t].ni()!=ni || imgs[t].nj()!=nj || imgs[t].nplanes()!=np)
     {
-      vcl_cerr << "ERROR: Images are not all the same size\n";
+      std::cerr << "ERROR: Images are not all the same size\n";
       return 2;
     }
   }
@@ -147,14 +149,14 @@ int main(int argc, char*argv[])
     mbl_logger::root().load_log_config_file();
     main2(argc, argv);
   }
-  catch (vcl_exception& e)
+  catch (std::exception& e)
   {
-    vcl_cout << "caught exception " << e.what() << vcl_endl;
+    std::cout << "caught exception " << e.what() << std::endl;
     return 3;
   }
   catch (...)
   {
-    vcl_cout << "caught unknown exception " << vcl_endl;
+    std::cout << "caught unknown exception " << std::endl;
     return 3;
   }
 

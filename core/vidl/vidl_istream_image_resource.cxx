@@ -10,7 +10,8 @@
 #include "vidl_convert.h"
 
 #include <vcl_cassert.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <iostream>
 
 #include <vil/vil_image_view.h>
 
@@ -172,8 +173,8 @@ vidl_istream_image_resource::get_copy_view(unsigned i0, unsigned ni,
    macro(VIL_PIXEL_FORMAT_BOOL , bool )
    macro(VIL_PIXEL_FORMAT_FLOAT , float )
    macro(VIL_PIXEL_FORMAT_DOUBLE , double )
-   macro(VIL_PIXEL_FORMAT_COMPLEX_FLOAT ,  vcl_complex<float>)
-   macro(VIL_PIXEL_FORMAT_COMPLEX_DOUBLE , vcl_complex<double>)
+   macro(VIL_PIXEL_FORMAT_COMPLEX_FLOAT ,  std::complex<float>)
+   macro(VIL_PIXEL_FORMAT_COMPLEX_DOUBLE , std::complex<double>)
 #undef macro
    default:
     break;
@@ -187,7 +188,7 @@ bool
 vidl_istream_image_resource::put_view(vil_image_view_base const& /*view*/,
                                       unsigned /*x0*/, unsigned /*y0*/)
 {
-  vcl_cerr << "vidl_istream_image_resource::put_view not supported\n";
+  std::cerr << "vidl_istream_image_resource::put_view not supported\n";
   return false;
 }
 
@@ -214,8 +215,8 @@ vidl_istream_image_resource::create_empty_view() const
    macro(VIL_PIXEL_FORMAT_BOOL , bool )
    macro(VIL_PIXEL_FORMAT_FLOAT , float )
    macro(VIL_PIXEL_FORMAT_DOUBLE , double )
-   macro(VIL_PIXEL_FORMAT_COMPLEX_FLOAT ,  vcl_complex<float>)
-   macro(VIL_PIXEL_FORMAT_COMPLEX_DOUBLE , vcl_complex<double>)
+   macro(VIL_PIXEL_FORMAT_COMPLEX_FLOAT ,  std::complex<float>)
+   macro(VIL_PIXEL_FORMAT_COMPLEX_DOUBLE , std::complex<double>)
 #undef macro
    default:
     break;

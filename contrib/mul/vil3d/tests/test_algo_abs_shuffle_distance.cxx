@@ -1,6 +1,8 @@
 // This is mul/vil3d/tests/test_algo_abs_shuffle_distance.cxx
 #include <testlib/testlib_test.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iostream>
 #include <vil3d/algo/vil3d_structuring_element.h>
 #include <vil3d/algo/vil3d_abs_shuffle_distance.h>
 #include <vil3d/vil3d_crop.h>
@@ -16,7 +18,7 @@ static void asd_fill_image(vil3d_image_view<int>& image)
 
 static void test_algo_abs_shuffle_distance()
 {
-  vcl_cout << "************************************\n"
+  std::cout << "************************************\n"
            << " Testing vil3d_abs_shuffle_distance\n"
            << "************************************\n";
 
@@ -29,7 +31,7 @@ static void test_algo_abs_shuffle_distance()
 
   vil3d_structuring_element se;
   se.set_to_sphere(1.5);
-  vcl_cout<<"Structuring element: "<<se<<vcl_endl;
+  std::cout<<"Structuring element: "<<se<<std::endl;
 
   asd_fill_image(image0);
 
@@ -71,9 +73,9 @@ static void test_algo_abs_shuffle_distance()
   TEST_NEAR("Shuffle dist to self, 2 pixel displacement - image",
             mean,1.0,1e-6);
 
-  vcl_cout<<"Using larger radius: "<<vcl_endl;
+  std::cout<<"Using larger radius: "<<std::endl;
   se.set_to_sphere(2.5);
-  vcl_cout<<"Structuring element: "<<se<<vcl_endl;
+  std::cout<<"Structuring element: "<<se<<std::endl;
   TEST_NEAR("Shuffle dist to self, 2 pixel displacement",
             vil3d_abs_shuffle_distance(sub_im1,sub_im3,se,false),0.0,1e-6);
 }

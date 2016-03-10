@@ -5,7 +5,8 @@
 // \file
 // \brief Access to certain POSIX functions.
 
-#include <vcl_cstddef.h>
+#include <vcl_compiler.h>
+#include <cstddef>
 
 //: Get the pathname of the current working directory.
 //
@@ -17,7 +18,7 @@
 //
 //  See also: getcwd(3) manpage.
 
-char           *vpl_getcwd( char *buf, vcl_size_t buf_size );
+char           *vpl_getcwd( char *buf, std::size_t buf_size );
 
 //: Create a new directory \a dir with permissions \a mode.
 int             vpl_mkdir( const char *dir, unsigned short mode );
@@ -46,7 +47,7 @@ int             vpl_putenv ( const char * envvar );
 unsigned        vpl_getpid( );
 
 //: Get the current machine's hostname.
-int             vpl_gethostname(char *name, vcl_size_t len );
+int             vpl_gethostname(char *name, std::size_t len );
 
 
 #endif // vpl_h_

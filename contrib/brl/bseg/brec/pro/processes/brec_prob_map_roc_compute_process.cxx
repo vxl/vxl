@@ -16,8 +16,10 @@
 
 #include <bprb/bprb_func_process.h>
 #include <bprb/bprb_parameters.h>
-#include <vcl_iostream.h>
-#include <vcl_fstream.h>
+#include <iostream>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <fstream>
 #include <brdb/brdb_value.h>
 #include <vil/vil_image_view.h>
 #include <vil/vil_convert.h>
@@ -27,7 +29,7 @@ bool brec_prob_map_roc_compute_process_cons(bprb_func_process& pro)
 {
   //inputs
   bool ok=false;
-  vcl_vector<vcl_string> input_types;
+  std::vector<std::string> input_types;
   input_types.push_back("vil_image_view_base_sptr"); //input probability frame
   input_types.push_back("vil_image_view_base_sptr"); //input probability frame's mask
   input_types.push_back("vil_image_view_base_sptr"); //foreground mask
@@ -36,7 +38,7 @@ bool brec_prob_map_roc_compute_process_cons(bprb_func_process& pro)
   if (!ok) return ok;
 
   //output
-  vcl_vector<vcl_string> output_types;
+  std::vector<std::string> output_types;
   output_types.push_back("float");  // return the threshold at the best operating point
   output_types.push_back("float");  // return a threshold
   ok = pro.set_output_types(output_types);
@@ -48,7 +50,7 @@ bool brec_prob_map_roc_compute_process(bprb_func_process& pro)
 {
   // Sanity check
   if (pro.n_inputs() < 4) {
-    vcl_cerr << " brec_prob_map_roc_compute_process - invalid inputs\n";
+    std::cerr << " brec_prob_map_roc_compute_process - invalid inputs\n";
     return false;
   }
 
@@ -66,9 +68,9 @@ bool brec_prob_map_roc_compute_process(bprb_func_process& pro)
   temp = pro.get_input<vil_image_view_base_sptr>(i++);
   vil_image_view<bool> fore_mask = *vil_convert_cast(bool(), temp);
 
-  vcl_string out_file = pro.get_input<vcl_string>(i++);
+  std::string out_file = pro.get_input<std::string>(i++);
 
-  vcl_vector<float> forepix, backpix;
+  std::vector<float> forepix, backpix;
   for (unsigned j = 0; j<nj; ++j)
     for (unsigned i = 0; i<ni; ++i)
     {
@@ -84,7 +86,7 @@ bool brec_prob_map_roc_compute_process(bprb_func_process& pro)
     return false;
   double nfd = nf, nbd = nb;
 #if 0
-  vcl_cout << "false_pos_fore true_pos_fore\n"
+  std::cout << "false_pos_fore true_pos_fore\n"
            << "----------------------------------------------------------\n";
   double inc = 0.05;
   unsigned N = 47;
@@ -96,14 +98,14 @@ bool brec_prob_map_roc_compute_process(bprb_func_process& pro)
   //double pa[58]={0.0, 0.001, 0.002, 0.003, 0.004, 0.005, 0.006, 0.007, 0.008, 0.009, 0.01, 0.015, 0.02, 0.025, 0.03, 0.04, 0.05, 0.06, 0.07, 0.08, 0.09, 0.10, 0.13, 0.15, 0.17, 0.2, 0.23, 0.25, 0.27, 0.3, 0.33, 0.35, 0.37, 0.4, 0.43, 0.45, 0.47, 0.5, 0.53, 0.55, 0.57, 0.6, 0.63, 0.65, 0.67, 0.7, 0.73, 0.75, 0.77, 0.8, 0.83, 0.85, 0.87, 0.9, 0.93, 0.95, 0.97, 1.0};
 #if 0
   unsigned N = 0;
-  vcl_vector<double> pa;
+  std::vector<double> pa;
   for (double th = 0.0; th <= 1.0; th+=0.002) {
     pa.push_back(th);
     N++;
   }
 #endif // 0
 
-  vcl_vector<double> fpr, tpr;
+  std::vector<double> fpr, tpr;
   for (unsigned ip = 0; ip<N; ++ip)
   {
     double p = pa[ip];
@@ -118,7 +120,7 @@ bool brec_prob_map_roc_compute_process(bprb_func_process& pro)
     double fore_false_pos_frac = (nbd-nbackd)/nbd;
     fpr.push_back(fore_false_pos_frac);
     tpr.push_back(fore_true_pos_frac);
-    //vcl_cout << fore_false_pos_frac << ' ' << fore_true_pos_frac << vcl_endl;
+    //std::cout << fore_false_pos_frac << ' ' << fore_true_pos_frac << std::endl;
   }
 
   double best_dist = 10000000000.0;
@@ -138,22 +140,22 @@ bool brec_prob_map_roc_compute_process(bprb_func_process& pro)
   }
 
 
-  vcl_cout << " threshold at fpr >= 0.1 is " << pa[fpr_id] << " and actual fpr is: " << fpr[fpr_id] << vcl_endl;
+  std::cout << " threshold at fpr >= 0.1 is " << pa[fpr_id] << " and actual fpr is: " << fpr[fpr_id] << std::endl;
 
   pro.set_output_val<float>(0, (float)pa[best_id]);
   pro.set_output_val<float>(1, (float)pa[fpr_id]);
 
-  vcl_ofstream of(out_file.c_str());
+  std::ofstream of(out_file.c_str());
   of << "# brec_prob_map_roc_compute_process\n#line 1: threshold values\n#line 2: FPR values for thresholds\n#line 3: TPR values\n";
   for (unsigned ip = 0; ip<N; ++ip)
     of << pa[ip] << '\t';
-  of << vcl_endl;
+  of << std::endl;
   for (unsigned ip = 0; ip<N; ++ip)
     of << fpr[ip] << '\t';
-  of << vcl_endl;
+  of << std::endl;
   for (unsigned ip = 0; ip<N; ++ip)
     of << tpr[ip] << '\t';
-  of << vcl_endl;
+  of << std::endl;
   of.close();
 
   return true;
@@ -165,7 +167,7 @@ bool brec_prob_map_roc_compute2_process_cons(bprb_func_process& pro)
 {
   //inputs
   bool ok=false;
-  vcl_vector<vcl_string> input_types;
+  std::vector<std::string> input_types;
   input_types.push_back("vil_image_view_base_sptr"); //input probability frame
   input_types.push_back("vil_image_view_base_sptr"); //input probability frame's mask
   input_types.push_back("vil_image_view_base_sptr"); //foreground mask
@@ -174,7 +176,7 @@ bool brec_prob_map_roc_compute2_process_cons(bprb_func_process& pro)
   if (!ok) return ok;
 
   //output
-  vcl_vector<vcl_string> output_types;
+  std::vector<std::string> output_types;
   output_types.push_back("float");  // return TP
   output_types.push_back("float");  // return FP
   output_types.push_back("float");  // return number of foreground pixels, nfd, TPR is TP/nfd
@@ -188,7 +190,7 @@ bool brec_prob_map_roc_compute2_process(bprb_func_process& pro)
 {
   // Sanity check
   if (pro.n_inputs() < 4) {
-    vcl_cerr << " brec_prob_map_roc_compute2_process - invalid inputs\n";
+    std::cerr << " brec_prob_map_roc_compute2_process - invalid inputs\n";
     return false;
   }
 
@@ -208,7 +210,7 @@ bool brec_prob_map_roc_compute2_process(bprb_func_process& pro)
 
   double threshold = pro.get_input<double>(i++);
 
-  vcl_vector<float> forepix, backpix;
+  std::vector<float> forepix, backpix;
   for (unsigned j = 0; j<nj; ++j)
     for (unsigned i = 0; i<ni; ++i)
     {

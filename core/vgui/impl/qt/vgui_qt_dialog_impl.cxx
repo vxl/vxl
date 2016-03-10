@@ -2,8 +2,9 @@
 #include "vgui_qt_dialog_impl.h"
 #include "vgui_qt_adaptor.h"
 
-#include <vcl_vector.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <vector>
+#include <iostream>
 
 #include <vgui/internals/vgui_dialog_impl.h>
 #include <vgui/internals/vgui_simple_field.h>
@@ -67,12 +68,12 @@ bool vgui_qt_dialog_impl::ask()
      }
    }
 
-   for (vcl_vector<element>::iterator ei = elements.begin();
+   for (std::vector<element>::iterator ei = elements.begin();
         ei != elements.end(); ++ei)
    {
       element l = (*ei);
       QWidget* widget = static_cast<QWidget*>(l.widget);
-      if (!widget) vcl_cerr << "No QWidget defined for element type " << l.type << vcl_endl;
+      if (!widget) std::cerr << "No QWidget defined for element type " << l.type << std::endl;
       else
       {
          if (l.type == int_elem    ||
@@ -120,7 +121,7 @@ bool vgui_qt_dialog_impl::ask()
 
    if (result)
    {
-      for (vcl_vector<element>::iterator ei = elements.begin();
+      for (std::vector<element>::iterator ei = elements.begin();
            ei != elements.end(); ++ei)
       {
          element l = (*ei);
@@ -215,7 +216,7 @@ void* vgui_qt_dialog_impl::double_field_widget(const char* txt, double& v)
 
 
 //-----------------------------------------------------------------------------
-void* vgui_qt_dialog_impl::string_field_widget(const char* txt, vcl_string& v)
+void* vgui_qt_dialog_impl::string_field_widget(const char* txt, std::string& v)
 {
    QLineEdit* widget = new QLineEdit(v.c_str(), this);
    return widget;
@@ -223,10 +224,10 @@ void* vgui_qt_dialog_impl::string_field_widget(const char* txt, vcl_string& v)
 
 
 //-----------------------------------------------------------------------------
-void* vgui_qt_dialog_impl::choice_field_widget(const char* txt, const vcl_vector<vcl_string>& labels, int& v)
+void* vgui_qt_dialog_impl::choice_field_widget(const char* txt, const std::vector<std::string>& labels, int& v)
 {
    QComboBox* widget = new QComboBox(this);
-   for (vcl_vector<vcl_string>::const_iterator si = labels.begin(); si != labels.end(); ++si)
+   for (std::vector<std::string>::const_iterator si = labels.begin(); si != labels.end(); ++si)
    {
       widget->insertItem((*si).c_str());
    }
@@ -244,7 +245,7 @@ void* vgui_qt_dialog_impl::text_message_widget(const char* txt)
 
 
 //-----------------------------------------------------------------------------
-void* vgui_qt_dialog_impl::file_browser_widget(const char* txt, vcl_string& v, vcl_string& s)
+void* vgui_qt_dialog_impl::file_browser_widget(const char* txt, std::string& v, std::string& s)
 {
    vgui_qt_filebrowser_impl* widget = new vgui_qt_filebrowser_impl(this, txt, v, s);
    return widget;
@@ -252,7 +253,7 @@ void* vgui_qt_dialog_impl::file_browser_widget(const char* txt, vcl_string& v, v
 
 
 //-----------------------------------------------------------------------------
-void* vgui_qt_dialog_impl::inline_file_browser_widget(const char * txt,vcl_string& v, vcl_string& s)
+void* vgui_qt_dialog_impl::inline_file_browser_widget(const char * txt,std::string& v, std::string& s)
 {
    vgui_qt_filebrowser_impl* widget = new vgui_qt_filebrowser_impl(this, txt, v, s);
    return widget;
@@ -260,7 +261,7 @@ void* vgui_qt_dialog_impl::inline_file_browser_widget(const char * txt,vcl_strin
 
 
 //-----------------------------------------------------------------------------
-void* vgui_qt_dialog_impl::color_chooser_widget(const char * txt,vcl_string& val)//, vcl_string& s)
+void* vgui_qt_dialog_impl::color_chooser_widget(const char * txt,std::string& val)//, std::string& s)
 {
    vgui_qt_colorchooser_impl* widget = new vgui_qt_colorchooser_impl(this, txt, val);
    return widget;
@@ -277,7 +278,7 @@ void* vgui_qt_dialog_impl::inline_tableau_widget(const vgui_tableau_sptr tab,
 
 
 //-----------------------------------------------------------------------------
-void* vgui_qt_dialog_impl::inline_color_chooser_widget(const char * txt,vcl_string& val)//, vcl_string& s)
+void* vgui_qt_dialog_impl::inline_color_chooser_widget(const char * txt,std::string& val)//, std::string& s)
 {
    vgui_qt_colorchooser_impl* widget = new vgui_qt_colorchooser_impl(this, txt, val);
    return widget;
@@ -285,7 +286,7 @@ void* vgui_qt_dialog_impl::inline_color_chooser_widget(const char * txt,vcl_stri
 
 
 //-----------------------------------------------------------------------------
-vgui_qt_filebrowser_impl::vgui_qt_filebrowser_impl(QWidget* parent, const char* txt, vcl_string& v, vcl_string& s)
+vgui_qt_filebrowser_impl::vgui_qt_filebrowser_impl(QWidget* parent, const char* txt, std::string& v, std::string& s)
 : QHGroupBox(txt, parent), filter_(v)
 {
    edit_ = new QLineEdit(s.c_str(), this);
@@ -303,7 +304,7 @@ void vgui_qt_filebrowser_impl::get_a_file()
 
 
 //-----------------------------------------------------------------------------
-vgui_qt_colorchooser_impl::vgui_qt_colorchooser_impl(QWidget* parent, const char* txt, vcl_string& val)
+vgui_qt_colorchooser_impl::vgui_qt_colorchooser_impl(QWidget* parent, const char* txt, std::string& val)
 : QHGroupBox(txt, parent), value_(val)
 {
    frame_ = new QFrame(this, "farm");

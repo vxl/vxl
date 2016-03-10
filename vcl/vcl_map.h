@@ -2,17 +2,16 @@
 #define vcl_map_h_
 
 #include "vcl_compiler.h"
-
-// vcl_less<> is a default argument to vcl_map<> and vcl_multimap<>
-// so we need this for compilers where vcl_less is a macro.
+#include <map>
+/* The following includes are needed to preserve backwards
+   compatilibility for external applications.  Previously
+   definitions were defined in multiple headers with conditional
+   ifndef guards, but we now include a reference header
+   instead */
 #include "vcl_functional.h"
-
-// -------------------- iso
-# include "iso/vcl_map.h"
-
-#define VCL_MAP_INSTANTIATE(T1, T2, L) extern "please include vcl_map.hxx"
-#define VCL_MULTIMAP_INSTANTIATE(T1, T2, L) extern "please include vcl_multimap.hxx"
-
-#include "vcl_map.hxx"
+//vcl alias names to std names
+#define vcl_map std::map
+#define vcl_multimap std::multimap
+#define vcl_swap std::swap
 
 #endif // vcl_map_h_

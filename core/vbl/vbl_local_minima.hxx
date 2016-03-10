@@ -2,8 +2,9 @@
 #define VBL_LOCAL_MINIMA_TXX_
 #include "vbl_local_minima.h"
 //
-#include <vcl_iostream.h>
-#include <vcl_limits.h>
+#include <iostream>
+#include <vcl_compiler.h>
+#include <limits>
 #include <vcl_cassert.h>
 
 template <class T>
@@ -54,7 +55,7 @@ bool local_minima(vbl_array_2d<T> const& in, vbl_array_2d<T>& minima, T thresh)
   if (nr<2||nc<2)
     return false;
   bool  minima_found = false;
-  T mval = vcl_numeric_limits<T>::max();
+  T mval = std::numeric_limits<T>::max();
   for (unsigned r = 0; r<nr; ++r)
     for (unsigned c = 0; c<nc; ++c)
       minima[r][c] = T(0);
@@ -268,7 +269,7 @@ bool local_minima(vbl_array_3d<T> const& in, vbl_array_3d<T>& minima, T thresh)
         minima[x1][x2][x3] = T(0);
   T v, d, mind;
   bool fail;
-  const T mval = vcl_numeric_limits<T>::max();
+  const T mval = std::numeric_limits<T>::max();
   // general case
   if (n3>2||n2>2||n1>2)
     for (x3 = 1; x3<n3-1; ++x3)

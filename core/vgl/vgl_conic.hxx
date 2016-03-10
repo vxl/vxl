@@ -7,8 +7,9 @@
 
 #include "vgl_conic.h"
 
-#include <vcl_cmath.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <cmath>
+#include <iostream>
 #include <vcl_compiler.h>
 
 static const char *vgl_conic_name[] =
@@ -32,10 +33,10 @@ static const char *vgl_conic_name[] =
 //: Returns the type name of the conic.
 
 template <class T>
-vcl_string vgl_conic<T>::real_type() const { return vgl_conic_name[(int)type_]; }
+std::string vgl_conic<T>::real_type() const { return vgl_conic_name[(int)type_]; }
 
 template <class T>
-typename vgl_conic<T>::vgl_conic_type vgl_conic<T>::type_by_name(vcl_string const& name)
+typename vgl_conic<T>::vgl_conic_type vgl_conic<T>::type_by_name(std::string const& name)
 {
   for (int i = (int)no_type; i < num_conic_types; i++)
     if (name == vgl_conic_name[i])
@@ -44,7 +45,7 @@ typename vgl_conic<T>::vgl_conic_type vgl_conic<T>::type_by_name(vcl_string cons
 }
 
 template <class T>
-vcl_string vgl_conic<T>::type_by_number(typename vgl_conic<T>::vgl_conic_type type)
+std::string vgl_conic<T>::type_by_number(typename vgl_conic<T>::vgl_conic_type type)
 {
   if (type <= 0 || type >= num_conic_types) return vgl_conic_name[no_type];
   return vgl_conic_name[type];
@@ -110,7 +111,7 @@ vgl_conic<T>::vgl_conic(vgl_homg_point_2d<T> const& co, T rx, T ry, T theta)
     c_ = co.x()*co.x();
     // polar line of (rx,ry) must have direction (co.y(),-co.x()), hence
     // 2*a_*rx + b_*ry + d_ = 2*t*co.x() and b_*rx + 2*c_*ry +e_ = 2*t*co.y() :
-    theta /= vcl_sqrt(co.x()*co.x()+co.y()*co.y()); // cannot be 0
+    theta /= std::sqrt(co.x()*co.x()+co.y()*co.y()); // cannot be 0
     d_ = -2*a_*rx - b_*ry + 2*theta*co.x();
     e_ = -2*c_*ry - b_*rx + 2*theta*co.y();
     // conic must go through (rx,ry):
@@ -120,8 +121,8 @@ vgl_conic<T>::vgl_conic(vgl_homg_point_2d<T> const& co, T rx, T ry, T theta)
     rx = (rx < 0) ? (-rx*rx) : rx*rx; // abs of square
     ry = (ry < 0) ? (-ry*ry) : ry*ry; // idem
 
-    double ct = vcl_cos(-theta); // rotate counterclockwise over theta
-    double st = vcl_sin(-theta);
+    double ct = std::cos(-theta); // rotate counterclockwise over theta
+    double st = std::sin(-theta);
     T u = co.x();
     T v = co.y();
     a_ = T(rx*st*st + ry*ct*ct);
@@ -217,14 +218,14 @@ ellipse_geometry(double& xc, double& yc, double& major_axis_length,
   yc = (D*B - A*E)/D2;
 
   double trace = A + C;
-  double disc = vcl_sqrt(trace*trace - 4.0*D2);
+  double disc = std::sqrt(trace*trace - 4.0*D2);
   double cmaj = (trace+disc)*D2/(2*det); if (cmaj < 0) cmaj = -cmaj;
   double cmin = (trace-disc)*D2/(2*det); if (cmin < 0) cmin = -cmin;
-  minor_axis_length = 1.0/vcl_sqrt(cmaj>cmin?cmaj:cmin);
-  major_axis_length = 1.0/vcl_sqrt(cmaj>cmin?cmin:cmaj);
+  minor_axis_length = 1.0/std::sqrt(cmaj>cmin?cmaj:cmin);
+  major_axis_length = 1.0/std::sqrt(cmaj>cmin?cmin:cmaj);
 
   // Find the angle that diagonalizes the upper 2x2 sub-matrix
-  angle_in_radians  = -0.5 * vcl_atan2(2*B, C-A);
+  angle_in_radians  = -0.5 * std::atan2(2*B, C-A);
   //                  ^
   // and return the negative of this angle
   return true;
@@ -234,12 +235,12 @@ ellipse_geometry(double& xc, double& yc, double& major_axis_length,
 //: Returns the list of component lines, when degenerate and real components.
 //  Otherwise returns an empty list.
 template <class T>
-vcl_list<vgl_homg_line_2d<T> > vgl_conic<T>::components() const
+std::list<vgl_homg_line_2d<T> > vgl_conic<T>::components() const
 {
   if (!is_degenerate() ||
       type() == complex_intersecting_lines ||
       type() == complex_parallel_lines)
-    return vcl_list<vgl_homg_line_2d<T> >(); // no real components
+    return std::list<vgl_homg_line_2d<T> >(); // no real components
 
   T A = a_, B = b_/2, C = c_, D = d_/2, E = e_/2, F = f_;
 
@@ -252,7 +253,7 @@ vcl_list<vgl_homg_line_2d<T> > vgl_conic<T>::components() const
       l = vgl_homg_line_2d<T>(B,C,E);
     else // only F!=0 : 2x line at infinity w=0
       l = vgl_homg_line_2d<T>(D,E,F);
-    return vcl_list<vgl_homg_line_2d<T> >(2,l); // two identical lines
+    return std::list<vgl_homg_line_2d<T> >(2,l); // two identical lines
   }
 
   // Both component lines must pass through the centre of this conic
@@ -263,22 +264,22 @@ vcl_list<vgl_homg_line_2d<T> > vgl_conic<T>::components() const
     // In this case the centre lies at infinity.
     // Either these lines both intersect the X axis, or both intersect the Y axis:
     if (A!=0 || D!=0) { // X axis: intersections satisfy y=0 && Axx+2Dxw+Fww=0:
-      vgl_homg_line_2d<T> l1(cntr, vgl_homg_point_2d<T>(-D+vcl_sqrt(D*D-A*F),0,A)),
-                          l2(cntr, vgl_homg_point_2d<T>(-D-vcl_sqrt(D*D-A*F),0,A));
-      vcl_list<vgl_homg_line_2d<T> > v(1,l1); v.push_back(l2);
+      vgl_homg_line_2d<T> l1(cntr, vgl_homg_point_2d<T>(-D+std::sqrt(D*D-A*F),0,A)),
+                          l2(cntr, vgl_homg_point_2d<T>(-D-std::sqrt(D*D-A*F),0,A));
+      std::list<vgl_homg_line_2d<T> > v(1,l1); v.push_back(l2);
       return v;
     }
     else { // Y axis: x=0 && Cyy+2Eyw+Fww=0:
-      vgl_homg_line_2d<T> l1(cntr, vgl_homg_point_2d<T>(0,-E+vcl_sqrt(E*E-C*F),C)),
-                          l2(cntr, vgl_homg_point_2d<T>(0,-E-vcl_sqrt(E*E-C*F),C));
-      vcl_list<vgl_homg_line_2d<T> > v(1,l1); v.push_back(l2);
+      vgl_homg_line_2d<T> l1(cntr, vgl_homg_point_2d<T>(0,-E+std::sqrt(E*E-C*F),C)),
+                          l2(cntr, vgl_homg_point_2d<T>(0,-E-std::sqrt(E*E-C*F),C));
+      std::list<vgl_homg_line_2d<T> > v(1,l1); v.push_back(l2);
       return v;
     }
   }
 
   // Only remaining case: type() == real_intersecting_lines.
   if (A==0 && B==0 && C==0) { // line at infinity (w=0) is a component
-    vcl_list<vgl_homg_line_2d<T> > v(1,vgl_homg_line_2d<T>(0,0,1));
+    std::list<vgl_homg_line_2d<T> > v(1,vgl_homg_line_2d<T>(0,0,1));
     v.push_back(vgl_homg_line_2d<T>(d_,e_,f_));
     return v;
   }
@@ -287,13 +288,13 @@ vcl_list<vgl_homg_line_2d<T> > vgl_conic<T>::components() const
   if (A==0 && C==0) { // components are vertical and horizontal, resp.
     vgl_homg_line_2d<T> l1(cntr, vgl_homg_point_2d<T>(0,1,0)),
                         l2(cntr, vgl_homg_point_2d<T>(1,0,0));
-    vcl_list<vgl_homg_line_2d<T> > v(1,l1); v.push_back(l2);
+    std::list<vgl_homg_line_2d<T> > v(1,l1); v.push_back(l2);
     return v;
   }
   else {
-    vgl_homg_line_2d<T> l1(cntr, vgl_homg_point_2d<T>(-B+vcl_sqrt(B*B-A*C),A,0)),
-                        l2(cntr, vgl_homg_point_2d<T>(-B-vcl_sqrt(B*B-A*C),A,0));
-    vcl_list<vgl_homg_line_2d<T> > v(1,l1); v.push_back(l2);
+    vgl_homg_line_2d<T> l1(cntr, vgl_homg_point_2d<T>(-B+std::sqrt(B*B-A*C),A,0)),
+                        l2(cntr, vgl_homg_point_2d<T>(-B-std::sqrt(B*B-A*C),A,0));
+    std::list<vgl_homg_line_2d<T> > v(1,l1); v.push_back(l2);
     return v;
   }
 }
@@ -377,7 +378,7 @@ double vgl_conic<T>::curvature_at(vgl_point_2d<T> const& p) const
   double f_x_2 = f_x*f_x;
   double f_y_2 = f_y*f_y;
   double denom = f_x_2 + f_y_2;
-  denom = vcl_sqrt(denom*denom*denom);
+  denom = std::sqrt(denom*denom*denom);
 
   // Divergent of the unit normal grad f/|grad f|
   return (f_xx*f_y_2 - 2*f_x*f_y*f_xy + f_yy*f_x_2) / denom;
@@ -386,7 +387,7 @@ double vgl_conic<T>::curvature_at(vgl_point_2d<T> const& p) const
 
 //: Write "<vgl_conic aX^2+bXY+cY^2+dXW+eYW+fW^2=0>" to stream
 template <class T>
-vcl_ostream& operator<<(vcl_ostream& s, vgl_conic<T> const& co)
+std::ostream& operator<<(std::ostream& s, vgl_conic<T> const& co)
 {
   s << "<vgl_conic ";
   if (co.a() == 1) s << "X^2";
@@ -417,7 +418,7 @@ vcl_ostream& operator<<(vcl_ostream& s, vgl_conic<T> const& co)
 
 //: Read a b c d e f from stream
 template <class T>
-vcl_istream& operator>>(vcl_istream& is, vgl_conic<T>& co)
+std::istream& operator>>(std::istream& is, vgl_conic<T>& co)
 {
   T ta, tb, tc, td, te, tf; is >> ta >> tb >> tc >> td >> te >> tf;
   co.set(ta,tb,tc,td,te,tf); return is;
@@ -426,7 +427,7 @@ vcl_istream& operator>>(vcl_istream& is, vgl_conic<T>& co)
 #undef VGL_CONIC_INSTANTIATE
 #define VGL_CONIC_INSTANTIATE(T) \
 template class vgl_conic<T >; \
-template vcl_ostream& operator<<(vcl_ostream&, const vgl_conic<T >&); \
-template vcl_istream& operator>>(vcl_istream&, vgl_conic<T >&)
+template std::ostream& operator<<(std::ostream&, const vgl_conic<T >&); \
+template std::istream& operator>>(std::istream&, vgl_conic<T >&)
 
 #endif // vgl_conic_hxx_

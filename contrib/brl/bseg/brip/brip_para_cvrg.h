@@ -36,7 +36,9 @@
 #include <vil/vil_image_view.h>
 #include <vil/vil_image_resource_sptr.h>
 #include <vil/vil_rgb.h>
-#include <vcl_vector.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <vector>
 class brip_para_cvrg : public brip_para_cvrg_params
 {
   // PUBLIC INTERFACE----------------------------------------------------------
@@ -76,10 +78,10 @@ class brip_para_cvrg : public brip_para_cvrg_params
   void grad135(int x, int y, vil_image_view<float> const& smooth,
                vil_image_view<float>& grad135);
   void compute_gradients();
-  float project(int x, int y, int dir, vcl_vector<float>& projection);
-  void remove_flat_peaks(int n, vcl_vector<float>& array);
-  void non_maximum_supress(vcl_vector<float> const& array, vcl_vector<float>& sup_array);
-  float parallel_coverage(vcl_vector<float> const& sup_array);
+  float project(int x, int y, int dir, std::vector<float>& projection);
+  void remove_flat_peaks(int n, std::vector<float>& array);
+  void non_maximum_supress(std::vector<float> const& array, std::vector<float>& sup_array);
+  float parallel_coverage(std::vector<float> const& sup_array);
   void compute_parallel_coverage();
   void compute_image(vil_image_view<float> const& data,
                      vil_image_view<unsigned char>& image);
@@ -88,7 +90,7 @@ class brip_para_cvrg : public brip_para_cvrg_params
   int proj_n_;         // Number of pixels in the projection array
   int width_;          // The smoothing kernel width
   int k_size_;         // The kernel is 2*_width+1
-  vcl_vector<float> kernel_;      // 1-Dimensional convolution kernel of size k_size
+  std::vector<float> kernel_;      // 1-Dimensional convolution kernel of size k_size
 
   int xstart_, ystart_; // The origin of the buffer in the image
   int xsize_, ysize_;   // The width of the image buffer
@@ -105,11 +107,11 @@ class brip_para_cvrg : public brip_para_cvrg_params
   //A memory image of the max pattern orientation
   vil_image_view<unsigned char> dir_image_;
   vil_image_view<float> image_; //original image converted to float
-  vcl_vector<float> sup_proj_;     //A 1-d array for maximal suppression
-  vcl_vector<float> proj_0_;       //1d arrays for projecting the gradient magnitude
-  vcl_vector<float> proj_45_;
-  vcl_vector<float> proj_90_;
-  vcl_vector<float> proj_135_;
+  std::vector<float> sup_proj_;     //A 1-d array for maximal suppression
+  std::vector<float> proj_0_;       //1d arrays for projecting the gradient magnitude
+  std::vector<float> proj_45_;
+  std::vector<float> proj_90_;
+  std::vector<float> proj_135_;
 };
 
 #endif

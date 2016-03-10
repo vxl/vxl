@@ -10,7 +10,9 @@
 // \endverbatim
 
 #include "rgrl_feature.h"
-#include <vcl_iosfwd.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iosfwd>
 
 //: Represent a point in space.
 //
@@ -30,11 +32,11 @@ class rgrl_feature_point
 
   //: read in feature
   virtual
-  bool read( vcl_istream& is, bool skip_tag=false );
+  bool read( std::istream& is, bool skip_tag=false );
 
   //: write out feature
   virtual
-  void write( vcl_ostream& os ) const;
+  void write( std::ostream& os ) const;
 
   vnl_matrix<double> const&
   error_projector() const;
@@ -69,7 +71,7 @@ class rgrl_feature_point
 
   // to be able to use the protected constructor
   friend rgrl_feature_sptr
-         rgrl_feature_reader( vcl_istream& is );
+         rgrl_feature_reader( std::istream& is );
 
   //: Apply transformation to the scale property
   virtual double

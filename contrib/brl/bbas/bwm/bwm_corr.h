@@ -19,11 +19,13 @@
 
 #include <vbl/vbl_ref_count.h>
 
-#include <vcl_vector.h>
-#include <vcl_string.h>
-#include <vcl_map.h>
-#include <vcl_utility.h>
-#include <vcl_iosfwd.h>
+#include <vector>
+#include <string>
+#include <map>
+#include <utility>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iosfwd>
 #include <vgl/vgl_point_2d.h>
 #include <vgl/vgl_point_3d.h>
 
@@ -45,13 +47,13 @@ class bwm_corr : public vbl_ref_count
   int num_matches() const { return matches_.size(); }
   vgl_point_3d<double> world_pt() const { return world_pt_; }
   void erase(bwm_observer_cam* obs);
-  vcl_vector<bwm_observer_cam*> observers();
+  std::vector<bwm_observer_cam*> observers();
 
   //: returns true, if the observer contributes to the correspondence
   bool obs_in(bwm_observer_cam* obs, vgl_point_2d<double> &corr);
 
   //: returns the match list as tableau name mapped to the 2D points
-  vcl_vector<vcl_pair<vcl_string, vsol_point_2d> > match_list();
+  std::vector<std::pair<std::string, vsol_point_2d> > match_list();
 
   //: Mutators
   bool update_match(bwm_observer_cam* obs, vgl_point_2d<double> old_pt, vgl_point_2d<double> new_pt);
@@ -60,16 +62,16 @@ class bwm_corr : public vbl_ref_count
   void set_world_pt(vgl_point_3d<double> const& wp) { world_pt_ = wp; }
 
   //: Utility functions
-  friend vcl_ostream&  operator<<(vcl_ostream& s, bwm_corr const& c);
+  friend std::ostream&  operator<<(std::ostream& s, bwm_corr const& c);
 
   //: XML write
-  void x_write(vcl_ostream &os);
+  void x_write(std::ostream &os);
 
  protected:
 
   //members
   bool mode_; //!< true if image_to_image
-  vcl_map<bwm_observer_cam*, vgl_point_2d<double> > matches_;//!< match in each camera
+  std::map<bwm_observer_cam*, vgl_point_2d<double> > matches_;//!< match in each camera
   vgl_point_3d<double> world_pt_;
 };
 

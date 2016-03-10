@@ -1,8 +1,8 @@
 #ifndef boxm_render_image_h_
 #define boxm_render_image_h_
 
-#include <vcl_vector.h>
-#include <vcl_sstream.h>
+#include <vector>
+#include <sstream>
 
 #include <boct/boct_tree.h>
 #include <boxm/boxm_scene.h>
@@ -17,7 +17,9 @@
 #include <vil/vil_image_view.h>
 #include <vil/vil_math.h>
 #include <vil/vil_transform.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iostream>
 #include <vul/vul_timer.h>
 
 class normalize_expected_functor
@@ -35,7 +37,7 @@ class normalize_expected_functor
 class image_exp_functor
 {
  public:
-  float operator()(float x) const { return x<0?vcl_exp(x):1.0f; }
+  float operator()(float x) const { return x<0?std::exp(x):1.0f; }
 };
 
 
@@ -64,22 +66,22 @@ void boxm_render_image_splatting(boxm_scene<boct_tree<T_loc,T_data> >& scene,
 
   int cnt=0;
   while (block_vis_iter.next()) {
-    vcl_vector<vgl_point_3d<int> > block_indices = block_vis_iter.frontier_indices();
+    std::vector<vgl_point_3d<int> > block_indices = block_vis_iter.frontier_indices();
     for (unsigned i=0; i<block_indices.size(); i++) { // code for each block
 
       t.mark();
       scene.load_block(block_indices[i].x(),block_indices[i].y(),block_indices[i].z());
-      vcl_cout<<"The time taken to read a block is "<<t.all()<<vcl_endl;
+      std::cout<<"The time taken to read a block is "<<t.all()<<std::endl;
 
       boxm_block<tree_type> * curr_block=scene.get_active_block();
-      vcl_cout<<"Block: "<<curr_block->bounding_box()<<vcl_endl
+      std::cout<<"Block: "<<curr_block->bounding_box()<<std::endl
               <<"Tree: "<<curr_block->get_tree()->number_levels()
-              << " #of leaf cells "<<curr_block->get_tree()->leaf_cells().size()<<vcl_endl;
+              << " #of leaf cells "<<curr_block->get_tree()->leaf_cells().size()<<std::endl;
 
       t.mark();
       // project vertices to the image determine which faces of the cell are visible
       boxm_cell_vis_graph_iterator<T_loc, T_data > frontier_it(cam,curr_block->get_tree(),ni,nj);
-      vcl_cout<<"The time taken to build the vis graph is "<<t.all()<<vcl_endl;
+      std::cout<<"The time taken to build the vis graph is "<<t.all()<<std::endl;
 
       // for each frontier layer of each block
       tree_type * tree=curr_block->get_tree();
@@ -96,15 +98,15 @@ void boxm_render_image_splatting(boxm_scene<boct_tree<T_loc,T_data> >& scene,
 
       while (frontier_it.next())
       {
-        vcl_vector<cell_type *> vis_cells=frontier_it.frontier();
-        typename vcl_vector<cell_type *>::iterator cell_it=vis_cells.begin();
+        std::vector<cell_type *> vis_cells=frontier_it.frontier();
+        typename std::vector<cell_type *>::iterator cell_it=vis_cells.begin();
         front_xyz.fill(0.0f);
         back_xyz.fill(0.0f);
         alphas.fill(0.0f);
         vis_end.fill(0.0f);
         temp_expected.fill(0.0f);
         temp_weights.fill(0.0f);
-        vcl_cout<<'.';
+        std::cout<<'.';
         for (;cell_it!=vis_cells.end();cell_it++)
         {
           // for each cell
@@ -113,7 +115,7 @@ void boxm_render_image_splatting(boxm_scene<boct_tree<T_loc,T_data> >& scene,
           {
             // get vertices of cell in the form of a bounding box (cells are always axis-aligned))
             vgl_box_3d<double> cell_bb = tree->cell_bounding_box(*cell_it);
-            vcl_vector<vgl_point_3d<double> > corners=boxm_utils::corners_of_box_3d(cell_bb);
+            std::vector<vgl_point_3d<double> > corners=boxm_utils::corners_of_box_3d(cell_bb);
             boxm_utils::project_corners(corners,cam,xverts,yverts);
             boct_face_idx  vis_face_ids=boxm_utils::visible_faces(cell_bb,cam,xverts,yverts);
             boxm_utils::project_cube_xyz(corners,vis_face_ids,front_xyz,back_xyz,xverts,yverts);
@@ -130,7 +132,7 @@ void boxm_render_image_splatting(boxm_scene<boct_tree<T_loc,T_data> >& scene,
         vil_image_view<float> len_seg(expected.ni(),expected.nj(),1);
 
         len_seg.fill(0.0f);
-        vcl_stringstream s,s1;
+        std::stringstream s,s1;
 
         vil_math_image_difference<float,float>(back_xyz,front_xyz,back_xyz);
         vil_math_sum_sqr<float,float>(back_xyz,len_seg);
@@ -156,7 +158,7 @@ void boxm_render_image_splatting(boxm_scene<boct_tree<T_loc,T_data> >& scene,
       scene.write_active_block();
     }
   }
-  vcl_cout<<"\nThe time taken is"<< t.all()<<vcl_endl;
+  std::cout<<"\nThe time taken is"<< t.all()<<std::endl;
   return;
 }
 

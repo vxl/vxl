@@ -22,7 +22,7 @@ static int test_save_scene_raw()
   scene.set_appearance_model(BOXM_APM_MOG_GREY);
   scene.set_paths("boxm_scene1", "block");
   vul_file::make_directory("boxm_scene1");
-  vcl_ofstream os("scene1.xml");
+  std::ofstream os("scene1.xml");
   x_write(os, scene, "scene");
   os.close();
 
@@ -113,7 +113,7 @@ static int test_save_scene_raw()
     boxm_refine_scene<short, boxm_sample<BOXM_APM_MOG_GREY> >(scene, thresh, reset);
     boxm_save_scene_raw<short,boxm_sample<BOXM_APM_MOG_GREY> >(scene, "scene.raw", 0);
 #ifdef DEBUG_LEAKS
-    vcl_cerr << "Leaks at test_save_scene_raw " << boct_tree_cell<short, float >::nleaks() << vcl_endl;
+    std::cerr << "Leaks at test_save_scene_raw " << boct_tree_cell<short, float >::nleaks() << std::endl;
 #endif
   }
 

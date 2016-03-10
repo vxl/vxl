@@ -6,8 +6,10 @@
 //
 // EndLatex
 
-#include <vcl_sstream.h>
-#include <vcl_fstream.h>
+#include <sstream>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <fstream>
 
 #include <vnl/vnl_vector_fixed.h>
 #include <vnl/vnl_math.h>
@@ -34,7 +36,7 @@
 #include <testlib/testlib_test.h>
 void testlib_enter_stealth_mode(); // defined in core/testlib/testlib_main.cxx
 
-typedef vcl_vector< rgrl_feature_sptr >         feature_vector;
+typedef std::vector< rgrl_feature_sptr >         feature_vector;
 typedef vnl_vector_fixed<double,2>              vector_2d;
 
 // using command/observer pattern
@@ -52,7 +54,7 @@ class command_iteration_update: public rgrl_command
       dynamic_cast<const rgrl_feature_based_registration*>(caller);
     rgrl_transformation_sptr trans = reg_engine->current_transformation();
     rgrl_trans_affine* xform = rgrl_cast<rgrl_trans_affine*>(trans);
-    vcl_cout<<"Xform A = "<<xform->A()<<"\n t= "<<xform->t()<<vcl_endl;
+    std::cout<<"Xform A = "<<xform->A()<<"\n t= "<<xform->t()<<std::endl;
 
 #if 0 // commented out
     static unsigned count = 0;
@@ -60,11 +62,11 @@ class command_iteration_update: public rgrl_command
 
     // Output the transformation estimate
     //
-    vcl_ostringstream s;
+    std::ostringstream s;
     s << "xform-dump-"<<count;
-    vcl_ofstream xform_out( s.str().c_str() );
+    std::ofstream xform_out( s.str().c_str() );
 
-    xform_out<<"Xform A = "<<xform->A()<<"\n t= "<<xform->t()<<vcl_endl;
+    xform_out<<"Xform A = "<<xform->A()<<"\n t= "<<xform->t()<<std::endl;
     xform_out.close();
 
     // Output the matches
@@ -72,9 +74,9 @@ class command_iteration_update: public rgrl_command
     typedef rgrl_match_set::from_iterator  from_iter;
     typedef from_iter::to_iterator         to_iter;
 
-    vcl_ostringstream ss;
+    std::ostringstream ss;
     ss << "matches-dump-"<<count;
-    vcl_ofstream fout( ss.str().c_str() );
+    std::ofstream fout( ss.str().c_str() );
 
     for ( unsigned ms=0; ms < match_sets.size(); ++ms ) {
       rgrl_match_set_sptr match_set = match_sets[ms];
@@ -91,7 +93,7 @@ class command_iteration_update: public rgrl_command
           //  for each match with a "to" image feature
           rgrl_feature_sptr to_feature = titr.to_feature();
           fout<<' '<<to_feature->location()[0]<<' '
-              <<to_feature->location()[1]<<vcl_endl;
+              <<to_feature->location()[1]<<std::endl;
         }
       }
     }
@@ -155,8 +157,8 @@ generate_data(feature_vector& feature_set)
   for ( unsigned int ci = 0; ci<360; ci++ ) {
     vector_2d pt;
     double angle = ci*2*vnl_math::pi_over_180;
-    pt[0] = center_x + radius*vcl_cos(angle);
-    pt[1] = center_y + radius*vcl_sin(angle);
+    pt[0] = center_x + radius*std::cos(angle);
+    pt[1] = center_y + radius*std::sin(angle);
     feature_set.push_back( new rgrl_feature_point(pt.as_ref()) );
   }
 }
@@ -223,12 +225,12 @@ main()
   reg.run( moving_image_roi, fixed_image_roi, estimator, init_transform );
 
   if ( reg.has_final_transformation() ) {
-    vcl_cout<<"Final xform:"<<vcl_endl;
+    std::cout<<"Final xform:"<<std::endl;
     rgrl_transformation_sptr trans = reg.final_transformation();
     rgrl_trans_affine* a_xform = rgrl_cast<rgrl_trans_affine*>(trans);
-    vcl_cout<<"A = "<<a_xform->A()<<vcl_endl
-            <<"t = "<<a_xform->t()<<vcl_endl
-            <<"Final alignment error = "<<reg.final_status()->error()<<vcl_endl;
+    std::cout<<"A = "<<a_xform->A()<<std::endl
+            <<"t = "<<a_xform->t()<<std::endl
+            <<"Final alignment error = "<<reg.final_status()->error()<<std::endl;
   }
 
   // Perform testing

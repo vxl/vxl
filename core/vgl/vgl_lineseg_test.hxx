@@ -8,7 +8,8 @@
 #include "vgl_lineseg_test.h"
 #include <vgl/vgl_tolerance.h>
 #include <vgl/vgl_triangle_test.h>
-#include <vcl_cmath.h>
+#include <vcl_compiler.h>
+#include <cmath>
 
 template <class T>
 bool vgl_lineseg_test_line(T x1, T y1, T x2, T y2, T x3, T y3, T x4, T y4)
@@ -63,10 +64,10 @@ bool vgl_lineseg_test_lineseg(T x1, T y1, T x2, T y2, T x3, T y3, T x4, T y4)
   double d = vgl_triangle_test_discriminant(px3, py3, px4, py4, px2, py2);
 
   // force to be zero when they're close to zero
-  a = (vcl_abs(a) < 1e-12) ? 0 : a;
-  b = (vcl_abs(b) < 1e-12) ? 0 : b;
-  c = (vcl_abs(c) < 1e-12) ? 0 : c;
-  d = (vcl_abs(d) < 1e-12) ? 0 : d;
+  a = (std::abs(a) < 1e-12) ? 0 : a;
+  b = (std::abs(b) < 1e-12) ? 0 : b;
+  c = (std::abs(c) < 1e-12) ? 0 : c;
+  d = (std::abs(d) < 1e-12) ? 0 : d;
 
   return
     ( ( (a<=0 && b>0) || (a>=0 && b<0) || (a<0 && b>=0) || (a>0 && b<=0) ) &&
@@ -96,7 +97,7 @@ bool vgl_lineseg_test_point(vgl_point_2d<T> const& p,
   double d1p = static_cast<double>((xp-x1)*(xp-x1) + (yp-y1)*(yp-y1));
   double d2p = static_cast<double>((xp-x2)*(xp-x2) + (yp-y2)*(yp-y2));
   double d12 = static_cast<double>((x2-x1)*(x2-x1) + (y2-y1)*(y2-y1));
-  double diff = vcl_sqrt(d1p) + vcl_sqrt(d2p) - vcl_sqrt(d12);
+  double diff = std::sqrt(d1p) + std::sqrt(d2p) - std::sqrt(d12);
   // diff is always >= 0 (triangle inequality)
   return diff <= vgl_tolerance<double>::position;
 }

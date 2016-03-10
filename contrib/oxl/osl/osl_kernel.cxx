@@ -7,7 +7,9 @@
 // \author fsm
 
 #include "osl_kernel.h"
-#include <vcl_cmath.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <cmath>
 #include <vnl/vnl_math.h>
 
 // Construct one half of a Gaussian convolution kernel.
@@ -19,7 +21,7 @@ void osl_kernel_DOG(float sigma_, float *kernel_, int k_size_, int width_)
   float det = sigma_*(float)vnl_math::sqrt2pi;
 
   for (int i=0,x=-width_; i<k_size_; ++i,++x)
-    kernel_[i] = (float)vcl_exp(-x*x/s2)/det;
+    kernel_[i] = (float)std::exp(-x*x/s2)/det;
 }
 
 // Construct one half of a Gaussian convolution kernel.
@@ -37,7 +39,7 @@ void osl_kernel_DOG(float *kernel_, float *sub_area_, int &k_size_,
     // 11 points evenly spaced on the interval [i-0.5, i+0.5].
     kernel_[i] = 0.0;
     for (float x=i-0.5f; x<=i+0.5f; x+=0.1f)
-      kernel_[i] += (float)vcl_exp(-x*x/s2);
+      kernel_[i] += (float)std::exp(-x*x/s2);
     kernel_[i] /= 11.0f;
 
     if (i>0 && kernel_[i] < gauss_tail_)

@@ -6,8 +6,10 @@
 //
 //\endverbatim
 
-#include <vcl_vector.h>
-#include <vcl_iostream.h>
+#include <vector>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iostream>
 #include <vnl/vnl_math.h>
 #include <gevd/gevd_noise.h>
 #include <gevd/gevd_float_operators.h>
@@ -39,18 +41,18 @@ gevd_fold::gevd_fold(float smooth_sigma, // width of filter dG
     filterFactor(6)              // factor from gevd_float_operators::Hessian
 {
   if (smoothSigma < 0.5)        // no guarantee for 2-pixel separation
-    vcl_cerr << "gevd_fold::gevd_fold -- too small smooth_sigma: "
-             << smoothSigma << vcl_endl;
+    std::cerr << "gevd_fold::gevd_fold -- too small smooth_sigma: "
+             << smoothSigma << std::endl;
   if (smoothSigma > 2)          // smooth out too much the junctions
-    vcl_cerr << "gevd_fold::gevd_fold -- too large smooth_sigma: "
-             << smoothSigma << vcl_endl;
+    std::cerr << "gevd_fold::gevd_fold -- too large smooth_sigma: "
+             << smoothSigma << std::endl;
   if (noiseSigma < -1) {
-    vcl_cerr << "gevd_fold::gevd_fold -- noiseSigma out of range -[0 1]: "
+    std::cerr << "gevd_fold::gevd_fold -- noiseSigma out of range -[0 1]: "
              << noiseSigma << ". Reset to -1.\n";
     noiseSigma = -1;
   }
 
-  //vcl_cout << "Init Step\n" << *this << vcl_endl;
+  //std::cout << "Init Step\n" << *this << std::endl;
 }
 
 
@@ -63,11 +65,11 @@ gevd_fold::DetectEdgels(const gevd_bufferxy& image,
                         bool transfer, //compute mag and angle? default=false
                         gevd_bufferxy*& mag, gevd_bufferxy*& angle)
 {
-  //vcl_cout << "*** Detect step profiles with second-derivative of Gaussian"
+  //std::cout << "*** Detect step profiles with second-derivative of Gaussian"
   //         << *this
-  //         << vcl_endl;
+  //         << std::endl;
   if (image.GetBitsPixel() != bits_per_float) {
-    vcl_cerr << "gevd_fold::DetectEdgels requires float image\n";
+    std::cerr << "gevd_fold::DetectEdgels requires float image\n";
     return false;
   }
 
@@ -108,7 +110,7 @@ gevd_fold::DetectEdgels(const gevd_bufferxy& image,
     for (int j = 0; j < image.GetSizeY(); j++)
       for (int i = 0; i < image.GetSizeX(); i++)
         if ((floatPixel(*mag, i, j) = floatPixel(*curvature, i, j)))
-            floatPixel(*angle, i, j) = kdeg*vcl_atan2(floatPixel(*diry, i, j),
+            floatPixel(*angle, i, j) = kdeg*std::atan2(floatPixel(*diry, i, j),
                                                       floatPixel(*dirx, i, j));
           else
             floatPixel(*angle, i, j) = 0;
@@ -129,15 +131,15 @@ gevd_fold::DetectEdgels(const gevd_bufferxy& image,
           NoiseResponseToFilter(1, smoothSigma, filterFactor);
       }
       else {
-        vcl_cout << "Can not estimate sensor & texture noise\n";
+        std::cout << "Can not estimate sensor & texture noise\n";
         noiseSigma = 1;         // reasonable default for 8-bit
       }
     }
     else {
-      vcl_cout << "Not enough edge elements to estimate noise\n";
+      std::cout << "Not enough edge elements to estimate noise\n";
       noiseSigma = 1;
     }
-    //vcl_cout << "Set noise sigma = " << noiseSigma << vcl_endl;
+    //std::cout << "Set noise sigma = " << noiseSigma << std::endl;
   }
 
   // 4. Find contour pixels as local maxima along slope direction
@@ -231,14 +233,14 @@ BestFoldExtension(const gevd_bufferxy& smooth,
       int dj = DJS[dir];
       float pix_m = floatPixel(smooth, ni-di, nj-dj);
       float pix_p = floatPixel(smooth, ni+di, nj+dj);
-      float curvature = (float)vcl_fabs(pix_p + pix_m - 2*pix);
+      float curvature = (float)std::fabs(pix_p + pix_m - 2*pix);
       float max_s = (dir%HALFPI)? best_s*2: best_s;
       if (curvature > max_s) {      // find best strength
         int di2 = 2*di;
         int dj2 = 2*dj;
-        if (curvature > vcl_fabs(pix + floatPixel(smooth, ni-di2, nj-dj2)
+        if (curvature > std::fabs(pix + floatPixel(smooth, ni-di2, nj-dj2)
                                  - 2 * pix_m) &&
-            curvature > vcl_fabs(pix + floatPixel(smooth, ni+di2, nj+dj2)
+            curvature > std::fabs(pix + floatPixel(smooth, ni+di2, nj+dj2)
                                  - 2 * pix_p)) {
           best_i = ni;
           best_j = nj;
@@ -252,9 +254,9 @@ BestFoldExtension(const gevd_bufferxy& smooth,
     float pix = floatPixel(smooth, best_i, best_j);
     int di = DIS[best_d], dj = DJS[best_d];
     int di2 = 2*di, dj2 = 2*dj;
-    float s_m = (float)vcl_fabs(pix + floatPixel(smooth, best_i-di2, best_j-dj2)
+    float s_m = (float)std::fabs(pix + floatPixel(smooth, best_i-di2, best_j-dj2)
                                 - 2*floatPixel(smooth, best_i-di, best_j-dj));
-    float s_p = (float)vcl_fabs(pix + floatPixel(smooth, best_i+di2, best_j+dj2)
+    float s_p = (float)std::fabs(pix + floatPixel(smooth, best_i+di2, best_j+dj2)
                                 - 2*floatPixel(smooth, best_i+di, best_j+dj));
     if (best_d%HALFPI) {
       s_m /= (float)2.0;
@@ -278,7 +280,7 @@ gevd_fold::RecoverJunctions(const gevd_bufferxy& image,
   vul_timer t;
 #endif
   if (image.GetBitsPixel() != bits_per_float) {
-    vcl_cerr << "gevd_fold::RecoverJunction requires float image\n";
+    std::cerr << "gevd_fold::RecoverJunction requires float image\n";
     return false;
   }
   const int rmax = 1+FRAME;     // 1 + kernel radius of BestStepExtension
@@ -286,15 +288,15 @@ gevd_fold::RecoverJunctions(const gevd_bufferxy& image,
   const int xmax = image.GetSizeX()-rmax-1; // fill fold direction
   const int ymax = image.GetSizeY()-rmax-1;
 #ifdef DEBUG
-  vcl_cout << "RecoverJunctions: rmax, kmax, xmax, ymax:" << rmax << ' ' << kmax << ' ' << xmax << ' ' << ymax << '\n';
+  std::cout << "RecoverJunctions: rmax, kmax, xmax, ymax:" << rmax << ' ' << kmax << ' ' << xmax << ' ' << ymax << '\n';
 #endif
   // 1. Find end points of dangling contours
   //const int length0 = xmax/kmax*ymax/kmax/4;// 25% size
   //const float growth = 2;     // growth ratio of the arrays
 
-  vcl_vector<int> ndir; //  ndir.set_growth_ratio(growth);
-  vcl_vector<int> xloc; //  xloc.set_growth_ratio(growth); // dynamic array instead of long lists
-  vcl_vector<int> yloc; //  yloc.set_growth_ratio(growth);
+  std::vector<int> ndir; //  ndir.set_growth_ratio(growth);
+  std::vector<int> xloc; //  xloc.set_growth_ratio(growth); // dynamic array instead of long lists
+  std::vector<int> yloc; //  yloc.set_growth_ratio(growth);
   int xdir;
   for (int y = rmax; y <= ymax; y++) // find end points of long contours
     for (int x = rmax; x <= xmax; x++) // inside image border - rmax
@@ -307,8 +309,8 @@ gevd_fold::RecoverJunctions(const gevd_bufferxy& image,
         yloc.push_back(y);
       }
   const int length = ndir.size();
-  //vcl_cout << "% end pats = "     // trace allocated size
-  //          << length*100 / float((xmax/kmax)*(ymax/kmax)) << vcl_endl;
+  //std::cout << "% end pats = "     // trace allocated size
+  //          << length*100 / float((xmax/kmax)*(ymax/kmax)) << std::endl;
 
   // 2. Extend from end points until they touch other contours
   gevd_bufferxy* smooth = VXL_NULLPTR;
@@ -355,8 +357,8 @@ gevd_fold::RecoverJunctions(const gevd_bufferxy& image,
         else                  // no further extension found
           ndir[i] = 0;
       }
-    //vcl_cout << "Touch " << ntouch << " contours.\n";
-    // vcl_cout << "Will extend " << nextension << " contours.\n";
+    //std::cout << "Touch " << ntouch << " contours.\n";
+    // std::cout << "Will extend " << nextension << " contours.\n";
     njunction += ntouch;
     if (!nextension) break;     // all either junction or termination
   }
@@ -374,7 +376,7 @@ gevd_fold::RecoverJunctions(const gevd_bufferxy& image,
       j++;
     }
 #if defined(DEBUG)
-  vcl_cout << "Find " << length << " end points, and "
+  std::cout << "Find " << length << " end points, and "
            << njunction << " junctions.\n"
            << "Recover " << 100.0*njunction/length
            << "% end points as junctions > "
@@ -415,33 +417,33 @@ gevd_fold::NoiseResponseToFilter(float noiseSigma,
                                  float filterFactor)
 {
   return noiseSigma /          // white noise
-         (float)vcl_pow((double)smoothSigma, 2.5) * // size of filter ddG
-         ((float)vcl_sqrt(0.1875 * vnl_math::two_over_sqrtpi)) *
+         (float)std::pow((double)smoothSigma, 2.5) * // size of filter ddG
+         ((float)std::sqrt(0.1875 * vnl_math::two_over_sqrtpi)) *
          filterFactor;        // factor in Hessian image
 }
 
 
 //: Output a snapshot of current control parameters
-vcl_ostream& operator<< (vcl_ostream& os, const gevd_fold& st)
+std::ostream& operator<< (std::ostream& os, const gevd_fold& st)
 {
   os << "Fold:\n"
-     << "   smoothSigma " << st.smoothSigma << vcl_endl
-     << "   noiseSigma " << st.noiseSigma << vcl_endl
-     << "   contourFactor " << st.contourFactor << vcl_endl
-     << "   junctionFactor " << st.junctionFactor << vcl_endl
-     << "   filterFactor " << st.filterFactor << vcl_endl;
+     << "   smoothSigma " << st.smoothSigma << std::endl
+     << "   noiseSigma " << st.noiseSigma << std::endl
+     << "   contourFactor " << st.contourFactor << std::endl
+     << "   junctionFactor " << st.junctionFactor << std::endl
+     << "   filterFactor " << st.filterFactor << std::endl;
     return os;
 }
 
 
 //: Output a snapshot of current control parameters
-vcl_ostream& operator<< (vcl_ostream& os, gevd_fold& st)
+std::ostream& operator<< (std::ostream& os, gevd_fold& st)
 {
   os << "Fold:\n"
-     << "   smoothSigma " << st.smoothSigma << vcl_endl
-     << "   noiseSigma " << st.noiseSigma << vcl_endl
-     << "   contourFactor " << st.contourFactor << vcl_endl
-     << "   junctionFactor " << st.junctionFactor << vcl_endl
-     << "   filterFactor " << st.filterFactor << vcl_endl;
+     << "   smoothSigma " << st.smoothSigma << std::endl
+     << "   noiseSigma " << st.noiseSigma << std::endl
+     << "   contourFactor " << st.contourFactor << std::endl
+     << "   junctionFactor " << st.junctionFactor << std::endl
+     << "   filterFactor " << st.filterFactor << std::endl;
     return os;
 }

@@ -25,9 +25,9 @@ bool bstm_util::query_point_color(bstm_scene_sptr& scene,
   if ( !scene->contains(point, id, local, time, local_t) )
     return false;
 
-  int index_x=(int)vcl_floor(local.x());
-  int index_y=(int)vcl_floor(local.y());
-  int index_z=(int)vcl_floor(local.z());
+  int index_x=(int)std::floor(local.x());
+  int index_y=(int)std::floor(local.y());
+  int index_z=(int)std::floor(local.z());
   bstm_block * blk=cache->get_block(id);
   bstm_block_metadata blk_data = scene->get_block_metadata_const(id);
   vnl_vector_fixed<unsigned char,16> treebits=blk->trees()(index_x,index_y,index_z);
@@ -45,15 +45,15 @@ bool bstm_util::query_point_color(bstm_scene_sptr& scene,
   int bit_index_t = time_tree.traverse(local_t - time_blk->tree_index(local_t) );
   float min,max;
   time_tree.cell_range(bit_index_t,min,max);
-  vcl_cout << "cell range: [" << min << ',' << max << "] ";
+  std::cout << "cell range: [" << min << ',' << max << "] ";
   int data_offset_t = time_tree.get_data_index(bit_index_t);
 
   bstm_data_base *  alpha_base  = cache->get_data_base(id,bstm_data_traits<BSTM_ALPHA>::prefix());
   float alpha = ((float*)alpha_base->data_buffer())[data_offset_t];
 
-  vcl_string data_type;
+  std::string data_type;
   bool foundDataType = false;
-  vcl_vector<vcl_string> apps = scene->appearances();
+  std::vector<std::string> apps = scene->appearances();
   int appTypeSize = 0; // just to avoid compiler warning about using potentially uninitialised value
   for (unsigned int i=0; i<apps.size(); ++i) {
       if ( apps[i] == bstm_data_traits<BSTM_GAUSS_RGB>::prefix() )
@@ -64,18 +64,18 @@ bool bstm_util::query_point_color(bstm_scene_sptr& scene,
   }
 
   if (!foundDataType) {
-      vcl_cerr<< "No gauss rgb...exiting\n";
+      std::cerr<< "No gauss rgb...exiting\n";
       return false;
   }
 
   //store cell probability
-  prob=1.0f-vcl_exp(-alpha*side_len);
+  prob=1.0f-std::exp(-alpha*side_len);
 
   vnl_vector_fixed<float,3> intensity;
   bstm_data_base *  int_base  = cache->get_data_base(id, data_type);
-  vcl_cout << "data_type: " << data_type << vcl_endl;
+  std::cout << "data_type: " << data_type << std::endl;
   vnl_vector_fixed<unsigned char, 8> color = ((vnl_vector_fixed<unsigned char, 8>*) int_base->data_buffer()) [data_offset_t];
-  if (data_type.find(bstm_data_traits<BSTM_GAUSS_RGB>::prefix()) != vcl_string::npos) {
+  if (data_type.find(bstm_data_traits<BSTM_GAUSS_RGB>::prefix()) != std::string::npos) {
     intensity = expected_color( color);
   }
   rgb[0] = (unsigned char)(intensity[0]*255.0f);
@@ -109,9 +109,9 @@ bool bstm_util::query_point(bstm_scene_sptr& scene, bstm_cache_sptr& cache,   co
   if (!foundPtInScene)
     return false;
 
-  int index_x=(int)vcl_floor(local.x());
-  int index_y=(int)vcl_floor(local.y());
-  int index_z=(int)vcl_floor(local.z());
+  int index_x=(int)std::floor(local.x());
+  int index_y=(int)std::floor(local.y());
+  int index_z=(int)std::floor(local.z());
   bstm_block * blk=cache->get_block(id);
   bstm_block_metadata blk_data = scene->get_block_metadata_const(id);
   vnl_vector_fixed<unsigned char,16> treebits=blk->trees()(index_x,index_y,index_z);
@@ -121,7 +121,7 @@ bool bstm_util::query_point(bstm_scene_sptr& scene, bstm_cache_sptr& cache,   co
   float side_len = static_cast<float>(blk_data.sub_block_dim_.x()/((float)(1<<depth)));
   int data_offset=tree.get_data_index(bit_index,false);
 
-  vcl_cout << "Found point at bit index: " <<  bit_index << " and data offset: " << data_offset << vcl_endl;
+  std::cout << "Found point at bit index: " <<  bit_index << " and data offset: " << data_offset << std::endl;
 
   vgl_point_3d<double> localCenter = tree.cell_center(bit_index);
   vgl_point_3d<double> cellCenter(localCenter.x() + index_x, localCenter.y() + index_y, localCenter.z() + index_z);
@@ -130,7 +130,7 @@ bool bstm_util::query_point(bstm_scene_sptr& scene, bstm_cache_sptr& cache,   co
                                              float(cellCenter.z()*blk_data.sub_block_dim_.z() + blk_data.local_origin_.z()));
 
   vgl_box_3d<double> datBox(cellCenter_global,side_len,side_len,side_len,vgl_box_3d<double>::centre);
-  vcl_cout << "Found point at box: " << datBox << ' ' <<  id << vcl_endl;
+  std::cout << "Found point at box: " << datBox << ' ' <<  id << std::endl;
 
   //do the query with data_offset....
   bstm_time_block * time_blk= cache->get_time_block(id);
@@ -140,7 +140,7 @@ bool bstm_util::query_point(bstm_scene_sptr& scene, bstm_cache_sptr& cache,   co
   int bit_index_t = time_tree.traverse(local_t - time_blk->tree_index(local_t) );
   float min,max;
   time_tree.cell_range(bit_index_t,min,max);
-  vcl_cout << "cell range: [" << min << ',' << max << "] ";
+  std::cout << "cell range: [" << min << ',' << max << "] ";
   int data_offset_t = time_tree.get_data_index(bit_index_t);
 
   bstm_data_base *  alpha_base  = cache->get_data_base(id,bstm_data_traits<BSTM_ALPHA>::prefix());
@@ -149,7 +149,7 @@ bool bstm_util::query_point(bstm_scene_sptr& scene, bstm_cache_sptr& cache,   co
   float alpha = alphas[data_offset_t];
 
   //store cell probability
-  prob=1.0f-vcl_exp(-alpha*side_len);
+  prob=1.0f-std::exp(-alpha*side_len);
 
   bstm_data_base *  mog_base  = cache->get_data_base(id,bstm_data_traits<BSTM_MOG3_GREY>::prefix());
   intensity = ((vnl_vector_fixed<unsigned char, 8>)mog_base->data_buffer()[data_offset_t])[0] / 255.0f;
@@ -158,10 +158,10 @@ bool bstm_util::query_point(bstm_scene_sptr& scene, bstm_cache_sptr& cache,   co
 }
 
 
-bool bstm_util::verify_appearance(bstm_scene& scene, const vcl_vector<vcl_string>&valid_types, vcl_string& data_type, int& appTypeSize )
+bool bstm_util::verify_appearance(bstm_scene& scene, const std::vector<std::string>&valid_types, std::string& data_type, int& appTypeSize )
 {
   bool foundDataType = false;
-  vcl_vector<vcl_string> apps = scene.appearances();
+  std::vector<std::string> apps = scene.appearances();
   for (unsigned int i=0; i<apps.size(); ++i) {
     //look for valid types
     for (unsigned int c=0; c<valid_types.size(); ++c) {
@@ -228,7 +228,7 @@ vil_image_view_base_sptr bstm_util::prepare_input_image(vil_image_view_base_sptr
       return vil_image_view_base_sptr(img_float);
     }
     else {
-      vcl_cerr << "Failed to load image\n";
+      std::cerr << "Failed to load image\n";
       return VXL_NULLPTR;
     }
     vil_image_view_base_sptr toReturn(floatimg);
@@ -236,7 +236,7 @@ vil_image_view_base_sptr bstm_util::prepare_input_image(vil_image_view_base_sptr
   }
 
   //otherwise it's messed up, return a null pointer
-  vcl_cerr<<"Failed to recognize input image type\n";
+  std::cerr<<"Failed to recognize input image type\n";
   return VXL_NULLPTR;
 }
 

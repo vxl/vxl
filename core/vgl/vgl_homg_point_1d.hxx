@@ -3,16 +3,17 @@
 #define vgl_homg_point_1d_hxx_
 
 #include "vgl_homg_point_1d.h"
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <iostream>
 
 template <class Type>
-vcl_ostream& operator<<(vcl_ostream& s, vgl_homg_point_1d<Type> const& p)
+std::ostream& operator<<(std::ostream& s, vgl_homg_point_1d<Type> const& p)
 {
   return s << "<vgl_homg_point_1d (" << p.x() << ',' << p.w() << ") > ";
 }
 
 template <class Type>
-vcl_istream& operator>>(vcl_istream& s, vgl_homg_point_1d<Type>& p)
+std::istream& operator>>(std::istream& s, vgl_homg_point_1d<Type>& p)
 {
   Type x, w; s >> x >> w; p.set(x,w); return s;
 }
@@ -20,7 +21,7 @@ vcl_istream& operator>>(vcl_istream& s, vgl_homg_point_1d<Type>& p)
 #undef VGL_HOMG_POINT_1D_INSTANTIATE
 #define VGL_HOMG_POINT_1D_INSTANTIATE(T) \
 template class vgl_homg_point_1d<T >; \
-template vcl_ostream& operator<<(vcl_ostream&, vgl_homg_point_1d<T >const&); \
-template vcl_istream& operator>>(vcl_istream&, vgl_homg_point_1d<T >&)
+template std::ostream& operator<<(std::ostream&, vgl_homg_point_1d<T >const&); \
+template std::istream& operator>>(std::istream&, vgl_homg_point_1d<T >&)
 
 #endif // vgl_homg_point_1d_hxx_

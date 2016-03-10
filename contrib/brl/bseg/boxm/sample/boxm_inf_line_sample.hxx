@@ -48,9 +48,9 @@ void vsl_b_read(vsl_b_istream & is, boxm_inf_line_sample<T> &sample)
       vsl_b_read(is, sample.line_clipped_);
       break;
     default:
-      vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, boxm_inf_line_sample<T>&)\n"
+      std::cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, boxm_inf_line_sample<T>&)\n"
                << "           Unknown version number "<< version << '\n';
-      is.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
+      is.is().clear(std::ios::badbit); // Set an unrecoverable IO error on stream
       break;
   }
 }
@@ -62,7 +62,7 @@ void vsl_b_read(vsl_b_istream & is, boxm_inf_line_sample<T> *&sample)
 }
 
 template <class T>
-vcl_ostream& operator << (vcl_ostream& os, boxm_inf_line_sample<T>& sample)
+std::ostream& operator << (std::ostream& os, boxm_inf_line_sample<T>& sample)
 {
   sample.print(os);
   return os;
@@ -74,6 +74,6 @@ template void vsl_b_write(vsl_b_ostream &, boxm_inf_line_sample<T > const &); \
 template void vsl_b_write(vsl_b_ostream &, boxm_inf_line_sample<T > const *&); \
 template void vsl_b_read(vsl_b_istream &, boxm_inf_line_sample<T > &); \
 template void vsl_b_read(vsl_b_istream &, boxm_inf_line_sample<T > *&);\
-template vcl_ostream& operator << (vcl_ostream&, boxm_inf_line_sample<T >&)
+template std::ostream& operator << (std::ostream&, boxm_inf_line_sample<T >&)
 
 #endif

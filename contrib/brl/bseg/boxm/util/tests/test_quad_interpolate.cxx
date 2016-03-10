@@ -8,7 +8,9 @@
 #include <boct/boct_tree_cell.h>
 #include <vil/vil_save.h>
 #include <vil/vil_plane.h>
-#include <vcl_fstream.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <fstream>
 #include <vpgl/vpgl_camera_double_sptr.h>
 #include <vpgl/vpgl_perspective_camera.h>
 #include <vgl/vgl_point_3d.h>
@@ -17,7 +19,7 @@
 
 static void test_quad_interpolate(int argc, char* argv[])
 {
-  vcl_vector<vgl_point_2d<double> > points;
+  std::vector<vgl_point_2d<double> > points;
   points.push_back(vgl_point_2d<double>(10,10));
   points.push_back(vgl_point_2d<double>(10,12));
   points.push_back(vgl_point_2d<double>(12,12));
@@ -43,9 +45,9 @@ static void test_quad_interpolate(int argc, char* argv[])
   {
     for (unsigned j=10;j<=12;j++)
     {
-      vcl_cout << img_max(j,i) << ' ';
+      std::cout << img_max(j,i) << ' ';
     }
-    vcl_cout << '\n';
+    std::cout << '\n';
   }
   bool flag=true;
   for (unsigned i=0; i<g_img_max.ni() && flag; ++i)
@@ -55,7 +57,7 @@ static void test_quad_interpolate(int argc, char* argv[])
 
   TEST("Interpolated image", true, flag);
 
-  vcl_vector<vgl_point_2d<double> > points1;
+  std::vector<vgl_point_2d<double> > points1;
   points.push_back(vgl_point_2d<double>(10.25,10.25));
   points.push_back(vgl_point_2d<double>(10.25,12.25));
   points.push_back(vgl_point_2d<double>(12.25,12.25));
@@ -80,10 +82,10 @@ static void test_quad_interpolate(int argc, char* argv[])
 
   // code to test the projection of a cube .
   vgl_box_3d<double> cell_bb(-0.8,19.2,-18.75,0.7625, 20.7625,-17.1875);
-  vcl_string camera_input_path = (argc < 2) ? "." : argv[1];
-  vcl_ifstream ifs((camera_input_path + "/frame_00000.txt").c_str());
+  std::string camera_input_path = (argc < 2) ? "." : argv[1];
+  std::ifstream ifs((camera_input_path + "/frame_00000.txt").c_str());
   if (!ifs.is_open()) {
-    vcl_cerr << "Failed to open file " << camera_input_path << "/frame_00000.txt\n";
+    std::cerr << "Failed to open file " << camera_input_path << "/frame_00000.txt\n";
     TEST("Opening camera file", true, false);
     return;
   }
@@ -99,13 +101,13 @@ static void test_quad_interpolate(int argc, char* argv[])
   vil_image_view<float> front_xyz(ni,nj,1);front_xyz.fill(0.0f);
   vil_image_view<float> back_xyz(ni,nj,1) ;back_xyz.fill(0.0f);
 
-  vcl_vector<vgl_point_3d<double> > corners=boxm_utils::corners_of_box_3d(cell_bb);
+  std::vector<vgl_point_3d<double> > corners=boxm_utils::corners_of_box_3d(cell_bb);
   boxm_utils::project_corners(corners,cam_d,xverts,yverts,vertdist);
   boct_face_idx  vis_face_ids=boxm_utils::visible_faces(cell_bb,cam_d,xverts,yverts);
   boxm_utils::project_cube_xyz(corners,vis_face_ids,front_xyz,back_xyz,xverts,yverts,vertdist);
 
-  vcl_string image_output_path = (argc < 3) ? "." : argv[2];
-  vcl_cout << "Saving two TIFF files to directory " << image_output_path << '\n';
+  std::string image_output_path = (argc < 3) ? "." : argv[2];
+  std::cout << "Saving two TIFF files to directory " << image_output_path << '\n';
   vil_save(vil_plane(front_xyz,0),(image_output_path + "/front.tiff").c_str());
   vil_save(vil_plane(back_xyz,0), (image_output_path + "/back.tiff").c_str());
 }

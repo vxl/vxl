@@ -5,7 +5,8 @@
 // \file
 
 #include "vgl_ellipsoid_3d.h"
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <iostream>
 
 template <class T>
 bool vgl_ellipsoid_3d<T>::operator==(vgl_ellipsoid_3d<T> const& e) const
@@ -19,7 +20,7 @@ bool vgl_ellipsoid_3d<T>::operator==(vgl_ellipsoid_3d<T> const& e) const
 }
 
 template <class T>
-vcl_ostream& vgl_ellipsoid_3d<T>::print(vcl_ostream& s) const
+std::ostream& vgl_ellipsoid_3d<T>::print(std::ostream& s) const
 {
   return s << "<vgl_ellipsoid_3d center=" << center_
            << ", orientation=" << orientation_ << ", size=("
@@ -29,6 +30,6 @@ vcl_ostream& vgl_ellipsoid_3d<T>::print(vcl_ostream& s) const
 #undef VGL_ELLIPSOID_3D_INSTANTIATE
 #define VGL_ELLIPSOID_3D_INSTANTIATE(T) \
 template class vgl_ellipsoid_3d<T >; \
-template vcl_ostream& operator<<(vcl_ostream&, vgl_ellipsoid_3d<T >const&)
+template std::ostream& operator<<(std::ostream&, vgl_ellipsoid_3d<T >const&)
 
 #endif // vgl_ellipsoid_3d_hxx_

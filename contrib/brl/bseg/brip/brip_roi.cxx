@@ -26,7 +26,7 @@ brip_roi::brip_roi(brip_roi const& roi, float delta)
 {
   float tdelta = delta;
   if (tdelta < 0) tdelta *= -1.0f; // to guarantee dxmin <= dxmax.
-  for (vcl_vector<vsol_box_2d_sptr>::iterator rit = regions_.begin();
+  for (std::vector<vsol_box_2d_sptr>::iterator rit = regions_.begin();
        rit != regions_.end(); rit++)
   {
     double xmin = (*rit)->get_min_x();
@@ -135,7 +135,7 @@ bool brip_roi::empty() const
 {
   return n_regions() == 0;
 #if 0 // later
-  for (vcl_vector<vgl_box_2d<int> >::iterator rit = regions_.begin();
+  for (std::vector<vgl_box_2d<int> >::iterator rit = regions_.begin();
        rit != regions_.end(); rit++)
     if (!(*rit).is_empty())
       return false;
@@ -144,8 +144,8 @@ bool brip_roi::empty() const
 
 void brip_roi::clip_to_image_bounds()
 {
-  vcl_vector<vsol_box_2d_sptr> temp;
-  for (vcl_vector<vsol_box_2d_sptr>::iterator rit = regions_.begin();
+  std::vector<vsol_box_2d_sptr> temp;
+  for (std::vector<vsol_box_2d_sptr>::iterator rit = regions_.begin();
        rit != regions_.end(); rit++)
     temp.push_back(this->clip_to_image_bounds(*rit));
   regions_ = temp;
@@ -209,11 +209,11 @@ unsigned brip_roi::lr(unsigned global_row, unsigned i) const
 
 bool brip_roi::remove_region(unsigned i)
 {
-  vcl_cerr << "brip_roi::remove_region(" << i << ") NYI\n";
+  std::cerr << "brip_roi::remove_region(" << i << ") NYI\n";
   return false;
 }
 
-vcl_ostream&  operator<<(vcl_ostream& s, brip_roi const& r)
+std::ostream&  operator<<(std::ostream& s, brip_roi const& r)
 {
   s << "brip_roi (regions)\n";
   for (unsigned i = 0; i< r.n_regions(); ++i)

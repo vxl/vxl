@@ -14,7 +14,9 @@
 // \endverbatim
 
 #include <bprb/bprb_func_process.h>
-#include <vcl_string.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <string>
 
 //: globals
 namespace bvxm_update_edges_process_globals
@@ -23,8 +25,8 @@ namespace bvxm_update_edges_process_globals
   const unsigned n_outputs_ = 0;
 #if 0
   // parameter strings
-  const vcl_string param_edge_prob_mask_size_ =  "edge_prob_mask_size";
-  const vcl_string param_edge_prob_mask_sigma_ =  "edge_prob_mask_sigma";
+  const std::string param_edge_prob_mask_size_ =  "edge_prob_mask_size";
+  const std::string param_edge_prob_mask_sigma_ =  "edge_prob_mask_sigma";
 #endif
 }
 

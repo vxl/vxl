@@ -13,7 +13,9 @@
 #include <sdet/sdet_img_edge.h>
 
 #ifdef DEBUG
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iostream>
 #endif
 
 template <boxm_apm_type APM, class T_aux>
@@ -69,7 +71,7 @@ class normalize_expected_functor_edge
   normalize_expected_functor_edge(float n_normal, unsigned int dof) : n_normal_(n_normal), dof_(dof)
   {
 #ifdef DEBUG
-    vcl_cout << "Degrees of freedom: " << dof << vcl_endl;
+    std::cout << "Degrees of freedom: " << dof << std::endl;
 #endif
   }
 

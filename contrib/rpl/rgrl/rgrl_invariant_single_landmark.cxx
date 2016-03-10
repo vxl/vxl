@@ -3,8 +3,10 @@
 #include "rgrl_scale.h"
 #include "rgrl_cast.h"
 
-#include <vcl_vector.h>
-#include <vcl_algorithm.h>
+#include <vector>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <algorithm>
 #include <vcl_cassert.h>
 
 #include <vnl/vnl_math.h>
@@ -26,7 +28,7 @@ rgrl_invariant_single_landmark(vnl_vector<double> location,
   center_set_(false),
   is_estimate_set_(false)
 {
-  vcl_vector< vnl_vector<double> > vessel_dirs;
+  std::vector< vnl_vector<double> > vessel_dirs;
   vessel_dirs.push_back(vessel_dir1);
   vessel_dirs.push_back(vessel_dir2);
   vessel_dirs.push_back(vessel_dir3);
@@ -42,7 +44,7 @@ rgrl_invariant_single_landmark(vnl_vector<double> location,
   // reorder the vessels directions, so that they're ordered in
   // increasing counter-clock-wise angles from the x-axis.
   //
-  vcl_vector<double> angles;
+  std::vector<double> angles;
   reorder_vessel(vessel_dirs, local_widths_, angles);
 
   // If the base trace direction is close to 0 degrees (below the threshold)
@@ -72,8 +74,8 @@ rgrl_invariant_single_landmark(vnl_vector<double> location,
 
   // local_widths_ should not contain zero entries
   cartesian_invariants_.set_size(2);
-  cartesian_invariants_[0] = vcl_atan(local_widths_[0]/local_widths_[1])*angular_std/width_ratio_std;
-  cartesian_invariants_[1] = vcl_atan(local_widths_[0]/local_widths_[2])*angular_std/width_ratio_std;
+  cartesian_invariants_[0] = std::atan(local_widths_[0]/local_widths_[1])*angular_std/width_ratio_std;
+  cartesian_invariants_[1] = std::atan(local_widths_[0]/local_widths_[2])*angular_std/width_ratio_std;
 }
 
 rgrl_invariant_single_landmark::
@@ -100,8 +102,8 @@ rgrl_invariant_single_landmark(const rgrl_invariant_single_landmark& copy,
   angular_invariants_[2] = copy.angular_invariants_[0];
 
   cartesian_invariants_.set_size(2);
-  cartesian_invariants_[0] = vcl_atan(local_widths_[0]/local_widths_[1])*angular_std/width_ratio_std;
-  cartesian_invariants_[1] = vcl_atan(local_widths_[0]/local_widths_[2])*angular_std/width_ratio_std;
+  cartesian_invariants_[0] = std::atan(local_widths_[0]/local_widths_[1])*angular_std/width_ratio_std;
+  cartesian_invariants_[1] = std::atan(local_widths_[0]/local_widths_[2])*angular_std/width_ratio_std;
 }
 
 const vnl_double_2&
@@ -226,7 +228,7 @@ estimate(rgrl_invariant_sptr         from_inv,
   // them and increase the numerical stability.
   double factor0 = std::max(sum_prod(0,0),sum_prod(1,1));
   double factor1 = std::max(sum_prod(2,2),sum_prod(3,3));
-  double norm_scale = vcl_sqrt(factor1 / factor0);   // neither should be 0
+  double norm_scale = std::sqrt(factor1 / factor0);   // neither should be 0
 
   vnl_double_4 s;
   s(2) = s(3) = 1; s(0) = s(1) = norm_scale;
@@ -283,8 +285,8 @@ estimate(rgrl_invariant_sptr         from_inv,
   obj += (location_ - mapped).squared_magnitude();
   //n = 8 for number of constraints
   //k = 4 for dof
-  //geometric_scale = vcl_sqrt(obj/(n-k));
-  geometric_scale = vcl_sqrt(obj/4);
+  //geometric_scale = std::sqrt(obj/(n-k));
+  geometric_scale = std::sqrt(obj/4);
 
   // Set the return parameters
   //
@@ -323,16 +325,16 @@ center()
 //------------ Non-member Functions ----------------------------
 void
 rgrl_invariant_single_landmark::
-reorder_vessel(vcl_vector<vnl_vector<double> >& directions,
-               vcl_vector<double>& local_widths,
-               vcl_vector<double>& angles)
+reorder_vessel(std::vector<vnl_vector<double> >& directions,
+               std::vector<double>& local_widths,
+               std::vector<double>& angles)
 {
   // create a basis for the x-axis
   vnl_double_2 x_axis(1, 0);
 
   // make a copy of the old stuff
-  vcl_vector<vnl_vector<double> > old_dirs = directions;
-  vcl_vector<double> old_widths = local_widths;
+  std::vector<vnl_vector<double> > old_dirs = directions;
+  std::vector<double> old_widths = local_widths;
   directions.clear();
   local_widths.clear();
 
@@ -343,8 +345,8 @@ reorder_vessel(vcl_vector<vnl_vector<double> >& directions,
     angles.push_back( ccw_angle_between(x_axis, old_dirs[i]) );
 
   // make a copy of the angles before sorting, and sort the angles
-  vcl_vector<double> old_angles(angles);
-  vcl_sort(angles.begin(), angles.end());
+  std::vector<double> old_angles(angles);
+  std::sort(angles.begin(), angles.end());
 
   // re-assign the directions
   for (int i=0; i<3; ++i) {
@@ -364,7 +366,7 @@ ccw_angle_between(vnl_double_2 from, vnl_double_2 to)
 {
   double cosine = (from[0]*to[0] + from[1]*to[1])/
                   (from.magnitude()*to.magnitude()); //normalize
-  double angle = vcl_acos(cosine);
+  double angle = std::acos(cosine);
   double z = from[0]*to[1] - from[1]*to[0];
   if (z >= 0)
     return angle;

@@ -4,27 +4,29 @@
 #include <vgl/vgl_distance.h>
 #include <vgl/vgl_box_3d.h>
 #include <vgl/vgl_bounding_box.h>
-#include <vcl_cmath.h>
-#include <vcl_limits.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <cmath>
+#include <limits>
 bvgl_gen_cylinder
 ::bvgl_gen_cylinder(vgl_cubic_spline_3d<double> const& axis,
-                    vcl_vector<bvgl_cross_section> const& cross_sects,
+                    std::vector<bvgl_cross_section> const& cross_sects,
                     double cross_section_interval):
   cross_section_interval_(cross_section_interval),
   axis_(axis),
   cross_sections_(cross_sects)
 {
-  for(vcl_vector<bvgl_cross_section>::const_iterator cit = cross_sects.begin();
+  for(std::vector<bvgl_cross_section>::const_iterator cit = cross_sects.begin();
       cit != cross_sects.end(); ++cit)
     bbox_.add(cit->bounding_box());
 }
 #if 0
-void bvgl_gen_cylinder::load_cross_section_pointsets(vcl_ifstream& istr, double distance){
+void bvgl_gen_cylinder::load_cross_section_pointsets(std::ifstream& istr, double distance){
   cross_sections_.clear();
   // load the entire pointset
   vgl_pointset_3d<double> ptset;
   istr >> ptset;
-  vcl_cout << "original pointset size " << ptset.npts() << '\n';
+  std::cout << "original pointset size " << ptset.npts() << '\n';
    // assign points to cross sections
   // scan through the axis knots
   unsigned nn = 0;
@@ -54,21 +56,21 @@ void bvgl_gen_cylinder::load_cross_section_pointsets(vcl_ifstream& istr, double 
     cross_sections_.push_back(cs);
     bbox_.add(cs.bounding_box());
   }
-  vcl_cout << "cumulative cross section pointset size " << nn << '\n';
+  std::cout << "cumulative cross section pointset size " << nn << '\n';
 }
-void bvgl_gen_cylinder::load_cross_section_pointsets(vcl_ifstream& istr, double distance){
+void bvgl_gen_cylinder::load_cross_section_pointsets(std::ifstream& istr, double distance){
   cross_sections_.clear();
   vgl_pointset_3d<double> ptset;
   // load the entire pointset
   istr >> ptset;
   if(!ptset.has_normals()){
-    vcl_cout << "FATAL input pointset must have normals! \n";
+    std::cout << "FATAL input pointset must have normals! \n";
     return;
   }
-  vcl_vector<vgl_pointset_3d<double> > ptsets;
-  vcl_vector<vgl_plane_3d<double> > cross_planes;
-  vcl_vector<double> tset;
-  vcl_vector<vgl_point_3d<double> > pset;
+  std::vector<vgl_pointset_3d<double> > ptsets;
+  std::vector<vgl_plane_3d<double> > cross_planes;
+  std::vector<double> tset;
+  std::vector<vgl_point_3d<double> > pset;
   // scan through the axis knots
   double mt = axis_.max_t();
   for(double t = 0.0; t<=mt; t += cross_section_interval_){
@@ -84,7 +86,7 @@ void bvgl_gen_cylinder::load_cross_section_pointsets(vcl_ifstream& istr, double 
   for(unsigned i =0; i<np; ++i){
     vgl_point_3d<double> pi = ptset.p(i);
     vgl_vector_3d<double> ni = ptset.n(i);
-    double min_dist = vcl_numeric_limits<double>::max();
+    double min_dist = std::numeric_limits<double>::max();
     unsigned min_j = 0;
     for(unsigned j = 0; j<nc; ++j){
       double d = vgl_distance(pi, cross_planes[j]);
@@ -103,19 +105,19 @@ void bvgl_gen_cylinder::load_cross_section_pointsets(vcl_ifstream& istr, double 
 }
 #endif
 
-void bvgl_gen_cylinder::load_cross_section_pointsets(vcl_ifstream& istr){
+void bvgl_gen_cylinder::load_cross_section_pointsets(std::ifstream& istr){
   cross_sections_.clear();
   vgl_pointset_3d<double> ptset;
   // load the entire pointset
   istr >> ptset;
   if(!ptset.has_normals()){
-    vcl_cout << "FATAL input pointset must have normals! \n";
+    std::cout << "FATAL input pointset must have normals! \n";
     return;
   }
-  vcl_vector<vgl_pointset_3d<double> > ptsets;
-  vcl_vector<vgl_plane_3d<double> > cross_planes;
-  vcl_vector<double> tset;
-  vcl_vector<vgl_point_3d<double> > pset;
+  std::vector<vgl_pointset_3d<double> > ptsets;
+  std::vector<vgl_plane_3d<double> > cross_planes;
+  std::vector<double> tset;
+  std::vector<vgl_point_3d<double> > pset;
   // scan through the axis knots and set up elements of the cross section data
   double mt = axis_.max_t();
   for(double t = 0.0; t<=mt; t += cross_section_interval_){
@@ -132,7 +134,7 @@ void bvgl_gen_cylinder::load_cross_section_pointsets(vcl_ifstream& istr){
   for(unsigned i =0; i<np; ++i){
     vgl_point_3d<double> pi = ptset.p(i);
     vgl_vector_3d<double> ni = ptset.n(i);
-    double min_dist = vcl_numeric_limits<double>::max();
+    double min_dist = std::numeric_limits<double>::max();
     unsigned min_j = 0;
     double dp, dk, d;
     for(unsigned j = 0; j<nc; ++j){
@@ -152,8 +154,8 @@ void bvgl_gen_cylinder::load_cross_section_pointsets(vcl_ifstream& istr){
     bbox_.add(cs.bounding_box());
   }
 }
-vcl_vector<unsigned> bvgl_gen_cylinder::cross_section_contains(vgl_point_3d<double> const& p) const{
-  vcl_vector<unsigned> ret;
+std::vector<unsigned> bvgl_gen_cylinder::cross_section_contains(vgl_point_3d<double> const& p) const{
+  std::vector<unsigned> ret;
   unsigned nc = static_cast<unsigned>(cross_sections_.size());
   for(unsigned i = 0; i<nc; ++i)
     if(cross_sections_[i].contains(p))
@@ -162,14 +164,14 @@ vcl_vector<unsigned> bvgl_gen_cylinder::cross_section_contains(vgl_point_3d<doub
 }
 
   bool bvgl_gen_cylinder::closest_point(vgl_point_3d<double> const& p, vgl_point_3d<double>& pc, double dist_thresh) const{
-  double big = vcl_numeric_limits<double>::max();
+  double big = std::numeric_limits<double>::max();
   pc.set(big, big, big);
-   vcl_vector<unsigned> crx_indices = this->cross_section_contains(p);
+   std::vector<unsigned> crx_indices = this->cross_section_contains(p);
    if(!crx_indices.size())
      return false;
    double d_close = big;
    vgl_point_3d<double> closest_pt;
-   for(vcl_vector<unsigned>::iterator cit = crx_indices.begin();
+   for(std::vector<unsigned>::iterator cit = crx_indices.begin();
        cit != crx_indices.end(); ++cit){
      vgl_point_3d<double> cp = cross_sections_[*cit].closest_point(p, dist_thresh);
      double d = (p-cp).length();
@@ -185,7 +187,7 @@ vcl_vector<unsigned> bvgl_gen_cylinder::cross_section_contains(vgl_point_3d<doub
 double bvgl_gen_cylinder::surface_distance(vgl_point_3d<double> const& p, double dist_thresh) const{
   vgl_point_3d<double> cp;
   if(!this->closest_point(p, cp, dist_thresh))
-    return vcl_numeric_limits<double>::max();
+    return std::numeric_limits<double>::max();
   return (p-cp).length();
 }
 
@@ -201,10 +203,10 @@ vgl_pointset_3d<double> bvgl_gen_cylinder::aggregate_pointset() const{
   return aggregate_ptset;
 }
 
-void bvgl_gen_cylinder::display_axis_spline(vcl_ofstream& ostr) const{
+void bvgl_gen_cylinder::display_axis_spline(std::ofstream& ostr) const{
   bvrml_write::write_vrml_header(ostr);
   // display the knots
-  vcl_vector<vgl_point_3d<double> > knots = axis_.knots();
+  std::vector<vgl_point_3d<double> > knots = axis_.knots();
   unsigned n = static_cast<unsigned>(knots.size());
   double nd = static_cast<double>(n-1);
   float r = 1.0f;
@@ -223,7 +225,7 @@ void bvgl_gen_cylinder::display_axis_spline(vcl_ofstream& ostr) const{
   }
   ostr.close();
 }
-void bvgl_gen_cylinder::display_cross_section_planes(vcl_ofstream& ostr) const{
+void bvgl_gen_cylinder::display_cross_section_planes(std::ofstream& ostr) const{
   bvrml_write::write_vrml_header(ostr);
   unsigned n = static_cast<unsigned>(cross_sections_.size());
   for(unsigned i = 0; i<n; i++)
@@ -231,7 +233,7 @@ void bvgl_gen_cylinder::display_cross_section_planes(vcl_ofstream& ostr) const{
   ostr.close();
 }
 
-void bvgl_gen_cylinder::display_cross_section_pointsets(vcl_ofstream& ostr) const{
+void bvgl_gen_cylinder::display_cross_section_pointsets(std::ofstream& ostr) const{
   bvrml_write::write_vrml_header(ostr);
   unsigned n = static_cast<unsigned>(cross_sections_.size());
   for(unsigned i = 0; i<n; i++)
@@ -239,7 +241,7 @@ void bvgl_gen_cylinder::display_cross_section_pointsets(vcl_ofstream& ostr) cons
   ostr.close();
 }
 
-void bvgl_gen_cylinder::display_surface_disks(vcl_ofstream& ostr) const{
+void bvgl_gen_cylinder::display_surface_disks(std::ofstream& ostr) const{
   bvrml_write::write_vrml_header(ostr);
   unsigned n = static_cast<unsigned>(cross_sections_.size());
   for(unsigned i = 0; i<n; i++)

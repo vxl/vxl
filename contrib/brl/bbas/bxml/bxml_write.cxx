@@ -8,19 +8,21 @@
 // \date   October 5, 2006
 
 #include "bxml_write.h"
-#include <vcl_fstream.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <fstream>
 
 
 //: Write the entire contents of \p filepath into an XML document class
-void bxml_write(const vcl_string& filepath, const bxml_document& doc)
+void bxml_write(const std::string& filepath, const bxml_document& doc)
 {
-  vcl_ofstream file(filepath.c_str());
+  std::ofstream file(filepath.c_str());
   bxml_write(file, doc);
 }
 
 
 //: Write the entire data stream \p is into an XML document class
-void bxml_write(vcl_ostream& os, const bxml_document& doc)
+void bxml_write(std::ostream& os, const bxml_document& doc)
 {
   bxml_write_declaration(os, doc);
   bxml_write_data(os, doc.root_element());
@@ -28,7 +30,7 @@ void bxml_write(vcl_ostream& os, const bxml_document& doc)
 
 
 //: Write the document declaration (header)
-void bxml_write_declaration(vcl_ostream& os, const bxml_document& doc)
+void bxml_write_declaration(std::ostream& os, const bxml_document& doc)
 {
   os  << "<?xml version=\"" << doc.version() << '"'
       << " encoding=\"" << doc.encoding() << '"'
@@ -37,7 +39,7 @@ void bxml_write_declaration(vcl_ostream& os, const bxml_document& doc)
 
 
 //: Write the data (element or text)
-void bxml_write_data(vcl_ostream& os, const bxml_data_sptr& data)
+void bxml_write_data(std::ostream& os, const bxml_data_sptr& data)
 {
   if (!data)
     return;
@@ -55,7 +57,7 @@ void bxml_write_data(vcl_ostream& os, const bxml_data_sptr& data)
 
 
 //: Write the XML element
-void bxml_write_element(vcl_ostream& os, const bxml_element& element)
+void bxml_write_element(std::ostream& os, const bxml_element& element)
 {
   // open the start tag
   os << '<' << element.name();

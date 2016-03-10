@@ -1,5 +1,7 @@
 #include <testlib/testlib_test.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iostream>
 #include <brip/brip_label_equivalence.h>
 
 static void test_label_equivalence()
@@ -13,17 +15,17 @@ static void test_label_equivalence()
   le.add_label_pair(e,f);
   le.add_label_pair(e,g);
   le.transitive_closure();
-  vcl_map<unsigned, vcl_set<unsigned> >& es = le.equivalence_sets();
-  vcl_map<unsigned, vcl_set<unsigned> >::iterator mit;
+  std::map<unsigned, std::set<unsigned> >& es = le.equivalence_sets();
+  std::map<unsigned, std::set<unsigned> >::iterator mit;
   bool good = true;
   for (mit=es.begin(); mit!= es.end(); ++mit)
   {
-    vcl_set<unsigned>& eqs = (*mit).second;
-    vcl_cout << '(' ;
-    for (vcl_set<unsigned>::iterator sit = eqs.begin();
+    std::set<unsigned>& eqs = (*mit).second;
+    std::cout << '(' ;
+    for (std::set<unsigned>::iterator sit = eqs.begin();
          sit != eqs.end(); ++sit)
-      vcl_cout << *sit << ' ';
-    vcl_cout << ")\n";
+      std::cout << *sit << ' ';
+    std::cout << ")\n";
     good = eqs.size() == 7;
   }
 
@@ -35,16 +37,16 @@ static void test_label_equivalence()
   le1.add_label_pair(e,f);
   le1.add_label_pair(f,g);
   le1.transitive_closure();
-  vcl_map<unsigned, vcl_set<unsigned> >& es1 = le1.equivalence_sets();
+  std::map<unsigned, std::set<unsigned> >& es1 = le1.equivalence_sets();
 
   for (mit=es1.begin(); mit!= es1.end(); ++mit)
   {
-    vcl_set<unsigned>& eqs = (*mit).second;
-    vcl_cout << '(' ;
-    for (vcl_set<unsigned>::iterator sit = eqs.begin();
+    std::set<unsigned>& eqs = (*mit).second;
+    std::cout << '(' ;
+    for (std::set<unsigned>::iterator sit = eqs.begin();
          sit != eqs.end(); ++sit)
-      vcl_cout << *sit << ' ';
-    vcl_cout << ")\n";
+      std::cout << *sit << ' ';
+    std::cout << ")\n";
     good = good&& eqs.size() == 7;
   }
   brip_label_equivalence le2;
@@ -55,16 +57,16 @@ static void test_label_equivalence()
   le2.add_label_pair(f,g);
   le2.transitive_closure();
   unsigned n = 0;
-  vcl_map<unsigned, vcl_set<unsigned> >& es2 = le2.equivalence_sets();
+  std::map<unsigned, std::set<unsigned> >& es2 = le2.equivalence_sets();
   for (mit=es2.begin(); mit!= es2.end(); ++mit)
   {
-    vcl_set<unsigned>& eqs = (*mit).second;
+    std::set<unsigned>& eqs = (*mit).second;
     n+= eqs.size();
-    vcl_cout << '(' ;
-    for (vcl_set<unsigned>::iterator sit = eqs.begin();
+    std::cout << '(' ;
+    for (std::set<unsigned>::iterator sit = eqs.begin();
          sit != eqs.end(); ++sit)
-      vcl_cout << *sit << ' ';
-    vcl_cout << ")\n";
+      std::cout << *sit << ' ';
+    std::cout << ")\n";
   }
   good = good && n ==7;
   TEST("Test equivalence classes", good, true);

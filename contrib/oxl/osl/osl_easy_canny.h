@@ -9,7 +9,9 @@
 // .FILE osl_easy_canny.cxx
 // \author fsm
 
-#include <vcl_list.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <list>
 class osl_edge;
 class vil1_image;
 
@@ -18,7 +20,7 @@ class vil1_image;
 // 2: rothwell2
 void osl_easy_canny(int which_canny,
                     vil1_image const &image,
-                    vcl_list<osl_edge*> *edges,
+                    std::list<osl_edge*> *edges,
                     double sigma = 0);
 
 #endif // osl_easy_canny_h_

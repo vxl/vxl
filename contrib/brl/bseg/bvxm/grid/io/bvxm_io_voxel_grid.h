@@ -22,8 +22,10 @@
 #include "../bvxm_opinion.h"
 #include <bsta/bsta_attributes.h>
 #include <bsta/bsta_gauss_sf1.h>
-#include <vcl_limits.h>
-#include <vcl_iostream.h>
+#include <limits>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iostream>
 
 //: Traits for saving grids of different datatypes to Drishti .raw file
 template <class T>
@@ -91,11 +93,11 @@ class bvxm_dristhi_traits<bsta_num_obs<bsta_gauss_sf1> >
 
 //: Save to Drishti raw file
 template <class T>
-bool bvxm_grid_save_raw(bvxm_voxel_grid<T> *grid,  vcl_string filename)
+bool bvxm_grid_save_raw(bvxm_voxel_grid<T> *grid,  std::string filename)
 {
-    vcl_fstream ofs(filename.c_str(),vcl_ios::binary | vcl_ios::out);
+    std::fstream ofs(filename.c_str(),std::ios::binary | std::ios::out);
     if (!ofs.is_open()) {
-      vcl_cerr << "error opening file " << filename << " for write!\n";
+      std::cerr << "error opening file " << filename << " for write!\n";
       return false;
     }
 
@@ -113,8 +115,8 @@ bool bvxm_grid_save_raw(bvxm_voxel_grid<T> *grid,  vcl_string filename)
 
     //get the range
     typename bvxm_voxel_grid<T>::iterator grid_it = grid->begin();
-    T max = vcl_numeric_limits<T>::min();
-    T min = vcl_numeric_limits<T>::max();
+    T max = std::numeric_limits<T>::min();
+    T min = std::numeric_limits<T>::max();
     for (unsigned k=0; grid_it != grid->end(); ++grid_it, ++k) {
       for (unsigned i=0; i<(*grid_it).nx(); ++i) {
         for (unsigned j=0; j < (*grid_it).ny(); ++j) {
@@ -125,7 +127,7 @@ bool bvxm_grid_save_raw(bvxm_voxel_grid<T> *grid,  vcl_string filename)
         }
       }
     }
-    vcl_cout << "max =  " << max << " min= " <<min << vcl_endl;
+    std::cout << "max =  " << max << " min= " <<min << std::endl;
 
    // write data
    // iterate through slabs and fill in memory array
@@ -133,7 +135,7 @@ bool bvxm_grid_save_raw(bvxm_voxel_grid<T> *grid,  vcl_string filename)
    grid_it = grid->begin();
    DataType *data_array = new DataType[nx*ny];
     for (unsigned k=0; grid_it != grid->end(); ++grid_it, ++k) {
-      vcl_cout << '.' <<vcl_flush;
+      std::cout << '.' <<std::flush;
       for (unsigned i=0; i<(*grid_it).nx(); ++i) {
         for (unsigned j=0; j < (*grid_it).ny(); ++j) {
           data_array[i*ny + j] =(*grid_it)(i,j)-DataType(0);  // +0 is needed for bvxm_opinion, do not delete
@@ -141,7 +143,7 @@ bool bvxm_grid_save_raw(bvxm_voxel_grid<T> *grid,  vcl_string filename)
       }
       ofs.write(reinterpret_cast<char*>(data_array),sizeof(DataType)*nx*ny);
     }
-    vcl_cout << vcl_endl;
+    std::cout << std::endl;
     delete [] data_array;
     ofs.close();
 
@@ -149,6 +151,6 @@ bool bvxm_grid_save_raw(bvxm_voxel_grid<T> *grid,  vcl_string filename)
 }
 
 template <>
-bool bvxm_grid_save_raw<bsta_num_obs<bsta_gauss_sf1> >(bvxm_voxel_grid<bsta_num_obs<bsta_gauss_sf1> > *grid,  vcl_string filename);
+bool bvxm_grid_save_raw<bsta_num_obs<bsta_gauss_sf1> >(bvxm_voxel_grid<bsta_num_obs<bsta_gauss_sf1> > *grid,  std::string filename);
 
 #endif // bvxm_io_voxel_grid_h

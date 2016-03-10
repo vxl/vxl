@@ -6,7 +6,9 @@
 #include "rgrl_trans_spline.h"
 #include <rgrl/rgrl_util.h>
 #include <rgrl/rgrl_trans_reader.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iostream>
 #include <vcl_cassert.h>
 
 rgrl_trans_spline::
@@ -16,7 +18,7 @@ rgrl_trans_spline( unsigned int dim )
 }
 
 rgrl_trans_spline::
-rgrl_trans_spline( vcl_vector<rgrl_spline_sptr> const& splines,
+rgrl_trans_spline( std::vector<rgrl_spline_sptr> const& splines,
                    vnl_vector< double > const& x0, vnl_vector< double > const& delta,
                    rgrl_transformation_sptr xform )
   : xform_( xform ), splines_( splines ),
@@ -27,7 +29,7 @@ rgrl_trans_spline( vcl_vector<rgrl_spline_sptr> const& splines,
 }
 
 rgrl_trans_spline::
-rgrl_trans_spline( vcl_vector<rgrl_spline_sptr> const& splines,
+rgrl_trans_spline( std::vector<rgrl_spline_sptr> const& splines,
                    vnl_vector< double > const& x0, vnl_vector< double > const& delta,
                    vnl_matrix< double > const& covar,
                    rgrl_transformation_sptr xform )
@@ -141,7 +143,7 @@ transfer_error_covar( vnl_vector<double> const& p ) const
 
 void
 rgrl_trans_spline::
-write( vcl_ostream& os ) const
+write( std::ostream& os ) const
 {
   // output tag
   os << "BSPLINE\n";
@@ -149,21 +151,21 @@ write( vcl_ostream& os ) const
   // global xform
   if ( xform_ ) {
     xform_->write( os );
-    os << vcl_endl;
+    os << std::endl;
   }
 
   // dim
   const unsigned int dim = x0_.size();
-  os << dim << vcl_endl;
+  os << dim << std::endl;
   // x0
-  os << x0_ << vcl_endl;
+  os << x0_ << std::endl;
   // deltas
   assert( delta_.size() == dim );
-  os << delta_ << vcl_endl;
+  os << delta_ << std::endl;
   // output the spline
   assert( splines_.size() == dim );
   for (unsigned int i=0; i<splines_.size(); ++i)
-    os << *splines_[i] << vcl_endl;
+    os << *splines_[i] << std::endl;
 
   // parent
   rgrl_transformation::write( os );
@@ -171,13 +173,13 @@ write( vcl_ostream& os ) const
 
 bool
 rgrl_trans_spline::
-read( vcl_istream& is )
+read( std::istream& is )
 {
   // skip empty lines
   rgrl_util_skip_empty_lines( is );
 
-  vcl_string str;
-  vcl_getline( is, str );
+  std::string str;
+  std::getline( is, str );
 
   // The token should appear at the beginning of line
   if ( str.find( "BSPLINE" ) != 0 ) {

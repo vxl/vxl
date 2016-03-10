@@ -7,8 +7,10 @@
 // \author Vishal Jain
 // \date Mar 25, 2011
 
-#include <vcl_fstream.h>
-#include <vcl_algorithm.h>
+#include <fstream>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <algorithm>
 #include <boxm2/ocl/boxm2_opencl_cache.h>
 #include <boxm2/boxm2_scene.h>
 #include <boxm2/boxm2_block.h>
@@ -42,7 +44,7 @@ bool boxm2_ocl_update_max_vis_score_process_cons(bprb_func_process& pro)
   using namespace boxm2_ocl_update_max_vis_score_process_globals;
 
   //process takes 9 inputs (of which the four last ones are optional):
-  vcl_vector<vcl_string> input_types_(n_inputs_);
+  std::vector<std::string> input_types_(n_inputs_);
   input_types_[0] = "bocl_device_sptr";
   input_types_[1] = "boxm2_scene_sptr";
   input_types_[2] = "boxm2_opencl_cache_sptr";
@@ -53,7 +55,7 @@ bool boxm2_ocl_update_max_vis_score_process_cons(bprb_func_process& pro)
   input_types_[7] = "float";                        // near factor ( maximum # of pixels should map to the finest voxel )
   input_types_[8] = "float";                        // far factor ( minimum # of pixels should map to the finest voxel )
   // process has no outputs
-  vcl_vector<vcl_string>  output_types_(n_outputs_);
+  std::vector<std::string>  output_types_(n_outputs_);
   bool good = pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
 
   brdb_value_sptr tnearfactor   = new brdb_value_t<float>(1e8f);  //by default update alpha
@@ -71,7 +73,7 @@ bool boxm2_ocl_update_max_vis_score_process(bprb_func_process& pro)
 
   //sanity check inputs
   if ( pro.n_inputs() < n_inputs_ ) {
-    vcl_cout << pro.name() << ": The input number should be " << n_inputs_<< vcl_endl;
+    std::cout << pro.name() << ": The input number should be " << n_inputs_<< std::endl;
     return false;
   }
   //get the inputs
@@ -89,7 +91,7 @@ bool boxm2_ocl_update_max_vis_score_process(bprb_func_process& pro)
   vul_timer t;
   t.mark();
   boxm2_ocl_update_max_vis::update_max_vis(scene, device, opencl_cache, cam, ni,nj,mask_img,nearfactor,farfactor);
-  vcl_cout<<"Total time taken is "<<t.all()<<vcl_endl;
+  std::cout<<"Total time taken is "<<t.all()<<std::endl;
   return true;
 }
 
@@ -106,7 +108,7 @@ bool boxm2_ocl_update_view_normal_dot_process_cons(bprb_func_process& pro)
   using namespace boxm2_ocl_update_view_normal_dot_process_globals;
 
   //process takes 9 inputs (of which the four last ones are optional):
-  vcl_vector<vcl_string> input_types_(n_inputs_);
+  std::vector<std::string> input_types_(n_inputs_);
   input_types_[0] = "bocl_device_sptr";
   input_types_[1] = "boxm2_scene_sptr";
   input_types_[2] = "boxm2_opencl_cache_sptr";
@@ -117,7 +119,7 @@ bool boxm2_ocl_update_view_normal_dot_process_cons(bprb_func_process& pro)
   input_types_[7] = "float";                        // near factor ( maximum # of pixels should map to the finest voxel )
   input_types_[8] = "float";                        // far factor ( minimum # of pixels should map to the finest voxel )
   // process has no outputs
-  vcl_vector<vcl_string>  output_types_(n_outputs_);
+  std::vector<std::string>  output_types_(n_outputs_);
   bool good = pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
 
   brdb_value_sptr tnearfactor   = new brdb_value_t<float>(1e8f);  //by default update alpha
@@ -135,7 +137,7 @@ bool boxm2_ocl_update_view_normal_dot_process(bprb_func_process& pro)
 
   //sanity check inputs
   if ( pro.n_inputs() < n_inputs_ ) {
-    vcl_cout << pro.name() << ": The input number should be " << n_inputs_<< vcl_endl;
+    std::cout << pro.name() << ": The input number should be " << n_inputs_<< std::endl;
     return false;
   }
   //get the inputs
@@ -152,7 +154,7 @@ bool boxm2_ocl_update_view_normal_dot_process(bprb_func_process& pro)
   vul_timer t;
   t.mark();
   boxm2_ocl_update_cosine_angle::update_cosine_angle(scene, device, opencl_cache, cam, ni,nj,mask_img,nearfactor,farfactor);
-  vcl_cout<<"Total time taken is "<<t.all()<<vcl_endl;
+  std::cout<<"Total time taken is "<<t.all()<<std::endl;
   return true;
 }
 
@@ -167,7 +169,7 @@ bool boxm2_ocl_update_surface_density_process_cons(bprb_func_process& pro)
   using namespace boxm2_ocl_update_surface_density_process_globals;
 
   //process takes 9 inputs (of which the four last ones are optional):
-  vcl_vector<vcl_string> input_types_(n_inputs_);
+  std::vector<std::string> input_types_(n_inputs_);
   input_types_[0] = "bocl_device_sptr";
   input_types_[1] = "boxm2_scene_sptr";
   input_types_[2] = "boxm2_opencl_cache_sptr";
@@ -179,7 +181,7 @@ bool boxm2_ocl_update_surface_density_process_cons(bprb_func_process& pro)
   input_types_[8] = "float";                        // near factor ( maximum # of pixels should map to the finest voxel )
   input_types_[9] = "float";                        // far factor ( minimum # of pixels should map to the finest voxel )
   // process has no outputs
-  vcl_vector<vcl_string>  output_types_(n_outputs_);
+  std::vector<std::string>  output_types_(n_outputs_);
   bool good = pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
 
   brdb_value_sptr tnearfactor   = new brdb_value_t<float>(1e8f);  //by default update alpha
@@ -196,7 +198,7 @@ bool boxm2_ocl_update_surface_density_process(bprb_func_process& pro)
 
   //sanity check inputs
   if ( pro.n_inputs() < n_inputs_ ) {
-    vcl_cout << pro.name() << ": The input number should be " << n_inputs_<< vcl_endl;
+    std::cout << pro.name() << ": The input number should be " << n_inputs_<< std::endl;
     return false;
   }
   //get the inputs
@@ -218,6 +220,6 @@ bool boxm2_ocl_update_surface_density_process(bprb_func_process& pro)
   if(vil_image_view<float> * exp_depth_float_img = dynamic_cast<vil_image_view<float> *>(exp_depth_img.ptr()) )
       if(vil_image_view<float> * std_depth_float_img = dynamic_cast<vil_image_view<float> *>(std_depth_img.ptr()) )
             boxm2_ocl_update_surface_density::update_surface_density(scene, device, opencl_cache, cam, ni,nj,*exp_depth_float_img,*std_depth_float_img,nearfactor,farfactor);
-  vcl_cout<<"Total time taken is "<<t.all()<<vcl_endl;
+  std::cout<<"Total time taken is "<<t.all()<<std::endl;
   return true;
 }

@@ -5,8 +5,10 @@
 // \file
 
 #include "vipl_filter.h"
-#include <vcl_iostream.h>
-#include <vcl_algorithm.h> // for vcl_max and vcl_min
+#include <iostream>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <algorithm> // for std::max and std::min
 
 #ifdef VCL_VC
 #pragma warning( disable: 4390 )
@@ -45,7 +47,7 @@ template < class ImgIn, class ImgOut, class DataIn, class DataOut, int  Arity, c
     hsfilter_state(Not_Ready),
     hsoutput_state(Not_Ready),
     hsnuminputs(ninputs),
-    hsinf(vcl_vector<inimagept>(hsnuminputs)),
+    hsinf(std::vector<inimagept>(hsnuminputs)),
     hsoutf(dst_img),
     hssrc_section (0),
     hsinsecp (0),
@@ -104,7 +106,7 @@ template < class ImgIn, class ImgOut, class DataIn, class DataOut, int Arity, cl
     hsfilter_state(Not_Ready),
     hsoutput_state(Not_Ready),
     hsnuminputs(ninputs),
-    hsinf(vcl_vector<inimagept>(hsnuminputs)),
+    hsinf(std::vector<inimagept>(hsnuminputs)),
     hsoutf(dst_img),
     hssrc_section (0),
     hsinsecp (0),
@@ -135,7 +137,7 @@ template < class ImgIn, class ImgOut, class DataIn, class DataOut, int Arity, cl
   }
   for (int i=0; i< ninputs; i++, src_img++) {
     if (src_img == 0)
-      vcl_cerr << "filter ctor passed vector will null src_img pointers, ignored them watch out.\n";
+      std::cerr << "filter ctor passed vector will null src_img pointers, ignored them watch out.\n";
     else
       ref_inf()[i] = *src_img;
 #if 0
@@ -149,7 +151,7 @@ template < class ImgIn, class ImgOut, class DataIn, class DataOut, int Arity, cl
   ::~vipl_filter()
 {
 #ifdef DEBUG
-  vcl_cout << "destructor for abstract class filter called " << this << vcl_endl;
+  std::cout << "destructor for abstract class filter called " << this << std::endl;
 #endif
 #ifndef SMARTPTR
   if (ref_src_section()) FILTER_IMPTR_DEC_REFCOUNT(ref_src_section()); // dec_refcount or kill it
@@ -169,7 +171,7 @@ template < class ImgIn, class ImgOut, class DataIn, class DataOut, int Arity, cl
     hsfilter_state(Not_Ready),
     hsoutput_state(Not_Ready),
     hsnuminputs(1),
-    hsinf(vcl_vector<inimagept>(hsnuminputs)),
+    hsinf(std::vector<inimagept>(hsnuminputs)),
     hsoutf(0),
     hssrc_section(0),
     hsinsecp(0),
@@ -195,7 +197,7 @@ template < class ImgIn, class ImgOut, class DataIn, class DataOut, int Arity, cl
     hsfilter_state(t.hsfilter_state),
     hsoutput_state(t.hsoutput_state),
     hsnuminputs(t.hsnuminputs),
-    hsinf(vcl_vector<inimagept>(hsnuminputs)),
+    hsinf(std::vector<inimagept>(hsnuminputs)),
     hsoutf(0),
     hssrc_section(t.hssrc_section),
     hsinsecp(t.hsinsecp),
@@ -271,7 +273,7 @@ template < class ImgIn, class ImgOut, class DataIn, class DataOut, int Arity, cl
     }
   }
   // error if reaching this point:
-  vcl_cerr << "Warning: called is_section_within_ROA but no valid sections defined. Returning 0\n";
+  std::cerr << "Warning: called is_section_within_ROA but no valid sections defined. Returning 0\n";
   return 0;
 }
 
@@ -307,15 +309,15 @@ template < class ImgIn, class ImgOut, class DataIn, class DataOut, int Arity, cl
     st += ibs;
     end -= ibs;
     if (inROA())
-      st =vcl_min(end,vcl_max(st,inROA()->curr_sec_start(axis)+ibs));
+      st =std::min(end,std::max(st,inROA()->curr_sec_start(axis)+ibs));
 #ifdef DEBUG
-    vcl_cerr << "i_ [" << axis << "] st=" << st << " ibs=" << ibs << vcl_endl;
+    std::cerr << "i_ [" << axis << "] st=" << st << " ibs=" << ibs << std::endl;
 #endif
     return st;
   }
 
   // error if reaching this point:
-  vcl_cerr << "Warning: called start_src but no valid sections defined. Returning 0\n";
+  std::cerr << "Warning: called start_src but no valid sections defined. Returning 0\n";
   return 0;
 }
 
@@ -340,15 +342,15 @@ template < class ImgIn, class ImgOut, class DataIn, class DataOut, int Arity, cl
     st += ibs;
     end -= ibs;
     if (ROA())
-      st = vcl_min(end,vcl_max(st,ROA()->curr_sec_start(axis)+ibs));
+      st = std::min(end,std::max(st,ROA()->curr_sec_start(axis)+ibs));
 #ifdef DEBUG
-    vcl_cerr << "o_ [" << axis << "] st=" << st << " ibs=" << ibs << vcl_endl;
+    std::cerr << "o_ [" << axis << "] st=" << st << " ibs=" << ibs << std::endl;
 #endif
     return st;
   }
 
   // error if reaching this point:
-  vcl_cerr << "Warning: called start_dst but no valid sections defined. Returning 0\n";
+  std::cerr << "Warning: called start_dst but no valid sections defined. Returning 0\n";
   return 0;
 }
 
@@ -389,13 +391,13 @@ template < class ImgIn, class ImgOut, class DataIn, class DataOut, int Arity, cl
     }
     end -= ibs;
 #ifdef DEBUG
-    vcl_cerr << "_i [" << axis << "] end=" << end << " ibs=" << ibs << vcl_endl;
+    std::cerr << "_i [" << axis << "] end=" << end << " ibs=" << ibs << std::endl;
 #endif
     return end;
   }
 
   // error if reaching this point:
-  vcl_cerr << "Warning: called stop_src but no valid sections defined. Returning 0\n";
+  std::cerr << "Warning: called stop_src but no valid sections defined. Returning 0\n";
   return 0;
 }
 
@@ -419,13 +421,13 @@ template < class ImgIn, class ImgOut, class DataIn, class DataOut, int Arity, cl
     }
     end -= ibs;
 #ifdef DEBUG
-    vcl_cerr << "_o [" << axis << "] end=" << end << " ibs=" << ibs << vcl_endl;
+    std::cerr << "_o [" << axis << "] end=" << end << " ibs=" << ibs << std::endl;
 #endif
     return end;
   }
 
   // error if reaching this point:
-  vcl_cerr << "Warning: called stop_dst but no valid sections defined. Returning 0\n";
+  std::cerr << "Warning: called stop_dst but no valid sections defined. Returning 0\n";
   return 0;
 }
 
@@ -448,7 +450,7 @@ template < class ImgIn, class ImgOut, class DataIn, class DataOut, int Arity, cl
     return true;
   }
   // error if reaching this point:
-  vcl_cerr << "Warning: index out of range in put_in_data_ptr, ignored\n";
+  std::cerr << "Warning: index out of range in put_in_data_ptr, ignored\n";
   return false;
 }
 
@@ -459,7 +461,7 @@ template < class ImgIn, class ImgOut, class DataIn, class DataOut, int Arity, cl
                           ::in_data_ptr(int index)
 {
   if (index < 0 || index >= numinputs()) {
-    vcl_cerr << "Warning: index " << index << " out of range, returning data at 0 instead\n";
+    std::cerr << "Warning: index " << index << " out of range, returning data at 0 instead\n";
     index = 0;
   }
   return inf()[index];
@@ -475,11 +477,11 @@ template < class ImgIn, class ImgOut, class DataIn, class DataOut, int Arity, cl
     if (inf()[index])
       return *inf()[index];
     else {
-      vcl_cerr << "Warning: input pointer is null returning image at index 0\n";
+      std::cerr << "Warning: input pointer is null returning image at index 0\n";
       return *inf()[0];
     }
   }
-  vcl_cerr << "Warning: out of range is null, a new val, it will leak\n";
+  std::cerr << "Warning: out of range is null, a new val, it will leak\n";
   return *inf()[0];
 }
 
@@ -513,7 +515,7 @@ template < class ImgIn, class ImgOut, class DataIn, class DataOut, int Arity, cl
   if (READY(output_state()) )
     return ref_outf();
   else {
-    vcl_cerr << "Warning: Tried to reference a NOT READY output-data, returned 0\n";
+    std::cerr << "Warning: Tried to reference a NOT READY output-data, returned 0\n";
     return 0;
   }
 }
@@ -526,7 +528,7 @@ template < class ImgIn, class ImgOut, class DataIn, class DataOut, int Arity, cl
   if (READY(output_state()) )
     return *outf();
   else {
-    vcl_cerr << "Warning: Tried to reference a NOT READY output-returning old input, may coredump\n";
+    std::cerr << "Warning: Tried to reference a NOT READY output-returning old input, may coredump\n";
     return *outf();
   }
 }
@@ -594,7 +596,7 @@ template < class ImgIn, class ImgOut, class DataIn, class DataOut, int Arity, cl
   if (NOT_READY(input_state())) {
     // first make sure that the filter is ready to proceed
     ref_filter_state() = Not_Ready;
-    vcl_cerr << "Warning: filtering without valid input\n";
+    std::cerr << "Warning: filtering without valid input\n";
     return false;
   }
   else if (UNCHANGED(input_state())) {
@@ -609,7 +611,7 @@ template < class ImgIn, class ImgOut, class DataIn, class DataOut, int Arity, cl
 #if 0
     if (outf()) FILTER_IMPTR_DEC_REFCOUNT(ref_outf());
 #endif
-    vcl_cerr << "Warning: Input changed after output set.  Sizes may not match...\n";
+    std::cerr << "Warning: Input changed after output set.  Sizes may not match...\n";
   }
   if ((check_params_1(proceed_anyway) &&
       READY(filter_state()) && CHANGED(filter_state())) || proceed_anyway) {
@@ -684,7 +686,7 @@ template < class ImgIn, class ImgOut, class DataIn, class DataOut, int Arity, cl
   bool vipl_filter< ImgIn, ImgOut, DataIn, DataOut, Arity, PixelItr >
                       ::compose_with(vipl_filter_abs& to)
 {
-  vcl_cerr << "Warning: called unimplemented method compose_with\n";
+  std::cerr << "Warning: called unimplemented method compose_with\n";
   return false;
 }
 #endif

@@ -7,7 +7,7 @@
 
 
 //: Return a platform independent string identifying the class
-vcl_string
+std::string
 bgrl_edge::is_a() const
 {
   return "bgrl_edge";
@@ -45,7 +45,7 @@ bgrl_edge::b_read( vsl_b_istream& )
 
 //: Print an ascii summary to the stream
 void
-bgrl_edge::print_summary( vcl_ostream& os ) const
+bgrl_edge::print_summary( std::ostream& os ) const
 {
   os << "2 vertices";
 }
@@ -74,7 +74,7 @@ void vsl_add_to_binary_loader(const bgrl_edge& e)
 
 //: Print an ASCII summary of a bgrl_edge to the stream
 void
-vsl_print_summary(vcl_ostream &os, const bgrl_edge* e)
+vsl_print_summary(std::ostream &os, const bgrl_edge* e)
 {
   os << "bgrl_edge{ ";
   e->print_summary(os);

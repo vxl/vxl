@@ -19,8 +19,10 @@
 #include "bmsh3d_halfedge.h"
 #include "bmsh3d_utils.h"
 
-#include <vcl_vector.h>
-#include <vcl_sstream.h>
+#include <vector>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <sstream>
 #include <vgl/vgl_fwd.h>
 
 //#######################################################
@@ -112,7 +114,7 @@ class bmsh3d_edge : public vispt_elm
   bool is_F_incident(bmsh3d_face* F) const;
   bmsh3d_halfedge* get_HE_of_F(bmsh3d_face* F) const;
 
-  void get_incident_Fs(vcl_vector<bmsh3d_face*>& incident_faces) const;
+  void get_incident_Fs(std::vector<bmsh3d_face*>& incident_faces) const;
 
   bmsh3d_face* incident_F_given_E(bmsh3d_edge* other_incident_E) const;
   bmsh3d_face* incident_F_given_V(bmsh3d_vertex* incident_vertex) const;
@@ -146,14 +148,14 @@ class bmsh3d_edge : public vispt_elm
   void _disconnect_HE(bmsh3d_halfedge* inputHE);
 
   //: disconnect all incident faces and return the vector of all such faces.
-  void disconnect_all_Fs(vcl_vector<bmsh3d_face*>& disconn_faces);
+  void disconnect_all_Fs(std::vector<bmsh3d_face*>& disconn_faces);
 
   //###### For the edge of a 2-manifold triangular mesh only ######
   bmsh3d_halfedge* m2_other_HE(bmsh3d_halfedge* inputHE);
   bmsh3d_face* m2_other_face(bmsh3d_face* input_face);
 
   //###### Other functions ######
-  virtual void getInfo(vcl_ostringstream& ostrm);
+  virtual void getInfo(std::ostringstream& ostrm);
 };
 
 //: Given two consecutive edges, find the common incident vertex.

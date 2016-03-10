@@ -7,16 +7,18 @@
 
 #include "PairMatchSet.h"
 
-#include <vcl_cstdlib.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <cstdlib>
 #include <vcl_cassert.h>
-#include <vcl_iostream.h>
-#include <vcl_vector.h>
+#include <iostream>
+#include <vector>
 
 #include <mvl/MatchSet.h>
 
 PairMatchSet::iterator PairMatchSet::iterator::operator++ (int /*postfix*/)
 {
-  vcl_abort();
+  std::abort();
   return *this;
 }
 
@@ -58,8 +60,8 @@ void PairMatchSet::update_feature_match_data()
 bool PairMatchSet::add_match(int i1, int i2)
 {
   if ((unsigned)i1 >= matches_.size()) {
-    vcl_cerr << "PairMatchSet: add_match(" << i1 << ") greater than size " << matches_.size() << vcl_endl;
-    vcl_abort();
+    std::cerr << "PairMatchSet: add_match(" << i1 << ") greater than size " << matches_.size() << std::endl;
+    std::abort();
     return false;
   }
   bool had_nomatch = (matches_[i1] == NoMatch);
@@ -75,7 +77,7 @@ bool PairMatchSet::add_match(int i1, int i2)
 void PairMatchSet::clear_match_1(int i1)
 {
   if ((unsigned)i1 >= matches_.size()) {
-    vcl_cerr << "PairMatchSet: clear squawwk\n";
+    std::cerr << "PairMatchSet: clear squawwk\n";
     return;
   }
   int& i2 = matches_[i1];
@@ -95,8 +97,8 @@ int PairMatchSet::get_match_12(int i1) const
     return MatchSet::NoMatch;
 
   if ((unsigned)i1 >= matches_.size()) {
-    vcl_cerr << "PairMatchSet::get_match_12() -- i1 = " << i1 << " >= matches_.size() = " << matches_.size() << vcl_endl;
-    vcl_abort();
+    std::cerr << "PairMatchSet::get_match_12() -- i1 = " << i1 << " >= matches_.size() = " << matches_.size() << std::endl;
+    std::abort();
     return -1;
   }
 
@@ -164,14 +166,14 @@ int PairMatchSet::size() const
 void PairMatchSet::set_size(unsigned newsize)
 {
   if (newsize != matches_.size())
-    matches_ = vcl_vector<int>(newsize, NoMatch);
+    matches_ = std::vector<int>(newsize, NoMatch);
 }
 
-void PairMatchSet::update(const vcl_vector<bool>& inliers)
+void PairMatchSet::update(const std::vector<bool>& inliers)
 {
   if (inliers.size() != count()) {
-    vcl_cerr << "PairMatchSet::update() -- This matchset is not the same length as the inliers\n";
-    vcl_abort();
+    std::cerr << "PairMatchSet::update() -- This matchset is not the same length as the inliers\n";
+    std::abort();
   }
 
   int n = 0;
@@ -185,22 +187,22 @@ void PairMatchSet::update(const vcl_vector<bool>& inliers)
 // == INPUT/OUTPUT ==
 
 //: Write matches in ASCII to stream.
-void PairMatchSet::write_ascii(vcl_ostream& s) const
+void PairMatchSet::write_ascii(std::ostream& s) const
 {
   for (unsigned i = 0; i < matches_.size(); ++i) {
     int to_index = matches_[i];
     if (to_index != NoMatch)
-      s << i << ' ' << to_index << vcl_endl;
+      s << i << ' ' << to_index << std::endl;
   }
 }
 
-vcl_ostream& operator<<(vcl_ostream& s, const PairMatchSet& cc)
+std::ostream& operator<<(std::ostream& s, const PairMatchSet& cc)
 {
   cc.write_ascii(s);
   return s;
 }
 
-bool PairMatchSet::read_ascii(vcl_istream& s)
+bool PairMatchSet::read_ascii(std::istream& s)
 {
   clear();
   for (;;) {
@@ -211,19 +213,19 @@ bool PairMatchSet::read_ascii(vcl_istream& s)
     if (!s.good())
       break;
     // Eat any whitespace
-    s >> vcl_ws;
+    s >> std::ws;
 
     // Sanity check
     if (i1 < 0 || i2 < 0 || i1 >= (int)matches_.size()) {
-      vcl_cerr << "PairMatchSet::read_ascii -- Pair " << i1 << '-' << i2 << " is outside the valid range.\n";
+      std::cerr << "PairMatchSet::read_ascii -- Pair " << i1 << '-' << i2 << " is outside the valid range.\n";
       clear();
       return false;
     }
 
     // More sanity checking
     if (matches_[i1] != NoMatch) {
-      vcl_cerr << "PairMatchSet::read_ascii() -- Warning:\n"
-               << "Duplicate matches for " << i1 << ": " << matches_[i1] << " and " << i2 << vcl_endl;
+      std::cerr << "PairMatchSet::read_ascii() -- Warning:\n"
+               << "Duplicate matches for " << i1 << ": " << matches_[i1] << " and " << i2 << std::endl;
       return false;
     }
 
@@ -233,19 +235,19 @@ bool PairMatchSet::read_ascii(vcl_istream& s)
   return compute_match_count() > 0;
 }
 
-vcl_istream& operator>>(vcl_istream& s, PairMatchSet& cc)
+std::istream& operator>>(std::istream& s, PairMatchSet& cc)
 {
   cc.read_ascii(s);
   return s;
 }
 
 //: Summarize matches on stream
-void PairMatchSet::print_brief(vcl_ostream& s) const
+void PairMatchSet::print_brief(std::ostream& s) const
 {
   s << "PairMatchSet: ";
   for (unsigned i = 0; i < matches_.size(); i++)
     s << matches_[i] << ' ';
-  s << vcl_endl;
+  s << std::endl;
 }
 
 //: Summarize matches on cout.
@@ -260,8 +262,8 @@ void PairMatchSet::print_brief() const
 
   for (unsigned i = 0; i < n; ++i)
     if (matches_[i] != NoMatch)
-      vcl_cout << ' ' << matches_[i];
-  vcl_cout << c << vcl_endl;
+      std::cout << ' ' << matches_[i];
+  std::cout << c << std::endl;
 }
 
 // Data Control--------------------------------------------------------------

@@ -6,7 +6,9 @@
 
 #include "bil_scale_image.h"
 
-#include <vcl_cmath.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <cmath>
 #include <vcl_cassert.h>
 
 #include <vil/vil_math.h>
@@ -19,7 +21,7 @@
 template <class T>
 bil_scale_image<T>::bil_scale_image(unsigned num_levels, unsigned num_octaves,
                                     float init_scale, int first_octave)
- : data_(num_octaves,vcl_vector<vil_image_view< T > >(num_levels+2)),
+ : data_(num_octaves,std::vector<vil_image_view< T > >(num_levels+2)),
    num_levels_(num_levels), init_scale_(init_scale), first_octave_(first_octave)
 {}
 
@@ -28,7 +30,7 @@ bil_scale_image<T>::bil_scale_image(unsigned num_levels, unsigned num_octaves,
 template <class T>
 bil_scale_image<T>::bil_scale_image(const vil_image_view<T>& image, unsigned int num_levels,
                                     unsigned int num_octaves, float init_scale, int first_octave)
- : data_(num_octaves,vcl_vector< vil_image_view< T > >(num_levels+2)),
+ : data_(num_octaves,std::vector< vil_image_view< T > >(num_levels+2)),
    num_levels_(num_levels), init_scale_(init_scale), first_octave_(first_octave)
 {
   build_gaussian(image);
@@ -54,10 +56,10 @@ static void
 smooth(double sigma, const vil_image_view< T >& in,
        vil_image_view< T >& out)
 {
-  const double sqrt2 = vcl_sqrt(2.0);
+  const double sqrt2 = std::sqrt(2.0);
   int num_iter = 1;
   int size = 2*int(sigma*3.5+0.5)+1;
-  int max_size = vcl_min(in.ni(),in.nj());
+  int max_size = std::min(in.ni(),in.nj());
   while (size >= max_size){
     sigma /= sqrt2;
     num_iter *= 2;
@@ -96,7 +98,7 @@ bil_scale_image<T>::build_gaussian(const vil_image_view<T>& image,
     diff->num_levels_ = this->num_levels_;
     diff->first_octave_ = this->first_octave_;
     diff->data_.resize(this->data_.size(),
-                       vcl_vector< vil_image_view< T > >(this->num_levels_+2));
+                       std::vector< vil_image_view< T > >(this->num_levels_+2));
   }
 
   assert(first_octave_ == -1 || first_octave_ == 0);
@@ -106,12 +108,12 @@ bil_scale_image<T>::build_gaussian(const vil_image_view<T>& image,
     temp = vil_image_view<T>(2*image.ni(), 2*image.nj(), image.nplanes());
     vil_resample_bilin( image, temp, 0.0, 0.0, 0.5, 0.0, 0.0, 0.5, 2*image.ni()-1, 2*image.nj()-1);
     if (init_scale_ > 1.0)
-      sigma = vcl_sqrt(init_scale_*init_scale_ - 1.0);
+      sigma = std::sqrt(init_scale_*init_scale_ - 1.0);
   }
   else{
     temp = image;
     if (init_scale_ > 0.5)
-      sigma = vcl_sqrt(init_scale_*init_scale_ - 0.5);
+      sigma = std::sqrt(init_scale_*init_scale_ - 0.5);
   }
 
   data_[0][0] = vil_image_view<T>(temp.ni(),temp.nj(), temp.nplanes());
@@ -120,9 +122,9 @@ bil_scale_image<T>::build_gaussian(const vil_image_view<T>& image,
   else
     data_[0][0].deep_copy(temp);
 
-  double k = vcl_pow(2.0, 1.0/num_levels_);
+  double k = std::pow(2.0, 1.0/num_levels_);
   // solve: scale^2 + sigma^2 = (k*scale)^2
-  double init_sigma = init_scale_ * vcl_sqrt(k*k - 1.0);
+  double init_sigma = init_scale_ * std::sqrt(k*k - 1.0);
 
   // create the Gaussian Pyramid
   for (unsigned int oc=0; oc<data_.size(); ++oc)
@@ -132,7 +134,7 @@ bil_scale_image<T>::build_gaussian(const vil_image_view<T>& image,
     }
     sigma = init_sigma;
     for (unsigned int lvl=0; lvl<num_levels_+2; ++lvl){
-      vcl_cout << "img("<<oc<<','<<lvl<<") - ("<<data_[oc][lvl].ni()<<','<<data_[oc][lvl].nj()<<") "<< sigma <<vcl_endl;
+      std::cout << "img("<<oc<<','<<lvl<<") - ("<<data_[oc][lvl].ni()<<','<<data_[oc][lvl].nj()<<") "<< sigma <<std::endl;
       if (lvl<num_levels_+1)
         temp = data_[oc][lvl+1] = vil_image_view<T>(temp.ni(),temp.nj(),temp.nplanes());
       else
@@ -164,9 +166,9 @@ bil_scale_image<T>::compute_gradients(bil_scale_image<T>& orientation,
   orientation.num_levels_ = this->num_levels_;
   magnitude.num_levels_ = this->num_levels_;
   orientation.data_.resize(this->data_.size(),
-                           vcl_vector< vil_image_view< T > >(this->num_levels_+2));
+                           std::vector< vil_image_view< T > >(this->num_levels_+2));
   magnitude.data_.resize(this->data_.size(),
-                         vcl_vector< vil_image_view< T > >(this->num_levels_+2));
+                         std::vector< vil_image_view< T > >(this->num_levels_+2));
 
   // compute the gradient magnitude and orientation of each image in the gauss pyramid
   for (unsigned int oc=0; oc<data_.size(); ++oc)

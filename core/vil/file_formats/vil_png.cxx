@@ -9,9 +9,9 @@
 #include "vil_png.h"
 
 #include <vcl_cassert.h>
-#include <vcl_cstring.h>
-#include <vcl_iostream.h>
-#include <vcl_algorithm.h>
+#include <cstring>
+#include <iostream>
+#include <algorithm>
 
 #include <vil/vil_stream.h>
 #include <vil/vil_image_view.h>
@@ -22,7 +22,8 @@
 #if (PNG_LIBPNG_VER_MAJOR == 0)
 extern "You need a later libpng. You should rerun CMake, after setting VXL_FORCE_V3P_PNG to ON."
 #endif
-#include <vcl_cstdlib.h> // for vcl_exit()
+#include <vcl_compiler.h>
+#include <cstdlib> // for std::exit()
 
 #include <vxl_config.h>
 
@@ -34,7 +35,7 @@ char const* vil_png_format_tag = "png";
 // Functions
 static bool problem(char const* msg)
 {
-  vcl_cerr << "[vil_png: PROBLEM " <<msg << ']';
+  std::cerr << "[vil_png: PROBLEM " <<msg << ']';
   return false;
 }
 
@@ -64,7 +65,7 @@ vil_image_resource_sptr vil_png_file_format::make_output_image(vil_stream* vs,
   // FIXME || format != VIL_PIXEL_FORMAT_BOOL
 
   {
-    vcl_cout<<"ERROR! vil_png_file_format::make_output_image()\n"
+    std::cout<<"ERROR! vil_png_file_format::make_output_image()\n"
             <<"Pixel format should be byte, but is "<<format<<" instead.\n";
     return VXL_NULLPTR;
   }
@@ -127,19 +128,19 @@ static bool jmpbuf_ok = false;
 //
 static void pngtopnm_error_handler (png_structp png_ptr, png_const_charp msg)
 {
-  vcl_cerr << "vil_png:  fatal libpng error: " << msg << '\n';
+  std::cerr << "vil_png:  fatal libpng error: " << msg << '\n';
 
   if (!jmpbuf_ok) {
     // Someone called the error handler when the setjmp was wrong
-    vcl_cerr << "vil_png: jmpbuf is pretty far from ok.  returning\n";
-    // vcl_abort();
+    std::cerr << "vil_png: jmpbuf is pretty far from ok.  returning\n";
+    // std::abort();
     return;
   }
 
   vil_jmpbuf_wrapper  *jmpbuf_ptr = static_cast<vil_jmpbuf_wrapper*>(png_get_error_ptr(png_ptr));
   if (jmpbuf_ptr == VXL_NULLPTR) {         // we are completely hosed now
-    vcl_cerr << "pnmtopng:  EXTREMELY fatal error: jmpbuf unrecoverable; terminating.\n";
-    vcl_exit(99);
+    std::cerr << "pnmtopng:  EXTREMELY fatal error: jmpbuf unrecoverable; terminating.\n";
+    std::exit(99);
   }
 
   longjmp(jmpbuf_ptr->jmpbuf, 1);
@@ -278,7 +279,7 @@ vil_png_image::vil_png_image(vil_stream* is)
 
 bool vil_png_image::get_property(char const *key, void * value) const
 {
-  if (vcl_strcmp(vil_property_quantisation_depth, key)==0)
+  if (std::strcmp(vil_property_quantisation_depth, key)==0)
   {
     if (value)
       *static_cast<unsigned int*>(value) = bits_per_component_;
@@ -481,7 +482,7 @@ vil_image_view_base_sptr vil_png_image::get_copy_view(unsigned x0,
     {
       assert(format_==VIL_PIXEL_FORMAT_BOOL);
 
-      vcl_memcpy(reinterpret_cast<char*>(chunk->data()), rows[y0], ny * bytes_per_row_dst);
+      std::memcpy(reinterpret_cast<char*>(chunk->data()), rows[y0], ny * bytes_per_row_dst);
       return new vil_image_view<bool>(chunk, reinterpret_cast<bool*>(chunk->data()),
         nx, ny, nplanes(), nplanes(), nplanes()*nx, 1);
     }
@@ -489,13 +490,13 @@ vil_image_view_base_sptr vil_png_image::get_copy_view(unsigned x0,
     {
       assert(format_==VIL_PIXEL_FORMAT_UINT_16);
 
-      vcl_memcpy(reinterpret_cast<char*>(chunk->data()), rows[y0], ny * bytes_per_row_dst);
+      std::memcpy(reinterpret_cast<char*>(chunk->data()), rows[y0], ny * bytes_per_row_dst);
       return new vil_image_view<vxl_uint_16>(chunk, reinterpret_cast<vxl_uint_16*>(chunk->data()),
         nx, ny, nplanes(), nplanes(), nplanes()*nx, 1);
     }
     else if (bit_depth ==8)
     {
-      vcl_memcpy(reinterpret_cast<char*>(chunk->data()), rows[y0], ny * bytes_per_row_dst);
+      std::memcpy(reinterpret_cast<char*>(chunk->data()), rows[y0], ny * bytes_per_row_dst);
       return new vil_image_view<vxl_byte>(chunk, reinterpret_cast<vxl_byte*>(chunk->data()),
         nx, ny, nplanes(), nplanes(), nplanes()*nx, 1);
     }
@@ -509,7 +510,7 @@ vil_image_view_base_sptr vil_png_image::get_copy_view(unsigned x0,
 
       png_byte* dst = reinterpret_cast<png_byte*>(chunk->data());
       for (unsigned y = 0; y < ny; ++y, dst += bytes_per_row_dst)
-        vcl_memcpy(dst, &rows[y0+y][x0*bytes_per_pixel], nx*bytes_per_pixel);
+        std::memcpy(dst, &rows[y0+y][x0*bytes_per_pixel], nx*bytes_per_pixel);
       return new vil_image_view<bool>(chunk, reinterpret_cast<bool*>(chunk->data()),
         nx, ny, nplanes(), nplanes(), nplanes()*nx, 1);
     }
@@ -519,7 +520,7 @@ vil_image_view_base_sptr vil_png_image::get_copy_view(unsigned x0,
 
       png_byte* dst = reinterpret_cast<png_byte*>(chunk->data());
       for (unsigned y = 0; y < ny; ++y, dst += bytes_per_row_dst)
-        vcl_memcpy(dst, &rows[y0+y][x0*bytes_per_pixel], nx*bytes_per_pixel);
+        std::memcpy(dst, &rows[y0+y][x0*bytes_per_pixel], nx*bytes_per_pixel);
       return new vil_image_view<vxl_uint_16>(chunk, reinterpret_cast<vxl_uint_16*>(chunk->data()),
         nx, ny, nplanes(), nplanes(), nplanes()*nx, 1);
     }
@@ -527,7 +528,7 @@ vil_image_view_base_sptr vil_png_image::get_copy_view(unsigned x0,
     {
       png_byte* dst = reinterpret_cast<png_byte*>(chunk->data());
       for (unsigned y = 0; y < ny; ++y, dst += bytes_per_row_dst)
-        vcl_memcpy(dst, &rows[y0+y][x0*bytes_per_pixel], nx*bytes_per_pixel);
+        std::memcpy(dst, &rows[y0+y][x0*bytes_per_pixel], nx*bytes_per_pixel);
       return new vil_image_view<vxl_byte>(chunk, reinterpret_cast<vxl_byte*>(chunk->data()),
         nx, ny, nplanes(), nplanes(), nplanes()*nx, 1);
     }

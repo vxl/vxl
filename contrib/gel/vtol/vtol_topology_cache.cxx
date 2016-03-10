@@ -84,7 +84,7 @@ void vtol_topology_cache::vertices(vertex_list& verts)
   // copy the lists
 
   verts.clear();
-  for (vcl_vector<vtol_vertex*>::iterator it = vertices_->begin();
+  for (std::vector<vtol_vertex*>::iterator it = vertices_->begin();
        it != vertices_->end(); ++it){
     verts.push_back(*it);
   }
@@ -100,7 +100,7 @@ void vtol_topology_cache::zero_chains(zero_chain_list& zchains)
     // copy the lists
 
   zchains.clear();
-  for (vcl_vector<vtol_zero_chain*>::iterator it = zerochains_->begin();
+  for (std::vector<vtol_zero_chain*>::iterator it = zerochains_->begin();
        it != zerochains_->end(); ++it){
     zchains.push_back(*it);
   }
@@ -116,7 +116,7 @@ void vtol_topology_cache::edges(edge_list& oedges)
     // copy the lists
 
   oedges.clear();
-  for (vcl_vector<vtol_edge*>::iterator it = edges_->begin();
+  for (std::vector<vtol_edge*>::iterator it = edges_->begin();
        it != edges_->end(); ++it){
     oedges.push_back(*it);
   }
@@ -130,7 +130,7 @@ void vtol_topology_cache::one_chains(one_chain_list& ochains)
     onechains_ = source_->compute_one_chains();
 
   ochains.clear();
-  for (vcl_vector<vtol_one_chain*>::iterator it = onechains_->begin();
+  for (std::vector<vtol_one_chain*>::iterator it = onechains_->begin();
        it != onechains_->end(); ++it){
     ochains.push_back(*it);
   }
@@ -144,7 +144,7 @@ void vtol_topology_cache::faces(face_list& ofaces)
     faces_ = source_->compute_faces();
 
   ofaces.clear();
-  for (vcl_vector<vtol_face*>::iterator it = faces_->begin();
+  for (std::vector<vtol_face*>::iterator it = faces_->begin();
        it != faces_->end(); ++it){
     ofaces.push_back(*it);
   }
@@ -159,7 +159,7 @@ void vtol_topology_cache::two_chains(two_chain_list& otwo_chains)
     twochains_ = source_->compute_two_chains();
 
   otwo_chains.clear();
-  for (vcl_vector<vtol_two_chain*>::iterator it = twochains_->begin();
+  for (std::vector<vtol_two_chain*>::iterator it = twochains_->begin();
        it != twochains_->end(); ++it){
     otwo_chains.push_back(*it);
   }
@@ -174,7 +174,7 @@ void vtol_topology_cache::blocks(block_list& oblocks)
     blocks_ = source_->compute_blocks();
 
   oblocks.clear();
-  for (vcl_vector<vtol_block*>::iterator it = blocks_->begin();
+  for (std::vector<vtol_block*>::iterator it = blocks_->begin();
        it != blocks_->end(); ++it){
     oblocks.push_back(*it);
   }

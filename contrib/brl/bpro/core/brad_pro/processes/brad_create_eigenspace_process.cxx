@@ -4,14 +4,16 @@
 //:
 // \file
 
-#include <vcl_fstream.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <fstream>
 
 //: Constructor
 bool brad_create_eigenspace_process_cons(bprb_func_process& pro)
 {
   // no inputs
   bool ok=false;
-  vcl_vector<vcl_string> input_types(6);
+  std::vector<std::string> input_types(6);
   input_types[0]= "vcl_string"; // feature vector type
   input_types[1]= "float";      // intensity hist max
   input_types[2]= "float";      // gradient hist max
@@ -22,7 +24,7 @@ bool brad_create_eigenspace_process_cons(bprb_func_process& pro)
   if (!ok) return ok;
 
   //output
-  vcl_vector<vcl_string> output_types;
+  std::vector<std::string> output_types;
   output_types.push_back("brad_eigenspace_sptr"); //eigenspace
   ok = pro.set_output_types(output_types);
   if (!ok) return ok;
@@ -35,12 +37,12 @@ bool brad_create_eigenspace_process(bprb_func_process& pro)
 #if 0
   // Sanity check
   if (pro.n_inputs()< 6) {
-    vcl_cout << "brad_create_eigenspace_process: The input number should be 6" << vcl_endl;
+    std::cout << "brad_create_eigenspace_process: The input number should be 6" << std::endl;
     return false;
   }
 #endif
   int i = 0;
-  vcl_string feature_vector_type = pro.get_input<vcl_string>(i++);
+  std::string feature_vector_type = pro.get_input<std::string>(i++);
   float max_int = pro.get_input<float>(i++);
   float max_grad = pro.get_input<float>(i++);
   unsigned nbins = pro.get_input<unsigned>(i++);

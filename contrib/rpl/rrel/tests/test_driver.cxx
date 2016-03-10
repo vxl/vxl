@@ -34,7 +34,9 @@ register_tests()
 DEFINE_MAIN;
 
 #include <vnl/vnl_random.h>
-#include <vcl_cmath.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <cmath>
 
 double noise( double sigma )
 {
@@ -44,5 +46,5 @@ double noise( double sigma )
 
 bool close( double a, double b )
 {
-  return vcl_fabs(a-b) < 1e-5;
+  return std::fabs(a-b) < 1e-5;
 }

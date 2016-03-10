@@ -12,7 +12,9 @@
 
 #include <bprb/bprb_func_process.h>
 
-#include <vcl_fstream.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <fstream>
 #include <boxm/boxm_scene_base.h>
 #include <boxm/boxm_scene.h>
 #include <boxm/algo/sp/boxm_render_image.h>
@@ -37,7 +39,7 @@ bool boxm_volume_visibility_process_cons(bprb_func_process& pro)
   //input[2]: ni of the expected image
   //input[3]: nj of the expected image
   //input[4-9]: bounding box
-  vcl_vector<vcl_string> input_types_(n_inputs_);
+  std::vector<std::string> input_types_(n_inputs_);
   input_types_[0] = "boxm_scene_base_sptr";
   input_types_[1] = "vpgl_camera_double_sptr";
   input_types_[2] = "unsigned";
@@ -51,7 +53,7 @@ bool boxm_volume_visibility_process_cons(bprb_func_process& pro)
 
   // process has 1 output:
   // output[0]: rendered image
-  vcl_vector<vcl_string>  output_types_(n_outputs_);
+  std::vector<std::string>  output_types_(n_outputs_);
   output_types_[0] = "vil_image_view_base_sptr";
 
   return pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
@@ -62,7 +64,7 @@ bool boxm_volume_visibility_process(bprb_func_process& pro)
   using namespace boxm_volume_visibility_process_globals;
 
   if ( pro.n_inputs() < n_inputs_ ){
-    vcl_cout << pro.name() << ": The input number should be " << n_inputs_<< vcl_endl;
+    std::cout << pro.name() << ": The input number should be " << n_inputs_<< std::endl;
     return false;
   }
 
@@ -112,10 +114,10 @@ bool boxm_volume_visibility_process(bprb_func_process& pro)
     vil_convert_stretch_range_limited(img_vol,*vol_vis, 0.0f, 1.0f);
     img = vol_vis;
 
-    vcl_cout<<"\n Visibility is "<<val;
+    std::cout<<"\n Visibility is "<<val;
   }
   else {
-    vcl_cout << "boxm_volume_visibility_process: undefined APM type" << vcl_endl;
+    std::cout << "boxm_volume_visibility_process: undefined APM type" << std::endl;
     return false;
   }
 

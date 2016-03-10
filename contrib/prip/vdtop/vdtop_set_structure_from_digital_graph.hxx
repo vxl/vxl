@@ -6,7 +6,9 @@
 #include <vdtop/vdtop_8_neighborhood_mask.h>
 #include <vmap/vmap_types.h> // for vmap_2_map_tag
 #include <vil/vil_image_view.h>
-#include <vcl_cstddef.h> // for std::ptrdiff_t
+#include <vcl_compiler.h>
+#include <iostream>
+#include <cstddef> // for std::ptrdiff_t
 
 template <class TMap>
 void vdtop_set_structure_from_digital_graph(TMap & res,
@@ -17,7 +19,7 @@ void vdtop_set_structure_from_digital_graph(TMap & res,
 
   unsigned ni = mask.ni(), nj = mask.nj();
   // Precompute steps
-  vcl_ptrdiff_t istepM=mask.istep(),jstepM=mask.jstep(),pstepM = mask.planestep();
+  std::ptrdiff_t istepM=mask.istep(),jstepM=mask.jstep(),pstepM = mask.planestep();
 
   // build res
   res.initialise_darts(nb_edges*2) ;
@@ -110,7 +112,7 @@ void vdtop_set_structure_from_digital_graph(TMap & res,
 
   unsigned ni = mask.ni(), nj = mask.nj();
   // Precompute steps
-  vcl_ptrdiff_t istepM=mask.istep(),jstepM=mask.jstep(),pstepM = mask.planestep();
+  std::ptrdiff_t istepM=mask.istep(),jstepM=mask.jstep(),pstepM = mask.planestep();
 
   // build res
 

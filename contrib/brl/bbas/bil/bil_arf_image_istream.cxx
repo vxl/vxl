@@ -10,8 +10,10 @@
 //-----------------------------------------------------------------------------
 
 #include "bil_arf_image_istream.h"
-#include <vcl_algorithm.h>
-#include <vcl_sstream.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <algorithm>
+#include <sstream>
 #include <vul/vul_file_iterator.h>
 #include <vul/vul_file.h>
 #include <vil/vil_image_view.h>
@@ -51,7 +53,7 @@ bil_arf_image_istream()
 
 //: Constructor
 bil_arf_image_istream::
-bil_arf_image_istream(const vcl_string& glob)
+bil_arf_image_istream(const std::string& glob)
   : index_(INIT_INDEX),
     ni_(0), nj_(0),
     format_(VIL_PIXEL_FORMAT_UNKNOWN),
@@ -66,11 +68,11 @@ bil_arf_image_istream(const vcl_string& glob)
 // \note files are loaded in alphanumeric order by path name
 bool
 bil_arf_image_istream::
-open(const vcl_string& rawFile)
+open(const std::string& rawFile)
 {
   //open up raw file, and read 20 byte header
   this->raw_file_ = rawFile;
-  raw_.open(raw_file_.c_str(), vcl_ios::in | vcl_ios::binary);
+  raw_.open(raw_file_.c_str(), std::ios::in | std::ios::binary);
 
   unsigned int magic_num, version, arf_image_type, ni, nj, num_images, image_offset, subheader_flags;
 
@@ -93,14 +95,14 @@ open(const vcl_string& rawFile)
   endian_swap(subheader_flags);
 
   //vj: modification
-  vcl_cout<<"Raw file header:\n"
+  std::cout<<"Raw file header:\n"
           <<"Magic Num "<<magic_num<<'\n'
           <<"version "<<version<<'\n'
           <<"size: "<<ni<<','<<nj<<'\n'
           <<"pixel:"<<arf_image_type<<'\n'
           <<"#fram:"<<num_images<<'\n'
           <<"Image Offset "<<image_offset<<'\n'
-          <<"Subheader "<<subheader_flags<<vcl_endl;
+          <<"Subheader "<<subheader_flags<<std::endl;
 
   //store in member vars
   ni_ = ni;
@@ -132,7 +134,7 @@ close()
   nj_ = 0;
   format_ = VIL_PIXEL_FORMAT_UNKNOWN;
   raw_.close();
-  vcl_cout<<"bil_arf_image_istream closed"<<vcl_endl;
+  std::cout<<"bil_arf_image_istream closed"<<std::endl;
 }
 
 
@@ -171,8 +173,8 @@ bil_arf_image_istream::current_frame()
       //  vj Modification
       long long loc = image_offset_+((long long) index_ -1)* ( (long long)imgSize +40 );
 
-      vcl_cout<<"location "<<loc <<' '<<index_<<vcl_endl;
-      raw_.seekg(loc, vcl_ios::beg);
+      std::cout<<"location "<<loc <<' '<<index_<<std::endl;
+      raw_.seekg(loc, std::ios::beg);
 
       //allocate vil memory chunk
       vil_memory_chunk_sptr mem_chunk = new vil_memory_chunk(imgSize,VIL_PIXEL_FORMAT_BYTE);
@@ -210,7 +212,7 @@ bil_arf_image_istream::current_frame()
 
 
 //: Return the path to the current image in the stream
-vcl_string
+std::string
 bil_arf_image_istream::current_path() const
 {
   return raw_file_;

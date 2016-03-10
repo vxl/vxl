@@ -29,10 +29,10 @@ void boxm_sample_multi_bin<APM_MODEL>::set_appearance(apm_datatype  app,int bin)
 }
 
 template <boxm_apm_type APM_MODEL>
-void boxm_sample_multi_bin<APM_MODEL>::print(vcl_ostream& os) const
+void boxm_sample_multi_bin<APM_MODEL>::print(std::ostream& os) const
 {
   os << "(alpha=" << alpha << " appearence=" ;
-  for (typename vcl_map<int,apm_datatype>::const_iterator iter=appearance_.begin();
+  for (typename std::map<int,apm_datatype>::const_iterator iter=appearance_.begin();
        iter!=appearance_.end(); ++iter)
     os << "bin#= " << iter->first << ' ' << iter->second;
 }
@@ -67,9 +67,9 @@ void vsl_b_read(vsl_b_istream & is, boxm_sample_multi_bin<APM_MODEL> &sample)
       vsl_b_read(is, sample.appearance_);
       break;
     default:
-      vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, boxm_sample_multi_bin<T>&)\n"
+      std::cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, boxm_sample_multi_bin<T>&)\n"
                << "           Unknown version number "<< version << '\n';
-      is.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
+      is.is().clear(std::ios::badbit); // Set an unrecoverable IO error on stream
       break;
   }
 }
@@ -81,7 +81,7 @@ void vsl_b_read(vsl_b_istream & is, boxm_sample_multi_bin<APM_MODEL> *&sample)
 }
 
 template <boxm_apm_type APM_MODEL>
-vcl_ostream& operator << (vcl_ostream& os, const boxm_sample_multi_bin<APM_MODEL>& sample)
+std::ostream& operator << (std::ostream& os, const boxm_sample_multi_bin<APM_MODEL>& sample)
 {
   sample.print(os);
   return os;
@@ -93,6 +93,6 @@ template void vsl_b_write(vsl_b_ostream &, boxm_sample_multi_bin<T > const &); \
 template void vsl_b_write(vsl_b_ostream &, boxm_sample_multi_bin<T > const *&); \
 template void vsl_b_read(vsl_b_istream &, boxm_sample_multi_bin<T > &); \
 template void vsl_b_read(vsl_b_istream &, boxm_sample_multi_bin<T > *&); \
-template vcl_ostream& operator << (vcl_ostream&, const boxm_sample_multi_bin<T >&)
+template std::ostream& operator << (std::ostream&, const boxm_sample_multi_bin<T >&)
 
 #endif

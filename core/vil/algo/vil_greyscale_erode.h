@@ -10,7 +10,7 @@
 
 //: Return minimum value of im[offset[k]]
 template <class T>
-inline T vil_greyscale_erode(const T* im, const vcl_ptrdiff_t* offset, unsigned n)
+inline T vil_greyscale_erode(const T* im, const std::ptrdiff_t* offset, unsigned n)
 {
   T min_v = im[offset[0]];
   for (unsigned i=1;i<n;++i)

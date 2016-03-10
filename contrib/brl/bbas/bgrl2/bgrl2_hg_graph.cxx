@@ -6,14 +6,16 @@
 // date:   Apr 04, 2005
 
 #include <vcl_cassert.h>
-#include <vcl_utility.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <utility>
 
 ////////////////////////////////////////////////////////////////////
 // ===== Internal Low-level Graph operation (without handling connectivity) =====
 void bgrl2_hg_graph::_internal_add_vertex (bgrl2_hg_vertex* vertex)
 {
   assert (vertex->id() > 0);
-  vertices_.insert (vcl_pair<int, bgrl2_hg_vertex*> (vertex->id(), vertex));
+  vertices_.insert (std::pair<int, bgrl2_hg_vertex*> (vertex->id(), vertex));
 }
 
 bool bgrl2_hg_graph::_internal_del_vertex (bgrl2_hg_vertex* vertex)
@@ -26,7 +28,7 @@ bool bgrl2_hg_graph::_internal_del_vertex (bgrl2_hg_vertex* vertex)
 void bgrl2_hg_graph::_internal_add_edge (bgrl2_hg_edge* edge)
 {
   assert (edge->id() > 0);
-  edges_.insert (vcl_pair<int, bgrl2_hg_edge*> (edge->id(), edge));
+  edges_.insert (std::pair<int, bgrl2_hg_edge*> (edge->id(), edge));
 }
 
 bool bgrl2_hg_graph::_internal_del_edge (bgrl2_hg_edge* edge)
@@ -42,7 +44,7 @@ bool bgrl2_hg_graph::_internal_del_edge (bgrl2_hg_edge* edge)
 
 bool bgrl2_hg_graph::remove_vertex (bgrl2_hg_vertex* vertex)
 {
-  vcl_vector<bgrl2_hg_edge*>::iterator it = vertex->connecting_edges().begin();
+  std::vector<bgrl2_hg_edge*>::iterator it = vertex->connecting_edges().begin();
   while (it != vertex->connecting_edges().end()) {
     bgrl2_hg_edge* edge = (*it);
     _internal_disconnect_edge_vertex (edge, vertex);

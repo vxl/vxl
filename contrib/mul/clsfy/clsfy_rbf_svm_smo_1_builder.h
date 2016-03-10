@@ -12,7 +12,9 @@
 #include <clsfy/clsfy_rbf_svm.h>
 #include <vnl/vnl_vector.h>
 #include <mbl/mbl_data_wrapper.h>
-#include <vcl_iosfwd.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iosfwd>
 
 //: Base for classes to build clsfy_classifier_base objects
 class clsfy_rbf_svm_smo_1_builder : public clsfy_builder_base
@@ -38,14 +40,14 @@ class clsfy_rbf_svm_smo_1_builder : public clsfy_builder_base
   double build(clsfy_classifier_base& classifier,
                mbl_data_wrapper<vnl_vector<double> >& inputs,
                unsigned nClasses,
-               const vcl_vector<unsigned> &outputs) const;
+               const std::vector<unsigned> &outputs) const;
 
   //: Build a classifier from data.
   // returns the empirical error rate, or +INF if there is an error.
   // The members of outputs() should be 0 or 1.
   double build(clsfy_classifier_base& classifier,
                mbl_data_wrapper<vnl_vector<double> >& inputs,
-               const vcl_vector<unsigned> &outputs) const;
+               const std::vector<unsigned> &outputs) const;
 
   //: Radius of Gaussian function
   double rbf_width() const;
@@ -69,10 +71,10 @@ class clsfy_rbf_svm_smo_1_builder : public clsfy_builder_base
   { return boundC_; }
 
   //: Name of the class
-  vcl_string is_a() const;
+  std::string is_a() const;
 
   //: Name of the class
-  bool is_class(vcl_string const& s) const;
+  bool is_class(std::string const& s) const;
 
   //: Return the class's IO version number
   short version_no() const;
@@ -81,7 +83,7 @@ class clsfy_rbf_svm_smo_1_builder : public clsfy_builder_base
   clsfy_builder_base* clone() const;
 
   //: Print class to os
-  void print_summary(vcl_ostream& os) const;
+  void print_summary(std::ostream& os) const;
 
   //: Save class to binary file stream
   void b_write(vsl_b_ostream& bfs) const;
@@ -90,7 +92,7 @@ class clsfy_rbf_svm_smo_1_builder : public clsfy_builder_base
   void b_read(vsl_b_istream& bfs);
 
   //: Config from a stream.
-  void config(vcl_istream&);
+  void config(std::istream&);
 };
 
 #endif // clsfy_rbf_svm_smo_1_builder_h_

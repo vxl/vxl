@@ -10,8 +10,10 @@
 // \author Tim Cootes
 
 #include <vpdfl/vpdfl_pdf_base.h>
-#include <vcl_vector.h>
-#include <vcl_iosfwd.h>
+#include <vector>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iosfwd>
 
 //: Multi-variate kernel PDF
 //  Distribution is the sum of a set of kernel functions placed on the training
@@ -25,7 +27,7 @@ class vpdfl_kernel_pdf : public vpdfl_pdf_base
 {
  protected:
   //: Position of kernel centres
-  vcl_vector<vnl_vector<double> > x_;
+  std::vector<vnl_vector<double> > x_;
 
   //: Width of each kernel
   vnl_vector<double> width_;
@@ -54,7 +56,7 @@ class vpdfl_kernel_pdf : public vpdfl_pdf_base
                    const vnl_vector<double>& width);
 
   //: Position of kernel centres
-  const vcl_vector<vnl_vector<double> >& centre() const { return x_; }
+  const std::vector<vnl_vector<double> >& centre() const { return x_; }
 
   //: Width of each kernel
   const vnl_vector<double>& width() const { return width_; }
@@ -66,13 +68,13 @@ class vpdfl_kernel_pdf : public vpdfl_pdf_base
   short version_no() const;
 
   //: Name of the class
-  virtual vcl_string is_a() const;
+  virtual std::string is_a() const;
 
   //: Does the name of the class match the argument?
-  virtual bool is_class(vcl_string const& s) const;
+  virtual bool is_class(std::string const& s) const;
 
   //: Print class to os
-  virtual void print_summary(vcl_ostream& os) const;
+  virtual void print_summary(std::ostream& os) const;
 
   //: Save class to binary file stream
   virtual void b_write(vsl_b_ostream& bfs) const;

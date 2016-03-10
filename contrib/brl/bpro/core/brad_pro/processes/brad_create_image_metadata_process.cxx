@@ -4,14 +4,16 @@
 //:
 // \file
 
-#include <vcl_fstream.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <fstream>
 
 //: Constructor
 bool brad_create_image_metadata_process_cons(bprb_func_process& pro)
 {
   //input
   bool ok=false;
-  vcl_vector<vcl_string> input_types;
+  std::vector<std::string> input_types;
   input_types.push_back("float"); // input 0: gain
   input_types.push_back("float"); // input 1: offset
   input_types.push_back("float"); // input 2: view azimuth
@@ -26,7 +28,7 @@ bool brad_create_image_metadata_process_cons(bprb_func_process& pro)
   pro.set_input(6, new brdb_value_t<float>(1381.79f)); // band-averaged value for Quickbird panchromatic sensor
 
   //output
-  vcl_vector<vcl_string> output_types;
+  std::vector<std::string> output_types;
   output_types.push_back("brad_image_metadata_sptr");
   ok = pro.set_output_types(output_types);
   if (!ok) return ok;
@@ -38,7 +40,7 @@ bool brad_create_image_metadata_process(bprb_func_process& pro)
 {
   // Sanity check
   if (pro.n_inputs() != pro.input_types().size()) {
-    vcl_cout << "brad_create_image_metadata_process: The input number should be " << pro.input_types().size() << vcl_endl;
+    std::cout << "brad_create_image_metadata_process: The input number should be " << pro.input_types().size() << std::endl;
     return false;
   }
 

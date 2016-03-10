@@ -2,8 +2,9 @@
   fsm
 */
 #include <vcl_cassert.h>
-#include <vcl_cmath.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <cmath>
+#include <iostream>
 #include <vil1/vil1_interpolate.h>
 #include <testlib/testlib_test.h>
 
@@ -27,7 +28,7 @@ static double f(double i, double j, int d)
   double out = 0;
   for (int m=0; m<=d; ++m)
     for (int n=0; n<=d; ++n)
-      out += taylor[m][n] * vcl_pow(i, m) * vcl_pow(j, n);
+      out += taylor[m][n] * std::pow(i, m) * std::pow(j, n);
 
   return out;
 }
@@ -40,16 +41,16 @@ static void test_interpolate()
 
   for (int d=0; d<=4; ++d)
   {
-    vcl_cout << "d=" << d << vcl_endl;
+    std::cout << "d=" << d << std::endl;
 
     for (int i=0; i<I.rows(); ++i)
       for (int j=0; j<I.cols(); ++j)
         I[i][j] = f(i, j, d);
 
-#define dn(u) int(vcl_floor(u))
-#define up(u) int(vcl_ceil (u))
-    vcl_cout << "  " << I[dn(r)][dn(c)] << ' ' << I[up(r)][dn(c)] << vcl_endl
-             << "  " << I[dn(r)][up(c)] << ' ' << I[up(r)][up(c)] << vcl_endl;
+#define dn(u) int(std::floor(u))
+#define up(u) int(std::ceil (u))
+    std::cout << "  " << I[dn(r)][dn(c)] << ' ' << I[up(r)][dn(c)] << std::endl
+             << "  " << I[dn(r)][up(c)] << ' ' << I[up(r)][up(c)] << std::endl;
 #undef dn
 #undef up
 

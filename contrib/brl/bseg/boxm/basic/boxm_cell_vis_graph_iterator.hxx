@@ -12,7 +12,7 @@ boxm_cell_vis_graph_iterator<T_loc,T_data>::boxm_cell_vis_graph_iterator(vpgl_ca
 {
   if (!tree)
   {
-   vcl_cout<<"No Tree found"<<vcl_endl;
+   std::cout<<"No Tree found"<<std::endl;
   }
   else
   {
@@ -49,10 +49,10 @@ boxm_cell_vis_graph_iterator<T_loc,T_data>::boxm_cell_vis_graph_iterator(vpgl_ca
 template <class T_loc,class T_data>
 bool boxm_cell_vis_graph_iterator<T_loc,T_data>::next()
 {
-  vcl_vector<boct_tree_cell<T_loc,T_data>* > to_process;
-  vcl_vector<boct_tree_cell<T_loc,T_data>* > to_process_refine;
+  std::vector<boct_tree_cell<T_loc,T_data>* > to_process;
+  std::vector<boct_tree_cell<T_loc,T_data>* > to_process_refine;
 
-  typename vcl_vector<boct_tree_cell<T_loc,T_data>* >::iterator cell_it = curr_cells_.begin();
+  typename std::vector<boct_tree_cell<T_loc,T_data>* >::iterator cell_it = curr_cells_.begin();
   for (; cell_it != curr_cells_.end(); ++cell_it) {
     // decrement each cell's count in list. if count == 0, add to list of nodes to process
     if (--((*cell_it)->vis_node()->incoming_count) == 0) {
@@ -70,8 +70,8 @@ bool boxm_cell_vis_graph_iterator<T_loc,T_data>::next()
   // add linked cells to list for next iteration
   curr_cells_.clear();
   for (cell_it = to_process.begin(); cell_it != to_process.end(); ++cell_it) {
-    vcl_vector<boct_tree_cell<T_loc,T_data>* > links = (*cell_it)->vis_node()->outgoing_links;
-    typename vcl_vector<boct_tree_cell<T_loc,T_data>* >::iterator neighbor_it = links.begin();
+    std::vector<boct_tree_cell<T_loc,T_data>* > links = (*cell_it)->vis_node()->outgoing_links;
+    typename std::vector<boct_tree_cell<T_loc,T_data>* >::iterator neighbor_it = links.begin();
     for (; neighbor_it != links.end(); ++neighbor_it) {
       curr_cells_.push_back(*neighbor_it);
     }
@@ -107,9 +107,9 @@ template<class T_loc,class T_data>
 void boxm_cell_vis_graph_iterator<T_loc,T_data>::form_graph_per_cell(boct_tree_cell<T_loc,T_data>* cell,boct_face_idx face_idx,boct_tree<T_loc,T_data>* tree)
 {
   boct_cell_vis_graph_node<T_loc,T_data>* vis_node=cell->vis_node();
-  vcl_vector<boct_tree_cell<T_loc,T_data>*> neighbors;
+  std::vector<boct_tree_cell<T_loc,T_data>*> neighbors;
   cell->find_neighbors(face_idx, neighbors,tree->root_level());
-  typename vcl_vector<boct_tree_cell<T_loc,T_data>*>::iterator neighbor_it = neighbors.begin();
+  typename std::vector<boct_tree_cell<T_loc,T_data>*>::iterator neighbor_it = neighbors.begin();
   bool visible_neighbors=false;
   for (; neighbor_it != neighbors.end(); ++neighbor_it) {
     boct_cell_vis_graph_node<T_loc,T_data>* neighbor_vis_node=(*neighbor_it)->vis_node();

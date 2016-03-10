@@ -11,7 +11,9 @@
 //   <none yet>
 // \endverbatim
 
-#include <vcl_string.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <string>
 #include <bprb/bprb_func_process.h>
 #include <bprb/bprb_parameters.h>
 #include <bvxm/grid/bvxm_voxel_grid_base.h>
@@ -38,7 +40,7 @@ bool bvxm_create_grid_process_cons(bprb_func_process& pro)
   using namespace bvxm_create_grid_process_globals;
 
   // process takes 5 inputs and has 1 output.
-  vcl_vector<vcl_string> input_types_(n_inputs_);
+  std::vector<std::string> input_types_(n_inputs_);
   unsigned i=0;
   input_types_[i++]="vcl_string"; //the input path
   input_types_[i++]="vcl_string";//the type e.g. "float","double"...
@@ -46,7 +48,7 @@ bool bvxm_create_grid_process_cons(bprb_func_process& pro)
   input_types_[i++]="unsigned";//dim_y
   input_types_[i++]="unsigned";//dim_z
 
-  vcl_vector<vcl_string> output_types_(n_outputs_);
+  std::vector<std::string> output_types_(n_outputs_);
   output_types_[0]="bvxm_voxel_grid_base_sptr";  // The resulting grid
 
   return pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
@@ -59,22 +61,22 @@ bool bvxm_create_grid_process(bprb_func_process& pro)
   // check number of inputs
   if (pro.input_types().size() != 5)
   {
-    vcl_cout << pro.name() << "The number of inputs should be " << 5 << vcl_endl;
+    std::cout << pro.name() << "The number of inputs should be " << 5 << std::endl;
     return false;
   }
 
-  vcl_string input_path = pro.get_input<vcl_string>(0);
-  vcl_string datatype =  pro.get_input<vcl_string>(1);
+  std::string input_path = pro.get_input<std::string>(0);
+  std::string datatype =  pro.get_input<std::string>(1);
   unsigned dim_x =  pro.get_input<unsigned>(2);
   unsigned dim_y =  pro.get_input<unsigned>(3);
   unsigned dim_z =  pro.get_input<unsigned>(4);
 
 
   if (vul_file::is_directory(input_path) ) {
-    vcl_cerr << "In bvxm_create_grid_process -- input path " << input_path<< "is not valid!\n";
+    std::cerr << "In bvxm_create_grid_process -- input path " << input_path<< "is not valid!\n";
     return false;
   }
-  vcl_cout << "In bvxm_create_grid_process( -- input file is: " <<  input_path << vcl_endl;
+  std::cout << "In bvxm_create_grid_process( -- input file is: " <<  input_path << std::endl;
 
   //This is temporary. What should happen is that we can read the type from the file header.
   //Also the header should be such that we can check if the file is not currupt
@@ -113,7 +115,7 @@ bool bvxm_create_grid_process(bprb_func_process& pro)
     return true;
   }
   else {
-    vcl_cerr << "datatype not supported\n";
+    std::cerr << "datatype not supported\n";
   }
 
   return false;

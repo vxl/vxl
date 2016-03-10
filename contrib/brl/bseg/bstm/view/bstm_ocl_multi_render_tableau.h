@@ -37,8 +37,8 @@ class bstm_ocl_multi_render_tableau : public bstm_cam_tableau
   virtual ~bstm_ocl_multi_render_tableau() {}
 
   //: initialize tableau with scene_file, viewport size, initial cam,
-  bool init(vcl_vector<bocl_device_sptr> devices,
-            vcl_vector<bstm_opencl_cache_sptr> opencl_caches,
+  bool init(std::vector<bocl_device_sptr> devices,
+            std::vector<bstm_opencl_cache_sptr> opencl_caches,
             bstm_scene_sptr scene,
             unsigned ni,
             unsigned nj,
@@ -61,14 +61,14 @@ class bstm_ocl_multi_render_tableau : public bstm_cam_tableau
  protected:
 
   unsigned long total_gpu_mem_;
-  vcl_vector<unsigned> gpu_ids_;
+  std::vector<unsigned> gpu_ids_;
   unsigned num_gpus_;
 
   bocl_manager_child* mgr_;
 
-  vcl_vector<cl_command_queue> queues_;
-  vcl_vector<bocl_device_sptr> devices_;
-  vcl_vector<bstm_opencl_cache_sptr> opencl_caches_;
+  std::vector<cl_command_queue> queues_;
+  std::vector<bocl_device_sptr> devices_;
+  std::vector<bstm_opencl_cache_sptr> opencl_caches_;
 
   //: Boxm2 Scene
   bstm_scene_sptr scene_;
@@ -84,10 +84,10 @@ class bstm_ocl_multi_render_tableau : public bstm_cam_tableau
   vgui_slider_tableau_sptr slider_;
 
   //: shared GL_CL image buffers
-  vcl_vector<GLuint> pbuffer_;
-  vcl_vector<cl_mem> clgl_buffer_;
-  vcl_vector<bocl_mem_sptr> exp_img_;
-  vcl_vector<bocl_mem_sptr> exp_img_dim_;
+  std::vector<GLuint> pbuffer_;
+  std::vector<cl_mem> clgl_buffer_;
+  std::vector<bocl_mem_sptr> exp_img_;
+  std::vector<bocl_mem_sptr> exp_img_dim_;
 
   //computes the gpu assignment to each blk of scene.
   void compute_gpu_assignments();

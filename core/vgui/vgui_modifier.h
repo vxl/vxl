@@ -9,7 +9,8 @@
 // \author VGG, Oxford University
 // \brief  Enum of modifiers for key-strokes and mouse presses.
 
-#include <vcl_iosfwd.h>
+#include <vcl_compiler.h>
+#include <iosfwd>
 
 //: Enum of modifiers for key-strokes and mouse presses.
 enum vgui_modifier {
@@ -20,6 +21,6 @@ enum vgui_modifier {
   vgui_ALT  =0x8
 };
 
-vcl_ostream& operator<<(vcl_ostream& s, vgui_modifier b);
+std::ostream& operator<<(std::ostream& s, vgui_modifier b);
 
 #endif // vgui_modifier_h_

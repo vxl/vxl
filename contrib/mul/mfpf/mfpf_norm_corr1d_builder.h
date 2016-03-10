@@ -8,7 +8,9 @@
 #include <mfpf/mfpf_point_finder_builder.h>
 #include <vnl/vnl_vector.h>
 #include <vgl/vgl_fwd.h>
-#include <vcl_iosfwd.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iosfwd>
 
 //: Builder for mfpf_norm_corr1d objects.
 class mfpf_norm_corr1d_builder : public mfpf_point_finder_builder
@@ -69,16 +71,16 @@ class mfpf_norm_corr1d_builder : public mfpf_point_finder_builder
   virtual void build(mfpf_point_finder&);
 
   //: Initialise from a string stream
-  virtual bool set_from_stream(vcl_istream &is);
+  virtual bool set_from_stream(std::istream &is);
 
   //: Name of the class
-  virtual vcl_string is_a() const;
+  virtual std::string is_a() const;
 
   //: Create a copy on the heap and return base class pointer
   virtual mfpf_point_finder_builder* clone() const;
 
   //: Print class to os
-  virtual void print_summary(vcl_ostream& os) const;
+  virtual void print_summary(std::ostream& os) const;
 
   //: Version number for I/O
   short version_no() const;

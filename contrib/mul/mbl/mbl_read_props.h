@@ -46,26 +46,28 @@
 // \endverbatim
 
 
-#include <vcl_map.h>
-#include <vcl_iosfwd.h>
-#include <vcl_string.h>
+#include <map>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iosfwd>
+#include <string>
 
 //: The type of the property dictionary
-class mbl_read_props_type : public vcl_map<vcl_string, vcl_string >
+class mbl_read_props_type : public std::map<std::string, std::string >
 {
  public:
 
   //: Return the contents for a given property prop.
   // prop is removed from the property list.
   // \throws mbl_exception_missing_property if prop doesn't exist
-  vcl_string get_required_property(const vcl_string &prop);
+  std::string get_required_property(const std::string &prop);
 
   //: Return the contents for a given property prop.
   // prop is removed from the property list.
   // Returns def_value, or empty string if prop doesn't exist.
   // \note This is a fairly trivial function, intended simply as a
   // convenient analogue to get_required_property().
-  vcl_string get_optional_property(const vcl_string &prop, const vcl_string &def_value = "");
+  std::string get_optional_property(const std::string &prop, const std::string &def_value = "");
 };
 
 
@@ -85,7 +87,7 @@ class mbl_read_props_type : public vcl_map<vcl_string, vcl_string >
 // Thus it treats the single line "a: a b: b" as
 // containing a single label ("a:") with value "a b: b".
 // If you want such a line treated as two label-values, use mbl_read_props_ws()
-mbl_read_props_type mbl_read_props(vcl_istream &afs);
+mbl_read_props_type mbl_read_props(std::istream &afs);
 
 
 //: Read properties from a text stream.
@@ -103,15 +105,15 @@ mbl_read_props_type mbl_read_props(vcl_istream &afs);
 // Differs from mbl_read_props(afs) in that all whitespace is treated
 // as a separator.  Thus it treats the single line "a: a b: b" as
 // containing two separate label-value pairs.
-mbl_read_props_type mbl_read_props_ws(vcl_istream &afs);
+mbl_read_props_type mbl_read_props_ws(std::istream &afs);
 
 
 //: Print a list of properties for debugging purposes.
-void mbl_read_props_print(vcl_ostream &afs, mbl_read_props_type props);
+void mbl_read_props_print(std::ostream &afs, mbl_read_props_type props);
 
 //: Print a list of properties for debugging purposes. Limit each property value length to \p max_chars
 // Useful for preventing diagnostic output from being flooded by large properties.
-void mbl_read_props_print(vcl_ostream &afs, mbl_read_props_type props, unsigned max_chars);
+void mbl_read_props_print(std::ostream &afs, mbl_read_props_type props, unsigned max_chars);
 
 //: merge two property sets.
 // \param first_overrides
@@ -125,7 +127,7 @@ mbl_read_props_type mbl_read_props_merge(
 //: Throw error if there are any keys in props that aren't in ignore.
 // \throw mbl_exception_unused_props
 void mbl_read_props_look_for_unused_props(
-  const vcl_string & function_name,
+  const std::string & function_name,
   const mbl_read_props_type &props,
   const mbl_read_props_type &ignore);
 
@@ -133,7 +135,7 @@ void mbl_read_props_look_for_unused_props(
 //: Throw error if there are any keys in props.
 // \throw mbl_exception_unused_props
 inline void mbl_read_props_look_for_unused_props(
-  const vcl_string & function_name,
+  const std::string & function_name,
   const mbl_read_props_type &props)
 {
   mbl_read_props_look_for_unused_props(function_name, props,

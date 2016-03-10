@@ -5,8 +5,9 @@
 // \file
 
 #include "vgl_line_3d_2_points.h"
-#include <vcl_iostream.h>
-// not used? #include <vcl_limits.h>
+#include <iostream>
+// not used? #include <vcl_compiler.h>
+#include <limits>
 
 //***************************************************************************
 // Initialization
@@ -32,7 +33,7 @@ bool vgl_line_3d_2_points<Type>::operator==(vgl_line_3d_2_points<Type> const& ot
 //*****************************************************************************
 
 template <class Type>
-vcl_ostream& operator<<(vcl_ostream &s,
+std::ostream& operator<<(std::ostream &s,
                         const vgl_line_3d_2_points<Type> &p)
 {
   return s << "<vgl_line_3d_2_points "
@@ -42,6 +43,6 @@ vcl_ostream& operator<<(vcl_ostream &s,
 #undef VGL_LINE_3D_2_POINTS_INSTANTIATE
 #define VGL_LINE_3D_2_POINTS_INSTANTIATE(T) \
 template class vgl_line_3d_2_points<T >;\
-template vcl_ostream& operator<<(vcl_ostream&, vgl_line_3d_2_points<T > const&)
+template std::ostream& operator<<(std::ostream&, vgl_line_3d_2_points<T > const&)
 
 #endif // vgl_line_3d_2_points_hxx_

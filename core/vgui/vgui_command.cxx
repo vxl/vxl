@@ -8,20 +8,21 @@
 // \brief  See vgui_command.h for a description of this file.
 
 #include "vgui_command.h"
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <iostream>
 
 //-----------------------------------------------------------------------------
 vgui_command::vgui_command()
 {
 #ifdef DEBUG
-  vcl_cerr << "vgui_command ctor : " << (void*)this << '\n';
+  std::cerr << "vgui_command ctor : " << (void*)this << '\n';
 #endif
 }
 
 vgui_command::~vgui_command()
 {
 #ifdef DEBUG
-  vcl_cerr << "vgui_command dtor : " << (void*)this << '\n';
+  std::cerr << "vgui_command dtor : " << (void*)this << '\n';
 #endif
 }
 
@@ -54,7 +55,7 @@ void vgui_command_cfunc::execute()
   else if (fn)
     (*fn)();
   else
-    vcl_cerr << "vgui_command_cfunc : fn is null\n";
+    std::cerr << "vgui_command_cfunc : fn is null\n";
 }
 
 //-----------------------------------------------------------------------------
@@ -66,11 +67,11 @@ vgui_command_toggle::~vgui_command_toggle()
 void vgui_command_toggle::execute()
 {
 #ifdef DEBUG
-  vcl_cerr << "\nvgui_command_toggle. old state : " << state;
+  std::cerr << "\nvgui_command_toggle. old state : " << state;
 #endif
   state = !state;
 #ifdef DEBUG
-  vcl_cerr << "; new state : " << state << ".\n\n";
+  std::cerr << "; new state : " << state << ".\n\n";
 #endif
 }
 

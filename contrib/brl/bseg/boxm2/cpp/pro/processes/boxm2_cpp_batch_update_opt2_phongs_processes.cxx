@@ -7,7 +7,9 @@
 // \author Ozge C. Ozcanli
 // \date May 12, 2011
 
-#include <vcl_fstream.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <fstream>
 #include <boxm2/io/boxm2_stream_cache.h>
 #include <boxm2/io/boxm2_cache.h>
 #include <boxm2/boxm2_scene.h>
@@ -41,7 +43,7 @@ bool boxm2_cpp_pre_infinity_opt2_phongs_process_cons(bprb_func_process& pro)
     // 2) camera
     // 3) image
     // 4) image identifier
-    vcl_vector<vcl_string> input_types_(n_inputs_);
+    std::vector<std::string> input_types_(n_inputs_);
     input_types_[0] = "boxm2_scene_sptr";
     input_types_[1] = "boxm2_cache_sptr";
     input_types_[2] = "vpgl_camera_double_sptr";
@@ -52,7 +54,7 @@ bool boxm2_cpp_pre_infinity_opt2_phongs_process_cons(bprb_func_process& pro)
     input_types_[7] = "float"; // Sun Elevation
     input_types_[8] = "float"; // Sun Azimuthal
     // process has 0 output:
-    vcl_vector<vcl_string>  output_types_(n_outputs_);
+    std::vector<std::string>  output_types_(n_outputs_);
     output_types_[0] = "vil_image_view_base_sptr";
 
     bool good = pro.set_input_types(input_types_) &&
@@ -65,7 +67,7 @@ bool boxm2_cpp_pre_infinity_opt2_phongs_process(bprb_func_process& pro)
     using namespace boxm2_cpp_pre_infinity_opt2_phongs_process_globals;
 
     if ( pro.n_inputs() < n_inputs_ ) {
-        vcl_cout << pro.name() << ": The number of inputs should be " << n_inputs_<< vcl_endl;
+        std::cout << pro.name() << ": The number of inputs should be " << n_inputs_<< std::endl;
         return false;
     }
     //get the inputs
@@ -77,16 +79,16 @@ bool boxm2_cpp_pre_infinity_opt2_phongs_process(bprb_func_process& pro)
     unsigned ni = pro.get_input<unsigned>(i++);
     unsigned nj = pro.get_input<unsigned>(i++);
 
-    vcl_string dir_identifier = pro.get_input<vcl_string>(i++);
-    vcl_string img_identifier = pro.get_input<vcl_string>(i++);
+    std::string dir_identifier = pro.get_input<std::string>(i++);
+    std::string img_identifier = pro.get_input<std::string>(i++);
 
     float sun_elev=pro.get_input<float>(i++);
     float sun_azim=pro.get_input<float>(i++);
 
-    vcl_vector<boxm2_block_id> vis_order=scene->get_vis_blocks(reinterpret_cast<vpgl_generic_camera<double>*>(cam.ptr()));
+    std::vector<boxm2_block_id> vis_order=scene->get_vis_blocks(reinterpret_cast<vpgl_generic_camera<double>*>(cam.ptr()));
     if (vis_order.empty())
     {
-        vcl_cout<<" None of the blocks are visible from this viewpoint"<<vcl_endl;
+        std::cout<<" None of the blocks are visible from this viewpoint"<<std::endl;
         return true;
     }
     vil_image_view<float> pre_inf_img(ni,nj);
@@ -94,11 +96,11 @@ bool boxm2_cpp_pre_infinity_opt2_phongs_process(bprb_func_process& pro)
 
     pre_inf_img.fill(0.0);
     vis_inf_img.fill(1.0);
-    vcl_vector<boxm2_block_id>::iterator id;
+    std::vector<boxm2_block_id>::iterator id;
 
     for (id = vis_order.begin(); id != vis_order.end(); ++id)
     {
-        vcl_cout<<"Block id "<<(*id)<<' ';
+        std::cout<<"Block id "<<(*id)<<' ';
         boxm2_block *     blk   = cache->get_block(scene,*id);
         boxm2_data_base *  alph  = cache->get_data_base(scene, *id,boxm2_data_traits<BOXM2_ALPHA>::prefix(),0,true);
         boxm2_data_base *  float8_phongs   = cache->get_data_base(scene, *id,boxm2_data_traits<BOXM2_FLOAT8>::prefix(),0,true);
@@ -111,7 +113,7 @@ bool boxm2_cpp_pre_infinity_opt2_phongs_process(bprb_func_process& pro)
         boxm2_data_base *aux2_view = cache->get_data_base(scene,*id,boxm2_data_traits<BOXM2_AUX2>::prefix(dir_identifier));
         boxm2_data_base *aux3_view = cache->get_data_base(scene,*id,boxm2_data_traits<BOXM2_AUX3>::prefix(dir_identifier));
 
-        vcl_vector<boxm2_data_base*> datas;
+        std::vector<boxm2_data_base*> datas;
         datas.push_back(aux0);
         datas.push_back(aux1);
         datas.push_back(aux0_view);
@@ -154,7 +156,7 @@ bool boxm2_cpp_pre_infinity_opt2_phongs_process(bprb_func_process& pro)
 
     for (id = vis_order.begin(); id != vis_order.end(); ++id)
     {
-        vcl_cout<<"Block id "<<(*id)<<' ';
+        std::cout<<"Block id "<<(*id)<<' ';
         boxm2_block *     blk   = cache->get_block(scene,*id);
         boxm2_data_base *  alph  = cache->get_data_base(scene,*id,boxm2_data_traits<BOXM2_ALPHA>::prefix(),0,true);
         boxm2_data_base *  phongs_model_base   = cache->get_data_base(scene,*id,boxm2_data_traits<BOXM2_FLOAT8>::prefix(),0,false);
@@ -168,7 +170,7 @@ bool boxm2_cpp_pre_infinity_opt2_phongs_process(bprb_func_process& pro)
         // generate aux in a writable mode
         boxm2_data_base *aux = cache->get_data_base(scene,*id, boxm2_data_traits<BOXM2_AUX>::prefix(img_identifier),aux0->buffer_length()/aux0TypeSize*auxTypeSize,false);
 
-        vcl_vector<boxm2_data_base*> datas;
+        std::vector<boxm2_data_base*> datas;
         datas.push_back(aux0);
         datas.push_back(aux1);
         datas.push_back(aux0_view);
@@ -222,7 +224,7 @@ bool boxm2_cpp_batch_update_opt2_phongs_process_cons(bprb_func_process& pro)
     // 3) stream cache 2
     // 4) sun elevation angle
     // 5) sun azimuthal angle
-    vcl_vector<vcl_string> input_types_(n_inputs_);
+    std::vector<std::string> input_types_(n_inputs_);
     input_types_[0] = "boxm2_scene_sptr";
     input_types_[1] = "boxm2_cache_sptr";
     input_types_[2] = "boxm2_stream_cache_sptr";
@@ -230,7 +232,7 @@ bool boxm2_cpp_batch_update_opt2_phongs_process_cons(bprb_func_process& pro)
     input_types_[4] = "float";
     input_types_[5] = "float";
     // process has no outputs
-    vcl_vector<vcl_string>  output_types_(n_outputs_);
+    std::vector<std::string>  output_types_(n_outputs_);
 
     return pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
 }
@@ -241,7 +243,7 @@ bool boxm2_cpp_batch_update_opt2_phongs_process(bprb_func_process& pro)
     using namespace boxm2_cpp_batch_update_opt2_phongs_process_globals;
 
     if ( pro.n_inputs() < n_inputs_ ) {
-        vcl_cout << pro.name() << ": The input number should be " << n_inputs_<< vcl_endl;
+        std::cout << pro.name() << ": The input number should be " << n_inputs_<< std::endl;
         return false;
     }
     // get the inputs
@@ -256,15 +258,15 @@ bool boxm2_cpp_batch_update_opt2_phongs_process(bprb_func_process& pro)
     // assumes that the data of each image has been created in the data models previously
     int alphaTypeSize = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_ALPHA>::prefix());
     // iterate the scene block by block and write to output
-    vcl_vector<boxm2_block_id> blk_ids = scene->get_block_ids();
-    vcl_vector<boxm2_block_id>::iterator id;
+    std::vector<boxm2_block_id> blk_ids = scene->get_block_ids();
+    std::vector<boxm2_block_id>::iterator id;
     id = blk_ids.begin();
     for (id = blk_ids.begin(); id != blk_ids.end(); ++id) {
         // pass num_bytes = 0 to make sure disc is read if not already in memory
         boxm2_data_base *  alph  = cache->get_data_base(scene,*id,boxm2_data_traits<BOXM2_ALPHA>::prefix(),0,false);
         boxm2_data_base *  phongs  = cache->get_data_base(scene,*id,boxm2_data_traits<BOXM2_FLOAT8>::prefix(),0,false);
-        vcl_cout << "buffer length of alpha: " << alph->buffer_length() << '\n'
-                 << "buffer length of phongs: " << phongs->buffer_length() << vcl_endl;
+        std::cout << "buffer length of alpha: " << alph->buffer_length() << '\n'
+                 << "buffer length of phongs: " << phongs->buffer_length() << std::endl;
         boxm2_batch_update_opt2_phongs_functor data_functor;
         data_functor.init_data(alph, phongs, str_cache1,str_cache2,sun_elev,sun_azim);
         int data_buff_length = (int) (alph->buffer_length()/alphaTypeSize);
@@ -295,11 +297,11 @@ bool boxm2_cpp_batch_update_nonray_process_cons(bprb_func_process& pro)
     // 3) stream cache 2
     // 4) sun elevation angle
     // 5) sun azimuthal angle
-    vcl_vector<vcl_string> input_types_(n_inputs_);
+    std::vector<std::string> input_types_(n_inputs_);
     input_types_[0] = "boxm2_scene_sptr";
     input_types_[1] = "boxm2_cache_sptr";
     // process has no output:
-    vcl_vector<vcl_string>  output_types_(n_outputs_);
+    std::vector<std::string>  output_types_(n_outputs_);
 
     return pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
 }
@@ -310,7 +312,7 @@ bool boxm2_cpp_batch_update_nonray_process(bprb_func_process& pro)
     using namespace boxm2_cpp_batch_update_nonray_process_globals;
 
     if ( pro.n_inputs() < n_inputs_ ) {
-        vcl_cout << pro.name() << ": The input number should be " << n_inputs_<< vcl_endl;
+        std::cout << pro.name() << ": The input number should be " << n_inputs_<< std::endl;
         return false;
     }
     // get the inputs
@@ -323,13 +325,13 @@ bool boxm2_cpp_batch_update_nonray_process(bprb_func_process& pro)
     // check for invalid parameters
     //This should never happen, it will result in division by zero later
     if( alphaTypeSize == 0 ) {
-        vcl_cout << "ERROR: alphaTypeSize == 0 in " << __FILE__ << __LINE__ << vcl_endl;
+        std::cout << "ERROR: alphaTypeSize == 0 in " << __FILE__ << __LINE__ << std::endl;
         return false;
     }
 
     // iterate the scene block by block and write to output
-    vcl_vector<boxm2_block_id> blk_ids = scene->get_block_ids();
-    vcl_vector<boxm2_block_id>::iterator id;
+    std::vector<boxm2_block_id> blk_ids = scene->get_block_ids();
+    std::vector<boxm2_block_id>::iterator id;
     id = blk_ids.begin();
     for (id = blk_ids.begin(); id != blk_ids.end(); ++id) {
         // pass num_bytes = 0 to make sure disc is read if not already in memory
@@ -337,8 +339,8 @@ bool boxm2_cpp_batch_update_nonray_process(bprb_func_process& pro)
         boxm2_data_base *  phongs  = cache->get_data_base(scene,*id,boxm2_data_traits<BOXM2_FLOAT8>::prefix("phongs_model"),0,false);
         boxm2_data_base *  air  = cache->get_data_base(scene,*id,boxm2_data_traits<BOXM2_AUX0>::prefix("entropy_histo_air"),0,false);
         boxm2_data_base *  uncertainty  = cache->get_data_base(scene,*id,boxm2_data_traits<BOXM2_AUX1>::prefix("uncertainty"),0,false);
-        vcl_cout << "buffer length of alpha: " << alph->buffer_length() << '\n'
-                 << "buffer length of phongs: " << phongs->buffer_length() << vcl_endl;
+        std::cout << "buffer length of alpha: " << alph->buffer_length() << '\n'
+                 << "buffer length of phongs: " << phongs->buffer_length() << std::endl;
         boxm2_batch_update_nonray_phongs_functor data_functor;
         data_functor.init_data(alph, phongs, air,uncertainty);
         int data_buff_length = (int) (alph->buffer_length()/alphaTypeSize);

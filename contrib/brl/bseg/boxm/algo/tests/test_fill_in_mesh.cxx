@@ -13,7 +13,9 @@
 #include <vpgl/vpgl_lvcs.h>
 #include <imesh/imesh_mesh.h>
 #include <imesh/imesh_fileio.h>
-#include <vcl_limits.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <limits>
 
 static void test_fill_in_mesh()
 {
@@ -25,14 +27,14 @@ static void test_fill_in_mesh()
   scene.set_appearance_model(BOXM_APM_MOG_GREY);
   scene.set_paths("./boxm_fill_in", "block");
   vul_file::make_directory("./boxm_fill_in");
-  vcl_ofstream os("scene.xml");
+  std::ofstream os("scene.xml");
   x_write(os, scene, "scene");
   os.close();
 
   //// create a mesh
   unsigned int num_faces=6;
-  vcl_auto_ptr<imesh_vertex_array<3> > verts(new imesh_vertex_array<3>(8));
-  vcl_auto_ptr<imesh_face_array > faces(new imesh_face_array(num_faces));
+  std::auto_ptr<imesh_vertex_array<3> > verts(new imesh_vertex_array<3>(8));
+  std::auto_ptr<imesh_face_array > faces(new imesh_face_array(num_faces));
   imesh_vertex<3>& vert0 = (*verts)[0]; imesh_vertex<3>& vert4 = (*verts)[4];
   vert0[0]=2;                           vert4[0]=2;
   vert0[1]=2;                           vert4[1]=2;
@@ -51,7 +53,7 @@ static void test_fill_in_mesh()
   vert3[1]=4;                           vert7[1]=4;
   vert3[2]=4;                           vert7[2]=8;
 
-  vcl_vector<unsigned int> face(4,0);
+  std::vector<unsigned int> face(4,0);
   face[0]=4;face[1]=5;face[2]=6;face[3]=7;
   (*faces)[0]=face;
   face[0]=3;face[1]=2;face[2]=1;face[3]=0;
@@ -67,8 +69,8 @@ static void test_fill_in_mesh()
 
 
   imesh_mesh mesh;
-  mesh.set_vertices(vcl_auto_ptr<imesh_vertex_array_base>(verts));
-  mesh.set_faces(vcl_auto_ptr<imesh_face_array_base>(faces));
+  mesh.set_vertices(std::auto_ptr<imesh_vertex_array_base>(verts));
+  mesh.set_faces(std::auto_ptr<imesh_face_array_base>(faces));
 
   typedef boct_tree<short,boxm_sample<BOXM_APM_MOG_GREY> > tree_type;
   boxm_block_iterator<boct_tree<short,boxm_sample<BOXM_APM_MOG_GREY> > > iter(&scene);
@@ -78,7 +80,7 @@ static void test_fill_in_mesh()
     boxm_block<boct_tree<short,boxm_sample<BOXM_APM_MOG_GREY> > > * block=scene.get_active_block();
     boct_tree<short,boxm_sample<BOXM_APM_MOG_GREY> > * tree=new boct_tree<short,boxm_sample<BOXM_APM_MOG_GREY> >(7,6);
     boxm_sample<BOXM_APM_MOG_GREY> s;
-    s.alpha=vcl_numeric_limits<float>::max();
+    s.alpha=std::numeric_limits<float>::max();
     tree->init_cells(s);
     block->init_tree(tree);
     scene.write_active_block();
@@ -87,10 +89,10 @@ static void test_fill_in_mesh()
 
   boxm_sample<BOXM_APM_MOG_GREY> val;
   val.alpha=0;
-  vcl_vector<imesh_mesh> meshes; meshes.push_back(mesh);
+  std::vector<imesh_mesh> meshes; meshes.push_back(mesh);
   boxm_fill_in_mesh_into_scene<short, boxm_sample<BOXM_APM_MOG_GREY> >(scene, meshes, false, val);
 
-  vcl_vector<vcl_string> fnames;
+  std::vector<std::string> fnames;
   boxm_block_iterator<tree_type> it(&scene);
 
   // check the first block

@@ -73,9 +73,9 @@ void vimt_sample_grid_bilin(vnl_vector<vecType>& vec,
   const imType* plane0 = image.image().top_left_ptr();
   unsigned ni = image.image().ni();
   unsigned nj = image.image().nj();
-  vcl_ptrdiff_t istep = image.image().istep();
-  vcl_ptrdiff_t jstep = image.image().jstep();
-  vcl_ptrdiff_t pstep = image.image().planestep();
+  std::ptrdiff_t istep = image.image().istep();
+  std::ptrdiff_t jstep = image.image().jstep();
+  std::ptrdiff_t pstep = image.image().planestep();
 
   if (all_in_image)
   {
@@ -187,9 +187,9 @@ void vimt_sample_grid_bilin_edgena(vnl_vector<vecType>& vec,
   const imType* plane0 = image.image().top_left_ptr();
   unsigned ni = image.image().ni();
   unsigned nj = image.image().nj();
-  vcl_ptrdiff_t istep = image.image().istep();
-  vcl_ptrdiff_t jstep = image.image().jstep();
-  vcl_ptrdiff_t pstep = image.image().planestep();
+  std::ptrdiff_t istep = image.image().istep();
+  std::ptrdiff_t jstep = image.image().jstep();
+  std::ptrdiff_t pstep = image.image().planestep();
 
   if (all_in_image)
   {

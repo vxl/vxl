@@ -1,20 +1,14 @@
 #ifndef vcl_cerrno_h_
 #define vcl_cerrno_h_
-/*
-  fsm
-*/
 
 #include "vcl_compiler.h"
-
-#if !VCL_CXX_HAS_HEADER_CERRNO
-# include <errno.h>
-#else
-# include "iso/vcl_cerrno.h"
-#endif
-
-#if defined(__linux__) && !defined(__ANDROID__) // bug fix: errno.h erroneously declares __errno_location() as C++
-extern "C" inline int* __errno_location__Fv() { return __errno_location(); }
-extern "C" inline int* _Z16__errno_locationv() { return __errno_location(); }
-#endif
+#include <cerrno>
+/* The following includes are needed to preserve backwards
+   compatilibility for external applications.  Previously
+   definitions were defined in multiple headers with conditional
+   ifndef guards, but we now include a reference header
+   instead */
+//no dependancies remove comment above
+//vcl alias names to std names
 
 #endif // vcl_cerrno_h_

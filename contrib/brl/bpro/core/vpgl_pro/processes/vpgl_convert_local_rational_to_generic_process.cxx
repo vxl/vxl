@@ -4,7 +4,9 @@
 // \file
 // \brief A process to convert a local_rational_camera to a generic_camera, using user-defined min and max z planes.
 
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iostream>
 #include <vpgl/vpgl_generic_camera.h>
 #include <vpgl/algo/vpgl_camera_compute.h>
 #include <vpgl/algo/vpgl_camera_convert.h>
@@ -20,7 +22,7 @@ bool vpgl_convert_local_rational_to_generic_process_cons(bprb_func_process& pro)
   //  3) local z minimum
   //  4) local z maximum
   //  5) level (the pyramid scale)
-  vcl_vector<vcl_string> input_types;
+  std::vector<std::string> input_types;
   input_types.push_back("vpgl_camera_double_sptr");
   input_types.push_back("unsigned");// ni
   input_types.push_back("unsigned");// nj
@@ -35,7 +37,7 @@ bool vpgl_convert_local_rational_to_generic_process_cons(bprb_func_process& pro)
 
   if (!ok) return ok;
 
-  vcl_vector<vcl_string> output_types;
+  std::vector<std::string> output_types;
   output_types.push_back("vpgl_camera_double_sptr");  // label image
   output_types.push_back("unsigned");
   output_types.push_back("unsigned");
@@ -46,18 +48,18 @@ bool vpgl_convert_local_rational_to_generic_process_cons(bprb_func_process& pro)
 bool vpgl_convert_local_rational_to_generic_process(bprb_func_process& pro)
 {
   if (pro.n_inputs()!= pro.input_types().size()) {
-    vcl_cout << "vpgl_convert_local_rational_to_generic_process: The number of inputs should be " << pro.input_types().size() << vcl_endl;
+    std::cout << "vpgl_convert_local_rational_to_generic_process: The number of inputs should be " << pro.input_types().size() << std::endl;
     return false;
   }
   // get the inputs
   vpgl_camera_double_sptr camera = pro.get_input<vpgl_camera_double_sptr>(0);
   if (!camera) {
-    vcl_cerr << "Null camera input\n\n";
+    std::cerr << "Null camera input\n\n";
     return false;
   }
   vpgl_local_rational_camera<double> *lrat_cam = dynamic_cast<vpgl_local_rational_camera<double>*>(camera.ptr());
   if (!lrat_cam) {
-    vcl_cerr << "Error: camera is not a vpgl_local_rational_camera\n";
+    std::cerr << "Error: camera is not a vpgl_local_rational_camera\n";
     return false;
   }
 
@@ -71,7 +73,7 @@ bool vpgl_convert_local_rational_to_generic_process(bprb_func_process& pro)
   vpgl_generic_camera<double> gcam;
 
   if (!vpgl_generic_camera_convert::convert(*lrat_cam, (int)ni, (int)nj, gcam, min_z, max_z, level)) {
-   vcl_cout<<"camera conversion failed\n"<<vcl_endl;
+   std::cout<<"camera conversion failed\n"<<std::endl;
     return false;
   }
   vpgl_camera_double_sptr out = new vpgl_generic_camera<double>(gcam);

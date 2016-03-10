@@ -15,8 +15,10 @@
 #include <vbl/vbl_ref_count.h>
 #include <bgrl/bgrl_vertex_sptr.h>
 #include <bgrl/bgrl_edge_sptr.h>
-#include <vcl_deque.h>
-#include <vcl_set.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <deque>
+#include <set>
 
 
 //: The abstract base class for search functions
@@ -61,9 +63,9 @@ class bgrl_breadth_search : public bgrl_search_func
 
  protected:
   //: The queue of nodes to be evaluated
-  vcl_deque<bgrl_edge_sptr> eval_queue_;
+  std::deque<bgrl_edge_sptr> eval_queue_;
   //: The set of visited nodes
-  vcl_set<bgrl_vertex_sptr> visited_;
+  std::set<bgrl_vertex_sptr> visited_;
 };
 
 //================================================================
@@ -84,9 +86,9 @@ class bgrl_depth_search : public bgrl_search_func
 
  protected:
   //: The queue of nodes to be evaluated
-  vcl_deque<bgrl_edge_sptr> eval_queue_;
+  std::deque<bgrl_edge_sptr> eval_queue_;
   //: The set of visited nodes
-  vcl_set<bgrl_vertex_sptr> visited_;
+  std::set<bgrl_vertex_sptr> visited_;
 };
 
 #endif // bgrl_search_func_h_

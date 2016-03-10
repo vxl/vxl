@@ -1,5 +1,6 @@
 #include <testlib/testlib_test.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <iostream>
 #include <vgl/vgl_point_2d.h>
 #include <vgl/vgl_point_3d.h>
 #include <vgl/vgl_plane_3d.h>
@@ -51,7 +52,7 @@ static void test_ray()
   vgl_point_3d<double> p3d(ox, oy, oz);
   vgl_vector_3d<double> v;
   vpgl_ray::ray(rcam, p3d, v);
-  vcl_cout << "Ray Direction " << v << '\n';
+  std::cout << "Ray Direction " << v << '\n';
   double x_y = v.x()/v.y();
 
   TEST_NEAR("test ray_direction", x_y,-0.16767109029721888, 0.002);
@@ -66,7 +67,7 @@ static void test_ray()
 
   bool good = vpgl_ray::ray(lrcam, ou, ov, orig, dir);
   TEST("ray()", good, true);
-  vcl_cout << "Orig: " << orig << "\n Dir: " << dir << '\n';
+  std::cout << "Orig: " << orig << "\n Dir: " << dir << '\n';
   vgl_vector_3d<double> tdir(0.0689725,-0.487625,-0.870325);
   double err = (tdir-dir).length();
   TEST_NEAR("test local rational ray_direction", err, 0.0, 1e-6);

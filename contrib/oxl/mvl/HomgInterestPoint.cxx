@@ -7,7 +7,9 @@
 
 #include "HomgInterestPoint.h"
 
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iostream>
 #include <vnl/vnl_math.h>
 #include <mvl/HomgMetric.h>
 
@@ -84,7 +86,7 @@ HomgInterestPoint::~HomgInterestPoint()
 {
 }
 
-vcl_ostream& operator<<(vcl_ostream& s, const HomgInterestPoint&)
+std::ostream& operator<<(std::ostream& s, const HomgInterestPoint&)
 {
   return s;
 }

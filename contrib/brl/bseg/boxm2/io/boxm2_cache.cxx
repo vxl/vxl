@@ -9,7 +9,7 @@ boxm2_cache_sptr boxm2_cache::instance_ = VXL_NULLPTR;
 boxm2_cache_sptr boxm2_cache::instance()
 {
   if (!instance_)
-    vcl_cerr<<"warning: boxm2_cache:: instance has not been created\n";
+    std::cerr<<"warning: boxm2_cache:: instance has not been created\n";
   return instance_;
 }
 

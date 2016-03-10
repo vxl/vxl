@@ -17,7 +17,9 @@
 // \endverbatim
 
 #include <vgl/vgl_fwd.h> // forward declare various vgl classes
-#include <vcl_vector.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <vector>
 #include <vgl/vgl_sphere_3d.h>
 
 template <typename T>

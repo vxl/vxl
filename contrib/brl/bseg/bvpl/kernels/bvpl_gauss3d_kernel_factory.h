@@ -36,7 +36,7 @@ class bvpl_gauss3d_kernel_factory : public bvpl_kernel_factory
 
   virtual ~bvpl_gauss3d_kernel_factory() {}
 
-  static vcl_string name() {return "gauss"; }
+  static std::string name() {return "gauss"; }
 
 #if 0
   /******************Batch Methods ***********************/

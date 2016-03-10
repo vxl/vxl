@@ -5,7 +5,9 @@
 // \file
 
 #include "bsta_gaussian_indep.h"
-#include <vcl_limits.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <limits>
 #include <vnl/vnl_erf.h>
 
 namespace
@@ -60,7 +62,7 @@ T
 bsta_gaussian_indep<T,n>::sqr_mahalanobis_dist(const vnl_vector_fixed<T,n>& pt) const
 {
   if (det_covar_<=T(0))
-    return vcl_numeric_limits<T>::infinity();
+    return std::numeric_limits<T>::infinity();
   vnl_vector_fixed<T,n> d = bsta_gaussian<T,n>::mean_-pt;
   return bsta_gaussian_indep_compute_sqr_mahalanobis<T,n,n>::value(d,diag_covar_);
 }
@@ -85,9 +87,9 @@ struct bsta_gaussian_indep_compute_probability_box
                        )
   {
     if (covar[index]<=T(0))
-      return vcl_numeric_limits<T>::infinity();
+      return std::numeric_limits<T>::infinity();
     double sigma_sq_2 = 2.0*static_cast<double>(covar[index]);
-    double s2 = 1/vcl_sqrt(sigma_sq_2);
+    double s2 = 1/std::sqrt(sigma_sq_2);
     double temp = vnl_erf(max_minus_mean[index]*s2);
     temp -= vnl_erf(min_minus_mean[index]*s2);
     T res = static_cast<T>(0.5*temp);
@@ -108,9 +110,9 @@ struct bsta_gaussian_indep_compute_probability_box<T,n,0>
                         const vnl_vector_fixed<T,n>& covar)
   {
     if (covar[0]<=T(0))
-      return vcl_numeric_limits<T>::infinity();
+      return std::numeric_limits<T>::infinity();
     double sigma_sq_2 = 2.0*static_cast<double>(covar[0]);
-    double s2 = 1/vcl_sqrt(sigma_sq_2);
+    double s2 = 1/std::sqrt(sigma_sq_2);
     double temp = vnl_erf(max_minus_mean[0]*s2);
     temp -= vnl_erf(min_minus_mean[0]*s2);
     return static_cast<T>(0.5*temp);

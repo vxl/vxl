@@ -8,9 +8,11 @@
 #include <vil/vil_convert.h>
 #include <vul/vul_file.h>
 #include <vul/vul_sprintf.h>
-#include <vcl_fstream.h>
+#include <fstream>
 #include <vcl_cassert.h>
-#include <vcl_cstddef.h> // for std::size_t
+#include <vcl_compiler.h>
+#include <iostream>
+#include <cstddef> // for std::size_t
 
 mvl2_video_from_sequence::mvl2_video_from_sequence()
 {
@@ -26,9 +28,9 @@ mvl2_video_from_sequence::~mvl2_video_from_sequence()
 {
 }
 
-vcl_string mvl2_video_from_sequence::is_a() const
+std::string mvl2_video_from_sequence::is_a() const
 {
-  return vcl_string("mvl2_video_from_sequence");
+  return std::string("mvl2_video_from_sequence");
 }
 
 mvl2_video_reader* mvl2_video_from_sequence::clone() const
@@ -38,27 +40,27 @@ mvl2_video_reader* mvl2_video_from_sequence::clone() const
 
 // possible options : Grey
 bool mvl2_video_from_sequence::initialize( int /* width */, int /* height */,
-                                           vcl_string format, vcl_string file_name)
+                                           std::string format, std::string file_name)
 {
   use_colour_=true;
-  if (!format.find(vcl_string("Grey"))) use_colour_=false;
+  if (!format.find(std::string("Grey"))) use_colour_=false;
   if (!vul_file::exists(file_name) || vul_file::is_directory(file_name))
   {
-    vcl_cerr<<"File "<<file_name<<" does not exist\n";
+    std::cerr<<"File "<<file_name<<" does not exist\n";
     is_initialized_=false;
     return false;
   }
 
-  if (vul_file::extension(file_name.c_str())==vcl_string(".seq"))
+  if (vul_file::extension(file_name.c_str())==std::string(".seq"))
   {
     char buffer[201];
-    vcl_ifstream ifile(file_name.c_str());
+    std::ifstream ifile(file_name.c_str());
     use_seq_file_=true;
 
     while (!ifile.eof())
     {
       ifile.getline(buffer,200);
-      vcl_string filename(buffer);
+      std::string filename(buffer);
       if (filename.length()>0) list_files_.push_back(filename);
     }
     current_frame_=0;
@@ -66,8 +68,8 @@ bool mvl2_video_from_sequence::initialize( int /* width */, int /* height */,
   }
 
   //knock off the extension
-  vcl_size_t name_length=file_name.length();
-  vcl_size_t dot_pos = file_name.find_last_of(".");
+  std::size_t name_length=file_name.length();
+  std::size_t dot_pos = file_name.find_last_of(".");
   file_name.erase(dot_pos, name_length);
 
   //Extract the largest possible number off the end
@@ -77,7 +79,7 @@ bool mvl2_video_from_sequence::initialize( int /* width */, int /* height */,
   name_length=file_name.length();
   for (int i=1;i<9;++i)
   {
-    vcl_string last_i;
+    std::string last_i;
     last_i=file_name.substr(name_length-i,i);
     int curr_no=atoi(last_i.c_str());
     if (curr_no>0)
@@ -111,7 +113,7 @@ int mvl2_video_from_sequence::next_frame()
 
 bool mvl2_video_from_sequence::get_frame(vil_image_view<vxl_byte>& image)
 {
-  vcl_string curr_file;
+  std::string curr_file;
 
   if (use_seq_file_)
   {
@@ -133,7 +135,7 @@ bool mvl2_video_from_sequence::get_frame(vil_image_view<vxl_byte>& image)
   vil_image_view_base_sptr image_view_sptr;
   if (!(image_view_sptr=vil_load(curr_file.c_str())))
   {
-    vcl_cout<<"Unable to load : " << curr_file<<vcl_endl;
+    std::cout<<"Unable to load : " << curr_file<<std::endl;
     return false;
   }
   if (use_colour_)
@@ -156,7 +158,7 @@ void mvl2_video_from_sequence::reset_frame()
 
 void mvl2_video_from_sequence::set_frame_rate(double /*frame_rate*/)
 {
-  vcl_cerr << "mvl2_video_from_sequence::set_frame_rate() NYI\n";
+  std::cerr << "mvl2_video_from_sequence::set_frame_rate() NYI\n";
 }
 
 double mvl2_video_from_sequence::get_frame_rate() const
@@ -176,7 +178,7 @@ int mvl2_video_from_sequence::get_height() const
 
 void mvl2_video_from_sequence::set_capture_size(int /*width*/,int /*height*/)
 {
-  vcl_cerr << "mvl2_video_from_sequence::set_capture_size() NYI\n";
+  std::cerr << "mvl2_video_from_sequence::set_capture_size() NYI\n";
 }
 
 int mvl2_video_from_sequence::length()

@@ -2,10 +2,12 @@
 
 #ifdef HAS_NO_NUMERICS
 
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iostream>
 void test_IUE_matrix_conversions()
 {
-  vcl_cerr << "test not run since you do not have the TargetJr Numerics package\n";
+  std::cerr << "test not run since you do not have the TargetJr Numerics package\n";
 }
 
 #else

@@ -5,7 +5,9 @@
 // \date   2007-07-09
 //
 
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iostream>
 #include <vil/vil_load.h>
 #include <vgui/vgui.h>
 #include <vgui/vgui_menu.h>
@@ -85,7 +87,7 @@ int main(int argc, char ** argv)
   vgui::init(argc,argv);
   if (argc <= 1)
   {
-    vcl_cerr << "Please give an image filename on the command line\n";
+    std::cerr << "Please give an image filename on the command line\n";
     return 0;
   }
 

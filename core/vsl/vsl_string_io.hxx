@@ -3,7 +3,7 @@
 #define vsl_string_io_hxx_
 //:
 // \file
-// \brief  binary IO functions for vcl_basic_string<T>
+// \brief  binary IO functions for std::basic_string<T>
 // \author K.Y.McGaul
 
 #include "vsl_string_io.h"
@@ -12,7 +12,7 @@
 //====================================================================================
 //: Write basic_string to binary stream
 template <class T>
-void vsl_b_write(vsl_b_ostream& s, const vcl_basic_string<T>& v)
+void vsl_b_write(vsl_b_ostream& s, const std::basic_string<T>& v)
 {
   const short version_no = 1;
   vsl_b_write(s, version_no);
@@ -25,7 +25,7 @@ void vsl_b_write(vsl_b_ostream& s, const vcl_basic_string<T>& v)
 //====================================================================================
 //: Read basic_string from binary stream
 template <class T>
-void vsl_b_read(vsl_b_istream& is, vcl_basic_string<T>& v)
+void vsl_b_read(vsl_b_istream& is, std::basic_string<T>& v)
 {
   if (!is) return;
 
@@ -41,16 +41,16 @@ void vsl_b_read(vsl_b_istream& is, vcl_basic_string<T>& v)
       vsl_b_read(is,v[i]);
     break;
    default:
-    vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, vcl_basic_string<T>&)\n"
+    std::cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, std::basic_string<T>&)\n"
              << "           Unknown version number "<< ver << '\n';
-    is.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
+    is.is().clear(std::ios::badbit); // Set an unrecoverable IO error on stream
     return;
   }
 }
 
 
 #define VSL_STRING_IO_INSTANTIATE(T) \
-template void vsl_b_write(vsl_b_ostream& s, const vcl_basic_string<T >& v); \
-template void vsl_b_read(vsl_b_istream& s, vcl_basic_string<T >& v)
+template void vsl_b_write(vsl_b_ostream& s, const std::basic_string<T >& v); \
+template void vsl_b_read(vsl_b_istream& s, std::basic_string<T >& v)
 
 #endif // vsl_string_io_hxx_

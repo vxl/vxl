@@ -12,7 +12,9 @@
 // http://www.boost.org/LICENSE_1_0.txt)
 
 #include "rgtl_serialize_access.hxx"
-#include <vcl_cstddef.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <cstddef>
 
 //: Wraps an unsigned integer for use as an index.
 //  The index is compatible only with other indexes using the same tag.
@@ -22,7 +24,7 @@ class rgtl_tagged_index
 {
  public:
   //: The underlying index type.
-  typedef vcl_size_t index_type;
+  typedef std::size_t index_type;
 
   //: Default construct to a zero index.
   rgtl_tagged_index(): value_(0) {}

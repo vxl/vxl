@@ -55,9 +55,9 @@ void vil_sobel_3x3(const vil_image_view<srcT>& src,
 //  Computes both i and j gradients of an ni x nj plane of data
 template<class srcT, class destT>
 void vil_sobel_3x3_1plane(const srcT* src,
-                          vcl_ptrdiff_t s_istep, vcl_ptrdiff_t s_jstep,
-                          destT* gi, vcl_ptrdiff_t gi_istep, vcl_ptrdiff_t gi_jstep,
-                          destT* gj, vcl_ptrdiff_t gj_istep, vcl_ptrdiff_t gj_jstep,
+                          std::ptrdiff_t s_istep, std::ptrdiff_t s_jstep,
+                          destT* gi, std::ptrdiff_t gi_istep, std::ptrdiff_t gi_jstep,
+                          destT* gj, std::ptrdiff_t gj_istep, std::ptrdiff_t gj_jstep,
                           unsigned ni, unsigned nj)
 {
   const destT k125=static_cast<destT>(0.125);
@@ -98,14 +98,14 @@ void vil_sobel_3x3_1plane(const srcT* src,
   //  o1 o2 o3
   //  o4    o5
   //  o6 o7 o8
-  const vcl_ptrdiff_t o1 = s_jstep - s_istep;
-  const vcl_ptrdiff_t o2 = s_jstep;
-  const vcl_ptrdiff_t o3 = s_istep + s_jstep;
-  const vcl_ptrdiff_t o4 = -s_istep;
-  const vcl_ptrdiff_t o5 = s_istep;
-  const vcl_ptrdiff_t o6 = -s_istep - s_jstep;
-  const vcl_ptrdiff_t o7 = -s_jstep;
-  const vcl_ptrdiff_t o8 = s_istep - s_jstep;
+  const std::ptrdiff_t o1 = s_jstep - s_istep;
+  const std::ptrdiff_t o2 = s_jstep;
+  const std::ptrdiff_t o3 = s_istep + s_jstep;
+  const std::ptrdiff_t o4 = -s_istep;
+  const std::ptrdiff_t o5 = s_istep;
+  const std::ptrdiff_t o6 = -s_istep - s_jstep;
+  const std::ptrdiff_t o7 = -s_jstep;
+  const std::ptrdiff_t o8 = s_istep - s_jstep;
 
   const unsigned ni1 = ni-1;
   const unsigned nj1 = nj-1;

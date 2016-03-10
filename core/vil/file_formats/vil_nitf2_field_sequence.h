@@ -5,10 +5,11 @@
 #ifndef VIL_NITF2_FIELD_SEQUENCE_H
 #define VIL_NITF2_FIELD_SEQUENCE_H
 
-#include <vcl_map.h>
-// not used? #include <vcl_iostream.h>
-#include <vcl_string.h>
-#include <vcl_vector.h>
+#include <vcl_compiler.h>
+#include <map>
+// not used? #include <iostream>
+#include <string>
+#include <vector>
 
 #include "vil_nitf2.h" // vil_nitf2_istream, vil_nitf2_ostream
 #include "vil_nitf2_index_vector.h"
@@ -36,16 +37,16 @@ class vil_nitf2_field_sequence
 
   // Sets out_value to the value of field specified by tag.
   // Returns 0 if such a field is not found or is of the wrong type.
-  bool get_value(vcl_string tag, int& out_value) const;
-  bool get_value(vcl_string tag, double& out_value) const;
-  bool get_value(vcl_string tag, char& out_value) const;
-  bool get_value(vcl_string tag, void*& out_value) const;
-  bool get_value(vcl_string tag, vcl_string& out_value) const;
-  bool get_value(vcl_string tag, vil_nitf2_location*& out_value) const;
-  bool get_value(vcl_string tag, vil_nitf2_date_time& out_value) const;
-  bool get_value(vcl_string tag, vil_nitf2_tagged_record_sequence& out_value) const;
+  bool get_value(std::string tag, int& out_value) const;
+  bool get_value(std::string tag, double& out_value) const;
+  bool get_value(std::string tag, char& out_value) const;
+  bool get_value(std::string tag, void*& out_value) const;
+  bool get_value(std::string tag, std::string& out_value) const;
+  bool get_value(std::string tag, vil_nitf2_location*& out_value) const;
+  bool get_value(std::string tag, vil_nitf2_date_time& out_value) const;
+  bool get_value(std::string tag, vil_nitf2_tagged_record_sequence& out_value) const;
 #if VXL_HAS_INT_64
-  bool get_value(vcl_string tag, vil_nitf2_long& out_value) const;
+  bool get_value(std::string tag, vil_nitf2_long& out_value) const;
 #endif
 
   // Sets out_value to the value of the array field element specified by tag and index.
@@ -54,22 +55,22 @@ class vil_nitf2_field_sequence
   // This option is used by vil_nitf2_field_functor so that when in a repeat loop, the
   // value in the nearest enclosing scope will be used. For instance, if called with
   // indexes (i,j), and if tag dimensionality equals 1, then value(i) will be returned.
-  bool get_value(vcl_string tag, const vil_nitf2_index_vector& indexes,
+  bool get_value(std::string tag, const vil_nitf2_index_vector& indexes,
                  int& out_value, bool ignore_extra_indexes = false) const;
-  bool get_value(vcl_string tag, const vil_nitf2_index_vector& indexes,
+  bool get_value(std::string tag, const vil_nitf2_index_vector& indexes,
                  double& out_value, bool ignore_extra_indexes = false) const;
-  bool get_value(vcl_string tag, const vil_nitf2_index_vector& indexes,
+  bool get_value(std::string tag, const vil_nitf2_index_vector& indexes,
                  char& out_value, bool ignore_extra_indexes = false) const;
-  bool get_value(vcl_string tag, const vil_nitf2_index_vector& indexes,
+  bool get_value(std::string tag, const vil_nitf2_index_vector& indexes,
                  void*& out_value, bool ignore_extra_indexes = false) const;
-  bool get_value(vcl_string tag, const vil_nitf2_index_vector& indexes,
-                 vcl_string& out_value, bool ignore_extra_indexes = false) const;
-  bool get_value(vcl_string tag, const vil_nitf2_index_vector& indexes,
+  bool get_value(std::string tag, const vil_nitf2_index_vector& indexes,
+                 std::string& out_value, bool ignore_extra_indexes = false) const;
+  bool get_value(std::string tag, const vil_nitf2_index_vector& indexes,
                  vil_nitf2_location*& out_value, bool ignore_extra_indexes = false) const;
-  bool get_value(vcl_string tag, const vil_nitf2_index_vector& indexes,
+  bool get_value(std::string tag, const vil_nitf2_index_vector& indexes,
                  vil_nitf2_date_time& out_value, bool ignore_extra_indexes = false) const;
 #if VXL_HAS_INT_64
-  bool get_value(vcl_string tag, const vil_nitf2_index_vector& indexes,
+  bool get_value(std::string tag, const vil_nitf2_index_vector& indexes,
                  vil_nitf2_long& out_value, bool ignore_extra_indexes = false) const;
 #endif
 
@@ -79,49 +80,49 @@ class vil_nitf2_field_sequence
   // the out_values hold all instances of the field selected by the partial index.
   // Appends to, instead of clearing, out_values if clear_out_values is false.
   // Returns 0 if such a field is not found or is of the wrong type.
-  bool get_values(vcl_string tag, const vil_nitf2_index_vector& indexes,
-                  vcl_vector<int>& out_values, bool clear_out_values = true) const;
-  bool get_values(vcl_string tag, const vil_nitf2_index_vector& indexes,
-                  vcl_vector<double>& out_values, bool clear_out_values = true) const;
-  bool get_values(vcl_string tag, const vil_nitf2_index_vector& indexes,
-                  vcl_vector<char>& out_values, bool clear_out_values = true) const;
-  bool get_values(vcl_string tag, const vil_nitf2_index_vector& indexes,
-                  vcl_vector<void*>& out_values, bool clear_out_values = true) const;
-  bool get_values(vcl_string tag, const vil_nitf2_index_vector& indexes,
-                  vcl_vector<vcl_string>& out_values, bool clear_out_values = true) const;
-  bool get_values(vcl_string tag, const vil_nitf2_index_vector& indexes,
-                  vcl_vector<vil_nitf2_location*>& out_values, bool clear_out_values = true) const;
-  bool get_values(vcl_string tag, const vil_nitf2_index_vector& indexes,
-                  vcl_vector<vil_nitf2_date_time>& out_values, bool clear_out_values = true) const;
+  bool get_values(std::string tag, const vil_nitf2_index_vector& indexes,
+                  std::vector<int>& out_values, bool clear_out_values = true) const;
+  bool get_values(std::string tag, const vil_nitf2_index_vector& indexes,
+                  std::vector<double>& out_values, bool clear_out_values = true) const;
+  bool get_values(std::string tag, const vil_nitf2_index_vector& indexes,
+                  std::vector<char>& out_values, bool clear_out_values = true) const;
+  bool get_values(std::string tag, const vil_nitf2_index_vector& indexes,
+                  std::vector<void*>& out_values, bool clear_out_values = true) const;
+  bool get_values(std::string tag, const vil_nitf2_index_vector& indexes,
+                  std::vector<std::string>& out_values, bool clear_out_values = true) const;
+  bool get_values(std::string tag, const vil_nitf2_index_vector& indexes,
+                  std::vector<vil_nitf2_location*>& out_values, bool clear_out_values = true) const;
+  bool get_values(std::string tag, const vil_nitf2_index_vector& indexes,
+                  std::vector<vil_nitf2_date_time>& out_values, bool clear_out_values = true) const;
 #if VXL_HAS_INT_64
-  bool get_values(vcl_string tag, const vil_nitf2_index_vector& indexes,
-                  vcl_vector<vil_nitf2_long>& out_values, bool clear_out_values = true) const;
+  bool get_values(std::string tag, const vil_nitf2_index_vector& indexes,
+                  std::vector<vil_nitf2_long>& out_values, bool clear_out_values = true) const;
 #endif
 
   // Convenience overload of preceding methods, that set out_values to all
   // instances of array field element.
-  bool get_values(vcl_string tag, vcl_vector<int>& out_values) const;
-  bool get_values(vcl_string tag, vcl_vector<double>& out_values) const;
-  bool get_values(vcl_string tag, vcl_vector<char>& out_values) const;
-  bool get_values(vcl_string tag, vcl_vector<void*>& out_values) const;
-  bool get_values(vcl_string tag, vcl_vector<vcl_string>& out_values) const;
-  bool get_values(vcl_string tag, vcl_vector<vil_nitf2_location*>& out_values) const;
-  bool get_values(vcl_string tag, vcl_vector<vil_nitf2_date_time>& out_values) const;
+  bool get_values(std::string tag, std::vector<int>& out_values) const;
+  bool get_values(std::string tag, std::vector<double>& out_values) const;
+  bool get_values(std::string tag, std::vector<char>& out_values) const;
+  bool get_values(std::string tag, std::vector<void*>& out_values) const;
+  bool get_values(std::string tag, std::vector<std::string>& out_values) const;
+  bool get_values(std::string tag, std::vector<vil_nitf2_location*>& out_values) const;
+  bool get_values(std::string tag, std::vector<vil_nitf2_date_time>& out_values) const;
 #if VXL_HAS_INT_64
-  bool get_values(vcl_string tag, vcl_vector<vil_nitf2_long>& out_values) const;
+  bool get_values(std::string tag, std::vector<vil_nitf2_long>& out_values) const;
 #endif
 
 #if 0 //Not yet implemented.
   // Sets the value of the integer-valued field specified by tag to value.
-  bool set_value(vcl_string tag, int value) { return false; }
+  bool set_value(std::string tag, int value) { return false; }
 #endif // 0
 
   // Returns a field with specified tag, or 0 if not found.
-  vil_nitf2_field* get_field(vcl_string tag) const;
+  vil_nitf2_field* get_field(std::string tag) const;
 
   // Removes the field with the specified tag, returning whether successful.
   // Not yet implemented.
-  //bool remove_field(vcl_string tag) { return false; }
+  //bool remove_field(std::string tag) { return false; }
 
   // Read field definition sequence from input stream. If this is called within
   // a repeat node, then indexes must equal the indexes must equal the
@@ -147,7 +148,7 @@ class vil_nitf2_field_sequence
                                   const vil_nitf2_index_vector& index, int repeat_count);
 
   // Returns field definition if found
-  vil_nitf2_field_definition* find_field_definition(vcl_string tag);
+  vil_nitf2_field_definition* find_field_definition(std::string tag);
 
   // I allocate the return value, but you own it after I return it to you
   // so you need to delete it.  If you pass in 'tr', then I'll add my stuff to that.
@@ -155,14 +156,14 @@ class vil_nitf2_field_sequence
   virtual vil_nitf2_field::field_tree* get_tree( vil_nitf2_field::field_tree* tr = VXL_NULLPTR ) const;
 
  private:
-  void insert_field( const vcl_string& str, vil_nitf2_field* field);
+  void insert_field( const std::string& str, vil_nitf2_field* field);
 
   // Map of fields, indexed by field name
-  typedef vcl_map<vcl_string, vil_nitf2_field*> field_map;
+  typedef std::map<std::string, vil_nitf2_field*> field_map;
   field_map fields;
 
   // Keeps track of the order in which fields are inserted into fields_map
-  vcl_vector<vil_nitf2_field*> fields_vector;
+  std::vector<vil_nitf2_field*> fields_vector;
 
   const vil_nitf2_field_definitions* m_field_definitions;
 };

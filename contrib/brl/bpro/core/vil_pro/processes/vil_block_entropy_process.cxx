@@ -13,7 +13,7 @@ bool vil_block_entropy_process_cons(bprb_func_process& pro)
 {
   //input
   bool ok=false;
-  vcl_vector<vcl_string> input_types;
+  std::vector<std::string> input_types;
   input_types.push_back("vil_image_view_base_sptr");  //: original image
   input_types.push_back("unsigned"); // block size
   input_types.push_back("unsigned"); // number of bins
@@ -21,7 +21,7 @@ bool vil_block_entropy_process_cons(bprb_func_process& pro)
   if (!ok) return ok;
 
   //output
-  vcl_vector<vcl_string> output_types;
+  std::vector<std::string> output_types;
   output_types.push_back("vil_image_view_base_sptr");  // output image
   ok = pro.set_output_types(output_types);
   if (!ok) return ok;
@@ -33,7 +33,7 @@ bool vil_block_entropy_process(bprb_func_process& pro)
 {
   // Sanity check
   if (pro.n_inputs()< 1) {
-    vcl_cout << "vil_block_entropy_process: The input number should be 1" << vcl_endl;
+    std::cout << "vil_block_entropy_process: The input number should be 1" << std::endl;
     return false;
   }
 

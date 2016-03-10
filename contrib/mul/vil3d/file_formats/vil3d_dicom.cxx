@@ -10,7 +10,9 @@
 
 #if 0
 
-#include <vcl_cstdlib.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <cstdlib>
 #include <vil3d/vil3d_image_view.h>
 
 
@@ -46,8 +48,8 @@ vil3d_image_resource_sptr vil3d_dicom_format::make_output_image
                    (const char* filename, unsigned ni, unsigned nj,
                     unsigned nk, unsigned nplanes, enum vil_pixel_format) const
 {
-  vcl_cerr <<"vil3d_dicom_format::make_output_image() NYI\n";
-  vcl_abort();
+  std::cerr <<"vil3d_dicom_format::make_output_image() NYI\n";
+  std::abort();
   return 0;
 }
 

@@ -6,8 +6,10 @@
 // \author Martin Roberts
 // \brief Class to independently normalise sub-blocks with a region
 
-#include <vcl_string.h>
-#include <vcl_iosfwd.h>
+#include <string>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iosfwd>
 #include <vnl/vnl_fwd.h>
 #include <mipa/mipa_block_normaliser.h>
 #include <mipa/mipa_identity_normaliser.h>
@@ -38,13 +40,13 @@ class mipa_ms_block_normaliser : public mipa_block_normaliser
   virtual void normalise(vnl_vector<double>& v) const;
 
   //: Name of the class
-  virtual vcl_string is_a() const;
+  virtual std::string is_a() const;
 
   //: Create a copy on the heap and return base class pointer
   virtual mipa_vector_normaliser* clone() const;
 
   //: Print class to os
-  virtual void print_summary(vcl_ostream& os) const;
+  virtual void print_summary(std::ostream& os) const;
 
   //: Save class to binary file stream
   virtual void b_write(vsl_b_ostream& bfs) const;
@@ -66,7 +68,7 @@ class mipa_ms_block_normaliser : public mipa_block_normaliser
   // }
   // \endverbatim
   virtual void config_from_stream(
-      vcl_istream &is, const mbl_read_props_type &extra_props);
+      std::istream &is, const mbl_read_props_type &extra_props);
 
   void set_nscales(unsigned n)
       {nscales_ = n;}

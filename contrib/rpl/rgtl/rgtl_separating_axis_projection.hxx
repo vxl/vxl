@@ -13,13 +13,15 @@
 
 #include "rgtl_serialize_access.hxx"
 
-#include <vcl_limits.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <limits>
 
 //: Represent the projection of an object onto a separating axis.
 template <class T>
 class rgtl_separating_axis_projection
 {
-  typedef vcl_numeric_limits<T> limits;
+  typedef std::numeric_limits<T> limits;
  public:
   //: Default construct with the range +inf..-inf which is an inside-out projection on the entire line.
   rgtl_separating_axis_projection(): lower_(limits::infinity()),

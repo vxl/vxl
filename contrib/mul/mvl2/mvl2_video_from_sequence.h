@@ -5,7 +5,9 @@
 // \brief A class to get video input from file
 // \author Franck Bettinger
 
-#include <vcl_string.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <string>
 #include <vil/vil_image_view.h>
 #include <mvl2/mvl2_video_reader.h>
 
@@ -22,7 +24,7 @@ class mvl2_video_from_sequence: public mvl2_video_reader
 
   //: Initialize the file (format can by Grey, RGB, or more complex)
   virtual bool initialize( int width, int height,
-                           vcl_string format, vcl_string file_name);
+                           std::string format, std::string file_name);
 
   //: Tidy up
   virtual void uninitialize();
@@ -52,7 +54,7 @@ class mvl2_video_from_sequence: public mvl2_video_reader
   virtual bool get_frame(vil_image_view<vxl_byte>& image);
 
   //: Name of the class
-  virtual vcl_string is_a() const;
+  virtual std::string is_a() const;
 
   //: Create a copy on the heap and return base class pointer
   virtual mvl2_video_reader* clone() const;
@@ -66,10 +68,10 @@ class mvl2_video_from_sequence: public mvl2_video_reader
  private:
 
   int no_digits_;
-  vcl_string file_stem_;
+  std::string file_stem_;
   int offset_;
   bool use_seq_file_;
-  vcl_vector<vcl_string> list_files_;
+  std::vector<std::string> list_files_;
 };
 
 #endif // mvl2_video_from_sequence_h_

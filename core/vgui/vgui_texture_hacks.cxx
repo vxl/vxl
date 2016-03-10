@@ -12,7 +12,8 @@
 #ifdef fsm_fake_gl_texture_calls
 
 #include <dlfcn.h>
-#include <vcl_cstdio.h>
+#include <vcl_compiler.h>
+#include <cstdio>
 #include <vcl_cassert.h>
 
 static bool debug = false;
@@ -29,7 +30,7 @@ ret urgh_##name proto \
   static void *f = 0; \
   if (!f) { \
     f = dlsym(RTLD_DEFAULT, #name); \
-    if (debug) vcl_printf("dlsym(%s) => 0x%08X\n", #name, unsigned(f)); \
+    if (debug) std::printf("dlsym(%s) => 0x%08X\n", #name, unsigned(f)); \
     if (! f) { \
       assert(false); \
       return_##ret( ret() ); \

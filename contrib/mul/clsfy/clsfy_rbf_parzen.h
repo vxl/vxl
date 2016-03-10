@@ -13,7 +13,9 @@
 // \endverbatim
 
 #include <clsfy/clsfy_classifier_base.h>
-#include <vcl_iosfwd.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iosfwd>
 
 //: A Parzen binary classifier using an RBF Window
 // A given vector, x0, is classified, by placing a window defined by w = exp(-1/(2*sigma^p) * |x-x0|^p),
@@ -35,10 +37,10 @@ class clsfy_rbf_parzen : public clsfy_classifier_base
   double power_;
 
   //: The set of training input values.  Size should equal number of outputs.
-  vcl_vector<vnl_vector<double> > trainInputs_;
+  std::vector<vnl_vector<double> > trainInputs_;
 
   //: The set of training output values.  Size should equal number of inputs.
-  vcl_vector<unsigned> trainOutputs_;
+  std::vector<unsigned> trainOutputs_;
 
  public:
   //: Construct a Parzen classifier.
@@ -49,7 +51,7 @@ class clsfy_rbf_parzen : public clsfy_classifier_base
 
   //: Provides a probability-like value that the input being in each class.
   // output(i) i<nClasses, contains the probability that the input is in class i
-  virtual void class_probabilities(vcl_vector<double> &outputs, const vnl_vector<double> &input) const;
+  virtual void class_probabilities(std::vector<double> &outputs, const vnl_vector<double> &input) const;
 
   //: Return the number of proximate training vectors, weighted by the windowing function.
   double weightings(const vnl_vector<double> &input) const;
@@ -59,7 +61,7 @@ class clsfy_rbf_parzen : public clsfy_classifier_base
   virtual double log_l(const vnl_vector<double> &input) const;
 
   //: Set the training data.
-  void set(const vcl_vector<vnl_vector<double> > &inputs, const vcl_vector<unsigned> &outputs);
+  void set(const std::vector<vnl_vector<double> > &inputs, const std::vector<unsigned> &outputs);
 
   //: The 1st standard deviation width of the RBF window.
   // The default value is 1.
@@ -84,12 +86,12 @@ class clsfy_rbf_parzen : public clsfy_classifier_base
 
   //: Return a reference to the training vectors.
   // Vectors are ordered similarly to training_classes()
-  const vcl_vector<vnl_vector<double> > & training_vectors() const
+  const std::vector<vnl_vector<double> > & training_vectors() const
   {return trainInputs_;}
 
   //: Return a reference to the training classes
   // Vectors are ordered similarly to training_vectors()
-  const vcl_vector<unsigned > & training_classes() const
+  const std::vector<unsigned > & training_classes() const
   {return trainOutputs_;}
 
   //: The number of possible output classes.
@@ -102,16 +104,16 @@ class clsfy_rbf_parzen : public clsfy_classifier_base
   virtual short version_no() const;
 
   //: Name of the class
-  virtual vcl_string is_a() const;
+  virtual std::string is_a() const;
 
   //: Name of the class
-  virtual bool is_class(vcl_string const& s) const;
+  virtual bool is_class(std::string const& s) const;
 
   //: Create a copy on the heap and return base class pointer
   virtual clsfy_classifier_base* clone() const;
 
   //: Print class to os
-  virtual void print_summary(vcl_ostream& os) const;
+  virtual void print_summary(std::ostream& os) const;
 
   //: Save class to binary file stream
   virtual void b_write(vsl_b_ostream& bfs) const;

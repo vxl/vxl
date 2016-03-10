@@ -41,7 +41,7 @@ class vgui_mfc_dialog_extensions_impl : public CWnd,public vgui_dialog_extension
   vgui_mfc_dialog_extensions_impl(const char* name);
   ~vgui_mfc_dialog_extensions_impl();
 
-  void* choice_field_widget(const char*, const vcl_vector<vcl_string>&, int&);
+  void* choice_field_widget(const char*, const std::vector<std::string>&, int&);
   void* inline_tableau_widget(const vgui_tableau_sptr tab, unsigned width, unsigned height);
   //: Sets the modality of the dialog box.
   // True makes the dialog modal (i.e. the dialog 'grabs' all events), this is
@@ -83,9 +83,9 @@ class vgui_mfc_dialog_extensions_impl : public CWnd,public vgui_dialog_extension
   CWnd *csrs[100];
   //: MFC dialog box object.
   CWnd *dialog_box;
-  vcl_vector<CWnd *> wlist;
+  std::vector<CWnd *> wlist;
   //: List of created MFC objects (so we can delete them).
-  vcl_vector<CWnd *> awlist;
+  std::vector<CWnd *> awlist;
   DECLARE_MESSAGE_MAP()
   //: Type font.
   CFont* font;

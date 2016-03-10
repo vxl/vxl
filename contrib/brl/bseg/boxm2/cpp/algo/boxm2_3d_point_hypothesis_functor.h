@@ -5,7 +5,9 @@
 
 #include <boxm2/cpp/algo/boxm2_cast_ray_function.h>
 #include <vil/vil_image_view.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iostream>
 
 //#define DEBUG 1
 //#define DEBUG2 1
@@ -58,9 +60,9 @@ class boxm2_3d_point_hypothesis_functor
 #if DEBUG
     //if (index%1000000 == 0) {
     if (spt_bid_ == id_ && index == spt_data_index_) {
-      vcl_cout << "index: " << index << " len: " << seg_len << vcl_endl;
-      vcl_cout << "current pt: " << pt << " vis(" << i << ", " << j << "): " << vis << vcl_endl;
-      vcl_cout << "cam center: " << C_.x() << " " << C_.y() << " " << C_.z() << "\n";
+      std::cout << "index: " << index << " len: " << seg_len << std::endl;
+      std::cout << "current pt: " << pt << " vis(" << i << ", " << j << "): " << vis << std::endl;
+      std::cout << "cam center: " << C_.x() << " " << C_.y() << " " << C_.z() << "\n";
     }
 #endif
 
@@ -78,7 +80,7 @@ class boxm2_3d_point_hypothesis_functor
 #if DEBUG
     //if (index%1000000 == 0)
     if (spt_bid_ == id_ && index == spt_data_index_)
-      vcl_cout << "pt after update: " << pt << vcl_endl;
+      std::cout << "pt after update: " << pt << std::endl;
 #endif
 
     // calculate sums
@@ -111,12 +113,12 @@ class boxm2_3d_point_hypothesis_functor
 #if DEBUG
     //if (index%1000000 == 0)
     if (spt_bid_ == id_ && index == spt_data_index_)
-      vcl_cout << "sums: " << sums << vcl_endl;
+      std::cout << "sums: " << sums << std::endl;
 #endif
 
     // update vis
     boxm2_data<BOXM2_ALPHA>::datatype alpha=alpha_data_->data()[index];
-    float temp=vcl_exp(-seg_len*alpha);
+    float temp=std::exp(-seg_len*alpha);
     vis*=temp;
     (*vis_img_)(i,j)=vis;
     return true;
@@ -168,10 +170,10 @@ class boxm2_3d_point_hypothesis_cov_functor
 #if DEBUG2
     //if (index%1000000 == 0) {
     if (spt_bid_ == id_ && index == spt_data_index_) {
-      vcl_cout << "--------------------------------------------------\n";
-      vcl_cout << "index: " << index << "\n";// len: " << seg_len << "\n";// ray i: " << i << " j: "<< j << vcl_endl;
-      vcl_cout << "cov matrix: \n" << cov_C_ << "\n";
-      vcl_cout << "cov matrix: \n" << cov_v_ << "\n";
+      std::cout << "--------------------------------------------------\n";
+      std::cout << "index: " << index << "\n";// len: " << seg_len << "\n";// ray i: " << i << " j: "<< j << std::endl;
+      std::cout << "cov matrix: \n" << cov_C_ << "\n";
+      std::cout << "cov matrix: \n" << cov_v_ << "\n";
     }
 #endif
 
@@ -188,8 +190,8 @@ class boxm2_3d_point_hypothesis_cov_functor
 #if DEBUG2
     //if (index%1000000 == 0) {
     if (spt_bid_ == id_ && index == spt_data_index_) {
-      vcl_cout << "portion of cov from cam center variation: " << vcl_endl;
-      vcl_cout << out_cov << vcl_endl;
+      std::cout << "portion of cov from cam center variation: " << std::endl;
+      std::cout << out_cov << std::endl;
     }
 #endif
 
@@ -213,8 +215,8 @@ class boxm2_3d_point_hypothesis_cov_functor
 #if DEBUG2
     //if (index%1000000 == 0) {
     if (spt_bid_ == id_ && index == spt_data_index_) {
-      vcl_cout << "portion of cov from cam orientation variation: " << vcl_endl;
-      vcl_cout << jac*temp << vcl_endl;
+      std::cout << "portion of cov from cam orientation variation: " << std::endl;
+      std::cout << jac*temp << std::endl;
     }
 #endif
 
@@ -227,9 +229,9 @@ class boxm2_3d_point_hypothesis_cov_functor
 #if DEBUG2
     //if (index%1000000 == 0) {
     if (spt_bid_ == id_ && index == spt_data_index_) {
-      vcl_cout << "sums: " << sums << vcl_endl;
-      vcl_cout << "portion of cov from depth variation: " << vcl_endl;
-      vcl_cout << temp << vcl_endl;
+      std::cout << "sums: " << sums << std::endl;
+      std::cout << "portion of cov from depth variation: " << std::endl;
+      std::cout << temp << std::endl;
     }
 #endif
 
@@ -250,8 +252,8 @@ class boxm2_3d_point_hypothesis_cov_functor
 #if DEBUG2
     //if (index%1000000 == 0) {
     if (spt_bid_ == id_ && index == spt_data_index_) {
-      vcl_cout << "cov: " << vcl_endl;
-      vcl_cout << out_cov << vcl_endl;
+      std::cout << "cov: " << std::endl;
+      std::cout << out_cov << std::endl;
     }
 #endif
 

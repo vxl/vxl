@@ -31,13 +31,13 @@ bool bvpl_compare_surface_and_normal_process_cons(bprb_func_process& pro)
   using namespace bvpl_compare_surface_and_normal_process_globals;
 
   //process takes 3 inputs
-  vcl_vector<vcl_string> input_types_(n_inputs_);
+  std::vector<std::string> input_types_(n_inputs_);
   input_types_[0] = "bvxm_voxel_grid_base_sptr"; // distance transform of the gt
   input_types_[1] = "bvxm_voxel_grid_base_sptr"; // estimated response
   input_types_[2] = "vcl_string"; // path for the output grid
 
   //output
-  vcl_vector<vcl_string> output_types_(n_outputs_);
+  std::vector<std::string> output_types_(n_outputs_);
   output_types_[0] = "bvxm_voxel_grid_base_sptr";
 
   return pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
@@ -49,7 +49,7 @@ bool bvpl_compare_surface_and_normal_process(bprb_func_process& pro)
 
   if (pro.n_inputs() < n_inputs_)
   {
-    vcl_cout << pro.name() << " The input number should be " << n_inputs_<< vcl_endl;
+    std::cout << pro.name() << " The input number should be " << n_inputs_<< std::endl;
     return false;
   }
 
@@ -57,10 +57,10 @@ bool bvpl_compare_surface_and_normal_process(bprb_func_process& pro)
   unsigned i = 0;
   bvxm_voxel_grid_base_sptr dt_grid_base = pro.get_input<bvxm_voxel_grid_base_sptr>(i++);
   bvxm_voxel_grid_base_sptr est_grid_base = pro.get_input<bvxm_voxel_grid_base_sptr>(i++);
-  vcl_string filename = pro.get_input<vcl_string>(i++);
+  std::string filename = pro.get_input<std::string>(i++);
 
   if (!dt_grid_base.ptr() || !est_grid_base.ptr()) {
-    vcl_cout <<  " :-- Grid is not valid!\n";
+    std::cout <<  " :-- Grid is not valid!\n";
     return false;
   }
 

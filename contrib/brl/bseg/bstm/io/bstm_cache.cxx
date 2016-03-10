@@ -12,7 +12,7 @@ bstm_cache_destroyer bstm_cache::destroyer_;
 bstm_cache_sptr bstm_cache::instance()
 {
   if (!instance_)
-    vcl_cerr<<"warning: bstm_cache:: instance has not been created\n";
+    std::cerr<<"warning: bstm_cache:: instance has not been created\n";
   return instance_;
 }
 

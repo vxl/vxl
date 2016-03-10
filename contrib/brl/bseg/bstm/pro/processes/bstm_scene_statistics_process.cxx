@@ -8,7 +8,9 @@
 
 #include <bprb/bprb_func_process.h>
 
-#include <vcl_fstream.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <fstream>
 #include <bstm/bstm_scene.h>
 #include <bstm/io/bstm_cache.h>
 #include <bstm/bstm_block.h>
@@ -30,7 +32,7 @@ bool bstm_scene_statistics_process_cons(bprb_func_process& pro)
   using namespace bstm_scene_statistics_process_globals;
 
   //process takes 1 inputs
-  vcl_vector<vcl_string> input_types_(n_inputs_);
+  std::vector<std::string> input_types_(n_inputs_);
   input_types_[0] = "bstm_scene_sptr";
   input_types_[1] = "bstm_cache_sptr";
   input_types_[2] = "float"; //center x
@@ -40,7 +42,7 @@ bool bstm_scene_statistics_process_cons(bprb_func_process& pro)
   input_types_[6] = "float"; //len y
   input_types_[7] = "float"; //len z
 
-  vcl_vector<vcl_string> output_types(n_outputs_);
+  std::vector<std::string> output_types(n_outputs_);
   output_types[0] = "float";
   output_types[1] = "float";
   output_types[2] = "unsigned";
@@ -73,7 +75,7 @@ bool bstm_scene_statistics_process(bprb_func_process& pro)
   typedef vnl_vector_fixed<ushort, 4> ushort4;
 
   if ( pro.n_inputs() < n_inputs_ ){
-    vcl_cout << pro.name() << ": The input number should be " << n_inputs_<< vcl_endl;
+    std::cout << pro.name() << ": The input number should be " << n_inputs_<< std::endl;
     return false;
   }
   //get the inputs
@@ -99,8 +101,8 @@ bool bstm_scene_statistics_process(bprb_func_process& pro)
   unsigned num_cells = 0;
 
   //get blocks
-  vcl_map<bstm_block_id, bstm_block_metadata> blocks = scene->blocks();
-  vcl_map<bstm_block_id, bstm_block_metadata>::const_iterator bstm_iter = blocks.begin();
+  std::map<bstm_block_id, bstm_block_metadata> blocks = scene->blocks();
+  std::map<bstm_block_id, bstm_block_metadata>::const_iterator bstm_iter = blocks.begin();
   for (; bstm_iter != blocks.end(); ++bstm_iter)
   {
     bstm_block_id bstm_id = bstm_iter->first;
@@ -127,8 +129,8 @@ bool bstm_scene_statistics_process(bprb_func_process& pro)
            if(!vgl_intersection<double>(tree_box,box).is_empty()) //if the tree intersects the box
            {
              //iterate through leaves of the tree
-             vcl_vector<int> leafBits = bit_tree.get_leaf_bits();
-             vcl_vector<int>::iterator iter;
+             std::vector<int> leafBits = bit_tree.get_leaf_bits();
+             std::vector<int>::iterator iter;
 
              for (iter = leafBits.begin(); iter != leafBits.end(); ++iter) {
                int currBitIndex = (*iter);

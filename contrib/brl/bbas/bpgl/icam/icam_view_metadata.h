@@ -17,7 +17,9 @@
 #include "icam_depth_transform.h"
 #include "icam_minimizer.h"
 #include "icam_minimizer_params.h"
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iostream>
 
 //: A class to hold image information of a viewpoint
 class icam_view_metadata
@@ -27,8 +29,8 @@ class icam_view_metadata
    //: default constructor
    icam_view_metadata() {}
 
-   icam_view_metadata(vcl_string const& exp_img,
-                      vcl_string const& dt_path);
+   icam_view_metadata(std::string const& exp_img,
+                      std::string const& dt_path);
 
    virtual ~icam_view_metadata() {}
 
@@ -51,7 +53,7 @@ class icam_view_metadata
                      vil_image_view<float>& act_dest,
                      vil_image_view<float>& mapped_dest);
 
-   void print(vcl_ostream& os) const { os << "icam_view_metadata:" << vcl_endl; }
+   void print(std::ostream& os) const { os << "icam_view_metadata:" << std::endl; }
 
    void b_read(vsl_b_istream& is);
 
@@ -60,8 +62,8 @@ class icam_view_metadata
    inline short version() const { return 1; }
 
  protected:
-   vcl_string exp_img_path_;
-   vcl_string depth_img_path_;
+   std::string exp_img_path_;
+   std::string depth_img_path_;
    vgl_vector_3d<double> min_trans_;
    vgl_rotation_3d<double> min_rot_;
    double cost_;
@@ -73,7 +75,7 @@ class icam_view_metadata
 };
 
 
-vcl_ostream& operator<<(vcl_ostream& os, icam_view_metadata const& p);
+std::ostream& operator<<(std::ostream& os, icam_view_metadata const& p);
 void vsl_b_read(vsl_b_istream& is, icam_view_metadata& p);
 void vsl_b_write(vsl_b_ostream& os, icam_view_metadata const& p);
 
@@ -96,7 +98,7 @@ bool load_image(vil_image_view_base_sptr const& base_img, vil_image_view<T>*& im
     vil_convert_cast<double,T>(*img, *image);
   }
   else {
-    vcl_cout << "icam_register_image_process -- image type " << base_img->pixel_format() << " is not supported!" << vcl_endl;
+    std::cout << "icam_register_image_process -- image type " << base_img->pixel_format() << " is not supported!" << std::endl;
     return false;
   }
   return true;

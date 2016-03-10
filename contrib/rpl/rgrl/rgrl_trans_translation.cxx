@@ -5,7 +5,9 @@
 // \date   Dec 2003
 
 #include <vcl_cassert.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iostream>
 #include <rgrl/rgrl_util.h>
 
 rgrl_trans_translation::
@@ -160,13 +162,13 @@ scale_by( double scale ) const
 
 void
 rgrl_trans_translation::
-write( vcl_ostream& os ) const
+write( std::ostream& os ) const
 {
   // tag
   os << "TRANSLATION\n"
   // parameters
-     << trans_.size() << vcl_endl
-     << trans_ << ' ' << from_centre_ << vcl_endl;
+     << trans_.size() << std::endl
+     << trans_ << ' ' << from_centre_ << std::endl;
 
   // parent
   rgrl_transformation::write( os );
@@ -174,15 +176,15 @@ write( vcl_ostream& os ) const
 
 bool
 rgrl_trans_translation::
-read( vcl_istream& is )
+read( std::istream& is )
 {
   int dim;
 
   // skip empty lines
   rgrl_util_skip_empty_lines( is );
 
-  vcl_string str;
-  vcl_getline( is, str );
+  std::string str;
+  std::getline( is, str );
 
   // The token should appear at the beginning of line
   if ( str.find( "TRANSLATION" ) != 0 ) {

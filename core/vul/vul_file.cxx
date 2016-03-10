@@ -17,9 +17,10 @@
 #include "vul_file.h"
 
 #include <sys/stat.h>
-#include <vcl_cstring.h>
-#include <vcl_cctype.h>
-#include <vcl_cstdlib.h>
+#include <cstring>
+#include <cctype>
+#include <vcl_compiler.h>
+#include <cstdlib>
 
 #if defined(VCL_WIN32) && !defined(__CYGWIN__)
 #include <direct.h> // for getcwd, mkdir
@@ -29,7 +30,7 @@
 
 #include <vul/vul_user_info.h>
 
-vcl_string vul_file::get_cwd()
+std::string vul_file::get_cwd()
 {
   const int BIG = 65536;
   char buf[BIG];
@@ -60,10 +61,10 @@ bool vul_file::is_directory(char const* fn)
       && (fs.st_mode & S_IFMT) == S_IFDIR;
 }
 
-vcl_time_t vul_file::time_modified(char const* filename){
+std::time_t vul_file::time_modified(char const* filename){
   struct stat fs;
   if(stat(filename, &fs)!=0)
-    return vcl_time_t(0);
+    return std::time_t(0);
   return fs.st_mtime;
 }
 
@@ -72,7 +73,7 @@ bool vul_file::is_drive(char const* fn)
 {
   // a drive string looks like "c:", "z:"
   return fn
-      && vcl_isalpha(fn[0])
+      && std::isalpha(fn[0])
       && fn[1]==':'
       && fn[2]=='\0';
 }
@@ -109,92 +110,92 @@ unsigned long vul_file::size(char const* fn)
 bool vul_file::exists(char const* fn)
 {
   struct stat fs;
-  vcl_string name(fn);
+  std::string name(fn);
 
 #if defined(VCL_WIN32) && !defined(__CYGWIN__)
-  vcl_string::size_type last_non_slash_index = name.find_last_not_of("\\/");
+  std::string::size_type last_non_slash_index = name.find_last_not_of("\\/");
 #else
-  vcl_string::size_type last_non_slash_index = name.find_last_not_of('/');
+  std::string::size_type last_non_slash_index = name.find_last_not_of('/');
 #endif
-  if (last_non_slash_index != vcl_string::npos)
+  if (last_non_slash_index != std::string::npos)
     last_non_slash_index++;
   name = name.substr(0, last_non_slash_index);
   return stat(name.c_str(), &fs) == 0;
 }
 
-vcl_string vul_file::dirname(char const* fn)
+std::string vul_file::dirname(char const* fn)
 {
-  vcl_string self(fn);
+  std::string self(fn);
 
 #if defined(VCL_WIN32) && !defined(__CYGWIN__)
-  vcl_string::size_type slash_index = self.find_last_of("\\/");
+  std::string::size_type slash_index = self.find_last_of("\\/");
 #else
-  vcl_string::size_type slash_index = self.rfind('/');
+  std::string::size_type slash_index = self.rfind('/');
 #endif
-  if (slash_index == vcl_string::npos)
+  if (slash_index == std::string::npos)
     return ".";
 
 
   return self.substr(0, slash_index);
 }
 
-vcl_string vul_file::extension(char const* fn)
+std::string vul_file::extension(char const* fn)
 {
-  vcl_string self(fn);
+  std::string self(fn);
 
-  vcl_string::size_type dot_index = self.rfind('.');
-  if (dot_index != vcl_string::npos)
-    return self.substr(dot_index, vcl_string::npos);
+  std::string::size_type dot_index = self.rfind('.');
+  if (dot_index != std::string::npos)
+    return self.substr(dot_index, std::string::npos);
   else
-    return vcl_string();
+    return std::string();
 }
 
-vcl_string vul_file::strip_directory(char const* fn)
+std::string vul_file::strip_directory(char const* fn)
 {
-  vcl_string self(fn);
+  std::string self(fn);
 
 #if defined(VCL_WIN32) && !defined(__CYGWIN__)
-  vcl_string::size_type slash_index = self.find_last_of("\\/");
+  std::string::size_type slash_index = self.find_last_of("\\/");
 #else
-  vcl_string::size_type slash_index = self.rfind('/');
+  std::string::size_type slash_index = self.rfind('/');
 #endif
-  if (slash_index != vcl_string::npos)
+  if (slash_index != std::string::npos)
     self.erase(0, slash_index+1);
 
   return self;
 }
 
-vcl_string vul_file::strip_extension(char const* fn)
+std::string vul_file::strip_extension(char const* fn)
 {
-  vcl_string self(fn);
+  std::string self(fn);
 
-  vcl_string::size_type dot_index = self.rfind('.');
-  if (dot_index != vcl_string::npos)
-    self.erase(dot_index, vcl_string::npos);
+  std::string::size_type dot_index = self.rfind('.');
+  if (dot_index != std::string::npos)
+    self.erase(dot_index, std::string::npos);
 
   return self;
 }
 
-vcl_string vul_file::basename(char const* fn, char const * suffix)
+std::string vul_file::basename(char const* fn, char const * suffix)
 {
   // First strip dir
-  vcl_string self(fn);
+  std::string self(fn);
 
 #if defined(VCL_WIN32) && !defined(__CYGWIN__)
-  vcl_string::size_type slash_index = self.find_last_of("\\/");
+  std::string::size_type slash_index = self.find_last_of("\\/");
 #else
-  vcl_string::size_type slash_index = self.rfind('/');
+  std::string::size_type slash_index = self.rfind('/');
 #endif
 
-  if (slash_index != vcl_string::npos)
+  if (slash_index != std::string::npos)
     self.erase(0, slash_index+1);
 
   // Now strip suffix if any
   if (suffix) {
-    int start = (int)(self.size() - vcl_strlen(suffix));
+    int start = (int)(self.size() - std::strlen(suffix));
     if (start >= 0)
-      if (vcl_string(self.begin()+start, self.end()) == suffix)
-        self.erase(start, vcl_string::npos);
+      if (std::string(self.begin()+start, self.end()) == suffix)
+        self.erase(start, std::string::npos);
   }
   return self;
 }
@@ -202,7 +203,7 @@ vcl_string vul_file::basename(char const* fn, char const * suffix)
 
 #if defined(VCL_WIN32) && !defined(__CYGWIN__)
 //: replace instances of 'from' in 's' with 'to'
-static unsigned replace(char from, char to, vcl_string &s)
+static unsigned replace(char from, char to, std::string &s)
 {
   unsigned c = 0;
   for (unsigned i=0; i<s.size(); ++i)
@@ -219,44 +220,44 @@ static unsigned replace(char from, char to, vcl_string &s)
 // E.g. \c delete_file_glob("*"); will delete all the files in the
 // current directory on most operating systems.
 // Takes Posix path separators i.e. '/'
-bool vul_file::delete_file_glob(vcl_string const& file_glob)
+bool vul_file::delete_file_glob(std::string const& file_glob)
 {
 #if defined(VCL_WIN32) && !defined(__CYGWIN__)
-  vcl_string command = file_glob;
+  std::string command = file_glob;
   replace('/', '\\', command);
   command = "del /Q " + command;
 #else
-  vcl_string command = "/bin/rm -f " + file_glob;
+  std::string command = "/bin/rm -f " + file_glob;
 #endif
-  return vcl_system(command.c_str())==0;
+  return std::system(command.c_str())==0;
 }
 
 
-vcl_string vul_file::expand_tilde(char const* vul_filename)
+std::string vul_file::expand_tilde(char const* vul_filename)
 {
-  if (!vul_filename || (vcl_strlen(vul_filename) == 0))
+  if (!vul_filename || (std::strlen(vul_filename) == 0))
     return "";
 
 #if defined(VCL_WIN32) && !defined(__CYGWIN__)
   // ~ meaningless on win32
-  return vcl_string(vul_filename);
+  return std::string(vul_filename);
 #else
 
   if (vul_filename[0] != '~')
-    return vcl_string(vul_filename);
+    return std::string(vul_filename);
 
   //// ** Have a tilde, go for it
 
   // 1. Strip to directory only, and remove the tilde itself
-  vcl_string fn(vul_filename);
-  vcl_string dir;
-  vcl_string::size_type first_slash =  fn.find('/');
-  if (first_slash != vcl_string::npos) {
+  std::string fn(vul_filename);
+  std::string dir;
+  std::string::size_type first_slash =  fn.find('/');
+  if (first_slash != std::string::npos) {
     dir = fn.substr(1, first_slash-1);
-    fn = fn.substr(first_slash, vcl_string::npos);
+    fn = fn.substr(first_slash, std::string::npos);
   }
   else {
-    dir = fn.substr(1, vcl_string::npos);
+    dir = fn.substr(1, std::string::npos);
     fn = "";
   }
   // Now, from original to  (dir, vul_filename) is one of
@@ -269,13 +270,13 @@ vcl_string vul_file::expand_tilde(char const* vul_filename)
     // Was just ~, use getenv(HOME)
     char const * home_directory = getenv("HOME");
     if (!home_directory) home_directory = "";
-    return vcl_string(home_directory) + fn;
+    return std::string(home_directory) + fn;
   }
 
   // Was ~user, Check password list for match
   vul_user_info user(dir);
   if (!user.ok)
-    return vcl_string(vul_filename);
+    return std::string(vul_filename);
 
   // Got user info
   return user.home_directory + fn;

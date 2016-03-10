@@ -3,7 +3,9 @@
 // \file
 #include <vpgl/vpgl_perspective_camera.h>
 #include <vgui/vgui_modifier.h>
-#include <vcl_sstream.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <sstream>
 #include <boxm2/ocl/boxm2_ocl_util.h>
 #include <boxm2/view/boxm2_view_utils.h>
 
@@ -49,7 +51,7 @@ bool boxm2_ocl_render_trajectory_tableau::init(bocl_device_sptr device,
                                     unsigned ni,
                                     unsigned nj,
                                     vpgl_perspective_camera<double> * cam,
-                                    vcl_string identifier, vcl_list<vgl_point_3d<double> > waypoints, vcl_string second_scene_file)
+                                    std::string identifier, std::list<vgl_point_3d<double> > waypoints, std::string second_scene_file)
 {
     //set image dimensions, camera and scene
     ni_ = ni;
@@ -103,7 +105,7 @@ bool boxm2_ocl_render_trajectory_tableau::handle(vgui_event const &e)
     glBindBuffer(GL_PIXEL_UNPACK_BUFFER_ARB, 0);
 
     //calculate and write fps to status
-    vcl_stringstream str;
+    std::stringstream str;
     str<<".  rendering at ~ "<< (1000.0f / gpu_time) <<" fps ";
     if (status_) {
       status_->write(str.str().c_str());
@@ -115,11 +117,11 @@ bool boxm2_ocl_render_trajectory_tableau::handle(vgui_event const &e)
   //toggle color - this is a hack to get color models to show as grey
   if (e.type == vgui_KEY_PRESS) {
     if (e.key == vgui_key('c')) {
-      vcl_cout<<"Toggling b and w"<<vcl_endl;
+      std::cout<<"Toggling b and w"<<std::endl;
       is_bw_ = !is_bw_;
     }
     if (e.key == vgui_key('t')) {
-        vcl_cout<<"Toggling Models"<<vcl_endl;
+        std::cout<<"Toggling Models"<<std::endl;
         is_second_ = !is_second_;
     }
   }
@@ -139,7 +141,7 @@ float boxm2_ocl_render_trajectory_tableau::render_frame()
     if (!check_val(status,CL_SUCCESS,"clEnqueueAcquireGLObjects failed. (gl_image)"+error_to_string(status)))
         return -1.0f;
 
-    vcl_cout<<cam_<<vcl_endl;
+    std::cout<<cam_<<std::endl;
     brdb_value_sptr   brdb_scene;
         bool good = true;
     //set up brdb_value_sptr arguments...
@@ -169,7 +171,7 @@ float boxm2_ocl_render_trajectory_tableau::render_frame()
     brdb_value_sptr brdb_nj = new brdb_value_t<unsigned>(nj_);
     brdb_value_sptr exp_img = new brdb_value_t<bocl_mem_sptr>(exp_img_);
     brdb_value_sptr exp_img_dim = new brdb_value_t<bocl_mem_sptr>(exp_img_dim_);
-    brdb_value_sptr ident = new brdb_value_t<vcl_string>(identifier_);
+    brdb_value_sptr ident = new brdb_value_t<std::string>(identifier_);
 
     //if scene has RGB data type, use color render process
 
@@ -201,12 +203,12 @@ float boxm2_ocl_render_trajectory_tableau::render_frame()
     brdb_query_aptr Q = brdb_query_comp_new("id", brdb_query::EQ, time_id);
     brdb_selection_sptr S = DATABASE->select("float_data", Q);
     if (S->size()!=1){
-        vcl_cout << "in bprb_batch_process_manager::set_input_from_db(.) -"
+        std::cout << "in bprb_batch_process_manager::set_input_from_db(.) -"
             << " no selections\n";
     }
     brdb_value_sptr value;
-    if (!S->get_value(vcl_string("value"), value)) {
-        vcl_cout << "in bprb_batch_process_manager::set_input_from_db(.) -"
+    if (!S->get_value(std::string("value"), value)) {
+        std::cout << "in bprb_batch_process_manager::set_input_from_db(.) -"
             << " didn't get value\n";
     }
     float time = value->val<float>();
@@ -222,7 +224,7 @@ float boxm2_ocl_render_trajectory_tableau::render_frame()
 bool boxm2_ocl_render_trajectory_tableau::init_clgl()
 {
   //get relevant blocks
-  vcl_cout<<"Data Path: "<<scene_->data_path()<<vcl_endl;
+  std::cout<<"Data Path: "<<scene_->data_path()<<std::endl;
   device_->context() = boxm2_view_utils::create_clgl_context(*(device_->device_id()));
   opencl_cache_->set_context(device_->context());
 

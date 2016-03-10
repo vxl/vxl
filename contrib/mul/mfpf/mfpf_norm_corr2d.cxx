@@ -5,8 +5,10 @@
 // \author Tim Cootes
 
 #include <vsl/vsl_binary_loader.h>
-#include <vcl_cmath.h>
-#include <vcl_algorithm.h>
+#include <cmath>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <algorithm>
 #include <vcl_cassert.h>
 
 #include <vil/vil_resample_bilin.h>
@@ -70,7 +72,7 @@ void mfpf_norm_corr2d::set(const vil_image_view<double>& k,
   ss-=(mean*mean*ni*nj);
   assert(ss>1e-6);  // If near zero, flat region - can't use correlation
   double s=1.0;
-  if (ss>0) s = vcl_sqrt(1.0/ss);
+  if (ss>0) s = std::sqrt(1.0/ss);
   vil_math_scale_and_offset_values(kernel_,s,-s*mean);
 
   ref_x_ = ref_x;
@@ -84,7 +86,7 @@ void mfpf_norm_corr2d::set(const vil_image_view<double>& k)
 }
 
 //: Define filter kernel to search with, expressed as a vector
-bool mfpf_norm_corr2d::set_model(const vcl_vector<double>& v)
+bool mfpf_norm_corr2d::set_model(const std::vector<double>& v)
 {
   // we assume that nplanes()==1
   unsigned ni=kernel_.ni(), nj=kernel_.nj();
@@ -114,7 +116,7 @@ unsigned mfpf_norm_corr2d::model_dim()
 }
 
 //: Filter kernel to search with, expressed as a vector
-void mfpf_norm_corr2d::get_kernel_vector(vcl_vector<double>& v) const
+void mfpf_norm_corr2d::get_kernel_vector(std::vector<double>& v) const
 {
   // we assume that nplanes()==1
   unsigned ni=kernel_.ni(), nj=kernel_.nj();
@@ -141,7 +143,7 @@ void mfpf_norm_corr2d::set_overlap_f(double f)
 // Assumes im2[i] has zero mean and unit length as a vector
 // Assumes element (i,j) is im1[i+j*jstep1] etc
 inline double norm_corr(const float* im1, const double* im2,
-                        vcl_ptrdiff_t jstep1, vcl_ptrdiff_t jstep2,
+                        std::ptrdiff_t jstep1, std::ptrdiff_t jstep2,
                         unsigned ni, unsigned nj)
 {
   double sum1=0.0,sum2=0.0,sum_sq=0.0;
@@ -154,8 +156,8 @@ inline double norm_corr(const float* im1, const double* im2,
     }
   unsigned n=ni*nj;
   double mean = sum2/n;
-  double ss = vcl_max(1e-6,sum_sq-n*mean*mean);
-  double s = vcl_sqrt(ss);
+  double ss = std::max(1e-6,sum_sq-n*mean*mean);
+  double s = std::sqrt(ss);
 
   return sum1/s;
 }
@@ -174,15 +176,15 @@ static void normalize(vil_image_view<double>& im)
 
   if (ss<1e-6)
   {
-    vcl_cerr << "Warning: Almost flat region in mfpf_norm_corr2d_builder\n"
-             << "         Size: "<<ni<<" x "<<nj<<vcl_endl;
+    std::cerr << "Warning: Almost flat region in mfpf_norm_corr2d_builder\n"
+             << "         Size: "<<ni<<" x "<<nj<<std::endl;
   }
 
   // Normalise so that im has zero mean and unit sum of squares.
   double mean=sum/(ni*nj);
   ss-=(mean*mean*ni*nj);
   double s=1.0;
-  if (ss>0) s = vcl_sqrt(1.0/ss);
+  if (ss>0) s = std::sqrt(1.0/ss);
   vil_math_scale_and_offset_values(im,s,-s*mean);
 }
 
@@ -190,7 +192,7 @@ static void normalize(vil_image_view<double>& im)
 void mfpf_norm_corr2d::get_sample_vector(const vimt_image_2d_of<float>& image,
                                          const vgl_point_2d<double>& p,
                                          const vgl_vector_2d<double>& u,
-                                         vcl_vector<double>& v)
+                                         std::vector<double>& v)
 {
   assert(image.image().size()>0);
 
@@ -227,12 +229,12 @@ double mfpf_norm_corr2d::radius() const
 {
   // Compute distance to each corner
   double wx = kernel_.ni()-1;
-  double x2 = vcl_max(ref_x_*ref_x_,(ref_x_-wx)*(ref_x_-wx));
+  double x2 = std::max(ref_x_*ref_x_,(ref_x_-wx)*(ref_x_-wx));
   double wy = kernel_.nj()-1;
-  double y2 = vcl_max(ref_y_*ref_y_,(ref_y_-wy)*(ref_y_-wy));
+  double y2 = std::max(ref_y_*ref_y_,(ref_y_-wy)*(ref_y_-wy));
   double r2 = x2+y2;
   if (r2<=1) return 1.0;
-  return vcl_sqrt(r2);
+  return std::sqrt(r2);
 }
 
 //: Evaluate match at p, using u to define scale and orientation
@@ -302,9 +304,9 @@ void mfpf_norm_corr2d::evaluate_region(
   double* r = response.image().top_left_ptr();
   const double* k = kernel_.top_left_ptr();
   const float* s = sample.top_left_ptr();
-  vcl_ptrdiff_t r_jstep = response.image().jstep();
-  vcl_ptrdiff_t s_jstep = sample.jstep();
-  vcl_ptrdiff_t k_jstep = kernel_.jstep();
+  std::ptrdiff_t r_jstep = response.image().jstep();
+  std::ptrdiff_t s_jstep = sample.jstep();
+  std::ptrdiff_t k_jstep = kernel_.jstep();
 
   for (int j=0;j<nj;++j,r+=r_jstep,s+=s_jstep)
   {
@@ -359,8 +361,8 @@ double mfpf_norm_corr2d::search_one_pose(
 
   const double* k = kernel_.top_left_ptr();
   const float* s = sample.top_left_ptr();
-  vcl_ptrdiff_t s_jstep = sample.jstep();
-  vcl_ptrdiff_t k_jstep = kernel_.jstep();
+  std::ptrdiff_t s_jstep = sample.jstep();
+  std::ptrdiff_t k_jstep = kernel_.jstep();
 
   double best_r=-9e99;
   int best_i=-1,best_j=-1;
@@ -410,7 +412,7 @@ bool mfpf_norm_corr2d::overlap(const mfpf_pose& pose1,
 //: Generate points in ref frame that represent boundary
 //  Points of a contour around the shape.
 //  Used for display purposes.
-void mfpf_norm_corr2d::get_outline(vcl_vector<vgl_point_2d<double> >& pts) const
+void mfpf_norm_corr2d::get_outline(std::vector<vgl_point_2d<double> >& pts) const
 {
   pts.resize(7);
   int roi_ni=kernel_.ni();
@@ -438,9 +440,9 @@ void mfpf_norm_corr2d::get_image_of_model(vimt_image_2d_of<vxl_byte>& image) con
 // Method: is_a
 //=======================================================================
 
-vcl_string mfpf_norm_corr2d::is_a() const
+std::string mfpf_norm_corr2d::is_a() const
 {
-  return vcl_string("mfpf_norm_corr2d");
+  return std::string("mfpf_norm_corr2d");
 }
 
 //: Create a copy on the heap and return base class pointer
@@ -453,7 +455,7 @@ mfpf_point_finder* mfpf_norm_corr2d::clone() const
 // Method: print
 //=======================================================================
 
-void mfpf_norm_corr2d::print_summary(vcl_ostream& os) const
+void mfpf_norm_corr2d::print_summary(std::ostream& os) const
 {
   os<<"{  size: "<<kernel_.ni()<<" x "<<kernel_.nj();
   mfpf_point_finder::print_summary(os);
@@ -496,9 +498,9 @@ void mfpf_norm_corr2d::b_read(vsl_b_istream& bfs)
       else            vsl_b_read(bfs,overlap_f_);
       break;
     default:
-      vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&)\n"
-               << "           Unknown version number "<< version << vcl_endl;
-      bfs.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
+      std::cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&)\n"
+               << "           Unknown version number "<< version << std::endl;
+      bfs.is().clear(std::ios::badbit); // Set an unrecoverable IO error on stream
       return;
   }
 }
@@ -509,8 +511,8 @@ bool mfpf_norm_corr2d::operator==(const mfpf_norm_corr2d& nc) const
   if (!base_equality(nc)) return false;
   if (kernel_.ni()!=nc.kernel_.ni()) return false;
   if (kernel_.nj()!=nc.kernel_.nj()) return false;
-  if (vcl_fabs(ref_x_-nc.ref_x_)>1e-6) return false;
-  if (vcl_fabs(ref_y_-nc.ref_y_)>1e-6) return false;
+  if (std::fabs(ref_x_-nc.ref_x_)>1e-6) return false;
+  if (std::fabs(ref_y_-nc.ref_y_)>1e-6) return false;
   if (kernel_.size()!=nc.kernel_.size()) return false;
   if (kernel_.size()==0) return true;  // ssd fails on empty
   return (vil_math_ssd(kernel_,nc.kernel_,double(0))<1e-4);

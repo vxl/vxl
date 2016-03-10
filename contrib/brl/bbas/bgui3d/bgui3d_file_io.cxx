@@ -3,7 +3,9 @@
 //:
 // \file
 
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iostream>
 
 #include <Inventor/nodes/SoNode.h>
 #include <Inventor/nodes/SoSeparator.h>
@@ -17,7 +19,7 @@
 
 //: Export the scene as IV
 void
-bgui3d_export_iv( SoNode* scene_root, const vcl_string& filename )
+bgui3d_export_iv( SoNode* scene_root, const std::string& filename )
 {
   SoOutput out;
   out.openFile(filename.c_str());
@@ -31,7 +33,7 @@ bgui3d_export_iv( SoNode* scene_root, const vcl_string& filename )
 
 //: Export the scene as VRML
 void
-bgui3d_export_vrml(SoNode* scene_root, const vcl_string& filename)
+bgui3d_export_vrml(SoNode* scene_root, const std::string& filename)
 {
   SoOutput out;
   out.openFile(filename.c_str());
@@ -52,7 +54,7 @@ bgui3d_export_vrml(SoNode* scene_root, const vcl_string& filename)
 
 //: Export the scene as VRML 2.0
 void
-bgui3d_export_vrml2(SoNode* scene_root, const vcl_string& filename)
+bgui3d_export_vrml2(SoNode* scene_root, const std::string& filename)
 {
   SoOutput out;
   out.openFile(filename.c_str());
@@ -71,7 +73,7 @@ bgui3d_export_vrml2(SoNode* scene_root, const vcl_string& filename)
 }
 
 
-SoNode* bgui3d_import_file(const vcl_string& filename, vcl_ostream& os)
+SoNode* bgui3d_import_file(const std::string& filename, std::ostream& os)
 {
   // Open the input file
   SoInput mySceneInput;
@@ -114,7 +116,7 @@ SoNode* bgui3d_import_file(const vcl_string& filename, vcl_ostream& os)
     SoInteraction::init();
     SoInput in;
     in.openFile(argv[1]);
-    vcl_cout << "Reading...\n"
+    std::cout << "Reading...\n"
     SoSeparator *root = SoDB::readAll(&in);
 
     if (root) {
@@ -122,14 +124,14 @@ SoNode* bgui3d_import_file(const vcl_string& filename, vcl_ostream& os)
       SbString hdr = in.getHeader();
       in.closeFile();
 
-      vcl_cout << "Converting...\n"
+      std::cout << "Converting...\n"
       SoToVRML2Action tovrml2;
       tovrml2.apply(root);
       SoVRMLGroup *newroot = tovrml2.getVRML2SceneGraph();
       newroot->ref();
       root->unref();
 
-      vcl_cout << "Writing...\n"
+      std::cout << "Writing...\n"
 
       SoOutput out;
       out.openFile("out.wrl");

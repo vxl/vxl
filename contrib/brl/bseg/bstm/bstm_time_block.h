@@ -16,7 +16,9 @@
 #include <bstm/basic/bstm_block_id.h>
 #include <boxm2/basic/boxm2_array_1d.h>
 #include <vnl/vnl_vector_fixed.h>
-#include <vcl_iosfwd.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iosfwd>
 
 //smart pointer stuff
 #include <vbl/vbl_ref_count.h>
@@ -31,7 +33,7 @@ class bstm_time_block : public vbl_ref_count
  public:
 
   //: creates possibly refined time block from existing data
-  bstm_time_block(bstm_block_id id, bstm_block_metadata data, char* buffer, vcl_size_t length);
+  bstm_time_block(bstm_block_id id, bstm_block_metadata data, char* buffer, std::size_t length);
 
   //: creates possibly refined time block with specified number of elements
   bstm_time_block(bstm_block_id id, bstm_block_metadata data, unsigned num_el);
@@ -62,7 +64,7 @@ class bstm_time_block : public vbl_ref_count
   bool                      b_write(char* buffer);
 
   //: filename for all block files stored by bstm_scenes
-  vcl_string                filename()          const { return "time_block.bin"; }
+  std::string                filename()          const { return "time_block.bin"; }
 
   //: accessors
   bstm_block_id&            block_id()          { return block_id_; }         //somehow make this a const return..
@@ -123,7 +125,7 @@ class bstm_time_block : public vbl_ref_count
 typedef vbl_smart_ptr<bstm_time_block> bstm_time_block_sptr;
 
 //: output stream
-vcl_ostream& operator <<(vcl_ostream &s, bstm_time_block& block);
+std::ostream& operator <<(std::ostream &s, bstm_time_block& block);
 
 //: Binary write boxm_update_bit_scene_manager scene to stream
 void vsl_b_write(vsl_b_ostream& os, bstm_time_block const& scene);

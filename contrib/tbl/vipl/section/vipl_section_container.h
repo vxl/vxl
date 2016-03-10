@@ -5,8 +5,10 @@
 #pragma interface
 #endif
 
-#include <vcl_vector.h>
-#include <vcl_cstddef.h>
+#include <vector>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <cstddef>
 
 template <  class DataType > class vipl_section_descriptor; //template forward reference
 template <  class DataType > class vipl_section_iterator; //template forward reference
@@ -24,19 +26,19 @@ class vipl_section_container
   typedef vipl_section_descriptor< DataType >* pointer;
   typedef vipl_section_iterator< DataType > iterator;
   typedef const vipl_section_iterator< DataType > const_iterator;
-  typedef vcl_ptrdiff_t difference_type;
-  typedef vcl_size_t size_type;
+  typedef std::ptrdiff_t difference_type;
+  typedef std::size_t size_type;
  protected:
   // declare data, accessors from codegen
   vipl_section_container< DataType >* hsthe;
   // allow for subclasses with pass-by-value
-  vcl_vector< int > hsimgsz;
+  std::vector< int > hsimgsz;
   // the dimensions of image
-  vcl_vector< int > hsimgstart;
+  std::vector< int > hsimgstart;
   // the starting index of image
-  vcl_vector< int > hssecsz;
+  std::vector< int > hssecsz;
   // the size of a "normal" section
-  vcl_vector< int > hsoverlap;
+  std::vector< int > hsoverlap;
   // the amount to overlap sections
   DataType* hsrawdata;
   // pointer to raw block of data for section (may ==0)
@@ -130,18 +132,18 @@ class vipl_section_container
   vipl_section_container< DataType >* the() const{ return hsthe;}
   vipl_section_container< DataType >* & ref_the(){ return hsthe;}
   void put_the( vipl_section_container< DataType >* v){ hsthe = v;}
-  vcl_vector< int > const & imgsz() const{ return hsimgsz;}
-  vcl_vector< int > & ref_imgsz(){ return hsimgsz;}
-  void put_imgsz( vcl_vector< int > const & v){ hsimgsz = v;}
-  vcl_vector< int > const & imgstart() const{ return hsimgstart;}
-  vcl_vector< int > & ref_imgstart(){ return hsimgstart;}
-  void put_imgstart( vcl_vector< int > const & v){ hsimgstart = v;}
-  vcl_vector< int > const & secsz() const{ return hssecsz;}
-  vcl_vector< int > & ref_secsz(){ return hssecsz;}
-  void put_secsz( vcl_vector< int > const & v){ hssecsz = v;}
-  vcl_vector< int > const & overlap() const{ return hsoverlap;}
-  vcl_vector< int > & ref_overlap(){ return hsoverlap;}
-  void put_overlap( vcl_vector< int > const & v){ hsoverlap = v;}
+  std::vector< int > const & imgsz() const{ return hsimgsz;}
+  std::vector< int > & ref_imgsz(){ return hsimgsz;}
+  void put_imgsz( std::vector< int > const & v){ hsimgsz = v;}
+  std::vector< int > const & imgstart() const{ return hsimgstart;}
+  std::vector< int > & ref_imgstart(){ return hsimgstart;}
+  void put_imgstart( std::vector< int > const & v){ hsimgstart = v;}
+  std::vector< int > const & secsz() const{ return hssecsz;}
+  std::vector< int > & ref_secsz(){ return hssecsz;}
+  void put_secsz( std::vector< int > const & v){ hssecsz = v;}
+  std::vector< int > const & overlap() const{ return hsoverlap;}
+  std::vector< int > & ref_overlap(){ return hsoverlap;}
+  void put_overlap( std::vector< int > const & v){ hsoverlap = v;}
   DataType* rawdata() const{ return hsrawdata;}
   DataType* & ref_rawdata(){ return hsrawdata;}
   void put_rawdata( DataType* v){ hsrawdata = v;}

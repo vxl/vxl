@@ -1,9 +1,11 @@
 //:
 // \file
 #include "sdet_detector_params.h"
-#include <vcl_string.h>
-#include <vcl_sstream.h>
-#include <vcl_iostream.h>
+#include <string>
+#include <sstream>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iostream>
 
 //------------------------------------------------------------------------
 // Constructors
@@ -124,7 +126,7 @@ void sdet_detector_params::set_close_borders(bool cb)
 //
 bool sdet_detector_params::SanityCheck()
 {
-  vcl_stringstream msg;
+  std::stringstream msg;
   bool valid = true;
 
   if (aggressive_junction_closure >0 )
@@ -232,9 +234,9 @@ bool sdet_detector_params::SanityCheck()
   return valid;
 }
 
-vcl_ostream& operator << (vcl_ostream& os, const sdet_detector_params& dp)
+std::ostream& operator << (std::ostream& os, const sdet_detector_params& dp)
 {
-  vcl_string sa, st;
+  std::string sa, st;
   if (dp.aggressive_junction_closure>0)
     sa = "yes";
   else
@@ -246,20 +248,20 @@ vcl_ostream& operator << (vcl_ostream& os, const sdet_detector_params& dp)
 
   return
   os << "Edge Detector Params:\n"
-     << " Smooth Sigma " << dp.smooth << vcl_endl
-     << " Noise Weight " << dp.noise_weight << vcl_endl
-     << " Noise Multiplier " << dp.noise_multiplier << vcl_endl
-     << " Automatic Threshold? " << st << vcl_endl
-     << " Aggressive Closure " << sa << vcl_endl
-     << " Recover Junctions " << dp.junctionp << vcl_endl
-     << " Minimum Chain Length " << dp.minLength << vcl_endl
-     << " Peaks Only " << dp.peaks_only << vcl_endl
-     << " Valleys Only " << dp.valleys_only << vcl_endl << vcl_endl
+     << " Smooth Sigma " << dp.smooth << std::endl
+     << " Noise Weight " << dp.noise_weight << std::endl
+     << " Noise Multiplier " << dp.noise_multiplier << std::endl
+     << " Automatic Threshold? " << st << std::endl
+     << " Aggressive Closure " << sa << std::endl
+     << " Recover Junctions " << dp.junctionp << std::endl
+     << " Minimum Chain Length " << dp.minLength << std::endl
+     << " Peaks Only " << dp.peaks_only << std::endl
+     << " Valleys Only " << dp.valleys_only << std::endl << std::endl
      << "Corner Detection Params:\n"
-     << " Corner Angle " << dp.corner_angle << vcl_endl
-     << " Corner Separation " << dp.separation  << vcl_endl
-     << " Min Corner Length " << dp.min_corner_length << vcl_endl
-     << " Close borders " << dp.borderp << vcl_endl << vcl_endl;
+     << " Corner Angle " << dp.corner_angle << std::endl
+     << " Corner Separation " << dp.separation  << std::endl
+     << " Min Corner Length " << dp.min_corner_length << std::endl
+     << " Close borders " << dp.borderp << std::endl << std::endl;
 }
 #if 0
 //------------------------------------------------------------

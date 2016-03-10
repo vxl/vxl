@@ -21,18 +21,18 @@ class vpgl_ba_fixed_k_lsqr : public vpgl_bundle_adjust_lsqr
   //: Constructor
   // \note image points are not homogeneous because they require finite points
   //       to measure projection error
-  vpgl_ba_fixed_k_lsqr(const vcl_vector<vpgl_calibration_matrix<double> >& K,
-                       const vcl_vector<vgl_point_2d<double> >& image_points,
-                       const vcl_vector<vcl_vector<bool> >& mask);
+  vpgl_ba_fixed_k_lsqr(const std::vector<vpgl_calibration_matrix<double> >& K,
+                       const std::vector<vgl_point_2d<double> >& image_points,
+                       const std::vector<std::vector<bool> >& mask);
 
   //: Constructor
   //  Each image point is assigned an inverse covariance (error projector) matrix
   // \note image points are not homogeneous because they require finite points
   //       to measure projection error
-  vpgl_ba_fixed_k_lsqr(const vcl_vector<vpgl_calibration_matrix<double> >& K,
-                       const vcl_vector<vgl_point_2d<double> >& image_points,
-                       const vcl_vector<vnl_matrix<double> >& inv_covars,
-                       const vcl_vector<vcl_vector<bool> >& mask);
+  vpgl_ba_fixed_k_lsqr(const std::vector<vpgl_calibration_matrix<double> >& K,
+                       const std::vector<vgl_point_2d<double> >& image_points,
+                       const std::vector<vnl_matrix<double> >& inv_covars,
+                       const std::vector<std::vector<bool> >& mask);
 
   // Destructor
   virtual ~vpgl_ba_fixed_k_lsqr() {}
@@ -93,18 +93,18 @@ class vpgl_ba_fixed_k_lsqr : public vpgl_bundle_adjust_lsqr
 
   //: Create the parameter vector \p a from a vector of cameras
   static vnl_vector<double>
-  create_param_vector(const vcl_vector<vpgl_perspective_camera<double> >& cameras);
+  create_param_vector(const std::vector<vpgl_perspective_camera<double> >& cameras);
 
   //: Create the parameter vector \p b from a vector of 3D points
   static vnl_vector<double>
-  create_param_vector(const vcl_vector<vgl_point_3d<double> >& world_points);
+  create_param_vector(const std::vector<vgl_point_3d<double> >& world_points);
 
 
  protected:
   //: The fixed internal camera calibration
-  vcl_vector<vpgl_calibration_matrix<double> > K_;
+  std::vector<vpgl_calibration_matrix<double> > K_;
   //: The fixed internal camera calibration in matrix form
-  vcl_vector<vnl_double_3x3> Km_;
+  std::vector<vnl_double_3x3> Km_;
 };
 
 

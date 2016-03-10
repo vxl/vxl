@@ -40,7 +40,9 @@
 //\endverbatim
 //
 //-------------------------------------------------------------------------
-#include <vcl_vector.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <vector>
 #include <vbl/vbl_array_2d.h>
 #include <vil/vil_image_view.h>
 #include <vgl/vgl_point_2d.h>
@@ -117,22 +119,22 @@ class sdet_nms
 
   //: apply NMS to the given data (also collect edgel tokens)
   void apply( bool collect_tokens,
-              vcl_vector<vgl_point_2d<double> >& loc,
-              vcl_vector<double>& orientation,
-              vcl_vector<double>& mag);
+              std::vector<vgl_point_2d<double> >& loc,
+              std::vector<double>& orientation,
+              std::vector<double>& mag);
 
   void apply( bool collect_tokens,
-              vcl_vector<vgl_point_2d<double> >& loc,
-              vcl_vector<double>& orientation,
-              vcl_vector<double>& mag,
-              vcl_vector<double>& d2f);
+              std::vector<vgl_point_2d<double> >& loc,
+              std::vector<double>& orientation,
+              std::vector<double>& mag,
+              std::vector<double>& d2f);
 
   void apply( bool collect_tokens,
-              vcl_vector<vgl_point_2d<double> >& loc,
-              vcl_vector<double>& orientation,
-              vcl_vector<double>& mag,
-              vcl_vector<double>& d2f,
-              vcl_vector<vgl_point_2d<int> >& pix_loc);
+              std::vector<vgl_point_2d<double> >& loc,
+              std::vector<double>& orientation,
+              std::vector<double>& mag,
+              std::vector<double>& d2f,
+              std::vector<vgl_point_2d<int> >& pix_loc);
 
   void clear();
 

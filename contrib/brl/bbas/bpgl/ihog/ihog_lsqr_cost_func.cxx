@@ -105,7 +105,7 @@ ihog_lsqr_cost_func::f(vnl_vector<double> const& x, vnl_vector<double>& fx)
       //if (nsamples)
       //  to_mask_samples /= nsamples;
       //else
-      //  vcl_cerr << "error: mask sums to 0\n";
+      //  std::cerr << "error: mask sums to 0\n";
       if (from_mask_) {
         // mask_samples already filled in - multiply by second mask to get AND
         mask_samples = element_product<double>(mask_samples,to_mask_samples);

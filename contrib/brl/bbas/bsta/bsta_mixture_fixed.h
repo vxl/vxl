@@ -16,8 +16,10 @@
 #include "bsta_distribution.h"
 #include "bsta_sampler.h"
 #include <vcl_cassert.h>
-#include <vcl_algorithm.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <algorithm>
+#include <iostream>
 #include <vpdl/vpdt/vpdt_dist_traits.h>
 #include <vnl/vnl_random.h>
 
@@ -191,7 +193,7 @@ class bsta_mixture_fixed : public bsta_distribution<typename dist_::math_type,
   }
 
   //: Sort the components in order of decreasing weight
-  void sort() { vcl_sort(components_, components_+num_components_, sort_weight() ); }
+  void sort() { std::sort(components_, components_+num_components_, sort_weight() ); }
 
   //: Sort the components using any StrictWeakOrdering function
   // The prototype should be
@@ -202,13 +204,13 @@ class bsta_mixture_fixed : public bsta_distribution<typename dist_::math_type,
   // \endcode
   template <class comp_type_>
   void sort(comp_type_ comp)
-  { vcl_sort(components_, components_+num_components_, sort_adaptor<comp_type_>(comp)); }
+  { std::sort(components_, components_+num_components_, sort_adaptor<comp_type_>(comp)); }
 
   //: Sort the first components up to index idx
   template <class comp_type_>
   void sort(comp_type_ comp, unsigned int idx)
   { assert(idx < s);
-    vcl_sort(components_, components_+idx+1, sort_adaptor<comp_type_>(comp)); }
+    std::sort(components_, components_+idx+1, sort_adaptor<comp_type_>(comp)); }
 
   //: sample from the mixture
   //  randomly selects a component wrt normalized component weights, then for now returns the mean of the selected component
@@ -220,8 +222,8 @@ class bsta_mixture_fixed : public bsta_distribution<typename dist_::math_type,
     for (unsigned i=0; i<num_components_; ++i)
       sum += components_[i].weight;
 
-    vcl_vector<float> ps;
-    vcl_vector<unsigned> ids;
+    std::vector<float> ps;
+    std::vector<unsigned> ids;
     for (unsigned i=0; i<num_components_; ++i) {
       float w;
       if (sum > 0)
@@ -231,7 +233,7 @@ class bsta_mixture_fixed : public bsta_distribution<typename dist_::math_type,
       ps.push_back(w);
       ids.push_back(i);
     }
-    vcl_vector<unsigned> out;
+    std::vector<unsigned> out;
     bsta_sampler<unsigned>::sample(ids, ps, 1, out, rng);
     assert(out.size() == 1);
 
@@ -241,11 +243,11 @@ class bsta_mixture_fixed : public bsta_distribution<typename dist_::math_type,
 };
 
 template <class dist_, unsigned s>
-inline vcl_ostream& operator<< (vcl_ostream& os,
+inline std::ostream& operator<< (std::ostream& os,
                                 bsta_mixture_fixed<dist_,s> const& no)
 {
   for (unsigned i=0; i<no.num_components(); ++i)
-    os<<"Component #"<<i<<" weight=: "<<no.weight(i)<<"distribution: "<<no.distribution(i)<<vcl_endl;
+    os<<"Component #"<<i<<" weight=: "<<no.weight(i)<<"distribution: "<<no.distribution(i)<<std::endl;
   return os;
 }
 

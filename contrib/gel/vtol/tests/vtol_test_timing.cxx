@@ -8,7 +8,7 @@
 
 static void vtol_test_timing()
 {
-  vcl_cout << "testing topology timing\n";
+  std::cout << "testing topology timing\n";
 
   vul_timer t;
   // make a network of s^2 vertices and edges on an s by s grid
@@ -23,8 +23,8 @@ static void vtol_test_timing()
       verts[off] = new vtol_vertex_2d(x,y);
     }
   }
-  vcl_cout << "Time to construct " << s*s << " vertices " << t.real()
-           << " msecs\n" << vcl_flush;
+  std::cout << "Time to construct " << s*s << " vertices " << t.real()
+           << " msecs\n" << std::flush;
 
   // make the edges
   edge_list edges(2*s*s);
@@ -44,8 +44,8 @@ static void vtol_test_timing()
       edges[nedges++] = new vtol_edge_2d(verts[off-s], verts[off]);
     }
   }
-  vcl_cout << "Time to construct " << nedges << " edges " << t.real()
-           << " msecs\n" << vcl_flush;
+  std::cout << "Time to construct " << nedges << " edges " << t.real()
+           << " msecs\n" << std::flush;
   TEST("number of edges", nedges, 2*(s-1)*s);
 
   // count the outgoing edges of all vertices
@@ -56,8 +56,8 @@ static void vtol_test_timing()
     edge_list vedges; (*vit)->edges(vedges);
     n_vedges += vedges.size();
   }
-  vcl_cout << "Time to count edges per vertex " << t.real()
-           << " msecs\n" << vcl_flush;
+  std::cout << "Time to count edges per vertex " << t.real()
+           << " msecs\n" << std::flush;
   TEST("number of edges per vertex", n_vedges, 4*(s-1)*s);
 
   // make the faces
@@ -78,8 +78,8 @@ static void vtol_test_timing()
       faces[nfaces++]= new vtol_face_2d(l);
     }
   }
-  vcl_cout << "Time to construct " << nfaces << " faces " << t.real()
-           << " msecs\n" << vcl_flush;
+  std::cout << "Time to construct " << nfaces << " faces " << t.real()
+           << " msecs\n" << std::flush;
   TEST("number of faces", nfaces, (s-1)*(s-1));
 
   // count the faces adjacent to all vertices
@@ -90,7 +90,7 @@ static void vtol_test_timing()
     face_list vfaces; (*vit)->faces(vfaces);
     n_vfaces += vfaces.size();
   }
-  vcl_cout << "Time to count faces per vertex " << t.real() << " msecs\n";
+  std::cout << "Time to count faces per vertex " << t.real() << " msecs\n";
   TEST("number of faces per vertex", n_vfaces, 4*(s-1)*(s-1));
 }
 

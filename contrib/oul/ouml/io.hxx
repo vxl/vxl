@@ -3,44 +3,46 @@
 // miscellaneous io operators
 
 #include "io.h"
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iostream>
 
 template <class T>
-vcl_ostream &operator <<(vcl_ostream &os, const vnl_vector<T> &vec)
+std::ostream &operator <<(std::ostream &os, const vnl_vector<T> &vec)
 {
   typename vnl_vector<T>::const_iterator iter, end_iter;
 
   end_iter = vec.end();
-  vcl_cout << "<Vector: ";
+  std::cout << "<Vector: ";
   for (iter=vec.begin(); iter!=end_iter; iter++)
   {
-    vcl_cout << ' ' << *iter;
+    std::cout << ' ' << *iter;
   }
-  vcl_cout << "> ";
+  std::cout << "> ";
 
   return os;
 }
 
 template <class T>
-vcl_ostream &operator <<(vcl_ostream &os, const vcl_vector<T> &vec)
+std::ostream &operator <<(std::ostream &os, const std::vector<T> &vec)
 {
-  typename vcl_vector<T>::const_iterator iter, end_iter;
+  typename std::vector<T>::const_iterator iter, end_iter;
 
   end_iter = vec.end();
-  vcl_cout << "<Vector: ";
+  std::cout << "<Vector: ";
   for (iter=vec.begin(); iter!=end_iter; iter++)
   {
-    vcl_cout << ' ' << *iter;
+    std::cout << ' ' << *iter;
   }
-  vcl_cout << "> ";
+  std::cout << "> ";
 
   return os;
 }
 
 template <class T, class S>
-vcl_ostream &operator<<(vcl_ostream &os, const vcl_map<T, S> &omap)
+std::ostream &operator<<(std::ostream &os, const std::map<T, S> &omap)
 {
-  typename vcl_map<T, S>::const_iterator iter, end_iter;
+  typename std::map<T, S>::const_iterator iter, end_iter;
 
   end_iter = omap.end();
   os << "<Map: ";
@@ -54,9 +56,9 @@ vcl_ostream &operator<<(vcl_ostream &os, const vcl_map<T, S> &omap)
 }
 
 template <class T>
-vcl_ostream &operator <<(vcl_ostream &os, const vcl_set<T> &vec)
+std::ostream &operator <<(std::ostream &os, const std::set<T> &vec)
 {
-  typename vcl_set<T>::const_iterator iter, end_iter;
+  typename std::set<T>::const_iterator iter, end_iter;
 
   end_iter = vec.end();
   os << "<Set: ";
@@ -70,7 +72,7 @@ vcl_ostream &operator <<(vcl_ostream &os, const vcl_set<T> &vec)
 }
 
 
-vcl_ostream &operator<<(vcl_ostream &os, const vil1_rgb<unsigned char> &colour)
+std::ostream &operator<<(std::ostream &os, const vil1_rgb<unsigned char> &colour)
 {
   os << "<RGB = " << (int)colour.R() << ", " << (int)colour.G() << ", "
      << (int)colour.B() << ">\n";

@@ -2,9 +2,11 @@
 #define bstm_block_id_h_
 //:
 // \file
-#include <vcl_iostream.h>
-#include <vcl_sstream.h>
-#include <vcl_string.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iostream>
+#include <sstream>
+#include <string>
 #include <vsl/vsl_binary_io.h>
 
 //smart pointer stuff
@@ -52,14 +54,14 @@ class bstm_block_id : public boxm2_block_id
   inline bool operator>=(bstm_block_id const& v) const { return !operator<(v); }
 
   //: to string
-  virtual vcl_string to_string() const;
+  virtual std::string to_string() const;
 };
 
 
 typedef vbl_smart_ptr<bstm_block_id> bstm_block_id_sptr;
 
 //: scene output stream operator
-vcl_ostream& operator <<(vcl_ostream &s, bstm_block_id const& id);
+std::ostream& operator <<(std::ostream &s, bstm_block_id const& id);
 
 
 //------IO Necessary for smart pointer linking ---------------------------------

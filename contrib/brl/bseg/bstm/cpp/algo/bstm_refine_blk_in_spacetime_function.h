@@ -10,7 +10,9 @@
 #include <boct/boct_bit_tree.h>
 #include <vnl/vnl_vector.h>
 #include <vnl/vnl_vector_fixed.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iostream>
 #include <bstm/io/bstm_cache.h>
 
 class bstm_refine_blk_in_spacetime_function
@@ -26,9 +28,9 @@ class bstm_refine_blk_in_spacetime_function
   bstm_refine_blk_in_spacetime_function() {}
 
   //: initialize generic data base pointers as their data type
-  bool init_data(bstm_time_block* t_blk, bstm_block* blk, vcl_vector<bstm_data_base*> & datas, float prob_thresh);
+  bool init_data(bstm_time_block* t_blk, bstm_block* blk, std::vector<bstm_data_base*> & datas, float prob_thresh);
 
-  bool refine(vcl_vector<bstm_data_base*>& datas);
+  bool refine(std::vector<bstm_data_base*>& datas);
 
  private:
 
@@ -84,7 +86,7 @@ class bstm_refine_blk_in_spacetime_function
 //MAIN REFINE FUNCTION
 ////////////////////////////////////////////////////////////////////////////////
 void bstm_refine_block_spacetime( bstm_time_block* t_blk, bstm_block* blk,
-                         vcl_vector<bstm_data_base*> & datas,
+                         std::vector<bstm_data_base*> & datas,
                          float prob_thresh);
 
 #endif //bstm_refine_blk_in_spacetime_function_h

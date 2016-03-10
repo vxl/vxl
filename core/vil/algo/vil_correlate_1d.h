@@ -6,10 +6,11 @@
 // \brief 1D Convolution with cunning boundary options
 // \author Tim Cootes (based on work by fsm)
 
-#include <vcl_algorithm.h>
-#include <vcl_cstring.h>
+#include <vcl_compiler.h>
+#include <algorithm>
+#include <cstring>
 #include <vcl_cassert.h>
-#include <vcl_iostream.h>
+#include <iostream>
 #include <vil/vil_image_view.h>
 #include <vil/vil_image_resource.h>
 #include <vil/vil_property.h>
@@ -18,10 +19,10 @@
 //: Correlate kernel[x] (x in [k_lo,k_hi]) with srcT
 // Assumes dest and src same size (nx)
 template <class srcT, class destT, class kernelT, class accumT>
-inline void vil_correlate_1d(const srcT* src0, unsigned nx, vcl_ptrdiff_t s_step,
-                             destT* dest0, vcl_ptrdiff_t d_step,
+inline void vil_correlate_1d(const srcT* src0, unsigned nx, std::ptrdiff_t s_step,
+                             destT* dest0, std::ptrdiff_t d_step,
                              const kernelT* kernel,
-                             vcl_ptrdiff_t k_lo, vcl_ptrdiff_t k_hi,
+                             std::ptrdiff_t k_lo, std::ptrdiff_t k_hi,
                              accumT ac,
                              vil_convolve_boundary_option start_option,
                              vil_convolve_boundary_option end_option)
@@ -59,17 +60,17 @@ template <class srcT, class destT, class kernelT, class accumT>
 inline void vil_correlate_1d(const vil_image_view<srcT>& src_im,
                              vil_image_view<destT>& dest_im,
                              const kernelT* kernel,
-                             vcl_ptrdiff_t k_lo, vcl_ptrdiff_t k_hi,
+                             std::ptrdiff_t k_lo, std::ptrdiff_t k_hi,
                              accumT ac,
                              vil_convolve_boundary_option start_option,
                              vil_convolve_boundary_option end_option)
 {
   unsigned ni = src_im.ni();
   unsigned nj = src_im.nj();
-  vcl_ptrdiff_t s_istep = src_im.istep(), s_jstep = src_im.jstep();
+  std::ptrdiff_t s_istep = src_im.istep(), s_jstep = src_im.jstep();
 
   dest_im.set_size(ni,nj,src_im.nplanes());
-  vcl_ptrdiff_t d_istep = dest_im.istep(),d_jstep = dest_im.jstep();
+  std::ptrdiff_t d_istep = dest_im.istep(),d_jstep = dest_im.jstep();
 
   for (unsigned int p=0;p<src_im.nplanes();++p)
   {
@@ -108,7 +109,7 @@ template <class destT, class kernelT, class accumT>
 vil_image_resource_sptr vil_correlate_1d(
                const vil_image_resource_sptr& src_im,
                const destT dt,
-               const kernelT* kernel, vcl_ptrdiff_t k_lo, vcl_ptrdiff_t k_hi,
+               const kernelT* kernel, std::ptrdiff_t k_lo, std::ptrdiff_t k_hi,
                const accumT ac,
                vil_convolve_boundary_option start_option,
                vil_convolve_boundary_option end_option);
@@ -120,7 +121,7 @@ class vil_correlate_1d_resource : public vil_image_resource
   //: Construct a correlate filter.
   // You can't create one of these directly, use vil_correlate_1d instead
   vil_correlate_1d_resource(const vil_image_resource_sptr& src,
-                            const kernelT* kernel, vcl_ptrdiff_t k_lo, vcl_ptrdiff_t k_hi,
+                            const kernelT* kernel, std::ptrdiff_t k_lo, std::ptrdiff_t k_hi,
                             vil_convolve_boundary_option start_option,
                             vil_convolve_boundary_option end_option)  :
       src_(src), kernel_(kernel), klo_(k_lo), khi_(k_hi),
@@ -133,7 +134,7 @@ class vil_correlate_1d_resource : public vil_image_resource
 
   friend vil_image_resource_sptr vil_correlate_1d VCL_NULL_TMPL_ARGS (
     const vil_image_resource_sptr& src_im, const destT dt, const kernelT* kernel,
-    vcl_ptrdiff_t k_lo, vcl_ptrdiff_t k_hi, const accumT ac,
+    std::ptrdiff_t k_lo, std::ptrdiff_t k_hi, const accumT ac,
     vil_convolve_boundary_option start_option,
     vil_convolve_boundary_option end_option);
 
@@ -142,9 +143,9 @@ class vil_correlate_1d_resource : public vil_image_resource
                                                  unsigned j0, unsigned nj) const
   {
     if (i0 + ni > src_->ni() || j0 + nj > src_->nj())  return 0;
-    const unsigned lsrc = (unsigned)vcl_max(0,int(i0+klo_)); // lhs of input window
-    const unsigned hsrc = vcl_min(src_->ni(),(unsigned int)(i0+ni-klo_+khi_)); // 1+rhs of input window.
-    const unsigned lboundary = vcl_min((unsigned) -klo_, i0); // width of lhs boundary area.
+    const unsigned lsrc = (unsigned)std::max(0,int(i0+klo_)); // lhs of input window
+    const unsigned hsrc = std::min(src_->ni(),(unsigned int)(i0+ni-klo_+khi_)); // 1+rhs of input window.
+    const unsigned lboundary = std::min((unsigned) -klo_, i0); // width of lhs boundary area.
     assert (hsrc > lsrc);
     vil_image_view_base_sptr vs = src_->get_view(lsrc, hsrc-lsrc, j0, nj);
     vil_image_view<destT> dest(vs->ni(), vs->nj(), vs->nplanes());
@@ -184,7 +185,7 @@ class vil_correlate_1d_resource : public vil_image_resource
   //: Put the data in this view back into the image source.
   virtual bool put_view(const vil_image_view_base&  /*im*/, unsigned  /*i0*/, unsigned  /*j0*/)
   {
-    vcl_cerr << "WARNING: vil_correlate_1d_resource::put_back\n"
+    std::cerr << "WARNING: vil_correlate_1d_resource::put_back\n"
              << "\tYou can't push data back into a correlate filter.\n";
     return false;
   }
@@ -192,7 +193,7 @@ class vil_correlate_1d_resource : public vil_image_resource
   //: Extra property information
   virtual bool get_property(char const* tag, void* property_value = 0) const
   {
-    if (0==vcl_strcmp(tag, vil_property_read_only))
+    if (0==std::strcmp(tag, vil_property_read_only))
       return property_value ? (*static_cast<bool*>(property_value)) = true : true;
 
     return src_->get_property(tag, property_value);
@@ -201,7 +202,7 @@ class vil_correlate_1d_resource : public vil_image_resource
  protected:
   vil_image_resource_sptr src_;
   const kernelT* kernel_;
-  vcl_ptrdiff_t klo_, khi_;
+  std::ptrdiff_t klo_, khi_;
   vil_convolve_boundary_option start_option_, end_option_;
 };
 
@@ -214,7 +215,7 @@ template <class destT, class kernelT, class accumT>
 vil_image_resource_sptr vil_correlate_1d(
                          const vil_image_resource_sptr& src_im,
                          const destT  /*dt*/,
-                         const kernelT* kernel, vcl_ptrdiff_t k_lo, vcl_ptrdiff_t k_hi,
+                         const kernelT* kernel, std::ptrdiff_t k_lo, std::ptrdiff_t k_hi,
                          const accumT,
                          vil_convolve_boundary_option start_option,
                          vil_convolve_boundary_option end_option)

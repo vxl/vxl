@@ -8,7 +8,9 @@
 
 #include <bprb/bprb_func_process.h>
 
-#include <vcl_fstream.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <fstream>
 #include <boxm2/boxm2_scene.h>
 
 namespace boxm2_scene_bbox_process_globals
@@ -20,11 +22,11 @@ bool boxm2_scene_bbox_process_cons(bprb_func_process& pro)
 {
   using namespace boxm2_scene_bbox_process_globals;
   //process takes 1 input, the scene
-  vcl_vector<vcl_string> input_types_(n_inputs_);
+  std::vector<std::string> input_types_(n_inputs_);
   input_types_[0] = "boxm2_scene_sptr";
 
   // process has 3 outputs:
-  vcl_vector<vcl_string>  output_types_(n_outputs_);
+  std::vector<std::string>  output_types_(n_outputs_);
   output_types_[0] = "double";// minx
   output_types_[1] = "double";// miny
   output_types_[2] = "double";// minz
@@ -39,7 +41,7 @@ bool boxm2_scene_bbox_process(bprb_func_process& pro)
   using namespace boxm2_scene_bbox_process_globals;
 
   if ( pro.n_inputs() < n_inputs_ ){
-    vcl_cout << pro.name() << ": The input number should be " << n_inputs_<< vcl_endl;
+    std::cout << pro.name() << ": The input number should be " << n_inputs_<< std::endl;
     return false;
   }
 

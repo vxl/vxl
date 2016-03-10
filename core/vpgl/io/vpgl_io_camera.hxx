@@ -16,8 +16,9 @@
 #include <vpgl/io/vpgl_io_local_rational_camera.h>
 
 #include <vsl/vsl_binary_io.h>
-#include <vcl_string.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <string>
+#include <iostream>
 
 
 //: Binary save camera to stream
@@ -59,8 +60,8 @@ void vsl_b_write(vsl_b_ostream & os, vpgl_camera<T>* const& camera)
     vsl_b_write(os,*lratcam);
   }
   else {
-    vcl_cerr << "tried to write unknown camera type!\n";
-    vcl_string cam_type("unknown");
+    std::cerr << "tried to write unknown camera type!\n";
+    std::string cam_type("unknown");
     vsl_b_write(os,cam_type);
   }
   return;
@@ -71,7 +72,7 @@ void vsl_b_write(vsl_b_ostream & os, vpgl_camera<T>* const& camera)
 template <class T>
 void vsl_b_read(vsl_b_istream & is, vpgl_camera<T>* &camera)
 {
-  vcl_string cam_type;
+  std::string cam_type;
   vsl_b_read(is,cam_type);
 
   if (cam_type == "vpgl_proj_camera") {
@@ -105,10 +106,10 @@ void vsl_b_read(vsl_b_istream & is, vpgl_camera<T>* &camera)
     camera = lratcam;
   }
   else if (cam_type == "unknown") {
-    vcl_cerr << "cannot read camera of unknown type!\n";
+    std::cerr << "cannot read camera of unknown type!\n";
   }
   else {
-    vcl_cerr << "error reading vpgl_camera!\n";
+    std::cerr << "error reading vpgl_camera!\n";
   }
   return;
 }

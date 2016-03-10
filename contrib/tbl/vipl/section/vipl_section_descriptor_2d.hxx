@@ -5,7 +5,9 @@
 
 #include "vipl_section_descriptor_2d.h"
 #include <vipl/section/vipl_section_container.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iostream>
 
 //: Ctor useful to define 2D section descriptors for ROA's. If you.
 // Once constructed there is no way to change the data in the section descriptor.
@@ -18,12 +20,12 @@ vipl_section_descriptor_2d< DataType > ::vipl_section_descriptor_2d(
  : hsreal_descriptor (0),
    hsreal_container (0),
    hsi_data_ptr (0),
-   hsi_data_offsets ( vcl_vector< int > () ),
-   hsi_curr_sec_start ( vcl_vector< int > () ),
-   hsi_curr_sec_end ( vcl_vector< int > () ),
-   hsi_curr_sec_size ( vcl_vector< int > () )
+   hsi_data_offsets ( std::vector< int > () ),
+   hsi_curr_sec_start ( std::vector< int > () ),
+   hsi_curr_sec_end ( std::vector< int > () ),
+   hsi_curr_sec_size ( std::vector< int > () )
 {
-  vcl_cerr << "Warning: called unimplemented vipl_section_descriptor_2d constructor with signature "
+  std::cerr << "Warning: called unimplemented vipl_section_descriptor_2d constructor with signature "
            << "int startx, int endx, int starty, int endy\n";
 }
 
@@ -34,12 +36,12 @@ template < class DataType >
                  vipl_section_container< DataType >* container): hsreal_descriptor (0),
                  hsreal_container (0),
                  hsi_data_ptr (0),
-                 hsi_data_offsets ( vcl_vector< int > () ),
-                 hsi_curr_sec_start ( vcl_vector< int > () ),
-                 hsi_curr_sec_end ( vcl_vector< int > () ),
-                 hsi_curr_sec_size ( vcl_vector< int > () )
+                 hsi_data_offsets ( std::vector< int > () ),
+                 hsi_curr_sec_start ( std::vector< int > () ),
+                 hsi_curr_sec_end ( std::vector< int > () ),
+                 hsi_curr_sec_size ( std::vector< int > () )
 {
-  vcl_cerr << "Warning: called unimplemented constructor with signature "
+  std::cerr << "Warning: called unimplemented constructor with signature "
            << "vipl_section_descriptor< DataType >* desc, vipl_section_container< DataType >* container\n";
 }
 
@@ -51,12 +53,12 @@ vipl_section_descriptor_2d< DataType > ::vipl_section_descriptor_2d(
           int t): hsreal_descriptor (0),
           hsreal_container (0),
           hsi_data_ptr (0),
-          hsi_data_offsets ( vcl_vector< int > () ),
-          hsi_curr_sec_start ( vcl_vector< int > () ),
-          hsi_curr_sec_end ( vcl_vector< int > () ),
-          hsi_curr_sec_size ( vcl_vector< int > () )
+          hsi_data_offsets ( std::vector< int > () ),
+          hsi_curr_sec_start ( std::vector< int > () ),
+          hsi_curr_sec_end ( std::vector< int > () ),
+          hsi_curr_sec_size ( std::vector< int > () )
 {
-  vcl_cerr << "Warning: called unimplemented constructor with signature "
+  std::cerr << "Warning: called unimplemented constructor with signature "
            << "const vipl_section_descriptor< DataType >* desc, const vipl_section_container< DataType >* container, int t\n";
 }
 
@@ -69,10 +71,10 @@ template < class DataType >
 vipl_section_descriptor_2d< DataType > ::vipl_section_descriptor_2d(): hsreal_descriptor (0),
                  hsreal_container (0),
                  hsi_data_ptr (0),
-                 hsi_data_offsets ( vcl_vector< int > () ),
-                 hsi_curr_sec_start ( vcl_vector< int > () ),
-                 hsi_curr_sec_end ( vcl_vector< int > () ),
-                 hsi_curr_sec_size ( vcl_vector< int > () )
+                 hsi_data_offsets ( std::vector< int > () ),
+                 hsi_curr_sec_start ( std::vector< int > () ),
+                 hsi_curr_sec_end ( std::vector< int > () ),
+                 hsi_curr_sec_size ( std::vector< int > () )
 // C++ auto-generated low-level constructor
 {
 }

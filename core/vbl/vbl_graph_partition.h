@@ -20,7 +20,8 @@
 // merged if the difference in internal component weights are greater
 // than the smallest weight edge between a pair of adjacent components.
 // The result is a set of isolated sub-graphs of the original graph.
-#include <vcl_vector.h>
+#include <vcl_compiler.h>
+#include <vector>
 #include <vbl/vbl_disjoint_sets.h>
 #include <vbl/vbl_edge.h>
 #include <vil/vil_image_view.h>
@@ -28,9 +29,9 @@
 //:
 // \p t is a constant that determines the threshold on edge weight
 //  to form disconnected sets
-void vbl_graph_partition(vbl_disjoint_sets& ds, vcl_vector<vbl_edge>& edges, float t);
+void vbl_graph_partition(vbl_disjoint_sets& ds, std::vector<vbl_edge>& edges, float t);
 
 // a partitioning function that uses an edge image so that the component shapes follow edges as much as possible
-void vbl_graph_partition(vbl_disjoint_sets& ds, vcl_vector<vbl_edge>& edges, float t, vil_image_view<float>& edge_img);
+void vbl_graph_partition(vbl_disjoint_sets& ds, std::vector<vbl_edge>& edges, float t, vil_image_view<float>& edge_img);
 
 #endif // vbl_graph_partition_h_

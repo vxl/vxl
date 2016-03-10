@@ -12,8 +12,10 @@
 // \endverbatim
 
 
-#include <vcl_vector.h>
-#include <vcl_set.h>
+#include <vector>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <set>
 #include <vbl/vbl_ref_count.h>
 #include <brdb/brdb_relation_sptr.h>
 #include <brdb/brdb_selection_sptr.h>
@@ -22,7 +24,7 @@
 #include <brdb/brdb_query_aptr.h>
 
 
-typedef vcl_set<vcl_vector<brdb_tuple_sptr>::iterator> selection_t;
+typedef std::set<std::vector<brdb_tuple_sptr>::iterator> selection_t;
 
 class brdb_selection : public vbl_ref_count
 {
@@ -50,26 +52,26 @@ class brdb_selection : public vbl_ref_count
   bool update_selected_tuple(const brdb_tuple_sptr& new_tuple);
 
   //: update the selected tuple with one new attribute value (suppose there is only one tuple been selected)
-  bool update_selected_tuple(const vcl_string& attribute_name, const brdb_value& value);
+  bool update_selected_tuple(const std::string& attribute_name, const brdb_value& value);
 
   //: Convenience function for updating the selected tuple with one new attribute value (suppose there is only one tuple been selected)
   //  \retval true if successful
   //  \retval false if invalid index or invalid type
   template<class T>
-  bool update_selected_tuple_value(const vcl_string& attribute_name, const T& value )
+  bool update_selected_tuple_value(const std::string& attribute_name, const T& value )
   {
     return this->update_selected_tuple(attribute_name, static_cast<const brdb_value&>(brdb_value_t<T>(value)));
   }
 
   //: get value from selected tupe
-  bool get_value(const vcl_string& attribute_name, brdb_value& value);
+  bool get_value(const std::string& attribute_name, brdb_value& value);
 
   //: get value pointer from selected tupe
-  bool get_value(const vcl_string& attribute_name, brdb_value_sptr& value);
+  bool get_value(const std::string& attribute_name, brdb_value_sptr& value);
 
   //: convenient function to get value from selected tupe
   template<class T>
-  bool get(const vcl_string& attribute_name, T& value)
+  bool get(const std::string& attribute_name, T& value)
   {
     brdb_value_t<T> val;
     if (! this->get_value(attribute_name, static_cast<brdb_value&>(val)))
@@ -82,11 +84,11 @@ class brdb_selection : public vbl_ref_count
   }
 
   //: function to get value from selected tupes with an index (say, the value of ith selected tuples)
-  bool get_value(const vcl_string& attribute_name,  unsigned int index, brdb_value& value);
+  bool get_value(const std::string& attribute_name,  unsigned int index, brdb_value& value);
 
   //: convenient function to get value from selected tupes with an index (say, the value of ith selected tuples)
   template<class T>
-  bool get(const vcl_string& attribute_name, unsigned int index, T& value)
+  bool get(const std::string& attribute_name, unsigned int index, T& value)
   {
     brdb_value_t<T> val;
     if (! this->get_value(attribute_name, index, static_cast<brdb_value&>(val)))
@@ -142,7 +144,7 @@ class brdb_selection : public vbl_ref_count
   bool tuple_exist(const brdb_tuple_sptr& tuple);
 
   //: see whether the selection contains a relation iterator
-  bool contains(const vcl_vector<brdb_tuple_sptr>::iterator& relation_itr) const;
+  bool contains(const std::vector<brdb_tuple_sptr>::iterator& relation_itr) const;
 
  private:
   //: time stamp

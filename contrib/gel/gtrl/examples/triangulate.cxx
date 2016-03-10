@@ -5,21 +5,23 @@
 // \date   8 October 2002
 
 #include <gtrl/gtrl_triangulation.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iostream>
 
-inline vcl_ostream& operator<<(vcl_ostream& os, gtrl_vertex const& v)
+inline std::ostream& operator<<(std::ostream& os, gtrl_vertex const& v)
 {
   return os << '(' << v.x() << ',' << v.y() << ')';
 }
 
-inline vcl_ostream& operator<<(vcl_ostream& os, gtrl_triangle const& t)
+inline std::ostream& operator<<(std::ostream& os, gtrl_triangle const& t)
 {
   return os << '[' << *(t.p1()) << ',' << *(t.p2()) << ',' << *(t.p3()) << ']';
 }
 
 int main()
 {
-  vcl_vector<gtrl_vertex_sptr> v(4);
+  std::vector<gtrl_vertex_sptr> v(4);
   v[0] = new gtrl_vertex( 1.0, 1.0);
   v[1] = new gtrl_vertex(50.0, 1.0);
   v[2] = new gtrl_vertex(50.0,50.0);
@@ -27,16 +29,16 @@ int main()
   gtrl_polygon poly(v);
   gtrl_triangulation tri(poly); tri.run();
 
-  vcl_vector<gtrl_vertex_sptr> p = tri.get_points();
-  vcl_vector<gtrl_triangle_sptr> t = tri.get_triangles();
+  std::vector<gtrl_vertex_sptr> p = tri.get_points();
+  std::vector<gtrl_triangle_sptr> t = tri.get_triangles();
 
-  vcl_cout << p.size() << " triangle points:\n";
+  std::cout << p.size() << " triangle points:\n";
   for (unsigned int i=0; i<p.size(); ++i)
-    vcl_cout << ' ' << *(p[i]) << '\n';
+    std::cout << ' ' << *(p[i]) << '\n';
 
-  vcl_cout << t.size() << " triangles:\n";
+  std::cout << t.size() << " triangles:\n";
   for (unsigned int i=0; i<t.size(); ++i)
-    vcl_cout << ' ' << *(t[i]) << '\n';
+    std::cout << ' ' << *(t[i]) << '\n';
 
   return 0;
 }

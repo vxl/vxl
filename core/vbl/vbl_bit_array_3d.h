@@ -19,7 +19,8 @@
 //
 //-----------------------------------------------------------------------------
 
-#include <vcl_iosfwd.h>
+#include <vcl_compiler.h>
+#include <iosfwd>
 
 class vbl_bit_array_3d
 {
@@ -98,6 +99,6 @@ class vbl_bit_array_3d
              unsigned long &byteindex, unsigned char &bitindex) const;
 };
 
-vcl_ostream &operator<<(vcl_ostream &os, vbl_bit_array_3d const&);
+std::ostream &operator<<(std::ostream &os, vbl_bit_array_3d const&);
 
 #endif // vbl_bit_array_3d_h_

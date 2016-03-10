@@ -3,9 +3,11 @@
 //
 #include <boxm2/boxm2_data_traits.h>
 #include <bstm/bstm_data_traits.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iostream>
 #include <boxm2/cpp/algo/boxm2_mog3_grey_processor.h>
-#include <vcl_limits.h>
+#include <limits>
 #include <vnl/vnl_math.h>
 
 #define SIMILARITY_T 0.0001
@@ -27,7 +29,7 @@ class bstm_similarity_traits<BSTM_MOG3_GREY, BOXM2_MOG3_GREY>
 
     //boxm2_p > 0 to make sure empty voxels always lead to time division
     //otherwise it leads to motion artefacts.
-    return vcl_fabs( isabel_measure - isabel_measure_boxm2) < SIMILARITY_T && (boxm2_p > 0 || p == 0);
+    return std::fabs( isabel_measure - isabel_measure_boxm2) < SIMILARITY_T && (boxm2_p > 0 || p == 0);
   }
 };
 
@@ -49,9 +51,9 @@ class bstm_similarity_traits<BSTM_MOG6_VIEW_COMPACT, BOXM2_MOG6_VIEW_COMPACT>
 #if 0
   static bool old_is_similar(bstm_data_traits<BSTM_MOG6_VIEW_COMPACT>::datatype app, boxm2_data_traits<BOXM2_MOG6_VIEW_COMPACT>::datatype boxm2_app, float p, float boxm2_p, double p_threshold, double app_threshold )
   {
-    vcl_cout << "KL surf: " << kl_div_surf( p, boxm2_p ) << " KL app: " << kl_div_app(app, boxm2_app ) << vcl_endl;
+    std::cout << "KL surf: " << kl_div_surf( p, boxm2_p ) << " KL app: " << kl_div_app(app, boxm2_app ) << std::endl;
     //it was 0.1 before...
-    if (vcl_fabs(p - boxm2_p) > 0.15 || (boxm2_p == 0 && p != 0)  ) //if p change is over SIMILARITY_T or the new p is 0 but the current p is not.
+    if (std::fabs(p - boxm2_p) > 0.15 || (boxm2_p == 0 && p != 0)  ) //if p change is over SIMILARITY_T or the new p is 0 but the current p is not.
       return false;
     else
     {
@@ -61,7 +63,7 @@ class bstm_similarity_traits<BSTM_MOG6_VIEW_COMPACT, BOXM2_MOG6_VIEW_COMPACT>
       //all 8 components must be similar
       float mean_change = 0;
       for (int i = 0; i < 8; i++)
-        mean_change  += vcl_fabs( ((float)app[2*i])/255.0 - ((float)boxm2_app[2*i])/255.0) ;
+        mean_change  += std::fabs( ((float)app[2*i])/255.0 - ((float)boxm2_app[2*i])/255.0) ;
       mean_change /= 8;
 
       return mean_change < 0.1;
@@ -89,7 +91,7 @@ class bstm_similarity_traits<BSTM_MOG6_VIEW_COMPACT, BOXM2_MOG6_VIEW_COMPACT>
     if ( boxm2_p > 1-EPSILON)
       boxm2_p = 1-EPSILON;
 
-    return (boxm2_p*vcl_log(boxm2_p/p) + (1-boxm2_p)*vcl_log( (1-boxm2_p)/(1-p) ) ) / vnl_math::ln2;
+    return (boxm2_p*std::log(boxm2_p/p) + (1-boxm2_p)*std::log( (1-boxm2_p)/(1-p) ) ) / vnl_math::ln2;
   }
 
   static float kl_div_app(bstm_data_traits<BSTM_MOG6_VIEW_COMPACT>::datatype app, boxm2_data_traits<BOXM2_MOG6_VIEW_COMPACT>::datatype boxm2_app )
@@ -105,7 +107,7 @@ class bstm_similarity_traits<BSTM_MOG6_VIEW_COMPACT, BOXM2_MOG6_VIEW_COMPACT>
         boxm2_std = EPSILON;
       if (std < EPSILON)
         std = EPSILON;
-      kl_div_app += -0.5f + (vcl_log(std /boxm2_std))/ vnl_math::ln2 + (square_of(mean-boxm2_mean) + square_of(boxm2_std)) / (2*std*std);
+      kl_div_app += -0.5f + (std::log(std /boxm2_std))/ vnl_math::ln2 + (square_of(mean-boxm2_mean) + square_of(boxm2_std)) / (2*std*std);
     }
     return kl_div_app / 8;
   }
@@ -137,7 +139,7 @@ class bstm_similarity_traits<BSTM_GAUSS_RGB_VIEW_COMPACT, BOXM2_GAUSS_RGB_VIEW_C
     if ( boxm2_p > 1-EPSILON)
       boxm2_p = 1-EPSILON;
 
-    return (boxm2_p*vcl_log(boxm2_p/p) + (1-boxm2_p)*vcl_log( (1-boxm2_p)/(1-p) ) ) / vnl_math::ln2;
+    return (boxm2_p*std::log(boxm2_p/p) + (1-boxm2_p)*std::log( (1-boxm2_p)/(1-p) ) ) / vnl_math::ln2;
   }
 
   static float app_rms(bstm_data_traits<BSTM_GAUSS_RGB_VIEW_COMPACT>::datatype app, boxm2_data_traits<BOXM2_GAUSS_RGB_VIEW_COMPACT>::datatype boxm2_app )
@@ -147,7 +149,7 @@ class bstm_similarity_traits<BSTM_GAUSS_RGB_VIEW_COMPACT, BOXM2_GAUSS_RGB_VIEW_C
       vnl_vector_fixed<unsigned char,4> rgb = (vnl_vector_fixed<unsigned char,4>) app[i];
       vnl_vector_fixed<unsigned char,4> boxm2_rgb = (vnl_vector_fixed<unsigned char,4>) boxm2_app[i];
 
-      rms += vcl_sqrt( (square_of(rgb[0] - boxm2_rgb[0]) + square_of(rgb[1] - boxm2_rgb[1]) + square_of(rgb[2] - boxm2_rgb[2])) / 3.0);
+      rms += std::sqrt( (square_of(rgb[0] - boxm2_rgb[0]) + square_of(rgb[1] - boxm2_rgb[1]) + square_of(rgb[2] - boxm2_rgb[2])) / 3.0);
     }
 
     return rms / 8;
@@ -181,7 +183,7 @@ class bstm_similarity_traits<BSTM_GAUSS_RGB, BOXM2_GAUSS_RGB>
     if ( boxm2_p > 1-EPSILON)
       boxm2_p = 1-EPSILON;
 
-    return (boxm2_p*vcl_log(boxm2_p/p) + (1-boxm2_p)*vcl_log( (1-boxm2_p)/(1-p) ) ) / vnl_math::ln2;
+    return (boxm2_p*std::log(boxm2_p/p) + (1-boxm2_p)*std::log( (1-boxm2_p)/(1-p) ) ) / vnl_math::ln2;
   }
 
   static float app_rms(bstm_data_traits<BSTM_GAUSS_RGB>::datatype app, boxm2_data_traits<BOXM2_GAUSS_RGB>::datatype boxm2_app )
@@ -189,7 +191,7 @@ class bstm_similarity_traits<BSTM_GAUSS_RGB, BOXM2_GAUSS_RGB>
     vnl_vector_fixed<unsigned char,8> rgb = app;
     vnl_vector_fixed<unsigned char,8> boxm2_rgb = boxm2_app;
 
-    float rms = vcl_sqrt( (square_of(rgb[0] - boxm2_rgb[0]) + square_of(rgb[1] - boxm2_rgb[1]) + square_of(rgb[2] - boxm2_rgb[2])) / 3.0);
+    float rms = std::sqrt( (square_of(rgb[0] - boxm2_rgb[0]) + square_of(rgb[1] - boxm2_rgb[1]) + square_of(rgb[2] - boxm2_rgb[2])) / 3.0);
 
     return rms;
   }

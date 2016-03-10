@@ -9,7 +9,9 @@
 #include "brip_mutual_info.h"
 
 #include "brip_histogram.h"
-#include <vcl_vector.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <vector>
 #include <vcl_cassert.h>
 
 
@@ -22,8 +24,8 @@ double brip_mutual_info(const vil_image_view<T>& image1,
   assert( (image1.ni() == image2.ni()) &&
           (image1.nj() == image2.nj()) &&
           (image1.nplanes() == image2.nplanes()) );
-  vcl_vector<double> histogram1, histogram2;
-  vcl_vector<vcl_vector<double> > joint_histogram;
+  std::vector<double> histogram1, histogram2;
+  std::vector<std::vector<double> > joint_histogram;
 
   double mag1, mag2, mag3;
 

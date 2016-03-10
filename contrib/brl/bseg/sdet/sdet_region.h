@@ -13,7 +13,9 @@
 // \endverbatim
 //
 //-----------------------------------------------------------------------------
-#include <vcl_iosfwd.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iosfwd>
 #include "sdet_region_sptr.h"
 #include <vsol/vsol_polygon_2d_sptr.h>
 #include <vdgl/vdgl_digital_region.h>
@@ -54,6 +56,6 @@ class sdet_region : public vdgl_digital_region
   vsol_polygon_2d_sptr boundary_;
 };
 
-vcl_ostream& operator<<(vcl_ostream& s, sdet_region const& sd);
+std::ostream& operator<<(std::ostream& s, sdet_region const& sd);
 
 #endif // sdet_region_h_

@@ -3,9 +3,11 @@
  *  Size of A must match 'true' count in B
  */
 
-#include <vcl_string.h>
-#include <vcl_exception.h>
-#include <vcl_iostream.h>
+#include <string>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <exception>
+#include <iostream>
 #include <vul/vul_arg.h>
 #include <mbl/mbl_mask.h>
 
@@ -16,9 +18,9 @@ int main(int argc, char **argv)
     "Input mask B has n elements (of which m are TRUE) and thus transforms a vector X of n elements to a vector Y of m elements.\n"
     "Input mask A has m elements (of which l are TRUE) and thus transforms a vector Y of m elements to a vector Z of l elements.\n"
     "Output mask C has n elements (of which l are TRUE) and thus transforms a vector X of n elements to a vector Z of l elements.\n");
-  vul_arg<vcl_string> maskA_filename(VXL_NULLPTR,"Filename of mask A");
-  vul_arg<vcl_string> maskB_filename(VXL_NULLPTR,"Filename of mask B");
-  vul_arg<vcl_string> maskout_filename(VXL_NULLPTR,"Filename of the output mask");
+  vul_arg<std::string> maskA_filename(VXL_NULLPTR,"Filename of mask A");
+  vul_arg<std::string> maskB_filename(VXL_NULLPTR,"Filename of mask B");
+  vul_arg<std::string> maskout_filename(VXL_NULLPTR,"Filename of the output mask");
   vul_arg_parse(argc, argv);
 
   mbl_mask maskA, maskB;
@@ -26,14 +28,14 @@ int main(int argc, char **argv)
   mbl_load_mask(maskB, maskB_filename().c_str());
 
   try { mbl_mask_on_mask(maskA, maskB); }
-  catch (vcl_exception & e)
+  catch (std::exception & e)
   {
-    vcl_cout << "An error occurred while applying the mask.\n" << e.what() << vcl_endl;
+    std::cout << "An error occurred while applying the mask.\n" << e.what() << std::endl;
     return 1;
   }
   catch (...)
   {
-    vcl_cout << "An unknown error occurred while applying the mask." << vcl_endl;
+    std::cout << "An unknown error occurred while applying the mask." << std::endl;
     return 1;
   }
 

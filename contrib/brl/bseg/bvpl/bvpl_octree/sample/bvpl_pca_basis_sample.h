@@ -14,7 +14,9 @@
 // \endverbatim
 
 #include <vnl/vnl_vector_fixed.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iostream>
 #include <vsl/vsl_binary_io.h>
 
 template <unsigned dim>
@@ -37,7 +39,7 @@ public:
 
 
 template <unsigned dim>
-vcl_ostream& operator << (vcl_ostream& os, const bvpl_pca_basis_sample<dim>& sample);
+std::ostream& operator << (std::ostream& os, const bvpl_pca_basis_sample<dim>& sample);
 
 template <unsigned dim>
 void vsl_b_write(vsl_b_ostream & os, bvpl_pca_basis_sample<dim> const &sample);

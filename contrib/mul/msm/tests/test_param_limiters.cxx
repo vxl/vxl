@@ -11,13 +11,15 @@
 // \brief test msm_param_limiter
 
 #include <msm/msm_ellipsoid_limiter.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iostream>
 
 //=======================================================================
 
 void test_ellipsoid_limiter()
 {
-  vcl_cout << "***********************\n"
+  std::cout << "***********************\n"
            << " Testing msm_ellipsoid_limiter\n"
            << "***********************\n";
 
@@ -41,12 +43,12 @@ void test_ellipsoid_limiter()
 
   // Create point outside the ellipsoid
   b.fill(1.0);
-  vcl_cout<<"M="<<limiter.mahalanobis(b)<<vcl_endl;
+  std::cout<<"M="<<limiter.mahalanobis(b)<<std::endl;
   limiter.apply_limit(b);
   TEST_NEAR("Revised point is on surface",
             limiter.mahalanobis(b),M,1e-6);
-  vcl_cout<<b<<vcl_endl;
-  TEST("Point not on line (1,1,1...)",vcl_fabs(b[0]-b[1])>0.01,true);
+  std::cout<<b<<std::endl;
+  TEST("Point not on line (1,1,1...)",std::fabs(b[0]-b[1])>0.01,true);
 }
 
 void test_param_limiters()

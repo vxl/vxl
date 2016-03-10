@@ -11,7 +11,7 @@ bool vcsl_composition::is_invertible(double time) const
   // require
   assert(valid_time(time));
 
-  vcl_vector<vcsl_spatial_transformation_sptr>::const_iterator i;
+  std::vector<vcsl_spatial_transformation_sptr>::const_iterator i;
 
   bool result=true;
   for (i=transformations_.begin();result&&i!=transformations_.end();++i)
@@ -25,7 +25,7 @@ bool vcsl_composition::is_invertible(double time) const
 //---------------------------------------------------------------------------
 bool vcsl_composition::is_valid() const
 {
-  vcl_vector<vcsl_spatial_transformation_sptr>::const_iterator i;
+  std::vector<vcsl_spatial_transformation_sptr>::const_iterator i;
   for (i=transformations_.begin(); i!=transformations_.end(); ++i)
     if (!(*i)->is_valid()) return false;
 
@@ -44,7 +44,7 @@ vnl_vector<double> vcsl_composition::execute(const vnl_vector<double> &v,
 
   vnl_vector<double> result = v;
 
-  vcl_vector<vcsl_spatial_transformation_sptr>::const_iterator i;
+  std::vector<vcsl_spatial_transformation_sptr>::const_iterator i;
   for (i=transformations_.begin();i!=transformations_.end();++i)
     result=(*i)->execute(result,time);
   return result;
@@ -64,7 +64,7 @@ vnl_vector<double> vcsl_composition::inverse(const vnl_vector<double> &v,
 
   vnl_vector<double> result = v;
 
-  vcl_vector<vcsl_spatial_transformation_sptr>::const_reverse_iterator i;
+  std::vector<vcsl_spatial_transformation_sptr>::const_reverse_iterator i;
   for (i=transformations_.rbegin();!(i==transformations_.rend());++i)
     result=(*i)->inverse(result,time);
   return result;

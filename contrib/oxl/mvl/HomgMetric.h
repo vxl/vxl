@@ -28,7 +28,9 @@
 
 #include <vnl/vnl_fwd.h>
 #include <vgl/vgl_fwd.h>
-#include <vcl_iosfwd.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iosfwd>
 
 class ImageMetric;
 class HomgPoint2D;
@@ -113,7 +115,7 @@ class HomgMetric
   double image_to_homg_distance_sqr(double image_distance) const;
   double homg_to_image_distance_sqr(double homg_distance) const;
 
-  vcl_ostream& print(vcl_ostream&) const;
+  std::ostream& print(std::ostream&) const;
 
   operator const ImageMetric* () const { return metric_; }
 
@@ -131,6 +133,6 @@ class HomgMetric
   static HMatrix2D image_to_homg_H(const HMatrix2D&, const HomgMetric& c1, const HomgMetric& c2);
 };
 
-inline vcl_ostream& operator<<(vcl_ostream& s, const HomgMetric& h) { return h.print(s); }
+inline std::ostream& operator<<(std::ostream& s, const HomgMetric& h) { return h.print(s); }
 
 #endif // HomgMetric_h_

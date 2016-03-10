@@ -1,17 +1,18 @@
 // This is core/vbl/tests/vbl_test_bit_array.cxx
 #include <testlib/testlib_test.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <iostream>
 #include <vbl/vbl_bit_array_2d.h>
 #include <vbl/vbl_bit_array_3d.h>
 
 static void vbl_test_bit_array_2d()
 {
-  vcl_cout << "\n Testing vbl_bit_array_2d\n"
+  std::cout << "\n Testing vbl_bit_array_2d\n"
            <<   " ++++++++++++++++++++++++\n\n";
 
   vbl_bit_array_2d v(1000,3000);
 
-  vcl_cout << "size " << v.size() << '\n'
+  std::cout << "size " << v.size() << '\n'
            << "rows " << v.rows() << '\n'
            << "columns " << v.columns() << '\n';
 
@@ -24,7 +25,7 @@ static void vbl_test_bit_array_2d()
   v.put(0,2, 0);
   v.put(1,2, 0);
 
-  vcl_cout << "\nv =\n" << v
+  std::cout << "\nv =\n" << v
            << "size " << v.size() << '\n'
            << "rows " << v.rows() << '\n'
            << "cols " << v.columns() << '\n';
@@ -58,12 +59,12 @@ static void vbl_test_bit_array_2d()
 
 static void vbl_test_bit_array_3d()
 {
-  vcl_cout << "\n Testing vbl_bit_array_3d\n"
+  std::cout << "\n Testing vbl_bit_array_3d\n"
            <<   " ++++++++++++++++++++++++\n\n";
 
   vbl_bit_array_3d v(10,20,30);
 
-  vcl_cout << "size " << v.size() << '\n'
+  std::cout << "size " << v.size() << '\n'
            << "rows " << v.row2_count() << '\n'
            << "cols " << v.row3_count() << '\n'
            << "depth " << v.row1_count() << '\n';
@@ -77,7 +78,7 @@ static void vbl_test_bit_array_3d()
   v.set(0,0,2, 0);
   v.set(0,1,2, 0);
 
-  vcl_cout << "\nv =\n" << v
+  std::cout << "\nv =\n" << v
            << "size " << v.size() << '\n'
            << "rows " << v.row2_count() << '\n'
            << "cols " << v.row3_count() << '\n'

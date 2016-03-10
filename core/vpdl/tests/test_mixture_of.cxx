@@ -5,9 +5,10 @@
 #include <vpdl/vpdl_gaussian_indep.h>
 #include <vnl/vnl_vector_fixed.h>
 #include <vnl/vnl_vector.h>
-#include <vcl_string.h>
-#include <vcl_vector.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <string>
+#include <vector>
+#include <iostream>
 
 
 // function to sort by increasing weight
@@ -20,7 +21,7 @@ bool weight_less(const dist_t& /*d1*/, const typename vpdt_dist_traits<dist_t>::
 
 
 template <class T>
-void test_mixture_of_type(T epsilon, const vcl_string& type_name)
+void test_mixture_of_type(T epsilon, const std::string& type_name)
 {
   // test a bunch of instantiations to make sure they compile
   {
@@ -45,7 +46,7 @@ void test_mixture_of_type(T epsilon, const vcl_string& type_name)
   vnl_vector_fixed<T,3> mean3(T(1), T(0), T(0));
   vnl_vector_fixed<T,3> var3(T(0.5), T(1.5), T(0.25));
 
-  vcl_cout << "=================== fixed<3> ======================="<<vcl_endl;
+  std::cout << "=================== fixed<3> ======================="<<std::endl;
   {
     vpdl_gaussian_indep<T,3> gauss1(mean1,var1);
     vpdl_gaussian_indep<T,3> gauss2(mean2,var2);
@@ -104,7 +105,7 @@ void test_mixture_of_type(T epsilon, const vcl_string& type_name)
 
     // test gradient virtual functions against numerical difference
     vnl_vector_fixed<T,3> g3;
-    T dp = vcl_sqrt(epsilon);
+    T dp = std::sqrt(epsilon);
     T den = mixture2.density(pt);
     T den_x = mixture2.density(pt+vnl_vector_fixed<T,3>(dp,0,0));
     T den_y = mixture2.density(pt+vnl_vector_fixed<T,3>(0,dp,0));
@@ -141,7 +142,7 @@ void test_mixture_of_type(T epsilon, const vcl_string& type_name)
          mixture2.weight(2) == T(0.6), true);
   }
 
-  vcl_cout << "=================== scalar ======================="<<vcl_endl;
+  std::cout << "=================== scalar ======================="<<std::endl;
   {
     vpdl_gaussian<T,1> gauss1(mean1[0],var1[0]);
     vpdl_gaussian<T,1> gauss2(mean2[0],var2[0]);
@@ -200,7 +201,7 @@ void test_mixture_of_type(T epsilon, const vcl_string& type_name)
 
     // test gradient virtual functions against numerical difference
     T g;
-    T dp = vcl_sqrt(epsilon);
+    T dp = std::sqrt(epsilon);
     T den = mixture2.density(pt);
     T den_x = mixture2.density(pt+dp);
     T grad = (den_x-den)/dp;
@@ -250,7 +251,7 @@ void test_mixture_of_type(T epsilon, const vcl_string& type_name)
               cmp_var, var, epsilon);
   }
 
-  vcl_cout << "=================== variable ======================="<<vcl_endl;
+  std::cout << "=================== variable ======================="<<std::endl;
   {
     vpdl_gaussian_indep<T> gauss1(mean1.as_ref(),var1.as_ref());
     vpdl_gaussian_indep<T> gauss2(mean2.as_ref(),var2.as_ref());
@@ -313,7 +314,7 @@ void test_mixture_of_type(T epsilon, const vcl_string& type_name)
 
     // test gradient virtual functions against numerical difference
     vnl_vector<T> g;
-    T dp = vcl_sqrt(epsilon);
+    T dp = std::sqrt(epsilon);
     T den = mixture2.density(pt.as_ref());
     T den_x = mixture2.density((pt+vnl_vector_fixed<T,3>(dp,0,0)).as_ref());
     T den_y = mixture2.density((pt+vnl_vector_fixed<T,3>(0,dp,0)).as_ref());

@@ -17,8 +17,8 @@
 vpgl_orientation_lsqr::
   vpgl_orientation_lsqr(const vpgl_calibration_matrix<double>& K,
                         const vgl_point_3d<double>& c,
-                        const vcl_vector<vgl_homg_point_3d<double> >& world_points,
-                        const vcl_vector<vgl_point_2d<double> >& image_points )
+                        const std::vector<vgl_homg_point_3d<double> >& world_points,
+                        const std::vector<vgl_point_2d<double> >& image_points )
  : vnl_least_squares_function(3,2*world_points.size(),no_gradient),
    K_(K),
    c_(c),
@@ -51,8 +51,8 @@ vpgl_orientation_lsqr::f(vnl_vector<double> const& x, vnl_vector<double>& fx)
 //: Constructor
 vpgl_orientation_position_lsqr::
   vpgl_orientation_position_lsqr(const vpgl_calibration_matrix<double>& K,
-                                 const vcl_vector<vgl_homg_point_3d<double> >& world_points,
-                                 const vcl_vector<vgl_point_2d<double> >& image_points )
+                                 const std::vector<vgl_homg_point_3d<double> >& world_points,
+                                 const std::vector<vgl_point_2d<double> >& image_points )
  : vnl_least_squares_function(6,2*world_points.size(),no_gradient),
    K_(K),
    world_points_(world_points),
@@ -95,7 +95,7 @@ vpgl_orientation_position_lsqr::trace(int iteration,
   vgl_h_matrix_3d<double> R(vnl_rotation_matrix(w), vnl_double_3(0.0,0.0,0.0));
   vpgl_perspective_camera<double> cam(K_,t,R);
 #ifdef DEBUG
-  vcl_cout << "camera =\n" << cam.get_matrix() << vcl_endl;
+  std::cout << "camera =\n" << cam.get_matrix() << std::endl;
 #endif
 }
 #endif
@@ -104,8 +104,8 @@ vpgl_orientation_position_lsqr::trace(int iteration,
 
 //: Constructor
 vpgl_orientation_position_calibration_lsqr::
-vpgl_orientation_position_calibration_lsqr(const vcl_vector<vgl_homg_point_3d<double> >& world_points,
-                                           const vcl_vector<vgl_point_2d<double> >& image_points )
+vpgl_orientation_position_calibration_lsqr(const std::vector<vgl_homg_point_3d<double> >& world_points,
+                                           const std::vector<vgl_point_2d<double> >& image_points )
  : vnl_least_squares_function(10,2*world_points.size(),no_gradient),
    world_points_(world_points),
    image_points_(image_points)
@@ -153,8 +153,8 @@ vpgl_orientation_position_calibration_lsqr::f(vnl_vector<double> const& x, vnl_v
 //: Constructor
 vpgl_orientation_position_focal_lsqr::
 vpgl_orientation_position_focal_lsqr(const vpgl_calibration_matrix<double>& K_init,
-                                     const vcl_vector<vgl_homg_point_3d<double> >& world_points,
-                                     const vcl_vector<vgl_point_2d<double> >& image_points )
+                                     const std::vector<vgl_homg_point_3d<double> >& world_points,
+                                     const std::vector<vgl_point_2d<double> >& image_points )
  : vnl_least_squares_function(7,2*world_points.size(),no_gradient),
    K_init_(K_init),
    world_points_(world_points),
@@ -197,8 +197,8 @@ vpgl_orientation_position_focal_lsqr::f(vnl_vector<double> const& x, vnl_vector<
 //: optimize orientation for a perspective camera
 vpgl_perspective_camera<double>
 vpgl_optimize_camera::opt_orient(const vpgl_perspective_camera<double>& camera,
-                                 const vcl_vector<vgl_homg_point_3d<double> >& world_points,
-                                 const vcl_vector<vgl_point_2d<double> >& image_points )
+                                 const std::vector<vgl_homg_point_3d<double> >& world_points,
+                                 const std::vector<vgl_point_2d<double> >& image_points )
 {
   const vpgl_calibration_matrix<double>& K = camera.get_calibration();
   const vgl_point_3d<double>& c = camera.get_camera_center();
@@ -219,8 +219,8 @@ vpgl_optimize_camera::opt_orient(const vpgl_perspective_camera<double>& camera,
 //: optimize orientation and position for a perspective camera
 vpgl_perspective_camera<double>
 vpgl_optimize_camera::opt_orient_pos(const vpgl_perspective_camera<double>& camera,
-                                     const vcl_vector<vgl_homg_point_3d<double> >& world_points,
-                                     const vcl_vector<vgl_point_2d<double> >& image_points )
+                                     const std::vector<vgl_homg_point_3d<double> >& world_points,
+                                     const std::vector<vgl_point_2d<double> >& image_points )
 {
   const vpgl_calibration_matrix<double>& K = camera.get_calibration();
   vgl_point_3d<double> c = camera.get_camera_center();
@@ -245,8 +245,8 @@ vpgl_optimize_camera::opt_orient_pos(const vpgl_perspective_camera<double>& came
 // optimize orientation, position, and focal length
 vpgl_perspective_camera<double>
 vpgl_optimize_camera::opt_orient_pos_f(const vpgl_perspective_camera<double>& camera,
-                                       const vcl_vector<vgl_homg_point_3d<double> >& world_points,
-                                       const vcl_vector<vgl_point_2d<double> >& image_points,
+                                       const std::vector<vgl_homg_point_3d<double> >& world_points,
+                                       const std::vector<vgl_point_2d<double> >& image_points,
                                        const double xtol, const unsigned nevals)
 {
   const vpgl_calibration_matrix<double>& K = camera.get_calibration();
@@ -277,8 +277,8 @@ vpgl_optimize_camera::opt_orient_pos_f(const vpgl_perspective_camera<double>& ca
 // optimize all the parameters except internal skew
 vpgl_perspective_camera<double>
 vpgl_optimize_camera::opt_orient_pos_cal(const vpgl_perspective_camera<double>& camera,
-                                         const vcl_vector<vgl_homg_point_3d<double> >& world_points,
-                                         const vcl_vector<vgl_point_2d<double> >& image_points,
+                                         const std::vector<vgl_homg_point_3d<double> >& world_points,
+                                         const std::vector<vgl_point_2d<double> >& image_points,
                                          const double xtol, const unsigned nevals)
 {
   const vpgl_calibration_matrix<double>& K = camera.get_calibration();

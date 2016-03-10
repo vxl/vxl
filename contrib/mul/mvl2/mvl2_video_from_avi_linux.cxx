@@ -11,8 +11,10 @@
 #include <version.h>
 #include <avm_default.h>
 #include <avm_fourcc.h>
-#include <vcl_cstring.h>
-#include <vcl_cstdlib.h> // malloc()
+#include <cstring>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <cstdlib> // malloc()
 
 mvl2_video_from_avi::mvl2_video_from_avi()
 {
@@ -27,9 +29,9 @@ mvl2_video_from_avi::~mvl2_video_from_avi()
   if (buffer_) delete buffer_;
 }
 
-vcl_string mvl2_video_from_avi::is_a() const
+std::string mvl2_video_from_avi::is_a() const
 {
-  return vcl_string("mvl2_video_from_avi");
+  return std::string("mvl2_video_from_avi");
 }
 
 mvl2_video_reader* mvl2_video_from_avi::clone() const
@@ -39,7 +41,7 @@ mvl2_video_reader* mvl2_video_from_avi::clone() const
 
 // possible options : Grey
 bool mvl2_video_from_avi::initialize( int width, int height,
-                                      vcl_string format, vcl_string file_name)
+                                      std::string format, std::string file_name)
 {
   firstcall_=true;
   current_frame_=0;
@@ -57,7 +59,7 @@ bool mvl2_video_from_avi::initialize( int width, int height,
 
   moviestream_->StartStreaming();
   use_colour_=true;
-  if (!format.find(vcl_string("Grey"))) use_colour_=false;
+  if (!format.find(std::string("Grey"))) use_colour_=false;
   is_initialized_=true;
 
   return is_initialized_;
@@ -110,7 +112,7 @@ bool mvl2_video_from_avi::get_frame(vil_image_view<vxl_byte>& image)
   if (use_colour_)
   {
     image.set_size(im24->Width(),im24->Height(),3);
-    vcl_memcpy(buffer_,im24->At(0,0),sizeof(vxl_byte)*im24->Bytes());
+    std::memcpy(buffer_,im24->At(0,0),sizeof(vxl_byte)*im24->Bytes());
     image.set_to_memory(buffer_+2,im24->Width(),im24->Height(),3,
                         3,3*im24->Width(),-1);
   }
@@ -183,7 +185,7 @@ int mvl2_video_from_avi::seek(unsigned int frame_number)
   moviestream_->Seek(frame_number);
   moviestream_->SeekToPrevKeyFrame();
   unsigned int key_frame=moviestream_->GetPos();
-  vcl_cout << "[mvl2_video_from_avi::seek] key frame " << key_frame
+  std::cout << "[mvl2_video_from_avi::seek] key frame " << key_frame
            << "  -> decompress " << frame_number-key_frame << " frames\n";
   for (unsigned int i=key_frame; i<frame_number; ++i)
   {

@@ -258,7 +258,7 @@ double vpgl_ray::angle_between_rays(vgl_rotation_3d<double> const& r0,
   vgl_rotation_3d<double> r0i = r0.inverse(), r1i = r1.inverse();
   a0 = r0i*zaxis; a1 = r1i*zaxis;
   double dp = dot_product(a0, a1);
-  return vcl_acos(dp);
+  return std::acos(dp);
 }
 
 double vpgl_ray::rot_about_ray(vgl_rotation_3d<double> const& r0,
@@ -276,7 +276,7 @@ double vpgl_ray::rot_about_ray(vgl_rotation_3d<double> const& r0,
   vnl_vector_fixed<double, 3> r0_alpha_rod = r0_alpha.as_rodrigues(), r1_alpha_rod = r1_alpha.as_rodrigues();
   // get angle difference
   double ang0 = r0_alpha_rod.magnitude(), ang1 = r1_alpha_rod.magnitude();
-  return vcl_fabs(ang0-ang1);
+  return std::fabs(ang0-ang1);
 }
 
 vgl_rotation_3d<double> vpgl_ray::
@@ -293,8 +293,8 @@ vgl_rotation_3d<double> vpgl_ray::rot_to_point_ray(double azimuth,
                                                    double elevation)
 {
   double el_rad = elevation*vnl_math::pi_over_180;
-  double s = vcl_sin(el_rad), c = vcl_cos(el_rad);
+  double s = std::sin(el_rad), c = std::cos(el_rad);
   double az_rad = azimuth*vnl_math::pi_over_180;
-  double x = s*vcl_cos(az_rad), y = s*vcl_sin(az_rad), z = c;
+  double x = s*std::cos(az_rad), y = s*std::sin(az_rad), z = c;
   return vpgl_ray::rot_to_point_ray(vgl_vector_3d<double>(x, y, z));
 }

@@ -4,12 +4,12 @@
 
 void volm_osm_object_line::print()
 {
-  vcl_cout << " object property: ";
+  std::cout << " object property: ";
   prop_.print();
-  vcl_cout << " line: " << vcl_endl;
+  std::cout << " line: " << std::endl;
   for (unsigned i = 0; i < line_.size(); i++)
-    vcl_cout << '(' << line_[i].x() << ',' << line_[i].y() << ") ";
-  vcl_cout << '\n';
+    std::cout << '(' << line_[i].x() << ',' << line_[i].y() << ") ";
+  std::cout << '\n';
 }
 
 void volm_osm_object_line::b_write(vsl_b_ostream& os)
@@ -32,7 +32,7 @@ void volm_osm_object_line::b_read(vsl_b_istream& is)
   vsl_b_read(is,ver);
   if (ver == 1) {
     unsigned char id, level;
-    vcl_string name;
+    std::string name;
     unsigned cnt;
     double width;
     vsl_b_read(is, id);
@@ -53,7 +53,7 @@ void volm_osm_object_line::b_read(vsl_b_istream& is)
       prop_ = volm_land_layer(id, name, level, width);
   }
   else {
-    vcl_cout << "volm_osm_object_line -- unknown binary io version " << ver << '\n';
+    std::cout << "volm_osm_object_line -- unknown binary io version " << ver << '\n';
     return;
   }
 }

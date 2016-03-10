@@ -186,10 +186,10 @@ vsol_line_3d::tangent_at_point(vsol_point_3d_sptr const& p) const
   return result;
 }
 
-void vsol_line_3d::describe(vcl_ostream &strm, int blanking) const
+void vsol_line_3d::describe(std::ostream &strm, int blanking) const
 {
   if (blanking < 0) blanking = 0; while (blanking--) strm << ' ';
-  strm << '[' << *(p0()) << ' ' << *(p1()) << ']' << vcl_endl;
+  strm << '[' << *(p0()) << ' ' << *(p1()) << ']' << std::endl;
 }
 
 //----------------------------------------------------------------
@@ -220,7 +220,7 @@ void vsol_line_3d::b_read(vsl_b_istream &is)
     vsl_b_read(is, p1_);
     break;
    default:
-    vcl_cerr << "vsol_line_3d: unknown I/O version " << ver << '\n';
+    std::cerr << "vsol_line_3d: unknown I/O version " << ver << '\n';
   }
 }
 //: Return IO version number;
@@ -230,7 +230,7 @@ short vsol_line_3d::version() const
 }
 
 //: Print an ascii summary to the stream
-void vsol_line_3d::print_summary(vcl_ostream &os) const
+void vsol_line_3d::print_summary(std::ostream &os) const
 {
   os << *this;
 }

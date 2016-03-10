@@ -8,7 +8,9 @@
 #include "rgrl_matcher_k_nearest.h"
 #include "rgrl_feature_sptr.h"
 
-#include <vcl_vector.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <vector>
 #include <vbl/vbl_array_2d.h>
 
 //: For each "from" feature, match the boundary points with the k nearest "to" features.
@@ -47,7 +49,7 @@ class rgrl_matcher_k_nearest_boundary
   rgrl_type_macro( rgrl_matcher_k_nearest_boundary, rgrl_matcher_k_nearest);
 
  private:
-  typedef vcl_vector<rgrl_feature_sptr >  feature_vector;
+  typedef std::vector<rgrl_feature_sptr >  feature_vector;
 
 
   vbl_array_2d<bool>

@@ -2,8 +2,10 @@
 #define icam_minimizer_params_h_
 //:
 // \file
-#include <vcl_string.h>
-#include <vcl_iostream.h>
+#include <string>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iostream>
 
 class icam_minimizer_params
 {
@@ -16,7 +18,7 @@ class icam_minimizer_params
                         double polar_range_multiplier=2.0,
                         double local_min_thresh=0.005,
                         double smooth_sigma=1.0,
-                        vcl_string const& base_path="")
+                        std::string const& base_path="")
                        : nbins_(nbins), min_level_size_(min_level_size),box_reduction_k_(box_reduction_k),
                          local_min_thresh_(local_min_thresh), smooth_sigma_(smooth_sigma),
                          axis_search_cone_multiplier_(axis_search_cone_multiplier),
@@ -45,7 +47,7 @@ class icam_minimizer_params
   }
 
   void print() {
-    vcl_cout << "====== Minimizer Parameters =======\n"
+    std::cout << "====== Minimizer Parameters =======\n"
              << "min pyramid dimension " << min_level_size_ << '\n'
              << "trans box reduction "   << box_reduction_k_ << '\n'
              << "axis_search_mulitplier " << axis_search_cone_multiplier_ << '\n'
@@ -64,7 +66,7 @@ class icam_minimizer_params
   double smooth_sigma_;
   double axis_search_cone_multiplier_;
   double polar_range_multiplier_;
-  vcl_string base_path_;
+  std::string base_path_;
 };
 
 #endif

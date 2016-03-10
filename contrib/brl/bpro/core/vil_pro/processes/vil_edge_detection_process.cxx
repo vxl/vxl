@@ -4,8 +4,10 @@
 // \file
 // \brief A process that performs edge detection on a grey image and returns the corresponding edge map
 
-#include <vcl_iostream.h>
-#include <vcl_string.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iostream>
+#include <string>
 #include <sdet/sdet_detector.h>
 #include <vil/vil_image_view_base.h>
 #include <vil/vil_image_view.h>
@@ -29,7 +31,7 @@ bool vil_edge_detection_process_cons(bprb_func_process& pro)
 {
   using namespace vil_edge_detection_process_globals;
   // process takes 6 inputs
-  vcl_vector<vcl_string> input_types_(n_inputs_);
+  std::vector<std::string> input_types_(n_inputs_);
   input_types_[0] = "vil_image_view_base_sptr";  // input grey image
   input_types_[1] = "float";                     // noise multiplier (edge detection parameter)
   input_types_[2] = "float";                     // smooth parameter (edge detection parameter)
@@ -38,7 +40,7 @@ bool vil_edge_detection_process_cons(bprb_func_process& pro)
   input_types_[5] = "bool";                      // aggressive_junction_closure (edge detection parameter)
 
   // process takes 1 outputs
-  vcl_vector<vcl_string> output_types_(n_outputs_);
+  std::vector<std::string> output_types_(n_outputs_);
   output_types_[0] = "vil_image_view_base_sptr";  // output edge map
   return pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
 }
@@ -63,7 +65,7 @@ bool vil_edge_detection_process(bprb_func_process& pro)
   // input image validity
   vil_image_view<vxl_byte>* in_img = dynamic_cast<vil_image_view<vxl_byte>*>(in_img_sptr.ptr());
   if (!in_img) {
-    vcl_cout << pro.name() << ": Unsupported input image format " << in_img_sptr->pixel_format() << vcl_endl;
+    std::cout << pro.name() << ": Unsupported input image format " << in_img_sptr->pixel_format() << std::endl;
     return false;
   }
 
@@ -87,13 +89,13 @@ bool vil_edge_detection_process(bprb_func_process& pro)
   vil_image_resource_sptr in_img_res_sptr = vil_new_image_resource_of_view(*in_img);
   detector.SetImage(in_img_res_sptr);
   detector.DoContour();
-  vcl_vector<vtol_edge_2d_sptr>* edges = detector.GetEdges();
+  std::vector<vtol_edge_2d_sptr>* edges = detector.GetEdges();
 
   // generate output edge image
   vil_image_view<vxl_byte> edge_image(in_img->ni(), in_img->nj());
   edge_image.fill(0);
 
-  for (vcl_vector<vtol_edge_2d_sptr>::iterator vit = edges->begin();  vit != edges->end();  ++vit)
+  for (std::vector<vtol_edge_2d_sptr>::iterator vit = edges->begin();  vit != edges->end();  ++vit)
   {
     vdgl_digital_curve_sptr dc = ((*vit)->curve())->cast_to_vdgl_digital_curve();
     if (!dc)

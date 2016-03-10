@@ -16,19 +16,21 @@
 #include <rgrl/rgrl_trans_couple.h>
 #include <rgrl/rgrl_trans_spline.h>
 #include <rgrl/rgrl_util.h>
-#include <vcl_iostream.h>
-#include <vcl_fstream.h>
-#include <vcl_string.h>
+#include <iostream>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <fstream>
+#include <string>
 #include <vcl_compiler.h>
 
 // initialize the static variables
-vcl_vector< rgrl_transformation_sptr >  rgrl_trans_reader::xform_candidates_;
+std::vector< rgrl_transformation_sptr >  rgrl_trans_reader::xform_candidates_;
 
 rgrl_transformation_sptr
 rgrl_trans_reader::
 read( char const* fn )
 {
-  vcl_ifstream ifs( fn, vcl_ios_in|vcl_ios_binary );
+  std::ifstream ifs( fn, std::ios::in|std::ios::binary );
   if( ifs.good() )
     return read( ifs );
   else
@@ -51,10 +53,10 @@ read( char const* fn )
 //  Please check the validity of the return smart ptr
 rgrl_transformation_sptr
 rgrl_trans_reader::
-read( vcl_istream& is )
+read( std::istream& is )
 {
-  vcl_string tag_str;
-  vcl_streampos pos;
+  std::string tag_str;
+  std::streampos pos;
 
   // 1. get to the tag line and save the position
   //
@@ -62,14 +64,14 @@ read( vcl_istream& is )
   rgrl_util_skip_empty_lines( is );
   // store current reading position
   pos = is.tellg();
-  vcl_getline( is, tag_str );
+  std::getline( is, tag_str );
 
   // 2. try classes stored in the vector
   //
   // back to the beginning of the tag line
   is.seekg( pos );
 
-  typedef vcl_vector< rgrl_transformation_sptr >::const_iterator iter;
+  typedef std::vector< rgrl_transformation_sptr >::const_iterator iter;
   for( iter i=xform_candidates_.begin(); i!=xform_candidates_.end(); ++i ) {
 
     // make a copy of the transformation
@@ -103,11 +105,11 @@ read( vcl_istream& is )
   READ_THIS_TRANSFORMATION("COUPLE_TRANS", rgrl_trans_couple)
 
   // default, should never reach here
-  vcl_cout<< "WARNING: " << RGRL_HERE << " ( line "
+  std::cout<< "WARNING: " << RGRL_HERE << " ( line "
           << __LINE__ << " )\n"
           << "       " << "Tag [" << tag_str
           << "] cannot match with any existing transformations.\n"
-          << "         Try to open istream in BINARY mode!" << vcl_endl;
+          << "         Try to open istream in BINARY mode!" << std::endl;
   return VXL_NULLPTR;
 }
 
@@ -119,8 +121,8 @@ add_xform( rgrl_transformation_sptr xform )
 }
 
 //: stream operator for reading transformation
-vcl_istream&
-operator>> (vcl_istream& is, rgrl_transformation_sptr& trans_sptr)
+std::istream&
+operator>> (std::istream& is, rgrl_transformation_sptr& trans_sptr)
 {
   trans_sptr = rgrl_trans_reader::read( is );
   return is;

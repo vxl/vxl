@@ -1,17 +1,18 @@
 #include <testlib/testlib_test.h>
 #include <vpdl/vpdt/vpdt_update_mog.h>
-#include <vcl_string.h>
-#include <vcl_vector.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <string>
+#include <vector>
+#include <iostream>
 
 template <class T>
-void test_update_mog_type(T epsilon, const vcl_string& type_name, T inf)
+void test_update_mog_type(T epsilon, const std::string& type_name, T inf)
 {
   // an arbitrary collection of data points
-  vcl_cout << "*************************\n"
+  std::cout << "*************************\n"
            << " testing for type " << type_name << '\n'
            << "*************************\n";
-  vcl_vector<vnl_vector_fixed<T,3> > data;
+  std::vector<vnl_vector_fixed<T,3> > data;
   data.push_back(vnl_vector_fixed<T,3>(1,1,1));
   data.push_back(vnl_vector_fixed<T,3>(2,2,2));
   data.push_back(vnl_vector_fixed<T,3>(3,1,4));

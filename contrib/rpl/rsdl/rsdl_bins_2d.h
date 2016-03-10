@@ -1,12 +1,14 @@
 #ifndef rsdl_bins_2d_h_
 #define rsdl_bins_2d_h_
 
-#include <vcl_iosfwd.h>
+#include <iosfwd>
 #include <vnl/vnl_vector_fixed.h>
 
 #include <vbl/vbl_array_2d.h>
-#include <vcl_vector.h>
-#include <vcl_cstddef.h> // for std::size_t
+#include <vector>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <cstddef> // for std::size_t
 
 template < class COORD_T, class VALUE_T >
 class rsdl_bins_2d_entry
@@ -23,8 +25,8 @@ class rsdl_bins_2d_entry
 };
 
 template < class COORD_T, class VALUE_T >
-vcl_ostream& operator<< ( vcl_ostream& ostr,
-                          const vcl_vector< rsdl_bins_2d_entry< COORD_T, VALUE_T > > & entries );
+std::ostream& operator<< ( std::ostream& ostr,
+                          const std::vector< rsdl_bins_2d_entry< COORD_T, VALUE_T > > & entries );
 
 
 template  < class COORD_T, class VALUE_T >
@@ -58,36 +60,36 @@ class rsdl_bins_2d
 
   void n_nearest( const point_type & query_pt,
                   int n,
-                  vcl_vector< value_type >& values ) const;
+                  std::vector< value_type >& values ) const;
 
   void n_nearest( const point_type & query_pt,
                   int n,
-                  vcl_vector< point_type > & points,
-                  vcl_vector< value_type > & values ) const;
+                  std::vector< point_type > & points,
+                  std::vector< value_type > & values ) const;
 
   bool is_any_point_within_radius( const point_type & query_pt,
                                    COORD_T radius ) const;
 
   void points_within_radius( const point_type & query_pt,
                              COORD_T radius,
-                             vcl_vector< value_type >& values ) const;
+                             std::vector< value_type >& values ) const;
 
   void points_within_radius( const point_type & query_pt,
                              COORD_T radius,
-                             vcl_vector< point_type > & points,
-                             vcl_vector< value_type >& values ) const;
+                             std::vector< point_type > & points,
+                             std::vector< value_type >& values ) const;
 
   bool is_any_point_in_bounding_box(  const point_type & min_query_pt,
                                       const point_type & max_query_pt ) const;
 
   void points_in_bounding_box( const point_type & min_query_pt,
                                const point_type & max_query_pt,
-                               vcl_vector< value_type  >& values ) const;
+                               std::vector< value_type  >& values ) const;
 
   void points_in_bounding_box( const point_type & min_query_pt,
                                const point_type & max_query_pt,
-                               vcl_vector< point_type > & points,
-                               vcl_vector< value_type > & values ) const;
+                               std::vector< point_type > & points,
+                               std::vector< value_type > & values ) const;
 
   void change_value( const value_type& old_val, const value_type& new_val );
 
@@ -97,7 +99,7 @@ class rsdl_bins_2d
 
   point_type bin_sizes() const {return bin_sizes_;}
 
-  vcl_size_t num_pts() const;
+  std::size_t num_pts() const;
 
  private:
   void point_to_bin( COORD_T x, COORD_T y, int& bin_x, int& bin_y ) const;
@@ -105,7 +107,7 @@ class rsdl_bins_2d
 
  public:
   typedef rsdl_bins_2d_entry< COORD_T, VALUE_T > bin_entry_type_;
-  typedef vcl_vector< bin_entry_type_ > bin_vector_type_;
+  typedef std::vector< bin_entry_type_ > bin_vector_type_;
 
  private:
   vbl_array_2d< bin_vector_type_ > bins_;

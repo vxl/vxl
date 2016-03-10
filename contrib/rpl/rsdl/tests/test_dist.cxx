@@ -1,5 +1,7 @@
-#include <vcl_cmath.h>
-#include <vcl_vector.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <cmath>
+#include <vector>
 #include <vnl/vnl_math.h>
 #include <testlib/testlib_test.h>
 
@@ -17,10 +19,10 @@ static void test_dist()
   double p_ang_arr[] = { vnl_math::pi/4,  vnl_math::pi/8, -vnl_math::pi };
   double q_ang_arr[] = { vnl_math::pi/8, -vnl_math::pi,   3*vnl_math::pi/4 };
 
-  vcl_vector<double> p_cart;
-  vcl_vector<double> q_cart;
-  vcl_vector<double> p_ang;
-  vcl_vector<double> q_ang;
+  std::vector<double> p_cart;
+  std::vector<double> q_cart;
+  std::vector<double> p_ang;
+  std::vector<double> q_ang;
   for ( unsigned int i=0; i < Nc; ++i )  p_cart.push_back( p_cart_arr[i] );
   for ( unsigned int i=0; i < Nc; ++i )  q_cart.push_back( q_cart_arr[i] );
   for ( unsigned int i=0; i < Na; ++i )  p_ang.push_back( p_ang_arr[i] );
@@ -36,7 +38,7 @@ static void test_dist()
   rsdl_point q( q_cart.begin(), q_cart.end(), q_ang.begin(), q_ang.end() );
 
   TEST_NEAR("square distance between points", sq_dist, rsdl_dist_sq( p, q ), 1e-6);
-  TEST_NEAR("distance between points", vcl_sqrt(sq_dist), rsdl_dist( p, q ), 1e-6);
+  TEST_NEAR("distance between points", std::sqrt(sq_dist), rsdl_dist( p, q ), 1e-6);
 
   p_cart[0] = -1.5;  q_cart[0] = 2.5;
   p_cart[1] =  6.0;  q_cart[1] = 3.2;
@@ -49,8 +51,8 @@ static void test_dist()
 
   double cart0_arr[] = { 1, 4.0 };
   double ang0_arr[] = { 3*vnl_math::pi/16, vnl_math::pi, 8*vnl_math::pi/5 };
-  vcl_vector<double> cart0;
-  vcl_vector<double> ang0;
+  std::vector<double> cart0;
+  std::vector<double> ang0;
   for ( unsigned int i=0; i < Nc; ++i )  cart0.push_back( cart0_arr[i] );
   for ( unsigned int i=0; i < Na; ++i )  ang0.push_back( ang0_arr[i] );
 
@@ -61,7 +63,7 @@ static void test_dist()
   cart0[0] = -2.5; cart0[1] = 7.5;
   test_p.set_cartesian( cart0.begin() );
   TEST_NEAR("point-to-box dist sq - point outside cartesian", rsdl_dist_sq( test_p, box), 3.25, 1e-6);
-  TEST_NEAR("point-to-box dist sq - point outside cartesian", rsdl_dist( test_p, box), vcl_sqrt(3.25), 1e-6);
+  TEST_NEAR("point-to-box dist sq - point outside cartesian", rsdl_dist( test_p, box), std::sqrt(3.25), 1e-6);
 
   cart0[0] = 1;  cart0[1] = 4;  // cartesian back inside
   test_p.set_cartesian( cart0.begin() );
@@ -72,7 +74,7 @@ static void test_dist()
   sq_dist = vnl_math::sqr( vnl_math::pi/16 ) + vnl_math::sqr( vnl_math::pi/8 ) +
             vnl_math::sqr( vnl_math::twopi/5 );
   TEST_NEAR("point-to-box dist sq - angle outside (a)", rsdl_dist_sq( test_p, box), sq_dist , 1e-6);
-  TEST_NEAR("point-to-box dist - angle outside (a) ", rsdl_dist( test_p, box), vcl_sqrt(sq_dist), 1e-6);
+  TEST_NEAR("point-to-box dist - angle outside (a) ", rsdl_dist( test_p, box), std::sqrt(sq_dist), 1e-6);
 
   ang0[0] = 15*vnl_math::pi/8;    // non-wrap, above, but closer to min value
   ang0[1] = 3*vnl_math::pi/8;    // wrap, closer to "max" (smaller angle value)
@@ -81,7 +83,7 @@ static void test_dist()
   sq_dist = vnl_math::sqr( vnl_math::pi/4 ) + vnl_math::sqr( vnl_math::pi/8 ) +
     vnl_math::sqr( vnl_math::pi/10 );
   TEST_NEAR("point-to-box dist sq - angle outside (b)", rsdl_dist_sq( test_p, box), sq_dist , 1e-6);
-  TEST_NEAR("point-to-box dist - angle outside (b) ", rsdl_dist( test_p, box), vcl_sqrt(sq_dist), 1e-6);
+  TEST_NEAR("point-to-box dist - angle outside (b) ", rsdl_dist( test_p, box), std::sqrt(sq_dist), 1e-6);
 
 
   //  Now testing box intersection code.  This will take a bit because

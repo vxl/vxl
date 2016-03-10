@@ -1,12 +1,14 @@
-#include <vcl_iostream.h>
-#include <vcl_string.h>
-#include <vcl_cstdlib.h>
+#include <iostream>
+#include <string>
+#include <cstdlib>
 #include <vcl_cassert.h>
-#include <vcl_algorithm.h>
-#include <vcl_vector.h>
-#include <vcl_numeric.h>
-#include <vcl_functional.h>
-#include <vcl_cstring.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <algorithm>
+#include <vector>
+#include <numeric>
+#include <functional>
+#include <cstring>
 #include <vul/vul_file.h>
 #include <vbl/vbl_array_3d.hxx>
 #include <vil3d/vil3d_property.h>
@@ -20,7 +22,7 @@
 
 void usage(char * progname)
 {
-  vcl_cout << "Usage:\n"
+  std::cout << "Usage:\n"
            << progname << " [-m margin_width] [-b voxel_value] output image1 image2 - image3 image4 -- image5 ...\n"
            << '\n'
            << "Option: -m number: Set the margin between images - defaults to 0\n"
@@ -29,10 +31,10 @@ void usage(char * progname)
            << "\"-\" means start a new row\n"
            << "\"--\" means start a new slice\n"
            << "Output will have the pixel sizes, number of planes, etc. of image1.\n";
-  vcl_exit(2);
+  std::exit(2);
 }
 
-void parse_cmdline(int argc, const char **argv, vbl_array_3d<vcl_string>& fnames)
+void parse_cmdline(int argc, const char **argv, vbl_array_3d<std::string>& fnames)
 {
   const char **arg = argv;
 
@@ -40,13 +42,13 @@ void parse_cmdline(int argc, const char **argv, vbl_array_3d<vcl_string>& fnames
   unsigned i=0, j=0, k=0;
   for (int a = 0; a!=argc; ++arg, ++a)
   {
-    if (vcl_string("--") == *arg)
+    if (std::string("--") == *arg)
     {
       ++k;
       i=0;
       j=0;
     }
-    else if (vcl_string("-") == *arg)
+    else if (std::string("-") == *arg)
     {
       ++j;
       i=0;
@@ -69,13 +71,13 @@ void parse_cmdline(int argc, const char **argv, vbl_array_3d<vcl_string>& fnames
 
   for (int a = 0; a!=argc; ++arg, ++a)
   {
-    if (vcl_string("--") == *arg)
+    if (std::string("--") == *arg)
     {
       ++k;
       i=0;
       j=0;
     }
-    else if (vcl_string("-") == *arg)
+    else if (std::string("-") == *arg)
     {
       ++j;
       i=0;
@@ -89,7 +91,7 @@ void parse_cmdline(int argc, const char **argv, vbl_array_3d<vcl_string>& fnames
 }
 
 
-vil3d_image_resource_sptr fname_to_resource(const vcl_string& fname)
+vil3d_image_resource_sptr fname_to_resource(const std::string& fname)
 {
   if (fname.empty()) return VXL_NULLPTR;
 
@@ -97,8 +99,8 @@ vil3d_image_resource_sptr fname_to_resource(const vcl_string& fname)
 
   if (!im)
   {
-    vcl_cerr << "ERROR: unable to load image \"" << fname << "\"\n";
-    vcl_exit(4);
+    std::cerr << "ERROR: unable to load image \"" << fname << "\"\n";
+    std::exit(4);
   }
 
   return im;
@@ -108,13 +110,13 @@ vil3d_image_resource_sptr fname_to_resource(const vcl_string& fname)
 void calc_image_sizes(
   const vbl_array_3d<vil3d_image_resource_sptr> &images,
   unsigned margin,
-  vcl_vector<unsigned> & sizes_i,
-  vcl_vector<unsigned> & sizes_j,
-  vcl_vector<unsigned> & sizes_k)
+  std::vector<unsigned> & sizes_i,
+  std::vector<unsigned> & sizes_j,
+  std::vector<unsigned> & sizes_k)
 {
   // Get max size of each slice of images in each direction.
 
-  vcl_vector<unsigned>
+  std::vector<unsigned>
     max_size_k(images.get_row3_count(), 0u),
     max_size_j(images.get_row2_count(), 0u),
     max_size_i(images.get_row1_count(), 0u);
@@ -124,18 +126,18 @@ void calc_image_sizes(
       for (unsigned int i = 0; i < images.get_row1_count(); ++i)
         if (images(i,j,k))
         {
-          max_size_k[k]  = vcl_max(max_size_k[k], images(i,j,k)->nk());
-          max_size_j[j]  = vcl_max(max_size_j[j], images(i,j,k)->nj());
-          max_size_i[i]  = vcl_max(max_size_i[i], images(i,j,k)->ni());
+          max_size_k[k]  = std::max(max_size_k[k], images(i,j,k)->nk());
+          max_size_j[j]  = std::max(max_size_j[j], images(i,j,k)->nj());
+          max_size_i[i]  = std::max(max_size_i[i], images(i,j,k)->ni());
         }
 
   // Add margins.
-  vcl_transform(max_size_k.begin(), max_size_k.end(), max_size_k.begin(),
-                vcl_bind2nd(vcl_plus<unsigned>(),margin));
-  vcl_transform(max_size_j.begin(), max_size_j.end(), max_size_j.begin(),
-                vcl_bind2nd(vcl_plus<unsigned>(),margin));
-  vcl_transform(max_size_i.begin(), max_size_i.end(), max_size_i.begin(),
-                vcl_bind2nd(vcl_plus<unsigned>(),margin));
+  std::transform(max_size_k.begin(), max_size_k.end(), max_size_k.begin(),
+                std::bind2nd(std::plus<unsigned>(),margin));
+  std::transform(max_size_j.begin(), max_size_j.end(), max_size_j.begin(),
+                std::bind2nd(std::plus<unsigned>(),margin));
+  std::transform(max_size_i.begin(), max_size_i.end(), max_size_i.begin(),
+                std::bind2nd(std::plus<unsigned>(),margin));
 
   // Sum these max sizes to find the position of each input image, in the output image.
 
@@ -143,9 +145,9 @@ void calc_image_sizes(
   sizes_j.resize(images.get_row2_count()+1);
   sizes_i.resize(images.get_row1_count()+1);
   sizes_k.front() = sizes_j.front() = sizes_i.front() = 0;
-  vcl_partial_sum(max_size_k.begin(), max_size_k.end(), sizes_k.begin()+1);
-  vcl_partial_sum(max_size_j.begin(), max_size_j.end(), sizes_j.begin()+1);
-  vcl_partial_sum(max_size_i.begin(), max_size_i.end(), sizes_i.begin()+1);
+  std::partial_sum(max_size_k.begin(), max_size_k.end(), sizes_k.begin()+1);
+  std::partial_sum(max_size_j.begin(), max_size_j.end(), sizes_j.begin()+1);
+  std::partial_sum(max_size_i.begin(), max_size_i.end(), sizes_i.begin()+1);
 
   //Remove margin at far end of concatenated volume.
   sizes_k.back() -= margin;
@@ -161,24 +163,24 @@ int main(int argc, char*argv[])
 
   while (argc >= 2 && *argv[1] == '-')
   {
-    if (vcl_string("-b") == argv[1])
+    if (std::string("-b") == argv[1])
     {
       if (argc == 2) usage(progname);
-      background = vcl_atof(argv[2]);
+      background = std::atof(argv[2]);
       argv += 2;
       argc -= 2;
     }
 
-    if (vcl_string("-m") == argv[1])
+    if (std::string("-m") == argv[1])
     {
       if (argc == 2) usage(progname);
-      margin = vcl_atoi(argv[2]);
+      margin = std::atoi(argv[2]);
       argv += 2;
       argc -= 2;
     }
 
-    if (vcl_string("-?") == argv[1] ||
-        vcl_string("--help") == argv[1] || vcl_string("-h") == argv[1])
+    if (std::string("-?") == argv[1] ||
+        std::string("--help") == argv[1] || std::string("-h") == argv[1])
       usage(progname);
   }
 
@@ -189,11 +191,11 @@ int main(int argc, char*argv[])
 
   if (vul_file::exists(filename))
   {
-    vcl_cerr << "ERROR: Output file \"" << filename << "\" already exists.\n";
-    vcl_exit(5);
+    std::cerr << "ERROR: Output file \"" << filename << "\" already exists.\n";
+    std::exit(5);
   }
 
-  vbl_array_3d<vcl_string> fnames;
+  vbl_array_3d<std::string> fnames;
 
 
   parse_cmdline(argc-2, const_cast<const char **>(argv+2), fnames);
@@ -204,10 +206,10 @@ int main(int argc, char*argv[])
     for (unsigned int j = 0; j < fnames.get_row2_count(); ++j)
     {
       for (unsigned int i = 0; i < fnames.get_row1_count(); ++i)
-        vcl_cout << '\"' << fnames(i,j,k) << "\" ";
-      vcl_cout << vcl_endl;
+        std::cout << '\"' << fnames(i,j,k) << "\" ";
+      std::cout << std::endl;
     }
-    vcl_cout << "END_SLICE" << vcl_endl;
+    std::cout << "END_SLICE" << std::endl;
   }
 
   vbl_array_3d<vil3d_image_resource_sptr> im_resources(
@@ -217,18 +219,18 @@ int main(int argc, char*argv[])
   vimt3d_add_all_loaders();
   vil3d_file_format::add_format(new vil3d_gen_synthetic_format);
 
-  vcl_transform(fnames.begin(), fnames.end(),
+  std::transform(fnames.begin(), fnames.end(),
                 im_resources.begin(), fname_to_resource);
 
   if (!im_resources(0,0,0))
   {
-    vcl_cerr << "ERROR: The first (front-top-left) input image has not been correctly specified.";
-    vcl_exit(6);
+    std::cerr << "ERROR: The first (front-top-left) input image has not been correctly specified.";
+    std::exit(6);
   }
 
-  vcl_vector<unsigned> sizes_i;
-  vcl_vector<unsigned> sizes_j;
-  vcl_vector<unsigned> sizes_k;
+  std::vector<unsigned> sizes_i;
+  std::vector<unsigned> sizes_j;
+  std::vector<unsigned> sizes_k;
   calc_image_sizes(im_resources, margin, sizes_i, sizes_j, sizes_k);
 
   vil3d_image_resource_sptr output =
@@ -239,8 +241,8 @@ int main(int argc, char*argv[])
 
   if (!output)
   {
-    vcl_cerr << "ERROR: Unable to create output file \"" <<  filename << "\"\n";
-    vcl_exit(7);
+    std::cerr << "ERROR: Unable to create output file \"" <<  filename << "\"\n";
+    std::exit(7);
   }
 
   vil3d_gen_synthetic_pixel_value pv;
@@ -271,7 +273,7 @@ int main(int argc, char*argv[])
     pv.sbyte_value=(vxl_sbyte)background;
     break;
   default:
-    vcl_memset(&pv, 0, sizeof(pv));
+    std::memset(&pv, 0, sizeof(pv));
     break;
   }
 
@@ -293,9 +295,9 @@ int main(int argc, char*argv[])
           vil3d_image_view_base_sptr in = im_resources(i,j,k)->get_view();
           if (!output->put_view(*in, sizes_i[i], sizes_j[j], sizes_k[k]))
           {
-            vcl_cerr << "ERROR: Unable to copy image \"" << fnames(i,j,k)
+            std::cerr << "ERROR: Unable to copy image \"" << fnames(i,j,k)
                      << "\" into output image \"" << filename << "\"\n";
-            vcl_exit(8);
+            std::exit(8);
           }
         }
 

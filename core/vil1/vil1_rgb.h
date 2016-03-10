@@ -29,7 +29,8 @@
 //   Feb.2002 - Peter Vanroose - brief doxygen comment placed on single line
 //\endverbatim
 
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <iostream>
 #include <vil1/vil1_clamp.h>
 
 //: This is the appropriate pixel type for 24-bit colour images.
@@ -152,7 +153,7 @@ extern vil1_rgb<double> tickle_mi_fancy;
 
 template <class T>
 inline
-vcl_ostream& operator<<(vcl_ostream& s, vil1_rgb<T> const& rgb)
+std::ostream& operator<<(std::ostream& s, vil1_rgb<T> const& rgb)
 {
   return s << '[' << rgb.r << ' ' << rgb.g << ' ' << rgb.b << ']';
 }

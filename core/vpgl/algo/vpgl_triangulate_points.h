@@ -7,7 +7,8 @@
 // \author Andrew Hoelscher
 // \date August 28, 2011
 
-#include <vcl_vector.h>
+#include <vcl_compiler.h>
+#include <vector>
 
 #include <vgl/vgl_point_2d.h>
 #include <vgl/vgl_point_3d.h>
@@ -25,8 +26,8 @@ class vpgl_triangulate_points
     // by camera i. The result is placed into point_3d. Returns
     // the sum of squared errors.
     static double triangulate(
-        const vcl_vector<vgl_point_2d<double> > &points,
-        const vcl_vector<vpgl_perspective_camera<double> > &cameras,
+        const std::vector<vgl_point_2d<double> > &points,
+        const std::vector<vpgl_perspective_camera<double> > &cameras,
         vgl_point_3d<double> &point_3d);
 };
 

@@ -17,7 +17,7 @@
 
 static void test_voxel_world_mog_image()
 {
-  vcl_string model_dir("test_world_dir");
+  std::string model_dir("test_world_dir");
   if (vul_file::is_directory(model_dir))
     vpl_rmdir(model_dir.c_str());
   else if (vul_file::exists(model_dir))
@@ -168,11 +168,11 @@ static void test_voxel_world_mog_image()
   bvxm_voxel_world_sptr vox_world2 = new bvxm_voxel_world;
   vox_world2->set_params(params3);
   // load a test image and camera
-  vcl_string image_fname = "D:/projects/change/plasticville/outseq/DSCN0521.jpg";
-  vcl_string camera_fname = "D:/projects/change/plasticville/outseq_cams/frame_00.txt";
+  std::string image_fname = "D:/projects/change/plasticville/outseq/DSCN0521.jpg";
+  std::string camera_fname = "D:/projects/change/plasticville/outseq_cams/frame_00.txt";
   vil_image_view_base_sptr img3 = vil_load(image_fname.c_str());
   // read projection matrix from the file.
-  vcl_ifstream ifs(camera_fname.c_str());
+  std::ifstream ifs(camera_fname.c_str());
   vnl_matrix_fixed<double,3,4> projection_matrix; ifs >> projection_matrix;
   vbl_smart_ptr<vpgl_camera<double> > procam3 = new vpgl_proj_camera<double>(projection_matrix);
   bvxm_image_metadata meta3(img3,procam3);

@@ -53,7 +53,8 @@
 
 #include <vgl/vgl_fwd.h>
 #include <vgl/vgl_homg_point_1d.h>
-#include <vcl_iosfwd.h>
+#include <vcl_compiler.h>
+#include <iosfwd>
 #include <vcl_cassert.h>
 
 //----------------------------------------------------------------------
@@ -134,7 +135,7 @@ class vgl_1d_basis
 
 //: Write "<vgl_1d_basis o u i> " to stream
 // \relatesalso vgl_1d_basis
-template <class T> vcl_ostream& operator<<(vcl_ostream& s, vgl_1d_basis<T> const&);
+template <class T> std::ostream& operator<<(std::ostream& s, vgl_1d_basis<T> const&);
 
 #define VGL_1D_BASIS_INSTANTIATE(T) extern "please include vgl/vgl_1d_basis.txx first"
 

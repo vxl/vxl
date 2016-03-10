@@ -109,28 +109,29 @@ void vbl_array_3d<T>::fill(T const& value)
 
 //--------------------------------------------------------------------------------
 
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <iostream>
 
 template <class T>
-vcl_ostream & operator<<(vcl_ostream& os, vbl_array_3d<T> const& A)
+std::ostream & operator<<(std::ostream& os, vbl_array_3d<T> const& A)
 {
   typedef typename vbl_array_3d<T>::size_type size_type;
   os << "vbl_array_3d [";
   for (size_type i=0; i<A.get_row1_count(); ++i) {
-    os << vcl_endl << "  <" << i << '>';
+    os << std::endl << "  <" << i << '>';
     for (size_type j=0; j<A.get_row2_count(); ++j) {
-      os << vcl_endl << "   ";
+      os << std::endl << "   ";
       for (size_type k=0; k<A.get_row3_count(); ++k) {
         os << ' ' << A(i,j,k);
       }
     }
   }
-  os << "\n             ]" << vcl_endl;
+  os << "\n             ]" << std::endl;
   return os;
 }
 
 template <class T>
-vcl_istream & operator>>(vcl_istream& is, vbl_array_3d<T>& A)
+std::istream & operator>>(std::istream& is, vbl_array_3d<T>& A)
 {
   typedef typename vbl_array_3d<T>::size_type size_type;
   for (size_type i=0; i<A.get_row1_count(); ++i)
@@ -147,7 +148,7 @@ vcl_istream & operator>>(vcl_istream& is, vbl_array_3d<T>& A)
 
 #undef VBL_ARRAY_3D_IO_INSTANTIATE
 #define VBL_ARRAY_3D_IO_INSTANTIATE(T) \
-template vcl_ostream & operator<<(vcl_ostream &,vbl_array_3d<T > const &); \
-template vcl_istream & operator>>(vcl_istream &,vbl_array_3d<T > &)
+template std::ostream & operator<<(std::ostream &,vbl_array_3d<T > const &); \
+template std::istream & operator>>(std::istream &,vbl_array_3d<T > &)
 
 #endif // vbl_array_3d_hxx_

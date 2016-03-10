@@ -10,7 +10,9 @@
 #include <bprb/bprb_parameters.h>
 #include <brdb/brdb_value.h>
 
-#include <vcl_string.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <string>
 
 #include <bvxm/algo/bvxm_merge_mog.h>
 #include <bvxm/grid/bvxm_voxel_grid_base.h>
@@ -24,13 +26,13 @@ bool bvxm_merge_mog_process_cons(bprb_func_process& pro)
   // Inputs
   // 0. Path to input grid(the one with gaussian mixtures)
   // 1. Path to univariate gaussian grid
-  vcl_vector<vcl_string> input_types_(2);
+  std::vector<std::string> input_types_(2);
   input_types_[0] = "vcl_string";
   input_types_[1] = "vcl_string";
 
 
   // No outputs to the database. The resulting grid is stored on disk
-  vcl_vector<vcl_string> output_types_(0);
+  std::vector<std::string> output_types_(0);
 
   if (!pro.set_input_types(input_types_))
     return false;
@@ -45,12 +47,12 @@ bool bvxm_merge_mog_process(bprb_func_process& pro)
   // check number of inputs
   if (pro.n_inputs() != 2)
   {
-    vcl_cout << pro.name() << "The number of inputs should be " << 2 << vcl_endl;
+    std::cout << pro.name() << "The number of inputs should be " << 2 << std::endl;
     return false;
   }
 
-  vcl_string apm_path = pro.get_input<vcl_string>(0);
-  vcl_string output_path = pro.get_input<vcl_string>(1);
+  std::string apm_path = pro.get_input<std::string>(0);
+  std::string output_path = pro.get_input<std::string>(1);
 
   //get the grids
   typedef bsta_num_obs<bsta_gauss_sf1> gauss_type;

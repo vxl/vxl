@@ -12,8 +12,9 @@
 //  Contains class vgui_toolkit
 
 #include "dll.h"
-#include <vcl_string.h>
-#include <vcl_vector.h>
+#include <vcl_compiler.h>
+#include <string>
+#include <vector>
 
 class vgui_window;
 class vgui_adaptor;
@@ -36,7 +37,7 @@ class vgui_toolkit
 
   virtual void init(int &, char **);
   virtual void uninit();
-  virtual vcl_string name() const =0;
+  virtual std::string name() const =0;
 
   virtual vgui_window* produce_window(int width, int height,
                                       vgui_menu const &menubar,
@@ -57,7 +58,7 @@ class vgui_toolkit
   virtual void quit();
 
   static vgui_toolkit *lookup(char const *);
-  static vcl_vector<vgui_toolkit*> *registry();
+  static std::vector<vgui_toolkit*> *registry();
 };
 
 #endif // vgui_toolkit_h_

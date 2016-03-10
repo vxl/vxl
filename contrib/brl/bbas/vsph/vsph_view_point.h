@@ -1,7 +1,9 @@
 #ifndef vsph_view_point_h_
 #define vsph_view_point_h_
 
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iostream>
 #include <vpgl/vpgl_camera.h>
 #include <vpgl/vpgl_perspective_camera.h>
 #include <vpgl/io/vpgl_io_perspective_camera.h>
@@ -28,7 +30,7 @@ class vsph_view_point
   vsph_sph_point_3d view_point() const { return spher_coord_; }
 
 
-  void print(vcl_ostream& os) const { os << " vsph_view_point: camera=" << cam_->type_name() << ",coordinates=" << spher_coord_ << ",data=" << *metadata_ << " " << vcl_endl; }
+  void print(std::ostream& os) const { os << " vsph_view_point: camera=" << cam_->type_name() << ",coordinates=" << spher_coord_ << ",data=" << *metadata_ << " " << std::endl; }
 
   void relative_transf(vpgl_camera_double_sptr const& cam,
                        vgl_rotation_3d<double>& rel_rot,
@@ -47,7 +49,7 @@ class vsph_view_point
 };
 
 template <class T>
-vcl_ostream& operator<<(vcl_ostream& os, vsph_view_point<T> const& vp)
+std::ostream& operator<<(std::ostream& os, vsph_view_point<T> const& vp)
 {
   vp.print(os);
   return os;
@@ -68,7 +70,7 @@ void vsph_view_point<T>::b_read(vsl_b_istream& is)
         metadata_ = new T();
         vsl_b_read(is, *metadata_);
       } else
-        vcl_cout << "vsph_view_point<T>::b_write -- Camera type:" << cam_->type_name() << " is not supported yet!" << vcl_endl;
+        std::cout << "vsph_view_point<T>::b_write -- Camera type:" << cam_->type_name() << " is not supported yet!" << std::endl;
   }
 }
 
@@ -82,7 +84,7 @@ void vsph_view_point<T>::b_write(vsl_b_ostream& os)
     spher_coord_.b_write(os);
     vsl_b_write(os, *metadata_);
   } else
-    vcl_cout << "vsph_view_point<T>::b_write -- Camera type:" << cam_->type_name() << " is not supported yet!" << vcl_endl;
+    std::cout << "vsph_view_point<T>::b_write -- Camera type:" << cam_->type_name() << " is not supported yet!" << std::endl;
 }
 template <class T>
 void vsph_view_point<T>::

@@ -4,15 +4,17 @@
 //:
 // \file
 #include "bsta_von_mises_updater.h"
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iostream>
 #include <vcl_cassert.h>
-#include <vcl_limits.h>
+#include <limits>
 //: The main function
 template <class von_mises_dist_>
 void bsta_von_mises_updater<von_mises_dist_>::update(obs_vm_dist_& pdist, const vect_t& vsum, math_t alpha) const
 {
   if(!(data_dimension == 2||data_dimension == 3)){
-    vcl_cerr << "von mises update only implemented for 2-d and 3-d vectors\n";
+    std::cerr << "von mises update only implemented for 2-d and 3-d vectors\n";
     return;
   }
   math_t r_mag = vsum.magnitude();
@@ -21,7 +23,7 @@ void bsta_von_mises_updater<von_mises_dist_>::update(obs_vm_dist_& pdist, const 
     pdist.set_kappa(initial_kappa_);
     return;
   }
-  //  double minv = static_cast<double>(vcl_numeric_limits<math_t>::min());
+  //  double minv = static_cast<double>(std::numeric_limits<math_t>::min());
   double minv = static_cast<double>(0.00001);
   double r_bar = static_cast<double>(r_mag*alpha);
   assert(r_bar<=1.00001); //round off in vector normalization
@@ -29,19 +31,19 @@ void bsta_von_mises_updater<von_mises_dist_>::update(obs_vm_dist_& pdist, const 
   if(data_dimension == 3){
   if(r_bar>=0.0&&r_bar<0.2941)
     {
-      double k = 16.2227*(0.348127-0.351118*vcl_sqrt(0.980629-r_bar));
+      double k = 16.2227*(0.348127-0.351118*std::sqrt(0.980629-r_bar));
       pdist.set_kappa(static_cast<math_t>(k));
       return;
     }
   if(r_bar>=0.2941&&r_bar<0.5398)
     {
-      double k = 9.96768*(0.373669-0.447938*vcl_sqrt(0.686434-r_bar));
+      double k = 9.96768*(0.373669-0.447938*std::sqrt(0.686434-r_bar));
       pdist.set_kappa(static_cast<math_t>(k));
       return;
     }
   if(r_bar>=0.5398&&r_bar<0.6775)
     {
-      double k = 12.0976*(0.338089-0.406599*vcl_sqrt(0.717942-r_bar));
+      double k = 12.0976*(0.338089-0.406599*std::sqrt(0.717942-r_bar));
       pdist.set_kappa(static_cast<math_t>(k));
       return;
     }
@@ -50,7 +52,7 @@ void bsta_von_mises_updater<von_mises_dist_>::update(obs_vm_dist_& pdist, const 
       double k = 1.0;
       double temp = (1.0-r_bar);
       if(temp<minv)
-        k = static_cast<double>(vcl_numeric_limits<math_t>::max());
+        k = static_cast<double>(std::numeric_limits<math_t>::max());
       else
         k = 1.0/temp;
       pdist.set_kappa(static_cast<math_t>(k));
@@ -72,7 +74,7 @@ void bsta_von_mises_updater<von_mises_dist_>::update(obs_vm_dist_& pdist, const 
         double t1 = 1.0;
         double temp = (1.0-r_bar);
         if(temp<minv)
-          t1 = static_cast<double>(vcl_numeric_limits<math_t>::max());
+          t1 = static_cast<double>(std::numeric_limits<math_t>::max());
         else
           t1 = 1.0/temp;
         double k = -0.4 + 1.39*r_bar + 0.43*t1;
@@ -84,7 +86,7 @@ void bsta_von_mises_updater<von_mises_dist_>::update(obs_vm_dist_& pdist, const 
         double k = 1.0;
         double temp = t3 - 4.0*t2 + 3.0*r_bar;
         if(temp<minv)
-          k = static_cast<double>(vcl_numeric_limits<math_t>::max());
+          k = static_cast<double>(std::numeric_limits<math_t>::max());
         else
           k = 1.0/temp;
         pdist.set_kappa(static_cast<math_t>(k));

@@ -9,14 +9,15 @@
 #include "vil1_stream_url.h"
 
 #include <vcl_cassert.h>
-#include <vcl_cstring.h>
-#include <vcl_cstdlib.h>
-#include <vcl_string.h>
-#include <vcl_iostream.h>
+#include <cstring>
+#include <vcl_compiler.h>
+#include <cstdlib>
+#include <string>
+#include <iostream>
 #include <vil1/vil1_stream_core.h>
-#include <vcl_fstream.h>
+#include <fstream>
 #undef sprintf // This works around a bug in libintl.h
-#include <vcl_cstdio.h>  // sprintf()
+#include <cstdio>  // sprintf()
 
 #if defined(unix) || defined(__unix) || defined(__unix__)
 # include <unistd.h>       // read(), write(), close()
@@ -71,9 +72,9 @@ static const char * encode_triplet(char data[3], unsigned n)
 
 //=======================================================================
 
-static vcl_string encode_base64(const vcl_string& in)
+static std::string encode_base64(const std::string& in)
 {
-  vcl_string out;
+  std::string out;
   unsigned int i = 0, line_octets = 0;
   const unsigned int l = (unsigned int)(in.size());
   char data[3];
@@ -116,7 +117,7 @@ static vcl_string encode_base64(const vcl_string& in)
 vil1_stream_url::vil1_stream_url(char const *url)
   : u_(0)
 {
-  if (vcl_strncmp(url, "http://", 7) != 0)
+  if (std::strncmp(url, "http://", 7) != 0)
     return; // doesn't look like a URL to me....
 
   char const *p = url+7;
@@ -124,16 +125,16 @@ vil1_stream_url::vil1_stream_url(char const *url)
     ++p;
 
   // split URL into auth, host, path and port number.
-  vcl_string host = vcl_string(url+7, p);
-  vcl_string path = (*p) ? p+1 : "";
-  vcl_string auth;
+  std::string host = std::string(url+7, p);
+  std::string path = (*p) ? p+1 : "";
+  std::string auth;
   int port = 80; // default
 
   //authentication
   for (unsigned int i=0; i<host.size(); ++i)
     if (host[i] == '@') {
-      auth = vcl_string(host.c_str(), host.c_str()+i);
-      host = vcl_string(host.c_str()+i+1, host.c_str() + host.size());
+      auth = std::string(host.c_str(), host.c_str()+i);
+      host = std::string(host.c_str()+i+1, host.c_str() + host.size());
       break;
     }
 
@@ -141,8 +142,8 @@ vil1_stream_url::vil1_stream_url(char const *url)
   if (host.size() > 0)
   for (unsigned int i=(unsigned int)(host.size()-1); i>0; --i)
     if (host[i] == ':') {
-      port = vcl_atoi(host.c_str() + i + 1);
-      host = vcl_string(host.c_str(), host.c_str() + i);
+      port = std::atoi(host.c_str() + i + 1);
+      host = std::string(host.c_str(), host.c_str() + i);
       break;
     }
 
@@ -155,10 +156,10 @@ vil1_stream_url::vil1_stream_url(char const *url)
 
   // so far so good.
 #ifdef DEBUG
-  vcl_cerr << "auth = \'" << auth << "\'\n"
+  std::cerr << "auth = \'" << auth << "\'\n"
            << "host = \'" << host << "\'\n"
            << "path = \'" << path << "\'\n"
-           << "port = " << port << vcl_endl;
+           << "port = " << port << std::endl;
 #endif
 
 #if defined(VCL_WIN32) && !defined(__CYGWIN__)
@@ -181,25 +182,25 @@ vil1_stream_url::vil1_stream_url(char const *url)
 
 #if defined(VCL_WIN32) && !defined(__CYGWIN__)
   if (tcp_socket == INVALID_SOCKET) {
-    vcl_cerr << __FILE__ ": failed to create socket.\n";
+    std::cerr << __FILE__ ": failed to create socket.\n";
 # ifndef NDEBUG
-    vcl_cerr << "error code : " << WSAGetLastError() << vcl_endl;
+    std::cerr << "error code : " << WSAGetLastError() << std::endl;
 # endif
     return;
   }
 #else
   if (tcp_socket < 0)
-    vcl_cerr << __FILE__ ": failed to create socket.\n";
+    std::cerr << __FILE__ ": failed to create socket.\n";
 #endif
 
 #ifdef DEBUG
-  vcl_cerr << __FILE__ ": tcp_sockect = " << tcp_socket << vcl_endl;
+  std::cerr << __FILE__ ": tcp_sockect = " << tcp_socket << std::endl;
 #endif
 
   // get network address of server.
   hostent *hp = gethostbyname(host.c_str());
   if (! hp) {
-    vcl_cerr << __FILE__ ": failed to lookup host\n";
+    std::cerr << __FILE__ ": failed to lookup host\n";
 #if defined(VCL_WIN32) && !defined(__CYGWIN__)
     closesocket(tcp_socket);
 #else
@@ -212,11 +213,11 @@ vil1_stream_url::vil1_stream_url(char const *url)
   sockaddr_in my_addr;
   my_addr.sin_family = AF_INET;
   my_addr.sin_port = htons(port);  // convert port number to network byte order..
-  vcl_memcpy(&my_addr.sin_addr, hp->h_addr_list[0], hp->h_length);
+  std::memcpy(&my_addr.sin_addr, hp->h_addr_list[0], hp->h_length);
 
   // connect to server.
   if (connect(tcp_socket , (sockaddr *) &my_addr, sizeof my_addr) < 0) {
-    vcl_cerr << __FILE__ ": failed to connect to host\n";
+    std::cerr << __FILE__ ": failed to connect to host\n";
     //perror(__FILE__);
 #if defined(VCL_WIN32) && !defined(__CYGWIN__)
     closesocket(tcp_socket);
@@ -230,22 +231,22 @@ vil1_stream_url::vil1_stream_url(char const *url)
   char buffer[4096];
 
   // send HTTP 1.1 request.
-  vcl_sprintf(buffer, "GET /%s / HTTP/1.1\n", path.c_str());
+  std::sprintf(buffer, "GET /%s / HTTP/1.1\n", path.c_str());
   if (auth != "")
-    vcl_sprintf(buffer+vcl_strlen(buffer), "Authorization:  Basic %s\n", encode_base64(auth).c_str());
-//    vcl_sprintf(buffer+vcl_strlen(buffer), "Authorization:  user  testuser:testuser\n");
+    std::sprintf(buffer+std::strlen(buffer), "Authorization:  Basic %s\n", encode_base64(auth).c_str());
+//    std::sprintf(buffer+std::strlen(buffer), "Authorization:  user  testuser:testuser\n");
 
 #if defined(VCL_WIN32) && !defined(__CYGWIN__)
-  if (send(tcp_socket, buffer, (int)vcl_strlen(buffer), 0) < 0)
+  if (send(tcp_socket, buffer, (int)std::strlen(buffer), 0) < 0)
   {
-    vcl_cerr << __FILE__ ": error sending HTTP request\n";
+    std::cerr << __FILE__ ": error sending HTTP request\n";
     closesocket(tcp_socket);
     return;
   }
 #else
-  if (::write(tcp_socket, buffer, vcl_strlen(buffer)) < 0)
+  if (::write(tcp_socket, buffer, std::strlen(buffer)) < 0)
   {
-    vcl_cerr << __FILE__ ": error sending HTTP request\n";
+    std::cerr << __FILE__ ": error sending HTTP request\n";
     close(tcp_socket);
     return;
   }
@@ -258,7 +259,7 @@ vil1_stream_url::vil1_stream_url(char const *url)
   for (int i=0; i<4096; ++i) ::write(tcp_socket, "\n\n\n\n", 4);
 #endif
 
-//  vcl_ofstream test2("/test2.jpg", vcl_ios_binary);
+//  std::ofstream test2("/test2.jpg", std::ios::binary);
 
   // read from socket into memory.
   u_ = new vil1_stream_core;
@@ -301,7 +302,7 @@ vil1_stream_url::vil1_stream_url(char const *url)
 
 #if 0 // useful for figuring out where the error is
   char btest[4096];
-  vcl_ofstream test("/test.jpg", vcl_ios_binary);
+  std::ofstream test("/test.jpg", std::ios::binary);
   u_->seek(0L);
   while (vil1_streampos bn = u_->read(btest, 4096L))
     test.write(btest, bn);

@@ -25,13 +25,13 @@ bool brec_density_to_prob_map_process_cons(bprb_func_process& pro)
 {
    //inputs
   bool ok=false;
-  vcl_vector<vcl_string> input_types;
+  std::vector<std::string> input_types;
   input_types.push_back("vil_image_view_base_sptr");      // input density map
   ok = pro.set_input_types(input_types);
   if (!ok) return ok;
 
   //output
-  vcl_vector<vcl_string> output_types;
+  std::vector<std::string> output_types;
   output_types.push_back("vil_image_view_base_sptr");      // output prob map
   ok = pro.set_output_types(output_types);
   if (!ok) return ok;
@@ -47,7 +47,7 @@ bool brec_density_to_prob_map_process(bprb_func_process& pro)
 {
 // Sanity check
   if (pro.n_inputs() < 1){
-    vcl_cerr << "brec_density_to_prob_map_process - invalid inputs\n";
+    std::cerr << "brec_density_to_prob_map_process - invalid inputs\n";
     return false;
   }
 

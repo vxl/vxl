@@ -81,12 +81,12 @@ void vil3d_corners<srcT,destT>::cornerness1(
   // Compute the cornerness value
   cornerness.set_size(ni,nj,nk);
 
-  vcl_ptrdiff_t c_istep=cornerness.istep();
-  vcl_ptrdiff_t c_jstep=cornerness.jstep();
-  vcl_ptrdiff_t c_kstep=cornerness.kstep();
-  vcl_ptrdiff_t s_istep=smooth_grad_product_.istep();
-  vcl_ptrdiff_t s_jstep=smooth_grad_product_.jstep();
-  vcl_ptrdiff_t s_kstep=smooth_grad_product_.kstep();
+  std::ptrdiff_t c_istep=cornerness.istep();
+  std::ptrdiff_t c_jstep=cornerness.jstep();
+  std::ptrdiff_t c_kstep=cornerness.kstep();
+  std::ptrdiff_t s_istep=smooth_grad_product_.istep();
+  std::ptrdiff_t s_jstep=smooth_grad_product_.jstep();
+  std::ptrdiff_t s_kstep=smooth_grad_product_.kstep();
 
   destT* c_data = cornerness.origin_ptr();
   destT* s_data = smooth_grad_product_.origin_ptr();

@@ -5,8 +5,9 @@
 // \file
 
 #include "vgl_conic_2d_regression.h"
-#include <vcl_iostream.h>
-#include <vcl_algorithm.h>
+#include <iostream>
+#include <vcl_compiler.h>
+#include <algorithm>
 #include <vnl/vnl_vector_fixed.h>
 #include <vnl/vnl_inverse.h>
 #include <vnl/vnl_numeric_traits.h>
@@ -63,7 +64,7 @@ void vgl_conic_2d_regression<T>::set_sampson_error(T a, T b, T c, T d, T e, T f)
 {
   T sum = 0;
   //remove warnings on implicit typename
-  typename vcl_vector<vgl_point_2d<T> >::iterator pit;
+  typename std::vector<vgl_point_2d<T> >::iterator pit;
   for (pit = points_.begin(); pit != points_.end(); ++pit)
   {
     T x = pit->x(), y = pit->y();
@@ -76,7 +77,7 @@ void vgl_conic_2d_regression<T>::set_sampson_error(T a, T b, T c, T d, T e, T f)
   }
   if (npts_)
   {
-    sampson_error_ = static_cast<T>(vcl_sqrt(sum/npts_));
+    sampson_error_ = static_cast<T>(std::sqrt(sum/npts_));
     return;
   }
   sampson_error_ = vnl_numeric_traits<T>::maxval;
@@ -93,8 +94,8 @@ template <class T>
 void vgl_conic_2d_regression<T>::remove_point(vgl_point_2d<T> const& p)
 {
   //remove warnings on implicit typename
-  typename vcl_vector<vgl_point_2d<T> >::iterator result;
-  result = vcl_find(points_.begin(), points_.end(), p);
+  typename std::vector<vgl_point_2d<T> >::iterator result;
+  result = std::find(points_.begin(), points_.end(), p);
   if (result != points_.end())
     points_.erase(result);
   if (npts_>0)
@@ -113,9 +114,9 @@ void vgl_conic_2d_regression<T>::compute_partial_sums()
 {
   hnorm_points_.clear();
   //Compute the normalizing transformation
-  vcl_vector<vgl_homg_point_2d<T> > hpoints;
+  std::vector<vgl_homg_point_2d<T> > hpoints;
   //remove warnings on implicit typename
-  typename vcl_vector<vgl_point_2d<T> >::iterator pit;
+  typename std::vector<vgl_point_2d<T> >::iterator pit;
   for (pit = points_.begin(); pit != points_.end(); ++pit)
   {
     hpoints.push_back(vgl_homg_point_2d<T>(*pit));
@@ -123,16 +124,16 @@ void vgl_conic_2d_regression<T>::compute_partial_sums()
   trans_.compute_from_points(hpoints, false);
 
   //Transform the input pointset
-  for (typename vcl_vector<vgl_homg_point_2d<T> >::iterator pit = hpoints.begin();
+  for (typename std::vector<vgl_homg_point_2d<T> >::iterator pit = hpoints.begin();
        pit != hpoints.end(); ++pit)
     hnorm_points_.push_back(trans_(*pit));
 
-  for (typename vcl_vector<T>::iterator dit = partial_sums_.begin();
+  for (typename std::vector<T>::iterator dit = partial_sums_.begin();
        dit != partial_sums_.end(); ++dit)
     (*dit)=0;
 
   T x2,y2,x3,y3;
-  for (typename vcl_vector<vgl_homg_point_2d<T> >::iterator pit = hnorm_points_.begin();
+  for (typename std::vector<vgl_homg_point_2d<T> >::iterator pit = hnorm_points_.begin();
        pit != hnorm_points_.end(); ++pit)
   {
     T x = pit->x()/pit->w(),
@@ -201,7 +202,7 @@ bool vgl_conic_2d_regression<T>::fit()
   T det = vnl_det(S22_);
   if (det == static_cast<T>(0))
   {
-    vcl_cout << "Singular S22 Matrix in vgl_conic_2d_regression::fit()\n";
+    std::cout << "Singular S22 Matrix in vgl_conic_2d_regression::fit()\n";
     return false;
   }
   //The Bookstein solution.
@@ -232,11 +233,11 @@ bool vgl_conic_2d_regression<T>::fit()
 }
 
 template <class T>
-void vgl_conic_2d_regression<T>::print_pointset(vcl_ostream& str)
+void vgl_conic_2d_regression<T>::print_pointset(std::ostream& str)
 {
   str << "Current Pointset has " << npts_ << " points\n";
   //remove warnings on implicit typename
-  typename vcl_vector<vgl_point_2d<T> >::iterator pit;
+  typename std::vector<vgl_point_2d<T> >::iterator pit;
   for (pit = points_.begin(); pit != points_.end(); ++pit)
     str << *pit << '\n';
 }

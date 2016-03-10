@@ -10,13 +10,15 @@
 #include <bocl/bocl_kernel.h>
 #include <bocl/bocl_mem.h>
 #include <bocl/bocl_device.h>
-#include <vcl_iostream.h>
-#include <vcl_ios.h> // for std::ios::fixed
-#include <vcl_string.h>
-#include <vcl_vector.h>
-#include <vcl_map.h>
-#include <vcl_algorithm.h>
-#include <vcl_cmath.h>
+#include <iostream>
+#include <ios> // for std::ios::fixed
+#include <string>
+#include <vector>
+#include <map>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <algorithm>
+#include <cmath>
 
 void test_cubic_estimation()
 {
@@ -26,8 +28,8 @@ void test_cubic_estimation()
   bocl_device* device = mgr->gpus_[0];
 
   //compile pyramid test
-  vcl_vector<vcl_string> src_paths;
-  vcl_string source_dir = vcl_string(VCL_SOURCE_ROOT_DIR) + "/contrib/brl/bseg/boxm2/ocl/cl/";
+  std::vector<std::string> src_paths;
+  std::string source_dir = std::string(VCL_SOURCE_ROOT_DIR) + "/contrib/brl/bseg/boxm2/ocl/cl/";
   src_paths.push_back(source_dir + "onl/onl_inverse_4x4.cl");
   src_paths.push_back(source_dir + "onl/cubic_fit.cl");
   src_paths.push_back(source_dir + "onl/test_onl_kernels.cl");
@@ -50,8 +52,8 @@ void test_cubic_estimation()
   bocl_mem_sptr invmatbuff = new bocl_mem( device->context(), odata, 16*sizeof(float), "inverse input matrix");
   invmatbuff->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
   //set workspace
-  vcl_size_t lThreads[] = {4, 4};
-  vcl_size_t gThreads[] = {4, 4};
+  std::size_t lThreads[] = {4, 4};
+  std::size_t gThreads[] = {4, 4};
   //set first kernel args
   inverse_test.set_arg( matbuff.ptr() );
   inverse_test.set_arg( invmatbuff.ptr() );
@@ -66,7 +68,7 @@ void test_cubic_estimation()
   invmatbuff->read_to_buffer(queue);
 
   for (unsigned i = 0 ; i < 16; i ++)
-    vcl_cout<<odata[i]<<' ';
+    std::cout<<odata[i]<<' ';
 
   int nobs = 16;
 
@@ -122,9 +124,9 @@ void test_cubic_estimation()
   coeffsbuff->read_to_buffer(queue);
   varbuff->read_to_buffer(queue);
   for (unsigned i = 0 ; i < 4; i ++)
-    vcl_cout<<coeffs[i]<<' ';
+    std::cout<<coeffs[i]<<' ';
 
-  vcl_cout<<var<<vcl_endl;
+  std::cout<<var<<std::endl;
 }
 
 

@@ -67,16 +67,16 @@ bool icam_spherical_map::map_sphere(double angle_exponent,
   for(unsigned ith = 0; ith<n_theta_; ++ith){
     // determine ray origin
     double theta = theta_cap_ + ith*dtheta;
-    vcl_cout << '.';
+    std::cout << '.';
     vgl_point_3d<double> orig(ox, oy, oz);
     double tr_theta = theta+t_theta_;
     for(unsigned iph= 0; iph<n_phi_; ++iph){
       //determine point on sphere
       double phi = iph*dphi;
       double tr_phi = phi + t_phi_;
-      double si = vcl_sin(tr_theta);
-      double x = radius_*si*vcl_cos(tr_phi), y = radius_*si*vcl_sin(tr_phi);
-      double z = radius_*vcl_cos(tr_theta);
+      double si = std::sin(tr_theta);
+      double x = radius_*si*std::cos(tr_phi), y = radius_*si*std::sin(tr_phi);
+      double z = radius_*std::cos(tr_theta);
       x+=ox; y+=oy; z+=oz;
       vgl_point_3d<double> pc(x, y, z);
       vgl_vector_3d<double> dir = pc-orig;
@@ -88,7 +88,7 @@ bool icam_spherical_map::map_sphere(double angle_exponent,
         continue;
       double fade = 1.0;
       if(angle_exponent !=0.0)
-        fade = vcl_exp(-angle_exponent*(1.0-vcl_fabs(dot_prod)));
+        fade = std::exp(-angle_exponent*(1.0-std::fabs(dot_prod)));
       int ui = static_cast<int>(u), vi = static_cast<int>(v);
       if(use_image){
         for(int p = 0; p<3; ++p)
@@ -163,9 +163,9 @@ render_map(vil_image_view<vxl_byte>const& backgnd,
       if(phi_map>=twopi)
         phi_map -= twopi;
       int kphi = static_cast<int>(phi_map/dphi);
-      double x = radius_*vcl_sin(theta)*vcl_cos(phi);
-      double y = radius_*vcl_sin(theta)*vcl_sin(phi);
-      double z = radius_*vcl_cos(theta);
+      double x = radius_*std::sin(theta)*std::cos(phi);
+      double y = radius_*std::sin(theta)*std::sin(phi);
+      double z = radius_*std::cos(theta);
       x+=ox; y+=oy; z += oz;
       vgl_point_3d<double> pc(x, y, z);
       vgl_vector_3d<double> dir = pc-origin_;

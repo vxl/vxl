@@ -3,17 +3,18 @@
 
 #include "vgl_tolerance.h"
 
-#include <vcl_cmath.h>
-#include <vcl_limits.h>
+#include <cmath>
+#include <vcl_compiler.h>
+#include <limits>
 
 //! \file
 
 
 template <typename T>
-const T vgl_tolerance<T>::point_3d_coplanarity = (T)vcl_sqrt(1.0f*vcl_numeric_limits<T>::epsilon());
+const T vgl_tolerance<T>::point_3d_coplanarity = (T)std::sqrt(1.0f*std::numeric_limits<T>::epsilon());
 
 template <typename T>
-const T vgl_tolerance<T>::position = vcl_numeric_limits<T>::epsilon();
+const T vgl_tolerance<T>::position = std::numeric_limits<T>::epsilon();
 
 
 

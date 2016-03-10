@@ -7,7 +7,9 @@
 #include <vpl/vpl.h>
 #include <vnl/vnl_vector_fixed.h>
 
-#include <vcl_sstream.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <sstream>
 
 template<class T>
 T test_value();
@@ -22,18 +24,18 @@ unsigned char test_value<unsigned char>() { return (unsigned char)25; }
 template<class T>
 void save_grid()
 {
-  vcl_string dir = "test_grid_to_stack";
+  std::string dir = "test_grid_to_stack";
   vgl_vector_3d<unsigned> grid_size(2, 2, 2);
   bvxm_voxel_grid<T> *grid = new bvxm_voxel_grid<T>(grid_size);
   grid->initialize_data(T(test_value<T>()));
   bvxm_grid_to_image_stack::write_grid_to_image_stack(grid, dir);
 
   //read images back in
-  vcl_stringstream grid_glob;
+  std::stringstream grid_glob;
   grid_glob << dir << "/*" << bvxm_extension<T>();
   for (vul_file_iterator file_it = grid_glob.str().c_str(); file_it; ++file_it)
   {
-    vcl_stringstream grid_glob;
+    std::stringstream grid_glob;
     vil_image_view_base_sptr img_base = vil_load(file_it());
     vil_image_view<T> *img_view = dynamic_cast<vil_image_view<T>*>(img_base.ptr());
     typename vil_image_view<T>::iterator img_it = img_view->begin();
@@ -53,14 +55,14 @@ void save_grid()
 template<class T, unsigned N>
 void save_grid()
 {
-  vcl_string dir = "test_grid_to_stack";
+  std::string dir = "test_grid_to_stack";
   vgl_vector_3d<unsigned> grid_size(2, 2, 2);
   bvxm_voxel_grid<vnl_vector_fixed<T,N> > *grid = new  bvxm_voxel_grid<vnl_vector_fixed<T,N> >(grid_size);
   grid->initialize_data(vnl_vector_fixed<T,N>(test_value<T>()));
   bvxm_grid_to_image_stack::write_grid_to_image_stack(grid, dir);
 
   //read images back in
-  vcl_stringstream grid_glob;
+  std::stringstream grid_glob;
   grid_glob << dir << "/*" << bvxm_extension<T>();
   for (vul_file_iterator file_it = grid_glob.str().c_str(); file_it; ++file_it)
   {
@@ -85,9 +87,9 @@ void save_grid()
 
 static void test_grid_to_image_stack()
 {
-  vcl_cout << "Float\n";
+  std::cout << "Float\n";
   save_grid<float>();
-  vcl_cout << "Vector Float\n";
+  std::cout << "Vector Float\n";
   save_grid<float,3>();
 }
 

@@ -26,20 +26,20 @@
 
 void print_usage()
 {
-  vcl_cout<<"find_matches -i1 image1.jpg -i2 image2.jpg -L 2\n"
+  std::cout<<"find_matches -i1 image1.jpg -i2 image2.jpg -L 2\n"
           <<"Loads in image1 and image2.\n"
           <<"Locates a set of interesting features (corners) on level L of image1.\n"
           <<"Constructs a model of their relative positions.\n"
           <<"Uses normalised correlation and this model to locate\n"
-          <<"equivalent points on the same level of the second image."<<vcl_endl;
+          <<"equivalent points on the same level of the second image."<<std::endl;
   vul_arg_display_usage_and_exit();
 }
 
 //: Write tree into the image
 // Draw disks at each point, and lines between linked points
 void draw_tree(vil_image_view<vxl_byte>& image,
-               const vcl_vector<vgl_point_2d<double> >& pts,
-               const vcl_vector<vcl_pair<int,int> >& pairs)
+               const std::vector<vgl_point_2d<double> >& pts,
+               const std::vector<std::pair<int,int> >& pairs)
 {
   // Draw tree into image for display purposes
   for (unsigned i=0;i<pairs.size();++i)
@@ -57,10 +57,10 @@ void draw_tree(vil_image_view<vxl_byte>& image,
 
 int main( int argc, char* argv[] )
 {
-  vul_arg<vcl_string> image1_path("-i1","Input image 1");
-  vul_arg<vcl_string> image2_path("-i2","Input image 2");
-  vul_arg<vcl_string> output_image1_path("-o1","Output image 1","output1.png");
-  vul_arg<vcl_string> output_image2_path("-o2","Output image 1","output2.png");
+  vul_arg<std::string> image1_path("-i1","Input image 1");
+  vul_arg<std::string> image2_path("-i2","Input image 2");
+  vul_arg<std::string> output_image1_path("-o1","Output image 1","output1.png");
+  vul_arg<std::string> output_image2_path("-o2","Output image 1","output2.png");
   vul_arg<unsigned> level("-L","Image pyramid level to work on",2);
   vul_arg<unsigned> nc("-n","Number of points to select",10);
   vul_arg<unsigned> w("-w","Half width of filters",7);
@@ -82,13 +82,13 @@ int main( int argc, char* argv[] )
   image1.image() = vil_load(image1_path().c_str());
   if (image1.image().size()==0)
   {
-    vcl_cerr<<"Unable to read in image from "<<image1_path()<<vcl_endl;
+    std::cerr<<"Unable to read in image from "<<image1_path()<<std::endl;
     return 1;
   }
   image2.image() = vil_load(image2_path().c_str());
   if (image2.image().size()==0)
   {
-    vcl_cerr<<"Unable to read in image from "<<image2_path()<<vcl_endl;
+    std::cerr<<"Unable to read in image from "<<image2_path()<<std::endl;
     return 1;
   }
 
@@ -111,23 +111,23 @@ int main( int argc, char* argv[] )
   corner_im.set_world2im(image1_L.world2im());
   vil_corners(image1_L.image(),corner_im.image());
 
-  vcl_vector<unsigned> pi,pj;
+  std::vector<unsigned> pi,pj;
   float threshold = 4.0f;
   vil_find_peaks_3x3(pi,pj,corner_im.image(),threshold);
 
   // Evaluate corner strength at each point (pi[i],pj[i])
   unsigned n = pi.size();
-  vcl_vector<float> corner_str(n);
+  std::vector<float> corner_str(n);
   for (unsigned i=0;i<n;++i)
     corner_str[i] = corner_im.image()(pi[i],pj[i]);
 
   // Sort and generate a list of image points and equivalent world points
-  vcl_vector<unsigned> index;
+  std::vector<unsigned> index;
   mbl_index_sort(corner_str,index);
 
-  unsigned n_c = vcl_min(nc(),n);
-  vcl_vector<vgl_point_2d<int> > im_pts(n_c);
-  vcl_vector<vgl_point_2d<double> > w_pts(n_c);
+  unsigned n_c = std::min(nc(),n);
+  std::vector<vgl_point_2d<int> > im_pts(n_c);
+  std::vector<vgl_point_2d<double> > w_pts(n_c);
   vimt_transform_2d im2w = image1_L.world2im().inverse();
   for (unsigned i=0;i<n_c;++i)
   {
@@ -139,17 +139,17 @@ int main( int argc, char* argv[] )
   // ========================================================
   // Extract patches around each selected point and normalise
   // ========================================================
-  vcl_vector<vil_image_view<float> > patch(n_c);
-  vcl_vector<vgl_point_2d<double> > patch_ref(n_c);  // Reference point
+  std::vector<vil_image_view<float> > patch(n_c);
+  std::vector<vgl_point_2d<double> > patch_ref(n_c);  // Reference point
   int ni = image1.image().ni();
   int nj = image1.image().nj();
   for (unsigned i=0;i<n_c;++i)
   {
     // Select region around point, allowing for image edges.
-    int ilo = vcl_max(0,int(im_pts[i].x()-w()));
-    int ihi = vcl_min(ni-1,int(im_pts[i].x()+w()));
-    int jlo = vcl_max(0,int(im_pts[i].y()-w()));
-    int jhi = vcl_min(nj-1,int(im_pts[i].y()+w()));
+    int ilo = std::max(0,int(im_pts[i].x()-w()));
+    int ihi = std::min(ni-1,int(im_pts[i].x()+w()));
+    int jlo = std::max(0,int(im_pts[i].y()-w()));
+    int jhi = std::min(nj-1,int(im_pts[i].y()+w()));
 
     // Compute position of reference point relative to corner
     int kx = im_pts[i].x()-ilo;
@@ -161,7 +161,7 @@ int main( int argc, char* argv[] )
   }
 
   // Construct tree structure for points
-  vcl_vector<vcl_pair<int,int> > pairs;
+  std::vector<std::pair<int,int> > pairs;
   mbl_minimum_spanning_tree(w_pts,pairs);
 
   assert(pairs.size()==n_c-1);
@@ -171,29 +171,29 @@ int main( int argc, char* argv[] )
 
   if (vil_save(image1.image(),output_image1_path().c_str()))
   {
-    vcl_cout<<"Saved output image 1 to "<<output_image1_path()<<vcl_endl;
+    std::cout<<"Saved output image 1 to "<<output_image1_path()<<std::endl;
   }
 
   // =================================================
   // Construct the arc model from the points and pairs
   // =================================================
 
-  vcl_vector<fhs_arc> arcs(n_c-1);
+  std::vector<fhs_arc> arcs(n_c-1);
   int root_node = pairs[0].first;
   for (unsigned i=0;i<pairs.size();++i)
   {
     int i1 = pairs[i].first;
     int i2 = pairs[i].second;
     vgl_vector_2d<double> dp = w_pts[i2]-w_pts[i1];
-    double sd_x = vcl_max(0.1*ni,0.2*dp.length());
-    double sd_y = vcl_max(0.1*nj,0.2*dp.length());
+    double sd_x = std::max(0.1*ni,0.2*dp.length());
+    double sd_y = std::max(0.1*nj,0.2*dp.length());
     arcs[i]=fhs_arc(i1,i2,dp.x(),dp.y(),sd_x*sd_x,sd_y*sd_y);
   }
 
   // =================================================
   // Apply filters to image2 (initially to whole image)
   // =================================================
-  vcl_vector<vimt_image_2d_of<float> > feature_response(n_c);
+  std::vector<vimt_image_2d_of<float> > feature_response(n_c);
   for (unsigned i=0;i<n_c;++i)
   {
     // Apply to whole image in first instance
@@ -212,7 +212,7 @@ int main( int argc, char* argv[] )
   fhs_searcher searcher;
   searcher.set_tree(arcs,root_node);
   searcher.search(feature_response);
-  vcl_vector<vgl_point_2d<double> > pts2;
+  std::vector<vgl_point_2d<double> > pts2;
   searcher.best_points(pts2);
 
   // Draw tree into image for display purposes
@@ -220,7 +220,7 @@ int main( int argc, char* argv[] )
 
   if (vil_save(image2.image(),output_image2_path().c_str()))
   {
-    vcl_cout<<"Saved output image 2 to "<<output_image2_path()<<vcl_endl;
+    std::cout<<"Saved output image 2 to "<<output_image2_path()<<std::endl;
   }
 
   return 0;

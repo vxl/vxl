@@ -3,12 +3,14 @@
 //:
 // \file
 
-#include <vcl_cmath.h>
-#include <vcl_cstdlib.h>
+#include <cmath>
+#include <cstdlib>
 #include <vcl_cassert.h>
-#include <vcl_list.h>
-#include <vcl_iostream.h>
-#include <vcl_algorithm.h>
+#include <list>
+#include <iostream>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <algorithm>
 
 #include <osl/osl_canny_base.h>
 #include <osl/osl_kernel.h>
@@ -37,13 +39,13 @@ osl_edge_detector::osl_edge_detector(osl_edge_detector_params const &params)
   gradient_histogram_ = false; //Do we need to compute a histogram?
   histogram_resolution_ = 15; // The number of buckets
 
- width_ = int(sigma_*vcl_sqrt(2*vcl_log(1.0/gauss_tail_))+1); // round up to int
+ width_ = int(sigma_*std::sqrt(2*std::log(1.0/gauss_tail_))+1); // round up to int
   k_size_ = 2*width_+ 1;
   kernel_ = new float[k_size_];
   max_gradient_ = low_;
-  xjunc_ = new vcl_list<int>;
-  yjunc_ = new vcl_list<int>;
-  vlist_ = new vcl_list<osl_Vertex*>;
+  xjunc_ = new std::list<int>;
+  yjunc_ = new std::list<int>;
+  vlist_ = new std::list<osl_Vertex*>;
 
   jval_ = 2000.0;
 
@@ -78,7 +80,7 @@ osl_edge_detector::~osl_edge_detector()
 //-----------------------------------------------------------------------------
 
 void osl_edge_detector::detect_edges(vil1_image const &image,
-                                     vcl_list<osl_edge*> *edges,
+                                     std::list<osl_edge*> *edges,
                                      bool maintain_topology)
 {
   assert(edges!=0);
@@ -89,8 +91,8 @@ void osl_edge_detector::detect_edges(vil1_image const &image,
   xstart_ = 0;
   ystart_ = 0;
 
-  //vcl_cerr << "xstart_ = " << xstart_ << " ystart_ = " << ystart_ << vcl_endl
-  //         << "xsize_ = " << xsize_ << " ysize_ = " << ysize_ << vcl_endl;
+  //std::cerr << "xstart_ = " << xstart_ << " ystart_ = " << ystart_ << std::endl
+  //         << "xsize_ = " << xsize_ << " ysize_ = " << ysize_ << std::endl;
 
   dx_ = Make_float_image(xsize_,ysize_);
   dy_ = Make_float_image(xsize_,ysize_);
@@ -107,15 +109,15 @@ void osl_edge_detector::detect_edges(vil1_image const &image,
   jy_ = Make_int_image(xsize_,ysize_);
 
   if (verbose_)
-    vcl_cerr << "Doing canny on image region "
-             << xsize_ << " by " << ysize_ << vcl_endl
-             << "Gaussian tail = " << gauss_tail_ << vcl_endl
-             << "Sigma         = " << sigma_ << vcl_endl
-             << "Kernel size   = " << k_size_ << vcl_endl
-             << "Threshold     = " << low_ << vcl_endl;
+    std::cerr << "Doing canny on image region "
+             << xsize_ << " by " << ysize_ << std::endl
+             << "Gaussian tail = " << gauss_tail_ << std::endl
+             << "Sigma         = " << sigma_ << std::endl
+             << "Kernel size   = " << k_size_ << std::endl
+             << "Threshold     = " << low_ << std::endl;
 
   if (verbose_)
-    vcl_cerr << "setting convolution kernel and zeroing images\n";
+    std::cerr << "setting convolution kernel and zeroing images\n";
   osl_kernel_DOG(sigma_, kernel_, k_size_, width_);
 
   osl_canny_base_fill_raw_image(thin_, xsize_, ysize_, 0.0f);
@@ -128,49 +130,49 @@ void osl_edge_detector::detect_edges(vil1_image const &image,
 
   // Do the traditional Canny parts, and use non-maximal suppression to
   // set the thresholds.
-  if (verbose_) vcl_cerr << "smoothing the image\n";
+  if (verbose_) std::cerr << "smoothing the image\n";
   osl_canny_smooth_rothwell(image, kernel_, width_, k_size_, smooth_);
 
   if (verbose_)
-    vcl_cerr << "computing x,y derivatives and norm of gradient\n";
+    std::cerr << "computing x,y derivatives and norm of gradient\n";
   osl_canny_gradient(xsize_, ysize_, smooth_, dx_, dy_, grad_);
 
   if (verbose_)
-    vcl_cerr << "doing sub-pixel interpolation\n";
+    std::cerr << "doing sub-pixel interpolation\n";
   Sub_pixel_interpolation();
 
-  if (verbose_) vcl_cerr << "assigning thresholds\n";
+  if (verbose_) std::cerr << "assigning thresholds\n";
   Set_thresholds(); // ghist_ is computed here
 
   // If we don't want to maintain the strict measurement of the topology
   // (ie. we want to stop the junction regions becoming too extensive), we
   // fill in single pixel holes in the edge description.
   if ( !maintain_topology ) {
-    vcl_cerr << "Filling holes\n";
+    std::cerr << "Filling holes\n";
     Fill_holes();
   }
 
   // Thin the edge image, though keep the original thick one
-  if (verbose_) vcl_cerr << "thinning edges\n";
+  if (verbose_) std::cerr << "thinning edges\n";
   Thin_edges();
 
   // Locate junctions in the edge image and joint the clusters together
   // as we have no confidence in the geometry around them.
   if (verbose_)
-    vcl_cerr << "locating junctions in the edge image - ";
+    std::cerr << "locating junctions in the edge image - ";
   Find_junctions();
   if (verbose_)
-    vcl_cerr << xjunc_->size() << " junctions found\n";
+    std::cerr << xjunc_->size() << " junctions found\n";
 
   Find_junction_clusters();
   if (verbose_)
-    vcl_cerr << vlist_->size() << " junction clusters found\n";
+    std::cerr << vlist_->size() << " junction clusters found\n";
 
   // Finally do edge following to extract the edge data from the thin_ image
-  if (verbose_) vcl_cerr << "doing final edge following\n";
+  if (verbose_) std::cerr << "doing final edge following\n";
   Follow_curves(edges);
 
-  if (verbose_) vcl_cerr << "finished osl_edge_detector\n";
+  if (verbose_) std::cerr << "finished osl_edge_detector\n";
 }
 
 //-----------------------------------------------------------------------------
@@ -202,7 +204,7 @@ void osl_edge_detector::Sub_pixel_interpolation()
     {
       // First check that we have a potential edge
       if ( g1[y] > low_ ) {
-        theta = k*(float)vcl_atan2(dy[y],dx[y]);
+        theta = k*(float)std::atan2(dy[y],dx[y]);
 
         // Now work out which direction wrt the eight-way
         // neighbours the edge normal points
@@ -240,8 +242,8 @@ void osl_edge_detector::Sub_pixel_interpolation()
           break;
 
         default:
-          vcl_abort();
-          //vcl_cerr << "*** ERROR ON SWITCH IN NMS ***\n";
+          std::abort();
+          //std::cerr << "*** ERROR ON SWITCH IN NMS ***\n";
         }
 
         // Do subpixel interpolation by fitting a parabola
@@ -269,8 +271,8 @@ void osl_edge_detector::Sub_pixel_interpolation()
           break;
 
         default:
-          vcl_abort();
-          //vcl_cerr << "*** ERROR ON SWITCH IN NMS ***\n";
+          std::abort();
+          //std::cerr << "*** ERROR ON SWITCH IN NMS ***\n";
         }
 
         // Now store the edge data, re-use dx_[][] and dy_[][]
@@ -280,7 +282,7 @@ void osl_edge_detector::Sub_pixel_interpolation()
         // thresholds. The >= is used rather than > for reasons
         // involving non-generic images. Should this be interpolated
         // height  = g1[y] + frac*(h2-h1)/4 ?
-        if ( g1[y]>=h1 && g1[y]>=h2 && vcl_fabs(dnewx)<=0.5 && vcl_fabs(dnewy)<=0.5 )
+        if ( g1[y]>=h1 && g1[y]>=h2 && std::fabs(dnewx)<=0.5 && std::fabs(dnewy)<=0.5 )
         {
           if ( g1[y]*ALPHA > low_ )
             thresh_[x][y] = ALPHA * g1[y]; // Use an ALPHA% bound
@@ -291,7 +293,7 @@ void osl_edge_detector::Sub_pixel_interpolation()
         }
 
         // + 0.5 is to account for targetjr display offset
-        if ( (vcl_fabs(dnewx)<=0.5) && (vcl_fabs(dnewy)<=0.5) ) {
+        if ( (std::fabs(dnewx)<=0.5) && (std::fabs(dnewy)<=0.5) ) {
           dx[y] = x + dnewx + 0.5f;
           dy[y] = y + dnewy + 0.5f;
         }
@@ -354,7 +356,7 @@ void osl_edge_detector::Thicken_threshold(int x, int y)
 
       dist_[i][j] = 0;
       if ( thresh_[i][j] != low_ )
-        thresh_[i][j] = vcl_min(thresh_[x][y], thresh_[i][j]);
+        thresh_[i][j] = std::min(thresh_[x][y], thresh_[i][j]);
       else
         thresh_[i][j] = thresh_[x][y];
     }
@@ -435,7 +437,7 @@ void osl_edge_detector::Set_thresholds()
           break;
 
         default:
-          vcl_abort();
+          std::abort();
           //break;
         }
         if ( den != 0.0 )
@@ -499,7 +501,7 @@ static int compare(osl_edge_detector_xyfloat* xyf1, osl_edge_detector_xyfloat* x
 // an edge location, and removing it if it is not a dangling chain as has
 // genus zero. We also order the edges by strength and try to remove the weaker
 // ones first. This accounts for non-maximal suppression, and does it in a
-// topology preserving way. Note that we are creating a vcl_list with a large
+// topology preserving way. Note that we are creating a std::list with a large
 // number of elements, and then sorting it - this is likely to be quite slow.
 // An alternative implementation would be better.
 //
@@ -508,7 +510,7 @@ void osl_edge_detector::Thin_edges()
   // Find all of the edgels with a strength > low_
   bool do_output = true;
 
-  vcl_cerr << __FILE__ ": Fast Sort\n";
+  std::cerr << __FILE__ ": Fast Sort\n";
   osl_edge_detector_xyfloat* edgel_array = new osl_edge_detector_xyfloat[xsize_ * ysize_];
   int count = 1;     // count set to dummy, nonzero value
   while ( count!=0 ) //  Thin until no Pixels are removed
@@ -528,7 +530,7 @@ void osl_edge_detector::Thin_edges()
     // Now sort the list; this could be slow if we have a lot of potential.
     // edges - surely we have to do number of elements (not -1)?
     //      qsort(edgel_array, edgel_array_len-1, sizeof(osl_edge_detector_xyfloat), &compare);
-    vcl_qsort(edgel_array,
+    std::qsort(edgel_array,
               edgel_array_len,
               sizeof(osl_edge_detector_xyfloat),
               (int (*)(const void *, const void *))&compare);
@@ -536,9 +538,9 @@ void osl_edge_detector::Thin_edges()
     // To assist in setting the thresholds:
     if (  do_output && (edgel_array_len > 0) ) {
 
-      vcl_cerr << "edgel strengths range from "
+      std::cerr << "edgel strengths range from "
                << edgel_array[0].thin << " to "
-               << edgel_array[edgel_array_len-1].thin << vcl_endl;
+               << edgel_array[edgel_array_len-1].thin << std::endl;
       do_output = false;
     }
 
@@ -611,20 +613,20 @@ void osl_edge_detector::Fill_holes()
 //-----------------------------------------------------------------------------
 
 // see osl_canny_ox.cxx
-extern osl_Vertex *osl_find(vcl_list<osl_Vertex*> const *l, osl_Vertex const &v);
+extern osl_Vertex *osl_find(std::list<osl_Vertex*> const *l, osl_Vertex const &v);
 
 //:
 // Follow all edgel chains that have pixel values above their corresponding
 // threshold values (thin_[x][y] > thresh_[x][y]).
 //
-void osl_edge_detector::Follow_curves(vcl_list<osl_edge*> *edges)
+void osl_edge_detector::Follow_curves(std::list<osl_edge*> *edges)
 {
   //  //Added May 1997 to restrict histogram to actual detected edgels -JLM
   //  if (gradient_histogram_)
   //    ghist_ = new Histogram(histogram_resolution_, low_, max_gradient_);
 
-  vcl_list<int> xcoords,ycoords;
-  vcl_list<float> grad;
+  std::list<int> xcoords,ycoords;
+  std::list<float> grad;
 
   chain_no_ = 10;  // Must be set to a number >= 1
 
@@ -657,11 +659,11 @@ void osl_edge_detector::Follow_curves(vcl_list<osl_edge*> *edges)
       // Check that we have at least two endpoints to
       // the list, otherwise go to next loop
       if ( xcoords.size() < 2 )
-        // vcl_cerr << "short list found in Final_follow\n";
+        // std::cerr << "short list found in Final_follow\n";
         continue;
 
       int count=0; // isn't this just "count = grad.size()" ?
-      for (vcl_list<float>::iterator i=grad.begin(); i!=grad.end(); ++i)
+      for (std::list<float>::iterator i=grad.begin(); i!=grad.end(); ++i)
         count++;
 
       // If the count is less than two we cannot accept
@@ -699,7 +701,7 @@ void osl_edge_detector::Follow_curves(vcl_list<osl_edge*> *edges)
         }
         if (theta_[tmpx][tmpy] == DUMMYTHETA) {
           const float k = float(vnl_math::deg_per_rad);
-          theta_[tmpx][tmpy]  = k*(float)vcl_atan2(dy_[tmpx][y],dx_[tmpx][y]);
+          theta_[tmpx][tmpy]  = k*(float)std::atan2(dy_[tmpx][y],dx_[tmpx][y]);
         }
 
         *(pt++) = theta_[tmpx][tmpy];
@@ -771,9 +773,9 @@ void osl_edge_detector::Follow_curves(vcl_list<osl_edge*> *edges)
 // accounts for single pixel gaps in the chains.
 //
 void osl_edge_detector::Follow(int x, int y,
-                               vcl_list<int> *xc,
-                               vcl_list<int> *yc,
-                               vcl_list<float> *grad,
+                               std::list<int> *xc,
+                               std::list<int> *yc,
+                               std::list<float> *grad,
                                int reverse)
 {
   // Make sure that we do not overun the border of the image
@@ -881,7 +883,7 @@ void osl_edge_detector::Find_junctions()
 //
 void osl_edge_detector::Find_junction_clusters()
 {
-  vcl_list<int> xcoords,ycoords,xvertices,yvertices,xjunc,yjunc;
+  std::list<int> xcoords,ycoords,xvertices,yvertices,xjunc,yjunc;
 
   // Find a junction and follow
   xvertices.clear();
@@ -924,7 +926,7 @@ void osl_edge_detector::Find_junction_clusters()
 
   // Construct the list of junction cluster centres
   vlist_->clear();
-  for (vcl_list<int>::iterator i=xvertices.begin(), j=yvertices.begin();
+  for (std::list<int>::iterator i=xvertices.begin(), j=yvertices.begin();
        i!=xvertices.end() && j!=yvertices.end();
        ++i, ++j) {
 
@@ -943,7 +945,7 @@ void osl_edge_detector::Find_junction_clusters()
 //
 //: Following routine looking for searching out junction clusters.
 //
-void osl_edge_detector::Follow_junctions(int x, int y, vcl_list<int> *xc, vcl_list<int> *yc)
+void osl_edge_detector::Follow_junctions(int x, int y, std::list<int> *xc, std::list<int> *yc)
 {
   // Add the current junction to the coordinate lists, and delete from
   // the junction image
@@ -974,8 +976,8 @@ void osl_edge_detector::Follow_junctions(int x, int y, vcl_list<int> *xc, vcl_li
 //: Finds which member of the lists lies closest to the centre of the list.
 //
 //
-void osl_edge_detector::Cluster_centre(vcl_list<int> &xc,
-                                       vcl_list<int> &yc,
+void osl_edge_detector::Cluster_centre(std::list<int> &xc,
+                                       std::list<int> &yc,
                                        int &x0,
                                        int &y0)
 {
@@ -1002,7 +1004,7 @@ void osl_edge_detector::Cluster_centre(vcl_list<int> &xc,
     }
 #endif
 
-  typedef vcl_list<int>::iterator it;
+  typedef std::list<int>::iterator it;
 
   // Define the centre as the point with the highest gradient value.
   float grad = -1.0;  // Negative is smaller than the smallest norm of gradient

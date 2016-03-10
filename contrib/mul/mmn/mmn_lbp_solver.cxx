@@ -1,8 +1,10 @@
 #include "mmn_lbp_solver.h"
-#include <vcl_algorithm.h>
-#include <vcl_functional.h>
-#include <vcl_iterator.h>
-#include <vcl_sstream.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <algorithm>
+#include <functional>
+#include <iterator>
+#include <sstream>
 #include <mbl/mbl_exception.h>
 #include <mbl/mbl_stl.h>
 #include <mbl/mbl_parse_block.h>
@@ -27,7 +29,7 @@ mmn_lbp_solver::mmn_lbp_solver()
 }
 
 //: Construct with arcs
-mmn_lbp_solver::mmn_lbp_solver(unsigned num_nodes,const vcl_vector<mmn_arc>& arcs)
+mmn_lbp_solver::mmn_lbp_solver(unsigned num_nodes,const std::vector<mmn_arc>& arcs)
     : max_iterations_(100), min_simple_iterations_(25),
       epsilon_(1E-6), alpha_(0.6), smooth_on_cycling_(true),
       max_cycle_detection_count_(3), verbose_(false),
@@ -50,7 +52,7 @@ void mmn_lbp_solver::init()
 }
 
 //: Pass in the arcs, which are then used to build the graph object
-void mmn_lbp_solver::set_arcs(unsigned num_nodes,const vcl_vector<mmn_arc>& arcs)
+void mmn_lbp_solver::set_arcs(unsigned num_nodes,const std::vector<mmn_arc>& arcs)
 {
     nnodes_=num_nodes;
     arcs_ = arcs;
@@ -58,11 +60,11 @@ void mmn_lbp_solver::set_arcs(unsigned num_nodes,const vcl_vector<mmn_arc>& arcs
     unsigned max_node=0;
     for (unsigned i=0; i<arcs.size();++i)
     {
-        max_node=vcl_max(max_node,arcs[i].max_v());
+        max_node=std::max(max_node,arcs[i].max_v());
     }
     if (nnodes_ != max_node+1)
     {
-        vcl_cerr<<"Arcs appear to be inconsistent with number of nodes in mmn_lbp_solver::set_arcs\n"
+        std::cerr<<"Arcs appear to be inconsistent with number of nodes in mmn_lbp_solver::set_arcs\n"
                 <<"Max mode in Arcs is: "<<max_node<<" but number of nodes= "<<nnodes_<<'\n';
     }
 
@@ -77,22 +79,22 @@ void mmn_lbp_solver::set_arcs(unsigned num_nodes,const vcl_vector<mmn_arc>& arcs
 }
 
 double mmn_lbp_solver::solve(
-                 const vcl_vector<vnl_vector<double> >& node_cost,
-                 const vcl_vector<vnl_matrix<double> >& pair_cost,
-                 vcl_vector<unsigned>& x)
+                 const std::vector<vnl_vector<double> >& node_cost,
+                 const std::vector<vnl_matrix<double> >& pair_cost,
+                 std::vector<unsigned>& x)
 {
     return (*this)(node_cost,pair_cost,x);
 }
 
 //: Run the algorithm
-double mmn_lbp_solver::operator()(const vcl_vector<vnl_vector<double> >& node_costs,
-                                  const vcl_vector<vnl_matrix<double> >& pair_costs,
-                                  vcl_vector<unsigned>& x)
+double mmn_lbp_solver::operator()(const std::vector<vnl_vector<double> >& node_costs,
+                                  const std::vector<vnl_matrix<double> >& pair_costs,
+                                  std::vector<unsigned>& x)
 {
     init();
 
     x.resize(nnodes_);
-    vcl_fill(x.begin(),x.end(),0);
+    std::fill(x.begin(),x.end(),0);
     belief_.resize(nnodes_);
 
     node_costs_.resize(nnodes_);
@@ -103,18 +105,18 @@ double mmn_lbp_solver::operator()(const vcl_vector<vnl_vector<double> >& node_co
     }
 
     //Initialise message structure and neighbourhood cost representation
-    const vcl_vector<vcl_vector<vcl_pair<unsigned,unsigned> > >& neighbourhoods=graph_.node_data();
+    const std::vector<std::vector<std::pair<unsigned,unsigned> > >& neighbourhoods=graph_.node_data();
     for (unsigned inode=0; inode<neighbourhoods.size();++inode)
     {
         unsigned nbstates=node_costs_[inode].size();
         belief_[inode].set_size(nbstates);
 
-        double priorb=vcl_log(1.0/double(nbstates));
+        double priorb=std::log(1.0/double(nbstates));
         belief_[inode].fill(priorb);
 
-        const vcl_vector<vcl_pair<unsigned,unsigned> >& neighbours=neighbourhoods[inode];
-        vcl_vector<vcl_pair<unsigned,unsigned> >::const_iterator neighIter=neighbours.begin();
-        vcl_vector<vcl_pair<unsigned,unsigned> >::const_iterator neighIterEnd=neighbours.end();
+        const std::vector<std::pair<unsigned,unsigned> >& neighbours=neighbourhoods[inode];
+        std::vector<std::pair<unsigned,unsigned> >::const_iterator neighIter=neighbours.begin();
+        std::vector<std::pair<unsigned,unsigned> >::const_iterator neighIterEnd=neighbours.end();
         while (neighIter != neighIterEnd)
         {
             unsigned arcId=neighIter->second;
@@ -126,11 +128,11 @@ double mmn_lbp_solver::operator()(const vcl_vector<vnl_vector<double> >& node_co
             unsigned minv=arc.min_v();
             if (inode!=v1 && inode!=v2)
             {
-                vcl_string msg("Graph inconsistency in mmn_lbp_solver::operator()\n");
-                vcl_ostringstream os;
+                std::string msg("Graph inconsistency in mmn_lbp_solver::operator()\n");
+                std::ostringstream os;
                 os <<"Source node is "<<inode<<" but arc to alleged neighbour joins nodes "<<v1<<"\t to "<<v2<<'\n';
                 msg+= os.str();
-                vcl_cerr<<msg<<vcl_endl;
+                std::cerr<<msg<<std::endl;
                 throw mbl_exception_abort(msg);
             }
 
@@ -146,7 +148,7 @@ double mmn_lbp_solver::operator()(const vcl_vector<vnl_vector<double> >& node_co
             unsigned nstates=linkCosts.cols();
             double dnstates=double(nstates);
             messages_[inode][neighIter->first].set_size(nstates);
-            messages_[inode][neighIter->first].fill(vcl_log(1.0/dnstates)); //set all initial messages to uniform prob
+            messages_[inode][neighIter->first].fill(std::log(1.0/dnstates)); //set all initial messages to uniform prob
 
             ++neighIter; //next neighbour of this node
         }
@@ -155,7 +157,7 @@ double mmn_lbp_solver::operator()(const vcl_vector<vnl_vector<double> >& node_co
     messages_upd_ = messages_;
 
     //Now keep repeating message passing
-    vcl_vector<unsigned > random_indices(nnodes_,0);
+    std::vector<unsigned > random_indices(nnodes_,0);
     mbl_stl_increments(random_indices.begin(),random_indices.end(),0);
 
     do
@@ -177,7 +179,7 @@ double mmn_lbp_solver::operator()(const vcl_vector<vnl_vector<double> >& node_co
             case eRANDOM_SERIAL:
             default:
             {
-                vcl_random_shuffle(random_indices.begin(),random_indices.end());
+                std::random_shuffle(random_indices.begin(),random_indices.end());
                 //Randomise the order of inter-node messages
                 //May help avoid looping
                 for (unsigned knode=0; knode<nnodes_;++knode)
@@ -191,7 +193,7 @@ double mmn_lbp_solver::operator()(const vcl_vector<vnl_vector<double> >& node_co
 
         if (verbose_)
         {
-            vcl_cout<<"Max message delta at iteration "<<count_<<"\t is "<<max_delta_<<vcl_endl;
+            std::cout<<"Max message delta at iteration "<<count_<<"\t is "<<max_delta_<<std::endl;
         }
         //Now calculate belief levels of each node's states
         calculate_beliefs(x);
@@ -206,12 +208,12 @@ double mmn_lbp_solver::operator()(const vcl_vector<vnl_vector<double> >& node_co
         renormalise_log(belief_[inode]);
         for (unsigned i=0; i<belief_[inode].size();i++)
         {
-            belief_[inode][i]=vcl_exp(belief_[inode][i]);
+            belief_[inode][i]=std::exp(belief_[inode][i]);
         }
     }
 
     //Return -best solution value (i.e. minimised form)
-    //vcl_cout<<"Calculating solution cost..."<<vcl_endl;
+    //std::cout<<"Calculating solution cost..."<<std::endl;
 
     if (!isCycling_)
     {
@@ -222,19 +224,19 @@ double mmn_lbp_solver::operator()(const vcl_vector<vnl_vector<double> >& node_co
         double zbest=best_solution_cost_in_history(x);
         if (verbose_)
         {
-            vcl_cout<<"Best solution when cycling condition first detected was: "<<zbest_on_cycle_detection_<<vcl_endl
-                    <<"Final Best solution : "<<zbest<<vcl_endl;
+            std::cout<<"Best solution when cycling condition first detected was: "<<zbest_on_cycle_detection_<<std::endl
+                    <<"Final Best solution : "<<zbest<<std::endl;
         }
         return -zbest;
     }
 }
 
-void mmn_lbp_solver::calculate_beliefs(vcl_vector<unsigned>& x)
+void mmn_lbp_solver::calculate_beliefs(std::vector<unsigned>& x)
 {
     //Now calculate belief levels of each node's states
     //NB calculates log belief actually
 
-    const vcl_vector<vcl_vector<vcl_pair<unsigned,unsigned> > >& neighbourhoods=graph_.node_data();
+    const std::vector<std::vector<std::pair<unsigned,unsigned> > >& neighbourhoods=graph_.node_data();
     for (unsigned inode=0; inode<neighbourhoods.size();++inode)
     {
         unsigned bestState=0;
@@ -244,9 +246,9 @@ void mmn_lbp_solver::calculate_beliefs(vcl_vector<unsigned>& x)
         {
             double b=node_costs_[inode][istate];
             //Now loop over neighbourhood
-            const vcl_vector<vcl_pair<unsigned,unsigned> >& neighbours=graph_.node_data()[inode];
-            vcl_vector<vcl_pair<unsigned,unsigned> >::const_iterator neighIter=neighbours.begin();
-            vcl_vector<vcl_pair<unsigned,unsigned> >::const_iterator neighIterEnd=neighbours.end();
+            const std::vector<std::pair<unsigned,unsigned> >& neighbours=graph_.node_data()[inode];
+            std::vector<std::pair<unsigned,unsigned> >::const_iterator neighIter=neighbours.begin();
+            std::vector<std::pair<unsigned,unsigned> >::const_iterator neighIterEnd=neighbours.end();
             while (neighIter != neighIterEnd)
             {
                 vnl_vector<double>& msgsFromNeigh = messages_[neighIter->first][inode];
@@ -266,14 +268,14 @@ void mmn_lbp_solver::calculate_beliefs(vcl_vector<unsigned>& x)
     }
 }
 
-double mmn_lbp_solver::solution_cost(vcl_vector<unsigned>& x)
+double mmn_lbp_solver::solution_cost(std::vector<unsigned>& x)
 {
     //: Calculate best (max log prob) of solution x
     double sumNodes=0.0;
     //Sum over all nodes
-    vcl_vector<vnl_vector<double> >::const_iterator nodeIter=node_costs_.begin();
-    vcl_vector<vnl_vector<double> >::const_iterator nodeIterEnd=node_costs_.end();
-    vcl_vector<unsigned >::const_iterator stateIter=x.begin();
+    std::vector<vnl_vector<double> >::const_iterator nodeIter=node_costs_.begin();
+    std::vector<vnl_vector<double> >::const_iterator nodeIterEnd=node_costs_.end();
+    std::vector<unsigned >::const_iterator stateIter=x.begin();
     while (nodeIter != nodeIterEnd)
     {
         const vnl_vector<double>& ncosts = *nodeIter;
@@ -282,8 +284,8 @@ double mmn_lbp_solver::solution_cost(vcl_vector<unsigned>& x)
     }
 
     // Sum over all arcs
-    vcl_vector<mmn_arc>::const_iterator arcIter=arcs_.begin();
-    vcl_vector<mmn_arc>::const_iterator arcIterEnd=arcs_.end();
+    std::vector<mmn_arc>::const_iterator arcIter=arcs_.begin();
+    std::vector<mmn_arc>::const_iterator arcIterEnd=arcs_.end();
     double sumArcs=0.0;
     while (arcIter != arcIterEnd)
     {
@@ -296,13 +298,13 @@ double mmn_lbp_solver::solution_cost(vcl_vector<unsigned>& x)
     return sumNodes+sumArcs;
 }
 
-double mmn_lbp_solver::best_solution_cost_in_history(vcl_vector<unsigned>& x)
+double mmn_lbp_solver::best_solution_cost_in_history(std::vector<unsigned>& x)
 {
     double zbest=solution_cost(x);
-    vcl_vector<double> solution_vals(soln_history_.size());
-    vcl_deque<vcl_vector<unsigned> >::iterator xIter=soln_history_.begin();
-    vcl_deque<vcl_vector<unsigned> >::iterator xIterEnd=soln_history_.end();
-    vcl_deque<vcl_vector<unsigned> >::iterator xIterBest=soln_history_.end()-1;
+    std::vector<double> solution_vals(soln_history_.size());
+    std::deque<std::vector<unsigned> >::iterator xIter=soln_history_.begin();
+    std::deque<std::vector<unsigned> >::iterator xIterEnd=soln_history_.end();
+    std::deque<std::vector<unsigned> >::iterator xIterBest=soln_history_.end()-1;
     while (xIter != xIterEnd)
     {
         double z = solution_cost(*xIter);
@@ -322,10 +324,10 @@ void mmn_lbp_solver::update_messages_to_neighbours(unsigned inode,
 {
     //Update all messages from this node to its neighbours
 
-    const vcl_vector<vcl_pair<unsigned,unsigned> >& neighbours=graph_.node_data()[inode];
+    const std::vector<std::pair<unsigned,unsigned> >& neighbours=graph_.node_data()[inode];
 
-    vcl_vector<vcl_pair<unsigned,unsigned> >::const_iterator neighIter=neighbours.begin();
-    vcl_vector<vcl_pair<unsigned,unsigned> >::const_iterator neighIterEnd=neighbours.end();
+    std::vector<std::pair<unsigned,unsigned> >::const_iterator neighIter=neighbours.begin();
+    std::vector<std::pair<unsigned,unsigned> >::const_iterator neighIterEnd=neighbours.end();
     while (neighIter != neighIterEnd) //Loop over all my neighbours
     {
         vnl_vector<double>& msgsToNeigh = messages_[inode][neighIter->first];
@@ -334,10 +336,10 @@ void mmn_lbp_solver::update_messages_to_neighbours(unsigned inode,
         unsigned nSrcStates=linkCosts.rows(); //number of source states for this node
         if (nSrcStates!=node_cost.size())
         {
-            vcl_string msg("Inconsistent array sizes in mmn_lbp_solver::update_messages_to_neighbours\n");
+            std::string msg("Inconsistent array sizes in mmn_lbp_solver::update_messages_to_neighbours\n");
             msg+= "Inconsistent array sizes in mmn_lbp_solver::update_messages_to_neighbours ";
 
-            vcl_cerr<<msg<<vcl_endl;
+            std::cerr<<msg<<std::endl;
             throw mbl_exception_abort(msg);
         }
         for (unsigned jstate=0;jstate<nTargetStates;++jstate) //do each state of the target neighbour
@@ -347,8 +349,8 @@ void mmn_lbp_solver::update_messages_to_neighbours(unsigned inode,
             {
                 double logProdIncoming=0.0;
                 //Compute product of all incoming messages to this node i from elsewhere (excluding target node j)
-                vcl_vector<vcl_pair<unsigned,unsigned> >::const_iterator tomeIter=neighbours.begin();
-                vcl_vector<vcl_pair<unsigned,unsigned> >::const_iterator tomeIterEnd=neighbours.end();
+                std::vector<std::pair<unsigned,unsigned> >::const_iterator tomeIter=neighbours.begin();
+                std::vector<std::pair<unsigned,unsigned> >::const_iterator tomeIterEnd=neighbours.end();
                 while (tomeIter != tomeIterEnd)
                 {
                     if (tomeIter != neighIter)
@@ -362,7 +364,7 @@ void mmn_lbp_solver::update_messages_to_neighbours(unsigned inode,
                 double acost=linkCosts(istate,jstate);
                 double ncost=node_cost[istate];
                 double logMij=acost+ncost+logProdIncoming;
-                max_istates = vcl_max(max_istates,logMij);
+                max_istates = std::max(max_istates,logMij);
             }
             if (cycle_detection_count_>0 && smooth_on_cycling_)
             {
@@ -375,26 +377,26 @@ void mmn_lbp_solver::update_messages_to_neighbours(unsigned inode,
         }
         renormalise_log(messages_upd_[inode][neighIter->first]);
 #if 0
-        vcl_cout<<"Iteration "<<count_<<"Msg Upd Node\t"<<inode<<"\tto node "<<neighIter->first<<'\t';
+        std::cout<<"Iteration "<<count_<<"Msg Upd Node\t"<<inode<<"\tto node "<<neighIter->first<<'\t';
 
-        vcl_copy(messages_upd_[inode][neighIter->first].begin(),
+        std::copy(messages_upd_[inode][neighIter->first].begin(),
                  messages_upd_[inode][neighIter->first].end(),
-                 vcl_ostream_iterator<double>(vcl_cout,"\t"));
-        vcl_cout<<vcl_endl
+                 std::ostream_iterator<double>(std::cout,"\t"));
+        std::cout<<std::endl
                 <<"Iteration "<<count_<<"Msg Prv Node\t"<<inode<<"\tto node "<<neighIter->first<<'\t';
 
-        vcl_copy(messages_[inode][neighIter->first].begin(),
+        std::copy(messages_[inode][neighIter->first].begin(),
                  messages_[inode][neighIter->first].end(),
-                 vcl_ostream_iterator<double>(vcl_cout,"\t"));
+                 std::ostream_iterator<double>(std::cout,"\t"));
 
-        vcl_cout<<vcl_endl<<vcl_endl;
+        std::cout<<std::endl<<std::endl;
 #endif
 
         //: Compute max change during iteration
         vnl_vector<double > delta_message=(messages_upd_[inode][neighIter->first]-
                                            messages_[inode][neighIter->first]);
         double delta=delta_message.inf_norm();
-        max_delta_ = vcl_max(max_delta_,delta);
+        max_delta_ = std::max(max_delta_,delta);
 
         ++neighIter;
     }
@@ -407,20 +409,20 @@ void mmn_lbp_solver::renormalise_log(vnl_vector<double >& logMessageVec)
     double probSum=0.0;
     while (stateIter != stateIterEnd)
     {
-        probSum+=vcl_exp(*stateIter);
+        probSum+=std::exp(*stateIter);
         ++stateIter;
     }
 
     //normalise so probabilities sum to 1
     double alpha = 1.0/probSum;
     //But now rather than multiplying by alpha, add log(alpha);
-    double logAlpha=vcl_log(alpha);
-    vcl_transform(logMessageVec.begin(),logMessageVec.end(),
+    double logAlpha=std::log(alpha);
+    std::transform(logMessageVec.begin(),logMessageVec.end(),
                   logMessageVec.begin(),
-                  vcl_bind2nd(vcl_plus<double>(),logAlpha));
+                  std::bind2nd(std::plus<double>(),logAlpha));
 }
 
-bool mmn_lbp_solver::continue_propagation(vcl_vector<unsigned>& x)
+bool mmn_lbp_solver::continue_propagation(std::vector<unsigned>& x)
 {
     ++count_;
     bool retstate=true;
@@ -435,8 +437,8 @@ bool mmn_lbp_solver::continue_propagation(vcl_vector<unsigned>& x)
         retstate = true;
     }
     else if (cycle_detection_count_<2 &&
-             vcl_count_if(max_delta_history_.begin(),max_delta_history_.end(),
-                          vcl_bind1st(vcl_less<double >(),max_delta_))
+             std::count_if(max_delta_history_.begin(),max_delta_history_.end(),
+                          std::bind1st(std::less<double >(),max_delta_))
              == int(max_delta_history_.size()))
     {
         retstate =true; //delta is definitely decreasing so keep going unless we've had >2 cycles already
@@ -445,7 +447,7 @@ bool mmn_lbp_solver::continue_propagation(vcl_vector<unsigned>& x)
     {
         isCycling_=false;
         //Check for cycling condition
-        vcl_deque<vcl_vector<unsigned  > >::iterator finder=vcl_find(soln_history_.begin(),soln_history_.end(),x);
+        std::deque<std::vector<unsigned  > >::iterator finder=std::find(soln_history_.begin(),soln_history_.end(),x);
         if (finder != soln_history_.end())
         {
             ++nrevisits_;
@@ -458,24 +460,24 @@ bool mmn_lbp_solver::continue_propagation(vcl_vector<unsigned>& x)
         {
             isCycling_=true;
             ++cycle_detection_count_;
-            vcl_cout<<"!!!! Loopy Belief is CYCLING... "<<vcl_endl;
+            std::cout<<"!!!! Loopy Belief is CYCLING... "<<std::endl;
         }
         if (isCycling_)
         {
             if (cycle_detection_count_==1)
             {
-                vcl_vector<unsigned > xdummy=x;
+                std::vector<unsigned > xdummy=x;
                 zbest_on_cycle_detection_=best_solution_cost_in_history(xdummy);
             }
             if (smooth_on_cycling_ && cycle_detection_count_<max_cycle_detection_count_)
             {
                 nrevisits_=0;
-                vcl_cout<<"Initiating message alpha smoothing to try and break cycling..."<<vcl_endl;
+                std::cout<<"Initiating message alpha smoothing to try and break cycling..."<<std::endl;
                 soln_history_.clear();
             }
             else
             {
-                vcl_cout<<"Abort and pick best solution in history."<<vcl_endl;
+                std::cout<<"Abort and pick best solution in history."<<std::endl;
                 retstate= false;
             }
         }
@@ -500,11 +502,11 @@ bool mmn_lbp_solver::continue_propagation(vcl_vector<unsigned>& x)
 // Method: set_from_stream
 //=======================================================================
 //: Initialise from a string stream
-bool mmn_lbp_solver::set_from_stream(vcl_istream &is)
+bool mmn_lbp_solver::set_from_stream(std::istream &is)
 {
   // Cycle through stream and produce a map of properties
-  vcl_string s = mbl_parse_block(is);
-  vcl_istringstream ss(s);
+  std::string s = mbl_parse_block(is);
+  std::istringstream ss(s);
   mbl_read_props_type props = mbl_read_props_ws(ss);
 
   // No properties expected.
@@ -529,9 +531,9 @@ short mmn_lbp_solver::version_no() const
 // Method: is_a
 //=======================================================================
 
-vcl_string mmn_lbp_solver::is_a() const
+std::string mmn_lbp_solver::is_a() const
 {
-  return vcl_string("mmn_lbp_solver");
+  return std::string("mmn_lbp_solver");
 }
 
 //: Create a copy on the heap and return base class pointer
@@ -544,9 +546,9 @@ mmn_solver* mmn_lbp_solver::clone() const
 // Method: print
 //=======================================================================
 
-void mmn_lbp_solver::print_summary(vcl_ostream& os) const
+void mmn_lbp_solver::print_summary(std::ostream& os) const
 {
-    os<<"This is a "<<is_a()<<'\t'<<"with "<<nnodes_<<" nodes"<<vcl_endl;
+    os<<"This is a "<<is_a()<<'\t'<<"with "<<nnodes_<<" nodes"<<std::endl;
 }
 
 //=======================================================================
@@ -572,9 +574,9 @@ void mmn_lbp_solver::b_read(vsl_b_istream& bfs)
     case (1):
       break;
     default:
-      vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&)\n"
-               << "           Unknown version number "<< version << vcl_endl;
-      bfs.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
+      std::cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&)\n"
+               << "           Unknown version number "<< version << std::endl;
+      bfs.is().clear(std::ios::badbit); // Set an unrecoverable IO error on stream
       return;
   }
 }

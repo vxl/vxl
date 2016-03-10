@@ -1,11 +1,13 @@
 // This is mul/m23d/tests/test_make_ortho_projection.cxx
 #include <testlib/testlib_test.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iostream>
 #include <m23d/m23d_make_ortho_projection.h>
 
 void test_make_ortho_projection()
 {
-  vcl_cout<<"==== test m23d_make_ortho_projection ====="<<vcl_endl;
+  std::cout<<"==== test m23d_make_ortho_projection ====="<<std::endl;
 
   vnl_matrix<double> P=m23d_make_ortho_projection(0.17,-0.23,0.1);
   vnl_matrix<double> I2(2,2);

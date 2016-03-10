@@ -1,8 +1,10 @@
 #include <testlib/testlib_test.h>
 
-#include <vcl_vector.h>
-#include <vcl_memory.h>
-#include <vcl_cmath.h>
+#include <vector>
+#include <memory>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <cmath>
 
 #include <vnl/vnl_matrix.h>
 #include <vnl/vnl_vector.h>
@@ -38,8 +40,8 @@ static void test_scale_est()
   }
 
 
-  vcl_vector< vnl_vector<double> > from;
-  vcl_vector< vnl_vector<double> > err;
+  std::vector< vnl_vector<double> > from;
+  std::vector< vnl_vector<double> > err;
 
   // Create one to one correspondences with unit scale.
   //
@@ -59,7 +61,7 @@ static void test_scale_est()
   }
   var /= num_pts;
 
-  vcl_auto_ptr<rrel_objective> obj( new rrel_muset_obj( num_pts ) );
+  std::auto_ptr<rrel_objective> obj( new rrel_muset_obj( num_pts ) );
   rgrl_scale_est_closest closest_est( obj );
 
   // Simple, one-to-one errors
@@ -75,7 +77,7 @@ static void test_scale_est()
     TEST( "Estimate scale from one-to-one",
           scale->has_geometric_scale() && ! scale->has_signature_inv_covar(), true);
 
-    TEST_NEAR( "Geometric scale is correct", scale->geometric_scale(), vcl_sqrt(var), 0.35 );
+    TEST_NEAR( "Geometric scale is correct", scale->geometric_scale(), std::sqrt(var), 0.35 );
     one_to_one_scale = scale->geometric_scale();
   }
 
@@ -85,7 +87,7 @@ static void test_scale_est()
   {
     rgrl_match_set ms( rgrl_feature_point::type_id() );
     for ( unsigned i=0; i < from.size(); ++i ) {
-      vcl_vector< rgrl_feature_sptr > to;
+      std::vector< rgrl_feature_sptr > to;
       unsigned num = rand(5)+1;
       unsigned pos = rand(num);
       for ( unsigned j=0; j < num; ++j ) {
@@ -117,7 +119,7 @@ static void test_scale_est()
     TEST( "Estimate weighted scale from one-to-one, unit weight",
           scale->has_geometric_scale() && ! scale->has_signature_inv_covar(), true);
 
-    TEST_NEAR( "Geometric scale is correct", scale->geometric_scale(), vcl_sqrt(var), 1e-6 );
+    TEST_NEAR( "Geometric scale is correct", scale->geometric_scale(), std::sqrt(var), 1e-6 );
   }
 }
 

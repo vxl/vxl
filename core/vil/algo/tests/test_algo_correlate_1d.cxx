@@ -1,7 +1,8 @@
 // This is core/vil/algo/tests/test_algo_correlate_1d.cxx
 #include <testlib/testlib_test.h>
-#include <vcl_vector.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <vector>
+#include <iostream>
 #include <vxl_config.h> // for vxl_byte
 #include <vil/vil_new.h>
 #include <vil/vil_crop.h>
@@ -9,12 +10,12 @@
 
 static void test_algo_correlate_1d_double()
 {
-  vcl_cout << "**************************\n"
+  std::cout << "**************************\n"
            << " Testing vil_correlate_1d\n"
            << "**************************\n";
 
   const int n = 10;
-  vcl_vector<double> src(n), dest(n+2), kernel(3);
+  std::vector<double> src(n), dest(n+2), kernel(3);
   for (int i=0;i<n;++i) src[i]=i+1;
   for (int i=0;i<3;++i) kernel[i]=i+1;
 
@@ -29,7 +30,7 @@ static void test_algo_correlate_1d_double()
   TEST_NEAR("First full value",dest[2],14.0,1e-6);
   TEST_NEAR("Last full value",dest[n-1],6*n-4,1e-6);
 
-  vcl_cout<<"Testing vil_correlate_ignore_edge end type\n";
+  std::cout<<"Testing vil_correlate_ignore_edge end type\n";
   for (int i=0;i<n+2;++i) dest[i]=999;
 
   vil_correlate_1d(&src[0],n,1, &dest[1],1,
@@ -44,7 +45,7 @@ static void test_algo_correlate_1d_double()
   TEST_NEAR("No overrun start",dest[0],999,1e-6);
   TEST_NEAR("No overrun end",dest[n+1],999,1e-6);
 
-  vcl_cout<<"Testing vil_correlate_no_extend end type\n";
+  std::cout<<"Testing vil_correlate_no_extend end type\n";
   for (int i=0;i<n+2;++i) dest[i]=999;
 
   vil_correlate_1d(&src[0],n,1, &dest[1],1,
@@ -59,7 +60,7 @@ static void test_algo_correlate_1d_double()
   TEST_NEAR("No overrun start",dest[0],999,1e-6);
   TEST_NEAR("No overrun end",dest[n+1],999,1e-6);
 
-  vcl_cout<<"Testing vil_correlate_zero_extend end type\n";
+  std::cout<<"Testing vil_correlate_zero_extend end type\n";
   for (int i=0;i<n+2;++i) dest[i]=999;
   vil_correlate_1d(&src[0],n,1, &dest[1],1,
                    &kernel[1],-1,1,
@@ -73,7 +74,7 @@ static void test_algo_correlate_1d_double()
   TEST_NEAR("No overrun start",dest[0],999,1e-6);
   TEST_NEAR("No overrun end",dest[n+1],999,1e-6);
 
-  vcl_cout << "Test vil_correlate_zero_extend end type with 5-tap filter\n";
+  std::cout << "Test vil_correlate_zero_extend end type with 5-tap filter\n";
   double kernel2[5] = {1.0, 5.0, 8.0, 5.0, -1.0};
   for (int i=0;i<n+2;++i) dest[i]=999;
   vil_correlate_1d(&src[0],n,1, &dest[1],1,
@@ -90,7 +91,7 @@ static void test_algo_correlate_1d_double()
   TEST_NEAR("No overrun start",dest[0],999,1e-6);
   TEST_NEAR("No overrun end",dest[n+1],999,1e-6);
 
-  vcl_cout<<"Testing vil_correlate_constant_extend end type\n";
+  std::cout<<"Testing vil_correlate_constant_extend end type\n";
   for (int i=0;i<n+2;++i) dest[i]=999;
   vil_correlate_1d(&src[0],n,1, &dest[1],1,
                    &kernel[1],-1,1,
@@ -104,7 +105,7 @@ static void test_algo_correlate_1d_double()
   TEST_NEAR("No overrun start",dest[0],999,1e-6);
   TEST_NEAR("No overrun end",dest[n+1],999,1e-6);
 
-  vcl_cout<<"Testing vil_correlate_reflect_extend end type\n";
+  std::cout<<"Testing vil_correlate_reflect_extend end type\n";
   for (int i=0;i<n+2;++i) dest[i]=999;
   vil_correlate_1d(&src[0],n,1, &dest[1],1,
                    &kernel[1],-1,1,
@@ -118,7 +119,7 @@ static void test_algo_correlate_1d_double()
   TEST_NEAR("No overrun start",dest[0],999,1e-6);
   TEST_NEAR("No overrun end",dest[n+1],999,1e-6);
 
-  vcl_cout<<"Testing vil_correlate_trim end type\n";
+  std::cout<<"Testing vil_correlate_trim end type\n";
   for (int i=0;i<n+2;++i) dest[i]=999;
   vil_correlate_1d(&src[0],n,1, &dest[1],1,
                    &kernel[1],-1,1,
@@ -132,7 +133,7 @@ static void test_algo_correlate_1d_double()
   TEST_NEAR("No overrun start",dest[0],999,1e-6);
   TEST_NEAR("No overrun end",dest[n+1],999,1e-6);
 
-  vcl_cout << "\n\nvil_correlate_1d(vil_image_resource_sptr&,...)\n";
+  std::cout << "\n\nvil_correlate_1d(vil_image_resource_sptr&,...)\n";
 
   vil_image_resource_sptr mem = vil_new_image_resource(n,n,1,VIL_PIXEL_FORMAT_BYTE);
   vil_image_view<vxl_byte> v(n,n,1), v_out(n,n,1);

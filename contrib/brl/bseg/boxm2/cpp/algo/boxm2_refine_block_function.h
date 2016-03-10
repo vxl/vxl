@@ -8,7 +8,9 @@
 #include <boxm2/cpp/algo/boxm2_mog3_grey_processor.h>
 #include <boct/boct_bit_tree.h>
 #include <vnl/vnl_vector_fixed.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iostream>
 #include <boxm2/io/boxm2_cache.h>
 
 class boxm2_refine_block_function
@@ -24,11 +26,11 @@ class boxm2_refine_block_function
   boxm2_refine_block_function() {}
 
   //: initialize generic data base pointers as their data type
-  bool init_data(boxm2_scene_sptr scene, boxm2_block* blk, vcl_vector<boxm2_data_base*> & datas, float prob_thresh);
+  bool init_data(boxm2_scene_sptr scene, boxm2_block* blk, std::vector<boxm2_data_base*> & datas, float prob_thresh);
 
   //: refine function;
   bool refine();
-  bool refine_deterministic(vcl_vector<boxm2_data_base*>& datas);
+  bool refine_deterministic(std::vector<boxm2_data_base*>& datas);
 
   //: refine bit tree
   boct_bit_tree refine_bit_tree(boct_bit_tree& curr_tree,
@@ -75,7 +77,7 @@ class boxm2_refine_block_function
 ////////////////////////////////////////////////////////////////////////////////
 void boxm2_refine_block( boxm2_scene_sptr scene,
                          boxm2_block* blk,
-                         vcl_vector<boxm2_data_base*> & datas,
+                         std::vector<boxm2_data_base*> & datas,
                          float prob_thresh,
                          bool is_random = true);
 

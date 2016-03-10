@@ -4,9 +4,11 @@
 // \brief Reader/Writer for a volume made up of a list of slices.
 // \author Ian Scott - Manchester
 
-#include <vcl_cstring.h>
-#include <vcl_cstdlib.h>
-#include <vcl_algorithm.h>
+#include <cstring>
+#include <cstdlib>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <algorithm>
 #include <vul/vul_file.h>
 #include <vul/vul_file_iterator.h>
 #include <vil/vil_load.h>
@@ -25,23 +27,23 @@ vil3d_slice_list_format::~vil3d_slice_list_format()
 // The globbing format expects only '#' to represent numbers.
 // Do not use "*" or "?"
 // All "#" should be in one contiguous group.
-void parse_globbed_filenames(const vcl_string & input,
-                             vcl_vector<vcl_string> &filenames)
+void parse_globbed_filenames(const std::string & input,
+                             std::vector<std::string> &filenames)
 {
   filenames.clear();
-  vcl_string filename = input;
+  std::string filename = input;
 
   // Avoid confusing globbing functions
   if (filename.find("*") != filename.npos) return;
   if (filename.find("?") != filename.npos) return;
 
   // Check that all the #s are in a single group.
-  vcl_size_t start = filename.find_first_of("#");
+  std::size_t start = filename.find_first_of("#");
   if (start == filename.npos) return;
-  vcl_size_t end = filename.find_first_not_of("#", start);
+  std::size_t end = filename.find_first_not_of("#", start);
   if (filename.find_first_of("#",end) != filename.npos) return;
   if (end == filename.npos) end = filename.length();
-  for (vcl_size_t i=start, j=start; i!=end; ++i, j+=12)
+  for (std::size_t i=start, j=start; i!=end; ++i, j+=12)
     filename.replace(j,1,"[0123456789]");
 
 
@@ -56,14 +58,14 @@ void parse_globbed_filenames(const vcl_string & input,
   end = (end + filenames.front().size()) - input.size();
 
   // Put them all in numeric order.
-  vcl_sort(filenames.begin(), filenames.end());
+  std::sort(filenames.begin(), filenames.end());
 
   // Now discard non-contiguously numbered files.
-  long count = vcl_atol(filenames.front().substr(start, end-start).c_str());
-  vcl_vector<vcl_string>::iterator it=filenames.begin()+1;
+  long count = std::atol(filenames.front().substr(start, end-start).c_str());
+  std::vector<std::string>::iterator it=filenames.begin()+1;
   while (it != filenames.end())
   {
-    if (vcl_atol(it->substr(start, end-start).c_str()) != ++count)
+    if (std::atol(it->substr(start, end-start).c_str()) != ++count)
       break;
     ++it;
   }
@@ -71,8 +73,8 @@ void parse_globbed_filenames(const vcl_string & input,
 }
 
 
-void parse_multiple_filenames(const vcl_string & input,
-                              vcl_vector<vcl_string> &filenames)
+void parse_multiple_filenames(const std::string & input,
+                              std::vector<std::string> &filenames)
 {
   filenames.clear();
   unsigned start=0;
@@ -90,7 +92,7 @@ void parse_multiple_filenames(const vcl_string & input,
 vil3d_image_resource_sptr
 vil3d_slice_list_format::make_input_image(const char * filename) const
 {
-  vcl_vector<vcl_string> filenames;
+  std::vector<std::string> filenames;
   parse_multiple_filenames(filename, filenames);
 
   for (unsigned i=0; i<filenames.size(); ++i)
@@ -107,7 +109,7 @@ vil3d_slice_list_format::make_input_image(const char * filename) const
   if (filenames.empty()) return VXL_NULLPTR;
 
   // load all the slices
-  vcl_vector<vil_image_resource_sptr> images(filenames.size());
+  std::vector<vil_image_resource_sptr> images(filenames.size());
 
   bool same = true;
 
@@ -125,14 +127,14 @@ vil3d_slice_list_format::make_input_image(const char * filename) const
         im->pixel_format() != images.front()->pixel_format())
       return VXL_NULLPTR;
     // decide if all slices are of the same type.
-    if (vcl_strcmp(im->file_format(), images.front()->file_format())!=0)
+    if (std::strcmp(im->file_format(), images.front()->file_format())!=0)
       same=true;
   }
 
   // everything seems fine so create the volume
 
   // If they are all dicom images, create an explicit dicom volume.
-  if (same && vcl_strcmp("dicom", images.front()->file_format())==0)
+  if (same && std::strcmp("dicom", images.front()->file_format())==0)
     return new vil3d_dicom_image(images);
 
   return new vil3d_slice_list_image(images);
@@ -140,7 +142,7 @@ vil3d_slice_list_format::make_input_image(const char * filename) const
 
 
 vil3d_image_resource_sptr
-vil3d_slice_list_to_volume(const vcl_vector<vil_image_resource_sptr> & images)
+vil3d_slice_list_to_volume(const std::vector<vil_image_resource_sptr> & images)
 {
   if (!images.empty() && !images.front()) return VXL_NULLPTR;
   for (unsigned i=1; i<images.size(); ++i)
@@ -171,13 +173,13 @@ vil3d_slice_list_format::make_output_image(const char* /*filename*/,
   // This should follow the pattern of make_input_image.
   // Construct a load of image resources using vil_new_image_resource
   // If you are able to construct them all, then create the slice_image.
-  vcl_cerr <<"vil3d_slice_list_format::make_output_image() NYI\n";
-  vcl_abort();
+  std::cerr <<"vil3d_slice_list_format::make_output_image() NYI\n";
+  std::abort();
   return VXL_NULLPTR;
 }
 
 
-vil3d_slice_list_image::vil3d_slice_list_image(const vcl_vector<vil_image_resource_sptr>& images):
+vil3d_slice_list_image::vil3d_slice_list_image(const std::vector<vil_image_resource_sptr>& images):
 slices_(images)
 {
 }
@@ -261,12 +263,12 @@ vil3d_slice_list_image::get_copy_view(unsigned i0, unsigned ni,
     macro( double );
 #if 0 // Several missing templates needed before these can be used
   case VIL_PIXEL_FORMAT_COMPLEX_FLOAT:
-    macro( vcl_complex<float> );
+    macro( std::complex<float> );
   case VIL_PIXEL_FORMAT_COMPLEX_DOUBLE:
-    macro( vcl_complex<double> );
+    macro( std::complex<double> );
 #endif
   default:
-    vcl_cerr<< "ERROR: vil3d_slice_list_image::get_copy_view\n"
+    std::cerr<< "ERROR: vil3d_slice_list_image::get_copy_view\n"
             << "       Can't deal with pixel_format " << pixel_format() << '\n';
     return VXL_NULLPTR;
   }
@@ -276,6 +278,6 @@ vil3d_slice_list_image::get_copy_view(unsigned i0, unsigned ni,
 bool vil3d_slice_list_image::put_view(const vil3d_image_view_base& /*vv*/,
                                       unsigned /*i0*/, unsigned /*j0*/, unsigned /*k0*/)
 {
-  vcl_cerr << "ERROR: vil3d_slice_list_image::put_view NYI\n\n";
+  std::cerr << "ERROR: vil3d_slice_list_image::put_view NYI\n\n";
   return false;
 }

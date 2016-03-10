@@ -7,7 +7,9 @@
 
 #include <rgrl/rgrl_feature_trace_pt.h>
 #include <rgrl/rgrl_feature_region.h>
-#include <vcl_vector.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <vector>
 
 //: Represent a point along a trace (of a vessel, neuron, etc.)
 //
@@ -18,7 +20,7 @@ class rgrl_feature_trace_region
   : public rgrl_feature_trace_pt, public rgrl_feature_region
 {
  public:
-  typedef vcl_vector<rgrl_feature_sptr >  feature_vector;
+  typedef std::vector<rgrl_feature_sptr >  feature_vector;
 
  public:
   //:  Constructor to initialize feature_trace_region location.

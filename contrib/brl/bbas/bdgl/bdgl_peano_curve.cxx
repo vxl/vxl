@@ -2,25 +2,27 @@
 //:
 // \file
 
-#include <vcl_cmath.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <cmath>
 #include <vnl/vnl_math.h>
 
-vcl_vector<vgl_point_2d<double> > rotate_2d(vcl_vector<vgl_point_2d<double> > in, double angle)
+std::vector<vgl_point_2d<double> > rotate_2d(std::vector<vgl_point_2d<double> > in, double angle)
 {
-  vcl_vector< vgl_point_2d<double> >  pnew;
+  std::vector< vgl_point_2d<double> >  pnew;
   for (unsigned i=0;i<in.size();i++)
   {
     double x=in[i].x(); double y=in[i].y();
-    double xnew=vcl_cos(angle)*x+vcl_sin(angle)*y;
-    double ynew=-vcl_sin(angle)*x+vcl_cos(angle)*y;
+    double xnew=std::cos(angle)*x+std::sin(angle)*y;
+    double ynew=-std::sin(angle)*x+std::cos(angle)*y;
     pnew.push_back(vgl_point_2d<double>(xnew,ynew));
   }
   return pnew;
 }
 
-vcl_vector<vgl_point_2d<double> > trans_2d(vcl_vector<vgl_point_2d<double> > in, double tx, double ty)
+std::vector<vgl_point_2d<double> > trans_2d(std::vector<vgl_point_2d<double> > in, double tx, double ty)
 {
-  vcl_vector< vgl_point_2d<double> >  pnew;
+  std::vector< vgl_point_2d<double> >  pnew;
   for (unsigned i=0;i<in.size();i++)
   {
     double x=in[i].x();
@@ -32,9 +34,9 @@ vcl_vector<vgl_point_2d<double> > trans_2d(vcl_vector<vgl_point_2d<double> > in,
   return pnew;
 }
 
-vcl_vector<vgl_point_2d<double> > scale_2d(vcl_vector<vgl_point_2d<double> > in, double s)
+std::vector<vgl_point_2d<double> > scale_2d(std::vector<vgl_point_2d<double> > in, double s)
 {
-  vcl_vector< vgl_point_2d<double> >  pnew;
+  std::vector< vgl_point_2d<double> >  pnew;
   for (unsigned i=0;i<in.size();i++)
   {
     double x=in[i].x();
@@ -47,9 +49,9 @@ vcl_vector<vgl_point_2d<double> > scale_2d(vcl_vector<vgl_point_2d<double> > in,
 }
 
 #if 0 // commented out
-vcl_vector<vgl_point_2d<double> > flip_y(vcl_vector<vgl_point_2d<double> > in)
+std::vector<vgl_point_2d<double> > flip_y(std::vector<vgl_point_2d<double> > in)
 {
-  vcl_vector< vgl_point_2d<double> >  pnew;
+  std::vector< vgl_point_2d<double> >  pnew;
   for (unsigned i=0;i<in.size();i++)
   {
     double x=in[i].x();
@@ -61,9 +63,9 @@ vcl_vector<vgl_point_2d<double> > flip_y(vcl_vector<vgl_point_2d<double> > in)
   return pnew;
 }
 
-vcl_vector<vgl_point_2d<double> > flip_x(vcl_vector<vgl_point_2d<double> > in)
+std::vector<vgl_point_2d<double> > flip_x(std::vector<vgl_point_2d<double> > in)
 {
-  vcl_vector< vgl_point_2d<double> >  pnew;
+  std::vector< vgl_point_2d<double> >  pnew;
   for (unsigned i=0;i<in.size();i++)
   {
     double x=in[i].x();
@@ -76,17 +78,17 @@ vcl_vector<vgl_point_2d<double> > flip_x(vcl_vector<vgl_point_2d<double> > in)
 }
 #endif // 0
 
-vcl_vector<vgl_point_2d<double> >  recurse_peano_curve(unsigned level)
+std::vector<vgl_point_2d<double> >  recurse_peano_curve(unsigned level)
 {
-  vcl_vector<vgl_point_2d<double> >  p;
+  std::vector<vgl_point_2d<double> >  p;
   if (level==0)
   {
     p.push_back(vgl_point_2d<double>(0,0));
     return p;
   }
-  vcl_vector<vgl_point_2d<double> >  p1,p2;
+  std::vector<vgl_point_2d<double> >  p1,p2;
   p1=recurse_peano_curve(level-1);
-  vcl_reverse(p1.begin(),p1.end());
+  std::reverse(p1.begin(),p1.end());
   p2=trans_2d(rotate_2d(p1,vnl_math::pi_over_2),-1,-1);
 
   p.insert(p.end(),p2.begin(),p2.end());
@@ -100,7 +102,7 @@ vcl_vector<vgl_point_2d<double> >  recurse_peano_curve(unsigned level)
   p.insert(p.end(),p2.begin(),p2.end());
 
   p1=recurse_peano_curve(level-1);
-  vcl_reverse(p1.begin(),p1.end());
+  std::reverse(p1.begin(),p1.end());
   p2=trans_2d(rotate_2d(p1,-vnl_math::pi_over_2),1,-1);
   p.insert(p.end(),p2.begin(),p2.end());
 
@@ -108,35 +110,35 @@ vcl_vector<vgl_point_2d<double> >  recurse_peano_curve(unsigned level)
 }
 
 //: peano_curve on cube of length 2
-vcl_vector<vgl_point_3d<double> >  peano_curve_on_cube(unsigned level)
+std::vector<vgl_point_3d<double> >  peano_curve_on_cube(unsigned level)
 {
-  vcl_vector<vgl_point_2d<double> > local_peano=recurse_peano_curve(level);
+  std::vector<vgl_point_2d<double> > local_peano=recurse_peano_curve(level);
 
   // 6 faces
-  vcl_vector<vgl_point_3d<double> > pc;
+  std::vector<vgl_point_3d<double> > pc;
 
   // high y face
-  vcl_vector<vgl_point_3d<double> > high_y;
+  std::vector<vgl_point_3d<double> > high_y;
   for (unsigned i=0;i<local_peano.size();i++)
     high_y.push_back(vgl_point_3d<double>(local_peano[i].x(),1,local_peano[i].y()));
   // high x face
-  vcl_vector<vgl_point_3d<double> > high_x;
+  std::vector<vgl_point_3d<double> > high_x;
   for (unsigned i=0;i<local_peano.size();i++)
      high_x.push_back(vgl_point_3d<double>(1,-local_peano[i].x(),local_peano[i].y()));
   // low z face
-  vcl_vector<vgl_point_3d<double> > low_z;
+  std::vector<vgl_point_3d<double> > low_z;
   for (int i=local_peano.size()-1;i>=0;i--)
      low_z.push_back(vgl_point_3d<double>(local_peano[i].x(),local_peano[i].y(),-1));
   // low x face
-  vcl_vector<vgl_point_3d<double> > low_x;
+  std::vector<vgl_point_3d<double> > low_x;
   for (int i=local_peano.size()-1;i>=0;i--)
      low_x.push_back(vgl_point_3d<double>(-1,local_peano[i].y(),-local_peano[i].x()));
   // High z face
-  vcl_vector<vgl_point_3d<double> > high_z;
+  std::vector<vgl_point_3d<double> > high_z;
   for (int i=local_peano.size()-1;i>=0;i--)
     high_z.push_back(vgl_point_3d<double>(-local_peano[i].x(),local_peano[i].y(),1));
   // Low y face
-  vcl_vector<vgl_point_3d<double> > low_y;
+  std::vector<vgl_point_3d<double> > low_y;
   for (int i=local_peano.size()-1;i>=0;i--)
     low_y.push_back(vgl_point_3d<double>(local_peano[i].x(),-1,-local_peano[i].y()));
 

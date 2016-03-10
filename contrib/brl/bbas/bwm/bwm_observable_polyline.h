@@ -11,7 +11,9 @@
 
 #include "bwm_observable.h"
 
-#include <vcl_string.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <string>
 
 #include <vsol/vsol_point_3d_sptr.h>
 #include <vsol/vsol_polyline_3d_sptr.h>
@@ -23,9 +25,9 @@ class bwm_observable_polyline : public bwm_observable
   bwm_observable_polyline() : object_(0) {}
   ~bwm_observable_polyline() {}
 
-  vcl_string type_name() const { return "bwm_observable_polyline"; }
+  std::string type_name() const { return "bwm_observable_polyline"; }
 
-  bwm_observable_polyline(vcl_vector<vsol_point_3d_sptr> const& vertices)
+  bwm_observable_polyline(std::vector<vsol_point_3d_sptr> const& vertices)
   { object_ = new vsol_polyline_3d(vertices); }
 
  private:

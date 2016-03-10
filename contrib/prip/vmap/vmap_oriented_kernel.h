@@ -13,7 +13,9 @@
 // \endverbatim
 
 #include "vmap_types.h" // for vmap_dart_index
-#include <vcl_vector.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <vector>
 
 //: Wrapper to avoid having non rooted hierarchies while constructing a kernel.
 template <class TKernel>
@@ -70,7 +72,7 @@ class vmap_oriented_kernel : public TKernel
  private :
 
   //:
-  typedef vcl_vector<int> Mark ;
+  typedef std::vector<int> Mark ;
 
   //:
   Mark mark_ ;

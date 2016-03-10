@@ -13,10 +13,10 @@
 bool vpgl_convert_to_local_rational_camera_process_cons(bprb_func_process& pro)
 {
   //this process takes two inputs and has one output
-  vcl_vector<vcl_string> input_types;
+  std::vector<std::string> input_types;
   input_types.push_back("vpgl_camera_double_sptr");
   input_types.push_back("vpgl_lvcs_sptr");
-  vcl_vector<vcl_string> output_types;
+  std::vector<std::string> output_types;
   output_types.push_back("vpgl_camera_double_sptr");
   return pro.set_input_types(input_types)
       && pro.set_output_types(output_types);
@@ -26,7 +26,7 @@ bool vpgl_convert_to_local_rational_camera_process_cons(bprb_func_process& pro)
 bool vpgl_convert_to_local_rational_camera_process(bprb_func_process& pro)
 {
   if (pro.n_inputs() != 2) {
-    vcl_cout << "vpgl_convert_to_local_rational_camera_process: The number of inputs should be 2" << vcl_endl;
+    std::cout << "vpgl_convert_to_local_rational_camera_process: The number of inputs should be 2" << std::endl;
     return false;
   }
 
@@ -36,12 +36,12 @@ bool vpgl_convert_to_local_rational_camera_process(bprb_func_process& pro)
 
   vpgl_rational_camera<double> *rat_cam = dynamic_cast<vpgl_rational_camera<double>*>(camera.ptr());
   if ( !rat_cam ) {
-    vcl_cerr << "Error: camera is not a vpgl_rational_camera\n";
+    std::cerr << "Error: camera is not a vpgl_rational_camera\n";
     return false;
   }
 
   if (dynamic_cast<vpgl_local_rational_camera<double>*>(rat_cam)) {
-    vcl_cerr << "Error: rational camera is already local!\n";
+    std::cerr << "Error: rational camera is already local!\n";
     return false;
   }
 

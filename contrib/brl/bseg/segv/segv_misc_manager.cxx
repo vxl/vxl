@@ -9,8 +9,10 @@
 #endif
 // include for project points menu option
 #include <vpgl/vpgl_rational_camera.h>
-#include <vcl_iostream.h>
-#include <vcl_cmath.h> //sin, cos exp
+#include <iostream>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <cmath> //sin, cos exp
 #include <vul/vul_file.h>
 #include <vnl/vnl_math.h>
 #include <vil/vil_image_view.h>
@@ -221,11 +223,11 @@ bgui_image_tableau_sptr segv_misc_manager::selected_image_tab()
   {
     bgui_image_tableau_sptr itab;
     itab.vertical_cast(vgui_find_below_by_type_name(top_tab,
-                                                    vcl_string("vgui_image_tableau")));
+                                                    std::string("vgui_image_tableau")));
     if (itab)
       return itab;
   }
-  vcl_cout << "Unable to get bgui_image_tableau at (" << col
+  std::cout << "Unable to get bgui_image_tableau at (" << col
            << ", " << row << ")\n";
   return bgui_image_tableau_sptr();
 }
@@ -240,11 +242,11 @@ segv_misc_manager::vtol2D_tab_at(const unsigned col,
   {
     bgui_vtol2D_tableau_sptr v2D;
     v2D.vertical_cast(vgui_find_below_by_type_name(top_tab,
-                                                   vcl_string("bgui_vtol2D_tableau")));
+                                                   std::string("bgui_vtol2D_tableau")));
     if (v2D)
       return v2D;
   }
-  vcl_cout << "Unable to get bgui_vtol2D_tableau at (" << col
+  std::cout << "Unable to get bgui_vtol2D_tableau at (" << col
            << ", " << row << ")\n";
   return bgui_vtol2D_tableau_sptr();
 }
@@ -267,11 +269,11 @@ bgui_picker_tableau_sptr segv_misc_manager::selected_picker_tab()
   {
     bgui_picker_tableau_sptr pick;
     pick.vertical_cast(vgui_find_below_by_type_name(top_tab,
-                                                    vcl_string("bgui_picker_tableau")));
+                                                    std::string("bgui_picker_tableau")));
     if (pick)
       return pick;
   }
-  vcl_cout << "Unable to get bgui_picker_tableau at (" << col
+  std::cout << "Unable to get bgui_picker_tableau at (" << col
            << ", " << row << ")\n";
   return bgui_picker_tableau_sptr();
 }
@@ -294,10 +296,10 @@ vil_image_resource_sptr segv_misc_manager::image_at(const unsigned col,
 
   bgui_image_tableau_sptr itab;
   itab.vertical_cast(vgui_find_below_by_type_name(top_tab,
-                                                  vcl_string("vgui_image_tableau")));
+                                                  std::string("vgui_image_tableau")));
   if (!itab)
   {
-    vcl_cout << "Unable to get bgui_image_tableau at (" << col
+    std::cout << "Unable to get bgui_image_tableau at (" << col
              << ", " << row << ")\n";
     return VXL_NULLPTR;
   }
@@ -334,7 +336,7 @@ void segv_misc_manager::clear_all()
 //: Draw edges onto the tableau
 //-----------------------------------------------------------------------------
 void
-segv_misc_manager::draw_edges(vcl_vector<vtol_edge_2d_sptr>& edges,
+segv_misc_manager::draw_edges(std::vector<vtol_edge_2d_sptr>& edges,
                               bool verts)
 {
   bgui_vtol2D_tableau_sptr t2D = this->selected_vtol2D_tab();
@@ -345,11 +347,11 @@ segv_misc_manager::draw_edges(vcl_vector<vtol_edge_2d_sptr>& edges,
   vgui_image_tableau_sptr itab = t2D->get_image_tableau();
   if (!itab)
   {
-    vcl_cout << "In segv_misc_manager::draw_edges - null image tab\n";
+    std::cout << "In segv_misc_manager::draw_edges - null image tab\n";
     return;
   }
 #endif
-  for (vcl_vector<vtol_edge_2d_sptr>::iterator eit = edges.begin();
+  for (std::vector<vtol_edge_2d_sptr>::iterator eit = edges.begin();
        eit != edges.end(); eit++)
   {
     t2D->add_edge(*eit);
@@ -376,7 +378,7 @@ segv_misc_manager::draw_edges(vcl_vector<vtol_edge_2d_sptr>& edges,
 //: Draw polylines on the tableau
 //-----------------------------------------------------------------------------
 void segv_misc_manager::
-draw_polylines(vcl_vector<vsol_polyline_2d_sptr > const& polys,
+draw_polylines(std::vector<vsol_polyline_2d_sptr > const& polys,
                vgui_style_sptr style)
 {
   bgui_vtol2D_tableau_sptr t2D = this->selected_vtol2D_tab();
@@ -387,11 +389,11 @@ draw_polylines(vcl_vector<vsol_polyline_2d_sptr > const& polys,
   vgui_image_tableau_sptr itab = t2D->get_image_tableau();
   if (!itab)
   {
-    vcl_cout << "In segv_misc_manager::draw_polylines - null image tab\n";
+    std::cout << "In segv_misc_manager::draw_polylines - null image tab\n";
     return;
   }
 #endif
-  for (vcl_vector<vsol_polyline_2d_sptr>::const_iterator pit = polys.begin();
+  for (std::vector<vsol_polyline_2d_sptr>::const_iterator pit = polys.begin();
        pit != polys.end(); pit++)
   {
     t2D->add_vsol_polyline_2d(*pit, style);
@@ -404,7 +406,7 @@ draw_polylines(vcl_vector<vsol_polyline_2d_sptr > const& polys,
 //: Draw line segments on the tableau
 //-----------------------------------------------------------------------------
 void segv_misc_manager::
-draw_lines(vcl_vector<vsol_line_2d_sptr > const& lines,
+draw_lines(std::vector<vsol_line_2d_sptr > const& lines,
            const vgui_style_sptr& style)
 {
   bgui_vtol2D_tableau_sptr t2D = this->selected_vtol2D_tab();
@@ -415,11 +417,11 @@ draw_lines(vcl_vector<vsol_line_2d_sptr > const& lines,
   vgui_image_tableau_sptr itab = t2D->get_image_tableau();
   if (!itab)
   {
-    vcl_cout << "In segv_misc_manager::draw_edges - null image tab\n";
+    std::cout << "In segv_misc_manager::draw_edges - null image tab\n";
     return;
   }
 #endif
-  for (vcl_vector<vsol_line_2d_sptr>::const_iterator lit = lines.begin();
+  for (std::vector<vsol_line_2d_sptr>::const_iterator lit = lines.begin();
        lit != lines.end(); lit++)
   {
     t2D->add_vsol_line_2d(*lit,style);
@@ -432,7 +434,7 @@ draw_lines(vcl_vector<vsol_line_2d_sptr > const& lines,
 //: Draw conic segments on the tableau
 //-----------------------------------------------------------------------------
 void segv_misc_manager::
-draw_conics(vcl_vector<vsol_conic_2d_sptr > const& conics,
+draw_conics(std::vector<vsol_conic_2d_sptr > const& conics,
             const vgui_style_sptr& style)
 {
   bgui_vtol2D_tableau_sptr t2D = this->selected_vtol2D_tab();
@@ -443,11 +445,11 @@ draw_conics(vcl_vector<vsol_conic_2d_sptr > const& conics,
   vgui_image_tableau_sptr itab = t2D->get_image_tableau();
   if (!itab)
   {
-    vcl_cout << "In segv_misc_manager::draw_edges - null image tab\n";
+    std::cout << "In segv_misc_manager::draw_edges - null image tab\n";
     return;
   }
 #endif
-  for (vcl_vector<vsol_conic_2d_sptr>::const_iterator lit = conics.begin();
+  for (std::vector<vsol_conic_2d_sptr>::const_iterator lit = conics.begin();
        lit != conics.end(); lit++)
   {
     t2D->add_vsol_conic_2d(*lit,style);
@@ -459,7 +461,7 @@ draw_conics(vcl_vector<vsol_conic_2d_sptr > const& conics,
 //: Draw points on the tableau
 //-----------------------------------------------------------------------------
 void segv_misc_manager::
-draw_points(vcl_vector<vsol_point_2d_sptr> const& points, const vgui_style_sptr& style)
+draw_points(std::vector<vsol_point_2d_sptr> const& points, const vgui_style_sptr& style)
 {
   bgui_vtol2D_tableau_sptr t2D = this->selected_vtol2D_tab();
   if (!t2D)
@@ -469,11 +471,11 @@ draw_points(vcl_vector<vsol_point_2d_sptr> const& points, const vgui_style_sptr&
   vgui_image_tableau_sptr itab = t2D->get_image_tableau();
   if (!itab)
   {
-    vcl_cout << "In segv_misc_manager::draw_edges - null image tab\n";
+    std::cout << "In segv_misc_manager::draw_edges - null image tab\n";
     return;
   }
 #endif
-  for (vcl_vector<vsol_point_2d_sptr>::const_iterator pit = points.begin();
+  for (std::vector<vsol_point_2d_sptr>::const_iterator pit = points.begin();
        pit != points.end(); pit++)
   {
     t2D->add_vsol_point_2d(*pit,style);
@@ -482,22 +484,22 @@ draw_points(vcl_vector<vsol_point_2d_sptr> const& points, const vgui_style_sptr&
   t2D->post_redraw();
 }
 
-void segv_misc_manager::draw_regions(vcl_vector<vtol_intensity_face_sptr>& regions,
+void segv_misc_manager::draw_regions(std::vector<vtol_intensity_face_sptr>& regions,
                                      bool verts)
 {
   bgui_vtol2D_tableau_sptr t2D = this->selected_vtol2D_tab();
   if (!t2D)
     return;
-  for (vcl_vector<vtol_intensity_face_sptr>::iterator rit = regions.begin();
+  for (std::vector<vtol_intensity_face_sptr>::iterator rit = regions.begin();
        rit != regions.end(); rit++)
   {
     vtol_face_2d_sptr f = (*rit)->cast_to_face_2d();
     t2D->add_face(f);
     if (verts)
     {
-      vcl_vector<vtol_vertex_sptr> vts;
+      std::vector<vtol_vertex_sptr> vts;
       f->vertices(vts);
-      for (vcl_vector<vtol_vertex_sptr>::iterator vit = vts.begin();
+      for (std::vector<vtol_vertex_sptr>::iterator vit = vts.begin();
            vit != vts.end(); vit++)
       {
         vtol_vertex_2d_sptr v = (*vit)->cast_to_vertex_2d();
@@ -519,8 +521,8 @@ void segv_misc_manager::load_image()
   static bool greyscale = false;
   static bool sblock = false;
   vgui_dialog load_image_dlg("Load image file");
-  static vcl_string image_filename = "/home/dec/images/cal_image1.tif";
-  static vcl_string ext = "*.*";
+  static std::string image_filename = "/home/dec/images/cal_image1.tif";
+  static std::string ext = "*.*";
   load_image_dlg.file("Image Filename:", ext, image_filename);
   load_image_dlg.checkbox("greyscale ", greyscale);
   load_image_dlg.checkbox("blocked?:", sblock);
@@ -573,9 +575,9 @@ void segv_misc_manager::load_image()
 void segv_misc_manager::save_image()
 {
   vgui_dialog file_dialog("Save Image");
-  static vcl_string image_file;
-  static vcl_string ext = "tif";
-  static vcl_string type = "tiff";
+  static std::string image_file;
+  static std::string ext = "tif";
+  static std::string type = "tiff";
   static unsigned size_block = 0;
   static bool byte = false;
   file_dialog.file("Image Filename:", ext, image_file);
@@ -587,7 +589,7 @@ void segv_misc_manager::save_image()
   vil_image_resource_sptr img = this->selected_image();
   if (!img)
   {
-    vcl_cerr << "Null image in segv_misc_manager::save_image\n";
+    std::cerr << "Null image in segv_misc_manager::save_image\n";
     return;
   }
   vil_image_resource_sptr save_image = img;
@@ -612,7 +614,7 @@ void segv_misc_manager::save_image()
   }
 
   if (!vil_save_image_resource(save_image, image_file.c_str(), type.c_str()))
-    vcl_cerr << "segv_misc_manager::save_image operation failed\n";
+    std::cerr << "segv_misc_manager::save_image operation failed\n";
 }
 
 #if 0
@@ -675,15 +677,15 @@ trans_poly(const double alpha,
   if (!base_poly)
     return VXL_NULLPTR;
   double e = vnl_math::e;
-  double scale = vcl_pow(e, alpha);
-  vcl_vector<vsol_point_2d_sptr> verts, trans_verts;
+  double scale = std::pow(e, alpha);
+  std::vector<vsol_point_2d_sptr> verts, trans_verts;
   for (unsigned i=0; i<base_poly->size(); ++i)
   {
     vsol_point_2d_sptr bv = base_poly->vertex(i);
     double x = bv->x(), y = bv->y();
     double sx = x*scale, sy = y*scale;
-    double rsx = sx*vcl_cos(theta)-sy*vcl_sin(theta);
-    double rsy = sx*vcl_sin(theta)+sy*vcl_cos(theta);
+    double rsx = sx*std::cos(theta)-sy*std::sin(theta);
+    double rsy = sx*std::sin(theta)+sy*std::cos(theta);
     vsol_point_2d_sptr tv = new vsol_point_2d(rsx, rsy);
     trans_verts.push_back(tv);
   }
@@ -697,7 +699,7 @@ static vsol_polyline_2d_sptr base_poly()
   vsol_point_2d_sptr p1 = new vsol_point_2d(-100,+100);
   vsol_point_2d_sptr p2 = new vsol_point_2d(+100,+100);
   vsol_point_2d_sptr p3 = new vsol_point_2d(+100,-100);
-  vcl_vector<vsol_point_2d_sptr> verts;
+  std::vector<vsol_point_2d_sptr> verts;
   verts.push_back(p3);   verts.push_back(p2);
   verts.push_back(p1);   verts.push_back(p0);
   return new vsol_polyline_2d(verts);
@@ -737,7 +739,7 @@ void segv_misc_manager::project_on_subm()
   project_dlg.field("Alpha:", alpha);
   if (!project_dlg.ask())
     return;
-  vcl_vector<vsol_polyline_2d_sptr> tpolys;
+  std::vector<vsol_polyline_2d_sptr> tpolys;
   vsol_polyline_2d_sptr base = base_poly();
   vsol_polyline_2d_sptr tbase = trans_poly(alpha,theta,base);
   tpolys.push_back(tbase);
@@ -768,7 +770,7 @@ void segv_misc_manager::project_on_articulation()
   vgui_style_sptr pstyle = vgui_style::new_style(1.0f, 0.5f, 0.1f,
                                                  1.0f, 5.0f);
   unsigned njoints = 4;
-  static vcl_vector<double> joint_trans(njoints, 0);
+  static std::vector<double> joint_trans(njoints, 0);
   static double basis_angle = 0.25*vnl_math::pi;
   joint_trans[0] = 0.25*vnl_math::pi;
   joint_trans[1] = 0.25*vnl_math::pi;
@@ -780,14 +782,14 @@ void segv_misc_manager::project_on_articulation()
   project_dlg.field("Basis Angle:", basis_angle);
   if (!project_dlg.ask())
     return;
-  vcl_vector<double> links(njoints-1, 100.0);
+  std::vector<double> links(njoints-1, 100.0);
   bvgl_articulated_poly_sptr ap = new bvgl_articulated_poly(njoints, links);
   ap->transform(joint_trans);
   ap->print();
 
-  vcl_vector<vsol_polyline_2d_sptr> tpolys;
+  std::vector<vsol_polyline_2d_sptr> tpolys;
 
-  vcl_vector<double> basis(njoints, basis_angle);
+  std::vector<double> basis(njoints, basis_angle);
   for (double t = - 2.5; t<=2.5; t+=0.25)
   {
     bvgl_articulated_poly_sptr manifold =

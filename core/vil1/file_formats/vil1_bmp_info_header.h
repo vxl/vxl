@@ -9,7 +9,8 @@
 // \author fsm
 
 class vil1_stream;
-#include <vcl_iosfwd.h>
+#include <vcl_compiler.h>
+#include <iosfwd>
 
 struct vil1_bmp_info_header
 {
@@ -24,7 +25,7 @@ struct vil1_bmp_info_header
   vil1_bmp_info_header();
   void read(vil1_stream *);
   void write(vil1_stream *) const;
-  void print(vcl_ostream &) const;
+  void print(std::ostream &) const;
 };
 
 #endif // vil1_bmp_info_header_h_

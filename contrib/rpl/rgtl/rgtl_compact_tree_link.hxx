@@ -13,7 +13,9 @@
 
 #include <vcl_compiler.h>
 #include "rgtl_serialize_access.hxx"
-#include <vcl_cstddef.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <cstddef>
 
 //: Store a flagged index for rgtl_compact_tree.
 //
@@ -24,7 +26,7 @@ class rgtl_compact_tree_link
 {
   VCL_SAFE_BOOL_DEFINE;
 public:
-  typedef vcl_size_t index_type;
+  typedef std::size_t index_type;
 
   //: Default-construct with a zero index and false flag.
   rgtl_compact_tree_link(): i_(0), f_(0) {}

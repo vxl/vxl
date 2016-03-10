@@ -8,7 +8,9 @@
 // \verbatim
 //  Modifications<none>
 // \endverbatim
-#include <vcl_vector.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <vector>
 #include <vgl/algo/vgl_h_matrix_2d.h>
 
 template<class T>
@@ -19,7 +21,7 @@ class bugl_random_transform_set_2d
 
   //: generate a set of uniformly distributed equiform transformations
  static void equiform_uniform(const unsigned n_trans,
-                              vcl_vector<vgl_h_matrix_2d<T> >& transform_set,
+                              std::vector<vgl_h_matrix_2d<T> >& transform_set,
                               const T dx, const T dy,
                               const T dtheta = (T)0, const T ds = (T)0);
 
@@ -27,13 +29,13 @@ class bugl_random_transform_set_2d
  //: generate a set of uniformly distributed affine transformations.
  // skew is always zero
  static void zero_skew_affine_uniform(const unsigned n_trans,
-                                      vcl_vector<vgl_h_matrix_2d<T> >& transform_set,
+                                      std::vector<vgl_h_matrix_2d<T> >& transform_set,
                                       const T dx, const T dy,
                                       const T dtheta = (T)0, const T ds = (T)0,
                                       const T daspect = (T)0);
  //: generate a set of uniformly distributed affine transformations on a specified set of intervals
  static void zero_skew_affine_uniform_interval(const unsigned n_trans,
-                                               vcl_vector<vgl_h_matrix_2d<T> >& trans_set,
+                                               std::vector<vgl_h_matrix_2d<T> >& trans_set,
                                                const T xmin, const T xmax,
                                                const T ymin, const T ymax,
                                                const T theta_min, const T theta_max,

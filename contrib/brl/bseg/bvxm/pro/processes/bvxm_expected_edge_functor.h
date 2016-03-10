@@ -11,7 +11,9 @@
 #include <vpgl/vpgl_perspective_camera.h>
 #include <vil/vil_image_view.h>
 
-#include <vcl_vector.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <vector>
 
 
 class bvxm_expected_edge_functor
@@ -25,7 +27,7 @@ class bvxm_expected_edge_functor
 
  private:
 
-  vcl_vector<vgl_point_3d<double> > convert_3d_box_to_3d_points(const vgl_box_3d<double> box_3d);
+  std::vector<vgl_point_3d<double> > convert_3d_box_to_3d_points(const vgl_box_3d<double> box_3d);
   vgl_polygon<double> convert_3d_box_to_2d_polygon(const vgl_box_3d<double> box_3d, const vpgl_perspective_camera<double> *cam);
 
   const bvxm_voxel_slab<float>* slab_;

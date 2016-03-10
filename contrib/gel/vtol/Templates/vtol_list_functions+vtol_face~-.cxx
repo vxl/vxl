@@ -1,5 +1,7 @@
 #include <vtol/vtol_face.h>
 #include <vtol/vtol_list_functions.hxx>
-#include <vcl_vector.hxx>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <vector>
 
-template vcl_vector<vtol_face*>* tagged_union(vcl_vector<vtol_face*>*);
+template std::vector<vtol_face*>* tagged_union(std::vector<vtol_face*>*);

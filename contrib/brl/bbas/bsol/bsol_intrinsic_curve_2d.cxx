@@ -7,11 +7,13 @@
 #include <vsol/vsol_polygon_2d.h>
 #include <vsol/vsol_digital_curve_2d.h>
 #include <vcl_cassert.h>
-#include <vcl_cmath.h>
-#include <vcl_fstream.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <cmath>
+#include <fstream>
 #include <vnl/vnl_math.h>
 
-#include <vcl_string.h>
+#include <string>
 
 //***************************************************************************
 // Initialization
@@ -22,31 +24,31 @@
 //---------------------------------------------------------------------------
 bsol_intrinsic_curve_2d::bsol_intrinsic_curve_2d()
 {
-  storage_=new vcl_vector<vsol_point_2d_sptr>();
+  storage_=new std::vector<vsol_point_2d_sptr>();
   isOpen_=true;
 }
 
 //---------------------------------------------------------------------------
-//: Constructor from a vcl_vector of points
+//: Constructor from a std::vector of points
 //---------------------------------------------------------------------------
 
-bsol_intrinsic_curve_2d::bsol_intrinsic_curve_2d(const vcl_vector<vsol_point_2d_sptr> &new_vertices)
+bsol_intrinsic_curve_2d::bsol_intrinsic_curve_2d(const std::vector<vsol_point_2d_sptr> &new_vertices)
 {
-  storage_=new vcl_vector<vsol_point_2d_sptr>(new_vertices);
+  storage_=new std::vector<vsol_point_2d_sptr>(new_vertices);
   isOpen_=true;
 }
 
 //: Constructor from a vsol_polyline_2d_sptr
 bsol_intrinsic_curve_2d::bsol_intrinsic_curve_2d(const vsol_polyline_2d_sptr poly)
 {
-  storage_ = new vcl_vector<vsol_point_2d_sptr>();
+  storage_ = new std::vector<vsol_point_2d_sptr>();
   for (unsigned i = 0; i < poly->size(); i++)
     storage_->push_back(poly->vertex(i));
   isOpen_=true;
 }
 bsol_intrinsic_curve_2d::bsol_intrinsic_curve_2d(const vsol_polygon_2d_sptr poly)
 {
-  storage_ = new vcl_vector<vsol_point_2d_sptr>();
+  storage_ = new std::vector<vsol_point_2d_sptr>();
   for (unsigned i = 0; i < poly->size(); i++)
     storage_->push_back(poly->vertex(i));
   isOpen_=false;
@@ -59,7 +61,7 @@ bsol_intrinsic_curve_2d::bsol_intrinsic_curve_2d(const vsol_polygon_2d_sptr poly
 bsol_intrinsic_curve_2d::bsol_intrinsic_curve_2d(const bsol_intrinsic_curve_2d &other)
   : vsol_curve_2d(other)
 {
-  storage_=new vcl_vector<vsol_point_2d_sptr>(*other.storage_);
+  storage_=new std::vector<vsol_point_2d_sptr>(*other.storage_);
   for (unsigned int i=0;i<storage_->size();++i)
     (*storage_)[i]=new vsol_point_2d(*((*other.storage_)[i]));
 
@@ -229,13 +231,13 @@ void bsol_intrinsic_curve_2d::insert_vertex(const int i, double x, double y, boo
 {
   assert (valid_index(i));
   vsol_point_2d_sptr pt = new vsol_point_2d(x,y);
-  vcl_vector<vsol_point_2d_sptr>::iterator it = storage_->begin();
+  std::vector<vsol_point_2d_sptr>::iterator it = storage_->begin();
   it += i;
   storage_->insert(it, pt);
   if (bRecomputeProperties) computeProperties();
 }
 
-void bsol_intrinsic_curve_2d::readCONFromFile(vcl_string fileName)
+void bsol_intrinsic_curve_2d::readCONFromFile(std::string fileName)
 {
   double x, y;
   char buffer[2000];
@@ -246,9 +248,9 @@ void bsol_intrinsic_curve_2d::readCONFromFile(vcl_string fileName)
     clear();
 
   //1)If file open fails, return.
-  vcl_ifstream fp(fileName.c_str(), vcl_ios::in);
+  std::ifstream fp(fileName.c_str(), std::ios::in);
   if (!fp) {
-    vcl_cout<<" : Unable to Open "<<fileName<<vcl_endl;
+    std::cout<<" : Unable to Open "<<fileName<<std::endl;
     return;
   }
 
@@ -257,23 +259,23 @@ void bsol_intrinsic_curve_2d::readCONFromFile(vcl_string fileName)
 
   //fp.getline(buffer,2000); //OPEN/CLOSE
   //char openFlag[2000];
-  vcl_string openFlag;
+  std::string openFlag;
   //fp.getline(openFlag,2000);
-  vcl_getline(fp, openFlag);
+  std::getline(fp, openFlag);
   //if (!vcl_Strncmp(openFlag,"OPEN",4))
-  if (openFlag.find("OPEN",0) != vcl_string::npos)
+  if (openFlag.find("OPEN",0) != std::string::npos)
     isOpen_ = true;
   //else if (!vcl_Strncmp(openFlag,"CLOSE",5))
-  else if (openFlag.find("CLOSE",0) != vcl_string::npos)
+  else if (openFlag.find("CLOSE",0) != std::string::npos)
     isOpen_ = false;
   else{
-    vcl_cerr << "Invalid File " << fileName.c_str() << '\n'
+    std::cerr << "Invalid File " << fileName.c_str() << '\n'
              << "Should be OPEN/CLOSE " << openFlag << '\n';
     return;
   }
 
   fp >> nPoints;
-  vcl_cout << "Number of Points from Contour: " << nPoints
+  std::cout << "Number of Points from Contour: " << nPoints
            << "\nContour flag is "<< isOpen_ << " (1 for open, 0 for close)\n";
 
   for (int i=0;i<nPoints;i++) {
@@ -322,7 +324,7 @@ void bsol_intrinsic_curve_2d::computeArcLength()
     py=(*storage_)[size()-1]->y();
     double cx=(*storage_)[0]->x();
     double cy=(*storage_)[0]->y();
-    double dL=vcl_sqrt(vcl_pow(cx-px,2)+vcl_pow(cy-py,2));
+    double dL=std::sqrt(std::pow(cx-px,2)+std::pow(cy-py,2));
     length_ += dL;
     arcLength_[0]=length_;
   }
@@ -334,13 +336,13 @@ void bsol_intrinsic_curve_2d::computeArcLength()
     normArcLength_.push_back(arcLength_[i]/length_);
 
 #ifdef DEBUG
-  vcl_cout << "Norm arc length values:\n";
+  std::cout << "Norm arc length values:\n";
   for (int i = 0; i<size(); i++)
-    vcl_cout << "normArcLength_[" << i << "]: " << normArcLength_[i] << vcl_endl;
+    std::cout << "normArcLength_[" << i << "]: " << normArcLength_[i] << std::endl;
 
-  vcl_cout << "arc length values:\n";
+  std::cout << "arc length values:\n";
   for (int i = 0; i<size(); i++)
-    vcl_cout << "arcLength_[" << i << "]: " << arcLength_[i] << vcl_endl;
+    std::cout << "arcLength_[" << i << "]: " << arcLength_[i] << std::endl;
 #endif
 }
 
@@ -365,10 +367,10 @@ void bsol_intrinsic_curve_2d::computeCurvatures()
       d2y=(cdy-pdy)/dL;
     }
     double K = 0;
-    if (vcl_fabs(cdx) >= ZERO_TOLERANCE || vcl_fabs(cdy) >= ZERO_TOLERANCE)
-      K=(d2y*cdx-d2x*cdy)/vcl_pow((vcl_pow(cdx,2)+vcl_pow(cdy,2)),3/2);
+    if (std::fabs(cdx) >= ZERO_TOLERANCE || std::fabs(cdy) >= ZERO_TOLERANCE)
+      K=(d2y*cdx-d2x*cdy)/std::pow((std::pow(cdx,2)+std::pow(cdy,2)),3/2);
 #ifdef DEBUG
-    vcl_cout << d2x << ' ' << d2y << ' ' << dL << ' ' << cdx << ' ' << cdy << ' ' << K << vcl_endl;
+    std::cout << d2x << ' ' << d2y << ' ' << dL << ' ' << cdx << ' ' << cdy << ' ' << K << std::endl;
 #endif
     curvature_.push_back(K);
     totalCurvature_+=K;
@@ -391,10 +393,10 @@ void bsol_intrinsic_curve_2d::computeCurvatures()
     else
       d2x=d2y=0;
     double K;
-    if (vcl_fabs(cdx) < ZERO_TOLERANCE && vcl_fabs(cdy) < ZERO_TOLERANCE)
+    if (std::fabs(cdx) < ZERO_TOLERANCE && std::fabs(cdy) < ZERO_TOLERANCE)
       K=0;
     else
-      K=(d2y*cdx-d2x*cdy)/vcl_pow((vcl_pow(cdx,2)+vcl_pow(cdy,2)),3/2);
+      K=(d2y*cdx-d2x*cdy)/std::pow((std::pow(cdx,2)+std::pow(cdy,2)),3/2);
     curvature_[0]=K;
   }
 #endif // 0
@@ -415,7 +417,7 @@ void bsol_intrinsic_curve_2d::computeDerivatives()
   {
     double cx=(*storage_)[i]->x();
     double cy=(*storage_)[i]->y();
-    double dL=vcl_sqrt(vcl_pow(cx-px,2)+vcl_pow(cy-py,2));
+    double dL=std::sqrt(std::pow(cx-px,2)+std::pow(cy-py,2));
     if (dL > ZERO_TOLERANCE) {
       dx_.push_back((cx-px)/dL);
       dy_.push_back((cy-py)/dL);
@@ -436,7 +438,7 @@ void bsol_intrinsic_curve_2d::computeDerivatives()
     double py=(*storage_)[size()-1]->y();
     double cx=(*storage_)[0]->x();
     double cy=(*storage_)[0]->y();
-    double dL=vcl_sqrt(vcl_pow(cx-px,2)+vcl_pow(cy-py,2));
+    double dL=std::sqrt(std::pow(cx-px,2)+std::pow(cy-py,2));
     dx_[0]=(cx-px)/dL;
     dy_[0]=(cy-py)/dL;
   }
@@ -456,7 +458,7 @@ void bsol_intrinsic_curve_2d::computeAngles()
   {
     double cx=(*storage_)[i]->x();
     double cy=(*storage_)[i]->y();
-    double theta=vcl_atan2(cy-py,cx-px);
+    double theta=std::atan2(cy-py,cx-px);
     angle_.push_back(theta);
     px=cx;
     py=cy;
@@ -466,9 +468,9 @@ void bsol_intrinsic_curve_2d::computeAngles()
     angle_[0]=angle_[1];
     for (unsigned int i=1;i<angle_.size();i++) {
 #ifdef DEBUG
-      vcl_cout << angle_[i] << ' ' << angle_[i-1] << vcl_endl;
+      std::cout << angle_[i] << ' ' << angle_[i-1] << std::endl;
 #endif
-      totalAngleChange_ += vcl_fabs(angle_[i]-angle_[i-1]);
+      totalAngleChange_ += std::fabs(angle_[i]-angle_[i-1]);
     }
   }
 
@@ -486,13 +488,13 @@ void bsol_intrinsic_curve_2d::computeAngles()
     double py=(*storage_)[size()-1]->y();
     double cx=(*storage_)[0]->x();
     double cy=(*storage_)[0]->y();
-    double theta=vcl_atan2(cy-py,cx-px);
+    double theta=std::atan2(cy-py,cx-px);
     angle_[0]=theta;
 
 #if 0 // commented out
     // TBS source code tests the distance between first and last points!!
-    if (vcl_sqrt((cx-px)*(cx-px)+(cy-py)*(cy-py))<2)
-      c->angle[0]=vcl_atan2(cy-py,cx-px);
+    if (std::sqrt((cx-px)*(cx-px)+(cy-py)*(cy-py))<2)
+      c->angle[0]=std::atan2(cy-py,cx-px);
 #endif // 0
   }
 #endif
@@ -514,7 +516,7 @@ void bsol_intrinsic_curve_2d::computeProperties()
 bool bsol_intrinsic_curve_2d::upsample(int new_size)
 {
   if (size() >= new_size) {
-    vcl_cout << "In bsol_intrinsic_curve_2d::upsample method: Curve size is larger than or equal to new_size already, exiting!\n";
+    std::cout << "In bsol_intrinsic_curve_2d::upsample method: Curve size is larger than or equal to new_size already, exiting!\n";
     return true;
   }
 
@@ -529,7 +531,7 @@ bool bsol_intrinsic_curve_2d::upsample(int new_size)
   storage_->clear();
 
   double T = dc->length()/new_size;
-  vcl_cout << "T value for new_size is: " << T << vcl_endl;
+  std::cout << "T value for new_size is: " << T << std::endl;
 
   for (unsigned int i=1; i<dc->size(); ++i)
   {
@@ -539,13 +541,13 @@ bool bsol_intrinsic_curve_2d::upsample(int new_size)
     //: add first point with length T apart
     int j = 0;
     while (len - j*T >= (T+(T/2))) {
-      vcl_cout << "i: " << i << " interpolating " << (i-1)+(j+1)*T/len << vcl_endl;
+      std::cout << "i: " << i << " interpolating " << (i-1)+(j+1)*T/len << std::endl;
       storage_->push_back(new vsol_point_2d(dc->interp((i-1)+(j+1)*T/len)));
       j++;
     }
   }
 
-  vcl_cout << "after upsampling bsol curve size: " << size() << " (should be " << new_size << ")\n";
+  std::cout << "after upsampling bsol curve size: " << size() << " (should be " << new_size << ")\n";
   this->computeProperties();
   return true;
 }
@@ -555,8 +557,8 @@ bool bsol_intrinsic_curve_2d::upsample(int new_size)
 //: Default Constructor:
 bsol_intrinsic_curve_2d::bsol_intrinsic_curve_2d()
 {
-  vcl_vector< vsol_point_2d > a;
-  vcl_vector<double> b;
+  std::vector< vsol_point_2d > a;
+  std::vector<double> b;
 
   (*storage_)=a;
   s_ = b;
@@ -644,7 +646,7 @@ bsol_intrinsic_curve_2d& bsol_intrinsic_curve_2d::operator=(const bsol_intrinsic
 
 
 template <class double,class double>
-void bsol_intrinsic_curve_2d<double,double>::readDataFromFile(vcl_string fileName)
+void bsol_intrinsic_curve_2d<double,double>::readDataFromFile(std::string fileName)
 {
 }
 
@@ -657,37 +659,37 @@ OPEN (or CLOSE)
 20 (numPoints)
 x1 y1 x2 y2 x3 y3 ....
 */
-void bsol_intrinsic_curve_2d::readDataFromFile(vcl_string fileName)
+void bsol_intrinsic_curve_2d::readDataFromFile(std::string fileName)
 {
   //clear the existing curve data
   if (size() !=0)
     clear();
 
-  vcl_ifstream infp(fileName.c_str(), vcl_ios::in);
+  std::ifstream infp(fileName.c_str(), std::ios::in);
 
   if (!infp) {
-    vcl_cout << " Error opening file  " << fileName << vcl_endl;
-    vcl_exit(1);
+    std::cout << " Error opening file  " << fileName << std::endl;
+    std::exit(1);
   }
 
   char lineBuffer[2000]; //200
   infp.getline(lineBuffer,2000);
-  if (vcl_strncmp(lineBuffer,"CONTOUR",7)) {
-    vcl_cerr << "Invalid File " << fileName.c_str() << '\n'
+  if (std::strncmp(lineBuffer,"CONTOUR",7)) {
+    std::cerr << "Invalid File " << fileName.c_str() << '\n'
              << "Should be CONTOUR " << lineBuffer << '\n';
-    vcl_exit(1);
+    std::exit(1);
   }
 
   char openFlag[2000];
   infp.getline(openFlag,2000);
-  if (!vcl_strncmp(openFlag,"OPEN",4))
+  if (!std::strncmp(openFlag,"OPEN",4))
     isOpen_ = true;
-  else if (!vcl_strncmp(openFlag,"CLOSE",5))
+  else if (!std::strncmp(openFlag,"CLOSE",5))
     isOpen_ = false;
   else{
-    vcl_cerr << "Invalid File " << fileName.c_str() << '\n'
+    std::cerr << "Invalid File " << fileName.c_str() << '\n'
              << "Should be OPEN/CLOSE " << openFlag << '\n';
-    vcl_exit(1);
+    std::exit(1);
   }
 
   int i,numOfPoints;
@@ -703,7 +705,7 @@ void bsol_intrinsic_curve_2d::readDataFromFile(vcl_string fileName)
   computeProperties();
 }
 
-void bsol_intrinsic_curve_2d::readDataFromVector(vcl_vector<vcl_pair<double,double> > v)
+void bsol_intrinsic_curve_2d::readDataFromVector(std::vector<std::pair<double,double> > v)
 {
   unsigned int numOfPoints=v.size();
 

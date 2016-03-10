@@ -11,16 +11,18 @@
 #include <boxm2/io/boxm2_sio_mgr.h>
 #include <vnl/vnl_vector_fixed.h>
 
-#include <vcl_iostream.h>
-#include <vcl_string.h>
-#include <vcl_vector.h>
-#include <vcl_map.h>
-#include <vcl_algorithm.h>
+#include <iostream>
+#include <string>
+#include <vector>
+#include <map>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <algorithm>
 
 void test_block_id()
 {
-    vcl_vector<boxm2_block_id> list;
-    vcl_map<boxm2_block_id, vcl_string> bmap;
+    std::vector<boxm2_block_id> list;
+    std::map<boxm2_block_id, std::string> bmap;
 
     boxm2_block_id zero(0,0,0);
     boxm2_block_id one(0,0,1);
@@ -52,10 +54,10 @@ void test_block_id()
     bmap[five] = "five";
     bmap[one] = "one";
     bmap[four] = "four";
-    vcl_map<boxm2_block_id, vcl_string>::iterator iter;
+    std::map<boxm2_block_id, std::string>::iterator iter;
     for (iter = bmap.begin(); iter != bmap.end(); ++iter) {
         boxm2_block_id b = (*iter).first;
-        vcl_cout << b <<','<< (*iter).second <<vcl_endl;
+        std::cout << b <<','<< (*iter).second <<std::endl;
     }
 }
 
@@ -66,8 +68,8 @@ void test_block()
     typedef unsigned short                      ushort;
 
     //test xml file
-    vcl_string root_dir  = testlib_root_dir();
-    vcl_string test_file = root_dir + "/contrib/brl/bseg/boxm2/tests/";
+    std::string root_dir  = testlib_root_dir();
+    std::string test_file = root_dir + "/contrib/brl/bseg/boxm2/tests/";
 
     //construct block from stream
     int nums[4] = { 64, 64, 64, 0 };

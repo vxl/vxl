@@ -4,7 +4,8 @@
 //:
 // \file
 
-#include <vcl_algorithm.h> // for std::sort()
+#include <vcl_compiler.h>
+#include <algorithm> // for std::sort()
 #include <vcl_cassert.h>
 
 // ------------ 1d array ----------
@@ -56,7 +57,7 @@ template <class T>
 T mean(vbl_array_1d<T> const& in)
 {
   T sum = T(0);
-  vcl_size_t n = in.size();
+  std::size_t n = in.size();
   assert(n>0);
   for (typename vbl_array_1d<T>::const_iterator it = in.begin();
        it != in.end(); ++it)
@@ -113,7 +114,7 @@ template <class T>
 T mean(vbl_array_2d<T> const& in)
 {
   T sum = T(0);
-  vcl_size_t n = in.size();
+  std::size_t n = in.size();
   assert(n>0);
   for (typename vbl_array_2d<T>::const_iterator it = in.begin();
        it != in.end(); ++it)
@@ -170,7 +171,7 @@ template <class T>
 T mean(vbl_array_3d<T> const& in)
 {
   T sum = T(0);
-  vcl_size_t n = in.size();
+  std::size_t n = in.size();
   assert(n>0);
   for (typename vbl_array_3d<T>::const_iterator it = in.begin();
        it != in.end(); ++it)
@@ -184,7 +185,7 @@ T median(vbl_array_1d<T> const& in)
 {
   assert(in.size()>0);
   vbl_array_1d<T> t = in;
-  vcl_sort(t.begin(), t.end());
+  std::sort(t.begin(), t.end());
   return *(t.begin() + (in.size()/2));
 }
 
@@ -194,7 +195,7 @@ T median(vbl_array_2d<T> const& in)
 {
   assert(in.size()>0);
   vbl_array_2d<T> t = in;
-  vcl_sort(t.begin(), t.end());
+  std::sort(t.begin(), t.end());
   return *(t.begin() + (in.size()/2));
 }
 
@@ -204,7 +205,7 @@ T median(vbl_array_3d<T> const& in)
 {
   assert(in.size()>0);
   vbl_array_3d<T> t = in;
-  vcl_sort(t.begin(), t.end());
+  std::sort(t.begin(), t.end());
   return *(t.begin() + (in.size()/2));
 }
 

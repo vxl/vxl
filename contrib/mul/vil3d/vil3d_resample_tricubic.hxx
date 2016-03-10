@@ -82,17 +82,17 @@ void vil3d_resample_tricubic(const vil3d_image_view<S>& src_image,
   const unsigned nj = src_image.nj();
   const unsigned nk = src_image.nk();
   const unsigned np = src_image.nplanes();
-  const vcl_ptrdiff_t istep = src_image.istep();
-  const vcl_ptrdiff_t jstep = src_image.jstep();
-  const vcl_ptrdiff_t kstep = src_image.kstep();
-  const vcl_ptrdiff_t pstep = src_image.planestep();
+  const std::ptrdiff_t istep = src_image.istep();
+  const std::ptrdiff_t jstep = src_image.jstep();
+  const std::ptrdiff_t kstep = src_image.kstep();
+  const std::ptrdiff_t pstep = src_image.planestep();
   const S* plane0 = src_image.origin_ptr();
 
   dest_image.set_size(n1,n2,n3,np);
-  const vcl_ptrdiff_t d_istep = dest_image.istep();
-  const vcl_ptrdiff_t d_jstep = dest_image.jstep();
-  const vcl_ptrdiff_t d_kstep = dest_image.kstep();
-  const vcl_ptrdiff_t d_pstep = dest_image.planestep();
+  const std::ptrdiff_t d_istep = dest_image.istep();
+  const std::ptrdiff_t d_jstep = dest_image.jstep();
+  const std::ptrdiff_t d_kstep = dest_image.kstep();
+  const std::ptrdiff_t d_pstep = dest_image.planestep();
   T* d_plane0 = dest_image.origin_ptr();
 
   if (all_in_image)
@@ -249,17 +249,17 @@ void vil3d_resample_tricubic_edge_extend(const vil3d_image_view<S>& src_image,
   const unsigned nj = src_image.nj();
   const unsigned nk = src_image.nk();
   const unsigned np = src_image.nplanes();
-  const vcl_ptrdiff_t istep = src_image.istep();
-  const vcl_ptrdiff_t jstep = src_image.jstep();
-  const vcl_ptrdiff_t kstep = src_image.kstep();
-  const vcl_ptrdiff_t pstep = src_image.planestep();
+  const std::ptrdiff_t istep = src_image.istep();
+  const std::ptrdiff_t jstep = src_image.jstep();
+  const std::ptrdiff_t kstep = src_image.kstep();
+  const std::ptrdiff_t pstep = src_image.planestep();
   const S* plane0 = src_image.origin_ptr();
 
   dest_image.set_size(n1,n2,n3,np);
-  const vcl_ptrdiff_t d_istep = dest_image.istep();
-  const vcl_ptrdiff_t d_jstep = dest_image.jstep();
-  const vcl_ptrdiff_t d_kstep = dest_image.kstep();
-  const vcl_ptrdiff_t d_pstep = dest_image.planestep();
+  const std::ptrdiff_t d_istep = dest_image.istep();
+  const std::ptrdiff_t d_jstep = dest_image.jstep();
+  const std::ptrdiff_t d_kstep = dest_image.kstep();
+  const std::ptrdiff_t d_pstep = dest_image.planestep();
   T* d_plane0 = dest_image.origin_ptr();
 
   if ( all_in_image )
@@ -415,17 +415,17 @@ void vil3d_resample_tricubic_edge_trilin_extend(const vil3d_image_view<S>& src_i
   const unsigned nj = src_image.nj();
   const unsigned nk = src_image.nk();
   const unsigned np = src_image.nplanes();
-  const vcl_ptrdiff_t istep = src_image.istep();
-  const vcl_ptrdiff_t jstep = src_image.jstep();
-  const vcl_ptrdiff_t kstep = src_image.kstep();
-  const vcl_ptrdiff_t pstep = src_image.planestep();
+  const std::ptrdiff_t istep = src_image.istep();
+  const std::ptrdiff_t jstep = src_image.jstep();
+  const std::ptrdiff_t kstep = src_image.kstep();
+  const std::ptrdiff_t pstep = src_image.planestep();
   const S* plane0 = src_image.origin_ptr();
 
   dest_image.set_size(n1,n2,n3,np);
-  const vcl_ptrdiff_t d_istep = dest_image.istep();
-  const vcl_ptrdiff_t d_jstep = dest_image.jstep();
-  const vcl_ptrdiff_t d_kstep = dest_image.kstep();
-  const vcl_ptrdiff_t d_pstep = dest_image.planestep();
+  const std::ptrdiff_t d_istep = dest_image.istep();
+  const std::ptrdiff_t d_jstep = dest_image.jstep();
+  const std::ptrdiff_t d_kstep = dest_image.kstep();
+  const std::ptrdiff_t d_pstep = dest_image.planestep();
   T* d_plane0 = dest_image.origin_ptr();
   // Use safe interpolation with edge-extension
   if (np==1)

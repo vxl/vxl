@@ -13,7 +13,9 @@
 // \endverbatim
 
 #include <boxm/boxm_scene.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iostream>
 
 template <class T_data>
 boxm_scene<boct_tree<short, bool> >* boxm_explore_cells_at_level(boxm_scene<boct_tree<short, T_data> > *scene_in, short level)
@@ -62,8 +64,8 @@ void boxm_remove_level_0_leaves(boxm_scene<boct_tree<short, T_data> > *scene_in)
     scene_in->load_block(it_in.index());
     tree_type *tree_in= (*it_in)->get_tree();
 
-    vcl_vector<boct_tree_cell<short, T_data> * > all_cells =  tree_in->all_cells();
-    typename vcl_vector<boct_tree_cell<short, T_data> * >::iterator cells_it = all_cells.begin();
+    std::vector<boct_tree_cell<short, T_data> * > all_cells =  tree_in->all_cells();
+    typename std::vector<boct_tree_cell<short, T_data> * >::iterator cells_it = all_cells.begin();
 
     for (; cells_it!=all_cells.end(); cells_it++) {
       boct_tree_cell<short, T_data> * cell_in = *cells_it;
@@ -85,9 +87,9 @@ void boxm_remove_level_0_leaves(boxm_scene<boct_tree<short, T_data> > *scene_in)
 
     tree_in->reset_num_levels(tree_in->number_levels() - 1);
     scene_in->write_active_block();
-    vcl_cout << '.';
+    std::cout << '.';
   }
-  vcl_cout << "\nCleaning\n";
+  std::cout << "\nCleaning\n";
   scene_in->unload_active_blocks();
 }
 

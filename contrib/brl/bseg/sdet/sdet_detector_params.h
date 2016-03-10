@@ -61,7 +61,9 @@
 //             GE Corporate Research and Development
 
 //-----------------------------------------------------------------------------
-#include <vcl_iosfwd.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iosfwd>
 #include <gevd/gevd_param_mixin.h>
 
 class sdet_detector_params : public gevd_param_mixin
@@ -81,7 +83,7 @@ class sdet_detector_params : public gevd_param_mixin
 
   sdet_detector_params(const sdet_detector_params& old_params);
   ~sdet_detector_params() {}
-  friend vcl_ostream& operator<<(vcl_ostream&, const sdet_detector_params& dp);
+  friend std::ostream& operator<<(std::ostream&, const sdet_detector_params& dp);
   bool SanityCheck();
 #if 0
   void Describe(ParamModifier& mod);

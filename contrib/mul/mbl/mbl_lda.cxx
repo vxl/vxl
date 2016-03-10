@@ -10,10 +10,12 @@
 
 #include "mbl_lda.h"
 
-#include <vcl_algorithm.h>  // for vcl_find
+#include <vcl_compiler.h>
+#include <iostream>
+#include <algorithm>  // for std::find
 #include <vcl_cassert.h>
-#include <vcl_cstddef.h> // for size_t
-#include <vcl_cstring.h> // for memcpy()
+#include <cstddef> // for size_t
+#include <cstring> // for memcpy()
 #include <vsl/vsl_indent.h>
 #include <vsl/vsl_vector_io.h>
 #include <vsl/vsl_binary_io.h>
@@ -109,10 +111,10 @@ void mbl_lda::updateCovar(vnl_matrix<double>& S, const vnl_vector<double>& V)
 // find out how many id in the label vector
 int mbl_lda::nDistinctIDs(const int* id, const int n)
 {
-  vcl_vector<int> dids;
+  std::vector<int> dids;
   for (int i=0;i<n;++i)
   {
-    if (vcl_find(dids.begin(), dids.end(), id[i])==dids.end())  // if (Index(dids,id[i])<0)
+    if (std::find(dids.begin(), dids.end(), id[i])==dids.end())  // if (Index(dids,id[i])<0)
       dids.push_back(id[i]);
   }
 
@@ -228,7 +230,7 @@ void mbl_lda::build(const vnl_vector<double>* v, const int * label, int n,
   wS_inv = wS_svd.inverse();
 
   vnl_matrix<double> B=withinS_*wS_inv;
-  vcl_cout<<B<<vcl_endl;
+  std::cout<<B<<std::endl;
 
   vnl_matrix<double> A = wS_inv* betweenS_; // was: betweenS_ * wS_inv;
 
@@ -292,10 +294,10 @@ void mbl_lda::build(const vnl_vector<double>* v, const int * label, int n,
   basis_.set_size(m,t);
   double **E = EVecs.data_array();
   double **b = basis_.data_array();
-  vcl_size_t bytes_per_row = t * sizeof(double);
+  std::size_t bytes_per_row = t * sizeof(double);
   for (int i=0;i<m;++i)
   {
-    vcl_memcpy(b[i],E[i],bytes_per_row);
+    std::memcpy(b[i],E[i],bytes_per_row);
   }
 
   // Normalize the basis vectors
@@ -305,7 +307,7 @@ void mbl_lda::build(const vnl_vector<double>* v, const int * label, int n,
   basis_.normalize_columns();
   MBL_LOG(DEBUG, logger(), "basis matrix after normalization:");
   basis_.print(logger().log(mbl_logger::DEBUG));
-  logger().log(mbl_logger::DEBUG) << vcl_flush;
+  logger().log(mbl_logger::DEBUG) << std::flush;
 
   // Copy first t eigenvalues
   evals_.set_size(t);
@@ -333,14 +335,14 @@ void mbl_lda::build(const vnl_vector<double>* v, const int* label, int n)
 
 //=======================================================================
 //: Perform LDA on data
-void mbl_lda::build(const vnl_vector<double>* v, const vcl_vector<int>& label)
+void mbl_lda::build(const vnl_vector<double>* v, const std::vector<int>& label)
 {
   build(v,&label.front(),label.size(),vnl_matrix<double>(),true);
 }
 
 //=======================================================================
 //: Perform LDA on data
-void mbl_lda::build(const vnl_vector<double>* v, const vcl_vector<int>& label,
+void mbl_lda::build(const vnl_vector<double>* v, const std::vector<int>& label,
                     const vnl_matrix<double>& wS)
 {
   build(v,&label.front(),label.size(),wS,false);
@@ -348,7 +350,7 @@ void mbl_lda::build(const vnl_vector<double>* v, const vcl_vector<int>& label,
 
 //=======================================================================
 //: Perform LDA on data
-void mbl_lda::build(const vcl_vector<vnl_vector<double> >& v, const vcl_vector<int>& label)
+void mbl_lda::build(const std::vector<vnl_vector<double> >& v, const std::vector<int>& label)
 {
   assert(v.size()==label.size());
   build(&v.front(),&label.front(),label.size(),vnl_matrix<double>(),true);
@@ -356,7 +358,7 @@ void mbl_lda::build(const vcl_vector<vnl_vector<double> >& v, const vcl_vector<i
 
 //=======================================================================
 //: Perform LDA on data
-void mbl_lda::build(const vcl_vector<vnl_vector<double> >& v, const vcl_vector<int>& label,
+void mbl_lda::build(const std::vector<vnl_vector<double> >& v, const std::vector<int>& label,
                     const vnl_matrix<double>& wS)
 {
   assert(v.size()==label.size());
@@ -368,12 +370,12 @@ void mbl_lda::build(const vcl_vector<vnl_vector<double> >& v, const vcl_vector<i
 //  Columns of M form example vectors
 //  i'th column belongs to class label[i]
 //  Note: label([1..n]) not label([0..n-1])
-void mbl_lda::build(const vnl_matrix<double>& M, const vcl_vector<int>& label)
+void mbl_lda::build(const vnl_matrix<double>& M, const std::vector<int>& label)
 {
   unsigned int n_egs = M.columns();
   assert(n_egs==label.size());
   //  assert(label.lo()==1);
-  vcl_vector<vnl_vector<double> > v(n_egs);
+  std::vector<vnl_vector<double> > v(n_egs);
   for (unsigned int i=0;i<n_egs;++i)
   {
     v[i] = M.get_column(i);
@@ -386,13 +388,13 @@ void mbl_lda::build(const vnl_matrix<double>& M, const vcl_vector<int>& label)
 //  Columns of M form example vectors
 //  i'th column belongs to class label[i]
 //  Note: label([1..n]) not label([0..n-1])
-void mbl_lda::build(const vnl_matrix<double>& M, const vcl_vector<int>& label,
+void mbl_lda::build(const vnl_matrix<double>& M, const std::vector<int>& label,
                     const vnl_matrix<double>& wS)
 {
   unsigned int n_egs = M.columns();
   assert(n_egs==label.size());
   //  assert(label.lo()==1);
-  vcl_vector<vnl_vector<double> > v(n_egs);
+  std::vector<vnl_vector<double> > v(n_egs);
   for (unsigned int i=0;i<n_egs;++i)
   {
     v[i] = M.get_column(i);
@@ -427,19 +429,19 @@ short mbl_lda::version_no() const
 
 //=======================================================================
 
-vcl_string mbl_lda::is_a() const
+std::string mbl_lda::is_a() const
 {
-  return vcl_string("mbl_lda");
+  return std::string("mbl_lda");
 }
 
-bool mbl_lda::is_class(vcl_string const& s) const
+bool mbl_lda::is_class(std::string const& s) const
 {
   return s==is_a();
 }
 
 //=======================================================================
 
-void mbl_lda::print_summary(vcl_ostream& os) const
+void mbl_lda::print_summary(std::ostream& os) const
 {
   int n_classes= n_samples_.size();
   os << "n_classes= "<<n_classes<<'\n';
@@ -496,9 +498,9 @@ void mbl_lda::b_read(vsl_b_istream& bfs)
       break;
     default:
       // CHECK FUNCTION SIGNATURE IS CORRECT
-      vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, mbl_lda &)\n"
-               << "           Unknown version number "<< version << vcl_endl;
-      bfs.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
+      std::cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, mbl_lda &)\n"
+               << "           Unknown version number "<< version << std::endl;
+      bfs.is().clear(std::ios::badbit); // Set an unrecoverable IO error on stream
       return;
   }
 }
@@ -519,7 +521,7 @@ void vsl_b_read(vsl_b_istream& bfs, mbl_lda& b)
 
 //=======================================================================
 
-vcl_ostream& operator<<(vcl_ostream& os,const mbl_lda& b)
+std::ostream& operator<<(std::ostream& os,const mbl_lda& b)
 {
   os << b.is_a() << ": ";
   vsl_indent_inc(os);
@@ -529,7 +531,7 @@ vcl_ostream& operator<<(vcl_ostream& os,const mbl_lda& b)
 }
 
 //=======================================================================
-void vsl_print_summary(vcl_ostream& os, const mbl_lda& b)
+void vsl_print_summary(std::ostream& os, const mbl_lda& b)
 {
   b.print_summary(os);
 }

@@ -7,8 +7,10 @@
 // \brief Link between one node and another
 
 #include <vsl/vsl_binary_io.h>
-#include <vcl_vector.h>
-#include <vcl_iosfwd.h>
+#include <vector>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iosfwd>
 
 //: Link between one node and another
 //  Indicates that position of node j, p(j) = p(i) + (N(dx,var_x),N(dy,var_y))
@@ -64,17 +66,17 @@ public:
 //  Assumes that there are n nodes (indexed 0..n-1),
 //  thus n-1 arcs defining a tree.
 //  On exit children[i] gives list of children of node i
-bool fhs_order_tree_from_root(const vcl_vector<fhs_arc>& arc0,
-                         vcl_vector<fhs_arc>& new_arc,
-                         vcl_vector<vcl_vector<unsigned> >& children,
+bool fhs_order_tree_from_root(const std::vector<fhs_arc>& arc0,
+                         std::vector<fhs_arc>& new_arc,
+                         std::vector<std::vector<unsigned> >& children,
                          unsigned new_root);
 
 
 //: Print
-vcl_ostream& operator<<(vcl_ostream& os, const fhs_arc& c);
+std::ostream& operator<<(std::ostream& os, const fhs_arc& c);
 
 //: Print set
-vcl_ostream& operator<<(vcl_ostream& os, const vcl_vector<fhs_arc>& arc);
+std::ostream& operator<<(std::ostream& os, const std::vector<fhs_arc>& arc);
 
 //: Save
 inline void vsl_b_write(vsl_b_ostream& bfs, const fhs_arc& t)
@@ -89,6 +91,6 @@ inline void vsl_b_read(vsl_b_istream& bfs, fhs_arc& t)
 }
 
 //: Print
-void vsl_print_summary(vcl_ostream& os, const fhs_arc& t);
+void vsl_print_summary(std::ostream& os, const fhs_arc& t);
 
 #endif // fhs_arc_h_

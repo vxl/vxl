@@ -1,6 +1,7 @@
 // \author fsm
-#include <vcl_iostream.h>
-#include <vcl_iomanip.h>
+#include <iostream>
+#include <vcl_compiler.h>
+#include <iomanip>
 
 #include <vgui/vgui_gl.h>
 #include <vgui/vgui.h>
@@ -20,7 +21,7 @@ class front_back_wibbler : public vgui_tableau
   front_back_wibbler() {}
 
   bool handle(vgui_event const &);
-  vcl_string type_name() const {
+  std::string type_name() const {
     return "front_back_wibbler";
   }
   void print_help_message() const;
@@ -28,7 +29,7 @@ class front_back_wibbler : public vgui_tableau
 
 void front_back_wibbler::print_help_message() const
 {
-  vcl_cerr<< __FILE__ " : the amazing front-back wibbler\n"
+  std::cerr<< __FILE__ " : the amazing front-back wibbler\n"
           << "'f' : draw into front buffer\n"
           << "'b' : draw into back buffer\n"
           << "'/' : glFlush(); glFinish();\n"
@@ -47,7 +48,7 @@ bool front_back_wibbler::handle(const vgui_event &e)
 {
   vgui_adaptor *ct = e.origin;
   if (!ct) {
-    vcl_cerr << "null adaptor\n";
+    std::cerr << "null adaptor\n";
     return false;
   }
 
@@ -62,29 +63,29 @@ bool front_back_wibbler::handle(const vgui_event &e)
     break;
 
    case 'f':
-    vcl_cerr << "front buffer\n";
+    std::cerr << "front buffer\n";
     glDrawBuffer(GL_FRONT);
     break;
 
    case 'b':
-    vcl_cerr << "back buffer\n";
+    std::cerr << "back buffer\n";
     glDrawBuffer(GL_BACK);
     break;
 
    case '/':
-    vcl_cerr << "flush\n";
+    std::cerr << "flush\n";
     glFlush();
     glFinish();
     break;
 
    case 'c':
-    vcl_cerr << "clear\n";
+    std::cerr << "clear\n";
     glClearColor(0,0,0,0);
     glClear(GL_COLOR_BUFFER_BIT);
     break;
 
    case 'l':
-    vcl_cerr << "line\n";
+    std::cerr << "line\n";
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
     glMatrixMode(GL_MODELVIEW);
@@ -97,7 +98,7 @@ bool front_back_wibbler::handle(const vgui_event &e)
     break;
 
    case 'p':
-    vcl_cerr << "point\n";
+    std::cerr << "point\n";
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
     glMatrixMode(GL_MODELVIEW);
@@ -110,44 +111,44 @@ bool front_back_wibbler::handle(const vgui_event &e)
     break;
 
    case '>':
-    vcl_cerr << "copy back -> front\n";
+    std::cerr << "copy back -> front\n";
     vgui_utils::copy_back_to_front();
     break;
 
    case '<':
-    vcl_cerr << "copy front -> back\n";
+    std::cerr << "copy front -> back\n";
     vgui_utils::copy_front_to_back();
     break;
 
    case 's':
-    vcl_cerr << "swap\n";
+    std::cerr << "swap\n";
     ct->swap_buffers();
     break;
 
    case ' ':
-    vcl_cerr << "some stuff :\n"
-             << "   vendor : " << glGetString(GL_VENDOR) << vcl_endl
-             << "   renderer : " << glGetString(GL_RENDERER) << vcl_endl
-             << "   version : " << glGetString(GL_VERSION) << vcl_endl
-             << "   extensions : " << glGetString(GL_EXTENSIONS) << vcl_endl;
+    std::cerr << "some stuff :\n"
+             << "   vendor : " << glGetString(GL_VENDOR) << std::endl
+             << "   renderer : " << glGetString(GL_RENDERER) << std::endl
+             << "   version : " << glGetString(GL_VERSION) << std::endl
+             << "   extensions : " << glGetString(GL_EXTENSIONS) << std::endl;
     {
       GLboolean bool_v;
       GLint int_v;
 
       glGetIntegerv(GL_AUX_BUFFERS, &int_v);
-      vcl_cerr << "   " << int_v << " aux buffers\n";
+      std::cerr << "   " << int_v << " aux buffers\n";
 
       glGetBooleanv(GL_DOUBLEBUFFER, &bool_v);
-      vcl_cerr << "   " << (bool_v ? "double" : "single") << " buffered\n";
+      std::cerr << "   " << (bool_v ? "double" : "single") << " buffered\n";
 
       glGetIntegerv(GL_MAX_MODELVIEW_STACK_DEPTH, &int_v);
-      vcl_cerr << "   " << "size of modelview matrix stack is " << int_v << vcl_endl;
+      std::cerr << "   " << "size of modelview matrix stack is " << int_v << std::endl;
 
       glGetIntegerv(GL_MAX_PROJECTION_STACK_DEPTH, &int_v);
-      vcl_cerr << "   " << "size of projection matrix stack is " << int_v << vcl_endl;
+      std::cerr << "   " << "size of projection matrix stack is " << int_v << std::endl;
 
-      vcl_cerr << "   " << "frame buffer depths:\n";
-#define macro(buf) { GLint v;glGetIntegerv(GL_ ## buf ## _BITS,&v); vcl_cerr<<"   "<<vcl_setw(3)<<v<<" " #buf <<vcl_endl; }
+      std::cerr << "   " << "frame buffer depths:\n";
+#define macro(buf) { GLint v;glGetIntegerv(GL_ ## buf ## _BITS,&v); std::cerr<<"   "<<std::setw(3)<<v<<" " #buf <<std::endl; }
       // Number of bits per R, G, B, or A component in  the color buffers
       macro(RED);
       macro(GREEN);

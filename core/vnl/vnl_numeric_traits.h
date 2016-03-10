@@ -27,7 +27,8 @@
 //-----------------------------------------------------------------------------
 
 #include <vxl_config.h> // for type vxl_uint_64
-#include <vcl_complex.h>
+#include <vcl_compiler.h>
+#include <complex>
 #include <vnl/vnl_export.h>
 
 // this is an empty class template.
@@ -450,75 +451,75 @@ class vnl_numeric_traits<long double const> : public vnl_numeric_traits<long dou
 #endif
 
 VCL_DEFINE_SPECIALIZATION
-class vnl_numeric_traits< vcl_complex<float> >
+class vnl_numeric_traits< std::complex<float> >
 {
  public:
   //: Additive identity
-  static VNL_EXPORT const vcl_complex<float> zero;
+  static VNL_EXPORT const std::complex<float> zero;
   //: Multiplicative identity
-  static VNL_EXPORT const vcl_complex<float> one;
+  static VNL_EXPORT const std::complex<float> one;
   // Maximum value which this type can assume; makes no sense for this type
-  //static VNL_EXPORT const vcl_complex<float> maxval;
+  //static VNL_EXPORT const std::complex<float> maxval;
 
   //: Return value of abs()
   typedef float abs_t;
   //: Name of a type twice as long as this one for accumulators and products.
-  typedef vcl_complex<vnl_numeric_traits<float>::double_t> double_t;
+  typedef std::complex<vnl_numeric_traits<float>::double_t> double_t;
   //: Name of type which results from multiplying this type with a double
-  typedef vcl_complex<float> real_t;
+  typedef std::complex<float> real_t;
 };
 
 #if !VCL_CANNOT_SPECIALIZE_CV
 VCL_DEFINE_SPECIALIZATION
-class vnl_numeric_traits<vcl_complex<float> const> : public vnl_numeric_traits<vcl_complex<float> > {};
+class vnl_numeric_traits<std::complex<float> const> : public vnl_numeric_traits<std::complex<float> > {};
 #endif
 
 VCL_DEFINE_SPECIALIZATION
-class vnl_numeric_traits< vcl_complex<double> >
+class vnl_numeric_traits< std::complex<double> >
 {
  public:
   //: Additive identity
-  static VNL_EXPORT const vcl_complex<double> zero;
+  static VNL_EXPORT const std::complex<double> zero;
   //: Multiplicative identity
-  static VNL_EXPORT const vcl_complex<double> one;
+  static VNL_EXPORT const std::complex<double> one;
   // Maximum value which this type can assume; makes no sense for this type
-  //static VNL_EXPORT const vcl_complex<double> maxval;
+  //static VNL_EXPORT const std::complex<double> maxval;
 
   //: Return value of abs()
   typedef double abs_t;
   //: Name of a type twice as long as this one for accumulators and products.
-  typedef vcl_complex<vnl_numeric_traits<double>::double_t> double_t;
+  typedef std::complex<vnl_numeric_traits<double>::double_t> double_t;
   //: Name of type which results from multiplying this type with a double
-  typedef vcl_complex<double> real_t;
+  typedef std::complex<double> real_t;
 };
 
 #if !VCL_CANNOT_SPECIALIZE_CV
 VCL_DEFINE_SPECIALIZATION
-class vnl_numeric_traits<vcl_complex<double> const> : public vnl_numeric_traits<vcl_complex<double> > {};
+class vnl_numeric_traits<std::complex<double> const> : public vnl_numeric_traits<std::complex<double> > {};
 #endif
 
 VCL_DEFINE_SPECIALIZATION
-class vnl_numeric_traits< vcl_complex<long double> >
+class vnl_numeric_traits< std::complex<long double> >
 {
  public:
   //: Additive identity
-  static VNL_EXPORT const vcl_complex<long double> zero;
+  static VNL_EXPORT const std::complex<long double> zero;
   //: Multiplicative identity
-  static VNL_EXPORT const vcl_complex<long double> one;
+  static VNL_EXPORT const std::complex<long double> one;
   // Maximum value which this type can assume; makes no sense for this type
-  //static VNL_EXPORT const vcl_complex<long double> maxval;
+  //static VNL_EXPORT const std::complex<long double> maxval;
 
   //: Return value of abs()
   typedef long double abs_t;
   //: Name of a type twice as long as this one for accumulators and products.
-  typedef vcl_complex<vnl_numeric_traits<long double>::double_t> double_t;
+  typedef std::complex<vnl_numeric_traits<long double>::double_t> double_t;
   //: Name of type which results from multiplying this type with a double
-  typedef vcl_complex<long double> real_t;
+  typedef std::complex<long double> real_t;
 };
 
 #if !VCL_CANNOT_SPECIALIZE_CV
 VCL_DEFINE_SPECIALIZATION
-class vnl_numeric_traits<vcl_complex<long double> const> : public vnl_numeric_traits<vcl_complex<long double> > {};
+class vnl_numeric_traits<std::complex<long double> const> : public vnl_numeric_traits<std::complex<long double> > {};
 #endif
 
 #endif // vnl_numeric_traits_h_

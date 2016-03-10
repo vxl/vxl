@@ -68,7 +68,7 @@ class vil_j2k_image : public vil_image_resource
   //  it can be a url to a file hosted on an Image Web Server (eg.
   //  ecwp://www.earthetc.com/images/australia/Sydney.ecw or
   //  ecwp://www.earthetc.com/images/usa/1metercalif.ecw
-  vil_j2k_image( const vcl_string& fileOrUrl );
+  vil_j2k_image( const std::string& fileOrUrl );
   //:
   //  Read a jpeg 2000 image from a stream containing either a raw j2k codestream
   //  or a jp2 file stream.  is' current position needs to be pointing at the beginning of
@@ -195,7 +195,7 @@ class vil_j2k_image : public vil_image_resource
   //:
   //  \sa setMaxImageDimension and \sa unsetMaxImageDimension
   //
-  //  if this equals vcl_numeric_limits<unsigned int>::max(), then this feature is turned off
+  //  if this equals std::numeric_limits<unsigned int>::max(), then this feature is turned off
   //  Of course I'm ignored if mRemoteFile is true
   unsigned int mMaxLocalDimension;
   //:

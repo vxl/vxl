@@ -1,19 +1,21 @@
 #include <testlib/testlib_test.h>
 #include <bsta/algo/bsta_mean_shift.h>
 #include <bsta/algo/bsta_sample_set.h>
-#include <vcl_string.h>
+#include <string>
 #include <bsta/bsta_gaussian_indep.h>
 #include <bsta/bsta_gaussian_full.h>
-#include <vcl_fstream.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <fstream>
 
 vnl_random rng;
 
 template<class T>
-void test_sample_set(T epsilon, const vcl_string& type_name)
+void test_sample_set(T epsilon, const std::string& type_name)
 {
   T meanv1(T(0.5));
 
-  T var1(T(vcl_pow(T(0.1), 2)));
+  T var1(T(std::pow(T(0.1), 2)));
 
   bsta_gaussian_sphere<T,1> g1(meanv1, var1);
 
@@ -37,7 +39,7 @@ void test_sample_set(T epsilon, const vcl_string& type_name)
 
   T out;
   TEST("find mean around m1", ss.mean(meanv1, out), true);
-  vcl_cout << "calculated mean:\n " << out << " \nwithin m1:\n " << meanv1 << vcl_endl;
+  std::cout << "calculated mean:\n " << out << " \nwithin m1:\n " << meanv1 << std::endl;
   T dif = out-meanv1;
   TEST_NEAR((type_name + ": mean shift sample set mean method").c_str(), dif, T(0), epsilon);
 
@@ -50,14 +52,14 @@ void test_sample_set(T epsilon, const vcl_string& type_name)
 
   T out2;
   ss.mode_mean(0, out2);
-  vcl_cout << "calculated mean:\n " << out2 << " \nwithin m1:\n " << meanv1 << vcl_endl;
+  std::cout << "calculated mean:\n " << out2 << " \nwithin m1:\n " << meanv1 << std::endl;
   dif = out2-meanv1;
   TEST_NEAR((type_name + ": mean shift sample set mean of the mode method").c_str(), dif, T(0), epsilon);
 
   // calculate variance
   T var;
   bsta_sample_set_variance<T>(ss, 0, T(MIN_VAR_), var);
-  vcl_cout << "-----------------\n"
+  std::cout << "-----------------\n"
            << "calculated variance:\n " << var << '\n'
            << "-----------------\n";
   TEST_NEAR((type_name + ": mean shift sample set variance of the mode method").c_str(), var, var1, epsilon);
@@ -68,18 +70,18 @@ void test_sample_set(T epsilon, const vcl_string& type_name)
   TEST((type_name + ": mean shift fit distribution to sample set method").c_str(), return_value, true);
   TEST((type_name + ": mean shift fit distribution to sample set method").c_str(), out_dist.num_components(), ss.mode_cnt());
 
-  vcl_cout << "prob density of meanv1: " << out_dist.prob_density(meanv1) << '\n'
+  std::cout << "prob density of meanv1: " << out_dist.prob_density(meanv1) << '\n'
            << "prob density of some point from ss: " << out_dist.prob_density(ss.sample(0)) << '\n';
 
   T likelihood = T(0);
   for (unsigned mi = 0; mi < out_dist.num_components(); mi++) {
     likelihood += bsta_sample_set_log_likelihood(ss, out_dist.distribution(mi), ss.total_weight());
   }
-  vcl_cout << "likelihood for ss: " << likelihood << '\n';
+  std::cout << "likelihood for ss: " << likelihood << '\n';
 }
 
 template<class T, unsigned n>
-void test_sample_set(T epsilon, const vcl_string& type_name)
+void test_sample_set(T epsilon, const std::string& type_name)
 {
   typedef typename bsta_gaussian_indep<T,n>::vector_type vect_t;
   typedef typename bsta_gaussian_full<T,n>::covar_type var_t;
@@ -88,9 +90,9 @@ void test_sample_set(T epsilon, const vcl_string& type_name)
   for (unsigned i = 1; i < n; i++)
     meanv1[i] = T(rng.drand32());
 
-  vnl_vector_fixed<T,n> sd1(T(vcl_pow(T(0.1), 2)));
+  vnl_vector_fixed<T,n> sd1(T(std::pow(T(0.1), 2)));
   for (unsigned i = 1; i < n; i++)
-    sd1[i] = T(vcl_pow(rng.drand32()/10,2));
+    sd1[i] = T(std::pow(rng.drand32()/10,2));
 
   bsta_gaussian_indep<T,n> g1(meanv1, sd1);
 
@@ -130,7 +132,7 @@ void test_sample_set(T epsilon, const vcl_string& type_name)
 
   vect_t out;
   TEST("find mean around m1", ss.mean(meanv1, out), true);
-  vcl_cout << "calculated mean:\n " << out << " \nwithin m1:\n " << meanv1 << vcl_endl;
+  std::cout << "calculated mean:\n " << out << " \nwithin m1:\n " << meanv1 << std::endl;
   vect_t dif = out-meanv1;
   vnl_vector_fixed<T,n> dummy(dif);
   TEST_NEAR((type_name + ": mean shift sample set mean method").c_str(), dummy.magnitude(), T(0), epsilon);
@@ -152,7 +154,7 @@ void test_sample_set(T epsilon, const vcl_string& type_name)
 
   vect_t out2;
   ss.mode_mean(0, out2);
-  vcl_cout << "calculated mean:\n " << out2 << " \nwithin m1:\n " << meanv1 << vcl_endl;
+  std::cout << "calculated mean:\n " << out2 << " \nwithin m1:\n " << meanv1 << std::endl;
   dif = out2-meanv1;
   vnl_vector_fixed<T,n> dummy2(dif);
   TEST_NEAR((type_name + ": mean shift sample set mean of the mode method").c_str(), dummy2.magnitude(), T(0), epsilon);
@@ -160,20 +162,20 @@ void test_sample_set(T epsilon, const vcl_string& type_name)
   // calculate variance
   var_t var;
   bsta_sample_set_variance<T,n>(ss, 0, var);
-  vcl_cout << "-----------------\n"
+  std::cout << "-----------------\n"
            << "calculated variance:\n " << var << '\n'
            << "-----------------\n";
 
   vect_t out3;
   ss.mode_mean(1, out3);
-  vcl_cout << "calculated mean:\n " << out3 << " \nwithin m1:\n " << meanv2 << vcl_endl;
+  std::cout << "calculated mean:\n " << out3 << " \nwithin m1:\n " << meanv2 << std::endl;
   dif = out3-meanv2;
   vnl_vector_fixed<T,n> dummy3(dif);
   TEST_NEAR((type_name + ": mean shift sample set mean of the mode method").c_str(), dummy3.magnitude(), T(0), epsilon);
 
   // calculate variance
   bsta_sample_set_variance<T,n>(ss, 1, var);
-  vcl_cout << "-----------------\n"
+  std::cout << "-----------------\n"
            << "calculated variance:\n " << var << '\n'
            << "-----------------\n";
 
@@ -183,7 +185,7 @@ void test_sample_set(T epsilon, const vcl_string& type_name)
   TEST((type_name + ": mean shift fit distribution to sample set method").c_str(), return_value, true);
   TEST((type_name + ": mean shift fit distribution to sample set method").c_str(), out_dist.num_components(), ss.mode_cnt());
 
-  vcl_cout << "prob density of meanv1: " << out_dist.prob_density(meanv1) << '\n'
+  std::cout << "prob density of meanv1: " << out_dist.prob_density(meanv1) << '\n'
            << "prob density of meanv2: " << out_dist.prob_density(meanv2) << '\n'
            << "prob density of some point from ss: " << out_dist.prob_density(ss.sample(0)) << '\n';
 
@@ -209,26 +211,26 @@ void test_sample_set(T epsilon, const vcl_string& type_name)
 
   T likelihood_sum1 = T(0); T likelihood_sum2 = T(0);
   for (unsigned i = 0; i < ss.size(); i++) {
-    likelihood_sum1 += vcl_log(out_dist.prob_density(ss.sample(i)));
-    likelihood_sum2 += vcl_log(rand_dist.prob_density(ss.sample(i)));
+    likelihood_sum1 += std::log(out_dist.prob_density(ss.sample(i)));
+    likelihood_sum2 += std::log(rand_dist.prob_density(ss.sample(i)));
   }
-  vcl_cout << "data likelihood of ss fitted dist: " << likelihood_sum1 << '\n'
+  std::cout << "data likelihood of ss fitted dist: " << likelihood_sum1 << '\n'
            << "data likelihood of random dist: " << likelihood_sum2 << '\n';
 
 
   for (unsigned mi = 0; mi < out_dist.num_components(); mi++) {
     T likelihood = bsta_sample_set_log_likelihood(ss, out_dist.distribution(mi), ss.total_weight());
-    vcl_cout << "data likelihood by component: " << mi << ": " << likelihood << '\n';
+    std::cout << "data likelihood by component: " << mi << ": " << likelihood << '\n';
   }
 
   for (unsigned mi = 0; mi < rand_dist.num_components(); mi++) {
     T likelihood = bsta_sample_set_log_likelihood(ss, rand_dist.distribution(mi), ss.total_weight());
-    vcl_cout << "data likelihood of random dist by component: " << mi << ": " << likelihood << '\n';
+    std::cout << "data likelihood of random dist by component: " << mi << ": " << likelihood << '\n';
   }
 }
 
 template <class T, unsigned n>
-void test_mean_shift_algo(T epsilon, const vcl_string& type_name)
+void test_mean_shift_algo(T epsilon, const std::string& type_name)
 {
   typedef typename bsta_gaussian_indep<T,n>::vector_type vect_t;
 
@@ -248,9 +250,9 @@ void test_mean_shift_algo(T epsilon, const vcl_string& type_name)
   for (unsigned i = 1; i < n; i++) {
     meanv1[i] = T(rng.drand32()); meanv2[i] = T(rng.drand32()); meanv3[i] = T(rng.drand32()); }
 
-  vnl_vector_fixed<T,n> sd1(T(vcl_pow(std_dev1, 2))), sd2(T(vcl_pow(std_dev2,2))), sd3(T(vcl_pow(std_dev3,2)));
+  vnl_vector_fixed<T,n> sd1(T(std::pow(std_dev1, 2))), sd2(T(std::pow(std_dev2,2))), sd3(T(std::pow(std_dev3,2)));
   for (unsigned i = 1; i < n; i++) {
-    sd1[i] = T(vcl_pow(rng.drand32()/1000,2)); sd2[i] = T(vcl_pow(rng.drand32()/1000,2)); sd3[i] = T(vcl_pow(rng.drand32()/1000,2)); }
+    sd1[i] = T(std::pow(rng.drand32()/1000,2)); sd2[i] = T(std::pow(rng.drand32()/1000,2)); sd3[i] = T(std::pow(rng.drand32()/1000,2)); }
 
   bsta_gaussian_indep<T,n> g1(meanv1, sd1);
   bsta_gaussian_indep<T,n> g2(meanv2, sd2);
@@ -284,18 +286,18 @@ void test_mean_shift_algo(T epsilon, const vcl_string& type_name)
   bsta_mean_shift<T,n> ms;
   ms.find_modes(ss, rng, 50.0f, T(1e-2));
   //ms.find_modes(ss, T(1e-2));
-  vcl_cout << "modes size: " << ms.size() << vcl_endl;
+  std::cout << "modes size: " << ms.size() << std::endl;
 
   ms.trim_modes(ss, T(1e-1));
-  vcl_cout << "modes size after trimming: " << ms.size() << vcl_endl;
+  std::cout << "modes size after trimming: " << ms.size() << std::endl;
   TEST((type_name + ": mean shift find modes and trim modes methods").c_str(), ms.size(), 3);
 
   // print m files to visualize the sample set and the fitted modes
-  vcl_ofstream of((type_name + "_out.m").c_str(), vcl_ios::out);
+  std::ofstream of((type_name + "_out.m").c_str(), std::ios::out);
   switch (n)
   {
     case 1:
-      vcl_cout << "case n==1\n";
+      std::cout << "case n==1\n";
       of << "x = [" << ss.sample(0);
       for (unsigned i = 0; i < ss.size(); i++) {
         of << ", " << ss.sample(i);
@@ -304,14 +306,14 @@ void test_mean_shift_algo(T epsilon, const vcl_string& type_name)
       break;
 
     case 2:
-      vcl_cout << "case n==2\n";
+      std::cout << "case n==2\n";
       of << "cmap = colormap(lines(" << ms.modes().size() << "));\n";
       // plot the assignments
       for (unsigned m = 0; m < ms.modes().size(); m++) {
-        vcl_vector<vcl_pair<T,T> > points;
+        std::vector<std::pair<T,T> > points;
         for (unsigned i = 0; i < ss.assignments().size(); i++) {
           if (ss.assignment(i) == (int)m)
-            points.push_back(vcl_pair<T,T>(ss.sample(i)[0], ss.sample(i)[1]));
+            points.push_back(std::pair<T,T>(ss.sample(i)[0], ss.sample(i)[1]));
         }
         if (points.size() > 0) {
           of << "x = [" << points[0].first;
@@ -362,7 +364,7 @@ void test_mean_shift_algo(T epsilon, const vcl_string& type_name)
 
     case 3:
     {
-      vcl_cout << "case n==3\n";
+      std::cout << "case n==3\n";
       vnl_vector_fixed<T,n> s0(ss.sample(0));
       of << "x = [" << s0[0];
       for (unsigned i = 0; i < ss.size(); i++) {
@@ -383,19 +385,19 @@ void test_mean_shift_algo(T epsilon, const vcl_string& type_name)
       break;
     }
     default:
-      vcl_cout << " default\n";
+      std::cout << " default\n";
   }
   of.close();
 #if 0
   TEST("recompute modes ", ms.recompute_modes(ss), true);
 
   // print m files to visualize the sample set and the fitted modes
-  of.open((type_name + "_out_recomputed.m").c_str(), vcl_ios::out);
+  of.open((type_name + "_out_recomputed.m").c_str(), std::ios::out);
 
   switch (n)
   {
     case 1:
-      vcl_cout << "case 1\n";
+      std::cout << "case 1\n";
       of << "x = [" << ss.sample(0);
       for (unsigned i = 0; i < ss.size(); i++) {
         of << ", " << ss.sample(i);
@@ -404,15 +406,15 @@ void test_mean_shift_algo(T epsilon, const vcl_string& type_name)
       break;
 
     case 2:
-      vcl_cout << "case 2\n";
+      std::cout << "case 2\n";
       of << "cmap = colormap(lines(" << ms.modes().size() << "));\n";
       // plot the assignments
       for (unsigned m = 0; m < ms.modes().size(); m++) {
-        vcl_vector<vcl_pair<T,T> > points;
+        std::vector<std::pair<T,T> > points;
         for (unsigned i = 0; i < ms.assignments().size(); i++) {
           if (ms.assignments()[i].first)
             if (ms.assignments()[i].second == m)
-              points.push_back(vcl_pair<T,T>(ss.sample(i)[0], ss.sample(i)[1]));
+              points.push_back(std::pair<T,T>(ss.sample(i)[0], ss.sample(i)[1]));
         }
         if (points.size() > 0) {
           of << "x = [" << points[0].first;
@@ -436,7 +438,7 @@ void test_mean_shift_algo(T epsilon, const vcl_string& type_name)
 
     case 3:
     {
-      vcl_cout << "case 3\n";
+      std::cout << "case 3\n";
       vnl_vector_fixed<T,3> s0(ss.sample(0));
       of << "x = [" << s0[0];
       for (unsigned i = 0; i < ss.size(); i++) {
@@ -457,7 +459,7 @@ void test_mean_shift_algo(T epsilon, const vcl_string& type_name)
       break;
     }
     default:
-      vcl_cout << " default\n";
+      std::cout << " default\n";
   }
   of.close();
 #endif // 0

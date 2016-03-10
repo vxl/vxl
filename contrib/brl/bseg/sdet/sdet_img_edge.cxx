@@ -19,11 +19,13 @@
 #include <vnl/vnl_vector_fixed.h>
 #include <vil/vil_new.h>
 #include <vnl/vnl_math.h>
-#include <vcl_iostream.h>
-#include <vcl_fstream.h>
-#include <vcl_cmath.h>
-#include <vcl_string.h>
-#include <vcl_vector.h>
+#include <iostream>
+#include <fstream>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <cmath>
+#include <string>
+#include <vector>
 #include <vcl_cassert.h>
 #include <vgl/vgl_line_2d.h>
 #include <vsol/vsol_line_2d.h>
@@ -59,14 +61,14 @@ vil_image_view<vxl_byte> sdet_img_edge::detect_edges(vil_image_view<vxl_byte> im
   vil_image_resource_sptr img_res_sptr = vil_new_image_resource_of_view(img);
   detector.SetImage(img_res_sptr);
   detector.DoContour();
-  vcl_vector<vtol_edge_2d_sptr> * edges = detector.GetEdges();
+  std::vector<vtol_edge_2d_sptr> * edges = detector.GetEdges();
 
   // initialize the output edge image
   vil_image_view<vxl_byte> img_edge(img.ni(),img.nj(),1);
   img_edge.fill(0);
 
   // iterate over each connected edge component
-  for (vcl_vector<vtol_edge_2d_sptr>::iterator eit = edges->begin(); eit != edges->end(); eit++)
+  for (std::vector<vtol_edge_2d_sptr>::iterator eit = edges->begin(); eit != edges->end(); eit++)
   {
     vsol_curve_2d_sptr c = (*eit)->curve();
     vdgl_digital_curve_sptr dc = c->cast_to_vdgl_digital_curve();
@@ -121,14 +123,14 @@ sdet_img_edge::detect_edge_tangent(vil_image_view<vxl_byte> img,
   vil_image_resource_sptr img_res_sptr = vil_new_image_resource_of_view(img);
   detector.SetImage(img_res_sptr);
   detector.DoContour();
-  vcl_vector<vtol_edge_2d_sptr> * edges = detector.GetEdges();
+  std::vector<vtol_edge_2d_sptr> * edges = detector.GetEdges();
 
   // initialize the output edge image
   vil_image_view<float> edge_img(img.ni(),img.nj(),3);
   edge_img.fill(-1.0f);
 
   // iterate over each connected edge component
-  for (vcl_vector<vtol_edge_2d_sptr>::iterator eit = edges->begin(); eit != edges->end(); eit++)
+  for (std::vector<vtol_edge_2d_sptr>::iterator eit = edges->begin(); eit != edges->end(); eit++)
   {
     vsol_curve_2d_sptr c = (*eit)->curve();
     vdgl_digital_curve_sptr dc = c->cast_to_vdgl_digital_curve();
@@ -144,7 +146,7 @@ sdet_img_edge::detect_edge_tangent(vil_image_view<vxl_byte> img,
     double e0x  = e0.x(), e0y = e0.y();
     double e1x  = e1.x(), e1y = e0.y();
     if (e0x<0||e0y<0) continue;
-    double ang = vnl_math::angle_0_to_2pi(vcl_atan2(e1y-e0y, e1x-e0x));
+    double ang = vnl_math::angle_0_to_2pi(std::atan2(e1y-e0y, e1x-e0x));
     unsigned x0 = static_cast<unsigned>(e0x);
     unsigned y0 = static_cast<unsigned>(e0y);
     edge_img(x0, y0, 0) = static_cast<float>(e0x);
@@ -156,7 +158,7 @@ sdet_img_edge::detect_edge_tangent(vil_image_view<vxl_byte> img,
     double enm2x  = enm2.x(), enm2y = enm2.y();
     double enm1x  = enm1.x(), enm1y = enm1.y();
     if (enm1x<0||enm1y<0) continue;
-    double angnm1 = vnl_math::angle_0_to_2pi(vcl_atan2(enm1y-enm2y, enm1x-enm2x));
+    double angnm1 = vnl_math::angle_0_to_2pi(std::atan2(enm1y-enm2y, enm1x-enm2x));
     unsigned xnm1 = static_cast<unsigned>(enm1x);
     unsigned ynm1 = static_cast<unsigned>(enm1y);
     edge_img(xnm1, ynm1, 0) = static_cast<float>(enm1x);
@@ -171,7 +173,7 @@ sdet_img_edge::detect_edge_tangent(vil_image_view<vxl_byte> img,
       double cex  = ce.x(), cey = ce.y();
       double nex  = ne.x(), ney = ne.y();
       if (cex<0||cey<0) continue;
-      double angle = vnl_math::angle_0_to_2pi(vcl_atan2(ney-pey, nex-pex));
+      double angle = vnl_math::angle_0_to_2pi(std::atan2(ney-pey, nex-pex));
       unsigned xc = static_cast<unsigned>(cex);
       unsigned yc = static_cast<unsigned>(cey);
       // set the current edge pixel in the edge image
@@ -220,7 +222,7 @@ sdet_img_edge::detect_edge_tangent_interpolated(vil_image_view<vxl_byte> img,
   vil_image_resource_sptr img_res_sptr = vil_new_image_resource_of_view(img);
   detector.SetImage(img_res_sptr);
   detector.DoContour();
-  vcl_vector<vdgl_digital_curve_sptr> edges;
+  std::vector<vdgl_digital_curve_sptr> edges;
   detector.get_vdgl_edges(edges);
 
   // initialize the output edge image
@@ -228,7 +230,7 @@ sdet_img_edge::detect_edge_tangent_interpolated(vil_image_view<vxl_byte> img,
   edge_img.fill(-1.0f);
 
   // iterate over each connected edge component
-  //for (vcl_vector<vtol_edge_2d_sptr>::iterator eit = edges->begin(); eit != edges->end(); eit++)
+  //for (std::vector<vtol_edge_2d_sptr>::iterator eit = edges->begin(); eit != edges->end(); eit++)
   for (unsigned ii = 0; ii < edges.size(); ii++)
   {
     vdgl_digital_curve_sptr dc = edges[ii];
@@ -240,7 +242,7 @@ sdet_img_edge::detect_edge_tangent_interpolated(vil_image_view<vxl_byte> img,
 
     vdgl_interpolator_sptr cubic_intp = new vdgl_interpolator_cubic(ec);
     //vdgl_interpolator_sptr cubic_intp = new vdgl_interpolator_linear(ec);
-    vcl_cout << " length: " << cubic_intp->get_length()  << vcl_endl;
+    std::cout << " length: " << cubic_intp->get_length()  << std::endl;
 
     for (unsigned j=1; j<n-1; j++) {
       double cex = cubic_intp->get_x(j);
@@ -307,28 +309,28 @@ sdet_img_edge::detect_edge_line_fitted(vil_image_view<vxl_byte> img,
 
   det.SetImage(img_res_sptr);
   det.DoContour();
-  vcl_vector<vtol_edge_2d_sptr>* edges = det.GetEdges();
+  std::vector<vtol_edge_2d_sptr>* edges = det.GetEdges();
   if (!edges)
   {
-    vcl_cerr << "In sdet_img_edge::detect_edge_line_fitted() - No edges found in the image\n";
+    std::cerr << "In sdet_img_edge::detect_edge_line_fitted() - No edges found in the image\n";
     return edge_img;
   }
   sdet_fit_lines fl(flp);
   fl.set_edges(*edges);
   fl.fit_lines();
-  vcl_vector<vsol_line_2d_sptr> lines = fl.get_line_segs();
+  std::vector<vsol_line_2d_sptr> lines = fl.get_line_segs();
 
   for (unsigned i = 0; i < lines.size(); i++) {
     vsol_line_2d_sptr l = lines[i];
-    int length = (int)vcl_ceil(l->length());
+    int length = (int)std::ceil(l->length());
     double angle = vnl_math::angle_0_to_2pi(vnl_math::pi_over_180*l->tangent_angle());
 #if 0
-    vcl_cout << " line: " << i << " length: " << l->length()
+    std::cout << " line: " << i << " length: " << l->length()
              << " p0: (" << l->p0()->x() << ", " << l->p0()->y() << ')'
              << " p1: (" << l->p1()->x() << ", " << l->p1()->y() << ')'
              << " mid: (" << l->middle()->x() << ", " << l->middle()->y() << ")\n";
 #endif
-    vcl_vector<vsol_point_2d_sptr> samples; samples.push_back(l->p0()); samples.push_back(l->p1());
+    std::vector<vsol_point_2d_sptr> samples; samples.push_back(l->p0()); samples.push_back(l->p1());
     vsol_digital_curve_2d_sptr dc = new vsol_digital_curve_2d(samples);
 
     // now sample length many samples along the line
@@ -358,7 +360,7 @@ sdet_img_edge::convert_edge_image_to_line_image(vil_image_view<float>& edge_imag
 {
   if (line_image.ni() != edge_image.ni() || line_image.nj() != edge_image.nj() ||
       line_image.nplanes() != edge_image.nplanes() || line_image.nplanes() != 3) {
-    vcl_cerr << "In sdet_img_edge::convert_edge_image_to_line_image() -- incompatible input output image pair!\n";
+    std::cerr << "In sdet_img_edge::convert_edge_image_to_line_image() -- incompatible input output image pair!\n";
     return;
   }
 
@@ -370,11 +372,11 @@ sdet_img_edge::convert_edge_image_to_line_image(vil_image_view<float>& edge_imag
       if (x<0||y<0)
         continue;
       float angle = edge_image(i,j,2);
-      vgl_vector_2d<float> tangent(vcl_cos(angle), vcl_sin(angle));
+      vgl_vector_2d<float> tangent(std::cos(angle), std::sin(angle));
       vgl_point_2d<float> pt(x,y);
       vgl_line_2d<float> l(pt, tangent);
       float a = l.a(), b = l.b(), c = l.c();
-      float norm = vcl_sqrt(a*a+b*b);
+      float norm = std::sqrt(a*a+b*b);
       a/=norm; b/=norm; c/=norm;
       line_image(i,j,0)= a;
       line_image(i,j,1)= b;
@@ -402,7 +404,7 @@ void sdet_img_edge::edge_distance_transform(vil_image_view<vxl_byte>& inp_image,
   out_edt.set_size(ni,nj,1);
   for (unsigned i=0; i<ni; i++) {
     for (unsigned j=0; j<nj; j++) {
-      out_edt(i,j) = vcl_sqrt((float)curr_image_edt(i,j));
+      out_edt(i,j) = std::sqrt((float)curr_image_edt(i,j));
     }
   }
 }
@@ -458,7 +460,7 @@ void sdet_img_edge::estimate_edge_prob_image(const vil_image_view<vxl_byte>& img
 
   for (unsigned i=0; i<kernel.rows(); i++) {
     for (unsigned j=0; j<kernel.columns(); j++) {
-      kernel(i,j) = vcl_log(1.0f - kernel(i,j));
+      kernel(i,j) = std::log(1.0f - kernel(i,j));
     }
   }
 
@@ -468,7 +470,7 @@ void sdet_img_edge::estimate_edge_prob_image(const vil_image_view<vxl_byte>& img
 
   for (unsigned i=0; i<img_edgeness.ni(); i++) {
     for (unsigned j=0; j<img_edgeness.nj(); j++) {
-      img_edgeness(i,j) = 1.0f - vcl_exp(img_edgeness(i,j));
+      img_edgeness(i,j) = 1.0f - std::exp(img_edgeness(i,j));
     }
   }
 }
@@ -479,7 +481,7 @@ void sdet_img_edge::convert_true_edge_prob_to_edge_statistics(
 {
   float img_mean,img_var;
   vil_math_mean_and_variance(img_mean,img_var,img_tep,0);
-  img_var = vcl_sqrt(img_mean*img_var);
+  img_var = std::sqrt(img_mean*img_var);
 
   img_es.set_size(img_tep.ni(),img_tep.nj());
 

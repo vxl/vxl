@@ -22,11 +22,13 @@
 #include <vnl/vnl_matrix_fixed.h>
 #include <vnl/vnl_vector_fixed.h>
 
-#include <vcl_algorithm.h>
-#include <vcl_cmath.h>
-#include <vcl_memory.h>
-#include <vcl_map.h>
-#include <vcl_vector.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <algorithm>
+#include <cmath>
+#include <memory>
+#include <map>
+#include <vector>
 
 //----------------------------------------------------------------------------
 template <unsigned int N>
@@ -44,14 +46,14 @@ class rtvl_refine_internal
   void setup_level();
   void select_scale();
   void refine_level();
-  void select_samples(vcl_vector<int>& selection);
+  void select_samples(std::vector<int>& selection);
   bool last_level();
 
   rtvl_refine<N>* external;
   double scale_multiplier;
   double mask_size;
-  vcl_auto_ptr< rtvl_tokens<N> > level;
-  vcl_auto_ptr< rgtl_octree_objects<N> > objects;
+  std::auto_ptr< rtvl_tokens<N> > level;
+  std::auto_ptr< rgtl_octree_objects<N> > objects;
   rgtl_octree_cell_bounds<N> bounds;
   unsigned int vote_count;
 };
@@ -60,7 +62,7 @@ class rtvl_refine_internal
 template <unsigned int N>
 rtvl_refine_internal<N>::rtvl_refine_internal(rtvl_refine<N>* e): external(e)
 {
-  scale_multiplier = vcl_sqrt(2.0);
+  scale_multiplier = std::sqrt(2.0);
   mask_size = 1;
   vote_count = 0;
 }
@@ -127,7 +129,7 @@ void rtvl_refine_internal<N>::select_scale()
 
   // Compute the nearest point to every point.
   unsigned int n = level->points.get_number_of_points();
-  vcl_vector<double> distances(n, 0.0);
+  std::vector<double> distances(n, 0.0);
   for (unsigned int id=0; id < n; ++id)
   {
     double p[N];
@@ -136,13 +138,13 @@ void rtvl_refine_internal<N>::select_scale()
     int nc = objects->query_closest(p, k+1, 0, squared_distances, 0);
     if (nc == (k+1))
     {
-      distances[id] = vcl_sqrt(squared_distances[k]);
+      distances[id] = std::sqrt(squared_distances[k]);
     }
   }
 
   // Choose a scale based on an order-statistic.
   unsigned int nth = static_cast<unsigned int>(distances.size()/10);
-  vcl_nth_element(distances.begin(), distances.begin()+nth, distances.end());
+  std::nth_element(distances.begin(), distances.begin()+nth, distances.end());
   level->scale = distances[nth];
 }
 
@@ -152,7 +154,7 @@ void rtvl_refine_internal<N>::refine_level()
 {
   unsigned int n = level->points.get_number_of_points();
   vnl_matrix_fixed<double, N, N> zero(0.0);
-  vcl_vector< vnl_matrix_fixed<double, N, N> > tensors;
+  std::vector< vnl_matrix_fixed<double, N, N> > tensors;
   tensors.resize(n, zero);
 
   rtvl_weight_smooth<N> tvw(level->scale);
@@ -165,7 +167,7 @@ void rtvl_refine_internal<N>::refine_level()
     rtvl_voter<N> voter(voter_location, level->tokens[i]);
 
     // Lookup points within reach of the voter.
-    vcl_vector<int> votee_ids;
+    std::vector<int> votee_ids;
     int num_votees = objects->query_sphere(voter_location.data_block(),
                                            3*level->scale, votee_ids);
 
@@ -191,15 +193,15 @@ void rtvl_refine_internal<N>::refine_level()
 
 //----------------------------------------------------------------------------
 template <unsigned int N>
-void rtvl_refine_internal<N>::select_samples(vcl_vector<int>& selection)
+void rtvl_refine_internal<N>::select_samples(std::vector<int>& selection)
 {
   unsigned int n = level->points.get_number_of_points();
 
   // Queue the tokens ordered from most to least salient.
-  typedef vcl_multimap<double, unsigned int,
-                       vcl_greater<double> > saliency_map_type;
+  typedef std::multimap<double, unsigned int,
+                       std::greater<double> > saliency_map_type;
   saliency_map_type saliency_map;
-  vcl_vector<saliency_map_type::iterator> saliency_map_index;
+  std::vector<saliency_map_type::iterator> saliency_map_index;
   saliency_map_index.resize(n, saliency_map.end());
   for (unsigned int i=0; i < n; ++i)
   {
@@ -218,7 +220,7 @@ void rtvl_refine_internal<N>::select_samples(vcl_vector<int>& selection)
     // Lookup points covered by the masking sphere.
     double p[N];
     level->points.get_point(id, p);
-    vcl_vector<int> masked_ids;
+    std::vector<int> masked_ids;
     int num_masked = objects->query_sphere(p, level->scale*mask_size,
                                            masked_ids);
 
@@ -254,7 +256,7 @@ bool rtvl_refine_internal<N>::build_next_level()
   }
 
   // Select samples for inclusion in the next level.
-  vcl_vector<int> selection;
+  std::vector<int> selection;
   this->select_samples(selection);
   unsigned int n = static_cast<unsigned int>(selection.size());
 
@@ -262,7 +264,7 @@ bool rtvl_refine_internal<N>::build_next_level()
   objects.reset(0);
 
   // Create the representation for the next level.
-  vcl_auto_ptr< rtvl_tokens<N> > next_level(new rtvl_tokens<N>);
+  std::auto_ptr< rtvl_tokens<N> > next_level(new rtvl_tokens<N>);
 
   // Increment the scale for the next level.
   next_level->scale = level->scale * scale_multiplier;
@@ -301,7 +303,7 @@ template <unsigned int N>
 void rtvl_refine_internal<N>::extract_tokens(rtvl_tokens<N>& out) const
 {
   // Identify the salient tokens.
-  vcl_vector<unsigned int> salient;
+  std::vector<unsigned int> salient;
   unsigned int n = level->points.get_number_of_points();
   for (unsigned int id=0; id < n; ++id)
   {
@@ -319,7 +321,7 @@ void rtvl_refine_internal<N>::extract_tokens(rtvl_tokens<N>& out) const
   out.scale = level->scale;
   out.points.set_number_of_points(int(salient.size()));
   out.tokens.resize(salient.size());
-  for (vcl_vector<unsigned int>::const_iterator si = salient.begin();
+  for (std::vector<unsigned int>::const_iterator si = salient.begin();
        si != salient.end(); ++si)
   {
     unsigned int in_id = *si;
@@ -336,7 +338,7 @@ template <unsigned int N>
 rtvl_refine<N>::rtvl_refine(unsigned int num_points, double* points):
   internal_(0)
 {
-  vcl_auto_ptr<internal_type> internal_p(new internal_type(this));
+  std::auto_ptr<internal_type> internal_p(new internal_type(this));
   internal_p->init(num_points, points);
   this->internal_ = internal_p.release();
 }

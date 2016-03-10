@@ -16,7 +16,9 @@
 //  This class acts as a functor to be used in eigenvector and
 //  classifier processes
 //
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iostream>
 #include <vnl/vnl_vector.h>
 #include <vil/vil_image_view.h>
 #include <vsl/vsl_binary_io.h>
@@ -40,7 +42,7 @@ class brad_grad_int_feature_vector
   unsigned size() const { return 2*nbins_+2;}
 
   //: the type name
-  vcl_string type() const {return "brad_grad_int_feature_vector";}
+  std::string type() const {return "brad_grad_int_feature_vector";}
 
   //: accessors, setters
   unsigned nbins() const { return nbins_;}
@@ -54,7 +56,7 @@ class brad_grad_int_feature_vector
   void set_min_grad(float min_grad) {min_grad_ = min_grad;}
   void set_max_grad(float max_grad) {max_grad_ = max_grad;}
   //: print
-  void print(vcl_ostream& os = vcl_cout) const {
+  void print(std::ostream& os = std::cout) const {
     os << "nbins = " << nbins_
        << " min_int = "  << min_int_
        << " max_int = "  << max_int_
@@ -73,7 +75,7 @@ void vsl_b_write(vsl_b_ostream &os, const brad_grad_int_feature_vector& fv);
 
 void vsl_b_read(vsl_b_istream &is, brad_grad_int_feature_vector& fv);
 
-void vsl_print_summary(vcl_ostream &os, brad_grad_int_feature_vector& fv);
+void vsl_print_summary(std::ostream &os, brad_grad_int_feature_vector& fv);
 
 
 #endif // brad_grad_int_feature_vector_h

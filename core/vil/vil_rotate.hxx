@@ -12,13 +12,14 @@
 #include "vil_rotate.h"
 #include <vil/vil_resample_bilin.h>
 #include <vcl_cassert.h>
-#include <vcl_cmath.h> // for vcl_fmod()
+#include <vcl_compiler.h>
+#include <cmath> // for std::fmod()
 
 //: Calculate theta in range 0 to x
 static double calc_theta_mod(double theta, double x)
 {
   if (x<0) x=-x;
-  double theta_x = vcl_fmod(theta,x);
+  double theta_x = std::fmod(theta,x);
   if (theta_x<0)
     theta_x += x;
   return theta_x;
@@ -36,8 +37,8 @@ void vil_rotate_image(const vil_image_view<sType>& src_image,
   double theta_90= calc_theta_mod( theta_deg, 90.0 );
   double theta_360= calc_theta_mod( theta_deg, 360.0 );
 #ifdef DEBUG
-  vcl_cout<<"theta_90 = "<<theta_90<<vcl_endl
-          <<"theta_360= "<<theta_360<<vcl_endl;
+  std::cout<<"theta_90 = "<<theta_90<<std::endl
+          <<"theta_360= "<<theta_360<<std::endl;
 #endif
 
   // calculate dimensions of rotated image
@@ -46,8 +47,8 @@ void vil_rotate_image(const vil_image_view<sType>& src_image,
   // c---d
   int src_ni = src_image.ni();
   int src_nj = src_image.nj();
-  double c= vcl_cos(theta_90*3.14159265358979323846/180);
-  double s= vcl_sin(theta_90*3.14159265358979323846/180);
+  double c= std::cos(theta_90*3.14159265358979323846/180);
+  double s= std::sin(theta_90*3.14159265358979323846/180);
 
   // calc corners of grid to sample (in original image frame)
   double ai= -src_nj*s*c;

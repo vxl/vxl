@@ -3,8 +3,9 @@
 // \brief Example of using vil_convolve_1d with a vil_image_view<T> to smooth an image with a Gaussian.
 // \author Ian Scott, David Serby
 
-#include <vcl_iostream.h>
-#include <vcl_cmath.h>
+#include <iostream>
+#include <vcl_compiler.h>
+#include <cmath>
 #include <vil/vil_image_view.h>
 #include <vil/vil_load.h>
 #include <vil/vil_save.h>
@@ -23,7 +24,7 @@ int main( int argc, char* argv[] )
   imageIn = vil_load( inputFilename );
   if (!imageIn)
   {
-    vcl_cout << "Unable to correctly load " << inputFilename << vcl_endl;
+    std::cout << "Unable to correctly load " << inputFilename << std::endl;
     return 2;
   }
 
@@ -33,7 +34,7 @@ int main( int argc, char* argv[] )
   vil_image_view<float> tmp( imageIn.ni(), imageIn.nj() );
 
   // create a normalized Gaussian kernel with standard deviation sigma=2.0
-  vcl_cout << "Creating kernel...\n";
+  std::cout << "Creating kernel...\n";
   float sigma = 2.f;
   float scaleFactor = 1.f / ( 2.f * sigma * sigma );
   const int halfSupport = 1;
@@ -43,7 +44,7 @@ int main( int argc, char* argv[] )
   float sum = 0;
   for ( int i = -halfSupport ; i <= halfSupport ; ++i )
   {
-    kernel[i+halfSupport] = vcl_exp( -i * i * scaleFactor );
+    kernel[i+halfSupport] = std::exp( -i * i * scaleFactor );
     sum += kernel[i+halfSupport];
   }
 
@@ -54,7 +55,7 @@ int main( int argc, char* argv[] )
   }
 
   // convolution of the input image in y-direction
-  vcl_cout << "Convolving in y-direction...\n";
+  std::cout << "Convolving in y-direction...\n";
   vil_convolve_1d(vil_transpose( imageIn ), tmp,
                   &kernel[halfSupport], -halfSupport, halfSupport,
                   float(),
@@ -62,7 +63,7 @@ int main( int argc, char* argv[] )
                   vil_convolve_constant_extend );
 
   // convolution of the input image in x-direction
-  vcl_cout << "Convolving in x-direction...\n";
+  std::cout << "Convolving in x-direction...\n";
   vil_convolve_1d(vil_transpose( tmp ), imageOut,
                   &kernel[1], -halfSupport, halfSupport,
                   float(),

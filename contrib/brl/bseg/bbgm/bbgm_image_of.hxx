@@ -5,7 +5,9 @@
 // \file
 
 #include "bbgm_image_of.h"
-#include <vcl_typeinfo.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <typeinfo>
 #include <vbl/io/vbl_io_array_2d.h>
 
 
@@ -16,10 +18,10 @@
 //: Return a string name
 // \note this is probably not portable
 template<class dist_>
-vcl_string
+std::string
 bbgm_image_of<dist_>::is_a() const
 {
-  return "bbgm_image_of<"+vcl_string(typeid(dist_).name())+">";
+  return "bbgm_image_of<"+std::string(typeid(dist_).name())+">";
 }
 
 
@@ -65,7 +67,7 @@ bbgm_image_of<dist_>::b_read(vsl_b_istream &is)
       vsl_b_read(is, data_);
       break;
     default:
-      vcl_cerr << "bbgm_image: unknown I/O version " << ver << '\n';
+      std::cerr << "bbgm_image: unknown I/O version " << ver << '\n';
   }
 }
 

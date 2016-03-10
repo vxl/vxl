@@ -31,18 +31,20 @@ typedef section<vxl_byte,2> img_type;
 #include <vil/vil_image_view.h>
 #include <vil/vil_load.h>
 #include <vil/vil_save.h>
-#include <vcl_iostream.h>
-#include <vcl_cstdlib.h> // for atof()
-#include <vcl_cstring.h> // for memcpy()
+#include <iostream>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <cstdlib> // for atof()
+#include <cstring> // for memcpy()
 
 int
 main(int argc, char** argv)
 {
-  if (argc < 3) { vcl_cerr << "Syntax: example_erode_disk file_in file_out [radius]\n"; return 1; }
+  if (argc < 3) { std::cerr << "Syntax: example_erode_disk file_in file_out [radius]\n"; return 1; }
 
   // The input image:
   vil_image_view<vxl_byte> in = vil_load(argv[1]);
-  if (!in) { vcl_cerr << "Please use a ubyte image as input\n"; return 2; }
+  if (!in) { std::cerr << "Please use a ubyte image as input\n"; return 2; }
 
   // The output image:
   vil_image_view<vxl_byte> out(in.ni(),in.nj(),in.nplanes());
@@ -52,13 +54,13 @@ main(int argc, char** argv)
   int ys = in.nj();
 
   // The radius: (default is 3x3 square)
-  float radius = (argc < 4) ? 1.5f : (float)vcl_atof(argv[3]);
+  float radius = (argc < 4) ? 1.5f : (float)std::atof(argv[3]);
 
   img_type src(xs,ys); // in-memory 2D images
   img_type dst(xs,ys);
 
   // set the input image:
-  vcl_memcpy(src.buffer, in.memory_chunk()->const_data(), in.size_bytes());
+  std::memcpy(src.buffer, in.memory_chunk()->const_data(), in.size_bytes());
 
   // The filter:
   vipl_erode_disk<img_type,img_type,vxl_byte,vxl_byte> op(radius);
@@ -67,9 +69,9 @@ main(int argc, char** argv)
   op.filter();
 
   // Write output:
-  vcl_memcpy(out.memory_chunk()->data(), dst.buffer, out.size_bytes());
+  std::memcpy(out.memory_chunk()->data(), dst.buffer, out.size_bytes());
   vil_save(out, argv[2], "pnm");
-  vcl_cout << "Written image of type PGM to " << argv[2] << vcl_endl;
+  std::cout << "Written image of type PGM to " << argv[2] << std::endl;
 
   return 0;
 }

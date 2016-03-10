@@ -1,5 +1,6 @@
 #include <testlib/testlib_test.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <iostream>
 
 
 
@@ -11,7 +12,7 @@
 
 static void test_affine_camera_io()
 {
-  vcl_cout << "Testing Projective camera" << vcl_endl;
+  std::cout << "Testing Projective camera" << std::endl;
 
   // Some matrices for testing.
   double random_list[12] = { 10.6, 1.009, .676, .5,
@@ -19,7 +20,7 @@ static void test_affine_camera_io()
                              0.0, 0.0, 0.0, 1.0 };
   vnl_double_3x4 random_matrix( random_list );
 
-  vcl_cout << "Matrix:\n" << random_matrix << vcl_endl;
+  std::cout << "Matrix:\n" << random_matrix << std::endl;
 
   vpgl_affine_camera<double> aff_cam( random_matrix );
   aff_cam.set_viewing_distance(1000.0);
@@ -38,7 +39,7 @@ static void test_affine_camera_io()
   vsl_b_read(bp_in, aff_cam_r);
   bp_in.close();
 
-  vcl_cout << "Recovered Matrix:\n" << aff_cam_r.get_matrix() << vcl_endl;
+  std::cout << "Recovered Matrix:\n" << aff_cam_r.get_matrix() << std::endl;
   TEST("recovery from binary read", aff_cam.get_matrix(), random_matrix );
   double viewing_dist_r = aff_cam_r.viewing_distance();
   TEST("viewing distance", viewing_dist_r, 1000.0);

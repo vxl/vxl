@@ -11,7 +11,9 @@
 
 #include <vimt3d/vimt3d_image_3d.h>
 #include <vil3d/vil3d_image_view.h>
-#include <vcl_iosfwd.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iosfwd>
 
 
 //: Represent 3D image of type T together with a transform.
@@ -85,10 +87,10 @@ public:
   short version_no() const;
 
   //: Name of the class
-  virtual vcl_string is_a() const;
+  virtual std::string is_a() const;
 
   //: Does the name of the class match the argument?
-  virtual bool is_class(vcl_string const& s) const;
+  virtual bool is_class(std::string const& s) const;
 
     //: Create a copy on the heap and return base class pointer
     //  Note that this will make a shallow copy of any contained images
@@ -99,10 +101,10 @@ public:
   virtual vimt_image* deep_clone() const;
 
   //: Print class to os
-  virtual void print_summary(vcl_ostream& os) const;
+  virtual void print_summary(std::ostream& os) const;
 
   //: print all data to os (rounds output to int)
-  virtual void print_all(vcl_ostream& os) const;
+  virtual void print_all(std::ostream& os) const;
 
   //: Save class to binary file stream
   virtual void b_write(vsl_b_ostream& bfs) const;

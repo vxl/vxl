@@ -5,7 +5,9 @@
 // \author Gehua Yang
 // \date Feb 2005
 
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iostream>
 #include <vcl_cassert.h>
 
 #include <rgrl/rgrl_trans_reader.h>
@@ -101,9 +103,9 @@ scale_by( double scale ) const
 //: output transformation
 void
 rgrl_trans_couple::
-write( vcl_ostream& os ) const
+write( std::ostream& os ) const
 {
-  os << "COUPLE_TRANS" << vcl_endl;
+  os << "COUPLE_TRANS" << std::endl;
 
   assert( forward_xform_ && backward_xform_ );
 
@@ -114,13 +116,13 @@ write( vcl_ostream& os ) const
 //: input transformation
 bool
 rgrl_trans_couple::
-read( vcl_istream& is )
+read( std::istream& is )
 {
   // skip empty lines
   rgrl_util_skip_empty_lines( is );
 
-  vcl_string str;
-  vcl_getline( is, str );
+  std::string str;
+  std::getline( is, str );
 
   if ( str.find("COUPLE_TRANS") != 0 ) {
     WarningMacro( "The tag is not COUPLE_TRANS. reading is aborted.\n" );

@@ -5,14 +5,16 @@
 // \author Tim Cootes
 
 #include <vsl/vsl_binary_loader.h>
-#include <vcl_cmath.h>
+#include <cmath>
 #include <vcl_cassert.h>
 
 #include <vil/vil_resample_bilin.h>
 #include <vil/io/vil_io_image_view.h>
 #include <vsl/vsl_vector_io.h>
 #include <vsl/vsl_indent.h>
-#include <vcl_algorithm.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <algorithm>
 #include <vnl/vnl_math.h>
 
 #include <mipa/mipa_orientation_histogram.h>
@@ -111,12 +113,12 @@ double mfpf_hog_box_finder::radius() const
 {
   // Compute distance to each corner
   double wx = ni_-1;
-  double x2 = vcl_max(ref_x_*ref_x_,(ref_x_-wx)*(ref_x_-wx));
+  double x2 = std::max(ref_x_*ref_x_,(ref_x_-wx)*(ref_x_-wx));
   double wy = nj_-1;
-  double y2 = vcl_max(ref_y_*ref_y_,(ref_y_-wy)*(ref_y_-wy));
+  double y2 = std::max(ref_y_*ref_y_,(ref_y_-wy)*(ref_y_-wy));
   double r2 = x2+y2;
   if (r2<=1) return 1.0;
-  return nc_*vcl_sqrt(r2);
+  return nc_*std::sqrt(r2);
 }
 
 
@@ -212,7 +214,7 @@ void mfpf_hog_box_finder::evaluate_region(
   int nj=1+2*snj;
   response.image().set_size(ni,nj);
   double* r = response.image().top_left_ptr();
-  vcl_ptrdiff_t r_jstep = response.image().jstep();
+  std::ptrdiff_t r_jstep = response.image().jstep();
 
   for (unsigned j=0;j<(unsigned)nj;++j,r+=r_jstep)
   {
@@ -224,11 +226,11 @@ void mfpf_hog_box_finder::evaluate_region(
       r[i] = cost().evaluate(v);
       if (vnl_math::isnan(r[i]))
       {
-        vcl_cerr<<is_a()<<"::evaluate_region: Response is NaN.\n"
+        std::cerr<<is_a()<<"::evaluate_region: Response is NaN.\n"
                 <<*this<<'\n'
                 <<"i,j="<<i<<','<<j<<'\n'
                 <<"v.sum()="<<v.sum()<<'\n';
-        vcl_abort();
+        std::abort();
       }
     }
   }
@@ -340,7 +342,7 @@ bool mfpf_hog_box_finder::overlap(const mfpf_pose& pose1,
 //: Generate points in ref frame that represent boundary
 //  Points of a contour around the shape.
 //  Used for display purposes.
-void mfpf_hog_box_finder::get_outline(vcl_vector<vgl_point_2d<double> >& pts) const
+void mfpf_hog_box_finder::get_outline(std::vector<vgl_point_2d<double> >& pts) const
 {
   double s=2*nc_;
   pts.resize(7);
@@ -359,9 +361,9 @@ void mfpf_hog_box_finder::get_outline(vcl_vector<vgl_point_2d<double> >& pts) co
 // Method: is_a
 //=======================================================================
 
-vcl_string mfpf_hog_box_finder::is_a() const
+std::string mfpf_hog_box_finder::is_a() const
 {
-  return vcl_string("mfpf_hog_box_finder");
+  return std::string("mfpf_hog_box_finder");
 }
 
 //: Create a copy on the heap and return base class pointer
@@ -374,7 +376,7 @@ mfpf_point_finder* mfpf_hog_box_finder::clone() const
 // Method: print
 //=======================================================================
 
-void mfpf_hog_box_finder::print_summary(vcl_ostream& os) const
+void mfpf_hog_box_finder::print_summary(std::ostream& os) const
 {
   os << "{ "<<'\n';
   vsl_indent_inc(os);
@@ -388,11 +390,11 @@ void mfpf_hog_box_finder::print_summary(vcl_ostream& os) const
   else                 os << vsl_indent()<<"norm: linear"<<'\n';
 #endif
 
-  vcl_cout<<"The HOG's normaliser is:"<<vcl_endl;
+  std::cout<<"The HOG's normaliser is:"<<std::endl;
   normaliser_->print_summary(os);
 
   os << vsl_indent()<< "cost: ";
-  if (cost_.ptr()==VXL_NULLPTR) os << "--"<<vcl_endl; else os << cost_<<'\n';
+  if (cost_.ptr()==VXL_NULLPTR) os << "--"<<std::endl; else os << cost_<<'\n';
   os << vsl_indent();
   mfpf_point_finder::print_summary(os);
   os << '\n'
@@ -450,9 +452,9 @@ void mfpf_hog_box_finder::b_read(vsl_b_istream& bfs)
       else            vsl_b_read(bfs,overlap_f_);
       break;
     default:
-      vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&)\n"
+      std::cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&)\n"
                << "           Unknown version number "<< version << '\n';
-      bfs.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
+      bfs.is().clear(std::ios::badbit); // Set an unrecoverable IO error on stream
       return;
   }
 }
@@ -467,9 +469,9 @@ bool mfpf_hog_box_finder::operator==(const mfpf_hog_box_finder& nc) const
   if (normaliser_->is_a()!=nc.normaliser_->is_a()) return false; //bit looser than true equality
   if (nA_bins_!=nc.nA_bins_) return false;
   if (full360_!=nc.full360_) return false;
-  if (vcl_fabs(ref_x_-nc.ref_x_)>1e-6) return false;
-  if (vcl_fabs(ref_y_-nc.ref_y_)>1e-6) return false;
-  if (vcl_fabs(overlap_f_-nc.overlap_f_)>1e-6) return false;
+  if (std::fabs(ref_x_-nc.ref_x_)>1e-6) return false;
+  if (std::fabs(ref_y_-nc.ref_y_)>1e-6) return false;
+  if (std::fabs(overlap_f_-nc.overlap_f_)>1e-6) return false;
   // Strictly should compare costs
   return true;
 }

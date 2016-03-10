@@ -1,33 +1,35 @@
 #include "boxm2_ocl_render_expected_shadow_map.h"
 #include <boxm2/ocl/boxm2_ocl_util.h>
-#include <vcl_algorithm.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <algorithm>
 
 #include <boxm2/ocl/algo/boxm2_ocl_render_expected_image_function.h>
 
-vcl_map<vcl_string,vcl_vector<bocl_kernel*> > boxm2_ocl_render_expected_shadow_map::kernels_;
+std::map<std::string,std::vector<bocl_kernel*> > boxm2_ocl_render_expected_shadow_map::kernels_;
 
 bool boxm2_ocl_render_expected_shadow_map::render(bocl_device_sptr device,
                                                   boxm2_scene_sptr scene,
                                                   boxm2_opencl_cache_sptr opencl_cache,
                                                   vpgl_camera_double_sptr cam,
                                                   unsigned ni, unsigned nj,
-                                                  vcl_string ident,
+                                                  std::string ident,
                                                   vil_image_view<float> &rendered_img)
 {
-  vcl_size_t lthreads[2]={8,8};
+  std::size_t lthreads[2]={8,8};
 
   //: create a command queue.
   int status=0;
   cl_command_queue queue = clCreateCommandQueue(device->context(),*(device->device_id()),
                                                 CL_QUEUE_PROFILING_ENABLE,&status);
   if (status!=0) return false;
-  vcl_string identifier=device->device_identifier();
+  std::string identifier=device->device_identifier();
 
   // compile the kernel
   if (kernels_.find(identifier)==kernels_.end())
   {
-    vcl_cout<<"===========Compiling kernels==========="<<vcl_endl;
-    vcl_vector<bocl_kernel*> ks;
+    std::cout<<"===========Compiling kernels==========="<<std::endl;
+    std::vector<bocl_kernel*> ks;
     compile_kernel(device,ks,"");
     kernels_[identifier]=ks;
   }
@@ -48,7 +50,7 @@ bool boxm2_ocl_render_expected_shadow_map::render(bocl_device_sptr device,
 
   // visibility image
   float* vis_buff = new float[cl_ni*cl_nj];
-  vcl_fill(vis_buff, vis_buff + cl_ni*cl_nj, 1.0f);
+  std::fill(vis_buff, vis_buff + cl_ni*cl_nj, 1.0f);
   bocl_mem_sptr vis_image = opencl_cache->alloc_mem(cl_ni*cl_nj*sizeof(float), vis_buff,"vis image buffer");
   vis_image->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
 
@@ -59,7 +61,7 @@ bool boxm2_ocl_render_expected_shadow_map::render(bocl_device_sptr device,
 
   // normalize
   //{
-  //  vcl_size_t gThreads[] = {cl_ni,cl_nj};
+  //  std::size_t gThreads[] = {cl_ni,cl_nj};
   //  bocl_kernel* normalize_kern = kernels[identifier][1];
   //  normalize_kern->set_arg( exp_image.ptr() );
   //  normalize_kern->set_arg( vis_image.ptr() );
@@ -92,11 +94,11 @@ bool boxm2_ocl_render_expected_shadow_map::render(bocl_device_sptr device,
 }
 
 
-void boxm2_ocl_render_expected_shadow_map::compile_kernel(bocl_device_sptr device,vcl_vector<bocl_kernel*> & vec_kernels, vcl_string opts)
+void boxm2_ocl_render_expected_shadow_map::compile_kernel(bocl_device_sptr device,std::vector<bocl_kernel*> & vec_kernels, std::string opts)
 {
   //gather all render sources... seems like a lot for rendering...
-  vcl_vector<vcl_string> src_paths;
-  vcl_string source_dir = boxm2_ocl_util::ocl_src_root();
+  std::vector<std::string> src_paths;
+  std::string source_dir = boxm2_ocl_util::ocl_src_root();
   src_paths.push_back(source_dir + "scene_info.cl");
   src_paths.push_back(source_dir + "pixel_conversion.cl");
   src_paths.push_back(source_dir + "bit/bit_tree_library_functions.cl");
@@ -109,7 +111,7 @@ void boxm2_ocl_render_expected_shadow_map::compile_kernel(bocl_device_sptr devic
 
   //set kernel options
   //#define STEP_CELL step_cell_render(mixture_array, alpha_array, data_ptr, d, &vis, &expected_int);
-  vcl_string options = opts + " -D RENDER_SUN_VIS";
+  std::string options = opts + " -D RENDER_SUN_VIS";
   options += " -D STEP_CELL=step_cell_render_sun_vis(aux_args.auxsun,aux_args.alpha,data_ptr,d*linfo->block_len,vis,aux_args.expint)";
 
   //have kernel construct itself using the context and device

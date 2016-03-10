@@ -1,8 +1,10 @@
 #include <testlib/testlib_test.h>
 
-#include <vcl_cstdio.h>
-#include <vcl_cmath.h>
-#include <vcl_algorithm.h>
+#include <cstdio>
+#include <cmath>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <algorithm>
 #include <vcl_cassert.h>
 
 #include <bil/algo/bil_cedt.h>
@@ -22,7 +24,7 @@ bool generate_random_circle(vil_image_view<unsigned char> &im, int seed);
 
 static void test_bil_cedt()
 {
-  vcl_cout << "Contour Euclidean Distance Transform Algorithms\n";
+  std::cout << "Contour Euclidean Distance Transform Algorithms\n";
 
   unsigned r=10,c=12;
   vil_image_view <unsigned char> image(r,c,1);
@@ -34,8 +36,8 @@ static void test_bil_cedt()
   for (int i=0;i<5;i++)
     generate_random_circle(image,i);
 
-  vcl_cout << "ORIGINAL IMAGE:\n";
-  vil_print_all(vcl_cout,image);
+  std::cout << "ORIGINAL IMAGE:\n";
+  vil_print_all(std::cout,image);
 
   bil_cedt_test(image,true);
 }
@@ -48,11 +50,11 @@ bil_cedt_test(vil_image_view<unsigned char> &im, bool /*print*/)
 
   vil_image_view<float> cedtim=cedt.cedtimg();
   vil_image_view<float> bruteforcedtim=bil_cedt_brute_force(im);
-  vcl_cout << "CEDT:\n";
-  vil_print_all(vcl_cout,cedtim);
+  std::cout << "CEDT:\n";
+  vil_print_all(std::cout,cedtim);
 
-  vcl_cout << "Brute Force:\n";
-  vil_print_all(vcl_cout,bruteforcedtim);
+  std::cout << "Brute Force:\n";
+  vil_print_all(std::cout,bruteforcedtim);
 
   bool cedt_error=false;
 
@@ -60,8 +62,8 @@ bil_cedt_test(vil_image_view<unsigned char> &im, bool /*print*/)
     float dst,cedtdst;
     dst = DATA(bruteforcedtim)[i];
     cedtdst=DATA(cedtim)[i];
-    if (vcl_fabs(dst -cedtdst)>0.1) {
-      vcl_printf("Error. CEDT: %g BF: %g\n",DATA(cedtim)[i],dst);
+    if (std::fabs(dst -cedtdst)>0.1) {
+      std::printf("Error. CEDT: %g BF: %g\n",DATA(cedtim)[i],dst);
       cedt_error = true;
       break;
     }
@@ -86,7 +88,7 @@ vil_image_view<float> bil_cedt_brute_force(vil_image_view<unsigned char> &im)
         {
           if (im(i,j)==0)
           {
-            float temp=vcl_sqrt((float)((i-arrayi)*(i-arrayi)+(j-arrayj)*(j-arrayj)));
+            float temp=std::sqrt((float)((i-arrayi)*(i-arrayi)+(j-arrayj)*(j-arrayj)));
             if (temp<dst)
               dst=temp;
           }
@@ -108,7 +110,7 @@ bool generate_random_line(vil_image_view<unsigned char> &im, int seed)
   double theta=rnd.drand32(0, vnl_math::pi/2);
   for (unsigned i=0; i<im.ni(); ++i)
   {
-    int j=(int)((i-x0)*vcl_tan(theta)+y0);
+    int j=(int)((i-x0)*std::tan(theta)+y0);
 
     int imnjunsigned = static_cast<int>(im.nj());
     assert(imnjunsigned >= 0);
@@ -123,7 +125,7 @@ bool generate_random_circle(vil_image_view<unsigned char> &im,int seed)
 {
   vnl_random rnd(seed);
   int x0 = rnd.lrand32(0, im.ni()-1);
-  int radius=rnd.lrand32(0, (int)vcl_min(im.nj(),im.ni())/2);
+  int radius=rnd.lrand32(0, (int)std::min(im.nj(),im.ni())/2);
 
   int imniunsigned = static_cast<int>(im.ni());
   assert(imniunsigned>=0);
@@ -133,8 +135,8 @@ bool generate_random_circle(vil_image_view<unsigned char> &im,int seed)
     float discriminant= (float)(radius*radius-(i-x0)*(i-x0));
     if (discriminant>0)
     {
-      int j1=x0+(int)vcl_sqrt(discriminant);
-      int j2=x0-(int)vcl_sqrt(discriminant);
+      int j1=x0+(int)std::sqrt(discriminant);
+      int j2=x0-(int)std::sqrt(discriminant);
 
       int imnjunsigned = static_cast<int>(im.nj());
       assert(imnjunsigned>=0);

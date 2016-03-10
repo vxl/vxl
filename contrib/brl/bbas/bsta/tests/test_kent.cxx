@@ -5,8 +5,10 @@
 #include <vgl/vgl_plane_3d.h>
 #include <vnl/vnl_inverse.h>
 
-#include <vcl_iostream.h>
-#include <vcl_vector.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iostream>
+#include <vector>
 
 //: Test bsta kent distribution
 void test_kent()
@@ -15,7 +17,7 @@ void test_kent()
   vgl_plane_3d<double> wpl1(0.9901,0.0990,0.0990,0.0);
   vgl_plane_3d<double> wpl2(0.7036,0.7036,0.0995,1);
 
-  vcl_vector<vgl_plane_3d<double> > planes;
+  std::vector<vgl_plane_3d<double> > planes;
   planes.push_back(wpl0);
   planes.push_back(wpl1);
   planes.push_back(wpl2);
@@ -32,7 +34,7 @@ void test_kent()
     X += nt*n;
   }
   X/=planes.size();
-  vcl_cout << X << vcl_endl;
+  std::cout << X << std::endl;
   vnl_matrix<double> X_inv = vnl_inverse(X);
 
   bsta_kent<double> kent(X_inv);

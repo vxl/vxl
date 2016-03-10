@@ -1,7 +1,9 @@
 //:
 // \file
 #include <testlib/testlib_test.h>
-#include <vcl_cmath.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <cmath>
 #include <vnl/vnl_math.h>
 #include <bsta/bsta_spherical_histogram.h>
 
@@ -20,11 +22,11 @@ void test_spherical_histogram()
   double el_start, el_range;
   sh.elevation_interval( el_ind, el_start, el_range);
   sh.upcount(10.0, 10.0);
-  vcl_cout << sh << '\n';
-  double er = vcl_fabs(az_start) + vcl_fabs(az_range-45.0);
-   er += vcl_fabs(el_start) + vcl_fabs(el_range-22.5);
+  std::cout << sh << '\n';
+  double er = std::fabs(az_start) + std::fabs(az_range-45.0);
+   er += std::fabs(el_start) + std::fabs(el_range-22.5);
    double cnt = sh.counts(10.0, 10.0);
-  er += vcl_fabs(cnt-1.0);
+  er += std::fabs(cnt-1.0);
   TEST_NEAR("Earth coordinates - degrees", er, 0.0, 0.0001);
   double pi = vnl_math::pi;
   bsta_spherical_histogram<double> shr(8, 4, -pi, 2.0*pi, 0.0, pi/2,
@@ -34,11 +36,11 @@ void test_spherical_histogram()
   shr.azimuth_interval( az_ind, az_start, az_range);
   shr.elevation_interval( el_ind, el_start, el_range);
   shr.upcount(pi/16.0, pi/16.0);
-  vcl_cout << shr << '\n';
-  er = vcl_fabs(az_start) + vcl_fabs(az_range-pi/4.0);
-  er += vcl_fabs(el_start) + vcl_fabs(el_range-pi/8.0);
+  std::cout << shr << '\n';
+  er = std::fabs(az_start) + std::fabs(az_range-pi/4.0);
+  er += std::fabs(el_start) + std::fabs(el_range-pi/8.0);
   cnt = shr.counts(pi/16.0, pi/16.0);
-  er += vcl_fabs(cnt-1.0);
+  er += std::fabs(cnt-1.0);
   TEST_NEAR("Earth coordinates - radians", er, 0.0, 0.0001);
   bsta_spherical_histogram<double> sh0360(8, 4, 0.0, 360.0, 0.0, 90.0,
                                           bsta_spherical_histogram<double>::DEG, bsta_spherical_histogram<double>::B_0_360);
@@ -47,11 +49,11 @@ void test_spherical_histogram()
   sh0360.azimuth_interval( az_ind, az_start, az_range);
   sh0360.elevation_interval( el_ind, el_start, el_range);
   sh0360.upcount(10.0, 10.0);
-  vcl_cout << sh0360 << '\n';
-  er = vcl_fabs(az_start) + vcl_fabs(az_range-45.0);
-  er += vcl_fabs(el_start) + vcl_fabs(el_range-22.5);
+  std::cout << sh0360 << '\n';
+  er = std::fabs(az_start) + std::fabs(az_range-45.0);
+  er += std::fabs(el_start) + std::fabs(el_range-22.5);
   cnt = sh0360.counts(10.0, 10.0);
-  er += vcl_fabs(cnt-1.0);
+  er += std::fabs(cnt-1.0);
   TEST_NEAR("Math spherical coordinates - degrees", er, 0.0, 0.0001);
   bsta_spherical_histogram<double>
     sh0360cut(3, 4, 337.5, 45.0, 0.0, 90.0,
@@ -62,48 +64,48 @@ void test_spherical_histogram()
   sh0360cut.upcount(7.0, 10.0);
   sh0360cut.upcount(353.0, 10.0);
   cnt = sh0360cut.counts(0.0, 10.0);
-  er = vcl_fabs(az_ind_10 + az_ind_350 - 2.0);
-  er += vcl_fabs(cnt-2.0);
+  er = std::fabs(az_ind_10 + az_ind_350 - 2.0);
+  er += std::fabs(cnt-2.0);
   double azc = sh0360cut.azimuth_center(az_ind_10);
-  er += vcl_fabs(azc);
+  er += std::fabs(azc);
   TEST_NEAR("bin spans cut, math coords - degrees", er , 0.0, 0.0001);
   double x, y, z, x1, y1, z1;
   sh0360cut.convert_to_cartesian(318.3, 62.5, x, y, z);
-  er = vcl_fabs(0.344759944-x)+vcl_fabs(-0.307169525-y);
+  er = std::fabs(0.344759944-x)+std::fabs(-0.307169525-y);
   sh0360cut.convert_to_cartesian(291.0, 35.0, x1, y1, z1);
-  er += vcl_fabs(0.293558722-x1)+ vcl_fabs(-0.764744293-y1);
+  er += std::fabs(0.293558722-x1)+ std::fabs(-0.764744293-y1);
   TEST_NEAR("convert to Cartesian", er, 0.0, 0.0001);
   double azim, elev;
   sh0360cut.convert_to_spherical(x, y, z, azim, elev);
-  er = vcl_fabs(azim-318.3) + vcl_fabs(elev-62.5);
+  er = std::fabs(azim-318.3) + std::fabs(elev-62.5);
   double azim1, elev1;
   sh0360cut.convert_to_spherical(x1, y1, z1, azim1, elev1);
-  er += vcl_fabs(azim1-291) + vcl_fabs(elev1-35.0);
+  er += std::fabs(azim1-291) + std::fabs(elev1-35.0);
   TEST_NEAR("convert to spherical", er, 0.0, 0.0001);
   sh0360cut.upcount(10.0, 26.0); sh0360cut.upcount(20.0, 35.0);
   sh0360cut.upcount(338.0, 8.0);  sh0360cut.upcount(350.0, 5.0);
-  vcl_cout << sh0360cut << '\n';
-  sh0360cut.print_to_text(vcl_cout);
+  std::cout << sh0360cut << '\n';
+  sh0360cut.print_to_text(std::cout);
   double mean_az, mean_el;
   sh0360cut.mean(mean_az, mean_el);
-  vcl_cout << "mean(" << mean_az << ' ' << mean_el << ")\n";
-  er = vcl_fabs(mean_az -359.189) + vcl_fabs(mean_el- 19.0974);
+  std::cout << "mean(" << mean_az << ' ' << mean_el << ")\n";
+  er = std::fabs(mean_az -359.189) + std::fabs(mean_el- 19.0974);
   vnl_matrix_fixed<double, 2, 2> cmat = sh0360cut.covariance_matrix();
-  vcl_cout << cmat << '\n';
-  er += vcl_fabs(cmat[0][0]-150.657) + vcl_fabs(cmat[0][1]-112.218);
-  er += vcl_fabs(cmat[1][1]-112.621);
+  std::cout << cmat << '\n';
+  er += std::fabs(cmat[0][0]-150.657) + std::fabs(cmat[0][1]-112.218);
+  er += std::fabs(cmat[1][1]-112.621);
   TEST_NEAR("mean and covariance matrix", er, 0.0, 0.01);
-  vcl_vector<int> inter_bins = sh0360cut.bins_intersecting_cone(mean_az, mean_el, 25.0);
+  std::vector<int> inter_bins = sh0360cut.bins_intersecting_cone(mean_az, mean_el, 25.0);
   double el_center, az_center;
   double tcnts = 0;
-  for (vcl_vector<int>::iterator cit = inter_bins.begin();
+  for (std::vector<int>::iterator cit = inter_bins.begin();
        cit != inter_bins.end(); ++cit) {
     sh0360cut.center(*cit, az_center, el_center);
     tcnts += sh0360cut.counts(*cit);
-    vcl_cout << "c(" << az_center << ' ' << el_center << "): "
+    std::cout << "c(" << az_center << ' ' << el_center << "): "
              << sh0360cut.counts(*cit) << '\n';
   }
-  vcl_cout << "Cone total = " << tcnts << " Full total = " <<  sh0360cut.total_counts() << '\n';
+  std::cout << "Cone total = " << tcnts << " Full total = " <<  sh0360cut.total_counts() << '\n';
   TEST_NEAR("bins intersecting cone", tcnts, sh0360cut.total_counts(), 0.01);
 }
 

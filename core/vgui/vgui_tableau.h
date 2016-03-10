@@ -27,9 +27,10 @@
 //   08-OCT-2002 K.Y.McGaul - Removed unused adopt and disown functions.
 // \endverbatim
 
-#include <vcl_string.h>
-#include <vcl_vector.h>
-#include <vcl_iosfwd.h>
+#include <string>
+#include <vector>
+#include <vcl_compiler.h>
+#include <iosfwd>
 
 #include <vgui/vgui_event.h>
 #include <vgui/internals/vgui_parent_child_link_data.h>
@@ -87,23 +88,23 @@ class vgui_tableau : public vgui_parent_child_link_data
   vgui_tableau();
 
   //: Return the name of the tableau.
-  virtual vcl_string name() const { return file_name(); }
+  virtual std::string name() const { return file_name(); }
 
   //: Return the name of a file associated with some tableau below (if meaningful).
-  virtual vcl_string file_name() const { return "(none)"; }
+  virtual std::string file_name() const { return "(none)"; }
 
   //: Used to provide an informative name for printouts, debugging etc.
   //  Often it's type_name() + some representation of the essential state.
-  virtual vcl_string pretty_name() const { return type_name(); }
+  virtual std::string pretty_name() const { return type_name(); }
 
   //: Return name of most derived class (for RTTI purposes).
-  virtual vcl_string type_name() const;
+  virtual std::string type_name() const;
 
   //: Get the parent tableaux for this tableau.
-  void get_parents (vcl_vector<vgui_tableau_sptr> *out) const;
+  void get_parents (std::vector<vgui_tableau_sptr> *out) const;
 
   //: Get the child tableaux for this tableau.
-  void get_children(vcl_vector<vgui_tableau_sptr> *out) const;
+  void get_children(std::vector<vgui_tableau_sptr> *out) const;
 
   //: Get the ith child or return 0.
   vgui_tableau_sptr get_child(unsigned i) const;
@@ -116,7 +117,7 @@ class vgui_tableau : public vgui_parent_child_link_data
   virtual bool remove_child(vgui_tableau_sptr const &);
 
   //: Push all tableaux onto the given vector.
-  static void get_all(vcl_vector<vgui_tableau_sptr> *out);
+  static void get_all(std::vector<vgui_tableau_sptr> *out);
 
   //: Returns true if the given address points to a valid tableau.
   static bool exists(vgui_tableau_sptr const &);
@@ -220,7 +221,7 @@ class vgui_tableau : public vgui_parent_child_link_data
 };
 
 //: Print some indication of what the tableau is.
-vcl_ostream &operator<<(vcl_ostream &os, vgui_tableau_sptr const &t);
+std::ostream &operator<<(std::ostream &os, vgui_tableau_sptr const &t);
 
 #include "vgui_tableau_sptr.h"
 

@@ -6,7 +6,9 @@
 #include <vsol/vsol_point_3d.h>
 #include <vgl/vgl_vector_3d.h>
 #include <vsl/vsl_vector_io.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iostream>
 #include <vcl_cassert.h>
 
 //***************************************************************************
@@ -19,19 +21,19 @@
 vsol_polyline_3d::vsol_polyline_3d()
   : vsol_curve_3d()
 {
-  storage_=new vcl_vector<vsol_point_3d_sptr>();
+  storage_=new std::vector<vsol_point_3d_sptr>();
   p0_ = VXL_NULLPTR;
   p1_ = VXL_NULLPTR;
 }
 
 //---------------------------------------------------------------------------
-//: Constructor from a vcl_vector of points
+//: Constructor from a std::vector of points
 //---------------------------------------------------------------------------
 
-vsol_polyline_3d::vsol_polyline_3d(vcl_vector<vsol_point_3d_sptr> const& new_vertices)
+vsol_polyline_3d::vsol_polyline_3d(std::vector<vsol_point_3d_sptr> const& new_vertices)
   : vsol_curve_3d()
 {
-  storage_=new vcl_vector<vsol_point_3d_sptr>(new_vertices);
+  storage_=new std::vector<vsol_point_3d_sptr>(new_vertices);
   int n = storage_->size();
   if (n<2)
   {
@@ -49,7 +51,7 @@ vsol_polyline_3d::vsol_polyline_3d(vcl_vector<vsol_point_3d_sptr> const& new_ver
 vsol_polyline_3d::vsol_polyline_3d(vsol_polyline_3d const& other)
   : vsol_curve_3d(other)
 {
-  storage_=new vcl_vector<vsol_point_3d_sptr>(*other.storage_);
+  storage_=new std::vector<vsol_point_3d_sptr>(*other.storage_);
   for (unsigned int i=0;i<storage_->size();++i)
     (*storage_)[i]=new vsol_point_3d(*((*other.storage_)[i]));
   p0_ = other.p0_;
@@ -205,7 +207,7 @@ void vsol_polyline_3d::b_read(vsl_b_istream &is)
   if (!is)
     return;
   delete storage_;
-  storage_ = new vcl_vector<vsol_point_3d_sptr>();
+  storage_ = new std::vector<vsol_point_3d_sptr>();
   p0_=VXL_NULLPTR;
   p1_=VXL_NULLPTR;
   bool null_ptr;
@@ -226,7 +228,7 @@ void vsol_polyline_3d::b_read(vsl_b_istream &is)
     break;
    }
    default:
-    vcl_cerr << "vsol_polyline_3d: unknown I/O version " << ver << '\n';
+    std::cerr << "vsol_polyline_3d: unknown I/O version " << ver << '\n';
   }
 }
 //: Return IO version number;
@@ -236,7 +238,7 @@ short vsol_polyline_3d::version() const
 }
 
 //: Print an ascii summary to the stream
-void vsol_polyline_3d::print_summary(vcl_ostream &os) const
+void vsol_polyline_3d::print_summary(std::ostream &os) const
 {
   os << *this;
 }
@@ -270,11 +272,11 @@ vsl_b_read(vsl_b_istream &is, vsol_polyline_3d* &p)
     p = VXL_NULLPTR;
 }
 
-void vsol_polyline_3d::describe(vcl_ostream &strm, int blanking) const
+void vsol_polyline_3d::describe(std::ostream &strm, int blanking) const
 {
   if (blanking < 0) blanking = 0; while (blanking--) strm << ' ';
   strm << "[vsol_polyline_3d";
   for (unsigned int i=0; i<size(); ++i)
     strm << ' ' << *(vertex(i));
-  strm << ']' << vcl_endl;
+  strm << ']' << std::endl;
 }

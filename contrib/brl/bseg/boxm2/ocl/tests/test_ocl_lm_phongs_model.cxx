@@ -1,6 +1,6 @@
 #include <vcl_where_root_dir.h>
 #include <testlib/testlib_test.h>
-#include <vcl_iostream.h>
+#include <iostream>
 #include <vnl/algo/vnl_cholesky.h>
 #include <bocl/bocl_manager.h>
 #include <bocl/bocl_kernel.h>
@@ -9,7 +9,9 @@
 #include <boxm2/ocl/tests/boxm2_ocl_test_utils.h>
 
 #include <brad/brad_phongs_model_est.h>
-#include <vcl_cmath.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <cmath>
 #include <vnl/vnl_double_3.h>
 #include <vnl/vnl_random.h>
 #include <vnl/vnl_math.h>
@@ -29,13 +31,13 @@ static void create_test_data(vnl_vector<double> & samples,
   double kd=0.5;
   double ks=0.5;
   double gamma=6;
-  vnl_double_3 normal(vcl_sin(0.75)*vcl_cos(0.0),
-                      vcl_sin(0.75)*vcl_sin(0.0),
-                      vcl_cos(0.75));
+  vnl_double_3 normal(std::sin(0.75)*std::cos(0.0),
+                      std::sin(0.75)*std::sin(0.0),
+                      std::cos(0.75));
 
-  vnl_double_3 lv(vcl_sin(sun_elev)*vcl_cos(sun_phi),
-                  vcl_sin(sun_elev)*vcl_sin(sun_phi),
-                  vcl_cos(sun_elev));
+  vnl_double_3 lv(std::sin(sun_elev)*std::cos(sun_phi),
+                  std::sin(sun_elev)*std::sin(sun_phi),
+                  std::cos(sun_elev));
   vnl_identity_3x3 I;
   vnl_double_3 rlv=(I-outer_product<double>(normal,normal)-outer_product<double>(normal,normal))*lv;
 
@@ -46,10 +48,10 @@ static void create_test_data(vnl_vector<double> & samples,
   {
     double elev = rand.drand32(vnl_math::pi/6,vnl_math::pi/3);
     double azim = rand.drand32(vnl_math::twopi);
-    vnl_double_3 vv(vcl_sin(elev)*vcl_cos(azim),
-                    vcl_sin(elev)*vcl_sin(azim),
-                    vcl_cos(elev));
-    double obs = kd * dot_product(lv,normal) + ks * vcl_pow(dot_product<double>(vv,rlv),gamma);
+    vnl_double_3 vv(std::sin(elev)*std::cos(azim),
+                    std::sin(elev)*std::sin(azim),
+                    std::cos(elev));
+    double obs = kd * dot_product(lv,normal) + ks * std::pow(dot_product<double>(vv,rlv),gamma);
     samples[i]=obs;
     camera_elev[i]=elev;
     camera_azim[i]=azim;
@@ -89,7 +91,7 @@ static void lm_phongs_model(vnl_vector<double> & x,
   lm.minimize(x);
 
 #if 0
-  vcl_cout<<"\nSolution: "
+  std::cout<<"\nSolution: "
           <<x[0]<<','<<x[1]<<','
           <<x[2]<<','<<x[3]<<','<<x[4] <<'\n';
 #endif
@@ -116,9 +118,9 @@ static void ocl_phongs_model(vnl_vector<float> & x,
   {
     obs[i] = samples[i];
     weights[i] = samples_weights[i];
-    viewdirs[i*3+0] = vcl_sin(camera_elev[i])*vcl_cos(camera_azim[i]);
-    viewdirs[i*3+1] = vcl_sin(camera_elev[i])*vcl_sin(camera_azim[i]);
-    viewdirs[i*3+2] = vcl_cos(camera_elev[i]);
+    viewdirs[i*3+0] = std::sin(camera_elev[i])*std::cos(camera_azim[i]);
+    viewdirs[i*3+1] = std::sin(camera_elev[i])*std::sin(camera_azim[i]);
+    viewdirs[i*3+2] = std::cos(camera_elev[i]);
   }
 
   vnl_vector<float> y(m);
@@ -128,8 +130,8 @@ static void ocl_phongs_model(vnl_vector<float> & x,
   bocl_device_sptr device = mgr.gpus_[0];
 
   //compile pyramid test
-  vcl_vector<vcl_string> src_paths;
-  vcl_string source_dir = vcl_string(VCL_SOURCE_ROOT_DIR) + "/contrib/brl/bseg/boxm2/ocl/cl/";
+  std::vector<std::string> src_paths;
+  std::string source_dir = std::string(VCL_SOURCE_ROOT_DIR) + "/contrib/brl/bseg/boxm2/ocl/cl/";
   src_paths.push_back(source_dir + "onl/cholesky_decomposition.cl");
   src_paths.push_back(source_dir + "onl/phongs_model.cl");
   src_paths.push_back(source_dir + "onl/levenberg_marquardt.cl");
@@ -177,8 +179,8 @@ static void ocl_phongs_model(vnl_vector<float> & x,
   viewdirsbuff->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
 
   //set workspace
-  vcl_size_t lThreads[] = {64};
-  vcl_size_t gThreads[] = {64*1000};
+  std::size_t lThreads[] = {64};
+  std::size_t gThreads[] = {64*1000};
   //set first kernel args
   lm_test.set_arg( maxiterbuff.ptr() );
   lm_test.set_arg( mbuff.ptr() );
@@ -203,10 +205,10 @@ static void ocl_phongs_model(vnl_vector<float> & x,
   float time = lm_test.execute( queue, 1, lThreads, gThreads);
   clFinish( queue );
   //xbuff->read_to_buffer(queue);
-  vcl_cout<<"Solution (OCL): "<<time <<' ';
+  std::cout<<"Solution (OCL): "<<time <<' ';
   for (int i=0; i<n; ++i)
-    vcl_cout<<x[i]<<' ';
-  vcl_cout<<vcl_endl;
+    std::cout<<x[i]<<' ';
+  std::cout<<std::endl;
 }
 
 static void test_ocl_lm_phongs_model()
@@ -245,7 +247,7 @@ static void test_ocl_lm_phongs_model()
 
   t.all();
 
-  vcl_cout<<"Time taken ofr OCL "<<t.all()<<vcl_endl;
+  std::cout<<"Time taken ofr OCL "<<t.all()<<std::endl;
   t.mark();
   for (int k = 0; k < 1000; ++k)
   {
@@ -259,7 +261,7 @@ static void test_ocl_lm_phongs_model()
                     camera_elev, camera_azim);
   }
   t.all();
-  vcl_cout<<"Time taken ofr VNL "<<t.all()<<vcl_endl;
+  std::cout<<"Time taken ofr VNL "<<t.all()<<std::endl;
 }
 
 TESTMAIN( test_ocl_lm_phongs_model );

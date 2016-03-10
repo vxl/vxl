@@ -18,9 +18,9 @@
 //: Compute 1 gradient of single plane of 3D data using 1x3 grad filters
 template <class srcT, class gradT, class accumT>
 void vil3d_grad_1x3_1dir(const srcT *src,
-                         gradT * grad, vcl_ptrdiff_t delta_step,
-                         vcl_ptrdiff_t isrc, vcl_ptrdiff_t jsrc, vcl_ptrdiff_t ksrc,
-                         vcl_ptrdiff_t igrad, vcl_ptrdiff_t jgrad, vcl_ptrdiff_t kgrad,
+                         gradT * grad, std::ptrdiff_t delta_step,
+                         std::ptrdiff_t isrc, std::ptrdiff_t jsrc, std::ptrdiff_t ksrc,
+                         std::ptrdiff_t igrad, std::ptrdiff_t jgrad, std::ptrdiff_t kgrad,
                          unsigned ni, unsigned nj, unsigned nk, accumT /*dummy*/ )
 {
   for (unsigned k=0;k<nk;++k)

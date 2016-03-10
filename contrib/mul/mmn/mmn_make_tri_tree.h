@@ -9,7 +9,9 @@
 #include <mmn/mmn_arc.h>
 #include <mmn/mmn_triplet.h>
 #include <mmn/mmn_dependancy.h>
-#include <vcl_vector.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <vector>
 
 //: Compute arcs defining a graph s.t. triangles form a tree.
 //  Compute arc of graph such that point belongs to at least one triangle,
@@ -26,7 +28,7 @@
 //  \param arcs: Output 2n-3 arcs defining the graph.
 //  \param v0: If input as < D.rows() then defines one node of the first arc
 void mmn_make_tri_tree(const vnl_matrix<double>& D,
-                       vcl_vector<mmn_arc>& arcs,
+                       std::vector<mmn_arc>& arcs,
                        unsigned int v0 = (unsigned int)(-1));
 
 //: Compute arcs defining a graph s.t. triangles form a tree.
@@ -46,9 +48,9 @@ void mmn_make_tri_tree(const vnl_matrix<double>& D,
 //  \param deps: n-1 dependancies, defining a way to traverse graph
 //  \param v0: If input as < D.rows() then defines one node of the first arc
 void mmn_make_tri_tree(const vnl_matrix<double>& D,
-                       vcl_vector<mmn_arc>& arcs,
-                       vcl_vector<mmn_triplet>& triplets,
-                       vcl_vector<mmn_dependancy>& deps,
+                       std::vector<mmn_arc>& arcs,
+                       std::vector<mmn_triplet>& triplets,
+                       std::vector<mmn_dependancy>& deps,
                        unsigned int v0 = (unsigned int)(-1));
 
 

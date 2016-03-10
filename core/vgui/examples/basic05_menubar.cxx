@@ -1,6 +1,7 @@
 // This example displays an image with a menu bar.
 
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <iostream>
 #include <vgui/vgui.h>
 #include <vgui/vgui_menu.h>
 #include <vgui/vgui_image_tableau.h>
@@ -11,7 +12,7 @@
 // simplicity all menu items will call this function):
 static void dummy()
 {
-  vcl_cerr << "Dummy function called\n";
+  std::cerr << "Dummy function called\n";
 }
 
 // Create a vgui menu:
@@ -37,7 +38,7 @@ int main(int argc, char ** argv)
   vgui::init(argc,argv);
   if (argc <= 1)
   {
-    vcl_cerr << "Please give an image filename on the command line\n";
+    std::cerr << "Please give an image filename on the command line\n";
     return 0;
   }
 

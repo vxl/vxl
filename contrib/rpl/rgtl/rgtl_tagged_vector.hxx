@@ -17,14 +17,16 @@
 #include "rgtl_serialize_split.hxx"
 #include "rgtl_serialize_stl_vector.hxx"
 
-#include <vcl_vector.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <vector>
 
 //: Wrap an STL vector and replace the indexing operators with tagged-indexing equivalents.
 template <typename Tag, typename T>
-class rgtl_tagged_vector: protected vcl_vector<T>
+class rgtl_tagged_vector: protected std::vector<T>
 {
   // TODO: Use a mmap-ed file to allow very large vectors.
-  typedef vcl_vector<T> derived;
+  typedef std::vector<T> derived;
  public:
   //: Allow access to standard vector types.
   typedef typename derived::size_type size_type;

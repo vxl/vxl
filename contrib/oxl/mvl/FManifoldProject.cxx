@@ -21,7 +21,9 @@
 #include <mvl/FMatrix.h>
 #include <mvl/HomgOperator2D.h>
 
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iostream>
 
 //: Construct an FManifoldProject object which will use the given F to correct point pairs.
 FManifoldProject::FManifoldProject(const FMatrix& Fobj)
@@ -55,7 +57,7 @@ void FManifoldProject::set_F(const FMatrix& Fobj)
   vnl_symmetric_eigensystem<double>  eig(A_.as_ref()); // size 4x4
 
 #ifdef DEBUG
-  vcl_cerr << vnl_svd<double>(F_);
+  std::cerr << vnl_svd<double>(F_);
   MATLABPRINT(F_);
   MATLABPRINT(eig.D);
 #endif // DEBUG
@@ -64,7 +66,7 @@ void FManifoldProject::set_F(const FMatrix& Fobj)
   affine_F_ = eig.D(3,3) < 1e-6;
   if (affine_F_) {
 #ifdef DEBUG
-    vcl_cerr << "FManifoldProject: Affine F = " << F_ << '\n';
+    std::cerr << "FManifoldProject: Affine F = " << F_ << '\n';
 #endif // DEBUG
     double s = 1.0 / b.magnitude();
     t_ = b * s;
@@ -81,7 +83,7 @@ void FManifoldProject::set_F(const FMatrix& Fobj)
 
     // Now C is zero cos F is rank 2
     if (vnl_math::abs(Cprime) > 1e-6) {
-      vcl_cerr << "FManifoldProject: ** HartleySturm: F = " << F_ << '\n'
+      std::cerr << "FManifoldProject: ** HartleySturm: F = " << F_ << '\n'
                << "FManifoldProject: ** HartleySturm: B = " << Bprime << '\n'
                << "FManifoldProject: ** HartleySturm: Cerror = " << Cprime << '\n'
                << "FManifoldProject: ** HartleySturm: F not rank 2 ?\n"
@@ -113,7 +115,7 @@ double FManifoldProject::correct(vgl_homg_point_2d<double> const& p1,
                                  vgl_homg_point_2d<double>& out2) const
 {
   if (p1.w()==0 || p2.w()==0) {
-    vcl_cerr << "FManifoldProject: p1 or p2 at infinity\n";
+    std::cerr << "FManifoldProject: p1 or p2 at infinity\n";
     out1 = p1; out2 = p2; return 1e33;
   }
 
@@ -133,7 +135,7 @@ double FManifoldProject::correct(const HomgPoint2D& p1, const HomgPoint2D& p2, H
   double p[4];
   if (!p1.get_nonhomogeneous(p[0], p[1]) ||
       !p2.get_nonhomogeneous(p[2], p[3])) {
-    vcl_cerr << "FManifoldProject: p1 or p2 at infinity\n";
+    std::cerr << "FManifoldProject: p1 or p2 at infinity\n";
     *out1 = p1;
     *out2 = p2;
     return 1e30;
@@ -174,17 +176,17 @@ double FManifoldProject::correct(double   x1, double   y1, double   x2, double  
     *oy2 = p[3];
 
     vnl_double_3 l = F_ * vnl_double_3(p[2], p[3], 1.0);
-    double EPIDIST = (l[0] * p[0] + l[1] * p[1] + l[2])/vcl_sqrt(l[0]*l[0]+l[1]*l[1]);
+    double EPIDIST = (l[0] * p[0] + l[1] * p[1] + l[2])/std::sqrt(l[0]*l[0]+l[1]*l[1]);
     if (EPIDIST > 1e-4) {
-      vcl_cerr << "FManifoldProject: Affine F: EPIDIST = " << EPIDIST << '\n'
+      std::cerr << "FManifoldProject: Affine F: EPIDIST = " << EPIDIST << '\n'
                << "FManifoldProject: Affine F: p = " << (dot_product(p,n) + d) << '\n';
 #if 0
       double EPI1 = dot_product(out2->get_vector(), F_*out1->get_vector());
       double EPI2 = dot_product(p, n) + d;
-      vcl_cerr << "t = " << n << ' ' << d << '\n'
+      std::cerr << "t = " << n << ' ' << d << '\n'
                << "F_ = " << F_ << '\n'
                << "FManifoldProject: Affine F: E = " << (EPI1 - EPI2) << '\n';
-      vcl_abort();
+      std::abort();
 #endif // 0
     }
 
@@ -201,7 +203,7 @@ double FManifoldProject::correct(double   x1, double   y1, double   x2, double  
   double b4 = 1./d_[3]; double a4 = vnl_math::sqr(pprime[3])*b4;
 
   if (std::max(vnl_math::abs(b1 + b2), vnl_math::abs(b3 + b4)) > 1e-7) {
-    vcl_cerr << "FManifoldProject: B = [" <<b1<< ' ' <<b2<< ' ' <<b3<< ' ' <<b4<< "];\n"
+    std::cerr << "FManifoldProject: B = [" <<b1<< ' ' <<b2<< ' ' <<b3<< ' ' <<b4<< "];\n"
              << "FManifoldProject: b1 != -b2 or b3 != -b4\n";
   }
 
@@ -243,7 +245,7 @@ double FManifoldProject::correct(double   x1, double   y1, double   x2, double  
                                a3/vnl_math::sqr(b3 - lambda) +
                                a4/vnl_math::sqr(b4 - lambda));
 
-    if (vcl_fabs(RATPOLY_RESIDUAL) > 1e-8)
+    if (std::fabs(RATPOLY_RESIDUAL) > 1e-8)
       continue;
 
     vnl_diag_matrix<double> Dinv((1.0 - lambda * d_).as_ref()); // length 4
@@ -259,7 +261,7 @@ double FManifoldProject::correct(double   x1, double   y1, double   x2, double  
       if (0 && EPIDIST > 1e-12) {
         // This can happen in reasonable circumstances -- notably when one
         // epipole is at infinity.
-        vcl_cerr << "FManifoldProject: A root has epidist = " << vcl_sqrt(EPIDIST) << '\n'
+        std::cerr << "FManifoldProject: A root has epidist = " << std::sqrt(EPIDIST) << '\n'
                  << "  coeffs: " << coeffs_ << '\n'
                  << "  root = " << lambda << '\n'
                  << "  poly residual = " << poly.evaluate(lambda) << '\n'
@@ -278,7 +280,7 @@ double FManifoldProject::correct(double   x1, double   y1, double   x2, double  
   }
 
   if (!got_one) {
-    vcl_cerr << "FManifoldProject: AROOGAH. Final epipolar distance =  " << dmin << ", errs = " << errs << '\n';
+    std::cerr << "FManifoldProject: AROOGAH. Final epipolar distance =  " << dmin << ", errs = " << errs << '\n';
     *ox1 = x1;
     *oy1 = y1;
     *ox2 = x2;

@@ -24,7 +24,9 @@
 //                      invalidated curve endpoint geometry.
 // \endverbatim
 
-#include <vcl_iosfwd.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iosfwd>
 #include <vnl/vnl_double_2.h>
 #include <vsol/vsol_point_2d_sptr.h>
 #include <vtol/vtol_vertex.h>
@@ -90,10 +92,10 @@ class vtol_vertex_2d : public vtol_vertex
   virtual vsol_spatial_object_2d* clone() const;
 
   //: Return a platform independent string identifying the class
-  virtual vcl_string is_a() const { return vcl_string("vtol_vertex_2d"); }
+  virtual std::string is_a() const { return std::string("vtol_vertex_2d"); }
 
   //: Return true if the argument matches the string identifying the class or any parent class
-  virtual bool is_class(const vcl_string& cls) const
+  virtual bool is_class(const std::string& cls) const
   { return cls==is_a() || vtol_vertex::is_class(cls); }
 
   // Accessors
@@ -174,8 +176,8 @@ class vtol_vertex_2d : public vtol_vertex
 
   double euclidean_distance(vtol_vertex_2d &v); //actual distance, not squared - JLM
 
-  void print(vcl_ostream &strm=vcl_cout) const;
-  void describe(vcl_ostream &strm=vcl_cout, int blanking=0) const;
+  void print(std::ostream &strm=std::cout) const;
+  void describe(std::ostream &strm=std::cout, int blanking=0) const;
   virtual void compute_bounding_box() const; //A local implementation
 
   //:  copy the geometry

@@ -21,9 +21,11 @@
 #include <bsta/bsta_histogram.h>
 
 #include <vnl/vnl_math.h>
-#include <vcl_iostream.h>
-#include <vcl_fstream.h>
-#include <vcl_vector.h>
+#include <iostream>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <fstream>
+#include <vector>
 
 static void test_brec_hierarchy_detector2_simple()
 {
@@ -84,7 +86,7 @@ static void test_brec_hierarchy_detector2_simple()
   //d->prior_non_c_b_ = n_b_0;
   d->prior_c_b_ = 1.0f - n_b_0 - n_f_0 - d->prior_c_f_;
 
-  vcl_vector<brec_part_instance_sptr> prims;
+  std::vector<brec_part_instance_sptr> prims;
   brec_part_gaussian_sptr p_img = new brec_part_gaussian(0.0f, 0.0f, 0.0f, 1.0f, 1.0f, 0.0f, false, 0);
   p_img->rho_c_b_ = 1.0f;  prims.push_back(p_img->cast_to_instance());
 
@@ -102,18 +104,18 @@ static void test_brec_hierarchy_detector2_simple()
   for (unsigned i = 0; i < prims.size(); i++)
     rt->add(prims[i]);
 
-  vcl_vector<brec_part_instance_sptr> upper_parts;
+  std::vector<brec_part_instance_sptr> upper_parts;
   d->extract_upper_layer(prims, rt, upper_parts, brec_detector_methods::POSTERIOR, radius);
 
   for (unsigned i = 0; i < upper_parts.size(); i++)
-    vcl_cout << "detected a part at center: (" << upper_parts[i]->x_ << ", " << upper_parts[i]->y_ << ") type: " << upper_parts[i]->type_ << " posterior: " << upper_parts[i]->rho_c_b_ << vcl_endl;
+    std::cout << "detected a part at center: (" << upper_parts[i]->x_ << ", " << upper_parts[i]->y_ << ") type: " << upper_parts[i]->type_ << " posterior: " << upper_parts[i]->rho_c_b_ << std::endl;
 }
 
 static void test_brec_hierarchy_detector2_img()
 {
-  vcl_string file = "test_view_0_cropped.png"; // "normalized0_cropped.png";
-  vcl_string gt_file = "normalized0_gt_cropped.png";
-  vcl_string mask_file = "test_view_0_mask_cropped.bin";
+  std::string file = "test_view_0_cropped.png"; // "normalized0_cropped.png";
+  std::string gt_file = "normalized0_gt_cropped.png";
+  std::string mask_file = "test_view_0_mask_cropped.bin";
 
   vil_image_resource_sptr img = vil_load_image_resource(file.c_str());
   TEST("test load img", !img, false);
@@ -128,15 +130,15 @@ static void test_brec_hierarchy_detector2_img()
     return;
 
   unsigned ni = img->ni(); unsigned nj = img->nj();
-  vcl_cout << "image ni: " << ni << " nj: " << nj << vcl_endl;
+  std::cout << "image ni: " << ni << " nj: " << nj << std::endl;
 
-  vcl_string prob_map_file = "test_view_0_prob_map_cropped.tiff";
+  std::string prob_map_file = "test_view_0_prob_map_cropped.tiff";
   vil_image_resource_sptr prob_map_img = vil_load_image_resource(prob_map_file.c_str());
   TEST("test load img", !prob_map_img, false);
   if (!prob_map_img)
     return;
   if (prob_map_img->ni() != ni || prob_map_img->nj() != nj) {
-    vcl_cout << "std dev img size not compatible!\n";
+    std::cout << "std dev img size not compatible!\n";
     return;
   }
   vil_image_view<float> back_prob_map = prob_map_img->get_view();
@@ -144,10 +146,10 @@ static void test_brec_hierarchy_detector2_img()
   dummy.fill(1.0f);
   vil_math_image_difference(dummy, back_prob_map, fg_prob_map);
 
-  vcl_string h_name = "C:\\projects\\roi_1\\sewage_and_vehicles_learning\\output_learning\\hierarchy_0_layer_2.xml";
-  vcl_string model_dir = "C:\\projects\\roi_1\\sewage_and_vehicles_learning\\output_learning\\";
+  std::string h_name = "C:\\projects\\roi_1\\sewage_and_vehicles_learning\\output_learning\\hierarchy_0_layer_2.xml";
+  std::string model_dir = "C:\\projects\\roi_1\\sewage_and_vehicles_learning\\output_learning\\";
   brec_part_hierarchy_sptr h = new brec_part_hierarchy();
-  vcl_ifstream is(h_name.c_str());
+  std::ifstream is(h_name.c_str());
   h->read_xml(is);
   is.close();
 

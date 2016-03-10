@@ -15,10 +15,12 @@
 
 #include "vpdfl_pc_gaussian_builder.h"
 //
-#include <vcl_string.h>
-#include <vcl_sstream.h>
+#include <string>
+#include <sstream>
 #include <vcl_cassert.h>
-#include <vcl_cstdlib.h> // for vcl_abort()
+#include <vcl_compiler.h>
+#include <iostream>
+#include <cstdlib> // for std::abort()
 #include <mbl/mbl_data_wrapper.h>
 #include <vnl/vnl_math.h>
 #include <vnl/vnl_c_vector.h>
@@ -233,7 +235,7 @@ void vpdfl_pc_gaussian_builder::mean_covar(vnl_vector<double>& mean, vnl_matrix<
 
 void vpdfl_pc_gaussian_builder::weighted_build(vpdfl_pdf_base& model,
                                                mbl_data_wrapper<vnl_vector<double> >& data,
-                                               const vcl_vector<double>& wts) const
+                                               const std::vector<double>& wts) const
 {
   vpdfl_pc_gaussian& g = gaussian(model);
 
@@ -241,8 +243,8 @@ void vpdfl_pc_gaussian_builder::weighted_build(vpdfl_pdf_base& model,
 
   if (n_samples<2L)
   {
-    vcl_cerr<<"vpdfl_gaussian_builder::weighted_build() Too few examples available.\n";
-    vcl_abort();
+    std::cerr<<"vpdfl_gaussian_builder::weighted_build() Too few examples available.\n";
+    std::abort();
   }
 
   data.reset();
@@ -284,9 +286,9 @@ void vpdfl_pc_gaussian_builder::weighted_build(vpdfl_pdf_base& model,
   // eigenvalues are highest first now
 
 #if 0
-  vcl_cerr << 'S' << S <<'\n'
+  std::cerr << 'S' << S <<'\n'
            << "evals " << evals <<'\n'
-           << "evecs " << evecs <<vcl_endl;
+           << "evecs " << evecs <<std::endl;
 #endif
 
   eValsFloorZero(evals);
@@ -350,9 +352,9 @@ unsigned vpdfl_pc_gaussian_builder::decide_partition(const vnl_vector<double>& e
   }
   else
   {
-    vcl_cerr << "vpdfl_pc_gaussian_builder::decide_partition(): Unexpected partition method: "
+    std::cerr << "vpdfl_pc_gaussian_builder::decide_partition(): Unexpected partition method: "
              << (short)partitionMethod_ << '\n';
-    vcl_abort();
+    std::abort();
     return 0;
   }
 }
@@ -368,11 +370,11 @@ unsigned vpdfl_pc_gaussian_builder::decide_partition(const vnl_vector<double>& e
 // }
 // \endverbatim
 // \throw mbl_exception_parse_error if the parse fails.
-void vpdfl_pc_gaussian_builder::config_from_stream(vcl_istream & is)
+void vpdfl_pc_gaussian_builder::config_from_stream(std::istream & is)
 {
-  vcl_string s = mbl_parse_block(is);
+  std::string s = mbl_parse_block(is);
 
-  vcl_istringstream ss(s);
+  std::istringstream ss(s);
   mbl_read_props_type props = mbl_read_props_ws(ss);
 
   if (props.find("mode_choice")!=props.end())
@@ -384,7 +386,7 @@ void vpdfl_pc_gaussian_builder::config_from_stream(vcl_istream & is)
       partitionMethod_=proportionate;
     else
     {
-      vcl_string err_msg = "Unknown mode_choice: "+props["mode_choice"];
+      std::string err_msg = "Unknown mode_choice: "+props["mode_choice"];
       throw mbl_exception_parse_error(err_msg);
     }
 
@@ -425,9 +427,9 @@ void vpdfl_pc_gaussian_builder::config_from_stream(vcl_istream & is)
 
 //=======================================================================
 
-vcl_string vpdfl_pc_gaussian_builder::is_a() const
+std::string vpdfl_pc_gaussian_builder::is_a() const
 {
-  static vcl_string class_name_ = "vpdfl_pc_gaussian_builder";
+  static std::string class_name_ = "vpdfl_pc_gaussian_builder";
   return class_name_;
 }
 
@@ -435,7 +437,7 @@ vcl_string vpdfl_pc_gaussian_builder::is_a() const
 // Method: is_class
 //=======================================================================
 
-bool vpdfl_pc_gaussian_builder::is_class(vcl_string const& s) const
+bool vpdfl_pc_gaussian_builder::is_class(std::string const& s) const
 {
   return vpdfl_gaussian_builder::is_class(s) || s==vpdfl_pc_gaussian_builder::is_a();
 }
@@ -462,7 +464,7 @@ vpdfl_builder_base* vpdfl_pc_gaussian_builder::clone() const
 // Method: print
 //=======================================================================
 
-void vpdfl_pc_gaussian_builder::print_summary(vcl_ostream& os) const
+void vpdfl_pc_gaussian_builder::print_summary(std::ostream& os) const
 {
   vpdfl_gaussian_builder::print_summary(os);
   if (partitionMethod_==fixed) os<<" mode_choice: fixed ";
@@ -494,14 +496,14 @@ void vpdfl_pc_gaussian_builder::b_read(vsl_b_istream& bfs)
 {
   if (!bfs) return;
 
-  vcl_string name;
+  std::string name;
   vsl_b_read(bfs,name);
   if (name != is_a())
   {
-    vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, vpdfl_pc_gaussian_builder &)\n"
+    std::cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, vpdfl_pc_gaussian_builder &)\n"
              << "           Attempted to load object of type "
              << name <<" into object of type " << is_a() << '\n';
-    bfs.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
+    bfs.is().clear(std::ios::badbit); // Set an unrecoverable IO error on stream
     return;
   }
 
@@ -525,9 +527,9 @@ void vpdfl_pc_gaussian_builder::b_read(vsl_b_istream& bfs)
       vsl_b_read(bfs, fixed_partition_);
       break;
     default:
-      vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, vpdfl_pc_gaussian_builder &)\n"
+      std::cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, vpdfl_pc_gaussian_builder &)\n"
                << "           Unknown version number "<< version << '\n';
-      bfs.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
+      bfs.is().clear(std::ios::badbit); // Set an unrecoverable IO error on stream
       return;
   }
 }

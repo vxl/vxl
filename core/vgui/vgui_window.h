@@ -18,7 +18,8 @@
 class vgui_menu;
 class vgui_adaptor;
 class vgui_statusbar;
-#include <vcl_string.h>
+#include <vcl_compiler.h>
+#include <string>
 
 //: An abstract representation of a system window.
 //
@@ -78,7 +79,7 @@ class vgui_window
   virtual void reposition(int, int);
 
   //: Use the given text as the window title (if the window has a title).
-  virtual void set_title(vcl_string const &);
+  virtual void set_title(std::string const &);
 
   //: Set the position of the horizontal scrollbar, returns old position
   virtual int set_hscrollbar(int pos);

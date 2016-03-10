@@ -1,8 +1,10 @@
 #include <testlib/testlib_test.h>
-#include <vcl_iostream.h>
-#include <vcl_algorithm.h>
-#include <vcl_limits.h>
-#include <vcl_vector.h>
+#include <iostream>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <algorithm>
+#include <limits>
+#include <vector>
 #include <vil3d/algo/vil3d_distance_transform.h>
 #include <vil3d/vil3d_print.h>
 #include <vil/vil_rgb.h>
@@ -12,7 +14,7 @@
 
 void test_signed_distance_transform()
 {
-  vcl_cout << "*****************************************\n"
+  std::cout << "*****************************************\n"
            << " Testing vil3d_signed_distance_transform\n"
            << "*****************************************\n";
 
@@ -38,8 +40,8 @@ void test_signed_distance_transform()
     double lk2=lk*lk;
 
     double tol=1e-6;
-    TEST_NEAR("26 connected distance correct for (0,0,0)",image(0,0,0),2*vcl_sqrt(li2+lj2+lk2),tol);
-    TEST_NEAR("26 connected distance correct for (4,4,4)",image(4,4,4),2*vcl_sqrt(li2+lj2+lk2),tol);
+    TEST_NEAR("26 connected distance correct for (0,0,0)",image(0,0,0),2*std::sqrt(li2+lj2+lk2),tol);
+    TEST_NEAR("26 connected distance correct for (4,4,4)",image(4,4,4),2*std::sqrt(li2+lj2+lk2),tol);
     TEST_NEAR("26 connected distance correct for (2,2,0)",image(2,2,0),2*lk,tol);
     TEST_NEAR("26 connected distance correct for (2,0,2)",image(2,0,2),2*lj,tol);
     TEST_NEAR("26 connected distance correct for (0,2,2)",image(0,2,2),2*li,tol);
@@ -63,8 +65,8 @@ void test_signed_distance_transform()
     float li=3.0f;
     float lj=4.0f;
     float lk=5.0f;
-    float min_link=vcl_min(li,lj);
-    min_link=vcl_min(min_link,lk);
+    float min_link=std::min(li,lj);
+    min_link=std::min(min_link,lk);
 
     vil3d_signed_distance_transform(mask,image,1000.0,li,lj,lk);
 
@@ -77,15 +79,15 @@ void test_signed_distance_transform()
     TEST_NEAR("26 connected distance correct for (1,0,0)",image(1,0,0),-1.0*li,tol);
     TEST_NEAR("26 connected distance correct for (0,1,0)",image(0,1,0),-1.0*lj,tol);
     TEST_NEAR("26 connected distance correct for (0,0,1)",image(0,0,1),-1.0*lk,tol);
-    TEST_NEAR("26 connected distance correct for (1,1,0)",image(1,1,0),-1.0*vcl_min(li,lj),tol);
-    TEST_NEAR("26 connected distance correct for (0,1,1)",image(0,1,1),-1.0*vcl_min(lj,lk),tol);
-    TEST_NEAR("26 connected distance correct for (1,0,1)",image(1,0,1),-1.0*vcl_min(li,lk),tol);
+    TEST_NEAR("26 connected distance correct for (1,1,0)",image(1,1,0),-1.0*std::min(li,lj),tol);
+    TEST_NEAR("26 connected distance correct for (0,1,1)",image(0,1,1),-1.0*std::min(lj,lk),tol);
+    TEST_NEAR("26 connected distance correct for (1,0,1)",image(1,0,1),-1.0*std::min(li,lk),tol);
   }
 }
 
 void test_distance_transform()
 {
-  vcl_cout << "**********************************\n"
+  std::cout << "**********************************\n"
            << " Testing vil3d_distance_transform\n"
            << "**********************************\n";
 
@@ -100,9 +102,9 @@ void test_distance_transform()
   orients.set_size(dim,dim,dim);
   gt_orients.set_size(dim,dim,dim);
 
-  image.fill(vcl_numeric_limits<float>::max());
-  gt_image.fill(vcl_numeric_limits<float>::max());
-  vcl_vector<int> planes;
+  image.fill(std::numeric_limits<float>::max());
+  gt_image.fill(std::numeric_limits<float>::max());
+  std::vector<int> planes;
   planes.push_back(3);
   planes.push_back(7);
 
@@ -118,7 +120,7 @@ void test_distance_transform()
   for (unsigned k=0; k<dim; ++k) {
     for (unsigned j=0; j<dim; ++j) {
       for (unsigned i=0; i<dim; ++i) {
-        double min = vcl_numeric_limits<double>::max();
+        double min = std::numeric_limits<double>::max();
         vgl_point_3d<float> v1((float)(i),(float)(j),(float)(k));
 
         // find the distance to the planes

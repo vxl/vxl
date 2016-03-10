@@ -27,14 +27,14 @@ void bstm_ocl_util::set_ocl_camera(vpgl_camera_double_sptr& cam, cl_float* ocl_c
     set_proj_camera(pcam, ocl_cam);
   }
   else {
-    vcl_cerr << "Error set_persp_camera() : unsupported camera type\n";
+    std::cerr << "Error set_persp_camera() : unsupported camera type\n";
   }
 }
 
 // fills a float buffer (should be 16*3 floats) with a perspective cam to be sent
 void bstm_ocl_util::set_persp_camera(vpgl_perspective_camera<double> * pcam, cl_float* persp_cam)
 {
-  //vcl_cout<<"CAM: "<<(*pcam)<<vcl_endl;
+  //std::cout<<"CAM: "<<(*pcam)<<std::endl;
   vnl_svd<double>* svd=pcam->svd();
   vnl_matrix<double> Ut=svd->U().conjugate_transpose();
   vnl_matrix<double> V=svd->V();
@@ -76,7 +76,7 @@ void bstm_ocl_util::set_persp_camera(vpgl_perspective_camera<double> * pcam, cl_
 // fills a float buffer (should be 16*3 floats) with a perspective cam to be sent
 void bstm_ocl_util::set_proj_camera(vpgl_proj_camera<double> * pcam, cl_float* cam)
 {
-  //vcl_cout<<"CAM: "<<(*pcam)<<vcl_endl;
+  //std::cout<<"CAM: "<<(*pcam)<<std::endl;
   vnl_svd<double>* svd=pcam->svd();
   vnl_matrix<double> Ut=svd->U().conjugate_transpose();
   vnl_matrix<double> V=svd->V();
@@ -151,7 +151,7 @@ void bstm_ocl_util::set_generic_camera(vpgl_camera_double_sptr& cam, cl_float* r
     }
   }
   else {
-    vcl_cerr << "Error set_generic_camera() : unsupported camera type\n";
+    std::cerr << "Error set_generic_camera() : unsupported camera type\n";
   }
 }
 
@@ -175,23 +175,23 @@ void bstm_ocl_util::set_bit_lookup(cl_uchar* lookup)
                            3,   4,   4,   5,   4,   5,   5,   6,   4,   5,   5,   6,   5,   6,   6,   7,
                            3,   4,   4,   5,   4,   5,   5,   6,   4,   5,   5,   6,   5,   6,   6,   7,
                            4,   5,   5,   6,   5,   6,   6,   7,   5,   6,   6,   7,   6,   7,   7,   8 };
-  vcl_memcpy(lookup, bits, 256);
+  std::memcpy(lookup, bits, 256);
 }
 
 void
-bstm_ocl_util::load_perspective_camera(vcl_string filename, vpgl_perspective_camera<double> & pcam)
+bstm_ocl_util::load_perspective_camera(std::string filename, vpgl_perspective_camera<double> & pcam)
 {
-  vcl_ifstream ifile(filename.c_str());
+  std::ifstream ifile(filename.c_str());
   if (!ifile)
   {
-      vcl_cout<<"Error Opening Camera File "<<filename<<vcl_endl;
+      std::cout<<"Error Opening Camera File "<<filename<<std::endl;
       return ;
   }
   ifile>>pcam;
   ifile.close();
 }
 
-void bstm_ocl_util::get_render_transfer_function(vcl_vector<vcl_string> imgfilenames, float & min, float & max, vbl_array_1d<float> & tf)
+void bstm_ocl_util::get_render_transfer_function(std::vector<std::string> imgfilenames, float & min, float & max, vbl_array_1d<float> & tf)
 {
   min= 3e38f;
   max=-3e38f;
@@ -231,7 +231,7 @@ void bstm_ocl_util::get_render_transfer_function(vcl_vector<vcl_string> imgfilen
   }
 }
 
-vcl_string bstm_ocl_util::mog_options(vcl_string data_type)
+std::string bstm_ocl_util::mog_options(std::string data_type)
 {
   if ( data_type == bstm_data_traits<BSTM_MOG3_GREY>::prefix() )
     return "-D MOG_TYPE_8 ";
@@ -249,7 +249,7 @@ vcl_string bstm_ocl_util::mog_options(vcl_string data_type)
     return "";
 }
 
-vcl_string bstm_ocl_util::label_options(vcl_string data_type)
+std::string bstm_ocl_util::label_options(std::string data_type)
 {
   if ( data_type == bstm_data_traits<BSTM_LABEL>::prefix() )
     return "-D LABEL_UCHAR ";

@@ -4,8 +4,10 @@
 // \file
 
 #include <boxm2/io/boxm2_stream_cache.h>
-#include <vcl_vector.h>
-#include <vcl_algorithm.h>
+#include <vector>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <algorithm>
 #include <brad/brad_phongs_model_est.h>
 #include <brad/brad_synoptic_function_1d.h>
 
@@ -18,19 +20,19 @@
 class boxm2_entropy_air
 {
   public:
-    inline static float compute_entropy_air(vcl_vector<float> & Iobs, vcl_vector<float> & vis)
+    inline static float compute_entropy_air(std::vector<float> & Iobs, std::vector<float> & vis)
     {
         //: temporary histogram to store gradient frequncies.
-        vcl_vector<float> temp_histogram(8,0.125f);
+        std::vector<float> temp_histogram(8,0.125f);
         float sum = 1.0;
         for (unsigned i=0;i<Iobs.size();i++)
         {
             unsigned index = i + 1;
             if (i == Iobs.size()-1)
                 index =0;
-            float gradI=vcl_fabs(Iobs[i]-Iobs[index]);
+            float gradI=std::fabs(Iobs[i]-Iobs[index]);
 
-            int bin_index  = (int) vcl_floor(gradI*8);
+            int bin_index  = (int) std::floor(gradI*8);
             bin_index = bin_index>7 ? 7:bin_index;
             temp_histogram[bin_index] += (vis[i]+vis[index])/2;
             sum += (vis[i]+vis[index])/2;
@@ -42,9 +44,9 @@ class boxm2_entropy_air
         {
             double pi = temp_histogram[i];
             if (pi>0)
-                entropy_histo += float(pi*vcl_log(pi));
+                entropy_histo += float(pi*std::log(pi));
         }
-        entropy_histo = vcl_exp(-entropy_histo/float(vnl_math::log2e));
+        entropy_histo = std::exp(-entropy_histo/float(vnl_math::log2e));
 
         return entropy_histo;
     }
@@ -76,15 +78,15 @@ class boxm2_compute_empty_model_gradient_functor
     {
         boxm2_data<BOXM2_AUX0>::datatype            & entropy_histo=entropy_histo_data_->data()[index];
 
-        vcl_vector<aux0_datatype>  out0   = str_cache_->get_next<BOXM2_AUX0>(id_, index);
-        vcl_vector<aux1_datatype>  out1   = str_cache_->get_next<BOXM2_AUX1>(id_, index);
-        vcl_vector<aux2_datatype>  out2   = str_cache_->get_next<BOXM2_AUX2>(id_, index);
+        std::vector<aux0_datatype>  out0   = str_cache_->get_next<BOXM2_AUX0>(id_, index);
+        std::vector<aux1_datatype>  out1   = str_cache_->get_next<BOXM2_AUX1>(id_, index);
+        std::vector<aux2_datatype>  out2   = str_cache_->get_next<BOXM2_AUX2>(id_, index);
         unsigned nobs = (unsigned)out0.size();
 
-        vcl_vector<float> temp_histogram(8,0.125f);
+        std::vector<float> temp_histogram(8,0.125f);
 
-        vcl_vector<float> Iobs;
-        vcl_vector<float> vis;
+        std::vector<float> Iobs;
+        std::vector<float> vis;
         for (unsigned i = 0; i < nobs; i++)
         {
             if (out0[i]>1e-10f)
@@ -102,9 +104,9 @@ class boxm2_compute_empty_model_gradient_functor
             unsigned index = i + 1;
             if (i == Iobs.size()-1)
                 index =0;
-            float gradI=vcl_fabs(Iobs[i]-Iobs[index]);
+            float gradI=std::fabs(Iobs[i]-Iobs[index]);
 
-            int bin_index  = (int) vcl_floor(gradI*8);
+            int bin_index  = (int) std::floor(gradI*8);
             bin_index = bin_index>7 ? 7:bin_index;
             temp_histogram[bin_index] += (vis[i]+vis[index])/2;
             sum += (vis[i]+vis[index])/2;
@@ -116,10 +118,10 @@ class boxm2_compute_empty_model_gradient_functor
         {
             double pi = temp_histogram[i];
             if (pi>0)
-                entropy_histo += float(pi*vcl_log(pi));
+                entropy_histo += float(pi*std::log(pi));
         }
         entropy_histo /= float(vnl_math::log2e);
-        entropy_histo = vcl_exp(-entropy_histo);
+        entropy_histo = std::exp(-entropy_histo);
 
         return true;
     }
@@ -161,10 +163,10 @@ class boxm2_synoptic_fucntion_1d_functor
     {
         boxm2_data<BOXM2_FLOAT8>::datatype & cubic_model=cubic_model_data_->data()[index];
         boxm2_data<BOXM2_ALPHA>::datatype & alpha=alpha_model_data_->data()[index];
-        vcl_vector<aux0_datatype>  aux0_raw   = str_cache_->get_next<BOXM2_AUX0>(id_, index);
-        vcl_vector<aux1_datatype>  aux1_raw   = str_cache_->get_next<BOXM2_AUX1>(id_, index);
-        vcl_vector<aux2_datatype>  aux2_raw   = str_cache_->get_next<BOXM2_AUX2>(id_, index);
-        vcl_vector<aux3_datatype>  aux3_raw   = str_cache_->get_next<BOXM2_AUX3>(id_, index);
+        std::vector<aux0_datatype>  aux0_raw   = str_cache_->get_next<BOXM2_AUX0>(id_, index);
+        std::vector<aux1_datatype>  aux1_raw   = str_cache_->get_next<BOXM2_AUX1>(id_, index);
+        std::vector<aux2_datatype>  aux2_raw   = str_cache_->get_next<BOXM2_AUX2>(id_, index);
+        std::vector<aux3_datatype>  aux3_raw   = str_cache_->get_next<BOXM2_AUX3>(id_, index);
         for (unsigned m = 0; m < aux0_raw.size(); m++) {
             if (aux0_raw[m]>1e-10f)
             {
@@ -183,12 +185,12 @@ class boxm2_synoptic_fucntion_1d_functor
 
         int half_m = aux0_raw.size()/2;
 
-        vcl_vector<aux1_datatype> Iobs;
-        vcl_vector<aux2_datatype> vis;
+        std::vector<aux1_datatype> Iobs;
+        std::vector<aux2_datatype> vis;
 
-        vcl_vector<aux1_datatype> xdir;
-        vcl_vector<aux2_datatype> ydir;
-        vcl_vector<aux3_datatype> zdir;
+        std::vector<aux1_datatype> xdir;
+        std::vector<aux2_datatype> ydir;
+        std::vector<aux3_datatype> zdir;
 
         Iobs.insert(Iobs.begin(), aux1_raw.begin(), aux1_raw.begin()+half_m);
         vis.insert(vis.begin(), aux2_raw.begin(), aux2_raw.begin()+half_m);
@@ -197,10 +199,10 @@ class boxm2_synoptic_fucntion_1d_functor
         ydir.insert(ydir.begin(), aux2_raw.begin()+half_m, aux2_raw.end());
         zdir.insert(zdir.begin(), aux3_raw.begin()+half_m, aux3_raw.end());
 
-        vcl_vector<double> thetas;
-        vcl_vector<double> phis;
-        vcl_vector<double> vis_double;
-        vcl_vector<double> obs_double;
+        std::vector<double> thetas;
+        std::vector<double> phis;
+        std::vector<double> vis_double;
+        std::vector<double> obs_double;
 
         for (unsigned i=0;i<Iobs.size();i++)
         {
@@ -211,8 +213,8 @@ class boxm2_synoptic_fucntion_1d_functor
             vec = vec.normalize();
             vis_double.push_back(vis[i]);
             obs_double.push_back(Iobs[i]);
-            phis.push_back(vcl_atan2(vec[1],vec[0]));
-            thetas.push_back(vcl_acos(vec[2]));
+            phis.push_back(std::atan2(vec[1],vec[0]));
+            thetas.push_back(std::acos(vec[2]));
         }
 
         brad_synoptic_function_1d f(thetas,phis,vis_double,obs_double);
@@ -221,7 +223,7 @@ class boxm2_synoptic_fucntion_1d_functor
 
          cubic_model[6] = boxm2_entropy_air::compute_entropy_air(Iobs,vis);
 #if 0
-        vcl_vector<double> amps;
+        std::vector<double> amps;
         f.compute_auto_correlation();
 
         f.auto_corr_freq_amplitudes(amps);
@@ -231,11 +233,11 @@ class boxm2_synoptic_fucntion_1d_functor
 
         cubic_model[6] = f.max_frequency_prob_density();
 #endif // 0
-        float ps = 1 - vcl_exp(-alpha*side_len);
+        float ps = 1 - std::exp(-alpha*side_len);
         float p = cubic_model[5] * ps /(cubic_model[5] * ps +cubic_model[6] * (1-ps) ) ;
 
         if (p<1)
-            alpha = -(vcl_log(1-p)) / side_len;
+            alpha = -(std::log(1-p)) / side_len;
         else
             alpha =10000;
         return true;
@@ -290,10 +292,10 @@ class boxm2_compute_phongs_and_empty_update_functor
     {
         boxm2_data<BOXM2_FLOAT8>::datatype & phongs_model=phongs_model_data_->data()[index];
         boxm2_data<BOXM2_AUX0>::datatype   & entropy_histo=entropy_histo_data_->data()[index];
-        vcl_vector<aux0_datatype>  aux0_raw   = str_cache_->get_next<BOXM2_AUX0>(id_, index);
-        vcl_vector<aux1_datatype>  aux1_raw   = str_cache_->get_next<BOXM2_AUX1>(id_, index);
-        vcl_vector<aux2_datatype>  aux2_raw   = str_cache_->get_next<BOXM2_AUX2>(id_, index);
-        vcl_vector<aux3_datatype>  aux3_raw   = str_cache_->get_next<BOXM2_AUX3>(id_, index);
+        std::vector<aux0_datatype>  aux0_raw   = str_cache_->get_next<BOXM2_AUX0>(id_, index);
+        std::vector<aux1_datatype>  aux1_raw   = str_cache_->get_next<BOXM2_AUX1>(id_, index);
+        std::vector<aux2_datatype>  aux2_raw   = str_cache_->get_next<BOXM2_AUX2>(id_, index);
+        std::vector<aux3_datatype>  aux3_raw   = str_cache_->get_next<BOXM2_AUX3>(id_, index);
 
         if (!is_leaf)
             return true;
@@ -314,11 +316,11 @@ class boxm2_compute_phongs_and_empty_update_functor
 
         int half_m = aux0_raw.size()/2;
 
-        vcl_vector<aux1_datatype> Iobs;
-        vcl_vector<aux2_datatype> vis;
-        vcl_vector<aux1_datatype> xdir;
-        vcl_vector<aux2_datatype> ydir;
-        vcl_vector<aux3_datatype> zdir;
+        std::vector<aux1_datatype> Iobs;
+        std::vector<aux2_datatype> vis;
+        std::vector<aux1_datatype> xdir;
+        std::vector<aux2_datatype> ydir;
+        std::vector<aux3_datatype> zdir;
 
         Iobs.insert(Iobs.begin(), aux1_raw.begin(), aux1_raw.begin()+half_m);
         vis.insert(vis.begin(), aux2_raw.begin(), aux2_raw.begin()+half_m);
@@ -328,7 +330,7 @@ class boxm2_compute_phongs_and_empty_update_functor
         zdir.insert(zdir.begin(), aux3_raw.begin()+half_m, aux3_raw.end());
 
 
-        vcl_vector<vnl_double_3>  viewing_dirs;
+        std::vector<vnl_double_3>  viewing_dirs;
         float sum_weights = 0.0f ;
         for (unsigned i=0;i<Iobs.size();i++)
         {
@@ -405,11 +407,11 @@ class boxm2_update_synoptic_probability
         if (!isleaf)
             return true;
 
-        float ps = 1 - vcl_exp(-alpha*side_len);
+        float ps = 1 - std::exp(-alpha*side_len);
         float p = cubic_model[5] * ps /(cubic_model[5] * ps +cubic_model[6] * (1-ps) ) ;
 
         if (p<1)
-            alpha = -(vcl_log(1-p)) / side_len;
+            alpha = -(std::log(1-p)) / side_len;
         else
             alpha =10000;
         return true;

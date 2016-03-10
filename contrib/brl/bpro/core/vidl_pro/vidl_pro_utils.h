@@ -11,17 +11,19 @@
 //   <none yet>
 // \endverbatim
 
-#include <vcl_string.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <string>
 
 class vidl_pro_utils
 {
  public:
-  static bool create_directory(vcl_string const& path, bool force = true);
+  static bool create_directory(std::string const& path, bool force = true);
 
-  static vcl_string image_sequence_path(vcl_string const& dir_path,
-                                        vcl_string const& sname,
+  static std::string image_sequence_path(std::string const& dir_path,
+                                        std::string const& sname,
                                         unsigned index,
-                                        vcl_string const& format = "tiff");
+                                        std::string const& format = "tiff");
 };
 
 #endif

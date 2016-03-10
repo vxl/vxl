@@ -17,8 +17,9 @@
 //   13-SEP-2002 K.Y.McGaul - Changed to Doxygen style documentation.
 // \endverbatim
 
-#include <vcl_string.h>
-#include <vcl_iosfwd.h>
+#include <string>
+#include <vcl_compiler.h>
+#include <iosfwd>
 #include <gtk/gtk.h>
 #include <vgui/vgui_statusbuf.h>
 #include <vgui/vgui_statusbar.h>
@@ -41,9 +42,9 @@ class vgui_gtk2_statusbar : public vgui_statusbar
   int write(const char* text);
 
   GtkWidget *widget;
-  vcl_string linebuffer;
+  std::string linebuffer;
   vgui_statusbuf* statusbuf;
-  vcl_ostream out;
+  std::ostream out;
 };
 
 #endif // vgui_gtk2_statusbar_h_

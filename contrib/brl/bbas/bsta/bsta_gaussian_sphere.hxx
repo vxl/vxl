@@ -6,7 +6,9 @@
 
 #include "bsta_gaussian_sphere.h"
 #include <vcl_cassert.h>
-#include <vcl_limits.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <limits>
 #include <vnl/vnl_erf.h>
 
 namespace
@@ -67,7 +69,7 @@ T
 bsta_gaussian_sphere<T,n>::sqr_mahalanobis_dist(const vector_& pt) const
 {
   if (var_<=T(0))
-    return vcl_numeric_limits<T>::infinity();
+    return std::numeric_limits<T>::infinity();
   vector_ d = bsta_gaussian<T,n>::mean_-pt;
   return bsta_gaussian_sphere_compute_dot<T,n,n>::value(d)/var_;
 }
@@ -83,9 +85,9 @@ struct bsta_gaussian_sphere_compute_probability_box
                        )
   {
     if (var<=T(0))
-      return vcl_numeric_limits<T>::infinity();
+      return std::numeric_limits<T>::infinity();
     double sigma_sq_2 = 2.0*static_cast<double>(var);
-    double s2 = 1/vcl_sqrt(sigma_sq_2);
+    double s2 = 1/std::sqrt(sigma_sq_2);
     double temp = vnl_erf(max_minus_mean[index]*s2);
     temp -= vnl_erf(min_minus_mean[index]*s2);
     T res = static_cast<T>(0.5*temp);
@@ -106,9 +108,9 @@ struct bsta_gaussian_sphere_compute_probability_box<T,vector_,n,0>
                         const T& var)
   {
     if (var<=T(0))
-      return vcl_numeric_limits<T>::infinity();
+      return std::numeric_limits<T>::infinity();
     double sigma_sq_2 = 2.0*static_cast<double>(var);
-    double s2 = 1/vcl_sqrt(sigma_sq_2);
+    double s2 = 1/std::sqrt(sigma_sq_2);
     double temp = vnl_erf(max_minus_mean[0]*s2);
     temp -= vnl_erf(min_minus_mean[0]*s2);
     return static_cast<T>(0.5*temp);
@@ -126,9 +128,9 @@ struct bsta_gaussian_sphere_compute_probability_box<T,vector_,1,0>
                         const T& var)
   {
     if (var<=T(0))
-      return vcl_numeric_limits<T>::infinity();
+      return std::numeric_limits<T>::infinity();
     double sigma_sq_2 = 2.0*static_cast<double>(var);
-    double s2 = 1/vcl_sqrt(sigma_sq_2);
+    double s2 = 1/std::sqrt(sigma_sq_2);
     double temp = vnl_erf(max_minus_mean*s2);
     temp -= vnl_erf(min_minus_mean*s2);
     return static_cast<T>(0.5*temp);
@@ -165,7 +167,7 @@ struct var_from_dist
 {
   static inline vector_ value(const T& var, vnl_random& rng)
   {
-    T s = (T)(vcl_sqrt(var)*rng.normal());
+    T s = (T)(std::sqrt(var)*rng.normal());
     vector_ res(T(0));
     res[index] = s;
     res += var_from_dist<T,vector_,n,index-1>::value(var, rng);
@@ -180,7 +182,7 @@ struct var_from_dist<T,vector_,n,0>
 {
   static inline vector_ value(const T& var, vnl_random& rng)
   {
-    T s = (T)(vcl_sqrt(var)*rng.normal());
+    T s = (T)(std::sqrt(var)*rng.normal());
     vector_ res(T(0));
     res[0] = s;
     return res;
@@ -195,7 +197,7 @@ struct var_from_dist<T,vector_,1,0>
 {
   static inline vector_ value(const T& var, vnl_random& rng)
   {
-    T s = (T)(vcl_sqrt(var)*rng.normal());
+    T s = (T)(std::sqrt(var)*rng.normal());
     vector_ res(s);
     return res;
   };

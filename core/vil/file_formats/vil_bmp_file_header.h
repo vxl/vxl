@@ -8,7 +8,8 @@
 // \file
 // \author fsm
 
-#include <vcl_iosfwd.h>
+#include <vcl_compiler.h>
+#include <iosfwd>
 class vil_stream;
 
 struct vil_bmp_file_header
@@ -22,7 +23,7 @@ struct vil_bmp_file_header
   vil_bmp_file_header();
   void read(vil_stream *);
   void write(vil_stream *) const;
-  void print(vcl_ostream &) const;
+  void print(std::ostream &) const;
   bool signature_valid() const;
 };
 

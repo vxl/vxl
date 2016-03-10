@@ -19,7 +19,7 @@ void vsl_b_read(vsl_b_istream &is, vgl_cylinder<T> & cyl);
 
 //: Print human readable summary of object to a stream
 template <class T>
-void vsl_print_summary(vcl_ostream& os, const vgl_cylinder<T> & cyl);
+void vsl_print_summary(std::ostream& os, const vgl_cylinder<T> & cyl);
 
 #define VGL_IO_CYLINDER_INSTANTIATE(T) extern "Please #include <vgl/io/vgl_io_cylinder.hxx>"
 

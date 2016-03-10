@@ -82,33 +82,33 @@ set_signature_inv_covar( vnl_matrix<double> const& covar )
 
 void
 rgrl_scale::
-write( vcl_ostream& os ) const
+write( std::ostream& os ) const
 {
   // write out geometric scale
   if( has_geometric_scale_ ) {
 
-    os << "GEOMETRIC_SCALE" << vcl_endl;
-    os << ((geo_scale_type_==prior)?"PRIOR":"ESTIMATE") << vcl_endl;
-    os << geometric_scale_ << vcl_endl;
+    os << "GEOMETRIC_SCALE" << std::endl;
+    os << ((geo_scale_type_==prior)?"PRIOR":"ESTIMATE") << std::endl;
+    os << geometric_scale_ << std::endl;
   }
 
   // write out signature covariance
   if( has_signature_inv_covar_ ) {
 
-    os << "SIGNATURE_INV_COVARIANCE" << vcl_endl;
+    os << "SIGNATURE_INV_COVARIANCE" << std::endl;
     os << signature_inv_covar_.rows() << " "
-      << signature_inv_covar_.cols() << vcl_endl;
-    os << signature_inv_covar_ << vcl_endl;
+      << signature_inv_covar_.cols() << std::endl;
+    os << signature_inv_covar_ << std::endl;
   }
 }
 
 bool
 rgrl_scale::
-read( vcl_istream& is )
+read( std::istream& is )
 {
-  vcl_streampos pos;
-  static const vcl_string white_chars = " \t\r";
-  vcl_string tag;
+  std::streampos pos;
+  static const std::string white_chars = " \t\r";
+  std::string tag;
   has_geometric_scale_ = false;
   has_signature_inv_covar_ = false;
 
@@ -116,30 +116,30 @@ read( vcl_istream& is )
   // and when the scales are not all read
   while( is && !is.eof() && (!has_geometric_scale_ || !has_signature_inv_covar_))  {
     pos = is.tellg();
-    vcl_getline( is, tag );
+    std::getline( is, tag );
 
-    if( tag.empty() || tag.find_first_not_of( white_chars ) == vcl_string::npos )
+    if( tag.empty() || tag.find_first_not_of( white_chars ) == std::string::npos )
       continue;
 
     // geometric scale
-    if( tag.find("GEOMETRIC_SCALE") != vcl_string::npos ) {
+    if( tag.find("GEOMETRIC_SCALE") != std::string::npos ) {
       if ( !has_geometric_scale_ && !has_signature_inv_covar_ ) {
         // get scale type
-        vcl_string type_str;
-        vcl_getline( is, type_str );
-        if( type_str.find("PRIOR") != vcl_string::npos )
+        std::string type_str;
+        std::getline( is, type_str );
+        if( type_str.find("PRIOR") != std::string::npos )
           geo_scale_type_ = prior;
-        else if( type_str.find("ESTIMATE") != vcl_string::npos )
+        else if( type_str.find("ESTIMATE") != std::string::npos )
           geo_scale_type_ = estimate;
         else {  // cannot handle
-          WarningMacro( "Cannot parse this line for geometric scale type: " << type_str << vcl_endl );
+          WarningMacro( "Cannot parse this line for geometric scale type: " << type_str << std::endl );
           return false;
         }
 
         // get scale
         is >> geometric_scale_;
         if( !is ) {
-          WarningMacro( "Cannot parse geometric scale." << vcl_endl );
+          WarningMacro( "Cannot parse geometric scale." << std::endl );
           return false;
         }
 
@@ -149,7 +149,7 @@ read( vcl_istream& is )
         is.seekg( pos );
         return true;
       }
-    } else if ( tag.find("SIGNATURE_INV_COVARIANCE") != vcl_string::npos ) {
+    } else if ( tag.find("SIGNATURE_INV_COVARIANCE") != std::string::npos ) {
       if( !has_signature_inv_covar_ ) {
         // signature covariance
         int nrow = -1;
@@ -158,7 +158,7 @@ read( vcl_istream& is )
         // get number of rows and cols
         is >> nrow >> ncol;
         if( !is || nrow<=0 || ncol<=0 ) {
-          WarningMacro( "Cannot parse the number of rows and columns." << vcl_endl );
+          WarningMacro( "Cannot parse the number of rows and columns." << std::endl );
           return false;
         }
 
@@ -166,7 +166,7 @@ read( vcl_istream& is )
         is >> signature_inv_covar_;
 
         if( !is ) {
-          WarningMacro( "Cannot parse signature covariance" << vcl_endl );
+          WarningMacro( "Cannot parse signature covariance" << std::endl );
           return false;
         }
 
@@ -177,7 +177,7 @@ read( vcl_istream& is )
         return true;
       }
     } else {// cannot handle
-      WarningMacro( "Cannot parse this line for tags: " << tag << vcl_endl );
+      WarningMacro( "Cannot parse this line for tags: " << tag << std::endl );
       return false;
     }
   }
@@ -187,16 +187,16 @@ read( vcl_istream& is )
 }
 
 //: output operator
-vcl_ostream&
-operator<<( vcl_ostream& ofs, rgrl_scale const& scale )
+std::ostream&
+operator<<( std::ostream& ofs, rgrl_scale const& scale )
 {
   scale.write(ofs);
   return ofs;
 }
 
 //: input operator
-vcl_istream&
-operator>>( vcl_istream& ifs, rgrl_scale& scale )
+std::istream&
+operator>>( std::istream& ifs, rgrl_scale& scale )
 {
   scale.read(ifs);
   return ifs;

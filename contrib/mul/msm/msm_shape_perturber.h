@@ -12,7 +12,9 @@
 #include <msm/msm_shape_instance.h>
 #include <msm/msm_aligner.h>
 
-#include <vcl_cstddef.h> // for std::size_t
+#include <vcl_compiler.h>
+#include <iostream>
+#include <cstddef> // for std::size_t
 
 class msm_shape_perturber
 {
@@ -34,8 +36,8 @@ class msm_shape_perturber
     vnl_vector<double> dparams_,  inv_dparams_;
     vnl_vector<double> all_, dall_, inv_dall_;
 
-    vcl_size_t n_pose_;
-    vcl_size_t n_params_;
+    std::size_t n_pose_;
+    std::size_t n_params_;
 
     double trunc_normal_sample( vnl_random& rand1, double sd, double max_d );
     double random_value( vnl_random& rand, double max_v, double rel_gauss_sd );
@@ -49,9 +51,9 @@ class msm_shape_perturber
     void set_model( const msm_shape_model& );
     void set_max_dp( const vnl_vector<double>&, const vnl_vector<double>& = vnl_vector<double>() );
     void set_rel_gauss( double );
-    void set_seed( vcl_size_t );
+    void set_seed( std::size_t );
 
-    vcl_size_t seed() const;
+    std::size_t seed() const;
     double rel_gauss() const;
 
     const vnl_vector<double>& max_d_pose() const;

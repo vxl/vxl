@@ -5,7 +5,9 @@
 #include <vsol/vsol_conic_2d.h>
 #include <vsol/vsol_conic_2d_sptr.h>
 #include <vsol/vsol_point_2d.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iostream>
 
 int main()
 {
@@ -14,6 +16,6 @@ int main()
   vsol_conic_2d_sptr ellipse = new vsol_conic_2d(vsol_point_2d(0,0), 20, 5, 0);
 
   // Distance to ellipse:
-  vcl_cout << "The closest distance from (10,10) to the ellipse is " << ellipse->distance(new vsol_point_2d(10,10)) << '\n';
+  std::cout << "The closest distance from (10,10) to the ellipse is " << ellipse->distance(new vsol_point_2d(10,10)) << '\n';
   return 0;
 }

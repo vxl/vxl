@@ -25,8 +25,10 @@
 
 #include <vsl/vsl_binary_io.h>
 
-#include <vcl_cmath.h>
-#include <vcl_vector.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <cmath>
+#include <vector>
 
 //:
 // Ignores Scale and Orientation computations and produces a sift descriptor at the scale of the image,
@@ -42,7 +44,7 @@ class bapl_dsift: public vbl_ref_count
   bool set_img( vil_image_view<float> const& img );
   bool set_img( vil_image_view<vxl_byte> const& img );
 
-  vcl_vector<float> dsift( unsigned const& key_x, unsigned const& key_y, float const& key_orient = 0.0f );
+  std::vector<float> dsift( unsigned const& key_x, unsigned const& key_y, float const& key_orient = 0.0f );
 
   vnl_vector<double> vnl_dsift( unsigned const& key_x, unsigned const& key_y, float const& key_orient = 0.0f );
 
@@ -55,7 +57,7 @@ class bapl_dsift: public vbl_ref_count
   vil_image_view<float> grad_orient_;
   bool grad_valid_;
 
-  inline static float gaussian( float const& x, float const& y ){return vcl_exp(-(x*x+y*y)/128.0f);}
+  inline static float gaussian( float const& x, float const& y ){return std::exp(-(x*x+y*y)/128.0f);}
 };
 
 #endif //BAPL_DSIFT_H_

@@ -11,7 +11,9 @@
 //
 //-----------------------------------------------------------------------------
 #include <gevd/gevd_param_mixin.h>
-#include <vcl_iosfwd.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iosfwd>
 
 
 class sdet_third_order_edge_det_params : public gevd_param_mixin
@@ -27,7 +29,7 @@ class sdet_third_order_edge_det_params : public gevd_param_mixin
 
   bool SanityCheck();
   friend
-    vcl_ostream& operator<<(vcl_ostream&,const sdet_third_order_edge_det_params& dp);
+    std::ostream& operator<<(std::ostream&,const sdet_third_order_edge_det_params& dp);
  protected:
   void InitParams(double sigma, double thresh, unsigned interp_factor,
                   unsigned pfit_type, unsigned grad_op, unsigned conv_algo, bool adapt_thresh);

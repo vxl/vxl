@@ -1,5 +1,7 @@
 #include <testlib/testlib_test.h>
-#include <vcl_vector.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <vector>
 #include <bbas/volm/volm_camera_space.h>
 
 static void test_camera_space()
@@ -8,7 +10,7 @@ static void test_camera_space()
   double tilt_mid=90.0, tilt_radius=20.0, tilt_inc=10.0;
   double roll_mid=0.0,  roll_radius=3.0,  roll_inc=3.0;
   double top_fov_vals[] = {3.0,  4.0, 5.0, 12.0, 17.0, 18.0,19.0, 20.0, 24.0};
-  vcl_vector<double> fovs(top_fov_vals, top_fov_vals + 9);
+  std::vector<double> fovs(top_fov_vals, top_fov_vals + 9);
   double altitude = 1.6;
   unsigned ni = 1280, nj = 760;
   volm_camera_space csp(fovs, altitude, ni, nj,
@@ -30,7 +32,7 @@ static void test_camera_space()
                    de_head_index, de_tilt_index);
   unsigned de_indx = cit->cam_index(roll_index,  fov_index,
                                     head_index, tilt_index);
-  vcl_cout << "(index " << indx << ' ' << de_indx << ")\n"
+  std::cout << "(index " << indx << ' ' << de_indx << ")\n"
            << '(' << roll_index << ' ' << fov_index << ' '
            << head_index << ' ' << tilt_index << ")\n"
            << '(' << de_roll_index << ' ' << de_fov_index << ' '
@@ -44,8 +46,8 @@ static void test_camera_space()
     (head_index ==de_head_index)&&(tilt_index == de_tilt_index);
   TEST("camera iterator and index transforms", good, true);
   // test camera angles
-  double er = vcl_fabs(ca.roll_-0.0) + vcl_fabs(ca.top_fov_ - 5.0);
-  er += vcl_fabs(ca.heading_-90.0) + vcl_fabs(ca.tilt_-80.0);
+  double er = std::fabs(ca.roll_-0.0) + std::fabs(ca.top_fov_ - 5.0);
+  er += std::fabs(ca.heading_-90.0) + std::fabs(ca.tilt_-80.0);
   TEST_NEAR("camera angles", er, 0.0, 0.01);
   //test generation of full camera space
   csp.generate_full_camera_index_space();
@@ -60,8 +62,8 @@ static void test_camera_space()
   volm_camera_space* csp_in;
   vsl_b_read(is, csp_in);
   cam_angles in_angs = csp_in->camera_angles(indx);
-  double er_in = vcl_fabs(in_angs.roll_-0.0) + vcl_fabs(in_angs.top_fov_ - 5.0);
-  er_in += vcl_fabs(in_angs.heading_-90.0) + vcl_fabs(in_angs.tilt_-80.0);
+  double er_in = std::fabs(in_angs.roll_-0.0) + std::fabs(in_angs.top_fov_ - 5.0);
+  er_in += std::fabs(in_angs.heading_-90.0) + std::fabs(in_angs.tilt_-80.0);
   TEST_NEAR("camera angles from binary", er_in, 0.0, 0.01);
   TEST("number of valid indices", (csp_in->valid_indices().size()), 1079);
 }

@@ -72,7 +72,7 @@ static void test_image_2d_byte_functions()
         image0.image()(i,j,p)=vxl_byte(i+10*j+100*p);
 
   // Test external functions
-  vcl_cout<<"Testing vimt_crop\n";
+  std::cout<<"Testing vimt_crop\n";
   vimt_image_2d_of<vxl_byte> image1 = vimt_crop(image0,1,3,2,4);
   TEST("Origin",image1.image()(0,0),image0.image()(1,2));
   TEST("Width",image1.image().ni(),3);

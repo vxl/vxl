@@ -3,15 +3,17 @@
 
 #include "brip_max_scale_response.h"
 #include <vcl_cassert.h>
-#include <vcl_cmath.h>
-#include <vcl_iomanip.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <cmath>
+#include <iomanip>
 #include <vil/vil_convert.h>
 #include <vil/vil_resample_bilin.h>
 #include <brip/brip_vil_float_ops.h>
 
 template <class T>
 brip_max_scale_response<T>::
-brip_max_scale_response( vcl_vector<vil_image_view<T> > const& pyramid)
+brip_max_scale_response( std::vector<vil_image_view<T> > const& pyramid)
 {
   unsigned nlevels = pyramid.size();
   assert(nlevels>0);
@@ -26,7 +28,7 @@ brip_max_scale_response( vcl_vector<vil_image_view<T> > const& pyramid)
   grey_pyramid_.push_back(lview);
   unsigned ni = pyramid[0].ni(), nj = pyramid[0].nj();
   float nif = static_cast<float>(ni), njf = static_cast<float>(nj);
-  float diag0 = vcl_sqrt(nif*nif + njf*njf);
+  float diag0 = std::sqrt(nif*nif + njf*njf);
   for (unsigned level = 1; level<nlevels; ++level){
     if (pyramid[level].nplanes()>1)
       vil_convert_planes_to_grey(pyramid[level], lview);
@@ -37,7 +39,7 @@ brip_max_scale_response( vcl_vector<vil_image_view<T> > const& pyramid)
     grey_pyramid_.push_back(lview);
     ni = lview.ni(); nj = lview.nj();
     nif = static_cast<float>(ni); njf = static_cast<float>(nj);
-    float diag = vcl_sqrt(nif*nif + njf*njf);
+    float diag = std::sqrt(nif*nif + njf*njf);
     float scale = diag0/diag;
     pyramid_scales_.push_back(scale);
   }
@@ -84,10 +86,10 @@ brip_max_scale_response( vil_image_view<T> const& base_image,
 }
 
 template <class T>
-vcl_vector<vil_image_view<T> > brip_max_scale_response<T>::
+std::vector<vil_image_view<T> > brip_max_scale_response<T>::
 image_pyramid(vil_image_view<T> const& base)
 {
-  vcl_vector<vil_image_view<T> > temp;
+  std::vector<vil_image_view<T> > temp;
   temp.push_back(base);
   unsigned nlevels = pyramid_scales_.size();
   assert(nlevels>0);
@@ -123,11 +125,11 @@ void brip_max_scale_response<T>::compute_trace_pyramid()
     vil_image_view<float> temp = grey_pyramid_[level];
     vil_image_view<float> smooth = brip_vil_float_ops::gaussian(temp, 0.75,"none", temp(0,0));
 #ifdef DEBUG
-    vcl_cout << "Input at level " << level << '\n';
+    std::cout << "Input at level " << level << '\n';
     for (unsigned j = 0; j<smooth.nj(); ++j){
       for (unsigned i = 0; i<smooth.nj(); ++i)
-        vcl_cout << vcl_setprecision(2) << vcl_fixed << smooth(i,j) << ' ';
-      vcl_cout <<'\n';
+        std::cout << std::setprecision(2) << std::fixed << smooth(i,j) << ' ';
+      std::cout <<'\n';
     }
 #endif
     const unsigned radius = 2;
@@ -135,11 +137,11 @@ void brip_max_scale_response<T>::compute_trace_pyramid()
       brip_vil_float_ops::trace_grad_matrix_NxN(smooth, radius);
     trace_.push_back(tr);
 #ifdef DEBUG
-    vcl_cout << "Level " << level << '\n';
+    std::cout << "Level " << level << '\n';
     for (unsigned j = 0; j<tr.nj(); ++j){
       for (unsigned i = 0; i<tr.nj(); ++i)
-        vcl_cout << 10*tr(i,j) << ' ';
-      vcl_cout <<'\n';
+        std::cout << 10*tr(i,j) << ' ';
+      std::cout <<'\n';
     }
 #endif
   }
@@ -156,20 +158,20 @@ static unsigned loci(unsigned i, float scale_ratio)
 }
 
 template <class T>
-vcl_vector<vil_image_view<float> >
+std::vector<vil_image_view<float> >
 brip_max_scale_response<T>::scale_pyramid()
 {
-  vcl_vector<vil_image_view<float> > temp, junk;
+  std::vector<vil_image_view<float> > temp, junk;
   if (!trace_valid_)
     return temp;
   vil_image_view<float> sbase = this->scale_base();
   unsigned ni = sbase.ni(), nj = sbase.nj();
 #ifdef DEBUG
-  vcl_cout << "Printing scale base\n";
+  std::cout << "Printing scale base\n";
   for (unsigned j = 0; j<nj; ++j){
     for (unsigned i = 0; i<ni; ++i)
-      vcl_cout << static_cast<unsigned>(sbase(i,j)) << ' ';
-    vcl_cout <<'\n';
+      std::cout << static_cast<unsigned>(sbase(i,j)) << ' ';
+    std::cout <<'\n';
   }
 #endif
   unsigned nlevels = pyramid_scales_.size();
@@ -200,13 +202,13 @@ brip_max_scale_response<T>::scale_pyramid()
 
 
 template <class T>
-vcl_vector<vil_image_view<vxl_byte> >
+std::vector<vil_image_view<vxl_byte> >
 brip_max_scale_response<T>::mask_pyramid()
 {
-  vcl_vector<vil_image_view<vxl_byte> > temp;
+  std::vector<vil_image_view<vxl_byte> > temp;
   if (!trace_valid_)
     return temp;
-  vcl_vector<vil_image_view<float> > scales = this->scale_pyramid();
+  std::vector<vil_image_view<float> > scales = this->scale_pyramid();
   unsigned nlevels = scales.size();
   for (unsigned level = 0; level<nlevels; ++level)
   {

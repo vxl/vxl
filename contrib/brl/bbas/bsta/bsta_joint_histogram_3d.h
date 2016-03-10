@@ -15,8 +15,10 @@
 // \endverbatim
 
 #include <vbl/vbl_array_3d.h>
-#include <vcl_vector.h>
-#include <vcl_iostream.h>
+#include <vector>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iostream>
 #include <vcl_cassert.h>
 #include <bsta/bsta_joint_histogram_3d_base.h>
 template <class T> class bsta_joint_histogram_3d :
@@ -153,14 +155,14 @@ public bsta_joint_histogram_3d_base
   void bin_max_count(unsigned& ia, unsigned& ib, unsigned& ic) const;
 
   // prints only cells with non-zero probability
-  void print(vcl_ostream& os = vcl_cout) const;
+  void print(std::ostream& os = std::cout) const;
 
   //: If relative_probability_scale = true, then the largest probability sphere will occupy one histogram cell. Otherwise only p=1 will occupy a full cell.
   // bin axis lines: a = red, b = green, c = blue
   // color arguments define color of bin probability spheres
-  void print_to_vrml(vcl_ostream& os, bool relative_prob_scale = true,
+  void print_to_vrml(std::ostream& os, bool relative_prob_scale = true,
                      T red = T(1), T green = T(0), T blue = T(0)) const;
-  void print_to_text(vcl_ostream& os) const;
+  void print_to_text(std::ostream& os) const;
 
   //:restore to default constructor state
   void clear();

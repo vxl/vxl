@@ -84,8 +84,8 @@ class bgui_image_utils
 
   vil_image_resource_sptr image_;
   vsol_polygon_2d_sptr poly_;
-  vcl_vector<bsta_histogram<double> > hist_;
-  vcl_vector<vcl_vector<double> > data_;
+  std::vector<bsta_histogram<double> > hist_;
+  std::vector<std::vector<double> > data_;
 };
 
 

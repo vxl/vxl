@@ -15,14 +15,16 @@
 
 #include <vnl/vnl_vector.h>
 
-#include <vcl_iosfwd.h>
-#include <vcl_vector.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iosfwd>
+#include <vector>
 
 class rsdl_point
 {
  public:
   //: Used until we support member templates.
-  typedef vcl_vector<double>::const_iterator const_iterator;
+  typedef std::vector<double>::const_iterator const_iterator;
 
  public:
   //: Provided only for STL.
@@ -98,6 +100,6 @@ class rsdl_point
   double *data_;
 };
 
-vcl_ostream& operator<< ( vcl_ostream& ostr, const rsdl_point& pt );
+std::ostream& operator<< ( std::ostream& ostr, const rsdl_point& pt );
 
 #endif

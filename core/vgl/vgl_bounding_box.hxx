@@ -28,8 +28,8 @@ vgl_box_3d<T>  vgl_bounding_box(vgl_pointset_3d<T> const& ptset){
 template <class T>
 vgl_box_3d<T>  vgl_bounding_box(vgl_cubic_spline_3d<T> const& spline){
   vgl_box_3d<T> ret;
-  vcl_vector<vgl_point_3d<T> > knots = spline.knots();
-  for(typename vcl_vector<vgl_point_3d<T> >::const_iterator kit = knots.begin();
+  std::vector<vgl_point_3d<T> > knots = spline.knots();
+  for(typename std::vector<vgl_point_3d<T> >::const_iterator kit = knots.begin();
       kit != knots.end(); ++kit)
     ret.add(*kit);
   return ret;

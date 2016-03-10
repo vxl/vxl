@@ -5,10 +5,11 @@
 //        Useful to try it on different platforms to how different optimisers perform.
 // \author Tim Cootes
 
-#include <vcl_iostream.h>
+#include <iostream>
 #include <vxl_config.h> // for vxl_byte
 #include <vil/vil_image_view.h>
-#include <vcl_ctime.h>
+#include <vcl_compiler.h>
+#include <ctime>
 #include <mbl/mbl_stats_1d.h>
 #include <vcl_cassert.h>
 
@@ -19,7 +20,7 @@ const unsigned NP=3;
 template <class imT>
 double method1(vil_image_view<imT>& image, int n_loops)
 {
-  vcl_time_t t0=vcl_clock();
+  std::time_t t0=std::clock();
   for (int n=0;n<n_loops;++n)
   {
     for (unsigned p=0;p<image.nplanes();++p)
@@ -27,14 +28,14 @@ double method1(vil_image_view<imT>& image, int n_loops)
         for (unsigned i=0;i<image.ni();++i)
           image(i,j,p) = imT(i+j+3*p);
   }
-  vcl_time_t t1=vcl_clock();
+  std::time_t t1=std::clock();
   return 1000000*(double(t1)-double(t0))/(n_loops*CLOCKS_PER_SEC);
 }
 
 template <class imT>
 double method2(vil_image_view<imT>& image, int n_loops)
 {
-  vcl_time_t t0=vcl_clock();
+  std::time_t t0=std::clock();
   for (int n=0;n<n_loops;++n)
   {
     unsigned ni=image.ni(),nj=image.nj(),np=image.nplanes();
@@ -43,14 +44,14 @@ double method2(vil_image_view<imT>& image, int n_loops)
         for (unsigned i=0;i<ni;++i)
           image(i,j,p) = imT(i+j+3*p);
   }
-  vcl_time_t t1=vcl_clock();
+  std::time_t t1=std::clock();
   return 1000000*(double(t1)-double(t0))/(n_loops*CLOCKS_PER_SEC);
 }
 
 template <class imT>
 double method3(vil_image_view<imT>& image, int n_loops)
 {
-  vcl_time_t t0=vcl_clock();
+  std::time_t t0=std::clock();
   for (int n=0;n<n_loops;++n)
   {
     imT* plane = image.top_left_ptr();
@@ -65,18 +66,18 @@ double method3(vil_image_view<imT>& image, int n_loops)
       }
     }
   }
-  vcl_time_t t1=vcl_clock();
+  std::time_t t1=std::clock();
   return 1000000*(double(t1)-double(t0))/(n_loops*CLOCKS_PER_SEC);
 }
 
 template <class imT>
 double method4(vil_image_view<imT>& image, int n_loops)
 {
-  vcl_time_t t0=vcl_clock();
+  std::time_t t0=std::clock();
   for (int n=0;n<n_loops;++n)
   {
    unsigned ni=image.ni(),nj=image.nj(),np=image.nplanes();
-   vcl_ptrdiff_t istep=image.istep(),jstep=image.jstep(),pstep=image.planestep();
+   std::ptrdiff_t istep=image.istep(),jstep=image.jstep(),pstep=image.planestep();
    imT* plane = image.top_left_ptr();
    for (unsigned p=0;p<np;++p,plane += pstep)
    {
@@ -89,18 +90,18 @@ double method4(vil_image_view<imT>& image, int n_loops)
     }
    }
   }
-  vcl_time_t t1=vcl_clock();
+  std::time_t t1=std::clock();
   return 1000000*(double(t1)-double(t0))/(n_loops*CLOCKS_PER_SEC);
 }
 
 template <class imT>
 double method5(vil_image_view<imT>& image, int n_loops)
 {
-  vcl_time_t t0=vcl_clock();
+  std::time_t t0=std::clock();
   for (int n=0;n<n_loops;++n)
   {
     unsigned ni=image.ni(),nj=image.nj(),np=image.nplanes();
-    vcl_ptrdiff_t istep=image.istep(),jstep=image.jstep(),pstep=image.planestep();
+    std::ptrdiff_t istep=image.istep(),jstep=image.jstep(),pstep=image.planestep();
     imT* plane = image.top_left_ptr();
     for (unsigned p=0;p<np;++p,plane += pstep)
     {
@@ -113,7 +114,7 @@ double method5(vil_image_view<imT>& image, int n_loops)
       }
     }
   }
-  vcl_time_t t1=vcl_clock();
+  std::time_t t1=std::clock();
   return 1000000*(double(t1)-double(t0))/(n_loops*CLOCKS_PER_SEC);
 }
 
@@ -122,11 +123,11 @@ double method6(vil_image_view<imT>& image, int n_loops)
 {
   assert(image.istep() == 1);
   // Uses row[i] to simulate lookup type access used in original vil1 images
-  vcl_time_t t0=vcl_clock();
+  std::time_t t0=std::clock();
   for (int n=0;n<n_loops;++n)
   {
    unsigned ni=image.ni(),nj=image.nj(),np=image.nplanes();
-   vcl_ptrdiff_t istep=image.istep(),jstep=image.jstep(),pstep=image.planestep();
+   std::ptrdiff_t istep=image.istep(),jstep=image.jstep(),pstep=image.planestep();
    imT* plane = image.top_left_ptr();
    for (unsigned p=0;p<np;++p,plane += pstep)
    {
@@ -138,7 +139,7 @@ double method6(vil_image_view<imT>& image, int n_loops)
     }
    }
   }
-  vcl_time_t t1=vcl_clock();
+  std::time_t t1=std::clock();
   return 1000000*(double(t1)-double(t0))/(n_loops*CLOCKS_PER_SEC);
 }
 
@@ -157,7 +158,7 @@ double method7(vil_image_view<imT>& image, int n_loops)
         raster_ptrs[p][j] = & image(0,j,p);
   }
 
-  vcl_time_t t0=vcl_clock();
+  std::time_t t0=std::clock();
   for (int n=0;n<n_loops;++n)
   {
    unsigned nj=image.nj();
@@ -170,7 +171,7 @@ double method7(vil_image_view<imT>& image, int n_loops)
     }
    }
   }
-  vcl_time_t t1=vcl_clock();
+  std::time_t t1=std::clock();
   return 1000000*(double(t1)-double(t0))/(n_loops*CLOCKS_PER_SEC);
 }
 
@@ -179,11 +180,11 @@ double method8(vil_image_view<imT>& image, int n_loops)
 {
   assert(image.istep() == 1);
 
-  vcl_time_t t0=vcl_clock();
+  std::time_t t0=std::clock();
   for (int n=0;n<n_loops;++n)
   {
    unsigned ni=image.ni(),nj=image.nj(),np=image.nplanes();
-   vcl_ptrdiff_t istep=image.istep(),jstep=image.jstep(),pstep=image.planestep();
+   std::ptrdiff_t istep=image.istep(),jstep=image.jstep(),pstep=image.planestep();
    imT* plane = image.top_left_ptr();
    for (unsigned p=0;p<np;++p,plane += pstep)
    {
@@ -195,7 +196,7 @@ double method8(vil_image_view<imT>& image, int n_loops)
     }
    }
   }
-  vcl_time_t t1=vcl_clock();
+  std::time_t t1=std::clock();
   return 1000000*(double(t1)-double(t0))/(n_loops*CLOCKS_PER_SEC);
 }
 
@@ -221,7 +222,7 @@ void compute_stats(int i, vil_image_view<imT>& image, int n_loops)
 {
   mbl_stats_1d stats;
   for (int j=0;j<10;++j) stats.obs(method(i,image,n_loops));
-  vcl_cout<<"Method "<<i<<") Mean: "<<int(stats.mean()+0.5)
+  std::cout<<"Method "<<i<<") Mean: "<<int(stats.mean()+0.5)
           <<"us  +/-"<<int(0.5*(stats.max()-stats.min())+0.5)<<"us\n";
 }
 
@@ -231,14 +232,14 @@ int main(int argc, char** argv)
   vil_image_view<float>    float_image(NI,NJ,NP);
   int n_loops = 100;
 
-  vcl_cout<<"Times to fill a "<<NI<<" x "<<NJ
+  std::cout<<"Times to fill a "<<NI<<" x "<<NJ
           <<" image of "<<NP<<" planes (in microsecs) [Range= 0.5(max-min)]\n"
           <<"Images of BYTE\n";
   for (int i=1;i<=8;++i)
   {
     compute_stats(i,byte_image,n_loops);
   }
-  vcl_cout<<"Images of FLOAT\n";
+  std::cout<<"Images of FLOAT\n";
   for (int i=1;i<=8;++i)
   {
     compute_stats(i,float_image,n_loops);

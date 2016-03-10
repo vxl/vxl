@@ -4,8 +4,10 @@
 // \file
 #include "bsta_spherical_histogram.h"
 
-#include <vcl_cmath.h> // for log()
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <cmath> // for log()
+#include <iostream>
 #include <vcl_cassert.h>
 #include <vnl/vnl_math.h>
 #include <vnl/vnl_vector.h>
@@ -193,10 +195,10 @@ convert_to_cartesian(T azimuth, T elevation, T& x, T& y, T& z) const
   if (el_poles_ == B_90_90)
     el = -el + static_cast<T>(vnl_math::pi/2.0);
   //convert to cartesian
-  T s = vcl_sin(el);
-  x = s*vcl_cos(az);
-  y = s*vcl_sin(az);
-  z = vcl_cos(el);
+  T s = std::sin(el);
+  x = s*std::cos(az);
+  y = s*std::sin(az);
+  z = std::cos(el);
 }
 
 template <class T>
@@ -206,7 +208,7 @@ convert_to_spherical(T x, T y, T z, T& azimuth, T& elevation) const
   //internal representation is the standard spherical coordinate system
   //azimuth 0-360, elevation 0-180 with North Pole elevation = 0
 
-  if (vcl_fabs(z-T(1))<1e-8) {//essentially at the North Pole
+  if (std::fabs(z-T(1))<1e-8) {//essentially at the North Pole
     azimuth = T(0);//units don't matter since azimuth is ambiguous
     if (el_poles_ == B_90_90)
       elevation = T(90);
@@ -216,7 +218,7 @@ convert_to_spherical(T x, T y, T z, T& azimuth, T& elevation) const
       elevation = deg_to_rad(elevation);
     return;
   }
-  if (vcl_fabs(z+T(1))<1e-8) {//essentially at the South Pole
+  if (std::fabs(z+T(1))<1e-8) {//essentially at the South Pole
     azimuth = T(0);//units don't matter since azimuth is ambiguous
     if (el_poles_ == B_90_90)
       elevation = -T(90);
@@ -226,11 +228,11 @@ convert_to_spherical(T x, T y, T z, T& azimuth, T& elevation) const
       elevation = deg_to_rad(elevation);
     return;
   }
-  elevation = vcl_acos(z);
-  T s = vcl_sin(elevation);
+  elevation = std::acos(z);
+  T s = std::sin(elevation);
   T xa = x/s;
   T ya = y/s;
-  azimuth = vcl_atan2(ya, xa);//returns angles with +-180 branch cut
+  azimuth = std::atan2(ya, xa);//returns angles with +-180 branch cut
   if (az_branch_cut_ == B_0_360)
     if (azimuth<0) azimuth += static_cast<T>(vnl_math::twopi);
   if (el_poles_ == B_90_90)
@@ -355,7 +357,7 @@ upcount_weighted_by_area(T azimuth, T elevation, T mag)
 {
   int el_indx = elevation_index(elevation);
   double ecnt = elevation_center(el_indx);
-  T s = static_cast<T>(vcl_fabs(vcl_sin(ecnt)));
+  T s = static_cast<T>(std::fabs(std::sin(ecnt)));
   if (s>0)
     mag /= s;
   upcount(azimuth, elevation, mag);
@@ -366,7 +368,7 @@ T bsta_spherical_histogram<T>::total_counts()
 {
   if (!total_counts_valid_) {
     total_counts_ = T(0);
-    typename vcl_map<int, T>::iterator cit = counts_.begin();
+    typename std::map<int, T>::iterator cit = counts_.begin();
     for (; cit != counts_.end(); ++cit)
       total_counts_ += (*cit).second;
     total_counts_valid_ = true;
@@ -404,7 +406,7 @@ void bsta_spherical_histogram<T>::mean(T& mean_az, T& mean_el)
       mean_x  += pc*x;      mean_y  += pc*y;       mean_z  += pc*z;
     }
   }
-  double length = vcl_sqrt(mean_x*mean_x + mean_y*mean_y + mean_z*mean_z);
+  double length = std::sqrt(mean_x*mean_x + mean_y*mean_y + mean_z*mean_z);
   if (length<1.0e-8) {
     mean_az = 0;
     mean_el = 0;
@@ -433,7 +435,7 @@ vnl_matrix_fixed<T, 2, 2> bsta_spherical_histogram<T>::covariance_matrix()
       mean_x  += pc*x;      mean_y  += pc*y;  mean_z  += pc*z;
     }
   }
-  double length = vcl_sqrt(mean_x*mean_x + mean_y*mean_y + mean_z*mean_z);
+  double length = std::sqrt(mean_x*mean_x + mean_y*mean_y + mean_z*mean_z);
   if (length<1.0e-8)
     return vnl_matrix_fixed<T, 2 ,2> ();
   mean_x /= length;   mean_y /= length;   mean_z /= length;
@@ -465,15 +467,15 @@ void bsta_spherical_histogram<T>::std_dev(T& std_dev_az, T& std_dev_el)
 {
   vnl_matrix_fixed<T, 2, 2> covar = covariance_matrix();
   double var_az = covar[0][0], var_el = covar[1][1];
-  std_dev_az = static_cast<T>(vcl_sqrt(var_az));
-  std_dev_el = static_cast<T>(vcl_sqrt(var_el));
+  std_dev_az = static_cast<T>(std::sqrt(var_az));
+  std_dev_el = static_cast<T>(std::sqrt(var_el));
 }
 
 template <class T>
-vcl_vector<int> bsta_spherical_histogram<T>::
+std::vector<int> bsta_spherical_histogram<T>::
 bins_intersecting_cone(T center_az, T center_el, T cone_half_angle)
 {
-  vcl_vector<int> ret;
+  std::vector<int> ret;
   T xc, yc ,zc;
   convert_to_cartesian(center_az, center_el, xc, yc, zc);
   vnl_vector<double> cone_axis(3);
@@ -488,7 +490,7 @@ bins_intersecting_cone(T center_az, T center_el, T cone_half_angle)
       double ang = angle(cone_axis, bin_vector);
       if (units_ == DEG)
         ang = rad_to_deg(static_cast<T>(ang));
-      if (vcl_fabs(ang)<=cone_half_angle)
+      if (std::fabs(ang)<=cone_half_angle)
         ret.push_back(linear_index(az, el));
     }
   return ret;
@@ -496,7 +498,7 @@ bins_intersecting_cone(T center_az, T center_el, T cone_half_angle)
 
 template <class T>
 void bsta_spherical_histogram<T>::
-write_counts_with_interval(vcl_ostream& os, int azimuth_index,
+write_counts_with_interval(std::ostream& os, int azimuth_index,
                            int elevation_index) {
   T az_start, az_range, el_start, el_range;
   int lidx = linear_index(azimuth_index,elevation_index);
@@ -511,7 +513,7 @@ write_counts_with_interval(vcl_ostream& os, int azimuth_index,
 
 template <class T>
 void bsta_spherical_histogram<T>::
-write_counts_with_center(vcl_ostream& os, int azimuth_index,
+write_counts_with_center(std::ostream& os, int azimuth_index,
                          int elevation_index) {
   int lidx = linear_index(azimuth_index,elevation_index);
   T cnts = counts_[lidx];
@@ -522,7 +524,7 @@ write_counts_with_center(vcl_ostream& os, int azimuth_index,
 }
 
 template <class T>
-void bsta_spherical_histogram<T>::print_to_text(vcl_ostream& os)
+void bsta_spherical_histogram<T>::print_to_text(std::ostream& os)
 {
   for (unsigned el = 0; el<n_elevation(); ++el)
     for (unsigned az = 0; az<n_azimuth(); ++az)
@@ -530,7 +532,7 @@ void bsta_spherical_histogram<T>::print_to_text(vcl_ostream& os)
 }
 
 template <class T>
-void bsta_spherical_histogram<T>::print_to_vrml(vcl_ostream& os,
+void bsta_spherical_histogram<T>::print_to_vrml(std::ostream& os,
                                                 T transparency)
 {
   os << "#VRML V2.0 utf8\n"
@@ -598,7 +600,7 @@ void bsta_spherical_histogram<T>::print_to_vrml(vcl_ostream& os,
 
 //: Write to stream
 template <class T>
-vcl_ostream& operator<<(vcl_ostream& s, bsta_spherical_histogram<T> const& h)
+std::ostream& operator<<(std::ostream& s, bsta_spherical_histogram<T> const& h)
 {
   bsta_spherical_histogram<T>& nch = const_cast<bsta_spherical_histogram<T>&>(h);
   s << "bsta_spherical_histogram<T> ==>\n";
@@ -643,7 +645,7 @@ vcl_ostream& operator<<(vcl_ostream& s, bsta_spherical_histogram<T> const& h)
 
 //: Read from stream
 template <class T>
-vcl_istream& operator>>(vcl_istream& is, bsta_spherical_histogram<T>& h)
+std::istream& operator>>(std::istream& is, bsta_spherical_histogram<T>& h)
 {
   return is;
 }
@@ -651,7 +653,7 @@ vcl_istream& operator>>(vcl_istream& is, bsta_spherical_histogram<T>& h)
 #undef BSTA_SPHERICAL_HISTOGRAM_INSTANTIATE
 #define BSTA_SPHERICAL_HISTOGRAM_INSTANTIATE(T) \
 template class bsta_spherical_histogram<T >;\
-template vcl_istream& operator>>(vcl_istream&, bsta_spherical_histogram<T >&);\
-template vcl_ostream& operator<<(vcl_ostream&, bsta_spherical_histogram<T > const&)
+template std::istream& operator>>(std::istream&, bsta_spherical_histogram<T >&);\
+template std::ostream& operator<<(std::ostream&, bsta_spherical_histogram<T > const&)
 
 #endif // bsta_spherical_histogram_hxx_

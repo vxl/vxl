@@ -20,8 +20,10 @@
 #include <vgl/vgl_box_3d.h>
 #include <vnl/vnl_vector_fixed.h>
 #include <vsl/vsl_binary_io.h>
-#include <vcl_cmath.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <cmath>
+#include <iostream>
 
 template <class T_loc, class T_data>
 class boct_tree
@@ -83,8 +85,8 @@ class boct_tree
   template<class T_data_to>
   boct_tree<T_loc,T_data_to>* clone_to_type() {
 
-    vcl_vector<boct_tree_cell<T_loc, T_data>*> cells = leaf_cells();
-    vcl_vector<boct_tree_cell<T_loc, T_data_to> > cloned_cells;
+    std::vector<boct_tree_cell<T_loc, T_data>*> cells = leaf_cells();
+    std::vector<boct_tree_cell<T_loc, T_data_to> > cloned_cells;
     for (unsigned i=0; i<cells.size(); i++) {
       cloned_cells.push_back(boct_tree_cell<T_loc, T_data_to>(cells[i]->code_));
     }
@@ -101,8 +103,8 @@ class boct_tree
   template<class T_data_to>
   boct_tree<T_loc,T_data_to>* clone_to_type(short level, boct_tree<T_loc, bool>* valid_tree= NULL)
   {
-    vcl_vector<boct_tree_cell<T_loc, T_data>*> cells = leaf_cells_at_level(level);
-    vcl_vector<boct_tree_cell<T_loc, T_data_to> > cloned_cells;
+    std::vector<boct_tree_cell<T_loc, T_data>*> cells = leaf_cells_at_level(level);
+    std::vector<boct_tree_cell<T_loc, T_data_to> > cloned_cells;
 
     if (!valid_tree) {
       for (unsigned i=0; i<cells.size(); i++) {
@@ -110,7 +112,7 @@ class boct_tree
       }
     }
     else {
-      vcl_vector<boct_tree_cell<T_loc, T_data>*> valid_cells = valid_tree->leaf_cells_at_level(level);
+      std::vector<boct_tree_cell<T_loc, T_data>*> valid_cells = valid_tree->leaf_cells_at_level(level);
       for (unsigned i=0; i<cells.size(); i++) {
         if (valid_cells[i]->data())
           cloned_cells.push_back(boct_tree_cell<T_loc, T_data_to>(cells[i]->code_));
@@ -129,8 +131,8 @@ class boct_tree
   template <unsigned DIM>
   boct_tree<T_loc,vnl_vector_fixed<T_data, DIM> >* clone_to_vector() {
 
-    vcl_vector<boct_tree_cell<T_loc, T_data>*> cells = leaf_cells();
-    vcl_vector<boct_tree_cell<T_loc, vnl_vector_fixed<T_data, DIM> > > cloned_cells;
+    std::vector<boct_tree_cell<T_loc, T_data>*> cells = leaf_cells();
+    std::vector<boct_tree_cell<T_loc, vnl_vector_fixed<T_data, DIM> > > cloned_cells;
     for (unsigned i=0; i<cells.size(); i++) {
       cloned_cells.push_back(boct_tree_cell<T_loc, vnl_vector_fixed<T_data, DIM> >(cells[i]->code_));
       cloned_cells[i].set_data(vnl_vector_fixed<T_data, DIM>(cells[i]->data()));
@@ -164,28 +166,28 @@ class boct_tree
   boct_tree_cell<T_loc,T_data>* locate_region(const vgl_box_3d<double>& r, bool check_out_of_bounds = false);
 
   //: Returns all leaf cells entirely contained in 3d region in global coordinates
-  void locate_region_leaves_global(const vgl_box_3d<double>& r, vcl_vector<boct_tree_cell<T_loc,T_data>*> &leaves);
+  void locate_region_leaves_global(const vgl_box_3d<double>& r, std::vector<boct_tree_cell<T_loc,T_data>*> &leaves);
 
   //: Returns all cells (at the specified level)  entirely contained in 3d region in global coordinates
-  void locate_region_cells_global(const vgl_box_3d<double>& r, vcl_vector<boct_tree_cell<T_loc,T_data>*> &leaves, short level);
+  void locate_region_cells_global(const vgl_box_3d<double>& r, std::vector<boct_tree_cell<T_loc,T_data>*> &leaves, short level);
 
   //: Returns all leaf cells entirely contained in 3d region in global coordinates
   //  Code assumes boxes have the same centroid
-  void locate_leaves_in_hollow_region_global(const vgl_box_3d<double>& outer_r, const vgl_box_3d<double>& inner_r, vcl_vector<boct_tree_cell<T_loc,T_data>*> &leaves);
+  void locate_leaves_in_hollow_region_global(const vgl_box_3d<double>& outer_r, const vgl_box_3d<double>& inner_r, std::vector<boct_tree_cell<T_loc,T_data>*> &leaves);
 
 
   //: Change the data of all leaf cells entirely contained in 3d region in global coordinates
   void change_leaves_in_global_region_leaves_global(const vgl_box_3d<double>& r, const T_data &val)
   {
     boct_tree_cell<T_loc,T_data>* root = locate_region_global(r);
-    vcl_vector<boct_tree_cell<T_loc,T_data>*> all_leaves;
+    std::vector<boct_tree_cell<T_loc,T_data>*> all_leaves;
     root->leaf_children(all_leaves);
 
     // now check that the leaves are contained in the region
     vgl_point_3d<double>  centroid = r.centroid();
     boct_tree_cell<T_loc,T_data> *centroid_cell = locate_point_global(centroid);
-    double radius = vcl_sqrt(r.width()*r.width() + r.depth()*r.depth()+r.height()*r.height()) + 1e-7;
-    typename vcl_vector<boct_tree_cell<T_loc,T_data>*>::iterator it = all_leaves.begin();
+    double radius = std::sqrt(r.width()*r.width() + r.depth()*r.depth()+r.height()*r.height()) + 1e-7;
+    typename std::vector<boct_tree_cell<T_loc,T_data>*>::iterator it = all_leaves.begin();
     for (; it!=all_leaves.end(); ++it)
     {
       if ((global_origin(*it) - global_origin(centroid_cell)).length() < radius)
@@ -196,7 +198,7 @@ class boct_tree
   }
 
   //: Returns all leaf cells entirely contained in 3d region (in octree coordinates [0,1)x[0,1)x[0,1))
-  void locate_region_leaves(const vgl_box_3d<double>& r, vcl_vector<boct_tree_cell<T_loc,T_data>*> &leaves)
+  void locate_region_leaves(const vgl_box_3d<double>& r, std::vector<boct_tree_cell<T_loc,T_data>*> &leaves)
   {
     boct_tree_cell<T_loc,T_data>* root = locate_region(r);
     root->leaf_children(leaves);
@@ -220,19 +222,19 @@ class boct_tree
   bool split();
 
   //: Returns a vector of all leaf cells of the tree
-  vcl_vector<boct_tree_cell<T_loc,T_data>*> leaf_cells();
+  std::vector<boct_tree_cell<T_loc,T_data>*> leaf_cells();
 
   //: Returns the number of leaf nodes in the tree
   unsigned int size();
 
   //: Returns all leaf cells at a specified level of the tree
-  vcl_vector<boct_tree_cell<T_loc,T_data>*> leaf_cells_at_level(short l);
+  std::vector<boct_tree_cell<T_loc,T_data>*> leaf_cells_at_level(short l);
 
   //: Returns all cells at a specified level of the tree (whether or not they are leafs)
-  vcl_vector<boct_tree_cell<T_loc,T_data>*> cells_at_level(short l);
+  std::vector<boct_tree_cell<T_loc,T_data>*> cells_at_level(short l);
 
   //: Returns all cells on the tree
-  vcl_vector<boct_tree_cell<T_loc,T_data>*> all_cells();
+  std::vector<boct_tree_cell<T_loc,T_data>*> all_cells();
 
   //: Fills cells with the average of the children
   void fill_with_average();
@@ -314,7 +316,7 @@ class boct_tree
   {
     if (save_internal_nodes) {
       if (!platform_independent) {
-        vcl_cerr << "warning: boct_tree::version_no : no platform_dependent method for writing internal nodes\n";
+        std::cerr << "warning: boct_tree::version_no : no platform_dependent method for writing internal nodes\n";
       }
       return 1;
     }
@@ -346,7 +348,7 @@ class boct_tree
 
  public: // should be made private
   //: Constructs the tree from leaf nodes and number of levels, returns the root cell. This function is used by b_read
-  boct_tree_cell<T_loc, T_data>* construct_tree(vcl_vector<boct_tree_cell<T_loc, T_data> >& leaf_nodes, short num_levels);
+  boct_tree_cell<T_loc, T_data>* construct_tree(std::vector<boct_tree_cell<T_loc, T_data> >& leaf_nodes, short num_levels);
 };
 
 //: Binary write

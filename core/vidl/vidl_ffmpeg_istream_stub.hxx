@@ -9,7 +9,8 @@
 // \author Amitha Perera
 // \date 14 Jan 2008
 
-#include <vcl_string.h>
+#include <vcl_compiler.h>
+#include <string>
 
 struct vidl_ffmpeg_istream::pimpl
 {
@@ -22,7 +23,7 @@ vidl_ffmpeg_istream
 }
 
 vidl_ffmpeg_istream
-::vidl_ffmpeg_istream(const vcl_string& /*filename*/)
+::vidl_ffmpeg_istream(const std::string& /*filename*/)
 {
 }
 
@@ -34,7 +35,7 @@ vidl_ffmpeg_istream
 
 bool
 vidl_ffmpeg_istream
-::open(const vcl_string& /*filename*/)
+::open(const std::string& /*filename*/)
 {
   return false;
 }

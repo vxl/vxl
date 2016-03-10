@@ -11,7 +11,8 @@
 
 #include "vgui_drag_mixin.h"
 
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <iostream>
 
 #include <vgui/vgui_event.h>
 
@@ -43,7 +44,7 @@ bool vgui_drag_mixin::handle(vgui_event const &event)
 
 bool vgui_drag_mixin::mouse_drag(int, int, vgui_button, vgui_modifier)
 {
-  if (debug) vcl_cerr << "vgui_drag_mixin::mouse_drag\n";
+  if (debug) std::cerr << "vgui_drag_mixin::mouse_drag\n";
   return false;
 }
 

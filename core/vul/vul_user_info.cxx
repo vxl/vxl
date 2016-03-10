@@ -19,19 +19,20 @@
 #include <pwd.h>
 #endif
 
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <iostream>
 
 //  uid_type uid;
 //  uid_type gid;
-//  vcl_string name; // login name
-//  vcl_string home_directory;
-//  vcl_string full_name;
-//  vcl_string shell;
-//  vcl_string passwd;
+//  std::string name; // login name
+//  std::string home_directory;
+//  std::string full_name;
+//  std::string shell;
+//  std::string passwd;
 
 void vul_user_info::init(uid_type /*uid*/)
 {
-  vcl_cerr << "Not implemented\n";
+  std::cerr << "Not implemented\n";
 }
 
 void vul_user_info::init(char const* name_)

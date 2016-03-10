@@ -4,8 +4,10 @@
 // \file
 // this process is the companion to vil_resample_image_process and
 // adjusts the calibration matrix to correspond to the resampled image
-#include <vcl_iostream.h>
-#include <vcl_fstream.h>
+#include <iostream>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <fstream>
 #include <vpgl/vpgl_camera.h>
 #include <vpgl/vpgl_perspective_camera.h>
 #include <vpgl/vpgl_calibration_matrix.h>
@@ -15,7 +17,7 @@
 bool vpgl_resample_perspective_camera_process_cons(bprb_func_process& pro)
 {
   bool ok=false;
-  vcl_vector<vcl_string> input_types(5);
+  std::vector<std::string> input_types(5);
   input_types[0] = "vpgl_camera_double_sptr";// input camera
   // the revised K matrix (no skew)
   input_types[1] = "int";// original ni
@@ -25,7 +27,7 @@ bool vpgl_resample_perspective_camera_process_cons(bprb_func_process& pro)
   ok = pro.set_input_types(input_types);
   if (!ok) return ok;
 
-  vcl_vector<vcl_string> output_types(1);
+  std::vector<std::string> output_types(1);
   output_types[0] = "vpgl_camera_double_sptr";  // resampled camera
   ok = pro.set_output_types(output_types);
   if (!ok) return ok;
@@ -38,14 +40,14 @@ bool vpgl_resample_perspective_camera_process(bprb_func_process& pro)
 {
    // Sanity check
   if (!pro.verify_inputs()) {
-    vcl_cerr << "vpgl_resample_perspective_camera_process: Invalid inputs\n";
+    std::cerr << "vpgl_resample_perspective_camera_process: Invalid inputs\n";
     return false;
   }
   // get the inputs
   vpgl_camera_double_sptr cam_ptr = pro.get_input<vpgl_camera_double_sptr>(0);
   vpgl_perspective_camera<double>* cam = dynamic_cast<vpgl_perspective_camera<double>*>(cam_ptr.ptr());
   if (!cam) {
-    vcl_cerr << "vpgl_resample_perspective_camera_process: couldn't cast camera\n";
+    std::cerr << "vpgl_resample_perspective_camera_process: couldn't cast camera\n";
     return false;
   }
   vpgl_perspective_camera<double>* ncam =
@@ -54,7 +56,7 @@ bool vpgl_resample_perspective_camera_process(bprb_func_process& pro)
   double ni_orig = pro.get_input<int>(1), nj_orig = pro.get_input<int>(2);
   double ni_new = pro.get_input<int>(3), nj_new = pro.get_input<int>(4);
   if (ni_orig == 0.0||nj_orig == 0.0||ni_new == 0.0||nj_new == 0.0){
-    vcl_cout << "In vpgl_resample_perspective_camera_process -"
+    std::cout << "In vpgl_resample_perspective_camera_process -"
              << " zero image dimension(s)\n";
     return false;
   }

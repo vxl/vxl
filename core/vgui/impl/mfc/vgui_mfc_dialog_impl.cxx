@@ -11,11 +11,12 @@
 
 #include "vgui_mfc_dialog_impl.h"
 
-#include <vcl_string.h>
-#include <vcl_iostream.h>
-#include <vcl_vector.h>
-#include <vcl_cstdio.h> // for sprintf()
-#include <vcl_cstring.h>
+#include <vcl_compiler.h>
+#include <string>
+#include <iostream>
+#include <vector>
+#include <cstdio> // for sprintf()
+#include <cstring>
 
 #include <vgui/internals/vgui_dialog_field.h>
 #include <vgui/internals/vgui_simple_field.h>
@@ -23,7 +24,7 @@
 #include <winuser.h>
 
 static bool debug = false;
-//vcl_string orig_color; // For when color chooser is cancelled.
+//std::string orig_color; // For when color chooser is cancelled.
 CString TempsNewClass;
 BEGIN_MESSAGE_MAP(vgui_mfc_dialog_impl, CDialog)
         ON_COMMAND(IDOK,OnOk)
@@ -54,7 +55,7 @@ vgui_mfc_dialog_impl::~vgui_mfc_dialog_impl()
 //: Structure to contain data for a choice field.
 struct vgui_mfc_dialog_choice
 {
-  vcl_vector<vcl_string> names;
+  std::vector<std::string> names;
   int index;
 };
 
@@ -62,7 +63,7 @@ struct vgui_mfc_dialog_choice
 //------------------------------------------------------------------------------
 //: Make a choice widget
 void* vgui_mfc_dialog_impl::choice_field_widget(const char* /*txt*/,
-                                                const vcl_vector<vcl_string>& labels, int& val) {
+                                                const std::vector<std::string>& labels, int& val) {
 
   vgui_mfc_dialog_choice *ch = new vgui_mfc_dialog_choice;
   ch->names = labels;
@@ -133,7 +134,7 @@ void vgui_mfc_dialog_impl::OnBrowse(UINT uID)
 {
   int which = uID-ID_BROWSE_FILES;
   ASSERT(which>=0 && which<100);
-  vcl_cerr<<"File browser loading...";
+  std::cerr<<"File browser loading...";
   CFileDialog file_dialog(TRUE,"*.*",NULL,OFN_HIDEREADONLY | OFN_OVERWRITEPROMPT, "All Files (*.*)|*.*||", this);
   file_dialog.DoModal();
   CString s(file_dialog.GetPathName());
@@ -147,17 +148,17 @@ void vgui_mfc_dialog_impl::OnChooseColour(UINT uID)
   char buffer[20];
   int which = uID-ID_CHOOSE_COLOUR;
   ASSERT(which>=0 && which<100);
-  vcl_cerr<<"File browser loading...";
+  std::cerr<<"File browser loading...";
   CColorDialog colour_dialog(0,0, this);
   colour_dialog.DoModal();
   COLORREF colour = colour_dialog.GetColor();
-  vcl_sprintf(buffer,"%4.3f",float(colour&0xff)/255.0);
+  std::sprintf(buffer,"%4.3f",float(colour&0xff)/255.0);
   CString s(buffer);
   s+=" ";
-  vcl_sprintf(buffer,"%4.3f",float((colour>>8)&0xff)/255.0);
+  std::sprintf(buffer,"%4.3f",float((colour>>8)&0xff)/255.0);
   s+=buffer;
   s+=" ";
-  vcl_sprintf(buffer,"%4.3f",float((colour>>16)&0xff)/255.0);
+  std::sprintf(buffer,"%4.3f",float((colour>>16)&0xff)/255.0);
   s+=buffer;
   csrs[which]->SetWindowText(s);
 }
@@ -178,7 +179,7 @@ bool vgui_mfc_dialog_impl::ask()
   int width, max_length = 0,fbsr_count = 0;
   int height = 45 + 6*8;
 
-  for (vcl_vector<element>::iterator e_iter1 = elements.begin();
+  for (std::vector<element>::iterator e_iter1 = elements.begin();
        e_iter1 != elements.end(); ++e_iter1)
   {
     element l = *e_iter1;
@@ -187,7 +188,7 @@ bool vgui_mfc_dialog_impl::ask()
     if (l.type == bool_elem)
     {
       vgui_bool_field *field = static_cast<vgui_bool_field*>(l.field);
-      int field_length = vcl_strlen(field->label.c_str());
+      int field_length = std::strlen(field->label.c_str());
       if (max_length<field_length)
         max_length = field_length;
       height += 45;
@@ -210,7 +211,7 @@ bool vgui_mfc_dialog_impl::ask()
     {
       // Add 40 extra characters to the length to leave space for
       // the user response box:
-      int field_length = vcl_strlen(field->label.c_str()) + 40;
+      int field_length = std::strlen(field->label.c_str()) + 40;
       if (max_length<field_length)
         max_length = field_length;
       height += 45;
@@ -243,7 +244,7 @@ bool vgui_mfc_dialog_impl::ask()
   ShowWindow(SW_SHOW);
 
   // determine default font for document
-  vcl_memset(&m_logfont, 0, sizeof m_logfont);
+  std::memset(&m_logfont, 0, sizeof m_logfont);
   m_logfont.lfHeight = -8;
   lstrcpy(m_logfont.lfFaceName, _T("Microsoft Sans Serif Regular"));
   m_logfont.lfOutPrecision = OUT_TT_PRECIS;
@@ -298,7 +299,7 @@ bool vgui_mfc_dialog_impl::ask()
   r.right = 999; //
   r.top = 0;
   r.bottom = 3*8+2;
-  for (vcl_vector<element>::iterator e_iter2 = elements.begin();
+  for (std::vector<element>::iterator e_iter2 = elements.begin();
        e_iter2 != elements.end(); ++e_iter2)
   {
     element l = *e_iter2;
@@ -382,7 +383,7 @@ bool vgui_mfc_dialog_impl::ask()
       r.bottom-=__min(ch->names.size(),4)*32;
 
       int count = 0;
-      for (vcl_vector<vcl_string>::iterator s_iter =  ch->names.begin();
+      for (std::vector<std::string>::iterator s_iter =  ch->names.begin();
            s_iter != ch->names.end(); ++s_iter, ++count)
         combobox->AddString(_T(s_iter->c_str()));
 
@@ -531,8 +532,8 @@ bool vgui_mfc_dialog_impl::ask()
                  SWP_NOSIZE|SWP_NOMOVE|SWP_NOACTIVATE|SWP_NOZORDER);
   if (ok_clicked)
   {
-    vcl_vector<CWnd *>::iterator w_iter = wlist.begin();
-    for (vcl_vector<element>::iterator e_iter3 = elements.begin();
+    std::vector<CWnd *>::iterator w_iter = wlist.begin();
+    for (std::vector<element>::iterator e_iter3 = elements.begin();
          e_iter3 != elements.end(); ++e_iter3, ++w_iter)
     {
       element l = *e_iter3;
@@ -565,7 +566,7 @@ bool vgui_mfc_dialog_impl::ask()
     }
   }
   // Remove all the created objects from the heap
-  for (vcl_vector<CWnd *>::iterator w_iter = awlist.begin();w_iter!=awlist.end();++w_iter)
+  for (std::vector<CWnd *>::iterator w_iter = awlist.begin();w_iter!=awlist.end();++w_iter)
     delete *w_iter;
 
   awlist.clear();

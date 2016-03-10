@@ -9,8 +9,10 @@
 #include <bvxm/bvxm_voxel_world.h>
 #include <bvxm/pro/processes/bvxm_normalization_util.h>
 
-#include <vcl_string.h>
-#include <vcl_iostream.h>
+#include <string>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iostream>
 
 #include <brdb/brdb_value.h>
 #include <brdb/brdb_selection.h>
@@ -32,13 +34,13 @@ static void test_bvxm_create_normalized_image_process()
   vil_image_view<vxl_byte> input_img(ni, nj, 1);
   input_img.fill(200);
   vil_image_view_base_sptr input_img_sptr = new vil_image_view<vxl_byte>(input_img);
-  vcl_cout << "format: " << input_img_sptr->pixel_format() << vcl_endl;
+  std::cout << "format: " << input_img_sptr->pixel_format() << std::endl;
   TEST("check byte", input_img_sptr->pixel_format() == VIL_PIXEL_FORMAT_BYTE, true);
 
   vil_image_view<vxl_byte> input_img_rgb(ni, nj, 3);
   input_img.fill(200);
   vil_image_view_base_sptr input_img_rgb_sptr = new vil_image_view<vxl_byte>(input_img_rgb);
-  vcl_cout << "format: " << input_img_rgb_sptr->pixel_format() << vcl_endl;
+  std::cout << "format: " << input_img_rgb_sptr->pixel_format() << std::endl;
   TEST("check byte", input_img_rgb_sptr->pixel_format() == VIL_PIXEL_FORMAT_BYTE, true);
 
 #if 0 // FAILED, FIX this
@@ -87,7 +89,7 @@ static void test_bvxm_create_normalized_image_process()
   TEST("output image is in db", S_img->size(), 1);
 
   brdb_value_sptr value_img;
-  TEST("output image is in db", S_img->get_value(vcl_string("value"), value_img), true);
+  TEST("output image is in db", S_img->get_value(std::string("value"), value_img), true);
   TEST("output image is non-null", (value_img != VXL_NULLPTR) ,true);
 
   brdb_value_t<vil_image_view_base_sptr>* result =

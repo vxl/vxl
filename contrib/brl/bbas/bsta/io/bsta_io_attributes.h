@@ -14,7 +14,9 @@
 
 #include <bsta/bsta_attributes.h>
 #include <vsl/vsl_binary_io.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iostream>
 
 //: Binary save bsta_attributes to stream.
 template <class comp_>
@@ -23,7 +25,7 @@ vsl_b_write(vsl_b_ostream &os, const bsta_num_obs<comp_>& m)
 {
   comp_ n=static_cast<comp_>(m);
 
-  //vcl_cout<<sizeof(n)<<' '<<sizeof(m)<<':';
+  //std::cout<<sizeof(n)<<' '<<sizeof(m)<<':';
   vsl_b_write(os,n);
   //vsl_b_write(os,(int)1);
   vsl_b_write(os,m.num_observations);
@@ -44,7 +46,7 @@ vsl_b_read(vsl_b_istream &is, bsta_num_obs<comp_>& m)
 //: Print summary
 template <class comp_>
 void
-vsl_print_summary(vcl_ostream &os, const bsta_num_obs<comp_>& m)
+vsl_print_summary(std::ostream &os, const bsta_num_obs<comp_>& m)
 {
   vsl_print_summary(os,static_cast<comp_>(m));
   os << " with "<<m.num_observations<<" observations";

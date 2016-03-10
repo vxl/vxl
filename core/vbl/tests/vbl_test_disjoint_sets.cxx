@@ -2,15 +2,16 @@
 #include <vbl/vbl_disjoint_sets.h>
 #include <vbl/vbl_edge.h>
 #include <vbl/vbl_graph_partition.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <iostream>
 
 static void print_element_sets(const vbl_disjoint_sets & s)
 {
   for (int i = 0; i < s.num_elements(); ++i){
     int k = s.find_set(i);
-    vcl_cout << "[" << k << "]: " << s.size(k) << "  ";
+    std::cout << "[" << k << "]: " << s.size(k) << "  ";
   }
-  vcl_cout << vcl_endl;
+  std::cout << std::endl;
 }
 
 static void vbl_test_disjoint_sets()
@@ -34,7 +35,7 @@ static void vbl_test_disjoint_sets()
 
   // test partitioning a graph
   int n_verts = 10;
-  vcl_vector<vbl_edge> edges;
+  std::vector<vbl_edge> edges;
   for(int i = 1; i<n_verts; ++i)
     edges.push_back(vbl_edge(i-1, i, 0.0f));
 

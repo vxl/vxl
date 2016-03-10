@@ -17,7 +17,8 @@
 // \endverbatim
 //-----------------------------------------------------------------------------
 
-#include <vcl_string.h>
+#include <vcl_compiler.h>
+#include <string>
 
 //: Reads information about a user from the password file
 class vul_user_info
@@ -28,11 +29,11 @@ class vul_user_info
   bool ok;
   uid_type uid;
   uid_type gid;
-  vcl_string name; // login name
-  vcl_string home_directory;
-  vcl_string full_name;
-  vcl_string shell;
-  vcl_string passwd;
+  std::string name; // login name
+  std::string home_directory;
+  std::string full_name;
+  std::string shell;
+  std::string passwd;
 
   // Constructors/Destructors--------------------------------------------------
 
@@ -41,7 +42,7 @@ class vul_user_info
   //: Lookup info from login name
   vul_user_info(char const* nam) { init(nam); }
   //: Lookup info from login name
-  vul_user_info(vcl_string const& nam) { init(nam.c_str()); }
+  vul_user_info(std::string const& nam) { init(nam.c_str()); }
   //: NYI
   void init(uid_type);
   //: initialise vul_user_info for given login name

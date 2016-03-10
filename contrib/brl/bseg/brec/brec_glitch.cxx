@@ -4,8 +4,10 @@
 // \author Ozge C Ozcanli (ozge@lems.brown.edu)
 // \date October 16, 2008
 
-#include <vcl_cmath.h>
-#include <vcl_sstream.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <cmath>
+#include <sstream>
 #include <vil/vil_save.h>
 
 vil_image_view<vxl_byte>
@@ -49,9 +51,9 @@ brec_glitch::square_glitch_mask_img(int c_size)
   }
 
 #if 1
-  vcl_stringstream ss;
+  std::stringstream ss;
   ss << c_size;
-  vcl_string name = "./glitch_mask_"+ss.str()+"x"+ss.str()+".png";
+  std::string name = "./glitch_mask_"+ss.str()+"x"+ss.str()+".png";
   vil_save(map_img, name.c_str());
 #endif
 
@@ -60,7 +62,7 @@ brec_glitch::square_glitch_mask_img(int c_size)
 
 //: given a size, generate a square center mask together with a surround neighborhood mask with the same number of pixels with the center
 void
-brec_glitch::square_glitch(int c_size, vcl_vector<vcl_pair<int, int> >& neighborhood_center, vcl_vector<vcl_pair<int, int> >& neighborhood_surround)
+brec_glitch::square_glitch(int c_size, std::vector<std::pair<int, int> >& neighborhood_center, std::vector<std::pair<int, int> >& neighborhood_surround)
 {
   neighborhood_center.clear();
   neighborhood_surround.clear();
@@ -71,20 +73,20 @@ brec_glitch::square_glitch(int c_size, vcl_vector<vcl_pair<int, int> >& neighbor
   for (int i = 0; i < c_size_outer; i++)
     for (int j = 0; j < c_size_outer; j++) {
       if (map_img(i,j) == 100)
-        neighborhood_center.push_back(vcl_pair<int, int>(i-(c_size_outer/2), j-(c_size_outer/2)));
+        neighborhood_center.push_back(std::pair<int, int>(i-(c_size_outer/2), j-(c_size_outer/2)));
     }
 
   for (int i = 0; i < (int)c_size_outer; i++)
     for (int j = 0; j < (int)c_size_outer; j++) {
       if (map_img(i,j) == 255)
-        neighborhood_surround.push_back(vcl_pair<int, int>(i-(c_size_outer/2), j-(c_size_outer/2)));
+        neighborhood_surround.push_back(std::pair<int, int>(i-(c_size_outer/2), j-(c_size_outer/2)));
     }
 }
 
 void brec_glitch::extend_prob_to_square_region(int c_size, vil_image_view<float>& input_map, vil_image_view<float>& output_map)
 {
-  vcl_vector<vcl_pair<int, int> > neighborhood;
-  vcl_vector<vcl_pair<int, int> > neighborhood_outer;
+  std::vector<std::pair<int, int> > neighborhood;
+  std::vector<std::pair<int, int> > neighborhood_outer;
   square_glitch(c_size, neighborhood, neighborhood_outer);
 
   output_map.fill(0.0f);

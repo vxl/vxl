@@ -3,8 +3,9 @@
 //:
 // \file
 
-#include <vcl_iostream.h>
-#include <vcl_cmath.h>
+#include <iostream>
+#include <vcl_compiler.h>
+#include <cmath>
 #include <vcl_cassert.h>
 #include <vnl/vnl_inverse.h>
 #include <vnl/algo/vnl_levenberg_marquardt.h>
@@ -19,8 +20,8 @@ vgl_h_matrix_2d_optimize_lmq(vgl_h_matrix_2d<double> const& initial_h)
 
 //: optimize the normalized projection problem
 bool vgl_h_matrix_2d_optimize_lmq::
-optimize_h(vcl_vector<vgl_homg_point_2d<double> > const& points1,
-           vcl_vector<vgl_homg_point_2d<double> > const& points2,
+optimize_h(std::vector<vgl_homg_point_2d<double> > const& points1,
+           std::vector<vgl_homg_point_2d<double> > const& points2,
            vgl_h_matrix_2d<double> const& h_initial,
            vgl_h_matrix_2d<double>& h_optimized)
 {
@@ -40,7 +41,7 @@ optimize_h(vcl_vector<vgl_homg_point_2d<double> > const& points1,
   bool success = lm.minimize(hv);
   if (verbose_)
   {
-    lm.diagnose_outcome(vcl_cout);
+    lm.diagnose_outcome(std::cout);
   }
 
   if (success)
@@ -51,8 +52,8 @@ optimize_h(vcl_vector<vgl_homg_point_2d<double> > const& points1,
 }
 
 bool vgl_h_matrix_2d_optimize_lmq::
-optimize_p(vcl_vector<vgl_homg_point_2d<double> > const& points1,
-           vcl_vector<vgl_homg_point_2d<double> > const& points2,
+optimize_p(std::vector<vgl_homg_point_2d<double> > const& points1,
+           std::vector<vgl_homg_point_2d<double> > const& points2,
            vgl_h_matrix_2d<double>& H)
 {
   //number of points must be the same
@@ -67,7 +68,7 @@ optimize_p(vcl_vector<vgl_homg_point_2d<double> > const& points1,
   if (!tr2.compute_from_points(points2))
     return false;
   //normalize the input point sets
-  vcl_vector<vgl_homg_point_2d<double> > tpoints1, tpoints2;
+  std::vector<vgl_homg_point_2d<double> > tpoints1, tpoints2;
   for (int i=0; i<n; ++i)
   {
     tpoints1.push_back(tr1(points1[i]));
@@ -101,8 +102,8 @@ optimize_p(vcl_vector<vgl_homg_point_2d<double> > const& points1,
 }
 
 bool vgl_h_matrix_2d_optimize_lmq::
-optimize_l(vcl_vector<vgl_homg_line_2d<double> > const& lines1,
-           vcl_vector<vgl_homg_line_2d<double> > const& lines2,
+optimize_l(std::vector<vgl_homg_line_2d<double> > const& lines1,
+           std::vector<vgl_homg_line_2d<double> > const& lines2,
            vgl_h_matrix_2d<double>& H)
 {
   //number of lines must be the same
@@ -116,8 +117,8 @@ optimize_l(vcl_vector<vgl_homg_line_2d<double> > const& lines1,
     return false;
   if (!tr2.compute_from_lines(lines2))
     return false;
-  vcl_vector<vgl_homg_point_2d<double> > tlines1, tlines2;
-  for (vcl_vector<vgl_homg_line_2d<double> >::const_iterator
+  std::vector<vgl_homg_point_2d<double> > tlines1, tlines2;
+  for (std::vector<vgl_homg_line_2d<double> >::const_iterator
        lit = lines1.begin(); lit != lines1.end(); lit++)
   {
     // transform lines1 according to the normalizing transform
@@ -126,7 +127,7 @@ optimize_l(vcl_vector<vgl_homg_line_2d<double> > const& lines1,
     vgl_homg_point_2d<double> p(l.a(), l.b(), l.c());
     tlines1.push_back(p);
   }
-  for (vcl_vector<vgl_homg_line_2d<double> >::const_iterator
+  for (std::vector<vgl_homg_line_2d<double> >::const_iterator
        lit = lines2.begin(); lit != lines2.end(); lit++)
   {
     // transform lines2 according to the normalizing transform
@@ -173,10 +174,10 @@ optimize_l(vcl_vector<vgl_homg_line_2d<double> > const& lines1,
 }
 
 bool vgl_h_matrix_2d_optimize_lmq::
-optimize_pl(vcl_vector<vgl_homg_point_2d<double> > const& points1,
-            vcl_vector<vgl_homg_point_2d<double> > const& points2,
-            vcl_vector<vgl_homg_line_2d<double> > const& lines1,
-            vcl_vector<vgl_homg_line_2d<double> > const& lines2,
+optimize_pl(std::vector<vgl_homg_point_2d<double> > const& points1,
+            std::vector<vgl_homg_point_2d<double> > const& points2,
+            std::vector<vgl_homg_line_2d<double> > const& lines1,
+            std::vector<vgl_homg_line_2d<double> > const& lines2,
             vgl_h_matrix_2d<double>& H)
 {
   //number of points must be the same
@@ -193,7 +194,7 @@ optimize_pl(vcl_vector<vgl_homg_point_2d<double> > const& points1,
     return false;
   if (!tr2.compute_from_points_and_lines(points2,lines2))
     return false;
-  vcl_vector<vgl_homg_point_2d<double> > tpoints1, tpoints2;
+  std::vector<vgl_homg_point_2d<double> > tpoints1, tpoints2;
   for (int i=0; i<np; ++i)
   {
     tpoints1.push_back(tr1(points1[i]));
@@ -201,9 +202,9 @@ optimize_pl(vcl_vector<vgl_homg_point_2d<double> > const& points1,
   }
   for (int i=0; i<nl; ++i)
   {
-    double a=lines1[i].a(), b=lines1[i].b(), c=lines1[i].c(), d=vcl_sqrt(a*a+b*b);
+    double a=lines1[i].a(), b=lines1[i].b(), c=lines1[i].c(), d=std::sqrt(a*a+b*b);
     tpoints1.push_back(tr1(vgl_homg_point_2d<double>(-a*c,-b*c,d)));
-    a=lines2[i].a(), b=lines2[i].b(), c=lines2[i].c(), d = vcl_sqrt(a*a+b*b);
+    a=lines2[i].a(), b=lines2[i].b(), c=lines2[i].c(), d = std::sqrt(a*a+b*b);
     tpoints2.push_back(tr2(vgl_homg_point_2d<double>(-a*c,-b*c,d)));
   }
 

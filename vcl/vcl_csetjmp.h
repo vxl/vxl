@@ -1,27 +1,16 @@
 #ifndef vcl_csetjmp_h_
 #define vcl_csetjmp_h_
-/*
-  Peter Vanroose, esat.kuleuven.be
-*/
-
-/* This should define C-style stack unwinding */
 
 #include "vcl_compiler.h"
-
-// VisualC++'s <csetjmp> does not use namespace std.
-#if !VCL_CXX_HAS_HEADER_CSETJMP
-# include <setjmp.h>
-# define vcl_generic_csetjmp_STD /* */
-# include "generic/vcl_csetjmp.h"
-#else
-# include "iso/vcl_csetjmp.h"
-#endif
-
-// In ISO C, setjmp() is a macro. So in vcl it should be
-// a macro without the vcl_ prefix, just like assert().
-// It is good that people know assert() is a macro because
-// they treat it with more care than a function. If vcl
-// provided a `vcl_setjmp' preprocessor macro people might
-// think they were using a function and not a macro.
+#include <csetjmp>
+/* The following includes are needed to preserve backwards
+   compatilibility for external applications.  Previously
+   definitions were defined in multiple headers with conditional
+   ifndef guards, but we now include a reference header
+   instead */
+//no dependancies remove comment above
+//vcl alias names to std names
+#define vcl_jmp_buf std::jmp_buf
+#define vcl_longjmp std::longjmp
 
 #endif // vcl_csetjmp_h_

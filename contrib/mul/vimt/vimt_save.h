@@ -7,7 +7,9 @@
 // \note Adapted from vimt3d_save
 
 
-#include <vcl_string.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <string>
 #include <vil/vil_fwd.h>
 class vimt_transform_2d;
 class vimt_image_2d;
@@ -19,7 +21,7 @@ void vimt_save_transform(vil_image_resource_sptr &ir,
                          bool use_millimetres =false);
 
 //: Save image from path into given image (forcing to given pixel type)
-bool vimt_save(const vcl_string& path,
+bool vimt_save(const std::string& path,
                const vimt_image_2d& image,
                bool use_millimetres =false);
 

@@ -18,17 +18,17 @@ vil_nitf2::enum_field_type vil_nitf2_field::type() const
   }
 }
 
-vcl_string vil_nitf2_field::tag() const
+std::string vil_nitf2_field::tag() const
 {
   return m_definition->tag;
 }
 
-vcl_string vil_nitf2_field::pretty_name() const
+std::string vil_nitf2_field::pretty_name() const
 {
   return m_definition->pretty_name;
 }
 
-vcl_string vil_nitf2_field::description() const
+std::string vil_nitf2_field::description() const
 {
   return m_definition->description;
 }
@@ -67,7 +67,7 @@ vil_nitf2_array_field* vil_nitf2_field::array_field()
   }
 }
 
-vcl_ostream& operator << (vcl_ostream& os, const vil_nitf2_field& field)
+std::ostream& operator << (std::ostream& os, const vil_nitf2_field& field)
 {
   return field.output(os);
 }

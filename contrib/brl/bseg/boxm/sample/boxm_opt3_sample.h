@@ -3,8 +3,10 @@
 //:
 // \file
 
-#include <vcl_vector.h>
-#include <vcl_iostream.h>
+#include <vector>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iostream>
 #include <vsl/vsl_binary_io.h>
 #include <boxm/boxm_apm_traits.h>
 #include <boxm/boxm_aux_traits.h>
@@ -23,7 +25,7 @@ class boxm_opt3_sample
     : weighted_vis_sum_(0.0f), seg_len_sum_(0.0f), log_pass_prob_sum_(0.0f) { }
   ~boxm_opt3_sample() {}
   static short version_no() { return 1; }
-  void print(vcl_ostream& os) const;
+  void print(std::ostream& os) const;
 
   void update_obs_dist(obs_datatype obs, float obs_prob);
 
@@ -41,7 +43,7 @@ class boxm_aux_traits<BOXM_AUX_OPT3_MOG_GREY>
    typedef boxm_apm_traits<BOXM_APM_MOG_GREY>::obs_datatype sample_datatype;
    static const boxm_apm_type APM_TYPE = BOXM_APM_MOG_GREY;
 
-  static vcl_string storage_subdir() { return "opt3_mog_grey"; }
+  static std::string storage_subdir() { return "opt3_mog_grey"; }
 };
 
 //: traits for an rgb optimization sample
@@ -52,7 +54,7 @@ class boxm_aux_traits<BOXM_AUX_OPT3_MOG_RGB>
    typedef boxm_apm_traits<BOXM_APM_MOG_RGB>::obs_datatype sample_datatype;
    static const boxm_apm_type APM_TYPE = BOXM_APM_MOG_RGB;
 
-  static vcl_string storage_subdir() { return "opt3_mog_rgb"; }
+  static std::string storage_subdir() { return "opt3_mog_rgb"; }
 };
 
 template <boxm_apm_type APM>
@@ -68,6 +70,6 @@ template <boxm_apm_type APM>
 void vsl_b_read(vsl_b_istream & is, boxm_opt3_sample<APM> *&sample);
 
 template <boxm_apm_type APM>
-vcl_ostream& operator << (vcl_ostream& os, const boxm_opt3_sample<APM>& sample);
+std::ostream& operator << (std::ostream& os, const boxm_opt3_sample<APM>& sample);
 
 #endif // boxm_opt3_sample_h_

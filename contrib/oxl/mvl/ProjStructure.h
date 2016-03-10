@@ -9,7 +9,9 @@
 // \author awf@robots.ox.ac.uk
 // \date   17 Mar 00
 
-#include <vcl_vector.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <vector>
 
 #include <mvl/ImageMetric.h>
 #include <mvl/PMatrix.h>
@@ -23,9 +25,9 @@ class ProjStructure
 {
  public:
 
-  vcl_vector<HomgInterestPointSet*> points_2d_;
-  vcl_vector<PMatrix> P_;
-  vcl_vector<HomgPoint3D> X_;
+  std::vector<HomgInterestPointSet*> points_2d_;
+  std::vector<PMatrix> P_;
+  std::vector<HomgPoint3D> X_;
   ImageMetric const* metric_;
 
   ProjStructure();

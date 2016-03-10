@@ -32,9 +32,9 @@ void vsl_b_read(vsl_b_istream & is, bvpl_octree_sample<T_data> &sample)
       vsl_b_read(is, sample.response_);
       break;
     default:
-      vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, boxm_sample<T>&)\n"
+      std::cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, boxm_sample<T>&)\n"
                << "           Unknown version number "<< version << '\n';
-      is.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
+      is.is().clear(std::ios::badbit); // Set an unrecoverable IO error on stream
       break;
   }
 }
@@ -47,13 +47,13 @@ void vsl_b_read(vsl_b_istream & is, bvpl_octree_sample<T_data> *&sample)
 
 
 template<class T_data>
-void bvpl_octree_sample<T_data>::print(vcl_ostream& os) const
+void bvpl_octree_sample<T_data>::print(std::ostream& os) const
 {
   os << "(response=" << response_ << " id=" << id_ <<')';
 }
 
 template<class T_data>
-vcl_ostream& operator << (vcl_ostream& os, const bvpl_octree_sample<T_data>& sample)
+std::ostream& operator << (std::ostream& os, const bvpl_octree_sample<T_data>& sample)
 {
   sample.print(os);
   return os;
@@ -61,7 +61,7 @@ vcl_ostream& operator << (vcl_ostream& os, const bvpl_octree_sample<T_data>& sam
 
 #define BVPL_OCTREE_SAMPLE_INSTANTIATE(T) \
 template class bvpl_octree_sample<T >; \
-template vcl_ostream& operator << (vcl_ostream&, const bvpl_octree_sample<T >&); \
+template std::ostream& operator << (std::ostream&, const bvpl_octree_sample<T >&); \
 template void vsl_b_write(vsl_b_ostream &, bvpl_octree_sample<T > const &); \
 template void vsl_b_write(vsl_b_ostream &, bvpl_octree_sample<T > const *&); \
 template void vsl_b_read(vsl_b_istream &, bvpl_octree_sample<T > &); \

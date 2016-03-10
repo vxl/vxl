@@ -69,7 +69,7 @@ GetEdges()
 
   if (!face_)
   {
-    vcl_cerr << "vifa_int_face_attr::GetFaces(): face_ is not set\n";
+    std::cerr << "vifa_int_face_attr::GetFaces(): face_ is not set\n";
     return edges_;
   }
 
@@ -100,7 +100,7 @@ ComputeAttributes()
 // Populate a vector containing all attributes, including inherited
 // ones.
 bool vifa_int_face_attr::
-GetAttributes(vcl_vector<float>&  attrs)
+GetAttributes(std::vector<float>&  attrs)
 {
   // no inherited attributes
   return this->vifa_int_face_attr::GetNativeAttributes(attrs);
@@ -109,7 +109,7 @@ GetAttributes(vcl_vector<float>&  attrs)
 // Append the names of the attributes in the same order as in
 // GetNativeAttributes.  KEEP THEM IN SYNC!
 void vifa_int_face_attr::
-GetAttributeNames(vcl_vector<vcl_string>&  names)
+GetAttributeNames(std::vector<std::string>&  names)
 {
   names.push_back("IntMax");
   names.push_back("IntMin");
@@ -131,11 +131,11 @@ GetAttributeNames(vcl_vector<vcl_string>&  names)
 // Populate a vector containing attributes native to this class (not
 // inherited).  SYNC ADDITIONS TO THIS WITH THE NAMES FUNCTION ABOVE!
 bool vifa_int_face_attr::
-GetNativeAttributes(vcl_vector<float>& attrs)
+GetNativeAttributes(std::vector<float>& attrs)
 {
   if (!this->ComputeAttributes())
   {
-    vcl_cerr << "Couldn't compute single face attributes?\n";
+    std::cerr << "Couldn't compute single face attributes?\n";
     return false;
   }
 
@@ -315,14 +315,14 @@ ComputeCacheValues()
   }
 
 #ifdef DEBUG
-  vcl_cout << "vifa::ComputeCacheValues(): start dump:\n";
+  std::cout << "vifa::ComputeCacheValues(): start dump:\n";
   intensity_hist.Print();
-  vcl_cout << "LowClipVal: " << intensity_hist.LowClipVal(0.1) << vcl_endl
-           << "HighClipVal: " << intensity_hist.LowClipVal(0.9) << vcl_endl
-           << "face_->Io(): " << face_->Io() << vcl_endl
-           << "face_->Npix(): " << face_->Npix() << vcl_endl;
+  std::cout << "LowClipVal: " << intensity_hist.LowClipVal(0.1) << std::endl
+           << "HighClipVal: " << intensity_hist.LowClipVal(0.9) << std::endl
+           << "face_->Io(): " << face_->Io() << std::endl
+           << "face_->Npix(): " << face_->Npix() << std::endl;
   np_->print_info();
-  vcl_cout << "vifa::ComputeCacheValues(): end dump\n";
+  std::cout << "vifa::ComputeCacheValues(): end dump\n";
 #endif
 
   cached_min_ = normalize_intensity(intensity_hist.LowClipVal(0.1f));
@@ -349,7 +349,7 @@ SetNP()
     npobj_->reset();
   else
   {
-    vcl_vector<vtol_intensity_face_sptr>  faces;
+    std::vector<vtol_intensity_face_sptr>  faces;
     faces.push_back(face_);
 
     static bool  contrast = true;

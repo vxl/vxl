@@ -11,13 +11,14 @@
 //   25-FEB-2000 K.Y.McGaul - Initial version.
 // \endverbatim
 
-#include <vcl_cstdio.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <cstdio>
+#include <iostream>
 #include <vgui/vgui_macro.h>
 
 static bool debug = false;
 
-vcl_string colors[][2] = {
+std::string colors[][2] = {
   { "white",          "1.000 1.000 1.000" },
   { "black",          "0.000 0.000 0.000" },
   { "blue",           "0.000 0.000 1.000" },
@@ -46,9 +47,9 @@ vcl_string colors[][2] = {
 #define NB_COLORS (sizeof(colors)/sizeof(colors[0]))
 
 //:
-vcl_string text_to_color(const vcl_string& txt)
+std::string text_to_color(const std::string& txt)
 {
-  vcl_string color = "";
+  std::string color = "";
   if (txt[0] == '0' || txt[0] == '1')
     color = txt;
 
@@ -59,41 +60,41 @@ vcl_string text_to_color(const vcl_string& txt)
   }
 
   if (color == ""){
-    vgui_macro_warning << "Unknown color string: " << txt << vcl_endl;
+    vgui_macro_warning << "Unknown color string: " << txt << std::endl;
     color = colors[1][1];
   }
 
   if (debug){
     float red, green, blue;
-    vcl_sscanf(color.c_str(), "%f %f %f", &red, &green, &blue);
-    vcl_cerr << "vgui_color_text:: color string= " << color << ", red="
-             << red << ", green=" << green << ", blue=" << blue << vcl_endl;
+    std::sscanf(color.c_str(), "%f %f %f", &red, &green, &blue);
+    std::cerr << "vgui_color_text:: color string= " << color << ", red="
+             << red << ", green=" << green << ", blue=" << blue << std::endl;
   }
 
   return color;
 }
 
-float red_value(const vcl_string& txt)
+float red_value(const std::string& txt)
 {
-  vcl_string nb_txt = text_to_color(txt);
+  std::string nb_txt = text_to_color(txt);
   float red, green, blue;
-  vcl_sscanf(nb_txt.c_str(), "%f %f %f", &red, &green, &blue);
+  std::sscanf(nb_txt.c_str(), "%f %f %f", &red, &green, &blue);
   return red;
 }
 
-float green_value(const vcl_string& txt)
+float green_value(const std::string& txt)
 {
-  vcl_string nb_txt = text_to_color(txt);
+  std::string nb_txt = text_to_color(txt);
   float red, green, blue;
-  vcl_sscanf(nb_txt.c_str(), "%f %f %f", &red, &green, &blue);
+  std::sscanf(nb_txt.c_str(), "%f %f %f", &red, &green, &blue);
   return green;
 }
 
-float blue_value(const vcl_string& txt)
+float blue_value(const std::string& txt)
 {
-  vcl_string nb_txt = text_to_color(txt);
+  std::string nb_txt = text_to_color(txt);
   float red, green, blue;
-  vcl_sscanf(nb_txt.c_str(), "%f %f %f", &red, &green, &blue);
+  std::sscanf(nb_txt.c_str(), "%f %f %f", &red, &green, &blue);
   return blue;
 }
 

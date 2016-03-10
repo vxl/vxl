@@ -15,8 +15,9 @@
 
 #include <vcl_cassert.h>
 #include <vcl_climits.h> // CHAR_BIT
-#include <vcl_iostream.h>
-#include <vcl_cstring.h> // memcpy()
+#include <vcl_compiler.h>
+#include <iostream>
+#include <cstring> // memcpy()
 
 #include <vil1/vil1_stream.h>
 #include <vil1/vil1_image.h>
@@ -30,7 +31,7 @@ bool vil1_jpeg_file_probe(vil1_stream *vs)
   int n = vs->read(magic, sizeof(magic));
 
   if (n != sizeof(magic)) {
-    vcl_cerr << __FILE__ << " : vil1_stream::read() failed\n";
+    std::cerr << __FILE__ << " : vil1_stream::read() failed\n";
     return false;
   }
 
@@ -82,10 +83,10 @@ vil1_jpeg_generic_image::vil1_jpeg_generic_image(vil1_stream *s)
 
 bool vil1_jpeg_generic_image::get_property(char const *tag, void *prop) const
 {
-  if (0==vcl_strcmp(tag, vil1_property_top_row_first))
+  if (0==std::strcmp(tag, vil1_property_top_row_first))
     return prop ? (*(bool*)prop) = true : true;
 
-  if (0==vcl_strcmp(tag, vil1_property_left_first))
+  if (0==std::strcmp(tag, vil1_property_left_first))
     return prop ? (*(bool*)prop) = true : true;
 
   return false;
@@ -105,7 +106,7 @@ vil1_jpeg_generic_image::vil1_jpeg_generic_image(vil1_stream *s,
   stream->ref();
   // warn
   if (planes != 1)
-    vcl_cerr << __FILE__ " : prototype has != 1 planes. ignored\n";
+    std::cerr << __FILE__ " : prototype has != 1 planes. ignored\n";
 
   // use same number of components as prototype, obviously.
   jc->jobj.input_components = components;
@@ -114,7 +115,7 @@ vil1_jpeg_generic_image::vil1_jpeg_generic_image(vil1_stream *s,
   jc->jobj.image_width = width;
   jc->jobj.image_height = height;
 #ifdef DEBUG
-  vcl_cerr << "w h = " << width << ' ' << height << '\n';
+  std::cerr << "w h = " << width << ' ' << height << '\n';
 #endif
 
   assert(bits_per_component == CHAR_BIT); // FIXME.
@@ -141,11 +142,11 @@ vil1_jpeg_generic_image::~vil1_jpeg_generic_image()
 bool vil1_jpeg_generic_image::get_section(void *buf, int x0, int y0, int w, int h) const
 {
   if (!jd) {
-    vcl_cerr << "attempted put_section() failed -- no jpeg decompressor\n";
+    std::cerr << "attempted put_section() failed -- no jpeg decompressor\n";
     return false;
   }
 #ifdef DEBUG
-  vcl_cerr << "get_section " << buf << ' ' << x0 << ' ' << y0 << ' ' << w << ' ' << h << '\n';
+  std::cerr << "get_section " << buf << ' ' << x0 << ' ' << y0 << ' ' << w << ' ' << h << '\n';
 #endif
 
   // number of bytes per pixel
@@ -156,7 +157,7 @@ bool vil1_jpeg_generic_image::get_section(void *buf, int x0, int y0, int w, int 
     JSAMPLE const *scanline = jd->read_scanline(y0+i);
     if (!scanline)
       return false; // failed
-    vcl_memcpy(static_cast<char*>(buf) + i*w*bpp, &scanline[x0*bpp], w*bpp);
+    std::memcpy(static_cast<char*>(buf) + i*w*bpp, &scanline[x0*bpp], w*bpp);
   }
 
   return true;
@@ -168,7 +169,7 @@ bool vil1_jpeg_generic_image::get_section(void *buf, int x0, int y0, int w, int 
 bool vil1_jpeg_generic_image::put_section(void const *buf, int x0, int y0, int w, int h)
 {
   if (!jc) {
-    vcl_cerr << "attempted get_section() failed -- no jpeg compressor\n";
+    std::cerr << "attempted get_section() failed -- no jpeg compressor\n";
     return false;
   }
 
@@ -176,11 +177,11 @@ bool vil1_jpeg_generic_image::put_section(void const *buf, int x0, int y0, int w
   // Relaxed slightly.. awf.
   // It will work if you send entire scan lines sequentially
   if (x0 != 0 || (unsigned int)w != jc->jobj.image_width) {
-    vcl_cerr << __FILE__ << " : Can only compress complete scanlines\n";
+    std::cerr << __FILE__ << " : Can only compress complete scanlines\n";
     return false;
   }
   if ((unsigned int)y0 != jc->jobj.next_scanline) {
-    vcl_cerr << __FILE__ << " : Scanlines must be sent sequentially\n";
+    std::cerr << __FILE__ << " : Scanlines must be sent sequentially\n";
     return false;
   }
 

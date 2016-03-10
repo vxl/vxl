@@ -5,8 +5,10 @@
 // \author Tim Cootes
 // \brief test vpdfl_axis_gaussian, building, sampling, saving, etc.
 
-#include <vcl_iostream.h>
-#include <vcl_sstream.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iostream>
+#include <sstream>
 #include <vpdfl/vpdfl_axis_gaussian.h>
 #include <vpdfl/vpdfl_axis_gaussian_builder.h>
 #include <vpdfl/vpdfl_axis_gaussian_sampler.h>
@@ -57,7 +59,7 @@ static void test_gradient_logp(vpdfl_pdf_base& pdf, const vnl_vector<double>& x0
 
 void test_axis_gaussian()
 {
-  vcl_cout << "*****************************\n"
+  std::cout << "*****************************\n"
            << " Testing vpdfl_axis_gaussian\n"
            << "*****************************\n";
 
@@ -77,13 +79,13 @@ void test_axis_gaussian()
   test_gradient(gauss0,var0);
   test_gradient_logp(gauss0,var0);
 
-  vcl_cout<<"Prob at zero: "<<gauss0(v0)<<vcl_endl;
+  std::cout<<"Prob at zero: "<<gauss0(v0)<<std::endl;
 
   TEST_NEAR("gauss0(0)",gauss0(v0),0.00273207,1e-8);
 
   // Generate lots of samples
   int n = 5000;
-  vcl_vector<vnl_vector<double> > samples(n);
+  std::vector<vnl_vector<double> > samples(n);
 
   vpdfl_axis_gaussian_sampler sampler;
   sampler.set_model(gauss0);
@@ -98,8 +100,8 @@ void test_axis_gaussian()
 
   builder0.build(gauss1,sample_wrapper);
 
-  vcl_cout<<"Original Model: "; vsl_print_summary(vcl_cout, gauss0); vcl_cout<<vcl_endl;
-  vcl_cout<<"Rebuild  Model: "; vsl_print_summary(vcl_cout, gauss1); vcl_cout<<vcl_endl;
+  std::cout<<"Original Model: "; vsl_print_summary(std::cout, gauss0); std::cout<<std::endl;
+  std::cout<<"Rebuild  Model: "; vsl_print_summary(std::cout, gauss1); std::cout<<std::endl;
 
   TEST("mean of built model",(gauss0.mean()-gauss1.mean()).squared_magnitude()<0.1,true);
   TEST("var. of built model",(gauss0.variance()-gauss1.variance()).squared_magnitude()<0.1,true);
@@ -135,11 +137,11 @@ void test_axis_gaussian()
   vpl_unlink("test_axis_gaussian.bvl.tmp");
 #endif
 
-  vcl_cout<<"Loaded:\n";
-  vcl_cout<<"Model: ";                 vsl_print_summary(vcl_cout, gauss0_in); vcl_cout<<vcl_endl;
-  vcl_cout<<"Builder: ";               vsl_print_summary(vcl_cout, builder0_in); vcl_cout<<vcl_endl;
-  vcl_cout<<"Model   (by base ptr): "; vsl_print_summary(vcl_cout, base_pdf_ptr_in); vcl_cout<<vcl_endl;
-  vcl_cout<<"Builder (by base ptr): "; vsl_print_summary(vcl_cout, base_builder_ptr_in); vcl_cout<<vcl_endl;
+  std::cout<<"Loaded:\n";
+  std::cout<<"Model: ";                 vsl_print_summary(std::cout, gauss0_in); std::cout<<std::endl;
+  std::cout<<"Builder: ";               vsl_print_summary(std::cout, builder0_in); std::cout<<std::endl;
+  std::cout<<"Model   (by base ptr): "; vsl_print_summary(std::cout, base_pdf_ptr_in); std::cout<<std::endl;
+  std::cout<<"Builder (by base ptr): "; vsl_print_summary(std::cout, base_builder_ptr_in); std::cout<<std::endl;
 
   TEST("mean of loaded model",
        (gauss0.mean()-gauss0_in.mean()).squared_magnitude()<1e-8,true);
@@ -149,12 +151,12 @@ void test_axis_gaussian()
   TEST("Load builder by base ptr",base_builder_ptr_in->is_a()==builder0.is_a(),true);
 
 
-  vcl_cout << "========Testing PDF Thresholds==========";
+  std::cout << "========Testing PDF Thresholds==========";
   vpdfl_sampler_base *p_sampler2 = gauss1.new_sampler();
   unsigned pass=0, fail=0;
   vnl_vector<double> x;
   double thresh = gauss1.log_prob_thresh(0.9);
-  vcl_cout << vcl_endl << "log density threshold for passing 90%: " << thresh << vcl_endl;
+  std::cout << std::endl << "log density threshold for passing 90%: " << thresh << std::endl;
   for (unsigned i=0; i < 1000; i++)
   {
     p_sampler2->sample(x);
@@ -163,11 +165,11 @@ void test_axis_gaussian()
     else
       fail ++;
   }
-  vcl_cout << "In a sample of 1000 vectors " << pass << " passed and " << fail <<  " failed.\n";
+  std::cout << "In a sample of 1000 vectors " << pass << " passed and " << fail <<  " failed.\n";
   TEST("880 < pass < 920", pass > 880 && pass < 920, true);
   pass=0; fail=0;
   thresh = gauss1.log_prob_thresh(0.1);
-  vcl_cout << vcl_endl << vcl_endl << "log density threshold for passing 10%: " << thresh << vcl_endl;
+  std::cout << std::endl << std::endl << "log density threshold for passing 10%: " << thresh << std::endl;
   for (unsigned i=0; i < 1000; i++)
   {
     p_sampler2->sample(x);
@@ -176,7 +178,7 @@ void test_axis_gaussian()
     else
       fail ++;
   }
-  vcl_cout << "In a sample of 1000 vectors " << pass << " passed and " << fail <<  " failed.\n";
+  std::cout << "In a sample of 1000 vectors " << pass << " passed and " << fail <<  " failed.\n";
   TEST("70 < pass < 130", pass > 70 && pass < 130, true);
 
   vsl_delete_all_loaders();
@@ -189,20 +191,20 @@ void test_axis_gaussian()
   // -------------------------------------------
   {
     vpdfl_add_all_binary_loaders();
-    vcl_istringstream ss(
+    std::istringstream ss(
           "axis_gaussian\n"
           "{\n"
           "  min_var: 0.1234e-5\n"
           "}\n");
 
-    vcl_auto_ptr<vpdfl_builder_base>
+    std::auto_ptr<vpdfl_builder_base>
             builder = vpdfl_builder_base::new_pdf_builder_from_stream(ss);
 
     TEST("Correct builder",builder->is_a(),"vpdfl_axis_gaussian_builder");
     if (builder->is_a()=="vpdfl_axis_gaussian_builder")
     {
       vpdfl_axis_gaussian_builder &a_builder = static_cast<vpdfl_axis_gaussian_builder&>(*builder);
-      vcl_cout<<a_builder<<vcl_endl;
+      std::cout<<a_builder<<std::endl;
       TEST_NEAR("Min var configured", a_builder.min_var(), 0.1234e-5, 1e-8);
     }
     vsl_delete_all_loaders();

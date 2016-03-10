@@ -1,5 +1,6 @@
 // This is core/vbl/io/tests/test_array_1d_io.cxx
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <iostream>
 #include <vbl/io/vbl_io_array_1d.h>
 #include <vsl/vsl_binary_io.h>
 #include <vsl/vsl_indent.h>
@@ -8,7 +9,7 @@
 
 void test_array_1d_io()
 {
-  vcl_cout << "******************************\n"
+  std::cout << "******************************\n"
            << "Testing vbl_array_1d<float> io\n"
            << "******************************\n";
 
@@ -45,8 +46,8 @@ void test_array_1d_io()
     test_result = false;
   else
   {
-    vcl_size_t array_size = v_out.size();
-    for (vcl_size_t i=0; i<array_size; i++)
+    std::size_t array_size = v_out.size();
+    for (std::size_t i=0; i<array_size; i++)
     {
       if (v_out[i] != v_in[i])
         test_result = false;
@@ -54,8 +55,8 @@ void test_array_1d_io()
   }
   TEST("v_out == v_in", test_result, true);
 
-  vsl_print_summary(vcl_cout, v_in);
-  vcl_cout << vcl_endl;
+  vsl_print_summary(std::cout, v_in);
+  std::cout << std::endl;
   vsl_indent_clear_all_data();
 }
 

@@ -15,7 +15,9 @@
 //
 // Should template this class.
 
-#include <vcl_vector.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <vector>
 #include <vgl/vgl_fwd.h>
 #include <vnl/vnl_fwd.h>
 #include <rrel/rrel_estimation_problem.h>
@@ -32,8 +34,8 @@ class bpgl_fm_compute_ransac
   // Put the resulting matrix into fm, return true if successful.
   // Points pr are associated with the RHS of the fundamental matrix
   // while the points pl are associated with the LHS.
-  bool compute( const vcl_vector< vgl_point_2d<double> >& pr,
-                const vcl_vector< vgl_point_2d<double> >& pl,
+  bool compute( const std::vector< vgl_point_2d<double> >& pr,
+                const std::vector< vgl_point_2d<double> >& pl,
                 vpgl_fundamental_matrix<double>& fm );
 
   //: The upper bound on the fraction of outlier correspondences
@@ -53,10 +55,10 @@ class bpgl_fm_compute_ransac
   void set_trace_level(int trace_level) { trace_level_ = trace_level; }
 
   //: After "compute" indices will have true set for correspondences that are outliers
-  vcl_vector<bool> outliers;
+  std::vector<bool> outliers;
 
   //: After "compute" this will have point distances from epipolar lines
-  vcl_vector<double> residuals;
+  std::vector<double> residuals;
 
  private:
   double outlier_thresh_;
@@ -75,8 +77,8 @@ class rrel_fm_problem : public rrel_estimation_problem
   //: Construct the problem object with two sets of corresponding points.
   // Points pr correspond to the RHS of the fundamental matrix, while the
   // points pl correspond to the LHS.
-  rrel_fm_problem( const vcl_vector< vgl_point_2d<double> > & pr,
-                   const vcl_vector< vgl_point_2d<double> > & pl );
+  rrel_fm_problem( const std::vector< vgl_point_2d<double> > & pr,
+                   const std::vector< vgl_point_2d<double> > & pl );
 
   virtual ~rrel_fm_problem() {}
 
@@ -87,12 +89,12 @@ class rrel_fm_problem : public rrel_estimation_problem
   unsigned int residual_dof() const { return 4; }
 
   // Generate a parameter estimate from a minimal sample.
-  bool fit_from_minimal_set( const vcl_vector<int>& point_indices,
+  bool fit_from_minimal_set( const std::vector<int>& point_indices,
                              vnl_vector<double>& params ) const;
 
   // Compute unsigned fit residuals relative to the parameter estimate.
   void compute_residuals( const vnl_vector<double>& params,
-                          vcl_vector<double>& residuals ) const;
+                          std::vector<double>& residuals ) const;
 
   // Convert a fundamental matrix into a parameter vector.
   virtual void  fm_to_params( const vpgl_fundamental_matrix<double>&  fm,
@@ -106,14 +108,14 @@ class rrel_fm_problem : public rrel_estimation_problem
   //  The normalized covariance is not yet filled in.
   bool weighted_least_squares_fit( vnl_vector<double>& params,
                                    vnl_matrix<double>& norm_covar,
-                                   const vcl_vector<double>* weights=0 ) const;
+                                   const std::vector<double>* weights=0 ) const;
 
   // Toggles detailed printing of computations.
   bool verbose;
 
  protected:
-  vcl_vector< vgl_point_2d<double> > pr_;
-  vcl_vector< vgl_point_2d<double> > pl_;
+  std::vector< vgl_point_2d<double> > pr_;
+  std::vector< vgl_point_2d<double> > pl_;
 };
 
 #endif // bpgl_fm_compute_ransac_h_

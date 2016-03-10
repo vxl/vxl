@@ -44,7 +44,7 @@ class vgui_listmanager2D_tableau : public vgui_tableau
  ~vgui_listmanager2D_tableau();
 
   //: Returns the type of this tableau ('vgui_listmanager2D_tableau').
-  vcl_string type_name() const;
+  std::string type_name() const;
 
   //: Add given vgui_displaylist2D_tableau to the end of the list of children.
   void add(vgui_displaylist2D_tableau_sptr const&);
@@ -90,17 +90,17 @@ class vgui_listmanager2D_tableau : public vgui_tableau
   bool index_ok(int);
 
   // data
-  vcl_vector<vgui_parent_child_link> children;
-  vcl_vector<bool> active;
-  vcl_vector<bool> visible;
+  std::vector<vgui_parent_child_link> children;
+  std::vector<bool> active;
+  std::vector<bool> visible;
 
   vgui_displaylist2D_tableau_sptr highlight_list;
   vgui_soview2D *highlight_so;
   vgui_event saved_event_;
 
-  vgui_displaylist2D_tableau_sptr contains_hit(vcl_vector<unsigned> const& names);
-  void get_hits(float x, float y, vcl_vector<vcl_vector<unsigned> >* hits);
-  void find_closest(float x, float y, vcl_vector<vcl_vector<unsigned> >* hits,
+  vgui_displaylist2D_tableau_sptr contains_hit(std::vector<unsigned> const& names);
+  void get_hits(float x, float y, std::vector<std::vector<unsigned> >* hits);
+  void find_closest(float x, float y, std::vector<std::vector<unsigned> >* hits,
                     vgui_soview2D** closest_so,
                     vgui_displaylist2D_tableau_sptr * closest_display);
 };

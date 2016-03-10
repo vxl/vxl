@@ -1,5 +1,7 @@
 #include "boxm2_vecf_eyelid_crease.h"
-#include <vcl_cmath.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <cmath>
 #include <vgl/vgl_distance.h>
 #include <vgl/vgl_point_3d.h>
 #include <vgl/vgl_vector_3d.h>
@@ -40,7 +42,7 @@ double boxm2_vecf_eyelid_crease::gi(double xp, double t) const{
   vnl_vector_fixed<double, 5> m = opr_.m(xs);
   double gg = el_.gi(xp,0.0);
   double dmc = dot_product(m, c0)*opr_.eyelid_crease_scale_y();
-  dmc = vcl_cos(dphi_rad_)*dmc + vcl_sin(dphi_rad_)*xs;
+  dmc = std::cos(dphi_rad_)*dmc + std::sin(dphi_rad_)*xs;
   return ((1.0-t)*dmc + t*gg);
 }
 
@@ -70,7 +72,7 @@ vgl_vector_3d<double> boxm2_vecf_eyelid_crease::socket_normal(double xp) const{
   double ct = opr_.eyelid_crease_ct_;
   // normal at crest of crease
   vgl_vector_3d<double> up_sock_normal = opr_.upper_socket_normal();
-  double up_sock_ang = vcl_acos(vcl_fabs(up_sock_normal.z()));
+  double up_sock_ang = std::acos(std::fabs(up_sock_normal.z()));
   // normal at lateral and medial extremes
   double zang = 0.0;
 
@@ -87,7 +89,7 @@ vgl_vector_3d<double> boxm2_vecf_eyelid_crease::socket_normal(double xp) const{
   // note linear interpolation of the angles, not vectors
   double ang = (1-s)*up_sock_ang + s*zang;
   // assume brow normal is never along positive y
-  vgl_vector_3d<double> vret(0.0, -vcl_sin(ang), vcl_cos(ang));
+  vgl_vector_3d<double> vret(0.0, -std::sin(ang), std::cos(ang));
   return vret;
 }
 
@@ -128,7 +130,7 @@ double boxm2_vecf_eyelid_crease::t0(double xp, double y) const{
   double xs = xp/opr_.scale_x();
   vnl_vector_fixed<double, 5> m = opr_.m(xs);
   double temp = dot_product(m, c0)*opr_.eyelid_crease_scale_y();
-  temp = vcl_cos(dphi_rad_)*temp + vcl_sin(dphi_rad_)*xs;
+  temp = std::cos(dphi_rad_)*temp + std::sin(dphi_rad_)*xs;
   // note that the top of the upper eyelid must match bottom of the crease region (el_.gi)
   double ret = (-temp + y)/( -temp + el_.gi(xp, 0.0));
   return ret;
@@ -143,7 +145,7 @@ double boxm2_vecf_eyelid_crease::t(double xp, double y) const{
   vnl_vector_fixed<double, 5> m = opr_.m(xs);
   vnl_vector_fixed<double, 5> c0 = opr_.crease_coefs_t0();
   double temp = dot_product(m, c0)*opr_.eyelid_crease_scale_y();
-  temp = vcl_cos(dphi_rad_)*temp + vcl_sin(dphi_rad_)*xs;
+  temp = std::cos(dphi_rad_)*temp + std::sin(dphi_rad_)*xs;
   // note that the top of the upper eyelid must match bottom of the crease region (el_.gi)
   double ret = (-temp + y)/( -temp + el_.gi(xp, 0.0));
 
@@ -162,7 +164,7 @@ double boxm2_vecf_eyelid_crease::surface_distance(vgl_point_3d<double> const& p)
     double dp = vgl_distance(p, cr_pl);
 
     // eyelid surface distance (includes skin thickness)
-    double r = vcl_sqrt(p.x()*p.x() + p.y()*p.y() + p.z()*p.z());
+    double r = std::sqrt(p.x()*p.x() + p.y()*p.y() + p.z()*p.z());
     double ds = vgl_distance(p, opr_.lid_sph_);
 
     //if  inside eye sphere

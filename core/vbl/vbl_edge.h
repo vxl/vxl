@@ -12,13 +12,14 @@
 // \verbatim
 // \endverbatim
 //-----------------------------------------------------------------------------
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <iostream>
 class vbl_edge
 {
  public:
   vbl_edge(): v0_(-1), v1_(-1), w_(0.0f) {}
   vbl_edge(int v0, int ve, float w): v0_(v0), v1_(ve) , w_(w){}
-  void print(vcl_ostream& os) const { os << '(' << v0_ << ' ' << v1_ << ")\n"; }
+  void print(std::ostream& os) const { os << '(' << v0_ << ' ' << v1_ << ")\n"; }
   int v0_;
   int v1_;
   float w_;

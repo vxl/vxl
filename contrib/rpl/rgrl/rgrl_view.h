@@ -32,7 +32,7 @@ class rgrl_view
 {
  public:
 
-  typedef vcl_vector< rgrl_feature_sptr > feature_vector;
+  typedef std::vector< rgrl_feature_sptr > feature_vector;
 
   //: ctor
   rgrl_view();

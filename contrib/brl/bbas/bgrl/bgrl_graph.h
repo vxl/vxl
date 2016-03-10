@@ -26,17 +26,19 @@
 #include "bgrl_search_func.h"
 #include <vbl/vbl_ref_count.h>
 #include <vsl/vsl_binary_io.h>
-#include <vcl_set.h>
-#include <vcl_string.h>
-#include <vcl_iosfwd.h>
+#include <set>
+#include <string>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iosfwd>
 
 //: The graph
 class bgrl_graph : public vbl_ref_count
 {
  public:
 
-  typedef vcl_set<bgrl_vertex_sptr>::iterator vertex_iterator;
-  typedef vcl_set<bgrl_edge_sptr>::iterator edge_iterator;
+  typedef std::set<bgrl_vertex_sptr>::iterator vertex_iterator;
+  typedef std::set<bgrl_edge_sptr>::iterator edge_iterator;
 
   //: Constructor
   bgrl_graph();
@@ -75,7 +77,7 @@ class bgrl_graph : public vbl_ref_count
   int size() const;
 
   //: Return a platform independent string identifying the class
-  virtual vcl_string is_a() const;
+  virtual std::string is_a() const;
 
   //: Create a copy of the object on the heap.
   // The caller is responsible for deletion
@@ -91,11 +93,11 @@ class bgrl_graph : public vbl_ref_count
   short version() const;
 
   //: Print an ascii summary to the stream
-  void print_summary(vcl_ostream &os) const;
+  void print_summary(std::ostream &os) const;
 
  private:
   //: The vector of vertices
-  vcl_set<bgrl_vertex_sptr> vertices_;
+  std::set<bgrl_vertex_sptr> vertices_;
 
 
  public:
@@ -153,7 +155,7 @@ void vsl_b_write(vsl_b_ostream &os, const bgrl_graph* g);
 void vsl_b_read(vsl_b_istream &is, bgrl_graph* &g);
 
 //: Print an ASCII summary to the stream
-void vsl_print_summary(vcl_ostream &os, const bgrl_graph* g);
+void vsl_print_summary(std::ostream &os, const bgrl_graph* g);
 
 
 #endif // bgrl_graph_h_

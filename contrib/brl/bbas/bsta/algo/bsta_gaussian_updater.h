@@ -18,7 +18,9 @@
 #include <bsta/bsta_gaussian_full.h>
 #include <bsta/bsta_mixture.h>
 #include <bsta/bsta_attributes.h>
-#include <vcl_algorithm.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <algorithm>
 
 
 //: Update the statistics given a 1D Gaussian distribution and a learning rate
@@ -112,7 +114,7 @@ void bsta_update_gaussian(bsta_gaussian_full<T,n>& gaussian, T rho,
 template <class T>
 inline T element_max(const T& a, const T& b)
 {
-  return vcl_max(a,b);
+  return std::max(a,b);
 }
 
 
@@ -125,7 +127,7 @@ vnl_vector_fixed<T,n> element_max(const vnl_vector_fixed<T,n>& a_vector,
   T* r = min_vector.data_block();
   const T* a = a_vector.data_block();
   for (unsigned i=0; i<n; ++i, ++r, ++a)
-    *r = vcl_max(*a,b);
+    *r = std::max(*a,b);
   return min_vector;
 }
 
@@ -140,7 +142,7 @@ vnl_vector_fixed<T,n> element_max(const vnl_vector_fixed<T,n>& a_vector,
   const T* a = a_vector.data_block();
   const T* b = b_vector.data_block();
   for (unsigned i=0; i<n; ++i, ++r, ++a, ++b)
-    *r = vcl_max(*a,*b);
+    *r = std::max(*a,*b);
   return min_vector;
 }
 
@@ -155,7 +157,7 @@ vnl_matrix_fixed<T,n,n> element_max(const vnl_matrix_fixed<T,n,n>& a_matrix,
   const T* a = a_matrix.data_block();
   const unsigned step = n+1;
   for (unsigned i=0; i<n; ++i, r+=step, a+=step)
-    *r = vcl_max(*a,b);
+    *r = std::max(*a,b);
   return min_matrix;
 }
 
@@ -171,7 +173,7 @@ vnl_matrix_fixed<T,n,n> element_max(const vnl_matrix_fixed<T,n,n>& a_matrix,
   const T* b = b_matrix.data_block();
   const unsigned num_elements = n*n;
   for (unsigned i=0; i<num_elements; ++i, ++r, ++a, ++b)
-    *r = vcl_max(*a,*b);
+    *r = std::max(*a,*b);
   return min_matrix;
 }
 

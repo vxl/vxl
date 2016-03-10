@@ -10,9 +10,9 @@
 
 void print_usage()
 {
-  vcl_cout << "Usage: msm_get_bounds -i source.pts -o output.pts\n";
-  vcl_cout<<"Calculate four points at corners of bounding box of input points.\n"
-          <<"Results saved to new_dest.pts"<<vcl_endl;
+  std::cout << "Usage: msm_get_bounds -i source.pts -o output.pts\n";
+  std::cout<<"Calculate four points at corners of bounding box of input points.\n"
+          <<"Results saved to new_dest.pts"<<std::endl;
 
   vul_arg_display_usage_and_exit();
 
@@ -20,8 +20,8 @@ void print_usage()
 
 int main(int argc, char** argv)
 {
-  vul_arg<vcl_string> in_pts_path("-i","Source points");
-  vul_arg<vcl_string> dest_pts_path("-o","Destination bounding box points","bounds.pts");
+  vul_arg<std::string> in_pts_path("-i","Source points");
+  vul_arg<std::string> dest_pts_path("-o","Destination bounding box points","bounds.pts");
 
   vul_arg_parse(argc,argv);
 
@@ -36,8 +36,8 @@ int main(int argc, char** argv)
 
   if (!points.read_text_file(in_pts_path()))
   {
-    vcl_cerr<<"Failed to load points from "
-            <<in_pts_path()<<vcl_endl;
+    std::cerr<<"Failed to load points from "
+            <<in_pts_path()<<std::endl;
     return 1;
   }
 
@@ -50,11 +50,11 @@ int main(int argc, char** argv)
 
   if (!dest_points.write_text_file(dest_pts_path()))
   {
-    vcl_cerr<<"Failed to write points to "
-            <<dest_pts_path()<<vcl_endl;
+    std::cerr<<"Failed to write points to "
+            <<dest_pts_path()<<std::endl;
     return 2;
   }
-  vcl_cout<<"Bounding box points saved to "<<dest_pts_path()<<vcl_endl;
+  std::cout<<"Bounding box points saved to "<<dest_pts_path()<<std::endl;
 
   return 0;
 }

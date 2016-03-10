@@ -29,8 +29,8 @@ public:
 
   //: Constructor
   volm_desc_ex_2d_matcher(depth_map_scene_sptr const& dms,
-                          vcl_vector<volm_weight> const& weights,
-                          vcl_vector<double> const& radius,
+                          std::vector<volm_weight> const& weights,
+                          std::vector<double> const& radius,
                           unsigned const& nlands = volm_osm_category_io::volm_land_table.size(),
                           unsigned char const& initial_mag = 0)
                           : dms_(dms), radius_(radius), nlands_(nlands), initial_mag_(initial_mag), weights_(weights) {}
@@ -47,7 +47,7 @@ public:
   //: Create a volumetric existence descriptor for the query image
   virtual volm_desc_sptr create_query_desc();
 
-  virtual vcl_string get_index_type_str() { return volm_desc_ex_2d_indexer::get_name(); }
+  virtual std::string get_index_type_str() { return volm_desc_ex_2d_indexer::get_name(); }
 
 private:
     //: query depth_map_scene
@@ -55,16 +55,16 @@ private:
   //volm_desc_sptr      query_;
 
   //: parameters related to volumetric existence descriptor
-  vcl_vector<double> radius_;
+  std::vector<double> radius_;
   unsigned           nlands_;
   unsigned char initial_mag_;
 
   //: weight parameters
-  vcl_vector<volm_weight> weights_;
-  vcl_vector<float> weights_hist_;
+  std::vector<volm_weight> weights_;
+  std::vector<float> weights_hist_;
 
   //: function to find weight value given the name of the region
-  float find_wgt_value(vcl_string const& name);
+  float find_wgt_value(std::string const& name);
 };
 
 #endif // volm_desc_ex_2d_matcher_h_

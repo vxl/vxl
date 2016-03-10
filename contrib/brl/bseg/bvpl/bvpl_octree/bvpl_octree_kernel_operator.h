@@ -15,7 +15,9 @@
 #include <bvpl/kernels/bvpl_kernel.h>
 #include <boct/boct_tree.h>
 #include <boxm/boxm_scene.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iostream>
 
 template<class T_data>
 class bvpl_octree_kernel_operator
@@ -32,8 +34,8 @@ class bvpl_octree_kernel_operator
   void operate(F functor, bvpl_kernel_sptr kernel, tree_type* out_tree, short level, double cell_length)
   {
     // get all (leaf) cells at given scale
-    vcl_vector<cell_type* > cells = tree_in_->leaf_cells_at_level(level);
-    vcl_vector<cell_type* > out_cells = out_tree->leaf_cells_at_level(level);
+    std::vector<cell_type* > cells = tree_in_->leaf_cells_at_level(level);
+    std::vector<cell_type* > out_cells = out_tree->leaf_cells_at_level(level);
 
     bvpl_kernel_iterator kernel_iter = kernel->iterator();
 
@@ -44,10 +46,10 @@ class bvpl_octree_kernel_operator
       cell_type* center_cell = cells[i];
 
       if (center_cell->level()!=level)
-        vcl_cerr << "Error in bvpl_octree_kernel_operator: Cell is not at the right level\n";
+        std::cerr << "Error in bvpl_octree_kernel_operator: Cell is not at the right level\n";
 
       if (!center_cell->is_leaf())
-        vcl_cerr << "Error in bvpl_octree_kernel_operator: Cell is a leaf\n";
+        std::cerr << "Error in bvpl_octree_kernel_operator: Cell is a leaf\n";
 
       vgl_point_3d<double> this_cell_origin = tree_in_->local_origin(center_cell);
 
@@ -90,7 +92,7 @@ template <class T_data> template <class F>
 void bvpl_octree_kernel_operator<T_data>::operate(F functor, bvpl_kernel_sptr kernel, short level, double cell_length)
 {
   // get all (leaf) cells at given scale/tree level
-  vcl_vector<cell_type* > cells = tree_in_->leaf_cells_at_level(level);
+  std::vector<cell_type* > cells = tree_in_->leaf_cells_at_level(level);
 
   bvpl_kernel_iterator kernel_iter = kernel->iterator();
 
@@ -101,10 +103,10 @@ void bvpl_octree_kernel_operator<T_data>::operate(F functor, bvpl_kernel_sptr ke
     cell_type* center_cell = cells[i];
 
     if (center_cell->level()!=level)
-      vcl_cerr << "Error in bvpl_octree_kernel_operator: Cell is not at the right level\n";
+      std::cerr << "Error in bvpl_octree_kernel_operator: Cell is not at the right level\n";
 
     if (!center_cell->is_leaf())
-      vcl_cerr << "Error in bvpl_octree_kernel_operator: Cell is a not a leaf\n";
+      std::cerr << "Error in bvpl_octree_kernel_operator: Cell is a not a leaf\n";
 
     vgl_point_3d<double> this_cell_origin = tree_in_->local_origin(center_cell);
 

@@ -18,7 +18,9 @@
 #include <vipl/vipl_with_vnl_matrix/accessors/vipl_accessors_vnl_vector.h>
 #include <vipl/vipl_histogram.h>
 #include <vnl/vnl_vector.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iostream>
 #include "test_driver.h"
 #include <vxl_config.h> // for vxl_byte
 
@@ -41,7 +43,7 @@ int vipl_test_histogram()
 {
   vil_image_view<vxl_byte> byte_img = vipl_test_histogram_CreateTest8bitImage(32, 32);
 
-  vcl_cout << "Starting vipl_histogram test\n";
+  std::cout << "Starting vipl_histogram test\n";
 
   {
     const unsigned int expected_n = 45;
@@ -58,11 +60,11 @@ int vipl_test_histogram()
     for (unsigned int i=0; i+2<byte_out.size(); ++i)
       if (byte_out(i)  != i*2 + i*2+1) test_pass = false;
     TEST("vnl_vector histogram counted correctly", test_pass, true);
-    vcl_cout << byte_out << vcl_endl;
+    std::cout << byte_out << std::endl;
   }
   {
-    vcl_vector<unsigned int> byte_out(46);
-    vipl_histogram<vil_image_view<vxl_byte>,vcl_vector<unsigned int>, vxl_byte,unsigned int> op;
+    std::vector<unsigned int> byte_out(46);
+    vipl_histogram<vil_image_view<vxl_byte>,std::vector<unsigned int>, vxl_byte,unsigned int> op;
     op.put_in_data_ptr(&byte_img); op.put_out_data_ptr(&byte_out); op.filter();
 
     // check that final bin has correct number.
@@ -72,7 +74,7 @@ int vipl_test_histogram()
     // check that rest of bins are correct
     for (unsigned int i=0; i+1<byte_out.size(); ++i)
       if (byte_out[i] != i) test_pass = false;
-    TEST("vcl_vector histogram counted correctly", test_pass, true);
+    TEST("std::vector histogram counted correctly", test_pass, true);
   }
 
   return 0;

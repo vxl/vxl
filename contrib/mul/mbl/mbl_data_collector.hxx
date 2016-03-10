@@ -7,7 +7,9 @@
 #include "mbl_data_collector.h"
 
 #include <vcl_cassert.h>
-#include <vcl_algorithm.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <algorithm>
 
 //=======================================================================
 // Dflt ctor
@@ -50,7 +52,7 @@ template<class T>
 unsigned long mbl_data_collector_merge_all(mbl_data_collector<T> &dest,
                                            mbl_data_wrapper<T > &src0,
                                            mbl_data_wrapper<T > &src1,
-                                           vcl_vector<unsigned> *order /*=0*/)
+                                           std::vector<unsigned> *order /*=0*/)
 {
   unsigned long n0 = src0.size();
   unsigned long n1 = src1.size();
@@ -62,7 +64,7 @@ unsigned long mbl_data_collector_merge_all(mbl_data_collector<T> &dest,
     if (order)
     {
       order->resize(n1);
-      vcl_fill(order->begin(), order->end(), 1);
+      std::fill(order->begin(), order->end(), 1);
     }
     return mbl_data_collector_copy_all(dest, src1);
   }
@@ -71,7 +73,7 @@ unsigned long mbl_data_collector_merge_all(mbl_data_collector<T> &dest,
     if (order)
     {
       order->resize(n0);
-      vcl_fill(order->begin(), order->end(), 0);
+      std::fill(order->begin(), order->end(), 0);
     }
     return mbl_data_collector_copy_all(dest, src0);
   }
@@ -116,6 +118,6 @@ template unsigned long mbl_data_collector_copy_all(mbl_data_collector<T > &dest,
 template unsigned long mbl_data_collector_merge_all(mbl_data_collector<T > &dest,\
                                     mbl_data_wrapper<T > &src1,\
                                     mbl_data_wrapper<T > &src2,\
-                                    vcl_vector<unsigned > *order)
+                                    std::vector<unsigned > *order)
 
 #endif // mbl_data_collector_hxx_

@@ -20,8 +20,9 @@
 // Modified extensively - J.L. Mundy January 07, 2007
 //
 #include <vpgl/vpgl_rational_camera.h>
-#include <vcl_string.h>
-// not used? #include <vcl_vector.h>
+#include <vcl_compiler.h>
+#include <string>
+// not used? #include <vector>
 #include <vnl/vnl_double_2.h>
 #include <vil/file_formats/vil_nitf2_image.h>
 
@@ -34,16 +35,16 @@ class vpgl_nitf_rational_camera : public vpgl_rational_camera<double>
   vpgl_nitf_rational_camera();
 
   //: Construct from a nitf image file
-  vpgl_nitf_rational_camera(vcl_string const& nitf_image_path,
+  vpgl_nitf_rational_camera(std::string const& nitf_image_path,
                             bool verbose = false);
 
   //: Construct from a nitf image
   vpgl_nitf_rational_camera(vil_nitf2_image* nift_image,
                             bool verbose = false);
 
-  vcl_string rational_extension_type() const {return nitf_rational_type_;}
+  std::string rational_extension_type() const {return nitf_rational_type_;}
 
-  vcl_string image_id() const {return image_id_;}
+  std::string image_id() const {return image_id_;}
 
   //: Geographic coordinates of image corners
   vnl_double_2 upper_left() const {return ul_;}
@@ -57,9 +58,9 @@ class vpgl_nitf_rational_camera : public vpgl_rational_camera<double>
   void set_order_b(int*);
   bool init(vil_nitf2_image* nitf_image, bool verbose);
   // data members
-  vcl_string nitf_rational_type_;
-  vcl_string image_id_;
-  vcl_string image_igeolo_;
+  std::string nitf_rational_type_;
+  std::string image_id_;
+  std::string image_igeolo_;
   //: geo-coordinates of image corners
   vnl_double_2 ul_;
   vnl_double_2 ur_;

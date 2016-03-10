@@ -9,11 +9,11 @@
 // \verbatim
 //  Modifications
 //   pcp - I removed the type and user fields and replaced them with
-//      a vcl_string. this is because I think the types of message that
+//      a std::string. this is because I think the types of message that
 //      will be sent are much more diverse than the event types
 //      and so shouldn't follow that model. It is more difficult
 //      to create a unique user tag than it is to put a different msg into the
-//      vcl_string.
+//      std::string.
 //      Also I have changed the pointer to a vgui_observable to a void*
 //      This is because the observable class doesn't contain any useful info
 //      as far as the observer is concerned and a static cast to another class
@@ -41,7 +41,7 @@
 //   static const char end[];
 //   void f()
 //   {
-//     vcl_string moo="moo moo moo";
+//     std::string moo="moo moo moo";
 //     vgui_message m;
 //     m.from = this;
 //     m.user = sender::begin;
@@ -64,13 +64,13 @@
 //   {
 //     if (m.user == sender::begin)
 //     {
-//       vcl_string *s = static_cast<vcl_string*>(m.data);
-//       vcl_cerr << "begin : " << *s << vcl_endl;
+//       std::string *s = static_cast<std::string*>(m.data);
+//       std::cerr << "begin : " << *s << std::endl;
 //     }
 //     else if (m.user == sender::end)
 //     {
 //       sender *s = static_cast<sender*>(m.from);
-//       vcl_cerr << "end\n";
+//       std::cerr << "end\n";
 //     }
 //     else
 //     {

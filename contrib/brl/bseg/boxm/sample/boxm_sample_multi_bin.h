@@ -3,7 +3,9 @@
 //:
 // \file
 #include <boxm/boxm_apm_traits.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iostream>
 #include <vsl/vsl_binary_io.h>
 #include <bsta/bsta_attributes.h>
 
@@ -20,7 +22,7 @@ class boxm_sample_multi_bin
   //: default constructor
   boxm_sample_multi_bin() : alpha(0.001f) {}
   //: constructor
-  boxm_sample_multi_bin(float alpha_val,vcl_map<int,apm_datatype> apm_val): alpha(alpha_val), appearance_(apm_val) {}
+  boxm_sample_multi_bin(float alpha_val,std::map<int,apm_datatype> apm_val): alpha(alpha_val), appearance_(apm_val) {}
 
   static short version_no() { return 1; }
 
@@ -33,9 +35,9 @@ class boxm_sample_multi_bin
 
   void set_appearance(apm_datatype  app,int bin=0);
 
-  vcl_map<int,apm_datatype> appearance_;
+  std::map<int,apm_datatype> appearance_;
 
-  void  print(vcl_ostream& os) const;
+  void  print(std::ostream& os) const;
  private:
   //: the appearance model at the sample point
 };
@@ -53,7 +55,7 @@ template <boxm_apm_type APM_MODEL>
 void vsl_b_read(vsl_b_istream & is, boxm_sample_multi_bin<APM_MODEL> *&sample);
 
 template <boxm_apm_type APM_MODEL>
-vcl_ostream& operator << (vcl_ostream& os, const boxm_sample_multi_bin<APM_MODEL>& sample);
+std::ostream& operator << (std::ostream& os, const boxm_sample_multi_bin<APM_MODEL>& sample);
 
 
 #endif

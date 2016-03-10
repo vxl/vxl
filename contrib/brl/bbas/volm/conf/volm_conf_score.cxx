@@ -1,13 +1,15 @@
 #include "volm_conf_score.h"
 //:
 // \file
-#include <vcl_cmath.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <cmath>
 #include <vnl/vnl_math.h>
-#include <vcl_limits.h>
+#include <limits>
 
 // note the angular value is from 0 to 2*pi and 0 refers to the east direction
 
-volm_conf_score::volm_conf_score(float const& score, float const& theta, vcl_vector<volm_conf_object> const& landmarks)
+volm_conf_score::volm_conf_score(float const& score, float const& theta, std::vector<volm_conf_object> const& landmarks)
  : score_(score), theta_(theta), landmarks_(landmarks)
 {
   while (theta_ > vnl_math::twopi)
@@ -61,7 +63,7 @@ void volm_conf_score::b_read(vsl_b_istream& is)
     }
   }
   else {
-    vcl_cout << "volm_conf_score: binary read -- unknown binary io version: " << (int)ver << ", most updated version is " << this->version() << '\n';
+    std::cout << "volm_conf_score: binary read -- unknown binary io version: " << (int)ver << ", most updated version is " << this->version() << '\n';
     return;
   }
 }

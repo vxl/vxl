@@ -1,6 +1,7 @@
 // This is core/vcsl/vcsl_spatial_transformation.cxx
 #include "vcsl_spatial_transformation.h"
-#include <vcl_cmath.h> // for acos(), sin()
+#include <vcl_compiler.h>
+#include <cmath> // for acos(), sin()
 #include <vcl_cassert.h>
 
 //---------------------------------------------------------------------------
@@ -126,10 +127,10 @@ vcsl_spatial_transformation::lqi(const vnl_quaternion<double> &v0,
   double t=(time-t0)/(t1-t0);
 
   double cosangle=dot_product(v0.as_ref(), v1.as_ref());
-  double angle=vcl_acos(cosangle);
-  double invsin=1/vcl_sin(angle);
-  double coef1=vcl_sin((1-t)*angle)*invsin;
-  double coef2=vcl_sin(t*angle)*invsin;
+  double angle=std::acos(cosangle);
+  double invsin=1/std::sin(angle);
+  double coef1=std::sin((1-t)*angle)*invsin;
+  double coef2=std::sin(t*angle)*invsin;
 
   return vnl_quaternion<double>(v0.x()*coef1+v1.x()*coef2,
                                 v0.y()*coef1+v1.y()*coef2,

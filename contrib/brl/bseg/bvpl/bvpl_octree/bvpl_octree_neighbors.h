@@ -15,7 +15,9 @@
 #include <bvpl/kernels/bvpl_kernel.h>
 #include <boct/boct_tree.h>
 #include <boxm/boxm_scene.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iostream>
 
 template<class T_data>
 class bvpl_octree_neighbors
@@ -29,7 +31,7 @@ class bvpl_octree_neighbors
 
   // "Convolves" kernel with class tree, storing the output in an output octree.
   void neighbors(bvpl_kernel_sptr kernel, cell_type* cell,
-                 vcl_vector<cell_type *>& neighb_cells)
+                 std::vector<cell_type *>& neighb_cells)
   {
     bvpl_kernel_iterator kernel_iter = kernel->iterator();
     short level = cell->level();
@@ -49,7 +51,7 @@ class bvpl_octree_neighbors
       if (this_cell) {
         // check if this cell is an internal node, if so get the children
         if (!this_cell->is_leaf()) {
-          vcl_vector<cell_type *> children;
+          std::vector<cell_type *> children;
           this_cell->leaf_children(children);
           neighb_cells.insert(neighb_cells.end(), children.begin(), children.end());
         }

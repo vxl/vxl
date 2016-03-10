@@ -7,7 +7,9 @@
 #include <boxm2/boxm2_data.h>
 #include <boxm2/basic/boxm2_block_id.h>
 
-#include <vcl_fstream.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <fstream>
 
 #include <vbl/vbl_ref_count.h>
 #include <vbl/vbl_smart_ptr.h>
@@ -18,18 +20,18 @@ class boxm2_stream_cache_helper : public vbl_ref_count
     boxm2_stream_cache_helper() : index_(-1), buf_(0) {}
     ~boxm2_stream_cache_helper();
 
-    bool open_file(vcl_string filename);
+    bool open_file(std::string filename);
     void read(unsigned long size, boxm2_block_id id);
     void close_file();
 
     //: return num cells on the buf
-    int num_cells(vcl_size_t cell_size);
+    int num_cells(std::size_t cell_size);
 
     //: return the byte buffer that contains ith cell, i is with respect to the global file
-    char *get_cell(int i, vcl_size_t cell_size, boxm2_block_id id);
+    char *get_cell(int i, std::size_t cell_size, boxm2_block_id id);
 
     int index_;  // index of the data point at the beginning of buf_
-    vcl_ifstream ifs_;
+    std::ifstream ifs_;
     boxm2_data_base *buf_;
 };
 
@@ -44,7 +46,7 @@ class boxm2_stream_cache_datatype_helper : public vbl_ref_count
     boxm2_block_id current_block_;
 
     //: the size of datatype that is stored in each cell
-    vcl_size_t cell_size_;
+    std::size_t cell_size_;
 
     //: the size of chunks that will be read from the file, computed based on cell size and available memory
     unsigned long buf_size_;
@@ -62,15 +64,15 @@ class boxm2_stream_cache: public vbl_ref_count
   public:
     //: hidden constructor (singleton class)
     boxm2_stream_cache(boxm2_scene_sptr scene,
-                       const vcl_vector<vcl_string>& data_types,
-                       const vcl_vector<vcl_string>& identifier_list,
+                       const std::vector<std::string>& data_types,
+                       const std::vector<std::string>& identifier_list,
                        float num_giga = 1.0f);
 
     //: return the next cells in the streams of each data block given by the identifier list for this datatype, pass index if available to check synchronization
-    template <boxm2_data_type T> vcl_vector<typename boxm2_data_traits<T>::datatype> get_next(boxm2_block_id id, int index = -1);
+    template <boxm2_data_type T> std::vector<typename boxm2_data_traits<T>::datatype> get_next(boxm2_block_id id, int index = -1);
 
     //: random access in the stream
-    template <boxm2_data_type T> vcl_vector<typename boxm2_data_traits<T>::datatype> get_random_i(boxm2_block_id id, unsigned int index);
+    template <boxm2_data_type T> std::vector<typename boxm2_data_traits<T>::datatype> get_random_i(boxm2_block_id id, unsigned int index);
     //: in iterative mode, the files need to be closed and re-opened
     void close_streams();
 
@@ -79,7 +81,7 @@ class boxm2_stream_cache: public vbl_ref_count
     //: hidden destructor (singleton class)
     ~boxm2_stream_cache();
 
-    boxm2_stream_cache_datatype_helper_sptr get_helper(vcl_string& data_type);
+    boxm2_stream_cache_datatype_helper_sptr get_helper(std::string& data_type);
 
     template <boxm2_data_type T> bool open_streams( boxm2_stream_cache_datatype_helper_sptr h);
 #if 0
@@ -89,16 +91,16 @@ class boxm2_stream_cache: public vbl_ref_count
     //: boxm2_scene needs to be around to get path of the files
     boxm2_scene_sptr scene_;
 
-    vcl_vector<vcl_string> identifier_list_;
+    std::vector<std::string> identifier_list_;
 
     //: available RAM size in bytes
     unsigned long mem_size_;
 
     //: map to store various info about each datatype
-    vcl_map<vcl_string, boxm2_stream_cache_datatype_helper_sptr > data_types_;
+    std::map<std::string, boxm2_stream_cache_datatype_helper_sptr > data_types_;
 
     //: for each data type, there is a list for each identifier
-    vcl_map<vcl_string, vcl_vector<boxm2_stream_cache_helper_sptr> > data_streams_;
+    std::map<std::string, std::vector<boxm2_stream_cache_helper_sptr> > data_streams_;
 };
 
 typedef vbl_smart_ptr<boxm2_stream_cache> boxm2_stream_cache_sptr;

@@ -1,5 +1,7 @@
 // This is mul/mbl/tests/test_dyn_prog.cxx
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iostream>
 #include <mbl/mbl_dyn_prog.h>
 #include <testlib/testlib_test.h>
 #include <mbl/mbl_combination.h>
@@ -9,7 +11,7 @@ static inline int mbl_abs(int i) { return i>=0 ? i : -i; }
 
 double dp_cost1(const vnl_matrix<double>& W,
                 const vnl_vector<double>& pair_cost,
-                const vcl_vector<unsigned>& x)
+                const std::vector<unsigned>& x)
 {
   unsigned n=x.size();
   double sum=0.0;
@@ -21,7 +23,7 @@ double dp_cost1(const vnl_matrix<double>& W,
 
 double dp_cost2(const vnl_matrix<double>& W,
                 const vnl_vector<double>& pair_cost,
-                const vcl_vector<unsigned>& x)
+                const std::vector<unsigned>& x)
 {
   unsigned n=x.size();
   double sum=0.0;
@@ -34,14 +36,14 @@ double dp_cost2(const vnl_matrix<double>& W,
 
 double global_optima1(const vnl_matrix<double>& W,
                       const vnl_vector<double>& pair_cost,
-                      vcl_vector<int>& x)
+                      std::vector<int>& x)
 {
   unsigned n = W.rows();
   unsigned n_states = W.columns();
-  vcl_vector<unsigned> nd(n,n_states);
+  std::vector<unsigned> nd(n,n_states);
 
-  vcl_vector<unsigned> ux = mbl_combination_begin(nd);
-  vcl_vector<unsigned> best_x=ux;
+  std::vector<unsigned> ux = mbl_combination_begin(nd);
+  std::vector<unsigned> best_x=ux;
   double best_cost = dp_cost1(W,pair_cost,ux);
   do
   {
@@ -56,14 +58,14 @@ double global_optima1(const vnl_matrix<double>& W,
 
 double global_optima2(const vnl_matrix<double>& W,
                       const vnl_vector<double>& pair_cost,
-                      vcl_vector<int>& x)
+                      std::vector<int>& x)
 {
   unsigned n = W.rows();
   unsigned n_states = W.columns();
-  vcl_vector<unsigned> nd(n,n_states);
+  std::vector<unsigned> nd(n,n_states);
 
-  vcl_vector<unsigned> ux = mbl_combination_begin(nd);
-  vcl_vector<unsigned> best_x=ux;
+  std::vector<unsigned> ux = mbl_combination_begin(nd);
+  std::vector<unsigned> best_x=ux;
   double best_cost = dp_cost2(W,pair_cost,ux);
   do
   {
@@ -79,7 +81,7 @@ double global_optima2(const vnl_matrix<double>& W,
 
 void test_dyn_prog1(unsigned n, unsigned n_states)
 {
-  vcl_cout<<n_states<<" states, "<<n<<" variables."<<vcl_endl;
+  std::cout<<n_states<<" states, "<<n<<" variables."<<std::endl;
 
   // Generate some random data
   vnl_random rand1(473849);
@@ -91,7 +93,7 @@ void test_dyn_prog1(unsigned n, unsigned n_states)
   vnl_vector<double> pair_cost(n_states);
   for (unsigned i=0;i<n_states;++i) pair_cost[i]=0.1*i;
 
-  vcl_vector<int> x,true_x;
+  std::vector<int> x,true_x;
 
   mbl_dyn_prog dp;
   double min_cost = dp.solve(x,W,pair_cost);
@@ -102,14 +104,14 @@ void test_dyn_prog1(unsigned n, unsigned n_states)
 
   for (unsigned i=0;i<n;++i)
   {
-    vcl_cout<<i<<") x="<<x[i]<<vcl_endl;
+    std::cout<<i<<") x="<<x[i]<<std::endl;
     TEST("State correct",x[i],true_x[i]);
   }
 }
 
 void test_dyn_prog_loop(unsigned n, unsigned n_states)
 {
-  vcl_cout<<n_states<<" states, "<<n<<" variables."<<vcl_endl;
+  std::cout<<n_states<<" states, "<<n<<" variables."<<std::endl;
 
   // Generate some random data
   vnl_random rand1(473349);
@@ -121,7 +123,7 @@ void test_dyn_prog_loop(unsigned n, unsigned n_states)
   vnl_vector<double> pair_cost(n_states);
   for (unsigned i=0;i<n_states;++i) pair_cost[i]=0.1*i;
 
-  vcl_vector<int> x,true_x;
+  std::vector<int> x,true_x;
 
   mbl_dyn_prog dp;
   double min_cost = dp.solve_loop(x,W,pair_cost);
@@ -132,14 +134,14 @@ void test_dyn_prog_loop(unsigned n, unsigned n_states)
 
   for (unsigned i=0;i<n;++i)
   {
-    vcl_cout<<i<<") x="<<x[i]<<vcl_endl;
+    std::cout<<i<<") x="<<x[i]<<std::endl;
     TEST("State correct",x[i],true_x[i]);
   }
 }
 
 void test_dyn_prog()
 {
-  vcl_cout << "********************\n"
+  std::cout << "********************\n"
            << " Testing mbl_dyn_prog\n"
            << "********************\n";
   test_dyn_prog1(4,4);

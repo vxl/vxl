@@ -1,5 +1,7 @@
 // This is rpl/rrel/tests/test_m_est_obj.cxx
-#include <vcl_vector.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <vector>
 #include <testlib/testlib_test.h>
 #include <vnl/vnl_math.h>
 
@@ -31,7 +33,7 @@ static void test_m_est_obj()
   //
   //  Test the MEstimator functions
   //
-  vcl_vector<double> res;
+  std::vector<double> res;
   res.push_back(1.0);
   res.push_back(2.1);
   res.push_back(-3.0);
@@ -46,7 +48,7 @@ static void test_m_est_obj()
   double obj = m_est->fcn( res.begin(), res.end(), sigma, VXL_NULLPTR );
   TEST_NEAR("Objective function", obj, hand_obj, 1e-6);
 
-  vcl_vector<double> weights(num_res);
+  std::vector<double> weights(num_res);
   m_est->wgt( res.begin(), res.end(), sigma, weights.begin() );
   TEST_NEAR("Computing weight 0 --- single scale", m_est->wgt( res[0],sigma ), weights[0] , 1e-6);
   TEST_NEAR("Computing weight 1 --- single scale", m_est->wgt( res[1],sigma ), weights[1] , 1e-6);
@@ -55,7 +57,7 @@ static void test_m_est_obj()
   TEST_NEAR("Computing weight 4 --- single scale", m_est->wgt( res[4],sigma ), weights[4] , 1e-6);
   TEST_NEAR("Computing weight 5 --- single scale", m_est->wgt( res[5],sigma ), weights[5] , 1e-6);
 
-  vcl_vector<double> scales(num_res);
+  std::vector<double> scales(num_res);
   scales[0] = 1.0;
   scales[1] = 2.0;
   scales[2] = 1.0;

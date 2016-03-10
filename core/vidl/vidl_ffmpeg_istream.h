@@ -17,7 +17,8 @@
 // \endverbatim
 
 #include "vidl_istream.h"
-#include <vcl_string.h>
+#include <vcl_compiler.h>
+#include <string>
 
 
 //: A video input stream using FFMPEG to decoded files
@@ -29,13 +30,13 @@ class vidl_ffmpeg_istream
   vidl_ffmpeg_istream();
 
   //: Constructor - from a filename
-  vidl_ffmpeg_istream(const vcl_string& filename);
+  vidl_ffmpeg_istream(const std::string& filename);
 
   //: Destructor
   virtual ~vidl_ffmpeg_istream();
 
   //: Open a new stream using a filename
-  virtual bool open(const vcl_string& filename);
+  virtual bool open(const std::string& filename);
 
   //: Close the stream
   virtual void close();

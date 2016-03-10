@@ -7,8 +7,10 @@
 #include <vdtop/vdtop_8_neighborhood_mask.h>
 #include <vmap/vmap_types.h> // for vmap_2_map_tag
 #include <vil/vil_image_view.h>
-#include <vcl_cstddef.h> // for std::ptrdiff_t
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <cstddef> // for std::ptrdiff_t
+#include <iostream>
 
 //: The 3 in 1 function.
 // It computes upper masks, removes non maximal directions, and compute the down-left version of the symmetric
@@ -24,9 +26,9 @@ void vdtop_compute_first_veinerization_pass_(vil_image_view<T> & img, const T& m
   masks.set_size(ni, nj, np) ;
 
   // Precompute steps
-  vcl_ptrdiff_t istepI=img.istep(),jstepI=img.jstep(),pstepI = img.planestep();
-  vcl_ptrdiff_t istepM=masks.istep(),jstepM=masks.jstep(),pstepM = masks.planestep();
-  vcl_ptrdiff_t movesI[8], movesM[8] ;
+  std::ptrdiff_t istepI=img.istep(),jstepI=img.jstep(),pstepI = img.planestep();
+  std::ptrdiff_t istepM=masks.istep(),jstepM=masks.jstep(),pstepM = masks.planestep();
+  std::ptrdiff_t movesI[8], movesM[8] ;
   movesI[0]=istepI ;
   movesI[1]=-jstepI+istepI ;
   movesI[2]=-jstepI ;
@@ -240,9 +242,9 @@ void vdtop_compute_8_upper_masks(vil_image_view<T> & img, const T& max_value, vi
   masks.set_size(ni, nj, np) ;
 
   // Precompute steps
-  vcl_ptrdiff_t istepI=img.istep(),jstepI=img.jstep(),pstepI = img.planestep();
-  vcl_ptrdiff_t istepM=masks.istep(),jstepM=masks.jstep(),pstepM = masks.planestep();
-  vcl_ptrdiff_t movesI[8], movesM[8] ;
+  std::ptrdiff_t istepI=img.istep(),jstepI=img.jstep(),pstepI = img.planestep();
+  std::ptrdiff_t istepM=masks.istep(),jstepM=masks.jstep(),pstepM = masks.planestep();
+  std::ptrdiff_t movesI[8], movesM[8] ;
   movesI[0]=istepI ;
   movesI[1]=-jstepI+istepI ;
   movesI[2]=-jstepI ;
@@ -364,9 +366,9 @@ void vdtop_remove_non_maximal_direction(const vil_image_view<T> & img, vil_image
   const vxl_byte dir_order[8]={4,2,1,3,5,6,7};
 
   // Precompute steps
-  vcl_ptrdiff_t istepI=img.istep(),jstepI=img.jstep(),pstepI = img.planestep();
-  vcl_ptrdiff_t istepM=masks.istep(),jstepM=masks.jstep(),pstepM = masks.planestep();
-  vcl_ptrdiff_t movesI[8] ;
+  std::ptrdiff_t istepI=img.istep(),jstepI=img.jstep(),pstepI = img.planestep();
+  std::ptrdiff_t istepM=masks.istep(),jstepM=masks.jstep(),pstepM = masks.planestep();
+  std::ptrdiff_t movesI[8] ;
   movesI[0]=istepI ;
   movesI[1]=-jstepI+istepI ;
   movesI[2]=-jstepI ;
@@ -515,8 +517,8 @@ void vdtop_set_structure_from_masks(TMap & res, const vil_image_view<vdtop_8_nei
 {
   unsigned ni = mask.ni(),nj = mask.nj(),np = mask.nplanes(), nil=ni-1, njl=nj-1;
   // Precompute steps
-  vcl_ptrdiff_t istepM=mask.istep(),jstepM=mask.jstep(),pstepM = mask.planestep();
-  vcl_ptrdiff_t movesM[8] ;
+  std::ptrdiff_t istepM=mask.istep(),jstepM=mask.jstep(),pstepM = mask.planestep();
+  std::ptrdiff_t movesM[8] ;
   movesM[0]=istepM ;
   movesM[1]=-jstepM+istepM ;
   movesM[2]=-jstepM ;
@@ -705,7 +707,7 @@ void vdtop_set_veinerization_structure(TMap & res, vil_image_view<T> & img, cons
       }
     }
   }
-  vcl_cout<<"V:"<<img.ni()*img.nj()<<'/'<<nb_vertices<<vcl_endl ;
+  std::cout<<"V:"<<img.ni()*img.nj()<<'/'<<nb_vertices<<std::endl ;
   for (int j=0; j<mask.ni(); j++)
     delete[] dart[j];
   delete[] vertex_first_dart;

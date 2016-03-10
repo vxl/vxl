@@ -19,7 +19,7 @@ template <class T_loc,class T_data>
 class boct_tree_cell_reader
 {
  public:
-  boct_tree_cell_reader(vcl_string path): is_(new vsl_b_ifstream(path)) { }
+  boct_tree_cell_reader(std::string path): is_(new vsl_b_ifstream(path)) { }
   ~boct_tree_cell_reader() {}
 
 #if 0

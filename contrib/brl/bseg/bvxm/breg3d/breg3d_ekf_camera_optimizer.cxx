@@ -78,14 +78,14 @@ breg3d_ekf_camera_optimizer_state breg3d_ekf_camera_optimizer::optimize(bvxm_vox
                                                                         vil_image_view_base_sptr &prev_img,
                                                                         bvxm_image_metadata &curr_img,
                                                                         breg3d_ekf_camera_optimizer_state &prev_state,
-                                                                        vcl_string apm_type, unsigned bin_idx)
+                                                                        std::string apm_type, unsigned bin_idx)
 {
   breg3d_ekf_camera_optimizer_state state_og = prev_state;
   vpgl_perspective_camera<double>* cam_est =
     dynamic_cast<vpgl_perspective_camera<double>*>(curr_img.camera.ptr());
 
   if (!cam_est) {
-    vcl_cerr << "error: current camera estimate must be a vpgl_perspective_camera with at least the calibration matrix set.\n";
+    std::cerr << "error: current camera estimate must be a vpgl_perspective_camera with at least the calibration matrix set.\n";
     return prev_state;
   }
 
@@ -98,11 +98,11 @@ breg3d_ekf_camera_optimizer_state breg3d_ekf_camera_optimizer::optimize(bvxm_vox
     optimize_once(vox_world,prev_img,mask,curr_img,prev_state, use_gps_);
 
   // debug
-  vcl_vector<vpgl_perspective_camera<double> > step_vec;
+  std::vector<vpgl_perspective_camera<double> > step_vec;
   step_vec.push_back(vpgl_perspective_camera<double>(cam_est->get_calibration(),state_og.get_point(),state_og.get_rotation()));
   step_vec.push_back(vpgl_perspective_camera<double>(cam_est->get_calibration(),step_state.get_point(),step_state.get_rotation()));
 
-  vcl_cout << "Pk =\n" << step_state.get_error_covariance() << vcl_endl;
+  std::cout << "Pk =\n" << step_state.get_error_covariance() << std::endl;
 
   // iteratively update estimate, using expected images at intermediate steps as observations
   if (use_expected_) {
@@ -134,7 +134,7 @@ breg3d_ekf_camera_optimizer_state breg3d_ekf_camera_optimizer::optimize(bvxm_vox
         vox_world->expected_image<APM_MOG_RGB>(step_meta,step_expected,step_mask,bin_idx);
       }
       else {
-        vcl_cerr << "error: unsupported appearance model type " << apm_type << " !\n";
+        std::cerr << "error: unsupported appearance model type " << apm_type << " !\n";
       }
       // optimize - do not use gps estimate (no new gps estimate for these sub-steps)
       vil_save(*step_expected,"C:/research/registration/output/step_expected.tiff");
@@ -144,8 +144,8 @@ breg3d_ekf_camera_optimizer_state breg3d_ekf_camera_optimizer::optimize(bvxm_vox
       step_vec.push_back(vpgl_perspective_camera<double>(cam_est->get_calibration(),substep_state.get_point(),substep_state.get_rotation()));
 
       double step_length = substep_state.get_state().magnitude();
-      vcl_cout << " step length = " << step_length << '\n'
-               << "Pk =\n" << substep_state.get_error_covariance() << vcl_endl;
+      std::cout << " step length = " << step_length << '\n'
+               << "Pk =\n" << substep_state.get_error_covariance() << std::endl;
       if (step_length < min_step_length)
         iterate_again = false;
     }
@@ -174,9 +174,9 @@ breg3d_ekf_camera_optimizer_state breg3d_ekf_camera_optimizer::optimize(bvxm_vox
   }
   // debug
   for (unsigned i=0; i<step_vec.size(); ++i) {
-    vcl_cout << "step " << i << '\n'
+    std::cout << "step " << i << '\n'
              << "center = " << step_vec[i].get_camera_center() << '\n'
-             << "rot = " << step_vec[i].get_rotation().as_rodrigues() << vcl_endl;
+             << "rot = " << step_vec[i].get_rotation().as_rodrigues() << std::endl;
   }
   return step_state;
 }
@@ -211,14 +211,14 @@ breg3d_ekf_camera_optimizer_state breg3d_ekf_camera_optimizer::optimize_once(bvx
   vgl_plane_3d<double> world_plane_cam(plane_normal_cam(0),plane_normal_cam(1),plane_normal_cam(2),dist_cam);
   // compute plane parameters theta,phi,and dz
   double dz = -world_plane_cam.d() / world_plane_cam.c();
-  //double theta = vcl_acos(-world_plane_cam.nz()/sqrt(world_plane_cam.nx()*world_plane_cam.nx() + world_plane_cam.nz()*world_plane_cam.nz()));
-  double theta = vcl_atan2(world_plane_cam.nx(),-world_plane_cam.nz());
-  //double phi = vcl_acos(-world_plane_cam.nz()/sqrt(world_plane_cam.ny()*world_plane_cam.ny() + world_plane_cam.nz()*world_plane_cam.nz()));
-  double phi = vcl_atan2(world_plane_cam.ny(),-world_plane_cam.nz());
+  //double theta = std::acos(-world_plane_cam.nz()/sqrt(world_plane_cam.nx()*world_plane_cam.nx() + world_plane_cam.nz()*world_plane_cam.nz()));
+  double theta = std::atan2(world_plane_cam.nx(),-world_plane_cam.nz());
+  //double phi = std::acos(-world_plane_cam.nz()/sqrt(world_plane_cam.ny()*world_plane_cam.ny() + world_plane_cam.nz()*world_plane_cam.nz()));
+  double phi = std::atan2(world_plane_cam.ny(),-world_plane_cam.nz());
 
-  vcl_cout << "dz = " << dz << '\n'
+  std::cout << "dz = " << dz << '\n'
            << "theta = " << theta << '\n'
-           << "phi = " << phi << '\n' << vcl_endl;
+           << "phi = " << phi << '\n' << std::endl;
 
   // construct the measurement Jacobian
   unsigned nhomography = 6 + (use_proj_homography_? 2:0);
@@ -236,8 +236,8 @@ breg3d_ekf_camera_optimizer_state breg3d_ekf_camera_optimizer::optimize_once(bvx
   vnl_matrix<double> H_trans = H.transpose();
   vnl_matrix<double> K = P_pred*H_trans*vnl_matrix_inverse<double>(H*P_pred*H_trans + measurement_error_covar_);
 
-  vcl_cout << "H = " << H << '\n'
-           << "measurement_error_covar = " << measurement_error_covar_ << vcl_endl;
+  std::cout << "H = " << H << '\n'
+           << "measurement_error_covar = " << measurement_error_covar_ << std::endl;
 
   // predict measurement vector z
   vnl_vector<double> z_pred(nmeasurements);
@@ -254,7 +254,7 @@ breg3d_ekf_camera_optimizer_state breg3d_ekf_camera_optimizer::optimize_once(bvx
   vpgl_perspective_camera<double>  *curr_cam_perspective;
   curr_cam_perspective = dynamic_cast<vpgl_perspective_camera<double>*>(curr_img.camera.ptr());
   if (!curr_cam_perspective) {
-    vcl_cerr << "ERROR camera_optimizer expects vpgl_perspective cameras.\n";
+    std::cerr << "ERROR camera_optimizer expects vpgl_perspective cameras.\n";
     return prev_state;
   }
 
@@ -292,18 +292,18 @@ breg3d_ekf_camera_optimizer_state breg3d_ekf_camera_optimizer::optimize_once(bvx
   // Update estimate with measurement zk
   vnl_vector_fixed<double,6> x_post = x_pred + K*(z - z_pred);
 
-  vcl_cout << "K = " << K << '\n'
+  std::cout << "K = " << K << '\n'
            << "z_pred = " << z_pred << '\n'
            << "z      = " << z << '\n'
            << "x_pred = " << x_pred << '\n'
-           << "x_post = " << x_post << vcl_endl;
+           << "x_post = " << x_post << std::endl;
 
 
   // Update error covariance
   vnl_matrix_fixed<double,6,6> P_post = (vnl_matrix<double>(6,6).set_identity() - K*H)*P_pred;
 
-  vcl_cout << "P_pred = " << P_pred << '\n'
-           << "P_post = " << P_post << vcl_endl;
+  std::cout << "P_pred = " << P_pred << '\n'
+           << "P_post = " << P_post << std::endl;
 
   // update camera
   vnl_vector_fixed<double,6> x_post_unscaled;
@@ -350,7 +350,7 @@ vnl_vector<double> breg3d_ekf_camera_optimizer::img_homography(vil_image_view_ba
     break;
    }
    default:
-    vcl_cerr << "error: breg3d_ekf_camera_optimizer::img_homography : unsupported pixel type " << base_img_viewb->pixel_format() << '\n';
+    std::cerr << "error: breg3d_ekf_camera_optimizer::img_homography : unsupported pixel type " << base_img_viewb->pixel_format() << '\n';
   }
 
   switch (img_viewb->pixel_format())
@@ -366,7 +366,7 @@ vnl_vector<double> breg3d_ekf_camera_optimizer::img_homography(vil_image_view_ba
     break;
    }
    default:
-    vcl_cerr << "error: breg3d_ekf_camera_optimizer::img_homography : unsupported pixel type " << img_viewb->pixel_format() << '\n';
+    std::cerr << "error: breg3d_ekf_camera_optimizer::img_homography : unsupported pixel type " << img_viewb->pixel_format() << '\n';
   }
 
   // computed homography maps pixels in current image to pixels in base image
@@ -387,9 +387,9 @@ vnl_vector<double> breg3d_ekf_camera_optimizer::img_homography(vil_image_view_ba
   else
     lie_vector = matrix_to_coeffs_GA2(H);
 
-  vcl_cout << "optimized homography =\n" << xform.inverse().get_matrix() << '\n'
+  std::cout << "optimized homography =\n" << xform.inverse().get_matrix() << '\n'
            << "normalized homography =\n" << H << '\n'
-           << "homography lie coeffs = " << lie_vector << '\n' << vcl_endl;
+           << "homography lie coeffs = " << lie_vector << '\n' << std::endl;
 
   return lie_vector;
 }
@@ -401,7 +401,7 @@ vnl_vector_fixed<double,6> breg3d_ekf_camera_optimizer::matrix_to_coeffs_SE3(vnl
   vnl_vector_fixed<double,6> coeffs;
 
   if (!logm_approx(M,logM)) {
-    vcl_cerr << "error converting matrix to Lie coefficients.  matrix could be too far from Identity.\n";
+    std::cerr << "error converting matrix to Lie coefficients.  matrix could be too far from Identity.\n";
     coeffs.fill(0.0);
     return coeffs;
   }
@@ -422,13 +422,13 @@ vnl_vector_fixed<double,6> breg3d_ekf_camera_optimizer::matrix_to_coeffs_GA2(vnl
   vnl_vector_fixed<double,6> coeffs;
 
   if (!logm_approx(M,logM)) {
-    vcl_cerr << "error converting matrix to Lie coefficients.  matrix could be too far from Identity.\n";
+    std::cerr << "error converting matrix to Lie coefficients.  matrix could be too far from Identity.\n";
     coeffs.fill(0.0);
     return coeffs;
   }
 
-  vcl_cout << "M = " << M << '\n'
-           << "logM = " << logM << vcl_endl;
+  std::cout << "M = " << M << '\n'
+           << "logM = " << logM << std::endl;
 
   coeffs(0) = logM(0,2);
   coeffs(1) = logM(1,2);
@@ -447,7 +447,7 @@ vnl_vector_fixed<double,8> breg3d_ekf_camera_optimizer::matrix_to_coeffs_P2(vnl_
   vnl_vector_fixed<double,8> coeffs;
 
   if (!logm_approx(M,logM)) {
-    vcl_cerr << "error converting matrix to Lie coefficients.  matrix could be too far from Identity.\n";
+    std::cerr << "error converting matrix to Lie coefficients.  matrix could be too far from Identity.\n";
     coeffs.fill(0.0);
     return coeffs;
   }
@@ -486,13 +486,13 @@ vnl_matrix_fixed<double,4,4> breg3d_ekf_camera_optimizer::coeffs_to_matrix_SE3(v
 
 vnl_matrix_fixed<double,3,3> breg3d_ekf_camera_optimizer::coeffs_to_matrix_GA2(vnl_vector_fixed<double,6> const& /*a*/)
 {
-  vcl_cerr << "breg3d_ekf_camera_optimizer::coeffs_to_matrix_GA2 not implemented yet\n";
+  std::cerr << "breg3d_ekf_camera_optimizer::coeffs_to_matrix_GA2 not implemented yet\n";
   return vnl_matrix_fixed<double,3,3>(0.0);
 }
 
 vnl_matrix_fixed<double,3,3> breg3d_ekf_camera_optimizer::coeffs_to_matrix_P2(vnl_vector_fixed<double,8> const& /*a*/)
 {
-  vcl_cerr << "breg3d_ekf_camera_optimizer::coeffs_to_matrix_P2 not implemented yet\n";
+  std::cerr << "breg3d_ekf_camera_optimizer::coeffs_to_matrix_P2 not implemented yet\n";
   return vnl_matrix_fixed<double,3,3>(0.0);
 }
 
@@ -504,7 +504,7 @@ bool breg3d_ekf_camera_optimizer::logm_approx(vnl_matrix<double> const& A, vnl_m
   unsigned nr = A.rows();
   unsigned nc = A.cols();
   if (nr != nc) {
-    vcl_cerr << "error: logm_approx called with non-square matrix.\n";
+    std::cerr << "error: logm_approx called with non-square matrix.\n";
     return false;
   }
   logA.set_size(nr,nr);
@@ -520,7 +520,7 @@ bool breg3d_ekf_camera_optimizer::logm_approx(vnl_matrix<double> const& A, vnl_m
   vnl_matrix<double> Wpow = I;
   while (term_norm > tol) {
     if (i >= max_iterations) {
-      vcl_cerr << '\n'
+      std::cerr << '\n'
                << "*************************************************************\n"
                << "ERROR: logm_approx did not converge.\n"
                << "*************************************************************\n\n";
@@ -530,11 +530,11 @@ bool breg3d_ekf_camera_optimizer::logm_approx(vnl_matrix<double> const& A, vnl_m
     vnl_matrix<double> term = -Wpow/i;
     term_norm = term.frobenius_norm();
     logA += term;
-    //vcl_cout << "iteration " << i <<": W = " << W << '\n' << "Wpow = " << Wpow << '\n'
-    //         << "term = " << term << '\n' << "logA = " << logA << vcl_endl;
+    //std::cout << "iteration " << i <<": W = " << W << '\n' << "Wpow = " << Wpow << '\n'
+    //         << "term = " << term << '\n' << "logA = " << logA << std::endl;
     ++i;
   }
-  vcl_cout << "logM converged in " << i << " iterations." << vcl_endl;
+  std::cout << "logM converged in " << i << " iterations." << std::endl;
 
   return true;
 }
@@ -551,8 +551,8 @@ vnl_matrix<double> breg3d_ekf_camera_optimizer::SE3_to_H_Jacobian(double plane_t
   J.fill(0.0);
 
   double inv_dz = 1.0/plane_dz;
-  double t_phi = vcl_tan(plane_phi) / (2*plane_dz);
-  double t_theta = vcl_tan(plane_theta) / (2*plane_dz);
+  double t_phi = std::tan(plane_phi) / (2*plane_dz);
+  double t_theta = std::tan(plane_theta) / (2*plane_dz);
 
   J(0,0) = inv_dz;                                                       J(0,4) = 1.0;
                      J(1,1) = inv_dz;                     J(1,3) = -1.0;

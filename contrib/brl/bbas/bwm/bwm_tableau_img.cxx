@@ -65,7 +65,7 @@ void bwm_tableau_img::create_polygon()
   pick_polygon(poly2d);
   if (!poly2d)
   {
-    vcl_cerr << "In bwm_tableau_img::create_polygon() - picking failed\n";
+    std::cerr << "In bwm_tableau_img::create_polygon() - picking failed\n";
     return;
   }
   this->unlock();
@@ -85,7 +85,7 @@ void bwm_tableau_img::create_polyline()
   this->pick_polyline(poly2d);
   if (!poly2d)
   {
-    vcl_cerr << "In bwm_tableau_img::create_polyline() - picking failed\n";
+    std::cerr << "In bwm_tableau_img::create_polyline() - picking failed\n";
     return;
   }
 
@@ -105,12 +105,12 @@ void bwm_tableau_img::create_point()
 
 void bwm_tableau_img::create_pointset()
 {
-  vcl_vector<vsol_point_2d_sptr> pts;
+  std::vector<vsol_point_2d_sptr> pts;
 
   bool picked = this->pick_point_set(pts, 1000);
   if (!picked) return; // failed!
 
-  for (vcl_vector<vsol_point_2d_sptr>::iterator pit = pts.begin();
+  for (std::vector<vsol_point_2d_sptr>::iterator pit = pts.begin();
        pit != pts.end(); ++pit)
     my_observer_->create_point(*pit);
   this->post_redraw();
@@ -126,17 +126,17 @@ void bwm_tableau_img::create_vsol_spatial_object(vsol_spatial_object_2d_sptr sos
   {
     if (sos->cast_to_curve()->cast_to_digital_curve())
     {
-      vcl_cerr << "bwm_observer does not have support to add digital curve!! skipping this object!\n";
+      std::cerr << "bwm_observer does not have support to add digital curve!! skipping this object!\n";
     }
     else if (sos->cast_to_curve()->cast_to_vdgl_digital_curve())
     {
-      vcl_cerr << "bwm_observer does not have support to add vdgl digital curve!! skipping this object!\n";
+      std::cerr << "bwm_observer does not have support to add vdgl digital curve!! skipping this object!\n";
     }
     else if (sos->cast_to_curve()->cast_to_line())
     {
       //vsol_line_2d_sptr line =
       //  sos->cast_to_curve()->cast_to_line();
-      vcl_cerr << "bwm_observer does not have support to add vsol_line_2d !! skipping this object!\n";
+      std::cerr << "bwm_observer does not have support to add vsol_line_2d !! skipping this object!\n";
     }
     else if (sos->cast_to_curve()->cast_to_polyline())
     {
@@ -150,7 +150,7 @@ void bwm_tableau_img::create_vsol_spatial_object(vsol_spatial_object_2d_sptr sos
       // make sure the endpoints are already defined
       //assert(conic->p0() && conic->p1());
       //this->add_vsol_conic_2d(conic, style);
-      vcl_cerr << "bwm_observer does not have support to add vsol_conic_2d_sptr !! skipping this object!\n";
+      std::cerr << "bwm_observer does not have support to add vsol_conic_2d_sptr !! skipping this object!\n";
     }
     else
       assert(!"unknown curve type in bgui_vsol2D_tableau::add_spatial_object()");
@@ -215,7 +215,7 @@ void bwm_tableau_img::intensity_profile()
   float x1, y1, x2, y2;
   this->lock();
   pick_line(&x1, &y1, &x2, &y2);
-  vcl_cout << x1 << ',' << y1 << "-->" << x2 << ',' << y2 << vcl_endl;
+  std::cout << x1 << ',' << y1 << "-->" << x2 << ',' << y2 << std::endl;
   my_observer_->intensity_profile(x1, y1, x2, y2);
   this->unlock();
 }
@@ -246,7 +246,7 @@ void bwm_tableau_img::save_mask()
   if (!mask)
     return;
   vgui_dialog save_dlg("Save Mask");
-  vcl_string ext, file_path;
+  std::string ext, file_path;
   save_dlg.file("Mask Filename", ext, file_path);
   if (!save_dlg.ask())
     return;
@@ -254,18 +254,18 @@ void bwm_tableau_img::save_mask()
     return;
   bool result = vil_save(*mask,file_path.c_str());
   if ( !result ) {
-    vcl_cerr << "Failed to save image to " << file_path << '\n';
+    std::cerr << "Failed to save image to " << file_path << '\n';
   }
 }
 
 void bwm_tableau_img::save_spatial_objects_2d()
 {
-  vcl_vector<vsol_spatial_object_2d_sptr> sos =
+  std::vector<vsol_spatial_object_2d_sptr> sos =
     my_observer_->get_spatial_objects_2d();
   if (sos.size() == 0)
     return;
   vgui_dialog save_dlg("Save Spatial Objects 2d");
-  vcl_string ext, binary_filename;
+  std::string ext, binary_filename;
   save_dlg.file("Binary Filename", ext, binary_filename);
   if (!save_dlg.ask())
     return;
@@ -273,15 +273,15 @@ void bwm_tableau_img::save_spatial_objects_2d()
     return;
   vsl_b_ofstream ostr(binary_filename);
   if (!ostr) {
-    vcl_cerr << "Failed to open output stream "
-             << binary_filename << vcl_endl;
+    std::cerr << "Failed to open output stream "
+             << binary_filename << std::endl;
     return;
   }
   vsl_b_write(ostr, sos);
 }
 void bwm_tableau_img::load_spatial_objects_2d(){
   vgui_dialog save_dlg("Load Spatial Objects 2d");
-  vcl_string ext, binary_filename;
+  std::string ext, binary_filename;
   save_dlg.file("Binary Filename", ext, binary_filename);
   if (!save_dlg.ask())
     return;
@@ -289,11 +289,11 @@ void bwm_tableau_img::load_spatial_objects_2d(){
     return;
   vsl_b_ifstream istr(binary_filename);
   if (!istr) {
-    vcl_cerr << "Failed to open inputt stream "
-             << binary_filename << vcl_endl;
+    std::cerr << "Failed to open inputt stream "
+             << binary_filename << std::endl;
     return;
   }
-  vcl_vector<vsol_spatial_object_2d_sptr> sos;
+  std::vector<vsol_spatial_object_2d_sptr> sos;
   vsl_b_read(istr, sos);
   //my_observer_->add_spatial_objects(sos);
   for (unsigned i = 0; i < sos.size(); i++)
@@ -303,11 +303,11 @@ void bwm_tableau_img::load_spatial_objects_2d(){
 
 void bwm_tableau_img::save_pointset_2d_ascii()
 {
-  vcl_vector<vsol_spatial_object_2d_sptr> sos =
+  std::vector<vsol_spatial_object_2d_sptr> sos =
     my_observer_->get_spatial_objects_2d();
   if (sos.size() == 0)
     return;
-  vcl_vector<vsol_point_2d_sptr> pts;
+  std::vector<vsol_point_2d_sptr> pts;
   for (unsigned i=0; i<sos.size(); ++i) {
     vsol_spatial_object_2d_sptr so = sos[i];
     vsol_point_2d_sptr pt = so->cast_to_point();
@@ -315,11 +315,11 @@ void bwm_tableau_img::save_pointset_2d_ascii()
       pts.push_back(pt);
   }
   vgui_dialog save_dlg("Save Pointset");
-  vcl_string ext, pt_filename;
+  std::string ext, pt_filename;
   save_dlg.file("Point Filename", ext, pt_filename);
   if (!save_dlg.ask())
     return;
-  vcl_ofstream os(pt_filename.c_str());
+  std::ofstream os(pt_filename.c_str());
   if (os.is_open()) {
     os << pts.size()<< '\n';
     for (unsigned i=0; i<pts.size(); ++i)
@@ -337,11 +337,11 @@ void bwm_tableau_img::load_pointset_2d_ascii()
   vgui_style_sptr sty = vgui_style::new_style( r, 1.0f, 0.0f, 3.0, 2.0);
 
   vgui_dialog load_dlg("Load Pointset");
-  vcl_string ext, pt_filename;
+  std::string ext, pt_filename;
   load_dlg.file("Point Filename", ext, pt_filename);
   if (!load_dlg.ask())
     return;
-  vcl_ifstream istr(pt_filename.c_str());
+  std::ifstream istr(pt_filename.c_str());
   if (istr.is_open()) {
     unsigned n;
     istr >> n; //number of pts
@@ -391,8 +391,8 @@ void bwm_tableau_img::recover_lines()
 void  bwm_tableau_img::crop_image()
 {
   vgui_dialog crop_dlg("Crop Image Path");
-  vcl_string ext = "tiff";
-  vcl_string filename;
+  std::string ext = "tiff";
+  std::string filename;
   crop_dlg.file("Point Filename", ext, filename);
   if (!crop_dlg.ask())
     return;

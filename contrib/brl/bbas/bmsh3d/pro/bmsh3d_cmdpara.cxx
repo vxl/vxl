@@ -5,7 +5,9 @@
 // \author Ming-Ching Chang
 // \date Feb 12, 2007
 
-#include <vcl_limits.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <limits>
 #include <bmsh3d/bmsh3d_utils.h>
 
 //#####################################################################
@@ -123,12 +125,12 @@ vul_arg<float>        bmsh3d_cmd_rx ("-rx", "Rotation in X", 0.0f);
 vul_arg<float>        bmsh3d_cmd_ry ("-ry", "Rotation in Y", 0.0f);
 vul_arg<float>        bmsh3d_cmd_rz ("-rz", "Rotation in Z", 0.0f);
 vul_arg<float>        bmsh3d_cmd_scale ("-scale", "Scaling factor", 1.0f);
-vul_arg<float>        bmsh3d_cmd_minx ("-minx", "Min X", vcl_numeric_limits<float>::max());
-vul_arg<float>        bmsh3d_cmd_miny ("-miny", "Min Y", vcl_numeric_limits<float>::max());
-vul_arg<float>        bmsh3d_cmd_minz ("-minz", "Min Z", vcl_numeric_limits<float>::max());
-vul_arg<float>        bmsh3d_cmd_maxx ("-maxx", "Max X", vcl_numeric_limits<float>::min());
-vul_arg<float>        bmsh3d_cmd_maxy ("-maxy", "Max Y", vcl_numeric_limits<float>::min());
-vul_arg<float>        bmsh3d_cmd_maxz ("-maxz", "Max Z", vcl_numeric_limits<float>::min());
+vul_arg<float>        bmsh3d_cmd_minx ("-minx", "Min X", std::numeric_limits<float>::max());
+vul_arg<float>        bmsh3d_cmd_miny ("-miny", "Min Y", std::numeric_limits<float>::max());
+vul_arg<float>        bmsh3d_cmd_minz ("-minz", "Min Z", std::numeric_limits<float>::max());
+vul_arg<float>        bmsh3d_cmd_maxx ("-maxx", "Max X", std::numeric_limits<float>::min());
+vul_arg<float>        bmsh3d_cmd_maxy ("-maxy", "Max Y", std::numeric_limits<float>::min());
+vul_arg<float>        bmsh3d_cmd_maxz ("-maxz", "Max Z", std::numeric_limits<float>::min());
 vul_arg<int>          bmsh3d_cmd_n ("-n", "An integer number", -1);
 vul_arg<int>          bmsh3d_cmd_n1 ("-n1", "n1", 1);
 vul_arg<int>          bmsh3d_cmd_n2 ("-n2", "n2", 1);
@@ -181,7 +183,7 @@ vul_arg<char const*>  bmsh3d_cmd_gen_rand_box ("-grbox", "Generate random points
 //#####################################################################
 
 //: bmsh3d_cmdproc process parameters.
-vcl_string            bmsh3d_app_window_title = "LEMS 3D Mesh App";
+std::string            bmsh3d_app_window_title = "LEMS 3D Mesh App";
 
 //: continuing the processing from the last step on existing data
 bool                  bmsh3d_pro_continue = false;

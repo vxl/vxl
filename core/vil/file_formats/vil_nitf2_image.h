@@ -9,7 +9,8 @@
 
 #include <vil/vil_blocked_image_resource.h>
 
-#include <vcl_vector.h>
+#include <vcl_compiler.h>
+#include <vector>
 #include <vcl_cassert.h>
 
 #include <vil/vil_stream.h>
@@ -76,7 +77,7 @@ class vil_nitf2_image : public vil_blocked_image_resource
   // (eg. before you ask for any image data).
   // If that returns false, then I am invalid and useless to you in every way.
   vil_nitf2_image( vil_stream* is );
-  vil_nitf2_image( const vcl_string& filePath, const char* mode );
+  vil_nitf2_image( const std::string& filePath, const char* mode );
 
   virtual ~vil_nitf2_image();
 
@@ -138,11 +139,11 @@ class vil_nitf2_image : public vil_blocked_image_resource
   virtual bool get_property (char const *tag, void *property_value=0) const;
 
   //const vil_nitf2_header& getFileHeader() const;
-  const vcl_vector< vil_nitf2_image_subheader* >& get_image_headers() const
+  const std::vector< vil_nitf2_image_subheader* >& get_image_headers() const
   { return m_image_headers; }
   const vil_nitf2_header& get_header() const
   { return m_file_header; }
-  const vcl_vector< vil_nitf2_des* >& get_des() const
+  const std::vector< vil_nitf2_des* >& get_des() const
   { return m_des; }
 
   //:
@@ -211,11 +212,11 @@ class vil_nitf2_image : public vil_blocked_image_resource
   //main file header
   vil_nitf2_header m_file_header;
   //image header(s)
-  vcl_vector< vil_nitf2_image_subheader* > m_image_headers;
+  std::vector< vil_nitf2_image_subheader* > m_image_headers;
   void clear_image_headers();
   const vil_nitf2_image_subheader* current_image_header() const;
   //DESs (if any)
-  vcl_vector< vil_nitf2_des* > m_des;
+  std::vector< vil_nitf2_des* > m_des;
   void clear_des();
 
   vil_stream* m_stream;
@@ -240,12 +241,12 @@ T get_bits( const T* in_val, unsigned int i0, unsigned int ni )
   int strip_right = ( sizeof( T ) * 8 ) - ( bit_offset + ni );
   T temp = in_val[sample_offset];
   if ( strip_left > 0 ){
-    //strip off the appropriate bits from the vcl_left (replacing them with zeros)
+    //strip off the appropriate bits from the std::left (replacing them with zeros)
     temp = temp << strip_left;
     temp = temp >> strip_left;
   }
   if ( strip_right > 0 ){
-    //strip off the appropriate bits from the vcl_right
+    //strip off the appropriate bits from the std::right
     //the bit shift operator wasn't having the correct effect, so that'w
     //why the for loop
     for ( int i = 0 ; i < strip_right ; i++ ) temp /= 2;
@@ -296,7 +297,7 @@ T get_bits( const T* in_val, unsigned int i0, unsigned int ni )
 // out_data[2] = 15   (0000000000001111) [shown in big endian for illustrative purposes only]
 // out_data[3] = 240  (0000000011110000) [shown in big endian for illustrative purposes only]
 //
-// Because of the fact that this function uses bit shifting operators, and the behavior of the vcl_right
+// Because of the fact that this function uses bit shifting operators, and the behavior of the std::right
 // shift operator is implementation specific when applied to a negative number, you should probably
 // only use this function on unsigned data.
 //

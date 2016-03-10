@@ -7,9 +7,10 @@
 // \brief See vgui_button.h for a description of this file.
 
 #include "vgui_button.h"
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <iostream>
 
-vcl_ostream& operator<<(vcl_ostream& s, vgui_button b)
+std::ostream& operator<<(std::ostream& s, vgui_button b)
 {
   char const *spc = "";
   if (b & vgui_LEFT)   { s << spc << "left";   spc=" "; }

@@ -4,9 +4,11 @@
 // \author Tim Cootes
 // \brief Generates set of axis aligned modes for non-zero elements
 
-#include <vcl_cstdlib.h>
-#include <vcl_string.h>
-#include <vcl_sstream.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <cstdlib>
+#include <string>
+#include <sstream>
 
 #include <vsl/vsl_binary_io.h>
 #include <vnl/vnl_vector.h>
@@ -43,15 +45,15 @@ void mcal_trivial_ca::build_about_mean(mbl_data_wrapper<vnl_vector<double> >& da
 {
   if (data.size()==0)
   {
-    vcl_cerr<<"mcal_trivial_ca::build_about_mean() No samples supplied.\n";
-    vcl_abort();
+    std::cerr<<"mcal_trivial_ca::build_about_mean() No samples supplied.\n";
+    std::abort();
   }
 
   data.reset();
 
   if (data.current().size()==0)
   {
-    vcl_cerr<<"mcal_trivial_ca::build_about_mean()\n"
+    std::cerr<<"mcal_trivial_ca::build_about_mean()\n"
             <<"Warning: Samples claim to have zero dimensions.\n"
             <<"Constructing empty model.\n";
 
@@ -93,9 +95,9 @@ void mcal_trivial_ca::build_about_mean(mbl_data_wrapper<vnl_vector<double> >& da
 // Method: is_a
 //=======================================================================
 
-vcl_string  mcal_trivial_ca::is_a() const
+std::string  mcal_trivial_ca::is_a() const
 {
-  return vcl_string("mcal_trivial_ca");
+  return std::string("mcal_trivial_ca");
 }
 
 //=======================================================================
@@ -120,7 +122,7 @@ mcal_component_analyzer* mcal_trivial_ca::clone() const
 // Method: print
 //=======================================================================
 
-void mcal_trivial_ca::print_summary(vcl_ostream& os) const
+void mcal_trivial_ca::print_summary(std::ostream& os) const
 {
   os << is_a();
 }
@@ -147,9 +149,9 @@ void mcal_trivial_ca::b_read(vsl_b_istream& bfs)
     case 1:
       break;
     default:
-      vcl_cerr << "mcal_trivial_ca::b_read()\n"
-               << "Unexpected version number " << version << vcl_endl;
-      vcl_abort();
+      std::cerr << "mcal_trivial_ca::b_read()\n"
+               << "Unexpected version number " << version << std::endl;
+      std::abort();
   }
 }
 
@@ -161,11 +163,11 @@ void mcal_trivial_ca::b_read(vsl_b_istream& bfs)
 // }
 // \endverbatim
 // \throw mbl_exception_parse_error if the parse fails.
-void mcal_trivial_ca::config_from_stream(vcl_istream & is)
+void mcal_trivial_ca::config_from_stream(std::istream & is)
 {
-  vcl_string s = mbl_parse_block(is);
+  std::string s = mbl_parse_block(is);
 
-  vcl_istringstream ss(s);
+  std::istringstream ss(s);
   mbl_read_props_type props = mbl_read_props_ws(ss);
 
   try

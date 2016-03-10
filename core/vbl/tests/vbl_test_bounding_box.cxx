@@ -1,11 +1,12 @@
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <iostream>
 #include <vbl/vbl_bounding_box.h>
 #include <testlib/testlib_test.h>
 
 static
 void vbl_test_bounding_box()
 {
-  vcl_cout << "\n\n\n"
+  std::cout << "\n\n\n"
            << "***********************\n"
            << " Test vbl_bounding_box\n"
            << "***********************\n";

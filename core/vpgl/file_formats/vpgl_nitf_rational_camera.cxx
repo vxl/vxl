@@ -6,11 +6,12 @@
 // \author Jim Green
 // \date Dec 2006
 
-#include <vcl_cstdlib.h>
+#include <vcl_compiler.h>
+#include <cstdlib>
 #include <vil/vil_load.h>
-#include <vcl_cmath.h>
-#include <vcl_cstring.h>
-#include <vcl_cctype.h>
+#include <cmath>
+#include <cstring>
+#include <cctype>
 // for calls to get nitf_rational parameters from vil
 #include <vil/file_formats/vil_nitf2_image.h>
 
@@ -56,7 +57,7 @@ static int geostr_to_double(const char* in_string, double* val, vpgl_nitf_ration
   while ((*in_string == ' ') || (*in_string == '\t'))
     ++in_string;
 
-  for (length=0; vcl_isdigit (*in_string) && length<15; ++length)
+  for (length=0; std::isdigit (*in_string) && length<15; ++length)
     ++in_string;
   if (length>14) return 0;
 
@@ -79,13 +80,13 @@ static int geostr_to_double(const char* in_string, double* val, vpgl_nitf_ration
     in_string-=2;
     char* temp = new char[2];
     for (length=0;
-         (*in_string=='.' || vcl_isdigit (*in_string)) && length<15;
+         (*in_string=='.' || std::isdigit (*in_string)) && length<15;
          ++length)
       ++in_string;
     if (length>14) return 0;
 
-    vcl_strncpy(temp,in_string-length,length);
-    if ( (fsec = (float)vcl_atof(temp)) >= 60.0f || fsec<0.0f)
+    std::strncpy(temp,in_string-length,length);
+    if ( (fsec = (float)std::atof(temp)) >= 60.0f || fsec<0.0f)
       return 0;
     delete [] temp;
 
@@ -122,7 +123,7 @@ static int geostr_to_double(const char* in_string, double* val, vpgl_nitf_ration
       ++in_string;
 
     //get the minutes
-    for (length=0; vcl_isdigit (*in_string) && length<15; ++in_string, ++length) /*nothing*/;
+    for (length=0; std::isdigit (*in_string) && length<15; ++in_string, ++length) /*nothing*/;
     if (length>14) return 0;
     if (length > 2)
       return 0;
@@ -137,13 +138,13 @@ static int geostr_to_double(const char* in_string, double* val, vpgl_nitf_ration
     //get the seconds (float)
     char* temp= new char[2];
     for (length=0;
-         (*in_string=='.' || vcl_isdigit (*in_string)) && length<15;
+         (*in_string=='.' || std::isdigit (*in_string)) && length<15;
          ++length)
       ++in_string;
     if (length>14) return 0;
 
-    vcl_strncpy(temp,in_string-length,length);
-    if ( (fsec = (float)vcl_atof(temp)) >= 60.0f || fsec<0.0f)
+    std::strncpy(temp,in_string-length,length);
+    if ( (fsec = (float)std::atof(temp)) >= 60.0f || fsec<0.0f)
       return 0;
     delete [] temp;
 
@@ -180,15 +181,15 @@ static int geostr_to_double(const char* in_string, double* val, vpgl_nitf_ration
     //calculate length of float
     for (length=0;
          (*in_string=='+' ||*in_string=='-' || *in_string=='.' ||
-          vcl_isdigit (*in_string)) && length<15;
+          std::isdigit (*in_string)) && length<15;
          ++length)
       ++in_string;
     if (length>14) return 0;
 
     //calculate value of float
-    vcl_strncpy(temp,in_string-length,length);
-    *val = vcl_atof(temp);
-    if (vcl_fabs(*val)>float(maxval)) return 0;
+    std::strncpy(temp,in_string-length,length);
+    *val = std::atof(temp);
+    if (std::fabs(*val)>float(maxval)) return 0;
     delete [] temp;
 
     ++in_string;
@@ -240,7 +241,7 @@ void vpgl_nitf_rational_camera::set_order_b(int* ord)
 bool vpgl_nitf_rational_camera::
 init(vil_nitf2_image* nitf_image, bool verbose)
 {
-  vcl_vector< vil_nitf2_image_subheader* > headers = nitf_image->get_image_headers();
+  std::vector< vil_nitf2_image_subheader* > headers = nitf_image->get_image_headers();
   vil_nitf2_image_subheader* hdr = headers[0];
 
   double tre_data[90];
@@ -252,13 +253,13 @@ init(vil_nitf2_image* nitf_image, bool verbose)
     hdr->get_rpc_params(nitf_rational_type_, image_id_, image_igeolo_,  tre_data);
   if (!success)
   {
-    vcl_cout << "Failed to get rational camera parameters from nitf image in"
+    std::cout << "Failed to get rational camera parameters from nitf image in"
              << " vgpl_nitf_rational_camera\n";
     return false;
   }
 
   if (verbose)
-    vcl_cout << " nitf_rational type " << nitf_rational_type_ << '\n'
+    std::cout << " nitf_rational type " << nitf_rational_type_ << '\n'
              << " Image Id " << image_id_ << '\n'
              << " IGEOLO " << image_igeolo_ << '\n';
   // example 324158N1171117W324506N1171031W324428N1170648W324120N1170734W
@@ -279,7 +280,7 @@ init(vil_nitf2_image* nitf_image, bool verbose)
   lr_[LAT]=LRlat;   lr_[LON]=LRlon;
 
   if (verbose)
-    vcl_cout << "ULlon " << ULlon << " ULlat " << ULlat << '\n'
+    std::cout << "ULlon " << ULlon << " ULlat " << ULlat << '\n'
              << "URlon " << URlon << " URlat " << URlat << '\n'
              << "LRlon " << LRlon << " LRlat " << LRlat << '\n'
              << "LLlon " << LLlon << " lLlat " << LLlat << '\n';
@@ -291,13 +292,13 @@ init(vil_nitf2_image* nitf_image, bool verbose)
     set_order_b(ord);
   else
   {
-    vcl_cout << "Unknown rational type from nitf image in"
+    std::cout << "Unknown rational type from nitf image in"
              << " vgpl_nitf_rational_camera\n";
     return false;
   }
 
 
-  // apply the 80 coefficients to the vcl_vectors to instance the vpgl_rational_camera
+  // apply the 80 coefficients to the std::vectors to instance the vpgl_rational_camera
   for (int i=0; i<20; i++)
   {
     rational_coeffs_[2][i] = tre_data[ord[i]];
@@ -333,7 +334,7 @@ vpgl_nitf_rational_camera::vpgl_nitf_rational_camera() {
 
 
 vpgl_nitf_rational_camera::
-vpgl_nitf_rational_camera(vcl_string const& nitf_image_path,
+vpgl_nitf_rational_camera(std::string const& nitf_image_path,
                           bool verbose)
 {
   //first open the nitf image
@@ -341,14 +342,14 @@ vpgl_nitf_rational_camera(vcl_string const& nitf_image_path,
     vil_load_image_resource(nitf_image_path.c_str());
   if (!image)
   {
-    vcl_cout << "Image load failed in vpgl_nitf_rational_camera_constructor\n";
+    std::cout << "Image load failed in vpgl_nitf_rational_camera_constructor\n";
     return ;
   }
-  vcl_string format = image->file_format();
-  vcl_string prefix = format.substr(0,4);
+  std::string format = image->file_format();
+  std::string prefix = format.substr(0,4);
   if (prefix != "nitf")
   {
-    vcl_cout << "not a nitf image in vpgl_nitf_rational_camera_constructor\n";
+    std::cout << "not a nitf image in vpgl_nitf_rational_camera_constructor\n";
     return;
   }
   //cast to an nitf2_image
@@ -363,16 +364,16 @@ vpgl_nitf_rational_camera(vcl_string const& nitf_image_path,
     double ul_u=0, ul_v=0, ur_u=0, ur_v=0, ll_u=0, ll_v=0, lr_u=0, lr_v=0;
     // Project upper left corner
     this->project(ul_[LON], ul_[LAT], z_off, ul_u, ul_v);
-    vcl_cout << "Upper left image corner(" << ul_u << ' ' << ul_v << ")\n";
+    std::cout << "Upper left image corner(" << ul_u << ' ' << ul_v << ")\n";
     // Project upper right corner
     this->project(ur_[LON], ur_[LAT], z_off, ur_u, ur_v);
-    vcl_cout << "Upper right image corner(" << ur_u << ' ' << ur_v << ")\n";
+    std::cout << "Upper right image corner(" << ur_u << ' ' << ur_v << ")\n";
     // Project lower left corner
     this->project(ll_[LON], ll_[LAT], z_off, ll_u, ll_v);
-    vcl_cout << "Lower left image corner(" << ll_u << ' ' << ll_v << ")\n";
+    std::cout << "Lower left image corner(" << ll_u << ' ' << ll_v << ")\n";
     // Project lower right corner
     this->project(lr_[LON], lr_[LAT], z_off, lr_u, lr_v);
-    vcl_cout << "Lower right image corner(" << lr_u << ' ' << lr_v << ")\n";
+    std::cout << "Lower right image corner(" << lr_u << ' ' << lr_v << ")\n";
   }
 }
 
@@ -384,7 +385,7 @@ vpgl_nitf_rational_camera(vil_nitf2_image* nitf_image, bool verbose)
     return;
 
   if (verbose)
-    vcl_cout << *this;
+    std::cout << *this;
   vpgl_scale_offset<double> z = scale_offsets_[Z_INDX];
   double z_off = z.offset();
   if (verbose)
@@ -392,16 +393,16 @@ vpgl_nitf_rational_camera(vil_nitf2_image* nitf_image, bool verbose)
     double ul_u=0, ul_v=0, ur_u=0, ur_v=0, ll_u=0, ll_v=0, lr_u=0, lr_v=0;
     // Project upper left corner
     this->project(ul_[LON], ul_[LAT], z_off, ul_u, ul_v);
-    vcl_cout << "Upper left image corner(" << ul_u << ' ' << ul_v << ")\n";
+    std::cout << "Upper left image corner(" << ul_u << ' ' << ul_v << ")\n";
     // Project upper right corner
     this->project(ur_[LON], ur_[LAT], z_off, ur_u, ur_v);
-    vcl_cout << "Upper right image corner(" << ur_u << ' ' << ur_v << ")\n";
+    std::cout << "Upper right image corner(" << ur_u << ' ' << ur_v << ")\n";
     // Project lower left corner
     this->project(ll_[LON], ll_[LAT], z_off, ll_u, ll_v);
-    vcl_cout << "Lower left image corner(" << ll_u << ' ' << ll_v << ")\n";
+    std::cout << "Lower left image corner(" << ll_u << ' ' << ll_v << ")\n";
     // Project lower right corner
     this->project(lr_[LON], lr_[LAT], z_off, lr_u, lr_v);
-    vcl_cout << "Lower right image corner(" << lr_u << ' ' << lr_v << ")\n";
+    std::cout << "Lower right image corner(" << lr_u << ' ' << lr_v << ")\n";
   }
 }
 

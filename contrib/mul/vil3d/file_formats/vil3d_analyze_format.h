@@ -10,7 +10,9 @@
 // \author Tim Cootes - Manchester
 // (Based on old code whose provenance has been lost in the mists of time...)
 
-#include <vcl_iosfwd.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iosfwd>
 #include <vil3d/vil3d_file_format.h>
 
 //: Structure containing analyse header file information.
@@ -134,20 +136,20 @@ class vil3d_analyze_header
   void set_voxel_size(float si, float sj, float sk);
 
   //: Read in header from given file
-  bool read_file(const vcl_string& path);
+  bool read_file(const std::string& path);
 
   //: Write header to given file
-  bool write_file(const vcl_string& path) const;
+  bool write_file(const std::string& path) const;
 
   void swapBytes(char *data, int size);
   bool needSwap() const { return swap_bytes_; }
 
   //: Print out some parts of header
-  void print_summary(vcl_ostream& os) const;
+  void print_summary(std::ostream& os) const;
 };
 
 //: Print out some parts of header
-vcl_ostream& operator<<(vcl_ostream& os, const vil3d_analyze_header&);
+std::ostream& operator<<(std::ostream& os, const vil3d_analyze_header&);
 
 //: Reader/Writer for analyze format images.
 class vil3d_analyze_format : public vil3d_file_format
@@ -179,7 +181,7 @@ class vil3d_analyze_format : public vil3d_file_format
 class vil3d_analyze_image: public vil3d_image_resource
 {
   //: Basename of file (not including .hdr/.img)
-  vcl_string base_path_;
+  std::string base_path_;
 
   //: Header information
   vil3d_analyze_header header_;
@@ -195,7 +197,7 @@ class vil3d_analyze_image: public vil3d_image_resource
   //  Doesn't actually load/save anything until get_copy_view() or put_view() called.
   //  Header is assumed to have been loaded/saved by the calling function.
   vil3d_analyze_image(const vil3d_analyze_header& header,
-                      const vcl_string& base_path);
+                      const std::string& base_path);
 
   virtual ~vil3d_analyze_image();
 
@@ -213,7 +215,7 @@ class vil3d_analyze_image: public vil3d_image_resource
   virtual unsigned nk() const;
 
   //: Basename of file (not including .hdr/.img)
-  const vcl_string& base_path() const { return base_path_; }
+  const std::string& base_path() const { return base_path_; }
 
   //: Header information
   const vil3d_analyze_header& header() { return header_; }

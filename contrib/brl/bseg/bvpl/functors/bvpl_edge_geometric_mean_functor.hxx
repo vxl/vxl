@@ -3,8 +3,10 @@
 //:
 // \file
 #include "bvpl_edge_geometric_mean_functor.h"
-#include <vcl_cmath.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <cmath>
+#include <iostream>
 
 
 // Default constructor
@@ -29,11 +31,11 @@ void bvpl_edge_geometric_mean_functor<T>::apply(T& val, bvpl_kernel_dispatch& d)
 {
 
   if (d.c_ > 0) {
-    P1_ += vcl_log(val);
+    P1_ += std::log(val);
     n1_++;
   }
   else if (d.c_ < 0 ){
-    P0_ += vcl_log(T(1.0)-val);
+    P0_ += std::log(T(1.0)-val);
     n0_++;
   }
 }
@@ -51,7 +53,7 @@ T bvpl_edge_geometric_mean_functor<T>::result()
   P0_/=(T)n0_;
   P1_/=(T)n1_;
 
-  T result = vcl_exp(P0_+P1_);
+  T result = std::exp(P0_+P1_);
 
   //reset all variables
   init();

@@ -3,7 +3,8 @@
 // \brief Example of loading an image and applying gradient filter
 // \author Tim Cootes
 
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <iostream>
 #include <vxl_config.h> // for vxl_byte
 #include <vil/vil_load.h>
 #include <vil/vil_save.h>
@@ -15,7 +16,7 @@ int main(int argc, char** argv)
 {
   if (argc!=3)
   {
-    vcl_cout<<"vil_exp_grad_filter_tool  src_image x_grad_image\n"
+    std::cout<<"vil_exp_grad_filter_tool  src_image x_grad_image\n"
             <<"Applies exponential gradient filter to src_image, saves to x_grad_image\n";
     return 0;
   }
@@ -23,7 +24,7 @@ int main(int argc, char** argv)
   vil_image_view<vxl_byte> src_im = vil_load(argv[1]);
   if (src_im.size()==0)
   {
-    vcl_cout<<"Unable to load source image from "<<argv[1]<<vcl_endl;
+    std::cout<<"Unable to load source image from "<<argv[1]<<std::endl;
     return 1;
   }
 
@@ -38,20 +39,20 @@ int main(int argc, char** argv)
   vil_math_value_range(grad_x,min_v,max_v);
   double s = 255/(max_v-min_v);
   vil_math_scale_and_offset_values(grad_x,s,-s*min_v);
-  vcl_cout<<"Range of result: "<<min_v<<','<<max_v<<vcl_endl;
+  std::cout<<"Range of result: "<<min_v<<','<<max_v<<std::endl;
 
   vil_image_view<vxl_byte> grad_x_byte;
   vil_convert_cast(grad_x,grad_x_byte);
 
-  vcl_cout<<"Resulting image is "<<grad_x_byte.ni()<<" x "<<grad_x_byte.nj()<<vcl_endl;
+  std::cout<<"Resulting image is "<<grad_x_byte.ni()<<" x "<<grad_x_byte.nj()<<std::endl;
 
   if (!vil_save(grad_x_byte, argv[2]))
   {
-    vcl_cerr<<"Unable to save result image to "<<argv[2]<<vcl_endl;
+    std::cerr<<"Unable to save result image to "<<argv[2]<<std::endl;
     return 1;
   }
 
-  vcl_cout<<"Saved x-gradient to "<<argv[2]<<vcl_endl;
+  std::cout<<"Saved x-gradient to "<<argv[2]<<std::endl;
 
   return 0;
 }

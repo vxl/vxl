@@ -10,7 +10,9 @@
 // \author Tim Cootes
 // \brief Test msm_dist_to_curves functions
 
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iostream>
 #include <msm/utils/msm_closest_pt.h>
 #include <msm/utils/msm_dist_to_curves.h>
 
@@ -18,7 +20,7 @@
 
 void test_dist_to_curves()
 {
-  vcl_cout << "****************************\n"
+  std::cout << "****************************\n"
            << " Testing msm_dist_to_curves \n"
            << "****************************\n";
 
@@ -42,7 +44,7 @@ void test_dist_to_curves()
   TEST_NEAR("Distance to (2,1)",d,1.0,1e-6);
 
   d=msm_dist_to_curves(points,open_curve,vgl_point_2d<double>(2,2));
-  TEST_NEAR("Distance to (2,2)",d,vcl_sqrt(2.0),1e-6);
+  TEST_NEAR("Distance to (2,2)",d,std::sqrt(2.0),1e-6);
 
   d=msm_dist_to_curves(points,open_curve,vgl_point_2d<double>(0.3,1.1));
   TEST_NEAR("Distance to (0.3,1.1)",d,0.1,1e-6);
@@ -51,10 +53,10 @@ void test_dist_to_curves()
   TEST_NEAR("Distance to (0.3,0.8)",d,0.2,1e-6);
 
   d=msm_dist_to_curves(points,open_curve,vgl_point_2d<double>(1.1,2.0));
-  TEST_NEAR("Distance to (1.1,2.0)",d,vcl_sqrt(1.01),1e-6);
+  TEST_NEAR("Distance to (1.1,2.0)",d,std::sqrt(1.01),1e-6);
 
   d=msm_dist_to_curves(points,open_curve,vgl_point_2d<double>(-1,0.5));
-  TEST_NEAR("Distance to (-1,0.5)",d,vcl_sqrt(1.25),1e-6);
+  TEST_NEAR("Distance to (-1,0.5)",d,std::sqrt(1.25),1e-6);
 
   d=msm_dist_to_curves(points,closed_curve,vgl_point_2d<double>(-1,0.5));
   TEST_NEAR("Distance to (-1,0.5) [Closed]",d,1.0,1e-6);

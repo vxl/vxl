@@ -12,7 +12,7 @@ class boxm2_ocl_vis_score_renderer
   public:
     boxm2_ocl_vis_score_renderer(boxm2_scene_sptr scene,
                                  boxm2_opencl_cache_sptr ocl_cache,
-                                 vcl_string ident="");
+                                 std::string ident="");
     ~boxm2_ocl_vis_score_renderer();
 
     bool render(vpgl_camera_double_sptr camera, unsigned ni, unsigned nj, float nearfactor=0.0f, float farfactor=1000000.0f);
@@ -24,7 +24,7 @@ class boxm2_ocl_vis_score_renderer
     boxm2_scene_sptr scene_;
     bocl_device_sptr device_;
     boxm2_opencl_cache_sptr opencl_cache_;
-    vcl_string ident_;
+    std::string ident_;
     bool buffers_allocated_;
     bocl_kernel ray_trace_kernel_;
     bool compile_kernels(bocl_device_sptr device);

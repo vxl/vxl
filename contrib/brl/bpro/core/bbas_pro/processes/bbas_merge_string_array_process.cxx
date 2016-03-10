@@ -5,20 +5,22 @@
 //:
 // \file
 
-#include <vcl_fstream.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <fstream>
 namespace bbas_core_merge_string_array
 {
-  vcl_vector<vcl_string> strings;
+  std::vector<std::string> strings;
 }
 //: Constructor
 bool bbas_merge_string_array_process_cons(bprb_func_process& pro)
 {
   using namespace bbas_core_merge_string_array;
   // inputs
-  vcl_vector<vcl_string> input_types;
+  std::vector<std::string> input_types;
   input_types.push_back("bbas_1d_array_string_sptr"); //1st string
   //outputs
-  vcl_vector<vcl_string> output_types;
+  std::vector<std::string> output_types;
   output_types.push_back("bbas_1d_array_string_sptr"); //2nd string
 
   return pro.set_input_types(input_types) &&
@@ -31,7 +33,7 @@ bool bbas_merge_string_array_process(bprb_func_process& pro)
   using namespace bbas_core_merge_string_array;
   // Sanity check
   if (pro.n_inputs()< 2) {
-    vcl_cout << "brad_merge_string_array_process: The input number should be 1" << vcl_endl;
+    std::cout << "brad_merge_string_array_process: The input number should be 1" << std::endl;
     return false;
   }
   bbas_1d_array_string_sptr sa0 = pro.get_input<bbas_1d_array_string_sptr>(0);

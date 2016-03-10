@@ -28,21 +28,21 @@
 
 //: Create from xml_file
 template <unsigned feature_dim>
-bvpl_global_pca<feature_dim>::bvpl_global_pca(const vcl_string &path)
+bvpl_global_pca<feature_dim>::bvpl_global_pca(const std::string &path)
 {
-  vcl_cout << "Loading pca info from xml-file" << vcl_endl;
+  std::cout << "Loading pca info from xml-file" << std::endl;
   int valid = 0;
   path_out_ = path;
-  vcl_ifstream xml_ifs(xml_path().c_str());
+  std::ifstream xml_ifs(xml_path().c_str());
   if (!xml_ifs.is_open()) {
-    vcl_cerr << "Error: bvpl_discover_pca_kernels - could not open xml info file: " << xml_path() << '\n';
+    std::cerr << "Error: bvpl_discover_pca_kernels - could not open xml info file: " << xml_path() << '\n';
     throw;
   }
   bxml_document doc = bxml_read(xml_ifs);
   bxml_element query("pca_global_info");
   bxml_data_sptr root = bxml_find_by_name(doc.root_element(), query);
   if (!root) {
-    vcl_cerr << "Error: bvpl_discover_pca_kernels - could not parse xml root\n";
+    std::cerr << "Error: bvpl_discover_pca_kernels - could not parse xml root\n";
     throw;
   }
 
@@ -59,7 +59,7 @@ bvpl_global_pca<feature_dim>::bvpl_global_pca(const vcl_string &path)
   nbbox_elm->get_attribute("max_z", max_z);
 
   nbbox_ = vgl_box_3d<int>(vgl_point_3d<int>(min_x, min_y, min_y), vgl_point_3d<int>(max_x, max_y, max_z));
-  vcl_cout << "Neighborhood: " << nbbox_ << vcl_endl;
+  std::cout << "Neighborhood: " << nbbox_ << std::endl;
 
   //Parse Number of samples
   bxml_element properties_query("properties");
@@ -76,16 +76,16 @@ bvpl_global_pca<feature_dim>::bvpl_global_pca(const vcl_string &path)
   unsigned nscenes = 0;
   properties_elm->get_attribute("nscenes", nscenes);
 
-  vcl_cout << "Number of samples: " << nsamples_ << '\n'
+  std::cout << "Number of samples: " << nsamples_ << '\n'
            << "Feature dimension: " << temp_dim << '\n'
-           << "Number of scenes: " << nscenes <<vcl_endl;
+           << "Number of scenes: " << nscenes <<std::endl;
 
   //Parse scenes
   bxml_element scenes_query("scene");
-  vcl_vector<bxml_data_sptr> scenes_data = bxml_find_all_with_name(root, scenes_query);
+  std::vector<bxml_data_sptr> scenes_data = bxml_find_all_with_name(root, scenes_query);
 
   if (nscenes !=scenes_data.size()) {
-    vcl_cerr<<"Wrong number of scenes\n";
+    std::cerr<<"Wrong number of scenes\n";
     throw;
   }
 
@@ -111,7 +111,7 @@ bvpl_global_pca<feature_dim>::bvpl_global_pca(const vcl_string &path)
     scenes_elm->get_attribute("cell_length" , finest_cell_length_[id]);
     scenes_elm->get_attribute("nleaves", nleaves_[id]);
 
-    vcl_cout << "Scene " << id << " is " << scenes_[id] << '\n';
+    std::cout << "Scene " << id << " is " << scenes_[id] << '\n';
   }
 
   //Parse training scenes
@@ -126,17 +126,17 @@ bvpl_global_pca<feature_dim>::bvpl_global_pca(const vcl_string &path)
   for (bxml_element::const_data_iterator s_it = train_elm->data_begin(); s_it != train_elm->data_end(); s_it++) {
     if ((*s_it)->type() == bxml_data::TEXT) {
       bxml_text* t = dynamic_cast<bxml_text*>((*s_it).ptr());
-      vcl_stringstream text_d(t->data()); vcl_string buf;
-      vcl_vector<vcl_string> tokens;
+      std::stringstream text_d(t->data()); std::string buf;
+      std::vector<std::string> tokens;
       while (text_d >> buf) {
         tokens.push_back(buf);
       }
       if (tokens.size() != n_train_scenes)
         continue;
       for (unsigned i = 0; i < n_train_scenes; i++) {
-        vcl_stringstream ss2(tokens[i]); int s_type_id;
+        std::stringstream ss2(tokens[i]); int s_type_id;
         ss2 >> s_type_id;
-        vcl_cout << "Scene: " << s_type_id << " is used for training\n";
+        std::cout << "Scene: " << s_type_id << " is used for training\n";
         training_scenes_[s_type_id]=true;
       }
       break;
@@ -150,13 +150,13 @@ bvpl_global_pca<feature_dim>::bvpl_global_pca(const vcl_string &path)
   {
     bxml_element* path_elm = dynamic_cast<bxml_element*>(paths_data.ptr());
 
-    vcl_string ifs_path;
+    std::string ifs_path;
 
     path_elm->get_attribute("pc_path", ifs_path);
     if (ifs_path != pc_path())
       valid = -1;
     else{
-      vcl_ifstream ifs(ifs_path.c_str());
+      std::ifstream ifs(ifs_path.c_str());
       ifs >> pc_;
       ifs.close();
       if (pc_.size()!=feature_dim*feature_dim)
@@ -167,7 +167,7 @@ bvpl_global_pca<feature_dim>::bvpl_global_pca(const vcl_string &path)
     if (ifs_path != weights_path())
       valid = -3;
     else{
-      vcl_ifstream ifs(ifs_path.c_str());
+      std::ifstream ifs(ifs_path.c_str());
       ifs >> weights_;
       ifs.close();
       if (weights_.size()!=feature_dim)
@@ -181,12 +181,12 @@ bvpl_global_pca<feature_dim>::bvpl_global_pca(const vcl_string &path)
     {
       if ( vul_file::exists(ifs_path))
       {
-        vcl_ifstream ifs(ifs_path.c_str());
+        std::ifstream ifs(ifs_path.c_str());
         ifs >> training_mean_;
         ifs.close();
       }
       else{
-        vcl_cerr << " Warning: Mean file is empty\n";
+        std::cerr << " Warning: Mean file is empty\n";
         training_mean_.fill(0.0);
       }
 
@@ -194,17 +194,17 @@ bvpl_global_pca<feature_dim>::bvpl_global_pca(const vcl_string &path)
       if (ifs_path != scatter_path())
         valid = -6;
       else if (vul_file::exists(ifs_path)) {
-        vcl_ifstream(ifs_path);
+        std::ifstream(ifs_path);
         ifs_path >> scatter_;
         ifs_path.close();
       }
       else{
-        vcl_cerr << " Warning: Scatter file is empty\n";
+        std::cerr << " Warning: Scatter file is empty\n";
         scatter_.fill(0.0);
       }
 
       if (valid<0) {
-        vcl_cout << "bvpl_discover_pca_kernels - errors parsing pca_info.xml. Error code: " << valid << vcl_endl;
+        std::cout << "bvpl_discover_pca_kernels - errors parsing pca_info.xml. Error code: " << valid << std::endl;
         xml_write();
       }
     }
@@ -220,7 +220,7 @@ void bvpl_global_pca<feature_dim>::init(unsigned scene_id)
   boxm_scene_base_sptr data_scene_base = load_scene(scene_id);
   boxm_scene<boct_tree<short, float> >* data_scene = dynamic_cast<boxm_scene<boct_tree<short, float> >*> (data_scene_base.as_pointer());
   if (!data_scene) {
-    vcl_cerr << "Error in bvpl_global_pca<feature_dim>::init(): Could not cast data scene\n";
+    std::cerr << "Error in bvpl_global_pca<feature_dim>::init(): Could not cast data scene\n";
     return;
   }
   double finest_cell_length = data_scene->finest_cell_length();
@@ -232,11 +232,11 @@ void bvpl_global_pca<feature_dim>::init(unsigned scene_id)
   }
 
   {
-    vcl_stringstream aux_scene_ss;
+    std::stringstream aux_scene_ss;
     aux_scene_ss << "train_scene_" << scene_id ;
-    vcl_string aux_scene_path = aux_dirs_[scene_id] + "/" + aux_scene_ss.str() + ".xml";
+    std::string aux_scene_path = aux_dirs_[scene_id] + "/" + aux_scene_ss.str() + ".xml";
     if (!vul_file::exists(aux_scene_path)) {
-      vcl_cout<< "Scene: " << aux_scene_path << " does not exist, initializing" << vcl_endl;
+      std::cout<< "Scene: " << aux_scene_path << " does not exist, initializing" << std::endl;
       boxm_scene<boct_tree<short, bool> > *aux_scene =
       new boxm_scene<boct_tree<short, bool> >(data_scene->lvcs(), data_scene->origin(), data_scene->block_dim(), data_scene->world_dim(), data_scene->max_level(), data_scene->init_level());
       aux_scene->set_appearance_model(BOXM_BOOL);
@@ -245,11 +245,11 @@ void bvpl_global_pca<feature_dim>::init(unsigned scene_id)
     }
   }
   {
-    vcl_stringstream aux_scene_ss;
+    std::stringstream aux_scene_ss;
     aux_scene_ss << "valid_scene_" << scene_id ;
-    vcl_string aux_scene_path = aux_dirs_[scene_id] + "/" + aux_scene_ss.str() + ".xml";
+    std::string aux_scene_path = aux_dirs_[scene_id] + "/" + aux_scene_ss.str() + ".xml";
     if (!vul_file::exists(aux_scene_path)) {
-      vcl_cout<< "Scene: " << aux_scene_path << " does not exist, initializing" << vcl_endl;
+      std::cout<< "Scene: " << aux_scene_path << " does not exist, initializing" << std::endl;
       boxm_scene<boct_tree<short, bool> > *aux_scene =
       new boxm_scene<boct_tree<short, bool> >(data_scene->lvcs(), data_scene->origin(), data_scene->block_dim(), data_scene->world_dim(), data_scene->max_level(), data_scene->init_level());
       aux_scene->set_appearance_model(BOXM_BOOL);
@@ -259,11 +259,11 @@ void bvpl_global_pca<feature_dim>::init(unsigned scene_id)
   }
 
   {
-    vcl_stringstream proj_scene_ss;
+    std::stringstream proj_scene_ss;
     proj_scene_ss << "proj_pca_scene_" << scene_id ;
-    vcl_string proj_scene_path = aux_dirs_[scene_id] + "/" + proj_scene_ss.str() + ".xml";
+    std::string proj_scene_path = aux_dirs_[scene_id] + "/" + proj_scene_ss.str() + ".xml";
     if (!vul_file::exists(proj_scene_path)) {
-      vcl_cout<< "Scene: " << proj_scene_path << " does not exist, initializing" << vcl_endl;
+      std::cout<< "Scene: " << proj_scene_path << " does not exist, initializing" << std::endl;
       typedef boct_tree<short,vnl_vector_fixed<double,10> > pca_tree_type;
       boxm_scene<pca_tree_type > *proj_scene =
       new boxm_scene<pca_tree_type >(data_scene->lvcs(), data_scene->origin(), data_scene->block_dim(), data_scene->world_dim(), data_scene->max_level(), data_scene->init_level());
@@ -288,7 +288,7 @@ bool bvpl_global_pca<feature_dim>::sample_statistics( int scene_id, int block_i,
                                                       unsigned long &nfeature)
 {
   if (!training_scenes_[scene_id]) {
-    vcl_cout << "Skiping scene: " << scene_id <<", labeled for testing\n";
+    std::cout << "Skiping scene: " << scene_id <<", labeled for testing\n";
     return false;
   }
 
@@ -306,12 +306,12 @@ bool bvpl_global_pca<feature_dim>::sample_statistics( int scene_id, int block_i,
 
   if (!(data_scene))
   {
-    vcl_cerr << "Error in bvpl_global_pca<feature_dim>::sample_statistics: Could not cast data scenes\n";
+    std::cerr << "Error in bvpl_global_pca<feature_dim>::sample_statistics: Could not cast data scenes\n";
     return false;
   }
   if (!(mask_scene))
   {
-    vcl_cerr << "Error in bvpl_global_pca<feature_dim>::sample_statistics: Could not cast mask scenes\n";
+    std::cerr << "Error in bvpl_global_pca<feature_dim>::sample_statistics: Could not cast mask scenes\n";
     return false;
   }
 
@@ -327,7 +327,7 @@ bool bvpl_global_pca<feature_dim>::sample_statistics( int scene_id, int block_i,
 
   //get the cells for this block
   if (!(data_scene->valid_index(block_i, block_j, block_k) && mask_scene->valid_index(block_i, block_j, block_k))) {
-    vcl_cerr << "In compute_testing_error: Invalid block\n";
+    std::cerr << "In compute_testing_error: Invalid block\n";
     return false;
   }
 
@@ -342,8 +342,8 @@ bool bvpl_global_pca<feature_dim>::sample_statistics( int scene_id, int block_i,
   nfeature = 1;
 
   //2. Sample cells from this tree. The number of samples from this tree depends on the portion of scene cells that live in this tree
-  vcl_vector<float_cell_type *> leaf_cells = data_tree->leaf_cells();
-  vcl_vector<bool_cell_type*> mask_leaves = mask_tree->leaf_cells();
+  std::vector<float_cell_type *> leaf_cells = data_tree->leaf_cells();
+  std::vector<bool_cell_type*> mask_leaves = mask_tree->leaf_cells();
 
   int tree_ncells = leaf_cells.size();
   unsigned long tree_nsamples = (unsigned long)(tree_ncells*training_fraction_);
@@ -353,7 +353,7 @@ bool bvpl_global_pca<feature_dim>::sample_statistics( int scene_id, int block_i,
   vgl_point_3d<int> nmin = nbbox_.min_point();
   vgl_point_3d<int> nmax = nbbox_.max_point();
 
-  vcl_cout <<" In block (" << block_i <<", " << block_j << ", " << block_k << "), number of nsamples is: " << tree_nsamples << ", cell length is: " << cell_length << vcl_endl;
+  std::cout <<" In block (" << block_i <<", " << block_j << ", " << block_k << "), number of nsamples is: " << tree_nsamples << ", cell length is: " << cell_length << std::endl;
 
   for (unsigned long i=0; i<tree_nsamples; i++)
   {
@@ -410,7 +410,7 @@ bool bvpl_global_pca<feature_dim>::sample_statistics( int scene_id, int block_i,
 
     ++nfeature;
 #if 0
-    vcl_cerr << "Feature EVD: " <<this_feature << '\n'
+    std::cerr << "Feature EVD: " <<this_feature << '\n'
              << "Mean Feature EVD: " <<mean_feature << '\n';
 #endif
   }
@@ -488,7 +488,7 @@ void bvpl_global_pca<feature_dim>::project(int scene_id, int block_i, int block_
   boxm_scene<boct_tree<short, bool> >* aux_scene = dynamic_cast<boxm_scene<boct_tree<short, bool> >*> (aux_scene_base.as_pointer());
   if (!(data_scene && proj_scene && aux_scene))
   {
-    vcl_cerr << "Error in bvpl_global_pca<feature_dim>::sample_statistics: Could not cast input scenes\n";
+    std::cerr << "Error in bvpl_global_pca<feature_dim>::sample_statistics: Could not cast input scenes\n";
     return;
   }
 
@@ -499,7 +499,7 @@ void bvpl_global_pca<feature_dim>::project(int scene_id, int block_i, int block_
 
   //get the cells for this block
   if (!(data_scene->valid_index(block_i, block_j, block_k) && proj_scene->valid_index(block_i, block_j, block_k) && aux_scene->valid_index(block_i, block_j, block_k))) {
-    vcl_cerr << "In compute_testing_error: Invalid block\n";
+    std::cerr << "In compute_testing_error: Invalid block\n";
     return;
   }
 
@@ -514,9 +514,9 @@ void bvpl_global_pca<feature_dim>::project(int scene_id, int block_i, int block_
   aux_tree->init_cells(true);
 
   //get leaf cells
-  vcl_vector<float_cell_type *> data_leaves = data_tree->leaf_cells();
-  vcl_vector<pca_cell_type *> proj_leaves = proj_tree->leaf_cells();
-  vcl_vector<boct_tree_cell<short, bool> *> aux_leaves = aux_tree->leaf_cells();
+  std::vector<float_cell_type *> data_leaves = data_tree->leaf_cells();
+  std::vector<pca_cell_type *> proj_leaves = proj_tree->leaf_cells();
+  std::vector<boct_tree_cell<short, bool> *> aux_leaves = aux_tree->leaf_cells();
 
   double cell_length = finest_cell_length_[scene_id];
 
@@ -560,7 +560,7 @@ void bvpl_global_pca<feature_dim>::project(int scene_id, int block_i, int block_
           boct_tree_cell<short,float> *neighbor_cell = data_scene->locate_point_in_memory(neighbor_centroid);
 
           if (!neighbor_cell) {
-            vcl_cerr << "Error in bvpl_global_pca<feature_dim>::project\n";
+            std::cerr << "Error in bvpl_global_pca<feature_dim>::project\n";
             return;
           }
 
@@ -569,7 +569,7 @@ void bvpl_global_pca<feature_dim>::project(int scene_id, int block_i, int block_
         }
 
     if (curr_dim != feature_dim) {
-      vcl_cerr << "Error in bvpl_global_pca<feature_dim>::project\n";
+      std::cerr << "Error in bvpl_global_pca<feature_dim>::project\n";
       return;
     }
     this_feature-=training_mean_;
@@ -600,7 +600,7 @@ void bvpl_global_pca<feature_dim>::project(int scene_id, int block_i, int block_
   data_scene->unload_active_blocks();
 
 #ifdef DEBUG_PROJ
-  vcl_cout << "Total error in this block: " << error/(double)n_valid_cells << vcl_endl;
+  std::cout << "Total error in this block: " << error/(double)n_valid_cells << std::endl;
 #endif
 }
 
@@ -609,7 +609,7 @@ template <unsigned feature_dim>
 void bvpl_global_pca<feature_dim>::projection_error(int scene_id, int block_i, int block_j, int block_k)
 {
   if (training_scenes_[scene_id]) {
-    vcl_cout << "Skipping training scene: " <<scene_id << vcl_endl;
+    std::cout << "Skipping training scene: " <<scene_id << std::endl;
     return;
   }
   typedef boct_tree<short,float> float_tree_type;
@@ -628,7 +628,7 @@ void bvpl_global_pca<feature_dim>::projection_error(int scene_id, int block_i, i
 
   if (!(data_scene && error_scene && proj_scene))
   {
-    vcl_cerr << "Error in bvpl_global_pca<feature_dim>::sample_statistics: Could not cast input scenes\n";
+    std::cerr << "Error in bvpl_global_pca<feature_dim>::sample_statistics: Could not cast input scenes\n";
     return;
   }
 
@@ -639,7 +639,7 @@ void bvpl_global_pca<feature_dim>::projection_error(int scene_id, int block_i, i
 
   //get the cells for this block
   if (!(data_scene->valid_index(block_i, block_j, block_k) && proj_scene->valid_index(block_i, block_j, block_k) && error_scene->valid_index(block_i, block_j, block_k))) {
-    vcl_cerr << "In compute_testing_error: Invalid block\n";
+    std::cerr << "In compute_testing_error: Invalid block\n";
     return;
   }
 
@@ -654,9 +654,9 @@ void bvpl_global_pca<feature_dim>::projection_error(int scene_id, int block_i, i
   error_tree->init_cells(-1.0f);
 
   //get leaf cells
-  vcl_vector<float_cell_type *> data_leaves = data_tree->leaf_cells();
-  vcl_vector<pca_cell_type *> proj_leaves = proj_tree->leaf_cells();
-  vcl_vector<float_cell_type *> error_leaves = error_tree->leaf_cells();
+  std::vector<float_cell_type *> data_leaves = data_tree->leaf_cells();
+  std::vector<pca_cell_type *> proj_leaves = proj_tree->leaf_cells();
+  std::vector<float_cell_type *> error_leaves = error_tree->leaf_cells();
 
   double cell_length = finest_cell_length_[scene_id];
 
@@ -695,7 +695,7 @@ void bvpl_global_pca<feature_dim>::projection_error(int scene_id, int block_i, i
           boct_tree_cell<short,float> *neighbor_cell = data_scene->locate_point_in_memory(neighbor_centroid);
 
           if (!neighbor_cell) {
-            vcl_cerr << "Error in bvpl_global_pca<feature_dim>::project\n";
+            std::cerr << "Error in bvpl_global_pca<feature_dim>::project\n";
             return;
           }
 
@@ -704,7 +704,7 @@ void bvpl_global_pca<feature_dim>::projection_error(int scene_id, int block_i, i
         }
 
     if (curr_dim != feature_dim) {
-      vcl_cerr << "Error in bvpl_global_pca<feature_dim>::project\n";
+      std::cerr << "Error in bvpl_global_pca<feature_dim>::project\n";
       return;
     }
     this_feature-=training_mean_;
@@ -734,7 +734,7 @@ boxm_scene_base_sptr bvpl_global_pca<feature_dim>::load_scene (int scene_id)
 {
   if (scene_id<0 || scene_id>((int)scenes_.size() -1))
   {
-    vcl_cerr << "Error in bvpl_global_pca::load_scene: Invalid scene id\n";
+    std::cerr << "Error in bvpl_global_pca::load_scene: Invalid scene id\n";
     return NULL;
   }
   //load scene
@@ -749,7 +749,7 @@ boxm_scene_base_sptr bvpl_global_pca<feature_dim>::load_scene (int scene_id)
     scene_base = scene;
   }
   else {
-    vcl_cerr << "Error in bvpl_global_pca::load_scene: Invalid appearance model\n";
+    std::cerr << "Error in bvpl_global_pca::load_scene: Invalid appearance model\n";
     return NULL;
   }
 
@@ -762,13 +762,13 @@ boxm_scene_base_sptr bvpl_global_pca<feature_dim>::load_valid_scene (int scene_i
 {
   if (scene_id<0 || scene_id>((int)scenes_.size() -1))
   {
-    vcl_cerr << "Error in bvpl_global_pca::load_scene: Invalid scene id\n";
+    std::cerr << "Error in bvpl_global_pca::load_scene: Invalid scene id\n";
     return NULL;
   }
   //load scene
   boxm_scene_base_sptr aux_scene_base = new boxm_scene_base();
   boxm_scene_parser aux_parser;
-  vcl_stringstream aux_scene_ss;
+  std::stringstream aux_scene_ss;
   aux_scene_ss << aux_dirs_[scene_id] << "/valid_scene_" << scene_id << ".xml";
   aux_scene_base->load_scene(aux_scene_ss.str(), aux_parser);
 
@@ -779,7 +779,7 @@ boxm_scene_base_sptr bvpl_global_pca<feature_dim>::load_valid_scene (int scene_i
     aux_scene_base = aux_scene;
   }
   else {
-    vcl_cerr << "Error in bvpl_global_pca::load_aux_scene: Invalid appearance model\n";
+    std::cerr << "Error in bvpl_global_pca::load_aux_scene: Invalid appearance model\n";
     return NULL;
   }
 
@@ -792,13 +792,13 @@ boxm_scene_base_sptr bvpl_global_pca<feature_dim>::load_train_scene (int scene_i
 {
   if (scene_id<0 || scene_id>((int)scenes_.size() -1))
   {
-    vcl_cerr << "Error in bvpl_global_pca::load_scene: Invalid scene id\n";
+    std::cerr << "Error in bvpl_global_pca::load_scene: Invalid scene id\n";
     return NULL;
   }
   //load scene
   boxm_scene_base_sptr aux_scene_base = new boxm_scene_base();
   boxm_scene_parser aux_parser;
-  vcl_stringstream aux_scene_ss;
+  std::stringstream aux_scene_ss;
   aux_scene_ss << aux_dirs_[scene_id] << "/train_scene_" << scene_id << ".xml";
   aux_scene_base->load_scene(aux_scene_ss.str(), aux_parser);
 
@@ -809,7 +809,7 @@ boxm_scene_base_sptr bvpl_global_pca<feature_dim>::load_train_scene (int scene_i
     aux_scene_base = aux_scene;
   }
   else {
-    vcl_cerr << "Error in bvpl_global_pca::load_aux_scene: Invalid appearance model\n";
+    std::cerr << "Error in bvpl_global_pca::load_aux_scene: Invalid appearance model\n";
     return NULL;
   }
 
@@ -824,13 +824,13 @@ boxm_scene_base_sptr bvpl_global_pca<feature_dim>::load_projection_scene (int sc
 {
   if (scene_id<0 || scene_id>((int)scenes_.size() -1))
   {
-    vcl_cerr << "Error in bvpl_global_pca::load_projection_scene: Invalid scene id\n";
+    std::cerr << "Error in bvpl_global_pca::load_projection_scene: Invalid scene id\n";
     return NULL;
   }
   //load scene
   boxm_scene_base_sptr proj_scene_base = new boxm_scene_base();
   boxm_scene_parser proj_parser;
-  vcl_stringstream proj_scene_ss;
+  std::stringstream proj_scene_ss;
   proj_scene_ss << aux_dirs_[scene_id] << "/proj_pca_scene_" << scene_id << ".xml";
   proj_scene_base->load_scene(proj_scene_ss.str(), proj_parser);
 
@@ -842,7 +842,7 @@ boxm_scene_base_sptr bvpl_global_pca<feature_dim>::load_projection_scene (int sc
     proj_scene_base = proj_scene;
   }
   else {
-    vcl_cerr << "Error in bvpl_global_pca::load_proj_scene: Invalid appearance model\n";
+    std::cerr << "Error in bvpl_global_pca::load_proj_scene: Invalid appearance model\n";
     return NULL;
   }
 
@@ -856,22 +856,22 @@ boxm_scene_base_sptr bvpl_global_pca<feature_dim>::load_error_scene (int scene_i
 {
   if (scene_id<0 || scene_id>((int)scenes_.size() -1))
   {
-    vcl_cerr << "Error in bvpl_global_pca::load_error_scene: Invalid scene id\n";
+    std::cerr << "Error in bvpl_global_pca::load_error_scene: Invalid scene id\n";
     return NULL;
   }
 
   boxm_scene_base_sptr data_scene_base = load_scene(scene_id);
   boxm_scene<boct_tree<short, float> >* data_scene = dynamic_cast<boxm_scene<boct_tree<short, float> >*> (data_scene_base.as_pointer());
   if (!data_scene) {
-    vcl_cerr << "Error in bvpl_global_pca<feature_dim>::init(): Could not cast data scene\n";
+    std::cerr << "Error in bvpl_global_pca<feature_dim>::init(): Could not cast data scene\n";
     return NULL;
   }
 
-  vcl_stringstream aux_scene_ss;
+  std::stringstream aux_scene_ss;
   aux_scene_ss << "error_pca_scene_" << scene_id ;
-  vcl_string aux_scene_path = aux_dirs_[scene_id] + "/" + aux_scene_ss.str() + ".xml";
+  std::string aux_scene_path = aux_dirs_[scene_id] + "/" + aux_scene_ss.str() + ".xml";
   if (!vul_file::exists(aux_scene_path)) {
-    vcl_cout<< "Scene: " << aux_scene_path << " does not exist, initializing" << vcl_endl;
+    std::cout<< "Scene: " << aux_scene_path << " does not exist, initializing" << std::endl;
     boxm_scene<boct_tree<short, float> > *aux_scene =
     new boxm_scene<boct_tree<short, float> >(data_scene->lvcs(), data_scene->origin(), data_scene->block_dim(), data_scene->world_dim(), data_scene->max_level(), data_scene->init_level());
     aux_scene->set_appearance_model(BOXM_FLOAT);
@@ -882,7 +882,7 @@ boxm_scene_base_sptr bvpl_global_pca<feature_dim>::load_error_scene (int scene_i
   //load scene
   boxm_scene_base_sptr error_scene_base = new boxm_scene_base();
   boxm_scene_parser error_parser;
-  vcl_stringstream error_scene_ss;
+  std::stringstream error_scene_ss;
   error_scene_ss << aux_dirs_[scene_id] << "/error_pca_scene_" << scene_id << ".xml";
   error_scene_base->load_scene(error_scene_ss.str(), error_parser);
 
@@ -893,7 +893,7 @@ boxm_scene_base_sptr bvpl_global_pca<feature_dim>::load_error_scene (int scene_i
     error_scene_base = error_scene;
   }
   else {
-    vcl_cerr << "Error in bvpl_global_pca::load_error_scene: Invalid appearance model\n";
+    std::cerr << "Error in bvpl_global_pca::load_error_scene: Invalid appearance model\n";
     return NULL;
   }
 
@@ -959,7 +959,7 @@ void bvpl_global_pca<feature_dim>::xml_write()
   bxml_element* train_elm = new bxml_element("training_scenes");
   train_elm->append_text("\n");
 
-  vcl_stringstream ss;
+  std::stringstream ss;
   unsigned ts = 0;
 
   for (unsigned i = 0; i< training_scenes_.size(); i++) {
@@ -976,7 +976,7 @@ void bvpl_global_pca<feature_dim>::xml_write()
   root->append_text("\n");
 
   //write to disk
-  vcl_ofstream os(xml_path().c_str());
+  std::ofstream os(xml_path().c_str());
   bxml_write(os, doc);
   os.close();
 
@@ -988,13 +988,13 @@ void bvpl_global_pca<feature_dim>::xml_write()
 template <unsigned feature_dim>
 void bvpl_global_pca<feature_dim>::write_pca_matrices()
 {
-  vcl_ofstream pc_ofs(pc_path().c_str());
+  std::ofstream pc_ofs(pc_path().c_str());
   pc_ofs.precision(15);
-  vcl_ofstream weights_ofs(weights_path().c_str());
+  std::ofstream weights_ofs(weights_path().c_str());
   weights_ofs.precision(15);
-  vcl_ofstream mean_ofs(mean_path().c_str());
+  std::ofstream mean_ofs(mean_path().c_str());
   mean_ofs.precision(15);
-  vcl_ofstream scatter_ofs(scatter_path().c_str());
+  std::ofstream scatter_ofs(scatter_path().c_str());
   scatter_ofs.precision(15);
 
   pc_ofs << pc_;

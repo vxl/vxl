@@ -7,7 +7,9 @@
 // \author Martin Roberts
 #include <clsfy/clsfy_classifier_base.h>
 #include <clsfy/clsfy_binary_threshold_1d.h>
-#include <vcl_iosfwd.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iosfwd>
 
 
 //: One node of a binary tree classifier - wrapper round clsfy_binary_threshold_1d
@@ -122,7 +124,7 @@ class clsfy_binary_tree : public clsfy_classifier_base
 
   //: Provides a probability-like value that the input being in each class.
   // output(i) i<nClasses, contains the probability that the input is in class i
-  virtual void class_probabilities(vcl_vector<double> &outputs, const vnl_vector<double> &input) const;
+  virtual void class_probabilities(std::vector<double> &outputs, const vnl_vector<double> &input) const;
 
   //: This value has properties of a Log likelihood of being in class (binary classifiers only)
   // class probability = exp(logL) / (1+exp(logL))
@@ -138,16 +140,16 @@ class clsfy_binary_tree : public clsfy_classifier_base
   virtual short version_no() const;
 
   //: Name of the class
-  virtual vcl_string is_a() const;
+  virtual std::string is_a() const;
 
   //: Name of the class
-  virtual bool is_class(vcl_string const& s) const;
+  virtual bool is_class(std::string const& s) const;
 
   //: Create a copy on the heap and return base class pointer
   virtual clsfy_classifier_base* clone() const;
 
   //: Print class to os
-  virtual void print_summary(vcl_ostream& os) const;
+  virtual void print_summary(std::ostream& os) const;
 
   //: Save class to binary file stream
   virtual void b_write(vsl_b_ostream& bfs) const;

@@ -3,8 +3,10 @@
 
 #include "boxm_opt2_optimizer.h"
 
-#include <vcl_vector.h>
-#include <vcl_string.h>
+#include <vector>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <string>
 
 #include <boxm/sample/algo/boxm_mog_grey_processor.h>
 #include <boxm/sample/algo/boxm_simple_grey_processor.h>
@@ -15,7 +17,7 @@
 
 template <class T_loc, boxm_apm_type APM, boxm_aux_type AUX>
 boxm_opt2_optimizer<T_loc,APM,AUX>::boxm_opt2_optimizer(boxm_scene<boct_tree<T_loc, boxm_sample<APM> > > &scene,
-                                                        vcl_vector<vcl_string> const& image_ids)
+                                                        std::vector<std::string> const& image_ids)
                                                         : image_ids_(image_ids), scene_(scene), max_cell_P_(0.995f), min_cell_P_(0.0001f)
 {}
 
@@ -29,13 +31,13 @@ bool boxm_opt2_optimizer<T_loc,APM,AUX>::update()
   typedef boct_tree<T_loc, boxm_sample<APM> > tree_type;
   typedef boct_tree<T_loc, aux_type > aux_tree_type;
 
-  vcl_vector<boxm_aux_scene<T_loc,  boxm_sample<APM>, aux_type> > aux_scenes;
+  std::vector<boxm_aux_scene<T_loc,  boxm_sample<APM>, aux_type> > aux_scenes;
   for (unsigned int i=0; i<image_ids_.size(); ++i) {
     boxm_aux_scene<T_loc, boxm_sample<APM>, aux_type> aux_scene(&scene_,image_ids_[i],boxm_aux_scene<T_loc, boxm_sample<APM>, aux_type>::LOAD, APM);
     aux_scenes.push_back(aux_scene);
   }
 
-  vcl_vector<boxm_opt2_sample<typename boxm_apm_traits<APM>::obs_datatype> > aux_samples;
+  std::vector<boxm_opt2_sample<typename boxm_apm_traits<APM>::obs_datatype> > aux_samples;
 
   // for each block
   boxm_block_iterator<tree_type> iter(&scene_);
@@ -45,10 +47,10 @@ bool boxm_opt2_optimizer<T_loc,APM,AUX>::update()
     scene_.load_block(iter.index());
     boxm_block<tree_type>* block = *iter;
     boct_tree<T_loc, boxm_sample<APM> >* tree = block->get_tree();
-    vcl_vector<boct_tree_cell<T_loc,boxm_sample<APM> >*> cells = tree->leaf_cells();
+    std::vector<boct_tree_cell<T_loc,boxm_sample<APM> >*> cells = tree->leaf_cells();
 
     // get a vector of incremental readers for each aux scene.
-    vcl_vector<boct_tree_cell_reader<T_loc, aux_type>* > aux_readers(aux_scenes.size());
+    std::vector<boct_tree_cell_reader<T_loc, aux_type>* > aux_readers(aux_scenes.size());
     for (unsigned int i=0; i<aux_scenes.size(); ++i) {
       aux_readers[i] = aux_scenes[i].get_block_incremental(iter.index());
     }
@@ -58,26 +60,26 @@ bool boxm_opt2_optimizer<T_loc,APM,AUX>::update()
       aux_samples.clear();
       boct_tree_cell<T_loc,boxm_sample<APM> >* cell = cells[i];
       boxm_sample<APM> data = cell->data();
-      //vcl_cout << "cell IN " << data.alpha << data.appearence_<< vcl_endl;
+      //std::cout << "cell IN " << data.alpha << data.appearence_<< std::endl;
       for (unsigned j=0; j<aux_readers.size(); j++) {
         boct_tree_cell<T_loc, aux_type> temp_cell;
 
         if (!aux_readers[j]->next(temp_cell)) {
-          vcl_cerr << "error: incremental reader returned false.\n";
+          std::cerr << "error: incremental reader returned false.\n";
           return false;
         }
         //boxm_opt_sample<typename boxm_apm_traits<APM>::obs_datatype> aux_cell = temp_cell.data();
         if (!temp_cell.code_.isequal(&(cell->code_))) {
-          vcl_cerr << "error: temp_cell idx does not match cell idx.\n";
+          std::cerr << "error: temp_cell idx does not match cell idx.\n";
           return false;
         }
         if (temp_cell.data().seg_len_ > 0.0f) {
           aux_samples.push_back(temp_cell.data());
         }
       }
-      vcl_vector<float> pre_vector;
-      vcl_vector<float> vis_vector;
-      vcl_vector<typename boxm_apm_traits<APM>::obs_datatype> obs_vector;
+      std::vector<float> pre_vector;
+      std::vector<float> vis_vector;
+      std::vector<typename boxm_apm_traits<APM>::obs_datatype> obs_vector;
 
       // UPDATE METHOD #1 : "OR" of occlusion probabilities
       double log_pass_prob_sum = 0.0;
@@ -105,8 +107,8 @@ bool boxm_opt2_optimizer<T_loc,APM,AUX>::update()
       // do bounds check on new alpha value
       vgl_box_3d<double> cell_bb = tree->cell_bounding_box(cell);
       const float cell_len = float(cell_bb.width());
-      const float max_alpha = -vcl_log(1.0f - max_cell_P_)/cell_len;
-      const float min_alpha = -vcl_log(1.0f - min_cell_P_)/cell_len;
+      const float max_alpha = -std::log(1.0f - max_cell_P_)/cell_len;
+      const float min_alpha = -std::log(1.0f - min_cell_P_)/cell_len;
       if (data.alpha > max_alpha) {
         data.alpha = max_alpha;
       }
@@ -114,14 +116,14 @@ bool boxm_opt2_optimizer<T_loc,APM,AUX>::update()
         data.alpha = min_alpha;
       }
       if (!((data.alpha >= min_alpha) && (data.alpha <= max_alpha)) ){
-        vcl_cerr << "\nerror: data.alpha = " << data.alpha << '\n';
-        //vcl_cerr << " log_alpha_sum = " << log_alpha_sum << ", n_actual_samples = " << n_actual_samples << '\n';
+        std::cerr << "\nerror: data.alpha = " << data.alpha << '\n';
+        //std::cerr << " log_alpha_sum = " << log_alpha_sum << ", n_actual_samples = " << n_actual_samples << '\n';
       }
       // update with new appearance
       const float min_sigma = 0.02f;
       boxm_apm_traits<APM>::apm_processor::compute_appearance(obs_vector, pre_vector, vis_vector, data.appearance_, min_sigma);
 
-      //vcl_cout << "cell OUT " << data.alpha << data.appearence_ << vcl_endl << vcl_endl;
+      //std::cout << "cell OUT " << data.alpha << data.appearence_ << std::endl << std::endl;
       cell->set_data(data);
     }
     scene_.write_active_block();
@@ -131,7 +133,7 @@ bool boxm_opt2_optimizer<T_loc,APM,AUX>::update()
     iter++;
   }
 #ifdef DEBUG
-  vcl_cout << "done with all cells" << vcl_endl;
+  std::cout << "done with all cells" << std::endl;
 #endif
   // clear the aux scenes so that its starts with the refined scene next time
   for (unsigned i=0; i<aux_scenes.size(); i++) {

@@ -8,9 +8,11 @@
 // \date   October 5, 2006
 
 #include "bxml_read.h"
-#include <vcl_deque.h>
-#include <vcl_utility.h>
-#include <vcl_fstream.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <deque>
+#include <utility>
+#include <fstream>
 #include <vcl_cassert.h>
 #include <vul/vul_file.h>
 #ifdef WIN32
@@ -38,8 +40,8 @@ class bxml_expat_parser : public expatpp
 
  private:
   bool online_mode_;
-  vcl_vector<bxml_data_sptr> stack_;
-  vcl_deque<vcl_pair<bxml_data_sptr,unsigned int> > complete_;
+  std::vector<bxml_data_sptr> stack_;
+  std::deque<std::pair<bxml_data_sptr,unsigned int> > complete_;
   bxml_document document_;
 };
 
@@ -88,8 +90,8 @@ void bxml_expat_parser::startElement(const XML_Char* name, const XML_Char** atts
 void bxml_expat_parser::endElement(const XML_Char* name)
 {
   if (stack_.back().ptr()) {
-    assert(static_cast<bxml_element*>(stack_.back().ptr())->name() == vcl_string(name));
-    complete_.push_back(vcl_pair<bxml_data_sptr,unsigned int>(stack_.back(),stack_.size()-1));
+    assert(static_cast<bxml_element*>(stack_.back().ptr())->name() == std::string(name));
+    complete_.push_back(std::pair<bxml_data_sptr,unsigned int>(stack_.back(),stack_.size()-1));
   }
   stack_.pop_back();
 }
@@ -101,7 +103,7 @@ void bxml_expat_parser::charData(const XML_Char* text, int len)
   assert(!stack_.empty());
   if (stack_.back().ptr()) {
     bxml_element* parent = static_cast<bxml_element*>(stack_.back().ptr());
-    parent->append_text(vcl_string(text,len));
+    parent->append_text(std::string(text,len));
   }
 }
 
@@ -120,17 +122,17 @@ void bxml_expat_parser::xmlDecl( const XML_Char *version,
 
 
 //: Read the entire contents of \p filepath into an XML document class
-bxml_document bxml_read(const vcl_string& filepath)
+bxml_document bxml_read(const std::string& filepath)
 {
   if (!vul_file::exists(filepath))
-    vcl_cerr<< "In bxml_read: " << vul_file::get_cwd() << filepath << " does not exist\n";
-  vcl_ifstream file(filepath.c_str());
+    std::cerr<< "In bxml_read: " << vul_file::get_cwd() << filepath << " does not exist\n";
+  std::ifstream file(filepath.c_str());
   return bxml_read(file);
 }
 
 
 //: Read the entire data stream \p is into an XML document class
-bxml_document bxml_read(vcl_istream& is)
+bxml_document bxml_read(std::istream& is)
 {
   bxml_expat_parser parser;
 
@@ -145,7 +147,7 @@ bxml_document bxml_read(vcl_istream& is)
     done = (n+1 < sizeof(buf)) ? 1 : 0;
 
     if (parser.XML_Parse(buf,n,done) != XML_STATUS_OK ) {
-      vcl_cerr << "Error parsing\n";
+      std::cerr << "Error parsing\n";
       break;
     }
   }
@@ -188,7 +190,7 @@ void bxml_stream_read::reset()
 
 //: Read the next element
 bxml_data_sptr
-bxml_stream_read::next_element(vcl_istream& is, unsigned int& depth)
+bxml_stream_read::next_element(std::istream& is, unsigned int& depth)
 {
   char buf[4096];
   int done = 0;
@@ -203,7 +205,7 @@ bxml_stream_read::next_element(vcl_istream& is, unsigned int& depth)
     is.get(buf,sizeof(buf),0);
     int n = is.gcount();
     if (p_->parser.XML_Parse(buf,n,done) != XML_STATUS_OK ) {
-      vcl_cerr << "Error parsing\n";
+      std::cerr << "Error parsing\n";
       break;
     }
 

@@ -4,8 +4,10 @@
 #define TMATCH 2.5f
 
 #include <boxm2/boxm2_util.h>
-#include <vcl_cmath.h> // for std::exp() && std::sqrt()
-#include <vcl_algorithm.h>
+#include <cmath> // for std::exp() && std::sqrt()
+#include <vcl_compiler.h>
+#include <iostream>
+#include <algorithm>
 
 #include <bsta/bsta_distribution.h>
 #include <bsta/bsta_gauss_sf1.h>
@@ -22,7 +24,7 @@ float boxm2_gauss_grey_processor::expected_color( vnl_vector_fixed<unsigned char
 
 float boxm2_gauss_grey_processor::gauss_prob_density(float x, float mu, float sigma)
 {
-  return 0.398942280f*vcl_exp(-0.5f*(x - mu)*(x - mu)/(sigma*sigma))/sigma;
+  return 0.398942280f*std::exp(-0.5f*(x - mu)*(x - mu)/(sigma*sigma))/sigma;
 }
 
 float boxm2_gauss_grey_processor::prob_density(const vnl_vector_fixed<unsigned char, 2> & app, float x)
@@ -51,7 +53,7 @@ float sigma_norm_factor(unsigned int nobs)
   return m/nobs + b;
 }
 
-void compute_gaussian_params(vcl_vector<float> const& obs, vcl_vector<float> const& weights, float &mean, float &sigma)
+void compute_gaussian_params(std::vector<float> const& obs, std::vector<float> const& weights, float &mean, float &sigma)
 {
   const unsigned int nobs = obs.size();
   double w_sum = 0.0;
@@ -79,15 +81,15 @@ void compute_gaussian_params(vcl_vector<float> const& obs, vcl_vector<float> con
   }
 
   mean = (float)mean_obs;
-  sigma = (float)vcl_sqrt(var);
+  sigma = (float)std::sqrt(var);
 }
 
 //:
 // Most of The following piece of code is copied from boxm_mog_grey_processor::compute_appearance
 //
 void boxm2_gauss_grey_processor::compute_app_model(vnl_vector_fixed<unsigned char, 2> & app,
-                                                   vcl_vector<float> const& obs,
-                                                   vcl_vector<float> const& vis,
+                                                   std::vector<float> const& obs,
+                                                   std::vector<float> const& vis,
                                                    bsta_sigma_normalizer_sptr n_table,
                                                    float min_sigma)
 {
@@ -96,15 +98,15 @@ void boxm2_gauss_grey_processor::compute_app_model(vnl_vector_fixed<unsigned cha
   const unsigned int nobs = obs.size();
   if (nobs == 0) {
     // zero observations. nothing to do here.
-    app[0]=(unsigned char)vcl_floor(0.5f*255.0f);
-    app[1]=(unsigned char)vcl_floor(1.0f*255.0f);
+    app[0]=(unsigned char)std::floor(0.5f*255.0f);
+    app[1]=(unsigned char)std::floor(1.0f*255.0f);
     return;
   }
 
   if (nobs == 1) {
     // one observation: Just return the value as the mean, and a big sigma.
-    app[0]=(unsigned char)vcl_floor(obs[0]*255.0f);
-    app[1]=(unsigned char)vcl_floor(big_sigma*255.0f);
+    app[0]=(unsigned char)std::floor(obs[0]*255.0f);
+    app[1]=(unsigned char)std::floor(big_sigma*255.0f);
     return;
   }
   else {
@@ -128,17 +130,17 @@ void boxm2_gauss_grey_processor::compute_app_model(vnl_vector_fixed<unsigned cha
     if (sigma_est > big_sigma) {
       sigma_est = big_sigma;
     }
-    app[0]=(unsigned char)vcl_floor(mean_est*255.0f);
-    app[1]=(unsigned char)vcl_floor(sigma_est*255.0f);
+    app[0]=(unsigned char)std::floor(mean_est*255.0f);
+    app[1]=(unsigned char)std::floor(sigma_est*255.0f);
   }
 
   return;
 }
 
 void boxm2_gauss_grey_processor::compute_app_model(vnl_vector_fixed<unsigned char, 2> & apm,
-                                                   vcl_vector<float> const& obs,
-                                                   vcl_vector<float> const& pre,
-                                                   vcl_vector<float> const& vis,
+                                                   std::vector<float> const& obs,
+                                                   std::vector<float> const& pre,
+                                                   std::vector<float> const& vis,
                                                    bsta_sigma_normalizer_sptr n_table,
                                                    float min_sigma)
 {
@@ -151,19 +153,19 @@ void boxm2_gauss_grey_processor::compute_app_model(vnl_vector_fixed<unsigned cha
   // check for some simple cases first
   if (nobs == 0) {
     // zero observations. nothing to do here.
-    apm[0]=(unsigned char)vcl_floor(0.5f*255.0f);
-    apm[1]=(unsigned char)vcl_floor(big_sigma*255.0f);
+    apm[0]=(unsigned char)std::floor(0.5f*255.0f);
+    apm[1]=(unsigned char)std::floor(big_sigma*255.0f);
     return;
   }
   if (nobs == 1) {
     // one observation: Just return the value as the mean, and a big sigma.
-    apm[0]=(unsigned char)vcl_floor(obs[0]*255.0f);
-    apm[1]=(unsigned char)vcl_floor(big_sigma*255.0f);
+    apm[0]=(unsigned char)std::floor(obs[0]*255.0f);
+    apm[1]=(unsigned char)std::floor(big_sigma*255.0f);
     return;
   }
-  //vcl_cout << "nobs = " << obs.size() << vcl_endl;
+  //std::cout << "nobs = " << obs.size() << std::endl;
   //for (unsigned int i=0; i<obs.size(); ++i) {
-  //  vcl_cout << "obs=" << obs[i] << " vis=" << vis[i] << "pre=" << pre[i] << vcl_endl;
+  //  std::cout << "obs=" << obs[i] << " vis=" << vis[i] << "pre=" << pre[i] << std::endl;
   //}
   const float min_var_EM = 1.5e-5f; // to prevent degenerate solution (corresponds roughly to sigma = 1/255)
   bsta_fit_gaussian(obs,vis,pre,model_bsta,min_var_EM);
@@ -175,7 +177,7 @@ void boxm2_gauss_grey_processor::compute_app_model(vnl_vector_fixed<unsigned cha
   // normalize sigma
   const float norm_factor = n_table->normalization_factor(expected_nobs);
   //const float norm_factor = 1.0f;
-  float sigma = vcl_sqrt(model_bsta.var()) * norm_factor;
+  float sigma = std::sqrt(model_bsta.var()) * norm_factor;
 
   // bounds check on std. deviation value
   if (sigma < min_sigma) {
@@ -185,17 +187,17 @@ void boxm2_gauss_grey_processor::compute_app_model(vnl_vector_fixed<unsigned cha
     sigma = big_sigma;
   }
   if (!(sigma < big_sigma) && !(sigma > min_sigma)) {
-    vcl_cerr << "error: sigma = " << sigma << " model_bsta.var() = " << model_bsta.var() << vcl_endl;
+    std::cerr << "error: sigma = " << sigma << " model_bsta.var() = " << model_bsta.var() << std::endl;
     sigma = big_sigma;
   }
   // convert back
   if (model_bsta.mean() <= 1.0f && model_bsta.mean() >= 0.0f) {
-    apm[0]=(unsigned char)vcl_floor(model_bsta.mean()*255.0f);
-    apm[1]=(unsigned char)vcl_floor(sigma*255.0f);
+    apm[0]=(unsigned char)std::floor(model_bsta.mean()*255.0f);
+    apm[1]=(unsigned char)std::floor(sigma*255.0f);
   }
   else {
-    apm[0]=(unsigned char)vcl_floor(0.5f*255.0f);
-    apm[1]=(unsigned char)vcl_floor(big_sigma*255.0f);
+    apm[0]=(unsigned char)std::floor(0.5f*255.0f);
+    apm[1]=(unsigned char)std::floor(big_sigma*255.0f);
   }
 }
 
@@ -205,7 +207,7 @@ void update_gauss(float & x, float & rho, float & mu, float &  sigma,float min_s
   float diff = x-mu;
   var = (1.0f-rho)*(var +rho*diff*diff);
   mu += rho*diff;
-  sigma = vcl_sqrt(var);
+  sigma = std::sqrt(var);
   sigma = sigma < min_sigma ? min_sigma: sigma;
 }
 
@@ -216,8 +218,8 @@ void boxm2_gauss_grey_processor::update_app_model(vnl_vector_fixed<unsigned char
   float mu = apm[0]/255.0f;
   float sigma = apm[1]/255.0f;
   update_gauss(x,w,mu, sigma, min_sigma);
-  apm[0] = (unsigned char)vcl_floor(mu*255.0f);
-  apm[1] = (unsigned char)vcl_floor(sigma*255.0f);
+  apm[0] = (unsigned char)std::floor(mu*255.0f);
+  apm[1] = (unsigned char)std::floor(sigma*255.0f);
   nobs[0] += 1;
 }
 

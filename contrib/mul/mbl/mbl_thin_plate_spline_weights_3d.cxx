@@ -5,8 +5,10 @@
 // \brief Construct thin plate spline to map 3D to 3D
 // \author Tim Cootes
 
-#include <vcl_cmath.h>
-#include <vcl_cstdlib.h> // for vcl_abort()
+#include <vcl_compiler.h>
+#include <iostream>
+#include <cmath>
+#include <cstdlib> // for std::abort()
 #include <vsl/vsl_indent.h>
 #include <vsl/vsl_vector_io.h>
 #include <vnl/vnl_math.h>
@@ -50,7 +52,7 @@ inline double r2lnr( const vgl_vector_3d<double>&  pt, const vgl_point_3d<double
               ( pt.y() * pt.y() * wt.y() ) +
               ( pt.z() * pt.z() * wt.z() );
   if (r2>1e-8)
-    return 0.5 * r2 * vcl_log(r2);
+    return 0.5 * r2 * std::log(r2);
   else
     return 0;
 }
@@ -59,7 +61,7 @@ inline double r2lnr(double x, double y, double z, double wx, double wy, double w
 {
   double r2 = (x * x * wx) + (y * y * wy) + (z * z * wz);
   if (r2>1e-8)
-    return 0.5 * r2 * vcl_log(r2);
+    return 0.5 * r2 * std::log(r2);
   else
     return 0;
 }
@@ -68,8 +70,8 @@ inline double r2lnr(double x, double y, double z, double wx, double wy, double w
 // Sets L to be a symmetric square matrix of size n + 4 (n = pts.nelems)
 // with L(i,j) = Uij = r2lnr(pts(i)-pts(j)) for i,j <= n
 static void build_K_part( vnl_matrix<double>& L,
-                          const vcl_vector<vgl_point_3d<double> >& pts,
-                          const vcl_vector<vgl_point_3d<double> >& wts)
+                          const std::vector<vgl_point_3d<double> >& pts,
+                          const std::vector<vgl_point_3d<double> >& wts)
 {
   unsigned int n = pts.size();
   if ( (L.rows()!=n+4) | (L.columns()!=n+4) ) L.set_size(n+4,n+4);
@@ -107,8 +109,8 @@ static void build_K_part( vnl_matrix<double>& L,
 //          ( 1 x1 y1 z1)
 //             . .  .
 static void build_L( vnl_matrix<double>& L,
-                     const vcl_vector<vgl_point_3d<double> >& pts,
-                     const vcl_vector<vgl_point_3d<double> >& wts)
+                     const std::vector<vgl_point_3d<double> >& pts,
+                     const std::vector<vgl_point_3d<double> >& wts)
 {
   int i,j;
 
@@ -142,8 +144,8 @@ static void build_L( vnl_matrix<double>& L,
 
 //: Build from small number of points
 void mbl_thin_plate_spline_weights_3d::build_pure_affine(
-        const vcl_vector<vgl_point_3d<double> >& source_pts,
-        const vcl_vector<vgl_point_3d<double> >& dest_pts)
+        const std::vector<vgl_point_3d<double> >& source_pts,
+        const std::vector<vgl_point_3d<double> >& dest_pts)
 {
   int n=source_pts.size();
   L_inv_.set_size(0,0);
@@ -184,8 +186,8 @@ void mbl_thin_plate_spline_weights_3d::build_pure_affine(
   }
   if (n>=2)
   {
-    vcl_cerr<<"mbl_thin_plate_spline_weights_3d::build_pure_affine() Incomplete. sorry.\n";
-    vcl_abort();
+    std::cerr<<"mbl_thin_plate_spline_weights_3d::build_pure_affine() Incomplete. sorry.\n";
+    std::abort();
   }
 }
 
@@ -263,7 +265,7 @@ void mbl_thin_plate_spline_weights_3d::compute_energy(vnl_vector<double>& W1,
 void mbl_thin_plate_spline_weights_3d::set_up_rhs(vnl_vector<double>& Bx,
                                                   vnl_vector<double>& By,
                                                   vnl_vector<double>& Bz,
-                                                  const vcl_vector<vgl_point_3d<double> >& dest_pts)
+                                                  const std::vector<vgl_point_3d<double> >& dest_pts)
 {
   int n =dest_pts.size();
 
@@ -289,8 +291,8 @@ void mbl_thin_plate_spline_weights_3d::set_up_rhs(vnl_vector<double>& Bx,
   }
 }
 
-void mbl_thin_plate_spline_weights_3d::build(const vcl_vector<vgl_point_3d<double> >& source_pts,
-                                             const vcl_vector<vgl_point_3d<double> >& dest_pts,
+void mbl_thin_plate_spline_weights_3d::build(const std::vector<vgl_point_3d<double> >& source_pts,
+                                             const std::vector<vgl_point_3d<double> >& dest_pts,
                                              bool compute_the_energy)
 {
   // See Booksteins paper in IPMI 1993 for details of calculation
@@ -298,8 +300,8 @@ void mbl_thin_plate_spline_weights_3d::build(const vcl_vector<vgl_point_3d<doubl
   unsigned int n=source_pts.size();
   if (dest_pts.size() != n)
   {
-    vcl_cerr<<"mbl_thin_plate_spline_weights_3d::build - incompatible number of points.\n";
-    vcl_abort();
+    std::cerr<<"mbl_thin_plate_spline_weights_3d::build - incompatible number of points.\n";
+    std::abort();
   }
 
   L_inv_.set_size(0,0);
@@ -339,7 +341,7 @@ void mbl_thin_plate_spline_weights_3d::build(const vcl_vector<vgl_point_3d<doubl
 //: Define source point positions
 //  Performs pre-computations so that build(dest_points) can be
 //  called multiple times efficiently
-void mbl_thin_plate_spline_weights_3d::set_source_pts(const vcl_vector<vgl_point_3d<double> >& source_pts)
+void mbl_thin_plate_spline_weights_3d::set_source_pts(const std::vector<vgl_point_3d<double> >& source_pts)
 {
   unsigned int n=source_pts.size();
   src_pts_ = source_pts;
@@ -364,19 +366,19 @@ void mbl_thin_plate_spline_weights_3d::set_source_pts(const vcl_vector<vgl_point
 
 //: Define source point weights
 //  Sets x, y, z weights for each of the source points
-void mbl_thin_plate_spline_weights_3d::set_pt_wts( const vcl_vector<vgl_point_3d<double> >& pt_wts )
+void mbl_thin_plate_spline_weights_3d::set_pt_wts( const std::vector<vgl_point_3d<double> >& pt_wts )
 {
   pt_wts_ = pt_wts;
 }
 
 //: Sets up internal transformation to map source_pts onto dest_pts
-void mbl_thin_plate_spline_weights_3d::build(const vcl_vector<vgl_point_3d<double> >& dest_pts)
+void mbl_thin_plate_spline_weights_3d::build(const std::vector<vgl_point_3d<double> >& dest_pts)
 {
   unsigned int n=src_pts_.size();
   if (dest_pts.size() != n)
   {
-    vcl_cerr<<"mbl_thin_plate_spline_weights_3d::build - incompatible number of points.\n";
-    vcl_abort();
+    std::cerr<<"mbl_thin_plate_spline_weights_3d::build - incompatible number of points.\n";
+    std::abort();
   }
 
   if (n<2)  // Only copes with trivial cases at the moment
@@ -456,7 +458,7 @@ short mbl_thin_plate_spline_weights_3d::version_no() const
 //=======================================================================
 
   // required if data is present in this class
-void mbl_thin_plate_spline_weights_3d::print_summary(vcl_ostream& os) const
+void mbl_thin_plate_spline_weights_3d::print_summary(std::ostream& os) const
 {
   os<<"\nfx: "<<Ax0_<<" + "<<AxX_<<"*x + "<<AxY_
     <<"*y + "<<AxZ_<<"*z   Nonlinear terms:";
@@ -523,9 +525,9 @@ void mbl_thin_plate_spline_weights_3d::b_read(vsl_b_istream& bfs)
       vsl_b_read(bfs,L_inv_);
       break;
     default:
-      vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, mbl_thin_plate_spline_weights_3d &)\n"
+      std::cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, mbl_thin_plate_spline_weights_3d &)\n"
                << "           Unknown version number "<< version << '\n';
-      bfs.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
+      bfs.is().clear(std::ios::badbit); // Set an unrecoverable IO error on stream
       return;
   }
 }
@@ -534,18 +536,18 @@ void mbl_thin_plate_spline_weights_3d::b_read(vsl_b_istream& bfs)
 bool mbl_thin_plate_spline_weights_3d::operator==(const mbl_thin_plate_spline_weights_3d& tps) const
 {
   if (&tps==this) return true;
-  if (vcl_fabs(Ax0_-tps.Ax0_)>1e-8) return false;
-  if (vcl_fabs(AxX_-tps.AxX_)>1e-8) return false;
-  if (vcl_fabs(AxY_-tps.AxY_)>1e-8) return false;
-  if (vcl_fabs(AxZ_-tps.AxZ_)>1e-8) return false;
-  if (vcl_fabs(Ay0_-tps.Ay0_)>1e-8) return false;
-  if (vcl_fabs(AyX_-tps.AyX_)>1e-8) return false;
-  if (vcl_fabs(AyY_-tps.AyY_)>1e-8) return false;
-  if (vcl_fabs(AyZ_-tps.AyZ_)>1e-8) return false;
-  if (vcl_fabs(Az0_-tps.Az0_)>1e-8) return false;
-  if (vcl_fabs(AzX_-tps.AzX_)>1e-8) return false;
-  if (vcl_fabs(AzY_-tps.AzY_)>1e-8) return false;
-  if (vcl_fabs(AzZ_-tps.AzZ_)>1e-8) return false;
+  if (std::fabs(Ax0_-tps.Ax0_)>1e-8) return false;
+  if (std::fabs(AxX_-tps.AxX_)>1e-8) return false;
+  if (std::fabs(AxY_-tps.AxY_)>1e-8) return false;
+  if (std::fabs(AxZ_-tps.AxZ_)>1e-8) return false;
+  if (std::fabs(Ay0_-tps.Ay0_)>1e-8) return false;
+  if (std::fabs(AyX_-tps.AyX_)>1e-8) return false;
+  if (std::fabs(AyY_-tps.AyY_)>1e-8) return false;
+  if (std::fabs(AyZ_-tps.AyZ_)>1e-8) return false;
+  if (std::fabs(Az0_-tps.Az0_)>1e-8) return false;
+  if (std::fabs(AzX_-tps.AzX_)>1e-8) return false;
+  if (std::fabs(AzY_-tps.AzY_)>1e-8) return false;
+  if (std::fabs(AzZ_-tps.AzZ_)>1e-8) return false;
   if (vnl_vector_ssd(Wx_,tps.Wx_)>1e-6) return false;
   if (vnl_vector_ssd(Wy_,tps.Wy_)>1e-6) return false;
   if (vnl_vector_ssd(Wz_,tps.Wz_)>1e-6) return false;
@@ -574,7 +576,7 @@ void vsl_b_read(vsl_b_istream& bfs, mbl_thin_plate_spline_weights_3d& b)
 // Associated function: operator<<
 //=======================================================================
 
-vcl_ostream& operator<<(vcl_ostream& os,const mbl_thin_plate_spline_weights_3d& b)
+std::ostream& operator<<(std::ostream& os,const mbl_thin_plate_spline_weights_3d& b)
 {
   os << "mbl_thin_plate_spline_weights_3d: ";
   vsl_indent_inc(os);

@@ -4,9 +4,11 @@
 
 #include "bpgl_fm_compute_affine_ransac.h"
 
-#include <vcl_iostream.h>
+#include <iostream>
 #include <vcl_cassert.h>
-#include <vcl_cmath.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <cmath>
 #include <vgl/vgl_point_2d.h>
 #include <vgl/vgl_homg_point_2d.h>
 #include <vgl/vgl_homg_line_2d.h>
@@ -19,26 +21,26 @@
 //------------------------------------------
 bool
 bpgl_fm_compute_affine_ransac::compute(
-  const vcl_vector< vgl_point_2d<double> >& pr,
-  const vcl_vector< vgl_point_2d<double> >& pl,
+  const std::vector< vgl_point_2d<double> >& pr,
+  const std::vector< vgl_point_2d<double> >& pl,
   vpgl_affine_fundamental_matrix<double>& fm )
 {
   // Check that there are at least 5 points.
   if ( pr.size() < 4 || pl.size() < 4 ){
-    vcl_cerr << "bpgl_fm_compute_ransac: Need at least 4 point pairs.\n"
-             << "Number in each set: " << pr.size() << ", " << pl.size() << vcl_endl;
+    std::cerr << "bpgl_fm_compute_ransac: Need at least 4 point pairs.\n"
+             << "Number in each set: " << pr.size() << ", " << pl.size() << std::endl;
     return false;
   }
 
   // Check that the correspondence lists are the same size.
   if ( pr.size() != pl.size() ){
-    vcl_cerr << "bpgl_fm_compute_affine_ransac: Need correspondence lists of same size.\n";
+    std::cerr << "bpgl_fm_compute_affine_ransac: Need correspondence lists of same size.\n";
     return false;
   }
 
   // The following block is hacked from similar code in rrel_homography2d_est.
   rrel_fm_affine_problem* estimator = new rrel_fm_affine_problem( pr, pl );
-  rrel_muset_obj* ransac = new rrel_muset_obj((int)vcl_floor(pr.size()*.75));
+  rrel_muset_obj* ransac = new rrel_muset_obj((int)std::floor(pr.size()*.75));
   estimator->set_prior_scale( 1.0 );
   rrel_ran_sam_search* ransam = new rrel_ran_sam_search;
   ransam->set_trace_level(params_->trace_level);
@@ -51,10 +53,10 @@ bpgl_fm_compute_affine_ransac::compute(
   estimator->params_to_fm( ransam->params(), fm );
 
   // Get a list of the outliers.
-  vcl_vector<double> residuals;
+  std::vector<double> residuals;
   estimator->compute_residuals( ransam->params(), residuals );
 
-  outliers = vcl_vector<bool>();
+  outliers = std::vector<bool>();
   for ( unsigned i = 0; i < pr.size(); i++ ){
     if ( residuals[i] > params_->residual_thresh )
       outliers.push_back( true );
@@ -83,8 +85,8 @@ bpgl_fm_compute_affine_ransac_params::bpgl_fm_compute_affine_ransac_params() :
 
 //------------------------------------------
 rrel_fm_affine_problem::rrel_fm_affine_problem(
-  const vcl_vector< vgl_point_2d<double> >& pr,
-  const vcl_vector< vgl_point_2d<double> >& pl ) :
+  const std::vector< vgl_point_2d<double> >& pr,
+  const std::vector< vgl_point_2d<double> >& pl ) :
   rrel_estimation_problem(4,4)
 {
   assert( pr.size() == pl.size() );
@@ -100,10 +102,10 @@ rrel_fm_affine_problem::rrel_fm_affine_problem(
 //------------------------------------------
 bool
 rrel_fm_affine_problem::fit_from_minimal_set(
-  const vcl_vector<int>& point_indices,
+  const std::vector<int>& point_indices,
   vnl_vector<double>& params ) const
 {
-  if ( verbose ) vcl_cerr << "rrel_fm_affine_problem::fit_from_minimal_set\n";
+  if ( verbose ) std::cerr << "rrel_fm_affine_problem::fit_from_minimal_set\n";
   assert( point_indices.size() == 4 );
 
   vnl_matrix<double> S(4,5);
@@ -115,7 +117,7 @@ rrel_fm_affine_problem::fit_from_minimal_set(
   vnl_svd<double> svdS( S );
   params = svdS.nullvector();
 
-  if ( verbose ) vcl_cerr << "params: " << params << '\n';
+  if ( verbose ) std::cerr << "params: " << params << '\n';
   return true;
 }
 
@@ -124,9 +126,9 @@ rrel_fm_affine_problem::fit_from_minimal_set(
 void
 rrel_fm_affine_problem::compute_residuals(
   const vnl_vector<double>& params,
-  vcl_vector<double>& residuals ) const
+  std::vector<double>& residuals ) const
 {
-  if ( verbose ) vcl_cerr << "rrel_fm_affine_problem::compute_residuals: ";
+  if ( verbose ) std::cerr << "rrel_fm_affine_problem::compute_residuals: ";
 
   vpgl_affine_fundamental_matrix<double> fm;
   params_to_fm(params, fm);
@@ -148,7 +150,7 @@ rrel_fm_affine_problem::compute_residuals(
                                                                      vgl_homg_point_2d<double>( pl_[i] ) );
     ressum+=residuals[i];
   }
-  if ( verbose ) vcl_cerr << ressum << '\n';
+  if ( verbose ) std::cerr << ressum << '\n';
 }
 
 
@@ -165,7 +167,7 @@ rrel_fm_affine_problem::fm_to_params(
   p(2) = fm_vnl(2,2);
   p(3) = fm_vnl(1,2);
   p(4) = fm_vnl(0,2);
-  double norm = vcl_sqrt( p(0)*p(0)+p(1)*p(1) );
+  double norm = std::sqrt( p(0)*p(0)+p(1)*p(1) );
   p=p/norm;
 }
 
@@ -185,9 +187,9 @@ bool
 rrel_fm_affine_problem::weighted_least_squares_fit(
   vnl_vector<double>& /*params*/,
   vnl_matrix<double>& /*norm_covar*/,
-  const vcl_vector<double>* /*weights*/ ) const
+  const std::vector<double>* /*weights*/ ) const
 {
-  vcl_cerr << "rrel_fm_affine_problem::weighted_least_squares_fit was called, but is not implemented.\n";
+  std::cerr << "rrel_fm_affine_problem::weighted_least_squares_fit was called, but is not implemented.\n";
   return false;
 }
 

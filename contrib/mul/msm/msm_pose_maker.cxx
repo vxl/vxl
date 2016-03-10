@@ -42,7 +42,7 @@ void msm_pose_maker::set_from_curves(unsigned n_points,
 
 //: Compute a direction at each point, usually normal to curve.
 void msm_pose_maker::create_vectors(const msm_points& points,
-                                    vcl_vector<vgl_vector_2d<double> >& dir) const
+                                    std::vector<vgl_vector_2d<double> >& dir) const
 {
   if (end0_.size()==0)
   {
@@ -83,13 +83,13 @@ double msm_pose_maker::mean_normal_distance(const msm_points& points1,
 {
   assert(points1.size()==points2.size());
   if (points1.size()==0) return 0.0;
-  vcl_vector<vgl_vector_2d<double> > dir(points1.size());
+  std::vector<vgl_vector_2d<double> > dir(points1.size());
   create_vectors(points1,dir);
   double sum_d=0;
   for (unsigned i=0;i<points1.size();++i)
   {
     vgl_vector_2d<double> dp = points2[i]-points1[i];
-    if (defined(i)) sum_d += vcl_fabs(dot_product(dp,dir[i]));
+    if (defined(i)) sum_d += std::fabs(dot_product(dp,dir[i]));
     else            sum_d += dp.length();
   }
   return sum_d/points1.size();
@@ -97,7 +97,7 @@ double msm_pose_maker::mean_normal_distance(const msm_points& points1,
 
 //=======================================================================
 
-void msm_pose_maker::print_summary(vcl_ostream& os) const
+void msm_pose_maker::print_summary(std::ostream& os) const
 {
   os<<" n_points: "<<end0_.size();
 }
@@ -125,9 +125,9 @@ void msm_pose_maker::b_read(vsl_b_istream& bfs)
       vsl_b_read(bfs,end1_);
       break;
     default:
-      vcl_cerr << "msm_pose_maker::b_read() :\n"
-               << "Unexpected version number " << version << vcl_endl;
-      bfs.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
+      std::cerr << "msm_pose_maker::b_read() :\n"
+               << "Unexpected version number " << version << std::endl;
+      bfs.is().clear(std::ios::badbit); // Set an unrecoverable IO error on stream
       return;
   }
 }
@@ -142,7 +142,7 @@ void vsl_b_read(vsl_b_istream& bfs, msm_pose_maker& b)
 { b.b_read(bfs); }
 
 //: Stream output operator for class reference
-vcl_ostream& operator<<(vcl_ostream& os,const msm_pose_maker& b)
+std::ostream& operator<<(std::ostream& os,const msm_pose_maker& b)
 {
   b.print_summary(os);
   return os;

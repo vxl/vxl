@@ -8,7 +8,9 @@
 #include "rgrl_transformation.h"
 #include <vnl/vnl_matrix_fixed.h>
 #include <vnl/vnl_vector_fixed.h>
-#include <vcl_iosfwd.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iosfwd>
 
 //: Represents a 2D homography transformation with radial lens distortion
 //
@@ -100,10 +102,10 @@ class rgrl_trans_rad_dis_homo2d
   rgrl_type_macro( rgrl_trans_rad_dis_homo2d, rgrl_transformation );
 
   // for output UNCENTERED transformation, with the origin as the center.
-  void write(vcl_ostream& os ) const;
+  void write(std::ostream& os ) const;
 
   // for input
-  bool read(vcl_istream& is );
+  bool read(std::istream& is );
 
   //: make a clone copy
   rgrl_transformation_sptr clone() const;

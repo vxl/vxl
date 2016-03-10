@@ -16,10 +16,10 @@
 float boxm2_ocl_adaptive_cone_update( boxm2_scene_sptr & scene,
                                       bocl_device_sptr & device,
                                       boxm2_opencl_cache_sptr & opencl_cache,
-                                      vcl_vector<bocl_kernel*> kernels,
+                                      std::vector<bocl_kernel*> kernels,
                                       cl_command_queue& queue,
-                                      vcl_string data_type,
-                                      vcl_string num_obs_type,
+                                      std::string data_type,
+                                      std::string num_obs_type,
                                       vpgl_camera_double_sptr cam ,
                                       vil_image_view_base_sptr in_img,
                                       unsigned int roi_ni0,
@@ -32,11 +32,11 @@ float boxm2_ocl_adaptive_cone_update( boxm2_scene_sptr & scene,
   };
   float transfer_time=0.0f;
   float gpu_time=0.0f;
-  vcl_size_t local_threads[2]={8,8};
+  std::size_t local_threads[2]={8,8};
 
   //camera check
   if (cam->type_name()!= "vpgl_perspective_camera" && cam->type_name() != "vpgl_generic_camera" ) {
-    vcl_cout<<"Cannot render with camera of type "<<cam->type_name()<<vcl_endl;
+    std::cout<<"Cannot render with camera of type "<<cam->type_name()<<std::endl;
     return 0.0f;
   }
 
@@ -45,7 +45,7 @@ float boxm2_ocl_adaptive_cone_update( boxm2_scene_sptr & scene,
   vil_image_view<float>* img_view = static_cast<vil_image_view<float>* >(float_img.ptr());
   unsigned cl_ni=(unsigned)RoundUp(img_view->ni(),(int)local_threads[0]);
   unsigned cl_nj=(unsigned)RoundUp(img_view->nj(),(int)local_threads[1]);
-  vcl_size_t global_threads[2] = {cl_ni, cl_nj};
+  std::size_t global_threads[2] = {cl_ni, cl_nj};
 
   //set generic cam and get visible block order
   cl_float* ray_origins = new cl_float[4*cl_ni*cl_nj];
@@ -57,7 +57,7 @@ float boxm2_ocl_adaptive_cone_update( boxm2_scene_sptr & scene,
 
   ////////////////////////////////////////////////////////////////////////////////
   //gotta do this the old fashion way for debuggin....
-  vcl_cout<<"  DEBUG: COMPUTING CONE HALF ANGLES ON CPU"<<vcl_endl;
+  std::cout<<"  DEBUG: COMPUTING CONE HALF ANGLES ON CPU"<<std::endl;
   int cnt = 0;
   for (unsigned j=0;j<cl_nj;++j) {
     for (unsigned i=0;i<cl_ni;++i) {
@@ -71,12 +71,12 @@ float boxm2_ocl_adaptive_cone_update( boxm2_scene_sptr & scene,
     }
   }
   ray_d_buff->write_to_buffer(queue);
-  vcl_cout<<"opencl Half angle: "
+  std::cout<<"opencl Half angle: "
           <<ray_directions[0]<<','
           <<ray_directions[1]<<','
           <<ray_directions[2]<<','
           <<ray_directions[3]<<'\n'
-          <<"  DEBUG: FINISHED CONE HALF ANGLES ON CPU"<<vcl_endl;
+          <<"  DEBUG: FINISHED CONE HALF ANGLES ON CPU"<<std::endl;
   ////////////////////////////////////////////////////////////////////////////////
 
   //Visibility, Preinf, Norm, and input image buffers
@@ -133,11 +133,11 @@ float boxm2_ocl_adaptive_cone_update( boxm2_scene_sptr & scene,
   centerZ->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR);
 
   // set arguments
-  vcl_vector<boxm2_block_id> vis_order = scene->get_vis_blocks(cam);
-  vcl_vector<boxm2_block_id>::iterator id;
+  std::vector<boxm2_block_id> vis_order = scene->get_vis_blocks(cam);
+  std::vector<boxm2_block_id>::iterator id;
   for (unsigned int i=0; i<kernels.size(); ++i)
   {
-    vcl_cout<<"Running kernel "<<i<<vcl_endl;
+    std::cout<<"Running kernel "<<i<<std::endl;
     for (id = vis_order.begin(); id != vis_order.end(); ++id)
     {
         //choose correct render kernel
@@ -154,7 +154,7 @@ float boxm2_ocl_adaptive_cone_update( boxm2_scene_sptr & scene,
         // check for invalid parameters
         if( alphaTypeSize == 0 ) //This should never happen, it will result in division by zero later
         {
-            vcl_cout << "ERROR: alphaTypeSize == 0 in " << __FILE__ << __LINE__ << vcl_endl;
+            std::cout << "ERROR: alphaTypeSize == 0 in " << __FILE__ << __LINE__ << std::endl;
             return false;
         }
 
@@ -175,7 +175,7 @@ float boxm2_ocl_adaptive_cone_update( boxm2_scene_sptr & scene,
         transfer_time += (float) transfer.all();
         if (i==UPDATE_PASSONE)
         {
-            vcl_cout<<"    "<<kern->id()<<": "<< (*id) <<vcl_endl;
+            std::cout<<"    "<<kern->id()<<": "<< (*id) <<std::endl;
             aux0->zero_gpu_buffer(queue);
             aux1->zero_gpu_buffer(queue);
             kern->set_arg( blk_info );
@@ -240,7 +240,7 @@ float boxm2_ocl_adaptive_cone_update( boxm2_scene_sptr & scene,
         }
         else if (i==UPDATE_BAYES)
         {
-            vcl_cout<<"    "<<kern->id()<<": "<< (*id) <<vcl_endl;
+            std::cout<<"    "<<kern->id()<<": "<< (*id) <<std::endl;
             auxTypeSize = boxm2_data_info::datasize(boxm2_data_traits<BOXM2_AUX2>::prefix());
             bocl_mem *aux2   = opencl_cache->get_data<BOXM2_AUX2>(scene, *id, info_buffer->data_buffer_length*auxTypeSize);
             aux2->zero_gpu_buffer(queue);
@@ -293,7 +293,7 @@ float boxm2_ocl_adaptive_cone_update( boxm2_scene_sptr & scene,
         }
         else if (i==UPDATE_CELL)
         {
-            vcl_cout<<"    "<<kern->id()<<": "<< (*id) <<vcl_endl;
+            std::cout<<"    "<<kern->id()<<": "<< (*id) <<std::endl;
             auxTypeSize = boxm2_data_info::datasize(boxm2_data_traits<BOXM2_AUX2>::prefix());
             bocl_mem *aux2   = opencl_cache->get_data<BOXM2_AUX2>(scene, *id, info_buffer->data_buffer_length*auxTypeSize);
 
@@ -354,10 +354,10 @@ float boxm2_ocl_adaptive_cone_update( boxm2_scene_sptr & scene,
 float boxm2_ocl_cone_update( boxm2_scene_sptr & scene,
                              bocl_device_sptr & device,
                              boxm2_opencl_cache_sptr & opencl_cache,
-                             vcl_vector<bocl_kernel*> kernels,
+                             std::vector<bocl_kernel*> kernels,
                              cl_command_queue& queue,
-                             vcl_string data_type,
-                             vcl_string num_obs_type,
+                             std::string data_type,
+                             std::string num_obs_type,
                              vpgl_camera_double_sptr cam ,
                              vil_image_view_base_sptr in_img,
                              unsigned int roi_ni0,
@@ -371,11 +371,11 @@ float boxm2_ocl_cone_update( boxm2_scene_sptr & scene,
 
   float transfer_time=0.0f;
   float gpu_time=0.0f;
-  vcl_size_t local_threads[2]={8,8};
+  std::size_t local_threads[2]={8,8};
 
   //camera check
   if (cam->type_name()!= "vpgl_perspective_camera" && cam->type_name() != "vpgl_generic_camera" ) {
-    vcl_cout<<"Cannot render with camera of type "<<cam->type_name()<<vcl_endl;
+    std::cout<<"Cannot render with camera of type "<<cam->type_name()<<std::endl;
     return 0.0f;
   }
 
@@ -384,7 +384,7 @@ float boxm2_ocl_cone_update( boxm2_scene_sptr & scene,
   vil_image_view<float>* img_view = static_cast<vil_image_view<float>* >(float_img.ptr());
   unsigned cl_ni=(unsigned)RoundUp(img_view->ni(),(int)local_threads[0]);
   unsigned cl_nj=(unsigned)RoundUp(img_view->nj(),(int)local_threads[1]);
-  vcl_size_t global_threads[2] = {cl_ni, cl_nj};
+  std::size_t global_threads[2] = {cl_ni, cl_nj};
 
   //set generic cam and get visible block order
   cl_float* ray_origins = new cl_float[4*cl_ni*cl_nj];
@@ -409,11 +409,11 @@ float boxm2_ocl_cone_update( boxm2_scene_sptr & scene,
     }
   }
   ray_d_buff->write_to_buffer(queue);
-  vcl_cout<<"opencl Half angle: "
+  std::cout<<"opencl Half angle: "
           <<ray_directions[0]<<','
           <<ray_directions[1]<<','
           <<ray_directions[2]<<','
-          <<ray_directions[3]<<vcl_endl;
+          <<ray_directions[3]<<std::endl;
   ////////////////////////////////////////////////////////////////////////////////
 
   //Visibility, Preinf, Norm, and input image buffers
@@ -470,11 +470,11 @@ float boxm2_ocl_cone_update( boxm2_scene_sptr & scene,
   centerZ->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR);
 
   // set arguments
-  vcl_vector<boxm2_block_id> vis_order = scene->get_vis_blocks(cam);
-  vcl_vector<boxm2_block_id>::iterator id;
+  std::vector<boxm2_block_id> vis_order = scene->get_vis_blocks(cam);
+  std::vector<boxm2_block_id>::iterator id;
   for (unsigned int i=0; i<kernels.size(); ++i)
   {
-    vcl_cout<<"Running kernel "<<i<<vcl_endl;
+    std::cout<<"Running kernel "<<i<<std::endl;
     for (id = vis_order.begin(); id != vis_order.end(); ++id)
     {
       //choose correct render kernel
@@ -510,7 +510,7 @@ float boxm2_ocl_cone_update( boxm2_scene_sptr & scene,
       transfer_time += (float) transfer.all();
       if (i==UPDATE_PASSONE)
       {
-        vcl_cout<<"    "<<kern->id()<<": "<< (*id) <<vcl_endl;
+        std::cout<<"    "<<kern->id()<<": "<< (*id) <<std::endl;
         aux0->zero_gpu_buffer(queue);
         aux1->zero_gpu_buffer(queue);
         kern->set_arg( blk_info );
@@ -553,7 +553,7 @@ float boxm2_ocl_cone_update( boxm2_scene_sptr & scene,
       }
       else if (i==UPDATE_BAYES)
       {
-        vcl_cout<<"    "<<kern->id()<<": "<< (*id) <<vcl_endl;
+        std::cout<<"    "<<kern->id()<<": "<< (*id) <<std::endl;
         auxTypeSize = boxm2_data_info::datasize(boxm2_data_traits<BOXM2_AUX2>::prefix());
         bocl_mem *aux2   = opencl_cache->get_data<BOXM2_AUX2>(scene, *id, info_buffer->data_buffer_length*auxTypeSize);
         aux2->zero_gpu_buffer(queue);
@@ -606,7 +606,7 @@ float boxm2_ocl_cone_update( boxm2_scene_sptr & scene,
       }
       else if (i==UPDATE_CELL)
       {
-        vcl_cout<<"    "<<kern->id()<<": "<< (*id) <<vcl_endl;
+        std::cout<<"    "<<kern->id()<<": "<< (*id) <<std::endl;
         auxTypeSize = boxm2_data_info::datasize(boxm2_data_traits<BOXM2_AUX2>::prefix());
         bocl_mem *aux2   = opencl_cache->get_data<BOXM2_AUX2>(scene, *id, info_buffer->data_buffer_length*auxTypeSize);
 

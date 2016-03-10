@@ -6,8 +6,10 @@
 // (See accompanying file rgtl_license_1_0.txt or copy at
 // http://www.boost.org/LICENSE_1_0.txt)
 
-#include <vcl_iostream.h>
-#include <vcl_cstdlib.h>
+#include <iostream>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <cstdlib>
 
 //----------------------------------------------------------------------------
 bool rgtl_serialize_ostream::okay() const
@@ -17,19 +19,19 @@ bool rgtl_serialize_ostream::okay() const
 
 //----------------------------------------------------------------------------
 rgtl_serialize_ostream&
-rgtl_serialize_ostream::write(void const* data, vcl_size_t length)
+rgtl_serialize_ostream::write(void const* data, std::size_t length)
 {
   this->stream_.write(static_cast<char const*>(data), length);
   if (!this->stream_)
   {
-    vcl_cerr << "Error writing to stream!\n";
-    vcl_abort();
+    std::cerr << "Error writing to stream!\n";
+    std::abort();
   }
   return *this;
 }
 
 //----------------------------------------------------------------------------
-vcl_size_t rgtl_serialize_ostream::position()
+std::size_t rgtl_serialize_ostream::position()
 {
   return this->stream_.tellp();
 }

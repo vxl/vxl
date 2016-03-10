@@ -7,8 +7,10 @@
 // \brief Univariate flat PDF
 // \author Tim Cootes
 
-#include <vcl_cmath.h>
-#include <vcl_iosfwd.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <cmath>
+#include <iosfwd>
 #include <pdf1d/pdf1d_pdf.h>
 
 //: Class for univariate flat distributions: p(x)=1/(hi-lo) in [lo,hi]
@@ -30,7 +32,7 @@ class pdf1d_flat : public pdf1d_pdf
   virtual ~pdf1d_flat();
 
   //: Return standard deviation
-  double sd() const { return vcl_sqrt(variance()); }
+  double sd() const { return std::sqrt(variance()); }
 
   //: Creates flat distribution in range [lo,hi]
   void set(double lo, double hi);
@@ -77,16 +79,16 @@ class pdf1d_flat : public pdf1d_pdf
   short version_no() const;
 
   //: Name of the class
-  virtual vcl_string is_a() const;
+  virtual std::string is_a() const;
 
   //: Does the name of the class match the argument?
-  virtual bool is_class(vcl_string const& s) const;
+  virtual bool is_class(std::string const& s) const;
 
   //: Create a copy on the heap and return base class pointer
   virtual pdf1d_pdf* clone() const;
 
   //: Print class to os
-  virtual void print_summary(vcl_ostream& os) const;
+  virtual void print_summary(std::ostream& os) const;
 
   //: Save class to binary file stream
   virtual void b_write(vsl_b_ostream& bfs) const;

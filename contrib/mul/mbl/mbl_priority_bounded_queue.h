@@ -6,12 +6,14 @@
 // \author Ian Scott
 // \date   Fri Oct  5  2001
 
-#include <vcl_vector.h>
-#include <vcl_functional.h>
-#include <vcl_algorithm.h>
+#include <vector>
+#include <functional>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <algorithm>
 
 //: A bounded priority queue
-// This is identical to a vcl_priority_queue, but
+// This is identical to a std::priority_queue, but
 // as more elements are added past the queue's bound size
 // the largest values are thrown out.
 // So this queue keeps the n smallest values that
@@ -21,7 +23,7 @@
 //
 // top() returns the value that is closest to being thrown out,
 // which is the largest value in the case of the default predicate.
-template <class T, class C= vcl_vector<T>, class O= vcl_less<
+template <class T, class C= std::vector<T>, class O= std::less<
 #ifndef VCL_VC
 typename
 #endif
@@ -75,12 +77,12 @@ public:
       else return;
     }
     c_.push_back(x);
-    vcl_push_heap(c_.begin(), c_.end(), comp_); } // ignore purify:UMR error here
+    std::push_heap(c_.begin(), c_.end(), comp_); } // ignore purify:UMR error here
   // It can be resolved by replacing a comparator object with a function pointer.
   // It seems that when using an object, some compilers put a small data marker in
   // to represent the object. But it contains no useful data.
   // Ignore purify:UMR error on next line as well - same cause.
-  void pop() {vcl_pop_heap(c_.begin(), c_.end(), comp_); c_.pop_back(); }
+  void pop() {std::pop_heap(c_.begin(), c_.end(), comp_); c_.pop_back(); }
 
 protected:
   size_type b_size_;

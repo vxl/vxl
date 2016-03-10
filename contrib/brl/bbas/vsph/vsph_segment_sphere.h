@@ -3,7 +3,9 @@
 #include "vsph_unit_sphere.h"
 //:
 // \file
-#include <vcl_map.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <map>
 #include <vbl/vbl_disjoint_sets.h>
 
 class vsph_segment_sphere
@@ -16,14 +18,14 @@ class vsph_segment_sphere
   double c() const {return c_;}
   int min_size() const {return min_size_;}
   int num_ccs() const {return num_ccs_;}
-  const vcl_map<int,  vcl_vector<int> >& regions() const {return regions_;}
+  const std::map<int,  std::vector<int> >& regions() const {return regions_;}
   // === process methods ===
-  void set_data(vcl_vector<double> data){data_ = data;}
+  void set_data(std::vector<double> data){data_ = data;}
   void segment();
   bool extract_region_bounding_boxes();
-  const vcl_map<int, vsph_sph_box_2d> region_boxes() const {return bboxes_;}
-  vcl_vector<double> region_data() const;
-  vcl_vector<vcl_vector<float> > region_color() const;
+  const std::map<int, vsph_sph_box_2d> region_boxes() const {return bboxes_;}
+  std::vector<double> region_data() const;
+  std::vector<std::vector<float> > region_color() const;
 
   //: function to compute mean of the pixels in a region using the oringal values of the spherical segment
   double region_mean(int id);
@@ -31,7 +33,7 @@ class vsph_segment_sphere
   double region_median(int id);
 
   vsph_unit_sphere & unit_sphere(){return usph_;}
-    vcl_vector<double> data_;
+    std::vector<double> data_;
  private:
   void smooth_data();
 
@@ -43,14 +45,14 @@ class vsph_segment_sphere
   bool dosmoothing_;
   //: spherical "image" data
 
-  vcl_vector<double> smooth_data_;
+  std::vector<double> smooth_data_;
   int num_ccs_;
   //: segmented regions
   vbl_disjoint_sets ds_;
   //: region id  sph vert ids
-  vcl_map<int,  vcl_vector<int> > regions_;
+  std::map<int,  std::vector<int> > regions_;
   //: region id  box
-  vcl_map<int, vsph_sph_box_2d> bboxes_;
+  std::map<int, vsph_sph_box_2d> bboxes_;
 };
 
 #endif

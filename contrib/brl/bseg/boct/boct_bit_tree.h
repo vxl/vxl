@@ -15,10 +15,12 @@
 
 #include <vgl/vgl_point_3d.h>
 #include <vgl/vgl_box_3d.h>
-#include <vcl_bitset.h>
-#include <vcl_iosfwd.h>
-#include <vcl_vector.h>
-#include <vcl_cmath.h> // for std::pow()
+#include <vcl_compiler.h>
+#include <iostream>
+#include <bitset>
+#include <iosfwd>
+#include <vector>
+#include <cmath> // for std::pow()
 
 class boct_bit_tree
 {
@@ -99,8 +101,8 @@ class boct_bit_tree
   int set_data_ptr(int ptr, bool is_random=false);
 
   //: returns bit indices of leaf nodes under rootBit
-  vcl_vector<int> get_leaf_bits(int rootBit=0);
-  vcl_vector<int> get_leaf_bits(int rootBit ,int depth);
+  std::vector<int> get_leaf_bits(int rootBit=0);
+  std::vector<int> get_leaf_bits(int rootBit ,int depth);
   //: returns parent index (invalid for bit_index = 0)
   int parent_index(int bit_index) { return (bit_index-1)>>3; }
 
@@ -120,6 +122,6 @@ class boct_bit_tree
   unsigned short num_levels_;
 };
 
-vcl_ostream& operator <<(vcl_ostream &s, boct_bit_tree &t);
+std::ostream& operator <<(std::ostream &s, boct_bit_tree &t);
 
 #endif // boct_bit_tree_h_

@@ -24,9 +24,11 @@
 // directory utility
 #include <vul/vul_timer.h>
 #include <vcl_where_root_dir.h>
-#include <vcl_fstream.h>
-#include <vcl_algorithm.h>
-#include <vcl_sstream.h>
+#include <fstream>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <algorithm>
+#include <sstream>
 #include <bocl/bocl_device.h>
 #include <bocl/bocl_kernel.h>
 
@@ -41,7 +43,7 @@ bool boxm2_ocl_change_detection_process_cons(bprb_func_process& pro)
   using namespace boxm2_ocl_change_detection_process_globals;
 
   // process takes 9 inputs and two outputs
-  vcl_vector<vcl_string> input_types_(n_inputs_);
+  std::vector<std::string> input_types_(n_inputs_);
   input_types_[0] = "bocl_device_sptr";
   input_types_[1] = "boxm2_scene_sptr";
   input_types_[2] = "boxm2_opencl_cache_sptr";
@@ -53,16 +55,16 @@ bool boxm2_ocl_change_detection_process_cons(bprb_func_process& pro)
   input_types_[8] = "bool";       // true to use max mode probability
   input_types_[9] = "vcl_string";       // idenitifer
 
-  vcl_vector<vcl_string>  output_types_(n_outputs_);
+  std::vector<std::string>  output_types_(n_outputs_);
   output_types_[0] = "vil_image_view_base_sptr";  // prob of change image
   output_types_[1] = "vil_image_view_base_sptr";  // Red Green change image
   bool good = pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
 
   // default is 1x1, with no ray belief
   brdb_value_sptr nxn  = new brdb_value_t<int>(1);
-  brdb_value_sptr rayb = new brdb_value_t<vcl_string>(""); // use ray belief?
+  brdb_value_sptr rayb = new brdb_value_t<std::string>(""); // use ray belief?
   brdb_value_sptr pmax = new brdb_value_t<bool>(false);    // use max-mode probability instead of mixture?
-  brdb_value_sptr ident = new brdb_value_t<vcl_string>(""); // identifier
+  brdb_value_sptr ident = new brdb_value_t<std::string>(""); // identifier
   pro.set_input(6, nxn);
   pro.set_input(7, rayb);
   pro.set_input(8, pmax);
@@ -74,7 +76,7 @@ bool boxm2_ocl_change_detection_process(bprb_func_process& pro)
 {
   using namespace boxm2_ocl_change_detection_process_globals;
   if ( pro.n_inputs() < n_inputs_ ) {
-    vcl_cout << pro.name() << ": The input number should be " << n_inputs_<< vcl_endl;
+    std::cout << pro.name() << ": The input number should be " << n_inputs_<< std::endl;
     return false;
   }
 
@@ -87,9 +89,9 @@ bool boxm2_ocl_change_detection_process(bprb_func_process& pro)
   vil_image_view_base_sptr  img           = pro.get_input<vil_image_view_base_sptr>(i++);
   vil_image_view_base_sptr  exp_img       = pro.get_input<vil_image_view_base_sptr>(i++);
   int                       n             = pro.get_input<unsigned>(i++);                 // nxn
-  vcl_string                norm_type     = pro.get_input<vcl_string>(i++);
+  std::string                norm_type     = pro.get_input<std::string>(i++);
   bool                      pmax          = pro.get_input<bool>(i++);
-  vcl_string                identifier = pro.get_input<vcl_string>(i++);
+  std::string                identifier = pro.get_input<std::string>(i++);
 
   // img dims
   unsigned ni=img->ni();
@@ -117,10 +119,10 @@ bool boxm2_ocl_change_detection_process(bprb_func_process& pro)
     bool ret = true;
     //TODO Factor this out to a utility function
     //make sure this image small enough (or else carve it into image pieces)
-    const vcl_size_t MAX_PIXELS = 16777216;
+    const std::size_t MAX_PIXELS = 16777216;
     if (ni*nj > MAX_PIXELS) {
-      vcl_size_t sni = RoundUp(ni, 16);
-      vcl_size_t snj = RoundUp(nj, 16);
+      std::size_t sni = RoundUp(ni, 16);
+      std::size_t snj = RoundUp(nj, 16);
       unsigned int numSegI = 1;
       unsigned int numSegJ = 1;
       while ( sni*snj*2 > MAX_PIXELS ) {
@@ -138,18 +140,18 @@ bool boxm2_ocl_change_detection_process(bprb_func_process& pro)
       for (unsigned int i=0; i<=numSegI; ++i) {
         for (unsigned int j=0; j<=numSegJ; ++j) {
           if(!ret) {
-            vcl_cout << pro.name() << " failed" << vcl_endl;
+            std::cout << pro.name() << " failed" << std::endl;
             return false;
           }
 
           //make sure the view doesn't extend past the original image
-          vcl_size_t startI = (vcl_size_t) i * sni;
-          vcl_size_t startJ = (vcl_size_t) j * snj;
-          vcl_size_t endI = vcl_min(startI + sni, (vcl_size_t) ni);
-          vcl_size_t endJ = vcl_min(startJ + snj, (vcl_size_t) nj);
+          std::size_t startI = (std::size_t) i * sni;
+          std::size_t startJ = (std::size_t) j * snj;
+          std::size_t endI = std::min(startI + sni, (std::size_t) ni);
+          std::size_t endJ = std::min(startJ + snj, (std::size_t) nj);
           if (endI <= startI || endJ <= startJ)
             break;
-          vcl_cout<<"Getting patch: ("<<startI<<','<<startJ<<") -> ("<<endI<<','<<endJ<<')'<<vcl_endl;
+          std::cout<<"Getting patch: ("<<startI<<','<<startJ<<") -> ("<<endI<<','<<endJ<<')'<<std::endl;
 
           unsigned int chunkNI = endI-startI;
           unsigned int chunkNJ = endJ-startJ;
@@ -172,7 +174,7 @@ bool boxm2_ocl_change_detection_process(bprb_func_process& pro)
 
     if(!ret) return false;
   }
-  vcl_cout<<"Total change time: "<<t.all()<<" ms"<<vcl_endl;
+  std::cout<<"Total change time: "<<t.all()<<" ms"<<std::endl;
 
   // set outputs
   i=0;

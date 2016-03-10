@@ -7,8 +7,9 @@
 #ifndef VIL_NITF2_ARRAY_FIELD_H
 #define VIL_NITF2_ARRAY_FIELD_H
 
-#include <vcl_map.h>
-#include <vcl_string.h>
+#include <vcl_compiler.h>
+#include <map>
+#include <string>
 #include "vil_nitf2_field.h"
 #include "vil_nitf2_index_vector.h"
 
@@ -88,14 +89,14 @@ class vil_nitf2_array_field : public vil_nitf2_field
   virtual bool value(const vil_nitf2_index_vector&, double& ) const { return false; }
   virtual bool value(const vil_nitf2_index_vector&, char& ) const { return false; }
   virtual bool value(const vil_nitf2_index_vector&, void*& ) const { return false; }
-  virtual bool value(const vil_nitf2_index_vector&, vcl_string& ) const { return false; }
+  virtual bool value(const vil_nitf2_index_vector&, std::string& ) const { return false; }
   virtual bool value(const vil_nitf2_index_vector&, vil_nitf2_location*& ) const { return false; }
   virtual bool value(const vil_nitf2_index_vector&, vil_nitf2_date_time& ) const { return false; }
 
  protected:
   void do_dimension( const vil_nitf2_index_vector& index,
                      vil_nitf2_field::field_tree* tr ) const;
-  vcl_string get_value_string(const vil_nitf2_index_vector& in_indices) const;
+  std::string get_value_string(const vil_nitf2_index_vector& in_indices) const;
 
 
   //: Dimensionality of vector field
@@ -113,7 +114,7 @@ class vil_nitf2_array_field : public vil_nitf2_field
   //   - m_dimensions_map[vector(i,j)] holds the third dimension of
   //     plane (i,j) of a 3-or-more-dimensional vector;
   // and so on, according dimensionality of the field.
-  vcl_map<vil_nitf2_index_vector, int> m_dimensions_map;
+  std::map<vil_nitf2_index_vector, int> m_dimensions_map;
 };
 
 #endif // VIL_NITF2_ARRAY_FIELD_H

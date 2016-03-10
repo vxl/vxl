@@ -31,6 +31,6 @@ VCL_INSTANTIATE_INLINE(vil1_rgb<double > operator*(double b, const vil1_rgb<T >&
 // must do << separately for byte specialization
 #undef VIL1_RGB_INSTANTIATE_LS
 #define VIL1_RGB_INSTANTIATE_LS(T) \
-VCL_INSTANTIATE_INLINE(vcl_ostream& operator<<(vcl_ostream&, const vil1_rgb<T >& ))
+VCL_INSTANTIATE_INLINE(std::ostream& operator<<(std::ostream&, const vil1_rgb<T >& ))
 
 #endif // vil1_rgb_hxx_

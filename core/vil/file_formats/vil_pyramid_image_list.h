@@ -13,8 +13,9 @@
 //                           New definition: diff(a,b) = abs(log(a/b))
 // \endverbatim
 
-#include <vcl_string.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <string>
+#include <iostream>
 #include <vil/vil_file_format.h>
 #include <vil/vil_pyramid_image_resource.h>
 
@@ -80,7 +81,7 @@ struct pyramid_level
   //:print ni and scale and values
   void print(const unsigned int l)
   {
-    vcl_cout << "level[" << l <<  "]  scale: " << scale_
+    std::cout << "level[" << l <<  "]  scale: " << scale_
              << "  ni: " << image_->ni() << '\n';
   }
 };
@@ -90,7 +91,7 @@ class vil_pyramid_image_list : public vil_pyramid_image_resource
 {
  public:
   vil_pyramid_image_list(char const* directory);
-  vil_pyramid_image_list(vcl_vector<vil_image_resource_sptr> const& images);
+  vil_pyramid_image_list(std::vector<vil_image_resource_sptr> const& images);
   virtual ~vil_pyramid_image_list();
   //: The number of planes (or components) in the image.
   // This method refers to the base (max resolution) image
@@ -214,10 +215,10 @@ class vil_pyramid_image_list : public vil_pyramid_image_resource
 
           //    ---  members ---
 
-  vcl_string directory_;
+  std::string directory_;
 
   //The set of images in the pyramid. levels_[0] is the base image
-  vcl_vector<pyramid_level*> levels_;
+  std::vector<pyramid_level*> levels_;
 };
 
 #endif // vil_pyramid_image_list_h_

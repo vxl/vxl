@@ -8,8 +8,10 @@
 #include "pdf1d_gaussian.h"
 
 #include <vcl_cassert.h>
-#include <vcl_string.h>
-#include <vcl_cmath.h>
+#include <string>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <cmath>
 
 #include <vnl/vnl_math.h>
 #include <pdf1d/pdf1d_gaussian_sampler.h>
@@ -40,8 +42,8 @@ pdf1d_gaussian::~pdf1d_gaussian()
 
 void pdf1d_gaussian::calc_log_k()
 {
-  k_ = vnl_math::one_over_sqrt2pi/vcl_sqrt(variance());
-  log_k_ = vcl_log(k_);
+  k_ = vnl_math::one_over_sqrt2pi/std::sqrt(variance());
+  log_k_ = std::log(k_);
 }
 
 //: Initialise with mean and variance (NOT standard deviation)
@@ -49,7 +51,7 @@ void pdf1d_gaussian::set(double mean, double var)
 {
   pdf1d_pdf::set_mean(mean);
   pdf1d_pdf::set_variance(var);
-  sd_ = vcl_sqrt(var);
+  sd_ = std::sqrt(var);
   calc_log_k();
 }
 
@@ -108,7 +110,7 @@ double pdf1d_gaussian::gradient(double x,
   assert(v>0);
 
   double dx = x-mean();
-  p = k_ * vcl_exp( -0.5*dx*dx/v);
+  p = k_ * std::exp( -0.5*dx*dx/v);
 
   return -1.0*dx*p/v;
 }
@@ -130,7 +132,7 @@ double pdf1d_gaussian::nearest_plausible(double x, double log_p_min) const
   // calculate radius of plausible region in standard deviations.
   log_p_min -= log_k();
   assert(log_p_min <0); // Check sd_limit is positive and real.
-  const double sd_limit = vcl_sqrt(-2.0*log_p_min);
+  const double sd_limit = std::sqrt(-2.0*log_p_min);
 
   double dx = x-mean();
 
@@ -149,9 +151,9 @@ double pdf1d_gaussian::nearest_plausible(double x, double log_p_min) const
 // Method: is_a
 //=======================================================================
 
-vcl_string pdf1d_gaussian::is_a() const
+std::string pdf1d_gaussian::is_a() const
 {
-  static vcl_string class_name_ = "pdf1d_gaussian";
+  static std::string class_name_ = "pdf1d_gaussian";
   return class_name_;
 }
 
@@ -159,7 +161,7 @@ vcl_string pdf1d_gaussian::is_a() const
 // Method: is_class
 //=======================================================================
 
-bool pdf1d_gaussian::is_class(vcl_string const& s) const
+bool pdf1d_gaussian::is_class(std::string const& s) const
 {
   return pdf1d_pdf::is_class(s) || s==pdf1d_gaussian::is_a();
 }
@@ -187,7 +189,7 @@ pdf1d_pdf* pdf1d_gaussian::clone() const
 //=======================================================================
 
 
-void pdf1d_gaussian::print_summary(vcl_ostream& os) const
+void pdf1d_gaussian::print_summary(std::ostream& os) const
 {
   pdf1d_pdf::print_summary(os);
   os << '\n';
@@ -213,14 +215,14 @@ void pdf1d_gaussian::b_read(vsl_b_istream& bfs)
 {
   if (!bfs) return;
 
-  vcl_string name;
+  std::string name;
   vsl_b_read(bfs,name);
   if (name != is_a())
   {
-    vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, pdf1d_gaussian &)\n"
+    std::cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, pdf1d_gaussian &)\n"
              << "           Attempted to load object of type "
              << name <<" into object of type " << is_a() << '\n';
-    bfs.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
+    bfs.is().clear(std::ios::badbit); // Set an unrecoverable IO error on stream
     return;
   }
 
@@ -233,14 +235,14 @@ void pdf1d_gaussian::b_read(vsl_b_istream& bfs)
       vsl_b_read(bfs,log_k_);
       break;
     default:
-      vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, pdf1d_gaussian &)\n"
+      std::cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, pdf1d_gaussian &)\n"
                << "           Unknown version number "<< version << '\n';
-      bfs.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
+      bfs.is().clear(std::ios::badbit); // Set an unrecoverable IO error on stream
       return;
   }
 
-  k_ = vcl_exp(log_k_);
-  sd_ = vcl_sqrt(variance());
+  k_ = std::exp(log_k_);
+  sd_ = std::sqrt(variance());
 }
 
 //==================< end of pdf1d_gaussian.cxx >====================

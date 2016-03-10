@@ -27,7 +27,7 @@ inline vil_image_view<T> vil_decimate(const vil_image_view<T> &im, unsigned i_fa
   // use (n+d-1)/n instead of ceil((double)n/d) to calcualte sizes
   if ( i_factor == 0 ) //Silence compiler "Division by zero" warning
   {
-    vcl_cerr << "ERROR: Division by 0 in " << __FILE__ << __LINE__ << vcl_endl;
+    std::cerr << "ERROR: Division by 0 in " << __FILE__ << __LINE__ << std::endl;
     throw 0;
   }
   return vil_image_view<T>(im.memory_chunk(), im.top_left_ptr(),

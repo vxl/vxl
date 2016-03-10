@@ -6,7 +6,9 @@
 // \author Charlene Tsai
 // \date   March 2004
 
-#include <vcl_vector.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <vector>
 #include <vnl/vnl_double_2.h>
 
 #include "rgrl_transformation_sptr.h"
@@ -109,15 +111,15 @@ class rgrl_invariant_single_landmark
   //  specified are reordered counterclockwise from the basis
   //  direction specified. The counterclockwise angles from the basis
   //  are also returned by reference.
-  void reorder_vessel( vcl_vector<vnl_vector<double> >& directions,
-                       vcl_vector<double>& local_widths,
-                       vcl_vector<double>& angles);
+  void reorder_vessel( std::vector<vnl_vector<double> >& directions,
+                       std::vector<double>& local_widths,
+                       std::vector<double>& angles);
 
  private:
   vnl_double_2 location_;
-  vcl_vector<double> local_widths_;
-  vcl_vector<vnl_double_2> boundary_points_;
-  vcl_vector<vnl_double_2> trace_normals_;
+  std::vector<double> local_widths_;
+  std::vector<vnl_double_2> boundary_points_;
+  std::vector<vnl_double_2> trace_normals_;
   vnl_vector<double> cartesian_invariants_;
   vnl_vector<double> angular_invariants_;
   vnl_double_2 center_;

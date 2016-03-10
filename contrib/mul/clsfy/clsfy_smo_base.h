@@ -7,7 +7,7 @@
 // \date 26-Nov-2001
 // \brief Sequential Minimum Optimisation algorithm
 
-#include <vcl_vector.h>
+#include <vector>
 #include <vnl/vnl_vector.h>
 #include <vnl/vnl_random.h>
 #include <mbl/mbl_data_wrapper.h>
@@ -47,13 +47,13 @@ class clsfy_smo_base
 
   //: Cache KKT error values for unbound multipliers.
   // \invariant a_i unbound => E_i = f(x_i) - y1
-  vcl_vector<double> error_cache_;
+  std::vector<double> error_cache_;
 
   //: Target values y_i
-  vcl_vector<int> target_;
+  std::vector<int> target_;
 
   //: The norm of each training vector is useful to know quickly
-  vcl_vector<double> precomputed_self_dot_product_;
+  std::vector<double> precomputed_self_dot_product_;
 
   vnl_random rng_;
 
@@ -95,9 +95,11 @@ class clsfy_smo_base
   //: Reseeds the internal random number generator.
   // To achieve quasi-random initialisation use;
   // \code
-  // #include <vcl_ctime.h>
+  // #include <vcl_compiler.h>
+  // #include <iostream>
+  // #include <ctime>
   // ..
-  // sampler.reseed(vcl_time(0));
+  // sampler.reseed(std::time(0));
   // \endcode
   virtual void reseed(unsigned long seed);
 

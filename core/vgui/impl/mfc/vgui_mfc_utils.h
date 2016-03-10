@@ -38,13 +38,13 @@ class vgui_mfc_utils
   int item_count;
 
   //: List of commands to be called by menus.
-  vcl_vector<vgui_command *> callbacks;
+  std::vector<vgui_command *> callbacks;
 
   //: List of menu accelerators.
-  vcl_vector<ACCEL> accels;
+  std::vector<ACCEL> accels;
 
   //: Add keyboard shortcut for this menu item to accelerator table (accels).
-  void add_menu_accelerator(const vgui_menu_item item, const WORD function_id, vcl_string& the_menu_name);
+  void add_menu_accelerator(const vgui_menu_item item, const WORD function_id, std::string& the_menu_name);
 
  public:
   //: (Create if necessary and) return singleton instance of this class.
@@ -76,7 +76,7 @@ class vgui_mfc_utils
 
  private:
   //: List of menus to be deleted when we are finished:
-  vcl_vector<CMenu*> menus_to_be_deleted;
+  std::vector<CMenu*> menus_to_be_deleted;
 
   //: first time a popup menu was created
   bool first_popup;

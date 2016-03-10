@@ -7,8 +7,10 @@
 // \date  6-Feb-2008
 // \brief Convenience function a tuple of PODs from a config file.
 
-#include <vcl_istream.h>
-#include <vcl_sstream.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <istream>
+#include <sstream>
 #include <mbl/mbl_exception.h>
 
 //: Read a 2-tuple of PODs from a config file.
@@ -20,29 +22,29 @@
 //
 // Example:
 // \code
-//   vcl_istringstream ss("{ 1.0 4 }");
+//   std::istringstream ss("{ 1.0 4 }");
 //   float a;
 //   int b;
 //   mbl_parse_tuple(ss, a, b)
 // \endcode
 //
 template <class T, class U>
-inline void mbl_parse_tuple(vcl_istream &afs, T& a, U& b)
+inline void mbl_parse_tuple(std::istream &afs, T& a, U& b)
 {
   if (!afs) return;
   char brace1, brace2;
-  afs >> vcl_ws >> brace1;
+  afs >> std::ws >> brace1;
   if (afs.eof())
     throw mbl_exception_parse_error("mbl_parse_tuple failed unexpected eof");
   if ( brace1 == '{')
   {
-    afs >> vcl_ws >> a >> vcl_ws >> b >> vcl_ws >> brace2;
+    afs >> std::ws >> a >> std::ws >> b >> std::ws >> brace2;
     if (!afs)
       throw mbl_exception_parse_error("mbl_parse_tuple failed with stream error");
     if (brace2 != '}')
     {
       afs.putback(brace2);
-      afs.clear(vcl_ios::failbit); // Set a recoverable IO error on stream
+      afs.clear(std::ios::failbit); // Set a recoverable IO error on stream
 
       throw mbl_exception_parse_error("mbl_parse_tuple failed to find closing brace");
     }
@@ -50,7 +52,7 @@ inline void mbl_parse_tuple(vcl_istream &afs, T& a, U& b)
   else
   {
     afs.putback(brace1);
-    afs >> vcl_ws >> a >> vcl_ws >> b;
+    afs >> std::ws >> a >> std::ws >> b;
     if (!afs)
       throw mbl_exception_parse_error("mbl_parse_tuple failed with stream error");
   }
@@ -65,29 +67,29 @@ inline void mbl_parse_tuple(vcl_istream &afs, T& a, U& b)
 //
 // \verbatim
 // Example:
-// vcl_istringstream ss("{ 1.0 -5 4 }");
+// std::istringstream ss("{ 1.0 -5 4 }");
 // float a;
 // int b;
 // unsigned c;
 // mbl_parse_tuple(ss, a, b, c)
 // \endverbatim
 template <class T, class U, class V>
-inline void mbl_parse_tuple(vcl_istream &afs, T& a, U& b, V& c)
+inline void mbl_parse_tuple(std::istream &afs, T& a, U& b, V& c)
 {
   if (!afs) return;
   char brace1, brace2;
-  afs >> vcl_ws >> brace1;
+  afs >> std::ws >> brace1;
   if (afs.eof())
     throw mbl_exception_parse_error("mbl_parse_tuple failed unexpected eof");
   if ( brace1 == '{')
   {
-    afs >> vcl_ws >> a >> vcl_ws >> b >> vcl_ws >> c >> vcl_ws >> brace2;
+    afs >> std::ws >> a >> std::ws >> b >> std::ws >> c >> std::ws >> brace2;
     if (!afs)
       throw mbl_exception_parse_error("mbl_parse_tuple failed with stream error");
     if (brace2 != '}')
     {
       afs.putback(brace2);
-      afs.clear(vcl_ios::failbit); // Set a recoverable IO error on stream
+      afs.clear(std::ios::failbit); // Set a recoverable IO error on stream
 
       throw mbl_exception_parse_error("mbl_parse_tuple failed to find closing brace");
     }
@@ -95,7 +97,7 @@ inline void mbl_parse_tuple(vcl_istream &afs, T& a, U& b, V& c)
   else
   {
     afs.putback(brace1);
-    afs >> vcl_ws >> a >> vcl_ws >> b >> vcl_ws >> c;
+    afs >> std::ws >> a >> std::ws >> b >> std::ws >> c;
     if (!afs)
       throw mbl_exception_parse_error("mbl_parse_tuple failed with stream error");
   }
@@ -111,7 +113,7 @@ inline void mbl_parse_tuple(vcl_istream &afs, T& a, U& b, V& c)
 //
 // \verbatim
 // Example:
-// vcl_istringstream ss("{ 1.0 -5 4 a }");
+// std::istringstream ss("{ 1.0 -5 4 a }");
 // float a;
 // int b;
 // unsigned c;
@@ -119,22 +121,22 @@ inline void mbl_parse_tuple(vcl_istream &afs, T& a, U& b, V& c)
 // mbl_parse_tuple(ss, a, b, c, d)
 // \endverbatim
 template <class T, class U, class V, class W>
-inline void mbl_parse_tuple(vcl_istream &afs, T& a, U& b, V& c, W& d)
+inline void mbl_parse_tuple(std::istream &afs, T& a, U& b, V& c, W& d)
 {
   if (!afs) return;
   char brace1, brace2;
-  afs >> vcl_ws >> brace1;
+  afs >> std::ws >> brace1;
   if (afs.eof())
     throw mbl_exception_parse_error("mbl_parse_tuple failed unexpected eof");
   if ( brace1 == '{')
   {
-    afs >> vcl_ws >> a >> vcl_ws >> b >> vcl_ws >> c >> vcl_ws >> d >> vcl_ws >> brace2;
+    afs >> std::ws >> a >> std::ws >> b >> std::ws >> c >> std::ws >> d >> std::ws >> brace2;
     if (!afs)
       throw mbl_exception_parse_error("mbl_parse_tuple failed with stream error");
     if (brace2 != '}')
     {
       afs.putback(brace2);
-      afs.clear(vcl_ios::failbit); // Set a recoverable IO error on stream
+      afs.clear(std::ios::failbit); // Set a recoverable IO error on stream
 
       throw mbl_exception_parse_error("mbl_parse_tuple failed to find closing brace");
     }
@@ -142,7 +144,7 @@ inline void mbl_parse_tuple(vcl_istream &afs, T& a, U& b, V& c, W& d)
   else
   {
     afs.putback(brace1);
-    afs >> vcl_ws >> a >> vcl_ws >> b >> vcl_ws >> c >> vcl_ws >> d;
+    afs >> std::ws >> a >> std::ws >> b >> std::ws >> c >> std::ws >> d;
     if (!afs)
       throw mbl_exception_parse_error("mbl_parse_tuple failed with stream error");
   }
@@ -158,7 +160,7 @@ inline void mbl_parse_tuple(vcl_istream &afs, T& a, U& b, V& c, W& d)
 //
 // \verbatim
 // Example:
-// vcl_istringstream ss("{ 1.0 -5 4 k l }");
+// std::istringstream ss("{ 1.0 -5 4 k l }");
 // float a;
 // int b;
 // unsigned c;
@@ -166,22 +168,22 @@ inline void mbl_parse_tuple(vcl_istream &afs, T& a, U& b, V& c, W& d)
 // mbl_parse_tuple(ss, a, b, c, d, e)
 // \endverbatim
 template <class T, class U, class V, class W, class X>
-inline void mbl_parse_tuple(vcl_istream &afs, T& a, U& b, V& c, W& d, X& e)
+inline void mbl_parse_tuple(std::istream &afs, T& a, U& b, V& c, W& d, X& e)
 {
   if (!afs) return;
   char brace1, brace2;
-  afs >> vcl_ws >> brace1;
+  afs >> std::ws >> brace1;
   if (afs.eof())
     throw mbl_exception_parse_error("mbl_parse_tuple failed unexpected eof");
   if ( brace1 == '{')
   {
-    afs >> vcl_ws >> a >> vcl_ws >> b >> vcl_ws >> c >> vcl_ws >> d >> vcl_ws >> e >> vcl_ws >> brace2;
+    afs >> std::ws >> a >> std::ws >> b >> std::ws >> c >> std::ws >> d >> std::ws >> e >> std::ws >> brace2;
     if (!afs)
       throw mbl_exception_parse_error("mbl_parse_tuple failed with stream error");
     if (brace2 != '}')
     {
       afs.putback(brace2);
-      afs.clear(vcl_ios::failbit); // Set a recoverable IO error on stream
+      afs.clear(std::ios::failbit); // Set a recoverable IO error on stream
 
       throw mbl_exception_parse_error("mbl_parse_tuple failed to find closing brace");
     }
@@ -189,7 +191,7 @@ inline void mbl_parse_tuple(vcl_istream &afs, T& a, U& b, V& c, W& d, X& e)
   else
   {
     afs.putback(brace1);
-    afs >> vcl_ws >> a >> vcl_ws >> b >> vcl_ws >> c >> vcl_ws >> d >> vcl_ws >> e;
+    afs >> std::ws >> a >> std::ws >> b >> std::ws >> c >> std::ws >> d >> std::ws >> e;
     if (!afs)
       throw mbl_exception_parse_error("mbl_parse_tuple failed with stream error");
   }
@@ -205,7 +207,7 @@ inline void mbl_parse_tuple(vcl_istream &afs, T& a, U& b, V& c, W& d, X& e)
 //
 // \verbatim
 // Example:
-// vcl_istringstream ss("{ 1.0 -3.4 -5 4 k l }");
+// std::istringstream ss("{ 1.0 -3.4 -5 4 k l }");
 // float a;
 // double b;
 // int c;
@@ -214,23 +216,23 @@ inline void mbl_parse_tuple(vcl_istream &afs, T& a, U& b, V& c, W& d, X& e)
 // mbl_parse_tuple(ss, a, b, c, d, e, f)
 // \endverbatim
 template <class T, class U, class V, class W, class X, class Y>
-inline void mbl_parse_tuple(vcl_istream &afs, T& a, U& b, V& c, W& d, X& e, Y& f)
+inline void mbl_parse_tuple(std::istream &afs, T& a, U& b, V& c, W& d, X& e, Y& f)
 {
   if (!afs) return;
   char brace1, brace2;
-  afs >> vcl_ws >> brace1;
+  afs >> std::ws >> brace1;
   if (afs.eof())
     throw mbl_exception_parse_error("mbl_parse_tuple failed unexpected eof");
   if ( brace1 == '{')
   {
-    afs >> vcl_ws >> a >> vcl_ws >> b >> vcl_ws >> c >> vcl_ws >> d >> vcl_ws >>
-      e >> vcl_ws >> f >> vcl_ws >> brace2;
+    afs >> std::ws >> a >> std::ws >> b >> std::ws >> c >> std::ws >> d >> std::ws >>
+      e >> std::ws >> f >> std::ws >> brace2;
     if (!afs)
       throw mbl_exception_parse_error("mbl_parse_tuple failed with stream error");
     if (brace2 != '}')
     {
       afs.putback(brace2);
-      afs.clear(vcl_ios::failbit); // Set a recoverable IO error on stream
+      afs.clear(std::ios::failbit); // Set a recoverable IO error on stream
 
       throw mbl_exception_parse_error("mbl_parse_tuple failed to find closing brace");
     }
@@ -238,8 +240,8 @@ inline void mbl_parse_tuple(vcl_istream &afs, T& a, U& b, V& c, W& d, X& e, Y& f
   else
   {
     afs.putback(brace1);
-    afs >> vcl_ws >> a >> vcl_ws >> b >> vcl_ws >> c >> vcl_ws >> d >>
-      vcl_ws >> e >> vcl_ws >> f;
+    afs >> std::ws >> a >> std::ws >> b >> std::ws >> c >> std::ws >> d >>
+      std::ws >> e >> std::ws >> f;
     if (!afs)
       throw mbl_exception_parse_error("mbl_parse_tuple failed with stream error");
   }

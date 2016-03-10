@@ -18,7 +18,9 @@
 // \endverbatim
 
 #include <vgl/vgl_point_2d.h>
-#include <vcl_vector.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <vector>
 #include <vgl/vgl_point_3d.h>
 #include <vnl/vnl_double_3x3.h>
 #include <vpgl/vpgl_calibration_matrix.h>
@@ -33,8 +35,8 @@ class bpgl_construct_cameras
 
     //: constructor initializing the set of points
     bpgl_construct_cameras(
-      vcl_vector<vgl_point_2d<double> > p0,
-      vcl_vector<vgl_point_2d<double> > p1,
+      std::vector<vgl_point_2d<double> > p0,
+      std::vector<vgl_point_2d<double> > p1,
       const vpgl_calibration_matrix<double>* K = NULL );
 
     ~bpgl_construct_cameras();
@@ -48,7 +50,7 @@ class bpgl_construct_cameras
     const vpgl_perspective_camera<double>& get_camera2(){return P2_;}
 
     //: gets the world points
-    void get_world_points( vcl_vector< vgl_point_3d<double> >& world_points );
+    void get_world_points( std::vector< vgl_point_3d<double> >& world_points );
 
  private:
 
@@ -60,8 +62,8 @@ class bpgl_construct_cameras
       const vnl_double_3x4& P2 );
 
     //: set of points
-    vcl_vector<vgl_point_2d<double> > points0_;
-    vcl_vector<vgl_point_2d<double> > points1_;
+    std::vector<vgl_point_2d<double> > points0_;
+    std::vector<vgl_point_2d<double> > points1_;
 
     vnl_double_3x3 K_;
     vnl_double_3x3 E_;

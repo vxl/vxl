@@ -22,8 +22,10 @@
 //
 //\endverbatim
 
-#include <vcl_vector.h>
-#include <vcl_iostream.h>
+#include <vector>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iostream>
 #include <vnl/vnl_math.h>
 #include <gevd/gevd_noise.h>
 #include <gevd/gevd_float_operators.h>
@@ -84,18 +86,18 @@ gevd_step::gevd_step(float smooth_sigma, // width of filter dG
     filterFactor(2)              // factor from gevd_float_operators::Gradient
 {
   if (smoothSigma < 0.5)        // no guarantee for 2-pixel separation
-    vcl_cerr << "gevd_step::gevd_step -- too small smooth_sigma: "
-             << smoothSigma << vcl_endl;
+    std::cerr << "gevd_step::gevd_step -- too small smooth_sigma: "
+             << smoothSigma << std::endl;
   if (smoothSigma > 3)          // smooth out too much the junctions
-    vcl_cerr << "gevd_step::gevd_step -- too large smooth_sigma: "
-             << smoothSigma << vcl_endl;
+    std::cerr << "gevd_step::gevd_step -- too large smooth_sigma: "
+             << smoothSigma << std::endl;
   if (noiseSigma < -1) {
-    vcl_cerr << "gevd_step::gevd_step -- noiseSigma out of range -[0 1]: "
+    std::cerr << "gevd_step::gevd_step -- noiseSigma out of range -[0 1]: "
              << noiseSigma << ". Reset to -1.\n";
     noiseSigma = -1;
   }
 
-  //vcl_cout << "Init Step\n" << *this << vcl_endl;
+  //std::cout << "Init Step\n" << *this << std::endl;
 }
 
 
@@ -123,11 +125,11 @@ gevd_step::DetectEdgels(const gevd_bufferxy& image,
                         gevd_bufferxy*& locationx, gevd_bufferxy*& locationy,
                         gevd_bufferxy*& grad_mag, gevd_bufferxy*& angle)
 {
-  //vcl_cout << "*** Detect step profiles with first-derivative of Gaussian"
+  //std::cout << "*** Detect step profiles with first-derivative of Gaussian"
   //         << *this
-  //         << vcl_endl;
+  //         << std::endl;
   if (image.GetBitsPixel() != bits_per_float) {
-    vcl_cerr << "gevd_step::DetectEdgels requires float image\n";
+    std::cerr << "gevd_step::DetectEdgels requires float image\n";
     return false;
   }
 
@@ -147,7 +149,7 @@ gevd_step::DetectEdgels(const gevd_bufferxy& image,
 
   // 2.5 JLM - Fill the theta array for use in outputting continuous digital curve
   //           directions later.  The angle definition here is consistent with
-  //           EdgeDetector, i.e. angle = (180/M_PI)*vcl_atan2(dI/dy, dI/dx);
+  //           EdgeDetector, i.e. angle = (180/M_PI)*std::atan2(dI/dy, dI/dx);
 
   grad_mag = gevd_float_operators::SimilarBuffer(image);
   angle = gevd_float_operators::SimilarBuffer(image);
@@ -155,7 +157,7 @@ gevd_step::DetectEdgels(const gevd_bufferxy& image,
   for (int j = 0; j < image.GetSizeY(); j++)
     for (int i = 0; i < image.GetSizeX(); i++)
       if ((floatPixel(*grad_mag, i, j) = floatPixel(*slope, i, j)))
-        floatPixel(*angle, i, j) = float(kdeg*vcl_atan2(floatPixel(*diry, i, j),
+        floatPixel(*angle, i, j) = float(kdeg*std::atan2(floatPixel(*diry, i, j),
                                                         floatPixel(*dirx, i, j)));
       else
         floatPixel(*angle, i, j) = 0;
@@ -176,15 +178,15 @@ gevd_step::DetectEdgels(const gevd_bufferxy& image,
           NoiseResponseToFilter(1, smoothSigma, filterFactor);
       }
       else {
-        vcl_cout << "Can not estimate sensor & texture noise\n";
+        std::cout << "Can not estimate sensor & texture noise\n";
         noiseSigma = 1;         // reasonable default for 8-bit
       }
     }
     else {
-      vcl_cout << "Not enough edge elements to estimate noise\n";
+      std::cout << "Not enough edge elements to estimate noise\n";
       noiseSigma = 1;
     }
-    //vcl_cout << "Set noise sigma = " << noiseSigma << vcl_endl;
+    //std::cout << "Set noise sigma = " << noiseSigma << std::endl;
   }
 
   // 4. Find contour pixels as local maxima along slope direction
@@ -308,16 +310,16 @@ BestStepExtension(const gevd_bufferxy& smooth,
       int dj = DJS[dir];
       float pix_m = floatPixel(smooth, ni-di, nj-dj);
       float pix_p = floatPixel(smooth, ni+di, nj+dj);
-      float slope = (float)vcl_fabs(pix_p - pix_m);
-      float max_s = (dir%HALFPI)? best_s*(float)vcl_sqrt(2.0): best_s;
+      float slope = (float)std::fabs(pix_p - pix_m);
+      float max_s = (dir%HALFPI)? best_s*(float)std::sqrt(2.0): best_s;
       if (slope > max_s) {      // find best strength
         int di2 = 2*di;
         int dj2 = 2*dj;
-        if (slope > vcl_fabs(pix - floatPixel(smooth, ni-di2, nj-dj2)) &&
-            slope > vcl_fabs(pix - floatPixel(smooth, ni+di2, nj+dj2))) {
+        if (slope > std::fabs(pix - floatPixel(smooth, ni-di2, nj-dj2)) &&
+            slope > std::fabs(pix - floatPixel(smooth, ni+di2, nj+dj2))) {
           best_i = ni;
           best_j = nj;
-          best_s = (dir%HALFPI)? slope/(float)vcl_sqrt(2.0) : slope;
+          best_s = (dir%HALFPI)? slope/(float)std::sqrt(2.0) : slope;
           best_d = dir%FULLPI + TWOPI; // in range [0 FULLPI) + TWOPI
         }
       }
@@ -326,11 +328,11 @@ BestStepExtension(const gevd_bufferxy& smooth,
   if (best_s > threshold) {     // interpolate with parabola
     float pix = floatPixel(smooth, best_i, best_j);
     int di2 = 2 * DIS[best_d], dj2 = 2 * DJS[best_d];
-    float s_m = (float)vcl_fabs(pix - floatPixel(smooth, best_i-di2, best_j-dj2));
-    float s_p = (float)vcl_fabs(pix - floatPixel(smooth, best_i+di2, best_j+dj2));
+    float s_m = (float)std::fabs(pix - floatPixel(smooth, best_i-di2, best_j-dj2));
+    float s_p = (float)std::fabs(pix - floatPixel(smooth, best_i+di2, best_j+dj2));
     if (best_d%HALFPI) {
-      s_m /= (float)vcl_sqrt(2.0);
-      s_p /= (float)vcl_sqrt(2.0);
+      s_m /= (float)std::sqrt(2.0);
+      s_p /= (float)std::sqrt(2.0);
     }
     best_l = gevd_float_operators::InterpolateParabola(s_m, best_s, s_p, best_s);
     return best_s;
@@ -361,7 +363,7 @@ gevd_step::RecoverJunctions(const gevd_bufferxy& image,
   vul_timer t;
 #endif
   if (image.GetBitsPixel() != bits_per_float) {
-    vcl_cerr << "gevd_step::RecoverJunction requires float image\n";
+    std::cerr << "gevd_step::RecoverJunction requires float image\n";
     return false;
   }
   const int rmax = 1+FRAME;     // 1 + kernel radius of BestStepExtension
@@ -369,15 +371,15 @@ gevd_step::RecoverJunctions(const gevd_bufferxy& image,
   const int xmax = image.GetSizeX()-rmax-1; // fill step direction
   const int ymax = image.GetSizeY()-rmax-1;
 #ifdef DEBUG
-  vcl_cout << "RecoverJunctions: rmax, kmax, xmax, ymax:" << rmax << ' ' << kmax << ' ' << xmax << ' ' << ymax << '\n';
+  std::cout << "RecoverJunctions: rmax, kmax, xmax, ymax:" << rmax << ' ' << kmax << ' ' << xmax << ' ' << ymax << '\n';
 #endif
   // 1. Find end points of dangling contours
   //const int length0 = xmax/kmax*ymax/kmax/4;// 25% size
   //const float growth = 2;     // growth ratio of the arrays
 
-  vcl_vector<int> ndir; //  ndir.set_growth_ratio(growth);
-  vcl_vector<int> xloc; //  xloc.set_growth_ratio(growth); // dynamic array instead of long lists
-  vcl_vector<int> yloc; //  yloc.set_growth_ratio(growth);
+  std::vector<int> ndir; //  ndir.set_growth_ratio(growth);
+  std::vector<int> xloc; //  xloc.set_growth_ratio(growth); // dynamic array instead of long lists
+  std::vector<int> yloc; //  yloc.set_growth_ratio(growth);
   int xdir;
   for (int y = rmax; y <= ymax; y++) // find end points of long contours
     for (int x = rmax; x <= xmax; x++) // inside image border - rmax
@@ -390,8 +392,8 @@ gevd_step::RecoverJunctions(const gevd_bufferxy& image,
         yloc.push_back(y);
       }
   const int length = ndir.size();
-  //vcl_cout << "% end pats = "     // trace allocated size
-  //          << length*100 / float((xmax/kmax)*(ymax/kmax)) << vcl_endl;
+  //std::cout << "% end pats = "     // trace allocated size
+  //          << length*100 / float((xmax/kmax)*(ymax/kmax)) << std::endl;
   if (!length) return 0;        // no end points exist
 
   // 2. Extend from end points until they touch other contours
@@ -439,8 +441,8 @@ gevd_step::RecoverJunctions(const gevd_bufferxy& image,
         else                  // no further extension found
           ndir[i] = 0;
       }
-    //vcl_cout << "Touch " << ntouch << " contours.\n";
-    // vcl_cout << "Will extend " << nextension << " contours.\n";
+    //std::cout << "Touch " << ntouch << " contours.\n";
+    // std::cout << "Will extend " << nextension << " contours.\n";
     njunction += ntouch;
     if (!nextension) break;     // all either junction or termination
   }
@@ -458,7 +460,7 @@ gevd_step::RecoverJunctions(const gevd_bufferxy& image,
       j++;
     }
 #if defined(DEBUG)
-  vcl_cout << "Find " << length << " end points, and "
+  std::cout << "Find " << length << " end points, and "
            << njunction << " junctions.\n"
            << "Recover " << 100.0*njunction/length
            << "% end points as junctions > "
@@ -520,33 +522,33 @@ gevd_step::NoiseResponseToFilter(const float noiseSigma,
                                  const float filterFactor)
 {
   return noiseSigma /          // white noise
-         (float)vcl_pow((double)smoothSigma, 1.5) * // size of filter dG
-         (0.5f / (float)vcl_pow(vnl_math::pi, 0.25)) *
+         (float)std::pow((double)smoothSigma, 1.5) * // size of filter dG
+         (0.5f / (float)std::pow(vnl_math::pi, 0.25)) *
          filterFactor;        // multiplication factor
 }
 
 
 //: Output a snapshot of current control parameters
-vcl_ostream& operator<< (vcl_ostream& os, const gevd_step& st)
+std::ostream& operator<< (std::ostream& os, const gevd_step& st)
 {
   os << "Step:\n"
-     << "   smoothSigma " << st.smoothSigma << vcl_endl
-     << "   noiseSigma " << st.noiseSigma << vcl_endl
-     << "   contourFactor " << st.contourFactor << vcl_endl
-     << "   junctionFactor " << st.junctionFactor << vcl_endl
-     << "   filterFactor " << st.filterFactor << vcl_endl;
+     << "   smoothSigma " << st.smoothSigma << std::endl
+     << "   noiseSigma " << st.noiseSigma << std::endl
+     << "   contourFactor " << st.contourFactor << std::endl
+     << "   junctionFactor " << st.junctionFactor << std::endl
+     << "   filterFactor " << st.filterFactor << std::endl;
     return os;
 }
 
 
 //: Output a snapshot of current control parameters
-vcl_ostream& operator<< (vcl_ostream& os, gevd_step& st)
+std::ostream& operator<< (std::ostream& os, gevd_step& st)
 {
   os << "Step:\n"
-     << "   smoothSigma " << st.smoothSigma << vcl_endl
-     << "   noiseSigma " << st.noiseSigma << vcl_endl
-     << "   contourFactor " << st.contourFactor << vcl_endl
-     << "   junctionFactor " << st.junctionFactor << vcl_endl
-     << "   filterFactor " << st.filterFactor << vcl_endl;
+     << "   smoothSigma " << st.smoothSigma << std::endl
+     << "   noiseSigma " << st.noiseSigma << std::endl
+     << "   contourFactor " << st.contourFactor << std::endl
+     << "   junctionFactor " << st.junctionFactor << std::endl
+     << "   filterFactor " << st.filterFactor << std::endl;
     return os;
 }

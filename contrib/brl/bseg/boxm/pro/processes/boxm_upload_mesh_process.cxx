@@ -30,8 +30,10 @@
 #include <imesh/imesh_mesh.h>
 #include <imesh/imesh_fileio.h>
 
-#include <vcl_string.h>
-#include <vcl_sstream.h>
+#include <string>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <sstream>
 
 namespace boxm_upload_mesh_process_globals
 {
@@ -46,14 +48,14 @@ bool boxm_upload_mesh_process_cons(bprb_func_process& pro)
   using namespace boxm_upload_mesh_process_globals;
 
   // process takes 4 inputs and no output
-  vcl_vector<vcl_string> input_types_(n_inputs_);
+  std::vector<std::string> input_types_(n_inputs_);
   unsigned i=0;
   input_types_[i++]="vcl_string";           //the directory for ply files
   input_types_[i++]="boxm_scene_base_sptr"; //scene to be uploaded
   input_types_[i++]="bool";                 //true, if mesh vertices are in geo coordinates
   input_types_[i++]="vcl_string";                 //true, if mesh vertices are in geo coordinates
 
-  vcl_vector<vcl_string> output_types_(n_outputs_);
+  std::vector<std::string> output_types_(n_outputs_);
   return pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
 }
 
@@ -65,34 +67,34 @@ bool boxm_upload_mesh_process(bprb_func_process& pro)
   // check number of inputs
   if (pro.input_types().size() != n_inputs_)
   {
-    vcl_cout << pro.name() << "The number of inputs should be " << n_inputs_ << vcl_endl;
+    std::cout << pro.name() << "The number of inputs should be " << n_inputs_ << std::endl;
     return false;
   }
 
   unsigned i=0;
-  vcl_string input_path = pro.get_input<vcl_string>(i++);
+  std::string input_path = pro.get_input<std::string>(i++);
   boxm_scene_base_sptr scene = pro.get_input<boxm_scene_base_sptr>(i++);
   bool use_lvcs = pro.get_input<bool>(i++);
-  vcl_string draw_or_fill = pro.get_input<vcl_string>(i++);
+  std::string draw_or_fill = pro.get_input<std::string>(i++);
 
   if (!vul_file::is_directory(input_path)) {
-    vcl_cerr << "In boxm_upload_mesh_process -- input path " << input_path<< "is not valid!\n";
+    std::cerr << "In boxm_upload_mesh_process -- input path " << input_path<< "is not valid!\n";
     return false;
   }
 
   // get all the files in the directory
-  vcl_stringstream glob;
+  std::stringstream glob;
   glob << input_path << "/*.ply*";
 
-  vcl_vector<imesh_mesh> meshes;
+  std::vector<imesh_mesh> meshes;
   for (vul_file_iterator file_it = glob.str().c_str(); file_it; ++file_it)
   {
-    vcl_string file(file_it());
-    vcl_string file_format = vul_file::extension(file);
+    std::string file(file_it());
+    std::string file_format = vul_file::extension(file);
     vul_string_upcase(file_format);
 
 
-    vcl_cout << "format = " << file_format << '\n'
+    std::cout << "format = " << file_format << '\n'
              << "file = " << file << '\n';
     // call appropriate load functions to load the M
     imesh_mesh mesh;
@@ -111,13 +113,13 @@ bool boxm_upload_mesh_process(bprb_func_process& pro)
 
       boxm_sample<BOXM_APM_MOG_GREY> val(0,boxm_utils::obtain_mog_grey_unit_mode());
       if (draw_or_fill=="draw")
-        vcl_cout<<"Not yet";
+        std::cout<<"Not yet";
         //boxm_upload_mesh_into_scene<short, boxm_sample<BOXM_APM_MOG_GREY> >(*s, mesh, use_lvcs, val);
       else if (draw_or_fill=="fill")
         boxm_fill_in_mesh_into_scene<short, boxm_sample<BOXM_APM_MOG_GREY> >(*s, meshes, use_lvcs, val);
     }
     else
-      vcl_cout << "boxm_upload_mesh_process: multi bin is not implemented yet" << vcl_endl;
+      std::cout << "boxm_upload_mesh_process: multi bin is not implemented yet" << std::endl;
   }
   if (scene->appearence_model() == BOXM_APM_SIMPLE_GREY) {
     if (!scene->multi_bin())
@@ -127,16 +129,16 @@ bool boxm_upload_mesh_process(bprb_func_process& pro)
       boxm_simple_grey simplegrey(1.0f,0.1f,1.0f);
       boxm_sample<BOXM_APM_SIMPLE_GREY> val(1,simplegrey);
       if (draw_or_fill=="draw")
-        vcl_cout<<"Not yet";
+        std::cout<<"Not yet";
         //boxm_upload_mesh_into_scene<short, boxm_sample<BOXM_APM_MOG_GREY> >(*s, mesh, use_lvcs, val);
       else if (draw_or_fill=="fill")
         boxm_fill_in_mesh_into_scene<short, boxm_sample<BOXM_APM_SIMPLE_GREY> >(*s, meshes, use_lvcs, val);
     }
     else
-      vcl_cout << "boxm_upload_mesh_process: multi bin is not implemented yet" << vcl_endl;
+      std::cout << "boxm_upload_mesh_process: multi bin is not implemented yet" << std::endl;
   }
   else {
-    vcl_cout << "boxm_upload_mesh_process: undefined APM type" << vcl_endl;
+    std::cout << "boxm_upload_mesh_process: undefined APM type" << std::endl;
     return false;
   }
 

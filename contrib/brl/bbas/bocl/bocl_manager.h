@@ -12,14 +12,16 @@
 //   <none yet>
 // \endverbatim
 
-#include <vcl_vector.h>
-#include <vcl_map.h>
-#include <vcl_iostream.h>
-#include <vcl_string.h>
+#include <vector>
+#include <map>
+#include <iostream>
+#include <string>
 #include "bocl_cl.h"
 #include "bocl_device.h"
 #include "bocl_device_info.h"
-#include <vcl_cstddef.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <cstddef>
 #if !defined(__APPLE__)
 #include <malloc.h>
 #endif
@@ -45,8 +47,8 @@ class bocl_manager
   static T& instance();
 
   //: available devices
-  vcl_vector<bocl_device_sptr> gpus_;
-  vcl_vector<bocl_device_sptr> cpus_;
+  std::vector<bocl_device_sptr> gpus_;
+  std::vector<bocl_device_sptr> cpus_;
   int numCPUs() const { return cpus_.size(); }
   int numGPUs() const { return gpus_.size(); }
 
@@ -60,12 +62,12 @@ class bocl_manager
   cl_context& context() { return context_; }
 
   //: current device info...
-  vcl_size_t group_size()         const { return curr_device_->info().max_work_group_size_; }
+  std::size_t group_size()         const { return curr_device_->info().max_work_group_size_; }
   cl_ulong total_local_memory()   const { return curr_device_->info().total_local_memory_; }
   cl_bool image_support()         const { return curr_device_->info().image_support_; }
-  vcl_size_t image2d_max_width()  const { return curr_device_->info().image2d_max_width_; }
-  vcl_size_t image2d_max_height() const { return curr_device_->info().image2d_max_height_; }
-  vcl_string platform_name()      const { return curr_device_->info().platform_name_; }
+  std::size_t image2d_max_width()  const { return curr_device_->info().image2d_max_width_; }
+  std::size_t image2d_max_height() const { return curr_device_->info().image2d_max_height_; }
+  std::string platform_name()      const { return curr_device_->info().platform_name_; }
   cl_device_type device_type()    const { return curr_device_->info().device_type_; }
   //////////////////////////////////////////////////////////////////////////////
 
@@ -85,23 +87,23 @@ class bocl_manager
 ////////////////////////////////////////////////////////////////////////////////
   //Malloc and Free Helper methods
   bool free_buffer(void* buffer);
-  bool create_buffer(void** buffer,vcl_string type,int elm_size,int length);
+  bool create_buffer(void** buffer,std::string type,int elm_size,int length);
     //: program source
-  vcl_string prog_;
+  std::string prog_;
 
  public:
   //: Allocate host memory for use with clCreateBuffer (aligned if necessary)
-  void* allocate_host_mem(vcl_size_t size);
-  bool load_kernel_source(vcl_string const& path);
-  bool append_process_kernels(vcl_string const& path);
-  bool write_program(vcl_string const& path);
-  vcl_string program_source() const { return prog_; }
+  void* allocate_host_mem(std::size_t size);
+  bool load_kernel_source(std::string const& path);
+  bool append_process_kernels(std::string const& path);
+  bool write_program(std::string const& path);
+  std::string program_source() const { return prog_; }
 
   //: initialize context from a device
   cl_context create_context(cl_device_id* device, int num_devices);
 
   //build kernel program:
-  int build_kernel_program(cl_program & program, vcl_string options);
+  int build_kernel_program(cl_program & program, std::string options);
 
  private:
   // prevent users from making copies of the singleton.

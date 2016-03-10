@@ -30,7 +30,7 @@ bool bvpl_create_edge3d_kernel_vector_process_cons(bprb_func_process& pro)
 
   //process takes 6 inputs
   //input[0]-input[5]: Min and max coordinates of kernel
-  vcl_vector<vcl_string> input_types_(n_inputs_);
+  std::vector<std::string> input_types_(n_inputs_);
   input_types_[0] = "int";
   input_types_[1] = "int";
   input_types_[2] = "int";
@@ -38,7 +38,7 @@ bool bvpl_create_edge3d_kernel_vector_process_cons(bprb_func_process& pro)
   input_types_[4] = "int";
   input_types_[5] = "int";
 
-  vcl_vector<vcl_string> output_types_(n_outputs_);
+  std::vector<std::string> output_types_(n_outputs_);
   output_types_[0] = "bvpl_kernel_vector_sptr";
 
   return pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
@@ -50,7 +50,7 @@ bool bvpl_create_edge3d_kernel_vector_process(bprb_func_process& pro)
 
   if (pro.n_inputs() < n_inputs_)
   {
-    vcl_cout << pro.name() << " The input number should be " << n_inputs_<< vcl_endl;
+    std::cout << pro.name() << " The input number should be " << n_inputs_<< std::endl;
     return false;
   }
 

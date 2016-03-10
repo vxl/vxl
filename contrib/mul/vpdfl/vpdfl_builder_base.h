@@ -14,10 +14,12 @@
 #include <vnl/vnl_vector.h>
 #include <mbl/mbl_data_wrapper.h>
 #include <vsl/vsl_binary_io.h>
-#include <vcl_vector.h>
-#include <vcl_string.h>
-#include <vcl_memory.h>
-#include <vcl_iosfwd.h>
+#include <vector>
+#include <string>
+#include <memory>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iosfwd>
 
 //=======================================================================
 
@@ -61,22 +63,22 @@ class vpdfl_builder_base
   //: Build model from weighted data
   virtual void weighted_build(vpdfl_pdf_base& model,
                               mbl_data_wrapper<vnl_vector<double> >& data,
-                              const vcl_vector<double>& wts) const = 0;
+                              const std::vector<double>& wts) const = 0;
 
   //: Version number for I/O
   short version_no() const;
 
   //: Name of the class
-  virtual vcl_string is_a() const;
+  virtual std::string is_a() const;
 
   //: Does the name of the class match the argument?
-  virtual bool is_class(vcl_string const& s) const;
+  virtual bool is_class(std::string const& s) const;
 
   //: Create a copy on the heap and return base class pointer
   virtual vpdfl_builder_base* clone() const = 0;
 
   //: Print class to os
-  virtual void print_summary(vcl_ostream& os) const = 0;
+  virtual void print_summary(std::ostream& os) const = 0;
 
   //: Save class to binary file stream
   virtual void b_write(vsl_b_ostream& bfs) const = 0;
@@ -86,16 +88,16 @@ class vpdfl_builder_base
 
   //: Create a vpdfl_builder_base object given a config stream
   // \throw mbl_exception if parse error.
-  static vcl_auto_ptr<vpdfl_builder_base> new_builder_from_stream(vcl_istream &is);
+  static std::auto_ptr<vpdfl_builder_base> new_builder_from_stream(std::istream &is);
 
   //: Read initialisation settings from a stream.
   // \throw mbl_exception_parse_error if the parse fails.
-  virtual void config_from_stream(vcl_istream & is);
+  virtual void config_from_stream(std::istream & is);
 
   //: Create a vpdfl_builder_base object given a config stream (recursive style)
   //  Creates object, then uses config_from_stream(is) to set up internals
   // \throw vcl_runtime_exception if parse error.
-  static vcl_auto_ptr<vpdfl_builder_base> new_pdf_builder_from_stream(vcl_istream &);
+  static std::auto_ptr<vpdfl_builder_base> new_pdf_builder_from_stream(std::istream &);
 };
 
 //: Allows derived class to be loaded by base-class pointer
@@ -116,15 +118,15 @@ void vsl_b_write(vsl_b_ostream& bfs, const vpdfl_builder_base& b);
 void vsl_b_read(vsl_b_istream& bfs, vpdfl_builder_base& b);
 
 //: Stream output operator for class reference
-void vsl_print_summary(vcl_ostream& os,const vpdfl_builder_base& b);
+void vsl_print_summary(std::ostream& os,const vpdfl_builder_base& b);
 
 //: Stream output operator for class pointer
-void vsl_print_summary(vcl_ostream& os,const vpdfl_builder_base* b);
+void vsl_print_summary(std::ostream& os,const vpdfl_builder_base* b);
 
 //: Stream output operator for class reference
-vcl_ostream& operator<<(vcl_ostream& os,const vpdfl_builder_base& b);
+std::ostream& operator<<(std::ostream& os,const vpdfl_builder_base& b);
 
 //: Stream output operator for class pointer
-vcl_ostream& operator<<(vcl_ostream& os,const vpdfl_builder_base* b);
+std::ostream& operator<<(std::ostream& os,const vpdfl_builder_base* b);
 
 #endif // vpdfl_builder_base_h

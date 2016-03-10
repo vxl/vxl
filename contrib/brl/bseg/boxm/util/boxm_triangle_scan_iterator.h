@@ -3,7 +3,9 @@
 //:
 // \file
 
-#include <vcl_vector.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <vector>
 
 #include <vgl/vgl_region_scan_iterator.h>
 #include <vgl/vgl_triangle_scan_iterator.h>

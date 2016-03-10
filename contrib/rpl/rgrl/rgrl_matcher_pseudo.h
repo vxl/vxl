@@ -44,7 +44,7 @@ class rgrl_matcher_pseudo
     double              weight;
   };
 
-  typedef vcl_vector< rgrl_mapped_pixel_type > rgrl_mapped_pixel_vector_type;
+  typedef std::vector< rgrl_mapped_pixel_type > rgrl_mapped_pixel_vector_type;
 
   //: Initialize the matcher using 2d images.
   //
@@ -76,7 +76,7 @@ class rgrl_matcher_pseudo
 
   //:  The actual work of mapping the region intensities.
   void
-  map_region_intensities( vcl_vector< vnl_vector<int> > const& pixel_locations,
+  map_region_intensities( std::vector< vnl_vector<int> > const& pixel_locations,
                           rgrl_transformation           const& trans,
                           rgrl_feature_sptr                    feature_sptr,
                           rgrl_mapped_pixel_vector_type      & mapped_pixels) const;
@@ -85,8 +85,8 @@ class rgrl_matcher_pseudo
   match_mapped_region( rgrl_feature_sptr                    mapped_feature,
                        rgrl_mapped_pixel_vector_type const& mapped_pixels,
                        rgrl_scale                    const& current_scale,
-                       vcl_vector< rgrl_feature_sptr >    & matched_to_features,
-                       vcl_vector< double >               & match_weights ) const;
+                       std::vector< rgrl_feature_sptr >    & matched_to_features,
+                       std::vector< double >               & match_weights ) const;
 
   double compute_response( vnl_double_2                  const& mapped_location,
                            rgrl_mapped_pixel_vector_type const& mapped_pixels,

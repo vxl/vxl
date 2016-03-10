@@ -22,7 +22,9 @@
 #include <vgl/vgl_plane_3d.h>
 #include <bvxm/bvxm_edge_ray_processor.h>
 
-#include <vcl_cstdio.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <cstdio>
 
 //: set input and output types
 bool bvxm_rpc_registration_process_cons(bprb_func_process& pro)
@@ -37,7 +39,7 @@ bool bvxm_rpc_registration_process_cons(bprb_func_process& pro)
   //input[4]: Uncertainty in meters
   //input[5]: Scale of the image
 
-  vcl_vector<vcl_string> input_types_(n_inputs_);
+  std::vector<std::string> input_types_(n_inputs_);
   unsigned i = 0;
   input_types_[i++] = "bvxm_voxel_world_sptr";
   input_types_[i++] = "vpgl_camera_double_sptr";
@@ -52,7 +54,7 @@ bool bvxm_rpc_registration_process_cons(bprb_func_process& pro)
   // output[0]: The optimized camera
   // output[1]: Expected edge image
 
-  vcl_vector<vcl_string> output_types_(n_outputs_);
+  std::vector<std::string> output_types_(n_outputs_);
   unsigned j = 0;
   output_types_[j++] = "vpgl_camera_double_sptr";
   output_types_[j++] = "vil_image_view_base_sptr";
@@ -68,7 +70,7 @@ bool bvxm_rpc_registration_process(bprb_func_process& pro)
 
   //check number of inputs
   if ( pro.n_inputs() < n_inputs_ ) {
-    vcl_cout << pro.name() << " The input number should be " << n_inputs_<< vcl_endl;
+    std::cout << pro.name() << " The input number should be " << n_inputs_<< std::endl;
     return false;
   }
 
@@ -92,15 +94,15 @@ bool bvxm_rpc_registration_process(bprb_func_process& pro)
   float n_normal = vox_world->get_params()->edges_n_normal();
 
   //local variables
-  vcl_ifstream file_inp;
-  vcl_ofstream file_out;
+  std::ifstream file_inp;
+  std::ofstream file_out;
 
   int offset_search_size = bvxm_util::convert_uncertainty_from_meters_to_pixels(uncertainty, vox_world->get_params()->lvcs(), camera_inp);
 
-  vcl_cout << "Offset search size is: " << offset_search_size << " given uncertainty value " << uncertainty <<'\n';
+  std::cout << "Offset search size is: " << offset_search_size << " given uncertainty value " << uncertainty <<'\n';
 
   int num_observations = vox_world->num_observations<EDGES>(0,scale);
-  vcl_cout << "Number of observations before the update: " << num_observations << '\n';
+  std::cout << "Number of observations before the update: " << num_observations << '\n';
 
   int ni = edge_image.ni();
   int nj = edge_image.nj();
@@ -115,8 +117,8 @@ bool bvxm_rpc_registration_process(bprb_func_process& pro)
   vil_image_view_base_sptr expected_edge_image_sptr = new vil_image_view<float>(ni,nj,1);
   edge_proc.expected_edge_image(camera_metadata_inp, expected_edge_image_sptr,n_normal,scale);
   vil_image_view<float> expected_edge_image(expected_edge_image_sptr);
-  //float eei_min = vcl_numeric_limits<float>::max();
-  //float eei_max = vcl_numeric_limits<float>::min();
+  //float eei_min = std::numeric_limits<float>::max();
+  //float eei_max = std::numeric_limits<float>::min();
   //// setting the output edge image for viewing purposes
   //for (int i=0; i<ni; i++) {
   //  for (int j=0; j<nj; j++) {
@@ -135,16 +137,16 @@ bool bvxm_rpc_registration_process(bprb_func_process& pro)
   // from the voxel model and edge map of the current image.
   // if the camera parameters are manually corrected by the user, this part should be omitted by setting the
   // "rpc_correction_flag" parameter to 0 (false).
-  double max_prob = vcl_numeric_limits<double>::min();
+  double max_prob = std::numeric_limits<double>::min();
 
   // this is the two level offset search algorithm
   int offset_lower_limit_u = -offset_search_size;
   int offset_lower_limit_v = -offset_search_size;
   int offset_upper_limit_u =  offset_search_size;
   int offset_upper_limit_v =  offset_search_size;
-  vcl_cout << "Estimating image offsets:" << vcl_endl;
+  std::cout << "Estimating image offsets:" << std::endl;
   for (int u=offset_lower_limit_u; u<=offset_upper_limit_u; u++) {
-    vcl_cout << '.';
+    std::cout << '.';
     for (int v=offset_lower_limit_v; v<=offset_upper_limit_v; v++) {
       // for each offset pair (u,v)
       double prob = 0.0;
@@ -170,13 +172,13 @@ bool bvxm_rpc_registration_process(bprb_func_process& pro)
       }
     }
   }
-  vcl_cout << vcl_endl;
+  std::cout << std::endl;
 
-  vcl_cout << "Estimated changes in offsets (u,v)=(" << best_offset_u << ',' << best_offset_v << ')' << vcl_endl;
+  std::cout << "Estimated changes in offsets (u,v)=(" << best_offset_u << ',' << best_offset_v << ')' << std::endl;
 
 #if 0
   file_out.clear();
-  file_out.open("offsets.txt",vcl_ofstream::app);
+  file_out.open("offsets.txt",std::ofstream::app);
   file_out << best_offset_u << ' ' << best_offset_v << '\n';
   file_out.close();
 #endif
@@ -250,7 +252,7 @@ bool bvxm_rpc_registration_process(bprb_func_process& pro)
     cam_out_local.image_offset(offset_u,offset_v);
     offset_u += (best_offset_u*(1.0-motion_mult));
     offset_v += (best_offset_v*(1.0-motion_mult));
-    vcl_cout << "Estimated changes with motion_mult in offsets (u,v)=(" << best_offset_u*(1.0-motion_mult) << ',' << best_offset_v*(1.0-motion_mult) << ')' << vcl_endl;
+    std::cout << "Estimated changes with motion_mult in offsets (u,v)=(" << best_offset_u*(1.0-motion_mult) << ',' << best_offset_v*(1.0-motion_mult) << ')' << std::endl;
     cam_out_local.set_image_offset(offset_u,offset_v);
     camera_out = new vpgl_local_rational_camera<double>(cam_out_local);
   }
@@ -264,7 +266,7 @@ bool bvxm_rpc_registration_process(bprb_func_process& pro)
     camera_out = new vpgl_rational_camera<double>(cam_out_rational);
   }
   else {
-    vcl_cerr << "error: process expects camera to be a vpgl_rational_camera or vpgl_local_rational_camera.\n";
+    std::cerr << "error: process expects camera to be a vpgl_rational_camera or vpgl_local_rational_camera.\n";
     return false;
   }
 

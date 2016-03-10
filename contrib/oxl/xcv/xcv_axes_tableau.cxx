@@ -10,7 +10,9 @@
 //   K.Y.McGaul 26-APR-2001   Initial version.
 // \endverbatim
 
-#include <vcl_cmath.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <cmath>
 #include <vul/vul_sprintf.h>
 
 #include <vgui/vgui.h>
@@ -21,8 +23,8 @@
 
 //========================================================================
 //: Constructor takes all the labels used on the graph.
-xcv_axes_tableau::xcv_axes_tableau(vcl_string heading, vcl_string x_axes_label,
-                                   vcl_string y_axes_label)
+xcv_axes_tableau::xcv_axes_tableau(std::string heading, std::string x_axes_label,
+                                   std::string y_axes_label)
 {
   xlow_ = 0.0;
   xhigh_ = 0.0;
@@ -88,7 +90,7 @@ void xcv_axes_tableau::compute_axes()
   ylimits_.calc_ticks();
 
   // Draw a square around the graph:
-  vcl_vector<float> x_corners, y_corners;
+  std::vector<float> x_corners, y_corners;
   x_corners.push_back(left_offset);
   x_corners.push_back(left_offset+graph_width);
   x_corners.push_back(left_offset+graph_width);
@@ -125,7 +127,7 @@ void xcv_axes_tableau::compute_axes()
     }
     else
     {
-      int tmp_number = (int)vcl_ceil(xlimits_.tick_start + (xcounter*xlimits_.tick_spacing));
+      int tmp_number = (int)std::ceil(xlimits_.tick_start + (xcounter*xlimits_.tick_spacing));
       const char* tmp_number_string = vul_sprintf("%d", tmp_number).c_str();
       text_->add(tmp_width-10, top_offset+graph_height+20, tmp_number_string);
     }
@@ -151,14 +153,14 @@ void xcv_axes_tableau::compute_axes()
     }
     else
     {
-      int tmp_number = (int)vcl_ceil(ylimits_.tick_end - (ycounter*ylimits_.tick_spacing));
+      int tmp_number = (int)std::ceil(ylimits_.tick_end - (ycounter*ylimits_.tick_spacing));
       const char* tmp_number_string = vul_sprintf("%d", tmp_number).c_str();
       text_->add(left_offset-40, (float)tmp_height+3, tmp_number_string);
     }
   }
 
   // Re-calibrate points and add them to the graph:
-  vcl_vector<float> xcalib, ycalib;
+  std::vector<float> xcalib, ycalib;
   float xscaling = graph_width/float(xlimits_.tick_end - (float)xlimits_.tick_start);
   for (unsigned int i=0; i<xpoints_.size(); i++)
     xcalib.push_back(left_offset + (xpoints_[i] - (float)xlimits_.tick_start)*xscaling);

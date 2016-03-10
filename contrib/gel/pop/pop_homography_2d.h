@@ -18,7 +18,7 @@
 #include<vgl/algo/vgl_h_matrix_2d.h>
 #include<pop/pop_transform.h>
 #include<pop/pop_vertex.h>
-#include<vcl_vector.h>
+#include<std::vector.h>
 #include<pop/pop_parameter.h>
 #include<pop/pop_geometric_object.h>
 
@@ -32,7 +32,7 @@ class pop_homography_2d : public pop_transform
   // |p3 p4 p5|
   // |p6 p7 p8|
   //
-  pop_homography_2d(vcl_vector<pop_parameter*> params,
+  pop_homography_2d(std::vector<pop_parameter*> params,
                     pop_vertex *cs1, pop_vertex *cs2);
 
   //: destructor

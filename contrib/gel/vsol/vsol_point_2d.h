@@ -33,7 +33,9 @@ class vsol_point_2d;
 #include <vsol/vsol_spatial_object_2d.h>
 #include <vgl/vgl_vector_2d.h>
 #include <vgl/vgl_point_2d.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iostream>
 
 class vsol_point_2d : public vsol_spatial_object_2d
 {
@@ -193,21 +195,21 @@ class vsol_point_2d : public vsol_spatial_object_2d
   short version() const;
 
   //: Print an ascii summary to the stream
-  void print_summary(vcl_ostream &os) const;
+  void print_summary(std::ostream &os) const;
 
   //: Return a platform independent string identifying the class
-  virtual vcl_string is_a() const { return vcl_string("vsol_point_2d"); }
+  virtual std::string is_a() const { return std::string("vsol_point_2d"); }
 
   //: Return true if the argument matches the string identifying the class or any parent class
-  virtual bool is_class(const vcl_string& cls) const { return cls==is_a(); }
+  virtual bool is_class(const std::string& cls) const { return cls==is_a(); }
 
   //---------------------------------------------------------------------------
   //: output description to stream
   //---------------------------------------------------------------------------
-  inline void describe(vcl_ostream &strm, int blanking=0) const
+  inline void describe(std::ostream &strm, int blanking=0) const
   {
     if (blanking < 0) blanking = 0; while (blanking--) strm << ' ';
-    strm << '(' << x() << ' ' << y() << ')' << vcl_endl;
+    strm << '(' << x() << ' ' << y() << ')' << std::endl;
   }
 };
 

@@ -78,7 +78,7 @@ class vgui_win32_window : public vgui_window, public vgui_win32_cmdtarget
 
   //: Use the given text as the window title (if the window has a title).
   // \todo This function is not called yet.
-  virtual void set_title(vcl_string const &t) { SetWindowText(hwnd_, t.c_str()); }
+  virtual void set_title(std::string const &t) { SetWindowText(hwnd_, t.c_str()); }
 
   //: Set the position of the horizontal scrollbar, returns old position
   virtual int set_hscrollbar(int pos);
@@ -103,7 +103,7 @@ class vgui_win32_window : public vgui_window, public vgui_win32_cmdtarget
   HWND  hwnd_;  //!< application window handle
   HMENU hMenu_; //!< application menu handle
   HACCEL hAccel_; // accelerator handle
-  vcl_vector<vgui_command_sptr> callbacks; //!< commands called by menu items
+  std::vector<vgui_command_sptr> callbacks; //!< commands called by menu items
 
  private:
   // Create window and initialize class members.

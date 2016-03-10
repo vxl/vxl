@@ -1,6 +1,8 @@
 // This is mul/vil3d/tests/test_convert.cxx
 #include <vxl_config.h> // for vxl_byte
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iostream>
 #include <vil3d/vil3d_convert.h>
 #include <vil3d/vil3d_image_view.h>
 #include <vil3d/vil3d_print.h>
@@ -11,11 +13,11 @@
 
 static void test_convert_diff_types(const char * golden_data_dir)
 {
-  vcl_cout << "***********************************************************************\n"
+  std::cout << "***********************************************************************\n"
            << " Testing vil3d_convert_cast(vil3d_image_view_base,vil3d_image_view<T>)\n"
            << "***********************************************************************\n";
 
-  vcl_string datadir = golden_data_dir;
+  std::string datadir = golden_data_dir;
   if (*golden_data_dir) datadir += "/";
 
   vil3d_image_view<vxl_uint_16> image1 = vil3d_load((datadir + "ff_grey_cross.gipl").c_str());
@@ -30,15 +32,15 @@ static void test_convert_diff_types(const char * golden_data_dir)
   TEST("Converting implicitly 16bit to 32bit", image_32_2(4,0,3), vxl_uint_32( image1(4,0,3) ));
 #ifdef DEBUG
   if ( image_32_2 )
-    vil3d_print_all(vcl_cout, image_32_2);
+    vil3d_print_all(std::cout, image_32_2);
   else
-    vcl_cout << "(no dump)\n";
+    std::cout << "(no dump)\n";
 #endif
 }
 
 static void test_convert_stretch_range()
 {
-  vcl_cout<<"testing vil3d_convert_stretch_range(src,dest):\n";
+  std::cout<<"testing vil3d_convert_stretch_range(src,dest):\n";
   vil3d_image_view<float> f_image(10,10,10);
   for (unsigned k=0;k<f_image.nk();++k)
     for (unsigned j=0;j<f_image.nj();++j)
@@ -46,7 +48,7 @@ static void test_convert_stretch_range()
         f_image(i,j,k)=0.1f*i+0.01f*j+0.001f*k+5.f;
 
 #ifdef DEBUG
-  vil3d_print_all(vcl_cout, f_image) ;
+  vil3d_print_all(std::cout, f_image) ;
 #endif
 
   vil3d_image_view<vxl_byte> b_image;
@@ -64,7 +66,7 @@ static void test_convert_stretch_range()
 static void test_convert_to_n_planes()
 {
   const unsigned n=10;
-  vcl_cout<<"testing vil3d_convert_to_n_planes(src,dest):\n";
+  std::cout<<"testing vil3d_convert_to_n_planes(src,dest):\n";
   vil3d_image_view<float> f_image(n,n,n,2);
   vil3d_image_view<float> f_image_expected(n,n,n,3);
   vil3d_image_view<vxl_uint_16> u16_image_expected(n,n,n,3);
@@ -83,7 +85,7 @@ static void test_convert_to_n_planes()
       }
 
 #ifdef DEBUG
-  vil3d_print_all(vcl_cout, f_image);
+  vil3d_print_all(std::cout, f_image);
 #endif
 
   vil3d_image_view_base_sptr f_image_ref = new vil3d_image_view<float>(f_image);
@@ -100,26 +102,26 @@ static void test_convert_to_n_planes()
   TEST("implicit vil3d_convert_round float to 16bit with rounding" , vil3d_image_view_deep_equality(image_16_3, u16_image_expected), true);
 
   { // print out values the function will use, because we are getting odd results on some platforms
-    vcl_streamsize oldprec = vcl_cout.precision(18);
+    std::streamsize oldprec = std::cout.precision(18);
     float fmaxp, fminp;
     vil3d_math_value_range(f_image_dest,fminp,fmaxp);
     double b = 0.0;
     if (fmaxp-fminp >0)
       b = (65535.999)/static_cast<double>(fmaxp-fminp);
     double a = -1.0*fminp*b + 0.0;
-    vcl_cout << "input (minp=" << fminp << ", maxp=" << fmaxp << ')' << vcl_endl
-             << "trans (a=" << a << ", b=" << b << ')' << vcl_endl;
-    vcl_cout.precision(oldprec);
+    std::cout << "input (minp=" << fminp << ", maxp=" << fmaxp << ')' << std::endl
+             << "trans (a=" << a << ", b=" << b << ')' << std::endl;
+    std::cout.precision(oldprec);
   }
   vil3d_image_view<vxl_uint_16> image_16_3_stretched = vil3d_convert_stretch_range(vxl_uint_16(), f_image_dest_sptr);
   vxl_uint_16 minp,maxp;
   vil3d_math_value_range(image_16_3_stretched,minp,maxp);
   TEST("implicit vil3d_convert_stretch_range float to 16bit with rounding", minp==0 && maxp==65535, true);
-  vcl_cout << "output (minp=" << minp << ", maxp=" << maxp << ')' << vcl_endl;
+  std::cout << "output (minp=" << minp << ", maxp=" << maxp << ')' << std::endl;
 #ifdef DEBUG
-  vil3d_print_all(vcl_cout, image_16_3_stretched);
-  vil3d_print_all(vcl_cout, image_16_3);
-  vil3d_print_all(vcl_cout, u16_image_expected);
+  vil3d_print_all(std::cout, image_16_3_stretched);
+  vil3d_print_all(std::cout, image_16_3);
+  vil3d_print_all(std::cout, u16_image_expected);
 #endif
 }
 

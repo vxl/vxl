@@ -9,10 +9,12 @@
 #include "bocl_cl.h"
 #include "bocl_utils.h"
 #include "bocl_device_info.h"
-#include <vcl_string.h>
-#include <vcl_vector.h>
-#include <vcl_cstddef.h> // for std::size_t
-#include <vcl_iosfwd.h>
+#include <string>
+#include <vector>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <cstddef> // for std::size_t
+#include <iosfwd>
 #include <vbl/vbl_ref_count.h>
 #include <vsl/vsl_binary_io.h>
 #include <vbl/vbl_smart_ptr.h>
@@ -31,7 +33,7 @@ class bocl_device: public vbl_ref_count
     cl_context&       context() { return context_; }
     bocl_device_info& info() { return info_; }
     //: function which returns a unique string for a device.
-    vcl_string device_identifier();
+    std::string device_identifier();
   private:
     //:Store a pointer to the cl_device_id
     cl_device_id device_;
@@ -45,7 +47,7 @@ class bocl_device: public vbl_ref_count
 
 
 typedef vbl_smart_ptr<bocl_device> bocl_device_sptr;
-vcl_ostream& operator <<(vcl_ostream &s, bocl_device& dev);
+std::ostream& operator <<(std::ostream &s, bocl_device& dev);
 
 //: Binary write bocl_device  to stream
 void vsl_b_write(vsl_b_ostream& os, bocl_device const& scene);

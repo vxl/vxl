@@ -8,7 +8,9 @@
 #include <mfpf/mfpf_point_finder_builder.h>
 #include <vgl/vgl_fwd.h>
 #include <vcl_cassert.h>
-#include <vcl_iosfwd.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iosfwd>
 
 class vimt_image_pyramid;
 class mfpf_mr_point_finder;
@@ -22,7 +24,7 @@ class mfpf_mr_point_finder_builder
  protected:
 
   //: Set of cost function objects.
-  vcl_vector<mfpf_point_finder_builder*> builders_;
+  std::vector<mfpf_point_finder_builder*> builders_;
 
   //: Delete all the builders
   void delete_all();
@@ -57,7 +59,7 @@ class mfpf_mr_point_finder_builder
   void set_n_levels(unsigned n);
 
   //: Define builders.  Clone of each taken
-  void set(const vcl_vector<mfpf_point_finder_builder*>& builders);
+  void set(const std::vector<mfpf_point_finder_builder*>& builders);
 
   //: Set up n builders, with step size step0*scale_step^L
   //  Takes clones of builder and sets up step sizes.
@@ -103,7 +105,7 @@ class mfpf_mr_point_finder_builder
                          const vgl_point_2d<double>& p,
                          const vgl_vector_2d<double>& u,
                          unsigned L,
-                         vcl_vector<double>& v);
+                         std::vector<double>& v);
 
   //: Add one example to the model
   void add_example(const vimt_image_pyramid& image_pyr,
@@ -117,10 +119,10 @@ class mfpf_mr_point_finder_builder
   short version_no() const;
 
   //: Name of the class
-  virtual vcl_string is_a() const;
+  virtual std::string is_a() const;
 
   //: Print class to os
-  virtual void print_summary(vcl_ostream& os) const;
+  virtual void print_summary(std::ostream& os) const;
 
   //: Save class to binary file stream
   virtual void b_write(vsl_b_ostream& bfs) const;
@@ -130,7 +132,7 @@ class mfpf_mr_point_finder_builder
 };
 
 //: Stream output operator for class reference
-vcl_ostream& operator<<(vcl_ostream& os,const mfpf_mr_point_finder_builder& b);
+std::ostream& operator<<(std::ostream& os,const mfpf_mr_point_finder_builder& b);
 
 //: Binary file stream output operator for class reference
 void vsl_b_write(vsl_b_ostream& bfs, const mfpf_mr_point_finder_builder& b);

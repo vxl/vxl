@@ -6,8 +6,10 @@
 // \author Ian Scott
 // \date 10 Jan 2008
 
-#include <vcl_string.h>
-#include <vcl_vector.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <string>
+#include <vector>
 #include <mbl/mbl_progress.h>
 
 //========================================================================
@@ -25,20 +27,20 @@ class mbl_progress_hierarchy: public mbl_progress
   //: Called when set_estimate_iterations() is called for a given identifier.
   //  Derived classes may take some action here.
   //  \param identifier The operation being monitored.
-  virtual void on_set_estimated_iterations(const vcl_string& identifier,
+  virtual void on_set_estimated_iterations(const std::string& identifier,
                                            const int total_iterations);
 
   //: Called when set_progress() is called for a given identifier.
   //  Derived classes may take some action here.
   //  \param identifier The operation being monitored.
   //  \param progress The new progress status.
-  virtual void on_set_progress(const vcl_string& identifier,
+  virtual void on_set_progress(const std::string& identifier,
                                const int progress);
 
   //: Called when end_progress() is called for a given identifier.
   //  Derived classes may take some action here.
   //  \param identifier The operation being monitored.
-  virtual void on_end_progress(const vcl_string& identifier);
+  virtual void on_end_progress(const std::string& identifier);
 
 
   //: Called when the progress has started, changed, or finished.
@@ -50,7 +52,7 @@ class mbl_progress_hierarchy: public mbl_progress
 
  private:
   //: The ordered hierarchy of identifiers.
-  vcl_vector<vcl_string> identifier_stack_;
+  std::vector<std::string> identifier_stack_;
 
   //: Has an existing identifier just been ended.
   bool just_ended_;

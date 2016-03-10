@@ -3,7 +3,9 @@
 //:
 // \file
 #include <vcl_sys/types.h>
-#include <vcl_cerrno.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <cerrno>
 #include <vcl_cassert.h>
 
 //: Initialise shared state to "no operation in progress"
@@ -41,7 +43,7 @@ AsyncIO::~AsyncIO()
 
 //: Begin reading n bytes into buf starting at current file position
 
-int AsyncIO::read(volatile void *buf, vcl_size_t n)
+int AsyncIO::read(volatile void *buf, std::size_t n)
 {
   // Only one op allowed at a time. Note that aio_read() itself never
   // returns EBUSY.
@@ -58,7 +60,7 @@ int AsyncIO::read(volatile void *buf, vcl_size_t n)
 
 //: Begin reading n bytes into buf starting at absolute file position pos
 
-int AsyncIO::read(volatile void *buf, vcl_size_t n, off_t pos)
+int AsyncIO::read(volatile void *buf, std::size_t n, off_t pos)
 {
   // Only one op allowed at a time. Note that aio_read() itself never
   // returns EBUSY.
@@ -84,7 +86,7 @@ int AsyncIO::read(volatile void *buf, vcl_size_t n, off_t pos)
 
 //: Begin writing n bytes from buf starting at current file position
 
-int AsyncIO::write(volatile void *buf, vcl_size_t n)
+int AsyncIO::write(volatile void *buf, std::size_t n)
 {
   // Only one op allowed at a time. Note that aio_write() itself never
   // returns EBUSY.
@@ -101,7 +103,7 @@ int AsyncIO::write(volatile void *buf, vcl_size_t n)
 
 //: Begin writing n bytes from buf starting at absolute file position pos
 
-int AsyncIO::write(volatile void *buf, vcl_size_t n, off_t pos)
+int AsyncIO::write(volatile void *buf, std::size_t n, off_t pos)
 {
   // Only one op allowed at a time. Note that aio_write() itself never
   // returns EBUSY.

@@ -11,8 +11,8 @@ static const double TOL = .001;
 static void add_pt_and_cam(
     vgl_homg_point_3d<double> pt,
     vgl_vector_3d<double> trans,
-    vcl_vector<vgl_point_2d<double> > &points,
-    vcl_vector<vpgl_perspective_camera<double> > &cameras)
+    std::vector<vgl_point_2d<double> > &points,
+    std::vector<vpgl_perspective_camera<double> > &cameras)
 {
     vpgl_calibration_matrix<double> k;
     k.set_focal_length(640);
@@ -33,8 +33,8 @@ static void add_pt_and_cam(
 
 // Adds a bunch of cameras and points to the lists using the above method.
 static void get_cams_and_pts(
-    vcl_vector<vgl_point_2d<double> > &points,
-    vcl_vector<vpgl_perspective_camera<double> > &cameras){
+    std::vector<vgl_point_2d<double> > &points,
+    std::vector<vpgl_perspective_camera<double> > &cameras){
 
     add_pt_and_cam(
         vgl_homg_point_3d<double>(0.0, 1.0, 1.0),
@@ -61,15 +61,15 @@ static void get_cams_and_pts(
 static void test_triangulate()
 {
     // First, get the cameras and points we'll be using to triangulate
-    vcl_vector<vgl_point_2d<double> > points;
-    vcl_vector<vpgl_perspective_camera<double> > cameras;
+    std::vector<vgl_point_2d<double> > points;
+    std::vector<vpgl_perspective_camera<double> > cameras;
     get_cams_and_pts(points, cameras);
 
     // Perform the triangulation
     vgl_point_3d<double> pt;
     double err = vpgl_triangulate_points::triangulate(points, cameras, pt);
 
-    vcl_cout << "Error is " << err << "." << vcl_endl;
+    std::cout << "Error is " << err << "." << std::endl;
 
     // Test the result
     TEST_NEAR("Xs are close:", pt.x(), GOAL.x(), TOL);

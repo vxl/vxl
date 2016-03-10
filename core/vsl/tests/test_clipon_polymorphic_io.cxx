@@ -3,7 +3,8 @@
 //:
 // \file
 
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <iostream>
 #include <vsl/vsl_binary_io.h>
 #include <vsl/vsl_clipon_binary_loader.h>
 #include <vsl/vsl_clipon_binary_loader.hxx>
@@ -21,16 +22,16 @@ class test2_base_class
   virtual int data() const { return 0; }
 
   //: Return a platform independent string identifying the class
-  virtual vcl_string is_a() const
+  virtual std::string is_a() const
   { return "test2_base_class"; }
 
   //: Return true if the argument matches this class' identifying string
-  virtual bool is_class(vcl_string const& s) const
+  virtual bool is_class(std::string const& s) const
   { return s == "test2_base_class"; }
 
   //: Print summary
-  virtual void print_summary(vcl_ostream& os) const
-  { os<<is_a()<<vcl_endl; }
+  virtual void print_summary(std::ostream& os) const
+  { os<<is_a()<<std::endl; }
 };
 
 void test2_base_class::vtable_hack() { }
@@ -46,11 +47,11 @@ class test2_base_class_io
 
   virtual void b_read_by_base(vsl_b_istream& os, test2_base_class& base) const =0;
 
-  virtual void print_summary_by_base(vcl_ostream& os, const test2_base_class& base) const =0;
+  virtual void print_summary_by_base(std::ostream& os, const test2_base_class& base) const =0;
 
   virtual test2_base_class_io* clone() const =0;
 
-  virtual vcl_string target_classname() const =0;
+  virtual std::string target_classname() const =0;
 
   virtual bool is_io_for(const test2_base_class& base) const =0;
 };
@@ -81,7 +82,7 @@ inline void vsl_b_read(vsl_b_istream &is, test2_base_class* &b)
 }
 
 //: Print summary to stream by vnl_nonlinear_minimizer pointer
-void vsl_print_summary(vcl_ostream &os, const test2_base_class * b)
+void vsl_print_summary(std::ostream &os, const test2_base_class * b)
 {
     vsl_clipon_binary_loader<test2_base_class,test2_base_class_io>::
       instance().print_object_summary(os,b);
@@ -99,13 +100,13 @@ class test2_derived_class : public test2_base_class
   virtual int data() const { return data_; }
 
   //: Print summary
-  virtual void print_summary(vcl_ostream& os) const;
+  virtual void print_summary(std::ostream& os) const;
 
   //: Return a platform independent string identifying the class
-  virtual vcl_string is_a() const;
+  virtual std::string is_a() const;
 
   //: Return true if the argument matches this class' or the parent's identifier
-  virtual bool is_class(vcl_string const& s) const;
+  virtual bool is_class(std::string const& s) const;
 
  private:
   void vtable_hack();
@@ -114,17 +115,17 @@ class test2_derived_class : public test2_base_class
 void test2_derived_class::vtable_hack() { }
 
 //: Return a platform independent string identifying the class
-vcl_string test2_derived_class::is_a() const
+std::string test2_derived_class::is_a() const
 { return "test2_derived_class"; }
 
 //: Return true if the argument matches this class' or the parent's identifier
-bool test2_derived_class::is_class(vcl_string const& s) const
+bool test2_derived_class::is_class(std::string const& s) const
 { return s == "test2_derived_class" || test2_base_class::is_class(s); }
 
 //: Print summary
-void test2_derived_class::print_summary(vcl_ostream& os) const
+void test2_derived_class::print_summary(std::ostream& os) const
 {
-  os<<is_a()<<" Data="<<data_<<vcl_endl;
+  os<<is_a()<<" Data="<<data_<<std::endl;
 }
 
 void vsl_b_write(vsl_b_ostream& os, const test2_derived_class& d)
@@ -160,7 +161,7 @@ class test2_derived_class_io: public test2_base_class_io
   }
 
   virtual void print_summary_by_base(
-    vcl_ostream& os, const test2_base_class& base) const
+    std::ostream& os, const test2_base_class& base) const
   {
     base.print_summary(os);
   }
@@ -170,9 +171,9 @@ class test2_derived_class_io: public test2_base_class_io
     return new test2_derived_class_io(*this);
   }
 
-  virtual vcl_string target_classname() const
+  virtual std::string target_classname() const
   {
-    return vcl_string("test2_derived_class");
+    return std::string("test2_derived_class");
   }
 
   virtual bool is_io_for(const test2_base_class& base) const
@@ -182,7 +183,7 @@ class test2_derived_class_io: public test2_base_class_io
 
 void test_clipon_polymorphic_io()
 {
-  vcl_cout << "*****************************************\n"
+  std::cout << "*****************************************\n"
            << "Testing vsl clip-on polymorphic binary io\n"
            << "*****************************************\n";
 

@@ -14,12 +14,14 @@
 #include <vbl/vbl_ref_count.h>
 #include <bapl/bapl_keypoint_set_sptr.h>
 #include <bapl/bapl_keypoint_sptr.h>
-#include <vcl_vector.h>
+#include <vector>
 #include <vsl/vsl_binary_io.h>
-#include <vcl_iosfwd.h> // for std::ostream
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iosfwd> // for std::ostream
 
-typedef vcl_pair< int, bapl_keypoint_sptr > bapl_image_key;
-typedef vcl_vector< bapl_image_key > bapl_image_key_vector;
+typedef std::pair< int, bapl_keypoint_sptr > bapl_image_key;
+typedef std::vector< bapl_image_key > bapl_image_key_vector;
 
 //: class to hold point tracks (2d correspondences in each image for a single 3d point)
 class bapl_track_data : public vbl_ref_count
@@ -35,7 +37,7 @@ bool second_less( const bapl_keypoint_match_set_sptr& left_set, const bapl_keypo
 
 //: a type to hold a list of matches to other images for an image, initially during construction connectivities of each image will be empty
 //  Stores all the connectivities of this image to the other images in a set of images
-typedef vcl_vector<bapl_keypoint_match_set_sptr> bapl_conn;
+typedef std::vector<bapl_keypoint_match_set_sptr> bapl_conn;
 
 //: Class to hold connectivities of each image in a list
 //  If an image does not have a conn to any other image then its bapl_conn vector will be empty
@@ -43,7 +45,7 @@ class bapl_conn_table : public vbl_ref_count
 {
  public:
   //: Constructor
-  bapl_conn_table(int n_images) : conns_(n_images), img_data_(n_images), img_data_key_flags_(n_images, vcl_vector<bool>()) {}  // initialize with an empty connectivity
+  bapl_conn_table(int n_images) : conns_(n_images), img_data_(n_images), img_data_key_flags_(n_images, std::vector<bool>()) {}  // initialize with an empty connectivity
   //: add this match set symmetrically, i.e. into the list of img id 1 as well img id 2, while adding for img id 2, reverse the keypoint pairs
   bool add_sym(bapl_keypoint_match_set_sptr set);
   bool add(bapl_keypoint_match_set_sptr set);
@@ -66,18 +68,18 @@ class bapl_conn_table : public vbl_ref_count
 
   //: compute a set of tracks, each corresponding to a separate 3d point
   //  Assumes a symmetric connectivity table
-  bool compute_tracks(vcl_vector<bapl_track_data>& tracks, int new_image_start = 0);
+  bool compute_tracks(std::vector<bapl_track_data>& tracks, int new_image_start = 0);
 
-  vcl_vector<bapl_conn> conns_;
-  vcl_vector<bapl_keypoint_set_sptr> img_data_;
-  vcl_vector<vcl_vector<bool> > img_data_key_flags_;
+  std::vector<bapl_conn> conns_;
+  std::vector<bapl_keypoint_set_sptr> img_data_;
+  std::vector<std::vector<bool> > img_data_key_flags_;
 };
 
 //: Print a summary of the connectivity data to a stream
-vcl_ostream& operator<< (vcl_ostream& os, bapl_conn_table const & t);
+std::ostream& operator<< (std::ostream& os, bapl_conn_table const & t);
 
 //: Print tracks as correspondences in BWM_VIDEO_SITE format for visualization
-void print_tracks(vcl_ostream& os, vcl_vector<bapl_track_data>& tracks, int img_width = 0, int img_height = 0);
+void print_tracks(std::ostream& os, std::vector<bapl_track_data>& tracks, int img_width = 0, int img_height = 0);
 
 // Binary io, NOT IMPLEMENTED, signatures defined to use bapl_keypoint_set as a brdb_value
 void vsl_b_write(vsl_b_ostream & os, bapl_conn_table const &ph);

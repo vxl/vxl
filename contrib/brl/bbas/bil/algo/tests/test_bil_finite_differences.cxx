@@ -49,9 +49,9 @@ static void test_bil_finite_differences()
 
   bil_finite_differences(testim, dxp, dxm, dxc, dyp, dym, dyc);
 #if 0
-  vil_print_all(vcl_cout,dxp);
-  vil_print_all(vcl_cout,dxm);
-  vil_print_all(vcl_cout,dxc);
+  vil_print_all(std::cout,dxp);
+  vil_print_all(std::cout,dxm);
+  vil_print_all(std::cout,dxc);
 #endif // 0
   for (unsigned j = 0 ; j < testim.nj(); j++) {
     TEST_NEAR("D_x_plus"    ,     dxp(0,j)    ,    0    ,     0.001);
@@ -90,9 +90,9 @@ static void test_bil_finite_differences()
   bil_finite_differences(testim, dxp, dxm, dxc, dyp, dym, dyc);
 
   /*
-  vil_print_all(vcl_cout,dyp);
-  vil_print_all(vcl_cout,dym);
-  vil_print_all(vcl_cout,dyc);
+  vil_print_all(std::cout,dyp);
+  vil_print_all(std::cout,dym);
+  vil_print_all(std::cout,dyc);
   */
   for (unsigned i = 0 ; i < testim.ni(); i++) {
     TEST_NEAR("D_x_plus"    ,     dxp(i,0)    ,    0    ,     0.001);
@@ -132,9 +132,9 @@ static void test_bil_finite_differences()
   bil_finite_differences(testim, dxp, dxm, dxc, dyp, dym, dyc);
 
   /*
-  vil_print_all(vcl_cout,dyp);
-  vil_print_all(vcl_cout,dym);
-  vil_print_all(vcl_cout,dyc);
+  vil_print_all(std::cout,dyp);
+  vil_print_all(std::cout,dym);
+  vil_print_all(std::cout,dyc);
   */
   for (unsigned i = 0 ; i < testim.ni(); i++) {
     TEST_NEAR("D_x_plus"    ,     dxp(i,0)    ,    0    ,     0.001);
@@ -173,9 +173,9 @@ static void test_bil_finite_differences()
   bil_finite_differences(testim, dxp, dxm, dxc, dyp, dym, dyc);
 
 #if 0
-  vil_print_all(vcl_cout,dxp);
-  vil_print_all(vcl_cout,dxm);
-  vil_print_all(vcl_cout,dxc);
+  vil_print_all(std::cout,dxp);
+  vil_print_all(std::cout,dxm);
+  vil_print_all(std::cout,dxc);
 #endif // 0
   for (unsigned j = 0 ; j < testim.nj(); j++) {
     TEST_NEAR("D_x_plus"    ,     dxp(0,j)    ,    0    ,     0.001);

@@ -2,13 +2,15 @@
 #define CoolArray_to_vcl_list_h_
 
 #include <cool/ArrayP.h>
-#include <vcl_list.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <list>
 
 template <class T>
 inline
-vcl_list<T> CoolArray_to_vcl_list(CoolArray<T> const& cl)
+std::list<T> CoolArray_to_vcl_list(CoolArray<T> const& cl)
 {
-  vcl_list<T> l;
+  std::list<T> l;
   typename CoolArray<T>::const_iterator it = cl.begin();
   for (; !(it == cl.end()); ++it)
     l.push_back(*it);
@@ -17,9 +19,9 @@ vcl_list<T> CoolArray_to_vcl_list(CoolArray<T> const& cl)
 
 template <class T>
 inline
-vcl_list<T> CoolArray_to_vcl_list(CoolArrayP<T> const& cl)
+std::list<T> CoolArray_to_vcl_list(CoolArrayP<T> const& cl)
 {
-  vcl_list<T> l;
+  std::list<T> l;
   typename CoolArrayP<T>::const_iterator it = cl.begin();
   for (; !(it == cl.end()); ++it)
     l.push_back(*it);

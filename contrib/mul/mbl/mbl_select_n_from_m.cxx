@@ -5,7 +5,9 @@
 
 #include "mbl_select_n_from_m.h"
 #include <vcl_cassert.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iostream>
 
 mbl_select_n_from_m::mbl_select_n_from_m()
  : n_(0), m_(0), is_done_(false), use_random_(false)
@@ -32,8 +34,8 @@ void mbl_select_n_from_m::set_n_m(unsigned int new_n, unsigned int new_m)
 {
   if (new_n>new_m)
   {
-    vcl_cerr<<"mbl_select_n_from_m::set_n_m(): Warning: N>M: nothing selected\n"
-            <<"N="<<new_n<<"  M="<<new_m<<vcl_endl;
+    std::cerr<<"mbl_select_n_from_m::set_n_m(): Warning: N>M: nothing selected\n"
+            <<"N="<<new_n<<"  M="<<new_m<<std::endl;
     is_done_ = true;
   }
 
@@ -123,13 +125,13 @@ bool mbl_select_n_from_m::next()
   return true;
 }
 
-const vcl_vector<int>& mbl_select_n_from_m::subset() const
+const std::vector<int>& mbl_select_n_from_m::subset() const
 {
   assert (!is_done_);
   return index_;
 }
 
-const vcl_vector<int>& mbl_select_n_from_m::complement()
+const std::vector<int>& mbl_select_n_from_m::complement()
 {
   if (use_random_)
     return not_index_;

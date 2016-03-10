@@ -2,8 +2,10 @@
 // \file
 #include <testlib/testlib_test.h>
 #include <bsta/bsta_k_medoid.h>
-#include <vcl_iostream.h>
-#include <vcl_cmath.h>
+#include <iostream>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <cmath>
 
 //: Test bsta histograms
 void test_k_medoid()
@@ -21,19 +23,19 @@ void test_k_medoid()
   km.insert_distance(2,3, 1.0);
   km.insert_distance(2,4, 4.0);
   km.insert_distance(3,4, 3.0);
-  vcl_cout << "Five point Distance Array "; km.print_distance_array();
+  std::cout << "Five point Distance Array "; km.print_distance_array();
   //form clusters
   unsigned k = 2;
   km.do_clustering(k);
   //print the medoids
   for (unsigned i = 0; i<k; ++i)
   {
-    vcl_cout << "Medoid[" << i << "] = " << km.medoid(i) << '\n'
+    std::cout << "Medoid[" << i << "] = " << km.medoid(i) << '\n'
              << "with cluster\n";
-    const vcl_vector<unsigned>& elements = km.elements(i);
+    const std::vector<unsigned>& elements = km.elements(i);
     for (unsigned j = 0; j<km.size(i); ++j)
-      vcl_cout << elements[j] << ' ' ;
-    vcl_cout << '\n';
+      std::cout << elements[j] << ' ' ;
+    std::cout << '\n';
   }
   TEST("Five Point Clusters", km.medoid(0)==3&&km.medoid(1)==1, true);
   //A larger problem
@@ -46,12 +48,12 @@ void test_k_medoid()
     for (unsigned j =i+1; j<5;++j)
     {
       double dj = j;
-      km2.insert_distance(i,j, vcl_fabs(di-dj));
+      km2.insert_distance(i,j, std::fabs(di-dj));
     }
     for (unsigned j = 5; j<10;++j)
     {
       double dj = j;
-      km2.insert_distance(i,j, 5.0+ vcl_fabs(di-dj));
+      km2.insert_distance(i,j, 5.0+ std::fabs(di-dj));
     }
   }
 
@@ -61,20 +63,20 @@ void test_k_medoid()
     for (unsigned j =i+1; j<10;++j)
     {
       double dj = j;
-      km2.insert_distance(i,j, vcl_fabs(di-dj));
+      km2.insert_distance(i,j, std::fabs(di-dj));
     }
   }
-  vcl_cout << "Linear Sets Distance Array "; km2.print_distance_array();
+  std::cout << "Linear Sets Distance Array "; km2.print_distance_array();
   km2.do_clustering(k);
   //print the medoids
   for (unsigned i = 0; i<k; ++i)
   {
-    vcl_cout << "Medoid[" << i << "] = " << km2.medoid(i) << '\n'
+    std::cout << "Medoid[" << i << "] = " << km2.medoid(i) << '\n'
              << "with cluster\n";
-    const vcl_vector<unsigned>& elements = km2.elements(i);
+    const std::vector<unsigned>& elements = km2.elements(i);
     for (unsigned j = 0; j<km2.size(i); ++j)
-      vcl_cout << elements[j] << ' ' ;
-    vcl_cout << '\n';
+      std::cout << elements[j] << ' ' ;
+    std::cout << '\n';
   }
   TEST("Linear Sets Clusters", km2.medoid(0)==7&&km2.medoid(1)==2, true);
 
@@ -171,18 +173,18 @@ void test_k_medoid()
 
   km3.insert_distance(10,11, 0.2);
 
-  vcl_cout << "Square Star Distance Array "; km3.print_distance_array();
+  std::cout << "Square Star Distance Array "; km3.print_distance_array();
   k = 4;
   km3.do_clustering(k);
   //print the medoids
   for (unsigned i = 0; i<k; ++i)
   {
-    vcl_cout << "Medoid[" << i << "] = " << km3.medoid(i) << '\n'
+    std::cout << "Medoid[" << i << "] = " << km3.medoid(i) << '\n'
              << "with cluster\n";
-    const vcl_vector<unsigned>& elements = km3.elements(i);
+    const std::vector<unsigned>& elements = km3.elements(i);
     for (unsigned j = 0; j<km3.size(i); ++j)
-      vcl_cout << elements[j] << ' ' ;
-    vcl_cout << '\n';
+      std::cout << elements[j] << ' ' ;
+    std::cout << '\n';
   }
   TEST("Square Star Clusters",
        km3.medoid(0)==4&&km3.medoid(1)==7&&km3.medoid(2)==8&&km3.medoid(3)==11,

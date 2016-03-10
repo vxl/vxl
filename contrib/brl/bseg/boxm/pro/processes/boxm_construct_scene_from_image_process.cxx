@@ -10,7 +10,9 @@
 //  Modifications
 // \endverbatim
 
-#include <vcl_fstream.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <fstream>
 
 #include <boxm/boxm_scene_base.h>
 #include <boxm/boxm_scene.h>
@@ -37,7 +39,7 @@ namespace boxm_construct_scene_from_image_process_globals
     unsigned ni = image.ni(), nj = image.nj();
     // find a square arrangement consistent with area unit
     double gsize = static_cast<double>(area_unit);
-    unsigned gwidth = static_cast<unsigned>(vcl_sqrt(gsize));
+    unsigned gwidth = static_cast<unsigned>(std::sqrt(gsize));
     unsigned gheight = area_unit/gwidth;
     if (gwidth*gheight!=gsize)
       return;//maybe fixup later to handle all situations
@@ -45,14 +47,14 @@ namespace boxm_construct_scene_from_image_process_globals
     double min_dim = mni;
     if (mnj<min_dim)
       min_dim = mnj;
-    double dlev = vcl_log(min_dim)/vcl_log(2.0);
+    double dlev = std::log(min_dim)/std::log(2.0);
     unsigned n_levels = static_cast<unsigned>(dlev+1.0);
 
     //note that tree is being constructed in local coordinates
     float rni = 1.0f/static_cast<float>(mni), rnj =1.0f/static_cast<float>(mnj);
     base_ni = mni; base_nj = mnj;
-    vcl_vector<boct_loc_code<short> > leaf_codes;
-    vcl_vector<float> image_int;
+    std::vector<boct_loc_code<short> > leaf_codes;
+    std::vector<float> image_int;
     float upper_v=float(mnj-1)*rnj;
     for (unsigned j=0; j<mnj; ++j)
       for (unsigned i=0; i<mni; ++i)
@@ -65,7 +67,7 @@ namespace boxm_construct_scene_from_image_process_globals
         image_int.push_back(image(i,j));
       }
     //construct leaves
-    vcl_vector<boct_tree_cell<short, T > > leaves;
+    std::vector<boct_tree_cell<short, T > > leaves;
     for (unsigned i = 0; i<leaf_codes.size(); ++i) {
       boct_tree_cell<short, T > leaf(leaf_codes[i]);
       leaves.push_back(leaf);
@@ -88,10 +90,10 @@ namespace boxm_construct_scene_from_image_process_globals
     delete init_tree;
 
     // fill the leaves with data
-    vcl_vector<boct_tree_cell<short, T >* > tleaves;
+    std::vector<boct_tree_cell<short, T >* > tleaves;
     tleaves = tree->leaf_cells();
-    vcl_size_t i = 0;
-    typename vcl_vector<boct_tree_cell<short, T >* >::iterator lit =
+    std::size_t i = 0;
+    typename std::vector<boct_tree_cell<short, T >* >::iterator lit =
       tleaves.begin();
     for (; lit!= tleaves.end(); ++lit, ++i)
     {
@@ -149,14 +151,14 @@ bool boxm_construct_scene_from_image_process_cons(bprb_func_process& pro)
   //input[1]: appearance model type
   //input[2]: scene directory
   //input[3]: scene xml path
-  vcl_vector<vcl_string> input_types_(n_inputs_);
+  std::vector<std::string> input_types_(n_inputs_);
   input_types_[0] = "vil_image_view_base_sptr";
   input_types_[1] = "vcl_string";
   input_types_[2] = "vcl_string";
   input_types_[3] = "vcl_string";
 
   //output[0]: The scene
-  vcl_vector<vcl_string> output_types_(n_outputs_);
+  std::vector<std::string> output_types_(n_outputs_);
   output_types_[0]=  "boxm_scene_base_sptr";
 
   return pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
@@ -167,18 +169,18 @@ bool boxm_construct_scene_from_image_process(bprb_func_process& pro)
   using namespace boxm_construct_scene_from_image_process_globals;
 
   if ( !pro.verify_inputs()){
-    vcl_cerr << pro.name() << "boxm_construct_scene_from_image_process: invalid inputs\n";
+    std::cerr << pro.name() << "boxm_construct_scene_from_image_process: invalid inputs\n";
     return false;
   }
 
   //get inputs:
   unsigned i = 0;
   vil_image_view_base_sptr image = pro.get_input<vil_image_view_base_sptr>(i++);
-  vcl_string app_type =  pro.get_input<vcl_string>(i++);
-  vcl_string scene_dir =  pro.get_input<vcl_string>(i++);
-  vcl_string xml_path =  pro.get_input<vcl_string>(i++);
+  std::string app_type =  pro.get_input<std::string>(i++);
+  std::string scene_dir =  pro.get_input<std::string>(i++);
+  std::string xml_path =  pro.get_input<std::string>(i++);
   if (image == VXL_NULLPTR) {
-    vcl_cerr << "boxm_construct_scene_from_image_process: null image value, cannot run\n";
+    std::cerr << "boxm_construct_scene_from_image_process: null image value, cannot run\n";
     return false;
   }
 
@@ -187,7 +189,7 @@ bool boxm_construct_scene_from_image_process(bprb_func_process& pro)
     vil_math_scale_values(img,1.0/255.0);
 
   unsigned base_ni =0, base_nj=0;
-  vcl_string block_prefix = "ideal";
+  std::string block_prefix = "ideal";
   boxm_scene_base_sptr scene_base = VXL_NULLPTR;
   if (app_type == "simple_grey")
   {

@@ -8,7 +8,9 @@
 // \brief Initialises kernel pdfs
 
 #include <pdf1d/pdf1d_builder.h>
-#include <vcl_iosfwd.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iosfwd>
 
 //=======================================================================
 
@@ -83,7 +85,7 @@ class pdf1d_kernel_pdf_builder : public pdf1d_builder
   //: Build model from weighted data
   virtual void weighted_build(pdf1d_pdf& model,
                               mbl_data_wrapper<double>& data,
-                              const vcl_vector<double>& wts) const;
+                              const std::vector<double>& wts) const;
 
   //: Build from n elements in data[i].  Fixed kernel width.
   // The kernel centres in the pdf will have same value and order as
@@ -127,13 +129,13 @@ class pdf1d_kernel_pdf_builder : public pdf1d_builder
   short version_no() const;
 
   //: Name of the class
-  virtual vcl_string is_a() const;
+  virtual std::string is_a() const;
 
   //: Does the name of the class match the argument?
-  virtual bool is_class(vcl_string const& s) const;
+  virtual bool is_class(std::string const& s) const;
 
   //: Print class to os
-  virtual void print_summary(vcl_ostream& os) const;
+  virtual void print_summary(std::ostream& os) const;
 
   //: Save class to binary file stream
   virtual void b_write(vsl_b_ostream& bfs) const;

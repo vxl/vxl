@@ -11,11 +11,12 @@
 #include "vil_dicom.h"
 
 #include <vcl_cassert.h>
-#include <vcl_iostream.h>
-#include <vcl_sstream.h>
-#include <vcl_cstring.h>
-#include <vcl_cstdlib.h>
-#include <vcl_vector.h>
+#include <iostream>
+#include <sstream>
+#include <cstring>
+#include <vcl_compiler.h>
+#include <cstdlib>
+#include <vector>
 
 #include <vxl_config.h> // for vxl_byte and such
 
@@ -58,7 +59,7 @@ vil_image_resource_sptr vil_dicom_file_format::make_input_image(vil_stream* vs)
   char magic[ DCM_MagicLen ];
   vs->seek( DCM_PreambleLen );
   if ( vs->read( magic, DCM_MagicLen ) == DCM_MagicLen ) {
-    if ( vcl_strncmp( magic, DCM_Magic, DCM_MagicLen ) == 0 ) {
+    if ( std::strncmp( magic, DCM_Magic, DCM_MagicLen ) == 0 ) {
       is_dicom = true;
     }
   }
@@ -75,13 +76,13 @@ vil_image_resource_sptr vil_dicom_file_format::make_output_image(vil_stream* /*v
                                                                  unsigned /*nplanes*/,
                                                                  vil_pixel_format)
 {
-  vcl_cerr << "ERROR: vil_dicom_file doesn't support output yet\n";
+  std::cerr << "ERROR: vil_dicom_file doesn't support output yet\n";
   return 0;
 #if 0
 
   if (nplanes != 1 || format != VIL_PIXEL_FORMAT_INT_32)
   {
-    vcl_cerr << "ERROR: vil_dicom_file_format::make_output_image\n"
+    std::cerr << "ERROR: vil_dicom_file_format::make_output_image\n"
              << "       Can only create DICOM images with a single plane\n"
              << "       and 32-bit integer pixels\n";
     return 0;
@@ -130,8 +131,8 @@ vil_dicom_image::vil_dicom_image(vil_stream* vs)
   ffmt.transferEnd();
 
   if ( cond != EC_Normal ) {
-    vcl_cerr << "vil_dicom ERROR: could not read file (" << cond.text() << ")\n"
-             << "And the error code is: " << cond.code() << vcl_endl;
+    std::cerr << "vil_dicom ERROR: could not read file (" << cond.text() << ")\n"
+             << "And the error code is: " << cond.code() << std::endl;
     //if (cond.code() != 4)
       return;
   }
@@ -146,7 +147,7 @@ vil_dicom_image::vil_dicom_image(vil_stream* vs)
   // tables, the pixel values represent actual measurements.)
   //
   if ( dset.tagExists( DCM_ModalityLUTSequence ) ) {
-    vcl_cerr << "vil_dicom ERROR: don't know (yet) how to handle modality LUTs\n";
+    std::cerr << "vil_dicom ERROR: don't know (yet) how to handle modality LUTs\n";
     return;
   }
 
@@ -166,7 +167,7 @@ vil_dicom_image::vil_dicom_image(vil_stream* vs)
 #define MustRead( func, key, var )                                                     \
   do {                                                                                 \
     if ( dset. func( key, var ) != EC_Normal ) {                                       \
-      vcl_cerr << "vil_dicom ERROR: couldn't read " Stringify(key) "; can't handle\n"; \
+      std::cerr << "vil_dicom ERROR: couldn't read " Stringify(key) "; can't handle\n"; \
       return;                                                                          \
   }} while (false)
 
@@ -194,7 +195,7 @@ vil_dicom_image::vil_dicom_image(vil_stream* vs)
     if ( dset.search( DCM_PixelData, stack, ESM_fromHere, true ) == EC_Normal )
     {
       if ( stack.card() == 0 ) {
-        vcl_cerr << "vil_dicom ERROR: no pixel data found\n";
+        std::cerr << "vil_dicom ERROR: no pixel data found\n";
         return;
       }
       else {
@@ -227,7 +228,7 @@ vil_dicom_image::vil_dicom_image(vil_stream* vs)
     DOCASE( VIL_PIXEL_FORMAT_BYTE );
     DOCASE( VIL_PIXEL_FORMAT_SBYTE );
     DOCASE( VIL_PIXEL_FORMAT_FLOAT );
-    default: vcl_cerr << "vil_dicom ERROR: unexpected pixel format\n";
+    default: std::cerr << "vil_dicom ERROR: unexpected pixel format\n";
   }
 #undef DOCASE
 }
@@ -235,14 +236,14 @@ vil_dicom_image::vil_dicom_image(vil_stream* vs)
 
 bool vil_dicom_image::get_property(char const* tag, void* value) const
 {
-  if (vcl_strcmp(vil_property_quantisation_depth, tag)==0)
+  if (std::strcmp(vil_property_quantisation_depth, tag)==0)
   {
     if (value)
       *static_cast<unsigned int*>(value) = header_.stored_bits_;
     return true;
   }
 
-  if (vcl_strcmp(vil_property_pixel_size, tag)==0 && value!=0)
+  if (std::strcmp(vil_property_pixel_size, tag)==0 && value!=0)
   {
     float *pixel_size = static_cast<float*>(value);
     pixel_size[0] = header_.spacing_x_ / 1000.0f;
@@ -379,29 +380,29 @@ bool vil_dicom_image::interpret_hologic_header(float& xpixSize, float& ypixSize)
 {
   //The magic internal Hologic tags used within their vast "Image Comments"
   //which is used as a cop-out from sensible DICOM conformance
-  static const vcl_string HOLOGIC_PixelXSizeMM = "<PixelXSizeMM>";
-  static const vcl_string HOLOGIC_PixelXSizeMM_END = "</PixelXSizeMM>";
-  static const vcl_string HOLOGIC_PixelYSizeMM = "<PixelYSizeMM>";
-  static const vcl_string HOLOGIC_PixelYSizeMM_END = "</PixelYSizeMM>";
+  static const std::string HOLOGIC_PixelXSizeMM = "<PixelXSizeMM>";
+  static const std::string HOLOGIC_PixelXSizeMM_END = "</PixelXSizeMM>";
+  static const std::string HOLOGIC_PixelYSizeMM = "<PixelYSizeMM>";
+  static const std::string HOLOGIC_PixelYSizeMM_END = "</PixelYSizeMM>";
 
-  vcl_string src = header_.image_comments_;
+  std::string src = header_.image_comments_;
   //Find start of x pixel size sub-text
-  vcl_size_t ipxStart = src.find(HOLOGIC_PixelXSizeMM);
+  std::size_t ipxStart = src.find(HOLOGIC_PixelXSizeMM);
   if (ipxStart==src.npos) return false;
 
   //Find end of x pixel size sub-text
-  vcl_size_t ipxEnd = src.find(HOLOGIC_PixelXSizeMM_END,ipxStart);
+  std::size_t ipxEnd = src.find(HOLOGIC_PixelXSizeMM_END,ipxStart);
   if (ipxEnd==src.npos) return false;
 
   //Extract just the numerical part of the text
-  vcl_string strPixelXSizeMM="";
+  std::string strPixelXSizeMM="";
   ipxStart+= HOLOGIC_PixelXSizeMM.size();
   strPixelXSizeMM.append(src,ipxStart, ipxEnd-ipxStart);
 
   if (strPixelXSizeMM.size()>0)
   {
     //Translate string to number
-    vcl_stringstream translate_is(strPixelXSizeMM,vcl_stringstream::in);
+    std::stringstream translate_is(strPixelXSizeMM,std::stringstream::in);
     translate_is>>xpixSize;
     if (!translate_is) return false;
     if (xpixSize<=0.0 || xpixSize>=1.0E6)
@@ -413,22 +414,22 @@ bool vil_dicom_image::interpret_hologic_header(float& xpixSize, float& ypixSize)
   }
 
   //Find start of y pixel size sub-text
-  vcl_size_t ipyStart = src.find(HOLOGIC_PixelYSizeMM);
+  std::size_t ipyStart = src.find(HOLOGIC_PixelYSizeMM);
   if (ipyStart==src.npos) return false;
 
   //Find end of y pixel size sub-text
-  vcl_size_t ipyEnd = src.find(HOLOGIC_PixelYSizeMM_END,ipyStart);
+  std::size_t ipyEnd = src.find(HOLOGIC_PixelYSizeMM_END,ipyStart);
   if (ipyEnd==src.npos) return false;
 
   //Extract just the numerical part of the text
-  vcl_string strPixelYSizeMM="";
+  std::string strPixelYSizeMM="";
   ipyStart+= HOLOGIC_PixelYSizeMM.size();
   strPixelYSizeMM.append(src,ipyStart, ipyEnd-ipyStart);
 
   if (strPixelYSizeMM.size()>0)
   {
     //Translate string to number
-    vcl_stringstream translate_is(strPixelYSizeMM,vcl_stringstream::in);
+    std::stringstream translate_is(strPixelYSizeMM,std::stringstream::in);
     translate_is>>ypixSize;
     if (!translate_is) return false;
     if (ypixSize<=0.0 || ypixSize>=1.0E6)
@@ -458,7 +459,7 @@ find_element( DcmObject* dset, vxl_uint_16 group, vxl_uint_16 element )
   if ( dset->search( key, stack, ESM_fromHere, true ) == EC_Normal )
   {
     if ( stack.card() == 0 ) {
-      vcl_cerr << "vil_dicom ERROR: no results on stack\n";
+      std::cerr << "vil_dicom ERROR: no results on stack\n";
     }
     else {
       result = static_cast<DcmElement*>(stack.top());
@@ -487,13 +488,13 @@ namespace
   //
   struct try_set_to_string
   {
-    static void proc( DcmObject* dset, vxl_uint_16 group, vxl_uint_16 element, vcl_string& value ) {
+    static void proc( DcmObject* dset, vxl_uint_16 group, vxl_uint_16 element, std::string& value ) {
       DcmElement* e = find_element( dset, group, element );
       if ( e )
       {
         OFString str;
         if ( e->getOFString( str, 0 ) != EC_Normal ) {
-          vcl_cerr << "vil_dicom Warning: value of ("<<group<<','<<element<<") is not string\n";
+          std::cerr << "vil_dicom Warning: value of ("<<group<<','<<element<<") is not string\n";
         }
         else {
           value = str.c_str();
@@ -535,10 +536,10 @@ namespace
       {
         OFString str;
         if ( e->getOFString( str, 0 ) != EC_Normal ) {
-          vcl_cerr << "Warning: value of ("<<group<<','<<element<<") is not string\n";
+          std::cerr << "Warning: value of ("<<group<<','<<element<<") is not string\n";
         }
         else {
-          value = vcl_atol( str.c_str() );
+          value = std::atol( str.c_str() );
         }
       }
     }
@@ -553,25 +554,25 @@ namespace
       {
         OFString str;
         if ( e->getOFString( str, 0 ) != EC_Normal ) {
-          vcl_cerr << "vil_dicom Warning: value of ("<<group<<','<<element<<") is not string\n";
+          std::cerr << "vil_dicom Warning: value of ("<<group<<','<<element<<") is not string\n";
         }
         else {
-          value = static_cast<float>( vcl_atof( str.c_str() ) );
+          value = static_cast<float>( std::atof( str.c_str() ) );
         }
       }
     }
 
-    static void proc( DcmObject* dset, vxl_uint_16 group, vxl_uint_16 element, vcl_vector<float>& value ) {
+    static void proc( DcmObject* dset, vxl_uint_16 group, vxl_uint_16 element, std::vector<float>& value ) {
       DcmElement* e = find_element( dset, group, element );
       if ( e ) {
         for ( unsigned pos = 0; pos < e->getVM(); ++pos )
         {
           OFString str;
           if ( e->getOFString( str, pos ) != EC_Normal ) {
-            vcl_cerr << "Warning: value of ("<<group<<','<<element<<") at " << pos << " is not string\n";
+            std::cerr << "Warning: value of ("<<group<<','<<element<<") at " << pos << " is not string\n";
           }
           else {
-            value.push_back( static_cast<float>( vcl_atof( str.c_str() ) ) );
+            value.push_back( static_cast<float>( std::atof( str.c_str() ) ) );
           }
         }
       }
@@ -585,7 +586,7 @@ namespace
       DcmElement* e = find_element( dset, group, element );
       if ( e ) {
         if ( e->getFloat64( value ) != EC_Normal ) {
-          vcl_cerr << "Warning: value of ("<<group<<','<<element<<") is not Float64\n";
+          std::cerr << "Warning: value of ("<<group<<','<<element<<") is not Float64\n";
         }
       }
     }
@@ -598,7 +599,7 @@ namespace
       DcmElement* e = find_element( dset, group, element );
       if ( e ) {
         if ( e->getFloat32( value ) != EC_Normal ) {
-          vcl_cerr << "Warning: value of ("<<group<<','<<element<<") is not Float32\n";
+          std::cerr << "Warning: value of ("<<group<<','<<element<<") is not Float32\n";
         }
       }
     }
@@ -613,10 +614,10 @@ namespace
       {
         OFString str;
         if ( e->getOFString( str, 0 ) != EC_Normal ) {
-          vcl_cerr << "vil_dicom Warning: value of ("<<group<<','<<element<<") is not string\n";
+          std::cerr << "vil_dicom Warning: value of ("<<group<<','<<element<<") is not string\n";
         }
         else {
-          value = vcl_atol( str.c_str() );
+          value = std::atol( str.c_str() );
         }
       }
     }
@@ -665,7 +666,7 @@ namespace
       DcmElement* e = find_element( dset, group, element );
       if ( e ) {
         if ( e->getSint32( reinterpret_cast<Sint32&>(value) ) != EC_Normal ) {
-          vcl_cerr << "vil_dicom Warning: value of ("<<group<<','<<element<<") is not Sint32\n";
+          std::cerr << "vil_dicom Warning: value of ("<<group<<','<<element<<") is not Sint32\n";
         }
       }
     }
@@ -684,7 +685,7 @@ namespace
       DcmElement* e = find_element( dset, group, element );
       if ( e ) {
         if ( e->getSint16( reinterpret_cast<Sint16&>(value) ) != EC_Normal ) {
-          vcl_cerr << "vil_dicom Warning: value of ("<<group<<','<<element<<") is not Sint16\n";
+          std::cerr << "vil_dicom Warning: value of ("<<group<<','<<element<<") is not Sint16\n";
         }
       }
     }
@@ -705,10 +706,10 @@ namespace
       {
         OFString str;
         if ( e->getOFString( str, 0 ) != EC_Normal ) {
-          vcl_cerr << "vil_dicom Warning: value of ("<<group<<','<<element<<") is not string\n";
+          std::cerr << "vil_dicom Warning: value of ("<<group<<','<<element<<") is not string\n";
         }
         else {
-          value = static_cast<float>( vcl_atof( str.c_str() ) );
+          value = static_cast<float>( std::atof( str.c_str() ) );
         }
       }
     }
@@ -727,7 +728,7 @@ namespace
       DcmElement* e = find_element( dset, group, element );
       if ( e ) {
         if ( e->getUint32( reinterpret_cast<Uint32&>(value) ) != EC_Normal ) {
-          vcl_cerr << "vil_dicom Warning: value of ("<<group<<','<<element<<") is not Uint32\n";
+          std::cerr << "vil_dicom Warning: value of ("<<group<<','<<element<<") is not Uint32\n";
         }
       }
     }
@@ -746,19 +747,19 @@ namespace
       DcmElement* e = find_element( dset, group, element );
       if ( e ) {
         if ( e->getUint16( value ) != EC_Normal ) {
-          vcl_cerr << "vil_dicom Warning: value of ("<<group<<','<<element<<") is not Uint16\n";
+          std::cerr << "vil_dicom Warning: value of ("<<group<<','<<element<<") is not Uint16\n";
         }
       }
     }
 
-    static void proc( DcmObject* dset, vxl_uint_16 group, vxl_uint_16 element, vcl_vector<vxl_uint_16>& value ) {
+    static void proc( DcmObject* dset, vxl_uint_16 group, vxl_uint_16 element, std::vector<vxl_uint_16>& value ) {
       DcmElement* e = find_element( dset, group, element );
       if ( e ) {
         vxl_uint_16 value_at_pos;
         for ( unsigned long pos = 0; pos < e->getVM(); ++pos )
         {
           if ( e->getUint16( value_at_pos, pos ) != EC_Normal ) {
-            vcl_cerr << "vil_dicom Warning: value of ("<<group<<','<<element<<") at " << pos << " is not Uint16\n";
+            std::cerr << "vil_dicom Warning: value of ("<<group<<','<<element<<") at " << pos << " is not Uint16\n";
           }
           else {
               value.push_back(value_at_pos);
@@ -850,7 +851,7 @@ read_header( DcmObject* f, vil_dicom_header_info& i )
   try_set< ap_type(CS) >::proc( f, group, ap_el(AQPATIENTPOSITION),       i.patient_pos_ ); // It's the patient position
 
   typedef vil_dicom_header_type_of<vil_dicom_header_DS>::type DS_type;
-  vcl_vector<DS_type> ps_ips;
+  std::vector<DS_type> ps_ips;
   try_set< ap_type(DS) >::proc( f, group, ap_el(AQIMAGERPIXELSPACING), ps_ips );
   if ( ps_ips.size() > 0 )
     i.imager_spacing_x_ = ps_ips[0];
@@ -894,7 +895,7 @@ read_header( DcmObject* f, vil_dicom_header_info& i )
   try_set< ap_type(DS) >::proc( f, group, ap_el(IMRESCALEINTERCEPT),   i.res_intercept_ ); // It's the rescale intercept
   try_set< ap_type(DS) >::proc( f, group, ap_el(IMRESCALESLOPE),       i.res_slope_ ); // It's the rescale slope
 
-  vcl_vector<DS_type> ps;
+  std::vector<DS_type> ps;
   try_set< ap_type(DS) >::proc( f, group, ap_el(IMPIXELSPACING), ps );
   if ( ps.size() > 0 )
     i.spacing_x_ = ps[0];
@@ -914,20 +915,20 @@ read_header( DcmObject* f, vil_dicom_header_info& i )
     {
       i.spacing_x_ = 1;
       i.spacing_y_ = 1;
-      //vcl_cout<<"DICOM tags PixelSpacing and ImagerPixelSpacing missing: use PixelSpacing = 1.0."<<vcl_endl;
+      //std::cout<<"DICOM tags PixelSpacing and ImagerPixelSpacing missing: use PixelSpacing = 1.0."<<std::endl;
     }
     else if (ps_ips.size() > 1)
     {
       i.spacing_x_ = i.imager_spacing_x_;
       i.spacing_y_ = i.imager_spacing_y_;
-      //vcl_cout<<"DICOM tag PixelSpacing missing: use PixelSpacing = ImagerPixelSpacing."<<vcl_endl;
+      //std::cout<<"DICOM tag PixelSpacing missing: use PixelSpacing = ImagerPixelSpacing."<<std::endl;
     }
     else if (ps_ips.size() > 0)
     {
       i.spacing_x_ = i.imager_spacing_x_;
       i.spacing_y_ = i.imager_spacing_x_;
-      //vcl_cout<<"DICOM tag x.PixelSpacing missing: use x.PixelSpacing = x.ImagerPixelSpacing."<<vcl_endl;
-      //vcl_cout<<"DICOM tags y.PixelSpacing and y.ImagerPixelSpacing missing: use y.PixelSpacing = x.ImagerPixelSpacing."<<vcl_endl;
+      //std::cout<<"DICOM tag x.PixelSpacing missing: use x.PixelSpacing = x.ImagerPixelSpacing."<<std::endl;
+      //std::cout<<"DICOM tags y.PixelSpacing and y.ImagerPixelSpacing missing: use y.PixelSpacing = x.ImagerPixelSpacing."<<std::endl;
     }
   }
 
@@ -936,7 +937,7 @@ read_header( DcmObject* f, vil_dicom_header_info& i )
   try_set< ap_type(FD) >::proc( f, group, ap_el(PRREALWORLDVALUESLOPE),    i.real_world_value_slope_ ); // It's the real world slope value
 
   typedef vil_dicom_header_type_of<vil_dicom_header_US>::type US_type;
-  vcl_vector<US_type> psb;
+  std::vector<US_type> psb;
   try_set< ap_type(US) >::proc( f, group, ap_el(EXPOSEDAREA), psb );
   if ( psb.size() > 0 )
     i.exposedarea_x_ = psb[0];
@@ -1088,9 +1089,9 @@ read_pixels_into_buffer(DcmPixelData* pixels,
     //
     out_buf = new vil_memory_chunk( num_samples * ((stored+7)/8), VIL_PIXEL_FORMAT_BYTE );
 #ifdef MIXED_ENDIAN
-    vcl_memcpy( out_buf->data(), temp3, out_buf->size() );
+    std::memcpy( out_buf->data(), temp3, out_buf->size() );
 #else
-    vcl_memcpy( out_buf->data(), pixel_data->getData(), out_buf->size() );
+    std::memcpy( out_buf->data(), pixel_data->getData(), out_buf->size() );
 #endif //MIXED_ENDIAN
   }
   else {
@@ -1118,7 +1119,7 @@ read_pixels_into_buffer(DcmPixelData* pixels,
       rescale_values( (vxl_sint_16*)in_begin, num_samples, out_begin, slope, intercept );
       break;
      default:
-      vcl_cerr << "vil_dicom ERROR: unexpected internal pixel format\n";
+      std::cerr << "vil_dicom ERROR: unexpected internal pixel format\n";
     }
   }
 

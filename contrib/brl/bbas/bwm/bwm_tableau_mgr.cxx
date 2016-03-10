@@ -16,7 +16,7 @@
 #include <vgui/vgui_dialog.h>
 
 bwm_tableau_mgr* bwm_tableau_mgr::instance_ = VXL_NULLPTR;
-vcl_map<vcl_string, bwm_command_sptr> bwm_tableau_mgr::tab_types_;
+std::map<std::string, bwm_command_sptr> bwm_tableau_mgr::tab_types_;
 
 bwm_tableau_mgr* bwm_tableau_mgr::instance()
 {
@@ -64,12 +64,12 @@ bwm_tableau_mgr::~bwm_tableau_mgr()
 {
 }
 
-void bwm_tableau_mgr::add_tableau(bwm_tableau_img* tab, vcl_string name)
+void bwm_tableau_mgr::add_tableau(bwm_tableau_img* tab, std::string name)
 {
   //create only if registered
-  vcl_map<vcl_string, bwm_command_sptr>::iterator iter = tab_types_.find(tab->type_name());
+  std::map<std::string, bwm_command_sptr>::iterator iter = tab_types_.find(tab->type_name());
   if (iter == tab_types_.end()) {
-    vcl_cerr << "Tableau type is not registered, not creating!\n";
+    std::cerr << "Tableau type is not registered, not creating!\n";
     return;
   }
 
@@ -82,9 +82,9 @@ void bwm_tableau_mgr::add_tableau(bwm_tableau_img* tab, vcl_string name)
   tableaus_[name] = tab;
 }
 
-bool bwm_tableau_mgr::is_registered(vcl_string const& name)
+bool bwm_tableau_mgr::is_registered(std::string const& name)
 {
-  vcl_map<vcl_string, bwm_command_sptr>::iterator iter =
+  std::map<std::string, bwm_command_sptr>::iterator iter =
     tab_types_.find(name);
   return iter != tab_types_.end();
 }
@@ -94,55 +94,55 @@ void bwm_tableau_mgr::register_tableau(bwm_command_sptr tab_comm)
   tab_types_[tab_comm->name()] = tab_comm;
 }
 
-bwm_command_sptr bwm_tableau_mgr::load_tableau_by_type(vcl_string tableau_type)
+bwm_command_sptr bwm_tableau_mgr::load_tableau_by_type(std::string tableau_type)
 {
   bwm_command_sptr comm = VXL_NULLPTR;
-  vcl_map<vcl_string, bwm_command_sptr>::iterator iter = tab_types_.find(tableau_type);
+  std::map<std::string, bwm_command_sptr>::iterator iter = tab_types_.find(tableau_type);
   if (iter != tab_types_.end())
     comm = iter->second;
 
   return comm;
 }
 
-vcl_string bwm_tableau_mgr::save_camera(vcl_string tab_name)
+std::string bwm_tableau_mgr::save_camera(std::string tab_name)
 {
   vgui_tableau_sptr tab = find_tableau(tab_name);
 
   // tableau is not found
   if (!tab) {
-    vcl_cerr << "Tableau " << tab_name << "is not found!\n";
+    std::cerr << "Tableau " << tab_name << "is not found!\n";
     return "";
   }
 
   if (tab->type_name().compare("bwm_tableau_rat_cam") == 0) {
     bwm_tableau_rat_cam* tab_cam =
       static_cast<bwm_tableau_rat_cam*> (tab.as_pointer());
-    vcl_string path = tab_cam->save_camera();
+    std::string path = tab_cam->save_camera();
     return path;
   }else if(tab->type_name().compare("bwm_tableau_proj_cam") == 0){
     bwm_tableau_proj_cam* tab_cam =
       static_cast<bwm_tableau_proj_cam*> (tab.as_pointer());
-    vcl_string path = tab_cam->save_camera();
+    std::string path = tab_cam->save_camera();
     return path;
   }else if(tab->type_name().compare("bwm_tableau_generic_cam") == 0){
-    vcl_cout << " generic cams not currently saved \n";
+    std::cout << " generic cams not currently saved \n";
     return "";
   }else{
-    vcl_cerr << "Tableau " << tab_name << "is an unknown camera tableau!\n";
+    std::cerr << "Tableau " << tab_name << "is an unknown camera tableau!\n";
     return "";
   }
 }
 
 void bwm_tableau_mgr::save_cameras()
 {
-  vcl_map<vcl_string, vgui_tableau_sptr>::iterator iter = tableaus_.begin();
+  std::map<std::string, vgui_tableau_sptr>::iterator iter = tableaus_.begin();
   while (iter != tableaus_.end()) {
     save_camera(iter->first);
     iter++;
   }
 }
 
-void bwm_tableau_mgr::add_corresp(vcl_string tab_name, bwm_corr_sptr corr, double X, double Y)
+void bwm_tableau_mgr::add_corresp(std::string tab_name, bwm_corr_sptr corr, double X, double Y)
 {
   vgui_tableau_sptr tab = this->find_tableau(tab_name);
   if (tab) {
@@ -166,7 +166,7 @@ void bwm_tableau_mgr::remove_tableau()
   grid_->set_selected(row, col, false);
   vgui_tableau_sptr tab = grid_->get_tableau_at(col, row);
 
-  vcl_map<vcl_string, vgui_tableau_sptr>::iterator iter = tableaus_.begin();
+  std::map<std::string, vgui_tableau_sptr>::iterator iter = tableaus_.begin();
   while (iter != tableaus_.end()) {
     if ((iter->second == tab) || (tab->get_child(0) == iter->second)) {
       tableaus_.erase(iter);
@@ -217,9 +217,9 @@ void bwm_tableau_mgr::add_to_grid(vgui_tableau_sptr tab)
   this->add_to_grid(tab, col, row);
 }
 
-vgui_tableau_sptr bwm_tableau_mgr::find_tableau(vcl_string name)
+vgui_tableau_sptr bwm_tableau_mgr::find_tableau(std::string name)
 {
-  vcl_map<vcl_string, vgui_tableau_sptr>::iterator iter = tableaus_.find(name);
+  std::map<std::string, vgui_tableau_sptr>::iterator iter = tableaus_.find(name);
   if (iter != tableaus_.end()) {
     return iter->second;
   }
@@ -228,9 +228,9 @@ vgui_tableau_sptr bwm_tableau_mgr::find_tableau(vcl_string name)
 
 void bwm_tableau_mgr::exit()
 {
-  vcl_vector<bwm_observer_cam*> obs =
+  std::vector<bwm_observer_cam*> obs =
     bwm_observer_mgr::instance()->observers_cam();
-  for (vcl_vector<bwm_observer_cam*>::iterator oit = obs.begin();
+  for (std::vector<bwm_observer_cam*>::iterator oit = obs.begin();
        oit != obs.end(); ++oit)
     if ((*oit)->type_name() == "bwm_observer_video")
     {
@@ -262,7 +262,7 @@ void bwm_tableau_mgr::set_draw_mode_mesh()
 
 void bwm_tableau_mgr::set_observer_draw_mode(int mode)
 {
-  vcl_vector<bwm_observer_cam*> obs =
+  std::vector<bwm_observer_cam*> obs =
     bwm_observer_mgr::instance()->observers_cam();
   for (unsigned i=0; i<obs.size(); i++)
   {
@@ -272,7 +272,7 @@ void bwm_tableau_mgr::set_observer_draw_mode(int mode)
 
 void bwm_tableau_mgr::zoom_to_fit()
 {
-  vcl_map<vcl_string, vgui_tableau_sptr>::iterator iter = tableaus_.begin();
+  std::map<std::string, vgui_tableau_sptr>::iterator iter = tableaus_.begin();
   while (iter != tableaus_.end()) {
     bwm_tableau_img* tab = static_cast<bwm_tableau_img*> (iter->second.as_pointer());
     tab->zoom_to_fit();
@@ -298,7 +298,7 @@ void bwm_tableau_mgr::scroll_to_point()
   if (!dialog.ask())
     return;
 
-  vcl_map<vcl_string, vgui_tableau_sptr>::iterator iter = tableaus_.begin();
+  std::map<std::string, vgui_tableau_sptr>::iterator iter = tableaus_.begin();
   while (iter != tableaus_.end()) {
     bwm_tableau_cam* tab = dynamic_cast<bwm_tableau_cam*> (iter->second.as_pointer());
     if (tab)

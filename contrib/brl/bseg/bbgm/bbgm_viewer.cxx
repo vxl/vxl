@@ -54,7 +54,7 @@ bool bbgm_viewer::apply(const bbgm_image_sptr& dimg,
 //=============================================================================
 
 //: initialize the static vector of registered types
-vcl_vector<bbgm_view_maker_sptr> bbgm_mean_viewer::reg_vms;
+std::vector<bbgm_view_maker_sptr> bbgm_mean_viewer::reg_vms;
 
 //: Register a new view_maker
 // \return true if successfully registered or false if invalid or already
@@ -65,7 +65,7 @@ bool bbgm_mean_viewer::register_view_maker(const bbgm_view_maker_sptr& vm)
     return false;
 
   // replace existing type match
-  typedef vcl_vector<bbgm_view_maker_sptr>::iterator vm_itr;
+  typedef std::vector<bbgm_view_maker_sptr>::iterator vm_itr;
   for (vm_itr i=reg_vms.begin(); i!=reg_vms.end(); ++i)
     if ((*i)->dist_typeid() == vm->dist_typeid()){
       *i = vm;
@@ -81,9 +81,9 @@ bool bbgm_mean_viewer::register_view_maker(const bbgm_view_maker_sptr& vm)
 //: Return a pointer to the view_maker that applies to this image type.
 //  Return a null pointer if no such view_maker is found
 bbgm_view_maker_sptr
-bbgm_mean_viewer::find_view_maker(const vcl_type_info& dist_type)
+bbgm_mean_viewer::find_view_maker(const std::type_info& dist_type)
 {
-  typedef vcl_vector<bbgm_view_maker_sptr>::const_iterator vm_itr;
+  typedef std::vector<bbgm_view_maker_sptr>::const_iterator vm_itr;
   for (vm_itr i=reg_vms.begin(); i!=reg_vms.end(); ++i)
     if ((*i)->dist_typeid() == dist_type)
       return *i;
@@ -93,7 +93,7 @@ bbgm_mean_viewer::find_view_maker(const vcl_type_info& dist_type)
 //=============================================================================
 
 //: initialize the static vector of registered types
-vcl_vector<bbgm_view_maker_sptr> bbgm_variance_viewer::reg_vms;
+std::vector<bbgm_view_maker_sptr> bbgm_variance_viewer::reg_vms;
 
 //: Register a new view_maker
 // \return true if successfully registered or false if invalid or already
@@ -104,7 +104,7 @@ bool bbgm_variance_viewer::register_view_maker(const bbgm_view_maker_sptr& vm)
     return false;
 
   // replace existing type match
-  typedef vcl_vector<bbgm_view_maker_sptr>::iterator vm_itr;
+  typedef std::vector<bbgm_view_maker_sptr>::iterator vm_itr;
   for (vm_itr i=reg_vms.begin(); i!=reg_vms.end(); ++i)
     if ((*i)->dist_typeid() == vm->dist_typeid()){
       *i = vm;
@@ -120,9 +120,9 @@ bool bbgm_variance_viewer::register_view_maker(const bbgm_view_maker_sptr& vm)
 //: Return a pointer to the view_maker that applies to this image type.
 //  Return a null pointer if no such view_maker is found
 bbgm_view_maker_sptr
-bbgm_variance_viewer::find_view_maker(const vcl_type_info& dist_type)
+bbgm_variance_viewer::find_view_maker(const std::type_info& dist_type)
 {
-  typedef vcl_vector<bbgm_view_maker_sptr>::const_iterator vm_itr;
+  typedef std::vector<bbgm_view_maker_sptr>::const_iterator vm_itr;
   for (vm_itr i=reg_vms.begin(); i!=reg_vms.end(); ++i)
     if ((*i)->dist_typeid() == dist_type)
       return *i;
@@ -133,7 +133,7 @@ bbgm_variance_viewer::find_view_maker(const vcl_type_info& dist_type)
 //=============================================================================
 
 //: initialize the static vector of registered types
-vcl_vector<bbgm_view_maker_sptr> bbgm_weight_viewer::reg_vms;
+std::vector<bbgm_view_maker_sptr> bbgm_weight_viewer::reg_vms;
 
 //: Register a new view_maker
 // \return true if successfully registered or false if invalid or already
@@ -144,7 +144,7 @@ bool bbgm_weight_viewer::register_view_maker(const bbgm_view_maker_sptr& vm)
     return false;
 
   // replace existing type match
-  typedef vcl_vector<bbgm_view_maker_sptr>::iterator vm_itr;
+  typedef std::vector<bbgm_view_maker_sptr>::iterator vm_itr;
   for (vm_itr i=reg_vms.begin(); i!=reg_vms.end(); ++i)
     if ((*i)->dist_typeid() == vm->dist_typeid()){
       *i = vm;
@@ -160,9 +160,9 @@ bool bbgm_weight_viewer::register_view_maker(const bbgm_view_maker_sptr& vm)
 //: Return a pointer to the view_maker that applies to this image type.
 //  Return a null pointer if no such view_maker is found
 bbgm_view_maker_sptr
-bbgm_weight_viewer::find_view_maker(const vcl_type_info& dist_type)
+bbgm_weight_viewer::find_view_maker(const std::type_info& dist_type)
 {
-  typedef vcl_vector<bbgm_view_maker_sptr>::const_iterator vm_itr;
+  typedef std::vector<bbgm_view_maker_sptr>::const_iterator vm_itr;
   for (vm_itr i=reg_vms.begin(); i!=reg_vms.end(); ++i)
     if ((*i)->dist_typeid() == dist_type)
       return *i;

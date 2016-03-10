@@ -31,12 +31,12 @@ bool bvpl_create_gauss3d_xx_kernel_vector_process_cons(bprb_func_process& pro)
   //input[0]: Kernel sigma1
   //input[1]: Kernel sigma2
   //input[2]: Kernel sigma3
-  vcl_vector<vcl_string> input_types_(n_inputs_);
+  std::vector<std::string> input_types_(n_inputs_);
   input_types_[0] = "float";
   input_types_[1] = "float";
   input_types_[2] = "float";
 
-  vcl_vector<vcl_string> output_types_(n_outputs_);
+  std::vector<std::string> output_types_(n_outputs_);
   output_types_[0] = "bvpl_kernel_vector_sptr";
 
   return pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
@@ -48,7 +48,7 @@ bool bvpl_create_gauss3d_xx_kernel_vector_process(bprb_func_process& pro)
 
   if (pro.n_inputs() < n_inputs_)
   {
-    vcl_cout << pro.name() << " The input number should be " << n_inputs_<< vcl_endl;
+    std::cout << pro.name() << " The input number should be " << n_inputs_<< std::endl;
     return false;
   }
 

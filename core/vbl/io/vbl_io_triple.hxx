@@ -35,7 +35,7 @@ void vsl_b_read(vsl_b_istream& s, vbl_triple<S, T, U>& v)
 //====================================================================================
 //: Output a human readable summary to the stream
 template <class S, class T, class U>
-void vsl_print_summary(vcl_ostream& os, const vbl_triple<S, T, U> &v)
+void vsl_print_summary(std::ostream& os, const vbl_triple<S, T, U> &v)
 {
   os << "(";
   vsl_print_summary(os, v.first);
@@ -49,7 +49,7 @@ void vsl_print_summary(vcl_ostream& os, const vbl_triple<S, T, U> &v)
 
 #undef VBL_IO_TRIPLE_INSTANTIATE
 #define VBL_IO_TRIPLE_INSTANTIATE(S, T, U ) \
-template void vsl_print_summary(vcl_ostream& s, const vbl_triple<S, T, U >& v); \
+template void vsl_print_summary(std::ostream& s, const vbl_triple<S, T, U >& v); \
 template void vsl_b_write(vsl_b_ostream& s, const vbl_triple<S, T, U > & v); \
 template void vsl_b_read(vsl_b_istream& s, vbl_triple<S, T, U > & v)
 

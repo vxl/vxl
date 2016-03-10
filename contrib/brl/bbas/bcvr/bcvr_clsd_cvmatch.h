@@ -20,7 +20,9 @@
 //
 //-------------------------------------------------------------------------
 
-#include <vcl_ctime.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <ctime>
 #include <vsol/vsol_polygon_2d_sptr.h>
 #include "bcvr_cv_cor_sptr.h"
 #include "bcvr_cvmatch.h"
@@ -33,20 +35,20 @@ class bcvr_clsd_cvmatch : public vbl_ref_count
   bsol_intrinsic_curve_2d_sptr _curve2;
 
   DPCostType _cost; //Temporary array for each match (2_n x _m)
-  vcl_vector<int> _leftMask;
-  vcl_vector<int> _rightMask;
+  std::vector<int> _leftMask;
+  std::vector<int> _rightMask;
 
   DPMapType _map; //Temporary array for each match (2_n x _m)
   DPMapType _finalMap; //Shortest Path for each start point (_n+1 x 1)
-  vcl_vector<double> _finalCost; //Final cost for each start point (_n+1 x 1)
+  std::vector<double> _finalCost; //Final cost for each start point (_n+1 x 1)
 
   int n1_;
   int n2_;
   double R_;
   bool _normalized_stretch_cost;
   int _template_size;
-  vcl_vector<int> XOFFSET;
-  vcl_vector<int> YOFFSET;
+  std::vector<int> XOFFSET;
+  std::vector<int> YOFFSET;
 
   //Functions
   void initializeDPMask1();
@@ -77,7 +79,7 @@ class bcvr_clsd_cvmatch : public vbl_ref_count
 
   //access functions
   double finalCost(int index) {return _finalCost[index];};
-  vcl_vector<double> finalCost() {return _finalCost;};
+  std::vector<double> finalCost() {return _finalCost;};
   FinalMapType finalMap(int index) {return _finalMap[index];};
   int n1() {return n1_;};
   int n2() {return n2_;};
@@ -100,7 +102,7 @@ class bcvr_clsd_cvmatch : public vbl_ref_count
 
   //display functions (debug)
   void printCost();
-  void writeCost(vcl_string f);
+  void writeCost(std::string f);
   void printMap();
 
   //: Match() corresponds to closedCurveDPMatch(ClosedDPMatch *d) in original source code

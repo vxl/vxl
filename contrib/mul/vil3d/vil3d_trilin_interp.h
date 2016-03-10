@@ -7,7 +7,9 @@
 // \author Tim Cootes
 
 #include <vcl_cassert.h>
-#include <vcl_cstddef.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <cstddef>
 #include <vil/vil_na.h>
 #include <vil3d/vil3d_image_view.h>
 
@@ -16,8 +18,8 @@
 //  No bound checks are done.
 template<class T>
 inline double vil3d_trilin_interp_raw(double x, double y, double z,
-                                      const T* data, vcl_ptrdiff_t xstep,
-                                      vcl_ptrdiff_t ystep, vcl_ptrdiff_t zstep)
+                                      const T* data, std::ptrdiff_t xstep,
+                                      std::ptrdiff_t ystep, std::ptrdiff_t zstep)
 {
   int p1x,p1y,p1z;
   double normx,normy,normz;
@@ -53,7 +55,7 @@ inline double vil3d_trilin_interp_raw(double x, double y, double z,
 template<class T>
 inline double vil3d_trilin_interp_safe(double x, double y, double z, const T* data,
                                        unsigned nx, unsigned ny, unsigned nz,
-                                       vcl_ptrdiff_t xstep, vcl_ptrdiff_t ystep, vcl_ptrdiff_t zstep,
+                                       std::ptrdiff_t xstep, std::ptrdiff_t ystep, std::ptrdiff_t zstep,
                                        double outval=0)
 {
   if (x<0) return static_cast<double>(outval);
@@ -88,7 +90,7 @@ inline double vil3d_trilin_interp_safe(const vil3d_image_view<T>& image,
 template<class T>
 inline double vil3d_trilin_interp_assert(double x, double y, double z, const T* data,
                                          unsigned nx, unsigned ny, unsigned nz,
-                                         vcl_ptrdiff_t xstep, vcl_ptrdiff_t ystep, vcl_ptrdiff_t zstep)
+                                         std::ptrdiff_t xstep, std::ptrdiff_t ystep, std::ptrdiff_t zstep)
 {
   assert(x>=0);
   assert(y>=0);
@@ -105,7 +107,7 @@ inline double vil3d_trilin_interp_assert(double x, double y, double z, const T* 
 template<class T>
 inline double vil3d_trilin_interp_safe_extend(double x, double y, double z, const T* data,
                                               unsigned nx, unsigned ny, unsigned nz,
-                                              vcl_ptrdiff_t xstep, vcl_ptrdiff_t ystep, vcl_ptrdiff_t zstep)
+                                              std::ptrdiff_t xstep, std::ptrdiff_t ystep, std::ptrdiff_t zstep)
 {
   if (x<0) x= 0.0;
   if (y<0) y= 0.0;
@@ -122,7 +124,7 @@ inline double vil3d_trilin_interp_safe_extend(double x, double y, double z, cons
 template<class T>
 inline double vil3d_trilin_interp_safe_edgena(double x, double y, double z, const T* data,
                                               unsigned nx, unsigned ny, unsigned nz,
-                                              vcl_ptrdiff_t xstep, vcl_ptrdiff_t ystep, vcl_ptrdiff_t zstep)
+                                              std::ptrdiff_t xstep, std::ptrdiff_t ystep, std::ptrdiff_t zstep)
 {
   if (x<0 || y<0 || z<0 ||
     x>=nx-1 || y>=ny-1 || z>=nz-1) return vil_na(double());

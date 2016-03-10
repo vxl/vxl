@@ -39,8 +39,8 @@ void vgui_qt::init(int &argc, char **argv)
    QGLFormat::setDefaultOverlayFormat(of);
 
 
-   vcl_cerr << "QGLFormat::hasOpenGL () is " << QGLFormat::hasOpenGL () << vcl_endl
-            << "QGLFormat::hasOpenGLOverlays () is " << QGLFormat::hasOpenGLOverlays () << vcl_endl;
+   std::cerr << "QGLFormat::hasOpenGL () is " << QGLFormat::hasOpenGL () << std::endl
+            << "QGLFormat::hasOpenGLOverlays () is " << QGLFormat::hasOpenGLOverlays () << std::endl;
 #endif
 }
 

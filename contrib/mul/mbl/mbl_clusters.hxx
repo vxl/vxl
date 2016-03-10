@@ -10,9 +10,11 @@
 // \author Tim Cootes
 
 #include "mbl_clusters.h"
-#include <vcl_iostream.h>
+#include <iostream>
 #include <vcl_cassert.h>
-#include <vcl_algorithm.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <algorithm>
 #include <vsl/vsl_binary_io.h>
 #include <vsl/vsl_vector_io.h>
 
@@ -43,7 +45,7 @@ void mbl_clusters<T,D>::empty()
 //  Empty existing clusters, then process every element of data
 //  to create clusters, by calling add_object()
 template<class T, class D>
-void mbl_clusters<T,D>::set_data(const vcl_vector<T>& data)
+void mbl_clusters<T,D>::set_data(const std::vector<T>& data)
 {
   empty();
   data_ = &data;
@@ -56,7 +58,7 @@ void mbl_clusters<T,D>::set_data(const vcl_vector<T>& data)
 //  point to data.  Really only to be used after loading
 //  internals using b_read(bfs).
 template<class T, class D>
-void mbl_clusters<T,D>::set_data_ptr(const vcl_vector<T>& data)
+void mbl_clusters<T,D>::set_data_ptr(const std::vector<T>& data)
 {
   data_=&data;
 }
@@ -82,7 +84,7 @@ unsigned mbl_clusters<T,D>::nearest(const T& t, double& d) const
     if (dj-r_[j]<d)
     {
       // There may be a point in the cluster closer than the current best
-      const vcl_vector<unsigned>& ind = index_[j];
+      const std::vector<unsigned>& ind = index_[j];
       for (unsigned i=0;i<ind.size();++i)
       {
         double di=D::d(data_ptr[ind[i]],t);
@@ -99,7 +101,7 @@ unsigned mbl_clusters<T,D>::nearest(const T& t, double& d) const
 //  The distance to the point is d
 template<class T, class D>
 unsigned mbl_clusters<T,D>::nearest(const T& t, double& d,
-                   const vcl_vector<unsigned>& c_list) const
+                   const std::vector<unsigned>& c_list) const
 {
   assert(data_!=0);
 
@@ -117,7 +119,7 @@ unsigned mbl_clusters<T,D>::nearest(const T& t, double& d,
     if (dj-r_[j]<d)
     {
       // There may be a point in the cluster closer than the current best
-      const vcl_vector<unsigned>& ind = index_[j];
+      const std::vector<unsigned>& ind = index_[j];
       for (unsigned i=0;i<ind.size();++i)
       {
         double di=D::d(data_ptr[ind[i]],t);
@@ -154,12 +156,12 @@ unsigned mbl_clusters<T,D>::nearest_cluster(const T& t, double& d) const
 //  Searches through all the clusters
 template<class T, class D>
 void mbl_clusters<T,D>::nearest_clusters(const T& t, double& max_d,
-                           vcl_vector<unsigned>& near_c) const
+                           std::vector<unsigned>& near_c) const
 {
   assert(p_.size()>0);
 
-  vcl_vector<unsigned> c1;
-  vcl_vector<double> d1;
+  std::vector<unsigned> c1;
+  std::vector<double> d1;
 
   double d = D::d(p_[0],t);
   c1.push_back(0);
@@ -174,7 +176,7 @@ void mbl_clusters<T,D>::nearest_clusters(const T& t, double& max_d,
     {
       c1.push_back(j);
       d1.push_back(dj);
-      max_d=vcl_min(max_d,dj+r_[j]);
+      max_d=std::min(max_d,dj+r_[j]);
     }
   }
 
@@ -192,14 +194,14 @@ void mbl_clusters<T,D>::nearest_clusters(const T& t, double& max_d,
 //  On exit, max_d gives the revised limit on the distance
 template<class T, class D>
 void mbl_clusters<T,D>::nearest_clusters(const T& t, double& max_d,
-                           const vcl_vector<unsigned>& c_list,
-                           vcl_vector<unsigned>& near_c) const
+                           const std::vector<unsigned>& c_list,
+                           std::vector<unsigned>& near_c) const
 {
   assert(p_.size()>0);
 
   // Storage for first pass
-  vcl_vector<unsigned> c1;
-  vcl_vector<double> d1;
+  std::vector<unsigned> c1;
+  std::vector<double> d1;
 
   // Try each cluster in turn, recording any that might include closest
   for (unsigned k=0;k<c_list.size();++k)
@@ -210,7 +212,7 @@ void mbl_clusters<T,D>::nearest_clusters(const T& t, double& max_d,
     {
       c1.push_back(j);
       d1.push_back(dj);
-      max_d=vcl_min(max_d,dj+r_[j]);
+      max_d=std::min(max_d,dj+r_[j]);
     }
   }
 
@@ -230,7 +232,7 @@ unsigned mbl_clusters<T,D>::create_cluster(unsigned new_i, double r)
   // Create a new cluster using this as a key point
   p_.push_back(data()[new_i]);
   r_.push_back(r);
-  vcl_vector<unsigned> ind(1);
+  std::vector<unsigned> ind(1);
   ind[0]=new_i;
   index_.push_back(ind);
   return p_.size()-1;
@@ -286,7 +288,7 @@ unsigned add_cluster(unsigned i, double r=0.0);
 //  gives index of cluster with centre nearest to t
 template<class T, class D>
 unsigned mbl_clusters<T,D>::clusters_within_d(const T& t, double d,
-                                              vcl_vector<unsigned>& c_list,
+                                              std::vector<unsigned>& c_list,
                                               unsigned& nearest_c,
                                               double& min_d)
 {
@@ -310,8 +312,8 @@ unsigned mbl_clusters<T,D>::clusters_within_d(const T& t, double d,
 //  gives index of cluster with centre nearest to t
 template<class T, class D>
 unsigned mbl_clusters<T,D>::clusters_within_d(const T& t, double d,
-                                              const vcl_vector<unsigned>& in_list,
-                                              vcl_vector<unsigned>& c_list,
+                                              const std::vector<unsigned>& in_list,
+                                              std::vector<unsigned>& c_list,
                                               unsigned& nearest_c,
                                               double& min_d)
 {
@@ -337,7 +339,7 @@ unsigned mbl_clusters<T,D>::clusters_within_d(const T& t, double d,
 //  gives index of cluster with centre nearest to t
 template<class T, class D>
 unsigned mbl_clusters<T,D>::clusters_within_max_r(const T& t,
-                                                  vcl_vector<unsigned>& c_list,
+                                                  std::vector<unsigned>& c_list,
                                                   unsigned& nearest_c,
                                                   double& min_d)
 {
@@ -347,8 +349,8 @@ unsigned mbl_clusters<T,D>::clusters_within_max_r(const T& t,
 //: Finds list of clusters whose keypoint is within max_r() of t
 template<class T, class D>
 unsigned mbl_clusters<T,D>::clusters_within_max_r(const T& t,
-                                                  const vcl_vector<unsigned>& in_list,
-                                                  vcl_vector<unsigned>& c_list,
+                                                  const std::vector<unsigned>& in_list,
+                                                  std::vector<unsigned>& c_list,
                                                   unsigned& nearest_c,
                                                   double& min_d)
 {
@@ -358,13 +360,13 @@ unsigned mbl_clusters<T,D>::clusters_within_max_r(const T& t,
 //: Create list of object indices in listed clusters
 //  Concatenates lists of indices for each cluster in c_list
 template<class T, class D>
-void mbl_clusters<T,D>::in_clusters(const vcl_vector<unsigned>& c_list,
-                                    vcl_vector<unsigned>& o_list) const
+void mbl_clusters<T,D>::in_clusters(const std::vector<unsigned>& c_list,
+                                    std::vector<unsigned>& o_list) const
 {
   o_list.resize(0);
   for (unsigned i=0;i<c_list.size();++i)
   {
-    const vcl_vector<unsigned>& ind = index()[c_list[i]];
+    const std::vector<unsigned>& ind = index()[c_list[i]];
     for (unsigned j=0;j<ind.size();++j) o_list.push_back(ind[j]);
   }
 }
@@ -372,7 +374,7 @@ void mbl_clusters<T,D>::in_clusters(const vcl_vector<unsigned>& c_list,
 
 //: Write out list of elements in each cluster
 template<class T, class D>
-void mbl_clusters<T,D>::print_cluster_sets(vcl_ostream& os) const
+void mbl_clusters<T,D>::print_cluster_sets(std::ostream& os) const
 {
   for (unsigned i=0;i<index_.size();++i)
   {
@@ -385,7 +387,7 @@ void mbl_clusters<T,D>::print_cluster_sets(vcl_ostream& os) const
 
 //: Write out list of elements in each cluster
 template<class T, class D>
-void mbl_clusters<T,D>::print_summary(vcl_ostream& os) const
+void mbl_clusters<T,D>::print_summary(std::ostream& os) const
 {
   os << " max_r: " << max_r_ << " n_clusters: " << p_.size();
 }
@@ -421,9 +423,9 @@ void mbl_clusters<T,D>::b_read(vsl_b_istream& bfs)
     break;
 
   default:
-    vcl_cerr << "mbl_clusters<T,D>::b_read() "
-      "Unexpected version number " << version << vcl_endl;
-    bfs.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
+    std::cerr << "mbl_clusters<T,D>::b_read() "
+      "Unexpected version number " << version << std::endl;
+    bfs.is().clear(std::ios::badbit); // Set an unrecoverable IO error on stream
     return;
   }
 
@@ -446,7 +448,7 @@ void vsl_b_read(vsl_b_istream& bfs, mbl_clusters<T,D>& c)
 
 //: Stream output operator for class reference
 template<class T, class D>
-vcl_ostream& operator<<(vcl_ostream& os,const mbl_clusters<T,D>& c)
+std::ostream& operator<<(std::ostream& os,const mbl_clusters<T,D>& c)
 {
   c.print_summary(os);
   return os;
@@ -457,6 +459,6 @@ vcl_ostream& operator<<(vcl_ostream& os,const mbl_clusters<T,D>& c)
 template class mbl_clusters< T,D >; \
 template void vsl_b_write(vsl_b_ostream& bfs, const mbl_clusters<T,D >& c); \
 template void vsl_b_read(vsl_b_istream& bfs, mbl_clusters<T,D >& c); \
-template vcl_ostream& operator<<(vcl_ostream& os,const mbl_clusters<T,D >& c)
+template std::ostream& operator<<(std::ostream& os,const mbl_clusters<T,D >& c)
 
 #endif // mbl_clusters_hxx_

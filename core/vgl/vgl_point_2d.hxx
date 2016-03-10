@@ -9,8 +9,9 @@
 #include <vgl/vgl_line_2d.h>
 #include <vgl/vgl_homg_line_2d.h>
 
-#include <vcl_iostream.h>
-#include <vcl_iomanip.h>
+#include <iostream>
+#include <vcl_compiler.h>
+#include <iomanip>
 
 //: Construct from homogeneous point
 template <class Type>
@@ -45,7 +46,7 @@ double cross_ratio(vgl_point_2d<T>const& p1, vgl_point_2d<T>const& p2,
 
 //: Write "<vgl_point_2d x,y> " to stream
 template <class Type>
-vcl_ostream&  operator<<(vcl_ostream& s, vgl_point_2d<Type> const& p)
+std::ostream&  operator<<(std::ostream& s, vgl_point_2d<Type> const& p)
 {
   return s << "<vgl_point_2d "<< p.x() << ',' << p.y() << "> ";
 }
@@ -55,18 +56,18 @@ vcl_ostream&  operator<<(vcl_ostream& s, vgl_point_2d<Type> const& p)
 //  or reads two comma-separated numbers,
 //  or reads two numbers in parenthesized form "(123, 321)"
 template <class Type>
-vcl_istream& vgl_point_2d<Type>::read(vcl_istream& is)
+std::istream& vgl_point_2d<Type>::read(std::istream& is)
 {
   if (! is.good()) return is; // (TODO: should throw an exception)
   bool paren = false;
   Type tx, ty;
-  is >> vcl_ws; // jump over any leading whitespace
+  is >> std::ws; // jump over any leading whitespace
   if (is.eof()) return is; // nothing to be set because of EOF (TODO: should throw an exception)
   if (is.peek() == '(') { is.ignore(); paren=true; }
-  is >> vcl_ws >> tx >> vcl_ws;
+  is >> std::ws >> tx >> std::ws;
   if (is.eof()) return is;
   if (is.peek() == ',') is.ignore();
-  is >> vcl_ws >> ty >> vcl_ws;
+  is >> std::ws >> ty >> std::ws;
   if (paren) {
     if (is.eof()) return is;
     if (is.peek() == ')') is.ignore();
@@ -78,7 +79,7 @@ vcl_istream& vgl_point_2d<Type>::read(vcl_istream& is)
 
 //: Read x y from stream
 template <class Type>
-vcl_istream&  operator>>(vcl_istream& is,  vgl_point_2d<Type>& p)
+std::istream&  operator>>(std::istream& is,  vgl_point_2d<Type>& p)
 {
   return p.read(is);
 }
@@ -88,7 +89,7 @@ vcl_istream&  operator>>(vcl_istream& is,  vgl_point_2d<Type>& p)
 template class vgl_point_2d<T >; \
 template double cross_ratio(vgl_point_2d<T >const&, vgl_point_2d<T >const&, \
                             vgl_point_2d<T >const&, vgl_point_2d<T >const&); \
-template vcl_ostream& operator<<(vcl_ostream&, const vgl_point_2d<T >&); \
-template vcl_istream& operator>>(vcl_istream&, vgl_point_2d<T >&)
+template std::ostream& operator<<(std::ostream&, const vgl_point_2d<T >&); \
+template std::istream& operator>>(std::istream&, vgl_point_2d<T >&)
 
 #endif // vgl_point_2d_hxx_

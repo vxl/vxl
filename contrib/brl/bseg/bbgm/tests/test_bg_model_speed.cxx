@@ -1,6 +1,8 @@
 #include <testlib/testlib_test.h>
-#include <vcl_vector.h>
-#include <vcl_iostream.h>
+#include <vector>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iostream>
 
 #include <bbgm/bbgm_image_of.h>
 #include <bsta/bsta_attributes.h>
@@ -54,7 +56,7 @@ static void test_bg_model_speed()
   vil_image_view<float> img(ni,nj,3);
   init_random_image(img);
 
-  vcl_vector<vil_image_view<float> > images(1,img);
+  std::vector<vil_image_view<float> > images(1,img);
   for (unsigned t=1; t<10; ++t){
     vil_image_view<float> new_img;
     new_img.deep_copy(img);
@@ -62,7 +64,7 @@ static void test_bg_model_speed()
     images.push_back(new_img);
   }
 
-  vcl_cout << "testing variable size mixture speeds" << vcl_endl;
+  std::cout << "testing variable size mixture speeds" << std::endl;
   {
     typedef bsta_num_obs<bsta_gauss_if3> gauss_type;
     typedef bsta_mixture<gauss_type> mix_gauss_type;
@@ -79,11 +81,11 @@ static void test_bg_model_speed()
       vul_timer time;
       update(model,images[t],updater);
       double up_time = time.real() / 1000.0;
-      vcl_cout << " updated in " << up_time << " sec" <<vcl_endl;
+      std::cout << " updated in " << up_time << " sec" <<std::endl;
     }
   }
 
-  vcl_cout << "testing fixed size mixture speeds" << vcl_endl;
+  std::cout << "testing fixed size mixture speeds" << std::endl;
   {
     typedef bsta_num_obs<bsta_gauss_if3> gauss_type;
     typedef bsta_mixture_fixed<gauss_type,3> mix_gauss_type;
@@ -100,7 +102,7 @@ static void test_bg_model_speed()
       vul_timer time;
       update(model,images[t],updater);
       double up_time = time.real() / 1000.0;
-      vcl_cout << " updated in " << up_time << " sec" <<vcl_endl;
+      std::cout << " updated in " << up_time << " sec" <<std::endl;
     }
   }
 }

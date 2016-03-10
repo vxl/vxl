@@ -6,10 +6,12 @@
 #include "boxm_triangle_interpolation_iterator.h"
 
 #include <vnl/algo/vnl_determinant.h>
-#include <vcl_vector.h>
-#include <vcl_cmath.h>
-#include <vcl_algorithm.h>
-#include <vcl_iostream.h>
+#include <vector>
+#include <cmath>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <algorithm>
+#include <iostream>
 
 
 //: constructor
@@ -37,7 +39,7 @@ boxm_triangle_interpolation_iterator<T>::boxm_triangle_interpolation_iterator(do
   s1_ = vnl_determinant(Acol0, Z, Acol2) / detA;
   s2_ = vnl_determinant(Acol0, Acol1, Z) / detA;
 
-  //vcl_cout << "s0 = " << s0_ <<"  s1 = " << s1_ << " s2 = " << s2_ << vcl_endl;
+  //std::cout << "s0 = " << s0_ <<"  s1 = " << s1_ << " s2 = " << s2_ << std::endl;
 }
 
 

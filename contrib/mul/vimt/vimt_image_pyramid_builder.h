@@ -10,8 +10,10 @@
 //  \author Tim Cootes
 
 #include <vsl/vsl_binary_io.h>
-#include <vcl_string.h>
-#include <vcl_iosfwd.h>
+#include <string>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iosfwd>
 
 class vimt_image;
 class vimt_image_pyramid;
@@ -55,16 +57,16 @@ class vimt_image_pyramid_builder
     short version_no() const;
 
     //: Name of the class
-    virtual vcl_string is_a() const;
+    virtual std::string is_a() const;
 
     //: Does the name of the class match the argument?
-    virtual bool is_class(vcl_string const& s) const;
+    virtual bool is_class(std::string const& s) const;
 
     //: Create a copy on the heap and return base class pointer
     virtual vimt_image_pyramid_builder* clone() const = 0;
 
     //: Print class to os
-    virtual void print_summary(vcl_ostream& os) const = 0;
+    virtual void print_summary(std::ostream& os) const = 0;
 
     //: Save class to binary file stream
     virtual void b_write(vsl_b_ostream& bfs) const = 0;
@@ -91,9 +93,9 @@ void vsl_b_write(vsl_b_ostream& bfs, const vimt_image_pyramid_builder& b);
 void vsl_b_read(vsl_b_istream& bfs, vimt_image_pyramid_builder& b);
 
 //: Stream output operator for class reference
-vcl_ostream& operator<<(vcl_ostream& os,const vimt_image_pyramid_builder& b);
+std::ostream& operator<<(std::ostream& os,const vimt_image_pyramid_builder& b);
 
 //: Stream output operator for class pointer
-vcl_ostream& operator<<(vcl_ostream& os,const vimt_image_pyramid_builder* b);
+std::ostream& operator<<(std::ostream& os,const vimt_image_pyramid_builder* b);
 
 #endif // vimt_image_pyramid_builder_h_

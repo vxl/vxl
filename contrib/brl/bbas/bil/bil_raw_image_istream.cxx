@@ -10,8 +10,10 @@
 //-----------------------------------------------------------------------------
 
 #include "bil_raw_image_istream.h"
-#include <vcl_algorithm.h>
-#include <vcl_sstream.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <algorithm>
+#include <sstream>
 #include <vul/vul_file_iterator.h>
 #include <vul/vul_file.h>
 #include <vil/vil_image_view.h>
@@ -36,7 +38,7 @@ bil_raw_image_istream()
 
 //: Constructor
 bil_raw_image_istream::
-bil_raw_image_istream(const vcl_string& glob)
+bil_raw_image_istream(const std::string& glob)
   : index_(INIT_INDEX),
     ni_(0), nj_(0),
     format_(VIL_PIXEL_FORMAT_UNKNOWN),
@@ -51,11 +53,11 @@ bil_raw_image_istream(const vcl_string& glob)
 // \note files are loaded in alphanumeric order by path name
 bool
 bil_raw_image_istream::
-open(const vcl_string& rawFile)
+open(const std::string& rawFile)
 {
   //open up raw file, and read 20 byte header
   this->raw_file_ = rawFile;
-  raw_.open(raw_file_.c_str(), vcl_ios::in | vcl_ios::binary);
+  raw_.open(raw_file_.c_str(), std::ios::in | std::ios::binary);
 
   int ni, nj, pixelSize;
   int numFrames;
@@ -68,10 +70,10 @@ open(const vcl_string& rawFile)
   //for (int i = 0; i < numFrames; ++i)
   //  raw_.read( (char*) &timestamp, sizeof(timestamp) );
 
-  vcl_cout<<"Raw file header:\n"
+  std::cout<<"Raw file header:\n"
           <<"  size: "<<ni<<','<<nj<<'\n'
           <<"  pixel:"<<pixelSize<<'\n'
-          <<"  #fram:"<<numFrames<<vcl_endl;
+          <<"  #fram:"<<numFrames<<std::endl;
 
   //store in member vars
   ni_ = ni;
@@ -106,7 +108,7 @@ close()
   nj_ = 0;
   format_ = VIL_PIXEL_FORMAT_UNKNOWN;
   raw_.close();
-  vcl_cout<<"bil_raw_image_istream closed"<<vcl_endl;
+  std::cout<<"bil_raw_image_istream closed"<<std::endl;
 }
 
 
@@ -144,8 +146,8 @@ bil_raw_image_istream::current_frame()
       unsigned int imgSize = ni_*nj_*pixel_size_/8;
       //  vj Modification
       long long loc = 20+8*index_ + (long long) index_* ( (long long)imgSize );
-      raw_.seekg(loc, vcl_ios::beg);
-      vcl_cout<<"The location is "<<loc<<" and image size is "<<ni_<<" "<<nj_<<" "<<pixel_size_<<vcl_endl;
+      raw_.seekg(loc, std::ios::beg);
+      std::cout<<"The location is "<<loc<<" and image size is "<<ni_<<" "<<nj_<<" "<<pixel_size_<<std::endl;
       //allocate vil memory chunk
       vil_memory_chunk_sptr mem_chunk = new vil_memory_chunk(imgSize,VIL_PIXEL_FORMAT_BYTE);
 
@@ -175,7 +177,7 @@ bil_raw_image_istream::current_frame()
 
 
 //: Return the path to the current image in the stream
-vcl_string
+std::string
 bil_raw_image_istream::current_path() const
 {
   return raw_file_;
@@ -192,7 +194,7 @@ seek_frame(unsigned int frame_nr)
     if (index_ != frame_nr)
       current_frame_ = VXL_NULLPTR;
     index_ = frame_nr;
-    vcl_cout<<"Index is "<<index_<<vcl_endl;
+    std::cout<<"Index is "<<index_<<std::endl;
     return true;
   }
   return false;

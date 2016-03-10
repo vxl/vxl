@@ -26,14 +26,14 @@ bool boxm2_import_triangle_mesh_process_cons(bprb_func_process& pro)
 
   //process takes 3 inputs
   int i=0;
-  vcl_vector<vcl_string> input_types_(n_inputs_);
+  std::vector<std::string> input_types_(n_inputs_);
   input_types_[i++] = "boxm2_scene_sptr";  // scene
   input_types_[i++] = "boxm2_cache_sptr";
   input_types_[i++] = "vcl_string";        // input mesh filename
   input_types_[i++] = "float";  // prob. of cells that mesh intersects
 
   // process has 0 output
-  vcl_vector<vcl_string>  output_types_(n_outputs_);
+  std::vector<std::string>  output_types_(n_outputs_);
 
   return pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
 }
@@ -42,14 +42,14 @@ bool boxm2_import_triangle_mesh_process(bprb_func_process& pro)
 {
   using namespace boxm2_import_triangle_mesh_process_globals;
   if ( pro.n_inputs() < n_inputs_ ) {
-    vcl_cout << pro.name() << ": The number of inputs should be " << n_inputs_<< vcl_endl;
+    std::cout << pro.name() << ": The number of inputs should be " << n_inputs_<< std::endl;
     return false;
   }
 
   //get the inputs
   boxm2_scene_sptr scene = pro.get_input<boxm2_scene_sptr>(0);
   boxm2_cache_sptr cache = pro.get_input<boxm2_cache_sptr>(1);
-  vcl_string mesh_filename = pro.get_input<vcl_string>(2);
+  std::string mesh_filename = pro.get_input<std::string>(2);
   float occupied_prob = pro.get_input<float>(3);
 
 #if 0
@@ -62,7 +62,7 @@ bool boxm2_import_triangle_mesh_process(bprb_func_process& pro)
 
   bool status = boxm2_import_triangle_mesh(scene, cache, mesh, occupied_prob);
   if (!status) {
-    vcl_cerr << "ERROR: boxm2_import_triangle_mesh_process: import_triangle_mesh retured false!" << vcl_endl;
+    std::cerr << "ERROR: boxm2_import_triangle_mesh_process: import_triangle_mesh retured false!" << std::endl;
   }
   return status;
 }

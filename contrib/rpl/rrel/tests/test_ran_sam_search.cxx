@@ -1,5 +1,7 @@
 // This is rpl/rrel/tests/test_ran_sam_search.cxx
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iostream>
 #include <vcl_cassert.h>
 
 #include <vnl/vnl_double_3.h>
@@ -18,7 +20,7 @@
 double noise( double sigma );
 
 inline bool
-sample_ok( const vcl_vector<int>& indices, int num_pts )
+sample_ok( const std::vector<int>& indices, int num_pts )
 {
   bool ok=true;
   for ( unsigned int i=0; i<indices.size() && ok; ++i ) {
@@ -36,7 +38,7 @@ struct null_problem : public rrel_estimation_problem
     : rrel_estimation_problem( dof, min_samples ), ns(num_samples) { }
   unsigned int num_samples() const { return ns; }
   void compute_residuals( const vnl_vector<double>& /*params*/,
-                          vcl_vector<double>& /*residuals*/ ) const { }
+                          std::vector<double>& /*residuals*/ ) const { }
   unsigned int ns;
 };
 
@@ -46,7 +48,7 @@ static void test_ran_sam_residuals()
   // Make sure that the residuals returned correspond to the best
   // parameter estimate. Use a location estimate to test.
 
-  vcl_vector< vnl_vector<double> > pts;
+  std::vector< vnl_vector<double> > pts;
 
   vnl_vector<double> mn(1);
   mn(0) = 0;
@@ -66,14 +68,14 @@ static void test_ran_sam_residuals()
   TEST("Found estimate", success, true );
   TEST_NEAR( "Accurate estimate", search.params()[0], 0, 0.005 );
   if ( success ) {
-    vcl_vector<int> const& idx = search.index();
+    std::vector<int> const& idx = search.index();
     assert( idx.size() == 1 );
-    vcl_cout << "used sample = " << idx[0] << '\n';
+    std::cout << "used sample = " << idx[0] << '\n';
     TEST("Used correct sample", idx[0], 2 );
 
-    vcl_vector<double> const& res = search.residuals();
+    std::vector<double> const& res = search.residuals();
     assert( res.size() == 4 );
-    vcl_cout << "residuals = " << res[0] << ',' << res[1] << ',' << res[2] << ',' << res[3] << '\n';
+    std::cout << "residuals = " << res[0] << ',' << res[1] << ',' << res[2] << ',' << res[3] << '\n';
     TEST("Residuals", res[0] == 0.1 && res[1] == -0.1 && res[2] == 0.0 && res[3] == 10, true );
   }
 }
@@ -85,8 +87,8 @@ static void test_ran_sam_search()
   const int num_pts=12;
 
   //  Build LinearRegression objects.
-  vcl_vector< vnl_vector<double> > pts(num_pts);
-  vcl_vector< double > error(num_pts);
+  std::vector< vnl_vector<double> > pts(num_pts);
+  std::vector< double > error(num_pts);
 
   vnl_double_3& a = true_params;
   double x = 1.0, y=-0.5; error[0]=-0.001;
@@ -143,7 +145,7 @@ static void test_ran_sam_search()
   //  ransam->print_params();
 
   int num_points=5;
-  vcl_vector<int> indices(dof);
+  std::vector<int> indices(dof);
   ransam->calc_num_samples( num_points, dof );
   TEST("generation of all samples" , ransam->samples_tested(), 10);
 
@@ -169,16 +171,16 @@ static void test_ran_sam_search()
   ransam->next_sample( 9, num_points, indices, dof );
   ok = ok && (indices[0]==2 && indices[1]==3 && indices[2]==4);
   testlib_test_perform( ok );
-  //  vcl_cout << "Test 2: " << ( ok ? "yes" : "NO" ) << vcl_endl;
+  //  std::cout << "Test 2: " << ( ok ? "yes" : "NO" ) << std::endl;
 
   double max_outlier_frac = 0.4;
   double desired_prob_good = 0.99;
   int max_pops = 2;
-  //  vcl_cout << "\nNow testing less than complete sampling:\n";
+  //  std::cout << "\nNow testing less than complete sampling:\n";
   testlib_test_begin( "1st probabilistic sampling" );
   ransam->set_sampling_params( max_outlier_frac, desired_prob_good,
                                max_pops);
-  //  vcl_cout << "Parameters:\n";
+  //  std::cout << "Parameters:\n";
   // ransam->print_params();
   ransam->calc_num_samples( num_pts, dof );
   testlib_test_perform(  ransam->samples_tested() == 83 );
@@ -186,7 +188,7 @@ static void test_ran_sam_search()
   testlib_test_begin( "2nd probabilistic sampling" );
   max_outlier_frac=0.5;
   ransam->set_sampling_params( max_outlier_frac, desired_prob_good );
-  // vcl_cout << "Parameters:\n";
+  // std::cout << "Parameters:\n";
   // ransam->print_params();
   ransam->calc_num_samples( num_pts, dof );
   testlib_test_perform( ransam->samples_tested() == 35 );
@@ -207,9 +209,9 @@ static void test_ran_sam_search()
   TEST("estimate succeed", ransam->estimate( lr, lms ), true);
   vnl_vector<double> est_params = ransam->params();
 #ifdef DEBUG
-  vcl_cout << "estimate = " << est_params
+  std::cout << "estimate = " << est_params
            << ", true model = " << true_params << '\n'
-           << "scale = " << ransam->scale() << vcl_endl;
+           << "scale = " << ransam->scale() << std::endl;
 #endif // DEBUG
   ok = vnl_math::abs( est_params[0] - true_params[0] ) < 0.2
     && vnl_math::abs( est_params[1] - true_params[1] ) < 0.025
@@ -219,7 +221,7 @@ static void test_ran_sam_search()
   delete lr;
 
   double sigma = 0.1;
-  vcl_vector<image_point_match> matches;
+  std::vector<image_point_match> matches;
   vnl_double_4 sim_params(1.4,-0.2,20.0,-18.0);
   generate_similarity_matches( sim_params.as_vector(), sigma, matches );  // 20 matches, 13 points
   rrel_estimation_problem* match_prob = new similarity_from_matches( matches );
@@ -232,9 +234,9 @@ static void test_ran_sam_search()
 //trace_level=0;
   TEST("non-unique estimate succeed", ransam->estimate( match_prob, lms ), true);
   est_params = ransam->params();
-  vcl_cout << "similarity estimate = " << est_params
+  std::cout << "similarity estimate = " << est_params
            << ", true similarity model = " << sim_params << '\n'
-           << "scale = " << ransam->scale() << vcl_endl;
+           << "scale = " << ransam->scale() << std::endl;
   ok = vnl_math::abs( est_params[0] - sim_params[0] ) < 0.025
     && vnl_math::abs( est_params[1] - sim_params[1] ) < 0.025
     && vnl_math::abs( est_params[2] - sim_params[2] ) < 1.0

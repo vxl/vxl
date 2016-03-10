@@ -80,9 +80,9 @@ brdb_value_t<T>::b_write_value(vsl_b_ostream& os) const
 
 
 #define BRDB_VALUE_INSTANTIATE(T,NAME) \
-template <> const vcl_string& brdb_value_t<T >::get_type_string()\
+template <> const std::string& brdb_value_t<T >::get_type_string()\
 {\
-static vcl_string type_string = NAME;\
+static std::string type_string = NAME;\
 return type_string;\
 }\
 template class brdb_value_t<T >; \

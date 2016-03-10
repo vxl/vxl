@@ -2,10 +2,12 @@
 #include "vifa_int_faces_attr.h"
 //:
 // \file
-#include <vcl_algorithm.h>
-#include <vcl_cmath.h>
-#include <vcl_map.h>
-#include <vcl_utility.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <algorithm>
+#include <cmath>
+#include <map>
+#include <utility>
 #include <vtol/vtol_edge.h>
 #include <vifa/vifa_incr_var.h>
 #include <vifa/vifa_parallel.h>
@@ -171,7 +173,7 @@ GetEdges()
 
   if (faces_.empty())
   {
-    vcl_cerr << "vifa_int_faces_attr::GetEdges: faces_ is not set\n";
+    std::cerr << "vifa_int_faces_attr::GetEdges: faces_ is not set\n";
     return edges_;
   }
 
@@ -188,7 +190,7 @@ GetEdges()
       {
         vtol_edge_2d_sptr  e = vtol_edge_2d_sptr(e_ptr);
 
-        edges_pos_ = vcl_find(edges_.begin(), edges_.end(), e);
+        edges_pos_ = std::find(edges_.begin(), edges_.end(), e);
         if (edges_pos_ == edges_.end())
           edges_.push_back(e);
       }
@@ -293,7 +295,7 @@ ComputeAttributes()
 
 // Populate a vector containing all attributes, including inherited ones.
 bool vifa_int_faces_attr::
-GetAttributes(vcl_vector<float>& attrs)
+GetAttributes(std::vector<float>& attrs)
 {
   // No inherited attributes. The class qualifier is necessary to
   // prevent this call from going to children that define this method
@@ -304,11 +306,11 @@ GetAttributes(vcl_vector<float>& attrs)
 // Populate a vector containing attributes native to this class (not
 // inherited).
 bool vifa_int_faces_attr::
-GetNativeAttributes(vcl_vector<float>& attrs)
+GetNativeAttributes(std::vector<float>& attrs)
 {
   if (!this->ComputeAttributes())
   {
-    vcl_cerr << "Couldn't compute group attributes?\n";
+    std::cerr << "Couldn't compute group attributes?\n";
     return false;
   }
 
@@ -335,7 +337,7 @@ GetNativeAttributes(vcl_vector<float>& attrs)
 // KEEP IN SYNC WITH GETNATIVEATTRIBUTES
 
 void vifa_int_faces_attr::
-GetAttributeNames(vcl_vector<vcl_string>& names)
+GetAttributeNames(std::vector<std::string>& names)
 {
   names.push_back("gArea");
   names.push_back("gPerimeterLength");
@@ -350,13 +352,13 @@ GetAttributeNames(vcl_vector<vcl_string>& names)
 
   for (int i = 0; i < NUM_HIST_ATTRIBUTES; i++)
   {
-    vcl_string  name(attr_names[i]);
+    std::string  name(attr_names[i]);
     names.push_back("mean" + name);
   }
 
   for (int i = 0; i < NUM_HIST_ATTRIBUTES; i++)
   {
-    vcl_string  name(attr_names[i]);
+    std::string  name(attr_names[i]);
     names.push_back("sd" + name);
   }
 }
@@ -371,17 +373,17 @@ GetBaseAttrName(int i)
 // Create a histogram of attribute values from the supplied list of
 // values.  This histogram must be deleted by the caller when done!
 vifa_histogram_sptr vifa_int_faces_attr::
-MakeAttrHist(vcl_vector<float>& attr_vals)
+MakeAttrHist(std::vector<float>& attr_vals)
 {
   this->ComputeSingleFaceAttributes(false);
 
   // Set the number of bins as sqrt(n), with a minimum of 20
-  int    num_bins = vcl_max(20, (int)vcl_sqrt( static_cast<float>(attr_vals.size()) ));
+  int    num_bins = std::max(20, (int)std::sqrt( static_cast<float>(attr_vals.size()) ));
 
   // Get value range
   float  max_val = 0;
   float  min_val = 1000000;
-  for (vcl_vector<float>::iterator vali = attr_vals.begin();
+  for (std::vector<float>::iterator vali = attr_vals.begin();
        vali != attr_vals.end(); ++vali)
   {
     float val = *vali;
@@ -399,7 +401,7 @@ MakeAttrHist(vcl_vector<float>& attr_vals)
                                                     max_val);
 
   // Populate histogram
-  for (vcl_vector<float>::iterator vali = attr_vals.begin();
+  for (std::vector<float>::iterator vali = attr_vals.begin();
        vali != attr_vals.end(); ++vali)
     val_hist->UpCount(*vali);
 
@@ -418,7 +420,7 @@ GetMeanAttr(int attr_index)
       attr_vec_[attr_index] = new vifa_incr_var;
 
       // Create list of attr vals and attr histogram
-      vcl_vector<float>  vals(attr_map_.size());
+      std::vector<float>  vals(attr_map_.size());
       int          index = 0;
       for (attr_iterator ai = attr_map_.begin();
            ai != attr_map_.end(); ++ai, ++index)
@@ -451,7 +453,7 @@ GetSDAttr(int attr_index)
       this->GetMeanAttr(attr_index);
     }
 
-    return (float)vcl_sqrt(attr_vec_[attr_index]->get_var());
+    return (float)std::sqrt(attr_vec_[attr_index]->get_var());
   }
   else
   {
@@ -532,13 +534,13 @@ GetPerimeterEdges()
 
   if (faces_.empty())
   {
-    vcl_cerr << "no faces to calculate perimeter!\n";
+    std::cerr << "no faces to calculate perimeter!\n";
     return p_edges;
   }
 
   // Maps edgeID to # of appearances
-  vcl_map<int, int>      edge_count;
-  vcl_map<int, int>::iterator  edge_count_pos;
+  std::map<int, int>      edge_count;
+  std::map<int, int>::iterator  edge_count_pos;
 
   int  edge_index = 0;
   for (iface_iterator f = faces_.begin(); f != faces_.end(); ++f)
@@ -563,7 +565,7 @@ GetPerimeterEdges()
       else
         count = edge_count_pos->second + 1;
 
-      edge_count.insert(vcl_pair<int, int>(e_id, count));
+      edge_count.insert(std::pair<int, int>(e_id, count));
     }
   }
 
@@ -579,7 +581,7 @@ GetPerimeterEdges()
       edge_count_pos = edge_count.find(e->get_id());
       if (edge_count_pos == edge_count.end())
       {
-        vcl_cerr << "Inconsistency in vifa_int_faces_attr::perimeter()?\n";
+        std::cerr << "Inconsistency in vifa_int_faces_attr::perimeter()?\n";
         continue;
       }
       else
@@ -632,7 +634,7 @@ WeightedPerimeterLength()
   if (weighted_perimeter_ >= 0)
     return weighted_perimeter_;
 
-//  vcl_cout << "In vifsa::WeightedPerimeterSum()...\n";
+//  std::cout << "In vifsa::WeightedPerimeterSum()...\n";
 
   weighted_perimeter_ = 0;
 
@@ -654,7 +656,7 @@ WeightedPerimeterLength()
         iface_list  in_faces;
         iface_list  out_faces;
 
-//        vcl_cout << edge_faces->size() << " faces found" << endl;
+//        std::cout << edge_faces->size() << " faces found" << endl;
 
         for (face_iterator fi=edge_faces.begin(); fi != edge_faces.end(); ++fi)
         {
@@ -662,7 +664,7 @@ WeightedPerimeterLength()
 
           if (!int_f)
           {
-            vcl_cerr << "vifa_int_faces_attr::WeightedPerimeterLength() -"
+            std::cerr << "vifa_int_faces_attr::WeightedPerimeterLength() -"
                      << " Face is not an intensity face\n";
             continue;
           }
@@ -682,7 +684,7 @@ WeightedPerimeterLength()
             out_faces.push_back(int_f);
         }
 
-//        vcl_cout << in_faces.size() << " in_faces, " << out_faces.size()
+//        std::cout << in_faces.size() << " in_faces, " << out_faces.size()
 //                 << " out_faces\n";
 
         //  this might emphasize large, high-gradient faces too much...
@@ -695,8 +697,8 @@ WeightedPerimeterLength()
           i_area_sum += (*f)->Npix();
         }
 
-//        vcl_cout << "i_intensity_sum = " << i_intensity_sum
-//                 << ", i_area_sum = " << i_area_sum << vcl_endl;
+//        std::cout << "i_intensity_sum = " << i_intensity_sum
+//                 << ", i_area_sum = " << i_area_sum << std::endl;
 
         float  i_intensity = (i_area_sum > 0) ?  i_intensity_sum / i_area_sum : 0.f;
 
@@ -709,32 +711,32 @@ WeightedPerimeterLength()
           o_area_sum += (*f)->Npix();
         }
 
-//        vcl_cout << "o_intensity_sum = " << o_intensity_sum
-//                 << ", o_area_sum = " << o_area_sum << vcl_endl;
+//        std::cout << "o_intensity_sum = " << o_intensity_sum
+//                 << ", o_area_sum = " << o_area_sum << std::endl;
 
         float  o_intensity = (o_area_sum > 0) ?  o_intensity_sum / o_area_sum : 0.f;
 
-        float  intensity_gradient = vcl_fabs(i_intensity - o_intensity);
+        float  intensity_gradient = std::fabs(i_intensity - o_intensity);
 
-//        vcl_cout << "intensity_gradient = " << intensity_gradient
-//                 << ", curve length = " << e->curve()->length() << vcl_endl;
+//        std::cout << "intensity_gradient = " << intensity_gradient
+//                 << ", curve length = " << e->curve()->length() << std::endl;
 
         weighted_perimeter_sum +=
           float(e->curve()->length()) * intensity_gradient;
         contrast_sum += intensity_gradient;
       }
       else
-        vcl_cerr << "(*eit)->cast_to_edge_2d() returned NULL\n";
+        std::cerr << "(*eit)->cast_to_edge_2d() returned NULL\n";
     }
 
-//    vcl_cout << "weighted_perimeter_sum = " << weighted_perimeter_sum
-//             << ", contrast_sum = " << contrast_sum << vcl_endl;
+//    std::cout << "weighted_perimeter_sum = " << weighted_perimeter_sum
+//             << ", contrast_sum = " << contrast_sum << std::endl;
 
     weighted_perimeter_ = weighted_perimeter_sum / contrast_sum;
     delete p_edges;
   }
 
-//  vcl_cout << "Leaving vifsa::WeightedPerimeterSum()\n";
+//  std::cout << "Leaving vifsa::WeightedPerimeterSum()\n";
 
   return weighted_perimeter_;
 }

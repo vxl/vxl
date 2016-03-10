@@ -1,20 +1,21 @@
 //:
 // \file
 #include "vbl_graph_partition.h"
-#include <vcl_algorithm.h>
-#include <vcl_cmath.h>
+#include <algorithm>
+#include <vcl_compiler.h>
+#include <cmath>
 
 //:
 // \p t is a constant that determines the threshold on edge weight
 //  to form disconnected sets
-void vbl_graph_partition(vbl_disjoint_sets& ds, vcl_vector<vbl_edge>& edges, float t) {
+void vbl_graph_partition(vbl_disjoint_sets& ds, std::vector<vbl_edge>& edges, float t) {
    // sort edges by weight in increasing order
-   vcl_sort(edges.begin(), edges.end());
+   std::sort(edges.begin(), edges.end());
 
 
   int nv = ds.num_elements();
   // init thresholds to t
-  vcl_vector<float> thr(nv, t);
+  std::vector<float> thr(nv, t);
 
   int ne = (int)edges.size();
   for (int i = 0; i < ne; i++) {
@@ -39,15 +40,15 @@ void vbl_graph_partition(vbl_disjoint_sets& ds, vcl_vector<vbl_edge>& edges, flo
 
 
 // a partitioning function that uses an edge image so that the component shapes follow edges as much as possible
-void vbl_graph_partition(vbl_disjoint_sets& ds, vcl_vector<vbl_edge>& edges, float t, vil_image_view<float>& edge_img)
+void vbl_graph_partition(vbl_disjoint_sets& ds, std::vector<vbl_edge>& edges, float t, vil_image_view<float>& edge_img)
 {
   // sort edges by weight in increasing order
-   vcl_sort(edges.begin(), edges.end());
+   std::sort(edges.begin(), edges.end());
 
 
   int nv = ds.num_elements();
   // init thresholds to t
-  vcl_vector<float> thr(nv, t);
+  std::vector<float> thr(nv, t);
 
   int ne = (int)edges.size();
   for (int i = 0; i < ne; i++) {

@@ -1,21 +1,23 @@
 // This is gel/vtol/tests/test_vertex_2d.cxx
 #include <testlib/testlib_test.h>
-#include <vcl_algorithm.h> // vcl_find()
+#include <vcl_compiler.h>
+#include <iostream>
+#include <algorithm> // std::find()
 #include <vnl/vnl_double_2.h>
 #include <vtol/vtol_vertex_2d_sptr.h>
 #include <vtol/vtol_vertex_2d.h>
 #include <vsol/vsol_point_2d.h>
 #include <vtol/vtol_edge.h>
 #include <vtol/vtol_edge_sptr.h>
-#include <vcl_list.h>
+#include <list>
 
 static void test_vertex_2d()
 {
   // we want to test the methods on vtol_vertex_2d
-  vcl_cout << "Testing vertex 2d\n";
+  std::cout << "Testing vertex 2d\n";
 
   vtol_vertex_2d_sptr v1=new vtol_vertex_2d(1.0,2.0);
-  v1->describe(vcl_cout,8);
+  v1->describe(std::cout,8);
   TEST("vtol_vertex_2d::x()", v1->x(), 1.0);
   TEST("vtol_vertex_2d::y()", v1->y(), 2.0);
 
@@ -42,14 +44,14 @@ static void test_vertex_2d()
 
   vsol_spatial_object_2d_sptr so = v1->clone();
   TEST("vtol_vertex_2d::clone()", so?true:false, true);
-  so->describe(vcl_cout,8);
+  so->describe(std::cout,8);
 
   vtol_topology_object_sptr to = so->cast_to_topology_object();
   TEST("vtol_vertex_2d::clone()", to?true:false, true);
-  to->describe(vcl_cout,8);
+  to->describe(std::cout,8);
   vtol_vertex_sptr ve = to->cast_to_vertex();
   TEST("vtol_topology_object::cast_to_vertex()", ve?true:false, true);
-  ve->describe(vcl_cout,8);
+  ve->describe(std::cout,8);
   vtol_vertex_2d_sptr v2 = ve->cast_to_vertex_2d();
   TEST("vtol_vertex::cast_to_vertex_2d()", v2?true:false, true);
 
@@ -115,9 +117,9 @@ static void test_vertex_2d()
   TEST("vtol_vertex_2d::edges()", *(e_list[0]->v2()), *v2);
 
   vertex_list v_list; v1->explore_vertex(v_list);
-  vcl_cout << "List size: " << v_list.size() << vcl_endl;
+  std::cout << "List size: " << v_list.size() << std::endl;
   for (unsigned int i=0; i<v_list.size(); ++i)
-    vcl_cout << *(v_list[i]) << vcl_endl;
+    std::cout << *(v_list[i]) << std::endl;
   TEST("vtol_vertex_2d::explore_vertex()", v_list.size(), 2);
 
   vtol_vertex_sptr v1v = v1->cast_to_vertex();
@@ -125,8 +127,8 @@ static void test_vertex_2d()
   TEST("vtol_vertex equality", *v1v, *v1v);
   TEST("vtol_vertex inequality", (*v1v)==(*v2v), false);
 
-  TEST("vtol_vertex::explore_vertex()", vcl_find(v_list.begin(),v_list.end(),v1v)==v_list.end(), false);
-  TEST("vtol_vertex::explore_vertex()", vcl_find(v_list.begin(),v_list.end(),v2v)==v_list.end(), false);
+  TEST("vtol_vertex::explore_vertex()", std::find(v_list.begin(),v_list.end(),v1v)==v_list.end(), false);
+  TEST("vtol_vertex::explore_vertex()", std::find(v_list.begin(),v_list.end(),v2v)==v_list.end(), false);
 
   vtol_vertex_sptr v1v_copy = new vtol_vertex_2d(0.0,0.0);
   (*v1v_copy) = (*v1v);
@@ -147,11 +149,11 @@ static void test_vertex_2d()
   TEST("vtol_vertex::valid_inferior_type()", v1v->valid_inferior_type(new_edge->cast_to_topology_object()), false);
   TEST("vtol_edge::valid_inferior_type()", new_edge->valid_inferior_type(v1v->cast_to_topology_object()), false);
 
-  vcl_cout << "Testing superiors_list\n"
-           << "ve before superiors access " << *ve << vcl_endl;
-  const vcl_list<vtol_topology_object*>* sups = ve->superiors_list();
+  std::cout << "Testing superiors_list\n"
+           << "ve before superiors access " << *ve << std::endl;
+  const std::list<vtol_topology_object*>* sups = ve->superiors_list();
   TEST("vtol_vertex::superiors_list()", sups==VXL_NULLPTR, false);
-  for (vcl_list<vtol_topology_object*>::const_iterator sit = sups->begin();
+  for (std::list<vtol_topology_object*>::const_iterator sit = sups->begin();
        sit !=sups->end(); sit++)
   {
     vtol_zero_chain_sptr zc = (*sit)->cast_to_zero_chain();
@@ -160,13 +162,13 @@ static void test_vertex_2d()
     bool found = false;
     for (vertex_list::iterator vit = verts.begin(); vit!=verts.end(); vit++)
     {
-      vcl_cout << **vit;
+      std::cout << **vit;
       found = ve==*vit;
     }
     TEST("vtol_zero_chain::vertices()", found, true);
   }
 
-  vcl_cout << "ve after superiors access " << *ve << vcl_endl;
+  std::cout << "ve after superiors access " << *ve << std::endl;
 }
 
 TESTMAIN(test_vertex_2d);

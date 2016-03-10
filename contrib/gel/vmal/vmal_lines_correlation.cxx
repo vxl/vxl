@@ -3,8 +3,10 @@
 
 #include <vnl/vnl_double_2.h>
 #include <vnl/vnl_double_3x3.h>
-#include <vcl_cmath.h>
-#include <vcl_cstdlib.h> // for vcl_abs(int)
+#include <vcl_compiler.h>
+#include <iostream>
+#include <cmath>
+#include <cstdlib> // for std::abs(int)
 
 vmal_lines_correlation::vmal_lines_correlation():
 delta_(5),radius_(5.0)
@@ -102,7 +104,7 @@ double vmal_lines_correlation::lines_correlation(vnl_double_3 &line0_p, vnl_doub
       unsigned char value0;
       unsigned char value1;
       if (interpol_pixel(pixel0, pixel1, image0, image1, value0, value1))
-        sum+=vcl_abs(value0-value1);
+        sum+=std::abs(value0-value1);
     }
 
   return sum/(num_pixel_height*num_pixel_height);

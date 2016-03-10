@@ -6,9 +6,11 @@
 //:
 //  \file
 
-#include <vcl_algorithm.h>
-#include <vcl_iostream.h>
-#include <vcl_cstdlib.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <algorithm>
+#include <iostream>
+#include <cstdlib>
 #include <vcl_cassert.h>
 
 //: Find k cluster centres
@@ -31,26 +33,26 @@
 // In particular if you let the function initialise the centres, it will
 // occur if any of the first k data samples are identical.
 template <class T>
-unsigned bsta_k_means(vcl_vector<vnl_vector<T> > &data, unsigned& k,
-                vcl_vector<vnl_vector<T> >* cluster_centres,
-                vcl_vector<unsigned> * partition //=0
+unsigned bsta_k_means(std::vector<vnl_vector<T> > &data, unsigned& k,
+                std::vector<vnl_vector<T> >* cluster_centres,
+                std::vector<unsigned> * partition //=0
                 )
 {
   unsigned n_data = data.size();
   if(n_data==0){
-    vcl_cout << "no data to process in bsta_k_means\n";
+    std::cout << "no data to process in bsta_k_means\n";
     return 0;
   }
-  vcl_vector<vnl_vector<T> > & centres = *cluster_centres;
+  std::vector<vnl_vector<T> > & centres = *cluster_centres;
 
-  vcl_vector<unsigned> * p_partition;
+  std::vector<unsigned> * p_partition;
 
   unsigned didx = 0;
 
   unsigned  dims = data[didx].size();
 
-  vcl_vector<vnl_vector<T> > sums(k, vnl_vector<T>(dims, T(0)));
-  vcl_vector<unsigned> nNearest(k, 0);
+  std::vector<vnl_vector<T> > sums(k, vnl_vector<T>(dims, T(0)));
+  std::vector<unsigned> nNearest(k, 0);
   unsigned i;
   unsigned iterations =0;
 
@@ -65,12 +67,12 @@ unsigned bsta_k_means(vcl_vector<vnl_vector<T> > &data, unsigned& k,
       if (p_partition->size() != data.size())
      {
        p_partition->resize(data.size());
-       vcl_fill(p_partition->begin(), p_partition->end(), 0);
+       std::fill(p_partition->begin(), p_partition->end(), 0);
      }
       else initialise_from_clusters = true;
     }
   else
-    p_partition = new vcl_vector<unsigned>(int(data.size()), 0u);
+    p_partition = new std::vector<unsigned>(int(data.size()), 0u);
 
 
   // Calculate initial centres
@@ -97,8 +99,8 @@ unsigned bsta_k_means(vcl_vector<vnl_vector<T> > &data, unsigned& k,
       for (i=0; i<k; ++i)
      centres[i] = sums[i]/static_cast<T>(nNearest[i]);
       didx = 0;
-      vcl_fill(sums.begin(), sums.end(), vnl_vector<T>(dims, T(0)));
-      vcl_fill(nNearest.begin(), nNearest.end(), 0);
+      std::fill(sums.begin(), sums.end(), vnl_vector<T>(dims, T(0)));
+      std::fill(nNearest.begin(), nNearest.end(), 0);
     }
 
   bool changed = true;
@@ -155,8 +157,8 @@ unsigned bsta_k_means(vcl_vector<vnl_vector<T> > &data, unsigned& k,
       // and repeat
 
       didx = 0;
-      vcl_fill(sums.begin(), sums.end(), vnl_vector<T>(dims, T(0)));
-      vcl_fill(nNearest.begin(), nNearest.end(), 0);
+      std::fill(sums.begin(), sums.end(), vnl_vector<T>(dims, T(0)));
+      std::fill(nNearest.begin(), nNearest.end(), 0);
       iterations ++;
     }
 
@@ -166,24 +168,24 @@ unsigned bsta_k_means(vcl_vector<vnl_vector<T> > &data, unsigned& k,
   return iterations;
 }
 template <class T, unsigned int n>
-unsigned bsta_k_means(vcl_vector<vnl_vector_fixed<T, n> > &data, unsigned& k,
-                vcl_vector<vnl_vector_fixed<T, n> >* cluster_centres,
-                vcl_vector<unsigned> * partition){
+unsigned bsta_k_means(std::vector<vnl_vector_fixed<T, n> > &data, unsigned& k,
+                std::vector<vnl_vector_fixed<T, n> >* cluster_centres,
+                std::vector<unsigned> * partition){
   unsigned n_data = data.size();
   if(n_data==0){
-    vcl_cout << "no data to process in bsta_k_means\n";
+    std::cout << "no data to process in bsta_k_means\n";
     return 0;
   }
-  vcl_vector<vnl_vector_fixed<T, n> > & centres = *cluster_centres;
+  std::vector<vnl_vector_fixed<T, n> > & centres = *cluster_centres;
 
-  vcl_vector<unsigned> * p_partition;
+  std::vector<unsigned> * p_partition;
 
   unsigned didx = 0;
 
   unsigned  dims = data[didx].size();
 
-  vcl_vector<vnl_vector_fixed<T, n> > sums(k, vnl_vector_fixed<T, n>(T(0)));
-  vcl_vector<unsigned> nNearest(k, 0);
+  std::vector<vnl_vector_fixed<T, n> > sums(k, vnl_vector_fixed<T, n>(T(0)));
+  std::vector<unsigned> nNearest(k, 0);
   unsigned i;
   unsigned iterations =0;
 
@@ -198,12 +200,12 @@ unsigned bsta_k_means(vcl_vector<vnl_vector_fixed<T, n> > &data, unsigned& k,
       if (p_partition->size() != data.size())
      {
        p_partition->resize(data.size());
-       vcl_fill(p_partition->begin(), p_partition->end(), 0u);
+       std::fill(p_partition->begin(), p_partition->end(), 0u);
      }
       else initialise_from_clusters = true;
     }
   else
-    p_partition = new vcl_vector<unsigned>(int(data.size()), 0u);
+    p_partition = new std::vector<unsigned>(int(data.size()), 0u);
 
 
   // Calculate initial centres
@@ -230,8 +232,8 @@ unsigned bsta_k_means(vcl_vector<vnl_vector_fixed<T, n> > &data, unsigned& k,
       for (i=0; i<k; ++i)
      centres[i] = sums[i]/static_cast<T>(nNearest[i]);
       didx = 0;
-      vcl_fill(sums.begin(), sums.end(), vnl_vector_fixed<T, n>(T(0)));
-      vcl_fill(nNearest.begin(), nNearest.end(), 0);
+      std::fill(sums.begin(), sums.end(), vnl_vector_fixed<T, n>(T(0)));
+      std::fill(nNearest.begin(), nNearest.end(), 0);
     }
 
   bool changed = true;
@@ -288,8 +290,8 @@ unsigned bsta_k_means(vcl_vector<vnl_vector_fixed<T, n> > &data, unsigned& k,
       // and repeat
 
       didx = 0;
-      vcl_fill(sums.begin(), sums.end(), vnl_vector<T>(dims, T(0)));
-      vcl_fill(nNearest.begin(), nNearest.end(), 0);
+      std::fill(sums.begin(), sums.end(), vnl_vector<T>(dims, T(0)));
+      std::fill(nNearest.begin(), nNearest.end(), 0);
       iterations ++;
     }
 
@@ -335,25 +337,25 @@ static inline void incXbyYv(vnl_vector<T> *X, const vnl_vector<T> &Y, T v)
 // \par
 // The algorithm has been optimised
 template <class T>
-unsigned bsta_k_means_weighted(vcl_vector<vnl_vector<T> > &data,
+unsigned bsta_k_means_weighted(std::vector<vnl_vector<T> > &data,
                                unsigned& k,
-                               const vcl_vector<T>& wts,
-                               vcl_vector<vnl_vector<T> >* cluster_centres,
-                               vcl_vector<unsigned> * partition //=0
+                               const std::vector<T>& wts,
+                               std::vector<vnl_vector<T> >* cluster_centres,
+                               std::vector<unsigned> * partition //=0
                                )
 {
   unsigned n_data = data.size();
   if(n_data==0){
-    vcl_cout << "no data to process in bsta_k_means\n";
+    std::cout << "no data to process in bsta_k_means\n";
     return 0;
   }
-  vcl_vector<vnl_vector<T> > & centres = *cluster_centres;
+  std::vector<vnl_vector<T> > & centres = *cluster_centres;
 
-  vcl_vector<unsigned> * p_partition;
+  std::vector<unsigned> * p_partition;
   unsigned didx = 0;
   unsigned  dims = data[didx].size();
-  vcl_vector<vnl_vector<T> > sums(k, vnl_vector<T>(dims, T(0)));
-  vcl_vector<T> nNearest(k, T(0));
+  std::vector<vnl_vector<T> > sums(k, vnl_vector<T>(dims, T(0)));
+  std::vector<T> nNearest(k, T(0));
   unsigned i;
   unsigned iterations =0;
 
@@ -369,14 +371,14 @@ unsigned bsta_k_means_weighted(vcl_vector<vnl_vector<T> > &data,
       if (p_partition->size() != data.size())
      {
        p_partition->resize(data.size());
-       vcl_fill(p_partition->begin(), p_partition->end(), 0);
+       std::fill(p_partition->begin(), p_partition->end(), 0);
      }
       else initialise_from_clusters = true;
     }
   else
-    p_partition = new vcl_vector<unsigned>(int(data.size()), 0u);
+    p_partition = new std::vector<unsigned>(int(data.size()), 0u);
 
-  const vnl_vector<T>  vcl_vector_T_dims_0(dims, T(0));
+  const vnl_vector<T>  vector_T_dims_0(dims, T(0));
 
 
   // Calculate initial centres
@@ -393,9 +395,9 @@ unsigned bsta_k_means_weighted(vcl_vector<vnl_vector<T> > &data,
 #else
            if (++didx<n_data)
           {
-            vcl_cerr << "ERROR: bsta_k_means_weighted, while initialising centres from data\n"
+            std::cerr << "ERROR: bsta_k_means_weighted, while initialising centres from data\n"
                   << "Not enough non-zero-weighted data\n";
-            vcl_abort();
+            std::abort();
           }
 #endif //NDEBUG
          }
@@ -418,8 +420,8 @@ unsigned bsta_k_means_weighted(vcl_vector<vnl_vector<T> > &data,
       for (i=0; i<k; ++i)
      centres[i] = sums[i]/nNearest[i];
       didx = 0;
-      vcl_fill(sums.begin(), sums.end(), vcl_vector_T_dims_0);
-      vcl_fill(nNearest.begin(), nNearest.end(), T(0));
+      std::fill(sums.begin(), sums.end(), vector_T_dims_0);
+      std::fill(nNearest.begin(), nNearest.end(), T(0));
     }
 
   bool changed = true;
@@ -479,8 +481,8 @@ unsigned bsta_k_means_weighted(vcl_vector<vnl_vector<T> > &data,
 
       // and repeat
       didx = 0;
-      vcl_fill(sums.begin(), sums.end(), vcl_vector_T_dims_0);
-      vcl_fill(nNearest.begin(), nNearest.end(), T(0));
+      std::fill(sums.begin(), sums.end(), vector_T_dims_0);
+      std::fill(nNearest.begin(), nNearest.end(), T(0));
       iterations ++;
     }
 
@@ -513,22 +515,22 @@ unsigned bsta_k_means_weighted(vcl_vector<vnl_vector<T> > &data,
 }
 
 template <class T, unsigned int n>
-unsigned bsta_k_means_weighted(vcl_vector<vnl_vector_fixed<T,n> > &data,
+unsigned bsta_k_means_weighted(std::vector<vnl_vector_fixed<T,n> > &data,
                       unsigned& k,
-                      const vcl_vector<T>& wts,
-                      vcl_vector<vnl_vector_fixed<T,n> >* cluster_centres,
-                      vcl_vector<unsigned> * partition){
+                      const std::vector<T>& wts,
+                      std::vector<vnl_vector_fixed<T,n> >* cluster_centres,
+                      std::vector<unsigned> * partition){
   unsigned n_data = data.size();
   if(n_data==0){
-    vcl_cout << "no data to process in bsta_k_means\n";
+    std::cout << "no data to process in bsta_k_means\n";
     return 0;
   }
-  vcl_vector<vnl_vector_fixed<T,n> > & centres = *cluster_centres;
+  std::vector<vnl_vector_fixed<T,n> > & centres = *cluster_centres;
 
-  vcl_vector<unsigned> * p_partition;
+  std::vector<unsigned> * p_partition;
   unsigned didx = 0;
-  vcl_vector<vnl_vector_fixed<T,n> > sums(k, vnl_vector_fixed<T,n>(T(0)));
-  vcl_vector<T> nNearest(k, T(0));
+  std::vector<vnl_vector_fixed<T,n> > sums(k, vnl_vector_fixed<T,n>(T(0)));
+  std::vector<T> nNearest(k, T(0));
   unsigned i;
   unsigned iterations =0;
 
@@ -544,14 +546,14 @@ unsigned bsta_k_means_weighted(vcl_vector<vnl_vector_fixed<T,n> > &data,
       if (p_partition->size() != data.size())
      {
        p_partition->resize(data.size());
-       vcl_fill(p_partition->begin(), p_partition->end(), 0);
+       std::fill(p_partition->begin(), p_partition->end(), 0);
      }
       else initialise_from_clusters = true;
     }
   else
-    p_partition = new vcl_vector<unsigned>(int(data.size()), 0u);
+    p_partition = new std::vector<unsigned>(int(data.size()), 0u);
 
-  const vnl_vector_fixed<T,n>  vcl_vector_T_dims_0(T(0));
+  const vnl_vector_fixed<T,n>  vector_T_dims_0(T(0));
 
 
   // Calculate initial centres
@@ -568,9 +570,9 @@ unsigned bsta_k_means_weighted(vcl_vector<vnl_vector_fixed<T,n> > &data,
 #else
            if (++didx<n_data)
           {
-            vcl_cerr << "ERROR: bsta_k_means_weighted, while initialising centres from data\n"
+            std::cerr << "ERROR: bsta_k_means_weighted, while initialising centres from data\n"
                   << "Not enough non-zero-weighted data\n";
-            vcl_abort();
+            std::abort();
           }
 #endif //NDEBUG
          }
@@ -594,8 +596,8 @@ unsigned bsta_k_means_weighted(vcl_vector<vnl_vector_fixed<T,n> > &data,
       for (i=0; i<k; ++i)
      centres[i] = sums[i]/nNearest[i];
       didx = 0;
-      vcl_fill(sums.begin(), sums.end(), vcl_vector_T_dims_0);
-      vcl_fill(nNearest.begin(), nNearest.end(), T(0));
+      std::fill(sums.begin(), sums.end(), vector_T_dims_0);
+      std::fill(nNearest.begin(), nNearest.end(), T(0));
     }
 
   bool changed = true;
@@ -656,8 +658,8 @@ unsigned bsta_k_means_weighted(vcl_vector<vnl_vector_fixed<T,n> > &data,
 
       // and repeat
       didx = 0;
-      vcl_fill(sums.begin(), sums.end(), vcl_vector_T_dims_0);
-      vcl_fill(nNearest.begin(), nNearest.end(), T(0));
+      std::fill(sums.begin(), sums.end(), vector_T_dims_0);
+      std::fill(nNearest.begin(), nNearest.end(), T(0));
       iterations ++;
     }
 
@@ -690,11 +692,11 @@ unsigned bsta_k_means_weighted(vcl_vector<vnl_vector_fixed<T,n> > &data,
 #undef BSTA_K_MEANS_INSTANTIATE
 #define BSTA_K_MEANS_INSTANTIATE(T, n)      \
  template void incXbyYv(vnl_vector<T> *, const vnl_vector<T> &, T); \
- template unsigned bsta_k_means_weighted(vcl_vector<vnl_vector<T> > &, unsigned&, const vcl_vector<T>&, vcl_vector<vnl_vector<T> >*, vcl_vector<unsigned> *); \
- template unsigned bsta_k_means_weighted(vcl_vector<vnl_vector_fixed<T,n> > &, \
-   unsigned&, const vcl_vector<T>&, vcl_vector<vnl_vector_fixed<T,n> >*, \
-   vcl_vector<unsigned> * partition); \
- template unsigned bsta_k_means(vcl_vector<vnl_vector<T> > &, unsigned&, vcl_vector<vnl_vector<T> >*, vcl_vector<unsigned> *); \
- template unsigned bsta_k_means(vcl_vector<vnl_vector_fixed<T, n> > &, unsigned&, vcl_vector<vnl_vector_fixed<T, n> >*, vcl_vector<unsigned> *)
+ template unsigned bsta_k_means_weighted(std::vector<vnl_vector<T> > &, unsigned&, const std::vector<T>&, std::vector<vnl_vector<T> >*, std::vector<unsigned> *); \
+ template unsigned bsta_k_means_weighted(std::vector<vnl_vector_fixed<T,n> > &, \
+   unsigned&, const std::vector<T>&, std::vector<vnl_vector_fixed<T,n> >*, \
+   std::vector<unsigned> * partition); \
+ template unsigned bsta_k_means(std::vector<vnl_vector<T> > &, unsigned&, std::vector<vnl_vector<T> >*, std::vector<unsigned> *); \
+ template unsigned bsta_k_means(std::vector<vnl_vector_fixed<T, n> > &, unsigned&, std::vector<vnl_vector_fixed<T, n> >*, std::vector<unsigned> *)
 
 #endif // bsta_k_means_hxx_

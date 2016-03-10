@@ -15,8 +15,10 @@
 #include <vnl/vnl_float_3.h>
 #include <vnl/vnl_double_3.h>
 
-#include <vcl_limits.h>
-#include <vcl_vector.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <limits>
+#include <vector>
 #include <vcl_cassert.h>
 
 //----------------------------------------------------------------------------
@@ -64,8 +66,8 @@ void rgtl_soat3d_polygon::split(double n[3], rgtl_soat3d_polygon out[2]) const
 
   // Get the position of each vertex along the plane normal.
   double dots[max_verts];
-  double min_dot = vcl_numeric_limits<float>::infinity();
-  double max_dot = -vcl_numeric_limits<float>::infinity();
+  double min_dot = std::numeric_limits<float>::infinity();
+  double max_dot = -std::numeric_limits<float>::infinity();
   int start = 0;
   for (unsigned int i=0; i < this->num_verts; ++i)
   {
@@ -122,12 +124,12 @@ void rgtl_soat3d_polygon::split(double n[3], rgtl_soat3d_polygon out[2]) const
     // If we switched sides add the intermediate vertex on both sides.
     if (current_side != last_side)
     {
-      double wB = vcl_fabs(dots[last_i]);
+      double wB = std::fabs(dots[last_i]);
       if (wB > 0)
       {
         // Intersect the line segment just traversed with the plane.
         // We know the intersection is between the endpoints.
-        double wA = vcl_fabs(dots[i]);
+        double wA = std::fabs(dots[i]);
         vnl_double_3 pA(this->verts[last_i][0],
                         this->verts[last_i][1],
                         this->verts[last_i][2]);
@@ -195,9 +197,9 @@ class rgtl_sqt_object_set_triangles_3d:
 
  private:
   // A compact representation for the polygons.
-  vcl_vector<unsigned char> vertex_counts_;
-  vcl_vector<vnl_float_3> vertex_points_;
-  vcl_vector<int> original_indices_;
+  std::vector<unsigned char> vertex_counts_;
+  std::vector<vnl_float_3> vertex_points_;
+  std::vector<int> original_indices_;
 };
 
 //----------------------------------------------------------------------------
@@ -289,7 +291,7 @@ rgtl_sqt_object_set_triangles_3d<Face>
   cell_geometry.get_center_planes(center_normals);
 
   // Allocate an output polygon set for each child.
-  vcl_auto_ptr<rgtl_sqt_object_set_triangles_3d> out[4];
+  std::auto_ptr<rgtl_sqt_object_set_triangles_3d> out[4];
   for (unsigned int i=0; i < 4; ++i)
   {
     // Create this polygon set.
@@ -355,7 +357,7 @@ rgtl_sqt_object_set_triangles_3d<Face>
 ::get_depth_range(float const direction[3],
                   float& depth_min, float& depth_max) const
 {
-  depth_min = vcl_numeric_limits<float>::infinity();
+  depth_min = std::numeric_limits<float>::infinity();
   depth_max = 0;
   for (unsigned int i=0; i < this->vertex_points_.size(); ++i)
   {
@@ -383,7 +385,7 @@ rgtl_sqt_object_set_triangles_3d<Face>
 ::get_depth_range(double const direction[3],
                   double& depth_min, double& depth_max) const
 {
-  depth_min = vcl_numeric_limits<double>::infinity();
+  depth_min = std::numeric_limits<double>::infinity();
   depth_max = 0;
   for (unsigned int i=0; i < this->vertex_points_.size(); ++i)
   {

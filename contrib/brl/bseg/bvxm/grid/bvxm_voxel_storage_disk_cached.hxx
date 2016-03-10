@@ -5,8 +5,10 @@
 
 #include "bvxm_voxel_storage_disk_cached.h"
 //
-#include <vcl_string.h>
-#include <vcl_iostream.h>
+#include <string>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iostream>
 #ifdef BVXM_USE_FSTREAM64
 #include <vil/vil_stream_fstream64.h>
 #else
@@ -20,7 +22,7 @@
 #include "bvxm_voxel_slab.h"
 
 template <class T>
-bvxm_voxel_storage_disk_cached<T>::bvxm_voxel_storage_disk_cached(vcl_string storage_filename, vgl_vector_3d<unsigned int> grid_size, vxl_int_64 max_cache_size)
+bvxm_voxel_storage_disk_cached<T>::bvxm_voxel_storage_disk_cached(std::string storage_filename, vgl_vector_3d<unsigned int> grid_size, vxl_int_64 max_cache_size)
 :  bvxm_voxel_storage<T>(grid_size), first_cache_slice_(-1), last_cache_slice_(-1), storage_fname_(storage_filename), fio_(0)
 {
   //set up cache
@@ -31,11 +33,11 @@ bvxm_voxel_storage_disk_cached<T>::bvxm_voxel_storage_disk_cached(vcl_string sto
   }
   vxl_int_64 cache_size = slice_size * n_cache_slices_;
 
-  vcl_cout << "allocating cache size of " << cache_size << " bytes ( " << n_cache_slices_ << " slices )." << vcl_endl;
+  std::cout << "allocating cache size of " << cache_size << " bytes ( " << n_cache_slices_ << " slices )." << std::endl;
 
   cache_mem_ = new bvxm_memory_chunk(cache_size);
   if (!cache_mem_) {
-    vcl_cerr << "ERROR allocating cache memory!\n";
+    std::cerr << "ERROR allocating cache memory!\n";
   }
 
   // check if file exists already or not
@@ -43,7 +45,7 @@ bvxm_voxel_storage_disk_cached<T>::bvxm_voxel_storage_disk_cached(vcl_string sto
     // make sure filename is not a directory
     bool is_dir = vul_file::is_directory(storage_fname_);
     if (is_dir) {
-      vcl_cerr << "error: directory name " << storage_fname_ << " passed to bvxm_voxel_storage_disk constructor.\n";
+      std::cerr << "error: directory name " << storage_fname_ << " passed to bvxm_voxel_storage_disk constructor.\n";
       return;
     }
     // read header and make sure that it matches given dimensions
@@ -55,7 +57,7 @@ bvxm_voxel_storage_disk_cached<T>::bvxm_voxel_storage_disk_cached(vcl_string sto
 #endif
 
     if (!fio_->ok()) {
-      vcl_cerr << "error opening " << storage_fname_ << " for read/write\n";
+      std::cerr << "error opening " << storage_fname_ << " for read/write\n";
       return;
     }
     bvxm_voxel_storage_header<T> header;
@@ -63,8 +65,8 @@ bvxm_voxel_storage_disk_cached<T>::bvxm_voxel_storage_disk_cached(vcl_string sto
     fio_->read(reinterpret_cast<char*>(&header),sizeof(header));
 
     if ((header.nx_ != grid_size.x()) || (header.ny_ != grid_size.y()) || (header.nz_ != grid_size.z())) {
-      vcl_cerr << "error: file on disk has size " << vgl_vector_3d<unsigned>(header.nx_,header.ny_,header.nz_) << vcl_endl
-               << "       size passed to constructor = " << grid_size << vcl_endl;
+      std::cerr << "error: file on disk has size " << vgl_vector_3d<unsigned>(header.nx_,header.ny_,header.nz_) << std::endl
+               << "       size passed to constructor = " << grid_size << std::endl;
       return;
     }
   }
@@ -78,7 +80,7 @@ template<class T>
 bvxm_voxel_storage_disk_cached<T>::~bvxm_voxel_storage_disk_cached()
 {
   // purge the cache
-  vcl_cout << " ------------ destructor: purging cache --------------" << vcl_endl;
+  std::cout << " ------------ destructor: purging cache --------------" << std::endl;
   purge_cache();
 
   // this will delete the stream object
@@ -98,10 +100,10 @@ bool bvxm_voxel_storage_disk_cached<T>::initialize_data(T const& value)
   // check if file exists already or not
   if (!(vul_file::exists(storage_fname_)))  {
     // make sure base directory exists
-    vcl_string base_dir = vul_file::dirname(storage_fname_);
+    std::string base_dir = vul_file::dirname(storage_fname_);
     bool base_dir_exists = vul_file::is_directory(base_dir);
     if (!base_dir_exists) {
-      vcl_cerr << "error: base directory " << base_dir << " does not exist.\n";
+      std::cerr << "error: base directory " << base_dir << " does not exist.\n";
       return false;
     }
   }
@@ -109,7 +111,7 @@ bool bvxm_voxel_storage_disk_cached<T>::initialize_data(T const& value)
     // make sure filename is not a directory
     bool is_dir = vul_file::is_directory(storage_fname_);
     if (is_dir) {
-      vcl_cerr << "error: directory name " << storage_fname_ << " passed to bvxm_voxel_storage_disk constructor.\n";
+      std::cerr << "error: directory name " << storage_fname_ << " passed to bvxm_voxel_storage_disk constructor.\n";
       return false;
     }
   }
@@ -125,7 +127,7 @@ bool bvxm_voxel_storage_disk_cached<T>::initialize_data(T const& value)
   init_slab.fill(value);
 
   if (!fio_->ok()) {
-    vcl_cerr << " error opening file " << storage_fname_ << " for write.\n";
+    std::cerr << " error opening file " << storage_fname_ << " for write.\n";
     return false;
   }
   // write the header
@@ -155,15 +157,15 @@ template <class T>
 bvxm_voxel_slab<T> bvxm_voxel_storage_disk_cached<T>::get_slab(unsigned slice_idx, unsigned slab_thickness)
 {
   if (slice_idx + slab_thickness > this->grid_size_.z()) {
-    vcl_cerr << "error: tried to get slab " << slice_idx
+    std::cerr << "error: tried to get slab " << slice_idx
              << " with thickness " << slab_thickness
-             << "; grid_size_.z() = " << this->grid_size_.z() << vcl_endl;
+             << "; grid_size_.z() = " << this->grid_size_.z() << std::endl;
     bvxm_voxel_slab<T> slab;
     return slab;
   }
   if (slab_thickness > n_cache_slices_) {
-    vcl_cerr << "error: tried to get slab with thickness > cache size\n"
-             << "  requested slab_thickness = " << slab_thickness << ", cache size = " << n_cache_slices_ << vcl_endl;
+    std::cerr << "error: tried to get slab with thickness > cache size\n"
+             << "  requested slab_thickness = " << slab_thickness << ", cache size = " << n_cache_slices_ << std::endl;
     bvxm_voxel_slab<T> slab;
     return slab;
   }
@@ -178,7 +180,7 @@ bvxm_voxel_slab<T> bvxm_voxel_storage_disk_cached<T>::get_slab(unsigned slice_id
     fill_cache(slice_idx);
     // make sure fill cache was successful
     if ( ((int)slice_idx < first_cache_slice_ ) || ((int)last_slice_idx > last_cache_slice_) ) {
-      vcl_cerr << "error: slices " << slice_idx << "through " << last_slice_idx << " still not in cache after fill.\n";
+      std::cerr << "error: slices " << slice_idx << "through " << last_slice_idx << " still not in cache after fill.\n";
       bvxm_voxel_slab<T> slab;
       return slab;
     }
@@ -212,7 +214,7 @@ bool bvxm_voxel_storage_disk_cached<T>::purge_cache()
     fio_ = new vil_stream_fstream(storage_fname_.c_str(),"rw");
 #endif
     if (!fio_->ok()) {
-      vcl_cerr << "error opening file " << storage_fname_ << " for read/write!\n";
+      std::cerr << "error opening file " << storage_fname_ << " for read/write!\n";
       return false;
     }
   }
@@ -222,7 +224,7 @@ bool bvxm_voxel_storage_disk_cached<T>::purge_cache()
     fio_->seek(slice_pos);
     file_pos = fio_->tell();
     if (file_pos != slice_pos) {
-      vcl_cerr << "error seeking to file position " << slice_pos << vcl_endl;
+      std::cerr << "error seeking to file position " << slice_pos << std::endl;
       return false;
     }
   }
@@ -247,7 +249,7 @@ bool bvxm_voxel_storage_disk_cached<T>::fill_cache(unsigned start_slice_idx)
     fio_ = new vil_stream_fstream(storage_fname_.c_str(),"rw");
 #endif
     if (!fio_->ok()) {
-      vcl_cerr << "error opening file " << storage_fname_ << " for read/write!\n";
+      std::cerr << "error opening file " << storage_fname_ << " for read/write!\n";
       return false;
     }
   }
@@ -294,7 +296,7 @@ unsigned bvxm_voxel_storage_disk_cached<T>::num_observations() const
     fio_ = new vil_stream_fstream(storage_fname_.c_str(),"rw");
 #endif
     if (!fio_->ok()) {
-      vcl_cerr << "error opening " << storage_fname_ << "for read/write\n";
+      std::cerr << "error opening " << storage_fname_ << "for read/write\n";
       return 0;
     }
   }
@@ -321,7 +323,7 @@ void bvxm_voxel_storage_disk_cached<T>::increment_observations()
     fio_ = new vil_stream_fstream(storage_fname_.c_str(),"rw");
 #endif
     if (!fio_->ok()) {
-      vcl_cerr << "error opening " << storage_fname_ << "for read/write\n";
+      std::cerr << "error opening " << storage_fname_ << "for read/write\n";
       return;
     }
   }
@@ -329,7 +331,7 @@ void bvxm_voxel_storage_disk_cached<T>::increment_observations()
   fio_->seek(0);
   vil_streampos pos = fio_->tell();
   if (pos != 0) {
-    vcl_cerr << "error seeking to beginning of file\n";
+    std::cerr << "error seeking to beginning of file\n";
     return;
   }
   bvxm_voxel_storage_header<T> header;
@@ -344,7 +346,7 @@ void bvxm_voxel_storage_disk_cached<T>::increment_observations()
   fio_->seek(0);
   pos = fio_->tell();
   if (pos != 0) {
-    vcl_cerr << "error seeking to beginning of file\n";
+    std::cerr << "error seeking to beginning of file\n";
     return;
   }
   // write
@@ -365,7 +367,7 @@ void bvxm_voxel_storage_disk_cached<T>::zero_observations()
     fio_ = new vil_stream_fstream(storage_fname_.c_str(),"rw");
 #endif
     if (!fio_->ok()) {
-      vcl_cerr << "error opening " << storage_fname_ << "for read/write\n";
+      std::cerr << "error opening " << storage_fname_ << "for read/write\n";
       return;
     }
   }
@@ -373,7 +375,7 @@ void bvxm_voxel_storage_disk_cached<T>::zero_observations()
   fio_->seek(0);
   vil_streampos pos = fio_->tell();
   if (pos != 0) {
-    vcl_cerr << "error seeking to beginning of file\n";
+    std::cerr << "error seeking to beginning of file\n";
     return;
   }
   bvxm_voxel_storage_header<T> header;
@@ -388,7 +390,7 @@ void bvxm_voxel_storage_disk_cached<T>::zero_observations()
   fio_->seek(0);
   pos = fio_->tell();
   if (pos != 0) {
-    vcl_cerr << "error seeking to beginning of file\n";
+    std::cerr << "error seeking to beginning of file\n";
     return;
   }
   // write

@@ -8,8 +8,8 @@
 //  the residuals that would be evaluated and the pop manager
 //  that is responsible for updating the graph based on the
 //  current parameter values.
-pop_graph_cost_function::pop_graph_cost_function(vcl_vector<pop_parameter*> &params,
-                                                 vcl_vector<pop_geometric_cost_function*> &cfs,
+pop_graph_cost_function::pop_graph_cost_function(std::vector<pop_parameter*> &params,
+                                                 std::vector<pop_geometric_cost_function*> &cfs,
                                                  pop_manager *manager):
   vnl_least_squares_function(params.size(),cfs.size(),no_gradient)
 {

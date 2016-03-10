@@ -10,8 +10,9 @@
 
 #include "vgui_deck_tableau.h"
 
-#include <vcl_iostream.h>
-#include <vcl_vector.h>
+#include <iostream>
+#include <vcl_compiler.h>
+#include <vector>
 
 #include <vgui/vgui_event.h>
 #include <vgui/vgui_menu.h>
@@ -68,7 +69,7 @@ bool vgui_deck_tableau::handle(const vgui_event& event)
 //  This function is called by the default handle() function in vgui_tableau.
 bool vgui_deck_tableau::help()
 {
-  vcl_cerr << "\n-- vgui_deck_tableau ----------------------------\n"
+  std::cerr << "\n-- vgui_deck_tableau ----------------------------\n"
            << "|     keys                                      |\n"
            << "| `PageUp' and `PageDown'  switch current child |\n"
            << "-------------------------------------------------\n\n";
@@ -83,7 +84,7 @@ bool vgui_deck_tableau::help()
 bool vgui_deck_tableau::key_press(int x, int y, vgui_key key, vgui_modifier)
 {
   if (debug)
-    vcl_cerr << "vgui_deck_tableau::key_press " << key << vcl_endl;
+    std::cerr << "vgui_deck_tableau::key_press " << key << std::endl;
 
   switch (key)
   {
@@ -130,7 +131,7 @@ bool vgui_deck_tableau::add_child(vgui_tableau_sptr const& t)
 void vgui_deck_tableau::remove(vgui_tableau_sptr const& t)
 {
   if (!remove_child(t))
-    vcl_cerr << __FILE__ " no such child tableau : " << t << vcl_endl;
+    std::cerr << __FILE__ " no such child tableau : " << t << std::endl;
 }
 
 //----------------------------------------------------------------------------
@@ -138,7 +139,7 @@ void vgui_deck_tableau::remove(vgui_tableau_sptr const& t)
 //  Override virtual base class  method
 bool vgui_deck_tableau::remove_child(vgui_tableau_sptr const& t)
 {
-  for (vcl_vector<vgui_parent_child_link>::iterator i = children.begin() ; i!=children.end() ; ++i)
+  for (std::vector<vgui_parent_child_link>::iterator i = children.begin() ; i!=children.end() ; ++i)
     if ( (*i) == t ) {
       children.erase(i);
       // Index must be allowed to go to -1 if all are deleted, so don't
@@ -183,7 +184,7 @@ void vgui_deck_tableau::index(int v)
 {
   if (index_ok(v)) index_ = v;
   if (debug)
-    vcl_cerr << "vgui_deck_tableau::index " << index_ << vcl_endl;
+    std::cerr << "vgui_deck_tableau::index " << index_ << std::endl;
   observers.notify();
 }
 
@@ -195,7 +196,7 @@ void vgui_deck_tableau::begin()
     index_ = 0;
 
   if (debug)
-    vcl_cerr << "vgui_deck_tableau::begin " << index_ << vcl_endl;
+    std::cerr << "vgui_deck_tableau::begin " << index_ << std::endl;
   observers.notify();
 }
 
@@ -214,7 +215,7 @@ void vgui_deck_tableau::next()
     index_=tmp;
 
   if (debug)
-    vcl_cerr << "vgui_deck_tableau::next " << index_ << vcl_endl;
+    std::cerr << "vgui_deck_tableau::next " << index_ << std::endl;
   observers.notify();
 }
 
@@ -233,7 +234,7 @@ void vgui_deck_tableau::prev()
     index_=tmp;
 
   if (debug)
-    vcl_cerr << "vgui_deck_tableau::prev " << index_ << vcl_endl;
+    std::cerr << "vgui_deck_tableau::prev " << index_ << std::endl;
   observers.notify();
 }
 
@@ -246,11 +247,11 @@ bool vgui_deck_tableau::index_ok(int v) const
 
 //----------------------------------------------------------------------------
 //: Returns the type of this tableau ('vgui_deck_tableau').
-vcl_string vgui_deck_tableau::type_name() const { return "vgui_deck_tableau"; }
+std::string vgui_deck_tableau::type_name() const { return "vgui_deck_tableau"; }
 
 //----------------------------------------------------------------------------
 //: Returns the filename of the currently active child tableau.
-vcl_string vgui_deck_tableau::file_name() const
+std::string vgui_deck_tableau::file_name() const
 {
   if (index_ok(index_)) {
     return children[index_]->file_name();
@@ -260,9 +261,9 @@ vcl_string vgui_deck_tableau::file_name() const
 
 //----------------------------------------------------------------------------
 //: Returns a nice version of the name, with info on the currently active child.
-vcl_string vgui_deck_tableau::pretty_name() const
+std::string vgui_deck_tableau::pretty_name() const
 {
-  vcl_string nice_name;
+  std::string nice_name;
   if (index_ok(index_)) {
     nice_name += "[current = ";
     nice_name += children[index_]->pretty_name();
@@ -294,7 +295,7 @@ void vgui_deck_tableau::get_popup(const vgui_popup_params& params,
   vgui_menu selections;
 
   int count = 0;
-  vcl_vector<vgui_parent_child_link>::iterator i = children.begin();
+  std::vector<vgui_parent_child_link>::iterator i = children.begin();
   for ( ; i!=children.end() ; ++i, ++count) {
     selections.add((*i)->file_name().c_str(),
                    new vgui_deck_switch_command(this,count));

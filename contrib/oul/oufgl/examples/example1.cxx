@@ -1,9 +1,11 @@
-#include <vcl_cstdlib.h>
-#include <vcl_cstring.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <cstdlib>
+#include <cstring>
 #include <vil1/vil1_memory_image.h>
 #include <vil1/vil1_save.h>
 #include <oufgl/frame_grabber_v4l.h>
-#include <vcl_iostream.h>
+#include <iostream>
 #include <getopt.h>
 #include <vul/vul_timer.h>
 
@@ -16,32 +18,32 @@ int main(int argc, char *argv[])
   int num_to_grab=1;
 
   const char * camera_name_default = "/dev/video0";
-  char * camera_name = new char[vcl_strlen(camera_name_default)+1];
-  vcl_strcpy (camera_name, camera_name_default);
+  char * camera_name = new char[std::strlen(camera_name_default)+1];
+  std::strcpy (camera_name, camera_name_default);
 
   while ((opt=getopt(argc, argv, "x:y:n:c:d")) != -1)
   {
     switch (opt)
     {
      case 'x':
-      width = vcl_atoi(optarg);
+      width = std::atoi(optarg);
       break;
      case 'y':
-      height = vcl_atoi(optarg);
+      height = std::atoi(optarg);
       break;
      case 'n':
-      num_to_grab = vcl_atoi(optarg);
+      num_to_grab = std::atoi(optarg);
       break;
      case 'c':
-      camera_name = new char[vcl_strlen(optarg)+1];
-      vcl_strcpy (camera_name, optarg);
+      camera_name = new char[std::strlen(optarg)+1];
+      std::strcpy (camera_name, optarg);
       break;
      case 'd':
       debug = !debug;
       break;
      default:
-      vcl_cout << "Usage: example1 [-x width] [-y height] [-n num_to_grab] [-c device_name] [-d]\n"
-               << "\t-d turn debug info on" << vcl_endl;
+      std::cout << "Usage: example1 [-x width] [-y height] [-n num_to_grab] [-c device_name] [-d]\n"
+               << "\t-d turn debug info on" << std::endl;
       break;
     }
   }
@@ -54,7 +56,7 @@ int main(int argc, char *argv[])
 
   long time_taken = t.real();
 
-  vcl_cout << "That took " << time_taken << " ms\n"
+  std::cout << "That took " << time_taken << " ms\n"
            << "which means "<< 1000.0*(double)num_to_grab/(double)time_taken
            << " frames per second\n";
 

@@ -1,5 +1,7 @@
 #include <testlib/testlib_test.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iostream>
 #include <vgl/vgl_point_3d.h>
 #include <vgl/vgl_homg_point_3d.h>
 #include <vgl/vgl_distance.h>
@@ -14,10 +16,10 @@ static void test_interpolate()
   // test log and exp on identity
   vnl_double_3x3 I;
   I.set_identity();
-  vcl_cout << "I\n" << I;
+  std::cout << "I\n" << I;
   vnl_double_3x3 lR = bpgl_interpolate::logR(I);
   vnl_double_3x3 elR=bpgl_interpolate::expr(lR);
-  vcl_cout << "log(I)\n" << lR
+  std::cout << "log(I)\n" << lR
            << "exp(log(I))\n" << elR;
   vnl_double_3x3 dif = I - elR;
   double tolerance = 1.0e-8;
@@ -27,10 +29,10 @@ static void test_interpolate()
   //test log and exp on 180 degrees
   I[0][0]=-1;   I[0][1]=0;
   I[1][0]=0;   I[1][1]=-1;
-  vcl_cout << "PI\n" << I;
+  std::cout << "PI\n" << I;
   lR = bpgl_interpolate::logR(I);
   elR=bpgl_interpolate::expr(lR);
-  vcl_cout << "log(PI)\n" << lR
+  std::cout << "log(PI)\n" << lR
            << "exp(log(PI))\n" << elR;
   dif = I - elR;
   TEST_NEAR("Lie operations on pi", dif.frobenius_norm(), 0.0, tolerance);
@@ -39,10 +41,10 @@ static void test_interpolate()
   double s2 = vnl_math::sqrt1_2;
   I[0][0]=s2;   I[0][1]=-s2;
   I[1][0]=s2;   I[1][1]=s2;
-  vcl_cout << "45I\n" << I;
+  std::cout << "45I\n" << I;
   vnl_double_3x3 lR45 = bpgl_interpolate::logR(I);
   elR=bpgl_interpolate::expr(lR45);
-  vcl_cout << "log(45I)\n" << lR45
+  std::cout << "log(45I)\n" << lR45
            << "exp(log(45I))\n" << elR;
   dif = I - elR;
   TEST_NEAR("Lie operations on pi/4", dif.frobenius_norm(), 0.0, tolerance);
@@ -51,12 +53,12 @@ static void test_interpolate()
   //==========test rotation interpolation==========
   vnl_double_3x3 Rm0 = R0.as_matrix();
   vnl_double_3x3 Rm1 = R1.as_matrix();
-  vcl_vector<vnl_double_3x3> Rintrps =
+  std::vector<vnl_double_3x3> Rintrps =
     bpgl_interpolate::interpolateR(Rm0, Rm1, 1);
   vnl_double_3x3 Rintrp = Rintrps[0];
-  vcl_cout << "Interpolated R\n" << Rintrp << '\n';
-  double interp_angle = vcl_acos(Rintrp[0][0]);
-  vcl_cout << "Interpolated angle = " << vnl_math::deg_per_rad*interp_angle << '\n';
+  std::cout << "Interpolated R\n" << Rintrp << '\n';
+  double interp_angle = std::acos(Rintrp[0][0]);
+  std::cout << "Interpolated angle = " << vnl_math::deg_per_rad*interp_angle << '\n';
   TEST_NEAR("Interpolated rotation",interp_angle, 0.392699082,1e-8);
 
   //====test with real camera rotations computed from a video sequence====
@@ -67,13 +69,13 @@ static void test_interpolate()
   //test if the basic interpolation solution is valid
    Rm0 = R0.as_matrix(); Rm1 = R1.as_matrix();
    vnl_double_3x3 tm = Rm0.transpose()*Rm1;
-   vcl_cout << "R0tR1\n"
+   std::cout << "R0tR1\n"
             << '\n'<< tm << '\n';
    lR = bpgl_interpolate::logR(tm);
-   vcl_cout << "Log(R0tR1)\n"
+   std::cout << "Log(R0tR1)\n"
             << '\n'<< lR << '\n';
    elR=bpgl_interpolate::expr(lR);
-   vcl_cout << "Should be R1\n"
+   std::cout << "Should be R1\n"
             << '\n'<< Rm0*elR << '\n';
    dif = Rm1 - Rm0*elR;
 
@@ -99,11 +101,11 @@ static void test_interpolate()
   vpgl_perspective_camera<double> cam0(K,c0,R0);
 
   vpgl_perspective_camera<double> cam1(K,c1,R1);
-  vcl_vector<vpgl_perspective_camera<double> > cams;
+  std::vector<vpgl_perspective_camera<double> > cams;
   bool success = bpgl_interpolate::interpolate(cam0, cam1, 1, cams);
   if (success)
     for (unsigned i = 0; i<cams.size(); ++i)
-      vcl_cout << cams[i];
+      std::cout << cams[i];
   vpgl_perspective_camera<double> cam_interp = cams[0];
   vgl_point_3d<double> ci = cam_interp.get_camera_center();
   vgl_point_3d<double> cact(5,5,-5);

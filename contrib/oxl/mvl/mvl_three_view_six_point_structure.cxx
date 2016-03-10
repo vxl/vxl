@@ -8,7 +8,9 @@
 
 #include "mvl_three_view_six_point_structure.h"
 
-#include <vcl_cmath.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <cmath>
 
 #include <vnl/algo/vnl_svd.h>
 #include <vnl/algo/vnl_rpoly_roots.h>
@@ -49,7 +51,7 @@ bool mvl_three_view_six_point_structure::compute()
   mvl_psi_constraint_restrict(&p[0], &q[0], &coeffs[0]);
 
   // solve the cubic on the pencil.
-  if (vcl_abs(coeffs[0]) > vcl_abs(coeffs[3])) {
+  if (std::abs(coeffs[0]) > std::abs(coeffs[3])) {
     coeffs.flip();
     swap(p, q);
   }
@@ -59,7 +61,7 @@ bool mvl_three_view_six_point_structure::compute()
     // extract solution, if (approximately) real.
     double re = roots.real(k);
     double im = roots.imag(k);
-    if (/* im != 0 */vcl_abs(im) > 0.03 * vcl_abs(re)) {
+    if (/* im != 0 */std::abs(im) > 0.03 * std::abs(re)) {
       solution[k].valid = false;
       //solution[k].clear();
       continue;

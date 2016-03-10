@@ -12,10 +12,10 @@
 // This means checking that the X_HIGH of one and X_LOW of other have the same x code and vice versa.
 // This function is used in one of the tests.
 void brute_force_test_neighbor(boct_tree_cell<short,vgl_point_3d<double> >* cell,
-                               vcl_vector<boct_tree_cell<short,vgl_point_3d<double> >*> leaf_nodes,
+                               std::vector<boct_tree_cell<short,vgl_point_3d<double> >*> leaf_nodes,
                                const boct_face_idx face,
                                int max_level,
-                               vcl_vector<boct_tree_cell<short,vgl_point_3d<double> >*> & neighbors)
+                               std::vector<boct_tree_cell<short,vgl_point_3d<double> >*> & neighbors)
 {
     double cellsize=(double)(1<<cell->level())/(double)(1<<(max_level-1));
 
@@ -79,7 +79,7 @@ static void test_find_neighbors()
   vgl_point_3d<double> p1(0.1,0.1,0.1);
   boct_tree_cell<short,vgl_point_3d<double> >* cell=block->locate_point(p1);
 
-  vcl_vector<boct_tree_cell<short,vgl_point_3d<double> >*> n;
+  std::vector<boct_tree_cell<short,vgl_point_3d<double> >*> n;
   cell->find_neighbors(X_HIGH,n,9);
 
   // ground truth for the code of the neighbor
@@ -106,14 +106,14 @@ static void test_find_neighbors()
   boct_tree<short,vgl_point_3d<double> >* tree3=new boct_tree<short,vgl_point_3d<double> >(nlevels);
   create_random_configuration_tree(tree3);
   //tree3->print();
-  vcl_vector<boct_tree_cell<short,vgl_point_3d<double> >*> leaf_nodes=tree3->leaf_cells();
+  std::vector<boct_tree_cell<short,vgl_point_3d<double> >*> leaf_nodes=tree3->leaf_cells();
   vgl_point_3d<double> p_z_low(0.6,0.1,0.1);
   boct_tree_cell<short,vgl_point_3d<double> >* cell_zlow=tree3->locate_point(p_z_low);
 
   n.clear();
   cell_zlow->find_neighbors(Y_HIGH,n,9);
 
-  vcl_vector<boct_tree_cell<short,vgl_point_3d<double> >*> n_brute_force;
+  std::vector<boct_tree_cell<short,vgl_point_3d<double> >*> n_brute_force;
 
   brute_force_test_neighbor(cell_zlow,leaf_nodes,Y_HIGH,nlevels, n_brute_force);
 

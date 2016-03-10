@@ -15,7 +15,8 @@
 #include <vpdl/vpdl_multi_cmp_dist.h>
 #include <vpdl/vpdt/vpdt_access.h> // function vpdt_size(v)
 #include <vcl_cassert.h>
-#include <vcl_vector.h>
+#include <vcl_compiler.h>
+#include <vector>
 
 //: A base class for kernel (aka Parzen window) distributions
 // A kernel distribution is restricted form of a mixture where each component
@@ -35,7 +36,7 @@ class vpdl_kernel_base : public vpdl_multi_cmp_dist<T,n>
   vpdl_kernel_base()  {}
 
   // Constructor from sample points
-  vpdl_kernel_base(const vcl_vector<vector>& samplez)
+  vpdl_kernel_base(const std::vector<vector>& samplez)
   : samples_(samplez) {}
 
   //: Return the number of components in the mixture
@@ -64,13 +65,13 @@ class vpdl_kernel_base : public vpdl_multi_cmp_dist<T,n>
   }
 
   //: Set the collection of sample points
-  virtual void set_samples(const vcl_vector<vector>& samplez)
+  virtual void set_samples(const std::vector<vector>& samplez)
   {
     samples_ = samplez;
   }
 
   //: Access the sample points
-  const vcl_vector<vector>& samples() const
+  const std::vector<vector>& samples() const
   {
     return samples_;
   }
@@ -84,7 +85,7 @@ class vpdl_kernel_base : public vpdl_multi_cmp_dist<T,n>
     vpdt_fill(mean,T(0));
     if (samples_.empty())
       return;
-    typedef typename vcl_vector<vector>::const_iterator samp_itr;
+    typedef typename std::vector<vector>::const_iterator samp_itr;
     for (samp_itr s = samples_.begin(); s != samples_.end(); ++s) {
       mean += *s;
     }
@@ -93,7 +94,7 @@ class vpdl_kernel_base : public vpdl_multi_cmp_dist<T,n>
 
  private:
   //: The sample points around which the kernels are centered
-  vcl_vector<vector> samples_;
+  std::vector<vector> samples_;
 };
 
 
@@ -113,7 +114,7 @@ class vpdl_kernel_fbw_base : public vpdl_kernel_base<T,n>
   : bandwidth_(T(1)) {}
 
   // Constructor from sample points and a bandwidth
-  vpdl_kernel_fbw_base(const vcl_vector<vector>& samplez, T bandwid = T(1))
+  vpdl_kernel_fbw_base(const std::vector<vector>& samplez, T bandwid = T(1))
   : vpdl_kernel_base<T,n>(samplez), bandwidth_(bandwid) {}
 
   //: Access the bandwidth
@@ -155,8 +156,8 @@ class vpdl_kernel_vbw_base : public vpdl_kernel_base<T,n>
   : vpdl_kernel_base<T,n>(var_dim) {}
 
   // Constructor from sample points and bandwidths
-  vpdl_kernel_vbw_base(const vcl_vector<vector>& samplez,
-                       const vcl_vector<T>& bandwidthz)
+  vpdl_kernel_vbw_base(const std::vector<vector>& samplez,
+                       const std::vector<T>& bandwidthz)
   : vpdl_kernel_base<T,n>(samplez), bandwidths_(bandwidthz) {}
 
   //: Add a new sample point
@@ -181,7 +182,7 @@ class vpdl_kernel_vbw_base : public vpdl_kernel_base<T,n>
   }
 
   //: Set the collection of sample points
-  virtual void set_samples(const vcl_vector<vector>& samplez)
+  virtual void set_samples(const std::vector<vector>& samplez)
   {
     vpdl_kernel_base<T,n>::set_samples(samplez);
     bandwidths_.clear();
@@ -189,8 +190,8 @@ class vpdl_kernel_vbw_base : public vpdl_kernel_base<T,n>
   }
 
   //: Set the collection of sample points and bandwidths
-  virtual void set_samples(const vcl_vector<vector>& samplez,
-                           const vcl_vector<T>& bandwidthz)
+  virtual void set_samples(const std::vector<vector>& samplez,
+                           const std::vector<T>& bandwidthz)
   {
     assert(samplez.size() == bandwidthz.size());
     vpdl_kernel_base<T,n>::set_samples(samplez);
@@ -198,11 +199,11 @@ class vpdl_kernel_vbw_base : public vpdl_kernel_base<T,n>
   }
 
   //: Access the bandwidths
-  const vcl_vector<T>& bandwidths() const { return bandwidths_; }
+  const std::vector<T>& bandwidths() const { return bandwidths_; }
 
  private:
   //: the bandwidths for each kernel
-  vcl_vector<T> bandwidths_;
+  std::vector<T> bandwidths_;
 };
 
 

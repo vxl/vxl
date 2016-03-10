@@ -9,7 +9,9 @@
 #include <vpdfl/vpdfl_builder_base.h>
 #include <mbl/mbl_cloneable_ptr.h>
 #include <mbl/mbl_chord.h>
-#include <vcl_iosfwd.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iosfwd>
 #include <mfpf/mfpf_region_form.h>
 #include <vgl/vgl_fwd.h>
 
@@ -34,10 +36,10 @@ class mfpf_region_pdf_builder : public mfpf_point_finder_builder
   double ref_y_;
 
   //: String defining shape of region, eg "box" or "ellipse"
-  vcl_string shape_;
+  std::string shape_;
 
   //: Chords defining the region of interest
-  vcl_vector<mbl_chord> roi_;
+  std::vector<mbl_chord> roi_;
 
   //: Size of bounding box of region of interest
   unsigned roi_ni_;
@@ -54,7 +56,7 @@ class mfpf_region_pdf_builder : public mfpf_point_finder_builder
   short norm_method_;
 
   //: Samples added in calls to add_example()
-  vcl_vector<vnl_vector<double> > data_;
+  std::vector<vnl_vector<double> > data_;
 
   //: Number of angles either side of 0 to sample at
   unsigned nA_;
@@ -79,11 +81,11 @@ class mfpf_region_pdf_builder : public mfpf_point_finder_builder
 
   //: Parse stream to set up as a box shape.
   // Expects: "{ ni: 3 nj: 5 ref_x: 1.0 ref_y: 2.0 }
-  void config_as_box(vcl_istream &is);
+  void config_as_box(std::istream &is);
 
   //: Parse stream to set up as an ellipse shape.
   // Expects: "{ ri: 2.1 rj: 5.2 }
-  void config_as_ellipse(vcl_istream &is);
+  void config_as_ellipse(std::istream &is);
 
   //: Add one example to the model
   void add_one_example(const vimt_image_2d_of<float>& image,
@@ -129,7 +131,7 @@ class mfpf_region_pdf_builder : public mfpf_point_finder_builder
   unsigned n_pixels() const { return n_pixels_; }
 
   //: String defining shape of region, eg "box" or "ellipse"
-  const vcl_string& shape() const { return shape_; }
+  const std::string& shape() const { return shape_; }
 
   //: Builder for PDF
   vpdfl_builder_base& pdf_builder() { return pdf_builder_; }
@@ -150,19 +152,19 @@ class mfpf_region_pdf_builder : public mfpf_point_finder_builder
   virtual void build(mfpf_point_finder&);
 
   //: Initialise from a string stream
-  virtual bool set_from_stream(vcl_istream &is);
+  virtual bool set_from_stream(std::istream &is);
 
   //: Name of the class
-  virtual vcl_string is_a() const;
+  virtual std::string is_a() const;
 
   //: Create a copy on the heap and return base class pointer
   virtual mfpf_point_finder_builder* clone() const;
 
   //: Print class to os
-  virtual void print_summary(vcl_ostream& os) const;
+  virtual void print_summary(std::ostream& os) const;
 
   //: Prints ASCII representation of shape to os
-  void print_shape(vcl_ostream& os) const;
+  void print_shape(std::ostream& os) const;
 
   //: Version number for I/O
   short version_no() const;

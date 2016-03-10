@@ -15,7 +15,8 @@
 #include <vcsl/vcsl_axis_sptr.h>
 #include <vcsl/vcsl_unit_sptr.h>
 #include <vcsl/vcsl_dimension_sptr.h>
-#include <vcl_string.h>
+#include <vcl_compiler.h>
+#include <string>
 
 //: Axis descriptor: a dimension, a unit, a label
 class vcsl_axis
@@ -40,7 +41,7 @@ class vcsl_axis
   //: Constructor from dimension, unit and label
   vcsl_axis(vcsl_dimension_sptr const& new_dimension,
             vcsl_unit_sptr const& new_unit,
-            vcl_string const& new_label)
+            std::string const& new_label)
     : dimension_(new_dimension), unit_(new_unit), label_(new_label) {}
 
   // Copy constructor
@@ -61,7 +62,7 @@ class vcsl_axis
   vcsl_unit_sptr unit() const { return unit_; }
 
   //: Return the label of the axis
-  vcl_string label() const { return label_; }
+  std::string label() const { return label_; }
 
   //***************************************************************************
   // Status change
@@ -80,7 +81,7 @@ class vcsl_axis
   void set_unit(vcsl_unit_sptr const& new_unit);
 
   //: Set the label
-  void set_label(vcl_string const& new_label) { label_=new_label; }
+  void set_label(std::string const& new_label) { label_=new_label; }
 
  protected:
   //***************************************************************************
@@ -94,7 +95,7 @@ class vcsl_axis
   vcsl_unit_sptr unit_;
 
   //: Label of the axis
-  vcl_string label_;
+  std::string label_;
 };
 
 #endif // vcsl_axis_h_

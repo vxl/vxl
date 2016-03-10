@@ -1,8 +1,9 @@
 // This is core/vcsl/vcsl_matrix.cxx
 #include "vcsl_matrix.h"
 #include <vcl_cassert.h>
-#include <vcl_cmath.h> // for cos(), sin()
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <cmath> // for cos(), sin()
+#include <iostream>
 
 //---------------------------------------------------------------------------
 // Is `this' invertible at time `time'?
@@ -97,18 +98,18 @@ vnl_matrix<double> vcsl_matrix::param_to_matrix(vcsl_matrix_param_sptr from,bool
   vnl_matrix<double> T(3, 4, 0.0);
   T(0,0) = 1.0; T(1,1) = 1.0; T(2,2) = 1.0;
   T(0,3) = -coef*from->xl; T(1,3) = -coef*from->yl; T(2,3) = -coef*from->zl;
-  vcl_cout << "Translation:\n" << T;
+  std::cout << "Translation:\n" << T;
   // Rotation matrix (Extrinsic parameters)
-  double co = vcl_cos(coef*from->omega), so = vcl_sin(coef*from->omega);
-  double cp = vcl_cos(coef*from->phi),   sp = vcl_sin(coef*from->phi);
-  double ck = vcl_cos(coef*from->kappa), sk = vcl_sin(coef*from->kappa);
+  double co = std::cos(coef*from->omega), so = std::sin(coef*from->omega);
+  double cp = std::cos(coef*from->phi),   sp = std::sin(coef*from->phi);
+  double ck = std::cos(coef*from->kappa), sk = std::sin(coef*from->kappa);
   vnl_matrix<double> R(4, 4, 0.0);
   R(0,0) = cp*ck; R(0,1) = so*sp*ck+co*sk; R(0,2) = -co*sp*ck+so*sk;
   R(1,0) = -cp*sk; R(1,1) = -so*sp*sk+co*ck;  R(1,2) = co*sp*sk+so*ck;
   R(2,0) = sp; R(2,1) = -so*cp; R(2,2) = co*cp;
   R(3,0)=R(3,1)=R(3,2)=R(0,3)=R(1,3)=R(2,3)=0;
   R(3,3)=1;
-  vcl_cout << "Rotation:\n" << R;
+  std::cout << "Rotation:\n" << R;
 
   if (type)
     return T*R;

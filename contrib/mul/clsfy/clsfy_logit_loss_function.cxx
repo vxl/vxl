@@ -36,7 +36,7 @@ double clsfy_logit_loss_function::f(vnl_vector<double> const& v)
   for (unsigned i=0;i<x_.size();++i,x_.next())
   {
     double z = c_[i]*dot1(v,x_.current());
-    sum -= a*vcl_log(min_p_+(1-min_p_)/(1+vcl_exp(-z)) );
+    sum -= a*std::log(min_p_+(1-min_p_)/(1+std::exp(-z)) );
   }
   return sum;
 }
@@ -63,7 +63,7 @@ void clsfy_logit_loss_function::gradf(vnl_vector<double> const& v,
   for (unsigned i=0;i<x_.size();++i,x_.next())
   {
     double z = c_[i]*dot1(v,x_.current());
-    double ez = vcl_exp(-1*z);
+    double ez = std::exp(-1*z);
     double sz=1/(1+ez);
     double fi = min_p_+(1-min_p_)*sz;
     double k = a*(1-min_p_)*ez*sz*sz*c_[i]/fi;
@@ -105,10 +105,10 @@ void clsfy_logit_loss_function::compute(vnl_vector<double> const& v,
   for (unsigned i=0;i<x_.size();++i,x_.next())
   {
     double z = c_[i]*dot1(v,x_.current());
-    double ez = vcl_exp(-1*z);
+    double ez = std::exp(-1*z);
     double sz=1/(1+ez);
     double fi = min_p_+(1-min_p_)*sz;
-    sum -= a*vcl_log(fi);
+    sum -= a*std::log(fi);
     double k = a*(1-min_p_)*ez*sz*sz*c_[i]/fi;
 
     // Update gradient with k*x (extending x by 1 in first element)

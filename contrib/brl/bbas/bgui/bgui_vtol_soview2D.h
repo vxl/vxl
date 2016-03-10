@@ -13,8 +13,10 @@
 //   J.L. Mundy November 28, 2002    Initial version.
 // \endverbatim
 //--------------------------------------------------------------------------------
-#include <vcl_vector.h>
-#include <vcl_iosfwd.h>
+#include <vector>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iosfwd>
 #include <vsol/vsol_line_2d_sptr.h>
 #include <vdgl/vdgl_digital_curve_sptr.h>
 #include <vtol/vtol_edge_2d.h>
@@ -32,10 +34,10 @@ class bgui_vtol_soview2D_point : public vgui_soview2D_point
   bgui_vtol_soview2D_point(){}
 
   //: Print details about this vtol_point to the given stream.
-  virtual vcl_ostream& print(vcl_ostream&) const;
+  virtual std::ostream& print(std::ostream&) const;
 
   //: Returns the type of this class ('bgui_vtol_soview2D_point').
-  vcl_string type_name() const { return "bgui_vtol_soview2D_point"; }
+  std::string type_name() const { return "bgui_vtol_soview2D_point"; }
 };
 
 //: vdgl_dotted_digital_curve (maybe later move to a geometry tableau)
@@ -50,10 +52,10 @@ class bgui_vtol_soview2D_dotted_digital_curve : public vgui_soview2D_group
   bgui_vtol_soview2D_dotted_digital_curve(vdgl_digital_curve_sptr const& e);
 
   //: Print details about this vdgl_digital_curve to the given stream.
-  virtual vcl_ostream& print(vcl_ostream&) const;
+  virtual std::ostream& print(std::ostream&) const;
 
   //: Returns the type of this class ('bgui_vtol_soview2D_dotted_digital_curve').
-  vcl_string type_name() const { return "bgui_vtol_soview2D_dotted_digital_curve"; }
+  std::string type_name() const { return "bgui_vtol_soview2D_dotted_digital_curve"; }
 };
 
 //: vdgl_digital_curve (maybe later move to a geometry tableau)
@@ -67,10 +69,10 @@ class bgui_vtol_soview2D_digital_curve : public vgui_soview2D_linestrip
   bgui_vtol_soview2D_digital_curve(vdgl_digital_curve_sptr const& e);
 
   //: Print details about this vdgl_digital_curve to the given stream.
-  virtual vcl_ostream& print(vcl_ostream&) const;
+  virtual std::ostream& print(std::ostream&) const;
 
   //: Returns the type of this class ('bgui_vtol_soview2D_digital_curve').
-  vcl_string type_name() const { return "bgui_vtol_soview2D_digital_curve"; }
+  std::string type_name() const { return "bgui_vtol_soview2D_digital_curve"; }
 };
 
 //: vtol_vertex_2d
@@ -83,10 +85,10 @@ class bgui_vtol_soview2D_vertex : public vgui_soview2D_point
   bgui_vtol_soview2D_vertex(){}
 
   //: Print details about this vtol_vertex_2d to the given stream.
-  virtual vcl_ostream& print(vcl_ostream&) const;
+  virtual std::ostream& print(std::ostream&) const;
 
   //: Returns the type of this class ('bgui_vtol_soview2D_vertex').
-  vcl_string type_name() const { return "bgui_vtol_soview2D_vertex"; }
+  std::string type_name() const { return "bgui_vtol_soview2D_vertex"; }
 };
 
 class bgui_vtol_soview2D_line_seg : public vgui_soview2D_lineseg
@@ -99,7 +101,7 @@ class bgui_vtol_soview2D_line_seg : public vgui_soview2D_lineseg
   bgui_vtol_soview2D_line_seg(vsol_line_2d_sptr const& seg);
 
   //: Returns the type of this class ('bgui_vtol_soview2D_edge').
-  vcl_string type_name() const { return "bgui_vtol_soview2D_line_seg"; }
+  std::string type_name() const { return "bgui_vtol_soview2D_line_seg"; }
 };
 
 class bgui_vtol_soview2D_edge : public vgui_soview2D_linestrip
@@ -112,10 +114,10 @@ class bgui_vtol_soview2D_edge : public vgui_soview2D_linestrip
   bgui_vtol_soview2D_edge(vtol_edge_2d_sptr const& e);
 
   //: Print details about this vtol_edge_2d to the given stream.
-  virtual vcl_ostream& print(vcl_ostream&) const;
+  virtual std::ostream& print(std::ostream&) const;
 
   //: Returns the type of this class ('bgui_vtol_soview2D_edge').
-  vcl_string type_name() const { return "bgui_vtol_soview2D_edge"; }
+  std::string type_name() const { return "bgui_vtol_soview2D_edge"; }
 };
 
 class bgui_vtol_soview2D_edge_group : public vgui_soview2D_group
@@ -125,13 +127,13 @@ class bgui_vtol_soview2D_edge_group : public vgui_soview2D_group
   bgui_vtol_soview2D_edge_group() {}
 
   //: Constructor - creates a view of a vtol_edge_2d group
-  bgui_vtol_soview2D_edge_group(vcl_vector<vtol_edge_2d_sptr>& edges);
+  bgui_vtol_soview2D_edge_group(std::vector<vtol_edge_2d_sptr>& edges);
 
   //: Print details about this vtol_edge_2d  group to the given stream.
-  virtual vcl_ostream& print(vcl_ostream&) const;
+  virtual std::ostream& print(std::ostream&) const;
 
   //: Returns the type of this class ('bgui_vtol_soview2D_edge_group').
-  vcl_string type_name() const { return "bgui_vtol_soview2D_edge_group"; }
+  std::string type_name() const { return "bgui_vtol_soview2D_edge_group"; }
 };
 
 class bgui_vtol_soview2D_face : public vgui_soview2D_group
@@ -144,10 +146,10 @@ class bgui_vtol_soview2D_face : public vgui_soview2D_group
   bgui_vtol_soview2D_face(vtol_face_2d_sptr const& f);
 
   //: Print details about this vtol_face_2d to the given stream.
-  virtual vcl_ostream& print(vcl_ostream&) const;
+  virtual std::ostream& print(std::ostream&) const;
 
   //: Returns the type of this class ('bgui_vtol_soview2D_face').
-  vcl_string type_name() const { return "bgui_vtol_soview2D_face"; }
+  std::string type_name() const { return "bgui_vtol_soview2D_face"; }
 };
 
 #endif // bgui_vtol_soview2D_h_

@@ -11,7 +11,8 @@
 //     15 Apr 2009 Created (A. Garrido)
 //\endverbatim
 
-#include <vcl_vector.h>
+#include <vcl_compiler.h>
+#include <vector>
 #include "vidl_v4l2_device.h"
 #include "vidl_v4l2_device_sptr.h"
 
@@ -27,7 +28,7 @@
 // \see vidl_v4l2_device
 class vidl_v4l2_devices
 {
-  vcl_vector<vidl_v4l2_device_sptr> vecdev;
+  std::vector<vidl_v4l2_device_sptr> vecdev;
   vidl_v4l2_devices();
   void load_devices(const char *name);
  public:

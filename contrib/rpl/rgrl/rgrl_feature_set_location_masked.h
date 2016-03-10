@@ -43,7 +43,7 @@ class rgrl_feature_set_location_masked
 
   //:  Return the type of feature
   virtual
-  const vcl_type_info&
+  const std::type_info&
   type() const
   { return fea_set_sptr_->type(); }
 

@@ -7,7 +7,9 @@
 // \author Andrew Miller
 // \date Jan 29, 2012
 
-#include <vcl_fstream.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <fstream>
 #include <boxm2/io/boxm2_cache.h>
 #include <boxm2/boxm2_scene.h>
 #include <boxm2/boxm2_block.h>
@@ -34,14 +36,14 @@ bool boxm2_cpp_points_to_volume_process_cons(bprb_func_process& pro)
   using namespace boxm2_cpp_points_to_volume_process_globals;
 
   //process inputs
-  vcl_vector<vcl_string> input_types_(n_inputs_);
+  std::vector<std::string> input_types_(n_inputs_);
   input_types_[0] = "boxm2_scene_sptr"; //input scene to be written to
   input_types_[1] = "boxm2_cache_sptr"; //cache used
   input_types_[2] = "vcl_string";       //path to ply file
 
   // process has 0 output:
   // output[0]: scene sptr
-  vcl_vector<vcl_string>  output_types_(n_outputs_);
+  std::vector<std::string>  output_types_(n_outputs_);
   bool good =pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
 
   //default value
@@ -53,23 +55,23 @@ bool boxm2_cpp_points_to_volume_process(bprb_func_process& pro)
   using namespace boxm2_cpp_points_to_volume_process_globals;
 
   if ( pro.n_inputs() < n_inputs_ ) {
-    vcl_cout << pro.name() << ": The input number should be " << n_inputs_<< vcl_endl;
+    std::cout << pro.name() << ": The input number should be " << n_inputs_<< std::endl;
     return false;
   }
   //get the inputs
   unsigned i = 0;
   boxm2_scene_sptr scene = pro.get_input<boxm2_scene_sptr>(i++);
   boxm2_cache_sptr cache = pro.get_input<boxm2_cache_sptr>(i++);
-  vcl_string point_file  = pro.get_input<vcl_string>(i++);
+  std::string point_file  = pro.get_input<std::string>(i++);
 
   //load point file
   imesh_mesh points;
   bool loaded = imesh_read( point_file, points);
   if(!loaded) {
-    vcl_cout<<"points to volume could not load file: "<<point_file<<vcl_endl;
+    std::cout<<"points to volume could not load file: "<<point_file<<std::endl;
     return false;
   }
-  vcl_cout<<"point cloud loaded of size: "<<points.num_verts()<<vcl_endl;
+  std::cout<<"point cloud loaded of size: "<<points.num_verts()<<std::endl;
 
   //fill out the volume and save
   boxm2_points_to_volume points2volume(scene, cache, points);

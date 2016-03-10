@@ -19,7 +19,7 @@ boxm_block_vis_graph_iterator<T>::boxm_block_vis_graph_iterator(vpgl_camera_doub
   for (; !iter.end(); iter++) {
     boxm_block<T>* block = *iter;
     if (boxm_utils::is_visible(block->bounding_box(), cam, img_ni, img_nj))
-      vis_graph_.insert(vcl_make_pair<vgl_point_3d<int>,boxm_block_vis_graph_node<T> >(iter.index(),boxm_block_vis_graph_node<T>()));
+      vis_graph_.insert(std::make_pair<vgl_point_3d<int>,boxm_block_vis_graph_node<T> >(iter.index(),boxm_block_vis_graph_node<T>()));
   }
 
   typename vis_graph_type::iterator vis_iter;
@@ -121,12 +121,12 @@ boxm_block_vis_graph_iterator<T>::boxm_block_vis_graph_iterator(vpgl_camera_doub
 template <class T>
 bool boxm_block_vis_graph_iterator<T>::next()
 {
-  typename vcl_vector<typename vis_graph_type::iterator>::iterator block_iter = curr_blocks_.begin();
-  vcl_vector<typename vis_graph_type::iterator> to_process;
+  typename std::vector<typename vis_graph_type::iterator>::iterator block_iter = curr_blocks_.begin();
+  std::vector<typename vis_graph_type::iterator> to_process;
 
   for (; block_iter != curr_blocks_.end(); block_iter++) {
-    //vcl_cout << (*block_iter)->first;
-    //vcl_cout << (*block_iter)->second.in_count << vcl_endl;
+    //std::cout << (*block_iter)->first;
+    //std::cout << (*block_iter)->second.in_count << std::endl;
     if (--((*block_iter)->second.in_count) == 0)
       to_process.push_back(*block_iter);
   }
@@ -137,7 +137,7 @@ bool boxm_block_vis_graph_iterator<T>::next()
   }
   to_process_indices_.resize(to_process.size());
 
-  vcl_vector<vgl_point_3d<int> >::iterator to_proc_it = to_process_indices_.begin();
+  std::vector<vgl_point_3d<int> >::iterator to_proc_it = to_process_indices_.begin();
   for (block_iter = to_process.begin(); block_iter != to_process.end(); ++block_iter, ++to_proc_it) {
     *to_proc_it = (*block_iter)->first;
   }
@@ -145,8 +145,8 @@ bool boxm_block_vis_graph_iterator<T>::next()
   // add linked blocks to list for next iteration
   curr_blocks_.clear();
   for (block_iter = to_process.begin(); block_iter != to_process.end(); ++block_iter) {
-    vcl_vector<typename vis_graph_type::iterator > &links = (*block_iter)->second.out_links;
-    typename vcl_vector<typename vis_graph_type::iterator >::iterator neighbor_it = links.begin();
+    std::vector<typename vis_graph_type::iterator > &links = (*block_iter)->second.out_links;
+    typename std::vector<typename vis_graph_type::iterator >::iterator neighbor_it = links.begin();
     for (; neighbor_it != links.end(); ++neighbor_it) {
       curr_blocks_.push_back(*neighbor_it);
     }
@@ -155,11 +155,11 @@ bool boxm_block_vis_graph_iterator<T>::next()
 }
 
 template <class T>
-vcl_vector<boxm_block<T>*> boxm_block_vis_graph_iterator<T>::frontier_blocks()
+std::vector<boxm_block<T>*> boxm_block_vis_graph_iterator<T>::frontier_blocks()
 {
-  vcl_vector<boxm_block<T>*> frontier;
+  std::vector<boxm_block<T>*> frontier;
 
-  vcl_vector<vgl_point_3d<int> > blocks = to_process_indices_;
+  std::vector<vgl_point_3d<int> > blocks = to_process_indices_;
   for (unsigned i=0; i<blocks.size(); i++) {
     vgl_point_3d<int> index = blocks[i];
     frontier.push_back(scene_->get_block(index)); //.x(), index.y(), index.z());

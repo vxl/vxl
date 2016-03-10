@@ -5,7 +5,7 @@
 
 void bvpl_convert_pair_grid_to_hsv_grid(bvxm_voxel_grid<bvpl_pair> *pair_grid,
                                         bvxm_voxel_grid<vnl_float_4> *out_grid,
-                                        vcl_vector<float> colors)
+                                        std::vector<float> colors)
 {
   //reset iterator
   bvxm_voxel_grid<vnl_float_4>::iterator out_grid_it = out_grid->begin();
@@ -62,11 +62,11 @@ bvpl_corner_pairs_sptr bvpl_corner_pair_finder::find_pairs(bvxm_voxel_grid<int>*
 {
   //sanity check
   if (search_kernels->size() != corner_kernels->size()){
-    vcl_cerr << "Error: kernels have different size()\n";
+    std::cerr << "Error: kernels have different size()\n";
     return VXL_NULLPTR;
   }
 
-  vcl_vector<vcl_vector<vgl_line_segment_3d<int> > > all_lines;
+  std::vector<std::vector<vgl_line_segment_3d<int> > > all_lines;
 
   //1. run the same direction(id) kernel as the one we are interested in
   for (int target_id=0; target_id<search_kernels->size(); ++target_id)
@@ -75,11 +75,11 @@ bvpl_corner_pairs_sptr bvpl_corner_pair_finder::find_pairs(bvxm_voxel_grid<int>*
 
     bvpl_kernel_sptr target_corner_kernel = corner_kernels->kernels_[target_id];
 
-    vcl_cout << "Search kernel " << target_id << " with size" << this_search_kernel->max_point() << ',' << this_search_kernel->min_point()<<vcl_endl;
+    std::cout << "Search kernel " << target_id << " with size" << this_search_kernel->max_point() << ',' << this_search_kernel->min_point()<<std::endl;
 
     /*******************************************************************/
     bvpl_subgrid_iterator<int> id_subgrid_iter(id_grid, this_search_kernel->min_point(), this_search_kernel->max_point());
-    vcl_vector<vgl_line_segment_3d<int> > lines;
+    std::vector<vgl_line_segment_3d<int> > lines;
 
     while (!id_subgrid_iter.isDone())
     {
@@ -89,7 +89,7 @@ bvpl_corner_pairs_sptr bvpl_corner_pair_finder::find_pairs(bvxm_voxel_grid<int>*
       int id_at_center = id_subgrid.get_voxel();
       if (id_at_center == target_id) {
 #ifdef DEBUG
-        vcl_cout << p1 << " id " << id_at_center << vcl_endl;
+        std::cout << p1 << " id " << id_at_center << std::endl;
 #endif // DEBUG
         //reset the iterator
         kernel_iter.begin();
@@ -100,7 +100,7 @@ bvpl_corner_pairs_sptr bvpl_corner_pair_finder::find_pairs(bvxm_voxel_grid<int>*
             if (this_id >=0) {
               bvpl_kernel_sptr this_corner_kernel = corner_kernels->kernels_[this_id];
               if (this_corner_kernel->axis()== target_corner_kernel->axis()){//same plane now look for opossite diagonal corners
-                if (vcl_abs(vcl_abs(this_corner_kernel->angle() - target_corner_kernel->angle()) - vnl_math::pi_over_2) < 1e-7) {
+                if (std::abs(std::abs(this_corner_kernel->angle() - target_corner_kernel->angle()) - vnl_math::pi_over_2) < 1e-7) {
                   vgl_point_3d<int> p2(p1.x()+idx.x(), p1.y()+idx.y(), p1.z()-idx.z());
                   lines.push_back(vgl_line_segment_3d<int>(p1, p2));
                 }
@@ -123,8 +123,8 @@ bvpl_corner_pairs_sptr bvpl_corner_pair_finder::find_pairs(bvxm_voxel_grid<int>*
                                                            bvpl_kernel_vector_sptr search_kernels,
                                                            bvpl_kernel_vector_sptr corner_kernels)
 {
-  vcl_vector<vcl_vector<vgl_line_segment_3d<int> > > all_lines;
-  vcl_vector<vcl_vector<vgl_box_3d<int> > > all_boxes;
+  std::vector<std::vector<vgl_line_segment_3d<int> > > all_lines;
+  std::vector<std::vector<vgl_box_3d<int> > > all_boxes;
 
   //1. run the same direction(id) kernel as the one we are interested in
   for (int target_id=0; target_id<search_kernels->size(); ++target_id)
@@ -133,13 +133,13 @@ bvpl_corner_pairs_sptr bvpl_corner_pair_finder::find_pairs(bvxm_voxel_grid<int>*
 
     bvpl_kernel_sptr target_corner_kernel = corner_kernels->kernels_[target_id];
 
-    vcl_cout << "Search kernel " << target_id << " with size" << this_search_kernel->max_point() << ',' << this_search_kernel->min_point()<<vcl_endl;
+    std::cout << "Search kernel " << target_id << " with size" << this_search_kernel->max_point() << ',' << this_search_kernel->min_point()<<std::endl;
 
     /*******************************************************************/
     bvpl_subgrid_iterator<int> id_subgrid_iter(id_grid, this_search_kernel->min_point(), this_search_kernel->max_point());
     bvpl_subgrid_iterator<float> response_subgrid_iter(response_grid, this_search_kernel->min_point(), this_search_kernel->max_point());
-    vcl_vector<vgl_line_segment_3d<int> > lines;
-    vcl_vector<vgl_box_3d<int> > boxes;
+    std::vector<vgl_line_segment_3d<int> > lines;
+    std::vector<vgl_box_3d<int> > boxes;
 
     while (!id_subgrid_iter.isDone() && !response_subgrid_iter.isDone())
     {
@@ -172,13 +172,13 @@ bvpl_corner_pairs_sptr bvpl_corner_pair_finder::find_pairs(bvxm_voxel_grid<int>*
                 if (this_id >=0) {
                   bvpl_kernel_sptr this_corner_kernel = corner_kernels->kernels_[this_id];
 #ifdef DEBUG
-                  vcl_cout << idx << vcl_endl;
+                  std::cout << idx << std::endl;
 #endif // DEBUG
                   if (this_corner_kernel->axis()== target_corner_kernel->axis()) {
                     //same plane now look for opposite diagonal corners
-                    if (vcl_abs(vcl_sin(this_corner_kernel->angle() - target_corner_kernel->angle()) - 1.0) < 1e-4) {
-                      vcl_cout << "this angle " <<this_corner_kernel->angle() << " target angle " << target_corner_kernel->angle()
-                               << " condition " <<vcl_abs((this_corner_kernel->angle() - target_corner_kernel->angle()) - vnl_math::pi_over_2)
+                    if (std::abs(std::sin(this_corner_kernel->angle() - target_corner_kernel->angle()) - 1.0) < 1e-4) {
+                      std::cout << "this angle " <<this_corner_kernel->angle() << " target angle " << target_corner_kernel->angle()
+                               << " condition " <<std::abs((this_corner_kernel->angle() - target_corner_kernel->angle()) - vnl_math::pi_over_2)
                                << " response " << this_response << " this_id " << this_id << '\n';
                       vgl_point_3d<int> p2(p1.x()+idx.x(), p1.y()+idx.y(), p1.z()-idx.z());
                       lines.push_back(vgl_line_segment_3d<int>(p1, p2));
@@ -186,7 +186,7 @@ bvpl_corner_pairs_sptr bvpl_corner_pair_finder::find_pairs(bvxm_voxel_grid<int>*
                   }
                 }
               }
-              else vcl_cout << "**********************************\n";
+              else std::cout << "**********************************\n";
             }
             ++kernel_iter;
           }
@@ -195,7 +195,7 @@ bvpl_corner_pairs_sptr bvpl_corner_pair_finder::find_pairs(bvxm_voxel_grid<int>*
        ++id_subgrid_iter;
       ++response_subgrid_iter;
     }
-    vcl_cout << "Target id " << target_id << " has " << lines.size() << " lines\n";
+    std::cout << "Target id " << target_id << " has " << lines.size() << " lines\n";
     all_lines.push_back(lines);
     all_boxes.push_back(boxes);
   }
@@ -210,8 +210,8 @@ bvpl_corner_pairs_sptr bvpl_corner_pair_finder::find_pairs(bvxm_voxel_grid<int>*
                                                            bvpl_kernel_vector_sptr corner_kernels,
                                                            bvxm_voxel_grid<bvpl_pair> *pair_grid)
 {
-  vcl_vector<vcl_vector<vgl_line_segment_3d<int> > > all_lines;
-  vcl_vector<vcl_vector<vgl_box_3d<int> > > all_boxes;
+  std::vector<std::vector<vgl_line_segment_3d<int> > > all_lines;
+  std::vector<std::vector<vgl_box_3d<int> > > all_boxes;
 
   //1. run the same direction(id) kernel as the one we are interested in
   for (int target_id=0; target_id<search_kernels->size(); ++target_id)
@@ -220,14 +220,14 @@ bvpl_corner_pairs_sptr bvpl_corner_pair_finder::find_pairs(bvxm_voxel_grid<int>*
 
     bvpl_kernel_sptr target_corner_kernel = corner_kernels->kernels_[target_id];
 
-    vcl_cout << "Search kernel " << target_id << " with size" << this_search_kernel->max_point() << ',' << this_search_kernel->min_point()<<vcl_endl;
+    std::cout << "Search kernel " << target_id << " with size" << this_search_kernel->max_point() << ',' << this_search_kernel->min_point()<<std::endl;
 
     /*******************************************************************/
     bvpl_subgrid_iterator<int> id_subgrid_iter(id_grid, this_search_kernel->min_point(), this_search_kernel->max_point());
     bvpl_subgrid_iterator<float> response_subgrid_iter(response_grid, this_search_kernel->min_point(), this_search_kernel->max_point());
     bvpl_subgrid_iterator<bvpl_pair> pair_subgrid_iter(pair_grid, this_search_kernel->min_point(), this_search_kernel->max_point());
-    vcl_vector<vgl_line_segment_3d<int> > lines;
-    vcl_vector<vgl_box_3d<int> > boxes;
+    std::vector<vgl_line_segment_3d<int> > lines;
+    std::vector<vgl_box_3d<int> > boxes;
 
     while (!id_subgrid_iter.isDone() && !response_subgrid_iter.isDone() && !pair_subgrid_iter.isDone())
     {
@@ -260,10 +260,10 @@ bvpl_corner_pairs_sptr bvpl_corner_pair_finder::find_pairs(bvxm_voxel_grid<int>*
               if (id_subgrid.voxel(idx, this_id)) {
                 if (this_id >=0) {
                   bvpl_kernel_sptr this_corner_kernel = corner_kernels->kernels_[this_id];
-                  // vcl_cout << idx << vcl_endl;
+                  // std::cout << idx << std::endl;
                   if (this_corner_kernel->axis()== target_corner_kernel->axis()){
                     //same plane now look for opossite diagonal corners
-                    if (vcl_abs(vcl_sin(this_corner_kernel->angle() - target_corner_kernel->angle()) - 1.0) < 1e-4) {
+                    if (std::abs(std::sin(this_corner_kernel->angle() - target_corner_kernel->angle()) - 1.0) < 1e-4) {
                       bvpl_feature f1(p1, target_id, target_corner_kernel->axis(), target_corner_kernel->angle(),response_subgrid.get_voxel());
                       vgl_point_3d<int> p2(p1.x()+idx.x(), p1.y()+idx.y(), p1.z()-idx.z());
                       vgl_point_3d<int> p2_2(p1.x()+idx.x()/2, p1.y()+idx.y()/2, p1.z()-idx.z()/2);
@@ -275,7 +275,7 @@ bvpl_corner_pairs_sptr bvpl_corner_pair_finder::find_pairs(bvxm_voxel_grid<int>*
                   }
                 }
               }
-              else vcl_cout << "**********************************\n";
+              else std::cout << "**********************************\n";
             }
             ++kernel_iter;
           }
@@ -285,7 +285,7 @@ bvpl_corner_pairs_sptr bvpl_corner_pair_finder::find_pairs(bvxm_voxel_grid<int>*
       ++response_subgrid_iter;
       ++pair_subgrid_iter;
     }
-    vcl_cout << "Target id " << target_id << " has " << lines.size() << " lines\n";
+    std::cout << "Target id " << target_id << " has " << lines.size() << " lines\n";
     all_lines.push_back(lines);
     all_boxes.push_back(boxes);
   }
@@ -307,7 +307,7 @@ void bvpl_corner_pair_finder::find_pairs_no_lines(bvxm_voxel_grid<int>* id_grid,
 
     bvpl_kernel_sptr target_corner_kernel = corner_kernels->kernels_[target_id];
 
-    vcl_cout << "Search kernel " << target_id << " with size" << this_search_kernel->max_point() << ',' << this_search_kernel->min_point()<<vcl_endl;
+    std::cout << "Search kernel " << target_id << " with size" << this_search_kernel->max_point() << ',' << this_search_kernel->min_point()<<std::endl;
 
     /*******************************************************************/
     bvpl_subgrid_iterator<int> id_subgrid_iter(id_grid, this_search_kernel->min_point(), this_search_kernel->max_point());
@@ -338,10 +338,10 @@ void bvpl_corner_pair_finder::find_pairs_no_lines(bvxm_voxel_grid<int>* id_grid,
               if (id_subgrid.voxel(idx, this_id)) {
                 if (this_id >=0) {
                   bvpl_kernel_sptr this_corner_kernel = corner_kernels->kernels_[this_id];
-                  // vcl_cout << idx << vcl_endl;
+                  // std::cout << idx << std::endl;
                   if (this_corner_kernel->axis()== target_corner_kernel->axis()){
                     //same plane now look for opossite diagonal corners
-                    if (vcl_abs(vcl_sin(this_corner_kernel->angle() - target_corner_kernel->angle()) - 1.0) < 1e-4) {
+                    if (std::abs(std::sin(this_corner_kernel->angle() - target_corner_kernel->angle()) - 1.0) < 1e-4) {
                       bvpl_feature f1(p1, target_id, target_corner_kernel->axis(), target_corner_kernel->angle(),response_subgrid.get_voxel());
                       vgl_point_3d<int> p2(p1.x()+idx.x(), p1.y()+idx.y(), p1.z()-idx.z());
                       vgl_point_3d<int> p2_2(p1.x()+idx.x()/2, p1.y()+idx.y()/2, p1.z()-idx.z()/2);
@@ -352,7 +352,7 @@ void bvpl_corner_pair_finder::find_pairs_no_lines(bvxm_voxel_grid<int>* id_grid,
                   }
                 }
               }
-              else vcl_cout << "**********************************\n";
+              else std::cout << "**********************************\n";
             }
             ++kernel_iter;
           }
@@ -372,22 +372,22 @@ bvpl_corner_pairs_sptr bvpl_corner_pair_finder::find_pairs(bvxm_voxel_grid<bvpl_
                                                            bvxm_voxel_grid<bvpl_pair> *pair_grid_out,
                                                            int opposite_angle)
 {
-  vcl_vector<vcl_vector<vgl_line_segment_3d<int> > > all_lines;
-  vcl_vector<vcl_vector<vgl_box_3d<int> > > all_boxes;
+  std::vector<std::vector<vgl_line_segment_3d<int> > > all_lines;
+  std::vector<std::vector<vgl_box_3d<int> > > all_boxes;
 
   //1. run the same direction(id) kernel as the one we are interested in
   for (int target_id=0; target_id<search_kernels->size(); ++target_id)
   {
     bvpl_kernel_sptr this_search_kernel = search_kernels->kernels_[target_id];
 
-    vcl_cout << "\n Search kernel " << target_id << " with size" << this_search_kernel->max_point() << ',' << this_search_kernel->min_point()
-             << "Axis " << this_search_kernel->axis() << " Angle " << this_search_kernel->angle() <<vcl_endl;
+    std::cout << "\n Search kernel " << target_id << " with size" << this_search_kernel->max_point() << ',' << this_search_kernel->min_point()
+             << "Axis " << this_search_kernel->axis() << " Angle " << this_search_kernel->angle() <<std::endl;
 
     /*******************************************************************/
     bvpl_subgrid_iterator<bvpl_pair> in_pair_subgrid_iter(pair_grid_in, this_search_kernel->min_point(), this_search_kernel->max_point());
     bvpl_subgrid_iterator<bvpl_pair> out_pair_subgrid_iter(pair_grid_out, this_search_kernel->min_point(), this_search_kernel->max_point());
-    vcl_vector<vgl_line_segment_3d<int> > lines;
-    vcl_vector<vgl_box_3d<int> > boxes;
+    std::vector<vgl_line_segment_3d<int> > lines;
+    std::vector<vgl_box_3d<int> > boxes;
 
     while (!in_pair_subgrid_iter.isDone() && !out_pair_subgrid_iter.isDone())
     {
@@ -429,9 +429,9 @@ bvpl_corner_pairs_sptr bvpl_corner_pair_finder::find_pairs(bvxm_voxel_grid<bvpl_
                   bool condition = false;
 
                   if (opposite_angle == 90)
-                    condition=(vcl_abs(vcl_sin(this_pair.angle() - pair_at_center.angle()) - 1.0) < 1e-4);
+                    condition=(std::abs(std::sin(this_pair.angle() - pair_at_center.angle()) - 1.0) < 1e-4);
                   if (opposite_angle == 180)
-                    condition=(vcl_abs(vcl_sin((this_pair.angle() - pair_at_center.angle())/2.0f) - 1.0) < 1e-4);
+                    condition=(std::abs(std::sin((this_pair.angle() - pair_at_center.angle())/2.0f) - 1.0) < 1e-4);
 
                   if (condition)
                   {
@@ -443,7 +443,7 @@ bvpl_corner_pairs_sptr bvpl_corner_pair_finder::find_pairs(bvxm_voxel_grid<bvpl_
                     bvpl_pair out_pair(p2_2, f1, f2, target_id, this_search_kernel->axis(), this_search_kernel->angle(), 1.0f);
                     (*out_pair_subgrid_iter).set_voxel_at(idx.x()/2, idx.y()/2, idx.z()/2, out_pair);
 #if 0
-                    vcl_cout << "**********************************\n"
+                    std::cout << "**********************************\n"
                              << "this angle " << this_pair.angle() << " axis " << this_pair.axis() << '\n'
                              << "center angle " << pair_at_center.angle() << " center axis " << pair_at_center.axis()
                              << " condition " << opposite_angles << '\n';
@@ -451,7 +451,7 @@ bvpl_corner_pairs_sptr bvpl_corner_pair_finder::find_pairs(bvxm_voxel_grid<bvpl_
                   }
                 }
               }
-              else vcl_cout << "**********************************\n";
+              else std::cout << "**********************************\n";
             }
             ++kernel_iter;
           }
@@ -461,7 +461,7 @@ bvpl_corner_pairs_sptr bvpl_corner_pair_finder::find_pairs(bvxm_voxel_grid<bvpl_
       ++out_pair_subgrid_iter;
     }
     if (lines.size() > 0)
-      vcl_cout << "\n Target id " << target_id << " has " << lines.size() << " lines\n";
+      std::cout << "\n Target id " << target_id << " has " << lines.size() << " lines\n";
     all_lines.push_back(lines);
     all_boxes.push_back(boxes);
   }
@@ -479,13 +479,13 @@ void bvpl_corner_pair_finder::find_pairs_no_lines(bvxm_voxel_grid<bvpl_pair> *pa
   {
     bvpl_kernel_sptr this_search_kernel = search_kernels->kernels_[target_id];
 
-    vcl_cout << "\n Search kernel " << target_id << " with size" << this_search_kernel->max_point() << ',' << this_search_kernel->min_point()
-             << "Axis " << this_search_kernel->axis() << " Angle " << this_search_kernel->angle() <<vcl_endl;
+    std::cout << "\n Search kernel " << target_id << " with size" << this_search_kernel->max_point() << ',' << this_search_kernel->min_point()
+             << "Axis " << this_search_kernel->axis() << " Angle " << this_search_kernel->angle() <<std::endl;
 
     /*******************************************************************/
     bvpl_subgrid_iterator<bvpl_pair> in_pair_subgrid_iter(pair_grid_in, this_search_kernel->min_point(), this_search_kernel->max_point());
     bvpl_subgrid_iterator<bvpl_pair> out_pair_subgrid_iter(pair_grid_out, this_search_kernel->min_point(), this_search_kernel->max_point());
-    vcl_vector<vgl_box_3d<int> > boxes;
+    std::vector<vgl_box_3d<int> > boxes;
 
     while (!in_pair_subgrid_iter.isDone() && !out_pair_subgrid_iter.isDone())
     {
@@ -518,9 +518,9 @@ void bvpl_corner_pair_finder::find_pairs_no_lines(bvxm_voxel_grid<bvpl_pair> *pa
                   bool condition = false;
 
                   if (opposite_angle == 90)
-                    condition=(vcl_abs(vcl_sin(this_pair.angle() - pair_at_center.angle()) - 1.0) < 1e-4);
+                    condition=(std::abs(std::sin(this_pair.angle() - pair_at_center.angle()) - 1.0) < 1e-4);
                   if (opposite_angle == 180)
-                    condition=(vcl_abs(vcl_sin((this_pair.angle() - pair_at_center.angle())/2.0f) - 1.0) < 1e-4);
+                    condition=(std::abs(std::sin((this_pair.angle() - pair_at_center.angle())/2.0f) - 1.0) < 1e-4);
 
                   if (condition)
                   {
@@ -531,7 +531,7 @@ void bvpl_corner_pair_finder::find_pairs_no_lines(bvxm_voxel_grid<bvpl_pair> *pa
                     bvpl_pair out_pair(p2_2, f1, f2, target_id, this_search_kernel->axis(), this_search_kernel->angle(), 1.0f);
                     (*out_pair_subgrid_iter).set_voxel_at(idx.x()/2, idx.y()/2, idx.z()/2, out_pair);
 #if 0
-                    vcl_cout << "**********************************\n"
+                    std::cout << "**********************************\n"
                              << "this angle " <<this_pair.angle() << " axis " << this_pair.axis() << '\n'
                              << "center angle " << pair_at_center.angle() << " center axis " << pair_at_center.axis()
                              << " condition " << opposite_angles << '\n';
@@ -539,7 +539,7 @@ void bvpl_corner_pair_finder::find_pairs_no_lines(bvxm_voxel_grid<bvpl_pair> *pa
                   }
                 }
               }
-              else vcl_cout << "**********************************\n";
+              else std::cout << "**********************************\n";
             }
             ++kernel_iter;
           }

@@ -11,7 +11,9 @@
 //-----------------------------------------------------------------------------
 #include <gevd/gevd_param_mixin.h>
 #include <sdet/sdet_detector_params.h>
-#include <vcl_iosfwd.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iosfwd>
 
 class sdet_region_proc_params : public gevd_param_mixin
 {
@@ -27,7 +29,7 @@ class sdet_region_proc_params : public gevd_param_mixin
 
   bool SanityCheck();
   friend
-    vcl_ostream& operator<<(vcl_ostream&, const sdet_region_proc_params& rpp);
+    std::ostream& operator<<(std::ostream&, const sdet_region_proc_params& rpp);
  protected:
   void InitParams(
                   const sdet_detector_params& dp,

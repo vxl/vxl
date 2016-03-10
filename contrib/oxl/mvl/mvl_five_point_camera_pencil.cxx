@@ -8,7 +8,9 @@
 
 #include "mvl_five_point_camera_pencil.h"
 
-#include <vcl_cmath.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <cmath>
 #include <vnl/vnl_double_3.h>
 #include <vnl/algo/vnl_svd.h>
 
@@ -24,7 +26,7 @@ bool mvl_five_point_camera_pencil(double const xs[5],
   for (int i=0; i<4; ++i) {
     double u = xs[i] - xs[4];
     double v = ys[i] - ys[4];
-    double one_over_r = 1.0 / vcl_sqrt(u*u + v*v);
+    double one_over_r = 1.0 / std::sqrt(u*u + v*v);
     if (! one_over_r)
       return false;
     design[0][i] = u * one_over_r;
@@ -45,19 +47,19 @@ bool mvl_five_point_camera_pencil(double const xs[5],
   // Since x5 = [ 0; 0; 1 ], this just means we take the nullspace
   // of the leading 2x4 submatrix of [ x1; x2; x3; x4 ].
 #ifdef DEBUG
-  vcl_cerr << "design = "; vnl_matlab_print(vcl_cerr,design);
+  std::cerr << "design = "; vnl_matlab_print(std::cerr,design);
 #endif
   vnl_svd<double> svd(design.extract(2, 4));
 #ifdef DEBUG
-  vcl_cerr << "singvals = " << svd.W() << vcl_endl;
+  std::cerr << "singvals = " << svd.W() << std::endl;
 #endif
 
   // get basis for nullspace :
   vnl_vector<double> a(svd.V().get_column(2));
   vnl_vector<double> b(svd.V().get_column(3));
 #ifdef DEBUG
-  vcl_cerr << "a = "; vnl_matlab_print(vcl_cerr,a);
-  vcl_cerr << "b = "; vnl_matlab_print(vcl_cerr,b);
+  std::cerr << "a = "; vnl_matlab_print(std::cerr,a);
+  std::cerr << "b = "; vnl_matlab_print(std::cerr,b);
 #endif
 
   // make the 3x4 cameras :
@@ -72,8 +74,8 @@ bool mvl_five_point_camera_pencil(double const xs[5],
   B->scale_column(2, b[2]);
   B->scale_column(3, b[3]);
 #ifdef DEBUG
-  vcl_cerr << "A = "; vnl_matlab_print(vcl_cerr,A);
-  vcl_cerr << "B = "; vnl_matlab_print(vcl_cerr,B);
+  std::cerr << "A = "; vnl_matlab_print(std::cerr,A);
+  std::cerr << "B = "; vnl_matlab_print(std::cerr,B);
 #endif
 
   // translate the last point back again.
@@ -110,7 +112,7 @@ bool mvl_five_point_camera_pencil_parameters(vnl_double_3x4 const &A,
     double s =  (l[1]*BX[0] - l[0]*BX[1]);
     double t = -(l[1]*AX[0] - l[0]*AX[1]);
 #if 1
-    double n = vcl_sqrt(s*s + t*t);
+    double n = std::sqrt(s*s + t*t);
     if (n == 0)
       return false;
     st[0] = s/n;
@@ -121,11 +123,11 @@ bool mvl_five_point_camera_pencil_parameters(vnl_double_3x4 const &A,
 #endif
 
 #ifdef DEBUG
-    vcl_cerr << A << vcl_endl
-             << B << vcl_endl
-             << X << vcl_endl
-             << u << ' ' << v << vcl_endl
-             << st[0] << ' ' << st[1] << vcl_endl;
+    std::cerr << A << std::endl
+             << B << std::endl
+             << X << std::endl
+             << u << ' ' << v << std::endl
+             << st[0] << ' ' << st[1] << std::endl;
 #endif
   }
 

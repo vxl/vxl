@@ -8,7 +8,9 @@
 
 #include <bprb/bprb_func_process.h>
 
-#include <vcl_fstream.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <fstream>
 #include <boxm2/ocl/boxm2_opencl_cache.h>
 #include <boxm2/boxm2_scene.h>
 #include <boxm2/boxm2_block.h>
@@ -36,18 +38,18 @@ namespace boxm2_ocl_create_norm_intensities_process_globals
     CONVERT_NOBS_INT_SHORT    = 1
   };
 
-  void compile_kernel(bocl_device_sptr device,vcl_vector<bocl_kernel*> & vec_kernels,vcl_string opts)
+  void compile_kernel(bocl_device_sptr device,std::vector<bocl_kernel*> & vec_kernels,std::string opts)
   {
     //gather all render sources... seems like a lot for rendering...
-    vcl_vector<vcl_string> src_paths;
-    vcl_string source_dir = vcl_string(VCL_SOURCE_ROOT_DIR) + "/contrib/brl/bseg/boxm2/ocl/cl/";
+    std::vector<std::string> src_paths;
+    std::string source_dir = std::string(VCL_SOURCE_ROOT_DIR) + "/contrib/brl/bseg/boxm2/ocl/cl/";
     src_paths.push_back(source_dir + "scene_info.cl");
     src_paths.push_back(source_dir + "cell_utils.cl");
     src_paths.push_back(source_dir + "bit/bit_tree_library_functions.cl");
     src_paths.push_back(source_dir + "backproject.cl");
     //src_paths.push_back(source_dir + "statistics_library_functions.cl");
     //src_paths.push_back(source_dir + "ray_bundle_library_opt.cl");
-    vcl_vector<vcl_string> second_pass_src = vcl_vector<vcl_string>(src_paths);
+    std::vector<std::string> second_pass_src = std::vector<std::string>(src_paths);
 
     //src_paths.push_back(source_dir + "bit/update_kernels.cl");
     //src_paths.push_back(source_dir + "update_functors.cl");
@@ -62,12 +64,12 @@ namespace boxm2_ocl_create_norm_intensities_process_globals
     second_pass_src.push_back(source_dir + "bit/cast_ray_bit.cl");
 
     //compilation options
-    vcl_string options = opts + " -D INTENSITY  ";
+    std::string options = opts + " -D INTENSITY  ";
     options += " -D DETERMINISTIC ";
 
     //push back cast_ray_bit
     bocl_kernel* seg_len = new bocl_kernel();
-    vcl_string bayes_opt = options + " -D SEGLENNOBS -D STEP_CELL=step_cell_seglen_nobs(aux_args,data_ptr,llid,d) ";
+    std::string bayes_opt = options + " -D SEGLENNOBS -D STEP_CELL=step_cell_seglen_nobs(aux_args,data_ptr,llid,d) ";
     seg_len->create_kernel(&device->context(),device->device_id(), second_pass_src, "seg_len_nobs_main", bayes_opt, "batch_update::seg_len_nobs_main");
     vec_kernels.push_back(seg_len);
 
@@ -78,7 +80,7 @@ namespace boxm2_ocl_create_norm_intensities_process_globals
     return ;
   }
 
-  static vcl_map<vcl_string,vcl_vector<bocl_kernel*> > kernels;
+  static std::map<std::string,std::vector<bocl_kernel*> > kernels;
 }
 
 bool boxm2_ocl_create_norm_intensities_process_cons(bprb_func_process& pro)
@@ -86,7 +88,7 @@ bool boxm2_ocl_create_norm_intensities_process_cons(bprb_func_process& pro)
   using namespace boxm2_ocl_create_norm_intensities_process_globals;
 
   //process takes 6 inputs
-  vcl_vector<vcl_string> input_types_(n_inputs_);
+  std::vector<std::string> input_types_(n_inputs_);
   input_types_[0] = "bocl_device_sptr";
   input_types_[1] = "boxm2_scene_sptr";
   input_types_[2] = "boxm2_opencl_cache_sptr";
@@ -94,11 +96,11 @@ bool boxm2_ocl_create_norm_intensities_process_cons(bprb_func_process& pro)
   input_types_[4] = "vil_image_view_base_sptr";
   input_types_[5] = "vcl_string";
   // in case the 6th input is not set
-  brdb_value_sptr idx = new brdb_value_t<vcl_string>("");
+  brdb_value_sptr idx = new brdb_value_t<std::string>("");
   pro.set_input(5, idx);
 
   // process has no outputs
-  vcl_vector<vcl_string>  output_types_(n_outputs_);
+  std::vector<std::string>  output_types_(n_outputs_);
 
   return pro.set_input_types(input_types_)
       && pro.set_output_types(output_types_);
@@ -107,11 +109,11 @@ bool boxm2_ocl_create_norm_intensities_process_cons(bprb_func_process& pro)
 bool boxm2_ocl_create_norm_intensities_process(bprb_func_process& pro)
 {
   using namespace boxm2_ocl_create_norm_intensities_process_globals;
-  vcl_size_t local_threads[2]={8,8};
-  vcl_size_t global_threads[2]={8,8};
+  std::size_t local_threads[2]={8,8};
+  std::size_t global_threads[2]={8,8};
 
   if ( pro.n_inputs() < n_inputs_ ) {
-    vcl_cout << pro.name() << ": The number of inputs should be " << n_inputs_<< vcl_endl;
+    std::cout << pro.name() << ": The number of inputs should be " << n_inputs_<< std::endl;
     return false;
   }
   float transfer_time=0.0f;
@@ -123,14 +125,14 @@ bool boxm2_ocl_create_norm_intensities_process(bprb_func_process& pro)
   boxm2_opencl_cache_sptr opencl_cache  = pro.get_input<boxm2_opencl_cache_sptr>(i++);
   vpgl_camera_double_sptr cam           = pro.get_input<vpgl_camera_double_sptr>(i++);
   vil_image_view_base_sptr img          = pro.get_input<vil_image_view_base_sptr>(i++);
-  vcl_string ident                      = pro.get_input<vcl_string>(i++);
+  std::string ident                      = pro.get_input<std::string>(i++);
 
   long binCache = opencl_cache.ptr()->bytes_in_cache();
-  vcl_cout<<"Update MBs in cache: "<<binCache/(1024.0*1024.0)<<vcl_endl;
+  std::cout<<"Update MBs in cache: "<<binCache/(1024.0*1024.0)<<std::endl;
 
   bool foundDataType = false, foundNumObsType = false;
-  vcl_string data_type, num_obs_type, num_obs_type_short, options;
-  vcl_vector<vcl_string> apps = scene->appearances();
+  std::string data_type, num_obs_type, num_obs_type_short, options;
+  std::vector<std::string> apps = scene->appearances();
   // int appTypeSize;
   for (unsigned int i=0; i<apps.size(); ++i) {
     if ( apps[i] == boxm2_data_traits<BOXM2_MOG3_GREY>::prefix() )
@@ -157,11 +159,11 @@ bool boxm2_ocl_create_norm_intensities_process(bprb_func_process& pro)
     }
   }
   if (!foundDataType) {
-    vcl_cout<<"BOXM2_OCL_UPDATE_AUX_PER_VIEW_PROCESS ERROR: scene doesn't have BOXM2_MOG3_GREY or BOXM2_MOG3_GREY_16 data type"<<vcl_endl;
+    std::cout<<"BOXM2_OCL_UPDATE_AUX_PER_VIEW_PROCESS ERROR: scene doesn't have BOXM2_MOG3_GREY or BOXM2_MOG3_GREY_16 data type"<<std::endl;
     return false;
   }
   if (!foundNumObsType) {
-    vcl_cout<<"BOXM2_OPENCL_UPDATE_PROCESS ERROR: scene doesn't have BOXM2_NUM_OBS type"<<vcl_endl;
+    std::cout<<"BOXM2_OPENCL_UPDATE_PROCESS ERROR: scene doesn't have BOXM2_NUM_OBS type"<<std::endl;
     return false;
   }
   if (ident.size() > 0) {
@@ -177,12 +179,12 @@ bool boxm2_ocl_create_norm_intensities_process(bprb_func_process& pro)
     CL_QUEUE_PROFILING_ENABLE,&status);
   if (status!=0) return false;
 
-  vcl_string identifier=device->device_identifier()+options;
+  std::string identifier=device->device_identifier()+options;
   // compile the kernel if not already compiled
   if (kernels.find(identifier)==kernels.end())
   {
-    vcl_cout<<"===========Compiling kernels==========="<<vcl_endl;
-    vcl_vector<bocl_kernel*> ks;
+    std::cout<<"===========Compiling kernels==========="<<std::endl;
+    std::vector<bocl_kernel*> ks;
     compile_kernel(device,ks,options);
     kernels[identifier]=ks;
   }
@@ -238,8 +240,8 @@ bool boxm2_ocl_create_norm_intensities_process(bprb_func_process& pro)
   lookup->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR);
 
   // set arguments
-  vcl_vector<boxm2_block_id> vis_order = scene->get_vis_blocks(cam);
-  vcl_vector<boxm2_block_id>::iterator id;
+  std::vector<boxm2_block_id> vis_order = scene->get_vis_blocks(cam);
+  std::vector<boxm2_block_id>::iterator id;
   for (unsigned int i=0; i<kernels[identifier].size(); ++i)
   {
     for (id = vis_order.begin(); id != vis_order.end(); ++id)
@@ -260,7 +262,7 @@ bool boxm2_ocl_create_norm_intensities_process(bprb_func_process& pro)
       // data type string may contain an identifier so determine the buffer size
       //bocl_mem* mog       = opencl_cache->get_data(*id,data_type,alpha->num_bytes()/alphaTypeSize*appTypeSize,false);
 
-      //vcl_cout << "Printing contents of lru cache: " << *(static_cast<boxm2_lru_cache*>( opencl_cache->get_cpu_cache().ptr() )) << vcl_endl;
+      //std::cout << "Printing contents of lru cache: " << *(static_cast<boxm2_lru_cache*>( opencl_cache->get_cpu_cache().ptr() )) << std::endl;
 
       transfer_time += (float) transfer.all();
       if (i==UPDATE_CREATE_NORM)
@@ -318,10 +320,10 @@ bool boxm2_ocl_create_norm_intensities_process(bprb_func_process& pro)
         int * aux2_f=static_cast<int*> (aux1->cpu_buffer());
         unsigned int * num_obs_f=static_cast<unsigned int*> (num_obs->cpu_buffer());
         for (unsigned k=0;k<1000;k++)
-          vcl_cout<< aux0_f[k] / 100000.0f << ' ' <<  aux2_f[k] / 100000.0f << ' ' <<  num_obs_f[k] << ',' << vcl_endl;
+          std::cout<< aux0_f[k] / 100000.0f << ' ' <<  aux2_f[k] / 100000.0f << ' ' <<  num_obs_f[k] << ',' << std::endl;
 
-        vcl_cout << "Printing contents of lru cache: "
-                 << static_cast<boxm2_lru_cache*>( opencl_cache->get_cpu_cache().ptr() ) << vcl_endl;
+        std::cout << "Printing contents of lru cache: "
+                 << static_cast<boxm2_lru_cache*>( opencl_cache->get_cpu_cache().ptr() ) << std::endl;
 #endif
       }
 #if 0
@@ -363,7 +365,7 @@ bool boxm2_ocl_create_norm_intensities_process(bprb_func_process& pro)
 #ifdef DEBUG
         unsigned int* num_obs_f=static_cast<unsigned int*> (num_obs->cpu_buffer());
         for (unsigned k=0;k<100;k++)
-          vcl_cout<< num_obs_f[k] << ',' << vcl_endl;
+          std::cout<< num_obs_f[k] << ',' << std::endl;
 #endif
       }
 #endif
@@ -375,7 +377,7 @@ bool boxm2_ocl_create_norm_intensities_process(bprb_func_process& pro)
   delete [] ray_origins;
   delete [] ray_directions;
 
-  vcl_cout<<"Gpu time "<<gpu_time<<" transfer time "<<transfer_time<<vcl_endl;
+  std::cout<<"Gpu time "<<gpu_time<<" transfer time "<<transfer_time<<std::endl;
   clReleaseCommandQueue(queue);
   return true;
 }

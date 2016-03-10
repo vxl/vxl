@@ -10,7 +10,9 @@
 // \author Tim Cootes
 
 #include "mbl_cluster_tree.h"
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iostream>
 #include <vcl_cassert.h>
 #include <vsl/vsl_binary_io.h>
 #include <vsl/vsl_vector_io.h>
@@ -35,7 +37,7 @@ void mbl_cluster_tree<T,D>::empty()
 
 //: Define number of levels and max radius of clusters at each level
 template<class T, class D>
-void mbl_cluster_tree<T,D>::set_max_r(const vcl_vector<double>& r)
+void mbl_cluster_tree<T,D>::set_max_r(const std::vector<double>& r)
 {
   empty();
   unsigned nL = r.size();
@@ -54,7 +56,7 @@ void mbl_cluster_tree<T,D>::set_max_r(const vcl_vector<double>& r)
 //  Empty existing clusters, then process every element of data
 //  to create clusters, by calling add_object()
 template<class T, class D>
-void mbl_cluster_tree<T,D>::set_data(const vcl_vector<T>& data)
+void mbl_cluster_tree<T,D>::set_data(const std::vector<T>& data)
 {
   empty();
   data_ = data;
@@ -86,7 +88,7 @@ unsigned mbl_cluster_tree<T,D>::nearest(const T& t, double& d) const
   // Perform hierarchical search
   // Find possible clusters at top level
   unsigned L=cluster_.size()-1;
-  vcl_vector<unsigned> near_c0, near_c1;
+  std::vector<unsigned> near_c0, near_c1;
   double max_d;
   cluster_[L].nearest_clusters(t,max_d,near_c1);
 
@@ -117,9 +119,9 @@ void mbl_cluster_tree<T,D>::add_object(unsigned new_i)
   unsigned Lhi = cluster_.size()-1;
 
   // Find any clusters at top level which could hold t
-  vcl_vector<unsigned> c_list0;
-  vcl_vector<unsigned>  nearest_c(Lhi+1);
-  vcl_vector<double>  nearest_d(Lhi+1);
+  std::vector<unsigned> c_list0;
+  std::vector<unsigned>  nearest_c(Lhi+1);
+  std::vector<double>  nearest_d(Lhi+1);
 
   if (cluster_[Lhi].clusters_within_max_r(t,c_list0,nearest_c[Lhi],
                                                    nearest_d[Lhi])==0)
@@ -140,7 +142,7 @@ void mbl_cluster_tree<T,D>::add_object(unsigned new_i)
   for (unsigned L0=Lhi;L0!=0;--L0)
   {
     unsigned L = L0 - 1;
-    vcl_vector<unsigned> c_list1=c_list0;
+    std::vector<unsigned> c_list1=c_list0;
 
      // Generate list of elements in each cluster to process at next level
     cluster_[L0].in_clusters(c_list1,c_list0);
@@ -183,7 +185,7 @@ void mbl_cluster_tree<T,D>::add_object(unsigned new_i)
       }
       return;
     }
-    vcl_swap(c_list0,c_list1);  // Set c_list0 to current valid list
+    std::swap(c_list0,c_list1);  // Set c_list0 to current valid list
   }
 
   // If reached here, then t is in range of a cluster at every level
@@ -202,7 +204,7 @@ void mbl_cluster_tree<T,D>::add_object(unsigned new_i)
 
 //: Print ancestry of every element
 template<class T, class D>
-void mbl_cluster_tree<T,D>::print_tree(vcl_ostream& os) const
+void mbl_cluster_tree<T,D>::print_tree(std::ostream& os) const
 {
   for (unsigned i=0;i<data().size();++i)
   {
@@ -219,7 +221,7 @@ void mbl_cluster_tree<T,D>::print_tree(vcl_ostream& os) const
 
 //: Print summary information
 template<class T, class D>
-void mbl_cluster_tree<T,D>::print_summary(vcl_ostream& os) const
+void mbl_cluster_tree<T,D>::print_summary(std::ostream& os) const
 {
   for (unsigned i=0;i<cluster_.size();++i)
   {
@@ -264,9 +266,9 @@ void mbl_cluster_tree<T,D>::b_read(vsl_b_istream& bfs)
    break;
 
   default:
-    vcl_cerr << "mbl_cluster_tree<T,D>::b_read() "
-      "Unexpected version number " << version << vcl_endl;
-    bfs.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
+    std::cerr << "mbl_cluster_tree<T,D>::b_read() "
+      "Unexpected version number " << version << std::endl;
+    bfs.is().clear(std::ios::badbit); // Set an unrecoverable IO error on stream
     return;
   }
 
@@ -292,7 +294,7 @@ void vsl_b_read(vsl_b_istream& bfs, mbl_cluster_tree<T,D>& c)
 
 //: Stream output operator for class reference
 template<class T, class D>
-vcl_ostream& operator<<(vcl_ostream& os,const mbl_cluster_tree<T,D>& c)
+std::ostream& operator<<(std::ostream& os,const mbl_cluster_tree<T,D>& c)
 {
   c.print_summary(os);
   return os;
@@ -303,6 +305,6 @@ vcl_ostream& operator<<(vcl_ostream& os,const mbl_cluster_tree<T,D>& c)
 template class mbl_cluster_tree<T,D >; \
 template void vsl_b_write(vsl_b_ostream& bfs, const mbl_cluster_tree<T,D >& c); \
 template void vsl_b_read(vsl_b_istream& bfs, mbl_cluster_tree<T,D >& c); \
-template vcl_ostream& operator<<(vcl_ostream&os,const mbl_cluster_tree<T,D >& c)
+template std::ostream& operator<<(std::ostream&os,const mbl_cluster_tree<T,D >& c)
 
 #endif // mbl_cluster_hxx_

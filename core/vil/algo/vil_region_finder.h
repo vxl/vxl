@@ -7,8 +7,9 @@
 //   March.2005 - Gehua Yang - template on predicate to make it generic
 // \endverbatim
 
-#include <vcl_vector.h>
-#include <vcl_functional.h>
+#include <vcl_compiler.h>
+#include <vector>
+#include <functional>
 #include <vil/vil_image_view.h>
 
 //: Type of connectivity to use in finding the regions
@@ -29,7 +30,7 @@ enum vil_region_finder_connectivity
 // between calls to the region extraction routine, so each region can
 // be extracted only once.
 //
-template <class pix_type, class predicate_type = vcl_equal_to<pix_type> >
+template <class pix_type, class predicate_type = std::equal_to<pix_type> >
 class vil_region_finder
 {
  public:
@@ -50,8 +51,8 @@ class vil_region_finder
   //
   void
   same_int_region( unsigned i, unsigned j,
-                   vcl_vector<unsigned>& ri,
-                   vcl_vector<unsigned>& rj );
+                   std::vector<unsigned>& ri,
+                   std::vector<unsigned>& rj );
 
 
   //: Extract the region containing (i,j)
@@ -63,8 +64,8 @@ class vil_region_finder
   //
   void
   same_int_region( unsigned i, unsigned j, pix_type p,
-                   vcl_vector<unsigned>& ri,
-                   vcl_vector<unsigned>& rj );
+                   std::vector<unsigned>& ri,
+                   std::vector<unsigned>& rj );
 
   //: The image from which the regions are being extracted
   image_view const&

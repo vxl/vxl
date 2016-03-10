@@ -3,9 +3,11 @@
 //:
 // \file
 #include <vsl/vsl_vector_io.h>
-#include <vcl_iostream.h>
+#include <iostream>
 #include <vcl_cassert.h>
-#include <vcl_cmath.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <cmath>
 #include <vsol/vsol_point_2d.h>
 #include <vgl/vgl_vector_2d.h>
 
@@ -14,16 +16,16 @@
 //***************************************************************************
 
 //---------------------------------------------------------------------------
-//: Constructor from a vcl_vector (not a geometric vector but a list of points)
+//: Constructor from a std::vector (not a geometric vector but a list of points)
 // Require: new_vertices.size()>=3
 //---------------------------------------------------------------------------
-vsol_polygon_2d::vsol_polygon_2d(const vcl_vector<vsol_point_2d_sptr> &new_vertices)
+vsol_polygon_2d::vsol_polygon_2d(const std::vector<vsol_point_2d_sptr> &new_vertices)
   : vsol_region_2d()
 {
   // require
   assert(new_vertices.size()>=3);
 
-  storage_=new vcl_vector<vsol_point_2d_sptr>(new_vertices);
+  storage_=new std::vector<vsol_point_2d_sptr>(new_vertices);
 }
 
 //---------------------------------------------------------------------------
@@ -33,7 +35,7 @@ vsol_polygon_2d::vsol_polygon_2d(const vsol_polygon_2d &other)
   : vsol_region_2d(other)
 {
   //vsol_point_2d_sptr p;
-  storage_=new vcl_vector<vsol_point_2d_sptr>(*other.storage_);
+  storage_=new std::vector<vsol_point_2d_sptr>(*other.storage_);
   for (unsigned int i=0;i<storage_->size();++i)
     (*storage_)[i]=new vsol_point_2d(*((*other.storage_)[i]));
 }
@@ -174,7 +176,7 @@ double vsol_polygon_2d::area(void) const
   area += ((*storage_)[last]->x() * (*storage_)[0]->y())
         - ((*storage_)[0]->x() * (*storage_)[last]->y());
 
-  return vcl_abs(area / 2.0);
+  return std::abs(area / 2.0);
 }
 
 //---------------------------------------------------------------------------
@@ -232,7 +234,7 @@ vsol_point_2d_sptr vsol_polygon_2d::centroid(void) const
       xsum += xi; ysum += yi;
     }
   area /= 2.0;
-  if(vcl_fabs(area)!=0.0)
+  if(std::fabs(area)!=0.0)
     {
       double xc = sx/(6.0*area), yc = sy/(6.0*area);
       return new vsol_point_2d(xc, yc);
@@ -319,7 +321,7 @@ void vsol_polygon_2d::b_read(vsl_b_istream &is)
     vsol_spatial_object_2d::b_read(is);
 
     delete storage_;
-    storage_ = new vcl_vector<vsol_point_2d_sptr>();
+    storage_ = new std::vector<vsol_point_2d_sptr>();
     bool null_ptr;
     vsl_b_read(is, null_ptr);
     if (!null_ptr)
@@ -327,7 +329,7 @@ void vsol_polygon_2d::b_read(vsl_b_istream &is)
     vsl_b_read(is, *storage_);
     break;
    default:
-    vcl_cerr << "vsol_polygon_2d: unknown I/O version " << ver << '\n';
+    std::cerr << "vsol_polygon_2d: unknown I/O version " << ver << '\n';
   }
 }
 
@@ -338,7 +340,7 @@ short vsol_polygon_2d::version() const
 }
 
 //: Print an ascii summary to the stream
-void vsol_polygon_2d::print_summary(vcl_ostream &os) const
+void vsol_polygon_2d::print_summary(std::ostream &os) const
 {
   os << *this;
 }
@@ -352,10 +354,10 @@ void vsol_polygon_2d::print_summary(vcl_ostream &os) const
 //---------------------------------------------------------------------------
 vsol_polygon_2d::vsol_polygon_2d(void)
 {
-  storage_=new vcl_vector<vsol_point_2d_sptr>();
+  storage_=new std::vector<vsol_point_2d_sptr>();
 }
 
-bool vsol_polygon_2d::valid_vertices(const vcl_vector<vsol_point_2d_sptr> ) const
+bool vsol_polygon_2d::valid_vertices(const std::vector<vsol_point_2d_sptr> ) const
 {
   return true;
 }
@@ -391,7 +393,7 @@ vsl_b_read(vsl_b_istream &is, vsol_polygon_2d* &p)
 }
 
 
-inline void vsol_polygon_2d::describe(vcl_ostream &strm, int blanking) const
+inline void vsol_polygon_2d::describe(std::ostream &strm, int blanking) const
 {
   if (blanking < 0) blanking = 0; while (blanking--) strm << ' ';
   if (size() == 0)
@@ -403,5 +405,5 @@ inline void vsol_polygon_2d::describe(vcl_ostream &strm, int blanking) const
       strm << " p" << i << ':' << *(vertex(i));
     strm << ']';
   }
-  strm << vcl_endl;
+  strm << std::endl;
 }

@@ -55,7 +55,7 @@ bool classify(vil_image_view_base_sptr lidar_first,
     }
     else
     {
-      vcl_cout << "input images have different bit depths" << vcl_endl;
+      std::cout << "input images have different bit depths" << std::endl;
       return false;
     }
   }
@@ -75,7 +75,7 @@ bool classify(vil_image_view_base_sptr lidar_first,
     }
     else
     {
-      vcl_cout << "input images have different bit depths" << vcl_endl;
+      std::cout << "input images have different bit depths" << std::endl;
       return false;
     }
   }
@@ -86,7 +86,7 @@ bool classify(vil_image_view_base_sptr lidar_first,
 bool bmdl_classify_process(bprb_func_process& pro)
 {
   if (pro.n_inputs()< 3) {
-    vcl_cout << "lidar_roi_process: The input number should be 3" << vcl_endl;
+    std::cout << "lidar_roi_process: The input number should be 3" << std::endl;
     return false;
   }
 
@@ -99,19 +99,19 @@ bool bmdl_classify_process(bprb_func_process& pro)
   //pro.set_input_types
   // check first return's validity
   if (!first_ret) {
-    vcl_cout << "bmdl_classify_process -- First return image is not valid!\n";
+    std::cout << "bmdl_classify_process -- First return image is not valid!\n";
     return false;
   }
 
   // check last return's validity
   if (!last_ret) {
-    vcl_cout << "bmdl_classify_process -- Last return image is not valid!\n";
+    std::cout << "bmdl_classify_process -- Last return image is not valid!\n";
     return false;
   }
 
   // check last return's validity
   if (!ground) {
-    vcl_cout << "bmdl_classify_process -- Ground image is not valid!\n";
+    std::cout << "bmdl_classify_process -- Ground image is not valid!\n";
     return false;
   }
 
@@ -123,13 +123,13 @@ bool bmdl_classify_process(bprb_func_process& pro)
       !pro.parameters()->get_value(PARAM_VEG_THRESH, vthresh) ||
       !pro.parameters()->get_value(PARAM_AREA_THRESH, athresh) ||
       !pro.parameters()->get_value(PARAM_HEIGHT_RES, hres)) {
-    vcl_cout << "bmdl_classify_process -- problem getting the parameters!\n";
+    std::cout << "bmdl_classify_process -- problem getting the parameters!\n";
     return false;
   }
 
   vil_image_view_base_sptr label_img=VXL_NULLPTR, height_img=VXL_NULLPTR;
   if (!classify(first_ret, last_ret, ground, label_img, height_img, gthresh, vthresh, athresh, hres)) {
-    vcl_cout << "bmdl_classify_process -- The process has failed!\n";
+    std::cout << "bmdl_classify_process -- The process has failed!\n";
     return false;
   }
   i=0;
@@ -141,14 +141,14 @@ bool bmdl_classify_process(bprb_func_process& pro)
 bool bmdl_classify_process_cons(bprb_func_process& pro)
 {
   bool ok=false;
-  vcl_vector<vcl_string> input_types;
+  std::vector<std::string> input_types;
   input_types.push_back("vil_image_view_base_sptr");
   input_types.push_back("vil_image_view_base_sptr");
   input_types.push_back("vil_image_view_base_sptr");
   ok = pro.set_input_types(input_types);
   if (!ok) return ok;
 
-  vcl_vector<vcl_string> output_types;
+  std::vector<std::string> output_types;
   output_types.push_back("vil_image_view_base_sptr");  // label image
   output_types.push_back("vil_image_view_base_sptr");  // height image
   ok = pro.set_output_types(output_types);

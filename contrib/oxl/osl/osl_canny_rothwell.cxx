@@ -9,11 +9,13 @@
 #include <osl/osl_canny_gradient.h>
 #include <vnl/vnl_math.h>
 
-#include <vcl_list.h>
-#include <vcl_cmath.h>
-#include <vcl_cstdlib.h>
-#include <vcl_cstdio.h>
-#include <vcl_iostream.h>
+#include <list>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <cmath>
+#include <cstdlib>
+#include <cstdio>
+#include <iostream>
 #include <vcl_cassert.h>
 
 const float DUMMYTHETA = 10000.0;
@@ -26,16 +28,16 @@ osl_canny_rothwell::osl_canny_rothwell(osl_canny_rothwell_params const &params)
   // Determine the size of the largest convolution kernel
   range_ = params.range;
   gauss_tail_ = 0.01f;   // Canny uses 0.001
-  width_ = int(sigma_*vcl_sqrt(2*vcl_log(1/gauss_tail_))+1); // round up to int
+  width_ = int(sigma_*std::sqrt(2*std::log(1/gauss_tail_))+1); // round up to int
   w0_ = width_;
   k_size_ = 2*width_+ 1;
   kernel_ = new float[k_size_];
 
-  xdang_ = new vcl_list<int>;
-  ydang_ = new vcl_list<int>;
-  xjunc_ = new vcl_list<int>;
-  yjunc_ = new vcl_list<int>;
-  vlist_ = new vcl_list<osl_Vertex*>;
+  xdang_ = new std::list<int>;
+  ydang_ = new std::list<int>;
+  xjunc_ = new std::list<int>;
+  yjunc_ = new std::list<int>;
+  vlist_ = new std::list<osl_Vertex*>;
 
   dummy_ = 1000.0;
   jval_ = 2000.0;
@@ -71,7 +73,7 @@ osl_canny_rothwell::~osl_canny_rothwell()
 
 //-----------------------------------------------------------------------------
 
-void osl_canny_rothwell::detect_edges(vil1_image const &image, vcl_list<osl_edge*> *edges, bool adaptive)
+void osl_canny_rothwell::detect_edges(vil1_image const &image, std::list<osl_edge*> *edges, bool adaptive)
 {
   assert(edges!=0);
 
@@ -81,14 +83,14 @@ void osl_canny_rothwell::detect_edges(vil1_image const &image, vcl_list<osl_edge
   ystart_ = 0;
 
   if (verbose)
-    vcl_cerr << "Doing Canny on image region "
-             << xsize_ << " by " << ysize_ << vcl_endl
-             << "Gaussian tail   = " << gauss_tail_ << vcl_endl
-             << "Sigma           = " << sigma_ << vcl_endl
-             << "Kernel size     = " << k_size_ << vcl_endl
-             << "Upper threshold = " << high_ << vcl_endl
-             << "Lower threshold = " << low_ << vcl_endl
-             << "Smoothing range = " << range_ << vcl_endl << vcl_endl;
+    std::cerr << "Doing Canny on image region "
+             << xsize_ << " by " << ysize_ << std::endl
+             << "Gaussian tail   = " << gauss_tail_ << std::endl
+             << "Sigma           = " << sigma_ << std::endl
+             << "Kernel size     = " << k_size_ << std::endl
+             << "Upper threshold = " << high_ << std::endl
+             << "Lower threshold = " << low_ << std::endl
+             << "Smoothing range = " << range_ << std::endl << std::endl;
 
   smooth_   = osl_canny_base_make_raw_image(xsize_, ysize_, (float*)VXL_NULLPTR);
   dx_       = osl_canny_base_make_raw_image(xsize_, ysize_, (float*)VXL_NULLPTR);
@@ -111,77 +113,77 @@ void osl_canny_rothwell::detect_edges(vil1_image const &image, vcl_list<osl_edge
   osl_canny_base_fill_raw_image(thin_,  xsize_, ysize_, 0.0f);
 
   // Do the traditional Canny parts
-  if (verbose) vcl_cerr << "setting convolution kernel and zeroing images\n";
+  if (verbose) std::cerr << "setting convolution kernel and zeroing images\n";
   osl_kernel_DOG(sigma_, kernel_, k_size_, width_);
 
-  if (verbose) vcl_cerr << "smoothing the image\n";
+  if (verbose) std::cerr << "smoothing the image\n";
   osl_canny_smooth_rothwell(image, kernel_, width_, k_size_, smooth_);
 
-  if (verbose) vcl_cerr << "computing derivatives\n";
+  if (verbose) std::cerr << "computing derivatives\n";
   osl_canny_gradient_central(xsize_, ysize_, smooth_, dx_, dy_, grad_);
 
-  if (verbose) vcl_cerr << "doing non-maximal suppression\n";
+  if (verbose) std::cerr << "doing non-maximal suppression\n";
   Non_maximal_suppression();
 
   // Thin the edge image, though keep the original thick one
-  if (verbose) vcl_cerr << "thinning edges\n";
+  if (verbose) std::cerr << "thinning edges\n";
   osl_canny_base_copy_raw_image(VCL_OVERLOAD_CAST(float const*const*, thick_),
                                 VCL_OVERLOAD_CAST(float *const*, thin_), xsize_, ysize_);
   Thin_edges();
 
-  if (verbose) vcl_cerr << "doing hysteresis\n";
+  if (verbose) std::cerr << "doing hysteresis\n";
   Initial_hysteresis();
 
   if ( adaptive ) {
     // Do Canny around the remaining ends at smaller scales to improve
     // topology. We wish to do the adaptive Canny until the region of
     // influence is less than `range' pixels
-    double min_sigma = range_ / vcl_sqrt(-2.0*vcl_log(gauss_tail_));
-    if (verbose) vcl_cerr << "\nadaptive Canny with smoothing sigma bound = " << min_sigma << vcl_endl;
+    double min_sigma = range_ / std::sqrt(-2.0*std::log(gauss_tail_));
+    if (verbose) std::cerr << "\nadaptive Canny with smoothing sigma bound = " << min_sigma << std::endl;
 
     // Try to fix single pixel breaks in the edgel chains
-    if (verbose) vcl_cerr << "searching for dangling ends\n";
+    if (verbose) std::cerr << "searching for dangling ends\n";
     Find_dangling_ends();
-    if (verbose) vcl_cerr << xdang_->size() << " dangling edges found initially\n"
+    if (verbose) std::cerr << xdang_->size() << " dangling edges found initially\n"
                           << "looking for single pixel breaks - ";
     Jump_single_breaks();
     Thin_edges();   // Must thin after jumping
     Find_dangling_ends();
-    if (verbose) vcl_cerr << xdang_->size() << " dangling edges found after joining\n";
+    if (verbose) std::cerr << xdang_->size() << " dangling edges found after joining\n";
 
     while ( sigma_ > min_sigma ) {
       // Locate junctions in the edge image
-      if (verbose) vcl_cerr << "computing current junction set";
+      if (verbose) std::cerr << "computing current junction set";
       Find_junctions();
 
-      if (verbose) vcl_cerr << "\nrunning adaptive Canny\n";
+      if (verbose) std::cerr << "\nrunning adaptive Canny\n";
       Adaptive_Canny(image);
 
       // Repeat the thinning and pixel-jumping process
-      if (verbose) vcl_cerr << "thinning edges - reprise\n";
+      if (verbose) std::cerr << "thinning edges - reprise\n";
       Thin_edges();
 
       Find_dangling_ends();
-      if (verbose) vcl_cerr << xdang_->size() << " dangling edges found after scale reduction\n"
+      if (verbose) std::cerr << xdang_->size() << " dangling edges found after scale reduction\n"
                             << "looking for single pixel breaks - ";
       Jump_single_breaks();
       Thin_edges();
       Find_dangling_ends();
-      if (verbose) vcl_cerr << xdang_->size() << " dangling edges found after re-joining\n";
+      if (verbose) std::cerr << xdang_->size() << " dangling edges found after re-joining\n";
     }
   }
 
   // Locate junctions in the edge image
-  if (verbose) vcl_cerr << "locating junctions in the edge image - ";
+  if (verbose) std::cerr << "locating junctions in the edge image - ";
   Find_junctions();
-  if (verbose) vcl_cerr << xjunc_->size() << " junctions found\n";
+  if (verbose) std::cerr << xjunc_->size() << " junctions found\n";
   Find_junction_clusters();
-  if (verbose)  vcl_cerr << vlist_->size() << " junction clusters found\n";
+  if (verbose)  std::cerr << vlist_->size() << " junction clusters found\n";
 
   // Finally do edge following to extract the edge data from the thin_ image
-  if (verbose) vcl_cerr << "doing final edge following\n";
+  if (verbose) std::cerr << "doing final edge following\n";
   Final_hysteresis(edges);
-  if (verbose) vcl_cerr << "finished Canny\n";
+  if (verbose) std::cerr << "finished Canny\n";
 }
 
 
@@ -210,7 +212,7 @@ void osl_canny_rothwell::Non_maximal_suppression()
     for (unsigned int y=w0_; y+2+w0_<ysize_; ++y)  {
       // First check that we have an edge
       if ( g1[y+1] > low_ ) {
-        double theta = k*vcl_atan2(dy[y+1],dx[y+1]);
+        double theta = k*std::atan2(dy[y+1],dx[y+1]);
 
         // Now work out which direction wrt the eight-way
         // neighbours the edge normal points
@@ -240,8 +242,8 @@ void osl_canny_rothwell::Non_maximal_suppression()
           h2 = grad*g0[y] + (1 - grad)*g0[y+1];
           break;
          default:
-          vcl_cerr << "*** ERROR ON SWITCH IN NMS ***: orient="<< orient<< '\n';
-          vcl_abort();
+          std::cerr << "*** ERROR ON SWITCH IN NMS ***: orient="<< orient<< '\n';
+          std::abort();
         }
 
         // If the edge is greater than h1 and h2 we are at a peak,
@@ -269,8 +271,8 @@ void osl_canny_rothwell::Non_maximal_suppression()
             newy = y - dy[y+1]/dx[y+1]*fraction;
             break;
            default:
-            vcl_cerr<<"*** ERROR ON SWITCH IN NMS ***: orient="<< orient<< '\n';
-            vcl_abort();
+            std::cerr<<"*** ERROR ON SWITCH IN NMS ***: orient="<< orient<< '\n';
+            std::abort();
           }
 
           // Now store the edge data, re-use dx_[][] and dy_[][]
@@ -298,9 +300,9 @@ void osl_canny_rothwell::Non_maximal_suppression()
 //
 void osl_canny_rothwell::Initial_hysteresis()
 {
-  vcl_list<int> xcoords,ycoords;
-  vcl_list<float> grad;
-  vcl_list<osl_edgel_chain*> edges;
+  std::list<int> xcoords,ycoords;
+  std::list<float> grad;
+  std::list<osl_edgel_chain*> edges;
   float *thin,*px,*py,*pg;
   osl_edgel_chain *edgels;
 
@@ -348,8 +350,8 @@ void osl_canny_rothwell::Initial_hysteresis()
 //-----------------------------------------------------------------------------
 
 // see osl_canny_ox.cxx
-extern osl_Vertex *osl_find(vcl_list<osl_Vertex*> const *l, osl_Vertex const &v);
-extern osl_Vertex *osl_find(vcl_list<osl_Vertex*> const *l, float x, float y);
+extern osl_Vertex *osl_find(std::list<osl_Vertex*> const *l, osl_Vertex const &v);
+extern osl_Vertex *osl_find(std::list<osl_Vertex*> const *l, float x, float y);
 
 //:
 // Hysteresis follows edgel chains that lie above the low_ threshold and
@@ -357,10 +359,10 @@ extern osl_Vertex *osl_find(vcl_list<osl_Vertex*> const *l, float x, float y);
 // phase, all edges greater than low_ will be by default good and so have a member
 // greater than high_.
 //
-void osl_canny_rothwell::Final_hysteresis(vcl_list<osl_edge*> *edges)
+void osl_canny_rothwell::Final_hysteresis(std::list<osl_edge*> *edges)
 {
-  vcl_list<int> xcoords,ycoords;
-  vcl_list<float> grad;
+  std::list<int> xcoords,ycoords;
+  std::list<float> grad;
   float *thin,*px,*py,*pg,*pt,val;
 
   chain_no_ = 10;  // Must be set to a number >= 1
@@ -396,12 +398,12 @@ void osl_canny_rothwell::Final_hysteresis(vcl_list<osl_edge*> *edges)
       // Check that we have at least two endpoints to
       // the list, otherwise go to next loop
       if ( xcoords.size() < 2 )
-        // vcl_cerr << "short list found in Final_follow\n";
+        // std::cerr << "short list found in Final_follow\n";
         continue;
 
       // count the number of non-dummy edgels
       int count=0;
-      for (vcl_list<float>::iterator i=grad.begin(); i!=grad.end(); ++i)
+      for (std::list<float>::iterator i=grad.begin(); i!=grad.end(); ++i)
         if ( (*i) != dummy_ )
           count++;
 
@@ -441,8 +443,8 @@ void osl_canny_rothwell::Final_hysteresis(vcl_list<osl_edge*> *edges)
             float *dy = dy_[tmpx];
 
             // *** Bug fix, Samer Abdallah May 10, 1995:  next line was
-            // theta_[tmpx][tmpy]  = k*vcl_atan2(dy[y],dx[y]);
-            theta_[tmpx][tmpy]  = k*(float)vcl_atan2(dy[tmpy],dx[tmpy]);
+            // theta_[tmpx][tmpy]  = k*std::atan2(dy[y],dx[y]);
+            theta_[tmpx][tmpy]  = k*(float)std::atan2(dy[tmpy],dx[tmpy]);
           }
 
           *(pt++) = theta_[tmpx][tmpy];
@@ -657,7 +659,7 @@ void osl_canny_rothwell::Adaptive_Canny(vil1_image const &image)
   // halving the size of the smoothing sigma
   old_sigma_ = sigma_;  sigma_ /= 2.0f;
   old_width_ = width_;
-  width_ = int(sigma_*vcl_sqrt(2*vcl_log(1.0/gauss_tail_))+1);
+  width_ = int(sigma_*std::sqrt(2*std::log(1.0/gauss_tail_))+1);
   old_k_size_ = k_size_;  k_size_ = 2*width_+ 1;
   delete kernel_; kernel_ = new float [k_size_];
   osl_kernel_DOG(sigma_, kernel_, k_size_, width_);
@@ -667,10 +669,10 @@ void osl_canny_rothwell::Adaptive_Canny(vil1_image const &image)
   int image_size = old_k_size_ + k_size_ - 1;
   int half_size = (image_size - 1)/2;
 
-  if (verbose) vcl_cerr << "new image region "
-                        << image_size << " by " << image_size << vcl_endl
-                        << "Sigma           = " << sigma_ << vcl_endl
-                        << "Kernel size     = " << k_size_ << vcl_endl;
+  if (verbose) std::cerr << "new image region "
+                        << image_size << " by " << image_size << std::endl
+                        << "Sigma           = " << sigma_ << std::endl
+                        << "Kernel size     = " << k_size_ << std::endl;
 
   // Set up the new images
   float **dx   = osl_canny_base_make_raw_image(image_size,image_size, (float*)VXL_NULLPTR);
@@ -679,8 +681,8 @@ void osl_canny_rothwell::Adaptive_Canny(vil1_image const &image)
 
   // For each dangling-end (X,Y), search for more edges at the reduced scale
   int count=0;
-  if (verbose) vcl_cerr << "percentage of endings examined =   0";
-  typedef vcl_list<int>::iterator it;
+  if (verbose) std::cerr << "percentage of endings examined =   0";
+  typedef std::list<int>::iterator it;
   for (it i=xdang_->begin(), j=ydang_->begin(); i!=xdang_->end() && j!=ydang_->end(); ++i, ++j)
   {
     //xdang_->reset(),ydang_->reset(); xdang_->next(),ydang_->next(); )  {
@@ -723,9 +725,9 @@ void osl_canny_rothwell::Adaptive_Canny(vil1_image const &image)
         }
       }
     }
-    if (verbose) vcl_fprintf(stderr,"\b\b\b%3d", int(10*((++count)*10/xdang_->size())));
+    if (verbose) std::fprintf(stderr,"\b\b\b%3d", int(10*((++count)*10/xdang_->size())));
   }
-  if (verbose)   vcl_cerr << vcl_endl;
+  if (verbose)   std::cerr << std::endl;
 
   // Remove the image arrays
   osl_canny_base_free_raw_image(dx);
@@ -846,7 +848,7 @@ void osl_canny_rothwell::Find_junctions()
 //
 void osl_canny_rothwell::Find_junction_clusters()
 {
-  vcl_list<int> xcoords,ycoords,xvertices,yvertices,xjunc,yjunc;
+  std::list<int> xcoords,ycoords,xvertices,yvertices,xjunc,yjunc;
   // Find a junction and follow
   xvertices.clear();  yvertices.clear();
   xjunc.clear();      yjunc.clear();
@@ -882,7 +884,7 @@ void osl_canny_rothwell::Find_junction_clusters()
 
   // Construct the list of junction cluster centres
   vlist_->clear();
-  for (vcl_list<int>::iterator i=xvertices.begin(), j=yvertices.begin();
+  for (std::list<int>::iterator i=xvertices.begin(), j=yvertices.begin();
        i!=xvertices.end() && j!=yvertices.end();
        ++i, ++j) {
     //for (xvertices.reset(),yvertices.reset(); xvertices.next(),yvertices.next(); )  {

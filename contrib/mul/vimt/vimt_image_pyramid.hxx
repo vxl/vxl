@@ -8,8 +8,10 @@
 #include <vimt/vimt_image.h>
 #include <vimt/vimt_image_2d.h>
 
-#include <vcl_cstdlib.h> // for abort()
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <cstdlib> // for abort()
+#include <iostream>
 #include <vcl_cassert.h>
 
 //------------------------------------------------------------------------
@@ -18,9 +20,9 @@ template <class T> void vimt_image_pyramid_flatten(T& out, const vimt_image_pyra
 {
   if (!out.is_class("vimt_image_2d"))
   {
-    vcl_cerr<< "ERROR: vimt_image_pyramid_flatten(const vimt_image_pyramid &)\n"
+    std::cerr<< "ERROR: vimt_image_pyramid_flatten(const vimt_image_pyramid &)\n"
             << "Don't know how to deal with image type "<< in(0).is_a() << '\n';
-    vcl_abort();
+    std::abort();
   }
 
   const int n_levels = in.n_levels();

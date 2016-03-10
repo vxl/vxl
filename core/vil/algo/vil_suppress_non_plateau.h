@@ -32,8 +32,8 @@ inline void vil_suppress_non_plateau_3x3(const vil_image_view<T>& src_im,
 
   dest_im.set_size(ni,nj,1);
 
-  vcl_ptrdiff_t istep = src_im.istep(),jstep=src_im.jstep();
-  vcl_ptrdiff_t distep = dest_im.istep(),djstep=dest_im.jstep();
+  std::ptrdiff_t istep = src_im.istep(),jstep=src_im.jstep();
+  std::ptrdiff_t distep = dest_im.istep(),djstep=dest_im.jstep();
   const T* row = src_im.top_left_ptr()+istep+jstep;
   T* drow = dest_im.top_left_ptr()+distep+djstep;
   for (unsigned j=1;j<nj-1;++j,row+=jstep,drow+=djstep)

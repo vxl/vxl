@@ -25,7 +25,9 @@ bool operator==(osl_vertex const &a, osl_vertex const &b) {
   return a.x==b.x && a.y==b.y && a.id==b.id;
 }
 
-#include <vcl_list.h>
-#include <vcl_vector.h>
-OSL_TOPOLOGY_REF_UNREF_INSTANTIATE(vcl_list<osl_vertex*>);
-OSL_TOPOLOGY_REF_UNREF_INSTANTIATE(vcl_vector<osl_vertex*>);
+#include <vcl_compiler.h>
+#include <iostream>
+#include <list>
+#include <vector>
+OSL_TOPOLOGY_REF_UNREF_INSTANTIATE(std::list<osl_vertex*>);
+OSL_TOPOLOGY_REF_UNREF_INSTANTIATE(std::vector<osl_vertex*>);

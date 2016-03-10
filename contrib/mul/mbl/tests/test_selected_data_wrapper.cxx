@@ -3,7 +3,9 @@
 // \author Ian Scott
 // \brief test vpdfl_pc_gaussian, building, sampling, saving etc.
 
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iostream>
 #include <mbl/mbl_data_array_wrapper.h>
 #include <mbl/mbl_selected_data_wrapper.h>
 #include <testlib/testlib_test.h>
@@ -13,20 +15,20 @@
 //: The main control program
 void test_selected_data_wrapper()
 {
-  vcl_cout <<"\n\n***********************************\n"
+  std::cout <<"\n\n***********************************\n"
            <<    " Testing mbl_selected_data_wrapper\n"
            <<    "***********************************\n";
 
 
   const unsigned n = 10;
-  vcl_vector<double> data(n);
+  std::vector<double> data(n);
 
   for (unsigned i = 0; i < n; i++)
     data[i] = (double)i;
 
   mbl_data_array_wrapper<double > original(data);
 
-  vcl_vector<unsigned> selector(2*n, 3);
+  std::vector<unsigned> selector(2*n, 3);
   selector[0] = n-1;
   mbl_selected_data_wrapper<double> selection(original, selector);
 

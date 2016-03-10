@@ -4,9 +4,10 @@
 // \date  March 28, 2003
 
 #include <testlib/testlib_test.h>
-#include <vcl_cmath.h>
-#include <vcl_vector.h>
-#include <vcl_iostream.h>
+#include <cmath>
+#include <vcl_compiler.h>
+#include <vector>
+#include <iostream>
 #include <vgl/vgl_vector_2d.h>
 #include <vgl/vgl_point_2d.h>
 #include <vgl/vgl_conic.h>
@@ -20,13 +21,13 @@ static void test_conic_segment_methods()
 {
   vgl_point_2d<double> p0(0.0,0.0), p1(1.0,2.0);
   vgl_conic<double> l(1.0,-1.0,0.0);
-  vcl_cout << "line angle " << l.slope_degrees() << '\n';
+  std::cout << "line angle " << l.slope_degrees() << '\n';
   TEST_NEAR("line angle", l.slope_degrees(), 45, 1e-04);
   vgl_conic_segment_2d<double> seg(p0,p1);
   double angle = seg.slope_degrees();
   TEST_NEAR("line angle", seg.slope_degrees(),63.43495 , 1e-04);
   vgl_vector_2d<double> dir = seg.direction(), norm = seg.normal();
-  vcl_cout << "segment angle = " << angle << '\n'
+  std::cout << "segment angle = " << angle << '\n'
            << "direction " << dir << '\n'
            << "normal " << norm << '\n';
 }
@@ -34,7 +35,7 @@ static void test_conic_segment_methods()
 
 static void test_conic_regression()
 {
-  vcl_cout << "Testing conic regression (unit circle)\n";
+  std::cout << "Testing conic regression (unit circle)\n";
   const double sr12 = vnl_math::sqrt1_2;
   vgl_point_2d<double> p0( 1.0,  0.0), p1( sr12,  sr12),
                        p2( 0.0,  1.0), p3(-sr12,  sr12),
@@ -50,13 +51,13 @@ static void test_conic_regression()
   reg.add_point(p6);
   reg.add_point(p7);
   reg.fit();
-  vcl_cout << "algebraic fitting error " << reg.get_rms_algebraic_error() << '\n'
+  std::cout << "algebraic fitting error " << reg.get_rms_algebraic_error() << '\n'
            << "Sampson fitting error " << reg.get_rms_sampson_error() << '\n'
-           << "fitted conic " << reg.conic() << vcl_endl;
+           << "fitted conic " << reg.conic() << std::endl;
 
   TEST_NEAR("unit circle", reg.get_rms_sampson_error(), 0.0, 1e-12);
 
-  const double sr2 = vnl_math::sqrt2, sr16 = vcl_sqrt(1.6);
+  const double sr2 = vnl_math::sqrt2, sr16 = std::sqrt(1.6);
   vgl_point_2d<double> q0( sr2,  sr2), q1(-sr12,  sr12),
                        q2(-sr2, -sr2), q3( sr12, -sr12),
                        q4( 0.0, sr16), q5(  0.0, -sr16),
@@ -71,9 +72,9 @@ static void test_conic_regression()
   reg.add_point(q6);
   reg.add_point(q7);
   reg.fit();
-  vcl_cout << "algebraic fitting error " << reg.get_rms_algebraic_error() << '\n'
+  std::cout << "algebraic fitting error " << reg.get_rms_algebraic_error() << '\n'
            << "Sampson fitting error " << reg.get_rms_sampson_error() << '\n'
-           << "fitted conic " << reg.conic() << vcl_endl;
+           << "fitted conic " << reg.conic() << std::endl;
 
   TEST_NEAR("2:1 at 45 deg", reg.get_rms_sampson_error(), 0.0, 1e-12);
 
@@ -98,7 +99,7 @@ static void test_conic_regression()
   reg.add_point(vgl_point_2d<double>(1.98481,0.173648));
   reg.add_point(vgl_point_2d<double>(2,0.0));
   reg.fit();
-  vcl_cout << "algebraic fitting error " << reg.get_rms_algebraic_error() << '\n'
+  std::cout << "algebraic fitting error " << reg.get_rms_algebraic_error() << '\n'
            << "Sampson fitting error " << reg.get_rms_sampson_error() << '\n'
            << "fitted conic " << reg.conic() << '\n';
 
@@ -110,13 +111,13 @@ static void test_conic_regression()
 static void unit_circle(double s, double x0, double y0, double& x, double& y)
 {
   double theta = static_cast<double>(s)*vnl_math::pi/18;
-  double c = vcl_cos(theta), si = vcl_sin(theta);
+  double c = std::cos(theta), si = std::sin(theta);
   x = x0 + c; y = y0 + si;
 }
 
 static void test_fit_simple_chain()
 {
-  vcl_vector<vgl_point_2d<double> > curve;
+  std::vector<vgl_point_2d<double> > curve;
 
   // Two segments from a unit circle forming a kind of sine wave
 
@@ -140,11 +141,11 @@ static void test_fit_simple_chain()
   }
 
   fitter.fit();
-  vcl_vector<vgl_conic_segment_2d<double> >& segs = fitter.get_conic_segs();
-  vcl_cout << "\nCurve fit Produced the following conic segments\n";
-  for (vcl_vector<vgl_conic_segment_2d<double> >::iterator sit = segs.begin();
+  std::vector<vgl_conic_segment_2d<double> >& segs = fitter.get_conic_segs();
+  std::cout << "\nCurve fit Produced the following conic segments\n";
+  for (std::vector<vgl_conic_segment_2d<double> >::iterator sit = segs.begin();
        sit != segs.end(); sit++)
-    vcl_cout << *sit << '\n';
+    std::cout << *sit << '\n';
 
   TEST("Number of conic segments ", segs.size(), 2);
 
@@ -672,10 +673,10 @@ static void test_fit_simple_chain()
   f.add_point(vgl_point_2d<double>(147.354, 103.646));
   f.add_point(vgl_point_2d<double>(148.042, 103.422));
   f.fit();
-  vcl_vector<vgl_conic_segment_2d<double > > temp = f.get_conic_segs();
+  std::vector<vgl_conic_segment_2d<double > > temp = f.get_conic_segs();
 
-  for (vcl_vector<vgl_conic_segment_2d<double > >::iterator cit = temp.begin(); cit != temp.end(); ++cit)
-    vcl_cout << *cit << '\n';
+  for (std::vector<vgl_conic_segment_2d<double > >::iterator cit = temp.begin(); cit != temp.end(); ++cit)
+    std::cout << *cit << '\n';
   TEST("Number of conic segments ", temp.size(), 1);
 
 
@@ -1050,9 +1051,9 @@ static void test_fit_simple_chain()
   f1.add_point(vgl_point_2d<double>(41.3536, 139.646));
   f1.add_point(vgl_point_2d<double>(41.9457, 138.862));
   f1.fit();
-  vcl_vector<vgl_conic_segment_2d<double > > temp1 = f1.get_conic_segs();
-  for (vcl_vector<vgl_conic_segment_2d<double > >::iterator cit = temp1.begin(); cit != temp1.end(); ++cit)
-    vcl_cout << *cit << '\n';
+  std::vector<vgl_conic_segment_2d<double > > temp1 = f1.get_conic_segs();
+  for (std::vector<vgl_conic_segment_2d<double > >::iterator cit = temp1.begin(); cit != temp1.end(); ++cit)
+    std::cout << *cit << '\n';
   TEST("Number of conic segments ", temp1.size(), 2);
 }
 

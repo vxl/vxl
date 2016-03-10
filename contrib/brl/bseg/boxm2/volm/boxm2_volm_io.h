@@ -15,7 +15,9 @@
 #include "boxm2_volm_locations.h"
 #include "boxm2_volm_locations_sptr.h"
 #include <vsl/vsl_binary_io.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iostream>
 
 //: Binary save to stream.
 void vsl_b_write(vsl_b_ostream &os, const boxm2_volm_loc_hypotheses& m);

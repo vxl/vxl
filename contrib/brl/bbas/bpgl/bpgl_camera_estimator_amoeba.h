@@ -13,9 +13,11 @@
 
 #include <vnl/vnl_cost_function.h>
 
-#include <vcl_iostream.h>
-#include <vcl_sstream.h>
-#include <vcl_limits.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iostream>
+#include <sstream>
+#include <limits>
 
 template <class func_>
 class bpgl_camera_estimator_amoeba : public vnl_cost_function
@@ -26,7 +28,7 @@ class bpgl_camera_estimator_amoeba : public vnl_cost_function
                                 const vpgl_camera_double_sptr& cam)
   : vnl_cost_function(2), cest_(cest), img_e_(img_e)
   {
-    best_score = -vcl_numeric_limits<double>::min();
+    best_score = -std::numeric_limits<double>::min();
 
     // check the camera type
     if (cam->type_name() == "vpgl_perspective_camera") {
@@ -55,7 +57,7 @@ class bpgl_camera_estimator_amoeba : public vnl_cost_function
       cam_center = cam_center - 2.0*vec_y;
     }
     else {
-      vcl_cout << "bvxm_expected_edge_functor::apply() -- The camera type: " << cam->type_name() << " is not implemented yet!" << vcl_endl;
+      std::cout << "bvxm_expected_edge_functor::apply() -- The camera type: " << cam->type_name() << " is not implemented yet!" << std::endl;
     }
   }
 
@@ -84,10 +86,10 @@ class bpgl_camera_estimator_amoeba : public vnl_cost_function
 #if 0
       vil_image_view<vxl_byte> img_eei_vb(img_eei.ni(),img_eei.nj(),1);
       brip_vil_float_ops::normalize_to_interval<float,vxl_byte>(img_eei,img_eei_vb,0.0f,255.0f);
-      vcl_stringstream name; name << "./current_eei_" << curr_score << ".png";
+      std::stringstream name; name << "./current_eei_" << curr_score << ".png";
       vil_save(img_eei_vb, name.str().c_str());
-      vcl_cout << "x[0]: " << x[0] << " x[1]: " << x[1] << " ctr: " << curr_center << " score: " << curr_score << " best_score: " << best_score << '\n';
-      vcl_cout.flush();
+      std::cout << "x[0]: " << x[0] << " x[1]: " << x[1] << " ctr: " << curr_center << " score: " << curr_score << " best_score: " << best_score << '\n';
+      std::cout.flush();
 #endif
       if (curr_score > best_score) {
         best_score = curr_score;

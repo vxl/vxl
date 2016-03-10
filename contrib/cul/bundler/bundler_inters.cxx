@@ -3,7 +3,9 @@
 #include <bundler/bundler_utils.h>
 #include <vcl_cassert.h>
 
-#include <vcl_algorithm.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <algorithm>
 
 const double INLIER_PERCENT_NOT_SET = -1.0;
 
@@ -65,7 +67,7 @@ void bundler_inters_match_set::add_match(
     bundler_inters_feature_sptr f2)
 {
     bundler_inters_feature_pair p =
-        vcl_make_pair(f1, f2);
+        std::make_pair(f1, f2);
 
     matches.push_back(p);
 

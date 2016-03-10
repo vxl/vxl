@@ -15,7 +15,9 @@
 
 
 #include <vnl/vnl_matrix.h>
-#include <vcl_iosfwd.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iosfwd>
 
 #include "rgrl_scale_sptr.h"
 #include "rgrl_object.h"
@@ -66,10 +68,10 @@ class rgrl_scale
   { geo_scale_type_ = new_type; }
 
   //: write to io stream
-  void write( vcl_ostream& os ) const;
+  void write( std::ostream& os ) const;
 
   //: read from io stream
-  bool read( vcl_istream& is );
+  bool read( std::istream& is );
 
  private:
   bool                has_geometric_scale_;
@@ -81,11 +83,11 @@ class rgrl_scale
 };
 
 //: output operator
-vcl_ostream&
-operator<<( vcl_ostream& ofs, rgrl_scale const& scale );
+std::ostream&
+operator<<( std::ostream& ofs, rgrl_scale const& scale );
 
 //: input operator
-vcl_istream&
-operator>>( vcl_istream& ifs, rgrl_scale& scale );
+std::istream&
+operator>>( std::istream& ifs, rgrl_scale& scale );
 
 #endif // rgrl_scale_h_

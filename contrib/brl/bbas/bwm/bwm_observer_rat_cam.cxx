@@ -34,12 +34,14 @@
 #include <vpgl/algo/vpgl_backproject.h>
 
 #include <vul/vul_file.h>
-#include <vcl_sstream.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <sstream>
 
 #include <bmsh3d/bmsh3d_textured_mesh_mc.h>
 #include <vpgl/vpgl_local_rational_camera.h>
 
-vpgl_camera<double>* bwm_observer_rat_cam::read_camera(vcl_string cam_path,
+vpgl_camera<double>* bwm_observer_rat_cam::read_camera(std::string cam_path,
                                                        bool& local)
 {
   local = true;
@@ -48,7 +50,7 @@ vpgl_camera<double>* bwm_observer_rat_cam::read_camera(vcl_string cam_path,
   vpgl_camera<double>* cam  = read_local_rational_camera<double>(cam_path);
 
   if ( !cam ) {
-    vcl_cout << "Rational camera isn't local... trying global" << vcl_endl;
+    std::cout << "Rational camera isn't local... trying global" << std::endl;
     cam = read_rational_camera<double>(cam_path);
     local = false;
   }
@@ -60,9 +62,9 @@ vpgl_camera<double>* bwm_observer_rat_cam::read_camera(vcl_string cam_path,
   return cam;
 }
 bwm_observer_rat_cam::bwm_observer_rat_cam(bgui_image_tableau_sptr img,
-                                           vcl_string& name,
-                                           vcl_string& image_path,
-                                           vcl_string& cam_path,
+                                           std::string& name,
+                                           std::string& image_path,
+                                           std::string& cam_path,
                                            bool display_image_path)
     : bwm_observer_cam(img)
 {
@@ -145,11 +147,11 @@ vgl_vector_3d<double> bwm_observer_rat_cam::camera_direction()
   vgl_point_3d<double> p1,p2;
 
   if (!vpgl_backproject::bproj_plane(*rat_cam, img_pt, plane1, plane_point1, p1)) {
-    vcl_cerr << "Error: vpgl_backproject::broj_plane() failed.\n";
+    std::cerr << "Error: vpgl_backproject::broj_plane() failed.\n";
   }
 
   if (!vpgl_backproject::bproj_plane(*rat_cam, img_pt, plane2, plane_point2, p2)) {
-    vcl_cerr << "Error: vpgl_backproject::broj_plane() failed.\n";
+    std::cerr << "Error: vpgl_backproject::broj_plane() failed.\n";
   }
 
   // convert p1 and p2 to lvcs
@@ -174,7 +176,7 @@ void bwm_observer_rat_cam::center_pos()
   double lat=41.830939, lon=-71.394178, elev=0;
 
   if (viewer_ == VXL_NULLPTR) {
-    vcl_cerr << "viewer2D tableau is not found in the parents\n";
+    std::cerr << "viewer2D tableau is not found in the parents\n";
     return;
   }
 
@@ -224,11 +226,11 @@ bool bwm_observer_rat_cam::shift_camera(double dx, double dy)
   cam_adjusted_ = true;
 
 #if 0 // take this to the camera tableau
-  vcl_map<bwm_observable_sptr, vcl_vector<bgui_vsol_soview2D_polygon* > >::iterator objit;
+  std::map<bwm_observable_sptr, std::vector<bgui_vsol_soview2D_polygon* > >::iterator objit;
   for (objit = objects_.begin(); objit != objects_.end(); objit++) {
     vgui_message msg;
     msg.from = objit->first;
-    msg.data = new vcl_string("update");
+    msg.data = new std::string("update");
     update(msg);
   }
 #endif // 0
@@ -250,7 +252,7 @@ bool bwm_observer_rat_cam::intersect_ray_and_plane(vgl_point_2d<double> img_poin
   vgl_point_3d<double> p;
 
   if (!vpgl_backproject::bproj_plane(*rat_cam, p2d, plane_nonhomg, guess, p)) {
-    vcl_cout << "vpgl_backproject::broj_plane() failed.\n";
+    std::cout << "vpgl_backproject::broj_plane() failed.\n";
     return false;
   }
 
@@ -266,8 +268,8 @@ void bwm_observer_rat_cam::set_lvcs_at_selected_vertex()
     return;
   vpgl_lvcs lvcs(sv->y(),sv->x(),sv->z(), vpgl_lvcs::wgs84,vpgl_lvcs::DEG,vpgl_lvcs::METERS);
   bwm_world::instance()->set_lvcs(lvcs);
-  vcl_cout << "defining lvcs with origin = <" << sv->x() << ", "<<
-    sv->y() <<", "<< sv->z() << '>' <<vcl_endl;
+  std::cout << "defining lvcs with origin = <" << sv->x() << ", "<<
+    sv->y() <<", "<< sv->z() << '>' <<std::endl;
 }
 
 //: Define a local vertical coordinate system by choosing a single point as the origin.
@@ -275,8 +277,8 @@ void bwm_observer_rat_cam::set_lvcs_at_selected_vertex()
 void bwm_observer_rat_cam::define_lvcs(float x1, float y1)
 {
   vsol_point_2d_sptr img_point = new vsol_point_2d(x1,y1);
-  vcl_vector<vsol_point_2d_sptr> points2d;
-  vcl_vector<vsol_point_3d_sptr> points3d;
+  std::vector<vsol_point_2d_sptr> points2d;
+  std::vector<vsol_point_3d_sptr> points3d;
   // push img_point 3x to create degenerate polygon
   for (int i=0;i<3;i++) {
     points2d.push_back(img_point);
@@ -292,10 +294,10 @@ void bwm_observer_rat_cam::define_lvcs(float x1, float y1)
                  origin_poly3d->vertex(0)->x(),
                  origin_poly3d->vertex(0)->z(),
                  vpgl_lvcs::wgs84,vpgl_lvcs::DEG,vpgl_lvcs::METERS);
-  vcl_cout << "defining lvcs with origin = <"
+  std::cout << "defining lvcs with origin = <"
            << origin_poly3d->vertex(0)->x() << ", "
            << origin_poly3d->vertex(0)->y() << ", "
-           << origin_poly3d->vertex(0)->z() << '>' << vcl_endl;
+           << origin_poly3d->vertex(0)->z() << '>' << std::endl;
   bwm_world::instance()->set_lvcs(lvcs);
 }
 
@@ -303,7 +305,7 @@ void bwm_observer_rat_cam::adjust_camera_offset(vsol_point_2d_sptr img_point)
 {
 #if 0 // make sure lvcs is defined
   if (!lvcs_) {
-    vcl_cerr << "error: no lvcs defined!\n";
+    std::cerr << "error: no lvcs defined!\n";
     return;
   }
 #endif // 0
@@ -322,13 +324,13 @@ void bwm_observer_rat_cam::adjust_camera_offset(vsol_point_2d_sptr img_point)
     // shift camera translation to line up points
     if (shift_camera(img_point->x() - image_pt.x(),
       img_point->y() - image_pt.y())) {
-      vcl_cout << "shifted right camera offset by [" <<
+      std::cout << "shifted right camera offset by [" <<
         img_point->x() - image_pt.x() <<", " <<
         image_pt.y() - image_pt.y() <<"]\n";
       cam_adjusted_ = true;
     }
     else {
-      vcl_cerr << " error shifting camera offset\n";
+      std::cerr << " error shifting camera offset\n";
     }
   }
 }
@@ -336,7 +338,7 @@ void bwm_observer_rat_cam::adjust_camera_offset(vsol_point_2d_sptr img_point)
 void bwm_observer_rat_cam::save_selected()
 {
   vgui_dialog params("File Save");
-  vcl_string ext, file, empty="";
+  std::string ext, file, empty="";
 
   params.file ("Save...", ext, file);
   bool use_lvcs = false;
@@ -365,7 +367,7 @@ void bwm_observer_rat_cam::save_selected()
 void bwm_observer_rat_cam::save_all()
 {
   vgui_dialog params("File Save");
-  vcl_string ext, list_name, empty="";
+  std::string ext, list_name, empty="";
   bool use_lvcs = false;
 
   params.file ("Filename...", ext, list_name);
@@ -381,23 +383,23 @@ void bwm_observer_rat_cam::save_all()
     return;
   }
 
-  vcl_string directory_name = vul_file::dirname(list_name);
+  std::string directory_name = vul_file::dirname(list_name);
 
-  vcl_ofstream list_out(list_name.data());
+  std::ofstream list_out(list_name.data());
   if (!list_out.good()) {
-    vcl_cerr << "error opening file "<< list_name <<'\n';
+    std::cerr << "error opening file "<< list_name <<'\n';
     return;
   }
 
   int mesh_idx = 0;
-  vcl_map<bwm_observable_sptr, vcl_map<unsigned, bgui_vsol_soview2D_polygon* > >::iterator it = objects_.begin();
+  std::map<bwm_observable_sptr, std::map<unsigned, bgui_vsol_soview2D_polygon* > >::iterator it = objects_.begin();
   while (it != objects_.end()) {
-    vcl_ostringstream meshname;
-    vcl_ostringstream fullpath;
+    std::ostringstream meshname;
+    std::ostringstream fullpath;
     meshname << "obj" << mesh_idx <<".ply2";
     fullpath << directory_name << '/' << meshname.str();
 
-    list_out << meshname.str() << vcl_endl;
+    list_out << meshname.str() << std::endl;
     bwm_observable_sptr o = it->first;
     if (use_lvcs) {
       o->save(fullpath.str().data(),lvcs_);
@@ -415,13 +417,13 @@ void bwm_observer_rat_cam::save_all()
 void bwm_observer_rat_cam::save_gml()
 {
   if (!lvcs_) {
-    vcl_cerr << "Error: lvcs not defined.\n";
+    std::cerr << "Error: lvcs not defined.\n";
     return;
   }
 
   vgui_dialog params("File Save");
-  vcl_string ext, gml_filename, empty="";
-  vcl_string model_name;
+  std::string ext, gml_filename, empty="";
+  std::string model_name;
 
   params.field("model name", model_name);
 
@@ -430,34 +432,34 @@ void bwm_observer_rat_cam::save_gml()
     return;
 
   if (gml_filename == "") {
-    vcl_cerr << "Error: no filename selected.\n";
+    std::cerr << "Error: no filename selected.\n";
     return;
   }
 
   FILE* fp;
-  if ((fp = vcl_fopen(gml_filename.c_str(), "w")) == NULL) {
-    vcl_fprintf (stderr, "Can't open xml file %s to write.\n", gml_filename.c_str());
+  if ((fp = std::fopen(gml_filename.c_str(), "w")) == NULL) {
+    std::fprintf (stderr, "Can't open xml file %s to write.\n", gml_filename.c_str());
     return;
   }
 
-  vcl_fprintf (fp, "<?xml version=\"1.0\" encoding=\"utf-8\" standalone=\"yes\"?>\n");
-  vcl_fprintf (fp, "<CityModel xmlns=\"http://www.citygml.org/citygml/1/0/0\" xmlns:gml=\"http://www.opengis.net/gml\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xsi:schemaLocation=\"http://www.citygml.org/citygml/1/0/0 http://www.citygml.org/citygml/1/0/0/CityGML.xsd\">\n");
-  vcl_fprintf (fp, "<gml:description>%s</gml:description>\n",model_name.c_str());
-  vcl_fprintf (fp, "<gml:name>%s</gml:name>\n",model_name.c_str());
+  std::fprintf (fp, "<?xml version=\"1.0\" encoding=\"utf-8\" standalone=\"yes\"?>\n");
+  std::fprintf (fp, "<CityModel xmlns=\"http://www.citygml.org/citygml/1/0/0\" xmlns:gml=\"http://www.opengis.net/gml\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xsi:schemaLocation=\"http://www.citygml.org/citygml/1/0/0 http://www.citygml.org/citygml/1/0/0/CityGML.xsd\">\n");
+  std::fprintf (fp, "<gml:description>%s</gml:description>\n",model_name.c_str());
+  std::fprintf (fp, "<gml:name>%s</gml:name>\n",model_name.c_str());
 
-  vcl_map<bwm_observable_sptr, vcl_map<unsigned, bgui_vsol_soview2D_polygon* > >::iterator it;
+  std::map<bwm_observable_sptr, std::map<unsigned, bgui_vsol_soview2D_polygon* > >::iterator it;
   int obj_count = 0;
   for (it = objects_.begin(); it != objects_.end(); it++, obj_count++) {
     bwm_observable_sptr obj = it->first;
     if (obj->type_name().compare("bwm_observable_textured_mesh") == 0) {
       bwm_observable_textured_mesh* tm_obj = static_cast<bwm_observable_textured_mesh*>(obj.as_pointer());
       tm_obj->save_gml(fp, obj_count, lvcs_);
-      vcl_fprintf (fp, "   </Building>");
-      vcl_fprintf (fp, "  </cityObjectMember>");
+      std::fprintf (fp, "   </Building>");
+      std::fprintf (fp, "  </cityObjectMember>");
     }
   }
-  vcl_fprintf (fp, " </CityModel>");
-  vcl_fclose (fp);
+  std::fprintf (fp, " </CityModel>");
+  std::fclose (fp);
 }
 #endif // 0
 
@@ -465,8 +467,8 @@ void bwm_observer_rat_cam::save_gml()
 void bwm_observer_rat_cam::save_kml()
 {
   vgui_dialog params("File Save");
-  vcl_string ext, kml_filename, empty="";
-  vcl_string model_name;
+  std::string ext, kml_filename, empty="";
+  std::string model_name;
   double ground_height = 0.0;
   double x_offset = 0.0;
   double y_offset = 0.0;
@@ -481,28 +483,28 @@ void bwm_observer_rat_cam::save_kml()
     return;
 
   if (kml_filename == "") {
-    vcl_cerr << "Error: no filename selected.\n";
+    std::cerr << "Error: no filename selected.\n";
     return;
   }
 
   FILE* fp;
-  if ((fp = vcl_fopen(kml_filename.c_str(), "w")) == NULL) {
-    vcl_fprintf (stderr, "Can't open xml file %s to write.\n", kml_filename.c_str());
+  if ((fp = std::fopen(kml_filename.c_str(), "w")) == NULL) {
+    std::fprintf (stderr, "Can't open xml file %s to write.\n", kml_filename.c_str());
     return;
   }
 
-  vcl_fprintf (fp, "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n");
-  vcl_fprintf (fp, "<kml xmlns=\"http://earth.google.com/kml/2.1\">\n");
-  vcl_fprintf (fp, "<Document>\n");
-  vcl_fprintf (fp, "  <name>%s</name>\n",vul_file::strip_directory(kml_filename.c_str()));
-  vcl_fprintf (fp, "  <open>1</open>\n");
-  vcl_fprintf (fp, "  <Placemark>\n");
-  vcl_fprintf (fp, "    <name>%s</name>\n",model_name.c_str());
-  vcl_fprintf (fp, "    <visibility>1</visibility>\n");
+  std::fprintf (fp, "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n");
+  std::fprintf (fp, "<kml xmlns=\"http://earth.google.com/kml/2.1\">\n");
+  std::fprintf (fp, "<Document>\n");
+  std::fprintf (fp, "  <name>%s</name>\n",vul_file::strip_directory(kml_filename.c_str()));
+  std::fprintf (fp, "  <open>1</open>\n");
+  std::fprintf (fp, "  <Placemark>\n");
+  std::fprintf (fp, "    <name>%s</name>\n",model_name.c_str());
+  std::fprintf (fp, "    <visibility>1</visibility>\n");
 
-  vcl_fprintf (fp, "    <MultiGeometry>\n");
+  std::fprintf (fp, "    <MultiGeometry>\n");
 
-  vcl_map<bwm_observable_sptr, vcl_map<unsigned, bgui_vsol_soview2D_polygon* > >::iterator it;
+  std::map<bwm_observable_sptr, std::map<unsigned, bgui_vsol_soview2D_polygon* > >::iterator it;
   int obj_count = 0;
   for (it = objects_.begin(); it != objects_.end(); it++, obj_count++) {
     bwm_observable_sptr obj = it->first;
@@ -512,12 +514,12 @@ void bwm_observer_rat_cam::save_kml()
     }
   }
 
-  vcl_fprintf(fp, "    </MultiGeometry>\n");
-  vcl_fprintf(fp, "  </Placemark>\n");
-  vcl_fprintf(fp, "</Document>\n");
-  vcl_fprintf(fp, "</kml>\n");
+  std::fprintf(fp, "    </MultiGeometry>\n");
+  std::fprintf(fp, "  </Placemark>\n");
+  std::fprintf(fp, "</Document>\n");
+  std::fprintf(fp, "</kml>\n");
 
-  vcl_fclose (fp);
+  std::fclose (fp);
 }
 #endif // 0
 
@@ -525,49 +527,49 @@ void bwm_observer_rat_cam::save_kml()
 void bwm_observer_rat_cam::save_x3d()
 {
   if (lvcs_ != 0) {
-    vcl_cerr << "Error: lvcs not defined.\n";
+    std::cerr << "Error: lvcs not defined.\n";
     return;
   }
 
   vgui_dialog params("File Save");
-  vcl_string ext, x3d_filename, empty="";
+  std::string ext, x3d_filename, empty="";
 
   params.file("Save...",ext,x3d_filename);
   if (!params.ask())
     return;
 
   if (x3d_filename == "") {
-    vcl_cerr << "Error: no filename selected.\n";
+    std::cerr << "Error: no filename selected.\n";
     return;
   }
 
   FILE* fp;
-  if ((fp = vcl_fopen(x3d_filename.c_str(), "w")) == NULL) {
-    vcl_fprintf (stderr, "Can't open x3d file %s to write.\n", x3d_filename.c_str());
+  if ((fp = std::fopen(x3d_filename.c_str(), "w")) == NULL) {
+    std::fprintf (stderr, "Can't open x3d file %s to write.\n", x3d_filename.c_str());
     return;
   }
 
-  vcl_fprintf(fp, "#VRML V2.0 utf8\n");
-  vcl_fprintf(fp, "PROFILE Immersive\n\n");
+  std::fprintf(fp, "#VRML V2.0 utf8\n");
+  std::fprintf(fp, "PROFILE Immersive\n\n");
 
-  vcl_map<bwm_observable_sptr, vcl_map<unsigned, bgui_vsol_soview2D_polygon*> >::iterator it;
+  std::map<bwm_observable_sptr, std::map<unsigned, bgui_vsol_soview2D_polygon*> >::iterator it;
   int obj_count = 0;
   for (it = objects_.begin(); it != objects_.end(); it++, obj_count++) {
     bwm_observable_sptr obj = it->first;
     if (obj->type_name().compare("bwm_observable_textured_mesh") == 0) {
       bwm_observable_textured_mesh* tm_obj = static_cast<bwm_observable_textured_mesh*> (obj.as_pointer());
       tm_obj->save_x3d(fp, lvcs_);
-      vcl_fprintf(fp, "      ]\n\n");
-      vcl_fprintf(fp, "      solid TRUE\n");
-      vcl_fprintf(fp, "      convex FALSE\n");
-      vcl_fprintf(fp, "      creaseAngle 0\n");
-      vcl_fprintf(fp, "    }\n");
-      vcl_fprintf(fp, "  }\n");
-      vcl_fprintf(fp, "}\n\n\n");
+      std::fprintf(fp, "      ]\n\n");
+      std::fprintf(fp, "      solid TRUE\n");
+      std::fprintf(fp, "      convex FALSE\n");
+      std::fprintf(fp, "      creaseAngle 0\n");
+      std::fprintf(fp, "    }\n");
+      std::fprintf(fp, "  }\n");
+      std::fprintf(fp, "}\n\n\n");
     }
   }
 
-  vcl_fclose(fp);
+  std::fclose(fp);
   return;
 }
 #endif // 0
@@ -576,19 +578,19 @@ void bwm_observer_rat_cam::save_x3d()
 void bwm_observer_rat_cam::save_kml_collada()
 {
   if (!lvcs_) {
-    vcl_cerr << "Error: lvcs not defined.\n";
+    std::cerr << "Error: lvcs not defined.\n";
     return;
   }
   double origin_lat = 0,origin_lon = 0, origin_elev = 0;
   lvcs_->get_origin(origin_lat,origin_lon,origin_elev);
 
   vgui_dialog params("File Save");
-  vcl_string ext, kmz_dir, empty="";
+  std::string ext, kmz_dir, empty="";
 
   // guess at ground height = lowest vertex
   double minz = 1e6;
-  vcl_map<bwm_observable_sptr, vcl_map<unsigned, bgui_vsol_soview2D_polygon* > >::iterator it;
- // vcl_map<int, dbmsh3d_vertex*>::iterator vit;
+  std::map<bwm_observable_sptr, std::map<unsigned, bgui_vsol_soview2D_polygon* > >::iterator it;
+ // std::map<int, dbmsh3d_vertex*>::iterator vit;
   for (it = objects_.begin(); it != objects_.end(); it++) {
     bwm_observable_sptr obj = it->first;
     obj->global_to_local(lvcs_, minz);
@@ -597,7 +599,7 @@ void bwm_observer_rat_cam::save_kml_collada()
   double ground_height = minz;
   double lat_offset = 0.0;
   double lon_offset = 0.0;
-  vcl_string model_name;
+  std::string model_name;
 
   params.field("model name",model_name);
   params.field("ground height",ground_height);
@@ -609,38 +611,38 @@ void bwm_observer_rat_cam::save_kml_collada()
     return;
 
   if (kmz_dir == "") {
-    vcl_cerr << "Error: no filename selected.\n";
+    std::cerr << "Error: no filename selected.\n";
     return;
   }
 
   if (!vul_file::is_directory(kmz_dir)) {
-    vcl_cerr << "Error: Select a directory name.\n";
+    std::cerr << "Error: Select a directory name.\n";
     return;
   }
 
-  vcl_ostringstream dae_fname;
+  std::ostringstream dae_fname;
   dae_fname << kmz_dir << "/models/mesh.dae";
 
   FILE* dae_fp;
-  if ((dae_fp = vcl_fopen(dae_fname.str().data(), "w")) == NULL) {
-    vcl_fprintf (stderr, "Can't open .dae file %s to write.\n", dae_fname.str().data());
+  if ((dae_fp = std::fopen(dae_fname.str().data(), "w")) == NULL) {
+    std::fprintf (stderr, "Can't open .dae file %s to write.\n", dae_fname.str().data());
     return;
   }
 
-  vcl_vector<vcl_string> image_names;
-  vcl_vector<vcl_string> image_fnames;
-  vcl_vector<vcl_string> material_ids;
-  vcl_vector<vcl_string> material_names;
-  vcl_vector<vcl_string> effect_ids;
-  vcl_vector<vcl_string> surface_ids;
-  vcl_vector<vcl_string> image_sampler_ids;
-  vcl_vector<vcl_string> geometry_ids;
-  vcl_vector<vcl_string> geometry_position_ids;
-  vcl_vector<vcl_string> geometry_position_array_ids;
-  vcl_vector<vcl_string> geometry_uv_ids;
-  vcl_vector<vcl_string> geometry_uv_array_ids;
-  vcl_vector<vcl_string> geometry_vertex_ids;
-  vcl_vector<vcl_string> mesh_ids;
+  std::vector<std::string> image_names;
+  std::vector<std::string> image_fnames;
+  std::vector<std::string> material_ids;
+  std::vector<std::string> material_names;
+  std::vector<std::string> effect_ids;
+  std::vector<std::string> surface_ids;
+  std::vector<std::string> image_sampler_ids;
+  std::vector<std::string> geometry_ids;
+  std::vector<std::string> geometry_position_ids;
+  std::vector<std::string> geometry_position_array_ids;
+  std::vector<std::string> geometry_uv_ids;
+  std::vector<std::string> geometry_uv_array_ids;
+  std::vector<std::string> geometry_vertex_ids;
+  std::vector<std::string> mesh_ids;
 
   int nobjects = 0;
   unsigned min_faces = 3;
@@ -656,46 +658,46 @@ void bwm_observer_rat_cam::save_kml_collada()
     if (obj->type_name().compare("bwm_observable_textured_mesh") == 0)
     {
       bwm_observable_textured_mesh* mesh = static_cast<bwm_observable_textured_mesh*>(obj.as_pointer());
-      vcl_string image_fname = vul_file::strip_directory(mesh->tex_map_uri()); // assume all faces have same texmap img
-      vcl_string image_name = vul_file::strip_extension(image_fname);
+      std::string image_fname = vul_file::strip_directory(mesh->tex_map_uri()); // assume all faces have same texmap img
+      std::string image_name = vul_file::strip_extension(image_fname);
 
-      vcl_ostringstream image_path;
+      std::ostringstream image_path;
       image_path << "../images/" << image_fname;
 
-      vcl_ostringstream objname;
+      std::ostringstream objname;
       objname << "object_"<<nobjects;
 
-      vcl_ostringstream material_id;
+      std::ostringstream material_id;
       material_id << objname.str() <<"_materialID";
 
-      vcl_ostringstream material_name;
+      std::ostringstream material_name;
       material_name << objname.str() <<"_material";
 
-      vcl_ostringstream effect_id;
+      std::ostringstream effect_id;
       effect_id << objname.str() << "_effect";
 
-      vcl_ostringstream surface_id;
+      std::ostringstream surface_id;
       surface_id << objname.str() << "_surface";
 
-      vcl_ostringstream image_sampler_id;
+      std::ostringstream image_sampler_id;
       image_sampler_id << objname.str() << "_sampler";
 
-      vcl_ostringstream geometry_id;
+      std::ostringstream geometry_id;
       geometry_id << objname.str() << "_geometry";
 
-      vcl_ostringstream geometry_position_id;
+      std::ostringstream geometry_position_id;
       geometry_position_id << objname.str() << "_geometry_position";
 
-      vcl_ostringstream geometry_position_array_id;
+      std::ostringstream geometry_position_array_id;
       geometry_position_array_id << objname.str() <<"_geometry_position_array";
 
-      vcl_ostringstream geometry_uv_id;
+      std::ostringstream geometry_uv_id;
       geometry_uv_id << objname.str() << "_geometry_uv";
 
-      vcl_ostringstream geometry_uv_array_id;
+      std::ostringstream geometry_uv_array_id;
       geometry_uv_array_id << objname.str() << "_geometry_uv_array";
 
-      vcl_stringstream geometry_vertex_id;
+      std::stringstream geometry_vertex_id;
       geometry_vertex_id << objname.str() << "_geometry_vertex";
 
       mesh_ids.push_back(objname.str());
@@ -717,82 +719,82 @@ void bwm_observer_rat_cam::save_kml_collada()
     }
   }
 
-  vcl_fprintf(dae_fp,"<?xml version=\"1.0\" encoding=\"utf-8\"?>\n");
-  vcl_fprintf(dae_fp,"<COLLADA xmlns=\"http://www.collada.org/2005/11/COLLADASchema\" version=\"1.4.1\">\n");
+  std::fprintf(dae_fp,"<?xml version=\"1.0\" encoding=\"utf-8\"?>\n");
+  std::fprintf(dae_fp,"<COLLADA xmlns=\"http://www.collada.org/2005/11/COLLADASchema\" version=\"1.4.1\">\n");
 
-  vcl_fprintf(dae_fp,"  <asset>\n");
-  vcl_fprintf(dae_fp,"    <contributor>\n");
-  vcl_fprintf(dae_fp,"      <authoring_tool> Brown University World Modeler </authoring_tool>\n");
-  vcl_fprintf(dae_fp,"    </contributor>\n");
-  vcl_fprintf(dae_fp,"    <unit name=\"meters\" meter=\"1\"/>\n");
-  vcl_fprintf(dae_fp,"    <up_axis>Z_UP</up_axis>\n");
-  vcl_fprintf(dae_fp,"  </asset>\n");
+  std::fprintf(dae_fp,"  <asset>\n");
+  std::fprintf(dae_fp,"    <contributor>\n");
+  std::fprintf(dae_fp,"      <authoring_tool> Brown University World Modeler </authoring_tool>\n");
+  std::fprintf(dae_fp,"    </contributor>\n");
+  std::fprintf(dae_fp,"    <unit name=\"meters\" meter=\"1\"/>\n");
+  std::fprintf(dae_fp,"    <up_axis>Z_UP</up_axis>\n");
+  std::fprintf(dae_fp,"  </asset>\n");
 
-  vcl_fprintf(dae_fp,"  <library_images>\n");
+  std::fprintf(dae_fp,"  <library_images>\n");
   for (int i=0; i<nobjects; i++) {
-    vcl_fprintf(dae_fp,"    <image id=\"%s\" name=\"%s\">\n",image_names[i].c_str(),image_names[i].c_str());
-    vcl_fprintf(dae_fp,"      <init_from>%s</init_from>\n",image_fnames[i].c_str());
-    vcl_fprintf(dae_fp,"    </image>\n");
+    std::fprintf(dae_fp,"    <image id=\"%s\" name=\"%s\">\n",image_names[i].c_str(),image_names[i].c_str());
+    std::fprintf(dae_fp,"      <init_from>%s</init_from>\n",image_fnames[i].c_str());
+    std::fprintf(dae_fp,"    </image>\n");
   }
-  vcl_fprintf(dae_fp,"  </library_images>\n");
+  std::fprintf(dae_fp,"  </library_images>\n");
 
-  vcl_fprintf(dae_fp,"  <library_materials>\n");
+  std::fprintf(dae_fp,"  <library_materials>\n");
   for (int i=0; i<nobjects; i++) {
-    vcl_fprintf(dae_fp,"    <material id=\"%s\" name=\"%s\">\n",material_ids[i].c_str(),material_names[i].c_str());
-    vcl_fprintf(dae_fp,"      <instance_effect url=\"#%s\"/>\n",effect_ids[i].c_str());
-    vcl_fprintf(dae_fp,"    </material>\n");
+    std::fprintf(dae_fp,"    <material id=\"%s\" name=\"%s\">\n",material_ids[i].c_str(),material_names[i].c_str());
+    std::fprintf(dae_fp,"      <instance_effect url=\"#%s\"/>\n",effect_ids[i].c_str());
+    std::fprintf(dae_fp,"    </material>\n");
   }
-  vcl_fprintf(dae_fp,"  </library_materials>\n");
+  std::fprintf(dae_fp,"  </library_materials>\n");
 
-  vcl_fprintf(dae_fp,"  <library_effects>\n");
+  std::fprintf(dae_fp,"  <library_effects>\n");
   for (int i=0; i<nobjects; i++)
   {
-    vcl_fprintf(dae_fp,"    <effect id=\"%s\" name=\"%s\">\n",effect_ids[i].c_str(),effect_ids[i].c_str());
-    vcl_fprintf(dae_fp,"      <profile_COMMON>\n");
-    vcl_fprintf(dae_fp,"        <newparam sid=\"%s\">\n",surface_ids[i].c_str());
-    vcl_fprintf(dae_fp,"          <surface type=\"2D\">\n");
-    vcl_fprintf(dae_fp,"            <init_from>%s</init_from>\n",image_names[i].c_str());
-    vcl_fprintf(dae_fp,"          </surface>\n");
-    vcl_fprintf(dae_fp,"        </newparam>\n");
-    vcl_fprintf(dae_fp,"        <newparam sid=\"%s\">\n",image_sampler_ids[i].c_str());
-    vcl_fprintf(dae_fp,"          <sampler2D>\n");
-    vcl_fprintf(dae_fp,"            <source>%s</source>\n",surface_ids[i].c_str());
-    vcl_fprintf(dae_fp,"          </sampler2D>\n");
-    vcl_fprintf(dae_fp,"        </newparam>\n");
-    vcl_fprintf(dae_fp,"        <technique sid=\"COMMON\">\n");
-    vcl_fprintf(dae_fp,"          <phong>\n");
-    vcl_fprintf(dae_fp,"            <emission>\n");
-    vcl_fprintf(dae_fp,"              <color>0.0 0.0 0.0 1</color>\n");
-    vcl_fprintf(dae_fp,"            </emission>\n");
-    vcl_fprintf(dae_fp,"            <ambient>\n");
-    vcl_fprintf(dae_fp,"              <color>0.0 0.0 0.0 1</color>\n");
-    vcl_fprintf(dae_fp,"            </ambient>\n");
-    vcl_fprintf(dae_fp,"            <diffuse>\n");
-    vcl_fprintf(dae_fp,"              <texture texture=\"%s\" texcoord=\"UVSET0\"/>\n",image_sampler_ids[i].c_str());
-    vcl_fprintf(dae_fp,"            </diffuse>\n");
-    vcl_fprintf(dae_fp,"            <specular>\n");
-    vcl_fprintf(dae_fp,"              <color>0.33 0.33 0.33 1</color>\n");
-    vcl_fprintf(dae_fp,"            </specular>\n");
-    vcl_fprintf(dae_fp,"            <shininess>\n");
-    vcl_fprintf(dae_fp,"              <float>20.0</float>\n");
-    vcl_fprintf(dae_fp,"            </shininess>\n");
-    vcl_fprintf(dae_fp,"            <reflectivity>\n");
-    vcl_fprintf(dae_fp,"              <float>0.1</float>\n");
-    vcl_fprintf(dae_fp,"            </reflectivity>\n");
-    vcl_fprintf(dae_fp,"            <transparent>\n");
-    vcl_fprintf(dae_fp,"              <color>1 1 1 1</color>\n");
-    vcl_fprintf(dae_fp,"            </transparent>\n");
-    vcl_fprintf(dae_fp,"            <transparency>\n");
-    vcl_fprintf(dae_fp,"              <float>0.0</float>\n");
-    vcl_fprintf(dae_fp,"            </transparency>\n");
-    vcl_fprintf(dae_fp,"          </phong>\n");
-    vcl_fprintf(dae_fp,"        </technique>\n");
-    vcl_fprintf(dae_fp,"      </profile_COMMON>\n");
-    vcl_fprintf(dae_fp,"    </effect>\n");
+    std::fprintf(dae_fp,"    <effect id=\"%s\" name=\"%s\">\n",effect_ids[i].c_str(),effect_ids[i].c_str());
+    std::fprintf(dae_fp,"      <profile_COMMON>\n");
+    std::fprintf(dae_fp,"        <newparam sid=\"%s\">\n",surface_ids[i].c_str());
+    std::fprintf(dae_fp,"          <surface type=\"2D\">\n");
+    std::fprintf(dae_fp,"            <init_from>%s</init_from>\n",image_names[i].c_str());
+    std::fprintf(dae_fp,"          </surface>\n");
+    std::fprintf(dae_fp,"        </newparam>\n");
+    std::fprintf(dae_fp,"        <newparam sid=\"%s\">\n",image_sampler_ids[i].c_str());
+    std::fprintf(dae_fp,"          <sampler2D>\n");
+    std::fprintf(dae_fp,"            <source>%s</source>\n",surface_ids[i].c_str());
+    std::fprintf(dae_fp,"          </sampler2D>\n");
+    std::fprintf(dae_fp,"        </newparam>\n");
+    std::fprintf(dae_fp,"        <technique sid=\"COMMON\">\n");
+    std::fprintf(dae_fp,"          <phong>\n");
+    std::fprintf(dae_fp,"            <emission>\n");
+    std::fprintf(dae_fp,"              <color>0.0 0.0 0.0 1</color>\n");
+    std::fprintf(dae_fp,"            </emission>\n");
+    std::fprintf(dae_fp,"            <ambient>\n");
+    std::fprintf(dae_fp,"              <color>0.0 0.0 0.0 1</color>\n");
+    std::fprintf(dae_fp,"            </ambient>\n");
+    std::fprintf(dae_fp,"            <diffuse>\n");
+    std::fprintf(dae_fp,"              <texture texture=\"%s\" texcoord=\"UVSET0\"/>\n",image_sampler_ids[i].c_str());
+    std::fprintf(dae_fp,"            </diffuse>\n");
+    std::fprintf(dae_fp,"            <specular>\n");
+    std::fprintf(dae_fp,"              <color>0.33 0.33 0.33 1</color>\n");
+    std::fprintf(dae_fp,"            </specular>\n");
+    std::fprintf(dae_fp,"            <shininess>\n");
+    std::fprintf(dae_fp,"              <float>20.0</float>\n");
+    std::fprintf(dae_fp,"            </shininess>\n");
+    std::fprintf(dae_fp,"            <reflectivity>\n");
+    std::fprintf(dae_fp,"              <float>0.1</float>\n");
+    std::fprintf(dae_fp,"            </reflectivity>\n");
+    std::fprintf(dae_fp,"            <transparent>\n");
+    std::fprintf(dae_fp,"              <color>1 1 1 1</color>\n");
+    std::fprintf(dae_fp,"            </transparent>\n");
+    std::fprintf(dae_fp,"            <transparency>\n");
+    std::fprintf(dae_fp,"              <float>0.0</float>\n");
+    std::fprintf(dae_fp,"            </transparency>\n");
+    std::fprintf(dae_fp,"          </phong>\n");
+    std::fprintf(dae_fp,"        </technique>\n");
+    std::fprintf(dae_fp,"      </profile_COMMON>\n");
+    std::fprintf(dae_fp,"    </effect>\n");
   }
-  vcl_fprintf(dae_fp,"  </library_effects>\n");
+  std::fprintf(dae_fp,"  </library_effects>\n");
 
-  vcl_fprintf(dae_fp,"  <library_geometries>\n");
+  std::fprintf(dae_fp,"  <library_geometries>\n");
   int idx = 0;
   for (it = objects_.begin(); it != objects_.end(); it++)
   {
@@ -815,125 +817,125 @@ void bwm_observer_rat_cam::save_kml_collada()
                                material_names[idx]);
     }
 
-    vcl_fprintf(dae_fp,"</p>\n");
-    vcl_fprintf(dae_fp,"      </triangles>\n");
-    vcl_fprintf(dae_fp,"    </mesh>\n");
-    vcl_fprintf(dae_fp,"  </geometry>\n");
+    std::fprintf(dae_fp,"</p>\n");
+    std::fprintf(dae_fp,"      </triangles>\n");
+    std::fprintf(dae_fp,"    </mesh>\n");
+    std::fprintf(dae_fp,"  </geometry>\n");
     idx++;
   }
 
-  vcl_fprintf(dae_fp,"</library_geometries>\n");
-  vcl_fprintf(dae_fp,"<library_nodes>\n");
+  std::fprintf(dae_fp,"</library_geometries>\n");
+  std::fprintf(dae_fp,"<library_nodes>\n");
   for (int i=0; i<nobjects; i++) {
-    vcl_fprintf(dae_fp,"  <node id=\"Component_%d\" name=\"Component_%d\">\n",i,i);
-    vcl_fprintf(dae_fp,"    <node id=\"%s\" name=\"%s\">\n",mesh_ids[i].c_str(),mesh_ids[i].c_str());
-    vcl_fprintf(dae_fp,"      <instance_geometry url=\"#%s\">\n",geometry_ids[i].c_str());
-    vcl_fprintf(dae_fp,"        <bind_material>\n");
-    vcl_fprintf(dae_fp,"          <technique_common>\n");
-    vcl_fprintf(dae_fp,"            <instance_material symbol=\"%s\" target=\"#%s\">\n",material_names[i].c_str(),material_ids[i].c_str());
-    vcl_fprintf(dae_fp,"              <bind_vertex_input semantic=\"UVSET0\" input_semantic=\"TEXCOORD\" input_set=\"0\"/>\n");
-    vcl_fprintf(dae_fp,"            </instance_material>\n");
-    vcl_fprintf(dae_fp,"          </technique_common>\n");
-    vcl_fprintf(dae_fp,"        </bind_material>\n");
-    vcl_fprintf(dae_fp,"      </instance_geometry>\n");
-    vcl_fprintf(dae_fp,"    </node>\n");
-    vcl_fprintf(dae_fp,"  </node>\n");
+    std::fprintf(dae_fp,"  <node id=\"Component_%d\" name=\"Component_%d\">\n",i,i);
+    std::fprintf(dae_fp,"    <node id=\"%s\" name=\"%s\">\n",mesh_ids[i].c_str(),mesh_ids[i].c_str());
+    std::fprintf(dae_fp,"      <instance_geometry url=\"#%s\">\n",geometry_ids[i].c_str());
+    std::fprintf(dae_fp,"        <bind_material>\n");
+    std::fprintf(dae_fp,"          <technique_common>\n");
+    std::fprintf(dae_fp,"            <instance_material symbol=\"%s\" target=\"#%s\">\n",material_names[i].c_str(),material_ids[i].c_str());
+    std::fprintf(dae_fp,"              <bind_vertex_input semantic=\"UVSET0\" input_semantic=\"TEXCOORD\" input_set=\"0\"/>\n");
+    std::fprintf(dae_fp,"            </instance_material>\n");
+    std::fprintf(dae_fp,"          </technique_common>\n");
+    std::fprintf(dae_fp,"        </bind_material>\n");
+    std::fprintf(dae_fp,"      </instance_geometry>\n");
+    std::fprintf(dae_fp,"    </node>\n");
+    std::fprintf(dae_fp,"  </node>\n");
   }
-  vcl_fprintf(dae_fp,"</library_nodes>\n");
+  std::fprintf(dae_fp,"</library_nodes>\n");
 
-  vcl_fprintf(dae_fp,"<library_visual_scenes>\n");
-  vcl_fprintf(dae_fp,"  <visual_scene id=\"WorldModelerScene\" name=\"WorldModelerScene\">\n");
-  vcl_fprintf(dae_fp,"    <node id=\"Model\" name=\"Model\">\n");
+  std::fprintf(dae_fp,"<library_visual_scenes>\n");
+  std::fprintf(dae_fp,"  <visual_scene id=\"WorldModelerScene\" name=\"WorldModelerScene\">\n");
+  std::fprintf(dae_fp,"    <node id=\"Model\" name=\"Model\">\n");
   for (int i=0; i<nobjects; i++) {
-    vcl_fprintf(dae_fp,"      <node id=\"Component_%d_1\" name=\"Component_%d_1\">\n",i,i);
-    vcl_fprintf(dae_fp,"        <instance_node url=\"#Component_%d\"/>\n",i);
-    vcl_fprintf(dae_fp,"      </node>\n");
+    std::fprintf(dae_fp,"      <node id=\"Component_%d_1\" name=\"Component_%d_1\">\n",i,i);
+    std::fprintf(dae_fp,"        <instance_node url=\"#Component_%d\"/>\n",i);
+    std::fprintf(dae_fp,"      </node>\n");
   }
-  vcl_fprintf(dae_fp,"    </node>\n");
-  vcl_fprintf(dae_fp,"  </visual_scene>\n");
-  vcl_fprintf(dae_fp,"</library_visual_scenes>\n");
+  std::fprintf(dae_fp,"    </node>\n");
+  std::fprintf(dae_fp,"  </visual_scene>\n");
+  std::fprintf(dae_fp,"</library_visual_scenes>\n");
 
-  vcl_fprintf(dae_fp,"<scene>\n");
-  vcl_fprintf(dae_fp,"  <instance_visual_scene url=\"#WorldModelerScene\"/>\n");
-  vcl_fprintf(dae_fp,"</scene>\n");
-  vcl_fprintf(dae_fp,"</COLLADA>\n");
+  std::fprintf(dae_fp,"<scene>\n");
+  std::fprintf(dae_fp,"  <instance_visual_scene url=\"#WorldModelerScene\"/>\n");
+  std::fprintf(dae_fp,"</scene>\n");
+  std::fprintf(dae_fp,"</COLLADA>\n");
 
-  vcl_fclose(dae_fp);
+  std::fclose(dae_fp);
 
-  vcl_ostringstream textures_fname;
+  std::ostringstream textures_fname;
   textures_fname << kmz_dir << "/textures.txt";
 
   FILE* tex_fp;
-  if ((tex_fp = vcl_fopen(textures_fname.str().data(), "w")) == NULL) {
-    vcl_fprintf (stderr, "Can't open .dae file %s to write.\n", textures_fname.str().data());
+  if ((tex_fp = std::fopen(textures_fname.str().data(), "w")) == NULL) {
+    std::fprintf (stderr, "Can't open .dae file %s to write.\n", textures_fname.str().data());
     return;
   }
 
   for (int i=0; i<nobjects; i++) {
-    vcl_fprintf(tex_fp,"<%s> <%s>\n",image_fnames[i].c_str(),image_fnames[i].c_str());
+    std::fprintf(tex_fp,"<%s> <%s>\n",image_fnames[i].c_str(),image_fnames[i].c_str());
   }
-  vcl_fclose(tex_fp);
+  std::fclose(tex_fp);
 
-  vcl_ostringstream kml_fname;
+  std::ostringstream kml_fname;
   kml_fname << kmz_dir << "/doc.kml";
   FILE* kml_fp;
-  if ((kml_fp = vcl_fopen(kml_fname.str().data(), "w")) == NULL) {
-    vcl_fprintf (stderr, "Can't open .kml file %s to write.\n", kml_fname.str().data());
+  if ((kml_fp = std::fopen(kml_fname.str().data(), "w")) == NULL) {
+    std::fprintf (stderr, "Can't open .kml file %s to write.\n", kml_fname.str().data());
     return;
   }
 
-  vcl_fprintf(kml_fp,"<?xml version='1.0' encoding='UTF-8'?>\n");
-  vcl_fprintf(kml_fp,"<kml xmlns='http://earth.google.com/kml/2.1'>\n");
-  vcl_fprintf(kml_fp,"<Folder>\n");
-  vcl_fprintf(kml_fp,"  <name>%s</name>\n",model_name.c_str());
-  vcl_fprintf(kml_fp,"  <description><![CDATA[Created with <a href=\"http://www.lems.brown.edu\">Brown University World Modeler</a>]]></description>\n");
-  vcl_fprintf(kml_fp,"  <DocumentSource>Brown University World Modeler</DocumentSource>\n");
-  vcl_fprintf(kml_fp,"  <visibility>1</visibility>\n");
-  vcl_fprintf(kml_fp,"  <LookAt>\n");
-  vcl_fprintf(kml_fp,"    <heading>0</heading>\n");
-  vcl_fprintf(kml_fp,"    <tilt>45</tilt>\n");
-  vcl_fprintf(kml_fp,"    <longitude>%f</longitude>\n",origin_lon);
-  vcl_fprintf(kml_fp,"    <latitude>%f</latitude>\n",origin_lat);
-  vcl_fprintf(kml_fp,"    <range>200</range>\n");
-  vcl_fprintf(kml_fp,"    <altitude>%f</altitude>\n",0.0f);
-  vcl_fprintf(kml_fp,"  </LookAt>\n");
-  vcl_fprintf(kml_fp,"  <Folder>\n");
-  vcl_fprintf(kml_fp,"    <name>Tour</name>\n");
-  vcl_fprintf(kml_fp,"    <Placemark>\n");
-  vcl_fprintf(kml_fp,"      <name>Camera</name>\n");
-  vcl_fprintf(kml_fp,"      <visibility>1</visibility>\n");
-  vcl_fprintf(kml_fp,"    </Placemark>\n");
-  vcl_fprintf(kml_fp,"  </Folder>\n");
-  vcl_fprintf(kml_fp,"  <Placemark>\n");
-  vcl_fprintf(kml_fp,"    <name>Model</name>\n");
-  vcl_fprintf(kml_fp,"    <description><![CDATA[]]></description>\n");
-  vcl_fprintf(kml_fp,"    <Style id='default'>\n");
-  vcl_fprintf(kml_fp,"    </Style>\n");
-  vcl_fprintf(kml_fp,"    <Model>\n");
-  vcl_fprintf(kml_fp,"      <altitudeMode>relativeToGround</altitudeMode>\n");
-  vcl_fprintf(kml_fp,"      <Location>\n");
-  vcl_fprintf(kml_fp,"        <longitude>%f</longitude>\n",origin_lon + lon_offset);
-  vcl_fprintf(kml_fp,"        <latitude>%f</latitude>\n",origin_lat + lat_offset);
-  vcl_fprintf(kml_fp,"        <altitude>%f</altitude>\n",origin_elev - ground_height);
-  vcl_fprintf(kml_fp,"      </Location>\n");
-  vcl_fprintf(kml_fp,"      <Orientation>\n");
-  vcl_fprintf(kml_fp,"        <heading>0</heading>\n");
-  vcl_fprintf(kml_fp,"        <tilt>0</tilt>\n");
-  vcl_fprintf(kml_fp,"        <roll>0</roll>\n");
-  vcl_fprintf(kml_fp,"      </Orientation>\n");
-  vcl_fprintf(kml_fp,"      <Scale>\n");
-  vcl_fprintf(kml_fp,"        <x>1.0</x>\n");
-  vcl_fprintf(kml_fp,"        <y>1.0</y>\n");
-  vcl_fprintf(kml_fp,"        <z>1.0</z>\n");
-  vcl_fprintf(kml_fp,"      </Scale>\n");
-  vcl_fprintf(kml_fp,"      <Link>\n");
-  vcl_fprintf(kml_fp,"        <href>models/mesh.dae</href>\n");
-  vcl_fprintf(kml_fp,"      </Link>\n");
-  vcl_fprintf(kml_fp,"    </Model>\n");
-  vcl_fprintf(kml_fp,"  </Placemark>\n");
-  vcl_fprintf(kml_fp,"</Folder>\n");
-  vcl_fprintf(kml_fp,"</kml>\n");
-  vcl_fclose(kml_fp);
+  std::fprintf(kml_fp,"<?xml version='1.0' encoding='UTF-8'?>\n");
+  std::fprintf(kml_fp,"<kml xmlns='http://earth.google.com/kml/2.1'>\n");
+  std::fprintf(kml_fp,"<Folder>\n");
+  std::fprintf(kml_fp,"  <name>%s</name>\n",model_name.c_str());
+  std::fprintf(kml_fp,"  <description><![CDATA[Created with <a href=\"http://www.lems.brown.edu\">Brown University World Modeler</a>]]></description>\n");
+  std::fprintf(kml_fp,"  <DocumentSource>Brown University World Modeler</DocumentSource>\n");
+  std::fprintf(kml_fp,"  <visibility>1</visibility>\n");
+  std::fprintf(kml_fp,"  <LookAt>\n");
+  std::fprintf(kml_fp,"    <heading>0</heading>\n");
+  std::fprintf(kml_fp,"    <tilt>45</tilt>\n");
+  std::fprintf(kml_fp,"    <longitude>%f</longitude>\n",origin_lon);
+  std::fprintf(kml_fp,"    <latitude>%f</latitude>\n",origin_lat);
+  std::fprintf(kml_fp,"    <range>200</range>\n");
+  std::fprintf(kml_fp,"    <altitude>%f</altitude>\n",0.0f);
+  std::fprintf(kml_fp,"  </LookAt>\n");
+  std::fprintf(kml_fp,"  <Folder>\n");
+  std::fprintf(kml_fp,"    <name>Tour</name>\n");
+  std::fprintf(kml_fp,"    <Placemark>\n");
+  std::fprintf(kml_fp,"      <name>Camera</name>\n");
+  std::fprintf(kml_fp,"      <visibility>1</visibility>\n");
+  std::fprintf(kml_fp,"    </Placemark>\n");
+  std::fprintf(kml_fp,"  </Folder>\n");
+  std::fprintf(kml_fp,"  <Placemark>\n");
+  std::fprintf(kml_fp,"    <name>Model</name>\n");
+  std::fprintf(kml_fp,"    <description><![CDATA[]]></description>\n");
+  std::fprintf(kml_fp,"    <Style id='default'>\n");
+  std::fprintf(kml_fp,"    </Style>\n");
+  std::fprintf(kml_fp,"    <Model>\n");
+  std::fprintf(kml_fp,"      <altitudeMode>relativeToGround</altitudeMode>\n");
+  std::fprintf(kml_fp,"      <Location>\n");
+  std::fprintf(kml_fp,"        <longitude>%f</longitude>\n",origin_lon + lon_offset);
+  std::fprintf(kml_fp,"        <latitude>%f</latitude>\n",origin_lat + lat_offset);
+  std::fprintf(kml_fp,"        <altitude>%f</altitude>\n",origin_elev - ground_height);
+  std::fprintf(kml_fp,"      </Location>\n");
+  std::fprintf(kml_fp,"      <Orientation>\n");
+  std::fprintf(kml_fp,"        <heading>0</heading>\n");
+  std::fprintf(kml_fp,"        <tilt>0</tilt>\n");
+  std::fprintf(kml_fp,"        <roll>0</roll>\n");
+  std::fprintf(kml_fp,"      </Orientation>\n");
+  std::fprintf(kml_fp,"      <Scale>\n");
+  std::fprintf(kml_fp,"        <x>1.0</x>\n");
+  std::fprintf(kml_fp,"        <y>1.0</y>\n");
+  std::fprintf(kml_fp,"        <z>1.0</z>\n");
+  std::fprintf(kml_fp,"      </Scale>\n");
+  std::fprintf(kml_fp,"      <Link>\n");
+  std::fprintf(kml_fp,"        <href>models/mesh.dae</href>\n");
+  std::fprintf(kml_fp,"      </Link>\n");
+  std::fprintf(kml_fp,"    </Model>\n");
+  std::fprintf(kml_fp,"  </Placemark>\n");
+  std::fprintf(kml_fp,"</Folder>\n");
+  std::fprintf(kml_fp,"</kml>\n");
+  std::fclose(kml_fp);
 }
 #endif // 0
 
@@ -941,11 +943,11 @@ void bwm_observer_rat_cam::save_kml_collada()
 void bwm_observer_rat_cam::generate_textures()
 {
   if (!lvcs_) {
-    vcl_cerr << "Error: must define LVCS coordinate system before generating tex coords.\n";
+    std::cerr << "Error: must define LVCS coordinate system before generating tex coords.\n";
     return;
   }
   vgui_dialog params("Texture Map filename");
-  vcl_string ext, tex_filename, empty = "";
+  std::string ext, tex_filename, empty = "";
   params.file("Texture map...",ext,tex_filename);
 
   if (!params.ask())
@@ -954,12 +956,12 @@ void bwm_observer_rat_cam::generate_textures()
   bwm_texture_map_generator tex_generator;
 
   // each object independently for now.
-  vcl_map<bwm_observable_sptr, vcl_map<unsigned, bgui_vsol_soview2D_polygon* > >::iterator it;
+  std::map<bwm_observable_sptr, std::map<unsigned, bgui_vsol_soview2D_polygon* > >::iterator it;
   int mesh_idx = 0;
   for (it = objects_.begin(); it != objects_.end(); it++, mesh_idx++) {
     bwm_observable_sptr o = it->first;
     if (o->type_name().compare("bwm_observable_textured_mesh") == 0) {
-      vcl_ostringstream tex_fullpath;
+      std::ostringstream tex_fullpath;
       tex_fullpath << tex_filename << '.' << mesh_idx << ".jpg";
       bwm_observable_textured_mesh* obj = static_cast<bwm_observable_textured_mesh*> (o.as_pointer());
       tex_generator.generate_texture_map(obj, tex_fullpath.str(), *lvcs_);
@@ -972,29 +974,29 @@ void bwm_observer_rat_cam::generate_textures()
 #if 0
 void bwm_observer_rat_cam::save_lvcs()
 {
-  vcl_string filename = select_file();
+  std::string filename = select_file();
   // just save origin for now
-  vcl_ofstream os(filename.data());
+  std::ofstream os(filename.data());
   double lat,lon,elev;
   lvcs_->get_origin(lat,lon,elev);
   os.precision(12);
-  os << lat << ' '<< lon << ' ' << elev << vcl_endl;
+  os << lat << ' '<< lon << ' ' << elev << std::endl;
 
   return;
 }
 
 void bwm_observer_rat_cam::load_lvcs()
 {
-  vcl_string filename = select_file();
+  std::string filename = select_file();
   // just load origin for now
-  vcl_ifstream is(filename.data());
+  std::ifstream is(filename.data());
   double lat, lon, elev;
   is >> lat;
   is >> lon;
   is >> elev;
 
   lvcs_ = new vpgl_lvcs(lat,lon,elev,vpgl_lvcs::wgs84,vpgl_lvcs::DEG,vpgl_lvcs::METERS);
-  vcl_cout << "loaded lvcs with origin "<<lat<<", "<<lon<<", "<<elev<<vcl_endl;
+  std::cout << "loaded lvcs with origin "<<lat<<", "<<lon<<", "<<elev<<std::endl;
 
   return;
 }
@@ -1004,14 +1006,14 @@ void bwm_observer_rat_cam::load_lvcs()
 void bwm_observer_rat_cam::convert_file_to_lvcs()
 {
   if (!lvcs_) {
-    vcl_cerr << "error: lvcs is not defined!\n";
+    std::cerr << "error: lvcs is not defined!\n";
     return;
   }
   // expects simple text file with each line being of the form "lat lon z"
-  vcl_string filename_in = select_file();
-  vcl_string filename_out = filename_in + ".lvcs";
-  vcl_ifstream is(filename_in.data());
-  vcl_ofstream os(filename_out.data());
+  std::string filename_in = select_file();
+  std::string filename_out = filename_in + ".lvcs";
+  std::ifstream is(filename_in.data());
+  std::ofstream os(filename_out.data());
 
   double lat,lon,elev;
   double x,y,z;
@@ -1021,17 +1023,17 @@ void bwm_observer_rat_cam::convert_file_to_lvcs()
     is >> lon;
     is >> elev;
     lvcs_->global_to_local(lon,lat,elev,vpgl_lvcs::wgs84,x,y,z,vpgl_lvcs::DEG,vpgl_lvcs::METERS);
-    os << x <<' '<< y <<' '<<z<<vcl_endl;
+    os << x <<' '<< y <<' '<<z<<std::endl;
   }
 
   return;
 }
 #endif // 0
 
-vcl_string bwm_observer_rat_cam::select_file()
+std::string bwm_observer_rat_cam::select_file()
 {
   vgui_dialog params ("File Open");
-  vcl_string ext, file, empty="";
+  std::string ext, file, empty="";
 
   params.file ("Open...", ext, file);
   if (!params.ask())
@@ -1046,7 +1048,7 @@ vcl_string bwm_observer_rat_cam::select_file()
   return file;
 }
 
-vcl_ostream& bwm_observer_rat_cam::print_camera(vcl_ostream& s)
+std::ostream& bwm_observer_rat_cam::print_camera(std::ostream& s)
 {
   vpgl_rational_camera<double>* rat_cam = static_cast<vpgl_rational_camera<double> *> (camera_);
   s << *rat_cam;
@@ -1061,11 +1063,11 @@ vcl_ostream& bwm_observer_rat_cam::print_camera(vcl_ostream& s)
 void bwm_observer_rat_cam::adjust_camera_to_world_pt()
 {
 #if 0
-  vcl_vector<bwm_corr_sptr> corrs =
+  std::vector<bwm_corr_sptr> corrs =
     bwm_observer_mgr::instance()->correspondences();
   if (!corrs.size())
   {
-    vcl_cerr << "In bwm_observer_rat_cam::adjust_camera_to_world_pt() -"
+    std::cerr << "In bwm_observer_rat_cam::adjust_camera_to_world_pt() -"
              << " no correspondences to use for alignment\n";
    return;
   }
@@ -1073,7 +1075,7 @@ void bwm_observer_rat_cam::adjust_camera_to_world_pt()
   //Find the world to image correspondence for this observer_cam
   bwm_corr_sptr corr;
   bwm_observer_cam* this_obs = (bwm_observer_cam*)this;
-  for (vcl_vector<bwm_corr_sptr>::iterator cit = corrs.begin();
+  for (std::vector<bwm_corr_sptr>::iterator cit = corrs.begin();
        cit != corrs.end(); ++cit)
     if ((*cit)->obs_in(this_obs))
       corr = *cit;
@@ -1081,7 +1083,7 @@ void bwm_observer_rat_cam::adjust_camera_to_world_pt()
   // get the world point to use for alignment
   if (!corr||corr->mode())
   {
-    vcl_cerr << "In bwm_observer_rat_cam::adjust_camera_to_world_pt() -"
+    std::cerr << "In bwm_observer_rat_cam::adjust_camera_to_world_pt() -"
              << " corr is null or correspondence is not world_to_image\n";
    return;
   }
@@ -1089,7 +1091,7 @@ void bwm_observer_rat_cam::adjust_camera_to_world_pt()
   vgl_point_3d<double> pt_3d;
   if (!bwm_world::instance()->world_pt(pt_3d))
   {
-    vcl_cerr << "In bwm_observer_rat_cam::adjust_camera_to_world_pt() -"
+    std::cerr << "In bwm_observer_rat_cam::adjust_camera_to_world_pt() -"
              << " no world point defined\n";
     return;
   }
@@ -1105,14 +1107,14 @@ void bwm_observer_rat_cam::adjust_camera_to_world_pt()
   double tx = x-proj_point_2d.x();
   double ty = y-proj_point_2d.y();
   this->shift_camera(tx, ty);
-  vcl_cout << "Shifting camera[" << this->camera_path() <<  "]:\n("
+  std::cout << "Shifting camera[" << this->camera_path() <<  "]:\n("
            << tx << ' ' << ty << "):\n point_3d("
            << pt_3d.x() << ' ' << pt_3d.y()
            << ' ' << pt_3d.z() << ")\n";
   cam_adjusted_ = true;
   //send the objects in the world the fact that they need to redisplay
-  vcl_vector<bwm_observable_sptr> objs = bwm_world::instance()->objects();
-  for (vcl_vector<bwm_observable_sptr>::iterator oit = objs.begin();
+  std::vector<bwm_observable_sptr> objs = bwm_world::instance()->objects();
+  for (std::vector<bwm_observable_sptr>::iterator oit = objs.begin();
        oit != objs.end(); ++oit)
     (*oit)->send_update();
 
@@ -1126,7 +1128,7 @@ void bwm_observer_rat_cam::project_edges_from_master()
   bwm_observer_cam* mobs = bwm_observer_mgr::BWM_MASTER_OBSERVER;
   if (!mobs)
   {
-    vcl_cout << "In bwm_observer_rat_cam::project_edges_from_master() -"
+    std::cout << "In bwm_observer_rat_cam::project_edges_from_master() -"
              << " no master selected\n";
     return;
   }
@@ -1136,14 +1138,14 @@ void bwm_observer_rat_cam::project_edges_from_master()
     mobs->get_selected_box(box);
   if (!selected)
   {
-    vcl_cout << "In bwm_observer_rat_cam::project_edges_from_master() -"
+    std::cout << "In bwm_observer_rat_cam::project_edges_from_master() -"
              << " no box selected\n";
     return;
   }
-  vcl_vector<vsol_digital_curve_2d_sptr> edges_2d = mobs->edges(box->get_id());
+  std::vector<vsol_digital_curve_2d_sptr> edges_2d = mobs->edges(box->get_id());
   if (!edges_2d.size())
   {
-    vcl_cout << "In bwm_observer_rat_cam::project_edges_from_master() -"
+    std::cout << "In bwm_observer_rat_cam::project_edges_from_master() -"
              << " no edges in box\n";
     return;
   }
@@ -1151,7 +1153,7 @@ void bwm_observer_rat_cam::project_edges_from_master()
   vpgl_camera<double>* mcam  =   mobs->camera();
   if (!mcam)
   {
-    vcl_cout << "In bwm_observer_rat_cam::project_edges_from_master() -"
+    std::cout << "In bwm_observer_rat_cam::project_edges_from_master() -"
              << " master camera null\n";
     return;
   }
@@ -1163,33 +1165,33 @@ void bwm_observer_rat_cam::project_edges_from_master()
   vgl_point_3d<double> wpt;
   if (!bwm_world::instance()->world_pt(wpt))
   {
-    vcl_cout << "In bwm_observer_rat_cam::project_edges_from_master() -"
+    std::cout << "In bwm_observer_rat_cam::project_edges_from_master() -"
              << " no world point to use as an initial guess\n";
     return;
   }
-  vcl_vector<vsol_digital_curve_3d_sptr> edges_3d;
+  std::vector<vsol_digital_curve_3d_sptr> edges_3d;
   if (! bwm_reg_utils::back_project_edges(edges_2d, master_cam, master_plane,
                                           wpt, edges_3d))
   {
-    vcl_cout << "In bwm_observer_rat_cam::project_edges_from_master() -"
+    std::cout << "In bwm_observer_rat_cam::project_edges_from_master() -"
              << " back-projection of edges failed\n";
     return;
   }
   //now project forward onto this image
   if (!camera_)
   {
-    vcl_cout << "In bwm_observer_rat_cam::project_edges_from_master() -"
+    std::cout << "In bwm_observer_rat_cam::project_edges_from_master() -"
              << " rational camera null\n";
     return;
   }
 
   vpgl_rational_camera<double> my_cam =
     *static_cast<vpgl_rational_camera<double>* >(camera_);
-  vcl_vector<vsol_digital_curve_2d_sptr> transfered_curves;
+  std::vector<vsol_digital_curve_2d_sptr> transfered_curves;
   bwm_reg_utils::project_edges(edges_3d, my_cam,transfered_curves);
 
   vgui_style_sptr pstyle = vgui_style::new_style(0.1f, 0.8f, 0.1f, 1.0f, 3.0f);
-  vcl_vector<vsol_digital_curve_2d_sptr>::iterator cit =
+  std::vector<vsol_digital_curve_2d_sptr>::iterator cit =
     transfered_curves.begin();
   for (; cit != transfered_curves.end(); ++cit)
     this->add_digital_curve(*cit, pstyle);
@@ -1203,7 +1205,7 @@ void bwm_observer_rat_cam::register_search_to_master()
   bwm_observer_cam* eo_obs = bwm_observer_mgr::BWM_EO_OBSERVER;
   if (!eo_obs)
   {
-    vcl_cout << "In bwm_observer_rat_cam::register_search_to_master() -"
+    std::cout << "In bwm_observer_rat_cam::register_search_to_master() -"
              << " no eo observer selected\n";
     return;
   }
@@ -1211,14 +1213,14 @@ void bwm_observer_rat_cam::register_search_to_master()
     eo_obs->image_tableau()->get_image_resource();
   if (!eo_image)
   {
-    vcl_cout << "In bwm_observer_rat_cam::register_search_master() -"
+    std::cout << "In bwm_observer_rat_cam::register_search_master() -"
              << " eo observer image null\n";
     return;
   }
   vpgl_camera<double>* eoc  =   eo_obs->camera();
   if (!eoc)
   {
-    vcl_cout << "In bwm_observer_rat_cam::register_search_to_master() -"
+    std::cout << "In bwm_observer_rat_cam::register_search_to_master() -"
              << " eo observer camera null\n";
     return;
   }
@@ -1228,7 +1230,7 @@ void bwm_observer_rat_cam::register_search_to_master()
   bwm_observer_cam* other_mode_obs = bwm_observer_mgr::BWM_OTHER_MODE_OBSERVER;
   if (!other_mode_obs)
   {
-    vcl_cout << "In bwm_observer_rat_cam::register_search_to_master() -"
+    std::cout << "In bwm_observer_rat_cam::register_search_to_master() -"
              << " no other observer selected\n";
     return;
   }
@@ -1236,14 +1238,14 @@ void bwm_observer_rat_cam::register_search_to_master()
     other_mode_obs->image_tableau()->get_image_resource();
   if (!other_mode_image)
   {
-    vcl_cout << "In bwm_observer_rat_cam::register_search_to_master() -"
+    std::cout << "In bwm_observer_rat_cam::register_search_to_master() -"
              << " other_observer image null\n";
     return;
   }
   vpgl_camera<double>* other_mode_c  =  other_mode_obs->camera();
   if (!other_mode_c)
   {
-    vcl_cout << "In bwm_observer_rat_cam::register_search_to_master() -"
+    std::cout << "In bwm_observer_rat_cam::register_search_to_master() -"
              << " other_observer camera null\n";
     return;
   }
@@ -1255,7 +1257,7 @@ void bwm_observer_rat_cam::register_search_to_master()
   vgl_point_3d<double> wpt;
   if (!bwm_world::instance()->world_pt(wpt))
   {
-    vcl_cout << "In bwm_observer_rat_cam::register_search_to_master() -"
+    std::cout << "In bwm_observer_rat_cam::register_search_to_master() -"
              << " no world point to use as an initial guess\n";
     return;
   }
@@ -1297,14 +1299,14 @@ void bwm_observer_rat_cam::register_search_to_master()
                  search_noise_threshold,
                  tcol, trow))
   {
-    vcl_cout << "In bwm_observer_rat_cam::register_search_to_master() -"
+    std::cout << "In bwm_observer_rat_cam::register_search_to_master() -"
              << " registration failed\n";
     //   return;
   }
 
   if (show_edges) {
-    vcl_vector<vsol_digital_curve_2d_sptr> search_edges = brp.search_curves();
-    vcl_vector<vsol_digital_curve_2d_sptr> trans_model_edges
+    std::vector<vsol_digital_curve_2d_sptr> search_edges = brp.search_curves();
+    std::vector<vsol_digital_curve_2d_sptr> trans_model_edges
       = brp.trans_model_curves();
     this->display_reg_seg(search_edges, trans_model_edges);
   }

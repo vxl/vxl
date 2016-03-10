@@ -25,7 +25,8 @@
 
 #include "vidl_istream.h"
 #include "vidl_iidc1394_params.h"
-#include <vcl_string.h>
+#include <vcl_compiler.h>
+#include <string>
 
 
 //: A video input stream using libdc1394

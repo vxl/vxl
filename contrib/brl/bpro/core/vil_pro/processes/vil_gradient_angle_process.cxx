@@ -7,17 +7,19 @@
 #include <bprb/bprb_parameters.h>
 #include <vil/vil_image_view_base.h>
 #include <vgl/vgl_vector_2d.h>
-#include <vcl_cmath.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <cmath>
 
 //: Constructor
 bool vil_gradient_angle_process_cons(bprb_func_process& pro)
 {
   //input
-  vcl_vector<vcl_string> input_types;
+  std::vector<std::string> input_types;
   input_types.push_back("vil_image_view_base_sptr"); // dI/dx
   input_types.push_back("vil_image_view_base_sptr"); // dI/dy
   //output
-  vcl_vector<vcl_string> output_types;
+  std::vector<std::string> output_types;
   output_types.push_back("vil_image_view_base_sptr"); // the angle of vector (dI/dx + dI/dy)
   return pro.set_input_types(input_types)
      &&  pro.set_output_types(output_types);
@@ -28,7 +30,7 @@ bool vil_gradient_angle_process(bprb_func_process& pro)
 {
   // Sanity check
   if (pro.n_inputs()< 2) {
-    vcl_cout << "vil_gradient_angle_process: The number of inputs should be 2" << vcl_endl;
+    std::cout << "vil_gradient_angle_process: The number of inputs should be 2" << std::endl;
     return false;
   }
 
@@ -51,7 +53,7 @@ bool vil_gradient_angle_process(bprb_func_process& pro)
     for (unsigned j=0; j<dx.nj(); ++j) {
       //vgl_vector_2d<float> pvec(dx(i,j), dy(i,j));
       //double t = angle( pvec, horiz);
-      double t = vcl_atan2( dy(i,j), dx(i,j) );
+      double t = std::atan2( dy(i,j), dx(i,j) );
       (*theta)(i,j) = (float) t;
     }
   }

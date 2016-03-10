@@ -51,19 +51,19 @@ class FMPlanarComputeNonLinear : public FMatrixCompute
 
   // Computations--------------------------------------------------------------
 
-  bool compute_planar(vcl_vector<vgl_homg_point_2d<double> >& points1,
-                      vcl_vector<vgl_homg_point_2d<double> >& points2,
+  bool compute_planar(std::vector<vgl_homg_point_2d<double> >& points1,
+                      std::vector<vgl_homg_point_2d<double> >& points2,
                       FMatrixPlanar& F);
   bool compute_planar(PairMatchSetCorner& matches, FMatrixPlanar* F);
-  bool compute_planar(vcl_vector<HomgPoint2D>& points1,
-                      vcl_vector<HomgPoint2D>& points2, FMatrixPlanar* F);
+  bool compute_planar(std::vector<HomgPoint2D>& points1,
+                      std::vector<HomgPoint2D>& points2, FMatrixPlanar* F);
 
   // FMatrixCompute virtuals
-  bool compute(vcl_vector<vgl_homg_point_2d<double> >& points1,
-               vcl_vector<vgl_homg_point_2d<double> >& points2, FMatrix& F);
+  bool compute(std::vector<vgl_homg_point_2d<double> >& points1,
+               std::vector<vgl_homg_point_2d<double> >& points2, FMatrix& F);
   bool compute(PairMatchSetCorner& matches, FMatrix* F);
-  bool compute(vcl_vector<HomgPoint2D>& points1,
-               vcl_vector<HomgPoint2D>& points2, FMatrix* F);
+  bool compute(std::vector<HomgPoint2D>& points1,
+               std::vector<HomgPoint2D>& points2, FMatrix* F);
 };
 
 #endif // FMPlanarComputeNonLinear_h_

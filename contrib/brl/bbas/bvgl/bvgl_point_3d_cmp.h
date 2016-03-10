@@ -13,11 +13,13 @@
 // \endverbatim
 
 #include <vgl/vgl_point_3d.h>
-#include <vcl_functional.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <functional>
 
-//: A comparison functor for vgl_point_3d's. Needed to create a vcl_set of vgl_point_3d<int>'s.
+//: A comparison functor for vgl_point_3d's. Needed to create a std::set of vgl_point_3d<int>'s.
 template <class T>
-class bvgl_point_3d_cmp : public vcl_binary_function<vgl_point_3d<T>, vgl_point_3d<T>, bool>
+class bvgl_point_3d_cmp : public std::binary_function<vgl_point_3d<T>, vgl_point_3d<T>, bool>
 {
  public:
   bvgl_point_3d_cmp() {}

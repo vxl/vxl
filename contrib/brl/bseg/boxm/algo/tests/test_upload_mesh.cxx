@@ -12,7 +12,9 @@
 #include <vpgl/vpgl_lvcs.h>
 #include <imesh/imesh_mesh.h>
 #include <imesh/imesh_fileio.h>
-#include <vcl_limits.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <limits>
 
 static void test_upload_mesh()
 {
@@ -38,14 +40,14 @@ static void test_upload_mesh()
 
   scene.set_paths("./boxm_upload", "block");
   vul_file::make_directory("./boxm_upload");
-  vcl_ofstream os("scene.xml");
+  std::ofstream os("scene.xml");
   x_write(os, scene, "scene");
   os.close();
 
   // create a mesh
   unsigned int num_faces=1;
-  vcl_auto_ptr<imesh_vertex_array<3> > verts(new imesh_vertex_array<3>(3));
-  vcl_auto_ptr<imesh_face_array > faces(new imesh_face_array(num_faces));
+  std::auto_ptr<imesh_vertex_array<3> > verts(new imesh_vertex_array<3>(3));
+  std::auto_ptr<imesh_face_array > faces(new imesh_face_array(num_faces));
   imesh_vertex<3>& vert0 = (*verts)[0];
   vert0[0]=2;
   vert0[1]=2;
@@ -60,15 +62,15 @@ static void test_upload_mesh()
   vert2[2]=4;
 
   for (unsigned int f=0; f<num_faces; ++f) {
-    vcl_vector<unsigned int>& face = (*faces)[f];
+    std::vector<unsigned int>& face = (*faces)[f];
     unsigned int cnt=3;
     face.resize(cnt,0);
     for (unsigned int v=0; v<cnt; ++v)
       face[v]=v;
   }
   imesh_mesh mesh;
-  mesh.set_vertices(vcl_auto_ptr<imesh_vertex_array_base>(verts));
-  mesh.set_faces(vcl_auto_ptr<imesh_face_array_base>(faces));
+  mesh.set_vertices(std::auto_ptr<imesh_vertex_array_base>(verts));
+  mesh.set_faces(std::auto_ptr<imesh_face_array_base>(faces));
 
   typedef boct_tree<short,boxm_sample<BOXM_APM_MOG_GREY> > tree_type;
   boxm_block_iterator<boct_tree<short,boxm_sample<BOXM_APM_MOG_GREY> > > iter(&scene);
@@ -78,7 +80,7 @@ static void test_upload_mesh()
     boxm_block<boct_tree<short,boxm_sample<BOXM_APM_MOG_GREY> > > * block=scene.get_active_block();
     boct_tree<short,boxm_sample<BOXM_APM_MOG_GREY> > * tree=new boct_tree<short,boxm_sample<BOXM_APM_MOG_GREY> >(6,5);
     boxm_sample<BOXM_APM_MOG_GREY> s;
-    s.alpha=vcl_numeric_limits<float>::max();
+    s.alpha=std::numeric_limits<float>::max();
     tree->init_cells(s);
     block->init_tree(tree);
     scene.write_active_block();
@@ -89,7 +91,7 @@ static void test_upload_mesh()
   val.alpha=0;
   boxm_upload_mesh_into_scene<short, boxm_sample<BOXM_APM_MOG_GREY> >(scene, mesh, false, val);
 
-  vcl_vector<vcl_string> fnames;
+  std::vector<std::string> fnames;
   boxm_block_iterator<tree_type> it(&scene);
   it.begin();
   // check the first block
@@ -107,7 +109,7 @@ static void test_upload_mesh()
   TEST("Vertex 2 is in the octree", cell2->data().alpha, 0.0f);
 
   boct_tree_cell<short,boxm_sample<BOXM_APM_MOG_GREY> >* cell = tree->locate_point_global(vgl_point_3d<double>(1,1,1));
-  TEST_NEAR("A non-polygon point should be non-zero", cell->data().alpha, vcl_numeric_limits<float>::max(), 1e-6);
+  TEST_NEAR("A non-polygon point should be non-zero", cell->data().alpha, std::numeric_limits<float>::max(), 1e-6);
 
   vpl_rmdir("./boxm_upload");
   vpl_unlink("./scene.xml");

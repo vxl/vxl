@@ -12,7 +12,9 @@
 
 #include <mvl/Homg3D.h>
 #include <vnl/vnl_double_3.h>
-#include <vcl_iosfwd.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iosfwd>
 
 class HomgPoint3D;
 
@@ -34,6 +36,6 @@ class HomgPlane3D : public Homg3D
   vnl_vector<double> n() const { return homg_vector_.extract(3).normalize(); }
 };
 
-vcl_ostream& operator<<(vcl_ostream&, const HomgPlane3D&);
+std::ostream& operator<<(std::ostream&, const HomgPlane3D&);
 
 #endif // HomgPlane3D_h_

@@ -19,6 +19,6 @@ void vsl_b_read(vsl_b_istream& is, vgl_line_3d_2_points<T> & p);
 
 //: Print human readable summary of object to a stream
 template <class T>
-void vsl_print_summary(vcl_ostream& os, vgl_line_3d_2_points<T> const& p);
+void vsl_print_summary(std::ostream& os, vgl_line_3d_2_points<T> const& p);
 
 #endif // vgl_io_line_3d_2_points_h_

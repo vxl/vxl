@@ -32,9 +32,11 @@
 
 #include "bvpl_kernel.h"
 #include "bvpl_kernel_iterator.h"
-#include <vcl_iostream.h>
-#include <vcl_map.h>
-#include <vcl_utility.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iostream>
+#include <map>
+#include <utility>
 #include <vnl/vnl_float_3.h>
 #include <vgl/algo/vgl_rotation_3d.h>
 #include <vbl/vbl_ref_count.h>
@@ -90,7 +92,7 @@ class bvpl_kernel_factory: public vbl_ref_count
   //: Return an xml element
   virtual bxml_data_sptr xml_element()
   {
-    vcl_cout << "Calling xml write in parent class, xml data will be NULL" << vcl_endl;
+    std::cout << "Calling xml write in parent class, xml data will be NULL" << std::endl;
     return NULL;
   }
 
@@ -98,13 +100,13 @@ class bvpl_kernel_factory: public vbl_ref_count
 
  protected:
 
-  typedef vcl_vector<vcl_pair<vgl_point_3d<float>, bvpl_kernel_dispatch> > kernel_type;
+  typedef std::vector<std::pair<vgl_point_3d<float>, bvpl_kernel_dispatch> > kernel_type;
 
   //: The map of 3d positions and their symbols. This kernel has an axis of rotation, but it is always on zero-rotation position
-  vcl_vector<vcl_pair<vgl_point_3d<float>, bvpl_kernel_dispatch> > kernel_;
+  std::vector<std::pair<vgl_point_3d<float>, bvpl_kernel_dispatch> > kernel_;
 
   //: The map of 3d positions and their symbols in their canonical form (As specified by children)
-  vcl_vector<vcl_pair<vgl_point_3d<float>, bvpl_kernel_dispatch> > canonical_kernel_;
+  std::vector<std::pair<vgl_point_3d<float>, bvpl_kernel_dispatch> > canonical_kernel_;
 
   //: The rotation axis for canonical edge
   const vnl_float_3 canonical_rotation_axis_;//(1,0,0);
@@ -135,7 +137,7 @@ class bvpl_kernel_factory: public vbl_ref_count
   double voxel_length_;
 
   //: Name that identifies the kernel e.g "edge3d", "gauss"
-  vcl_string factory_name_;
+  std::string factory_name_;
 
   //: Creates canonical(default) kernel.
   //  It is described by a canonical axis of rotation and a canonical parallel axis
@@ -156,8 +158,8 @@ class bvpl_kernel_factory: public vbl_ref_count
 template <class F>
 bvpl_kernel_vector_sptr bvpl_kernel_factory::create_kernel_vector(F func)
 {
-  vcl_vector<vnl_float_3> axes=func.get_axes();
-  vcl_vector<float> angles = func.get_angles();
+  std::vector<vnl_float_3> axes=func.get_axes();
+  std::vector<float> angles = func.get_angles();
 
   bvpl_kernel_vector_sptr vec_kernel=new bvpl_kernel_vector();
 

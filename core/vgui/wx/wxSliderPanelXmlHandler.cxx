@@ -22,7 +22,7 @@ wxObject *wxSliderPanelXmlHandler::DoCreateResource()
                         GetName());
 
   // TODO: Load initial sliders from the XML File
-  //vcl_vector<double> min_vals, max_vals, init_vals;
+  //std::vector<double> min_vals, max_vals, init_vals;
   //panel->CreateSliders(init_vals,min_vals,max_vals);
 
   return panel;

@@ -1,7 +1,8 @@
 // This is core/vil1/tests/test_vil.cxx
 #include <vil1/vil1_vil.h>
 #include <vxl_config.h> // for vxl_byte
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <iostream>
 #include <testlib/testlib_test.h>
 #include <vil1/vil1_memory_image_of.h>
 #include <vil1/vil1_load.h>
@@ -10,7 +11,7 @@
 
 static void test_vil(int argc, char* argv[])
 {
-  vcl_string image_base;
+  std::string image_base;
   if ( argc >= 2 )
   {
     image_base = argv[1];
@@ -21,7 +22,7 @@ static void test_vil(int argc, char* argv[])
 #endif
   }
 
-  vcl_cout << "************************\n"
+  std::cout << "************************\n"
            << " Testing vil1_vil_*(..)\n"
            << "************************\n";
 

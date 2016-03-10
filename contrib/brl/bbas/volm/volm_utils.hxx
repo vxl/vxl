@@ -8,9 +8,11 @@
 #include <vgl/vgl_polygon.h>
 #include <vgl/vgl_line_segment_2d.h>
 #include <vgl/vgl_line_2d.h>
-#include <vcl_iostream.h>
-#include <vcl_limits.h>
-#include <vcl_cmath.h>
+#include <iostream>
+#include <limits>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <cmath>
 
 #define EPSILON 1E-6
 
@@ -23,11 +25,11 @@ static bool inside_box(vgl_box_2d<T> const& b, vgl_point_2d<T> const& pt)
 
 // check whether the given box is entirely inside the region defined by input point list
 template <class T>
-bool volm_utils::poly_contains(vcl_vector<vgl_point_2d<T> > const& sheet, vgl_box_2d<T> const& b)
+bool volm_utils::poly_contains(std::vector<vgl_point_2d<T> > const& sheet, vgl_box_2d<T> const& b)
 {
   // check whether all 4 corners are inside
   vgl_polygon<T> poly(sheet);
-  vcl_vector<vgl_point_2d<T> > corners;
+  std::vector<vgl_point_2d<T> > corners;
   corners.push_back(b.min_point());
   corners.push_back(vgl_point_2d<T>(b.max_x(), b.min_y()));
   corners.push_back(b.max_point());
@@ -43,7 +45,7 @@ bool volm_utils::poly_contains(vcl_vector<vgl_point_2d<T> > const& sheet, vgl_bo
 }
 
 template <class T>
-vgl_polygon<T> volm_utils::poly_contains(vcl_vector<vgl_point_2d<T> > const& sheet, vgl_polygon<T> const& p_in)
+vgl_polygon<T> volm_utils::poly_contains(std::vector<vgl_point_2d<T> > const& sheet, vgl_polygon<T> const& p_in)
 {
   vgl_polygon<T> out_poly;
   out_poly.clear();
@@ -75,9 +77,9 @@ vgl_polygon<T> volm_utils::poly_contains(vgl_polygon<T> const& p_out, vgl_polygo
 
 #undef VOLM_UTILS_INSTANTIATE
 #define VOLM_UTILS_INSTANTIATE(T) \
-template bool volm_utils::poly_contains(vcl_vector<vgl_point_2d<T > > const& sheet, vgl_box_2d<T > const& b); \
+template bool volm_utils::poly_contains(std::vector<vgl_point_2d<T > > const& sheet, vgl_box_2d<T > const& b); \
 template bool volm_utils::poly_contains(vgl_polygon<T > const& poly, vgl_box_2d<T > const& b); \
-template vgl_polygon<T> volm_utils::poly_contains(vcl_vector<vgl_point_2d<T > > const& p_out, vgl_polygon<T > const& p_in); \
+template vgl_polygon<T> volm_utils::poly_contains(std::vector<vgl_point_2d<T > > const& p_out, vgl_polygon<T > const& p_in); \
 template vgl_polygon<T> volm_utils::poly_contains(vgl_polygon<T > const& p_out, vgl_polygon<T > const& p_in)
 
 #endif // volm_utils_hxx_

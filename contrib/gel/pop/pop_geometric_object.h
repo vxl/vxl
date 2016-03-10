@@ -28,7 +28,7 @@ class pop_geometric_object : public pop_object
 {
  public:
   //: constructor
-  pop_geometric_object(pop_vertex *coordinate_system,vcl_vector<pop_parameter*> &params);
+  pop_geometric_object(pop_vertex *coordinate_system,std::vector<pop_parameter*> &params);
 
   //: used when this is not a parametric object but just a geometric one
   pop_geometric_object(pop_vertex *coordinate_system);

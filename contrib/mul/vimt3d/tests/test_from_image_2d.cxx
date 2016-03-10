@@ -1,6 +1,8 @@
 // This is mul/vimt3d/tests/test_from_image_2d.cxx
 #include <testlib/testlib_test.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iostream>
 #include <vxl_config.h>
 #include <vimt3d/vimt3d_from_image_2d.h>
 
@@ -38,7 +40,7 @@ static void test_from_image_2d_1()
 //========================================================================
 static void test_from_image_2d()
 {
-  vcl_cout << "******************************\n"
+  std::cout << "******************************\n"
            << " Testing vimt3d_from_image_2d\n"
            << "******************************\n";
 

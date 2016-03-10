@@ -7,9 +7,11 @@
 //
 // Provide an n-dimensional bin structure for fast point retrieval.
 
-#include <vcl_vector.h>
+#include <vector>
 #include <vnl/vnl_vector_fixed.h>
-#include <vcl_cstddef.h> // for std::size_t
+#include <vcl_compiler.h>
+#include <iostream>
+#include <cstddef> // for std::size_t
 
 // these two classes are helper classes for rsdl_bins, and should ideally
 // be declared in rsdl_bins and defined only in the .txx, but MSVC6 and 7
@@ -94,7 +96,7 @@ class rsdl_bins
   //
   void n_nearest( point_type const& pt,
                   unsigned n,
-                  vcl_vector< value_type >& values ) const;
+                  std::vector< value_type >& values ) const;
 
   //: Return the values and locations of the \p n nearest neighbours.
   //
@@ -103,8 +105,8 @@ class rsdl_bins
   //
   void n_nearest( point_type const& pt,
                   unsigned n,
-                  vcl_vector< point_type >& points,
-                  vcl_vector< value_type >& values  ) const;
+                  std::vector< point_type >& points,
+                  std::vector< value_type >& values  ) const;
 
   //: Return the values of the \p n nearest neighbours.
   //
@@ -113,7 +115,7 @@ class rsdl_bins
   //
   void n_nearest_exhaustive( point_type const& pt,
                              unsigned n,
-                             vcl_vector< value_type >& values ) const;
+                             std::vector< value_type >& values ) const;
 
   //: Return the values and locations of the \p n nearest neighbours.
   //
@@ -122,8 +124,8 @@ class rsdl_bins
   //
   void n_nearest_exhaustive( point_type const& pt,
                              unsigned n,
-                             vcl_vector< point_type >& points,
-                             vcl_vector< value_type >& values  ) const;
+                             std::vector< point_type >& points,
+                             std::vector< value_type >& values  ) const;
 
   //: Check if there is at least one point within \p radius of \p pt.
   //
@@ -134,14 +136,14 @@ class rsdl_bins
   //
   void points_within_radius( point_type const& pt,
                              coord_type const& radius,
-                             vcl_vector< value_type >& values ) const;
+                             std::vector< value_type >& values ) const;
 
   //: Return values and locations of all the points within \p radius of \p pt.
   //
   void points_within_radius( point_type const& pt,
                              coord_type const& radius,
-                             vcl_vector< point_type >& points,
-                             vcl_vector< value_type >& values  ) const;
+                             std::vector< point_type >& points,
+                             std::vector< value_type >& values  ) const;
 
   //: Return values of all the points within the bounding box.
   //
@@ -150,7 +152,7 @@ class rsdl_bins
   //
   void points_in_bounding_box( point_type const& min_pt,
                                point_type const& max_pt,
-                               vcl_vector< value_type >& values ) const;
+                               std::vector< value_type >& values ) const;
 
   //: Return values and locations of all the points within the bounding box.
   //
@@ -159,8 +161,8 @@ class rsdl_bins
   //
   void points_in_bounding_box( point_type const& min_pt,
                                point_type const& max_pt,
-                               vcl_vector< point_type >& points,
-                               vcl_vector< value_type >& values  ) const;
+                               std::vector< point_type >& points,
+                               std::vector< value_type >& values  ) const;
   // INTERNALS
  public:
   typedef rsdl_bins_bin_entry_type<N,CoordType,ValueType> bin_entry_type;
@@ -170,7 +172,7 @@ class rsdl_bins
 
   //:
   // Data stored at each bin
-  typedef vcl_vector< bin_entry_type >  bin_type;
+  typedef std::vector< bin_entry_type >  bin_type;
 
   //:
   // The type of an index into the bins_ storage structure.
@@ -178,7 +180,7 @@ class rsdl_bins
 
   //:
   // A vector of indices into the bins_ storage structure.
-  typedef vcl_vector< bin_index_type > bin_index_vector;
+  typedef std::vector< bin_index_type > bin_index_vector;
 
   //:
   // Converts the coordinate \p x to a bin coordinate for dimension \p d.
@@ -234,8 +236,8 @@ class rsdl_bins
   // not null, to \p points.
   void  n_nearest_impl( point_type const& pt,
                         unsigned n,
-                        vcl_vector< value_type >& values,
-                        vcl_vector< point_type >* points ) const;
+                        std::vector< value_type >& values,
+                        std::vector< point_type >* points ) const;
 
   //:
   // Implementation of n_nearest_exhaustive. See the documentation for that.
@@ -244,8 +246,8 @@ class rsdl_bins
   // not null, to \p points.
   void  n_nearest_exhaustive_impl( point_type const& pt,
                                    unsigned n,
-                                   vcl_vector< value_type >& values,
-                                   vcl_vector< point_type >* points ) const;
+                                   std::vector< value_type >& values,
+                                   std::vector< point_type >* points ) const;
 
   //:
   // Implementation of points_within_radius. See the documentation for that.
@@ -254,8 +256,8 @@ class rsdl_bins
   // not null, to \p points.
   void points_within_radius_impl( point_type const& pt,
                                   coord_type const& radius,
-                                  vcl_vector< value_type >& values,
-                                  vcl_vector< point_type >* points ) const;
+                                  std::vector< value_type >& values,
+                                  std::vector< point_type >* points ) const;
 
   //:
   // Implementation of points_in_bounding_box. See the documentation for that.
@@ -265,11 +267,11 @@ class rsdl_bins
   //
   void points_in_bounding_box_impl( point_type const& min_pt,
                                     point_type const& max_pt,
-                                    vcl_vector< value_type >& values,
-                                    vcl_vector< point_type >* points ) const;
+                                    std::vector< value_type >& values,
+                                    std::vector< point_type >* points ) const;
 
   // documentation in .txx
-  vcl_size_t scan_region( int lo[N], int hi[N], int cur[N], unsigned dim,
+  std::size_t scan_region( int lo[N], int hi[N], int cur[N], unsigned dim,
                           bin_index_vector& indices ) const;
 
 #if 0
@@ -299,7 +301,7 @@ class rsdl_bins
 
   //:
   // Storage for all the bins.
-  vcl_vector< bin_type > bins_;
+  std::vector< bin_type > bins_;
 };
 
 

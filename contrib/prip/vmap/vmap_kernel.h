@@ -12,7 +12,9 @@
 //   06 May 2004 Jocelyn Marchadier
 // \endverbatim
 
-#include <vcl_vector.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <vector>
 #include "vmap_types.h" // for vmap_face_index etc.
 #include "vbl_controlled_partition.h"
 
@@ -558,7 +560,7 @@ class vmap_permutation_kernel : public vmap_kernel<typename TPermutation::map_ty
   }
 
   //:
-  vcl_vector<element_pointer> dart_associated_elt_;
+  std::vector<element_pointer> dart_associated_elt_;
 
   //:
   vbl_controlled_partition representatives_;

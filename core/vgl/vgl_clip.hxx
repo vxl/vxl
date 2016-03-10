@@ -6,11 +6,12 @@
 // \author fsm
 
 #include "vgl_clip.h"
-#include <vcl_cstdlib.h> // for vcl_malloc() and vcl_free()
-#include <vcl_cstdio.h> // for vcl_fprintf()
-#include <vcl_algorithm.h> // for swap
-#include <vcl_limits.h>
-#include <vcl_cmath.h>
+#include <vcl_compiler.h>
+#include <cstdlib> // for std::malloc() and std::free()
+#include <cstdio> // for std::fprintf()
+#include <algorithm> // for swap
+#include <limits>
+#include <cmath>
 
 template <class T>
 bool vgl_clip_lineseg_to_line(T &x1, T &y1,
@@ -45,8 +46,8 @@ bool vgl_clip_line_to_box(T a, T b, T c, // line coefficients.
                           T &bx, T &by,  // start and
                           T &ex, T &ey)  // end points.
 {
-  if (x1>x2) vcl_swap(x1,x2);
-  if (y1>y2) vcl_swap(y1,y2);
+  if (x1>x2) std::swap(x1,x2);
+  if (y1>y2) std::swap(y1,y2);
   // now x1 <= x2 and y1 <= y2
 
   if (a == 0 && b == 0) return false; // then ax+by+c=0 is the line at infinity
@@ -66,7 +67,7 @@ bool vgl_clip_line_to_box(T a, T b, T c, // line coefficients.
   }
 
   if (b_set && e_set) return true;
-  if (b_set) { vcl_swap(bx,ex); vcl_swap(by,ey); vcl_swap(b_set,e_set); }
+  if (b_set) { std::swap(bx,ex); std::swap(by,ey); std::swap(b_set,e_set); }
   // now b_set is false
 
   if (b != 0) // line is not vertical
@@ -75,7 +76,7 @@ bool vgl_clip_line_to_box(T a, T b, T c, // line coefficients.
     bx = x1; by = -(a*x1+c)/b;
     b_set =  by >= y1 && by <= y2;
     if (b_set && e_set) return true;
-    if (b_set) { vcl_swap(bx,ex); vcl_swap(by,ey); e_set=true; }
+    if (b_set) { std::swap(bx,ex); std::swap(by,ey); e_set=true; }
 
     // Intersection point with the line x=x2:
     bx = x2; by = -(a*x2+c)/b;
@@ -94,11 +95,11 @@ extern "C" {
 }
 
 #define MALLOC(p, T, c, s) { if ((c) > 0) { \
-                            p= (T*)vcl_malloc(c * sizeof(T)); if (!(p)) { \
-                            vcl_fprintf(stderr, "vgl: gpc malloc failure: %s\n", s); \
-                            vcl_exit(0);}} else p=NULL; }
+                            p= (T*)std::malloc(c * sizeof(T)); if (!(p)) { \
+                            std::fprintf(stderr, "vgl: gpc malloc failure: %s\n", s); \
+                            std::exit(0);}} else p=NULL; }
 
-#define FREE(p)            { if (p) { vcl_free(p); (p)= NULL; } }
+#define FREE(p)            { if (p) { std::free(p); (p)= NULL; } }
 
 namespace {
   //: Creates a gpc polygon from a vgl_polygon.
@@ -189,10 +190,10 @@ bounds(vgl_polygon<T> vgl_poly, T& min_x, T& max_x, T& min_y, T& max_y)
         min_y = max_y = vgl_poly[0][0].y();
       }
 
-      min_x = vcl_min(vgl_poly[s][p].x(), min_x);
-      min_y = vcl_min(vgl_poly[s][p].y(), min_y);
-      max_x = vcl_max(vgl_poly[s][p].x(), max_x);
-      max_y = vcl_max(vgl_poly[s][p].y(), max_y);
+      min_x = std::min(vgl_poly[s][p].x(), min_x);
+      min_y = std::min(vgl_poly[s][p].y(), min_y);
+      max_x = std::max(vgl_poly[s][p].x(), max_x);
+      max_y = std::max(vgl_poly[s][p].y(), max_y);
     }
   }
 }
@@ -264,21 +265,21 @@ vgl_clip(vgl_polygon<T> const& poly1, vgl_polygon<T> const& poly2, vgl_clip_type
   // to compute a scale factor to preserve precision.
   // per Angus Johnson, "if any coordinate value exceeds +/-3.0e+9, large integer
   // math slows clipping by about 10%"
-  int halfSignificantDigits = vcl_numeric_limits<ClipperLib::cInt>::digits10/2;
+  int halfSignificantDigits = std::numeric_limits<ClipperLib::cInt>::digits10/2;
 
   T min_x, max_x, min_y, max_y;
   bounds( poly1, min_x, max_x, min_y, max_y);
-  max_x = vcl_max(max_x, vcl_abs(min_x));
-  max_y = vcl_max(max_y, vcl_abs(min_y));
-  T max1 = vcl_max(max_x, max_y);
+  max_x = std::max(max_x, std::abs(min_x));
+  max_y = std::max(max_y, std::abs(min_y));
+  T max1 = std::max(max_x, max_y);
 
   bounds( poly2, min_x, max_x, min_y, max_y);
-  max_x = vcl_max(max_x, vcl_abs(min_x));
-  max_y = vcl_max(max_y, vcl_abs(min_y));
-  T max2 = vcl_max(max_x, max_y);
+  max_x = std::max(max_x, std::abs(min_x));
+  max_y = std::max(max_y, std::abs(min_y));
+  T max2 = std::max(max_x, max_y);
 
-  T max = vcl_max(max1, max2);
-  double scale = vcl_pow(10.0, halfSignificantDigits) / max;
+  T max = std::max(max1, max2);
+  double scale = std::pow(10.0, halfSignificantDigits) / max;
 
 
   ClipperLib::Paths p1 = vgl_to_clipper( poly1, scale );
@@ -305,8 +306,8 @@ vgl_clip(vgl_polygon<T> const& poly1, vgl_polygon<T> const& poly2, vgl_clip_type
 
 #else
   *p_retval = -1;
-  vcl_fprintf(stdout,"WARNING: GPC is only free for non-commercial use -- assuming disjoint polygons.\n");
-  vcl_fprintf(stderr,"WARNING: GPC is only free for non-commercial use -- assuming disjoint polygons.\n");
+  std::fprintf(stdout,"WARNING: GPC is only free for non-commercial use -- assuming disjoint polygons.\n");
+  std::fprintf(stderr,"WARNING: GPC is only free for non-commercial use -- assuming disjoint polygons.\n");
   switch ( op )
   {
     default:

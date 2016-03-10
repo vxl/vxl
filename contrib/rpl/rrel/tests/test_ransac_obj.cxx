@@ -1,12 +1,14 @@
 // This is rpl/rrel/tests/test_ransac_obj.cxx
-#include <vcl_vector.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <vector>
 #include <testlib/testlib_test.h>
 
 #include <rrel/rrel_ransac_obj.h>
 
 inline double rho( rrel_objective* obj, double r )
 {
-  vcl_vector<double> res;
+  std::vector<double> res;
   res.push_back( r );
   return obj->fcn( res.begin(), res.end(), 1.0, VXL_NULLPTR );
 }

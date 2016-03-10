@@ -94,7 +94,7 @@ vtol_one_chain_sptr
 vtol_extract_topology_region_type::
 make_one_chain( ) const
 {
-  vcl_vector< vtol_edge_sptr > edges;
+  std::vector< vtol_edge_sptr > edges;
 
   for ( unsigned i = 0; i < list_.size(); ++i ) {
     edges.push_back( &*list_[i]->edge );

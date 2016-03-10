@@ -55,7 +55,7 @@ mbl_data_wrapper<T >& mbl_data_collector_list<T>::data_wrapper()
 {
   if (data_.size() > 0)
   {
-    // Check assumption that vcl_vectors store their data in a contiguous block of memory
+    // Check assumption that std::vectors store their data in a contiguous block of memory
     assert(&data_[data_.size()-1] + 1 == &data_[0] + data_.size());
 
     wrapper_.set(&data_[0],data_.size()); // not data_.begin() since set() expects T*, not vector_iterator
@@ -67,7 +67,7 @@ mbl_data_wrapper<T >& mbl_data_collector_list<T>::data_wrapper()
 
 
 template <class T>
-bool mbl_data_collector_list<T>::is_class(vcl_string const& s) const
+bool mbl_data_collector_list<T>::is_class(std::string const& s) const
 {
   return s==mbl_data_collector_list<T>::is_a() || mbl_data_collector<T>::is_class(s);
 }
@@ -89,7 +89,7 @@ mbl_data_collector_base* mbl_data_collector_list<T>::clone() const
 }
 
 template <class T>
-void mbl_data_collector_list<T>::print_summary(vcl_ostream& os) const
+void mbl_data_collector_list<T>::print_summary(std::ostream& os) const
 {
   os<<"Number stored: "<<data_.size()<<'\n';
 }
@@ -114,16 +114,16 @@ void mbl_data_collector_list<T>::b_read(vsl_b_istream& bfs)
     vsl_b_read(bfs, data_);
     break;
   default:
-    vcl_cerr << "I/O ERROR: mbl_data_collector_list<T>::b_read(vsl_b_istream&)\n";
-    vcl_cerr << "           Unknown version number "<< version << "\n";
-    bfs.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
+    std::cerr << "I/O ERROR: mbl_data_collector_list<T>::b_read(vsl_b_istream&)\n";
+    std::cerr << "           Unknown version number "<< version << "\n";
+    bfs.is().clear(std::ios::badbit); // Set an unrecoverable IO error on stream
     return;
   }
 }
 
 
 #define MBL_DATA_COLLECTOR_LIST_INSTANTIATE(T) \
-VCL_DEFINE_SPECIALIZATION vcl_string mbl_data_collector_list<T >::is_a() const \
-{  return vcl_string("mbl_data_collector_list<" #T ">"); }\
+VCL_DEFINE_SPECIALIZATION std::string mbl_data_collector_list<T >::is_a() const \
+{  return std::string("mbl_data_collector_list<" #T ">"); }\
 template class mbl_data_collector_list< T >
 #endif // mbl_data_collector_list_hxx_

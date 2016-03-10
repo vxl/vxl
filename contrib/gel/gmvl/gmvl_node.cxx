@@ -7,9 +7,11 @@
 // \author crossge@crd.ge.com
 
 #include "gmvl_node.h"
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iostream>
 
-vcl_ostream &operator<<( vcl_ostream &os, gmvl_node &node)
+std::ostream &operator<<( std::ostream &os, gmvl_node &node)
 {
   return os << "<Node " << &node << " ref=" << node.ref_ << " type=\"" << node.type_ << "\">";
 }

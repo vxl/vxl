@@ -8,7 +8,8 @@
 // \file
 // \brief A blocked representation of the image_resource
 // \author J. L. Mundy
-#include <vcl_vector.h>
+#include <vcl_compiler.h>
+#include <vector>
 #include <vil/vil_image_resource.h>
 #include <vil/vil_blocked_image_resource_sptr.h>
 
@@ -56,7 +57,7 @@ class vil_blocked_image_resource : public vil_image_resource
   //: the multiple blocks are in col row order, i.e. blocks[i][j]
   virtual bool get_blocks( unsigned start_block_i, unsigned end_block_i,
                            unsigned  start_block_j, unsigned end_block_j,
-                           vcl_vector< vcl_vector< vil_image_view_base_sptr > >& blocks ) const;
+                           std::vector< std::vector< vil_image_view_base_sptr > >& blocks ) const;
 
   //: put the block into the resource at the indicated location
   virtual bool put_block(unsigned  block_index_i,
@@ -67,7 +68,7 @@ class vil_blocked_image_resource : public vil_image_resource
   //: put multiple blocks in raster order, i.e.,  blocks[i][j]
   virtual bool put_blocks( unsigned start_block_i, unsigned end_block_i,
                            unsigned  start_block_j, unsigned end_block_j,
-                           vcl_vector< vcl_vector< vil_image_view_base_sptr > > const& blocks );
+                           std::vector< std::vector< vil_image_view_base_sptr > > const& blocks );
 
   //: Extra property information
   virtual bool get_property(char const* tag, void* property_value = VXL_NULLPTR) const = 0;
@@ -90,10 +91,10 @@ class vil_blocked_image_resource : public vil_image_resource
                           unsigned j0, unsigned nj,
                           unsigned start_block_i,
                           unsigned start_block_j,
-                          vcl_vector< vcl_vector< vil_image_view_base_sptr > >& blocks) const;
+                          std::vector< std::vector< vil_image_view_base_sptr > >& blocks) const;
 
   vil_image_view_base_sptr
-    glue_blocks_together(const vcl_vector< vcl_vector< vil_image_view_base_sptr > >& blocks) const;
+    glue_blocks_together(const std::vector< std::vector< vil_image_view_base_sptr > >& blocks) const;
 
  protected:
   friend class vil_smart_ptr<vil_blocked_image_resource>;

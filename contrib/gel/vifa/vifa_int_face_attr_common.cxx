@@ -9,7 +9,9 @@
 #include <vsol/vsol_line_2d.h>
 #include <vtol/vtol_vertex_sptr.h>
 #include <vifa/vifa_group_pgram.h>
-#include <vcl_cmath.h> // fabs()
+#include <vcl_compiler.h>
+#include <iostream>
+#include <cmath> // fabs()
 
 vifa_int_face_attr_common::
 vifa_int_face_attr_common(vdgl_fit_lines_params*    fitter_params,
@@ -87,7 +89,7 @@ get_contrast_across_edge(vtol_edge_sptr  e, double dflt_cont)
     vtol_intensity_face*  f2 = faces[1]->cast_to_intensity_face();
 
     if (f1 && f2)
-      cont = vcl_fabs(f1->Io() - f2->Io());
+      cont = std::fabs(f1->Io() - f2->Io());
   }
   return cont;
 }
@@ -188,17 +190,17 @@ fit_lines()
   edge_2d_list  edges_in_vect = this->GetEdges();
 
 #ifdef DEBUG
-    vcl_cout << "ifac::fit_lines(): " << edges_in_vect.size()
+    std::cout << "ifac::fit_lines(): " << edges_in_vect.size()
              << " edges available\n";
 #endif
 
   if (!edges_in_vect.size())
   {
-    vcl_cerr << "vifa_int_face_attr_common::fit_lines: face_ is not set\n";
+    std::cerr << "vifa_int_face_attr_common::fit_lines: face_ is not set\n";
     return;
   }
 
-  vcl_vector<vdgl_digital_curve_sptr>  curves_in;
+  std::vector<vdgl_digital_curve_sptr>  curves_in;
   for (edge_2d_iterator ei = edges_in_vect.begin();
        ei != edges_in_vect.end(); ei++)
   {
@@ -218,14 +220,14 @@ fit_lines()
   // Call the line fitting routine (thanks Joe!)
   vdgl_fit_lines  fitter(*(fitter_params_.ptr()));
   fitter.set_curves(curves_in);
-  vcl_vector<vsol_line_2d_sptr>&  segs = fitter.get_line_segs();
+  std::vector<vsol_line_2d_sptr>&  segs = fitter.get_line_segs();
 
 #ifdef DEBUG
-    vcl_cout << "ifac::fit_lines(): " << segs.size() << " segments from fitter\n";
+    std::cout << "ifac::fit_lines(): " << segs.size() << " segments from fitter\n";
 #endif
 
   // Convert fitter output to edges & update statistics
-  vcl_vector<vsol_line_2d_sptr>::iterator  segi = segs.begin();
+  std::vector<vsol_line_2d_sptr>::iterator  segi = segs.begin();
   for (; segi != segs.end(); segi++)
   {
     vsol_line_2d_sptr  seg = *segi;
@@ -263,12 +265,12 @@ find_collinear_lines()
   coll_iterator  match;
 
 #ifdef DEBUG
-  vcl_cout << "Collineating: ";
+  std::cout << "Collineating: ";
 #endif
   for (edge_2d_iterator e = f_edges.begin(); e != f_edges.end(); ++e)
   {
 #ifdef DEBUG
-    vcl_cout << '.';
+    std::cout << '.';
 #endif
 
     if ((*e)->curve()->length() == 0)
@@ -290,7 +292,7 @@ find_collinear_lines()
   }
 
 #ifdef DEBUG
-  vcl_cout << vcl_endl;
+  std::cout << std::endl;
 #endif
 
   // remove lines whose support is too low
@@ -331,9 +333,9 @@ find_collinear_lines()
   }
 
 #ifdef DEBUG
-  vcl_cout << unfiltered_lines.size() << " raw collinear lines; "
+  std::cout << unfiltered_lines.size() << " raw collinear lines; "
            << collinear_lines_.size() << " lines above discard threshold "
-           << cpp_->discard_threshold_ << vcl_endl;
+           << cpp_->discard_threshold_ << std::endl;
 #endif
 }
 
@@ -371,14 +373,14 @@ compute_parallel_sal(vifa_group_pgram_params_sptr  gpp)
   edge_2d_list  fedges = this->GetFittedEdges();
 
 #ifdef DEBUG
-  vcl_cout << "ifac::compute_parallel_sal(): " << fedges.size()
+  std::cout << "ifac::compute_parallel_sal(): " << fedges.size()
            << " edges found\n";
 #endif
 
   if (fedges.size())
   {
 #ifdef DEBUG
-    vcl_cout << (*fitter_params_);
+    std::cout << (*fitter_params_);
 #endif
 
     float    total_len = 0.f;
@@ -402,8 +404,8 @@ compute_parallel_sal(vifa_group_pgram_params_sptr  gpp)
     }
 
 #ifdef DEBUG
-    vcl_cout << "ifac::compute_parallel_sal(): " << nlines
-             << " lines after filtering, total_len = " << total_len << vcl_endl;
+    std::cout << "ifac::compute_parallel_sal(): " << nlines
+             << " lines after filtering, total_len = " << total_len << std::endl;
 #endif
 
     // compute the score for the set of fitted lines

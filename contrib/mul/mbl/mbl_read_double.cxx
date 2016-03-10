@@ -18,7 +18,7 @@
 // - Returns:       The answer or a default
 // - Description:   Asks question and waits for an answer.
 //                  If the answer is a double, returns it.
-//                  If the answer is an empty vcl_string (return)
+//                  If the answer is an empty std::string (return)
 //                  then returns default.
 //                  Otherwise waits for another input.
 // - References:    -
@@ -29,8 +29,10 @@
 // \endcode
 
 #include "mbl_read_double.h"
-#include <vcl_cstdio.h> // for fgets()
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <cstdio> // for fgets()
+#include <iostream>
 
 const int MAX_LEN = 40;
 
@@ -43,15 +45,15 @@ double RD_ReadDouble1(const char *q_str, double default_d,
   while (true)
   {
     if (min_d==0 && max_d==0)
-      vcl_cout<<q_str<<" ("<<default_d<<") :";
+      std::cout<<q_str<<" ("<<default_d<<") :";
     else
-    vcl_cout<<q_str<<" ["<<min_d<<".."<<max_d<<"] ("<<default_d<<") :";
-    vcl_cout.flush();
+    std::cout<<q_str<<" ["<<min_d<<".."<<max_d<<"] ("<<default_d<<") :";
+    std::cout.flush();
 
-    if (vcl_fgets(reply,MAX_LEN,stdin)!=VXL_NULLPTR)
+    if (std::fgets(reply,MAX_LEN,stdin)!=VXL_NULLPTR)
     {
       double r = default_d;
-      if (reply[0]=='\n' || vcl_sscanf(reply,"%lf",&r)>0)
+      if (reply[0]=='\n' || std::sscanf(reply,"%lf",&r)>0)
         return r;
     }
   }
@@ -69,9 +71,9 @@ double mbl_read_double( const char *q_str, double default_d,
   {
     double R = RD_ReadDouble1(q_str,default_d,min_d,max_d);
     if (R<min_d)
-      vcl_cout<<R<<": must be at least "<<min_d<<"\n";
+      std::cout<<R<<": must be at least "<<min_d<<"\n";
     else if (R>max_d)
-      vcl_cout<<R<<": must be no more than "<<max_d<<"\n";
+      std::cout<<R<<": must be no more than "<<max_d<<"\n";
     else
       return R; // acceptable
   }

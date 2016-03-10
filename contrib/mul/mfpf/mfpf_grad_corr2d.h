@@ -7,7 +7,9 @@
 
 #include <mfpf/mfpf_point_finder.h>
 #include <vgl/vgl_fwd.h>
-#include <vcl_iosfwd.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iosfwd>
 
 //: Searches over a grid using normalised correlation.
 class mfpf_grad_corr2d : public mfpf_point_finder
@@ -56,7 +58,7 @@ class mfpf_grad_corr2d : public mfpf_point_finder
            double ref_x, double ref_y);
 
   //: Define filter kernel to search with, expressed as a vector
-  virtual bool set_model(const vcl_vector<double>& v);
+  virtual bool set_model(const std::vector<double>& v);
 
   //: Number of dimensions in the model
   virtual unsigned model_dim();
@@ -72,13 +74,13 @@ class mfpf_grad_corr2d : public mfpf_point_finder
   const vil_image_view<double>& kernel_y() const { return kernel_y_; }
 
   //: Filter kernel to search with, expressed as a vector
-  void get_kernel_vector(vcl_vector<double>& v) const;
+  void get_kernel_vector(std::vector<double>& v) const;
 
   //: Get sample of region around specified point in image
   virtual void get_sample_vector(const vimt_image_2d_of<float>& image,
                                  const vgl_point_2d<double>& p,
                                  const vgl_vector_2d<double>& u,
-                                 vcl_vector<double>& v);
+                                 std::vector<double>& v);
 
   //: Radius of circle containing modelled region
   virtual double radius() const;
@@ -125,7 +127,7 @@ class mfpf_grad_corr2d : public mfpf_point_finder
   //: Generate points in ref frame that represent boundary
   //  Points of a contour around the shape.
   //  Used for display purposes.
-  virtual void get_outline(vcl_vector<vgl_point_2d<double> >& pts) const;
+  virtual void get_outline(std::vector<vgl_point_2d<double> >& pts) const;
 
   //: Return an image of the kernel
   virtual void get_image_of_model(vimt_image_2d_of<vxl_byte>& image) const;
@@ -134,13 +136,13 @@ class mfpf_grad_corr2d : public mfpf_point_finder
   short version_no() const;
 
   //: Name of the class
-  virtual vcl_string is_a() const;
+  virtual std::string is_a() const;
 
   //: Create a copy on the heap and return base class pointer
   virtual mfpf_point_finder* clone() const;
 
   //: Print class to os
-  virtual void print_summary(vcl_ostream& os) const;
+  virtual void print_summary(std::ostream& os) const;
 
   //: Save class to binary file stream
   virtual void b_write(vsl_b_ostream& bfs) const;

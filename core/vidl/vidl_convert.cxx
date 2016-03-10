@@ -28,9 +28,10 @@
 #include <vil/vil_convert.h>
 #include <vil/vil_new.h>
 #include <vil/vil_memory_chunk.h>
-#include <vcl_cstring.h>
+#include <cstring>
 #include <vcl_cassert.h>
-#include <vcl_memory.h>
+#include <vcl_compiler.h>
+#include <memory>
 
 //--------------------------------------------------------------------------------
 
@@ -44,8 +45,8 @@ typedef bool (*converter_func)(vidl_frame const& in_frame, vidl_frame& out_frame
 //: Default pixel format conversion - it fails
 bool default_conversion(vidl_frame const& in_frame, vidl_frame& out_frame)
 {
-  vcl_cerr << "No routine to convert " << in_frame.pixel_format()
-           << " to " << out_frame.pixel_format() << vcl_endl;
+  std::cerr << "No routine to convert " << in_frame.pixel_format()
+           << " to " << out_frame.pixel_format() << std::endl;
   return false;
 }
 
@@ -55,7 +56,7 @@ bool copy_conversion(vidl_frame const& in_frame, vidl_frame& out_frame)
 {
   assert(in_frame.pixel_format() == out_frame.pixel_format());
   assert(in_frame.size() == out_frame.size());
-  vcl_memcpy(out_frame.data(), in_frame.data(), in_frame.size());
+  std::memcpy(out_frame.data(), in_frame.data(), in_frame.size());
   return true;
 }
 
@@ -88,10 +89,10 @@ bool convert_generic(vidl_frame const& in_frame,
                      vidl_frame& out_frame)
 {
   // create pixel iterators for each frame
-  vcl_auto_ptr<vidl_pixel_iterator> in_pitr(vidl_make_pixel_iterator(in_frame));
+  std::auto_ptr<vidl_pixel_iterator> in_pitr(vidl_make_pixel_iterator(in_frame));
   if (!in_pitr.get())
     return false;
-  vcl_auto_ptr<vidl_pixel_iterator> out_pitr(vidl_make_pixel_iterator(out_frame));
+  std::auto_ptr<vidl_pixel_iterator> out_pitr(vidl_make_pixel_iterator(out_frame));
   if (!out_pitr.get())
     return false;
 
@@ -761,7 +762,7 @@ vidl_convert_wrap_in_view(vidl_frame const& frame)
 
   unsigned ni = frame.ni(), nj = frame.nj();
   unsigned np = pt.num_channels;
-  vcl_ptrdiff_t i_step, j_step, p_step;
+  std::ptrdiff_t i_step, j_step, p_step;
   switch (pt.arrangement) {
     case VIDL_PIXEL_ARRANGE_SINGLE:
       i_step = np;
@@ -777,7 +778,7 @@ vidl_convert_wrap_in_view(vidl_frame const& frame)
       // Cannot wrap other pixel arrangements
       return NULL;
   }
-  vcl_ptrdiff_t top_left_offset = 0;
+  std::ptrdiff_t top_left_offset = 0;
 
   if (format == VIDL_PIXEL_FORMAT_BGR_24) {
     top_left_offset = 2;

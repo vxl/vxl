@@ -15,8 +15,10 @@
 //   Amir Tamrakar Feb 30, 2005    Initial version.
 // \endverbatim
 
-#include <vcl_list.h>
-#include <vcl_iostream.h>
+#include <list>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iostream>
 #include <vbl/vbl_ref_count.h>
 #include <vbl/vbl_smart_ptr.h>
 
@@ -28,7 +30,7 @@ class bgrl2_vertex : public vbl_ref_count
   typedef vbl_smart_ptr<E> E_sptr;
 
  public:
-  typedef typename vcl_list<E_sptr>::iterator edge_iterator;
+  typedef typename std::list<E_sptr>::iterator edge_iterator;
 
   //: Constructor
   bgrl2_vertex() : vbl_ref_count(), out_edges_(), in_edges_() {}
@@ -37,10 +39,10 @@ class bgrl2_vertex : public vbl_ref_count
   virtual ~bgrl2_vertex(){}
 
   //:  returns all outgoing edges of this vertex
-  const vcl_list<E_sptr>& out_edges() { return out_edges_; }
+  const std::list<E_sptr>& out_edges() { return out_edges_; }
 
   //:  returns all incoming edges of this vertex
-  const vcl_list<E_sptr>& in_edges() { return in_edges_; }
+  const std::list<E_sptr>& in_edges() { return in_edges_; }
 
   //: Returns an iterator to the beginning of the set of incoming edges
   edge_iterator in_edges_begin() { return in_edges_.begin(); }
@@ -88,15 +90,15 @@ class bgrl2_vertex : public vbl_ref_count
   void del_all_out_edges();
 
   //: Print an ascii summary to the stream
-  virtual void print_summary(vcl_ostream &os) const;
+  virtual void print_summary(std::ostream &os) const;
 
  protected:
 
   //: The pointers to outgoing edges
-  vcl_list<E_sptr> out_edges_;
+  std::list<E_sptr> out_edges_;
 
   //: The pointers to incoming edges
-  vcl_list<E_sptr> in_edges_;
+  std::list<E_sptr> in_edges_;
 };
 
 #endif // bgrl2_vertex_h_

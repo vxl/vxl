@@ -18,33 +18,35 @@
 
 #include <vul/vul_file.h>
 
-#include <vcl_fstream.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <fstream>
 
 
 //: Constructor  from xml file
-bvpl_global_corners::bvpl_global_corners(const vcl_string &path)
+bvpl_global_corners::bvpl_global_corners(const std::string &path)
 {
-  vcl_cout << "Loading corners info from xml-file" << vcl_endl;
+  std::cout << "Loading corners info from xml-file" << std::endl;
   path_out_ = path;
-  vcl_ifstream xml_ifs(xml_path().c_str());
+  std::ifstream xml_ifs(xml_path().c_str());
   if (!xml_ifs.is_open()){
-    vcl_cerr << "Error: could not open xml info file: " << xml_path() << '\n';
+    std::cerr << "Error: could not open xml info file: " << xml_path() << '\n';
     throw;
   }
   bxml_document doc = bxml_read(xml_ifs);
   bxml_element query("global_corners_info");
   bxml_data_sptr root = bxml_find_by_name(doc.root_element(), query);
   if (!root) {
-    vcl_cerr << "Error: bvpl_discover_pca_kernels - could not parse xml root\n";
+    std::cerr << "Error: bvpl_discover_pca_kernels - could not parse xml root\n";
     throw;
   }
 
   //Parse scenes
   bxml_element scenes_query("scene");
-  vcl_vector<bxml_data_sptr> scenes_data = bxml_find_all_with_name(root, scenes_query);
+  std::vector<bxml_data_sptr> scenes_data = bxml_find_all_with_name(root, scenes_query);
 
   unsigned nscenes=scenes_data.size();
-  vcl_cout << "Number of scenes: " << nscenes << vcl_endl;
+  std::cout << "Number of scenes: " << nscenes << std::endl;
 
   aux_dirs_.clear();
   aux_dirs_.resize(nscenes);
@@ -73,10 +75,10 @@ bvpl_global_corners::bvpl_global_corners(const vcl_string &path)
     bxml_element* params_elm = dynamic_cast<bxml_element*>(params_data.ptr());
 
     params_elm->get_attribute("harris_k", harris_k_);
-    vcl_cout << "Harris_k is " << harris_k_ << '\n';
+    std::cout << "Harris_k is " << harris_k_ << '\n';
   }
   else {
-    vcl_cerr << " In Gobal Corners: no parameters element\n";
+    std::cerr << " In Gobal Corners: no parameters element\n";
   }
 }
 
@@ -101,7 +103,7 @@ void bvpl_global_corners::compute_laptev_corners(bvpl_global_taylor_sptr global_
 
   if (!( proj_scene && valid_scene && corner_scene ))
   {
-    vcl_cerr << "Error in bvpl_global_corners::threshold_corners: Could not cast input scenes\n";
+    std::cerr << "Error in bvpl_global_corners::threshold_corners: Could not cast input scenes\n";
     return;
   }
 
@@ -117,7 +119,7 @@ void bvpl_global_corners::compute_laptev_corners(bvpl_global_taylor_sptr global_
   vgl_point_3d<int> max_neighborhood_idx = global_taylor->kernel_vector_->max();
   vgl_point_3d<int> min_neighborhood_idx = global_taylor->kernel_vector_->min();
 
-  vcl_cout << "Neighborhood for Harris threshold: " << min_neighborhood_idx << " , " << max_neighborhood_idx << vcl_endl;
+  std::cout << "Neighborhood for Harris threshold: " << min_neighborhood_idx << " , " << max_neighborhood_idx << std::endl;
 
   corner_detector.compute_C(proj_scene, harris_functor, min_neighborhood_idx, max_neighborhood_idx, block_i, block_j, block_k, valid_scene, corner_scene, finest_cell_length_[scene_id]);
 
@@ -148,7 +150,7 @@ void bvpl_global_corners::compute_beaudet_corners(bvpl_global_taylor_sptr global
 
   if (!( proj_scene && valid_scene && corner_scene ))
   {
-    vcl_cerr << "Error in bvpl_global_corners::threshold_corners: Could not cast input scenes\n";
+    std::cerr << "Error in bvpl_global_corners::threshold_corners: Could not cast input scenes\n";
     return;
   }
 
@@ -171,7 +173,7 @@ void bvpl_global_corners::compute_beaudet_corners(bvpl_global_taylor_sptr global
 
 //: Threshold a percentage of corners, based of the Harris' measure extension to 3-d proposed by:
 //  I. Laptev. On space-time interest points. Int. J. Computer Vision, 64(2):107--123, 2005
-void bvpl_global_corners::threshold_laptev_corners(bvpl_global_taylor_sptr global_taylor,int scene_id, float harris_thresh, vcl_string output_path)
+void bvpl_global_corners::threshold_laptev_corners(bvpl_global_taylor_sptr global_taylor,int scene_id, float harris_thresh, std::string output_path)
 {
   typedef boct_tree<short,vnl_vector_fixed<double,10> > taylor_tree_type;
   typedef boct_tree_cell<short,vnl_vector_fixed<double,10> > taylor_cell_type;
@@ -193,14 +195,14 @@ void bvpl_global_corners::threshold_laptev_corners(bvpl_global_taylor_sptr globa
   new boxm_scene<boct_tree<short, bool> >(valid_scene->lvcs(), valid_scene->origin(), valid_scene->block_dim(), valid_scene->world_dim(), valid_scene->max_level(), valid_scene->init_level());
   valid_corner_scene->set_appearance_model(BOXM_BOOL);
 
-  vcl_stringstream valid_ss;
+  std::stringstream valid_ss;
   valid_ss << "valid_scene_" << scene_id ;
 
   valid_corner_scene->set_paths(output_path, valid_ss.str());
   valid_corner_scene->write_scene(valid_ss.str() + ".xml");
   valid_scene->clone_blocks(*valid_corner_scene);
 
-  vcl_stringstream proj_ss;
+  std::stringstream proj_ss;
   proj_ss << "proj_taylor_scene_" << scene_id ;
 
   boxm_scene<taylor_tree_type >* copy_proj_scene =
@@ -213,7 +215,7 @@ void bvpl_global_corners::threshold_laptev_corners(bvpl_global_taylor_sptr globa
 
   if (!( valid_scene && corner_scene && valid_corner_scene))
   {
-    vcl_cerr << "Error in bvpl_global_corners::threshold_corners: Could not cast input scenes\n";
+    std::cerr << "Error in bvpl_global_corners::threshold_corners: Could not cast input scenes\n";
     return;
   }
 
@@ -239,7 +241,7 @@ void bvpl_global_corners::threshold_laptev_corners(bvpl_global_taylor_sptr globa
 
     //if level and location code of cells isn't the same then continue
     if ((valid_cell->level() != corner_cell->level()) || (valid_cell->level() != valid_corner_cell->level()) || !(valid_code.isequal(&corner_code)) || !(valid_code.isequal(&valid_corner_code))){
-      vcl_cerr << " Error in threshold_laptev_corners: Cells don't have the same structure\n";
+      std::cerr << " Error in threshold_laptev_corners: Cells don't have the same structure\n";
       return;
     }
 
@@ -285,7 +287,7 @@ void bvpl_global_corners::explore_corner_statistics(bvpl_global_taylor_sptr glob
 
   if (!( valid_scene && corner_scene))
   {
-    vcl_cerr << "Error in bvpl_global_corners::explore_corner_statistics: Could not cast input scenes\n";
+    std::cerr << "Error in bvpl_global_corners::explore_corner_statistics: Could not cast input scenes\n";
     return;
   }
 
@@ -316,7 +318,7 @@ void bvpl_global_corners::explore_corner_statistics(bvpl_global_taylor_sptr glob
 
     //if level and location code of cells isn't the same then continue
     if ((valid_cell->level() != corner_cell->level()) || !(valid_code.isequal(&corner_code))){
-      vcl_cerr << " Error in threshold_laptev_corners: Cells don't have the same structure\n";
+      std::cerr << " Error in threshold_laptev_corners: Cells don't have the same structure\n";
       return;
     }
 
@@ -336,7 +338,7 @@ void bvpl_global_corners::explore_corner_statistics(bvpl_global_taylor_sptr glob
     ++corners_it;
   }
 
-  unsigned int nbins = (unsigned int)vcl_floor(vcl_sqrt(cell_count));
+  unsigned int nbins = (unsigned int)std::floor(std::sqrt(cell_count));
   bsta_histogram<float>  corner_hist(min, max, nbins);
   valid_it.begin();
   corners_it.begin();
@@ -350,7 +352,7 @@ void bvpl_global_corners::explore_corner_statistics(bvpl_global_taylor_sptr glob
 
     //if level and location code of cells isn't the same then continue
     if ((valid_cell->level() != corner_cell->level()) || !(valid_code.isequal(&corner_code))){
-      vcl_cerr << " Error in threshold_laptev_corners: Cells don't have the same structure\n";
+      std::cerr << " Error in threshold_laptev_corners: Cells don't have the same structure\n";
       return;
     }
 
@@ -367,9 +369,9 @@ void bvpl_global_corners::explore_corner_statistics(bvpl_global_taylor_sptr glob
     ++corners_it;
   }
 
-  vcl_string file = aux_dirs_[scene_id] + "/corner_threshold_values.txt";
+  std::string file = aux_dirs_[scene_id] + "/corner_threshold_values.txt";
   float threshold[] = {0.01f, 0.02f, 0.05f, 0.1f, 0.2f, 0.5f, 0.8f};
-  vcl_ofstream ofs(file.c_str());
+  std::ofstream ofs(file.c_str());
   ofs.precision(7);
   for (unsigned i = 0; i < 7; i++) {
     ofs << threshold[i] << ' ' << corner_hist.value_with_area_above(threshold[i]) << '\n';
@@ -386,13 +388,13 @@ boxm_scene_base_sptr bvpl_global_corners::load_corner_scene(int scene_id)
 {
   if (scene_id<0 || scene_id>((int)aux_dirs_.size() -1))
   {
-    vcl_cerr << "Error in bvpl_global_corners::load_corner_scene: Invalid scene id\n";
+    std::cerr << "Error in bvpl_global_corners::load_corner_scene: Invalid scene id\n";
     return VXL_NULLPTR;
   }
   //load scene
   boxm_scene_base_sptr scene_base = new boxm_scene_base();
   boxm_scene_parser scene_parser;
-  vcl_stringstream aux_scene_ss;
+  std::stringstream aux_scene_ss;
   aux_scene_ss << aux_dirs_[scene_id] << "/harris_scene.xml";
   scene_base->load_scene(aux_scene_ss.str(), scene_parser);
 
@@ -403,7 +405,7 @@ boxm_scene_base_sptr bvpl_global_corners::load_corner_scene(int scene_id)
     scene_base = scene;
   }
   else {
-    vcl_cerr << "Error in bvpl_global_corners::load_corner_scene: Invalid appearance model\n";
+    std::cerr << "Error in bvpl_global_corners::load_corner_scene: Invalid appearance model\n";
     return VXL_NULLPTR;
   }
 
@@ -415,13 +417,13 @@ boxm_scene_base_sptr bvpl_global_corners::load_valid_scene (int scene_id)
 {
   if (scene_id<0 || scene_id>((int)aux_dirs_.size() -1))
   {
-    vcl_cerr << "Error in bvpl_global_corners::load_scene: Invalid scene id\n";
+    std::cerr << "Error in bvpl_global_corners::load_scene: Invalid scene id\n";
     return VXL_NULLPTR;
   }
   //load scene
   boxm_scene_base_sptr aux_scene_base = new boxm_scene_base();
   boxm_scene_parser aux_parser;
-  vcl_stringstream aux_scene_ss;
+  std::stringstream aux_scene_ss;
   aux_scene_ss << aux_dirs_[scene_id] << "/valid_scene_" << scene_id << ".xml";
   aux_scene_base->load_scene(aux_scene_ss.str(), aux_parser);
 
@@ -432,7 +434,7 @@ boxm_scene_base_sptr bvpl_global_corners::load_valid_scene (int scene_id)
     aux_scene_base = aux_scene;
   }
   else {
-    vcl_cerr << "Error in bvpl_global_corners::load_aux_scene: Invalid appearance model\n";
+    std::cerr << "Error in bvpl_global_corners::load_aux_scene: Invalid appearance model\n";
     return VXL_NULLPTR;
   }
 
@@ -467,7 +469,7 @@ void bvpl_global_corners::xml_write()
   root->append_text("\n");
 
   //write to disk
-  vcl_ofstream os(xml_path().c_str());
+  std::ofstream os(xml_path().c_str());
   bxml_write(os, doc);
   os.close();
 }

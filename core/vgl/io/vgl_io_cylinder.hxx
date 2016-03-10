@@ -2,6 +2,7 @@
 #define vgl_io_cylinder_hxx_
 //:
 // \file
+#include <iostream>
 #include "vgl_io_cylinder.h"
 #include <vgl/io/vgl_io_point_3d.h>
 #include <vgl/io/vgl_io_vector_3d.h>
@@ -53,21 +54,21 @@ void vsl_b_read(vsl_b_istream &is, vgl_cylinder<T> & cyl)
     cyl.set_orientation(orient);
     break;
    default:
-    vcl_cerr << "vsol_cylinder: unknown I/O version " << ver << '\n';
+    std::cerr << "vsol_cylinder: unknown I/O version " << ver << '\n';
   }
 }
 
 //: Print an ascii summary to the stream
 template<class T>
-void vsl_print_summary(vcl_ostream& os, const vgl_cylinder<T> & cyl)
+void vsl_print_summary(std::ostream& os, const vgl_cylinder<T> & cyl)
 {
   //os << *this;
-  os << "Cylinder with center=" << cyl.center() << " radius=" << cyl.radius() << " length=" << cyl.length() << vcl_endl;
+  os << "Cylinder with center=" << cyl.center() << " radius=" << cyl.radius() << " length=" << cyl.length() << std::endl;
 }
 
 #undef VGL_IO_CYLINDER_INSTANTIATE
 #define VGL_IO_CYLINDER_INSTANTIATE(T) \
-template void vsl_print_summary(vcl_ostream &, const vgl_cylinder<T > &); \
+template void vsl_print_summary(std::ostream &, const vgl_cylinder<T > &); \
 template void vsl_b_read(vsl_b_istream &, vgl_cylinder<T > &); \
 template void vsl_b_write(vsl_b_ostream &, const vgl_cylinder<T > &)
 

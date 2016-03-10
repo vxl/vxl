@@ -3,7 +3,9 @@
 #include <bpgl/depth_map/depth_map_scene.h>
 #include <volm/volm_spherical_container.h>
 #include <volm/volm_spherical_shell_container.h>
-#include <vcl_algorithm.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <algorithm>
 #include <bsol/bsol_algs.h>
 
 #define TOL -1E-8
@@ -25,7 +27,7 @@ volm_spherical_layers(vpgl_perspective_camera<double> const& cam,
   d_threshold_(d_threshold)
 {
   scn_regs_ = dm_scene_->scene_regions();
-  vcl_sort(scn_regs_.begin(), scn_regs_.end(), compare_order());
+  std::sort(scn_regs_.begin(), scn_regs_.end(), compare_order());
 }
 
 volm_spherical_layers::
@@ -44,14 +46,14 @@ volm_spherical_layers(depth_map_scene_sptr const& dm_scene,
   d_threshold_(d_threshold)
 {
   scn_regs_ = dm_scene_->scene_regions();
-  vcl_sort(scn_regs_.begin(), scn_regs_.end(), compare_order());
+  std::sort(scn_regs_.begin(), scn_regs_.end(), compare_order());
 }
 
 unsigned char volm_spherical_layers::
 fetch_depth(double const& u, double const& v,
-            vcl_vector<depth_map_region_sptr> const& depth_regions,
-            vcl_vector<depth_map_region_sptr> const& ground_plane,
-            vcl_vector<depth_map_region_sptr> const& sky,
+            std::vector<depth_map_region_sptr> const& depth_regions,
+            std::vector<depth_map_region_sptr> const& ground_plane,
+            std::vector<depth_map_region_sptr> const& sky,
             unsigned char& order, unsigned char& max_dist,
             unsigned& object_id,  unsigned char& grd_nlcd,
             bool& is_ground,  bool& is_sky,
@@ -95,18 +97,18 @@ fetch_depth(double const& u, double const& v,
         is_ground = true;
         // get the depth of the pixel
         // maybe better to do bilinear interpolation instead of casting to nearest pixel
-        int uu = (int)vcl_floor(u/(1<<log_downsample_ratio_)+0.5);
+        int uu = (int)std::floor(u/(1<<log_downsample_ratio_)+0.5);
         uu = uu < 0 ? 0 : uu;
         uu = uu >= (int)dm_scene_->ni() ? dm_scene_->ni()-1 : uu;
-        int vv = (int)vcl_floor(v/(1<<log_downsample_ratio_)+0.5);
+        int vv = (int)std::floor(v/(1<<log_downsample_ratio_)+0.5);
         vv = vv < 0 ? 0 : vv;
         vv = vv >= (int)dm_scene_->nj() ? dm_scene_->nj()-1 : vv;
         float depth_uv = gp_depth_img(uu,vv);
         // handle the case where the voxel/ray is too close to ground_plane boundary
         if (depth_uv < 0) {
 #ifdef DEBUG
-          vcl_cout << " WARNING: point (" << (int)u << ',' << (int)v << ") "
-                   << " is too close to the ground boundary, disregard" << vcl_endl;
+          std::cout << " WARNING: point (" << (int)u << ',' << (int)v << ") "
+                   << " is too close to the ground boundary, disregard" << std::endl;
 #endif
           is_ground = false;
           max_dist = invalid_;
@@ -146,14 +148,14 @@ fetch_depth(double const& u, double const& v,
 
 bool volm_spherical_layers::compute_layers()
 {
-  vcl_cout << "layers camera\n" << cam_ << '\n';
+  std::cout << "layers camera\n" << cam_ << '\n';
 #if 0
-  vcl_vector<depth_map_region_sptr> scn_regs = dm_scene_->scene_regions();
+  std::vector<depth_map_region_sptr> scn_regs = dm_scene_->scene_regions();
 #endif
   dist_id_layer_.resize(scn_regs_.size());
-  vcl_vector<depth_map_region_sptr> gp_regs = dm_scene_->ground_plane();
-  vcl_vector<depth_map_region_sptr> sky_regs = dm_scene_->sky();
-  vcl_vector<vgl_point_3d<double> > rays = sph_shell_->cart_points();
+  std::vector<depth_map_region_sptr> gp_regs = dm_scene_->ground_plane();
+  std::vector<depth_map_region_sptr> sky_regs = dm_scene_->sky();
+  std::vector<vgl_point_3d<double> > rays = sph_shell_->cart_points();
   unsigned n_rays = (unsigned)rays.size();
   vil_image_view<float> gp_depth_img = dm_scene_->depth_map("ground_plane", log_downsample_ratio_, d_threshold_);
   unsigned count = 0;
@@ -189,7 +191,7 @@ bool volm_spherical_layers::compute_layers()
                                      order, max_dist,
                                      obj_id, grd_nlcd, is_ground,
                                      is_sky, is_object, gp_depth_img);
-        vcl_cout << ray_idx << ' ' << count << ' '
+        std::cout << ray_idx << ' ' << count << ' '
                  << (unsigned)min_dist << ' ' << u << ' ' << v << ' '
                  << (unsigned)order << ' ' << (unsigned)max_dist
                  << ' ' << (unsigned)obj_id << ' ' << (unsigned)grd_nlcd
@@ -211,7 +213,7 @@ bool volm_spherical_layers::compute_layers()
             dist_id_layer_[obj_id].push_back(ray_idx);
           }
           else {
-            vcl_cerr << "ERROR in spherical layer creation: "
+            std::cerr << "ERROR in spherical layer creation: "
                      << "object id exceeds the size of non-ground, non-sky objects\n";
             return false;
           }

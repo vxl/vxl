@@ -5,7 +5,9 @@
 // \brief Simple program to generate homography2d data plus outliers.
 //
 
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iostream>
 #include <vnl/vnl_matrix.h>
 #include <vnl/vnl_random.h>
 
@@ -62,12 +64,12 @@ main()
         B(1, 0) += B(2,0) * sigma * mz_random.normal();
         inliers ++ ;
       }
-      vcl_cout << A(0, 0) << " " << A(1, 0) << " " << A(2, 0) << " "
-               << B(0, 0) << " " << B(1, 0) << " " << B(2, 0) << vcl_endl;
+      std::cout << A(0, 0) << " " << A(1, 0) << " " << A(2, 0) << " "
+               << B(0, 0) << " " << B(1, 0) << " " << B(2, 0) << std::endl;
     }
   }
 
-  vcl_cerr << "outlier frac = " << outliers / double(inliers+outliers) << vcl_endl;
+  std::cerr << "outlier frac = " << outliers / double(inliers+outliers) << std::endl;
 
   return 0;
 }

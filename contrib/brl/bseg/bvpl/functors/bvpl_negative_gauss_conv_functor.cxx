@@ -29,7 +29,7 @@ bsta_gauss_sf1 bvpl_negative_gauss_conv_functor::result()
   bsta_gauss_sf1 final_gauss;
 
 
-  final_gauss.set_mean((mean_<0.0f)?vcl_abs(mean_):0.0f);
+  final_gauss.set_mean((mean_<0.0f)?std::abs(mean_):0.0f);
   final_gauss.set_var(var_);
 
   init();

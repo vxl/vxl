@@ -19,11 +19,13 @@
 #include "clsfy_simple_adaboost.h"
 #include "clsfy_builder_1d.h"
 
-#include <vcl_iostream.h>
-#include <vcl_cstdlib.h> // for vcl_abort()
-#include <vcl_cmath.h>
-#include <vcl_ctime.h> // for clock()
-#include <vcl_algorithm.h>
+#include <iostream>
+#include <cstdlib> // for std::abort()
+#include <cmath>
+#include <ctime> // for clock()
+#include <vcl_compiler.h>
+#include <iostream>
+#include <algorithm>
 #include <vcl_cassert.h>
 #include <vbl/vbl_triple.h>
 #include <mbl/mbl_file_data_collector.h>
@@ -45,16 +47,16 @@ clsfy_adaboost_sorted_builder::~clsfy_adaboost_sorted_builder()
 
 //=======================================================================
 
-bool clsfy_adaboost_sorted_builder::is_class(vcl_string const& s) const
+bool clsfy_adaboost_sorted_builder::is_class(std::string const& s) const
 {
   return s == clsfy_adaboost_sorted_builder::is_a() || clsfy_builder_base::is_class(s);
 }
 
 //=======================================================================
 
-vcl_string clsfy_adaboost_sorted_builder::is_a() const
+std::string clsfy_adaboost_sorted_builder::is_a() const
 {
-  return vcl_string("clsfy_adaboost_sorted_builder");
+  return std::string("clsfy_adaboost_sorted_builder");
 }
 
 
@@ -64,7 +66,7 @@ vcl_string clsfy_adaboost_sorted_builder::is_a() const
 double clsfy_adaboost_sorted_builder::build(clsfy_classifier_base& model,
                                             mbl_data_wrapper<vnl_vector<double> >& inputs,
                                             unsigned /* nClasses */,
-                                            const vcl_vector<unsigned> &outputs) const
+                                            const std::vector<unsigned> &outputs) const
 {
   // N.B. ignore nClasses=1, i.e. always binary classifier
 
@@ -75,41 +77,41 @@ double clsfy_adaboost_sorted_builder::build(clsfy_classifier_base& model,
   // check parameters are OK
   if ( max_n_clfrs_ < 0 )
   {
-    vcl_cout<<"Error: clsfy_adaboost_sorted_builder::build\n"
+    std::cout<<"Error: clsfy_adaboost_sorted_builder::build\n"
             <<"max_n_clfrs_ = "<<max_n_clfrs_<<" ie < 0\n"
             <<"set using set_max_n_clfrs()\n";
-    vcl_abort();
+    std::abort();
   }
   else
   {
-    vcl_cout<<"Maximum number of classifiers to be found by Adaboost = "
+    std::cout<<"Maximum number of classifiers to be found by Adaboost = "
             <<max_n_clfrs_<<'\n';
   }
 
   if ( weak_builder_ == VXL_NULLPTR )
   {
-    vcl_cout<<"Error: clsfy_adaboost_sorted_builder::build\n"
+    std::cout<<"Error: clsfy_adaboost_sorted_builder::build\n"
             <<"weak_builder_ pointer has not been set\n"
             <<"need to provide a builder to build each weak classifier\n"
             <<"set using set_weak_builder()\n";
-    vcl_abort();
+    std::abort();
   }
   else
   {
-    vcl_cout<<"Weak learner used by AdaBoost = "
+    std::cout<<"Weak learner used by AdaBoost = "
             <<weak_builder_->is_a()<<'\n';
   }
 
   if ( bs_ < 0 )
   {
-    vcl_cout<<"Error: clsfy_adaboost_sorted_builder::build\n"
+    std::cout<<"Error: clsfy_adaboost_sorted_builder::build\n"
             <<"bs_ = "<<bs_<<" ie < 0\n"
             <<"set using set_batch_size()\n";
-    vcl_abort();
+    std::abort();
   }
   else
   {
-    vcl_cout<<"Batch size when sorting data =" <<bs_<<'\n';
+    std::cout<<"Batch size when sorting data =" <<bs_<<'\n';
   }
 
 
@@ -118,13 +120,13 @@ double clsfy_adaboost_sorted_builder::build(clsfy_classifier_base& model,
   assert (max_n_clfrs_ >= 0);
 
   // first arrange the data in the form
-  // vcl_vector< < vcl_vector< vtl_triple<double,int,int> > > > data
+  // std::vector< < std::vector< vtl_triple<double,int,int> > > > data
   // + vnl_vector wts
   // then sort all data once, then build the classifier
 
   // number of examples
   unsigned n= inputs.size();
-  //vcl_cout<<"n= "<<n<<'\n';
+  //std::cout<<"n= "<<n<<'\n';
 
   // Dimensionality of data
   inputs.reset();
@@ -132,31 +134,31 @@ double clsfy_adaboost_sorted_builder::build(clsfy_classifier_base& model,
 
   //need file data wrapper instead of old vector
   //data stored on disk NOT ram
-  //vcl_vector< vcl_vector<vbl_triple<double,int,int> > > data(d);
+  //std::vector< std::vector<vbl_triple<double,int,int> > > data(d);
 
-  vcl_string temp_path= "temp.dat";
+  std::string temp_path= "temp.dat";
   mbl_file_data_collector<
-      vcl_vector< vbl_triple<double,int,int> >
+      std::vector< vbl_triple<double,int,int> >
                          >
               file_collector( temp_path );
 
   mbl_data_collector_list<
-      vcl_vector< vbl_triple<double,int,int> >
+      std::vector< vbl_triple<double,int,int> >
                          >
               ram_collector;
 
-  mbl_data_collector<vcl_vector< vbl_triple<double,int,int> >
+  mbl_data_collector<std::vector< vbl_triple<double,int,int> >
                          >*  collector;
 
   if (save_data_to_disk_)
   {
-    vcl_cout<<"saving data to disk!\n";
+    std::cout<<"saving data to disk!\n";
     collector= &file_collector;
   }
   else
   {
     //bs_ = n ;
-    vcl_cout<<"saving data to ram!\n";
+    std::cout<<"saving data to ram!\n";
     collector= &ram_collector;
   }
 
@@ -166,17 +168,17 @@ double clsfy_adaboost_sorted_builder::build(clsfy_classifier_base& model,
   // i.e. 100 features at once!
 
   //int bs= 100; //batch size
-  vcl_vector< vcl_vector< vbl_triple<double,int,int> > >vec(bs_);
+  std::vector< std::vector< vbl_triple<double,int,int> > >vec(bs_);
   vbl_triple<double,int,int> t;
 
-  vcl_cout<<"d= "<<d<<'\n';
+  std::cout<<"d= "<<d<<'\n';
   int b=0;
   while ( b+1<d )
   {
-    int r= vcl_min ( bs_, (d-b) );
+    int r= std::min ( bs_, (d-b) );
     assert(r>0);
 
-    vcl_cout<<"sorting weak classifiers = "<<b<<" to "
+    std::cout<<"sorting weak classifiers = "<<b<<" to "
             <<(b+r)-1<<" of "<<d<<'\n';
 
 
@@ -205,7 +207,7 @@ double clsfy_adaboost_sorted_builder::build(clsfy_classifier_base& model,
       assert (vec[i].size() == n);
       assert (n != 0);
 
-      vcl_sort(vec[i].begin(), vec[i].end() );
+      std::sort(vec[i].begin(), vec[i].end() );
 
       // store sorted vector of responses for each individual weak classifier
       collector->record(vec[i]);
@@ -215,7 +217,7 @@ double clsfy_adaboost_sorted_builder::build(clsfy_classifier_base& model,
   }
 
 
-  mbl_data_wrapper< vcl_vector< vbl_triple<double,int,int> > >&
+  mbl_data_wrapper< std::vector< vbl_triple<double,int,int> > >&
               wrapper=collector->data_wrapper();
 
 
@@ -236,10 +238,10 @@ double clsfy_adaboost_sorted_builder::build(clsfy_classifier_base& model,
       n1++;
     else
     {
-      vcl_cout<<"Error : clsfy_adaboost_sorted_builder\n"
+      std::cout<<"Error : clsfy_adaboost_sorted_builder\n"
               <<"unrecognised output value : outputs["<<i<<"]= "
               <<outputs[i]<<'\n';
-      vcl_abort();
+      std::abort();
     }
   }
 
@@ -254,10 +256,10 @@ double clsfy_adaboost_sorted_builder::build(clsfy_classifier_base& model,
       wts(i)=0.5/n1;
     else
     {
-      vcl_cout<<"Error : clsfy_adaboost_sorted_builder\n"
+      std::cout<<"Error : clsfy_adaboost_sorted_builder\n"
               <<"unrecognised output value : outputs["<<i<<"]= "
               <<outputs[i]<<'\n';
-      vcl_abort();
+      std::abort();
     }
   }
 
@@ -272,21 +274,21 @@ double clsfy_adaboost_sorted_builder::build(clsfy_classifier_base& model,
   clsfy_classifier_1d* c1d = weak_builder_->new_classifier();
   clsfy_classifier_1d* best_c1d= weak_builder_->new_classifier();
 
-  long old_time = vcl_clock();
+  long old_time = std::clock();
   double tot_time=0;
 
   for (unsigned int r=0;r<(unsigned)max_n_clfrs_;++r)
   {
-    vcl_cout<<"adaboost training round = "<<r<<'\n';
+    std::cout<<"adaboost training round = "<<r<<'\n';
 
-    //vcl_cout<<"wts0= "<<wts0<<"\nwts1= "<<wts1<<'\n';
+    //std::cout<<"wts0= "<<wts0<<"\nwts1= "<<wts1<<'\n';
 
     int best_i=-1;
     double min_error= 100000;
     wrapper.reset();  // make sure pointing to first data vector
     for (int i=0;i<d;++i)
     {
-      const vcl_vector< vbl_triple<double,int,int> >& vec = wrapper.current();
+      const std::vector< vbl_triple<double,int,int> >& vec = wrapper.current();
 
       double error = weak_builder_->build_from_sorted_data(*c1d,&vec[0],wts);
       if (i==0 || error<min_error)
@@ -302,13 +304,13 @@ double clsfy_adaboost_sorted_builder::build(clsfy_classifier_base& model,
 
     assert(best_i != -1);
 
-    vcl_cout<<"best_i= "<<best_i<<'\n'
+    std::cout<<"best_i= "<<best_i<<'\n'
             <<"min_error= "<<min_error<<'\n';
 
     if (min_error<1e-10)  // Hooray!
     {
-      vcl_cout<<"min_error<1e-10 !!!\n";
-      double alpha  = vcl_log(2.0*n);   //is this appropriate???
+      std::cout<<"min_error<1e-10 !!!\n";
+      double alpha  = std::log(2.0*n);   //is this appropriate???
       strong_classifier.add_classifier( best_c1d, alpha, best_i);
 
       // delete classifiers on heap, because clones taken by strong_classifier
@@ -320,7 +322,7 @@ double clsfy_adaboost_sorted_builder::build(clsfy_classifier_base& model,
 
     else if (0.5-min_error<1e-10) // Oh dear, no further improvement possible
     {
-      vcl_cout<<"min_error => 0.5 !!!\n";
+      std::cout<<"min_error => 0.5 !!!\n";
 
       // delete classifiers on heap, because clones taken by strong_classifier
       delete c1d;
@@ -330,12 +332,12 @@ double clsfy_adaboost_sorted_builder::build(clsfy_classifier_base& model,
 
     else { // update the classifier
       double beta = min_error/(1.0-min_error);
-      double alpha  = -1.0*vcl_log(beta);
+      double alpha  = -1.0*std::log(beta);
       strong_classifier.add_classifier( best_c1d, alpha, best_i);
 
       // extract the best weak classifier results
       wrapper.set_index(best_i);
-      const vcl_vector< vbl_triple<double,int,int> >& vec = wrapper.current();
+      const std::vector< vbl_triple<double,int,int> >& vec = wrapper.current();
 
       // update the wts using the best weak classifier
       for (unsigned int j=0; j<n; ++j)
@@ -347,12 +349,12 @@ double clsfy_adaboost_sorted_builder::build(clsfy_classifier_base& model,
     double w_sum= wts.mean()*n;
     wts/=w_sum;
 
-    long new_time = vcl_clock();
+    long new_time = std::clock();
 
     double dt = (1.0*(new_time-old_time))/CLOCKS_PER_SEC;
-    vcl_cout<<"Time for AdaBoost round:      "<<dt<<" secs\n";
+    std::cout<<"Time for AdaBoost round:      "<<dt<<" secs\n";
     tot_time+=dt;
-    vcl_cout<<"Total time for rounds so far: "<<tot_time<<" secs\n";
+    std::cout<<"Total time for rounds so far: "<<tot_time<<" secs\n";
 
     old_time = new_time;
   }
@@ -363,7 +365,7 @@ double clsfy_adaboost_sorted_builder::build(clsfy_classifier_base& model,
   // does clsfy_test_error balk if have too much data?
   // should be OK because just passes mbl_data_wrapper and evaluates
   // one at a time, so if using mbl_file_data_wrapper should be OK!
-  vcl_cout<<"calculating training error\n";
+  std::cout<<"calculating training error\n";
   return clsfy_test_error(strong_classifier, inputs, outputs);
 }
 
@@ -417,14 +419,14 @@ clsfy_builder_base* clsfy_adaboost_sorted_builder::clone() const
 //=======================================================================
 
     // required if data is present in this base class
-void clsfy_adaboost_sorted_builder::print_summary(vcl_ostream& /*os*/) const
+void clsfy_adaboost_sorted_builder::print_summary(std::ostream& /*os*/) const
 {
 #if 0
   clsfy_builder_base::print_summary(os); // Uncomment this line if it has one.
   vsl_print_summary(os, data_); // Example of data output
 #endif
 
-  vcl_cerr << "clsfy_adaboost_sorted_builder::print_summary() NYI\n";
+  std::cerr << "clsfy_adaboost_sorted_builder::print_summary() NYI\n";
 }
 
 //=======================================================================
@@ -437,7 +439,7 @@ void clsfy_adaboost_sorted_builder::b_write(vsl_b_ostream& /*bfs*/) const
   clsfy_builder_base::b_write(bfs);  // Needed if base has any data
   vsl_b_write(bfs, data_);
 #endif
-  vcl_cerr << "clsfy_adaboost_sorted_builder::b_write() NYI\n";
+  std::cerr << "clsfy_adaboost_sorted_builder::b_write() NYI\n";
 }
 
 //=======================================================================
@@ -445,7 +447,7 @@ void clsfy_adaboost_sorted_builder::b_write(vsl_b_ostream& /*bfs*/) const
   // required if data is present in this base class
 void clsfy_adaboost_sorted_builder::b_read(vsl_b_istream& /*bfs*/)
 {
-  vcl_cerr << "clsfy_adaboost_sorted_builder::b_read() NYI\n";
+  std::cerr << "clsfy_adaboost_sorted_builder::b_read() NYI\n";
 #if 0
   if (!bfs) return;
 
@@ -458,9 +460,9 @@ void clsfy_adaboost_sorted_builder::b_read(vsl_b_istream& /*bfs*/)
     vsl_b_read(bfs,data_);
     break;
    default:
-    vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, clsfy_adaboost_sorted_builder&)\n"
+    std::cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, clsfy_adaboost_sorted_builder&)\n"
              << "           Unknown version number "<< version << '\n';
-    bfs.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
+    bfs.is().clear(std::ios::badbit); // Set an unrecoverable IO error on stream
     return;
   }
 #endif // 0

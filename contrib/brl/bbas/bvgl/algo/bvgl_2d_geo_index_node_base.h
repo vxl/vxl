@@ -15,8 +15,10 @@
 //
 
 #include <vbl/vbl_ref_count.h>
-#include <vcl_string.h>
-#include <vcl_vector.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <string>
+#include <vector>
 #include <vgl/vgl_box_2d.h>
 #include <vgl/vgl_point_2d.h>
 #include "bvgl_2d_geo_index_sptr.h"
@@ -31,10 +33,10 @@ public:
   virtual ~bvgl_2d_geo_index_node_base() { children_.clear(); }
 
   //: return a name base on the extent boundary
-  vcl_string get_string() const;
+  std::string get_string() const;
 
   //: return a name based on the extent boundary and an input identifier
-  vcl_string get_label_name(vcl_string const& geo_index_name_pre, vcl_string const& identifier);
+  std::string get_label_name(std::string const& geo_index_name_pre, std::string const& identifier);
 
   //: add children
   void add_child(bvgl_2d_geo_index_node_sptr child) { children_.push_back(child); }
@@ -45,7 +47,7 @@ public:
   bvgl_2d_geo_index_node_sptr parent_;
 
   //: children nodes
-  vcl_vector<bvgl_2d_geo_index_node_sptr> children_;
+  std::vector<bvgl_2d_geo_index_node_sptr> children_;
 
   //: node boundary
   vgl_box_2d<double> extent_;

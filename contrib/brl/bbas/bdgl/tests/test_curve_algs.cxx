@@ -1,5 +1,7 @@
 // This is brl/bbas/bdgl/tests/test_curve_algs.cxx
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iostream>
 #include <vdgl/vdgl_edgel_chain_sptr.h>
 #include <vdgl/vdgl_edgel_chain.h>
 #include <vdgl/vdgl_interpolator_linear.h>
@@ -13,7 +15,7 @@
 static void test_curve_algs()
 {
   // we want to test the methods on bdgl_curve_algs
-  vcl_cout << "Testing nearest point\n";
+  std::cout << "Testing nearest point\n";
   // construct and edgel chain at 45 degrees
   int N = 10;
   vdgl_edgel_chain_sptr ec = new vdgl_edgel_chain();
@@ -28,7 +30,7 @@ static void test_curve_algs()
 
   vdgl_digital_curve_sptr dc = new vdgl_digital_curve(p0, p1);
   vgl_line_2d<double> l(0.0, 1.0, -2.1);
-  vcl_vector<vgl_point_2d<double> > pts;
+  std::vector<vgl_point_2d<double> > pts;
   bool good;
   /* good = */ bdgl_curve_algs::intersect_line(dc, l, pts);
   TEST("Num Intersection points = 1", pts.size(), 1);
@@ -50,25 +52,25 @@ static void test_curve_algs()
     ec1->add_edgel(vdgl_edgel(2.0,double(4-i)));
   int N1 = ec1->size();
   for (int j = 0; j<N1; j++)
-    vcl_cout << (*ec1)[j] << '\n';
+    std::cout << (*ec1)[j] << '\n';
   vdgl_interpolator_sptr intp = new vdgl_interpolator_linear(ec1);
   vdgl_digital_curve_sptr dc1 = new vdgl_digital_curve(intp);
   pts.clear();
   good = bdgl_curve_algs::intersect_line(dc1, l, pts);
   TEST("Num Intersection points = 2", pts.size(), 2);
   if (good)
-    vcl_cout << " p[0] " << pts[0] << " p[1] " << pts[1] << '\n';
+    std::cout << " p[0] " << pts[0] << " p[1] " << pts[1] << '\n';
   // test fast curve intersection
   pts.clear();
   good = bdgl_curve_algs::intersect_line_fast(dc1, l, pts);
   TEST("(fast) Num Intersection points = 2", pts.size(), 2);
-  vcl_cout << "points size: "<<pts.size() << vcl_endl;
+  std::cout << "points size: "<<pts.size() << std::endl;
   if (good)
-    vcl_cout << " p[0] " << pts[0] << " p[1] " << pts[1] << '\n';
+    std::cout << " p[0] " << pts[0] << " p[1] " << pts[1] << '\n';
   //test closest point
   double xc=0, yc=0;
   /* good = */ bdgl_curve_algs::closest_point(dc, 0.5, 2.0, xc, yc);
-  vcl_cout << "Closest Point to (0.5, 2.0)=(" << xc << ' ' << yc << ")\n";
+  std::cout << "Closest Point to (0.5, 2.0)=(" << xc << ' ' << yc << ")\n";
 }
 
 TESTMAIN(test_curve_algs);

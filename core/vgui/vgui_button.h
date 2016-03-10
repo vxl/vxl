@@ -14,7 +14,8 @@
 //  the "Button Actions" tab that your middle mouse button is set to "Middle"
 //  - kym.
 
-#include <vcl_iosfwd.h>
+#include <vcl_compiler.h>
+#include <iosfwd>
 
 //: Enumeration of possible mouse buttons.
 enum vgui_button {
@@ -24,6 +25,6 @@ enum vgui_button {
   vgui_RIGHT =0x4
 };
 
-vcl_ostream& operator<<(vcl_ostream& s, vgui_button b);
+std::ostream& operator<<(std::ostream& s, vgui_button b);
 
 #endif // vgui_button_h_

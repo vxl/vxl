@@ -4,8 +4,9 @@
 
 #include "vgl_infinite_line_3d.h"
 #include <vcl_cassert.h>
-#include <vcl_iostream.h>
-#include <vcl_cmath.h> // for fabs
+#include <iostream>
+#include <vcl_compiler.h>
+#include <cmath> // for fabs
 template <class Type>
 vgl_infinite_line_3d<Type>::vgl_infinite_line_3d(vgl_point_3d<Type> const& p1,
                                                  vgl_point_3d<Type> const& p2)
@@ -47,9 +48,9 @@ vgl_infinite_line_3d(vgl_point_3d<Type> const& p,
                      vgl_vector_3d<Type> const& dir)
 {
   // reconcile direction so that tangent is in the positive hemisphere
-  double ttx = vcl_fabs(static_cast<double>(dir.x()));
-  double tty = vcl_fabs(static_cast<double>(dir.y()));
-  double ttz = vcl_fabs(static_cast<double>(dir.z()));
+  double ttx = std::fabs(static_cast<double>(dir.x()));
+  double tty = std::fabs(static_cast<double>(dir.y()));
+  double ttz = std::fabs(static_cast<double>(dir.z()));
   double max_comp = ttx;
   double sign = static_cast<double>(dir.x());
   if (max_comp < tty) {
@@ -103,19 +104,19 @@ bool vgl_infinite_line_3d<Type>::contains(const vgl_point_3d<Type>& p ) const
   //            point outside (point1, point2) segment
   double r = seg -(len1 + len2);
   if (len1>seg||len2>seg)
-    r = seg - vcl_fabs(len1-len2);
+    r = seg - std::fabs(len1-len2);
   return r < 1e-8 && r > -1e-8;
 }
 
 // stream operators
 template <class Type>
-vcl_ostream& operator<<(vcl_ostream& s, vgl_infinite_line_3d<Type> const & p)
+std::ostream& operator<<(std::ostream& s, vgl_infinite_line_3d<Type> const & p)
 {
   return s << "<vgl_infinite_line_3d: origin" << p.x0() << " dir " << p.direction() << " >";
 }
 
 template <class Type>
-vcl_istream& operator>>(vcl_istream& s, vgl_infinite_line_3d<Type>& p)
+std::istream& operator>>(std::istream& s, vgl_infinite_line_3d<Type>& p)
 {
   vgl_vector_2d<Type> x_0;
   vgl_vector_3d<Type> dir;
@@ -127,7 +128,7 @@ vcl_istream& operator>>(vcl_istream& s, vgl_infinite_line_3d<Type>& p)
 #undef VGL_INFINITE_LINE_3D_INSTANTIATE
 #define VGL_INFINITE_LINE_3D_INSTANTIATE(Type) \
 template class vgl_infinite_line_3d<Type >;\
-template vcl_istream& operator>>(vcl_istream&, vgl_infinite_line_3d<Type >&);\
-template vcl_ostream& operator<<(vcl_ostream&, vgl_infinite_line_3d<Type > const&)
+template std::istream& operator>>(std::istream&, vgl_infinite_line_3d<Type >&);\
+template std::ostream& operator<<(std::ostream&, vgl_infinite_line_3d<Type > const&)
 
 #endif // vgl_infinite_line_3d_hxx_

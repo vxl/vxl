@@ -9,9 +9,11 @@
 
 #include <mbl/mbl_data_wrapper.h>
 #include <vsl/vsl_binary_io.h>
-#include <vcl_vector.h>
-#include <vcl_string.h>
-#include <vcl_iosfwd.h>
+#include <vector>
+#include <string>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iosfwd>
 
 //=======================================================================
 
@@ -39,7 +41,7 @@ class pdf1d_builder
   virtual pdf1d_pdf* new_model() const = 0;
 
   //: Name of the model class returned by new_model()
-  virtual vcl_string new_model_type() const =0;
+  virtual std::string new_model_type() const =0;
 
   //: Define lower threshold on variance for built models
   virtual void set_min_var(double min_var) =0;
@@ -63,22 +65,22 @@ class pdf1d_builder
   //: Build model from weighted data
   virtual void weighted_build(pdf1d_pdf& model,
                               mbl_data_wrapper<double>& data,
-                              const vcl_vector<double>& wts) const = 0;
+                              const std::vector<double>& wts) const = 0;
 
   //: Version number for I/O
   short version_no() const;
 
   //: Name of the class
-  virtual vcl_string is_a() const;
+  virtual std::string is_a() const;
 
   //: Does the name of the class match the argument?
-  virtual bool is_class(vcl_string const& s) const;
+  virtual bool is_class(std::string const& s) const;
 
   //: Create a copy on the heap and return base class pointer
   virtual pdf1d_builder* clone() const = 0;
 
   //: Print class to os
-  virtual void print_summary(vcl_ostream& os) const = 0;
+  virtual void print_summary(std::ostream& os) const = 0;
 
   //: Save class to binary file stream
   virtual void b_write(vsl_b_ostream& bfs) const = 0;
@@ -106,15 +108,15 @@ void vsl_b_write(vsl_b_ostream& bfs, const pdf1d_builder& b);
 void vsl_b_read(vsl_b_istream& bfs, pdf1d_builder& b);
 
 //: Stream output operator for class reference
-void vsl_print_summary(vcl_ostream& os,const pdf1d_builder& b);
+void vsl_print_summary(std::ostream& os,const pdf1d_builder& b);
 
 //: Stream output operator for class pointer
-void vsl_print_summary(vcl_ostream& os,const pdf1d_builder* b);
+void vsl_print_summary(std::ostream& os,const pdf1d_builder* b);
 
 //: Stream output operator for class reference
-vcl_ostream& operator<<(vcl_ostream& os,const pdf1d_builder& b);
+std::ostream& operator<<(std::ostream& os,const pdf1d_builder& b);
 
 //: Stream output operator for class pointer
-vcl_ostream& operator<<(vcl_ostream& os,const pdf1d_builder* b);
+std::ostream& operator<<(std::ostream& os,const pdf1d_builder* b);
 
 #endif // pdf1d_builder_h

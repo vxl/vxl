@@ -16,7 +16,8 @@
 // Kieran O'Mahony - 13 Aug 2007 - Added contains()
 // \endverbatim
 
-#include <vcl_iosfwd.h>
+#include <vcl_compiler.h>
+#include <iosfwd>
 #include <vgl/vgl_point_3d.h> // data member of this class
 
 //: Represents a 3D line segment using two points.
@@ -76,12 +77,12 @@ class vgl_line_segment_3d
 //: Write to stream
 // \relatesalso vgl_line_segment_3d
 template <class Type>
-vcl_ostream&  operator<<(vcl_ostream& s, const vgl_line_segment_3d<Type>& p);
+std::ostream&  operator<<(std::ostream& s, const vgl_line_segment_3d<Type>& p);
 
 //: Read from stream
 // \relatesalso vgl_line_segment_3d
 template <class Type>
-vcl_istream&  operator>>(vcl_istream& is,  vgl_line_segment_3d<Type>& p);
+std::istream&  operator>>(std::istream& is,  vgl_line_segment_3d<Type>& p);
 #define VGL_LINE_SEGMENT_3D_INSTANTIATE(T) extern "please include vgl/vgl_line_segment_3d.txx first"
 
 #endif // vgl_line_segment_3d_h_

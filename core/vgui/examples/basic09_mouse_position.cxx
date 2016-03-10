@@ -1,6 +1,7 @@
 // This displays the mouse position when the left mouse button is pressed.
 
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <iostream>
 #include <vgui/vgui.h>
 #include <vgui/vgui_image_tableau.h>
 #include <vgui/vgui_viewer2D_tableau.h>
@@ -18,7 +19,7 @@ struct example_tableau : public vgui_image_tableau
   {
     if (e.type == vgui_BUTTON_DOWN && e.button == vgui_LEFT && e.modifier == 0)
     {
-      vcl_cout << "selecting at " << e.wx << ' ' << e.wy << vcl_endl;
+      std::cout << "selecting at " << e.wx << ' ' << e.wy << std::endl;
       return true; // event has been used
     }
 
@@ -42,7 +43,7 @@ int main(int argc,char **argv)
   vgui::init(argc, argv);
   if (argc <= 1)
   {
-    vcl_cerr << "Please give an image filename on the command line\n";
+    std::cerr << "Please give an image filename on the command line\n";
     return 0;
   }
 

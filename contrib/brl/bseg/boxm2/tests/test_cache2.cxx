@@ -15,7 +15,9 @@
 // for stats
 #include <vul/vul_timer.h>
 #include <vcl_sys/time.h>
-#include <vcl_cstdio.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <cstdio>
 //#include <unistd.h>
 
 void test_lru_cache2()
@@ -27,7 +29,7 @@ void test_lru_cache2()
   boxm2_lru_cache::create(scene1);
   boxm2_cache_sptr cache = boxm2_cache::instance();
   //simulate a render
-  vcl_cout<<"loading initial BLOCK and ALPHA"<<vcl_endl;
+  std::cout<<"loading initial BLOCK and ALPHA"<<std::endl;
   boxm2_block* blk1 =  cache->get_block(scene1, boxm2_block_id(0,0,0));
   boxm2_block* blk2 =  cache->get_block(scene2, boxm2_block_id(0,0,0));
 

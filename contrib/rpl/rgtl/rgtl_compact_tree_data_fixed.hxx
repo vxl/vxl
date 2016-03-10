@@ -10,7 +10,9 @@
 #include "rgtl_serialize_base.hxx"
 #include "rgtl_serialize_stl_vector.hxx"
 
-#include <vcl_vector.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <vector>
 
 template <typename LeafDataType>
 class rgtl_compact_tree_data_fixed_leaf_data_policy:
@@ -54,7 +56,7 @@ public:
       return 0;
       }
     }
-  vcl_vector<leaf_data_type> leaf_data_values_;
+  std::vector<leaf_data_type> leaf_data_values_;
 private:
   friend class rgtl_serialize_access;
   template <class Serializer>
@@ -107,7 +109,7 @@ public:
       }
     }
 
-  vcl_vector<node_data_type> node_data_values_;
+  std::vector<node_data_type> node_data_values_;
 private:
   friend class rgtl_serialize_access;
   template <class Serializer>

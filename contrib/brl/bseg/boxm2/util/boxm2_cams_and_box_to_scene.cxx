@@ -13,7 +13,7 @@
 
 //~ //: takes in a list of cameras and a bounding box, creates
 //  an update scene and a render scene
-void boxm2_util_cams_and_box_to_scene (vcl_vector<CamType>& cams,
+void boxm2_util_cams_and_box_to_scene (std::vector<CamType>& cams,
                                        vgl_box_3d<double>   bbox,
                                        boxm2_scene&         uscene,
                                         int nblks)
@@ -40,7 +40,7 @@ void boxm2_util_cams_and_box_to_scene (vcl_vector<CamType>& cams,
     vgl_point_3d<double> cc = cam.camera_center();
     vgl_point_3d<double> zc( b2box.centroid().x(), b2box.centroid().y(), zplane);
     double res =2* (cc-zc).length()*cone_half_angle;
-    vcl_cout<<"Resres :"<<res<<vcl_endl;
+    std::cout<<"Resres :"<<res<<std::endl;
 
     //extend bbox a bit
     //double extSize = b2box.width() * .1;
@@ -61,12 +61,12 @@ void boxm2_util_cams_and_box_to_scene (vcl_vector<CamType>& cams,
     //number of blocks in scene (nblks,nblks,1)
     vgl_vector_3d<unsigned> numBlocks(nblks, nblks, 1);
 
-    vcl_cout<<"totSubBlocks "<<totSubBlocks<<vcl_endl;
+    std::cout<<"totSubBlocks "<<totSubBlocks<<std::endl;
     //number of subblocks per block
-    vgl_vector_3d<unsigned> numSubBlocks( (unsigned) vcl_ceil( (float)totSubBlocks.x()/(float)numBlocks.x() ),
-                                          (unsigned) vcl_ceil( (float)totSubBlocks.y()/(float)numBlocks.y() ),
-                                          (unsigned) vcl_ceil( (float)totSubBlocks.z()/(float)numBlocks.z() ) );
-    vcl_cout<<" Num Sub blocks "<<numSubBlocks<<vcl_endl;
+    vgl_vector_3d<unsigned> numSubBlocks( (unsigned) std::ceil( (float)totSubBlocks.x()/(float)numBlocks.x() ),
+                                          (unsigned) std::ceil( (float)totSubBlocks.y()/(float)numBlocks.y() ),
+                                          (unsigned) std::ceil( (float)totSubBlocks.z()/(float)numBlocks.z() ) );
+    std::cout<<" Num Sub blocks "<<numSubBlocks<<std::endl;
     vgl_vector_3d<double>   blockDim( subBlockDim.x() * numSubBlocks.x(),
                                       subBlockDim.y() * numSubBlocks.y(),
                                       subBlockDim.z() * numSubBlocks.z() );
@@ -74,14 +74,14 @@ void boxm2_util_cams_and_box_to_scene (vcl_vector<CamType>& cams,
     //create an image with this res, and count each pixel
     unsigned ni = numSubBlocks.x()*numBlocks.x()*nblks;//(unsigned) (b2box.width()/res);
     unsigned nj = numSubBlocks.y()*numBlocks.y()*nblks;;
-    vcl_cout<<"Created Box size: "<<ni<<','<<nj<<vcl_endl;
+    std::cout<<"Created Box size: "<<ni<<','<<nj<<std::endl;
     vil_image_view<vxl_byte> cntimg(ni, nj); cntimg.fill(0);
 
     //---------------------------------------------------------------------------
     // Set up scene dimensions
     //---------------------------------------------------------------------------
 
-    vcl_cout<<"Selecting Blocks for Rendering"<<vcl_endl;
+    std::cout<<"Selecting Blocks for Rendering"<<std::endl;
     //create blocks in each direction
     for (unsigned int i=0; i<numBlocks.x(); ++i) {
         for (unsigned int j=0; j<numBlocks.y(); ++j) {
@@ -91,9 +91,9 @@ void boxm2_util_cams_and_box_to_scene (vcl_vector<CamType>& cams,
                 {
                     //get block map
                     boxm2_block_id id(i,j,k);
-                    vcl_map<boxm2_block_id, boxm2_block_metadata> blks = uscene.blocks();
+                    std::map<boxm2_block_id, boxm2_block_metadata> blks = uscene.blocks();
                     if (blks.find(id)!=blks.end()) {
-                        vcl_cout<<"block already exists: "<<id<<vcl_endl;
+                        std::cout<<"block already exists: "<<id<<std::endl;
                         continue;
                     }
 
@@ -159,6 +159,6 @@ bool boxm2_util_has_percent_views(int i,
         }
     }
     mean = mean / (pixPerBlock.x() * pixPerBlock.y());
-    vcl_cout << "Block (" <<i<< ',' << j << ") mean views,percent: " << mean << ',' << mean/num_views << vcl_endl;
+    std::cout << "Block (" <<i<< ',' << j << ") mean views,percent: " << mean << ',' << mean/num_views << std::endl;
     return mean/num_views > percent;
 }

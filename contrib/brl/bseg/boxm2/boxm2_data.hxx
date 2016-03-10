@@ -4,7 +4,7 @@
 
 template <boxm2_data_type T>
 boxm2_data<T>::boxm2_data(char * data_buffer,
-                          vcl_size_t length,
+                          std::size_t length,
                           boxm2_block_id id)
 : boxm2_data_base(data_buffer,length,id)
 {

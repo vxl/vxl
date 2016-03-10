@@ -17,7 +17,9 @@
 // \endverbatim
 
 #include <mvl/HomgPoint3D.h>
-#include <vcl_iosfwd.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iosfwd>
 
 class HomgLine3D
 {
@@ -47,6 +49,6 @@ class HomgLine3D
   }
 };
 
-vcl_ostream& operator<<(vcl_ostream& s, const HomgLine3D& );
+std::ostream& operator<<(std::ostream& s, const HomgLine3D& );
 
 #endif // HomgLine3D_h_

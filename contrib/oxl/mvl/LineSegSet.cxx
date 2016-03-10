@@ -7,10 +7,11 @@
 
 #include "LineSegSet.h"
 
-#include <vcl_iostream.h>
-#include <vcl_fstream.h>
-#include <vcl_vector.h>
-#include <vcl_vector.hxx>
+#include <iostream>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <fstream>
+#include <vector>
 
 #include <mvl/ImageMetric.h>
 #include <mvl/HomgPoint2D.h>
@@ -45,19 +46,19 @@ LineSegSet::~LineSegSet()
 //: Construct from ascii file
 LineSegSet::LineSegSet(const char* filename, const HomgMetric& c)
 {
-  vcl_ifstream f(filename);
+  std::ifstream f(filename);
   load_ascii(f, c);
 }
 
 //: Load lines from ASCII file
-bool LineSegSet::load_ascii(vcl_istream& f, HomgMetric const& c)
+bool LineSegSet::load_ascii(std::istream& f, HomgMetric const& c)
 {
   vnl_matrix<double> L;
   f >> L;
 
   int cols = L.columns();
   if (cols != 6 && cols != 4) {
-    vcl_cerr << "Load failed -- there are " << L.columns() << " data per row\n";
+    std::cerr << "Load failed -- there are " << L.columns() << " data per row\n";
     return false;
   }
 
@@ -85,13 +86,13 @@ bool LineSegSet::load_ascii(vcl_istream& f, HomgMetric const& c)
     hlines_.push_back(c.image_to_homg_line(line));
   }
 
-  vcl_cerr << "Loaded " << size() << " line segments\n";
+  std::cerr << "Loaded " << size() << " line segments\n";
   return true;
 }
 
 int LineSegSet::FindNearestLineIndex(double /*x*/, double /*y*/)
 {
-  vcl_cerr <<"LineSegSet::FindNearestLineIndex not yet implemented\n";
+  std::cerr <<"LineSegSet::FindNearestLineIndex not yet implemented\n";
   return -1;
 #if 0 // commented out
   double mindist=-1.0f;
@@ -107,7 +108,7 @@ int LineSegSet::FindNearestLineIndex(double /*x*/, double /*y*/)
     if (t<0)     // P lies inbetween the two end points
       dist = vgl_distance(dl.get_line(),vgl_point_2d<double>(x,y)); // distance to the support line
     else
-      dist = vcl_min(// closest distance with endpoints
+      dist = std::min(// closest distance with endpoints
                      vgl_distance(dl.get_point1(),vgl_point_2d<double>(x,y)),
                      vgl_distance(dl.get_point2(),vgl_point_2d<double>(x,y)));
     if (mini<0 || dist<mindist){ mindist = dist; mini = i; }
@@ -117,7 +118,7 @@ int LineSegSet::FindNearestLineIndex(double /*x*/, double /*y*/)
 }
 
 //: Save lines to ASCII file
-bool LineSegSet::save_ascii(vcl_ostream& f) const
+bool LineSegSet::save_ascii(std::ostream& f) const
 {
   for (unsigned i = 0; i < hlines_.size(); ++i) {
     HomgLineSeg2D const& l = hlines_[i];
@@ -126,9 +127,9 @@ bool LineSegSet::save_ascii(vcl_ostream& f) const
     vnl_double_2 p2 = conditioner_.homg_to_image(l.get_point2());
 
     f << p1[0] << " " << p1[1] << "\t"
-      << p2[0] << " " << p2[1] << vcl_endl;
+      << p2[0] << " " << p2[1] << std::endl;
   }
-  vcl_cerr << "LineSegSet: Saved " << hlines_.size() << " line segments\n";
+  std::cerr << "LineSegSet: Saved " << hlines_.size() << " line segments\n";
   return true;
 }
 

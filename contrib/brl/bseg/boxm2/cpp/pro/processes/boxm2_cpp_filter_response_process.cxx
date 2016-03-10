@@ -18,7 +18,9 @@
 // \author Ali Osman Ulusoy
 // \date Dec 1, 2011
 
-#include <vcl_fstream.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <fstream>
 #include <boxm2/io/boxm2_cache.h>
 #include <boxm2/boxm2_scene.h>
 #include <boxm2/boxm2_block.h>
@@ -41,7 +43,7 @@ bool boxm2_cpp_filter_response_process_cons(bprb_func_process& pro)
   using namespace boxm2_cpp_filter_response_process_globals;
 
   //process takes 10 inputs
-  vcl_vector<vcl_string> input_types_(n_inputs_);
+  std::vector<std::string> input_types_(n_inputs_);
   input_types_[0] = "boxm2_scene_sptr";
   input_types_[1] = "boxm2_cache_sptr";
   input_types_[2] = "float";      //probability threshold
@@ -51,7 +53,7 @@ bool boxm2_cpp_filter_response_process_cons(bprb_func_process& pro)
 
   // process has 0 output:
   // output[0]: scene sptr
-  vcl_vector<vcl_string>  output_types_(n_outputs_);
+  std::vector<std::string>  output_types_(n_outputs_);
   bool good =pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
 
   //default values
@@ -69,7 +71,7 @@ bool boxm2_cpp_filter_response_process(bprb_func_process& pro)
   using namespace boxm2_cpp_filter_response_process_globals;
 
   if ( pro.n_inputs() < n_inputs_ ) {
-    vcl_cout << pro.name() << ": The input number should be " << n_inputs_<< vcl_endl;
+    std::cout << pro.name() << ": The input number should be " << n_inputs_<< std::endl;
     return false;
   }
   //get the inputs
@@ -77,22 +79,22 @@ bool boxm2_cpp_filter_response_process(bprb_func_process& pro)
   boxm2_scene_sptr scene =pro.get_input<boxm2_scene_sptr>(i++);
   boxm2_cache_sptr cache= pro.get_input<boxm2_cache_sptr>(i++);
   float prob_threshold = pro.get_input<float>(i++);
-  vcl_string kernel_base_file_name =  pro.get_input< vcl_string>(i++);
+  std::string kernel_base_file_name =  pro.get_input< std::string>(i++);
   unsigned id_kernel = pro.get_input<unsigned>(i++);
   unsigned octree_lvl = pro.get_input<unsigned>(i++);
 
-  vcl_map<boxm2_block_id, boxm2_block_metadata> blocks = scene->blocks();
-  vcl_cout << "Running boxm2_cpp_filter_response_process ..." << vcl_endl;
+  std::map<boxm2_block_id, boxm2_block_metadata> blocks = scene->blocks();
+  std::cout << "Running boxm2_cpp_filter_response_process ..." << std::endl;
 
   //construct boxm2_apply_filter_function
   boxm2_apply_filter_function<BOXM2_FLOAT> filter_function(kernel_base_file_name,id_kernel);
 
   //zip through each block
-  vcl_map<boxm2_block_id, boxm2_block_metadata>::iterator blk_iter;
+  std::map<boxm2_block_id, boxm2_block_metadata>::iterator blk_iter;
   for (blk_iter = blocks.begin(); blk_iter != blocks.end(); ++blk_iter)
   {
     boxm2_block_id id = blk_iter->first;
-    vcl_cout<<"Filtering Block: "<<id<<vcl_endl;
+    std::cout<<"Filtering Block: "<<id<<std::endl;
 
     boxm2_block *     blk     = cache->get_block(scene,id);
     boxm2_data_base * alph    = cache->get_data_base(scene,id,boxm2_data_traits<BOXM2_ALPHA>::prefix());
@@ -102,9 +104,9 @@ bool boxm2_cpp_filter_response_process(bprb_func_process& pro)
 
     //store responses
     int responseTypeSize = (int)boxm2_data_info::datasize(RESPONSE_DATATRAIT::prefix());
-    vcl_string kernel_name = vul_file::strip_directory(kernel_base_file_name);
-    vcl_stringstream ss; ss << kernel_name << "_" << id_kernel;
-    vcl_cout << "Data type: " << RESPONSE_DATATRAIT::prefix(ss.str()) << vcl_endl;
+    std::string kernel_name = vul_file::strip_directory(kernel_base_file_name);
+    std::stringstream ss; ss << kernel_name << "_" << id_kernel;
+    std::cout << "Data type: " << RESPONSE_DATATRAIT::prefix(ss.str()) << std::endl;
     boxm2_data_base * response    = cache->get_data_base(scene,id,RESPONSE_DATATRAIT::prefix(ss.str()),alph->buffer_length()/alphaTypeSize*responseTypeSize,false);
 
     filter_function.apply_filter(data, blk, alph, response, prob_threshold,  octree_lvl);

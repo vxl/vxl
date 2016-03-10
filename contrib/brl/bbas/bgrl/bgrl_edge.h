@@ -17,8 +17,10 @@
 #include <vbl/vbl_ref_count.h>
 #include <bgrl/bgrl_vertex_sptr.h>
 #include <vsl/vsl_binary_io.h>
-#include <vcl_string.h>
-#include <vcl_iosfwd.h>
+#include <string>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iosfwd>
 
 //: Directed edge from one vertex to another
 class bgrl_edge : public vbl_ref_count
@@ -41,7 +43,7 @@ class bgrl_edge : public vbl_ref_count
   bgrl_vertex_sptr to() const { return bgrl_vertex_sptr(to_); }
 
   //: Return a platform independent string identifying the class
-  virtual vcl_string is_a() const;
+  virtual std::string is_a() const;
 
   //: Create a copy of the object on the heap.
   // The caller is responsible for deletion
@@ -54,7 +56,7 @@ class bgrl_edge : public vbl_ref_count
   void b_read(vsl_b_istream &is);
 
   //: Print an ascii summary to the stream
-  void print_summary(vcl_ostream &os) const;
+  void print_summary(std::ostream &os) const;
 
  protected:
   //: initialize the edge
@@ -86,7 +88,7 @@ void vsl_add_to_binary_loader(const bgrl_edge& e);
 
 //: Print an ASCII summary to the stream
 // \relatesalso bgrl_edge
-void vsl_print_summary(vcl_ostream &os, const bgrl_edge* e);
+void vsl_print_summary(std::ostream &os, const bgrl_edge* e);
 
 #include "bgrl_edge_sptr.h"
 

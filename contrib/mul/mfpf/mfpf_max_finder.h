@@ -8,7 +8,9 @@
 
 #include <mfpf/mfpf_point_finder.h>
 #include <vgl/vgl_fwd.h>
-#include <vcl_iosfwd.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iosfwd>
 
 //: Locates largest value along a profile.
 class mfpf_max_finder : public mfpf_point_finder
@@ -54,16 +56,16 @@ class mfpf_max_finder : public mfpf_point_finder
   //: Generate points in ref frame that represent boundary
   //  Points of a closed contour around the shape.
   //  Used for display purposes.
-  virtual void get_outline(vcl_vector<vgl_point_2d<double> >& pts) const;
+  virtual void get_outline(std::vector<vgl_point_2d<double> >& pts) const;
 
   //: Name of the class
-  virtual vcl_string is_a() const;
+  virtual std::string is_a() const;
 
   //: Create a copy on the heap and return base class pointer
   virtual mfpf_point_finder* clone() const;
 
   //: Print class to os
-  virtual void print_summary(vcl_ostream& os) const;
+  virtual void print_summary(std::ostream& os) const;
 
   //: Version number for I/O
   short version_no() const;

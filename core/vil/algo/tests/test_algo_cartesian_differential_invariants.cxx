@@ -1,7 +1,8 @@
 // This is core/vil/algo/tests/test_algo_cartesian_differential_invariants.cxx
-#include <vcl_iostream.h>
+#include <iostream>
 #include <vcl_cassert.h>
-#include <vcl_cmath.h> // for fabs(float)
+#include <vcl_compiler.h>
+#include <cmath> // for fabs(float)
 #include <vil/vil_image_view.h>
 #include <vil/vil_print.h>
 #include <vil/algo/vil_cartesian_differential_invariants.h>
@@ -9,7 +10,7 @@
 
 static void test_algo_cartesian_differential_invariants()
 {
-  vcl_cout << "*****************************************************\n"
+  std::cout << "*****************************************************\n"
            << " Testing test_algo_cartesian_differential_invariants\n"
            << "*****************************************************\n";
 
@@ -22,10 +23,10 @@ static void test_algo_cartesian_differential_invariants()
   src(n/2,n/2) = 255;
 
   vil_cartesian_differential_invariants_3(src, dest, 1.0);
-  vcl_cout << "Source\n";
-  vil_print_all(vcl_cout,  src);
-  vcl_cout << "Destination\n";
-  vil_print_all(vcl_cout,  dest);
+  std::cout << "Source\n";
+  vil_print_all(std::cout,  src);
+  std::cout << "Destination\n";
+  vil_print_all(std::cout,  dest);
   TEST("dest is correct size", dest.ni() == n && dest.nj() == n && dest.nplanes() == 8, true);
 
 
@@ -147,9 +148,9 @@ static void test_algo_cartesian_differential_invariants()
   unsigned i;
   for (i=0; i<dest.size(); ++i)
   {
-    if ( vcl_fabs(*p_dest - *p_golden) > vcl_fabs(*p_golden) * 1e-6)
+    if ( std::fabs(*p_dest - *p_golden) > std::fabs(*p_golden) * 1e-6)
     {
-      vcl_cout << "Found excess value at pixel " << i << vcl_endl;
+      std::cout << "Found excess value at pixel " << i << std::endl;
       break;
     }
   }
@@ -170,7 +171,7 @@ static void test_algo_cartesian_differential_invariants()
   vil_cartesian_differential_invariants_3(src, dest2, 1.0);
   for (unsigned i=0; i<8; ++i)
     TEST_NEAR("cartesian invariance", dest2(n/2,n/2,i), dest2(n/2,n/2,i),
-              vcl_fabs(dest2(n/2,n/2,i)*1.e-4f));
+              std::fabs(dest2(n/2,n/2,i)*1.e-4f));
 }
 
 TESTMAIN(test_algo_cartesian_differential_invariants);

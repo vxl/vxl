@@ -2,125 +2,36 @@
 #define vcl_cstring_h_
 
 #include "vcl_compiler.h"
-
-#if !VCL_CXX_HAS_HEADER_CSTRING
-# include <string.h>
-# define vcl_generic_cstring_STD /* */
-# include "generic/vcl_cstring.h"
-#else
-# include "iso/vcl_cstring.h"
-#endif
-
-// Sometimes they are not functions, but macros (this is non-standard).
-//  memchr
-//  memcmp
-//  memcpy
-//  memmove
-//  memset
-//  strcat
-//  strchr
-//  strcmp
-//  strcoll
-//  strcpy
-//  strcspn
-//  strerror
-//  strlen
-//  strncat
-//  strncmp
-//  strncpy
-//  strpbrk
-//  strrchr
-//  strspn
-//  strstr
-//  strtok
-//  strxfrm
-#ifdef memchr
-# undef vcl_memchr
-# define vcl_memchr memchr
-#endif
-#ifdef memcmp
-# undef vcl_memcmp
-# define vcl_memcmp memcmp
-#endif
-#ifdef memcpy
-# undef vcl_memcpy
-# define vcl_memcpy memcpy
-#endif
-#ifdef memmove
-# undef vcl_memmove
-# define vcl_memmove memmove
-#endif
-#ifdef memset
-# undef vcl_memset
-# define vcl_memset memset
-#endif
-#ifdef strcat
-# undef vcl_strcat
-# define vcl_strcat strcat
-#endif
-#ifdef strchr
-# undef vcl_strchr
-# define vcl_strchr strchr
-#endif
-#ifdef strcmp
-# undef vcl_strcmp
-# define vcl_strcmp strcmp
-#endif
-#ifdef strcoll
-# undef vcl_strcoll
-# define vcl_strcoll strcoll
-#endif
-#ifdef strcpy
-# undef vcl_strcpy
-# define vcl_strcpy strcpy
-#endif
-#ifdef strcspn
-# undef vcl_strcspn
-# define vcl_strcspn strcspn
-#endif
-#ifdef strerror
-# undef vcl_strerror
-# define vcl_strerror strerror
-#endif
-#ifdef strlen
-# undef vcl_strlen
-# define vcl_strlen strlen
-#endif
-#ifdef strncat
-# undef vcl_strncat
-# define vcl_strncat strncat
-#endif
-#ifdef strncmp
-# undef vcl_strncmp
-# define vcl_strncmp strncmp
-#endif
-#ifdef strncpy
-# undef vcl_strncpy
-# define vcl_strncpy strncpy
-#endif
-#ifdef strpbrk
-# undef vcl_strpbrk
-# define vcl_strpbrk strpbrk
-#endif
-#ifdef strrchr
-# undef vcl_strrchr
-# define vcl_strrchr strrchr
-#endif
-#ifdef strspn
-# undef vcl_strspn
-# define vcl_strspn strspn
-#endif
-#ifdef strstr
-# undef vcl_strstr
-# define vcl_strstr strstr
-#endif
-#ifdef strtok
-# undef vcl_strtok
-# define vcl_strtok strtok
-#endif
-#ifdef strxfrm
-# undef vcl_strxfrm
-# define vcl_strxfrm strxfrm
-#endif
+#include <cstring>
+/* The following includes are needed to preserve backwards
+   compatilibility for external applications.  Previously
+   definitions were defined in multiple headers with conditional
+   ifndef guards, but we now include a reference header
+   instead */
+//no dependancies remove comment above
+//vcl alias names to std names
+// NB: size_t is declared in <cstddef>, not <cstring>
+#define vcl_memchr std::memchr
+#define vcl_memcmp std::memcmp
+#define vcl_memcpy std::memcpy
+#define vcl_memmove std::memmove
+#define vcl_memset std::memset
+#define vcl_strcat std::strcat
+#define vcl_strchr std::strchr
+#define vcl_strcmp std::strcmp
+#define vcl_strcoll std::strcoll
+#define vcl_strcpy std::strcpy
+#define vcl_strcspn std::strcspn
+#define vcl_strerror std::strerror
+#define vcl_strlen std::strlen
+#define vcl_strncat std::strncat
+#define vcl_strncmp std::strncmp
+#define vcl_strncpy std::strncpy
+#define vcl_strpbrk std::strpbrk
+#define vcl_strrchr std::strrchr
+#define vcl_strspn std::strspn
+#define vcl_strstr std::strstr
+#define vcl_strtok std::strtok
+#define vcl_strxfrm std::strxfrm
 
 #endif // vcl_cstring_h_

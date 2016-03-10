@@ -3,8 +3,10 @@
 //:
 // \file
 
-#include <vcl_iostream.h>
-#include <vcl_fstream.h>
+#include <iostream>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <fstream>
 #include <vpgl/vpgl_camera.h>
 #include <vpgl/vpgl_perspective_camera.h>
 #include <vpgl/vpgl_calibration_matrix.h>
@@ -19,7 +21,7 @@
 bool vpgl_create_perspective_camera_process_cons(bprb_func_process& pro)
 {
   bool ok=false;
-  vcl_vector<vcl_string> input_types(10);
+  std::vector<std::string> input_types(10);
   // the revised K matrix (no skew)
   input_types[0] = "double";// K[0][0] - u scale
   input_types[1] = "double";// K[0][2] - principal point (u)
@@ -34,7 +36,7 @@ bool vpgl_create_perspective_camera_process_cons(bprb_func_process& pro)
   ok = pro.set_input_types(input_types);
   if (!ok) return ok;
 
-  vcl_vector<vcl_string> output_types(1);
+  std::vector<std::string> output_types(1);
   output_types[0] = "vpgl_camera_double_sptr";  // output camera
   ok = pro.set_output_types(output_types);
   if (!ok) return ok;
@@ -47,7 +49,7 @@ bool vpgl_create_perspective_camera_process(bprb_func_process& pro)
 {
    // Sanity check
   if (!pro.verify_inputs()) {
-    vcl_cerr << "vpgl_scale_perspective_camera_process: Invalid inputs\n";
+    std::cerr << "vpgl_scale_perspective_camera_process: Invalid inputs\n";
     return false;
   }
   // get the inputs
@@ -75,7 +77,7 @@ bool vpgl_create_perspective_camera_process(bprb_func_process& pro)
 bool vpgl_create_perspective_camera_process2_cons(bprb_func_process& pro)
 {
   bool ok=false;
-  vcl_vector<vcl_string> input_types(4);
+  std::vector<std::string> input_types(4);
   input_types[0] = "vpgl_camera_double_sptr";// get everything from this camera
   input_types[1] = "float";// center x  Except the center
   input_types[2] = "float";// center y
@@ -83,7 +85,7 @@ bool vpgl_create_perspective_camera_process2_cons(bprb_func_process& pro)
   ok = pro.set_input_types(input_types);
   if (!ok) return ok;
 
-  vcl_vector<vcl_string> output_types(1);
+  std::vector<std::string> output_types(1);
   output_types[0] = "vpgl_camera_double_sptr";  // output camera
   ok = pro.set_output_types(output_types);
   if (!ok) return ok;
@@ -96,14 +98,14 @@ bool vpgl_create_perspective_camera_process2(bprb_func_process& pro)
 {
    // Sanity check
   if (!pro.verify_inputs()) {
-    vcl_cerr << "vpgl_create_perspective_camera_process2: Invalid inputs\n";
+    std::cerr << "vpgl_create_perspective_camera_process2: Invalid inputs\n";
     return false;
   }
   // get the inputs
   vpgl_camera_double_sptr cam_ptr = pro.get_input<vpgl_camera_double_sptr>(0);
   vpgl_perspective_camera<double>* cam = dynamic_cast<vpgl_perspective_camera<double>*>(cam_ptr.ptr());
   if (!cam) {
-    vcl_cerr << "vpgl_create_perspective_camera_process2: couldn't cast camera\n";
+    std::cerr << "vpgl_create_perspective_camera_process2: couldn't cast camera\n";
     return false;
   }
 
@@ -123,7 +125,7 @@ bool vpgl_create_perspective_camera_process2(bprb_func_process& pro)
 bool vpgl_create_perspective_camera_process3_cons(bprb_func_process& pro)
 {
   bool ok=false;
-  vcl_vector<vcl_string> input_types(6);
+  std::vector<std::string> input_types(6);
   input_types[0] = "vpgl_camera_double_sptr";// get R from this camera
   input_types[1] = "float"; // phi, first rotate up vector by phi around z, then rotate principal axis of camera by theta around rotated up vector, then rotate principal axis by R
   input_types[2] = "float"; // theta  pass angles in degrees, process converts to radians
@@ -133,7 +135,7 @@ bool vpgl_create_perspective_camera_process3_cons(bprb_func_process& pro)
   ok = pro.set_input_types(input_types);
   if (!ok) return ok;
 
-  vcl_vector<vcl_string> output_types(1);
+  std::vector<std::string> output_types(1);
   output_types[0] = "vpgl_camera_double_sptr";  // output camera
   ok = pro.set_output_types(output_types);
   if (!ok) return ok;
@@ -146,14 +148,14 @@ bool vpgl_create_perspective_camera_process3(bprb_func_process& pro)
 {
    // Sanity check
   if (!pro.verify_inputs()) {
-    vcl_cerr << "vpgl_create_perspective_camera_process2: Invalid inputs\n";
+    std::cerr << "vpgl_create_perspective_camera_process2: Invalid inputs\n";
     return false;
   }
   // get the inputs
   vpgl_camera_double_sptr cam_ptr = pro.get_input<vpgl_camera_double_sptr>(0);
   vpgl_perspective_camera<double>* cam = dynamic_cast<vpgl_perspective_camera<double>*>(cam_ptr.ptr());
   if (!cam) {
-    vcl_cerr << "vpgl_create_perspective_camera_process2: couldn't cast camera\n";
+    std::cerr << "vpgl_create_perspective_camera_process2: couldn't cast camera\n";
     return false;
   }
   double phi = pro.get_input<float>(1)/180.0*vnl_math::pi;
@@ -189,7 +191,7 @@ bool vpgl_create_perspective_camera_process3(bprb_func_process& pro)
 bool vpgl_create_perspective_camera_process4_cons(bprb_func_process& pro)
 {
   bool ok=false;
-  vcl_vector<vcl_string> input_types(7);
+  std::vector<std::string> input_types(7);
   input_types[0] = "vpgl_camera_double_sptr";// get everything from this camera
   input_types[1] = "float";// center x  Except the center, and initialize orientation with respect to direction of motion
   input_types[2] = "float";// center y
@@ -200,7 +202,7 @@ bool vpgl_create_perspective_camera_process4_cons(bprb_func_process& pro)
   ok = pro.set_input_types(input_types);
   if (!ok) return ok;
 
-  vcl_vector<vcl_string> output_types(1);
+  std::vector<std::string> output_types(1);
   output_types[0] = "vpgl_camera_double_sptr";  // output camera
   ok = pro.set_output_types(output_types);
   if (!ok) return ok;
@@ -213,14 +215,14 @@ bool vpgl_create_perspective_camera_process4(bprb_func_process& pro)
 {
    // Sanity check
   if (!pro.verify_inputs()) {
-    vcl_cerr << "vpgl_create_perspective_camera_process4: Invalid inputs\n";
+    std::cerr << "vpgl_create_perspective_camera_process4: Invalid inputs\n";
     return false;
   }
   // get the inputs
   vpgl_camera_double_sptr cam_ptr = pro.get_input<vpgl_camera_double_sptr>(0);
   vpgl_perspective_camera<double>* cam = dynamic_cast<vpgl_perspective_camera<double>*>(cam_ptr.ptr());
   if (!cam) {
-    vcl_cerr << "vpgl_create_perspective_camera_process2: couldn't cast camera\n";
+    std::cerr << "vpgl_create_perspective_camera_process2: couldn't cast camera\n";
     return false;
   }
   float cent_x = pro.get_input<float>(1);
@@ -249,11 +251,11 @@ bool vpgl_create_perspective_camera_process4(bprb_func_process& pro)
   double cy=pt2.y();
   double nx=pt3.x();
   double ny=pt3.y();
-  double theta_c=vcl_atan2(cy-py,cx-px);
-  double theta_n=vcl_atan2(ny-cy,nx-cx);
-  vcl_cout << "theta_c: " << theta_c*rad_to_deg << " theta_n: " << theta_n*rad_to_deg << " theta dif: " << (theta_c-theta_n)*rad_to_deg << vcl_endl;
+  double theta_c=std::atan2(cy-py,cx-px);
+  double theta_n=std::atan2(ny-cy,nx-cx);
+  std::cout << "theta_c: " << theta_c*rad_to_deg << " theta_n: " << theta_n*rad_to_deg << " theta dif: " << (theta_c-theta_n)*rad_to_deg << std::endl;
   double theta = (theta_n - theta_c)/2.0;
-  vcl_cout << "theta: " << theta << " which is: " << theta*rad_to_deg << " in degrees, using 5 degree which is: " << 5*vnl_math::pi/180.0 << " in radians!\n";
+  std::cout << "theta: " << theta << " which is: " << theta*rad_to_deg << " in degrees, using 5 degree which is: " << 5*vnl_math::pi/180.0 << " in radians!\n";
   //theta = -5*vnl_math::pi/180.0;
   vnl_vector_fixed<double,3> v(up_vec.x(), up_vec.y(), up_vec.z());
   //: then rotate axis by theta around up vector
@@ -276,7 +278,7 @@ bool vpgl_create_perspective_camera_process4(bprb_func_process& pro)
 bool vpgl_create_perspective_camera_from_kml_process_cons(bprb_func_process& pro)
 {
   bool ok=false;
-  vcl_vector<vcl_string> input_types(10);
+  std::vector<std::string> input_types(10);
   input_types[0] = "unsigned";// ni
   input_types[1] = "unsigned";// nj
   input_types[2] = "double";  // right field of view
@@ -290,7 +292,7 @@ bool vpgl_create_perspective_camera_from_kml_process_cons(bprb_func_process& pro
   ok = pro.set_input_types(input_types);
   if (!ok) return ok;
 
-  vcl_vector<vcl_string> output_types(1);
+  std::vector<std::string> output_types(1);
   output_types[0] = "vpgl_camera_double_sptr";  // output camera
   ok = pro.set_output_types(output_types);
   if (!ok) return ok;
@@ -303,7 +305,7 @@ bool vpgl_create_perspective_camera_from_kml_process(bprb_func_process& pro)
 {
    // Sanity check
   if (!pro.verify_inputs()) {
-    vcl_cerr << "vpgl_create_perspective_camera_process4: Invalid inputs\n";
+    std::cerr << "vpgl_create_perspective_camera_process4: Invalid inputs\n";
     return false;
   }
   // get the inputs
@@ -329,7 +331,7 @@ bool vpgl_create_perspective_camera_from_kml_process(bprb_func_process& pro)
 bool vpgl_create_perspective_camera_process5_cons(bprb_func_process& pro)
 {
   bool ok=false;
-  vcl_vector<vcl_string> input_types(3);
+  std::vector<std::string> input_types(3);
   // the revised K matrix (no skew)
   input_types[0] = "bbas_1d_array_double_sptr";// K
   input_types[1] = "bbas_1d_array_double_sptr";// R
@@ -337,7 +339,7 @@ bool vpgl_create_perspective_camera_process5_cons(bprb_func_process& pro)
   ok = pro.set_input_types(input_types);
   if (!ok) return ok;
 
-  vcl_vector<vcl_string> output_types(1);
+  std::vector<std::string> output_types(1);
   output_types[0] = "vpgl_camera_double_sptr";  // output camera
   ok = pro.set_output_types(output_types);
   if (!ok) return ok;
@@ -350,7 +352,7 @@ bool vpgl_create_perspective_camera_process5(bprb_func_process& pro)
 {
    // Sanity check
   if (!pro.verify_inputs()) {
-    vcl_cerr << "vpgl_scale_perspective_camera_process5: Invalid inputs\n";
+    std::cerr << "vpgl_scale_perspective_camera_process5: Invalid inputs\n";
     return false;
   }
   // get the inputs

@@ -2,7 +2,8 @@
 #define vgl_convex_hull_2d_hxx_
 #include "vgl_convex_hull_2d.h"
 
-#include <vcl_cstdlib.h> // vcl_qsort
+#include <vcl_compiler.h>
+#include <cstdlib> // std::qsort
 
 //:
 // \file
@@ -35,8 +36,8 @@
 static void print_hull(double **P, int m)
 {
   for (int i=0; i<m; i++)
-    vcl_cout << (P[i]-points[0])/2) << ' ';
-  vcl_cout << vcl_endl;
+    std::cout << (P[i]-points[0])/2) << ' ';
+  std::cout << std::endl;
 }
 #endif // 0
 
@@ -69,7 +70,7 @@ static int cmph(const void *a, const void *b) {return cmpl(b,a);}
 
 static int make_chain(double** V, int n, int (*cmp)(const void*, const void*))
 {
-  vcl_qsort(V, n, sizeof(double*), cmp);
+  std::qsort(V, n, sizeof(double*), cmp);
   int s = 1;
   for (int i=2; i<n; i++) {
     while (s>=1 && ccw(V, i, s, s-1)) --s;
@@ -89,7 +90,7 @@ static int ch2d(double **P, int n)
 
 template <class T>
 vgl_convex_hull_2d<T>::
-vgl_convex_hull_2d (vcl_vector<vgl_point_2d<T> > const& points)
+vgl_convex_hull_2d (std::vector<vgl_point_2d<T> > const& points)
 {
   hull_valid_ = false;
   points_ = points;
@@ -116,7 +117,7 @@ void vgl_convex_hull_2d<T>::compute_hull()
   int n_hull = ch2d(P, N);
 
   //convert back to vgl_points
-  vcl_vector<vgl_point_2d<T> > temp;
+  std::vector<vgl_point_2d<T> > temp;
   for (int i = 0; i<n_hull; i++)
   {
     vgl_point_2d<T> p((T)P[i][0], (T)P[i][1]);
@@ -146,8 +147,8 @@ vgl_polygon<T> vgl_convex_hull_2d<T>::hull()
 //----------------------------------------------------------------------------
 #undef VGL_CONVEX_HULL_2D_INSTANTIATE
 #define VGL_CONVEX_HULL_2D_INSTANTIATE(T) \
-/* template vcl_ostream& operator<<(vcl_ostream& s, vgl_convex_hull_2d<T >const& h); */ \
-/* template vcl_istream& operator>>(vcl_istream& s, vgl_convex_hull_2d<T >& h); */ \
+/* template std::ostream& operator<<(std::ostream& s, vgl_convex_hull_2d<T >const& h); */ \
+/* template std::istream& operator>>(std::istream& s, vgl_convex_hull_2d<T >& h); */ \
 template class vgl_convex_hull_2d<T >
 
 #endif // vgl_convex_hull_2d_hxx_

@@ -1,7 +1,8 @@
 #include <testlib/testlib_test.h>
 
-#include <vcl_vector.h>
-#include <vcl_string.h>
+#include <vector>
+#include <vcl_compiler.h>
+#include <string>
 
 #include <vgl/vgl_point_2d.h>
 
@@ -15,9 +16,9 @@
 static const double TOL = .001;
 
 static void normalize(
-    const vcl_vector<vgl_point_2d<double> > &points,
+    const std::vector<vgl_point_2d<double> > &points,
     const vpgl_calibration_matrix<double> &k,
-    vcl_vector<vgl_point_2d<double> > &normed_points)
+    std::vector<vgl_point_2d<double> > &normed_points)
 {
     vnl_matrix_fixed<double, 3, 3> k_inv = vnl_inverse(k.get_matrix());
 
@@ -36,19 +37,19 @@ static void normalize(
 }
 
 static void eval_e_mats(
-    const vcl_vector<vpgl_essential_matrix<double> > &ems,
-    const vcl_vector<vgl_point_2d<double> > &corres1,
-    const vcl_vector<vgl_point_2d<double> > &corres2,
-    vcl_string test_name)
+    const std::vector<vpgl_essential_matrix<double> > &ems,
+    const std::vector<vgl_point_2d<double> > &corres1,
+    const std::vector<vgl_point_2d<double> > &corres2,
+    std::string test_name)
 {
     //Check each essential matrix.
-    vcl_vector<vpgl_essential_matrix<double> >::const_iterator i;
+    std::vector<vpgl_essential_matrix<double> >::const_iterator i;
     for (i = ems.begin(); i != ems.end(); ++i)
     {
         //Check that the determinant of the essential matrix is 0.
         double det = vnl_determinant(i->get_matrix());
         TEST_NEAR(
-         (test_name+vcl_string(": Test det(essential_matrix) = 0")).c_str(),
+         (test_name+std::string(": Test det(essential_matrix) = 0")).c_str(),
          det, 0, TOL);
 
         //Now check that 2*e*e^t*e - tr(e * e^t) * e = 0;
@@ -60,7 +61,7 @@ static void eval_e_mats(
                 vnl_trace(e_et)*i->get_matrix()).get(0,0);
 
         TEST_NEAR(
-        (test_name+vcl_string(": Test 2*E*E^t*E - tr(E*E^t)*E = 0")).c_str(),
+        (test_name+std::string(": Test 2*E*E^t*E - tr(E*E^t)*E = 0")).c_str(),
         v, 0, TOL);
 
 
@@ -84,7 +85,7 @@ static void eval_e_mats(
                 (vec2.transpose() * i->get_matrix() * vec1).get(0,0);
 
             TEST_NEAR(
-            (test_name+vcl_string(": Testing that q' * E * q = 0")).c_str(),
+            (test_name+std::string(": Testing that q' * E * q = 0")).c_str(),
             result, 0, TOL);
         }
     }
@@ -120,7 +121,7 @@ static void test_unnormed()
          vgl_point_2d<double>(585,321),
          vgl_point_2d<double>(362,119),
          vgl_point_2d<double>(502,170)};
-    vcl_vector<vgl_point_2d<double> > corres1(corres1_arr,
+    std::vector<vgl_point_2d<double> > corres1(corres1_arr,
         corres1_arr + sizeof(corres1_arr) / sizeof(vgl_point_2d<double>));
 
     vgl_point_2d<double> corres2_arr[] =
@@ -129,7 +130,7 @@ static void test_unnormed()
          vgl_point_2d<double>(582,377),
          vgl_point_2d<double>(370,114),
          vgl_point_2d<double>(544,182)};
-    vcl_vector<vgl_point_2d<double> > corres2(corres2_arr,
+    std::vector<vgl_point_2d<double> > corres2(corres2_arr,
         corres2_arr + sizeof(corres2_arr) / sizeof(vgl_point_2d<double>));
 
     Assert("Un-normed: Testing that the correspondences are the same size.",
@@ -137,7 +138,7 @@ static void test_unnormed()
     //*************End definitions.
 
     //Now actually do the computation.
-    vcl_vector<vpgl_essential_matrix<double> > ems;
+    std::vector<vpgl_essential_matrix<double> > ems;
     vpgl_em_compute_5_point<double> em_5_pt;
 
     Assert(
@@ -148,11 +149,11 @@ static void test_unnormed()
         "Un-normed: Testing that we found the right number of solutions.",
         ems.size() <= 10);
 
-    vcl_vector<vgl_point_2d<double> > normed1, normed2;
+    std::vector<vgl_point_2d<double> > normed1, normed2;
     normalize(corres1, k1, normed1);
     normalize(corres2, k2, normed2);
 
-    eval_e_mats(ems, normed1, normed2, vcl_string("Un-normed"));
+    eval_e_mats(ems, normed1, normed2, std::string("Un-normed"));
 }
 
 static void test_normed()
@@ -165,7 +166,7 @@ static void test_normed()
          vgl_point_2d<double>(0.138513,0.329644),
          vgl_point_2d<double>(-0.028314,0.155250),
          vgl_point_2d<double>(0.057233,0.067887)};
-    vcl_vector<vgl_point_2d<double> > corres1(corres1_arr,
+    std::vector<vgl_point_2d<double> > corres1(corres1_arr,
         corres1_arr + sizeof(corres1_arr) / sizeof(vgl_point_2d<double>));
 
     vgl_point_2d<double> corres2_arr[] =
@@ -174,7 +175,7 @@ static void test_normed()
          vgl_point_2d<double>(0.105493,0.307611),
          vgl_point_2d<double>(-0.065042,0.175362),
          vgl_point_2d<double>(0.014028,0.086819)};
-    vcl_vector<vgl_point_2d<double> > corres2(corres2_arr,
+    std::vector<vgl_point_2d<double> > corres2(corres2_arr,
         corres2_arr + sizeof(corres2_arr) / sizeof(vgl_point_2d<double>));
 
     Assert("Normed: Testing that the correspondences are the same size.",
@@ -182,7 +183,7 @@ static void test_normed()
     //*************End definitions.
 
     //Now actually do the computation.
-    vcl_vector<vpgl_essential_matrix<double> > ems;
+    std::vector<vpgl_essential_matrix<double> > ems;
     vpgl_em_compute_5_point<double> em_5_pt;
 
     Assert("Normed: Testing that the 5 point algorithm returns correctly.",
@@ -191,7 +192,7 @@ static void test_normed()
     Assert("Normed: Testing that we found the right number of solutions.",
            ems.size() <= 10);
 
-    eval_e_mats(ems, corres1, corres2, vcl_string("Normed"));
+    eval_e_mats(ems, corres1, corres2, std::string("Normed"));
 }
 
 static void test_em_compute_5_point()

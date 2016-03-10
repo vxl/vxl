@@ -3,7 +3,9 @@
 
 #include <vmap/tests/my_map_functions.hxx>
 #include <vmap/vmap_types.h> // for vmap_vertex_index & vmap_face_index
-#include <vcl_vector.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <vector>
 
 template <class P>
 void display_tpyramid(const P & pyramid)
@@ -12,27 +14,27 @@ void display_tpyramid(const P & pyramid)
 
   for (int j=0; i!=pyramid.end_level(); ++i, ++j)
   {
-    vcl_cout<<"\n----------------\nlevel_type 0x"
-            <<vcl_hex<<(*i).index()<<vcl_dec
+    std::cout<<"\n----------------\nlevel_type 0x"
+            <<std::hex<<(*i).index()<<std::dec
             <<"\n----------------\n" ;
     display_tmap(*i) ;
-    vcl_vector<vmap_vertex_index> vertexFather;
-    vcl_cout<<"Base vertex correspondences for 0x"<<vcl_hex<<(*i).index()<<vcl_dec<<':' ;
+    std::vector<vmap_vertex_index> vertexFather;
+    std::cout<<"Base vertex correspondences for 0x"<<std::hex<<(*i).index()<<std::dec<<':' ;
     pyramid.down_projection_vertices((*i).index(),vertexFather) ;
     for (unsigned int j=0; j<vertexFather.size(); ++j)
     {
-      vcl_cout<<" ("<<pyramid.base_level().vertex(j).id()<<','<<(*i).vertex(vertexFather[j]).id()<<')' << vcl_flush;
+      std::cout<<" ("<<pyramid.base_level().vertex(j).id()<<','<<(*i).vertex(vertexFather[j]).id()<<')' << std::flush;
     }
-    vcl_cout<<vcl_endl ;
+    std::cout<<std::endl ;
 
-    vcl_vector<vmap_face_index> faceFather;
-    vcl_cout<<"Base face correspondences for 0x"<<vcl_hex<<(*i).index()<<vcl_dec<<':' ;
+    std::vector<vmap_face_index> faceFather;
+    std::cout<<"Base face correspondences for 0x"<<std::hex<<(*i).index()<<std::dec<<':' ;
     pyramid.down_projection_faces((*i).index(),faceFather) ;
     for (unsigned int j=0; j<faceFather.size(); ++j)
     {
-      vcl_cout<<" ("<<pyramid.base_level().face(j).id()<<','<<(*i).face(faceFather[j]).id()<<')' << vcl_flush;
+      std::cout<<" ("<<pyramid.base_level().face(j).id()<<','<<(*i).face(faceFather[j]).id()<<')' << std::flush;
     }
-    vcl_cout<<vcl_endl ;
+    std::cout<<std::endl ;
   }
 }
 

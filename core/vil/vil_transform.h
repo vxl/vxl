@@ -20,7 +20,7 @@ inline void vil_transform(vil_image_view<T >& image, F functor)
 {
   const unsigned ni = image.ni(), nj= image.nj(), np = image.nplanes();
 
-  vcl_ptrdiff_t istep=image.istep(),jstep=image.jstep(),pstep = image.planestep();
+  std::ptrdiff_t istep=image.istep(),jstep=image.jstep(),pstep = image.planestep();
   T* plane = image.top_left_ptr();
 
   if (istep==1)

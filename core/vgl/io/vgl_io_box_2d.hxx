@@ -4,6 +4,7 @@
 //:
 // \file
 
+#include <iostream>
 #include "vgl_io_box_2d.h"
 #include <vsl/vsl_binary_io.h>
 
@@ -46,9 +47,9 @@ void vsl_b_read(vsl_b_istream &is, vgl_box_2d<T> & p)
     break;
 
    default:
-    vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, vgl_box_2d<T>&)\n"
+    std::cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, vgl_box_2d<T>&)\n"
              << "           Unknown version number "<< v << '\n';
-    is.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
+    is.is().clear(std::ios::badbit); // Set an unrecoverable IO error on stream
     return;
   }
 }
@@ -56,7 +57,7 @@ void vsl_b_read(vsl_b_istream &is, vgl_box_2d<T> & p)
 //============================================================================
 //: Output a human readable summary to the stream
 template<class T>
-void vsl_print_summary(vcl_ostream& os,const vgl_box_2d<T> & p)
+void vsl_print_summary(std::ostream& os,const vgl_box_2d<T> & p)
 {
   if (p.is_empty())
     os<<"Empty 2d box\n";
@@ -66,7 +67,7 @@ void vsl_print_summary(vcl_ostream& os,const vgl_box_2d<T> & p)
 }
 
 #define VGL_IO_BOX_2D_INSTANTIATE(T) \
-template void vsl_print_summary(vcl_ostream &, const vgl_box_2d<T > &); \
+template void vsl_print_summary(std::ostream &, const vgl_box_2d<T > &); \
 template void vsl_b_read(vsl_b_istream &, vgl_box_2d<T > &); \
 template void vsl_b_write(vsl_b_ostream &, const vgl_box_2d<T > &)
 

@@ -49,7 +49,7 @@ vil_image_resource_sptr vepl_convert(vil_image_resource_sptr image, D /*dummy*/)
 
   //
   else
-    vcl_cerr << __FILE__ ": vepl_convert() not implemented for " << image << '\n';
+    std::cerr << __FILE__ ": vepl_convert() not implemented for " << image << '\n';
 
   return img_out;
 }

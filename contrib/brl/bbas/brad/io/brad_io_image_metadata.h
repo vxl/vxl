@@ -14,7 +14,9 @@
 
 #include <brad/brad_image_metadata.h>
 #include <vsl/vsl_binary_io.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iostream>
 
 //: Binary save brad_image_metadata to stream.
 void
@@ -26,7 +28,7 @@ vsl_b_read(vsl_b_istream &is, brad_image_metadata& m);
 
 //: Print summary
 void
-vsl_print_summary(vcl_ostream &os, const brad_image_metadata& m);
+vsl_print_summary(std::ostream &os, const brad_image_metadata& m);
 
 //: Binary write brad_image_metadata to stream
 void vsl_b_write(vsl_b_ostream& os, const brad_image_metadata* &p);

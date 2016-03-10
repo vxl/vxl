@@ -4,10 +4,12 @@
 // \author Tim Cootes
 // \brief Cost function to promote sparse basis vectors
 
-#include <vcl_cstdlib.h>
-#include <vcl_string.h>
-#include <vcl_cmath.h>
-#include <vcl_sstream.h>
+#include <cstdlib>
+#include <string>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <cmath>
+#include <sstream>
 
 #include <vsl/vsl_binary_io.h>
 #include <mbl/mbl_parse_block.h>
@@ -51,7 +53,7 @@ double mcal_var_basis_cost::cost(const vnl_vector<double>& unit_basis,
 double mcal_var_basis_cost::cost_from_variance(const vnl_vector<double>& unit_basis,
                                                double variance)
 {
-  return vcl_log(1e-8+variance);
+  return std::log(1e-8+variance);
 }
 
 
@@ -59,9 +61,9 @@ double mcal_var_basis_cost::cost_from_variance(const vnl_vector<double>& unit_ba
 // Method: is_a
 //=======================================================================
 
-vcl_string  mcal_var_basis_cost::is_a() const
+std::string  mcal_var_basis_cost::is_a() const
 {
-  return vcl_string("mcal_var_basis_cost");
+  return std::string("mcal_var_basis_cost");
 }
 
 //=======================================================================
@@ -86,7 +88,7 @@ mcal_single_basis_cost* mcal_var_basis_cost::clone() const
 // Method: print
 //=======================================================================
 
-void mcal_var_basis_cost::print_summary(vcl_ostream& os) const
+void mcal_var_basis_cost::print_summary(std::ostream& os) const
 {
   os << is_a();
 }
@@ -113,9 +115,9 @@ void mcal_var_basis_cost::b_read(vsl_b_istream& bfs)
     case (1):
       break;
     default:
-      vcl_cerr << "mcal_var_basis_cost::b_read()\n"
-               << "Unexpected version number " << version << vcl_endl;
-      vcl_abort();
+      std::cerr << "mcal_var_basis_cost::b_read()\n"
+               << "Unexpected version number " << version << std::endl;
+      std::abort();
   }
 }
 
@@ -127,11 +129,11 @@ void mcal_var_basis_cost::b_read(vsl_b_istream& bfs)
 // }
 // \endverbatim
 // \throw mbl_exception_parse_error if the parse fails.
-void mcal_var_basis_cost::config_from_stream(vcl_istream & is)
+void mcal_var_basis_cost::config_from_stream(std::istream & is)
 {
-  vcl_string s = mbl_parse_block(is);
+  std::string s = mbl_parse_block(is);
 
-  vcl_istringstream ss(s);
+  std::istringstream ss(s);
   mbl_read_props_type props = mbl_read_props_ws(ss);
 
   try

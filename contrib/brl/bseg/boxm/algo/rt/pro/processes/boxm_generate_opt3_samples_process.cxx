@@ -12,7 +12,9 @@
 
 #include <bprb/bprb_func_process.h>
 
-#include <vcl_fstream.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <fstream>
 
 #include <boxm/boxm_scene_base.h>
 #include <boxm/boxm_scene.h>
@@ -39,14 +41,14 @@ bool boxm_generate_opt3_samples_process_cons(bprb_func_process& pro)
   //input[2]: The scene
   //input[3]: image name for saving scene
   //input[4]: use black background
-  vcl_vector<vcl_string> input_types_(n_inputs_);
+  std::vector<std::string> input_types_(n_inputs_);
   input_types_[0] = "vil_image_view_base_sptr";
   input_types_[1] = "vpgl_camera_double_sptr";
   input_types_[2] = "boxm_scene_base_sptr";
   input_types_[3] = "vcl_string";
   input_types_[4] = "bool";
 
-  vcl_vector<vcl_string>  output_types_(n_outputs_);
+  std::vector<std::string>  output_types_(n_outputs_);
   return pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
 }
 
@@ -55,7 +57,7 @@ bool boxm_generate_opt3_samples_process(bprb_func_process& pro)
   using namespace boxm_generate_opt3_samples_process_globals;
 
   if ( pro.n_inputs() < n_inputs_ ){
-    vcl_cout << pro.name() << "boxm_generate_opt3_samples_process: The input number should be " << n_inputs_<< vcl_endl;
+    std::cout << pro.name() << "boxm_generate_opt3_samples_process: The input number should be " << n_inputs_<< std::endl;
     return false;
   }
 
@@ -64,12 +66,12 @@ bool boxm_generate_opt3_samples_process(bprb_func_process& pro)
   vil_image_view_base_sptr input_image = pro.get_input<vil_image_view_base_sptr>(i++);
   vpgl_camera_double_sptr camera = pro.get_input<vpgl_camera_double_sptr>(i++);
   boxm_scene_base_sptr scene = pro.get_input<boxm_scene_base_sptr>(i++);
-  vcl_string img_name =  pro.get_input<vcl_string>(i++); // TODO - unused!!
+  std::string img_name =  pro.get_input<std::string>(i++); // TODO - unused!!
   bool use_black_background =  pro.get_input<bool>(i++);
 
   // check the input validity
   if ((input_image == VXL_NULLPTR) || (camera == VXL_NULLPTR) || (scene == VXL_NULLPTR)) {
-    vcl_cout << "boxm_generate_opt3_samples_process: null input value, cannot run" << vcl_endl;
+    std::cout << "boxm_generate_opt3_samples_process: null input value, cannot run" << std::endl;
     return false;
   }
 
@@ -102,7 +104,7 @@ bool boxm_generate_opt3_samples_process(bprb_func_process& pro)
       break;
     }
    default:
-    vcl_cout << "boxm_generate_opt3_samples_process: unsupported APM type" << vcl_endl;
+    std::cout << "boxm_generate_opt3_samples_process: unsupported APM type" << std::endl;
     return false;
   }
 

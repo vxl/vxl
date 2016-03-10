@@ -17,7 +17,9 @@
 #include <brdb/brdb_database_manager.h>
 #include <brdb/brdb_relation.h>
 #include <brdb/brdb_tuple.h>
-#include <vcl_string.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <string>
 
 #define REG_PROCESS(proc, T) \
   T ::register_process( bprb_process_sptr( new proc() ) )
@@ -43,11 +45,11 @@ bprb_batch_process_manager::register_process( bprb_process_sptr( new bprb_func_p
  T ::register_process( bprb_process_sptr( new proc(func, nm, func##_cons, func##_init, func##_finish) ) )
 
 #define REGISTER_DATATYPE(T) \
-  vcl_string s##T = #T; \
+  std::string s##T = #T; \
   s##T += "_data"; \
   if(!DATABASE->exists(s##T)){ \
-  vcl_vector<vcl_string> r_##T##_names(2); \
-  vcl_vector<vcl_string> r_##T##_types(2); \
+  std::vector<std::string> r_##T##_names(2); \
+  std::vector<std::string> r_##T##_types(2); \
   r_##T##_names[0]="id"; \
   r_##T##_names[1]="value"; \
   r_##T##_types[0]=brdb_value_t<unsigned>::type(); \

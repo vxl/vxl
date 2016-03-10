@@ -5,9 +5,11 @@
 // \author Martin Roberts
 // \brief Builder for linear 2-state classifier, using a sigmoidal Geman-McClure rho function
 
-#include <vcl_string.h>
-#include <vcl_iosfwd.h> // for std::ostream
-// not used? #include <vcl_functional.h>
+#include <string>
+#include <iosfwd> // for std::ostream
+// not used? #include <vcl_compiler.h>
+#include <iostream>
+#include <functional>
 #include <vnl/io/vnl_io_vector.h>
 #include <vnl/io/vnl_io_matrix.h>
 #include <vnl/vnl_matrix.h>
@@ -64,7 +66,7 @@ class clsfy_binary_hyperplane_gmrho_builder  : public clsfy_binary_hyperplane_ls
   // Return the mean error over the training set.
   double build(clsfy_classifier_base &classifier,
                mbl_data_wrapper<vnl_vector<double> > &inputs,
-               const vcl_vector<unsigned> &outputs) const;
+               const std::vector<unsigned> &outputs) const;
 
   //: Build model from data
   // Return the mean error over the training set.
@@ -73,19 +75,19 @@ class clsfy_binary_hyperplane_gmrho_builder  : public clsfy_binary_hyperplane_ls
   virtual double build(clsfy_classifier_base& model,
                        mbl_data_wrapper<vnl_vector<double> >& inputs,
                        unsigned nClasses,
-                       const vcl_vector<unsigned> &outputs) const;
+                       const std::vector<unsigned> &outputs) const;
 
   //: Version number for I/O
   short version_no() const;
 
   //: Name of the class
-  vcl_string is_a() const;
+  std::string is_a() const;
 
   //: Name of the class
-  virtual bool is_class(vcl_string const& s) const;
+  virtual bool is_class(std::string const& s) const;
 
   //: Print class to os
-  void print_summary(vcl_ostream& os) const;
+  void print_summary(std::ostream& os) const;
 
   //: Create a deep copy.
   // client is responsible for deleting returned object.

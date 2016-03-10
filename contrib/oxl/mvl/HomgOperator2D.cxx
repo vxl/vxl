@@ -8,8 +8,10 @@
 #include "HomgOperator2D.h"
 
 #include <vcl_cassert.h>
-#include <vcl_iostream.h>
-#include <vcl_vector.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iostream>
+#include <vector>
 
 #include <vnl/vnl_math.h>
 #include <vnl/vnl_matrix.h>
@@ -61,11 +63,11 @@ void HomgOperator2D::unitize(Homg2D* a)
   double norm = a->x()*a->x() + a->y()*a->y() + a->w()*a->w();
 
   if (norm == 0.0) {
-    vcl_cerr << "HomgOperator2D::unitize() -- Zero length vector\n";
+    std::cerr << "HomgOperator2D::unitize() -- Zero length vector\n";
     return;
   }
 
-  norm = 1.0/vcl_sqrt(norm);
+  norm = 1.0/std::sqrt(norm);
   a->set(a->x()*norm, a->y()*norm, a->w()*norm);
 }
 
@@ -84,7 +86,7 @@ double HomgOperator2D::distance_squared(const HomgPoint2D& point1,
   double z2 = point2.w();
 
   if (z1 == 0 || z2 == 0) {
-    vcl_cerr << "HomgOperator2D::distance_squared() -- point at infinity";
+    std::cerr << "HomgOperator2D::distance_squared() -- point at infinity";
     return Homg::infinity;
   }
 
@@ -106,7 +108,7 @@ double HomgOperator2D::distance_squared(const HomgPoint2D& point1,
 double HomgOperator2D::perp_dist_squared (const HomgPoint2D& point, const HomgLine2D& line)
 {
   if (line.ideal(0.0) || point.ideal(0.0)) {
-    vcl_cerr << "HomgOperator2D::perp_dist_squared() -- line or point at infinity\n";
+    std::cerr << "HomgOperator2D::perp_dist_squared() -- line or point at infinity\n";
     return Homg::infinity;
   }
 
@@ -128,7 +130,7 @@ double HomgOperator2D::distance_squared(const HomgLineSeg2D& segment, const Homg
 //: Return distance between line segments.
 double HomgOperator2D::distance(const HomgLineSeg2D& ls, const HomgLineSeg2D& ll, double OVERLAP_THRESH)
 {
-  double norm = vcl_sqrt(ll.get_line().x()*ll.get_line().x()+ll.get_line().y()*ll.get_line().y());
+  double norm = std::sqrt(ll.get_line().x()*ll.get_line().x()+ll.get_line().y()*ll.get_line().y());
   HomgLine2D lll;
   lll.set(ll.get_line().x()/norm,ll.get_line().y()/norm,ll.get_line().w()/norm);
   double dist1 = ls.get_point1().x()/ls.get_point1().w() * lll.x() +
@@ -136,9 +138,9 @@ double HomgOperator2D::distance(const HomgLineSeg2D& ls, const HomgLineSeg2D& ll
   double dist2 = ls.get_point2().x()/ls.get_point2().w() * lll.x() +
                  ls.get_point2().y()/ls.get_point2().w() * lll.y() + lll.w();
 #ifdef DEBUG
-  vcl_cerr << "dist 1 is " <<dist1 << " dist 2 is " <<dist2 << '\n';
+  std::cerr << "dist 1 is " <<dist1 << " dist 2 is " <<dist2 << '\n';
 #endif
-  double dist = (vcl_fabs(dist1) + vcl_fabs(dist2))/2;
+  double dist = (std::fabs(dist1) + std::fabs(dist2))/2;
 
   // compute overlap
   // if smaller than OVERLAP_THRESH then reject
@@ -160,7 +162,7 @@ double HomgOperator2D::distance(const HomgLineSeg2D& ls, const HomgLineSeg2D& ll
   double r3 = v2(0)/v1(0); if (r3 > 1) r3 = 1; else if (r3 < 0) r3 =0;
   double r4 = v3(0)/v1(0); if (r4 > 1) r4 = 1; else if (r4 < 0) r4 =0;
 
-  double r = vcl_fabs(r3-r4) * v1.two_norm();
+  double r = std::fabs(r3-r4) * v1.two_norm();
 
   if (r < OVERLAP_THRESH)
     dist = 1000000;
@@ -186,7 +188,7 @@ double HomgOperator2D::distance_squared (const HomgLineSeg2D& lineseg, const Hom
   double dx = p2x - p1x;
   double dy = p2y - p1y;
 
-  double l = vcl_sqrt(dx*dx + dy*dy);
+  double l = std::sqrt(dx*dx + dy*dy);
 
   double px = p[0] / p[2];
   double py = p[1] / p[2];
@@ -206,7 +208,7 @@ double HomgOperator2D::distance_squared (const HomgLineSeg2D& lineseg, const Hom
 //: Get the anticlockwise angle between a line and the x axis.
 double HomgOperator2D::line_angle(const HomgLine2D& line)
 {
-  return vcl_atan2(line.y(), line.x());
+  return std::atan2(line.y(), line.x());
 }
 
 //-----------------------------------------------------------------------------
@@ -347,7 +349,7 @@ HomgPoint2D HomgOperator2D::midpoint (const HomgPoint2D& p1, const HomgPoint2D& 
 // == FITTING ==
 
 // - Kanatani sect 2.2.2.
-static vnl_vector<double> most_orthogonal_vector(const vcl_vector<HomgLine2D>& inpoints)
+static vnl_vector<double> most_orthogonal_vector(const std::vector<HomgLine2D>& inpoints)
 {
   vnl_scatter_3x3<double> scatter_matrix;
 
@@ -357,7 +359,7 @@ static vnl_vector<double> most_orthogonal_vector(const vcl_vector<HomgLine2D>& i
   return scatter_matrix.minimum_eigenvector().as_ref();
 }
 
-static vnl_vector<double> most_orthogonal_vector_svd(const vcl_vector<HomgLine2D>& lines)
+static vnl_vector<double> most_orthogonal_vector_svd(const std::vector<HomgLine2D>& lines)
 {
   vnl_matrix<double> D(lines.size(), 3);
 
@@ -365,7 +367,7 @@ static vnl_vector<double> most_orthogonal_vector_svd(const vcl_vector<HomgLine2D
     D.set_row(i, lines[i].get_vector().as_ref());
 
   vnl_svd<double> svd(D);
-  vcl_cerr << "[movrank " << svd.W() << ']';
+  std::cerr << "[movrank " << svd.W() << ']';
 
   return svd.nullvector();
 }
@@ -377,7 +379,7 @@ bool lines_to_point_use_svd = false;
 // is the matrix whose rows are the lines. The current implementation uses the
 // vnl_scatter_3x3<double> class from vnl to accumulate and compute the
 // nullspace of $\tt L^\top \tt L$.
-HomgPoint2D HomgOperator2D::lines_to_point(const vcl_vector<HomgLine2D>& lines)
+HomgPoint2D HomgOperator2D::lines_to_point(const std::vector<HomgLine2D>& lines)
 {
   // ho_triveccam_aspect_lines_to_point
   assert(lines.size() >= 2);
@@ -445,7 +447,7 @@ double HomgOperator2D::CrossRatio(const Homg2D& a, const Homg2D& b, const Homg2D
   double n = (x>y) ? (x1*w3-x3*w1)*(x2*w4-x4*w2) : (y1*w3-y3*w1)*(y2*w4-y4*w2);
   double m = (x>y) ? (x1*w4-x4*w1)*(x2*w3-x3*w2) : (y1*w4-y4*w1)*(y2*w3-y3*w2);
   if (n == 0 && m == 0)
-    vcl_cerr << "CrossRatio not defined: three of the given points coincide\n";
+    std::cerr << "CrossRatio not defined: three of the given points coincide\n";
   return n/m;
 }
 

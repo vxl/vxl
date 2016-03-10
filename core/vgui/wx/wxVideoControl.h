@@ -10,7 +10,8 @@
 
 #include <wx/panel.h>
 #include <vgui/vgui_observable.h>
-#include <vcl_vector.h>
+#include <vcl_compiler.h>
+#include <vector>
 
 // forward declarations
 class wxBitmapButton;

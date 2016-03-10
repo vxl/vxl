@@ -1,6 +1,8 @@
 #include "brip_phase_correlation.h"
 #include "brip_vil_float_ops.h"
-#include <vcl_cmath.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <cmath>
 #include <vnl/vnl_math.h>
 #include <vil/vil_math.h>
 #include <vnl/vnl_random.h>
@@ -31,10 +33,10 @@ brip_phase_correlation(vil_image_view<float> const&img0,
   if(nj>nj1) nj = nj1;
 
   //reduce to a power of two in each dimension, required by the FFT algorithm
-  double p2i = vcl_floor(vcl_log(static_cast<double>(ni))/vnl_math::ln2 + 0.5);
-  double p2j = vcl_floor(vcl_log(static_cast<double>(nj))/vnl_math::ln2 + 0.5);
-  int nip2 = static_cast<unsigned>(vcl_pow(2.0, p2i));
-  int njp2 = static_cast<unsigned>(vcl_pow(2.0, p2j));
+  double p2i = std::floor(std::log(static_cast<double>(ni))/vnl_math::ln2 + 0.5);
+  double p2j = std::floor(std::log(static_cast<double>(nj))/vnl_math::ln2 + 0.5);
+  int nip2 = static_cast<unsigned>(std::pow(2.0, p2i));
+  int njp2 = static_cast<unsigned>(std::pow(2.0, p2j));
   nip2_margin0_ = (ni0-nip2)/2; njp2_margin0_ = (nj0-njp2)/2;
   nip2_margin1_ = (ni1-nip2)/2; njp2_margin1_ = (nj1-njp2)/2;
   // if source image is smaller than target, fill borders with the fill_value
@@ -79,7 +81,7 @@ bool brip_phase_correlation::compute_correlation_array(){
   if(good){
     for(unsigned j = 0; j<corr_.nj(); ++j)
       for(unsigned i = 0; i<corr_.ni(); ++i)
-        corr_(i,j) = vcl_fabs(corr_(i,j));
+        corr_(i,j) = std::fabs(corr_(i,j));
   }
   thresh_ = compute_threshold(corr_);
   return good;
@@ -174,7 +176,7 @@ bool brip_phase_correlation::extract_correlation_peaks(){
        }
      }
    // sort the scores so that peaks_[0] is the largest
-   vcl_sort(peaks_.begin(), peaks_.end(), peak_greater);
+   std::sort(peaks_.begin(), peaks_.end(), peak_greater);
 
   //null hypothesis to use in case of a single peak
    gauss_avg_ = avg_sum/count;
@@ -184,17 +186,17 @@ bool brip_phase_correlation::extract_correlation_peaks(){
 bool brip_phase_correlation::compute(){
   bool good = this->compute_ffts();
   if(!good){
-    vcl_cout << "computation of fast fourier transforms failed\n";
+    std::cout << "computation of fast fourier transforms failed\n";
     return false;
   }
   good = this->compute_correlation_array();
   if(!good){
-    vcl_cout << "computation of correlation array failed\n";
+    std::cout << "computation of correlation array failed\n";
     return false;
   }
   good =  this->extract_correlation_peaks();
   if(!good){
-    vcl_cout << "extract correlation peaks failed\n";
+    std::cout << "extract correlation peaks failed\n";
     return false;
   }
   return true;
@@ -203,15 +205,15 @@ bool brip_phase_correlation::translation(float& tu, float& tv, float& confidence
   confidence = 0.0f;
   int npeaks = static_cast<int>(peaks_.size());
   if(npeaks == 0){
-    vcl_cout << "translation failed - no local correlation maxima\n";
+    std::cout << "translation failed - no local correlation maxima\n";
     return false;
   }
 #if 0 // for debug
   int limit = npeaks;
   if(limit>5) limit = 5;
-  vcl_cout << "scores \n";
+  std::cout << "scores \n";
   for(int i=0; i<limit; ++i)
-    vcl_cout << peaks_[i].u_ << ' ' << peaks_[i].v_ << ' ' << peaks_[i].score_ << '\n';
+    std::cout << peaks_[i].u_ << ' ' << peaks_[i].v_ << ' ' << peaks_[i].score_ << '\n';
 #endif
   const peak& pk = peaks_[0];
   tu = pk.u_; tv = pk.v_;
@@ -229,6 +231,6 @@ bool brip_phase_correlation::translation(float& tu, float& tv, float& confidence
   // map the score ratio to [0, 1]
   // alpha_ is a scale factor to define ratio significance
   // (should adjust using a large training test set, default value for now)
-  confidence =vcl_tanh(alpha_*(ratio-1.0f));
+  confidence =std::tanh(alpha_*(ratio-1.0f));
   return true;
 }

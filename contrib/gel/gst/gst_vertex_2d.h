@@ -8,7 +8,9 @@
 // \file
 // \author crossge@crd.ge.com
 
-#include <vcl_iosfwd.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iosfwd>
 #include <vbl/vbl_ref_count.h>
 
 class gst_vertex_2d : public vbl_ref_count
@@ -49,6 +51,6 @@ class gst_vertex_2d : public vbl_ref_count
 bool operator==(const gst_vertex_2d& a, const gst_vertex_2d& b)
 { return a.x_== b.x_ && a.y_== b.y_; }
 
-vcl_ostream &operator <<( vcl_ostream &os, const gst_vertex_2d &v);
+std::ostream &operator <<( std::ostream &os, const gst_vertex_2d &v);
 
 #endif // gst_vertex_2d_h_

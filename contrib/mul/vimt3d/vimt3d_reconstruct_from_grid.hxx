@@ -113,9 +113,9 @@ void vimt3d_reconstruct_from_grid_ic_no_checks(vil3d_image_view<imType>& image,
   int ni = image.ni();
   int nj = image.nj();
   int nk = image.nk();
-  vcl_ptrdiff_t istep = image.istep();
-  vcl_ptrdiff_t jstep = image.jstep();
-  vcl_ptrdiff_t kstep = image.kstep();
+  std::ptrdiff_t istep = image.istep();
+  std::ptrdiff_t jstep = image.jstep();
+  std::ptrdiff_t kstep = image.kstep();
 
   const vecType* vc = vec.begin();
   vgl_point_3d<double> p1 = p0;
@@ -175,9 +175,9 @@ void vimt3d_reconstruct_from_grid_ic_safe(vil3d_image_view<imType>& image,
   int ni = image.ni();
   int nj = image.nj();
   int nk = image.nk();
-  vcl_ptrdiff_t istep = image.istep();
-  vcl_ptrdiff_t jstep = image.jstep();
-  vcl_ptrdiff_t kstep = image.kstep();
+  std::ptrdiff_t istep = image.istep();
+  std::ptrdiff_t jstep = image.jstep();
+  std::ptrdiff_t kstep = image.kstep();
 
   const vecType* vc = vec.begin();
   vgl_point_3d<double> p1 = p0;

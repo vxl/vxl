@@ -19,9 +19,11 @@
 
 #include "clsfy_adaboost_trainer.h"
 
-#include <vcl_iostream.h>
+#include <iostream>
 #include <vsl/vsl_indent.h>
-#include <vcl_cmath.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <cmath>
 #include <vcl_cassert.h>
 
 //=======================================================================
@@ -104,20 +106,20 @@ void clsfy_adaboost_trainer::build_strong_classifier(
 
   for (int i=0;i<n;++i)
   {
-    vcl_cout<<"adaboost training round = "<<i<<'\n';
+    std::cout<<"adaboost training round = "<<i<<'\n';
 
-    //vcl_cout<<"wts0= "<<wts0<<"\nwts1= "<<wts1<<'\n';
+    //std::cout<<"wts0= "<<wts0<<"\nwts1= "<<wts1<<'\n';
 
     int best_j=-1;
     double min_error= 100000;
     for (unsigned int j=0;j<d;++j)
     {
-      //vcl_cout<<"building classifier "<<j<<" of "<<d<<'\n';
+      //std::cout<<"building classifier "<<j<<" of "<<d<<'\n';
       clsfy_get_elements(egs0_1d,egs0,j);
       clsfy_get_elements(egs1_1d,egs1,j);
 
       double error = builder.build(*c1d,egs0_1d,wts0,egs1_1d,wts1);
-      //vcl_cout<<"error= "<<error<<'\n';
+      //std::cout<<"error= "<<error<<'\n';
       if (j==0 || error<min_error)
       {
         min_error = error;
@@ -127,13 +129,13 @@ void clsfy_adaboost_trainer::build_strong_classifier(
       }
     }
 
-    vcl_cout<<"best_j= "<<best_j<<'\n'
+    std::cout<<"best_j= "<<best_j<<'\n'
             <<"min_error= "<<min_error<<'\n';
 
     if (min_error<1e-10)  // Hooray!
     {
-      vcl_cout<<"min_error<1e-10 !!!\n";
-      double alpha  = vcl_log(2.0*(n0+n1));   //is this appropriate???
+      std::cout<<"min_error<1e-10 !!!\n";
+      double alpha  = std::log(2.0*(n0+n1));   //is this appropriate???
       strong_classifier.add_classifier( best_c1d, alpha, best_j);
 
       // delete classifiers on heap, because clones taken by strong_classifier
@@ -145,7 +147,7 @@ void clsfy_adaboost_trainer::build_strong_classifier(
 
     if (0.5-min_error<1e-10) // Oh dear, no further improvement possible
     {
-      vcl_cout<<"min_error => 0.5 !!!\n";
+      std::cout<<"min_error => 0.5 !!!\n";
 
       // delete classifiers on heap, because clones taken by strong_classifier
       delete c1d;
@@ -154,7 +156,7 @@ void clsfy_adaboost_trainer::build_strong_classifier(
     }
 
     double beta = min_error/(1.0-min_error);
-    double alpha  = -1.0*vcl_log(beta);
+    double alpha  = -1.0*std::log(beta);
     strong_classifier.add_classifier( best_c1d, alpha, best_j);
 
     if (i<(n-1))
@@ -186,12 +188,12 @@ short clsfy_adaboost_trainer::version_no() const
 
 //=======================================================================
 
-vcl_string clsfy_adaboost_trainer::is_a() const
+std::string clsfy_adaboost_trainer::is_a() const
 {
-  return vcl_string("clsfy_adaboost_trainer");
+  return std::string("clsfy_adaboost_trainer");
 }
 
-bool clsfy_adaboost_trainer::is_class(vcl_string const& s) const
+bool clsfy_adaboost_trainer::is_class(std::string const& s) const
 {
   return s == clsfy_adaboost_trainer::is_a();
 }
@@ -231,10 +233,10 @@ clsfy_adaboost_trainer& clsfy_adaboost_trainer::operator=(const clsfy_adaboost_t
 //=======================================================================
 
 // required if data is present in this class
-void clsfy_adaboost_trainer::print_summary(vcl_ostream& /*os*/) const
+void clsfy_adaboost_trainer::print_summary(std::ostream& /*os*/) const
 {
     // os << data_; // example of data output
-    vcl_cerr << "clsfy_adaboost_trainer::print_summary() NYI\n";
+    std::cerr << "clsfy_adaboost_trainer::print_summary() NYI\n";
 }
 
 //=======================================================================
@@ -244,7 +246,7 @@ void clsfy_adaboost_trainer::b_write(vsl_b_ostream& /*bfs*/) const
 {
   //vsl_b_write(bfs, version_no());
   //vsl_b_write(bfs, data_);
-  vcl_cerr << "clsfy_adaboost_trainer::b_write() NYI\n";
+  std::cerr << "clsfy_adaboost_trainer::b_write() NYI\n";
 }
 
 //=======================================================================
@@ -252,7 +254,7 @@ void clsfy_adaboost_trainer::b_write(vsl_b_ostream& /*bfs*/) const
 // required if data is present in this class
 void clsfy_adaboost_trainer::b_read(vsl_b_istream& /*bfs*/)
 {
-  vcl_cerr << "clsfy_adaboost_trainer::b_read() NYI\n";
+  std::cerr << "clsfy_adaboost_trainer::b_read() NYI\n";
 #if 0
   if (!bfs) return;
 
@@ -264,9 +266,9 @@ void clsfy_adaboost_trainer::b_read(vsl_b_istream& /*bfs*/)
     vsl_b_read(bfs,data_);
     break;
   default:
-    vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, clsfy_adaboost_trainer&)\n"
+    std::cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, clsfy_adaboost_trainer&)\n"
              << "           Unknown version number "<< version << '\n';
-    bfs.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
+    bfs.is().clear(std::ios::badbit); // Set an unrecoverable IO error on stream
     return;
   }
 #endif
@@ -288,7 +290,7 @@ void vsl_b_read(vsl_b_istream& bfs, clsfy_adaboost_trainer& b)
 
 //=======================================================================
 
-void vsl_print_summary(vcl_ostream& os,const clsfy_adaboost_trainer& b)
+void vsl_print_summary(std::ostream& os,const clsfy_adaboost_trainer& b)
 {
   os << b.is_a() << ": ";
   vsl_indent_inc(os);
@@ -298,7 +300,7 @@ void vsl_print_summary(vcl_ostream& os,const clsfy_adaboost_trainer& b)
 
 //=======================================================================
 
-vcl_ostream& operator<<(vcl_ostream& os,const clsfy_adaboost_trainer& b)
+std::ostream& operator<<(std::ostream& os,const clsfy_adaboost_trainer& b)
 {
   vsl_print_summary(os,b);
   return os;

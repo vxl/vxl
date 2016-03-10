@@ -6,7 +6,9 @@
 
 #include <mbl/mbl_exception.h>
 #include <vsl/vsl_indent.h>
-#include <vcl_sstream.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <sstream>
 #include <vcl_cassert.h>
 
 //: Parse list of string pairs separated by colons
@@ -20,11 +22,11 @@
 // }
 // \endverbatim
 // Throws a mbl_exception_parse_error if it fails.
-void mbl_parse_colon_pairs_list(const vcl_string& data,
-                                vcl_vector<vcl_string>& item1,
-                                vcl_vector<vcl_string>& item2)
+void mbl_parse_colon_pairs_list(const std::string& data,
+                                std::vector<std::string>& item1,
+                                std::vector<std::string>& item2)
 {
-  vcl_istringstream data_stream(data);
+  std::istringstream data_stream(data);
   mbl_parse_colon_pairs_list(data_stream,item1,item2);
 }
 
@@ -39,16 +41,16 @@ void mbl_parse_colon_pairs_list(const vcl_string& data,
 // }
 // \endverbatim
 // Throws a mbl_exception_parse_error if it fails.
-void mbl_parse_colon_pairs_list(vcl_istream& is,
-                                vcl_vector<vcl_string>& item1,
-                                vcl_vector<vcl_string>& item2)
+void mbl_parse_colon_pairs_list(std::istream& is,
+                                std::vector<std::string>& item1,
+                                std::vector<std::string>& item2)
 {
   char c;
-  is >> vcl_ws>>c;
+  is >> std::ws>>c;
   if (c!='{')
   {
-    is.clear(vcl_ios::failbit);  // Set error flag
-    vcl_string error_msg("Expecting '{' got: '");
+    is.clear(std::ios::failbit);  // Set error flag
+    std::string error_msg("Expecting '{' got: '");
     error_msg+=c;
     error_msg+="'";
     throw (mbl_exception_parse_error(error_msg));
@@ -58,7 +60,7 @@ void mbl_parse_colon_pairs_list(vcl_istream& is,
   item1.resize(0);
   item2.resize(0);
 
-  vcl_string string1,string2;
+  std::string string1,string2;
   while (!is.eof())
   {
     // Read first item
@@ -67,11 +69,11 @@ void mbl_parse_colon_pairs_list(vcl_istream& is,
     item1.push_back(string1);
 
     // Check there is a colon
-    is >> vcl_ws>>c;
+    is >> std::ws>>c;
     if (c!=':')
     {
-      is.clear(vcl_ios::failbit);  // Set error flag
-      vcl_string error_msg("Expecting ':' after ");
+      is.clear(std::ios::failbit);  // Set error flag
+      std::string error_msg("Expecting ':' after ");
       error_msg+=string1;
       error_msg+=" Got `";
       error_msg+=c;
@@ -83,8 +85,8 @@ void mbl_parse_colon_pairs_list(vcl_istream& is,
     is >> string2;
     if (string2=="}")
     {
-      is.clear(vcl_ios::failbit);  // Set error flag
-      vcl_string error_msg("Expecting a string after ");
+      is.clear(std::ios::failbit);  // Set error flag
+      std::string error_msg("Expecting a string after ");
       error_msg+=string1;
       error_msg+=" : Got `}`";
       throw (mbl_exception_parse_error(error_msg));
@@ -94,9 +96,9 @@ void mbl_parse_colon_pairs_list(vcl_istream& is,
 
   if (string1!="}")
   {
-    vcl_string error_msg("Expected list to end with a }, not ");
+    std::string error_msg("Expected list to end with a }, not ");
     error_msg+=string2;
-    is.clear(vcl_ios::failbit);  // Set error flag
+    is.clear(std::ios::failbit);  // Set error flag
     throw (mbl_exception_parse_error(error_msg));
   }
 }
@@ -109,18 +111,18 @@ void mbl_parse_colon_pairs_list(vcl_istream& is,
 //   item1[1] : item2[1]
 // }
 // \endverbatim
-void mbl_write_colon_pairs_list(vcl_ostream& os,
-                                const vcl_vector<vcl_string>& item1,
-                                const vcl_vector<vcl_string>& item2)
+void mbl_write_colon_pairs_list(std::ostream& os,
+                                const std::vector<std::string>& item1,
+                                const std::vector<std::string>& item2)
 {
   assert(item1.size()==item2.size());
-  os<<vsl_indent()<<'{'<<vcl_endl;
+  os<<vsl_indent()<<'{'<<std::endl;
   vsl_indent_inc(os);
   for (unsigned i=0;i<item1.size();++i)
   {
-    os<<vsl_indent()<<item1[i]<<" : "<<item2[i]<<vcl_endl;
+    os<<vsl_indent()<<item1[i]<<" : "<<item2[i]<<std::endl;
   }
   vsl_indent_dec(os);
-  os<<'}'<<vcl_endl;
+  os<<'}'<<std::endl;
 }
 

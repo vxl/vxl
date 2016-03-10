@@ -11,7 +11,8 @@
 //
 // this class "wraps" any image resource and provides blocking methods
 //
-// not used? #include <vcl_vector.h>
+// not used? #include <vcl_compiler.h>
+#include <vector>
 #include <vil/vil_blocked_image_resource.h>
 
 class vil_blocked_image_facade : public vil_blocked_image_resource

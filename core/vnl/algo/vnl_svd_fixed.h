@@ -15,7 +15,8 @@
 #include <vnl/vnl_vector_fixed.h>
 #include <vnl/vnl_matrix_fixed.h>
 #include <vnl/vnl_diag_matrix_fixed.h>
-#include <vcl_iosfwd.h>
+#include <vcl_compiler.h>
+#include <iosfwd>
 
 //: Holds the singular value decomposition of a vnl_matrix_fixed.
 //
@@ -174,6 +175,6 @@ vnl_matrix_fixed<T,C,R> vnl_svd_fixed_inverse(vnl_matrix_fixed<T,R,C> const& m)
 }
 
 VCL_TEMPLATE_EXPORT template <class T, unsigned int R, unsigned int C>
-vcl_ostream& operator<<(vcl_ostream&, vnl_svd_fixed<T,R,C> const& svd);
+std::ostream& operator<<(std::ostream&, vnl_svd_fixed<T,R,C> const& svd);
 
 #endif // vnl_svd_fixed_h_

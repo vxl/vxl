@@ -18,7 +18,9 @@ typedef vbl_smart_ptr<rsdl_kd_tree> rsdl_kd_tree_sptr;
 
 #include <rgrl/rgrl_feature_set.h>
 #include <rgrl/rgrl_mask.h>
-// not used? #include <vcl_memory.h>
+// not used? #include <vcl_compiler.h>
+#include <iostream>
+#include <memory>
 
 //: A set of features grouped only by N-d location.
 //
@@ -89,7 +91,7 @@ class rgrl_feature_set_location
   bounding_box() const;
 
   //:  Return the type of feature
-  const vcl_type_info&
+  const std::type_info&
   type() const;
 
   // Defines type-related functions
@@ -107,7 +109,7 @@ class rgrl_feature_set_location
   }
 
  private:
-  const vcl_type_info* feature_type_;
+  const std::type_info* feature_type_;
 
   rgrl_mask_box bounding_box_;
 
@@ -115,8 +117,8 @@ class rgrl_feature_set_location
   rsdl_kd_tree_sptr kd_tree_;
 
   // temp storage space
-  mutable vcl_vector<rsdl_point> temp_points_;
-  mutable vcl_vector<int>        temp_point_indices_;
+  mutable std::vector<rsdl_point> temp_points_;
+  mutable std::vector<int>        temp_point_indices_;
 };
 
 

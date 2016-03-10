@@ -4,6 +4,7 @@
 //:
 // \file
 
+#include <iostream>
 #include "vbl_io_sparse_array_base.h"
 #include <vsl/vsl_pair_io.h>
 #include <vsl/vsl_binary_io.h>
@@ -19,7 +20,7 @@ void vsl_b_write(vsl_b_ostream &os, const vbl_sparse_array_base<T, Index> & p)
   vsl_b_write(os, p.count_nonempty());
   for (typename vbl_sparse_array_base<T, Index>::const_iterator s = p.begin(); s != p.end(); ++s){
     // the value_type of a map<Key, T> is "pair<Key const, T>", not "pair<Key, T>".
-    vcl_pair<Index, T> tt((*s).first, (*s).second);
+    std::pair<Index, T> tt((*s).first, (*s).second);
     vsl_b_write(os, tt);
   }
 }
@@ -41,7 +42,7 @@ void vsl_b_read(vsl_b_istream &is, vbl_sparse_array_base<T, Index> & p)
     unsigned int size;
     vsl_b_read(is, size);
 
-    vcl_pair<Index, T> value;
+    std::pair<Index, T> value;
     for (unsigned i=0; i<size; i++){
       vsl_b_read(is, value);
       p(value.first)=value.second;
@@ -50,9 +51,9 @@ void vsl_b_read(vsl_b_istream &is, vbl_sparse_array_base<T, Index> & p)
    }
 
    default:
-    vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, vbl_sparse_array_base<T, Index> &)\n"
+    std::cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, vbl_sparse_array_base<T, Index> &)\n"
              << "           Unknown version number "<< v << '\n';
-    is.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
+    is.is().clear(std::ios::badbit); // Set an unrecoverable IO error on stream
     return;
   }
 }
@@ -61,7 +62,7 @@ void vsl_b_read(vsl_b_istream &is, vbl_sparse_array_base<T, Index> & p)
 //==========================================================================
 //: Output a human readable summary to the stream
 template<class T, class Index>
-void vsl_print_summary(vcl_ostream& os,const vbl_sparse_array_base<T, Index> & p)
+void vsl_print_summary(std::ostream& os,const vbl_sparse_array_base<T, Index> & p)
 {
   os<<"nonempty elements: "<< p.count_nonempty() << '\n';
   int k=0;
@@ -81,7 +82,7 @@ void vsl_print_summary(vcl_ostream& os,const vbl_sparse_array_base<T, Index> & p
 }
 
 #define VBL_IO_SPARSE_ARRAY_BASE_INSTANTIATE(T, I) \
-  template void vsl_print_summary(vcl_ostream &, const vbl_sparse_array_base<T , I > &); \
+  template void vsl_print_summary(std::ostream &, const vbl_sparse_array_base<T , I > &); \
   template void vsl_b_read(vsl_b_istream &, vbl_sparse_array_base<T , I > &); \
   template void vsl_b_write(vsl_b_ostream &, const vbl_sparse_array_base<T , I > &)
 
