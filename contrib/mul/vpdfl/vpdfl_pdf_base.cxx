@@ -17,6 +17,8 @@
 #include <vsl/vsl_indent.h>
 #include <vsl/vsl_binary_loader.h>
 #include <queue>
+#include <functional>
+
 #include <vpdfl/vpdfl_sampler_base.h>
 
 //=======================================================================
