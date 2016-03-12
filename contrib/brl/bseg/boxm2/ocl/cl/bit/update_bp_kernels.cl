@@ -7,6 +7,9 @@
 #endif
 
 #ifdef PRE_CELL
+// The AuxArgs struct is defined for each step cell case in order to pass custom arguments from the cast_ray function
+// note that only one instance of the struct definition can exist in the kernel source code prior to the implementation
+// of the cast_ray function. This requirement translates to defining only one cell symbol, e.g. PRE_CELL, for a given process
 typedef struct
 {
     __global float* alpha;
@@ -21,27 +24,37 @@ typedef struct
 } AuxArgs;
 
 //preinf step cell functor
+// this function is called on each step along a ray as voxels on the ray are traversed
+//=================================================================================
+// inputs:                                                                         |
+// aux_args - a struct containing custom data for a given step cell implementation |
+// data_ptr - a pointer into any data array defined for the cell                   |
+// llid     - the local index of the thread processing this ray                    |
+// d        - the length of the ray segment intersecting this cell in local units  |
+//=================================================================================
 void step_cell_pre(AuxArgs aux_args, int data_ptr, uchar llid, float d)
 {
     //keep track of cells being hit
     ////cell data, i.e., alpha and app model is needed for some passes
-    float  alpha = aux_args.alpha[data_ptr];
-    float seg_len = d*aux_args.linfo->block_len;
-    float PI = aux_args.datadensity[data_ptr];
+  float  alpha = aux_args.alpha[data_ptr];         // surface probability is given by p = (1-exp(-alpha*seg_len))
+  float seg_len = d*aux_args.linfo->block_len;     // the length of the ray's intersection with the cell in global units (e.g meters)
+  float PI = aux_args.datadensity[data_ptr];       // the probability density of the observation, e.g. image intensity
 
-    /* Calculate pre and vis infinity */
-    float diff_omega = exp(-alpha * seg_len);
-    float vis_prob_end = (*aux_args.vis_inf) * diff_omega;
+  /* Calculate pre and vis infinity */
+  float diff_omega = exp(-alpha * seg_len);
+  float vis_prob_end = (*aux_args.vis_inf) * diff_omega; // vis_prob_end = vis_inf * (1-p)
+                                                         // = vis_inf * (1-(1-diff_omega)) = vis_inf*diff_omega
 
-    /* updated pre                      Omega         *   PI  */
-    (*aux_args.pre_inf) += ((*aux_args.vis_inf) - vis_prob_end) *  PI;
+  /* updated pre                      Omega         *   PI  */
+  (*aux_args.pre_inf) += ((*aux_args.vis_inf) - vis_prob_end) *  PI; // vis_inf - vis_prob_end =
+                                                                     // vis_inf - vis_inf(1-p) = 
+                                                                     // vis_inf * p
 
-    /* updated visibility probability */
-    (*aux_args.vis_inf) = vis_prob_end;
-    AtomicAdd((__global float*) (&aux_args.seg_len[data_ptr]), d);
-    AtomicAdd((__global float*) (&aux_args.pre[data_ptr]), (*aux_args.pre_inf)*d );
-    AtomicAdd((__global float*) (&aux_args.vis[data_ptr]), (*aux_args.vis_inf)*d );
-
+  /* updated visibility probability */
+  (*aux_args.vis_inf) = vis_prob_end;
+  AtomicAdd((__global float*) (&aux_args.seg_len[data_ptr]), d);
+  AtomicAdd((__global float*) (&aux_args.pre[data_ptr]), (*aux_args.pre_inf)*d );
+  AtomicAdd((__global float*) (&aux_args.vis[data_ptr]), (*aux_args.vis_inf)*d );
 }
 
 //forward declare cast ray (so you can use it)
@@ -159,16 +172,29 @@ void normalize_pre_cell(__global RenderSceneInfo  * info,
 
 typedef struct
 {
-    __global float* alpha;
-    __global float * seg_len;
-	__global float * post;
-    __global float * datadensity;
-    float* vis_inf;
-    float* post_inf;
-    __constant RenderSceneInfo * linfo;
+  __global float* alpha;
+  __global float * seg_len;
+  __global float * post;
+  __global float * datadensity;
+  float* vis_inf;
+  float* post_inf;
+  __constant RenderSceneInfo * linfo;
 
 } AuxArgs;
 //post step cell functor
+//
+// It is necessary to reverse trace the ray in order to incrementally compute
+// post since to compute the marginalized probability it is necessary to
+// have a running sum based on the previously computed cell information
+// and post is, by definition, after the current cell not before.
+// Thus, the computation starts at the last cell on the ray intersecting the model
+//          c0                            ci                                  cN-1                              cN
+//     ]|========|====| ...|================================|...|================================|================================[
+//                          post(i)= post(i-1)*(1-p) + p*PI       post(N-1)= post(N)*(1-p) + p*PI           post(N)=p*PI
+//                                                                                     ^          don't know vis yet. will be 1-p
+//                                            vis i-1                                vis N        of the next cell.
+// This diagram should be read right to left
+//
 void step_cell_post(AuxArgs aux_args, int data_ptr, uchar llid, float d)
 {
     //keep track of cells being hit
@@ -176,11 +202,13 @@ void step_cell_post(AuxArgs aux_args, int data_ptr, uchar llid, float d)
     float alpha = aux_args.alpha[data_ptr];
     float seg_len = d*aux_args.linfo->block_len;
     float PI = aux_args.datadensity[data_ptr];
-        /* Calculate pre and vis infinity */
-        float diff_omega = exp(-alpha * seg_len);
-    AtomicAdd((__global float*) (&aux_args.post[data_ptr]), (*aux_args.post_inf)*d );
-    AtomicAdd((__global float*) (&aux_args.seg_len[data_ptr]), d);
-    /* updated post = post*(1-P)+ P*PI                      Omega         *   PI  */
+    /* Calculate pre and vis infinity */
+    float diff_omega = exp(-alpha * seg_len);
+    AtomicAdd((__global float*) (&aux_args.post[data_ptr]), (*aux_args.post_inf)*d );// store post for this cell
+    AtomicAdd((__global float*) (&aux_args.seg_len[data_ptr]), d);                   // store seg length
+
+    // update post
+    /* updated post      =          post       *  (1-p)    +        P        *  PI    */
     (*aux_args.post_inf) = (*aux_args.post_inf)*diff_omega + (1 - diff_omega)*  PI;
 }
 
@@ -290,7 +318,8 @@ void normalize_post_cell(__global RenderSceneInfo  * info,
 #ifdef ADD_SUBTRACT_FACTOR
 // Update each cell using its aux data
 //
-// This function is for computing the factor for each viewpoint and is added/subtracted to the facotr accumulator. Each factor should look like
+//
+// This function is for computing the factor for each viewpoint and is added/subtracted to the factor accumulator. Each factor should look like
 // - log( (pre+pdata*vis)/(pre+post*vis)
 __kernel
 void add_subtract_factor_main(__constant RenderSceneInfo    * info,
@@ -306,11 +335,11 @@ void add_subtract_factor_main(__constant RenderSceneInfo    * info,
 	//: todo make this robust
     if (gid<datasize)
     {
-		if(aux3_pre[gid] > 1e-10 )
-		{
-		float pigs  = aux2_pre[gid] + aux3_pre[gid]* aux3_post[gid];
-		float pige  = aux2_pre[gid] + aux3_pre[gid]* aux2_post[gid];
-        if (pige > 0.0)
+      if(aux3_pre[gid] > 1e-10 )
+        {
+          float pigs  = aux2_pre[gid] + aux3_pre[gid]* aux3_post[gid];
+          float pige  = aux2_pre[gid] + aux3_pre[gid]* aux2_post[gid];
+          if (pige > 0.0)
         {
           float small = 1e-10;
           float u = max(small, (pigs / pige));
@@ -320,11 +349,11 @@ void add_subtract_factor_main(__constant RenderSceneInfo    * info,
             aux0_Z[gid] = aux0_Z[gid] - log(u);
         }
 
-		}
+        }
     }
 }
 
-#endif // COMPUTEZ
+#endif // ADD_SUBTRACT_FACTOR
 
 #ifdef INIT_CUM
 // initialize each cell with the factor using prior probability
