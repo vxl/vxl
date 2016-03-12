@@ -52,6 +52,9 @@ void step_cell_seglen(AuxArgs aux_args, int data_ptr, uchar llid, float d)
 
 #ifdef PREINF
 //preinf step cell functor
+//
+// pre(x)(I) = pre(x-1)(I) + vis(x)*p(I|x in S)*P(x in S)
+//
 void step_cell_preinf(AuxArgs aux_args, int data_ptr, uchar llid, float d)
 {
     //keep track of cells being hit
@@ -70,7 +73,8 @@ void step_cell_preinf(AuxArgs aux_args, int data_ptr, uchar llid, float d)
     float cum_len = convert_float(cum_int) / SEGLEN_FACTOR;
 #endif
 
-    //calculate pre_infinity denomanator (shape of image)
+    //calculate pre_infinity term 
+    // pre_infinity_opt is in ray_bundle_library_opt.cl
     pre_infinity_opt( d*aux_args.linfo->block_len,
                       cum_len*aux_args.linfo->block_len,
                       mean_obs,
