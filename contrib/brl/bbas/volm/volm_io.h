@@ -18,6 +18,8 @@
 #include <set>
 #include <utility>
 #include <iostream>
+#include <functional>
+#include <set>
 #include <vcl_compiler.h>
 #include <iostream>
 #include <iomanip>

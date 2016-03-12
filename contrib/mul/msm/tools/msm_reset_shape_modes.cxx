@@ -19,6 +19,7 @@
 #include <msm/msm_shape_instance.h>
 #include <msm/msm_add_all_loaders.h>
 #include <limits.h>
+#include <limits>
 
 /*
 Parameter file format:
@@ -159,7 +160,8 @@ int main(int argc, char** argv)
   }
 
   // check for valid modes
-  int min = INT_MAX; unsigned max = 0;
+  unsigned int min = std::numeric_limits<unsigned int>::max();
+  unsigned int max = std::numeric_limits<unsigned int>::min();
   for (unsigned k=0; k<params.modes_to_reset.size(); ++k)
   {
     if (min > params.modes_to_reset[k]) min = params.modes_to_reset[k];

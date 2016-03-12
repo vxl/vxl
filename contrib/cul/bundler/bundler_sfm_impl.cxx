@@ -308,11 +308,10 @@ static bool can_be_added(
     int num_observed_thresh,
     double angle_thresh)
 {
-    double max_angle = 180;
-    int num_observed;
+    static const double max_angle = 180;
+    int num_observed=0;
 
     //TODO: Check angle
-
     std::vector<bundler_inters_feature_sptr>::iterator f;
     for (f = track->points.begin(); f != track->points.end(); ++f) {
         if ( (*f)->image->in_recon ) { ++num_observed; }

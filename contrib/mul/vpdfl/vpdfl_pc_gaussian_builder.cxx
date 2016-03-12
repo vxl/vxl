@@ -17,6 +17,7 @@
 //
 #include <string>
 #include <sstream>
+#include <algorithm>
 #include <vcl_cassert.h>
 #include <vcl_compiler.h>
 #include <iostream>
@@ -334,7 +335,7 @@ unsigned vpdfl_pc_gaussian_builder::decide_partition(const vnl_vector<double>& e
   assert (eVals.size() > 0);
   if (partitionMethod_ == vpdfl_pc_gaussian_builder::fixed)
   {
-    return std::min(eVals.size(), (unsigned)fixed_partition()+1);;
+    return std::min<size_t>(eVals.size(), fixed_partition()+1);;
   }
   else if (partitionMethod_ == proportionate)
   {

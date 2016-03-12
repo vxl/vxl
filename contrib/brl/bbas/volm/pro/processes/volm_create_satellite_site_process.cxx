@@ -8,6 +8,7 @@
 #include <vcl_compiler.h>
 #include <iostream>
 #include <cstdio> // for std::FILE and std::fopen()
+#include <functional>
 
 #include <brdb/brdb_value.h>
 
