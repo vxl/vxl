@@ -286,7 +286,9 @@ static void test_math()
 
   TEST("std::numeric_limits<float>::has_infinity==true assumption",std::numeric_limits<float>::has_infinity, true);
   TEST("std::numeric_limits<double>::has_infinity==true assumption",std::numeric_limits<double>::has_infinity, true);
+#ifdef INCLUDE_LONG_DOUBLE_TESTS
   TEST("std::numeric_limits<ldouble>::has_infinity==true assumption",std::numeric_limits<long double>::has_infinity, true);
+#endif
   if (! std::numeric_limits<float>::has_infinity && ! std::numeric_limits<double>::has_infinity)
   {
     std::cout << "Your platform doesn't appear to have an infinity. VXL is in places relatively\n"
@@ -297,7 +299,9 @@ static void test_math()
   }
   TEST("std::numeric_limits<float>::has_quiet_NaN==true assumption",std::numeric_limits<float>::has_quiet_NaN, true);
   TEST("std::numeric_limits<double>::has_quiet_NaN==true assumption",std::numeric_limits<double>::has_quiet_NaN, true);
+#ifdef INCLUDE_LONG_DOUBLE_TESTS
   TEST("std::numeric_limits<ldouble>::has_quiet_NaN==true assumption",std::numeric_limits<long double>::has_quiet_NaN, true);
+#endif
   if (! std::numeric_limits<float>::has_quiet_NaN && ! std::numeric_limits<double>::has_quiet_NaN)
   {
     std::cout << "Your platform doesn't appear to have a quiet NaN. VXL is in places relatively\n"
@@ -311,23 +315,26 @@ static void test_math()
   const float ninf_f = - std::numeric_limits<float>::infinity();
   const double pinf_d =   std::numeric_limits<double>::infinity();
   const double ninf_d = - std::numeric_limits<double>::infinity();
-  const long double pinf_q =  std::numeric_limits<long double>::infinity();
-  const long double ninf_q = -std::numeric_limits<long double>::infinity();
-
   // Create NaN
   const float qnan_f = std::numeric_limits<float>::quiet_NaN();
   const double qnan_d = std::numeric_limits<double>::quiet_NaN();
+#ifdef INCLUDE_LONG_DOUBLE_TESTS
+  const long double pinf_q =  std::numeric_limits<long double>::infinity();
+  const long double ninf_q = -std::numeric_limits<long double>::infinity();
   const long double qnan_q = std::numeric_limits<long double>::quiet_NaN();
+#endif
 
   std::cout << "pinf_f = " << pinf_f << " =  "<< print_hex(pinf_f) << "    sizeof " << sizeof(pinf_f) << '\n'
            << "ninf_f = " << ninf_f << " = " << print_hex(ninf_f) << "    sizeof " << sizeof(ninf_f) << '\n'
            << "pinf_d = " << pinf_d << " =  "<< print_hex(pinf_d) << "    sizeof " << sizeof(pinf_d) << '\n'
            << "ninf_d = " << ninf_d << " = " << print_hex(ninf_d) << "    sizeof " << sizeof(ninf_d) << '\n'
-           << "pinf_q = " << pinf_q << " =  "<< print_hex(pinf_q) << "    sizeof " << sizeof(pinf_q) << '\n'
-           << "ninf_q = " << ninf_q << " = " << print_hex(ninf_q) << "    sizeof " << sizeof(ninf_q) << '\n'
            << "qnan_f = " << qnan_f << " =  "<< print_hex(qnan_f) << "    sizeof " << sizeof(qnan_f) << '\n'
            << "qnan_d = " << qnan_d << " =  "<< print_hex(qnan_d) << "    sizeof " << sizeof(qnan_d) << '\n'
+#ifdef INCLUDE_LONG_DOUBLE_TESTS
+           << "pinf_q = " << pinf_q << " =  "<< print_hex(pinf_q) << "    sizeof " << sizeof(pinf_q) << '\n'
+           << "ninf_q = " << ninf_q << " = " << print_hex(ninf_q) << "    sizeof " << sizeof(ninf_q) << '\n'
            << "qnan_q = " << qnan_q << " =  "<< print_hex(qnan_q) << "    sizeof " << sizeof(qnan_q) << '\n'
+#endif
            << std::endl;
 
   TEST("!isfinite(pinf_f)", vnl_math::isfinite(pinf_f), false);
@@ -350,6 +357,7 @@ static void test_math()
   TEST("!isinf(qnan_d)   ", vnl_math::isinf(qnan_d), false);
   TEST(" isnan(qnan_d)   ",  vnl_math::isnan(qnan_d), true);
 
+#ifdef INCLUDE_LONG_DOUBLE_TESTS
 #ifndef __ICC // "long double" has no standard internal representation on different platforms/compilers
   TEST("!isfinite(pinf_q)", vnl_math::isfinite(pinf_q), false);
   TEST("!isfinite(ninf_q)", vnl_math::isfinite(ninf_q), false);
@@ -360,6 +368,7 @@ static void test_math()
   TEST("!isfinite(qnan_q)", vnl_math::isfinite(qnan_q), false);
   TEST("!isinf(qnan_q)   ", vnl_math::isinf(qnan_q), false);
 #endif // __ICC
+#endif
 
   TEST("!isfinite(huge_val(double))", vnl_math::isfinite(vnl_huge_val(double())), false);
   TEST("!isfinite(huge_val(float))",  vnl_math::isfinite(vnl_huge_val(float())),  false);
@@ -437,8 +446,10 @@ static void test_math()
     float          y_float       = 2;
     double         x_double      = 7;
     double         y_double      = 2;
+#ifdef INCLUDE_LONG_DOUBLE_TESTS
     long double    x_long_double = 7;
     long double    y_long_double = 2;
+#endif
 
     TEST("vnl_math::remainder_truncated(x_short_u    ,y_short_u    )",vnl_math::remainder_truncated(x_short_u    ,y_short_u    ),+1);
     TEST("vnl_math::remainder_truncated(x_short_s    ,y_short_s    )",vnl_math::remainder_truncated(x_short_s    ,y_short_s    ),+1);
@@ -448,7 +459,9 @@ static void test_math()
     TEST("vnl_math::remainder_truncated(x_long_s     ,y_long_s     )",vnl_math::remainder_truncated(x_long_s     ,y_long_s     ),+1);
     TEST("vnl_math::remainder_truncated(x_float      ,y_float      )",vnl_math::remainder_truncated(x_float      ,y_float      ),+1);
     TEST("vnl_math::remainder_truncated(x_double     ,y_double     )",vnl_math::remainder_truncated(x_double     ,y_double     ),+1);
+#ifdef INCLUDE_LONG_DOUBLE_TESTS
     TEST("vnl_math::remainder_truncated(x_long_double,y_long_double)",vnl_math::remainder_truncated(x_long_double,y_long_double),+1);
+#endif
 
     std::cout << "+ -" << std::endl;
 
@@ -457,14 +470,18 @@ static void test_math()
     y_long_s      *= -1;
     y_float       *= -1;
     y_double      *= -1;
+#ifdef INCLUDE_LONG_DOUBLE_TESTS
     y_long_double *= -1;
+#endif
 
     TEST("vnl_math::remainder_truncated(x_short_s    ,y_short_s    )",vnl_math::remainder_truncated(x_short_s    ,y_short_s    ),+1);
     TEST("vnl_math::remainder_truncated(x_int_s      ,y_int_s      )",vnl_math::remainder_truncated(x_int_s      ,y_int_s      ),+1);
     TEST("vnl_math::remainder_truncated(x_long_s     ,y_long_s     )",vnl_math::remainder_truncated(x_long_s     ,y_long_s     ),+1);
     TEST("vnl_math::remainder_truncated(x_float      ,y_float      )",vnl_math::remainder_truncated(x_float      ,y_float      ),+1);
     TEST("vnl_math::remainder_truncated(x_double     ,y_double     )",vnl_math::remainder_truncated(x_double     ,y_double     ),+1);
+#ifdef INCLUDE_LONG_DOUBLE_TESTS
     TEST("vnl_math::remainder_truncated(x_long_double,y_long_double)",vnl_math::remainder_truncated(x_long_double,y_long_double),+1);
+#endif
 
     std::cout << "- -" << std::endl;
 
@@ -473,14 +490,18 @@ static void test_math()
     x_long_s      *= -1;
     x_float       *= -1;
     x_double      *= -1;
+#ifdef INCLUDE_LONG_DOUBLE_TESTS
     x_long_double *= -1;
+#endif
 
     TEST("vnl_math::remainder_truncated(x_short_s    ,y_short_s    )",vnl_math::remainder_truncated(x_short_s    ,y_short_s    ),-1);
     TEST("vnl_math::remainder_truncated(x_int_s      ,y_int_s      )",vnl_math::remainder_truncated(x_int_s      ,y_int_s      ),-1);
     TEST("vnl_math::remainder_truncated(x_long_s     ,y_long_s     )",vnl_math::remainder_truncated(x_long_s     ,y_long_s     ),-1);
     TEST("vnl_math::remainder_truncated(x_float      ,y_float      )",vnl_math::remainder_truncated(x_float      ,y_float      ),-1);
     TEST("vnl_math::remainder_truncated(x_double     ,y_double     )",vnl_math::remainder_truncated(x_double     ,y_double     ),-1);
+#ifdef INCLUDE_LONG_DOUBLE_TESTS
     TEST("vnl_math::remainder_truncated(x_long_double,y_long_double)",vnl_math::remainder_truncated(x_long_double,y_long_double),-1);
+#endif
 
     std::cout << "- +" << std::endl;
 
@@ -489,14 +510,18 @@ static void test_math()
     y_long_s      *= -1;
     y_float       *= -1;
     y_double      *= -1;
+#ifdef INCLUDE_LONG_DOUBLE_TESTS
     y_long_double *= -1;
+#endif
 
     TEST("vnl_math::remainder_truncated(x_short_s    ,y_short_s    )",vnl_math::remainder_truncated(x_short_s    ,y_short_s    ),-1);
     TEST("vnl_math::remainder_truncated(x_int_s      ,y_int_s      )",vnl_math::remainder_truncated(x_int_s      ,y_int_s      ),-1);
     TEST("vnl_math::remainder_truncated(x_long_s     ,y_long_s     )",vnl_math::remainder_truncated(x_long_s     ,y_long_s     ),-1);
     TEST("vnl_math::remainder_truncated(x_float      ,y_float      )",vnl_math::remainder_truncated(x_float      ,y_float      ),-1);
     TEST("vnl_math::remainder_truncated(x_double     ,y_double     )",vnl_math::remainder_truncated(x_double     ,y_double     ),-1);
+#ifdef INCLUDE_LONG_DOUBLE_TESTS
     TEST("vnl_math::remainder_truncated(x_long_double,y_long_double)",vnl_math::remainder_truncated(x_long_double,y_long_double),-1);
+#endif
     }
 
   /////////////
@@ -527,8 +552,10 @@ static void test_math()
     float          y_float       = 2;
     double         x_double      = 7;
     double         y_double      = 2;
+#ifdef INCLUDE_LONG_DOUBLE_TESTS
     long double    x_long_double = 7;
     long double    y_long_double = 2;
+#endif
 
     TEST("vnl_math::remainder_floored(x_short_u    ,y_short_u    )",vnl_math::remainder_floored(x_short_u    ,y_short_u    ),+1);
     TEST("vnl_math::remainder_floored(x_short_s    ,y_short_s    )",vnl_math::remainder_floored(x_short_s    ,y_short_s    ),+1);
@@ -538,7 +565,9 @@ static void test_math()
     TEST("vnl_math::remainder_floored(x_long_s     ,y_long_s     )",vnl_math::remainder_floored(x_long_s     ,y_long_s     ),+1);
     TEST("vnl_math::remainder_floored(x_float      ,y_float      )",vnl_math::remainder_floored(x_float      ,y_float      ),+1);
     TEST("vnl_math::remainder_floored(x_double     ,y_double     )",vnl_math::remainder_floored(x_double     ,y_double     ),+1);
+#ifdef INCLUDE_LONG_DOUBLE_TESTS
     TEST("vnl_math::remainder_floored(x_long_double,y_long_double)",vnl_math::remainder_floored(x_long_double,y_long_double),+1);
+#endif
 
     std::cout << "+ -" << std::endl;
 
@@ -547,14 +576,18 @@ static void test_math()
     y_long_s      *= -1;
     y_float       *= -1;
     y_double      *= -1;
+#ifdef INCLUDE_LONG_DOUBLE_TESTS
     y_long_double *= -1;
+#endif
 
     TEST("vnl_math::remainder_floored(x_short_s    ,y_short_s    )",vnl_math::remainder_floored(x_short_s    ,y_short_s    ),-1);
     TEST("vnl_math::remainder_floored(x_int_s      ,y_int_s      )",vnl_math::remainder_floored(x_int_s      ,y_int_s      ),-1);
     TEST("vnl_math::remainder_floored(x_long_s     ,y_long_s     )",vnl_math::remainder_floored(x_long_s     ,y_long_s     ),-1);
     TEST("vnl_math::remainder_floored(x_float      ,y_float      )",vnl_math::remainder_floored(x_float      ,y_float      ),-1);
     TEST("vnl_math::remainder_floored(x_double     ,y_double     )",vnl_math::remainder_floored(x_double     ,y_double     ),-1);
+#ifdef INCLUDE_LONG_DOUBLE_TESTS
     TEST("vnl_math::remainder_floored(x_long_double,y_long_double)",vnl_math::remainder_floored(x_long_double,y_long_double),-1);
+#endif
 
     std::cout << "- -" << std::endl;
 
@@ -563,14 +596,18 @@ static void test_math()
     x_long_s      *= -1;
     x_float       *= -1;
     x_double      *= -1;
+#ifdef INCLUDE_LONG_DOUBLE_TESTS
     x_long_double *= -1;
+#endif
 
     TEST("vnl_math::remainder_floored(x_short_s    ,y_short_s    )",vnl_math::remainder_floored(x_short_s    ,y_short_s    ),-1);
     TEST("vnl_math::remainder_floored(x_int_s      ,y_int_s      )",vnl_math::remainder_floored(x_int_s      ,y_int_s      ),-1);
     TEST("vnl_math::remainder_floored(x_long_s     ,y_long_s     )",vnl_math::remainder_floored(x_long_s     ,y_long_s     ),-1);
     TEST("vnl_math::remainder_floored(x_float      ,y_float      )",vnl_math::remainder_floored(x_float      ,y_float      ),-1);
     TEST("vnl_math::remainder_floored(x_double     ,y_double     )",vnl_math::remainder_floored(x_double     ,y_double     ),-1);
+#ifdef INCLUDE_LONG_DOUBLE_TESTS
     TEST("vnl_math::remainder_floored(x_long_double,y_long_double)",vnl_math::remainder_floored(x_long_double,y_long_double),-1);
+#endif
 
     std::cout << "- +" << std::endl;
 
@@ -579,14 +616,18 @@ static void test_math()
     y_long_s      *= -1;
     y_float       *= -1;
     y_double      *= -1;
+#ifdef INCLUDE_LONG_DOUBLE_TESTS
     y_long_double *= -1;
+#endif
 
     TEST("vnl_math::remainder_floored(x_short_s    ,y_short_s    )",vnl_math::remainder_floored(x_short_s    ,y_short_s    ),+1);
     TEST("vnl_math::remainder_floored(x_int_s      ,y_int_s      )",vnl_math::remainder_floored(x_int_s      ,y_int_s      ),+1);
     TEST("vnl_math::remainder_floored(x_long_s     ,y_long_s     )",vnl_math::remainder_floored(x_long_s     ,y_long_s     ),+1);
     TEST("vnl_math::remainder_floored(x_float      ,y_float      )",vnl_math::remainder_floored(x_float      ,y_float      ),+1);
     TEST("vnl_math::remainder_floored(x_double     ,y_double     )",vnl_math::remainder_floored(x_double     ,y_double     ),+1);
+#ifdef INCLUDE_LONG_DOUBLE_TESTS
     TEST("vnl_math::remainder_floored(x_long_double,y_long_double)",vnl_math::remainder_floored(x_long_double,y_long_double),+1);
+#endif
     }
 
 }

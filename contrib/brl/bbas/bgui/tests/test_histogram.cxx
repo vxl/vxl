@@ -63,9 +63,11 @@ static void test_histogram(int argc, char* argv[])
 
              << "double [" << -std::numeric_limits< double>::max()
              << ' ' << std::numeric_limits< double>::max()  << "]\n"
-
+#ifdef INCLUDE_LONG_DOUBLE_TESTS
              << "long double [" << -std::numeric_limits< long double>::max()
-             << ' ' << std::numeric_limits< long double>::max()  << "]\n";
+             << ' ' << std::numeric_limits< long double>::max()  << "]\n"
+#endif
+             << "\n";
 }
 
 TESTMAIN_ARGS(test_histogram);

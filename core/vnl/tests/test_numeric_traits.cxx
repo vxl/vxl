@@ -40,16 +40,22 @@ void test_static_const_definition()
   ALL(unsigned long);
   ALL(float);
   ALL(double);
+#ifdef INCLUDE_LONG_DOUBLE_TESTS
   ALL(long double);
+#endif
   ONE_ZERO( std::complex<float> );
   ONE_ZERO( std::complex<double> );
+#ifdef INCLUDE_LONG_DOUBLE_TESTS
   ONE_ZERO( std::complex<long double> );
+#endif
 
 #undef ONE_ZERO
 #undef ALL
 }
 
+#ifdef INCLUDE_LONG_DOUBLE_TESTS
 extern "C" { long double increment(long double x) { return x+1; } }
+#endif
 
 void test_numeric_traits()
 {
@@ -86,8 +92,10 @@ void test_numeric_traits()
   TEST("vnl_numeric_traits<float>::one", vnl_numeric_traits<float>::one, 1.0f);
   TEST("vnl_numeric_traits<double>::zero", vnl_numeric_traits<double>::zero, 0.0);
   TEST("vnl_numeric_traits<double>::one", vnl_numeric_traits<double>::one, 1.0);
+#ifdef INCLUDE_LONG_DOUBLE_TESTS
   TEST("vnl_numeric_traits<long double>::zero", vnl_numeric_traits<long double>::zero, 0.0);
   TEST("vnl_numeric_traits<long double>::one", vnl_numeric_traits<long double>::one, 1.0);
+#endif
   TEST("vnl_numeric_traits<std::complex<float> >::zero",
        vnl_numeric_traits<std::complex<float> >::zero, std::complex<float>(0.0f));
   TEST("vnl_numeric_traits<std::complex<float> >::one",
@@ -96,11 +104,12 @@ void test_numeric_traits()
        vnl_numeric_traits<std::complex<double> >::zero, std::complex<double>(0.0));
   TEST("vnl_numeric_traits<std::complex<double> >::one",
        vnl_numeric_traits<std::complex<double> >::one, std::complex<double>(1.0));
+#ifdef INCLUDE_LONG_DOUBLE_TESTS
   TEST("vnl_numeric_traits<std::complex<long double> >::zero",
        vnl_numeric_traits<std::complex<long double> >::zero, std::complex<long double>(0.0));
   TEST("vnl_numeric_traits<std::complex<long double> >::one",
        vnl_numeric_traits<std::complex<long double> >::one, std::complex<long double>(1.0));
-
+#endif
   // Testing maxval values
 
   char cm = vnl_numeric_traits<char>::maxval;
@@ -114,7 +123,9 @@ void test_numeric_traits()
   unsigned long ulm = vnl_numeric_traits<unsigned long>::maxval;
   float fm = vnl_numeric_traits<float>::maxval;
   double dm = vnl_numeric_traits<double>::maxval;
+#ifdef INCLUDE_LONG_DOUBLE_TESTS
   long double ldm = vnl_numeric_traits<long double>::maxval;
+#endif
 
   std::cout << " vnl_numeric_traits<bool>::maxval = " << vnl_numeric_traits<bool>::maxval << '\n'
            << " vnl_numeric_traits<char>::maxval = " << (int)cm << '\n'
@@ -128,7 +139,10 @@ void test_numeric_traits()
            << " vnl_numeric_traits<unsigned long>::maxval = " << ulm << '\n'
            << " vnl_numeric_traits<float>::maxval = " << fm << '\n'
            << " vnl_numeric_traits<double>::maxval = " << dm << '\n'
-           << " vnl_numeric_traits<long double>::maxval = " << ldm << '\n';
+#ifdef INCLUDE_LONG_DOUBLE_TESTS
+           << " vnl_numeric_traits<long double>::maxval = " << ldm << '\n'
+#endif
+           << '\n';
 
   // Verify that these values are positive and satisfy certain constraints:
   TEST("vnl_numeric_traits<char>::maxval must be at least 127", cm >= 127, true);
@@ -142,7 +156,9 @@ void test_numeric_traits()
   TEST("vnl_numeric_traits<unsigned long>::maxval must be larger than that", ulm>(unsigned long)lm, true);
   TEST("vnl_numeric_traits<float>::maxval must be at least 1e33", fm>1e33, true);
   TEST("vnl_numeric_traits<double>::maxval must be larger than that", dm>fm, true);
+#ifdef INCLUDE_LONG_DOUBLE_TESTS
   TEST("vnl_numeric_traits<long double>::maxval must be at least as large", ldm>=dm, true);
+#endif
 
   // Verify that there is nothing larger than these maxval values:
   // unsigned cases:
@@ -202,6 +218,7 @@ void test_numeric_traits()
   // there should only be 2 zeros in the representation: the sign bits of mantissa and of exponent:
   TEST("vnl_numeric_traits<double>::maxval must be the largest possible", nr_of_ones, 8*sizeof(double)-2);
 
+#ifdef INCLUDE_LONG_DOUBLE_TESTS
   x = (unsigned char*)(&ldm);
   std::cout << "vnl_numeric_traits<long double>::maxval has internal representation ";
 #if VXL_BIG_ENDIAN
@@ -214,6 +231,7 @@ void test_numeric_traits()
       std::cout << n;
     }
   std::cout << '\n';
+#endif
 }
 
 TESTMAIN(test_numeric_traits);

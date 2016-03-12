@@ -18,5 +18,7 @@ void test_util_fill_random(std::complex<T> *b, std::complex<T> *e, vnl_random &r
 
 macro(float);
 macro(double);
+#ifdef INCLUDE_LONG_DOUBLE_TESTS
 macro(long double);
+#endif
 #undef macro
