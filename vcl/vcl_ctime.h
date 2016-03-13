@@ -9,12 +9,6 @@
 
 #include "vcl_compiler.h"
 #include <ctime>
-/* The following includes are needed to preserve backwards
-   compatilibility for external applications.  Previously
-   definitions were defined in multiple headers with conditional
-   ifndef guards, but we now include a reference header
-   instead */
-//no dependancies remove comment above
 //vcl alias names to std names
 // NB: size_t is declared in <cstddef>, not <ctime>
 #define vcl_clock_t std::clock_t
