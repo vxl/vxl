@@ -13,14 +13,14 @@
 //                                 instead of a minimum in the limit
 // \endverbatim
 
+#include <iostream>
+#include <algorithm>
 #include <bsta/bsta_gaussian_sphere.h>
 #include <bsta/bsta_gaussian_indep.h>
 #include <bsta/bsta_gaussian_full.h>
 #include <bsta/bsta_mixture.h>
 #include <bsta/bsta_attributes.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <algorithm>
 
 
 //: Update the statistics given a 1D Gaussian distribution and a learning rate

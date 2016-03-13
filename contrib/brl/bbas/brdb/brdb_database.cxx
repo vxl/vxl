@@ -1,3 +1,4 @@
+#include <iostream>
 #include "brdb_database.h"
 //:
 // \file
@@ -12,8 +13,6 @@
 
 #include <vcl_cassert.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 #include <brdb/brdb_tuple.h>
 #include <brdb/brdb_relation.h>
 #include <brdb/brdb_selection.h>

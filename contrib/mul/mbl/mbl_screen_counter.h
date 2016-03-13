@@ -6,9 +6,9 @@
 // \brief Printing dots to the screen to indicate events
 // \author Ian Scott
 
-#include <vcl_compiler.h>
 #include <iostream>
 #include <iosfwd>
+#include <vcl_compiler.h>
 
 //: Prints items to the screen to represent events.
 // \code

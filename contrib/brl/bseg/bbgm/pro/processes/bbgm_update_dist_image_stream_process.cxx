@@ -1,4 +1,5 @@
 // This is brl/bseg/bbgm/pro/processes/bbgm_update_dist_image_stream_process.cxx
+#include <iostream>
 #include <bprb/bprb_func_process.h>
 //:
 // \file
@@ -18,8 +19,6 @@
 #include <vidl/vidl_frame.h>
 #include <vidl/vidl_convert.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 
 namespace {
   vidl_istream_sptr istr = VXL_NULLPTR;

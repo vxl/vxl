@@ -2,11 +2,10 @@
 #ifndef boxm2_array_2d_hxx_
 #define boxm2_array_2d_hxx_
 
+#include <iostream>
 #include "boxm2_array_2d.h"
 
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 
 template<class T>
 std::ostream& operator<<(std::ostream &os, boxm2_array_2d<T> const &array)

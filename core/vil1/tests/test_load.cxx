@@ -3,9 +3,9 @@
 // \brief Testing I/O of all possible PNM file formats
 // \author Peter Vanroose
 
-#include <vcl_compiler.h>
 #include <fstream>
 #include <iostream>
+#include <vcl_compiler.h>
 
 #include <vpl/vpl.h>
 #include <vul/vul_temp_filename.h>

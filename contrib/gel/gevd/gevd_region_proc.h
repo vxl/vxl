@@ -22,9 +22,9 @@
 // \endverbatim
 //
 //-------------------------------------------------------------------------
-#include <vcl_compiler.h>
 #include <iostream>
 #include <vector>
+#include <vcl_compiler.h>
 #include <gevd/gevd_bufferxy.h>
 #include <vil1/vil1_image.h>
 #include <vdgl/vdgl_digital_region.h>

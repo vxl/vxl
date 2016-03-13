@@ -5,8 +5,8 @@
 // \author Amitha Perera
 // \date   Feb 2005
 
-#include <vcl_compiler.h>
 #include <list>
+#include <vcl_compiler.h>
 #include <vgui/vgui_tableau.h>
 #include "vgui_slider_tableau_sptr.h"
 

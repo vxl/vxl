@@ -1,4 +1,7 @@
 // This is brl/bseg/boxm2/ocl/pro/processes/boxm2_ocl_fuse_based_visibility_process.cxx
+#include <fstream>
+#include <iostream>
+#include <algorithm>
 #include <bprb/bprb_func_process.h>
 //:
 // \file
@@ -7,10 +10,7 @@
 // \author Vishal Jain
 // \date Nov 13, 2013
 
-#include <fstream>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <algorithm>
 #include <boxm2/ocl/boxm2_opencl_cache.h>
 #include <boxm2/boxm2_scene.h>
 #include <boxm2/boxm2_block.h>

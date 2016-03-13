@@ -1,8 +1,7 @@
+#include <iostream>
 #include "bwm_plane_fitting_lsf.h"
 
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 #include <vgl/vgl_point_2d.h>
 #include <vgl/vgl_vector_2d.h>
 #include <vsol/vsol_point_2d.h>

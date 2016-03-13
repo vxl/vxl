@@ -4,6 +4,7 @@
 //  Copyright: (C) 2007 The University of Manchester
 //
 //=======================================================================
+#include <iostream>
 #include <testlib/testlib_test.h>
 //:
 // \file
@@ -11,8 +12,6 @@
 // \brief test mfpf_dp_snake
 
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 #include <mfpf/mfpf_dp_snake.h>
 #include <mfpf/mfpf_edge_finder.h>
 #include <vgl/vgl_point_2d.h>

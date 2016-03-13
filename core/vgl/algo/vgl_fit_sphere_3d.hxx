@@ -4,12 +4,12 @@
 //:
 // \file
 
+#include <iostream>
 #include "vgl_fit_sphere_3d.h"
 #include <vgl/algo/vgl_norm_trans_3d.h>
 #include <vnl/algo/vnl_svd.h>
 #include <vnl/vnl_matrix.h>
 #include <vcl_compiler.h>
-#include <iostream>
 #include <vgl/vgl_distance.h>
 #include <vnl/algo/vnl_levenberg_marquardt.h>
 #include <vnl/vnl_least_squares_function.h>

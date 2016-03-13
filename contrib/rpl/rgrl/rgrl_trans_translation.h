@@ -6,10 +6,10 @@
 // \author Charlene Tsai
 // \date Dec 2003
 
-#include "rgrl_transformation.h"
-#include <vcl_compiler.h>
 #include <iostream>
 #include <iosfwd>
+#include "rgrl_transformation.h"
+#include <vcl_compiler.h>
 
 class rgrl_trans_translation
   : public rgrl_transformation

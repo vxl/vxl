@@ -1,4 +1,6 @@
 // This is brl/bpro/core/vil_pro/processes/vil_convert_pixel_type_process.cxx
+#include <iostream>
+#include <string>
 #include <bprb/bprb_func_process.h>
 //:
 // \file
@@ -6,9 +8,6 @@
 
 #include <bprb/bprb_parameters.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
-#include <string>
 #include <vil/vil_image_view_base.h>
 #include <vil/vil_math.h>
 #include <vil/vil_convert.h>

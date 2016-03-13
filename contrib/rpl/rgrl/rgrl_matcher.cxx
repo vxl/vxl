@@ -1,3 +1,5 @@
+#include <iostream>
+#include <algorithm>
 #include "rgrl_matcher.h"
 //:
 // \file
@@ -5,8 +7,6 @@
 #include <rgrl/rgrl_feature.h>
 #include <rgrl/rgrl_match_set.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <algorithm>
 
 // less than operator
 bool

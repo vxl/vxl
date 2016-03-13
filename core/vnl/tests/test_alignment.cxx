@@ -1,9 +1,9 @@
 // This is core/vnl/tests/test_alignment.cxx
-#include <vcl_compiler.h>
 #include <limits>
 #include <typeinfo>
 #include <iostream>
 #include <algorithm>
+#include <vcl_compiler.h>
 #include <vnl/vnl_matrix.h>
 #include <vnl/vnl_vector.h>
 #include <vnl/vnl_matrix_ref.h>

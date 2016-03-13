@@ -1,8 +1,8 @@
-#include "vil_tiff_header.h"
 #include <iostream>
 #include <cstdio>
-#include <vcl_compiler.h>
 #include <ctime>
+#include "vil_tiff_header.h"
+#include <vcl_compiler.h>
 
 #if HAS_GEOTIFF
 #include <vil/file_formats/vil_geotiff_header.h>

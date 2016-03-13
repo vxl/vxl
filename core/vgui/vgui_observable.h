@@ -17,8 +17,8 @@
 //   31-Jul-2010 Peter Vanroose - minor bug fix (operator= instead of operator==)
 // \endverbatim
 
-#include <vcl_compiler.h>
 #include <vector>
+#include <vcl_compiler.h>
 class vgui_observer;
 class vgui_message;
 

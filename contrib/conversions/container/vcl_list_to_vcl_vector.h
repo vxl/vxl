@@ -2,9 +2,9 @@
 #define vcl_list_to_vcl_vector_h_
 
 #include <vector>
-#include <vcl_compiler.h>
 #include <iostream>
 #include <list>
+#include <vcl_compiler.h>
 
 template <class T>
 inline

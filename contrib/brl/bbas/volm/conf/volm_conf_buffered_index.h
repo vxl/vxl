@@ -11,13 +11,13 @@
 //   Modifications
 // \endverbatim
 
-#include <vbl/vbl_ref_count.h>
-#include <vbl/vbl_smart_ptr.h>
 #include <string>
-#include <vcl_compiler.h>
 #include <iostream>
 #include <fstream>
 #include <vector>
+#include <vbl/vbl_ref_count.h>
+#include <vbl/vbl_smart_ptr.h>
+#include <vcl_compiler.h>
 #include <volm/conf/volm_conf_object.h>
 
 class volm_conf_buffered_index;

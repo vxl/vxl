@@ -2,6 +2,7 @@
 #define boxm_update_image_functor_h
 //:
 // \file
+#include <iostream>
 #include <boxm/boxm_apm_traits.h>
 #include <boxm/basic/boxm_raytrace_function.h>
 #include <boxm/sample/boxm_rt_sample.h>
@@ -11,8 +12,6 @@
 #include <boxm/algo/rt/boxm_pre_infinity_functor.h>
 #include <vil/vil_math.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 
 template <boxm_apm_type APM, class T_aux>
 class boxm_update_image_functor_pass_2

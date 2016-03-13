@@ -12,14 +12,13 @@
 //   <none yet>
 // \endverbatim
 
+#include <iostream>
+#include <limits>
 #include "bvpl_neighb_operator.h"
 #include "bvpl_combined_neighb_operator.h"
 #include <bvpl/kernels/bvpl_kernel_factory.h>
 #include <bvpl/functors/bvpl_local_max_functor.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
-#include <limits>
 #include <vpl/vpl.h>
 #include <vul/vul_file.h>
 

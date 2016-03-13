@@ -1,4 +1,8 @@
 // This is contrib/brl/bpro/core/vpgl_pro/processes
+#include <iomanip>
+#include <iostream>
+#include <sstream>
+#include <fstream>
 #include <bprb/bprb_func_process.h>
 //:
 // \file
@@ -16,12 +20,7 @@
 // \endverbatim
 //
 #include <bprb/bprb_parameters.h>
-#include <iomanip>
-#include <iostream>
-#include <sstream>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <fstream>
 #include <vpgl/vpgl_rational_camera.h>
 #include <vpgl/vpgl_local_rational_camera.h>
 #include <vgl/vgl_point_2d.h>

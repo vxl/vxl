@@ -1,18 +1,17 @@
 // This is mul/mbl/mbl_rvm_regression_builder.cxx
+#include <cmath>
+#include <iostream>
+#include <algorithm>
 #include "mbl_rvm_regression_builder.h"
 //:
 // \file
 // \brief Object to train Relevance Vector Machines for regression
 // \author Tim Cootes
 
-#include <cmath>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <algorithm>
 #include <vnl/algo/vnl_svd.h>
 #include <mbl/mbl_matxvec.h>
 #include <mbl/mbl_matrix_products.h>
-#include <iostream>
 #include <vcl_cassert.h>
 
 //=======================================================================

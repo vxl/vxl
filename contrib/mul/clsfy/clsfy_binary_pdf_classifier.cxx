@@ -1,15 +1,14 @@
 // This is mul/clsfy/clsfy_binary_pdf_classifier.cxx
 //  Copyright: (C) 2000 British Telecommunications PLC
+#include <string>
+#include <iostream>
+#include <cmath>
+#include <vector>
 #include "clsfy_binary_pdf_classifier.h"
 //:
 // \file
 
-#include <string>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <cmath>
-#include <iostream>
-#include <vector>
 #include <vnl/io/vnl_io_vector.h>
 #include <vsl/vsl_binary_loader.h>
 #include <vcl_cassert.h>

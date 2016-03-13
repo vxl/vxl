@@ -1,12 +1,12 @@
 // Amitha Perera <perera@cs.rpi.edu>
 
+#include <iostream>
+#include <fstream>
 #include <testlib/testlib_test.h>
 
 #include <vul/vul_temp_filename.h>
 #include <vpl/vpl.h>  // for vpl_unlink and vpl_sleep
 #include <vcl_compiler.h>
-#include <iostream>
-#include <fstream>
 
 static void test_first()
 {

@@ -3,10 +3,11 @@
 #define boxm2_array_3d_h_
 //:
 // \file
-#include <vcl_compiler.h>
-#include <vcl_compiler.h>
 #include <iostream>
 #include <cstddef>
+#include <iosfwd>
+#include <vcl_compiler.h>
+#include <vcl_compiler.h>
 
 #ifdef __OPTIMIZE__
 # define RANGECHECK(i,j,k) ((void)0)
@@ -133,7 +134,6 @@ class boxm2_array_3d
 //
 // formatted I/O
 //
-#include <iosfwd>
 VCL_TEMPLATE_EXPORT template <class T> std::ostream& operator<<(std::ostream&,
                                                   boxm2_array_3d<T >const&);
 

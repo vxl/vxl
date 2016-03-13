@@ -1,4 +1,9 @@
 // This is core/vgui/vgui_selector_tableau.cxx
+#include <iostream>
+#include <sstream>
+#include <vector>
+#include <algorithm>
+#include <string>
 #include "vgui_selector_tableau.h"
 //:
 // \file
@@ -6,12 +11,7 @@
 // \date   November 5, 2003
 // \brief  See vgui_selector_tableau.h for a description of this file.
 
-#include <iostream>
-#include <sstream>
-#include <vector>
-#include <algorithm>
 #include <vcl_compiler.h>
-#include <string>
 
 #include <vgui/vgui.h>
 #include <vgui/vgui_gl.h>

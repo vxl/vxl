@@ -12,9 +12,9 @@
 //   Sep.2004, Peter Vanroose: added testlib_test_assert_near_relative().
 // \endverbatim
 
-#include <vcl_compiler.h>
 #include <string>
 #include <complex>
+#include <vcl_compiler.h>
 
 //: initialise test counters, check test name 'name' exists
 void testlib_test_start(const char* name = VXL_NULLPTR);

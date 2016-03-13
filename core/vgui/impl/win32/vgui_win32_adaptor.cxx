@@ -1,11 +1,11 @@
 // This is core/vgui/impl/win32/vgui_win32_adaptor.cxx
+#include <iostream>
+#include <cstring>
+#include <utility>
 #include "vgui_win32_adaptor.h"
 #include "vgui_win32_utils.h"
 
-#include <iostream>
-#include <cstring> // for std::memset
 #include <vcl_compiler.h>
-#include <utility> // for std::pair
 #include <vgui/vgui_gl.h>
 #include <vgui/vgui_event.h>
 #include <vgui/vgui_macro.h>

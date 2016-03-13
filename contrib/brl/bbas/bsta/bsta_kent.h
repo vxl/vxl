@@ -12,6 +12,8 @@
 //   (none yet)
 // \endverbatim
 
+#include <vector>
+#include <iostream>
 #include "bsta_distribution.h"
 #include <vnl/vnl_vector_fixed.h>
 #include <vnl/vnl_matrix_fixed.h>
@@ -19,10 +21,7 @@
 #include <vgl/vgl_plane_3d.h>
 #endif
 #include <vsl/vsl_binary_io.h>
-#include <vector>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 
 template <class T>
 class bsta_kent // : public bsta_distribution<T,1>

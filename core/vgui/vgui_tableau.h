@@ -29,8 +29,8 @@
 
 #include <string>
 #include <vector>
-#include <vcl_compiler.h>
 #include <iosfwd>
+#include <vcl_compiler.h>
 
 #include <vgui/vgui_event.h>
 #include <vgui/internals/vgui_parent_child_link_data.h>

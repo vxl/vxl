@@ -1,5 +1,7 @@
 //:
 // \file
+#include <iostream>
+#include <limits>
 #include <testlib/testlib_test.h>
 #include <bvpl/bvpl_subgrid_iterator.h>
 #include <bvpl/bvpl_voxel_subgrid.h>
@@ -10,8 +12,6 @@
 #include <vul/vul_file.h>
 #include <vnl/vnl_math.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <limits>
 
 bool save_occupancy_raw(std::string filename, bvxm_voxel_grid<float>* grid)
 {

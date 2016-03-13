@@ -1,11 +1,11 @@
 // This is bil_edt.cxx ATTENTION: MOVED TO core/vil/algo/vil_exact_distance_transform.cxx
 // THIS IS OBSOLETE - DO NOT MODIFY THIS FILE
-#include "bil_edt.h"
 #include <limits>
-#include <vcl_compiler.h>
 #include <iostream>
 #include <cmath>
 #include <vector>
+#include "bil_edt.h"
+#include <vcl_compiler.h>
 //:
 // \file
 // \brief Computes the exact Euclidean distance transform

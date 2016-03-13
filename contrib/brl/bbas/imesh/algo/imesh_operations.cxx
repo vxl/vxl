@@ -1,4 +1,6 @@
 // This is brl/bbas/imesh/algo/imesh_operations.cxx
+#include <list>
+#include <iostream>
 #include "imesh_operations.h"
 //:
 // \file
@@ -11,11 +13,8 @@
 #include <vnl/vnl_double_3.h>
 #include <vnl/algo/vnl_svd.h>
 #include <vcl_cassert.h>
-#include <list>
 
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 
 
 //: Compute the dual mesh using vertex normals to compute dual vertices

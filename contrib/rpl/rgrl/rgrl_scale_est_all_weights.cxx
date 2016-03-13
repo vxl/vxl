@@ -1,11 +1,11 @@
+#include <iostream>
+#include <cmath>
 #include "rgrl_scale_est_all_weights.h"
 //:
 // \file
 // \author Chuck Stewart
 
 #include <vcl_compiler.h>
-#include <iostream>
-#include <cmath>
 
 #include <vnl/vnl_math.h>
 #include <vnl/algo/vnl_svd.h>
@@ -13,7 +13,6 @@
 #include "rgrl_scale.h"
 #include "rgrl_match_set.h"
 #include "rgrl_util.h"
-#include <iostream>
 
 rgrl_scale_est_all_weights::
 rgrl_scale_est_all_weights( bool do_signature_scale )

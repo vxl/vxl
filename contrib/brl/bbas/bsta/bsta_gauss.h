@@ -13,9 +13,9 @@
 // \verbatim
 //  Modifications
 // \endverbatim
-#include <vcl_compiler.h>
 #include <iostream>
 #include <vector>
+#include <vcl_compiler.h>
 #include <vbl/vbl_array_2d.h>
 #include <vbl/vbl_array_3d.h>
 class bsta_gauss

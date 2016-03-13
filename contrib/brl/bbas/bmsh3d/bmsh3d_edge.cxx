@@ -1,5 +1,7 @@
 // This is brl/bbas/bmsh3d/bmsh3d_edge.cxx
 //---------------------------------------------------------------------
+#include <iostream>
+#include <cstdio>
 #include "bmsh3d_edge.h"
 //:
 // \file
@@ -17,9 +19,6 @@
 
 #include <vcl_cassert.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <cstdio>
-#include <iostream>
 
 #include <vgl/vgl_point_3d.h>
 #include <vgl/vgl_vector_3d.h>

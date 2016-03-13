@@ -15,8 +15,8 @@
 //   Peter Vanroose  30 Mar 2007: Commented out deprecated intersection() functions.
 // \endverbatim
 
-#include <vcl_compiler.h>
 #include <iosfwd>
+#include <vcl_compiler.h>
 #include <vcl_cassert.h>
 #include <vgl/vgl_point_3d.h> // data member of this class
 #include <vgl/vgl_vector_3d.h>

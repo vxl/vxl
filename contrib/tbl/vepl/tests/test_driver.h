@@ -1,11 +1,10 @@
 #ifndef vepl_test_driver_h_
 #define vepl_test_driver_h_
 
-#include <vil/vil_image_resource.h>
 #include <string>
+#include <iostream>
+#include <vil/vil_image_resource.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 #include <testlib/testlib_test.h>
 
 // create a 1 bit test image

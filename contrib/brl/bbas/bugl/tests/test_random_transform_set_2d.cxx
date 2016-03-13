@@ -1,7 +1,6 @@
+#include <iostream>
 #include <testlib/testlib_test.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 #include <vnl/vnl_math.h>
 #include <bugl/bugl_random_transform_set_2d.h>
 #include <vgl/vgl_homg_point_2d.h>

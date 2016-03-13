@@ -13,9 +13,9 @@
 // \endverbatim
 
 #include <vector>
-#include <vcl_compiler.h>
 #include <iostream>
 #include <string>
+#include <vcl_compiler.h>
 
 #include "rgrl_feature.h"
 #include "rgrl_object.h"

@@ -6,11 +6,11 @@
 // \file
 // This file is a cut-and-paste of vnl_na.cxx
 
+#include <istream>
+#include <ios>
 #include "vil_na.h"
 #include <vxl_config.h>
-#include <istream>
 #include <vcl_compiler.h>
-#include <ios>
 
 //: A particular qNaN to indicate not available.
 // This returns the bit pattern 0x7ff00000000007a2, as used by Octave and R

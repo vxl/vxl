@@ -1,4 +1,6 @@
 // This is core/vil/vil_math.cxx
+#include <iostream>
+#include <cstdlib>
 #include "vil_math.h"
 //:
 // \file
@@ -8,9 +10,7 @@
 //  Modifications
 // \endverbatim
 
-#include <iostream>
 #include <vcl_compiler.h>
-#include <cstdlib>
 
 void vil_math_median_unimplemented()
 {

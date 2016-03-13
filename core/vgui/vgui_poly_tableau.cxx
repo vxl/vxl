@@ -22,10 +22,10 @@
 //
 // \author fsm
 
+#include <iostream>
 #include "vgui_poly_tableau.h"
 
 #include <vcl_compiler.h>
-#include <iostream>
 #include <vcl_cassert.h>
 
 #include <vgui/vgui_gl.h>

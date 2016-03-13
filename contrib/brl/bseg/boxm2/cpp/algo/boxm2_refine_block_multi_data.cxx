@@ -1,7 +1,7 @@
-#include "boxm2_refine_block_multi_data.h"
-#include <vcl_compiler.h>
 #include <iostream>
 #include <algorithm>
+#include "boxm2_refine_block_multi_data.h"
+#include <vcl_compiler.h>
 #include <boxm2/boxm2_data_traits.h>
 //:
 // \file

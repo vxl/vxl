@@ -1,3 +1,5 @@
+#include <iostream>
+#include <cstdlib>
 #include "boxm2_point_util.h"
 #include <vgl/algo/vgl_rotation_3d.h>
 #include <vgl/algo/vgl_fit_plane_3d.h>
@@ -5,8 +7,6 @@
 #include <vnl/vnl_double_3.h>
 #include <vnl/vnl_quaternion.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <cstdlib> // for std::rand()
 #include <vcl_cassert.h>
 
 bool boxm2_point_util::fit_plane_ransac(std::vector<vgl_homg_point_3d<double> > & points, vgl_homg_plane_3d<double>  & plane)

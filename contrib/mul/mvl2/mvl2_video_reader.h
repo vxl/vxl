@@ -9,12 +9,12 @@
 // \brief A base class for cameras/virtual cameras
 // \author Louise Butcher
 
-#include <vxl_config.h>
-#include <utility> // for std::pair
-#include <vcl_compiler.h>
+#include <utility>
 #include <iostream>
 #include <string>
 #include <vector>
+#include <vxl_config.h>
+#include <vcl_compiler.h>
 #include <vil/vil_image_view.h>
 
 

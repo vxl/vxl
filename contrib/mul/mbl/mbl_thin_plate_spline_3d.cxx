@@ -1,4 +1,7 @@
 // This is mul/mbl/mbl_thin_plate_spline_3d.cxx
+#include <iostream>
+#include <cmath>
+#include <cstdlib>
 #include "mbl_thin_plate_spline_3d.h"
 //:
 // \file
@@ -6,9 +9,6 @@
 // \author Tim Cootes
 
 #include <vcl_compiler.h>
-#include <iostream>
-#include <cmath>
-#include <cstdlib> // for std::abort()
 #include <vsl/vsl_indent.h>
 #include <vsl/vsl_vector_io.h>
 #include <vnl/vnl_math.h>

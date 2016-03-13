@@ -80,10 +80,10 @@
 //   30 Mar.2007 - Peter Vanroose - Commented out deprecated versions of vil_convert_cast & vil_convert_to_grey_using_average
 // \endverbatim
 
-#include <vcl_cassert.h>
-#include <vcl_compiler.h>
 #include <limits>
 #include <cmath>
+#include <vcl_cassert.h>
+#include <vcl_compiler.h>
 #include <vil/vil_transform.h>
 #include <vil/vil_math.h>
 #include <vil/vil_plane.h>

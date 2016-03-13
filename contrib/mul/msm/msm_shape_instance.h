@@ -5,11 +5,11 @@
 // \brief Representation of an instance of a shape model.
 // \author Tim Cootes
 
+#include <iostream>
+#include <iosfwd>
 #include <msm/msm_ref_shape_instance.h>
 #include <msm/msm_shape_model.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iosfwd>
 
 //: Representation of an instance of a shape model.
 //  Contains shape model parameters and the parameters of

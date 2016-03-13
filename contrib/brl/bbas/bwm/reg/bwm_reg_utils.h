@@ -1,9 +1,9 @@
 #ifndef bwm_reg_utils_h_
 #define bwm_reg_utils_h_
 
-#include <vcl_compiler.h>
 #include <iostream>
 #include <vector>
+#include <vcl_compiler.h>
 #include <vgl/vgl_point_3d.h>
 #include <vgl/vgl_plane_3d.h>
 #include <vpgl/vpgl_rational_camera.h>

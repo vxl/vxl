@@ -1,8 +1,7 @@
-#include <testlib/testlib_test.h>
-#include <vcl_compiler.h>
 #include <iostream>
 #include <cmath>
-#include <iostream>
+#include <testlib/testlib_test.h>
+#include <vcl_compiler.h>
 #include <bil/algo/bil_scale_image.h>
 #include <vil/vil_image_view.h>
 #include <vil/vil_save.h>

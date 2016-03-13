@@ -49,13 +49,13 @@
 // If s0 is not on the spherical shell then the target cell contents is unchanged.
 // Note that eye rotation always takes a shell cell into another shell cell.
 //
+#include <iostream>
+#include <string>
+#include <vector>
 #include <boxm2/boxm2_block.h>
 #include <boxm2/boxm2_scene.h>
 #include <boxm2/boxm2_data.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <string>
-#include <vector>
 #include <vgl/algo/vgl_rotation_3d.h>
 #include "boxm2_vecf_eye_params.h"
 class boxm2_vecf_eye_scene : public boxm2_scene

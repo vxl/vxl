@@ -12,6 +12,8 @@
 //   <none yet>
 // \endverbatim
 
+#include <list>
+#include <iostream>
 #include <vgl/vgl_box_3d.h>
 
 #include <boxm/boxm_scene.h>
@@ -21,10 +23,7 @@
 #include <vnl/vnl_vector.h>
 #include <vnl/algo/vnl_svd.h>
 
-#include <list>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 
 #include <bvpl/bvpl_octree/sample/bvpl_pca_basis_sample.h>
 

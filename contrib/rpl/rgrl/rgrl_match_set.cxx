@@ -1,3 +1,6 @@
+#include <vector>
+#include <iostream>
+#include <algorithm>
 #include "rgrl_match_set.h"
 //:
 // \file
@@ -12,10 +15,7 @@
 #include <rgrl/rgrl_feature_sptr.h>
 #include <rgrl/rgrl_transformation.h>
 
-#include <vector>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <algorithm>
 #include <vcl_cassert.h>
 
 rgrl_match_set::

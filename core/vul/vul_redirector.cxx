@@ -5,12 +5,12 @@
 //:
 // \file
 
+#include <iostream>
+#include <cstdio>
 #include <vcl_compiler.h>
 
 #include "vul_redirector.h"
-#include <iostream>
 #include <vcl_compiler.h>
-#include <cstdio> // for EOF
 
 //----------------------------------------------------------------------
 // This class is used as a stream buffer that can

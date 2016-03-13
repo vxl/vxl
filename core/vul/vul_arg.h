@@ -19,8 +19,8 @@
 #include <vector>
 #include <string>
 #include <list>
-#include <vcl_compiler.h>
 #include <iosfwd>
+#include <vcl_compiler.h>
 #include <vxl_config.h>
 #include <vul/vul_export.h>
 

@@ -2,6 +2,9 @@
 // \file
 // \author Gehua Yang
 // \date   March 2005
+#include <vector>
+#include <iostream>
+#include <algorithm>
 #include "rgrl_matcher_k_nearest_random.h"
 #include <rgrl/rgrl_feature.h>
 #include <rgrl/rgrl_feature_set.h>
@@ -9,10 +12,7 @@
 #include <rgrl/rgrl_view.h>
 #include <rgrl/rgrl_match_set.h>
 
-#include <vector>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <algorithm>
 
 rgrl_matcher_k_nearest_random::
 rgrl_matcher_k_nearest_random( unsigned int k, unsigned int max_num )

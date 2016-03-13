@@ -4,17 +4,16 @@
 //  Copyright: (C) 2000 Victoria University of Manchester
 //
 //=======================================================================
+#include <iostream>
+#include <string>
+#include <cmath>
 #include <testlib/testlib_test.h>
 //:
 // \file
 // \author Tim Cootes
 // \brief test pdf1d_mixture, building, sampling, saving etc.
 
-#include <iostream>
-#include <string>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <cmath>
 #include <vpl/vpl.h> // vpl_unlink()
 #include <pdf1d/pdf1d_mixture.h>
 #include <pdf1d/pdf1d_mixture_builder.h>

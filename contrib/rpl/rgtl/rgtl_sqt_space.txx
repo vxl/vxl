@@ -5,12 +5,12 @@
 #ifndef rgtl_sqt_space_txx
 #define rgtl_sqt_space_txx
 
+#include <iostream>
+#include <cmath>
 #include "rgtl_sqt_space.hxx"
 
 #include <vcl_cassert.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <cmath>
 
 //----------------------------------------------------------------------------
 template <unsigned int D>

@@ -1,7 +1,6 @@
+#include <iostream>
 #include "boxm2_vecf_orbit_params.h"
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 double
 boxm2_vecf_orbit_params
 ::height_to_width_ratio()

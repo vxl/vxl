@@ -1,3 +1,6 @@
+#include <iostream>
+#include <sstream>
+#include <iterator>
 #include "msm_curve.h"
 //:
 // \file
@@ -5,9 +8,6 @@
 // \author Tim Cootes
 
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
-#include <sstream>
 #include <vsl/vsl_indent.h>
 #include <vsl/vsl_binary_io.h>
 #include <vsl/vsl_vector_io.h>
@@ -16,7 +16,6 @@
 #include <mbl/mbl_parse_int_list.h>
 #include <mbl/mbl_parse_keyword_list.h>
 #include <vul/vul_string.h>
-#include <iterator> // For std::back_inserter
 #include <vcl_cassert.h>
 
 // Default Constructor

@@ -6,9 +6,9 @@
 // \brief Simple statistics (mean, variance) on vectors.
 // \author Tim Cootes
 
-#include <vcl_compiler.h>
 #include <iostream>
 #include <iosfwd>
+#include <vcl_compiler.h>
 #include <vsl/vsl_binary_io.h>
 #include <vnl/vnl_vector.h>
 

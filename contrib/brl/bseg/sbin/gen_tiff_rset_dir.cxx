@@ -1,9 +1,9 @@
 // This is brl/bseg/sbin/gen_tiff_rset_dir.cxx
 
 #include <string>
-#include <vcl_compiler.h>
 #include <iostream>
-#include <cstdlib> // for std::system()
+#include <cstdlib>
+#include <vcl_compiler.h>
 #include <vul/vul_file.h>
 #include <vil/vil_load.h>
 #include <vil/vil_image_resource.h>

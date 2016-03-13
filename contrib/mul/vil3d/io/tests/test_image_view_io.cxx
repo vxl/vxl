@@ -1,9 +1,8 @@
 // This is mul/vil3d/io/tests/test_image_view_io.cxx
+#include <iostream>
 #include <testlib/testlib_test.h>
 
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 #include <vxl_config.h>
 #include <vpl/vpl.h> // vpl_unlink()
 #include <vil3d/vil3d_image_view.h>

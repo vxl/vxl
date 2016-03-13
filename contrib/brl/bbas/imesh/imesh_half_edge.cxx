@@ -1,12 +1,12 @@
 // This is brl/bbas/imesh/imesh_half_edge.cxx
+#include <iostream>
+#include <map>
+#include <utility>
 #include "imesh_half_edge.h"
 //:
 // \file
 
 #include <vcl_compiler.h>
-#include <iostream>
-#include <map>
-#include <utility>
 #include <vcl_cassert.h>
 
 

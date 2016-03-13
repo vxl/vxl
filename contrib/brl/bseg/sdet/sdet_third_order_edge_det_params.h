@@ -10,10 +10,10 @@
 //    Brown University
 //
 //-----------------------------------------------------------------------------
-#include <gevd/gevd_param_mixin.h>
-#include <vcl_compiler.h>
 #include <iostream>
 #include <iosfwd>
+#include <gevd/gevd_param_mixin.h>
+#include <vcl_compiler.h>
 
 
 class sdet_third_order_edge_det_params : public gevd_param_mixin

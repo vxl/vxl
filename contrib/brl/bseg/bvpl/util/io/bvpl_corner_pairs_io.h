@@ -13,10 +13,9 @@
 //   <none yet>
 // \endverbatim
 
+#include <iostream>
 #include <vsl/vsl_binary_io.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 #include <bvpl/util/bvpl_corner_pair_finder.h>
 
 

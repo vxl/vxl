@@ -4,9 +4,9 @@
 //:
 // \file
 
+#include <iostream>
 #include "vgl_ellipsoid_3d.h"
 #include <vcl_compiler.h>
-#include <iostream>
 
 template <class T>
 bool vgl_ellipsoid_3d<T>::operator==(vgl_ellipsoid_3d<T> const& e) const

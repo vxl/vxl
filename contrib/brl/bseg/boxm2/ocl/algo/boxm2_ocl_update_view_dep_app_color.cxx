@@ -1,12 +1,12 @@
 // This is brl/bseg/boxm2/ocl/algo/boxm2_ocl_view_based_update.cxx
+#include <fstream>
+#include <iostream>
+#include <algorithm>
 #include "boxm2_ocl_update_view_dep_app_color.h"
 //:
 // \file
 
-#include <fstream>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <algorithm>
 #include <boxm2/ocl/boxm2_opencl_cache.h>
 #include <boxm2/boxm2_scene.h>
 #include <boxm2/boxm2_block.h>

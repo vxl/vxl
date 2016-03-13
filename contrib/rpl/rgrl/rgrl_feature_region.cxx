@@ -1,3 +1,5 @@
+#include <iostream>
+#include <vector>
 #include "rgrl_feature_region.h"
 //:
 // \file
@@ -8,8 +10,6 @@
 #include <vcl_cassert.h>
 #include <vnl/vnl_vector.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <vector>
 
 const std::vector< vnl_vector<int> >&
 rgrl_feature_region::

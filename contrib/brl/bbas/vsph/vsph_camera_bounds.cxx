@@ -1,3 +1,5 @@
+#include <iostream>
+#include <cmath>
 #include "vsph_camera_bounds.h"
 #include <bpgl/algo/bpgl_project.h>
 #include <vpgl/algo/vpgl_ray.h>
@@ -6,8 +8,6 @@
 #include <vgl/vgl_plane_3d.h>
 #include <vgl/vgl_intersection.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <cmath>
 #include <vnl/vnl_math.h>
 
 principal_ray_scan::principal_ray_scan(double cone_half_angle,

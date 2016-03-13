@@ -11,10 +11,10 @@
 //
 //-----------------------------------------------------------------------------
 
-#include "ConvexHull.h"
-#include <vcl_compiler.h>
 #include <iostream>
 #include <cstdlib>
+#include "ConvexHull.h"
+#include <vcl_compiler.h>
 
 #define CMPM(c,A,B) \
         v = (*(const double*const*)A)[c] - (*(const double*const*)B)[c];\

@@ -24,10 +24,9 @@
 // \endverbatim
 //=======================================================================
 
+#include <iostream>
 #include "gevd_memory_mixin.h"
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 #include <vil1/vil1_image.h>
 #include <vil/vil_image_resource.h>
 

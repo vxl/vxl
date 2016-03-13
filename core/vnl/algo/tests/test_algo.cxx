@@ -1,4 +1,5 @@
 // This is core/vnl/algo/tests/test_algo.cxx
+#include <complex>
 #include <testlib/testlib_test.h>
 //:
 // \file
@@ -24,7 +25,6 @@
 // \date 20 September 2003
 
 #include <vcl_compiler.h>
-#include <complex>
 
 #include <vnl/algo/vnl_adjugate.h>
 #include <vnl/algo/vnl_conjugate_gradient.h>

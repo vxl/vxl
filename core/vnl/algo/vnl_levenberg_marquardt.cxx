@@ -9,11 +9,11 @@
 //
 //-----------------------------------------------------------------------------
 
+#include <iostream>
 #include "vnl_levenberg_marquardt.h"
 
 #include <vcl_cassert.h>
 #include <vcl_compiler.h>
-#include <iostream>
 
 #include <vnl/vnl_vector.h>
 #include <vnl/vnl_matrix.h>

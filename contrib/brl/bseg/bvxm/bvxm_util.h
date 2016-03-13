@@ -18,6 +18,10 @@
 //   July 14, 2009 - Ibrahim Eden - Moved edge related functions to bvxm_edge_util
 // \endverbatim
 
+#include <string>
+#include <vector>
+#include <iostream>
+#include <cmath>
 #include "grid/bvxm_voxel_slab.h"
 #include "bvxm_world_params.h"
 
@@ -43,12 +47,7 @@
 #include <vil/vil_pixel_format.h>
 #include <vil/vil_save.h> // for debug saving
 
-#include <string>
-#include <vector>
-#include <iostream>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <cmath>
 #include <vcl_cassert.h>
 
 class bvxm_util

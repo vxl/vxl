@@ -5,11 +5,11 @@
 // \brief Perform median filtering on 3D images
 // \author Tim Cootes
 
+#include <iostream>
+#include <algorithm>
 #include <vil3d/algo/vil3d_structuring_element.h>
 #include <vil3d/vil3d_image_view.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <algorithm>
 
 //: Return r-th sorted value of im[offset[k]]
 //  Values im[offset[k]] placed into values[k] then sorted.

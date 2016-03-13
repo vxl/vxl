@@ -1,11 +1,11 @@
+#include <string>
+#include <iostream>
+#include <cstdlib>
 #include <testlib/testlib_test.h>
 #include <bsta/algo/bsta_von_mises_updater.h>
 #include <bsta/bsta_attributes.h>
-#include <string>
 #include <vgl/vgl_point_2d.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <cstdlib> // for rand()
 #include <vnl/vnl_math.h>
 // do not remove the following text
 // Approved for public release, distribution unlimited (DISTAR Case 14389)

@@ -12,12 +12,12 @@
 //   <None yet>
 // \endverbatim
 
+#include <limits>
 #include <vnl/algo/vnl_symmetric_eigensystem.h>
 #include <vpdl/vpdt/vpdt_field_traits.h>
 #include <vpdl/vpdt/vpdt_field_default.h>
 #include <vpdl/vpdt/vpdt_access.h>
 #include <vcl_compiler.h>
-#include <limits>
 #include <vcl_cassert.h>
 
 

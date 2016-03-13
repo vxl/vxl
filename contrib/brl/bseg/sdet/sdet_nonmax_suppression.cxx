@@ -1,10 +1,10 @@
 // This is brl/bseg/sdet/sdet_nonmax_suppression.cxx
+#include <iostream>
+#include <cstdlib>
 #include "sdet_nonmax_suppression.h"
 //:
 // \file
 #include <vcl_compiler.h>
-#include <iostream>
-#include <cstdlib>   // for std::abs(int) and std::sqrt()
 #include <vsol/vsol_point_2d.h>
 #include <vsol/vsol_line_2d.h>
 #include <vgl/vgl_point_2d.h>

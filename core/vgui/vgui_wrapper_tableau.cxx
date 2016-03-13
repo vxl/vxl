@@ -1,4 +1,5 @@
 // This is core/vgui/vgui_wrapper_tableau.cxx
+#include <iostream>
 #include "vgui_wrapper_tableau.h"
 //:
 // \file
@@ -6,7 +7,6 @@
 // \brief  See vgui_wrapper_tableau.h for a description of this file.
 
 #include <vcl_compiler.h>
-#include <iostream>
 #include <vgui/vgui_event.h>
 
 //--------------------------------------------------------------------------------

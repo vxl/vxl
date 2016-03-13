@@ -1,6 +1,6 @@
+#include <iostream>
 #include <testlib/testlib_test.h>
 // not used? #include <vcl_compiler.h>
-#include <iostream>
 
 #include <vpgl/vpgl_proj_camera.h>
 #include <vnl/vnl_fwd.h>
@@ -18,7 +18,6 @@
 #include <vgl/algo/vgl_h_matrix_3d.h>
 #include <vgl/vgl_ray_3d.h>
 #include <vcl_compiler.h>
-#include <iostream>
 
 static void test_proj_camera()
 {

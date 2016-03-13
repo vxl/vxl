@@ -6,12 +6,12 @@
 #ifndef m2d3_ortho_flexible_builder_h_
 #define m2d3_ortho_flexible_builder_h_
 
+#include <iostream>
+#include <vector>
 #include <vnl/vnl_matrix.h>
 #include <vnl/vnl_vector.h>
 
 #include <vcl_compiler.h>
-#include <iostream>
-#include <vector>
 
 #include <vgl/vgl_point_3d.h>
 #include <vgl/vgl_point_2d.h>

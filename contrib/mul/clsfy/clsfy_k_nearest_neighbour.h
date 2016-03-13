@@ -12,10 +12,10 @@
 //   2 May 2001 IMS Converted to VXL
 // \endverbatim
 
-#include <clsfy/clsfy_classifier_base.h>
-#include <vcl_compiler.h>
 #include <iostream>
 #include <iosfwd>
+#include <clsfy/clsfy_classifier_base.h>
+#include <vcl_compiler.h>
 
 //: A Binary k-Nearest Neighbour classifier
 class clsfy_k_nearest_neighbour : public clsfy_classifier_base

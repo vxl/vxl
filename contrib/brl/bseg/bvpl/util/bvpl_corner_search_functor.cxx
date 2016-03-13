@@ -1,3 +1,5 @@
+#include <iostream>
+#include <algorithm>
 #include "bvpl_corner_search_functor.h"
 //:
 // \file
@@ -5,8 +7,6 @@
 #include <bvpl/kernels/bvpl_corner2d_kernel_factory.h>
 #include <vnl/vnl_math.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <algorithm>
 
 // Default Constructor
 bvpl_corner2d_kernel_factory::bvpl_corner2d_kernel_factory()

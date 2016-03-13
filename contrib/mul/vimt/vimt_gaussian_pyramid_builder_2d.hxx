@@ -6,12 +6,12 @@
 // \brief Class to build gaussian pyramids of vimt_image_2d_of<T>
 // \author Tim Cootes
 
-#include "vimt_gaussian_pyramid_builder_2d.h"
-
-#include <vcl_compiler.h>
 #include <iostream>
 #include <cstdlib>
 #include <string>
+#include "vimt_gaussian_pyramid_builder_2d.h"
+
+#include <vcl_compiler.h>
 
 #include <vcl_cassert.h>
 #include <vnl/vnl_math.h> // for sqrt2

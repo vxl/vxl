@@ -6,11 +6,11 @@
 // \brief Locates strongest edge along a profile
 // \author Tim Cootes
 
+#include <iostream>
+#include <iosfwd>
 #include <mfpf/mfpf_point_finder.h>
 #include <vgl/vgl_fwd.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iosfwd>
 
 //: Locates strongest edge along a profile.
 class mfpf_edge_finder : public mfpf_point_finder

@@ -4,12 +4,12 @@
 #endif
 //:
 // \file
+#include <iostream>
+#include <fstream>
 #include "HMatrix1D.h"
 
 #include <vgl/vgl_homg_point_1d.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <fstream>
 #include <vnl/vnl_double_2.h>
 #include <vnl/vnl_inverse.h>
 

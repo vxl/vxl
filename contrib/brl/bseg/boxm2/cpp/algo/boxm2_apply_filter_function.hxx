@@ -2,6 +2,7 @@
 #define boxm2_apply_filter_function_hxx_
 //:
 // \file
+#include <iostream>
 #include "boxm2_apply_filter_function.h"
 
 #if 1
@@ -11,8 +12,6 @@
 
 #include <vcl_cassert.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 
 //: "default" constructor
 template<boxm2_data_type RESPONSE_DATA_TYPE>

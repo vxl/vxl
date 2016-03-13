@@ -1,10 +1,9 @@
-#include <testlib/testlib_test.h>
-
-#include <iostream>
-#include <vcl_compiler.h>
 #include <iostream>
 #include <algorithm>
 #include <cmath>
+#include <testlib/testlib_test.h>
+
+#include <vcl_compiler.h>
 #include <vcl_cassert.h>
 #include <rgrl/rgrl_util.h>
 #include <vnl/vnl_vector.h>

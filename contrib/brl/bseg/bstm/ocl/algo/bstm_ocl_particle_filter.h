@@ -10,6 +10,8 @@
 //          low ranking particles are eliminated.
 
 
+#include <iostream>
+#include <set>
 #include <bstm/ocl/bstm_opencl_cache.h>
 #include <bstm/bstm_scene.h>
 #include <bstm/bstm_block.h>
@@ -20,8 +22,6 @@
 #include <vnl/vnl_random.h>
 #include <bbas/bsta/bsta_gaussian_indep.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <set>
 #include <vgl/algo/vgl_orient_box_3d.h>
 
 class bstm_ocl_particle_filter

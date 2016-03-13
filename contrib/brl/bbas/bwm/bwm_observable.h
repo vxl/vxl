@@ -3,14 +3,14 @@
 //:
 // \file
 
+#include <string>
+#include <iostream>
+#include <map>
 #include <vbl/vbl_ref_count.h>
 
 #include "bwm_observable_sptr.h"
 
-#include <string>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <map>
 
 #include <vgl/vgl_point_3d.h>
 #include <vgl/vgl_vector_3d.h>

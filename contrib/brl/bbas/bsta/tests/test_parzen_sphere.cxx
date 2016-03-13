@@ -1,11 +1,10 @@
+#include <string>
+#include <limits>
+#include <iostream>
 #include <testlib/testlib_test.h>
 #include <bsta/bsta_parzen_sphere.h>
 #include <vnl/vnl_matrix_fixed.h>
-#include <string>
-#include <limits>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 // Do not remove the following statement
 // Approved for Public Release, Distribution Unlimited (DISTAR Case 12529)
 //

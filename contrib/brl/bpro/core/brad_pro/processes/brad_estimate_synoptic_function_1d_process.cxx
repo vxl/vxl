@@ -1,12 +1,12 @@
 // This is brl/bpro/core/brad_pro/processes/brad_estimate_synoptic_function_1d_process.cxx
+#include <iostream>
+#include <algorithm>
 #include <bprb/bprb_func_process.h>
 //:
 // \file
 #include <bpro/core/bbas_pro/bbas_1d_array_float.h>
 #include <brad/brad_synoptic_function_1d.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <algorithm>
 
 namespace brad_estimate_synoptic_function_1d_process_globals
 {

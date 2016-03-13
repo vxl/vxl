@@ -11,9 +11,9 @@
 // \author Paul Crane and Brendan McCane
 // \date 21 Feb 2006
 
+#include <string>
 #include "vidl_istream.h"
 #include <vcl_compiler.h>
-#include <string> // this is for the strings scattered about the place
 
 // this is linux specific
 using namespace std;

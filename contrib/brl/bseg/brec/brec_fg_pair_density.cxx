@@ -10,10 +10,10 @@
 //   <none yet>
 // \endverbatim
 
-#include "brec_fg_pair_density.h"
-#include <vcl_compiler.h>
 #include <iostream>
 #include <cmath>
+#include "brec_fg_pair_density.h"
+#include <vcl_compiler.h>
 #include <vnl/vnl_math.h>
 #include <vnl/vnl_erf.h>
 

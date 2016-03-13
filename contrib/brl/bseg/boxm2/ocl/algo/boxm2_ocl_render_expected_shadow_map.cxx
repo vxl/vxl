@@ -1,8 +1,8 @@
+#include <iostream>
+#include <algorithm>
 #include "boxm2_ocl_render_expected_shadow_map.h"
 #include <boxm2/ocl/boxm2_ocl_util.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <algorithm>
 
 #include <boxm2/ocl/algo/boxm2_ocl_render_expected_image_function.h>
 

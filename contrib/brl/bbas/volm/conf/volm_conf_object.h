@@ -12,12 +12,11 @@
 //    Yi Dong     SEP--2014    added height attribute
 // \endverbatim
 
+#include <iostream>
 #include <vbl/vbl_ref_count.h>
 #include <vbl/vbl_smart_ptr.h>
 #include <vsl/vsl_binary_io.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 #include <vgl/vgl_point_2d.h>
 #include <vgl/vgl_point_3d.h>
 

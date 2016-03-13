@@ -1,6 +1,6 @@
-#include <vcl_compiler.h>
 #include <iostream>
 #include <cstdio>
+#include <vcl_compiler.h>
 
 #include <vnl/vnl_math.h> // for pi_over_2
 

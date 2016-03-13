@@ -12,12 +12,12 @@
 //   23 Oct.2003 - Peter Vanroose - Added support for 64-bit int pixels
 // \endverbatim
 
+#include <iosfwd>
+#include <complex>
 #include <vil/vil_rgb.h>
 #include <vil/vil_rgba.h>
 #include <vxl_config.h> // for vxl_uint_32 etc.
 #include <vcl_compiler.h>
-#include <iosfwd>
-#include <complex>
 
 //: Describes the type of the concrete data.
 enum vil_pixel_format

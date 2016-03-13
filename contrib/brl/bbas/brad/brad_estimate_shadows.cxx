@@ -1,8 +1,8 @@
+#include <iostream>
+#include <cmath>
 #include <vil/vil_image_view.h>
 #include <vnl/vnl_math.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <cmath>
 
 #include "brad_image_metadata.h"
 #include "brad_atmospheric_parameters.h"

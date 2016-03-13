@@ -1,9 +1,8 @@
-#include "bvpl_create_directions.h"
-#include <vnl/vnl_math.h>
-#include <iostream>
-#include <vcl_compiler.h>
 #include <iostream>
 #include <iomanip>
+#include "bvpl_create_directions.h"
+#include <vnl/vnl_math.h>
+#include <vcl_compiler.h>
 #include <bxml/bsvg/bsvg_document.h>
 #include <bxml/bsvg/bsvg_element.h>
 #include <bxml/bxml_write.h>

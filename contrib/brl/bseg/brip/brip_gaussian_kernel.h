@@ -12,11 +12,11 @@
 //   <none yet>
 // \endverbatim
 
+#include <iostream>
+#include <vector>
 #include <brip/brip_kernel.h>
 #include <vnl/vnl_math.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <vector>
 
 //: Gaussian derivative kernel base class
 class brip_gaussian_kernel : public brip_kernel

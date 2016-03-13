@@ -10,14 +10,14 @@
 //  Modifications
 //   Yi Dong Dec, 2015 -- enlarge array size to avoid CL_DEVICE_EXTENSIONS query failure
 // \endverbatim
-#include "bocl_cl.h"
-#include "bocl_utils.h"
 #include <string>
 #include <vector>
-#include <vcl_compiler.h>
 #include <iostream>
-#include <cstddef> // for std::size_t
+#include <cstddef>
 #include <iosfwd>
+#include "bocl_cl.h"
+#include "bocl_utils.h"
+#include <vcl_compiler.h>
 
 //Just in case NVIDIA extensions are not defined
 #ifndef CL_DEVICE_COMPUTE_CAPABILITY_MAJOR_NV

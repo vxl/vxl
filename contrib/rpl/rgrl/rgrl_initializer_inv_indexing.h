@@ -6,11 +6,11 @@
 // \author Charlene Tsai
 // \date March 2004
 
+#include <iostream>
+#include <vector>
 #include "rgrl_initializer.h"
 
 #include <vcl_compiler.h>
-#include <iostream>
-#include <vector>
 
 #include "rgrl_view_sptr.h"
 #include "rgrl_mask.h"

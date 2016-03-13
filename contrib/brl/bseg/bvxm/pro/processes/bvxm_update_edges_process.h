@@ -13,10 +13,10 @@
 //   Yi Dong        - May 06, 2014 - avoid using xml file as input to avoid IO confliction when the process is running in parallel
 // \endverbatim
 
-#include <bprb/bprb_func_process.h>
-#include <vcl_compiler.h>
 #include <iostream>
 #include <string>
+#include <bprb/bprb_func_process.h>
+#include <vcl_compiler.h>
 
 //: globals
 namespace bvxm_update_edges_process_globals

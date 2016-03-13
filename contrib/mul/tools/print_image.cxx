@@ -4,10 +4,9 @@
 //  \brief Program to print info about an image.
 
 #include <exception>
-#include <vcl_compiler.h>
 #include <iostream>
 #include <cstdlib>
-#include <iostream>
+#include <vcl_compiler.h>
 #include <vul/vul_arg.h>
 #include <vgl/vgl_point_2d.h>
 #include <vgl/vgl_vector_2d.h>

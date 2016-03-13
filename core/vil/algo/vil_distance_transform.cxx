@@ -1,3 +1,5 @@
+#include <algorithm>
+#include <cmath>
 #include "vil_distance_transform.h"
 //:
 // \file
@@ -5,9 +7,7 @@
 // \author Tim Cootes
 
 #include <vil/vil_fill.h>
-#include <algorithm>
 #include <vcl_compiler.h>
-#include <cmath>
 #include <vcl_cassert.h>
 
 //: Compute distance function from zeros in original image

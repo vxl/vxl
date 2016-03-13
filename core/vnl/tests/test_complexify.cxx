@@ -1,9 +1,9 @@
 #include <cstdlib>
+#include <iostream>
+#include <complex>
 #include <testlib/testlib_test.h>
 
-#include <iostream>
 #include <vcl_compiler.h>
-#include <complex>
 #include <vnl/vnl_complexify.h>
 #include <vnl/vnl_real.h>
 #include <vnl/vnl_imag.h>

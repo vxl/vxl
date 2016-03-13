@@ -2,10 +2,9 @@
 #define boxm_sample_multi_bin_h_
 //:
 // \file
+#include <iostream>
 #include <boxm/boxm_apm_traits.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 #include <vsl/vsl_binary_io.h>
 #include <bsta/bsta_attributes.h>
 

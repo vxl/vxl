@@ -17,6 +17,8 @@
 //  response_scale: 0.5
 // \endverbatim
 
+#include <iostream>
+#include <algorithm>
 #include <vul/vul_arg.h>
 #include <vimt/vimt_image_2d_of.h>
 #include <vimt/vimt_gaussian_pyramid_builder_2d.h>
@@ -26,8 +28,6 @@
 #include <vil/vil_load.h>
 #include <vul/vul_string.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <algorithm>
 #include <vil/vil_save.h>
 #include <vil/vil_fill.h>
 #include <vil/vil_crop.h>

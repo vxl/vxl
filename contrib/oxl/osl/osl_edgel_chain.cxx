@@ -6,13 +6,12 @@
 // \file
 // \author fsm
 
+#include <iostream>
+#include <cstdlib>
+#include <new>
 #include "osl_edgel_chain.h"
 
 #include <vcl_compiler.h>
-#include <iostream>
-#include <cstdlib>
-#include <iostream>
-#include <new>
 
 #include <osl/osl_hacks.h>
 

@@ -1,10 +1,9 @@
 // This is gel/pop/pop_object.cxx
+#include <iostream>
 #include "pop_object.h"
 //:
 // \file
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 
 void pop_object::update()
 {

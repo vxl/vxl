@@ -10,9 +10,9 @@
 // \author Ian Scott (Manchester ISBE)
 // \date   6 Dec 2001
 
+#include <iosfwd>
 #include <vcl_cassert.h>
 #include <vcl_compiler.h>
-#include <iosfwd>
 #include <vnl/vnl_vector.h>
 #include <vnl/vnl_matrix.h>
 #include <vnl/vnl_c_vector.h>

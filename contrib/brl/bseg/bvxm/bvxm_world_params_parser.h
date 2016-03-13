@@ -3,11 +3,11 @@
 //:
 // \file expatpp parser to parse bpro process parameter files of bvxm worlds in order to create them outside bpro processes
 
-#include <expatpplib.h>
 #include <string>
-#include <vcl_compiler.h>
 #include <iostream>
 #include <sstream>
+#include <expatpplib.h>
+#include <vcl_compiler.h>
 // bvxm files
 #include <bvxm/bvxm_world_params.h>
 

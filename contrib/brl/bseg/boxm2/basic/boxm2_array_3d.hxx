@@ -5,10 +5,9 @@
 //:
 // \file
 
+#include <iostream>
 #include "boxm2_array_3d.h"
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 
 //--------------------------------------------------------------
 //

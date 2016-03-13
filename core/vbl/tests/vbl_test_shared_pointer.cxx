@@ -1,10 +1,10 @@
 /*
   fsm
 */
+#include <iostream>
 #include <testlib/testlib_test.h>
 
 #include <vcl_compiler.h>
-#include <iostream>
 #include <vbl/vbl_shared_pointer.h>
 
 #define print std::cout

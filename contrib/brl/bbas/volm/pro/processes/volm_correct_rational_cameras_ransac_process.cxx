@@ -1,4 +1,8 @@
 // This is brl/bbas/volm/pro/processes/volm_correct_rational_cameras_process.cxx
+#include <iostream>
+#include <sstream>
+#include <fstream>
+#include <iomanip>
 #include <bprb/bprb_func_process.h>
 //:
 // \file
@@ -8,12 +12,7 @@
 //
 //
 #include <bprb/bprb_parameters.h>
-#include <iostream>
-#include <sstream>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <fstream>
-#include <iomanip>
 #include <vpgl/vpgl_rational_camera.h>
 #include <vpgl/vpgl_local_rational_camera.h>
 #include <vul/vul_file.h>

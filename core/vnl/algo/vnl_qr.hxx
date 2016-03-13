@@ -6,11 +6,11 @@
 // \author Andrew W. Fitzgibbon, Oxford RRG
 // \date   08 Dec 1996
 
+#include <iostream>
+#include <complex>
 #include "vnl_qr.h"
 #include <vcl_cassert.h>
-#include <iostream>
 #include <vcl_compiler.h>
-#include <complex>
 #include <vnl/vnl_math.h>
 #include <vnl/vnl_complex.h>  // vnl_math::squared_magnitude()
 #include <vnl/vnl_matlab_print.h>

@@ -1,4 +1,8 @@
 // This is mul/clsfy/clsfy_binary_threshold_1d.cxx
+#include <string>
+#include <iostream>
+#include <vector>
+#include <cmath>
 #include "clsfy_binary_threshold_1d.h"
 //:
 // \file
@@ -7,13 +11,8 @@
 //
 //=======================================================================
 
-#include <string>
-#include <iostream>
-#include <vector>
 #include <vcl_cassert.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <cmath>
 #include <vsl/vsl_binary_io.h>
 #include <vsl/vsl_indent.h>
 #include <vnl/vnl_double_2.h>

@@ -12,9 +12,9 @@
 //                                print_greyscale_image() & print_color_image()
 // \endverbatim
 
-#include <vcl_compiler.h>
 #include <string>
 #include <fstream>
+#include <vcl_compiler.h>
 
 //: Write a PostScript file
 class vul_psfile: public std::ofstream

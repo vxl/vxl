@@ -7,12 +7,11 @@
 // \author J.L. Mundy
 // \date   06 September 2015
 //
+#include <iostream>
 #include "boxm2_vecf_articulated_params.h"
 #include "boxm2_vecf_mandible_params.h"
 #include "boxm2_vecf_cranium_params.h"
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 #include <vgl/vgl_point_3d.h>
 #include <vgl/vgl_vector_3d.h>
 #include <vgl/algo/vgl_h_matrix_3d.h>

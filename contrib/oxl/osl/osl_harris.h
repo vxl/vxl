@@ -23,11 +23,11 @@
 //   J.Mundy     Jan98  slight modified the interface to correspond to new style using parameter blocks and image dispatch
 // \endverbatim
 
-#include <vcl_compiler.h>
 #include <iostream>
 #include <iosfwd>
 #include <vector>
 #include <utility>
+#include <vcl_compiler.h>
 #include <vxl_config.h>
 #include <vil1/vil1_memory_image_of.h>
 #include <osl/osl_harris_params.h>

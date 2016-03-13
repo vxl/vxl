@@ -1,12 +1,12 @@
 // This is mul/mmn/tests/test_parse_arcs.cxx
-#include <testlib/testlib_test.h>
 #include <vector>
-#include <mmn/mmn_parse_arcs.h>
 #include <sstream>
-#include <vcl_compiler.h>
 #include <iostream>
 #include <algorithm>
 #include <iterator>
+#include <testlib/testlib_test.h>
+#include <mmn/mmn_parse_arcs.h>
+#include <vcl_compiler.h>
 
 
 void test_parse_arcs_a()

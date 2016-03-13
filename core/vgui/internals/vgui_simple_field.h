@@ -18,8 +18,8 @@
 //   13-SEP-2002  K.Y.McGaul - Converted to doxygen style comments
 // \endverbatim
 
-#include <vcl_compiler.h>
 #include <string>
+#include <vcl_compiler.h>
 #include "vgui_dialog_field.h"
 
 //: Templated fields for dialog boxes.

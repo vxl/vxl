@@ -12,9 +12,9 @@
 //   <none>
 // \endverbatim
 
-#include <vcl_compiler.h>
 #include <iostream>
 #include <iosfwd>
+#include <vcl_compiler.h>
 
 //:A block of parameters for the bapl_mi_matcher class
 // The member variable are kept public here for easy access,

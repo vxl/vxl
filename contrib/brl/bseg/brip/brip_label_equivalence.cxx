@@ -1,11 +1,10 @@
+#include <utility>
+#include <iostream>
 #include "brip_label_equivalence.h"
 //:
 // \file
 
-#include <utility>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 
 //: add a label pair equivalence
 void brip_label_equivalence::add_label_pair(unsigned la, unsigned lb)

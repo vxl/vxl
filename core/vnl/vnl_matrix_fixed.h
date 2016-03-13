@@ -26,10 +26,10 @@
 // \endverbatim
 //-----------------------------------------------------------------------------
 
-#include <cstring> // memcpy()
+#include <cstring>
+#include <iosfwd>
 #include <vcl_cassert.h>
 #include <vcl_compiler.h>
-#include <iosfwd>
 
 #include "vnl_matrix.h"
 #include "vnl_matrix_ref.h"

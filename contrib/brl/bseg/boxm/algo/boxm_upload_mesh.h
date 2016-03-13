@@ -2,6 +2,7 @@
 #define boxm_render_mesh_h_
 //:
 // \file
+#include <iostream>
 #include <boct/boct_tree.h>
 #include <boct/boct_tree_cell.h>
 #include <boxm/boxm_block.h>
@@ -12,8 +13,6 @@
 #include <vgl/vgl_intersection.h>
 #include <vgl/algo/vgl_intersection.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 
 template <class T_loc, class T_data>
 void boxm_upload_mesh_into_block(boxm_block<boct_tree<T_loc, T_data> > *block,

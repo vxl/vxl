@@ -19,8 +19,8 @@
 //   05-DEC-2002 K.Y.McGaul - Added Awf's comments from mailing list.
 // \endverbatim
 
-#include <vcl_compiler.h>
 #include <string>
+#include <vcl_compiler.h>
 #include <vgui/vgui_key.h>
 #include <vgui/vgui_button.h>
 #include <vgui/vgui_modifier.h>

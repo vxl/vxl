@@ -10,16 +10,15 @@
 // \author Peter Vanroose, K.U.Leuven, ESAT/PSI
 // \date   7 October 2002, from vepl1/examples
 //
+#include <iostream>
+#include <cstdlib>
 #include <vepl/vepl_threshold.h>
 #include <vxl_config.h> // for vxl_byte
 
 // for I/O:
 #include <vil/vil_load.h>
 #include <vil/vil_save.h>
-#include <iostream>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <cstdlib> // for atoi()
 
 int
 main(int argc, char** argv)

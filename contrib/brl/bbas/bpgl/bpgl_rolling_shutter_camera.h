@@ -7,13 +7,12 @@
 // \author Vishal Jain
 // \date Feb 08, 2011
 //
-#include <vgl/vgl_fwd.h>
-#include <vcl_compiler.h>
 #include <iostream>
-#include <iostream>
-#include <vsl/vsl_binary_io.h>
 #include <vector>
 #include <string>
+#include <vgl/vgl_fwd.h>
+#include <vcl_compiler.h>
+#include <vsl/vsl_binary_io.h>
 #include <vnl/vnl_fwd.h>
 #include <vpgl/vpgl_camera.h>
 

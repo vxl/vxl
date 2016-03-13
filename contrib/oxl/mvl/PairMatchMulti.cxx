@@ -5,13 +5,13 @@
 //:
 //  \file
 
+#include <iostream>
+#include <fstream>
+#include <utility>
 #include "PairMatchMulti.h"
 
 #include <vcl_cassert.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <fstream>
-#include <utility>
 
 #include <vbl/vbl_sparse_array_2d.h>
 #include <vnl/vnl_matrix.h>
@@ -212,7 +212,6 @@ bool PairMatchMulti::load(char const* filename)
 }
 
 #ifdef TEST_PairMatchMulti
-#include <iostream>
 
 main()
 {

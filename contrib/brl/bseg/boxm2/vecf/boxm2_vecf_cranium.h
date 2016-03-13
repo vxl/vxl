@@ -7,10 +7,9 @@
 // \author J.L. Mundy
 // \date   6 Nov 2015
 //
-#include <vcl_compiler.h>
-#include <iostream>
 #include <iostream>
 #include <string>
+#include <vcl_compiler.h>
 #include <vgl/vgl_pointset_3d.h>
 #include <vgl/vgl_box_3d.h>
 #include <bvgl/bvgl_grid_index_3d.h>

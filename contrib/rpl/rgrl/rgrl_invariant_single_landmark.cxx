@@ -1,12 +1,12 @@
+#include <vector>
+#include <iostream>
+#include <algorithm>
 #include "rgrl_invariant_single_landmark.h"
 #include "rgrl_trans_similarity.h"
 #include "rgrl_scale.h"
 #include "rgrl_cast.h"
 
-#include <vector>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <algorithm>
 #include <vcl_cassert.h>
 
 #include <vnl/vnl_math.h>

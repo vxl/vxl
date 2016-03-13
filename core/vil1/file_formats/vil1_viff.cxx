@@ -3,6 +3,8 @@
 #pragma implementation
 #endif
 
+#include <iostream>
+#include <cstring>
 #include "vil1_viff.h"
 extern "C" {
 #include "vil1_viff_support.h"
@@ -12,8 +14,6 @@ extern "C" {
 char const* vil1_viff_format_tag = "viff";
 
 #include <vcl_compiler.h>
-#include <iostream>
-#include <cstring>
 
 #include <vil1/vil1_stream.h>
 #include <vil1/vil1_image_impl.h>

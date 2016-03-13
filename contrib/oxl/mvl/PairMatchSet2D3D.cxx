@@ -3,13 +3,12 @@
 #pragma implementation
 #endif
 
+#include <iostream>
 #include "PairMatchSet2D3D.h"
 #include <mvl/HomgInterestPointSet.h>
 #include <mvl/PairMatchSetCorner.h>
 #include <mvl/ProjStructure.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 
 // Default ctor
 PairMatchSet2D3D::PairMatchSet2D3D()

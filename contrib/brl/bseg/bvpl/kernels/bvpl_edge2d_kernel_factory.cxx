@@ -1,9 +1,9 @@
+#include <iostream>
+#include <algorithm>
 #include "bvpl_edge2d_kernel_factory.h"
 //:
 // \file
 #include <vcl_compiler.h>
-#include <iostream>
-#include <algorithm>
 #include <vnl/vnl_math.h>
 #include <vnl/vnl_float_3.h>
 

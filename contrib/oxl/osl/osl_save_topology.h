@@ -9,9 +9,9 @@
 // .FILE osl_save_topology.cxx
 // \author fsm
 
-#include <vcl_compiler.h>
 #include <iostream>
 #include <iosfwd>
+#include <vcl_compiler.h>
 #include <osl/osl_edge.h>
 
 void osl_save_topology(char const *, std::list<osl_edge*> const &, std::list<osl_vertex*> const &);

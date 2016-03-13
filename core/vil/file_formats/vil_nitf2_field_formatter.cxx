@@ -2,13 +2,13 @@
 // Stellar Science Ltd. Co. (stellarscience.com) for
 // Air Force Research Laboratory, 2005.
 
+#include <iomanip>
+#include <iostream>
+#include <cstring>
 #include "vil_nitf2_field_formatter.h"
 #include "vil_nitf2_field.h"
 
 // not used? #include <vcl_compiler.h>
-#include <iomanip>
-#include <iostream>
-#include <cstring> // for std::strlen()
 
 //==============================================================================
 // Class vil_nitf2_field_formatter

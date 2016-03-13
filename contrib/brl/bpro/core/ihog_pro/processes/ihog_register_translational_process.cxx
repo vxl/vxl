@@ -1,12 +1,11 @@
 // This is brl/bpro/core/ihog_pro/processes/ihog_register_translational_process.cxx
+#include <iostream>
 #include <bprb/bprb_func_process.h>
 //:
 // \file
 // \brief A process to register two images by finding the best translational mapping.
 
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 #include <ihog/ihog_minimizer.h>
 #include <ihog/ihog_world_roi.h>
 #include <vil/vil_convert.h>

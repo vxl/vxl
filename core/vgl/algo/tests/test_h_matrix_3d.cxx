@@ -9,13 +9,13 @@
 //                               all basic constructors (not for point list match).
 // \endverbatim
 
-#include <testlib/testlib_test.h>
-#include <vgl/algo/vgl_h_matrix_3d.h>
 #include <cmath>
 #include <algorithm>
 #include <iostream>
-#include <vcl_compiler.h>
 #include <sstream>
+#include <testlib/testlib_test.h>
+#include <vgl/algo/vgl_h_matrix_3d.h>
+#include <vcl_compiler.h>
 #include <vgl/vgl_distance.h>
 #include <vgl/vgl_closest_point.h>
 #include <vgl/vgl_homg_point_3d.h>

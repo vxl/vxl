@@ -1,4 +1,5 @@
 // This is core/vbl/io/tests/golden_test_vbl_io.cxx
+#include <string>
 #include <testlib/testlib_test.h>
 //:
 // \file
@@ -24,7 +25,6 @@
 #include <vbl/io/vbl_io_bounding_box.h>
 
 #include <vcl_compiler.h>
-#include <string>
 #include <testlib/testlib_root_dir.h>
 
 static void golden_test_vbl_io(bool save_file)

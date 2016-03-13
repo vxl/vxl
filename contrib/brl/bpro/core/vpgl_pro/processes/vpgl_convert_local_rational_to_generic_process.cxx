@@ -1,12 +1,11 @@
 // This is brl/bpro/core/vpgl_pro/processes/vpgl_convert_local_rational_to_generic_process.cxx
+#include <iostream>
 #include <bprb/bprb_func_process.h>
 //:
 // \file
 // \brief A process to convert a local_rational_camera to a generic_camera, using user-defined min and max z planes.
 
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 #include <vpgl/vpgl_generic_camera.h>
 #include <vpgl/algo/vpgl_camera_compute.h>
 #include <vpgl/algo/vpgl_camera_convert.h>

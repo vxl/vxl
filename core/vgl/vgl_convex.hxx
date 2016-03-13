@@ -3,11 +3,11 @@
 #define vgl_convex_hxx_
 //:
 // \file
-#include "vgl_convex.h"
-#include <vcl_compiler.h>
 #include <limits>
 #include <cmath>
 #include <list>
+#include "vgl_convex.h"
+#include <vcl_compiler.h>
 
 
 //: Calculate the negative cosine of the angle from dir to next - current.

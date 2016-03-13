@@ -6,10 +6,10 @@
 // \author Tim Cootes
 
 #include <iostream>
+#include <ctime>
 #include <vxl_config.h> // for vxl_byte
 #include <vil/vil_image_view.h>
 #include <vcl_compiler.h>
-#include <ctime>
 #include <mbl/mbl_stats_1d.h>
 #include <vcl_cassert.h>
 

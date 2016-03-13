@@ -13,13 +13,12 @@
 // Do not remove the following statement
 // Approved for Public Release, Distribution Unlimited (DISTAR Case 12529)
 //
+#include <iostream>
 #include <bsta/bsta_von_mises.h>
 #include <bsta/bsta_parzen.h>
 #include <vsl/vsl_binary_io.h>
 #include <vnl/io/vnl_io_vector_fixed.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 
 //: Binary save bsta_von_mises to stream.
 template <class T, unsigned n>

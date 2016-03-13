@@ -3,12 +3,11 @@
 //:
 // \file
 
+#include <string>
+#include <iostream>
 #include "bvxm_voxel_storage_disk.h"
 //
-#include <string>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 #ifdef BVXM_USE_FSTREAM64
 #include <vil/vil_stream_fstream64.h>
 #else

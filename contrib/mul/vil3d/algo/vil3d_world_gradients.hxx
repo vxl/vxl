@@ -6,13 +6,13 @@
 // \brief Given image gradients compute world gradients and gradient magnitude
 // \author Tim Cootes
 
+#include <iostream>
+#include <cmath>
 #include "vil3d_world_gradients.h"
 #include <vil3d/algo/vil3d_fill_border.h>
 #include <vil3d/vil3d_transform.h>
 #include <vil3d/vil3d_plane.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <cmath>
 #include <vcl_cassert.h>
 
 //: Functor class to scale by s

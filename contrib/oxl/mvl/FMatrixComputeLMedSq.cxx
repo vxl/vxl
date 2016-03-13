@@ -1,11 +1,11 @@
+#include <iostream>
+#include <algorithm>
 #include "FMatrixComputeLMedSq.h"
 #include <mvl/HomgOperator2D.h>
 #include <vgl/vgl_homg_point_2d.h>
 #include <vgl/vgl_homg_line_2d.h>
 #include <vgl/algo/vgl_homg_operators_2d.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <algorithm>
 
 FMatrixComputeLMedSq::FMatrixComputeLMedSq(bool rank2_truncate, int size)
 {

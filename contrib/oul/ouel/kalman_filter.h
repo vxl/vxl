@@ -31,10 +31,10 @@
 // \author Brendan McCane
 //----------------------------------------------------------------------
 
-#include <vnl/vnl_matrix.h>
-#include <vcl_compiler.h>
 #include <iostream>
 #include <iosfwd>
+#include <vnl/vnl_matrix.h>
+#include <vcl_compiler.h>
 
 class KalmanFilter
 {

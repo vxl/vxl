@@ -1,12 +1,11 @@
 // This is brl/bbas/imesh/imesh_operations.cxx
+#include <iostream>
+#include <map>
 #include "imesh_operations.h"
 //:
 // \file
 
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
-#include <map>
 #include <vcl_cassert.h>
 #include <vgl/vgl_point_2d.h>
 #include <vgl/vgl_point_3d.h>

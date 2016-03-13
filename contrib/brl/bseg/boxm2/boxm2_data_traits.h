@@ -8,11 +8,10 @@
 // \date nov 17, 2010
 
 #include <string>
+#include <iostream>
+#include <cstddef>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <cstddef> // for std::size_t
 #include <vnl/vnl_vector_fixed.h>
-#include <iostream>
 
 #include "boxm2_normal_albedo_array.h"
 #include "boxm2_feature_vector.h"

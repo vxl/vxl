@@ -1,6 +1,6 @@
+#include <iostream>
 #include <testlib/testlib_test.h>
 #include <vcl_compiler.h>
-#include <iostream>
 
 #include <vpgl/vpgl_fundamental_matrix.h>
 

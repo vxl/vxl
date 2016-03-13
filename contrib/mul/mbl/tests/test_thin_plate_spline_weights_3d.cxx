@@ -1,7 +1,6 @@
 // This is mul/mbl/tests/test_thin_plate_spline_weights_3d.cxx
+#include <iostream>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 #include <mbl/mbl_thin_plate_spline_weights_3d.h>
 #include <vnl/vnl_random.h>
 #include <vgl/vgl_point_3d.h>

@@ -6,10 +6,10 @@
 // \brief   See vgui_matrix_state.h for a description of this file.
 
 
+#include <cstdlib>
+#include <iostream>
 #include "vgui_matrix_state.h"
 #include <vcl_compiler.h>
-#include <cstdlib> // std::abort()
-#include <iostream>
 #include <vnl/vnl_matrix_fixed.h>
 #include <vnl/vnl_matlab_print.h>
 #include <vgui/vgui_gl.h>

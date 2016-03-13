@@ -1,8 +1,8 @@
+#include <iostream>
+#include <cmath>
 #include "brip_phase_correlation.h"
 #include "brip_vil_float_ops.h"
 #include <vcl_compiler.h>
-#include <iostream>
-#include <cmath>
 #include <vnl/vnl_math.h>
 #include <vil/vil_math.h>
 #include <vnl/vnl_random.h>

@@ -15,10 +15,10 @@
 // \endverbatim
 //-----------------------------------------------------------------------------
 
+#include <map>
 #include <vgui/vgui_menu.h>
 #include <vgui/vgui_command.h>
 #include <vcl_compiler.h>
-#include <map>
 
 #include <QMenu>
 #include <QObject>

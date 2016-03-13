@@ -3,14 +3,14 @@
 //:
 // \file
 
-#include "bwm_io_structs.h"
-
-#include <vcl_compiler.h>
 #include <iostream>
 #include <iosfwd>
 #include <string>
 #include <vector>
 #include <utility>
+#include "bwm_io_structs.h"
+
+#include <vcl_compiler.h>
 
 #include <vbl/vbl_ref_count.h>
 

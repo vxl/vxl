@@ -10,10 +10,10 @@
 // \date   19 Dec 99
 // \brief  The GTK implementation of vgui_adaptor.
 
+#include <map>
 #include <vgui/vgui_adaptor.h>
 #include <vgui/internals/vgui_adaptor_mixin.h>
 #include <vcl_compiler.h>
-#include <map>
 #include <gtk/gtk.h>
 
 struct vgui_overlay_helper;

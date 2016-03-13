@@ -1,9 +1,9 @@
+#include <iostream>
+#include <ostream>
 #include "rsdl_bounding_box.h"
 
 #include <vcl_cassert.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <ostream>
 
 rsdl_bounding_box::rsdl_bounding_box( const rsdl_point& min_point,
                                       const rsdl_point& max_point )

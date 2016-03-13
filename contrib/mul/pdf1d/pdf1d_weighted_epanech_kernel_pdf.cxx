@@ -5,13 +5,13 @@
 // \brief Univariate Weighted Epanechnikov kernel PDF
 // \author Ian Scott
 
-#include "pdf1d_weighted_epanech_kernel_pdf.h"
-
 #include <cstdlib>
 #include <string>
-#include <vcl_compiler.h>
 #include <iostream>
 #include <cmath>
+#include "pdf1d_weighted_epanech_kernel_pdf.h"
+
+#include <vcl_compiler.h>
 
 #include <pdf1d/pdf1d_weighted_epanech_kernel_sampler.h>
 #include <pdf1d/pdf1d_sampler.h>

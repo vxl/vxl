@@ -5,13 +5,13 @@
 // \author Barry Skellern
 // \brief Class representing a binary mask, and related functions
 
-#include "mbl_mask.h"
 #include <set>
 #include <map>
-#include <vcl_compiler.h>
 #include <iostream>
 #include <fstream>
 #include <string>
+#include "mbl_mask.h"
+#include <vcl_compiler.h>
 #include <vul/vul_string.h>
 #include <mbl/mbl_exception.h>
 

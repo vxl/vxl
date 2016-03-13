@@ -1,7 +1,6 @@
+#include <iostream>
 #include "brip_region_pixel.h"
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 
 std::ostream& operator<<(std::ostream& s, brip_region_pixel const& sd)
 {

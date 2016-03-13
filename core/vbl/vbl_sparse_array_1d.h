@@ -16,9 +16,9 @@
 // \endverbatim
 //---------------------------------------------------------------------------
 
+#include <iostream>
 #include <vbl/vbl_sparse_array_base.h>
 #include <vcl_compiler.h>
-#include <iostream>
 
 //: Sparse array allowing space efficient access of the form s[3000] = 2;
 template <class T>

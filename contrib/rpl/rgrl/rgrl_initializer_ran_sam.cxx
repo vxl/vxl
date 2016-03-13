@@ -1,4 +1,6 @@
 // This is rpl/rgrl/rgrl_initializer_ran_sam.cxx
+#include <iostream>
+#include <cmath>
 #include "rgrl_initializer_ran_sam.h"
 //:
 // \file
@@ -6,8 +8,6 @@
 // \date   Sep 2003
 
 #include <vcl_compiler.h>
-#include <iostream>
-#include <cmath>
 #include <vcl_cassert.h>
 
 #include "rgrl_match_set.h"

@@ -11,10 +11,10 @@
 //
 //-----------------------------------------------------------------------------
 
-#include "vidl_ffmpeg_pixel_format.h"
 #include <cstring>
-#include <vcl_compiler.h>
 #include <iostream>
+#include "vidl_ffmpeg_pixel_format.h"
+#include <vcl_compiler.h>
 
 
 #ifdef LIBAVFORMAT_BUILD

@@ -1,13 +1,12 @@
 //:
 // \file
+#include <iostream>
+#include <cmath>
+#include <sstream>
+#include <string>
 #include <testlib/testlib_test.h>
 #include <brad/brad_image_metadata.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <cmath>
-#include <iostream>
-#include <sstream>
-#include <string>
 
 //: Test the image_metadata class
 static void test_image_metadata()

@@ -14,11 +14,11 @@
 //                                as signalled by Kenneth Fritzsche and Gehua Yang.
 // \endverbatim
 
+#include <iostream>
 #include <testlib/testlib_test.h>
 #include <vgl/vgl_polygon.h>
 #include <vgl/vgl_polygon_scan_iterator.h>
 #include <vcl_compiler.h>
-#include <iostream>
 
 typedef vgl_polygon<float>::point_t        Point_type;
 typedef vgl_polygon<float>                 Polygon_type;

@@ -17,6 +17,9 @@
 //   Peter Vanroose, Feb.2004 - replaced vil1_load by vil_load
 // \endverbatim
 //
+#include <iostream>
+#include <cstdlib>
+#include <cstring>
 #include <vnl/vnl_matrix.h>
 
 #include <vipl/vipl_with_vnl_matrix/accessors/vipl_accessors_vnl_matrix.h>
@@ -29,11 +32,7 @@ typedef vnl_matrix<vxl_byte> img_type;
 #include <vil/vil_image_view.h>
 #include <vil/vil_load.h>
 #include <vil/vil_save.h>
-#include <iostream>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <cstdlib> // for atoi()
-#include <cstring> // for memcpy()
 
 int
 main(int argc, char** argv)

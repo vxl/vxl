@@ -22,13 +22,13 @@
 // \endverbatim
 //*****************************************************************************
 
+#include <vector>
+#include <iostream>
+#include <iosfwd>
 #include <vsol/vsol_volume_3d.h>
 #include <vsol/vsol_point_3d.h>
 #include <vsol/vsol_point_3d_sptr.h>
-#include <vector>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iosfwd>
 #include <vsl/vsl_binary_io.h>
 class vsol_tetrahedron;
 

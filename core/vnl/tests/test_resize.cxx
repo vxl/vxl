@@ -1,8 +1,8 @@
 // This is core/vnl/tests/test_resize.cxx
+#include <iostream>
 #include <testlib/testlib_test.h>
 // \author fsm
 #include <vcl_compiler.h>
-#include <iostream>
 #include <vnl/vnl_vector.h>
 #include <vnl/vnl_matrix.h>
 

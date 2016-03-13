@@ -4,10 +4,10 @@
 #pragma implementation
 #endif
 
+#include <iostream>
 #include "vil_stream_fstream64.h"
 #include <vcl_cassert.h>
 #include <vcl_compiler.h>
-#include <iostream> //for std::cerr
 
 #if defined(WIN32)
 #include <io.h>

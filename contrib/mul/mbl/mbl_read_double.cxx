@@ -28,11 +28,10 @@
 //    double new_scale = mbl_read_double("Scale?",1.00,min_scale,max_scale);
 // \endcode
 
+#include <iostream>
+#include <cstdio>
 #include "mbl_read_double.h"
 #include <vcl_compiler.h>
-#include <iostream>
-#include <cstdio> // for fgets()
-#include <iostream>
 
 const int MAX_LEN = 40;
 

@@ -3,10 +3,10 @@
 #define vpgl_local_rational_camera_hxx_
 //:
 // \file
-#include "vpgl_local_rational_camera.h"
-#include <vcl_compiler.h>
 #include <vector>
 #include <fstream>
+#include "vpgl_local_rational_camera.h"
+#include <vcl_compiler.h>
 #include <vgl/vgl_point_2d.h>
 #include <vgl/vgl_point_3d.h>
 //--------------------------------------

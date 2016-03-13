@@ -5,12 +5,12 @@
 // \brief Builder for mfpf_ssd_vec_cost objects.
 // \author Tim Cootes
 
-#include <mfpf/mfpf_vec_cost_builder.h>
-#include <vnl/vnl_vector.h>
-#include <vcl_compiler.h>
 #include <iostream>
 #include <iosfwd>
 #include <vector>
+#include <mfpf/mfpf_vec_cost_builder.h>
+#include <vnl/vnl_vector.h>
+#include <vcl_compiler.h>
 
 //: Builder for mfpf_ssd_vec_cost objects.
 //  Computes mean and weights given the training data.

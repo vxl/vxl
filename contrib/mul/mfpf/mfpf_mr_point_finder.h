@@ -5,12 +5,12 @@
 // \author Tim Cootes
 // \brief Multi-res point finder.  Searches at range of scales.
 
+#include <iostream>
+#include <iosfwd>
 #include <mbl/mbl_cloneable_ptr.h>
 #include <mfpf/mfpf_point_finder.h>
 #include <vcl_cassert.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iosfwd>
 
 class vimt_image_pyramid;
 

@@ -1,4 +1,6 @@
 // This is mul/mbl/mbl_stats_1d.cxx
+#include <iostream>
+#include <cmath>
 #include "mbl_stats_1d.h"
 //:
 // \file
@@ -6,9 +8,6 @@
 // \author Tim Cootes
 
 #include <vcl_compiler.h>
-#include <iostream>
-#include <cmath>
-#include <iostream>
 
 mbl_stats_1d::mbl_stats_1d()
 {

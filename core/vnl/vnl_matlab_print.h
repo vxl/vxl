@@ -9,8 +9,8 @@
 //  \brief Print matrices and vectors in nice MATLAB format.
 //  \author fsm, from awf's MatOps code.
 
-#include <vcl_compiler.h>
 #include <iosfwd>
+#include <vcl_compiler.h>
 #include <vnl/vnl_fwd.h>
 
 #include <vnl/vnl_matlab_print_format.h>

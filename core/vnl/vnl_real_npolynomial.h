@@ -28,12 +28,12 @@
 
 //-----------------------------------------------------------------------------
 
-#include <vnl/vnl_vector.h>
-#include <vnl/vnl_matrix.h>
 #include <vector>
 #include <string>
-#include <vcl_compiler.h>
 #include <iosfwd>
+#include <vnl/vnl_vector.h>
+#include <vnl/vnl_matrix.h>
+#include <vcl_compiler.h>
 
 //: real polynomial in N variables.
 //    vnl_real_npolynomial represents a polynomial in multiple variables.

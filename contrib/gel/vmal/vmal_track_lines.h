@@ -15,9 +15,9 @@
 //   Feb.2002 - Peter Vanroose - brief doxygen comment placed on single line
 // \endverbatim
 //--------------------------------------------------------------------------------
-#include <vcl_compiler.h>
 #include <iostream>
 #include <vector>
+#include <vcl_compiler.h>
 #include <vxl_config.h>
 #include <vtol/vtol_edge_2d_sptr.h>
 #include <vmal/vmal_multi_view_data_edge_sptr.h>

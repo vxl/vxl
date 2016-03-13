@@ -1,4 +1,6 @@
 // This is brl/bseg/boxm/algo/pro/processes/boxm_replace_const_app_process.cxx
+#include <iostream>
+#include <fstream>
 #include <bprb/bprb_func_process.h>
 //:
 // \file
@@ -7,8 +9,6 @@
 // \date July 28, 2009
 
 #include <vcl_compiler.h>
-#include <iostream>
-#include <fstream>
 
 #include <boxm/boxm_scene_base.h>
 #include <boxm/boxm_scene.h>

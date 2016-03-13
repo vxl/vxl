@@ -14,12 +14,11 @@
 //   Ozge C. Ozcanli - Feb 03, 2009 - converted process-class to functions which is the new design for bprb processes.
 // \endverbatim
 
-#include <bprb/bprb_func_process.h>
-#include <bprb/bprb_parameters.h>
-#include <iostream>
-#include <vcl_compiler.h>
 #include <iostream>
 #include <fstream>
+#include <bprb/bprb_func_process.h>
+#include <bprb/bprb_parameters.h>
+#include <vcl_compiler.h>
 #include <brdb/brdb_value.h>
 #include <vil/vil_image_view.h>
 #include <vil/vil_convert.h>

@@ -4,14 +4,14 @@
 // \file
 // \brief  boxm2_vecf_ocl_head_model static model of human head (no eyes)
 //
+#include <iostream>
+#include <string>
+#include <vector>
 #include <boxm2/boxm2_block.h>
 #include <boxm2/boxm2_scene.h>
 #include <boxm2/boxm2_data.h>
 #include <boxm2/ocl/boxm2_opencl_cache.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <string>
-#include <vector>
 #include "../boxm2_vecf_articulated_scene.h"
 #include "../boxm2_vecf_articulated_params.h"
 #include "boxm2_vecf_ocl_transform_scene.h"

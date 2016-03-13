@@ -13,12 +13,11 @@
 //                                    add probability integration over a box
 // \endverbatim
 
+#include <iostream>
 #include "bsta_gaussian.h"
 #include <vnl/vnl_vector_fixed.h>
 #include <vnl/vnl_matrix_fixed.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 
 //: A Gaussian distribution with a full covariance matrix
 template <class T, unsigned n>

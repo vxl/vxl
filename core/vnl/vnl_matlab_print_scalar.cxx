@@ -1,12 +1,13 @@
 // This is core/vnl/vnl_matlab_print_scalar.cxx
 
+#include <cstdio>
+#include <cstdlib>
+#include <cstring>
+#include <complex>
+#include <iostream>
 #include "vnl_matlab_print_scalar.h"
 
-#include <cstdio>  // sprintf()
 #include <vcl_compiler.h>
-#include <cstdlib> // abort()
-#include <cstring> // strlen()
-#include <complex>
 
 void vnl_matlab_print_scalar(int v,
                              char *buf,
@@ -230,7 +231,6 @@ void vnl_matlab_print_scalar(std::complex<long double> v,
 }
 
 
-#include <iostream>
 template <class T>
 std::ostream &vnl_matlab_print_scalar(std::ostream &s,
                                      T value,

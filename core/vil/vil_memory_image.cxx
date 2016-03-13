@@ -11,10 +11,10 @@
 //   23 Oct.2003 - Peter Vanroose - Added support for 64-bit int pixels
 // \endverbatim
 
+#include <cstdlib>
 #include "vil_memory_image.h"
 #include <vcl_cassert.h>
 #include <vcl_compiler.h>
-#include <cstdlib>
 #include <vxl_config.h> // for vxl_uint_32 etc.
 #include <vil/vil_image_view.h>
 #include <vil/vil_copy.h>

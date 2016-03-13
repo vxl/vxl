@@ -1,11 +1,11 @@
 #ifndef brad_phongs_model_est_h_
 #define brad_phongs_model_est_h_
 
+#include <iostream>
+#include <vector>
 #include <vnl/vnl_least_squares_function.h>
 #include <vnl/vnl_double_3.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <vector>
 class brad_phongs_model
 {
  public:

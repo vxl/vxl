@@ -20,10 +20,10 @@
 //   23 Oct.2003 - Peter Vanroose - made the program more readable by adding overloads for almost_equal() for all geom types
 // \endverbatim
 
-#include <vcl_compiler.h>
 #include <string>
 #include <iostream>
-#include <cstdlib> // for std::exit()
+#include <cstdlib>
+#include <vcl_compiler.h>
 #include <vsl/vsl_binary_io.h>
 #include <vsl/vsl_indent.h>
 #include <testlib/testlib_root_dir.h>

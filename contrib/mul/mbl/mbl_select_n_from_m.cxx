@@ -3,11 +3,10 @@
 // \brief A class which returns an N element subset of the integers [0..M-1]
 // \author Tim Cootes
 
+#include <iostream>
 #include "mbl_select_n_from_m.h"
 #include <vcl_cassert.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 
 mbl_select_n_from_m::mbl_select_n_from_m()
  : n_(0), m_(0), is_done_(false), use_random_(false)

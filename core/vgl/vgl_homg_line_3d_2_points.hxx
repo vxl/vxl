@@ -4,10 +4,10 @@
 //:
 // \file
 
+#include <iostream>
 #include "vgl_homg_line_3d_2_points.h"
 #include "vgl_tolerance.h"
 #include <vcl_compiler.h>
-#include <iostream>
 #include <vcl_cassert.h>
 
 //***************************************************************************

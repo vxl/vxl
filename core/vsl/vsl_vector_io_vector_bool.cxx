@@ -4,10 +4,10 @@
 // \author Kevin de Souza (based on vsl_vector_io_bool.cxx by Ian Scott)
 //
 
+#include <iostream>
 #include "vsl_vector_io.h"
 #include <vsl/vsl_binary_io.h>
 #include <vcl_compiler.h>
-#include <iostream>
 #include <vcl_deprecated.h>
 
 //====================================================================================

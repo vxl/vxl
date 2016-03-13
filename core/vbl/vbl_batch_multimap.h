@@ -8,13 +8,13 @@
 // \author Ian Scott, Imorphics 2011
 
 
-#include <vcl_cassert.h>
 #include <vector>
-#include <vcl_compiler.h>
-#include <cstddef> // for ptrdiff_t and size_t
+#include <cstddef>
 #include <functional>
 #include <utility>
 #include <algorithm>
+#include <vcl_cassert.h>
+#include <vcl_compiler.h>
 
 namespace
 {

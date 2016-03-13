@@ -1,8 +1,8 @@
 #ifndef bwm_io_kml_camera_h_
 #define bwm_io_kml_camera_h_
-#include <vcl_compiler.h>
 #include <iostream>
 #include <string>
+#include <vcl_compiler.h>
 class bwm_io_kml_camera
 {
  public:

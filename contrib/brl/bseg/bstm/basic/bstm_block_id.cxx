@@ -1,9 +1,9 @@
+#include <iostream>
+#include <sstream>
 #include "bstm_block_id.h"
 //:
 // \file
 #include <vcl_compiler.h>
-#include <iostream>
-#include <sstream>
 
 //: scene output stream operator
 std::ostream& operator <<(std::ostream &s, bstm_block_id const& id)

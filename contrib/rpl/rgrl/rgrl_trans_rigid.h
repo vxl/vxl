@@ -5,10 +5,10 @@
 // \author Tomasz Malisiewicz
 // \date   March 2004
 
-#include "rgrl_transformation.h"
-#include <vcl_compiler.h>
 #include <iostream>
 #include <iosfwd>
+#include "rgrl_transformation.h"
+#include <vcl_compiler.h>
 
 //: Represents a rigid transformation.
 //

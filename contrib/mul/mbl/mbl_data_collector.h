@@ -10,9 +10,9 @@
 // \author Tim Cootes
 // \author Ian Scott
 
-#include <vcl_compiler.h>
 #include <iostream>
 #include <vector>
+#include <vcl_compiler.h>
 #include <mbl/mbl_data_collector_base.h>
 #include <mbl/mbl_data_wrapper.h>
 

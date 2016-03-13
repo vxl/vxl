@@ -12,15 +12,15 @@
 //
 //////////////////////////////////////////////////////////////////////
 
-#include <vbl/vbl_ref_count.h>
-
 #include <vector>
 #include <string>
 #include <map>
 #include <utility>
-#include <vcl_compiler.h>
 #include <iostream>
 #include <iosfwd>
+#include <vbl/vbl_ref_count.h>
+
+#include <vcl_compiler.h>
 #include <vgl/vgl_point_3d.h>
 
 //: Correspondence between 3-d points, each in different bwm sites.

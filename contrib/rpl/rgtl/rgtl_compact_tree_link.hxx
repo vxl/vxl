@@ -11,11 +11,11 @@
 // \author Brad King
 // \date December 2006
 
+#include <iostream>
+#include <cstddef>
 #include <vcl_compiler.h>
 #include "rgtl_serialize_access.hxx"
 #include <vcl_compiler.h>
-#include <iostream>
-#include <cstddef>
 
 //: Store a flagged index for rgtl_compact_tree.
 //

@@ -1,7 +1,7 @@
 #include <vector>
-#include <vcl_compiler.h>
 #include <iostream>
 #include <cmath>
+#include <vcl_compiler.h>
 #include <testlib/testlib_test.h>
 #include <vpgl/vpgl_perspective_camera.h>
 #include <bpgl/algo/bpgl_interpolate.h>

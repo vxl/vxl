@@ -1,17 +1,16 @@
 //:
 // \file
+#include <iostream>
+#include <cmath>
+#include <vector>
 #include <testlib/testlib_test.h>
 #include <brad/brad_phongs_model_est.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <cmath>
 #include <vnl/vnl_double_3.h>
 #include <vnl/vnl_random.h>
 #include <vnl/vnl_math.h>
 #include <vnl/vnl_identity_3x3.h>
 #include <vnl/algo/vnl_levenberg_marquardt.h>
-#include <iostream>
-#include <vector>
 
 //: Test the sun_pos class
 static void test_phongs_model_est()

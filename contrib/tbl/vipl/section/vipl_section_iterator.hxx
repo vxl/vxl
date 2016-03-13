@@ -4,14 +4,13 @@
 //:
 //  \file
 
+#include <iostream>
 #include "vipl_section_iterator.h"
 #include <vipl/section/vipl_section_container.h>
 #include <vipl/section/vipl_section_descriptor.h>
 #include <vipl/filter/vipl_filter_abs.h> // for default def of FILTER_IMPTR_INC_REFCOUNT
 #if 0
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream> // for error message stuff
 #endif
 
 #ifdef VCL_VC

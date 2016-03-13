@@ -1,10 +1,9 @@
+#include <iostream>
+#include <sstream>
 #include <testlib/testlib_test.h>
 #include <bxml/bxml_read.h>
 #include <bxml/bxml_write.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
-#include <sstream>
 
 
 bxml_document make_simple_doc()

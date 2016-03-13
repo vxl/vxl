@@ -11,11 +11,11 @@
 //
 //-----------------------------------------------------------------------------
 
+#include <iostream>
+#include <vector>
 #include <vbl/vbl_sparse_array_3d.h>
 #include <vnl/vnl_double_3.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <vector>
 
 class VoxmapPoints
 {

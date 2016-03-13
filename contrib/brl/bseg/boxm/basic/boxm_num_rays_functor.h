@@ -2,10 +2,9 @@
 #define boxm_num_rays_functor_h
 //:
 // \file
+#include <iostream>
 #include <boxm/boxm_scene.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 #include <bsta/bsta_histogram.h>
 #include <boxm/boxm_apm_traits.h>
 #include "boxm_raytrace_function.h"

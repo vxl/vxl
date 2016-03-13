@@ -3,6 +3,7 @@
 
 #include <vector>
 #include <new>
+#include <iostream>
 
 #include <boct/boct_tree.h>
 #include <boxm/boxm_scene.h>
@@ -15,8 +16,6 @@
 #include <bsta/bsta_attributes.h>
 
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 
 template <class T_loc, class T_data>
 void boxm_save_block_raw(boxm_scene<boct_tree<T_loc, T_data > > &scene,

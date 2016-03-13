@@ -1,12 +1,12 @@
 #include <string>
+#include <iostream>
+#include <cstring>
 #include <vgui/vgui.h>
 #include <vgui/vgui_adaptor.h>
 #include <vgui/vgui_window.h>
 #include <segv/segv_vil_menus.h>
 #include <segv/segv_vil_segmentation_manager.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <cstring>
 
 int main(int argc, char* argv[])
 {

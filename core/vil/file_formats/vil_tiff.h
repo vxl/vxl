@@ -25,10 +25,10 @@
 //   KNOWN BUG - bool pixel format write - crashes due to incorrect block size
 // \endverbatim
 
-#include <vcl_compiler.h>
 #include <vector>
-#include <vcl_cassert.h>
 #include <iostream>
+#include <vcl_compiler.h>
+#include <vcl_cassert.h>
 #include <vil/vil_config.h>
 #include <vil/vil_file_format.h>
 #include <vil/vil_image_resource.h>

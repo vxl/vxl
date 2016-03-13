@@ -16,10 +16,10 @@
 // \endverbatim
 //=======================================================================
 
-#include <vpdfl/vpdfl_gaussian_builder.h>
-#include <vcl_compiler.h>
 #include <iostream>
 #include <iosfwd>
+#include <vpdfl/vpdfl_gaussian_builder.h>
+#include <vcl_compiler.h>
 
 //=======================================================================
 

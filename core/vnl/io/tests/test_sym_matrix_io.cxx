@@ -1,6 +1,6 @@
 // This is core/vnl/io/tests/test_sym_matrix_io.cxx
-#include <vcl_compiler.h>
 #include <iostream>
+#include <vcl_compiler.h>
 #include <vnl/vnl_sym_matrix.h>
 #include <vnl/io/vnl_io_sym_matrix.h>
 #include <testlib/testlib_test.h>

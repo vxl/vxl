@@ -1,9 +1,9 @@
+#include <iostream>
+#include <cmath>
 #include "utils.h"
 //
 #include <testlib/testlib_test.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <cmath>
 
 static const double TOL = 480 * .2;
 

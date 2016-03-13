@@ -13,10 +13,10 @@
 //         This process is moved from bvxm_pro to sdet_pro
 // \endverbatim
 
-#include <bprb/bprb_func_process.h>
-#include <vcl_compiler.h>
 #include <iostream>
 #include <string>
+#include <bprb/bprb_func_process.h>
+#include <vcl_compiler.h>
 
 //: global variables
 namespace sdet_detect_edge_tangent_process_globals

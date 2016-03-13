@@ -1,4 +1,6 @@
 // This is brl/bpro/core/bbas_pro/processes/imesh_ply_bbox_process.cxx
+#include <iostream>
+#include <fstream>
 #include <bprb/bprb_func_process.h>
 //:
 // \file
@@ -8,8 +10,6 @@
 // \date jan 26, 2011
 
 #include <vcl_compiler.h>
-#include <iostream>
-#include <fstream>
 #include <imesh/imesh_fileio.h>
 #include <vgl/vgl_box_3d.h>
 

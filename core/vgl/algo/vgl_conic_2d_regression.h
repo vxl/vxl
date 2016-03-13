@@ -58,9 +58,9 @@
 //   none
 // \endverbatim
 
-#include <vcl_compiler.h>
 #include <vector>
 #include <iostream>
+#include <vcl_compiler.h>
 #include <vnl/vnl_matrix_fixed.h>
 #include <vgl/vgl_point_2d.h>
 #include <vgl/vgl_homg_point_2d.h>

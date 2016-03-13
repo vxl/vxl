@@ -1,3 +1,6 @@
+#include <vector>
+#include <iostream>
+#include <algorithm>
 #include "rgrl_matcher_k_nearest_pick_one.h"
 //:
 // \file
@@ -9,10 +12,7 @@
 #include <rgrl/rgrl_transformation.h>
 #include <rgrl/rgrl_view.h>
 #include <rgrl/rgrl_match_set.h>
-#include <vector>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <algorithm>
 
 
 rgrl_matcher_k_nearest_pick_one::

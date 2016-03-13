@@ -3,13 +3,12 @@
 // \brief Example of reading information from a parameter file using mbl_read_props
 // \author Tim Cootes/Sheng Su
 
-#include <vul/vul_arg.h>
-#include <iostream>
-#include <vcl_compiler.h>
 #include <iostream>
 #include <fstream>
-#include <mbl/mbl_read_props.h>
 #include <sstream>
+#include <vul/vul_arg.h>
+#include <vcl_compiler.h>
+#include <mbl/mbl_read_props.h>
 #include <vul/vul_string.h>
 
 void print_usage()

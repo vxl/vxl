@@ -16,9 +16,9 @@
 #include <iosfwd>
 #include <string>
 #include <fstream>
-#include <vcl_compiler.h>
 #include <map>
 #include <utility>
+#include <vcl_compiler.h>
 #include <vxl_config.h>
 #include <vsl/vsl_export.h>
 //: A binary output adaptor for any std::ostream

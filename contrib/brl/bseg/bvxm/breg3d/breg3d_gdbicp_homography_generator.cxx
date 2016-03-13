@@ -1,13 +1,12 @@
-#include "breg3d_gdbicp_homography_generator.h"
-
 #include <string>
 #include <sstream>
 #include <iostream>
 #include <fstream>
+#include <cstdlib>
+#include "breg3d_gdbicp_homography_generator.h"
+
 
 #include <vcl_compiler.h>
-#include <iostream>
-#include <cstdlib> // for "system" function
 
 #include <vul/vul_file.h>
 #include <vil/vil_image_view.h>

@@ -6,11 +6,11 @@
 // \author Gehua Yang
 // \date Aug 2004
 
+#include <iostream>
+#include <string>
 #include <rgrl/rgrl_command.h>
 #include <rgrl/rgrl_mask_sptr.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <string>
 
 //: observer to view transformations at each iteration of feature-based registration engine
 class rgrl_debug_feature_iteration_print: public rgrl_command

@@ -55,10 +55,10 @@
 // It may be a good idea to provide vil3d_image_resource_sptr based
 // vil3d_converts as well.
 
-#include <vcl_cassert.h>
-#include <vcl_compiler.h>
 #include <iostream>
 #include <limits>
+#include <vcl_cassert.h>
+#include <vcl_compiler.h>
 #include <vil/vil_convert.h>
 #include <vil3d/vil3d_transform.h>
 #include <vil3d/vil3d_math.h>

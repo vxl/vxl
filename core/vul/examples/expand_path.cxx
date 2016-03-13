@@ -1,8 +1,8 @@
 /*
   fsm
 */
-#include <vcl_compiler.h>
 #include <iostream>
+#include <vcl_compiler.h>
 #include <vul/vul_expand_path.h>
 
 int main(int argc, char **argv)

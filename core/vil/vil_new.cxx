@@ -7,10 +7,10 @@
 // \author Andrew W. Fitzgibbon, Oxford RRG
 // \date   16 Feb 00
 
+#include <cstring>
 #include "vil_new.h"
 
 #include <vcl_compiler.h>
-#include <cstring>
 #include <vcl_cassert.h>
 #include <vil/vil_save.h>
 #include <vil/vil_file_format.h>

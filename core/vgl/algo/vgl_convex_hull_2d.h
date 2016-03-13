@@ -14,8 +14,8 @@
 //                  from code by Ken Clarkson (see .txx file for details)
 // \endverbatim
 
-#include <vcl_compiler.h>
 #include <vector>
+#include <vcl_compiler.h>
 #include <vgl/vgl_point_2d.h>
 #include <vgl/vgl_polygon.h>
 

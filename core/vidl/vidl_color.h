@@ -12,10 +12,10 @@
 // \date 23 Jan 2006
 //
 
-#include "vidl_pixel_format.h"
 #include <cstring>
-#include <vcl_compiler.h>
 #include <typeinfo>
+#include "vidl_pixel_format.h"
+#include <vcl_compiler.h>
 #include <vcl_cassert.h>
 
 

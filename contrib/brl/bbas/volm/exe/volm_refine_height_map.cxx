@@ -11,6 +11,8 @@
 // \endverbatim
 //
 
+#include <iostream>
+#include <algorithm>
 #include <vul/vul_arg.h>
 #include <vul/vul_file.h>
 #include <volm/volm_io.h>
@@ -23,8 +25,6 @@
 #include <vil/vil_save.h>
 #include <vil/algo/vil_region_finder.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <algorithm>
 #include <vul/vul_file_iterator.h>
 
 

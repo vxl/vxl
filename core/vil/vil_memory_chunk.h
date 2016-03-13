@@ -6,9 +6,9 @@
 //  \brief Ref. counted block of data on the heap
 //  \author Tim Cootes
 
+#include <cstddef>
 #include <vcl_atomic_count.h>
 #include <vcl_compiler.h>
-#include <cstddef>
 #include <vil/vil_smart_ptr.h>
 #include <vil/vil_pixel_format.h>
 

@@ -1,12 +1,11 @@
 // This is brl/bpro/core/vpgl_pro/processes/vpgl_generate_xyz_from_depth_image_process.cxx
+#include <iostream>
+#include <fstream>
 #include <bprb/bprb_func_process.h>
 //:
 // \file
 
-#include <iostream>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <fstream>
 #include <vpgl/vpgl_camera.h>
 #include <vpgl/vpgl_perspective_camera.h>
 #include <vpgl/vpgl_generic_camera.h>

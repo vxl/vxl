@@ -1,20 +1,19 @@
 // This is gel/gevd/gevd_edgel_regions.cxx
+#include <iostream>
+#include <cstdlib>
+#include <algorithm>
+#include <cmath>
 #include "gevd_edgel_regions.h"
 //:
 // \file
 
-#include <iostream>
-#include <cstdlib> // for std::abs(int)
 #include <vcl_cassert.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <algorithm> // for std::sort() and std::find()
 
 #include <vtol/vtol_intensity_face.h>
 
 #include <vxl_config.h>
 #include <vil1/vil1_memory_image_of.h>
-#include <cmath>     // for sqrt()
 #include <vul/vul_timer.h>
 
 #include <vsol/vsol_box_2d.h>

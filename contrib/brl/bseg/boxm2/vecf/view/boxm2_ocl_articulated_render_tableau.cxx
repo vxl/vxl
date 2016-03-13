@@ -1,3 +1,5 @@
+#include <iostream>
+#include <sstream>
 #include "boxm2_ocl_articulated_render_tableau.h"
 #include "../boxm2_vecf_scene_articulation.h"
 
@@ -7,8 +9,6 @@
 #include <vgui/vgui_modifier.h>
 #include <vgui/vgui_soview2D.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <sstream>
 #include <boxm2/ocl/boxm2_ocl_util.h>
 #include <boxm2/view/boxm2_view_utils.h>
 #include <boxm2/ocl/pro/boxm2_ocl_processes.h>

@@ -18,12 +18,12 @@
 // Do not remove the following statement
 // Approved for Public Release, Distribution Unlimited (DISTAR Case 12529)
 
-#include <bsta/bsta_parzen_sphere.h>
-#include <vcl_compiler.h>
 #include <iostream>
 #include <algorithm>
 #include <cmath>
 #include <vector>
+#include <bsta/bsta_parzen_sphere.h>
+#include <vcl_compiler.h>
 
 //: A parzen window (kernel) updater.
 // If a new sample is within tol of the existing samples then don't insert.

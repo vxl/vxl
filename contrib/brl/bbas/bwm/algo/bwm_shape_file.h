@@ -3,9 +3,9 @@
 //:
 // \file
 #include <vector>
-#include <vcl_compiler.h>
 #include <iostream>
 #include <string>
+#include <vcl_compiler.h>
 
 #include <shapefil.h>
 #include <vsol/vsol_point_3d_sptr.h>

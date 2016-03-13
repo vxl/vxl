@@ -2,6 +2,11 @@
 // \file
 // \author Andy Miller
 // \date 26-Oct-2010
+#include <iostream>
+#include <string>
+#include <vector>
+#include <map>
+#include <algorithm>
 #include <testlib/testlib_test.h>
 #include <testlib/testlib_root_dir.h>
 #include "test_utils.h"
@@ -11,13 +16,7 @@
 #include <boxm2/io/boxm2_sio_mgr.h>
 #include <vnl/vnl_vector_fixed.h>
 
-#include <iostream>
-#include <string>
-#include <vector>
-#include <map>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <algorithm>
 
 void test_block_id()
 {

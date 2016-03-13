@@ -21,10 +21,10 @@
 //   06-5-2006 Peter Vanroose - replaced all vnl_vector by vnl_vector_fixed
 // \endverbatim
 
+#include <iostream>
 #include <vnl/vnl_vector_fixed.h>
 #include <vnl/vnl_matrix_fixed.h>
 #include <vcl_compiler.h>
-#include <iostream>
 
 //: 4-element vector that represents rotation in 3D.
 // vnl_quaternion is a 4-element vector with 1 real and 3 imaginary

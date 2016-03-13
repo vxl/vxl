@@ -2,17 +2,17 @@
 #ifndef bocl_manager_hxx_
 #define bocl_manager_hxx_
 
+#include <utility>
+#include <fstream>
+#include <sstream>
+#include <iostream>
+#include <cstdio>
 #include "bocl_manager.h"
 //:
 // \file
 
-#include <utility>
-#include <fstream>
-#include <sstream>
 #include <bocl/bocl_utils.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <cstdio>
 #if !defined (_WIN32) && !defined(__APPLE__)
 #include <malloc.h> // for memalign()
 #endif

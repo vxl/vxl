@@ -4,11 +4,11 @@
 //:
 // \file
 
+#include <iostream>
+#include <limits>
 #include "bsta_gaussian_sphere.h"
 #include <vcl_cassert.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <limits>
 #include <vnl/vnl_erf.h>
 
 namespace

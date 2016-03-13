@@ -4,13 +4,12 @@
 //:
 // \file
 
+#include <iostream>
+#include <cstddef>
 #include <vdtop/vdtop_8_neighborhood_mask.h>
 #include <vmap/vmap_types.h> // for vmap_2_map_tag
 #include <vil/vil_image_view.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <cstddef> // for std::ptrdiff_t
-#include <iostream>
 
 //: The 3 in 1 function.
 // It computes upper masks, removes non maximal directions, and compute the down-left version of the symmetric

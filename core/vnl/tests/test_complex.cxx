@@ -1,12 +1,12 @@
 // This is core/vnl/tests/test_complex.cxx
+#include <iostream>
+#include <cmath>
+#include <complex>
 #include <testlib/testlib_test.h>
 //:
 // \file
 
-#include <iostream>
 #include <vcl_compiler.h>
-#include <cmath>
-#include <complex>
 
 #include <vnl/vnl_vector.h>
 #include <vnl/vnl_random.h>

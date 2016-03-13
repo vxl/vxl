@@ -16,10 +16,9 @@
 // \endverbatim
 
 #include <vector>
+#include <iostream>
 #include <vcl_cassert.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 #include <bsta/bsta_histogram_base.h>
 template <class T> class bsta_histogram : public bsta_histogram_base
 {

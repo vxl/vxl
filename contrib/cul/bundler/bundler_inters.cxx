@@ -1,11 +1,11 @@
+#include <iostream>
+#include <algorithm>
 #include "bundler_inters.h"
 //
 #include <bundler/bundler_utils.h>
 #include <vcl_cassert.h>
 
 #include <vcl_compiler.h>
-#include <iostream>
-#include <algorithm>
 
 const double INLIER_PERCENT_NOT_SET = -1.0;
 

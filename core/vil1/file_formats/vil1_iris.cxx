@@ -8,12 +8,12 @@
 //
 //-----------------------------------------------------------------------------
 
+#include <cstring>
+#include <iostream>
 #include "vil1_iris.h"
 
 #include <vcl_cassert.h>
-#include <cstring> // for memcpy()
 #include <vcl_compiler.h>
-#include <iostream>
 
 #include <vil1/vil1_stream.h>
 #include <vil1/vil1_image_impl.h>

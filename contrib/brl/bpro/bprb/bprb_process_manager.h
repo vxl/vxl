@@ -16,10 +16,10 @@
 
 
 #include <vector>
-#include <vcl_compiler.h>
 #include <iostream>
 #include <map>
 #include <string>
+#include <vcl_compiler.h>
 
 #include <vbl/vbl_ref_count.h>
 #include <bprb/bprb_process_sptr.h>

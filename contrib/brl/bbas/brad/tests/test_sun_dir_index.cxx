@@ -1,9 +1,9 @@
+#include <iostream>
+#include <cstdlib>
+#include <fstream>
 #include <testlib/testlib_test.h>
 #include <brad/brad_sun_dir_index.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <cstdlib> // for rand()
-#include <fstream>
 #include <vnl/vnl_double_2.h>
 #include <vnl/vnl_double_3.h>
 

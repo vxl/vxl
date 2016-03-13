@@ -1,13 +1,12 @@
 // This is rpl/rsdl/rsdl_kd_tree.cxx
+#include <iostream>
+#include <algorithm>
+#include <cmath>
+#include <utility>
 #include "rsdl_kd_tree.h"
 
 #include <vcl_compiler.h>
-#include <iostream>
-#include <algorithm>
 #include <vcl_cassert.h>
-#include <cmath>
-#include <iostream>
-#include <utility>
 
 #include <vnl/vnl_math.h>
 #include <vnl/vnl_numeric_traits.h>

@@ -2,8 +2,8 @@
 // Example: image cropping
 
 #include <iostream>
+#include <cstdlib>
 #include <vcl_compiler.h>
-#include <cstdlib> // for atoi()
 
 #include <vil1/vil1_save.h>
 #include <vil1/vil1_load.h>

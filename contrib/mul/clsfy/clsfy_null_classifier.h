@@ -11,12 +11,12 @@
 // \author Ian Scott
 // \date 2009-08-25
 
+#include <iostream>
+#include <iosfwd>
 #include "clsfy_classifier_base.h"
 #include <vsl/vsl_fwd.h>
 #include <vnl/vnl_fwd.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iosfwd>
 
 //:  A classifier that always returns the same answer.
 class clsfy_null_classifier : public clsfy_classifier_base

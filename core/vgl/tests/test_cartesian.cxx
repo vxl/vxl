@@ -1,4 +1,6 @@
 // This is core/vgl/tests/test_cartesian.cxx
+#include <iostream>
+#include <sstream>
 #include <testlib/testlib_test.h>
 //:
 // \file
@@ -10,9 +12,7 @@
 //   PVr -  4 May 2009 - added tests for operator>>
 //   PVr - 21 May 2009 - added more tests for operator>>
 
-#include <iostream>
 #include <vcl_compiler.h>
-#include <sstream>
 #include <vgl/vgl_tolerance.h>
 #include <vgl/vgl_point_2d.hxx>
 #include <vgl/vgl_point_3d.hxx>

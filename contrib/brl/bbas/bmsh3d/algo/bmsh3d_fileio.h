@@ -17,9 +17,9 @@
 //-------------------------------------------------------------------------
 
 #include <vector>
-#include <vcl_compiler.h>
 #include <iostream>
 #include <string>
+#include <vcl_compiler.h>
 
 #include <vgl/vgl_point_3d.h>
 #include <vgl/vgl_vector_3d.h>

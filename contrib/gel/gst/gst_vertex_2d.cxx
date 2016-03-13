@@ -6,10 +6,9 @@
 // \file
 // \author crossge@crd.ge.com
 
+#include <iostream>
 #include "gst_vertex_2d.h"
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 
 // output
 std::ostream &operator <<( std::ostream &os, const gst_vertex_2d &v)

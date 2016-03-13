@@ -19,14 +19,14 @@
 ///////////////////////////////////////////////////////////////////////////
 
 
+#include <iostream>
+#include <cstdio>
 #ifdef EXPATPP_COMPATIBLE_EXPAT12 // earlier versions of expat up to v1.2
   #include <xmlparse.h>
 #else
   #include "expat.h"  // since some version of expat moved to SourceForge
 #endif
 #include <vcl_compiler.h>
-#include <iostream>
-#include <cstdio>
 #include <vcl_cassert.h>
 
 

@@ -1,13 +1,12 @@
 // This is gel/vsol/vsol_poly_set_2d.cxx
+#include <iostream>
+#include <cmath>
 #include "vsol_poly_set_2d.h"
 //:
 // \file
 #include <vsl/vsl_vector_io.h>
-#include <iostream>
 #include <vcl_cassert.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <cmath>
 #include <vsol/vsol_polygon_2d.h>
 
 //***************************************************************************

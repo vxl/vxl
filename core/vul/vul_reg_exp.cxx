@@ -1,4 +1,7 @@
 // This is core/vul/vul_reg_exp.cxx
+#include <iostream>
+#include <cstring>
+#include <cstddef>
 #include "vul_reg_exp.h"
 //:
 // \file
@@ -117,10 +120,7 @@
 //    the same as the two characters before  the first p encountered in
 //    the line.  It would match "drepa qrepb" in "rep drepa qrepb".
 
-#include <iostream>
-#include <cstring> // for strcspn()
 #include <vcl_compiler.h>
-#include <cstddef> // for std::ptrdiff_t
 
 //: Copies the given regular expression.
 

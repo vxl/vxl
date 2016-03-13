@@ -29,11 +29,11 @@
 // \date  August 2011
 // History: Originally written for double precision arithmetic (1996).
 
-#include <vnl/vnl_decnum.h>
 #include <iostream>
 #include <string>
+#include <cstdlib>
+#include <vnl/vnl_decnum.h>
 #include <vcl_compiler.h>
-#include <cstdlib> // for std::exit()
 
 const vnl_decnum zero("0");
 const vnl_decnum one("1");

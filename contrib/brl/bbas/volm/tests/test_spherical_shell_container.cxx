@@ -1,7 +1,6 @@
+#include <iostream>
 #include <testlib/testlib_test.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 #include <vpl/vpl.h>
 #include <bbas/volm/volm_spherical_shell_container.h>
 #include <bbas/volm/volm_spherical_shell_container_sptr.h>

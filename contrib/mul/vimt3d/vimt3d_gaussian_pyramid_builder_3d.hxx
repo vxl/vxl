@@ -6,10 +6,12 @@
 // \brief Class to build Gaussian pyramids of vimt3d_image_3d_of<T>
 // \author Tim Cootes
 
-#include "vimt3d_gaussian_pyramid_builder_3d.h"
-
 #include <cstdlib>
 #include <string>
+#include <iostream>
+#include <cmath>
+#include "vimt3d_gaussian_pyramid_builder_3d.h"
+
 
 #include <vul/vul_sprintf.h>
 #include <vul/vul_file.h>
@@ -20,8 +22,6 @@
 #include <vil3d/algo/vil3d_gauss_reduce.h>
 #include <vcl_cassert.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <cmath>
 #include <mbl/mbl_log.h>
 
 

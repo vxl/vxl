@@ -2,13 +2,13 @@
 #include <iomanip>
 #include <sstream>
 #include <string>
-#include <vcl_compiler.h>
-#include <iostream>
 #include <algorithm>
+#include <vector>
+#include <cmath>
+#include <vcl_compiler.h>
 #include <vul/vul_file.h>
 #include <vul/vul_file_iterator.h>
 #include <vul/vul_arg.h>
-#include <vector>
 #include <vil/vil_load.h>
 #include <vil/vil_save.h>
 #include <vil/vil_image_view.h>
@@ -16,7 +16,6 @@
 #include <vil/vil_convert.h>
 #include <vsol/vsol_box_2d.h>
 #include <vgl/vgl_polygon_scan_iterator.h>
-#include <cmath>
 #ifdef BWM_HAS_PROJECT_MESHES
   #include <bwm/bwm_observer_cam.h>
 #endif

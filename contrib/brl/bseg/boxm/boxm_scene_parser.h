@@ -1,6 +1,8 @@
 #ifndef boxm_scene_parser_h_
 #define boxm_scene_parser_h_
 
+#include <iostream>
+#include <string>
 #include <boxm/boxm_scene.h>
 
 #ifdef WIN32
@@ -8,8 +10,6 @@
 #endif
 #include <expatpp.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <string>
 
 #include <vpgl/vpgl_lvcs.h>
 #include <vgl/vgl_point_3d.h>

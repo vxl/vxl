@@ -14,12 +14,12 @@
 //   IMS   Converted to VXL 18 April 2000
 // \endverbatim
 
+#include <iostream>
+#include <iosfwd>
 #include <vpdfl/vpdfl_pdf_base.h>
 #include <vnl/vnl_matrix.h>
 #include <vnl/vnl_vector.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iosfwd>
 
 //: Class for multi-variate gaussians with arbitrary axes.
 //  Covariance matrix is represented by its eigenvectors and values

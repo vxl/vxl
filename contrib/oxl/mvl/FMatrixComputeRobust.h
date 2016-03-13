@@ -18,12 +18,12 @@
 //
 //-----------------------------------------------------------------------------
 
+#include <iostream>
+#include <vector>
 #include <mvl/FMatrixCompute.h>
 #include <mvl/HomgPoint2D.h>
 #include <vgl/vgl_homg_point_2d.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <vector>
 
 class FMatrixComputeRobust : public FMatrixCompute
 {

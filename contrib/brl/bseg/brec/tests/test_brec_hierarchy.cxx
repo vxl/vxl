@@ -1,3 +1,5 @@
+#include <iostream>
+#include <vector>
 #include <testlib/testlib_test.h>
 
 #include <brec/brec_part_base.h>
@@ -14,9 +16,6 @@
 #include <bsta/algo/bsta_gaussian_updater.h>
 
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
-#include <vector>
 
 static void test_brec_hierarchy()
 {

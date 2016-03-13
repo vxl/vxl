@@ -2,13 +2,13 @@
 // Stellar Science Ltd. Co. (stellarscience.com) for
 // Air Force Research Laboratory, 2005.
 
-#include "vil_nitf2_tagged_record.h"
-
 #include <sstream>
-#include <vcl_compiler.h>
 #include <iomanip>
 #include <iostream>
 #include <string>
+#include "vil_nitf2_tagged_record.h"
+
+#include <vcl_compiler.h>
 
 #include <vil/vil_stream_core.h>
 #include <vil/vil_stream_section.h>

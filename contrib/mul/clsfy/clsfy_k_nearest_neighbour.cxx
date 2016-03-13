@@ -3,12 +3,12 @@
 //:
 // \file
 
-#include "clsfy_k_nearest_neighbour.h"
-
-#include <vcl_compiler.h>
 #include <iostream>
 #include <string>
 #include <utility>
+#include "clsfy_k_nearest_neighbour.h"
+
+#include <vcl_compiler.h>
 #include <vcl_cassert.h>
 
 #include <vnl/vnl_math.h>

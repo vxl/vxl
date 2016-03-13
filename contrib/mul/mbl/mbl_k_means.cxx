@@ -1,14 +1,13 @@
 // This is mul/mbl/mbl_k_means.cxx
+#include <iostream>
+#include <algorithm>
+#include <cstdlib>
+#include <vector>
 #include "mbl_k_means.h"
 //:
 //  \file
 
 #include <vcl_compiler.h>
-#include <iostream>
-#include <algorithm>
-#include <iostream>
-#include <cstdlib>
-#include <vector>
 #include <vcl_cassert.h>
 
 //: Find k cluster centres

@@ -1,4 +1,5 @@
 // This is brl/bpro/core/vil_pro/processes/vil_invert_float_image_process.cxx
+#include <iostream>
 #include <bprb/bprb_func_process.h>
 //:
 // \file
@@ -7,8 +8,6 @@
 #include <vil/vil_image_view.h>
 #include <vil/vil_convert.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 
 
 //: Constructor

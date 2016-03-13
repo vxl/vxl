@@ -1,6 +1,6 @@
 // This is core/vgl/io/tests/test_box_2d_io.cxx
-#include <vcl_compiler.h>
 #include <iostream>
+#include <vcl_compiler.h>
 #include <vgl/io/vgl_io_box_2d.h>
 #include <vsl/vsl_indent.h>
 #include <testlib/testlib_test.h>

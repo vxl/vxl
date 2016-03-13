@@ -1,3 +1,5 @@
+#include <iostream>
+#include <vector>
 #include "rrel_orthogonal_regression.h"
 
 #include <vnl/vnl_matrix.h>
@@ -7,9 +9,6 @@
 
 #include <vcl_cassert.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
-#include <vector>
 
 rrel_orthogonal_regression::rrel_orthogonal_regression( const vnl_matrix<double>& pts )
   : vars_( pts )

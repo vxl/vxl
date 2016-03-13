@@ -16,12 +16,12 @@
 //
 //   The main work of loading and saving happens in vil3d_analyze_image
 
-#include "vil3d_analyze_format.h"
-#include <cstring> // for std::strcmp() and std::memset()
-#include <cstdio>  // for std::sprintf
-#include <vcl_compiler.h>
+#include <cstring>
+#include <cstdio>
 #include <iostream>
-#include <cstddef>  // for std::size_t
+#include <cstddef>
+#include "vil3d_analyze_format.h"
+#include <vcl_compiler.h>
 #include <vil/vil_stream_fstream.h>
 #include <vil3d/vil3d_image_view.h>
 #include <vil3d/vil3d_new.h>

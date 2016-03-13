@@ -1,4 +1,7 @@
 // This is core/vil/algo/vil_gauss_filter.cxx
+#include <cmath>
+#include <algorithm>
+#include <functional>
 #include "vil_gauss_filter.h"
 //:
 // \file
@@ -6,10 +9,7 @@
 // \author Ian Scott
 
 #include <vcl_compiler.h>
-#include <cmath>
 #include <vcl_cassert.h>
-#include <algorithm>
-#include <functional>
 #include <vnl/vnl_erf.h>
 #include <vnl/vnl_double_2.h>
 #include <vnl/vnl_real_polynomial.h>

@@ -3,14 +3,13 @@
 // \brief Example of sampling from images.
 // \author Tim Cootes - Manchester
 
+#include <iostream>
 #include <vimt/vimt_image_pyramid.h>
 #include <vimt/vimt_gaussian_pyramid_builder_2d.h>
 #include <vimt/vimt_image_2d_of.h>
 #include <vimt/vimt_sample_profile_bilin.h>
 #include <vxl_config.h> // for vxl_byte
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 #include <vnl/vnl_vector.h>
 #include <vgl/vgl_point_2d.h>
 #include <vgl/vgl_vector_2d.h>

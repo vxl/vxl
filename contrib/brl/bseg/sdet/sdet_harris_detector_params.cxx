@@ -1,14 +1,13 @@
 // This is brl/bseg/sdet/sdet_harris_detector_params.cxx
+#include <sstream>
+#include <iostream>
 #include "sdet_harris_detector_params.h"
 //:
 // \file
 // See sdet_harris_detector_params.h
 //
 //-----------------------------------------------------------------------------
-#include <sstream>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 
 //------------------------------------------------------------------------
 // Constructors

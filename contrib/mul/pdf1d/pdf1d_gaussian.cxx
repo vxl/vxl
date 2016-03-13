@@ -5,13 +5,13 @@
 // \brief Univariate Gaussian PDF.
 // \author Tim Cootes
 
+#include <string>
+#include <iostream>
+#include <cmath>
 #include "pdf1d_gaussian.h"
 
 #include <vcl_cassert.h>
-#include <string>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <cmath>
 
 #include <vnl/vnl_math.h>
 #include <pdf1d/pdf1d_gaussian_sampler.h>

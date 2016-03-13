@@ -1,16 +1,16 @@
 // This is core/tests/test_build_info.cxx
+#include <ios>
+#include <iostream>
+#include <fstream>
+#include <string>
+#include <map>
+#include <ctime>
 #include "test_build_info.h"
 //:
 // \file
 // Based on ITK, Testing/Code/Common/itkSystemInformationTest.cxx
 
-#include <ios>
-#include <iostream>
-#include <fstream>
-#include <string>
 #include <vcl_compiler.h>
-#include <map>
-#include <ctime>
 #include <testlib/testlib_test.h>
 
 // Construct the name of the notes file.

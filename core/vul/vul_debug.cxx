@@ -1,14 +1,16 @@
 // This is core/vul/vul_debug.cxx
+#include <iostream>
+#include <new>
+#include <cstdlib>
+#include <cstdio>
+#include <string>
 #include "vul_debug.h"
 //: \file
 //  \brief Get debug related information like core dumps, and stack traces
 //  \author Ian Scott
 
-#include <iostream>
 #include <vxl_config.h>
 #include <vcl_compiler.h>
-#include <new>
-#include <cstdlib>
 #include <vcl_cstdio.h> // for vcl_snprintf()
 
 #ifdef _WIN32
@@ -34,7 +36,6 @@
 #define NOMCX
 #include <windows.h>
 #include <DbgHelp.h>
-#include <cstdio>
 #pragma comment (lib, "dbghelp")
 
 static bool vul_debug_core_dump_in_windows_seh(const char * filename,
@@ -181,7 +182,6 @@ void vul_debug_set_coredump_and_throw_on_windows_se(const char * )
 
 #else // _WIN32
 
-#include <string>
 #ifdef VXL_UNISTD_HAS_GETPID
 # include <unistd.h>
 #endif

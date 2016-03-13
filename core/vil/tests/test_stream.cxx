@@ -1,9 +1,9 @@
 // This is core/vil/tests/test_stream.cxx
+#include <string>
 #include <testlib/testlib_test.h>
 #include <testlib/testlib_root_dir.h>
 
 #include <vcl_compiler.h>
-#include <string>
 #include <vul/vul_file.h>
 
 #include <vil/vil_stream_fstream.h>

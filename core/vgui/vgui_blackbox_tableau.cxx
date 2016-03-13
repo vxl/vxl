@@ -13,12 +13,12 @@
 //   13-OCT-1999 P.Pritchett - Initial version
 // \endverbatim
 
-#include "vgui_blackbox_tableau.h"
-
 #include <iostream>
-#include <vcl_compiler.h>
 #include <cstdio>
 #include <fstream>
+#include "vgui_blackbox_tableau.h"
+
+#include <vcl_compiler.h>
 
 #include <vpl/vpl.h>
 

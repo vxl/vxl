@@ -6,12 +6,11 @@
 // \file
 // \author crossge@crd.ge.com
 
+#include <iostream>
 #include "gmvl_connection_cache.h"
 
 #include <vcl_cassert.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 #include <vnl/vnl_math.h>
 
 // constructors / destructors

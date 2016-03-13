@@ -4,11 +4,11 @@
 //:
 // \file
 
+#include <iostream>
+#include <cmath>
 #include "bsta_weibull.h"
 #include <vcl_cassert.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <cmath>
 
 
 template <class T>

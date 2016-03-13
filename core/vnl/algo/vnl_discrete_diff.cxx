@@ -1,3 +1,4 @@
+#include <iostream>
 #include "vnl_discrete_diff.h"
 #include <vnl/vnl_least_squares_function.h>
 #include <vcl_cassert.h>
@@ -104,7 +105,6 @@ bool vnl_discrete_diff_sym(vnl_least_squares_function *lsf,
 //----------------------------------------------------------------------
 
 #include <vcl_compiler.h>
-#include <iostream>
 
 void vnl_discrete_diff_test_lsf(vnl_least_squares_function *lsf, vnl_vector<double> const &x)
 {

@@ -6,9 +6,9 @@
 // \author Tim Cootes
 
 #include <string>
-#include <vcl_compiler.h>
 #include <iostream>
 #include <fstream>
+#include <vcl_compiler.h>
 #include <vsl/vsl_fwd.h>
 #include <vil/vil_image_view.h>
 #include <vgl/vgl_point_2d.h>

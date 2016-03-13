@@ -1,4 +1,7 @@
 // This is brl/bseg/boxm2/pro/processes/boxm2_export_color_point_cloud_process.cxx
+#include <iostream>
+#include <fstream>
+#include <sstream>
 #include <bprb/bprb_func_process.h>
 //:
 // \file
@@ -9,14 +12,11 @@
 // \date Aug 15, 2014
 
 #include <vcl_compiler.h>
-#include <iostream>
-#include <fstream>
 #include <boxm2/boxm2_scene.h>
 #include <boxm2/boxm2_util.h>
 #include <boxm2/io/boxm2_cache.h>
 #include <boxm2/boxm2_data_traits.h>
 #include "boxm2/cpp/algo/boxm2_export_oriented_point_cloud_function.h"
-#include <sstream>
 #include <vgl/vgl_intersection.h>
 
 

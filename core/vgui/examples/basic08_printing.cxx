@@ -2,8 +2,8 @@
 // an image file.  In the PostScript file all the objects will be saved
 // separately from the image (look inside the .ps file to see what I mean).
 
-#include <vcl_compiler.h>
 #include <iostream>
+#include <vcl_compiler.h>
 #include <vgui/vgui.h>
 #include <vgui/vgui_image_tableau.h>
 #include <vgui/vgui_easy2D_tableau.h>

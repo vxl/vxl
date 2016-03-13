@@ -5,15 +5,15 @@
 //:
 // \file
 
+#include <cstdio>
+#include <vector>
+#include <iostream>
+#include <cstring>
 #include "vil_pnm.h"
 
 #include <vcl_cassert.h>
-#include <cstdio> // for sprintf
 #include <vcl_compiler.h>
-#include <vector>
 
-#include <iostream>
-#include <cstring>
 
 #include <vxl_config.h> // for VXL_BIG_ENDIAN and vxl_byte
 

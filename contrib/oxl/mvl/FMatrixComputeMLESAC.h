@@ -22,12 +22,12 @@
 //
 //-----------------------------------------------------------------------------
 
+#include <iostream>
+#include <vector>
 #include <vgl/vgl_fwd.h>
 #include <mvl/FMatrixComputeRobust.h>
 #include <mvl/FManifoldProject.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <vector>
 
 class FMatrixComputeMLESAC : public FMatrixComputeRobust
 {

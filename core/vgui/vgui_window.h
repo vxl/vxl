@@ -18,8 +18,8 @@
 class vgui_menu;
 class vgui_adaptor;
 class vgui_statusbar;
-#include <vcl_compiler.h>
 #include <string>
+#include <vcl_compiler.h>
 
 //: An abstract representation of a system window.
 //

@@ -1,4 +1,6 @@
 // This is brl/bbas/bmsh3d/vis/bmsh3d_vis_vertex.cxx
+#include <iostream>
+#include <cstdio>
 #include "bmsh3d_vis_vertex.h"
 //:
 // \file
@@ -18,8 +20,6 @@
 #include <Inventor/nodes/SoDrawStyle.h>
 
 #include <vcl_compiler.h>
-#include <iostream>
-#include <cstdio> // std::sprintf()
 
 SoSeparator* draw_vertex_geom_SoPoint (const bmsh3d_vertex* V)
 {

@@ -5,10 +5,10 @@
 // \author fsm
 // Adapted from awf's MatOps class.
 
+#include <iostream>
 #include "vnl_matlab_print.h"
 
 #include <vcl_compiler.h>
-#include <iostream>
 
 #include <vnl/vnl_vector.h>
 #include <vnl/vnl_matrix.h>

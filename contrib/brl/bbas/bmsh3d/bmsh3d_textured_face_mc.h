@@ -17,9 +17,9 @@
 // \endverbatim
 //
 //-------------------------------------------------------------------------
-#include <vcl_compiler.h>
 #include <iostream>
 #include <map>
+#include <vcl_compiler.h>
 
 #include "bmsh3d_face_mc.h"
 #include <vgl/vgl_point_2d.h>

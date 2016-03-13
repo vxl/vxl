@@ -2,10 +2,9 @@
 // Author: Andrew W. Fitzgibbon, Oxford RRG, July 96
 // Adapted to mvl by Peter Vanroose, January 2002.
 
-#include <vcl_compiler.h>
-#include <iostream>
 #include <iostream>
 #include <vector>
+#include <vcl_compiler.h>
 #include <vgl/vgl_homg_point_2d.h>
 #include <mvl/FMatrix.h>
 #include <mvl/FMatrixComputeLinear.h>

@@ -12,10 +12,10 @@
 //   06 May 2004 Jocelyn Marchadier
 // \endverbatim
 
-#include "vdtop_neighborhood.h"
-#include <vcl_compiler.h>
 #include <iostream>
 #include <vector>
+#include "vdtop_neighborhood.h"
+#include <vcl_compiler.h>
 
 #define BORDER_PIXEL (vxl_byte)2
 #define FALSE_PIXEL (vxl_byte)0

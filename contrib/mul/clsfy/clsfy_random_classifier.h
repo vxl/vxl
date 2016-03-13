@@ -15,13 +15,13 @@
 //   2 May 2001 IMS Converted to VXL
 // \endverbatim
 
+#include <vector>
+#include <string>
+#include <iosfwd>
 #include "clsfy_classifier_base.h"
 #include <vnl/vnl_vector.h>
 #include <vnl/vnl_random.h>
 #include <vsl/vsl_binary_io.h>
-#include <vector>
-#include <string>
-#include <iosfwd>
 
 //:  A common interface for 1-out-of-N classifiers
 // This class takes a vector and classifies into one of

@@ -4,6 +4,11 @@
 // Distributed under the Boost Software License, Version 1.0.
 // (See accompanying file rgtl_license_1_0.txt or copy at
 // http://www.boost.org/LICENSE_1_0.txt)
+#include <map>
+#include <iostream>
+#include <cmath>
+#include <cstddef>
+#include <cstdlib>
 #include "rgtl_object_array_triangles_3d.hxx"
 
 #include "rgtl_object_closest_polygon_3d.hxx"
@@ -22,13 +27,8 @@
 #include <vnl/vnl_double_3x3.h>
 #include <vnl/vnl_cross.h>
 
-#include <map>
 
 #include <vcl_compiler.h>
-#include <iostream>
-#include <cmath>
-#include <cstddef>
-#include <cstdlib>
 #include <vcl_cassert.h>
 
 //----------------------------------------------------------------------------

@@ -16,10 +16,10 @@
 // different interface and different assumptions on the input image (e.g. 0
 // pixels as interest or not).
 
-#include <vil/vil_image_view.h>
-#include <vcl_compiler.h>
 #include <iostream>
 #include <vector>
+#include <vil/vil_image_view.h>
+#include <vcl_compiler.h>
 
 
 //: Euclidean Signed Distance Transform

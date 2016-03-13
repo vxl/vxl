@@ -1,4 +1,9 @@
 // This is brl/bbas/bmsh3d/bmsh3d_mesh.cxx
+#include <list>
+#include <set>
+#include <map>
+#include <queue>
+#include <iostream>
 #include "bmsh3d_mesh.h"
 //:
 // \file
@@ -14,14 +19,8 @@
 //
 //-------------------------------------------------------------------------
 
-#include <list>
-#include <set>
-#include <map>
-#include <queue>
 #include <vcl_cassert.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 #include <vgl/vgl_point_3d.h>
 #include <vgl/vgl_distance.h>
 #include <vul/vul_printf.h>

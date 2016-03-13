@@ -28,12 +28,12 @@
 // \endverbatim
 
 
-#include <vil3d/vil3d_file_format.h>
-#include <vimt3d/vimt3d_image_3d.h>
-#include <vcl_compiler.h>
 #include <iostream>
 #include <iosfwd>
 #include <memory>
+#include <vil3d/vil3d_file_format.h>
+#include <vimt3d/vimt3d_image_3d.h>
+#include <vcl_compiler.h>
 
 //: Reader/Writer for v3m format images, specialised for label or mask images.
 //

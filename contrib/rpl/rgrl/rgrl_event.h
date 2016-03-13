@@ -6,10 +6,10 @@
 // \author  Charlene Tsai
 // \date    April 2004
 
-#include <vbl/vbl_ref_count.h>
-#include <vcl_compiler.h>
 #include <iostream>
 #include <string>
+#include <vbl/vbl_ref_count.h>
+#include <vcl_compiler.h>
 #include "rgrl_event_sptr.h"
 
 //: Event class provides a standard coding for sending and receiving messages.

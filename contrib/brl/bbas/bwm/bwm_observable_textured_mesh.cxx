@@ -1,8 +1,7 @@
+#include <iostream>
 #include "bwm_observable_textured_mesh.h"
 
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 #include <vul/vul_file.h>
 #include <vgl/vgl_point_2d.h>
 

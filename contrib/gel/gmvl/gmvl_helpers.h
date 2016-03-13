@@ -10,9 +10,9 @@
 
 #include <vector>
 #include <string>
-#include <vcl_compiler.h>
 #include <iostream>
 #include <iosfwd>
+#include <vcl_compiler.h>
 #include <gmvl/gmvl_node_sptr.h>
 
 //: to print out a lot of nodes

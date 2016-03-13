@@ -1,8 +1,8 @@
 // @author fsm
-#include <vnl/vnl_double_2.h>
-#include <vcl_compiler.h>
 #include <cmath>
 #include <iostream>
+#include <vnl/vnl_double_2.h>
+#include <vcl_compiler.h>
 
 #include <testlib/testlib_test.h>
 #include <vnl/vnl_least_squares_function.h>

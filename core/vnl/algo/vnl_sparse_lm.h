@@ -16,9 +16,9 @@
 // \endverbatim
 //
 
-#include <vcl_compiler.h>
 #include <iosfwd>
 #include <vector>
+#include <vcl_compiler.h>
 #include <vnl/vnl_vector.h>
 #include <vnl/vnl_matrix.h>
 #include <vnl/vnl_nonlinear_minimizer.h>

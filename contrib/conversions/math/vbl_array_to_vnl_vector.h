@@ -1,9 +1,9 @@
 #ifndef vbl_array_to_vnl_vector_h_
 #define vbl_array_to_vnl_vector_h_
 
-#include <vcl_compiler.h>
 #include <iostream>
 #include <limits>
+#include <vcl_compiler.h>
 #include <vcl_cassert.h>
 #include <vnl/vnl_vector.h>
 #include <vbl/vbl_array_1d.h>

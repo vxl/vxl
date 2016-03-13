@@ -9,10 +9,10 @@
 // \date Mar 10, 2011
 
 #include <fstream>
-#include <vcl_compiler.h>
 #include <iostream>
 #include <algorithm>
 #include <sstream>
+#include <vcl_compiler.h>
 #include <boxm2/ocl/boxm2_opencl_cache.h>
 #include <boxm2/boxm2_scene.h>
 #include <boxm2/boxm2_block.h>

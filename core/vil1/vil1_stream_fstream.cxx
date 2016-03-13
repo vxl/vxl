@@ -3,10 +3,10 @@
 #pragma implementation
 #endif
 
+#include <iostream>
 #include "vil1_stream_fstream.h"
 #include <vcl_cassert.h>
 #include <vcl_compiler.h>
-#include <iostream>
 
 static std::ios::openmode modeflags(char const* mode)
 {

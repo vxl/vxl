@@ -1,7 +1,7 @@
 // This is core/vnl/algo/tests/test_util.cxx
+#include <complex>
 #include "test_util.h"
 #include <vcl_compiler.h>
-#include <complex>
 #include <vnl/vnl_random.h>
 
 #define macro(T) \

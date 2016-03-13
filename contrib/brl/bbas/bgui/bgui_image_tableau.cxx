@@ -1,4 +1,7 @@
 // This is brl/bbas/bgui/bgui_image_tableau.cxx
+#include <iostream>
+#include <cmath>
+#include <cstdio>
 #include "bgui_image_tableau.h"
 //:
 // \file
@@ -6,9 +9,6 @@
 // \brief  See bgui_image_tableau.h for a description of this file.
 
 #include <vcl_compiler.h>
-#include <iostream>
-#include <cmath>
-#include <cstdio> // sprintf
 #include <vgui/vgui_event.h>
 #include <vgui/vgui.h>
 #include <vgui/vgui_projection_inspector.h>

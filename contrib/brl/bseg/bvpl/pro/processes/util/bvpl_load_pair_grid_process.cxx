@@ -10,11 +10,11 @@
 //   <none yet>
 // \endverbatim
 
+#include <iostream>
+#include <string>
 #include <bvpl/util/bvpl_corner_pair_finder.h>
 
 #include <vcl_compiler.h>
-#include <iostream>
-#include <string>
 #include <bprb/bprb_func_process.h>
 #include <bprb/bprb_parameters.h>
 #include <bvxm/grid/bvxm_voxel_grid.h>

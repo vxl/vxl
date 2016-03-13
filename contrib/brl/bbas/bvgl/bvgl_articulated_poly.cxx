@@ -1,12 +1,11 @@
+#include <iostream>
+#include <vector>
+#include <cmath>
 #include "bvgl_articulated_poly.h"
 //:
 // \file
-#include <iostream>
 #include <vcl_cassert.h>
-#include <vector>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <cmath>
 #include <vnl/vnl_math.h>
 #include <vnl/vnl_numeric_traits.h>
 #include <vgl/vgl_homg_point_2d.h>

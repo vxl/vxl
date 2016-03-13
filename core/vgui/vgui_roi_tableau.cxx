@@ -8,9 +8,9 @@
 // \date   18 Jul 2000
 // \brief  See vgui_roi_tableau.h for a description of this file.
 
+#include <string>
 #include "vgui_roi_tableau.h"
 #include <vcl_compiler.h>
-#include <string>
 
 #include <vil1/vil1_load.h>
 #include <vil1/vil1_crop.h>

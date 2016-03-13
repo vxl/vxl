@@ -1,4 +1,6 @@
 // This is bbas/bpgl/ihog/ihog_minimizer.cxx
+#include <iostream>
+#include <cstdlib>
 #include "ihog_minimizer.h"
 //:
 // \file
@@ -10,8 +12,6 @@
 #include <vnl/algo/vnl_levenberg_marquardt.h>
 #include <vnl/algo/vnl_powell.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <cstdlib>
 
 // generate a pyramid of transforms corresponding to the vil_image_pyramid
 static  std::vector<ihog_transform_2d>

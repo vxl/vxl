@@ -13,10 +13,9 @@
 // 1.0     |2000/05/01| Peter TU                 |Creation
 //*****************************************************************************
 
-#include <vcl_compiler.h>
-#include <iostream>
 #include <iostream>
 #include <vector>
+#include <vcl_compiler.h>
 #include <vcl_cassert.h>
 
 #include <vtol/vtol_vertex.h>

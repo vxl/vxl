@@ -32,10 +32,10 @@
 // \endverbatim
 
 #include <iostream>
-#include <vcl_cassert.h>
 #include <vector>
-#include <vcl_compiler.h>
 #include <cstddef>
+#include <vcl_cassert.h>
+#include <vcl_compiler.h>
 
 //: finite modulo-N arithmetic
 //

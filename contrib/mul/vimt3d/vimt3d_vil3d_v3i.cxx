@@ -7,16 +7,16 @@
 // \brief Reader/Writer for v3i format images.
 // \author Ian Scott - Manchester
 
-#include "vimt3d_vil3d_v3i.h"
-//
-#include <cstdlib> // for std::abort()
-#include <cstring> // for std::strcmp()
+#include <cstdlib>
+#include <cstring>
 #include <sstream>
-#include <vcl_cassert.h>
 #include <ios>
-#include <vcl_compiler.h>
 #include <iostream>
 #include <algorithm>
+#include "vimt3d_vil3d_v3i.h"
+//
+#include <vcl_cassert.h>
+#include <vcl_compiler.h>
 #include <vsl/vsl_binary_loader.h>
 #include <vsl/vsl_block_binary.h>
 #include <vgl/vgl_point_3d.h>

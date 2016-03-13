@@ -9,9 +9,9 @@
 // .FILE osl_easy_canny.cxx
 // \author fsm
 
-#include <vcl_compiler.h>
 #include <iostream>
 #include <list>
+#include <vcl_compiler.h>
 class osl_edge;
 class vil1_image;
 

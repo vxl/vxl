@@ -6,12 +6,12 @@
 // \brief Sample vector from image, assuming istep==np, pstep=1
 // \author Tim Cootes
 
+#include <vector>
+#include <iostream>
+#include <cstddef>
 #include <mbl/mbl_chord.h>
 #include <vnl/vnl_vector.h>
-#include <vector>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <cstddef> // for std::ptrdiff_t
 
 //: Sample vector from image, assuming istep==np, pstep=1
 //  Assumes vector already correct size, and region completely

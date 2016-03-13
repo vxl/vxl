@@ -4,12 +4,11 @@
 // \file
 // \brief This class will write a list of topology objects into an XML document.
 
-#include <vtol/vtol_topology_object_sptr.h>
 #include <list>
 #include <ostream>
+#include <iostream>
+#include <vtol/vtol_topology_object_sptr.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 
 #include <vtol/vtol_vertex_2d_sptr.h>
 #include <vtol/vtol_zero_chain_sptr.h>

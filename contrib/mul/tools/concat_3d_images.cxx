@@ -1,14 +1,13 @@
 #include <iostream>
 #include <string>
 #include <cstdlib>
-#include <vcl_cassert.h>
-#include <vcl_compiler.h>
-#include <iostream>
 #include <algorithm>
 #include <vector>
 #include <numeric>
 #include <functional>
 #include <cstring>
+#include <vcl_cassert.h>
+#include <vcl_compiler.h>
 #include <vul/vul_file.h>
 #include <vbl/vbl_array_3d.hxx>
 #include <vil3d/vil3d_property.h>

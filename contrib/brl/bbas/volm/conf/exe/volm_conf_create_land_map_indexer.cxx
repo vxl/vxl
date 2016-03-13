@@ -11,13 +11,13 @@
 // \endverbatim
 //
 
+#include <iostream>
+#include <algorithm>
 #include <vul/vul_arg.h>
 #include <vul/vul_file.h>
 #include <vul/vul_file_iterator.h>
 #include <vgl/vgl_intersection.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <algorithm>
 #include <volm/volm_io.h>
 #include <volm/volm_io_tools.h>
 #include <volm/volm_tile.h>

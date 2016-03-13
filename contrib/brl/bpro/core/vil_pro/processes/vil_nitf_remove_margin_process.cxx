@@ -1,4 +1,6 @@
 //This is brl/bpro/core/vil_pro/processes/vil_nitf_remove_margin_process.cxx
+#include <iostream>
+#include <cmath>
 #include <bprb/bprb_func_process.h>
 //:
 // \file
@@ -14,8 +16,6 @@
 #include <vil/vil_blocked_image_resource_sptr.h>
 #include <vil/vil_crop.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <cmath>
 #include <vil/vil_save.h>
 #include <vil/vil_plane.h>
 

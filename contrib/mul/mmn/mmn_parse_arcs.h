@@ -5,11 +5,11 @@
 // \brief Parse in a set of arc definitions using names of nodes
 // \author Martin Roberts
 
-#include <mmn/mmn_arc.h>
-#include <vcl_compiler.h>
 #include <iostream>
 #include <istream>
 #include <vector>
+#include <mmn/mmn_arc.h>
+#include <vcl_compiler.h>
 
 // Expects "{ arc: { name1 name2 } arc: { name3 name 4 } }"
 //Format

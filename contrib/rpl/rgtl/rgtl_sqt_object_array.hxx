@@ -11,9 +11,9 @@
 // \author Brad King
 // \date April 2007
 
-#include <vcl_compiler.h>
 #include <iostream>
 #include <memory>
+#include <vcl_compiler.h>
 
 template <unsigned int D> class rgtl_object_array;
 template <unsigned int D> class rgtl_sqt_cell_location;

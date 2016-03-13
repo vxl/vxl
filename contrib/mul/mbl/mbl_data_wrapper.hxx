@@ -7,11 +7,10 @@
 //:
 //  \file
 
-#include "mbl_data_wrapper.h"
-#include <iostream>
-#include <vcl_compiler.h>
 #include <iostream>
 #include <cstdlib>
+#include "mbl_data_wrapper.h"
+#include <vcl_compiler.h>
 
 //: Default constructor
 template<class T>

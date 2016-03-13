@@ -8,12 +8,12 @@
 
 //=======================================================================
 
+#include <iostream>
+#include <iosfwd>
 #include <pdf1d/pdf1d_builder.h>
 #include <pdf1d/pdf1d_mixture_builder.h>
 #include <pdf1d/pdf1d_mixture.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iosfwd>
 
 //=======================================================================
 

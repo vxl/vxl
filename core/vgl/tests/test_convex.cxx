@@ -1,9 +1,9 @@
 // Some tests for vgl_convex
 // Ian Scott, Feb 2004.
+#include <iostream>
 #include <testlib/testlib_test.h>
 #include <vgl/vgl_convex.h>
 #include <vcl_compiler.h>
-#include <iostream>
 
 static void test_convex()
 {

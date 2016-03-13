@@ -6,9 +6,9 @@
 // \brief Computes running sum of 1D variable, so mean accessible.
 // \author Tim Cootes
 
-#include <vcl_compiler.h>
 #include <iostream>
 #include <iosfwd>
+#include <vcl_compiler.h>
 #include <vsl/vsl_binary_io.h>
 
 //: Computes running sum of 1D variable, so mean accessible.

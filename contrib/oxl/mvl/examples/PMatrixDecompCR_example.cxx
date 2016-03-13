@@ -3,9 +3,8 @@
 // \brief PMatrixDecompCR example
 // \author Peter Vanroose, November 2002
 
+#include <iostream>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 #include <vnl/vnl_double_3x4.h>
 #include <mvl/PMatrix.h>
 #include <mvl/PMatrixDecompCR.h>

@@ -5,14 +5,14 @@
 //:
 // \file
 
-#include "vnl_na.h"
-
-#include <vxl_config.h>
 #include <istream>
 #include <sstream>
 #include <cctype>
-#include <vcl_compiler.h>
 #include <string>
+#include "vnl_na.h"
+
+#include <vxl_config.h>
+#include <vcl_compiler.h>
 #include <vnl/vnl_math.h>
 
 //: A particular qNaN to indicate not available.

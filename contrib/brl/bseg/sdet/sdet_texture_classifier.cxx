@@ -1,3 +1,6 @@
+#include <cstdlib>
+#include <iostream>
+#include <algorithm>
 #include "sdet_texture_classifier.h"
 //
 #include <brip/brip_vil_float_ops.h>
@@ -21,11 +24,7 @@
 #include <vsol/vsol_point_2d_sptr.h>
 #include <vsol/vsol_box_2d.h>
 #include <vsol/vsol_box_2d_sptr.h>
-#include <cstdlib> // for std::rand()
-#include <iostream>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <algorithm>
 #include <vcl_cassert.h>
 #include <vul/vul_file_iterator.h>
 

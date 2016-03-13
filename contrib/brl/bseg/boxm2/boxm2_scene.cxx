@@ -1,13 +1,12 @@
-#include "boxm2_scene.h"
-//:
-// \file
 #include <iostream>
 #include <string>
-#include <vcl_compiler.h>
-#include <iostream>
 #include <algorithm>
 #include <fstream>
 #include <sstream>
+#include "boxm2_scene.h"
+//:
+// \file
+#include <vcl_compiler.h>
 
 /* xml includes */
 #include <vsl/vsl_basic_xml_element.h>

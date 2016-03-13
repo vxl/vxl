@@ -16,9 +16,9 @@
 //   21 Apr 2009 Kent Williams - Taking care of the byte ordering of the MAT file
 // \endverbatim
 
-#include <vcl_compiler.h>
 #include <iosfwd>
 #include <complex>
+#include <vcl_compiler.h>
 #include <vnl/vnl_matlab_header.h>
 
 // ------------------------------ easy ------------------------------

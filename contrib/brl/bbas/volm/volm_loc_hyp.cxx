@@ -1,3 +1,6 @@
+#include <limits>
+#include <iostream>
+#include <fstream>
 #include "volm_loc_hyp.h"
 //:
 // \file
@@ -6,11 +9,8 @@
 #include <bkml/bkml_write.h>
 #include <vpgl/file_formats/vpgl_geo_camera.h>
 #include <vcl_cassert.h>
-#include <limits>
 #include <vgl/vgl_distance.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <fstream>
 
 //: construct using a single dem file
 void volm_loc_hyp::add(vgl_polygon<double>& poly, vil_image_view<float>& dem, vpgl_geo_camera* geocam, int inc_i, int inc_j, bool adjust_cam, char hemi, char dir)

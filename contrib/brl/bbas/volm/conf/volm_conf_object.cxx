@@ -1,11 +1,11 @@
+#include <iostream>
+#include <cmath>
+#include <limits>
 #include <volm/conf/volm_conf_object.h>
 //:
 // \file
 #include <vcl_compiler.h>
-#include <iostream>
-#include <cmath>
 #include <vnl/vnl_math.h>
-#include <limits>
 #include <vpgl/vpgl_lvcs.h>
 #include <bkml/bkml_write.h>
 #include <volm/volm_category_io.h>

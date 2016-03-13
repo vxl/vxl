@@ -6,12 +6,12 @@
 // \author Andrew Miller
 // \date Oct 10, 2011
 
-#include <bprb/bprb_func_process.h>
 #include <fstream>
-#include <vcl_compiler.h>
 #include <iostream>
 #include <algorithm>
 #include <sstream>
+#include <bprb/bprb_func_process.h>
+#include <vcl_compiler.h>
 #include <boxm2/ocl/boxm2_ocl_util.h>
 #include <boxm2/boxm2_util.h>
 #include <vil/vil_image_view.h>

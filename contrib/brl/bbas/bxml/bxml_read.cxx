@@ -7,12 +7,12 @@
 // \author Matt Leotta
 // \date   October 5, 2006
 
-#include "bxml_read.h"
-#include <vcl_compiler.h>
 #include <iostream>
 #include <deque>
 #include <utility>
 #include <fstream>
+#include "bxml_read.h"
+#include <vcl_compiler.h>
 #include <vcl_cassert.h>
 #include <vul/vul_file.h>
 #ifdef WIN32

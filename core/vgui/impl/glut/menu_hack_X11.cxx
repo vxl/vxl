@@ -1,11 +1,11 @@
 /*
   fsm
 */
+#include <iostream>
+#include <vector>
 #include "menu_hack.h"
 
-#include <iostream>
 #include <vcl_compiler.h>
-#include <vector>
 
 #include <vgui/vgui_gl.h>
 #include <vgui/vgui_glut.h>

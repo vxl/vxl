@@ -47,10 +47,10 @@
 
 
 #include <map>
-#include <vcl_compiler.h>
 #include <iostream>
 #include <iosfwd>
 #include <string>
+#include <vcl_compiler.h>
 
 //: The type of the property dictionary
 class mbl_read_props_type : public std::map<std::string, std::string >

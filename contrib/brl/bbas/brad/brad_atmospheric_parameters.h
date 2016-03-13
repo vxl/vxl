@@ -9,12 +9,11 @@
 #ifndef brad_atmospheric_parameters_h_
 #define brad_atmospheric_parameters_h_
 
+#include <iostream>
+#include <vector>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 #include <vbl/vbl_ref_count.h>
 #include <vbl/vbl_smart_ptr.h>
-#include <vector>
 
 class brad_atmospheric_parameters : public vbl_ref_count
 {

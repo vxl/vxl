@@ -1,9 +1,9 @@
 // This is brl/bbas/bvgl_2d_geo_index_node_base.cxx
-#include "bvgl_2d_geo_index_node_base.h"
 #include <sstream>
-#include <vcl_compiler.h>
 #include <iostream>
 #include <iomanip>
+#include "bvgl_2d_geo_index_node_base.h"
+#include <vcl_compiler.h>
 
 std::string bvgl_2d_geo_index_node_base::get_string() const
 {

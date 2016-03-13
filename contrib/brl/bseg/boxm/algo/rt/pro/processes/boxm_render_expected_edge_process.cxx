@@ -1,4 +1,6 @@
 // This is brl/bseg/boxm/algo/rt/pro/processes/boxm_render_expected_edge_process.cxx
+#include <iostream>
+#include <fstream>
 #include <bprb/bprb_func_process.h>
 //:
 // \file
@@ -21,8 +23,6 @@
 #include <boxm/sample/boxm_inf_line_sample.h>
 #include <vil/vil_image_view.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <fstream>
 
 namespace boxm_render_expected_edge_process_globals
 {

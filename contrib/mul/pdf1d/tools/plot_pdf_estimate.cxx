@@ -6,9 +6,8 @@
 // Sample from one distribution, generate kernel estimate, generate text file for plotting.
 // \author Tim Cootes
 
+#include <iostream>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 #include <vnl/vnl_vector.h>
 #include <vnl/vnl_random.h>
 #include <pdf1d/pdf1d_flat.h>

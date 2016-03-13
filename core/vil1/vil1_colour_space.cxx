@@ -6,11 +6,11 @@
 // \file
 // \author fsm
 
-#include "vil1_colour_space.h"
-#include <vcl_compiler.h>
 #include <cstdlib>
 #include <algorithm>
 #include <cmath>
+#include "vil1_colour_space.h"
+#include <vcl_compiler.h>
 
 template <class T>
 void vil1_colour_space_RGB_to_YIQ(T const in[3], T out[3])

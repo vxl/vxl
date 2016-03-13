@@ -3,8 +3,8 @@
 // \brief Example of creating and using an image data object
 // \author Ian Scott
 
-#include <vcl_compiler.h>
 #include <iostream>
+#include <vcl_compiler.h>
 #include <vil/vil_load.h>
 #include <vil/vil_image_view.h>
 #include <vil/vil_print.h>

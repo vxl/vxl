@@ -5,6 +5,8 @@
 // \brief Class for perturbing shapes from ground truth
 // \author Patrick Sauer
 
+#include <iostream>
+#include <cstddef>
 #include <vnl/vnl_random.h>
 #include <vnl/vnl_vector.h>
 
@@ -13,8 +15,6 @@
 #include <msm/msm_aligner.h>
 
 #include <vcl_compiler.h>
-#include <iostream>
-#include <cstddef> // for std::size_t
 
 class msm_shape_perturber
 {

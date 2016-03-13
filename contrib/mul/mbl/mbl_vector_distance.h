@@ -5,10 +5,10 @@
 // \brief  Functor object to compute distance between two vectors
 // \author Tim Cootes
 
-#include <vnl/vnl_vector.h>
-#include <vcl_compiler.h>
 #include <iostream>
 #include <cmath>
+#include <vnl/vnl_vector.h>
+#include <vcl_compiler.h>
 
 //: Functor object to compute distance between two vectors
 template<class T>

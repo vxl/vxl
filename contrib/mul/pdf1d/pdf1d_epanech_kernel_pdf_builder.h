@@ -7,10 +7,10 @@
 // \author Tim Cootes
 // \brief Builds Epanechnikov kernel pdfs
 
-#include <pdf1d/pdf1d_kernel_pdf_builder.h>
-#include <vcl_compiler.h>
 #include <iostream>
 #include <iosfwd>
+#include <pdf1d/pdf1d_kernel_pdf_builder.h>
+#include <vcl_compiler.h>
 
 //=======================================================================
 

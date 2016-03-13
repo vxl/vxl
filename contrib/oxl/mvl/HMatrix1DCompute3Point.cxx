@@ -1,8 +1,8 @@
+#include <iostream>
+#include <vector>
 #include "HMatrix1DCompute3Point.h"
 
 #include <vcl_compiler.h>
-#include <iostream>
-#include <vector>
 #include <vcl_cassert.h>
 #include <vgl/vgl_homg_point_1d.h>
 #include <mvl/HMatrix1D.h>

@@ -8,10 +8,10 @@
 // Provide an n-dimensional bin structure for fast point retrieval.
 
 #include <vector>
+#include <iostream>
+#include <cstddef>
 #include <vnl/vnl_vector_fixed.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <cstddef> // for std::size_t
 
 // these two classes are helper classes for rsdl_bins, and should ideally
 // be declared in rsdl_bins and defined only in the .txx, but MSVC6 and 7

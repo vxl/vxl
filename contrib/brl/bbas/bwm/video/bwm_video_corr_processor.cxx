@@ -1,3 +1,6 @@
+#include <iostream>
+#include <cmath>
+#include <cstdio>
 #include "bwm_video_corr_processor.h"
 //:
 // \file
@@ -27,9 +30,6 @@
 #include <vpgl/vpgl_lvcs.h>
 
 #include <vcl_compiler.h>
-#include <iostream>
-#include <cmath>
-#include <cstdio> // for std::sprintf
 
 //Minimum number of correspondences on a frame to compute cameras
 //static const unsigned min_corrs = 10;

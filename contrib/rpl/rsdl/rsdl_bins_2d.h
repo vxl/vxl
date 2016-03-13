@@ -2,13 +2,13 @@
 #define rsdl_bins_2d_h_
 
 #include <iosfwd>
+#include <vector>
+#include <iostream>
+#include <cstddef>
 #include <vnl/vnl_vector_fixed.h>
 
 #include <vbl/vbl_array_2d.h>
-#include <vector>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <cstddef> // for std::size_t
 
 template < class COORD_T, class VALUE_T >
 class rsdl_bins_2d_entry

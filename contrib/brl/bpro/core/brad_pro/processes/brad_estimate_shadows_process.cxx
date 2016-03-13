@@ -2,6 +2,7 @@
 //:
 // \file
 #include <string>
+#include <iostream>
 #include <bprb/bprb_func_process.h>
 #include <bprb/bprb_parameters.h>
 #include <brdb/brdb_value.h>
@@ -12,8 +13,6 @@
 #include <brad/brad_estimate_shadows.h>
 #ifdef DEBUG
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 #endif
 
 

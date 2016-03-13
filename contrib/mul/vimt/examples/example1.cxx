@@ -3,9 +3,8 @@
 // \brief Example of taking sub-windows of an image.
 // \author Tim Cootes - Manchester
 
+#include <iostream>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 #include <vxl_config.h> // for vxl_byte
 #include <vnl/vnl_vector.h>
 #include <vgl/vgl_point_2d.h>

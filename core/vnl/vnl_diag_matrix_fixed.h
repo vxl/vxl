@@ -20,9 +20,9 @@
 //   Jan.2011 - Peter Vanroose - added methods set_diagonal() & get_diagonal()
 // \endverbatim
 
+#include <iosfwd>
 #include <vcl_cassert.h>
 #include <vcl_compiler.h>
-#include <iosfwd>
 #include <vnl/vnl_vector_fixed.h>
 #include <vnl/vnl_matrix_fixed.h>
 

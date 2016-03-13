@@ -6,10 +6,10 @@
 // \author Gamze Tunali
 // \date Dec 19, 2005
 
-#include <vgl/vgl_box_3d.h>
 #include <string>
-#include <vcl_compiler.h>
 #include <iosfwd>
+#include <vgl/vgl_box_3d.h>
+#include <vcl_compiler.h>
 
 //: XML save vgl_box_3d to stream.
 template <class T>

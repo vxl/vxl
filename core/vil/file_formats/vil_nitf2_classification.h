@@ -5,12 +5,12 @@
 #ifndef VIL_NITF2_CLASSIFICATION_H
 #define VIL_NITF2_CLASSIFICATION_H
 
+#include <string>
+#include <map>
+#include <utility>
 #include "vil_nitf2.h"
 
-#include <string>
 #include <vcl_compiler.h>
-#include <map>
-#include <utility> // std::pair
 
 class vil_nitf2_field_definitions;
 

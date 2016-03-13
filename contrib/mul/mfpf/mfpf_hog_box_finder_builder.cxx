@@ -1,3 +1,7 @@
+#include <cmath>
+#include <sstream>
+#include <iostream>
+#include <algorithm>
 #include "mfpf_hog_box_finder_builder.h"
 //:
 // \file
@@ -7,8 +11,6 @@
 #include <mfpf/mfpf_hog_box_finder.h>
 #include <vsl/vsl_binary_loader.h>
 #include <vul/vul_string.h>
-#include <cmath>
-#include <sstream>
 #include <vcl_cassert.h>
 
 #include <mbl/mbl_parse_block.h>
@@ -22,8 +24,6 @@
 #include <vsl/vsl_vector_io.h>
 #include <vsl/vsl_indent.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <algorithm>
 
 #include <mipa/mipa_orientation_histogram.h>
 #include <mipa/mipa_sample_histo_boxes.h>

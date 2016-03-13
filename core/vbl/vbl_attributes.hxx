@@ -1,11 +1,11 @@
 #ifndef vbl_attributes_hxx_
 #define vbl_attributes_hxx_
+#include <algorithm>
 #include "vbl_attributes.h"
 //:
 // \file
 
 #include <vcl_compiler.h>
-#include <algorithm> // for std::sort()
 #include <vcl_cassert.h>
 
 // ------------ 1d array ----------

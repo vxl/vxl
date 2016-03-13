@@ -13,8 +13,8 @@
 // \endverbatim
 
 class vil_stream;
-#include <vcl_compiler.h>
 #include <iosfwd>
+#include <vcl_compiler.h>
 
 struct vil_bmp_core_header
 {

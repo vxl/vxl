@@ -6,11 +6,12 @@
 // \file
 // http://www.mirror.ac.uk/sites/ftp.cdrom.com/pub/png/libpng.html
 
+#include <cstring>
+#include <iostream>
+#include <cstdlib>
 #include "vil1_png.h"
 
 #include <vcl_cassert.h>
-#include <cstring>
-#include <iostream>
 
 #include <vil1/vil1_stream.h>
 #include <vil1/vil1_image_impl.h>
@@ -22,7 +23,6 @@
 extern "You need a later libpng. You should rerun CMake, after setting VXL_FORCE_V3P_PNG to ON."
 #endif
 #include <vcl_compiler.h>
-#include <cstdlib> // for std::exit()
 
 #include <vxl_config.h>
 

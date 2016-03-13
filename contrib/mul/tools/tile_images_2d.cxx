@@ -2,10 +2,9 @@
 //  \brief Program to tile several 2D images onto a single large 2D image
 
 #include <exception>
-#include <vcl_compiler.h>
 #include <iostream>
 #include <cstdlib>
-#include <iostream>
+#include <vcl_compiler.h>
 #include <vul/vul_arg.h>
 #include <mbl/mbl_log.h>
 #include <vil/vil_convert.h>

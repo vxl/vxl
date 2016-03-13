@@ -1,11 +1,11 @@
 // This is core/testlib/testlib_root_dir.cxx
+#include <cstdlib>
+#include <iostream>
 #include "testlib_root_dir.h"
 //:
 // \file
 
 #include <vcl_compiler.h>
-#include <cstdlib>
-#include <iostream>
 
 // The following should have been created automatically by the
 // configuration scripts from vcl_where_root_dir.h.in

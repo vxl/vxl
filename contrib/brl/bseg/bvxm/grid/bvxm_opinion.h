@@ -15,9 +15,8 @@
 //   <none yet>
 // \endverbatim
 
+#include <iostream>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 
 class bvxm_opinion
 {

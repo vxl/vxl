@@ -2,6 +2,9 @@
 // \file
 // \author Andy Miller
 // \date 26-Oct-2010
+#include <vector>
+#include <iostream>
+#include <map>
 #include <boxm2/basic/boxm2_block_id.h>
 #include <boxm2/boxm2_block.h>
 #include <boxm2/io/boxm2_sio_mgr.h>
@@ -10,10 +13,7 @@
 #include <testlib/testlib_root_dir.h>
 #include "test_utils.h"
 
-#include <vector>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <map>
 
 void test_asio_data()
 {

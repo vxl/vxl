@@ -3,6 +3,7 @@
 #define vidl_ffmpeg_ostream_v56_hxx_
 #pragma once
 
+#include <cstring>
 #include "vidl_ffmpeg_ostream.h"
 #include "vidl_ffmpeg_pixel_format.h"
 //:
@@ -22,7 +23,6 @@
 #include "vidl_frame.h"
 #include "vidl_convert.h"
 #include <vcl_compiler.h>
-#include <cstring>
 #include <vcl_climits.h>
 #include <vil/vil_memory_chunk.h>
 

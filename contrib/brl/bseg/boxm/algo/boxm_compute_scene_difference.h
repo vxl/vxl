@@ -2,6 +2,7 @@
 #define boxm_compute_scene_difference_h_
 //:
 // \file
+#include <iostream>
 #include <boct/boct_tree.h>
 #include <boct/boct_tree_cell.h>
 #include <boxm/boxm_block.h>
@@ -10,8 +11,6 @@
 #include <imesh/imesh_operations.h>
 #include <vgl/vgl_point_3d.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 
 
 void boxm_compute_block_difference(boxm_block<boct_tree<short, boxm_sample<BOXM_APM_MOG_GREY> > > * block1,

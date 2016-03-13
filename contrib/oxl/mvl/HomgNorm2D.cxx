@@ -5,10 +5,9 @@
 //:
 // \file
 
+#include <iostream>
 #include "HomgNorm2D.h"
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 #include <vnl/vnl_math.h>
 #include <vgl/vgl_homg_point_2d.h>
 #include <vgl/algo/vgl_homg_operators_2d.h> // for matrix * vgl_homg_point_2d

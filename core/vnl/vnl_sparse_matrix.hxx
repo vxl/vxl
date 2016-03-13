@@ -4,12 +4,12 @@
 //:
 // \file
 
+#include <algorithm>
+#include <iostream>
 #include "vnl_sparse_matrix.h"
 
 #include <vcl_cassert.h>
 #include <vcl_compiler.h>
-#include <algorithm>
-#include <iostream>
 
 #include <vnl/vnl_math.h>
 #include <vnl/vnl_complex_traits.h>

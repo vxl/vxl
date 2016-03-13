@@ -9,11 +9,11 @@
 //
 //-----------------------------------------------------------------------------
 
-#include "bil_arf_image_istream.h"
-#include <vcl_compiler.h>
 #include <iostream>
 #include <algorithm>
 #include <sstream>
+#include "bil_arf_image_istream.h"
+#include <vcl_compiler.h>
 #include <vul/vul_file_iterator.h>
 #include <vul/vul_file.h>
 #include <vil/vil_image_view.h>

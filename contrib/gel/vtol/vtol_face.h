@@ -36,10 +36,10 @@
 //   22 Sep.2004, Peter Vanroose - added cast_to_intensity_face()
 // \endverbatim
 
-#include <vcl_compiler.h>
 #include <iostream>
 #include <iosfwd>
 #include <vector>
+#include <vcl_compiler.h>
 #include <vtol/vtol_topology_object.h>
 #include <vtol/vtol_one_chain.h>
 #include <vtol/vtol_two_chain.h>

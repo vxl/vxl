@@ -2,16 +2,15 @@
 #define boxm2_asio_mgr_h_
 //:
 // \file
+#include <iostream>
+#include <sstream>
+#include <vector>
+#include <map>
 #include <boxm2/boxm2_block.h>
 #include <boxm2/boxm2_data_traits.h>
 #include <boxm2/boxm2_data.h>
 #include <boxm2/basic/boxm2_block_id.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
-#include <sstream>
-#include <vector>
-#include <map>
 #include <bbas/baio/baio.h>
 #include <vul/vul_file.h>
 

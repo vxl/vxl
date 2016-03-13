@@ -6,13 +6,13 @@
 // \brief base class for topology objects
 // \author Patricia A. Vrobel.
 
-#include <vtol/vtol_topology_object_sptr.h>
-#include <vsol/vsol_spatial_object_2d.h> // parent class
 #include <vector>
 #include <list>
-#include <vcl_compiler.h>
 #include <iostream>
 #include <iosfwd>
+#include <vtol/vtol_topology_object_sptr.h>
+#include <vsol/vsol_spatial_object_2d.h> // parent class
+#include <vcl_compiler.h>
 #include <vtol/vtol_vertex_sptr.h>
 #include <vtol/vtol_zero_chain_sptr.h>
 #include <vtol/vtol_edge_sptr.h>

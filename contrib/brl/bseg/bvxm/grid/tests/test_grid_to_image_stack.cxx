@@ -1,3 +1,5 @@
+#include <iostream>
+#include <sstream>
 #include <testlib/testlib_test.h>
 
 #include <bvxm/grid/io/bvxm_grid_to_image_stack.h>
@@ -8,8 +10,6 @@
 #include <vnl/vnl_vector_fixed.h>
 
 #include <vcl_compiler.h>
-#include <iostream>
-#include <sstream>
 
 template<class T>
 T test_value();

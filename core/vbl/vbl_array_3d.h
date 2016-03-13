@@ -21,8 +21,9 @@
 // \endverbatim
 
 
-#include <vcl_compiler.h>
 #include <cstddef>
+#include <iosfwd>
+#include <vcl_compiler.h>
 
 #ifdef __OPTIMIZE__
 # define RANGECHECK(i,j,k) ((void)0)
@@ -155,7 +156,6 @@ class vbl_array_3d
 // formatted I/O
 //
 #include <vcl_compiler.h>
-#include <iosfwd>
 VCL_TEMPLATE_EXPORT template <class T> std::ostream& operator<<(std::ostream&,
                                                   vbl_array_3d<T >const&);
 

@@ -1,13 +1,12 @@
 // This is brl/bpro/core/vpgl_pro/processes/vpgl_correct_rational_cameras_multi_corr_process.cxx
+#include <iostream>
+#include <sstream>
+#include <fstream>
 #include <bprb/bprb_func_process.h>
 //:
 // \file
 #include <bprb/bprb_parameters.h>
-#include <iostream>
-#include <sstream>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <fstream>
 #include <vpgl/vpgl_rational_camera.h>
 #include <vul/vul_file.h>
 #include <vul/vul_awk.h>

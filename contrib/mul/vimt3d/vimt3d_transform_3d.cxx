@@ -1,4 +1,7 @@
 // This is mul/vimt3d/vimt3d_transform_3d.cxx
+#include <iostream>
+#include <cstdlib>
+#include <sstream>
 #include "vimt3d_transform_3d.h"
 //:
 // \file
@@ -7,9 +10,6 @@
 
 #include <vcl_cassert.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <cstdlib>
-#include <sstream>
 #include <vsl/vsl_indent.h>
 #include <vnl/vnl_matrix_fixed.h>
 #include <vnl/vnl_vector.h>

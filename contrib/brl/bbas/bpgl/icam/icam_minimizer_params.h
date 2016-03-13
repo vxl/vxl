@@ -3,9 +3,8 @@
 //:
 // \file
 #include <string>
+#include <iostream>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 
 class icam_minimizer_params
 {

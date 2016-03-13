@@ -20,11 +20,11 @@
 //                            - Removed 'playback' - doesn't seem to be used.
 // \endverbatim
 
+#include <vector>
 #include "vgui_blackbox_tableau_sptr.h"
 #include <vgui/vgui_wrapper_tableau.h>
 #include <vgui/vgui_event.h>
 #include <vcl_compiler.h>
-#include <vector>
 
 //: Tableau for event record and playback.
 //

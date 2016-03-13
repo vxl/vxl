@@ -1,7 +1,7 @@
 // This is core/vil/tests/test_resample_nearest.cxx
+#include <iostream>
 #include <testlib/testlib_test.h>
 #include <vcl_compiler.h>
-#include <iostream>
 #include <vxl_config.h> // for vxl_byte
 #include <vil/vil_image_view.h>
 #include <vil/vil_resample_nearest.h>

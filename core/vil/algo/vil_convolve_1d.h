@@ -13,13 +13,13 @@
 // called "convolution". So don't break the convolution routines in
 // that particular way.
 
-#include <vcl_compiler.h>
 #include <algorithm>
-#include <vcl_compiler.h>
-#include <cstdlib> // for std::abort()
+#include <cstdlib>
 #include <cstring>
-#include <vcl_cassert.h>
 #include <iostream>
+#include <vcl_compiler.h>
+#include <vcl_compiler.h>
+#include <vcl_cassert.h>
 #include <vil/vil_image_view.h>
 #include <vil/vil_image_resource.h>
 #include <vil/vil_property.h>

@@ -37,11 +37,11 @@
 //   January 9, 2012  - Use default value (1) for images that do not have SamplesPerPixel tag - GY
 // \endverbatim
 
-#include <vcl_compiler.h>
 #include <string>
 #include <vector>
-#include <vxl_config.h>
 #include <cmath>
+#include <vcl_compiler.h>
+#include <vxl_config.h>
 #include <vil/vil_config.h>
 #include <vil/vil_pixel_format.h>
 #include <tiffio.h>

@@ -8,9 +8,9 @@
 // \file
 // \author crossge@crd.ge.com
 
-#include <vcl_compiler.h>
 #include <iostream>
 #include <vector>
+#include <vcl_compiler.h>
 
 #include "gst_edge_2d_sptr.h"
 #include "gst_polygon_2d_sptr.h"

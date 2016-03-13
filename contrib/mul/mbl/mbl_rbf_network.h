@@ -6,16 +6,16 @@
 // \author tfc
 //         wondrous VXL conversion started by gvw, errors corrected by ...
 
+#include <string>
+#include <vector>
+#include <iostream>
+#include <cmath>
+#include <iosfwd>
 #include <vsl/vsl_binary_io.h>
 #include <vnl/io/vnl_io_vector.h>
 #include <vnl/io/vnl_io_matrix.h>
 #include <vnl/vnl_vector.h>
-#include <string>
-#include <vector>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <cmath>
-#include <iosfwd>
 
 //: A class to perform some of the functions of a Radial Basis Function Network.
 //  This is a special case of a mixture model pdf, where the same

@@ -1,6 +1,9 @@
 // This is core/vidl/vidl_ffmpeg_istream_v1.hxx
 #ifndef vidl_ffmpeg_istream_v1_hxx_
 #define vidl_ffmpeg_istream_v1_hxx_
+#include <cstring>
+#include <string>
+#include <iostream>
 #include "vidl_ffmpeg_istream.h"
 //:
 // \file
@@ -13,10 +16,7 @@
 #include "vidl_frame.h"
 #include "vidl_ffmpeg_convert.h"
 
-#include <cstring>
 #include <vcl_compiler.h>
-#include <string>
-#include <iostream>
 
 extern "C" {
 #if FFMPEG_IN_SEVERAL_DIRECTORIES

@@ -8,15 +8,15 @@
 // \author Matt Leotta
 // \date Oct. 14, 2008
 
-#include "bmdl_classify.h"
 #include <limits>
-#include <vnl/vnl_math.h>
-#include <vcl_compiler.h>
 #include <iostream>
 #include <algorithm>
 #include <utility>
 #include <set>
 #include <map>
+#include "bmdl_classify.h"
+#include <vnl/vnl_math.h>
+#include <vcl_compiler.h>
 #include <vcl_cassert.h>
 
 #include <vil/algo/vil_binary_dilate.h>

@@ -1,4 +1,7 @@
 // This is brl/bseg/boxm2/pro/processes/boxm2_create_stream_cache_process.cxx
+#include <iostream>
+#include <fstream>
+#include <iomanip>
 #include <bprb/bprb_func_process.h>
 //:
 // \file
@@ -12,8 +15,6 @@
 //   <none yet>
 // \endverbatim
 #include <vcl_compiler.h>
-#include <iostream>
-#include <fstream>
 #include <vul/vul_file.h>
 #include <boxm2/boxm2_scene.h>
 #include <bkml/bkml_parser.h>
@@ -21,7 +22,6 @@
 #include <vgl/vgl_polygon.h>
 #include <vgl/vgl_line_2d.h>
 #include <vpgl/vpgl_lvcs_sptr.h>
-#include <iomanip>
 
 namespace boxm2_create_camera_from_kml_path_process_globals
 {

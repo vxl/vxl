@@ -14,10 +14,10 @@
 //   K.Y.McGaul     27-JAN-2000    Initial version.
 // \endverbatim
 
-#include <vcl_compiler.h>
 #include <iostream>
 #include <list>
 #include <vector>
+#include <vcl_compiler.h>
 
 class vgui_menu;
 class osl_harris_params;

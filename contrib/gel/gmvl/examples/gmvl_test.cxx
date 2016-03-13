@@ -4,9 +4,9 @@
 // \file
 // \author crossge@crd.ge.com
 
-#include <vcl_compiler.h>
 #include <iostream>
 #include <fstream>
+#include <vcl_compiler.h>
 
 #include <gmvl/gmvl_database.h>
 #include <gmvl/gmvl_image_node.h>

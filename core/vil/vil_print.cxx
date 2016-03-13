@@ -1,4 +1,5 @@
 // This is core/vil/vil_print.cxx
+#include <complex>
 #include "vil_print.h"
 //:
 // \file
@@ -12,7 +13,6 @@
 
 #include <vxl_config.h> // for vxl_uint_32 etc.
 #include <vcl_compiler.h>
-#include <complex>
 #include <vil/vil_rgb.h>
 #include <vil/vil_rgba.h>
 

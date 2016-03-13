@@ -3,6 +3,11 @@
 // \author Andy Miller
 // \date 26-Oct-2010
 
+#include <iostream>
+#include <string>
+#include <vector>
+#include <map>
+#include <algorithm>
 #include <testlib/testlib_test.h>
 #include <testlib/testlib_root_dir.h>
 #include <vcl_where_root_dir.h>
@@ -16,13 +21,7 @@
 #include <boxm2/ocl/boxm2_opencl_cache.h>
 #include <boxm2/ocl/pro/boxm2_opencl_processor.h> // beware: does not exist anymore
 
-#include <iostream>
-#include <string>
-#include <vector>
-#include <map>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <algorithm>
 #endif
 
 //: Three unit tests for the three main refine kernel functions

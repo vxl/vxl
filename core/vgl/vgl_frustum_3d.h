@@ -17,8 +17,8 @@
 
 #include <iosfwd>
 #include <vector>
-#include <vcl_compiler.h>
 #include <map>
+#include <vcl_compiler.h>
 #include <vgl/vgl_plane_3d.h>
 #include <vgl/vgl_point_3d.h> // forward declare vgl datatypes
 

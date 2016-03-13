@@ -3,11 +3,11 @@
 // Modifications approved for public release, distribution unlimited
 // DISTAR Case 14074
 //
+#include <iostream>
+#include <string>
 #include <testlib/testlib_test.h>
 #include <testlib/testlib_root_dir.h>
-#include <iostream>
 #include <vcl_compiler.h>
-#include <string>
 #include <vil/vil_config.h>
 #include <vil/vil_open.h>
 #include <vil/vil_save.h>

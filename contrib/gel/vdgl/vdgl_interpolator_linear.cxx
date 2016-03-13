@@ -5,13 +5,13 @@
 //:
 // \file
 
+#include <iostream>
+#include <cmath>
 #include "vdgl_interpolator_linear.h"
 #include <vdgl/vdgl_edgel_chain.h>
 #include <vsol/vsol_point_2d.h>
 #include <vgl/vgl_point_2d.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <cmath>
 #include <vnl/vnl_numeric_traits.h>
 #include <vnl/vnl_math.h>
 #include <vcl_cassert.h>

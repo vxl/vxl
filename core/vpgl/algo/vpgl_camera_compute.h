@@ -9,11 +9,11 @@
 //
 // Should template this class.
 
+#include <vector>
 #include <vpgl/vpgl_perspective_camera.h>
 #include <vpgl/vpgl_proj_camera.h>
 #include <vpgl/vpgl_affine_camera.h>
 #include <vcl_compiler.h>
-#include <vector>
 #include <vgl/vgl_fwd.h>
 #include <vnl/vnl_fwd.h>
 

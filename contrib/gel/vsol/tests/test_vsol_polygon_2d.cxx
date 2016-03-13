@@ -10,13 +10,13 @@
 // 1.1     |2001/07/03| Peter Vanroose           |Thorough check of is_convex
 // 1.2     |2003/01/08| Peter Vanroose           |Now using testlib macros
 //*****************************************************************************
+#include <iostream>
+#include <vector>
 #include <testlib/testlib_test.h>
 //:
 // \file
 
 #include <vcl_compiler.h>
-#include <iostream>
-#include <vector>
 
 #include <vsol/vsol_polygon_2d.h>
 #include <vsol/vsol_polygon_2d_sptr.h>

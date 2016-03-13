@@ -5,8 +5,8 @@
 // When this program is run, highlighting a line on the display by passing
 // the mouse pointer close to it will print a message saying its start point.
 
-#include <vcl_compiler.h>
 #include <iostream>
+#include <vcl_compiler.h>
 #include <vgui/vgui.h>
 #include <vgui/vgui_easy2D_tableau.h>
 #include <vgui/vgui_viewer2D_tableau.h>

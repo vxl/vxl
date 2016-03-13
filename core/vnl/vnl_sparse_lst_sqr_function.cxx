@@ -8,9 +8,9 @@
 // \date   April 13, 2005
 
 
+#include <iostream>
 #include "vnl_sparse_lst_sqr_function.h"
 #include <vcl_compiler.h>
-#include <iostream>
 #include <vcl_cassert.h>
 #include <vnl/vnl_vector_ref.h>
 

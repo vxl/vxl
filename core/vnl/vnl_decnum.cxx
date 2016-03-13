@@ -1,8 +1,8 @@
 // This is core/vnl/vnl_decnum.cxx
+#include <sstream>
 #include "vnl_decnum.h"
 #include <vcl_cassert.h>
 #include <vcl_compiler.h>
-#include <sstream>
 
 // constructor from (decimal) string.
 // Parses the input into (in that order)

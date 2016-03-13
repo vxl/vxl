@@ -4,14 +4,13 @@
 // \author Gamze D. Tunali
 // \date   February 23, 2008
 
+#include <string>
+#include <iostream>
 #include <testlib/testlib_test.h>
 #include <bvxm/bvxm_world_params.h>
 #include <bvxm/bvxm_voxel_world.h>
 
-#include <string>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 
 #include <brdb/brdb_value.h>
 #include <brdb/brdb_selection.h>

@@ -5,13 +5,13 @@
 // \brief Collect data and store them in a list.
 // \author Tim Cootes
 
+#include <string>
+#include <iostream>
+#include <iosfwd>
 #include <mbl/mbl_data_collector.h>
 #include <mbl/mbl_data_array_wrapper.h>
 #include <vsl/vsl_binary_io.h>
-#include <string>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iosfwd>
 
 //: Collect data and store them in a list.
 template<class T>

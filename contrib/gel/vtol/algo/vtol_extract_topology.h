@@ -12,12 +12,11 @@
 //
 // \endverbatim
 
-#include <vxl_config.h>
 #include <vector>
+#include <iostream>
+#include <vxl_config.h>
 #include <vcl_cassert.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 
 #include <vbl/vbl_ref_count.h>
 

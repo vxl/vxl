@@ -2,13 +2,13 @@
 #ifndef bprb_process_manager_hxx_
 #define bprb_process_manager_hxx_
 
+#include <iostream>
+#include <utility>
 #include "bprb_process_manager.h"
 //:
 // \file
 
 #include <vcl_compiler.h>
-#include <iostream>
-#include <utility>
 #include <bprb/bprb_process.h>
 
 //: Constructor

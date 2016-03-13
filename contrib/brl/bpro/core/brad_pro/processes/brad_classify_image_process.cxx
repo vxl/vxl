@@ -1,4 +1,6 @@
 // This is brl/bpro/core/brad_pro/processes/brad_classify_image_process.cxx
+#include <iostream>
+#include <fstream>
 #include <bprb/bprb_func_process.h>
 #include <brad/brad_eigenspace.h>
 #include <vil/vil_load.h>
@@ -6,8 +8,6 @@
 // \file
 
 #include <vcl_compiler.h>
-#include <iostream>
-#include <fstream>
 namespace bbas_core_brad_classify_image
 {
 }

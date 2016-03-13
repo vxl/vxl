@@ -1,3 +1,5 @@
+#include <string>
+#include <iostream>
 #include "bpro_batch.h"
 
 #include <bprb/bprb_batch_process_manager.h>
@@ -15,8 +17,6 @@
 
 #include <vcl_compiler.h>
 #include <vcl_string.h>
-#include <string>
-#include <iostream>
 
 static PyObject *init_process(PyObject *self, PyObject *args);
 static PyObject *set_input_bool(PyObject *self, PyObject *args);

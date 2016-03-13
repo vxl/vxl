@@ -1,4 +1,5 @@
 // This is oxl/xcv/xcv_threeview_manager.cxx
+#include <iostream>
 #include "xcv_threeview_manager.h"
 //:
 //  \file
@@ -7,8 +8,6 @@
 // \author K.Y.McGaul
 
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 #include <vgui/vgui_macro.h>
 #include <vgui/vgui_projection_inspector.h>
 #include <vgui/vgui_find.h>

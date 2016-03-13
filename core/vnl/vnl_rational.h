@@ -45,8 +45,8 @@
 //                                (actually a full re-implementation, using gcd)
 // \endverbatim
 
-#include <vcl_compiler.h>
 #include <iostream>
+#include <vcl_compiler.h>
 #include <vcl_cassert.h>
 
 //: High-precision rational numbers

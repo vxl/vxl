@@ -1,7 +1,7 @@
-#include "rrel_misc.h"
-#include <vcl_compiler.h>
 #include <iostream>
 #include <cmath>
+#include "rrel_misc.h"
+#include <vcl_compiler.h>
 #include <vnl/vnl_math.h>
 
 // Chebychev approximation to erfc --- the complement of the error

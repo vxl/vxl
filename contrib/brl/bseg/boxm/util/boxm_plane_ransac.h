@@ -11,6 +11,9 @@
 //   Ozge C. Ozcanli  July 7, 2010 : made some internal hard-coded defaults into parameters
 // \endverbatim
 
+#include <iostream>
+#include <cstdlib>
+#include <list>
 #include <vgl/vgl_infinite_line_3d.h>
 #include <vgl/vgl_intersection.h>
 #include <vgl/algo/vgl_intersection.h>
@@ -21,10 +24,6 @@
 #include <boxm/boxm_apm_traits.h>
 #include <boxm/sample/boxm_edge_tangent_sample.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <cstdlib> // for rand()
-#include <iostream>
-#include <list>
 
 #define ITER_MAX 100
 

@@ -8,9 +8,9 @@
 // \file
 
 #include <vector>
+#include <string>
 #include <vxl_config.h>
 #include <vcl_compiler.h>
-#include <string>
 #include <vil/vil_pixel_format.h>
 
 class vil_stream;

@@ -1,12 +1,12 @@
 // This is brl/bseg/sdet/sdet_nms.cxx
+#include <iostream>
+#include <cstdio>
+#include <cstdlib>
 #include "sdet_nms.h"
 //:
 // \file
 
 #include <vcl_compiler.h>
-#include <iostream>
-#include <cstdio>
-#include <cstdlib>   // for std::abs(int) and std::sqrt()
 #include <vnl/vnl_matrix.h>
 #include <vnl/algo/vnl_svd.h>
 #include <vgl/vgl_homg_point_2d.h>

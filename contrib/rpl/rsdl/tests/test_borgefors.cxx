@@ -1,9 +1,8 @@
-#include <rsdl/rsdl_borgefors.h>
-#include <vcl_compiler.h>
-#include <iostream>
 #include <iostream>
 #include <vector>
 #include <string>
+#include <rsdl/rsdl_borgefors.h>
+#include <vcl_compiler.h>
 #include <vnl/vnl_vector_fixed.h>
 #include <testlib/testlib_test.h>
 

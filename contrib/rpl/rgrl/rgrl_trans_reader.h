@@ -12,11 +12,11 @@
 //                            This is to allow user to add other local-defined transformations types.
 // \endverbatim
 
-#include <rgrl/rgrl_transformation_sptr.h>
-#include <vcl_compiler.h>
 #include <iostream>
 #include <iosfwd>
 #include <vector>
+#include <rgrl/rgrl_transformation_sptr.h>
+#include <vcl_compiler.h>
 
 //: Reader class for smartly detecting various transformation classes
 //  Users can also add user-defined classes, which takes priority before others

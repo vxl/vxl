@@ -13,10 +13,10 @@
 // \endverbatim
 
 #include <string>
-#include <vcl_compiler.h>
 #include <iostream>
 #include <fstream>
 #include <vector>
+#include <vcl_compiler.h>
 #include <vsl/vsl_binary_io.h>
 
 template <class Type>

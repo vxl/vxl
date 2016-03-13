@@ -9,11 +9,11 @@
 // \author Tim Cootes
 // \brief A wrapper to provide access to sets of objects
 
+#include <iostream>
+#include <string>
 #include <vsl/vsl_binary_io.h>
 #include <mbl/mbl_data_wrapper.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <string>
 
 //: Base class for objects which can return a set of objects, one at a time
 //  This is an iterator-like object.  However, unlike STL, generality is

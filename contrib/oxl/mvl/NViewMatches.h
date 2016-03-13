@@ -32,11 +32,11 @@
 //
 //-----------------------------------------------------------------------------
 
-#include <vnl/vnl_vector.h>
 #include <vector>
-#include <vcl_compiler.h>
 #include <iostream>
 #include <iosfwd>
+#include <vnl/vnl_vector.h>
+#include <vcl_compiler.h>
 
 struct NViewMatch : public vnl_vector<int>
 {

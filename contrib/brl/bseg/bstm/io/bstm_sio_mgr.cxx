@@ -1,8 +1,8 @@
+#include <iostream>
+#include <fstream>
 #include "bstm_sio_mgr.h"
 //
 #include <vcl_compiler.h>
-#include <iostream>
-#include <fstream>
 #include <sys/stat.h>  //for getting file sizes
 #include <vul/vul_file.h>
 

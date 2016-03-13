@@ -1,3 +1,4 @@
+#include <fstream>
 #include <vidl/vidl_dshow_live_istream.h>
 #include <vidl/vidl_dshow_istream_params.h>
 #include <vidl/vidl_image_list_ostream.h>
@@ -6,7 +7,6 @@
 
 #include <vul/vul_timer.h>
 #include <vcl_compiler.h>
-#include <fstream>
 
 #if 0 // Commented out
 const std::string config_file = "core/vidl/examples/config.dshow.logitech"; // config.euresys.vid1

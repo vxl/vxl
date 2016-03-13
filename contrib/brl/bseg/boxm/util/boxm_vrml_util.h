@@ -12,13 +12,12 @@
 //   <none yet>
 // \endverbatim
 
+#include <iostream>
+#include <fstream>
 #include <boxm/boxm_scene.h>
 #include "boxm_cell_data_traits.h"
 #include <bvrml/bvrml_write.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <fstream>
-#include <iostream>
 
 class boxm_vrml_util
 {

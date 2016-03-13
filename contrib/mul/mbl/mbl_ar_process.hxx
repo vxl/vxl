@@ -4,6 +4,8 @@
 //:
 // \file
 
+#include <iostream>
+#include <cmath>
 #include "mbl_ar_process.h"
 
 #include <vnl/algo/vnl_symmetric_eigensystem.h>
@@ -12,8 +14,6 @@
 #include <vnl/vnl_vector_fixed.h>
 #include <vnl/vnl_random.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <cmath>
 
 //: Constructor
 template<class T>

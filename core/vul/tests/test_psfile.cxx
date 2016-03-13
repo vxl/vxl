@@ -8,9 +8,9 @@
 //  7 Jan 2003 - Peter Vanroose - complete rewrite: full coverage of vul_psfile
 // \endverbatim
 //-----------------------------------------------------------------------------
+#include <iostream>
 #include <testlib/testlib_test.h>
 
-#include <iostream>
 #include <vul/vul_psfile.h>
 #include <vul/vul_temp_filename.h>
 #include <vpl/vpl.h> // for unlink()

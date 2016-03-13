@@ -17,11 +17,11 @@
 // the aziumuth range is:
 //  0 <= phi <= two_pi
 //
+#include <iostream>
+#include <vector>
 #include <vil/vil_image_view.h>
 #include <vbl/vbl_ref_count.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <vector>
 #include <vpgl/vpgl_camera_double_sptr.h>
 #include <vgl/vgl_point_3d.h>
 #include <vgl/vgl_ray_3d.h>

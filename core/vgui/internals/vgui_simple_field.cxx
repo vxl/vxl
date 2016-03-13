@@ -8,10 +8,10 @@
 // \date   23 Oct 99
 // \brief  See vgui_simple_field.h for a description of this file.
 
+#include <sstream>
 #include "vgui_simple_field.h"
 
 #include <vcl_compiler.h>
-#include <sstream>
 
 
 template <class T>

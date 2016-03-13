@@ -40,6 +40,9 @@
 // \endverbatim
 //-----------------------------------------------------------------------------
 
+#include <functional>
+#include <map>
+#include <iosfwd>
 #include <vxl_config.h>
 
 #if VXL_HAS_INT_64
@@ -50,10 +53,7 @@ typedef vxl_uint_32 ulonglong;
 # error "only implemented with 32 and 64-bit ints"
 #endif
 
-#include <functional>
 #include <vcl_compiler.h>
-#include <map>
-#include <iosfwd>
 
 template <class T>
 class vbl_big_sparse_array_3d

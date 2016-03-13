@@ -1,9 +1,9 @@
 #ifndef OTAGO_INLINES_H__
 #define OTAGO_INLINES_H__
 
-#include <vcl_compiler.h>
 #include <iostream>
 #include <cmath>
+#include <vcl_compiler.h>
 
 inline bool epsilon_equals(double d1, double d2, double epsilon=1.0e-6)
 {

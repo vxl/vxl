@@ -16,10 +16,10 @@
 //   None
 // \endverbatim
 
+#include <limits>
 #include <vpdl/vpdt/vpdt_dist_traits.h>
 #include <vnl/vnl_math.h>
 #include <vcl_compiler.h>
-#include <limits>
 
 //: Compute the log of the unnormalized density
 template <class dist>

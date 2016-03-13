@@ -2,13 +2,13 @@
 // Stellar Science Ltd. Co. (stellarscience.com) for
 // Air Force Research Laboratory, 2005.
 
+#include <string>
+#include <cstdlib>
 #include "vil_nitf2_data_mask_table.h"
 
 #include <vil/vil_stream.h>
-#include <string>
 #include <vcl_cassert.h>
 #include <vcl_compiler.h>
-#include <cstdlib>
 
 vil_nitf2_data_mask_table::vil_nitf2_data_mask_table(
   unsigned int num_blocks_x, unsigned int num_blocks_y,

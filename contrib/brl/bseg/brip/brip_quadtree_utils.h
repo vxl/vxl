@@ -12,9 +12,8 @@
 // \endverbatim
 //------------------------------------------------------------------
 #include <vector>
+#include <iostream>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 #include <vil/vil_image_view.h>
 #include <brip/brip_quadtree_node.h>
 #include <vbl/vbl_array_2d.h>

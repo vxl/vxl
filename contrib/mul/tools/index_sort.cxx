@@ -4,11 +4,10 @@
 //  \brief Perform an index sort on a list of scalar numeric data
 
 
-#include <vcl_compiler.h>
 #include <iostream>
 #include <exception>
-#include <iostream>
 #include <iterator>
+#include <vcl_compiler.h>
 #include <vul/vul_arg.h>
 #include <vul/vul_file.h>
 #include <mbl/mbl_log.h>

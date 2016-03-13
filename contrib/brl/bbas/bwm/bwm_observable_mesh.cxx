@@ -1,3 +1,5 @@
+#include <iostream>
+#include <sstream>
 #include "bwm_observable_mesh.h"
 #include "bwm_world.h"
 //:
@@ -7,9 +9,6 @@
 
 #include <vcl_cassert.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
-#include <sstream>
 #include <vnl/vnl_math.h>
 
 #include <vgl/vgl_point_3d.h>

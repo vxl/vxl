@@ -1,13 +1,12 @@
+#include <cmath>
+#include <iostream>
+#include <algorithm>
+#include <limits>
 #include "bsta_k_medoid.h"
 //:
 // \file
-#include <cmath>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <algorithm> //for find
-#include <iostream>
 #include <vcl_cassert.h>
-#include <limits>
 
 bsta_k_medoid::bsta_k_medoid(const unsigned n_elements, bool verbose)
 {

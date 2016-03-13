@@ -1,7 +1,7 @@
 // This is mul/mbl/tests/test_exception.cxx
-#include <vcl_compiler.h>
 #include <iostream>
 #include <typeinfo>
+#include <vcl_compiler.h>
 #include <mbl/mbl_exception.h>
 #include <testlib/testlib_test.h>
 #include <vul/vul_file.h>

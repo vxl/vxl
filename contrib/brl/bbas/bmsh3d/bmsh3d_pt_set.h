@@ -16,10 +16,10 @@
 //
 //-------------------------------------------------------------------------
 
-#include <vcl_compiler.h>
 #include <iostream>
 #include <map>
 #include <utility>
+#include <vcl_compiler.h>
 #include <vgl/vgl_fwd.h>
 
 #include "bmsh3d_vertex.h"

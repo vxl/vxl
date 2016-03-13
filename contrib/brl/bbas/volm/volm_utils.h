@@ -12,12 +12,12 @@
 //   <none yet>
 // \endverbatim
 //
+#include <iostream>
+#include <string>
 #include <vgl/vgl_box_2d.h>
 #include <vgl/vgl_polygon.h>
 #include <vgl/vgl_intersection.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <string>
 
 class volm_utils
 {

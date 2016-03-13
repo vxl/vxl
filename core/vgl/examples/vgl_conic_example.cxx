@@ -1,7 +1,7 @@
 // This is an example of how to use vgl_conic,
 // written by Peter Vanroose, ESAT, K.U.Leuven, Belgium, 5 October 2001.
-#include <vcl_compiler.h>
 #include <iostream>
+#include <vcl_compiler.h>
 #include <vcl_cassert.h>
 #include <vgl/vgl_conic.h>
 #include <vgl/vgl_box_2d.h>

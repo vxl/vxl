@@ -11,6 +11,8 @@
 //      The reason is rsdl_bins has problems on finding k-nearest points
 // \endverbatim
 
+#include <iostream>
+#include <memory>
 #include <rsdl/rsdl_bins_2d.h>
 
 #include "rgrl_feature.h"
@@ -18,8 +20,6 @@
 #include "rgrl_mask.h"
 
 #include <vcl_compiler.h>
-#include <iostream>
-#include <memory>
 
 //: A set of features grouped only by N-d location.
 //

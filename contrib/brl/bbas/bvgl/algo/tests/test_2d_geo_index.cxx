@@ -5,11 +5,10 @@
 // \author Yi Dong
 // \data Nov. 01, 2013
 
+#include <iostream>
 #include <testlib/testlib_test.h>
 #include <bvgl/algo/bvgl_2d_geo_index.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 
 static void test_2d_geo_index()
 {

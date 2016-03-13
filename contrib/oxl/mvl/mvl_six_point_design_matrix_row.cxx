@@ -6,11 +6,11 @@
 // \file
 // \author fsm
 
+#include <iostream>
+#include <cmath>
 #include "mvl_six_point_design_matrix_row.h"
 
 #include <vcl_compiler.h>
-#include <iostream>
-#include <cmath>
 
 void mvl_six_point_design_matrix_row(vnl_matrix<double> const &A,
                                      vnl_matrix<double> const &B,

@@ -10,9 +10,9 @@
 // \author Tim Cootes - Manchester
 // (Based on old code whose provenance has been lost in the mists of time...)
 
-#include <vcl_compiler.h>
 #include <iostream>
 #include <iosfwd>
+#include <vcl_compiler.h>
 #include <vil3d/vil3d_file_format.h>
 
 //: Structure containing analyse header file information.

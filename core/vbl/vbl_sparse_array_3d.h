@@ -23,8 +23,8 @@
 //---------------------------------------------------------------------------
 
 
-#include <vcl_compiler.h>
 #include <iosfwd>
+#include <vcl_compiler.h>
 #include <vbl/vbl_sparse_array_base.h>
 #include <vbl/vbl_triple.h>
 

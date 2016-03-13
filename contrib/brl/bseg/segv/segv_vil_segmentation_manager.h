@@ -13,9 +13,9 @@
 // \endverbatim
 //---------------------------------------------------------------------------
 
-#include <vcl_compiler.h>
 #include <iostream>
 #include <vector>
+#include <vcl_compiler.h>
 #include <vil/vil_image_resource.h>
 #include <vsol/vsol_line_2d_sptr.h>
 #include <vsol/vsol_conic_2d_sptr.h>

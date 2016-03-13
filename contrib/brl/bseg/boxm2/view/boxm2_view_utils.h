@@ -3,14 +3,13 @@
 //:
 // \file
 // \brief boxm2_view_utils contains factored out methods used in multiple tableaus
+#include <iostream>
+#include <vector>
 #include <vnl/vnl_math.h>
 #include "boxm2_include_glew.h"
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 #include <bocl/bocl_cl.h>
 #include <vgl/vgl_vector_3d.h>
-#include <vector>
 #include <vpgl/vpgl_camera.h>
 
 //: Utility class with static methods

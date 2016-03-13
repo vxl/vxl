@@ -1,12 +1,11 @@
+#include <string>
+#include <iostream>
 #include <testlib/testlib_test.h>
 #include <bundler/bundler_tracks_impl.h>
 
-#include <string>
 #include <vil/vil_load.h>
 
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 
 // TODO: Save an image with the location of all the features.
 

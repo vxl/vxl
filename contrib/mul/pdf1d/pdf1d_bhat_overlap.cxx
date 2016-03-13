@@ -1,4 +1,6 @@
 // This is mul/pdf1d/pdf1d_bhat_overlap.cxx
+#include <iostream>
+#include <cmath>
 #include "pdf1d_bhat_overlap.h"
 //:
 // \file
@@ -7,8 +9,6 @@
 
 #include <pdf1d/pdf1d_sampler.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <cmath>
 #include <vnl/vnl_vector.h>
 #include <vnl/vnl_math.h>
 

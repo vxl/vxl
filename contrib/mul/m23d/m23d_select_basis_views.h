@@ -6,10 +6,10 @@
 #ifndef m23d_select_basis_views_h_
 #define m23d_select_basis_views_h_
 
-#include <vnl/vnl_matrix.h>
-#include <vcl_compiler.h>
 #include <iostream>
 #include <vector>
+#include <vnl/vnl_matrix.h>
+#include <vcl_compiler.h>
 
 //: Select a subset most suitable for use as a basis set
 //  Data matrix is 2ns x np (ns= number of samples, np = number of points)

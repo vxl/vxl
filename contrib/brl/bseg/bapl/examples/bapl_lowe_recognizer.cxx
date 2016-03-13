@@ -3,6 +3,8 @@
 //:
 // \file
 
+#include <iostream>
+#include <vector>
 #include <vul/vul_arg.h>
 #include <vil/vil_load.h>
 #include <vil/vil_new.h>
@@ -18,8 +20,6 @@
 #include <rrel/rrel_ran_sam_search.h>
 #include <rrel/rrel_muset_obj.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <vector>
 #include <ipts/ipts_draw.h>
 
 #include <bapl/bapl_bbf_tree.h>

@@ -12,9 +12,9 @@
 //   (none yet)
 // \endverbatim
 
-#include <vcl_compiler.h>
 #include <iostream>
 #include <limits>
+#include <vcl_compiler.h>
 #include <bsta/bsta_attributes.h> // for bsta_num_obs<T>
 #include <bsta/bsta_mixture.h>
 

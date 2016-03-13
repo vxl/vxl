@@ -13,12 +13,12 @@
 //            General Electric
 //
 //-------------------------------------------------------------------------------
-#include <pop/pop_parameter.h>
-#include <pop/pop_object.h>
 #include <vector>
-#include <vcl_compiler.h>
 #include <iostream>
 #include <list>
+#include <pop/pop_parameter.h>
+#include <pop/pop_object.h>
+#include <vcl_compiler.h>
 #include <pop/pop_geometric_cost_function.h>
 
 //: A class for keeping track of parameterized objects

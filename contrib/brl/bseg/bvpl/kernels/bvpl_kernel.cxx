@@ -1,13 +1,12 @@
+#include <iostream>
+#include <sstream>
+#include <fstream>
+#include <string>
 #include "bvpl_kernel.h"
 //:
 // \file
 
-#include <iostream>
-#include <sstream>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <fstream>
-#include <string>
 
 #include <bxml/bxml_find.h>
 

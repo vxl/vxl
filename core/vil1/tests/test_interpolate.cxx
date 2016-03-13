@@ -1,10 +1,10 @@
 /*
   fsm
 */
-#include <vcl_cassert.h>
-#include <vcl_compiler.h>
 #include <cmath>
 #include <iostream>
+#include <vcl_cassert.h>
+#include <vcl_compiler.h>
 #include <vil1/vil1_interpolate.h>
 #include <testlib/testlib_test.h>
 

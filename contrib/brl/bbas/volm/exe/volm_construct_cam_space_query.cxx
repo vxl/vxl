@@ -12,11 +12,11 @@
 //   Yi Dong   Feb-2013   added the creation of an empty weight parameter text file
 // \endverbatim
 //
-#include <ios>        // for std::ios::fixed etc.
-#include <iomanip>    // for std::fixed etc.
-#include <vcl_compiler.h>
+#include <ios>
+#include <iomanip>
 #include <iostream>
-#include <algorithm>  // for std::sort
+#include <algorithm>
+#include <vcl_compiler.h>
 #include <volm/volm_io.h>
 #include <vul/vul_file.h>
 #include <volm/volm_camera_space.h>

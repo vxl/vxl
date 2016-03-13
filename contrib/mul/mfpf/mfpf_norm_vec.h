@@ -5,10 +5,10 @@
 // \brief Sets vec to have zero mean and unit length
 // \author Tim Cootes
 
+#include <iostream>
+#include <algorithm>
 #include <vnl/vnl_vector.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <algorithm> // std::max()
 
 //: Sets vec to have zero mean and unit length
 inline void mfpf_norm_vec(vnl_vector<double>& vec, double var_min=1.0E-6,

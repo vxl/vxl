@@ -22,10 +22,10 @@
 //   Jun 2009 created
 // \endverbatim
 
+#include <iosfwd>
 #include <vgl/vgl_point_3d.h>
 #include <vgl/algo/vgl_rotation_3d.h>
 #include <vcl_compiler.h>
-#include <iosfwd>
 
 template <class T>
 class vgl_ellipsoid_3d

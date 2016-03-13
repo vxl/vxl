@@ -1,7 +1,7 @@
 // This is core/vgui/examples/basic_manager.cxx
+#include <cstdlib>
 #include "basic_manager.h"
 #include <vcl_compiler.h>
-#include <cstdlib> // for std::exit()
 #include <vil1/vil1_load.h>
 #include <vgui/vgui.h>
 #include <vgui/vgui_dialog.h>

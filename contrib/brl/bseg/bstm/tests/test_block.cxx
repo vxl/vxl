@@ -2,6 +2,11 @@
 // \file
 // \author Ali Osman Ulusoy
 // \date 03-Aug-2012
+#include <iostream>
+#include <string>
+#include <vector>
+#include <map>
+#include <algorithm>
 #include <testlib/testlib_test.h>
 #include <testlib/testlib_root_dir.h>
 
@@ -10,13 +15,7 @@
 #include <bstm/bstm_block_metadata.h>
 #include <bstm/bstm_time_block.h>
 
-#include <iostream>
-#include <string>
-#include <vector>
-#include <map>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <algorithm>
 
 void test_block_id()
 {

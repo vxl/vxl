@@ -4,6 +4,7 @@
 //  Copyright: (C) 2010 The University of Manchester
 //
 //=======================================================================
+#include <iostream>
 #include <testlib/testlib_test.h>
 //:
 // \file
@@ -13,8 +14,6 @@
 #include <msm/msm_wt_mat_2d.h>
 #include <vnl/vnl_matrix.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 
 //=======================================================================
 

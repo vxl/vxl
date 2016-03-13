@@ -3,6 +3,9 @@
 //:
 // \file
 
+#include <vector>
+#include <iostream>
+#include <cmath>
 #include <boxm2/boxm2_data_traits.h>
 #include <boxm2/cpp/algo/boxm2_cast_ray_function.h>
 #include <boxm2/cpp/algo/boxm2_mog3_grey_processor.h>
@@ -13,10 +16,7 @@
 #include <bvgl/bvgl_triangle_3d.h>
 #include <vnl/vnl_vector_fixed.h>
 #include <vgl/vgl_box_3d.h>
-#include <vector>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <cmath>
 
 class boxm2_points_to_volume
 {

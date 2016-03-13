@@ -1,6 +1,9 @@
 #ifndef bwm_video_site_io_h_
 #define bwm_video_site_io_h_
 
+#include <iostream>
+#include <string>
+#include <vector>
 #include "bwm_video_site_io_defs.h"
 
 #ifdef WIN32
@@ -8,9 +11,6 @@
 #endif
 #include <expatpp.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <string>
-#include <vector>
 #include "bwm_video_corr_sptr.h"
 
 class bwm_video_site_io : public expatpp

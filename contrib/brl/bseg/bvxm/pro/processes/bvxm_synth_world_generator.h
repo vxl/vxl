@@ -13,6 +13,9 @@
 //                                   Some of the methods for reconstruction have been left out
 // \endverbatim
 
+#include <iostream>
+#include <string>
+#include <vector>
 #include <vpgl/vpgl_perspective_camera.h>
 #include <vpgl/vpgl_rational_camera.h>
 
@@ -29,9 +32,6 @@
 #include <vgl/vgl_vector_3d.h>
 
 #include <vcl_compiler.h>
-#include <iostream>
-#include <string>
-#include <vector>
 
 class bvxm_synth_world_generator
 {

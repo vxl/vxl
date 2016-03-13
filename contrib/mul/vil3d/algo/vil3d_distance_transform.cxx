@@ -1,3 +1,5 @@
+#include <iostream>
+#include <algorithm>
 #include "vil3d_distance_transform.h"
 //:
 // \file
@@ -11,8 +13,6 @@
 #include <vil/vil_fill.h>
 #include <vcl_cassert.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <algorithm>
 
 //: Compute signed distance transform in 3d from zeros in original image.
 //  Image is assumed to be filled with max_dist

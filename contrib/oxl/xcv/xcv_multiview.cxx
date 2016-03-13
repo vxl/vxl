@@ -12,17 +12,16 @@
 //   K.Y.McGaul     27-JAN-2000  Initial version.
 // \endverbatim
 
+#include <string>
+#include <iostream>
+#include <fstream>
 #include "xcv_multiview.h"
 #include "xcv_twoview_manager.h"
 #include "xcv_threeview_manager.h"
 #include "xcv_tjunction.h"
 #include "xcv_segmentation.h"
 
-#include <string>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <fstream>
-#include <iostream>
 #include <vil1/vil1_image.h>
 
 #include <mvl/HomgInterestPointSet.h>

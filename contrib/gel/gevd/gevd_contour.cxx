@@ -1,13 +1,12 @@
 // This is gel/gevd/gevd_contour.cxx
+#include <iostream>
+#include <cstdlib>
+#include <vector>
+#include <algorithm>
 #include "gevd_contour.h"
 //:
 // \file
-#include <iostream>
-#include <cstdlib>   // for std::abs(int)
-#include <vector>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <algorithm> // for std::max()
 #include <vxl_config.h>
 #include <vnl/vnl_math.h> // for sqrt(2)
 #include <vdgl/vdgl_digital_curve.h>

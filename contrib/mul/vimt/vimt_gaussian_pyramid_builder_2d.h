@@ -6,13 +6,13 @@
 // \brief Build gaussian pyramids of vimt_image_2d_of<T>
 // \author Tim Cootes
 
+#include <string>
+#include <iostream>
+#include <iosfwd>
 #include <vimt/vimt_image_2d_of.h>
 #include <vimt/vimt_image_pyramid_builder.h>
 #include <vsl/vsl_binary_io.h>
-#include <string>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iosfwd>
 
 //: Build gaussian pyramids of vimt_image_2d_of<T>
 //  Smooth with a gaussian filter (1-5-8-5-1 by default)

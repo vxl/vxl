@@ -5,9 +5,9 @@
 //:
 // \file
 
+#include <iostream>
 #include "vil_load.h"
 #include <vcl_compiler.h>
-#include <iostream>
 #include <vil/vil_open.h>
 #include <vil/vil_new.h>
 #include <vil/vil_file_format.h>

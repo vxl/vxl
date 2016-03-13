@@ -19,8 +19,8 @@
 //-----------------------------------------------------------------------------
 
 #include <string>
-#include <vcl_compiler.h>
 #include <iosfwd>
+#include <vcl_compiler.h>
 
 //: C++ conforming replacement to the ANSI C functions sprintf and printf.
 // vul_sprintf works in the same way as sprintf but is itself an ANSI C++ string

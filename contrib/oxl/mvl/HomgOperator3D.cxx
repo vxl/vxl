@@ -1,14 +1,13 @@
-#include "HomgOperator3D.h"
-//:
-//  \file
-
 #include <cmath>
 #include <iostream>
 #include <vector>
 #include <utility>
-#include <vcl_compiler.h>
-#include <iostream>
 #include <algorithm>
+#include "HomgOperator3D.h"
+//:
+//  \file
+
+#include <vcl_compiler.h>
 
 #include <vnl/algo/vnl_svd.h>
 #include <vnl/vnl_matrix_fixed.h>

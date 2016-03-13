@@ -3,12 +3,11 @@
 //:
 // \file
 
+#include <iostream>
 #include "vipl_section_descriptor.h"
 #include <vipl/section/vipl_section_container.h>
 #include <vipl/filter/vipl_filter_abs.h> // for default def of FILTER_IMPTR_INC_REFCOUNT
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream> // for error message stuff
 
 #include <vcl_compiler.h>
 

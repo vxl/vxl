@@ -5,14 +5,14 @@
 //:
 //  \file
 
+#include <string>
+#include <sstream>
+#include <iostream>
+#include <cstdlib>
 #include "vpdfl_axis_gaussian_builder.h"
 //
 #include <vcl_cassert.h>
-#include <string>
-#include <sstream>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <cstdlib> // std::abort()
 
 #include <mbl/mbl_data_wrapper.h>
 #include <vpdfl/vpdfl_axis_gaussian.h>

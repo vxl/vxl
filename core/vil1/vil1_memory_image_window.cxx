@@ -8,9 +8,9 @@
 // \date   19 Aug 96
 //-----------------------------------------------------------------------------
 
+#include <cmath>
 #include "vil1_memory_image_window.h"
 #include <vcl_compiler.h>
-#include <cmath>
 
 vil1_memory_image_window::vil1_memory_image_window(
            const vil1_memory_image_of<vxl_byte>& image,

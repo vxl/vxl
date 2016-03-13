@@ -6,6 +6,10 @@
 // \author Vishal Jain
 // \date Mar 10, 2011
 
+#include <fstream>
+#include <iostream>
+#include <algorithm>
+#include <sstream>
 #include <bprb/bprb_func_process.h>
 #include <boxm2/ocl/boxm2_opencl_cache.h>
 #include <boxm2/ocl/algo/boxm2_ocl_change_detection.h>
@@ -24,11 +28,7 @@
 // directory utility
 #include <vul/vul_timer.h>
 #include <vcl_where_root_dir.h>
-#include <fstream>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <algorithm>
-#include <sstream>
 #include <bocl/bocl_device.h>
 #include <bocl/bocl_kernel.h>
 

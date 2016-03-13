@@ -7,9 +7,9 @@
 // \brief Class to independently normalise sub-blocks with a region
 
 #include <string>
-#include <vcl_compiler.h>
 #include <iostream>
 #include <iosfwd>
+#include <vcl_compiler.h>
 #include <vnl/vnl_fwd.h>
 #include <mbl/mbl_cloneable_ptr.h>
 #include <mipa/mipa_vector_normaliser.h>

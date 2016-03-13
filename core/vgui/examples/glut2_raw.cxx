@@ -1,5 +1,5 @@
-#include <vcl_compiler.h>
 #include <cmath>
+#include <vcl_compiler.h>
 
 #include <vgui/vgui_gl.h>
 #include <vgui/vgui_glut.h>

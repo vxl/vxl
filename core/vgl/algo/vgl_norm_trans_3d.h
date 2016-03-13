@@ -15,10 +15,10 @@
 //   Created August 14, 2004 - J.L. Mundy
 // \endverbatim
 
+#include <iosfwd>
 #include <vnl/vnl_matrix_fixed.h>
 #include <vgl/vgl_homg_point_3d.h>
 #include <vcl_compiler.h>
-#include <iosfwd>
 #include <vgl/algo/vgl_h_matrix_3d.h>
 
 template <class T>

@@ -1,13 +1,13 @@
+#include <iostream>
+#include <algorithm>
+#include <limits>
 #include <volm/volm_camera_space.h>
 //:
 // \file
 #include <vcl_compiler.h>
-#include <iostream>
-#include <algorithm>
 #include <bpgl/bpgl_camera_utils.h>
 #include <vsl/vsl_vector_io.h>
 #include <vsph/vsph_utils.h>
-#include <limits>
   //it is possible for radius and increment to be inconsistent
   //that is, the radius is not a multiple of the increment
   //perhaps the best assumption is that increment rules and

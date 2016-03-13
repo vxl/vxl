@@ -19,9 +19,9 @@
 // \endverbatim
 //-----------------------------------------------------------------------------
 
-#include <vcl_compiler.h>
 #include <iostream>
 #include <vector>
+#include <vcl_compiler.h>
 #include <vifa/vifa_bbox.h>
 #include <vifa/vifa_group_pgram_params.h>
 #include <vifa/vifa_histogram.h>

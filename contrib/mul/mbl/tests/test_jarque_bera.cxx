@@ -1,8 +1,7 @@
 // This is mul/mbl/tests/test_jarque_bera.cxx
-#include <vcl_compiler.h>
-#include <iostream>
 #include <iostream>
 #include <vector>
+#include <vcl_compiler.h>
 #include <mbl/mbl_jarque_bera.h>
 #include <vnl/vnl_random.h>
 #include <testlib/testlib_test.h>

@@ -3,6 +3,10 @@
 //:
 // \file
 
+#include <vector>
+#include <utility>
+#include <iostream>
+#include <string>
 #include <bwm/bwm_observer.h>
 #include <bwm/bwm_observer_img.h>
 #include <bwm/bwm_observable_sptr.h>
@@ -22,11 +26,7 @@
 #include <vgl/vgl_point_3d.h>
 #include <vgl/vgl_vector_3d.h>
 
-#include <vector>
-#include <utility>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <string>
 
 class bwm_observer_vgui : public bwm_observer_img, public bwm_observer
 {

@@ -1,8 +1,7 @@
 #include <iostream>
-#include <vcl_compiler.h>
-#include <iostream>
 #include <cmath>
 #include <vector>
+#include <vcl_compiler.h>
 
 #include <vnl/vnl_double_3.h>
 #include <vnl/vnl_double_4.h>

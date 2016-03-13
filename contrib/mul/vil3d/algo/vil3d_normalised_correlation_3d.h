@@ -6,11 +6,11 @@
 // \brief 3D normalised correlation
 // \author Tim Cootes
 
+#include <iostream>
+#include <cmath>
 #include <vcl_compiler.h>
 #include <vcl_cassert.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <cmath>  // for std::sqrt()
 #include <vil3d/vil3d_image_view.h>
 
 //: Evaluate dot product between kernel and src_im

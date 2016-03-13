@@ -7,16 +7,16 @@
 // See vgui_wx.h for details.
 //=========================================================================
 
+#include <cstdlib>
+#include <cstddef>
+#include <iostream>
 #include "vgui_wx.h"
 #include "vgui_wx_window.h"
 #include "vgui_wx_dialog_impl.h"
 #include <vgui/vgui_gl.h>
 
 #include <vcl_compiler.h>
-#include <cstdlib> // for std::exit()
-#include <cstddef> // for std::size_t
 #include <vcl_cassert.h>
-#include <iostream>
 
 #include <wx/app.h>
 #include <wx/log.h>

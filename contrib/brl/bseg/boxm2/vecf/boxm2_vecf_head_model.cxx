@@ -1,3 +1,6 @@
+#include <iostream>
+#include <algorithm>
+#include <limits>
 #include "boxm2_vecf_head_model.h"
 #include <vnl/vnl_vector_fixed.h>
 #include <vgl/vgl_distance.h>
@@ -8,9 +11,6 @@
 #include <boxm2/io/boxm2_lru_cache.h>
 #include <boct/boct_bit_tree.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <algorithm>
-#include <limits>
 
 boxm2_vecf_head_model::boxm2_vecf_head_model(std::string const& scene_file,std::string color_apm_ident):
   boxm2_vecf_articulated_scene(scene_file,color_apm_ident),

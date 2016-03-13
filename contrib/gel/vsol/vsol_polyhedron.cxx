@@ -1,11 +1,10 @@
 // This is gel/vsol/vsol_polyhedron.cxx
+#include <iostream>
 #include "vsol_polyhedron.h"
 //:
 // \file
 #include <vcl_cassert.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 #include <vsl/vsl_vector_io.h>
 #include <vsol/vsol_point_3d.h>
 

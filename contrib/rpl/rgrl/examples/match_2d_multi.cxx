@@ -7,11 +7,10 @@
 
 #include <fstream>
 #include <iostream>
-#include <vcl_compiler.h>
-#include <iostream>
 #include <algorithm>
 #include <list>
-#include <cstdlib> // for exit()
+#include <cstdlib>
+#include <vcl_compiler.h>
 
 #include <vnl/vnl_double_2.h>
 

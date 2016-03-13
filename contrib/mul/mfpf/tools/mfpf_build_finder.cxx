@@ -19,6 +19,9 @@
 // }
 // \endcode
 
+#include <iostream>
+#include <cmath>
+#include <sstream>
 #include <mbl/mbl_parse_colon_pairs_list.h>
 #include <mbl/mbl_read_props.h>
 #include <mbl/mbl_exception.h>
@@ -41,10 +44,7 @@
 
 #include <msm/msm_points.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <cmath>
 #include <vcl_cassert.h>
-#include <sstream>
 
 //: Structure to hold parameters
 struct tool_params

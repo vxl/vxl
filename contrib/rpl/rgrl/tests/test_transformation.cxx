@@ -1,8 +1,7 @@
 //:
 // \file
+#include <iostream>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 
 #include <testlib/testlib_test.h>
 

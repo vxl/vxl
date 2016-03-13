@@ -1,6 +1,6 @@
+#include <iostream>
 #include <vxl_config.h>
 #include <vcl_compiler.h>
-#include <iostream>
 #include <testlib/testlib_test.h>
 #include <vil/algo/vil_find_4con_boundary.h>
 #include <vil/vil_crop.h>

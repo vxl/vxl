@@ -1,7 +1,6 @@
 // This is mul/mbl/tests/test_gram_schmidt.cxx
+#include <iostream>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 #include <mbl/mbl_mod_gram_schmidt.h>
 #include <vnl/vnl_vector.h>
 #include <testlib/testlib_test.h>

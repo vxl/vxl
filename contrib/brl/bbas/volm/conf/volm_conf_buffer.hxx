@@ -1,13 +1,13 @@
 #ifndef volm_conf_buffer_hxx_
 #define volm_conf_buffer_hxx_
 
+#include <iostream>
+#include <algorithm>
+#include <cmath>
 #include "volm_conf_buffer.h"
 //:
 // \file
 #include <vcl_compiler.h>
-#include <iostream>
-#include <algorithm>
-#include <cmath>
 #include <vul/vul_file.h>
 
 template <class T>

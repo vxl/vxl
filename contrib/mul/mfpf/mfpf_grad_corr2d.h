@@ -5,11 +5,11 @@
 // \brief Searches over a grid using normalised correlation
 // \author Tim Cootes
 
+#include <iostream>
+#include <iosfwd>
 #include <mfpf/mfpf_point_finder.h>
 #include <vgl/vgl_fwd.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iosfwd>
 
 //: Searches over a grid using normalised correlation.
 class mfpf_grad_corr2d : public mfpf_point_finder

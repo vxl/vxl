@@ -14,10 +14,10 @@
 //   2004/09/17 Peter Vanroose - made composition() non-virtual - it just returns a member and should not be overloaded
 // \endverbatim
 
+#include <vector>
 #include <vcsl/vcsl_spatial_transformation.h>
 #include <vcsl/vcsl_composition_sptr.h>
 #include <vcl_compiler.h>
-#include <vector>
 
 //: Composition of transformations
 // This transformation handles a composition of transformations, that is,

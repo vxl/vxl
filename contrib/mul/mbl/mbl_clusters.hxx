@@ -9,12 +9,11 @@
 // \brief  Class to record clusters of data, for faster neighbour finding
 // \author Tim Cootes
 
-#include "mbl_clusters.h"
-#include <iostream>
-#include <vcl_cassert.h>
-#include <vcl_compiler.h>
 #include <iostream>
 #include <algorithm>
+#include "mbl_clusters.h"
+#include <vcl_cassert.h>
+#include <vcl_compiler.h>
 #include <vsl/vsl_binary_io.h>
 #include <vsl/vsl_vector_io.h>
 

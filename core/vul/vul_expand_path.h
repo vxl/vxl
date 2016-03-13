@@ -27,8 +27,8 @@
 // Peter Vanroose   27/05/2001: Corrected the documentation
 // \endverbatim
 
-#include <vcl_compiler.h>
 #include <string>
+#include <vcl_compiler.h>
 #include <vxl_config.h>
 
 //: Expand given path.

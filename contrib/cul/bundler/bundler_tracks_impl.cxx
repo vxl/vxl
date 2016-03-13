@@ -1,3 +1,6 @@
+#include <vector>
+#include <stack>
+#include <iostream>
 #include "bundler_tracks_impl.h"
 //
 #include <bundler/bundler_inters.h>
@@ -12,12 +15,8 @@
 #include <rsdl/rsdl_kd_tree.h>
 #include <rsdl/rsdl_point.h>
 
-#include <vector>
-#include <stack>
 #include <vcl_cassert.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 
 static const double TOL = .01;
 

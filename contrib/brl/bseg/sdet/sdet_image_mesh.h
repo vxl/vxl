@@ -19,9 +19,9 @@
 // \endverbatim
 //
 //-------------------------------------------------------------------------
-#include <vcl_compiler.h>
 #include <iostream>
 #include <vector>
+#include <vcl_compiler.h>
 #include <vgl/vgl_line_segment_2d.h>
 #include <sdet/sdet_image_mesh_params.h>
 #include <imesh/imesh_mesh.h>

@@ -5,10 +5,10 @@
 // \brief Computes log prob based on output of a linear classifier
 // \author Tim Cootes
 
-#include <mfpf/mfpf_vec_cost.h>
-#include <vcl_compiler.h>
 #include <iostream>
 #include <iosfwd>
+#include <mfpf/mfpf_vec_cost.h>
+#include <vcl_compiler.h>
 
 //: Computes log prob based on output of a linear classifier
 //  Linear classifier gives output z = w.x - bias

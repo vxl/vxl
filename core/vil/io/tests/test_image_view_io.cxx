@@ -1,9 +1,9 @@
 // This is core/vil/io/tests/test_image_view_io.cxx
+#include <iostream>
+#include <complex>
 #include <testlib/testlib_test.h>
 
-#include <iostream>
 #include <vcl_compiler.h>
-#include <complex>
 #include <vxl_config.h>
 #include <vpl/vpl.h> // vpl_unlink()
 #include <vil/vil_image_view.h>

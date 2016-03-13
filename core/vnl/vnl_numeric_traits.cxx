@@ -9,9 +9,9 @@
 //
 //-----------------------------------------------------------------------------
 
+#include <complex>
 #include "vnl_numeric_traits.h"
 #include <vcl_compiler.h>
-#include <complex>
 #include <vxl_config.h>
 
 static const long s16 = 0x7fffL;

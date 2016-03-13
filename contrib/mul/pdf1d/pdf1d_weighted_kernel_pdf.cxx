@@ -7,11 +7,10 @@
 // \date   Tue Apr  9 14:00:27 2002
 
 
-#include "pdf1d_weighted_kernel_pdf.h"
-#include <vcl_compiler.h>
-#include <iostream>
 #include <iostream>
 #include <string>
+#include "pdf1d_weighted_kernel_pdf.h"
+#include <vcl_compiler.h>
 #include <vcl_cassert.h>
 #include <vsl/vsl_indent.h>
 #include <vnl/vnl_math.h>

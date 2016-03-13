@@ -8,9 +8,9 @@
 // \brief Reader/Writer for DICOM format images.
 // \author Ian Scott, Chris Wolstenholme - Manchester
 
-#include <vcl_compiler.h>
 #include <iostream>
 #include <vector>
+#include <vcl_compiler.h>
 #include <vil3d/vil3d_file_format.h>
 #include <vil3d/vil3d_image_resource.h>
 #include <vil3d/file_formats/vil3d_slice_list.h>

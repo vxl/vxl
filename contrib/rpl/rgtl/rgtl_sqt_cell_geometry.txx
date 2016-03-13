@@ -5,6 +5,8 @@
 #ifndef rgtl_sqt_cell_geometry_txx
 #define rgtl_sqt_cell_geometry_txx
 
+#include <iostream>
+#include <cmath>
 #include "rgtl_sqt_cell_geometry.hxx"
 
 #include "rgtl_sqt_cell_bounds.hxx"
@@ -15,8 +17,6 @@
 #include <vnl/vnl_vector_fixed.h>
 
 #include <vcl_compiler.h>
-#include <iostream>
-#include <cmath>
 #include <vcl_cassert.h>
 
 #define RGTL_SQT_CELL_GEOMETRY_CONE_SPECIALIZE_3

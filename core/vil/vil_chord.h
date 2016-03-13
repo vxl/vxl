@@ -6,8 +6,8 @@
 // \author Tim Cootes
 
 #include <iostream>
-#include <vcl_compiler.h>
 #include <vector>
+#include <vcl_compiler.h>
 
 //: Store information about position of a row of pixels in an image
 //  Pixels are ([ilo,ihi],y)

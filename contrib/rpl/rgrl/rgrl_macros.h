@@ -4,9 +4,8 @@
 // \file
 
 #include <typeinfo>
+#include <iostream>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 
 #if defined(VCL_VC_DOTNET) || defined(VCL_GCC)
 # define RGRL_HERE __FUNCTION__

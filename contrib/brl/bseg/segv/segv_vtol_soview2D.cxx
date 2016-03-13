@@ -1,9 +1,8 @@
+#include <iostream>
 #include "segv_vtol_soview2D.h"
 //:
 // \file
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 #include <vgui/vgui_gl.h>
 #include <vdgl/vdgl_digital_curve.h>
 #include <vdgl/vdgl_interpolator.h>

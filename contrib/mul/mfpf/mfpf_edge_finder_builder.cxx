@@ -1,3 +1,5 @@
+#include <iostream>
+#include <sstream>
 #include "mfpf_edge_finder_builder.h"
 //:
 // \file
@@ -7,8 +9,6 @@
 #include <mfpf/mfpf_edge_finder.h>
 #include <vsl/vsl_binary_loader.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <sstream>
 #include <vcl_cassert.h>
 
 #include <mbl/mbl_parse_block.h>

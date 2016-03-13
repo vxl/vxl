@@ -23,6 +23,7 @@
 // \endverbatim
 //*****************************************************************************
 
+#include <iostream>
 #include <vsl/vsl_binary_io.h>
 #include <vsol/vsol_point_3d_sptr.h>
 #include <vsol/vsol_spatial_object_3d.h>
@@ -30,8 +31,6 @@
 #include <vgl/vgl_point_3d.h>
 #include <vgl/vgl_homg_point_3d.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 
 class vsol_point_3d : public vsol_spatial_object_3d
 {

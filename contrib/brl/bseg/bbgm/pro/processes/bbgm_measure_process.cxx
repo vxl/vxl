@@ -2,9 +2,11 @@
 #define MEASURE_BKGROUND
 //:
 // \file
+#include <iostream>
+#include <cstddef>
+#include <string>
 #include <bprb/bprb_func_process.h>
 #include <bprb/bprb_parameters.h>
-#include <iostream>
 #include <bbgm/bbgm_image_of.h>
 #include <bbgm/bbgm_image_sptr.h>
 #include <bbgm/bbgm_update.h>
@@ -26,9 +28,6 @@
 #include <bbgm/bbgm_measure.h>
 #include <brip/brip_vil_float_ops.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <cstddef> // for std::size_t
-#include <string> // for std::string::npos
 
 bool bbgm_measure_process_cons(bprb_func_process& pro)
 {

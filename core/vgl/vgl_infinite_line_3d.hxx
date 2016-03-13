@@ -2,11 +2,11 @@
 #ifndef vgl_infinite_line_3d_hxx_
 #define vgl_infinite_line_3d_hxx_
 
+#include <iostream>
+#include <cmath>
 #include "vgl_infinite_line_3d.h"
 #include <vcl_cassert.h>
-#include <iostream>
 #include <vcl_compiler.h>
-#include <cmath> // for fabs
 template <class Type>
 vgl_infinite_line_3d<Type>::vgl_infinite_line_3d(vgl_point_3d<Type> const& p1,
                                                  vgl_point_3d<Type> const& p2)

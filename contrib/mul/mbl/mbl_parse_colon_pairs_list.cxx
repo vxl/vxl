@@ -1,3 +1,5 @@
+#include <iostream>
+#include <sstream>
 #include "mbl_parse_colon_pairs_list.h"
 //:
 // \file
@@ -7,8 +9,6 @@
 #include <mbl/mbl_exception.h>
 #include <vsl/vsl_indent.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <sstream>
 #include <vcl_cassert.h>
 
 //: Parse list of string pairs separated by colons

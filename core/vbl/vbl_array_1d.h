@@ -15,11 +15,11 @@
 //    Amitha Perera  jan2003  fixed possible alignment issues.
 // \endverbatim
 
-#include <vcl_compiler.h>
 #include <new>
-#include <vcl_cassert.h>
 #include <iosfwd>
-#include <cstddef> // for ptrdiff_t and size_t
+#include <cstddef>
+#include <vcl_compiler.h>
+#include <vcl_cassert.h>
 
 //: A simple container.
 // This container stores its elements in contiguous

@@ -1,4 +1,9 @@
 // This is oxl/osl/osl_canny_rothwell.cxx
+#include <list>
+#include <iostream>
+#include <cmath>
+#include <cstdlib>
+#include <cstdio>
 #include "osl_canny_rothwell.h"
 //:
 // \file
@@ -9,13 +14,7 @@
 #include <osl/osl_canny_gradient.h>
 #include <vnl/vnl_math.h>
 
-#include <list>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <cmath>
-#include <cstdlib>
-#include <cstdio>
-#include <iostream>
 #include <vcl_cassert.h>
 
 const float DUMMYTHETA = 10000.0;

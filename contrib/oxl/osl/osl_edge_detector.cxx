@@ -1,16 +1,15 @@
 // This is oxl/osl/osl_edge_detector.cxx
+#include <cmath>
+#include <cstdlib>
+#include <list>
+#include <iostream>
+#include <algorithm>
 #include "osl_edge_detector.h"
 //:
 // \file
 
-#include <cmath>
-#include <cstdlib>
 #include <vcl_cassert.h>
-#include <list>
-#include <iostream>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <algorithm>
 
 #include <osl/osl_canny_base.h>
 #include <osl/osl_kernel.h>

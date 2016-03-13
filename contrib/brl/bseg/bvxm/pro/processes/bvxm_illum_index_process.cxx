@@ -1,4 +1,7 @@
 //This is brl/bseg/bvxm/pro/processes/bvxm_illum_index_process.cxx
+#include <iostream>
+#include <cmath>
+#include <vector>
 #include "bvxm_illum_index_process.h"
 //:
 // \file
@@ -8,10 +11,6 @@
 #include <vil/file_formats/vil_nitf2_image.h>
 
 #include <vcl_compiler.h>
-#include <iostream>
-#include <cmath>
-#include <vector>
-#include <iostream>
 
 //: set input and output types
 bool bvxm_illum_index_process_cons(bprb_func_process& pro)

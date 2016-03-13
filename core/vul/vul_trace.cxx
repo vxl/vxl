@@ -2,9 +2,9 @@
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
+#include <iostream>
 #include "vul_trace.h"
 #include <vcl_compiler.h>
-#include <iostream>
 
 void vul_trace_function(char const *file, int line)
 {

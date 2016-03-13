@@ -40,9 +40,9 @@
 // \endverbatim
 //
 //-------------------------------------------------------------------------
-#include <vcl_compiler.h>
 #include <iostream>
 #include <vector>
+#include <vcl_compiler.h>
 #include <vsol/vsol_point_2d_sptr.h>
 #include <vsol/vsol_line_2d_sptr.h>
 #include <sdet/sdet_nonmax_suppression_params.h>

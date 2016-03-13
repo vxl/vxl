@@ -6,10 +6,9 @@
 // \brief Store information about which node a given node depends on.
 // \author Tim Cootes
 
+#include <iostream>
 #include <vsl/vsl_binary_io.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 
 //: Value to indicate no valid arc
 const unsigned mmn_no_arc=99999;

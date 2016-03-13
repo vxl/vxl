@@ -28,10 +28,10 @@
 // \endverbatim
 //-----------------------------------------------------------------------------
 #include <vector>
-#include <vcl_compiler.h>
 #include <iostream>
 #include <map>
 #include <string>
+#include <vcl_compiler.h>
 #include <vgui/vgui_style_sptr.h>
 #include <vtol/vtol_vertex_2d_sptr.h>
 #include <vtol/vtol_edge_2d_sptr.h>

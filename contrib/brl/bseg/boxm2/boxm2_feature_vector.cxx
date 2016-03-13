@@ -1,9 +1,8 @@
 #include <vector>
+#include <iostream>
 #include <vnl/vnl_math.h>
 #include "boxm2_feature_vector.h"
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 
 std::ostream& operator<<(std::ostream &s, boxm2_feature_vector& f)
 {

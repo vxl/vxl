@@ -1,10 +1,10 @@
 // This is core/vpgl/file_formats/vpgl_geo_camera.cxx
+#include <vector>
 #include "vpgl_geo_camera.h"
 //:
 // \file
 
 #include <vcl_compiler.h>
-#include <vector>
 #include <vcl_cassert.h>
 
 #include <vnl/vnl_vector.h>

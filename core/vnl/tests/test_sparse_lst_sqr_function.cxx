@@ -1,8 +1,8 @@
+#include <iostream>
+#include <limits>
 #include <testlib/testlib_test.h>
 #include <vnl/vnl_sparse_lst_sqr_function.h>
-#include <iostream>
 #include <vcl_compiler.h>
-#include <limits>
 
 
 // all ai.size() == 2, all bj.size() == 3, c.size() == 2, all eij.size() == 2

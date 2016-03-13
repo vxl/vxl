@@ -1,4 +1,7 @@
 // This is brl/bpro/core/brip_pro/processes/brip_blob_intersection_process.cxx
+#include <iostream>
+#include <algorithm>
+#include <sstream>
 #include <bprb/bprb_func_process.h>
 //:
 // \file
@@ -10,9 +13,6 @@
 #include <vil/vil_chord.h>
 #include <bbas_pro/bbas_1d_array_float.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <algorithm>
-#include <sstream>
 
 namespace brip_blob_intersection_process_globals
 {

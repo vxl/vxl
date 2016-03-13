@@ -3,11 +3,11 @@
 #pragma implementation
 #endif
 
-#include "vul_temp_filename.h"
 #include <string>
 #include <ctime>
+#include <cstdlib>
+#include "vul_temp_filename.h"
 #include <vcl_compiler.h>
-#include <cstdlib> // for rand/srand
 
 #if defined (VCL_VC) || defined(__MINGW32__)
 # include <vcl_cstdio.h>

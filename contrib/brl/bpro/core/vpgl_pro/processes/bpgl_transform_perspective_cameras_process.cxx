@@ -1,4 +1,6 @@
 // This is brl/bpro/core/vpgl_pro/processes/bpgl_transform_perspective_cameras_process.cxx
+#include <iostream>
+#include <fstream>
 #include <bprb/bprb_func_process.h>
 //:
 // \file
@@ -8,10 +10,7 @@
 #include <bprb/bprb_parameters.h>
 #include <bprb/bprb_macros.h>
 
-#include <iostream>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <fstream>
 #include <vul/vul_file.h>
 #include <vul/vul_file_iterator.h>
 #include <vgl/algo/vgl_rotation_3d.h>

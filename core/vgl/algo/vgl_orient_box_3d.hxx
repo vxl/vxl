@@ -4,12 +4,12 @@
 //:
 // \file
 
+#include <iostream>
 #include "vgl_orient_box_3d.h"
 #include <vgl/vgl_vector_3d.h>
 #include <vgl/vgl_tolerance.h>
 #include <vnl/vnl_det.h>
 #include <vcl_compiler.h>
-#include <iostream>
 
 //: constructor from four corner points.
 //  The three directions from the first of these to the three other points must be mutually orthogonal.

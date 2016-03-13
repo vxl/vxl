@@ -1,11 +1,10 @@
+#include <iostream>
+#include <fstream>
 #include "bvxm_illum_util.h"
 
 #include <vcl_compiler.h>
-#include <iostream>
-#include <fstream>
 #include <vcl_cassert.h>
 #include <vnl/algo/vnl_svd.h>
-#include <iostream>
 bool bvxm_illum_util::
 load_surface_nhbds(std::string const& path,
                    std::vector<std::vector<vnl_matrix<float> > >& nhds)

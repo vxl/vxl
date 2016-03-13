@@ -8,10 +8,10 @@
 // \date   5 July 2015
 //
 #include <vector>
-#include <vcl_compiler.h>
 #include <iostream>
 #include <fstream>
 #include <map>
+#include <vcl_compiler.h>
 #include "boxm2_vecf_orbit_params.h"
 #include <vnl/vnl_matrix.h>
 class boxm2_vecf_orbit_param_stats{

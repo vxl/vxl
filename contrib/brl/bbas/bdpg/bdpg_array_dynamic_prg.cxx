@@ -1,10 +1,9 @@
+#include <iostream>
 #include "bdpg_array_dynamic_prg.h"
 //:
 // \file
 #include <vnl/vnl_numeric_traits.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 
 bdpg_array_dynamic_prg::bdpg_array_dynamic_prg(const unsigned rows, const unsigned cols)
 {

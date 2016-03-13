@@ -10,11 +10,11 @@
 //     11 Oct 2002 Ian Scott - converted to vil
 //\endverbatim
 
+#include <iostream>
 #include "vil_jpeg_compressor.h"
 #include "vil_jpeg_destination_mgr.h"
 #include <vil/vil_stream.h>
 #include <vcl_compiler.h>
-#include <iostream>
 #include <vxl_config.h>
 
 vil_jpeg_compressor::vil_jpeg_compressor(vil_stream *s)

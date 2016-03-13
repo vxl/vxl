@@ -1,4 +1,9 @@
 // This is brl/bpro/core/vpgl_pro/processes/vpgl_perturb_perspective_camera_processes.cxx
+#include <iostream>
+#include <limits>
+#include <fstream>
+#include <ctime>
+#include <cmath>
 #include <bprb/bprb_func_process.h>
 //:
 // \file
@@ -12,14 +17,8 @@
 #include <vnl/vnl_quaternion.h>
 #include <vgl/algo/vgl_p_matrix.h>
 #include <bsta/bsta_random_wrapper.h>
-#include <iostream>
-#include <limits>
-#include <fstream>
-#include <ctime>
 #if 0
 #include <vcl_compiler.h>
-#include <iostream>
-#include <cmath> // for std::tan()
 #endif
 
 struct ang_pair {

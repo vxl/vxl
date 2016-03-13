@@ -1,12 +1,11 @@
+#include <iostream>
+#include <cmath>
+#include <cstdlib>
 #include "bdgl_curve_algs.h"
 //:
 // \file
 #include <vcl_compiler.h>
-#include <iostream>
-#include <cmath>
-#include <cstdlib> // for std::abs(int)
 #include <vcl_cassert.h>
-#include <iostream>
 #include <vnl/vnl_numeric_traits.h>
 #include <vnl/vnl_double_2.h>
 #include <vnl/vnl_double_3.h>

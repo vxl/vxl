@@ -1,14 +1,14 @@
 #ifndef bpgl_camera_estimator_hxx_
 #define bpgl_camera_estimator_hxx_
 
+#include <iostream>
+#include <limits>
 #include "bpgl_camera_estimator.h"
 #include <vnl/vnl_double_3.h>
 #include <vnl/vnl_double_3x3.h>
 #include <vil/vil_math.h>
 #include <vcl_cassert.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <limits>
 
 // Default constructor
 template <class exp_edge_func>

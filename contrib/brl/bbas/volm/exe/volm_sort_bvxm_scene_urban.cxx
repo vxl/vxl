@@ -9,6 +9,8 @@
 //   <None yet>
 // \endverbatim
 
+#include <iostream>
+#include <ios>
 #include <vul/vul_arg.h>
 #include <vul/vul_file.h>
 #include <vul/vul_file_iterator.h>
@@ -23,8 +25,6 @@
 #include <volm/volm_loc_hyp_sptr.h>
 #include <vil/vil_save.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <ios>
 
 
 void error(std::string log_file, std::string msg)

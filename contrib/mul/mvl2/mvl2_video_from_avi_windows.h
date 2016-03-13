@@ -5,9 +5,9 @@
 // \brief A class to get video input from file
 // \author Franck Bettinger
 
-#include <vcl_compiler.h>
 #include <iostream>
 #include <string>
+#include <vcl_compiler.h>
 // If we must use windows.h, we should at least sanitise it first
 #ifndef NOMINMAX
 # define NOMINMAX

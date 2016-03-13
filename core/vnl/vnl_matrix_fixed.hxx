@@ -3,12 +3,12 @@
 #define vnl_matrix_fixed_hxx_
 //:
 // \file
-#include "vnl_matrix_fixed.h"
-
 #include <cmath>
 #include <iostream>
+#include <cstdlib>
+#include "vnl_matrix_fixed.h"
+
 #include <vcl_compiler.h>
-#include <cstdlib> // for abort
 #include <vcl_cassert.h>
 
 #include <vnl/vnl_error.h>

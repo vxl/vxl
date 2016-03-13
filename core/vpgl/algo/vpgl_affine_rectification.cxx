@@ -1,12 +1,12 @@
+#include <iostream>
+#include <limits>
 #include "vpgl_affine_rectification.h"
 //:
 // \file
 
 
-#include <iostream>
 #include <vnl/algo/vnl_svd.h>
 #include <vcl_compiler.h>
-#include <limits>
 #include <vnl/algo/vnl_lsqr.h>
 #include <vnl/vnl_sparse_matrix_linear_system.h>
 #include <vpgl/algo/vpgl_camera_compute.h>

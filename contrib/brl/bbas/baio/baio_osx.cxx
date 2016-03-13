@@ -1,13 +1,12 @@
 // This is brl/bbas/baio/baio_osx.cxx
+#include <iostream>
+#include <cstdlib>
+#include <cstdio>
+#include <cerrno>
 #include "baio.h"
 //:
 // \file
-#include <iostream> //for std::cout
-#include <cstdlib>  //includes malloc
 #include <vcl_compiler.h>
-#include <iostream>
-#include <cstdio>   // for std::perror
-#include <cerrno>   // for EINPROGRESS int
 
 //UNIX specific includes
 #include <aio.h>     //for aio_read

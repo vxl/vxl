@@ -1,9 +1,8 @@
 #ifndef my_map_functions_hxx_
 #define my_map_functions_hxx_
 
+#include <iostream>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 
 template <class M>
 void display_tmap(const M & map)

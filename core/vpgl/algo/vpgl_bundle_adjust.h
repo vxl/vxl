@@ -12,13 +12,13 @@
 // \endverbatim
 
 
+#include <vector>
 #include <vnl/vnl_vector.h>
 #include <vgl/vgl_point_2d.h>
 #include <vgl/vgl_point_3d.h>
 #include <vpgl/vpgl_perspective_camera.h>
 #include <vpgl/algo/vpgl_bundle_adjust_lsqr.h>
 #include <vcl_compiler.h>
-#include <vector>
 
 
 //: Static functions for bundle adjustment

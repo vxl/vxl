@@ -6,8 +6,11 @@
 // \file
 // \author fsm
 
-#include "vul_expand_path.h"
 #include <vector>
+#include <functional>
+#include <map>
+#include <cstdlib>
+#include "vul_expand_path.h"
 
 #if defined(VCL_WIN32)
 
@@ -181,10 +184,7 @@ std::wstring vul_expand_path(std::wstring path)
 
 #else // #if defined(VCL_WIN32)
 
-#include <functional>
-#include <map>
 #include <vcl_compiler.h>
-#include <cstdlib> // for getenv()
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <dirent.h>

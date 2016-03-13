@@ -1,11 +1,11 @@
+#include <iostream>
+#include <algorithm>
+#include <cmath>
 #include "bvpl_gauss3d_kernel_factory.h"
 //:
 // \file
 
 #include <vcl_compiler.h>
-#include <iostream>
-#include <algorithm>
-#include <cmath> // for std::sqrt() and std::exp() and std::floor()
 #include <vnl/vnl_math.h>
 #include <vnl/vnl_float_3.h>
 #include <bsta/bsta_gauss_if3.h>

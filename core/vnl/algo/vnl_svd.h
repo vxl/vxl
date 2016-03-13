@@ -18,12 +18,12 @@
 //   Feb.2002 - Peter Vanroose - brief doxygen comment placed on single line
 // \endverbatim
 
+#include <iosfwd>
 #include <vnl/vnl_numeric_traits.h>
 #include <vnl/vnl_vector.h>
 #include <vnl/vnl_matrix.h>
 #include <vnl/vnl_diag_matrix.h>
 #include <vcl_compiler.h>
-#include <iosfwd>
 
 //: Holds the singular value decomposition of a vnl_matrix.
 //

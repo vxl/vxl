@@ -1,5 +1,10 @@
 // This is mul/clsfy/tests/test_rbf_svm_smo.cxx
 // Copyright: (C) 2001 British Telecommunications PLC
+#include <vector>
+#include <iostream>
+#include <iomanip>
+#include <ios>
+#include <string>
 #include <testlib/testlib_test.h>
 //:
 // \file
@@ -7,13 +12,7 @@
 // \author Ian Scott
 // Test construction, IO etc.
 
-#include <vector>
-#include <iostream>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iomanip>
-#include <ios>
-#include <string>
 #include <clsfy/clsfy_rbf_svm.h>
 #include <clsfy/clsfy_rbf_svm_smo_1_builder.h>
 #include <clsfy/clsfy_k_nearest_neighbour.h>

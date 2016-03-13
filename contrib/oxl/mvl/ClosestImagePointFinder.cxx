@@ -5,13 +5,13 @@
 //:
 //  \file
 
-#include "ClosestImagePointFinder.h"
 #include <vector>
 #include <map>
-#include <vcl_compiler.h>
 #include <iostream>
 #include <functional>
 #include <utility>
+#include "ClosestImagePointFinder.h"
+#include <vcl_compiler.h>
 
 #include <vgl/vgl_box_2d.h>
 #include <vgl/vgl_homg_point_2d.h>

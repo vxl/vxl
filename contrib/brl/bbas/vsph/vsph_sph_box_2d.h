@@ -9,12 +9,11 @@
 //  Modifications none
 // \endverbatim
 
+#include <iostream>
+#include <vector>
 #include <vsl/vsl_binary_io.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 #include <vsph/vsph_sph_point_2d.h>
-#include <vector>
 #include <vgl/vgl_vector_3d.h>
 
 //: An axis-aligned box on the unit sphere.

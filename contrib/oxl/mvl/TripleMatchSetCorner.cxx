@@ -5,12 +5,12 @@
 //:
 //  \file
 
+#include <iostream>
+#include <vector>
 #include "TripleMatchSetCorner.h"
 
 #include <vcl_cassert.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <vector>
 #include <mvl/HomgInterestPointSet.h>
 #include <mvl/PairMatchSetCorner.h>
 

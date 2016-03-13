@@ -10,9 +10,9 @@
 // \author J. L. Mundy
 //
 #include <iostream>
-#include <vcl_compiler.h>
 #include <queue>
 #include <vector>
+#include <vcl_compiler.h>
 #include <vil/vil_image_view_base.h>
 
 // \verbatim

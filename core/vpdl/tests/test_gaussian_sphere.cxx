@@ -1,11 +1,11 @@
-#include <testlib/testlib_test.h>
-#include <vpdl/vpdl_gaussian_sphere.h>
-#include <vnl/vnl_math.h> // for twopi
 #include <string>
-#include <vcl_compiler.h>
 #include <limits>
 #include <iostream>
 #include <cmath>
+#include <testlib/testlib_test.h>
+#include <vpdl/vpdl_gaussian_sphere.h>
+#include <vnl/vnl_math.h> // for twopi
+#include <vcl_compiler.h>
 
 template <class T>
 void test_gaussian_sphere_type(T epsilon, const std::string& type_name)

@@ -9,10 +9,10 @@
 // \author fsm
 
 class osl_edge;
-#include <vcl_compiler.h>
 #include <iostream>
 #include <list>
 #include <vector>
+#include <vcl_compiler.h>
 
 //: Break the given edge at the positions indicated.
 //

@@ -1,11 +1,10 @@
 // This is gel/vsol/vsol_spatial_object_2d.cxx
+#include <iostream>
 #include "vsol_spatial_object_2d.h"
 //:
 // \file
 
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 #include <vsol/vsol_box_2d.h>
 #include <vsl/vsl_binary_loader.h>
 

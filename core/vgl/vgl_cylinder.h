@@ -14,10 +14,10 @@
 //  Modifications
 //   Nov 2005 created
 // \endverbatim
+#include <iosfwd>
 #include <vgl/vgl_point_3d.h>
 #include <vgl/vgl_vector_3d.h>
 #include <vcl_compiler.h>
-#include <iosfwd>
 
 template <class Type>
 class vgl_cylinder

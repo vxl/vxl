@@ -7,11 +7,11 @@
 // \brief Univariate gaussian kernel PDF
 // \author Tim Cootes
 
+#include <iostream>
+#include <iosfwd>
 #include <pdf1d/pdf1d_pdf.h>
 #include <pdf1d/pdf1d_kernel_pdf.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iosfwd>
 
 //: Class for univariate gaussian kernel based PDF
 class pdf1d_gaussian_kernel_pdf : public pdf1d_kernel_pdf

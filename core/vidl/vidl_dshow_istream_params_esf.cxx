@@ -1,5 +1,9 @@
 // This is core/vidl/vidl_dshow_istream_params_esf.cxx
 //=========================================================================
+#include <iostream>
+#include <iomanip>
+#include <sstream>
+#include <utility>
 #include "vidl_dshow_istream_params_esf.h"
 //:
 // \file
@@ -11,11 +15,7 @@
 
 #include <vidl/vidl_dshow.h>
 
-#include <iostream>
 #include <vcl_compiler.h>
-#include <iomanip>
-#include <sstream>
-#include <utility>
 
 #include <vbl/vbl_triple.h>
 

@@ -7,10 +7,10 @@
 //:
 // \file
 
+#include <string>
 #include <vil1/vil1_image_impl.h>
 #include <vil1/vil1_image.h>
 #include <vcl_compiler.h>
-#include <string>
 
 //: View of image clamped to a given range
 class vil1_clamp_image_impl : public vil1_image_impl

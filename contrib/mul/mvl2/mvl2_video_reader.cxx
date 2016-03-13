@@ -6,12 +6,12 @@
 // \brief A base class for cameras/virtual cameras
 // \author Louise Butcher
 
-#include "mvl2_video_reader.h"
-#include <cstdlib> // for std::getenv()
-#include <vcl_compiler.h>
+#include <cstdlib>
 #include <iostream>
-#include <algorithm> // for std::find()
+#include <algorithm>
 #include <fstream>
+#include "mvl2_video_reader.h"
+#include <vcl_compiler.h>
 
 mvl2_video_reader::mvl2_video_reader()
 {

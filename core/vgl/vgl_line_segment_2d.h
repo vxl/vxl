@@ -15,8 +15,8 @@
 // J.L. Mundy     - 13 April 2003 - Added angle and line coefficient functions
 // \endverbatim
 
-#include <vcl_compiler.h>
 #include <iosfwd>
+#include <vcl_compiler.h>
 #include <vgl/vgl_point_2d.h> // data member of this class
 
 //: Represents a 2D line segment using two points.

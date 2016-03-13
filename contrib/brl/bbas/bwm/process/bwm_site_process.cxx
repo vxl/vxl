@@ -2,6 +2,9 @@
 #pragma implementation
 #endif
 
+#include <sstream>
+#include <iostream>
+#include <cstdlib>
 #include "bwm_site_process.h"
 //
 #include <bwm/algo/bwm_algo.h>
@@ -12,10 +15,7 @@
 #include <vil/vil_image_list.h>
 #include <vpgl/vpgl_rational_camera.h>
 #include <vgui/vgui_error_dialog.h>
-#include <sstream>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <cstdlib> // for std::system()
 
 double bwm_site_process::version_num = 0;
 

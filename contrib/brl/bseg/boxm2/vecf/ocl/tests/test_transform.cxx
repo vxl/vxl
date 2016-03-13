@@ -4,10 +4,10 @@
 // \date 10/12/14
 
 
-#include <testlib/testlib_test.h>
-#include <vcl_compiler.h>
 #include <iostream>
 #include <fstream>
+#include <testlib/testlib_test.h>
+#include <vcl_compiler.h>
 #include <vil/vil_image_view.h>
 #include <vil/vil_save.h>
 #include <vil/vil_load.h>

@@ -1,3 +1,5 @@
+#include <iostream>
+#include <vector>
 #include "volm_spherical_query_region.h"
 #include <vgl/vgl_polygon.h>
 #include <bsol/bsol_algs.h>
@@ -7,8 +9,6 @@
 #include "volm_char_codes.h"
 #include <bpgl/depth_map/depth_map_region.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <vector>
 
 void volm_spherical_query_region::
 set_from_depth_map_region(vpgl_perspective_camera<double> const& cam,

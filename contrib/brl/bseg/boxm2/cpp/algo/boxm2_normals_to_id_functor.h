@@ -3,9 +3,8 @@
 //:
 // \file
 
+#include <iostream>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 
 class boxm2_normals_to_id_functor
 {

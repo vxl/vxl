@@ -11,13 +11,12 @@
 // \author Brad King
 // \date February 2008
 
+#include <vector>
+#include <iostream>
 #include "rgtl_serialize_split.hxx"
 
-#include <vector>
 
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 
 template <class Serializer, typename T>
 void rgtl_serialize_save(Serializer& sr, std::vector<T>& self)

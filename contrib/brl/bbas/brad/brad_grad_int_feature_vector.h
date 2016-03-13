@@ -16,9 +16,8 @@
 //  This class acts as a functor to be used in eigenvector and
 //  classifier processes
 //
+#include <iostream>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 #include <vnl/vnl_vector.h>
 #include <vil/vil_image_view.h>
 #include <vsl/vsl_binary_io.h>

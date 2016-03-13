@@ -1,4 +1,6 @@
 //This is brl/bseg/bvxm/pro/processes/bvxm_change_detection_display_process.cxx
+#include <iostream>
+#include <cmath>
 #include "bvxm_change_detection_display_process.h"
 //:
 // \file
@@ -17,8 +19,6 @@
 #endif
 
 #include <vcl_compiler.h>
-#include <iostream>
-#include <cmath>
 
 //:sets input and output types for  bvxm_change_detection_display_process
 bool bvxm_change_detection_display_process_cons(bprb_func_process& pro)

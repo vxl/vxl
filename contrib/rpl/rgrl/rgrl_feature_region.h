@@ -6,9 +6,9 @@
 // \author Gehua yang
 // \date 21 Oct. 2004
 
-#include <vcl_compiler.h>
 #include <iostream>
 #include <vector>
+#include <vcl_compiler.h>
 #include <vnl/vnl_vector.h>
 
 class rgrl_transformation;

@@ -18,8 +18,8 @@
 //    3-Feb-07 Peter Vanroose - changed vnl_vector to vnl_vector_fixed
 // \endverbatim
 
-#include <vcl_compiler.h>
 #include <vector>
+#include <vcl_compiler.h>
 #include <vnl/vnl_fwd.h>
 #include <vgl/vgl_fwd.h>
 #include <vgl/vgl_homg_line_3d_2_points.h>

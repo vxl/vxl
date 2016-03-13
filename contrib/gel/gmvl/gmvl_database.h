@@ -11,11 +11,11 @@
 //   only dependency is on 'tag' nodes, although tag nodes are in all other
 //   sense identical to other nodes.
 
-#include <vcl_compiler.h>
 #include <iostream>
 #include <iosfwd>
 #include <vector>
 #include <string>
+#include <vcl_compiler.h>
 
 #include <gmvl/gmvl_node_cache.h>
 #include <gmvl/gmvl_connection_cache.h>

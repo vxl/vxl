@@ -1,3 +1,6 @@
+#include <iostream>
+#include <fstream>
+#include <sstream>
 #include "bvxm_edge_ray_processor.h"
 //:
 // \file
@@ -16,9 +19,6 @@
 #include <vnl/vnl_double_3.h>
 #include <vnl/vnl_quaternion.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <fstream>
-#include <sstream>
 
 static const bool edge_debug = false;
 static const bool print_arrays = false;

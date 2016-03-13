@@ -1,12 +1,11 @@
 // This is brl/bbas/volm/pro/processes/volm_refine_bvxm_height_map_process.cxx
 //:
 // \file
+#include <string>
+#include <iostream>
 #include <bprb/bprb_func_process.h>
 #include <bprb/bprb_parameters.h>
-#include <string>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 #include <vil/vil_image_view.h>
 #include <vul/vul_file.h>
 #include <vil/algo/vil_region_finder.h>

@@ -17,9 +17,9 @@
 // PDA (Manchester) 21/03/2001: Tidied up the documentation
 // \endverbatim
 
-#include <vcl_compiler.h>
 #include <iosfwd>
 #include <cstddef>
+#include <vcl_compiler.h>
 
 //: simple 2D array
 template <class T>

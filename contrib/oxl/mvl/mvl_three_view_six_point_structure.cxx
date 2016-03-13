@@ -6,11 +6,11 @@
 // \file
 // \author fsm
 
+#include <iostream>
+#include <cmath>
 #include "mvl_three_view_six_point_structure.h"
 
 #include <vcl_compiler.h>
-#include <iostream>
-#include <cmath>
 
 #include <vnl/algo/vnl_svd.h>
 #include <vnl/algo/vnl_rpoly_roots.h>

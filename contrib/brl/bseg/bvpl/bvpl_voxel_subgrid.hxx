@@ -1,11 +1,10 @@
 #ifndef bvpl_voxel_subgrid_hxx_
 #define bvpl_voxel_subgrid_hxx_
 
+#include <iostream>
 #include "bvpl_voxel_subgrid.h"
 
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 
 template <class T>
 bvpl_voxel_subgrid<T>::bvpl_voxel_subgrid(bvxm_voxel_slab<T>& slab,

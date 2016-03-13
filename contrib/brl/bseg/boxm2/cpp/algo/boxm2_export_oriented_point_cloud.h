@@ -1,8 +1,8 @@
 #ifndef boxm2_export_oriented_point_cloud_h_included_
 #define boxm2_export_oriented_point_cloud_h_included_
-#include <vcl_compiler.h>
 #include <iostream>
 #include <string>
+#include <vcl_compiler.h>
 #include <boxm2/boxm2_scene.h>
 #include <boxm2/io/boxm2_cache.h>
 

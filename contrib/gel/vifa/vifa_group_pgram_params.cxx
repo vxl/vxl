@@ -1,12 +1,11 @@
 // This is gel/vifa/vifa_group_pgram_params.cxx
+#include <iostream>
+#include <sstream>
 #include "vifa_group_pgram_params.h"
 //:
 // \file
 
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
-#include <sstream>
 
 vifa_group_pgram_params::
 vifa_group_pgram_params(const vifa_group_pgram_params&  dp)

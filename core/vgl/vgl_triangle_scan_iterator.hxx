@@ -5,11 +5,11 @@
 // \file
 // \author fsm
 
+#include <cmath>
+#include <iostream>
 #include "vgl_triangle_scan_iterator.h"
 
 #include <vcl_compiler.h>
-#include <cmath>
-#include <iostream>
 
 template <class T>
 static inline

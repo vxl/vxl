@@ -22,9 +22,9 @@
 //
 // computations are simple enough so everything is in the .h file
 //
-#include <vcl_compiler.h>
 #include <iosfwd>
 #include <vector>
+#include <vcl_compiler.h>
 #include <vgl/vgl_vector_2d.h>
 #include <vgl/vgl_point_2d.h>
 #include <vcl_cassert.h>

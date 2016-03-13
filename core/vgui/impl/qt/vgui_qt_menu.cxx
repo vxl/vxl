@@ -1,6 +1,6 @@
+#include <iostream>
 #include "vgui_qt_menu.h"
 #include <vcl_compiler.h>
-#include <iostream>
 
 //---------------------------------------------------------------------------
 vgui_qt_menu::vgui_qt_menu(const vgui_menu& menu)

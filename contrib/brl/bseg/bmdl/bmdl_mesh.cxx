@@ -1,4 +1,6 @@
 // This is brl/bseg/bmdl/bmdl_mesh.cxx
+#include <iostream>
+#include <map>
 #include "bmdl_mesh.h"
 //:
 // \file
@@ -13,8 +15,6 @@
 #include <vil/vil_bilin_interp.h>
 #include <vcl_cassert.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <map>
 
 //: find the next trace point and direction
 bool bmdl_mesh::next_trace_point(unsigned int& i, unsigned int& j, int& dir,

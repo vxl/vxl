@@ -1,14 +1,13 @@
+#include <iostream>
+#include <fstream>
+#include <cmath>
+#include <string>
+#include <vector>
 #include "bvxm_edge_util.h"
 
 #include "bvxm_util.h"
 
-#include <iostream>
-#include <fstream>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <cmath>
-#include <string>
-#include <vector>
 #include <vpgl/vpgl_camera.h>
 #include <vnl/vnl_double_3x3.h>
 #include <vnl/vnl_double_3x1.h>

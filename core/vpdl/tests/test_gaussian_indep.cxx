@@ -1,10 +1,10 @@
+#include <string>
+#include <limits>
+#include <iostream>
 #include <testlib/testlib_test.h>
 #include <vpdl/vpdl_gaussian_indep.h>
 #include <vnl/vnl_math.h> // for twopi
-#include <string>
 #include <vcl_compiler.h>
-#include <limits>
-#include <iostream>
 
 
 template <class T>

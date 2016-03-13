@@ -18,10 +18,10 @@
 //   01 Mar 2007 - Gamze Tunali - split up into vgl/algo and vgl parts
 // \endverbatim
 
-#include <vgl/vgl_fwd.h> // forward declare various vgl classes
-#include <vcl_compiler.h>
 #include <vector>
 #include <list>
+#include <vgl/vgl_fwd.h> // forward declare various vgl classes
+#include <vcl_compiler.h>
 
 //: Return the intersection point of vector of planes.
 // \relatesalso vgl_plane_3d

@@ -1,7 +1,6 @@
 // This is mul/mbl/tests/test_matrix_products.cxx
+#include <iostream>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 #include <vnl/vnl_vector.h>
 #include <vnl/vnl_matrix.h>
 #include <mbl/mbl_matrix_products.h>

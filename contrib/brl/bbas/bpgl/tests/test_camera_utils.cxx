@@ -1,7 +1,6 @@
+#include <iostream>
 #include <testlib/testlib_test.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 
 #include <bpgl/bpgl_camera_utils.h>
 #include <vgl/vgl_vector_3d.h>

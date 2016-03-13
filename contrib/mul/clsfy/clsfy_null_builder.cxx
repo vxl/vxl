@@ -8,14 +8,13 @@
 // \author Ian Scott
 // \date 2009-08-27
 
-#include "clsfy_null_builder.h"
-
 #include <iostream>
 #include <sstream>
 #include <string>
-#include <vcl_compiler.h>
-#include <iostream>
 #include <algorithm>
+#include "clsfy_null_builder.h"
+
+#include <vcl_compiler.h>
 #include <vsl/vsl_binary_loader.h>
 #include <vul/vul_string.h>
 #include <mbl/mbl_parse_block.h>

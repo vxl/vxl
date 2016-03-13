@@ -3,6 +3,7 @@
 //:
 // \file    This function copyies the data in the input time step into all future time nodes
 
+#include <iostream>
 #include <bstm/bstm_data_traits.h>
 #include <bstm/bstm_time_tree.h>
 #include <bstm/bstm_data_base.h>
@@ -10,8 +11,6 @@
 #include <vnl/vnl_vector.h>
 #include <vnl/vnl_vector_fixed.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 #include <bstm/io/bstm_cache.h>
 
 template <bstm_data_type APM_DATA_TYPE, bstm_data_type NOBS_DATA_TYPE >

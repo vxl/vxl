@@ -1,3 +1,6 @@
+#include <iostream>
+#include <cmath>
+#include <sstream>
 #include "mfpf_lin_clsfy_finder_builder.h"
 //:
 // \file
@@ -8,9 +11,6 @@
 #include <vsl/vsl_binary_loader.h>
 #include <vul/vul_string.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <cmath>
-#include <sstream>
 #include <vcl_cassert.h>
 
 #include <mbl/mbl_parse_block.h>

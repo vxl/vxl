@@ -2,6 +2,11 @@
 #ifndef vgl_polygon_hxx_
 #define vgl_polygon_hxx_
 
+#include <iostream>
+#include <set>
+#include <cmath>
+#include <algorithm>
+#include <string>
 #include "vgl_polygon.h"
 //:
 // \file
@@ -10,13 +15,8 @@
 #include "vgl_line_2d.h"
 #include "vgl_tolerance.h"
 
-#include <iostream>
 #include <vcl_compiler.h>
-#include <set>
-#include <cmath>
 #include <vcl_cassert.h>
-#include <algorithm>
-#include <string>
 
 // Constructors/Destructor---------------------------------------------------
 

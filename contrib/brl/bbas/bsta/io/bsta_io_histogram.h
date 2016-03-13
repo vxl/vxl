@@ -12,6 +12,7 @@
 //   <none yet>
 // \endverbatim
 
+#include <iostream>
 #include <bsta/bsta_histogram.h>
 #include <bsta/bsta_joint_histogram.h>
 #include <bsta/bsta_joint_histogram_3d.h>
@@ -22,8 +23,6 @@
 #include <vbl/vbl_array_3d.h>
 #include <vbl/io/vbl_io_array_3d.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 
 //: Binary save bsta_histogram to stream.
 template <class T>

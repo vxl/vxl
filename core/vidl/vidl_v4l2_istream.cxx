@@ -1,4 +1,5 @@
 // This is core/vidl/vidl_v4l2_istream.cxx
+#include <iostream>
 #include "vidl_v4l2_istream.h"
 //:
 // \file
@@ -10,7 +11,6 @@
 //\endverbatim
 
 #include <vcl_compiler.h>
-#include "iostream"
 #include "vidl_frame.h"
 #include "vidl_v4l2_pixel_format.h"
 

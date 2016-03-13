@@ -4,8 +4,8 @@
 // \author dac
 
 #include <iostream>
-#include <vcl_compiler.h>
 #include <cstdlib>
+#include <vcl_compiler.h>
 #include <vxl_config.h> // for vxl_byte
 #include <vil/vil_load.h>
 #include <vil/vil_save.h>

@@ -1,4 +1,6 @@
 // This is mul/mbl/mbl_rbf_network.cxx
+#include <iostream>
+#include <cstdlib>
 #include "mbl_rbf_network.h"
 //:
 // \file
@@ -23,8 +25,6 @@
 //  definition. I'll check one day.
 
 #include <vcl_compiler.h>
-#include <iostream>
-#include <cstdlib>
 #include <vcl_cassert.h>
 #include <vsl/vsl_indent.h>
 #include <mbl/mbl_stats_1d.h>

@@ -12,10 +12,10 @@
 //   9 Sept 2004 - Peter Vanroose - removed InitParams
 // \endverbatim
 //-----------------------------------------------------------------------------
-#include <gevd/gevd_param_mixin.h>
-#include <vcl_compiler.h>
 #include <iostream>
 #include <iosfwd>
+#include <gevd/gevd_param_mixin.h>
+#include <vcl_compiler.h>
 
 class brip_para_cvrg_params : public gevd_param_mixin
 {

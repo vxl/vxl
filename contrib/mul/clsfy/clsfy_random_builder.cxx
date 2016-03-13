@@ -9,12 +9,11 @@
 // \author Ian Scott
 // \date 2001-10-08
 
+#include <iostream>
+#include <string>
 #include "clsfy_random_builder.h"
 
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
-#include <string>
 #include <vcl_cassert.h>
 #include <vsl/vsl_binary_loader.h>
 #include <clsfy/clsfy_random_classifier.h>

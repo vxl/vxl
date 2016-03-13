@@ -1,3 +1,6 @@
+#include <iostream>
+#include <algorithm>
+#include <limits>
 #include "boxm2_vecf_eye_scene.h"
 #include <vnl/vnl_vector_fixed.h>
 #include <vgl/vgl_distance.h>
@@ -8,9 +11,6 @@
 #include <boxm2/boxm2_util.h>
 #include <boxm2/io/boxm2_lru_cache.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <algorithm>
-#include <limits>
 static double gauss(double d, double sigma){
   return std::exp((-0.5*d*d)/(sigma*sigma));
 }

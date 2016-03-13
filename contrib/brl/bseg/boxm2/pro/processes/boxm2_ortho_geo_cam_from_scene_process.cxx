@@ -6,12 +6,12 @@
 // \author Yi Dong
 // \date Feb 13, 2014
 
+#include <iostream>
+#include <iomanip>
 #include <bprb/bprb_func_process.h>
 #include <boxm2/boxm2_scene.h>
 #include <vpgl/file_formats/vpgl_geo_camera.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iomanip>
 
 namespace boxm2_ortho_geo_cam_from_scene_process_globals
 {

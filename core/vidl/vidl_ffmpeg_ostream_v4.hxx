@@ -1,6 +1,7 @@
 // This is core/vidl/vidl_ffmpeg_ostream_v4.hxx
 #ifndef vidl_ffmpeg_ostream_v4_hxx_
 #define vidl_ffmpeg_ostream_v4_hxx_
+#include <cstring>
 #include "vidl_ffmpeg_ostream.h"
 //:
 // \file
@@ -19,7 +20,6 @@
 #include "vidl_frame.h"
 #include "vidl_convert.h"
 #include <vcl_compiler.h>
-#include <cstring>
 #include <vcl_climits.h>
 #include <vil/vil_memory_chunk.h>
 

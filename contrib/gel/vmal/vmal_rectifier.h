@@ -20,9 +20,9 @@
 //--------------------------------------------------------------------------------
 
 
-#include <vcl_compiler.h>
 #include <iostream>
 #include <vector>
+#include <vcl_compiler.h>
 
 #include <vmal/vmal_multi_view_data_vertex_sptr.h>
 #include <vmal/vmal_multi_view_data_edge_sptr.h>

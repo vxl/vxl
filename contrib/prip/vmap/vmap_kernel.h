@@ -12,9 +12,9 @@
 //   06 May 2004 Jocelyn Marchadier
 // \endverbatim
 
-#include <vcl_compiler.h>
 #include <iostream>
 #include <vector>
+#include <vcl_compiler.h>
 #include "vmap_types.h" // for vmap_face_index etc.
 #include "vbl_controlled_partition.h"
 

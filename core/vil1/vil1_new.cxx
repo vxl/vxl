@@ -9,11 +9,11 @@
 //
 //-----------------------------------------------------------------------------
 
+#include <cstring>
+#include <iostream>
 #include "vil1_new.h"
 
 #include <vcl_compiler.h>
-#include <cstring>
-#include <iostream>
 #include <vcl_cassert.h>
 
 #include <vil1/vil1_file_format.h>

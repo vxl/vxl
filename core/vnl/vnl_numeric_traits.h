@@ -26,9 +26,9 @@
 //
 //-----------------------------------------------------------------------------
 
+#include <complex>
 #include <vxl_config.h> // for type vxl_uint_64
 #include <vcl_compiler.h>
-#include <complex>
 #include <vnl/vnl_export.h>
 
 // this is an empty class template.

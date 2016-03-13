@@ -1,8 +1,7 @@
 // This is mul/m23d/tests/test_rotation_matrix.cxx
+#include <iostream>
 #include <testlib/testlib_test.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 #include <m23d/m23d_rotation_matrix.h>
 
 

@@ -3,9 +3,9 @@
 // \brief Finds connected regions in a boolean image.
 // \author Ian Scott
 
+#include <algorithm>
 #include "vil_blob.h"
 #include <vcl_compiler.h>
-#include <algorithm>
 #include <vcl_cassert.h>
 
 namespace

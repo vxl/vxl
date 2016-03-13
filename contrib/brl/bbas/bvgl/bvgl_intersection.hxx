@@ -12,14 +12,14 @@
 //   11 June 2015 dec: incorporated bug fixes included in v3, available at: http://fileadmin.cs.lth.se/cs/Personal/Tomas_Akenine-Moller/code/tribox3.txt
 //
 
-#include "bvgl_intersection.h"
 #include <limits>
-#include <vcl_cassert.h>
 #include <cmath>
-#include <vcl_compiler.h>
 #include <iostream>
 #include <algorithm>
 #include <vector>
+#include "bvgl_intersection.h"
+#include <vcl_cassert.h>
+#include <vcl_compiler.h>
 
 //helper functions
 namespace bvgl_intersection_helpers

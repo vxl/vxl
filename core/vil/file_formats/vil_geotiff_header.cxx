@@ -1,10 +1,10 @@
+#include <cstdlib>
+#include <iostream>
 #include "vil_geotiff_header.h"
 //:
 // \file
 #include <vcl_cassert.h>
 #include <vcl_compiler.h>
-#include <cstdlib>
-#include <iostream>
 #include <geo_tiffp.h>
 #include <geotiffio.h>
 #include <geovalues.h>

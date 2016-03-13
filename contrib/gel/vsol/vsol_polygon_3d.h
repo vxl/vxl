@@ -22,12 +22,12 @@
 // \endverbatim
 //*****************************************************************************
 
-#include <vsol/vsol_region_3d.h>
-#include <vsol/vsol_point_3d_sptr.h>
 #include <vector>
-#include <vcl_compiler.h>
 #include <iostream>
 #include <iosfwd>
+#include <vsol/vsol_region_3d.h>
+#include <vsol/vsol_point_3d_sptr.h>
+#include <vcl_compiler.h>
 #include <vsl/vsl_binary_io.h>
 #include <vgl/vgl_fwd.h> // vgl_vector_3d
 #include <vgl/vgl_homg_plane_3d.h>

@@ -1,11 +1,11 @@
+#include <iostream>
+#include <fstream>
 #include "boxm2_ocl_kernel_vector_filter.h"
 #include <boct/boct_bit_tree.h>
 #include <boxm2/ocl/boxm2_ocl_util.h>
 #include <boxm2/boxm2_block.h>
 #include <vul/vul_timer.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <fstream>
 
 boxm2_ocl_kernel_vector_filter::
 boxm2_ocl_kernel_vector_filter( bocl_device_sptr device) :

@@ -6,10 +6,10 @@
 // \file
 // \author fsm
 
-#include "osl_canny_gradient.h"
-#include <vcl_compiler.h>
 #include <iostream>
 #include <cmath>
+#include "osl_canny_gradient.h"
+#include <vcl_compiler.h>
 
 // smooth_  is the (smoothed, presumably) input image.
 // dx_, dy_ are the output x, y gradient images.

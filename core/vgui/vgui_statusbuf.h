@@ -17,8 +17,8 @@
 //   21-Nov-1999 P.Pritchett - Initial version.
 // \endverbatim
 
-#include <vcl_compiler.h>
 #include <streambuf>
+#include <vcl_compiler.h>
 class vgui_statusbar;
 
 class vgui_statusbuf : public std::streambuf

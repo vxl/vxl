@@ -5,9 +5,9 @@
 // \brief Linear interpolation of tabulated data
 // \author Graham Vincent
 
-#include <vcl_compiler.h>
 #include <iostream>
 #include <vector>
+#include <vcl_compiler.h>
 
 // Linear interpolation of tabulated data
 class mbl_linear_interpolator

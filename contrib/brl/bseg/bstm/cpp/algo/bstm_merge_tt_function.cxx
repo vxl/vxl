@@ -1,7 +1,7 @@
-#include "bstm_merge_tt_function.h"
-#include <vcl_compiler.h>
 #include <iostream>
 #include <set>
+#include "bstm_merge_tt_function.h"
+#include <vcl_compiler.h>
 
 bool bstm_merge_tt_function::init_data(bstm_time_block* blk_t, bstm_block* blk, std::vector<bstm_data_base*> & datas, float prob_thresh)
 {

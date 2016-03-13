@@ -4,11 +4,10 @@
 //  Copyright: (C) 2007 The University of Manchester
 //
 //=======================================================================
+#include <iostream>
 #include <testlib/testlib_test.h>
 #include <mipa/mipa_sample_histo_boxes.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 
 //:
 // \file

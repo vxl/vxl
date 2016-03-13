@@ -1,11 +1,10 @@
 // This is oxl/mvl/LineSeg.cxx
+#include <iostream>
 #include "LineSeg.h"
 //:
 //  \file
 
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 
 //: Constructor
 LineSeg::LineSeg(float x0, float y0, float x1, float y1, float theta, float grad_mean)

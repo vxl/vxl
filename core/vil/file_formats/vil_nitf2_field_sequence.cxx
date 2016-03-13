@@ -2,6 +2,7 @@
 // Stellar Science Ltd. Co. (stellarscience.com) for
 // Air Force Research Laboratory, 2005.
 
+#include <utility>
 #include "vil_nitf2_field_sequence.h"
 #include "vil_nitf2_index_vector.h"
 #include "vil_nitf2_field_formatter.h"
@@ -11,7 +12,6 @@
 #include "vil_nitf2_compound_field_value.h"
 
 #include <vcl_compiler.h>
-#include <utility>
 
 vil_nitf2_field::field_tree*
 vil_nitf2_field_sequence::get_tree( vil_nitf2_field::field_tree* tr ) const

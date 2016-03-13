@@ -5,12 +5,13 @@
 // \file
 // \author Gamze Tunali
 
+#include <limits>
+#include <cmath>
+#include <vector>
 #include "vgl_intersection.h"
 
 #include <vcl_compiler.h>
-#include <limits>
 #include <vcl_cassert.h>
-#include <cmath>
 #include <vgl/vgl_point_2d.h>
 #include <vgl/vgl_line_2d.h>
 #include <vgl/vgl_line_3d_2_points.h>
@@ -26,7 +27,6 @@
 #include <vgl/vgl_tolerance.h>
 #include <vgl/vgl_closest_point.h>
 #include <vgl/vgl_lineseg_test.hxx>
-#include <vector>
 
 static double eps = 1.0e-8; // tolerance for intersections
 inline bool vgl_near_zero(double x) { return x < eps && x > -eps; }

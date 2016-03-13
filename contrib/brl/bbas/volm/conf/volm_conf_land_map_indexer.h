@@ -12,6 +12,8 @@
 // \verbatim
 //   Yi Dong     SEP--2014    added height value for each location point
 // \endverbatim
+#include <iostream>
+#include <iomanip>
 #include <vbl/vbl_ref_count.h>
 #include <vbl/vbl_smart_ptr.h>
 #include <vil/vil_save.h>
@@ -23,8 +25,6 @@
 #include <vpgl/vpgl_lvcs.h>
 #include <vpgl/file_formats/vpgl_geo_camera.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iomanip>
 #include <vgl/vgl_polygon.h>
 #include <vsol/vsol_point_2d.h>
 #include <vsol/vsol_point_2d_sptr.h>

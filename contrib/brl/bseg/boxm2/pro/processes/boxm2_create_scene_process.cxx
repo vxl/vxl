@@ -1,4 +1,10 @@
 // This is brl/bseg/boxm2/pro/processes/boxm2_create_scene_process.cxx
+#include <fstream>
+#include <limits>
+#include <utility>
+#include <iostream>
+#include <iomanip>
+#include <algorithm>
 #include <bprb/bprb_func_process.h>
 //:
 // \file
@@ -7,13 +13,10 @@
 // \author Vishal Jain
 // \date Mar 15, 2011
 
-#include <fstream>
 #include <vul/vul_file.h>
 #include <boxm2/boxm2_scene.h>
 #include <vpgl/vpgl_utm.h>
-#include <limits>
 #include <vgl/vgl_distance.h>
-#include <utility>
 
 namespace boxm2_create_scene_process_globals
 {
@@ -300,8 +303,6 @@ bool boxm2_create_poly_scene_and_blocks_process_cons(bprb_func_process& pro)
 #include <bpgl/bpgl_camera_utils.h>
 #include <vgl/vgl_polygon.h>
 #include <vgl/vgl_intersection.h>
-#include <iostream>
-#include <iomanip>
 
 bool boxm2_create_poly_scene_and_blocks_process(bprb_func_process& pro)
 {
@@ -839,8 +840,6 @@ bool boxm2_prune_scene_blocks_process(bprb_func_process& pro)
 #include <vil/vil_image_resource_sptr.h>
 #include <vpgl/file_formats/vpgl_geo_camera.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <algorithm>
 #include <vgl/vgl_intersection.h>
 #include <vul/vul_file_iterator.h>
 #include <vil/vil_load.h>

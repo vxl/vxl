@@ -4,6 +4,8 @@
 // \author Ozge C. Ozcanli
 // \date   Oct 03, 2008
 //
+#include <string>
+#include <iostream>
 #include <testlib/testlib_test.h>
 
 #include <bvxm/bvxm_world_params.h>
@@ -11,8 +13,6 @@
 
 #include <vcl_string.h>
 #include <vcl_compiler.h>
-#include <string>
-#include <iostream>
 
 #include <brdb/brdb_value.h>
 #include <brdb/brdb_selection.h>

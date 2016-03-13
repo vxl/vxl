@@ -1,6 +1,8 @@
 //This is brl/bpro/core/bbas_pro/processes/bbas_atmospheric_corr_process.cxx
 //:
 // \file
+#include <string>
+#include <iostream>
 #include <bprb/bprb_func_process.h>
 #include <bprb/bprb_parameters.h>
 #include <bsta/bsta_histogram.h>
@@ -8,11 +10,8 @@
 #include <vil/vil_image_view.h>
 #include <vil/vil_convert.h>
 
-#include <string>
 #ifdef DEBUG
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 #endif
 
 #include <brdb/brdb_value.h>

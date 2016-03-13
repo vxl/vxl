@@ -1,9 +1,9 @@
+#include <cmath>
+#include <iostream>
 #include "vpgl_invmap_cost_function.h"
 //:
 // \file
 #include <vcl_compiler.h>
-#include <cmath>
-#include <iostream>
 #include <vcl_deprecated.h>
 
 vpgl_invmap_cost_function::

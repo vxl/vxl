@@ -6,15 +6,15 @@
 // \author Andrew Miller acm@computervisiongroup.com
 // \date  March 8, 2011
 //
+#include <string>
+#include <vector>
+#include <iostream>
+#include <cstddef>
+#include <iosfwd>
 #include "bocl_cl.h"
 #include "bocl_utils.h"
 #include "bocl_device_info.h"
-#include <string>
-#include <vector>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <cstddef> // for std::size_t
-#include <iosfwd>
 #include <vbl/vbl_ref_count.h>
 #include <vsl/vsl_binary_io.h>
 #include <vbl/vbl_smart_ptr.h>

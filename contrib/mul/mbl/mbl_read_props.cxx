@@ -2,15 +2,14 @@
 //:
 // \file
 
-#include "mbl_read_props.h"
-#include <vsl/vsl_indent.h>
 #include <sstream>
 #include <iostream>
 #include <string>
-#include <vcl_compiler.h>
-#include <iostream>
 #include <cctype>
 #include <utility>
+#include "mbl_read_props.h"
+#include <vsl/vsl_indent.h>
+#include <vcl_compiler.h>
 
 #include <mbl/mbl_parse_block.h>
 #include <mbl/mbl_exception.h>

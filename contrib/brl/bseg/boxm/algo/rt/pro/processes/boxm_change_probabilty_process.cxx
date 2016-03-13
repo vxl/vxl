@@ -1,4 +1,6 @@
 // This is brl/bseg/boxm/algo/rt/pro/processes/boxm_change_probabilty_process.cxx
+#include <iostream>
+#include <fstream>
 #include <bprb/bprb_func_process.h>
 //:
 // \file
@@ -12,8 +14,6 @@
 // \endverbatim
 
 #include <vcl_compiler.h>
-#include <iostream>
-#include <fstream>
 #include <boxm/boxm_scene_base.h>
 #include <boxm/boxm_scene.h>
 #include <boxm/algo/rt/boxm_change_probability_functor.h>

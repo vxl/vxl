@@ -5,12 +5,12 @@
 // \file
 // \brief Binary tree classifier
 // \author Martin Roberts
+#include <iostream>
+#include <iosfwd>
 #include <clsfy/clsfy_classifier_base.h>
 #include <clsfy/clsfy_binary_tree.h>
 #include <mbl/mbl_cloneable_ptr.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iosfwd>
 
 
 //: Forest of clsfy_binary_tree trees

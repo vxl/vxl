@@ -1,15 +1,15 @@
 #ifndef boxm2_bounding_box_parser_h_
 #define boxm2_bounding_box_parser_h_
 
-#include <expatpplib.h>
 #include <string>
+#include <iostream>
+#include <map>
+#include <expatpplib.h>
 
 #include <boxm2/basic/boxm2_block_id.h>
 #include <boxm2/boxm2_block_metadata.h>
 #include <vgl/vgl_point_3d.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <map>
 
 //block level metadata
 #define DATASET_TAG "dataSet"

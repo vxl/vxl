@@ -1,8 +1,7 @@
 // This is mul/vimt3d/tests/test_crop.cxx
 
+#include <iostream>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 #include <vgl/vgl_point_3d.h>
 #include <vgl/vgl_box_3d.h>
 #include <vimt3d/vimt3d_image_3d_of.h>

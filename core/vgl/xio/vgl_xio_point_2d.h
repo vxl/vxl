@@ -6,10 +6,10 @@
 // \author Gamze Tunali
 // \date 25-Dec-2005
 
-#include <vgl/vgl_point_2d.h>
 #include <string>
-#include <vcl_compiler.h>
 #include <iosfwd>
+#include <vgl/vgl_point_2d.h>
+#include <vcl_compiler.h>
 
 //: XML save vgl_point_2d to stream.
 template <class T>

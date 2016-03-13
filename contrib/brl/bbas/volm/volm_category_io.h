@@ -14,12 +14,11 @@
 //
 
 #include <string>
-#include <vcl_compiler.h>
-#include <iostream>
 #include <iostream>
 #include <utility>
 #include <map>
 #include <set>
+#include <vcl_compiler.h>
 #include <vil/vil_rgb.h>
 #include <vxl_config.h>
 #include <bvrml/bvrml_write.h>

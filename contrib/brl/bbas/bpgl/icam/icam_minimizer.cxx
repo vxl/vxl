@@ -1,10 +1,12 @@
 // This is brl/bbas/bpgl/icam/icam_minimizer.cxx
+#include <fstream>
+#include <sstream>
+#include <iostream>
+#include <cstdlib>
 #include "icam_minimizer.h"
 //:
 // \file
 
-#include <fstream>
-#include <sstream>
 #include <vnl/vnl_inverse.h>
 #include <vnl/vnl_numeric_traits.h>
 #include <vbl/vbl_local_minima.h>
@@ -14,8 +16,6 @@
 #include <vnl/algo/vnl_levenberg_marquardt.h>
 #include <vnl/vnl_vector_fixed.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <cstdlib>
 #include <vul/vul_timer.h>
 #include <icam/icam_depth_trans_pyramid.h>
 #include <icam/icam_sample.h>

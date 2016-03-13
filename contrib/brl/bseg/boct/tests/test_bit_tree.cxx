@@ -1,9 +1,8 @@
+#include <iostream>
 #include <testlib/testlib_test.h>
 
 #include <boct/boct_bit_tree.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 
 void test_print_centers()
 {

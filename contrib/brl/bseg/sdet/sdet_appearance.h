@@ -10,10 +10,9 @@
 //\endverbatim
 
 #include <string>
-#include <vcl_compiler.h>
-#include <iostream>
 #include <iostream>
 #include <sstream>
+#include <vcl_compiler.h>
 
 #include "sdet_EMD.h"
 

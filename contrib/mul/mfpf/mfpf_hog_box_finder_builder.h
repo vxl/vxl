@@ -5,13 +5,13 @@
 // \brief Builder for mfpf_region_finder objects.
 // \author Tim Cootes
 
+#include <iostream>
+#include <iosfwd>
 #include <mfpf/mfpf_point_finder_builder.h>
 #include <mipa/mipa_vector_normaliser.h>
 #include <mfpf/mfpf_vec_cost_builder.h>
 #include <mbl/mbl_cloneable_ptr.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iosfwd>
 #include <mfpf/mfpf_region_form.h>
 
 

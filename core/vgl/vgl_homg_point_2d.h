@@ -16,11 +16,11 @@
 //   Peter Vanroose - 27 June 2001 - Added operator==
 // \endverbatim
 
+#include <iosfwd>
 #include <vgl/vgl_vector_2d.h>
 #include <vgl/vgl_point_2d.h>
 #include <vgl/vgl_fwd.h> // forward declare vgl_homg_line_2d
 #include <vcl_compiler.h>
-#include <iosfwd>
 #include <vcl_cassert.h>
 
 //: Represents a homogeneous 2D point

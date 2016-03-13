@@ -9,10 +9,10 @@
 //      Nov 2008 J Becker: Added a clone function.
 // \endverbatim
 
-#include "rgrl_feature.h"
-#include <vcl_compiler.h>
 #include <iostream>
 #include <iosfwd>
+#include "rgrl_feature.h"
+#include <vcl_compiler.h>
 
 //: Represent a point in space.
 //

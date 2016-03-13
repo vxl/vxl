@@ -1,4 +1,5 @@
 // This is core/vgui/vgui_image_tableau.cxx
+#include <string>
 #include "vgui_image_tableau.h"
 //:
 // \file
@@ -13,7 +14,6 @@
 
 
 #include <vcl_compiler.h>
-#include <string>
 
 #include <vil/vil_image_view_base.h>
 #include <vil1/vil1_load.h>

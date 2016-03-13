@@ -30,9 +30,9 @@
 // \endverbatim
 //-----------------------------------------------------------------------------
 
-#include <vcl_compiler.h>
 #include <iostream>
 #include <vector>
+#include <vcl_compiler.h>
 #include <vcl_cassert.h>
 #include <bsta/bsta_int_histogram_1d.h>
 

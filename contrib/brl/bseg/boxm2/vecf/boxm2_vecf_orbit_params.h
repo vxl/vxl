@@ -7,11 +7,10 @@
 // \author J.L. Mundy
 // \date   27 Mar 2015
 //
+#include <iostream>
 #include "boxm2_vecf_articulated_params.h"
 #include <vnl/vnl_vector_fixed.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 #include <vgl/vgl_sphere_3d.h>
 
 class boxm2_vecf_orbit_params

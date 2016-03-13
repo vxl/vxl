@@ -1,3 +1,7 @@
+#include <iostream>
+#include <cmath>
+#include <cstdlib>
+#include <sstream>
 #include "mfpf_mr_point_finder.h"
 //:
 // \file
@@ -9,11 +13,7 @@
 #include <vimt/vimt_image_pyramid.h>
 #include <vil/vil_save.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <cmath>
 #include <vcl_cassert.h>
-#include <cstdlib> // for std::abort()
-#include <sstream>
 
 #include <vsl/vsl_indent.h>
 #include <vsl/vsl_binary_loader.h>

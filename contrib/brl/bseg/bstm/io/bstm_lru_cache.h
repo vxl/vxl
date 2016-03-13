@@ -4,10 +4,9 @@
 // \file
 // \brief bstm_lru_cache (least recently used) is a singleton, derived from abstract class bstm_cache
 
+#include <iostream>
 #include <bstm/io/bstm_cache.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 
 
 //: A cache that keeps the most recently used blocks and data, while kicking out the least recently used blocks and data to make more room.

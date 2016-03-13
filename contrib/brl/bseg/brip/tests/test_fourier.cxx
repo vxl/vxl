@@ -1,4 +1,5 @@
 // This is brl/bseg/brip/tests/test_fourier.cxx
+#include <iostream>
 #include <vil1/vil1_memory_image_of.h>
 #ifdef DEBUG
 #include <vil1/vil1_save.h>
@@ -6,8 +7,6 @@
 #include <brip/brip_vil1_float_ops.h>
 #include <testlib/testlib_test.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 
 static void test_fourier()
 {

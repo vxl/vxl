@@ -1,4 +1,5 @@
 // This is core/vil/vil_copy.cxx
+#include <algorithm>
 #include "vil_copy.h"
 //:
 // \file
@@ -6,7 +7,6 @@
 // \date   21 Aug 2003
 
 #include <vcl_compiler.h>
-#include <algorithm>
 #include <vil/vil_property.h>
 #include <vil/vil_image_resource.h>
 #include <vil/vil_blocked_image_resource.h>

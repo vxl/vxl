@@ -13,6 +13,7 @@
 // \endverbatim
 
 
+#include <vector>
 #include <vnl/vnl_vector.h>
 #include <vnl/vnl_double_3x3.h>
 #include <vnl/vnl_double_3x4.h>
@@ -21,7 +22,6 @@
 #include <vgl/vgl_homg_point_3d.h>
 #include <vpgl/vpgl_perspective_camera.h>
 #include <vcl_compiler.h>
-#include <vector>
 
 
 //: base class bundle adjustment sparse least squares function

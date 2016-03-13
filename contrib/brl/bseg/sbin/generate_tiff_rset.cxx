@@ -1,7 +1,7 @@
 #include <string>
-#include <vcl_compiler.h>
 #include <iostream>
 #include <cstdlib>
+#include <vcl_compiler.h>
 #include <vul/vul_file.h>
 #include <vil/vil_load.h>
 #include <vil/vil_image_resource.h>

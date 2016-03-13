@@ -1,3 +1,5 @@
+#include <iostream>
+#include <cstdlib>
 #include "msm_ref_shape_instance.h"
 //:
 // \file
@@ -11,9 +13,6 @@
 #include <vnl/algo/vnl_svd.h>
 
 #include <vcl_compiler.h>
-#include <iostream>
-#include <cstdlib>  // for std::atoi() & std::abort()
-#include <iostream>
 #include <vcl_cassert.h>
 
 #include <msm/msm_ref_shape_model.h>

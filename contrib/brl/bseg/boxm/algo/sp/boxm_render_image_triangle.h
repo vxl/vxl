@@ -3,6 +3,7 @@
 //:
 // \file
 #include <vector>
+#include <iostream>
 #include "boxm_render_image.h"
 #include <boct/boct_tree.h>
 #include <boxm/boxm_scene.h>
@@ -20,8 +21,6 @@
 #include <vil/vil_math.h>
 #include <vil/vil_transform.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 #include <vul/vul_timer.h>
 
 

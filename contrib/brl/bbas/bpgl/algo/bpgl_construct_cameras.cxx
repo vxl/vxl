@@ -1,11 +1,11 @@
 // This is bbas/bpgl/algo/bpgl_construct_cameras.cxx
+#include <iostream>
+#include <cmath>
 #include "bpgl_construct_cameras.h"
 //:
 // \file
 
 #include <vcl_compiler.h>
-#include <iostream>
-#include <cmath> // for std::abs
 #include <vnl/vnl_inverse.h>
 #include <vnl/vnl_vector.h>
 #include <vnl/vnl_double_3.h>

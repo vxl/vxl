@@ -1,4 +1,8 @@
 // This is brl/bseg/boxm2/ocl/pro/processes/boxm2_ocl_ingest_buckeye_process.cxx
+#include <iostream>
+#include <algorithm>
+#include <cmath>
+#include <fstream>
 #include <bprb/bprb_func_process.h>
 //:
 // \file
@@ -8,10 +12,6 @@
 // \date November 8, 2011
 
 #include <vcl_compiler.h>
-#include <iostream>
-#include <algorithm>
-#include <cmath>
-#include <fstream>
 #include <boct/boct_bit_tree.h>
 #include <boxm2/ocl/boxm2_opencl_cache.h>
 #include <boxm2/boxm2_scene.h>

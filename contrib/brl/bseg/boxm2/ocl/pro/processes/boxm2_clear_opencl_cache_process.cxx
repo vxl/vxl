@@ -6,11 +6,11 @@
 // \author Andrew Miller
 // \date May 24, 2011
 
+#include <iostream>
+#include <fstream>
 #include <bprb/bprb_func_process.h>
 
 #include <vcl_compiler.h>
-#include <iostream>
-#include <fstream>
 #include <boxm2/ocl/boxm2_opencl_cache.h>
 
 namespace boxm2_clear_opencl_cache_process_globals

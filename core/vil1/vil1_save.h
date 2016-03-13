@@ -15,8 +15,8 @@
 //     011002 Peter Vanroose - vil1_save now respects top-is-first; vil1_save_raw not
 //\endverbatim
 
-#include <vcl_compiler.h>
 #include <string>
+#include <vcl_compiler.h>
 class vil1_stream;
 #include <vil1/vil1_image.h>
 

@@ -11,8 +11,8 @@
 //  August 4, 2009              Initial version
 
 #include <string>
+#include <iosfwd>
 #include <vcl_compiler.h>
-#include <iosfwd> // for the declaration of std::ostream
 
 #include <vgui/vgui_statusbar.h>
 #include <vgui/vgui_statusbuf.h>

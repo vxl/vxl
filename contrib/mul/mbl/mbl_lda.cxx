@@ -8,14 +8,14 @@
 // \author Tim Cootes
 //         Converted to VXL by Gavin Wheeler
 
+#include <iostream>
+#include <algorithm>
+#include <cstddef>
+#include <cstring>
 #include "mbl_lda.h"
 
 #include <vcl_compiler.h>
-#include <iostream>
-#include <algorithm>  // for std::find
 #include <vcl_cassert.h>
-#include <cstddef> // for size_t
-#include <cstring> // for memcpy()
 #include <vsl/vsl_indent.h>
 #include <vsl/vsl_vector_io.h>
 #include <vsl/vsl_binary_io.h>

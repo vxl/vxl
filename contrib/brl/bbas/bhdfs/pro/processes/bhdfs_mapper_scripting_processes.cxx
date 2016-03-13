@@ -1,4 +1,6 @@
 // This is brl/bbas/bhdfs/pro/processes/bhdfs_mapper_scripting_processes.cxx
+#include <iostream>
+#include <sstream>
 #include <bprb/bprb_func_process.h>
 //:
 // \file
@@ -11,8 +13,6 @@
 #include <bhdfs/bhdfs_fstream.h>
 #include <bpro/core/bbas_pro/bbas_1d_array_string.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <sstream>
 
 
 //: generate an input file on the output hdfs folder, this file will be streamed to mapper processes

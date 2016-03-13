@@ -6,9 +6,9 @@
 // \brief binary IO functions for std::vector<T>
 // \author Tim Cootes
 
-#include <vcl_compiler.h>
 #include <iosfwd>
 #include <vector>
+#include <vcl_compiler.h>
 #include <vsl/vsl_fwd.h>
 
 //: Write vector to binary stream

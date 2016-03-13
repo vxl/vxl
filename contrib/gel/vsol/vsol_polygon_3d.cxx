@@ -1,12 +1,11 @@
 // This is gel/vsol/vsol_polygon_3d.cxx
+#include <iostream>
+#include <cmath>
 #include "vsol_polygon_3d.h"
 //:
 // \file
 #include <vcl_cassert.h>
-#include <iostream>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <cmath>
 #include <vsl/vsl_vector_io.h>
 #include <vsol/vsol_point_3d.h>
 #include <vgl/vgl_vector_3d.h>

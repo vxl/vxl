@@ -7,11 +7,11 @@
 // \brief Load properties with repeated labels from text files
 
 #include <map>
-#include <vcl_compiler.h>
 #include <iostream>
 #include <iosfwd>
 #include <string>
 #include <vector>
+#include <vcl_compiler.h>
 
 
 //: The type of the property dictionary

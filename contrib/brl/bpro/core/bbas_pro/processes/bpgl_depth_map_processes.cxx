@@ -1,15 +1,14 @@
 //This is brl/bpro/core/bbas_pro/processes/bpgl_depth_map_processes.cxx
 //:
 // \file
+#include <string>
+#include <iostream>
 #include <bprb/bprb_func_process.h>
 #include <bprb/bprb_parameters.h>
 #include <bsta/bsta_histogram.h>
 #include <bpgl/depth_map/depth_map_scene.h>
 
-#include <string>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 
 #include <brdb/brdb_value.h>
 #include <vil/vil_image_view.h>

@@ -9,10 +9,10 @@
 // \author Tim Cootes
 // \brief Initialises kernel pdfs
 
-#include <vpdfl/vpdfl_builder_base.h>
-#include <vcl_compiler.h>
 #include <iostream>
 #include <iosfwd>
+#include <vpdfl/vpdfl_builder_base.h>
+#include <vcl_compiler.h>
 
 //=======================================================================
 

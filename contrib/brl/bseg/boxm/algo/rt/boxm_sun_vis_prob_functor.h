@@ -2,6 +2,7 @@
 #define boxm_sun_vis_prob_functor_h
 //:
 //\file
+#include <iostream>
 #include <boxm/boxm_apm_traits.h>
 #include <boxm/basic/boxm_raytrace_function.h>
 #include <boxm/sample/boxm_opt2_sample.h>
@@ -15,8 +16,6 @@
 #include <vgl/vgl_vector_3d.h>
 #include <vil/vil_image_view.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 
 
 template <boxm_apm_type APM, class T_aux>

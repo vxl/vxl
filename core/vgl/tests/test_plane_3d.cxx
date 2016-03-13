@@ -2,6 +2,7 @@
 // J.L. Mundy Sept. 17, 2010
 
 #include <iostream>
+#include <cmath>
 #include <testlib/testlib_test.h>
 #include <vgl/vgl_plane_3d.h>
 #include <vgl/vgl_point_3d.h>
@@ -10,7 +11,6 @@
 #include <vgl/vgl_ray_3d.h>
 #include <vgl/vgl_closest_point.h>
 #include <vcl_compiler.h>
-#include <cmath>
 static void test_constructor()
 {
   double a = 0.0, b = 10.0, c = 0.0, d = 0.0;

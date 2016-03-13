@@ -10,9 +10,9 @@
 //   J.L. Mundy - November 12, 2003
 //
 //-----------------------------------------------------------------------------
-#include <vcl_compiler.h>
 #include <iostream>
 #include <vector>
+#include <vcl_compiler.h>
 #include <vnl/vnl_matrix.h>
 
 //-----------------------------------------------------------------------------

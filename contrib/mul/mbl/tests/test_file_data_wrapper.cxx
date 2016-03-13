@@ -1,11 +1,10 @@
 // This is mul/mbl/tests/test_file_data_wrapper.cxx
+#include <iostream>
 #include <testlib/testlib_test.h>
 
 #include <mbl/mbl_file_data_collector.h>
 #include <vnl/vnl_double_2.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 #include <vpl/vpl.h> // vpl_unlink()
 
 #ifndef LEAVE_FILES_BEHIND

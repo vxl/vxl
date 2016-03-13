@@ -16,9 +16,9 @@
 //------------------------------------------------------------------------------
 
 #include <vector>
-#include <vcl_compiler.h>
 #include <iostream>
 #include <list>
+#include <vcl_compiler.h>
 
 #include <vil/vil_image_view.h>
 

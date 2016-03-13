@@ -1,13 +1,13 @@
 #ifndef ComputeGRIC_h
 #define ComputeGRIC_h
 
+#include <vector>
+#include <iostream>
+#include <memory>
 #include <mvl/PairMatchSetCorner.h>
 #include <mvl/FMatrix.h>
 #include <mvl/HMatrix2D.h>
-#include <vector>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <memory>
 
 class ComputeGRIC
 {

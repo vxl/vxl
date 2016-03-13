@@ -11,6 +11,10 @@
 //  Modifications
 // \endverbatim
 
+#include <iostream>
+#include <cmath>
+#include <map>
+#include <vector>
 #include <bapl/bapl_keypoint_extractor.h>
 #include <bapl/bapl_keypoint_sptr.h>
 #include <bapl/bapl_lowe_pyramid_set.h>
@@ -24,10 +28,6 @@
 
 
 #include <vcl_compiler.h>
-#include <iostream>
-#include <cmath>
-#include <map>
-#include <vector>
 
 class bapl_dense_sift:public vbl_ref_count
 {

@@ -1,8 +1,7 @@
-#include "similarity_from_matches.h"
-#include <vcl_compiler.h>
-#include <iostream>
 #include <iostream>
 #include <vector>
+#include "similarity_from_matches.h"
+#include <vcl_compiler.h>
 #include <vcl_cassert.h>
 #include <vnl/vnl_math.h>
 #include <vnl/vnl_matrix_fixed.h>

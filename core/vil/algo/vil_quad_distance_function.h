@@ -5,9 +5,9 @@
 //  \brief Functions to compute quadratic distance functions
 //  \author Tim Cootes
 
+#include <vector>
 #include <vil/vil_image_view.h>
 #include <vcl_compiler.h>
-#include <vector>
 #include <vcl_cassert.h>
 
 //: Add parabola y=y0+(x-x0)^2 to lower envelope defined by (x,y,z)

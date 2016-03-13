@@ -5,11 +5,11 @@
 // \file
 // \author fsm
 
+#include <cmath>
 #include "vgl_lineseg_test.h"
 #include <vgl/vgl_tolerance.h>
 #include <vgl/vgl_triangle_test.h>
 #include <vcl_compiler.h>
-#include <cmath>
 
 template <class T>
 bool vgl_lineseg_test_line(T x1, T y1, T x2, T y2, T x3, T y3, T x4, T y4)

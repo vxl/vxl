@@ -30,11 +30,10 @@
 //           its (vil_image_view<float> const&) operator
 //           and has a size() method to indicate the number of vector elements
 //
-#include <vsl/vsl_binary_io.h>
 #include <vector>
+#include <iostream>
+#include <vsl/vsl_binary_io.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 #include <vnl/vnl_vector.h>
 #include <vnl/vnl_matrix.h>
 #include <vil/vil_image_resource.h>

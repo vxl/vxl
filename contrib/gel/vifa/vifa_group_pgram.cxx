@@ -1,11 +1,11 @@
 // This is gel/vifa/vifa_group_pgram.cxx
+#include <iostream>
+#include <cmath>
 #include "vifa_group_pgram.h"
 //:
 // \file
 
 #include <vcl_compiler.h>
-#include <iostream>
-#include <cmath>
 #include <vnl/vnl_math.h>
 #include <vgl/vgl_point_2d.h>
 #include <vgl/vgl_vector_2d.h>

@@ -1,9 +1,9 @@
 #ifndef vnl_vector_to_vcl_vector_h_
 #define vnl_vector_to_vcl_vector_h_
 
-#include <vcl_compiler.h>
 #include <iostream>
 #include <vector>
+#include <vcl_compiler.h>
 #include <vnl/vnl_vector.h>
 
 template <class T>

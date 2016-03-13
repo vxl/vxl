@@ -12,9 +12,9 @@
 // to project and backproject the 3D points in local coordinates to pixel positions
 
 
-#include <vcl_compiler.h>
 #include <iosfwd>
 #include <vector>
+#include <vcl_compiler.h>
 
 #include <vpgl/vpgl_lvcs_sptr.h>
 #include <vpgl/vpgl_lvcs.h>

@@ -1,4 +1,7 @@
 //This is brl/bseg/bvpl/bvpl_octree/pro/processes/bvpl_nonmax_supp_process.cxx
+#include <string>
+#include <iostream>
+#include <fstream>
 #include <bprb/bprb_func_process.h>
 //:
 // \file
@@ -11,10 +14,7 @@
 //
 // \endverbatim
 
-#include <string>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <fstream>
 
 #include <brdb/brdb_value.h>
 #include <bprb/bprb_parameters.h>

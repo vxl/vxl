@@ -14,15 +14,12 @@
 // \endverbatim
 //
 
+#include <iostream>
+#include <string>
+#include <vector>
 #include <vbl/vbl_ref_count.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <string>
-#include <vector>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <string>
-#include <vector>
 #include <vgl/vgl_box_2d.h>
 #include <vgl/vgl_point_2d.h>
 #include "volm_geo_index2_sptr.h"

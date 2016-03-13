@@ -2,8 +2,8 @@
 // When the user has added values to the dialog box and clicked on OK
 // their list of choices will be printed to cerr.
 
-#include <vcl_compiler.h>
 #include <iostream>
+#include <vcl_compiler.h>
 #include <vbl/vbl_bool_ostream.h>
 #include <vgui/vgui.h>
 #include <vgui/vgui_menu.h>

@@ -3,12 +3,11 @@
 //:
 // \file
 
+#include <iostream>
 #include <boxm2/boxm2_data_traits.h>
 #include <boct/boct_bit_tree.h>
 #include <vnl/vnl_vector_fixed.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 #include <boxm2/io/boxm2_cache.h>
 
 class boxm2_merge_block_function

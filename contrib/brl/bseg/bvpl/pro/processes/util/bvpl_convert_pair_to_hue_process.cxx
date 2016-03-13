@@ -1,4 +1,6 @@
 // This is brl/bseg/bvpl/pro/processes/util/bvpl_convert_pair_to_hue_process.cxx
+#include <iostream>
+#include <string>
 #include <bprb/bprb_func_process.h>
 //:
 // \file
@@ -12,8 +14,6 @@
 // \endverbatim
 
 #include <vcl_compiler.h>
-#include <iostream>
-#include <string>
 #include <bprb/bprb_parameters.h>
 #include <bvxm/grid/bvxm_voxel_grid.h>
 #include <bvpl/kernels/bvpl_kernel.h>

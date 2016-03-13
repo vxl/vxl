@@ -1,4 +1,5 @@
 // This is core/vgui/vgui_menu.cxx
+#include <iostream>
 #include "vgui_menu.h"
 //:
 // \file
@@ -6,7 +7,6 @@
 // \brief  See vgui_menu.h for a description of this file.
 
 #include <vcl_compiler.h>
-#include <iostream>
 #include <vgui/vgui_command.h>
 
 //--------------------------------------------------------------------------------

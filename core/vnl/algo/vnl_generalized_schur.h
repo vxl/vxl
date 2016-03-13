@@ -10,6 +10,7 @@
 // \author fsm, Oxford RRG
 // \date   2 Oct 2001
 
+#include <algorithm>
 #include <vnl/vnl_matrix.h>
 #include <vnl/vnl_vector.h>
 
@@ -55,7 +56,6 @@ bool vnl_generalized_schur(vnl_matrix<double> *A,
                            vnl_matrix<double> *R);
 
 #include <vcl_compiler.h>
-#include <algorithm>
 
 template <class T>
 T vnl_generalized_schur_convert_cast(double a) { return static_cast<T>(a); }

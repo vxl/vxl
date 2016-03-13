@@ -16,12 +16,12 @@
 // \endverbatim
 //
 
-#include <vbl/vbl_ref_count.h>
 #include <string>
-#include <vcl_compiler.h>
 #include <iostream>
 #include <fstream>
 #include <vector>
+#include <vbl/vbl_ref_count.h>
+#include <vcl_compiler.h>
 
 #define uchar unsigned char
 

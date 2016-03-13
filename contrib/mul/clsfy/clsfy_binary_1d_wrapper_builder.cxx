@@ -1,4 +1,9 @@
 // Copyright: (C) 2009 Imorphics PLC
+#include <string>
+#include <iostream>
+#include <sstream>
+#include <vector>
+#include <algorithm>
 #include "clsfy_binary_1d_wrapper_builder.h"
 //:
 // \file
@@ -8,14 +13,8 @@
 
 //=======================================================================
 
-#include <string>
-#include <iostream>
-#include <sstream>
-#include <vector>
 #include <vcl_cassert.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <algorithm>
 #include <mbl/mbl_parse_block.h>
 #include <mbl/mbl_read_props.h>
 #include <clsfy/clsfy_binary_threshold_1d_builder.h>

@@ -5,13 +5,14 @@
 //:
 // \file
 
+#include <vector>
+#include <iostream>
+#include <cstring>
+#include <cstdio>
 #include "vil1_pnm.h"
 
 #include <vcl_cassert.h>
 #include <vcl_compiler.h>
-#include <vector>
-#include <iostream>
-#include <cstring>
 
 #include <vil1/vil1_stream.h>
 #include <vil1/vil1_image_impl.h>
@@ -20,7 +21,6 @@
 
 #include <vxl_config.h>
 #undef sprintf // This works around a bug in libintl.h
-#include <cstdio> // for sprintf
 
 char const* vil1_pnm_format_tag = "pnm";
 

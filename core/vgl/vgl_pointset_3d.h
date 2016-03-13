@@ -15,12 +15,12 @@
 // \endverbatim
 
 #include <vector>
-#include <vgl/vgl_point_3d.h>
-#include <vcl_cassert.h>
 #include <iostream>
 #include <sstream>
-#include <vcl_compiler.h>
 #include <string>
+#include <vgl/vgl_point_3d.h>
+#include <vcl_cassert.h>
+#include <vcl_compiler.h>
 template <class Type>
 class vgl_pointset_3d
 {

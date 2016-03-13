@@ -5,13 +5,13 @@
 // \brief A class to define and apply a 3D transformation up to affine.
 // \author Graham Vincent, Tim Cootes
 
+#include <iostream>
+#include <iosfwd>
 #include <vgl/vgl_point_3d.h>
 #include <vgl/vgl_vector_3d.h>
 #include <vnl/io/vnl_io_matrix.h>
 #include <vsl/vsl_binary_io.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iosfwd>
 #include <vnl/vnl_quaternion.h>
 
 //=======================================================================

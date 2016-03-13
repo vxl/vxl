@@ -2,15 +2,15 @@
 #define boxm2_update_with_shadow_functor_h
 //:
 // \file
+#include <vector>
+#include <limits>
+#include <iostream>
+#include <cmath>
 #include <boxm2/cpp/algo/boxm2_cast_ray_function.h>
 #include <boxm2/cpp/algo/boxm2_mog3_grey_processor.h>
 #include <boxm2/cpp/algo/boxm2_gauss_grey_processor.h>
 #include <vil/vil_image_view.h>
-#include <vector>
-#include <limits>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <cmath>
 
 template <boxm2_data_type APM_TYPE>
 class boxm2_update_with_shadow_pass2_functor

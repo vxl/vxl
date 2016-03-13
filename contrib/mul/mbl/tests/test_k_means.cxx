@@ -1,10 +1,9 @@
 // This is mul/mbl/tests/test_k_means.cxx
 #include <iostream>
-#include <vcl_compiler.h>
-#include <iostream>
-#include <cmath> // for std::sqrt()
-#include <vcl_cassert.h>
+#include <cmath>
 #include <vector>
+#include <vcl_compiler.h>
+#include <vcl_cassert.h>
 
 #include <vnl/vnl_random.h>
 #include <mbl/mbl_k_means.h>

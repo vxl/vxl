@@ -6,6 +6,9 @@
 // \brief Calculate the mutual information between the images.
 // \author Matt Leotta
 
+#include <vector>
+#include <iostream>
+#include <algorithm>
 #include "brip_blobwise_mutual_info.h"
 #include "brip_histogram.h"
 #include "brip_mutual_info.h"
@@ -13,11 +16,8 @@
 #include <vil/algo/vil_binary_dilate.h>
 #include <vil/algo/vil_binary_erode.h>
 #include <vil/vil_math.h>
-#include <vector>
 #include <vcl_cassert.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <algorithm>
 
 //: Calculate the Mutual Information between the images.
 template<class T>

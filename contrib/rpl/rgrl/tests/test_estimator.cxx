@@ -1,13 +1,12 @@
-#include <testlib/testlib_test.h>
-//:
-// \file
 #include <vector>
 #include <iostream>
 #include <iterator>
-#include <vcl_compiler.h>
-#include <iostream>
 #include <algorithm>
 #include <cmath>
+#include <testlib/testlib_test.h>
+//:
+// \file
+#include <vcl_compiler.h>
 #include <vcl_cassert.h>
 
 #include <vnl/vnl_matrix.h>

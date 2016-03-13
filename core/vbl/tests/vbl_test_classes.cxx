@@ -1,6 +1,6 @@
+#include <iostream>
 #include "vbl_test_classes.h"
 #include <vcl_compiler.h>
-#include <iostream>
 
 // Remember, the template instances must be in
 // Templates, but they use these classes, so the class

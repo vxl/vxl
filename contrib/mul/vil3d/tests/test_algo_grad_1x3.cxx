@@ -1,8 +1,7 @@
 // This is mul/vil3d/tests/test_algo_grad_1x3.cxx
+#include <iostream>
 #include <testlib/testlib_test.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 #include <vxl_config.h> // for vxl_byte
 #include <vil3d/algo/vil3d_grad_1x3.h>
 #include <vil3d/vil3d_crop.h>

@@ -31,11 +31,11 @@
 //
 //-----------------------------------------------------------------------------
 
+#include <iostream>
+#include <iosfwd>
 #include <vnl/vnl_fwd.h>
 #include <vgl/vgl_fwd.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iosfwd>
 class HomgPoint2D;
 class HomgLineSeg2D;
 class HomgLine2D;

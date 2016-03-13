@@ -1,9 +1,9 @@
 // This is brl/bbas/bgui/tests/test_histogram.cxx
+#include <iostream>
+#include <limits>
 #include <testlib/testlib_test.h>
 
 #include <vcl_compiler.h>
-#include <iostream>
-#include <limits>
 #include <vil/vil_load.h>
 #include <vil/vil_image_view.h>
 #include <vil/algo/vil_histogram.h>

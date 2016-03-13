@@ -1,8 +1,8 @@
 // This is core/vul/tests/test_vul_file.cxx
+#include <fstream>
 #include <vpl/vpl.h>
 #include <vul/vul_file.h>
 #include <vcl_compiler.h>
-#include <fstream>
 #include <testlib/testlib_test.h>
 
 

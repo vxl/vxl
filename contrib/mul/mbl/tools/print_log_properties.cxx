@@ -4,9 +4,8 @@
 // \author Ian Scott
 
 #include <iostream>
-#include <vcl_compiler.h>
-#include <iostream>
 #include <fstream>
+#include <vcl_compiler.h>
 #include <vul/vul_string.h>
 #include <mbl/mbl_log.h>
 

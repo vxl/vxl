@@ -1,10 +1,9 @@
+#include <iostream>
 #include <testlib/testlib_test.h>
 #include "../bvxm_mog_norm.h"
 #include <bvxm/grid/bvxm_voxel_grid.h>
 #include <bvxm/grid/bvxm_voxel_grid_base.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 
 void test_l2_mog_norm()
 {

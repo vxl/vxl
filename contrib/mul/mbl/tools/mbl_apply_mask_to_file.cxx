@@ -4,15 +4,14 @@
  */
 
 #include <string>
-#include <cstddef> // for std::size_t
+#include <cstddef>
 #include <iostream>
 #include <fstream>
 #include <sstream>
-#include <vcl_compiler.h>
-#include <iostream>
 #include <algorithm>
-#include <vul/vul_arg.h>
 #include <exception>
+#include <vcl_compiler.h>
+#include <vul/vul_arg.h>
 #include <mbl/mbl_mask.h>
 #include <mbl/mbl_exception.h>
 

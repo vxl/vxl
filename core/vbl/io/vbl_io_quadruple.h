@@ -6,10 +6,10 @@
 // \brief   binary IO functions for vbl_quadruple<S, T, U>
 // \author  Ian Scott
 
+#include <iosfwd>
 #include <vsl/vsl_fwd.h>
 #include <vbl/vbl_quadruple.h>
 #include <vcl_compiler.h>
-#include <iosfwd>
 
 //: Write pair to binary stream
 template <class S, class T, class U, class V>

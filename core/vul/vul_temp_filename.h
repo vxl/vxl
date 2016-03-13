@@ -12,8 +12,8 @@
 // This is to avoid (GNU) linker warnings (and errors!) about calls to
 // tmpnam being unsafe.
 
-#include <vcl_compiler.h>
 #include <string>
+#include <vcl_compiler.h>
 
 //: Generates a temporary filename.
 // There is a possible race condition, in that some other process may

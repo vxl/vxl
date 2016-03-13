@@ -1,4 +1,9 @@
 // This is core/vgui/impl/glut/vgui_glut_adaptor.cxx
+#include <cstdlib>
+#include <iostream>
+#include <algorithm>
+#include <utility>
+#include <list>
 #include "vgui_glut_adaptor.h"
 //:
 // \file
@@ -10,9 +15,6 @@
 
 #include <vcl_cassert.h>
 #include <vcl_compiler.h>
-#include <cstdlib>
-#include <iostream>
-#include <algorithm>
 
 #include <vgui/vgui_glut.h>
 #include <vgui/vgui_macro.h>
@@ -648,8 +650,6 @@ struct vgui_glut_adaptor_callback_data
   int val;
 };
 
-#include <utility>
-#include <list>
 typedef std::pair<void*, int> pair_Pv_i;
 typedef std::list<pair_Pv_i> list_Pv_i;
 static list_Pv_i *timer_posts = VXL_NULLPTR;

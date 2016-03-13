@@ -6,14 +6,14 @@
 //  \brief Create windows into vimt3d_images.
 //  \author Kevin de Souza, Tim Cootes, Ian Scott
 
+#include <cmath>
+#include <iostream>
+#include <algorithm>
 #include <vimt3d/vimt3d_image_3d_of.h>
 #include <vil3d/vil3d_crop.h>
 #include <vgl/vgl_box_3d.h>
-#include <cmath>
 #include <vcl_cassert.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <algorithm>
 
 //: Create windowed view of given image by specifying a cropping region in image co-ords.
 //  The world2im transform is set so that this appears identical to im when addressed in world co-ords.

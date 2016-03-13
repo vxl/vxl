@@ -1,4 +1,7 @@
 //This is brl/bseg/boxm/pro/processes/boxm_camera_viewing_scene_process.cxx
+#include <string>
+#include <iostream>
+#include <cmath>
 #include <boxm/boxm_scene_base.h>
 #include <boxm/boxm_scene.h>
 //:
@@ -20,12 +23,8 @@
 
 #include <vpgl/vpgl_perspective_camera.h>
 #include <bpgl/algo/bpgl_project.h>
-#include <string>
-#include <iostream>
 #include <vnl/vnl_math.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <cmath>
 //:global variables
 namespace boxm_camera_viewing_scene_process_globals
 {

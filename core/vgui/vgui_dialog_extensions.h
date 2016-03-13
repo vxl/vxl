@@ -16,8 +16,8 @@
 //  Modifications
 // \endverbatim
 
-#include <vcl_compiler.h>
 #include <string>
+#include <vcl_compiler.h>
 #include <vgui/vgui_dialog.h>
 
 class vgui_dialog_extensions_impl;

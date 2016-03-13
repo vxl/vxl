@@ -17,15 +17,14 @@
 //                 because that type as T cannot be used to fill the resulting grid.
 // \endverbatim
 
+#include <limits>
+#include <iostream>
 #include "../bvxm_voxel_grid.h"
 #include "../bvxm_voxel_grid_base.h"
 #include "../bvxm_opinion.h"
 #include <bsta/bsta_attributes.h>
 #include <bsta/bsta_gauss_sf1.h>
-#include <limits>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 
 //: Traits for saving grids of different datatypes to Drishti .raw file
 template <class T>

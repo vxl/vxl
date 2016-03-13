@@ -6,12 +6,12 @@
 // \brief Calculate the mutual information between the images.
 // \author Matt Leotta
 
+#include <iostream>
+#include <vector>
 #include "brip_mutual_info.h"
 
 #include "brip_histogram.h"
 #include <vcl_compiler.h>
-#include <iostream>
-#include <vector>
 #include <vcl_cassert.h>
 
 

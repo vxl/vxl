@@ -5,11 +5,11 @@
 // \brief Represents 2x2 symmetric matrix, used as weight matrix
 // \author Tim Cootes
 
-#include <vcl_cassert.h>
-#include <vcl_compiler.h>
 #include <iostream>
 #include <iosfwd>
 #include <string>
+#include <vcl_cassert.h>
+#include <vcl_compiler.h>
 #include <vsl/vsl_fwd.h>
 
 //: Represents 2x2 symmetric matrix, used as weight matrix

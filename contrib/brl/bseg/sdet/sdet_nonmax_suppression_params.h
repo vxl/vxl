@@ -10,10 +10,10 @@
 //    Brown University
 //
 //-----------------------------------------------------------------------------
-#include <gevd/gevd_param_mixin.h>
-#include <vcl_compiler.h>
 #include <iostream>
 #include <iosfwd>
+#include <gevd/gevd_param_mixin.h>
+#include <vcl_compiler.h>
 
 // enumeration for the parabola fit type
 enum {PFIT_3_POINTS, PFIT_9_POINTS};

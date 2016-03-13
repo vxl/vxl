@@ -1,11 +1,11 @@
 // This is core/vil/vil_memory_chunk.cxx
+#include <cstring>
 #include "vil_memory_chunk.h"
 //:
 // \file
 // \brief Ref. counted block of data on the heap
 // \author Tim Cootes
 #include <vcl_compiler.h>
-#include <cstring>
 #include <vcl_cassert.h>
 
 //: Dflt ctor

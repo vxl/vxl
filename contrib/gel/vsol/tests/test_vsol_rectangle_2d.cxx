@@ -10,13 +10,13 @@
 // 1.1     |2003/01/08| Peter Vanroose           |Now using testlib macros
 // 2.0     |2004/05/16| Joseph Mundy             |Reworked rectangle interface
 //*****************************************************************************
+#include <iostream>
+#include <cmath>
 #include <testlib/testlib_test.h>
 //:
 // \file
 #include <vnl/vnl_math.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <cmath> //for fabs
 #include <vsol/vsol_rectangle_2d.h>
 #include <vsol/vsol_rectangle_2d_sptr.h>
 #include <vsol/vsol_point_2d.h>

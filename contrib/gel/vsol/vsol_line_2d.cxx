@@ -1,12 +1,11 @@
 // This is gel/vsol/vsol_line_2d.cxx
+#include <iostream>
+#include <cmath>
 #include "vsol_line_2d.h"
 //:
 // \file
 #include <vcl_cassert.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <cmath>
-#include <iostream>
 #include <vnl/vnl_math.h>
 #include <vbl/io/vbl_io_smart_ptr.h>
 #include <vsol/vsol_point_2d.h>

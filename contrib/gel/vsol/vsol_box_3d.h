@@ -34,6 +34,7 @@
 //   2004/11/15 H.Can Aras     added inheritance from vsol_box
 // \endverbatim
 
+#include <iostream>
 #include <vsol/vsol_box.h>
 #include <vsl/vsl_binary_io.h>
 #include <vul/vul_timestamp.h>
@@ -41,8 +42,6 @@
 #include <vbl/vbl_bounding_box.h>
 #include "vsol_box_3d_sptr.h"
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 
 //: A bounding box for 3d spatial objects
 

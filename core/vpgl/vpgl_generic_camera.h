@@ -25,13 +25,13 @@
 //  Modifications <none>
 // \endverbatim
 
+#include <iosfwd>
+#include <string>
 #include <vbl/vbl_array_2d.h>
 #include <vgl/vgl_ray_3d.h>
 #include <vgl/vgl_point_3d.h>
 #include <vpgl/vpgl_camera.h>
 #include <vcl_compiler.h>
-#include <iosfwd>
-#include <string>
 
 template <class T>
 class vpgl_generic_camera : public vpgl_camera<T>

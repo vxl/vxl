@@ -1,6 +1,10 @@
 //:
 //  \file
 
+#include <iostream>
+#include <cmath>
+#include <cstdlib>
+#include <list>
 #include "osl_canny_ox.h"
 #include <osl/osl_canny_port.h>
 #include <osl/osl_canny_ox_params.h>
@@ -10,11 +14,6 @@
 #include <osl/osl_canny_nms.h>
 
 #include <vcl_compiler.h>
-#include <iostream>
-#include <cmath>
-#include <cstdlib>
-#include <list>
-#include <iostream>
 #include <vcl_cassert.h>
 #include <vnl/vnl_math.h>
 

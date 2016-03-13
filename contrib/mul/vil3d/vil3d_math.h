@@ -6,14 +6,14 @@
 // \brief Various mathematical manipulations of 3D images
 // \author Tim Cootes
 
-#include <vcl_cassert.h>
 #include <vector>
+#include <iostream>
+#include <algorithm>
+#include <vcl_cassert.h>
 // not used? #include <functional> // for std::less<T>
 #include <vil3d/vil3d_image_view.h>
 #include <vil3d/vil3d_plane.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <algorithm>
 
 
 //: Compute minimum and maximum values over im

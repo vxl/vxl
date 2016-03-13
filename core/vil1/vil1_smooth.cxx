@@ -6,11 +6,11 @@
 // \file
 // \author fsm
 
+#include <cmath>
+#include <vector>
 #include "vil1_smooth.h"
 
-#include <cmath>
 #include <vcl_compiler.h>
-#include <vector>
 
 #include <vxl_config.h>
 #include <vil1/vil1_convolve.h>

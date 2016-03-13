@@ -1,10 +1,15 @@
 /*
   fsm
 */
+#include <cstdlib>
+#include <cstring>
+#include <csetjmp>
+#include <iostream>
+#include <list>
+#include <utility>
 #include "vgui_glut_impl.h"
 #include "vgui_glut_window.h"
 #include <vcl_compiler.h>
-#include <cstdlib>
 #include <vcl_cassert.h>
 #include <vgui/vgui_glut.h>
 
@@ -72,9 +77,6 @@ vgui_window *vgui_glut_impl::produce_window(int width, int height,
 
 //----------------------------------------------------------------------
 
-#include <cstring> // memcpy()
-#include <csetjmp>
-#include <iostream>
 #include <vgui/vgui_macro.h>
 
 // Use setjmp()/longjmp() to circumvent GLUT event loop restrictions.
@@ -152,8 +154,6 @@ void internal_run_till_idle()
 
 //--------------------------------------------------------------------------------
 
-#include <list>
-#include <utility>
 #include <vgui/vgui_command.h>
 #include "vgui_glut_adaptor.h"
 

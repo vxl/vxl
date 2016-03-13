@@ -5,13 +5,13 @@
 // \author Tim Cootes
 // \brief Class to perform Principle Component Analysis
 
+#include <iostream>
+#include <iosfwd>
 #include <mcal/mcal_component_analyzer.h>
 #include <vnl/io/vnl_io_vector.h>
 #include <vnl/io/vnl_io_matrix.h>
 #include <mbl/mbl_data_wrapper.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iosfwd>
 
 //: Class to perform Principle Component Analysis
 //  Applies a PCA to compute mean, variance and eigenvectors/values

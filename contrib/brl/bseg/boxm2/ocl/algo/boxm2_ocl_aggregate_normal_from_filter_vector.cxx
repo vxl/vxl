@@ -1,9 +1,10 @@
 // This is brl/bseg/boxm2/ocl/algo/boxm2_ocl_aggregate_normal_from_filter_vector.cxx
-#include "boxm2_ocl_aggregate_normal_from_filter_vector.h"
-
 #include <stdexcept>
 #include <map>
 #include <iostream>
+#include <fstream>
+#include "boxm2_ocl_aggregate_normal_from_filter_vector.h"
+
 
 #include <boxm2/ocl/boxm2_ocl_util.h>
 #include <boxm2/boxm2_block.h>
@@ -11,8 +12,6 @@
 
 //utilities
 #include <vcl_compiler.h>
-#include <iostream>
-#include <fstream>
 #include <vul/vul_timer.h>
 
 

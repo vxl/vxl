@@ -1,11 +1,11 @@
+#include <cmath>
+#include <iostream>
+#include <algorithm>
 #include <volm/conf/volm_conf_query.h>
 //:
 // \file
 #include <vcl_cassert.h>
-#include <cmath>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <algorithm>
 #include <bpgl/bpgl_camera_utils.h>
 #include <vul/vul_file.h>
 #include <vil/vil_load.h>

@@ -1,3 +1,4 @@
+#include <iostream>
 #include <vil1/vil1_memory_image_of.h>
 
 #include <vil1/vil1_load.h>
@@ -5,7 +6,6 @@
 
 #include <vxl_config.h>
 #include <vcl_compiler.h>
-#include <iostream>
 
 #include <testlib/testlib_test.h>
 

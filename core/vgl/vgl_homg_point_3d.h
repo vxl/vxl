@@ -16,10 +16,10 @@
 //   Guillaume Mersch- 10 Feb 2009 - bug fix in coplanar()
 // \endverbatim
 
+#include <iosfwd>
 #include <vgl/vgl_point_3d.h>
 #include <vgl/vgl_fwd.h> // forward declare vgl_homg_plane_3d
 #include <vcl_compiler.h>
-#include <iosfwd>
 #include <vcl_cassert.h>
 
 //: Represents a homogeneous 3D point

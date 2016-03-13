@@ -9,9 +9,9 @@
 // \author      Franck Bettinger
 // \date        Sun Mar 17 22:57:00 2002
 
+#include <vector>
 #include "vil_image_resource_plugin.h"
 #include <vcl_compiler.h>
-#include <vector>
 
 //=======================================================================
 

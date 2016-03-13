@@ -1,11 +1,11 @@
 // This is core/vpgl/algo/vpgl_triangulate_points.cxx
+#include <cmath>
+#include <cstdlib>
 #include "vpgl_triangulate_points.h"
 //:
 // \file
 
-#include <cmath>
 #include <vcl_compiler.h>
-#include <cstdlib>
 #include <vcl_cassert.h>
 
 #include <vgl/vgl_vector_3d.h>

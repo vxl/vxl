@@ -5,12 +5,12 @@
 // \author Tim Cootes
 // \brief Test if data from a given distribution using Kolmogorov-Smirnov
 
-#include "pdf1d_compare_to_pdf_ks.h"
-
 #include <string>
-#include <vcl_compiler.h>
 #include <iostream>
 #include <cmath>
+#include "pdf1d_compare_to_pdf_ks.h"
+
+#include <vcl_compiler.h>
 #include <vbl/vbl_qsort.h>
 #include <vnl/vnl_vector.h>
 

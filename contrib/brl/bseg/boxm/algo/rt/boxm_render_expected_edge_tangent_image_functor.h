@@ -2,6 +2,7 @@
 #define boxm_render_expected_edge_tangent_image_functor_h
 //:
 // \file
+#include <iostream>
 #include <boxm/boxm_apm_traits.h>
 #include <boxm/basic/boxm_raytrace_function.h>
 #include <boxm/sample/boxm_rt_sample.h>
@@ -15,8 +16,6 @@
 #include <vgl/vgl_distance.h>
 #ifdef DEBUG
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 #endif
 
 template <boxm_apm_type APM, class T_aux>

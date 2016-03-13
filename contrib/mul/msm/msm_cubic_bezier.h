@@ -5,14 +5,14 @@
 // \brief Basic implementation of a cubic poly-bezier
 // \author Tim Cootes
 
-#include <vcl_cassert.h>
-#include <vcl_compiler.h>
 #include <iostream>
 #include <cstddef>
 #include <iosfwd>
 #include <string>
-#include <vsl/vsl_fwd.h>
 #include <vector>
+#include <vcl_cassert.h>
+#include <vcl_compiler.h>
+#include <vsl/vsl_fwd.h>
 #include <vgl/vgl_point_2d.h>
 
 //: Store start point and two control points for Bezier poly-curve

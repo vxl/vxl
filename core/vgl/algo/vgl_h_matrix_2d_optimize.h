@@ -12,8 +12,8 @@
 // \verbatim
 //  Modifications
 // \endverbatim
-#include <vcl_compiler.h>
 #include <vector>
+#include <vcl_compiler.h>
 #include <vcl_cassert.h>
 #include <vnl/vnl_least_squares_function.h>
 #include <vgl/vgl_homg_point_2d.h>

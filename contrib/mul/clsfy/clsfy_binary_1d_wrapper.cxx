@@ -1,4 +1,8 @@
 // Copyright: (C) 2009 Imorphics PLC
+#include <string>
+#include <iostream>
+#include <vector>
+#include <cmath>
 #include "clsfy_binary_1d_wrapper.h"
 //:
 // \file
@@ -8,12 +12,7 @@
 
 //=======================================================================
 
-#include <string>
-#include <iostream>
-#include <vector>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <cmath>
 #include <vsl/vsl_binary_io.h>
 #include <clsfy/clsfy_binary_threshold_1d.h>
 

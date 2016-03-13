@@ -1,4 +1,5 @@
 // This is mul/vil3d/algo/vil3d_structuring_element.cxx
+#include <iostream>
 #include "vil3d_structuring_element.h"
 //:
 // \file
@@ -7,8 +8,6 @@
 
 #include <vcl_cassert.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 
   //: Define elements { (p_i[a],p_j[a],p_k[a]) }
 vil3d_structuring_element::vil3d_structuring_element(const std::vector<int>& p_i,

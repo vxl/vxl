@@ -5,6 +5,8 @@
 // \brief Uses regression to predict new pose from current sample
 // \author Tim Cootes
 
+#include <iostream>
+#include <iosfwd>
 #include <mfpf/mfpf_pose.h>
 #include <mbl/mbl_chord.h>
 #include <vnl/vnl_matrix.h>
@@ -12,8 +14,6 @@
 #include <vimt/vimt_image_2d_of.h>
 #include <vgl/vgl_fwd.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iosfwd>
 
 
 //: Types of 2D transformation

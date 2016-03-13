@@ -1,7 +1,6 @@
+#include <iostream>
 #include "bsta_histogram.h"
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 
 template <>
 void bsta_histogram<char>::pretty_print(std::ostream& os) const

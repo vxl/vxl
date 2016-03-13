@@ -24,11 +24,11 @@
 //   Peter Vanroose  - Jul 10, 2009 - split into .h and .cxx
 // \endverbatim
 
-#include <bprb/bprb_func_process.h>
-#include <vcl_compiler.h>
 #include <iostream>
 #include <string>
 #include <vector>
+#include <bprb/bprb_func_process.h>
+#include <vcl_compiler.h>
 
 #include <bvxm/bvxm_world_params.h>
 #include <vpgl/file_formats/vpgl_geo_camera.h>

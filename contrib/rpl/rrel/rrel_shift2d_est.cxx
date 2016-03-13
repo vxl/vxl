@@ -1,3 +1,5 @@
+#include <iostream>
+#include <cmath>
 #include "rrel_shift2d_est.h"
 
 #include <vgl/vgl_homg_point_2d.h>
@@ -6,8 +8,6 @@
 
 #include <vcl_cassert.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <cmath>
 
 rrel_shift2d_est::rrel_shift2d_est(
     const std::vector< vgl_homg_point_2d<double> > & from_pts,

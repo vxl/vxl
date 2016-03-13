@@ -14,10 +14,10 @@
 //   Ozge C. Ozcanli - July 08, 09 - ported to vxl from local repository - minor fixes
 // \endverbatim
 
-#include <bxml/bxml_document.h>
-#include <vcl_compiler.h>
 #include <iostream>
 #include <string>
+#include <bxml/bxml_document.h>
+#include <vcl_compiler.h>
 
 class bsvg_document : public bxml_document
 {

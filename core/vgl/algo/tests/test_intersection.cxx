@@ -1,9 +1,9 @@
 // Some tests for vgl_intersection
 // Gamze Tunali, Jan 2007.
 #include <iostream>
-#include <vcl_compiler.h>
 #include <limits>
 #include <list>
+#include <vcl_compiler.h>
 #include <testlib/testlib_test.h>
 #include <vgl/vgl_plane_3d.h>
 #include <vgl/vgl_point_2d.h>

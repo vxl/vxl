@@ -1,4 +1,7 @@
 // This is core/vidl/vidl_v4l2_devices.cxx
+#include <cstdio>
+#include <cstring>
+#include <iostream>
 #include "vidl_v4l2_devices.h"
 //:
 // \file
@@ -18,9 +21,6 @@ extern "C" { // revisar los .h
 };
 
 #include <vcl_compiler.h>
-#include <cstdio> // for std::perror()
-#include <cstring>
-#include <iostream>
 #include "vidl_pixel_format.h"
 
 

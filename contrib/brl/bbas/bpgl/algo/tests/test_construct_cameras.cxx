@@ -1,8 +1,7 @@
+#include <iostream>
+#include <cmath>
 #include <testlib/testlib_test.h>
-#include <iostream>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <cmath> // for std::abs
 
 #include <bpgl/algo/bpgl_construct_cameras.h>
 #include <vgl/vgl_point_2d.h>

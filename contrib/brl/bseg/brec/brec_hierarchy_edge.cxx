@@ -3,6 +3,8 @@
 // \author Ozge C Ozcanli (ozge@lems.brown.edu)
 // \date October 16, 2008
 
+#include <iostream>
+#include <cmath>
 #include "brec_hierarchy_edge.h"
 #include <bsta/algo/bsta_gaussian_updater.h>
 #include <vgl/vgl_point_2d.h>
@@ -10,8 +12,6 @@
 
 #include <bxml/bxml_find.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <cmath>
 
 #include <vnl/vnl_cross_product_matrix.h>
 #include <vnl/vnl_double_3.h>

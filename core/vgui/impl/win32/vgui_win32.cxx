@@ -1,11 +1,11 @@
 // This is core/vgui/impl/win32/vgui_win32.cxx
+#include <iostream>
+#include <cstring>
 #include "vgui_win32.h"
 
 #include <vgui/vgui_gl.h> // for glFlush()
 #include <vcl_compiler.h>
-#include <iostream> // for std::cerr
 #include <vcl_cassert.h> // for assert
-#include <cstring> // for std::strlen()
 #include "vgui_win32_window.h"
 #include "vgui_win32_dialog_impl.h"
 

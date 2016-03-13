@@ -1,12 +1,12 @@
 // This is core/vgui/impl/win32/vgui_win32_dialog_impl.cxx
+#include <algorithm>
+#include <cstdio>
+#include <cstddef>
+#include <cstring>
+#include <iostream>
 #include "vgui_win32_dialog_impl.h"
 
-#include <algorithm> // for std::find
-#include <cstdio> // for std::sprintf
 #include <vcl_compiler.h>
-#include <cstddef> // for std::size_t
-#include <cstring> // for std::strlen()
-#include <iostream>
 #include <vgui/internals/vgui_simple_field.h>
 #include <vgui/internals/vgui_file_field.h>
 #include <vgui/internals/vgui_button_field.h>

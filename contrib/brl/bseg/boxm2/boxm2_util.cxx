@@ -1,3 +1,9 @@
+#include <iostream>
+#include <fstream>
+#include <cstdio>
+#include <algorithm>
+#include <limits>
+#include <ios>
 #include "boxm2_util.h"
 #include <boxm2/boxm2_data_traits.h>
 //:
@@ -23,14 +29,7 @@
 #include <vil/vil_resample_nearest.h>
 
 //vcl io stuff
-#include <iostream>
-#include <fstream>
-#include <cstdio>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <algorithm>
-#include <limits>
-#include <ios>
 
 //vul file includes
 #include <vul/vul_file.h>

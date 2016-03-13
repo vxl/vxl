@@ -1,10 +1,9 @@
+#include <iostream>
+#include <cmath>
 #include "bnl_quadratic_interpolator.h"
 #include <vnl/vnl_vector.h>
 #include <vnl/algo/vnl_svd.h>
-#include <iostream>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <cmath> // for fabs()
 
 void bnl_quadratic_interpolator::add_data_point(const double px,
                                                  const double py,

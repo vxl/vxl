@@ -1,7 +1,7 @@
 // This is rpl/rrel/tests/test_ransac_obj.cxx
-#include <vcl_compiler.h>
 #include <iostream>
 #include <vector>
+#include <vcl_compiler.h>
 #include <testlib/testlib_test.h>
 
 #include <rrel/rrel_ransac_obj.h>

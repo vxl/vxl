@@ -1,7 +1,7 @@
 // This is core/vpl/vpl_fdopen.cxx
+#include <cstdio>
 #include "vpl_fdopen.h"
 #include <vcl_compiler.h>
-#include <cstdio>
 
 std::FILE *vpl_fdopen(int fd, char const *mode)
 {

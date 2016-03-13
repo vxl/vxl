@@ -1,8 +1,7 @@
 // This is mul/vimt/tests/test_sample_profile_bilin.cxx
+#include <iostream>
 #include <testlib/testlib_test.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 #include <vxl_config.h> // for vxl_byte
 #include <vimt/vimt_sample_profile_bilin.h>
 #include <vnl/vnl_vector.h>

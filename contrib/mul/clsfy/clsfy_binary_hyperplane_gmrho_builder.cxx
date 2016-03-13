@@ -1,4 +1,11 @@
 // This is mul/clsfy/clsfy_binary_hyperplane_gmrho_builder.cxx
+#include <string>
+#include <iostream>
+#include <vector>
+#include <cmath>
+#include <algorithm>
+#include <numeric>
+#include <cstddef>
 #include "clsfy_binary_hyperplane_gmrho_builder.h"
 //:
 // \file
@@ -8,16 +15,8 @@
 
 //=======================================================================
 
-#include <string>
-#include <iostream>
-#include <vector>
 #include <vcl_cassert.h>
-#include <cmath>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <algorithm>
-#include <numeric>
-#include <cstddef>
 #include <vnl/vnl_vector_ref.h>
 #include <vnl/algo/vnl_lbfgs.h>
 

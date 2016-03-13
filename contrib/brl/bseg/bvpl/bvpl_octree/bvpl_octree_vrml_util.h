@@ -12,6 +12,7 @@
 //   <none yet>
 // \endverbatim
 
+#include <iostream>
 #include <bvpl/bvpl_octree/sample/bvpl_octree_sample.h>
 #include <bvpl/kernels/bvpl_kernel.h>
 #include <bvpl/bvpl_octree/bvpl_cell_data_traits.h>
@@ -19,8 +20,6 @@
 #include <boxm/boxm_scene.h>
 #include <bvrml/bvrml_write.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 
 class bvpl_octree_vrml_util
 {

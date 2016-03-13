@@ -38,11 +38,11 @@
 //   <none yet>
 // \endverbatim
 
-#include <vbl/vbl_ref_count.h>
 #include <vector>
+#include <iostream>
+#include <utility>
+#include <vbl/vbl_ref_count.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 #include <vsl/vsl_binary_io.h>
 
 #include <vil/vil_image_view.h>
@@ -53,7 +53,6 @@
 #include <brec/brec_part_base_sptr.h>
 #include <brec/brec_part_hierarchy_sptr.h>
 #include <brec/brec_part_hierarchy_detector_sptr.h>
-#include <utility>
 
 
 class brec_part_hierarchy_learner : public vbl_ref_count

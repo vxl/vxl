@@ -22,10 +22,9 @@
 // total distance.  There might be on the order of k swaps (or worse).
 
 #include <vector>
+#include <iostream>
 #include <vcl_cassert.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 #include <vbl/vbl_array_2d.h>
 
 class bsta_k_medoid

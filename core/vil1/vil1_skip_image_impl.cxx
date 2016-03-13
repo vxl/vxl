@@ -6,13 +6,13 @@
 // \file
 // \author fsm
 
+#include <iostream>
+#include <vector>
 #include "vil1_skip_image_impl.h"
 
 #include <vcl_climits.h> // CHAR_BIT
-#include <iostream>
 #include <vcl_cassert.h>
 #include <vcl_compiler.h>
-#include <vector>
 
 vil1_skip_image_impl::vil1_skip_image_impl(vil1_image const &underlying, unsigned sx, unsigned sy)
   : base(underlying)

@@ -16,10 +16,10 @@
 //   11-FEB-2007  A. Khropov Fixed the "Main menu callbacks not initialized" bug.
 // \endverbatim
 
+#include <iostream>
 #include "vgui_mfc_utils.h"
 #include <vgui/vgui_command.h>
 #include <vcl_compiler.h>
-#include <iostream>
 static bool debug = false;
 
 

@@ -1,4 +1,7 @@
 // This is bbas/bpgl/algo/bpgl_bundle_rolling_shutter_adjust.cxx
+#include <iostream>
+#include <fstream>
+#include <algorithm>
 #include "bpgl_bundle_rolling_shutter_adjust.h"
 //:
 // \file
@@ -10,11 +13,7 @@
 #include <vgl/vgl_point_2d.h>
 #include <vgl/vgl_point_3d.h>
 
-#include <iostream>
-#include <fstream>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <algorithm>
 #include <vcl_cassert.h>
 #include <vnl/vnl_double_4.h>
 

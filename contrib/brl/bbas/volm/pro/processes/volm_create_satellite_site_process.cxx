@@ -1,14 +1,13 @@
 //This is brl/bbas/volm/pro/processes/volm_create_satellite_site_process.cxx
 //:
 // \file
-#include <bprb/bprb_func_process.h>
-#include <bprb/bprb_parameters.h>
 #include <string>
 #include <iostream>
-#include <vcl_compiler.h>
-#include <iostream>
-#include <cstdio> // for std::FILE and std::fopen()
+#include <cstdio>
 #include <functional>
+#include <bprb/bprb_func_process.h>
+#include <bprb/bprb_parameters.h>
+#include <vcl_compiler.h>
 
 #include <brdb/brdb_value.h>
 

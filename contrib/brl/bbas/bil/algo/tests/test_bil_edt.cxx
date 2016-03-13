@@ -1,7 +1,7 @@
-#include <testlib/testlib_test.h>
-#include <vcl_compiler.h>
 #include <iostream>
 #include <cstdlib>
+#include <testlib/testlib_test.h>
+#include <vcl_compiler.h>
 
 #include <bil/algo/bil_edt.h>
 

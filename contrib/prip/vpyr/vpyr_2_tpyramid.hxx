@@ -2,11 +2,10 @@
 #ifndef vpyr_2_tpyramid_hxx_
 #define vpyr_2_tpyramid_hxx_
 
+#include <iostream>
 #include "vpyr_2_tpyramid.h"
 #include <vmap/vbl_controlled_partition.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 
 template <class TLevel>
 vpyr_2_tpyramid<TLevel>::vpyr_2_tpyramid()

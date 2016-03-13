@@ -19,10 +19,10 @@
 //   Peter Vanroose   24/10/2012 Now adds to the vnl_math namespace
 // \endverbatim
 
-#include <cmath> // for sqrt(double)
+#include <cmath>
 #include <complex>
-#include <vcl_compiler.h>
 #include <iosfwd>
+#include <vcl_compiler.h>
 #include <vnl/vnl_math.h>
 
 namespace vnl_math

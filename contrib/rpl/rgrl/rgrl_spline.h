@@ -6,12 +6,12 @@
 //  \date   Sep 2003
 //  \brief A class for dealing a uniform cubic B-spline up to 4D (a hypersurface in 4D).
 
+#include <iostream>
+#include <iosfwd>
 #include "rgrl_spline_sptr.h"
 #include "rgrl_object.h"
 
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iosfwd>
 #include <vnl/vnl_matrix.h>
 #include <vnl/vnl_vector.h>
 

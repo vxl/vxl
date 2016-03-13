@@ -15,9 +15,9 @@
 // \endverbatim
 //
 //-------------------------------------------------------------------------
-#include <vcl_compiler.h>
 #include <iostream>
 #include <map>
+#include <vcl_compiler.h>
 
 #include "bmsh3d_face.h"
 #include "bmsh3d_halfedge.h"

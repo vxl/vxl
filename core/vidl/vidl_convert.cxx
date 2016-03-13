@@ -14,6 +14,8 @@
 //
 //-----------------------------------------------------------------------------
 
+#include <cstring>
+#include <memory>
 #include "vidl_convert.h"
 #include "vidl_frame.h"
 #include "vidl_pixel_format.h"
@@ -28,10 +30,8 @@
 #include <vil/vil_convert.h>
 #include <vil/vil_new.h>
 #include <vil/vil_memory_chunk.h>
-#include <cstring>
 #include <vcl_cassert.h>
 #include <vcl_compiler.h>
-#include <memory>
 
 //--------------------------------------------------------------------------------
 

@@ -16,10 +16,10 @@
 //   Mar.2009 - Peter Vanroose - added arg_min() and arg_max()
 //   Oct.2010 - Peter Vanroose - mutators and setters now return *this
 // \endverbatim
+#include <iosfwd>
 # include <vnl/vnl_error.h>
 
 #include <vcl_compiler.h>
-#include <iosfwd>
 #include <vnl/vnl_tag.h>
 #include <vnl/vnl_c_vector.h>
 #include <vnl/vnl_config.h>

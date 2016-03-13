@@ -1,3 +1,8 @@
+#include <iostream>
+#include <string>
+#include <vector>
+#include <map>
+#include <algorithm>
 #include <testlib/testlib_test.h>
 #include <testlib/testlib_root_dir.h>
 #include "test_utils.h"
@@ -7,13 +12,7 @@
 #include <boxm2/boxm2_blocks_vis_graph.h>
 #include <vnl/vnl_vector_fixed.h>
 #include <vpgl/vpgl_generic_camera.h>
-#include <iostream>
-#include <string>
-#include <vector>
-#include <map>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <algorithm>
 void create_scene(boxm2_scene_sptr & scene)
 {
   //create block metadata

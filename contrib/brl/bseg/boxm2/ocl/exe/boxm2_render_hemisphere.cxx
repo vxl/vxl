@@ -1,7 +1,7 @@
-#include <bocl/bocl_cl.h>
-#include <vcl_compiler.h>
 #include <iostream>
 #include <sstream>
+#include <bocl/bocl_cl.h>
+#include <vcl_compiler.h>
 
 #include <vpgl/vpgl_perspective_camera.h>
 #include <vsph/vsph_view_sphere.h>

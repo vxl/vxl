@@ -8,8 +8,8 @@
 // \file
 // \author Tim Cootes
 
-#include <vcl_compiler.h>
 #include <iosfwd>
+#include <vcl_compiler.h>
 
 //: Put indents into output streams, to produce more legible printed output
 //  Its use is best described by example:

@@ -1,3 +1,5 @@
+#include <iostream>
+#include <sstream>
 #include "mfpf_region_definer.h"
 //:
 // \file
@@ -11,8 +13,6 @@
 #include <mbl/mbl_read_props.h>
 #include <mbl/mbl_cloneables_factory.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <sstream>
 
 //=======================================================================
 // Dflt ctor

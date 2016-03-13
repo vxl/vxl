@@ -17,8 +17,8 @@
 //   10-SEP-2004 Peter Vanroose  Inlined all 1-line methods in class decl
 // \endverbatim
 
-#include <vcl_compiler.h>
 #include <string>
+#include <vcl_compiler.h>
 #include "vgui_dialog_field.h"
 
 //: A dialog field implementation that holds a std::string.

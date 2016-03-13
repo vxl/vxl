@@ -1,3 +1,10 @@
+#include <cerrno>
+#include <string>
+#include <fstream>
+#include <ctime>
+#include <iostream>
+#include <cstdlib>
+#include <iomanip>
 #include "mbl_test.h"
 //:
 // \file
@@ -5,14 +12,7 @@
 // \author iscott
 // \date  Aug 2005
 
-#include <cerrno>
-#include <string>
-#include <fstream>
-#include <ctime>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <cstdlib>
-#include <iomanip>
 #include <vul/vul_file.h>
 #include <vul/vul_expand_path.h>
 #include <mbl/mbl_config.h>

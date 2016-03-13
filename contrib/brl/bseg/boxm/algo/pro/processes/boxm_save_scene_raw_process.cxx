@@ -1,4 +1,7 @@
 // This is brl/bseg/boxm/algo/pro/processes/boxm_save_scene_raw_process.cxx
+#include <iostream>
+#include <fstream>
+#include <sstream>
 #include <bprb/bprb_func_process.h>
 //:
 // \file
@@ -12,9 +15,6 @@
 // \endverbatim
 
 #include <vcl_compiler.h>
-#include <iostream>
-#include <fstream>
-#include <sstream>
 #include <boxm/boxm_scene_base.h>
 #include <boxm/boxm_scene.h>
 #include <boxm/algo/boxm_save_scene_raw_general.h>

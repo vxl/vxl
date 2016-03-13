@@ -3,11 +3,11 @@
 #define bpgl_list_hxx_
 //:
 // \file
+#include <iostream>
+#include <fstream>
 #include "bpgl_list.h"
 
 #include <vcl_compiler.h>
-#include <iostream>
-#include <fstream>
 
 //-------------------------------------------
 template <class T>

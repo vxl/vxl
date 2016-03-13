@@ -1,12 +1,12 @@
 // This is brl/bseg/bapl/bapl_keypoint_extractor.cxx
+#include <iostream>
+#include <cmath>
+#include <cstdlib>
 #include "bapl_keypoint_extractor.h"
 //:
 // \file
 
 #include <vcl_compiler.h>
-#include <iostream>
-#include <cmath>
-#include <cstdlib>
 #include <vcl_cassert.h>
 #include <vil/vil_image_resource.h>
 #include <bapl/bapl_lowe_keypoint.h>

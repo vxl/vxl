@@ -16,10 +16,10 @@
 
 #include <iosfwd>
 #include <string>
-#include <vcl_cassert.h>
-#include <vcl_compiler.h>
 #include <iostream>
 #include <cstddef>
+#include <vcl_cassert.h>
+#include <vcl_compiler.h>
 #include <vil/vil_pixel_format.h>
 #include <vil/vil_smart_ptr.h>
 

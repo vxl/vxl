@@ -2,9 +2,8 @@
 #define bstm_util_h
 //:
 // \file
+#include <iostream>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 #include <vgl/vgl_point_3d.h>
 #include <vil/vil_image_view.h>
 #include <vil/vil_load.h>

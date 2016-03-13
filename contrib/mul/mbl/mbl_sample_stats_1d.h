@@ -6,10 +6,9 @@
 // \author Graham Vincent
 
 #include <stdexcept>
-#include <vcl_compiler.h>
-#include <iostream>
 #include <iostream>
 #include <vector>
+#include <vcl_compiler.h>
 #include <vnl/vnl_vector.h>
 #include <vsl/vsl_fwd.h>
 #include <mbl/mbl_stats_1d.h>

@@ -10,10 +10,10 @@
 // \author awf@robots.ox.ac.uk
 // \date 16 Feb 00
 
+#include <string>
 #include <vil1/vil1_image_impl.h>
 #include <vil1/vil1_image.h>
 #include <vcl_compiler.h>
-#include <string>
 
 //: A generic_image adaptor that behaves like a cropped version of its input
 class vil1_crop_image_impl : public vil1_image_impl

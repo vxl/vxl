@@ -1,4 +1,6 @@
 // This is core/vil/vil_pixel_format.cxx
+#include <complex>
+#include <string>
 #include "vil_pixel_format.h"
 //:
 // \file
@@ -10,9 +12,7 @@
 // \endverbatim
 
 #include <vcl_cassert.h>
-#include <complex>
 #include <vcl_compiler.h>
-#include <string>
 
 static unsigned component_size[] =
 {

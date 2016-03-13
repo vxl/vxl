@@ -1,4 +1,6 @@
 //This is brl/bbas/bsta/pro/processes/bsta_initialize_random_seed_process.cxx
+#include <iostream>
+#include <ctime>
 #include <bprb/bprb_func_process.h>
 //:
 // \file
@@ -8,8 +10,6 @@
 #include <bprb/bprb_parameters.h>
 #include <bsta/bsta_random_wrapper.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <ctime>
 #include <brdb/brdb_value.h>
 
 //: sets input and output types

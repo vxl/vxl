@@ -4,13 +4,12 @@
 //:
 // \file
 
-#include "mbl_file_data_wrapper.h"
-
 #include <ios>
 #include <iostream>
-#include <vcl_compiler.h>
-#include <iostream>
 #include <cstdlib>
+#include "mbl_file_data_wrapper.h"
+
+#include <vcl_compiler.h>
 
 // constructor
 template<class T>

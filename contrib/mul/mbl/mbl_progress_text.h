@@ -9,9 +9,8 @@
 // \author Graham Vincent and Kevin de Souza
 // \date 25 Feb 2005
 
+#include <iostream>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 #include <mbl/mbl_progress.h>
 
 //========================================================================

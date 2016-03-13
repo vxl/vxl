@@ -8,6 +8,8 @@
 //
 // \date   March 25, 2010
 
+#include <iostream>
+#include <vector>
 #include <testlib/testlib_test.h>
 #include <boxm/util/boxm_plane_ransac.h>
 #include <boxm/sample/boxm_plane_obs.h>
@@ -16,8 +18,6 @@
 #include <vgl/vgl_infinite_line_3d.h>
 #include <vnl/vnl_random.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <vector>
 
 static const unsigned int test_num=10;
 static const unsigned int test_set=10;

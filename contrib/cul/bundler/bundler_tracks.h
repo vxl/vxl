@@ -3,9 +3,9 @@
 //:
 // \file
 
-#include <vcl_compiler.h>
 #include <iostream>
 #include <vector>
+#include <vcl_compiler.h>
 #include <vil/vil_image_resource.h>
 
 #include <bundler/bundler_settings.h>

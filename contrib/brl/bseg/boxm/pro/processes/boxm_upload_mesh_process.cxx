@@ -1,4 +1,7 @@
 //This is brl/bseg/boxm/pro/processes/boxm_upload_mesh_process.cxx
+#include <string>
+#include <iostream>
+#include <sstream>
 #include <bprb/bprb_func_process.h>
 //:
 // \file
@@ -30,10 +33,7 @@
 #include <imesh/imesh_mesh.h>
 #include <imesh/imesh_fileio.h>
 
-#include <string>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <sstream>
 
 namespace boxm_upload_mesh_process_globals
 {

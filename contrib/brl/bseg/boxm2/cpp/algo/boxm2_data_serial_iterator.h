@@ -3,12 +3,11 @@
 //:
 // \file
 
+#include <iostream>
 #include <boxm2/boxm2_block.h>
 #include <boxm2/boxm2_data.h>
 #include <boct/boct_bit_tree.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 
 template <class F>
 void boxm2_data_serial_iterator(int data_buff_length,

@@ -6,11 +6,11 @@
 // \brief Efficiently Store/Load a block of values using Run length encoding.
 // \author Ian Scott, Imorphics, Jun 2010
 
-#include <vcl_compiler.h>
 #include <algorithm>
+#include <iostream>
+#include <vcl_compiler.h>
 #include <vsl/vsl_binary_io.h>
 #include <vsl/vsl_binary_explicit_io.h>
-#include <iostream>
 
 //: Write a block of values to a vsl_b_ostream, as (value count) pairs.
 template <class T>

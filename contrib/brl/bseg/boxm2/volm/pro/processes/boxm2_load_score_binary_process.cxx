@@ -1,4 +1,6 @@
 // This is brl/bseg/boxm2/volm/pro/process/boxm2_load_score_binary_process.cxx
+#include <iostream>
+#include <iomanip>
 #include <bprb/bprb_func_process.h>
 //:
 // \file
@@ -16,8 +18,6 @@
 #include <volm/volm_loc_hyp_sptr.h>
 #include <bkml/bkml_parser.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iomanip>
 
 namespace boxm2_load_score_binary_process_globals
 {

@@ -12,12 +12,11 @@
 //   <none yet>
 // \endverbatim
 
+#include <iostream>
 #include <bsta/bsta_gaussian_sphere.h>
 #include <vsl/vsl_binary_io.h>
 #include <vnl/io/vnl_io_vector_fixed.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 
 //: Binary save bsta_gaussian_sphere to stream.
 template <class T, unsigned n>

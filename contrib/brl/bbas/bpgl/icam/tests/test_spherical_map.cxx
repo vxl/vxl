@@ -1,12 +1,11 @@
-#include <testlib/testlib_test.h>
-#include <testlib/testlib_root_dir.h>
-#include <iostream>
-#include <vcl_compiler.h>
 #include <iostream>
 #include <fstream>
 #include <string>
 #include <vector>
 #include <sstream>
+#include <testlib/testlib_test.h>
+#include <testlib/testlib_root_dir.h>
+#include <vcl_compiler.h>
 #include <vil/vil_image_view.h>
 #include <vil/vil_save.h>
 #include <vil/vil_load.h>

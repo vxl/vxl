@@ -1,8 +1,8 @@
 #ifndef vipl_accessors_vcl_vector_h_
 #define vipl_accessors_vcl_vector_h_
-#include <vcl_compiler.h>
 #include <iostream>
 #include <vector>
+#include <vcl_compiler.h>
 
 #undef FILTER_IMPTR_DEC_REFCOUNT
 #define FILTER_IMPTR_DEC_REFCOUNT(v) {delete (v); (v)=0;}

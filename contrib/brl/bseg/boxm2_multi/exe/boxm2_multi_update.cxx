@@ -4,6 +4,8 @@
 // \author Andy Miller
 // \date 13-Nov-2011
 
+#include <iostream>
+#include <algorithm>
 #include <boxm2_multi_cache.h>
 #include <algo/boxm2_multi_render.h>
 #include <algo/boxm2_multi_update.h>
@@ -11,8 +13,6 @@
 
 #include <vcl_where_root_dir.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <algorithm>
 
 //executable args
 #include <vil/vil_image_view_base.h>

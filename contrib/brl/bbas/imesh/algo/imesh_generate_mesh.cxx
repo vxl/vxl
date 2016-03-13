@@ -1,4 +1,5 @@
 // This is brl/bbas/imesh/algo/imesh_generate_mesh.cxx
+#include <iostream>
 #include "imesh_generate_mesh.h"
 //:
 // \file
@@ -10,8 +11,6 @@ extern "C" {
 #include <vgl/vgl_line_segment_2d.h>
 #include <vgl/vgl_box_2d.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 #include <vil/vil_image_view.h>
 #define GRID_SIZE 1000 // defined by the tolerance for equal vertices
 

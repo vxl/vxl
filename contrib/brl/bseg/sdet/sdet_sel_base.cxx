@@ -1,14 +1,13 @@
-#include "sdet_sel_base.h"
-
 #include <iostream>
 #include <fstream>
-#include <vcl_cassert.h>
 #include <deque>
 #include <map>
 #include <set>
-#include <vcl_compiler.h>
-#include <iostream>
 #include <algorithm>
+#include "sdet_sel_base.h"
+
+#include <vcl_cassert.h>
+#include <vcl_compiler.h>
 #include <pdf1d/pdf1d_calc_mean_var.h>
 #include <mbl/mbl_stats_1d.h>
 

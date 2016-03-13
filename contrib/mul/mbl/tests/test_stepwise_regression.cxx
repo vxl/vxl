@@ -2,10 +2,9 @@
 #include <cstddef>
 #include <iostream>
 #include <vector>
-#include <vcl_compiler.h>
-#include <iostream>
 #include <algorithm>
 #include <iterator>
+#include <vcl_compiler.h>
 #include <vnl/vnl_random.h>
 #include <vnl/vnl_matrix.h>
 #include <vnl/vnl_vector.h>

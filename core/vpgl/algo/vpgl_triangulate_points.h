@@ -7,8 +7,8 @@
 // \author Andrew Hoelscher
 // \date August 28, 2011
 
-#include <vcl_compiler.h>
 #include <vector>
+#include <vcl_compiler.h>
 
 #include <vgl/vgl_point_2d.h>
 #include <vgl/vgl_point_3d.h>

@@ -1,11 +1,10 @@
+#include <string>
+#include <limits>
+#include <iostream>
 #include <testlib/testlib_test.h>
 #include <bsta/bsta_gaussian_sphere.h>
 #include <bsta/bsta_attributes.h>
-#include <string>
-#include <limits>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 
 template <class T>
 void test_gaussian_sphere_type(T epsilon, const std::string& type_name)

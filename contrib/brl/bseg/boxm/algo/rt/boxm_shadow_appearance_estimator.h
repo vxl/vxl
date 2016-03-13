@@ -2,12 +2,11 @@
 #define boxm_shadow_appearance_estimator_h_
 
 #include <vector>
+#include <iostream>
 #include <boxm/boxm_apm_traits.h>
 #include <boxm/sample/algo/boxm_simple_grey_processor.h>
 #if 1
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 #endif
 
 template <boxm_apm_type APM>

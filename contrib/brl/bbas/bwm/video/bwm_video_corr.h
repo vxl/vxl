@@ -12,10 +12,10 @@
 // \endverbatim
 //
 //-----------------------------------------------------------------------------
-#include <vcl_compiler.h>
 #include <iostream>
 #include <iosfwd>
 #include <map>
+#include <vcl_compiler.h>
 #include <vbl/vbl_ref_count.h>
 #include <vgl/vgl_point_2d.h>
 #include <vgl/vgl_point_3d.h>

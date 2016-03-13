@@ -1,11 +1,10 @@
 // This is brl/bseg/bapl/bapl_mi_matcher_params.cxx
+#include <iostream>
 #include "bapl_mi_matcher_params.h"
 //:
 // \file
 
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 
 #define BAPL_MIN_SCALE 1.0
 #define BAPL_MAX_SCALE 10.0

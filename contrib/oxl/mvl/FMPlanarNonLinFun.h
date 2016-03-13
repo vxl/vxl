@@ -18,9 +18,9 @@
 //
 //-----------------------------------------------------------------------------
 
-#include <vcl_compiler.h>
 #include <iostream>
 #include <vector>
+#include <vcl_compiler.h>
 #include <vnl/vnl_least_squares_function.h>
 #include <vnl/vnl_double_3x3.h>
 #include <vgl/vgl_homg_point_2d.h>

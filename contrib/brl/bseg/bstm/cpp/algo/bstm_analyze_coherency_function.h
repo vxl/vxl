@@ -3,6 +3,9 @@
 //:
 // \file
 
+#include <iostream>
+#include <map>
+#include <fstream>
 #include <bstm/bstm_time_block.h>
 #include <bstm/bstm_block.h>
 #include <bstm/bstm_scene.h>
@@ -10,15 +13,11 @@
 #include <boct/boct_bit_tree.h>
 #include <boxm2/basic/boxm2_array_3d.h>
 #include <vnl/vnl_vector_fixed.h>
-#include <iostream>
 #include <bstm/io/bstm_cache.h>
 
 #include <boxm2/boxm2_scene.h>
 #include <boxm2/io/boxm2_cache.h>
-#include <map>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <fstream>
 
 class bstm_analyze_coherency_function
 {

@@ -10,11 +10,11 @@
 //   2001-10-22 Amitha Perera. Reorganised and added comments.
 // \endverbatim
 
+#include <iostream>
+#include <vector>
 #include <vnl/vnl_vector.h>
 #include <vnl/vnl_matrix.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <vector>
 #include <rrel/rrel_export.h>
 
 class rrel_estimation_problem;

@@ -1,12 +1,11 @@
+#include <iostream>
+#include <cmath>
+#include <memory>
 #include "ComputeGRIC.h"
 #include <mvl/FMatrixComputeMLESAC.h>
 #include <mvl/HMatrix2DComputeMLESAC.h>
 #include <mvl/HomgInterestPointSet.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <cmath>
-#include <iostream>
-#include <memory>
 
 ComputeGRIC::ComputeGRIC(double std) : std_(std) {}
 

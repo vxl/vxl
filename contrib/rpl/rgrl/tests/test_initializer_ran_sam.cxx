@@ -1,9 +1,9 @@
-#include <testlib/testlib_test.h>
-
 #include <vector>
-#include <vcl_compiler.h>
 #include <iostream>
 #include <cmath>
+#include <testlib/testlib_test.h>
+
+#include <vcl_compiler.h>
 
 #include <vnl/vnl_matrix.h>
 #include <vnl/vnl_vector.h>

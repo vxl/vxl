@@ -5,6 +5,8 @@
 // \file
 // \author fsm
 
+#include <cmath>
+#include <utility>
 #include "vgl_distance.h"
 #include <vgl/vgl_point_2d.h>
 #include <vgl/vgl_point_3d.h>
@@ -22,9 +24,7 @@
 #include <vgl/vgl_polygon.h>
 #include <vgl/vgl_closest_point.h>
 #include <vcl_cassert.h>
-#include <cmath> // for std::sqrt()
 #include <vcl_compiler.h>
-#include <utility> // for std::pair<T,U>
 
 template <class T>
 static inline T square_of(T x) { return x*x; }

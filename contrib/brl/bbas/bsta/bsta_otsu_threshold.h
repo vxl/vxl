@@ -14,7 +14,7 @@
 //   Templated and moved up to bsta - J.L. Mundy June 29, 2005
 // \endverbatim
 
-#include<vector>
+#include <vector>
 #include<bsta/bsta_histogram.h>
 
 template <class T> class bsta_otsu_threshold

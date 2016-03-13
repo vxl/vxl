@@ -12,16 +12,15 @@
 //   <none yet>
 // \endverbatim
 
+#include <string>
+#include <iostream>
 #include <bprb/bprb_func_process.h>
 #include <bprb/bprb_parameters.h>
 
 #include <brdb/brdb_value.h>
 
 #include <vpgl/vpgl_perspective_camera.h>
-#include <string>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 
 #include <icam/icam_view_sphere.h>
 #include <icam/icam_view_metadata.h>

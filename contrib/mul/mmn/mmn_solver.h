@@ -5,17 +5,17 @@
 // \brief Base for classes which solve Markov Random Field problems
 // \author Tim Cootes
 
+#include <vector>
+#include <string>
+#include <memory>
+#include <iostream>
+#include <iosfwd>
 #include <mmn/mmn_arc.h>
 #include <vnl/vnl_fwd.h>
 
 #include <vsl/vsl_binary_io.h>
-#include <vector>
-#include <string>
 #include <vcl_cassert.h>
-#include <memory>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iosfwd>
 
 //: Base for classes which solve Markov Random Field problems.
 class mmn_solver

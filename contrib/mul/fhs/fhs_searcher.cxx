@@ -1,3 +1,6 @@
+#include <iostream>
+#include <cmath>
+#include <cstdlib>
 #include "fhs_searcher.h"
 //:
 // \file
@@ -6,9 +9,6 @@
 
 #include <vcl_cassert.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <cmath>
-#include <cstdlib> // for std::abort()
 #include <vnl/vnl_math.h>
 #include <vgl/vgl_point_2d.h>
 #include <vgl/vgl_vector_2d.h>

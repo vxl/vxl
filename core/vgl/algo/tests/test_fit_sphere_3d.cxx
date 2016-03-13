@@ -1,12 +1,12 @@
 // Some tests for vgl_fit_sphere_3d
 // J.L. Mundy, June 8, 2015.
+#include <iostream>
+#include <cstdlib>
 #include <testlib/testlib_test.h>
 #include <vgl/algo/vgl_fit_sphere_3d.h>
 #include <vgl/vgl_point_3d.h>
 #include <vgl/vgl_distance.h>
-#include <iostream>
 #include <vcl_compiler.h>
-#include <cstdlib> // for rand()
 #include <vnl/vnl_random.h>
 // creates points on the unit sphere
 static void test_linear_fit_unit_sphere()

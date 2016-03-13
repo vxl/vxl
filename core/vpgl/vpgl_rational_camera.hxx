@@ -4,10 +4,10 @@
 //:
 // \file
 
-#include "vpgl_rational_camera.h"
-#include <vcl_compiler.h>
 #include <vector>
 #include <fstream>
+#include "vpgl_rational_camera.h"
+#include <vcl_compiler.h>
 #include <vsl/vsl_binary_io.h>
 //#include <vnl/io/vnl_io_matrix_fixed.h>
 #include <vgl/vgl_point_2d.h>

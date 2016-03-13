@@ -1,4 +1,5 @@
 // This is core/vgui/vgui_quit_tableau.cxx
+#include <iostream>
 #include "vgui_quit_tableau.h"
 //:
 // \file
@@ -9,7 +10,6 @@
 #include <vgui/vgui_event.h>
 #include <vgui/vgui_adaptor.h>
 #include <vcl_compiler.h>
-#include <iostream>
 
 bool vgui_quit_tableau::handle(vgui_event const &e)
 {

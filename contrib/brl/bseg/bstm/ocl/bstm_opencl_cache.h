@@ -3,6 +3,9 @@
 //:
 // \file
 // \brief
+#include <vector>
+#include <iostream>
+#include <list>
 #include <bstm/bstm_scene.h>
 #include <bstm/bstm_block.h>
 #include <bstm/bstm_data_base.h>
@@ -11,10 +14,7 @@
 #include <boxm2/basic/boxm2_array_3d.h>
 #include <bstm/io/bstm_cache.h>
 #include <bstm/io/bstm_lru_cache.h>
-#include <vector>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <list>
 
 //open cl includes
 #include <bocl/bocl_cl.h>

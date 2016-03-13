@@ -10,10 +10,10 @@
 // Reproduction rights limited as described in the COPYRIGHT file.
 //----------------------------------------------------------------------
 
-#include <vcl_cfloat.h> // for DBL_MAX
-#include <vcl_compiler.h>
 #include <iostream>
 #include <vector>
+#include <vcl_cfloat.h> // for DBL_MAX
+#include <vcl_compiler.h>
 #include <vnl/vnl_vector.h>
 #include <vil1/vil1_memory_image_of.h>
 #include "inlines.h"

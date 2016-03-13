@@ -1,4 +1,6 @@
 // This is brl/bseg/boxm2/pro/processes/boxm2_add_aux_info_to_ply_process.cxx
+#include <iostream>
+#include <fstream>
 #include <bprb/bprb_func_process.h>
 //:
 // \file
@@ -15,8 +17,6 @@
 #include <boct/boct_bit_tree.h>
 
 #include <vcl_compiler.h>
-#include <iostream>
-#include <fstream>
 #include <vcl_cassert.h>
 
 #include <rply.h>

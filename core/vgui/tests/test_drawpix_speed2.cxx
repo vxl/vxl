@@ -1,9 +1,9 @@
 // This is core/vgui/tests/test_drawpix_speed2.cxx
 #include <iostream>
-#include <vcl_compiler.h>
 #include <iomanip>
 #include <cstring>
 #include <cmath>
+#include <vcl_compiler.h>
 
 #include <vul/vul_timer.h>
 

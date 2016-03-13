@@ -1,3 +1,4 @@
+#include <cmath>
 #include "vpgl_datum_conversion.h"
 //******************************************************************************
 //:
@@ -25,7 +26,6 @@
 //         elev(NAD27) = elev(WGS84)-d_H
 //
 #include <vcl_compiler.h>
-#include <cmath>
 #include <vnl/vnl_math.h>
 
 #define degree_to_rad   (vnl_math::pi_over_180)      // Degree to rad conv.

@@ -1,11 +1,11 @@
 // This is core/vsl/tests/test_polymorphic_io.cxx
+#include <iostream>
 #include <testlib/testlib_test.h>
 //:
 // \file
 
 #include <vcl_cassert.h>
 #include <vcl_compiler.h>
-#include <iostream>
 #include <vsl/vsl_binary_io.h>
 #include <vsl/vsl_binary_loader.h>
 #include <vsl/vsl_binary_loader.hxx>

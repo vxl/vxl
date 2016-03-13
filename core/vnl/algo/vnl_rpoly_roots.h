@@ -18,8 +18,8 @@
 //   Feb.2002 - Peter Vanroose - brief doxygen comment placed on single line
 //  \endverbatim
 
-#include <vcl_compiler.h>
 #include <complex>
+#include <vcl_compiler.h>
 #include <vnl/vnl_vector.h>
 
 class vnl_real_polynomial;

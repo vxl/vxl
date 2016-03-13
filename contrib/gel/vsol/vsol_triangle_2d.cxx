@@ -1,12 +1,11 @@
 // This is gel/vsol/vsol_triangle_2d.cxx
+#include <iostream>
 #include "vsol_triangle_2d.h"
 //:
 // \file
 #include <vbl/io/vbl_io_smart_ptr.h>
 #include <vsol/vsol_point_2d.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 
 //***************************************************************************
 // Initialization

@@ -1,8 +1,8 @@
 // This example displays two images in a grid tableau.
 // The images are loaded from the filenames given on
 // the command line
-#include <vcl_compiler.h>
 #include <iostream>
+#include <vcl_compiler.h>
 #include <vgui/vgui.h>
 #include <vgui/vgui_image_tableau.h>
 #include <vgui/vgui_viewer2D_tableau.h>

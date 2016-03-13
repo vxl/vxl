@@ -5,12 +5,12 @@
 //:
 // \file
 
+#include <iostream>
+#include <fstream>
 #include "HMatrix2D.h"
 #include <mvl/HomgOperator2D.h>
 #include <vnl/vnl_inverse.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <fstream>
 
 //--------------------------------------------------------------
 //

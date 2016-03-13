@@ -1,4 +1,6 @@
 // This is brl/bseg/boxm2/ocl/pro/processes/boxm2_ocl_update_color_process.cxx
+#include <iostream>
+#include <algorithm>
 #include <bprb/bprb_func_process.h>
 //:
 // \file
@@ -15,8 +17,6 @@
 #include <vil/vil_image_resource.h>
 #include <vil/vil_new.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <algorithm>
 
 namespace boxm2_ocl_update_color_process_globals
 {

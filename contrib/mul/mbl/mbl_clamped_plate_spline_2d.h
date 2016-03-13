@@ -6,14 +6,14 @@
 // \brief Construct clamped plate spline to map 2D to 2D
 // \author Tim Cootes
 
+#include <vector>
+#include <iostream>
+#include <iosfwd>
 #include <vgl/vgl_point_2d.h>
 #include <vnl/vnl_vector.h>
 #include <vnl/vnl_matrix.h>
 #include <vsl/vsl_binary_io.h>
-#include <vector>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iosfwd>
 
 //=======================================================================
 //: Construct clamped plate spline to map 2D points in unit disk.

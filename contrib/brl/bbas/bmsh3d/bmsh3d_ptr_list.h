@@ -6,9 +6,9 @@
 #ifndef bmsh3d_ptr_list_h_
 #define bmsh3d_ptr_list_h_
 
-#include <vcl_compiler.h>
 #include <iostream>
 #include <set>
+#include <vcl_compiler.h>
 #include <vcl_cassert.h>
 
 class bmsh3d_ptr_node

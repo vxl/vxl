@@ -1,9 +1,9 @@
+#include <iostream>
+#include <cstdio>
+#include <cstdlib>
+#include <cerrno>
 #include "frame_grabber_vil.h"
 #include <vcl_compiler.h>
-#include <iostream>
-#include <cstdio> // for perror()
-#include <cstdlib> // for exit()
-#include <cerrno>
 
 // Constructor
 // Sets up the framegrabber.

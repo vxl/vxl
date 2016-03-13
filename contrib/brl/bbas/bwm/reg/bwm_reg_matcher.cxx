@@ -1,9 +1,9 @@
+#include <iostream>
+#include <cmath>
 #include "bwm_reg_matcher.h"
 //:
 // \file
 #include <vcl_compiler.h>
-#include <iostream>
-#include <cmath>
 #include <vnl/vnl_numeric_traits.h>
 #include <vsol/vsol_point_2d.h>
 #include <vsol/vsol_digital_curve_2d.h>

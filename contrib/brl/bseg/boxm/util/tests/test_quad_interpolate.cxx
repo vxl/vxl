@@ -1,3 +1,5 @@
+#include <iostream>
+#include <fstream>
 #include <testlib/testlib_test.h>
 #include <boxm/util/boxm_utils.h>
 #include <vgl/vgl_point_2d.h>
@@ -9,8 +11,6 @@
 #include <vil/vil_save.h>
 #include <vil/vil_plane.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <fstream>
 #include <vpgl/vpgl_camera_double_sptr.h>
 #include <vpgl/vpgl_perspective_camera.h>
 #include <vgl/vgl_point_3d.h>

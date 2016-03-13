@@ -1,10 +1,9 @@
 //:
 // \file
+#include <iostream>
 #include "bgui_vsol_soview2D.h"
 
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 #include <vnl/vnl_math.h>
 
 #include <vgui/vgui_gl.h>

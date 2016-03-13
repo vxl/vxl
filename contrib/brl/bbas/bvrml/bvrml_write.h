@@ -13,10 +13,10 @@
 //   <none yet>
 // \endverbatim
 
-#include <vcl_compiler.h>
 #include <iostream>
 #include <fstream>
 #include <string>
+#include <vcl_compiler.h>
 #include <vgl/vgl_sphere_3d.h>
 #include <vgl/vgl_box_3d.h>
 #include <vgl/vgl_line_segment_3d.h>

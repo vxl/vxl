@@ -1,3 +1,6 @@
+#include <iostream>
+#include <cstdio>
+#include <fstream>
 #include "rgrl_debug_util.h"
 //:
 // \file
@@ -15,9 +18,6 @@
 #include <rgrl/rgrl_match_set.h>
 
 #include <vcl_compiler.h>
-#include <iostream>
-#include <cstdio>
-#include <fstream>
 
 //: observer to view transformations at each iteration of feature-based registration engine
 void

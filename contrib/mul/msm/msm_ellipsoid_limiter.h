@@ -5,11 +5,11 @@
 // \author Tim Cootes
 // \brief Force param.s to lie in ellipsoid defined by variances.
 
+#include <iostream>
+#include <iosfwd>
 #include <msm/msm_param_limiter.h>
 #include <vnl/vnl_vector.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iosfwd>
 
 //: Force param.s to lie in ellipsoid defined by variances.
 //  An axis aligned ellipsoid is defined by the variances along

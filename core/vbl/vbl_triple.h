@@ -9,8 +9,8 @@
 // \brief a templated 3-tuple
 // \author fsm
 
-#include <vcl_compiler.h>
 #include <iosfwd>
+#include <vcl_compiler.h>
 
 //: a templated 3-tuple
 template <class T1, class T2, class T3>

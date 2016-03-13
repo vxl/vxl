@@ -1,9 +1,9 @@
+#include <string>
+#include <cstring>
 #include "vpgl_lvcs.h"
 //:
 // \file
 #include <vcl_compiler.h>
-#include <string>
-#include <cstring>
 #include <vsl/vsl_basic_xml_element.h>
 #include <vpgl/vpgl_datum_conversion.h>
 #include <vpgl/vpgl_earth_constants.h>

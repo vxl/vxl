@@ -2,14 +2,14 @@
 #ifndef rrel_util_txx_
 #define rrel_util_txx_
 
-#include "rrel_util.h"
-
-#include <vcl_cassert.h>
 #include <cmath>
-#include <vcl_compiler.h>
 #include <iostream>
 #include <algorithm>
 #include <vector>
+#include "rrel_util.h"
+
+#include <vcl_cassert.h>
+#include <vcl_compiler.h>
 
 #include <vnl/vnl_math.h>
 

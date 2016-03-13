@@ -38,8 +38,9 @@
 //   Peter Vanroose -15 Nov 2012 - the deprecated vnl_math_* #defines are now only available when VNL_CONFIG_LEGACY_METHODS==1
 // \endverbatim
 
-#include <vcl_compiler.h>
 #include <cmath>
+#include <algorithm>
+#include <vcl_compiler.h>
 #include "dll.h"
 #include <vxl_config.h>
 #include <vnl/vnl_config.h> // for VNL_CONFIG_ENABLE_SSE2_ROUNDING
@@ -76,7 +77,6 @@
 # define VC_USE_FAST_IMPL 0
 #endif
 
-#include <algorithm> //needed for min & max
 
 
 //: Type-accessible infinities for use in templates.

@@ -2,11 +2,11 @@
 //:
 // \file
 
+#include <iostream>
+#include <fstream>
 #include <bprb/bprb_func_process.h>
 
 #include <vcl_compiler.h>
-#include <iostream>
-#include <fstream>
 #include <boxm2/boxm2_scene.h>
 #include <boxm2/boxm2_util.h>
 #include <boxm2/boxm2_data_traits.h>

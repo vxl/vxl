@@ -36,9 +36,9 @@
 //   9 Jan. 2003, Peter Vanroose - added "copy_geometry()"
 // \endverbatim
 
-#include <vcl_compiler.h>
 #include <iostream>
 #include <iosfwd>
+#include <vcl_compiler.h>
 #include <vsol/vsol_region_2d_sptr.h>
 #include <vtol/vtol_face.h>
 

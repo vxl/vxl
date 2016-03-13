@@ -1,8 +1,8 @@
 // This is core/vil/tests/test_math_median.cxx
 
+#include <iostream>
 #include <testlib/testlib_test.h>
 #include <vcl_compiler.h>
-#include <iostream>
 #include <vil/vil_image_view.h>
 #include <vil/vil_math.h>
 

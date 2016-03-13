@@ -4,6 +4,7 @@
 // \author Isabel Restrepo
 // \date 3-Aug-2011
 
+#include <iostream>
 #include <bprb/bprb_func_process.h>
 #include <bprb/bprb_parameters.h>
 
@@ -13,8 +14,6 @@
 #include <vnl/vnl_vector_fixed.h>
 
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 
 //:global variables
 namespace bvpl_grad_scene_to_bin_process_globals

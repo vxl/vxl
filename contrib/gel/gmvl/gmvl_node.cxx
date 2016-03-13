@@ -6,10 +6,9 @@
 // \file
 // \author crossge@crd.ge.com
 
+#include <iostream>
 #include "gmvl_node.h"
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 
 std::ostream &operator<<( std::ostream &os, gmvl_node &node)
 {

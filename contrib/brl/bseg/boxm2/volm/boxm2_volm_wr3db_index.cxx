@@ -1,3 +1,5 @@
+#include <iostream>
+#include <algorithm>
 #include "boxm2_volm_wr3db_index.h"
 //:
 // \file
@@ -5,8 +7,6 @@
 #include <boxm2/volm/boxm2_volm_locations.h>
 #include <vgl/vgl_box_3d.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <algorithm>
 
 bool boxm2_volm_wr3db_index_params::write_params_file(std::string index_file_name)
 {

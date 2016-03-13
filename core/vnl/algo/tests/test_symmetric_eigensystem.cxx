@@ -1,4 +1,7 @@
 // This is core/vnl/algo/tests/test_symmetric_eigensystem.cxx
+#include <iostream>
+#include <algorithm>
+#include <ctime>
 #include <testlib/testlib_test.h>
 //:
 // \file
@@ -9,13 +12,10 @@
 //-----------------------------------------------------------------------------
 
 
-#include <iostream>
-#include <algorithm>
 #include <vnl/vnl_double_3x3.h>
 #include <vnl/vnl_double_3.h>
 #include <vnl/vnl_random.h>
 #include <vcl_compiler.h>
-#include <ctime>
 #include <vnl/vnl_c_vector.h>
 #include <vnl/algo/vnl_symmetric_eigensystem.h>
 

@@ -1,10 +1,10 @@
 // This is brl/bseg/sdet/sdet_watershed_region_proc.cxx
+#include <iostream>
+#include <algorithm>
 #include "sdet_watershed_region_proc.h"
 //:
 // \file
 #include <vcl_compiler.h>
-#include <iostream>
-#include <algorithm>
 #include <vnl/vnl_numeric_traits.h>
 #include <vil1/vil1_memory_image_of.h>
 #include <vsol/vsol_box_2d.h>

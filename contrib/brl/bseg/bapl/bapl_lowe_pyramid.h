@@ -12,9 +12,9 @@
 //  Modifications
 // \endverbatim
 
-#include <vcl_compiler.h>
 #include <iostream>
 #include <vector>
+#include <vcl_compiler.h>
 #include <vil/vil_image_view.h>
 //#include <vil/vil_image_view_base.h>
 

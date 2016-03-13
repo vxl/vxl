@@ -11,13 +11,13 @@
 // \author Graham Vincent
 // \date  25 Feb 2005
 
-#include <vsl/vsl_binary_io.h>
-#include <mbl/mbl_progress.h>
 #include <vector>
 #include <string>
-#include <vcl_compiler.h>
 #include <iostream>
 #include <iosfwd>
+#include <vsl/vsl_binary_io.h>
+#include <mbl/mbl_progress.h>
+#include <vcl_compiler.h>
 
 //=======================================================================
 //:  A composite  of progress objects.

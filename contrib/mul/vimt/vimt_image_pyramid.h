@@ -10,9 +10,9 @@
 // \author Tim Cootes
 
 #include <vector>
-#include <vcl_compiler.h>
 #include <iostream>
 #include <iosfwd>
+#include <vcl_compiler.h>
 class vimt_image;
 
 //: Pyramid of images of arbitrary type

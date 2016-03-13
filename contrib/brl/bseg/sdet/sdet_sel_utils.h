@@ -13,10 +13,10 @@
 //
 //\endverbatim
 
-#include <vnl/vnl_math.h>
-#include <vcl_compiler.h>
 #include <iostream>
 #include <cmath>
+#include <vnl/vnl_math.h>
+#include <vcl_compiler.h>
 #include <vgl/vgl_point_2d.h>
 #include <vgl/vgl_distance.h>
 

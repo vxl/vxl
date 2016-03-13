@@ -6,10 +6,10 @@
 // \author Charlene Tsai
 // \date Sep 2003
 
-#include "rgrl_transformation.h"
-#include <vcl_compiler.h>
 #include <iostream>
 #include <iosfwd>
+#include "rgrl_transformation.h"
+#include <vcl_compiler.h>
 
 //:
 // A reduced quadratic transformation, when centered, consists of a

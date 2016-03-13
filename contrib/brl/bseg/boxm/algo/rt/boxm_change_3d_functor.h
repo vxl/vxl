@@ -2,12 +2,11 @@
 #define boxm_change_3d_functor_h
 //:
 // \file
+#include <iostream>
 #include <boxm/boxm_apm_traits.h>
 #include <boxm/basic/boxm_raytrace_function.h>
 #include <boxm/sample/boxm_scalar_sample.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 
 
 template <boxm_apm_type APM>

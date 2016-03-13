@@ -5,12 +5,12 @@
 // \author Gehua Yang
 // \date   Feb 2005
 
+#include <iostream>
+#include <iosfwd>
 #include "rgrl_transformation.h"
 #include <vnl/vnl_matrix_fixed.h>
 #include <vnl/vnl_vector_fixed.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iosfwd>
 
 //: Represents a 2D homography transformation with radial lens distortion
 //

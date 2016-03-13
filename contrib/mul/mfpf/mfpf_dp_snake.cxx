@@ -3,11 +3,11 @@
 // \author Tim Cootes
 // \brief Basic snake, using dynamic programming to update.
 
+#include <iostream>
+#include <cmath>
 #include "mfpf_dp_snake.h"
 
 #include <vcl_compiler.h>
-#include <iostream>
-#include <cmath>
 
 #include <vsl/vsl_indent.h>
 #include <vsl/vsl_binary_loader.h>

@@ -8,11 +8,11 @@
 //    Joseph L. Mundy - July 11, 2004
 //
 //-----------------------------------------------------------------------------
+#include <iostream>
+#include <iosfwd>
 #include <gevd/gevd_param_mixin.h>
 #include <brip/brip_watershed_params.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iosfwd>
 
 class sdet_watershed_region_proc_params : public gevd_param_mixin
 {

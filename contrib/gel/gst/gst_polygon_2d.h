@@ -8,10 +8,10 @@
 // \file
 // \author crossge@crd.ge.com
 
-#include <vcl_compiler.h>
 #include <iostream>
 #include <iosfwd>
 #include <vector>
+#include <vcl_compiler.h>
 #include <vbl/vbl_ref_count.h>
 #include "gst_edge_2d_sptr.h"
 

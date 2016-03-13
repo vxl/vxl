@@ -12,11 +12,11 @@
 //   <none yet>
 // \endverbatim
 
+#include <iostream>
+#include <vector>
 #include <brad/brad_phongs_model_est.h>
 #include <vnl/vnl_double_3.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <vector>
 
 class  boxm2_phongs_model_processor
 {

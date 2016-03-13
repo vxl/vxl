@@ -1,9 +1,9 @@
 // This is bbas/vsph/vsph_spherical_coord.cxx
-#include "vsph_spherical_coord.h"
 #include <complex>
-#include <vcl_compiler.h>
 #include <iostream>
 #include <cmath>
+#include "vsph_spherical_coord.h"
+#include <vcl_compiler.h>
 
 #include <vgl/io/vgl_io_point_3d.h>
 

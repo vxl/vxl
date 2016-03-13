@@ -1,4 +1,7 @@
 // This is brl/bseg/bstm/pro/processes/bstm_bundle_to_scene_process.cxx
+#include <fstream>
+#include <iostream>
+#include <cstdio>
 #include <bprb/bprb_func_process.h>
 //:
 // \file
@@ -6,10 +9,7 @@
 //
 // \author Andy Miller
 // \date Sep 16, 2011
-#include <fstream>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <cstdio> // for sprintf()
 #include <bstm/bstm_scene.h>
 #include <boxm2/util/boxm2_convert_nvm.h>
 #include <bstm/util/bstm_cams_and_box_to_scene.h>

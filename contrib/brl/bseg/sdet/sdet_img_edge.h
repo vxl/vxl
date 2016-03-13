@@ -14,15 +14,14 @@
 //   July 07, 2010 - Ozge C. Ozcanli - added detect_edge_tangent_interpolated method
 // \endverbatim
 
-#include <vil/vil_image_view.h>
-#include <vbl/vbl_array_2d.h>
-
 #include <string>
 #include <vector>
 #include <iostream>
-#include <vcl_compiler.h>
-#include <iostream>
 #include <cmath>
+#include <vil/vil_image_view.h>
+#include <vbl/vbl_array_2d.h>
+
+#include <vcl_compiler.h>
 
 class sdet_img_edge
 {

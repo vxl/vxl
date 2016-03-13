@@ -25,8 +25,8 @@
 //=========================================================================
 
 #include <iostream>
-#include <vcl_compiler.h>
 #include <string>
+#include <vcl_compiler.h>
 
 //-------------------------------------------------------------------------
 //: Throw an exception indicating a definite problem.

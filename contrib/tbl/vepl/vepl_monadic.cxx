@@ -1,13 +1,12 @@
 // This is tbl/vepl/vepl_monadic.cxx
+#include <iostream>
+#include <cmath>
 #include "vepl_monadic.h"
 #include <vepl/accessors/vipl_accessors_vil_image_view_base.h>
 #include <vipl/vipl_monadic.h>
 #include <vil/vil_image_view.h>
 #include <vil/vil_new.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <cmath>
-#include <iostream>
 #include <vxl_config.h> // for vxl_byte
 
 vxl_sbyte abs_byte(vxl_sbyte const& a) { return (a<0) ? -a : a; }

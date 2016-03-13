@@ -6,13 +6,13 @@
 //
 // \author Vishal Jain
 // \date nov 17, 2010
+#include <iostream>
+#include <cstring>
 #include <boxm2/basic/boxm2_block_id.h>
 #include <boxm2/basic/boxm2_array_1d.h>
 #include <boxm2/boxm2_data_traits.h>
 #include <boxm2/boxm2_block_metadata.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <cstring>
 
 //smart ptr includes
 #include <vbl/vbl_ref_count.h>

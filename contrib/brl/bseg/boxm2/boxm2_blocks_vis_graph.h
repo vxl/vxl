@@ -2,9 +2,9 @@
 #define boxm2_blocks_vis_graph_h_
 
 
-#include <vcl_compiler.h>
 #include <iostream>
 #include <set>
+#include <vcl_compiler.h>
 #include <vbl/vbl_smart_ptr.h>
 #include <boxm2/basic/boxm2_block_id.h>
 #include <boxm2/boxm2_scene.h>

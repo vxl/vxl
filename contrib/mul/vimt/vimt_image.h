@@ -10,10 +10,10 @@
 // \author Tim Cootes
 
 #include <string>
-#include <vcl_compiler.h>
 #include <iostream>
 #include <iosfwd>
 #include <vector>
+#include <vcl_compiler.h>
 #include <vsl/vsl_fwd.h>
 
 //: A base class for images of any dimension and type

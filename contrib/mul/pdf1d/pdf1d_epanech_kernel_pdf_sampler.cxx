@@ -1,4 +1,8 @@
 // This is mul/pdf1d/pdf1d_epanech_kernel_pdf_sampler.cxx
+#include <string>
+#include <iostream>
+#include <cmath>
+#include <complex>
 #include "pdf1d_epanech_kernel_pdf_sampler.h"
 //:
 // \file
@@ -7,11 +11,7 @@
 
 //=======================================================================
 
-#include <string>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <cmath>
-#include <complex>
 #include <pdf1d/pdf1d_sampler.h>
 
 //=======================================================================

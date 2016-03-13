@@ -1,9 +1,8 @@
-#include <testlib/testlib_test.h>
-
-#include <iostream>
-#include <vcl_compiler.h>
 #include <iostream>
 #include <fstream>
+#include <testlib/testlib_test.h>
+
+#include <vcl_compiler.h>
 
 #include <mbl/mbl_save_text_file.h>
 #include <mbl/mbl_load_text_file.h>

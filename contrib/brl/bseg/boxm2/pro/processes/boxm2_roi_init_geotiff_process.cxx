@@ -1,4 +1,9 @@
 // This is brl/bseg/boxm2/pro/processes/boxm2_roi_init_geotiff_process.cxx
+#include <cmath>
+#include <fstream>
+#include <ios>
+#include <iostream>
+#include <algorithm>
 #include <bprb/bprb_func_process.h>
 //:
 // \file
@@ -19,12 +24,7 @@
 #include <vil/file_formats/vil_tiff.h>
 #include <vil/vil_resample_bilin.h>
 #include <vil/vil_load.h>
-#include <cmath> // for std::pow()
-#include <fstream>
-#include <ios> // for std::ios::fixed
 #include <vcl_compiler.h>
-#include <iostream>
-#include <algorithm>
 
 namespace boxm2_roi_init_geotiff_process_globals
 {

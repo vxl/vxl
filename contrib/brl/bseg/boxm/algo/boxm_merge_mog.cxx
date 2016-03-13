@@ -1,13 +1,13 @@
+#include <vector>
+#include <iostream>
+#include <limits>
 #include "boxm_merge_mog.h"
 //:
 // \file
 
-#include <vector>
 #include <boxm/boxm_scene.h>
 #include <vcl_cassert.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <limits>
 #include <vnl/vnl_math.h> // for vnl_math::sqr()
 
 #include <boxm/sample/algo/boxm_mog_grey_processor.h>

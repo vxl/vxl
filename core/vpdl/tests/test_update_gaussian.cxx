@@ -1,10 +1,10 @@
+#include <string>
+#include <vector>
+#include <iostream>
 #include <testlib/testlib_test.h>
 #include <vpdl/vpdt/vpdt_update_gaussian.h>
 #include <vnl/vnl_vector_fixed.h>
 #include <vcl_compiler.h>
-#include <string>
-#include <vector>
-#include <iostream>
 
 template <class T>
 void test_update_gaussian_type(T epsilon, const std::string& type_name)

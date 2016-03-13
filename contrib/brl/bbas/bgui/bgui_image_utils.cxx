@@ -1,9 +1,9 @@
+#include <cstdlib>
+#include <iostream>
+#include <cmath>
 #include "bgui_image_utils.h"
 
-#include <cstdlib> // for rand()
 #include <vcl_compiler.h>
-#include <iostream>
-#include <cmath> // for ceil()
 
 #include <vil/vil_new.h>
 #include <vil/vil_property.h>

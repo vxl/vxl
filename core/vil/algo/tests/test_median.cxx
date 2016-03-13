@@ -1,7 +1,7 @@
 // This is core/vil/algo/tests/test_median.cxx
+#include <iostream>
 #include <testlib/testlib_test.h>
 #include <vcl_compiler.h>
-#include <iostream>
 #include <vxl_config.h> // for vxl_byte
 #include <vil/algo/vil_median.h>
 #include <vil/vil_print.h>

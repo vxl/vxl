@@ -11,6 +11,8 @@
 //   <none yet>
 // \endverbatim
 
+#include <vector>
+#include <iostream>
 #include "../bvxm_voxel_slab.h"
 #include <vnl/vnl_vector_fixed.h>
 #include <vnl/vnl_float_3.h>
@@ -19,10 +21,7 @@
 #include <vil/vil_image_view.h>
 #include <vil/vil_pixel_format.h>
 #include <vil/vil_save.h> // for debug saving
-#include <vector>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 
 class bvxm_slab_to_image
 {

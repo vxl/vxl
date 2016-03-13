@@ -16,9 +16,9 @@
 // \endverbatim
 //
 
-#include <vcl_compiler.h>
 #include <iostream>
 #include <iosfwd>
+#include <vcl_compiler.h>
 #include <vnl/vnl_double_2.h>
 #include <vnl/vnl_double_3.h>
 #include <mvl/Homg2D.h>

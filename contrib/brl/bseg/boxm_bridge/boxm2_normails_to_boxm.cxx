@@ -1,8 +1,8 @@
 //:
 // \file
-#include <vcl_compiler.h>
 #include <iostream>
 #include <queue>
+#include <vcl_compiler.h>
 #include <vcl_cassert.h>
 
 //executable args

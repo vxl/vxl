@@ -6,11 +6,11 @@
 // \file
 // \author fsm
 
+#include <cstring>
+#include <iostream>
 #include "vil1_open.h"
 
 #include <vcl_compiler.h>
-#include <cstring>  // strncmp()
-#include <iostream>
 
 #include <vil1/vil1_stream_fstream.h>
 #include <vil1/vil1_stream_core.h>

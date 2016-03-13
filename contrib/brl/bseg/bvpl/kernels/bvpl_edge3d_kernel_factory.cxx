@@ -1,10 +1,10 @@
+#include <iostream>
+#include <algorithm>
 #include "bvpl_edge3d_kernel_factory.h"
 //:
 // \file
 
 #include <vcl_compiler.h>
-#include <iostream>
-#include <algorithm>
 #include <bxml/bxml_find.h>
 
 // Default Constructor

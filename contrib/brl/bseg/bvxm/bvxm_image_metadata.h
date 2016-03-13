@@ -6,9 +6,9 @@
 // \author Thomas Pollard
 // \date January 12, 2008
 
-#include <vcl_compiler.h>
 #include <iostream>
 #include <string>
+#include <vcl_compiler.h>
 
 #include <vil/vil_image_view_base.h>
 #include <vnl/vnl_vector.h>

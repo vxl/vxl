@@ -7,10 +7,10 @@
 // \author fsm
 // \brief  See vgui_text_graph.h for a description of this file.
 
+#include <iostream>
 #include "vgui_text_graph.h"
 
 #include <vcl_compiler.h>
-#include <iostream>
 #include <vgui/vgui_tableau.h>
 
 //-----------------------------------------------------------------------------

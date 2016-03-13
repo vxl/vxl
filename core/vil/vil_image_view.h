@@ -13,11 +13,11 @@
 //   Peter Vanroose - 21 Aug.2003 - support added for interleaved planes
 // \endverbatim
 
-#include <vcl_compiler.h>
 #include <iosfwd>
 #include <string>
-#include <vcl_cassert.h>
 #include <cstddef>
+#include <vcl_compiler.h>
+#include <vcl_cassert.h>
 #include <vil/vil_image_view_base.h>
 #include <vil/vil_memory_chunk.h>
 #include <vil/vil_pixel_format.h>

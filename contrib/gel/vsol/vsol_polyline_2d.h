@@ -18,14 +18,14 @@
 // \endverbatim
 //*****************************************************************************
 
+#include <vector>
+#include <string>
+#include <iostream>
+#include <iosfwd>
 #include <vsol/vsol_curve_2d.h>
 #include <vsol/vsol_point_2d_sptr.h>
 #include <vsl/vsl_binary_io.h>
-#include <vector>
-#include <string>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iosfwd>
 
 //: General Polyline class, part of the vsol_curve_2d hierarchy
 

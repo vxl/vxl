@@ -1,17 +1,16 @@
+#include <iostream>
+#include <cmath>
+#include <string>
+#include <vector>
+#include <utility>
+#include <fstream>
 #include "bcvr_cvmatch.h"
 //:
 // \file
 #include "bcvr_cv_cor.h"
 
 #include <vcl_compiler.h>
-#include <iostream>
-#include <cmath>
-#include <string>
-#include <vector>
-#include <utility>
 
-#include <iostream>
-#include <fstream>
 #include <vcl_cassert.h>
 
 #include <vnl/vnl_math.h>

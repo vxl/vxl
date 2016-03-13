@@ -15,10 +15,10 @@
 //
 //-----------------------------------------------------------------------------
 
-#include <vnl/vnl_unary_function.h>
-#include <vcl_compiler.h>
 #include <iostream>
 #include <string>
+#include <vnl/vnl_unary_function.h>
+#include <vcl_compiler.h>
 
 class FileNameGeneratorBase
 {

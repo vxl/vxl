@@ -13,15 +13,15 @@
 // 23 April 2001 IMS - Ported to VXL
 // \endverbatim
 
-#include "vpdfl_pc_gaussian_builder.h"
-//
 #include <string>
 #include <sstream>
 #include <algorithm>
+#include <iostream>
+#include <cstdlib>
+#include "vpdfl_pc_gaussian_builder.h"
+//
 #include <vcl_cassert.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <cstdlib> // for std::abort()
 #include <mbl/mbl_data_wrapper.h>
 #include <vnl/vnl_math.h>
 #include <vnl/vnl_c_vector.h>

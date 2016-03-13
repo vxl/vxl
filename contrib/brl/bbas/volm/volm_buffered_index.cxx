@@ -1,3 +1,6 @@
+#include <iostream>
+#include <algorithm>
+#include <iterator>
 #include "volm_buffered_index.h"
 //:
 // \file
@@ -5,9 +8,6 @@
 #include <boxm2/volm/boxm2_volm_locations.h>
 #include <vgl/vgl_box_3d.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <algorithm>
-#include <iterator>
 
 bool volm_buffered_index_params::write_params_file(std::string index_file_name_pre)
 {

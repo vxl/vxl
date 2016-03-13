@@ -24,10 +24,10 @@
 // \endverbatim
 //-----------------------------------------------------------------------------
 
-#include <vnl/vnl_matrix.h>
-#include <vcl_compiler.h>
 #include <iostream>
 #include <vector>
+#include <vnl/vnl_matrix.h>
+#include <vcl_compiler.h>
 #include <mvl/HomgPoint2D.h>
 #include <vgl/vgl_homg_point_2d.h>
 

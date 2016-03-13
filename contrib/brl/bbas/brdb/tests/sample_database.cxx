@@ -1,11 +1,11 @@
 // This is brl/bbas/brdb/tests/sample_database.cxx
+#include <iostream>
+#include <sstream>
 #include "sample_database.h"
 //:
 // \file
 
 #include <vcl_compiler.h>
-#include <iostream>
-#include <sstream>
 #include <brdb/brdb_tuple.h>
 #include <brdb/brdb_relation.h>
 #include <brdb/brdb_database.h>

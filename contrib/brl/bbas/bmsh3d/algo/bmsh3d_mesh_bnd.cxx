@@ -1,5 +1,6 @@
 // This is brl/bbas/bmsh3d/algo/bmsh3d_mesh_bnd.cxx
 //---------------------------------------------------------------------
+#include <iostream>
 #include "bmsh3d_mesh_bnd.h"
 //:
 // \file
@@ -17,8 +18,6 @@
 
 #include <vcl_cassert.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 #include <vul/vul_printf.h>
 
 bool bmsh3d_bnd_chain::is_V_incident_via_HE (const bmsh3d_vertex* V)

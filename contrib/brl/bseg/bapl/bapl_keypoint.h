@@ -12,11 +12,11 @@
 //   <none>
 // \endverbatim
 
+#include <iostream>
+#include <iosfwd>
 #include <vbl/vbl_ref_count.h>
 #include <vnl/vnl_vector_fixed.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iosfwd>
 
 //: Base class for all affine patch keypoints
 class bapl_keypoint : public vbl_ref_count

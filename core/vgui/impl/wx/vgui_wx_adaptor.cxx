@@ -1,4 +1,6 @@
 // This is core/vgui/impl/wx/vgui_wx_adaptor.cxx
+#include <iostream>
+#include <map>
 #include "vgui_wx_adaptor.h"
 //=========================================================================
 //:
@@ -24,9 +26,7 @@
 #endif
 
 #include <vcl_cassert.h>
-#include <iostream>
 // not used? #include <vcl_compiler.h>
-#include <map>
 
 //-------------------------------------------------------------------------
 // Private helpers - declarations.

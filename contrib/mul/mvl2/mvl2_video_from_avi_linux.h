@@ -5,9 +5,9 @@
 // \brief A class to get video input from file
 // \author Franck Bettinger
 
-#include <vcl_compiler.h>
 #include <iostream>
 #include <string>
+#include <vcl_compiler.h>
 #include <avifile.h>
 #include <vil/vil_image_view.h>
 #include <mvl2/mvl2_video_reader.h>

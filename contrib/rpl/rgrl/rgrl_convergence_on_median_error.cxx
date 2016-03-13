@@ -1,9 +1,9 @@
-#include "rgrl_convergence_on_median_error.h"
-
 #include <vector>
-#include <vcl_compiler.h>
 #include <iostream>
 #include <algorithm>
+#include "rgrl_convergence_on_median_error.h"
+
+#include <vcl_compiler.h>
 #include <vcl_cassert.h>
 
 #include "rgrl_match_set.h"

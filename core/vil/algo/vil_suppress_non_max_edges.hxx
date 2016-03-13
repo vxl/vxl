@@ -6,11 +6,11 @@
 // \brief Given gradient image, compute magnitude and zero any non-maximal values
 // \author Tim Cootes
 
+#include <cmath>
 #include "vil_suppress_non_max_edges.h"
 #include <vil/vil_bilin_interp.h>
 #include <vil/vil_fill.h>
 #include <vcl_compiler.h>
-#include <cmath>
 #include <vcl_cassert.h>
 
 //: Given gradient images, computes magnitude image containing maximal edges

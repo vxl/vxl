@@ -1,4 +1,6 @@
 // This is brl/bbas/bgrl2/bgrl2_hg_graph.cxx
+#include <iostream>
+#include <utility>
 #include "bgrl2_hg_graph.h"
 //:
 // \file
@@ -7,8 +9,6 @@
 
 #include <vcl_cassert.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <utility>
 
 ////////////////////////////////////////////////////////////////////
 // ===== Internal Low-level Graph operation (without handling connectivity) =====

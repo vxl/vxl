@@ -32,6 +32,9 @@
 // for that camera view.
 //
 #include <vector>
+#include <iostream>
+#include <limits>
+#include <map>
 #include <vsol/vsol_polygon_2d_sptr.h>
 #include <vsol/vsol_polygon_3d_sptr.h>
 #include "depth_map_region_sptr.h"
@@ -39,9 +42,6 @@
 #include <vil/vil_image_view.h>
 #include <vpgl/vpgl_perspective_camera.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <limits>
-#include <map>
 #include <vbl/vbl_ref_count.h>
 #include <vsl/vsl_binary_io.h>
 

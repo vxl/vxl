@@ -1,11 +1,10 @@
+#include <string>
+#include <limits>
+#include <iostream>
 #include <testlib/testlib_test.h>
 #include <bsta/bsta_gaussian_indep.h>
 #include <vnl/vnl_math.h>
-#include <string>
-#include <limits>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 
 
 template <class T>

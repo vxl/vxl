@@ -9,12 +9,12 @@
 // \brief Reader/Writer for Meta Image format images.
 // \author Chris Wolstenholme - Imorphics
 
-#include <vil3d/vil3d_file_format.h>
-#include <vil/vil_pixel_format.h>
-#include <vcl_compiler.h>
 #include <iostream>
 #include <iosfwd>
 #include <string>
+#include <vil3d/vil3d_file_format.h>
+#include <vil/vil_pixel_format.h>
+#include <vcl_compiler.h>
 
 class vil3d_meta_image_header
 {

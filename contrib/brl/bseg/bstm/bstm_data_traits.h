@@ -2,11 +2,10 @@
 #define bstm_data_traits_h_
 
 #include <string>
+#include <iostream>
+#include <cstddef>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <cstddef> // for std::size_t
 #include <vnl/vnl_vector_fixed.h>
-#include <iostream>
 
 class boxm2_mog3_grey_processor;
 class boxm2_gauss_grey_processor;

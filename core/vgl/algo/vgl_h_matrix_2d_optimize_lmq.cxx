@@ -1,11 +1,11 @@
 // This is core/vgl/algo/vgl_h_matrix_2d_optimize_lmq.cxx
+#include <iostream>
+#include <cmath>
 #include "vgl_h_matrix_2d_optimize_lmq.h"
 //:
 // \file
 
-#include <iostream>
 #include <vcl_compiler.h>
-#include <cmath>
 #include <vcl_cassert.h>
 #include <vnl/vnl_inverse.h>
 #include <vnl/algo/vnl_levenberg_marquardt.h>

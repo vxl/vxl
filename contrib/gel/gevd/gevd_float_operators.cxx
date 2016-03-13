@@ -1,20 +1,19 @@
 // This is gel/gevd/gevd_float_operators.cxx
+#include <iostream>
+#include <fstream>
+#include <algorithm>
+#include <cmath>
+#include <cstring>
 #include "gevd_float_operators.h"
 //:
 // \file
 
-#include <iostream>
-#include <fstream>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <algorithm>
 #include <vcl_cassert.h>
 #include <vnl/vnl_math.h> // for pi_over_2
 #include <vnl/vnl_float_3.h>
 #include <vnl/vnl_cross.h>
 
-#include <cmath>
-#include <cstring>
 
 #include "gevd_pixel.h"
 #include "gevd_xpixel.h"

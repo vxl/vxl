@@ -1,4 +1,6 @@
 // This is mul/mfpf/tests/test_norm_corr1d.cxx
+#include <iostream>
+#include <sstream>
 #include <testlib/testlib_test.h>
 //:
 // \file
@@ -11,9 +13,6 @@
 //=======================================================================
 
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
-#include <sstream>
 #include <vsl/vsl_binary_loader.h>
 #include <mfpf/mfpf_add_all_loaders.h>
 #include <mfpf/mfpf_norm_corr1d.h>

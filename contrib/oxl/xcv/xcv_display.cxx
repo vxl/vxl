@@ -1,4 +1,8 @@
 // This is oxl/xcv/xcv_display.cxx
+#include <string>
+#include <iostream>
+#include <vector>
+#include <cmath>
 #include "xcv_display.h"
 //:
 // \file
@@ -12,12 +16,7 @@
 // \endverbatim
 //
 
-#include <string>
-#include <iostream>
-#include <vector>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <cmath>
 #include <vxl_config.h>
 
 #include <vul/vul_sprintf.h>

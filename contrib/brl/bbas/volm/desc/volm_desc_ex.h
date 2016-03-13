@@ -16,10 +16,9 @@
 // \endverbatim
 //
 
+#include <iostream>
 #include "volm_desc.h"
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 #include <volm_io.h>
 #include <volm_category_io.h>
 #include <vcl_cassert.h>

@@ -1,13 +1,13 @@
 // This is brl/bseg/bvpl/util/bvpl_bundler_features_2d.cxx
+#include <iostream>
+#include <cstdlib>
+#include <iterator>
 #include "bvpl_bundler_features_2d.h"
 //
 #include <vgl/io/vgl_io_point_3d.h>
 #include <vnl/io/vnl_io_vector.h>
 
 #include <vcl_compiler.h>
-#include <iostream>
-#include <cstdlib> // for std::exit()
-#include <iterator>
 
 void bvpl_bundler_features_2d::write_feature_txt( std::string const& filename ) const
 {

@@ -1,7 +1,7 @@
+#include <iostream>
 #include <testlib/testlib_test.h>
 #include <vbl/vbl_quadruple.h>
 #include <vcl_compiler.h>
-#include <iostream>
 
 static
 void vbl_test_quadruple()

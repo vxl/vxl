@@ -5,11 +5,11 @@
 //:
 //  \file
 
-#include "vimt_transform_2d.h"
-#include <vcl_compiler.h>
 #include <iostream>
 #include <cmath>
-#include <cstdlib> // for std::abort()
+#include <cstdlib>
+#include "vimt_transform_2d.h"
+#include <vcl_compiler.h>
 #include <vcl_cassert.h>
 #include <vsl/vsl_indent.h>
 #include <vnl/vnl_vector.h>

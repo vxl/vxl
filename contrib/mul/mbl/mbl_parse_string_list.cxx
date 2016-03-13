@@ -1,3 +1,5 @@
+#include <iostream>
+#include <sstream>
 #include "mbl_parse_string_list.h"
 //:
 // \file
@@ -7,8 +9,6 @@
 #include <mbl/mbl_exception.h>
 #include <mbl/mbl_parse_block.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <sstream>
 
 //: Parse list of strings
 // Expects format of data:

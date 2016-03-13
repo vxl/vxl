@@ -4,16 +4,16 @@
 //:
 // \file
 
+#include <iostream>
+#include <iomanip>
+#include <cmath>
 #include "vgl_point_3d.h"
 #include <vgl/vgl_homg_point_3d.h>
 #include <vgl/vgl_plane_3d.h>
 #include <vgl/vgl_homg_plane_3d.h>
 #include <vgl/vgl_tolerance.h>
 
-#include <iostream>
 #include <vcl_compiler.h>
-#include <iomanip>
-#include <cmath> // for std::sqrt
 
 //: Construct from homogeneous point
 template <class Type>

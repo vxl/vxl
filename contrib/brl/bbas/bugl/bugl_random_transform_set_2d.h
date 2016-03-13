@@ -8,9 +8,9 @@
 // \verbatim
 //  Modifications<none>
 // \endverbatim
-#include <vcl_compiler.h>
 #include <iostream>
 #include <vector>
+#include <vcl_compiler.h>
 #include <vgl/algo/vgl_h_matrix_2d.h>
 
 template<class T>

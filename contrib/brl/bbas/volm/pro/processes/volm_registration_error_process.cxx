@@ -1,4 +1,6 @@
 // This is brl/bbas/volm/pro/processes/volm_registration_error_process.cxx
+#include <iostream>
+#include <ios>
 #include <bprb/bprb_func_process.h>
 //:
 // \file
@@ -12,10 +14,7 @@
 // \endverbatim
 //
 
-#include <iostream>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <ios>
 #include <vul/vul_file.h>
 #include <vsl/vsl_binary_io.h>
 #include <vsl/vsl_vector_io.h>

@@ -21,10 +21,10 @@
 //   Peter Vanroose - 20 aug 2003 - changed parameter from vil_image_view_base_sptr to vil_image_resource_sptr
 // \endverbatim
 
-#include <vil/vil_image_resource.h>
-#include <vcl_compiler.h>
 #include <iostream>
 #include <vector>
+#include <vil/vil_image_resource.h>
+#include <vcl_compiler.h>
 
 //: pixel value histogram of 2D image, stored in a vector
 std::vector<unsigned int> vepl_histogram(vil_image_resource_sptr );

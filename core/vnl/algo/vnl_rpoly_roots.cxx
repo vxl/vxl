@@ -10,12 +10,12 @@
 //
 //-----------------------------------------------------------------------------
 
+#include <cmath>
+#include <iostream>
+#include <complex>
 #include "vnl_rpoly_roots.h"
 
 #include <vcl_compiler.h>
-#include <cmath> // for fabs()
-#include <iostream>
-#include <complex>
 #include <vnl/algo/vnl_netlib.h> // rpoly_()
 #include <vnl/vnl_real_polynomial.h>
 

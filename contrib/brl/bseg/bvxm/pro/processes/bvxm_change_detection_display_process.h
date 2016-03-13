@@ -18,10 +18,10 @@
 //   Peter Vanroose  - Jul 10, 2009 - split into .h and .cxx
 // \endverbatim
 
-#include <bprb/bprb_func_process.h>
-#include <vcl_compiler.h>
 #include <iostream>
 #include <string>
+#include <bprb/bprb_func_process.h>
+#include <vcl_compiler.h>
 
 //: global variables
 namespace bvxm_change_detection_display_process_globals

@@ -11,6 +11,8 @@
 // each must define an execute member function which is called
 // when the menu item is selected.
 //
+#include <iostream>
+#include <string>
 #include <bwm/bwm_tableau_sptr.h>
 #include <bwm/bwm_tableau.h>
 
@@ -20,8 +22,6 @@
 #include <vgui/vgui_menu.h>
 
 #include <vcl_compiler.h>
-#include <iostream>
-#include <string>
 
 //: \brief The command for selecting the active tool from a menu
 class bwm_command : public vgui_command

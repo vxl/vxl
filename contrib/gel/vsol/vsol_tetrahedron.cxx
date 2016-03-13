@@ -1,12 +1,11 @@
 // This is gel/vsol/vsol_tetrahedron.cxx
+#include <iostream>
+#include <cmath>
 #include "vsol_tetrahedron.h"
 //:
 //  \file
 
 #include <vcl_compiler.h>
-#include <iostream>
-#include <cmath> // for std::abs(double)
-#include <iostream>
 #include <vsol/vsol_point_3d.h>
 
 //***************************************************************************

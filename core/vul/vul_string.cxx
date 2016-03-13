@@ -1,16 +1,16 @@
 // This is core/vul/vul_string.cxx
-#include "vul_string.h"
-//:
-// \file
-
-#include <vcl_cassert.h>
-#include <vcl_compiler.h>
 #include <cstdlib>
 #include <cstring>
 #include <cctype>
 #include <algorithm>
 #include <sstream>
 #include <cmath>
+#include "vul_string.h"
+//:
+// \file
+
+#include <vcl_cassert.h>
+#include <vcl_compiler.h>
 #include <vul/vul_reg_exp.h>
 #include <vul/vul_sprintf.h>
 

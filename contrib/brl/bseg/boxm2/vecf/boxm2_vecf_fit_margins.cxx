@@ -1,13 +1,12 @@
 //:
 // \file
 
+#include <iostream>
 #include "boxm2_vecf_fit_margins.h"
 #include <vgl/algo/vgl_norm_trans_3d.h>
 #include <vnl/algo/vnl_svd.h>
 #include <vnl/vnl_matrix.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 #include <vgl/vgl_distance.h>
 #include <vgl/vgl_closest_point.h>
 #include <vnl/algo/vnl_levenberg_marquardt.h>

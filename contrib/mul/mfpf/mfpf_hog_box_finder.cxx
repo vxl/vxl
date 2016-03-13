@@ -1,3 +1,6 @@
+#include <cmath>
+#include <iostream>
+#include <algorithm>
 #include "mfpf_hog_box_finder.h"
 //:
 // \file
@@ -5,7 +8,6 @@
 // \author Tim Cootes
 
 #include <vsl/vsl_binary_loader.h>
-#include <cmath>
 #include <vcl_cassert.h>
 
 #include <vil/vil_resample_bilin.h>
@@ -13,8 +15,6 @@
 #include <vsl/vsl_vector_io.h>
 #include <vsl/vsl_indent.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <algorithm>
 #include <vnl/vnl_math.h>
 
 #include <mipa/mipa_orientation_histogram.h>

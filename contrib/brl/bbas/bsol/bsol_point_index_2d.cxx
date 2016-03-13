@@ -1,3 +1,4 @@
+#include <iostream>
 #include "bsol_point_index_2d.h"
 //:
 // \file
@@ -6,8 +7,6 @@
 #include "bsol_algs.h"
 #ifdef DEBUG
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 #endif
 
 static void clear_flag(vsol_point_2d_sptr& p)

@@ -1,4 +1,5 @@
 // This is brl/bpro/core/vidl_pro/processes/vidl_put_frame_ostream_process.cxx
+#include <iostream>
 #include <bprb/bprb_func_process.h>
 //:
 // \file
@@ -7,8 +8,6 @@
 #include <vidl/vidl_convert.h>
 #include <bprb/bprb_parameters.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 
 //: Constructor
 bool vidl_put_frame_ostream_process_cons(bprb_func_process& pro)

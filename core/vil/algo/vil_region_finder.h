@@ -7,9 +7,9 @@
 //   March.2005 - Gehua Yang - template on predicate to make it generic
 // \endverbatim
 
-#include <vcl_compiler.h>
 #include <vector>
 #include <functional>
+#include <vcl_compiler.h>
 #include <vil/vil_image_view.h>
 
 //: Type of connectivity to use in finding the regions

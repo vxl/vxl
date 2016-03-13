@@ -1,7 +1,7 @@
-#include <vcl_compiler.h>
 #include <iostream>
 #include <cmath>
 #include <vector>
+#include <vcl_compiler.h>
 #include <vnl/vnl_math.h>
 #include <testlib/testlib_test.h>
 

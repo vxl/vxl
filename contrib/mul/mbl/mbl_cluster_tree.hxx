@@ -9,10 +9,9 @@
 // \brief  Record trees of clusters of data, for faster neighbour finding
 // \author Tim Cootes
 
+#include <iostream>
 #include "mbl_cluster_tree.h"
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 #include <vcl_cassert.h>
 #include <vsl/vsl_binary_io.h>
 #include <vsl/vsl_vector_io.h>

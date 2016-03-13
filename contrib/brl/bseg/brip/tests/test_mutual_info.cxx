@@ -1,10 +1,10 @@
-#include <testlib/testlib_test.h>
-#include <vcl_compiler.h>
 #include <iostream>
-#include <cstdlib> // for rand()
+#include <cstdlib>
 #include <vector>
 #include <fstream>
 #include <string>
+#include <testlib/testlib_test.h>
+#include <vcl_compiler.h>
 #include <vil/vil_image_view.h>
 #include <vil/vil_load.h>
 #include <vil/vil_flip.h>

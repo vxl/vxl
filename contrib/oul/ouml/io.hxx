@@ -2,10 +2,9 @@
 #define ouml_io_hxx_
 // miscellaneous io operators
 
+#include <iostream>
 #include "io.h"
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 
 template <class T>
 std::ostream &operator <<(std::ostream &os, const vnl_vector<T> &vec)

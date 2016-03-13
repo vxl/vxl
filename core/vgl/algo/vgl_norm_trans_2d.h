@@ -28,11 +28,11 @@
 //   Sep 27, 2007 - Ricardo Fabbri - isotropic scaling set to sqrt(2) factor
 // \endverbatim
 
+#include <iosfwd>
 #include <vnl/vnl_matrix_fixed.h>
 #include <vgl/vgl_homg_point_2d.h>
 #include <vgl/vgl_homg_line_2d.h>
 #include <vcl_compiler.h>
-#include <iosfwd>
 #include <vgl/algo/vgl_h_matrix_2d.h>
 
 template <class T>

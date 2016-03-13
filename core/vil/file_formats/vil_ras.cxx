@@ -5,12 +5,12 @@
 //:
 // \file
 
+#include <iostream>
+#include <vector>
 #include "vil_ras.h"
 
 #include <vcl_cassert.h>
-#include <iostream>
 #include <vcl_compiler.h>
-#include <vector>
 
 #include <vil/vil_stream.h>
 #include <vil/vil_image_resource.h>

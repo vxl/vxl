@@ -2,11 +2,11 @@
 #ifndef vbl_big_sparse_array_3d_hxx_
 #define vbl_big_sparse_array_3d_hxx_
 
+#include <utility>
+#include <iostream>
 #include "vbl_big_sparse_array_3d.h"
 #include <vcl_cassert.h>
 #include <vcl_compiler.h>
-#include <utility> // for std::pair<T,bool>
-#include <iostream>
 
 // locals
 inline ulonglong bigencode(unsigned i, unsigned j, unsigned k)

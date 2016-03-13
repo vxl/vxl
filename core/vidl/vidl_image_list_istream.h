@@ -11,10 +11,10 @@
 // \author Matt Leotta
 // \date 19 Dec 2005
 
-#include "vidl_istream.h"
 #include <vector>
-#include <vcl_compiler.h>
 #include <string>
+#include "vidl_istream.h"
+#include <vcl_compiler.h>
 
 
 //: A video input stream from a list of images on disk

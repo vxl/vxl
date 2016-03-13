@@ -16,12 +16,12 @@
 // \date   November 2009
 //-----------------------------------------------------------------------------
 
-#include <vnl/vnl_sample.h>
-#include <vnl/vnl_math.h>
 #include <cmath>
-#include <vcl_compiler.h>
 #include <cstdlib>
 #include <iostream>
+#include <vnl/vnl_sample.h>
+#include <vnl/vnl_math.h>
+#include <vcl_compiler.h>
 
 int main(int argc, char* argv[])
 {

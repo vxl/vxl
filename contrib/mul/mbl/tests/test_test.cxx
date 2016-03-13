@@ -2,10 +2,9 @@
 #include <iostream>
 #include <fstream>
 #include <cstdlib>
-#include <cstring> // for std::strncpy()
-#include <vcl_compiler.h>
-#include <iostream>
+#include <cstring>
 #include <algorithm>
+#include <vcl_compiler.h>
 #include <vul/vul_file.h>
 #include <vpl/vpl.h>
 #include <vsl/vsl_binary_io.h>

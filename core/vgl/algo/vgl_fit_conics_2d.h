@@ -23,8 +23,8 @@
 //  Modifications
 //   none
 // \endverbatim
-#include <vcl_compiler.h>
 #include <vector>
+#include <vcl_compiler.h>
 #include <vgl/vgl_point_2d.h>
 #include <vgl/vgl_conic_segment_2d.h>
 

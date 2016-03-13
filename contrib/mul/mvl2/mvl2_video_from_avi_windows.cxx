@@ -3,12 +3,12 @@
 // \brief A class for reading video files on windows platform
 // \author Louise Butcher
 
+#include <iostream>
+#include <cstdlib>
 #include "mvl2_video_from_avi_windows.h"
 #include <vil/vil_flip.h>
 #include <vil/vil_convert.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <cstdlib>
 
 mvl2_video_from_avi::mvl2_video_from_avi()
 {

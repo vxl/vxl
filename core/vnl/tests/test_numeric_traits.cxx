@@ -1,9 +1,9 @@
 // This is core/vnl/tests/test_numeric_traits.cxx
+#include <complex>
+#include <iostream>
 #include <vnl/vnl_numeric_traits.h>
 #include <testlib/testlib_test.h>
 #include <vcl_compiler.h>
-#include <complex>
-#include <iostream>
 #include <vxl_config.h> // for VXL_BIG_ENDIAN
 
 static

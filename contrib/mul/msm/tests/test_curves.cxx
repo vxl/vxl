@@ -4,6 +4,8 @@
 //  Copyright: (C) 2010 The University of Manchester
 //
 //=======================================================================
+#include <sstream>
+#include <iostream>
 #include <testlib/testlib_test.h>
 //:
 // \file
@@ -11,10 +13,7 @@
 // \brief test msm_curves
 
 #include <msm/msm_curve.h>
-#include <sstream>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 
 //=======================================================================
 

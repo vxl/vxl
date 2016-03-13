@@ -1,8 +1,8 @@
-#include "volm_geo_index2_node_base.h"
 #include <sstream>
-#include <vcl_compiler.h>
 #include <iostream>
 #include <iomanip>
+#include "volm_geo_index2_node_base.h"
+#include <vcl_compiler.h>
 
 std::string volm_geo_index2_node_base::get_string() const
 {

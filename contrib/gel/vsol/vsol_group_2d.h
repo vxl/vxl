@@ -21,12 +21,11 @@
 //*****************************************************************************
 // External declarations for values
 //*****************************************************************************
+#include <vector>
+#include <iostream>
 #include <vsl/vsl_binary_io.h>
 #include <vsol/vsol_spatial_object_2d.h>
-#include <vector>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 
 class vsol_group_2d : public vsol_spatial_object_2d
 {

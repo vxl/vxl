@@ -8,12 +8,12 @@
 // \date   28 Dec 99
 // \brief  See vgui_gtk2_dialog_impl.h for a description of this file.
 
-#include "vgui_gtk2_dialog_impl.h"
-
-#include <vcl_compiler.h>
 #include <string>
 #include <vector>
 #include <iostream>
+#include "vgui_gtk2_dialog_impl.h"
+
+#include <vcl_compiler.h>
 #include <vul/vul_sprintf.h>
 
 #include <vgui/vgui_gl.h>

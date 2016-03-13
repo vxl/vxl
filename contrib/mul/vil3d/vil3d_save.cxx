@@ -7,12 +7,11 @@
 //
 
 
+#include <iostream>
+#include <cstring>
 #include "vil3d_save.h"
 
 #include <vcl_compiler.h>
-#include <iostream>
-#include <cstring>
-#include <iostream>
 #include <vxl_config.h> // for vxl_byte
 
 #include <vil3d/vil3d_new.h>

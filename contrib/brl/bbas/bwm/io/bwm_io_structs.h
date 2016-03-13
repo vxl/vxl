@@ -1,9 +1,9 @@
 #ifndef bwm_io_structs_h_
 #define bwm_io_structs_h_
 
-#include <vcl_compiler.h>
 #include <iostream>
 #include <string>
+#include <vcl_compiler.h>
 
 // XML Tags
 #define SITE_TAG "BWM_SITE"

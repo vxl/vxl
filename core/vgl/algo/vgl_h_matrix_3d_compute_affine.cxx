@@ -1,15 +1,15 @@
 // This is core/vgl/algo/vgl_h_matrix_3d_compute_affine.cxx
+#include <iostream>
+#include <cmath>
+#include <iomanip>
 #include "vgl_h_matrix_3d_compute_affine.h"
 //:
 // \file
 
-#include <iostream>
-#include <cmath>
 #include <vcl_cassert.h>
 #include <vgl/algo/vgl_norm_trans_3d.h>
 #include <vnl/algo/vnl_svd.h>
 #include <vcl_compiler.h>
-#include <iomanip>
 
 const int TM_UNKNOWNS_COUNT = 9;
 const double DEGENERACY_THRESHOLD = 0.00001;

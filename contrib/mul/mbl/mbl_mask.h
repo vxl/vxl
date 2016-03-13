@@ -6,7 +6,6 @@
 // \author Barry Skellern
 // \brief Class representing a binary mask, and related functions
 
-#include <vcl_compiler.h>
 #include <iostream>
 #include <algorithm>
 #include <vector>
@@ -15,7 +14,7 @@
 #include <string>
 #include <iosfwd>
 #include <cstddef>
-#include <iostream>
+#include <vcl_compiler.h>
 #include <vul/vul_sprintf.h>
 
 

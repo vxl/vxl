@@ -4,14 +4,13 @@
 // \file
 // \brief Loads blocks and data from ID's and data_types with blocking.
 //  If file is not available, will return null.
+#include <iostream>
 #include <bstm/bstm_block.h>
 #include <bstm/bstm_time_block.h>
 #include <bstm/bstm_data_base.h>
 #include <bstm/basic/bstm_block_id.h>
 #include <bstm/bstm_data_traits.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 
 //: disk level storage class.
 //  handles all of the synchronous IO read and write requests

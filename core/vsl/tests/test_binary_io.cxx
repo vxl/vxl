@@ -1,8 +1,8 @@
 // This is core/vsl/tests/test_binary_io.cxx
 #include <iostream>
 #include <cstring>
-#include <vcl_compiler.h>
 #include <cstddef>
+#include <vcl_compiler.h>
 #include <vsl/vsl_binary_io.h>
 #include <vsl/vsl_quick_file.h>
 #include <testlib/testlib_root_dir.h>

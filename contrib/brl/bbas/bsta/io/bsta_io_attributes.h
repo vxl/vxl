@@ -12,11 +12,10 @@
 //   <none yet>
 // \endverbatim
 
+#include <iostream>
 #include <bsta/bsta_attributes.h>
 #include <vsl/vsl_binary_io.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 
 //: Binary save bsta_attributes to stream.
 template <class comp_>

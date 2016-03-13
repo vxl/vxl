@@ -5,9 +5,8 @@
 // \author Kevin de Souza
 // \date 2005-02-02
 
+#include <iostream>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 #include <mbl/mbl_table.h>
 #include <testlib/testlib_test.h>
 

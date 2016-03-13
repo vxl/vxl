@@ -4,12 +4,12 @@
 // \brief Set of functions to do binary IO on a block of values.
 // \author Ian Scott, ISBE Manchester, Feb 2003
 
-#include "vsl_block_binary.h"
 #include <cstddef>
-#include <vcl_compiler.h>
 #include <new>
 #include <algorithm>
 #include <cstdlib>
+#include "vsl_block_binary.h"
+#include <vcl_compiler.h>
 #include <vcl_cassert.h>
 
 struct vsl_block_t

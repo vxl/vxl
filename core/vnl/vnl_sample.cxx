@@ -3,11 +3,12 @@
 #pragma implementation
 #endif
 
+#include <cmath>
+#include <ctime>
 #include "vnl_sample.h"
 #include <vnl/vnl_math.h>
 
 #include <vcl_compiler.h>
-#include <cmath>
 #include <vxl_config.h>
 
 #include <stdlib.h> // dont_vxl_filter
@@ -18,7 +19,6 @@
 static unsigned long vnl_sample_seed = 12345;
 #endif
 
-# include <ctime>
 
 void vnl_sample_reseed()
 {

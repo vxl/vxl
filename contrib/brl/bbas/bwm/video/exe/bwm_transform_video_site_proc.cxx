@@ -1,9 +1,9 @@
-#include <vul/vul_file.h>
-#include <vul/vul_arg.h>
-#include <vcl_compiler.h>
 #include <iostream>
 #include <fstream>
 #include <string>
+#include <vul/vul_file.h>
+#include <vul/vul_arg.h>
+#include <vcl_compiler.h>
 #include <vnl/vnl_double_4.h>
 #include <vpl/vpl.h> // vpl_unlink()
 #include <vpgl/vpgl_perspective_camera.h>

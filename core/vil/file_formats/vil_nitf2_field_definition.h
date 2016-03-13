@@ -26,8 +26,8 @@
 #define NITF_STR_BCS(LEN)  NITF_STR(LEN, vil_nitf2_string_formatter::BCS)
 #define NITF_STR_BCSA(LEN) NITF_STR(LEN, vil_nitf2_string_formatter::BCSA)
 
-#include <vcl_compiler.h>
 #include <list>
+#include <vcl_compiler.h>
 
 #include "vil_nitf2.h" // vil_nitf2_istream, vil_nitf2_ostream
 #include "vil_nitf2_field_functor.h"

@@ -1,7 +1,7 @@
-#include <volm/volm_vrml_io.h>
-#include <vcl_compiler.h>
 #include <iostream>
 #include <cmath>
+#include <volm/volm_vrml_io.h>
+#include <vcl_compiler.h>
 #include <vsph/vsph_unit_sphere.h>
 #include <vgl/vgl_point_3d.h>
 

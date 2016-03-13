@@ -1,15 +1,15 @@
 // This is mul/vil3d/algo/vil3d_find_blobs.cxx
+#include <vector>
+#include <iostream>
+#include <algorithm>
 #include "vil3d_find_blobs.h"
 //:
 // \file
 // \brief Identify and enumerate all disjoint blobs in a binary image.
 // \author Ian Scott, Kevin de Souza
 
-#include <vector>
 #include <vcl_cassert.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <algorithm>
 
 #include <vil3d/vil3d_image_view.h>
 

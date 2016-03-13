@@ -1,15 +1,15 @@
 // Some tests for vgl_distance
 // Amitha Perera, Sep 2001.
+#include <iostream>
+#include <cmath>
 #include <testlib/testlib_test.h>
 
-#include <iostream>
 
 #include <vgl/vgl_polygon.h>
 #include <vgl/vgl_point_2d.h>
 #include <vgl/vgl_line_segment_2d.h>
 #include <vgl/vgl_distance.h>
 #include <vcl_compiler.h>
-#include <cmath> // for std::sqrt()
 
 
 static void test_point_to_polygon()

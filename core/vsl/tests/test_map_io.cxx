@@ -1,7 +1,7 @@
 // This is core/vsl/tests/test_map_io.cxx
 #include <iostream>
-#include <vcl_compiler.h>
 #include <string>
+#include <vcl_compiler.h>
 #include <vsl/vsl_binary_io.h>
 #include <vsl/vsl_map_io.h>
 #include <testlib/testlib_test.h>

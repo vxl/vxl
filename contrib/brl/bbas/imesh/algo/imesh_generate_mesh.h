@@ -12,10 +12,10 @@
 //   <none yet>
 // \endverbatim
 
-#include <imesh/imesh_mesh.h>
-#include <vcl_compiler.h>
 #include <iostream>
 #include <vector>
+#include <imesh/imesh_mesh.h>
+#include <vcl_compiler.h>
 #include <vgl/vgl_fwd.h>
 
 //: Fill the convex hull with triangles, constrained by the line segments

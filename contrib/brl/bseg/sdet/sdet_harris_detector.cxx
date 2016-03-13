@@ -1,10 +1,10 @@
 // This is brl/bseg/sdet/sdet_harris_detector.cxx
+#include <iostream>
+#include <cstdlib>
 #include "sdet_harris_detector.h"
 //:
 // \file
 #include <vcl_compiler.h>
-#include <iostream>
-#include <cstdlib>   // for std::abs(int) and std::qsort()
 #include <vil1/vil1_memory_image_of.h>
 #include <vil/vil_image_view.h>
 #include <vil/vil_convert.h>

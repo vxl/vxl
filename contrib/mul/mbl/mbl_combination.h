@@ -5,12 +5,11 @@
 // \author Tim Cootes
 // \brief Functions to generate combinations of integers
 
-#include <vcl_cassert.h>
 #include <vector>
 #include <iostream>
-#include <vcl_compiler.h>
-#include <iostream>
 #include <algorithm>
+#include <vcl_cassert.h>
+#include <vcl_compiler.h>
 
 //: Generate first combination (n.size() zeros)
 inline

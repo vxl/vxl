@@ -4,12 +4,12 @@
 //:
 // \file
 
-#include "vgl_p_matrix.h"
-
 #include <iostream>
 #include <fstream>
-#include <vcl_compiler.h>
 #include <cmath>
+#include "vgl_p_matrix.h"
+
+#include <vcl_compiler.h>
 
 #include <vnl/vnl_matrix.h>
 #include <vnl/vnl_inverse.h>

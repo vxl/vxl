@@ -1,4 +1,7 @@
 // This is gel/vtol/vtol_two_chain.cxx
+#include <vector>
+#include <iostream>
+#include <algorithm>
 #include "vtol_two_chain.h"
 //:
 // \file
@@ -7,10 +10,7 @@
 //   05/13/98  RIH replaced append by insert_after to avoid n^2 behavior
 // \endverbatim
 
-#include <vector>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <algorithm>
 
 #include <vtol/vtol_list_functions.h>
 #include <vtol/vtol_face.h>

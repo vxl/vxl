@@ -6,14 +6,13 @@
 // \author Yi Dong
 // \date August 01, 2013
 
+#include <iostream>
 #include <bprb/bprb_func_process.h>
 #include <bvrml/bvrml_write.h>
 #include <boxm2/boxm2_scene.h>
 #include <vpgl/vpgl_lvcs.h>
 #include <vgl/vgl_box_3d.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 
 namespace boxm2_scene_vrml_process_globals
 {

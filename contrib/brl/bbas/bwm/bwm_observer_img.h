@@ -4,9 +4,9 @@
 // \file
 
 #include <vector>
-#include <vcl_compiler.h>
 #include <iostream>
 #include <map>
+#include <vcl_compiler.h>
 
 #include <bwm/algo/bwm_soview2D_vertex.h>
 

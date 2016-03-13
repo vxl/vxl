@@ -1,14 +1,13 @@
+#include <iostream>
+#include <cstring>
+#include <cstdio>
+#include <cstdlib>
+#include <sstream>
 #include "bocl_mem.h"
 //:
 // \file
-#include <iostream>
-#include <cstring>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <cstdio>
-#include <cstdlib>
 #include <vcl_cassert.h>
-#include <sstream>
 #include <bocl/bocl_kernel.h>
 
 bocl_mem::bocl_mem(const cl_context& context, void* buffer, unsigned num_bytes, std::string id)

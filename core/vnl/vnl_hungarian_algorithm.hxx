@@ -1,17 +1,17 @@
 #ifndef vnl_hungarian_algorithm_hxx_
 #define vnl_hungarian_algorithm_hxx_
 
+#include <vector>
+#include <limits>
+#include <algorithm>
+#include <iostream>
 #include "vnl_hungarian_algorithm.h"
 
 #include <vnl/vnl_matrix.h>
-#include <vector>
 #include <vcl_compiler.h>
-#include <limits>
-#include <algorithm>
 #include <vcl_cassert.h>
 
 #ifdef DEBUG
-#include <iostream>
 #endif
 
 //-----------------------------------------------------------------------------

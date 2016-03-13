@@ -35,10 +35,9 @@
 //
 // \endverbatim
 
+#include <iostream>
 #include "bvpl_kernel_factory.h"
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 #include <bxml/bxml_document.h>
 
 class bvpl_edge3d_kernel_factory : public bvpl_kernel_factory

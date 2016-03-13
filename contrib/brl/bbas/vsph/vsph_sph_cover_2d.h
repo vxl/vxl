@@ -19,10 +19,9 @@
 // min_area_fraction.
 //
 #include <vector>
-#include <vcl_compiler.h>
-#include <iostream>
 #include <iostream>
 #include <string>
+#include <vcl_compiler.h>
 #include <vsph/vsph_sph_box_2d.h>
 
 // A struct associating an axis aligned box with an area fraction of coverage.

@@ -19,13 +19,13 @@
 // Approved for public release, distribution unlimited (DISTAR Case 14389)
 //
 
-#include <bsta/bsta_von_mises.h>
-#include <bsta/bsta_attributes.h>
-#include <vcl_compiler.h>
 #include <iostream>
 #include <algorithm>
 #include <cmath>
 #include <vector>
+#include <bsta/bsta_von_mises.h>
+#include <bsta/bsta_attributes.h>
+#include <vcl_compiler.h>
 
 //: A von_mises window updater based on samples of the space of unit vectors.
 // Implemented only for vector dimensions 2 and 3.

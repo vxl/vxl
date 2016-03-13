@@ -4,12 +4,11 @@
 //:
 // \file
 
-#include "mbl_data_wrapper_mixer.h"
-
-#include <iostream>
-#include <vcl_compiler.h>
 #include <iostream>
 #include <cstdlib>
+#include "mbl_data_wrapper_mixer.h"
+
+#include <vcl_compiler.h>
 #include <vcl_cassert.h>
 
 //: Default constructor

@@ -6,19 +6,19 @@
 // \file
 // \author fsm
 
+#include <cstdio>
+#include <cstring>
+#include <cstdlib>
+#include <string>
+#include <iostream>
+#include <fstream>
 #include "vil_stream_url.h"
 #include <vil/vil_stream_core.h>
 
 #include <vcl_cassert.h>
 #undef sprintf
-#include <cstdio>  // sprintf()
 #include <vcl_cstdio.h> // for vcl_snprintf()
-#include <cstring>
 #include <vcl_compiler.h>
-#include <cstdlib>
-#include <string>
-#include <iostream>
-#include <fstream>
 
 #if defined(unix) || defined(__unix) || defined(__unix__) || defined(__APPLE__)
 

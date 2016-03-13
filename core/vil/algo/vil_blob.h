@@ -19,8 +19,8 @@
 // \endcode
 
 #include <vector>
-#include <vcl_compiler.h>
 #include <utility>
+#include <vcl_compiler.h>
 #include <vil/vil_image_view.h>
 #include <vil/vil_chord.h>
 

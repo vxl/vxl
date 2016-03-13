@@ -9,6 +9,7 @@
 //
 //-----------------------------------------------------------------------------
 
+#include <iostream>
 #include "vul_user_info.h"
 
 
@@ -20,7 +21,6 @@
 #endif
 
 #include <vcl_compiler.h>
-#include <iostream>
 
 //  uid_type uid;
 //  uid_type gid;

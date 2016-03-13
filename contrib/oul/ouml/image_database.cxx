@@ -18,14 +18,13 @@
 // Reproduction rights limited as described in the COPYRIGHT file.
 //----------------------------------------------------------------------
 
+#include <iostream>
+#include <cerrno>
+#include <cctype>
+#include <cstdio>
+#include <algorithm>
 #include "image_database.h"
-#include <iostream>
-#include <cerrno> // for EEXIST
-#include <cctype> // for tolower()
-#include <cstdio> // for fscanf()
 #include <vcl_compiler.h>
-#include <iostream>
-#include <algorithm> // for transform()
 #include <vpl/vpl.h> // for vpl_mkdir
 #include <vil1/vil1_load.h>
 #include <vil1/vil1_save.h>

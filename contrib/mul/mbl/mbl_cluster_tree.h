@@ -5,10 +5,10 @@
 // \brief  Record trees of clusters of data, for faster neighbour finding
 // \author Tim Cootes
 
-#include <mbl/mbl_clusters.h>
-#include <vcl_compiler.h>
 #include <iostream>
 #include <iosfwd>
+#include <mbl/mbl_clusters.h>
+#include <vcl_compiler.h>
 
 //: Record trees of clusters of data, for fast neighbour finding
 //  Used to record clusters of objects of type T.

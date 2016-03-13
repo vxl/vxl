@@ -1,9 +1,9 @@
 // This is core/vcsl/vcsl_matrix.cxx
+#include <cmath>
+#include <iostream>
 #include "vcsl_matrix.h"
 #include <vcl_cassert.h>
 #include <vcl_compiler.h>
-#include <cmath> // for cos(), sin()
-#include <iostream>
 
 //---------------------------------------------------------------------------
 // Is `this' invertible at time `time'?

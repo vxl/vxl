@@ -4,6 +4,8 @@
 //  Copyright: (C) 1998 Victoria University of Manchester
 //
 //=======================================================================
+#include <iostream>
+#include <string>
 #include "vpdfl_mixture_sampler.h"
 //:
 // \file
@@ -19,8 +21,6 @@
 //=======================================================================
 
 #include <vcl_compiler.h>
-#include <iostream>
-#include <string>
 #include <vpdfl/vpdfl_sampler_base.h>
 
 //=======================================================================

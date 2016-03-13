@@ -5,12 +5,12 @@
 // \brief Find choice of nodes which minimises Markov problem
 // \author Tim Cootes
 
+#include <iostream>
+#include <vector>
 #include <vnl/vnl_vector.h>
 #include <mmn/mmn_arc.h>
 #include <mmn/mmn_dependancy.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <vector>
 
 double mmn_solve(const std::vector<vnl_vector<double> >& node_cost,
                  const std::vector<vnl_matrix<double> >& pair_cost,

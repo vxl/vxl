@@ -19,8 +19,8 @@
 //----------------------------------------------------------------------------
 
 
-#include <vcl_compiler.h>
 #include <vector>
+#include <vcl_compiler.h>
 #include <vidl/vidl_iidc1394_params.h>
 #include <vidl/vidl_istream.h>
 #include <vidl/vidl_ostream.h>

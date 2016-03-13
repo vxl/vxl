@@ -1,8 +1,8 @@
+#include <iostream>
+#include <cstdio>
 #include "bocl_global_memory_bandwidth_manager.h"
 //
 #include <vcl_compiler.h>
-#include <iostream>
-#include <cstdio>
 
 #define local_workgroup_size 32
 

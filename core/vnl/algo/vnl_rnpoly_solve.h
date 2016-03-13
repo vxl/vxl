@@ -19,10 +19,10 @@
 //                               now using std::vector throughout instead of C arrays of fixed size
 // \endverbatim
 
+#include <vector>
 #include <vnl/vnl_vector.h>
 #include <vnl/vnl_real_npolynomial.h>
 #include <vcl_compiler.h>
-#include <vector>
 
 //: Solves for roots of system of real polynomials
 //  Calculates all the roots of a system of N polynomials in N variables

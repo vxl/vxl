@@ -15,12 +15,12 @@
 //   Peter Vanroose - 11 Mar 97 - added operator==
 // \endverbatim
 
+#include <iostream>
+#include <iosfwd>
 #include <mvl/HomgLine3D.h>
 #include <mvl/HomgOperator3D.h>
 #include <mvl/HomgPoint3D.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iosfwd>
 
 class HomgLineSeg3D : public HomgLine3D
 {

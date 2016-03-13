@@ -1,4 +1,5 @@
 // This is core/vil/algo/vil_gauss_reduce.cxx
+#include <cmath>
 #include "vil_gauss_reduce.h"
 //:
 // \file
@@ -6,7 +7,6 @@
 // \author Tim Cootes
 
 #include <vcl_compiler.h>
-#include <cmath>
 #include <vcl_cassert.h>
 #include <vxl_config.h> // for vxl_byte
 #include <vnl/vnl_erf.h>

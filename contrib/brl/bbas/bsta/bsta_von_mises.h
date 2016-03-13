@@ -16,11 +16,10 @@
 // Approved for public release, distribution unlimited (DISTAR Case 14389)
 //
 
-#include "bsta_distribution.h"
 #include <vector>
+#include <iostream>
+#include "bsta_distribution.h"
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 
 //: A Von_Mises distribution
 template <class T, unsigned n>

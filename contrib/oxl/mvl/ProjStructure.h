@@ -9,9 +9,9 @@
 // \author awf@robots.ox.ac.uk
 // \date   17 Mar 00
 
-#include <vcl_compiler.h>
 #include <iostream>
 #include <vector>
+#include <vcl_compiler.h>
 
 #include <mvl/ImageMetric.h>
 #include <mvl/PMatrix.h>

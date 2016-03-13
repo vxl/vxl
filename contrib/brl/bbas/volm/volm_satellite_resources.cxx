@@ -1,3 +1,7 @@
+#include <iostream>
+#include <algorithm>
+#include <iterator>
+#include <cstdio>
 #include "volm_satellite_resources.h"
 
 #include <vil/vil_load.h>
@@ -20,10 +24,6 @@
 #include <vgl/algo/vgl_convex_hull_2d.h>
 #include <vpgl/vpgl_lvcs.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <algorithm>
-#include <iterator>
-#include <cstdio>
 #include <bkml/bkml_parser.h>
 
 void add_directories(std::string root, std::vector<std::string>& directories) {

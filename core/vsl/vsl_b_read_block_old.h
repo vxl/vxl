@@ -11,9 +11,9 @@
 // Users should have no reason to include this file.
 //
 
+#include <iostream>
 #include <vxl_config.h>
 #include <vcl_compiler.h>
-#include <iostream>
 #include <vsl/vsl_binary_io.h>
 #include <vsl/vsl_binary_explicit_io.h>
 

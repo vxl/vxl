@@ -1,3 +1,5 @@
+#include <iostream>
+#include <algorithm>
 #include "mmn_csp_solver.h"
 //:
 // \file
@@ -5,8 +7,6 @@
 // \author Martin Roberts
 
 #include <vcl_compiler.h>
-#include <iostream>
-#include <algorithm>
 #include <vcl_cassert.h>
 
 //: Default constructor

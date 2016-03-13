@@ -1,4 +1,6 @@
 // This is brl/bpro/core/vil_pro/processes/vil_mask_image_using_ids_process.cxx
+#include <iostream>
+#include <string>
 #include <bprb/bprb_func_process.h>
 //:
 // \file  Mask all ids except the given one in an image using another id image (should be exactly same size)
@@ -7,9 +9,6 @@
 #include <vil/vil_convert.h>
 #include <bprb/bprb_parameters.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
-#include <string>
 #include <vil/vil_image_view_base.h>
 #include <vil/vil_transform.h>
 #include <vil/vil_math.h>

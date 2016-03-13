@@ -23,14 +23,14 @@
 // computations are simple enough so everything is in the .h file
 //
 
-#include <vcl_compiler.h>
 #include <vector>
+#include <iostream>
+#include <vcl_compiler.h>
 #include <vgl/vgl_vector_3d.h>
 #include <vgl/vgl_vector_3d.h>
 #include <vgl/vgl_point_3d.h>
 #include <vgl/vgl_plane_3d.h>
 #include <vcl_cassert.h>
-#include <iostream>
 
 template <class Type>
 class vgl_cubic_spline_3d

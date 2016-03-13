@@ -8,13 +8,13 @@
 // --------+----------+--------------------------+-----------------------------
 // 1.0     |2004/07/13| Matt Leotta          |Creation
 //*****************************************************************************
+#include <iostream>
+#include <vector>
 #include <testlib/testlib_test.h>
 //:
 // \file
 
 #include <vcl_compiler.h>
-#include <iostream>
-#include <vector>
 
 #include <vgl/vgl_point_2d.h>
 #include <vsol/vsol_digital_curve_2d.h>

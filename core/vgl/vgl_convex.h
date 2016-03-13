@@ -7,8 +7,8 @@
 // \author Peter Vanroose
 // \date 14 November 2003
 
-#include <vcl_compiler.h>
 #include <vector>
+#include <vcl_compiler.h>
 #include <vgl/vgl_point_2d.h>
 #include <vgl/vgl_polygon.h>
 

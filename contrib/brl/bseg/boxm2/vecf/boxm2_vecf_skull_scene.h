@@ -1,9 +1,9 @@
 #ifndef boxm2_vecf_skull_scene_h_
 #define boxm2_vecf_skull_scene_h_
 
-#include <vcl_compiler.h>
 #include <iostream>
 #include <string>
+#include <vcl_compiler.h>
 
 #include <boxm2/boxm2_scene.h>
 #include "boxm2_vecf_mandible_scene.h"

@@ -1,4 +1,6 @@
 // This is brl/bpro/core/vpgl_pro/processes/vpgl_persp_cam_from_photo_overlay_process.cxx
+#include <iostream>
+#include <cmath>
 #include <bprb/bprb_func_process.h>
 //:
 // \file
@@ -11,8 +13,6 @@
 #include <vpgl/vpgl_lvcs.h>
 #include <vpgl/vpgl_lvcs_sptr.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <cmath>
 #include <vpgl/vpgl_calibration_matrix.h>
 #include <vpgl/vpgl_perspective_camera.h>
 #include <bpgl/algo/bpgl_camera_from_box.h>

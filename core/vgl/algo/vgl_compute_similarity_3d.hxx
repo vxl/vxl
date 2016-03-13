@@ -4,6 +4,7 @@
 //:
 // \file
 
+#include <iostream>
 #include "vgl_compute_similarity_3d.h"
 #include <vgl/algo/vgl_norm_trans_3d.h>
 #include <vnl/vnl_double_4.h>
@@ -11,7 +12,6 @@
 #include <vnl/algo/vnl_determinant.h>
 #include <vnl/vnl_matrix.h>
 #include <vcl_compiler.h>
-#include <iostream>
 #include <vcl_cassert.h>
 
 template <class T>

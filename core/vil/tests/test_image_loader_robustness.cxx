@@ -1,7 +1,7 @@
 // This is core/vil/tests/test_image_loader_robustness.cxx
-#include <vcl_compiler.h>
 #include <cstddef>
 #include <iostream>
+#include <vcl_compiler.h>
 #include <vil/vil_load.h>
 #include <vil/vil_stream_core.h>
 #include <vil/vil_stream_section.h>

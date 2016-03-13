@@ -18,10 +18,10 @@
 //   Jun.2003 - Ian Scott      - added support for '\' file separator to dos version
 // \endverbatim
 
-#include <vcl_compiler.h>
 #include <string>
-#include <vxl_config.h>
 #include <ctime>
+#include <vcl_compiler.h>
+#include <vxl_config.h>
 //: A collection of miscellaneous filesystem-type utilities
 //
 struct vul_file

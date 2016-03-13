@@ -1,7 +1,7 @@
 // This is core/vil/algo/tests/test_algo_corners.cxx
+#include <iostream>
 #include <testlib/testlib_test.h>
 #include <vcl_compiler.h>
-#include <iostream>
 #include <vil/algo/vil_corners.h>
 #include <vil/vil_crop.h>
 #include <vxl_config.h>

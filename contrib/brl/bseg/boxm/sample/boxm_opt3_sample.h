@@ -4,9 +4,8 @@
 // \file
 
 #include <vector>
+#include <iostream>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 #include <vsl/vsl_binary_io.h>
 #include <boxm/boxm_apm_traits.h>
 #include <boxm/boxm_aux_traits.h>

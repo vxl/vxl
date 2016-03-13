@@ -1,4 +1,7 @@
 // This is brl/bbas/brdb/brdb_selection.cxx
+#include <iostream>
+#include <algorithm>
+#include <iterator>
 #include "brdb_selection.h"
 //:
 // \file
@@ -8,9 +11,6 @@
 
 #include <vcl_cassert.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <algorithm>
-#include <iterator>
 #include <brdb/brdb_query.h>
 #include <brdb/brdb_relation.h>
 #include <brdb/brdb_tuple.h>

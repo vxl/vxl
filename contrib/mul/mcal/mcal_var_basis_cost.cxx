@@ -1,15 +1,15 @@
+#include <cstdlib>
+#include <string>
+#include <iostream>
+#include <cmath>
+#include <sstream>
 #include "mcal_var_basis_cost.h"
 //:
 // \file
 // \author Tim Cootes
 // \brief Cost function to promote sparse basis vectors
 
-#include <cstdlib>
-#include <string>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <cmath>
-#include <sstream>
 
 #include <vsl/vsl_binary_io.h>
 #include <mbl/mbl_parse_block.h>

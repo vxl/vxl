@@ -1,12 +1,11 @@
-#include "sdet_curvelet.h"
-
 #include <iostream>
 #include <fstream>
-#include <vcl_cassert.h>
 #include <deque>
-#include <vcl_compiler.h>
-#include <iostream>
 #include <algorithm>
+#include "sdet_curvelet.h"
+
+#include <vcl_cassert.h>
+#include <vcl_compiler.h>
 
 //: copy constructor
 sdet_curvelet::sdet_curvelet(const sdet_curvelet& other)

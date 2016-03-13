@@ -13,9 +13,9 @@
 //
 //-----------------------------------------------------------------------------
 
+#include <cstring>
 #include "vil_clamp.h"
 #include <vcl_compiler.h>
-#include <cstring>
 #include <vcl_cassert.h>
 #include <vil/vil_property.h>
 #include <vil/vil_exception.h>

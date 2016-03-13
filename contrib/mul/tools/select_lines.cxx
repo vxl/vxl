@@ -3,13 +3,12 @@
 //  \date 20 October 2008
 //  \brief Select specified lines from a text file.
 
-#include <vcl_compiler.h>
 #include <iostream>
 #include <exception>
-#include <iostream>
 #include <fstream>
 #include <iterator>
 #include <limits>
+#include <vcl_compiler.h>
 #include <vul/vul_arg.h>
 #include <mbl/mbl_exception.h>
 #include <mbl/mbl_index_sort.h>

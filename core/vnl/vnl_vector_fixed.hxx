@@ -3,14 +3,14 @@
 #define vnl_vector_fixed_hxx_
 //:
 // \file
+#include <algorithm>
+#include <iostream>
+#include <cstdlib>
 #include "vnl_vector_fixed.h"
 #include "vnl_matrix_fixed.h"
 
 #include <vcl_cassert.h>
-#include <algorithm> // for std::swap
-#include <iostream>  // for std::cerr
 #include <vcl_compiler.h>
-#include <cstdlib>   // for std::abort
 #include <vnl/vnl_math.h>  // for vnl_math::isfinite
 
 template<class T, unsigned int n>

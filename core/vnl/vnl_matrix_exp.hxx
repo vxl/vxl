@@ -4,11 +4,11 @@
 //:
 // \file
 // \author fsm
+#include <iostream>
 #include "vnl_matrix_exp.h"
 #include <vcl_cassert.h>
 #ifdef DEBUG
 #include <vcl_compiler.h>
-#include <iostream>
 #endif
 
 template <class Matrix>

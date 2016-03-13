@@ -22,8 +22,8 @@
 // \endcode
 // See the vxl tests for further examples (such as vil/tests).
 
-#include <vcl_compiler.h>
 #include <string>
+#include <vcl_compiler.h>
 
 typedef int (*TestMainFunction)( int, char*[] );
 

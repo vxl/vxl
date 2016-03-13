@@ -3,8 +3,8 @@
 // \brief Example of generating functions to manipulate views.
 // \author Tim Cootes - Manchester
 
-#include <vcl_compiler.h>
 #include <iostream>
+#include <vcl_compiler.h>
 #include <vcl_cassert.h>
 #include <vxl_config.h> // for vxl_byte
 #include <vil/vil_rgb.h>

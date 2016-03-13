@@ -18,11 +18,11 @@
 // \endverbatim
 //*****************************************************************************
 
+#include <iostream>
+#include <iosfwd>
 #include <vsol/vsol_polyhedron.h>
 #include <vsol/vsol_point_3d.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iosfwd>
 
 class vsol_tetrahedron : public vsol_polyhedron
 {

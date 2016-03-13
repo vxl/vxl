@@ -1,3 +1,5 @@
+#include <iostream>
+#include <sstream>
 #include "bwm_world.h"
 #include "bwm_observer_mgr.h"
 #include "algo/bwm_shape_file.h"
@@ -5,9 +7,6 @@
 #include "algo/bwm_utils.h"
 
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
-#include <sstream>
 
 #include <vul/vul_file.h>
 #include <vgl/vgl_vector_3d.h>

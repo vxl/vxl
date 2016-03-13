@@ -1,3 +1,6 @@
+#include <iostream>
+#include <cmath>
+#include <limits>
 #include "bvgl_gen_cylinder.h"
 #include <bvrml/bvrml_write.h>
 #include <vgl/vgl_intersection.h>
@@ -5,9 +8,6 @@
 #include <vgl/vgl_box_3d.h>
 #include <vgl/vgl_bounding_box.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <cmath>
-#include <limits>
 bvgl_gen_cylinder
 ::bvgl_gen_cylinder(vgl_cubic_spline_3d<double> const& axis,
                     std::vector<bvgl_cross_section> const& cross_sects,

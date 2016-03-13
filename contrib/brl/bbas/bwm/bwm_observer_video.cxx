@@ -1,3 +1,5 @@
+#include <iostream>
+#include <sstream>
 #include "bwm_observer_video.h"
 //:
 // \file
@@ -8,8 +10,6 @@
 #include "algo/bwm_soview2D_cross.h"
 #include <bsta/bsta_histogram.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <sstream>
 #include <vgl/vgl_point_2d.h>
 #include <vgl/vgl_point_3d.h>
 #include <vgl/vgl_distance.h>

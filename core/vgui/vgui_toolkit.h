@@ -11,10 +11,10 @@
 //
 //  Contains class vgui_toolkit
 
-#include "dll.h"
-#include <vcl_compiler.h>
 #include <string>
 #include <vector>
+#include "dll.h"
+#include <vcl_compiler.h>
 
 class vgui_window;
 class vgui_adaptor;

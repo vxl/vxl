@@ -12,9 +12,9 @@
 //   17-Sep-2002 K.Y.McGaul - Added doxygen style comments.
 // \endverbatim
 
-#include <vcl_compiler.h>
 #include <iosfwd>
 #include <vector>
+#include <vcl_compiler.h>
 
 class  vgui_event;
 class  vgui_tableau;

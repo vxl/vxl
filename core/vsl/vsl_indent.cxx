@@ -5,11 +5,11 @@
 //:
 // \file
 
-#include "vsl_indent.h"
 #include <iostream>
-#include <vcl_compiler.h>
 #include <map>
 #include <utility>
+#include "vsl_indent.h"
+#include <vcl_compiler.h>
 
 const int default_tab = 2;
 

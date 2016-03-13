@@ -1,3 +1,5 @@
+#include <iostream>
+#include <cmath>
 #include "bwm_observer_img.h"
 //:
 // \file
@@ -27,8 +29,6 @@
 #include <vil/file_formats/vil_nitf2_image.h>
 
 #include <vcl_compiler.h>
-#include <iostream>
-#include <cmath>
 
 bwm_observer_img::bwm_observer_img(bgui_image_tableau_sptr const& img, std::string name, std::string image_path, bool display_image_path)
 : bgui_vsol2D_tableau(img), lock_vgui_status_(false), vgui_status_on_(false), draw_mode_(MODE_2D_POLY), img_tab_(img), viewer_(VXL_NULLPTR),

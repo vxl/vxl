@@ -1,3 +1,5 @@
+#include <iostream>
+#include <fstream>
 #include <testlib/testlib_test.h>
 
 #include <rgrl/rgrl_transformation_sptr.h>
@@ -5,8 +7,6 @@
 #include <rgrl/rgrl_trans_affine.h>
 #include <rgrl/rgrl_cast.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <fstream>
 
 static void test_trans_reader(int argc, char* argv[])
 {

@@ -6,11 +6,11 @@
 // \author Ali Osman Ulusoy
 // \date Nov 27, 2012
 
+#include <iostream>
+#include <fstream>
 #include <bprb/bprb_func_process.h>
 
 #include <vcl_compiler.h>
-#include <iostream>
-#include <fstream>
 #include <bstm/bstm_scene.h>
 #include <bstm/io/bstm_cache.h>
 #include <bstm/io/bstm_lru_cache.h>

@@ -1,3 +1,5 @@
+#include <iostream>
+#include <sstream>
 #include "msm_box_limiter.h"
 //:
 // \file
@@ -10,8 +12,6 @@
 #include <mbl/mbl_read_props.h>
 #include <vul/vul_string.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <sstream>
 #include <vcl_cassert.h>
 
 //=======================================================================

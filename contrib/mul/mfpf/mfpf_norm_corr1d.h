@@ -6,12 +6,12 @@
 // \brief Searches along a profile using normalised correlation
 // \author Tim Cootes
 
+#include <iostream>
+#include <iosfwd>
 #include <mfpf/mfpf_point_finder.h>
 #include <vnl/vnl_vector.h>
 #include <vgl/vgl_fwd.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iosfwd>
 
 //: Searches along a profile using normalised correlation.
 class mfpf_norm_corr1d : public mfpf_point_finder

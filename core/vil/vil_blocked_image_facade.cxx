@@ -2,10 +2,10 @@
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
+#include <cstring>
 #include "vil_blocked_image_facade.h"
 
 #include <vcl_compiler.h>
-#include <cstring>
 #include <vcl_cassert.h>
 #include <vil/vil_property.h>
 #include <vil/vil_image_view.h>

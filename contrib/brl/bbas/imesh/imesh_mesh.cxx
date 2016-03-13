@@ -1,4 +1,5 @@
 // This is brl/bbas/imesh/imesh_mesh.cxx
+#include <iostream>
 #include "imesh_mesh.h"
 //:
 // \file
@@ -7,8 +8,6 @@
 #include <vgl/vgl_area.h>
 
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 
 //: Copy Constructor
 imesh_mesh::imesh_mesh(const imesh_mesh& other)

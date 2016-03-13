@@ -12,12 +12,12 @@
 //   None
 // \endverbatim
 
+#include <limits>
 #include <vpdl/vpdl_kernel_base.h>
 #include <vpdl/vpdt/vpdt_access.h>
 #include <vnl/vnl_erf.h>
 #include <vnl/vnl_math.h> // for twopi
 #include <vcl_compiler.h>
-#include <limits>
 #include <vcl_cassert.h>
 
 //: A fixed bandwidth spherical Gaussian kernel distribution

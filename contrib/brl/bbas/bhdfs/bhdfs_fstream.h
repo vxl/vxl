@@ -20,11 +20,10 @@
 //   <none yet>
 // \endverbatim
 
-#include <vxl_config.h>
-#include <vcl_compiler.h>
-#include <iostream>
 #include <iostream>
 #include <string>
+#include <vxl_config.h>
+#include <vcl_compiler.h>
 
 #include "bhdfs_manager.h"
 

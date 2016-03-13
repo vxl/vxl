@@ -3,11 +3,11 @@
 #pragma implementation
 #endif
 
+#include <iostream>
+#include <string>
 #include "vpdfl_gaussian_kernel_pdf_builder.h"
 
 #include <vcl_compiler.h>
-#include <iostream>
-#include <string>
 
 #include <vpdfl/vpdfl_gaussian_kernel_pdf.h>
 

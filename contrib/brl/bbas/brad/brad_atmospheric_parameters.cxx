@@ -1,11 +1,10 @@
+#include <iostream>
+#include <string>
 #include "brad_atmospheric_parameters.h"
 //:
 // \file
 
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
-#include <string>
 
 // Write brad_atmospheric_parameters to stream
 std::ostream&  operator<<(std::ostream& s, brad_atmospheric_parameters const& atm)

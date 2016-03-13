@@ -4,6 +4,7 @@
 // \file    This function refines the space-time data structures. A space cell is subdivided if it contains a cell (at any time) with prob. larger than provided threshold.
 //          A time cell is subdivided if it contains such a cell.
 
+#include <iostream>
 #include <bstm/bstm_data_traits.h>
 #include <bstm/bstm_time_tree.h>
 #include <bstm/bstm_data_base.h>
@@ -11,8 +12,6 @@
 #include <vnl/vnl_vector.h>
 #include <vnl/vnl_vector_fixed.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 #include <bstm/io/bstm_cache.h>
 
 class bstm_merge_tt_function

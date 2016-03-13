@@ -1,4 +1,6 @@
 // This is oul/ouml/polygon_mesh.cxx
+#include <iostream>
+#include <cstdio>
 #include "polygon_mesh.h"
 //:
 // \file
@@ -10,9 +12,6 @@
 //----------------------------------------------------------------------
 
 #include <vcl_compiler.h>
-#include <iostream>
-#include <cstdio> // for fscanf()
-#include <iostream>
 #include <vcl_cassert.h>
 #include <vnl/vnl_cross.h>
 

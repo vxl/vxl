@@ -6,12 +6,11 @@
 // \file
 // \author fsm
 
+#include <iostream>
 #include "osl_easy_canny.h"
 
 #include <vcl_cassert.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 
 #include <osl/osl_topology.h>
 

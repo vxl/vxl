@@ -1,4 +1,7 @@
 // This is brl/bseg/bstm/ocl/algo/bstm_ocl_update_viewdep.cxx
+#include <fstream>
+#include <iostream>
+#include <algorithm>
 #include "bstm_ocl_update_viewdep.h"
 //:
 // \file
@@ -7,10 +10,7 @@
 // \author Ali Osman Ulusoy
 // \date May 10, 2013
 
-#include <fstream>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <algorithm>
 #include <bstm/ocl/bstm_opencl_cache.h>
 #include <bstm/bstm_scene.h>
 #include <bstm/bstm_block.h>

@@ -5,9 +5,8 @@
 // \date   2005-05-09
 //
 
+#include <iostream>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 #include <vgui/vgui.h>
 #include <vgui/vgui_menu.h>
 #include <vgui/vgui_image_tableau.h>

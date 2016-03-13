@@ -8,9 +8,8 @@
 
 #include <iostream>
 #include <ios>
-#include <vcl_compiler.h>
-#include <iostream>
 #include <iomanip>
+#include <vcl_compiler.h>
 #include <clsfy/clsfy_smo_1.h>
 #include <clsfy/clsfy_k_nearest_neighbour.h>
 #include <clsfy/clsfy_rbf_parzen.h>

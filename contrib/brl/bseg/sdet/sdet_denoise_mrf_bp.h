@@ -40,9 +40,9 @@
 //
 //-------------------------------------------------------------------------
 
-#include <vcl_compiler.h>
 #include <iostream>
 #include <vector>
+#include <vcl_compiler.h>
 #include <sdet/sdet_denoise_mrf_bp_params.h>
 #include <sdet/sdet_mrf_bp.h>
 #include <vil/vil_image_resource.h>

@@ -1,8 +1,7 @@
+#include <iostream>
 #include <vcl_where_root_dir.h>
 #include <testlib/testlib_test.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 #include <vnl/vnl_vector.h>
 #include <vnl/algo/vnl_cholesky.h>
 #include <bocl/bocl_manager.h>

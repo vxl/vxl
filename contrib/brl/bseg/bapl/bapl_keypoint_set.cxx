@@ -1,4 +1,6 @@
 // This is brl/bseg/bapl/bapl_keypoint_set.cxx
+#include <iostream>
+#include <set>
 #include "bapl_keypoint_set.h"
 //:
 // \file
@@ -8,8 +10,6 @@
 #include "bapl_lowe_keypoint_sptr.h"
 #include "bapl_keypoint_sptr.h"
 #include <vcl_compiler.h>
-#include <iostream>
-#include <set>
 
 #include <vgl/vgl_point_2d.h>
 #include <vpgl/vpgl_fundamental_matrix.h>

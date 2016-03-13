@@ -4,10 +4,10 @@
 // \file
 // \brief Tricubic interpolation functions for 3D images
 //
-#include <vcl_cassert.h>
-#include <vcl_compiler.h>
 #include <iostream>
 #include <cstddef>
+#include <vcl_cassert.h>
+#include <vcl_compiler.h>
 #include <vil3d/vil3d_image_view.h>
 #include <vil3d/vil3d_trilin_interp.h>
 

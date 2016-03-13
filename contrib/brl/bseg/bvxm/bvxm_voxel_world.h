@@ -70,10 +70,13 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#include <vcl_cassert.h>
 #include <string>
 #include <vector>
 #include <set>
+#include <iostream>
+#include <sstream>
+#include <utility>
+#include <vcl_cassert.h>
 #include <vbl/vbl_ref_count.h>
 
 #include <vgl/vgl_point_3d.h>
@@ -96,10 +99,6 @@
 // These includes are for the implementations of the templated methods,
 // which should be moved from the header file if possible.
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
-#include <sstream>
-#include <utility>
 #include <vil/vil_image_view_base.h>
 #include <vul/vul_file_iterator.h>
 

@@ -5,11 +5,11 @@
 // \author Amitha Perera
 // \date   Feb 2003
 
-#include "rgrl_feature.h"
 #include <vector>
-#include <vcl_compiler.h>
 #include <iostream>
 #include <iosfwd>
+#include "rgrl_feature.h"
+#include <vcl_compiler.h>
 
 //: Represent a point along a trace (of a vessel, neuron, etc.)
 //

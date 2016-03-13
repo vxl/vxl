@@ -1,4 +1,6 @@
 // This is gel/vtol/vtol_block.cxx
+#include <iostream>
+#include <vector>
 #include "vtol_block.h"
 //:
 // \file
@@ -8,8 +10,6 @@
 #include <vtol/vtol_macros.h>
 #include <vtol/vtol_list_functions.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <vector>
 #include <vcl_cassert.h>
 
 //***************************************************************************

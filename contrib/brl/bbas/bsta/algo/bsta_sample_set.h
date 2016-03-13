@@ -13,6 +13,9 @@
 //   (none yet)
 // \endverbatim
 //
+#include <iostream>
+#include <fstream>
+#include <utility>
 #include <bsta/bsta_parzen_sphere.h>
 #include <bsta/bsta_mixture.h>
 #include <bsta/bsta_attributes.h>
@@ -21,10 +24,6 @@
 #include <vnl/vnl_vector_fixed.h>
 #include <vnl/vnl_matrix_fixed.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <fstream>
-#include <utility>
-#include <iostream>
 
 #define MIN_VAR_  0.0001
 

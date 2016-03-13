@@ -8,11 +8,11 @@
 // \author Ian Scott
 // \date 4 June 2001
 
+#include <iostream>
+#include <iosfwd>
 #include <clsfy/clsfy_classifier_base.h>
 #include <vnl/vnl_vector.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iosfwd>
 
 //:  A binary output hyperplane classifier.
 // The classifier could be considered as a single perceptron.

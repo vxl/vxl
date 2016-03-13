@@ -8,13 +8,13 @@
 // \author Ian Scott
 // \date Dec 2001
 
+#include <iostream>
+#include <iosfwd>
 #include <clsfy/clsfy_builder_base.h>
 #include <clsfy/clsfy_rbf_svm.h>
 #include <vnl/vnl_vector.h>
 #include <mbl/mbl_data_wrapper.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iosfwd>
 
 //: Base for classes to build clsfy_classifier_base objects
 class clsfy_rbf_svm_smo_1_builder : public clsfy_builder_base

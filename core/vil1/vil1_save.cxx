@@ -5,11 +5,11 @@
 //:
 // \file
 
+#include <cstring>
+#include <iostream>
 #include "vil1_save.h"
 
-#include <cstring>
 #include <vcl_compiler.h>
-#include <iostream>
 
 #include <vil1/vil1_new.h>
 #include <vil1/vil1_open.h>

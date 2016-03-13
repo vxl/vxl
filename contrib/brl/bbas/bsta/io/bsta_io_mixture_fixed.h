@@ -12,11 +12,10 @@
 //   <none yet>
 // \endverbatim
 
+#include <iostream>
 #include <bsta/bsta_mixture_fixed.h>
 #include <vsl/vsl_binary_io.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 
 //: Binary save bsta_mixture_fixed to stream.
 template <class comp_, unsigned s>

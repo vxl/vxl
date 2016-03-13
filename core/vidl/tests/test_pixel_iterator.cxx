@@ -1,8 +1,8 @@
 // This is core/vidl/tests/test_pixel_iterator.cxx
-#include <testlib/testlib_test.h>
 #include <iostream>
-#include <vcl_compiler.h>
 #include <memory>
+#include <testlib/testlib_test.h>
+#include <vcl_compiler.h>
 #include <vidl/vidl_frame.h>
 #include <vidl/vidl_frame_sptr.h>
 #include <vidl/vidl_pixel_iterator.h>

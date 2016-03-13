@@ -3,11 +3,10 @@
 // \brief Randomly select n from m integers without replacement
 // \author Tim Cootes
 
-#include "mbl_random_n_from_m.h"
-#include <iostream>
-#include <vcl_compiler.h>
 #include <iostream>
 #include <cstdlib>
+#include "mbl_random_n_from_m.h"
+#include <vcl_compiler.h>
 
 mbl_random_n_from_m::mbl_random_n_from_m()
 {

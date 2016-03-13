@@ -17,14 +17,14 @@
 //    23 Oct 2002 - Peter Vanroose - using fixed 3x3 matrices throughout
 // \endverbatim
 
+#include <iostream>
+#include <iosfwd>
 #include <mvl/HomgLine2D.h>
 #include <mvl/HomgPoint2D.h>
 #include <vgl/vgl_homg_line_2d.h>
 #include <mvl/PMatrix.h>
 #include <vgl/vgl_homg_point_2d.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iosfwd>
 #include <vgl/algo/vgl_p_matrix.h>
 
 #include <vnl/vnl_double_3x3.h>

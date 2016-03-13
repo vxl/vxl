@@ -9,10 +9,9 @@
 
 #include <sstream>
 #include <string>
-#include <vcl_compiler.h>
-#include <iostream>
 #include <iostream>
 #include <vector>
+#include <vcl_compiler.h>
 #include <vul/vul_reg_exp.h>
 
 //: Test if the summaries of two objects are the same.

@@ -8,10 +8,10 @@
 // \date   27 Oct 99
 // \brief  See vgui_blender_tableau.h for a description of this file.
 
+#include <iostream>
 #include "vgui_blender_tableau.h"
 
 #include <vcl_compiler.h>
-#include <iostream>
 
 #include <vil/vil_load.h>
 #include <vil/vil_new.h>

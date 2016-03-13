@@ -12,9 +12,9 @@
 //   None
 // \endverbatim
 
-#include <vcl_compiler.h>
 #include <iostream>
 #include <vector>
+#include <vcl_compiler.h>
 #include <vsl/vsl_binary_io.h>
 #include "ihog_image.h"
 #include "ihog_transform_2d.h"

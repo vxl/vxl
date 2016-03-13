@@ -5,14 +5,14 @@
 // \brief Base for objects which generate regions from sets of points
 // \author Tim Cootes
 
+#include <string>
+#include <memory>
+#include <iostream>
+#include <iosfwd>
 #include <mfpf/mfpf_region_form.h>
 #include <vsl/vsl_binary_io.h>
 
-#include <string>
-#include <memory>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iosfwd>
 
 const unsigned mfpf_invalid_index=99999;
 

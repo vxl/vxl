@@ -1,12 +1,11 @@
+#include <iostream>
+#include <fstream>
 #include "bundler.h"
 //
 #include <bundler/bundler_inters.h>
 #include <vcl_cassert.h>
 
-#include <iostream>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <fstream>
 
 bool bundler_driver(
     const bundler_routines &routines,

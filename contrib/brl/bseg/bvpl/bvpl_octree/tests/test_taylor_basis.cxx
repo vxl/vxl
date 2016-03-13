@@ -3,6 +3,8 @@
 // \author Isabel Restrepo
 // \date 11-Feb-2011
 
+#include <iostream>
+#include <map>
 #include <testlib/testlib_test.h>
 
 #include "test_utils.h"
@@ -13,9 +15,6 @@
 
 #include <vul/vul_file.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
-#include <map>
 #include <vnl/vnl_sym_matrix.h>
 
 void create_basis(std::string test_dir, std::map<std::string, float> &values)

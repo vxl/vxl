@@ -11,11 +11,11 @@
 // \date June 22, 2015
 //
 #include <vector>
+#include <iostream>
+#include <iosfwd>
 #include <vgl/vgl_point_2d.h>
 #include <vgl/vgl_point_3d.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iosfwd>
 #include "boxm2_vecf_orbit_params.h"
 
 class boxm2_vecf_fit_margins

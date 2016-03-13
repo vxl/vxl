@@ -7,17 +7,17 @@
 // \brief Reader/Writer for GIPL format images.
 // \author Tim Cootes - Manchester
 
+#include <iostream>
+#include <cstring>
+#include <vector>
 #include "vil3d_gipl_format.h"
 #include <vcl_compiler.h>
-#include <iostream>
-#include <cstring> // for std::strcmp()
 #include <vil/vil_stream_read.h>
 #include <vil/vil_stream_fstream.h>
 #include <vil3d/vil3d_image_view.h>
 #include <vil3d/vil3d_new.h>
 #include <vil3d/vil3d_property.h>
 #include <vil3d/vil3d_image_resource.h>
-#include <vector>
 #include <vil/vil_open.h>
 #include <vsl/vsl_binary_explicit_io.h>
 #include <vcl_cassert.h>

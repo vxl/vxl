@@ -1,3 +1,4 @@
+#include <cmath>
 #include "vil_j2k_nitf2_pyramid_image_resource.h"
 //:
 // \file
@@ -6,7 +7,6 @@
 // DISTAR Case 14074
 
 #include <vcl_compiler.h>
-#include <cmath>
 
 // By definition, each level is a factor of 2 reduced in scale
 static float scale_at_level(unsigned level)

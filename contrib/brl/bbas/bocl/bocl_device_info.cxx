@@ -1,15 +1,14 @@
+#include <iostream>
+#include <fstream>
+#include <sstream>
+#include <cstdio>
+#include <cstdlib>
+#include <cstring>
 #include "bocl_device_info.h"
 #include "bocl_utils.h"
 //:
 // \file
-#include <iostream>
-#include <fstream>
-#include <sstream>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <cstdio>
-#include <cstdlib> // for std::malloc() and std::free()
-#include <cstring>
 
 bocl_device_info::bocl_device_info(cl_device_id* device)
 {

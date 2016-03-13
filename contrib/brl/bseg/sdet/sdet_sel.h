@@ -23,16 +23,15 @@
 //                           then failed to create the vtable causing the error.
 //\endverbatim
 
+#include <iostream>
+#include <fstream>
+#include <deque>
+#include <algorithm>
 #include "sdet_sel_utils.h"
 #include "sdet_sel_base.h"
 
-#include <iostream>
-#include <fstream>
 #include <vcl_cassert.h>
-#include <deque>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <algorithm>
 
 //: A templatized subclass that can work with different curve models
 template <class curve_model>

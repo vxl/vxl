@@ -1,4 +1,8 @@
 // This is mul/clsfy/tests/test_random_forest.cxx
+#include <iostream>
+#include <string>
+#include <numeric>
+#include <algorithm>
 #include <testlib/testlib_test.h>
 //:
 // \file
@@ -6,12 +10,7 @@
 // \author dac
 // Test construction, IO etc
 
-#include <iostream>
-#include <string>
-#include <numeric>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <algorithm>
 #include <vnl/vnl_math.h>
 #include <vpl/vpl.h> // vpl_unlink()
 #include <clsfy/clsfy_random_forest.h>

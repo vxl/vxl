@@ -47,6 +47,10 @@
 //               the histograms, e.g. 400,000 in training vs. 4096 for
 //               a test image block.
 
+#include <vector>
+#include <map>
+#include <iostream>
+#include <iosfwd>
 #include <sdet/sdet_texture_classifier_params.h>
 #include <brip/brip_filter_bank.h>
 #include <vil/vil_image_resource.h>
@@ -55,11 +59,7 @@
 #include <vnl/vnl_vector.h>
 #include <vnl/vnl_vector_fixed.h>
 #include <vbl/vbl_ref_count.h>
-#include <vector>
-#include <map>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iosfwd>
 
 struct sdet_neighbor
 {

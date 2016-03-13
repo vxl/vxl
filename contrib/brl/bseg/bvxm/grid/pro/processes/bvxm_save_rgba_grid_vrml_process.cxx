@@ -12,12 +12,12 @@
 // \endverbatim
 
 
+#include <iostream>
+#include <fstream>
 #include <bprb/bprb_func_process.h>
 #include <bvxm/grid/io/bvxm_vrml_voxel_grid.h>
 #include <vnl/vnl_float_4.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <fstream>
 
 namespace bvxm_save_rgba_grid_vrml_process_globals
 {

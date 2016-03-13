@@ -2,13 +2,13 @@
 #ifndef vgl_homg_operators_1d_hxx_
 #define vgl_homg_operators_1d_hxx_
 
+#include <cmath>
+#include <iostream>
 #include "vgl_homg_operators_1d.h"
 #include <vnl/vnl_vector_fixed.h>
 #include <vnl/vnl_matrix_fixed.h>
 #include <vgl/vgl_homg.h> // for infinity
 #include <vcl_compiler.h>
-#include <cmath>
-#include <iostream>
 
 template <class T>
 vnl_vector_fixed<T,2> vgl_homg_operators_1d<T>::get_vector(vgl_homg_point_1d<T> const& p)

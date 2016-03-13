@@ -1,4 +1,8 @@
 // This is brl/bbas/imesh/algo/imesh_kd_tree.cxx
+#include <iostream>
+#include <algorithm>
+#include <limits>
+#include <cmath>
 #include "imesh_kd_tree.h"
 #include "imesh_kd_tree.hxx"
 //:
@@ -8,10 +12,6 @@
 #include <vgl/vgl_point_3d.h>
 #include <imesh/algo/imesh_intersect.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <algorithm>
-#include <limits>
-#include <cmath>
 
 
 //: The minimum square distance between \a p and any point in \a b

@@ -1,10 +1,10 @@
-#include <testlib/testlib_test.h>
-
-#include <vcl_compiler.h>
 #include <iostream>
 #include <algorithm>
 #include <vector>
 #include <string>
+#include <testlib/testlib_test.h>
+
+#include <vcl_compiler.h>
 #include <vul/vul_sprintf.h>
 #include <vnl/vnl_vector.h>
 #include <vnl/vnl_double_2.h>

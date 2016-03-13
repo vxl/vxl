@@ -5,9 +5,8 @@
 // \date   2007-07-09
 //
 
+#include <iostream>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 #include <vil/vil_load.h>
 #include <vgui/vgui.h>
 #include <vgui/vgui_menu.h>

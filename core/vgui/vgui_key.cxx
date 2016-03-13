@@ -2,9 +2,9 @@
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
+#include <iostream>
 #include "vgui_key.h"
 #include <vcl_compiler.h>
-#include <iostream>
 //:
 // \file
 // \brief  See vgui_key.h for a description of this file.

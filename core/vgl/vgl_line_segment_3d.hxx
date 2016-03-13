@@ -2,10 +2,10 @@
 #ifndef vgl_line_segment_3d_hxx_
 #define vgl_line_segment_3d_hxx_
 
+#include <iostream>
 #include "vgl_line_segment_3d.h"
 
 #include <vcl_compiler.h>
-#include <iostream>
 
 // stream operators
 template <class Type>

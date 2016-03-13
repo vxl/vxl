@@ -16,9 +16,9 @@
 // \endverbatim
 
 #include <vector>
-#include <vcl_compiler.h>
 #include <iostream>
 #include <utility>
+#include <vcl_compiler.h>
 #include <vnl/vnl_random.h>
 #include <bsta/bsta_joint_histogram.h>
 

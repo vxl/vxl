@@ -13,6 +13,10 @@
 //   <none yet>
 // \endverbatim
 
+#include <vector>
+#include <new>
+#include <iostream>
+#include <sstream>
 #include <boct/boct_tree.h>
 #include <boxm/boxm_scene.h>
 #include <boxm/sample/boxm_sample.h>
@@ -26,12 +30,7 @@
 #include <vsl/vsl_binary_io.h>
 #include <vpl/vpl.h>
 
-#include <vector>
-#include <new>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
-#include <sstream>
 #include <vcl_cassert.h>
 
 template <class T_loc, class T_data>

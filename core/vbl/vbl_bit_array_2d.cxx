@@ -5,13 +5,13 @@
 //:
 // \file
 
+#include <iostream>
+#include <cstring>
 #include "vbl_bit_array_2d.h"
 
 #include <vcl_compiler.h>
-#include <iostream>
 #include <vcl_climits.h>  // for CHAR_BIT
 #include <vcl_cassert.h>
-#include <cstring> // for memcmp()
 
 //: Copy constructor
 vbl_bit_array_2d::vbl_bit_array_2d(vbl_bit_array_2d const& that)

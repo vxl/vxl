@@ -16,13 +16,13 @@
 //
 //-------------------------------------------------------------------------
 
+#include <vector>
+#include <iostream>
+#include <sstream>
 #include "bmsh3d_halfedge.h"
 #include "bmsh3d_utils.h"
 
-#include <vector>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <sstream>
 #include <vgl/vgl_fwd.h>
 
 //#######################################################

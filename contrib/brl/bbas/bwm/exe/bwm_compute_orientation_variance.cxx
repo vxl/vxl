@@ -9,18 +9,17 @@
 //  Modifications
 //
 // \endverbatim
+#include <vector>
+#include <set>
+#include <iostream>
+#include <fstream>
+#include <string>
 #include <bwm/bwm_observer_cam.h>
 #include <bwm/bwm_observer_mgr.h>
 #include <bwm/bwm_3d_corr.h>
 #include <bwm/bwm_3d_corr_sptr.h>
-#include <vector>
-#include <set>
 #include <vcl_cassert.h>
-#include <iostream>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <fstream>
-#include <string>
 #include <vul/vul_arg.h>
 #include <vul/vul_file_iterator.h>
 #include <vul/vul_file.h>

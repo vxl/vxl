@@ -1,3 +1,5 @@
+#include <iostream>
+#include <cmath>
 #include "mfpf_edge_finder.h"
 //:
 // \file
@@ -9,8 +11,6 @@
 #include <vgl/vgl_point_2d.h>
 #include <vgl/vgl_vector_2d.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <cmath>
 
 #include <vimt/vimt_bilin_interp.h>
 #include <vimt/vimt_sample_profile_bilin.h>

@@ -16,10 +16,10 @@
 //
 //-----------------------------------------------------------------------------
 
-#include <vcl_compiler.h>
 #include <iostream>
 #include <iosfwd>
 #include <vector>
+#include <vcl_compiler.h>
 #include <vsol/vsol_line_2d_sptr.h>
 
 class bsol_distance_histogram

@@ -14,14 +14,14 @@
 //  Modifications
 // \endverbatim
 
+#include <set>
+#include <string>
+#include <iostream>
+#include <iosfwd>
 #include <bgrl/bgrl_edge_sptr.h>
 #include <vbl/vbl_ref_count.h>
 #include <vsl/vsl_binary_io.h>
-#include <set>
-#include <string>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iosfwd>
 
 #include "bgrl_vertex_sptr.h"
 

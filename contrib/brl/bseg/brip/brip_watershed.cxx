@@ -1,9 +1,9 @@
+#include <iostream>
+#include <cmath>
 #include "brip_watershed.h"
 //:
 // \file
 #include <vcl_compiler.h>
-#include <iostream>
-#include <cmath>
 #include <vnl/vnl_numeric_traits.h>
 #include <vnl/vnl_math.h>
 #include <vgl/vgl_point_2d.h>

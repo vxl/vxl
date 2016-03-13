@@ -1,7 +1,7 @@
-#include <testlib/testlib_test.h>
 #include <iostream>
-#include <vcl_compiler.h>
 #include <exception>
+#include <testlib/testlib_test.h>
+#include <vcl_compiler.h>
 
 #include <vpgl/vpgl_poly_radial_distortion.h>
 #include <vgl/vgl_point_2d.h>

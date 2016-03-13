@@ -44,11 +44,11 @@
 //  class, scale_offset, is defined to process the forward and reverse
 //  normalizations.
 //
-#include <vgl/vgl_fwd.h>
 #include <iostream>
 #include <vector>
-#include <vcl_compiler.h>
 #include <string>
+#include <vgl/vgl_fwd.h>
+#include <vcl_compiler.h>
 #include <vnl/vnl_vector_fixed.h>
 #include <vnl/vnl_matrix_fixed.h>
 #include <vpgl/vpgl_camera.h>

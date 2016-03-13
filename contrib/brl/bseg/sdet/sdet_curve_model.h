@@ -17,9 +17,8 @@
 
 #include <vector>
 #include <iostream>
-#include <vcl_compiler.h>
-#include <iostream>
 #include <deque>
+#include <vcl_compiler.h>
 #include <vnl/vnl_math.h>
 #include <vbl/vbl_array_2d.h>
 

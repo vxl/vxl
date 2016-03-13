@@ -6,13 +6,12 @@
 // \author Tim Cootes
 
 
-#include <vsl/vsl_binary_io.h>
 #include <iostream>
 #include <cstdlib>
-#include <vcl_compiler.h>
-#include <iostream>
 #include <cmath>
 #include <vector>
+#include <vsl/vsl_binary_io.h>
+#include <vcl_compiler.h>
 #include <vgl/vgl_point_2d.h>
 #include <vgl/vgl_vector_2d.h>
 

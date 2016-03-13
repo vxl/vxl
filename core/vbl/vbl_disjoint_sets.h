@@ -14,8 +14,8 @@
 // \endverbatim
 //-----------------------------------------------------------------------------
 
-#include <vcl_compiler.h>
 #include <vector>
+#include <vcl_compiler.h>
 // Disjoint Set Data Structure
 // Author: Emil Stefanov
 // Date: 03/28/06

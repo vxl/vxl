@@ -3,10 +3,10 @@
 // \brief Examples using complex images
 // \author Fred Wheeler
 
-#include <vxl_config.h>
 #include <iostream>
-#include <vcl_compiler.h>
 #include <complex>
+#include <vxl_config.h>
+#include <vcl_compiler.h>
 #include <vil/vil_image_view.h>
 #include <vil/vil_view_as.h>
 #include <vil/vil_print.h>

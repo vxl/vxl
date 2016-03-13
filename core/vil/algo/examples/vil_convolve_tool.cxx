@@ -3,8 +3,8 @@
 // \brief Example of loading an image and convolving with a mask
 // \author Tim Cootes
 
-#include <vcl_compiler.h>
 #include <iostream>
+#include <vcl_compiler.h>
 #include <vxl_config.h> // for vxl_byte
 #include <vil/vil_load.h>
 #include <vil/vil_save.h>

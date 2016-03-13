@@ -1,4 +1,6 @@
 // This is brl/bbas/bocl/pro/processes/bocl_init_manager_process.cxx
+#include <iostream>
+#include <fstream>
 #include <bprb/bprb_func_process.h>
 //:
 // \file
@@ -12,8 +14,6 @@
 // \endverbatim
 
 #include <vcl_compiler.h>
-#include <iostream>
-#include <fstream>
 #include <bocl/bocl_manager.h>
 
 

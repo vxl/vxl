@@ -3,10 +3,9 @@
 //:
 // \file
 
+#include <iostream>
 #include <vsl/vsl_binary_io.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 #include <bvxm/grid/bvxm_voxel_grid_base.h>
 
 // Binary io, NOT IMPLEMENTED, signatures defined to use bvxm_voxel_grid_base as a brdb_value

@@ -3,6 +3,7 @@
 //:
 // \file
 
+#include <iostream>
 #include <boxm/boxm_apm_traits.h>
 #include <boxm/boxm_scene.h>
 #include <boxm/util/boxm_utils.h>
@@ -30,8 +31,6 @@
 
 #include <vcl_cassert.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 
 template<class F, class T_loc, class T_data, class T_aux = typename boxm_aux_traits<BOXM_AUX_NULL>::sample_datatype>
 class boxm_raytrace_function

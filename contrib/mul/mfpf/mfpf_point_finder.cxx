@@ -1,3 +1,5 @@
+#include <iostream>
+#include <cmath>
 #include "mfpf_point_finder.h"
 //:
 // \file
@@ -8,8 +10,6 @@
 #include <vsl/vsl_binary_loader.h>
 
 #include <vcl_compiler.h>
-#include <iostream>
-#include <cmath>
 #include <vimt/algo/vimt_find_troughs.h>
 #include <vimt/vimt_image_pyramid.h>
 #include <vnl/vnl_cost_function.h>

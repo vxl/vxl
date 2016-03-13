@@ -15,11 +15,11 @@
 //   May.2009 - Matt Leotta - added a function to find self-intersections
 // \endverbatim
 
-#include <vcl_compiler.h>
 #include <iosfwd>
-#include <vgl/vgl_point_2d.h> // needed for std::vector instantiations
 #include <vector>
-#include <utility> // for std::pair
+#include <utility>
+#include <vcl_compiler.h>
+#include <vgl/vgl_point_2d.h> // needed for std::vector instantiations
 
 //: Store a polygon.
 // May have holes or multiple sections.  The polygon is stored as a list

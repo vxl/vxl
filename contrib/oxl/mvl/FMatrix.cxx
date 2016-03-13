@@ -5,13 +5,12 @@
 //:
 // \file
 
+#include <iostream>
+#include <fstream>
 #include "FMatrix.h"
 
 #include <vcl_cassert.h>
-#include <iostream>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <fstream>
 
 #include <vul/vul_printf.h>
 

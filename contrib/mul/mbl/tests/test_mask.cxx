@@ -1,10 +1,10 @@
 // This is mul/mbl/tests/test_mask.cxx
 
 #include <vector>
-#include <vcl_compiler.h>
 #include <iostream>
 #include <fstream>
 #include <sstream>
+#include <vcl_compiler.h>
 #include <vsl/vsl_vector_io.h>
 #include <vsl/vsl_binary_io.h>
 #include <testlib/testlib_test.h>

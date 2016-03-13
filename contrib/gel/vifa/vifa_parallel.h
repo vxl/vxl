@@ -15,9 +15,9 @@
 // \endverbatim
 //-----------------------------------------------------------------------------
 
-#include <vcl_compiler.h>
 #include <iostream>
 #include <vector>
+#include <vcl_compiler.h>
 #include <vtol/vtol_intensity_face_sptr.h>
 #include <vtol/vtol_edge_2d.h>
 #include <vifa/vifa_histogram.h>

@@ -27,8 +27,8 @@
 //   24 Oct 2010 Peter Vanroose - mutators and setters now return *this
 // \endverbatim
 
-#include <vcl_compiler.h>
 #include <iosfwd>
+#include <vcl_compiler.h>
 
 #include <vnl/algo/vnl_algo_fwd.h> // for vnl_svd
 #include <vnl/vnl_matrix.h>

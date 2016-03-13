@@ -1,8 +1,8 @@
 // This is core/vidl/tests/test_pixel_format.cxx
-#include <testlib/testlib_test.h>
 #include <iostream>
-#include <vcl_compiler.h>
 #include <iomanip>
+#include <testlib/testlib_test.h>
+#include <vcl_compiler.h>
 #include <vidl/vidl_pixel_format.h>
 
 

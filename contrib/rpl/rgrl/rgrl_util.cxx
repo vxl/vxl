@@ -2,13 +2,13 @@
 // \file
 // \author Charlene Tsai
 
-#include "rgrl_util.h"
 #include <vector>
 #include <string>
-#include <vcl_cassert.h>
-#include <vcl_compiler.h>
 #include <iostream>
 #include <algorithm>
+#include "rgrl_util.h"
+#include <vcl_cassert.h>
+#include <vcl_compiler.h>
 
 #include <vnl/vnl_vector.h>
 #include <vnl/algo/vnl_svd.h>

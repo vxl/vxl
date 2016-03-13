@@ -5,10 +5,10 @@
 //        Useful to try it on different platforms to how different optimisers perform.
 // \author Tim Cootes
 
-#include <vcl_compiler.h>
 #include <ctime>
-#include <vcl_cassert.h>
 #include <iostream>
+#include <vcl_compiler.h>
+#include <vcl_cassert.h>
 #include <vxl_config.h> // for vxl_byte
 #include <vil/vil_image_view.h>
 #include <mbl/mbl_stats_1d.h>

@@ -5,14 +5,13 @@
 //:
 // \file
 
-#include "vrml_out.h"
-
 #include <functional>
-#include <vcl_compiler.h>
 #include <iostream>
 #include <fstream>
 #include <map>
-#include <iostream>
+#include "vrml_out.h"
+
+#include <vcl_compiler.h>
 #include <vul/vul_printf.h>
 
 // Default ctor

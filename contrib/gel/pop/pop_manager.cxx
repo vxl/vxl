@@ -1,12 +1,11 @@
 // This is gel/pop/pop_manager.cxx
+#include <iostream>
 #include "pop_manager.h"
 //:
 // \file
 #include <vnl/algo/vnl_levenberg_marquardt.h>
 #include <pop/pop_graph_cost_function.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 
 
 //: constructor

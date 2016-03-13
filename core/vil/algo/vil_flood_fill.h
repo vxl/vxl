@@ -5,10 +5,10 @@
 // \brief Fills a connected region with a given value.
 // \author Tim Cootes
 
-#include <vil/vil_image_view.h>
 #include <vector>
+#include <utility>
+#include <vil/vil_image_view.h>
 #include <vcl_compiler.h>
-#include <utility> // for std::pair
 #include <vil/vil_chord.h>
 
 //: Search along i direction either side for limits of pixels matching v

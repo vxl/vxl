@@ -1,4 +1,6 @@
 // This is brl/bpro/core/bvgl_pro/processes/bvgl_geo_index_region_resource.cxx
+#include <iostream>
+#include <complex>
 #include <bprb/bprb_func_process.h>
 //:
 // \file
@@ -8,8 +10,6 @@
 #include <bvgl/algo/bvgl_2d_geo_index.h>
 #include <bvgl/algo/bvgl_2d_geo_index_sptr.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <complex>
 
 namespace bvgl_geo_index_region_resource_process_globals
 {

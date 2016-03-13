@@ -11,8 +11,8 @@
 //  dac (Manchester) March 28th 2001: Tidied documentation
 // \endverbatim
 
-#include <vcl_compiler.h>
 #include <complex>
+#include <vcl_compiler.h>
 #include <vnl/vnl_vector.h>
 
 //: Find all the roots of a univariate polynomial with complex coefficients.

@@ -1,7 +1,7 @@
 // This is core/vul/tests/test_ios_state.cxx
 #include <iostream>
-#include <vcl_compiler.h>
 #include <sstream>
+#include <vcl_compiler.h>
 #include <testlib/testlib_test.h>
 #include <vul/vul_ios_state.h>
 

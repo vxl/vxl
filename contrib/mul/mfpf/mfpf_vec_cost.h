@@ -5,12 +5,12 @@
 // \brief Cost functions to evaluate vector of pixel samples
 // \author Tim Cootes
 
-#include <vnl/vnl_vector.h>
-#include <vsl/vsl_binary_io.h>
 #include <string>
-#include <vcl_compiler.h>
 #include <iostream>
 #include <iosfwd>
+#include <vnl/vnl_vector.h>
+#include <vsl/vsl_binary_io.h>
+#include <vcl_compiler.h>
 
 //: Cost functions to evaluate vector of pixel samples
 //  Derived functions return some form of sum of differences

@@ -1,4 +1,6 @@
 // This is core/vgui/impl/mfc/vgui_mfc_adaptor.cxx
+#include <iostream>
+#include <cstring>
 #include "vgui_mfc_adaptor.h"
 //:
 // \file
@@ -14,8 +16,6 @@
 // \endverbatim
 
 #include <vcl_compiler.h>
-#include <iostream>
-#include <cstring>
 
 #include <vgui/vgui_gl.h>
 #include <vgui/vgui_event.h>

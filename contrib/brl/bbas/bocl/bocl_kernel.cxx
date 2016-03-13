@@ -1,14 +1,13 @@
+#include <iostream>
+#include <fstream>
+#include <sstream>
+#include <cstdio>
 #include "bocl_kernel.h"
 //:
 // \file
 #include "bocl_device_info.h"
 #include "bocl_mem.h"
-#include <iostream>
-#include <fstream>
-#include <sstream>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <cstdio>
 
 bool bocl_kernel::create_kernel(cl_context* context,
                                 cl_device_id* device,

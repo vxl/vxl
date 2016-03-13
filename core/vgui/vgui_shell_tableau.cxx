@@ -1,5 +1,6 @@
 // \author fsm
 
+#include <iostream>
 #include "vgui_shell_tableau.h"
 
 #include <vgui/vgui.h>
@@ -9,7 +10,6 @@
 #include <vgui/vgui_clear_tableau.h>
 #include <vgui/vgui_tview_launcher_tableau.h>
 #include <vcl_compiler.h>
-#include <iostream>
 
 vgui_event_condition vgui_shell_tableau_bindings::default_quit  = vgui_event_condition( vgui_key('q'), vgui_ALT );
 vgui_event_condition vgui_shell_tableau_bindings::default_close = vgui_event_condition( vgui_key('w'), vgui_ALT );

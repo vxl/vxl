@@ -1,14 +1,14 @@
 // This is brl/bbas/bsol/bsol_intrinsic_curve_3d.cxx
+#include <cstdio>
+#include <iostream>
+#include <cmath>
+#include <cstring>
 #include "bsol_intrinsic_curve_3d.h"
 //:
 // \file
 #include <vsol/vsol_point_3d.h>
 #include <vcl_cassert.h>
-#include <cstdio>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <cmath>
-#include <cstring>
 #include <vnl/vnl_math.h>
 
 //***************************************************************************

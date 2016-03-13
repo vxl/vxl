@@ -5,16 +5,15 @@
 // \author Amitha Perera
 // \date   Feb 2003
 
-#include "rsdl_bins.h"
-
-#include <vcl_cassert.h>
 #include <iostream>
 #include <cmath>
 #include <vector>
-#include <vcl_compiler.h>
-#include <iostream>
 #include <algorithm>
-#include <cstddef> // for std::size_t
+#include <cstddef>
+#include "rsdl_bins.h"
+
+#include <vcl_cassert.h>
+#include <vcl_compiler.h>
 
 //:
 // This class is used in n_nearest_impl. It stores a pointer to an

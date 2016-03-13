@@ -10,21 +10,21 @@
 // For the time being the mandible shape will not be adjusted except for the
 // global affine transformation of the skull (including the mandible)
 //
+#include <string>
+#include <vector>
+#include <iostream>
+#include <set>
 #include <boxm2/boxm2_block.h>
 #include <boxm2/vecf/boxm2_vecf_articulated_scene.h>
 #include <boxm2/vecf/boxm2_vecf_articulated_params.h>
 #include <boxm2/boxm2_scene.h>
 #include <boxm2/boxm2_data.h>
 #include <boxm2/boxm2_data_base.h>
-#include <string>
-#include <vector>
 #include <vgl/algo/vgl_rotation_3d.h>
 #include "boxm2_vecf_mandible_params.h"
 #include "boxm2_vecf_mandible.h"
 #include <vgl/vgl_point_3d.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <set>
 
 class boxm2_vecf_mandible_scene : public boxm2_vecf_articulated_scene
 {

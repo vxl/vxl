@@ -2,11 +2,10 @@
 #define bstm_block_id_h_
 //:
 // \file
-#include <vcl_compiler.h>
-#include <iostream>
 #include <iostream>
 #include <sstream>
 #include <string>
+#include <vcl_compiler.h>
 #include <vsl/vsl_binary_io.h>
 
 //smart pointer stuff

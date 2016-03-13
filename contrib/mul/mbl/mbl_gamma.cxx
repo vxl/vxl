@@ -1,9 +1,8 @@
-#include "mbl_gamma.h"
-#include <iostream>
-#include <vcl_compiler.h>
 #include <iostream>
 #include <cmath>
-#include <cstdlib> // std::abort()
+#include <cstdlib>
+#include "mbl_gamma.h"
+#include <vcl_compiler.h>
 
 const int MAX_ITS = 200;
 const double EPS = 3.0e-7;

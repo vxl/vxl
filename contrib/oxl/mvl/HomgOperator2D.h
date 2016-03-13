@@ -13,9 +13,9 @@
 //   221198 - Peter Vanroose - Added CrossRatio() and Conjugate()
 // \endverbatim
 
-#include <vcl_compiler.h>
 #include <iostream>
 #include <vector>
+#include <vcl_compiler.h>
 class Homg2D;
 class HomgLine2D;
 class HomgPoint2D;

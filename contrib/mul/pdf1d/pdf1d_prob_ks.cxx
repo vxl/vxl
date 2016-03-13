@@ -1,4 +1,6 @@
 // This is mul/pdf1d/pdf1d_prob_ks.cxx
+#include <iostream>
+#include <cmath>
 #include "pdf1d_prob_ks.h"
 //:
 // \file
@@ -6,8 +8,6 @@
 // \brief Probability used in Kolmogorov-Smirnov test
 
 #include <vcl_compiler.h>
-#include <iostream>
-#include <cmath>
 
 const double f1 = 0.001;
 const double f2 = 1.0e-8;

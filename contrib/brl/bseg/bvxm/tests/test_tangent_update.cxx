@@ -1,9 +1,9 @@
+#include <iostream>
+#include <cstdlib>
 #include <testlib/testlib_test.h>
 #include <vul/vul_file.h>
 #include <vpl/vpl.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <cstdlib> // for rand()
 #include <vgl/vgl_point_3d.h>
 #include <vgl/vgl_vector_3d.h>
 #include <vgl/vgl_infinite_line_3d.h>

@@ -6,11 +6,11 @@
 // \brief Simplest possible 1D classifier: A single thresholding function
 // \author Tim Cootes
 
+#include <iostream>
+#include <iosfwd>
 #include <clsfy/clsfy_classifier_1d.h>
 #include <vnl/vnl_vector.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iosfwd>
 
 //: Simplest possible 1D classifier: A single thresholding function.
 //  Returns class zero if s_*x<threshold_

@@ -14,9 +14,9 @@
 // Notes:  We use floats instead of doubles as size is a speed issue (sic.)
 //
 
+#include <iosfwd>
 #include "vgui_soview.h"
 #include <vcl_compiler.h>
-#include <iosfwd>
 
 //: 3-dimensional spatial object view.
 class vgui_soview3D : public vgui_soview

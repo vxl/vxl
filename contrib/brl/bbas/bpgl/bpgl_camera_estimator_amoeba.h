@@ -1,6 +1,9 @@
 #ifndef bpgl_camera_estimator_amoeba_h_
 #define bpgl_camera_estimator_amoeba_h_
 
+#include <iostream>
+#include <sstream>
+#include <limits>
 #include "bpgl_camera_estimator.h"
 
 #include <vpgl/vpgl_perspective_camera.h>
@@ -14,10 +17,6 @@
 #include <vnl/vnl_cost_function.h>
 
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
-#include <sstream>
-#include <limits>
 
 template <class func_>
 class bpgl_camera_estimator_amoeba : public vnl_cost_function

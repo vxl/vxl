@@ -1,15 +1,15 @@
 // This is core/vsl/vsl_binary_io.cxx
+#include <cstddef>
+#include <map>
+#include <cstdlib>
 #include "vsl_binary_io.h"
 //:
 // \file
 // \brief Functions to perform consistent binary IO within vsl
 // \author Tim Cootes and Ian Scott
 
-#include <cstddef>
 #include <vcl_cassert.h>
-#include <map>
 #include <vcl_compiler.h>
-#include <cstdlib> // abort()
 #include <vsl/vsl_binary_explicit_io.h>
 
 

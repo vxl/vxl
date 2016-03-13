@@ -12,10 +12,10 @@
 //  May 10, 2010 Andrew Hoelscher - Added verbose option to disable printing
 // \endverbatim
 
-#include <vxl_config.h>
-#include <vcl_compiler.h>
 #include <iostream>
 #include <vector>
+#include <vxl_config.h>
+#include <vcl_compiler.h>
 #include <vil/vil_image_view.h>
 #include <vil/vil_image_resource.h>
 #include <bapl/bapl_keypoint_sptr.h>

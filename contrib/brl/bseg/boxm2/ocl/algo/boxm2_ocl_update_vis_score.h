@@ -2,9 +2,9 @@
 #define boxm2_ocl_update_vis_score_h_included_
 //:
 // \file
-#include <vcl_compiler.h>
 #include <iostream>
 #include <string>
+#include <vcl_compiler.h>
 #include <bocl/bocl_device.h>
 #include <bocl/bocl_kernel.h>
 

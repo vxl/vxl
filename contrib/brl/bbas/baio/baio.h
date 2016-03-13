@@ -1,9 +1,9 @@
 // This is brl/bbas/baio/baio.h
 #ifndef baio_h
 #define baio_h
-#include <vcl_compiler.h>
 #include <iostream>
 #include <string>
+#include <vcl_compiler.h>
 //-----------------------------------------------------------------------------
 //:
 // \file

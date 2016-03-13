@@ -6,15 +6,15 @@
 // \author Ying-Lin Bess Lee
 // \date   Sept 2003
 
+#include <vector>
+#include <iostream>
+#include <iosfwd>
 #include "rgrl_transformation.h"
 #include "rgrl_spline.h"
 #include "rgrl_spline_sptr.h"
 #include <vnl/vnl_vector.h>
 #include <vnl/vnl_matrix.h>
-#include <vector>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iosfwd>
 
 class rgrl_trans_spline
   : public rgrl_transformation

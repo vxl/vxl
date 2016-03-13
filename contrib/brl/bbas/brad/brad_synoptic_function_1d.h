@@ -11,9 +11,9 @@
 //
 //----------------------------------------------------------------------------
 #include <vector>
-#include <vcl_compiler.h>
 #include <iostream>
 #include <string>
+#include <vcl_compiler.h>
 #include <vnl/vnl_double_4.h>
 class brad_synoptic_function_1d
 {

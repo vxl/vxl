@@ -1,6 +1,6 @@
+#include <iostream>
 #include <vul/vul_sprintf.h>
 #include <vcl_compiler.h>
-#include <iostream>
 #include <testlib/testlib_test.h>
 
 void test_sprintf(void)

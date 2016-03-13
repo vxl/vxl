@@ -12,13 +12,13 @@
 //   Ozge C. Ozcanli -- Sep 15, 2010 -- added constructor with a descriptor vector
 // \endverbatim
 
+#include <iostream>
+#include <iosfwd>
 #include <bapl/bapl_keypoint.h>
 #include <bapl/bapl_lowe_keypoint_sptr.h>
 #include <bapl/bapl_lowe_pyramid_set_sptr.h>
 #include <vnl/vnl_vector_fixed.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iosfwd>
 
 class bapl_lowe_keypoint : public bapl_keypoint
 {

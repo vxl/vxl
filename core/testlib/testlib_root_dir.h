@@ -8,8 +8,8 @@
 //    Modifications
 //     17-05-2001 I. Scott - Moved from vul to testlib
 // \endverbatim
-#include <vcl_compiler.h>
 #include <string>
+#include <vcl_compiler.h>
 
 // macros to stringify compiler -D path value
 #define TEST_STR(x) #x

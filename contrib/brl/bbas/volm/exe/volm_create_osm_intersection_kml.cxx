@@ -10,6 +10,8 @@
 // \endverbatim
 //
 
+#include <iostream>
+#include <algorithm>
 #include <vul/vul_arg.h>
 #include <vul/vul_file.h>
 #include <volm/volm_geo_index2.h>
@@ -27,8 +29,6 @@
 #include <vpgl/vpgl_utm.h>
 #include <bkml/bkml_write.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <algorithm>
 #include <vul/vul_timer.h>
 #include <vcl_where_root_dir.h>
 

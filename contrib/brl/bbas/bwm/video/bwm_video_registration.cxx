@@ -1,14 +1,14 @@
-#include "bwm_video_registration.h"
-
-#include <bwm/video/bwm_video_cam_istream.h>
-#include <vcl_compiler.h>
 #include <iostream>
 #include <cmath>
-#include <vul/vul_timer.h>
 #include <iomanip>
 #include <fstream>
 #include <sstream>
 #include <string>
+#include "bwm_video_registration.h"
+
+#include <bwm/video/bwm_video_cam_istream.h>
+#include <vcl_compiler.h>
+#include <vul/vul_timer.h>
 #include <vul/vul_file.h>
 #include <vnl/vnl_matrix_fixed.h>
 #include <vgl/algo/vgl_h_matrix_2d.h>

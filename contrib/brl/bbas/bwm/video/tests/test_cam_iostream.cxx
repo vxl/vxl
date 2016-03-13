@@ -1,9 +1,8 @@
+#include <iostream>
+#include <string>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 #include <testlib/testlib_test.h>
 #include <vul/vul_file.h>
-#include <string>
 #include <vpl/vpl.h> // vpl_unlink()
 #include <vpgl/vpgl_perspective_camera.h>
 

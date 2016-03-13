@@ -1,7 +1,7 @@
-#include "boxm2_vecf_eyelid_crease.h"
-#include <vcl_compiler.h>
 #include <iostream>
 #include <cmath>
+#include "boxm2_vecf_eyelid_crease.h"
+#include <vcl_compiler.h>
 #include <vgl/vgl_distance.h>
 #include <vgl/vgl_point_3d.h>
 #include <vgl/vgl_vector_3d.h>

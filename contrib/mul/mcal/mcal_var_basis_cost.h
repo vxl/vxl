@@ -5,12 +5,12 @@
 // \author Tim Cootes
 // \brief Cost function returning variance along given vector
 
+#include <iostream>
+#include <iosfwd>
 #include <mcal/mcal_single_basis_cost.h>
 #include <vnl/io/vnl_io_vector.h>
 #include <vnl/io/vnl_io_matrix.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iosfwd>
 
 //: Cost function returning variance along given vector
 class mcal_var_basis_cost : public mcal_single_basis_cost

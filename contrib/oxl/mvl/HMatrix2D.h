@@ -17,6 +17,8 @@
 //    23 Oct 2002 - Peter Vanroose - using fixed 3x3 matrices throughout
 // \endverbatim
 
+#include <iostream>
+#include <iosfwd>
 #include <vnl/vnl_double_3x3.h>
 #include <vnl/vnl_double_4.h>
 #include <vgl/vgl_homg_point_2d.h>
@@ -26,8 +28,6 @@
 #include <mvl/HomgLine2D.h>
 #include <mvl/HomgLineSeg2D.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iosfwd>
 
 //:
 // A class to hold a plane-to-plane projective transformation matrix

@@ -7,10 +7,9 @@
 // \author Amir Tamrakar
 // \date June 18, 2005
 
+#include <iostream>
 #include <bgrl2/bgrl2_edge.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 
 #include "test_node.h"
 #include "test_node_sptr.h"

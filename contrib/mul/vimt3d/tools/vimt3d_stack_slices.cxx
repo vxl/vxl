@@ -3,11 +3,10 @@
 // \brief Tool to load in a set of 2D images and produce a 3D image
 // \author Tim Cootes
 
-#include <vul/vul_arg.h>
-#include <iostream>
-#include <vcl_compiler.h>
 #include <iostream>
 #include <fstream>
+#include <vul/vul_arg.h>
+#include <vcl_compiler.h>
 #include <vimt3d/vimt3d_save.h>
 #include <vimt3d/vimt3d_image_3d_of.h>
 #include <vil/vil_image_view.h>

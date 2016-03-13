@@ -1,4 +1,7 @@
 // This is brl/bpro/bprb/bprb_batch_process_manager.cxx
+#include <iostream>
+#include <cstdio>
+#include <cstdlib>
 #include "bprb_batch_process_manager.h"
 //:
 // \file
@@ -12,9 +15,6 @@
 #include <bprb/bprb_parameters.h>
 
 #include <vcl_compiler.h>
-#include <iostream>
-#include <cstdio>
-#include <cstdlib>
 
 //: Constructor
 bprb_batch_process_manager::bprb_batch_process_manager() : current_process_(VXL_NULLPTR),

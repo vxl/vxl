@@ -16,9 +16,9 @@
 // \endverbatim
 //-----------------------------------------------------------------------------
 #include <vector>
-#include <vcl_compiler.h>
 #include <iostream>
 #include <map>
+#include <vcl_compiler.h>
 #include <vgl/algo/vgl_p_matrix.h>
 #include <vgui/vgui_style.h>
 #include <vgl/vgl_point_2d.h>

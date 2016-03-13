@@ -1,7 +1,7 @@
-#include <testlib/testlib_test.h>
-#include <vcl_compiler.h>
 #include <iostream>
 #include <vector>
+#include <testlib/testlib_test.h>
+#include <vcl_compiler.h>
 #include <vnl/vnl_double_3x3.h>
 #include <vnl/vnl_double_3.h>
 #include <vnl/vnl_vector.h>

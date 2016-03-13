@@ -1,4 +1,9 @@
 // This is core/vgui/impl/wx/vgui_wx_dialog_impl.cxx
+#include <iostream>
+#include <sstream>
+#include <algorithm>
+#include <map>
+#include <utility>
 #include "vgui_wx_dialog_impl.h"
 //=========================================================================
 //:
@@ -37,12 +42,7 @@
     (wxObjectEventFunction)(wxEventFunction)wxStaticCastEvent(wxCommandEventFunction, &func)
 #endif
 
-#include <iostream>
-#include <sstream>
-#include <algorithm>
 #include <vcl_compiler.h>
-#include <map>
-#include <utility>
 #include <vcl_cassert.h>
 
 //-------------------------------------------------------------------------

@@ -1,16 +1,16 @@
 // This is core/vil1/tests/test_file_format_read.cxx
+#include <iostream>
+#include <fstream>
+#include <vector>
+#include <cmath>
 #include <testlib/testlib_test.h>
 
 #include <vil1/vil1_memory_image_of.h>
 #include <vil1/vil1_rgb.h>
 #include <vil1/vil1_load.h>
 
-#include <iostream>
-#include <fstream>
 #include <vcl_compiler.h>
-#include <vector>
 #include <vcl_cassert.h>
-#include <cmath> // for std::fabs()
 
 #include <vxl_config.h> // for vxl_uint_16 etc.
 

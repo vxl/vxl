@@ -6,11 +6,10 @@
 // \author Tim Cootes
 
 
-#include <vsl/vsl_binary_io.h>
-#include <vcl_compiler.h>
-#include <iostream>
 #include <iostream>
 #include <vector>
+#include <vsl/vsl_binary_io.h>
+#include <vcl_compiler.h>
 
 //: Representation of three vertex indices, eg a triangle
 //  For comparison, order not important.

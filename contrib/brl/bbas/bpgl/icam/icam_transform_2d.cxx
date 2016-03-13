@@ -1,3 +1,4 @@
+#include <iostream>
 #include "icam_transform_2d.h"
 //:
 // \file
@@ -5,8 +6,6 @@
 #include <vnl/vnl_matrix_fixed.h>
 #include <vnl/vnl_inverse.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 
 vgl_point_2d<double> icam_transform_2d::origin() const
 {

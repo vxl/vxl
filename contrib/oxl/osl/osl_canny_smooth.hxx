@@ -7,10 +7,10 @@
 // -  if this file is not in Templates, gcc 2.7 does not instantiate.
 // \author fsm
 
-#include "osl_canny_smooth.h"
-#include <vcl_compiler.h>
 #include <iostream>
 #include <cmath>
+#include "osl_canny_smooth.h"
+#include <vcl_compiler.h>
 #include <vil1/vil1_rgb.h>
 #include <vil1/vil1_memory_image_of.h>
 

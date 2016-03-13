@@ -1,16 +1,15 @@
+#include <iostream>
+#include <cstdlib>
+#include <fstream>
+#include <sstream>
 #include "brad_image_metadata.h"
 //:
 // \file
 
 #include <vcl_compiler.h>
-#include <iostream>
-#include <cstdlib> // for std::abs(int)
-#include <iostream>
-#include <fstream>
 #include <vul/vul_awk.h>
 #include <vul/vul_file.h>
 #include <vul/vul_file_iterator.h>
-#include <sstream>
 #include <vcl_cassert.h>
 
 #include <vil/vil_image_resource.h>

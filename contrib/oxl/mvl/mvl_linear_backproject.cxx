@@ -1,8 +1,7 @@
-#include "mvl_linear_backproject.h"
-#include <iostream>
-#include <vcl_compiler.h>
 #include <iostream>
 #include <cstdlib>
+#include "mvl_linear_backproject.h"
+#include <vcl_compiler.h>
 #include <vnl/algo/vnl_svd.h>
 
 vnl_vector<double> mvl_linear_backproject(

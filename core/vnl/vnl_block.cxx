@@ -6,11 +6,11 @@
 // \file
 // \author fsm
 
+#include <iostream>
 #include "vnl_block.h"
 
 #include <vcl_cassert.h>
 #include <vcl_compiler.h>
-#include <iostream>
 
 void vnl_block_raise_exception(char const *FILE, int LINE, char const *why)
 {

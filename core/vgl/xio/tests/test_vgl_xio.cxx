@@ -1,3 +1,4 @@
+#include <sstream>
 #include <vgl/xio/vgl_xio_box_3d.h>
 #include <vgl/xio/vgl_xio_point_2d.h>
 #include <vgl/xio/vgl_xio_point_3d.h>
@@ -5,7 +6,6 @@
 
 #include <testlib/testlib_test.h>
 #include <vcl_compiler.h>
-#include <sstream>
 
 static void test_xio_box_3d()
 {

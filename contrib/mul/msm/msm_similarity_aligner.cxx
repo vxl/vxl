@@ -3,14 +3,14 @@
 // \author Tim Cootes
 // \brief Calculate and apply 2D similarity transformations
 
+#include <iostream>
+#include <cstddef>
 #include "msm_similarity_aligner.h"
 #include <vnl/vnl_vector.h>
 #include <vsl/vsl_binary_loader.h>
 #include <vnl/algo/vnl_svd.h>
 #include <vnl/algo/vnl_cholesky.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <cstddef> // for std::size_t
 #include <vcl_cassert.h>
 
 //=======================================================================

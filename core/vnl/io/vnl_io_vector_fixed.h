@@ -6,10 +6,10 @@
 // \author Amitha Perera
 // \date Oct 2002
 
+#include <iosfwd>
 #include <vsl/vsl_fwd.h>
 #include <vnl/vnl_vector_fixed.h>
 #include <vcl_compiler.h>
-#include <iosfwd>
 
 //: Binary save vnl_vector_fixed to stream.
 //  \relatesalso vnl_vector_fixed

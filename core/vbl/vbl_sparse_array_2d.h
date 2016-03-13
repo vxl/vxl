@@ -23,8 +23,8 @@
 //---------------------------------------------------------------------------
 
 #include <iostream>
+#include <utility>
 #include <vcl_compiler.h>
-#include <utility> // for std::pair<.,.>
 #include <vbl/vbl_sparse_array_base.h>
 
 //: Sparse 2D array allowing space efficient access of the form  s(300,700) =2

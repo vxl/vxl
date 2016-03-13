@@ -1,13 +1,12 @@
 #include <iostream>
-#include <vcl_compiler.h>
-#include <iostream>
 #include <iomanip>
 #include <sstream>
-#include <vnl/vnl_random.h>
 #include <string>
+#include <vector>
+#include <vcl_compiler.h>
+#include <vnl/vnl_random.h>
 #include <vul/vul_file.h>
 #include <vul/vul_arg.h>
-#include <vector>
 #include <vsl/vsl_binary_io.h>
 #include <vsl/vsl_vector_io.h>
 #include <vsl/vsl_binary_loader.h>

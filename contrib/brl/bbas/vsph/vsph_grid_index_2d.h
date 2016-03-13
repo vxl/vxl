@@ -12,13 +12,12 @@
 //  for azimuth  -180 < v < -180+inc and 180-inc <= v <= p180
 //  where a point with phi = -180 is put in the bin bounded by +180
 //
-#include <vcl_compiler.h>
 #include <iostream>
-#include <iostream>
-#include "vsph_sph_point_2d.h"
-#include "vsph_defs.h"//DIST_TOL
 #include <vector>
 #include <map>
+#include <vcl_compiler.h>
+#include "vsph_sph_point_2d.h"
+#include "vsph_defs.h"//DIST_TOL
 
 class vsph_grid_index_2d
 {

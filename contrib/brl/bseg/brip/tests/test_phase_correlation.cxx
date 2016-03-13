@@ -1,4 +1,7 @@
 // This is brl/bseg/brip/tests/test_fourier.cxx
+#include <iostream>
+#include <string>
+#include <vector>
 #include <vil/vil_image_view.h>
 //#define DEBUG
 #ifdef DEBUG
@@ -8,10 +11,6 @@
 #include <brip/brip_phase_correlation.h>
 #include <testlib/testlib_test.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
-#include <string>
-#include <vector>
 #include <vil/vil_load.h>
 #include <vil/vil_convert.h>
 #include <vnl/algo/vnl_fft.h>

@@ -11,9 +11,9 @@
 // \author
 //    Geoff Cross
 
-#include <vcl_compiler.h>
 #include <iostream>
 #include <iosfwd>
+#include <vcl_compiler.h>
 #include <vgl/vgl_point_2d.h>
 
 class vdgl_edgel

@@ -3,9 +3,9 @@
 #pragma implementation "vul_arg.h"//otherwise "unresolved typeinfo vul_arg_base"
 #endif
 
-#include <vcl_compiler.h>
-#include <cmath>   // std::fabs()
+#include <cmath>
 #include <iostream>
+#include <vcl_compiler.h>
 
 #include <vul/vul_arg.h>
 

@@ -12,6 +12,7 @@
 //   <none yet>
 // \endverbatim
 
+#include <iostream>
 #include <bvpl/bvpl_octree/sample/bvpl_octree_sample.h>
 #include <bvpl/kernels/bvpl_kernel.h>
 #include <bvpl/functors/bvpl_local_max_functor.h>
@@ -21,8 +22,6 @@
 #include <vnl/vnl_vector_fixed.h>
 
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 
 class bvpl_scene_vector_operator
 {

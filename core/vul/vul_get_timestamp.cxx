@@ -6,6 +6,9 @@
 // \file
 // \author fsm
 
+#include <ctime>
+#include <sstream>
+#include <iomanip>
 #include "vul_get_timestamp.h"
 
 #include <vcl_compiler.h>
@@ -19,11 +22,8 @@
 #include <vcl_sys/time.h> // for gettimeofday()
 
 // for vul_get_time_string()
-#include <ctime>
 #include <vul/vul_string.h>
-#include <sstream>
 #include <vcl_compiler.h>
-#include <iomanip>
 //
 
 #if !defined(VCL_WIN32) || defined(__CYGWIN__)

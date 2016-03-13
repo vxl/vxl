@@ -1,5 +1,7 @@
 // Some tests for vgl_closest_point
 // Peter Vanroose, 5 June 2003
+#include <iostream>
+#include <cmath>
 #include <testlib/testlib_test.h>
 #include <vgl/vgl_closest_point.h>
 #include <vgl/vgl_distance.h>
@@ -17,9 +19,7 @@
 #include <vgl/vgl_infinite_line_3d.h>
 #include <vgl/vgl_plane_3d.h>
 #include <vgl/vgl_sphere_3d.h>
-#include <iostream>
 #include <vcl_compiler.h>
-#include <cmath> // for sqrt()
 
 static void testHomgLine2DClosestPoint()
 {

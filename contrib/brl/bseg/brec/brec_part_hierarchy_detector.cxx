@@ -1,4 +1,7 @@
 // This is brl/bseg/brec/brec_part_hierarchy_detector.cxx
+#include <utility>
+#include <iostream>
+#include <algorithm>
 #include "brec_part_hierarchy_detector.h"
 //:
 // \file
@@ -12,10 +15,7 @@
 #include <vil/vil_image_view.h>
 #include <vil/vil_image_resource.h>
 
-#include <utility>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <algorithm>
 
 brec_part_hierarchy_detector::~brec_part_hierarchy_detector()
 {

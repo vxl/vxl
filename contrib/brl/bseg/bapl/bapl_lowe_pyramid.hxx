@@ -4,10 +4,10 @@
 //:
 // \file
 
-#include "bapl_lowe_pyramid.h"
-#include <vcl_compiler.h>
 #include <iostream>
 #include <cmath>
+#include "bapl_lowe_pyramid.h"
+#include <vcl_compiler.h>
 #include <vcl_cassert.h>
 
 //: Constructor

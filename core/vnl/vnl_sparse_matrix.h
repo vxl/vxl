@@ -55,10 +55,10 @@
 //   Peter Vanroose - Mar.2011 - Added transpose() and conjugate_transpose()
 // \endverbatim
 
-#include <vcl_compiler.h>
 #include <vector>
-#include <vnl/vnl_vector.h>
 #include <functional>
+#include <vcl_compiler.h>
+#include <vnl/vnl_vector.h>
 
 //: Stores elements of sparse matrix
 //  Only those values which

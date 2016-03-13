@@ -16,6 +16,9 @@
 //  Modifications
 // \endverbatim
 
+#include <iostream>
+#include <cmath>
+#include <vector>
 #include <vil/vil_image_view.h>
 #include <vil/io/vil_io_image_view.h>
 
@@ -26,9 +29,6 @@
 #include <vsl/vsl_binary_io.h>
 
 #include <vcl_compiler.h>
-#include <iostream>
-#include <cmath>
-#include <vector>
 
 //:
 // Ignores Scale and Orientation computations and produces a sift descriptor at the scale of the image,

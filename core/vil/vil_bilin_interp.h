@@ -12,9 +12,9 @@
 // corresponding bicub file that would likely also benefit from
 // the same change.
 
+#include <cstddef>
 #include <vcl_cassert.h>
 #include <vcl_compiler.h>
-#include <cstddef>
 #include <vil/vil_image_view.h>
 #include <vil/vil_na.h>
 

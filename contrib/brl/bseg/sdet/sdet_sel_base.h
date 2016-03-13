@@ -30,16 +30,16 @@
 //
 //\endverbatim
 
-#include <vbl/vbl_ref_count.h>
-#include <vbl/vbl_array_2d.h>
 #include <vector>
-#include <vcl_compiler.h>
 #include <iostream>
 #include <list>
 #include <set>
 #include <map>
 #include <queue>
 #include <utility>
+#include <vbl/vbl_ref_count.h>
+#include <vbl/vbl_array_2d.h>
+#include <vcl_compiler.h>
 
 #include "sdet_edgel.h"
 #include "sdet_edgemap_sptr.h"

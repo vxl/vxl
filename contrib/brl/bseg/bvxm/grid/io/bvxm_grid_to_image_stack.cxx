@@ -1,11 +1,11 @@
+#include <sstream>
+#include <iostream>
+#include <iomanip>
 #include "bvxm_grid_to_image_stack.h"
 //
 #include <vil/vil_save.h>
 #include <vul/vul_file.h>
-#include <sstream>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iomanip>
 
 template<>
 bool bvxm_grid_to_image_stack::write_grid_to_image_stack(bvxm_voxel_grid<vnl_float_3> *grid, std::string directory)

@@ -1,17 +1,17 @@
 // This is mul/clsfy/clsfy_binary_tree.cxx
+#include <string>
+#include <deque>
+#include <iostream>
+#include <algorithm>
+#include <iterator>
+#include <cmath>
 #include "clsfy_binary_tree.h"
 //:
 // \file
 // \brief Binary tree classifier
 // \author Martin Roberts
 
-#include <string>
-#include <deque>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <algorithm>
-#include <iterator>
-#include <cmath>
 #include <vcl_cassert.h>
 #include <vsl/vsl_binary_io.h>
 #include <vsl/vsl_vector_io.h>

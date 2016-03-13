@@ -15,11 +15,11 @@
 //   2004/09/17 Peter Vanroose - made count() non-virtual - it just returns a member and should not be overloaded
 // \endverbatim
 
+#include <vector>
 #include <vbl/vbl_ref_count.h>
 #include <vcsl/vcsl_graph_sptr.h>
 #include <vcsl/vcsl_spatial_sptr.h>
 #include <vcl_compiler.h>
-#include <vector>
 
 //: Spatial coordinate system transformation graph
 // Graph where nodes are spatial coordinate systems and arrows are

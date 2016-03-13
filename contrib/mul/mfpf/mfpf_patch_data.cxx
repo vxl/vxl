@@ -1,3 +1,5 @@
+#include <iostream>
+#include <sstream>
 #include "mfpf_patch_data.h"
 //:
 // \file
@@ -12,8 +14,6 @@
 #include <mbl/mbl_exception.h>
 #include <vul/vul_string.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <sstream>
 
 //=======================================================================
 // Dflt ctor

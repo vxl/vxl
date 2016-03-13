@@ -1,4 +1,5 @@
 // This is brl/bseg/sdet/tests/test_gauss_fit.cxx
+#include <iostream>
 #include <testlib/testlib_test.h>
 #if 0 // commented out: see below
 #include <sdet/sdet_gauss_fit.h>
@@ -8,8 +9,6 @@
 #include <vnl/algo/vnl_matrix_inverse.h>
 #include <vgl/vgl_point_3d.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 #endif // 0
 
 void test_gauss_fit()

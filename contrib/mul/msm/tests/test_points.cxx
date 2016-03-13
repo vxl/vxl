@@ -4,6 +4,7 @@
 //  Copyright: (C) 2008 The University of Manchester
 //
 //=======================================================================
+#include <iostream>
 #include <testlib/testlib_test.h>
 //:
 // \file
@@ -11,8 +12,6 @@
 // \brief test msm_points
 
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 #include <vsl/vsl_binary_loader.h>
 #include <msm/msm_points.h>
 #include <vgl/vgl_point_2d.h>

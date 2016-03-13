@@ -5,9 +5,9 @@
 // \file
 // \brief A test process
 
-#include <vcl_compiler.h>
 #include <iostream>
 #include <string>
+#include <vcl_compiler.h>
 #include <brdb/brdb_database.h>
 #include <bprb/bprb_process.h>
 

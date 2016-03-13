@@ -11,9 +11,9 @@
 //   221198 - Peter Vanroose - Added CrossRatio()
 // \endverbatim
 
-#include <vcl_compiler.h>
 #include <iostream>
 #include <vector>
+#include <vcl_compiler.h>
 
 #include <mvl/HomgLine3D.h>
 #include <mvl/HomgPoint3D.h>

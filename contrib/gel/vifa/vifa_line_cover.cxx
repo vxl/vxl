@@ -1,11 +1,11 @@
 // This is gel/vifa/vifa_line_cover.cxx
+#include <iostream>
+#include <algorithm>
 #include "vifa_line_cover.h"
 //:
 // \file
 
 #include <vcl_compiler.h>
-#include <iostream>
-#include <algorithm>
 #include <vgl/vgl_point_2d.h>
 #include <vgl/vgl_vector_2d.h>
 

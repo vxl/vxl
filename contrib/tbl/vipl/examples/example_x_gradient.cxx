@@ -16,6 +16,8 @@
 //   Peter Vanroose, Feb.2004 - replaced vil1_load by vil_load
 // \endverbatim
 //
+#include <iostream>
+#include <cstring>
 #include <section/section.h>
 #include <vipl/vipl_with_section/accessors/vipl_accessors_section.h>
 #include <vil/vil_rgb.h>
@@ -30,10 +32,7 @@ typedef section<rgbcell,2> img_type;
 #include <vil/vil_image_view.h>
 #include <vil/vil_load.h>
 #include <vil/vil_save.h>
-#include <iostream>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <cstring> // for memcpy()
 
 int
 main(int argc, char** argv)

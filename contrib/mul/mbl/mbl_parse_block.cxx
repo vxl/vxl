@@ -1,4 +1,7 @@
 // This is mul/mbl/mbl_parse_block.cxx
+#include <iostream>
+#include <cctype>
+#include <cstring>
 #include "mbl_parse_block.h"
 //:
 // \file
@@ -7,10 +10,6 @@
 // \brief Load a block of text from a file.
 
 #include <vcl_compiler.h>
-#include <iostream>
-#include <cctype>
-#include <cstring>
-#include <iostream>
 #include <mbl/mbl_exception.h>
 
 //: Read a block of text from a stream.

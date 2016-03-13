@@ -5,11 +5,11 @@
 // \brief Construct histogram from pixels in given image.
 // \author Tim Cootes
 
+#include <vector>
+#include <algorithm>
 #include <vil/vil_image_view.h>
 #include <vcl_compiler.h>
-#include <vector>
 #include <vxl_config.h>
-#include <algorithm>
 
 //: Construct histogram from pixels in given image
 //  \relatesalso vil_image_view

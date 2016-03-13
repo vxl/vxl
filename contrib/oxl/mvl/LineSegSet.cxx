@@ -5,13 +5,12 @@
 //:
 //  \file
 
-#include "LineSegSet.h"
-
-#include <iostream>
-#include <vcl_compiler.h>
 #include <iostream>
 #include <fstream>
 #include <vector>
+#include "LineSegSet.h"
+
+#include <vcl_compiler.h>
 
 #include <mvl/ImageMetric.h>
 #include <mvl/HomgPoint2D.h>

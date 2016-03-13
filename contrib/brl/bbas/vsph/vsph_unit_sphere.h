@@ -10,6 +10,11 @@
 //  Modifications
 //   2013/01/13 Initial version
 // \endverbatim
+#include <vector>
+#include <map>
+#include <set>
+#include <iostream>
+#include <iosfwd>
 #include "vsph_sph_point_2d.h"
 #include "vsph_sph_box_2d.h"
 #include "vsph_grid_index_2d.h"
@@ -18,12 +23,7 @@
 #include <vgl/vgl_vector_3d.h>
 #include <vgl/vgl_plane_3d.h>
 #include <vsl/vsl_binary_io.h>
-#include <vector>
-#include <map>
-#include <set>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iosfwd>
 
 class vsph_edge
 {

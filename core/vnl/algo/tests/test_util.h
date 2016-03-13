@@ -2,8 +2,8 @@
 #define test_util_h_
 
 class vnl_random;
-#include <vcl_compiler.h>
 #include <complex>
+#include <vcl_compiler.h>
 #define macro(T) void test_util_fill_random(T *begin, T *end, vnl_random &rng)
 macro(float);
 macro(std::complex<float>);
