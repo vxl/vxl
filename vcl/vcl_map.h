@@ -9,9 +9,9 @@
    ifndef guards, but we now include a reference header
    instead */
 #include "vcl_functional.h"
+#include "vcl_algorithm.h"
 //vcl alias names to std names
 #define vcl_map std::map
 #define vcl_multimap std::multimap
-#define vcl_swap std::swap
 
 #endif // vcl_map_h_

@@ -8,7 +8,7 @@
    definitions were defined in multiple headers with conditional
    ifndef guards, but we now include a reference header
    instead */
-//no dependancies remove comment above
+#include "vcl_algorithm.h"
 //vcl alias names to std names
 #define vcl_unary_function std::unary_function
 #define vcl_binary_function std::binary_function
@@ -54,15 +54,5 @@
 #define vcl_const_mem_fun_ref std::const_mem_fun_ref
 #define vcl_const_mem_fun1_ref_t std::const_mem_fun1_ref_t
 #define vcl_const_mem_fun1_ref std::const_mem_fun1_ref
-#define vcl_transform std::transform
-//not in the standard:
-// @identity
-// @select1st
-// @select2nd
-// @project1st
-// @project2nd
-// @constant_void_fun
-// @constant_unary_fun
-// @constant_binary_fun
 
 #endif // vcl_functional_h_

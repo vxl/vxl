@@ -14,6 +14,8 @@
 #include "vcl_iomanip.h"
 #include "vcl_istream.h"
 #include "vcl_ostream.h"
+#include "vcl_streambuf.h"
+#include "vcl_iomanip.h"
 //vcl alias names to std names
 #define vcl_cin std::cin
 #define vcl_cout std::cout
@@ -33,15 +35,7 @@
 #define vcl_ios_trunc std::ios::trunc
 #define vcl_ios_binary std::ios::binary
 #define vcl_ios_openmode std::ios::openmode
-#define vcl_ostream std::ostream
-#define vcl_endl std::endl
-#define vcl_ends std::ends
-#define vcl_flush std::flush
 #define vcl_streampos std::streampos
-#define vcl_streambuf std::streambuf
-#define vcl_hex std::hex
-#define vcl_oct std::oct
-#define vcl_dec std::dec
 #define vcl_ws std::ws
 
 #endif // vcl_iostream_h_

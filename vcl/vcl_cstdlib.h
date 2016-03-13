@@ -8,9 +8,8 @@
    definitions were defined in multiple headers with conditional
    ifndef guards, but we now include a reference header
    instead */
-//no dependancies remove comment above
+#include "vcl_cmath.h"
 //vcl alias names to std names
-#define vcl_abs std::abs
 #define vcl_div std::div
 #define vcl_labs std::labs
 #define vcl_ldiv std::ldiv

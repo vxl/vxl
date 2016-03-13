@@ -15,8 +15,6 @@
 #define vcl_reverse_iterator std::reverse_iterator
 #define vcl_istream_iterator std::istream_iterator
 #define vcl_ostream_iterator std::ostream_iterator
-#define vcl_istreambuf_iterator std::istreambuf_iterator
-#define vcl_ostreambuf_iterator std::ostreambuf_iterator
 #define vcl_back_insert_iterator std::back_insert_iterator
 #define vcl_front_insert_iterator std::front_insert_iterator
 #define vcl_insert_iterator std::insert_iterator

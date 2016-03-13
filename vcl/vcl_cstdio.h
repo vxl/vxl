@@ -9,6 +9,7 @@
    ifndef guards, but we now include a reference header
    instead */
 #include "vcl_cstddef.h"
+#include "vcl_algorithm.h"
 //vcl alias names to std names
 // [27.8.2.1]
 //
@@ -45,7 +46,6 @@
 #define vcl_putc std::putc
 #define vcl_putchar std::putchar
 #define vcl_puts std::puts
-#define vcl_remove std::remove
 #define vcl_rewind std::rewind
 #define vcl_setbuf std::setbuf
 #define vcl_setvbuf std::setvbuf

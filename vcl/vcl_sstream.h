@@ -13,7 +13,6 @@
 #define vcl_basic_stringbuf std::basic_stringbuf
 #define vcl_stringbuf std::stringbuf
 #define vcl_wstringbuf std::wstringbuf
-#define vcl_stringstream std::stringstream
 #define vcl_istringstream std::istringstream
 #define vcl_ostringstream std::ostringstream
 

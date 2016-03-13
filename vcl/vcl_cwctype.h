@@ -8,7 +8,7 @@
    definitions were defined in multiple headers with conditional
    ifndef guards, but we now include a reference header
    instead */
-//no dependancies remove comment above
+#include "vcl_cwchar.h"
 //vcl alias names to std names
 #define vcl_iswalnum std::iswalnum
 #define vcl_iswalpha std::iswalpha
@@ -30,6 +30,5 @@
 #define vcl_wctrans_t std::wctrans_t
 #define vcl_wctype std::wctype
 #define vcl_wctype_t std::wctype_t
-#define vcl_wint_t std::wint_t
 
 #endif // vcl_cwctype_h_
