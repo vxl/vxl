@@ -1,8 +1,8 @@
 #ifndef vcl_exception_h_
 #define vcl_exception_h_
 
-#include "vcl_compiler.h"
 #include <exception>
+#include "vcl_compiler.h"
 
 # define vcl_throw     throw
 # define vcl_try       try
