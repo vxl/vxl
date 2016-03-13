@@ -227,6 +227,15 @@ typedef int saw_VCL_FOR_SCOPE_HACK;
 // Check if the compiler (claims to) support C++11.
 #if defined(NDEBUG)
 # define VXL_USED_IN_DEBUG(x)
+/* Valgrind does not support "long double" types and this results
+ * in numerous false positive memory errors being reported.
+ * Turn off tests involving "long double" types by default
+ * when compiling in "Debug" mode.
+ * You can override this behavior by including a compiler
+ * flag of -DINCLUDE_LONG_DOUBLE_TESTS when compiling
+ * in debug mode to enable these tests.
+ */
+# define INCLUDE_LONG_DOUBLE_TESTS
 #else
 # define VXL_USED_IN_DEBUG(x) x
 #endif
