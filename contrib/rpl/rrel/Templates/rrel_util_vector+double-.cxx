@@ -1,7 +1,7 @@
-#include <vcl_compiler.h>
-#include <vcl_compiler.h>
 #include <iostream>
 #include <vector>
+#include <vcl_compiler.h>
+#include <vcl_compiler.h>
 #include <rrel/rrel_util.txx>
 
 #if defined(VCL_GCC) || defined(VCL_ICC)

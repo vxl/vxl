@@ -2,14 +2,14 @@
 #ifndef vnl_matrix_fixed_ref_hxx_
 #define vnl_matrix_fixed_ref_hxx_
 
+#include <cmath>
+#include <iostream>
+#include <cstdlib>
 #include "vnl_matrix_fixed_ref.h"
 //:
 // \file
 
-#include <cmath>
-#include <iostream>
 #include <vcl_compiler.h>
-#include <cstdlib> // for abort
 #include <vcl_cassert.h>
 
 #include <vnl/vnl_error.h>

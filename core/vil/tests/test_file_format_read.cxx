@@ -1,9 +1,9 @@
 // This is core/vil/tests/test_file_format_read.cxx
 #include <iostream>
 #include <fstream>
-#include <vcl_compiler.h>
 #include <vector>
 #include <cmath>
+#include <vcl_compiler.h>
 #include <vul/vul_file.h>
 #include <vxl_config.h> // for vxl_uint_16 etc.
 

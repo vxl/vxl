@@ -1,3 +1,5 @@
+#include <iostream>
+#include <cmath>
 #include "mfpf_profile_pdf.h"
 //:
 // \file
@@ -6,8 +8,6 @@
 
 #include <vsl/vsl_binary_loader.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <cmath> // for std::abs
 
 #include <vimt/vimt_sample_profile_bilin.h>
 #include <vnl/io/vnl_io_vector.h>

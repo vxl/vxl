@@ -6,10 +6,10 @@
 // \file
 // \author fsm
 
-#include "osl_save_topology.h"
-#include <vcl_compiler.h>
 #include <iostream>
 #include <fstream>
+#include "osl_save_topology.h"
+#include <vcl_compiler.h>
 
 void osl_save_topology(std::ostream &f, std::list<osl_edge*> const &es, std::list<osl_vertex*> const &vs)
 {

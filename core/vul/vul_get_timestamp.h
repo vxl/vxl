@@ -16,8 +16,8 @@
 // \endverbatim
 
 
-#include <vcl_compiler.h>
 #include <string>
+#include <vcl_compiler.h>
 
 
 //: purpose: obtain time elapsed since 1 Jan 1970, in seconds and milliseconds.

@@ -5,11 +5,11 @@
 //:
 //  \file
 
+#include <iostream>
+#include <vector>
 #include "HMatrix2DAffineCompute.h"
 //
 #include <vcl_compiler.h>
-#include <iostream>
-#include <vector>
 #include <vcl_cassert.h>
 #include <vnl/vnl_matrix.h>
 #include <mvl/HMatrix2D.h>

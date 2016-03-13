@@ -1,10 +1,10 @@
 // Some tests for vgl_sphere_3d
 // Ian Scott, Aug 2005.
+#include <iostream>
 #include <testlib/testlib_test.h>
 #include <vgl/vgl_sphere_3d.h>
 #include <vgl/vgl_line_3d_2_points.h>
 #include <vcl_compiler.h>
-#include <iostream>
 
 static void test_sphere()
 {

@@ -1,6 +1,6 @@
 // This is core/vnl/io/tests/test_matrix_fixed_io.cxx
-#include <vcl_compiler.h>
 #include <iostream>
+#include <vcl_compiler.h>
 #include <vnl/vnl_matrix_fixed.h>
 #include <vnl/io/vnl_io_matrix_fixed.h>
 #include <testlib/testlib_test.h>

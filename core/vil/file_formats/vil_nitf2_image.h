@@ -7,10 +7,10 @@
 #ifndef VIL_NITF2_IMAGE_H
 #define VIL_NITF2_IMAGE_H
 
+#include <vector>
 #include <vil/vil_blocked_image_resource.h>
 
 #include <vcl_compiler.h>
-#include <vector>
 #include <vcl_cassert.h>
 
 #include <vil/vil_stream.h>

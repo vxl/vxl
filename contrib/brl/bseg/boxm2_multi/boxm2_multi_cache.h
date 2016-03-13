@@ -4,6 +4,10 @@
 // \file
 // \brief boxm2_opencl_scene_streamer assists the processor in streaming blocks
 
+#include <vector>
+#include <iosfwd>
+#include <iostream>
+#include <algorithm>
 #include "boxm2_multi_cache_group.h"
 #include <boxm2/boxm2_scene.h>
 #include <boxm2/ocl/boxm2_opencl_cache1.h>
@@ -20,11 +24,7 @@
 
 // other includes
 #include <vbl/vbl_ref_count.h>
-#include <vector>
-#include <iosfwd>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <algorithm>
 
 class boxm2_multi_cache;
 typedef vbl_smart_ptr<boxm2_multi_cache> boxm2_multi_cache_sptr;

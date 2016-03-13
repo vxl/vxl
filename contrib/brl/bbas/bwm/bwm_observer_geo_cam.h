@@ -1,11 +1,11 @@
 #ifndef bwm_observer_geo_cam_h_
 #define bwm_observer_geo_cam_h_
 
+#include <iostream>
+#include <iosfwd>
 #include "bwm_observer_cam.h"
 
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iosfwd>
 
 #include <vgl/vgl_fwd.h>
 

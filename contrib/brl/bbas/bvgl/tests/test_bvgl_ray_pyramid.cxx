@@ -1,11 +1,10 @@
 //:
 // \file
-#include <testlib/testlib_test.h>
-#include <bvgl/bvgl_ray_pyramid.h>
-#include <iostream>
-#include <vcl_compiler.h>
 #include <iostream>
 #include <cmath>
+#include <testlib/testlib_test.h>
+#include <bvgl/bvgl_ray_pyramid.h>
+#include <vcl_compiler.h>
 
 //: Test changes
 static void test_bvgl_ray_pyramid()

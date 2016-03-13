@@ -25,9 +25,9 @@
 //------------------------------------------------------------------------------
 
 #include <vector>
-#include <vcl_compiler.h>
 #include <iostream>
 #include <iosfwd>
+#include <vcl_compiler.h>
 
 #include <vbl/vbl_array_3d.h>
 

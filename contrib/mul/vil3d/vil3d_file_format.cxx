@@ -7,10 +7,10 @@
 // \brief Base for objects capable of reading/writing different image formats.
 // \author Tim Cootes - Manchester
 
-#include "vil3d_file_format.h"
-#include <vcl_compiler.h>
 #include <iostream>
 #include <vector>
+#include "vil3d_file_format.h"
+#include <vcl_compiler.h>
 #include <vil/vil_open.h>
 #include <vil3d/file_formats/vil3d_analyze_format.h>
 #include <vil3d/file_formats/vil3d_gipl_format.h>

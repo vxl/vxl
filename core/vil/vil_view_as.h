@@ -12,8 +12,8 @@
 // conversions for you.
 // \author Tim Cootes, Ian Scott - Manchester
 
-#include <vcl_compiler.h>
 #include <complex>
+#include <vcl_compiler.h>
 #include <vil/vil_image_view.h>
 #include <vil/vil_rgb.h>
 #include <vil/vil_rgba.h>

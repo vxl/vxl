@@ -1,5 +1,7 @@
 // This is brl/bbas/bmsh3d/bmsh3d_pt_set.cxx
 //---------------------------------------------------------------------
+#include <iostream>
+#include <cstdlib>
 #include "bmsh3d_pt_set.h"
 //:
 // \file
@@ -15,11 +17,8 @@
 //
 //-------------------------------------------------------------------------
 
-#include <iostream>
 #include <vcl_cassert.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <cstdlib>
 #include <vnl/vnl_random.h>
 #include <vgl/vgl_point_3d.h>
 #include <vgl/vgl_vector_3d.h>

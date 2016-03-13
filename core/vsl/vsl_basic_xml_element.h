@@ -13,8 +13,8 @@
 #include <string>
 #include <sstream>
 #include <iostream>
+#include <iomanip>
 #include <vcl_compiler.h>
-#include <iomanip> // for std::fixed
 
 template<typename T> std::string toString(const T& t)
 {

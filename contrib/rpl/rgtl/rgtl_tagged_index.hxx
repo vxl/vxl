@@ -11,10 +11,10 @@
 // (See accompanying file rgtl_license_1_0.txt or copy at
 // http://www.boost.org/LICENSE_1_0.txt)
 
-#include "rgtl_serialize_access.hxx"
-#include <vcl_compiler.h>
 #include <iostream>
 #include <cstddef>
+#include "rgtl_serialize_access.hxx"
+#include <vcl_compiler.h>
 
 //: Wraps an unsigned integer for use as an index.
 //  The index is compatible only with other indexes using the same tag.

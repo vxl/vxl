@@ -1,3 +1,4 @@
+#include <iostream>
 #include "vgui_qt_adaptor.h"
 #include "vgui_qt_menu.h"
 
@@ -5,7 +6,6 @@
 
 #include <qgl.h>
 #include <vcl_compiler.h>
-#include <iostream>
 
 vgui_qt_adaptor::vgui_qt_adaptor(QWidget* parent, const char* name)
    : QGLWidget(QGLFormat(DoubleBuffer|DepthBuffer|Rgba|AlphaChannel|

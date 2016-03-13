@@ -3,9 +3,9 @@
 //:
 // \file
 
-#include <vcl_compiler.h>
 #include <iostream>
 #include <iterator>
+#include <vcl_compiler.h>
 
 #include <vgl/vgl_vector_3d.h>
 

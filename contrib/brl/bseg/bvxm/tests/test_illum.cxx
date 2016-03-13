@@ -1,11 +1,11 @@
+#include <iostream>
+#include <cstdlib>
 #include <testlib/testlib_test.h>
 #include <bvxm/bvxm_illum_util.h>
 #include <bsta/bsta_histogram.h>
 #include <bsta/io/bsta_io_histogram.h>
 #include <vsl/vsl_binary_io.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <cstdlib> // for rand()
 
 static void test_illum()
 {

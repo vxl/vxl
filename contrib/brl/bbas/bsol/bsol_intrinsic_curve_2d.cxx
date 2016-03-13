@@ -1,4 +1,8 @@
 // This is brl/bbas/bsol/bsol_intrinsic_curve_2d.cxx
+#include <iostream>
+#include <cmath>
+#include <fstream>
+#include <string>
 #include "bsol_intrinsic_curve_2d.h"
 //:
 // \file
@@ -8,12 +12,8 @@
 #include <vsol/vsol_digital_curve_2d.h>
 #include <vcl_cassert.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <cmath>
-#include <fstream>
 #include <vnl/vnl_math.h>
 
-#include <string>
 
 //***************************************************************************
 // Initialization

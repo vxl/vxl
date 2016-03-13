@@ -1,8 +1,8 @@
 // This is core/vul/tests/test_checksum.cxx
 #include <iostream>
-#include <vcl_compiler.h>
 #include <iomanip>
 #include <iterator>
+#include <vcl_compiler.h>
 #include <testlib/testlib_test.h>
 #include <vul/vul_checksum.h>
 

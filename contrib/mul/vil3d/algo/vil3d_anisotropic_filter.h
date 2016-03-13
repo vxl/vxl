@@ -7,6 +7,7 @@
 //
 // \author Kevin de Souza and Ian Scott
 
+#include <iostream>
 #include <vil3d/vil3d_image_view.h>
 #include <vgl/vgl_vector_3d.h>
 #include <vil/algo/vil_gauss_filter.h>
@@ -16,8 +17,6 @@
 #include <vil3d/vil3d_convert.h>
 #include <vil3d/vil3d_print.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 
 
 //========================================================================

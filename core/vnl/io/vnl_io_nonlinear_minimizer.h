@@ -9,10 +9,10 @@
 // \author dac
 // \date 21-Mar-2001
 
+#include <string>
 #include <vsl/vsl_binary_io.h>
 #include <vnl/vnl_nonlinear_minimizer.h>
 #include <vcl_compiler.h>
-#include <string>
 
 //: Base for objects which provide IO
 //  for classes derived from vnl_nonlinear_minimizer

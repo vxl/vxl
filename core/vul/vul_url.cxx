@@ -11,15 +11,15 @@
 //   8 Nov 2002 - Peter Vanroose - corrected HTTP client request syntax
 // \endverbatim
 
-#include "vul_url.h"
-#include <cstdio>  // sprintf()
-#include <vcl_cstdio.h> // for vcl_snprintf()
+#include <cstdio>
 #include <cstring>
-#include <vcl_compiler.h>
 #include <cstdlib>
 #include <sstream>
-#include <vcl_cassert.h>
 #include <fstream>
+#include "vul_url.h"
+#include <vcl_cstdio.h> // for vcl_snprintf()
+#include <vcl_compiler.h>
+#include <vcl_cassert.h>
 #include <vul/vul_file.h>
 
 #if defined(unix) || defined(__unix) || defined(__unix__)

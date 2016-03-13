@@ -10,10 +10,10 @@
 //     11 Oct 2002 Ian Scott - converted to vil
 //\endverbatim
 
+#include <cstddef>
 #include "vil_jpeg_destination_mgr.h"
 #include <vcl_cassert.h>
 #include <vcl_compiler.h>
-#include <cstddef> // for std::size_t
 #include <vil/vil_stream.h>
 
 #define STATIC /*static*/

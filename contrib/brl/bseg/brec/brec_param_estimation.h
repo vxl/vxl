@@ -14,9 +14,9 @@
 
 #include <vector>
 #include <utility>
-#include <vcl_compiler.h>
 #include <iostream>
 #include <string>
+#include <vcl_compiler.h>
 
 #include <vil/vil_image_resource_sptr.h>
 #include <bvgl/bvgl_changes_sptr.h>

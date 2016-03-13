@@ -6,11 +6,11 @@
 // \author MingChing Chang
 // \date May 03, 2005.
 
-#include <vcl_compiler.h>
 #include <iostream>
 #include <cmath>
 #include <utility>
 #include <vector>
+#include <vcl_compiler.h>
 #include <vgl/vgl_point_3d.h>
 #include <vgl/vgl_box_3d.h>
 #include <bmsh3d/bmsh3d_utils.h>

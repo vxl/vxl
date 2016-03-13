@@ -92,11 +92,11 @@
 //   2009-06-06 Peter Vanroose - Added the contains() method (not yet implem.)
 // \endverbatim
 
+#include <iosfwd>
 #include <vgl/vgl_homg_point_2d.h> // data member of this class
 #include <vgl/vgl_conic.h>         // data member of this class
 #include <vgl/vgl_point_2d.h>      // return type of some methods
 #include <vcl_compiler.h>
-#include <iosfwd>
 #include <vcl_cassert.h>
 
 //: Represents a 2D conic segment using two points.

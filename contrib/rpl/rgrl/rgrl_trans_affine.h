@@ -8,10 +8,10 @@
 // \author Chuck Stewart
 // \date 15 Nov 2002
 
-#include "rgrl_transformation.h"
-#include <vcl_compiler.h>
 #include <iostream>
 #include <iosfwd>
+#include "rgrl_transformation.h"
+#include <vcl_compiler.h>
 
 class rgrl_trans_affine
   : public rgrl_transformation

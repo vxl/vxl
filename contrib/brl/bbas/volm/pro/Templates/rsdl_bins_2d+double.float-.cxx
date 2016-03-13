@@ -1,7 +1,7 @@
-#include <rsdl/rsdl_bins_2d.txx>
-#include <vcl_compiler.h>
 #include <iostream>
 #include <vector>
+#include <rsdl/rsdl_bins_2d.txx>
+#include <vcl_compiler.h>
 #include <vbl/vbl_array_2d.hxx>
 
 RSDL_BINS_2D_INSTANTIATE(double, float);

@@ -3,11 +3,11 @@
 #define bsta_sample_set_hxx_
 //:
 // \file
+#include <iostream>
+#include <map>
 #include "bsta_sample_set.h"
 
 #include <vcl_compiler.h>
-#include <iostream>
-#include <map>
 
 //: Compute the mean in a window around the given pt, the window size is the bandwidth
 //  If there are no points within bandwidth of the input \a pt, return false

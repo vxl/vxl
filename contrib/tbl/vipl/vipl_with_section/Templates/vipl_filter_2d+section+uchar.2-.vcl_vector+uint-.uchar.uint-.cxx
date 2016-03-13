@@ -1,8 +1,8 @@
 #ifndef INSTANTIATE_TEMPLATES
-#include <section/section.h>
-#include <vcl_compiler.h>
 #include <iostream>
 #include <vector>
+#include <section/section.h>
+#include <vcl_compiler.h>
 
 // this must be here for filter-2d to work
 #include "../vipl_filterable_section_container_generator_section.hxx"

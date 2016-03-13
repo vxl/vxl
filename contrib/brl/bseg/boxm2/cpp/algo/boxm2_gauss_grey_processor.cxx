@@ -1,13 +1,13 @@
+#include <cmath>
+#include <iostream>
+#include <algorithm>
 #include "boxm2_gauss_grey_processor.h"
 //:
 // \file
 #define TMATCH 2.5f
 
 #include <boxm2/boxm2_util.h>
-#include <cmath> // for std::exp() && std::sqrt()
 #include <vcl_compiler.h>
-#include <iostream>
-#include <algorithm>
 
 #include <bsta/bsta_distribution.h>
 #include <bsta/bsta_gauss_sf1.h>

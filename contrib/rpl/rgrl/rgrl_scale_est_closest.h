@@ -6,11 +6,11 @@
 // \author Chuck Stewart
 // \date   25 Nov 2002
 
+#include <iostream>
+#include <memory>
 #include "rgrl_scale_estimator.h"
 
 #include <vcl_compiler.h>
-#include <iostream>
-#include <memory>
 #include <vnl/vnl_matrix.h>
 
 class rrel_objective;

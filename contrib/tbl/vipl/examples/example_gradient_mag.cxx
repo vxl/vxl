@@ -15,6 +15,8 @@
 //   Peter Vanroose, Feb.2004 - replaced vil1_load by vil_load
 // \endverbatim
 //
+#include <iostream>
+#include <cstring>
 #include <vbl/vbl_array_2d.h>
 
 #include <vipl/vipl_with_vbl_array_2d/accessors/vipl_accessors_vbl_array_2d.h>
@@ -27,10 +29,7 @@ typedef vbl_array_2d<vxl_byte> img_type;
 #include <vil/vil_image_view.h>
 #include <vil/vil_load.h>
 #include <vil/vil_save.h>
-#include <iostream>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <cstring> // for memcpy()
 
 int
 main(int argc, char** argv)

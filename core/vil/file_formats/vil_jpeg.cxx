@@ -12,6 +12,8 @@
 //     30 Mar 2007 Peter Vanroose - replaced deprecated vil_new_image_view_j_i_plane()
 //\endverbatim
 
+#include <iostream>
+#include <cstring>
 #include "vil_jpeg.h"
 #include "vil_jpeg_source_mgr.h"
 #include "vil_jpeg_decompressor.h"
@@ -20,8 +22,6 @@
 
 #include <vcl_cassert.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <cstring> // memcpy()
 #include <vxl_config.h> // vxl_byte
 
 #include <vil/vil_stream.h>

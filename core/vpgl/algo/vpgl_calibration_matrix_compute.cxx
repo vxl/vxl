@@ -1,7 +1,7 @@
 // This is core/vpgl/algo/vpgl_calibration_matrix_compute.cxx
+#include <iostream>
 #include <vpgl/algo/vpgl_calibration_matrix_compute.h>
 #include <vcl_compiler.h>
-#include <iostream>
 #include <vnl/vnl_matrix_fixed.h>
 #include <vnl/vnl_vector_fixed.h>
 #include <vnl/vnl_det.h>

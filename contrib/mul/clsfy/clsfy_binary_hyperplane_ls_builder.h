@@ -8,11 +8,11 @@
 // \author Ian Scott
 // \date 2000-05-26
 
+#include <iostream>
+#include <iosfwd>
 #include <clsfy/clsfy_binary_hyperplane.h>
 #include <clsfy/clsfy_builder_base.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iosfwd>
 
 //: Build a binary linear classifier using least squares
 class clsfy_binary_hyperplane_ls_builder : public clsfy_builder_base

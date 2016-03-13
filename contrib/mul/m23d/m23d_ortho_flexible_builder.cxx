@@ -1,3 +1,6 @@
+#include <iostream>
+#include <algorithm>
+#include <cstdlib>
 #include "m23d_ortho_flexible_builder.h"
 //:
 // \file
@@ -16,11 +19,7 @@
 #include <vnl/algo/vnl_levenberg_marquardt.h>
 #include <vgl/vgl_vector_3d.h>
 
-#include <iostream>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <algorithm>
-#include <cstdlib>  // abort()
 #include <vcl_cassert.h>
 
 

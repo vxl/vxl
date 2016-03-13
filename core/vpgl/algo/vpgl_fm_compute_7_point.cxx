@@ -4,13 +4,13 @@
 //:
 // \file
 
+#include <iostream>
 #include "vpgl_fm_compute_7_point.h"
 //
 #include <vnl/vnl_fwd.h>
 #include <vnl/vnl_math.h> // for twopi
 #include <vgl/algo/vgl_norm_trans_2d.h>
 #include <vcl_compiler.h>
-#include <iostream>
 
 //-------------------------------------------
 bool

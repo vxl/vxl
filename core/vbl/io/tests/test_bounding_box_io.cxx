@@ -1,6 +1,6 @@
 // This is core/vbl/io/tests/test_bounding_box_io.cxx
-#include <vcl_compiler.h>
 #include <iostream>
+#include <vcl_compiler.h>
 #include <vbl/vbl_bounding_box.h>
 #include <vbl/io/vbl_io_bounding_box.h>
 #include <vsl/vsl_binary_io.h>

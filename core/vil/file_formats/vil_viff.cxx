@@ -1,13 +1,13 @@
 // This is core/vil/file_formats/vil_viff.cxx
+#include <complex>
+#include <iostream>
+#include <cstring>
 #include "vil_viff.h"
 #include <vcl_cassert.h>
 #include <vcl_compiler.h>
-#include <complex>
 
 static char const* vil_viff_format_tag = "viff";
 
-#include <iostream>
-#include <cstring>
 
 #include <vil/vil_stream.h>
 #include <vil/vil_image_resource.h>

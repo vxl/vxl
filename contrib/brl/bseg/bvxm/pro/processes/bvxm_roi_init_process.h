@@ -24,10 +24,10 @@
 //   Yi Dong        - Mar 22, 2014 - add new method to output a unsigned short image with all 11 bits of the input NITF image kept
 // \endverbatim
 
-#include <bprb/bprb_func_process.h>
-#include <vcl_compiler.h>
 #include <iostream>
 #include <string>
+#include <bprb/bprb_func_process.h>
+#include <vcl_compiler.h>
 
 #include <bvxm/bvxm_world_params.h>
 #include <vil/vil_image_view.h>

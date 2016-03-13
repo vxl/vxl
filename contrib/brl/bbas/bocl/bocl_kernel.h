@@ -12,9 +12,9 @@
 // \endverbatim
 #include <string>
 #include <vector>
-#include <vcl_compiler.h>
 #include <iostream>
-#include <cstddef> // for std::size_t
+#include <cstddef>
+#include <vcl_compiler.h>
 #include "bocl_cl.h"
 #include "bocl_utils.h"
 

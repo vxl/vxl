@@ -18,10 +18,10 @@
 //   13 Jun 2004 - Peter Vanroose - added compute() overload, similar to 2d interface
 // \endverbatim
 
+#include <vector>
 #include <vgl/vgl_homg_point_1d.h>
 #include <vgl/algo/vgl_h_matrix_1d.h>
 #include <vcl_compiler.h>
-#include <vector>
 
 class vgl_h_matrix_1d_compute
 {

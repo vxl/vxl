@@ -3,10 +3,9 @@
 //:
 // \file
 #include <string>
-#include <vcl_compiler.h>
-#include <iostream>
 #include <iostream>
 #include <vector>
+#include <vcl_compiler.h>
 #include <bocl/bocl_manager.h>
 #include <bocl/bocl_utils.h>
 #include <bocl/bocl_mem.h>

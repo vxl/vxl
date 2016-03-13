@@ -1,3 +1,5 @@
+#include <iostream>
+#include <iomanip>
 #include "volm_geo_index.h"
 #include "volm_io.h"
 //:
@@ -8,8 +10,6 @@
 #include <vgl/vgl_intersection.h>
 #include <volm/volm_loc_hyp.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iomanip>
 
 volm_geo_index_node::~volm_geo_index_node()
 {

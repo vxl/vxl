@@ -4,16 +4,17 @@
 //  Copyright: (C) 2007 The University of Manchester
 //
 //=======================================================================
+#include <iostream>
+#include <sstream>
+#include <cmath>
+#include <algorithm>
 #include <testlib/testlib_test.h>
 //:
 // \file
 // \author Tim Cootes
 // \brief test mcal_general_ca
 
-#include <iostream>
-#include <sstream>
 #include <vsl/vsl_binary_loader.h>
-#include <cmath>
 #include <vnl/vnl_matrix.h>
 #include <vnl/vnl_vector.h>
 #include <vnl/vnl_random.h>
@@ -25,8 +26,6 @@
 #include <mcal/mcal_sparse_basis_cost.h>
 #include <mcal/mcal_var_basis_cost.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <algorithm>
 
 //=======================================================================
 

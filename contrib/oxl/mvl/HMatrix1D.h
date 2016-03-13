@@ -16,11 +16,11 @@
 //   23 Oct 2002 - Peter Vanroose - using fixed 3x3 matrices throughout
 // \endverbatim
 
+#include <iostream>
+#include <iosfwd>
 #include <vnl/vnl_double_2x2.h>
 #include <vgl/vgl_homg_point_1d.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iosfwd>
 
 class HMatrix1D
 {

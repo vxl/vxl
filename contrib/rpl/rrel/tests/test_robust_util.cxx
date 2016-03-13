@@ -1,8 +1,8 @@
 // This is rpl/rrel/tests/test_robust_util.cxx
-#include <vcl_compiler.h>
 #include <iostream>
 #include <cmath>
 #include <vector>
+#include <vcl_compiler.h>
 #include <vnl/vnl_math.h>
 
 #include <rrel/rrel_util.h>

@@ -1,12 +1,12 @@
 // This is tbl/vepl/tests/test_driver.cxx
+#include <iostream>
+#include <string>
 #include <testlib/testlib_register.h>
 #include "test_driver.h"
 #include <vil/vil_new.h>
 #include <vil/vil_image_view.h>
 #include <vxl_config.h> // for vxl_byte etc.
 #include <vcl_compiler.h>
-#include <iostream>
-#include <string>
 
 DECLARE(vepl_test_dilate_disk);
 DECLARE(vepl_test_dyadic);

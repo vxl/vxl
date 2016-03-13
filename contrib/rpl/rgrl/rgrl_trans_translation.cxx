@@ -1,3 +1,4 @@
+#include <iostream>
 #include "rgrl_trans_translation.h"
 //:
 // \file
@@ -6,8 +7,6 @@
 
 #include <vcl_cassert.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 #include <rgrl/rgrl_util.h>
 
 rgrl_trans_translation::

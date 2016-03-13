@@ -16,12 +16,12 @@
 //   21 May  2009 Peter Vanroose istream operator>> re-implemented
 // \endverbatim
 
-#include <vcl_compiler.h>
 #include <iosfwd>
+#include <vector>
+#include <vcl_compiler.h>
 #include <vgl/vgl_fwd.h> // declare vgl_homg_point_2d and vgl_line_2d
 #include <vgl/vgl_vector_2d.h>
 #include <vcl_cassert.h>
-#include <vector>
 
 //: Represents a cartesian 2D point
 template <class Type>

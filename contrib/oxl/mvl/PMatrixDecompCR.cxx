@@ -5,12 +5,11 @@
 //:
 //  \file
 
+#include <iostream>
 #include "PMatrixDecompCR.h"
 
 
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 
 #include <vnl/vnl_matlab_print.h>
 #include <vnl/vnl_double_3.h>

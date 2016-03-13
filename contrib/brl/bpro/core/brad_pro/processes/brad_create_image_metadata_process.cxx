@@ -1,12 +1,12 @@
 // This is brl/bpro/core/brad_pro/processes/brad_create_image_metadata_process.cxx
+#include <iostream>
+#include <fstream>
 #include <bprb/bprb_func_process.h>
 #include <brad/brad_image_metadata.h>
 //:
 // \file
 
 #include <vcl_compiler.h>
-#include <iostream>
-#include <fstream>
 
 //: Constructor
 bool brad_create_image_metadata_process_cons(bprb_func_process& pro)

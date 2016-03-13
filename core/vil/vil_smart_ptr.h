@@ -18,8 +18,8 @@
 // 2002.9.20  Ian Scott       Copied into vil1, renamed and simplified.
 // \endverbatim
 
-#include <vcl_compiler.h>
 #include <iosfwd>
+#include <vcl_compiler.h>
 
 //: A templated smart pointer class
 // This class requires that the class being templated over has

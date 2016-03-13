@@ -1,14 +1,14 @@
+#include <cstring>
+#include <cstdlib>
+#include <iostream>
+#include <algorithm>
 #include "vil3d_slice_list.h"
 //:
 // \file
 // \brief Reader/Writer for a volume made up of a list of slices.
 // \author Ian Scott - Manchester
 
-#include <cstring>
-#include <cstdlib>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <algorithm>
 #include <vul/vul_file.h>
 #include <vul/vul_file_iterator.h>
 #include <vil/vil_load.h>

@@ -1,3 +1,5 @@
+#include <iostream>
+#include <cmath>
 #include "mfpf_region_pdf.h"
 //:
 // \file
@@ -6,8 +8,6 @@
 
 #include <vsl/vsl_binary_loader.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <cmath>
 #include <vcl_cassert.h>
 
 #include <vil/vil_resample_bilin.h>

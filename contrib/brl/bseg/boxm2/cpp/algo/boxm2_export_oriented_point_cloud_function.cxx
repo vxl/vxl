@@ -1,3 +1,5 @@
+#include <iostream>
+#include <limits>
 #include "boxm2_export_oriented_point_cloud_function.h"
 //:
 // \file
@@ -5,8 +7,6 @@
 #include <vcl_cassert.h>
 #include <vnl/algo/vnl_symmetric_eigensystem.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <limits>
 
 #include <rply.h>   //.ply parser
 

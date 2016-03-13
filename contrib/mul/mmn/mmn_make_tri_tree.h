@@ -5,13 +5,13 @@
 // \brief Compute arcs defining a graph s.t. triangles form a tree.
 // \author Tim Cootes
 
+#include <iostream>
+#include <vector>
 #include <vnl/vnl_matrix.h>
 #include <mmn/mmn_arc.h>
 #include <mmn/mmn_triplet.h>
 #include <mmn/mmn_dependancy.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <vector>
 
 //: Compute arcs defining a graph s.t. triangles form a tree.
 //  Compute arc of graph such that point belongs to at least one triangle,

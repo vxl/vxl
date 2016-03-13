@@ -9,10 +9,10 @@
 // \brief Adaptor which produces a new image by skipping rows and columns
 // \author fsm
 
+#include <string>
 #include <vil1/vil1_image_impl.h>
 #include <vil1/vil1_image.h>
 #include <vcl_compiler.h>
-#include <string>
 
 //: Adaptor which produces a new image by skipping rows and columns
 class vil1_skip_image_impl : public vil1_image_impl

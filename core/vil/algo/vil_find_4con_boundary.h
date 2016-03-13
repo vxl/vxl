@@ -1,10 +1,10 @@
 #ifndef vil_find_4con_boundary_h_
 #define vil_find_4con_boundary_h_
 
+#include <vector>
 #include <vil/vil_image_view.h>
 #include <vcl_cassert.h>
 #include <vcl_compiler.h>
-#include <vector>
 
 //:
 // \file

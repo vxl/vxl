@@ -5,10 +5,9 @@
 // \file
 // \author Tim Cootes
 
-#include <vcl_compiler.h>
 #include <iostream>
 #include <cstddef>
-#include <iostream>
+#include <vcl_compiler.h>
 #include <vil3d/vil3d_image_view.h>
 #include <vil/io/vil_io_memory_chunk.h>
 #include <vil/io/vil_io_smart_ptr.h>

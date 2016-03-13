@@ -1,9 +1,9 @@
 #pragma once
+#include <iostream>
+#include <string>
 #include <boxm2/boxm2_data_traits.h>
 #include <boxm2/boxm2_scene.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <string>
 //:
 // \file
 // \brief  Parent class for articulated parameters used in articulated scenes

@@ -12,10 +12,9 @@
 //   <none yet>
 // \endverbatim
 
+#include <iostream>
 #include <boxm/boxm_scene.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 
 //: A class to combine children cells and fill intermediate nodes
 template <class T_data>

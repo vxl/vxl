@@ -12,9 +12,9 @@
 // http://www.boost.org/LICENSE_1_0.txt)
 
 #include <memory>
-#include <vcl_compiler.h>
 #include <iostream>
 #include <iosfwd>
+#include <vcl_compiler.h>
 
 class rgtl_serialize_access;
 

@@ -1,4 +1,7 @@
 // This is brl/bseg/boxm2/pro/processes/boxm2_mask_sift_features_process.cxx
+#include <fstream>
+#include <iostream>
+#include <cmath>
 #include <bprb/bprb_func_process.h>
 //:
 // \file
@@ -7,12 +10,9 @@
 // \author Vishal Jain
 // \date Mar 15, 2011
 
-#include <fstream>
 #include <vil/vil_image_view_base.h>
 #include <vil/vil_image_view.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <cmath>
 namespace boxm2_mask_sift_features_process_globals
 {
     const unsigned n_inputs_  = 3;

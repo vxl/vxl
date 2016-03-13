@@ -19,12 +19,11 @@
 // \endverbatim
 //*****************************************************************************
 
+#include <vector>
+#include <iostream>
 #include <vsl/vsl_binary_io.h>
 #include <vsol/vsol_spatial_object_3d.h>
-#include <vector>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 
 class vsol_group_3d : public vsol_spatial_object_3d
 {

@@ -28,12 +28,12 @@
 //  emit value embedded in 7 bits
 // \endverbatim
 
-#include <vxl_config.h>
-#include <vcl_cassert.h>
 #include <cstring>
-#include <vcl_compiler.h>
 #include <cstddef>
 #include <iostream>
+#include <vxl_config.h>
+#include <vcl_cassert.h>
+#include <vcl_compiler.h>
 #include "vsl_binary_io.h"
 
 // Both VXL_LITTLE_ENDIAN && VXL_BIG_ENDIAN should be defined

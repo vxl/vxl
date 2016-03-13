@@ -7,10 +7,10 @@
 // \date  6-Feb-2008
 // \brief Convenience function a tuple of PODs from a config file.
 
-#include <vcl_compiler.h>
 #include <iostream>
 #include <istream>
 #include <sstream>
+#include <vcl_compiler.h>
 #include <mbl/mbl_exception.h>
 
 //: Read a 2-tuple of PODs from a config file.

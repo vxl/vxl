@@ -2,10 +2,10 @@
 #ifndef vgl_homg_point_2d_hxx_
 #define vgl_homg_point_2d_hxx_
 
+#include <iostream>
 #include "vgl_homg_point_2d.h"
 #include <vgl/vgl_homg_line_2d.h>
 #include <vcl_compiler.h>
-#include <iostream>
 
 // Note that the given lines must be distinct!
 template <class Type>

@@ -1,9 +1,8 @@
+#include <iostream>
 #include <testlib/testlib_test.h>
 #include "../bvxm_merge_mog.h"
 #include <bvxm/grid/bvxm_voxel_grid.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 
 static void test_merge_mog()
 {

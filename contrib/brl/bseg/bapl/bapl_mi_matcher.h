@@ -12,12 +12,12 @@
 //   None
 // \endverbatim
 
+#include <iostream>
+#include <vector>
 #include <bapl/bapl_affine_transform.h>
 #include <bapl/bapl_mi_matcher_params.h>
 #include <vil/vil_image_view.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <vector>
 
 class bapl_affine_roi;
 

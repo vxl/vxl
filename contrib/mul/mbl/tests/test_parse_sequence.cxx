@@ -1,9 +1,8 @@
 // This is mul/mbl/tests/test_parse_sequence.cxx
-#include <vcl_compiler.h>
-#include <iostream>
 #include <iostream>
 #include <sstream>
 #include <vector>
+#include <vcl_compiler.h>
 
 #include <mbl/mbl_parse_sequence.h>
 #include <vsl/vsl_vector_io.h>

@@ -5,13 +5,13 @@
 // \brief Builder for mfpf_region_pdf objects.
 // \author Tim Cootes
 
+#include <iostream>
+#include <iosfwd>
 #include <mfpf/mfpf_point_finder_builder.h>
 #include <vpdfl/vpdfl_builder_base.h>
 #include <mbl/mbl_cloneable_ptr.h>
 #include <mbl/mbl_chord.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iosfwd>
 #include <mfpf/mfpf_region_form.h>
 #include <vgl/vgl_fwd.h>
 

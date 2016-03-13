@@ -1,4 +1,5 @@
 // This is brl/bbas/volm/processes/vlm_project_dem_to_sat_img_process.cxx
+#include <iostream>
 #include <bprb/bprb_func_process.h>
 //:
 // \file
@@ -11,8 +12,6 @@
 //
 
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 #include <vpgl/vpgl_lvcs.h>
 #include <vpgl/vpgl_lvcs_sptr.h>
 #include <vul/vul_file.h>

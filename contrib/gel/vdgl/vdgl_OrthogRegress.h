@@ -10,9 +10,9 @@
 //   10 Sep. 2004 Peter Vanroose  Inlined all 1-line methods in class decl
 // \endverbatim
 
-#include <vcl_compiler.h>
 #include <iostream>
 #include <cmath>
+#include <vcl_compiler.h>
 #include <vdgl/vdgl_ortho_regress.h>
 
 class vdgl_OrthogRegress : public vdgl_ortho_regress

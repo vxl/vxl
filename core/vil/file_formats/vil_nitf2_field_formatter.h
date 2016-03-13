@@ -7,8 +7,8 @@
 
 #include <string>
 #include <istream>
-#include <vcl_compiler.h>
 #include <ostream>
+#include <vcl_compiler.h>
 
 #include "vil_nitf2.h"
 class vil_nitf2_field;

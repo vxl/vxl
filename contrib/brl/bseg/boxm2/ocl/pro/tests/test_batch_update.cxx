@@ -2,6 +2,11 @@
 // \file
 // \author Vishal JAin
 // \date 01-Mar-2010
+#include <iostream>
+#include <string>
+#include <vector>
+#include <map>
+#include <algorithm>
 #include <testlib/testlib_test.h>
 #include <testlib/testlib_root_dir.h>
 #include <vcl_where_root_dir.h>
@@ -21,13 +26,7 @@
 #include <boxm2/io/boxm2_sio_mgr.h>
 #include <vnl/vnl_vector_fixed.h>
 
-#include <iostream>
-#include <string>
-#include <vector>
-#include <map>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <algorithm>
 
 #include <brdb/brdb_value.h>
 

@@ -4,6 +4,9 @@
 //  Copyright: (C) 2000 Victoria University of Manchester
 //
 //=======================================================================
+#include <iostream>
+#include <sstream>
+#include <string>
 #include <testlib/testlib_test.h>
 //:
 // \file
@@ -11,10 +14,6 @@
 // \brief test vpdfl_gaussian, building, sampling, saving etc.
 
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
-#include <sstream>
-#include <string>
 #include <vpl/vpl.h> // vpl_unlink()
 #include <vpdfl/vpdfl_mixture.h>
 #include <vpdfl/vpdfl_mixture_builder.h>

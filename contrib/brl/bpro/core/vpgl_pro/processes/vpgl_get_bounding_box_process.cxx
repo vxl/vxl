@@ -1,13 +1,12 @@
 // This is brl/bpro/core/vpgl_pro/processes/vpgl_get_bounding_box_process.cxx
+#include <iostream>
+#include <fstream>
 #include <bprb/bprb_func_process.h>
 //:
 // \file
 
 #include <bprb/bprb_parameters.h>
-#include <iostream>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <fstream>
 #include <vgl/vgl_plane_3d.h>
 #include <vgl/vgl_intersection.h>
 #include <vsph/vsph_camera_bounds.h>

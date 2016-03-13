@@ -4,6 +4,8 @@
 // \author Isabel Restrepo
 // \date 13-Jan-2011
 
+#include <iostream>
+#include <cstdlib>
 #include <bprb/bprb_func_process.h>
 #include <bprb/bprb_parameters.h>
 
@@ -15,8 +17,6 @@
 #include <vul/vul_file.h>
 
 #include <vcl_compiler.h>
-#include <iostream>
-#include <cstdlib>
 
 // global variables
 namespace bvpl_compute_pca_error_scene_process_globals

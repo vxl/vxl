@@ -7,9 +7,9 @@
 // \date March 2001
 // \brief Class to maintain data and optimization model for 2d homography estimation
 
-#include <vcl_compiler.h>
 #include <iostream>
 #include <vector>
+#include <vcl_compiler.h>
 #include <vgl/vgl_fwd.h>
 #include <vnl/vnl_fwd.h>
 

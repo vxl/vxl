@@ -4,10 +4,10 @@
 //:
 // \file
 
+#include <iostream>
 #include "vbl_sparse_array_3d.h"
 #include "vbl_sparse_array_base.hxx"
 #include <vcl_compiler.h>
-#include <iostream>
 
 //: Print the array to a stream in "(i,j,k): value" format.
 template <class T>

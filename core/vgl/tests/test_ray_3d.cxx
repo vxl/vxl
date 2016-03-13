@@ -1,8 +1,8 @@
 // Some tests for vgl_ray_3d
 // J.L. Mundy Sept. 17, 2010
 
-#include <vcl_compiler.h>
 #include <iostream>
+#include <vcl_compiler.h>
 #include <testlib/testlib_test.h>
 #include <vgl/vgl_ray_3d.h>
 #include <vgl/vgl_closest_point.h>

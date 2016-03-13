@@ -9,8 +9,8 @@
 // \brief A reference-counted image object.
 // \author fsm
 
-#include <vcl_compiler.h>
 #include <iosfwd>
+#include <vcl_compiler.h>
 #include <vil1/vil1_image_impl.h>
 
 //: A smart pointer to an actual image.

@@ -9,14 +9,14 @@
 // \brief Build a random forest classifier
 // \author Martin Roberts
 
-#include <clsfy/clsfy_builder_base.h>
-#include <clsfy/clsfy_random_forest.h>
 #include <vector>
 #include <set>
 #include <string>
-#include <vcl_compiler.h>
 #include <iostream>
 #include <iosfwd>
+#include <clsfy/clsfy_builder_base.h>
+#include <clsfy/clsfy_random_forest.h>
+#include <vcl_compiler.h>
 #include <vnl/vnl_vector.h>
 #include <vnl/vnl_random.h>
 

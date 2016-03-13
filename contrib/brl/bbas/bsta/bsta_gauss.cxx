@@ -1,9 +1,9 @@
+#include <iostream>
+#include <cmath>
 #include "bsta_gauss.h"
 //:
 // \file
 #include <vcl_compiler.h>
-#include <iostream>
-#include <cmath> // for exp()
 
 double bsta_gauss::bsta_gaussian(const double x, const double sigma)
 {

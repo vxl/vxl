@@ -23,11 +23,11 @@
 //               conversion.
 // \endverbatim
 
+#include <iostream>
 #include "vgui_section_buffer.h"
 
 #include <vcl_cassert.h>
 #include <vcl_compiler.h>
-#include <iostream>
 #include <vbl/vbl_array_1d.h>
 #include <vil1/vil1_image.h>
 #include <vil1/vil1_pixel.h>

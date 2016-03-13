@@ -3,13 +3,13 @@
 #pragma implementation
 #endif
 
+#include <iostream>
+#include <vector>
+#include <cstring>
 #include "vil1_bmp.h"
 
 #include <vcl_cassert.h>
-#include <iostream>
 #include <vcl_compiler.h>
-#include <vector>
-#include <cstring>
 #include <vil1/vil1_stream.h>
 #include <vil1/vil1_property.h>
 

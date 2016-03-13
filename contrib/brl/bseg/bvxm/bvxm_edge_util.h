@@ -12,9 +12,8 @@
 #include <string>
 #include <vector>
 #include <iostream>
-#include <vcl_compiler.h>
-#include <iostream>
 #include <cmath>
+#include <vcl_compiler.h>
 
 #include <vbl/vbl_array_2d.h>
 

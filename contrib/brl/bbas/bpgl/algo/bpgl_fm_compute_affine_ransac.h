@@ -13,9 +13,9 @@
 //
 // Should template this class.
 
-#include <vcl_compiler.h>
 #include <iostream>
 #include <vector>
+#include <vcl_compiler.h>
 #include <vgl/vgl_fwd.h>
 #include <vnl/vnl_fwd.h>
 #include <rrel/rrel_estimation_problem.h>

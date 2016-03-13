@@ -14,9 +14,9 @@
 //   10 Sep. 2004 Peter Vanroose  Inlined all 1-line methods in class decl
 // \endverbatim
 
-#include <vcl_compiler.h>
 #include <iosfwd>
 #include <string>
+#include <vcl_compiler.h>
 #include <vcl_cassert.h>
 #include <vcl_atomic_count.h>
 #include <vil/vil_pixel_format.h>

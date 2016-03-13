@@ -13,6 +13,7 @@
 // \endverbatim
 //=========================================================================
 
+#include <map>
 #include <vgui/vgui_adaptor.h>
 #include <vgui/internals/vgui_adaptor_mixin.h>
 
@@ -21,7 +22,6 @@
 class wxMenu;
 
 #include <vcl_compiler.h>
-#include <map>
 
 //-------------------------------------------------------------------------
 //: wxWidgets implementation of vgui_adaptor.

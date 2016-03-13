@@ -10,10 +10,10 @@
 //    golden_test_vnl_io create
 // \endverbatim
 
-#include <vcl_compiler.h>
 #include <string>
 #include <iostream>
-#include <cstdlib> // for std::exit()
+#include <cstdlib>
+#include <vcl_compiler.h>
 #include <vsl/vsl_binary_io.h>
 #include <vnl/vnl_vector_fixed.h>
 #include <vnl/io/vnl_io_vector.h>

@@ -1,4 +1,6 @@
 //This is brl/bseg/bvxm/pro/processes/bvxm_atmospheric_corr_process.cxx
+#include <string>
+#include <iostream>
 #include "bvxm_atmospheric_corr_process.h"
 //:
 // \file
@@ -9,11 +11,8 @@
 #include <vil/vil_image_view.h>
 #include <vil/vil_convert.h>
 
-#include <string>
 #ifdef DEBUG
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 #endif
 
 #include <brdb/brdb_value.h>

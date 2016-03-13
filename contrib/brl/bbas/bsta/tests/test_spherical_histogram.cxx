@@ -1,9 +1,9 @@
 //:
 // \file
-#include <testlib/testlib_test.h>
-#include <vcl_compiler.h>
 #include <iostream>
 #include <cmath>
+#include <testlib/testlib_test.h>
+#include <vcl_compiler.h>
 #include <vnl/vnl_math.h>
 #include <bsta/bsta_spherical_histogram.h>
 

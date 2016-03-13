@@ -1,11 +1,11 @@
+#include <string>
+#include <iostream>
+#include <sstream>
 #include <testlib/testlib_test.h>
 #include <bsta/bsta_gaussian_full.h>
 #include <bsta/algo/bsta_display_vrml.h>
 #include <vgl/algo/vgl_rotation_3d.h>
-#include <string>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <sstream>
 static void test_display_vrml()
 {
   vnl_vector_fixed<float, 3> mean(0.0f, 0.0f, 0.0f);

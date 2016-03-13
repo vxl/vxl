@@ -1,4 +1,6 @@
 // This is oxl/xcv/xcv_axes_limits.cxx
+#include <iostream>
+#include <cmath>
 #include "xcv_axes_limits.h"
 //:
 // \file
@@ -15,9 +17,6 @@
 //
 
 #include <vcl_compiler.h>
-#include <iostream>
-#include <cmath>
-#include <iostream>
 
 static bool debug = false;
 

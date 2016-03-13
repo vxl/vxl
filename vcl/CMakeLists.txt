@@ -28,9 +28,9 @@ set( vcl_sources
   vcl_compiler.h
   vcl_deprecated.cxx     vcl_deprecated.h
 
-  vcl_cmath.cxx          vcl_cmath.h
-  vcl_cassert.cxx        vcl_cassert.h
-  vcl_cstdlib.cxx        vcl_cstdlib.h
+  vcl_cmath.h
+  vcl_cassert.h
+  vcl_cstdlib.h
 
   vcl_algorithm.h
   vcl_bitset.h

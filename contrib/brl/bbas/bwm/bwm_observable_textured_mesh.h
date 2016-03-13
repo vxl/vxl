@@ -3,14 +3,14 @@
 //:
 // \file
 
+#include <iostream>
+#include <iosfwd>
 #include "bwm_observable_mesh.h"
 
 #include <bmsh3d/bmsh3d_textured_mesh_mc.h>
 #include <bmsh3d/bmsh3d_textured_face_mc.h>
 
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iosfwd>
 
 class bwm_observable_textured_mesh : public bwm_observable_mesh
 {

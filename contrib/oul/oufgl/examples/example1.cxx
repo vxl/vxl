@@ -1,11 +1,10 @@
-#include <vcl_compiler.h>
 #include <iostream>
 #include <cstdlib>
 #include <cstring>
+#include <vcl_compiler.h>
 #include <vil1/vil1_memory_image.h>
 #include <vil1/vil1_save.h>
 #include <oufgl/frame_grabber_v4l.h>
-#include <iostream>
 #include <getopt.h>
 #include <vul/vul_timer.h>
 

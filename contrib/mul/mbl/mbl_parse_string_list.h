@@ -8,9 +8,8 @@
 
 #include <string>
 #include <vector>
+#include <iostream>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 
 //: Parse list of strings
 // Expects format of data:

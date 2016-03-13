@@ -1,7 +1,6 @@
 // This is mul/vimt3d/tests/test_save.cxx
+#include <iostream>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 #include <mbl/mbl_test.h>
 #include <vil3d/vil3d_load.h>
 #include <vil3d/vil3d_new.h>

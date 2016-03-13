@@ -19,10 +19,10 @@
 //   16-NOV_2007  Gamze Tunali - Added a new type of dialog called dialog_extensions
 // \endverbatim
 
-#include "dll.h"
 #include <string>
+#include <iosfwd>
+#include "dll.h"
 #include <vcl_compiler.h>
-#include <iosfwd> // for the status bar std::ostream.
 
 class vgui_window;
 class vgui_adaptor;

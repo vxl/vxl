@@ -15,6 +15,7 @@
 //   16-NOV-2007 Gamze Tunali - added produce_dialog_extension()
 // \endverbatim
 //-----------------------------------------------------------------------------
+#include <iostream>
 #include "vgui_mfc.h"
 
 #include <vgui/vgui_adaptor.h>
@@ -37,7 +38,6 @@
 
 #include <vcl_cassert.h>
 #include <vcl_compiler.h>
-#include <iostream>
 #include <vgui/vgui_gl.h>
 
 static bool debug = false;

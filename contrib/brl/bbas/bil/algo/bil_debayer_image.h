@@ -6,11 +6,11 @@
 // \author Vishal Jain
 
 
+#include <iostream>
+#include <vector>
 #include <vil/vil_image_view.h>
 
 #include <vcl_compiler.h>
-#include <iostream>
-#include <vector>
 
 
 

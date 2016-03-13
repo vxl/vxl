@@ -1,4 +1,6 @@
 // This is brl/bbas/bmsh3d/pro/bmsh3d_cmdpara.cxx
+#include <iostream>
+#include <limits>
 #include "bmsh3d_cmdpara.h"
 //:
 // \file
@@ -6,8 +8,6 @@
 // \date Feb 12, 2007
 
 #include <vcl_compiler.h>
-#include <iostream>
-#include <limits>
 #include <bmsh3d/bmsh3d_utils.h>
 
 //#####################################################################

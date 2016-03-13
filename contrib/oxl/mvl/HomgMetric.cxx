@@ -5,11 +5,10 @@
 //:
 // \file
 
+#include <iostream>
 #include "HomgMetric.h"
 
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 #include <vnl/vnl_math.h>
 #include <vnl/vnl_identity_3x3.h>
 #include <vnl/vnl_double_2.h>

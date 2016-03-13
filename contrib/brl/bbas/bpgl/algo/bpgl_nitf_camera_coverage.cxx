@@ -1,11 +1,10 @@
+#include <iostream>
+#include <fstream>
 #include "bpgl_nitf_camera_coverage.h"
 
 #include <vpgl/file_formats/vpgl_nitf_rational_camera.h>
 
-#include <iostream>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <fstream>
 
 #include <vul/vul_awk.h>
 

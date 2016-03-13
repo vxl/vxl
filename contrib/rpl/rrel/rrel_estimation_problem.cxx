@@ -1,11 +1,11 @@
 // This is rpl/rrel/rrel_estimation_problem.cxx
+#include <iostream>
+#include <vector>
 #include "rrel_estimation_problem.h"
 
 #include <rrel/rrel_wls_obj.h>
 
 #include <vcl_compiler.h>
-#include <iostream>
-#include <vector>
 #include <vcl_cassert.h>
 
 rrel_estimation_problem::rrel_estimation_problem( unsigned int dof,

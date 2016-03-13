@@ -22,8 +22,8 @@
 //                a homography from line correspondences.
 //   Jun 23, 2003 Peter Vanroose - made compute_pl() etc. pure virtual
 // \endverbatim
-#include <vcl_compiler.h>
 #include <vector>
+#include <vcl_compiler.h>
 #include <vgl/vgl_homg_point_2d.h>
 #include <vgl/vgl_homg_line_2d.h>
 #include <vgl/algo/vgl_h_matrix_2d.h>

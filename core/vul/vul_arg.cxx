@@ -18,18 +18,18 @@
 // \endcode
 // and then instantiate the class vul_arg<T> as usual (in myarg.cxx).
 
-#include "vul_arg.h"
-
-#include <vcl_cassert.h>
 #include <algorithm>
 #include <iostream>
 #include <sstream>
 #include <cstring>
-#include <vcl_compiler.h>
-#include <cstdlib> // exit()
-#include <cmath>   // floor()
+#include <cstdlib>
+#include <cmath>
 #include <vector>
 #include <list>
+#include "vul_arg.h"
+
+#include <vcl_cassert.h>
+#include <vcl_compiler.h>
 
 #include <vul/vul_sprintf.h>
 #include <vul/vul_string.h>

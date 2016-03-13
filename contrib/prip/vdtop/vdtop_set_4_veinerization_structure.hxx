@@ -3,10 +3,10 @@
 //:
 // \file
 
-#include "vdtop_set_4_veinerization_structure.h"
-#include <vcl_compiler.h>
 #include <iostream>
 #include <limits>
+#include "vdtop_set_4_veinerization_structure.h"
+#include <vcl_compiler.h>
 
 //: The 3 in 1 function.
 // It computes upper masks, removes non maximal directions, and compute the down-left version of the symmetric

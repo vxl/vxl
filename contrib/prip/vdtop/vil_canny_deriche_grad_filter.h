@@ -12,10 +12,10 @@
 //   06 May 2004 Jocelyn Marchadier
 // \endverbatim
 
-#include <vil/vil_image_view.h>
-#include <vcl_compiler.h>
 #include <iostream>
 #include <cmath>
+#include <vil/vil_image_view.h>
+#include <vcl_compiler.h>
 
 //: the canny_deriche filter for 1d pass.
 template <class srcT, class destT, class accumT>

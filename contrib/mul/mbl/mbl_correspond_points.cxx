@@ -1,17 +1,17 @@
 // This is mul/mbl/mbl_correspond_points.cxx
+#include <cmath>
+#include <iostream>
+#include <algorithm>
 #include "mbl_correspond_points.h"
 //:
 // \file
 // \brief Shapiro & Brady's point correspondence algorithm
 // \author Tim Cootes
 
-#include <cmath>
 #include <vgl/vgl_distance.h>
 #include <vnl/vnl_math.h>
 #include <vnl/algo/vnl_symmetric_eigensystem.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <algorithm>
 
 //=======================================================================
 // Dflt ctor

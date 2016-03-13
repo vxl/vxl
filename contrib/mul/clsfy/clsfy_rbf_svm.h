@@ -13,11 +13,11 @@
 //   31 May 2001 IMS Merged with Finder/IS_OrderedSVM
 // \endverbatim
 
-#include <clsfy/clsfy_classifier_base.h>
-#include <vcl_compiler.h>
 #include <iostream>
 #include <cmath>
 #include <iosfwd>
+#include <clsfy/clsfy_classifier_base.h>
+#include <vcl_compiler.h>
 
 //: A Support Vector Machine Binary Classifier.
 class clsfy_rbf_svm : public clsfy_classifier_base

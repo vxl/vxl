@@ -1,4 +1,5 @@
 // This is mul/mfpf/tests/test_pose_predictor.cxx
+#include <iostream>
 #include <testlib/testlib_test.h>
 //:
 // \file
@@ -11,8 +12,6 @@
 //=======================================================================
 
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 #include <vsl/vsl_binary_loader.h>
 #include <mfpf/mfpf_add_all_loaders.h>
 #include <mfpf/mfpf_pose_predictor.h>

@@ -1,9 +1,8 @@
-#include <testlib/testlib_test.h>
-#include <iostream>
-#include <vcl_compiler.h>
 #include <iostream>
 #include <fstream>
 #include <vector>
+#include <testlib/testlib_test.h>
+#include <vcl_compiler.h>
 
 #include <brec/brec_part_base.h>
 #include <brec/brec_part_base_sptr.h>

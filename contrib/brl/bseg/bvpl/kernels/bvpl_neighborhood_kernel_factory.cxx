@@ -1,11 +1,11 @@
+#include <iostream>
+#include <algorithm>
 #include "bvpl_neighborhood_kernel_factory.h"
 //:
 // \file
 
 #include <vnl/vnl_math.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <algorithm>
 
 // Default Constructor
 bvpl_neighborhood_kernel_factory::bvpl_neighborhood_kernel_factory()

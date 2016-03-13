@@ -5,12 +5,12 @@
 // \author Tim Cootes
 // \brief Compute a direction at each point, usually normal to curve
 
+#include <iostream>
+#include <iosfwd>
 #include <msm/msm_points.h>
 #include <msm/msm_curve.h>
 #include <vgl/vgl_vector_2d.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iosfwd>
 
 //: Compute a direction at each point, usually normal to curve.
 //  Generates a unit direction vector for each point.

@@ -1,7 +1,6 @@
-#include <vcl_compiler.h>
-#include <iostream>
 #include <iostream>
 #include <vector>
+#include <vcl_compiler.h>
 
 #include <pop/pop_vertex.h>
 #include <pop/pop_edge.h>

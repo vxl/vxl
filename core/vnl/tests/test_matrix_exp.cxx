@@ -1,8 +1,8 @@
 // @author fsm
 
 #include <iostream>
+#include <cmath>
 #include <vcl_compiler.h>
-#include <cmath> // for std::abs()
 
 #include <vnl/vnl_double_3.h>
 #include <vnl/vnl_double_3x3.h>

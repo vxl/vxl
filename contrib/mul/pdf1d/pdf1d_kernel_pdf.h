@@ -7,12 +7,12 @@
 // \brief Univariate kernel_pdf PDF
 // \author Tim Cootes
 
-#include <pdf1d/pdf1d_pdf.h>
-#include <vnl/vnl_vector.h>
 #include <vector>
-#include <vcl_compiler.h>
 #include <iostream>
 #include <iosfwd>
+#include <pdf1d/pdf1d_pdf.h>
+#include <vnl/vnl_vector.h>
+#include <vcl_compiler.h>
 
 //: Class for univariate kernel based PDFs.
 //  Distribution is the sum of a set of kernel functions placed on the training

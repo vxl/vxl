@@ -18,10 +18,10 @@
 //   29 July 2011 - Peter Vanroose - added documentation, tests, and x_write_tree()
 // \endverbatim
 
-#include <vnl/vnl_quaternion.h>
 #include <string>
-#include <vcl_compiler.h>
 #include <iosfwd>
+#include <vnl/vnl_quaternion.h>
+#include <vcl_compiler.h>
 
 //: XML save vnl_quaternion to stream.
 // \relatesalso vnl_quaternion

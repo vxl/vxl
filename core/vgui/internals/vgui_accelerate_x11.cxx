@@ -8,6 +8,10 @@
 // \date   28 Mar 2000
 // \brief  See vgui_accelerate_x11.h for a description of this file.
 
+#include <iostream>
+#include <cmath>
+#include <cstring>
+#include <algorithm>
 #include "vgui_accelerate_x11.h"
 
 //capes : there's no point starting this accelerator unless you're running Mesa at the moment
@@ -18,12 +22,8 @@
 //   XMesaGetCurrentBuffer (function)
 //   XMesaGetBackBuffer (function)
 
-#include <iostream>
 #include <vcl_compiler.h>
-#include <cmath>
 #include <vcl_cassert.h>
-#include <cstring>
-#include <algorithm>
 
 #include <X11/Xlib.h>
 #include <X11/Xutil.h>

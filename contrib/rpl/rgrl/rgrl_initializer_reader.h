@@ -7,9 +7,9 @@
 // \date 16 Feb 2005
 
 #include <vector>
-#include <vcl_compiler.h>
 #include <iostream>
 #include <iosfwd>
+#include <vcl_compiler.h>
 
 #include <rgrl/rgrl_initializer.h>
 #include <rgrl/rgrl_scale_sptr.h>

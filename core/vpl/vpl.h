@@ -5,8 +5,8 @@
 // \file
 // \brief Access to certain POSIX functions.
 
-#include <vcl_compiler.h>
 #include <cstddef>
+#include <vcl_compiler.h>
 
 //: Get the pathname of the current working directory.
 //

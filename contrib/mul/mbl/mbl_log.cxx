@@ -9,17 +9,16 @@
 // n.b. We have not copied any code from log4j (or other logging libraries)
 // - just the ideas.
 
-#include "mbl_log.h"
 #include <cstddef>
 #include <fstream>
 #include <memory>
-#include <vcl_compiler.h>
 #include <iostream>
 #include <algorithm>
-#include <vcl_cassert.h>
-#include <iostream>
 #include <sstream>
 #include <utility>
+#include "mbl_log.h"
+#include <vcl_compiler.h>
+#include <vcl_cassert.h>
 #include <vul/vul_string.h>
 #include <mbl/mbl_read_props.h>
 #include <mbl/mbl_exception.h>

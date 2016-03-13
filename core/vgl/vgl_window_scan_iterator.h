@@ -11,8 +11,8 @@
 //   Nov.2003 - Peter Vanroose - made constructor more robust w.r.t. its input
 // \endverbatim
 
-#include <vcl_compiler.h>
 #include <cmath>
+#include <vcl_compiler.h>
 #include <vgl/vgl_region_scan_iterator.h>
 
 //: Iterator to scan rectangular windows

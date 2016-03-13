@@ -5,11 +5,10 @@
 // \brief Functions to load objects from text file
 // \author dac
 
-#include <vcl_compiler.h>
-#include <iostream>
 #include <iostream>
 #include <string>
 #include <vector>
+#include <vcl_compiler.h>
 
 //: Load vector from file with format "v1 v2 .. vn"
 // \throws on error, or returns false if exceptions are disabled.

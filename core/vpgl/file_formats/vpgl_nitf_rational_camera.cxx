@@ -1,4 +1,8 @@
 // This is core/vpgl/file_formats/vpgl_nitf_rational_camera.cxx
+#include <cstdlib>
+#include <cmath>
+#include <cstring>
+#include <cctype>
 #include "vpgl_nitf_rational_camera.h"
 //:
 // \file
@@ -7,11 +11,7 @@
 // \date Dec 2006
 
 #include <vcl_compiler.h>
-#include <cstdlib>
 #include <vil/vil_load.h>
-#include <cmath>
-#include <cstring>
-#include <cctype>
 // for calls to get nitf_rational parameters from vil
 #include <vil/file_formats/vil_nitf2_image.h>
 

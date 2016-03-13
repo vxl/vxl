@@ -14,12 +14,11 @@
 
 #include <string>
 #include <vector>
+#include <iostream>
 #include <vnl/vnl_vector.h>
 #include <mbl/mbl_data_wrapper.h>
 #include <vsl/vsl_binary_io.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 
 //:  A common interface for 1-out-of-N classifiers
 // This class takes a vector and classifies into one of

@@ -2,8 +2,8 @@
 // JLM
 
 #include <iostream>
-#include <vcl_compiler.h>
 #include <vector>
+#include <vcl_compiler.h>
 #include <vnl/vnl_quaternion.h>
 #include <vnl/vnl_double_3.h>
 #include <vnl/vnl_math.h> // for pi

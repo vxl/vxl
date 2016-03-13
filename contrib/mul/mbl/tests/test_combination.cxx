@@ -1,7 +1,6 @@
 // This is mul/mbl/tests/test_combination.cxx
+#include <iostream>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 #include <mbl/mbl_combination.h>
 #include <testlib/testlib_test.h>
 

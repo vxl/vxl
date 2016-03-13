@@ -1,7 +1,6 @@
+#include <iostream>
 #include <testlib/testlib_test.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 #include <vil/vil_image_view.h>
 #include <bil/bil_bounded_image_view.h>
 

@@ -14,11 +14,10 @@
 // \endverbatim
 
 #include <vector>
-#include <vcl_compiler.h>
-#include <iostream>
 #include <iostream>
 #include <map>
 #include <string>
+#include <vcl_compiler.h>
 #include <volm/volm_camera_space.h>
 #include <volm/volm_camera_space_sptr.h>
 #include <bpgl/depth_map/depth_map_scene_sptr.h>

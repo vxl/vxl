@@ -4,9 +4,9 @@
 #define BUNDLER_DEBUG
 
 #include <vector>
-#include <vcl_compiler.h>
 #include <iostream>
 #include <utility>
+#include <vcl_compiler.h>
 
 #include <vbl/vbl_smart_ptr.hxx>
 #include <vbl/vbl_ref_count.h>

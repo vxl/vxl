@@ -1,3 +1,5 @@
+#include <vector>
+#include <iostream>
 #include "vnl_solve_qp.h"
 //:
 // \file
@@ -7,9 +9,7 @@
 #include <vnl/algo/vnl_svd.h>
 #include <vnl/algo/vnl_cholesky.h>
 #include <vcl_compiler.h>
-#include <vector>
 #include <vcl_cassert.h>
-#include <iostream>
 
 //: Solve Sx=b for symmetric S
 static void vnl_solve_symmetric_le(const vnl_matrix<double>& S,

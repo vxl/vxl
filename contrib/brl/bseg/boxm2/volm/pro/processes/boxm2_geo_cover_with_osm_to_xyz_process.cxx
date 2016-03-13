@@ -1,4 +1,5 @@
 // This is brl/bseg/boxm2/volm/pro/process/boxm2_geo_cover_with_osm_to_xyz_process.cxx
+#include <iostream>
 #include <bprb/bprb_func_process.h>
 //:
 // \file
@@ -10,8 +11,6 @@
 
 #include <vul/vul_file.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 #include <volm/volm_osm_objects.h>
 #include <volm/volm_io.h>
 #include <volm/volm_category_io.h>

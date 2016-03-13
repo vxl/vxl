@@ -1,3 +1,8 @@
+#include <sstream>
+#include <iostream>
+#include <fstream>
+#include <iomanip>
+#include <cmath>
 #include <testlib/testlib_test.h>
 
 #include <bvpl/kernels/bvpl_edge2d_kernel_factory.h>
@@ -16,13 +21,7 @@
 #include <vnl/vnl_random.h>
 #include <vbl/vbl_array_3d.h>
 
-#include <sstream>
-#include <iostream>
-#include <fstream>
-#include <iomanip>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <cmath>
 
 template<class data_type>
 void fill_in_data(vbl_array_3d<data_type> & data,data_type min_p, data_type max_p, vnl_float_3 axis)

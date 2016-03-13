@@ -1,16 +1,15 @@
 // This is brl/bpro/core/vil_pro/processes/bil_create_raw_image_istream_process.cxx
+#include <iostream>
+#include <string>
+#include <sstream>
 #include <bprb/bprb_func_process.h>
 //:
 // \file
 
 #include <bprb/bprb_parameters.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
-#include <string>
 #include <vil/vil_image_view_base.h>
 #include <bil/bil_raw_image_istream.h>
-#include <sstream>
 
 //: Constructor
 bool bil_create_raw_image_istream_process_cons(bprb_func_process& pro)

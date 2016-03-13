@@ -4,6 +4,7 @@
 //:
 // \file
 
+#include <iostream>
 #include "vpgl_fm_compute_8_point.h"
 
 #include <vnl/vnl_vector.h>
@@ -12,7 +13,6 @@
 #include <vnl/algo/vnl_svd.h>
 #include <vgl/algo/vgl_norm_trans_2d.h>
 #include <vcl_compiler.h>
-#include <iostream>
 
 
 //-------------------------------------------

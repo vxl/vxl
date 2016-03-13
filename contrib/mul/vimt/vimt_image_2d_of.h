@@ -6,11 +6,11 @@
 // \brief Container for vil_image_view<T> + transform
 // \author Tim Cootes
 
+#include <iostream>
+#include <iosfwd>
 #include <vimt/vimt_image_2d.h>
 #include <vil/vil_image_view.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iosfwd>
 
 //: Represent 2D image of type T together with a transform.
 //  Each plane is ni() x nj() Ts, with the (x,y) element

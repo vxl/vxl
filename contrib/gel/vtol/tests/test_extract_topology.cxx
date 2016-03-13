@@ -1,7 +1,6 @@
 #include <iostream>
-#include <vcl_compiler.h>
-#include <iostream>
 #include <cmath>
+#include <vcl_compiler.h>
 #include <vil/vil_image_view.h>
 #include <testlib/testlib_test.h>
 #include <vxl_config.h>

@@ -4,6 +4,7 @@
 //  Copyright: (C) 2011 The University of Manchester
 //
 //=======================================================================
+#include <iostream>
 #include <testlib/testlib_test.h>
 //:
 // \file
@@ -11,8 +12,6 @@
 // \brief test msdi_reflected_marked_images
 
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 #include <msdi/msdi_reflected_marked_images.h>
 #include <msdi/msdi_array_of_marked_images.h>
 #include <vimt/vimt_image_2d_of.h>

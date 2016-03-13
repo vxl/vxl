@@ -1,8 +1,7 @@
-#include <testlib/testlib_test.h>
 #include <vector>
+#include <iostream>
+#include <testlib/testlib_test.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 
 #include <bbgm/bbgm_image_of.h>
 #include <bsta/bsta_attributes.h>

@@ -1,11 +1,10 @@
 // This is brl/bseg/sdet/tests/test_denoise_mrf_bp.cxx
-#include <sdet/sdet_denoise_mrf_bp.h>
 #include <vector>
 #include <string>
 #include <iostream>
-#include <vcl_compiler.h>
-#include <iostream>
 #include <fstream>
+#include <sdet/sdet_denoise_mrf_bp.h>
+#include <vcl_compiler.h>
 #include <vil/vil_image_resource.h>
 #include <vil/vil_load.h>
 #include <vil/vil_save.h>

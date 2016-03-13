@@ -1,13 +1,12 @@
 // This is gel/vsol/vsol_rectangle_2d.cxx
+#include <iostream>
+#include <cmath>
 #include "vsol_rectangle_2d.h"
 //:
 // \file
 #include <vcl_cassert.h>
 #include <vnl/vnl_math.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <cmath> // for fabs()
-#include <iostream>
 #include <vgl/vgl_vector_2d.h>
 #include <vsol/vsol_point_2d.h>
 #include <vbl/io/vbl_io_smart_ptr.h>

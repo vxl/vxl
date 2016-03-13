@@ -1,11 +1,10 @@
 // This is brl/bbas/bsta/tests/test_k_means.cxx
-#include <testlib/testlib_test.h>
 #include <vector>
 #include <string>
 #include <sstream>
+#include <iostream>
+#include <testlib/testlib_test.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 #include <bsta/bsta_k_means.h>
 void test_k_means()
 {

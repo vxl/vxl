@@ -6,11 +6,11 @@
 // \file
 // \author fsm
 
+#include <iostream>
 #include "vgui_overlay_helper.h"
 
 #include <vcl_cassert.h>
 #include <vcl_compiler.h>
-#include <iostream>
 
 #include <vgui/vgui_event.h>
 #include <vgui/vgui_macro.h>

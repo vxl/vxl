@@ -1,14 +1,14 @@
 // This is brl/bbas/bil/algo/bil_compass_edge_detector.cxx
+#include <vector>
+#include <iostream>
+#include <cmath>
 #include "bil_compass_edge_detector.h"
 //:
 // \file
 
 #include <bil/algo/bil_nms.h>
 
-#include <vector>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <cmath>
 #include <vnl/vnl_math.h> // for vnl_math::pi
 #include <vil/vil_convert.h>
 

@@ -1,9 +1,9 @@
 // This is tbl/vipl/tests/test_driver.cxx
+#include <iostream>
+#include <cmath>
 #include "test_driver.h"
 #include <testlib/testlib_register.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <cmath> // for std::fabs()
 
 DECLARE( vipl_test_histogram );
 DECLARE( vipl_test_erode_disk );

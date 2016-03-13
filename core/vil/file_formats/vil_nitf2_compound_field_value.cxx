@@ -2,12 +2,12 @@
 // Stellar Science Ltd. Co. (stellarscience.com) for
 // Air Force Research Laboratory, 2005.
 
+#include <iomanip>
+#include <string>
 #include "vil_nitf2_compound_field_value.h"
 
 // not used? #include <sstream>
 #include <vcl_compiler.h>
-#include <iomanip>
-#include <string>
 
 #include "vil_nitf2_typed_field_formatter.h"
 

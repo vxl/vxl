@@ -1,4 +1,7 @@
 // This is brl/bseg/boxm2/pro/processes/boxm2_blob_precision_recall_process.cxx
+#include <iostream>
+#include <algorithm>
+#include <sstream>
 #include <bprb/bprb_func_process.h>
 //:
 // \file
@@ -11,9 +14,6 @@
 #include <vil/vil_save.h>
 #include <bbas_pro/bbas_1d_array_float.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <algorithm>
-#include <sstream>
 
 namespace boxm2_blob_precision_recall_process_globals
 {

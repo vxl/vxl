@@ -6,11 +6,11 @@
 // \brief Simple object to build histogram from supplied data.
 // \author Tim Cootes
 
-#include <vcl_compiler.h>
 #include <iostream>
 #include <iosfwd>
-#include <vsl/vsl_binary_io.h>
 #include <vector>
+#include <vcl_compiler.h>
+#include <vsl/vsl_binary_io.h>
 
 //: Simple object to build histogram from supplied data.
 //  Assumes all 1D data can be cast to doubles

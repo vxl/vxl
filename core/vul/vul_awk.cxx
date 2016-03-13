@@ -14,13 +14,13 @@
 //
 //-----------------------------------------------------------------------------
 
-#include "vul_awk.h"
-
-#include <vcl_compiler.h>
 #include <cctype>
 #include <cstring>
 #include <iostream>
-#include <cstdio> // for EOF
+#include <cstdio>
+#include "vul_awk.h"
+
+#include <vcl_compiler.h>
 
 //: Construct from input stream
 vul_awk::vul_awk(std::istream& s, ModeFlags mode):

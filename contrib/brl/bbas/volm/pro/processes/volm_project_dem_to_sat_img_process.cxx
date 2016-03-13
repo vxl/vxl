@@ -1,4 +1,5 @@
 // This is brl/bbas/volm/processes/vlm_project_dem_to_sat_img_process.cxx
+#include <iostream>
 #include <bprb/bprb_func_process.h>
 //:
 // \file
@@ -16,8 +17,6 @@
 //
 
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 #include <vpgl/vpgl_rational_camera.h>
 #include <vpgl/vpgl_local_rational_camera.h>
 #include <vil/vil_image_view.h>

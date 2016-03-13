@@ -3,16 +3,16 @@
 // \brief A class for reading video files on windows platform
 // \author Louise Butcher
 
+#include <fstream>
+#include <iostream>
+#include <cstddef>
 #include "mvl2_video_from_sequence.h"
 #include <vil/vil_load.h>
 #include <vil/vil_convert.h>
 #include <vul/vul_file.h>
 #include <vul/vul_sprintf.h>
-#include <fstream>
 #include <vcl_cassert.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <cstddef> // for std::size_t
 
 mvl2_video_from_sequence::mvl2_video_from_sequence()
 {

@@ -10,8 +10,8 @@
 // \brief Templated rtree class and associated classes and functions
 //--------------------------------------------------------------------------------
 
-#include <vcl_compiler.h>
 #include <vector>
+#include <vcl_compiler.h>
 // forward declare all classes.
 template <class V, class B, class C> class vgl_rtree_probe;
 template <class V, class B, class C> class vgl_rtree_node;

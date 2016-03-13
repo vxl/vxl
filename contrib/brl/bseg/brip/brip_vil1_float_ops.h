@@ -22,9 +22,9 @@
 //
 //-----------------------------------------------------------------------------
 #include <vector>
-#include <vcl_compiler.h>
 #include <iostream>
 #include <complex>
+#include <vcl_compiler.h>
 #include <vnl/vnl_matrix.h>
 #include <vbl/vbl_array_2d.h>
 #include <vsol/vsol_box_2d_sptr.h>

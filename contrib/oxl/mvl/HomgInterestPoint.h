@@ -21,9 +21,9 @@
 // \endverbatim
 //-----------------------------------------------------------------------------
 
-#include <vcl_compiler.h>
 #include <iostream>
 #include <iosfwd>
+#include <vcl_compiler.h>
 #include <vnl/vnl_int_2.h>
 #include <mvl/HomgPoint2D.h>
 #include <vgl/vgl_homg_point_2d.h>

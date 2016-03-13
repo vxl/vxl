@@ -19,12 +19,12 @@
 //
 //\endverbatim
 
-#include <vbl/vbl_ref_count.h>
 #include <vector>
-#include <vcl_compiler.h>
 #include <iostream>
 #include <deque>
 #include <list>
+#include <vbl/vbl_ref_count.h>
+#include <vcl_compiler.h>
 
 #include <vgl/vgl_point_2d.h>
 

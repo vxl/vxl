@@ -5,10 +5,10 @@
 // \brief Builder for mfpf_norm_corr2d objects.
 // \author Tim Cootes
 
-#include <mfpf/mfpf_point_finder_builder.h>
-#include <vcl_compiler.h>
 #include <iostream>
 #include <iosfwd>
+#include <mfpf/mfpf_point_finder_builder.h>
+#include <vcl_compiler.h>
 #include <vgl/vgl_fwd.h>
 
 //: Builder for mfpf_norm_corr2d objects.

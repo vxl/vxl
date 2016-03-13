@@ -13,13 +13,12 @@
 //                                   add probability integration over a box
 // \endverbatim
 
+#include <iostream>
+#include <algorithm>
 #include "bsta_distribution.h"
 #include "bsta_sampler.h"
 #include <vcl_cassert.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <algorithm>
-#include <iostream>
 #include <vpdl/vpdt/vpdt_dist_traits.h>
 #include <vnl/vnl_random.h>
 

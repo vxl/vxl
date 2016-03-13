@@ -7,10 +7,9 @@
 // \author Amir Tamrakar
 // \date June 18, 2005
 
+#include <iostream>
 #include <bgrl2/bgrl2_vertex.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 
 class test_edge;
 

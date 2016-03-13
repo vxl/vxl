@@ -12,11 +12,11 @@
 // map is used by default and added a destructor that removes the id
 // from the map and therefore prevents a memory leak.
 
+#include <iostream>
+#include <map>
 #include "vgui_soview.h"
 
-#include <iostream>
 #include <vcl_compiler.h>
-#include <map>
 
 #include <vgui/vgui_gl.h>
 #include <vgui/vgui_observer.h>

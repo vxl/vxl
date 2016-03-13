@@ -1,9 +1,9 @@
 /*
   fsm
 */
-#include <vcl_compiler.h>
 #include <cstdlib>
 #include <iostream>
+#include <vcl_compiler.h>
 
 #include <vgui/vgui.h>
 #include <vgui/vgui_window.h>

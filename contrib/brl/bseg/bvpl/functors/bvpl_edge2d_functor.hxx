@@ -2,11 +2,10 @@
 #define bvpl_edge2d_functor_hxx_
 //:
 // \file
-#include "bvpl_edge2d_functor.h"
-#include <vcl_compiler.h>
 #include <iostream>
 #include <cmath>
-#include <iostream>
+#include "bvpl_edge2d_functor.h"
+#include <vcl_compiler.h>
 
 
 // Default constructor

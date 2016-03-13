@@ -6,6 +6,10 @@
 // \author Yi Dong
 // \date Apr 17, 2013
 
+#include <set>
+#include <iostream>
+#include <functional>
+#include <ios>
 #include <volm/volm_io.h>
 #include <volm/volm_tile.h>
 #include <volm/volm_loc_hyp.h>
@@ -19,11 +23,7 @@
 #include <vil/vil_load.h>
 #include <vgl/vgl_polygon.h>
 #include <vil/algo/vil_find_4con_boundary.h>
-#include <set>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <functional>
-#include <ios>
 #include <bvrml/bvrml_write.h>
 #include <vil/vil_crop.h>
 #include <bkml/bkml_parser.h>

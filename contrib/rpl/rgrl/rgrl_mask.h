@@ -15,9 +15,9 @@
 // Oct. 2006  Gehua Yang (RPI) - move rgrl_mask_3d_image into separate file
 // \endverbatim
 
-#include <vcl_compiler.h>
 #include <iostream>
 #include <iosfwd>
+#include <vcl_compiler.h>
 #include <vnl/vnl_vector.h>
 #include <vil/vil_image_view.h>
 

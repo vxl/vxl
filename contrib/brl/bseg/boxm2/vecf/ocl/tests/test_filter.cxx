@@ -4,10 +4,11 @@
 // \date 10/12/14
 
 #include <memory>
-#include <testlib/testlib_test.h>
-#include <vcl_compiler.h>
 #include <iostream>
 #include <fstream>
+#include <vector>
+#include <testlib/testlib_test.h>
+#include <vcl_compiler.h>
 #include <vil/vil_image_view.h>
 #include <vil/vil_save.h>
 #include <vil/vil_load.h>
@@ -17,7 +18,6 @@
 #include <boxm2/ocl/boxm2_opencl_cache.h>
 #include <boxm2/boxm2_util.h>
 #include <vul/vul_file.h>
-#include <vector>
 #include "../boxm2_vecf_ocl_filter.h"
 typedef vnl_vector_fixed<unsigned char, 16> uchar16;
 void test_filter()

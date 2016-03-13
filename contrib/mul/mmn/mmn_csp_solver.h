@@ -6,9 +6,9 @@
 // \author Martin Roberts
 
 #include <vector>
-#include <vcl_compiler.h>
 #include <iostream>
 #include <set>
+#include <vcl_compiler.h>
 #include <mmn/mmn_arc.h>
 #include <mmn/mmn_dependancy.h>
 #include <mmn/mmn_graph_rep1.h>

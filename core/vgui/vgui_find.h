@@ -9,8 +9,8 @@
 // \author  fsm
 // \brief   Functions to search for tableaux in the tableau hierarchy.
 
-#include <vcl_compiler.h>
 #include <string>
+#include <vcl_compiler.h>
 #include <vgui/vgui_tableau_sptr.h>
 
 //: Search for a tableau by type in the hierarchy.

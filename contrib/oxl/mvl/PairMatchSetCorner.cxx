@@ -5,14 +5,13 @@
 //:
 // \file
 
+#include <iostream>
+#include <cstdlib>
+#include <vector>
 #include "PairMatchSetCorner.h"
 
 #include <vcl_cassert.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <cstdlib>
-#include <vector>
-#include <iostream>
 #include <mvl/HomgInterestPointSet.h>
 
 //: Constructor

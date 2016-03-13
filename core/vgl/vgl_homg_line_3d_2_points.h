@@ -15,8 +15,8 @@
 //   Peter Vanroose - 15 July 2002 - Added concurrent(), coplanar() and intersection()
 // \endverbatim
 
-#include <vcl_compiler.h>
 #include <iosfwd>
+#include <vcl_compiler.h>
 #include <vgl/vgl_homg_point_3d.h> // data member of this class
 
 //:Represents a homogeneous 3D line using two points

@@ -9,12 +9,12 @@
 //
 //-----------------------------------------------------------------------------
 
-#include "vnl_sparse_lm.h"
-
 #include <iostream>
-#include <vcl_compiler.h>
 #include <iomanip>
 #include <algorithm>
+#include "vnl_sparse_lm.h"
+
+#include <vcl_compiler.h>
 
 #include <vnl/vnl_vector.h>
 #include <vnl/vnl_matrix.h>

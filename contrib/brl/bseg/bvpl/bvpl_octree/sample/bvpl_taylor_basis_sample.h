@@ -13,12 +13,11 @@
 //   <none yet>
 // \endverbatim
 
+#include <iostream>
 #include <vnl/vnl_double_3.h>
 #include <vnl/vnl_double_3x3.h>
 
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 #include <vsl/vsl_binary_io.h>
 
 

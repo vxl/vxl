@@ -7,9 +7,9 @@
 #ifndef VIL_NITF2_TAGGED_RECORD_DEFINITION_H
 #define VIL_NITF2_TAGGED_RECORD_DEFINITION_H
 
-#include <vcl_compiler.h>
 #include <map>
 #include <string>
+#include <vcl_compiler.h>
 
 #include "vil_nitf2_field_functor.h"
 

@@ -12,14 +12,14 @@
 //   2009-12-19 Peter Vanroose - added write_vrml_header()
 // \endverbatim
 
+#include <iostream>
+#include <fstream>
 #include "../bvxm_voxel_grid.h"
 #include <bvrml/bvrml_write.h>
 #include <bsta/bsta_attributes.h>
 #include <bsta/bsta_gauss_sf1.h>
 #include <vnl/vnl_float_4.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <fstream>
 
 class bvxm_vrml_voxel_grid
 {

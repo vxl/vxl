@@ -16,8 +16,8 @@
 //   Feb.2002 - Peter Vanroose - brief doxygen comment placed on single line
 // \endverbatim
 
-#include <vcl_compiler.h>
 #include <iostream>
+#include <vcl_compiler.h>
 
 struct vul_redirector_data;
 

@@ -4,11 +4,11 @@
 //:
 // \file
 
+#include <iostream>
 #include "vgl_fit_conics_2d.h"
 #include <vgl/vgl_vector_2d.h>
 #include <vgl/algo/vgl_conic_2d_regression.h>
 #include <vcl_compiler.h>
-#include <iostream>
 #include <vcl_cassert.h>
 
 //--------------------------------------------------------------

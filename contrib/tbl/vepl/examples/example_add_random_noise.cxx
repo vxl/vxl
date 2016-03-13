@@ -9,14 +9,13 @@
 // \author Peter Vanroose, K.U.Leuven, ESAT/PSI
 // \date   7 October 2002, from vepl1/examples
 //
+#include <iostream>
+#include <cstdlib>
 #include <vil/vil_load.h>
 #include <vil/vil_save.h>
 
 #include <vepl/vepl_add_random_noise.h>
-#include <iostream>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <cstdlib> // for atof()
 
 int
 main(int argc, char** argv) {

@@ -1,7 +1,6 @@
 // This is mul/vimt3d/tests/test_v3m.cxx
+#include <iostream>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 #include <vpl/vpl.h>
 #include <vul/vul_temp_filename.h>
 #include <mbl/mbl_stl.h>

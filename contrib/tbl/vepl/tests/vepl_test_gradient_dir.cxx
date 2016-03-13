@@ -7,11 +7,10 @@
 // \author Peter Vanroose, K.U.Leuven, ESAT/PSI
 // \date   7 October 2002, from vepl1/tests
 
-#include <vepl/vepl_gradient_dir.h>
-#include <vcl_compiler.h>
-#include <iostream>
 #include <iostream>
 #include <string>
+#include <vepl/vepl_gradient_dir.h>
+#include <vcl_compiler.h>
 #include "test_driver.h"
 #include <vxl_config.h> // for vxl_byte
 

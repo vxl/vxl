@@ -1,9 +1,9 @@
 #include <iostream>
-#include <vcl_compiler.h>
 #include <iomanip>
+#include <complex>
+#include <vcl_compiler.h>
 #include <vnl/vnl_rational.h>
 #include <vnl/vnl_rational_traits.h>
-#include <complex>
 #ifdef NEED_COMPLEX_RATIONAL
 # include <vnl/vnl_complex.h>
 #endif

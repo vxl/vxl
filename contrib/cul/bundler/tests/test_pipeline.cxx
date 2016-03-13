@@ -1,3 +1,6 @@
+#include <string>
+#include <iostream>
+#include <iomanip>
 #include <testlib/testlib_test.h>
 
 #include <bundler/bundler.h>
@@ -6,10 +9,7 @@
 
 
 #include <vil/vil_load.h>
-#include <string>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iomanip>
 
 static const char* IMG_PATH = "contrib/cul/bundler/test/test_data";
 

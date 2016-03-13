@@ -18,6 +18,7 @@
 //   2006/05/31 O.C. Ozcanli   added inside method
 // \endverbatim
 
+#include <iostream>
 #include <vsol/vsol_box.h>
 #include <vsl/vsl_binary_io.h>
 #include <vul/vul_timestamp.h>
@@ -25,8 +26,6 @@
 #include <vbl/vbl_bounding_box.h>
 #include "vsol_box_2d_sptr.h"
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 
 //: A bounding box for 2d spatial objects
 

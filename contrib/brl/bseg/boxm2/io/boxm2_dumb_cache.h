@@ -2,10 +2,9 @@
 #define boxm2_dumb_cache_h_
 //:
 // \file
+#include <iostream>
 #include <boxm2/io/boxm2_cache1.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 
 //: boxm2_dumb_cache - example realization of abstract cache class
 class boxm2_dumb_cache : public boxm2_cache1

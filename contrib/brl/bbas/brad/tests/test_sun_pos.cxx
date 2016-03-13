@@ -1,10 +1,10 @@
 //:
 // \file
+#include <iostream>
+#include <cmath>
 #include <testlib/testlib_test.h>
 #include <brad/brad_sun_pos.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <cmath>
 
 //: Test the sun_pos class
 static void test_sun_pos()

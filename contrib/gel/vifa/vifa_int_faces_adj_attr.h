@@ -21,9 +21,9 @@
 // \endverbatim
 //-----------------------------------------------------------------------------
 
-#include <vcl_compiler.h>
 #include <iostream>
 #include <vector>
+#include <vcl_compiler.h>
 #include <vdgl/vdgl_fit_lines_params.h>
 #include <vtol/vtol_intensity_face_sptr.h>
 #include <vifa/vifa_coll_lines_params.h>

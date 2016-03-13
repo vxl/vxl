@@ -1,12 +1,11 @@
 // This is basic/bvgl/algo/tests/test_eulerspiral.cxx
 
 #include <cstdlib>
-#include <vcl_compiler.h>
 #include <iostream>
 #include <cmath>
-#include <iostream>
 #include <vector>
 #include <string>
+#include <vcl_compiler.h>
 
 #include <testlib/testlib_test.h>
 

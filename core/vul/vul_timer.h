@@ -51,8 +51,8 @@
 //: struct containing timer data
 struct vul_timer_data;
 
-#include <vcl_compiler.h>
 #include <iosfwd>
+#include <vcl_compiler.h>
 
 //: The Timer class provides timing code for performance evaluation.
 class vul_timer

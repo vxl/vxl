@@ -11,13 +11,13 @@
 //      based on point location alone
 // \endverbatim
 
+#include <iostream>
+#include <memory>
 #include <rsdl/rsdl_fwd.h>
 #include <rgrl/rgrl_feature_set.h>
 #include <rgrl/rgrl_mask.h>
 
 #include <vcl_compiler.h>
-#include <iostream>
-#include <memory>
 
 //: A set of features grouped only by N-d location.
 //

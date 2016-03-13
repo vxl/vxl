@@ -6,10 +6,10 @@
 // \file
 // \author fsm
 
+#include <iostream>
 #include "vil1_pyramid.h"
 #include <vcl_cassert.h>
 #include <vcl_compiler.h>
-#include <iostream>
 #include <vil1/vil1_resample.h>
 #include <vil1/vil1_memory_image.h>
 

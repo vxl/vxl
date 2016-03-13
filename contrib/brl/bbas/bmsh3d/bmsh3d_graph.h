@@ -15,12 +15,12 @@
 // \endverbatim
 //
 //-------------------------------------------------------------------------
-#include <vcl_cassert.h>
-
-#include <vcl_compiler.h>
 #include <iostream>
 #include <map>
 #include <utility>
+#include <vcl_cassert.h>
+
+#include <vcl_compiler.h>
 
 #include <bmsh3d/bmsh3d_vertex.h>
 #include <bmsh3d/bmsh3d_edge.h>

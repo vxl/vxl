@@ -1,9 +1,9 @@
 //:
 // \file
-#include "vbl_graph_partition.h"
 #include <algorithm>
-#include <vcl_compiler.h>
 #include <cmath>
+#include "vbl_graph_partition.h"
+#include <vcl_compiler.h>
 
 //:
 // \p t is a constant that determines the threshold on edge weight

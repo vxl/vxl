@@ -6,10 +6,10 @@
 // \file
 // \author fsm
 
+#include <iostream>
 #include "vil1_bmp_core_header.h"
 
 #include <vcl_compiler.h>
-#include <iostream>
 
 #include <vil1/vil1_stream.h>
 #include <vil1/vil1_16bit.h>

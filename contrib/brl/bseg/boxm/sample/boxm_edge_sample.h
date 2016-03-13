@@ -3,9 +3,8 @@
 //:
 // \file
 
+#include <iostream>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 #include <vil/vil_rgb.h>
 #include <vsl/vsl_binary_io.h>
 #include <boxm/boxm_aux_traits.h>

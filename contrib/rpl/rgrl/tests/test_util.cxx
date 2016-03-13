@@ -1,8 +1,8 @@
+#include <iostream>
+#include <cmath>
 #include "test_util.h"
 
 #include <vcl_compiler.h>
-#include <iostream>
-#include <cmath>
 
 #include <vnl/algo/vnl_determinant.h>
 

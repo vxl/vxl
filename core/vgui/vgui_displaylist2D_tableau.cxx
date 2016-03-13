@@ -8,11 +8,11 @@
 // \date   14 Sep 1999
 // \brief  See vgui_displaylist2D_tableau.h for a description of this file.
 
+#include <iostream>
+#include <vector>
 #include "vgui_displaylist2D_tableau.h"
 
-#include <iostream>
 #include <vcl_compiler.h>
-#include <vector>
 #include <vcl_cassert.h>
 
 #include <vgui/vgui_gl.h>

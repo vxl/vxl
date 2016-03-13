@@ -1,3 +1,7 @@
+#include <iostream>
+#include <algorithm>
+#include <limits>
+#include <set>
 #include "boxm2_vecf_ocl_orbit_scene.h"
 #include <vnl/vnl_vector_fixed.h>
 #include <vgl/vgl_distance.h>
@@ -8,10 +12,6 @@
 #include <boxm2/boxm2_util.h>
 #include <boxm2/io/boxm2_lru_cache.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <algorithm>
-#include <limits>
-#include <set>
 #include <vul/vul_timer.h>
 #include <vcl_where_root_dir.h>
 #include <boct/boct_bit_tree.h>

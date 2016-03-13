@@ -1,3 +1,4 @@
+#include <iostream>
 #include "rgrl_trans_couple.h"
 //:
 // \file
@@ -6,8 +7,6 @@
 // \date Feb 2005
 
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 #include <vcl_cassert.h>
 
 #include <rgrl/rgrl_trans_reader.h>

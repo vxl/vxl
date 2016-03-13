@@ -1,4 +1,6 @@
 // This is brl/bbas/volm/pro/processes/volm_combine_height_map.cxx
+#include <iostream>
+#include <algorithm>
 #include <bprb/bprb_func_process.h>
 //:
 // \file
@@ -17,8 +19,6 @@
 #include <bkml/bkml_write.h>
 #include <bkml/bkml_parser.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <algorithm>
 
 namespace volm_combine_height_map_process_globals
 {

@@ -1,8 +1,7 @@
 // This is mul/vil3d/tests/test_convert.cxx
+#include <iostream>
 #include <vxl_config.h> // for vxl_byte
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 #include <vil3d/vil3d_convert.h>
 #include <vil3d/vil3d_image_view.h>
 #include <vil3d/vil3d_print.h>

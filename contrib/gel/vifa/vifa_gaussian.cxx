@@ -1,9 +1,9 @@
+#include <iostream>
+#include <cmath>
 #include "vifa_gaussian.h"
 //:
 // \file
 #include <vcl_compiler.h>
-#include <iostream>
-#include <cmath>
 #include <vnl/vnl_math.h>
 
 // From GeneralUtility/Stat/stat_constants.h in TargetJr

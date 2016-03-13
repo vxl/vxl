@@ -6,12 +6,12 @@
 // \brief Construct histogram from pixels in given image.
 // \author Matt Leotta
 
+#include <iostream>
+#include <algorithm>
 #include "brip_histogram.h"
 
 #include <vcl_cassert.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <algorithm>
 
 //: Construct histogram from pixels in the given image.
 template<class T>

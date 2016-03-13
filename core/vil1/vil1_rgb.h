@@ -29,8 +29,8 @@
 //   Feb.2002 - Peter Vanroose - brief doxygen comment placed on single line
 //\endverbatim
 
-#include <vcl_compiler.h>
 #include <iostream>
+#include <vcl_compiler.h>
 #include <vil1/vil1_clamp.h>
 
 //: This is the appropriate pixel type for 24-bit colour images.

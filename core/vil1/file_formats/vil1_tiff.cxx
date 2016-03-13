@@ -12,15 +12,15 @@
 //   09-NOV-2001  K.Y.McGaul  Use default value for orientation when it can't be read.
 // \endverbatim
 
+#include <cstdio>
+#include <cstring>
+#include <iostream>
 #include "vil1_tiff.h"
 
 #include <vcl_cassert.h>
 #if 0 // commented out
 #include <vcl_compiler.h>
-#include <cstdio> // sprintf
 #endif
-#include <cstring>
-#include <iostream>
 
 #include <vil1/vil1_stream.h>
 #include <vil1/vil1_image_impl.h>

@@ -8,9 +8,9 @@
 // \author Ian Scott
 // \date 2 Sep 2009
 
-#include <vcl_compiler.h>
 #include <iostream>
 #include <iosfwd>
+#include <vcl_compiler.h>
 #include <mbl/mbl_cloneable_ptr.h>
 #include <clsfy/clsfy_binary_1d_wrapper.h>
 #include <clsfy/clsfy_builder_1d.h>

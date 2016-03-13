@@ -1,13 +1,12 @@
+#include <string>
+#include <iostream>
 #include <testlib/testlib_test.h>
 #include <bvxm/bvxm_world_params.h>
 #include <bvxm/bvxm_voxel_world.h>
 
-#include <string>
 //For backwards compatibility
 #include <vcl_string.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 
 #include <brdb/brdb_value.h>
 #include <brdb/brdb_selection.h>

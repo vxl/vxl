@@ -5,12 +5,12 @@
 // \author Tim Cootes
 // \brief Cost function to promote sparse basis vectors
 
+#include <iostream>
+#include <iosfwd>
 #include <mcal/mcal_single_basis_cost.h>
 #include <vnl/io/vnl_io_vector.h>
 #include <vnl/io/vnl_io_matrix.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iosfwd>
 
 //: Cost function to promote sparse basis vectors
 //  Cost is log(variance) + alpha sum |e_i|, which encourages concentration

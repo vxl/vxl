@@ -18,9 +18,9 @@
 //
 //-----------------------------------------------------------------------------
 
-#include <vcl_compiler.h>
 #include <iostream>
 #include <vector>
+#include <vcl_compiler.h>
 #include <mvl/FileNameGenerator.h>
 #include <mvl/PMatrix_sptr.h>
 

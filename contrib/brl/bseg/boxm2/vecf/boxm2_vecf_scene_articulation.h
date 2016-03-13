@@ -1,9 +1,9 @@
 #pragma once
 #include <vector>
-#include "boxm2_vecf_articulated_params.h"
-#include <vcl_compiler.h>
 #include <iostream>
 #include <string>
+#include "boxm2_vecf_articulated_params.h"
+#include <vcl_compiler.h>
 typedef std::vector<boxm2_vecf_articulated_params>::iterator iterator;
 class boxm2_vecf_scene_articulation{
 

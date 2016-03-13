@@ -7,8 +7,8 @@
 // \author J. L. Mundy
 // \date August 06, 2007
 
-#include <vcl_compiler.h>
 #include <vector>
+#include <vcl_compiler.h>
 #include <vnl/vnl_vector.h>
 #include <vnl/vnl_least_squares_function.h>
 #include <vpgl/vpgl_rational_camera.h>

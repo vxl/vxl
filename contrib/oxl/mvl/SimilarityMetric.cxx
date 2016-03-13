@@ -5,11 +5,10 @@
 //:
 // \file
 
+#include <iostream>
 #include "SimilarityMetric.h"
 
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 #include <vnl/vnl_math.h>
 
 #include <vnl/vnl_double_2.h>

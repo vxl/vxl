@@ -13,11 +13,10 @@
 //    Ozge C. Ozcanli  Dec 09, 2008 : support for only square regions for now
 // \endverbatim
 
-#include <vcl_compiler.h>
-#include <iostream>
 #include <iostream>
 #include <vector>
 #include <utility>
+#include <vcl_compiler.h>
 #include <vil/vil_image_view.h>
 
 class brec_glitch

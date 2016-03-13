@@ -26,9 +26,9 @@
 // Texas Instruments Incorporated provides this software "as is" without
 // express or implied warranty.
 
-#include <vcl_compiler.h>
 #include <string>
-#include <cstddef> // for std::ptrdiff_t
+#include <cstddef>
+#include <vcl_compiler.h>
 
 const int vul_reg_exp_nsubexp = 10;
 

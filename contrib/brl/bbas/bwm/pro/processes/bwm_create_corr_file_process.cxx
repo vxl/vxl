@@ -1,13 +1,12 @@
 //This is brl/bbas/bwm/pro/processes/bwm_create_corr_file_process.cxx
 //:
 // \file
-#include <bprb/bprb_func_process.h>
-#include <bprb/bprb_parameters.h>
 #include <string>
 #include <iostream>
+#include <cstdio>
+#include <bprb/bprb_func_process.h>
+#include <bprb/bprb_parameters.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <cstdio> // for std::FILE and std::fopen()
 
 #include <brdb/brdb_value.h>
 #include <brip/brip_vil_float_ops.h>

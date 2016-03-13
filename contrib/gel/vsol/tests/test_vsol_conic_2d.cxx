@@ -9,14 +9,13 @@
 // 1.0     |2000/05/16| Francois BERTEL          |Creation
 // 1.1     |2003/01/08| Peter Vanroose           |Now using testlib macros
 //*****************************************************************************
+#include <iostream>
+#include <cmath>
 #include <testlib/testlib_test.h>
 //:
 // \file
 
-#include <iostream>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <cmath> // std::abs(double)
 #include <vgl/vgl_point_2d.h>
 #include <vgl/vgl_vector_2d.h>
 #include <vsol/vsol_conic_2d.h>

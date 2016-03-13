@@ -9,13 +9,12 @@
 #ifndef brad_image_metadata_h_
 #define brad_image_metadata_h_
 
+#include <string>
+#include <iostream>
 #include <vbl/vbl_ref_count.h>
 #include <vbl/vbl_smart_ptr.h>
 
-#include <string>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 #include <vnl/vnl_double_2.h>
 #include <vsl/vsl_binary_io.h>
 #include <vgl/vgl_point_3d.h>

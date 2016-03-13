@@ -10,9 +10,8 @@
 // of components to the data, and select the one that
 // gives the largest mean overlap.
 
+#include <iostream>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 #include <vnl/vnl_vector.h>
 #include <pdf1d/pdf1d_compare_to_pdf_bhat.h>
 #include <pdf1d/pdf1d_sampler.h>

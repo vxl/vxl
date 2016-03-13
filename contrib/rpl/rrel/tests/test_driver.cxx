@@ -1,3 +1,5 @@
+#include <iostream>
+#include <cmath>
 #include <testlib/testlib_register.h>
 
 
@@ -35,8 +37,6 @@ DEFINE_MAIN;
 
 #include <vnl/vnl_random.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <cmath>
 
 double noise( double sigma )
 {

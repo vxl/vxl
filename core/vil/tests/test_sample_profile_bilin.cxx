@@ -1,8 +1,8 @@
 // This is core/vil/tests/test_sample_profile_bilin.cxx
-#include <testlib/testlib_test.h>
-#include <vcl_compiler.h>
 #include <vector>
 #include <iostream>
+#include <testlib/testlib_test.h>
+#include <vcl_compiler.h>
 #include <vxl_config.h> // for vxl_byte
 #include <vil/vil_image_view.h>
 #include <vil/vil_sample_profile_bilin.h>

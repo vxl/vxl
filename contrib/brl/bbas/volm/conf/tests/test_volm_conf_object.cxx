@@ -1,10 +1,10 @@
+#include <iostream>
+#include <cmath>
+#include <limits>
 #include <testlib/testlib_test.h>
 #include <volm/conf/volm_conf_object.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <cmath>
 #include <vnl/vnl_math.h>
-#include <limits>
 #include <vgl/vgl_point_2d.h>
 #include <vul/vul_file.h>
 

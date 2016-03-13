@@ -21,6 +21,8 @@
 // \endverbatim
 //
 
+#include <iostream>
+#include <set>
 #include <vbl/vbl_ref_count.h>
 #include <bpgl/depth_map/depth_map_scene_sptr.h>
 #include <bpgl/depth_map/depth_map_scene.h>
@@ -31,8 +33,6 @@
 #include <vpgl/vpgl_perspective_camera.h>
 #include <vil/vil_image_view.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <set>
 #include <vpgl/io/vpgl_io_perspective_camera.h>
 #include <volm/volm_camera_space_sptr.h>
 #include <volm/volm_camera_space.h>

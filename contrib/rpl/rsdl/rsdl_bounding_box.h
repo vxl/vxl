@@ -15,10 +15,10 @@
 //  operator).
 
 
-#include <rsdl/rsdl_point.h>
-#include <vcl_compiler.h>
 #include <iostream>
 #include <iosfwd>
+#include <rsdl/rsdl_point.h>
+#include <vcl_compiler.h>
 
 class rsdl_bounding_box
 {

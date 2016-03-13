@@ -6,11 +6,11 @@
 // \file
 // \author fsm
 
-#include "osl_topology.h"
 #include <new>
-#include <vcl_compiler.h>
 #include <iostream>
 #include <cstring>
+#include "osl_topology.h"
+#include <vcl_compiler.h>
 #include <osl/osl_hacks.h>
 
 // Set this to 1 if you think it can avoid heap corruption, and

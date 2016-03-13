@@ -6,11 +6,11 @@
 // \brief Describe a concrete classifier builder for scalar data
 // \author Tim Cootes
 
-#include "clsfy_builder_1d.h"
 #include <string>
-#include <vcl_compiler.h>
 #include <iostream>
 #include <iosfwd>
+#include "clsfy_builder_1d.h"
+#include <vcl_compiler.h>
 #include <vnl/vnl_vector.h>
 #include <vbl/vbl_triple.h>
 #include <clsfy/clsfy_classifier_1d.h>

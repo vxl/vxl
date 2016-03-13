@@ -3,11 +3,10 @@
 //:
 //  \file
 
+#include <iostream>
 #include "vipl_section_descriptor_2d.h"
 #include <vipl/section/vipl_section_container.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 
 //: Ctor useful to define 2D section descriptors for ROA's. If you.
 // Once constructed there is no way to change the data in the section descriptor.

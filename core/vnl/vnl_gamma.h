@@ -6,8 +6,8 @@
 //  \brief Complete and incomplete gamma function approximations
 //  \author Tim Cootes
 
-#include <vcl_compiler.h>
 #include <cmath>
+#include <vcl_compiler.h>
 
 //: Approximate log of gamma function
 //  Uses 6 parameter Lanczos approximation as described by Toth

@@ -1,5 +1,6 @@
 // This is brl/bpro/core/vidl_pro/processes/vidl_open_dshow_istream_process.cxx
 #if defined(HAS_DIRECTSHOW) && HAS_DIRECTSHOW
+#include <iostream>
 #include <bprb/bprb_func_process.h>
 //:
 // \file
@@ -8,8 +9,6 @@
 #include <vidl/vidl_istream_sptr.h>
 #include <bprb/bprb_parameters.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 
 //: Constructor
 bool vidl_open_dshow_istream_process_cons(bprb_func_process& pro)

@@ -1,10 +1,10 @@
 #ifndef CoolArray_to_vcl_vector_h_
 #define CoolArray_to_vcl_vector_h_
 
-#include <cool/ArrayP.h>
-#include <vcl_compiler.h>
 #include <iostream>
 #include <vector>
+#include <cool/ArrayP.h>
+#include <vcl_compiler.h>
 
 template <class T>
 inline

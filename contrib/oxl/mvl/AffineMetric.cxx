@@ -5,11 +5,10 @@
 //:
 // \file
 
+#include <iostream>
 #include "AffineMetric.h"
 
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 #include <vcl_cassert.h>
 
 #include <vnl/vnl_inverse.h>

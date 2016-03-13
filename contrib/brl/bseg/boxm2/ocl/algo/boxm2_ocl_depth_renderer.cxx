@@ -5,12 +5,12 @@
 //
 // \author Daniel Crispell, adapted from process version
 // \date 4 Nov 2014
-#include "boxm2_ocl_depth_renderer.h"
-
-#include <vcl_compiler.h>
 #include <iostream>
 #include <algorithm>
 #include <stdexcept>
+#include "boxm2_ocl_depth_renderer.h"
+
+#include <vcl_compiler.h>
 #include <boxm2/ocl/boxm2_opencl_cache.h>
 #include <boxm2/boxm2_scene.h>
 #include <boxm2/boxm2_block.h>

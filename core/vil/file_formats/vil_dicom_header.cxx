@@ -8,14 +8,14 @@
 // E-mail: cwolstenholme@imorphics.com
 // Copyright (c) 2001 iMorphics Ltd
 
+#include <iostream>
+#include <cstdlib>
 #include <vil/vil_config.h>
 #if HAS_DCMTK
 
 #include "vil_dicom_header.h"
 #include <vil/vil_stream.h>
-#include <iostream>
 #include <vcl_compiler.h>
-#include <cstdlib>
 
 //================================================================
 

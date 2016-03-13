@@ -1,12 +1,12 @@
 // This is core/vil/io/tests/test_memory_chunk_io.cxx
+#include <iostream>
+#include <cstring>
 #include <testlib/testlib_test.h>
 
 #include <vil/vil_memory_chunk.h>
 #include <vil/io/vil_io_memory_chunk.h>
 #include <vil/io/vil_io_smart_ptr.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <cstring> // for memset()
 #include <vxl_config.h>
 #include <vpl/vpl.h> // vpl_unlink()
 

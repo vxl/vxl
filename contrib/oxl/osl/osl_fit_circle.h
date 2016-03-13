@@ -18,9 +18,9 @@
 //
 // \author Markus Meyer (meyer@mesw.de)
 
-#include <vcl_compiler.h>
 #include <iostream>
 #include <list>
+#include <vcl_compiler.h>
 #include <vgl/vgl_point_2d.h>
 #include <osl/osl_edgel_chain.h>
 

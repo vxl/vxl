@@ -1,12 +1,11 @@
 //:
 // \file
+#include <iostream>
+#include <cmath>
+#include <iomanip>
 #include "bvpl_find_surface_functor.h"
 
 #include <vcl_compiler.h>
-#include <iostream>
-#include <cmath>
-#include <iostream>
-#include <iomanip>
 // Default constructor
 bvpl_find_surface_functor::bvpl_find_surface_functor()
 {

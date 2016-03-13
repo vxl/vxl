@@ -13,12 +13,12 @@
 //   23 Aug 2003 Peter Vanroose - added asserts in get_pointer() to trace down test errors
 // \endverbatim
 
-#include "vmap_types.h"
-#include <vcl_compiler.h>
 #include <iostream>
 #include <vector>
-#include <vcl_cassert.h>
 #include <algorithm>
+#include "vmap_types.h"
+#include <vcl_compiler.h>
+#include <vcl_cassert.h>
 
 //:
 template< typename F, typename Ref, typename Ptr, typename It >

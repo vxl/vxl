@@ -7,11 +7,11 @@
 // \brief Container for tabulated data suitable for reading/writing to delimited text files
 
 #include <map>
-#include <vcl_compiler.h>
 #include <iostream>
 #include <iosfwd>
 #include <vector>
 #include <string>
+#include <vcl_compiler.h>
 
 //: Container for tabulated data suitable for reading/writing to delimited text files.
 //

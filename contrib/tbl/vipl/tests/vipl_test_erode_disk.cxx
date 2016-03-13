@@ -14,12 +14,11 @@
 //   Peter Vanroose, Feb.2004 - replaced vil1_image by vil2_image_view<T>
 // \endverbatim
 
+#include <iostream>
+#include <string>
 #include <vipl/accessors/vipl_accessors_vil_image_view.h>
 #include <vipl/vipl_erode_disk.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
-#include <string>
 #include "test_driver.h"
 #include <vxl_config.h> // for vxl_byte
 

@@ -14,10 +14,11 @@
 //     Yi Dong     SEP--2014    added height of the region
 // \endverbatim
 // units are in meters
-#include <vbl/vbl_ref_count.h>
-#include <vcl_compiler.h>
 #include <iostream>
 #include <limits>
+#include <string>
+#include <vbl/vbl_ref_count.h>
+#include <vcl_compiler.h>
 #include <vsol/vsol_point_2d_sptr.h>
 #include <vsol/vsol_polygon_2d_sptr.h>
 #include <vsol/vsol_polygon_3d_sptr.h>
@@ -26,7 +27,6 @@
 #include <vgl/vgl_vector_3d.h>
 #include <vgl/algo/vgl_h_matrix_2d.h>
 #include <vgl/vgl_plane_3d.h>
-#include <string>
 #include <vsl/vsl_binary_io.h>
 
 

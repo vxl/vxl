@@ -1,8 +1,7 @@
 // This is brl/bseg/bapl/io/bapl_io_dsift.cxx
+#include <iostream>
 #include "bapl_io_dsift.h"
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 
 void vsl_b_read(vsl_b_istream &is, bapl_dsift &dsift)
 {

@@ -1,11 +1,10 @@
 // This is mul/m23d/tests/test_ortho_rigid_builder.cxx
-#include <testlib/testlib_test.h>
 #include <iostream>
+#include <cmath>
+#include <testlib/testlib_test.h>
 #include <m23d/m23d_make_ortho_projection.h>
 #include <m23d/m23d_ortho_rigid_builder.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <cmath>
 #include <vnl/vnl_random.h>
 
 void test_ortho_rigid_builder()

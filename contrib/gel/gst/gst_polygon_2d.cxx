@@ -6,11 +6,10 @@
 // \file
 // \author crossge@crd.ge.com
 
+#include <iostream>
 #include "gst_polygon_2d.h"
 #include "gst_vertex_2d_sptr.h"
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 
 bool gst_polygon_2d::check_validity() const
 {

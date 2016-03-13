@@ -1,4 +1,7 @@
 // This is brl/bseg/segv/segv_vil_segmentation_manager.cxx
+#include <iostream>
+#include <cstdio>
+#include <fstream>
 #include "segv_vil_segmentation_manager.h"
 //:
 // \file
@@ -8,11 +11,7 @@
 #include <vpgl/file_formats/vpgl_nitf_rational_camera.h>
 #endif
 // include for project points menu option
-#include <iostream>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <cstdio> // sprintf
-#include <fstream>
 #include <vul/vul_timer.h>
 #include <vbl/vbl_array_2d.h>
 #include <vnl/vnl_math.h>

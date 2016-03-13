@@ -6,6 +6,7 @@
 //
 //
 //
+#include <iostream>
 #include <vul/vul_file.h>
 #include <vul/vul_file_iterator.h>
 #include <bprb/bprb_func_process.h>
@@ -28,8 +29,6 @@
 #include <vsol/vsol_box_2d_sptr.h>
 #include <vsol/vsol_box_2d.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 
 
 // global variables and functions

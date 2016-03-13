@@ -7,10 +7,10 @@
 // \author Matt Leotta
 // \date   October 5, 2006
 
-#include "bxml_write.h"
-#include <vcl_compiler.h>
 #include <iostream>
 #include <fstream>
+#include "bxml_write.h"
+#include <vcl_compiler.h>
 
 
 //: Write the entire contents of \p filepath into an XML document class

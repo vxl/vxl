@@ -1,3 +1,5 @@
+#include <iostream>
+#include <sstream>
 #include "bvpl_direction_to_color_map.h"
 //:
 // \file
@@ -9,8 +11,6 @@
 #include <vgl/vgl_closest_point.h>
 #include <vil/algo/vil_colour_space.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <sstream>
 
 //: project a unit radius sphere onto the cube circumscribing it using gnomonic projection
 void bvpl_direction_to_color_map::project_sphereical_samples_to_cubes(std::vector<vgl_point_3d<double> > & proj_on_cube)

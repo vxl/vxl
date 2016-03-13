@@ -18,12 +18,12 @@
 //
 //----------------------------------------------------------------------------
 #include <map>
-#include <bbas/bsta/bsta_spherical_histogram.h>
-#include <vnl/vnl_double_3.h>
 #include <vector>
-#include <vcl_compiler.h>
 #include <iostream>
 #include <iosfwd>
+#include <bbas/bsta/bsta_spherical_histogram.h>
+#include <vnl/vnl_double_3.h>
+#include <vcl_compiler.h>
 
 class brad_sun_dir_index
 {

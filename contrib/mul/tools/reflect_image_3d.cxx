@@ -1,8 +1,8 @@
 // This is mul/tools/reflect_image_3d.cxx
 
-#include <vcl_compiler.h>
 #include <iostream>
 #include <exception>
+#include <vcl_compiler.h>
 #include <vul/vul_arg.h>
 #include <vul/vul_file.h>
 #include <vil3d/vil3d_reflect.h>

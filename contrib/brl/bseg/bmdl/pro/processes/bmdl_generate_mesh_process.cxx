@@ -1,15 +1,14 @@
 //:
 // \file
-#include <bprb/bprb_func_process.h>
-
 #include <iostream>
 #include <sstream>
 #include <vector>
 #include <string>
 #include <ctime>
+#include <cstdio>
+#include <bprb/bprb_func_process.h>
+
 #include <vcl_compiler.h>
-#include <iostream>
-#include <cstdio> // for std::fclose()
 #include <vcl_cassert.h>
 
 #include <vgl/vgl_polygon.h>

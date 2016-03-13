@@ -12,9 +12,9 @@
 //   Jun 22, 2009  I. Eden Added the method: interpolate_next
 // \endverbatim
 
-#include <vcl_compiler.h>
 #include <iostream>
 #include <vector>
+#include <vcl_compiler.h>
 #include <vnl/vnl_double_3.h>
 #include <vnl/vnl_double_3x3.h>
 #include <vpgl/vpgl_perspective_camera.h>

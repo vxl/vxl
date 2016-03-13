@@ -1,11 +1,10 @@
 // This is brl/bbas/bgui3d/bgui3d_file_io.cxx
+#include <iostream>
 #include "bgui3d_file_io.h"
 //:
 // \file
 
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 
 #include <Inventor/nodes/SoNode.h>
 #include <Inventor/nodes/SoSeparator.h>

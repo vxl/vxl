@@ -5,12 +5,12 @@
 // \author Tim Cootes
 // \brief Builder for mfpf_mr_point_finder objects.
 
+#include <iostream>
+#include <iosfwd>
 #include <mfpf/mfpf_point_finder_builder.h>
 #include <vgl/vgl_fwd.h>
 #include <vcl_cassert.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iosfwd>
 
 class vimt_image_pyramid;
 class mfpf_mr_point_finder;

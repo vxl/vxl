@@ -13,13 +13,13 @@
 //    IMS   Converted to VXL 18 April 2000
 // \endverbatim
 
-#include "vpdfl_gaussian_builder.h"
-//
 #include <string>
 #include <sstream>
-#include <vcl_compiler.h>
 #include <iostream>
 #include <cstdlib>
+#include "vpdfl_gaussian_builder.h"
+//
+#include <vcl_compiler.h>
 #include <vcl_cassert.h>
 #include <mbl/mbl_data_wrapper.h>
 #include <vpdfl/vpdfl_gaussian.h>

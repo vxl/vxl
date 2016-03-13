@@ -1,11 +1,10 @@
+#include <new>
+#include <iostream>
 #include "boxm2_stream_scene_cache.h"
 //:
 // \file
 #include <vgl/vgl_box_3d.h>
-#include <new>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 
 boxm2_stream_scene_cache::boxm2_stream_scene_cache(boxm2_scene_sptr scene,
                                                    std::vector<std::string> data_types,

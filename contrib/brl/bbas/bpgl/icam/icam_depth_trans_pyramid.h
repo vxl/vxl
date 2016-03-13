@@ -12,6 +12,8 @@
 //   None
 // \endverbatim
 
+#include <iostream>
+#include <vector>
 #include <icam/icam_depth_transform.h>
 #include <vgl/algo/vgl_rotation_3d.h>
 #include <vgl/vgl_vector_3d.h>
@@ -21,8 +23,6 @@
 #include <vil/vil_pyramid_image_view.h>
 #include <vsl/vsl_binary_io.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <vector>
 
 class icam_depth_trans_pyramid
 {

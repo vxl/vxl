@@ -1,12 +1,11 @@
+#include <vector>
+#include <iostream>
+#include <algorithm>
 #include <testlib/testlib_test.h>
 
 #include <rgrl/rgrl_match_set.h>
 
-#include <vector>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <algorithm>
-#include <iostream>
 
 #include <vnl/vnl_vector.h>
 

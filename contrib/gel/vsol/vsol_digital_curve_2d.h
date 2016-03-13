@@ -16,16 +16,16 @@
 // \endverbatim
 //*****************************************************************************
 
+#include <vector>
+#include <string>
+#include <iostream>
+#include <iosfwd>
 #include <vgl/vgl_fwd.h>
 #include <vsl/vsl_binary_io.h>
 #include <vsol/vsol_curve_2d.h>
 #include <vsol/vsol_point_2d_sptr.h>
 #include <vsol/vsol_digital_curve_2d_sptr.h>
-#include <vector>
-#include <string>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iosfwd>
 
 //: Digital curve class, part of the vsol_curve_2d hierarchy
 // This class is more basic and "pure" than the vdgl counterpart.

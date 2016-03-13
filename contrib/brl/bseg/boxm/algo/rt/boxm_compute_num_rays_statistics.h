@@ -1,10 +1,9 @@
 #ifndef boxm_compute_num_rays_statistics_h
 #define boxm_compute_num_rays_statistics_h
 
+#include <iostream>
 #include <boxm/boxm_scene.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 #include <bsta/bsta_histogram.h>
 #include <boxm/basic/boxm_num_rays_functor.h>
 #include <boxm/sample/boxm_scalar_sample.h>

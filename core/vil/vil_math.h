@@ -6,11 +6,11 @@
 // \brief Various mathematical manipulations of 2D images
 // \author Tim Cootes
 
-#include <vcl_cassert.h>
-#include <vcl_compiler.h>
 #include <vector>
 #include <cmath>
 #include <algorithm>
+#include <vcl_cassert.h>
+#include <vcl_compiler.h>
 #include <vil/vil_image_view.h>
 #include <vil/vil_view_as.h>
 #include <vil/vil_plane.h>

@@ -1,3 +1,5 @@
+#include <iostream>
+#include <iomanip>
 #include "volm_io.h"
 //:
 // \file
@@ -12,10 +14,7 @@
 #include <vsol/vsol_polygon_2d_sptr.h>
 #include <bsol/bsol_algs.h>
 #include <vul/vul_file.h>
-#include <iostream>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iomanip>
 #include <vcl_cassert.h>
 #include <vsl/vsl_vector_io.h>
 #include "volm_utils.h"

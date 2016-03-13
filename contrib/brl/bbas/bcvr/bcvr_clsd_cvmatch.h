@@ -20,9 +20,9 @@
 //
 //-------------------------------------------------------------------------
 
-#include <vcl_compiler.h>
 #include <iostream>
 #include <ctime>
+#include <vcl_compiler.h>
 #include <vsol/vsol_polygon_2d_sptr.h>
 #include "bcvr_cv_cor_sptr.h"
 #include "bcvr_cvmatch.h"

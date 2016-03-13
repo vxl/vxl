@@ -16,12 +16,12 @@
 //    Added quite a few little functors mainly to do with iterating through maps
 //    for example a version of the non-standard select1st and select2nd
 
-#include <vcl_compiler.h>
 #include <iostream>
 #include <functional>
 #include <vector>
 #include <ostream>
 #include <utility>
+#include <vcl_compiler.h>
 
 //: Fill an output sequence with incrementing values.
 // A bit like std::fill, but after each assignment, the value is incremented.

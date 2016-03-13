@@ -8,9 +8,8 @@
 
 #include <string>
 #include <vector>
+#include <iostream>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 
 //: Read in keyword separated blocks of text from stream.
 // Assumes list of blocks separated by a keyword.

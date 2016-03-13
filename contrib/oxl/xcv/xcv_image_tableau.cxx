@@ -1,4 +1,8 @@
 // This is oxl/xcv/xcv_image_tableau.cxx
+#include <string>
+#include <iostream>
+#include <cmath>
+#include <sstream>
 #include "xcv_image_tableau.h"
 //:
 // \file
@@ -11,11 +15,7 @@
 //    06-AUG-2002 K.Y.McGaul - Print RGB value on status bar.
 // \endverbatim
 
-#include <string>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <cmath>
-#include <sstream>
 
 #include <vil1/vil1_crop.h>
 #include <vil1/vil1_image.h>

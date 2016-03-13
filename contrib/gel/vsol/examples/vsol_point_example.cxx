@@ -2,9 +2,8 @@
 //
 // Author: Peter Tu sep 19 2000
 
+#include <iostream>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 #include <vsol/vsol_point_2d.h>
 #include <vsol/vsol_point_3d.h>
 

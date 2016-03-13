@@ -14,11 +14,11 @@
 // \endverbatim
 //
 
-#include <vbl/vbl_ref_count.h>
-#include <vcl_compiler.h>
 #include <iostream>
 #include <string>
 #include <vector>
+#include <vbl/vbl_ref_count.h>
+#include <vcl_compiler.h>
 #include <vgl/vgl_box_2d.h>
 #include <vgl/vgl_point_2d.h>
 #include "bvgl_2d_geo_index_sptr.h"

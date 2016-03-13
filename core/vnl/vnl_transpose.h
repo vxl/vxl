@@ -15,8 +15,8 @@
 //  LSB (Manchester) 19/3/01 Tidied documentation
 // \endverbatim
 
-#include <vcl_compiler.h>
 #include <iostream>
+#include <vcl_compiler.h>
 #include <vnl/vnl_fastops.h>
 
 //: Efficient matrix transpose

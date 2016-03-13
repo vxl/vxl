@@ -10,6 +10,8 @@
 //      Nov 2008 J Becker: Added a clone function.
 // \endverbatim
 
+#include <iostream>
+#include <iosfwd>
 #include <vcl_cassert.h>
 #include <vnl/vnl_vector.h>
 #include <vnl/vnl_matrix.h>
@@ -18,8 +20,6 @@
 #include "rgrl_feature_reader.h"
 #include "rgrl_object.h"
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iosfwd>
 
 class rgrl_transformation;
 

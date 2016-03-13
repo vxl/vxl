@@ -4,6 +4,8 @@
 //  Copyright: (C) 2007 The University of Manchester
 //
 //=======================================================================
+#include <iostream>
+#include <sstream>
 #include <testlib/testlib_test.h>
 //:
 // \file
@@ -11,9 +13,6 @@
 // \brief test mfpf_edge_finder
 
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
-#include <sstream>
 #include <vsl/vsl_binary_loader.h>
 #include <mbl/mbl_cloneables_factory.h>
 #include <mfpf/mfpf_add_all_loaders.h>

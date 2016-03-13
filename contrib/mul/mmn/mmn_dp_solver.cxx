@@ -1,3 +1,6 @@
+#include <iostream>
+#include <cstdlib>
+#include <sstream>
 #include "mmn_dp_solver.h"
 //:
 // \file
@@ -8,9 +11,6 @@
 #include <mmn/mmn_graph_rep1.h>
 #include <vcl_cassert.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <cstdlib>
-#include <sstream>
 
 #include <mbl/mbl_parse_block.h>
 #include <mbl/mbl_read_props.h>

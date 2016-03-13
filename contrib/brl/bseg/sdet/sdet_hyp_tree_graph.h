@@ -12,10 +12,10 @@
 //\endverbatim
 
 #include <vector>
-#include <vcl_compiler.h>
 #include <iostream>
 #include <list>
 #include <set>
+#include <vcl_compiler.h>
 
 #include "sdet_edgel.h"
 #include "sdet_curvelet.h"

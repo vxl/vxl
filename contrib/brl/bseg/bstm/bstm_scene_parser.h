@@ -1,16 +1,16 @@
 #ifndef bstm_scene_parser_h_
 #define bstm_scene_parser_h_
 
-#include <expatpplib.h>
 #include <string>
+#include <iostream>
+#include <map>
+#include <expatpplib.h>
 
 #include <bstm/basic/bstm_block_id.h>
 #include <bstm/bstm_block_metadata.h>
 #include <vpgl/vpgl_lvcs.h>
 #include <vgl/vgl_point_3d.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <map>
 
 //scene level metadata
 #define VERSION_TAG "version"

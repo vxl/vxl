@@ -2,6 +2,7 @@
 #define boxm_generate_shadow_sample_functor_h
 //:
 // \file
+#include <iostream>
 #include <boxm/boxm_apm_traits.h>
 #include <boxm/basic/boxm_raytrace_function.h>
 #include <boxm/sample/boxm_rt_sample.h>
@@ -12,8 +13,6 @@
 #include <vil/vil_math.h>
 #include <vil/vil_save.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 
 template <boxm_apm_type APM, class T_aux>
 class boxm_generate_shadow_sample_functor_pass_2

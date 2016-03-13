@@ -22,10 +22,10 @@
 // \endverbatim
 //-----------------------------------------------------------------------------
 
-#include <vcl_compiler.h>
 #include <iostream>
 #include <iosfwd>
 #include <vector>
+#include <vcl_compiler.h>
 #include <vtol/vtol_topology_object.h>
 #include <vtol/vtol_vertex.h>
 #include <vtol/vtol_vertex_sptr.h>

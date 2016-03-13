@@ -6,6 +6,8 @@
 // \author Charlene Tsai
 // \date Sep 2002
 
+#include <iostream>
+#include <vector>
 #include "rgrl_initializer.h"
 #include "rgrl_match_set_sptr.h"
 #include "rgrl_scale_sptr.h"
@@ -14,8 +16,6 @@
 #include "rgrl_mask.h"
 
 #include <vcl_compiler.h>
-#include <iostream>
-#include <vector>
 
 class vnl_random;
 

@@ -18,9 +18,9 @@
 //                                to distinguish from vsol cast_to_digital_curve()
 // \endverbatim
 
-#include <vcl_compiler.h>
 #include <iostream>
 #include <iosfwd>
+#include <vcl_compiler.h>
 #include <vdgl/vdgl_digital_curve_sptr.h>
 #include <vsol/vsol_curve_2d.h>
 #include <vsol/vsol_point_2d_sptr.h>

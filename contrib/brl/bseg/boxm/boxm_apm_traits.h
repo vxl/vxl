@@ -7,6 +7,8 @@
 // \author Daniel Crispell
 // \date April 03, 2009
 
+#include <iostream>
+#include <iosfwd>
 #include <bsta/bsta_attributes.h>
 #include <bsta/bsta_mixture_fixed.h>
 #include <bsta/bsta_gauss_sf1.h>
@@ -19,8 +21,6 @@
 #include <boxm/sample/boxm_edge_sample.h>
 #include <boxm/sample/boxm_inf_line_sample.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iosfwd> // for std::ostream
 #include "boxm_export.h"
 
 class boxm_mog_grey_processor;

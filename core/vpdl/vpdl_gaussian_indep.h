@@ -12,9 +12,9 @@
 //   <None yet>
 // \endverbatim
 
+#include <limits>
 #include <vpdl/vpdl_gaussian_base.h>
 #include <vcl_compiler.h>
-#include <limits>
 #include <vcl_cassert.h>
 
 #include <vpdl/vpdt/vpdt_gaussian.h>

@@ -15,11 +15,11 @@
 //   Peter Vanroose - 11 Mar 97 - added operator==
 // \endverbatim
 
+#include <iostream>
+#include <iosfwd>
 #include <vnl/vnl_double_3.h>
 #include <mvl/Homg3D.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iosfwd>
 
 class HomgPoint3D : public Homg3D
 {

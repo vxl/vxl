@@ -6,8 +6,8 @@
 // \file
 // \author fsm
 
-#include <vcl_compiler.h>
 #include <iostream>
+#include <vcl_compiler.h>
 
 #define vul_whereami (std::cerr << __FILE__ ", line " << __LINE__ << " : ")
 

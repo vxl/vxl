@@ -3,6 +3,7 @@
 // \author Lee, Ying-Lin (Bess)
 // \date   Sept 2003
 
+#include <iostream>
 #include "rgrl_est_spline.h"
 #include "rgrl_spline.h"
 #include "rgrl_match_set.h"
@@ -19,8 +20,6 @@
 #include <vnl/algo/vnl_powell.h>
 #include <vnl/algo/vnl_lbfgs.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 #include <vul/vul_timer.h>
 #include <vcl_cassert.h>
 

@@ -5,6 +5,11 @@
 #ifndef rgtl_sqt_objects_txx
 #define rgtl_sqt_objects_txx
 
+#include <limits>
+#include <memory>
+#include <cstdlib>
+#include <iostream>
+#include <cmath>
 #include "rgtl_sqt_objects.hxx"
 
 #include "rgtl_config.hxx"
@@ -26,12 +31,7 @@
 #include <vnl/vnl_vector_fixed.h>
 
 #include <vcl_cassert.h>
-#include <limits>
-#include <memory>
-#include <cstdlib>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <cmath>
 
 // TODO: During tree construction we should check the set of objects
 // in the current node.  Those with no boundary inside the node should

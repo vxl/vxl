@@ -5,10 +5,10 @@
 // \author Chuck Stewart (stewart@cs.rpi.edu)
 // \brief Abstract base class for robust objective functions.
 
-#include <vnl/vnl_fwd.h>
-#include <vcl_compiler.h>
 #include <iostream>
 #include <vector>
+#include <vnl/vnl_fwd.h>
+#include <vcl_compiler.h>
 
 //: An objective function to be minimised.
 //  It returns a "cost" given the residuals, and thus gives a cost for

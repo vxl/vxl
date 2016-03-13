@@ -38,8 +38,8 @@
 //
 //-----------------------------------------------------------------------------
 
-#include <vcl_compiler.h>
 #include <list>
+#include <vcl_compiler.h>
 #include <vnl/vnl_matrix.h>
 
 template <class T>

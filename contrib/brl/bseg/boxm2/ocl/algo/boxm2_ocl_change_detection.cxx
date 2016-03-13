@@ -6,13 +6,13 @@
 // \author Vishal Jain
 // \date Mar 10, 2011
 
-#include "boxm2_ocl_change_detection.h"
-
 #include <fstream>
-#include <vcl_compiler.h>
 #include <iostream>
 #include <algorithm>
 #include <sstream>
+#include "boxm2_ocl_change_detection.h"
+
+#include <vcl_compiler.h>
 #include <boxm2/ocl/boxm2_opencl_cache.h>
 #include <boxm2/boxm2_scene.h>
 #include <boxm2/boxm2_block.h>

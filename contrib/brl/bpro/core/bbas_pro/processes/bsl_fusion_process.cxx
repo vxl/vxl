@@ -1,4 +1,6 @@
 // This is brl/bpro/core/bbas_pro/processes/bsl_fusion_process.cxx
+#include <string>
+#include <iostream>
 #include <bprb/bprb_func_process.h>
 //:
 // \file
@@ -6,11 +8,8 @@
 
 #include <bprb/bprb_parameters.h>
 
-#include <string>
 #ifdef DEBUG
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 #endif
 
 #include <brdb/brdb_value.h>

@@ -1,8 +1,7 @@
 // This is mul/vimt3d/tests/test_gauss_reduce.cxx
+#include <iostream>
 #include <testlib/testlib_test.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 #include <vimt3d/vimt3d_image_3d_of.h>
 #include <vimt3d/vimt3d_gauss_reduce.h>
 

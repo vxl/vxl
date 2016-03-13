@@ -6,9 +6,9 @@
 #endif
 
 #include <vector>
-#include <vcl_compiler.h>
 #include <iostream>
 #include <cstddef>
+#include <vcl_compiler.h>
 
 template <  class DataType > class vipl_section_descriptor; //template forward reference
 template <  class DataType > class vipl_section_iterator; //template forward reference

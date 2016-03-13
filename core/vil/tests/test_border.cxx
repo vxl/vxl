@@ -1,8 +1,8 @@
 // This is core/vil/tests/test_border.cxx
-#include <testlib/testlib_test.h>
 #include <iostream>
-// not used? #include <vcl_compiler.h>
 #include <sstream>
+#include <testlib/testlib_test.h>
+// not used? #include <vcl_compiler.h>
 // not used? #include <functional>
 #include <vxl_config.h> // for vxl_byte
 #include <vil/vil_image_view.h>

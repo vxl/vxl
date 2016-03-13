@@ -4,18 +4,18 @@
 //:
 // \file
 
+#include <cmath>
+#include <iostream>
 #include "vpgl_generic_camera.h"
 #include <vnl/vnl_numeric_traits.h>
 #include <vcl_cassert.h>
 #include <vcl_compiler.h>
-#include <cmath>
 #include <vgl/vgl_distance.h>
 #include <vgl/vgl_closest_point.h>
 #include <vgl/vgl_intersection.h>
 #include <vgl/vgl_vector_2d.h>
 #include <vgl/vgl_point_2d.h>
 #include <vgl/vgl_plane_3d.h>
-#include <iostream>
 #include <vnl/vnl_math.h>
 
 //-------------------------------------------

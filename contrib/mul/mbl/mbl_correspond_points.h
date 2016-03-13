@@ -5,9 +5,9 @@
 // \brief Shapiro & Brady's point correspondence algorithm
 // \author Tim Cootes
 
-#include <vcl_compiler.h>
 #include <iostream>
 #include <vector>
+#include <vcl_compiler.h>
 #include <vnl/vnl_vector.h>
 #include <vnl/vnl_matrix.h>
 #include <vgl/vgl_point_2d.h>

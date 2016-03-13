@@ -49,9 +49,9 @@
 //
 //-----------------------------------------------------------------------------
 #include <vector>
-#include <vcl_compiler.h>
 #include <iostream>
 #include <map>
+#include <vcl_compiler.h>
 #include <vbl/vbl_array_2d.h>
 #include <vil1/vil1_image.h>
 #include <vil/vil_image_resource.h>

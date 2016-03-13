@@ -2,6 +2,7 @@
 // \author Amitha Perera
 // \date   Feb 2003
 
+#include <iostream>
 #include "rgrl_feature_trace_region.h"
 #include <rgrl/rgrl_transformation.h>
 #include <rgrl/rgrl_util.h>
@@ -10,8 +11,6 @@
 
 #include <vcl_cassert.h>
 // not used? #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 
 rgrl_feature_trace_region::
 rgrl_feature_trace_region( vnl_vector<double> const& loc,

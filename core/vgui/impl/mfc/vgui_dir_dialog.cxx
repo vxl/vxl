@@ -134,6 +134,8 @@
 //   double-clicking them (this is a DIRECTORY selection dialog after all)
 
 
+#include <cstring>
+#include <cctype>
 #include "stdafx.h"
 
 // If you don't want this as part of your project (eg to put in a library) remove
@@ -146,9 +148,7 @@
 #include <imagehlp.h>       // For ::MakeSureDirectoryPathExists()
 
 #include "vgui_dir_dialog.h"      // Our own header file
-#include <cstring>
 #include <vcl_compiler.h>
-#include <cctype>
 
 
 #ifdef _DEBUG

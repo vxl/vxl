@@ -27,9 +27,9 @@
 // \endverbatim
 //
 //-------------------------------------------------------------------------
-#include <vcl_compiler.h>
 #include <iostream>
 #include <vector>
+#include <vcl_compiler.h>
 #include <vgl/vgl_homg_point_2d.h>
 #include <vgl/algo/vgl_h_matrix_2d.h>
 #include <vsol/vsol_line_2d_sptr.h>

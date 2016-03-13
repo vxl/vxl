@@ -6,11 +6,11 @@
 // \brief Functions to save objects to text file
 // \author dac
 
-#include <vcl_compiler.h>
 #include <iostream>
 #include <ostream>
 #include <string>
 #include <vector>
+#include <vcl_compiler.h>
 
 
 //: Save vector to file with format "v1 v2 .. vn"

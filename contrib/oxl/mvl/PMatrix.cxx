@@ -5,13 +5,12 @@
 //:
 // \file
 
-#include "PMatrix.h"
-
 #include <iostream>
 #include <fstream>
-#include <vcl_compiler.h>
-#include <iostream>
 #include <cmath>
+#include "PMatrix.h"
+
+#include <vcl_compiler.h>
 #include <vcl_cassert.h>
 
 #include <vnl/vnl_matrix.h>

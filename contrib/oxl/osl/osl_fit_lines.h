@@ -42,9 +42,9 @@
 //                        before fitting the line. Avoids fitting to the garbage edgels
 //                        which are curving away from the line.
 //-----------------------------------------------------------------------------
-#include <vcl_compiler.h>
 #include <iostream>
 #include <list>
+#include <vcl_compiler.h>
 #include <osl/osl_fit_lines_params.h>
 #include <osl/osl_topology.h>
 #include <osl/osl_canny_port.h>

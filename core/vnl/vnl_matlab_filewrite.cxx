@@ -5,12 +5,12 @@
 //:
 // \file
 
-#include "vnl_matlab_filewrite.h"
-
-#include <vcl_compiler.h>
 #include <sstream>
 #include <iostream>
 #include <complex>
+#include "vnl_matlab_filewrite.h"
+
+#include <vcl_compiler.h>
 
 #include <vnl/vnl_vector.h>
 #include <vnl/vnl_matrix.h>

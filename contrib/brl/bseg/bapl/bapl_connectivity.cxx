@@ -1,4 +1,7 @@
 // This is brl/bseg/bapl/bapl_connectivity.cxx
+#include <iostream>
+#include <algorithm>
+#include <queue>
 #include "bapl_connectivity.h"
 //:
 // \file
@@ -8,9 +11,6 @@
 #include <bapl/bapl_lowe_keypoint_sptr.h>
 #include <bapl/bapl_lowe_keypoint.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <algorithm>
-#include <queue>
 #include <vcl_cassert.h>
 
 //: For sorting keypoint_match_sets

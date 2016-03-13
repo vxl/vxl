@@ -1,10 +1,9 @@
 // Test program fpr test_sample_stats_1d
-#include <testlib/testlib_test.h>
-#include <vcl_compiler.h>
 #include <iostream>
 #include <algorithm>
-#include <iostream>
 #include <cmath>
+#include <testlib/testlib_test.h>
+#include <vcl_compiler.h>
 #include <mbl/mbl_sample_stats_1d.h>
 
 

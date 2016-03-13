@@ -83,9 +83,9 @@
 //   10-sep-2004 Peter Vanroose Added copy ctor with explicit vbl_ref_count init
 // \endverbatim
 //-----------------------------------------------------------------------------
-#include <vcl_compiler.h>
 #include <iostream>
 #include <vector>
+#include <vcl_compiler.h>
 #include <vbl/vbl_ref_count.h>
 #include <vbl/vbl_bounding_box.h>
 #include <vbl/vbl_array_2d.h>

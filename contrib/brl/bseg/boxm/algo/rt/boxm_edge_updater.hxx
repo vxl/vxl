@@ -1,6 +1,9 @@
 #ifndef boxm_edge_updater_hxx_
 #define boxm_edge_updater_hxx_
 
+#include <vector>
+#include <iostream>
+#include <string>
 #include "boxm_edge_updater.h"
 
 #include <boxm/boxm_apm_traits.h>
@@ -8,10 +11,7 @@
 #include <boxm/boxm_scene.h>
 #include <boxm/boxm_aux_scene.h>
 
-#include <vector>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <string>
 
 template <class T_loc, class APM, class AUX>
 boxm_edge_updater<T_loc,APM,AUX>::boxm_edge_updater(boxm_scene<boct_tree<T_loc,

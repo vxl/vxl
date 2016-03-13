@@ -6,10 +6,10 @@
 // \file
 // \author fsm
 
+#include <cstddef>
 #include "vil1_byte_swap.h"
 #include <vcl_cassert.h>
 #include <vcl_compiler.h>
-#include <cstddef>
 
 // this is not efficient
 void vil1_byte_swap(void *b_, void *e_)

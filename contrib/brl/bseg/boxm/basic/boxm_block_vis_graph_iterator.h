@@ -2,14 +2,14 @@
 #define boxm_block_vis_graph_iterator_h_
 //:
 // \file
+#include <vector>
+#include <iostream>
+#include <map>
 #include "boxm_block_vis_graph_node.h"
 #include <boxm/boxm_block.h>
 #include <boxm/boxm_scene.h>
 #include <vpgl/vpgl_camera_double_sptr.h>
-#include <vector>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <map>
 
 template <class T>
 class boxm_block_vis_graph_iterator

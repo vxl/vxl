@@ -10,10 +10,10 @@
 // \date 19-Apr-2001
 // \brief Base class for Multi-Variate random sampler classes.
 
-#include <vnl/vnl_vector.h>
 #include <string>
 #include <vector>
 #include <iosfwd>
+#include <vnl/vnl_vector.h>
 
 //=======================================================================
 

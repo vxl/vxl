@@ -1,10 +1,9 @@
+#include <iostream>
 #include "bwm_3d_corr.h"
 //:
 // \file
 #include <vgl/vgl_distance.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 
 bool bwm_3d_corr::match(std::string const& site, vgl_point_3d<double> &pt) const
 {

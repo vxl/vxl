@@ -6,8 +6,8 @@
 // \brief Smooths images.
 // \author Ian Scott
 
-#include <vcl_compiler.h>
 #include <vector>
+#include <vcl_compiler.h>
 #include <vil/vil_image_view.h>
 #include <vil/algo/vil_convolve_1d.h>
 #include <vil/vil_transpose.h>

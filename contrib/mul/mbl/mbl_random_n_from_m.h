@@ -5,9 +5,9 @@
 // \brief Randomly select n from m integers without replacement
 // \author Tim Cootes
 
-#include <vcl_compiler.h>
 #include <iostream>
 #include <vector>
+#include <vcl_compiler.h>
 #include <vnl/vnl_random.h>
 
 //: Class to generate arrays of n integers chosen without replacement from [0,m-1]

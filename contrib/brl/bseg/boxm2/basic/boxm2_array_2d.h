@@ -3,9 +3,9 @@
 //:
 // \file
 #include <iosfwd>
-#include <vcl_compiler.h>
 #include <iostream>
 #include <cstddef>
+#include <vcl_compiler.h>
 
 //: simple wrapper for a 1D buffer (re interpreted as 2D)
 template <class T>

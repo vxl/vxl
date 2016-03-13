@@ -15,9 +15,9 @@
 // \endverbatim
 
 #include <istream>
-#include <iostream> // needed for std::ios::in and std::ios::openmode
-#include <vcl_compiler.h>
+#include <iostream>
 #include <string>
+#include <vcl_compiler.h>
 
 //: Functions to test and open streams via a URL
 // Currently supports file and HTTP only.

@@ -18,10 +18,10 @@
 
 #include <string>
 #include <sstream>
-#include <vcl_compiler.h>
 #include <iostream>
 #include <map>
 #include <vector>
+#include <vcl_compiler.h>
 #include <vbl/vbl_ref_count.h>
 #include <vbl/vbl_smart_ptr.h>
 #include <vsl/vsl_binary_io.h>

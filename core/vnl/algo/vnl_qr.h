@@ -23,10 +23,10 @@
 //                                tinverse(), solve(matrix), extract_q_and_r().
 // \endverbatim
 
+#include <iosfwd>
 #include <vnl/vnl_vector.h>
 #include <vnl/vnl_matrix.h>
 #include <vcl_compiler.h>
-#include <iosfwd>
 
 //: Extract the Q*R decomposition of matrix M.
 //  The decomposition is stored in a compact and time-efficient

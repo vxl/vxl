@@ -1,14 +1,13 @@
 // This is brl/bseg/sdet/sdet_symbolic_edge_linker_params.cxx
+#include <sstream>
+#include <iostream>
 #include "sdet_symbolic_edge_linker_params.h"
 //:
 // \file
 // See sdet_symbolic_edge_linker_params.h
 //
 //-----------------------------------------------------------------------------
-#include <sstream>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 
 //------------------------------------------------------------------------
 // Constructors

@@ -6,10 +6,10 @@
 // \file
 // \author fsm
 
+#include <cmath>
 #include "vgui_section_render.h"
 
 #include <vcl_compiler.h>
-#include <cmath>
 #include <vcl_cassert.h>
 #include <vcl_climits.h> // for UCHAR_MAX
 // not used? #include <iostream>

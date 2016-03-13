@@ -6,6 +6,8 @@
 // \date   March 2007
 // \brief  a generic class to estimate a homogeneous projection matrix with radial distortion parameter(s)  using L-M
 
+#include <iostream>
+#include <vector>
 #include "rgrl_est_proj_rad_func.h"
 
 #include <rgrl/rgrl_est_proj_func.txx>
@@ -21,8 +23,6 @@
 #include <vnl/algo/vnl_svd.h>
 
 #include <vcl_compiler.h>
-#include <iostream>
-#include <vector>
 #include <vcl_cassert.h>
 
 template <unsigned int Tdim, unsigned int Fdim>

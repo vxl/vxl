@@ -2,6 +2,7 @@
 // \file
 // \author Chuck Stewart
 
+#include <iostream>
 #include "rgrl_scale_est_closest.h"
 
 #include <rrel/rrel_objective.h>
@@ -12,8 +13,6 @@
 #include "rgrl_util.h"
 
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 #include <vcl_cassert.h>
 
 rgrl_scale_est_closest::

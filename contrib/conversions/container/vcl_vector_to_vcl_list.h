@@ -1,10 +1,10 @@
 #ifndef vcl_vector_to_vcl_list_h_
 #define vcl_vector_to_vcl_list_h_
 
-#include <vcl_compiler.h>
 #include <iostream>
 #include <list>
 #include <vector>
+#include <vcl_compiler.h>
 
 template <class T>
 inline

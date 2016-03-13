@@ -1,15 +1,14 @@
+#include <iostream>
+#include <vector>
+#include <cmath>
+#include <limits>
+#include <algorithm>
 #include "depth_map_scene.h"
 //:
 // \file
 #include "depth_map_region.h"
-#include <iostream>
-#include <vector>
 #include <vcl_cassert.h>
-#include <cmath>
-#include <limits>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <algorithm>
 #include <vgl/vgl_vector_3d.h>
 #include <vgl/vgl_plane_3d.h>
 #include <vsol/vsol_polygon_3d.h>

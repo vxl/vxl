@@ -2,6 +2,7 @@
 #ifndef Image_to_vil1_h_
 #define Image_to_vil1_h_
 
+#include <iostream>
 #include <ImageClasses/Image.h>
 #include <vil1/vil1_image.h>
 
@@ -9,8 +10,6 @@
 #include <vil1/vil1_memory_image.h>
 
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 
 inline vil1_image Image_to_vil1(Image const* im)
 {

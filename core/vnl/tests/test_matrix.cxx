@@ -1,12 +1,12 @@
 // This is core/vnl/tests/test_matrix.cxx
 #include <iostream>
+#include <cmath>
+#include <exception>
 #include <vnl/vnl_matrix.h>
 #include <vnl/vnl_vector.h> // necessary for tests of methods set_diagonal() and get_diagonal()
 #include <vnl/vnl_copy.h>
 #include <testlib/testlib_test.h>
-#include <cmath> // sqrt()
 #include <vcl_compiler.h>
-#include <exception>
 
 // This function is used in testing later.
 template< typename T >

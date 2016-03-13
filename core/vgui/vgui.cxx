@@ -8,12 +8,12 @@
 // \date   30 Sep 99
 // \brief  See vgui.h for a description of this file.
 
+#include <cstring>
+#include <cstdlib>
+#include <iostream>
 #include "vgui.h"
 #include <vcl_cassert.h>
-#include <cstring>
 #include <vcl_compiler.h>
-#include <cstdlib> // abort()
-#include <iostream>
 
 #include <vgui/vgui_macro.h>
 #include <vgui/vgui_window.h>

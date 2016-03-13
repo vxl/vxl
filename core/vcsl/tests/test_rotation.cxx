@@ -11,9 +11,9 @@
 // 1.2     |2002/11/13| Peter Vanroose           |converted to use TESTMAIN
 //*****************************************************************************
 
+#include <iostream>
 #include <testlib/testlib_test.h>
 #include <vcl_compiler.h>
-#include <iostream>
 #include <vcsl/vcsl_cartesian_3d.h>
 #include <vcsl/vcsl_rotation.h>
 #include <vcsl/vcsl_graph.h>

@@ -6,10 +6,10 @@
 // \brief Trilinear interpolation functions for 3D images
 // \author Tim Cootes
 
-#include <vcl_cassert.h>
-#include <vcl_compiler.h>
 #include <iostream>
 #include <cstddef>
+#include <vcl_cassert.h>
+#include <vcl_compiler.h>
 #include <vil/vil_na.h>
 #include <vil3d/vil3d_image_view.h>
 

@@ -4,11 +4,11 @@
 // \author Tim Cootes
 // \brief Iterator for images and points stored in arrays
 
-#include <vcl_cassert.h>
 #include <string>
-#include <vcl_compiler.h>
 #include <iostream>
 #include <sstream>
+#include <vcl_cassert.h>
+#include <vcl_compiler.h>
 
 #include "msdi_array_of_marked_images.h"
 #include <vimt/vimt_image_2d_of.h>

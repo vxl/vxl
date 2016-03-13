@@ -1,6 +1,6 @@
 // This is core/vnl/io/tests/test_vector_io.cxx
-#include <vcl_compiler.h>
 #include <iostream>
+#include <vcl_compiler.h>
 #include <vnl/io/vnl_io_vector.h>
 #include <vsl/vsl_binary_io.h>
 #include <testlib/testlib_test.h>

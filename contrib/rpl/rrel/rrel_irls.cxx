@@ -1,4 +1,6 @@
 // This is rpl/rrel/rrel_irls.cxx
+#include <iostream>
+#include <vector>
 #include "rrel_irls.h"
 //:
 // \file
@@ -12,9 +14,6 @@
 #include <vnl/vnl_matrix.h>
 
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
-#include <vector>
 #include <vcl_cassert.h>
 
 const double rrel_irls::dflt_convergence_tol_ = 1e-4;

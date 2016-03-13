@@ -2,6 +2,10 @@
 #define bwm_site_mgr_h_
 //:
 // \file
+#include <iostream>
+#include <map>
+#include <string>
+#include <vector>
 #include <bwm/bwm_tableau_factory.h>
 #include <bwm/io/bwm_io_config_parser.h>
 #include <bwm/process/bwm_site_process.h>
@@ -11,10 +15,6 @@
 
 #include <vul/vul_timer.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <map>
-#include <string>
-#include <vector>
 
 class bwm_site_mgr
 {

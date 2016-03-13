@@ -7,11 +7,11 @@
 // \author Jan 30, 2012 Andrew Miller
 //
 
-#include <vgl/vgl_point_3d.h>
 #include <vector>
-#include <vcl_compiler.h>
 #include <iostream>
 #include <iosfwd>
+#include <vgl/vgl_point_3d.h>
+#include <vcl_compiler.h>
 
 template <class Type>
 class bvgl_triangle_3d

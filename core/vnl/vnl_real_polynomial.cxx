@@ -10,11 +10,11 @@
 // Modifications
 // IMS (Manchester) 14/03/2001: Added Manchester IO scheme
 
-#include "vnl_real_polynomial.h"
 #include <iostream>
 #include <complex>
-#include <vcl_compiler.h>
 #include <cmath>
+#include "vnl_real_polynomial.h"
+#include <vcl_compiler.h>
 
 // This is replacing a member template...
 template <class T>

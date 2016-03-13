@@ -10,8 +10,8 @@
 //    dac (Manchester) 26/03/2001: tidied up documentation
 //  \endverbatim
 
-#include <vcl_compiler.h>
 #include <complex>
+#include <vcl_compiler.h>
 #include <vnl/vnl_vector.h>
 #include <vnl/vnl_matrix.h>
 

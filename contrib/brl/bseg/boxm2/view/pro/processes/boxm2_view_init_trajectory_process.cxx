@@ -1,4 +1,6 @@
 // This is brl/bseg/boxm2/view/pro/processes/boxm2_view_init_trajectory_process.cxx
+#include <iostream>
+#include <fstream>
 #include <bprb/bprb_func_process.h>
 //:
 // \file
@@ -8,8 +10,6 @@
 // \date Mar 10, 2011
 
 #include <vcl_compiler.h>
-#include <iostream>
-#include <fstream>
 #include <boxm2/boxm2_scene.h>
 #include <boxm2/view/boxm2_trajectory.h>
 #include <vil/vil_image_view.h>

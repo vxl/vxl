@@ -6,11 +6,11 @@
 // \brief Builder  of 1d threshold using gini index
 // \author Martin Roberts
 
-#include <clsfy/clsfy_builder_1d.h>
 #include <string>
-#include <vcl_compiler.h>
 #include <iostream>
 #include <iosfwd>
+#include <clsfy/clsfy_builder_1d.h>
+#include <vcl_compiler.h>
 #include <vnl/vnl_vector.h>
 #include <vbl/vbl_triple.h>
 #include <clsfy/clsfy_classifier_1d.h>

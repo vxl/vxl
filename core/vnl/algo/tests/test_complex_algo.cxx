@@ -1,4 +1,5 @@
 // This is core/vnl/algo/tests/test_complex_algo.cxx
+#include <complex>
 #include <testlib/testlib_test.h>
 //:
 // \file
@@ -13,7 +14,6 @@
 // \date 9 January 2011
 
 #include <vcl_compiler.h>
-#include <complex>
 
 #include <vnl/algo/vnl_complex_generalized_schur.h>
 #include <vnl/algo/vnl_svd_economy.h>

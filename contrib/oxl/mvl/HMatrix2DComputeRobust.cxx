@@ -1,12 +1,11 @@
+#include <iostream>
+#include <cmath>
 #include "HMatrix2DComputeRobust.h"
 //:
 // \file
 
 #include <vcl_cassert.h>
-#include <iostream>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <cmath>
 #include <vgl/vgl_homg_point_2d.h>
 #include <mvl/Probability.h>
 #include <mvl/AffineMetric.h>

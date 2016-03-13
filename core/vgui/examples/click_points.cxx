@@ -6,8 +6,8 @@
 // \date   4 November 2008
 
 #include <iostream>
-#include <vcl_compiler.h>
 #include <cstdlib>
+#include <vcl_compiler.h>
 #include <vgui/vgui.h>
 #include <vgui/vgui_image_tableau.h>
 #include <vgui/vgui_viewer2D_tableau.h>

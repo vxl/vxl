@@ -7,10 +7,9 @@
 // \author Ozge C. Ozcanli
 // \date April 22, 2009
 
-#include <vcl_compiler.h>
-#include <iostream>
 #include <iostream>
 #include <sstream>
+#include <vcl_compiler.h>
 #include <bsta/bsta_histogram.h>
 #include <bsta/bsta_joint_histogram.h>
 #include <bxml/bsvg/bsvg_plot.h>

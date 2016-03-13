@@ -1,17 +1,16 @@
 // This is brl/bbas/brad/tests/test_feature_pca.cxx
 
+#include <string>
+#include <iostream>
+#include <fstream>
+#include <iomanip>
 #include <vpl/vpl.h>
 #include <vsl/vsl_binary_io.h>
-#include <string>
 #include <vil/vil_image_view.h>
 #include <brad/brad_hist_prob_feature_vector.h>
 #include <brad/brad_eigenspace.h>
 #include <testlib/testlib_test.h>
-#include <iostream>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <fstream>
-#include <iomanip>
 
 static void test_feature_pca()
 {

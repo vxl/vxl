@@ -1,9 +1,9 @@
-#include <testlib/testlib_test.h>
-
-#include <vcl_compiler.h>
 #include <iostream>
 #include <cmath>
 #include <string>
+#include <testlib/testlib_test.h>
+
+#include <vcl_compiler.h>
 #include <vcl_cassert.h>
 
 #include <bil/algo/bil_detect_ridges.h>

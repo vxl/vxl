@@ -1,6 +1,6 @@
 // This is core/vil/algo/tests/test_algo_line_filter.cxx
-#include <vcl_compiler.h>
 #include <iostream>
+#include <vcl_compiler.h>
 #include <vil/algo/vil_line_filter.h>
 #include <vil/vil_image_view.h>
 #include <testlib/testlib_test.h>

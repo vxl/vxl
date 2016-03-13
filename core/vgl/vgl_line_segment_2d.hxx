@@ -2,10 +2,10 @@
 #ifndef vgl_line_segment_2d_hxx_
 #define vgl_line_segment_2d_hxx_
 
-#include "vgl_line_segment_2d.h"
 #include <iostream>
-#include <vcl_compiler.h>
 #include <cmath>
+#include "vgl_line_segment_2d.h"
+#include <vcl_compiler.h>
 // stream operators
 template <class Type>
 std::ostream& operator<<(std::ostream& s, vgl_line_segment_2d<Type> const & p)

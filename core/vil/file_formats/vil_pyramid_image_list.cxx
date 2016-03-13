@@ -1,11 +1,11 @@
+#include <algorithm>
+#include <cmath>
+#include <sstream>
 #include "vil_pyramid_image_list.h"
 //:
 // \file
-#include <algorithm>
-#include <cmath>
 #include <vcl_cassert.h>
 #include <vcl_compiler.h>
-#include <sstream>
 #include <vil/vil_stream_fstream.h>
 #include <vil/vil_image_list.h>
 #include <vil/vil_blocked_image_facade.h>

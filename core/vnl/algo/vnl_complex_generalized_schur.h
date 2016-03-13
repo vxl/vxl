@@ -11,10 +11,11 @@
 // \date   9 Jan 2011
 // Adapted from vnl_generalized_schur.h/.cxx
 
+#include <complex>
+#include <algorithm>
 #include <vnl/vnl_matrix.h>
 #include <vnl/vnl_vector.h>
 
-#include <complex>
 
 //:
 // For a scalar type T, this function uses orthogonal matrices L, R
@@ -46,7 +47,6 @@ bool vnl_generalized_schur(vnl_matrix<std::complex<double> > *A,
                            vnl_matrix<std::complex<double> > *R);
 
 #include <vcl_compiler.h>
-#include <algorithm>
 
 template <class T>
 std::complex<T> vnl_complex_generalized_schur_convert_cast(std::complex<double> a) { return static_cast<std::complex<T> >(a); }

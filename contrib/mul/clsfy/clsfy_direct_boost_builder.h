@@ -8,12 +8,12 @@
 // \author dac
 // \date 2000-05-10
 
-#include <clsfy/clsfy_builder_base.h> // parent class
 #include <vector>
 #include <string>
-#include <vcl_compiler.h>
 #include <iostream>
 #include <iosfwd>
+#include <clsfy/clsfy_builder_base.h> // parent class
+#include <vcl_compiler.h>
 #include <mbl/mbl_data_wrapper.h>
 #include <vnl/vnl_vector.h>
 class clsfy_builder_1d;

@@ -5,13 +5,12 @@
 //:
 // \file
 
+#include <iostream>
 #include "FMatrixCompute.h"
 #include <mvl/PairMatchSetCorner.h>
 #include <mvl/HomgInterestPointSet.h>
 #include <vcl_cassert.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 
 //---------------------------------------------------------------
 //

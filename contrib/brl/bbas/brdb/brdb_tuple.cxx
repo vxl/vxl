@@ -1,4 +1,5 @@
 // This is brl/bbas/brdb/brdb_tuple.cxx
+#include <iostream>
 #include "brdb_tuple.h"
 //:
 // \file
@@ -8,8 +9,6 @@
 // make it work with the database initially
 
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 #include <vcl_cassert.h>
 
 

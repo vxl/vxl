@@ -1,3 +1,5 @@
+#include <iostream>
+#include <sstream>
 #include "vil3d_load.h"
 //:
 // \file
@@ -7,8 +9,6 @@
 #include <vil/vil_exception.h>
 #include <vil3d/vil3d_file_format.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <sstream>
 
 vil3d_image_resource_sptr vil3d_load_image_resource(char const* filename)
 {

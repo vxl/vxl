@@ -6,9 +6,9 @@
 // \author Charlene Tsai
 // \date   March 2004
 
-#include <vcl_compiler.h>
 #include <iostream>
 #include <vector>
+#include <vcl_compiler.h>
 #include <vnl/vnl_double_2.h>
 
 #include "rgrl_transformation_sptr.h"

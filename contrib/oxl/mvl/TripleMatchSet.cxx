@@ -5,12 +5,11 @@
 //:
 // \file
 
+#include <iostream>
+#include <cstdlib>
 #include "TripleMatchSet.h"
 //
 #include <vcl_compiler.h>
-#include <iostream>
-#include <cstdlib> // for std::abort()
-#include <iostream>
 #include <vnl/vnl_matrix.h>
 #include <mvl/PairMatchSet.h>
 

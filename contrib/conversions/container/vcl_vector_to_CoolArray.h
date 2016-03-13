@@ -1,10 +1,10 @@
 #ifndef std::vector_to_CoolArray_h_
 #define std::vector_to_CoolArray_h_
 
-#include <cool/Array.h>
-#include <vcl_compiler.h>
 #include <iostream>
 #include <vector>
+#include <cool/Array.h>
+#include <vcl_compiler.h>
 
 template <class T>
 inline

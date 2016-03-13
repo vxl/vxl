@@ -4,10 +4,10 @@
 //:
 // \file
 
-#include "vgl_conic_2d_regression.h"
 #include <iostream>
-#include <vcl_compiler.h>
 #include <algorithm>
+#include "vgl_conic_2d_regression.h"
+#include <vcl_compiler.h>
 #include <vnl/vnl_vector_fixed.h>
 #include <vnl/vnl_inverse.h>
 #include <vnl/vnl_numeric_traits.h>

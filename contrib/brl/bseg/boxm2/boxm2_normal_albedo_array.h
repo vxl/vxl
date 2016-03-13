@@ -1,10 +1,10 @@
 #ifndef boxm2_normal_albedo_array_h_
 #define boxm2_normal_albedo_array_h_
 
-#include <vgl/vgl_vector_3d.h>
-#include <vcl_compiler.h>
 #include <iostream>
 #include <vector>
+#include <vgl/vgl_vector_3d.h>
+#include <vcl_compiler.h>
 #include "boxm2_export.h"
 
 class boxm2_normal_albedo_array

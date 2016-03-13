@@ -1,8 +1,7 @@
 // This is mul/vimt3d/tests/test_resample.cxx
+#include <iostream>
 #include <testlib/testlib_test.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 #include <vimt3d/vimt3d_resample_trilinear.h>
 #include <vimt3d/vimt3d_transform_3d.h>
 

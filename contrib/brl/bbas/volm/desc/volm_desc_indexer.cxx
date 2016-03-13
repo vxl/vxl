@@ -1,8 +1,8 @@
+#include <iostream>
+#include <sstream>
 #include "volm_desc_indexer.h"
 
 #include <vcl_compiler.h>
-#include <iostream>
-#include <sstream>
 #include <vul/vul_file.h>
 #include <volm/volm_geo_index.h>
 #include <volm/volm_geo_index_sptr.h>

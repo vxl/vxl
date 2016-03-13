@@ -3,12 +3,11 @@
 #define bsta_von_mises_updater_hxx_
 //:
 // \file
+#include <iostream>
+#include <limits>
 #include "bsta_von_mises_updater.h"
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 #include <vcl_cassert.h>
-#include <limits>
 //: The main function
 template <class von_mises_dist_>
 void bsta_von_mises_updater<von_mises_dist_>::update(obs_vm_dist_& pdist, const vect_t& vsum, math_t alpha) const

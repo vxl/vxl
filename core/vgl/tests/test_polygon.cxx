@@ -1,10 +1,10 @@
 // Some tests for vgl_polygon
 // Amitha Perera, Sep 2001.
+#include <iostream>
+#include <fstream>
 #include <testlib/testlib_test.h>
 #include <vgl/vgl_polygon.h>
-#include <iostream>
 #include <vcl_compiler.h>
-#include <fstream>
 
 static void test_simple_polygon()
 {

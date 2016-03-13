@@ -1,6 +1,8 @@
 #ifndef __frame_grabber__
 #define __frame_grabber__ 1
 
+#include <iostream>
+#include <cstdlib>
 #include <sys/mman.h>
 #include <sys/ioctl.h>
 #include <vcl_sys/types.h>
@@ -9,9 +11,6 @@
 #include <fcntl.h>
 #include <sys/signal.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <cstdlib> // for exit()
-#include <iostream>
 #include <vil/vil_image_view.h>
 #include <unistd.h>
 

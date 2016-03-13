@@ -1,4 +1,9 @@
 // This is core/vil1/tests/test_save_load_image.cxx
+#include <string>
+#include <cstring>
+#include <iostream>
+#include <fstream>
+#include <vector>
 #include <testlib/testlib_test.h>
 //:
 // \file
@@ -22,11 +27,6 @@
 // \endverbatim
 
 #include <vcl_compiler.h>
-#include <string>
-#include <cstring>
-#include <iostream>
-#include <fstream>
-#include <vector>
 #include <vcl_cassert.h>
 
 #include <vul/vul_temp_filename.h>

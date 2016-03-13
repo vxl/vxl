@@ -1,3 +1,5 @@
+#include <iostream>
+#include <cstddef>
 #include "rgtl_object_once.hxx"
 //:
 // \file
@@ -13,8 +15,6 @@
 
 #include <vcl_cassert.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <cstddef>
 
 //----------------------------------------------------------------------------
 rgtl_object_once::rgtl_object_once(): marks_(), mark_(0)

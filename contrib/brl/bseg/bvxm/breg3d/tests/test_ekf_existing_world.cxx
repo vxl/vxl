@@ -1,11 +1,10 @@
-#include <testlib/testlib_test.h>
 #include <iostream>
 #include <sstream>
-#include <vcl_compiler.h>
-#include <iostream>
 #include <iomanip>
 #include <string>
 #include <vector>
+#include <testlib/testlib_test.h>
+#include <vcl_compiler.h>
 
 #include <vgl/vgl_vector_3d.h>
 #include <vgl/vgl_point_3d.h>

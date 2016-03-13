@@ -1,10 +1,10 @@
+#include <iostream>
+#include <limits>
 #include "bvgl_grid_index_3d.h"
 #include <vgl/vgl_bounding_box.h>
 #include <vgl/vgl_closest_point.h>
 #include <vgl/vgl_plane_3d.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <limits>
 
 void
 bvgl_grid_index_3d

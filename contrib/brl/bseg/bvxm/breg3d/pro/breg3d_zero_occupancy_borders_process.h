@@ -12,9 +12,9 @@
 //   Aug 09 2010 jlm  moved to brl/bseg/bvxm/breg3d/pro
 // \endverbatim
 
-#include <vcl_compiler.h>
 #include <iostream>
 #include <string>
+#include <vcl_compiler.h>
 #include <bprb/bprb_process.h>
 
 

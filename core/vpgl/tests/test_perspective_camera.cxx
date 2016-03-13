@@ -1,7 +1,7 @@
-#include <testlib/testlib_test.h>
 #include <iostream>
-#include <vcl_compiler.h>
 #include <fstream>
+#include <testlib/testlib_test.h>
+#include <vcl_compiler.h>
 #include <vpl/vpl.h>
 
 #include <vpgl/vpgl_perspective_camera.h>

@@ -15,14 +15,14 @@
 //
 //\endverbatim
 
-#include <vbl/vbl_ref_count.h>
 #include <vector>
-#include <vcl_compiler.h>
 #include <iostream>
 #include <list>
 #include <set>
 #include <map>
 #include <utility>
+#include <vbl/vbl_ref_count.h>
+#include <vcl_compiler.h>
 
 #include <vnl/vnl_math.h>
 

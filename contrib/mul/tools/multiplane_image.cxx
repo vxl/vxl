@@ -3,10 +3,9 @@
 //  \date 30 October 2008
 //  \brief Combine 2 images into a single image with multiple planes
 
-#include <vcl_compiler.h>
 #include <iostream>
 #include <exception>
-#include <iostream>
+#include <vcl_compiler.h>
 #include <vul/vul_arg.h>
 #include <mbl/mbl_log.h>
 #include <vil/vil_pixel_format.h>

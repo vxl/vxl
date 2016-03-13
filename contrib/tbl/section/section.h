@@ -44,11 +44,11 @@
 // \author
 //   Peter Vanroose, ESAT/KULeuven, december 1996.
 
-#include <vcl_compiler.h>
 #include <iostream>
-#include <cstddef>  // for size_t
+#include <cstddef>
+#include <cstring>
+#include <vcl_compiler.h>
 #include <vcl_cassert.h>
-#include <cstring>  // for memcpy()
 
 typedef unsigned int uint;
 

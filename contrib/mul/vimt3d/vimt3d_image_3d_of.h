@@ -9,11 +9,11 @@
 // \author Tim Cootes
 
 
+#include <iostream>
+#include <iosfwd>
 #include <vimt3d/vimt3d_image_3d.h>
 #include <vil3d/vil3d_image_view.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iosfwd>
 
 
 //: Represent 3D image of type T together with a transform.

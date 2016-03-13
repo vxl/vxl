@@ -13,6 +13,7 @@
 //  <none yet>
 // \endverbatim
 
+#include <iostream>
 #include <bgrl2/bgrl2_graph.h>
 #include "brec_part_base.h"
 #include "brec_hierarchy_edge.h"
@@ -21,8 +22,6 @@
 
 #include <vil/vil_image_view.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 #include <vsl/vsl_binary_io.h>
 
 class brec_part_hierarchy : public bgrl2_graph<brec_part_base , brec_hierarchy_edge>

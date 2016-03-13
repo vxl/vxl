@@ -8,9 +8,9 @@
 // \date May 2, 2008
 
 #include <vector>
-#include <vcl_compiler.h>
 #include <iostream>
 #include <memory>
+#include <vcl_compiler.h>
 #include <vcl_cassert.h>
 
 #include <imesh/imesh_vertex.h>

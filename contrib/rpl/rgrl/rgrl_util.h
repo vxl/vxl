@@ -5,6 +5,9 @@
 // \author Charlene Tsai / Chuck Stewart / Gehua Yang
 // \date   Sep 2003
 
+#include <iostream>
+#include <iosfwd>
+#include <vector>
 #include <rgrl/rgrl_transformation_sptr.h>
 #include <rgrl/rgrl_weighter_sptr.h>
 #include <rgrl/rgrl_scale_sptr.h>
@@ -14,9 +17,6 @@
 
 #include <vnl/vnl_vector.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iosfwd>
-#include <vector>
 #include <rgrl/rgrl_fwd.h>
 
 class rgrl_match_set;

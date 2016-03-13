@@ -14,13 +14,13 @@
 //   10-sep-2004 Peter Vanroose Added copy ctor with explicit vbl_ref_count init
 // \endverbatim
 
+#include <string>
+#include <iostream>
+#include <iosfwd>
 #include <vbl/vbl_ref_count.h>
 #include <bgrl/bgrl_vertex_sptr.h>
 #include <vsl/vsl_binary_io.h>
-#include <string>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iosfwd>
 
 //: Directed edge from one vertex to another
 class bgrl_edge : public vbl_ref_count

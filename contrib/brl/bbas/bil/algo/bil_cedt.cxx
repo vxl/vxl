@@ -1,11 +1,11 @@
+#include <iostream>
+#include <cmath>
 #include "bil_cedt.h"
 //:
 // \file
 
 #include <vbl/vbl_array_2d.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <cmath>
 
 bil_cedt::bil_cedt()
 {

@@ -8,9 +8,9 @@
 // 1.0     |2002/04/05| Luis E. Galup            |Creation
 //*****************************************************************************
 
-#include <vcl_compiler.h>
 #include <iostream>
-#include <cstring> // memcpy
+#include <cstring>
+#include <vcl_compiler.h>
 #include <testlib/testlib_test.h>
 #include <gevd/gevd_memory_mixin.h>
 

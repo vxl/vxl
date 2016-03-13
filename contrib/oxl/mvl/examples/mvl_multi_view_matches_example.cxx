@@ -1,10 +1,9 @@
-#include <vxl_config.h>
-#include <vcl_compiler.h>
 #include <iostream>
 #include <cstdlib>
+#include <vxl_config.h>
+#include <vcl_compiler.h>
 #include <vul/vul_timer.h>
 #include <mvl/mvl_multi_view_matches.h>
-#include <iostream>
 
 static const int W = -1;
 

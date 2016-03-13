@@ -4,11 +4,11 @@
 //:
 // \file
 
+#include <cmath>
+#include <iostream>
 #include "vgl_vector_2d.h"
 
 #include <vcl_compiler.h>
-#include <cmath> // sqrt() , acos()
-#include <iostream>
 
 template <class T>
 double vgl_vector_2d<T>::length() const

@@ -11,12 +11,12 @@
 //   <None yet>
 // \endverbatim
 
+#include <iostream>
+#include <vector>
 #include <vbl/vbl_ref_count.h>
 #include <vil/vil_image_view_base.h>
 
 #include <vcl_compiler.h>
-#include <iostream>
-#include <vector>
 #include <vsl/vsl_binary_io.h>
 #include "bvgl_change_obj_sptr.h"
 

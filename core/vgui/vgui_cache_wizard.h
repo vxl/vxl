@@ -20,8 +20,8 @@
 
 #include <vector>
 #include <list>
-#include <vcl_compiler.h>
 #include <utility>
+#include <vcl_compiler.h>
 
 #include <vil1/vil1_image.h>
 #include <vgui/vgui_gl.h>

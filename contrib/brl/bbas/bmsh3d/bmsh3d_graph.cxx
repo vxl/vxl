@@ -1,5 +1,6 @@
 // This is brl/bbas/bmsh3d/bmsh3d_graph.cxx
 //---------------------------------------------------------------------
+#include <iostream>
 #include "bmsh3d_graph.h"
 //:
 // \file
@@ -16,8 +17,6 @@
 //-------------------------------------------------------------------------
 
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 #include <vul/vul_printf.h>
 
 //###############################################################

@@ -4,11 +4,11 @@
 //:
 // \file
 
+#include <iostream>
+#include <cstdlib>
+#include <vector>
 #include "vsl_clipon_binary_loader.h"
 #include <vcl_compiler.h>
-#include <iostream>
-#include <cstdlib> // std::abort()
-#include <vector>
 
 template<class BaseClass, class BaseClassIO>
 vsl_clipon_binary_loader<BaseClass,BaseClassIO>& vsl_clipon_binary_loader<BaseClass,BaseClassIO>::instance()

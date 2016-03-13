@@ -16,12 +16,11 @@
 #include <map>
 #include <iostream>
 #include <string>
+#include <cstddef>
 #include "bocl_cl.h"
 #include "bocl_device.h"
 #include "bocl_device_info.h"
 #include <vcl_compiler.h>
-#include <iostream>
-#include <cstddef>
 #if !defined(__APPLE__)
 #include <malloc.h>
 #endif

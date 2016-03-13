@@ -5,14 +5,13 @@
 
 //=======================================================================
 
-#include "clsfy_simple_adaboost.h"
 #include <string>
 #include <iostream>
 #include <vector>
+#include <cmath>
+#include "clsfy_simple_adaboost.h"
 #include <vcl_cassert.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <cmath>
 #include <vsl/vsl_binary_io.h>
 #include <vsl/vsl_binary_loader.h>
 #include <vsl/vsl_vector_io.h>

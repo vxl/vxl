@@ -9,11 +9,11 @@
 //  \brief Base class for objects which build image pyramids.
 //  \author Tim Cootes
 
-#include <vsl/vsl_binary_io.h>
 #include <string>
-#include <vcl_compiler.h>
 #include <iostream>
 #include <iosfwd>
+#include <vsl/vsl_binary_io.h>
+#include <vcl_compiler.h>
 
 class vimt_image;
 class vimt_image_pyramid;

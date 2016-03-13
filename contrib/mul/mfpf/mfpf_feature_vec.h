@@ -5,13 +5,12 @@
 // \brief Container for set of poses and associated fit values
 // \author Martin Roberts
 
+#include <iostream>
+#include <cstdlib>
 #include <mfpf/mfpf_pose.h>
 #include <mfpf/mfpf_pose_set.h>
 #include <vsl/vsl_vector_io.h>
-#include <iostream>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <cstdlib>
 
 
 //As well as pose_set, it can be helpful to think of vector combined pose/fit

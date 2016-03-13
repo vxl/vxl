@@ -3,12 +3,12 @@
 //:
 // \file
 
+#include <iostream>
+#include <string>
 #include "bwm_tableau.h"
 #include "bwm_observer_img.h"
 
 #include <vcl_compiler.h>
-#include <iostream>
-#include <string>
 
 #include <vgui/vgui_menu.h>
 #include <vgui/vgui_event.h>

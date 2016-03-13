@@ -6,10 +6,10 @@
 // \brief Various functions for manipulating image views
 // \author Tim Cootes - Manchester
 
+#include <algorithm>
 #include <vcl_cassert.h>
 #include <vil/vil_image_view.h>
 #include <vcl_compiler.h>
-#include <algorithm>
 
 //: Fill view with given value
 //  O(size).

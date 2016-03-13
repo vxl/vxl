@@ -13,6 +13,8 @@
 //   <none yet>
 // \endverbatim
 
+#include <iostream>
+#include <cmath>
 #include "boct_tree_cell.h"
 #include "boct_loc_code.h"
 
@@ -21,9 +23,6 @@
 #include <vnl/vnl_vector_fixed.h>
 #include <vsl/vsl_binary_io.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <cmath>
-#include <iostream>
 
 template <class T_loc, class T_data>
 class boct_tree

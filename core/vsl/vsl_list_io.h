@@ -6,9 +6,9 @@
 // \brief binary IO functions for std::list<T>
 // \author K.Y.McGaul
 
-#include <vcl_compiler.h>
 #include <iosfwd>
 #include <list>
+#include <vcl_compiler.h>
 
 class vsl_b_ostream;
 class vsl_b_istream;

@@ -1,15 +1,15 @@
+#include <cmath>
+#include <cstdlib>
+#include <iostream>
+#include <algorithm>
 #include "vsph_segment_sphere.h"
 //:
 // \file
-#include <cmath>
-#include <cstdlib> // for std::rand()
 #include <vcl_cassert.h>
 #include <vnl/vnl_math.h>
 #include <vbl/vbl_graph_partition.h>
 #include <vbl/vbl_edge.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <algorithm>
 
 static void random_rgb(float& r, float&g, float& b)
 {

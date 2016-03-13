@@ -43,9 +43,9 @@
 
 #include <string>
 #include <cstddef>
-#include <vcl_compiler.h>
 #include <iosfwd>
 #include <typeinfo>
+#include <vcl_compiler.h>
 #include <vxl_config.h>
 #include <vidl/vidl_export.h>
 

@@ -11,11 +11,11 @@
 // \author Brad King
 // \date February 2007
 
+#include <iostream>
+#include <iosfwd>
 #include "rgtl_octree_cell_location.hxx"
 
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iosfwd>
 
 //: Represent the logical index of a spherical quad-tree cell.
 //

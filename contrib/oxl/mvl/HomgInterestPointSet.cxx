@@ -5,14 +5,13 @@
 //:
 // \file
 
-#include "HomgInterestPointSet.h"
-
-#include <vcl_cassert.h>
-#include <iostream>
-#include <vcl_compiler.h>
 #include <iostream>
 #include <fstream>
 #include <vector>
+#include "HomgInterestPointSet.h"
+
+#include <vcl_cassert.h>
+#include <vcl_compiler.h>
 
 #include <vil1/vil1_memory_image_of.h>
 

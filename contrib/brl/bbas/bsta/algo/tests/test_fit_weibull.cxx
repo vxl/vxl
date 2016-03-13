@@ -1,8 +1,8 @@
+#include <iostream>
+#include <string>
 #include <testlib/testlib_test.h>
 #include <bsta/algo/bsta_fit_weibull.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <string>
 
 template <class T>
 void test_fit_weibull_type(T epsilon, const std::string& type_name)

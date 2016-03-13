@@ -6,9 +6,8 @@
 // \author Tim Cootes
 
 #include <vector>
+#include <iostream>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 #include <vsl/vsl_fwd.h>
 
 //:  Class to record clusters of data, for faster neighbour finding

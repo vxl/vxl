@@ -1,3 +1,6 @@
+#include <iostream>
+#include <fstream>
+#include <vector>
 #include <testlib/testlib_test.h>
 
 #include <brec/brec_part_base.h>
@@ -21,11 +24,7 @@
 #include <bsta/bsta_histogram.h>
 
 #include <vnl/vnl_math.h>
-#include <iostream>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <fstream>
-#include <vector>
 
 static void test_brec_hierarchy_detector2_simple()
 {

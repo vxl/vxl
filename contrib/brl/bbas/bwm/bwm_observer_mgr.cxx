@@ -1,3 +1,5 @@
+#include <iostream>
+#include <fstream>
 #include "bwm_observer_mgr.h"
 //:
 // \file
@@ -14,10 +16,7 @@
 #include <vsol/vsol_polygon_3d.h>
 #include <vgui/vgui_soview.h>
 #include <vgui/vgui_dialog.h>
-#include <iostream>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <fstream>
 
 bwm_observer_cam* bwm_observer_mgr::BWM_MASTER_OBSERVER = VXL_NULLPTR;
 bwm_observer_cam* bwm_observer_mgr::BWM_EO_OBSERVER = VXL_NULLPTR;

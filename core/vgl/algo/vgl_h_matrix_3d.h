@@ -19,14 +19,14 @@
 //   26 Jul 2011 - Peter Vanroose - added correlation(),set_affine(),is_identity()
 // \endverbatim
 
+#include <vector>
+#include <iosfwd>
 #include <vnl/vnl_fwd.h> // for vnl_vector_fixed<T,3>
 #include <vnl/vnl_matrix_fixed.h>
 #include <vgl/vgl_homg_point_3d.h>
 #include <vgl/vgl_homg_plane_3d.h>
 #include <vgl/vgl_pointset_3d.h>
-#include <vector>
 #include <vcl_compiler.h>
-#include <iosfwd>
 
 //:
 // A class to hold a 3-d projective transformation matrix

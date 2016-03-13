@@ -1,12 +1,11 @@
 // This is brl/bbas/bil/algo/bil_color_conversions.cxx
+#include <iostream>
 #include "bil_color_conversions.h"
 //:
 // \file
 #include <vnl/vnl_vector_fixed.h>
 #if 0
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 #endif
 
 void rgb2lab(double R, double G, double B, double &L , double &a, double &b)

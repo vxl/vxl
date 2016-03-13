@@ -12,9 +12,9 @@
 //   (none yet)
 // \endverbatim
 
-#include <vcl_compiler.h>
 #include <iostream>
 #include <vector>
+#include <vcl_compiler.h>
 #include <bsta/bsta_attributes.h>
 #include <bsta/bsta_gaussian_indep.h>
 #include <bsta/bsta_gaussian_sphere.h>

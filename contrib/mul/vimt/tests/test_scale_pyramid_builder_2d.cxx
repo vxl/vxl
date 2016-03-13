@@ -1,13 +1,12 @@
 // This is mul/vimt/tests/test_scale_pyramid_builder_2d.cxx
+#include <iostream>
+#include <cmath>
 #include <testlib/testlib_test.h>
 
 #include <vimt/vimt_scale_pyramid_builder_2d.h>
 #include <vimt/vimt_image_pyramid.h>
 #include <vimt/vimt_image_2d_of.h>
-#include <iostream>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <cmath> // for log()
 #include <vxl_config.h>
 #include <vpl/vpl.h> // vpl_unlink()
 #include <vsl/vsl_binary_loader.h>

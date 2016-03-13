@@ -1,8 +1,8 @@
 #include <string>
 #include <vector>
-#include <vcl_compiler.h>
 #include <iostream>
 #include <cstdio>
+#include <vcl_compiler.h>
 #include <vul/vul_file.h>
 #include <vul/vul_file_iterator.h>
 #include <vul/vul_timer.h>

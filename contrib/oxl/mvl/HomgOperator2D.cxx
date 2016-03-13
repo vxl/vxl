@@ -5,13 +5,12 @@
 //:
 // \file
 
+#include <iostream>
+#include <vector>
 #include "HomgOperator2D.h"
 
 #include <vcl_cassert.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
-#include <vector>
 
 #include <vnl/vnl_math.h>
 #include <vnl/vnl_matrix.h>

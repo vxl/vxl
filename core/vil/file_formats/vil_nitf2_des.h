@@ -7,11 +7,11 @@
 
 class vil_nitf2_field_definitions;
 class vil_stream;
+#include <map>
 #include "vil_nitf2_classification.h"
 #include "vil_nitf2_field_sequence.h"
 
 #include <vcl_compiler.h>
-#include <map>
 
 // Class for representing a single data extension segment (DES) in
 // a NITF 2.x file.  This class can handle TRE overflow DES (DESID=TRE_OVERFLOW)

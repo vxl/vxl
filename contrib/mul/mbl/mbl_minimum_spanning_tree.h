@@ -5,13 +5,13 @@
 // \author Tim Cootes
 // \brief Functions to compute minimum spanning trees from distance data
 
+#include <vector>
+#include <iostream>
+#include <utility>
 #include <vnl/vnl_matrix.h>
 #include <vgl/vgl_point_2d.h>
 #include <vgl/vgl_point_3d.h>
-#include <vector>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <utility>  // For std::pair
 
 //: Compute the minimum spanning tree given a distance matrix
 //  \param pairs[0].first is the root node

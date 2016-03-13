@@ -9,6 +9,8 @@
 //
 // TODO - limit t_min so that the brow region doesn't jut out too far when the brow angle is increased.
 //
+#include <iostream>
+#include <cmath>
 #include <vgl/vgl_box_3d.h>
 #include <vgl/vgl_vector_3d.h>
 #include <vgl/vgl_plane_3d.h>
@@ -16,8 +18,6 @@
 #include "boxm2_vecf_lid_base.h"
 #include "boxm2_vecf_orbit_params.h"
 #include <vcl_compiler.h>
-#include <iostream>
-#include <cmath>
 class boxm2_vecf_eyelid_crease : public boxm2_vecf_lid_base{
  public:
   boxm2_vecf_eyelid_crease();

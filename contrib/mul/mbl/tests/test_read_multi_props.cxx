@@ -1,9 +1,8 @@
 // This is mul/mbl/tests/test_read_multi_props.cxx
-#include <vcl_compiler.h>
-#include <iostream>
 #include <iostream>
 #include <sstream>
 #include <iterator>
+#include <vcl_compiler.h>
 
 #include <mbl/mbl_read_multi_props.h>
 #include <testlib/testlib_test.h>

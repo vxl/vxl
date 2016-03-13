@@ -14,9 +14,9 @@
 //=========================================================================
 
 #include <string>
-#include <vcl_compiler.h>
 #include <bitset>
 #include <map>
+#include <vcl_compiler.h>
 
 #include <atlbase.h>
 #include <dshow.h>

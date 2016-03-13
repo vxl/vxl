@@ -32,9 +32,9 @@
 // \endverbatim
 //
 
-#include <vcl_compiler.h>
 #include <iostream>
 #include <vector>
+#include <vcl_compiler.h>
 #include <mvl/FMatrix.h>
 #include <vgl/vgl_homg_point_2d.h>
 class HomgPoint2D;

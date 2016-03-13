@@ -20,8 +20,8 @@
 // merged if the difference in internal component weights are greater
 // than the smallest weight edge between a pair of adjacent components.
 // The result is a set of isolated sub-graphs of the original graph.
-#include <vcl_compiler.h>
 #include <vector>
+#include <vcl_compiler.h>
 #include <vbl/vbl_disjoint_sets.h>
 #include <vbl/vbl_edge.h>
 #include <vil/vil_image_view.h>

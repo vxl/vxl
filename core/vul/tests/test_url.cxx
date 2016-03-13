@@ -8,14 +8,14 @@
 //
 // Test construction, IO etc.
 
-#include <vul/vul_url.h>
-
 #include <iostream>
-#include <vcl_compiler.h>
 #include <string>
 #include <algorithm>
 #include <utility>
-#include <cstring> // for strncmp()
+#include <cstring>
+#include <vul/vul_url.h>
+
+#include <vcl_compiler.h>
 
 #include <testlib/testlib_test.h>
 

@@ -11,13 +11,13 @@
 //   15 Apr 2009 Created (A. Garrido)
 //\endverbatim
 
-#include "vidl_v4l2_control.h"
 #include <vector>
 #include <string>
-#include <vcl_cassert.h>
-#include <vcl_compiler.h>
 #include <iosfwd>
 #include <iostream>
+#include "vidl_v4l2_control.h"
+#include <vcl_cassert.h>
+#include <vcl_compiler.h>
 extern "C" {
 //#include <asm/types.h>          /* for videodev2.h */
 #include <sys/time.h>

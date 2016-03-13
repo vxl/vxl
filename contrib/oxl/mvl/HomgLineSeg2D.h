@@ -16,11 +16,11 @@
 //   Peter Vanroose - 11 Mar 97 - added operator==
 // \endverbatim
 
+#include <iostream>
+#include <iosfwd>
 #include <mvl/HomgLine2D.h>
 #include <mvl/HomgPoint2D.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iosfwd>
 
 class HomgLineSeg2D : public HomgLine2D
 {

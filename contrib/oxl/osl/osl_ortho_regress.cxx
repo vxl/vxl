@@ -6,10 +6,10 @@
 // \file
 // \author fsm
 
-#include "osl_ortho_regress.h"
-#include <vcl_compiler.h>
 #include <iostream>
 #include <cmath>
+#include "osl_ortho_regress.h"
+#include <vcl_compiler.h>
 #include <vcl_cassert.h>
 
 // convenience methods

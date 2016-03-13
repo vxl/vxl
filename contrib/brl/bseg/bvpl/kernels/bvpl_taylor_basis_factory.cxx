@@ -3,10 +3,10 @@
 // \author Isabel Restrepo
 // \date 25-Jan-2011
 
-#include "bvpl_taylor_basis_factory.h"
-#include <vcl_compiler.h>
 #include <iostream>
 #include <map>
+#include "bvpl_taylor_basis_factory.h"
+#include <vcl_compiler.h>
 
 //: Constructor from filename
 bvpl_taylor_basis_factory::bvpl_taylor_basis_factory(std::string filename)

@@ -1,3 +1,7 @@
+#include <ios>
+#include <iostream>
+#include <sstream>
+#include <iomanip>
 #include "bwm_observer_cam.h"
 //:
 // \file
@@ -13,12 +17,7 @@
 #include <bwm/bwm_tableau_mgr.h>
 #include <bwm/bwm_world.h>
 
-#include <ios>
-#include <iostream>
-#include <sstream>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iomanip>
 #include <vcl_cassert.h>
 #include <vgui/vgui.h>
 #include <vnl/vnl_math.h>

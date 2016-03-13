@@ -9,12 +9,12 @@
 //
 //-----------------------------------------------------------------------------
 
+#include <algorithm>
+#include <cmath>
+#include <iostream>
 #include "vnl_symmetric_eigensystem.h"
 #include <vcl_cassert.h>
-#include <algorithm> // for swap
 #include <vcl_compiler.h>
-#include <cmath> // for sqrt(double), acos, etc.
-#include <iostream>
 #include <vnl/vnl_copy.h>
 #include <vnl/vnl_math.h>
 #include <vnl/algo/vnl_netlib.h> // rs_()

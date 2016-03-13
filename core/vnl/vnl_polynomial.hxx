@@ -2,6 +2,7 @@
 #ifndef vnl_polynomial_hxx_
 #define vnl_polynomial_hxx_
 
+#include <iostream>
 #include "vnl_polynomial.h"
 //:
 // \file
@@ -12,7 +13,6 @@
 // \date  August 2011
 
 #include <vcl_compiler.h>
-#include <iostream>
 #include <vcl_cassert.h>
 
 //: Evaluate polynomial at value x

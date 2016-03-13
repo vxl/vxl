@@ -1,4 +1,6 @@
 // This is brl/bseg/bvxm/pro/processes/bvxm_estimate_camera_process.cxx
+#include <iostream>
+#include <cstdio>
 #include "bvxm_estimate_camera_process.h"
 //:
 // \file
@@ -22,8 +24,6 @@
 #include <bpgl/bpgl_camera_estimator_amoeba.h>
 
 #include <vcl_compiler.h>
-#include <iostream>
-#include <cstdio>
 #include <vcl_cassert.h>
 
 #include "bvxm_expected_edge_functor.h"

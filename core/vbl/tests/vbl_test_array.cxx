@@ -1,7 +1,7 @@
 // This is core/vbl/tests/vbl_test_array.cxx
+#include <iostream>
 #include <testlib/testlib_test.h>
 #include <vcl_compiler.h>
-#include <iostream>
 #include <vbl/vbl_array_1d.h>
 #include <vbl/vbl_array_2d.h>
 #include <vbl/vbl_array_3d.h>

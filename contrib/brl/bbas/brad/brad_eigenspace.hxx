@@ -1,12 +1,12 @@
 // Thisx is brl/bbas/brad/brad_eigenspace.hxx
 #ifndef brad_eigenspace_hxx_
 #define brad_eigenspace_hxx_
+#include <iostream>
+#include <cstdlib>
 #include "brad_eigenspace.h"
 //:
 // \file
 #include <vcl_compiler.h>
-#include <iostream>
-#include <cstdlib> // for std::rand()
 #include <vcl_cassert.h>
 #include <vil/vil_convert.h>
 #include <vil/vil_new.h>

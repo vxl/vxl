@@ -2,9 +2,9 @@
 #ifndef vgl_ellipse_scan_iterator_hxx_
 #define vgl_ellipse_scan_iterator_hxx_
 
+#include <cmath>
 #include "vgl_ellipse_scan_iterator.h"
 #include <vcl_compiler.h>
-#include <cmath>
 
 // Helper functions
 namespace {

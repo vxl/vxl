@@ -7,12 +7,12 @@
 // \author Ian Scott
 //=======================================================================
 
+#include <iostream>
+#include <iosfwd>
 #include <vimt/vimt_gaussian_pyramid_builder_2d.h>
 #include <vil/vil_image_view.h>
 #include <vil/algo/vil_gauss_reduce.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iosfwd>
 
 //: Build pyramids of vimt_image_2d_of<vxl_byte> at any scale step
 

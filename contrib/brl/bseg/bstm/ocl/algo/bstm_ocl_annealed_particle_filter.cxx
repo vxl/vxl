@@ -1,9 +1,9 @@
-#include "bstm_ocl_annealed_particle_filter.h"
-
-#include <vcl_compiler.h>
 #include <iostream>
 #include <fstream>
 #include <sstream>
+#include "bstm_ocl_annealed_particle_filter.h"
+
+#include <vcl_compiler.h>
 #define ALPHA 0.5
 #define MAX_BETA 15
 #define ENABLE_ROT

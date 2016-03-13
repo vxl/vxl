@@ -12,14 +12,14 @@
 //     d
 // with index (u, l, r, d) ==> (0, 1, 2, 3)
 //
+#include <iostream>
+#include <vector>
 #include <sdet/sdet_mrf_site_bp_sptr.h>
 #include <vil/vil_image_resource.h>
 #include <vil/vil_image_view.h>
 #include <vbl/vbl_array_2d.h>
 #include <vbl/vbl_ref_count.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <vector>
 
 class sdet_mrf_bp : public vbl_ref_count
 {

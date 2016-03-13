@@ -1,17 +1,17 @@
 // This is brl/bseg/bstm/pro/processes/bstm_cpp_export_point_cloud_process.cxx
+#include <iostream>
+#include <fstream>
+#include <sstream>
 #include <bprb/bprb_func_process.h>
 //:
 // \file
 
 
 #include <vcl_compiler.h>
-#include <iostream>
-#include <fstream>
 #include <bstm/bstm_scene.h>
 #include <bstm/bstm_util.h>
 #include <bstm/io/bstm_cache.h>
 #include <bstm/bstm_data_traits.h>
-#include <sstream>
 
 
 namespace bstm_cpp_export_point_cloud_process_globals

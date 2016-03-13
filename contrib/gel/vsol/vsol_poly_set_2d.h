@@ -18,15 +18,15 @@
 // \endverbatim
 //*****************************************************************************
 
+#include <vector>
+#include <string>
+#include <iostream>
+#include <iosfwd>
 #include <vsol/vsol_region_2d.h>
 #include <vsol/vsol_point_2d_sptr.h>
 #include <vsol/vsol_polygon_2d_sptr.h>
 #include <vsl/vsl_binary_io.h>
-#include <vector>
-#include <string>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iosfwd>
 
 //: General poly_set class, part of the vsol_curve_2d hierarchy
 

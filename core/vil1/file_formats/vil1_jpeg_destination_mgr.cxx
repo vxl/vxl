@@ -6,10 +6,10 @@
 // \file
 // \author fsm
 
+#include <cstddef>
 #include "vil1_jpeg_destination_mgr.h"
 #include <vcl_cassert.h>
 #include <vcl_compiler.h>
-#include <cstddef> // for std::size_t
 #include <vil1/vil1_stream.h>
 
 #define STATIC /*static*/

@@ -6,8 +6,8 @@
 // \brief   binary IO functions for vbl_triple<S, T, U>
 // \author  Ian Scott
 
-#include <vcl_compiler.h>
 #include <iosfwd>
+#include <vcl_compiler.h>
 #include <vbl/vbl_triple.h>
 class vsl_b_ostream;
 class vsl_b_istream;

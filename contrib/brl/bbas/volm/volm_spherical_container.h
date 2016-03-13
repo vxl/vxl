@@ -13,13 +13,13 @@
 // \endverbatim
 //
 
-#include <vbl/vbl_ref_count.h>
 #include <vector>
 #include <string>
-#include <vcl_compiler.h>
 #include <iostream>
 #include <cmath>
 #include <map>
+#include <vbl/vbl_ref_count.h>
+#include <vcl_compiler.h>
 #include <vgl/vgl_point_3d.h>
 #include <bvrml/bvrml_write.h>
 #include <vnl/vnl_math.h>

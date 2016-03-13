@@ -1,10 +1,9 @@
 // This is mul/vimt3d/tests/test_reflect.cxx
 
-#include <testlib/testlib_test.h>
-#include <vcl_compiler.h>
 #include <iostream>
 #include <ctime>
-#include <iostream>
+#include <testlib/testlib_test.h>
+#include <vcl_compiler.h>
 #include <vxl_config.h>
 #include <vimt3d/vimt3d_reflect.h>
 #include <vul/vul_ios_state.h>

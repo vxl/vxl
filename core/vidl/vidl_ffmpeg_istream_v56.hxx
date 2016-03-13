@@ -3,6 +3,8 @@
 #define vidl_ffmpeg_istream_v56_hxx_
 #pragma once
 
+#include <string>
+#include <iostream>
 #include "vidl_ffmpeg_istream.h"
 #include "vidl_ffmpeg_pixel_format.h"
 //:
@@ -21,8 +23,6 @@
 #include "vidl_ffmpeg_convert.h"
 
 #include <vcl_compiler.h>
-#include <string>
-#include <iostream>
 
 extern "C" {
 #if FFMPEG_IN_SEVERAL_DIRECTORIES

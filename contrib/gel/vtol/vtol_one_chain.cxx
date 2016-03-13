@@ -1,12 +1,12 @@
 // This is gel/vtol/vtol_one_chain.cxx
+#include <iostream>
+#include <algorithm>
 #include "vtol_one_chain.h"
 //:
 // \file
 
 #include <vcl_cassert.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <algorithm>
 #include <vtol/vtol_edge.h>
 #include <vtol/vtol_edge_2d.h>
 #include <vtol/vtol_macros.h>

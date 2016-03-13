@@ -3,9 +3,8 @@
 #include <vector>
 #include <iterator>
 #include <utility>
-#include <vcl_compiler.h>
-#include <iostream>
 #include <algorithm>
+#include <vcl_compiler.h>
 #include <testlib/testlib_test.h>
 #include <mbl/mbl_stl.h>
 

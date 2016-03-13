@@ -2,10 +2,9 @@
 #define vsph_sph_point_2d_h_
 //:
 // \file
+#include <iostream>
 #include <vsl/vsl_binary_io.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 
 //: a point in the spherical coordinate system on the surface of a unit sphere
 // \p theta is elevation with zero at the North Pole, 180 degress at the South Pole

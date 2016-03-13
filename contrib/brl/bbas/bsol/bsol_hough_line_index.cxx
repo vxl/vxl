@@ -1,3 +1,6 @@
+#include <cmath>
+#include <iostream>
+#include <algorithm>
 #include "bsol_hough_line_index.h"
 //:
 // \file
@@ -6,11 +9,8 @@
 //
 //-----------------------------------------------------------------------------
 
-#include <cmath>
 
 #include <vcl_compiler.h>
-#include <iostream>
-#include <algorithm> // std::find()
 #include <vnl/vnl_math.h>
 #include <vsol/vsol_line_2d.h>
 #include <vsol/vsol_point_2d.h>

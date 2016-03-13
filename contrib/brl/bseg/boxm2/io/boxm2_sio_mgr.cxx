@@ -1,7 +1,7 @@
-#include "boxm2_sio_mgr.h"
-#include <vcl_compiler.h>
 #include <iostream>
 #include <fstream>
+#include "boxm2_sio_mgr.h"
+#include <vcl_compiler.h>
 #include <sys/stat.h>  //for getting file sizes
 
 #if defined(HAS_HDFS) && HAS_HDFS

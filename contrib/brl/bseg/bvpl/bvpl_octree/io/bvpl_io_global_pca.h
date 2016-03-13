@@ -12,11 +12,10 @@
 //   <none yet>
 // \endverbatim
 
+#include <iostream>
 #include <bvpl/bvpl_octree/bvpl_global_pca.h>
 
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 #include <vsl/vsl_binary_io.h>
 
 typedef bvpl_global_pca<125> bvpl_global_pca_125;

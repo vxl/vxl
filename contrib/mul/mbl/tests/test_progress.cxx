@@ -1,8 +1,7 @@
 // This is mul/mbl/tests/test_progress.cxx
 #include <iostream>
-#include <vcl_compiler.h>
-#include <iostream>
 #include <iomanip>
+#include <vcl_compiler.h>
 #include <mbl/mbl_progress_callback.h>
 #include <testlib/testlib_test.h>
 

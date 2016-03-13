@@ -15,8 +15,8 @@
 //   K.Y.McGaul 21-FEB-2002 Added comments and documentation.
 // \endverbatim
 
-#include <vcl_compiler.h>
 #include <vector>
+#include <vcl_compiler.h>
 #include <vbl/vbl_array_2d.h>
 #include "vgui_grid_tableau_sptr.h"
 #include <vgui/vgui_poly_tableau.h>

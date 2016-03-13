@@ -1,8 +1,8 @@
 // This is core/vul/tests/test_file_iterator.cxx
 #include <iostream>
 #include <fstream>
-#include <vcl_compiler.h>
 #include <map>
+#include <vcl_compiler.h>
 #include <vpl/vpl.h>
 #include <vul/vul_temp_filename.h>
 

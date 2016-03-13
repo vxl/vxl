@@ -1,19 +1,18 @@
 // This is mul/clsfy/clsfy_binary_threshold_1d_gini_builder.cxx
+#include <iostream>
+#include <string>
+#include <algorithm>
 #include "clsfy_binary_threshold_1d_gini_builder.h"
 //:
 // \file
 // \author Martin Roberts
 
-#include <iostream>
-#include <string>
 #include <vcl_cassert.h>
 #include <vsl/vsl_binary_loader.h>
 #include <vnl/vnl_double_2.h>
 #include <clsfy/clsfy_builder_1d.h>
 #include <clsfy/clsfy_binary_threshold_1d.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <algorithm>
 
 // Note this is used by clsfy_binary_tree_builder
 // Derived from clsfy_binary_threshold_1d_builder but uses a slightly different

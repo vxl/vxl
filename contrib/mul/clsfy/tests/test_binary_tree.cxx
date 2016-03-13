@@ -1,4 +1,8 @@
 // This is mul/clsfy/tests/test_binary_tree.cxx
+#include <iostream>
+#include <string>
+#include <numeric>
+#include <algorithm>
 #include <testlib/testlib_test.h>
 //:
 // \file
@@ -6,12 +10,7 @@
 // \author dac
 // Test construction, IO etc
 
-#include <iostream>
-#include <string>
-#include <numeric>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <algorithm>
 #include <vpl/vpl.h> // vpl_unlink()
 #include <clsfy/clsfy_binary_tree.h>
 #include <clsfy/clsfy_binary_tree_builder.h>

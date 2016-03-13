@@ -8,9 +8,9 @@
 // \date   08 Oct 1999
 // \brief  See vgui_debug_tableau.cxx for a description of this file.
 
+#include <iostream>
 #include "vgui_debug_tableau.h"
 #include <vcl_compiler.h>
-#include <iostream>
 #include <vgui/vgui_event.h>
 
 //-----------------------------------------------------------------------------

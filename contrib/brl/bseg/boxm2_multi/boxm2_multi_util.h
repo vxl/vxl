@@ -3,10 +3,10 @@
 //:
 // \file
 // \brief boxm2_opencl_scene_streamer assists the processor in streaming blocks
-#include <boxm2/boxm2_scene.h>
-#include <vcl_compiler.h>
 #include <iostream>
 #include <vector>
+#include <boxm2/boxm2_scene.h>
+#include <vcl_compiler.h>
 #include <boxm2/ocl/boxm2_opencl_cache1.h>
 
 //open cl includes

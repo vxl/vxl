@@ -4,6 +4,8 @@
 // \author Isabel Restrepo
 // \date April 12, 2012
 
+#include <iostream>
+#include <fstream>
 #include "boxm2_ocl_kernel_filter_process.h"
 #include <boct/boct_bit_tree.h>
 
@@ -13,8 +15,6 @@
 
 #include <vul/vul_timer.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <fstream>
 
 
 bool boxm2_ocl_kernel_filter_process_globals::compile_filter_kernel(bocl_device_sptr device, bocl_kernel * filter_kernel, std::string opts)

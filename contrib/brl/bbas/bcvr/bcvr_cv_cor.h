@@ -17,12 +17,12 @@
 //
 //-------------------------------------------------------------------------
 
-#include <vbl/vbl_ref_count.h>
 #include <vector>
 #include <utility>
-#include <vcl_compiler.h>
 #include <iostream>
 #include <string>
+#include <vbl/vbl_ref_count.h>
+#include <vcl_compiler.h>
 #include <vsl/vsl_binary_io.h>
 #include <vgl/vgl_point_2d.h>
 #include <bsol/bsol_intrinsic_curve_2d_sptr.h>

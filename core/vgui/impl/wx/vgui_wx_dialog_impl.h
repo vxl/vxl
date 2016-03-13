@@ -13,14 +13,14 @@
 // \endverbatim
 //=========================================================================
 
+#include <string>
+#include <cstddef>
 #include <vgui/internals/vgui_dialog_impl.h>
 class  vgui_wx_adaptor;
 class  vgui_dialog_field;
 struct vgui_wx_dialog_choice;
 
 #include <vcl_compiler.h>
-#include <string>
-#include <cstddef>
 
 class wxDialog;
 class wxTextCtrl;

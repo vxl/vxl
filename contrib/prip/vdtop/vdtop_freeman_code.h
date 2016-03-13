@@ -12,10 +12,10 @@
 //   06 May 2004 Jocelyn Marchadier
 // \endverbatim
 
-#include <vxl_config.h>
-#include <vcl_compiler.h>
 #include <iostream>
 #include <utility>
+#include <vxl_config.h>
+#include <vcl_compiler.h>
 #include <vdtop/vdtop_export.h>
 
 //: Freeman code class.

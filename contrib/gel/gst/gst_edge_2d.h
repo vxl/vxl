@@ -8,9 +8,9 @@
 // \file
 // \author crossge@crd.ge.com
 
-#include <vcl_compiler.h>
 #include <iostream>
 #include <iosfwd>
+#include <vcl_compiler.h>
 #include <vbl/vbl_ref_count.h>
 
 #include "gst_vertex_2d_sptr.h"

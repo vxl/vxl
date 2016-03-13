@@ -1,4 +1,6 @@
 // This is mul/clsfy/tests/test_logit_loss_function.cxx
+#include <iostream>
+#include <string>
 #include <testlib/testlib_test.h>
 //:
 // \file
@@ -6,9 +8,6 @@
 // \author TFC
 
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
-#include <string>
 #include <vpl/vpl.h> // vpl_unlink()
 #include <clsfy/clsfy_logit_loss_function.h>
 #include <vpdfl/vpdfl_axis_gaussian.h>

@@ -8,10 +8,10 @@
 // \brief  See vgui_event_condition.h for a description of this file.
 
 
+#include <sstream>
 #include "vgui_event_condition.h"
 
 #include <vcl_compiler.h>
-#include <sstream>
 #include <vgui/vgui_event.h>
 
 //----------------------------------------------------------------------------

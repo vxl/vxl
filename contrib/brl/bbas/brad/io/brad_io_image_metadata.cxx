@@ -1,11 +1,10 @@
+#include <iostream>
 #include "brad_io_image_metadata.h"
 //:
 // \file
 #include <brad/brad_image_metadata.h>
 #include <vsl/vsl_binary_io.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 
 //: Binary save brad_image_metadata to stream.
 void

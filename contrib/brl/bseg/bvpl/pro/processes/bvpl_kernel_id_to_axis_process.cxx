@@ -1,4 +1,6 @@
 // This is brl/bseg/bvpl/pro/processes/bvpl_kernel_id_to_axis_process.cxx
+#include <iostream>
+#include <string>
 #include <bprb/bprb_func_process.h>
 //:
 // \file
@@ -18,8 +20,6 @@
 #include <bvpl/bvpl_direction_to_color_map.h>
 #include <vnl/vnl_float_3.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <string>
 
 namespace bvpl_kernel_id_to_axis_process_globals
 {

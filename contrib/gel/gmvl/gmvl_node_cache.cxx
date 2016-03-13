@@ -6,10 +6,9 @@
 // \file
 // \author crossge@crd.ge.com
 
+#include <iostream>
 #include "gmvl_node_cache.h"
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 
 // constructors and destructors
 gmvl_node_cache::gmvl_node_cache()

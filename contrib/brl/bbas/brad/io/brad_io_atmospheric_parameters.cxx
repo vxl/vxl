@@ -1,11 +1,10 @@
+#include <iostream>
 #include "brad_io_atmospheric_parameters.h"
 //:
 // \file
 #include <brad/brad_atmospheric_parameters.h>
 #include <vsl/vsl_binary_io.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 
 //: Binary save brad_atmospheric_parameters to stream.
 void

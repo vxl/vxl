@@ -28,10 +28,10 @@
 //
 //-----------------------------------------------------------------------------
 
-#include <vcl_compiler.h>
 #include <iostream>
 #include <iosfwd>
 #include <vector>
+#include <vcl_compiler.h>
 #include <mvl/MatchSet.h>
 
 class PairMatchSet : public MatchSet

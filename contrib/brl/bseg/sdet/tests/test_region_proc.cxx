@@ -1,9 +1,8 @@
 // This is brl/bseg/sdet/tests/test_region_proc.cxx
 #include <vector>
 #include <string>
+#include <iostream>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 #include <vil/vil_image_resource.h>
 #include <vil/vil_load.h>
 #include <vtol/vtol_intensity_face.h>

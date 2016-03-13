@@ -2,10 +2,10 @@
 #ifndef vgl_1d_basis_hxx_
 #define vgl_1d_basis_hxx_
 
+#include <iostream>
 #include "vgl_1d_basis.h"
 #include <vcl_cassert.h>
 #include <vcl_compiler.h>
-#include <iostream>
 
 template <class T>
 vgl_1d_basis<T>::vgl_1d_basis(T const& o, T const& u, T const& i)

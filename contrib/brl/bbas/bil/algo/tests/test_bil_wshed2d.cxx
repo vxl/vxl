@@ -1,7 +1,6 @@
+#include <iostream>
 #include <testlib/testlib_test.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 
 static void test_bil_wshed2d()
 {

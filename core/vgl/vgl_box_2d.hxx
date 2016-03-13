@@ -4,12 +4,12 @@
 //:
 // \file
 
-#include "vgl_box_2d.h"
 #include <iostream>
 #include <algorithm>
+#include <cmath>
+#include "vgl_box_2d.h"
 #include <vcl_cassert.h>
 #include <vcl_compiler.h>
-#include <cmath>
 #include <vgl/vgl_point_2d.h>
 
 // Constructors/Destructor---------------------------------------------------

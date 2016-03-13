@@ -1,7 +1,7 @@
-#include <testlib/testlib_test.h>
 #include <string>
-#include <vcl_compiler.h>
 #include <iostream>
+#include <testlib/testlib_test.h>
+#include <vcl_compiler.h>
 #include <vpl/vpl.h>
 //For backwards compatibility
 #include <vcl_string.h>

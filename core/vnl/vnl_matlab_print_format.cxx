@@ -1,11 +1,11 @@
 // This is core/vnl/vnl_matlab_print_format.cxx
+#include <iostream>
+#include <vector>
 #include "vnl_matlab_print_format.h"
 //:
 // \file
 
-#include <iostream>
 #include <vcl_compiler.h>
-#include <vector>
 
 //: Choose precision in printouts.
 //

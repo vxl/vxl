@@ -1,4 +1,7 @@
 // This is oxl/mvl/FMatrixCompute7Point.cxx
+#include <vector>
+#include <iostream>
+#include <cmath>
 #include "FMatrixCompute7Point.h"
 //:
 // \file
@@ -6,11 +9,7 @@
 // \date   25 Nov 2000
 //-----------------------------------------------------------------------------
 
-#include <vector>
-#include <iostream>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <cmath>
 
 #include <vnl/vnl_matrix.h>
 #include <vnl/vnl_math.h>

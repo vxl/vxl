@@ -11,11 +11,11 @@
 //   <none yet>
 // \endverbatim
 
-#include "bocl_cl.h"
 #include <string>
-#include <vcl_compiler.h>
 #include <iostream>
 #include <cstddef>
+#include "bocl_cl.h"
+#include <vcl_compiler.h>
 
 #define MEM_SUCCESS 1
 #define MEM_FAILURE 0

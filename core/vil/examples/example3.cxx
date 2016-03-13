@@ -4,8 +4,8 @@
 // \author Tim Cootes - Manchester
 
 #include <iostream>
-#include <vcl_compiler.h>
 #include <vector>
+#include <vcl_compiler.h>
 #include <vxl_config.h> // for vxl_byte
 #include <vil/vil_image_view.h>
 #include <vil/vil_print.h>

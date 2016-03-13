@@ -1,9 +1,9 @@
-#include <testlib/testlib_test.h>
-#include <vpl/vpl.h>
 #include <iostream>
-#include <vcl_compiler.h>
 #include <vector>
 #include <cmath>
+#include <testlib/testlib_test.h>
+#include <vpl/vpl.h>
+#include <vcl_compiler.h>
 #include <vpgl/vpgl_local_rational_camera.h>
 #include <vpgl/io/vpgl_io_local_rational_camera.h>
 #include <vpgl/vpgl_lvcs.h>

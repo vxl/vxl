@@ -1,9 +1,8 @@
-#include <testlib/testlib_test.h>
-#include <vcl_compiler.h>
-#include <iostream>
 #include <iostream>
 #include <string>
 #include <vector>
+#include <testlib/testlib_test.h>
+#include <vcl_compiler.h>
 #include <vul/vul_file.h>
 
 #include <vgl/vgl_vector_3d.h>

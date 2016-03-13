@@ -1,8 +1,8 @@
+#include <algorithm>
 #include "vil_block_cache.h"
 //:
 // \file
 #include <vcl_compiler.h>
-#include <algorithm>
 #include <vcl_cassert.h>
 
 unsigned long bcell::time_ = 0;

@@ -4,10 +4,10 @@
 //:
 // \file
 
+#include <limits>
 #include "vpdl_distribution.h"
 #include <vpdl/vpdt/vpdt_access.h>
 #include <vcl_compiler.h>
-#include <limits>
 #include <vcl_cassert.h>
 
 //: Default implementation of numerical CDF inverse computation.

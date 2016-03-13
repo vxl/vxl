@@ -1,4 +1,6 @@
 //This is brl/bseg/bvxm/pro/processes/bvxm_compare_3d_voxels_process.cxx
+#include <iostream>
+#include <fstream>
 #include "bvxm_compare_3d_voxels_process.h"
 //:
 // \file
@@ -15,8 +17,6 @@
 #include <bsta/bsta_histogram.h>
 
 #include <vcl_compiler.h>
-#include <iostream>
-#include <fstream>
 
 //: set input and output types
 bool bvxm_compare_3d_voxels_process_cons(bprb_func_process& pro)

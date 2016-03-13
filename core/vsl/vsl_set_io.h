@@ -7,8 +7,8 @@
 // \author K.Y.McGaul
 
 #include <iosfwd>
-#include <vcl_compiler.h>
 #include <set>
+#include <vcl_compiler.h>
 
 class vsl_b_ostream;
 class vsl_b_istream;

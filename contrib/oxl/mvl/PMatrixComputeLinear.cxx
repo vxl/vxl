@@ -1,11 +1,11 @@
 // This is oxl/mvl/PMatrixComputeLinear.cxx
+#include <iostream>
+#include <vector>
 #include "PMatrixComputeLinear.h"
 //:
 //  \file
 
 #include <vcl_compiler.h>
-#include <iostream>
-#include <vector>
 #include <vcl_cassert.h>
 #include <vnl/vnl_matrix.h>
 #include <vnl/algo/vnl_svd.h>

@@ -1,7 +1,6 @@
+#include <iostream>
 #include <testlib/testlib_test.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 #include <volm/volm_osm_parser.h>
 #include <bkml/bkml_parser.h>
 #include <bkml/bkml_write.h>

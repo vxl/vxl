@@ -3,8 +3,8 @@
 // \brief Example of loading an image and correlating with a normalised mask
 // \author Tim Cootes
 
-#include <vcl_compiler.h>
 #include <iostream>
+#include <vcl_compiler.h>
 #include <vxl_config.h> // for vxl_byte
 #include <vul/vul_arg.h>
 #include <vil/vil_load.h>

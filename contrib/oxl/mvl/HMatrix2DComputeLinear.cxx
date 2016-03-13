@@ -1,12 +1,11 @@
 // This is oxl/mvl/HMatrix2DComputeLinear.cxx
+#include <vector>
+#include <iostream>
 #include "HMatrix2DComputeLinear.h"
 //:
 //  \file
 
-#include <vector>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 #include <vcl_cassert.h>
 #include <vnl/algo/vnl_svd.h>
 #include <mvl/HMatrix2D.h>

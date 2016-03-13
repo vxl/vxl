@@ -22,19 +22,18 @@
 //   Peter Vanroose, Feb.2004 - replaced vil1_load by vil_load
 // \endverbatim
 //
+#include <vector>
+#include <iostream>
+#include <cstring>
 #include <section/section.h>
 #include <vipl/vipl_with_section/accessors/vipl_accessors_section.h>
 #include <vipl/accessors/vipl_accessors_vcl_vector.h>
 #include <vipl/vipl_histogram.h>
-#include <vector>
 
 // for I/O:
 #include <vil/vil_load.h>
 #include <vil/vil_image_view.h>
-#include <iostream>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <cstring> // for memcpy()
 #include <vxl_config.h> // for vxl_byte
 
 int

@@ -1,12 +1,12 @@
+#include <string>
+#include <limits>
+#include <iostream>
 #include <testlib/testlib_test.h>
 #include <vpdl/vpdl_gaussian.h>
-#include <string>
 #include <vcl_compiler.h>
-#include <limits>
 #include <vnl/vnl_math.h> // for twopi
 #include <vnl/vnl_inverse.h>
 #include <vnl/algo/vnl_determinant.h>
-#include <iostream>
 
 template <class T>
 void test_gaussian_type(T epsilon, const std::string& type_name)

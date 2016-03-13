@@ -2,9 +2,9 @@
 #ifndef vgl_conic_segment_2d_hxx_
 #define vgl_conic_segment_2d_hxx_
 
+#include <iostream>
 #include "vgl_conic_segment_2d.h"
 #include <vcl_compiler.h>
-#include <iostream>
 
 // stream operators
 template <class Type>

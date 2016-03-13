@@ -6,11 +6,11 @@
 // \brief Compute a pyramid of difference of gaussian images
 // \author Tim Cootes
 
+#include <vector>
 #include <vil/algo/vil_gauss_filter.h>
 #include <vil/vil_resample_bilin.h>
 #include <vil/vil_math.h>
 #include <vcl_compiler.h>
-#include <vector>
 
 //: Compute a pyramid of difference of gaussian images
 //  Computes each layer of a pyramid by smoothing

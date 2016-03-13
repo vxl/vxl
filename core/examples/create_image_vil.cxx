@@ -1,5 +1,5 @@
-#include <vcl_compiler.h>
 #include <string>
+#include <vcl_compiler.h>
 #include <vul/vul_arg.h>
 #include <vil/vil_save.h>
 #include <vil/vil_image_view.h>

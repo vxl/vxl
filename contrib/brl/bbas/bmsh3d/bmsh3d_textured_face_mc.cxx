@@ -1,5 +1,6 @@
 // This is brl/bbas/bmsh3d/bmsh3d_textured_face_mc.cxx
 //---------------------------------------------------------------------
+#include <iostream>
 #include "bmsh3d_textured_face_mc.h"
 //:
 // \file
@@ -20,8 +21,6 @@
 #include <vgl/vgl_point_2d.h>
 
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 
 bmsh3d_textured_face_mc::bmsh3d_textured_face_mc(const bmsh3d_face* face, std::string tex_map_uri)
 : bmsh3d_face_mc(face->id())

@@ -1,9 +1,9 @@
+#include <cstdlib>
 #include "vil_image_list.h"
 //:
 // \file
 #include <sys/stat.h>
 #include <vcl_compiler.h>
-#include <cstdlib>
 #include <vil/vil_image_resource.h>
 #include <vil/vil_blocked_image_resource.h>
 #include <vil/vil_pyramid_image_resource.h>

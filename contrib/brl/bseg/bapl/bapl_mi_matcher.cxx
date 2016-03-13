@@ -1,4 +1,7 @@
 // This is brl/bseg/bapl/bapl_mi_matcher.cxx
+#include <iostream>
+#include <algorithm>
+#include <cmath>
 #include "bapl_mi_matcher.h"
 //:
 // \file
@@ -6,9 +9,6 @@
 #include <bapl/bapl_affine_roi.h>
 #include <bapl/bapl_affine_transform.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <algorithm>
-#include <cmath>
 #include <brip/brip_histogram.h>
 #include <brip/brip_mutual_info.h>
 #include <vnl/vnl_double_2.h>

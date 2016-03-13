@@ -3,8 +3,8 @@
 //:
 // \file
 
-#include <vcl_compiler.h>
 #include <iostream>
+#include <vcl_compiler.h>
 #include <vsl/vsl_binary_io.h>
 #include <vsl/vsl_clipon_binary_loader.h>
 #include <vsl/vsl_clipon_binary_loader.hxx>

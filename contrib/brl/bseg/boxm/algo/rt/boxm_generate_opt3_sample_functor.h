@@ -2,6 +2,7 @@
 #define boxm_generate_opt3_sample_functor_h
 //:
 // \file
+#include <iostream>
 #include "boxm_pre_infinity_functor.h"
 #include <boxm/boxm_apm_traits.h>
 #include <boxm/boxm_aux_traits.h>
@@ -13,8 +14,6 @@
 #include <vil/vil_math.h>
 #include <vil/vil_save.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 
 
 template <boxm_apm_type APM>

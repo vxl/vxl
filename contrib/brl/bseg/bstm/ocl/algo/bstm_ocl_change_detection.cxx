@@ -6,13 +6,13 @@
 // \author Ali Osman Ulusoy
 // \date May 15, 2013
 
-#include "bstm_ocl_change_detection.h"
-
 #include <fstream>
-#include <vcl_compiler.h>
 #include <iostream>
 #include <algorithm>
 #include <sstream>
+#include "bstm_ocl_change_detection.h"
+
+#include <vcl_compiler.h>
 #include <bstm/ocl/bstm_opencl_cache.h>
 #include <bstm/bstm_scene.h>
 #include <bstm/bstm_block.h>

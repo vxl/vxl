@@ -20,8 +20,8 @@
 // PDA (Manchester) 21/03/2001: Tidied up the documentation
 // \endverbatim
 
-#include <vcl_compiler.h>
 #include <iosfwd>
+#include <vcl_compiler.h>
 
 //: Print using printf format specifiers to an ostream.
 // E.g.

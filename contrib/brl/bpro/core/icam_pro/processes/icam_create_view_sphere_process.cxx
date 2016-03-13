@@ -1,4 +1,7 @@
 // This is brl/bpro/core/icam_pro/processes/icam_create_view_sphere_process.cxx
+#include <string>
+#include <iostream>
+#include <sstream>
 #include <bprb/bprb_func_process.h>
 //:
 // \file
@@ -17,11 +20,7 @@
 #include <brdb/brdb_value.h>
 
 #include <vpgl/vpgl_perspective_camera.h>
-#include <string>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
-#include <sstream>
 
 #include <icam/icam_view_sphere.h>
 #include <icam/icam_view_metadata.h>

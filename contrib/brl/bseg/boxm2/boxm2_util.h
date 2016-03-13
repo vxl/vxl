@@ -2,9 +2,9 @@
 #define boxm2_util_h
 //:
 // \file
+#include <iostream>
+#include <limits>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 #include <vpgl/vpgl_camera_double_sptr.h>
 #include <vpgl/vpgl_perspective_camera.h>
 #include <vbl/vbl_array_2d.h>
@@ -14,7 +14,6 @@
 #include <bsta/bsta_histogram.h>
 #include <boxm2/boxm2_scene.h>
 #include <boxm2/io/boxm2_cache.h>
-#include <limits>
 
 //: Utility class with static methods
 class boxm2_util

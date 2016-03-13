@@ -6,9 +6,9 @@
 //     Andrew W. Fitzgibbon, Oxford RRG, 01 Aug 96
 //
 //-----------------------------------------------------------------------------
-#include <vcl_compiler.h>
 #include <iostream>
 #include <iosfwd>
+#include <vcl_compiler.h>
 
 class LineSeg
 {

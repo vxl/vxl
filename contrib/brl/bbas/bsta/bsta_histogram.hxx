@@ -2,12 +2,11 @@
 #define bsta_histogram_hxx_
 //:
 // \file
+#include <iostream>
+#include <cmath>
 #include "bsta_histogram.h"
 
 #include <vcl_compiler.h>
-#include <iostream>
-#include <cmath> // for log()
-#include <iostream>
 #include <vcl_cassert.h>
 #include "bsta_gauss.h"
 #include <vnl/vnl_math.h> // for log2e == 1/std::log(2.0)

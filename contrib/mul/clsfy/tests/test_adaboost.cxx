@@ -1,4 +1,7 @@
 // This is mul/clsfy/tests/test_adaboost.cxx
+#include <iostream>
+#include <string>
+#include <algorithm>
 #include <testlib/testlib_test.h>
 //:
 // \file
@@ -6,11 +9,7 @@
 // \author dac
 // Test construction, IO etc.
 
-#include <iostream>
-#include <string>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <algorithm>
 #include <vpl/vpl.h> // vpl_unlink()
 #include <clsfy/clsfy_simple_adaboost.h>
 #include <clsfy/clsfy_binary_threshold_1d_builder.h>

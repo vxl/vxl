@@ -1,13 +1,13 @@
 // This is core/vul/vul_psfile.cxx
+#include <cmath>
+#include <iostream>
+#include <iomanip>
+#include <algorithm>
 #include "vul_psfile.h"
 //:
 // \file
 
-#include <cmath>
-#include <iostream>
 #include <vcl_compiler.h>
-#include <iomanip> // for setw()
-#include <algorithm> // for std::min()
 #include <vcl_cassert.h>
 
 #define RANGE(a,b,c) { if (a < b) a = b;  if (a > c) a = c; }

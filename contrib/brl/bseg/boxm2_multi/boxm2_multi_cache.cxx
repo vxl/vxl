@@ -1,13 +1,13 @@
+#include <sstream>
+#include <iostream>
+#include <algorithm>
 #include "boxm2_multi_cache.h"
 //:
 // \file
-#include <sstream>
 #include <vgl/vgl_distance.h>
 #include <vgl/vgl_box_3d.h>
 #include <vgl/vgl_intersection.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <algorithm>
 #include <vsph/vsph_camera_bounds.h>
 
 //: init opencl cache for each device

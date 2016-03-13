@@ -5,9 +5,9 @@
 //    constitute the articulation of the model.  The articulation
 //    is initiatied/paused by pressing the 'v' key in a toggle mode
 //
-#include <vcl_compiler.h>
 #include <iostream>
 #include <fstream>
+#include <vcl_compiler.h>
 // Utilities, OpenCL and system includes
 #include <GL/glew.h>
 #include <bocl/bocl_cl.h>

@@ -8,8 +8,8 @@
 #include <iostream>
 #include <string>
 #include <istream>
-#include <vcl_compiler.h>
 #include <ostream>
+#include <vcl_compiler.h>
 
 //-----------------------------------------------------------------------------
 // NITF compound field types

@@ -1,10 +1,10 @@
 #ifndef std::list_to_CoolArray_h_
 #define std::list_to_CoolArray_h_
 
-#include <cool/ArrayP.h>
-#include <vcl_compiler.h>
 #include <iostream>
 #include <list>
+#include <cool/ArrayP.h>
+#include <vcl_compiler.h>
 
 template <class T>
 inline

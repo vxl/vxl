@@ -56,10 +56,10 @@
 //
 // Objects using I/O via a smart ptr, should not save the objects reference count.
 
+#include <iosfwd>
 #include <vsl/vsl_fwd.h>
 #include <vbl/vbl_smart_ptr.h>
 #include <vcl_compiler.h>
-#include <iosfwd>
 
 //: Binary save vbl_smart_ptr to stream.
 template <class T>

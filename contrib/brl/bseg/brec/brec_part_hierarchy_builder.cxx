@@ -1,13 +1,13 @@
+#include <vector>
+#include <iostream>
+#include <algorithm>
 #include "brec_part_hierarchy_builder.h"
 //:
 // \file
 // \author Ozge C Ozcanli (ozge at lems dot brown dot edu)
 // \date Oct. 16, 2008
 
-#include <vector>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <algorithm>
 
 #include "brec_part_hierarchy.h"
 #include "brec_part_base_sptr.h"

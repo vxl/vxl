@@ -4,14 +4,13 @@
 //:
 // \file
 
+#include <iostream>
+#include <cstdlib>
 #include "vimt_image_pyramid.h"
 #include <vimt/vimt_image.h>
 #include <vimt/vimt_image_2d.h>
 
 #include <vcl_compiler.h>
-#include <iostream>
-#include <cstdlib> // for abort()
-#include <iostream>
 #include <vcl_cassert.h>
 
 //------------------------------------------------------------------------

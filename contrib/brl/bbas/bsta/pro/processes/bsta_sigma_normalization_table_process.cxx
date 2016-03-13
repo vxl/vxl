@@ -5,15 +5,14 @@
 //   made into a separate process for fast access and also to avoid optimization routines on GPU
 //   if later processes are run on GPU
 //
+#include <string>
+#include <iostream>
 #include <bprb/bprb_func_process.h>
 #include <bprb/bprb_parameters.h>
 #include <bsta/algo/bsta_sigma_normalizer.h>
 
-#include <string>
 #ifdef DEBUG
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 #endif
 
 #include <brdb/brdb_value.h>

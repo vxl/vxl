@@ -61,9 +61,9 @@
 //             GE Corporate Research and Development
 
 //-----------------------------------------------------------------------------
-#include <vcl_compiler.h>
 #include <iostream>
 #include <iosfwd>
+#include <vcl_compiler.h>
 #include <gevd/gevd_param_mixin.h>
 
 class sdet_detector_params : public gevd_param_mixin

@@ -15,11 +15,11 @@
 // the camera focal plane. That is, e.g.,
 // left_coor(in camera focal plane coordinates) =
 //    $[K_{left}]^{-1} p_{left}$ (in image coordinates).
+#include <iosfwd>
 #include <vnl/vnl_fwd.h>
 #include <vnl/vnl_matrix_fixed.h>
 #include <vgl/vgl_fwd.h>
 #include <vcl_compiler.h>
-#include <iosfwd>
 
 #include "vpgl_perspective_camera.h"
 #include "vpgl_calibration_matrix.h"

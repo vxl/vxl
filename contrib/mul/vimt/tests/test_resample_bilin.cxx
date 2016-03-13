@@ -1,10 +1,9 @@
 // This is mul/vimt/tests/test_resample_bilin.cxx
-#include <testlib/testlib_test.h>
-
-#include <iostream>
-#include <vcl_compiler.h>
 #include <iostream>
 #include <iomanip>
+#include <testlib/testlib_test.h>
+
+#include <vcl_compiler.h>
 
 #include <vil/vil_math.h>
 #include <vil/vil_crop.h>

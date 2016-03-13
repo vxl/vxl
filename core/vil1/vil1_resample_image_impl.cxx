@@ -6,6 +6,7 @@
 // \file
 // \author fsm
 
+#include <iostream>
 #include "vil1_resample_image_impl.h"
 #include <vil1/vil1_resample_image.h>
 #include <vil1/vil1_rgb.h>
@@ -13,7 +14,6 @@
 #include <vxl_config.h>
 #include <vcl_climits.h> // CHAR_BIT
 #include <vcl_compiler.h>
-#include <iostream>
 #include <vcl_cassert.h>
 
 vil1_resample_image_impl::vil1_resample_image_impl(vil1_image const &underlying, unsigned nw, unsigned nh)

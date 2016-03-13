@@ -1,12 +1,12 @@
 
+#include <iostream>
+#include <string>
+#include <algorithm>
+#include <limits>
 #include "bstm_scene.h"
 //:
 // \file
-#include <iostream>
-#include <string>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <algorithm>
 
 /* xml includes */
 #include <vsl/vsl_basic_xml_element.h>
@@ -23,7 +23,6 @@
 //vsph include
 #include <vsph/vsph_camera_bounds.h>
 
-#include <limits>
 
 bstm_scene::bstm_scene(std::string data_path, vgl_point_3d<double> const& origin, int version)
 {

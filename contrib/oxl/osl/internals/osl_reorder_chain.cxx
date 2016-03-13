@@ -6,11 +6,11 @@
 // \file
 // \author fsm
 
+#include <iostream>
+#include <vector>
 #include "osl_reorder_chain.h"
 
 #include <vcl_compiler.h>
-#include <iostream>
-#include <vector>
 #include <vnl/vnl_math.h>
 #include <osl/osl_edgel_chain.h>
 #include <osl/osl_OrthogRegress.h>

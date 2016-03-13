@@ -1,10 +1,10 @@
 #ifndef vipl_gaussian_convolution_hxx_
 #define vipl_gaussian_convolution_hxx_
 
+#include <iostream>
+#include <cmath>
 #include "vipl_gaussian_convolution.h"
 #include <vcl_compiler.h>
-#include <iostream>
-#include <cmath> // for std::sqrt(), std::exp(), std::log()
 
 template <class ImgIn,class ImgOut,class DataIn,class DataOut,class PixelItr>
 bool vipl_gaussian_convolution <ImgIn,ImgOut,DataIn,DataOut,PixelItr> :: section_applyop()

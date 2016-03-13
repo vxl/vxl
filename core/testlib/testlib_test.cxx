@@ -1,4 +1,9 @@
 // This is core/testlib/testlib_test.cxx
+#include <cmath>
+#include <cstdlib>
+#include <iostream>
+#include <iomanip>
+#include <complex>
 #include "testlib_test.h"
 //
 // Copyright (C) 1991 Texas Instruments Incorporated.
@@ -14,12 +19,7 @@
 // Created: 11-Mar-2001: TFC Copy of vnl_test
 // Created: 25-Apr-2002: AGAP Modified copy of testlib_test
 //
-#include <cmath>
-#include <cstdlib> // for abs(long)
-#include <iostream>
 #include <vcl_compiler.h>
-#include <iomanip> // for setfill, setw
-#include <complex>
 
 static int num_test;
 static int tests_passed;

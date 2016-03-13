@@ -4,11 +4,11 @@
 //:
 // \file
 
+#include <iostream>
 #include "vbl_sparse_array_2d.h"
 #include "vbl_sparse_array_base.hxx"
 
 #include <vcl_compiler.h>
-#include <iostream>
 
 #if 0 // capes@robots - moved print implementation to header file
 //: Print the array to a stream in "(i,j): value" format.

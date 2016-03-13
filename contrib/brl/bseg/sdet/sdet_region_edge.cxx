@@ -1,10 +1,10 @@
 // This is brl/bseg/sdet/sdet_region_edge.cxx
+#include <iostream>
+#include <algorithm>
 #include "sdet_region_edge.h"
 //:
 // \file
 #include <vcl_compiler.h>
-#include <iostream>
-#include <algorithm> // find
 #include <vtol/vtol_edge_2d.h>
 
 sdet_region_edge::sdet_region_edge(vtol_edge_2d_sptr e)

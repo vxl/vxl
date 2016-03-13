@@ -1,14 +1,14 @@
 // This is mul/mbl/mbl_exception.cxx
+#include <cerrno>
+#include <iostream>
+#include <cstring>
 #include "mbl_exception.h"
 //:
 // \file
 // \brief Exceptions thrown by mbl, and a mechanism for turning them off.
 // \author Ian Scott.
 
-#include <cerrno>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <cstring>
 
 #if 0 // should be #ifdef VCL_VC, but it doesn't work yet - I can't get it to link
 #pragma comment(lib, "user32")

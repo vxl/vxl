@@ -1,4 +1,6 @@
 // This is brl/bpro/core/vil_pro/processes/vil_gradient_angle_process.cxx
+#include <iostream>
+#include <cmath>
 #include <bprb/bprb_func_process.h>
 //:
 // \file
@@ -8,8 +10,6 @@
 #include <vil/vil_image_view_base.h>
 #include <vgl/vgl_vector_2d.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <cmath>
 
 //: Constructor
 bool vil_gradient_angle_process_cons(bprb_func_process& pro)

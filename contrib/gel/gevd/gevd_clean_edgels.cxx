@@ -1,13 +1,12 @@
 // This is gel/gevd/gevd_clean_edgels.cxx
+#include <iostream>
+#include <vector>
+#include <algorithm>
 #include "gevd_clean_edgels.h"
 //:
 // \file
 
-#include <iostream>
-#include <vector>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <algorithm> // for std::find()
 #include <vul/vul_timer.h>
 #include <vgl/vgl_point_2d.h>
 #include <vsol/vsol_point_2d.h>

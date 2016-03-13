@@ -13,6 +13,7 @@
 //
 // \endverbatim
 
+#include <iostream>
 #include "bvpl_subgrid_iterator.h"
 #include <bvpl/kernels/bvpl_kernel_iterator.h>
 #include "bvpl_voxel_subgrid.h"
@@ -21,8 +22,6 @@
 
 #include <vgl/vgl_point_3d.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 
 class bvpl_susan_opinion_operator
 {

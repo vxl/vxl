@@ -1,17 +1,17 @@
 // This is core/vnl/vnl_bignum.cxx
+#include <cstdlib>
+#include <cstring>
+#include <cmath>
+#include <algorithm>
+#include <vector>
+#include <iostream>
+#include <limits>
 #include "vnl_bignum.h"
 //:
 // \file
 
 #include <vcl_compiler.h>
-#include <cstdlib>   // for std::atol
-#include <cstring>   // for std::strlen
-#include <cmath>     // for std::fmod
-#include <algorithm> // for std::copy
-#include <vector>
 #include <vcl_cassert.h>
-#include <iostream>
-#include <limits>
 #include <vnl/vnl_math.h> // for vnl_math::isfinite(double)
 
 typedef unsigned short Counter;

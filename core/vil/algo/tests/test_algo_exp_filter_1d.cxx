@@ -1,8 +1,8 @@
 // This is core/vil/algo/tests/test_algo_exp_filter_1d.cxx
-#include <testlib/testlib_test.h>
-#include <vcl_compiler.h>
 #include <vector>
 #include <iostream>
+#include <testlib/testlib_test.h>
+#include <vcl_compiler.h>
 #include <vxl_config.h> // for vxl_byte
 #include <vil/algo/vil_exp_filter_1d.h>
 

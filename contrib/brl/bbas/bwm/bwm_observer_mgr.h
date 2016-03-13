@@ -4,9 +4,9 @@
 // \file
 
 #include <vector>
-#include <vcl_compiler.h>
 #include <iostream>
 #include <iosfwd>
+#include <vcl_compiler.h>
 #include <vgl/vgl_fwd.h>
 
 #include "bwm_observer.h"

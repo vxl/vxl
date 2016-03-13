@@ -15,11 +15,10 @@
 //
 //-------------------------------------------------------------------------
 
-#include <vcl_cassert.h>
 #include <string>
+#include <iostream>
+#include <vcl_cassert.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 #include <vgl/vgl_point_3d.h>
 
 #include <vnl/vnl_numeric_traits.h>

@@ -14,13 +14,13 @@
 //   08-OCT-2002 K.Y.McGaul - Removed unused adopt and disown functions.
 // \endverbatim
 
+#include <iostream>
+#include <vector>
+#include <algorithm>
 #include "vgui_tableau.h"
 
 #include <vcl_cassert.h>
-#include <iostream>
 #include <vcl_compiler.h>
-#include <vector>
-#include <algorithm>
 
 #include <vgui/vgui_macro.h>
 #include <vgui/vgui_event.h>

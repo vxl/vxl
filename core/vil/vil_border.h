@@ -9,9 +9,9 @@
 // \brief Border handling for images.
 // \author Nicolas Burrus - Paris
 
+#include <limits>
 #include <vcl_cassert.h>
 // not used? #include <vcl_compiler.h>
-#include <limits>
 
 //: Vil border modes.
 enum vil_border_mode

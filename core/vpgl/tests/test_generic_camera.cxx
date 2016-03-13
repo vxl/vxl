@@ -1,3 +1,5 @@
+#include <iostream>
+#include <cmath>
 #include <testlib/testlib_test.h>
 
 #include <vpgl/vpgl_generic_camera.h>
@@ -8,9 +10,7 @@
 #include <vgl/vgl_point_3d.h>
 #include <vgl/vgl_vector_3d.h>
 #include <vbl/vbl_array_2d.h>
-#include <iostream>
 #include <vcl_compiler.h>
-#include <cmath>
 
 static void simple_test()
 {

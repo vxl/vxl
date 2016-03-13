@@ -1,6 +1,6 @@
 // This is core/vsl/tests/test_complex_io.cxx
-#include <vcl_compiler.h>
 #include <iostream>
+#include <vcl_compiler.h>
 #include <vsl/vsl_binary_io.h>
 #include <vsl/vsl_complex_io.h>
 #include <testlib/testlib_test.h>

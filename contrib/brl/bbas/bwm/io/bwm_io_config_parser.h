@@ -1,6 +1,10 @@
 #ifndef bwm_io_config_parser_h_
 #define bwm_io_config_parser_h_
 
+#include <iostream>
+#include <string>
+#include <vector>
+#include <utility>
 #include "bwm_io_structs.h"
 #include <bwm/io/bwm_site_sptr.h>
 
@@ -9,10 +13,6 @@
 #endif
 #include <expatpp.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <string>
-#include <vector>
-#include <utility>
 
 #include <vsol/vsol_point_2d.h>
 #include <vsol/vsol_point_3d.h>

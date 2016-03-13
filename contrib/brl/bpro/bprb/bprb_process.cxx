@@ -1,12 +1,11 @@
 // This is brl/bpro/bprb/bprb_process.cxx
+#include <iostream>
 #include "bprb_process.h"
 //:
 // \file
 
 #include <bprb/bprb_parameters.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 
 
 bprb_process::bprb_process()

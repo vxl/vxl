@@ -1,3 +1,6 @@
+#include <string>
+#include <vector>
+#include <iostream>
 #include <testlib/testlib_test.h>
 #include <vpdl/vpdl_mixture.h>
 #include <vpdl/vpdl_gaussian.h>
@@ -5,9 +8,6 @@
 #include <vpdl/vpdl_gaussian_indep.h>
 #include <vnl/vnl_random.h>
 #include <vcl_compiler.h>
-#include <string>
-#include <vector>
-#include <iostream>
 
 
 template <class T>

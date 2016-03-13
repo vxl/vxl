@@ -1,4 +1,6 @@
 // This is brl/bseg/segv/segv_misc_manager.cxx
+#include <iostream>
+#include <cmath>
 #include "segv_misc_manager.h"
 //:
 // \file
@@ -9,10 +11,7 @@
 #endif
 // include for project points menu option
 #include <vpgl/vpgl_rational_camera.h>
-#include <iostream>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <cmath> //sin, cos exp
 #include <vul/vul_file.h>
 #include <vnl/vnl_math.h>
 #include <vil/vil_image_view.h>

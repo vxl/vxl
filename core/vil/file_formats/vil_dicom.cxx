@@ -5,18 +5,18 @@
 //:
 // \file
 
+#include <iostream>
+#include <sstream>
+#include <cstring>
+#include <cstdlib>
+#include <vector>
 #include <vil/vil_config.h>
 #if HAS_DCMTK
 
 #include "vil_dicom.h"
 
 #include <vcl_cassert.h>
-#include <iostream>
-#include <sstream>
-#include <cstring>
 #include <vcl_compiler.h>
-#include <cstdlib>
-#include <vector>
 
 #include <vxl_config.h> // for vxl_byte and such
 

@@ -1,9 +1,8 @@
 // This is mul/vimt/tests/test_transform_2d.cxx
+#include <iostream>
 #include <testlib/testlib_test.h>
 
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 #include <vpl/vpl.h> // vpl_unlink()
 #include <vgl/vgl_distance.h>
 #include <vnl/vnl_matrix.h>

@@ -6,10 +6,10 @@
 // \author Ian Scott
 
 #include <vector>
-#include <vcl_compiler.h>
 #include <iostream>
 #include <algorithm>
 #include <functional>
+#include <vcl_compiler.h>
 
 //: Implementation class - Do No Use.
 template <class T>

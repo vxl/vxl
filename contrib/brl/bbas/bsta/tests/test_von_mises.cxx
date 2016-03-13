@@ -1,8 +1,8 @@
+#include <iostream>
+#include <string>
 #include <testlib/testlib_test.h>
 #include <bsta/bsta_von_mises.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <string>
 #include <vnl/vnl_math.h> // for pi
 
 // do not remove the following text

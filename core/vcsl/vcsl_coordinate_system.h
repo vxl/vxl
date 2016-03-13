@@ -14,11 +14,11 @@
 //   2004/09/17 Peter Vanroose - made dimensionality() non-virtual - it just returns a member and should not be overloaded
 // \endverbatim
 
+#include <vector>
 #include <vbl/vbl_ref_count.h>
 #include <vcsl/vcsl_coordinate_system_sptr.h>
 #include <vcsl/vcsl_axis_sptr.h>
 #include <vcl_compiler.h>
-#include <vector>
 #include <vnl/vnl_vector.h>
 class vcsl_spatial;
 

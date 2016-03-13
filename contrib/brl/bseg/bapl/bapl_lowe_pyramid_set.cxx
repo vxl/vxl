@@ -2,10 +2,11 @@
 //:
 // \file
 
-#include "bapl_lowe_pyramid_set.h"
-#include <vcl_compiler.h>
 #include <iostream>
 #include <cmath>
+#include <sstream>
+#include "bapl_lowe_pyramid_set.h"
+#include <vcl_compiler.h>
 #include <vnl/vnl_math.h>
 #include <vil/vil_convert.h>
 #include <vil/vil_resample_bilin.h>
@@ -16,7 +17,6 @@
 #include <bapl/bapl_lowe_keypoint.h>
 
 #include <vil/vil_copy.h>
-#include <sstream>
 #include <vcl_cassert.h>
 
 //: Constructor

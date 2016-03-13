@@ -7,10 +7,10 @@
 // \brief Univariate exponential PDF
 // \author Tim Cootes
 
-#include <pdf1d/pdf1d_pdf.h>
-#include <vcl_compiler.h>
 #include <iostream>
 #include <iosfwd>
+#include <pdf1d/pdf1d_pdf.h>
+#include <vcl_compiler.h>
 
 //: Class for exponential distributions
 //  $p(x)=\lambda exp(-\lambda x)$

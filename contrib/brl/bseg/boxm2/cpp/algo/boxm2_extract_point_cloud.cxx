@@ -1,7 +1,7 @@
-#include "boxm2_extract_point_cloud.h"
-#include <vcl_compiler.h>
 #include <iostream>
 #include <map>
+#include "boxm2_extract_point_cloud.h"
+#include <vcl_compiler.h>
 #include <boxm2/boxm2_data_traits.h>
 #include <boxm2/basic/boxm2_array_3d.h>
 #include <boxm2/boxm2_util.h>

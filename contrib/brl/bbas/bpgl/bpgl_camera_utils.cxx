@@ -1,13 +1,12 @@
+#include <cmath>
+#include <vector>
+#include <iostream>
+#include <algorithm>
+#include <fstream>
 #include "bpgl_camera_utils.h"
 //:
 // \file
-#include <cmath>
-#include <vector>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <algorithm>
-#include <iostream>
-#include <fstream>
 #include <vul/vul_file.h>
 #include <vul/vul_file_iterator.h>
 #include <vgl/vgl_point_2d.h>

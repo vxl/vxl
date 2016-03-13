@@ -1,14 +1,14 @@
 #ifndef vgl_frustum_3d_hxx_
 #define vgl_frustum_3d_hxx_
 
+#include <iostream>
+#include <cmath>
 #include <vgl/vgl_frustum_3d.h>
 #include <vgl/vgl_ray_3d.h>
 #include <vgl/vgl_plane_3d.h>
 #include <vgl/vgl_tolerance.h>
 #include <vgl/vgl_intersection.h>
-#include <iostream>
 #include <vcl_compiler.h>
-#include <cmath> // for std::sqrt
 //:
 template <class Type>
 vgl_frustum_3d<Type>::

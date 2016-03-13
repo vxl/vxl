@@ -5,10 +5,10 @@
 // \brief Function to trace 8-connected boundary around region in bool image
 // \author Tim Cootes
 
-#include <vil/vil_image_view.h>
-#include <vcl_compiler.h>
 #include <iostream>
 #include <vector>
+#include <vil/vil_image_view.h>
+#include <vcl_compiler.h>
 
 //: Trace 8-connected boundary around region in boolean image
 //  Assumes that (i0,j0) is a boundary point.

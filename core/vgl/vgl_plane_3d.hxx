@@ -4,6 +4,8 @@
 //:
 // \file
 
+#include <cmath>
+#include <iostream>
 #include "vgl_plane_3d.h"
 #include <vgl/vgl_homg_plane_3d.h>
 #include <vgl/vgl_point_3d.h>
@@ -13,9 +15,7 @@
 #include <vgl/vgl_distance.h>
 #include <vgl/vgl_tolerance.h>
 #include <vcl_compiler.h>
-#include <cmath>
 #include <vcl_cassert.h>
-#include <iostream>
 
 //: Construct from homogeneous plane
 template <class T>

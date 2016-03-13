@@ -1,8 +1,8 @@
 // \author  fsm
 // \brief   Example using vgui_satellite_tableau.
 
-#include <vcl_compiler.h>
 #include <iostream>
+#include <vcl_compiler.h>
 
 #include <vgui/vgui_satellite_tableau.h>
 #include <vgui/vgui_satellite_tableau.hxx>

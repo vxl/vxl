@@ -23,6 +23,8 @@
 // There is a minimum acceptable cumulative probability of edges lying within
 // the distance threshold, to produce a successful match.
 
+#include <iostream>
+#include <vector>
 #include "bwm_reg_image_sptr.h"
 #include <vsol/vsol_digital_curve_2d.h>
 #include <vsol/vsol_digital_curve_3d.h>
@@ -32,8 +34,6 @@
 #include <vgl/vgl_point_3d.h>
 #include <vgl/vgl_plane_3d.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <vector>
 
 class bwm_reg_processor
 {

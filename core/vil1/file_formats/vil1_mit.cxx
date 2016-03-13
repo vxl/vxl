@@ -8,12 +8,12 @@
 //
 //-----------------------------------------------------------------------------
 
+#include <iostream>
+#include <cstring>
 #include "vil1_mit.h"
 
 #include <vcl_compiler.h>
-#include <iostream>
 #include <vcl_cassert.h>
-#include <cstring>
 
 #include <vil1/vil1_stream.h>
 #include <vil1/vil1_image_impl.h>

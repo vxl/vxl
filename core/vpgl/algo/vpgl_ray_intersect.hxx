@@ -2,6 +2,7 @@
 #ifndef vpgl_ray_intersect_hxx_
 #define vpgl_ray_intersect_hxx_
 
+#include <iostream>
 #include "vpgl_ray_intersect.h"
 //:
 // \file
@@ -11,7 +12,6 @@
 #include <vnl/vnl_vector.h>
 #include <vnl/vnl_double_3.h>
 #include <vcl_compiler.h>
-#include <iostream>
 #include <vpgl/vpgl_camera.h>
 
 template<typename T>

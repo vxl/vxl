@@ -5,11 +5,10 @@
 // \brief Defines pose and shape (box/ellipse etc) of a region
 // \author Tim Cootes
 
-#include <mfpf/mfpf_pose.h>
-#include <iostream>
-#include <vcl_compiler.h>
 #include <iostream>
 #include <cstdlib>
+#include <mfpf/mfpf_pose.h>
+#include <vcl_compiler.h>
 
 //: Defines pose and shape (box/ellipse etc) of a region
 //  General purpose object.  form() gives shape (eg "box", "ellipse")

@@ -23,8 +23,8 @@
 // \endverbatim
 
 #include <list>
-#include <vcl_compiler.h>
 #include <vector>
+#include <vcl_compiler.h>
 #include <vnl/vnl_fwd.h>
 #include <vgl/vgl_fwd.h>
 

@@ -24,9 +24,9 @@
 //-----------------------------------------------------------------------------
 
 #include <vector>
-#include <vcl_compiler.h>
 #include <iostream>
 #include <iosfwd>
+#include <vcl_compiler.h>
 
 #include <vnl/vnl_double_2.h>
 #include <vgl/vgl_homg_point_2d.h>

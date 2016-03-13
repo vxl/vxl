@@ -1,8 +1,7 @@
+#include <iostream>
 #include "volm_utils.h"
 #include <stdlib.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 #include <vcl_where_root_dir.h>
 
 //returns path to opencl src (cl files)

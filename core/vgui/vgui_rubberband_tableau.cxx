@@ -8,12 +8,12 @@
 // \date   31-MAR-2000
 // \brief  See vgui_rubberband_tableau.h for a description of this file.
 
+#include <cmath>
+#include <iostream>
 #include "vgui_rubberband_tableau.h"
 
 #include <vcl_cassert.h>
 #include <vcl_compiler.h>
-#include <cmath>
-#include <iostream>
 #include <vgl/vgl_clip.h>
 #include <vnl/vnl_math.h> // for twopi
 

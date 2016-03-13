@@ -1,14 +1,13 @@
 // This is brl/bseg/bvxm/pro/processes/bvxm_compare_rpc_process.cxx
+#include <string>
+#include <iostream>
+#include <fstream>
 #include "bvxm_compare_rpc_process.h"
 //:
 // \file
 #include <brdb/brdb_value.h>
 #include <bprb/bprb_parameters.h>
-#include <string>
-#include <iostream>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <fstream>
 #include <bprb/bprb_process.h>
 #include <vpgl/vpgl_camera.h>
 #include <vpgl/vpgl_rational_camera.h>

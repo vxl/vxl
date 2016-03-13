@@ -25,11 +25,11 @@
 // \endverbatim
 //
 
-#include <vbl/vbl_ref_count.h>
 #include <vector>
-#include <vcl_compiler.h>
 #include <iostream>
-#include <cstddef> // for std::size_t
+#include <cstddef>
+#include <vbl/vbl_ref_count.h>
+#include <vcl_compiler.h>
 #include <vgl/vgl_point_3d.h>
 #include <vsph/vsph_spherical_coord_sptr.h>
 #include <vsph/vsph_spherical_coord.h>

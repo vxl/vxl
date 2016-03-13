@@ -2,6 +2,13 @@
 // \file
 // \author Andy Miller
 // \date 26-Oct-2010
+#include <iostream>
+#include <ios>
+#include <string>
+#include <vector>
+#include <map>
+#include <algorithm>
+#include <cmath>
 #include <testlib/testlib_test.h>
 #include <testlib/testlib_root_dir.h>
 #include <vcl_where_root_dir.h>
@@ -9,15 +16,7 @@
 #include <bocl/bocl_kernel.h>
 #include <bocl/bocl_mem.h>
 #include <bocl/bocl_device.h>
-#include <iostream>
-#include <ios> // for std::ios::fixed
-#include <string>
-#include <vector>
-#include <map>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <algorithm>
-#include <cmath>
 
 #include <bsta/algo/bsta_sigma_normalizer.h>
 #include <boxm2/cpp/algo/boxm2_mog3_grey_processor.h>

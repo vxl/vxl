@@ -1,12 +1,12 @@
 // This is core/vidl/gui/vidl_gui_param_dialog.cxx
+#include <iostream>
+#include <sstream>
 #include "vidl_gui_param_dialog.h"
 //:
 // \file
 // \author Matt Leotta
 
-#include <iostream>
 #include <vcl_compiler.h>
-#include <sstream>
 #include <vil/vil_file_format.h>
 #include <vgui/vgui_error_dialog.h>
 #include <vgui/vgui_dialog.h>

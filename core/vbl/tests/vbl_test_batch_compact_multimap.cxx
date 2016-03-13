@@ -1,7 +1,7 @@
 // This is core/vbl/tests/vbl_test_batch_compact_multimap.cxx
+#include <iostream>
 #include <testlib/testlib_test.h>
 #include <vcl_compiler.h>
-#include <iostream>
 #include <vbl/vbl_batch_compact_multimap.h>
 
 namespace

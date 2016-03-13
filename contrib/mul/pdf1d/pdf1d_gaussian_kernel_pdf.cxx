@@ -5,13 +5,13 @@
 // \brief Univariate gaussian_kernel_pdf kernel PDF
 // \author Tim Cootes
 
-#include "pdf1d_gaussian_kernel_pdf.h"
-
 #include <cstdlib>
 #include <string>
-#include <vcl_compiler.h>
 #include <iostream>
 #include <cmath>
+#include "pdf1d_gaussian_kernel_pdf.h"
+
+#include <vcl_compiler.h>
 
 #include <vnl/vnl_math.h>
 #include <vnl/vnl_erf.h>

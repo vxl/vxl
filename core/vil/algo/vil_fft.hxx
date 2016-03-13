@@ -6,10 +6,10 @@
 // \brief Functions to apply the FFT to an image.
 // \author Fred Wheeler
 
-#include "vil_fft.h"
 #include <complex>
-#include <vcl_compiler.h>
 #include <vector>
+#include "vil_fft.h"
+#include <vcl_compiler.h>
 #include <vil/vil_image_view.h>
 #include <vnl/algo/vnl_fft_1d.h>
 

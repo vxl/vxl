@@ -1,12 +1,12 @@
 // This is rpl/rrel/rrel_mlesac_obj.cxx
+#include <cstdlib>
+#include <iostream>
+#include <cmath>
 #include "rrel_mlesac_obj.h"
 
 #include <vnl/vnl_math.h>
 
-#include <cstdlib>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <cmath>
 
 
 namespace {

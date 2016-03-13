@@ -9,10 +9,10 @@
 //
 //-----------------------------------------------------------------------------
 
-#include "vnl_file_matrix.h"
-#include <vcl_compiler.h>
 #include <fstream>
 #include <iostream>
+#include "vnl_file_matrix.h"
+#include <vcl_compiler.h>
 
 //: Load matrix from filename.
 template <class T>

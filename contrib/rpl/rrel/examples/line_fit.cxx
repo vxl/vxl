@@ -6,10 +6,9 @@
 // \author Bess Lee
 // Modifications: Oct 2001 Amitha Perera: added comments.
 
-#include <vcl_compiler.h>
-#include <iostream>
 #include <iostream>
 #include <vector>
+#include <vcl_compiler.h>
 #include <vnl/vnl_vector.h>
 
 #include <rrel/rrel_linear_regression.h>

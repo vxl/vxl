@@ -16,6 +16,11 @@
 //
 // The main work of loading and saving happens in vil3d_meta_image
 
+#include <iostream>
+#include <algorithm>
+#include <cstring>
+#include <cstdlib>
+#include <cstddef>
 #include "vil3d_meta_image_format.h"
 #include <vul/vul_file.h>
 #include <vil/vil_stream_fstream.h>
@@ -25,12 +30,6 @@
 #include <vil3d/vil3d_new.h>
 #include <vil3d/vil3d_copy.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <algorithm>
-#include <cstring>
-#include <cstdlib> // for std::atoi() and atof()
-#include <cstddef> // for std::size_t
-#include <iostream>
 
 //
 // Helper functions

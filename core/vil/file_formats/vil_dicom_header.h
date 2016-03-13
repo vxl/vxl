@@ -9,12 +9,12 @@
 // \author Chris Wolstenholme - Manchester
 // Modified by Ian Scott to work with vil loader.
 
-#include <vcl_compiler.h>
 #include <ostream>
 #include <string>
+#include <vector>
+#include <vcl_compiler.h>
 #include <vxl_config.h>
 #include <vil/vil_stream.h>
-#include <vector>
 
 //: DICOM types
 //  Defines the type of the dicom file being loaded. A

@@ -1,11 +1,10 @@
+#include <iostream>
 #include "bsta_sigma_normalizer.h"
 //:
 // \file
 // \brief A class for adjusting sample standard deviation values such that the probability of underestimation of the true std. dev. is fixed.
 
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 
 #include <vnl/vnl_vector_fixed.h>
 #include <vnl/vnl_gamma.h>

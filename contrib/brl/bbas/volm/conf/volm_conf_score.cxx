@@ -1,11 +1,11 @@
+#include <iostream>
+#include <cmath>
+#include <limits>
 #include "volm_conf_score.h"
 //:
 // \file
 #include <vcl_compiler.h>
-#include <iostream>
-#include <cmath>
 #include <vnl/vnl_math.h>
-#include <limits>
 
 // note the angular value is from 0 to 2*pi and 0 refers to the east direction
 

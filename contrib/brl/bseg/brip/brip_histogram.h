@@ -7,10 +7,10 @@
 // \author Matt Leotta
 //
 
-#include <vil/vil_image_view.h>
-#include <vcl_compiler.h>
 #include <iostream>
 #include <vector>
+#include <vil/vil_image_view.h>
+#include <vcl_compiler.h>
 
 
 //: Construct histogram from pixels in the given image.

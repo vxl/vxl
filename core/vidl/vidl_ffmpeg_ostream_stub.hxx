@@ -1,6 +1,7 @@
 // This is core/vidl/vidl_ffmpeg_ostream_stub.hxx
 #ifndef vidl_ffmpeg_ostream_stub_hxx_
 #define vidl_ffmpeg_ostream_stub_hxx_
+#include <iostream>
 #include "vidl_ffmpeg_ostream.h"
 //:
 // \file
@@ -10,7 +11,6 @@
 // \date 26 Dec 2007
 
 #include <vcl_compiler.h>
-#include <iostream>
 
 struct vidl_ffmpeg_ostream::pimpl
 {

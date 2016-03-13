@@ -15,11 +15,11 @@
 //                          - Set event.ascii_char to actual key stroke
 // \endverbatim
 
+#include <cstdlib>
+#include <utility>
 #include "vgui_gtk_adaptor.h"
 #include <vcl_compiler.h>
-#include <cstdlib>
 #include <vcl_cassert.h>
-#include <utility>
 #include <gdk/gdkkeysyms.h>
 #include <gtk/gtk.h>
 #include <gtkgl/gtkglarea.h>

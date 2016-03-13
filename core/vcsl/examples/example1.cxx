@@ -23,8 +23,8 @@
 //:
 // \file
 
-#include <vcl_compiler.h>
 #include <iostream>
+#include <vcl_compiler.h>
 #include <vcl_cassert.h>
 #include <vcsl/vcsl_cartesian_3d.h>
 #include <vcsl/vcsl_displacement.h>

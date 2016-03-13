@@ -22,12 +22,12 @@
 //
 //----------------------------------------------------------------------
 
-#include <vcl_sys/types.h>
-#include <vcl_compiler.h>
 #include <iostream>
-#include <cstring> // for strcpy(), strcmp()
+#include <cstring>
 #include <map>
 #include <utility>
+#include <vcl_sys/types.h>
+#include <vcl_compiler.h>
 #include <vil1/vil1_memory_image.h>
 
 class ImageDatabase

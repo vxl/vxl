@@ -13,11 +13,11 @@
 //    IMS   Converted to VXL 23 April 2000
 // \endverbatim
 
-#include "vpdfl_pc_gaussian.h"
 #include <string>
-#include <vcl_compiler.h>
 #include <iostream>
-#include <cstdlib> // for std::abort()
+#include <cstdlib>
+#include "vpdfl_pc_gaussian.h"
+#include <vcl_compiler.h>
 #include <vcl_cassert.h>
 #include <vsl/vsl_binary_loader.h>
 #include <vsl/vsl_indent.h>

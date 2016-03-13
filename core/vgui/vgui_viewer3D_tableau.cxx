@@ -13,11 +13,11 @@
 //   14-SEP-1999 P.Pritchett - Initial version.
 // \endverbatim
 
+#include <cmath>
+#include <iostream>
 #include "vgui_viewer3D_tableau.h"
 
 #include <vcl_compiler.h>
-#include <cmath>
-#include <iostream>
 #include <vbl/vbl_bool_ostream.h>
 
 #include <vgui/vgui_gl.h>

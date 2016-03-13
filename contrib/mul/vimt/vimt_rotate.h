@@ -9,12 +9,12 @@
 // A front end to the resampling functions that allows
 // an image to be rotated by any angle theta
 
+#include <iostream>
+#include <cmath>
 #include <vimt/vimt_image_2d_of.h>
 #include <vil/vil_resample_bilin.h>
 #include <vnl/vnl_math.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <cmath> // for std::fmod()
 #include <vcl_cassert.h>
 
 //: Calculate theta in range 0 to x

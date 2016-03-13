@@ -1,4 +1,7 @@
 // This is brl/bbas/bocl/pro/processes/bocl_get_device_process.cxx
+#include <iostream>
+#include <fstream>
+#include <sstream>
 #include <bprb/bprb_func_process.h>
 //:
 // \file
@@ -12,10 +15,7 @@
 // \endverbatim
 
 #include <vcl_compiler.h>
-#include <iostream>
-#include <fstream>
 #include <bocl/bocl_manager.h>
-#include <sstream>
 
 namespace bocl_get_device_process_globals
 {

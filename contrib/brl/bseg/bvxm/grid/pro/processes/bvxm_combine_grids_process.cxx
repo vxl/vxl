@@ -1,4 +1,6 @@
 // This is brl/bseg/bvxm/grid/pro/processes/bvxm_combine_grids_process.cxx
+#include <iostream>
+#include <string>
 #include <bprb/bprb_func_process.h>
 //:
 // \file
@@ -18,8 +20,6 @@
 #include <vnl/vnl_float_3.h>
 #include <vnl/vnl_float_4.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <string>
 
 //: set input and output types
 bool bvxm_combine_grids_process_cons(bprb_func_process& pro)

@@ -1,4 +1,7 @@
 // This is brl/bseg/boxm2/ocl/pro/processes/boxm2_ocl_compute_visibility_process.cxx
+#include <fstream>
+#include <iostream>
+#include <cstdio>
 #include <bprb/bprb_func_process.h>
 //:
 // \file
@@ -7,7 +10,6 @@
 // \author Vishal Jain
 // \date Sept 15, 2012
 
-#include <fstream>
 #include <boxm2/ocl/boxm2_opencl_cache.h>
 #include <boxm2/boxm2_scene.h>
 #include <boxm2/boxm2_block.h>
@@ -25,8 +27,6 @@
 #include <boxm2/ocl/algo/boxm2_ocl_camera_converter.h>
 #include <boxm2/boxm2_util.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <cstdio>
 #include <vil/vil_save.h>
 #include <vil/vil_resample_nearest.h>
 

@@ -30,12 +30,12 @@
 //
 //-----------------------------------------------------------------------------
 
+#include <iostream>
+#include <cstdlib>
+#include <iosfwd>
 #include <mvl/MatchSet.h>
 #include <mvl/PairMatchSet.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <cstdlib> // for std::abort()
-#include <iosfwd>
 
 class TripleMatchSet : public MatchSet
 {

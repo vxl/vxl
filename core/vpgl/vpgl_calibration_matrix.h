@@ -15,13 +15,13 @@
 // \endverbatim
 //
 
+#include <iostream>
 #include <vgl/vgl_fwd.h>
 #include <vnl/vnl_fwd.h>
 #include <vnl/vnl_matrix_fixed.h>
 #include <vgl/vgl_point_2d.h>
 
 // not used? #include <vcl_compiler.h>
-#include <iostream>
 
 //:  A class representing the "K" matrix of a perspective camera matrix as described in
 //   Hartley and Zisserman, "Multiple View Geometry".

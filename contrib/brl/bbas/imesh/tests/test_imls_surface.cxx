@@ -1,10 +1,9 @@
+#include <iostream>
 #include <testlib/testlib_test.h>
 #include <imesh/algo/imesh_imls_surface.h>
 #include "test_share.h"
 #include <imesh/algo/imesh_transform.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 
 #include <imesh/imesh_fileio.h>
 #include <imesh/imesh_operations.h>

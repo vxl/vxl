@@ -4,10 +4,10 @@
 // \author Tim Cootes
 // \brief Adaptor which generates reflected versions of images/points
 
-#include <vcl_cassert.h>
-#include <vcl_compiler.h>
 #include <iostream>
 #include <string>
+#include <vcl_cassert.h>
+#include <vcl_compiler.h>
 
 #include "msdi_reflected_marked_images.h"
 #include <vimt/vimt_image_2d_of.h>

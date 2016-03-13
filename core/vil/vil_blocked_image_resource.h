@@ -8,8 +8,8 @@
 // \file
 // \brief A blocked representation of the image_resource
 // \author J. L. Mundy
-#include <vcl_compiler.h>
 #include <vector>
+#include <vcl_compiler.h>
 #include <vil/vil_image_resource.h>
 #include <vil/vil_blocked_image_resource_sptr.h>
 

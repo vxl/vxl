@@ -4,13 +4,13 @@
 //:
 // \file
 
+#include <cmath>
+#include <iostream>
 #include "vgl_line_2d_regression.h"
 #include <vcl_compiler.h>
-#include <cmath>
 #include <vgl/vgl_distance.h>
 #include <vnl/vnl_matrix_fixed.h>
 #include <vnl/algo/vnl_symmetric_eigensystem.h>
-#include <iostream>
 #include <vcl_cassert.h>
 
 //: Constructor

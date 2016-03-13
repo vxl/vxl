@@ -1,8 +1,7 @@
 // This is tbl/vepl/vepl_gradient_dir.cxx
+#include <iostream>
 #include "vepl_gradient_dir.h"
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 #include <vepl/accessors/vipl_accessors_vil_image_view_base.h>
 #include <vipl/vipl_gradient_dir.h>
 #include <vil/vil_image_view.h>

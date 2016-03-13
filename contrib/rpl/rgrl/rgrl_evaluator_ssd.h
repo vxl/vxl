@@ -8,10 +8,10 @@
 // \verbatim
 // \endverbatim
 
-#include <rgrl/rgrl_evaluator.h>
-#include <vcl_compiler.h>
 #include <iostream>
 #include <vector>
+#include <rgrl/rgrl_evaluator.h>
+#include <vcl_compiler.h>
 
 class rgrl_evaluator_ssd
   : public rgrl_evaluator

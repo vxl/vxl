@@ -17,13 +17,12 @@
 // Modifications
 // \endverbatim
 
-#include "clsfy_adaboost_trainer.h"
-
-#include <iostream>
-#include <vsl/vsl_indent.h>
-#include <vcl_compiler.h>
 #include <iostream>
 #include <cmath>
+#include "clsfy_adaboost_trainer.h"
+
+#include <vsl/vsl_indent.h>
+#include <vcl_compiler.h>
 #include <vcl_cassert.h>
 
 //=======================================================================

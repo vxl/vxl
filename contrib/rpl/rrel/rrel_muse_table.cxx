@@ -1,11 +1,11 @@
 // This is rpl/rrel/rrel_muse_table.cxx
+#include <iostream>
+#include <cmath>
 #include "rrel_muse_table.h"
 #include <rrel/rrel_misc.h>
 #include <vnl/vnl_math.h>
 
 #include <vcl_compiler.h>
-#include <iostream>
-#include <cmath>
 #include <vcl_cassert.h>
 
 bool operator< ( rrel_muse_key_type const& left_t, rrel_muse_key_type const& right_t )

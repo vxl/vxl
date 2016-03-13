@@ -1,7 +1,6 @@
 // This is brl/bbas/bsol/tests/test_hough_index.cxx
+#include <iostream>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 #include <vsol/vsol_point_2d.h>
 #include <vsol/vsol_point_2d_sptr.h>
 #include <vsol/vsol_line_2d.h>

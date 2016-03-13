@@ -6,9 +6,9 @@
 // \brief Find peaks in image
 // \author Tim Cootes
 
+#include <vector>
 #include <vil/vil_image_view.h>
 #include <vcl_compiler.h>
-#include <vector>
 
 //: True if pixel at *im is strictly above 8 neighbours.
 // \sa vil_is_plateau_3x3()

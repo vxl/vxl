@@ -9,8 +9,8 @@
 //
 // Should template this class.
 
-#include <vcl_compiler.h>
 #include <vector>
+#include <vcl_compiler.h>
 #include <vgl/vgl_fwd.h>
 #include <vnl/vnl_fwd.h>
 #include <vpgl/vpgl_calibration_matrix.h>

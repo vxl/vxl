@@ -1,8 +1,8 @@
 // This is core/vil/tests/test_image_list.cxx
-#include <testlib/testlib_test.h>
 #include <iostream>
-#include <vcl_compiler.h>
 #include <string>
+#include <testlib/testlib_test.h>
+#include <vcl_compiler.h>
 #include <vpl/vpl.h> // vpl_unlink()
 #include <vil/vil_image_resource.h>
 #include <vil/vil_image_view.h>

@@ -6,9 +6,9 @@
 // \author Gehua Yang
 // \date   Feb 2006
 
-#include <vcl_compiler.h>
 #include <iostream>
 #include <vector>
+#include <vcl_compiler.h>
 
 #include <rgrl/rgrl_invariant_sptr.h>
 #include <rgrl/rgrl_object.h>

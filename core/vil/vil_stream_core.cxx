@@ -6,11 +6,11 @@
 // \file
 // \author fsm
 
+#include <cstddef>
+#include <limits>
 #include "vil_stream_core.h"
 #include <vcl_cassert.h>
-#include <cstddef> // for std::size_t
 #include <vcl_compiler.h>
-#include <limits>
 
 vil_stream_core::vil_stream_core(unsigned block_size)
     : curpos_(0), blocksize_(block_size), tailpos_(0)

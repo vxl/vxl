@@ -1,12 +1,12 @@
 #ifndef vgui_range_map_hxx_
 #define vgui_range_map_hxx_
 
+#include <cmath>
+#include <limits>
 #include "vgui_range_map.h"
 
 #include <vcl_cassert.h>
-#include <cmath>
 #include <vcl_compiler.h>
-#include <limits>
 
 template <class Type>
 void vgui_range_map<Type>::init_map_domain(const Type min, const Type max,

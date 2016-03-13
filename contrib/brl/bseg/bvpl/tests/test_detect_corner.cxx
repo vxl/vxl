@@ -1,3 +1,6 @@
+#include <sstream>
+#include <iostream>
+#include <iomanip>
 #include <testlib/testlib_test.h>
 
 #include <bvpl/kernels/bvpl_corner2d_kernel_factory.h>
@@ -16,11 +19,7 @@
 
 #include <vnl/vnl_float_3.h>
 #include <vnl/vnl_math.h>
-#include <sstream>
-#include <iostream>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iomanip>
 
 typedef bsta_num_obs<bsta_gauss_sf1> gauss_sf1;
 

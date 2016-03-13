@@ -1,11 +1,10 @@
+#include <iostream>
+#include <sstream>
 #include <testlib/testlib_test.h>
 #include <testlib/testlib_root_dir.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 #include <vil/vil_image_view.h>
 #include <bil/bil_raw_image_istream.h>
-#include <sstream>
 
 
 

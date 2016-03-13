@@ -1,3 +1,5 @@
+#include <iostream>
+#include <cstdlib>
 #include "msm_shape_instance.h"
 //:
 // \file
@@ -5,7 +7,6 @@
 // \author Tim Cootes
 
 #include <msm/msm_shape_model.h>
-#include <iostream>
 #include <vsl/vsl_indent.h>
 #include <vsl/vsl_binary_io.h>
 #include <vnl/io/vnl_io_vector.h>
@@ -13,8 +14,6 @@
 #include <vnl/algo/vnl_svd.h>
 
 #include <vcl_compiler.h>
-#include <iostream>
-#include <cstdlib>  // for std::atoi() & std::abort()
 #include <vcl_cassert.h>
 
 //=======================================================================

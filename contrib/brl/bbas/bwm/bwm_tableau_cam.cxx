@@ -1,3 +1,6 @@
+#include <iostream>
+#include <algorithm>
+#include <sstream>
 #include "bwm_tableau_cam.h"
 #include "bwm_site_mgr.h"
 //:
@@ -26,10 +29,7 @@
 
 #include <volm/volm_category_io.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <algorithm>
 #include <vul/vul_file.h>
-#include <sstream>
 
 #define NUM_CIRCL_SEC 12
 

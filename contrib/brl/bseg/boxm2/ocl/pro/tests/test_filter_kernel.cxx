@@ -2,6 +2,12 @@
 // \file
 // \author Andrew Miller
 // \date May 24, 2011
+#include <iostream>
+#include <ios>
+#include <string>
+#include <vector>
+#include <map>
+#include <algorithm>
 #include <testlib/testlib_test.h>
 #include <testlib/testlib_root_dir.h>
 #include <vcl_where_root_dir.h>
@@ -23,14 +29,7 @@
 #include <boxm2/io/boxm2_lru_cache.h>
 #include <boxm2/io/boxm2_sio_mgr.h>
 
-#include <iostream>
-#include <ios> // for std::ios::fixed
-#include <string>
-#include <vector>
-#include <map>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <algorithm>
 
 #include <vnl/vnl_vector_fixed.h>
 #include <brdb/brdb_value.h>

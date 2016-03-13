@@ -1,11 +1,11 @@
 // This is core/vil/algo/tests/test_algo_fft.cxx
-#include <testlib/testlib_test.h>
 #include <complex>
+#include <ctime>
+#include <testlib/testlib_test.h>
 #include <vil/vil_math.h>
 #include <vil/vil_image_view.h>
 #include <vil/algo/vil_fft.h>
 #include <vcl_compiler.h>
-#include <ctime> // seed for random number generator
 
 static void test_algo_fft()
 {

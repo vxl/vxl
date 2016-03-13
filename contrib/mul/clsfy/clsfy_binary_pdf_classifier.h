@@ -7,12 +7,12 @@
 // \brief Describe a classifier based on a single pdf.
 // \author Ian Scott
 
+#include <iostream>
+#include <iosfwd>
 #include <clsfy/clsfy_classifier_base.h>
 #include <vpdfl/vpdfl_pdf_base.h>
 #include <vcl_cassert.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iosfwd>
 
 //:  Decisions are based on an explicit multivariate probability distribution
 class clsfy_binary_pdf_classifier : public clsfy_classifier_base

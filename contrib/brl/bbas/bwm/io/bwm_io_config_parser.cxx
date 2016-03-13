@@ -2,15 +2,14 @@
 // \file
 // \brief Parses the configuration file for bwm tool.
 //
-#include "bwm_io_config_parser.h"
-#include "bwm_site.h"
-
 #include <sstream>
-#include <iostream>
-#include <vcl_compiler.h>
 #include <iostream>
 #include <cstdio>
 #include <cstring>
+#include "bwm_io_config_parser.h"
+#include "bwm_site.h"
+
+#include <vcl_compiler.h>
 
 // --------------
 // --- PARSER ---

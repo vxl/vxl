@@ -11,6 +11,10 @@
 //   2010/09/10 Initial version
 // \endverbatim
 
+#include <vector>
+#include <map>
+#include <iostream>
+#include <iosfwd>
 #include "vsph_spherical_coord_sptr.h"
 #include "vsph_sph_point_3d.h"
 
@@ -18,11 +22,7 @@
 #include <vgl/vgl_box_3d.h>
 #include <vpgl/vpgl_camera_double_sptr.h>
 #include <vsl/vsl_binary_io.h>
-#include <vector>
-#include <map>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iosfwd>
 
 template <class T>
 class vsph_view_sphere

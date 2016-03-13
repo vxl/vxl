@@ -6,9 +6,9 @@
 // \date March 2001
 // \brief Base class for an estimation problem in the robust estimation library.
 
-#include <vcl_compiler.h>
 #include <iostream>
 #include <vector>
+#include <vcl_compiler.h>
 #include <vnl/vnl_fwd.h>
 
 class rrel_wls_obj;

@@ -18,8 +18,8 @@
 // 13 Jul 2001 Peter Vanroose     bug fix in inside() when box is empty
 // \endverbatim
 
-#include <vcl_compiler.h>
 #include <iosfwd>
+#include <vcl_compiler.h>
 #include <vcl_cassert.h>
 
 #ifndef DOXYGEN_SHOULD_SKIP_THIS

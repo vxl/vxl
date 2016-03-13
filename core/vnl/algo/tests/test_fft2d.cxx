@@ -1,4 +1,7 @@
 // This is core/vnl/algo/tests/test_fft2d.cxx
+#include <cstdlib>
+#include <iostream>
+#include <complex>
 #include <testlib/testlib_test.h>
 //:
 // \file
@@ -17,9 +20,6 @@
 
 //-----------------------------------------------------------------------------
 #include <vcl_compiler.h>
-#include <cstdlib>
-#include <iostream>
-#include <complex>
 
 #include <vnl/vnl_complexify.h>
 #include <vnl/vnl_matrix.h>

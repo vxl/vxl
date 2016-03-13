@@ -12,9 +12,8 @@
 // \date 26 June 2008
 
 
+#include <iostream>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 #include <vul/vul_timer.h>
 #include <vul/vul_ios_state.h>
 #include <mbl/mbl_progress.h>

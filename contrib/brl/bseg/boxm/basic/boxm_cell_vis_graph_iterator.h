@@ -2,12 +2,12 @@
 #define boxm_cell_vis_graph_iterator_h_
 //:
 // \file
+#include <iostream>
+#include <vector>
 #include <boct/boct_tree_cell.h>
 #include <boct/boct_tree.h>
 #include <vpgl/vpgl_camera_double_sptr.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <vector>
 
 template <class T_loc, class T_data>
 class boxm_cell_vis_graph_iterator

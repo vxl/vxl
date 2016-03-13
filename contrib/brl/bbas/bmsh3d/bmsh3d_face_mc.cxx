@@ -1,4 +1,5 @@
 // This is brl/bbas/bmsh3d/bmsh3d_face_mc.cxx
+#include <iostream>
 #include "bmsh3d_face_mc.h"
 //:
 // \file
@@ -18,8 +19,6 @@
 #include <bmsh3d/bmsh3d_edge.h>
 #include <vcl_cassert.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 
 #if 0 // commented out
 bmsh3d_face_mc::bmsh3d_face_mc(const bmsh3d_face_mc& face)

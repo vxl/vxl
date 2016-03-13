@@ -6,10 +6,10 @@
 // \author J.L. Mundy
 // \date October 25, 2014
 //
-#include <vbl/vbl_ref_count.h>
-#include <vcl_compiler.h>
 #include <iostream>
 #include <vector>
+#include <vbl/vbl_ref_count.h>
+#include <vcl_compiler.h>
 #include <boxm2/io/boxm2_cache.h>
 #include <bocl/bocl_mem.h>
 #include <bocl/bocl_device.h>

@@ -1,11 +1,11 @@
 // This is core/vnl/algo/tests/test_svd.cxx
+#include <iostream>
+#include <complex>
 #include "test_util.h"
 //:
 // \file
 #include <testlib/testlib_test.h>
-#include <iostream>
 #include <vcl_compiler.h>
-#include <complex>
 #include <vcl_cfloat.h>
 
 #include <vnl/vnl_matrix.h>

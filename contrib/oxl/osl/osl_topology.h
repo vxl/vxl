@@ -17,9 +17,9 @@
 //   10 Sep. 2004 Peter Vanroose  Inlined all 1-line methods in class decl
 // \endverbatim
 
-#include <vcl_compiler.h>
 #include <iostream>
 #include <list>
+#include <vcl_compiler.h>
 #include <vbl/vbl_ref_count.h>
 
 template <class T>

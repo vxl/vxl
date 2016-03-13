@@ -2,15 +2,16 @@
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
+#include <ios>
+#include <iostream>
+#include <cstring>
+#include <complex>
+#include <cstdlib>
 #include "vnl_matlab_read.h"
 //:
 // \file
 // \author fsm
 #include <vxl_config.h>
-#include <ios> // for std::ios::cur
-#include <iostream>
-#include <cstring> // memset()
-#include <complex>
 #include <vnl/vnl_c_vector.h>
 
 //--------------------------------------------------------------------------------
@@ -218,7 +219,6 @@ fsm_define_methods(std::complex<double>);
 
 //--------------------------------------------------------------------------------
 
-#include <cstdlib>
 #include <vcl_compiler.h>
 #include <vcl_new.h>
 #include <vnl/vnl_vector.h>

@@ -1,10 +1,9 @@
+#include <iostream>
+#include <cmath>
 #include "bsol_distance_histogram.h"
 //:
 // \file
 #include <vcl_compiler.h>
-#include <iostream>
-#include <cmath>
-#include <iostream>
 #include <vnl/vnl_math.h>
 #include <vnl/vnl_numeric_traits.h>
 #include <vgl/vgl_homg_line_2d.h>

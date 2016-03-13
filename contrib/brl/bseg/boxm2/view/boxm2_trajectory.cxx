@@ -1,10 +1,10 @@
+#include <iostream>
+#include <algorithm>
 #include "boxm2_trajectory.h"
 //:
 // \file
 #include <vpgl/vpgl_perspective_camera.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <algorithm>
 #include <boxm2/boxm2_util.h>
 #include <bpgl/bpgl_camera_utils.h>
 #include <vcl_cassert.h>

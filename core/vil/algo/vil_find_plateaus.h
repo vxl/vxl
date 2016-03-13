@@ -6,9 +6,9 @@
 // \brief Find plateau points in image. Based on vil_find_peaks.h
 // \author Tim Cootes, Kevin de Souza
 
+#include <vector>
 #include <vil/vil_image_view.h>
 #include <vcl_compiler.h>
-#include <vector>
 
 //: True if pixel at *im is greater than or equal to all 8 neighbours.
 // \sa vil_is_peak_3x3()

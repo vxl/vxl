@@ -1,11 +1,10 @@
 //:
 // \file
+#include <iostream>
 #include <testlib/testlib_test.h>
 #include <bvgl/bvgl_cross_section.h>
 #include <bvgl/bvgl_grid_index_3d.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 #include <vgl/vgl_pointset_3d.h>
 #include <vgl/vgl_point_3d.h>
 #include <vgl/vgl_vector_3d.h>

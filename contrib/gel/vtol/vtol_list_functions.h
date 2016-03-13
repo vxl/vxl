@@ -15,10 +15,10 @@
 //     Peter Vanroose - July 2000 - made templated
 // \endverbatim
 
-#include <vcl_compiler.h>
 #include <iostream>
 #include <list>
 #include <vector>
+#include <vcl_compiler.h>
 
 //: \brief function used to get rid of duplicate entries
 template <class T>

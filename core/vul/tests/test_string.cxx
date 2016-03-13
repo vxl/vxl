@@ -1,6 +1,6 @@
 // This is core/vul/tests/test_string.cxx
-#include <vcl_compiler.h>
 #include <iostream>
+#include <vcl_compiler.h>
 #include <testlib/testlib_test.h>
 #include <vul/vul_string.h>
 #include <vpl/vpl.h>

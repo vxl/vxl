@@ -8,14 +8,14 @@
 // \date   14 Sep 1999
 // \brief  See vgui_displaybase_tableau.h for a description of this file.
 
-#include "vgui_displaybase_tableau.h"
-#include "vgui_macro.h"
-
 #include <iostream>
 #include <vector>
 #include <algorithm>
+#include <utility>
+#include "vgui_displaybase_tableau.h"
+#include "vgui_macro.h"
+
 #include <vcl_compiler.h>
-#include <utility> // for std::pair<,>
 
 #include <vgui/vgui_gl.h>
 #include <vgui/vgui_glu.h>

@@ -19,14 +19,14 @@
 //   10 Apr 2001 Ian Scott (Manchester) Converted perceps header to doxygen
 // \endverbatim
 
-#include <vcl_compiler.h>
 #include <iostream>
 #include <cstdlib>
 #include <string>
 #include <fstream>
 #include <vector>
-#undef sprintf // works around a bug in libintl.h
 #include <cstdio>
+#include <vcl_compiler.h>
+#undef sprintf // works around a bug in libintl.h
 
 #include <vnl/vnl_matrix.h>
 #include <vnl/algo/vnl_svd.h>

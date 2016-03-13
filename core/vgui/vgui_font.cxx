@@ -1,5 +1,6 @@
 // This is core/vgui/vgui_font.cxx
 //=========================================================================
+#include <iostream>
 #include "vgui_font.h"
 //:
 // \file
@@ -9,7 +10,6 @@
 //=========================================================================
 
 #include <vcl_compiler.h>
-#include <iostream>
 
 //: Draw a string of font symbols.
 void vgui_font::draw(const std::string& str, unsigned int size) const

@@ -1,3 +1,4 @@
+#include <iostream>
 #include "rgrl_transformation.h"
 //:
 // \file
@@ -11,8 +12,6 @@
 #include <vnl/algo/vnl_levenberg_marquardt.h>
 
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 #include <vcl_cassert.h>
 
 #include <vnl/vnl_cross.h>

@@ -11,6 +11,7 @@
 // \author Peter Vanroose, K.U.Leuven, ESAT/PSI
 // \date   7 October 2002, from vepl1/examples
 //
+#include <iostream>
 #include <vepl/vepl_convert.h>
 #include <vepl/vepl_moment.h>
 #include <vepl/vepl_monadic.h>
@@ -20,8 +21,6 @@
 #include <vil/vil_load.h>
 #include <vil/vil_save.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 #include <vxl_config.h> // for vxl_byte
 
 int

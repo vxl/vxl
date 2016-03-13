@@ -7,12 +7,12 @@
 // \author Vishal Jain
 // \date nov 17, 2010
 
+#include <iostream>
+#include <cstring>
 #include <boxm2/boxm2_data_base.h>
 #include <boxm2/basic/boxm2_array_1d.h>
 #include <boxm2/boxm2_data_traits.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <cstring>
 
 //: Specific, templated derived class for data blocks
 template <boxm2_data_type T>

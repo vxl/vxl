@@ -19,10 +19,10 @@
 //   29 July 2011 - Peter Vanroose - added documentation, tests, and x_write_tree()
 // \endverbatim
 
-#include <vnl/vnl_vector.h>
 #include <string>
-#include <vcl_compiler.h>
 #include <iosfwd>
+#include <vnl/vnl_vector.h>
+#include <vcl_compiler.h>
 
 //: XML save vnl_vector to stream.
 // \relatesalso vnl_vector

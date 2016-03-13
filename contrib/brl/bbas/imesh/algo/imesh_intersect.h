@@ -13,11 +13,11 @@
 // \endverbatim
 
 
+#include <iostream>
+#include <limits>
 #include <imesh/imesh_mesh.h>
 #include <vgl/vgl_vector_3d.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <limits>
 
 
 //: Intersect the ray from point p with direction d and the triangle defined by a,b,c

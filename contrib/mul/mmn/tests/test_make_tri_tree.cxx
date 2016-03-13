@@ -1,8 +1,8 @@
 // This is mul/mmn/tests/test_make_tri_tree.cxx
-#include <testlib/testlib_test.h>
-#include <vcl_compiler.h>
 #include <iostream>
 #include <vector>
+#include <testlib/testlib_test.h>
+#include <vcl_compiler.h>
 #include <mmn/mmn_make_tri_tree.h>
 
 

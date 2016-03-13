@@ -12,13 +12,13 @@
 //   10-sep-2004 Peter Vanroose Added copy ctor with explicit vbl_ref_count init
 // \endverbatim
 
+#include <iostream>
+#include <deque>
+#include <set>
 #include <vbl/vbl_ref_count.h>
 #include <bgrl/bgrl_vertex_sptr.h>
 #include <bgrl/bgrl_edge_sptr.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <deque>
-#include <set>
 
 
 //: The abstract base class for search functions

@@ -19,8 +19,8 @@
 //   01-OCT-2002 K.Y.McGaul   - Moved vgui_composite to vgui_composite_tableau.
 // \endverbatim
 
-#include <vcl_compiler.h>
 #include <vector>
+#include <vcl_compiler.h>
 
 #include <vgui/vgui_composite_tableau_sptr.h>
 #include <vgui/vgui_tableau.h>

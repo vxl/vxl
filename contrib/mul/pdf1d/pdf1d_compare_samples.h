@@ -5,9 +5,9 @@
 // \author Tim Cootes
 // \brief Functions to compare sets of samples.
 
-#include <vcl_compiler.h>
 #include <iostream>
 #include <vector>
+#include <vcl_compiler.h>
 
 //: Return true if x1[i] significantly larger than x2[j]
 //  Essentially tests if on average a sample from x1 is larger than

@@ -47,10 +47,10 @@
 //          confidence of 0.9.
 //
 //
-#include <vil/vil_image_view.h>
-#include <vcl_compiler.h>
 #include <iostream>
 #include <vector>
+#include <vil/vil_image_view.h>
+#include <vcl_compiler.h>
 
 // a struct for holding correlation peak info
 struct peak{

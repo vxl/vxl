@@ -14,11 +14,10 @@
 // \endverbatim
 
 #include <vector>
-#include <vcl_compiler.h>
-#include <iostream>
 #include <iostream>
 #include <map>
 #include <string>
+#include <vcl_compiler.h>
 #include <volm/volm_camera_space.h>
 #include <volm/volm_camera_space_sptr.h>
 #include <volm/volm_spherical_region_index.h>

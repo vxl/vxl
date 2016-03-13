@@ -1,12 +1,11 @@
 // This is brl/bpro/core/vpgl_pro/processes/vpgl_geo_camera_processes.cxx
+#include <iostream>
 #include <bprb/bprb_func_process.h>
 //:
 // \file
 
 #include <bprb/bprb_parameters.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 #include <vpgl/file_formats/vpgl_geo_camera.h>
 #include <vpgl/algo/vpgl_camera_convert.h>
 #include <vpgl/vpgl_lvcs_sptr.h>

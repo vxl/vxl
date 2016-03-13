@@ -7,10 +7,9 @@
 // INCOMPLETE
 // Need to resample image to cubic voxels before projection to keep aspect ratios.
 
+#include <iostream>
 #include <vul/vul_arg.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 #include <vimt3d/vimt3d_load.h>
 #include <vil3d/vil3d_slice.h>
 #include <vil3d/vil3d_resample_trilinear.h>

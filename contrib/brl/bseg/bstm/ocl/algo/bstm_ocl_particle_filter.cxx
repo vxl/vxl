@@ -1,3 +1,5 @@
+#include <iostream>
+#include <algorithm>
 #include "bstm_ocl_particle_filter.h"
 
 #include <vcl_where_root_dir.h>
@@ -8,8 +10,6 @@
 #include <vul/vul_timer.h>
 #include <bstm/cpp/algo/bstm_label_bb_function.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <algorithm>
 #include <vgl/vgl_sphere_3d.h>
 #include <vnl/algo/vnl_svd.h>
 #include <vnl/vnl_det.h>

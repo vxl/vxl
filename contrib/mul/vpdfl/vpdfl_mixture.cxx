@@ -1,5 +1,9 @@
 // This is mul/vpdfl/vpdfl_mixture.cxx
 // Copyright: (C) 1998 Victoria University of Manchester
+#include <iostream>
+#include <cmath>
+#include <cstdlib>
+#include <string>
 #include "vpdfl_mixture.h"
 //:
 // \file
@@ -15,10 +19,6 @@
 //=======================================================================
 
 #include <vcl_compiler.h>
-#include <iostream>
-#include <cmath>
-#include <cstdlib>
-#include <string>
 #include <vsl/vsl_indent.h>
 #include <vsl/vsl_binary_loader.h>
 #include <vpdfl/vpdfl_mixture_sampler.h>

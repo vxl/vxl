@@ -1,7 +1,7 @@
-#include "boxm2_import_triangle_mesh.h"
-#include <vcl_compiler.h>
 #include <iostream>
 #include <map>
+#include "boxm2_import_triangle_mesh.h"
+#include <vcl_compiler.h>
 #include <vnl/vnl_vector_fixed.h>
 #include <vgl/vgl_point_3d.h>
 #include <vgl/vgl_vector_3d.h>

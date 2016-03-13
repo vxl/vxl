@@ -1,6 +1,6 @@
 // not used? #include <iostream>
-#include <vcl_compiler.h>
 #include <cmath>
+#include <vcl_compiler.h>
 #include <vnl/vnl_double_3.h>
 #include <vnl/vnl_math.h>
 #include <vnl/vnl_analytic_integrant.h>

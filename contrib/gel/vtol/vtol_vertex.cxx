@@ -1,4 +1,6 @@
 // This is gel/vtol/vtol_vertex.cxx
+#include <iostream>
+#include <algorithm>
 #include "vtol_vertex.h"
 //:
 // \file
@@ -9,8 +11,6 @@
 #include <vtol/vtol_macros.h>
 #include <vtol/vtol_list_functions.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <algorithm> // for std::find()
 #include <vcl_cassert.h>
 
 //***************************************************************************

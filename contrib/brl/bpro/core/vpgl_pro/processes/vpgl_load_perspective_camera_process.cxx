@@ -1,12 +1,11 @@
 // This is brl/bpro/core/vpgl_pro/processes/vpgl_load_perspective_camera_process.cxx
+#include <iostream>
+#include <fstream>
 #include <bprb/bprb_func_process.h>
 //:
 // \file
 
-#include <iostream>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <fstream>
 #include <vpgl/vpgl_camera_double_sptr.h>
 #include <vpgl/vpgl_perspective_camera.h>
 #include <vpgl/io/vpgl_io_perspective_camera.h>

@@ -6,8 +6,8 @@
 #endif
 
 
-#include <vcl_compiler.h>
 #include <iosfwd>
+#include <vcl_compiler.h>
 
 //:
 // \file

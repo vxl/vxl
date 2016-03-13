@@ -1,11 +1,10 @@
+#include <iostream>
+#include <fstream>
+#include <cstdlib>
 #include <testlib/testlib_test.h>
 #include <testlib/testlib_root_dir.h>
 #include <baio/baio.h>
-#include <iostream> //for std::cout
-#include <fstream>  //for file open
 #include <vcl_compiler.h>
-#include <iostream>
-#include <cstdlib>  //includes malloc
 #include <vnl/vnl_random.h>
 #include <vpl/vpl.h>
 

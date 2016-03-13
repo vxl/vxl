@@ -1,14 +1,13 @@
+#include <vector>
+#include <iostream>
+#include <iomanip>
 #include <testlib/testlib_test.h>
 #include <brip/brip_max_scale_response.h>
 #include <vil/vil_image_view.h>
 #include <vil/vil_resample_bilin.h>
-#include <vector>
 
 #ifdef DEBUG // I/O only for debugging output
-#include <iostream>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iomanip>
 #endif
 
 #ifdef DEBUG // functions only used in debugging output

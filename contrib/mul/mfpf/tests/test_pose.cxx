@@ -4,6 +4,7 @@
 //  Copyright: (C) 2007 The University of Manchester
 //
 //=======================================================================
+#include <iostream>
 #include <testlib/testlib_test.h>
 //:
 // \file
@@ -11,8 +12,6 @@
 // \brief test mfpf_pose
 
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 #include <mfpf/mfpf_pose.h>
 #include <vgl/vgl_point_2d.h>
 #include <vgl/vgl_vector_2d.h>

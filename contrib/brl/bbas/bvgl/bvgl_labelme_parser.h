@@ -11,11 +11,11 @@
 //     Yi Dong   FEB-2015   added height tag
 // \endverbatim
 
-#include <expatpplib.h>
 #include <string>
-#include <vcl_compiler.h>
 #include <iostream>
 #include <sstream>
+#include <expatpplib.h>
+#include <vcl_compiler.h>
 #include <vgl/vgl_polygon.h>
 #include <vgl/vgl_point_2d.h>
 

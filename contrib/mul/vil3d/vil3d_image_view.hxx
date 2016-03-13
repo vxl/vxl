@@ -13,14 +13,14 @@
 // In that case, use the "relates" keyword of Doxygen to link the documentation
 // of that function to the vil3d_image_view class.
 
-#include "vil3d_image_view.h"
-#include <cstring> // for std::memset
+#include <cstring>
 #include <string>
-#include <vcl_cassert.h>
 #include <ostream>
-#include <vcl_compiler.h>
 #include <iostream>
 #include <algorithm>
+#include "vil3d_image_view.h"
+#include <vcl_cassert.h>
+#include <vcl_compiler.h>
 #include <vil/vil_pixel_format.h>
 
 //=======================================================================

@@ -1,3 +1,7 @@
+#include <cmath>
+#include <iostream>
+#include <algorithm>
+#include <cstdlib>
 #include "mfpf_mr_point_finder_builder.h"
 //:
 // \file
@@ -10,12 +14,8 @@
 #include <vnl/vnl_math.h>
 #include <vgl/vgl_point_2d.h>
 #include <vgl/vgl_vector_2d.h>
-#include <cmath>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <algorithm>
 #include <vcl_cassert.h>
-#include <cstdlib>
 
 #include <vsl/vsl_indent.h>
 #include <vsl/vsl_binary_loader.h>

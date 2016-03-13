@@ -6,9 +6,9 @@
 // \file
 // \author fsm
 
+#include <string>
 #include "vil1_image_proxy.h"
 #include <vcl_compiler.h>
-#include <string>
 #include <vil1/vil1_load.h>
 
 struct vil1_image_proxy_impl : public vil1_image_impl

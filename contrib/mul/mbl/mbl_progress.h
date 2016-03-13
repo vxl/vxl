@@ -10,9 +10,9 @@
 // \date 25 Feb 2005
 
 #include <string>
-#include <vcl_compiler.h>
 #include <iostream>
 #include <map>
+#include <vcl_compiler.h>
 
 //========================================================================
 //: An exception that can be thrown by an operation when cancelled.

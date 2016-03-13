@@ -1,8 +1,8 @@
-#include <testlib/testlib_test.h>
 #include <vector>
-#include <vcl_compiler.h>
 #include <iostream>
 #include <sstream>
+#include <testlib/testlib_test.h>
+#include <vcl_compiler.h>
 #include <vil/vil_image_view.h>
 #include <brip/brip_histogram.h>
 

@@ -3,6 +3,8 @@
 //  \date 16 Dec 2009
 //  \brief Program to split a 3d image into blocks.
 
+#include <iostream>
+#include <exception>
 #include <vul/vul_arg.h>
 #include <vul/vul_reg_exp.h>
 #include <vul/vul_sprintf.h>
@@ -17,9 +19,6 @@
 #include <vil3d/vil3d_crop.h>
 #include <vul/vul_string.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <exception>
-#include <iostream>
 
 //=========================================================================
 // Static function to create a static logger when first required

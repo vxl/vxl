@@ -1,9 +1,8 @@
 // This is mul/mbl/tests/test_priority_bounded_queue.cxx
 #include <functional>
-#include <vcl_compiler.h>
 #include <iostream>
 #include <deque>
-#include <iostream>
+#include <vcl_compiler.h>
 #include <mbl/mbl_priority_bounded_queue.h>
 #include <testlib/testlib_test.h>
 

@@ -29,10 +29,10 @@
 //            d
 //          (c,p)
 //
-#include <vbl/vbl_ref_count.h>
-#include <vcl_compiler.h>
 #include <iostream>
 #include <vector>
+#include <vbl/vbl_ref_count.h>
+#include <vcl_compiler.h>
 class sdet_mrf_site_bp : public vbl_ref_count
 {
  public:

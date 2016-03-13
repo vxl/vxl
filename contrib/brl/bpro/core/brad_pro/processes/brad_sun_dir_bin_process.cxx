@@ -1,12 +1,12 @@
 // This is brl/bpro/core/brad_pro/processes/brad_sun_dir_bin_process.cxx
+#include <iostream>
+#include <fstream>
 #include <bprb/bprb_func_process.h>
 //:
 // \file
 #include <brad/brad_sun_dir_index.h>
 #include <vnl/vnl_double_3.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <fstream>
 #include <brad/brad_image_metadata.h>
 
 //: Constructor

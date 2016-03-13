@@ -1,9 +1,8 @@
 // This is mul/vimt/tests/test_image_bounds_and_centre_2d.cxx
 
+#include <iostream>
 #include <testlib/testlib_test.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 #include <vimt/vimt_transform_2d.h>
 #include <vimt/vimt_image_2d_of.h>
 #include <vgl/vgl_point_2d.h>

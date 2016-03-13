@@ -1,10 +1,10 @@
 #ifndef VBL_LOCAL_MINIMA_TXX_
 #define VBL_LOCAL_MINIMA_TXX_
+#include <iostream>
+#include <limits>
 #include "vbl_local_minima.h"
 //
-#include <iostream>
 #include <vcl_compiler.h>
-#include <limits>
 #include <vcl_cassert.h>
 
 template <class T>

@@ -1,16 +1,15 @@
 // This is brl/bbas/btol/btol_edge_algs.cxx
+#include <iostream>
+#include <algorithm>
+#include <cmath>
 #include "btol_edge_algs.h"
 //:
 // \file
 #include <vcl_compiler.h>
-#include <iostream>
-#include <algorithm> // std::find()
-#include <cmath>
 #include <vdgl/vdgl_digital_curve.h>
 #include <vtol/vtol_topology_object_sptr.h>
 #include <vtol/vtol_topology_object.h>
 #include <vtol/vtol_edge_2d.h>
-#include <iostream>
 
 const double btol_edge_algs::tol = 1e-6;
 

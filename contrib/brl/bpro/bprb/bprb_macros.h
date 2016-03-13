@@ -12,14 +12,14 @@
 //   <none yet>
 // \endverbatim
 
+#include <iostream>
+#include <string>
 #include <bprb/bprb_batch_process_manager.h>
 #include <bprb/bprb_null_process.h>
 #include <brdb/brdb_database_manager.h>
 #include <brdb/brdb_relation.h>
 #include <brdb/brdb_tuple.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <string>
 
 #define REG_PROCESS(proc, T) \
   T ::register_process( bprb_process_sptr( new proc() ) )

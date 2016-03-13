@@ -33,6 +33,8 @@
 // \endverbatim
 //*****************************************************************************
 
+#include <list>
+#include <iostream>
 #include <vgl/vgl_fwd.h>
 #include <vgl/vgl_conic.h> // parent class
 #include <vgl/vgl_conic_segment_2d.h>
@@ -42,10 +44,7 @@
 #include <vsol/vsol_line_2d.h>
 #include <vsol/vsol_line_2d_sptr.h>
 #include <vnl/vnl_double_3x3.h>
-#include <list>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 
 //: Euclidean general conic class, part of the vsol_curve_2d hierarchy
 

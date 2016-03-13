@@ -1,11 +1,11 @@
+#include <iostream>
+#include <cmath>
 #include "boxm2_vecf_mandible.h"
 #include <bvrml/bvrml_write.h>
 #include <vgl/vgl_intersection.h>
 #include <vgl/vgl_box_3d.h>
 #include <vgl/vgl_bounding_box.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <cmath>
 //==========================================
 //: mandible class member implementations
 void boxm2_vecf_mandible::fill_boundary_map(){

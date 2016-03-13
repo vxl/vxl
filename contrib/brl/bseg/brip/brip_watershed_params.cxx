@@ -1,10 +1,9 @@
+#include <sstream>
+#include <iostream>
 #include "brip_watershed_params.h"
 //:
 // \file
-#include <sstream>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 
 //------------------------------------------------------------------------
 // Constructors

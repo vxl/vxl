@@ -1,8 +1,8 @@
+#include <iostream>
+#include <algorithm>
 #include "bstm_refine_blk_in_spacetime_function.h"
 #include <bstm/io/bstm_lru_cache.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <algorithm>
 
 
 bool bstm_refine_blk_in_spacetime_function::init_data(bstm_time_block* blk_t, bstm_block* blk, std::vector<bstm_data_base*> & datas, float prob_thresh)

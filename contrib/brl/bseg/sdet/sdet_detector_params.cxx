@@ -1,11 +1,10 @@
 //:
 // \file
-#include "sdet_detector_params.h"
 #include <string>
 #include <sstream>
+#include <iostream>
+#include "sdet_detector_params.h"
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 
 //------------------------------------------------------------------------
 // Constructors

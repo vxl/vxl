@@ -6,12 +6,12 @@
 //
 //-----------------------------------------------------------------------------
 
-#include <vul/vul_arg.h>
-#include <cstring> // needed for strcmp()
+#include <cstring>
 #include <iostream>
 #include <list>
-#include <vcl_compiler.h>
 #include <algorithm>
+#include <vul/vul_arg.h>
+#include <vcl_compiler.h>
 #include <testlib/testlib_test.h>
 
 char const * my_argv_1[] =

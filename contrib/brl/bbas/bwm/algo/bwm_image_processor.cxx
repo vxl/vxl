@@ -1,8 +1,8 @@
+#include <iostream>
+#include <cstdio>
 #include "bwm_image_processor.h"
 
 #include <vcl_compiler.h>
-#include <iostream>
-#include <cstdio>
 #include <vcl_cassert.h>
 #include <vgui/vgui_range_map_params.h>
 #include <bgui/bgui_graph_tableau.h>

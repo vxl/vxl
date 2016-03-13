@@ -1,3 +1,5 @@
+#include <iostream>
+#include <cmath>
 #include "rgrl_weighter_m_est.h"
 //:
 // \file
@@ -5,8 +7,6 @@
 // \date   Feb 2003
 
 #include <vcl_compiler.h>
-#include <iostream>
-#include <cmath>
 #include <vcl_cassert.h>
 #include <vnl/vnl_matrix.h>
 #include <vnl/vnl_math.h>

@@ -23,10 +23,10 @@
 // \endverbatim
 //-----------------------------------------------------------------------------
 
+#include <iosfwd>
 #include <vnl/vnl_vector.h>
 #include <vnl/vnl_linear_system.h>
 #include <vcl_compiler.h>
-#include <iosfwd>
 
 //: Linear least squares
 //  vnl_lsqr implements an algorithm for large, sparse linear systems and

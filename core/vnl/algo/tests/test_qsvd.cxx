@@ -1,8 +1,8 @@
+#include <cstdio>
 #include <vnl/vnl_math.h> // vnl_math::abs()
 #include <testlib/testlib_test.h>
 #undef printf // to work around a bug in libintl.h
 #include <vcl_compiler.h>
-#include <cstdio>
 
 #include <v3p_netlib.h> // resides in v3p/netlib
 

@@ -1,12 +1,11 @@
+#include <cstdlib>
+#include <iostream>
+#include <algorithm>
 #include "mbl_dyn_prog.h"
 //:
 // \file
 
-#include <cstdlib>
-#include <iostream>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <algorithm> // for std::min() & std::max()
 #include <vsl/vsl_indent.h>
 #include <vsl/vsl_binary_io.h>
 #include <vnl/io/vnl_io_matrix.h>

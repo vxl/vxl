@@ -12,9 +12,9 @@
 //              when checking if they are 2D transformations.
 // \endverbatim
 
+#include <vector>
 #include <vgui/vgui_gl.h>
 #include <vcl_compiler.h>
-#include <vector>
 #include <vil1/vil1_rgb.h>
 #include <vil1/vil1_memory_image_of.h>
 #include <vil/vil_image_view.h>

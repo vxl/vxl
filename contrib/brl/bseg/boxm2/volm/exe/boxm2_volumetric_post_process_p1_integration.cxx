@@ -4,6 +4,9 @@
 // \author Yi Dong
 // \date Apr 03, 2013
 
+#include <set>
+#include <iostream>
+#include <ios>
 #include <volm/volm_io.h>
 #include <volm/volm_tile.h>
 #include <volm/volm_camera_space.h>
@@ -16,10 +19,7 @@
 #include <volm/volm_loc_hyp_sptr.h>
 #include <vil/vil_save.h>
 #include <vil/vil_load.h>
-#include <set>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <ios>
 #include <bkml/bkml_write.h>
 
 

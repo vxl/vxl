@@ -1,5 +1,7 @@
 // This is brl/bbas/bmsh3d/bmsh3d_vertex.cxx
 //---------------------------------------------------------------------
+#include <sstream>
+#include <iostream>
 #include "bmsh3d_vertex.h"
 //:
 // \file
@@ -15,11 +17,8 @@
 //
 //-------------------------------------------------------------------------
 
-#include <sstream>
 #include <vcl_cassert.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 
 #include "bmsh3d_edge.h"
 #include "bmsh3d_face.h"

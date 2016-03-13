@@ -18,9 +18,10 @@
 // \endverbatim
 
 
+#include <algorithm>
+#include <vector>
 #include <vxl_config.h> // VXL_STDLIB_HAS_QSORT
 
-#include <algorithm>
 #if VXL_STDLIB_HAS_QSORT
 # include <vcl_cstdlib.h>
 #else
@@ -28,7 +29,6 @@
 # include <std::iostream.h>
 #endif
 #include <vcl_compiler.h>
-#include <vector>
 
 #include <vbl/vbl_sort.h>
 

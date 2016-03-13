@@ -1,4 +1,5 @@
 // This is mul/mbl/mbl_screen_counter.cxx
+#include <iostream>
 #include "mbl_screen_counter.h"
 //:
 // \file
@@ -6,8 +7,6 @@
 // \author Ian Scott
 
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 
 mbl_screen_counter::mbl_screen_counter(std::ostream & os):
 count_(0), symbol_('a'), skip_(1), os_(os)

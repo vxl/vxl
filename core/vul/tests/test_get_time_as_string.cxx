@@ -1,6 +1,6 @@
 // This is core/vul/tests/test_get_time_as_string.cxx
-#include <vcl_compiler.h>
 #include <iostream>
+#include <vcl_compiler.h>
 #include <vul/vul_get_timestamp.h>
 #include <testlib/testlib_test.h>
 

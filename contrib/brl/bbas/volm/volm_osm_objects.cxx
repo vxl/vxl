@@ -1,11 +1,11 @@
+#include <iostream>
+#include <algorithm>
 #include "volm_osm_objects.h"
 //:
 // \file
 #include <vul/vul_file.h>
 #include <bkml/bkml_write.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <algorithm>
 
 // create volm_osm_objects from open street map xml file
 volm_osm_objects::volm_osm_objects(std::string const& osm_file, std::string const& osm_to_volm_file)

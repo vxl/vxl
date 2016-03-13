@@ -1,4 +1,5 @@
 // This is brl/bbas/bmsh3d/vis/bmsh3d_vis_mesh.cxx
+#include <iostream>
 #include "bmsh3d_vis_mesh.h"
 //:
 // \file
@@ -6,8 +7,6 @@
 // \date May 03, 2005.
 
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 #include <vcl_cassert.h>
 
 #include <bmsh3d/pro/bmsh3d_cmdpara.h>

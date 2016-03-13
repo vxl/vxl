@@ -1,11 +1,11 @@
 // This is core/vidl/vidl_pixel_format.cxx
+#include <iostream>
 #include "vidl_pixel_format.h"
 //:
 // \file
 // \author Matt Leotta
 //
 #include <vcl_compiler.h>
-#include <iostream>
 
 #define vidl_ppi_mac(FMT)\
 const std::ptrdiff_t vidl_pixel_pack_of<VIDL_PIXEL_FORMAT_##FMT>::offset[macro_pix_size][num_channels]

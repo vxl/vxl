@@ -1,4 +1,7 @@
 // This is mul/clsfy/tests/test_binary_1d_wrapper.cxx
+#include <iostream>
+#include <sstream>
+#include <string>
 #include <testlib/testlib_test.h>
 //:
 // \file
@@ -7,10 +10,6 @@
 // Test construction, IO etc
 
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
-#include <sstream>
-#include <string>
 #include <vpl/vpl.h> // vpl_unlink()
 #include <vsl/vsl_binary_loader.h>
 #include <vsl/vsl_vector_io.h>

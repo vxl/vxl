@@ -1,3 +1,4 @@
+#include <iostream>
 #include <testlib/testlib_test.h>
 #include <testlib/testlib_root_dir.h>
 
@@ -7,8 +8,6 @@
 #include <bapl/bapl_lowe_keypoint_sptr.h>
 
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 #include <vil/vil_image_view.h>
 #include <vil/vil_convert.h>
 #include <vil/vil_load.h>

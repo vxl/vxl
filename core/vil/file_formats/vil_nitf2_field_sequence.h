@@ -5,11 +5,11 @@
 #ifndef VIL_NITF2_FIELD_SEQUENCE_H
 #define VIL_NITF2_FIELD_SEQUENCE_H
 
-#include <vcl_compiler.h>
 #include <map>
-// not used? #include <iostream>
 #include <string>
 #include <vector>
+#include <vcl_compiler.h>
+// not used? #include <iostream>
 
 #include "vil_nitf2.h" // vil_nitf2_istream, vil_nitf2_ostream
 #include "vil_nitf2_index_vector.h"

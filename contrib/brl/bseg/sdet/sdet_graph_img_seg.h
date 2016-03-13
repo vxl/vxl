@@ -16,15 +16,15 @@
 //  each pixel/node is assigned to a connected component (segment) as a result
 //
 
-#include <vbl/vbl_ref_count.h>
 #include <vector>
 #include <map>
-#include <vcl_compiler.h>
 #include <iostream>
 #include <iosfwd>
 #include <string>
-#include <vil/vil_image_view.h>
 #include <utility>
+#include <vbl/vbl_ref_count.h>
+#include <vcl_compiler.h>
+#include <vil/vil_image_view.h>
 #include <vbl/vbl_edge.h>
 #include <vbl/vbl_graph_partition.h>
 

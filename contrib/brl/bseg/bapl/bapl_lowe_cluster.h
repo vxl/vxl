@@ -12,9 +12,9 @@
 // \endverbatim
 
 #include <vector>
-#include <vcl_compiler.h>
 #include <iostream>
 #include <utility>
+#include <vcl_compiler.h>
 #include <bapl/bapl_lowe_keypoint_sptr.h>
 #include <bapl/bapl_affine_transform.h>
 

@@ -71,9 +71,9 @@
 //  Joe Mundy       (2003) [Aug] Eliminate zig-zags in ::FindChains
 //-----------------------------------------------------------------------------
 
-#include <vcl_compiler.h>
 #include <iostream>
 #include <vector>
+#include <vcl_compiler.h>
 #include <vbl/vbl_array_2d.h>
 #include <vdgl/vdgl_digital_curve_sptr.h>
 #include <vtol/vtol_vertex_2d_sptr.h>

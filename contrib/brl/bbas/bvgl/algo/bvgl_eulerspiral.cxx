@@ -2,13 +2,12 @@
 //:
 // \file
 
-#include "bvgl_eulerspiral.h"
-#include <vcl_compiler.h>
 #include <iostream>
 #include <algorithm>
-#include <iostream>
 #include <fstream>
 #include <string>
+#include "bvgl_eulerspiral.h"
+#include <vcl_compiler.h>
 #include <vsl/vsl_binary_io.h>
 #include <vsl/vsl_vector_io.h>
 

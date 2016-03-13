@@ -1,5 +1,5 @@
-#include <vcl_compiler.h>
 #include <iostream>
+#include <vcl_compiler.h>
 #include <vbl/vbl_bounding_box.h>
 #include <testlib/testlib_test.h>
 

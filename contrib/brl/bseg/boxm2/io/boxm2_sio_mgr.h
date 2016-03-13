@@ -4,14 +4,13 @@
 // \file
 // \brief Loads blocks and data from ID's and data_types with blocking.
 //  If file is not available, will return null.
+#include <iostream>
 #include <boxm2/boxm2_block.h>
 #include <boxm2/basic/boxm2_block_id.h>
 #include <boxm2/boxm2_data_traits.h>
 #include <boxm2/boxm2_data.h>
 #include <vul/vul_file.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 
 //: enabling to allow different filesystems to load blocks
 typedef enum {LOCAL=0, HDFS} BOXM2_IO_FS_TYPE;

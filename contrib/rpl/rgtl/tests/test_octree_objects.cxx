@@ -5,6 +5,8 @@
 // (See accompanying file rgtl_license_1_0.txt or copy at
 // http://www.boost.org/LICENSE_1_0.txt)
 
+#include <iostream>
+#include <cmath>
 #include <testlib/testlib_test.h>
 
 #include <rgtl/rgtl_octree_objects.hxx>
@@ -12,10 +14,7 @@
 #include <rgtl/rgtl_octree_cell_bounds.hxx>
 #include <vnl/vnl_random.h>
 #include <vul/vul_timer.h>
-#include <iostream>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <cmath>
 
 static void test_octree_objects()
 {

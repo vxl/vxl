@@ -1,4 +1,7 @@
 // This is brl/bseg/boxm2/ocl/pro/processes/boxm2_multi_update_process.cxx
+#include <fstream>
+#include <iostream>
+#include <algorithm>
 #include <bprb/bprb_func_process.h>
 //:
 // \file
@@ -7,10 +10,7 @@
 // \author Vishal Jain
 // \date Aug 28, 2014
 
-#include <fstream>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <algorithm>
 #include <boxm2_multi/boxm2_multi_cache.h>
 #include <boxm2_multi/algo/boxm2_multi_render.h>
 #include <boxm2_multi/algo/boxm2_multi_update.h>
@@ -18,8 +18,6 @@
 
 #include <vcl_where_root_dir.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <algorithm>
 
 //executable args
 #include <vil/vil_image_view_base.h>

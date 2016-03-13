@@ -4,10 +4,10 @@
 //:
 // \file
 
-#include "vsl_binary_loader.h"
-#include <vcl_compiler.h>
 #include <iostream>
 #include <vector>
+#include "vsl_binary_loader.h"
+#include <vcl_compiler.h>
 
 template<class BaseClass>
 vsl_binary_loader<BaseClass>& vsl_binary_loader<BaseClass>::instance()

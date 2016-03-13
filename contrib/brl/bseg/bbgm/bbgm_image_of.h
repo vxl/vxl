@@ -7,9 +7,9 @@
 // \author Matt Leotta (mleotta@lems.brown.edu)
 // \date January 27, 2006
 
-#include <vcl_compiler.h>
 #include <iostream>
 #include <typeinfo>
+#include <vcl_compiler.h>
 #include <vbl/vbl_array_2d.h>
 #include <vbl/vbl_ref_count.h>
 #include <vsl/vsl_binary_loader.h>

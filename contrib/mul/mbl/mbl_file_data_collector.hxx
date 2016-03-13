@@ -4,11 +4,11 @@
 //:
 // \file
 
+#include <iostream>
+#include <cstdlib>
 #include "mbl_file_data_collector.h"
 
 #include <vcl_compiler.h>
-#include <iostream>
-#include <cstdlib>
 #include <vcl_cassert.h>
 
 #include <vsl/vsl_binary_loader.h>

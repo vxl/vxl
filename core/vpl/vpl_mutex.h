@@ -11,11 +11,11 @@
 //   08 Dec 2001 first version.
 // \endverbatim
 
+#include <cerrno>
 #include <vxl_config.h>
 
 #if VXL_HAS_PTHREAD_H
 # include <pthread.h>
-# include <cerrno> // for EBUSY, I think
 struct vpl_mutex
 {
   vpl_mutex() { pthread_mutex_init(&mutex_, VXL_NULLPTR); }

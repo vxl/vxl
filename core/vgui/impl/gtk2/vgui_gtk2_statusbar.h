@@ -18,8 +18,8 @@
 // \endverbatim
 
 #include <string>
-#include <vcl_compiler.h>
 #include <iosfwd>
+#include <vcl_compiler.h>
 #include <gtk/gtk.h>
 #include <vgui/vgui_statusbuf.h>
 #include <vgui/vgui_statusbar.h>

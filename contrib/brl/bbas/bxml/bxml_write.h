@@ -15,10 +15,9 @@
 //   <none yet>
 // \endverbatim
 
+#include <iostream>
 #include "bxml_document.h"
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 
 //: Write the entire contents of \p filepath into an XML document class
 void bxml_write(const std::string& filepath, const bxml_document& doc);

@@ -3,6 +3,8 @@
 // \author Isabel Restrepo
 // \date 21-Jul-2011
 
+#include <iostream>
+#include <fstream>
 #include "bvpl_global_corners.h"
 
 #include <bsta/bsta_histogram.h>
@@ -19,8 +21,6 @@
 #include <vul/vul_file.h>
 
 #include <vcl_compiler.h>
-#include <iostream>
-#include <fstream>
 
 
 //: Constructor  from xml file

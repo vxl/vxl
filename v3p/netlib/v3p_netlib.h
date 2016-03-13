@@ -16,8 +16,8 @@
 
 /* Modify the interface for C++.  */
 #ifdef __cplusplus
+#include <complex>
 # undef complex
-# include <complex>
 # define v3p_netlib_complex std::complex<float>
 # define v3p_netlib_doublecomplex std::complex<double>
 #endif

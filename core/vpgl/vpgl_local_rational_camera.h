@@ -13,10 +13,10 @@
 // Local Vertical Coordinate System (LVCS) to convert local coordinates
 // to geographic coordinates to input to the native geographic RPC model.
 
-#include <vgl/vgl_fwd.h>
 #include <iostream>
-#include <vcl_compiler.h>
 #include <string>
+#include <vgl/vgl_fwd.h>
+#include <vcl_compiler.h>
 #include <vpgl/vpgl_rational_camera.h>
 #include <vpgl/vpgl_lvcs.h>
 //

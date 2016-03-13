@@ -3,10 +3,10 @@
 // \brief Load in a set of points, and a list of indices. Write out given subset.
 // \author Tim Cootes
 
-#include <msm/msm_points.h>
-#include <vcl_compiler.h>
 #include <iostream>
 #include <cstdlib>
+#include <msm/msm_points.h>
+#include <vcl_compiler.h>
 
 #include <vul/vul_arg.h>
 

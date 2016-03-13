@@ -6,11 +6,11 @@
 // \brief Functions to calculate closest points on curves (poly-lines) to target point
 // \author Tim Cootes
 
+#include <iostream>
+#include <algorithm>
 #include <msm/msm_points.h>
 #include <msm/msm_curve.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <algorithm>
 
 
 //: Define position of point on a line segment between points with index i0,i1.

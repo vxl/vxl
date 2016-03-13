@@ -4,11 +4,11 @@
 //:
 // \file
 
-#include "bsta_gaussian_full.h"
-#include <vcl_compiler.h>
 #include <iostream>
 #include <algorithm>
 #include <limits>
+#include "bsta_gaussian_full.h"
+#include <vcl_compiler.h>
 #if 0
 #include <vcl_cassert.h>
 #endif

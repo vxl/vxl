@@ -1,7 +1,7 @@
 // This is gel/vifa/tests/test_region_proc.cxx
-#include <vcl_compiler.h>
 #include <iostream>
 #include <ostream>
+#include <vcl_compiler.h>
 #include <vgl/vgl_vector_2d.h>
 #include <testlib/testlib_test.h>
 #include <sdet/sdet_detector_params.h>

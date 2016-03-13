@@ -3,10 +3,10 @@
 #pragma implementation
 #endif
 
+#include <iostream>
 #include "vil1_load.h"
 
 #include <vcl_compiler.h>
-#include <iostream>
 
 #include <vil1/vil1_open.h>
 #include <vil1/vil1_file_format.h>

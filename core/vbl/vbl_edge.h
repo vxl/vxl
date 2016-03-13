@@ -12,8 +12,8 @@
 // \verbatim
 // \endverbatim
 //-----------------------------------------------------------------------------
-#include <vcl_compiler.h>
 #include <iostream>
+#include <vcl_compiler.h>
 class vbl_edge
 {
  public:

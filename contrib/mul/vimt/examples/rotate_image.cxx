@@ -3,10 +3,9 @@
 // \brief Example of rotating an image
 // \author Tim Cootes - Manchester
 
+#include <iostream>
 #include <vxl_config.h> // for vxl_byte
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 #include <vimt/vimt_rotate.h>
 #include <vil/vil_load.h>
 #include <vil/vil_save.h>

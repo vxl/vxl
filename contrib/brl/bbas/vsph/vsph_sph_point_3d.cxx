@@ -1,10 +1,10 @@
 // This is bbas/vsph/vsph_sph_point_3d.cxx
-#include "vsph_sph_point_3d.h"
-//
 #include <complex>
-#include <vcl_compiler.h>
 #include <iostream>
 #include <cmath>
+#include "vsph_sph_point_3d.h"
+//
+#include <vcl_compiler.h>
 
 #define RADIUS_THRESH 0.0001
 

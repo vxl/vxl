@@ -20,8 +20,8 @@
 //   <none>
 // \endverbatim
 
-#include <vcl_compiler.h>
 #include <vector>
+#include <vcl_compiler.h>
 #include <tiffio.h>
 #include <geotiffio.h>
 

@@ -1,12 +1,11 @@
 // This is brl/bpro/core/ihog_pro/processes/ihog_compute_mi_cost_surface_process.cxx
+#include <iostream>
 #include <bprb/bprb_func_process.h>
 //:
 // \file
 // \brief A process to register two images by finding the best translational mapping.
 
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 #include <ihog/ihog_minimizer.h>
 #include <ihog/ihog_world_roi.h>
 #include <ihog/ihog_minfo_cost_func.h>

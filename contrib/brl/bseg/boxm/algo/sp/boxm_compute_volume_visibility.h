@@ -1,12 +1,11 @@
 #ifndef boxm_compute_volume_visibility_h
 #define boxm_compute_volume_visibility_h
+#include <iostream>
 #include <vgl/vgl_box_3d.h>
 #include <boxm/boxm_scene.h>
 #include <boxm/util/boxm_utils.h>
 #include <vpgl/vpgl_perspective_camera.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 
 template <class T_loc, class T_data>
 float boxm_compute_point_visibility(vgl_point_3d<double> point,

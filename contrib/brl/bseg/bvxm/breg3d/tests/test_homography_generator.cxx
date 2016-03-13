@@ -1,10 +1,9 @@
-#include <testlib/testlib_test.h>
-#include <testlib/testlib_root_dir.h>
-#include <vcl_compiler.h>
-#include <iostream>
 #include <iostream>
 #include <string>
 #include <vector>
+#include <testlib/testlib_test.h>
+#include <testlib/testlib_root_dir.h>
+#include <vcl_compiler.h>
 
 #include <vgl/vgl_vector_2d.h>
 #include <vgl/vgl_point_2d.h>

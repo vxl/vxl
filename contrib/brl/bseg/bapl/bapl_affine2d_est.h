@@ -14,9 +14,9 @@
 //  Modifications
 // \endverbatim
 
-#include <vcl_compiler.h>
 #include <iostream>
 #include <vector>
+#include <vcl_compiler.h>
 #include <vnl/vnl_fwd.h>
 #include <bapl/bapl_lowe_cluster.h>
 

@@ -8,12 +8,12 @@
 //
 //-----------------------------------------------------------------------------
 
-#include "vul_sequence_filename_map.h"
-#include <cstddef> // for std::size_t
-#include <vcl_compiler.h>
+#include <cstddef>
 #include <cstdlib>
 #include <iostream>
 #include <string>
+#include "vul_sequence_filename_map.h"
+#include <vcl_compiler.h>
 
 #include <vul/vul_sprintf.h>
 #include <vul/vul_reg_exp.h>

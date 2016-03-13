@@ -1,4 +1,7 @@
 // This is brl/bseg/sdet/sdet_grid_finder.cxx
+#include <fstream>
+#include <iostream>
+#include <algorithm>
 #include "sdet_grid_finder.h"
 //:
 // \file
@@ -14,10 +17,7 @@
 //      get_square_pixel_stats()
 // \endverbatim
 
-#include <fstream>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <algorithm> // for std::sort() and std::find()
 #include <vnl/vnl_matrix_fixed.h>
 #include <vnl/vnl_numeric_traits.h>
 #include <vnl/vnl_math.h>

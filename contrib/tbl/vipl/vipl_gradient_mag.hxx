@@ -1,10 +1,10 @@
 #ifndef vipl_gradient_mag_hxx_
 #define vipl_gradient_mag_hxx_
 
+#include <iostream>
+#include <cmath>
 #include "vipl_gradient_mag.h"
 #include <vcl_compiler.h>
-#include <iostream>
-#include <cmath> // for sqrt()
 
 template <class ImgIn,class ImgOut,class DataIn,class DataOut,class PixelItr>
 bool vipl_gradient_mag <ImgIn,ImgOut,DataIn,DataOut,PixelItr> :: section_applyop()

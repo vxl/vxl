@@ -1,5 +1,5 @@
-#include <vcl_compiler.h>
 #include <iostream>
+#include <vcl_compiler.h>
 #include <testlib/testlib_test.h>
 #include <vil/algo/vil_blob.h>
 #include <vil/vil_crop.h>

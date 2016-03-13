@@ -5,10 +5,9 @@
 //:
 // \file
 
+#include <iostream>
 #include "HomgPoint3D.h"
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 
 //--------------------------------------------------------------
 //

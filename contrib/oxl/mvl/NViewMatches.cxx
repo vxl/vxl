@@ -5,13 +5,13 @@
 //:
 //  \file
 
+#include <iostream>
+#include <cstdlib>
+#include <fstream>
 #include "NViewMatches.h"
 
 #include <vcl_cassert.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <cstdlib> // for std::abort()
-#include <fstream>
 #include <vul/vul_awk.h>
 #include <vul/vul_printf.h>
 

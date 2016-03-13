@@ -12,9 +12,8 @@
 // to generate a kernel pdf from the samples.
 // We then estimate the Bhat. overlap with the true pdf.
 
+#include <iostream>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 #include <mbl/mbl_stats_1d.h>
 #include <vnl/vnl_vector.h>
 #include <pdf1d/pdf1d_compare_to_pdf_bhat.h>

@@ -1,9 +1,9 @@
 // This is gel/vtol/vtol_topology_io.cxx
+#include <iostream>
+#include <ostream>
 #include "vtol_topology_io.h"
 
 #include <vcl_compiler.h>
-#include <iostream>
-#include <ostream>
 
 #include <vtol/vtol_list_functions.h>
 #include <vtol/vtol_vertex_2d.h>

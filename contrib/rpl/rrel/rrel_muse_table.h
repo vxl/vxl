@@ -8,9 +8,9 @@
 //  \brief  Look-up table for the normalization terms used in the MUSE objective function.
 //
 
-#include <vcl_compiler.h>
 #include <iostream>
 #include <map>
+#include <vcl_compiler.h>
 
 //: Look-up table for the MUSET objective function.
 //  Look-up table for the MUSET objective function, derived in James

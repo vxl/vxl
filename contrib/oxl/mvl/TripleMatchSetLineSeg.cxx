@@ -3,13 +3,13 @@
 #pragma implementation
 #endif
 
+#include <iostream>
+#include <vector>
 #include "TripleMatchSetLineSeg.h"
 
 #include <vcl_cassert.h>
 
 #include <vcl_compiler.h>
-#include <iostream>
-#include <vector>
 #include <mvl/HomgLineSeg2D.h>
 
 #include <mvl/LineSegSet.h>

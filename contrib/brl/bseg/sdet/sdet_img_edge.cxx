@@ -1,5 +1,10 @@
 // This is brl/bseg/sdet/sdet_img_edge.cxx
 
+#include <iostream>
+#include <fstream>
+#include <cmath>
+#include <string>
+#include <vector>
 #include "sdet_img_edge.h"
 
 #include <sdet/sdet_detector.h>
@@ -19,13 +24,7 @@
 #include <vnl/vnl_vector_fixed.h>
 #include <vil/vil_new.h>
 #include <vnl/vnl_math.h>
-#include <iostream>
-#include <fstream>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <cmath>
-#include <string>
-#include <vector>
 #include <vcl_cassert.h>
 #include <vgl/vgl_line_2d.h>
 #include <vsol/vsol_line_2d.h>

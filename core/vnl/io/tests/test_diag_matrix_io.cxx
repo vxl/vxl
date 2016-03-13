@@ -1,6 +1,6 @@
 // This is core/vnl/io/tests/test_diag_matrix_io.cxx
-#include <vcl_compiler.h>
 #include <iostream>
+#include <vcl_compiler.h>
 #include <vnl/vnl_vector.h>
 #include <vsl/vsl_binary_io.h>
 #include <vnl/vnl_diag_matrix.h>

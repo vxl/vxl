@@ -1,11 +1,11 @@
 #ifndef my_pyramid_functions_hxx_
 #define my_pyramid_functions_hxx_
 
+#include <iostream>
+#include <vector>
 #include <vmap/tests/my_map_functions.hxx>
 #include <vmap/vmap_types.h> // for vmap_vertex_index & vmap_face_index
 #include <vcl_compiler.h>
-#include <iostream>
-#include <vector>
 
 template <class P>
 void display_tpyramid(const P & pyramid)

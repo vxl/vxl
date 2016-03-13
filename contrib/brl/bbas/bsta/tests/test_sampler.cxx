@@ -1,11 +1,10 @@
+#include <string>
+#include <limits>
+#include <iostream>
 #include <testlib/testlib_test.h>
 #include <bsta/bsta_sampler.h>
 #include <vnl/vnl_random.h>
-#include <string>
-#include <limits>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 
 void test_sampler_helper(void)
 {

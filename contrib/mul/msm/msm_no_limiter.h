@@ -5,11 +5,11 @@
 // \author Tim Cootes
 // \brief No limits applied to parameters
 
+#include <iostream>
+#include <iosfwd>
 #include <msm/msm_param_limiter.h>
 #include <vnl/vnl_vector.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iosfwd>
 
 //: No limits applied to parameters
 class msm_no_limiter : public msm_param_limiter

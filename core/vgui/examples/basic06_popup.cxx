@@ -1,7 +1,7 @@
 // This example displays an image with a popup-menu.
 
-#include <vcl_compiler.h>
 #include <iostream>
+#include <vcl_compiler.h>
 #include <vgui/vgui.h>
 #include <vgui/vgui_window.h>
 #include <vgui/vgui_adaptor.h>

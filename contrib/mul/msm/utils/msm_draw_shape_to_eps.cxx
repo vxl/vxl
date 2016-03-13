@@ -1,3 +1,5 @@
+#include <iostream>
+#include <iosfwd>
 #include "msm_draw_shape_to_eps.h"
 //:
 // \file
@@ -5,8 +7,6 @@
 // \author Tim Cootes
 
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iosfwd>
 #include <vcl_cassert.h>
 
 //: Draws current shape instance to an eps file

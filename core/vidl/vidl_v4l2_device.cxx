@@ -1,3 +1,8 @@
+#include <cerrno>
+#include <cstring>
+#include <cstdlib>
+#include <sstream>
+#include <iostream>
 #include "vidl_v4l2_device.h"
 //:
 // \file
@@ -17,15 +22,10 @@ extern "C" {
 #include <sys/mman.h>
 #include <sys/ioctl.h>
 #include <vcl_compiler.h>
-#include <cerrno>
 #include <fcntl.h>
 #include <unistd.h>
 };
 
-#include <cstring>
-#include <cstdlib>
-#include <sstream>
-#include <iostream>
 
 // ----------------- local functions ---------------
 namespace {

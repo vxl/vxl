@@ -15,8 +15,8 @@
 //   os << "Blah: " << vsl_stream_summary(blah);
 // \endcode
 
-#include <vcl_compiler.h>
 #include <ostream>
+#include <vcl_compiler.h>
 
 
 //: Convert a vsl_print_summary function call to a streamable object.

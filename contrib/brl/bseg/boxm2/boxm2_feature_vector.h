@@ -1,9 +1,9 @@
 #ifndef boxm2_feature_vector_h_
 #define boxm2_feature_vector_h_
 
-#include <vcl_compiler.h>
 #include <iostream>
 #include <iosfwd>
+#include <vcl_compiler.h>
 
 class boxm2_feature_vector
 {

@@ -1,10 +1,10 @@
 #ifndef vbl_test_smart_ptr_h_
 #define vbl_test_smart_ptr_h_
 
+#include <iosfwd>
 #include <vbl/vbl_ref_count.h>
 #include <vbl/vbl_smart_ptr.h>
 #include <vcl_compiler.h>
-#include <iosfwd>
 
 class base_impl : public vbl_ref_count
 {

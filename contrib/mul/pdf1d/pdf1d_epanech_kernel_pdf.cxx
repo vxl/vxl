@@ -5,13 +5,13 @@
 // \brief Univariate Epanechnikov kernel PDF
 // \author Tim Cootes
 
-#include "pdf1d_epanech_kernel_pdf.h"
-
 #include <cstdlib>
 #include <string>
-#include <vcl_compiler.h>
 #include <iostream>
 #include <cmath>
+#include "pdf1d_epanech_kernel_pdf.h"
+
+#include <vcl_compiler.h>
 
 #include <pdf1d/pdf1d_epanech_kernel_pdf_sampler.h>
 #include <pdf1d/pdf1d_sampler.h>

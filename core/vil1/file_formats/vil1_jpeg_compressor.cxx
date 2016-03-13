@@ -6,11 +6,11 @@
 // \file
 // \author fsm
 
+#include <iostream>
 #include "vil1_jpeg_compressor.h"
 #include "vil1_jpeg_destination_mgr.h"
 #include <vil1/vil1_stream.h>
 #include <vcl_compiler.h>
-#include <iostream>
 
 vil1_jpeg_compressor::vil1_jpeg_compressor(vil1_stream *s)
   : stream(s)

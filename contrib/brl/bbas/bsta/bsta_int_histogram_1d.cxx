@@ -1,12 +1,11 @@
 // This is brl/bbas/bsta/bsta_int_histogram_1d.cxx
+#include <iostream>
 #include "bsta_int_histogram_1d.h"
 //:
 // \file
 
 #include "bsta_gauss.h" // for gausian parzan window filter
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 
 // constructor
 bsta_int_histogram_1d::bsta_int_histogram_1d(unsigned int bins) // const??

@@ -1,8 +1,8 @@
 // This is core/vsl/tests/test_block_rle_io.cxx
 #include <iostream>
-#include <vcl_compiler.h>
 #include <vector>
 #include <algorithm>
+#include <vcl_compiler.h>
 #include <vsl/vsl_binary_io.h>
 #include <vsl/vsl_block_binary_rle.h>
 #include <vsl/vsl_block_binary.h>

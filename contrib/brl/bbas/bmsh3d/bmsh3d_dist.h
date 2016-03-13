@@ -13,9 +13,9 @@
 //   Peter Vanroose - 22 Feb 2009 - Added bmsh3d_dist_3d(point,point)
 // \endverbatim
 
-#include <vcl_compiler.h>
 #include <iostream>
 #include <cmath>
+#include <vcl_compiler.h>
 #include <vgl/vgl_point_3d.h>
 #include <vgl/vgl_box_3d.h>
 

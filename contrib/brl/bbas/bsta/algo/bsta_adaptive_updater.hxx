@@ -3,14 +3,13 @@
 #define bsta_adaptive_updater_hxx_
 //:
 // \file
+#include <iostream>
+#include <limits>
 #include "bsta_adaptive_updater.h"
 #include "bsta_gaussian_updater.h"
 #include "bsta_gaussian_stats.h"
 
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
-#include <limits>
 
 // The update equations used here are based on the following
 // paper that extends the Stauffer-Grimson approach.

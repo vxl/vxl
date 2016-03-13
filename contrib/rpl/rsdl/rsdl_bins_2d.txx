@@ -2,14 +2,13 @@
 #ifndef rsdl_bins_2d__txx_
 #define rsdl_bins_2d__txx_
 
+#include <iostream>
+#include <vector>
+#include <cstddef>
 #include "rsdl_bins_2d.h"
 
 #include <vcl_cassert.h>
-#include <iostream>
-#include <vector>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <cstddef> // for std::size_t
 
 #include <vnl/vnl_math.h>
 #include <vnl/vnl_vector_fixed.h>

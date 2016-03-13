@@ -15,6 +15,8 @@
 // \endverbatim
 //
 
+#include <iostream>
+#include <utility>
 #include <bsta/bsta_parzen_sphere.h>
 #include <bsta/bsta_mixture.h>
 #include <bsta/bsta_attributes.h>
@@ -22,8 +24,6 @@
 #include <bsta/bsta_gaussian_full.h>
 #include <vnl/vnl_random.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <utility>
 #include <bsta/algo/bsta_sample_set.h>
 
 template <class T, unsigned n>

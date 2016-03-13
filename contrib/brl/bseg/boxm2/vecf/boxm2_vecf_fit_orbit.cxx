@@ -1,4 +1,7 @@
 #include <fstream>
+#include <iostream>
+#include <algorithm>
+#include <limits>
 #include "boxm2_vecf_labeled_point.h"
 #include "boxm2_vecf_fit_orbit.h"
 #include "boxm2_vecf_eyelid.h"
@@ -8,9 +11,6 @@
 #include <vgl/algo/vgl_fit_sphere_3d.h>
 #include <bvrml/bvrml_write.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <algorithm>
-#include <limits>
 # define USE_SPHERE 0
 # define SET_CREASE_T 0
 void boxm2_vecf_fit_orbit::fill_smid_map(){

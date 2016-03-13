@@ -1,4 +1,7 @@
 // This is brl/bbas/volm/volm_pro/processes/volm_upsample_dem_projected_img_process.cxx
+#include <iostream>
+#include <algorithm>
+#include <cmath>
 #include <bprb/bprb_func_process.h>
 //:
 // \file
@@ -10,15 +13,11 @@
 //   <none yet>
 // \endverbatim
 //
-#include <iostream>
 #include <vil/vil_image_view.h>
 #include <rsdl/rsdl_bins_2d.h>
 #include <vnl/vnl_float_4.h>
 #include <vnl/vnl_vector_fixed.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <algorithm>
-#include <cmath>
 #include <vul/vul_timer.h>
 
 

@@ -8,9 +8,9 @@
 //   24 June 2003 - Peter Vanroose - added test_projective_basis_from_lines()
 // \endverbatim
 
+#include <iostream>
 #include <testlib/testlib_test.h>
 #include <vcl_compiler.h>
-#include <iostream>
 #include <vgl/vgl_homg_point_2d.h>
 #include <vnl/vnl_math.h>
 #include <vnl/vnl_matrix_fixed.h>

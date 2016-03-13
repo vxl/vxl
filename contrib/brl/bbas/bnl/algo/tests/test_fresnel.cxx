@@ -1,9 +1,8 @@
-#include <testlib/testlib_test.h>
-#include <bnl/algo/bnl_fresnel.h>
-#include <iostream>
-#include <vcl_compiler.h>
 #include <iostream>
 #include <cmath>
+#include <testlib/testlib_test.h>
+#include <bnl/algo/bnl_fresnel.h>
+#include <vcl_compiler.h>
 
 
 //: Compare the values of Fresnel integral (cosin and sin) computed

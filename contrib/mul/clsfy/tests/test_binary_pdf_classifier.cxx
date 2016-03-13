@@ -1,5 +1,9 @@
 // This is mul/clsfy/tests/test_binary_pdf_classifier.cxx
 // Copyright: (C) 2000 British Telecommunications PLC
+#include <iostream>
+#include <iomanip>
+#include <ios>
+#include <string>
 #include <testlib/testlib_test.h>
 //:
 // \file
@@ -7,12 +11,7 @@
 // \author Ian Scott
 // Test construction, IO etc.
 
-#include <iostream>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iomanip>
-#include <ios>
-#include <string>
 #include <vpl/vpl.h> // vpl_unlink()
 #include <vsl/vsl_binary_loader.h>
 

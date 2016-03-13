@@ -9,14 +9,14 @@
 // \brief Build a binary tree classifier
 // \author Martin Roberts
 
-#include <clsfy/clsfy_builder_base.h>
-#include <clsfy/clsfy_binary_tree.h>
 #include <vector>
 #include <set>
 #include <string>
-#include <vcl_compiler.h>
 #include <iostream>
 #include <iosfwd>
+#include <clsfy/clsfy_builder_base.h>
+#include <clsfy/clsfy_binary_tree.h>
+#include <vcl_compiler.h>
 #include <mbl/mbl_data_wrapper.h>
 #include <vnl/vnl_vector.h>
 #include <vnl/vnl_random.h>

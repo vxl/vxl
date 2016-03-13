@@ -9,10 +9,10 @@
 // \author Ian Scott
 // \brief A subset of an existing mbl_data_wrapper.
 
-#include <vcl_compiler.h>
 #include <iostream>
 #include <string>
 #include <vector>
+#include <vcl_compiler.h>
 #include <mbl/mbl_data_wrapper.h>
 
 //: A subset of an existing mbl_data_wrapper.

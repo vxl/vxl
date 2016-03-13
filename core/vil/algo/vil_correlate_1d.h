@@ -6,11 +6,11 @@
 // \brief 1D Convolution with cunning boundary options
 // \author Tim Cootes (based on work by fsm)
 
-#include <vcl_compiler.h>
 #include <algorithm>
 #include <cstring>
-#include <vcl_cassert.h>
 #include <iostream>
+#include <vcl_compiler.h>
+#include <vcl_cassert.h>
 #include <vil/vil_image_view.h>
 #include <vil/vil_image_resource.h>
 #include <vil/vil_property.h>

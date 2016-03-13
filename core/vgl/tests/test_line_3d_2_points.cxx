@@ -1,8 +1,8 @@
 // Some tests for vgl_sphere
 // Ian Scott, Aug 2005.
 #include <iostream>
-// not used? #include <vcl_compiler.h>
 #include <limits>
+// not used? #include <vcl_compiler.h>
 #include <testlib/testlib_test.h>
 #include <vgl/vgl_plane_3d.h>
 #include <vgl/vgl_line_3d_2_points.h>

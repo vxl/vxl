@@ -10,12 +10,12 @@
 // \author Brad King
 // \date March 2007
 
+#include <iostream>
+#include <vector>
 #include "rgtl_object_array_points.hxx"
 
 #include <vnl/vnl_vector_fixed.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <vector>
 
 class rgtl_serialize_access;
 

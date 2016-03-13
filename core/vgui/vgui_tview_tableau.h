@@ -20,9 +20,9 @@
 // \endverbatim
 
 
+#include <vector>
 #include "vgui_tview_tableau_sptr.h"
 #include <vcl_compiler.h>
-#include <vector>
 #include <vgui/vgui_wrapper_tableau.h>
 
 //: Tableau displaying a tableau tree.

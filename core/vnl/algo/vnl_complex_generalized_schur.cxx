@@ -6,10 +6,10 @@
 // \file
 // \author fsm
 
+#include <iostream>
 #include "vnl_complex_generalized_schur.h"
 
 #include <vcl_compiler.h>
-#include <iostream>
 #include <vcl_cassert.h>
 
 #include <vnl/vnl_vector.h>

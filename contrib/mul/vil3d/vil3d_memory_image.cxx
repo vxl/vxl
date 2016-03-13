@@ -6,11 +6,11 @@
 // \file
 // \author Ian Scott
 
+#include <iostream>
+#include <cstdlib>
 #include "vil3d_memory_image.h"
 #include <vcl_cassert.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <cstdlib>
 #include <vxl_config.h> // for vxl_uint_32 etc.
 #include <vil3d/vil3d_image_view.h>
 #include <vil3d/vil3d_copy.h>

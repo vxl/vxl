@@ -1,10 +1,9 @@
 //:
 // \file
-#include "bvpl_opinion_functor.h"
-#include <vcl_compiler.h>
 #include <iostream>
 #include <cmath>
-#include <iostream>
+#include "bvpl_opinion_functor.h"
+#include <vcl_compiler.h>
 
 
 // Default constructor

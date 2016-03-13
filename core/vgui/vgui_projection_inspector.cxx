@@ -1,4 +1,6 @@
 // This is core/vgui/vgui_projection_inspector.cxx
+#include <cstdlib>
+#include <iostream>
 #include "vgui_projection_inspector.h"
 //:
 // \file
@@ -7,8 +9,6 @@
 
 #include <vcl_cassert.h>
 #include <vcl_compiler.h>
-#include <cstdlib> // std::abort()
-#include <iostream>
 
 #include <vnl/vnl_double_2.h>
 #include <vnl/vnl_double_3.h>

@@ -1,4 +1,5 @@
 // This is oxl/xcv/xcv_file.cxx
+#include <iostream>
 #include "xcv_file.h"
 //:
 //  \file
@@ -13,8 +14,6 @@
 //
 
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 
 #include <vil1/vil1_image.h>
 #include <vil1/vil1_save.h>

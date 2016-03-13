@@ -3,14 +3,14 @@
 // \author Isabel Restrepo
 // \date 18-Feb-2011
 
+#include <iostream>
+#include <sstream>
 #include "bvpl_pca_error_scenes.h"
 
 #include <boxm/boxm_scene.h>
 
 #include <vul/vul_file.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <sstream>
 
 bvpl_pca_error_scenes::bvpl_pca_error_scenes(boxm_scene_base_sptr data_scene_base, std::string pca_path, unsigned dim)
 {

@@ -12,11 +12,11 @@
 //
 //-----------------------------------------------------------------------------
 
-#include "RawPMatrixStore.h"
-#include <vcl_compiler.h>
 #include <iostream>
 #include <fstream>
 #include <string>
+#include "RawPMatrixStore.h"
+#include <vcl_compiler.h>
 #include <mvl/PMatrix.h>
 
 #include <mvl/FileNameGenerator.h>

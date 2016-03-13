@@ -1,6 +1,8 @@
 #ifndef boxm2_ocl_cone_update_function_h_
 #define boxm2_ocl_cone_update_function_h_
 
+#include <iostream>
+#include <vector>
 #include <bocl/bocl_device.h>
 #include <bocl/bocl_kernel.h>
 #include <boxm2/boxm2_scene.h>
@@ -8,8 +10,6 @@
 #include <boxm2/ocl/boxm2_opencl_cache.h>
 #include <vil/vil_image_view.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <vector>
 
 float boxm2_ocl_cone_update( boxm2_scene_sptr & scene,
                              bocl_device_sptr & device,

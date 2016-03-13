@@ -5,10 +5,10 @@
 // \author Amitha Perera
 // \date   Feb 2003
 
-#include "rgrl_set_of.h"
-#include <vcl_compiler.h>
 #include <iostream>
 #include <algorithm>
+#include "rgrl_set_of.h"
+#include <vcl_compiler.h>
 
 template<typename T>
 rgrl_set_of<T>::

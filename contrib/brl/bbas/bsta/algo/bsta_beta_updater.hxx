@@ -2,10 +2,10 @@
 #define bsta_beta_updater_hxx_
 //:
 // \file
-#include "bsta_beta_updater.h"
-#include <vcl_compiler.h>
 #include <iostream>
 #include <limits>
+#include "bsta_beta_updater.h"
+#include <vcl_compiler.h>
 
 
 //: The update function

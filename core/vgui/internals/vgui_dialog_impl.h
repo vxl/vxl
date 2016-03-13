@@ -23,9 +23,9 @@
 //   Lianqing Yu 02-JAN-2010  Added push button.
 // \endverbatim
 
-#include <vcl_compiler.h>
 #include <string>
 #include <vector>
+#include <vcl_compiler.h>
 #include <vgui/vgui_tableau.h>
 #include <vgui/vgui_command_sptr.h>
 

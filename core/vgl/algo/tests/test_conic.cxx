@@ -5,15 +5,15 @@
 //                  when two intersection points have equal y value.
 //                  (This bug detected by Patrick Pol, 29 Nov. 2010.)
 //
+#include <cmath>
+#include <iostream>
+#include <sstream>
 #include <testlib/testlib_test.h>
 #include <vgl/vgl_conic.h>
 #include <vgl/vgl_box_2d.h>
 #include <vgl/vgl_homg_point_2d.h>
 #include <vgl/algo/vgl_homg_operators_2d.h>
-#include <cmath>
-#include <iostream>
 #include <vcl_compiler.h>
-#include <sstream>
 #include <vnl/vnl_double_3x3.h>
 #include <vnl/vnl_vector_fixed.h>
 #include <vnl/vnl_math.h>

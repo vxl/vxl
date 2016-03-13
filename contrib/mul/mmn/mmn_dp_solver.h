@@ -5,16 +5,16 @@
 // \brief Solve restricted class of Markov problems (trees and tri-trees)
 // \author Tim Cootes
 
+#include <vector>
+#include <iostream>
+#include <iosfwd>
 #include <mmn/mmn_arc.h>
 #include <mmn/mmn_dependancy.h>
 #include <mmn/mmn_solver.h>
 #include <vnl/vnl_vector.h>
 #include <vnl/vnl_matrix.h>
 #include <vil/vil_image_view.h>
-#include <vector>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iosfwd>
 
 //: Solve restricted class of Markov problems (trees and tri-trees)
 //  Find choice of values at each node which minimises Markov problem.

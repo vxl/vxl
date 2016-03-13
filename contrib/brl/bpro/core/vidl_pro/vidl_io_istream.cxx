@@ -1,11 +1,10 @@
+#include <iostream>
 #include "vidl_io_istream.h"
 //:
 // \file
 #include <vsl/vsl_binary_io.h>
 #include <vidl/vidl_istream.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 
 
 //: Binary write vidl istream to stream

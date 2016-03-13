@@ -1,10 +1,9 @@
 // This is mul/mbl/tests/test_cluster_tree.cxx
+#include <iostream>
 #include <testlib/testlib_test.h>
 //:
 // \file
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 #include <mbl/mbl_cluster_tree.h>
 
 #include <mbl/mbl_clusters.hxx>

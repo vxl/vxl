@@ -1,8 +1,7 @@
-#include <testlib/testlib_test.h>
-#include <vcl_compiler.h>
-#include <iostream>
 #include <iostream>
 #include <vector>
+#include <testlib/testlib_test.h>
+#include <vcl_compiler.h>
 
 #include <brec/brec_param_estimation.h>
 

@@ -1,5 +1,5 @@
-#include <vcl_compiler.h>
 #include <sstream>
+#include <vcl_compiler.h>
 
 #include <vgui/vgui.h>
 #include <vgui/vgui_event.h>

@@ -4,10 +4,10 @@
 //:
 // \file
 
-#include "mbl_stochastic_data_collector.h"
-#include <vcl_compiler.h>
 #include <iostream>
 #include <string>
+#include "mbl_stochastic_data_collector.h"
+#include <vcl_compiler.h>
 #include <vsl/vsl_vector_io.h>
 #include <vnl/vnl_math.h>
 

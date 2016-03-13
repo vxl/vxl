@@ -8,9 +8,9 @@
 //
 //-----------------------------------------------------------------------------
 
+#include <cmath>
 #include "vnl_c_na_vector.h"
 #include <vcl_compiler.h>
-#include <cmath>     // std::sqrt()
 #include <vnl/vnl_math.h>
 #include <vnl/vnl_na.h>
 #include <vnl/vnl_complex_traits.h>

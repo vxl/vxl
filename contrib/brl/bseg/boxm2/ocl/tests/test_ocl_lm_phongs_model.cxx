@@ -1,6 +1,7 @@
+#include <iostream>
+#include <cmath>
 #include <vcl_where_root_dir.h>
 #include <testlib/testlib_test.h>
-#include <iostream>
 #include <vnl/algo/vnl_cholesky.h>
 #include <bocl/bocl_manager.h>
 #include <bocl/bocl_kernel.h>
@@ -10,8 +11,6 @@
 
 #include <brad/brad_phongs_model_est.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <cmath>
 #include <vnl/vnl_double_3.h>
 #include <vnl/vnl_random.h>
 #include <vnl/vnl_math.h>

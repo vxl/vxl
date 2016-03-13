@@ -1,3 +1,6 @@
+#include <cmath>
+#include <iostream>
+#include <algorithm>
 #include "vmal_track_lines.h"
 
 #include <vnl/vnl_math.h> // for pi
@@ -5,10 +8,7 @@
 
 #include <vtol/vtol_edge_2d.h>
 
-#include <cmath>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <algorithm> // for std::min
 
 #include <vmal/vmal_lines_correlation.h>
 #include <vmal/vmal_refine_lines.h>

@@ -8,9 +8,9 @@
 // \date   24 Mar 99
 // \brief  See vgui_soview3D.h for a description of this file.
 
+#include <iostream>
 #include "vgui_soview3D.h"
 #include <vcl_compiler.h>
-#include <iostream>
 #include <vgui/vgui_gl.h>
 
 //--------------------------------------------------------------------------//

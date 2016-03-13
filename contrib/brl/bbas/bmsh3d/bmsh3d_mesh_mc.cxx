@@ -1,5 +1,8 @@
 // This is brl/bbas/bmsh3d/bmsh3d_mesh_mc.cxx
 //---------------------------------------------------------------------
+#include <iostream>
+#include <sstream>
+#include <list>
 #include "bmsh3d_mesh_mc.h"
 //:
 // \file
@@ -17,10 +20,6 @@
 
 #include <vcl_cassert.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
-#include <sstream>
-#include <list>
 
 #include <vnl/vnl_math.h>
 #include <vgl/vgl_point_3d.h>

@@ -1,8 +1,8 @@
 // Some tests for vgl_line_segment_3d
 // J.L. Mundy July 2009
 
-#include <vcl_compiler.h>
 #include <iostream>
+#include <vcl_compiler.h>
 #include <testlib/testlib_test.h>
 #include <vgl/vgl_infinite_line_3d.h>
 #include <vgl/vgl_distance.h>

@@ -13,12 +13,12 @@
 //   24-SEP-1999 P.Pritchett - Initial version.
 // \endverbatim
 
+#include <vector>
+#include <cstdlib>
 #include "vgui_easy2D_tableau.h"
 
-#include <vector>
 #include <vcl_cassert.h>
 #include <vcl_compiler.h>
-#include <cstdlib> // for abort
 
 #include <vxl_config.h> // for vxl_byte
 

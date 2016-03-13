@@ -7,15 +7,14 @@
 // \brief Implement a random_forest classifier builder
 // \author Martin Roberts
 
-#include "clsfy_random_forest_builder.h"
-#include <vxl_config.h>
 #include <iostream>
 #include <string>
-#include <vcl_compiler.h>
-#include <iostream>
 #include <algorithm>
 #include <numeric>
 #include <iterator>
+#include "clsfy_random_forest_builder.h"
+#include <vxl_config.h>
+#include <vcl_compiler.h>
 #include <vcl_cassert.h>
 #include <vsl/vsl_binary_loader.h>
 #include <mbl/mbl_stl.h>

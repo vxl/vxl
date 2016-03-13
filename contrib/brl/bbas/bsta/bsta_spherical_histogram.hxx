@@ -2,12 +2,11 @@
 #define bsta_spherical_histogram_hxx_
 //:
 // \file
+#include <iostream>
+#include <cmath>
 #include "bsta_spherical_histogram.h"
 
 #include <vcl_compiler.h>
-#include <iostream>
-#include <cmath> // for log()
-#include <iostream>
 #include <vcl_cassert.h>
 #include <vnl/vnl_math.h>
 #include <vnl/vnl_vector.h>

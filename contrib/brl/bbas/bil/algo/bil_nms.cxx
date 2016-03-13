@@ -1,4 +1,7 @@
 // This is brl/bbas/bil/algo/bil_nms.cxx
+#include <cstdio>
+#include <iostream>
+#include <cmath>
 #include "bil_nms.h"
 //:
 // \file
@@ -9,10 +12,7 @@
 #include <vgl/vgl_homg_point_2d.h>
 #include <vgl/vgl_point_2d.h>
 #include <vgl/algo/vgl_homg_operators_2d.h>
-#include <cstdio>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <cmath>   // for std::abs(double)
 #include <vcl_cassert.h>
 
 static const vil_image_view<double> img_d; // dummy local variables, used to initialise

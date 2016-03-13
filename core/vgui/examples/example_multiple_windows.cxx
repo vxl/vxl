@@ -8,10 +8,10 @@
 // 2 - selecting the "Close View" menu option
 // 3 - pressing Meta-W (caught by vgui_quit_tableau and vgui_shell_tableau)
 
-#include <vcl_compiler.h>
 #include <cstdlib>
 #include <iostream>
 #include <sstream>
+#include <vcl_compiler.h>
 #include <vil1/vil1_load.h>
 #include <vgui/vgui.h>
 #include <vgui/vgui_text_tableau.h>

@@ -1,6 +1,6 @@
-#include <vcl_compiler.h>
 #include <cstdlib>
 #include <iostream>
+#include <vcl_compiler.h>
 
 #include <vil1/vil1_load.h>
 #include <vil1/vil1_save.h>

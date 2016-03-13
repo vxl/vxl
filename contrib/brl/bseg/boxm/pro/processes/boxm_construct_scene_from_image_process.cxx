@@ -1,4 +1,6 @@
 // This is brl/bseg/boxm/pro/processes/boxm_construct_scene_from_image_process.cxx
+#include <iostream>
+#include <fstream>
 #include <bprb/bprb_func_process.h>
 //:
 // \file
@@ -11,8 +13,6 @@
 // \endverbatim
 
 #include <vcl_compiler.h>
-#include <iostream>
-#include <fstream>
 
 #include <boxm/boxm_scene_base.h>
 #include <boxm/boxm_scene.h>

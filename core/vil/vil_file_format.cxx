@@ -4,6 +4,7 @@
 #endif
 //:
 // \file
+#include <cstdlib>
 #include "vil_file_format.h"
 
 vil_file_format::~vil_file_format()
@@ -11,7 +12,6 @@ vil_file_format::~vil_file_format()
 }
 
 #include <vcl_compiler.h>
-#include <cstdlib>
 #include <vil/vil_config.h> // for list of configured file formats
 #include <vil/vil_exception.h>
 

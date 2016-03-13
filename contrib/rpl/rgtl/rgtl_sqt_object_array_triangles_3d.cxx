@@ -1,3 +1,6 @@
+#include <iostream>
+#include <limits>
+#include <vector>
 #include "rgtl_sqt_object_array_triangles_3d.hxx"
 //:
 // \file
@@ -16,9 +19,6 @@
 #include <vnl/vnl_double_3.h>
 
 #include <vcl_compiler.h>
-#include <iostream>
-#include <limits>
-#include <vector>
 #include <vcl_cassert.h>
 
 //----------------------------------------------------------------------------

@@ -3,13 +3,13 @@
 // \author Tim Cootes
 // \brief Calculate and apply 2D translations
 
+#include <iostream>
+#include <cstddef>
 #include "msm_translation_aligner.h"
 #include <vnl/vnl_vector.h>
 #include <vsl/vsl_binary_loader.h>
 #include <vcl_cassert.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <cstddef> // for std::size_t
 
 //=======================================================================
 

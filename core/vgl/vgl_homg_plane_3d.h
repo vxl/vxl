@@ -20,8 +20,8 @@
 //   Peter Vanroose 7 March 2009: Added normalize(), similar to the one in vgl_homg_line_2d<T>
 // \endverbatim
 
-#include <vcl_compiler.h>
 #include <iosfwd>
+#include <vcl_compiler.h>
 #include <vgl/vgl_fwd.h> // forward declare vgl_plane_3d and vgl_homg_point_3d
 #include <vgl/vgl_vector_3d.h>
 #include <vcl_cassert.h>

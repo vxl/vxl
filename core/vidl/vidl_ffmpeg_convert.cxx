@@ -10,13 +10,13 @@
 //
 //-----------------------------------------------------------------------------
 
+#include <cstring>
+#include <iostream>
 #include "vidl_ffmpeg_convert.h"
 #include "vidl_ffmpeg_pixel_format.h"
 #include "vidl_frame.h"
 #include <vcl_cassert.h>
-#include <cstring>
 #include <vcl_compiler.h>
-#include <iostream>
 
 #include <vidl/vidl_config.h>
 extern "C" {

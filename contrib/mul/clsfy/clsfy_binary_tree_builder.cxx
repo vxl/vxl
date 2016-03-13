@@ -7,18 +7,17 @@
 // \brief Implement a binary_tree classifier builder
 // \author Martin Roberts
 
-#include "clsfy_binary_tree_builder.h"
-#include <clsfy/clsfy_binary_threshold_1d_gini_builder.h>
-
 #include <iostream>
 #include <string>
-#include <vcl_compiler.h>
-#include <iostream>
 #include <algorithm>
 #include <numeric>
 #include <iterator>
-#include <vcl_cassert.h>
 #include <cstddef>
+#include "clsfy_binary_tree_builder.h"
+#include <clsfy/clsfy_binary_threshold_1d_gini_builder.h>
+
+#include <vcl_compiler.h>
+#include <vcl_cassert.h>
 #include <vsl/vsl_binary_loader.h>
 #include <mbl/mbl_stl.h>
 #include <clsfy/clsfy_k_nearest_neighbour.h>

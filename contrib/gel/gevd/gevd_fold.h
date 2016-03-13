@@ -60,9 +60,9 @@
 // \endverbatim
 //-----------------------------------------------------------------------------
 
-#include <vcl_compiler.h>
 #include <iostream>
 #include <iosfwd>
+#include <vcl_compiler.h>
 class gevd_bufferxy;
 
 class gevd_fold

@@ -16,9 +16,9 @@
 // \endverbatim
 
 #include <string>
-#include <vcl_compiler.h>
 #include <iosfwd>
 #include <vector>
+#include <vcl_compiler.h>
 
 
 //: Maps sequence frame indices to filenames

@@ -1,8 +1,8 @@
 // This is core/vnl/vnl_rotation_matrix.cxx
+#include <cmath>
 #include "vnl_rotation_matrix.h"
 
 #include <vcl_compiler.h>
-#include <cmath>
 
 bool vnl_rotation_matrix(double const x[3], double **R)
 {

@@ -9,13 +9,12 @@
 // \author Ian Scott
 // \date 2001-10-07
 
-#include "clsfy_knn_builder.h"
-
-#include <vcl_compiler.h>
-#include <iostream>
 #include <iostream>
 #include <sstream>
 #include <string>
+#include "clsfy_knn_builder.h"
+
+#include <vcl_compiler.h>
 #include <vcl_cassert.h>
 #include <vsl/vsl_binary_loader.h>
 #include <vul/vul_string.h>

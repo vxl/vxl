@@ -10,11 +10,11 @@
 //    Brown University
 //
 //-----------------------------------------------------------------------------
+#include <iostream>
+#include <iosfwd>
 #include <vbl/vbl_ref_count.h>
 #include <gevd/gevd_param_mixin.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iosfwd>
 
 class sdet_fit_lines_params : public gevd_param_mixin, public vbl_ref_count
 {

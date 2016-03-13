@@ -1,4 +1,6 @@
 // This is brl/bseg/boxm/algo/pro/processes/boxm_render_expected_edge_vrml_process.cxx
+#include <iostream>
+#include <fstream>
 #include <bprb/bprb_func_process.h>
 //:
 // \file
@@ -21,8 +23,6 @@
 #include <vgl/vgl_point_3d.h>
 #include <vgl/vgl_intersection.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <fstream>
 
 namespace boxm_render_expected_edge_vrml_process_globals
 {

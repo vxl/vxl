@@ -6,8 +6,8 @@
 //  \brief Functions to apply the FFT to an image.
 // \author Fred Wheeler
 
-#include <vcl_compiler.h>
 #include <complex>
+#include <vcl_compiler.h>
 #include <vil/vil_image_view.h>
 
 //: Perform in place forward FFT.

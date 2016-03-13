@@ -6,10 +6,10 @@
 // \author P D Allen
 // \date 21-Mar-2001
 
+#include <iosfwd>
 #include <vsl/vsl_fwd.h>
 #include <vbl/vbl_bounding_box.h>
 #include <vcl_compiler.h>
-#include <iosfwd>
 
 //: Binary save vbl_bounding_box to stream.
 template <class T, class DIM_>

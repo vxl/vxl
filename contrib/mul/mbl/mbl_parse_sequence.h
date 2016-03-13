@@ -7,11 +7,11 @@
 // \date  7-Aug-2007
 // \brief Load a sequence of PODs/objects from a config file.
 
-#include <vcl_compiler.h>
 #include <iostream>
 #include <algorithm>
 #include <istream>
 #include <iterator>
+#include <vcl_compiler.h>
 #include <mbl/mbl_exception.h>
 
 //: Read a sequence of PODs from a stream.

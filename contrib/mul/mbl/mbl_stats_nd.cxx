@@ -1,4 +1,6 @@
 // This is mul/mbl/mbl_stats_nd.cxx
+#include <iostream>
+#include <cmath>
 #include "mbl_stats_nd.h"
 //:
 // \file
@@ -6,10 +8,7 @@
 // \author Tim Cootes
 
 #include <vcl_compiler.h>
-#include <iostream>
-#include <cmath>
 #include <vcl_cassert.h>
-#include <iostream>
 #include <vnl/io/vnl_io_vector.h>
 
 mbl_stats_nd::mbl_stats_nd()

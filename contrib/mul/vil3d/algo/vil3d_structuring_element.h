@@ -7,9 +7,9 @@
 
 #include <vector>
 #include <iosfwd>
-#include <vcl_compiler.h>
 #include <iostream>
 #include <cstddef>
+#include <vcl_compiler.h>
 
 //: Structuring element for morphology represented as a list of non-zero pixels
 // Elements in box bounded by [min_i(),max_i()][min_j(),max_j()]

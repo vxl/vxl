@@ -16,8 +16,8 @@
 // 2009-05-21 Peter Vanroose  istream operator>> re-implemented
 // \endverbatim
 
-#include <vcl_compiler.h>
 #include <iosfwd>
+#include <vcl_compiler.h>
 
 //----------------------------------------------------------------------
 

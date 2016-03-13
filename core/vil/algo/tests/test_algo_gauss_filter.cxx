@@ -2,9 +2,9 @@
 #include <iostream>
 #include <algorithm>
 #include <vector>
+#include <cstdlib>
+#include <cmath>
 #include <vcl_compiler.h>
-#include <cstdlib> // for abs(int)
-#include <cmath> // for fabs()
 
 #include <vil/vil_image_view.h>
 #include <vil/vil_print.h>

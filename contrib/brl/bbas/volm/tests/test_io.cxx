@@ -1,7 +1,6 @@
+#include <iostream>
 #include <testlib/testlib_test.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 #include <vpl/vpl.h>
 #include <depth_map/depth_map_scene.h>
 #include <depth_map/depth_map_region_sptr.h>

@@ -6,11 +6,11 @@
 // \author Chuck Stewart
 // \date 15 Nov 2002
 
+#include <iostream>
+#include <iosfwd>
 #include <vnl/vnl_vector.h>
 #include <vnl/vnl_matrix.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iosfwd>
 
 #include <rgrl/rgrl_object.h>
 #include <rgrl/rgrl_set_of.h>

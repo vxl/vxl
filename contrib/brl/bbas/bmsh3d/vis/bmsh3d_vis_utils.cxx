@@ -1,4 +1,6 @@
 // This is brl/bbas/bmsh3d/vis/bmsh3d_vis_utils.cxx
+#include <iostream>
+#include <vector>
 #include "bmsh3d_vis_utils.h"
 //:
 // \file
@@ -6,8 +8,6 @@
 // \date May 03, 2005.
 
 #include <vcl_compiler.h>
-#include <iostream>
-#include <vector>
 #include <vcl_cassert.h>
 #include <vnl/vnl_random.h>
 #include <vnl/vnl_math.h>

@@ -6,13 +6,13 @@
 // \file
 // \author fsm
 
+#include <iostream>
+#include <vector>
+#include <string>
 #include "vil1_image_as.h"
 
 #include <vcl_cassert.h>
-#include <iostream>
-#include <vector>
 #include <vcl_compiler.h>
-#include <string>
 
 #include <vil1/vil1_pixel.h>
 #include <vil1/vil1_memory_image_of_format.hxx>

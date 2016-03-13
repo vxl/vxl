@@ -11,17 +11,17 @@
 // \author Vishal Jain
 // \date 31 Aug 2012
 
+#include <vector>
+#include <string>
+#include <fstream>
+#include <iostream>
+#include <algorithm>
 #include <vil/vil_pixel_format.h>
 #include <vil/vil_image_view_base.h>
 #include <vbl/vbl_ref_count.h>
 #include <vbl/vbl_smart_ptr.h>
 #include <vsl/vsl_binary_io.h>
-#include <vector>
-#include <string>
-#include <fstream>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <algorithm>
 
 //: A video input stream from a list of images on disk
 // This istream will try to open and validate (but not read image data from)

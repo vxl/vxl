@@ -1,10 +1,10 @@
+#include <iostream>
+#include <cmath>
+#include <cstdio>
 #include "bcvr_clsd_cvmatch.h"
 //:
 // \file
 #include <vcl_compiler.h>
-#include <iostream>
-#include <cmath>
-#include <cstdio>
 #include <vgl/algo/vgl_fit_lines_2d.h>
 #include <vsol/vsol_polygon_2d.h>
 #include "bcvr_cv_cor.h"

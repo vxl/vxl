@@ -7,13 +7,13 @@
 // \author Tim Cootes
 
 #include <string>
-#include <vcl_compiler.h>
 #include <iostream>
 #include <iosfwd>
+#include <vector>
+#include <vcl_compiler.h>
 
 #include <vsl/vsl_fwd.h>
 #include <vnl/vnl_matrix.h>
-#include <vector>
 #include <vbl/vbl_array_2d.h>
 #include <vnl/vnl_vector.h>
 

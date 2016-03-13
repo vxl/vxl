@@ -1,12 +1,12 @@
 #ifndef brip_max_scale_response_hxx_
 #define brip_max_scale_response_hxx_
 
-#include "brip_max_scale_response.h"
-#include <vcl_cassert.h>
-#include <vcl_compiler.h>
 #include <iostream>
 #include <cmath>
 #include <iomanip>
+#include "brip_max_scale_response.h"
+#include <vcl_cassert.h>
+#include <vcl_compiler.h>
 #include <vil/vil_convert.h>
 #include <vil/vil_resample_bilin.h>
 #include <brip/brip_vil_float_ops.h>

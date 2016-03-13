@@ -20,6 +20,8 @@
 // }
 // \endcode
 
+#include <iostream>
+#include <cmath>
 #include <mbl/mbl_parse_colon_pairs_list.h>
 #include <mbl/mbl_read_props.h>
 #include <mbl/mbl_exception.h>
@@ -43,8 +45,6 @@
 #include <msm/msm_points.h>
 #include <mbl/mbl_stats_1d.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <cmath>
 #include <vcl_cassert.h>
 
 //: Structure to hold parameters

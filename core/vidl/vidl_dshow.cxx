@@ -1,5 +1,11 @@
 // This is core/vidl/vidl_dshow.cxx
 //=========================================================================
+#include <iostream>
+#include <sstream>
+#include <map>
+#include <utility>
+#include <iterator>
+#include <algorithm>
 #include "vidl_dshow.h"
 //:
 // \file
@@ -13,13 +19,7 @@
 #include <vidl/vidl_pixel_format.h>
 
 #include <vcl_cassert.h>
-#include <iostream>
-#include <sstream>
 #include <vcl_compiler.h>
-#include <map>
-#include <utility>
-#include <iterator>
-#include <algorithm>
 
 //-------------------------------------------------------------------------
 // Helper class, which should only concern this implementation.

@@ -1,12 +1,12 @@
 // This is gel/vmal/vmal_rectifier.cxx
+#include <iostream>
+#include <cmath>
 #include "vmal_rectifier.h"
 //:
 // \file
 
 #include <vmal/vmal_convert_vtol.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <cmath> // atan2()
 #include <vbl/vbl_bounding_box.h>
 #include <vnl/algo/vnl_svd.h>
 #include <vnl/vnl_inverse.h>

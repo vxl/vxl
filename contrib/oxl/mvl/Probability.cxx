@@ -1,13 +1,12 @@
 // This is oxl/mvl/Probability.cxx
+#include <iostream>
+#include <cstdlib>
+#include <vector>
 #include "Probability.h"
 //:
 // \file
 
 #include <vcl_compiler.h>
-#include <iostream>
-#include <cstdlib>
-#include <vector>
-#include <iostream>
 #include <vcl_cassert.h>
 
 #include <vnl/vnl_matrix.h>

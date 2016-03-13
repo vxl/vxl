@@ -1,5 +1,6 @@
 // This is core/vidl/vidl_dshow_live_istream.cxx
 //=========================================================================
+#include <cstring>
 #include "vidl_dshow_live_istream.h"
 //:
 // \file
@@ -13,7 +14,6 @@
 #include <vidl/vidl_dshow.h>
 #include <vcl_cassert.h>
 #include <vcl_compiler.h>
-#include <cstring> // for memcpy
 
 //-------------------------------------------------------------------------
 //-------------------------------------------------------------------------

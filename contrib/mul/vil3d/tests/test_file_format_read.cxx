@@ -1,9 +1,8 @@
 // This is mul/vil3d/tests/test_file_format_read.cxx
 #include <iostream>
-#include <vcl_compiler.h>
-#include <iostream>
 #include <fstream>
 #include <vector>
+#include <vcl_compiler.h>
 #include <vcl_cassert.h>
 
 #include <vxl_config.h> // for vxl_uint_16 etc.

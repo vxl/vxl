@@ -11,9 +11,9 @@
 //   <None yet>
 // \endverbatim
 
-#include <vcl_compiler.h>
 #include <iostream>
 #include <iterator>
+#include <vcl_compiler.h>
 #include <vbl/vbl_ref_count.h>
 
 #include <vgl/vgl_vector_3d.h>

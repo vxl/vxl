@@ -11,9 +11,9 @@
 //   Ozge C. Ozcanli 11/15/08  Moved up to vxl
 // \endverbatim
 
-#include <vcl_compiler.h>
 #include <iostream>
 #include <map>
+#include <vcl_compiler.h>
 
 #include <bgrl2/bgrl2_hg_graph.h>
 #include <bgrl2/bgrl2_hg_hyperedge.h>

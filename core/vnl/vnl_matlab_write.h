@@ -21,8 +21,8 @@
 //   09 Mar 2000 fsm. changed order of arguments for consistency with \sa vnl_matlab_read.
 // \endverbatim
 
-#include <vcl_compiler.h>
 #include <iosfwd>
+#include <vcl_compiler.h>
 
 template <class T> // scalar
 bool vnl_matlab_write(std::ostream &, T const &, char const *variable_name);

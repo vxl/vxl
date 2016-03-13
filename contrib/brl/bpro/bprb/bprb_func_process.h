@@ -18,10 +18,9 @@
 //   Gamze D. Tunali    November 20, 2008  Initial version.
 // \endverbatim
 //------------------------------------------------------------------------------
+#include <iostream>
 #include <bprb/bprb_process_ext.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 
 class bprb_func_process: public bprb_process_ext
 {

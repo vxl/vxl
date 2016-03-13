@@ -6,6 +6,7 @@
 // \file
 // \brief See vgui_cache_wizard.h for a description of this file.
 
+#include <iostream>
 #include "vgui_cache_wizard.h"
 
 #include <vil1/vil1_crop.h>
@@ -13,7 +14,6 @@
 
 #include <vcl_cassert.h>
 #include <vcl_compiler.h>
-#include <iostream>
 
 #include <vgui/vgui_pixel.h>
 #include <vgui/vgui_macro.h>

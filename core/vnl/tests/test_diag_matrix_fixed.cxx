@@ -1,16 +1,16 @@
 // This is core/vnl/tests/test_diag_matrix_fixed.cxx
+#include <iostream>
+#include <exception>
 #include <testlib/testlib_test.h>
 //:
 // \file
 // \author Peter Vanroose, KULeuven
 // \date 20 Sept. 2002
 
-#include <iostream>
 #include <vnl/vnl_diag_matrix_fixed.h>
 #include <vnl/vnl_matrix_fixed.h>
 #include <vnl/vnl_vector_fixed.h>
 #include <vcl_compiler.h>
-#include <exception>
 
 void test_diag_matrix_fixed()
 {

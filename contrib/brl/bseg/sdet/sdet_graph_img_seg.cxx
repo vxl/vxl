@@ -1,11 +1,10 @@
+#include <cstdlib>
+#include <iostream>
+#include <algorithm>
 #include "sdet_graph_img_seg.h"
 #include "sdet_graph_img_seg_sptr.h"
 //
-#include <cstdlib> // for std::rand()
-#include <iostream>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <algorithm>
 #include <vcl_cassert.h>
 #include <vil/vil_load.h>
 #include <vil/vil_math.h>

@@ -1,10 +1,9 @@
 //:
 // \file
-#include "gevd_detector_params.h"
 #include <sstream>
+#include <iostream>
+#include "gevd_detector_params.h"
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 
 //------------------------------------------------------------------------
 // Constructors

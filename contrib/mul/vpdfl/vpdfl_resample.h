@@ -5,10 +5,10 @@
 // \author Tim Cootes
 // \brief Select random sample of data with replacement.
 
-#include <vnl/vnl_vector.h>
-#include <vcl_compiler.h>
 #include <iostream>
 #include <vector>
+#include <vnl/vnl_vector.h>
+#include <vcl_compiler.h>
 
 //: Fill x with ns samples drawn at random from d
 //  If ns not specified (or zero) then draw d.size() samples from d

@@ -12,9 +12,9 @@
 // corresponding bicub and bilin files that would likely also benefit from
 // the same change.
 
+#include <cstddef>
 #include <vcl_cassert.h>
 #include <vcl_compiler.h>
-#include <cstddef>
 #include <vil/vil_fwd.h>
 
 //: Compute nearest neighbour interpolation at (x,y), no bound checks. Requires -0.5<x<ni-0.5, -0.5<y<nj-0.5

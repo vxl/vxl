@@ -1,8 +1,8 @@
 // This is core/vil/algo/tests/test_binary_erode.cxx
-#include <testlib/testlib_test.h>
 #include <iostream>
-#include <vcl_compiler.h>
 #include <vector>
+#include <testlib/testlib_test.h>
+#include <vcl_compiler.h>
 #include <vil/algo/vil_binary_dilate.h>
 #include <vil/algo/vil_binary_erode.h>
 #include <vil/algo/vil_binary_opening.h>

@@ -12,6 +12,7 @@
 //   <none yet>
 // \endverbatim
 
+#include <iostream>
 #include <vnl/vnl_math.h>
 
 #include <vil/vil_image_view.h>
@@ -21,8 +22,6 @@
 #include <vil/algo/vil_sobel_3x3.h>
 
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 
 //: Functor class to compute malladi image force function
 class bil_malladi_scale_functor

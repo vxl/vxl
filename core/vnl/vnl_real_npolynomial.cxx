@@ -9,11 +9,11 @@
 //
 //  Implements a polynomial with N variables
 
+#include <iostream>
+#include <sstream>
 #include "vnl_real_npolynomial.h"
 #include <vcl_cassert.h>
-#include <iostream>
 #include <vcl_compiler.h>
-#include <sstream>
 
 //: Constructor
 // \verbatim

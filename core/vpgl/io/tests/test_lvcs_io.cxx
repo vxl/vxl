@@ -1,7 +1,7 @@
-#include <testlib/testlib_test.h>
 #include <iostream>
-#include <vcl_compiler.h>
 #include <cmath>
+#include <testlib/testlib_test.h>
+#include <vcl_compiler.h>
 #include <vpgl/vpgl_lvcs.h>
 #include <vpgl/io/vpgl_io_lvcs.h>
 #include <vpl/vpl.h>

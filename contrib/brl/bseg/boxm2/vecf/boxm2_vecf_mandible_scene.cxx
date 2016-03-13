@@ -1,3 +1,7 @@
+#include <iostream>
+#include <algorithm>
+#include <limits>
+#include <set>
 #include "boxm2_vecf_mandible_scene.h"
 #include <boxm2/boxm2_data_traits.h>
 #include <boxm2/cpp/algo/boxm2_refine_block_multi_data.h>
@@ -15,10 +19,6 @@
 #include <boxm2/io/boxm2_lru_cache.h>
 #include <vnl/vnl_random.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <algorithm>
-#include <limits>
-#include <set>
 #include <vul/vul_timer.h>
 
 typedef boxm2_data_traits<BOXM2_PIXEL>::datatype pixtype;

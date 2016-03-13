@@ -1,10 +1,10 @@
 #include <iostream>
+#include <sstream>
 
 #include <testlib/testlib_test.h>
 #include <vnl/vnl_real_polynomial.h>
 #include <vnl/vnl_vector.h>
 #include <vcl_compiler.h>
-#include <sstream>
 
 void test_real_polynomial()
 {

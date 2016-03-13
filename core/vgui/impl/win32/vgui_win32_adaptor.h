@@ -13,13 +13,13 @@
 //    never called? Qt impl. does this but MFC impl. does not.
 // 3. How to implement post_message?
 
+#include <map>
 #include <windows.h>
 
 #include <vgui/vgui_adaptor.h>
 #include <vgui/internals/vgui_adaptor_mixin.h>
 #include <vgui/impl/win32/vgui_win32_cmdtarget.h>
 #include <vcl_compiler.h>
-#include <map>
 
 class vgui_win32_window;
 class vgui_win32_internal_timer;

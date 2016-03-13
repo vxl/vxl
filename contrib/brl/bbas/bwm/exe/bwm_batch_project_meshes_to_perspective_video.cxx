@@ -1,16 +1,15 @@
 //:
 // \file
 
-#include <bwm/bwm_observer_cam.h>
-
 #include <vector>
-
 #include <iostream>
 #include <sstream>
-#include <vcl_compiler.h>
-#include <iostream>
 #include <fstream>
 #include <string>
+#include <bwm/bwm_observer_cam.h>
+
+
+#include <vcl_compiler.h>
 #include <vul/vul_arg.h>
 #include <vul/vul_awk.h>
 #include <vgl/vgl_polygon.h>

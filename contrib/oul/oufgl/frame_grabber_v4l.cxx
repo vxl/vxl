@@ -18,12 +18,12 @@
 // @library oul/oufgl
 //----------------------------------------------------------------------
 
-#include "frame_grabber_v4l.h"
-#include <cstring> // for memcpy()
-#include <cstdlib> // for exit()
-#include <vcl_compiler.h>
+#include <cstring>
+#include <cstdlib>
 #include <iostream>
 #include <cstdio>
+#include "frame_grabber_v4l.h"
+#include <vcl_compiler.h>
 
 FrameGrabberV4lGrey::FrameGrabberV4lGrey(int width_, int height_,
                                          bool debug_, char *devname)

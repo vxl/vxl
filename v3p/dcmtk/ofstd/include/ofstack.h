@@ -28,6 +28,7 @@
 #ifndef OFSTACK_H
 #define OFSTACK_H
 
+#include <stack>
 #include "osconfig.h"    /* make sure OS specific configuration is included first */
 #include "oftypes.h"
 
@@ -36,7 +37,6 @@
 // interface is nearly identical.
 // Important: If you want to use the standard template library, no variable
 // in a namespace with using a list shall have the name stack
-#include <stack>
 #define OFStack stack
 #else
 

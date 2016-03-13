@@ -1,11 +1,11 @@
 #ifndef bwm_tableau_h_
 #define bwm_tableau_h_
 
+#include <iostream>
+#include <string>
 #include <vbl/vbl_ref_count.h>
 #include <vgui/vgui_viewer2D_tableau_sptr.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <string>
 
 class bwm_tableau : public vbl_ref_count
 {

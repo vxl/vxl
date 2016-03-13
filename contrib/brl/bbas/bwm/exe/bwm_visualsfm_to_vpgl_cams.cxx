@@ -1,15 +1,16 @@
+#include <vector>
+#include <set>
+#include <iostream>
+#include <fstream>
+#include <string>
+#include <cstdlib>
 #include <bwm/bwm_observer_cam.h>
 #include <bwm/video/bwm_video_cam_ostream.h>
 #include <bwm/video/bwm_video_corr_sptr.h>
 #include <bwm/video/bwm_video_corr.h>
 #include <bwm/video/bwm_video_site_io.h>
 
-#include <vector>
-#include <set>
 #include <vcl_cassert.h>
-#include <iostream>
-#include <fstream>
-#include <string>
 #include <vul/vul_arg.h>
 #include <vul/vul_file.h>
 #include <vgl/algo/vgl_fit_plane_3d.h>
@@ -27,8 +28,6 @@
 #include <vidl/vidl_image_list_istream.h>
 
 #include <vcl_compiler.h>
-#include <iostream>
-#include <cstdlib> // for rand()
 #include <bwm/bwm_site_mgr.h>
 
 #include <bxml/bxml_write.h>

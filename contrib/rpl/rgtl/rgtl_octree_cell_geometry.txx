@@ -5,14 +5,14 @@
 #ifndef rgtl_octree_cell_geometry_txx
 #define rgtl_octree_cell_geometry_txx
 
+#include <iostream>
+#include <cmath>
 #include "rgtl_octree_cell_geometry.hxx"
 
 #include "rgtl_octree_cell_bounds.hxx"
 #include "rgtl_sqt_space.txx"
 
 #include <vcl_compiler.h>
-#include <iostream>
-#include <cmath>
 
 #define RGTL_OCTREE_CELL_GEOMETRY_CONE_SPECIALIZE_3
 

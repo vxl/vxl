@@ -1,5 +1,5 @@
-#include <vcl_compiler.h>
 #include <iostream>
+#include <vcl_compiler.h>
 #include <vul/vul_timer.h>
 #include <vnl/vnl_random.h>
 #include <vnl/vnl_matrix.h>

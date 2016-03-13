@@ -1,4 +1,6 @@
 // This is brl/bseg/bvxm/pro/processes/bvxm_update_edges_process.cxx
+#include <iostream>
+#include <cstdio>
 #include "bvxm_update_edges_process.h"
 //:
 // \file
@@ -24,8 +26,6 @@
 
 #include <vil/vil_image_view.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <cstdio>
 
 //: set input and output types
 bool bvxm_update_edges_process_cons(bprb_func_process& pro)

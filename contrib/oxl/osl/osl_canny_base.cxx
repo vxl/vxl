@@ -1,13 +1,13 @@
 // This is oxl/osl/osl_canny_base.cxx
+#include <iostream>
+#include <cmath>
+#include <list>
 #include "osl_canny_base.h"
 //:
 //  \file
 
 #include <osl/osl_canny_port.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <cmath>
-#include <list>
 #include <vcl_cassert.h>
 
 //--------------------------------------------------------------

@@ -13,10 +13,10 @@
 //            General Electric
 //
 //-------------------------------------------------------------------------------
-#include <vnl/vnl_least_squares_function.h>
-#include <vcl_compiler.h>
 #include <iostream>
 #include <vector>
+#include <vnl/vnl_least_squares_function.h>
+#include <vcl_compiler.h>
 #include <pop/pop_parameter.h>
 #include <pop/pop_geometric_cost_function.h>
 #include <pop/pop_manager.h>

@@ -2,12 +2,12 @@
 #ifndef vgl_ray_3d_hxx_
 #define vgl_ray_3d_hxx_
 
-#include "vgl_ray_3d.h"
-#include <vcl_cassert.h>
 #include <algorithm>
 #include <iostream>
+#include <cmath>
+#include "vgl_ray_3d.h"
+#include <vcl_cassert.h>
 #include <vcl_compiler.h>
-#include <cmath> // for fabs
 #include <vgl/vgl_closest_point.h>
 #include <vgl/vgl_tolerance.h>
 template <class Type>

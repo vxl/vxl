@@ -4,8 +4,8 @@
 // \file
 
 #include <iostream>
-#include <vcl_compiler.h>
 #include <list>
+#include <vcl_compiler.h>
 #include <vbl/vbl_ref_count.h>
 #include <vbl/vbl_smart_ptr.h>
 

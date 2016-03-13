@@ -20,9 +20,9 @@
 // has precedence over \a use_signature_error.
 //
 
-#include <vcl_compiler.h>
 #include <iostream>
 #include <memory>
+#include <vcl_compiler.h>
 class rrel_m_est_obj;
 class rgrl_transformation;
 

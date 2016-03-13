@@ -1,3 +1,5 @@
+#include <iostream>
+#include <limits>
 #include <testlib/testlib_test.h>
 
 #include <boxm/sample/boxm_sample.h>
@@ -13,8 +15,6 @@
 #include <imesh/imesh_mesh.h>
 #include <imesh/imesh_fileio.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <limits>
 
 static void test_upload_mesh()
 {

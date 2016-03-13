@@ -1,9 +1,9 @@
 // This is core/vidl/tests/test_color.cxx
+#include <iostream>
 #include <testlib/testlib_test.h>
 //:
 // \file
 #include <vcl_compiler.h>
-#include <iostream>
 #include <vidl/vidl_color.h>
 #include <vcl_cassert.h>
 

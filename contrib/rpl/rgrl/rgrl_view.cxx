@@ -1,3 +1,5 @@
+#include <iostream>
+#include <cstdlib>
 #include "rgrl_view.h"
 //:
 // \file
@@ -9,8 +11,6 @@
 #include <rgrl/rgrl_feature_set.h>
 // not used? #include <vector>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <cstdlib>
 #include <vcl_cassert.h>
 
 rgrl_view::

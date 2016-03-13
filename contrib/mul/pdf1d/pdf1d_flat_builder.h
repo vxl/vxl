@@ -7,10 +7,10 @@
 // \author Tim Cootes
 // \brief Class to build pdf1d_flat objects.
 
-#include <pdf1d/pdf1d_builder.h>
-#include <vcl_compiler.h>
 #include <iostream>
 #include <iosfwd>
+#include <pdf1d/pdf1d_builder.h>
+#include <vcl_compiler.h>
 
 //=======================================================================
 

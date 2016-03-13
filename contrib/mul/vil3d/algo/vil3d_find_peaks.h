@@ -6,11 +6,11 @@
 // \brief Find peaks in image
 // \author Tim Cootes
 
+#include <iostream>
+#include <vector>
 #include <vil3d/vil3d_image_view.h>
 #include <vgl/vgl_point_3d.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <vector>
 
 //: True if value v is strictly above 8 neighbours of *im in i and j
 template <class T>

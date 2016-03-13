@@ -16,10 +16,10 @@
 // Texas Instruments Incorporated and General Electric Company
 // provides this software "as is" without express or implied warranty.
 
-#include "vnl_error.h"
 #include <iostream>
+#include <exception>
+#include "vnl_error.h"
 #include <vcl_compiler.h>
-#include <exception> // for throw
 
 //: Raise exception for invalid index.
 void vnl_error_vector_index (char const* fcn, int index)

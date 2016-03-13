@@ -6,10 +6,10 @@
 #ifndef m2d3_ortho_rigid_builder_h_
 #define m2d3_ortho_rigid_builder_h_
 
-#include <vnl/vnl_matrix.h>
-#include <vcl_compiler.h>
 #include <iostream>
 #include <vector>
+#include <vnl/vnl_matrix.h>
+#include <vcl_compiler.h>
 
 #include <vgl/vgl_point_2d.h>
 #include <vgl/vgl_point_3d.h>

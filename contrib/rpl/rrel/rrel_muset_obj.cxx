@@ -1,12 +1,11 @@
 // This is rpl/rrel/rrel_muset_obj.cxx
-#include "rrel_muset_obj.h"
-//
 #include <limits>
 #include <iostream>
 #include <vector>
-#include <vcl_compiler.h>
-#include <iostream>
 #include <algorithm>
+#include "rrel_muset_obj.h"
+//
+#include <vcl_compiler.h>
 #include <vcl_cassert.h>
 #include <vnl/vnl_math.h>
 #include <rrel/rrel_muse_table.h>

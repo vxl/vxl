@@ -1,11 +1,10 @@
 //:
 // \file
+#include <iostream>
 #include <testlib/testlib_test.h>
 #include <bhdfs/bhdfs_manager.h>
 #include <bhdfs/bhdfs_vil_stream.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 
 //: Test bhdfs vil stream
 void test_vil_stream()

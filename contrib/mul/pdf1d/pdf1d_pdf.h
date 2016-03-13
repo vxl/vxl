@@ -7,10 +7,10 @@
 // \brief Base class for Univariate Probability Density Function classes.
 // \author Tim Cootes
 
-#include <vsl/vsl_binary_io.h>
-#include <vcl_compiler.h>
 #include <iostream>
 #include <string>
+#include <vsl/vsl_binary_io.h>
+#include <vcl_compiler.h>
 #include <vnl/vnl_vector.h> // HACK: IMS: don't replace this with vnl_fwd.h
 
 //=======================================================================

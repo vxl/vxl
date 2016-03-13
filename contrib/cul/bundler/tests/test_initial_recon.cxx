@@ -1,3 +1,6 @@
+#include <string>
+#include <iostream>
+#include <iomanip>
 #include <testlib/testlib_test.h>
 
 #include <bundler/bundler.h>
@@ -7,10 +10,7 @@
 
 
 #include <vil/vil_load.h>
-#include <string>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iomanip>
 
 static const double FOCAL_LENGTH_MM = 5.4;
 static const double SENSOR_WIDTH_MM = 5.312;

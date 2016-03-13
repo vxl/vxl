@@ -36,8 +36,8 @@
 //
 // \endverbatim
 /////////////////////////////////////////////////////////////////////////////
-#include <vcl_compiler.h>
 #include <iostream>
+#include <vcl_compiler.h>
 #include <vsl/vsl_binary_io.h>
 #include <vbl/vbl_ref_count.h>
 //#include <vpgl/vpgl_dll.h>

@@ -1,12 +1,12 @@
+#include <cstdlib>
+#include <iostream>
+#include <cmath>
 #include "brip_para_cvrg.h"
 //:
 // \file
 
 #include <vul/vul_timer.h>
-#include <cstdlib>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <cmath>
 #include <vcl_cassert.h>
 #include "brip_vil_float_ops.h"
 

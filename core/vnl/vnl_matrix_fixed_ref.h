@@ -140,10 +140,10 @@
 //
 //-----------------------------------------------------------------------------
 
+#include <iosfwd>
+#include <cstring>
 #include <vcl_cassert.h>
 #include <vcl_compiler.h>
-#include <iosfwd>
-#include <cstring> // memcpy()
 #include <vnl/vnl_matrix_fixed.h>
 #include <vnl/vnl_vector_fixed.h>
 #include <vnl/vnl_vector_fixed_ref.h>

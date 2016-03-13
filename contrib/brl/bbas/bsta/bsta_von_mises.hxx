@@ -7,11 +7,11 @@
 // Approved for public release, distribution unlimited (DISTAR Case 14389)
 //
 
+#include <iostream>
+#include <limits>
 #include "bsta_von_mises.h"
 #include <vcl_cassert.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <limits>
 #include <vnl/vnl_math.h> // for pi
 
 namespace

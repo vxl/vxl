@@ -4,8 +4,8 @@
 // \author Ian Scott, David Serby
 
 #include <iostream>
-#include <vcl_compiler.h>
 #include <cmath>
+#include <vcl_compiler.h>
 #include <vil/vil_image_view.h>
 #include <vil/vil_load.h>
 #include <vil/vil_save.h>

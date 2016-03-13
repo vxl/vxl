@@ -1,8 +1,8 @@
+#include <iostream>
 #include <vidl/vidl_dshow_file_istream.h>
 #include <vidl/vidl_image_list_ostream.h>
 
 #include <vcl_compiler.h>
-#include <iostream>
 
 int main()
 {

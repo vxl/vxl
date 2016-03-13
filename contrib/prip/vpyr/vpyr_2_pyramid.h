@@ -12,11 +12,11 @@
 //   06 May 2004 Jocelyn Marchadier
 // \endverbatim
 
-#include "vpyr_2_pyramid_level.h"
-#include <vcl_compiler.h>
 #include <iostream>
 #include <iosfwd>
 #include <map>
+#include "vpyr_2_pyramid_level.h"
+#include <vcl_compiler.h>
 #include <vmap/vmap_map_iterator_wrapper.h>
 
 //: enables to handle combinatorial pyramids.

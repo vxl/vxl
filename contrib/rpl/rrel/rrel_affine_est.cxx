@@ -1,3 +1,6 @@
+#include <iostream>
+#include <vector>
+#include <algorithm>
 #include "rrel_affine_est.h"
 
 #include <vnl/vnl_matrix.h>
@@ -5,12 +8,8 @@
 #include <vnl/algo/vnl_svd.h>
 #include <vgl/vgl_point_2d.h>
 
-#include <iostream>
-#include <vector>
 #include <vcl_cassert.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <algorithm>
 
 rrel_affine_est::
 rrel_affine_est( const std::vector< vgl_point_2d<double> > & from_pts,

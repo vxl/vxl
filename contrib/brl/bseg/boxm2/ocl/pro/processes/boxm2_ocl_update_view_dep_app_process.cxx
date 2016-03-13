@@ -1,4 +1,7 @@
 // This is brl/bseg/boxm2/ocl/pro/processes/boxm2_ocl_update_view_dep_app_process.cxx
+#include <fstream>
+#include <iostream>
+#include <algorithm>
 #include <bprb/bprb_func_process.h>
 //:
 // \file
@@ -11,10 +14,7 @@
 // \author Ali Osman Ulusoy
 // \date Nov 20, 2012
 
-#include <fstream>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <algorithm>
 #include <boxm2/ocl/boxm2_opencl_cache.h>
 #include <boxm2/boxm2_scene.h>
 #include <boxm2/boxm2_block.h>

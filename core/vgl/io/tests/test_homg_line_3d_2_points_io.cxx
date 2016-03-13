@@ -1,6 +1,6 @@
 // This is core/vgl/io/tests/test_homg_line_3d_2_points_io.cxx
-#include <vcl_compiler.h>
 #include <iostream>
+#include <vcl_compiler.h>
 #include <vsl/vsl_indent.h>
 #include <vgl/vgl_homg_point_3d.h>
 #include <vgl/io/vgl_io_homg_line_3d_2_points.h>

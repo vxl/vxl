@@ -7,11 +7,11 @@
 // \author fsm
 // \brief  See vgui_macro.h for a description of this file.
 
+#include <cstdlib>
+#include <iostream>
 #include "vgui_macro.h"
 
 #include <vcl_compiler.h>
-#include <cstdlib>
-#include <iostream>
 
 #include <vgui/vgui_gl.h>
 #include <vgui/vgui_glu.h>

@@ -6,10 +6,10 @@
 // \file
 // \author fsm
 
+#include <iomanip>
+#include <iostream>
 #include "vil_bmp_file_header.h"
 #include <vcl_compiler.h>
-#include <iomanip> // for std::hex, std::dec
-#include <iostream>
 #include <vil/vil_stream.h>
 #include <vil/vil_stream_write.h>
 #include <vil/vil_stream_read.h>

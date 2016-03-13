@@ -1,6 +1,9 @@
 #ifndef boxm_shadow_bayes_optimizer_hxx_
 #define boxm_shadow_bayes_optimizer_hxx_
 
+#include <vector>
+#include <iostream>
+#include <string>
 #include "boxm_shadow_bayes_optimizer.h"
 #include "boxm_shadow_appearance_estimator.h"
 
@@ -8,10 +11,7 @@
 #include <boxm/boxm_aux_traits.h>
 #include <boxm/boxm_scene.h>
 #include <boxm/boxm_aux_scene.h>
-#include <vector>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <string>
 
 template <class T_loc, boxm_apm_type APM, boxm_aux_type AUX>
 boxm_shadow_bayes_optimizer<T_loc,APM,AUX>::boxm_shadow_bayes_optimizer(boxm_scene<boct_tree<T_loc, boxm_sample<APM> > > &scene,

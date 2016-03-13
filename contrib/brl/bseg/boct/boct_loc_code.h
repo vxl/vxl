@@ -13,10 +13,9 @@
 //   <none yet>
 // \endverbatim
 
+#include <iostream>
 #include <vgl/vgl_point_3d.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 #include <vsl/vsl_binary_io.h>
 
 template <typename T>

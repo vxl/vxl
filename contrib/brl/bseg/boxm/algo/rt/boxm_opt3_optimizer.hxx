@@ -1,6 +1,9 @@
 #ifndef boxm_opt3_optimizer_hxx_
 #define boxm_opt3_optimizer_hxx_
 
+#include <vector>
+#include <iostream>
+#include <string>
 #include "boxm_opt3_optimizer.h"
 
 #include <boxm/boxm_apm_traits.h>
@@ -12,10 +15,7 @@
 #include <boxm/sample/algo/boxm_mog_grey_processor.h>
 
 #include <vnl/vnl_random.h>
-#include <vector>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <string>
 
 template <class T_loc, boxm_apm_type APM, boxm_apm_type AUX_APM>
 boxm_opt3_optimizer<T_loc,APM,AUX_APM>::boxm_opt3_optimizer(boxm_scene<boct_tree<T_loc, boxm_sample<APM> > > &scene,

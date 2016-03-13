@@ -3,10 +3,10 @@
 // \author Tim Cootes
 // \brief Iterator for images and points stored in files
 
-#include <vcl_cassert.h>
-#include <vcl_compiler.h>
 #include <iostream>
 #include <string>
+#include <vcl_cassert.h>
+#include <vcl_compiler.h>
 
 #include "msdi_marked_images_from_files.h"
 #include <vil/vil_load.h>

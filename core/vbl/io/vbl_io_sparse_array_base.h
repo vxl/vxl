@@ -6,8 +6,8 @@
 // \author Ian Scott
 // \date 11-Apr-2001
 
-#include <vcl_compiler.h>
 #include <iosfwd>
+#include <vcl_compiler.h>
 #include <vsl/vsl_fwd.h>
 #include <vbl/vbl_sparse_array_base.h>
 

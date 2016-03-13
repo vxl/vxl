@@ -1,4 +1,6 @@
 // This is gel/vsol/vsol_conic_2d.cxx
+#include <iostream>
+#include <cmath>
 #include "vsol_conic_2d.h"
 //:
 // \file
@@ -12,8 +14,6 @@
 #include <vgl/io/vgl_io_conic.h>
 #include <vgl/algo/vgl_homg_operators_2d.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <cmath> // for std::abs(double)
 #include <vcl_cassert.h>
 
 //---------------------------------------------------------------------------

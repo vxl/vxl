@@ -1,11 +1,11 @@
 #ifndef vsph_segment_sphere_h_
 #define vsph_segment_sphere_h_
+#include <iostream>
+#include <map>
 #include "vsph_unit_sphere.h"
 //:
 // \file
 #include <vcl_compiler.h>
-#include <iostream>
-#include <map>
 #include <vbl/vbl_disjoint_sets.h>
 
 class vsph_segment_sphere

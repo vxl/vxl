@@ -1,4 +1,5 @@
 // This is mul/pdf1d/tests/test_gaussian.cxx
+#include <iostream>
 #include <testlib/testlib_test.h>
 //:
 // \file
@@ -6,8 +7,6 @@
 // \brief test pdf1d_gaussian, building, sampling, saving etc.
 
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 #include <vpl/vpl.h> // vpl_unlink()
 
 #include <pdf1d/pdf1d_gaussian.h>

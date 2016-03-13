@@ -7,10 +7,9 @@
 // \author Matt Leotta (mleotta@lems.brown.edu)
 // \date May 2, 2008
 
-#include <vcl_compiler.h>
-#include <iostream>
 #include <iostream>
 #include <string>
+#include <vcl_compiler.h>
 #include "imesh_mesh.h"
 
 

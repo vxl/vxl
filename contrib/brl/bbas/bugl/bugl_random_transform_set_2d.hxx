@@ -1,11 +1,11 @@
 #ifndef bugl_random_transform_set_2d_hxx_
 #define bugl_random_transform_set_2d_hxx_
 
+#include <iostream>
+#include <cstdlib>
 #include "bugl_random_transform_set_2d.h"
 
 #include <vcl_compiler.h>
-#include <iostream>
-#include <cstdlib> // for rand()
 
 template<class T>
 void bugl_random_transform_set_2d<T>::

@@ -3,9 +3,9 @@
 #pragma implementation
 #endif
 
+#include <iostream>
 #include "vbl_bool_ostream.h"
 #include <vcl_compiler.h>
-#include <iostream>
 
 std::ostream& operator<<(std::ostream& s, const vbl_bool_ostream::on_off& proxy)
 {

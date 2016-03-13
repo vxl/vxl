@@ -12,13 +12,12 @@
 //  Modifications
 // \endverbatim
 
+#include <iostream>
 #include <vbl/vbl_array_2d.h>
 #include <vbl/vbl_ref_count.h>
 #include <vsl/vsl_binary_io.h>
 #include <vsl/vsl_binary_loader.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 
 //: base class for images of features
 class bbgm_feature_image_base : public vbl_ref_count

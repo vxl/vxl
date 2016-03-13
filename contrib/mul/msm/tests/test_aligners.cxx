@@ -4,6 +4,8 @@
 //  Copyright: (C) 2010 The University of Manchester
 //
 //=======================================================================
+#include <iostream>
+#include <cmath>
 #include <testlib/testlib_test.h>
 //:
 // \file
@@ -16,8 +18,6 @@
 #include <msm/msm_similarity_aligner.h>
 #include <vnl/vnl_vector.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <cmath>
 
 void test_generic_aligner(const msm_aligner& aligner)
 {

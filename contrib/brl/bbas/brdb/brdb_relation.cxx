@@ -1,4 +1,7 @@
 // This is brl/bbas/brdb/brdb_relation.cxx
+#include <set>
+#include <iostream>
+#include <algorithm>
 #include "brdb_relation.h"
 //:
 // \file
@@ -7,11 +10,8 @@
 // \date Apr 4th, 2007
 // Make it work with the whole database initially based on Matt's sketch.
 
-#include <set>
 #include <vcl_cassert.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <algorithm>
 #include <vsl/vsl_vector_io.h>
 #include <brdb/brdb_value.h>
 #include <brdb/brdb_tuple.h>

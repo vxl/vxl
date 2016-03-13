@@ -2,11 +2,10 @@
 #ifndef vmap_2_tmap_hxx_
 #define vmap_2_tmap_hxx_
 
+#include <iostream>
 #include "vmap_2_tmap.h"
 #include <vcl_cassert.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 
 template <class V, class E, class F, class D>
 vmap_2_tmap< V,E,F,D >::vmap_2_tmap(self_type const& tmap)

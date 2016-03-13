@@ -10,12 +10,12 @@
 //
 //-----------------------------------------------------------------------------
 
+#include <cstring>
+#include <iostream>
 #include "vbl_bit_array_3d.h"
 
-#include <cstring> // for memset()
 #include <vcl_cassert.h>
 #include <vcl_compiler.h>
-#include <iostream>
 #include <vcl_climits.h>
 
 void vbl_bit_array_3d::put(unsigned int i1, unsigned int i2, unsigned int i3, bool v)

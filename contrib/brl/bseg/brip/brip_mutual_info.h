@@ -7,11 +7,11 @@
 // \author Matt Leotta
 //
 
-#include <vil/vil_image_view.h>
 #include <vector>
-#include <vcl_compiler.h>
 #include <iostream>
 #include <cmath>
+#include <vil/vil_image_view.h>
+#include <vcl_compiler.h>
 #include <vnl/vnl_math.h>
 
 

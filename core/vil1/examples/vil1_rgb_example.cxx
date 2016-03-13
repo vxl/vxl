@@ -2,8 +2,8 @@
 //
 // Author: Peter Vanroose, KULeuven/ESAT, December 1999
 
-#include <vcl_compiler.h>
 #include <iostream>
+#include <vcl_compiler.h>
 #include <vil1/vil1_rgb.h>
 typedef vil1_rgb<unsigned char> vil1_rgb_cell;
 

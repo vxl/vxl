@@ -1,3 +1,4 @@
+#include <iostream>
 #include <testlib/testlib_test.h>
 
 #include <vnl/vnl_vector.h>
@@ -9,7 +10,6 @@
 
 #include <vcl_cassert.h>
 #include <vcl_compiler.h>
-#include <iostream>
 
 
 // --- dynamic ------------------------------

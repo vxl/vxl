@@ -1,4 +1,6 @@
 // This is mul/clsfy/clsfy_smo_1.cxx
+#include <iostream>
+#include <cmath>
 #include "clsfy_smo_1.h"
 //:
 // \file
@@ -15,10 +17,7 @@
 // B. Scholkopf, C. Burges and A. Smola, MIT Press: 185-208. and other papers.
 
 #include <vcl_compiler.h>
-#include <iostream>
-#include <cmath>
 #include <vnl/vnl_math.h>
-#include <iostream>
 #include <vcl_cassert.h>
 
 // Linear SMO

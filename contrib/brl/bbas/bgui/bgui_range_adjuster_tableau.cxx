@@ -1,4 +1,7 @@
 // This is brl/bbas/bgui/bgui_range_adjuster_tableau.cxx
+#include <iostream>
+#include <cmath>
+#include <limits>
 #include "bgui_range_adjuster_tableau.h"
 //:
 // \file
@@ -6,9 +9,6 @@
 
 #include <vcl_cassert.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <cmath> //for fabs()
-#include <limits> // for min and max
 
 #include <vil1/vil1_memory_image_of.h>
 #include <vil1/vil1_vil.h>

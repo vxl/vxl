@@ -7,6 +7,8 @@
 // \author L. Guichard
 //------------------------------------------------------------------------------
 
+#include <iostream>
+#include <vector>
 #include <vtol/vtol_vertex_2d_sptr.h>
 #include <vtol/vtol_edge_2d_sptr.h>
 
@@ -17,8 +19,6 @@
 #include <vil1/vil1_memory_image_of.h>
 
 #include <vcl_compiler.h>
-#include <iostream>
-#include <vector>
 #include <vxl_config.h>
 
 void convert_lines_double_3(std::vector<vtol_edge_2d_sptr> in,

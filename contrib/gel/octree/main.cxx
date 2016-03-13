@@ -6,15 +6,14 @@
 // \date   11 May 99
 //-----------------------------------------------------------------------------
 
-#include <vcl_cassert.h>
-#include <vcl_compiler.h>
 #include <iostream>
-#include <cmath> // for sqrt()
-#include <cstdlib> // for exit()
-#include <iostream>
+#include <cmath>
+#include <cstdlib>
 #include <fstream>
 #include <list>
 #include <vector>
+#include <vcl_cassert.h>
+#include <vcl_compiler.h>
 #include <vxl_config.h>
 
 #include <vbl/vbl_array_2d.h>

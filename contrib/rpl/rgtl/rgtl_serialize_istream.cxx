@@ -1,3 +1,6 @@
+#include <iostream>
+#include <cstring>
+#include <cstdlib>
 #include "rgtl_serialize_istream.hxx"
 //:
 // \file
@@ -6,11 +9,7 @@
 // (See accompanying file rgtl_license_1_0.txt or copy at
 // http://www.boost.org/LICENSE_1_0.txt)
 
-#include <iostream>
-#include <cstring>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <cstdlib>
 
 //----------------------------------------------------------------------------
 rgtl_serialize_istream

@@ -1,8 +1,8 @@
 // This is mul/vil3d/tests/test_gen_synthetic.cxx
 #include <functional>
-#include <vcl_compiler.h>
 #include <iostream>
 #include <algorithm>
+#include <vcl_compiler.h>
 
 #include <vxl_config.h> // for vxl_uint_16 etc.
 

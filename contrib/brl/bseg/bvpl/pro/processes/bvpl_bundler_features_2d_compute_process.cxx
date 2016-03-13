@@ -1,4 +1,10 @@
 //this is /contrib/bm/bseg/bvpl/pro/bvpl_bundler_features_2d_compute_process.cxx
+#include <vector>
+#include <set>
+#include <iostream>
+#include <fstream>
+#include <string>
+#include <iterator>
 #include <bprb/bprb_func_process.h>
 //:
 // \file
@@ -19,15 +25,8 @@
 #include <bwm/video/bwm_video_corr_sptr.h>
 #include <bwm/video/bwm_video_corr.h>
 
-#include <vector>
-#include <set>
 #include <vcl_cassert.h>
-#include <iostream>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <fstream>
-#include <string>
-#include <iterator>
 
 #include<vgl/vgl_point_2d.h>
 #include<vgl/vgl_point_3d.h>

@@ -1,7 +1,7 @@
 // \author fsm
 
-#include <vcl_compiler.h>
 #include <iostream>
+#include <vcl_compiler.h>
 #include <vul/vul_sprintf.h>
 #include <vgui/vgui_gl.h>
 #include <vgui/vgui_pixel.h>

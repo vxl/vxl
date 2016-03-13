@@ -14,12 +14,11 @@
 //   <none yet>
 // \endverbatim
 
+#include <iostream>
 #include "bvxm_voxel_grid_base.h"
 #include "bvxm_voxel_grid.h"
 #include <bvxm/grid/bvxm_opinion.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 
 void bvxm_expectation_opinion_voxel_grid(bvxm_voxel_grid<bvxm_opinion> * grid_in_base,
                                          bvxm_voxel_grid<float> * grid_out_base);

@@ -11,9 +11,9 @@
 // This class implements the plugin to load avi frames as a new formats
 
 #include <string>
-#include <vcl_compiler.h>
 #include <iostream>
 #include <map>
+#include <vcl_compiler.h>
 #include <vil/vil_image_view_base.h>
 #include <vil/vil_image_resource_plugin.h>
 #include <mvl2/mvl2_video_reader.h>

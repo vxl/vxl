@@ -1,11 +1,11 @@
 // This is core/vgui/vgui_grid_tableau.cxx
+#include <iostream>
 #include "vgui_grid_tableau.h"
 //:
 // \file
 // \brief   See vgui_grid_tableau.h for a description of this file.
 
 #include <vcl_compiler.h>
-#include <iostream>
 #include <vgui/vgui_macro.h>
 #include <vgui/vgui_clear_tableau.h>
 

@@ -12,6 +12,7 @@
 //
 // \endverbatim
 
+#include <iostream>
 #include <bsta/bsta_gaussian.h>
 #include <bsta/bsta_gaussian_sphere.h>
 #include <bsta/bsta_gaussian_indep.h>
@@ -19,8 +20,6 @@
 #include <bsta/bsta_mixture.h>
 #include <bsta/bsta_attributes.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 
 //: fit a 1D Gaussian distribution to a set of weighted samples
 template <class T>

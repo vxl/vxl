@@ -6,11 +6,11 @@
 // \brief smooth images
 // \author Ian Scott
 
+#include <iostream>
 #include "vil_gauss_filter.h"
 #include <vil/vil_transpose.h>
 #include <vil/algo/vil_convolve_1d.h>
 #include <vcl_compiler.h>
-#include <iostream>
 #include <vcl_cassert.h>
 
 //=======================================================================

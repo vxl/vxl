@@ -6,6 +6,10 @@
 // \author Charlene Tsai
 // \date   Feb 2004
 
+#include <vector>
+#include <iostream>
+#include <map>
+#include <string>
 #include <rgrl/rgrl_estimator_sptr.h>
 #include <rgrl/rgrl_feature_set_sptr.h>
 #include <rgrl/rgrl_matcher_sptr.h>
@@ -18,11 +22,7 @@
 #include <rgrl/rgrl_weighter.h>
 #include <rgrl/rgrl_object.h>
 
-#include <vector>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <map>
-#include <string>
 
 // ---------------------------------------------------------------------------
 //                                                                   data item

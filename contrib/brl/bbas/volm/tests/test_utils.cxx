@@ -1,8 +1,7 @@
+#include <iostream>
 #include <testlib/testlib_test.h>
 #include <volm/volm_utils.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 
 static void test_poly_contain_box()
 {

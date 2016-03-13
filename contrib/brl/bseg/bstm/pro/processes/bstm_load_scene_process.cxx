@@ -6,11 +6,11 @@
 // \author Ali Osman Ulusoy
 // \date Nov 27, 2012
 
+#include <iostream>
+#include <fstream>
 #include <bprb/bprb_func_process.h>
 
 #include <vcl_compiler.h>
-#include <iostream>
-#include <fstream>
 #include <bstm/bstm_scene.h>
 
 namespace bstm_load_scene_process_globals

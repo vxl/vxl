@@ -1,4 +1,6 @@
 // This is brl/bseg/bvxm/grid/pro/processes/bvxm_expectation_opinion_grid_process.cxx
+#include <iostream>
+#include <string>
 #include <bprb/bprb_func_process.h>
 //:
 // \file
@@ -16,8 +18,6 @@
 #include <bvxm/grid/bvxm_opinion.h>
 #include <bvxm/grid/bvxm_voxel_grid_opinion_basic_ops.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <string>
 
 namespace bvxm_expectation_opinion_grid_process_globals
 {

@@ -1,3 +1,6 @@
+#include <cmath>
+#include <iostream>
+#include <algorithm>
 #include "mfpf_pose_predictor_builder.h"
 //:
 // \file
@@ -5,10 +8,7 @@
 // \author Tim Cootes
 
 #include <vsl/vsl_binary_loader.h>
-#include <cmath>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <algorithm>
 #include <vcl_cassert.h>
 #include <vnl/algo/vnl_svd.h>
 

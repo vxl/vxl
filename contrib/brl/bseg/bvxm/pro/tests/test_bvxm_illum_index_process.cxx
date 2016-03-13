@@ -4,15 +4,14 @@
 // \author Isabel Restrepo
 // \date   February 29, 2008
 
+#include <string>
+#include <iostream>
 #include <testlib/testlib_test.h>
 #include <bvxm/pro/processes/bvxm_illum_index_process.h>
 #include <bvxm/bvxm_world_params.h>
 #include <bvxm/bvxm_voxel_world.h>
 
-#include <string>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 
 #include <brdb/brdb_value.h>
 #include <brdb/brdb_selection.h>

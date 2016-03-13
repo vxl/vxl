@@ -24,10 +24,10 @@
 // \endverbatim
 //-----------------------------------------------------------------------------
 
-#include <vcl_compiler.h>
 #include <iostream>
-#include <cstdlib> // for std::abort()
+#include <cstdlib>
 #include <iosfwd>
+#include <vcl_compiler.h>
 #include "PairMatchMultiIterator.h"
 
 template <class T> class vbl_sparse_array_2d;

@@ -3,10 +3,10 @@
 // \author Joseph Mundy
 // \date  July 14, 2004
 
-#include <testlib/testlib_test.h>
-#include <vcl_compiler.h>
 #include <vector>
 #include <iostream>
+#include <testlib/testlib_test.h>
+#include <vcl_compiler.h>
 #include <vgl/vgl_point_2d.h>
 #include <vgl/vgl_polygon.h>
 #include <vgl/algo/vgl_convex_hull_2d.h>

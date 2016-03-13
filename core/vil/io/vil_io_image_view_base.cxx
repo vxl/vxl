@@ -1,8 +1,8 @@
+#include <iostream>
 #include "vil_io_image_view_base.h"
 //:
 // \file
 #include <vcl_compiler.h>
-#include <iostream>
 #include <vsl/vsl_binary_io.h>
 #include <vil/vil_image_view_base.h>
 #include <vil/vil_image_view.h>

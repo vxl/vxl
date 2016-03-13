@@ -1,8 +1,8 @@
 // This is core/vul/tests/test_expand_path.cxx
+#include <fstream>
 #include <vpl/vpl.h>
 #include <vul/vul_expand_path.h>
 #include <vcl_compiler.h>
-#include <fstream>
 #include <testlib/testlib_test.h>
 
 

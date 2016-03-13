@@ -6,10 +6,10 @@
 // \file
 // \author fsm
 
-#include "osl_canny_nms.h"
-#include <vcl_compiler.h>
 #include <iostream>
 #include <cmath>
+#include "osl_canny_nms.h"
+#include <vcl_compiler.h>
 #include <vnl/vnl_math.h>
 
 //: returns number of edgels found [?]

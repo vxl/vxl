@@ -1,11 +1,11 @@
 // This is brl/bbas/bgui/bgui_graph_tableau.cxx
+#include <iostream>
+#include <cmath>
+#include <sstream>
 #include "bgui_graph_tableau.h"
 //:
 // \file
 #include <vcl_compiler.h>
-#include <iostream>
-#include <cmath> //for fabs()
-#include <sstream>
 #include <vnl/vnl_numeric_traits.h>
 #include <vnl/vnl_math.h>
 #include <vgui/vgui.h>

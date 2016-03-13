@@ -11,11 +11,11 @@
 //  Modifications
 //   <none yet>
 // \endverbatim
-#include "bocl/bocl_cl.h"
 #include <string>
-#include <vcl_compiler.h>
 #include <iostream>
 #include <cstddef>
+#include "bocl/bocl_cl.h"
+#include <vcl_compiler.h>
 
 #define SDK_SUCCESS 0
 #define SDK_FAILURE 1

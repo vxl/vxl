@@ -1,9 +1,9 @@
 // This is core/vil/tests/test_image_view.cxx
-#include <testlib/testlib_test.h>
 #include <iostream>
-#include <vcl_compiler.h>
 #include <sstream>
 #include <functional>
+#include <testlib/testlib_test.h>
+#include <vcl_compiler.h>
 #include <vxl_config.h> // for vxl_byte
 #include <vil/vil_crop.h>
 #include <vil/vil_copy.h>

@@ -1,4 +1,5 @@
 #include <iostream>
+#include <ctime>
 #include <vnl/algo/vnl_convolve.h>
 #include <vnl/vnl_double_2.h>
 #include <vnl/vnl_random.h>
@@ -9,7 +10,6 @@
 #include "test_util.h"
 
 #include <vcl_compiler.h>
-#include <ctime>
 
 void test_convolve()
 {

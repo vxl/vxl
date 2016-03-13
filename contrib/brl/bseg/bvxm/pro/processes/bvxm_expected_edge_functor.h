@@ -1,6 +1,8 @@
 #ifndef bvxm_expected_edge_functor_h_
 #define bvxm_expected_edge_functor_h_
 
+#include <iostream>
+#include <vector>
 #include <bvxm/grid/bvxm_voxel_slab.h>
 
 #include <vgl/vgl_box_3d.h>
@@ -12,8 +14,6 @@
 #include <vil/vil_image_view.h>
 
 #include <vcl_compiler.h>
-#include <iostream>
-#include <vector>
 
 
 class bvxm_expected_edge_functor

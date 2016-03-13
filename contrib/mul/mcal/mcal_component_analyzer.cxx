@@ -1,9 +1,9 @@
 //:
 // \file
-#include "mcal_component_analyzer.h"
-#include <vcl_compiler.h>
 #include <iostream>
 #include <cstdlib>
+#include "mcal_component_analyzer.h"
+#include <vcl_compiler.h>
 #include <mbl/mbl_data_array_wrapper.h>
 #include <mbl/mbl_exception.h>
 #include <mbl/mbl_cloneables_factory.h>

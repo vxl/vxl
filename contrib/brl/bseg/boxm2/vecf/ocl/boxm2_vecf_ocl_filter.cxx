@@ -1,3 +1,5 @@
+#include <iostream>
+#include <algorithm>
 #include "boxm2_vecf_ocl_filter.h"
 //:
 // \file
@@ -17,8 +19,6 @@
 #include <bocl/bocl_kernel.h>
 #include <vcl_where_root_dir.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <algorithm>
 
 typedef vnl_vector_fixed<unsigned char,16> uchar16;
 bool boxm2_vecf_ocl_filter::get_scene_appearance( boxm2_scene_sptr scene,

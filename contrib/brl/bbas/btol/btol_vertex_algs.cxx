@@ -1,10 +1,10 @@
+#include <cmath>
+#include <iostream>
+#include <algorithm>
 #include "btol_vertex_algs.h"
 //:
 // \file
-#include <cmath> // for fabs()
 #include <vcl_compiler.h>
-#include <iostream>
-#include <algorithm>
 #include "btol_edge_algs.h"
 #include <vtol/vtol_vertex.h>
 #include <vtol/vtol_vertex_2d.h>

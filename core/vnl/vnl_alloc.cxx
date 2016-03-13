@@ -3,11 +3,12 @@
 #pragma implementation
 #endif
 
+#include <cstring>
+#include <cstdlib>
+#include <iostream>
 #include "vnl_alloc.h"
 
-#include <cstring>  // memcpy() lives here.
 #include <vcl_compiler.h>
-#include <cstdlib>
 
 char*
 vnl_alloc::chunk_alloc(std::size_t size, int& nobjs)
@@ -129,7 +130,6 @@ vnl_alloc::obj *
 vnl_alloc::free_list[VNL_ALLOC_NFREELISTS] = { VXL_NULLPTR };
 
 #ifdef TEST
-#include <iostream>
 int main()
 {
   char* p = (char*)vnl_alloc::allocate(10);

@@ -1,4 +1,7 @@
 //This is brl/bseg/bvxm/pro/processes/bvxm_create_voxel_world_process.cxx
+#include <string>
+#include <iostream>
+#include <fstream>
 #include "bvxm_create_voxel_world_process.h"
 //:
 // \file
@@ -11,11 +14,7 @@
 
 #include <brdb/brdb_value.h>
 
-#include <string>
-#include <iostream>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <fstream>
 
 #include <vgl/vgl_point_3d.h>
 #include <vgl/vgl_vector_3d.h>

@@ -11,9 +11,9 @@
 // \endverbatim
 
 #include <vector>
-#include <vcl_compiler.h>
 #include <iostream>
 #include <iosfwd>
+#include <vcl_compiler.h>
 #include <vnl/vnl_vector.h>
 #include <vbl/vbl_array_2d.h>
 

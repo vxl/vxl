@@ -6,15 +6,15 @@
 // the separation between the reference points is larger than a threshold.
 // \author Tim Cootes
 
+#include <sstream>
+#include <iostream>
+#include <fstream>
+#include <string>
 #include <mbl/mbl_read_props.h>
 #include <mbl/mbl_exception.h>
 #include <mbl/mbl_parse_colon_pairs_list.h>
 #include <vul/vul_arg.h>
-#include <sstream>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <fstream>
-#include <string>
 #include <vsl/vsl_quick_file.h>
 #include <msm/msm_points.h>
 #include <msm/msm_add_all_loaders.h>

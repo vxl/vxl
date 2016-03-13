@@ -7,8 +7,8 @@
 // \file
 // \brief A simple object to test a container.
 
-#include <vcl_compiler.h>
 #include <iostream>
+#include <vcl_compiler.h>
 
 class vbl_test_array_x
 {

@@ -3,11 +3,10 @@
 // \brief Tool to load in a 3D image (assumed to be bytes) and compute histogram
 // \author Tim Cootes
 
-#include <vul/vul_arg.h>
-#include <iostream>
-#include <vcl_compiler.h>
 #include <iostream>
 #include <fstream>
+#include <vul/vul_arg.h>
+#include <vcl_compiler.h>
 #include <vil3d/vil3d_property.h>
 #include <vil3d/vil3d_load.h>
 #include <vil3d/vil3d_convert.h>

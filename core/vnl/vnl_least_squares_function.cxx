@@ -7,9 +7,9 @@
 // \author Andrew W. Fitzgibbon, Oxford RRG
 // \date   31 Aug 96
 
+#include <iostream>
 #include "vnl_least_squares_function.h"
 #include <vcl_compiler.h>
-#include <iostream>
 #include <vcl_cassert.h>
 
 void vnl_least_squares_function::dim_warning(unsigned int number_of_unknowns,

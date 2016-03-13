@@ -2,9 +2,8 @@
 // \brief Convert a 3D rotation between various representations e.g. quaternion and Euler angles
 
 
+#include <iostream>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 #include <vul/vul_arg.h>
 #include <vgl/algo/vgl_rotation_3d.h>
 #include <mbl/mbl_log.h>

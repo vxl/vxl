@@ -4,6 +4,8 @@
 
 #ifdef STANDALONE // if running as a stand-alone (test) program,
                   // options -n and -m (matrix sizes) are available
+#include <algorithm>
+#include <iostream>
 #include <getopt.h>
 #else             // else, this program follows the testlib style mechanism
 #include <testlib/testlib_test.h>
@@ -14,8 +16,6 @@
 #include <vnl/vnl_matrix.h>
 #include <vnl/vnl_random.h>
 #include <vcl_compiler.h>
-#include <algorithm> // for std::sort()
-#include <iostream>
 
 // The following defaults can be overridden with options -n and -m of the standalone version
 const int cNumElRows = 10;

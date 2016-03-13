@@ -1,13 +1,13 @@
+#include <complex>
+#include <vector>
+#include <iostream>
+#include <cmath>
+#include <cstdlib>
 #include "bwm_delaunay_tri.h"
 //:
 // \file
 
-#include <complex>
-#include <vector>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <cmath>
-#include <cstdlib>
 
 #include <vgl/vgl_point_2d.h>
 #include <vgl/vgl_point_3d.h>

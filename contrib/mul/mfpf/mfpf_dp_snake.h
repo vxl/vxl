@@ -5,12 +5,12 @@
 // \author Tim Cootes
 // \brief Basic snake, using dynamic programming to update.
 
+#include <iostream>
+#include <iosfwd>
 #include <mfpf/mfpf_point_finder.h>
 #include <mbl/mbl_cloneable_ptr.h>
 #include <vgl/vgl_point_2d.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iosfwd>
 
 //: Basic snake, using dynamic programming to update.
 // Contains a single mfpf_point_finder, which is used to locate

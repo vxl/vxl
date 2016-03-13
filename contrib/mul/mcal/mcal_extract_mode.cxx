@@ -3,12 +3,11 @@
 // \brief Functions to learn modes from subsets of data
 // \author Tim Cootes
 
+#include <iostream>
+#include <algorithm>
 #include "mcal_extract_mode.h"
 #include <vnl/algo/vnl_symmetric_eigensystem.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <algorithm>
-#include <iostream>
 #include <mbl/mbl_data_array_wrapper.h>
 #include <mcal/mcal_pca.h>
 

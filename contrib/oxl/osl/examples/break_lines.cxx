@@ -6,10 +6,9 @@
 // \file
 // \author fsm
 
+#include <iostream>
 #include <vul/vul_arg.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 #include <osl/osl_edge.h>
 #include <osl/osl_break_edge.h>
 #include <osl/osl_load_topology.h>

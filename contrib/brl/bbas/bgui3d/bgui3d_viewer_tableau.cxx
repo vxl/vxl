@@ -1,13 +1,12 @@
 // This is brl/bbas/bgui3d/bgui3d_viewer_tableau.cxx
+#include <iostream>
+#include <cmath>
 #include "bgui3d_viewer_tableau.h"
 //:
 // \file
 
-#include <iostream>
 #include <vcl_cassert.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <cmath>
 #include "bgui3d_algo.h"
 #include <vgui/vgui_gl.h>
 #include <vnl/vnl_quaternion.h>

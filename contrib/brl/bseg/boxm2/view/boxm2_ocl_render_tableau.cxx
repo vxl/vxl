@@ -1,11 +1,11 @@
+#include <iostream>
+#include <sstream>
 #include "boxm2_ocl_render_tableau.h"
 //:
 // \file
 #include <vpgl/vpgl_perspective_camera.h>
 #include <vgui/vgui_modifier.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <sstream>
 #include <boxm2/ocl/boxm2_ocl_util.h>
 #include <boxm2/view/boxm2_view_utils.h>
 

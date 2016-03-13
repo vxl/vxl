@@ -12,9 +12,9 @@
 #include <vector>
 #include <string>
 #include <utility>
-#include <vcl_compiler.h>
 #include <iostream>
 #include <cmath>
+#include <vcl_compiler.h>
 #include <vnl/vnl_vector.h>
 
 //: Return true if a string contains a substring

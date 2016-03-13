@@ -3,9 +3,8 @@
 //:
 // \file
 
+#include <iostream>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 #include <boxm2/boxm2_block.h>
 #include <boxm2/boxm2_data.h>
 #include <testlib/testlib_test.h>

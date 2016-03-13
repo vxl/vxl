@@ -9,11 +9,11 @@
 //
 //-----------------------------------------------------------------------------
 
+#include <algorithm>
 #include "vidl_image_list_istream.h"
 #include "vidl_frame.h"
 #include "vidl_convert.h"
 #include <vcl_compiler.h>
-#include <algorithm>
 #include <vul/vul_file_iterator.h>
 #include <vul/vul_file.h>
 #include <vil/vil_image_resource_sptr.h>

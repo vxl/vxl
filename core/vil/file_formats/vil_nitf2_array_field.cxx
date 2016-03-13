@@ -2,14 +2,14 @@
 // Stellar Science Ltd. Co. (stellarscience.com) for
 // Air Force Research Laboratory, 2005.
 
+#include <cstddef>
+#include <sstream>
+#include <cstdlib>
 #include "vil_nitf2_array_field.h"
 #include "vil_nitf2_field_definition.h"
 #include "vil_nitf2_index_vector.h"
 
-#include <cstddef> // for size_t
-#include <sstream>
 #include <vcl_compiler.h>
-#include <cstdlib>
 #include <vil/vil_stream_core.h>
 
 int vil_nitf2_array_field::num_dimensions() const

@@ -16,11 +16,11 @@
 // Approved for Public Release, Distribution Unlimited (DISTAR Case 12529)
 //
 
-#include "bsta_parzen.h"
 #include <vector>
-#include <vcl_compiler.h>
 #include <iostream>
 #include <algorithm>
+#include "bsta_parzen.h"
+#include <vcl_compiler.h>
 
 //: forward declare vnl_matrix_fixed and vnl_vector_fixed
 template<class T, unsigned n, unsigned m> class vnl_matrix_fixed;

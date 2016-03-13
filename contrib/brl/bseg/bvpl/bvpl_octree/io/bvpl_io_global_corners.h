@@ -12,11 +12,10 @@
 //   <none yet>
 // \endverbatim
 
+#include <iostream>
 #include <bvpl/bvpl_octree/bvpl_global_corners.h>
 
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 #include <vsl/vsl_binary_io.h>
 
 typedef bvpl_global_corners bvpl_global_corners;

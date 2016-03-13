@@ -1,8 +1,8 @@
 // This is gel/vifa/vifa_coll_lines.cxx
-#include "vifa_coll_lines.h"
-#include <vcl_compiler.h>
 #include <iostream>
 #include <cmath>
+#include "vifa_coll_lines.h"
+#include <vcl_compiler.h>
 #include <vnl/vnl_math.h>
 #include <vsol/vsol_point_2d.h>
 #include <vtol/vtol_face.h>

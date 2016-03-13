@@ -1,4 +1,7 @@
 // This is brl/bseg/boxm2/pro/processes/boxm2_dem_to_xyz_process.cxx
+#include <fstream>
+#include <iostream>
+#include <algorithm>
 #include <bprb/bprb_func_process.h>
 //:
 // \file
@@ -12,7 +15,6 @@
 // \author Ozge C. Ozcanli
 // \date May 02, 2012
 
-#include <fstream>
 #include <boxm2/boxm2_scene.h>
 
 #include <vpgl/file_formats/vpgl_geo_camera.h>
@@ -21,8 +23,6 @@
 #include <vil/vil_image_resource.h>
 #include <vil/vil_load.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <algorithm>
 //#include <vil/vil_resample_bilin.h>
 #include <vil/vil_convert.h>
 #include <vil/vil_new.h>

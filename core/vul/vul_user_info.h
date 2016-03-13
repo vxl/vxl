@@ -17,8 +17,8 @@
 // \endverbatim
 //-----------------------------------------------------------------------------
 
-#include <vcl_compiler.h>
 #include <string>
+#include <vcl_compiler.h>
 
 //: Reads information about a user from the password file
 class vul_user_info

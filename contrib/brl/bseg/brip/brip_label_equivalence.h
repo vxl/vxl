@@ -12,10 +12,10 @@
 //   Initial version May 5, 2008
 // \endverbatim
 //
-#include <vcl_compiler.h>
 #include <iostream>
 #include <map>
 #include <set>
+#include <vcl_compiler.h>
 
 class brip_label_equivalence
 {

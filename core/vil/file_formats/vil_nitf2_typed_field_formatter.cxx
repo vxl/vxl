@@ -2,16 +2,16 @@
 // Stellar Science Ltd. Co. (stellarscience.com) for
 // Air Force Research Laboratory, 2005.
 
-#include "vil_nitf2_typed_field_formatter.h"
-
 #include <algorithm>
 #include <iomanip>
 #include <iostream>
 #include <utility>
+#include <cerrno>
+#include "vil_nitf2_typed_field_formatter.h"
+
 #include <vcl_compiler.h> //for VCL_WIN32
 
 #include <vcl_compiler.h>
-#include <cerrno>
 
 //==============================================================================
 // Class vil_nitf2_date_time_formatter

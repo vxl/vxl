@@ -1,5 +1,6 @@
 // This is core/vgui/vgui_font_bitmap.cxx
 //=========================================================================
+#include <iostream>
 #include "vgui_font_bitmap.h"
 //:
 // \file
@@ -11,7 +12,6 @@
 #include <vgui/vgui_macro.h>
 
 #include <vcl_compiler.h>
-#include <iostream>
 
 //-------------------------------------------------------------------------
 // Supported fonts - declarations (definitions below).

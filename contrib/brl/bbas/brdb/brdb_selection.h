@@ -13,9 +13,9 @@
 
 
 #include <vector>
-#include <vcl_compiler.h>
 #include <iostream>
 #include <set>
+#include <vcl_compiler.h>
 #include <vbl/vbl_ref_count.h>
 #include <brdb/brdb_relation_sptr.h>
 #include <brdb/brdb_selection_sptr.h>

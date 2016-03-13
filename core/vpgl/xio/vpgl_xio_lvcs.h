@@ -14,10 +14,10 @@
 //   <none yet>
 // \endverbatim
 
-#include <vpgl/vpgl_lvcs.h>
 #include <string>
-#include <vcl_compiler.h>
 #include <iosfwd>
+#include <vpgl/vpgl_lvcs.h>
+#include <vcl_compiler.h>
 
 //: XML save vpgl_lvcs to stream.
 // \relatesalso vpgl_lvcs

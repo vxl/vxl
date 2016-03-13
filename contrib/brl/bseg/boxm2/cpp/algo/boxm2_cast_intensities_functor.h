@@ -3,11 +3,10 @@
 //:
 // \file
 
+#include <iostream>
 #include <boxm2/cpp/algo/boxm2_cast_ray_function.h>
 #include <vil/vil_image_view.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 
 class boxm2_cast_intensities_functor
 {

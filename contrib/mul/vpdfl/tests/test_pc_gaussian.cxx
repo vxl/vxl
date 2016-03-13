@@ -1,14 +1,13 @@
 // This is mul/vpdfl/tests/test_pc_gaussian.cxx
+#include <iostream>
+#include <ctime>
 #include <testlib/testlib_test.h>
 //:
 // \file
 // \author Ian Scott
 // \brief test vpdfl_pc_gaussian, building, sampling, saving etc.
 
-#include <iostream>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <ctime>
 #include <vpl/vpl.h> // vpl_unlink()
 
 #include <vpdfl/vpdfl_pc_gaussian.h>

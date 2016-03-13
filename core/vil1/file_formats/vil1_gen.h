@@ -16,8 +16,8 @@
 #pragma interface
 #endif
 
-#include <vcl_compiler.h>
 #include <string>
+#include <vcl_compiler.h>
 #include <vil1/vil1_file_format.h>
 #include <vil1/vil1_image_impl.h>
 

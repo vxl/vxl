@@ -4,6 +4,9 @@
 // \author Gehua yang, Chia-ling Tsai
 // \date Aug 04 2004
 
+#include <iostream>
+#include <fstream>
+#include <string>
 #include "rgrl_trans_reader.h"
 #include <rgrl/rgrl_trans_translation.h>
 #include <rgrl/rgrl_trans_similarity.h>
@@ -16,11 +19,7 @@
 #include <rgrl/rgrl_trans_couple.h>
 #include <rgrl/rgrl_trans_spline.h>
 #include <rgrl/rgrl_util.h>
-#include <iostream>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <fstream>
-#include <string>
 #include <vcl_compiler.h>
 
 // initialize the static variables

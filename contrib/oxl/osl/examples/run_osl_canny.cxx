@@ -6,10 +6,9 @@
 // \file
 // \author fsm
 
+#include <iostream>
 #include <vcl_cassert.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 #include <vul/vul_arg.h>
 #include <vil1/vil1_load.h>
 

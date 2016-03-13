@@ -3,9 +3,9 @@
 // It then also computes the four complex 4th roots of 24i-7 by solving
 // x^4 - c4 = 0.
 
+#include <iostream>
 #include <vnl/algo/vnl_cpoly_roots.h>
 #include <vcl_compiler.h>
-#include <iostream>
 
 int main()
 {

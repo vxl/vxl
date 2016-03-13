@@ -1,4 +1,7 @@
 // This is mul/mbl/mbl_read_str.cxx
+#include <iostream>
+#include <cstdio>
+#include <cstring>
 #include "mbl_read_str.h"
 //:
 // \file
@@ -7,9 +10,6 @@
 //  Copyright: (C) 1994 Victoria University of Manchester
 
 #include <vcl_compiler.h>
-#include <iostream>
-#include <cstdio>
-#include <cstring>
 
 char* mbl_read_str(char *reply, int max_str_len, const char *q_str, const char *default_str)
 {

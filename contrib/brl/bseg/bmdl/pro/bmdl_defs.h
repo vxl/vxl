@@ -1,9 +1,9 @@
 #ifndef bmdl_defs_h_
 #define bmdl_defs_h_
 
-#include <vcl_compiler.h>
 #include <iostream>
 #include <string>
+#include <vcl_compiler.h>
 #include <vil/vil_image_resource.h>
 #include <vil/vil_image_view_base.h>
 #include <vil/vil_image_resource_sptr.h>

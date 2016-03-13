@@ -3,6 +3,7 @@
 //:
 // \file
 
+#include <iostream>
 #include "boxm_triangle_interpolation_iterator.h"
 #include "boxm_triangle_scan_iterator.h"
 #include <boxm/boxm_apm_traits.h>
@@ -14,8 +15,6 @@
 
 #if 0
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 #endif
 
 bool cube_fill_value(double* xverts_2d, double* yverts_2d, boct_face_idx visible_faces, vil_image_view<float> &img, float const& val);

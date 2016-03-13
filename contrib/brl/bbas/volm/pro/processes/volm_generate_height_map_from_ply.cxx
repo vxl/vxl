@@ -1,4 +1,6 @@
 // This is brl/bbas/volm/pro/processes/volm_generate_height_map_from_ply_process.cxx
+#include <iostream>
+#include <limits>
 #include <bprb/bprb_func_process.h>
 //:
 // \file
@@ -19,8 +21,6 @@
 #include <core/bbas_pro/bbas_1d_array_float.h>
 #include <vil/vil_math.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <limits>
 
 //:
 //  Take a colored segmentation output and map it to volm labels

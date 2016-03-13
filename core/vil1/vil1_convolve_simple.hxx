@@ -5,18 +5,18 @@
 // \file
 // \author fsm
 
+#include <algorithm>
+#include <vector>
+#include <iostream>
 #include "vil1_convolve_simple.h"
 
 #include <vcl_cassert.h>
-#include <algorithm>
 #include <vcl_compiler.h>
-#include <vector>
 
 #ifndef TRACE
 #define TRACE 0
 #endif
 #if TRACE
-#include <iostream>
 #endif
 
 //--------------------------------------------------------------------------------

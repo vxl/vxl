@@ -1,4 +1,6 @@
 // This is brl/bpro/core/brad_pro/processes/brad_update_joint_hist_3d_process.cxx
+#include <iostream>
+#include <fstream>
 #include <bprb/bprb_func_process.h>
 //:
 // \file
@@ -7,8 +9,6 @@
 #include <vsl/vsl_binary_io.h>
 #include <vil/vil_load.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <fstream>
 
 namespace bbas_core_brad_update_hist
 {

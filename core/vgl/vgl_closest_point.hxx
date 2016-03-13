@@ -1,8 +1,9 @@
 // This is core/vgl/vgl_closest_point.hxx
 #ifndef vgl_closest_point_hxx_
 #define vgl_closest_point_hxx_
-#include <vcl_compiler.h>
 #include <limits>
+#include <cmath>
+#include <vcl_compiler.h>
 //:
 // \file
 // \author Peter Vanroose, KULeuven, ESAT/PSI
@@ -27,7 +28,6 @@
 #include <vgl/vgl_ray_3d.h>
 #include <vgl/vgl_pointset_3d.h>
 #include <vcl_cassert.h>
-#include <cmath> // for std::abs(double)
 
 template <class T>
 static inline T square(T x) { return x*x; }

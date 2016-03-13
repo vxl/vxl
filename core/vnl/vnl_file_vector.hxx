@@ -4,12 +4,12 @@
 //:
 // \file
 
+#include <fstream>
+#include <iostream>
+#include <cstring>
 #include "vnl_file_vector.h"
 
 #include <vcl_compiler.h>
-#include <fstream>
-#include <iostream>
-#include <cstring> // for strcmp()
 
 //: Load vector from filename.
 template <class T>

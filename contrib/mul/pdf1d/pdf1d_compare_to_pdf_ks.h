@@ -7,10 +7,10 @@
 // \author Tim Cootes
 // \brief Test if data from a given distribution using Kolmogorov-Smirnov
 
-#include <pdf1d/pdf1d_compare_to_pdf.h>
-#include <vcl_compiler.h>
 #include <iostream>
 #include <iosfwd>
+#include <pdf1d/pdf1d_compare_to_pdf.h>
+#include <vcl_compiler.h>
 
 // \brief Test if data from a given distribution using Kolmogorov-Smirnov
 class pdf1d_compare_to_pdf_ks : public pdf1d_compare_to_pdf

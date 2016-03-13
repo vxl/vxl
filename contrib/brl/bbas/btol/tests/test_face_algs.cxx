@@ -1,8 +1,8 @@
 // This is brl/bbas/btol/tests/test_face_algs.cxx
-#include <testlib/testlib_test.h>
-#include <vcl_compiler.h>
 #include <iostream>
 #include <string>
+#include <testlib/testlib_test.h>
+#include <vcl_compiler.h>
 #include <vnl/vnl_matrix_fixed.h>
 #include <vgl/vgl_polygon.h>
 #include <vtol/vtol_vertex_2d_sptr.h>

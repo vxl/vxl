@@ -5,17 +5,17 @@
 // \file
 // \author Andrew Miller
 
-#include "bvgl_volume_of_intersection.h"
-
 #include <limits>
-#include <vcl_cassert.h>
 #include <cmath>
-#include <vcl_compiler.h>
 #include <iostream>
 #include <algorithm>
+#include <vector>
+#include "bvgl_volume_of_intersection.h"
+
+#include <vcl_cassert.h>
+#include <vcl_compiler.h>
 #include <vnl/vnl_math.h>
 #include <vgl/vgl_sphere_3d.h>
-#include <vector>
 
 //tolerance constants/functions
 static double bvgl_eps = 1.0e-8; // tolerance for intersections

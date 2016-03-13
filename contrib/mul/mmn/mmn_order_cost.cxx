@@ -3,10 +3,10 @@
 // \brief Functions to re-arrange cost data to match index rank
 // \author Tim Cootes
 
-#include "mmn_order_cost.h"
-#include <vcl_compiler.h>
 #include <iostream>
 #include <vector>
+#include "mmn_order_cost.h"
+#include <vcl_compiler.h>
 
 //: (i0,i1,i2) gives ordering of v0,v1,v2
 //  Each i is {0,1,2}, indicating rank of equivalent v

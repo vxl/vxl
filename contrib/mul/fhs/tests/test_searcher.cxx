@@ -1,8 +1,8 @@
 // This is mul/fhs/tests/test_searcher.cxx
-#include <testlib/testlib_test.h>
-#include <vcl_compiler.h>
 #include <iostream>
 #include <vector>
+#include <testlib/testlib_test.h>
+#include <vcl_compiler.h>
 #include <fhs/fhs_searcher.h>
 #include <vgl/vgl_point_2d.h>
 

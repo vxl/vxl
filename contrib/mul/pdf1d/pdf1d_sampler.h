@@ -7,9 +7,9 @@
 // \author Tim Cootes
 // \brief Base class for Univariate random sampler classes.
 
-#include <vnl/vnl_vector.h>
 #include <string>
 #include <iosfwd>
+#include <vnl/vnl_vector.h>
 class pdf1d_pdf;
 
 //=======================================================================

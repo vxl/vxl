@@ -5,10 +5,10 @@
 // \brief Region centred on a single point, pose defined by other pts
 // \author Tim Cootes
 
-#include <mfpf/mfpf_region_definer.h>
-#include <vcl_compiler.h>
 #include <iostream>
 #include <iosfwd>
+#include <mfpf/mfpf_region_definer.h>
+#include <vcl_compiler.h>
 
 //: Region centred on a single point, pose defined by other pts
 //  Region defined by three points, p0=pts[i0], p1, p2.

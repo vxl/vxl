@@ -19,9 +19,9 @@
 // \endverbatim
 //-----------------------------------------------------------------------------
 
-#include <vcl_compiler.h>
 #include <iostream>
 #include <vector>
+#include <vcl_compiler.h>
 #include <vnl/vnl_vector.h>
 #include <vgl/vgl_fwd.h>
 

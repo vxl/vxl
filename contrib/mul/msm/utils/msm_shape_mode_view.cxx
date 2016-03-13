@@ -4,14 +4,14 @@
 // \brief Generates shapes displaying modes of a shape model.
 // \author Tim Cootes
 
+#include <cmath>
+#include <iostream>
+#include <algorithm>
 #include "msm_shape_mode_view.h"
 #include <msm/msm_ref_shape_model.h>
-#include <cmath>
 #include <vsl/vsl_indent.h>
 #include <vcl_cassert.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <algorithm>
 
 //=======================================================================
 // Dflt ctor

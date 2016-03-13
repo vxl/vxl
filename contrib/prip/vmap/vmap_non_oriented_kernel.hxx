@@ -2,10 +2,10 @@
 #ifndef vmap_non_oriented_kernel_hxx_
 #define vmap_non_oriented_kernel_hxx_
 
-#include "vmap_non_oriented_kernel.h"
-#include <vcl_compiler.h>
 #include <iostream>
 #include <list>
+#include "vmap_non_oriented_kernel.h"
+#include <vcl_compiler.h>
 
 template <class TKernel>
 void

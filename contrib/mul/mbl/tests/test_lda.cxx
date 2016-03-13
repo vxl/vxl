@@ -1,10 +1,9 @@
 // This is mul/mbl/tests/test_lda.cxx
 #include <iostream>
-#include <vcl_cassert.h>
 #include <vector>
-#include <vcl_compiler.h>
-#include <iostream>
 #include <fstream>
+#include <vcl_cassert.h>
+#include <vcl_compiler.h>
 #include <vpl/vpl.h> // vpl_unlink()
 
 #include <mbl/mbl_lda.h>

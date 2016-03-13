@@ -1,8 +1,8 @@
 #pragma once
-#include <boxm2/boxm2_scene.h>
-#include <vcl_compiler.h>
 #include <iostream>
 #include <string>
+#include <boxm2/boxm2_scene.h>
+#include <vcl_compiler.h>
 #include "boxm2_vecf_articulated_params.h"
 #include <boxm2/boxm2_data_traits.h>
 //smart pointer

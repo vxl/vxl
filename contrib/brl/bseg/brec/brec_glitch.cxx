@@ -1,3 +1,6 @@
+#include <iostream>
+#include <cmath>
+#include <sstream>
 #include "brec_glitch.h"
 //:
 // \file
@@ -5,9 +8,6 @@
 // \date October 16, 2008
 
 #include <vcl_compiler.h>
-#include <iostream>
-#include <cmath>
-#include <sstream>
 #include <vil/vil_save.h>
 
 vil_image_view<vxl_byte>

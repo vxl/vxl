@@ -1,15 +1,14 @@
+#include <cstdlib>
+#include <iostream>
+#include <cmath>
+#include <algorithm>
 #include "bundler_sfm_impl.h"
 //
 #include <bundler/bundler_inters.h>
 #include <bundler/bundler_utils.h>
 
-#include <cstdlib>
-#include <iostream>
 #include <vcl_cassert.h>
-#include <cmath>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <algorithm>
 
 #include <vpgl/vpgl_calibration_matrix.h>
 #include <vpgl/algo/vpgl_em_compute_5_point.h>

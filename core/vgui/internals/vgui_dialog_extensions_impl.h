@@ -14,8 +14,8 @@
 //  Modifications
 // \endverbatim
 
-#include <vcl_compiler.h>
 #include <string>
+#include <vcl_compiler.h>
 #include "vgui_dialog_impl.h"
 
 //: vgui_dialog_extensions_impl is the abstract base class for dialog extensions implementation.

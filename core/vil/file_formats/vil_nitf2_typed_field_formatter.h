@@ -5,14 +5,14 @@
 #ifndef VIL_NITF2_TYPED_FIELD_FORMATTER_H
 #define VIL_NITF2_TYPED_FIELD_FORMATTER_H
 
+#include <iosfwd>
+#include <string>
+#include <sstream>
 #include "vil_nitf2_field_formatter.h"
 #include "vil_nitf2_tagged_record.h"
 
 #include <vcl_cassert.h>
 #include <vcl_compiler.h>
-#include <iosfwd>
-#include <string>
-#include <sstream>
 
 // All subclasses of NITF field formatter derive from this template
 // The template handles both scalars and vectors of type T.

@@ -15,10 +15,10 @@
 // \endverbatim
 //
 //-----------------------------------------------------------------------------
-#include <vbl/vbl_ref_count.h>
-#include <vcl_compiler.h>
 #include <iostream>
 #include <iosfwd>
+#include <vbl/vbl_ref_count.h>
+#include <vcl_compiler.h>
 
 class vdgl_fit_lines_params : public vbl_ref_count
 {

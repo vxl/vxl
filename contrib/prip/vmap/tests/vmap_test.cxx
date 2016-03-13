@@ -1,9 +1,8 @@
+#include <iostream>
 #include "my_map.h"
 #include "my_map_functions.hxx"
 #include <vmap/vmap_set_grid_structure.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 
 void tmap_test()
 {

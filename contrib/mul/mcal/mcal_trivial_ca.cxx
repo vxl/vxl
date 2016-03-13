@@ -1,3 +1,7 @@
+#include <iostream>
+#include <cstdlib>
+#include <string>
+#include <sstream>
 #include "mcal_trivial_ca.h"
 //:
 // \file
@@ -5,10 +9,6 @@
 // \brief Generates set of axis aligned modes for non-zero elements
 
 #include <vcl_compiler.h>
-#include <iostream>
-#include <cstdlib>
-#include <string>
-#include <sstream>
 
 #include <vsl/vsl_binary_io.h>
 #include <vnl/vnl_vector.h>

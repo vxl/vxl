@@ -1,11 +1,10 @@
+#include <string>
+#include <iostream>
+#include <cstdio>
 #include "bwm_io_kml_camera.h"
 #include "bwm_io_kml_parser.h"
 #include <expatpp.h>
-#include <string>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <cstdio>
-#include <iostream>
 bool bwm_io_kml_camera::read_camera(std::string const& camera_path,
                                     double& right_fov, double& top_fov,
                                     double& altitude, double& heading,

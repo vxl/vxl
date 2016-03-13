@@ -14,13 +14,13 @@
 
 #include <vector>
 #include <set>
-#include <vcl_cassert.h>
 #include <memory>
 #include <utility>
 #include <string>
-#include <vcl_compiler.h>
 #include <iostream>
 #include <algorithm>
+#include <vcl_cassert.h>
+#include <vcl_compiler.h>
 #include <vgl/vgl_vector_3d.h>
 
 #define imesh_invalid_idx (static_cast<unsigned int>(-1))

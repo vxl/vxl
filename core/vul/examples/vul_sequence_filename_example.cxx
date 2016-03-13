@@ -1,6 +1,6 @@
 // This is core/vul/examples/vul_sequence_filename_example.cxx
-#include <vcl_compiler.h>
 #include <iostream>
+#include <vcl_compiler.h>
 #include <vul/vul_sequence_filename_map.h>
 
 int main (int argc, char** argv)

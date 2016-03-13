@@ -5,12 +5,11 @@
 // \date   January 05, 2009
 //
 
+#include <string>
+#include <iostream>
 #include <testlib/testlib_test.h>
 
-#include <string>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 
 #include <brdb/brdb_value.h>
 #include <brdb/brdb_selection.h>

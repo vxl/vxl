@@ -1,10 +1,9 @@
 
+#include <iostream>
 #include "rgrl_feature_face_region.h"
 #include <rgrl/rgrl_transformation.h>
 #include <vnl/algo/vnl_svd.h>
 // not used? #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 #include <vcl_cassert.h>
 #include <rgrl/rgrl_cast.h>
 #include <rgrl/rgrl_util.h>

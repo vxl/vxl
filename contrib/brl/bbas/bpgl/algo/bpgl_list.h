@@ -11,10 +11,10 @@
 // \author Thomas Pollard
 // \date March 05, 2005
 
-#include <vcl_compiler.h>
 #include <iostream>
 #include <string>
 #include <vector>
+#include <vcl_compiler.h>
 
 template <class T>
 bool bpgl_read_list(

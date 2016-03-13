@@ -1,4 +1,6 @@
 // This is bbas/bpgl/algo/bpgl_vsol_lens_warp.cxx
+#include <list>
+#include <iostream>
 #include "bpgl_vsol_lens_warp.h"
 //:
 // \file
@@ -11,10 +13,7 @@
 #include <vsol/vsol_polyline_2d.h>
 #include <vsol/vsol_digital_curve_2d.h>
 #include <vsol/vsol_polygon_2d.h>
-#include <list>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 
 
 //: Apply lens distortion to this vsol_spatial_object_2d and produce a new spatial object

@@ -3,11 +3,11 @@
 // \author Joseph Mundy
 // \date  March 28, 2003
 
-#include <testlib/testlib_test.h>
 #include <cmath>
-#include <vcl_compiler.h>
 #include <vector>
 #include <iostream>
+#include <testlib/testlib_test.h>
+#include <vcl_compiler.h>
 #include <vgl/vgl_vector_2d.h>
 #include <vgl/vgl_point_2d.h>
 #include <vgl/vgl_line_2d.h>

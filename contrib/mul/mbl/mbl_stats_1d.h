@@ -6,11 +6,11 @@
 // \brief Simple statistics on a 1D variable.
 // \author Tim Cootes
 
-#include <vcl_compiler.h>
 #include <iostream>
 #include <iosfwd>
-#include <vsl/vsl_binary_io.h>
 #include <vector>
+#include <vcl_compiler.h>
+#include <vsl/vsl_binary_io.h>
 
 // windows thinks min and max are macros in this file, but they
 // are not, don't know where they are defined (somewhere in vxl!)

@@ -16,6 +16,7 @@
 //   21 Jul 2009 - Peter Vanroose - added inlined point intersection functions
 // \endverbatim
 
+#include <vector>
 #include <vgl/vgl_fwd.h> // forward declare various vgl classes
 #include <vgl/vgl_box_2d.h> // method "contains()"
 #include <vgl/vgl_box_3d.h> // method "contains()"
@@ -26,7 +27,6 @@
 #include <vgl/vgl_infinite_line_3d.h>
 #include <vgl/vgl_pointset_3d.h>
 #include <vcl_compiler.h>
-#include <vector>
 
 //: Return true if the two points intersect, i.e., coincide
 // \relatesalso vgl_point_2d

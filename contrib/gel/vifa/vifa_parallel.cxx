@@ -1,4 +1,6 @@
 // This is gel/vifa/vifa_parallel.cxx
+#include <iostream>
+#include <fstream>
 #include "vifa_parallel.h"
 //:
 // \file
@@ -13,8 +15,6 @@
 #ifdef DUMP
 #include <vul/vul_sprintf.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <fstream>
 
 static int pass = 0;
 #endif

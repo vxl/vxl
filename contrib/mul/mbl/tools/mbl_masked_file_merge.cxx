@@ -3,14 +3,13 @@
 // \brief Tool to apply mask-based merge operation between two value files
 
 #include <string>
-#include <vul/vul_arg.h>
 #include <exception>
 #include <iostream>
-#include <vcl_compiler.h>
-#include <iostream>
 #include <algorithm>
-#include <mbl/mbl_mask.h>
 #include <fstream>
+#include <vul/vul_arg.h>
+#include <vcl_compiler.h>
+#include <mbl/mbl_mask.h>
 
 // IO helpers - see below for definition
 bool load_values(const std::string & filename, std::vector<std::string> & values, bool ignore_blanks = true);

@@ -9,10 +9,10 @@
 // \author Peter Vanroose
 // \date 10-Oct-2001
 
+#include <iosfwd>
 #include <vsl/vsl_fwd.h>
 #include <vnl/vnl_rational.h>
 #include <vcl_compiler.h>
-#include <iosfwd>
 
 //: Binary save vnl_rational to stream.
 //  \relatesalso vnl_rational

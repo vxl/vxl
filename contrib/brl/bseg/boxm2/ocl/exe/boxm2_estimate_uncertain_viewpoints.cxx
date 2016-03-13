@@ -1,10 +1,9 @@
-#include <bocl/bocl_cl.h>
 #include <sstream>
-#include <vcl_where_root_dir.h>
-#include <iostream>
-#include <vcl_compiler.h>
 #include <iostream>
 #include <fstream>
+#include <bocl/bocl_cl.h>
+#include <vcl_where_root_dir.h>
+#include <vcl_compiler.h>
 
 #include <vpgl/vpgl_perspective_camera.h>
 #include <vsph/vsph_view_sphere.h>

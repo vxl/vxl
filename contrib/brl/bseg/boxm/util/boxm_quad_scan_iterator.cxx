@@ -1,12 +1,11 @@
+#include <vector>
+#include <cmath>
+#include <iostream>
+#include <algorithm>
 #include "boxm_quad_scan_iterator.h"
 //:
 // \file
-#include <vector>
-#include <cmath>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <algorithm>
-#include <iostream>
 
 //: constructor
 boxm_quad_scan_iterator::boxm_quad_scan_iterator(double *verts_x, double *verts_y,

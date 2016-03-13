@@ -14,10 +14,9 @@
 //   <none yet>
 // \endverbatim
 //
+#include <iostream>
 #include "volm_desc.h"
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 #include <volm_io.h>
 #include <vcl_cassert.h>
 #include <vsl/vsl_binary_io.h>

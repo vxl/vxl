@@ -5,11 +5,10 @@
 //:
 //  \file
 
+#include <iostream>
 #include "HomgPlane3D.h"
 
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 #include <vnl/vnl_double_3.h>
 #include <mvl/Homg3D.h>
 #include <mvl/HomgPoint3D.h>

@@ -18,11 +18,11 @@
 //   Peter Vanroose 18-JAN-2002    Added compute methods for F-matrix & H-matrix
 // \endverbatim
 
+#include <iostream>
+#include <vector>
 #include "xcv_twoview_manager.h"
 #include "xcv_threeview_manager.h"
 #include <vcl_compiler.h>
-#include <iostream>
-#include <vector>
 
 class vgui_menu;
 

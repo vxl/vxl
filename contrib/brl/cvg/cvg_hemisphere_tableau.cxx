@@ -1,3 +1,5 @@
+#include <iostream>
+#include <sstream>
 #include "cvg_hemisphere_tableau.h"
 //:
 // \file
@@ -5,8 +7,6 @@
 #include <vgui/vgui_modifier.h>
 #include <vgl/vgl_point_3d.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <sstream>
 
 #include <vil/vil_crop.h>
 #include <vil/vil_resample_bilin.h>

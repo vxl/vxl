@@ -1,4 +1,8 @@
 // This is mul/pdf1d/pdf1d_mixture.cxx
+#include <iostream>
+#include <cmath>
+#include <cstdlib>
+#include <string>
 #include "pdf1d_mixture.h"
 //:
 // \file
@@ -8,10 +12,6 @@
 //=======================================================================
 
 #include <vcl_compiler.h>
-#include <iostream>
-#include <cmath>
-#include <cstdlib>
-#include <string>
 #include <vsl/vsl_indent.h>
 #include <vsl/vsl_binary_loader.h>
 #include <pdf1d/pdf1d_mixture_sampler.h>

@@ -1,7 +1,6 @@
+#include <iostream>
 #include <testlib/testlib_test.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 #include <brip/brip_rect_mask.h>
 
 static void test_mask()

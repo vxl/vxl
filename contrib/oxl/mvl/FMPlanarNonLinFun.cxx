@@ -5,12 +5,11 @@
 //:
 // \file
 
+#include <iostream>
+#include <cstdlib>
 #include "FMPlanarNonLinFun.h"
 
 #include <vcl_compiler.h>
-#include <iostream>
-#include <cstdlib> // for std::abort()
-#include <iostream>
 
 #include <vnl/vnl_math.h>
 #include <vnl/vnl_matrix.h>

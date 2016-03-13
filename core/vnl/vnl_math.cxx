@@ -5,10 +5,10 @@
 //:
 // \file
 
+#include <limits>
 #include "vnl_math.h"
 #include <vxl_config.h>
 #include <vcl_compiler.h>
-#include <limits>
 
 #if  __cplusplus >= 201103L
 // Nothing to do for isnan,isfinite,isinf,isnormal

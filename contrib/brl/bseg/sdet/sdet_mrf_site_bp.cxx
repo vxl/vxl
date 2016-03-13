@@ -1,13 +1,12 @@
+#include <iostream>
+#include <string>
+#include <cmath>
 #include "sdet_mrf_site_bp.h"
 //:
 // \file
 
 #include <vnl/vnl_numeric_traits.h>
-#include <iostream>
-#include <string>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <cmath>
 
 sdet_mrf_site_bp::sdet_mrf_site_bp(unsigned n_labels, float lambda, float truncation_cost)
   : lambda_(lambda), truncation_cost_(truncation_cost), prior_(0),

@@ -1,13 +1,13 @@
 // This is core/vidl/tests/test_convert.cxx
+#include <iostream>
+#include <cstring>
 #include <testlib/testlib_test.h>
 #include <vcl_compiler.h>
-#include <iostream>
 #include <vil/vil_image_view.h>
 #include <vil/vil_crop.h>
 #include <vidl/vidl_config.h>
 #include <vidl/vidl_convert.h>
 #include <vul/vul_timer.h>
-#include <cstring> // for std::memcpy
 
 #if VIDL_HAS_FFMPEG
 #include <vidl/vidl_ffmpeg_convert.h>

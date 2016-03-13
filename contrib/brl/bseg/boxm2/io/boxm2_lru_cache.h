@@ -4,10 +4,9 @@
 // \file
 // \brief boxm2_lru_cache (least recently used) is a singleton, derived from abstract class boxm2_cache
 
+#include <iostream>
 #include <boxm2/io/boxm2_cache.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 
 #define MAX_BYTES 1024*1024*1024*4 // 4 gigs of memory is max...
 struct ltstr1

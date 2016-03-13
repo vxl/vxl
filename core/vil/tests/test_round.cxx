@@ -1,7 +1,7 @@
 #include <iostream>
-#include <vcl_compiler.h>
 #include <iomanip>
-#include <limits> // for infinity()
+#include <limits>
+#include <vcl_compiler.h>
 #include <vil/vil_round.h>
 #include <testlib/testlib_test.h>
 

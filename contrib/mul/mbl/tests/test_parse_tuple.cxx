@@ -1,8 +1,7 @@
 // This is mul/mbl/tests/test_parse_tuple.cxx
-#include <vcl_compiler.h>
-#include <iostream>
 #include <iostream>
 #include <sstream>
+#include <vcl_compiler.h>
 
 #include <mbl/mbl_parse_tuple.h>
 

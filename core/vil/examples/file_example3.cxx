@@ -3,8 +3,8 @@
 // \brief Example of creating, processing and using an image data object
 // \author Ian Scott
 
-#include <vcl_compiler.h>
 #include <iostream>
+#include <vcl_compiler.h>
 #include <vxl_config.h> // for vxl_byte
 #include <vil/vil_load.h>
 #include <vil/vil_save.h>

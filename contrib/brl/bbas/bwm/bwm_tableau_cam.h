@@ -3,6 +3,8 @@
 //:
 // \file
 
+#include <iostream>
+#include <string>
 #include "bwm_observable.h"
 #include "bwm_observer_cam.h"
 #include "bwm_tableau_img.h"
@@ -16,8 +18,6 @@
 #include <vsol/vsol_point_3d_sptr.h>
 
 #include <vcl_compiler.h>
-#include <iostream>
-#include <string>
 
 
 class bwm_tableau_cam : public bwm_tableau_img

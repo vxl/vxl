@@ -5,6 +5,13 @@
 #ifndef rgtl_octree_objects_txx
 #define rgtl_octree_objects_txx
 
+#include <iostream>
+#include <cmath>
+#include <limits>
+#include <map>
+#include <set>
+#include <stack>
+#include <vector>
 #include "rgtl_octree_objects.hxx"
 
 #include "rgtl_object_array.hxx"
@@ -21,13 +28,6 @@
 #include <vnl/vnl_math.h>
 
 #include <vcl_compiler.h>
-#include <iostream>
-#include <cmath>
-#include <limits>
-#include <map>
-#include <set>
-#include <stack>
-#include <vector>
 
 // TODO: During tree construction we should check the set of objects
 // in the current node.  Those with no boundary inside the node should

@@ -13,9 +13,9 @@
 //    Make it work with the whole database initially based on Matt's sketch.
 // \endverbatim
 
-#include <vcl_compiler.h>
 #include <iostream>
 #include <vector>
+#include <vcl_compiler.h>
 #include <vcl_cassert.h>
 #include <vbl/vbl_ref_count.h>
 #include <brdb/brdb_value.h>

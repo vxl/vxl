@@ -14,6 +14,8 @@
 //   <none yet>
 // \endverbatim
 
+#include <iostream>
+#include <limits>
 #include "bvxm_voxel_grid_base.h"
 #include "bvxm_voxel_grid.h"
 #include "bvxm_voxel_slab_iterator.h"
@@ -29,9 +31,6 @@
 #include <vil3d/algo/vil3d_distance_transform.h>
 #include <vnl/vnl_vector_fixed.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
-#include <limits>
 
 //: Multiplies 2 grids. The types of input grids must have a * operator
 template <class T>

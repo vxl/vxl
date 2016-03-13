@@ -1,9 +1,9 @@
+#include <iostream>
+#include <queue>
 #include "boxm2_to_boxm.h"
 //:
 // \file
 #include <vcl_compiler.h>
-#include <iostream>
-#include <queue>
 #include <vcl_cassert.h>
 
 //executable args

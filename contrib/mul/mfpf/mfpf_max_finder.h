@@ -6,11 +6,11 @@
 // \brief Locates largest value along a profile
 // \author Tim Cootes
 
+#include <iostream>
+#include <iosfwd>
 #include <mfpf/mfpf_point_finder.h>
 #include <vgl/vgl_fwd.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iosfwd>
 
 //: Locates largest value along a profile.
 class mfpf_max_finder : public mfpf_point_finder

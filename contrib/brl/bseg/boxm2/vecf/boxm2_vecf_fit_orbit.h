@@ -9,14 +9,13 @@
 //
 #include <string>
 #include <iostream>
-#include <vcl_compiler.h>
-#include <iostream>
 #include <fstream>
+#include <map>
+#include <vcl_compiler.h>
 #include "boxm2_vecf_labeled_point.h"
 #include "boxm2_vecf_orbit_params.h"
 #include <vgl/vgl_point_3d.h>
 #include <vgl/vgl_sphere_3d.h>
-#include <map>
 
 class boxm2_vecf_fit_orbit{
  public:

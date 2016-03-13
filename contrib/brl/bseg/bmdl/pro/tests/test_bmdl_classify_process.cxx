@@ -1,10 +1,10 @@
+#include <iostream>
+#include <string>
 #include <testlib/testlib_test.h>
 #include "../bmdl_processes.h"
 
 #include <vcl_compiler.h>
 #include <vcl_string.h>
-#include <iostream>
-#include <string>
 
 #include <brdb/brdb_value.h>
 #include <brdb/brdb_selection.h>

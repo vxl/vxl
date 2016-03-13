@@ -14,9 +14,9 @@
 
 
 // Generic includes.
-#include <vcl_compiler.h>
 #include <iostream>
 #include <vector>
+#include <vcl_compiler.h>
 #include <vnl/vnl_sparse_matrix.h>
 
 // We use vil_image_resources since they are not in memory, and we might

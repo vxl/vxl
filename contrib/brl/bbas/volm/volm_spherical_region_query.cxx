@@ -1,9 +1,9 @@
+#include <iostream>
+#include <vector>
 #include "volm_spherical_region_query.h"
 #include <vsph/vsph_unit_sphere.h>
 #include <bsol/bsol_algs.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <vector>
 #include <vcl_cassert.h>
 #include <vsph/vsph_utils.h>
 #include <volm/volm_char_codes.h>

@@ -11,12 +11,12 @@
 // \date   12 Oct 2009
 //
 
+#include <iosfwd>
 #include <vnl/vnl_numeric_traits.h>
 #include <vnl/vnl_vector_fixed.h>
 #include <vnl/vnl_matrix_fixed.h>
 #include <vnl/vnl_diag_matrix_fixed.h>
 #include <vcl_compiler.h>
-#include <iosfwd>
 
 //: Holds the singular value decomposition of a vnl_matrix_fixed.
 //

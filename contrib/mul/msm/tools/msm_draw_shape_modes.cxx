@@ -3,16 +3,16 @@
 // \brief Tool to write eps files showing modes of model
 // \author Tim Cootes
 
+#include <sstream>
+#include <fstream>
+#include <string>
+#include <iostream>
+#include <algorithm>
 #include <mbl/mbl_read_props.h>
 #include <mbl/mbl_exception.h>
 #include <vul/vul_arg.h>
 #include <vul/vul_string.h>
-#include <sstream>
-#include <fstream>
-#include <string>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <algorithm>
 #include <vsl/vsl_quick_file.h>
 
 #include <msm/msm_shape_model.h>

@@ -1,8 +1,9 @@
 // This is core/vil/tests/test_image_resource.cxx
+#include <complex>
+#include <iostream>
 #include <testlib/testlib_test.h>
 
 #include <vcl_compiler.h>
-#include <complex>
 
 // These are "dummy" operator< for complex<T>.  These functions are never
 // to be actually called, but declaring these makes it possible to use a
@@ -12,7 +13,6 @@ static inline bool operator< (std::complex<double>const&, std::complex<double>co
 static inline bool operator> (std::complex<float> const&, std::complex<float> const&) { return false; }
 static inline bool operator> (std::complex<double>const&, std::complex<double>const&) { return false; }
 
-#include <iostream>
 #include <vil/vil_image_resource.h>
 #include <vil/vil_math.h>
 #include <vil/vil_new.h>

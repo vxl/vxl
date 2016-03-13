@@ -1,4 +1,8 @@
 // This is brl/bbas/bhdfs/tests/test_vil_save_load_image.cxx
+#include <iostream>
+#include <cstring>
+#include <string>
+#include <fstream>
 #include <testlib/testlib_test.h>
 //:
 // \file
@@ -11,11 +15,6 @@
 // \endverbatim
 
 #include <vcl_compiler.h>
-#include <iostream>
-#include <cstring>
-#include <string>
-#include <iostream>
-#include <fstream>
 
 #include <vxl_config.h> // for vxl_byte
 #include <vil/vil_config.h> // for HAS_JPEG

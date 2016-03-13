@@ -7,11 +7,11 @@
 // \date  7-Aug-2007
 // \brief Load an int_list of PODs/objects from a config file.
 
-#include <mbl/mbl_exception.h>
 #include <istream>
-#include <vcl_compiler.h>
 #include <iostream>
 #include <cctype>
+#include <mbl/mbl_exception.h>
+#include <vcl_compiler.h>
 
 //: Read a list of integers from a stream.
 // This integer list should be space-separated.

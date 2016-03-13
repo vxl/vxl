@@ -5,12 +5,12 @@
 // \brief Builder for mfpf_sad_vec_cost objects.
 // \author Tim Cootes
 
-#include <mfpf/mfpf_vec_cost_builder.h>
-#include <vnl/vnl_vector.h>
-#include <vcl_compiler.h>
 #include <iostream>
 #include <iosfwd>
 #include <vector>
+#include <mfpf/mfpf_vec_cost_builder.h>
+#include <vnl/vnl_vector.h>
+#include <vcl_compiler.h>
 
 //: Builder for mfpf_sad_vec_cost objects.
 class mfpf_sad_vec_cost_builder : public mfpf_vec_cost_builder

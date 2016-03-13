@@ -2,14 +2,14 @@
 #ifndef vpgl_camera_convert_cxx_
 #define vpgl_camera_convert_cxx_
 
+#include <iostream>
+#include <cstdlib>
+#include <cmath>
 #include "vpgl_camera_convert.h"
 //:
 // \file
-#include <iostream>
 #include <vcl_cassert.h>
 #include <vcl_compiler.h>
-#include <cstdlib> // for rand()
-#include <cmath> // for std::pow()
 #include <vnl/vnl_numeric_traits.h>
 #include <vnl/vnl_det.h>
 #include <vnl/vnl_vector_fixed.h>

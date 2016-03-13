@@ -1,13 +1,13 @@
 // This is core/vnl/tests/test_matlab.cxx
+#include <iostream>
+#include <cstring>
+#include <fstream>
 #include <testlib/testlib_test.h>
 //:
 // \file
 // \author fsm
 
-#include <iostream>
-#include <cstring>
 #include <vcl_compiler.h>
-#include <fstream>
 
 #include <vpl/vpl.h>
 

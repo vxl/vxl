@@ -1,12 +1,11 @@
 // This is brl/bseg/sdet/sdet_edgel_regions.cxx
+#include <iostream>
+#include <algorithm>
 #include "sdet_edgel_regions.h"
 //:
 // \file
 
-#include <iostream>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <algorithm> // std::find()
 #include <vbl/vbl_qsort.h> // for sorting labels
 
 #include <vxl_config.h>

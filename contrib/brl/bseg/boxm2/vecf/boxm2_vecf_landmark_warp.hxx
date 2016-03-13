@@ -1,6 +1,10 @@
 #ifndef boxm2_vecf_landmark_warp_hxx_included_
 #define boxm2_vecf_landmark_warp_hxx_included_
 
+#include <iostream>
+#include <stdexcept>
+#include <vector>
+#include <utility>
 #include "boxm2_vecf_landmark_warp.h"
 #include <boxm2/boxm2_data.h>
 #include <boxm2/boxm2_block.h>
@@ -9,10 +13,6 @@
 #include <boct/boct_bit_tree.h>
 #include <vgl/vgl_point_3d.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <stdexcept>
-#include <vector>
-#include <utility> // for make_pair
 #include <rsdl/rsdl_kd_tree.h>
 #include <rsdl/rsdl_point.h>
 

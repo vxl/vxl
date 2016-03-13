@@ -1,4 +1,6 @@
 // This is brl/bseg/boxm2/ocl/pro/processes/boxm2_ocl_aggregate_normal_from_filter_vector_process.cxx
+#include <iostream>
+#include <fstream>
 #include <bprb/bprb_func_process.h>
 //:
 // \file
@@ -31,8 +33,6 @@
 
 //utilities
 #include <vcl_compiler.h>
-#include <iostream>
-#include <fstream>
 #include <vul/vul_timer.h>
 
 namespace boxm2_ocl_aggregate_normal_from_filter_vector_process_globals

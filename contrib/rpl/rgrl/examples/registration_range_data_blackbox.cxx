@@ -21,10 +21,9 @@
 // estimate_normals_3d first to generate the normals.
 //
 
-#include <vcl_compiler.h>
 #include <iostream>
 #include <fstream>
-#include <iostream>
+#include <vcl_compiler.h>
 #include <vnl/vnl_math.h>
 #include <vnl/vnl_vector_fixed.h>
 

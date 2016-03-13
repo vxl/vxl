@@ -3,9 +3,9 @@
 //:
 // \file
 
-#include <vcl_compiler.h>
 #include <iostream>
 #include <vector>
+#include <vcl_compiler.h>
 #include <rsdl/rsdl_point.h>
 #include <rsdl/rsdl_bounding_box.h>
 #include <vbl/vbl_ref_count.h>

@@ -6,13 +6,13 @@
 #ifndef rtvl_tokens_hxx
 #define rtvl_tokens_hxx
 
+#include <iostream>
+#include <vector>
 #include "rtvl_tensor.hxx"
 
 #include <rgtl/rgtl_object_array_points.hxx>
 
 #include <vcl_compiler.h>
-#include <iostream>
-#include <vector>
 
 #include <rgtl/rgtl_serialize_access.hxx>
 #include <rgtl/rgtl_serialize_base.hxx>

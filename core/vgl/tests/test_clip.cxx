@@ -1,7 +1,7 @@
+#include <cmath>
 #include <vgl/vgl_polygon.h>
 #include <vgl/vgl_clip.h>
 #include <vcl_compiler.h>
-#include <cmath> // for abs(float/double)
 
 #include <testlib/testlib_test.h>
 

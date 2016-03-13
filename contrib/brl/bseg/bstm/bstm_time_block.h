@@ -11,14 +11,14 @@
 //  its destructor.
 //
 //
+#include <iostream>
+#include <iosfwd>
 #include <bstm/bstm_time_tree.h>
 #include <bstm/bstm_block_metadata.h>
 #include <bstm/basic/bstm_block_id.h>
 #include <boxm2/basic/boxm2_array_1d.h>
 #include <vnl/vnl_vector_fixed.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iosfwd>
 
 //smart pointer stuff
 #include <vbl/vbl_ref_count.h>

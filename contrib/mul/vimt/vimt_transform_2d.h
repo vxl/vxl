@@ -13,13 +13,13 @@
 //   2011-06-10 Peter Vanroose - modified signature of set_*() to return *this
 // \endverbatim
 
+#include <iostream>
+#include <iosfwd>
 #include <vnl/vnl_fwd.h>
 #include <vgl/vgl_vector_2d.h>
 #include <vgl/vgl_point_2d.h>
 #include <vsl/vsl_binary_io.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iosfwd>
 
 //: 2D transform, which can be up to a projective transformation.
 // In order of complexity the transform can be

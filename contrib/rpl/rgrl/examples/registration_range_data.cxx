@@ -18,10 +18,9 @@
 //  EndLatex
 
 #include <sstream>
-#include <vcl_compiler.h>
 #include <iostream>
 #include <fstream>
-#include <iostream>
+#include <vcl_compiler.h>
 #include <vnl/vnl_math.h>
 #include <vnl/vnl_vector_fixed.h>
 

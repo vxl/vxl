@@ -19,9 +19,9 @@
 //   000216 AWF Initial version.
 // \endverbatim
 
+#include <string>
 #include <vcl_cassert.h>
 #include <vcl_compiler.h>
-#include <string>
 
 class vil1_image;
 

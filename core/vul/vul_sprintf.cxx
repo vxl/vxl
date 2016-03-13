@@ -8,14 +8,14 @@
 //
 //-----------------------------------------------------------------------------
 
-#include "vul_sprintf.h"
-
-#include <vcl_compiler.h>
 #include <cstdarg>
 #include <cstring>
 #include <iostream>
+#include <cstdio>
+#include "vul_sprintf.h"
+
+#include <vcl_compiler.h>
 #undef vsprintf // this works around a bug in libintl.h
-#include <cstdio> // for vsprintf()
 
 vul_sprintf::vul_sprintf(char const *fmt, ...) : std::string("")
 {

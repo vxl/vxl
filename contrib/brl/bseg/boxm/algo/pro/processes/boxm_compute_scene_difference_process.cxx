@@ -1,5 +1,8 @@
 // This is brl/bseg/boxm/algo/pro/processes/boxm_compute_scene_difference_process.cxx
 
+#include <string>
+#include <iostream>
+#include <fstream>
 #include <boxm/boxm_scene_base.h>
 #include <boxm/boxm_scene.h>
 //:
@@ -19,11 +22,7 @@
 
 #include <brdb/brdb_value.h>
 
-#include <string>
-#include <iostream>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <fstream>
 
 #include <boxm/boxm_scene_parser.h>
 #include <boxm/algo/boxm_compute_scene_difference.h>

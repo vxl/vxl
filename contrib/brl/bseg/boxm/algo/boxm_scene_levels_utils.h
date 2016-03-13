@@ -12,10 +12,9 @@
 //   <none yet>
 // \endverbatim
 
+#include <iostream>
 #include <boxm/boxm_scene.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 
 template <class T_data>
 boxm_scene<boct_tree<short, bool> >* boxm_explore_cells_at_level(boxm_scene<boct_tree<short, T_data> > *scene_in, short level)

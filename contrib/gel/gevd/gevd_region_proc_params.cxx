@@ -1,4 +1,6 @@
 // This is gel/gevd/gevd_region_proc_params.cxx
+#include <iostream>
+#include <sstream>
 #include "gevd_region_proc_params.h"
 //:
 // \file
@@ -7,9 +9,6 @@
 //-----------------------------------------------------------------------------
 
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
-#include <sstream>
 
 //------------------------------------------------------------------------
 // Constructors

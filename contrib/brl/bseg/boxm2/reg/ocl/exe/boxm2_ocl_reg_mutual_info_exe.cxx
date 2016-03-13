@@ -6,6 +6,8 @@
 // \brief  Register two boxm2 worlds using muual information.
 // \author Vishal JAin
 // \date Apr-21-2014
+#include <iostream>
+#include <algorithm>
 #include <boxm2/reg/ocl/boxm2_ocl_reg_mutual_info.h>
 #include <boxm2/reg/ocl/boxm2_ocl_hierarchical_reg.h>
 #include <boxm2/boxm2_scene.h>
@@ -17,8 +19,6 @@
 #include <vul/vul_arg.h>
 #include <vul/vul_timer.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <algorithm>
 #include <bocl/bocl_manager.h>
 #include <bocl/bocl_device.h>
 #include <boxm2/ocl/boxm2_opencl_cache.h>
@@ -27,7 +27,6 @@
 #include <vnl/algo/vnl_powell.h>
 #include <vnl/algo/vnl_levenberg_marquardt.h>
 
-#include <iostream>
 #include <vil/vil_image_view.h>
 #include <vil/vil_save.h>
 

@@ -5,11 +5,11 @@
 // \brief Functions to learn modes from subsets of data
 // \author Tim Cootes
 
+#include <iostream>
+#include <vector>
 #include <vnl/vnl_vector.h>
 #include <vnl/vnl_matrix.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <vector>
 
 //: Computes one mode from used elements of each \p dv
 //  Compute a mode which only uses a subset of the elements,

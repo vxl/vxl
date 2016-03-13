@@ -7,11 +7,11 @@
 // \author J.L. Mundy
 // \date   18 November 2015
 //
-#include <boxm2/boxm2_scene.h>
-#include <vcl_compiler.h>
 #include <iostream>
 #include <cmath>
 #include <string>
+#include <boxm2/boxm2_scene.h>
+#include <vcl_compiler.h>
 
 // template over a functor that defines surface distance
 // the vector types contains the prefix strings for each database in databases

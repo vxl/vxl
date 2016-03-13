@@ -6,10 +6,10 @@
 // \author Gehua Yang (yangg2@rpi.edu)
 // \date Nov 2004
 
-#include <rrel/rrel_ran_sam_search.h>
-#include <vcl_compiler.h>
 #include <iostream>
 #include <vector>
+#include <rrel/rrel_ran_sam_search.h>
+#include <vcl_compiler.h>
 
 class rrel_wgted_ran_sam_search : public rrel_ran_sam_search
 {

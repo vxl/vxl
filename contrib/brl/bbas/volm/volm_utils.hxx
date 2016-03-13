@@ -3,16 +3,15 @@
 #define volm_utils_hxx_
 //:
 // \file
+#include <iostream>
+#include <limits>
+#include <cmath>
 #include "volm_utils.h"
 #include <vgl/vgl_box_2d.h>
 #include <vgl/vgl_polygon.h>
 #include <vgl/vgl_line_segment_2d.h>
 #include <vgl/vgl_line_2d.h>
-#include <iostream>
-#include <limits>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <cmath>
 
 #define EPSILON 1E-6
 

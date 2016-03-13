@@ -1,6 +1,9 @@
 #ifndef boxm_shadow_app_initializer_hxx_
 #define boxm_shadow_app_initializer_hxx_
 
+#include <vector>
+#include <iostream>
+#include <string>
 #include "boxm_shadow_app_initializer.h"
 #include "boxm_shadow_appearance_estimator.h"
 
@@ -9,10 +12,7 @@
 #include <boxm/boxm_scene.h>
 #include <boxm/boxm_aux_scene.h>
 
-#include <vector>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <string>
 
 template <class T_loc, boxm_apm_type APM, boxm_aux_type AUX>
 boxm_shadow_app_initializer<T_loc,APM,AUX>::boxm_shadow_app_initializer(

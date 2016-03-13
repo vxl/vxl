@@ -13,14 +13,13 @@
 // \endverbatim
 //
 
+#include <iostream>
 #include <vipl/accessors/vipl_accessors_vil_image_view.h>
 #include <vipl/accessors/vipl_accessors_vcl_vector.h>
 #include <vipl/vipl_with_vnl_matrix/accessors/vipl_accessors_vnl_vector.h>
 #include <vipl/vipl_histogram.h>
 #include <vnl/vnl_vector.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 #include "test_driver.h"
 #include <vxl_config.h> // for vxl_byte
 

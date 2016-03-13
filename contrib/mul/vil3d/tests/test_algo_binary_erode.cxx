@@ -1,8 +1,7 @@
 // This is mul/vil3d/tests/test_algo_binary_erode.cxx
+#include <iostream>
 #include <testlib/testlib_test.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 #include <vil3d/algo/vil3d_binary_erode.h>
 
 inline void print_binary_image(const vil3d_image_view<bool>& im)

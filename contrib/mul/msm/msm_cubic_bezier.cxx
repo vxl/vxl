@@ -3,9 +3,10 @@
 // \brief Basic implementation of a cubic poly-bezier
 // \author Tim Cootes
 
-#include "msm_cubic_bezier.h"
 #include <iostream>
 #include <sstream>
+#include <cstdlib>
+#include "msm_cubic_bezier.h"
 #include <vsl/vsl_indent.h>
 #include <vsl/vsl_binary_io.h>
 #include <vsl/vsl_vector_io.h>
@@ -14,8 +15,6 @@
 #include <vgl/io/vgl_io_vector_2d.h>
 #include <vnl/algo/vnl_cholesky.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <cstdlib>  // for std::abort()
 
 //: Return position at t (in [0,1]) given end point q
 vgl_point_2d<double> msm_cubic_bezier_node::point(double t, const vgl_point_2d<double>& q) const

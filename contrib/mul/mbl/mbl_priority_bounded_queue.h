@@ -8,9 +8,9 @@
 
 #include <vector>
 #include <functional>
-#include <vcl_compiler.h>
 #include <iostream>
 #include <algorithm>
+#include <vcl_compiler.h>
 
 //: A bounded priority queue
 // This is identical to a std::priority_queue, but

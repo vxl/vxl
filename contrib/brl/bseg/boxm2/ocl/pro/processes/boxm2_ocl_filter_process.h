@@ -1,13 +1,13 @@
 #ifndef boxm2_ocl_filter_process_h_
 #define boxm2_ocl_filter_process_h_
+#include <vector>
+#include <string>
+#include <iostream>
+#include <map>
 #include <bprb/bprb_func_process.h>
 #include <bocl/bocl_device.h>
 #include <bocl/bocl_kernel.h>
-#include <vector>
-#include <string>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <map>
 #include <vcl_where_root_dir.h>
 
 

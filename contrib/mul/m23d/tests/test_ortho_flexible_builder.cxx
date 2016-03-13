@@ -1,12 +1,11 @@
 // This is mul/m23d/tests/test_ortho_flexible_builder.cxx
-#include <testlib/testlib_test.h>
 #include <iostream>
+#include <cmath>
+#include <algorithm>
+#include <testlib/testlib_test.h>
 #include <m23d/m23d_make_ortho_projection.h>
 #include <m23d/m23d_ortho_flexible_builder.h>
-#include <cmath>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <algorithm>
 #include <vnl/vnl_random.h>
 #include <vnl/vnl_vector.h>
 #include <m23d/m23d_rotation_matrix.h>

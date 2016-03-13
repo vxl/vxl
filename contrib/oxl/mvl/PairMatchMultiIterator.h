@@ -17,9 +17,9 @@
 
 #include <functional>
 #include <map>
-#include <vcl_compiler.h>
 #include <iostream>
-#include <cstdlib> // for std::abort()
+#include <cstdlib>
+#include <vcl_compiler.h>
 class PairMatchMulti;
 
 // conceptually a list of tuples (index1, index2, strength)

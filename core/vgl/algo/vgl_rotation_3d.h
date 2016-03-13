@@ -19,20 +19,20 @@
 //   Peter Vanroose 2010-10-24 mutators and setters now return *this
 // \endverbatim
 
+#include <cmath>
+#include <vector>
+#include <iostream>
 #include <vnl/vnl_vector_fixed.h>
 #include <vnl/vnl_matrix_fixed.h>
 #include <vnl/vnl_quaternion.h>
 #include <vnl/vnl_cross.h>
 #include <vnl/vnl_math.h>
-#include <cmath>
 #include <vgl/vgl_fwd.h>
 #include <vgl/vgl_point_3d.h>
 #include <vgl/vgl_homg_point_3d.h>
 #include <vgl/algo/vgl_h_matrix_3d.h>
 #include <vgl/vgl_tolerance.h>
 #include <vcl_compiler.h>
-#include <vector>
-#include <iostream>
 
 template <class T>
 class vgl_rotation_3d

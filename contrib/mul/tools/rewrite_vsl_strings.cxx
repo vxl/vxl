@@ -9,10 +9,9 @@
 #include <iterator>
 #include <ios>
 #include <streambuf>
-#include <vcl_compiler.h>
-#include <iostream>
 #include <algorithm>
 #include <sstream>
+#include <vcl_compiler.h>
 #include <vul/vul_arg.h>
 #include <vsl/vsl_binary_io.h>
 #include <mbl/mbl_exception.h>

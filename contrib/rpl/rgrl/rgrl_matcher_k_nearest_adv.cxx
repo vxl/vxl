@@ -1,3 +1,5 @@
+#include <iostream>
+#include <map>
 #include "rgrl_matcher_k_nearest_adv.h"
 //:
 // \file
@@ -11,8 +13,6 @@
 #include <rgrl/rgrl_match_set.h>
 // not used? #include <vector>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <map>
 #include <vcl_cassert.h>
 
 //-----------------------------------------------

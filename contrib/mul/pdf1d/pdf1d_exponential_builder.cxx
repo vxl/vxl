@@ -3,14 +3,14 @@
 //:
 // \file
 
+#include <string>
+#include <cstdlib>
+#include <iostream>
+#include <cmath>
 #include "pdf1d_exponential_builder.h"
 
 #include <vcl_cassert.h>
-#include <string>
-#include <cstdlib> // std::abort()
 #include <vcl_compiler.h>
-#include <iostream>
-#include <cmath>
 
 #include <mbl/mbl_data_wrapper.h>
 #include <mbl/mbl_data_array_wrapper.h>

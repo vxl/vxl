@@ -1,5 +1,5 @@
-#include <vcl_compiler.h>
 #include <iostream>
+#include <vcl_compiler.h>
 #include <vxl_config.h>
 #include <vil/vil_rgb.h>
 #include <vil/vil_load.h>

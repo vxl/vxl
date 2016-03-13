@@ -1,4 +1,6 @@
 // This is brl/bseg/boxm2/pro/processes/boxm2_load_mesh_process.cxx
+#include <iostream>
+#include <fstream>
 #include <bprb/bprb_func_process.h>
 //:
 // \file
@@ -8,8 +10,6 @@
 // \date Mar 15, 2013
 
 #include <vcl_compiler.h>
-#include <iostream>
-#include <fstream>
 #include <vul/vul_file.h>
 #include <vul/vul_timer.h>
 #include <vnl/vnl_random.h>

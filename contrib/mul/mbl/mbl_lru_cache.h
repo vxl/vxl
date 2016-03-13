@@ -6,11 +6,11 @@
 // \brief Least recently used cache.
 // \author Ian Scott
 
-#include <vcl_compiler.h>
 #include <iostream>
 #include <list>
 #include <map>
 #include <utility>
+#include <vcl_compiler.h>
 #include <vcl_cassert.h>
 
 //: Least recently used cache

@@ -4,6 +4,8 @@
 // \author Yi Dong
 // \date June 04, 2013
 
+#include <iostream>
+#include <algorithm>
 #include <boxm2/volm/desc/boxm2_volm_desc_ex_matcher.h>
 #include <boxm2/volm/desc/boxm2_volm_desc_ex_land_only_matcher.h>
 #include <volm/desc/volm_desc_ex_2d_matcher.h>
@@ -12,8 +14,6 @@
 #include <volm/volm_buffered_index.h>
 #include <vul/vul_arg.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <algorithm>
 
 void error_report(std::string error_file, std::string error_msg)
 {

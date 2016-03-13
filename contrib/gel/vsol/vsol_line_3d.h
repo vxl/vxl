@@ -21,13 +21,13 @@
 // \endverbatim
 //*****************************************************************************
 
+#include <iostream>
+#include <iosfwd>
 #include <vsol/vsol_curve_3d.h>
 #include <vsol/vsol_point_3d_sptr.h>
 #include <vsl/vsl_binary_io.h>
 #include <vgl/vgl_fwd.h> // vgl_vector_3d, vgl_homg_line_3d_2_points
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iosfwd>
 
 class vsol_line_3d : public vsol_curve_3d
 {

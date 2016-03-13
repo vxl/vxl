@@ -1,7 +1,6 @@
 // This is mul/mbl/tests/test_stats_1d.cxx
+#include <iostream>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 #include <mbl/mbl_stats_1d.h>
 #include <testlib/testlib_test.h>
 #include <vnl/vnl_math.h>

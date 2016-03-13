@@ -1,3 +1,5 @@
+#include <iostream>
+#include <cmath>
 #include "vmal_dense_matching.h"
 #include <vtol/vtol_edge_2d.h>
 #include <vmal/vmal_convert_vtol.h>
@@ -10,8 +12,6 @@
 #include <vil1/vil1_save.h>
 
 #include <vcl_compiler.h>
-#include <iostream>
-#include <cmath>
 
 vmal_dense_matching::vmal_dense_matching(const vnl_double_3x3 & H0,
                                          const vnl_double_3x3 & H1)

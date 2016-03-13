@@ -1,10 +1,10 @@
+#include <iostream>
+#include <limits>
 #include "rgrl_mask.h"
 //:
 // \file
 #include <vcl_cassert.h>
 // not used? #include <vcl_compiler.h>
-#include <iostream>
-#include <limits>
 #include <vnl/vnl_math.h>
 
 rgrl_mask_box

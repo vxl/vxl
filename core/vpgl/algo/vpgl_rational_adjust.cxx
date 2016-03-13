@@ -1,9 +1,9 @@
+#include <cmath>
 #include "vpgl_rational_adjust.h"
 //:
 // \file
 
 #include <vcl_compiler.h>
-#include <cmath>
 #include <vgl/vgl_plane_3d.h>
 #include <vgl/vgl_distance.h>
 #include <vgl/vgl_point_2d.h>

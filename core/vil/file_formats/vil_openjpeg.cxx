@@ -15,11 +15,11 @@
 // \author Chuck Atkins
 
 #include <cmath>
-#include <cstring> // for std::memcmp()
+#include <cstring>
 #include <iostream>
 #include <stdexcept>
-#include <vcl_compiler.h>
 #include <limits>
+#include <vcl_compiler.h>
 #include <vcl_cassert.h>
 
 #include <vil/vil_stream.h>

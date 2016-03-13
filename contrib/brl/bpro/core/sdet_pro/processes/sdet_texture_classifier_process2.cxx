@@ -1,4 +1,6 @@
 // This is brl/bpro/core/sdet_pro/processes/sdet_texture_classifier_process.cxx
+#include <iostream>
+#include <algorithm>
 #include <bprb/bprb_func_process.h>
 //:
 // \file
@@ -10,8 +12,6 @@
 #include <vil/vil_image_view.h>
 #include <vnl/vnl_random.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <algorithm>
 
 // no need to check cause get data checks it anyway
 void get_block(int i, int j, int bb, std::vector<std::pair<int, int> >& pixels)

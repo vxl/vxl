@@ -1,4 +1,6 @@
 // This is brl/bpro/core/vil_pro/processes/vil_fill_holes_in_regions_process.cxx
+#include <iostream>
+#include <algorithm>
 #include <bprb/bprb_func_process.h>
 //:
 // \file
@@ -7,10 +9,7 @@
 #include <vil/algo/vil_structuring_element.h>
 #include <vil/algo/vil_blob.h>
 #include <vil/algo/vil_binary_closing.h>
-#include <iostream>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <algorithm>
 
 //: Constructor
 bool vil_fill_holes_in_regions_process_cons(bprb_func_process& pro)

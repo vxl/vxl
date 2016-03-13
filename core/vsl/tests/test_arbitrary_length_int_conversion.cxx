@@ -1,8 +1,8 @@
 // This is core/vsl/tests/test_arbitrary_length_int_conversion.cxx
 #include <iostream>
-#include <vcl_compiler.h>
 #include <sstream>
 #include <ctime>
+#include <vcl_compiler.h>
 #include <vcl_config_compiler.h>
 #include <vsl/vsl_binary_explicit_io.h>
 #include <testlib/testlib_test.h>

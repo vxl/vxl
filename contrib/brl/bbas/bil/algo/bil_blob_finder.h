@@ -5,11 +5,11 @@
 // \brief Finds connected regions in a boolean image.
 // \author Tim Cootes
 
+#include <iostream>
+#include <vector>
 #include <vil/vil_image_view.h>
 #include <vil/vil_chord.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <vector>
 
 //: Finds connected regions in a boolean image
 //  Class to iterate through image, finding boundaries of all regions

@@ -5,9 +5,8 @@
 // \brief Simple program to generate homography2d data plus outliers.
 //
 
+#include <iostream>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 #include <vnl/vnl_matrix.h>
 #include <vnl/vnl_random.h>
 

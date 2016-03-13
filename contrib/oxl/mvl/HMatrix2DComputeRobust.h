@@ -9,14 +9,14 @@
 //   22 Oct 2002 - Peter Vanroose - added vgl_homg_point_2d interface
 // \endverbatim
 
+#include <iostream>
+#include <vector>
 #include <vgl/vgl_fwd.h>
 #include <mvl/HMatrix2DCompute4Point.h>
 #include <mvl/HMatrix2D.h>
 #include <mvl/AffineMetric.h>
 #include <mvl/HomgPoint2D.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <vector>
 
 class HMatrix2DComputeRobust
 {

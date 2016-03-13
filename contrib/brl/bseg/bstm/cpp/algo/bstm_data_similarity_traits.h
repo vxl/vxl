@@ -1,13 +1,12 @@
 #ifndef bstm_data_similarity_traits_h
 #define bstm_data_similarity_traits_h
 //
+#include <iostream>
+#include <limits>
 #include <boxm2/boxm2_data_traits.h>
 #include <bstm/bstm_data_traits.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 #include <boxm2/cpp/algo/boxm2_mog3_grey_processor.h>
-#include <limits>
 #include <vnl/vnl_math.h>
 
 #define SIMILARITY_T 0.0001

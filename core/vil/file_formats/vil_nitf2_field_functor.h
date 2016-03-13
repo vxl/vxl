@@ -11,8 +11,8 @@ class vil_nitf2_index_vector;
 
 #include <string>
 #include <vector>
-#include <vcl_compiler.h>
 #include <map>
+#include <vcl_compiler.h>
 #include "vil_nitf2_field_sequence.h"
 
 //-----------------------------------------------------------------------------

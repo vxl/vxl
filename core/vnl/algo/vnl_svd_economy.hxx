@@ -2,12 +2,12 @@
 #ifndef vnl_svd_economy_hxx_
 #define vnl_svd_economy_hxx_
 
-#include "vnl_svd_economy.h"
-
 #include <iostream>
 #include <algorithm>
+#include <cmath>
+#include "vnl_svd_economy.h"
+
 #include <vcl_compiler.h>
-#include <cmath> // for std::abs(double)
 
 #include <vnl/vnl_fortran_copy.h>
 #include <vnl/algo/vnl_netlib.h> // dsvdc_()

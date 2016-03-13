@@ -1,4 +1,6 @@
 // This is brl/bseg/boxm/algo/rt/pro/processes/boxm_rpc_registration_process.cxx
+#include <iostream>
+#include <cstdio>
 #include <bprb/bprb_func_process.h>
 //:
 // \file
@@ -11,8 +13,6 @@
 #include <boxm/algo/rt/boxm_rpc_registration.h>
 #include <vil/vil_image_view.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <cstdio>
 
 //: globals
 namespace boxm_rpc_registration_process_globals

@@ -1,7 +1,7 @@
-#include <testlib/testlib_test.h>
-#include <vcl_compiler.h>
 #include <iostream>
 #include <string>
+#include <testlib/testlib_test.h>
+#include <vcl_compiler.h>
 #include <bsta/bsta_mixture.h>
 #include <bsta/bsta_mixture_fixed.h>
 #include <bsta/bsta_gauss_sf1.h>

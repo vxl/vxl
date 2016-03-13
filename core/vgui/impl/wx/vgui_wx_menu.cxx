@@ -1,4 +1,5 @@
 // This is core/vgui/impl/wx/vgui_wx_menu.cxx
+#include <cctype>
 #include "vgui_wx_menu.h"
 //=========================================================================
 //:
@@ -18,7 +19,6 @@
 #endif
 
 #include <vcl_compiler.h>
-#include <cctype>  // for std::toupper
 #include <vcl_cassert.h>
 
 //-------------------------------------------------------------------------

@@ -1,12 +1,12 @@
-#include "testlib_register.h"
-
 #include <iostream>
 #include <string>
 #include <vector>
-#include <vcl_compiler.h>
 #include <cstdlib>
-#if VCL_HAS_EXCEPTIONS
 #include <exception>
+#include "testlib_register.h"
+
+#include <vcl_compiler.h>
+#if VCL_HAS_EXCEPTIONS
 #endif
 
 #if defined(VCL_VC)

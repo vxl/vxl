@@ -13,14 +13,14 @@
 //   <none yet>
 // \endverbatim
 
+#include <iostream>
+#include <vector>
 #include "volm_category_io.h"
 #include <vbl/vbl_ref_count.h>
 #include <vbl/vbl_smart_ptr.h>
 #include <vsl/vsl_binary_io.h>
 #include <vgl/vgl_point_2d.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <vector>
 
 class volm_osm_object_line;
 typedef vbl_smart_ptr<volm_osm_object_line> volm_osm_object_line_sptr;

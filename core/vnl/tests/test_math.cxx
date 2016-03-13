@@ -1,8 +1,8 @@
 #include <iostream>
-#include <vcl_compiler.h>
 #include <iomanip>
 #include <string>
-#include <limits> // for infinity()
+#include <limits>
+#include <vcl_compiler.h>
 #include <vxl_config.h> // for VCL_STATIC_CONST_INIT_FLOAT_NO_DEFN
 #include <vnl/vnl_math.h>
 #include <vnl/vnl_complex.h> // for vnl_math::abs(std::complex)

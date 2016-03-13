@@ -2,8 +2,8 @@
 // Images are loaded from the two filenames
 // on the command line.
 
-#include <vcl_compiler.h>
 #include <iostream>
+#include <vcl_compiler.h>
 #include <vnl/vnl_math.h>
 #include <vgui/vgui.h>
 #include <vgui/vgui_image_tableau.h>

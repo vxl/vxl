@@ -1,4 +1,5 @@
 // This is brl/bseg/boxm2/volm/pro/process/boxm2_change_scene_res_by_geo_cover_process.cxx
+#include <iostream>
 #include <bprb/bprb_func_process.h>
 //:
 // \file
@@ -8,8 +9,6 @@
 // \author Yi Dong
 // \date August 17, 2013
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 #include <vil/vil_image_view.h>
 #include <vil/vil_load.h>
 #include <volm/volm_tile.h>

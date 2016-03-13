@@ -1,4 +1,5 @@
 // This is core/vil/algo/vil_structuring_element.cxx
+#include <iostream>
 #include "vil_structuring_element.h"
 //:
 // \file
@@ -7,7 +8,6 @@
 
 #include <vcl_cassert.h>
 #include <vcl_compiler.h>
-#include <iostream>
 
 //: Define elements { (p_i[k],p_j[k]) }
 void vil_structuring_element::set(const std::vector<int>& v_p_i,const std::vector<int>& v_p_j)

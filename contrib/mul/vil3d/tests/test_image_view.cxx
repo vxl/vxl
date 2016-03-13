@@ -1,9 +1,8 @@
 // This is mul/vil3d/tests/test_image_view.cxx
-#include <testlib/testlib_test.h>
-#include <iostream>
-#include <vcl_compiler.h>
 #include <iostream>
 #include <functional>
+#include <testlib/testlib_test.h>
+#include <vcl_compiler.h>
 #include <vxl_config.h> // for vxl_int_32
 #include <vil3d/vil3d_print.h>
 #include <vil3d/vil3d_plane.h>

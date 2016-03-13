@@ -1,15 +1,14 @@
 // Some tests for vgl_spline_*d
 // J.L. Mundy August, 2015
+#include <iostream>
+#include <fstream>
+#include <cmath>
 #include <testlib/testlib_test.h>
 #include <vgl/vgl_pointset_3d.h>
 #include <vgl/vgl_point_3d.h>
 #include <vgl/vgl_bounding_box.h>
 #include <vgl/vgl_box_3d.h>
-#include <iostream>
-#include <fstream>
-#include <iostream>
 #include <vcl_compiler.h>
-#include <cmath>
 #include <vpl/vpl.h>
 
 static void test_pointset()

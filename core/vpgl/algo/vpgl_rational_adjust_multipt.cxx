@@ -1,7 +1,8 @@
+#include <cmath>
+#include <limits>
 #include "vpgl_rational_adjust_multipt.h"
 //:
 // \file
-#include <cmath>
 #include <vcl_cassert.h>
 #include <vgl/vgl_point_3d.h>
 #include <vnl/vnl_numeric_traits.h>
@@ -11,7 +12,6 @@
 #include <vpgl/algo/vpgl_rational_adjust_onept.h>
 
 #include <vcl_compiler.h>
-#include <limits>
 
 double compute_projection_error(std::vector<vpgl_rational_camera<double> > const& cams,
                                 std::vector<vgl_point_2d<double> > const& corrs, vgl_point_3d<double>& intersection)

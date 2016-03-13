@@ -1,9 +1,9 @@
 // This is core/vil/algo/tests/test_algo_colour_space.cxx
+#include <cmath>
 #include <testlib/testlib_test.h>
 #include <vil/algo/vil_colour_space.h>
 // not used? #include <iostream>
 #include <vcl_compiler.h>
-#include <cmath>
 
 static void test_algo_colour_space()
 {

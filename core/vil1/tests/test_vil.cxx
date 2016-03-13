@@ -1,8 +1,8 @@
 // This is core/vil1/tests/test_vil.cxx
+#include <iostream>
 #include <vil1/vil1_vil.h>
 #include <vxl_config.h> // for vxl_byte
 #include <vcl_compiler.h>
-#include <iostream>
 #include <testlib/testlib_test.h>
 #include <vil1/vil1_memory_image_of.h>
 #include <vil1/vil1_load.h>

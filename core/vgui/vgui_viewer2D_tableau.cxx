@@ -8,10 +8,10 @@
 // \date   14 Sep 1999
 // \brief  See vgui_viewer2D_tableau.h for a description of this file.
 
+#include <cmath>
 #include "vgui_viewer2D_tableau.h"
 
 #include <vcl_compiler.h>
-#include <cmath>
 #include <vbl/vbl_bool_ostream.h>
 
 #include <vgui/vgui_gl.h>

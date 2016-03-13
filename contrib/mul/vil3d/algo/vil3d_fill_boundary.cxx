@@ -1,3 +1,6 @@
+#include <vector>
+#include <iostream>
+#include <stack>
 #include "vil3d_fill_boundary.h"
 //:
 // \file
@@ -5,10 +8,7 @@
 // \author Kola Babalola
 
 #include <vil3d/vil3d_image_view.h>
-#include <vector>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <stack>
 #include <vil3d/vil3d_convert.h>
 #include <vil3d/algo/vil3d_threshold.h>
 

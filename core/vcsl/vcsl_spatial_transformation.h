@@ -17,11 +17,11 @@
 //   2004/09/17 Peter Vanroose - made beat() and interpolators() non-virtual: they just return a member and should not be overloaded
 // \endverbatim
 
+#include <vector>
 #include <vcsl/vcsl_spatial_transformation_sptr.h>
 
 #include <vbl/vbl_ref_count.h>
 #include <vcl_compiler.h>
-#include <vector>
 #include <vnl/vnl_vector.h>
 #include <vnl/vnl_quaternion.h>
 

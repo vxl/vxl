@@ -26,10 +26,10 @@
 //
 //-----------------------------------------------------------------------------
 
-#include <mvl/HMatrix2D.h>
-#include <vcl_compiler.h>
 #include <iostream>
 #include <vector>
+#include <mvl/HMatrix2D.h>
+#include <vcl_compiler.h>
 class HomgPoint2D;
 
 class ProjectiveBasis2D

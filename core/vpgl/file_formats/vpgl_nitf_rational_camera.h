@@ -19,9 +19,9 @@
 //
 // Modified extensively - J.L. Mundy January 07, 2007
 //
+#include <string>
 #include <vpgl/vpgl_rational_camera.h>
 #include <vcl_compiler.h>
-#include <string>
 // not used? #include <vector>
 #include <vnl/vnl_double_2.h>
 #include <vil/file_formats/vil_nitf2_image.h>

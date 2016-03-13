@@ -1,12 +1,11 @@
 // This is brl/bpro/bprb/bprb_parameters.cxx
+#include <utility>
+#include <iostream>
 #include "bprb_parameters.h"
 //:
 // \file
 
-#include <utility>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 #include <bxml/bxml_read.h>
 #include <bxml/bxml_find.h>
 #include <bxml/bxml_write.h>

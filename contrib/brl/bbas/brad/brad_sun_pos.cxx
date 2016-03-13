@@ -1,3 +1,7 @@
+#include <iostream>
+#include <cmath>
+#include <map>
+#include <cstdlib>
 #include "brad_sun_pos.h"
 //:
 // \file
@@ -5,11 +9,6 @@
 #include <vnl/vnl_cost_function.h>
 #include <vnl/algo/vnl_brent_minimizer.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <cmath>
-#include <map>
-#include <cstdlib> // for std::rand()
-#include <iostream>
 
 // Declaration of some constants
 static double twopi  = vnl_math::twopi;

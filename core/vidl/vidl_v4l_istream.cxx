@@ -9,13 +9,13 @@
 //
 //-----------------------------------------------------------------------------
 
+#include <cstdio>
 #include "vidl_v4l_ulong_fix.h" // include first to fix linux/videodev.h ulong problem
 #include "vidl_v4l_istream.h"
 #include "vidl_v4l_params.h"
 #include "vidl_pixel_format.h"
 #include "vidl_frame.h"
 #include <vcl_compiler.h>
-#include <cstdio> // for std::perror()
 
 //: Destructor
 vidl_v4l_istream::~vidl_v4l_istream()

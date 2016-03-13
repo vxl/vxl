@@ -6,10 +6,10 @@
 // \author K.Y.McGaul
 // \date   22-Mar-2001
 
+#include <iosfwd>
 #include <vsl/vsl_fwd.h>
 #include <vbl/vbl_array_2d.h>
 #include <vcl_compiler.h>
-#include <iosfwd>
 
 //: Binary save vbl_array_2d to stream.
 template <class T>

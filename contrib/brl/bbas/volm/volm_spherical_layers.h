@@ -14,9 +14,9 @@
 // \endverbatim
 
 #include <vector>
-#include <vcl_compiler.h>
 #include <iostream>
 #include <string>
+#include <vcl_compiler.h>
 #include <vgl/vgl_box_2d.h>
 #include <bpgl/depth_map/depth_map_scene_sptr.h>
 #include <bpgl/depth_map/depth_map_region_sptr.h>

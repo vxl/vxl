@@ -21,8 +21,8 @@
 //                      projective geometry may not apply in the most general case, e.g. rational cameras. - JLM
 // \endverbatim
 
-#include <vcl_compiler.h>
 #include <string>
+#include <vcl_compiler.h>
 #include <vbl/vbl_ref_count.h>
 
 template <class T>

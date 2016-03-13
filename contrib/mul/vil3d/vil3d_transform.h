@@ -9,10 +9,10 @@
 // \brief STL algorithm like methods.
 // \author Tim Cootes, Ian Scott.
 
-#include <vcl_cassert.h>
-#include <vcl_compiler.h>
 #include <iostream>
 #include <algorithm>
+#include <vcl_cassert.h>
+#include <vcl_compiler.h>
 #include <vil3d/vil3d_image_view.h>
 
 

@@ -5,14 +5,14 @@
 // Note: Alignment calculated by estimating optimal similarity transformation,
 // then discarding scale.
 
+#include <iostream>
+#include <cstddef>
 #include "msm_rigid_aligner.h"
 #include <vnl/vnl_vector.h>
 #include <vsl/vsl_binary_loader.h>
 #include <vnl/algo/vnl_svd.h>
 #include <vnl/algo/vnl_cholesky.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <cstddef> // for std::size_t
 #include <vcl_cassert.h>
 
 //=======================================================================

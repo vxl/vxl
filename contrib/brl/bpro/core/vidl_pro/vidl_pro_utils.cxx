@@ -1,10 +1,9 @@
-#include "vidl_pro_utils.h"
-#include <iostream>
-#include <vcl_compiler.h>
 #include <iostream>
 #include <iomanip>
 #include <sstream>
 #include <string>
+#include "vidl_pro_utils.h"
+#include <vcl_compiler.h>
 #include <vul/vul_file.h>
 
 bool vidl_pro_utils::create_directory(std::string const& dir, bool force)

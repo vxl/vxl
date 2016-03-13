@@ -1,11 +1,10 @@
 // This is brl/bbas/bgui3d/bgui3d_project2d_tableau.cxx
+#include <iostream>
 #include "bgui3d_project2d_tableau.h"
 //:
 // \file
 
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 #include <vcl_cassert.h>
 #include <vgui/vgui_gl.h>
 #include <vgui/vgui_glu.h>

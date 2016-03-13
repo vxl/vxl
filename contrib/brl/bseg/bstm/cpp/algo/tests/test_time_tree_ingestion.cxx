@@ -1,14 +1,13 @@
+#include <iostream>
+#include <fstream>
+#include <vector>
 #include <testlib/testlib_test.h>
 #include <testlib/testlib_root_dir.h>
 
 #include <bstm/bstm_time_tree.h>
 
-#include <iostream>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <fstream>
 
-#include <vector>
 
 
 #define DATA_LEN 80

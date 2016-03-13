@@ -1,8 +1,8 @@
 // This is gel/vmal/vmal_operators.cxx
-#include "vmal_operators.h"
-#include <vcl_compiler.h>
 #include <iostream>
 #include <cmath>
+#include "vmal_operators.h"
+#include <vcl_compiler.h>
 #include <vnl/vnl_double_2.h>
 #include <vnl/vnl_cross.h>
 

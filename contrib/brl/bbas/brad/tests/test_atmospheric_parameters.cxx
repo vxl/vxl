@@ -1,13 +1,12 @@
 //:
 // \file
+#include <iostream>
+#include <cmath>
+#include <sstream>
+#include <string>
 #include <testlib/testlib_test.h>
 #include <brad/brad_atmospheric_parameters.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <cmath>
-#include <iostream>
-#include <sstream>
-#include <string>
 
 //: Test the atmospheric_parameters class
 static void test_atmospheric_parameters()

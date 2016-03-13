@@ -1,8 +1,7 @@
 // This is mul/vimt3d/tests/test_transform_3d.cxx
 #include <iostream>
-#include <vcl_compiler.h>
-#include <iostream>
 #include <cstdlib>
+#include <vcl_compiler.h>
 #include <vpl/vpl.h> // vpl_unlink()
 #include <vnl/vnl_math.h>
 #include <vnl/vnl_vector.h>

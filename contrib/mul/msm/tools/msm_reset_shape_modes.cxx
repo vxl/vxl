@@ -5,6 +5,9 @@
 // Given a model and a set of shape points, selected shape modes are set to 0 and the
 // shape points are updated (excluding the reset modes).
 
+#include <iostream>
+#include <iterator>
+#include <limits>
 #include <mbl/mbl_read_props.h>
 #include <mbl/mbl_exception.h>
 #include <mbl/mbl_parse_int_list.h>
@@ -13,13 +16,10 @@
 #include <vul/vul_string.h>
 #include <vul/vul_file.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iterator>
 #include <vsl/vsl_quick_file.h>
 #include <msm/msm_shape_instance.h>
 #include <msm/msm_add_all_loaders.h>
 #include <limits.h>
-#include <limits>
 
 /*
 Parameter file format:

@@ -16,11 +16,10 @@
 //   06/01/2010  Brandon A. Mayer. Added mutual_information() function
 // \endverbatim
 
-#include <vbl/vbl_array_2d.h>
 #include <vector>
+#include <iostream>
+#include <vbl/vbl_array_2d.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 #include <bsta/bsta_joint_histogram_base.h>
 
 template <class T> class bsta_joint_histogram : public bsta_joint_histogram_base

@@ -14,10 +14,10 @@
 //   <none yet>
 // \endverbatim
 
-#include<bapl/bapl_dsift.h>
-#include <vcl_compiler.h>
 #include <iostream>
 #include <iosfwd>
+#include<bapl/bapl_dsift.h>
+#include <vcl_compiler.h>
 #include<vsl/vsl_binary_io.h>
 
 //: Binary read parameters from stream.

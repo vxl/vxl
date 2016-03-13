@@ -1,4 +1,7 @@
 // This is core/vgui/vgui_parent_child_link.cxx
+#include <iostream>
+#include <vector>
+#include <set>
 #include "vgui_parent_child_link.h"
 //:
 // \file
@@ -6,10 +9,7 @@
 // \brief  See vgui_parent_child_link.h for a description of this file.
 
 #include <vcl_cassert.h>
-#include <iostream>
-#include <vector>
 #include <vcl_compiler.h>
-#include <set>
 
 #include <vgui/vgui_event.h>
 #include <vgui/vgui_tableau.h>

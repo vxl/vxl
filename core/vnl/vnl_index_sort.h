@@ -5,11 +5,11 @@
 // \author Michael R. Bowers
 //
 
-#include <vnl/vnl_vector.h>
 #include <algorithm>
-#include <vcl_compiler.h>
 #include <utility>
 #include <vector>
+#include <vnl/vnl_vector.h>
+#include <vcl_compiler.h>
 
 
 template <class TValue, class TIndex>

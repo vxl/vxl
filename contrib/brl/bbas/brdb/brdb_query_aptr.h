@@ -6,9 +6,9 @@
 
 class brdb_query;
 
-#include <vcl_compiler.h>
 #include <iostream>
 #include <memory>
+#include <vcl_compiler.h>
 
 typedef std::auto_ptr<brdb_query> brdb_query_aptr;
 

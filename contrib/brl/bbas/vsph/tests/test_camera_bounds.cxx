@@ -1,11 +1,10 @@
+#include <iostream>
+#include <fstream>
 #include <testlib/testlib_test.h>
 #ifdef DEBUG
 #include <testlib/testlib_root_dir.h>
 #endif
-#include <iostream>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <fstream>
 #include <vgl/vgl_point_3d.h>
 #include <vpgl/vpgl_perspective_camera.h>
 #include <vpgl/vpgl_generic_camera.h>

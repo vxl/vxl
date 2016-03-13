@@ -7,11 +7,11 @@
 // \author Ian Scott
 //=======================================================================
 
+#include <iostream>
+#include <iosfwd>
 #include <vimt/vimt_image_pyramid_builder.h>
 #include <vimt/vimt_image_2d_of.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iosfwd>
 
 //: Build pyramids of vimt_image_2d_of<vxl_byte> at any scale step
 template <class T>

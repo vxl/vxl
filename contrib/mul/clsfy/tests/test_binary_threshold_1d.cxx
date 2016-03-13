@@ -1,4 +1,6 @@
 // This is mul/clsfy/tests/test_binary_threshold_1d.cxx
+#include <iostream>
+#include <string>
 #include <testlib/testlib_test.h>
 //:
 // \file
@@ -7,9 +9,6 @@
 // Test construction, IO etc
 
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
-#include <string>
 #include <vpl/vpl.h> // vpl_unlink()
 #include <clsfy/clsfy_binary_threshold_1d.h>
 #include <clsfy/clsfy_binary_threshold_1d_builder.h>

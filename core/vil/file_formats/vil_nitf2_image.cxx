@@ -2,16 +2,16 @@
 // Stellar Science Ltd. Co. (stellarscience.com) for
 // Air Force Research Laboratory, 2005.
 
+#include <cstring>
+#include <algorithm>
+#include <cstdlib>
 #include "vil_nitf2_image.h"
 
 //:
 // \file
 
 #include <vcl_cassert.h>
-#include <cstring> // for std::memcpy()
-#include <algorithm>
 #include <vcl_compiler.h>
-#include <cstdlib>
 #include <vil/vil_stream_fstream.h>
 #include <vil/vil_image_view.h>
 #include <vil/vil_property.h>

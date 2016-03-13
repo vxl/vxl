@@ -9,11 +9,11 @@
 // \author Tim Cootes
 // \brief Non-templated base class for mbl_data_collector<T>
 
-#include <vsl/vsl_binary_io.h>
 #include <string>
-#include <vcl_compiler.h>
 #include <iostream>
 #include <iosfwd>
+#include <vsl/vsl_binary_io.h>
+#include <vcl_compiler.h>
 
 //: Non-templated base class for mbl_data_collector<T>
 // Provided mainly because the Visual C++ compiler can't cope with

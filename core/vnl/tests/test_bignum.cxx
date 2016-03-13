@@ -8,10 +8,10 @@
 // \endverbatim
 
 #include <iostream>
-#include <limits> // for std::numeric_limits<double>::infinity()
+#include <limits>
 #include <sstream>
-#include <vcl_compiler.h>
 #include <iomanip>
+#include <vcl_compiler.h>
 #include <vnl/vnl_bignum.h>
 #include <vnl/vnl_bignum_traits.h>
 #include <vnl/vnl_numeric_traits.h> // for vnl_numeric_traits<double>::maxval

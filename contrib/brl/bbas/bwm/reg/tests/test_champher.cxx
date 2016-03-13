@@ -1,7 +1,6 @@
 // This is brl/bbas/bwm/reg/tests/test_champher.cxx
+#include <iostream>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 #include <testlib/testlib_test.h>
 #include <bwm/reg/bwm_reg_edge_champher.h>
 #include <vsol/vsol_point_2d.h>

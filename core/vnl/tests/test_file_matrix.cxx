@@ -1,8 +1,8 @@
 /*
   fsm
 */
-#include <vcl_compiler.h>
 #include <iostream>
+#include <vcl_compiler.h>
 #include <testlib/testlib_root_dir.h>
 
 #include <testlib/testlib_test.h>

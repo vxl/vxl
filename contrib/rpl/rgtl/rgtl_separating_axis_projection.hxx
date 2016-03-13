@@ -11,11 +11,11 @@
 // (See accompanying file rgtl_license_1_0.txt or copy at
 // http://www.boost.org/LICENSE_1_0.txt)
 
+#include <iostream>
+#include <limits>
 #include "rgtl_serialize_access.hxx"
 
 #include <vcl_compiler.h>
-#include <iostream>
-#include <limits>
 
 //: Represent the projection of an object onto a separating axis.
 template <class T>

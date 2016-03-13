@@ -1,4 +1,6 @@
 // This is rpl/rrel/rrel_homography2d_est.cxx
+#include <iostream>
+#include <cmath>
 #include "rrel_homography2d_est.h"
 
 #include <vgl/vgl_homg_point_2d.h>
@@ -6,11 +8,8 @@
 #include <vnl/vnl_math.h>
 #include <vnl/algo/vnl_svd.h>
 
-#include <iostream>
 #include <vcl_cassert.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <cmath>
 
 rrel_homography2d_est :: rrel_homography2d_est( const std::vector< vgl_homg_point_2d<double> > & from_pts,
                                                 const std::vector< vgl_homg_point_2d<double> > & to_pts,

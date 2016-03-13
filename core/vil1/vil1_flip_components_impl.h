@@ -8,9 +8,9 @@
 // \file
 // \author Peter Vanroose, ESAT, KULeuven.
 
+#include <string>
 #include <vil1/vil1_image.h>
 #include <vcl_compiler.h>
-#include <string>
 
 //: A view of a B,G,R image as if it were R,G,B (or the other way around)
 class vil1_flip_components_impl : public vil1_image_impl

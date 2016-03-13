@@ -1,9 +1,9 @@
 #ifndef Probability_h_
 #define Probability_h_
 
-#include <vcl_compiler.h>
 #include <iostream>
 #include <vector>
+#include <vcl_compiler.h>
 #include <mvl/HomgPoint2D.h>
 #include <mvl/FMatrix.h>
 #include <mvl/PairMatchSetCorner.h>

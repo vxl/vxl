@@ -17,14 +17,14 @@
 // \endverbatim
 //*****************************************************************************
 
+#include <string>
+#include <iostream>
+#include <iosfwd>
 #include <vgl/vgl_cylinder.h>
 #include <vsol/vsol_spatial_object_3d.h>
 #include <vsol/vsol_cylinder_sptr.h>
 #include <vsl/vsl_binary_io.h>
-#include <string>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iosfwd>
 
 class vsol_cylinder : public  vsol_spatial_object_3d
 {

@@ -12,12 +12,12 @@
 //  <none yet>
 // \endverbatim
 
-#include <vgl/vgl_polygon.h>
-#include <vil/algo/vil_find_4con_boundary.h>
-#include <vcl_compiler.h>
 #include <iostream>
 #include <functional>
 #include <map>
+#include <vgl/vgl_polygon.h>
+#include <vil/algo/vil_find_4con_boundary.h>
+#include <vcl_compiler.h>
 #include <volm/volm_io.h>
 #include <volm/volm_tile.h>
 #include <volm/volm_camera_space.h>

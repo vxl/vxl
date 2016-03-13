@@ -3,15 +3,14 @@
 //:
 // \file
 
+#include <vector>
+#include <cmath>
+#include <iostream>
+#include <algorithm>
 #include "boxm_triangle_interpolation_iterator.h"
 
 #include <vnl/algo/vnl_determinant.h>
-#include <vector>
-#include <cmath>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <algorithm>
-#include <iostream>
 
 
 //: constructor

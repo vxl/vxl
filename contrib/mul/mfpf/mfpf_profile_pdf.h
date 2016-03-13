@@ -5,13 +5,13 @@
 // \brief Searches along a profile using a statistical model
 // \author Tim Cootes
 
+#include <iostream>
+#include <iosfwd>
 #include <mfpf/mfpf_point_finder.h>
 #include <vpdfl/vpdfl_pdf_base.h>
 #include <mbl/mbl_cloneable_ptr.h>
 #include <vgl/vgl_fwd.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iosfwd>
 
 //: Searches along a profile using a statistical model.
 class mfpf_profile_pdf : public mfpf_point_finder
