@@ -386,11 +386,11 @@ class vnl_numeric_traits<float>
 {
  public:
   //: Additive identity
-  static VNL_EXPORT VCL_CONSTEXPR float zero VCL_STATIC_CONST_INIT_FLOAT_DECL(0.0F);
+  static VNL_EXPORT VXL_CONSTEXPR float zero VCL_STATIC_CONST_INIT_FLOAT_DECL(0.0F);
   //: Multiplicative identity
-  static VNL_EXPORT VCL_CONSTEXPR float one VCL_STATIC_CONST_INIT_FLOAT_DECL(1.0F);
+  static VNL_EXPORT VXL_CONSTEXPR float one VCL_STATIC_CONST_INIT_FLOAT_DECL(1.0F);
   //: Maximum value which this type can assume
-  static VNL_EXPORT VCL_CONSTEXPR float maxval VCL_STATIC_CONST_INIT_FLOAT_DECL(3.40282346638528860e+38F);
+  static VNL_EXPORT VXL_CONSTEXPR float maxval VCL_STATIC_CONST_INIT_FLOAT_DECL(3.40282346638528860e+38F);
   //: Return value of abs()
   typedef float abs_t;
   //: Name of a type twice as long as this one for accumulators and products.
@@ -409,11 +409,11 @@ class vnl_numeric_traits<double>
 {
  public:
   //: Additive identity
-  static VNL_EXPORT VCL_CONSTEXPR double zero VCL_STATIC_CONST_INIT_FLOAT_DECL(0.0);
+  static VNL_EXPORT VXL_CONSTEXPR double zero VCL_STATIC_CONST_INIT_FLOAT_DECL(0.0);
   //: Multiplicative identity
-  static VNL_EXPORT VCL_CONSTEXPR double one VCL_STATIC_CONST_INIT_FLOAT_DECL(1.0);
+  static VNL_EXPORT VXL_CONSTEXPR double one VCL_STATIC_CONST_INIT_FLOAT_DECL(1.0);
   //: Maximum value which this type can assume
-  static VNL_EXPORT VCL_CONSTEXPR double maxval VCL_STATIC_CONST_INIT_FLOAT_DECL(1.7976931348623157E+308);
+  static VNL_EXPORT VXL_CONSTEXPR double maxval VCL_STATIC_CONST_INIT_FLOAT_DECL(1.7976931348623157E+308);
   //: Return value of abs()
   typedef double abs_t;
   //: Name of a type twice as long as this one for accumulators and products.
@@ -432,11 +432,11 @@ class vnl_numeric_traits<long double>
 {
  public:
   //: Additive identity
-  static VNL_EXPORT VCL_CONSTEXPR long double zero VCL_STATIC_CONST_INIT_FLOAT_DECL(0.0);
+  static VNL_EXPORT VXL_CONSTEXPR long double zero VCL_STATIC_CONST_INIT_FLOAT_DECL(0.0);
   //: Multiplicative identity
-  static VNL_EXPORT VCL_CONSTEXPR long double one VCL_STATIC_CONST_INIT_FLOAT_DECL(1.0);
+  static VNL_EXPORT VXL_CONSTEXPR long double one VCL_STATIC_CONST_INIT_FLOAT_DECL(1.0);
   //: Maximum value which this type can assume
-  static VNL_EXPORT VCL_CONSTEXPR long double maxval VCL_STATIC_CONST_INIT_FLOAT_DECL(1.7976931348623157E+308);
+  static VNL_EXPORT VXL_CONSTEXPR long double maxval VCL_STATIC_CONST_INIT_FLOAT_DECL(1.7976931348623157E+308);
   //: Return value of abs()
   typedef long double abs_t;
   //: Name of a type twice as long as this one for accumulators and products.

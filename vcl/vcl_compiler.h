@@ -211,6 +211,10 @@ typedef int saw_VCL_FOR_SCOPE_HACK;
 # define VXL_NOEXCEPT noexcept
 # define VXL_HAS_CXX11_STATIC_ASSERT
 # define VXL_HAS_CXX11_RVREF
+
+# define VXL_CONSTEXPR constexpr
+# define VXL_CONSTEXPR_FUNC constexpr
+
 #else
 //----------------------------------------------------------------------------
 //  C++11 not supported
@@ -220,6 +224,10 @@ typedef int saw_VCL_FOR_SCOPE_HACK;
 # define VXL_DELETE_FUNCTION
 # define VXL_NULLPTR  NULL
 # define VXL_NOEXCEPT throw()
+
+# define VXL_CONSTEXPR const
+# define VXL_CONSTEXPR_FUNC
+
 #endif
 
 
