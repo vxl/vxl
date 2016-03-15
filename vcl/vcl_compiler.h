@@ -485,6 +485,7 @@ typedef int saw_VCL_FOR_SCOPE_HACK;
 // Microsoft has finally implemented snprintf in Visual Studio 2015. On earlier
 // versions you can simulate it as below.
 #if defined(_MSC_VER) && _MSC_VER < 1900
+#include <cstdarg>
 __inline int c99_vsnprintf(char *outBuf, size_t size, const char *format, va_list ap)
 {
     int count = -1;
