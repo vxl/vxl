@@ -18,11 +18,12 @@
 #include <vpgl/file_formats/vpgl_geo_camera.h>
 #include <vil/vil_image_view.h>
 #include <vil/vil_image_resource.h>
+#include <vil/algo/vil_threshold.h>
 #include <vgl/vgl_intersection.h>
 #include <vil/vil_convert.h>
 #include <bkml/bkml_write.h>
 #include <bkml/bkml_parser.h>
-
+#include <bbas_pro/bbas_1d_array_float.h>
 
 namespace volm_layer_extraction_process_globals
 {
@@ -466,7 +467,7 @@ bool volm_generate_kml_from_binary_image_process(bprb_func_process& pro)
   ofs.close();
 
   // output
-  pro.set_output_val<unsigned>(0, polys.size());
+  pro.set_output_val<unsigned>(0, static_cast<unsigned>(polys.size()));
   return true;
 }
 
@@ -564,5 +565,218 @@ bool volm_downsample_binary_layer_process(bprb_func_process& pro)
   }
   vcl_cout << "DONE!" << vcl_endl;
 
+  return true;
+}
+
+//: process to compute detection rate and generate detection-rate base roc curve
+namespace volm_detection_rate_roc_process_globals
+{
+  unsigned n_inputs_ = 4;
+  unsigned n_outputs_ = 7;
+}
+
+bool volm_detection_rate_roc_process_cons(bprb_func_process& pro)
+{
+  using namespace volm_detection_rate_roc_process_globals;
+  // this process takes 4 inputs
+  vcl_vector<vcl_string> input_types_(n_inputs_);
+  input_types_[0] = "vil_image_view_base_sptr";  // input probability image
+  input_types_[1] = "vpgl_camera_double_sptr";   // input geocamera
+  input_types_[2] = "vcl_string";                // positive ground truth kml file
+  input_types_[3] = "vcl_string";                // negative ground truth kml file
+  // this process generates 4 outputs
+  vcl_vector<vcl_string> output_types_(n_outputs_);
+  output_types_[0] = "bbas_1d_array_float_sptr";  // threshold array
+  output_types_[1] = "bbas_1d_array_float_sptr";  // tp
+  output_types_[2] = "bbas_1d_array_float_sptr";  // tn
+  output_types_[3] = "bbas_1d_array_float_sptr";  // fp
+  output_types_[4] = "bbas_1d_array_float_sptr";  // fn
+  output_types_[5] = "bbas_1d_array_float_sptr";  // tpr
+  output_types_[6] = "bbas_1d_array_float_sptr";  // fpr
+  return pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
+}
+
+bool volm_detection_rate_roc_process(bprb_func_process& pro)
+{
+  if (!pro.verify_inputs()) {
+    vcl_cerr << pro.name() << ": Wrong Inputs!\n";
+    return false;
+  }
+  // get inputs
+  unsigned in_i = 0;
+  vil_image_view_base_sptr in_img_sptr = pro.get_input<vil_image_view_base_sptr>(in_i++);
+  vpgl_camera_double_sptr  in_cam_sptr = pro.get_input<vpgl_camera_double_sptr>(in_i++);
+  vcl_string              pos_poly_kml = pro.get_input<vcl_string>(in_i++);
+  vcl_string              neg_poly_kml = pro.get_input<vcl_string>(in_i++);
+
+  // get camera
+  vpgl_geo_camera* in_cam = dynamic_cast<vpgl_geo_camera*>(in_cam_sptr.ptr());
+  if (!in_cam) {
+    vcl_cerr << pro.name() << ": can not load land cover image camera!\n";
+    return false;
+  }
+  if (!vul_file::exists(pos_poly_kml)) {
+    vcl_cerr << pro.name() << ": can not find input positive ground truth kml file -- " << pos_poly_kml << "!\n";
+    return false;
+  }
+  if (!vul_file::exists(neg_poly_kml)) {
+    vcl_cerr << pro.name() << ": can not find input negative ground truth kml file -- " << neg_poly_kml << "!\n";
+    return false;
+  }
+  vgl_polygon<double> pos_poly = bkml_parser::parse_polygon(pos_poly_kml);
+  vgl_polygon<double> neg_poly = bkml_parser::parse_polygon(neg_poly_kml);
+
+  // convert image to [0,1] float
+  vil_image_view<float>* detection_map;
+  if (vil_image_view<unsigned char>* detection_map_unchar = dynamic_cast<vil_image_view<unsigned char>*>(in_img_sptr.ptr())) {
+    detection_map = new vil_image_view<float>(detection_map_unchar->ni(), detection_map_unchar->nj());
+    vil_convert_stretch_range_limited<unsigned char>(*detection_map_unchar, *detection_map, 0, 255, 0.0f, 1.0f);
+  }
+  else if (dynamic_cast<vil_image_view<float>*>(in_img_sptr.ptr())) {
+    detection_map = dynamic_cast<vil_image_view<float>*>(in_img_sptr.ptr());
+  }
+  else {
+    vcl_cerr << pro.name() << ": input detection image can not be converted to float image!\n";
+    return false;
+  }
+
+  vcl_cout << "There are " << pos_poly.num_sheets() << " positive regions and " << neg_poly.num_sheets() << " negative regions." << vcl_endl;
+  unsigned n_pos_condition = static_cast<unsigned>(pos_poly.num_sheets());
+  unsigned n_neg_condition = static_cast<unsigned>(neg_poly.num_sheets());
+
+  // convert polygon from world domain to image domain
+  vcl_vector<vgl_polygon<double> > pos_img_poly;
+  vcl_vector<vgl_polygon<double> > neg_img_poly;
+  vcl_vector<vgl_box_2d<int> > pos_bbox;
+  vcl_vector<vgl_box_2d<int> > neg_bbox;
+  for (unsigned i = 0; i < n_pos_condition; i++) {
+    vgl_polygon<double> pos_single_sheet;
+    pos_single_sheet.new_sheet();
+    vgl_box_2d<int> bbox;
+    unsigned n_verts = static_cast<unsigned>(pos_poly[i].size());
+    for (unsigned pidx = 0; pidx < n_verts; pidx++) {
+      vgl_point_2d<double> wp = pos_poly[i][pidx];
+      double u, v;
+      in_cam->global_to_img(wp.x(), wp.y(), 0.0, u, v);
+      vgl_point_2d<int> img_pt((int)vcl_floor(u+0.5), (int)vcl_floor(v+0.5));
+      bbox.add(img_pt);
+      pos_single_sheet.push_back(u,v);
+    }
+    pos_bbox.push_back(bbox);
+    pos_img_poly.push_back(pos_single_sheet);
+  }
+  for (unsigned i = 0; i < n_neg_condition; i++) {
+    vgl_polygon<double> neg_single_sheet;
+    neg_single_sheet.new_sheet();
+    vgl_box_2d<int> bbox;
+    unsigned n_verts = static_cast<unsigned>(neg_poly[i].size());
+    for (unsigned pidx = 0; pidx < n_verts; pidx++) {
+      vgl_point_2d<double> wp = neg_poly[i][pidx];
+      double u, v;
+      in_cam->global_to_img(wp.x(), wp.y(), 0.0, u, v);
+      vgl_point_2d<int> img_pt((int)vcl_floor(u+0.5), (int)vcl_floor(v+0.5));
+      bbox.add(img_pt);
+      neg_single_sheet.push_back(u, v);
+    }
+    neg_bbox.push_back(bbox);
+    neg_img_poly.push_back(neg_single_sheet);
+  }
+
+  // create threshold based on image range
+  float min_val, max_val;
+  vil_math_value_range(*detection_map, min_val,max_val);
+  vcl_vector<float> thresholds;
+  unsigned num_thres = 200;
+  float delta = (max_val - min_val) / num_thres;
+  for (unsigned i = 0; i <= (num_thres+1); i++) {
+    thresholds.push_back(min_val + delta*i);
+  }
+  const unsigned n_thres = thresholds.size();
+  vcl_cout << "Start ROC count using " << n_thres << " thresholds, ranging from " << min_val << " to " << max_val << "..." << vcl_endl;
+
+  bbas_1d_array_float* tp  = new bbas_1d_array_float(n_thres);
+  bbas_1d_array_float* tn  = new bbas_1d_array_float(n_thres);
+  bbas_1d_array_float* fp  = new bbas_1d_array_float(n_thres);
+  bbas_1d_array_float* fn  = new bbas_1d_array_float(n_thres);
+  bbas_1d_array_float* tpr = new bbas_1d_array_float(n_thres);
+  bbas_1d_array_float* fpr = new bbas_1d_array_float(n_thres);
+  // initialize
+  for (unsigned i = 0; i < n_thres; i++) {
+    tp->data_array[i]  = 0.0f;
+    tn->data_array[i]  = 0.0f;
+    fp->data_array[i]  = 0.0f;
+    fn->data_array[i]  = 0.0f;
+    tpr->data_array[i] = 0.0f;
+    fpr->data_array[i] = 0.0f;
+  }
+
+  // count
+  unsigned ni = detection_map->ni();
+  unsigned nj = detection_map->nj();
+  for (unsigned t_idx = 0; t_idx < n_thres; t_idx++)
+  {
+    // convert detection map to binary image
+    vil_image_view<bool> pos_img(ni, nj);
+    vil_threshold_above(*detection_map, pos_img, thresholds[t_idx]);
+    for (unsigned pos_idx = 0; pos_idx < n_pos_condition; pos_idx++) {
+      vgl_box_2d<int> bbox = pos_bbox[pos_idx];
+      vgl_polygon<double> poly = pos_img_poly[pos_idx];
+      int min_i, min_j, max_i, max_j;
+      min_i = bbox.min_x();  min_j = bbox.min_y();
+      max_i = bbox.max_x();  max_j = bbox.max_y();
+      bool found = false;
+      for (int i = min_i; ( i <= max_i && !found); i++) {
+        for (int j = min_j; ( j <= max_j && !found); j++) {
+          if ( i < 0 || i >= ni || j < 0 || j >= nj)
+            continue;
+          if (pos_img(i,j) && poly.contains(i,j)) {  // there is a positive pixel inside the positive polygon region -- true positive
+            found = true;
+            tp->data_array[t_idx] += 1;
+          }
+        }
+      }
+      if (!found)                                    // there is no positive pixel inside the current positive polygon region -- false negative
+        fn->data_array[t_idx] += 1;
+    }
+    for (unsigned neg_idx = 0; neg_idx < n_pos_condition; neg_idx++) {
+      vgl_box_2d<int> bbox = neg_bbox[neg_idx];
+      vgl_polygon<double> poly = neg_img_poly[neg_idx];
+      int min_i, min_j, max_i, max_j;
+      min_i = bbox.min_x();  min_j = bbox.min_y();
+      max_i = bbox.max_x();  max_j = bbox.max_y();
+      bool found = false;
+      for (int i = min_i; ( i <= max_i && !found); i++) {
+        for (int j = min_j; ( j <= max_j && !found); j++) {
+          if ( i < 0 || i >= ni || j < 0 || j >= nj)
+            continue;
+          if (pos_img(i,j) && poly.contains(i,j)) {  // there is a positive pixel inside the negative polygon region -- false positive
+            found = true;
+            fp->data_array[t_idx] += 1;
+          }
+        }
+      }
+      if (!found)                                    // there is no positive pixel inside the current negative polygon region -- true negative
+        tn->data_array[t_idx] += 1;
+    }
+  }
+
+  // calculate true positive rate and false positive rate
+  for (unsigned tidx = 0; tidx < n_thres; tidx++) {
+    tpr->data_array[tidx] = tp->data_array[tidx] / (tp->data_array[tidx] + fn->data_array[tidx]);
+    fpr->data_array[tidx] = fp->data_array[tidx] / (fp->data_array[tidx] + tn->data_array[tidx]);
+  }
+  bbas_1d_array_float * thres_out=new bbas_1d_array_float(n_thres);
+  for (unsigned k = 0; k < n_thres; k++) {
+    thres_out->data_array[k] = thresholds[k];
+  }
+  // output
+  unsigned out_i = 0;
+  pro.set_output_val<bbas_1d_array_float_sptr>(out_i++, thres_out);
+  pro.set_output_val<bbas_1d_array_float_sptr>(out_i++, tp);
+  pro.set_output_val<bbas_1d_array_float_sptr>(out_i++, tn);
+  pro.set_output_val<bbas_1d_array_float_sptr>(out_i++, fp);
+  pro.set_output_val<bbas_1d_array_float_sptr>(out_i++, fn);
+  pro.set_output_val<bbas_1d_array_float_sptr>(out_i++, tpr);
+  pro.set_output_val<bbas_1d_array_float_sptr>(out_i++, fpr);
   return true;
 }

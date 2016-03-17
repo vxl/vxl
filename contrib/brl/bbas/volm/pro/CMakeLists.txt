@@ -1,9 +1,10 @@
 # This is contrib/brl/bbas/volm/pro/CMakeLists.txt
 # volm Process Library
-IF(BUILD_RPL)
-INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR}/bbas )
-INCLUDE_DIRECTORIES( ${MUL_INCLUDE_DIR} )
-INCLUDE_DIRECTORIES( ${VTHREEP_INCLUDE_DIR}/rply)
+if(BUILD_RPL)
+include_directories( ${BRL_INCLUDE_DIR}/bbas )
+include_directories( ${BRL_INCLUDE_DIR}/bpro/core )
+include_directories( ${MUL_INCLUDE_DIR} )
+include_directories( ${VTHREEP_INCLUDE_DIR}/rply)
 
   # The N-dimensional bin structure implementations use rpl/rsdl
 
@@ -20,7 +21,7 @@ INCLUDE_DIRECTORIES( ${VTHREEP_INCLUDE_DIR}/rply)
   aux_source_directory(Templates volm_pro_sources)
 
   add_library(volm_pro ${volm_pro_sources})
-  target_link_libraries( volm_pro bstm_cpp_pro boxm2_cpp volm bprb brip  ${VXL_LIB_PREFIX}vul bmsh3d_algo rply bsol ${VXL_LIB_PREFIX}vgl ${VXL_LIB_PREFIX}vil ${VXL_LIB_PREFIX}vul bmsh3d bvgl bvgl_algo vpgl_pro)
+  target_link_libraries( volm_pro bstm_cpp_pro boxm2_cpp volm bprb brip  ${VXL_LIB_PREFIX}vul bmsh3d_algo rply bsol ${VXL_LIB_PREFIX}vgl ${VXL_LIB_PREFIX}vil ${VXL_LIB_PREFIX}vul bmsh3d bvgl bvgl_algo vpgl_pro bbas_pro)
   # Need vpgl_pro only for the instantiation of brdb_value_t<vbl_smart_ptr<vpgl_camera<double> > >
 
   if(BUILD_RPL)

@@ -63,4 +63,5 @@ void volm_register::register_process()
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, volm_generate_kml_from_binary_image_process, "volmGenerateKmlFromBinaryImageProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, volm_downsample_binary_layer_process, "volmDownsampleLayerImageProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, volm_dsm_ground_filter_mgf_process, "volmDsmGroundFilterMGFProcess");
+  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, volm_detection_rate_roc_process, "volmDetectionRateROCProcess");
 }

@@ -736,4 +736,30 @@ def downsample_binary_layer(in_img, in_mask, in_cam, out_img, out_mask, out_cam)
   bvxm_batch.set_input_from_db(5, out_cam)
   status = bvxm_batch.run_process()
   return status 
-  
+
+## process to compute detection rate based ROC
+def region_wise_roc_analysis(in_img, in_cam, positive_kml, negative_kml):
+  bvxm_batch.init_process("volmDetectionRateROCProcess")
+  bvxm_batch.set_input_from_db(0, in_img)
+  bvxm_batch.set_input_from_db(1, in_cam)
+  bvxm_batch.set_input_string(2, positive_kml)
+  bvxm_batch.set_input_string(3, negative_kml)
+  status = bvxm_batch.run_process()
+  if status:
+    (id, type) = bvxm_batch.commit_output(0)
+    thres_out = bvxm_batch.get_bbas_1d_array_float(id)
+    (id, type) = bvxm_batch.commit_output(1)
+    tp = bvxm_batch.get_bbas_1d_array_float(id)
+    (id, type) = bvxm_batch.commit_output(2)
+    tn = bvxm_batch.get_bbas_1d_array_float(id)
+    (id, type) = bvxm_batch.commit_output(3)
+    fp = bvxm_batch.get_bbas_1d_array_float(id)
+    (id, type) = bvxm_batch.commit_output(4)
+    fn = bvxm_batch.get_bbas_1d_array_float(id)
+    (id, type) = bvxm_batch.commit_output(5)
+    tpr = bvxm_batch.get_bbas_1d_array_float(id)
+    (id, type) = bvxm_batch.commit_output(6)
+    fpr = bvxm_batch.get_bbas_1d_array_float(id)
+    return thres_out, tp, tn, fp, fn, tpr, fpr
+  else:
+    return None, None, None, None, None, None, None

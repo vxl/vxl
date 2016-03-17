@@ -53,4 +53,5 @@ DECLARE_FUNC_CONS(volm_render_kml_polygon_mask_process);
 DECLARE_FUNC_CONS(volm_generate_kml_from_binary_image_process);
 DECLARE_FUNC_CONS(volm_downsample_binary_layer_process);
 DECLARE_FUNC_CONS(volm_dsm_ground_filter_mgf_process);
+DECLARE_FUNC_CONS(volm_detection_rate_roc_process);
 #endif
