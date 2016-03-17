@@ -4,7 +4,7 @@
 #include <vgui/vgui_range_map.h>
 #include <vbl/vbl_array_1d.h>
 
-#define INCLUDE_LONG_DOUBLE_TESTS
+#if define INCLUDE_LONG_DOUBLE_TESTS
 static void test_range_map()
 {
   //Test the range map parameter class
