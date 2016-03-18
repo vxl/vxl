@@ -22,6 +22,9 @@ vxl_configure_file( ${CMAKE_SOURCE_DIR}/core/vidl/vidl_config.h.in
                 ${CMAKE_BINARY_DIR}/core/vidl/vidl_config.h include/vxl/core/vidl )
 
 if( FFMPEG_FOUND )
+  # Mark FFMPEG is found.  In future we can even export
+  # FFMPEG setting for external use. 
+  SET(CORE_VIDEO_FFMPEG_FOUND ON CACHE INTERNAL "FFMPEG library has been found and is used in vidl")
   include_directories(${FFMPEG_INCLUDE_DIR})
 endif()
 
