@@ -84,6 +84,8 @@ class vbl_array_3d
   ~vbl_array_3d () { destruct(); }
   vbl_array_3d<T>& operator=(vbl_array_3d<T> const& that) {
     resize(that.row1_count_, that.row2_count_, that.row3_count_);
+        if(row1_count_*row2_count_*row3_count_==0)
+                return *this;
     set(that.data_block());
     return *this;
   }
