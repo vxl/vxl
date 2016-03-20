@@ -36,7 +36,8 @@ set(boxm2_ocl_algo_sources
     boxm2_ocl_update_image_factor.h				boxm2_ocl_update_image_factor.cxx
     boxm2_ocl_fuse_factors.h					boxm2_ocl_fuse_factors.cxx
     boxm2_ocl_update_heightmap_factor.h		boxm2_ocl_update_heightmap_factor.cxx
-   )
+    boxm2_ocl_remove_low_nobs.h	    	        boxm2_ocl_remove_low_nobs.cxx
+)
 
 vxl_add_library(LIBRARY_NAME boxm2_ocl_algo LIBRARY_SOURCES  ${boxm2_ocl_algo_sources})
 target_link_libraries(boxm2_ocl_algo boxm2_cpp_algo boxm2_ocl ${VXL_LIB_PREFIX}vgl ${VXL_LIB_PREFIX}vil ${VXL_LIB_PREFIX}vul ${VXL_LIB_PREFIX}vnl_algo brad bvpl_kernels)

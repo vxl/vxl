@@ -452,9 +452,9 @@ void init_prob_main(__constant  RenderSceneInfo    * linfo,            // scene 
 //
 __kernel
 void fuse_factors_main(__global RenderSceneInfo    * info,
-				   __global float			   * aux0_factor,       // array stoing the cumulative factor per datatype
-				   __global float			   * aux0_cum,          // array stoing the cumulative factor over all the datatypes
-                   __global float              * weight_factor)     // different weight for each datatype
+                       __global float			   * aux0_factor,       // array stoing the cumulative factor per datatype
+                       __global float			   * aux0_cum,          // array stoing the cumulative factor over all the datatypes
+                       __global float              * weight_factor)     // different weight for each datatype
 {
     int gid=get_global_id(0);
     int datasize = info->data_len ;
@@ -468,12 +468,12 @@ void fuse_factors_main(__global RenderSceneInfo    * info,
 //: function to compute new alpa from the cumulative factors.
 __kernel
 void evaluate_alpha_main(__constant RenderSceneInfo * linfo,
-								  __global uchar16 * trees,
-								  __global float* alpha,
-								  __global float * aux0_cum,    // array stoing the cumulative factor over all the datatypes
-								  __constant uchar * lookup,
-								  __local uchar * cumsum,
-								  __local uchar16 * all_local_tree)
+                         __global uchar16 * trees,
+                         __global float* alpha,
+                         __global float * aux0_cum,    // array stoing the cumulative factor over all the datatypes
+                         __constant uchar * lookup,
+                         __local uchar * cumsum,       // for computing data index 
+                         __local uchar16 * all_local_tree)
 {
     //make sure local_tree points to the right one in shared memory
     uchar llid = (uchar)(get_local_id(0) + (get_local_id(1) + get_local_id(2)*get_local_size(1))*get_local_size(0));
@@ -501,7 +501,7 @@ void evaluate_alpha_main(__constant RenderSceneInfo * linfo,
                 float side_len = 1.0f/(float) (1<<currDepth);
                 //if you've collected a nonzero amount of probs, update it
                 int currIdx = data_index_relative(local_tree, i, lookup) + data_index_root(local_tree);
-				float p = 1/(1+exp(-aux0_cum[currIdx]));
+                float p = 1/(1+exp(-aux0_cum[currIdx]));
                 alpha[currIdx] = -(log(1-p))/ (side_len * linfo->block_len) ;
                  //END LEAF CODE
                 ///////////////////////////////////////

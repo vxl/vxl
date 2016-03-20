@@ -74,9 +74,7 @@ bool boxm2_ocl_compute_height_factor_process(bprb_func_process& pro)
     vil_image_view_base_sptr x_img = pro.get_input<vil_image_view_base_sptr>(i++);
     vil_image_view_base_sptr y_img = pro.get_input<vil_image_view_base_sptr>(i++);
     int sradius  = pro.get_input<int>(i++);
-    
     boxm2_ocl_compute_heightmap_pre_post::compute_pre_post(scene, device, opencl_cache, z_img, z_var_img, x_img, y_img,sradius);
-
     return true;
 }
 

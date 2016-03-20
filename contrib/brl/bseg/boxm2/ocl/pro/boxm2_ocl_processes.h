@@ -113,5 +113,6 @@ DECLARE_FUNC_CONS(boxm2_ocl_compute_pre_post_process);
 DECLARE_FUNC_CONS(boxm2_ocl_compute_height_factor_process);
 DECLARE_FUNC_CONS(boxm2_ocl_update_heightmap_factor_process);
 DECLARE_FUNC_CONS(boxm2_ocl_init_prob_uniform_process);
+DECLARE_FUNC_CONS(boxm2_ocl_remove_low_nobs_process);
 
 #endif

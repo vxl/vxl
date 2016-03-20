@@ -130,6 +130,5 @@ void boxm2_ocl_register::register_process()
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, boxm2_ocl_compute_height_factor_process, "boxm2OclComputeHeightFactorProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, boxm2_ocl_update_heightmap_factor_process, "boxm2OclUpdateHeightMapFactorProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, boxm2_ocl_init_prob_uniform_process, "boxm2OclInitProbUniformProcess");
-  
-  
+  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, boxm2_ocl_remove_low_nobs_process, "boxm2OclRemoveLowNobsProcess");
 }

@@ -2263,7 +2263,7 @@ def boxm2_fuse_factors(scene, device, cache, view_idents=[], weights= []) :
     return boxm2_batch.run_process();
 def compute_hmap_factor(scene, device, cache,zimg,zvar,ximg,yimg,sradius):
     #If no device is passed in, do cpu update
-    print("boxm2_batch GPU update");
+    print("boxm2_batch GPU compute_hmap_factor");
     boxm2_batch.init_process("boxm2OclComputeHeightFactorProcess");
     boxm2_batch.set_input_from_db(0,device);
     boxm2_batch.set_input_from_db(1,scene);
@@ -2292,4 +2292,13 @@ def boxm2_init_uniform_prob(scene, device, cache):
     boxm2_batch.set_input_from_db(0,device);
     boxm2_batch.set_input_from_db(1,scene);
     boxm2_batch.set_input_from_db(2,cache);
+    return boxm2_batch.run_process();
+
+def boxm2_remove_low_nobs(scene, device, cache, nobs_thresh_multiplier):
+    print("boxm2_batch GPU process");
+    boxm2_batch.init_process("boxm2OclRemoveLowNobsProcess");
+    boxm2_batch.set_input_from_db(0,device);
+    boxm2_batch.set_input_from_db(1,scene);
+    boxm2_batch.set_input_from_db(2,cache);
+    boxm2_batch.set_input_float(3,nobs_thresh_multiplier);
     return boxm2_batch.run_process();

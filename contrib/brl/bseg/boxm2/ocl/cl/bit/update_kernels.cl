@@ -1010,3 +1010,54 @@ __kernel void update_P_using_Q(__constant RenderSceneInfo * linfo,__global uchar
 }
 
 #endif
+
+#ifdef REMOVE_LOW_NOBS
+//: function to compute new alpa from the cumulative factors.
+__kernel
+void remove_low_nobs_main(__constant RenderSceneInfo * linfo,
+                          __global uchar16 * trees,
+                          __global float* alpha,
+                          __global short4* num_obs, 
+                          __global float*  num_obs_thresh, 
+                          __constant uchar * lookup,
+                          __local uchar * cumsum,       // for computing data index 
+                          __local uchar16 * all_local_tree)
+{
+    //make sure local_tree points to the right one in shared memory
+    uchar llid = (uchar)(get_local_id(0) + (get_local_id(1) + get_local_id(2)*get_local_size(1))*get_local_size(0));
+    __local uchar16* local_tree    = &all_local_tree[llid];
+    __local uchar*   csum          = &cumsum[llid*10];
+
+    //global id should be the same as treeIndex
+    unsigned gidX = get_global_id(0);
+    unsigned gidY = get_global_id(1);
+    unsigned gidZ = get_global_id(2);
+
+    //tree Index is global id
+    unsigned treeIndex = calc_blkunisgned(gidX, gidY, gidZ, linfo->dims);
+    if (gidX < linfo->dims.x && gidY < linfo->dims.y && gidZ <linfo->dims.z) {
+        int MAX_INNER_CELLS, MAX_CELLS;
+        get_max_inner_outer(&MAX_INNER_CELLS, &MAX_CELLS, linfo->root_level);
+        //1. get current tree information
+        (*local_tree)    = trees[treeIndex];
+        //FOR ALL LEAVES IN CURRENT TREE
+        for (int i = 0; i < MAX_CELLS; ++i) {
+            if ( is_leaf(local_tree, i) ) {
+              ///////////////////////////////////////
+              //LEAF CODE
+              int currIdx = data_index_relative(local_tree, i, lookup) + data_index_root(local_tree);
+              float cur_alpha = alpha[currIdx];
+              float n0 = (float)(num_obs[currIdx].x);
+              float n1 = (float)(num_obs[currIdx].y);
+              float n2 = (float)(num_obs[currIdx].z);
+              float sum = n0+n1+n2;
+              if(sum<*num_obs_thresh)
+                cur_alpha = 0.0f;
+              alpha[currIdx] = cur_alpha;
+              //END LEAF CODE
+              ///////////////////////////////////////
+            } //end leaf IF
+        } //end leaf for
+    } //end global id IF
+}
+#endif //REMOVE_LOW_NOBS
