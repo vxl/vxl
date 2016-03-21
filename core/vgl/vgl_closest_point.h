@@ -335,4 +335,9 @@ vgl_point_3d<T> vgl_closest_point(vgl_sphere_3d<T> const& s,
 template <class T>
 vgl_point_3d<T> vgl_closest_point(vgl_pointset_3d<T> const& ptset, vgl_point_3d<T> const& p,
                                   T dist = std::numeric_limits<T>::max());
+
+//: Return the closest point on a cubic spline
+template <class T>
+vgl_point_3d<T> vgl_closest_point(vgl_cubic_spline_3d<T> const& cspl, vgl_point_3d<T> const& p);
+
 #endif // vgl_closest_point_h_
