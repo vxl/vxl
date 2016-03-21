@@ -335,12 +335,12 @@ bool boxm2_ocl_render_expected_height_map_process(bprb_func_process& pro)
   delete[] prob_buff;
   delete[] t_infinity_buff;
   //delete[] app_buff;
-  opencl_cache->free_mem(exp_image.ptr());
-  opencl_cache->free_mem(var_image.ptr());
-  opencl_cache->free_mem(vis_image.ptr());
-  opencl_cache->free_mem(prob_image.ptr());
-  opencl_cache->free_mem(t_infinity.ptr());
-  opencl_cache->free_mem(ray_o_buff.ptr());
-  opencl_cache->free_mem(ray_d_buff.ptr());
+  opencl_cache->unref_mem(exp_image.ptr());
+  opencl_cache->unref_mem(var_image.ptr());
+  opencl_cache->unref_mem(vis_image.ptr());
+  opencl_cache->unref_mem(prob_image.ptr());
+  opencl_cache->unref_mem(t_infinity.ptr());
+  opencl_cache->unref_mem(ray_o_buff.ptr());
+  opencl_cache->unref_mem(ray_d_buff.ptr());
   return true;
 }

@@ -236,11 +236,11 @@ bool boxm2_ocl_compute_heightmap_pre_post::update_pre(boxm2_scene_sptr         s
     delete[] ray_directions;
     //opencl_cache->unref_mem(hmean_image.ptr());
     //opencl_cache->unref_mem(hvar_image.ptr());
-    opencl_cache->free_mem(vis_image.ptr());
-    opencl_cache->free_mem(pre_image.ptr());
-    opencl_cache->free_mem(ray_o_buff.ptr());
-    opencl_cache->free_mem(ray_d_buff.ptr());
-    opencl_cache->free_mem(tnearfar_mem_ptr.ptr());
+    opencl_cache->unref_mem(vis_image.ptr());
+    opencl_cache->unref_mem(pre_image.ptr());
+    opencl_cache->unref_mem(ray_o_buff.ptr());
+    opencl_cache->unref_mem(ray_d_buff.ptr());
+    opencl_cache->unref_mem(tnearfar_mem_ptr.ptr());
     vcl_cout << "Gpu time " << gpu_time << " transfer time " << transfer_time << vcl_endl;
     clReleaseCommandQueue(queue);
     return true;
@@ -451,11 +451,11 @@ bool boxm2_ocl_compute_heightmap_pre_post::update_post(boxm2_scene_sptr         
     delete[] ray_origins;
     delete[] ray_directions;
 
-    opencl_cache->free_mem(vis_image.ptr());
-    opencl_cache->free_mem(post_image.ptr());
-    opencl_cache->free_mem(ray_o_buff.ptr());
-    opencl_cache->free_mem(ray_d_buff.ptr());
-    opencl_cache->free_mem(tnearfar_mem_ptr.ptr());
+    opencl_cache->unref_mem(vis_image.ptr());
+    opencl_cache->unref_mem(post_image.ptr());
+    opencl_cache->unref_mem(ray_o_buff.ptr());
+    opencl_cache->unref_mem(ray_d_buff.ptr());
+    opencl_cache->unref_mem(tnearfar_mem_ptr.ptr());
     vcl_cout << "Gpu time " << gpu_time << " transfer time " << transfer_time << vcl_endl;
     clReleaseCommandQueue(queue);
 
@@ -555,7 +555,7 @@ bool boxm2_ocl_update_heightmap_factor::update_heightmap_factor(boxm2_scene_sptr
         opencl_cache->deep_remove_data(scene, *id, boxm2_data_traits<BOXM2_AUX0>::prefix("hf"), true);
     }
     clFinish(queue);
-    opencl_cache->free_mem(does_add.ptr());
+    opencl_cache->unref_mem(does_add.ptr());
     return true;
 }
 
@@ -922,11 +922,11 @@ compute_smooth_heightmap_pdata(boxm2_scene_sptr         scene,
     delete[] hvar_buff;
     delete[] ray_origins;
     delete[] ray_directions;
-    opencl_cache->free_mem(hmean_image.ptr());
-    opencl_cache->free_mem(hvar_image.ptr());
-    opencl_cache->free_mem(ray_o_buff.ptr());
-    opencl_cache->free_mem(ray_d_buff.ptr());
-    opencl_cache->free_mem(tnearfar_mem_ptr.ptr());
+    opencl_cache->unref_mem(hmean_image.ptr());
+    opencl_cache->unref_mem(hvar_image.ptr());
+    opencl_cache->unref_mem(ray_o_buff.ptr());
+    opencl_cache->unref_mem(ray_d_buff.ptr());
+    opencl_cache->unref_mem(tnearfar_mem_ptr.ptr());
     vcl_cout << "Gpu time " << gpu_time << " transfer time " << transfer_time << vcl_endl;
     clReleaseCommandQueue(queue);
 
