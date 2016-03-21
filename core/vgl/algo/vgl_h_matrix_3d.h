@@ -70,7 +70,14 @@ class vgl_h_matrix_3d
   vgl_homg_plane_3d<T> correlation(vgl_homg_point_3d<T> const& p) const;
   vgl_homg_point_3d<T> correlation(vgl_homg_plane_3d<T> const& l) const;
 
-  //: operate directly on a Euclidean pointset for convenience (no ideal points allowed)
+
+  //: operate directly on Euclidean points for convenience (no ideal points allowed)
+
+  vgl_point_3d<T> operator()(vgl_point_3d<T> const& p) const{
+    vgl_homg_point_3d<T> hp(p); return (*this)(hp);}
+
+  vgl_point_3d<T> operator* (vgl_point_3d<T> const& p) const {return (*this)(p);}
+
   vgl_pointset_3d<T> operator()(vgl_pointset_3d<T> const& ptset) const;
 
   //the following require computing the inverse homography
