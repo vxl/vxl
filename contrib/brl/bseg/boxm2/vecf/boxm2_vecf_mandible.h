@@ -50,7 +50,7 @@ class boxm2_vecf_mandible : public bvgl_gen_cylinder{
 
  //: the functor operator for surface distance. dist_thresh is the distance a closest point on the normal plane
  // can be away from the closest point in the cross-section pointset.
- double operator() (vgl_point_3d<double> p) const{ return bvgl_gen_cylinder::surface_distance(p, params_.planar_surface_dist_thresh_);}
+ double operator() (vgl_point_3d<double> p) const{ return bvgl_gen_cylinder::distance(p, params_.planar_surface_dist_thresh_);}
 
  //:for debug purposes
  virtual void display_axis_spline(std::ofstream& ostr) const;
