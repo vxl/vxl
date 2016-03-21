@@ -35,7 +35,7 @@ class boxm2_vecf_cranium{
 
  private:
  unsigned nbins_;
- bvgl_grid_index_3d index_;
+ bvgl_grid_index_3d<double> index_;
  vgl_pointset_3d<double> ptset_;
 };
 std::ostream&  operator << (std::ostream& s, boxm2_vecf_cranium const& pr);

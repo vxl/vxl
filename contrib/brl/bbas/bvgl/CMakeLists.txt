@@ -25,7 +25,12 @@ set(bvgl_sources
  bvgl_param_curve.h                      # EMPTY FILE bvgl_param_curve.cxx
  bvgl_cross_section.h                    bvgl_cross_section.cxx
  bvgl_gen_cylinder.h                     bvgl_gen_cylinder.cxx
- bvgl_grid_index_3d.h                    bvgl_grid_index_3d.cxx
+ bvgl_grid_index_3d.h
+ bvgl_spline_region_3d.h                 bvgl_poly_region_3d.hxx
+ bvgl_poly_region_3d.h                   bvgl_poly_region_3d.hxx
+ bvgl_scaled_shape_3d.h                  bvgl_scaled_shape_3d.hxx
+ bvgl_k_nearest_neighbors_3d.h
+ bvgl_knn_index_3d.h
 )
 aux_source_directory(Templates bvgl_sources)
 
