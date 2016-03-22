@@ -27,6 +27,7 @@
 #include <vgl/vgl_polygon.h>
 #include <vgl/vgl_ray_3d.h>
 #include <vgl/vgl_pointset_3d.h>
+#include <vgl/vgl_cubic_spline_3d.h>
 #include <vcl_cassert.h>
 
 template <class T>
@@ -677,6 +678,94 @@ vgl_point_3d<T> vgl_closest_point(vgl_pointset_3d<T> const& ptset,
     return pc_plane;
   }
 }
+template <class T>
+vgl_point_3d<T> vgl_closest_point(vgl_cubic_spline_3d<T> const& cspl, vgl_point_3d<T> const& p){
+  // find the closest knot
+ std::vector<vgl_point_3d<T> > const& knots = cspl.const_knots();
+  unsigned n = cspl.n_knots();
+  double min_dist = std::numeric_limits<double>::max();
+  unsigned min_index = 0;
+  for(unsigned i = 0; i<n; ++i){
+    double d = vgl_distance(knots[i],p);
+    if(d<min_dist){
+      min_dist  = d;
+      min_index = i;
+    }
+  }
+  unsigned start_index = 0, end_index = 0;
+  // find the interval assuming that the closest knots span the closest point
+  // cases
+  if(min_index == 0){
+    if(cspl.closed()){
+      double dm = vgl_distance(knots[n-2], p);
+      double dp = vgl_distance(knots[1], p);
+      if(dp<dm){
+        start_index = 0;
+        end_index = 1;
+      }else{
+        start_index = n-2;
+        end_index = n-1;
+      }
+    }else{
+      start_index = 0;
+      end_index = 1;
+    }
+  }else if(min_index == n-1){
+    if(cspl.closed()){
+      double dm = vgl_distance(knots[n-2], p);
+      double dp = vgl_distance(knots[1], p);
+      if(dp<dm){
+        start_index = 0;
+        end_index = 1;
+      }else{
+        start_index = n-2;
+        end_index = n-1;
+      }
+    }else{
+      start_index = n-2;
+      end_index = n-1;
+    }
+  }else{
+      double dm = vgl_distance(knots[min_index-1], p);
+      double dp = vgl_distance(knots[min_index+1], p);
+      if(dp<dm){
+        start_index = min_index;
+        end_index = min_index+1;
+      }else{
+        start_index = min_index-1;
+        end_index = min_index;
+      }
+  }
+  // iterate to fine closest point (within 1/1000 of the interval)
+  T sindx = static_cast<T>(start_index), eindx = static_cast<T>(end_index);
+  bool first = true;
+  unsigned iter = 0;
+  double tolerance = vgl_distance(knots[start_index],knots[end_index])/T(1000);
+  T t = (sindx+ eindx)/T(2);
+  vgl_point_3d<T> cp = cspl(t);
+  double dcm = vgl_distance(p, cp), dcm0 = 0.0 ;
+  unsigned max_iter = 100;
+  while(first || ((std::fabs(dcm - dcm0)>tolerance)&&iter<max_iter)){
+    dcm0 = dcm;
+    first = false;
+    T tp = (t+eindx)/T(2), tm = (t+sindx)/T(2);
+    double dp = vgl_distance(p, cspl(tp));
+    double dm = vgl_distance(p, cspl(tm));
+    if(dp<dm){
+      sindx = t;
+      t = tp;
+    }else{
+      eindx = t;
+      t = tm;
+    }
+    cp = cspl(t);
+    dcm = vgl_distance(p,cp);
+    iter++;
+  }
+  if(iter>=max_iter)
+    std::cout << " Warning: exceeded num interations in closest point cubic_spline_3d\n";
+  return cp;
+}
 
 #undef DIST_SQR_TO_LINE_SEG_2D
 #undef DIST_SQR_TO_LINE_SEG_3D
@@ -718,5 +807,6 @@ template std::pair<vgl_point_3d<T >,vgl_point_3d<T > > \
 template vgl_point_2d<T > vgl_closest_point(vgl_line_segment_2d<T > const&, vgl_point_2d<T > const&); \
 template vgl_point_3d<T > vgl_closest_point(vgl_line_segment_3d<T > const&, vgl_point_3d<T > const&); \
 template vgl_point_3d<T> vgl_closest_point(vgl_sphere_3d<T> const& s, vgl_point_3d<T> const& p); \
- template vgl_point_3d<T> vgl_closest_point(vgl_pointset_3d<T> const& ptset, vgl_point_3d<T> const& p, T dist)
+template vgl_point_3d<T> vgl_closest_point(vgl_pointset_3d<T> const& ptset, vgl_point_3d<T> const& p, T dist); \
+template vgl_point_3d<T> vgl_closest_point(vgl_cubic_spline_3d<T> const& cspl, vgl_point_3d<T> const& p)
 #endif // vgl_closest_point_hxx_
