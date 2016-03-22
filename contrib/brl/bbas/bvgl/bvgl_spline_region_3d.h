@@ -133,12 +133,6 @@ class bvgl_spline_region_3d
   Type cang_; // principal_axis_cosine;
 };
 
-template <class Type>
-std::ostream&  operator<<(std::ostream& s, bvgl_spline_region_3d<Type> const& p);
-
-template <class Type>
-std::istream&  operator>>(std::istream& is,  bvgl_spline_region_3d<Type>& p);
-
 #define BVGL_SPLINE_REGION_3D(T) extern "please include bbas/bvgl/bvgl_spline_region_3d.hxx first"
 
 #endif // bvgl_spline_region_3d_h_

@@ -65,12 +65,6 @@ class bvgl_poly_region_3d
   vnl_vector<Type> v_coefs_;
 };
 
-template <class Type>
-std::ostream&  operator<<(std::ostream& s, bvgl_poly_region_3d<Type> const& p);
-
-template <class Type>
-std::istream&  operator>>(std::istream& is,  bvgl_poly_region_3d<Type>& p);
-
 #define BVGL_POLY_REGION_3D(T) extern "please include bbas/bvgl/bvgl_poly_region_3d.hxx first"
 
 #endif // bvgl_poly_region_3d_h_

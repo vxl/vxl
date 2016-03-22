@@ -435,8 +435,6 @@ vgl_pointset_3d<Type> bvgl_spline_region_3d<Type>::random_pointset(unsigned n_pt
 }
 #undef BVGL_SPLINE_REGION_3D_INSTANTIATE
 #define BVGL_SPLINE_REGION_3D_INSTANTIATE(Type) \
-template class bvgl_spline_region_3d<Type >;\
-template std::ostream& operator<<(std::ostream&, bvgl_spline_region_3d<Type > const& p);\
-template std::istream& operator>>(std::istream&, bvgl_spline_region_3d<Type >& p)
+template class bvgl_spline_region_3d<Type >
 
 #endif // bvgl_spline_region_3d_hxx_

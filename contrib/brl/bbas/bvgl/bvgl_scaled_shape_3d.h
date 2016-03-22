@@ -139,12 +139,6 @@ class bvgl_scaled_shape_3d
   void compute_cross_sections();
 };
 
-template <class Type>
-std::ostream&  operator<<(std::ostream& s, bvgl_scaled_shape_3d<Type> const& p);
-
-template <class Type>
-std::istream&  operator>>(std::istream& is,  bvgl_scaled_shape_3d<Type>& p);
-
 #define BVGL_SCALED_SHAPE_3D(T) extern "please include bbas/bvgl/bvgl_scaled_shape_3d.hxx first"
 
 #endif // bvgl_scaled_shape_3d_h_
