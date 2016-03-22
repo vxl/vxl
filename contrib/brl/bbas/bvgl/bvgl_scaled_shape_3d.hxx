@@ -250,7 +250,7 @@ vgl_box_3d<Type> bvgl_scaled_shape_3d<Type>::bounding_box() const{
   // assume the scale monotonically decreases so bounding box is defined by the base
   vgl_vector_3d<Type> nv = max_norm_distance_*base_.normal();
   std::vector<vgl_point_3d<Type> > knots = base_.knots();
-  for(std::vector<vgl_point_3d<Type> >::iterator kit = knots.begin();
+  for(typename std::vector<vgl_point_3d<Type> >::iterator kit = knots.begin();
       kit != knots.end(); ++kit){
     vgl_point_3d<Type> p = (*kit) + nv;
     bb.add(p);
@@ -281,7 +281,7 @@ vgl_pointset_3d<Type> bvgl_scaled_shape_3d<Type>::random_pointset(unsigned n_pts
   //map the 2-d points back to the 3-d space
 
 
-  for(std::vector<vgl_point_3d<Type> >::iterator pit = pts.begin();
+  for(typename std::vector<vgl_point_3d<Type> >::iterator pit = pts.begin();
       pit != pts.end(); ++pit){
     ret.add_point_with_normal(*pit,norm);
   }

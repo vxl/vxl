@@ -38,7 +38,7 @@ bvgl_spline_region_3d<Type>::bvgl_spline_region_3d(std::vector<vgl_point_3d<Type
   vgl_fit_plane_3d<Type> fitter;
   fitter.clear();
   Type limit = static_cast<Type>(1);
-  for(std::vector<vgl_point_3d<Type> >::const_iterator pit = knots.begin();
+  for(typename std::vector<vgl_point_3d<Type> >::const_iterator pit = knots.begin();
       pit != knots.end(); ++pit)
     fitter.add_point(pit->x(), pit->y(), pit->z());
   double temp = fitter.fit(&std::cout);
@@ -57,7 +57,7 @@ bvgl_spline_region_3d<Type>::bvgl_spline_region_3d(std::vector<vgl_point_3d<Type
   plane_.plane_coord_vectors(u_vec_, v_vec_);
 
   std::vector<vgl_point_3d<Type> > planar_knots;
-  for(std::vector<vgl_point_3d<Type> >::const_iterator pit = knots.begin();
+  for(typename std::vector<vgl_point_3d<Type> >::const_iterator pit = knots.begin();
       pit != knots.end(); ++pit){
     vgl_point_3d<Type> cp = vgl_closest_point(plane_, *pit);
     planar_knots.push_back(cp);
@@ -80,7 +80,7 @@ bvgl_spline_region_3d<Type>::bvgl_spline_region_3d(std::vector<vgl_point_3d<Type
   // create the spline on the plane
   bool closed = true;
   std::vector<vgl_point_2d<Type> > knots_2d;
-  for(std::vector<vgl_point_3d<Type> >::iterator kit=planar_knots.begin();
+  for(typename std::vector<vgl_point_3d<Type> >::iterator kit=planar_knots.begin();
       kit != planar_knots.end(); ++kit){
     Type u, v;
     if(!this->world_to_plane(*kit, u, v, tolerance_))
@@ -138,7 +138,7 @@ bvgl_spline_region_3d<Type>::bvgl_spline_region_3d(std::vector<vgl_point_2d<Type
     poly_2d_.push_back(vgl_point_2d<Type>(spline_2d_(t)));
 
   std::vector<vgl_point_3d<double> > knots_3d;
-  for(std::vector<vgl_point_2d<Type> >::const_iterator kit = knots_2d.begin();
+  for(typename std::vector<vgl_point_2d<Type> >::const_iterator kit = knots_2d.begin();
       kit != knots_2d.end(); ++kit){
     vgl_point_3d<Type> p3d;
     this->plane_to_world(kit->x(), kit->y(), p3d);
@@ -206,7 +206,7 @@ vgl_point_2d<Type> bvgl_spline_region_3d<Type>::compute_centroid_2d() const{
   if(pts.size()==0)
     return vgl_point_2d<Type>(cx, cy);
   double n = Type(0);
-  for(std::vector<vgl_point_2d<Type> >::iterator pit = pts.begin();
+  for(typename std::vector<vgl_point_2d<Type> >::iterator pit = pts.begin();
       pit != pts.end(); ++pit, n+=Type(1)){
     cx += pit->x(); cy += pit->y();
   }
@@ -221,7 +221,7 @@ vgl_point_3d<Type> bvgl_spline_region_3d<Type>::compute_centroid() const{
   if(pts.size()==0)
     return vgl_point_3d<Type>(cx, cy, cz);
   double n = Type(0);
-  for(std::vector<vgl_point_3d<Type> >::iterator pit = pts.begin();
+  for(typename std::vector<vgl_point_3d<Type> >::iterator pit = pts.begin();
       pit != pts.end(); ++pit, n+=Type(1)){
     cx += pit->x(); cy += pit->y(); cz += pit->z();
   }
@@ -343,7 +343,7 @@ bvgl_spline_region_3d<Type> bvgl_spline_region_3d<Type>::scale(Type su, Type sv,
   std::vector<vgl_point_2d<Type> > pts = spline_2d_.knots();
   std::vector<vgl_point_3d<Type> > scaled_pts;
   unsigned k = 0;
-  for(std::vector<vgl_point_2d<Type> >::iterator kit = pts.begin();
+  for(typename std::vector<vgl_point_2d<Type> >::iterator kit = pts.begin();
       kit != pts.end(); ++kit, k++){
     // subtract off the centroid, i.e. rotate about the centroid
     vgl_vector_2d<Type> dv = (*kit)-c;
@@ -425,7 +425,7 @@ vgl_pointset_3d<Type> bvgl_spline_region_3d<Type>::random_pointset(unsigned n_pt
     std::cout << "Warning! Insufficient number of points " << pts.size() << " instead of " << n_pts << '\n';
   //map the 2-d points back to the 3-d space
   vgl_pointset_3d<Type> ret;
-  for(std::vector<vgl_point_2d<Type> >::iterator pit = pts.begin();
+  for(typename std::vector<vgl_point_2d<Type> >::iterator pit = pts.begin();
       pit != pts.end(); ++pit){
     vgl_point_3d<Type> p3d;
     this->plane_to_world(pit->x(), pit->y(), p3d);

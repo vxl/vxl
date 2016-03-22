@@ -123,7 +123,7 @@ vgl_point_3d<Type> bvgl_poly_region_3d<Type>::centroid() const{
   if(pts.size()==0)
     return vgl_point_3d<Type>(cx, cy, cz);
   double n = Type(0);
-  for(std::vector<vgl_point_2d<Type> >::const_iterator pit = pts.begin();
+  for(typename std::vector<vgl_point_2d<Type> >::const_iterator pit = pts.begin();
       pit != pts.end(); ++pit, n+=Type(1)){
                 Type x = u_vec_.x()*pit->x() + origin_.x();
         Type y = v_vec_.y()*pit->y() + origin_.y();
@@ -185,7 +185,7 @@ vgl_pointset_3d<Type> bvgl_poly_region_3d<Type>::random_pointset(unsigned n_pts)
     std::cout << "Warning! Insufficient number of points " << pts.size() << " instead of " << n_pts << '\n';
   //map the 2-d points back to the 3-d space
   vgl_pointset_3d<Type> ret;
-  for(std::vector<vgl_point_2d<Type> >::iterator pit = pts.begin();
+  for(typename std::vector<vgl_point_2d<Type> >::iterator pit = pts.begin();
       pit != pts.end(); ++pit){
     Type pu = pit->x(), pv = pit->y();
     vgl_vector_3d<Type> del = pu*u_vec_ + pv*v_vec_;
