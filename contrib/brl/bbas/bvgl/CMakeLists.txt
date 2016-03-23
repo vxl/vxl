@@ -47,7 +47,7 @@ endif()
 
 #Create BVGL library
 vxl_add_library(LIBRARY_NAME bvgl LIBRARY_SOURCES ${bvgl_sources})
-target_link_libraries(bvgl bvrml vsol ${VXL_LIB_PREFIX}vgl ${VXL_LIB_PREFIX}vgl_algo ${VXL_LIB_PREFIX}vgl_io ${VXL_LIB_PREFIX}vgl ${VXL_LIB_PREFIX}vnl_algo ${VXL_LIB_PREFIX}vnl ${VXL_LIB_PREFIX}vil ${VXL_LIB_PREFIX}vbl)
+target_link_libraries(bvgl bnabo bvrml vsol ${VXL_LIB_PREFIX}vgl ${VXL_LIB_PREFIX}vgl_algo ${VXL_LIB_PREFIX}vgl_io ${VXL_LIB_PREFIX}vgl ${VXL_LIB_PREFIX}vnl_algo ${VXL_LIB_PREFIX}vnl ${VXL_LIB_PREFIX}vil ${VXL_LIB_PREFIX}vbl)
 if(EXPAT_FOUND)
 target_link_libraries(bvgl expatpp)
 endif()

@@ -75,7 +75,7 @@ bool bvgl_k_nearest_neighbors_3d<Type>::create(){
   return true;
 }
 template <class Type>
-bvgl_k_nearest_neighbors_3d<Type>::bvgl_k_nearest_neighbors_3d(vgl_pointset_3d<Type> const& ptset, Type tolerance = Type(0)):
+bvgl_k_nearest_neighbors_3d<Type>::bvgl_k_nearest_neighbors_3d(vgl_pointset_3d<Type> const& ptset, Type tolerance):
 search_tree_(0), tolerance_(tolerance), ptset_(ptset){
   create();
 }
