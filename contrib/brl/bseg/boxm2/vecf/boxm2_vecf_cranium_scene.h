@@ -29,7 +29,7 @@ class boxm2_vecf_cranium_scene : public boxm2_vecf_articulated_scene
 {
  public:
   enum anat_type { CRANIUM, NO_TYPE};
- boxm2_vecf_cranium_scene(): source_model_exists_(false), alpha_data_(0), app_data_(0), nobs_data_(0), cranium_data_(0),target_alpha_data_(0),target_app_data_(0), target_nobs_data_(0), extrinsic_only_(false),target_blk_(0),target_data_extracted_(false),boxm2_vecf_articulated_scene(),sigma_(0.5f){}
+ boxm2_vecf_cranium_scene(): cranium_data_(0),boxm2_vecf_articulated_scene(){}
 
   //: set parameters
   bool set_params(boxm2_vecf_articulated_params const& params);
@@ -40,10 +40,12 @@ class boxm2_vecf_cranium_scene : public boxm2_vecf_articulated_scene
 
   boxm2_vecf_cranium_scene(std::string const& scene_file, std::string const& geometry_file);
 
-  boxm2_vecf_cranium_scene(std::string const& scene_file, std::string const& geometry_file, std::string const& params_file);
-
   //: map cranium data to the target scene
   void map_to_target(boxm2_scene_sptr target_scene);
+
+  virtual bool inverse_vector_field(vgl_point_3d<double> const& target_pt, vgl_vector_3d<double>& inv_vf) const;
+  virtual bool apply_vector_field(cell_info const& target_cell, vgl_vector_3d<double> const& inv_vf);
+
 
   //: compute an inverse vector field for rotation of cranium
   void inverse_vector_field(std::vector<vgl_vector_3d<double> >& vfield, std::vector<bool>& valid) const;
@@ -54,16 +56,9 @@ class boxm2_vecf_cranium_scene : public boxm2_vecf_articulated_scene
  //: test the anat_type (CRANIUM) of a given data index
  bool is_type_data_index(unsigned data_index, anat_type type) const;
 
- //: tree subblock size in mm
- double subblock_len() const { if(blk_)return (blk_->sub_block_dim()).x(); return 0.0;}
   //: set up pointers to source block databases
  void extract_block_data();
-  //: set up pointers to target block databases
- void extract_target_block_data(boxm2_scene_sptr target_scene);
- //: initialize the source block data
- void fill_block();
- //: initialize the full target block (not currently used )
- void fill_target_block();
+
  //: interpolate the alpha and appearance data around the vector field source location
  void interpolate_vector_field(vgl_point_3d<double> const& src, unsigned sindx, unsigned dindx, unsigned tindx,
                                 std::vector<vgl_point_3d<double> > & cell_centers,
@@ -83,9 +78,14 @@ class boxm2_vecf_cranium_scene : public boxm2_vecf_articulated_scene
   bool vfield_params_change_check(const boxm2_vecf_cranium_params& params);
   // store the neigbors of each cell for each anatomical component in a vector;
   void cache_neighbors();
-  // pre-refine the target scene
-  void prerefine_target(boxm2_scene_sptr target_scene);
- // ============   cranium methods ================
+
+  //: refine target cells to match the refinement level of the source block
+  virtual int prerefine_target_sub_block(vgl_point_3d<double> const& sub_block_pt, unsigned pt_index);
+
+  //: compute inverse vector field for unrefined sub_block centers
+  virtual void inverse_vector_field_unrefined(std::vector<vgl_point_3d<double> > const& unrefined_target_pts);
+
+    // ============   cranium methods ================
  //: construct manidble from parameters
  void create_cranium();
  //:read block eye data and reset indices
@@ -102,30 +102,13 @@ class boxm2_vecf_cranium_scene : public boxm2_vecf_articulated_scene
 
   //: members
  boxm2_vecf_cranium cranium_geo_;
-  boxm2_block_sptr blk_;                     // the source block
-  boxm2_block_sptr target_blk_;              // the target block
-  // cached databases
-  // source dbs
-  boxm2_data_base* alpha_base_;
-  boxm2_data_base* app_base_;
-  boxm2_data_base* nobs_base_;
-  boxm2_data_base* cranium_base_;
 
-  // target dbs
-  boxm2_data_base* target_alpha_base_;
-  boxm2_data_base* target_app_base_;
-  boxm2_data_base* target_nobs_base_;
+ std::vector<cell_info> box_cell_centers_;       // cell centers in the target block
 
-  boxm2_data<BOXM2_ALPHA>::datatype* alpha_data_;  // source alpha database
-  boxm2_data<BOXM2_MOG3_GREY>::datatype* app_data_;// source appearance database
-  boxm2_data<BOXM2_NUM_OBS>::datatype* nobs_data_;         // source nobs database
-  boxm2_data<BOXM2_ALPHA>::datatype* target_alpha_data_;   //target alpha database
-  boxm2_data<BOXM2_MOG3_GREY>::datatype* target_app_data_; //target appearance database
-  boxm2_data<BOXM2_NUM_OBS>::datatype* target_nobs_data_;  //target nobs
-  std::vector<cell_info> box_cell_centers_;       // cell centers in the target block
 
   boxm2_vecf_cranium_params params_;               // parameter struct
-  // =============  manible ===============
+  // =============  cranium ===============
+  boxm2_data_base* cranium_base_;
   boxm2_data<BOXM2_PIXEL>::datatype* cranium_data_;        // is voxel a cranium point
 
   std::vector<vgl_point_3d<double> > cranium_cell_centers_; // centers of cranium cells
@@ -138,11 +121,6 @@ class boxm2_vecf_cranium_scene : public boxm2_vecf_articulated_scene
   std::map<unsigned, std::vector<unsigned> > cell_neighbor_data_index_; // data index to neighbor data indices
 
 private:
-  bool source_model_exists_;
-  bool extrinsic_only_;
-  bool intrinsic_change_;
-  bool target_data_extracted_;
-  float sigma_;
 
  //: assign target cell centers that map to the source scene bounding box
   void determine_target_box_cell_centers();

@@ -8,7 +8,6 @@
 #include <fstream>
 #include <testlib/testlib_test.h>
 #include <vcl_compiler.h>
-#include <vcl_compiler.h>
 #include <vul/vul_timer.h>
 #include <vbl/vbl_array_3d.h>
 #include <boxm2/cpp/algo/boxm2_surface_distance_refine.h>
@@ -23,6 +22,7 @@
 void test_mandible()
 {
 #ifdef BUILD_TEST_MANDIBLE
+
   std::string base_dir = "c:/Users/mundy/VisionSystems/Janus/RelevantPapers/FacialMusclesExpression/skull/";
   std::string scene_dir = "c:/Users/mundy/VisionSystems/Janus/experiments/vector_flow/mandible/";
   std::string axis_path4 = base_dir  + "mandible_spline_2x_zero_samp_1.0_r35_norm.txt";
@@ -131,12 +131,16 @@ void test_mandible()
 
   //boxm2_vecf_mandible mand(mandible_geo_path);
 
-  boxm2_vecf_mandible_scene mscene(mandible_scene_path, mandible_geo_path);
-  const boxm2_vecf_mandible& mand = mscene.mandible_geo();
+  // boxm2_vecf_mandible_scene mscene(mandible_scene_path, mandible_geo_path);
+  boxm2_vecf_mandible_scene mscene(mandible_scene_path);
+  //  const boxm2_vecf_mandible& mand = mscene.mandible_geo();
   boxm2_scene_sptr scene = mscene.scene();
   if(!scene)
     return;
+  //boxm2_cache::instance()->write_to_disk();
+
   std::vector<std::string> prefixes;
+
   prefixes.push_back("alpha");
   prefixes.push_back("boxm2_mog3_grey");
   prefixes.push_back("boxm2_num_obs");
@@ -160,6 +164,7 @@ void test_mandible()
   std::vector<unsigned> data_indices;
   blk->leaf_neighbors(probe, 1.5, nbrs, nbr_edge_lengths, data_indices);
 #endif
+#if 0
   std::string target_scene_path = scene_dir + "target_mandible_8.xml";
 //std::string target_scene_path = scene_dir + "../skull/target_skull_8.xml";
 
@@ -172,7 +177,9 @@ void test_mandible()
   if(!target)
     return;
   mscene.map_to_target(target);
-  // boxm2_cache::instance()->write_to_disk();
+  boxm2_cache::instance()->write_to_disk();
+#endif
+
 #if 0
   std::map<boxm2_block_id, boxm2_block_metadata> tblocks = target->blocks();
   std::map<boxm2_block_id, boxm2_block_metadata>::iterator bitrg = tblocks.begin();

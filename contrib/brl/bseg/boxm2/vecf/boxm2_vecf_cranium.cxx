@@ -31,6 +31,10 @@ void boxm2_vecf_cranium::read_cranium(std::istream& cstr){
   index_ = bvgl_grid_index_3d<double>(nbins_, nbins_, nbins_, ptset_, surface_dist_thresh);
 }
 
+bool boxm2_vecf_cranium::inverse_vector_field(vgl_point_3d<double> const& p, vgl_vector_3d<double>& inv_vf) const{
+  inv_vf.set(-params_.offset_.x(), -params_.offset_.y(), -params_.offset_.z());
+  return true;
+}
 
 void boxm2_vecf_cranium::display_vrml(std::ofstream& ostr) const{
   bvrml_write::write_vrml_header(ostr);

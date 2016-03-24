@@ -6,6 +6,9 @@
 #include <vgl/vgl_box_3d.h>
 #include <vgl/vgl_bounding_box.h>
 #include <vcl_compiler.h>
+#include <vnl/vnl_vector_fixed.h>
+#include <vnl/vnl_quaternion.h>
+
 //==========================================
 //: mandible class member implementations
 void boxm2_vecf_mandible::fill_boundary_map(){
@@ -17,6 +20,15 @@ void boxm2_vecf_mandible::fill_boundary_map(){
   boundary_knots_["left_angle_center"] =9 ;
   boundary_knots_["left_ramus_start"] = 0;
 }
+
+void boxm2_vecf_mandible::set_inv_rot(){
+  // set rotation from params
+  vnl_vector_fixed<double,3> X(1.0, 0.0, 0.0);
+  vnl_quaternion<double> Q(X,params_.jaw_opening_angle_rad_);
+  vgl_rotation_3d<double> rot(Q);
+  inv_rot_ = rot.inverse();
+}
+
 boxm2_vecf_mandible::boxm2_vecf_mandible(std::string const& geometry_file){
   std::ifstream istr(geometry_file.c_str());
   if(!istr){
@@ -39,6 +51,7 @@ boxm2_vecf_mandible::boxm2_vecf_mandible(std::string const& geometry_file){
       std::ifstream cstr((pit->second).c_str());
       this->load_cross_section_pointsets(cstr);
   }
+  this->set_inv_rot();
 }
 boxm2_vecf_spline_field boxm2_vecf_mandible::translate(vgl_vector_3d<double> const& tr){
   std::vector<vgl_point_3d<double> > knots = axis_.knots();
@@ -195,4 +208,11 @@ void boxm2_vecf_mandible::display_axis_spline(std::ofstream& ostr) const{
     bvrml_write::write_vrml_sphere(ostr, sp, 1.0f, 1.0f, 0.0f);
   }
   ostr.close();
+}
+// assume no jaw deformations for now,just jaw rotation
+bool boxm2_vecf_mandible::inverse_vector_field(vgl_point_3d<double> const& target_pt, vgl_vector_3d<double>& inv_vf) const{
+  vgl_point_3d<double> p = target_pt-params_.offset_;
+  vgl_point_3d<double> rp = inv_rot_ * p;// rotated point
+  inv_vf.set(rp.x() - target_pt.x(), rp.y() - target_pt.y(), rp.z() - target_pt.z());
+  return true;
 }

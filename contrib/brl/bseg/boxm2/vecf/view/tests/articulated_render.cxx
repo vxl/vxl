@@ -42,13 +42,17 @@
 #include "../../boxm2_vecf_mandible_scene.h"
 #include "../../boxm2_vecf_cranium_scene.h"
 #include "../../boxm2_vecf_skull_scene.h"
+#include "../../boxm2_vecf_composite_face_scene.h"
 #include "../../boxm2_vecf_composite_head_model.h"
 #include "../../ocl/boxm2_vecf_ocl_composite_head_model.h"
 #include "../../boxm2_vecf_orbit_articulation.h"
 #include "../../boxm2_vecf_mandible_articulation.h"
 #include "../../boxm2_vecf_cranium_articulation.h"
 #include "../../boxm2_vecf_skull_articulation.h"
+#include "../../boxm2_vecf_composite_face_articulation.h"
 #include "../../boxm2_vecf_composite_head_model_articulation.h"
+#include "../../boxm2_vecf_middle_fat_pocket_scene.h"
+#include "../../boxm2_vecf_middle_fat_pocket_articulation.h"
 #include "../boxm2_ocl_articulated_render_tableau.h"
 
 int main(int argc, char ** argv)
@@ -66,6 +70,7 @@ int main(int argc, char ** argv)
     vgui::init(argc, argv);
 #endif
   vul_arg_info_list arglist;
+
   vul_arg<std::string> base_dir_path_arg(arglist, "-bdir", "Base model directory", "");
   vul_arg<std::string> model_path_arg(arglist, "-model", "model_xml_file", "");
   vul_arg<std::string> target_path_arg(arglist, "-target", "target_xml_file", "");
@@ -91,8 +96,13 @@ int main(int argc, char ** argv)
     std::cout << base_dir_path << " is not valid\n";
     return -1;
   }
+  std::string target_base_dir = "";//may be defined in the future
   std::string articulated_scene_path = base_dir_path + model_path;
   std::string target_scene_path = base_dir_path + target_path;
+  if(target_base_dir == "")
+    target_scene_path = base_dir_path + target_path;
+  else
+    target_scene_path = target_base_dir + target_path;
   std::string geometry_path = base_dir_path + geo_path;
   std::string eye_model_path = base_dir_path + "eye/eye.xml";
   std::string default_cam_path = base_dir_path + cam_path;
@@ -108,7 +118,7 @@ int main(int argc, char ** argv)
     return -1;
   }
 
-  good = (geo_path != "") && vul_file::exists(geometry_path);
+  good = (geo_path != "") || vul_file::exists(geometry_path);
   if(!good){
     std::cout << geometry_path << " is not valid\n";
     return -1;
@@ -200,9 +210,13 @@ int main(int argc, char ** argv)
     composite_head_model->map_to_target(target_scene);
 
       bit_tableau->init(device, opencl_cache, composite_head_model, head_model_articulation,target_scene, ni, nj, pcam, "");
-    }else if(scene_t == "mandible"){
+    }else if(scene_t == "mandible"||scene_t == "mandible_f"){
+      boxm2_vecf_mandible_scene* mandible_scene= 0;
+      if(scene_t == "mandible_f")
+           mandible_scene = new boxm2_vecf_mandible_scene(articulated_scene_path);
+      else
+        mandible_scene = new boxm2_vecf_mandible_scene(articulated_scene_path, geometry_path);
 
-      boxm2_vecf_mandible_scene* mandible_scene = new boxm2_vecf_mandible_scene(articulated_scene_path, geometry_path);
       boxm2_vecf_mandible_articulation* mandible_articulation =new boxm2_vecf_mandible_articulation();
       mandible_articulation->set_play_sequence("default");
       mandible_scene->set_target_background(dark_background);
@@ -234,6 +248,27 @@ int main(int argc, char ** argv)
       //boxm2_scene_sptr crscn = skull_scene->scene();
       //boxm2_lru_cache::instance()->write_to_disk(crscn);
       bit_tableau->init(device, opencl_cache, skull_scene, skull_articulation,target_scene, ni, nj, pcam, "");
+    }else if(scene_t == "composite_face"){
+      boxm2_vecf_composite_face_scene* composite_face_scene = new boxm2_vecf_composite_face_scene(articulated_scene_path);
+      // this constructor for the articulation passes in the global transformation between source and target
+      // needed to render the face of individual subjects
+      boxm2_vecf_composite_face_articulation* composite_face_articulation =
+        new boxm2_vecf_composite_face_articulation(composite_face_scene->params());
+      composite_face_articulation->set_play_sequence("default");
+      composite_face_scene->set_target_background(dark_background);
+      //boxm2_scene_sptr crscn = skull_scene->scene();
+      //boxm2_lru_cache::instance()->write_to_disk(crscn);
+      bit_tableau->init(device, opencl_cache, composite_face_scene, composite_face_articulation,target_scene, ni, nj, pcam, "");
+    }else if(scene_t == "fat_pocket"){
+      // assumes source scene exists, i.e. initialize is false
+      bool initialize = false;
+      boxm2_vecf_middle_fat_pocket_scene* fat_pocket_scene = new boxm2_vecf_middle_fat_pocket_scene(articulated_scene_path, geometry_path, initialize);
+      boxm2_vecf_middle_fat_pocket_articulation* fat_pocket_articulation =new boxm2_vecf_middle_fat_pocket_articulation();
+      fat_pocket_articulation->set_play_sequence("default");
+      fat_pocket_scene->set_target_background(dark_background);
+      //boxm2_scene_sptr crscn = skull_scene->scene();
+      //boxm2_lru_cache::instance()->write_to_disk(crscn);
+      bit_tableau->init(device, opencl_cache, fat_pocket_scene, fat_pocket_articulation,target_scene, ni, nj, pcam, "");
     }
       //create window, attach the new tableau and status bar
       vgui_window* win = vgui::produce_window(ni, nj, "OpenCl Volume Visualizer (Render)");
