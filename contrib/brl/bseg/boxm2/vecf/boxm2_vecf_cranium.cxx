@@ -28,7 +28,7 @@ boxm2_vecf_cranium::boxm2_vecf_cranium(std::string const& geometry_file, unsigne
 void boxm2_vecf_cranium::read_cranium(std::istream& cstr){
   cstr >> ptset_;
   double surface_dist_thresh = 1.0;
-  index_ = bvgl_grid_index_3d(nbins_, nbins_, nbins_, ptset_, surface_dist_thresh);
+  index_ = bvgl_grid_index_3d<double>(nbins_, nbins_, nbins_, ptset_, surface_dist_thresh);
 }
 
 
