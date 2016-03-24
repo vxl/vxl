@@ -61,13 +61,15 @@ static void test_k_nearest_neighbors()
   unsigned index=0;
   vgl_point_3d<double> q(0.5, 0.0, 0.5);
   bool good = knn3d.closest_index(q, index);
-  if(good)
+  if(good) {
     vcl_cout << "closest index " << ptset.p(index) << '\n';
+  }
   vgl_point_3d<double> cp;
   good = knn3d.closest_point(q, cp);
-  if(good)
+  if(good) {
          vcl_cout << "closest point " << cp << '\n';
-  double d = (vgl_point_3d<double>(0,0,0)-cp).length();
+  }
+  double d = (p8-cp).length();
   TEST_NEAR("closest point" , d ,0.0 , 0.001);
   vgl_pointset_3d<double> k_neighbors;
   unsigned k = 5;
