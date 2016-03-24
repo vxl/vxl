@@ -173,13 +173,13 @@ boxm2_vecf_fit_fat_pocket::boxm2_vecf_fit_fat_pocket(std::string const& neutral_
                                                      std::string const& fat_pocket_geo_path):
   pocket_(boxm2_vecf_middle_fat_pocket(fat_pocket_geo_path)), is_right_(false){
   double surface_dist_thresh = 1.0;
-  std::ifstream neu_istr(neutral_face_ptset_path);
+  std::ifstream neu_istr(neutral_face_ptset_path.c_str());
   assert(neu_istr);
   vgl_pointset_3d<double> neu_ptset;
   neu_istr >> neu_ptset;
   neutral_face_.set_pointset(neu_ptset);
   neutral_face_.set_thresh(surface_dist_thresh);
-  std::ifstream skin_istr(skin_ptset_path);
+  std::ifstream skin_istr(skin_ptset_path.c_str());
   assert(skin_istr);
   vgl_pointset_3d<double> skin_ptset;
   skin_istr >> skin_ptset;
@@ -191,13 +191,13 @@ boxm2_vecf_fit_fat_pocket::boxm2_vecf_fit_fat_pocket(std::string const& neutral_
                                                      std::string const& skin_ptset_path, std::string const& fat_pocket_geo_path):
   pocket_(boxm2_vecf_middle_fat_pocket(fat_pocket_geo_path)), is_right_(false){
   double surface_dist_thresh = 1.0;
-  std::ifstream def_istr(deformed_face_ptset_path);
+  std::ifstream def_istr(deformed_face_ptset_path.c_str());
   assert(def_istr);
   vgl_pointset_3d<double> def_ptset;
   def_istr >> def_ptset;
   deformed_face_.set_pointset(def_ptset);
   deformed_face_.set_thresh(surface_dist_thresh);
-  std::ifstream skin_istr(skin_ptset_path);
+  std::ifstream skin_istr(skin_ptset_path.c_str());
   assert(skin_istr);
   vgl_pointset_3d<double> skin_ptset;
   skin_istr >> skin_ptset;

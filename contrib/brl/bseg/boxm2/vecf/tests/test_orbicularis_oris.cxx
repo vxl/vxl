@@ -23,12 +23,12 @@ bool test_orbicularis_oris_params()
   pr.tilt_angle_in_deg_ = 1.0;
   pr.scale_factor_ = 1.0;
   std::string param_file = "./boxm2_vecf_orbicularis_oris_params.txt";
-  std::ofstream ostr(param_file);
+  std::ofstream ostr(param_file.c_str());
   ostr << pr;
   ostr.close();
   // read in
   boxm2_vecf_orbicularis_oris_params pr_in;
-  std::ifstream istr(param_file);
+  std::ifstream istr(param_file.c_str());
   istr >> pr_in;
   istr.close();
   bool good = pr_in.principal_eigenvector_1_ == pr.principal_eigenvector_1_;
@@ -47,7 +47,7 @@ bool test_orbicularis_oris_doformation(std::string const& geometry_file, std::st
 
   // set the parameters
   boxm2_vecf_orbicularis_oris_params pr;
-  std::ifstream istr(param_file);
+  std::ifstream istr(param_file.c_str());
   istr >> pr;
   istr.close();
 
@@ -61,9 +61,12 @@ bool test_orbicularis_oris_doformation(std::string const& geometry_file, std::st
   oom.display_axis_spline_ascii(aostr_init);
   std::ofstream postr_init(init_pts_file.c_str());
   oom.display_cross_section_pointsets_ascii(postr_init);
-  oom.display_axis_spline(std::ofstream(init_axis_wrl.c_str()));
-  oom.display_cross_section_pointsets(std::ofstream(init_pts_wrl.c_str()));
-  oom.display_cross_section_planes(std::ofstream(init_cross_wrl.c_str()));
+  std::ofstream axis_ofs(init_axis_wrl.c_str());
+  oom.display_axis_spline(axis_ofs);
+  std::ofstream pts_ofs(init_pts_wrl.c_str());
+  oom.display_cross_section_pointsets(pts_ofs);
+  std::ofstream cross_ofs(init_cross_wrl.c_str());
+  oom.display_cross_section_planes(cross_ofs);
 
 
   // test scale operation
@@ -78,11 +81,16 @@ bool test_orbicularis_oris_doformation(std::string const& geometry_file, std::st
   std::string large_pts_wrl   = base_dir + "/enlarge_pts.wrl";
   std::string large_axis_file = base_dir + "/enlarge_axis.txt";
   std::string large_pts_file  = base_dir + "/enlarge_pts.txt";
-  oom_large.display_axis_spline_ascii(std::ofstream(large_axis_file.c_str()), 0, 0, 255);
-  oom_large.display_cross_section_pointsets_ascii(std::ofstream(large_pts_file.c_str()), 0, 0, 255);
-  oom_large.display_axis_spline(std::ofstream(large_axis_wrl.c_str()));
-  oom_large.display_cross_section_planes(std::ofstream(large_cross_wrl.c_str()));
-  oom_large.display_cross_section_pointsets(std::ofstream(large_pts_wrl.c_str()));
+  std::ofstream large_axis_ofs(large_axis_file.c_str());
+  oom_large.display_axis_spline_ascii(large_axis_ofs, 0, 0, 255);
+  std::ofstream large_pts_ofs(large_pts_file.c_str());
+  oom_large.display_cross_section_pointsets_ascii(large_pts_ofs, 0, 0, 255);
+  std::ofstream large_axis_wrl_ofs(large_axis_wrl.c_str());
+  oom_large.display_axis_spline(large_axis_wrl_ofs);
+  std::ofstream large_cross_ofs(large_cross_wrl.c_str());
+  oom_large.display_cross_section_planes(large_cross_ofs);
+  std::ofstream large_pts_wrl_ofs(large_pts_wrl.c_str());
+  oom_large.display_cross_section_pointsets(large_pts_wrl_ofs);
 
   // shrink
   pr_scale.scale_factor_ = 0.5;
@@ -94,11 +102,16 @@ bool test_orbicularis_oris_doformation(std::string const& geometry_file, std::st
   std::string shrink_pts_wrl   = base_dir + "/shrink_pts.wrl";
   std::string shrink_axis_file = base_dir + "/shrink_axis.txt";
   std::string shrink_pts_file  = base_dir + "/shrink_pts.txt";
-  oom_shrink.display_axis_spline_ascii(std::ofstream(shrink_axis_file.c_str()), 255, 0, 0);
-  oom_shrink.display_cross_section_pointsets_ascii(std::ofstream(shrink_pts_file.c_str()), 255, 0, 0);
-  oom_shrink.display_axis_spline(std::ofstream(shrink_axis_wrl.c_str()));
-  oom_shrink.display_cross_section_planes(std::ofstream(shrink_cross_wrl.c_str()));
-  oom_shrink.display_cross_section_pointsets(std::ofstream(shrink_pts_wrl.c_str()));
+  std::ofstream shrink_axis_ofs(shrink_axis_file.c_str());
+  oom_shrink.display_axis_spline_ascii(shrink_axis_ofs, 255, 0, 0);
+  std::ofstream shrink_pts_ofs(shrink_pts_file.c_str());
+  oom_shrink.display_cross_section_pointsets_ascii(shrink_pts_ofs, 255, 0, 0);
+  std::ofstream shrink_axis_wrl_ofs(shrink_axis_wrl.c_str());
+  oom_shrink.display_axis_spline(shrink_axis_wrl_ofs);
+  std::ofstream shrink_cross_wrl_ofs(shrink_cross_wrl.c_str());
+  oom_shrink.display_cross_section_planes(shrink_cross_wrl_ofs);
+  std::ofstream shrink_pts_wrl_ofs(shrink_pts_wrl.c_str());
+  oom_shrink.display_cross_section_pointsets(shrink_pts_wrl_ofs);
 
   // test tilt operation
   // open
@@ -112,11 +125,16 @@ bool test_orbicularis_oris_doformation(std::string const& geometry_file, std::st
   std::string open_pts_wrl   = base_dir + "/mouth_open_25_deg_pts.wrl";
   std::string open_axis_file = base_dir + "/mouth_open_25_deg_axis.txt";
   std::string open_pts_file  = base_dir + "/mouth_open_25_deg_pts.txt";
-  oom_open.display_axis_spline_ascii(std::ofstream(open_axis_file.c_str()), 0, 255, 255);
-  oom_open.display_cross_section_pointsets_ascii(std::ofstream(open_pts_file.c_str()), 0, 255, 255);
-  oom_open.display_axis_spline(std::ofstream(open_axis_wrl.c_str()));
-  oom_open.display_cross_section_planes(std::ofstream(open_cross_wrl.c_str()));
-  oom_open.display_cross_section_pointsets(std::ofstream(open_pts_wrl.c_str()));
+  std::ofstream open_axis_ofs(open_axis_file.c_str());
+  oom_open.display_axis_spline_ascii(open_axis_ofs, 0, 255, 255);
+  std::ofstream open_pts_ofs(open_pts_file.c_str());
+  oom_open.display_cross_section_pointsets_ascii(open_pts_ofs, 0, 255, 255);
+  std::ofstream open_axis_wrl_ofs(open_axis_wrl.c_str());
+  oom_open.display_axis_spline(open_axis_wrl_ofs);
+  std::ofstream open_cross_wrl_ofs(open_cross_wrl.c_str());
+  oom_open.display_cross_section_planes(open_cross_wrl_ofs);
+  std::ofstream open_pts_wrl_ofs(open_pts_wrl.c_str());
+  oom_open.display_cross_section_pointsets(open_pts_wrl_ofs);
 
   // close
   pr_tilt.tilt_angle_in_deg_ = -20.0;
@@ -128,11 +146,16 @@ bool test_orbicularis_oris_doformation(std::string const& geometry_file, std::st
   std::string close_pts_wrl   = base_dir + "/mouth_close_20_deg_pts.wrl";
   std::string close_axis_file = base_dir + "/mouth_close_20_deg_axis.txt";
   std::string close_pts_file  = base_dir + "/mouth_close_20_deg_pts.txt";
-  oom_close.display_axis_spline_ascii(std::ofstream(close_axis_file.c_str()), 138, 43, 226);
-  oom_close.display_cross_section_pointsets_ascii(std::ofstream(close_pts_file.c_str()), 138, 43, 226);
-  oom_close.display_axis_spline(std::ofstream(close_axis_wrl.c_str()));
-  oom_close.display_cross_section_planes(std::ofstream(close_cross_wrl.c_str()));
-  oom_close.display_cross_section_pointsets(std::ofstream(close_pts_wrl.c_str()));
+  std::ofstream close_axis_ofs(close_axis_file.c_str());
+  oom_close.display_axis_spline_ascii(close_axis_ofs, 138, 43, 226);
+  std::ofstream close_pts_ofs(close_pts_file.c_str());
+  oom_close.display_cross_section_pointsets_ascii(close_pts_ofs, 138, 43, 226);
+  std::ofstream close_axis_wrl_ofs(close_axis_wrl.c_str());
+  oom_close.display_axis_spline(close_axis_wrl_ofs);
+  std::ofstream close_cross_wrl_ofs(close_cross_wrl.c_str());
+  oom_close.display_cross_section_planes(close_cross_wrl_ofs);
+  std::ofstream close_pts_wrl_ofs(close_pts_wrl.c_str());
+  oom_close.display_cross_section_pointsets(close_pts_wrl_ofs);
 
   // test pucker deformation
   oom.set_params(pr);
