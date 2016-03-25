@@ -8,13 +8,12 @@
 // \date   3 November 2015
 //
 #include <iostream>
-#include <vcl_compiler.h>
-#include <iostream>
 #include <fstream>
-#include <vcl_cassert.h>
 #include <vector>
 #include <string>
 #include <map>
+#include <vcl_compiler.h>
+#include <vcl_cassert.h>
 #include <vgl/vgl_vector_3d.h>
 #include <vgl/vgl_cubic_spline_3d.h>
 #include <vgl/vgl_pointset_3d.h>
@@ -53,7 +52,7 @@ class bvgl_gen_cylinder{
  bool closest_point(vgl_point_3d<double> const& p, vgl_point_3d<double>& pc, double dist_thresh) const;
 
  //: the distance from p to a plane defined by the closest point and its normal
- double surface_distance(vgl_point_3d<double> const& p, double dist_thresh) const;
+ double distance(vgl_point_3d<double> const& p, double dist_thresh) const;
 
  //: the total pointset contained in all the cross sections (may duplicate points)
  vgl_pointset_3d<double> aggregate_pointset() const;

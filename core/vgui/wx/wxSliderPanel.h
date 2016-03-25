@@ -8,10 +8,10 @@
 // \date   August 6, 2008
 //
 
+#include <vector>
 #include <wx/scrolwin.h>
 #include <vgui/vgui_observable.h>
 #include <vcl_compiler.h>
-#include <vector>
 
 // forward declarations
 class wxSlider;

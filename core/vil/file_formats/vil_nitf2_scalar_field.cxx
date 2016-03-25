@@ -2,14 +2,14 @@
 // Stellar Science Ltd. Co. (stellarscience.com) for
 // Air Force Research Laboratory, 2005.
 
+#include <cstddef>
+#include <cstdlib>
 #include "vil_nitf2_scalar_field.h"
 #include "vil_nitf2.h"
 #include "vil_nitf2_field_definition.h"
 #include "vil_nitf2_field_formatter.h"
 #include <vil/vil_stream_core.h>
-#include <cstddef> // for size_t
 #include <vcl_compiler.h>
-#include <cstdlib>
 
 vil_nitf2_scalar_field*
 vil_nitf2_scalar_field::read(vil_nitf2_istream& input,

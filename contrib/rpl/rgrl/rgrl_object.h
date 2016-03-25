@@ -6,11 +6,11 @@
 // \author Charlene Tsai
 // \date April 2004
 
+#include <iostream>
+#include <map>
 #include <vbl/vbl_ref_count.h>
 
 #include <vcl_compiler.h>
-#include <iostream>
-#include <map>
 
 #include "rgrl_command_sptr.h"
 #include "rgrl_event_sptr.h"

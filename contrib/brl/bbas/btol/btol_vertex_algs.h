@@ -10,12 +10,12 @@
 // \endverbatim
 //
 //-----------------------------------------------------------------------------
+#include <iostream>
+#include <vector>
 #include <vnl/vnl_matrix_fixed.h>
 #include <vtol/vtol_vertex_sptr.h>
 #include <vtol/vtol_vertex_2d_sptr.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <vector>
 
 class btol_vertex_algs
 {

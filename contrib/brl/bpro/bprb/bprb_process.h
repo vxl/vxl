@@ -23,9 +23,9 @@
 //------------------------------------------------------------------------------
 
 #include <vector>
-#include <vcl_compiler.h>
 #include <iostream>
 #include <string>
+#include <vcl_compiler.h>
 #include <vbl/vbl_ref_count.h>
 #include <brdb/brdb_value.h>
 #include <bprb/bprb_parameters_sptr.h>

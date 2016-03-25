@@ -13,10 +13,10 @@
 //   06 May 2004 Jocelyn Marchadier
 // \endverbatim
 
-#include "vmap_types.h" // for vmap_dart_index
-#include <vcl_compiler.h>
 #include <iostream>
 #include <vector>
+#include "vmap_types.h" // for vmap_dart_index
+#include <vcl_compiler.h>
 
 //: A wrapper to an existing kernel which manages darts in a non oriented manager and avoids having loops in the resulting kernel.
 // The darts added to the kernel using the function "add" are added if the resulting edge graph is a tree.

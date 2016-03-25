@@ -3,9 +3,9 @@
 #pragma implementation
 #endif
 
+#include <iostream>
 #include "vil1_file_image.h"
 #include <vcl_compiler.h>
-#include <iostream>
 
 #include <vil1/vil1_load.h>
 

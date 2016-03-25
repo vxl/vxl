@@ -14,13 +14,13 @@
 //
 //-----------------------------------------------------------------------------
 
+#include <cstring>
+#include <cctype>
+#include <cstdlib>
 #include "vul_file.h"
 
 #include <sys/stat.h>
-#include <cstring>
-#include <cctype>
 #include <vcl_compiler.h>
-#include <cstdlib>
 
 #if defined(VCL_WIN32) && !defined(__CYGWIN__)
 #include <direct.h> // for getcwd, mkdir

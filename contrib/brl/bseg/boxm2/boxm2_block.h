@@ -13,6 +13,8 @@
 // \author Andrew Miller
 // \date   26 Oct 2010
 //
+#include <iostream>
+#include <iosfwd>
 #include <boxm2/boxm2_block_metadata.h>
 #include <boxm2/basic/boxm2_block_id.h>
 #include <boxm2/basic/boxm2_array_1d.h>
@@ -21,8 +23,6 @@
 #include <vnl/vnl_vector_fixed.h>
 #include <vgl/vgl_vector_3d.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iosfwd>
 
 //smart pointer stuff
 #include <vbl/vbl_ref_count.h>

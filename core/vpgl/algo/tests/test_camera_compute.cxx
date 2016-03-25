@@ -1,9 +1,9 @@
+#include <iostream>
 #include <testlib/testlib_test.h>
 #if 0
 #include <testlib/testlib_root_dir.h>
 #endif
 #include <vcl_compiler.h>
-#include <iostream>
 #include <vnl/vnl_fwd.h>
 #include <vnl/vnl_vector_fixed.h>
 #include <vnl/vnl_matrix_fixed.h>

@@ -24,9 +24,8 @@
 //-----------------------------------------------------------------------------
 
 #include <vector>
+#include <iostream>
 // not used? #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 #include <vbl/vbl_array_2d.h>
 #include <bdpg/bdpg_node_sptr.h>
 

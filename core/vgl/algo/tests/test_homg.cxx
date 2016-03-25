@@ -3,10 +3,10 @@
 // \author Peter Vanroose, ESAT, KULeuven.
 // \date  4 July, 2001
 
-#include <testlib/testlib_test.h>
 #include <iostream>
-#include <vcl_compiler.h>
 #include <sstream>
+#include <testlib/testlib_test.h>
+#include <vcl_compiler.h>
 
 #include <vgl/vgl_homg_point_1d.h>
 #include <vgl/vgl_homg_point_2d.h>

@@ -1,4 +1,5 @@
 // This is core/vgui/wx/wxVideoControl.cxx
+#include <iostream>
 #include "wxVideoControl.h"
 //:
 // \file
@@ -19,7 +20,6 @@
 #include "bitmaps/next.xpm"
 
 #include <vcl_compiler.h>
-#include <iostream>
 
 
 IMPLEMENT_DYNAMIC_CLASS( wxVideoControl, wxPanel )

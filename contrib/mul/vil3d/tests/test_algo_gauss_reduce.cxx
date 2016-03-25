@@ -1,9 +1,8 @@
 // This is mul/vil3d/tests/test_algo_gauss_reduce.cxx
-#include <testlib/testlib_test.h>
-#include <iostream>
-#include <vcl_compiler.h>
 #include <iostream>
 #include <iomanip>
+#include <testlib/testlib_test.h>
+#include <vcl_compiler.h>
 #include <vil3d/vil3d_image_view.h>
 #include <vil3d/algo/vil3d_gauss_reduce.h>
 #include <vil3d/vil3d_print.h>

@@ -1,12 +1,11 @@
 // This is brl/bseg/bapl/bapl_lowe_keypoint.cxx
+#include <iostream>
+#include <cstdlib>
 #include "bapl_lowe_keypoint.h"
 //:
 // \file
 
-#include <iostream>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <cstdlib>
 #include <bapl/bapl_lowe_pyramid_set.h>
 
 //: Constructor

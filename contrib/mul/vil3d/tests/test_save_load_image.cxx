@@ -1,4 +1,6 @@
 // This is mul/vil3d/tests/test_save_load_image.cxx
+#include <string>
+#include <iostream>
 #include <testlib/testlib_test.h>
 //:
 // \file
@@ -6,10 +8,7 @@
 // \date 18 Dec 2007
 //
 
-#include <string>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 
 #include <vxl_config.h> // for vxl_byte
 

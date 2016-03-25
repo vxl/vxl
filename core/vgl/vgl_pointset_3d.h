@@ -15,12 +15,12 @@
 // \endverbatim
 
 #include <vector>
-#include <vgl/vgl_point_3d.h>
-#include <vcl_cassert.h>
 #include <iostream>
 #include <sstream>
-#include <vcl_compiler.h>
 #include <string>
+#include <vgl/vgl_point_3d.h>
+#include <vcl_cassert.h>
+#include <vcl_compiler.h>
 template <class Type>
 class vgl_pointset_3d
 {
@@ -61,6 +61,18 @@ class vgl_pointset_3d
   void set_points_with_normals(std::vector<vgl_point_3d<Type> > const& points,
                                std::vector<vgl_vector_3d<Type> > const& normals)
   { points_ = points; normals_ = normals; has_normals_=true;}
+
+  void append_pointset(vgl_pointset_3d<Type> const& ptset){
+    if(this->has_normals_ != ptset.has_normals())
+      return; // can't be done
+    unsigned npts = ptset.npts();
+    for(unsigned i = 0; i<npts; ++i){
+      if(!this->has_normals_)
+        this->add_point(ptset.p(i));
+      else
+        this->add_point_with_normal(ptset.p(i), ptset.n(i));
+    }
+  }
 
   bool set_point(unsigned i, vgl_point_3d<Type> const& p){
     if(i>=static_cast<unsigned>(points_.size())) return false;

@@ -5,11 +5,11 @@
 // \brief Object to build a msm_shape_model
 // \author Tim Cootes
 
-#include <vcl_cassert.h>
-#include <vcl_compiler.h>
 #include <iostream>
 #include <iosfwd>
 #include <string>
+#include <vcl_cassert.h>
+#include <vcl_compiler.h>
 #include <vsl/vsl_fwd.h>
 #include <msm/msm_shape_model.h>
 #include <msm/msm_param_limiter.h>

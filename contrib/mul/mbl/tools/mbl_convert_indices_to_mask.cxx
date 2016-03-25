@@ -2,14 +2,13 @@
 // \file
 // \brief Convert a list of indices to a mask.
 
-#include <vcl_compiler.h>
 #include <iostream>
 #include <algorithm>
 #include <string>
 #include <fstream>
 #include <stdexcept>
 #include <iterator>
-#include <iostream>
+#include <vcl_compiler.h>
 #include <vul/vul_arg.h>
 #include <mbl/mbl_log.h>
 #include <mbl/mbl_mask.h>

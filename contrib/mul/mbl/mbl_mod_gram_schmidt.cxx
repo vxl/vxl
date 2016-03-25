@@ -1,4 +1,6 @@
 // This is mul/mbl/mbl_mod_gram_schmidt.cxx
+#include <iostream>
+#include <vector>
 #include "mbl_mod_gram_schmidt.h"
 //:
 // \file
@@ -20,8 +22,6 @@
 // \endverbatim
 
 #include <vcl_compiler.h>
-#include <iostream>
-#include <vector>
 #include <vnl/vnl_vector.h>
 
 //=======================================================================

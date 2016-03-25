@@ -1,13 +1,13 @@
-#include "bvpl_kernel_factory.h"
-//:
-// \file
 #include <map>
-#include <vnl/vnl_vector_fixed.h>
-#include <vcl_compiler.h>
 #include <iostream>
 #include <algorithm>
 #include <limits>
 #include <cmath>
+#include "bvpl_kernel_factory.h"
+//:
+// \file
+#include <vnl/vnl_vector_fixed.h>
+#include <vcl_compiler.h>
 
 
 //: Returns a kernel along the local rotation_axis_ and rotated around this axis an amount angle_

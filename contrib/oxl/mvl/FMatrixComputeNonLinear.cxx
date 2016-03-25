@@ -5,11 +5,10 @@
 //:
 // \file
 
+#include <iostream>
 #include "FMatrixComputeNonLinear.h"
 
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 
 #include <vnl/vnl_matrix.h>
 #include <vnl/algo/vnl_levenberg_marquardt.h>

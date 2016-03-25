@@ -1,8 +1,8 @@
 #ifndef boxm2_ocl_aggregate_normal_from_filter_h_included_
 #define boxm2_ocl_aggregate_normal_from_filter_h_included_
-#include <vcl_compiler.h>
 #include <iostream>
 #include <string>
+#include <vcl_compiler.h>
 
 #include <boxm2/boxm2_data_traits.h>
 #include <boxm2/ocl/boxm2_opencl_cache.h>

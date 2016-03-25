@@ -2,6 +2,7 @@
 #define boxm_fill_in_mesh_h_
 //:
 // \file
+#include <iostream>
 #include <boct/boct_tree.h>
 #include <boct/boct_tree_cell.h>
 #include <boxm/boxm_block.h>
@@ -13,8 +14,6 @@
 #include <vgl/vgl_intersection.h>
 #include <vgl/algo/vgl_intersection.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 
 bool is_mesh_in_block(imesh_mesh & mesh, vgl_box_3d<double> block_bbox,vpgl_lvcs& lvcs, bool use_lvcs)
 {

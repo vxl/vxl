@@ -6,6 +6,8 @@
 // \author Ali Osman Ulusoy
 // \date   07 Aug 2012
 //
+#include <iostream>
+#include <iosfwd>
 #include <bstm/basic/bstm_block_id.h>
 #include <bstm/bstm_block_metadata.h>
 #include <vpgl/vpgl_lvcs.h>
@@ -13,8 +15,6 @@
 #include <vgl/vgl_box_3d.h>
 #include <vgl/vgl_box_2d.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iosfwd>
 #include <vul/vul_file.h>
 
 //smart pointer stuff

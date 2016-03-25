@@ -5,11 +5,11 @@
 // \brief Contains mean/modes etc of a shape model and aligner details
 // \author Tim Cootes
 
+#include <iostream>
+#include <iosfwd>
 #include <msm/msm_ref_shape_model.h>
 #include <msm/msm_aligner.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iosfwd>
 
 //: Contains mean/modes etc of a shape model
 //  Container to hold the components of a statistical shape model.

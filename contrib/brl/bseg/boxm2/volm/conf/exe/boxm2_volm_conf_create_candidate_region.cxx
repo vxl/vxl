@@ -12,12 +12,12 @@
 // \endverbatim
 //
 
+#include <iostream>
+#include <map>
 #include <vul/vul_arg.h>
 #include <vul/vul_file.h>
 #include <vul/vul_file_iterator.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <map>
 #include <vnl/vnl_math.h>
 #include <vpgl/vpgl_lvcs.h>
 #include <vpgl/vpgl_lvcs_sptr.h>

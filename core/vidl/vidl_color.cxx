@@ -1,4 +1,5 @@
 // This is core/vidl/vidl_color.cxx
+#include <iostream>
 #include "vidl_color.h"
 //:
 // \file
@@ -6,7 +7,6 @@
 //
 
 #include <vcl_compiler.h>
-#include <iostream>
 
 //: The total number of pixel datatypes
 const unsigned int num_types = 5;

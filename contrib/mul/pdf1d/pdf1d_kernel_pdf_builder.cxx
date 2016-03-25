@@ -3,13 +3,13 @@
 //:
 // \file
 
-#include "pdf1d_kernel_pdf_builder.h"
-#include <vcl_cassert.h>
 #include <string>
-#include <cstdlib> // std::abort()
-#include <vcl_compiler.h>
+#include <cstdlib>
 #include <iostream>
 #include <cmath>
+#include "pdf1d_kernel_pdf_builder.h"
+#include <vcl_cassert.h>
+#include <vcl_compiler.h>
 
 #include <vnl/vnl_vector_ref.h>
 #include <mbl/mbl_data_wrapper.h>

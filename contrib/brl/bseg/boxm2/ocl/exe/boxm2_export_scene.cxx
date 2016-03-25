@@ -1,8 +1,9 @@
-#include <bocl/bocl_cl.h>
 #include <sstream>
-#include <vcl_where_root_dir.h>
 #include <iostream>
 #include <fstream>
+#include <algorithm>
+#include <bocl/bocl_cl.h>
+#include <vcl_where_root_dir.h>
 
 #include <vpgl/vpgl_perspective_camera.h>
 #include <vpgl/vpgl_generic_camera.h>
@@ -41,8 +42,6 @@
 #include <bprb/bprb_func_process.h>
 #include <brip/brip_vil_float_ops.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <algorithm>
 #include <vil/file_formats/vil_jpeg.h>
 #include <vil/vil_open.h>
 // Boxm2_Export_Scene executable will create a small, portable, pre rendered

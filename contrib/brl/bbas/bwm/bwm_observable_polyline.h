@@ -9,11 +9,11 @@
 // \date   2007-10-25
 //*****************************************************************************
 
+#include <iostream>
+#include <string>
 #include "bwm_observable.h"
 
 #include <vcl_compiler.h>
-#include <iostream>
-#include <string>
 
 #include <vsol/vsol_point_3d_sptr.h>
 #include <vsol/vsol_polyline_3d_sptr.h>

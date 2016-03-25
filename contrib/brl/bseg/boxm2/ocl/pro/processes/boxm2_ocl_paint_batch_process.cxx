@@ -1,4 +1,7 @@
 // This is brl/bseg/boxm2/ocl/pro/processes/boxm2_ocl_paint_batch_process.cxx
+#include <fstream>
+#include <iostream>
+#include <algorithm>
 #include <boxm2/ocl/algo/boxm2_ocl_paint_batch.h>
 //:
 // \file
@@ -15,10 +18,7 @@
 #include <boxm2/io/boxm2_stream_cache.h>
 #include <boxm2/boxm2_util.h>
 #include <bprb/bprb_func_process.h>
-#include <fstream>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <algorithm>
 
 //bsta sigma normalizer...
 #include <bsta/algo/bsta_sigma_normalizer.h>

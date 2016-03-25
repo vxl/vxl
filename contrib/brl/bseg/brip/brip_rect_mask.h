@@ -23,11 +23,11 @@
 //       0 - - 0 0 0 0
 //
 #include <string>
-#include <vcl_compiler.h>
 #include <iostream>
 #include <iosfwd>
-#include <vnl/vnl_matrix.h>
 #include <map>
+#include <vcl_compiler.h>
+#include <vnl/vnl_matrix.h>
 
 class brip_rect_mask
 {

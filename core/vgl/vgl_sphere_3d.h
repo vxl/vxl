@@ -9,8 +9,8 @@
 // \brief a sphere in 3D nonhomogeneous space
 // \author Ian Scott
 
-#include <vcl_compiler.h>
 #include <iosfwd>
+#include <vcl_compiler.h>
 #include <vgl/vgl_fwd.h> // forward declare vgl_line_3d_2_points
 #include <vgl/vgl_point_3d.h>
 

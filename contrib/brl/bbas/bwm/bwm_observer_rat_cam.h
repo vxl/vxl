@@ -2,11 +2,11 @@
 #define bwm_observer_rat_cam_h_
 //:
 // \file
+#include <iostream>
+#include <iosfwd>
 #include "bwm_observer_cam.h"
 
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iosfwd>
 
 #include <vgl/vgl_fwd.h>
 

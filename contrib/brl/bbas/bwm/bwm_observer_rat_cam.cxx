@@ -1,3 +1,5 @@
+#include <iostream>
+#include <sstream>
 #include "bwm_observer_rat_cam.h"
 //:
 // \file
@@ -35,8 +37,6 @@
 
 #include <vul/vul_file.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <sstream>
 
 #include <bmsh3d/bmsh3d_textured_mesh_mc.h>
 #include <vpgl/vpgl_local_rational_camera.h>

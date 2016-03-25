@@ -8,11 +8,10 @@
 #include <iterator>
 #include <fstream>
 #include <string>
-#include <vcl_compiler.h>
-#include <iostream>
 #include <exception>
 #include <map>
 #include <typeinfo>
+#include <vcl_compiler.h>
 #include <vul/vul_arg.h>
 #include <vul/vul_sprintf.h>
 #include <mbl/mbl_log.h>

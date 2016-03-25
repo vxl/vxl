@@ -7,11 +7,11 @@
 // \date   24 Mar 1999
 // \brief  See vgui_soview2D.h for a description of this file.
 
+#include <cmath>
+#include <iostream>
 #include "vgui_soview2D.h"
 
 #include <vcl_compiler.h>
-#include <cmath>
-#include <iostream>
 
 #include <vgl/vgl_distance.h>
 #include <vnl/vnl_math.h> // for twopi

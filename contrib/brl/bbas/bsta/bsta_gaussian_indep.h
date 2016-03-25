@@ -13,11 +13,10 @@
 //                                    add probability integration over a box
 // \endverbatim
 
+#include <iostream>
 #include "bsta_gaussian.h"
 #include <vnl/vnl_vector_fixed.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 #include <vnl/vnl_random.h>
 
 //: A Gaussian distribution, independent in each dimension

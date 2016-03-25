@@ -1,7 +1,7 @@
-#include <testlib/testlib_test.h>
-#include <vcl_compiler.h>
 #include <iostream>
 #include <cmath>
+#include <testlib/testlib_test.h>
+#include <vcl_compiler.h>
 #include <bapl/bapl_lowe_pyramid_set.h>
 #include <vil/vil_image_view.h>
 #include <vil/vil_new.h>

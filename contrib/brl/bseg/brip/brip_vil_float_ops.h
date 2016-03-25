@@ -23,9 +23,9 @@
 //
 //-----------------------------------------------------------------------------
 #include <vector>
-#include <vcl_compiler.h>
 #include <iostream>
 #include <complex>
+#include <vcl_compiler.h>
 #include <vcl_cassert.h>
 #include <vnl/vnl_matrix.h>
 #include <vbl/vbl_array_2d.h>

@@ -1,4 +1,7 @@
 // This is brl/bseg/boxm2/cpp/pro/processes/boxm2_export_stack_images_process.cxx
+#include <iostream>
+#include <fstream>
+#include <iomanip>
 #include <bprb/bprb_func_process.h>
 //:
 // \file
@@ -8,9 +11,6 @@
 // \date Mar 28, 2012
 
 #include <vcl_compiler.h>
-#include <iostream>
-#include <fstream>
-#include <iomanip>
 #include <vul/vul_file.h>
 #include <boxm2/boxm2_scene.h>
 #include <boxm2/io/boxm2_cache.h>

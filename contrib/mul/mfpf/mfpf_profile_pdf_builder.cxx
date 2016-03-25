@@ -1,3 +1,6 @@
+#include <iostream>
+#include <algorithm>
+#include <sstream>
 #include "mfpf_profile_pdf_builder.h"
 //:
 // \file
@@ -11,9 +14,6 @@
 #include <vgl/vgl_vector_2d.h>
 #include <vcl_cassert.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <algorithm>
-#include <sstream>
 
 #include <mbl/mbl_parse_block.h>
 #include <mbl/mbl_read_props.h>

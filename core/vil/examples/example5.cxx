@@ -3,8 +3,8 @@
 // \brief Example of data scoping for views.
 // \author Tim Cootes - Manchester
 
-#include <vcl_compiler.h>
 #include <iostream>
+#include <vcl_compiler.h>
 #include <vxl_config.h> // for vxl_byte
 #include <vil/vil_image_view.h>
 #include <vil/vil_print.h>

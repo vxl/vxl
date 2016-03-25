@@ -1,9 +1,8 @@
-#include "boxm2_stream_block_cache.h"
 #include <new>
 #include <iostream>
-#include <vcl_compiler.h>
-#include <iostream>
 #include <algorithm>
+#include "boxm2_stream_block_cache.h"
+#include <vcl_compiler.h>
 //:
 // \file
 

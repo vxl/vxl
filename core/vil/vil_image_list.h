@@ -13,9 +13,9 @@
 //   <none>
 // \endverbatim
 //
-#include <vcl_compiler.h>
 #include <string>
 #include <vector>
+#include <vcl_compiler.h>
 #include <vil/vil_image_resource_sptr.h>
 
 class vil_image_list

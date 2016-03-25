@@ -6,6 +6,10 @@
 // \author Andrew Miller
 // \date   26 Oct 2010
 //
+#include <iostream>
+#include <iosfwd>
+#include <vector>
+#include <string>
 #include <vcl_cassert.h>
 #include <boxm2/basic/boxm2_block_id.h>
 #include <boxm2/boxm2_block_metadata.h>
@@ -14,8 +18,6 @@
 #include <vgl/vgl_box_3d.h>
 #include <vgl/vgl_box_2d.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iosfwd>
 #include <vul/vul_file.h>
 
 //smart pointer stuff
@@ -67,6 +69,22 @@ class boxm2_scene : public vbl_ref_count
     boxm2_scene() {boxm2_scene::get_count()++;}
 
     boxm2_scene(std::string const& data_path, vgl_point_3d<double> const& origin, int version = 2);
+
+    //: create a scene with a single block
+    // scene_dir      - path to scene directory
+    // scene_name     - path to xml file is scene_dir + scene_name.xml
+    // data_path      - binary data is stored in scene_dir + data_path
+    // prefixes       - the set of prefix strings defining the databases stored in the model(appearances)
+    // scene_box      - the 3-d bounding box for the scene in global coordinates
+    // sub_block_len  - the length of the octree block (sub_block) assumed to be a cube
+    // init/max level - the number of levels in the refined tree
+    // max_mb         - the maximum storage for a block (not typically used)
+    // p_init         - the initial probability of surface occupancy
+    // n_illum_bins   - number of illumination bins
+    // version        - scene format version
+    boxm2_scene(std::string const& scene_dir, std::string const& scene_name, std::string const& data_path, std::vector<std::string> const& prefixes,
+                vgl_box_3d<double> const& scene_box, double sub_block_len, int init_level = 1,
+                int max_level = 4, double max_mb=1200, double p_init=0.001, int n_illum_bins = 1, int version = 2);
 
     //: initializes the scene from the buffer that loaded an XML file in.
     // this is added for decoupling from the local filesystem to load the scene

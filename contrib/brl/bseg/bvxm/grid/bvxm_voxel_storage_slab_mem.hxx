@@ -2,6 +2,8 @@
 #ifndef bvxm_voxel_storage_slab_mem_hxx_
 #define bvxm_voxel_storage_slab_mem_hxx_
 
+#include <iostream>
+#include <vector>
 #include "bvxm_voxel_storage_slab_mem.h"
 // \file
 #include "bvxm_voxel_storage.h"
@@ -9,8 +11,6 @@
 
 #include <vgl/vgl_vector_3d.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <vector>
 #include <vcl_cassert.h>
 
 template <class T>

@@ -6,11 +6,11 @@
 // \brief Functions to calculate distance from points to curves (poly-lines)
 // \author Tim Cootes
 
+#include <iostream>
+#include <algorithm>
 #include <msm/msm_points.h>
 #include <msm/msm_curve.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <algorithm>
 
 //: Return square of distance to closest point on line segment [pt0-pt1]
 inline double msm_sqr_dist_to_line_segment(const vgl_point_2d<double>& pt0,

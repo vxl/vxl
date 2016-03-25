@@ -18,12 +18,12 @@
 //   <none yet>
 // \endverbatim
 
+#include <iostream>
+#include <vector>
 #include "brec_part_hierarchy_sptr.h"
 #include "brec_part_base_sptr.h"
 #include <vil/vil_image_resource_sptr.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <vector>
 
 class brec_part_hierarchy_builder
 {

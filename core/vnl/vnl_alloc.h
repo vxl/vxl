@@ -34,8 +34,8 @@
 // Note that containers built on different allocator instances have
 // different types, limiting the utility of this approach.
 
+#include <cstddef>
 #include <vcl_compiler.h>
-#include <cstddef> // size_t lives here
 
 const int VNL_ALLOC_ALIGN = 8;
 const std::size_t VNL_ALLOC_MAX_BYTES = 256;

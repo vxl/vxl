@@ -37,6 +37,7 @@
 // underlying matrix P_ you should call set_matrix to change it, rather than
 // changing P_ itself.  The automatic SVD caching will be screwed up otherwise.
 
+#include <iosfwd>
 #include <vnl/vnl_fwd.h>
 #include <vgl/vgl_fwd.h>
 #include <vnl/vnl_matrix_fixed.h>
@@ -53,7 +54,6 @@
 #include <vgl/algo/vgl_h_matrix_2d.h>
 #include <vgl/algo/vgl_h_matrix_3d.h>
 #include <vcl_compiler.h>
-#include <iosfwd>
 
 
 

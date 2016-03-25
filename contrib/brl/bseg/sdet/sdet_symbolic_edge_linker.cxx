@@ -1,4 +1,7 @@
 // This is brl/bseg/sdet/sdet_symbolic_edge_linker.cxx
+#include <vector>
+#include <iostream>
+#include <string>
 #include "sdet_symbolic_edge_linker.h"
 //:
 // \file
@@ -8,10 +11,7 @@
 #include <sdet/sdet_sel.h>
 #include <sdet/sdet_curve_model.h>
 
-#include <vector>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <string>
 #include <vul/vul_timer.h>
 #include <vil/vil_image_resource.h>
 

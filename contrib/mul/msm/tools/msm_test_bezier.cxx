@@ -3,12 +3,12 @@
 // \brief Warp a set of points using a Thin Plate Spline
 // \author Tim Cootes
 
+#include <iostream>
+#include <fstream>
 #include <msm/msm_cubic_bezier.h>
 
 #include <vul/vul_arg.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <fstream>
 #include <vnl/algo/vnl_svd.h>
 #include <vnl/algo/vnl_cholesky.h>
 

@@ -7,10 +7,10 @@
 // \brief Univariate weighted kernel_pdf PDF
 // \author Ian Scott
 
-#include <pdf1d/pdf1d_kernel_pdf.h>
-#include <vcl_compiler.h>
 #include <iostream>
 #include <iosfwd>
+#include <pdf1d/pdf1d_kernel_pdf.h>
+#include <vcl_compiler.h>
 
 //: Class for univariate kernel based PDFs.
 //  Distribution is the sum of a set of kernel functions placed on the training

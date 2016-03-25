@@ -12,10 +12,9 @@
 //   August 25, 2009 Moved out of bvpl_kernel_factory.h
 // \endverbatim
 
-#include <vcl_compiler.h>
-#include <iostream>
 #include <iostream>
 #include <string>
+#include <vcl_compiler.h>
 #include <vnl/vnl_float_3.h>
 #include <vbl/vbl_ref_count.h>
 #include "bvpl_kernel_iterator.h"

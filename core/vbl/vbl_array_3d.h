@@ -21,8 +21,9 @@
 // \endverbatim
 
 
-#include <vcl_compiler.h>
 #include <cstddef>
+#include <iosfwd>
+#include <vcl_compiler.h>
 
 #ifdef __OPTIMIZE__
 # define RANGECHECK(i,j,k) ((void)0)
@@ -83,6 +84,8 @@ class vbl_array_3d
   ~vbl_array_3d () { destruct(); }
   vbl_array_3d<T>& operator=(vbl_array_3d<T> const& that) {
     resize(that.row1_count_, that.row2_count_, that.row3_count_);
+        if(row1_count_*row2_count_*row3_count_==0)
+                return *this;
     set(that.data_block());
     return *this;
   }
@@ -155,7 +158,6 @@ class vbl_array_3d
 // formatted I/O
 //
 #include <vcl_compiler.h>
-#include <iosfwd>
 VCL_TEMPLATE_EXPORT template <class T> std::ostream& operator<<(std::ostream&,
                                                   vbl_array_3d<T >const&);
 

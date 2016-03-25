@@ -2,13 +2,13 @@
 #ifndef _VIFA_IMP_LINE_TXX_
 #define _VIFA_IMP_LINE_TXX_
 
+#include <iostream>
+#include <cmath>
 #include "vifa_imp_line.h"
 //:
 // \file
 
 #include <vcl_compiler.h>
-#include <iostream>
-#include <cmath>  // for std::sqrt()
 #include <vcl_cassert.h>
 #include <vgl/vgl_line_2d.h>
 

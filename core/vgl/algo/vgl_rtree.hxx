@@ -3,10 +3,10 @@
 /*
   fsm
 */
+#include <iostream>
 #include "vgl_rtree.h"
 #include <vcl_cassert.h>
 #include <vcl_compiler.h>
-#include <iostream>
 
 #ifdef DEBUG
 #define trace(str) { std::cerr << str << std::endl; }

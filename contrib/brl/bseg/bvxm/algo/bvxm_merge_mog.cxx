@@ -1,11 +1,11 @@
+#include <iostream>
+#include <cmath>
+#include <vector>
 #include "bvxm_merge_mog.h"
 //:
 // \file
 
 #include <vcl_compiler.h>
-#include <iostream>
-#include <cmath>
-#include <vector>
 #include <bvxm/grid/bvxm_voxel_grid.h>
 
 void bvxm_merge_mog::kl_merge(bvxm_merge_mog::mix_gauss_type const& mixture, bsta_gauss_sf1 &gaussian)

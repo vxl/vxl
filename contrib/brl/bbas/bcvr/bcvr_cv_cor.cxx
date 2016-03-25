@@ -1,16 +1,15 @@
+#include <cmath>
+#include <cstdio>
+#include <iostream>
+#include <algorithm>
 #include "bcvr_clsd_cvmatch.h"
 //:
 // \file
-#include <cmath>
-#include <cstdio>
 #include <vgl/algo/vgl_fit_lines_2d.h>
 #include <vsol/vsol_polygon_2d.h>
 #include <vnl/vnl_math.h>
 #include <vcl_cassert.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <algorithm>
-#include <iostream>
 
 #define TOL                   (1.0e-1)
 #define IS_ALMOST_ZERO(X)     (std::abs(X) < TOL)

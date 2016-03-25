@@ -6,11 +6,11 @@
 // \file
 // \author Ian Scott 4 Mar 2003
 
+#include <iostream>
+#include <cstring>
 #include "vil3d_new.h"
 
 #include <vcl_compiler.h>
-#include <iostream>
-#include <cstring>
 
 #include <vil3d/vil3d_file_format.h>
 #include <vil3d/vil3d_image_resource.h>

@@ -4,12 +4,12 @@
 //:
 // \file
 
+#include <cmath>
+#include <iostream>
 #include "vgl_vector_3d.h"
 #include "vgl_tolerance.h"
 
 #include <vcl_compiler.h>
-#include <cmath> // sqrt() , acos()
-#include <iostream>
 #include <vcl_cassert.h>
 #include <vcl_deprecated.h>
 

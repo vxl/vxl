@@ -1,12 +1,12 @@
 // This is core/vidl/examples/vidl_player_manager.cxx
+#include <iostream>
+#include <cstdlib>
 #include "vidl_player_manager.h"
 //:
 // \file
 // \author Matt Leotta
 
-#include <iostream>
 #include <vcl_compiler.h>
-#include <cstdlib> // for std::exit()
 #include <vul/vul_timer.h>
 #include <vgui/vgui.h>
 #include <vgui/vgui_dialog.h>

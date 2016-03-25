@@ -4,9 +4,9 @@
 // \author  Gamze Tunali Cetintemel
 // \date    2005-03-03
 //
-#include <vcl_compiler.h>
 #include <iostream>
 #include <fstream>
+#include <vcl_compiler.h>
 #include <testlib/testlib_test.h>
 
 #include <bwm/bwm_plane_fitting_lsf.h>
@@ -17,7 +17,6 @@
 #include <vsol/vsol_point_2d.h>
 
 #if 0
-#include <iostream>
 #include <vnl/algo/vnl_levenberg_marquardt.h>
 #include <vnl/vnl_vector.h>
 #include <vgl/vgl_point_2d.h>

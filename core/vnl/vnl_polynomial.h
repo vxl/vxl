@@ -33,8 +33,8 @@
 // \endverbatim
 
 #include <vector>
-#include <vcl_compiler.h>
 #include <iosfwd>
+#include <vcl_compiler.h>
 #include <vcl_cassert.h>
 
 //: Evaluation of polynomials.

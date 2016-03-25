@@ -1,13 +1,13 @@
 // This is brl/bbas/imesh/algo/imesh_detect.cxx
+#include <iostream>
+#include <algorithm>
+#include <limits>
 #include "imesh_detect.h"
 //:
 // \file
 
 
 #include <vcl_compiler.h>
-#include <iostream>
-#include <algorithm>
-#include <limits>
 #include <vcl_cassert.h>
 #include <vil/vil_image_view.h>
 #include <vgl/algo/vgl_rotation_3d.h>

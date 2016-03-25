@@ -1,3 +1,6 @@
+#include <string>
+#include <iostream>
+#include <fstream>
 #include <testlib/testlib_test.h>
 
 #include <bsta/bsta_mixture_fixed.h>
@@ -5,10 +8,7 @@
 #include <bsta/algo/bsta_beta_updater.h>
 #include <bsta/algo/bsta_adaptive_updater.h>
 
-#include <string>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <fstream>
 
 void load_samples(std::string file, std::vector<float>& samples)
 {

@@ -2,9 +2,9 @@
 #ifndef vil1_convolve_hxx_
 #define vil1_convolve_hxx_
 // \author fsm
+#include <iostream>
 #include "vil1_convolve.h"
 #include <vcl_compiler.h>
-#include <iostream>
 
 template <class I1, class I2, class AC, class O>
 void vil1_convolve_separable(I1 const kernel[], unsigned N,

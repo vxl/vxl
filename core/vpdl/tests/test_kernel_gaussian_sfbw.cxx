@@ -1,11 +1,11 @@
-#include <testlib/testlib_test.h>
-#include <vpdl/vpdl_kernel_gaussian_sfbw.h>
-#include <vpdl/vpdl_gaussian_sphere.h>
 #include <string>
-#include <vcl_compiler.h>
 #include <limits>
 #include <iostream>
 #include <cmath>
+#include <testlib/testlib_test.h>
+#include <vpdl/vpdl_kernel_gaussian_sfbw.h>
+#include <vpdl/vpdl_gaussian_sphere.h>
+#include <vcl_compiler.h>
 
 template <class T>
 void test_kernel_gaussian_sfbw_type(T epsilon, const std::string& type_name)

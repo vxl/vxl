@@ -1,3 +1,8 @@
+#include <iostream>
+#include <algorithm>
+#include <limits>
+#include <cmath>
+#include <sstream>
 #include "brec_part_hierarchy_learner.h"
 //:
 // \file
@@ -13,11 +18,6 @@
 
 #include <vil/vil_image_view.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <algorithm> // for std::sort()
-#include <limits>
-#include <cmath> // for std::cos() and std::sin()
-#include <sstream>
 
 //: check the "true" part of the mask
 bool check_equal(vbl_array_2d<bool>& left_array, vbl_array_2d<bool>& right_array)

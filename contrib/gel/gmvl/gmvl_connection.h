@@ -13,9 +13,9 @@
 //   10-sep-2004 Peter Vanroose Added copy ctor with explicit vbl_ref_count init
 // \endverbatim
 
-#include <vcl_compiler.h>
 #include <iostream>
 #include <iosfwd>
+#include <vcl_compiler.h>
 #include <vbl/vbl_ref_count.h>
 #include <gmvl/gmvl_node_sptr.h>
 

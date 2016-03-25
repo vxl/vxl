@@ -1,4 +1,5 @@
 // This is gel/vsol/vsol_rectangle_3d.cxx
+#include <iostream>
 #include "vsol_rectangle_3d.h"
 //:
 // \file
@@ -6,8 +7,6 @@
 #include <vgl/vgl_vector_3d.h>
 #include <vsol/vsol_point_3d.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 
 //***************************************************************************
 // Initialization

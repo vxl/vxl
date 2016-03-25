@@ -2,11 +2,10 @@
 #define boct_tree_cell_hxx_
 //:
 // \file
+#include <iostream>
 #include "boct_tree_cell.h"
 
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 #include <vgl/vgl_intersection.h>
 
 #ifdef DEBUG_LEAKS

@@ -6,9 +6,9 @@
 // \author Ian Scott
 
 
-#include <vcl_compiler.h>
 #include <iostream>
 #include <string>
+#include <vcl_compiler.h>
 #include <vil3d/vil3d_fwd.h>
 class vimt3d_transform_3d;
 class vimt3d_image_3d;

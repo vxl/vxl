@@ -19,9 +19,9 @@
 //
 //-----------------------------------------------------------------------------
 
+#include <limits>
 #include "vnl_unary_function.h"
 #include <vcl_compiler.h>
-#include <limits>
 
 //: Return bounding cube of range (outputs)
 template <class RETURN, class ARGUMENT>

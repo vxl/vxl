@@ -5,13 +5,13 @@
 // \brief Univariate flat PDF.
 // \author Tim Cootes
 
+#include <string>
+#include <iostream>
+#include <cmath>
 #include "pdf1d_flat.h"
 
 #include <vcl_cassert.h>
-#include <string>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <cmath>
 
 #include <pdf1d/pdf1d_flat_sampler.h>
 #include <pdf1d/pdf1d_sampler.h>

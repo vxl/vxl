@@ -3,9 +3,8 @@
 // \brief Experimental tool to load in an image and compute local entropy.
 // \author Tim Cootes
 
+#include <iostream>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 #include <vul/vul_arg.h>
 #include <vxl_config.h> // for vxl_byte
 #include <vil/vil_load.h>

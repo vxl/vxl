@@ -17,9 +17,9 @@
 //   Peter Vanroose - 11 Mar 97 - added operator==
 // \endverbatim
 
-#include <vcl_compiler.h>
 #include <iostream>
 #include <iosfwd>
+#include <vcl_compiler.h>
 #include <mvl/Homg2D.h>
 
 class HomgLineSeg2D;

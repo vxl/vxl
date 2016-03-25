@@ -1,9 +1,8 @@
 // This is bbas/bvgl/algo/tests/test_biarc.cxx
 
 #include <iostream>
-#include <vcl_compiler.h>
-#include <iostream>
 #include <cmath>
+#include <vcl_compiler.h>
 #include <testlib/testlib_test.h>
 #include <vnl/vnl_math.h>
 #include <bvgl/algo/bvgl_biarc.h>

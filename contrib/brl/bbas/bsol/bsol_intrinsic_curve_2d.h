@@ -23,15 +23,14 @@
 // \endverbatim
 //*****************************************************************************
 
+#include <vector>
+#include <iostream>
 #include <vsol/vsol_curve_2d.h>
 #include <vsol/vsol_point_2d.h>
 #include <vsol/vsol_point_2d_sptr.h>
 #include <vsol/vsol_polyline_2d_sptr.h>
 #include <vsol/vsol_polygon_2d_sptr.h>
-#include <vector>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 #include <vcl_cassert.h>
 
 #define ZERO_TOLERANCE 1E-1 // used in bsol_intrinsic_curve_2d.cxx

@@ -12,12 +12,12 @@
 //   <none yet>
 // \endverbatim
 
+#include <iostream>
+#include <string>
 #include <bvxm/bvxm_voxel_world_sptr.h>
 #include <bvxm/bvxm_image_metadata.h>
 #include <bvxm/bvxm_von_mises_tangent_processor.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <string>
 
 class  bvxm_edge_ray_processor
 {

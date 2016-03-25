@@ -9,11 +9,11 @@
 //    GE Corporate Research and Development
 //
 //-----------------------------------------------------------------------------
+#include <iostream>
+#include <iosfwd>
 #include <gevd/gevd_param_mixin.h>
 #include <sdet/sdet_detector_params.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iosfwd>
 
 class sdet_region_proc_params : public gevd_param_mixin
 {

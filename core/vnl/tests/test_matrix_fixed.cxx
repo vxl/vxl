@@ -1,12 +1,14 @@
 // This is core/vnl/tests/test_matrix_fixed.cxx
+#include <cstdlib>
+#include <cstddef>
+#include <cmath>
+#include <iostream>
+#include <exception>
+#include <cstdio>
 #ifdef TEST_MALLOC // see note below, at the other #ifdef TEST_MALLOC
 # include <vcl_new.h>
 #endif
 #include <vcl_compiler.h>
-#include <cstdlib>
-#include <cstddef> // for std::size_t
-#include <cmath> // for sqrt
-#include <iostream>
 
 #include <vnl/vnl_matrix_fixed.h>
 #include <vnl/vnl_vector_fixed.h>
@@ -17,10 +19,8 @@
 #include <vnl/vnl_int_2x2.h>
 
 #include <testlib/testlib_test.h>
-#include <exception>
 
 #undef printf // to work around a bug in libintl.h
-#include <cstdio> // do not use iostream within operator new - it causes infinite recursion
 
 bool verbose_malloc = false;
 int malloc_count = 0;
@@ -128,7 +128,7 @@ void test_int()
   try { m0.get(0,25); }  // Raise out of bounds exception.
   catch(...) { exceptionThrownAndCaught = true; }
   TEST("Out of bounds get(0,25)", exceptionThrownAndCaught, true);
-  
+
   exceptionThrownAndCaught = false;
   try { m0.get(25,0); }  // Raise out of bounds exception.
   catch(...) { exceptionThrownAndCaught = true; }

@@ -5,10 +5,10 @@
 // \file
 // \brief numeric traits for vnl_rational
 
+#include <iosfwd>
 #include <vnl/vnl_rational.h>
 #include <vnl/vnl_numeric_traits.h>
 #include <vcl_compiler.h>
-#include <iosfwd>
 #include <vnl/vnl_export.h>
 
 VCL_DEFINE_SPECIALIZATION

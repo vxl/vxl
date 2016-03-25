@@ -1,11 +1,11 @@
 // This is brl/bbas/bsta/bsta_int_histogram_2d.cxx
 // see bsta/bsta_int_histogram_2d.h for description of class
+#include <iostream>
+#include <cmath>
 #include "bsta_int_histogram_2d.h"
 //:
 // \file
 #include <vcl_compiler.h>
-#include <iostream>
-#include <cmath>
 // for gausian parzan window filter
 #include "bsta_gauss.h"
 #include "bsta_int_histogram_1d.h"

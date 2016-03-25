@@ -6,9 +6,9 @@
 // \author Ian Scott.
 
 #include <string>
-#include <vcl_compiler.h>
 #include <cstdlib>
 #include <iostream>
+#include <vcl_compiler.h>
 #if VCL_HAS_EXCEPTIONS
 # include <vcl_stdexcept.h>
 #endif

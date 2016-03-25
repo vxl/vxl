@@ -19,8 +19,8 @@
 
 #include <string>
 #include <vector>
-#include <vcl_compiler.h>
 #include <iosfwd>
+#include <vcl_compiler.h>
 #include <vgui/vgui_key.h>
 #include <vgui/vgui_modifier.h>
 #include <vgui/vgui_command_sptr.h>

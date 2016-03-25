@@ -12,11 +12,11 @@
 // \endverbatim
 //
 //-----------------------------------------------------------------------------
+#include <iostream>
+#include <algorithm>
 #include <vgl/vgl_point_2d.h>
 #include <vgl/vgl_point_3d.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <algorithm>
 
 std::vector<vgl_point_2d<double> > rotate_2d(std::vector<vgl_point_2d<double> > in, double angle);
 std::vector<vgl_point_2d<double> > trans_2d(std::vector<vgl_point_2d<double> > in, double tx, double ty);

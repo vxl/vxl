@@ -4,9 +4,9 @@
 //  Test support class that gives an example of a non-unique matching
 //  problem.  This may eventually be moved to rrel/examples.
 
-#include <vcl_compiler.h>
 #include <iostream>
 #include <vector>
+#include <vcl_compiler.h>
 #include <vnl/vnl_vector_fixed.h>
 #include <vnl/vnl_matrix.h>
 #include <rrel/rrel_estimation_problem.h>

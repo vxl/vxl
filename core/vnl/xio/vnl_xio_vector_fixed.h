@@ -19,11 +19,11 @@
 //   29 July 2011 - Peter Vanroose - added documentation, tests, and x_write_tree()
 // \endverbatim
 
+#include <iosfwd>
+#include <string>
 #include <vsl/vsl_fwd.h>
 #include <vnl/vnl_vector_fixed.h>
 #include <vcl_compiler.h>
-#include <iosfwd>
-#include <string>
 
 //: XML save vnl_vector_fixed to stream.
 // \relatesalso vnl_vector_fixed

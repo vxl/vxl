@@ -12,12 +12,12 @@
 //   <none yet>
 // \endverbatim
 
-#include "imesh_kd_tree.h"
-
-#include <vcl_compiler.h>
 #include <iostream>
 #include <algorithm>
 #include <limits>
+#include "imesh_kd_tree.h"
+
+#include <vcl_compiler.h>
 #include <vcl_cassert.h>
 
 

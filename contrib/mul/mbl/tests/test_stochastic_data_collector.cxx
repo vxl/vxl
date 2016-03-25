@@ -1,4 +1,6 @@
 // This is mul/mbl/tests/test_stochastic_data_collector.cxx
+#include <iostream>
+#include <string>
 #include <testlib/testlib_test.h>
 //:
 // \file
@@ -6,9 +8,6 @@
 // \brief test vpdfl_pc_gaussian, building, sampling, saving etc.
 
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
-#include <string>
 #include <vpl/vpl.h> // vpl_unlink()
 #include <vsl/vsl_binary_loader.h>
 #include <vnl/io/vnl_io_vector.h>

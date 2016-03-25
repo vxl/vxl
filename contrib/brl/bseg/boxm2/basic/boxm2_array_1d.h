@@ -3,11 +3,11 @@
 //:
 // \file
 #include <new>
-#include <vcl_cassert.h>
 #include <iosfwd>
-#include <vcl_compiler.h>
 #include <iostream>
-#include <cstddef> // for ptrdiff_t and size_t
+#include <cstddef>
+#include <vcl_cassert.h>
+#include <vcl_compiler.h>
 
 //: A simple wrapper for a buffer.
 //  This class does not have ownership over data,

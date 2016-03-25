@@ -5,14 +5,13 @@
 //:
 // \file
 
+#include <iostream>
+#include <cstdlib>
+#include <vector>
 #include "PairMatchSet.h"
 
 #include <vcl_compiler.h>
-#include <iostream>
-#include <cstdlib>
 #include <vcl_cassert.h>
-#include <iostream>
-#include <vector>
 
 #include <mvl/MatchSet.h>
 

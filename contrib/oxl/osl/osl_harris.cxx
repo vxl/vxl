@@ -1,16 +1,15 @@
 // This is oxl/osl/osl_harris.cxx
+#include <cmath>
+#include <iostream>
+#include <fstream>
+#include <vector>
+#include <algorithm>
 #include "osl_harris.h"
 //:
 // \file
 
-#include <cmath>
 #include <vcl_cassert.h>
-#include <iostream>
-#include <fstream>
-#include <vector>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <algorithm>
 
 #include <vil1/vil1_image_as.h>
 #include <vil1/vil1_copy.h>

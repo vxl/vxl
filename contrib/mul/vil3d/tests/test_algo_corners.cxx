@@ -1,8 +1,7 @@
 // This is mul/vil3d/tests/test_algo_corners.cxx
+#include <iostream>
 #include <testlib/testlib_test.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 #include <vxl_config.h> // for vxl_byte
 #include <vgl/vgl_point_3d.h>
 #include <vil3d/algo/vil3d_corners.h>

@@ -14,10 +14,10 @@
 // Modifications
 // \endverbatim
 
-#include <vcl_compiler.h>
 #include <iosfwd>
-#include <vcl_cassert.h>
 #include <vector>
+#include <vcl_compiler.h>
+#include <vcl_cassert.h>
 
 //: Represents a homogeneous 1-D point, i.e., a homogeneous pair \a (x,w)
 template <class T>

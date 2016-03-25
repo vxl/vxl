@@ -6,9 +6,9 @@
 // \brief L2norm v->v/(||v||_2 + epsilon)
 
 #include <string>
-#include <vcl_compiler.h>
 #include <iostream>
 #include <iosfwd>
+#include <vcl_compiler.h>
 #include <vsl/vsl_fwd.h>
 #include <vnl/vnl_fwd.h>
 #include <mipa/mipa_vector_normaliser.h>

@@ -28,14 +28,13 @@ class vsol_point_2d;
 //*****************************************************************************
 // External declarations for values
 //*****************************************************************************
+#include <iostream>
 #include <vsl/vsl_binary_io.h>
 #include <vsol/vsol_point_2d_sptr.h>
 #include <vsol/vsol_spatial_object_2d.h>
 #include <vgl/vgl_vector_2d.h>
 #include <vgl/vgl_point_2d.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 
 class vsol_point_2d : public vsol_spatial_object_2d
 {

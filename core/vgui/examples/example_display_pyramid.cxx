@@ -2,8 +2,8 @@
 // an image pyramid for that image.  The user can move through the list
 // of images by pressing PageUp and PageDown.
 
-#include <vcl_compiler.h>
 #include <iostream>
+#include <vcl_compiler.h>
 
 #include <vil1/vil1_load.h>
 #include <vil1/vil1_image.h>

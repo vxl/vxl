@@ -4,10 +4,10 @@
 //:
 // \file
 
+#include <iostream>
 #include "vnl_diag_matrix_fixed.h"
 
 #include <vcl_compiler.h>
-#include <iostream>
 
 
 //: Return inv(D) * b.

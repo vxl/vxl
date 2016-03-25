@@ -13,10 +13,9 @@
 //                               add probability integration over a box
 // \endverbatim
 
+#include <iostream>
 #include "bsta_gaussian.h"
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 #include <vnl/vnl_random.h>
 
 //: A (hyper-)spherical Gaussian distribution

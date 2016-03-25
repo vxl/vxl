@@ -1,12 +1,11 @@
-#include <testlib/testlib_test.h>
-#include <bsta/bsta_gaussian_full.h>
 #include <string>
 #include <limits>
+#include <iostream>
+#include <testlib/testlib_test.h>
+#include <bsta/bsta_gaussian_full.h>
 #include <vnl/vnl_math.h>
 #include <vnl/vnl_inverse.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 
 template <class T>
 void test_gaussian_full_type(T epsilon, const std::string& type_name)

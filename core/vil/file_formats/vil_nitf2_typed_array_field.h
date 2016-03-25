@@ -7,9 +7,9 @@
 #ifndef VIL_NITF2_TYPED_ARRAY_FIELD_H
 #define VIL_NITF2_TYPED_ARRAY_FIELD_H
 
-#include <vcl_compiler.h>
 #include <map>
 #include <iosfwd>
+#include <vcl_compiler.h>
 
 #include "vil_nitf2_array_field.h"
 #include "vil_nitf2.h"

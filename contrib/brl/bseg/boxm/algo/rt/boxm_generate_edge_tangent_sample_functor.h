@@ -2,6 +2,7 @@
 #define boxm_generate_edge_tangent_sample_functor_h
 //:
 // \file
+#include <iostream>
 #include <boxm/boxm_apm_traits.h>
 #include <boxm/basic/boxm_raytrace_function.h>
 #include <boxm/sample/boxm_edge_tangent_sample.h>
@@ -12,8 +13,6 @@
 #include <vgl/vgl_homg_plane_3d.h>
 #include <vil/vil_image_view.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 
 template <class T, class T_aux>
 class boxm_generate_edge_tangent_sample_functor

@@ -13,10 +13,10 @@
 // Nov 2008 J Becker: Added a clone function.
 // \endverbatim
 
-#include <rgrl/rgrl_feature.h>
-#include <vcl_compiler.h>
 #include <iostream>
 #include <iosfwd>
+#include <rgrl/rgrl_feature.h>
+#include <vcl_compiler.h>
 
 class rgrl_feature_face_pt
   : public rgrl_feature

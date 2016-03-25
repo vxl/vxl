@@ -1,7 +1,7 @@
+#include <iostream>
+#include <limits>
 #include <testlib/testlib_test.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 
 #include <depth_map/depth_map_scene.h>
 #include <depth_map/depth_map_region.h>
@@ -16,7 +16,6 @@
 #include <vil/vil_save.h>
 #include <vsl/vsl_binary_io.h>
 #include <vpl/vpl.h>
-#include <limits>
 
 static void test_depth_map()
 {

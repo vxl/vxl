@@ -7,6 +7,7 @@
 // \date March 8, 2009
 // \brief Iterative updating of a mixture of Gaussians
 
+#include <utility>
 #include <vpdl/vpdt/vpdt_field_traits.h>
 #include <vpdl/vpdt/vpdt_gaussian.h>
 #include <vpdl/vpdt/vpdt_mixture_of.h>
@@ -14,7 +15,6 @@
 #include <vpdl/vpdt/vpdt_mog_fitness.h>
 #include <vpdl/vpdt/vpdt_num_obs.h>
 #include <vcl_compiler.h>
-#include <utility>
 #include <vcl_cassert.h>
 
 //: A mixture of Gaussians updater

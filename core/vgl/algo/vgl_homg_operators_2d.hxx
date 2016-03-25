@@ -4,13 +4,13 @@
 //:
 // \file
 
+#include <iostream>
+#include <limits>
+#include <cmath>
 #include "vgl_homg_operators_2d.h"
 
-#include <iostream>
 #include <vcl_compiler.h>
-#include <limits> // for infinity
 #include <vcl_cassert.h>
-#include <cmath> // for std::sqrt()
 #include <vgl/vgl_homg_line_2d.h>
 #include <vgl/vgl_homg_point_2d.h>
 #include <vgl/vgl_point_2d.h>

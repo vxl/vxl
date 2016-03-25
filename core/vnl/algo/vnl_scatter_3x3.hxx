@@ -7,9 +7,9 @@
 // Created: 02 Oct 96
 //-----------------------------------------------------------------------------
 
+#include <iostream>
 #include "vnl_scatter_3x3.h"
 #include <vcl_compiler.h>
-#include <iostream>
 #include <vnl/algo/vnl_symmetric_eigensystem.h>
 
 template <class T>

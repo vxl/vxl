@@ -7,15 +7,15 @@
 // \brief Base for classes with test whether data could come from a given pdf.
 // \author Tim Cootes
 
+#include <string>
+#include <iostream>
+#include <iosfwd>
 #include <pdf1d/pdf1d_pdf.h>
 #include <pdf1d/pdf1d_builder.h>
 #include <vnl/vnl_fwd.h>
 #include <mbl/mbl_cloneable_ptr.h>
 #include <vsl/vsl_binary_io.h>
-#include <string>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iosfwd>
 
 //=======================================================================
 

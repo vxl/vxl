@@ -1,13 +1,13 @@
 #ifndef vtol_extract_topology_hxx_
 #define vtol_extract_topology_hxx_
 
+#include <iostream>
+#include <iosfwd>
 #include "vtol_extract_topology.h"
 //:
 // \file
 
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iosfwd>
 #include <vcl_cassert.h>
 
 #include <vgl/vgl_point_2d.h>
@@ -27,7 +27,6 @@
 #include <vdgl/vdgl_digital_curve.h>
 
 #ifndef NDEBUG
-#  include <iostream>
 #  define DBG( x ) x;
 #else
 #  define DBG( x ) /*debugging removed*/ do {} while (false)

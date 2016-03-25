@@ -6,8 +6,8 @@
 // click through the dialog to the tableau, even the mouse events were
 // happening (appeared to happen) on the dialog.
 
-#include <vcl_compiler.h>
 #include <iostream>
+#include <vcl_compiler.h>
 
 #include <vgui/vgui.h>
 #include <vgui/vgui_dialog.h>

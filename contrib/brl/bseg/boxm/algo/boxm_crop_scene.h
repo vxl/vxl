@@ -13,11 +13,10 @@
 //   <none yet>
 // \endverbatim
 
+#include <iostream>
 #include <vgl/vgl_box_3d.h>
 #include <boxm/boxm_scene.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 
 
 template <class T_data>

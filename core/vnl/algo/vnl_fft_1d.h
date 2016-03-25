@@ -14,8 +14,8 @@
 //   19 June 2003 - Peter Vanroose - added cmplx* and vector<cmplx> interfaces
 // \endverbatim
 
-#include <vcl_compiler.h>
 #include <vector>
+#include <vcl_compiler.h>
 #include <vnl/vnl_vector.h>
 #include <vnl/algo/vnl_fft_base.h>
 

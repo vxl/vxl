@@ -1,3 +1,6 @@
+#include <fstream>
+#include <iostream>
+#include <algorithm>
 #include "boxm2_ocl_paint_batch.h"
 //:
 // \file
@@ -14,14 +17,11 @@
 #include <brdb/brdb_value.h>
 
 //directory utility
-#include <fstream>
 #include <vcl_where_root_dir.h>
 #include <bocl/bocl_device.h>
 #include <bocl/bocl_kernel.h>
 #include <vul/vul_timer.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <algorithm>
 
 //: Declare kernels
 std::map<std::string, bocl_kernel*> boxm2_ocl_paint_batch::kernels_;

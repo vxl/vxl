@@ -28,8 +28,8 @@
 //   Peter Vanroose  22 Jul 2009: Moved vgl_intersection() to vgl_intersection.h
 // \endverbatim
 
-#include <vcl_compiler.h>
 #include <iosfwd>
+#include <vcl_compiler.h>
 #include <vgl/vgl_fwd.h> // forward declare vgl_point_2d
 
 //: Represents a cartesian 2D box

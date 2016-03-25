@@ -4,10 +4,10 @@
 //:
 // \file
 
-#include "vpgl_proj_camera.h"
 #include <iostream>
-#include <vcl_compiler.h>
 #include <fstream>
+#include "vpgl_proj_camera.h"
+#include <vcl_compiler.h>
 #include <vgl/vgl_point_2d.h>
 #include <vgl/vgl_point_3d.h>
 #include <vgl/vgl_ray_3d.h>

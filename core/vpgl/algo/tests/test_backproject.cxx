@@ -1,3 +1,5 @@
+#include <iostream>
+#include <algorithm>
 #include <testlib/testlib_test.h>
 #include <vpgl/algo/vpgl_backproject.h>
 #include <vpgl/vpgl_rational_camera.h>
@@ -7,9 +9,7 @@
 #include <vgl/vgl_point_2d.h>
 #include <vgl/vgl_point_3d.h>
 #include <vgl/vgl_plane_3d.h>
-#include <iostream>
 #include <vcl_compiler.h>
-#include <algorithm> // for std::min()
 
 static void test_backproject()
 {

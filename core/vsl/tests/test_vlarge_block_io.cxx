@@ -1,11 +1,11 @@
 // This is core/vsl/tests/test_vlarge_block_io.cxx
 #include <iostream>
-#include <vcl_compiler.h>
 #include <new>
 #include <algorithm>
 #include <limits>
 #include <vector>
 #include <cstdlib>
+#include <vcl_compiler.h>
 #include <vsl/vsl_binary_io.h>
 #include <vsl/vsl_block_binary.h>
 #include <testlib/testlib_test.h>

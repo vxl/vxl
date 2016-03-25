@@ -4,9 +4,9 @@
 //  \note Adapted from test_amoeba.cxx
 
 #include <iostream>
+#include <cmath>
 #include <vcl_cassert.h>
 #include <vcl_compiler.h>
-#include <cmath>
 
 #include <vnl/vnl_vector.h>
 #include <vnl/vnl_double_2.h>

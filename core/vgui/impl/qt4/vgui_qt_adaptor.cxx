@@ -1,9 +1,9 @@
+#include <iostream>
 #include "vgui_qt_adaptor.h"
 #include "vgui_qt_menu.h"
 
 #include <vgui/vgui_popup_params.h>
 #include <vcl_compiler.h>
-#include <iostream>
 
 #include <QMenu>
 

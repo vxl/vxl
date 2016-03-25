@@ -2,6 +2,8 @@
 // \file
 // \author Andy Miller
 // \date 26-Oct-2010
+#include <iostream>
+#include <cstdio>
 #include <boxm2/boxm2_scene.h>
 #include <boxm2/boxm2_block.h>
 #include <boxm2/basic/boxm2_block_id.h>
@@ -15,8 +17,6 @@
 #include <vul/vul_timer.h>
 #include <vcl_sys/time.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <cstdio>
 //#include <unistd.h>
 
 void test_cache()

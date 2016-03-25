@@ -6,11 +6,11 @@
 // \author Chuck Stewart (stewart@cs.rpi.edu)
 // \date March 2001
 
+#include <iostream>
+#include <vector>
 #include <vnl/vnl_vector.h>
 #include <vnl/vnl_random.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <vector>
 
 class rrel_objective;
 class rrel_estimation_problem;

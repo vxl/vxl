@@ -4,10 +4,10 @@
 // \author Tim Cootes
 // \brief Adaptor which steps through images and returns a subset of original points
 
-#include <vcl_cassert.h>
-#include <vcl_compiler.h>
 #include <iostream>
 #include <string>
+#include <vcl_cassert.h>
+#include <vcl_compiler.h>
 
 #include "msdi_points_subset.h"
 

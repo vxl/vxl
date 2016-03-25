@@ -7,9 +7,9 @@
 #ifndef VIL_NITF2_ARRAY_FIELD_H
 #define VIL_NITF2_ARRAY_FIELD_H
 
-#include <vcl_compiler.h>
 #include <map>
 #include <string>
+#include <vcl_compiler.h>
 #include "vil_nitf2_field.h"
 #include "vil_nitf2_index_vector.h"
 

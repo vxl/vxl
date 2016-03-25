@@ -4,9 +4,9 @@
 // \file
 
 #include <sstream>
-#include <vcl_compiler.h>
 #include <iostream>
 #include <iomanip>
+#include <vcl_compiler.h>
 #include <vil3d/vil3d_image_view.h>
 #include <boxm2/io/boxm2_cache.h>
 class boxm2_export_stack_images_function

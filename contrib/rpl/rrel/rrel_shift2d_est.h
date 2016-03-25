@@ -7,9 +7,9 @@
 // \date October 2002
 // \brief Class to maintain data and optimization model for 2d shift estimation
 
-#include <vcl_compiler.h>
 #include <iostream>
 #include <vector>
+#include <vcl_compiler.h>
 #include <vgl/vgl_fwd.h>
 #include <vnl/vnl_fwd.h>
 #include <rrel/rrel_estimation_problem.h>

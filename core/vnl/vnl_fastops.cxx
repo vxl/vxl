@@ -9,12 +9,12 @@
 //
 //-----------------------------------------------------------------------------
 
+#include <cstdlib>
+#include <cstring>
+#include <iostream>
 #include "vnl_fastops.h"
 
 #include <vcl_compiler.h>
-#include <cstdlib> // abort()
-#include <cstring> // memset()
-#include <iostream>
 
 //: Compute $A^\top A$.
 void vnl_fastops::AtA(vnl_matrix<double>& out, const vnl_matrix<double>& A)

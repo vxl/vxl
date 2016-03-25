@@ -1,12 +1,11 @@
 // This is mul/mbl/tests/test_clusters.cxx
+#include <iostream>
 #include <testlib/testlib_test.h>
 //:
 // \file
 #include <mbl/mbl_clusters.h>
 #include <mbl/mbl_clusters.hxx>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 
 //: Distance class
 class test_scalar_distance

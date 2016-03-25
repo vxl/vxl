@@ -2,9 +2,9 @@
 #ifndef vbl_smart_ptr_hxx_
 #define vbl_smart_ptr_hxx_
 
+#include <iostream>
 #include "vbl_smart_ptr.h"
 #include <vcl_compiler.h>
-#include <iostream>
 
 // Template definitions for ref() and unref().
 // The client can specialize them between including this file and

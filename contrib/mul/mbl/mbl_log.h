@@ -67,7 +67,6 @@
 // \endcode
 
 
-#include <vcl_compiler.h>
 #include <iostream>
 #include <fstream>
 #include <streambuf>
@@ -76,6 +75,7 @@
 #include <set>
 #include <map>
 #include <ios>
+#include <vcl_compiler.h>
 
 
 // define MBL_LOG_DISABLE_ALL_LOGGING to stop all logging.

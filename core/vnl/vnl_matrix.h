@@ -36,8 +36,8 @@
 //   18-Jan-2011 - Peter Vanroose - added methods set_diagonal() & get_diagonal()
 // \endverbatim
 
-#include <vcl_compiler.h>
 #include <iosfwd>
+#include <vcl_compiler.h>
 #include <vnl/vnl_tag.h>
 #include <vnl/vnl_c_vector.h>
 #include <vnl/vnl_config.h>

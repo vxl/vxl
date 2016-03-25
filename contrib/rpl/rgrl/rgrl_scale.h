@@ -14,10 +14,10 @@
 // \endverbatim
 
 
-#include <vnl/vnl_matrix.h>
-#include <vcl_compiler.h>
 #include <iostream>
 #include <iosfwd>
+#include <vnl/vnl_matrix.h>
+#include <vcl_compiler.h>
 
 #include "rgrl_scale_sptr.h"
 #include "rgrl_object.h"

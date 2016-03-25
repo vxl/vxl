@@ -16,15 +16,14 @@
 //   Peter Vanroose, Feb.2004 - replaced vil1_image by vil_image_view<T>
 // \endverbatim
 //
+#include <iostream>
+#include <cstdlib>
 #include <vil/vil_load.h>
 #include <vil/vil_save.h>
 #include <vil/vil_image_view.h>
 #include <vipl/accessors/vipl_accessors_vil_image_view.h>
 #include <vipl/vipl_threshold.h>
-#include <iostream>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <cstdlib> // for atoi()
 #include <vxl_config.h> // for vxl_byte
 
 int

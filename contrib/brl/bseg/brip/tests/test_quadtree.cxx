@@ -1,12 +1,11 @@
+#include <iostream>
+#include <iomanip>
 #include <testlib/testlib_test.h>
 #include <brip/brip_quadtree_node.h>
 #include <brip/brip_quadtree_utils.h>
 #include <brip/brip_quadtree_node_base_sptr.h>
 #include <vil/vil_image_view.h>
-#include <iostream>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iomanip>
 #include <vbl/vbl_array_2d.h>
 static void test_quadtree()
 {

@@ -3,14 +3,14 @@
 //:
 // \file
 // \brief This class aggregates data of one type across all the blocks of the scene into an array.
+#include <iostream>
+#include <fstream>
 #include <boxm2/boxm2_scene.h>
 #include <boxm2/boxm2_block.h>
 #include <boxm2/boxm2_data.h>
 #include <boxm2/basic/boxm2_block_id.h>
 
 #include <vcl_compiler.h>
-#include <iostream>
-#include <fstream>
 
 #include <vbl/vbl_ref_count.h>
 #include <vbl/vbl_smart_ptr.h>

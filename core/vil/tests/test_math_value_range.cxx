@@ -1,8 +1,8 @@
 // This is core/vil/tests/test_math_value_range.cxx
 
+#include <iostream>
 #include <testlib/testlib_test.h>
 #include <vcl_compiler.h>
-#include <iostream>
 #include <vil/vil_math.h>
 
 

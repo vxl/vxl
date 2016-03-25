@@ -19,9 +19,9 @@
 /*****************************************************************/
 
 
-#include <vcl_compiler.h>
 #include <iostream>
-#include <vector>  // Include STL vector class.
+#include <vector>
+#include <vcl_compiler.h>
 
 class Vector2d
 {

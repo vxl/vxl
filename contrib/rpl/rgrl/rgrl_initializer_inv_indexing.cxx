@@ -1,9 +1,9 @@
-#include "rgrl_initializer_inv_indexing.h"
-
 #include <vector>
-#include <vcl_compiler.h>
 #include <iostream>
 #include <algorithm>
+#include "rgrl_initializer_inv_indexing.h"
+
+#include <vcl_compiler.h>
 #include <vcl_cassert.h>
 
 #include <rsdl/rsdl_kd_tree.h>

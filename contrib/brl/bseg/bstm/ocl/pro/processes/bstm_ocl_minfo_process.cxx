@@ -10,13 +10,13 @@
 // \date Jan 30, 2013
 
 //directory utility
+#include <fstream>
+#include <iostream>
+#include <algorithm>
 #include <vcl_where_root_dir.h>
 #include <bprb/bprb_func_process.h>
 
-#include <fstream>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <algorithm>
 #include <bstm/ocl/bstm_opencl_cache.h>
 #include <bstm/bstm_scene.h>
 #include <bstm/bstm_block.h>

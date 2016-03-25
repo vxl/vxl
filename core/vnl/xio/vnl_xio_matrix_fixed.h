@@ -21,10 +21,10 @@
 //   29 July 2011 - Peter Vanroose - added documentation, tests, and x_write_tree()
 // \endverbatim
 
-#include <vnl/vnl_matrix_fixed.h>
 #include <string>
-#include <vcl_compiler.h>
 #include <iosfwd>
+#include <vnl/vnl_matrix_fixed.h>
+#include <vcl_compiler.h>
 
 //: XML save vnl_matrix_fixed to stream.
 // \relatesalso vnl_matrix_fixed

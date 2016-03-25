@@ -8,6 +8,7 @@
 // \date   11 Nov 99
 // \brief  See vgui_clear_tableau.h for a description of this class.
 
+#include <sstream>
 #include "vgui_clear_tableau.h"
 #include <vgui/vgui_event.h>
 #include <vgui/vgui_menu.h>
@@ -15,7 +16,6 @@
 #include <vgui/vgui_dialog.h>
 #include <vgui/internals/vgui_accelerate.h>
 #include <vcl_compiler.h>
-#include <sstream>
 
 //-----------------------------------------------------------------------------
 //: Constructor - don't use this, use vgui_clear_tableau_new.

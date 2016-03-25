@@ -6,6 +6,9 @@
 // \file
 // \author fsm
 
+#include <iostream>
+#include <list>
+#include <vector>
 #include "osl_vertex.h"
 
 #include <osl/osl_hacks.h>
@@ -26,8 +29,5 @@ bool operator==(osl_vertex const &a, osl_vertex const &b) {
 }
 
 #include <vcl_compiler.h>
-#include <iostream>
-#include <list>
-#include <vector>
 OSL_TOPOLOGY_REF_UNREF_INSTANTIATE(std::list<osl_vertex*>);
 OSL_TOPOLOGY_REF_UNREF_INSTANTIATE(std::vector<osl_vertex*>);

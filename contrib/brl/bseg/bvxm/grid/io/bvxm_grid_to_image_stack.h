@@ -14,16 +14,15 @@
 //   <none yet>
 // \endverbatim
 
-#include <bvxm/grid/bvxm_voxel_grid.h>
-#include "bvxm_slab_to_image.h"
-#include <vul/vul_file.h>
-#include <iostream>
-#include <vil/vil_save.h>
-#include <vnl/vnl_vector_fixed.h>
-#include <vcl_compiler.h>
 #include <iostream>
 #include <iomanip>
 #include <sstream>
+#include <bvxm/grid/bvxm_voxel_grid.h>
+#include "bvxm_slab_to_image.h"
+#include <vul/vul_file.h>
+#include <vil/vil_save.h>
+#include <vnl/vnl_vector_fixed.h>
+#include <vcl_compiler.h>
 
 template<class T>
 std::string bvxm_extension();

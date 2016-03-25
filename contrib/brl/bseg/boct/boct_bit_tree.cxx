@@ -1,13 +1,12 @@
 //:
 // \file
-#include "boct_bit_tree.h"
-#include "boct_tree_cell.h"
 #include <iostream>
 #include <list>
-#include <vcl_compiler.h>
-#include <iostream>
 #include <algorithm>
-#include <cstring> // for std::memcpy()
+#include <cstring>
+#include "boct_bit_tree.h"
+#include "boct_tree_cell.h"
+#include <vcl_compiler.h>
 
 //: default constructor
 boct_bit_tree::boct_bit_tree()

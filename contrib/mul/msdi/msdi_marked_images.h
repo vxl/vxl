@@ -10,9 +10,9 @@ class vimt_image_pyramid;
 class vimt_image_2d;
 class msm_points;
 
-#include <vcl_compiler.h>
 #include <iostream>
 #include <string>
+#include <vcl_compiler.h>
 
 //: Base for iterator which returns images+points
 class msdi_marked_images

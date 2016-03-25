@@ -11,6 +11,8 @@
 // \endverbatim
 //
 
+#include <iostream>
+#include <algorithm>
 #include <vul/vul_file.h>
 #include <vul/vul_arg.h>
 #include <vcl_where_root_dir.h>
@@ -18,8 +20,6 @@
 #include <volm/volm_osm_parser.h>
 #include <volm/volm_io.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <algorithm>
 
 static void error(std::string error_file, std::string error_msg)
 {

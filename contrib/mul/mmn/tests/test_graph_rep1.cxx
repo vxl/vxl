@@ -1,8 +1,8 @@
 // This is mul/mmn/tests/test_graph_rep1.cxx
-#include <testlib/testlib_test.h>
-#include <vcl_compiler.h>
 #include <iostream>
 #include <vector>
+#include <testlib/testlib_test.h>
+#include <vcl_compiler.h>
 #include <mmn/mmn_graph_rep1.h>
 
 

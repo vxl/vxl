@@ -1,11 +1,11 @@
+#include <iostream>
+#include <sstream>
 #include "bwm_tableau_geo_cam.h"
 #include <vpgl/file_formats/vpgl_geo_camera.h>
 #include "bwm_observer_mgr.h"
 #include "algo/bwm_utils.h"
 #include <vul/vul_file.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <sstream>
 
 bool bwm_tableau_geo_cam::handle(const vgui_event &e)
 {

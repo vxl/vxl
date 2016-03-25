@@ -2,18 +2,17 @@
 // \file
 // \brief Parses the configuration file for correspondences
 //
+#include <sstream>
+#include <iostream>
+#include <fstream>
+#include <cstdio>
+#include <cstring>
 #include "bwm_video_site_io.h"
 #include "bwm_video_corr.h"
 #include <vgl/vgl_point_2d.h>
 #include <vgl/vgl_point_3d.h>
 #include <vsl/vsl_basic_xml_element.h>
-#include <sstream>
-#include <iostream>
-#include <fstream>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <cstdio>
-#include <cstring>
 // --------------
 // --- PARSER ---
 // --------------

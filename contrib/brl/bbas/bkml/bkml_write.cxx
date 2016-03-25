@@ -1,11 +1,11 @@
+#include <iostream>
+#include <cstdio>
+#include <iomanip>
 #include "bkml_write.h"
 //:
 // \file
 #include <vcl_compiler.h>
-#include <iostream>
-#include <cstdio>
 #include <vcl_cstdio.h>
-#include <iomanip>
 
 std::string rgb_color_to_hex_color(int alpha, int rNum, int gNum, int bNum)
 {

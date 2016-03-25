@@ -12,14 +12,13 @@
 //  G.Tunali 8/2010 Removed dependency on vimt
 // \endverbatim
 
+#include <iostream>
 #include <vbl/vbl_ref_count.h>
 #include <vgl/algo/vgl_h_matrix_2d.h>
 #include <vnl/vnl_double_3x3.h>
 #include <vnl/vnl_double_2x3.h>
 #include <vsl/vsl_binary_io.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 
 //: A quadrilateral region of an image
 class ihog_transform_2d : public vgl_h_matrix_2d<double>, public vbl_ref_count

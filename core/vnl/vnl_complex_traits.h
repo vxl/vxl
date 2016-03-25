@@ -15,8 +15,8 @@
 // \endverbatim
 //-----------------------------------------------------------------------------
 
-#include <vcl_compiler.h>
 #include <complex>
+#include <vcl_compiler.h>
 
 template <class T> // the primary template is empty, by design.
 struct vnl_complex_traits;

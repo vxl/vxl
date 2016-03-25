@@ -16,11 +16,11 @@
 //
 //-------------------------------------------------------------------------
 
-#include <vcl_compiler.h>
 #include <iostream>
 #include <set>
 #include <string>
 #include <sstream>
+#include <vcl_compiler.h>
 #include <vcl_cassert.h>
 #include <vgl/vgl_point_3d.h>
 

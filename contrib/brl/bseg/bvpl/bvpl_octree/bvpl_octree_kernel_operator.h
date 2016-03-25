@@ -12,12 +12,11 @@
 //   <none yet>
 // \endverbatim
 
+#include <iostream>
 #include <bvpl/kernels/bvpl_kernel.h>
 #include <boct/boct_tree.h>
 #include <boxm/boxm_scene.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 
 template<class T_data>
 class bvpl_octree_kernel_operator

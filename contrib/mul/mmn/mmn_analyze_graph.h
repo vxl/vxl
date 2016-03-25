@@ -6,11 +6,11 @@
 // \brief Analyze a graph to deduce the dependency order.
 // \author Tim Cootes
 
+#include <iostream>
+#include <vector>
 #include <mmn/mmn_arc.h>
 #include <mmn/mmn_dependancy.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <vector>
 
 //: Given a graph with n.size() nodes and arc.size() arcs, deduce dependencies
 //  If returns true, then dep is an ordered list of dependencies

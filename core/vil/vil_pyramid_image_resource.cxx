@@ -2,13 +2,13 @@
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
+#include <cstring>
+#include <vector>
 #include "vil_pyramid_image_resource.h"
 //:
 // \file
 #include <vcl_cassert.h>
-#include <cstring>
 #include <vcl_compiler.h>
-#include <vector>
 #include <vil/vil_property.h>
 #include <vil/vil_convert.h>
 #include <vil/vil_blocked_image_resource.h>

@@ -2,11 +2,10 @@
 #define boct_tree_hxx_
 //:
 // \file
-#include "boct_tree.h"
-#include <vcl_compiler.h>
 #include <iostream>
 #include <cmath>
-#include <iostream>
+#include "boct_tree.h"
+#include <vcl_compiler.h>
 #include <vgl/vgl_box_3d.h>
 #include <vgl/vgl_intersection.h>
 #include <vgl/io/vgl_io_box_3d.h>

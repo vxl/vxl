@@ -6,9 +6,9 @@
 // \date 2004-03-12
 //  Ming: General 3D Utilities
 
-#include <vcl_compiler.h>
 #include <iostream>
 #include <sstream>
+#include <vcl_compiler.h>
 
 #include "bmsh3d_fuzzy_boolean.h"
 

@@ -11,6 +11,8 @@
 // \endverbatim
 //
 //-----------------------------------------------------------------------------
+#include <iostream>
+#include <vector>
 #include <vnl/vnl_matrix_fixed.h>
 #include <vgl/vgl_polygon.h>
 #include <vsol/vsol_point_2d_sptr.h>
@@ -20,8 +22,6 @@
 #include <vtol/vtol_face_2d_sptr.h>
 #include <vtol/vtol_one_chain_sptr.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <vector>
 
 class btol_face_algs
 {

@@ -1,12 +1,12 @@
 // This is gel/vmal/vmal_lines_correlation.cxx
+#include <iostream>
+#include <cmath>
+#include <cstdlib>
 #include "vmal_lines_correlation.h"
 
 #include <vnl/vnl_double_2.h>
 #include <vnl/vnl_double_3x3.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <cmath>
-#include <cstdlib> // for std::abs(int)
 
 vmal_lines_correlation::vmal_lines_correlation():
 delta_(5),radius_(5.0)

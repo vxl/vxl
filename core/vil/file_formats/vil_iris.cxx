@@ -15,12 +15,12 @@
 //
 //-----------------------------------------------------------------------------
 
+#include <cstring>
+#include <iostream>
 #include "vil_iris.h"
 
 #include <vcl_cassert.h>
-#include <cstring> // for memcpy()
 #include <vcl_compiler.h>
-#include <iostream>
 
 #include <vil/vil_stream.h>
 #include <vil/vil_image_view.h>

@@ -1,9 +1,9 @@
 // This is mul/mbl/mbl_linear_interpolator.cxx
+#include <iostream>
+#include <limits>
 #include "mbl_linear_interpolator.h"
 
 #include <vcl_compiler.h>
-#include <iostream>
-#include <limits>
 #include <mbl/mbl_index_sort.h>
 
 

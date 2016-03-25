@@ -14,12 +14,11 @@
 // \endverbatim
 
 
+#include <iostream>
 #include <bvpl/kernels/bvpl_kernel.h>
 #include <boxm/boxm_scene.h>
 #include "bvpl_octree_kernel_operator.h"
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 
 //:A class operates a kernel on a boxm_block.
 // This class differes from bvpl_octree_kernel_operator in that it loads neighbor block to process blocks appropriately.

@@ -2,9 +2,8 @@
 // \file
 // \author Andy Miller
 // \date 26-Oct-2010
+#include <iostream>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 #include <testlib/testlib_test.h>
 #include <testlib/testlib_root_dir.h>
 #include <boxm2/basic/boxm2_array_1d.h>

@@ -1,11 +1,10 @@
 #ifndef vipl_test_driver_h_
 #define vipl_test_driver_h_
 
-#include <vil/vil_image_view.h>
 #include <string>
+#include <iostream>
+#include <vil/vil_image_view.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 #include <testlib/testlib_test.h>
 #include <vxl_config.h> // for vxl_byte
 

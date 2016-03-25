@@ -11,9 +11,9 @@
 //   <none yet>
 // \endverbatim
 
-#include <vcl_compiler.h>
 #include <iostream>
 #include <string>
+#include <vcl_compiler.h>
 
 class vidl_pro_utils
 {

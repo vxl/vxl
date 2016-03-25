@@ -2,14 +2,13 @@
 #define boxm2_batch_functors_h_
 //:
 // \file
+#include <iostream>
 #include <boxm2/cpp/algo/boxm2_cast_ray_function.h>
 #include <boxm2/cpp/algo/boxm2_mog3_grey_processor.h>
 #include <boxm2/cpp/algo/boxm2_gauss_grey_processor.h>
 #include <bsta/algo/bsta_sigma_normalizer.h>
 #include <boxm2/io/boxm2_stream_cache.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 
 //: accumulate seg_lengths and intensities over all rays that pass through a cell to compute normalized intensity later
 class boxm2_batch_update_pass0_functor

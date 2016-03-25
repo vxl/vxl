@@ -1,14 +1,14 @@
-#include "boxm2_scene.h"
-//:
-// \file
 #include <iostream>
 #include <string>
-#include <vcl_compiler.h>
-#include <iostream>
 #include <algorithm>
 #include <fstream>
 #include <sstream>
-
+#include <cmath>
+#include <stddef.h>
+#include "boxm2_scene.h"
+//:
+// \file
+#include <vcl_compiler.h>
 /* xml includes */
 #include <vsl/vsl_basic_xml_element.h>
 #include <vgl/xio/vgl_xio_point_3d.h>
@@ -42,7 +42,38 @@ boxm2_scene::boxm2_scene(std::string const& data_path, vgl_point_3d<double> cons
   id_ = boxm2_scene::get_count();
   boxm2_scene::get_count()++;
 }
-
+//create a scene with one block
+boxm2_scene::boxm2_scene(std::string const& scene_dir, std::string const& scene_name, std::string const& data_path, std::vector<std::string> const& prefixes,
+            vgl_box_3d<double> const& scene_box, double sub_block_len, int init_level,
+                         int max_level, double max_mb, double p_init, int n_illum_bins, int version){
+  num_illumination_bins_ = n_illum_bins;
+  version_ = version;
+  id_ = boxm2_scene::get_count();
+  boxm2_scene::get_count()++;
+  boxm2_block_id bid(0,0,0);
+  boxm2_block_metadata md;
+  md.id_ = bid;
+  vgl_point_3d<double> origin = scene_box.min_point();
+  unsigned dim_x = static_cast<unsigned>(std::ceil(scene_box.width()/sub_block_len));
+  unsigned dim_y = static_cast<unsigned>(std::ceil(scene_box.height()/sub_block_len));
+  unsigned dim_z = static_cast<unsigned>(std::ceil(scene_box.depth()/sub_block_len));
+  md.local_origin_ = origin;
+  md.sub_block_dim_ = vgl_vector_3d<double>(sub_block_len, sub_block_len, sub_block_len);
+  md.sub_block_num_ = vgl_vector_3d<unsigned>(dim_x, dim_y, dim_z);
+  md.init_level_ = init_level;
+  md.max_level_ = max_level;
+  md.max_mb_ = 400;
+  md.p_init_ = .001;
+  md.version_ = version;
+  blocks_[bid]=md;
+  appearances_ = prefixes;
+  this->set_local_origin(origin);
+  this->set_rpc_origin(origin);
+  vpgl_lvcs lvcs;
+  this->set_lvcs(lvcs);
+  this->set_xml_path(scene_dir + scene_name + ".xml");
+  this->set_data_path(scene_dir + data_path );
+}
 boxm2_scene::boxm2_scene(const char* buffer)
 {
   boxm2_scene_parser parser;

@@ -1,3 +1,6 @@
+#include <string>
+#include <vector>
+#include <iostream>
 #include <testlib/testlib_test.h>
 #include <vpdl/vpdl_mixture_of.h>
 #include <vpdl/vpdl_gaussian.h>
@@ -6,9 +9,6 @@
 #include <vnl/vnl_vector_fixed.h>
 #include <vnl/vnl_vector.h>
 #include <vcl_compiler.h>
-#include <string>
-#include <vector>
-#include <iostream>
 
 
 // function to sort by increasing weight

@@ -10,13 +10,12 @@
 //   <none yet>
 // \endverbatim
 
+#include <iostream>
 #include "brec_bayesian_propagation.h"
 #include <vil/vil_image_view.h>
 #include <vil/vil_copy.h>
 #include <bsta/bsta_joint_histogram.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 
 bool helper_function(double p_b_current, double p_f_current,
                      double p_b_current1, double p_f_current1,

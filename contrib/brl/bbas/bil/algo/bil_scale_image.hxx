@@ -4,11 +4,11 @@
 //:
 // \file
 
+#include <iostream>
+#include <cmath>
 #include "bil_scale_image.h"
 
 #include <vcl_compiler.h>
-#include <iostream>
-#include <cmath>
 #include <vcl_cassert.h>
 
 #include <vil/vil_math.h>

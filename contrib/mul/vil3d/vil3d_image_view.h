@@ -11,10 +11,10 @@
 
 #include <iosfwd>
 #include <string>
-#include <vcl_cassert.h>
-#include <vcl_compiler.h>
 #include <iostream>
 #include <cstddef>
+#include <vcl_cassert.h>
+#include <vcl_compiler.h>
 #include <vil3d/vil3d_image_view_base.h>
 #include <vil/vil_memory_chunk.h>
 #include <vil/vil_pixel_format.h>

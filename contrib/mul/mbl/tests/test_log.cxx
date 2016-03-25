@@ -3,10 +3,10 @@
 #include <fstream>
 #include <vector>
 #include <string>
-#include <vcl_compiler.h>
 #include <iostream>
 #include <cstddef>
 #include <iomanip>
+#include <vcl_compiler.h>
 #include <vsl/vsl_vector_io.h>
 #include <vsl/vsl_string_io.h>
 #include <mbl/mbl_log.h>

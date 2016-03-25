@@ -1,7 +1,6 @@
 // This is mul/vimt3d/tests/test_load.cxx
+#include <iostream>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 #include <vgl/vgl_point_3d.h>
 #include <vil3d/vil3d_load.h>
 #include <vimt3d/vimt3d_load.h>

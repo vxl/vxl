@@ -1,9 +1,9 @@
 #ifndef boxm2_vecf_ocl_composite_head_model_h_
 #define boxm2_vecf_ocl_composite_head_model_h_
 
-#include <vcl_compiler.h>
 #include <iostream>
 #include <string>
+#include <vcl_compiler.h>
 
 #include <boxm2/boxm2_scene.h>
 #include "../boxm2_vecf_orbit_scene.h"

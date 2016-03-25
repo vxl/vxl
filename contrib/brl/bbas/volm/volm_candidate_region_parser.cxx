@@ -1,15 +1,14 @@
 //:
 // \file
-#include "volm_candidate_region_parser.h"
-//
 #include <sstream>
 #include <iostream>
 #include <cstdio>
 #include <cstring>
-#include <vcl_compiler.h>
-#include <iostream>
 #include <algorithm>
-#include <cstddef> // for std::size_t
+#include <cstddef>
+#include "volm_candidate_region_parser.h"
+//
+#include <vcl_compiler.h>
 
 template <typename T>
 void convert(const char* t, T& d)

@@ -1,10 +1,10 @@
+#include <iostream>
+#include <iomanip>
 #include "vgl_h_matrix_1d_compute_optimize.h"
 #include <vgl/algo/vgl_h_matrix_1d_compute_linear.h>
 
 #include <vcl_cassert.h>
-#include <iostream>
 #include <vcl_compiler.h>
-#include <iomanip>
 
 #include <vnl/vnl_least_squares_function.h>
 #include <vnl/algo/vnl_levenberg_marquardt.h>

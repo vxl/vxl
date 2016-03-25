@@ -1,11 +1,10 @@
 // This is mul/m23d/tests/test_correction_matrix_error.cxx
-#include <testlib/testlib_test.h>
 #include <iostream>
+#include <cmath>
+#include <testlib/testlib_test.h>
 #include <m23d/m23d_correction_matrix_error.h>
 #include <m23d/m23d_make_ortho_projection.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <cmath>
 #include <vnl/vnl_random.h>
 #include <m23d/m23d_rotation_matrix.h>
 #include <m23d/m23d_set_q_constraint.h>

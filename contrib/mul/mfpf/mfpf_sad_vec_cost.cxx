@@ -1,3 +1,6 @@
+#include <iostream>
+#include <cmath>
+#include <cstdlib>
 #include "mfpf_sad_vec_cost.h"
 //:
 // \file
@@ -6,10 +9,7 @@
 
 #include <vsl/vsl_binary_loader.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <cmath>
 #include <vcl_cassert.h>
-#include <cstdlib>
 
 #include <vnl/io/vnl_io_vector.h>
 

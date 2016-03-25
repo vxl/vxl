@@ -11,9 +11,9 @@
 // \author Matt Leotta
 // \date 19 Dec 2005
 
+#include <string>
 #include "vidl_ostream.h"
 #include <vcl_compiler.h>
-#include <string>
 
 //:A video output stream to a list of images
 class vidl_image_list_ostream

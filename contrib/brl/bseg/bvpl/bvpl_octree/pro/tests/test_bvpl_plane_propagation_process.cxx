@@ -1,3 +1,5 @@
+#include <iostream>
+#include <vector>
 #include <testlib/testlib_test.h>
 //:
 // \file
@@ -32,8 +34,6 @@
 #include <vul/vul_file.h>
 
 #include <vcl_compiler.h>
-#include <iostream>
-#include <vector>
 
 static void test_bvpl_plane_propagation_process()
 {

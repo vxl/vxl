@@ -1,10 +1,9 @@
 // This is brl/bbas/bwm/reg/tests/test_processor.cxx
+#include <iostream>
+#include <string>
 #include <testlib/testlib_test.h>
 
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
-#include <string>
 #include <vnl/vnl_numeric_traits.h>
 #include <vgl/vgl_point_2d.h>
 #include <vgl/vgl_point_3d.h>

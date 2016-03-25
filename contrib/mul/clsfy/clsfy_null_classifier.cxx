@@ -10,13 +10,12 @@
 // \author iscott
 // \date    25 Aug 2009
 
-#include "clsfy_null_classifier.h"
-
 #include <iostream>
 #include <string>
-#include <vcl_compiler.h>
-#include <iostream>
 #include <algorithm>
+#include "clsfy_null_classifier.h"
+
+#include <vcl_compiler.h>
 #include <vnl/vnl_math.h>
 
 

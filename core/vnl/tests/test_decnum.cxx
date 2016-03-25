@@ -1,7 +1,7 @@
 #include <iostream>
 #include <sstream>
-#include <vcl_compiler.h>
 #include <iomanip>
+#include <vcl_compiler.h>
 #include <vnl/vnl_decnum.h>
 #include <testlib/testlib_test.h>
 

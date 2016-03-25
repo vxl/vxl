@@ -1,13 +1,12 @@
 //This is brl/bpro/core/brad_pro/processes/brad_estimate_reflectance_process.cxx
 //:
 // \file
+#include <string>
+#include <iostream>
 #include <bprb/bprb_func_process.h>
 #include <bprb/bprb_parameters.h>
 #include <brdb/brdb_value.h>
-#include <string>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 #include <vil/vil_image_view_base.h>
 #include <vil/vil_image_view.h>
 #include <brad/brad_image_metadata.h>

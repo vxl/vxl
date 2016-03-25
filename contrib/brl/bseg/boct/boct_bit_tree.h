@@ -13,14 +13,14 @@
 //   <none yet>
 // \endverbatim
 
-#include <vgl/vgl_point_3d.h>
-#include <vgl/vgl_box_3d.h>
-#include <vcl_compiler.h>
 #include <iostream>
 #include <bitset>
 #include <iosfwd>
 #include <vector>
-#include <cmath> // for std::pow()
+#include <cmath>
+#include <vgl/vgl_point_3d.h>
+#include <vgl/vgl_box_3d.h>
+#include <vcl_compiler.h>
 
 class boct_bit_tree
 {

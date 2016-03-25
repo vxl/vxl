@@ -1,7 +1,7 @@
-#include "bvrml_write.h"
-#include <vcl_compiler.h>
 #include <iostream>
 #include <cmath>
+#include "bvrml_write.h"
+#include <vcl_compiler.h>
 
 unsigned bvrml_color::heatmap_classic_size = 256;
 unsigned char bvrml_color::heatmap_classic[256][3] = {

@@ -1,8 +1,7 @@
+#include <iostream>
 #include <testlib/testlib_test.h>
 #include <bcvr/bcvr_cvmatch.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 
 MAIN_ARGS(test_cvmatch)
 {

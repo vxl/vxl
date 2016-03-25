@@ -1,8 +1,8 @@
 #include <iostream>
-#include <vcl_compiler.h>
 #include <iomanip>
 #include <sstream>
-#include <limits> // for infinity()
+#include <limits>
+#include <vcl_compiler.h>
 #include <vil/vil_na.h>
 #include <testlib/testlib_test.h>
 

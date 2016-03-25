@@ -1,14 +1,13 @@
 // This is brl/bseg/sdet/sdet_contour.cxx
+#include <iostream>
+#include <cstdlib>
+#include <vector>
+#include <cmath>
+#include <algorithm>
 #include "sdet_contour.h"
 //:
 // \file
-#include <iostream>
-#include <cstdlib>   // for std::abs(int) and std::qsort()
-#include <vector>
-#include <cmath>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <algorithm> // for std::max()
 #include <vul/vul_timer.h>
 #include <vxl_config.h>
 #include <vnl/vnl_math.h> // for sqrt2

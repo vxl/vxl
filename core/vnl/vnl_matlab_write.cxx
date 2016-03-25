@@ -6,12 +6,12 @@
 // \file
 // \author fsm
 
+#include <iostream>
+#include <cstring>
+#include <complex>
 #include "vnl_matlab_write.h"
 
-#include <iostream>
-#include <cstring>  // strlen()
 #include <vcl_compiler.h>
-#include <complex>
 #include <vnl/vnl_matlab_header.h>
 
 #include <vxl_config.h>

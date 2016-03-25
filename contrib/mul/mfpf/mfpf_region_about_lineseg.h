@@ -6,10 +6,10 @@
 // \brief Region centred on line segment between two points
 // \author Tim Cootes
 
-#include <mfpf/mfpf_region_definer.h>
-#include <vcl_compiler.h>
 #include <iostream>
 #include <iosfwd>
+#include <mfpf/mfpf_region_definer.h>
+#include <vcl_compiler.h>
 
 //: Region centred on a line between two points.
 //  Region defined by two points, p0=pts[i0], p1=pts[i1]

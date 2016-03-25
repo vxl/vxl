@@ -4,11 +4,11 @@
 //:
 // \file
 
+#include <cmath>
+#include <iostream>
 #include "vgl_homg_plane_3d.h"
 #include <vcl_cassert.h>
 #include <vcl_compiler.h>
-#include <cmath> // for std::sqrt and std::fabs(double)
-#include <iostream>
 #include <vgl/vgl_plane_3d.h>
 #include <vgl/vgl_homg_point_3d.h>
 #include <vgl/vgl_homg_line_3d_2_points.h>

@@ -1,9 +1,9 @@
+#include <iostream>
+#include <sstream>
 #include "boxm2_block_id.h"
 //:
 // \file
 #include <vcl_compiler.h>
-#include <iostream>
-#include <sstream>
 
 std::string boxm2_block_id::to_string() const
 {

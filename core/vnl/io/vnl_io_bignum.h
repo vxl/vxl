@@ -9,10 +9,10 @@
 // \author Ian Scott
 // \date 10-Oct-2001
 
+#include <iosfwd>
 #include <vsl/vsl_fwd.h>
 #include <vnl/vnl_bignum.h>
 #include <vcl_compiler.h>
-#include <iosfwd>
 
 //: Binary save vnl_bignum to stream.
 //  \relatesalso vnl_bignum

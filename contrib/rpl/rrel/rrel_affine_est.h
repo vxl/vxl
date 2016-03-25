@@ -7,13 +7,13 @@
 // \date Oct 2004
 // Class to maintain data and optimization model for affine transformation estimation
 
+#include <iostream>
+#include <vector>
 #include <rrel/rrel_estimation_problem.h>
 #include <rrel/rrel_linear_regression.h>
 #include <vgl/vgl_fwd.h>
 #include <vnl/vnl_fwd.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <vector>
 
 class rrel_affine_est : public rrel_estimation_problem {
 public:

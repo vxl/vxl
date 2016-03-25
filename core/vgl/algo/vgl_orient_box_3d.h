@@ -15,12 +15,12 @@
 //   2010-01-18 Peter Vanroose - added constructor from 4 corner points
 // \endverbatim
 
+#include <vector>
+#include <iosfwd>
 #include <vgl/vgl_box_3d.h>
 #include <vgl/vgl_point_3d.h>
 #include <vnl/vnl_quaternion.h>
-#include <vector>
 #include <vcl_compiler.h>
-#include <iosfwd>
 
 template <class Type>
 class vgl_orient_box_3d

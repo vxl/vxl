@@ -1,14 +1,13 @@
 // This is oxl/mvl/HMatrix1DCompute.cxx
+#include <iostream>
+#include <cstdlib>
+#include <vector>
 #include "HMatrix1DCompute.h"
 
 #include <vcl_compiler.h>
-#include <iostream>
-#include <cstdlib>
-#include <iostream>
 
 #include <mvl/HMatrix1D.h>
 #include <vgl/vgl_homg_point_1d.h>
-#include <vector>
 
 //--------------------------------------------------------------------------------
 //

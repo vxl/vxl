@@ -4,16 +4,15 @@
 // \brief Parse in a set of arc definitions using names of nodes
 // \author Martin Roberts
 
-#include "mmn_parse_arcs.h"
-#include <mbl/mbl_exception.h>
-#include <mbl/mbl_parse_block.h>
 #include <sstream>
 #include <map>
 #include <iostream>
 #include <iterator>
-#include <vcl_compiler.h>
-#include <iostream>
 #include <algorithm>
+#include "mmn_parse_arcs.h"
+#include <mbl/mbl_exception.h>
+#include <mbl/mbl_parse_block.h>
+#include <vcl_compiler.h>
 
 
 void  mmn_parse_arcs(std::istream& is,

@@ -1,11 +1,10 @@
 //:
 // \file
+#include <iostream>
 #include <testlib/testlib_test.h>
 #include <bsta/bsta_histogram.h>
 #include <bsta/bsta_otsu_threshold.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 
 //: Test bsta otsu_thresholds
 void test_otsu_threshold()

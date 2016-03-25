@@ -8,10 +8,10 @@
 // \date   April 10, 2009
 //
 
+#include <vector>
 #include <wx/panel.h>
 #include <vgui/vgui_observable.h>
 #include <vcl_compiler.h>
-#include <vector>
 
 // forward declarations
 class wxBitmapButton;

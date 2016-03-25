@@ -1,12 +1,12 @@
 #ifndef bwm_observer_proj_cam_h_
 #define bwm_observer_proj_cam_h_
 
+#include <iostream>
+#include <iosfwd>
 #include "bwm_observer_cam.h"
 //:
 // \file
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iosfwd>
 #include <vgl/vgl_fwd.h>
 #include <vpgl/vpgl_proj_camera.h>
 #include <bmsh3d/bmsh3d_vertex.h>

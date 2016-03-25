@@ -1,4 +1,6 @@
 // This is oxl/xcv/xcv_axes_tableau.cxx
+#include <iostream>
+#include <cmath>
 #include "xcv_axes_tableau.h"
 //:
 // \file
@@ -11,8 +13,6 @@
 // \endverbatim
 
 #include <vcl_compiler.h>
-#include <iostream>
-#include <cmath>
 #include <vul/vul_sprintf.h>
 
 #include <vgui/vgui.h>

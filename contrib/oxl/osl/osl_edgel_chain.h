@@ -9,9 +9,9 @@
 // .FILE osl_edgel_chain.cxx
 // \author fsm
 
-#include <vcl_compiler.h>
 #include <iostream>
 #include <iosfwd>
+#include <vcl_compiler.h>
 
 struct osl_edgel_chain
 {

@@ -1,17 +1,16 @@
 // This is mul/mbl/mbl_read_multi_props.cxx
+#include <sstream>
+#include <iostream>
+#include <string>
+#include <cctype>
+#include <utility>
+#include <iterator>
 #include "mbl_read_multi_props.h"
 //:
 // \file
 
 #include <vsl/vsl_indent.h>
-#include <sstream>
-#include <iostream>
-#include <string>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <cctype>
-#include <utility>
-#include <iterator>
 
 #include <mbl/mbl_parse_block.h>
 #include <mbl/mbl_exception.h>

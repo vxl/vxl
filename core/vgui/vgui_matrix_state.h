@@ -15,8 +15,8 @@
 //   FSM Renamed method names for consistency with projection_inspector.
 // \endverbatim
 
-#include <vcl_compiler.h>
 #include <iosfwd>
+#include <vcl_compiler.h>
 #include <vgui/vgui_gl.h>
 #include <vnl/vnl_fwd.h>
 

@@ -1,9 +1,8 @@
 // This is mul/vimt/tests/test_dog_pyramid_builder_2d.cxx
+#include <iostream>
 #include <testlib/testlib_test.h>
 
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 #include <vpl/vpl.h> // vpl_unlink()
 #include <vimt/vimt_dog_pyramid_builder_2d.h>
 #include <vimt/vimt_image_pyramid.h>

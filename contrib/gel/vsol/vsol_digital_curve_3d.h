@@ -9,16 +9,16 @@
 // \author Peter Vanroose
 // \date   24 September 2004
 
+#include <vector>
+#include <string>
+#include <iostream>
+#include <iosfwd>
 #include <vgl/vgl_fwd.h>
 #include <vsl/vsl_binary_io.h>
 #include <vsol/vsol_curve_3d.h>
 #include <vsol/vsol_point_3d_sptr.h>
 #include <vsol/vsol_digital_curve_3d_sptr.h>
-#include <vector>
-#include <string>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iosfwd>
 
 //: Digital curve class, part of the vsol_curve_3d hierarchy
 // The curve is made up of vsol points and has no addition data members

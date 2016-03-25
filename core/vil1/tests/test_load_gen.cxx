@@ -1,6 +1,6 @@
 // This is core/vil1/tests/test_load_gen.cxx
-#include <vcl_compiler.h>
 #include <vector>
+#include <vcl_compiler.h>
 #include <vxl_config.h>
 #include <vil1/vil1_load.h>
 #include <vil1/vil1_rgb.h>

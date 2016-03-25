@@ -23,12 +23,12 @@
 //   (none yet)
 // \endverbatim
 
+#include <iostream>
+#include <iosfwd>
 #include "bsta_distribution.h"
 #include <vnl/vnl_gamma.h>
 #include <vcl_cassert.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iosfwd>
 
 // A Weibull distribution does not have a natural, unique extension to
 // multi-dimensional variables. However, various approaches do exist

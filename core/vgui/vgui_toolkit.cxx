@@ -7,13 +7,13 @@
 // \author fsm
 // \brief  See vgui_toolkit.h for a description of this file.
 
+#include <iostream>
+#include <cstdlib>
+#include <algorithm>
 #include "vgui_toolkit.h"
 
-#include <iostream>
 #include <vcl_compiler.h>
-#include <cstdlib> // for std::exit()
 #include <vcl_cassert.h>
-#include <algorithm>
 
 #include <vul/vul_trace.h>
 

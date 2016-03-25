@@ -6,9 +6,9 @@
 // \author Chuck Stewart
 // \date 25 Nov 2002
 
-#include <vcl_compiler.h>
 #include <iostream>
 #include <vector>
+#include <vcl_compiler.h>
 
 #include "rgrl_initializer.h"
 #include "rgrl_estimator_sptr.h"

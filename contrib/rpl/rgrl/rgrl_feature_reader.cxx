@@ -4,6 +4,8 @@
 // \author Gehua yang
 // \date Aug 04 2004
 
+#include <iostream>
+#include <string>
 #include "rgrl_feature_reader.h"
 #include <rgrl/rgrl_feature_point.h>
 #include <rgrl/rgrl_feature_landmark.h>
@@ -12,9 +14,6 @@
 
 #include <rgrl/rgrl_util.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
-#include <string>
 #include <vcl_compiler.h>
 
 // initialize the static variables

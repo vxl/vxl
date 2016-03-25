@@ -1,4 +1,5 @@
 // This is core/vgui/vgui_adaptor.cxx
+#include <iostream>
 #include "vgui_adaptor.h"
 //:
 // \file
@@ -7,7 +8,6 @@
 
 #include <vcl_cassert.h>
 #include <vcl_compiler.h>
-#include <iostream>
 
 #include <vgui/vgui_gl.h>
 

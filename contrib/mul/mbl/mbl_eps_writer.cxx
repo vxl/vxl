@@ -1,3 +1,5 @@
+#include <iostream>
+#include <algorithm>
 #include "mbl_eps_writer.h"
 //:
 // \file
@@ -7,8 +9,6 @@
 #include <vil/vil_plane.h>
 #include <vil/vil_crop.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <algorithm>
 #include <vcl_cassert.h>
 
 //=======================================================================

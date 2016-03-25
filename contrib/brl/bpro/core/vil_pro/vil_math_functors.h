@@ -10,9 +10,9 @@
 //  Modifications
 // \endverbatim
 //
-#include <vcl_compiler.h>
 #include <iostream>
 #include <cmath>
+#include <vcl_compiler.h>
 
 //: Functor class to compute (1-x) - useful for probability calculations
 // Here not means the log of the probability of not the predicate

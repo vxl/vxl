@@ -6,12 +6,12 @@
 // \brief Given gradient image, compute magnitude and zero any non-maximal values
 // \author Tim Cootes
 
+#include <iostream>
+#include <cmath>
 #include "vil3d_suppress_non_max_edges.h"
 #include <vil3d/algo/vil3d_fill_border.h>
 #include <vil3d/vil3d_trilin_interp.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <cmath>
 #include <vcl_cassert.h>
 
 

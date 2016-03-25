@@ -6,13 +6,13 @@
 // \file
 // \author fsm
 
+#include <iostream>
+#include <cmath>
+#include <cstdlib>
 #include "mvl_psi.h"
 
 #include <vcl_compiler.h>
-#include <iostream>
-#include <cmath>
 #include <vcl_cassert.h>
-#include <cstdlib>
 
 #if 0
 # define mvl_psi_temp_name(l, r) U l = r

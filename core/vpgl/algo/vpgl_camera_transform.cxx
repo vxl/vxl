@@ -1,11 +1,11 @@
+#include <iostream>
+#include <limits>
 #include "vpgl_camera_transform.h"
 //:
 // \file
 
 
-#include <iostream>
 #include <vcl_compiler.h>
-#include <limits>
 #include <vpgl/algo/vpgl_camera_compute.h>
 #include <vgl/vgl_box_3d.h>
 #include <vnl/algo/vnl_levenberg_marquardt.h>

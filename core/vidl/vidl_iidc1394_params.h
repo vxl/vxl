@@ -16,9 +16,9 @@
 // they should work for any istream that follows this
 // specification.
 
-#include <vcl_compiler.h>
 #include <string>
 #include <vector>
+#include <vcl_compiler.h>
 #include "vidl_pixel_format.h"
 
 //: A parameters struct for IIDC 1394 camera streams

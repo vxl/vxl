@@ -12,12 +12,11 @@
 //   <none yet>
 // \endverbatim
 
+#include <iostream>
 #include <boxm/boxm_scene.h>
 #include <boxm/sample/boxm_sample.h>
 #include <boxm/boxm_apm_traits.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 
 template<boxm_apm_type APM_MODEL>
 class boxm_split_sample

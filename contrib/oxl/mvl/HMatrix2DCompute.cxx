@@ -1,13 +1,12 @@
+#include <iostream>
+#include <cstdlib>
+#include <vector>
 #include "HMatrix2DCompute.h"
 
 #include <vcl_compiler.h>
-#include <iostream>
-#include <cstdlib>
-#include <iostream>
 
 #include <mvl/HMatrix2D.h>
 #include <mvl/PairMatchSetCorner.h>
-#include <vector>
 
 bool
 HMatrix2DCompute::compute_p(PointArray const&p1,

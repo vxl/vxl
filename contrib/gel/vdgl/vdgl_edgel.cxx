@@ -3,11 +3,10 @@
 #pragma implementation
 #endif
 
+#include <iostream>
 #include "vdgl_edgel.h"
 #include <vgl/vgl_point_2d.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 
 vdgl_edgel::vdgl_edgel( const double x, const double y, const double grad, const double theta )
   : p_( x, y), grad_( grad), theta_( theta)

@@ -11,6 +11,10 @@
 //   <none yet>
 // \endverbatim
 
+#include <string>
+#include <iostream>
+#include <iosfwd>
+#include <set>
 #include <boxm/boxm_scene_base.h>
 #include <boxm/boxm_block.h>
 #include <boxm/sample/boxm_sample.h>
@@ -20,11 +24,7 @@
 #include <vbl/vbl_array_3d.h>
 #include <vpgl/vpgl_lvcs.h>
 #include <boct/boct_tree.h>
-#include <string>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iosfwd>
-#include <set>
 #include <vcl_cassert.h>
 
 class boxm_scene_parser;

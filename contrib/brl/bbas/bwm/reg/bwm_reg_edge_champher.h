@@ -17,10 +17,9 @@
 // \endverbatim
 //
 //-----------------------------------------------------------------------------
-#include <vcl_compiler.h>
-#include <iostream>
 #include <iostream>
 #include <vector>
+#include <vcl_compiler.h>
 #include <vbl/vbl_array_2d.h>
 #include <vnl/vnl_numeric_traits.h>
 #include <vsol/vsol_digital_curve_2d.h>

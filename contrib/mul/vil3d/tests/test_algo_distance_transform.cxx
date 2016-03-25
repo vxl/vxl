@@ -1,10 +1,9 @@
-#include <testlib/testlib_test.h>
-#include <iostream>
-#include <vcl_compiler.h>
 #include <iostream>
 #include <algorithm>
 #include <limits>
 #include <vector>
+#include <testlib/testlib_test.h>
+#include <vcl_compiler.h>
 #include <vil3d/algo/vil3d_distance_transform.h>
 #include <vil3d/vil3d_print.h>
 #include <vil/vil_rgb.h>

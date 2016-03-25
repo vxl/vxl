@@ -1,9 +1,8 @@
 //:
 // \file
 #include <iostream>
-#include <vcl_compiler.h>
-#include <iostream>
 #include <cmath>
+#include <vcl_compiler.h>
 #include <mbl/mbl_stats_1d.h>
 #include <vnl/vnl_vector.h>
 #include <vnl/vnl_random.h>

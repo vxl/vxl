@@ -3,13 +3,13 @@
 //:
 // \file
 //
+#include <iostream>
+#include <cstring>
 #include <bstm/basic/bstm_block_id.h>
 #include <boxm2/basic/boxm2_array_1d.h>
 #include <bstm/bstm_data_traits.h>
 #include <bstm/bstm_block_metadata.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <cstring>
 
 //smart ptr includes
 #include <vbl/vbl_ref_count.h>

@@ -1,7 +1,6 @@
+#include <iostream>
 #include "bocl_buffer.h"
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 
 bocl_buffer::bocl_buffer(const cl_context& context)
 : context_(context)

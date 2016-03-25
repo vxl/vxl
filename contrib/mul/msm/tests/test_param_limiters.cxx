@@ -4,6 +4,7 @@
 //  Copyright: (C) 2010 The University of Manchester
 //
 //=======================================================================
+#include <iostream>
 #include <testlib/testlib_test.h>
 //:
 // \file
@@ -12,8 +13,6 @@
 
 #include <msm/msm_ellipsoid_limiter.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 
 //=======================================================================
 

@@ -5,11 +5,11 @@
 // \brief Container for vil_image_view<T> + transform
 // \author Tim Cootes
 
+#include <iostream>
+#include <string>
 #include "vimt3d_image_3d_of.h"
 
 #include <vcl_compiler.h>
-#include <iostream>
-#include <string>
 #include <vcl_cassert.h>
 #include <vsl/vsl_indent.h>
 #include <vsl/vsl_vector_io.h>

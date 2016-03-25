@@ -5,9 +5,8 @@
 // \brief
 // \date September 11, 2006
 
+#include <iostream>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 #include <vul/vul_timer.h>
 
 #include <bmsh3d/algo/bmsh3d_fileio.h>

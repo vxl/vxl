@@ -11,9 +11,9 @@
 //     10 Nov 2008 Created (A. Garrido)
 //\endverbatim
 
-#include <vcl_compiler.h>
 #include <string>
 #include <vector>
+#include <vcl_compiler.h>
 
 extern "C" {
 //#include <asm/types.h>          /* for videodev2.h */

@@ -17,11 +17,10 @@
 // \endverbatim
 
 #include <iostream>
-
 #include <limits>
-#include <vcl_compiler.h>
-#include <iostream>
 #include <cmath>
+
+#include <vcl_compiler.h>
 
 class bsl_opinion
 {

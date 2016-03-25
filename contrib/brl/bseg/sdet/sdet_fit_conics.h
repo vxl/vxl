@@ -20,9 +20,9 @@
 // \endverbatim
 //
 //-------------------------------------------------------------------------
-#include <vcl_compiler.h>
 #include <iostream>
 #include <vector>
+#include <vcl_compiler.h>
 #include <vgl/algo/vgl_fit_conics_2d.h>
 #include <vsol/vsol_conic_2d_sptr.h>
 #include <vtol/vtol_edge_2d_sptr.h>

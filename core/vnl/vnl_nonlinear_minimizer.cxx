@@ -6,10 +6,10 @@
 // \file
 // \author Andrew W. Fitzgibbon, Oxford RRG, 22 Aug 99
 
-#include "vnl_nonlinear_minimizer.h"
 #include <iostream>
-#include <vcl_compiler.h>
 #include <iomanip>
+#include "vnl_nonlinear_minimizer.h"
+#include <vcl_compiler.h>
 
 //: Default ctor sets verbosity etc.
 vnl_nonlinear_minimizer::vnl_nonlinear_minimizer()

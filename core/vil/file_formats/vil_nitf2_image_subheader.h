@@ -6,8 +6,8 @@
 //:
 // \file
 
-#include <vcl_compiler.h>
 #include <vector>
+#include <vcl_compiler.h>
 
 #include "vil_nitf2_field_sequence.h"
 #include "vil_nitf2_classification.h"

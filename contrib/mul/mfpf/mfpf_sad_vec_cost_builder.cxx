@@ -1,3 +1,6 @@
+#include <iostream>
+#include <algorithm>
+#include <sstream>
 #include "mfpf_sad_vec_cost_builder.h"
 //:
 // \file
@@ -9,9 +12,6 @@
 #include <vul/vul_string.h>
 #include <vcl_cassert.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <algorithm>
-#include <sstream>
 
 #include <mbl/mbl_parse_block.h>
 #include <mbl/mbl_read_props.h>

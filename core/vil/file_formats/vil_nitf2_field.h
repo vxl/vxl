@@ -7,9 +7,9 @@
 
 #include <vector>
 #include <iostream>
+#include <string>
 // not used? #include <sstream>
 #include <vcl_compiler.h>
-#include <string>
 
 class vil_nitf2_date_time;
 class vil_nitf2_location;

@@ -1,3 +1,6 @@
+#include <iostream>
+#include <cmath>
+#include <limits>
 #include "bvgl_gen_cylinder.h"
 #include <bvrml/bvrml_write.h>
 #include <vgl/vgl_intersection.h>
@@ -5,9 +8,6 @@
 #include <vgl/vgl_box_3d.h>
 #include <vgl/vgl_bounding_box.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <cmath>
-#include <limits>
 bvgl_gen_cylinder
 ::bvgl_gen_cylinder(vgl_cubic_spline_3d<double> const& axis,
                     std::vector<bvgl_cross_section> const& cross_sects,
@@ -184,7 +184,7 @@ std::vector<unsigned> bvgl_gen_cylinder::cross_section_contains(vgl_point_3d<dou
    return true;
 }
 
-double bvgl_gen_cylinder::surface_distance(vgl_point_3d<double> const& p, double dist_thresh) const{
+double bvgl_gen_cylinder::distance(vgl_point_3d<double> const& p, double dist_thresh) const{
   vgl_point_3d<double> cp;
   if(!this->closest_point(p, cp, dist_thresh))
     return std::numeric_limits<double>::max();

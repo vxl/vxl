@@ -8,9 +8,9 @@
 // \date   25 Oct 1999
 // \brief  See vgui_dialog_impl.h for a description of this file
 
+#include <iostream>
 #include "vgui_dialog_impl.h"
 #include <vcl_compiler.h>
-#include <iostream>
 #include <vcl_cassert.h>
 #include <vgui/internals/vgui_simple_field.h>
 #include <vgui/internals/vgui_string_field.h>

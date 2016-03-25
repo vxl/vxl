@@ -18,9 +18,9 @@
 
 
 #include <vector>
-#include <vcl_compiler.h>
 #include <iostream>
 #include <string>
+#include <vcl_compiler.h>
 #include <vbl/vbl_ref_count.h>
 #include <brdb/brdb_tuple_sptr.h>
 #include <brdb/brdb_relation_sptr.h>

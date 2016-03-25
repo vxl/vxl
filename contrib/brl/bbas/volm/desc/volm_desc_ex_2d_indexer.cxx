@@ -1,7 +1,7 @@
-#include "volm_desc_ex_2d_indexer.h"
-#include <vcl_compiler.h>
 #include <iostream>
 #include <algorithm>
+#include "volm_desc_ex_2d_indexer.h"
+#include <vcl_compiler.h>
 #include <vil/vil_load.h>
 
 std::string& volm_desc_ex_2d_indexer::get_name()

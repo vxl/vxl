@@ -26,9 +26,9 @@
 // \endverbatim
 
 #include <vector>
-#include <vcl_compiler.h>
 #include <iostream>
 #include <cmath>
+#include <vcl_compiler.h>
 #include <vil/vil_image_view.h>
 #include <vnl/vnl_math.h>
 

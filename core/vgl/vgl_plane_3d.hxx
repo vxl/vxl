@@ -4,6 +4,8 @@
 //:
 // \file
 
+#include <cmath>
+#include <iostream>
 #include "vgl_plane_3d.h"
 #include <vgl/vgl_homg_plane_3d.h>
 #include <vgl/vgl_point_3d.h>
@@ -13,9 +15,7 @@
 #include <vgl/vgl_distance.h>
 #include <vgl/vgl_tolerance.h>
 #include <vcl_compiler.h>
-#include <cmath>
 #include <vcl_cassert.h>
-#include <iostream>
 
 //: Construct from homogeneous plane
 template <class T>
@@ -180,7 +180,7 @@ plane_coord_vectors(vgl_vector_3d<T>& uvec, vgl_vector_3d<T>& vvec) const
   // Since we have an int Template definition, we need to static cast input so VS is happy.
   // Note* currently there are only float and double Template defs. If long double is ever created,
   // this cast will need to get expanded to prevent loss of precision issues.
-  T dp = (T)1 - std::fabs(static_cast<double>(dot_product(n, Y)));
+  T dp = (T)1 - (T)std::fabs(static_cast<double>(dot_product(n, Y)));
   T tol = ((T)1)/((T)10);
   if (dp>tol)//ok to use the Y axis to form the coordinate system
   {

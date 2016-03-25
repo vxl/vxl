@@ -1,3 +1,5 @@
+#include <iostream>
+#include <cstdlib>
 #include <boxm2/class/boxm2_class_generate_samples.h>
 
 //executable args
@@ -10,8 +12,6 @@
 #include <boxm2/boxm2_util.h>
 
 #include <vcl_compiler.h>
-#include <iostream>
-#include <cstdlib> // for std::exit()
 
 //check dirs, exit if not exist
 void check_dir(std::string& dir)

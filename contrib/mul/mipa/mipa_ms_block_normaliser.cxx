@@ -1,3 +1,5 @@
+#include <iostream>
+#include <sstream>
 #include "mipa_ms_block_normaliser.h"
 //:
 // \file
@@ -5,9 +7,6 @@
 // \author Martin Roberts
 
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
-#include <sstream>
 #include <vsl/vsl_binary_loader.h>
 #include <vsl/vsl_vector_io.h>
 #include <vnl/vnl_vector_ref.h>

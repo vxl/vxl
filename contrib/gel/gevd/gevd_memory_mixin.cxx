@@ -1,12 +1,12 @@
 // This is gel/gevd/gevd_memory_mixin.cxx
+#include <cstring>
+#include <iostream>
+#include <algorithm>
 #include "gevd_memory_mixin.h"
 //:
 // \file
 
-#include <cstring>   // memset() and memcpy() live here
 #include <vcl_compiler.h>
-#include <iostream>
-#include <algorithm>
 
 //=========================================================================
 //=========================================================================

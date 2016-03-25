@@ -1,10 +1,10 @@
+#include <iostream>
+#include <cmath>
 #include "bdgl_peano_curve.h"
 //:
 // \file
 
 #include <vcl_compiler.h>
-#include <iostream>
-#include <cmath>
 #include <vnl/vnl_math.h>
 
 std::vector<vgl_point_2d<double> > rotate_2d(std::vector<vgl_point_2d<double> > in, double angle)

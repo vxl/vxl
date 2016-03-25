@@ -1,4 +1,6 @@
 // This is brl/bbas/volm/pro/processes/vpgl_affine_rectify_images_process.cxx
+#include <iostream>
+#include <limits>
 #include <bprb/bprb_func_process.h>
 //:
 // \file
@@ -14,8 +16,6 @@
 #include <vnl/vnl_random.h>
 #include <vil/vil_convert.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <limits>
 #include <vnl/vnl_math.h>
 
 //:

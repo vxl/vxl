@@ -5,13 +5,12 @@
 //:
 // \file
 
+#include <iostream>
+#include <cmath>
 #include "FMatrixPlanar.h"
 
 #include <vcl_cassert.h>
-#include <iostream>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <cmath>
 #include <vnl/vnl_double_3.h>
 
 #include <vnl/algo/vnl_svd.h>

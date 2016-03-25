@@ -1,9 +1,9 @@
 #ifndef bwm_utils_h_
 #define bwm_utils_h_
 
-#include <vcl_compiler.h>
 #include <iostream>
 #include <string>
+#include <vcl_compiler.h>
 #include <vgui/vgui_range_map_params.h>
 #include <vil/vil_image_resource_sptr.h>
 

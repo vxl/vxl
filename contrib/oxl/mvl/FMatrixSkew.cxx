@@ -5,11 +5,10 @@
 //:
 //  \file
 
-#include "FMatrixSkew.h"
-#include <iostream>
-#include <vcl_compiler.h>
 #include <iostream>
 #include <cmath>
+#include "FMatrixSkew.h"
+#include <vcl_compiler.h>
 #include <vnl/vnl_matrix.h>
 #include <mvl/HomgLine2D.h>
 #include <mvl/HomgOperator2D.h>

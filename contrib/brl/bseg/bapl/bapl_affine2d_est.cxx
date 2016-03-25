@@ -1,4 +1,6 @@
 // This is brl/bseg/bapl/bapl_affine2d_est.cxx
+#include <iostream>
+#include <cmath>
 #include "bapl_affine2d_est.h"
 //:
 // \file
@@ -8,11 +10,8 @@
 #include <vnl/vnl_math.h>
 #include <vnl/algo/vnl_svd.h>
 
-#include <iostream>
 #include <vcl_cassert.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <cmath>
 
 //: Constructor from a vector of matches (pairs of keypoint smart pointers)
 bapl_affine2d_est::bapl_affine2d_est( const std::vector< bapl_keypoint_match > & matches )

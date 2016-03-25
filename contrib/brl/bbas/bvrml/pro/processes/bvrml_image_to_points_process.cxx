@@ -1,4 +1,6 @@
 //This is brl/bbas/bvrml/pro/processes/bvrml_image_to_points_process.cxx
+#include <string>
+#include <iostream>
 #include <bprb/bprb_func_process.h>
 //:
 // \file This process takes two images as input, the first image is the probabilities of existencies of points at the corresponding x,y (i,j) locations
@@ -7,11 +9,8 @@
 //
 #include <bprb/bprb_parameters.h>
 
-#include <string>
 #ifdef DEBUG
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 #endif
 
 #include <brdb/brdb_value.h>

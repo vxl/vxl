@@ -1,4 +1,8 @@
 //This is core/vil/file_formats/vil_tiff.cxx
+#include <cstring>
+#include <iostream>
+#include <algorithm>
+#include <sstream>
 #include "vil_tiff.h"
 //:
 // \file
@@ -14,11 +18,7 @@
 // \endverbatim
 
 #include <vcl_cassert.h>
-#include <cstring>
-#include <iostream>
-#include <algorithm>
 #include <vcl_compiler.h>
-#include <sstream>
 #include <vil/vil_stream.h>
 #include <vil/vil_property.h>
 #include <vil/vil_image_view.h>

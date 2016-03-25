@@ -1,3 +1,5 @@
+#include <iostream>
+#include <cstdlib>
 #include "rgtl_serialize_ostream.hxx"
 //:
 // \file
@@ -6,10 +8,7 @@
 // (See accompanying file rgtl_license_1_0.txt or copy at
 // http://www.boost.org/LICENSE_1_0.txt)
 
-#include <iostream>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <cstdlib>
 
 //----------------------------------------------------------------------------
 bool rgtl_serialize_ostream::okay() const

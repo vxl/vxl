@@ -1,8 +1,8 @@
 // This is brl/bseg/sdet/sdet_denoise_mrf.cxx
-#include "sdet_denoise_mrf.h"
-#include <vcl_compiler.h>
 #include <iostream>
 #include <cstdlib>
+#include "sdet_denoise_mrf.h"
+#include <vcl_compiler.h>
 #include <vnl/vnl_math.h>
 #include <vil/vil_new.h>
 #include <vnl/vnl_numeric_traits.h>

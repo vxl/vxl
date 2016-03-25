@@ -10,11 +10,11 @@
 //
 // A class to hold a homogeneous 4-vector for a 3D plane.
 
+#include <iostream>
+#include <iosfwd>
 #include <mvl/Homg3D.h>
 #include <vnl/vnl_double_3.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iosfwd>
 
 class HomgPoint3D;
 

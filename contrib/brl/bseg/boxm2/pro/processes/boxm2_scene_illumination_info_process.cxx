@@ -6,11 +6,11 @@
 // \author J. L. Mundy
 // \date May 19, 2011
 
+#include <iostream>
+#include <fstream>
 #include <bprb/bprb_func_process.h>
 
 #include <vcl_compiler.h>
-#include <iostream>
-#include <fstream>
 #include <boxm2/boxm2_scene.h>
 
 namespace boxm2_scene_illumination_info_process_globals

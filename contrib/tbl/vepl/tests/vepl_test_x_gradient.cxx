@@ -1,4 +1,6 @@
 // This is tbl/vepl/tests/vepl_test_x_gradient.cxx
+#include <iostream>
+#include <string>
 #include "test_driver.h"
 //:
 // \file
@@ -9,9 +11,6 @@
 
 #include <vepl/vepl_x_gradient.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
-#include <string>
 #include <vxl_config.h> // for vxl_byte
 
 int vepl_test_x_gradient()

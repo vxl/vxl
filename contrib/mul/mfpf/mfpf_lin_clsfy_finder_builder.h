@@ -5,14 +5,14 @@
 // \brief Builds mfpf_region_finder objects which use a linear classifier
 // \author Tim Cootes
 
+#include <iostream>
+#include <iosfwd>
 #include <mfpf/mfpf_point_finder_builder.h>
 #include <mfpf/mfpf_vec_cost_builder.h>
 #include <mfpf/mfpf_region_form.h>
 #include <mbl/mbl_chord.h>
 #include <vgl/vgl_fwd.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iosfwd>
 
 //: Builds mfpf_region_finder objects which use a linear classifier.
 //  Resulting mfpf_region_finder is set up with a mfpf_log_lin_class_cost

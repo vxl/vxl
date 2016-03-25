@@ -4,6 +4,7 @@
 //:
 // \file
 
+#include <iosfwd>
 #include "vpgl_essential_matrix.h"
 #include <vnl/vnl_fwd.h>
 #include <vnl/vnl_vector_fixed.h>
@@ -14,7 +15,6 @@
 #include <vgl/vgl_homg_point_3d.h>
 #include <vgl/algo/vgl_rotation_3d.h>
 #include <vcl_compiler.h>
-#include <iosfwd>
 #include "vpgl_proj_camera.h"
 
 

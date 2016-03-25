@@ -1,10 +1,10 @@
+#include <iostream>
+#include <cmath>
+#include <cstdlib>
 #include "bdgl_region_algs.h"
 //:
 // \file
 #include <vcl_compiler.h>
-#include <iostream>
-#include <cmath>
-#include <cstdlib>
 #include <vdgl/vdgl_digital_region.h>
 
 //:

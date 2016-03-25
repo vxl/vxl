@@ -8,9 +8,9 @@
 //
 // Implementation
 
+#include <iostream>
 #include "vsl_list_io.h"
 #include <vcl_compiler.h>
-#include <iostream>
 #include <vsl/vsl_binary_io.h>
 #include <vsl/vsl_indent.h>
 

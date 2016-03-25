@@ -6,14 +6,14 @@
 // \brief Like a smaller and slightly faster vcl_batch_multimap but without the pair<key, value> sequence
 // \author Ian Scott, Imorphics 2011
 
-#include <vcl_cassert.h>
 #include <vector>
-#include <cstddef> // for ptrdiff_t and size_t
+#include <cstddef>
 #include <functional>
 #include <utility>
 #include <algorithm>
-#include <vcl_compiler.h>
 #include <iterator>
+#include <vcl_cassert.h>
+#include <vcl_compiler.h>
 
 
 //: A fast read and batch-write map-style collection.

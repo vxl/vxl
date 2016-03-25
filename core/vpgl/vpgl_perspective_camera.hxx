@@ -4,6 +4,9 @@
 //:
 // \file
 
+#include <iostream>
+#include <fstream>
+#include <algorithm>
 #include "vpgl_perspective_camera.h"
 
 #include <vgl/vgl_point_2d.h>
@@ -23,10 +26,7 @@
 #include <vul/vul_file_iterator.h>
 
 #include <vcl_cassert.h>
-#include <iostream>
-#include <fstream>
 #include <vcl_compiler.h>
-#include <algorithm> // for std::sort()
 
 #include <vnl/vnl_trace.h>
 

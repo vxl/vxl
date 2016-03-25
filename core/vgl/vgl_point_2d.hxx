@@ -4,14 +4,14 @@
 //:
 // \file
 
+#include <iostream>
+#include <iomanip>
 #include "vgl_point_2d.h"
 #include <vgl/vgl_homg_point_2d.h>
 #include <vgl/vgl_line_2d.h>
 #include <vgl/vgl_homg_line_2d.h>
 
-#include <iostream>
 #include <vcl_compiler.h>
-#include <iomanip>
 
 //: Construct from homogeneous point
 template <class Type>

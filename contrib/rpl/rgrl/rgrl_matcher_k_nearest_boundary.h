@@ -5,12 +5,12 @@
 // \author Charlene Tsai
 // \date   Sep 2003
 
+#include <iostream>
+#include <vector>
 #include "rgrl_matcher_k_nearest.h"
 #include "rgrl_feature_sptr.h"
 
 #include <vcl_compiler.h>
-#include <iostream>
-#include <vector>
 #include <vbl/vbl_array_2d.h>
 
 //: For each "from" feature, match the boundary points with the k nearest "to" features.

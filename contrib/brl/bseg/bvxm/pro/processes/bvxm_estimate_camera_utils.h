@@ -14,10 +14,9 @@
 
 #include <iostream>
 #include <vector>
+#include <cmath>
 #include <vcl_cassert.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <cmath>
 
 #include <vgl/vgl_box_3d.h>
 #include <vgl/vgl_point_2d.h>

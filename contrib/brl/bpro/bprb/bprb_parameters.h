@@ -15,13 +15,12 @@
 // \endverbatim
 
 #include <string>
-#include <vcl_compiler.h>
 #include <iostream>
-#include <iostream>
-#include <vcl_cassert.h>
 #include <typeinfo>
 #include <vector>
 #include <map>
+#include <vcl_compiler.h>
+#include <vcl_cassert.h>
 #include <vbl/vbl_ref_count.h>
 #include <bxml/bxml_document.h>
 #include <bprb/bprb_parameters_sptr.h>

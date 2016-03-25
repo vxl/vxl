@@ -1,3 +1,6 @@
+#include <iostream>
+#include <algorithm>
+#include <limits>
 #include "vsph_unit_sphere.h"
 //
 #include "vsph_sph_point_2d.h"
@@ -6,11 +9,8 @@
 #include <vnl/vnl_math.h>
 #include <vgl/vgl_line_segment_3d.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <algorithm>
 
 #include <bvrml/bvrml_write.h>
-#include <limits>
 #include <vcl_cassert.h>
 
 #define DEBUG

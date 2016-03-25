@@ -2,12 +2,11 @@
 //:
 // \file
 
-#include "bnl_fresnel.h"
-#include <vcl_compiler.h>
 #include <iostream>
 #include <complex>
+#include "bnl_fresnel.h"
+#include <vcl_compiler.h>
 #include <vnl/vnl_math.h>
-#include <iostream>
 
 // Fresnel Integral computation adapted from Numerical recipes in C
 // eps   is the relative error;

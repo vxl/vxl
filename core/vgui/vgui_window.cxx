@@ -7,9 +7,9 @@
 // \author fsm
 // \brief  See vgui_window.h for a description of this file.
 
+#include <iostream>
 #include "vgui_window.h"
 #include <vcl_compiler.h>
-#include <iostream>
 #include <vgui/vgui_adaptor.h>
 #include <vgui/vgui_macro.h>
 #include <vgui/vgui_statusbar.h>

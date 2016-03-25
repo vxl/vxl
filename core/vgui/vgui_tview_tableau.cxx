@@ -8,12 +8,12 @@
 // \date   12 Oct 1999
 // \brief  See vgui_tview_tableau.h for a description of this file.
 
-#include "vgui_tview_tableau.h"
-
-#include <vcl_compiler.h>
 #include <string>
 #include <cmath>
 #include <iostream>
+#include "vgui_tview_tableau.h"
+
+#include <vcl_compiler.h>
 
 #include <vgui/vgui_gl.h>
 #include <vgui/vgui_event.h>

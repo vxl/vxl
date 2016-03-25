@@ -4,11 +4,11 @@
 //:
 // \file
 
+#include <cmath>
+#include <iostream>
 #include "vgl_line_2d.h"
 #include <vcl_compiler.h>
-#include <cmath>     // std::sqrt()
 #include <vcl_cassert.h>
-#include <iostream>
 #include <vgl/vgl_point_2d.h>
 #include <vgl/vgl_homg_line_2d.h>
 

@@ -3,12 +3,11 @@
 //:
 // \file
 
+#include <iostream>
 #include "bwm_observer_vgui.h"
 #include "bwm_observable_sptr.h"
 
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 
 #include <vgui/vgui_easy2D_tableau.h>
 #include <vgui/vgui_viewer2D_tableau.h>

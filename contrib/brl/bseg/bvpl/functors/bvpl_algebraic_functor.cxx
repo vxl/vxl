@@ -3,12 +3,11 @@
 // \author Isabel Restrepo
 // \date 11-Oct-2010
 
+#include <iostream>
+#include <cmath>
 #include "bvpl_algebraic_functor.h"
 
 #include <vcl_compiler.h>
-#include <iostream>
-#include <cmath>
-#include <iostream>
 
 
 // Default constructor

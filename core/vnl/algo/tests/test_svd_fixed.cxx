@@ -1,10 +1,11 @@
 // This is core/vnl/algo/tests/test_svd_fixed.cxx
+#include <iostream>
+#include <complex>
+#include <ctime>
 #include "test_util.h"
 //:
 // \file
 #include <testlib/testlib_test.h>
-#include <iostream>
-#include <complex>
 
 #include <vnl/vnl_matrix.h>
 #include <vnl/vnl_matrix_fixed.h>
@@ -14,7 +15,6 @@
 #include <vnl/algo/vnl_svd.h>
 
 #include <vcl_compiler.h>
-#include <ctime>
 
 
 template <class T, class S> static

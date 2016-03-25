@@ -1,6 +1,6 @@
 // This is core/vbl/io/tests/test_smart_ptr_io.cxx
-#include <vcl_compiler.h>
 #include <iostream>
+#include <vcl_compiler.h>
 #include "vbl_io_test_classes.h"
 #include <testlib/testlib_test.h>
 #include <vpl/vpl.h>

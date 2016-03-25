@@ -1,14 +1,14 @@
+#include <fstream>
+#include <iostream>
+#include <complex>
 #include "brip_vil1_float_ops.h"
 //:
 // \file
 
-#include <fstream>
 #include <vul/vul_timer.h>
 #include <vnl/vnl_numeric_traits.h>
 #include <vnl/vnl_math.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <complex>
 #include <vbl/vbl_array_1d.h>
 #include <vnl/algo/vnl_fft_prime_factors.h>
 #include <vnl/algo/vnl_svd.h>

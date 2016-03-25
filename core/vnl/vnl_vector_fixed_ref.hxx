@@ -4,12 +4,12 @@
 // Author: Paul P. Smyth, Vicon Motion Systems Ltd.
 // Created: 02 May 2001
 //
+#include <algorithm>
+#include <iostream>
+#include <cstdlib>
 #include "vnl_vector_fixed_ref.h"
 #include <vcl_cassert.h>
-#include <algorithm> // for std::swap
-#include <iostream>  // for std::cerr
 #include <vcl_compiler.h>
-#include <cstdlib>   // for std::abort
 #include <vnl/vnl_math.h>  // for vnl_math::isfinite
 
 

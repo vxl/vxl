@@ -1,14 +1,13 @@
 // This is brl/bseg/sdet/sdet_third_order_edge_det_params.cxx
+#include <sstream>
+#include <iostream>
 #include "sdet_third_order_edge_det_params.h"
 //:
 // \file
 // See sdet_third_order_edge_det_params.h
 //
 //-----------------------------------------------------------------------------
-#include <sstream>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 
 //------------------------------------------------------------------------
 // Constructors

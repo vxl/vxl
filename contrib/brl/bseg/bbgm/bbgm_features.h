@@ -12,16 +12,16 @@
 //   <none yet>
 // \endverbatim
 
+#include <vector>
+#include <set>
+#include <iostream>
+#include <iosfwd>
 #include <brip/brip_rect_mask.h>
 #include <vgl/vgl_box_2d.h>
 #include <vgl/vgl_polygon.h>
 #include <vsl/vsl_binary_io.h>
 #include <vsl/vsl_set_io.h>
-#include <vector>
-#include <set>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iosfwd> // for std::ostream
 
 //================================================================
 //=======================  mask feature ===========================

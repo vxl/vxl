@@ -9,14 +9,13 @@
 //  Modifications
 // \endverbatim
 
+#include <iostream>
 #include "vsph_spherical_coord_sptr.h"
 #include "vsph_sph_point_3d.h"
 #include <vgl/vgl_point_3d.h>
 #include <vbl/vbl_ref_count.h>
 #include <vsl/vsl_binary_io.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 
 
 //: 3D coordinate system specified by distance rho, angles theta (elevation) and phi (azimuth).

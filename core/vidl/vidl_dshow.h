@@ -15,13 +15,13 @@
 //
 //=========================================================================
 
+#include <string>
+#include <vector>
+#include <iostream>
 #include <vidl/vidl_exception.h>
 #include <vidl/vidl_pixel_format.h>
 
 #include <vcl_compiler.h>
-#include <string>
-#include <vector>
-#include <iostream>
 
 #include <atlbase.h>
 #include <dshow.h>

@@ -8,8 +8,8 @@
 // \file
 // \author fsm
 
-#include <vcl_compiler.h>
 #include <iosfwd>
+#include <vcl_compiler.h>
 class vil1_stream;
 
 struct vil1_bmp_file_header

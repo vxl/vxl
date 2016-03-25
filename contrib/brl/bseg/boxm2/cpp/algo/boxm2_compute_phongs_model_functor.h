@@ -3,11 +3,11 @@
 //:
 // \file
 
-#include <boxm2/io/boxm2_stream_cache.h>
 #include <vector>
-#include <vcl_compiler.h>
 #include <iostream>
 #include <algorithm>
+#include <boxm2/io/boxm2_stream_cache.h>
+#include <vcl_compiler.h>
 #include <brad/brad_phongs_model_est.h>
 #include <boxm2/cpp/algo/boxm2_phongs_model_processor.h>
 #include <bsta/bsta_histogram.h>

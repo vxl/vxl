@@ -16,10 +16,9 @@
 //*****************************************************************************
 
 #include <vector>
-#include <vcl_compiler.h>
-#include <iostream>
 #include <iostream>
 #include <string>
+#include <vcl_compiler.h>
 #include <vcl_cassert.h>
 #include <vsol/vsol_curve_3d.h>
 #include <vsol/vsol_point_3d.h>

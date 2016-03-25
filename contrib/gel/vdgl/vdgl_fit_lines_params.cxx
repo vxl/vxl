@@ -1,11 +1,10 @@
 // This is gel/vdgl/vdgl_fit_lines_params.cxx
+#include <iostream>
 #include "vdgl_fit_lines_params.h"
 //:
 // \file
 
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 
 bool vdgl_fit_lines_params::SanityCheck()
 {

@@ -12,12 +12,11 @@
 //   <none yet>
 // \endverbatim
 
+#include <iostream>
 #include <boxm/boxm_scene.h>
 #include <bvxm/grid/bvxm_voxel_grid.h>
 #include <bvxm/grid/bvxm_voxel_grid_basic_ops.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 #include <boxm/util/boxm_cell_data_traits.h>
 
 template <class T_loc, class T_data>

@@ -1,12 +1,11 @@
 //:
 // \file
+#include <iostream>
+#include <fstream>
 #include <testlib/testlib_test.h>
 #include <bsta/bsta_beta.h>
 #include <bsta/bsta_histogram.h>
-#include <iostream>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <fstream>
 
 //: Test bsta beta distribution
 void test_beta()

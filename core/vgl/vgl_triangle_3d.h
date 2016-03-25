@@ -7,9 +7,9 @@
 // \date 21 June 2007
 
 #include <algorithm>
-#include <vcl_compiler.h>
 #include <utility>
 #include <cmath>
+#include <vcl_compiler.h>
 
 #include <vgl/vgl_line_segment_3d.h>
 #include <vgl/vgl_point_3d.h>

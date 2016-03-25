@@ -8,9 +8,9 @@
 // \date August 08, 2008
 //
 #include <vector>
-#include <vcl_compiler.h>
 #include <iostream>
 #include <string>
+#include <vcl_compiler.h>
 
 #include <vgl/vgl_point_2d.h>
 //:

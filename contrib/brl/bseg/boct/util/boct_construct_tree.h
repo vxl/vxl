@@ -12,10 +12,9 @@
 //   <none yet>
 // \endverbatim
 
+#include <iostream>
 #include <boct/boct_tree.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 
 //: Construct a tree from leaf nodes. Cells are initialized to the default value given
 template <class T_loc,class T_data>

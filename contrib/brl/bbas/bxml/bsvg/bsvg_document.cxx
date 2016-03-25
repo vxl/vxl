@@ -1,3 +1,5 @@
+#include <iostream>
+#include <sstream>
 #include "bsvg_document.h"
 //:
 // \file
@@ -5,9 +7,6 @@
 // \date   April 21, 2009
 
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
-#include <sstream>
 
 bsvg_document::bsvg_document(float w, float h) : w_(w), h_(h)
 {

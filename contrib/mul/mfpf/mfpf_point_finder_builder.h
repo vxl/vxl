@@ -5,15 +5,15 @@
 // \brief Base for classes which build mfpf_point_finder objects.
 // \author Tim Cootes
 
+#include <string>
+#include <memory>
+#include <iostream>
+#include <iosfwd>
 #include <vimt/vimt_image_2d_of.h>
 #include <vgl/vgl_fwd.h>
 
 #include <vsl/vsl_binary_io.h>
-#include <string>
-#include <memory>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iosfwd>
 
 class mfpf_point_finder;
 class mbl_read_props_type;

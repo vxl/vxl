@@ -12,13 +12,12 @@
 //   <none yet>
 // \endverbatim
 
+#include <iostream>
 #include <bvpl/kernels/bvpl_kernel_factory.h>
 #include <bvpl/kernels/bvpl_create_directions.h>
 #include <bvpl/kernels/bvpl_kernel_iterator.h>
 #include <vgl/vgl_line_3d_2_points.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 
 class bvpl_corner_search_functor
 {

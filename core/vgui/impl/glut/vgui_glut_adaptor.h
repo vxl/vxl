@@ -11,8 +11,8 @@
 //   17-Sep-2002 K.Y.McGaul - Converted to doxygen style documentation.
 // \endverbatim
 
-#include <vcl_compiler.h>
 #include <vector>
+#include <vcl_compiler.h>
 #include <vgui/vgui_adaptor.h>
 struct vgui_command;
 struct vgui_overlay_helper;

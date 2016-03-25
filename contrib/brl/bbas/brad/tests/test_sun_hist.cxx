@@ -1,12 +1,12 @@
+#include <iostream>
+#include <cstdlib>
+#include <fstream>
 #include <testlib/testlib_test.h>
 #include <brad/brad_illum_util.h>
 #include <brad/brad_sun_pos.h>
 #include <bsta/bsta_spherical_histogram.h>
 #include <vnl/algo/vnl_symmetric_eigensystem.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <cstdlib> // for rand()
-#include <fstream>
 
 #ifdef DEBUG
 // illumination directions for longitude = 33.331465, latitude =44.376970 deg

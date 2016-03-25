@@ -6,14 +6,14 @@
 // \file
 // \author fsm
 
+#include <iomanip>
+#include <iostream>
+#include <cstring>
+#include <cctype>
 #include "vil1_gif.h"
 
 #include <vcl_cassert.h>
 #include <vcl_compiler.h>
-#include <iomanip> // for std::hex, std::dec
-#include <iostream>
-#include <cstring>
-#include <cctype> // for std::isprint
 
 #include <vil1/vil1_stream.h>
 #include <vil1/vil1_16bit.h>

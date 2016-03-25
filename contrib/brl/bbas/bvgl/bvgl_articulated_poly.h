@@ -9,9 +9,9 @@
 //  J.L. Mundy - January 13, 2007
 //
 //-----------------------------------------------------------------------------
-#include <vcl_compiler.h>
 #include <iostream>
 #include <vector>
+#include <vcl_compiler.h>
 #include <vgl/algo/vgl_h_matrix_2d.h>
 #include <vsol/vsol_point_2d_sptr.h>
 #include <vsol/vsol_polyline_2d.h>

@@ -40,10 +40,10 @@
 //   27 Sep.2004, Peter Vanroose -is_endpoint() now accepts smart pointer argument
 // \endverbatim
 
-#include <vcl_compiler.h>
 #include <iostream>
 #include <iosfwd>
 #include <vector>
+#include <vcl_compiler.h>
 #include <vtol/vtol_topology_object.h>
 #include <vtol/vtol_zero_chain.h>
 #include <vtol/vtol_one_chain.h>

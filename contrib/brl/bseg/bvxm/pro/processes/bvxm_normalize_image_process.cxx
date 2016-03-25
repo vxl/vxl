@@ -1,4 +1,6 @@
 //This is brl/bseg/bvxm/pro/processes/bvxm_normalize_image_process.cxx
+#include <string>
+#include <iostream>
 #include "bvxm_normalize_image_process.h"
 //:
 // \file
@@ -13,11 +15,8 @@
 #include <bvxm/bvxm_image_metadata.h>
 #include <bvxm/bvxm_voxel_world.h>
 
-#include <string>
 #ifdef DEBUG
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 #endif
 
 #include <brdb/brdb_value.h>

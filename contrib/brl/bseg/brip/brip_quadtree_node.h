@@ -20,9 +20,9 @@
 // \endverbatim
 //------------------------------------------------------------------
 
-#include <vcl_compiler.h>
 #include <iostream>
 #include <vector>
+#include <vcl_compiler.h>
 #include <vbl/vbl_ref_count.h>
 #include <brip/brip_quadtree_node_base_sptr.h>
 

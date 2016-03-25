@@ -39,9 +39,8 @@
 
 #include <map>
 #include <vector>
+#include <iostream>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 #include <vnl/vnl_math.h>
 #include <vnl/vnl_matrix_fixed.h>
 //: A histogram on the unit sphere

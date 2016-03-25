@@ -1,14 +1,13 @@
 // This is gel/vifa/vifa_histogram.cxx
+#include <iostream>
+#include <algorithm>
+#include <cmath>
+#include <fstream>
+#include <cstdio>
 #include "vifa_histogram.h"
 //:
 // \file
 #include <vcl_compiler.h>
-#include <iostream>
-#include <algorithm>
-#include <cmath>
-#include <iostream>
-#include <fstream>
-#include <cstdio>
 
 static int MEAN_FLAG = 1;
 static int SD_FLAG = 2;

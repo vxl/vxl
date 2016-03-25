@@ -9,8 +9,8 @@
 // \author VGG, Oxford University
 // \brief  Enum of modifiers for key-strokes and mouse presses.
 
-#include <vcl_compiler.h>
 #include <iosfwd>
+#include <vcl_compiler.h>
 
 //: Enum of modifiers for key-strokes and mouse presses.
 enum vgui_modifier {

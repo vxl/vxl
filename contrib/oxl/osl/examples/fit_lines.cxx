@@ -1,10 +1,9 @@
+#include <iostream>
 #include <osl/osl_fit_lines.h>
 #include <osl/osl_easy_canny.h>
 #include <osl/osl_save_topology.h>
 #include <vil1/vil1_load.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 
 // runs Canny on the given input image, followed by line fitting
 int main(int argc, char *argv[])

@@ -11,10 +11,10 @@
 //   Ported to vxl July 01, 2004
 // \endverbatim
 //-----------------------------------------------------------------------------
-#include <gevd/gevd_param_mixin.h>
-#include <vcl_compiler.h>
 #include <iostream>
 #include <iosfwd>
+#include <gevd/gevd_param_mixin.h>
+#include <vcl_compiler.h>
 
 class brip_watershed_params : public gevd_param_mixin
 {

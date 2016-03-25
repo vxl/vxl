@@ -12,14 +12,13 @@
 //   Apr 4, 2007 - Yong Zhao - Make it work with the whole database initially based on Matt's sketch.
 // \endverbatim
 
-#include <brdb/brdb_value_sptr.h>
 #include <string>
 #include <map>
+#include <iostream>
+#include <brdb/brdb_value_sptr.h>
 #include <vcl_cassert.h>
 #include <vbl/vbl_ref_count.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 #include <vsl/vsl_binary_io.h>
 
 // forward declaration

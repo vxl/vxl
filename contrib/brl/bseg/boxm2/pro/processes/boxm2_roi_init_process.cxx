@@ -1,4 +1,6 @@
 // This is brl/bseg/boxm2/pro/processes/boxm2_roi_init_process.cxx
+#include <iostream>
+#include <string>
 #include <bprb/bprb_func_process.h>
 #include <bprb/bprb_parameters.h>
 //:
@@ -23,8 +25,6 @@
 
 
 #include <vcl_compiler.h>
-#include <iostream>
-#include <string>
 
 #include <vil/vil_image_view.h>
 #include <vil/vil_load.h>

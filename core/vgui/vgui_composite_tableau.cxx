@@ -9,12 +9,12 @@
 // \brief  See vgui_composite_tableau.h for a description of this file.
 
 
-#include "vgui_composite_tableau.h"
-
 #include <iostream>
-#include <vcl_compiler.h>
 #include <sstream>
 #include <vector>
+#include "vgui_composite_tableau.h"
+
+#include <vcl_compiler.h>
 
 #include <vgui/vgui.h>
 #include <vgui/vgui_gl.h>

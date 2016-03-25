@@ -8,11 +8,10 @@
 // \date nov 17, 2010
 
 #include <string>
+#include <iostream>
+#include <cstddef>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <cstddef> // for std::size_t
 #include <vnl/vnl_vector_fixed.h>
-#include <iostream>
 
 #include "boxm2_normal_albedo_array.h"
 #include "boxm2_feature_vector.h"
@@ -31,26 +30,45 @@ class boxm2_mog6_view_compact_processor;
  * To add a new boxm2 data type, you now just add a row to the bottom of the table below.
  * If the type needs a "processor type" associated with it, that is now in a separate table further below.
  */
+typedef vnl_vector_fixed<unsigned char, 2>  vnl_vector_fixed_unsigned_char_2;
+typedef vnl_vector_fixed<unsigned char, 8>  vnl_vector_fixed_unsigned_char_8;
+typedef vnl_vector_fixed<unsigned char, 16> vnl_vector_fixed_unsigned_char_16;
+
+typedef vnl_vector_fixed<unsigned short, 4> vnl_vector_fixed_unsigned_short_2;
+typedef vnl_vector_fixed<unsigned short, 4> vnl_vector_fixed_unsigned_short_4;
+typedef vnl_vector_fixed<unsigned short, 8> vnl_vector_fixed_unsigned_short_8;
+
+typedef vnl_vector_fixed<short, 8> vnl_vector_fixed_short_8;
+
+typedef vnl_vector_fixed<int, 4>  vnl_vector_fixed_int_4;
+typedef vnl_vector_fixed<int, 8>  vnl_vector_fixed_int_8;
+typedef vnl_vector_fixed<int, 16> vnl_vector_fixed_int_16;
+
+typedef vnl_vector_fixed<float, 4>  vnl_vector_fixed_float_4;
+typedef vnl_vector_fixed<float, 8>  vnl_vector_fixed_float_8;
+typedef vnl_vector_fixed<float, 9>  vnl_vector_fixed_float_9;
+typedef vnl_vector_fixed<float, 16> vnl_vector_fixed_float_16;
+
 #define BOXM2_DATATYPE_TABLE \
   X(BOXM2_ALPHA, "alpha", float) \
   X(BOXM2_GAMMA, "gamma", float) \
-  X(BOXM2_MOG3_GREY, "boxm2_mog3_grey", (vnl_vector_fixed<unsigned char, 8>)) \
-  X(BOXM2_MOG3_GREY_16, "boxm2_mog3_grey16", (vnl_vector_fixed<unsigned short, 8>)) \
-  X(BOXM2_MOG6_VIEW, "boxm2_mog6_view", (vnl_vector_fixed<float, 16>)) \
-  X(BOXM2_MOG6_VIEW_COMPACT, "boxm2_mog6_view_compact", (vnl_vector_fixed<unsigned char, 16>)) \
-  X(BOXM2_BATCH_HISTOGRAM, "boxm2_batch_histogram", (vnl_vector_fixed<float, 8>)) \
-  X(BOXM2_GAUSS_RGB, "boxm2_gauss_rgb", (vnl_vector_fixed<unsigned char, 8>)) \
-  X(BOXM2_GAUSS_RGB_VIEW, "boxm2_gauss_rgb_view", (vnl_vector_fixed<int, 16>)) \
-  X(BOXM2_GAUSS_RGB_VIEW_COMPACT, "boxm2_gauss_rgb_view_compact", (vnl_vector_fixed<int, 8>)) \
-  X(BOXM2_GAUSS_UV_VIEW, "boxm2_gauss_uv_view", (vnl_vector_fixed<int, 4>)) \
-  X(BOXM2_MOG2_RGB,"boxm2_mog2_rgb", (vnl_vector_fixed<unsigned char, 16>)) \
-  X(BOXM2_NUM_OBS, "boxm2_num_obs", (vnl_vector_fixed<unsigned short, 4>)) \
+  X(BOXM2_MOG3_GREY, "boxm2_mog3_grey", vnl_vector_fixed_unsigned_char_8) \
+  X(BOXM2_MOG3_GREY_16, "boxm2_mog3_grey16", vnl_vector_fixed_unsigned_short_8) \
+  X(BOXM2_MOG6_VIEW, "boxm2_mog6_view", vnl_vector_fixed_float_16) \
+  X(BOXM2_MOG6_VIEW_COMPACT, "boxm2_mog6_view_compact", vnl_vector_fixed_unsigned_char_16) \
+  X(BOXM2_BATCH_HISTOGRAM, "boxm2_batch_histogram", vnl_vector_fixed_float_8) \
+  X(BOXM2_GAUSS_RGB, "boxm2_gauss_rgb", vnl_vector_fixed_unsigned_char_8) \
+  X(BOXM2_GAUSS_RGB_VIEW, "boxm2_gauss_rgb_view", vnl_vector_fixed_int_16) \
+  X(BOXM2_GAUSS_RGB_VIEW_COMPACT, "boxm2_gauss_rgb_view_compact", vnl_vector_fixed_int_8) \
+  X(BOXM2_GAUSS_UV_VIEW, "boxm2_gauss_uv_view", vnl_vector_fixed_int_4) \
+  X(BOXM2_MOG2_RGB,"boxm2_mog2_rgb", vnl_vector_fixed_unsigned_char_16) \
+  X(BOXM2_NUM_OBS, "boxm2_num_obs", vnl_vector_fixed_unsigned_short_4) \
   X(BOXM2_NUM_OBS_SINGLE, "boxm2_num_obs_single", unsigned short) \
   X(BOXM2_NUM_OBS_SINGLE_INT, "boxm2_num_obs_single_int", unsigned) \
-  X(BOXM2_NUM_OBS_VIEW, "boxm2_num_obs_view", (vnl_vector_fixed<float, 8>)) \
-  X(BOXM2_NUM_OBS_VIEW_COMPACT, "boxm2_num_obs_view_compact", (vnl_vector_fixed<short, 8>)) \
+  X(BOXM2_NUM_OBS_VIEW, "boxm2_num_obs_view", vnl_vector_fixed_float_8) \
+  X(BOXM2_NUM_OBS_VIEW_COMPACT, "boxm2_num_obs_view_compact", vnl_vector_fixed_short_8) \
   X(BOXM2_LABEL_SHORT, "boxm2_label_short", short) \
-  X(BOXM2_AUX, "aux", (vnl_vector_fixed<float, 4>)) \
+  X(BOXM2_AUX, "aux", vnl_vector_fixed_float_4) \
   X(BOXM2_INTENSITY, "boxm2_intensity", float) \
   X(BOXM2_AUX0, "aux0", float) \
   X(BOXM2_AUX1, "aux1", float) \
@@ -58,28 +76,25 @@ class boxm2_mog6_view_compact_processor;
   X(BOXM2_AUX3, "aux3", float) \
   X(BOXM2_AUX4, "aux4", float) \
   X(BOXM2_FLOAT, "float", float) \
-  X(BOXM2_FLOAT8, "float8", (vnl_vector_fixed<float, 8>)) \
-  X(BOXM2_FLOAT16, "float16", (vnl_vector_fixed<float, 16>)) \
-  X(BOXM2_VIS_SPHERE, "boxm2_vis_sphere", (vnl_vector_fixed<float, 16>)) \
-  X(BOXM2_NORMAL, "boxm2_normal", (vnl_vector_fixed<float, 4>)) \
-  X(BOXM2_POINT, "boxm2_point", (vnl_vector_fixed<float, 4>)) \
+  X(BOXM2_FLOAT8, "float8", vnl_vector_fixed_float_8) \
+  X(BOXM2_FLOAT16, "float16", vnl_vector_fixed_float_16) \
+  X(BOXM2_VIS_SPHERE, "boxm2_vis_sphere", vnl_vector_fixed_float_16) \
+  X(BOXM2_NORMAL, "boxm2_normal", vnl_vector_fixed_float_4) \
+  X(BOXM2_POINT, "boxm2_point", vnl_vector_fixed_float_4) \
   X(BOXM2_VIS_SCORE, "boxm2_vis_score", float) \
-  X(BOXM2_GAUSS_GREY, "boxm2_gauss_grey", (vnl_vector_fixed<unsigned char, 2>)) \
+  X(BOXM2_GAUSS_GREY, "boxm2_gauss_grey", vnl_vector_fixed_unsigned_char_2) \
   X(BOXM2_NORMAL_ALBEDO_ARRAY, "boxm2_normal_albedo_array", boxm2_normal_albedo_array) \
-  X(BOXM2_COVARIANCE, "boxm2_covariance", (vnl_vector_fixed<float, 9>)) \
+  X(BOXM2_COVARIANCE, "boxm2_covariance", vnl_vector_fixed_float_9) \
   X(BOXM2_FEATURE_VECTOR, "boxm2_feature_vector", boxm2_feature_vector) \
   X(BOXM2_PIXEL, "boxm2_pixel", unsigned char) \
   X(BOXM2_EXPECTATION, "boxm2_expectation", float) \
   X(BOXM2_DATA_INDEX, "boxm2_data_index", unsigned int) \
-  X(BOXM2_RAY_DIR, "boxm2_ray_dir", (vnl_vector_fixed<float, 4>)) \
-  X(BOXM2_CHAR8, "char8", (vnl_vector_fixed<unsigned char, 8>)) \
-  X(BOXM2_VEC3D, "boxm2_vec3d", (vnl_vector_fixed<float, 4>)) \
-  X(BOXM2_VECF_EYELID, "boxm2_vecf_eyelid", (vnl_vector_fixed<float, 16>))
+  X(BOXM2_RAY_DIR, "boxm2_ray_dir", vnl_vector_fixed_float_4) \
+  X(BOXM2_CHAR8, "char8", vnl_vector_fixed_unsigned_char_8) \
+  X(BOXM2_VEC3D, "boxm2_vec3d", vnl_vector_fixed_float_4) \
+  X(BOXM2_VECF_EYELID, "boxm2_vecf_eyelid", vnl_vector_fixed_float_16)
 
-// The following two lines are a workaround that allows passing in of types that include
-// commas as macro arguments, as long as you enclose them in parentheses, e.g. (std::map<int,int>)
-template<typename T> struct argument_type;
-template<typename T, typename U> struct argument_type<T(U)> { typedef U type; };
+
 
 // define the boxm2_data_type enum using the X macro pattern and the table above.
 #define X(enum_val, string_val, datatype_val) enum_val,
@@ -99,7 +114,7 @@ class boxm2_data_traits;
   class boxm2_data_traits<enum_val> \
   { \
   public: \
-    typedef argument_type<void(datatype_val)>::type datatype; \
+    typedef datatype_val datatype; \
     static std::size_t datasize() { return sizeof(datatype); } \
     static std::string prefix(const std::string& identifier = "") \
     { if (!identifier.size()) return string_val; else return string_val + std::string("_") + identifier; } \
@@ -227,7 +242,7 @@ class boxm2_processor_type;
   class boxm2_processor_type<enum_val> \
   { \
     public: \
-    typedef argument_type<void(processor_type)>::type type; \
+    typedef processor_type type; \
   };
 
 // declare the specializations via the "X macro" pattern.

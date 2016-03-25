@@ -1,10 +1,10 @@
-#include <testlib/testlib_test.h>
-
 #include <cstdio>
 #include <cmath>
-#include <vcl_compiler.h>
 #include <iostream>
 #include <algorithm>
+#include <testlib/testlib_test.h>
+
+#include <vcl_compiler.h>
 #include <vcl_cassert.h>
 
 #include <bil/algo/bil_cedt.h>

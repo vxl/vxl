@@ -16,10 +16,10 @@
 //   21 Jul 2009 - Peter Vanroose - added inlined point intersection functions
 // \endverbatim
 
-#include <vgl/vgl_fwd.h> // forward declare various vgl classes
-#include <vcl_compiler.h>
 #include <iostream>
 #include <vector>
+#include <vgl/vgl_fwd.h> // forward declare various vgl classes
+#include <vcl_compiler.h>
 #include <vgl/vgl_sphere_3d.h>
 
 template <typename T>

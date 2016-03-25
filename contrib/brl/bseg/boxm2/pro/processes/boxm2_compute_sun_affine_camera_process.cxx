@@ -6,13 +6,13 @@
 // \author Vishal Jain
 // \date May 24, 2011
 
+#include <iostream>
+#include <cmath>
 #include <bprb/bprb_func_process.h>
 #include <boxm2/boxm2_scene.h>
 #include <bpgl/algo/bpgl_camera_from_box.h>
 #include <vpgl/algo/vpgl_camera_convert.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <cmath>
 namespace boxm2_compute_sun_affine_camera_process_globals
 {
   const unsigned n_inputs_ = 4;

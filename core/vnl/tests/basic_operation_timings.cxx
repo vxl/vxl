@@ -6,13 +6,13 @@
 #include <vector>
 #include <iostream>
 #include <fstream>
+#include <ctime>
+#include <algorithm>
+#include <string>
 #include <vnl/vnl_matrix.h>
 #include <vnl/vnl_vector.h>
 #include <vnl/vnl_random.h>
-#include <ctime>
-#include <algorithm>
 #include <vcl_compiler.h>
-#include <string>
 
 const unsigned nstests = 10;
 

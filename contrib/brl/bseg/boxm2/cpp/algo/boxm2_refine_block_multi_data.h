@@ -6,12 +6,11 @@
 // \author J.L. Mundy
 // \date   26 November 2015
 //
+#include <iostream>
 #include <boxm2/boxm2_data_traits.h>
 #include <boct/boct_bit_tree.h>
 #include <vnl/vnl_vector_fixed.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 #include <boxm2/io/boxm2_cache.h>
 #include <vbl/vbl_array_3d.h>
 class boxm2_refine_block_multi_data

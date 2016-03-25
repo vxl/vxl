@@ -8,10 +8,10 @@
 // \brief Univariate gaussian PDF
 // \author Tim Cootes
 
-#include <pdf1d/pdf1d_pdf.h>
-#include <vcl_compiler.h>
 #include <iostream>
 #include <iosfwd>
+#include <pdf1d/pdf1d_pdf.h>
+#include <vcl_compiler.h>
 
 //: Class for univariate gaussian.
 class pdf1d_gaussian : public pdf1d_pdf

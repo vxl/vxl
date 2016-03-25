@@ -2,9 +2,8 @@
 // Images are loaded from the two filenames
 // on the command line.
 
+#include <iostream>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 #include <vil/vil_load.h>
 #include <vil/vil_resample_bilin.h>
 

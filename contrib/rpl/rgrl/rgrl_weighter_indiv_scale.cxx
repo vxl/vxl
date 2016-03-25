@@ -1,3 +1,5 @@
+#include <iostream>
+#include <cmath>
 #include "rgrl_weighter_indiv_scale.h"
 //:
 // \file
@@ -5,8 +7,6 @@
 // \date   March 2006
 
 #include <vcl_compiler.h>
-#include <iostream>
-#include <cmath>
 #include <vcl_cassert.h>
 #include <vnl/vnl_matrix.h>
 #include <rrel/rrel_m_est_obj.h>

@@ -1,4 +1,6 @@
 // This is mul/pdf1d/pdf1d_gaussian_kernel_pdf_sampler.cxx
+#include <iostream>
+#include <string>
 #include "pdf1d_gaussian_kernel_pdf_sampler.h"
 //:
 // \file
@@ -8,8 +10,6 @@
 //=======================================================================
 
 #include <vcl_compiler.h>
-#include <iostream>
-#include <string>
 #include <vnl/vnl_vector.h>
 #include <pdf1d/pdf1d_sampler.h>
 

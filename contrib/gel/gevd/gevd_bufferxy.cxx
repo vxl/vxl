@@ -1,13 +1,13 @@
 // This is gel/gevd/gevd_bufferxy.cxx
+#include <fstream>
+#include <iostream>
+#include <cstdio>
+#include <cstring>
 #include "gevd_bufferxy.h"
 //:
 // \file
 
-#include <fstream>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <cstdio>
-#include <cstring>
 #include <vil/vil_pixel_format.h>
 #include <vil/vil_image_view.h>
 #include <vil/vil_math.h>

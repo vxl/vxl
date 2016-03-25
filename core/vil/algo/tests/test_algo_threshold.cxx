@@ -1,7 +1,7 @@
 // This is core/vil/algo/tests/test_algo_threshold.cxx
+#include <iostream>
 #include <testlib/testlib_test.h>
 #include <vcl_compiler.h>
-#include <iostream>
 #include <vxl_config.h> // for vxl_byte
 #include <vil/algo/vil_threshold.h>
 #include <vil/vil_crop.h>

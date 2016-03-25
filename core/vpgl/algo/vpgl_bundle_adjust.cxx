@@ -1,4 +1,6 @@
 // This is vpgl/algo/vpgl_bundle_adjust.cxx
+#include <fstream>
+#include <algorithm>
 #include "vpgl_bundle_adjust.h"
 //:
 // \file
@@ -12,9 +14,7 @@
 #include <vpgl/algo/vpgl_ba_shared_k_lsqr.h>
 #include <vgl/algo/vgl_rotation_3d.h>
 
-#include <fstream>
 #include <vcl_compiler.h>
-#include <algorithm>
 
 
 vpgl_bundle_adjust::vpgl_bundle_adjust()

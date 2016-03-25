@@ -1,14 +1,13 @@
 // This is brl/bseg/sdet/sdet_texture_classifier_params.cxx
+#include <sstream>
+#include <iostream>
 #include "sdet_texture_classifier_params.h"
 //:
 // \file
 // See sdet_texture_classifier_params.h
 //
 //-----------------------------------------------------------------------------
-#include <sstream>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 
 //------------------------------------------------------------------------
 // Constructors

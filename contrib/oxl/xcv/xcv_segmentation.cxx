@@ -1,4 +1,6 @@
 // This is oxl/xcv/xcv_segmentation.cxx
+#include <iostream>
+#include <cmath>
 #include "xcv_segmentation.h"
 //:
 // \file
@@ -8,9 +10,6 @@
 
 #include <vil1/vil1_image.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <cmath>
-#include <iostream>
 
 #include <osl/osl_harris_params.h>
 #include <osl/osl_harris.h>

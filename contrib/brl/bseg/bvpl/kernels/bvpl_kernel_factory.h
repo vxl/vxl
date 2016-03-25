@@ -30,13 +30,12 @@
 //   <none yet>
 // \endverbatim
 
-#include "bvpl_kernel.h"
-#include "bvpl_kernel_iterator.h"
-#include <vcl_compiler.h>
-#include <iostream>
 #include <iostream>
 #include <map>
 #include <utility>
+#include "bvpl_kernel.h"
+#include "bvpl_kernel_iterator.h"
+#include <vcl_compiler.h>
 #include <vnl/vnl_float_3.h>
 #include <vgl/algo/vgl_rotation_3d.h>
 #include <vbl/vbl_ref_count.h>

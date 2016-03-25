@@ -11,8 +11,8 @@
 //   10 Sep. 2004 Peter Vanroose  Inlined all 1-line methods in class decl
 // \endverbatim
 
-#include <vcl_compiler.h>
 #include <vector>
+#include <vcl_compiler.h>
 
 struct vgui_parent_child_link_impl;
 struct vgui_parent_child_link;

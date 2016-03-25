@@ -7,12 +7,12 @@
 // \author Ian Scott (Manchester)
 // \date 26-Mar-2001
 
+#include <cstdlib>
+#include <iostream>
 #include "vbl_io_smart_ptr.h"
 #include <vsl/vsl_binary_io.h>
 #include <vbl/vbl_smart_ptr.h>
 #include <vcl_compiler.h>
-#include <cstdlib> // std::abort()
-#include <iostream>
 
 //=========================================================================
 //: Binary save self to stream.

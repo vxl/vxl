@@ -1,10 +1,10 @@
 // This is core/vgui/impl/win32/vgui_win32_utils.cxx
 
-#include "vgui_win32_utils.h"
 #include <iostream>
+#include <cstddef>
+#include "vgui_win32_utils.h"
 #include <vcl_cassert.h>
 #include <vcl_compiler.h>
-#include <cstddef> // for std::size_t
 
 // (Create if necessary and) return singleton instance of this class.
 vgui_win32_utils* vgui_win32_utils::instance()

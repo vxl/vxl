@@ -18,10 +18,10 @@
 // 1, 1.4, 2, 2.8, 4, 5.6, 8, i.e.,
 // 8/4 = 2, 2^(0.5) = 1.4, 4*1.4 = 5.6
 //
-#include <vil/vil_image_view.h>
-#include <vcl_compiler.h>
 #include <iostream>
 #include <vector>
+#include <vil/vil_image_view.h>
+#include <vcl_compiler.h>
 
 template <class T>
 class brip_max_scale_response

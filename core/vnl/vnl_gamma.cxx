@@ -1,4 +1,5 @@
 // This is core/vnl/vnl_gamma.cxx
+#include <iostream>
 #include "vnl_gamma.h"
 //:
 // \file
@@ -6,7 +7,6 @@
 // \author Tim Cootes
 
 #include <vcl_compiler.h>
-#include <iostream>
 #include <vcl_cassert.h>
 
 #if defined(__INTEL_COMPILER)

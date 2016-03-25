@@ -19,6 +19,9 @@
 // \endverbatim
 
 
+#include <iostream>
+#include <fstream>
+#include <limits>
 #include <vpgl/vpgl_rational_camera.h>
 #include <vpgl/vpgl_local_rational_camera.h>
 #include <vpgl/algo/vpgl_backproject.h>
@@ -35,11 +38,7 @@
 #include <vgl/vgl_plane_3d.h>
 #include <vil/vil_image_view.h>
 
-#include <iostream>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <fstream>
-#include <limits>
 
 int convert_uncertainty_from_meters_to_pixels(float uncertainty,
                                               vpgl_lvcs lvcs,

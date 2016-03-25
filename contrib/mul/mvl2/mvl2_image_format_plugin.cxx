@@ -12,12 +12,11 @@
 //  Modifications
 // \endverbatim
 
-#include "mvl2_image_format_plugin.h"
 #include <iostream>
 #include <string>
+#include <cstdlib>
+#include "mvl2_image_format_plugin.h"
 #include <vcl_compiler.h>
-#include <iostream>
-#include <cstdlib> // for std::atoi()
 #include <vul/vul_file.h>
 #include <mvl2/mvl2_video_from_avi.h>
 #include <mvl2/mvl2_video_from_sequence.h>

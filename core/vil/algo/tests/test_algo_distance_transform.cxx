@@ -1,6 +1,6 @@
+#include <iostream>
 #include <testlib/testlib_test.h>
 #include <vcl_compiler.h>
-#include <iostream>
 #include <vil/algo/vil_distance_transform.h>
 
 static void test_algo_distance_transform1()

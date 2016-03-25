@@ -1,3 +1,5 @@
+#include <iostream>
+#include <string>
 #include <testlib/testlib_test.h>
 #include "sample_database.h"
 #include <brdb/brdb_value.h>
@@ -5,9 +7,6 @@
 #include <brdb/brdb_relation.h>
 #include <brdb/brdb_database.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
-#include <string>
 
 static void test_database()
 {

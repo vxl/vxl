@@ -1,7 +1,7 @@
-#include "bstm_majority_filter.h"
-#include <vcl_compiler.h>
 #include <iostream>
 #include <algorithm>
+#include "bstm_majority_filter.h"
+#include <vcl_compiler.h>
 
 
 bstm_majority_filter::bstm_majority_filter(bstm_block_metadata data, bstm_block* blk, bstm_time_block* blk_t, bstm_data_base* changes)

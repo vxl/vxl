@@ -1,8 +1,8 @@
+#include <iostream>
 #include <testlib/testlib_test.h>
 #include <vnl/vnl_sparse_lst_sqr_function.h>
 #include <vnl/algo/vnl_sparse_lm.h>
 #include <vcl_compiler.h>
-#include <iostream>
 #include <vcl_cassert.h>
 #include <vnl/vnl_random.h>
 #include <vnl/vnl_math.h>

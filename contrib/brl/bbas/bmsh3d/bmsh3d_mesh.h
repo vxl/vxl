@@ -15,13 +15,13 @@
 // \endverbatim
 //
 
-#include <vcl_cassert.h>
-#include <vcl_compiler.h>
 #include <iostream>
 #include <iosfwd>
-
 #include <map>
 #include <utility>
+#include <vcl_cassert.h>
+#include <vcl_compiler.h>
+
 
 #include <vgl/vgl_point_3d.h>
 

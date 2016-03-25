@@ -8,9 +8,9 @@
 // \brief Interface/base for a volume made up of slices.
 // \author Ian Scott - Manchester
 
-#include <vcl_compiler.h>
 #include <iostream>
 #include <vector>
+#include <vcl_compiler.h>
 #include <vil3d/vil3d_file_format.h>
 #include <vil3d/vil3d_image_resource.h>
 #include <vil/vil_image_resource.h>

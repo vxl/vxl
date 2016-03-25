@@ -1,5 +1,6 @@
 // Example of using a vgui_blender_tableau.
 
+#include <iostream>
 #include <vgui/vgui.h>
 #include <vgui/vgui_composite_tableau.h>
 #include <vgui/vgui_image_tableau.h>
@@ -7,7 +8,6 @@
 #include <vgui/vgui_viewer2D_tableau.h>
 
 #include <vcl_compiler.h>
-#include <iostream>
 
 int main(int argc, char ** argv)
 {

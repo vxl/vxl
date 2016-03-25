@@ -22,8 +22,8 @@
 //   2009-05-21 Peter Vanroose    istream operator>> re-implemented
 // \endverbatim
 
-#include <vcl_compiler.h>
 #include <iosfwd>
+#include <vcl_compiler.h>
 #include <vcl_cassert.h>
 #include <vgl/vgl_fwd.h> // forward declare vgl_point_2d and vgl_homg_line_2d
 #include <vgl/vgl_vector_2d.h>

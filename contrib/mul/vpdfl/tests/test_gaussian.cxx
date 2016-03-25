@@ -1,4 +1,6 @@
 // This is mul/vpdfl/tests/test_gaussian.cxx
+#include <iostream>
+#include <sstream>
 #include <testlib/testlib_test.h>
 //:
 // \file
@@ -6,9 +8,6 @@
 // \brief test vpdfl_gaussian, building, sampling, saving etc.
 
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
-#include <sstream>
 #include <vpl/vpl.h> // vpl_unlink()
 
 #include <vsl/vsl_binary_loader.h>

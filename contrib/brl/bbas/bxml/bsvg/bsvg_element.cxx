@@ -1,3 +1,6 @@
+#include <iostream>
+#include <cmath>
+#include <sstream>
 #include "bsvg_element.h"
 //:
 // \file
@@ -5,9 +8,6 @@
 // \date   April 21, 2009
 
 #include <vcl_compiler.h>
-#include <iostream>
-#include <cmath>
-#include <sstream>
 
 void bsvg_element::set_transformation(float trans_x, float trans_y, float rot)
 {

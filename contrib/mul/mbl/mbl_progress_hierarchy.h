@@ -6,10 +6,10 @@
 // \author Ian Scott
 // \date 10 Jan 2008
 
-#include <vcl_compiler.h>
 #include <iostream>
 #include <string>
 #include <vector>
+#include <vcl_compiler.h>
 #include <mbl/mbl_progress.h>
 
 //========================================================================

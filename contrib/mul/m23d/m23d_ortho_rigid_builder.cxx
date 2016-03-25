@@ -1,3 +1,5 @@
+#include <iostream>
+#include <cstdlib>
 #include "m23d_ortho_rigid_builder.h"
 //:
 // \file
@@ -13,11 +15,8 @@
 #include <vnl/algo/vnl_symmetric_eigensystem.h>
 #include <vgl/vgl_vector_3d.h>
 
-#include <iostream>
 #include <vcl_cassert.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <cstdlib>
 
 //: Reconstruct structure from set of 2d pts
 // Formulates measurement matrix P2D then calls reconstruct function above

@@ -1,4 +1,6 @@
 // This is brl/bpro/core/brad_pro/processes/brad_load_eigenspace_process.cxx
+#include <iostream>
+#include <fstream>
 #include <bprb/bprb_func_process.h>
 #include <brad/brad_eigenspace.h>
 #include <vsl/vsl_binary_io.h>
@@ -6,8 +8,6 @@
 // \file
 
 #include <vcl_compiler.h>
-#include <iostream>
-#include <fstream>
 
 //: Constructor
 bool brad_load_eigenspace_process_cons(bprb_func_process& pro)

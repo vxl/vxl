@@ -2,6 +2,8 @@
 #define boxm2_multi_cache_group_h_
 //:
 // \file
+#include <iostream>
+#include <iosfwd>
 #include "boxm2_multi_cache_group.h"
 #include "boxm2_multi_util.h"
 #include <boxm2/basic/boxm2_block_id.h>
@@ -10,8 +12,6 @@
 #include <vgl/vgl_box_3d.h>
 #include <vpgl/vpgl_camera_double_sptr.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iosfwd>
 
 //: a helper class that groups together contiguous blocks across devices.
 // Essentially this enforces that a group contains just one block per device,

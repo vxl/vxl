@@ -1,4 +1,8 @@
 // This is rpl/rrel/rrel_ran_sam_search.cxx
+#include <iostream>
+#include <cmath>
+#include <vector>
+#include <cstdlib>
 #include "rrel_ran_sam_search.h"
 #include <rrel/rrel_objective.h>
 #include <rrel/rrel_estimation_problem.h>
@@ -7,12 +11,7 @@
 #include <vnl/vnl_vector.h>
 #include <vnl/vnl_random.h>
 
-#include <iostream>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <cmath>
-#include <vector>
-#include <cstdlib>
 #include <vcl_cassert.h>
 
 // Random number generator. This will be shared by all ran_sam instances.

@@ -1,3 +1,4 @@
+#include <iostream>
 #include "bwm_corr.h"
 //:
 // \file
@@ -5,8 +6,6 @@
 #include "io/bwm_io_structs.h"
 #include <vgl/vgl_distance.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 #include <vsl/vsl_basic_xml_element.h>
 #include <vsol/vsol_point_2d.h>
 

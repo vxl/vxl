@@ -8,9 +8,9 @@
 // \date   03 Nov 1999
 // \brief  See vgui_loader_tableau.h for a description of this file.
 
+#include <iostream>
 #include "vgui_loader_tableau.h"
 #include <vcl_compiler.h>
-#include <iostream>
 #include <vnl/vnl_matrix_fixed.h>
 #include <vgui/vgui_gl.h>
 

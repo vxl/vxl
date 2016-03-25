@@ -1,3 +1,5 @@
+#include <iostream>
+#include <fstream>
 #include <testlib/testlib_test.h>
 
 #include <vsph/vsph_view_sphere.h>
@@ -5,8 +7,6 @@
 #include <vsph/vsph_sph_box_2d.h>
 #include <vsph/vsph_utils.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <fstream>
 #include <vnl/vnl_math.h>
 #include <vul/vul_timer.h>
 #include <vgl/vgl_box_2d.h>

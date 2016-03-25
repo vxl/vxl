@@ -4,6 +4,10 @@
 //  Copyright: (C) 2000 Victoria University of Manchester
 //
 //=======================================================================
+#include <sstream>
+#include <iostream>
+#include <cmath>
+#include <cstdlib>
 #include "vpdfl_mixture_builder.h"
 //:
 // \file
@@ -16,12 +20,8 @@
 //    IMS   Converted to VXL 14 May 2000, with redesign
 // \endverbatim
 
-#include <sstream>
 #include <vcl_cassert.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <cmath>
-#include <cstdlib> // for std::abort()
 #include <vsl/vsl_indent.h>
 #include <vsl/vsl_vector_io.h>
 #include <vsl/vsl_binary_loader.h>

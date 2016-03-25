@@ -6,11 +6,11 @@
 // \author Gamze Tunali
 // \date   Sep 16, 2012
 
+#include <iostream>
+#include <fstream>
 #include <bprb/bprb_func_process.h>
 
 #include <vcl_compiler.h>
-#include <iostream>
-#include <fstream>
 #include <boxm2/boxm2_scene.h>
 #include <boxm2/boxm2_scene_parser.h>
 

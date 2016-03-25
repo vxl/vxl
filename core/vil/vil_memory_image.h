@@ -12,11 +12,11 @@
 //   Peter Vanroose - 21 Aug.2003 - support added for _RGB_, _RGBA_ and _COMPLEX_ pixel_formats
 // \endverbatim
 
+#include <cstring>
 #include <vil/vil_image_resource.h>
 #include <vil/vil_image_view_base.h>
 #include <vil/vil_property.h>
 #include <vcl_compiler.h>
-#include <cstring>
 
 //: Generic image implementation for PNM files
 // You can't create one of these yourself - use vil_new_image_resource() instead.

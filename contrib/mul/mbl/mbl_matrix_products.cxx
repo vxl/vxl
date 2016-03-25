@@ -4,14 +4,13 @@
 // \date 25-Apr-2001
 // \brief Various specialised versions of matrix product operations
 
+#include <iostream>
+#include <cstdlib>
 #include "mbl_matrix_products.h"
 #include <vnl/vnl_vector.h>
 #include <vnl/vnl_matrix.h>
 #include <vcl_cassert.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <cstdlib> // for std::abort()
-#include <iostream>
 
 //=======================================================================
 //: Compute product AB = A * B

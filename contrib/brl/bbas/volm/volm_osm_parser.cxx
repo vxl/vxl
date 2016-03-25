@@ -1,12 +1,12 @@
-#include "volm_osm_parser.h"
-//:
-// \file
 #include <sstream>
 #include <cstdio>
 #include <cstring>
-#include <vcl_compiler.h>
 #include <iostream>
 #include <cstddef>
+#include "volm_osm_parser.h"
+//:
+// \file
+#include <vcl_compiler.h>
 #include <vcl_cassert.h>
 
 template <typename T>

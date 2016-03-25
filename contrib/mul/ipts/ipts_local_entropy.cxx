@@ -1,14 +1,14 @@
 // This is mul/ipts/ipts_local_entropy.cxx
+#include <vector>
+#include <iostream>
+#include <cmath>
 #include "ipts_local_entropy.h"
 //:
 // \file
 // \brief Compute entropy in region around each image pixel
 // \author Tim Cootes
 
-#include <vector>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <cmath>
 #include <vcl_cassert.h>
 
 inline double histo_entropy_sum(const std::vector<int>& histo,

@@ -1,12 +1,11 @@
 // This is rpl/rsdl/rsdl_point.cxx
+#include <iostream>
 #include "rsdl_point.h"
 //:
 //  \file
 
 #include <vcl_cassert.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 #include <vnl/vnl_vector.h>
 
 rsdl_point::rsdl_point( )

@@ -6,14 +6,14 @@
 // \brief Find peaks in scale-space
 // \author Tim Cootes
 
+#include <iostream>
+#include <cmath>
 #include <vimt/algo/vimt_find_peaks.h>
 #include <vgl/vgl_point_2d.h>
 #include <vgl/vgl_vector_2d.h>
 #include <vgl/vgl_point_3d.h>
 #include <vimt/vimt_image_pyramid.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <cmath> // for sqrt(double)
 #include <vcl_cassert.h>
 
 //: True if value is strictly above *im and its 8 neighbours

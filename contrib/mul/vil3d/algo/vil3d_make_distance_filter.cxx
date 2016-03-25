@@ -3,10 +3,10 @@
 //  \brief Compute filter for an exp. distance transform.
 // \author Tim Cootes
 
-#include "vil3d_make_distance_filter.h"
-#include <vcl_compiler.h>
 #include <iostream>
 #include <cmath>
+#include "vil3d_make_distance_filter.h"
+#include <vcl_compiler.h>
 #include <vcl_cassert.h>
 
 //: Create filter such that d[a] is distance from origin of se[a]

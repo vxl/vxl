@@ -5,11 +5,11 @@
 #ifndef rgtl_object_array_points_txx
 #define rgtl_object_array_points_txx
 
+#include <iostream>
+#include <limits>
 #include "rgtl_object_array_points.hxx"
 
 #include <vcl_compiler.h>
-#include <iostream>
-#include <limits>
 
 //----------------------------------------------------------------------------
 template <unsigned int D>

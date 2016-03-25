@@ -4,10 +4,10 @@
 // \author Ian Scott
 //
 
+#include <iostream>
 #include "vsl_vector_io.h"
 #include <vsl/vsl_binary_io.h>
 #include <vcl_compiler.h>
-#include <iostream>
 
 //====================================================================================
 //: Write vector to binary stream

@@ -12,12 +12,12 @@
 //                         backward compatibility I left the original read function.
 // \endverbatim
 
-#include <rgrl/rgrl_feature_sptr.h>
-
-#include <vcl_compiler.h>
 #include <iostream>
 #include <iosfwd>
 #include <vector>
+#include <rgrl/rgrl_feature_sptr.h>
+
+#include <vcl_compiler.h>
 
 //: Read one feature from input stream
 //  IMPORTANCE:

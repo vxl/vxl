@@ -5,11 +5,10 @@
 //:
 //  \file
 
+#include <iostream>
 #include "HomgInterestPoint.h"
 
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 #include <vnl/vnl_math.h>
 #include <mvl/HomgMetric.h>
 

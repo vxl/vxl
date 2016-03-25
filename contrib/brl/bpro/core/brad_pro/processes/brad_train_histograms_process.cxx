@@ -1,4 +1,8 @@
 // This is brl/bpro/core/brad_pro/processes/brad_train_histograms_process.cxx
+#include <vector>
+#include <string>
+#include <iostream>
+#include <fstream>
 #include <bprb/bprb_func_process.h>
 //:
 // \file
@@ -7,11 +11,7 @@
 #include <brad/brad_eigenspace.h>
 #include <bpro/core/bbas_pro/bbas_1d_array_string.h>
 #include <vil/vil_load.h>
-#include <vector>
-#include <string>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <fstream>
 
 namespace bbas_core_brad_train_hist
 {

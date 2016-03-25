@@ -1,9 +1,8 @@
-#include "bwm_utils.h"
-
-#include <iostream>
-#include <vcl_compiler.h>
 #include <iostream>
 #include <fstream>
+#include "bwm_utils.h"
+
+#include <vcl_compiler.h>
 #include <vil/vil_config.h>
 
 #include <vgui/vgui_dialog.h>

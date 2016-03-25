@@ -17,8 +17,8 @@
 //   Ian Scott        12/06/2003: Added filen?m[abc].* notation to unix and dos version
 // \endverbatim
 
-#include <vcl_compiler.h>
 #include <string>
+#include <vcl_compiler.h>
 
 struct vul_file_iterator_data;
 

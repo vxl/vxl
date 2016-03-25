@@ -1,6 +1,8 @@
 #ifndef vpgl_io_camera_hxx_
 #define vpgl_io_camera_hxx_
 
+#include <string>
+#include <iostream>
 #include "vpgl_io_camera.h"
 //:
 // \file
@@ -17,8 +19,6 @@
 
 #include <vsl/vsl_binary_io.h>
 #include <vcl_compiler.h>
-#include <string>
-#include <iostream>
 
 
 //: Binary save camera to stream

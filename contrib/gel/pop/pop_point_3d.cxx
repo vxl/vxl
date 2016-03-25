@@ -1,10 +1,9 @@
 // This is gel/pop/pop_point_3d.cxx
+#include <iostream>
 #include "pop_point_3d.h"
 //:
 // \file
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 
 
 //: constructor

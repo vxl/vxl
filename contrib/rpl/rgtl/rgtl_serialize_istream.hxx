@@ -11,13 +11,13 @@
 // \author Brad King
 // \date February 2008
 
+#include <iosfwd>
+#include <iostream>
+#include <cstddef>
 #include "rgtl_serialize_direction.hxx"
 
 #include <vcl_compiler.h>
-#include <iosfwd>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <cstddef>
 
 //: Serialization load object that reads from a stream.
 //  See rgtl_serialize.txt for serialization interface details.

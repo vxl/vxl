@@ -13,11 +13,11 @@
 //  Modifications:
 // \endverbatim
 
+#include <iostream>
+#include <vector>
 #include "bvxm_voxel_storage.h"
 #include <vgl/vgl_vector_3d.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <vector>
 
 
 template <class T>

@@ -1,4 +1,6 @@
 // Copyright: (C) 2000 British Telecommunications plc
+#include <iostream>
+#include <vector>
 #include "clsfy_classifier_base.h"
 //:
 // \file
@@ -11,10 +13,7 @@
 // \endverbatim
 
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 #include <vcl_cassert.h>
-#include <vector>
 #include <vsl/vsl_indent.h>
 #include <vsl/vsl_binary_loader.h>
 

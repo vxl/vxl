@@ -22,10 +22,10 @@
 //   25 Sept 2004 Peter Vanroose added full 3D interface
 // \endverbatim
 
-#include <vgl/vgl_fwd.h> // forward declare various vgl classes
-#include <utility> // for std::pair<T,U>
-#include <vcl_compiler.h>
+#include <utility>
 #include <limits>
+#include <vgl/vgl_fwd.h> // forward declare various vgl classes
+#include <vcl_compiler.h>
 //: Closest point to \a (x,y) on the line segment \a (x1,y1)-(x2,y2)
 template <class T>
 void vgl_closest_point_to_linesegment(T& ret_x, T& ret_y,
@@ -335,4 +335,9 @@ vgl_point_3d<T> vgl_closest_point(vgl_sphere_3d<T> const& s,
 template <class T>
 vgl_point_3d<T> vgl_closest_point(vgl_pointset_3d<T> const& ptset, vgl_point_3d<T> const& p,
                                   T dist = std::numeric_limits<T>::max());
+
+//: Return the closest point on a cubic spline
+template <class T>
+vgl_point_3d<T> vgl_closest_point(vgl_cubic_spline_3d<T> const& cspl, vgl_point_3d<T> const& p);
+
 #endif // vgl_closest_point_h_

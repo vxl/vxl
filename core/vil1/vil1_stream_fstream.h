@@ -10,8 +10,8 @@
 // \author    awf@robots.ox.ac.uk
 // \date 16 Feb 00
 
-#include <vcl_compiler.h>
 #include <fstream>
+#include <vcl_compiler.h>
 #include <vil1/vil1_stream.h>
 
 //: A vil1_stream implementation using std::fstream

@@ -1,4 +1,7 @@
 // This is mul/mbl/mbl_clamped_plate_spline_2d.cxx
+#include <iostream>
+#include <cmath>
+#include <cstdlib>
 #include "mbl_clamped_plate_spline_2d.h"
 //:
 // \file
@@ -6,10 +9,7 @@
 // \author Tim Cootes
 
 #include <vcl_compiler.h>
-#include <iostream>
-#include <cmath>
 #include <vcl_cassert.h>
-#include <cstdlib> // for std::abort()
 #include <vsl/vsl_indent.h>
 #include <vsl/vsl_vector_io.h>
 #include <vnl/algo/vnl_svd.h>

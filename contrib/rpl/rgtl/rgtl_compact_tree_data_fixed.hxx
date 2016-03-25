@@ -5,14 +5,14 @@
 #ifndef rgtl_compact_tree_data_fixed_hxx
 #define rgtl_compact_tree_data_fixed_hxx
 
+#include <iostream>
+#include <vector>
 #include "rgtl_compact_tree.hxx"
 #include "rgtl_serialize_access.hxx"
 #include "rgtl_serialize_base.hxx"
 #include "rgtl_serialize_stl_vector.hxx"
 
 #include <vcl_compiler.h>
-#include <iostream>
-#include <vector>
 
 template <typename LeafDataType>
 class rgtl_compact_tree_data_fixed_leaf_data_policy:

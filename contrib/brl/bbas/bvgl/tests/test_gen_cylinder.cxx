@@ -1,11 +1,10 @@
 //:
 // \file
+#include <iostream>
 #include <testlib/testlib_test.h>
 #include <bvgl/bvgl_cross_section.h>
 #include <bvgl/bvgl_gen_cylinder.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 #define TEST_GEN_CYLINDER 0
 //: Test changes
 static void test_gen_cylinder()

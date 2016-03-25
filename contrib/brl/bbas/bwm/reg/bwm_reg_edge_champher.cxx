@@ -1,9 +1,9 @@
+#include <iostream>
+#include <cmath>
 #include "bwm_reg_edge_champher.h"
 //:
 // \file
 #include <vcl_compiler.h>
-#include <iostream>
-#include <cmath>
 #include <vsol/vsol_point_2d.h>
 #include <bsol/bsol_algs.h>
 

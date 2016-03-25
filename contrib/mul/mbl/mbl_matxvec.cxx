@@ -1,4 +1,6 @@
 // This is mul/mbl/mbl_matxvec.cxx
+#include <iostream>
+#include <cstdlib>
 #include "mbl_matxvec.h"
 //:
 // \file
@@ -21,9 +23,6 @@
 #include <vnl/vnl_matrix.h>
 #include <vcl_cassert.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <cstdlib> // for std::abort()
-#include <iostream>
 
 
 // Some of the code in this file has been converted to use VXL,

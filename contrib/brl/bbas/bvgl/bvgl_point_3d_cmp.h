@@ -12,10 +12,10 @@
 //   <none yet>
 // \endverbatim
 
-#include <vgl/vgl_point_3d.h>
-#include <vcl_compiler.h>
 #include <iostream>
 #include <functional>
+#include <vgl/vgl_point_3d.h>
+#include <vcl_compiler.h>
 
 //: A comparison functor for vgl_point_3d's. Needed to create a std::set of vgl_point_3d<int>'s.
 template <class T>

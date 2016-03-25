@@ -1,11 +1,11 @@
 // This is gel/gevd/gevd_noise.cxx
+#include <iostream>
+#include <cmath>
 #include "gevd_noise.h"
 //:
 // \file
 
 #include <vcl_compiler.h>
-#include <iostream>
-#include <cmath> // for std::fabs()
 
 #include "gevd_pixel.h"
 #include "gevd_float_operators.h"

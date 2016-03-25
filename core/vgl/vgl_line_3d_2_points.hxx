@@ -4,10 +4,10 @@
 //:
 // \file
 
-#include "vgl_line_3d_2_points.h"
 #include <iostream>
-// not used? #include <vcl_compiler.h>
 #include <limits>
+#include "vgl_line_3d_2_points.h"
+// not used? #include <vcl_compiler.h>
 
 //***************************************************************************
 // Initialization

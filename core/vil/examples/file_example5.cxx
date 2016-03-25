@@ -3,8 +3,8 @@
 // \brief Example of creating, processing and using an image data object
 // \author Ian Scott
 
-#include <vcl_compiler.h>
 #include <iostream>
+#include <vcl_compiler.h>
 #include <vil/vil_load.h>
 
 //: Analyse an image file without reading the pixels.

@@ -15,9 +15,8 @@
 #include <string>
 #include <utility>
 #include <iostream>
-#include <vcl_compiler.h>
-#include <iostream>
 #include <iomanip>
+#include <vcl_compiler.h>
 #include <vpgl/file_formats/vpgl_geo_camera.h>
 #include <vgl/vgl_box_2d.h>
 #include <vgl/vgl_polygon.h>

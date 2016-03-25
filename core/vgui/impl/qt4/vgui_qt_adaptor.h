@@ -17,8 +17,8 @@
 //   23.05.2007 Matt Leotta  converted to QT3 compatibility functions to native QT4
 // \endverbatim
 //-----------------------------------------------------------------------------
-#include <vcl_compiler.h>
 #include <map>
+#include <vcl_compiler.h>
 #include <vgui/vgui_adaptor.h>
 #include <vgui/internals/vgui_adaptor_mixin.h>
 #include <vgui/internals/vgui_overlay_helper.h>

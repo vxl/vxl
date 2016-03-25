@@ -15,9 +15,9 @@
 //  Modifications
 // \endverbatim
 
-#include <vcl_compiler.h>
 #include <iostream>
 #include <cmath>
+#include <vcl_compiler.h>
 #include <vcl_cassert.h>
 #include <vil/vil_image_view.h>
 #include <vil/vil_math.h>

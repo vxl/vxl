@@ -1,16 +1,15 @@
 // This is oxl/xcv/xcv_geometry.cxx
+#include <iostream>
+#include <fstream>
+#include <vector>
+#include <cmath>
 #include "xcv_geometry.h"
 //:
 // \file
 // See xcv_geometry.h for a description of this file.
 // \author K.Y.McGaul
 
-#include <iostream>
-#include <fstream>
-#include <vector>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <cmath>
 
 #include <vgl/vgl_polygon.h>
 #include <vgl/vgl_clip.h>

@@ -1,6 +1,8 @@
 //This is brl/bpro/core/bbas_pro/processes/bbas_camera_angles_process.cxx
 //:
 // \file
+#include <vector>
+#include <iostream>
 #include <bprb/bprb_func_process.h>
 #include <bprb/bprb_parameters.h>
 #include <vnl/vnl_math.h>
@@ -11,10 +13,7 @@
 #include <vpgl/vpgl_camera.h>
 #include <vpgl/vpgl_local_rational_camera.h>
 #include <vpgl/algo/vpgl_backproject.h>
-#include <vector>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 
 //: set input and output types
 bool bbas_camera_angles_process_cons(bprb_func_process& pro)

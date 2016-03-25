@@ -1,4 +1,6 @@
 // This is brl/bpro/core/vil_pro/processes/vil_pixelwise_roc_process.cxx
+#include <iostream>
+#include <algorithm>
 #include <bprb/bprb_func_process.h>
 //:
 // \file
@@ -8,8 +10,6 @@
 #include <vil/vil_convert.h>
 #include <bbas_pro/bbas_1d_array_float.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <algorithm>
 
 // do pixelwise sort on the image, and then
 struct Pair

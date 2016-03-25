@@ -51,10 +51,10 @@
 //   Feb.2002 - Peter Vanroose - brief doxygen comment placed on single line
 // \endverbatim
 
+#include <iosfwd>
 #include <vgl/vgl_fwd.h>
 #include <vgl/vgl_homg_point_1d.h>
 #include <vcl_compiler.h>
-#include <iosfwd>
 #include <vcl_cassert.h>
 
 //----------------------------------------------------------------------

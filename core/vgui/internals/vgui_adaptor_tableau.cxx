@@ -7,9 +7,9 @@
 // \author fsm
 // \brief  See vgui_adaptor_tableau.h for a description of this file.
 
+#include <iostream>
 #include "vgui_adaptor_tableau.h"
 #include <vcl_compiler.h>
-#include <iostream>
 #include <vgui/vgui_adaptor.h>
 
 //:

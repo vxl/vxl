@@ -1,13 +1,12 @@
 // This is oxl/osl/osl_fit_lines.cxx
+#include <iostream>
+#include <list>
 #include "osl_fit_lines.h"
 //:
 //  \file
 
 #include <vcl_cassert.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
-#include <list>
 
 #include <vnl/vnl_math.h>
 

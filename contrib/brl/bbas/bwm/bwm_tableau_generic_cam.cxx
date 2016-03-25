@@ -1,10 +1,10 @@
+#include <iostream>
+#include <sstream>
 #include "bwm_tableau_generic_cam.h"
 #include <vpgl/vpgl_generic_camera.h>
 #include "bwm_observer_mgr.h"
 #include "algo/bwm_utils.h"
 #include <vcl_compiler.h>
-#include <iostream>
-#include <sstream>
 #include <vgui/vgui_dialog.h>
 #include <vil/vil_save.h>
 

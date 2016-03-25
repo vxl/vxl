@@ -1,7 +1,8 @@
 // This is core/vnl/tests/test_vector.cxx
 #include <iostream>
-#include <vcl_compiler.h>
 #include <sstream>
+#include <exception>
+#include <vcl_compiler.h>
 #include <vnl/vnl_math.h>
 #include <vnl/vnl_vector.h>
 #include <vnl/vnl_float_3.h>
@@ -10,7 +11,6 @@
 #include <vnl/vnl_matrix_fixed.h>
 #include <vnl/vnl_cross.h>
 #include <testlib/testlib_test.h>
-#include <exception>
 
 void vnl_vector_test_int()
 {
@@ -222,7 +222,7 @@ void vnl_vector_test_int()
   v_temp = v.roll(v.size());
   TEST("v.roll(v.size())",
        (0 == v_temp[0] && 1 == v_temp[1] && 2 == v_temp[2] && 3 == v_temp[3]), true);
-  v_temp = v.roll(-v.size());
+  v_temp = v.roll(-1*static_cast<long signed int>(v.size()));
   TEST("v.roll(-v.size())",
        (0 == v_temp[0] && 1 == v_temp[1] && 2 == v_temp[2] && 3 == v_temp[3]), true);
 
@@ -269,7 +269,7 @@ void vnl_vector_test_int()
   v.roll_inplace(v.size());
   TEST("v.roll_inplace(v.size())",
        (0 == v[0] && 1 == v[1] && 2 == v[2] && 3 == v[3]), true);
-  v.roll_inplace(-v.size());
+  v.roll_inplace(-1*static_cast<long signed int>(v.size()));
   TEST("v.roll_inplace(-v.size())",
        (0 == v[0] && 1 == v[1] && 2 == v[2] && 3 == v[3]), true);
 

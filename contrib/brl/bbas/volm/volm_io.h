@@ -13,14 +13,14 @@
 // \endverbatim
 
 #include <string>
-#include <bpgl/depth_map/depth_map_scene_sptr.h>
-#include <bpgl/depth_map/depth_map_scene.h>
 #include <set>
 #include <utility>
 #include <iostream>
-#include <vcl_compiler.h>
-#include <iostream>
+#include <functional>
 #include <iomanip>
+#include <bpgl/depth_map/depth_map_scene_sptr.h>
+#include <bpgl/depth_map/depth_map_scene.h>
+#include <vcl_compiler.h>
 #include "volm_category_io.h"
 #include "volm_export.h"
 

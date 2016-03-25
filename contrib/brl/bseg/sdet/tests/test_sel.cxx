@@ -1,13 +1,12 @@
 // This is brl/bseg/sdet/tests/test_sel.cxx
 
-#include <testlib/testlib_test.h>
-#include <iostream>
-#include <vcl_compiler.h>
 #include <iostream>
 #include <cmath>
 #include <vector>
 #include <cstdlib>
 #include <string>
+#include <testlib/testlib_test.h>
+#include <vcl_compiler.h>
 #include <vnl/vnl_math.h>
 #include <sdet/sdet_curve_model.h>
 #include <sdet/sdet_sel.h>

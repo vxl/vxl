@@ -24,11 +24,10 @@
 //
 //-----------------------------------------------------------------------------
 #include <vector>
+#include <iostream>
 #include <vil/vil_image_view.h>
 #include <vil/vil_pyramid_image_view.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 
 class brip_filter_bank
 {

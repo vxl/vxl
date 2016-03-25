@@ -1,8 +1,8 @@
+#include <iostream>
 #include <vgui/vgui_easy2D_tableau.h>
 #include <vgui/vgui_soview2D.h>
 #include <vgui/vgui_style.h>
 #include <vcl_compiler.h>
-#include <iostream>
 #include <testlib/testlib_test.h>
 
 void test_displaybase()

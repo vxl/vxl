@@ -3,12 +3,12 @@
 #define vpgl_em_compute_5_point_hxx_
 //:
 // \file
+#include <iostream>
+#include <cstdlib>
 #include "vpgl_em_compute_5_point.h"
 
-#include <iostream>
 #include <vcl_cassert.h>
 #include <vcl_compiler.h>
-#include <cstdlib>
 
 #include <vnl/vnl_matrix_fixed.h>
 #include <vnl/vnl_inverse.h>

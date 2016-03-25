@@ -5,13 +5,13 @@
 //:
 // \file
 
+#include <iostream>
 #include "vidl_istream_image_resource.h"
 #include <vidl/vidl_istream.h>
 #include "vidl_convert.h"
 
 #include <vcl_cassert.h>
 #include <vcl_compiler.h>
-#include <iostream>
 
 #include <vil/vil_image_view.h>
 

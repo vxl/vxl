@@ -5,14 +5,14 @@
 // \author Tim Cootes
 // \brief Generates set of axis aligned modes for non-zero elements
 
+#include <iostream>
+#include <iosfwd>
 #include <mcal/mcal_component_analyzer.h>
 #include <mcal/mcal_single_basis_cost.h>
 #include <vnl/io/vnl_io_vector.h>
 #include <vnl/io/vnl_io_matrix.h>
 #include <mbl/mbl_data_wrapper.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iosfwd>
 
 //: Generates set of axis aligned modes for non-zero element
 //  Given n-D input data, for each element which contains non-zero

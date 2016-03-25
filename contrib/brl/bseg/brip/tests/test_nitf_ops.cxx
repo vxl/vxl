@@ -1,9 +1,8 @@
+#include <iostream>
 #include <testlib/testlib_test.h>
 #include <testlib/testlib_root_dir.h>
 #include <brip/brip_vil_nitf_ops.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 #include <vil/vil_load.h>
 #include <vil/vil_save.h>
 #include <vul/vul_file.h>

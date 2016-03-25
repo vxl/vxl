@@ -19,10 +19,10 @@
 // \endverbatim
 
 #include <vector>
+#include <iosfwd>
 #include <vgl/vgl_homg_point_3d.h>
 #include <vgl/vgl_homg_plane_3d.h>
 #include <vcl_compiler.h>
-#include <iosfwd>
 
 template <class T>
 class vgl_fit_plane_3d

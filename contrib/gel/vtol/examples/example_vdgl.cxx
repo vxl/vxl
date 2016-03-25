@@ -1,7 +1,6 @@
 // This is gel/vtol/examples/example_vdgl.cxx
+#include <iostream>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 
 #include <vsol/vsol_point_2d.h>
 

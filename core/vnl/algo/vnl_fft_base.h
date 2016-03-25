@@ -9,8 +9,8 @@
 // \brief In-place n-D fast Fourier transform
 // \author fsm
 
-#include <vcl_compiler.h>
 #include <complex>
+#include <vcl_compiler.h>
 #include <vnl/algo/vnl_fft_prime_factors.h>
 
 //: Base class for in-place ND fast Fourier transform.

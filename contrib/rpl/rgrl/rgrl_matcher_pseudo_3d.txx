@@ -1,6 +1,7 @@
 #ifndef rgrl_matcher_pseudo_3d_txx_
 #define rgrl_matcher_pseudo_3d_txx_
 
+#include <iostream>
 #include "rgrl_matcher_pseudo_3d.h"
 #include <rgrl/rgrl_feature_face_region.h>
 #include <rgrl/rgrl_feature_trace_region.h>
@@ -18,7 +19,6 @@ static const double rgrl_matcher_pseudo_3d_max_response_value = 1.0e30;
 
 #define DEBUG
 #if defined ( DEBUG )
-#  include <iostream>
 #  define DBG(x) x
 #else
 #  define DBG(x)

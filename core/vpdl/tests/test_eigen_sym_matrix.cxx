@@ -1,7 +1,7 @@
+#include <iostream>
 #include <testlib/testlib_test.h>
 #include <vpdl/vpdt/vpdt_eigen_sym_matrix.h>
 #include <vcl_compiler.h>
-#include <iostream>
 #include <vnl/vnl_matrix_fixed.h>
 
 template <class T>

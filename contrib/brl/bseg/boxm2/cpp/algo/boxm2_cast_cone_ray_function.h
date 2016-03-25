@@ -3,6 +3,9 @@
 //:
 // \file
 
+#include <iostream>
+#include <algorithm>
+#include <list>
 #include <vgl/vgl_point_3d.h>
 #include <vgl/vgl_vector_3d.h>
 #include <vgl/vgl_box_3d.h>
@@ -17,10 +20,6 @@
 #include <boxm2/boxm2_util.h>
 #include <boct/boct_bit_tree.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <algorithm>
-#include <list>
-#include <iostream>
 
 // camera includes
 #include <vpgl/vpgl_perspective_camera.h>

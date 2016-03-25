@@ -1,4 +1,6 @@
 // This is brl/bseg/boxm/algo/pro/processes/boxm_line_backproject_process.cxx
+#include <iostream>
+#include <cstdio>
 #include <bprb/bprb_func_process.h>
 //:
 // \file
@@ -29,8 +31,6 @@
 #include <vil/vil_image_view.h>
 
 #include <vcl_compiler.h>
-#include <iostream>
-#include <cstdio>
 
 //: globals
 namespace boxm_line_backproject_process_globals

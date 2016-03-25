@@ -1,7 +1,6 @@
+#include <iostream>
 #include <testlib/testlib_test.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 #include <volm/volm_geo_index2.h>
 #include <volm/volm_geo_index2_sptr.h>
 #include <volm/volm_loc_hyp.h>

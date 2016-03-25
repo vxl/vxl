@@ -1,10 +1,9 @@
 // This is mul/pdf1d/pdf1d_prob_chi2.cxx
+#include <iostream>
+#include <cstdlib>
 #include "pdf1d_prob_chi2.h"
 
-#include <iostream>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <cstdlib> // for std::abort()
 #include <mbl/mbl_gamma.h>
 
 double pdf1d_chi2_for_cum_prob(double p, int n_dof, double tol)

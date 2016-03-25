@@ -1,16 +1,16 @@
 #ifndef boxm2_scene_parser_h_
 #define boxm2_scene_parser_h_
 
-#include <expatpplib.h>
 #include <string>
+#include <iostream>
+#include <map>
+#include <expatpplib.h>
 
 #include <boxm2/basic/boxm2_block_id.h>
 #include <boxm2/boxm2_block_metadata.h>
 #include <vpgl/vpgl_lvcs.h>
 #include <vgl/vgl_point_3d.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <map>
 
 //scene level metadata
 #define VERSION_TAG "version"

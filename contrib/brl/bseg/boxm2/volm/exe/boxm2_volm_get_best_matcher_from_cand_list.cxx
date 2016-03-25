@@ -7,10 +7,11 @@
 // \author Yi Dong
 // \date Aug. 24, 2013
 
-#include <vul/vul_arg.h>
-#include <vul/vul_file.h>
 #include <iostream>
 #include <iomanip>
+#include <algorithm>
+#include <vul/vul_arg.h>
+#include <vul/vul_file.h>
 #include <volm/volm_io.h>
 #include <volm/volm_tile.h>
 #include <volm/volm_camera_space.h>
@@ -26,8 +27,6 @@
 #include <bkml/bkml_write.h>
 #include <vgl/vgl_intersection.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <algorithm>
 
 void error_report(std::string error_file, std::string error_msg)
 {

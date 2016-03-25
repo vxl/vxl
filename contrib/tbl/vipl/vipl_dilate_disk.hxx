@@ -1,10 +1,10 @@
 #ifndef vipl_dilate_disk_hxx_
 #define vipl_dilate_disk_hxx_
 
-#include "vipl_dilate_disk.h"
-#include <vcl_compiler.h>
 #include <iostream>
 #include <algorithm>
+#include "vipl_dilate_disk.h"
+#include <vcl_compiler.h>
 
 template <class ImgIn,class ImgOut,class DataIn,class DataOut,class PixelItr>
 bool vipl_dilate_disk <ImgIn,ImgOut,DataIn,DataOut,PixelItr> :: section_applyop()

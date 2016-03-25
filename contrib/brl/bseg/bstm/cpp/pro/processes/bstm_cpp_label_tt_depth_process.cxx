@@ -1,4 +1,6 @@
 // This is brl/bseg/bstm/cpp/pro/processes/bstm_cpp_label_tt_depth_process.cxx
+#include <iostream>
+#include <fstream>
 #include <bprb/bprb_func_process.h>
 //:
 // \file
@@ -8,8 +10,6 @@
 // \date Jan 28, 2013
 
 #include <vcl_compiler.h>
-#include <iostream>
-#include <fstream>
 #include <bstm/io/bstm_cache.h>
 #include <bstm/io/bstm_lru_cache.h>
 #include <bstm/bstm_scene.h>

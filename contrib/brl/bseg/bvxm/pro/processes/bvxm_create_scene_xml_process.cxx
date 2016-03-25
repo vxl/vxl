@@ -1,4 +1,6 @@
 // This is brl/bseg/bvxm/pro/processes/bvxm_create_scene_xml_process.cxx
+#include <iostream>
+#include <string>
 #include "bvxm_create_scene_xml_process.h"
 //:
 // \file
@@ -6,8 +8,6 @@
 #include <vgl/vgl_point_3d.h>
 #include <vgl/vgl_vector_3d.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <string>
 #include <vul/vul_file.h>
 
 // set up input types

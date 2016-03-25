@@ -8,12 +8,12 @@
 //\endverbatim
 
 
-#include "vidl_v4l2_control.h"
-#include <vcl_compiler.h>
 #include <cstdio>
-#include <vcl_cstdio.h> // for vcl_snprintf()
 #include <cstring>
 #include <iostream>
+#include "vidl_v4l2_control.h"
+#include <vcl_compiler.h>
+#include <vcl_cstdio.h> // for vcl_snprintf()
 
 extern "C" {
 #include <sys/ioctl.h>

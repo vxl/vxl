@@ -6,16 +6,16 @@
 // \author Yi Dong
 // \date Feb 18, 2013
 
+#include <set>
+#include <iostream>
+#include <ios>
 #include <volm/volm_io.h>
 #include <volm/volm_tile.h>
 #include <vul/vul_arg.h>
 #include <vul/vul_file.h>
 #include <vil/vil_save.h>
 #include <vil/vil_load.h>
-#include <set>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <ios>
 #include <bvrml/bvrml_write.h>
 
 int main(int argc, char** argv)

@@ -1,3 +1,4 @@
+#include <cmath>
 #include "vil_orientations.h"
 //:
 // \file
@@ -6,7 +7,6 @@
 
 #include <vcl_cassert.h>
 #include <vcl_compiler.h>
-#include <cmath>
 
 //: Compute orientation (in radians) and gradient magnitude at each pixel
 void vil_orientations(const vil_image_view<float>& grad_i,

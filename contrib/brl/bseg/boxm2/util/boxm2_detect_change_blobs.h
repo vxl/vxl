@@ -2,12 +2,12 @@
 #define boxm2_detect_change_blobs_h
 //:
 // \file
-#include <vil/vil_image_view.h>
-#include <vgl/vgl_point_2d.h>
 #include <vector>
-#include <vcl_compiler.h>
 #include <iostream>
 #include <cstddef>
+#include <vil/vil_image_view.h>
+#include <vgl/vgl_point_2d.h>
+#include <vcl_compiler.h>
 
 //: pixel pair-i,j value
 typedef vgl_point_2d<int> PairType;

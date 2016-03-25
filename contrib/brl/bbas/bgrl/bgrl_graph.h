@@ -19,6 +19,10 @@
 // \endverbatim
 
 
+#include <set>
+#include <string>
+#include <iostream>
+#include <iosfwd>
 #include "bgrl_vertex_sptr.h"
 #include "bgrl_edge_sptr.h"
 #include "bgrl_graph_sptr.h"
@@ -26,11 +30,7 @@
 #include "bgrl_search_func.h"
 #include <vbl/vbl_ref_count.h>
 #include <vsl/vsl_binary_io.h>
-#include <set>
-#include <string>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iosfwd>
 
 //: The graph
 class bgrl_graph : public vbl_ref_count

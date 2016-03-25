@@ -6,10 +6,9 @@
 // \file
 // \author crossge@crd.ge.com
 
+#include <iostream>
 #include "gmvl_connection.h"
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 
 gmvl_connection::gmvl_connection( const gmvl_node_sptr node1, const gmvl_node_sptr node2)
   : n1_( node1), n2_( node2)

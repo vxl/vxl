@@ -9,12 +9,11 @@
 //   Yi Dong --- Oct, 2014  added radiometric normalization for different types of multi-spectral images
 // \endverbatim
 
-#include <vcl_compiler.h>
 #include <iostream>
 #include <cmath>
 #include <vector>
-#include <iostream>
 #include <fstream>
+#include <vcl_compiler.h>
 #include <bprb/bprb_func_process.h>
 
 #include <vil/vil_convert.h>

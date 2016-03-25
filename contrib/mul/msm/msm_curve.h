@@ -5,14 +5,14 @@
 // \brief List of points making a curve - for defining boundaries
 // \author Tim Cootes
 
-#include <vcl_cassert.h>
-#include <vcl_compiler.h>
 #include <iostream>
 #include <cstddef>
 #include <iosfwd>
 #include <string>
-#include <vsl/vsl_fwd.h>
 #include <vector>
+#include <vcl_cassert.h>
+#include <vcl_compiler.h>
+#include <vsl/vsl_fwd.h>
 
 //: List of points making a curve - for defining boundaries
 //  A curve is a sequence of point indices indicating how

@@ -22,10 +22,10 @@
 //   generating OpenGL display list during initialization of tableau tree.
 // \endverbatim
 
+#include <map>
 #include <vgui/vgui_adaptor.h>
 #include <vgui/internals/vgui_adaptor_mixin.h>
 #include <vcl_compiler.h>
-#include <map>
 
 #include <gtk/gtk.h>
 

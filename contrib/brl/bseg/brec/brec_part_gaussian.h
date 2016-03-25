@@ -13,11 +13,10 @@
 //   <none yet>
 // \endverbatim
 
-#include "brec_part_base.h"
 #include <vector>
+#include <iostream>
+#include "brec_part_base.h"
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 #include "brec_part_gaussian_sptr.h"
 
 #include <vnl/vnl_vector_fixed.h>

@@ -1,4 +1,6 @@
 // This is core/vgui/vgui_utils.cxx
+#include <cstdlib>
+#include <iostream>
 #include "vgui_utils.h"
 //:
 // \file
@@ -7,9 +9,7 @@
 // \brief  See vgui_utils.h for a description of this file.
 
 #include <vcl_compiler.h>
-#include <cstdlib>
 #include <vcl_cassert.h>
-#include <iostream>
 
 #include <vil1/vil1_rgba.h>
 #include <vil1/vil1_save.h>

@@ -13,10 +13,10 @@
 // \endverbatim
 
 
-#include "imesh_mesh.h"
-#include <vcl_compiler.h>
 #include <iostream>
 #include <set>
+#include "imesh_mesh.h"
+#include <vcl_compiler.h>
 #include <vgl/vgl_point_3d.h>
 
 //: Subdivide mesh faces into triangle

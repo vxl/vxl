@@ -6,9 +6,9 @@
 //  \author Chuck Stewart
 //  \date   Summer 2001
 
-#include <vcl_compiler.h>
 #include <iostream>
 #include <iterator>
+#include <vcl_compiler.h>
 
 //: \brief Compute the median absolute deviation (MAD) scale estimate of the residuals.
 //

@@ -11,14 +11,14 @@
 //   Andrew Miller - 30 Nov 2010 - moved to BOCL, added string, void* member var
 // \endverbatim
 
-#include "bocl_cl.h"
-#include "bocl_utils.h"
-#include "bocl_kernel.h"
 #include <string>
-#include <vcl_compiler.h>
 #include <iostream>
 #include <cstddef>
 #include <iosfwd>
+#include "bocl_cl.h"
+#include "bocl_utils.h"
+#include "bocl_kernel.h"
+#include <vcl_compiler.h>
 
 //makes a bocl_mem a sptr
 #include <vbl/vbl_ref_count.h>

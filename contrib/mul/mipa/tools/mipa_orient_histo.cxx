@@ -3,9 +3,8 @@
 // \brief Tool to compute an orientation histogram image from an input image
 // \author Tim Cootes
 
+#include <iostream>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 #include <vxl_config.h> // for vxl_byte
 #include <vil/vil_load.h>
 #include <vil/vil_save.h>

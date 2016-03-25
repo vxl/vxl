@@ -1,10 +1,10 @@
-#include "mmn_lbp_solver.h"
-#include <vcl_compiler.h>
 #include <iostream>
 #include <algorithm>
 #include <functional>
 #include <iterator>
 #include <sstream>
+#include "mmn_lbp_solver.h"
+#include <vcl_compiler.h>
 #include <mbl/mbl_exception.h>
 #include <mbl/mbl_stl.h>
 #include <mbl/mbl_parse_block.h>

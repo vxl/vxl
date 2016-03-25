@@ -1,4 +1,6 @@
 // This is brl/bbas/bhdfs/pro/processes/bhdfs_save_txt_file_process.cxx
+#include <iostream>
+#include <fstream>
 #include <bprb/bprb_func_process.h>
 //:
 // \file
@@ -13,10 +15,7 @@
 //   <none yet>
 // \endverbatim
 
-#include <iostream>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <fstream>
 
 
 #include <bhdfs/bhdfs_manager.h>

@@ -7,10 +7,10 @@
 // \date  25-Feb-2003
 // \brief Load a block of text from a file.
 
-#include <vcl_compiler.h>
 #include <iostream>
 #include <istream>
 #include <string>
+#include <vcl_compiler.h>
 
 //: Read a block of text from a stream.
 // This function will read through a stream, and store the text found to a string.

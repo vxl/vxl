@@ -1,3 +1,6 @@
+#include <sstream>
+#include <iostream>
+#include <iomanip>
 #include <testlib/testlib_test.h>
 
 #include <bvpl/kernels/bvpl_edge2d_kernel_factory.h>
@@ -17,11 +20,7 @@
 
 #include <vnl/vnl_float_3.h>
 #include <vul/vul_file.h>
-#include <sstream>
-#include <iostream>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iomanip>
 
 void create_grid(std::string grid_filename)
 {

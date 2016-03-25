@@ -1,7 +1,6 @@
 // This is mul/mbl/tests/test_linear_interpolator.cxx
+#include <iostream>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 #include <vnl/vnl_math.h>
 #include <mbl/mbl_linear_interpolator.h>
 #include <testlib/testlib_test.h>

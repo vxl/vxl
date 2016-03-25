@@ -9,12 +9,11 @@
 //
 #include <string>
 #include <iostream>
-#include <vcl_compiler.h>
-#include <iostream>
 #include <fstream>
+#include <map>
+#include <vcl_compiler.h>
 #include "boxm2_vecf_skull_params.h"
 #include "boxm2_vecf_labeled_point.h"
-#include <map>
 #include <vgl/vgl_vector_3d.h>
 class boxm2_vecf_fit_skull{
  public:

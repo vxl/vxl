@@ -1,7 +1,7 @@
 // This is core/vnl/vnl_bessel.cxx
+#include <algorithm>
 #include "vnl_bessel.h"
 #include <vcl_compiler.h>
-#include <algorithm>
 
 //:
 // \file

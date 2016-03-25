@@ -12,9 +12,9 @@
 // \endverbatim
 //
 //-----------------------------------------------------------------------------
-#include <vcl_compiler.h>
 #include <iostream>
 #include <vector>
+#include <vcl_compiler.h>
 #include "dll.h"
 #include <vtol/vtol_vertex_sptr.h>
 #include <vtol/vtol_edge_sptr.h>

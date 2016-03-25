@@ -1,4 +1,5 @@
 // This is brl/bbas/bmsh3d/algo/bmsh3d_mesh_triangulate.cxx
+#include <iostream>
 #include "bmsh3d_mesh_triangulate.h"
 //:
 // \file
@@ -11,8 +12,6 @@
 #include <vgl/vgl_vector_3d.h>
 #ifdef DEBUG
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 #endif
 
 //: Triangulate the input mesh face F into a set of triangular faces.

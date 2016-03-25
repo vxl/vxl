@@ -22,11 +22,11 @@
 // \endverbatim
 
 
-#include <vcl_compiler.h>
 #include <iostream>
 #include <ostream>
-#include <vgl/vgl_point_2d.h>
 #include <string>
+#include <vcl_compiler.h>
+#include <vgl/vgl_point_2d.h>
 #include "bvgl_eulerspiral_base.h"
 
 // declaration of bvgl_eulerspiral_optimization_function;

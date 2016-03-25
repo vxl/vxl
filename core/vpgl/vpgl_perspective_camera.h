@@ -17,6 +17,7 @@
 //   May 31, 2011  Peter Vanroose   Added homg-coord. "backproject()" method
 // \endverbatim
 
+#include <iosfwd>
 #include <vnl/vnl_fwd.h>
 #include <vgl/vgl_fwd.h>
 #include <vgl/vgl_point_3d.h>
@@ -25,7 +26,6 @@
 #include <vgl/vgl_ray_3d.h>
 #include <vgl/vgl_frustum_3d.h>
 #include <vcl_compiler.h>
-#include <iosfwd>
 
 #include "vpgl_proj_camera.h"
 #include "vpgl_calibration_matrix.h"

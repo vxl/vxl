@@ -2,6 +2,7 @@
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
+#include <iostream>
 #include "geml_matcher_correlation.h"
 //:
 // \file
@@ -13,8 +14,6 @@
 //-----------------------------------------------------------------------------
 
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 #include <vnl/vnl_math.h>
 #include <vnl/vnl_matrix.h>
 

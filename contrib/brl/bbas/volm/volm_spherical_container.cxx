@@ -1,9 +1,9 @@
+#include <iostream>
+#include <cmath>
 #include "volm_spherical_container.h"
 //:
 // \file
 #include <vcl_compiler.h>
-#include <iostream>
-#include <cmath> // for std::floor() and std::fabs()
 
 double RoundUp(double x, double unit)
 {

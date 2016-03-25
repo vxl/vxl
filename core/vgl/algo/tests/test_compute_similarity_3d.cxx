@@ -1,8 +1,8 @@
+#include <iostream>
 #include <testlib/testlib_test.h>
 #include <vgl/algo/vgl_compute_similarity_3d.h>
 #include <vgl/vgl_vector_3d.h>
 #include <vcl_compiler.h>
-#include <iostream>
 #include <vnl/vnl_random.h>
 
 

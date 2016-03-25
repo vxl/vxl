@@ -2,10 +2,9 @@
 #define boxm_compute_scene_statistics_h
 //:
 // \file
+#include <iostream>
 #include <boxm/boxm_scene.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 #include <bsta/bsta_histogram.h>
 
 //: Compute histogram of a simple-type scenes. e.g. T_data = float, double

@@ -1,8 +1,7 @@
 #include <iostream>
-#include <vcl_compiler.h>
-#include <iostream>
 #include <fstream>
 #include <sstream>
+#include <vcl_compiler.h>
 #include "boxm2_vecf_labeled_point.h"
 //
 // there are two anchor file formats at present:

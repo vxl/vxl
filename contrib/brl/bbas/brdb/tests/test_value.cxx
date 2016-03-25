@@ -1,8 +1,7 @@
+#include <iostream>
 #include <testlib/testlib_test.h>
 #include <brdb/brdb_value.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 
 static void test_value()
 {

@@ -19,14 +19,14 @@
 //   26 Jul 2011 - Peter Vanroose - added correlation(),set_affine(),is_identity()
 // \endverbatim
 
+#include <vector>
+#include <iosfwd>
 #include <vnl/vnl_fwd.h> // for vnl_vector_fixed<T,3>
 #include <vnl/vnl_matrix_fixed.h>
 #include <vgl/vgl_homg_point_3d.h>
 #include <vgl/vgl_homg_plane_3d.h>
 #include <vgl/vgl_pointset_3d.h>
-#include <vector>
 #include <vcl_compiler.h>
-#include <iosfwd>
 
 //:
 // A class to hold a 3-d projective transformation matrix
@@ -70,7 +70,14 @@ class vgl_h_matrix_3d
   vgl_homg_plane_3d<T> correlation(vgl_homg_point_3d<T> const& p) const;
   vgl_homg_point_3d<T> correlation(vgl_homg_plane_3d<T> const& l) const;
 
-  //: operate directly on a Euclidean pointset for convenience (no ideal points allowed)
+
+  //: operate directly on Euclidean points for convenience (no ideal points allowed)
+
+  vgl_point_3d<T> operator()(vgl_point_3d<T> const& p) const{
+    vgl_homg_point_3d<T> hp(p); return (*this)(hp);}
+
+  vgl_point_3d<T> operator* (vgl_point_3d<T> const& p) const {return (*this)(p);}
+
   vgl_pointset_3d<T> operator()(vgl_pointset_3d<T> const& ptset) const;
 
   //the following require computing the inverse homography

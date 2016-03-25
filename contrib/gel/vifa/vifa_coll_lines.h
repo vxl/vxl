@@ -15,9 +15,9 @@
 // \endverbatim
 //-----------------------------------------------------------------------------
 
-#include <vcl_compiler.h>
 #include <iostream>
 #include <vector>
+#include <vcl_compiler.h>
 #include <vbl/vbl_smart_ptr.h>
 #include <vgl/vgl_point_2d.h>
 #include <vtol/vtol_edge.h>

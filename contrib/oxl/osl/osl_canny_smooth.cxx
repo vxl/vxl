@@ -7,11 +7,10 @@
 // \author fsm
 // see osl_canny_smooth.txx for template functions.
 
+#include <iostream>
+#include <cstdlib>
 #include "osl_canny_smooth.h"
 #include <vcl_compiler.h>
-#include <iostream>
-#include <cstdlib> // std::abort()
-#include <iostream>
 #include <vxl_config.h>
 #include <vil1/vil1_rgb.h>
 #include <vil1/vil1_pixel.h>

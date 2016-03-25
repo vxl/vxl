@@ -1,9 +1,9 @@
-#include <vul/vul_file.h>
-#include <vul/vul_arg.h>
-#include <vcl_compiler.h>
 #include <iostream>
 #include <fstream>
 #include <string>
+#include <vul/vul_file.h>
+#include <vul/vul_arg.h>
+#include <vcl_compiler.h>
 #include <vnl/vnl_double_4.h>
 #include <vgl/vgl_point_3d.h>
 #include <vgl/vgl_plane_3d.h>

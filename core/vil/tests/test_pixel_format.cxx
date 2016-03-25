@@ -1,7 +1,7 @@
 // This is core/vil/tests/test_pixel_format.cxx
+#include <iostream>
 #include <testlib/testlib_test.h>
 #include <vcl_compiler.h>
-#include <iostream>
 #include <vxl_config.h> // for vxl_byte
 #include <vil/vil_rgb.h>
 #include <vil/vil_pixel_format.h>

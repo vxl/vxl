@@ -1,3 +1,5 @@
+#include <set>
+#include <iostream>
 #include <testlib/testlib_test.h>
 
 #if HAS_OPENCL
@@ -19,10 +21,7 @@
 #include <boxm2/volm/boxm2_volm_locations_sptr.h>
 #include <bbas/bocl/bocl_manager.h>
 #include <bbas/bocl/bocl_device.h>
-#include <set>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 #include <volm/volm_geo_index.h>
 #include <volm/volm_geo_index_sptr.h>
 #include <vsol/vsol_polygon_2d.h>

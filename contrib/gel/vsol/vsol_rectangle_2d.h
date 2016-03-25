@@ -42,11 +42,11 @@
 //*****************************************************************************
 // External declarations for values
 //*****************************************************************************
+#include <iostream>
+#include <iosfwd>
 #include <vsol/vsol_polygon_2d.h>
 #include <vsl/vsl_binary_io.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iosfwd>
 
 class vsol_rectangle_2d : public vsol_polygon_2d
 {

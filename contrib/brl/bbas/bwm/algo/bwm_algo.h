@@ -1,6 +1,9 @@
 #ifndef bwm_algo_t_
 #define bwm_algo_t_
 
+#include <vector>
+#include <iostream>
+#include <list>
 #include <vgl/vgl_point_3d.h>
 #include <vgl/vgl_vector_3d.h>
 #include <vgl/vgl_homg_point_2d.h>
@@ -14,10 +17,7 @@
 
 #include <vil/vil_image_resource_sptr.h>
 
-#include <vector>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <list>
 
 class bwm_algo
 {

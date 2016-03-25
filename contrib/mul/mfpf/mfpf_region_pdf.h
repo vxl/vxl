@@ -5,14 +5,14 @@
 // \brief Searches with a PDF of an arbitrary region
 // \author Tim Cootes
 
+#include <iostream>
+#include <iosfwd>
 #include <mfpf/mfpf_point_finder.h>
 #include <vpdfl/vpdfl_pdf_base.h>
 #include <mbl/mbl_cloneable_ptr.h>
 #include <mbl/mbl_chord.h>
 #include <vgl/vgl_fwd.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iosfwd>
 
 //: Searches with a PDF of an arbitrary region.
 //  Records a PDF of the normalised intensities in a

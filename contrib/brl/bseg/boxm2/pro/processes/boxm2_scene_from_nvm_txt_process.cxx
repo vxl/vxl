@@ -6,6 +6,8 @@
 // \author Ali Osman Ulusoy
 // \date August 12, 2013
 
+#include <iostream>
+#include <cstdio>
 #include <bprb/bprb_func_process.h>
 #include <boxm2/boxm2_scene.h>
 #include <boxm2/boxm2_util.h>
@@ -16,8 +18,6 @@
 #include <vul/vul_file.h>
 #include <vul/vul_file_iterator.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <cstdio> // for sprintf()
 
 
 

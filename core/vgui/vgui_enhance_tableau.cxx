@@ -13,10 +13,10 @@
 //   17-NOV-1999 P.Pritchett - Initial version.
 // \endverbatim
 
+#include <iostream>
 #include "vgui_enhance_tableau.h"
 
 #include <vcl_compiler.h>
-#include <iostream>
 
 #include <vnl/vnl_matrix_fixed.h>
 

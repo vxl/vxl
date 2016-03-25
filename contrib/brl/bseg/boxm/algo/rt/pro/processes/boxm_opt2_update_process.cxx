@@ -1,4 +1,7 @@
 //This is brl/bseg/boxm/algo/rt/pro/processes/boxm_opt2_update_process.cxx
+#include <string>
+#include <iostream>
+#include <fstream>
 #include <bprb/bprb_func_process.h>
 //:
 // \file
@@ -10,10 +13,7 @@
 //  Modifications
 // \endverbatim
 
-#include <string>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <fstream>
 
 #include <brdb/brdb_value.h>
 #include <bprb/bprb_parameters.h>

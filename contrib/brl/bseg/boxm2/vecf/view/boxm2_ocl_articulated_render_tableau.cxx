@@ -1,3 +1,5 @@
+#include <iostream>
+#include <sstream>
 #include "boxm2_ocl_articulated_render_tableau.h"
 #include "../boxm2_vecf_scene_articulation.h"
 
@@ -7,8 +9,6 @@
 #include <vgui/vgui_modifier.h>
 #include <vgui/vgui_soview2D.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <sstream>
 #include <boxm2/ocl/boxm2_ocl_util.h>
 #include <boxm2/view/boxm2_view_utils.h>
 #include <boxm2/ocl/pro/boxm2_ocl_processes.h>
@@ -148,7 +148,6 @@ bool boxm2_ocl_articulated_render_tableau::handle(vgui_event const &e)
     return true;
   }
 
-
   //toggle color - this is a hack to get color models to show as grey
   if (e.type == vgui_KEY_PRESS) {
     if (e.key == vgui_key('c')) {
@@ -163,6 +162,8 @@ bool boxm2_ocl_articulated_render_tableau::handle(vgui_event const &e)
       }
     }
   }
+  if(articulated_scene_ && scene_articulation_->handle(e))
+    return true;
 
   if ((e.type == vgui_KEY_PRESS  && e.key == vgui_key('v'))||(e.type == vgui_TIMER&&e.timer_id == 1234)) {
 
@@ -170,9 +171,10 @@ bool boxm2_ocl_articulated_render_tableau::handle(vgui_event const &e)
       animation_on_ = !animation_on_;
 
     if(!animation_on_){
-                 if (boxm2_cam_tableau::handle(e))
-                         return true;
-    return false;
+      if(boxm2_cam_tableau::handle(e))
+        return true;
+      else
+        return false;
     }
     if(articulated_scene_){
       unsigned nsa = static_cast<unsigned>(scene_articulation_->size());
@@ -186,11 +188,11 @@ bool boxm2_ocl_articulated_render_tableau::handle(vgui_event const &e)
           play_index_=1;
         }
       }else{
-                articulated_scene_->set_params((*scene_articulation_)[play_index_]);
-                 std::cout<<"apply vector field"<<std::endl;
-            articulated_scene_->map_to_target(target_scene_);
-            play_index_++;
-          }
+        articulated_scene_->set_params((*scene_articulation_)[play_index_]);
+        std::cout<<"apply vector field"<<std::endl;
+        articulated_scene_->map_to_target(target_scene_);
+        play_index_++;
+      }
      if(nsa>1&&play_index_ == nsa)
         play_index_ = 0;
      post_redraw();
@@ -200,7 +202,6 @@ bool boxm2_ocl_articulated_render_tableau::handle(vgui_event const &e)
   if (boxm2_cam_tableau::handle(e)) {
     return true;
   }
-
   return false;
 }
 

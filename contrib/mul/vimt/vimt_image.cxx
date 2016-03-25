@@ -5,6 +5,7 @@
 //:
 // \file
 
+#include <iostream>
 #include "vimt_image.h"
 #if VCL_CXX_HAS_HEADER_TYPEINFO
 # include <vcl_typeinfo.h>
@@ -12,8 +13,6 @@
 #include <vsl/vsl_indent.h>
 #include <vsl/vsl_binary_loader.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 
 //=======================================================================
 

@@ -1,7 +1,7 @@
 // This is core/vil/tests/test_convert.cxx
+#include <iostream>
 #include <vxl_config.h> // for vxl_byte
 #include <vcl_compiler.h>
-#include <iostream>
 #include <vul/vul_file.h>
 #include <vil/vil_convert.h>
 #include <vil/vil_image_view.h>

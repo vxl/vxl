@@ -1,4 +1,6 @@
 // This is brl/bpro/core/bbas_pro/processes/bbas_merge_string_array_process.cxx
+#include <iostream>
+#include <fstream>
 #include <bprb/bprb_func_process.h>
 #include <bpro/core/bbas_pro/bbas_1d_array_string.h>
 
@@ -6,8 +8,6 @@
 // \file
 
 #include <vcl_compiler.h>
-#include <iostream>
-#include <fstream>
 namespace bbas_core_merge_string_array
 {
   std::vector<std::string> strings;

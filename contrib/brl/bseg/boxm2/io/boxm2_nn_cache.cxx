@@ -1,8 +1,8 @@
+#include <iostream>
+#include <sstream>
 #include "boxm2_nn_cache.h"
 #include <boxm2/boxm2_block_metadata.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <sstream>
 //:
 // \file
 

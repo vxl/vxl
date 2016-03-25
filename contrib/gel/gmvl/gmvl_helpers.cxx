@@ -6,12 +6,11 @@
 // \file
 // \author crossge@crd.ge.com
 
-#include "gmvl_helpers.h"
-
-#include <iostream>
-#include <vcl_compiler.h>
 #include <iostream>
 #include <fstream>
+#include "gmvl_helpers.h"
+
+#include <vcl_compiler.h>
 #include <vil1/vil1_image.h>
 #include <vil1/vil1_load.h>
 #include <gmvl/gmvl_corner_node.h>

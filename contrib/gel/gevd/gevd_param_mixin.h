@@ -29,9 +29,9 @@
 // \endverbatim
 //======================================================================
 
-#include <vcl_compiler.h>
 #include <iostream>
 #include <string>
+#include <vcl_compiler.h>
 
 #if 0 // not implemented
 class ParamModifier;

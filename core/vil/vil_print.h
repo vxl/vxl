@@ -8,10 +8,10 @@
 // \file
 // \author Ian Scott, Tim Cootes.
 
-#include <vil/vil_image_view.h>
-#include <vcl_compiler.h>
 #include <iomanip>
 #include <iostream>
+#include <vil/vil_image_view.h>
+#include <vcl_compiler.h>
 
 //: How to print value in vil_print_all(image_view)
 // \relatesalso vil_image_view

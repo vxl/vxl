@@ -1,7 +1,7 @@
-#include "boxm2_merge_block_function.h"
-#include <vcl_compiler.h>
 #include <iostream>
 #include <list>
+#include "boxm2_merge_block_function.h"
+#include <vcl_compiler.h>
 
 //:
 // \file

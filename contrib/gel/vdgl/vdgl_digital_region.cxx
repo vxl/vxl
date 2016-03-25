@@ -1,11 +1,11 @@
 // This is gel/vdgl/vdgl_digital_region.cxx
+#include <iostream>
+#include <cmath>
 #include "vdgl_digital_region.h"
 //:
 // \file
 
 #include <vcl_compiler.h>
-#include <iostream>
-#include <cmath> // for fabs and sqrt
 #include <vcl_cassert.h>
 #include <vnl/algo/vnl_svd.h>
 #include <vnl/vnl_float_3.h>

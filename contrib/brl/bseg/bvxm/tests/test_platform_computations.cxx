@@ -1,7 +1,6 @@
+#include <iostream>
 #include <testlib/testlib_test.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 // The following test is to determine if there are platform differences in
 // roc calculations. The reference counts are obtained on
 // a Dell XPS M1710 Centro Duo running Windows XP

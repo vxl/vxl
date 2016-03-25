@@ -2,10 +2,9 @@
 #ifndef vmap_2_map_hxx_
 #define vmap_2_map_hxx_
 
+#include <iostream>
 #include "vmap_2_map.h"
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 
 template <class D>
 vmap_2_map<D>::vmap_2_map(self_type const& m) : dart_sequence(m)

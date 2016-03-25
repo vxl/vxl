@@ -3,13 +3,12 @@
 //:
 // \file
 
-#include <boxm2/io/boxm2_stream_cache.h>
 #include <vector>
 #include <limits>
-#include <vcl_compiler.h>
 #include <iostream>
 #include <cmath>
-#include <iostream>
+#include <boxm2/io/boxm2_stream_cache.h>
+#include <vcl_compiler.h>
 
 class boxm2_mean_intensities_batch_functor
 {

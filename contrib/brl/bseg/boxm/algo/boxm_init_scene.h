@@ -2,13 +2,12 @@
 #define boxm_init_scene_h_
 //:
 // \file
+#include <iostream>
 #include <boct/boct_tree.h>
 #include <boct/boct_tree_cell.h>
 #include <boxm/sample/boxm_sample.h>
 #include <boxm/boxm_scene.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 
 
 //: This method inits the blocks (octrees) of the scene of type boxm_sample

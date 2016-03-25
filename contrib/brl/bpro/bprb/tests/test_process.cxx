@@ -1,3 +1,4 @@
+#include <iostream>
 #include <testlib/testlib_test.h>
 #include <brdb/brdb_relation.h>
 #include <brdb/brdb_query.h>
@@ -6,8 +7,6 @@
 #include <brdb/brdb_database_manager.h>
 #include <brdb/brdb_value.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 #include "bprb_test_process.h"
 #include <bprb/bprb_parameters.h>
 #include <bprb/bprb_macros.h>

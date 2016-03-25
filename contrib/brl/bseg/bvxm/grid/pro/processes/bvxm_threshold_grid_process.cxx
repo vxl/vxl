@@ -1,4 +1,6 @@
 //This is brl/bseg/bvxm/grid/pro/processes/bvxm_threshold_grid_process.cxx
+#include <iostream>
+#include <string>
 #include <bprb/bprb_func_process.h>
 //:
 // \file
@@ -12,8 +14,6 @@
 // \endverbatim
 
 #include <vcl_compiler.h>
-#include <iostream>
-#include <string>
 #include <brdb/brdb_value.h>
 #include <bprb/bprb_parameters.h>
 

@@ -1,10 +1,10 @@
+#include <iostream>
+#include <iomanip>
 #include <bvrml/bvrml_write.h>
 #include "boxm2_vecf_orbit_param_stats.h"
 #include "boxm2_vecf_plot_orbit.h"
 #include <vnl/algo/vnl_svd.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iomanip>
 void boxm2_vecf_orbit_param_stats::average_params(){
   for(std::map<std::string, std::pair<boxm2_vecf_orbit_params, boxm2_vecf_orbit_params > >::iterator pit =  param_map_.begin();
       pit!=param_map_.end(); ++pit){

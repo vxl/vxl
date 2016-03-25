@@ -1,3 +1,5 @@
+#include <iostream>
+#include <string>
 #include <testlib/testlib_test.h>
 
 #include <bsta/bsta_mixture_fixed.h>
@@ -5,8 +7,6 @@
 #include <bsta/algo/bsta_adaptive_updater.h>
 
 #include <vcl_compiler.h>
-#include <iostream>
-#include <string>
 
 // This test was first written to verify whether the basic functionality of
 // bsta_mixtures is consistent across platforms.

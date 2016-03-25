@@ -1,3 +1,4 @@
+#include <limits>
 #include "vgl_triangle_3d.h"
 //:
 // \file
@@ -13,7 +14,6 @@
 #include <vgl/vgl_vector_3d.h>
 #include <vgl/vgl_closest_point.h>
 #include <vcl_compiler.h>
-#include <limits>
 #include <vcl_cassert.h>
 
 // Define a file-scope vgl_nan constant

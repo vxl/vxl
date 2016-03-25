@@ -2,6 +2,7 @@
 #define boxm_update_h_
 //:
 //\file
+#include <iostream>
 #include "boxm_render_image.h"
 #include <boct/boct_tree.h>
 #include <boct/boct_tree_cell.h>
@@ -15,8 +16,6 @@
 #include <vul/vul_timer.h>
 
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 
 //: functor used for normalizing cell_expected image
 template <class T_loc, class T_data>

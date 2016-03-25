@@ -5,10 +5,9 @@
 // Actually, we are going to use correlation, which is similar to convolution,
 // but does not reverse the kernel.
 
+#include <iostream>
 #include <vxl_config.h> // for vxl_byte
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 #include <vimt/algo/vimt_find_peaks.h>
 #include <vimt/algo/vimt_correlate_2d.h>
 #include <vimt/vimt_resample_bilin.h>

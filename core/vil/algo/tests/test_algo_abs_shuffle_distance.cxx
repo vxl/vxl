@@ -1,4 +1,5 @@
 // This is core/vil/algo/tests/test_algo_abs_shuffle_distance.cxx
+#include <iostream>
 #include <testlib/testlib_test.h>
 //:
 // \file
@@ -6,7 +7,6 @@
 // \date   23 Feb 2005
 
 #include <vcl_compiler.h>
-#include <iostream>
 #include <vxl_config.h> // for vxl_byte
 #include <vil/algo/vil_abs_shuffle_distance.h>
 #include <vil/vil_crop.h>

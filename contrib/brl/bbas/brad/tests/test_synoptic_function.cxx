@@ -1,9 +1,9 @@
+#include <iostream>
+#include <cstdlib>
+#include <fstream>
 #include <testlib/testlib_test.h>
 #include <brad/brad_synoptic_function_1d.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <cstdlib> // for rand()
-#include <fstream>
 
 static void test_synoptic_function()
 {

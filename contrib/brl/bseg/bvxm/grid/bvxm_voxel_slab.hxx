@@ -6,12 +6,12 @@
 // \author Daniel Crispell (dec@lems.brown.edu)
 // \date Jan 22, 2008
 
-#include "bvxm_voxel_slab.h"
-
-#include <cstring> // for memcpy
-#include <vcl_compiler.h>
+#include <cstring>
 #include <iostream>
 #include <algorithm>
+#include "bvxm_voxel_slab.h"
+
+#include <vcl_compiler.h>
 
 //=======================================================================
 

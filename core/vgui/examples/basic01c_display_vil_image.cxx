@@ -1,8 +1,8 @@
 // This example displays an image in a window.  The image is loaded from
 // the filename given as the first command line parameter.
 
-#include <vcl_compiler.h>
 #include <iostream>
+#include <vcl_compiler.h>
 
 #include <vil/vil_load.h>
 

@@ -1,4 +1,7 @@
 // This is brl/bseg/boxm2/ocl/pro/processes/boxm2_ocl_render_expected_depth_process.cxx
+#include <fstream>
+#include <iostream>
+#include <algorithm>
 #include <bprb/bprb_func_process.h>
 //:
 // \file
@@ -7,7 +10,6 @@
 // \author Vishal Jain
 // \date Mar 10, 2011
 
-#include <fstream>
 #include <boxm2/ocl/boxm2_opencl_cache.h>
 #include <boxm2/boxm2_scene.h>
 #include <boxm2/boxm2_block.h>
@@ -17,8 +19,6 @@
 //brdb stuff
 #include <brdb/brdb_value.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <algorithm>
 //directory utility
 #include <vcl_where_root_dir.h>
 #include <bocl/bocl_device.h>

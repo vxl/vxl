@@ -9,9 +9,9 @@
 // \endverbatim
 
 #include <vector>
-#include <vcl_compiler.h>
 #include <iostream>
 #include <list>
+#include <vcl_compiler.h>
 
 #define SEL_SUP(suptype,target)\
   std::vector<suptype *> *new_list=new std::vector<suptype *>();\

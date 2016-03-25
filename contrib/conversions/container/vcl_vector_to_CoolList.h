@@ -1,10 +1,10 @@
 #ifndef std::vector_to_CoolList_h_
 #define std::vector_to_CoolList_h_
 
-#include <cool/List.h>
-#include <vcl_compiler.h>
 #include <iostream>
 #include <vector>
+#include <cool/List.h>
+#include <vcl_compiler.h>
 
 template <class T>
 inline

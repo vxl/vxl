@@ -1,4 +1,6 @@
 // This is brl/bseg/bvxm/pro/processes/bvxm_rpc_registration_process.cxx
+#include <iostream>
+#include <cstdio>
 #include "bvxm_rpc_registration_process.h"
 //:
 // \file
@@ -23,8 +25,6 @@
 #include <bvxm/bvxm_edge_ray_processor.h>
 
 #include <vcl_compiler.h>
-#include <iostream>
-#include <cstdio>
 
 //: set input and output types
 bool bvxm_rpc_registration_process_cons(bprb_func_process& pro)

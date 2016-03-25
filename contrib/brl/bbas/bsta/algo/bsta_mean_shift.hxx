@@ -3,11 +3,11 @@
 #define bsta_mean_shift_hxx_
 //:
 // \file
+#include <iostream>
+#include <map>
 #include "bsta_mean_shift.h"
 
 #include <vcl_compiler.h>
-#include <iostream>
-#include <map>
 
 template <class T, unsigned n>
 bool

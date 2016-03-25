@@ -12,9 +12,9 @@
 //\endverbatim
 
 #include <vector>
-#include <vcl_compiler.h>
 #include <iostream>
 #include <cmath>
+#include <vcl_compiler.h>
 
 #include <vbl/vbl_ref_count.h>
 #include <vbl/vbl_array_2d.h>

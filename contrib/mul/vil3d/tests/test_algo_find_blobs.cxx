@@ -1,9 +1,8 @@
 // This is mul/vil3d/tests/test_algo_find_blobs.cxx
 
-#include <vcl_compiler.h>
-#include <iostream>
 #include <iostream>
 #include <map>
+#include <vcl_compiler.h>
 #include <testlib/testlib_test.h>
 #include <vil3d/algo/vil3d_find_blobs.h>
 #include <vil3d/vil3d_crop.h>

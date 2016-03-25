@@ -13,9 +13,9 @@
 //   11-SEP-1999 P.Pritchett - Initial version.
 // \endverbatim
 
+#include <iostream>
 #include "vgui_event.h"
 #include <vcl_compiler.h>
-#include <iostream>
 #include <vul/vul_get_timestamp.h>
 
 //----------------------------------------------------------------------------

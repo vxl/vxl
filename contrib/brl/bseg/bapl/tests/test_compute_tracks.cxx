@@ -1,3 +1,5 @@
+#include <iostream>
+#include <sstream>
 #include <testlib/testlib_test.h>
 #include <bapl/bapl_connectivity.h>
 #include <bapl/bapl_connectivity_sptr.h>
@@ -8,8 +10,6 @@
 
 #include <vul/vul_awk.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <sstream>
 
 static void test_compute_tracks(int argc, char* argv[])
 {

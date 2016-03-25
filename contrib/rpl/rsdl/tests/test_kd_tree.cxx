@@ -1,9 +1,8 @@
 #include <iostream>
 #include <vector>
-#include <vcl_compiler.h>
-#include <iostream>
 #include <algorithm>
 #include <utility>
+#include <vcl_compiler.h>
 #include <vnl/vnl_math.h>
 #include <vnl/vnl_random.h>
 #include <testlib/testlib_test.h>

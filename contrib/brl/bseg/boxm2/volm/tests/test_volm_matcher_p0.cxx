@@ -1,3 +1,5 @@
+#include <set>
+#include <iostream>
 #include <testlib/testlib_test.h>
 
 #include <boxm2/volm/boxm2_volm_wr3db_index.h>
@@ -16,10 +18,7 @@
 #include <bbas/volm/volm_tile.h>
 #include <boxm2/volm/boxm2_volm_locations.h>
 #include <boxm2/volm/boxm2_volm_locations_sptr.h>
-#include <set>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 #include <volm/volm_geo_index.h>
 #include <volm/volm_geo_index_sptr.h>
 #include <vpl/vpl.h>

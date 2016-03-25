@@ -12,9 +12,9 @@
 //   06 May 2004 Jocelyn Marchadier
 // \endverbatim
 
-#include <vcl_compiler.h>
 #include <iostream>
 #include <iosfwd>
+#include <vcl_compiler.h>
 #include "vmap_types.h"       // for vmap_face_index etc.
 #include "vmap_2_tmap_elts.h" // for vmap_2_tmap_dart etc.
 #include "vmap_2_map.h"

@@ -3,6 +3,9 @@
 //:
 // \file
 // \brief boxm2_opencl_scene_streamer assists the processor in streaming blocks
+#include <vector>
+#include <list>
+#include <iostream>
 #include <boxm2/boxm2_scene.h>
 #include <boxm2/boxm2_block.h>
 #include <boxm2/boxm2_data.h>
@@ -13,12 +16,8 @@
 #include <boxm2/io/boxm2_cache.h>
 #include <boxm2/io/boxm2_lru_cache.h>
 #include <brdb/brdb_value_sptr.h>
-#include <vector>
-#include <list>
 #ifdef DEBUG
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 #endif
 
 //open cl includes

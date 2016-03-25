@@ -7,6 +7,8 @@
 // \author fsm
 // \date   17 Feb 2000
 
+#include <iostream>
+#include <cstring>
 #include "vil1_jpeg.h"
 #include "vil1_jpeg_source_mgr.h"
 #include "vil1_jpeg_decompressor.h"
@@ -16,8 +18,6 @@
 #include <vcl_cassert.h>
 #include <vcl_climits.h> // CHAR_BIT
 #include <vcl_compiler.h>
-#include <iostream>
-#include <cstring> // memcpy()
 
 #include <vil1/vil1_stream.h>
 #include <vil1/vil1_image.h>

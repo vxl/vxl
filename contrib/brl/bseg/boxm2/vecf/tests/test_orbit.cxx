@@ -4,10 +4,10 @@
 // \date 11/19/14
 
 
-#include <testlib/testlib_test.h>
-#include <vcl_compiler.h>
 #include <iostream>
 #include <fstream>
+#include <testlib/testlib_test.h>
+#include <vcl_compiler.h>
 #include <vgl/vgl_box_3d.h>
 #include <vnl/vnl_vector_fixed.h>
 #include <vil/vil_image_view.h>
@@ -24,7 +24,7 @@
 #include "../boxm2_vecf_eyelid.h"
 #include "../boxm2_vecf_eyelid_crease.h"
 typedef vnl_vector_fixed<unsigned char, 16> uchar16;
-#define BUILD_TEST_ORBIT
+//#define BUILD_TEST_ORBIT
 void test_orbit()
 {
 #ifdef BUILD_TEST_ORBIT

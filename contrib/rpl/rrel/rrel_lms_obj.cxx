@@ -1,13 +1,13 @@
 // This is rpl/rrel/rrel_lms_obj.cxx
+#include <iostream>
+#include <algorithm>
+#include <vector>
 #include "rrel_lms_obj.h"
 #include "rrel_util.h"
 
 #include <vnl/vnl_math.h>
 
 #include <vcl_compiler.h>
-#include <iostream>
-#include <algorithm>
-#include <vector>
 
 #include <vcl_cassert.h>
 

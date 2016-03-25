@@ -1,11 +1,11 @@
 #ifndef vgl_tolerance_hxx_
 #define vgl_tolerance_hxx_
 
+#include <cmath>
+#include <limits>
 #include "vgl_tolerance.h"
 
-#include <cmath>
 #include <vcl_compiler.h>
-#include <limits>
 
 //! \file
 

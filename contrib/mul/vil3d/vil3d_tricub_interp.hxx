@@ -4,10 +4,10 @@
 // \file
 // \brief Tricubic interpolation functions for 3D images
 
-#include "vil3d_tricub_interp.h"
-#include <vcl_compiler.h>
 #include <iostream>
 #include <limits>
+#include "vil3d_tricub_interp.h"
+#include <vcl_compiler.h>
 #include <vil/vil_round.h>
 
 

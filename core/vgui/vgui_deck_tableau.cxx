@@ -8,11 +8,11 @@
 // \date   13 Sep 1999
 // \brief  See vgui_deck_tableau.h for a description of this file.
 
+#include <iostream>
+#include <vector>
 #include "vgui_deck_tableau.h"
 
-#include <iostream>
 #include <vcl_compiler.h>
-#include <vector>
 
 #include <vgui/vgui_event.h>
 #include <vgui/vgui_menu.h>

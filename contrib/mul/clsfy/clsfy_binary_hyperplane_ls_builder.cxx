@@ -1,5 +1,9 @@
 // This is mul/clsfy/clsfy_binary_hyperplane_ls_builder.cxx
 // Copyright: (C) 2001 British Telecommunications PLC
+#include <string>
+#include <iostream>
+#include <vector>
+#include <algorithm>
 #include "clsfy_binary_hyperplane_ls_builder.h"
 //:
 // \file
@@ -9,13 +13,8 @@
 
 //=======================================================================
 
-#include <string>
-#include <iostream>
-#include <vector>
 #include <vcl_cassert.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <algorithm>
 #include <vnl/algo/vnl_svd.h>
 #include <vnl/vnl_math.h>
 

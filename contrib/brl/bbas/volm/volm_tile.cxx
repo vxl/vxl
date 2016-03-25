@@ -1,11 +1,11 @@
+#include <iostream>
+#include <iomanip>
+#include <sstream>
 #include "volm_tile.h"
 #include "volm_io.h"
 //:
 // \file
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iomanip>
-#include <sstream>
 #include <vcl_cassert.h>
 
 #include <brip/brip_vil_float_ops.h>

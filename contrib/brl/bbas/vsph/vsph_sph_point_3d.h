@@ -2,10 +2,9 @@
 #define vsph_sph_point_3d_h_
 //:
 // \file
+#include <iostream>
 #include <vsl/vsl_binary_io.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 
 //: a point in the spherical coordinate system
 // theta is elevation with zero at the North pole

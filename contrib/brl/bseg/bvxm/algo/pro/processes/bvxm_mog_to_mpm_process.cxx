@@ -1,4 +1,6 @@
 // This is brl/bseg/bvxm/algo/pro/processes/bvxm_mog_to_mpm_process.cxx
+#include <iostream>
+#include <string>
 #include <bprb/bprb_func_process.h>
 //:
 // \file
@@ -19,8 +21,6 @@
 #include <bsta/bsta_gauss_sf1.h>
 
 #include <vcl_compiler.h>
-#include <iostream>
-#include <string>
 
 //: set input and output types
 bool bvxm_mog_to_mpm_process_cons(bprb_func_process& pro)

@@ -8,13 +8,13 @@
 // These timings will be used to optimise vil.
 
 #include <iostream>
+#include <ctime>
 #include <vxl_config.h> // for imT
 #include <vil/vil_image_view.h>
 #include <vil/vil_copy.h>
 #include <vil/vil_convert.h>
 #include <vil/algo/vil_convolve_1d.h>
 #include <vcl_compiler.h>
-#include <ctime>
 #include <mbl/mbl_stats_1d.h>
 #include <vil1/vil1_memory_image_of.h>
 #include <vil1/vil1_rgb.h>

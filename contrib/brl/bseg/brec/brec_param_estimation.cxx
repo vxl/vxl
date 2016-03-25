@@ -10,6 +10,7 @@
 //   <none yet>
 // \endverbatim
 
+#include <iostream>
 #include "brec_param_estimation.h"
 #include <vnl/algo/vnl_levenberg_marquardt.h>
 #include <vnl/algo/vnl_amoeba.h>
@@ -21,8 +22,6 @@
 #include <bsta/bsta_joint_histogram.h>
 #include <vgl/vgl_polygon_scan_iterator.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 
 //: estimate the initial value as the real variation in the data
 double

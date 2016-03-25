@@ -46,15 +46,15 @@
 #define KML_POLYOB_TAG "outerBoundaryIs"
 #define KML_POLYIB_TAG "innerBoundaryIs"
 
-#include <expatpp.h>
-#include <vgl/vgl_polygon.h>
 #include <string>
 #include <vector>
 #include <utility>
-#include <vgl/vgl_point_3d.h>
-#include <vcl_compiler.h>
 #include <iostream>
 #include <map>
+#include <expatpp.h>
+#include <vgl/vgl_polygon.h>
+#include <vgl/vgl_point_3d.h>
+#include <vcl_compiler.h>
 
 class volm_candidate_region_parser : public expatpp
 {

@@ -10,6 +10,8 @@
 // point is to show that vgui just makes OpenGL commands -- no
 // magic happens when you send a vgui_DRAW event.
 
+#include <ctime>
+#include <cstdlib>
 #include <vgui/vgui_gl.h>
 #include <vgui/vgui_glut.h>
 
@@ -18,9 +20,7 @@
 #include <vgui/vgui_loader_tableau.h>
 #include <vgui/vgui_deck_tableau.h>
 
-#include <ctime>
 #include <vcl_compiler.h>
-#include <cstdlib> // for std::exit()
 
 vgui_deck_tableau_new   deck;
 vgui_loader_tableau_new load(deck);

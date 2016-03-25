@@ -34,9 +34,9 @@
 //   Peter Vanroose - 30/12/99 - Link_edgelsOX rewritten and documented
 //   F. Schaffalitzky 2-apr-99   converted from Segmentation to osl
 
-#include <vcl_compiler.h>
 #include <iostream>
 #include <vector>
+#include <vcl_compiler.h>
 #include <vil1/vil1_image.h>
 #include <osl/osl_canny_base.h>
 

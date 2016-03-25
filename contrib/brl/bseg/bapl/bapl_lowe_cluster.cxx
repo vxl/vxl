@@ -2,12 +2,11 @@
 //:
 // \file
 
-#include "bapl_lowe_cluster.h"
 #include <cmath>
-#include <vcl_compiler.h>
 #include <iostream>
 #include <algorithm>
-#include <iostream>
+#include "bapl_lowe_cluster.h"
+#include <vcl_compiler.h>
 #include <vnl/vnl_math.h>
 
 #include <bapl/bapl_lowe_keypoint.h>

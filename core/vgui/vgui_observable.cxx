@@ -7,10 +7,10 @@
 // \author fsm
 // \brief  See vgui_observable.h for a description of this file.
 
+#include <algorithm>
 #include "vgui_observable.h"
 #include <vgui/vgui_observer.h>
 #include <vcl_compiler.h>
-#include <algorithm>
 
 //
 // Base class for classes which want to broadcast messages to vgui_observers

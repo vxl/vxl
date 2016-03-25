@@ -1,3 +1,5 @@
+#include <iostream>
+#include <algorithm>
 #include "m23d_set_q_constraint.h"
 //:
 // \file
@@ -5,8 +7,6 @@
 // \brief Functions to construct linear constraints as rows in a matrix
 
 #include <vcl_compiler.h>
-#include <iostream>
-#include <algorithm>
 #include <vcl_cassert.h>
 
 //: Defines constraint on elements of Q of form a'Qb=r

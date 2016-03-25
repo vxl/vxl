@@ -1,9 +1,9 @@
 #ifndef boxm2_vecf_composite_transform_h_included_
 #define boxm2_vecf_composite_transform_h_included_
 
-#include <vcl_compiler.h>
 #include <iostream>
 #include <vector>
+#include <vcl_compiler.h>
 #include <boxm2/boxm2_scene.h>
 #include <boxm2/boxm2_block.h>
 #include <boxm2/boxm2_data_traits.h>

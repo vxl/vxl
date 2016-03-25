@@ -1,4 +1,6 @@
 //This is brl/bseg/bvpl/bvpl_octree/pro/processes/bvpl_create_scene_process.cxx
+#include <iostream>
+#include <string>
 #include <boxm/boxm_scene_base.h>
 //:
 // \file
@@ -18,8 +20,6 @@
 #include <brdb/brdb_value.h>
 
 #include <vcl_compiler.h>
-#include <iostream>
-#include <string>
 
 #include <boxm/boxm_scene.h>
 #include <boxm/boxm_scene_parser.h>

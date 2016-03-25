@@ -1,4 +1,8 @@
 // This is mul/mbl/mbl_stepwise_regression.cxx
+#include <iostream>
+#include <algorithm>
+#include <iterator>
+#include <utility>
 #include "mbl_stepwise_regression.h"
 //:
 // \file
@@ -6,10 +10,6 @@
 // \author Martin Roberts
 
 #include <vcl_compiler.h>
-#include <iostream>
-#include <algorithm>
-#include <iterator>
-#include <utility>
 // not used? #include <cmath>
 #include <vcl_cassert.h>
 // not used? #include <vector>

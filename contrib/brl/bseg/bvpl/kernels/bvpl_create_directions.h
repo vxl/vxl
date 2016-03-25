@@ -14,12 +14,11 @@
 //   <none yet>
 // \endverbatim
 
-#include <vnl/vnl_float_3.h>
-#include <vcl_compiler.h>
-#include <iostream>
 #include <iostream>
 #include <vector>
 #include <string>
+#include <vnl/vnl_float_3.h>
+#include <vcl_compiler.h>
 
 class bvpl_create_directions_base
 {

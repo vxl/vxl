@@ -43,8 +43,8 @@
 // ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 // DEALINGS IN THE SOFTWARE.
 
-#include <vcl_compiler.h>
 #include <ios>
+#include <vcl_compiler.h>
 
 //: Use RAII to save and restore precision and other state on an iostream
 class vul_ios_state_saver

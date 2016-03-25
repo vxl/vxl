@@ -7,9 +7,9 @@
 // can all be overridden by creating a new class that inherits from the
 // relevant stage. These defaults are the most general case.
 
-#include <vcl_compiler.h>
 #include <iostream>
 #include <vector>
+#include <vcl_compiler.h>
 #include <vil/vil_image_resource.h>
 #include <bundler/bundler_tracks.h>
 #include <bundler/bundler_settings.h>

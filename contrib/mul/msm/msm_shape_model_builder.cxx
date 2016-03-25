@@ -1,17 +1,16 @@
+#include <iostream>
+#include <cstdlib>
 #include "msm_shape_model_builder.h"
 //:
 // \file
 // \brief Object to build a msm_shape_model
 // \author Tim Cootes
 
-#include <iostream>
 #include <vsl/vsl_indent.h>
 #include <vsl/vsl_binary_io.h>
 #include <vnl/io/vnl_io_vector.h>
 #include <vnl/io/vnl_io_matrix.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <cstdlib>  // for std::atoi() & std::abort()
 #include <mbl/mbl_data_array_wrapper.h>
 #include <mcal/mcal_pca.h>
 #include <mcal/mcal_extract_mode.h>

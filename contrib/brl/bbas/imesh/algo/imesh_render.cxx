@@ -1,11 +1,11 @@
 // This is brl/bbas/imesh/algo/imesh_render.cxx
+#include <iostream>
+#include <limits>
 #include "imesh_render.h"
 //:
 // \file
 
 #include <vcl_compiler.h>
-#include <iostream>
-#include <limits>
 #include <vcl_cassert.h>
 #include <imesh/algo/imesh_project.h>
 #include <imesh/imesh_operations.h>

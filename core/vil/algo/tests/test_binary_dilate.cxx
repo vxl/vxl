@@ -1,7 +1,7 @@
 // This is core/vil/algo/tests/test_binary_dilate.cxx
+#include <iostream>
 #include <testlib/testlib_test.h>
 #include <vcl_compiler.h>
-#include <iostream>
 #include <vil/algo/vil_binary_dilate.h>
 
 static inline void print_binary_image(const vil_image_view<bool>& im)

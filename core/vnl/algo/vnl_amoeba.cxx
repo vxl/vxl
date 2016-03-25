@@ -8,13 +8,13 @@
 // \date   23 Oct 97
 //-----------------------------------------------------------------------------
 
-#include "vnl_amoeba.h"
-
-#include <cstdio> // for sprintf()
-#include <vcl_compiler.h>
-#include <cstdlib> // for std::qsort
+#include <cstdio>
+#include <cstdlib>
 #include <iostream>
 #include <vector>
+#include "vnl_amoeba.h"
+
+#include <vcl_compiler.h>
 #include <vnl/vnl_math.h>
 #include <vnl/vnl_vector.h>
 #include <vnl/vnl_cost_function.h>

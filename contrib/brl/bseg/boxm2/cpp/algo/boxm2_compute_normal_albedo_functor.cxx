@@ -1,14 +1,13 @@
 // This is brl/bseg/boxm2/cpp/algo/boxm2_compute_normal_albedo_functor.cxx
+#include <vector>
+#include <iostream>
+#include <algorithm>
 #include <boxm2/io/boxm2_stream_cache.h>
 #include <bsta/bsta_histogram.h>
 #include <boxm2/boxm2_data_traits.h>
 #include <vgl/vgl_vector_3d.h>
 #include <vnl/vnl_math.h>
-#include <vector>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <algorithm>
-#include <iostream>
 #include <vnl/vnl_erf.h>
 
 #include <brad/brad_image_metadata.h>

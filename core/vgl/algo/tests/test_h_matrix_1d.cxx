@@ -3,9 +3,9 @@
 // \author Peter Vanroose
 // \date  June 13, 2004
 
+#include <iostream>
 #include <testlib/testlib_test.h>
 #include <vcl_compiler.h>
-#include <iostream>
 #include <vgl/vgl_homg_point_1d.h>
 #include <vnl/vnl_matrix_fixed.h>
 #include <vgl/algo/vgl_h_matrix_1d.h>

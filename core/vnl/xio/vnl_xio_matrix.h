@@ -21,10 +21,10 @@
 //   <none yet>
 // \endverbatim
 
-#include <vnl/vnl_matrix.h>
 #include <string>
-#include <vcl_compiler.h>
 #include <iosfwd>
+#include <vnl/vnl_matrix.h>
+#include <vcl_compiler.h>
 
 //: XML save vnl_matrix to stream.
 // \relatesalso vnl_matrix

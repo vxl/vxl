@@ -16,9 +16,9 @@
 //
 //-------------------------------------------------------------------------
 
-#include <vcl_compiler.h>
 #include <iostream>
 #include <map>
+#include <vcl_compiler.h>
 
 #include "bmsh3d_mesh.h"
 #include "bmsh3d_face_mc.h"

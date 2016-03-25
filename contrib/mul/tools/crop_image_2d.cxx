@@ -3,10 +3,9 @@
 //  \date 24 May 2010
 //  \brief Program to crop a 2D image down to a specified bounding box.
 
-#include <vcl_compiler.h>
 #include <iostream>
 #include <exception>
-#include <iostream>
+#include <vcl_compiler.h>
 #include <vul/vul_arg.h>
 #include <mbl/mbl_log.h>
 #include <vimt/vimt_add_all_binary_loaders.h>

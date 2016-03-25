@@ -1,3 +1,5 @@
+#include <queue>
+#include <iostream>
 #include "boxm_to_boxm2.h"
 //:
 // \file
@@ -9,10 +11,7 @@
 //  Copyright (c) 2011 Brown University. All rights reserved.
 //
 
-#include <queue>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 
 //executable args
 #include <vul/vul_arg.h>

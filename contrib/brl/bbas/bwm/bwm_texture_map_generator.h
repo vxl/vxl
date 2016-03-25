@@ -3,14 +3,14 @@
 //:
 // \file
 
+#include <vector>
+#include <iostream>
+#include <string>
 #include "bwm_observer_rat_cam.h"
 #include "bwm_observable_mesh.h"
 #include "bwm_observer_mgr.h"
 
-#include <vector>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <string>
 
 #include <vgl/vgl_vector_3d.h>
 #include <vpgl/vpgl_lvcs.h>

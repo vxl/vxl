@@ -4,8 +4,8 @@
 // It differs from vil_image_copy by not loading the image into a view
 // \author Gehua
 
-#include <vcl_compiler.h>
 #include <iostream>
+#include <vcl_compiler.h>
 #include <vil/vil_load.h>
 #include <vil/vil_save.h>
 #include <vil/vil_image_resource_sptr.h>

@@ -3,14 +3,14 @@
 //:
 // \file
 
+#include <sstream>
+#include <iostream>
+#include <iomanip>
 #include <boxm2/boxm2_data_base.h>
 #include <boxm2/boxm2_data_traits.h>
 #include <boxm2/boxm2_block.h>
 #include <boxm2/boxm2_data.h>
-#include <sstream>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iomanip>
 #include <boct/boct_bit_tree.h>
 
 #include "boxm2_mog3_grey_processor.h"

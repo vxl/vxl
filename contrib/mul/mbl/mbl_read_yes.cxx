@@ -6,11 +6,10 @@
 // \author Tim Cootes
 // \brief Get yes or no response from keyboard
 
-#include "mbl_read_yes.h"
-#include <iostream>
-#include <vcl_compiler.h>
 #include <iostream>
 #include <cstdio>
+#include "mbl_read_yes.h"
+#include <vcl_compiler.h>
 
 bool mbl_read_yes()
 {

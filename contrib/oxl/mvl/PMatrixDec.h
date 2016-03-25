@@ -34,11 +34,11 @@
 //
 //----------------------------------------------------------------------------
 
+#include <iostream>
+#include <iosfwd>
 #include <vnl/vnl_matrix.h>
 #include <mvl/PMatrix.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iosfwd>
 
 class PMatrixDec : public PMatrix
 {

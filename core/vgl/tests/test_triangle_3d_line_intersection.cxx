@@ -1,7 +1,7 @@
 // Some tests for vgl_triangle_3d_line_intersection
 
-#include <vcl_compiler.h>
 #include <iostream>
+#include <vcl_compiler.h>
 #include <testlib/testlib_test.h>
 #include <vgl/vgl_triangle_3d.h>
 #include <vgl/vgl_point_3d.h>

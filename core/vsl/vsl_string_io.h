@@ -6,8 +6,8 @@
 // \brief   binary IO functions for std::basic_string<T>
 // \author  K.Y.McGaul
 
-#include <vcl_compiler.h>
 #include <string>
+#include <vcl_compiler.h>
 class vsl_b_ostream;
 class vsl_b_istream;
 

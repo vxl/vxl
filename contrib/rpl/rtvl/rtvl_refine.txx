@@ -6,6 +6,12 @@
 #ifndef rtvl_refine_txx
 #define rtvl_refine_txx
 
+#include <iostream>
+#include <algorithm>
+#include <cmath>
+#include <memory>
+#include <map>
+#include <vector>
 #include "rtvl_refine.hxx"
 
 #include "rtvl_tensor.hxx"
@@ -23,12 +29,6 @@
 #include <vnl/vnl_vector_fixed.h>
 
 #include <vcl_compiler.h>
-#include <iostream>
-#include <algorithm>
-#include <cmath>
-#include <memory>
-#include <map>
-#include <vector>
 
 //----------------------------------------------------------------------------
 template <unsigned int N>

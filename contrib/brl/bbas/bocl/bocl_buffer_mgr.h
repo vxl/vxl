@@ -3,9 +3,9 @@
 
 #include <string>
 #include <map>
-#include <vcl_compiler.h>
 #include <iostream>
-#include <cstddef> // for std::size_t
+#include <cstddef>
+#include <vcl_compiler.h>
 #include "bocl_cl.h"
 #include "bocl_buffer.h"
 

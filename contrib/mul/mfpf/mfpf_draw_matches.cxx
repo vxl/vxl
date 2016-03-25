@@ -1,3 +1,5 @@
+#include <iostream>
+#include <algorithm>
 #include "mfpf_draw_matches.h"
 //:
 // \file
@@ -9,8 +11,6 @@
 #include <mfpf/mfpf_pose_set.h>
 #include <vgl/vgl_point_2d.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <algorithm>
 #include <vimt/vimt_convert.h>
 
 //: Draws first n_draw matches (defined by poses) into out_image

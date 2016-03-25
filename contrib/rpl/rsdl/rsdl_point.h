@@ -13,12 +13,12 @@
 //  separate arrays.
 
 
-#include <vnl/vnl_vector.h>
-
-#include <vcl_compiler.h>
 #include <iostream>
 #include <iosfwd>
 #include <vector>
+#include <vnl/vnl_vector.h>
+
+#include <vcl_compiler.h>
 
 class rsdl_point
 {

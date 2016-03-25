@@ -1,9 +1,9 @@
+#include <iostream>
+#include <algorithm>
 #include "bwm_video_cam_istream.h"
 //:
 // \file
 #include <vcl_compiler.h>
-#include <iostream>
-#include <algorithm>
 #include <vul/vul_file_iterator.h>
 #include <vul/vul_file.h>
 #include <vsl/vsl_binary_io.h>

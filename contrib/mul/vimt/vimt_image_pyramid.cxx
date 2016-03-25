@@ -5,12 +5,11 @@
 //:
 // \file
 
+#include <iostream>
 #include "vimt_image_pyramid.h"
 
 #include <vcl_cassert.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 #include <vsl/vsl_indent.h>
 #include <vimt/vimt_image.h>
 

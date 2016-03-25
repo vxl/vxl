@@ -5,14 +5,13 @@
 //:
 // \file
 
+#include <iostream>
+#include <cmath>
+#include <cstdlib>
 #include "vdgl_edgel_chain.h"
 #include <vgl/vgl_distance.h>
 #include <vcl_cassert.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <cmath>   // for std::sqrt(float)
-#include <cstdlib> // for std::abs(int)
-#include <iostream>
 
 vdgl_edgel_chain::vdgl_edgel_chain( const double x0, const double y0,
                                     const double x1, const double y1)

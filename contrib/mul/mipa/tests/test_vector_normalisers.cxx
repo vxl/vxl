@@ -3,10 +3,9 @@
 #include <iostream>
 #include <sstream>
 #include <string>
-#include <vcl_compiler.h>
-#include <iostream>
 #include <algorithm>
 #include <iterator>
+#include <vcl_compiler.h>
 #include <testlib/testlib_test.h>
 #include <vsl/vsl_binary_loader.h>
 #include <vnl/vnl_random.h>

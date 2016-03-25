@@ -1,4 +1,5 @@
 // This is brl/bpro/core/vpgl_pro/processes/vpgl_compute_utm_zone_process.cxx
+#include <iostream>
 #include <bprb/bprb_func_process.h>
 //:
 // \file
@@ -8,8 +9,6 @@
 // \date April 14, 2014
 
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 #include <vpgl/vpgl_utm.h>
 
 // global variables and functions

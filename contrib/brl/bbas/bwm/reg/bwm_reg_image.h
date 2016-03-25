@@ -1,9 +1,9 @@
 #ifndef bwm_reg_image_h_
 #define bwm_reg_image_h_
 
-#include <vcl_compiler.h>
 #include <iostream>
 #include <vector>
+#include <vcl_compiler.h>
 #include <vbl/vbl_ref_count.h>
 #include <vgl/vgl_point_2d.h>
 #include <vgl/vgl_point_3d.h>

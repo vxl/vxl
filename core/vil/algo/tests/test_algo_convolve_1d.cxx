@@ -1,8 +1,8 @@
 // This is core/vil/algo/tests/test_algo_convolve_1d.cxx
-#include <testlib/testlib_test.h>
-#include <vcl_compiler.h>
 #include <vector>
 #include <iostream>
+#include <testlib/testlib_test.h>
+#include <vcl_compiler.h>
 #include <vxl_config.h> // for vxl_byte
 #include <vil/vil_new.h>
 #include <vil/vil_crop.h>

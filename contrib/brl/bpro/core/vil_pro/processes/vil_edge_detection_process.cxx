@@ -1,13 +1,12 @@
 // This is brl/bpro/core/vil_pro/processes/vil_edge_detection_process.cxx
+#include <iostream>
+#include <string>
 #include <bprb/bprb_func_process.h>
 //:
 // \file
 // \brief A process that performs edge detection on a grey image and returns the corresponding edge map
 
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
-#include <string>
 #include <sdet/sdet_detector.h>
 #include <vil/vil_image_view_base.h>
 #include <vil/vil_image_view.h>

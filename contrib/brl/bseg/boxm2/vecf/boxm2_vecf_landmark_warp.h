@@ -1,14 +1,14 @@
 #ifndef boxm2_vecf_landmark_warp_h_included_
 #define boxm2_vecf_landmark_warp_h_included_
 
+#include <vector>
+#include <iostream>
+#include <utility>
 #include <boxm2/boxm2_scene.h>
 #include <boxm2/boxm2_block.h>
 #include <boxm2/boxm2_data_traits.h>
 #include <vgl/vgl_point_3d.h>
-#include <vector>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <utility>
 
 // forward declare rsdl_kd_tree so we can use pointers to it
 class rsdl_kd_tree;

@@ -5,6 +5,8 @@
 // \author Tim Cootes
 // \brief Class to perform general Component Analysis
 
+#include <iostream>
+#include <iosfwd>
 #include <mcal/mcal_component_analyzer.h>
 #include <mcal/mcal_single_basis_cost.h>
 #include <mbl/mbl_cloneable_ptr.h>
@@ -12,8 +14,6 @@
 #include <vnl/io/vnl_io_matrix.h>
 #include <mbl/mbl_data_wrapper.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iosfwd>
 
 //: Class to perform general Component Analysis
 //  After an initial component analysis, this rotates pairs of

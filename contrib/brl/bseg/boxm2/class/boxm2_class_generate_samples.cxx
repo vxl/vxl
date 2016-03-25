@@ -1,12 +1,12 @@
+#include <iostream>
+#include <algorithm>
+#include <cstddef>
 #include "boxm2_class_generate_samples.h"
 #include <bvgl/bvgl_labelme_parser.h>
 #include <vil/vil_image_view.h>
 #include <vil/vil_save.h>
 #include <boxm2/boxm2_util.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <algorithm>
-#include <cstddef> // for std::size_t
 #include <vcl_cassert.h>
 
 boxm2_class_generate_samples::boxm2_class_generate_samples(std::string xml_label,

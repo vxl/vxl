@@ -3,15 +3,15 @@
 #pragma implementation
 #endif
 
+#include <iostream>
+#include <cstdlib>
+#include <set>
+#include <functional>
+#include <fstream>
 #include "mvl_multi_view_matches.h"
 
 #include <vcl_cassert.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <cstdlib> // for std::abort()
-#include <set>
-#include <functional>
-#include <fstream>
 
 #include <vul/vul_awk.h>
 

@@ -1,3 +1,6 @@
+#include <cstdlib>
+#include <iostream>
+#include <cmath>
 #include "mbl_table.h"
 //:
 // \file
@@ -5,11 +8,7 @@
 // \date 05-Aug-2004
 // \brief Container for tabulated data suitable for reading/writing to delimited text files
 
-#include <cstdlib>
-#include <iostream>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <cmath>
 
 
 // Tolerance used to determine whether table entries are equal

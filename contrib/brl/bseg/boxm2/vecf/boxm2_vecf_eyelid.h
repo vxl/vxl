@@ -38,7 +38,7 @@ class boxm2_vecf_eyelid : public boxm2_vecf_lid_base{
   double t(double xp, double y) const;
 
   //: distance to closest point on closed eyelid surface
-  double surface_distance(vgl_point_3d<double> const& p) const;
+  double distance(vgl_point_3d<double> const& p) const;
 
 
   //: return 2nd order coefficients weighted by t

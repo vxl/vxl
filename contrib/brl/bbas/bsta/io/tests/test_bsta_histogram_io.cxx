@@ -1,17 +1,16 @@
 //:
 // \file
-#include <testlib/testlib_test.h>
-#include <vcl_compiler.h>
 #include <iostream>
 #include <cmath>
+#include <fstream>
+#include <testlib/testlib_test.h>
+#include <vcl_compiler.h>
 #include <bsta/bsta_histogram.h>
 #include <bsta/bsta_joint_histogram.h>
 #include <bsta/bsta_joint_histogram_3d.h>
 #include <bsta/bsta_int_histogram_1d.h>
 #include <bsta/bsta_int_histogram_2d.h>
 #include <vpl/vpl.h>
-#include <iostream>
-#include <fstream>
 #include <bsta/io/bsta_io_histogram.h>
 #include <vsl/vsl_binary_io.h>
 

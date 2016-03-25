@@ -3,14 +3,13 @@
 //:
 // \file
 
+#include <iostream>
 #include <boxm2/cpp/algo/boxm2_cast_ray_function.h>
 #include <boxm2/cpp/algo/boxm2_mog3_grey_processor.h>
 #include <boxm2/cpp/algo/boxm2_gauss_grey_processor.h>
 #include <bsta/algo/bsta_sigma_normalizer.h>
 #include <boxm2/io/boxm2_stream_cache.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 
 //: compute average pre_i, vis_i and post_i for each cell, save the values in aux
 template <boxm2_data_type APM_TYPE>

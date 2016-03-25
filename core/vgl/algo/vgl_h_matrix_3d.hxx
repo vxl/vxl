@@ -2,14 +2,14 @@
 #ifndef vgl_h_matrix_3d_hxx_
 #define vgl_h_matrix_3d_hxx_
 
-#include "vgl_h_matrix_3d.h"
 #include <iostream>
 #include <fstream>
 #include <cmath>
 #include <limits>
+#include <cstdlib>
+#include "vgl_h_matrix_3d.h"
 #include <vcl_cassert.h>
 #include <vcl_compiler.h>
-#include <cstdlib> // for exit()
 #include <vgl/vgl_plane_3d.h>
 #include <vnl/vnl_inverse.h>
 #include <vnl/vnl_numeric_traits.h>

@@ -1,6 +1,8 @@
 // vil_nitf2: Written by Rob Radtke (rob@) and Harry Voorhees (hlv@) of
 // Stellar Science Ltd. Co. (stellarscience.com) for
 // Air Force Research Laboratory, 2005.
+#include <sstream>
+#include <cstdlib>
 #include "vil_nitf2_image_subheader.h"
 //:
 // \file
@@ -12,10 +14,8 @@
 // for TREs
 #include "vil_nitf2_tagged_record_definition.h"
 
-#include <sstream>
 #include <vcl_cassert.h>
 #include <vcl_compiler.h>
-#include <cstdlib>
 
 vil_nitf2_field_definitions* vil_nitf2_image_subheader::s_field_definitions_21 = VXL_NULLPTR;
 vil_nitf2_field_definitions* vil_nitf2_image_subheader::s_field_definitions_20 = VXL_NULLPTR;

@@ -4,10 +4,10 @@
 #endif
 //:
 // \file
+#include <iostream>
 #include "vnl_sparse_lu.h"
 #include <vcl_cassert.h>
 #include <vcl_compiler.h>
-#include <iostream>
 
 #include <sparse/spMatrix.h>
 

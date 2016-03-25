@@ -6,9 +6,9 @@
 #include <string>
 #include <cctype>
 #include <iostream>
-#include <vcl_compiler.h>
 #include <cerrno>
 #include <algorithm>
+#include <vcl_compiler.h>
 
 #include <testlib/testlib_test.h>
 

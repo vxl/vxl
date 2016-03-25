@@ -5,11 +5,10 @@
 //:
 // \file
 
+#include <iostream>
 #include "ImageMetric.h"
 
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 #include <vcl_cassert.h>
 #include <vnl/vnl_double_2.h>
 #include <vnl/vnl_double_3x3.h>

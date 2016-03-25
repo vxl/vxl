@@ -6,10 +6,10 @@
 // \brief Builder for linear 2-state classifier, using a sigmoidal Geman-McClure rho function
 
 #include <string>
-#include <iosfwd> // for std::ostream
-// not used? #include <vcl_compiler.h>
+#include <iosfwd>
 #include <iostream>
 #include <functional>
+// not used? #include <vcl_compiler.h>
 #include <vnl/io/vnl_io_vector.h>
 #include <vnl/io/vnl_io_matrix.h>
 #include <vnl/vnl_matrix.h>

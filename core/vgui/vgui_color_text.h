@@ -14,8 +14,8 @@
 //   26-APR-2002  K.Y.McGaul - Added doxygen style comments.
 // \endverbatim
 
-#include <vcl_compiler.h>
 #include <string>
+#include <vcl_compiler.h>
 
 //: Convert a string naming a colour to a string of the RGB values.
 std::string text_to_color(const std::string&);

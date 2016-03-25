@@ -1,13 +1,13 @@
 
 // This is brl/bpro/core/bbas_pro/processes/bbas_remove_from_db_process.cxx
+#include <iostream>
+#include <fstream>
 #include <bprb/bprb_func_process.h>
 #include <bprb/bprb_batch_process_manager.h>
 //:
 // \file
 
 #include <vcl_compiler.h>
-#include <iostream>
-#include <fstream>
 
 //: Constructor
 bool bbas_remove_from_db_process_cons(bprb_func_process& pro)

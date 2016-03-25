@@ -1,4 +1,7 @@
 // This is brl/bseg/boxm2/cpp/pro/processes/boxm2_cpp_render_z_images_process.cxx
+#include <iostream>
+#include <fstream>
+#include <sstream>
 #include <bprb/bprb_func_process.h>
 //:
 // \file
@@ -8,8 +11,6 @@
 // \date Mar 10, 2011
 
 #include <vcl_compiler.h>
-#include <iostream>
-#include <fstream>
 #include <boxm2/io/boxm2_cache.h>
 #include <boxm2/io/boxm2_stream_cache.h>
 #include <boxm2/boxm2_scene.h>
@@ -23,7 +24,6 @@
 #include <vcl_where_root_dir.h>
 #include <boct/boct_bit_tree.h>
 #include <brad/brad_phongs_model_est.h>
-#include <sstream>
 #include <vil/vil_save.h>
 
 //#define SEGLEN_FACTOR 93206.7555f   //Hack representation of int32.maxvalue/(ni*nj*block_length)

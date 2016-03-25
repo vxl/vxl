@@ -1,4 +1,6 @@
 // This is brl/bpro/core/vil_pro/processes/vil_binary_edge_detection_process.cxx
+#include <iostream>
+#include <algorithm>
 #include <bprb/bprb_func_process.h>
 //:
 // \file
@@ -8,11 +10,8 @@
 #include <vil/algo/vil_structuring_element.h>
 #include <vil/algo/vil_blob.h>
 #include <vil/algo/vil_binary_closing.h>
-#include <iostream>
 #include <vil/vil_save.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <algorithm>
 
 namespace vil_binary_edge_detection_process_globals
 {

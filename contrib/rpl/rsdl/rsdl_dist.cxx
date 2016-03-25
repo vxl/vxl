@@ -1,9 +1,9 @@
+#include <iostream>
+#include <cmath>
 #include "rsdl_dist.h"
 
 #include <vcl_cassert.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <cmath>
 #include <vnl/vnl_math.h>
 
 double

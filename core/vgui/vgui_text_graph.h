@@ -9,8 +9,8 @@
 // \author fsm
 // \brief  Text descriptions of the tableau hierarchy.
 
-#include <vcl_compiler.h>
 #include <iosfwd>
+#include <vcl_compiler.h>
 #include <vgui/vgui_tableau_sptr.h>
 
 //: Sends a text description of the whole tableau hierarchy to the given stream.

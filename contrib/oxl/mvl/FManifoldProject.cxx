@@ -5,6 +5,7 @@
 //:
 //  \file
 
+#include <iostream>
 #include "FManifoldProject.h"
 
 #include <vnl/vnl_double_2x2.h>
@@ -22,8 +23,6 @@
 #include <mvl/HomgOperator2D.h>
 
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 
 //: Construct an FManifoldProject object which will use the given F to correct point pairs.
 FManifoldProject::FManifoldProject(const FMatrix& Fobj)

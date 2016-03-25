@@ -1,10 +1,9 @@
 // This is mul/mbl/tests/test_rbf_network.cxx
 #include <iostream>
-#include <vcl_compiler.h>
-#include <iostream>
-#include <cmath> // for fabs()
-#include <vcl_cassert.h>
+#include <cmath>
 #include <vector>
+#include <vcl_compiler.h>
+#include <vcl_cassert.h>
 
 #include <vnl/vnl_random.h>
 #include <mbl/mbl_rbf_network.h>

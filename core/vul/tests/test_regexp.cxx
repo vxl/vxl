@@ -1,4 +1,5 @@
 // This is core/vul/tests/test_regexp.cxx
+#include <iostream>
 #include <vul/vul_reg_exp.h>
 #include <testlib/testlib_test.h>
 //:
@@ -10,7 +11,6 @@
 //          but with lots of tests added.
 
 #include <vcl_compiler.h>
-#include <iostream>
 
 void test_regexp()
 {

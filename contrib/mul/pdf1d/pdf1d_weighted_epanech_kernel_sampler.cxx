@@ -1,4 +1,6 @@
 // This is mul/pdf1d/pdf1d_weighted_epanech_kernel_sampler.cxx
+#include <iostream>
+#include <string>
 #include "pdf1d_weighted_epanech_kernel_sampler.h"
 //:
 // \file
@@ -8,8 +10,6 @@
 //=======================================================================
 
 #include <vcl_compiler.h>
-#include <iostream>
-#include <string>
 #include <vcl_cassert.h>
 #include <vnl/vnl_math.h>
 #include <vnl/vnl_vector.h>

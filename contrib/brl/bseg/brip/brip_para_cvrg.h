@@ -32,13 +32,13 @@
 // \endverbatim
 //-----------------------------------------------------------------------------
 
+#include <iostream>
+#include <vector>
 #include <brip/brip_para_cvrg_params.h>
 #include <vil/vil_image_view.h>
 #include <vil/vil_image_resource_sptr.h>
 #include <vil/vil_rgb.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <vector>
 class brip_para_cvrg : public brip_para_cvrg_params
 {
   // PUBLIC INTERFACE----------------------------------------------------------

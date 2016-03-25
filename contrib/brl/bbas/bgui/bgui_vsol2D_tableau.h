@@ -23,9 +23,9 @@
 //   Nhon Trinh   Sep 20, 2005       Added support for elliptical curve segment.
 // \endverbatim
 //-----------------------------------------------------------------------------
-#include <vcl_compiler.h>
 #include <iostream>
 #include <vector>
+#include <vcl_compiler.h>
 
 #include <vsol/vsol_spatial_object_2d_sptr.h>
 #include <vsol/vsol_point_2d_sptr.h>

@@ -1,3 +1,5 @@
+#include <iostream>
+#include <sstream>
 #include "bsvg_plot.h"
 //:
 // \file
@@ -7,9 +9,6 @@
 #include <bxml/bxml_find.h>
 #include <bxml/bsvg/bsvg_element.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
-#include <sstream>
 
 void bsvg_plot::add_axes(float x_min, float x_max, float y_min, float y_max, float stroke_width)
 {

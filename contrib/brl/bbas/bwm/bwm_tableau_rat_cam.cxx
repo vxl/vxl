@@ -1,3 +1,5 @@
+#include <iostream>
+#include <sstream>
 #include "bwm_tableau_rat_cam.h"
 
 #include <bwm/bwm_popup_menu.h>
@@ -7,8 +9,6 @@
 #include <vsol/vsol_point_2d.h>
 #include <vul/vul_file.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <sstream>
 
 bool bwm_tableau_rat_cam::handle(const vgui_event &e)
 {

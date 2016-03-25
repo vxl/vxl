@@ -42,6 +42,7 @@
 //   function parameters, so you must give  them a hint casting
 //   the parameter function to the correct type (e.g. NeXT gcc 2.5.8)
 
+#include <list>
 #include "osconfig.h"    /* make sure OS specific configuration is included first */
 #include "oftypes.h"
 
@@ -55,7 +56,6 @@
 // Important: If you want to use the standard template library (STL), no
 // variable within a namespace using a class of the STL shall have a name
 // of one class of the STL
-#include <list>
 #define OFList list
 #define OFListIterator(x) list<x>::iterator
 #define OFListInsert(InputIterator, T, c, pos, first, last) (c).insert((pos), (first), (last))

@@ -5,11 +5,11 @@
 #ifndef VIL_NITF2_TYPED_SCALAR_FIELD_H
 #define VIL_NITF2_TYPED_SCALAR_FIELD_H
 
+#include <iosfwd>
 #include "vil_nitf2_scalar_field.h"
 #include "vil_nitf2_tagged_record.h"
 #include "vil_nitf2.h"
 #include <vcl_compiler.h>
-#include <iosfwd>
 
 // Typed concrete class for scalar NITF fields.
 // During file reading, this class is instantiated only for non-blank

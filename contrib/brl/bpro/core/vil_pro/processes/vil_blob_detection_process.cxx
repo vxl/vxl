@@ -1,4 +1,5 @@
 // This is brl/bpro/core/vil_pro/processes/vil_blob_detection_process.cxx
+#include <iostream>
 #include <bprb/bprb_func_process.h>
 //:
 // \file
@@ -8,8 +9,6 @@
 #include <vil/algo/vil_blob.h>
 #include <vil/algo/vil_binary_closing.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 
 
 //: Constructor

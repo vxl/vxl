@@ -12,8 +12,8 @@
 //      August 31, 2011  Andrew Hoelscher   Added a ransac routine
 // \endverbatim
 
-#include <vcl_compiler.h>
 #include <vector>
+#include <vcl_compiler.h>
 
 #include <vnl/vnl_matrix.h>
 #include <vnl/vnl_vector_fixed.h>

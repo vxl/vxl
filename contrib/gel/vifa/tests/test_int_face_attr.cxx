@@ -1,7 +1,7 @@
 // This is gel/vifa/tests/test_int_face_attr.cxx
-#include <vcl_compiler.h>
 #include <iostream>
 #include <ostream>
+#include <vcl_compiler.h>
 #include <vxl_config.h>
 #include <testlib/testlib_test.h>
 #include <sdet/sdet_detector_params.h>

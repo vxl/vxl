@@ -2,10 +2,9 @@
 #define vsph_utils_h_
 //:
 // \file
+#include <iostream>
 #include <vsl/vsl_binary_io.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 #include <vpgl/vpgl_perspective_camera.h>
 #include "vsph_sph_box_2d.h"
 #include "vsph_sph_point_2d.h"

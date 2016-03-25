@@ -11,12 +11,12 @@
 //   14-Aug-2002 K.Y.McGaul - Converted to Doxygen style comments.
 // \endverbatim
 
+#include <iosfwd>
 #include <vnl/vnl_double_2.h>
 #include <vnl/vnl_double_3.h>
 #include <vnl/vnl_double_4.h>
 #include <vnl/vnl_double_4x4.h>
 #include <vcl_compiler.h>
-#include <iosfwd>
 
 //:
 class vgui_projection_inspector

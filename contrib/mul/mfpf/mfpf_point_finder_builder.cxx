@@ -1,3 +1,6 @@
+#include <iostream>
+#include <cmath>
+#include <sstream>
 #include "mfpf_point_finder_builder.h"
 //:
 // \file
@@ -11,9 +14,6 @@
 #include <mbl/mbl_read_props.h>
 #include <mbl/mbl_cloneables_factory.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <cmath>
-#include <sstream>
 
 #include <mfpf/mfpf_point_finder.h>
 #include <vul/vul_string.h>

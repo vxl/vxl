@@ -6,11 +6,11 @@
 // \file
 // \author fsm
 
+#include <iostream>
+#include <cmath>
 #include "mvl_five_point_camera_pencil.h"
 
 #include <vcl_compiler.h>
-#include <iostream>
-#include <cmath>
 #include <vnl/vnl_double_3.h>
 #include <vnl/algo/vnl_svd.h>
 

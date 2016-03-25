@@ -2,21 +2,20 @@
 #define boxm2_point_util_h
 //:
 // \file
+#include <vector>
+#include <set>
+#include <iostream>
+#include <fstream>
+#include <string>
+#include <algorithm>
 #include <vpgl/vpgl_perspective_camera.h>
 #include <bwm/video/bwm_video_corr_sptr.h>
 #include <bwm/video/bwm_video_corr.h>
 #include <vgl/vgl_homg_point_3d.h>
 #include <vgl/vgl_homg_plane_3d.h>
 #include <vgl/vgl_point_3d.h>
-#include <vector>
-#include <set>
 #include <vcl_cassert.h>
-#include <iostream>
-#include <fstream>
-#include <string>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <algorithm>
 //#include <cstdlib>
 
 typedef vpgl_perspective_camera<double> CamType;

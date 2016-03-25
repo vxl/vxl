@@ -7,9 +7,9 @@
 // EndLatex
 
 #include <sstream>
-#include <vcl_compiler.h>
 #include <iostream>
 #include <fstream>
+#include <vcl_compiler.h>
 
 #include <vnl/vnl_vector_fixed.h>
 #include <vnl/vnl_math.h>

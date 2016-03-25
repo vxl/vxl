@@ -16,10 +16,10 @@
 //  Yi Dong - July 29 2014 - add more tile generators
 // \endverbatim
 
-#include <vcl_compiler.h>
 #include <iostream>
 #include <string>
 #include <vector>
+#include <vcl_compiler.h>
 #include <vpgl/file_formats/vpgl_geo_camera.h>
 #include <vbl/vbl_array_2d.h>
 #include <vil/vil_image_view.h>

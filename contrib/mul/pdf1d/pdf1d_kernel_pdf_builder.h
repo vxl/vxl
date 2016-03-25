@@ -7,10 +7,10 @@
 // \author Tim Cootes
 // \brief Initialises kernel pdfs
 
-#include <pdf1d/pdf1d_builder.h>
-#include <vcl_compiler.h>
 #include <iostream>
 #include <iosfwd>
+#include <pdf1d/pdf1d_builder.h>
+#include <vcl_compiler.h>
 
 //=======================================================================
 

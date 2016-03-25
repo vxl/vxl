@@ -1,3 +1,7 @@
+#include <iostream>
+#include <algorithm>
+#include <limits>
+#include <set>
 #include "boxm2_vecf_orbit_scene.h"
 #include <vnl/vnl_vector_fixed.h>
 #include <vgl/vgl_distance.h>
@@ -8,10 +12,6 @@
 #include <boxm2/boxm2_util.h>
 #include <boxm2/io/boxm2_lru_cache.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <algorithm>
-#include <limits>
-#include <set>
 #include <vul/vul_timer.h>
 
 typedef boxm2_data_traits<BOXM2_PIXEL>::datatype pixtype;
@@ -735,7 +735,7 @@ boxm2_vecf_orbit_scene
       cit != ccs.end(); ++cit){
     const vgl_point_3d<double>& cell_center = cit->cell_center_;
     unsigned indx = cit->data_index_;
-    double d = eyelid_geo_.surface_distance(cell_center);
+    double d = eyelid_geo_.distance(cell_center);
 
     if(d < d_thresh){
       if(!eyelid_geo_.inside(cell_center))
@@ -831,7 +831,7 @@ boxm2_vecf_orbit_scene
       cit != ccs.end(); ++cit){
     const vgl_point_3d<double>& cell_center = cit->cell_center_;
     unsigned indx = cit->data_index_;
-        double d = lower_eyelid_geo_.surface_distance(cell_center);
+        double d = lower_eyelid_geo_.distance(cell_center);
     if(d < d_thresh){
       if(!lower_eyelid_geo_.inside(cell_center))
         continue;
@@ -929,7 +929,7 @@ boxm2_vecf_orbit_scene
       cit != ccs.end(); ++cit){
     const vgl_point_3d<double>& cell_center = cit->cell_center_;
     unsigned indx = cit->data_index_;
-    double d = eyelid_crease_geo_.surface_distance(cell_center);
+    double d = eyelid_crease_geo_.distance(cell_center);
     if(d < d_thresh){
       if(!eyelid_crease_geo_.inside(cell_center))
         continue;

@@ -5,12 +5,12 @@
 //:
 // \file
 
+#include <cstring>
+#include <iostream>
 #include "vil1_memory_image_impl.h"
 
 #include <vcl_cassert.h>
-#include <cstring>   // strcmp() and memcpy()
 #include <vcl_compiler.h>
-#include <iostream>
 
 #include <vil1/vil1_image.h>
 #include <vil1/vil1_property.h>

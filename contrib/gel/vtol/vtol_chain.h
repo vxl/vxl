@@ -16,11 +16,11 @@
 //     Patricia A. Vrobel
 //-----------------------------------------------------------------------------
 
+#include <iostream>
+#include <vector>
 #include <vtol/vtol_chain_sptr.h>
 #include <vtol/vtol_topology_object.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <vector>
 
 //: Base class of vtol_two_chain and vtol_one_chain (representation of holes)
 //

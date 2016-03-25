@@ -1,4 +1,5 @@
 // This is brl/bpro/core/bvgl_pro/processes/bvgl_generate_mask_process.cxx
+#include <iostream>
 #include <bprb/bprb_func_process.h>
 #include <bprb/bprb_parameters.h>
 //:
@@ -6,8 +7,6 @@
 
 #include <vil/vil_image_view.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 #include <bvgl/bvgl_changes.h>
 #include <bvgl/bvgl_changes_sptr.h>
 #define NI "ni"

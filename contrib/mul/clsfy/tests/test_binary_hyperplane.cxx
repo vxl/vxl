@@ -1,5 +1,11 @@
 // This is mul/clsfy/tests/test_binary_hyperplane.cxx
 // Copyright: (C) 2000 British Telecommunications PLC
+#include <iostream>
+#include <iomanip>
+#include <ios>
+#include <string>
+#include <algorithm>
+#include <cmath>
 #include <testlib/testlib_test.h>
 //:
 // \file
@@ -7,14 +13,7 @@
 // \author Ian Scott
 // Test construction, IO etc.
 
-#include <iostream>
-#include <iomanip>
-#include <ios>
-#include <string>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <algorithm>
-#include <cmath>
 #include <clsfy/clsfy_rbf_parzen.h>
 #include <clsfy/clsfy_k_nearest_neighbour.h>
 #include <clsfy/clsfy_binary_hyperplane.h>

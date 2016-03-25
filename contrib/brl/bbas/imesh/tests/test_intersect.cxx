@@ -1,9 +1,8 @@
+#include <limits>
+#include <iostream>
 #include <testlib/testlib_test.h>
 #include <imesh/algo/imesh_intersect.h>
-#include <limits>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 #include <vgl/vgl_triangle_3d.h>
 
 

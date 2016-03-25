@@ -12,10 +12,10 @@
 // You should include this file if you want to do polymorphic IO
 // (i.e. save a class by its base-class pointer.)
 
+#include <vector>
 #include <vsl/vsl_binary_io.h>
 #include <vsl/vsl_binary_loader_base.h>
 #include <vcl_compiler.h>
-#include <vector>
 
 //: Class to load objects by baseclass pointer.
 // An example of a singleton design pattern for loading

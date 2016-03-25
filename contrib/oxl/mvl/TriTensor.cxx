@@ -5,14 +5,13 @@
 //:
 // \file
 
-#include "TriTensor.h"
-
-#include <iostream>
-#include <vcl_compiler.h>
 #include <iostream>
 #include <cmath>
-#include <vcl_cassert.h>
 #include <vector>
+#include "TriTensor.h"
+
+#include <vcl_compiler.h>
+#include <vcl_cassert.h>
 
 #include <vul/vul_printf.h>
 

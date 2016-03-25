@@ -1,11 +1,11 @@
+#include <iostream>
+#include <sstream>
 #include "bstm_lru_cache.h"
 //:
 // \file
 #include <bstm/bstm_block_metadata.h>
 #include <bstm/io/bstm_sio_mgr.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <sstream>
 
 //: PUBLIC create method, for creating singleton instance of bstm_cache
 void bstm_lru_cache::create(bstm_scene_sptr scene)

@@ -1,7 +1,7 @@
 // This is core/vnl/algo/tests/test_util.cxx
+#include <complex>
 #include "test_util.h"
 #include <vcl_compiler.h>
-#include <complex>
 #include <vnl/vnl_random.h>
 
 #define macro(T) \
@@ -18,5 +18,7 @@ void test_util_fill_random(std::complex<T> *b, std::complex<T> *e, vnl_random &r
 
 macro(float);
 macro(double);
+#ifdef INCLUDE_LONG_DOUBLE_TESTS
 macro(long double);
+#endif
 #undef macro

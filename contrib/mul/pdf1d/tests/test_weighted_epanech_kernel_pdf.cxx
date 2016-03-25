@@ -1,4 +1,6 @@
 // This is mul/pdf1d/tests/test_weighted_epanech_kernel_pdf.cxx
+#include <iostream>
+#include <algorithm>
 #include <testlib/testlib_test.h>
 //:
 // \file
@@ -8,10 +10,7 @@
 #include <pdf1d/pdf1d_weighted_epanech_kernel_pdf.h>
 #include <pdf1d/pdf1d_epanech_kernel_pdf_builder.h>
 #include <pdf1d/pdf1d_weighted_epanech_kernel_sampler.h>
-#include <iostream>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <algorithm>
 #include <vpl/vpl.h> // vpl_unlink()
 #include <vsl/vsl_binary_loader.h>
 #include <vnl/vnl_math.h>

@@ -1,4 +1,7 @@
 // This is brl/bseg/boxm2/ocl/pro/processes/boxm2_ocl_batch_update_scene_process.cxx
+#include <iomanip>
+#include <iostream>
+#include <fstream>
 #include <bprb/bprb_func_process.h>
 //:
 // \file
@@ -13,10 +16,7 @@
 // \author Ali Osman Ulusoy
 // \date Jun 12, 2012
 
-#include <iomanip>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <fstream>
 #include <boxm2/ocl/boxm2_opencl_cache.h>
 #include <boxm2/boxm2_scene.h>
 #include <boxm2/boxm2_block.h>

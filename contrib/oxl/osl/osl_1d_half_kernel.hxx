@@ -5,12 +5,11 @@
 // \file
 // \author fsm
 
-#include "osl_1d_half_kernel.h"
-#include <iostream>
-#include <vcl_cassert.h>
-#include <vcl_compiler.h>
 #include <iostream>
 #include <cmath>
+#include "osl_1d_half_kernel.h"
+#include <vcl_cassert.h>
+#include <vcl_compiler.h>
 
 //: helper routine used by create_gaussian
 //static/*FIXME*/

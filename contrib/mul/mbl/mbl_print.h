@@ -9,10 +9,9 @@
 
 #ifndef NDEBUG // skip all this if not debugging
 
-#include <vcl_compiler.h>
-#include <iostream>
 #include <iostream>
 #include <vector>
+#include <vcl_compiler.h>
 #include <vnl/vnl_vector.h>
 #include <vnl/vnl_matrix.h>
 

@@ -1,11 +1,11 @@
 // This is brl/bbas/imesh/algo/imesh_intersect.cxx
+#include <iostream>
+#include <limits>
 #include "imesh_intersect.h"
 //:
 // \file
 
 #include <vcl_compiler.h>
-#include <iostream>
-#include <limits>
 #include <vcl_cassert.h>
 
 #include <vgl/vgl_triangle_3d.h>

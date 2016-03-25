@@ -1,9 +1,8 @@
 // This is mul/vil3d/tests/test_algo_exp_distance_transform.cxx
-#include <testlib/testlib_test.h>
-#include <iostream>
-#include <vcl_compiler.h>
 #include <iostream>
 #include <cmath>
+#include <testlib/testlib_test.h>
+#include <vcl_compiler.h>
 #include <vil3d/algo/vil3d_exp_distance_transform.h>
 #include <vil3d/vil3d_crop.h>
 

@@ -2,9 +2,9 @@
 // Example: scaling.
 
 #include <iostream>
-#include <cmath>    // std::sqrt()
+#include <cmath>
+#include <cstdlib>
 #include <vcl_compiler.h>
-#include <cstdlib>  // std::atoi()
 
 #include <vil1/vil1_new.h>
 #include <vil1/vil1_load.h>

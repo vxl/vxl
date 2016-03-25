@@ -6,13 +6,13 @@
 // \author Tim Cootes
 // \date 18 Jul 2009
 
+#include <string>
+#include <iostream>
+#include <iosfwd>
 #include <clsfy/clsfy_binary_hyperplane_ls_builder.h>
 #include <vnl/io/vnl_io_vector.h>
 #include <vnl/vnl_vector.h>
-#include <string>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iosfwd> // for std::ostream
 
 //=======================================================================
 

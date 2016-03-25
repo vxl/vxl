@@ -8,11 +8,11 @@
 // \date   19 Dec 99
 // \brief  See vgui_gtk_utils.h for a description of this file.
 
+#include <iostream>
+#include <cstdlib>
 #include "vgui_gtk_utils.h"
 
-#include <iostream>
 #include <vcl_compiler.h>
-#include <cstdlib> // for std::abort()
 
 #include <vgui/vgui_gl.h>
 #include <gdk/gdkkeysyms.h>

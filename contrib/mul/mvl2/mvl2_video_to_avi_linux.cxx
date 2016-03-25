@@ -6,10 +6,10 @@
 // \brief A class for writing videos
 // \author Franck Bettinger
 
-#include "mvl2_video_to_avi_linux.h"
-#include <vcl_compiler.h>
 #include <iostream>
 #include <cstring>
+#include "mvl2_video_to_avi_linux.h"
+#include <vcl_compiler.h>
 #include <vil/vil_resample_bilin.h>
 
 mvl2_video_to_avi::mvl2_video_to_avi()

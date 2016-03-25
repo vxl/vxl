@@ -4,9 +4,8 @@
 //\date Dec. 22th, 2004
 //\brief test bnl_legendre_polynomial by comparing result with math table
 
+#include <iostream>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 #include <testlib/testlib_test.h>
 #include <vnl/vnl_real_polynomial.h>
 #include <bnl/algo/bnl_legendre_polynomial.h>

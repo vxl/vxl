@@ -15,18 +15,17 @@
 // \endverbatim
 //
 
-#include <expatpplib.h>
 #include <string>
-#include <vcl_compiler.h>
-#include <iostream>
 #include <iostream>
 #include <map>
+#include <vector>
+#include <utility>
+#include <expatpplib.h>
+#include <vcl_compiler.h>
 #include <vgl/vgl_point_2d.h>
 #include <vgl/vgl_point_3d.h>
 #include <vgl/vgl_polygon.h>
 #include <vgl/vgl_box_2d.h>
-#include <vector>
-#include <utility>
 
 // Tags for OSM
 #define OSM_NODE "node"

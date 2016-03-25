@@ -2,14 +2,13 @@
 //:
 // \file
 
+#include <iostream>
+#include <cmath>
+#include <vector>
 #include <vil/vil_image_resource.h>
 #include <vil/vil_load.h>
 #include <vil/file_formats/vil_nitf2_image.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <cmath>
-#include <vector>
-#include <iostream>
 #include <bprb/bprb_func_process.h>
 //: set input and output types
 bool  vil_nitf_date_time_process_cons(bprb_func_process& pro)

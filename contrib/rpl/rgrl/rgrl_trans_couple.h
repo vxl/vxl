@@ -6,11 +6,11 @@
 // \author Gehua Yang
 // \date Feb 2005
 
+#include <iostream>
+#include <iosfwd>
 #include <rgrl/rgrl_transformation_sptr.h>
 #include <rgrl/rgrl_transformation.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iosfwd>
 
 //: A base class that represents a pair of transformation: forward & backward
 //

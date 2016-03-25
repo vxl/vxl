@@ -3,9 +3,8 @@
 //:
 // \file
 
+#include <iostream>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 #include <vsl/vsl_binary_io.h>
 #include <vgl/vgl_homg_plane_3d.h>
 #include <boxm/boxm_aux_traits.h>

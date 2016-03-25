@@ -12,10 +12,9 @@
 //   06 May 2004 Jocelyn Marchadier
 // \endverbatim
 
+#include <iostream>
 #include "vmap_grid_structure.h"
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 
 template < class TMap >
 void vmap_set_grid_structure(TMap & arg, const vmap_grid_structure& grid, vmap_2_tmap_tag)

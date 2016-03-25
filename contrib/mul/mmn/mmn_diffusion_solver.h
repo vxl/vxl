@@ -6,9 +6,9 @@
 // \author Martin Roberts
 
 #include <vector>
-#include <vcl_compiler.h>
 #include <iostream>
 #include <map>
+#include <vcl_compiler.h>
 #include <vnl/vnl_vector.h>
 #include <vnl/vnl_matrix.h>
 #include <mmn/mmn_arc.h>

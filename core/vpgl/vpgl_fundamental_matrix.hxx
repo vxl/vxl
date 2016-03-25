@@ -4,6 +4,7 @@
 //:
 // \file
 
+#include <iosfwd>
 #include "vpgl_fundamental_matrix.h"
 #include "vpgl_essential_matrix.h"
 #include "vpgl_calibration_matrix.h"
@@ -22,7 +23,6 @@
 #include <vgl/vgl_homg_line_2d.h>
 #include <vgl/algo/vgl_homg_operators_2d.h>
 #include <vcl_compiler.h>
-#include <iosfwd>
 #include <vcl_cassert.h>
 
 

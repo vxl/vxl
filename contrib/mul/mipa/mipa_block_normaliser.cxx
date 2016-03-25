@@ -1,21 +1,20 @@
+#include <iostream>
+#include <sstream>
+#include <algorithm>
+#include <cstddef>
 #include "mipa_block_normaliser.h"
 //:
 // \file
 // \brief Class to independently normalise sub-blocks with a region
 // \author Martin Roberts
 
-#include <iostream>
-#include <sstream>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <algorithm>
 #include <vsl/vsl_binary_loader.h>
 #include <vsl/vsl_vector_io.h>
 #include <vnl/vnl_vector.h>
 #include <mbl/mbl_read_props.h>
 #include <mbl/mbl_parse_block.h>
 #include <mbl/mbl_exception.h>
-#include <cstddef>
 
 //=======================================================================
 //: Apply transform to texture vector

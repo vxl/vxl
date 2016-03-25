@@ -21,16 +21,16 @@
 // \endverbatim
 //*****************************************************************************
 
+#include <string>
+#include <iostream>
+#include <iosfwd>
 #include <vsol/vsol_curve_2d.h>
 #include <vsol/vsol_point_2d_sptr.h>
 #include <vgl/vgl_fwd.h> // vgl_line_segment_2d, vgl_homg_line_2d, vgl_point_2d
 #include <vgl/vgl_homg_line_2d.h>
 #include <vgl/vgl_line_segment_2d.h>
 #include <vsl/vsl_binary_io.h>
-#include <string>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iosfwd>
 
 class vsol_line_2d : public vsol_curve_2d
 {

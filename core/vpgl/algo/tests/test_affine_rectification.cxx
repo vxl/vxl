@@ -1,8 +1,8 @@
+#include <limits>
+#include <iostream>
 #include <testlib/testlib_test.h>
 #include <vpgl/algo/vpgl_affine_rectification.h>
 #include <vcl_compiler.h>
-#include <limits>
-#include <iostream>
 
 static void test_affine_rect()
 {

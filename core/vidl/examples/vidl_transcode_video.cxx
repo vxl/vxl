@@ -3,11 +3,11 @@
 // into vidl, then the executable will simply fail without being able
 // to open in input file.
 
+#include <cstdlib>
+#include <iostream>
 #include <vidl/vidl_config.h>
 
 #include <vcl_compiler.h>
-#include <cstdlib>
-#include <iostream>
 #include <vul/vul_arg.h>
 #include <vidl/vidl_ffmpeg_istream.h>
 #include <vidl/vidl_ffmpeg_ostream.h>

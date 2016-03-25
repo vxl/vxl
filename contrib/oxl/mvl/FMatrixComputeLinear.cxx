@@ -11,12 +11,11 @@
 //
 //-----------------------------------------------------------------------------
 
+#include <vector>
+#include <iostream>
 #include "FMatrixComputeLinear.h"
 
-#include <vector>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 
 #include <vnl/algo/vnl_svd.h>
 #include <vgl/vgl_homg_point_2d.h>

@@ -5,10 +5,10 @@
 // \author Amitha Perera
 // \date   Feb 2003
 
-#include "rgrl_transformation.h"
-#include <vcl_compiler.h>
 #include <iostream>
 #include <iosfwd>
+#include "rgrl_transformation.h"
+#include <vcl_compiler.h>
 
 //: Represents a similarity transformation.
 //

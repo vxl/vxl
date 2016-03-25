@@ -1,6 +1,9 @@
 #ifndef boxm_edge_tangent_updater_hxx_
 #define boxm_edge_tangent_updater_hxx_
 
+#include <vector>
+#include <iostream>
+#include <string>
 #include "boxm_edge_tangent_updater.h"
 
 #include <boxm/boxm_apm_traits.h>
@@ -18,10 +21,7 @@
 #include <vgl/vgl_intersection.h>
 #include <vgl/algo/vgl_intersection.h>
 
-#include <vector>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <string>
 
 #include <bsta/bsta_histogram.h>
 

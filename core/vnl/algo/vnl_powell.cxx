@@ -4,6 +4,7 @@
 #endif
 //:
 // \file
+#include <iostream>
 #include "vnl_powell.h"
 
 #include <vcl_cassert.h>
@@ -19,7 +20,6 @@
 #ifdef DEBUG
 #include <vnl/vnl_matlab_print.h>
 #include <vcl_compiler.h>
-#include <iostream>
 #endif
 
 class vnl_powell_1dfun : public vnl_cost_function

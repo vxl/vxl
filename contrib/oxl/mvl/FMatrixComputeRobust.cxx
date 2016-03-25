@@ -1,3 +1,5 @@
+#include <iostream>
+#include <cmath>
 #include "FMatrixComputeRobust.h"
 //:
 // \file
@@ -8,10 +10,7 @@
 #include <mvl/FMatrixCompute7Point.h>
 #include <vnl/vnl_double_2.h>
 #include <vnl/vnl_double_3x3.h>
-#include <iostream>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <cmath>
 
 FMatrixComputeRobust::FMatrixComputeRobust() {}
 

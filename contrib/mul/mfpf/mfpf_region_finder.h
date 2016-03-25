@@ -5,14 +5,14 @@
 // \brief Searches for an arbitrary shaped region
 // \author Tim Cootes
 
+#include <iostream>
+#include <iosfwd>
 #include <mfpf/mfpf_point_finder.h>
 #include <mfpf/mfpf_vec_cost.h>
 #include <mbl/mbl_cloneable_ptr.h>
 #include <mbl/mbl_chord.h>
 #include <vgl/vgl_fwd.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iosfwd>
 
 //: Searches to minimise a cost of pixels in an arbitrary region.
 //  Samples intensities in a region of interest, defined by the set of mbl_chords roi_.

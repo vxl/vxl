@@ -19,12 +19,12 @@
 // \endverbatim
 //
 //-----------------------------------------------------------------------------
+#include <vector>
+#include <iostream>
+#include <iosfwd>
 #include <vsol/vsol_box_2d_sptr.h>
 #include <vbl/vbl_ref_count.h>
-#include <vector>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iosfwd> // for std::ostream
 
 class brip_roi : public vbl_ref_count
 {

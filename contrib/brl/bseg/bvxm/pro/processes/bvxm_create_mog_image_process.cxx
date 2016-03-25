@@ -1,4 +1,6 @@
 //This is brl/bseg/bvxm/pro/processes/bvxm_create_mog_image_process.cxx
+#include <iostream>
+#include <string>
 #include "bvxm_create_mog_image_process.h"
 //:
 // \file
@@ -13,8 +15,6 @@
 #include <bvxm/bvxm_voxel_world.h>
 
 #include <vcl_compiler.h>
-#include <iostream>
-#include <string>
 
 #include <brdb/brdb_value.h>
 #include <brip/brip_vil_float_ops.h>

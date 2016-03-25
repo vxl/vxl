@@ -1,9 +1,9 @@
+#include <iostream>
+#include <sstream>
 #include "bvxm_synth_world_generator.h"
 //
 #include <vul/vul_file.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <sstream>
 #include <vcl_cassert.h>
 
 // Default constructor

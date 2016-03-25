@@ -16,11 +16,10 @@
 // Approved for Public Release, Distribution Unlimited (DISTAR Case 12529)
 //
 
-#include "bsta_distribution.h"
 #include <vector>
+#include <iostream>
+#include "bsta_distribution.h"
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 
 //: forward declare vnl_vector_fixed
 template<class T, unsigned n> class vnl_vector_fixed;

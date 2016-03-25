@@ -8,8 +8,9 @@
 //
 //-----------------------------------------------------------------------------
 
+#include <cmath>
+#include <new>
 #include "vnl_c_vector.h"
-#include <cmath>     // std::sqrt()
 #include <vcl_cassert.h>
 #include <vnl/vnl_math.h>
 #include <vnl/vnl_complex_traits.h>
@@ -378,7 +379,6 @@ void vnl_c_vector<T>::deallocate(T** v, std::size_t n)
 
 // "T *" is POD, but "T" might not be.
 #include <vcl_compiler.h>
-#include <new>
 template <class T> inline void vnl_c_vector_construct(T *p, std::size_t n)
 {
   for (std::size_t i=0; i<n; ++i)

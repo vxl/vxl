@@ -1,13 +1,13 @@
+#include <cmath>
+#include <limits>
+#include <iostream>
+#include <algorithm>
 #include "mbl_sample_stats_1d.h"
 //:
 // \file
 #include <vsl/vsl_vector_io.h>
 #include <vcl_cassert.h>
-#include <cmath>
-#include <limits>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <algorithm>
 
 
 //=========================================================================

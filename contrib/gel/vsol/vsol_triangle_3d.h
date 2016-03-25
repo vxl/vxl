@@ -21,11 +21,11 @@
 // \endverbatim
 //*****************************************************************************
 
+#include <iostream>
+#include <iosfwd>
 #include <vsol/vsol_polygon_3d.h>
 #include <vgl/vgl_fwd.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iosfwd>
 
 class vsol_triangle_3d : public vsol_polygon_3d
 {

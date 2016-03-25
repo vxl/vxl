@@ -1,8 +1,8 @@
+#include <vector>
+#include <string>
 #include <testlib/testlib_test.h>
 
-#include <vector>
 #include <vcl_compiler.h>
-#include <string>
 
 #include <vgl/vgl_point_2d.h>
 

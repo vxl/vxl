@@ -6,13 +6,12 @@
 // \brief Build gaussian image pyramids at any scale separation
 // \author Ian Scott
 
-#include "vimt_gaussian_pyramid_builder_2d_general.h"
-#include <vcl_compiler.h>
 #include <iostream>
 #include <cmath>
-#include <vcl_cassert.h>
 #include <string>
-#include <iostream>
+#include "vimt_gaussian_pyramid_builder_2d_general.h"
+#include <vcl_compiler.h>
+#include <vcl_cassert.h>
 #include <vil/algo/vil_gauss_reduce.h>
 #include <vgl/vgl_point_2d.h>
 #include <vgl/vgl_vector_2d.h>

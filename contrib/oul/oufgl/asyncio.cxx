@@ -1,11 +1,11 @@
 // This is oul/oufgl/asyncio.cxx
+#include <iostream>
+#include <cerrno>
 #include "asyncio.h"
 //:
 // \file
 #include <vcl_sys/types.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <cerrno>
 #include <vcl_cassert.h>
 
 //: Initialise shared state to "no operation in progress"

@@ -1,10 +1,10 @@
 // This is core/vil1/tests/test_resample.cxx
 // \author Peter Vanroose
 
+#include <iostream>
 #include <vil1/vil1_resample.h>
 
 #include <vcl_compiler.h>
-#include <iostream>
 
 #include <vil1/vil1_load.h>
 #include <vil1/vil1_save.h>

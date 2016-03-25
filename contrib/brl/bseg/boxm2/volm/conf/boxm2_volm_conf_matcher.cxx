@@ -1,11 +1,11 @@
+#include <iostream>
+#include <algorithm>
 #include "boxm2_volm_conf_matcher.h"
 //:
 // \file
 
 #include <vul/vul_file.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <algorithm>
 #include <vgl/io/vgl_io_polygon.h>
 #include <volm/volm_utils.h>
 #include <volm/volm_candidate_list.h>

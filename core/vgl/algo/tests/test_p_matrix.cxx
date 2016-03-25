@@ -9,13 +9,13 @@
 //                               constructors, read/write, and accessors.
 // \endverbatim
 
+#include <cmath>
+#include <iostream>
+#include <sstream>
 #include <testlib/testlib_test.h>
 #include <vgl/algo/vgl_p_matrix.h>
 #include <vgl/algo/vgl_h_matrix_3d.h>
-#include <cmath>
-#include <iostream>
 #include <vcl_compiler.h>
-#include <sstream>
 #include <vgl/vgl_homg_point_2d.h>
 #include <vgl/vgl_homg_point_3d.h>
 #include <vgl/vgl_distance.h>

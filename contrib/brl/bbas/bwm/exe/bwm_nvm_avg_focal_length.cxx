@@ -1,3 +1,6 @@
+#include <iostream>
+#include <fstream>
+#include <string>
 #include <bwm/bwm_observer_cam.h>
 #include <bwm/bwm_site_mgr.h>
 #include <bwm/video/bwm_video_cam_ostream.h>
@@ -7,11 +10,7 @@
 
 #include <vul/vul_arg.h>
 
-#include <iostream>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <fstream>
-#include <string>
 
 bool NVMreplaceByAvgFocalLength(std::ifstream& in1,
                                 std::ifstream& in2,

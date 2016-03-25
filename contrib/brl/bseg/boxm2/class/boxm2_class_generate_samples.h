@@ -3,12 +3,12 @@
 #define boxm2_class_generate_samples_h_
 //:
 // \file
+#include <string>
+#include <iostream>
+#include <cstddef>
 #include <vgl/vgl_point_2d.h>
 #include <vgl/vgl_polygon.h>
-#include <string>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <cstddef> // for std::size_t
 
 //: Randomly samples the pixels of an image for training a model
 class boxm2_class_generate_samples

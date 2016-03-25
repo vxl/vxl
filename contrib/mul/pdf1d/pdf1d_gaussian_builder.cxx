@@ -1,13 +1,13 @@
 // This is mul/pdf1d/pdf1d_gaussian_builder.cxx
+#include <string>
+#include <iostream>
+#include <cstdlib>
 #include "pdf1d_gaussian_builder.h"
 //:
 // \file
 
 #include <vcl_cassert.h>
-#include <string>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <cstdlib> // std::abort()
 
 #include <mbl/mbl_data_wrapper.h>
 #include <mbl/mbl_data_array_wrapper.h>

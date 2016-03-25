@@ -1,3 +1,4 @@
+#include <limits>
 #include <vil/vil_config.h>
 #if HAS_DCMTK
 
@@ -7,7 +8,6 @@
 
 #include <vcl_cassert.h>
 #include <vcl_compiler.h>
-#include <limits>
 
 // ===========================================================================
 //                                                             stream producer

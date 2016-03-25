@@ -5,10 +5,10 @@
 // \brief Perform median filtering on images
 // \author Tim Cootes
 
+#include <algorithm>
 #include <vil/algo/vil_structuring_element.h>
 #include <vil/vil_image_view.h>
 #include <vcl_compiler.h>
-#include <algorithm>
 
 //: Return r-th sorted value of im[offset[k]]
 //  Values im[offset[k]] placed into values[k] then sorted. \a values

@@ -8,11 +8,11 @@
 // \author Tim Cootes
 // \date   Feb 2007
 
+#include <cmath>
+#include <algorithm>
 #include "vnl_bracket_minimum.h"
 #include <vnl/algo/vnl_fit_parabola.h>
 #include <vcl_compiler.h>
-#include <cmath>
-#include <algorithm>
 // not used? #include <iostream>
 
 static const double GOLDEN_RATIO = 1.618033988749894848; // = 0.5*(std::sqrt(5)-1);

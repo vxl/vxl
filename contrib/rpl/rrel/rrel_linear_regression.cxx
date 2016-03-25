@@ -1,3 +1,5 @@
+#include <iostream>
+#include <vector>
 #include "rrel_linear_regression.h"
 
 #include <vnl/vnl_matrix.h>
@@ -5,9 +7,6 @@
 #include <vnl/algo/vnl_svd.h>
 
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
-#include <vector>
 #include <vcl_cassert.h>
 
 rrel_linear_regression::rrel_linear_regression( const std::vector< vnl_vector<double> >& pts,

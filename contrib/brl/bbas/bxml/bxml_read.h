@@ -15,10 +15,9 @@
 //   <none yet>
 // \endverbatim
 
+#include <iostream>
 #include "bxml_document.h"
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 
 //: Read the entire contents of \p filepath into an XML document class
 bxml_document bxml_read(const std::string& filepath);

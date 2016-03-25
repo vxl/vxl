@@ -3,9 +3,9 @@
 //:
 // \file
 
+#include <iostream>
 #include "vgl_cylinder.h"
 #include <vcl_compiler.h>
-#include <iostream>
 
 template <class T>
 bool vgl_cylinder<T>::operator==(vgl_cylinder<T> const& cyl) const

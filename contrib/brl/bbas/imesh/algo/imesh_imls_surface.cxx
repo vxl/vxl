@@ -1,4 +1,7 @@
 // This is brl/bbas/imesh/algo/imesh_imls_surface.cxx
+#include <iostream>
+#include <cmath>
+#include <limits>
 #include "imesh_imls_surface.h"
 //:
 // \file
@@ -7,12 +10,8 @@
 #include <imesh/algo/imesh_intersect.h>
 #include <imesh/algo/imesh_kd_tree.hxx>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <cmath>
-#include <limits>
 #include <vcl_cassert.h>
 
-#include <iostream>
 #include <vnl/vnl_math.h>
 #include <vnl/vnl_double_3.h>
 

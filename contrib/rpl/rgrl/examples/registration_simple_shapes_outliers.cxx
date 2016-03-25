@@ -18,9 +18,8 @@
 //
 // \endlatexonly
 
+#include <iostream>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 
 #include <vnl/vnl_vector_fixed.h>
 #include <vnl/vnl_math.h>

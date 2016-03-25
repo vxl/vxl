@@ -2,6 +2,8 @@
 //:
 // \file
 
+#include <iostream>
+#include <cmath>
 #include <core/vidl_pro/vidl_pro_utils.h>
 #include <bprb/bprb_func_process.h>
 #include <brip/brip_vil_float_ops.h>
@@ -14,10 +16,7 @@
 #include <vbl/io/vbl_io_smart_ptr.h>
 #include <vil/vil_convert.h>
 #include <vil/vil_math.h>
-#include <iostream>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <cmath>
 
 static void eigenvalues(double B, double C, double E, double& la,
                         double& lb)

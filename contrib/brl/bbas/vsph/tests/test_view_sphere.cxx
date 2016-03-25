@@ -1,3 +1,5 @@
+#include <iostream>
+#include <fstream>
 #include <testlib/testlib_test.h>
 
 #include <vsph/vsph_view_sphere.h>
@@ -9,8 +11,6 @@
 #include <vnl/vnl_math.h>
 
 #include <vcl_compiler.h>
-#include <iostream>
-#include <fstream>
 
 vsph_view_point<double> create_view_point(vsph_spherical_coord_sptr coord, double theta, double phi, double* data)
 {

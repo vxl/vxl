@@ -2,14 +2,13 @@
 // \file
 // \brief Parses the kmluration file for bwm tool.
 //
-#include "bwm_io_kml_parser.h"
-
 #include <sstream>
-#include <iostream>
-#include <vcl_compiler.h>
 #include <iostream>
 #include <cstdio>
 #include <cstring>
+#include "bwm_io_kml_parser.h"
+
+#include <vcl_compiler.h>
 
 // --------------
 // --- PARSER ---

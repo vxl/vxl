@@ -1,3 +1,5 @@
+#include <iostream>
+#include <cstdlib>
 #include "bwm_algo.h"
 //:
 // \file
@@ -18,10 +20,7 @@
 #include <vil/vil_load.h>
 #include <vnl/algo/vnl_svd.h>
 
-#include <iostream>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <cstdlib> // for std::malloc()
 
 // The well-known square function
 static inline double square(double x) { return x * x; }

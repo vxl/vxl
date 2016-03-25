@@ -9,10 +9,10 @@
 // \date   11 Sep 99
 // \brief  See vgui_drag_mixin.h for a description of this file.
 
+#include <iostream>
 #include "vgui_drag_mixin.h"
 
 #include <vcl_compiler.h>
-#include <iostream>
 
 #include <vgui/vgui_event.h>
 

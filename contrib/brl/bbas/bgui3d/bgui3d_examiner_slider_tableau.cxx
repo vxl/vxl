@@ -1,11 +1,11 @@
 // This is brl/bbas/bgui3d/bgui3d_examiner_slider_tableau.cxx
+#include <iostream>
+#include <algorithm>
 #include "bgui3d_examiner_slider_tableau.h"
 //:
 // \file
 
 #include <vcl_compiler.h>
-#include <iostream>
-#include <algorithm>
 #include <vnl/vnl_math.h> // for vnl_math::pi_over_2
 
 #include <Inventor/nodes/SoSeparator.h>

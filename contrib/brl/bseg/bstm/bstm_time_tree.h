@@ -14,9 +14,9 @@
 
 #include <iosfwd>
 #include <vector>
-#include <vcl_compiler.h>
 #include <iostream>
-#include <cmath> // for std::pow()
+#include <cmath>
+#include <vcl_compiler.h>
 
 #define TT_NUM_BYTES  8
 #define TT_NUM_LVLS  6

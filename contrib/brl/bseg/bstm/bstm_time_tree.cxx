@@ -1,12 +1,11 @@
 //:
 // \file
-#include "bstm_time_tree.h"
 #include <iostream>
 #include <list>
-#include <vcl_compiler.h>
-#include <iostream>
 #include <algorithm>
-#include <cstring> // for std::memcpy()
+#include <cstring>
+#include "bstm_time_tree.h"
+#include <vcl_compiler.h>
 
 //: default constructor
 bstm_time_tree::bstm_time_tree()

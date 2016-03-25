@@ -17,9 +17,9 @@
 //             Oxford University, UK
 //---------------------------------------------------------------------------
 
-#include <vcl_compiler.h>
 #include <iostream>
 #include <list>
+#include <vcl_compiler.h>
 
 class HomgMatchLineSeg2D2D2D;
 class HomgMatchPoint2D2D2D;

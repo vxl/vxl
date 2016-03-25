@@ -1,12 +1,12 @@
+#include <string>
+#include <iostream>
+#include <fstream>
 #include <testlib/testlib_test.h>
 #include <bsta/algo/bsta_mean_shift.h>
 #include <bsta/algo/bsta_sample_set.h>
-#include <string>
 #include <bsta/bsta_gaussian_indep.h>
 #include <bsta/bsta_gaussian_full.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <fstream>
 
 vnl_random rng;
 

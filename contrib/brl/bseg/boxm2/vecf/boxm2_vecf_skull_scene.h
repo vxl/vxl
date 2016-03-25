@@ -1,9 +1,10 @@
 #ifndef boxm2_vecf_skull_scene_h_
 #define boxm2_vecf_skull_scene_h_
 
-#include <vcl_compiler.h>
 #include <iostream>
 #include <string>
+#include <vcl_compiler.h>
+#include <vector>
 
 #include <boxm2/boxm2_scene.h>
 #include "boxm2_vecf_mandible_scene.h"
@@ -22,6 +23,12 @@ public:
 
   bool set_params(boxm2_vecf_articulated_params const& params);
   boxm2_vecf_skull_params const& get_params() const {return params_;}
+  //: refine target cells to match the refinement level of the source block
+  virtual int prerefine_target_sub_block(vgl_point_3d<double> const& sub_block_pt, unsigned pt_index){return -1;}//FIXME
+  //: compute inverse vector field for unrefined sub_block centers
+  virtual void inverse_vector_field_unrefined(std::vector<vgl_point_3d<double> > const& unrefined_target_pts){}//FIXME
+  virtual bool inverse_vector_field(vgl_point_3d<double> const& target_pt, vgl_vector_3d<double>& inv_vf) const{return false;}//FIXME
+  virtual bool apply_vector_field(cell_info const& target_cell, vgl_vector_3d<double> const& inv_vf){return false;}//FIXME
 
 private:
   bool target_data_extracted_;

@@ -29,10 +29,10 @@
 // \endverbatim
 //-----------------------------------------------------------------------------
 
-#include <vcl_compiler.h>
 #include <iostream>
 #include <iosfwd>
 #include <vector>
+#include <vcl_compiler.h>
 #include <vtol/vtol_chain.h>
 #include <vtol/vtol_face_2d_sptr.h>
 class vtol_vertex;

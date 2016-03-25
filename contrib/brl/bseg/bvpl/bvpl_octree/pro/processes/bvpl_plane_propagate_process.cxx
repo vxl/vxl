@@ -1,4 +1,8 @@
 //This is brl/bseg/bvpl/bvpl_octree/pro/processes/bvpl_plane_propagate_process.cxx
+#include <string>
+#include <iostream>
+#include <fstream>
+#include <set>
 #include <bprb/bprb_func_process.h>
 //:
 // \file
@@ -11,10 +15,7 @@
 //
 // \endverbatim
 
-#include <string>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <fstream>
 
 #include <brdb/brdb_value.h>
 #include <bprb/bprb_parameters.h>
@@ -30,7 +31,6 @@
 #include <bvpl/kernels/bvpl_kernel_iterator.h>
 #include <bvpl/kernels/bvpl_kernel.h>
 #include <bvpl/bvpl_octree/bvpl_octree_neighbors.h>
-#include <set>
 
 struct ltstr
 {

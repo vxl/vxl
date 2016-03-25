@@ -12,6 +12,8 @@
 // \endverbatim
 
 class rsdl_kd_tree;
+#include <iostream>
+#include <memory>
 #include <vbl/vbl_smart_ptr.h>
 typedef vbl_smart_ptr<rsdl_kd_tree> rsdl_kd_tree_sptr;
 #include <rsdl/rsdl_point.h>
@@ -19,8 +21,6 @@ typedef vbl_smart_ptr<rsdl_kd_tree> rsdl_kd_tree_sptr;
 #include <rgrl/rgrl_feature_set.h>
 #include <rgrl/rgrl_mask.h>
 // not used? #include <vcl_compiler.h>
-#include <iostream>
-#include <memory>
 
 //: A set of features grouped only by N-d location.
 //

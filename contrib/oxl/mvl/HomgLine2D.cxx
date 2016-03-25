@@ -5,11 +5,10 @@
 //:
 // \file
 
+#include <iostream>
 #include "HomgLine2D.h"
 
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 
 #include <vnl/algo/vnl_svd.h>
 

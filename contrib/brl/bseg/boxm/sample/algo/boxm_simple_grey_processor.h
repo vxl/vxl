@@ -13,11 +13,11 @@
 //  <none yet>
 // \endverbatim
 
+#include <iostream>
+#include <iosfwd>
 #include <boxm/boxm_apm_traits.h>
 #if 0 // operator<< in commented-out section
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iosfwd>
 #endif
 
 class  boxm_simple_grey_processor

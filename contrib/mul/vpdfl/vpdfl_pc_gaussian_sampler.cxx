@@ -10,11 +10,11 @@
 // Modifications
 // 23 April 2001 IMS - Ported to VXL
 
+#include <iostream>
+#include <string>
 #include "vpdfl_pc_gaussian_sampler.h"
 
 #include <vcl_compiler.h>
-#include <iostream>
-#include <string>
 
 //=======================================================================
 // Method: is_a

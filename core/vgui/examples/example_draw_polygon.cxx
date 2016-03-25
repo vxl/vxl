@@ -5,10 +5,10 @@
 //
 // Example usage:  example_draw_polygon -n 7 -b
 
-#include <vcl_cassert.h>
 #include <cmath>
-#include <vcl_compiler.h>
 #include <vector>
+#include <vcl_cassert.h>
+#include <vcl_compiler.h>
 
 #include <vul/vul_arg.h>
 

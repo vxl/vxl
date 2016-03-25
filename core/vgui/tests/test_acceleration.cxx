@@ -1,6 +1,6 @@
 // This is core/vgui/tests/test_acceleration.cxx
-#include <vcl_compiler.h>
 #include <iostream>
+#include <vcl_compiler.h>
 
 #include <vpl/vpl.h>
 

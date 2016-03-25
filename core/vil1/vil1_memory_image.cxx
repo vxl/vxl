@@ -5,11 +5,11 @@
 //:
 // \file
 
+#include <iostream>
 #include "vil1_memory_image.h"
 
 #include <vcl_cassert.h>
 #include <vcl_compiler.h>
-#include <iostream>
 
 #include <vil1/vil1_image.h>
 #include <vil1/vil1_memory_image_impl.h>

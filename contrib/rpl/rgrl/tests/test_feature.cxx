@@ -1,3 +1,4 @@
+#include <iostream>
 #include <testlib/testlib_test.h>
 
 #include <vnl/vnl_math.h>
@@ -12,8 +13,6 @@
 #include <rgrl/rgrl_feature_face_pt.h>
 
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 
 #include <rgrl/rgrl_trans_affine.h>
 

@@ -1,5 +1,8 @@
 // This is brl/bbas/bmsh3d/bmsh3d_face.cxx
 //---------------------------------------------------------------------
+#include <sstream>
+#include <iostream>
+#include <cstdio>
 #include "bmsh3d_face.h"
 //:
 // \file
@@ -16,10 +19,7 @@
 //-------------------------------------------------------------------------
 
 #include <vcl_cassert.h>
-#include <sstream>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <cstdio>
 #include <vgl/vgl_point_2d.h>
 #include <vgl/vgl_distance.h>
 

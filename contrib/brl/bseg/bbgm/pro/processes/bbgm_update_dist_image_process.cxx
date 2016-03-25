@@ -1,10 +1,9 @@
 // This is brl/bseg/bbgm/pro/processes/bbgm_update_dist_image_process.cxx
 //:
 // \file
+#include <iostream>
 #include <bprb/bprb_func_process.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 #include <bbgm/bbgm_image_of.h>
 #include <bbgm/bbgm_image_sptr.h>
 #include <bbgm/bbgm_update.h>

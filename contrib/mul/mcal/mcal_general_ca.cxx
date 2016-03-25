@@ -1,19 +1,19 @@
+#include <cstdlib>
+#include <string>
+#include <sstream>
+#include <iostream>
+#include <cmath>
+#include <vector>
 #include "mcal_general_ca.h"
 //:
 // \file
 // \author Tim Cootes
 // \brief Class to perform general Component Analysis
 
-#include <cstdlib>
-#include <string>
-#include <sstream>
 
 #include <vsl/vsl_indent.h>
 #include <mbl/mbl_matxvec.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <cmath>
-#include <vector>
 #include <vsl/vsl_binary_io.h>
 #include <mbl/mbl_parse_block.h>
 #include <mbl/mbl_read_props.h>

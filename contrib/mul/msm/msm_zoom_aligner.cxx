@@ -3,12 +3,12 @@
 // \author Tim Cootes
 // \brief Calculate and apply translation + scale transform
 
+#include <iostream>
+#include <cstddef>
 #include "msm_zoom_aligner.h"
 #include <vnl/vnl_vector.h>
 #include <vsl/vsl_binary_loader.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <cstddef> // for std::size_t
 #include <vcl_cassert.h>
 
 //=======================================================================

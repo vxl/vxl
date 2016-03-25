@@ -1,7 +1,6 @@
+#include <iostream>
 #include "bocl_buffer_mgr.h"
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 
 bocl_buffer_mgr* bocl_buffer_mgr::instance_=NULL;
 

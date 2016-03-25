@@ -11,8 +11,8 @@
 // \author J. L. Mundy
 // \date 19 March 2006
 
-#include <vcl_compiler.h>
 #include <vector>
+#include <vcl_compiler.h>
 #include <vil/vil_image_view_base.h>
 #include <vil/vil_smart_ptr.h>
 #include <vil/vil_image_resource.h>

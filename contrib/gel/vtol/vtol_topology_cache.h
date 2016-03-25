@@ -12,10 +12,10 @@
 //
 //-----------------------------------------------------------------------------
 
-#include <vtol/vtol_topology_object.h>
-#include <vcl_compiler.h>
 #include <iostream>
 #include <vector>
+#include <vtol/vtol_topology_object.h>
+#include <vcl_compiler.h>
 #include <vul/vul_timestamp.h>
 
 class vtol_vertex;

@@ -1,6 +1,6 @@
-#include <vcl_compiler.h>
 #include <iostream>
 #include <cstring>
+#include <vcl_compiler.h>
 
 #include <vgl/vgl_box_2d.h>
 #include <vgl/vgl_box_3d.h>

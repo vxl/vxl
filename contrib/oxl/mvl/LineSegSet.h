@@ -11,9 +11,9 @@
 //-----------------------------------------------------------------------------
 
 #include <vector>
-#include <vcl_compiler.h>
 #include <iostream>
 #include <iosfwd>
+#include <vcl_compiler.h>
 #include <mvl/HomgLineSeg2D.h>
 #include <mvl/HomgMetric.h>
 

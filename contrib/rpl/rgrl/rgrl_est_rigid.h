@@ -6,10 +6,10 @@
 // \author Tomasz Malisiewicz
 // \date   March 2004
 
-#include "rgrl_estimator.h"
-#include <vcl_compiler.h>
 #include <iostream>
 #include <vector>
+#include "rgrl_estimator.h"
+#include <vcl_compiler.h>
 #include "rgrl_trans_rigid.h"
 
 //: Rigid transform estimator

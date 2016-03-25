@@ -1,9 +1,9 @@
-#include <vul/vul_file.h>
-#include <vul/vul_arg.h>
-#include <vcl_compiler.h>
 #include <iostream>
 #include <fstream>
 #include <string>
+#include <vul/vul_file.h>
+#include <vul/vul_arg.h>
+#include <vcl_compiler.h>
 #include <vnl/vnl_double_3.h>
 #include <vnl/vnl_double_3x3.h>
 #include <vpgl/vpgl_calibration_matrix.h>

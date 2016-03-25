@@ -16,8 +16,8 @@
 //   Peter Vanroose - 27 June 2001 - Added operator==
 // \endverbatim
 
-#include <vcl_compiler.h>
 #include <iosfwd>
+#include <vcl_compiler.h>
 #include <vgl/vgl_fwd.h> // forward declare vgl_homg_point_2d and vgl_line_2d
 #include <vcl_cassert.h>
 #include <vgl/vgl_vector_2d.h>

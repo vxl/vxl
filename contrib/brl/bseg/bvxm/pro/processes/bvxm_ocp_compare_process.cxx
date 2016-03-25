@@ -1,4 +1,6 @@
 //This is brl/bseg/bvxm/pro/processes/bvxm_ocp_compare_process.cxx
+#include <iostream>
+#include <string>
 #include "bvxm_ocp_compare_process.h"
 //:
 // \file
@@ -6,8 +8,6 @@
 #include <bprb/bprb_parameters.h>
 #include <vgl/vgl_vector_3d.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <string>
 #include <bprb/bprb_process.h>
 
 #include <bvxm/bvxm_world_params.h>

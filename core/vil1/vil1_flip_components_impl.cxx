@@ -5,9 +5,9 @@
 //:
 // \file
 
+#include <cstring>
 #include "vil1_flip_components_impl.h"
 #include <vcl_compiler.h>
-#include <cstring> // for memcpy
 
 vil1_image vil1_flip_components_impl::get_plane(unsigned int p) const
 {

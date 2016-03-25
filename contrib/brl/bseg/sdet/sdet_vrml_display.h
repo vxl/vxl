@@ -7,10 +7,10 @@
 // \author Author J. L. Mundy - August 17, 2008
 // \verbatim
 // \endverbatim
-#include <vcl_compiler.h>
 #include <iostream>
 #include <fstream>
 #include <vector>
+#include <vcl_compiler.h>
 #include <vtol/vtol_intensity_face_sptr.h>
 #include <vsol/vsol_polygon_3d_sptr.h>
 #include <vil/vil_image_view.h>

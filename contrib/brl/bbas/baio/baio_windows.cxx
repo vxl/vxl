@@ -1,12 +1,11 @@
 // This is brl/bbas/baio/baio_windows.cxx
+#include <iostream>
+#include <cstdio>
+#include <cstring>
 #include "baio.h"
 //:
 // \file
-#include <iostream> //for std::cout
 #include <vcl_compiler.h>
-#include <iostream>
-#include <cstdio>   //for std::perror
-#include <cstring>  //for std::memset
 //windows specific includes
 #include <windows.h>
 

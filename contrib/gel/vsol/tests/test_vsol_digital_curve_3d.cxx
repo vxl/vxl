@@ -2,13 +2,13 @@
 // \author Peter Vanroose
 // \date 13 November 2004
 //-----------------------------------------------------------------------------
+#include <iostream>
+#include <vector>
 #include <testlib/testlib_test.h>
 //:
 // \file
 
 #include <vcl_compiler.h>
-#include <iostream>
-#include <vector>
 
 #include <vgl/vgl_point_3d.h>
 #include <vsol/vsol_digital_curve_3d.h>

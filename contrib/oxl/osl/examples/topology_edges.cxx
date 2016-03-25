@@ -1,8 +1,7 @@
 // @author fsm
 
+#include <iostream>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 
 #include <osl/osl_topology.h>
 #include <osl/osl_load_topology.h>

@@ -12,9 +12,9 @@
 //   Aug 09 2010 jlm  moved to brl/bseg/bvxm/breg3d
 // \endverbatim
 
-#include <vcl_compiler.h>
 #include <iostream>
 #include <string>
+#include <vcl_compiler.h>
 #include <ihog/ihog_transform_2d.h>
 
 #include "breg3d_homography_generator.h"

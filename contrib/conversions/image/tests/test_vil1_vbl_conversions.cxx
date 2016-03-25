@@ -1,10 +1,10 @@
+#include <iostream>
+#include <cstring>
+#include <fstream>
 #include <image/vbl_array_to_vil1.h>
 #include <image/vil1_to_vbl_array.h>
 
 #include <vcl_compiler.h>
-#include <iostream>
-#include <cstring> // for memcmp()
-#include <fstream>
 #include <vpl/vpl.h> // for vpl_unlink()
 #include <vil1/vil1_load.h>
 #include <testlib/testlib_test.h>

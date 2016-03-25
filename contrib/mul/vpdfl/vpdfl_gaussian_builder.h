@@ -15,11 +15,11 @@
 // \endverbatim
 //=======================================================================
 
+#include <iostream>
+#include <iosfwd>
 #include <vpdfl/vpdfl_builder_base.h>
 #include <vnl/vnl_fwd.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iosfwd>
 
 //=======================================================================
 

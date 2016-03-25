@@ -1,8 +1,8 @@
 // This is rpl/rsdl/tests/test_bins_2d.cxx
 #include <vector>
-#include <vcl_compiler.h>
 #include <iostream>
 #include <algorithm>
+#include <vcl_compiler.h>
 
 #include <vnl/vnl_vector_fixed.h>
 #include <vnl/vnl_double_2.h>

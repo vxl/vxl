@@ -3,14 +3,14 @@
 #pragma implementation
 #endif
 
+#include <cstdlib>
+#include <cstdio>
+#include <cstring>
+#include <iostream>
 #include "vil1_gen.h"
 
 #include <vcl_cassert.h>
 #include <vcl_compiler.h>
-#include <cstdlib> // std::abort()
-#include <cstdio>  // sprintf()
-#include <cstring>
-#include <iostream>
 
 #include <vil1/vil1_stream.h>
 #include <vil1/vil1_image_impl.h>

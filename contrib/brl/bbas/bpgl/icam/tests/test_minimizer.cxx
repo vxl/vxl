@@ -1,12 +1,11 @@
-#include <testlib/testlib_test.h>
-#include <testlib/testlib_root_dir.h>
-#include <iostream>
-#include <vcl_compiler.h>
 #include <iostream>
 #include <iomanip>
 #include <ios>
 #include <string>
 #include <vector>
+#include <testlib/testlib_test.h>
+#include <testlib/testlib_root_dir.h>
+#include <vcl_compiler.h>
 
 #include <vgl/vgl_box_3d.h>
 

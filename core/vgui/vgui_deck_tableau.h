@@ -18,12 +18,12 @@
 //   26-APR-2002 K.Y.McGaul - Converted to and added doxygen style comments.
 // \endverbatim
 
+#include <string>
 #include "vgui_deck_tableau_sptr.h"
 #include <vgui/vgui_observable.h>
 #include <vgui/vgui_tableau.h>
 #include <vgui/vgui_parent_child_link.h>
 #include <vcl_compiler.h>
-#include <string>
 
 //: Tableau holding many child tableaux, but only one receives events.
 //

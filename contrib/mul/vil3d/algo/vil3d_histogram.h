@@ -6,10 +6,10 @@
 // \author Tim Cootes
 
 #include <vector>
-#include <vxl_config.h>
-#include <vcl_compiler.h>
 #include <iostream>
 #include <algorithm>
+#include <vxl_config.h>
+#include <vcl_compiler.h>
 #include <vil3d/vil3d_image_view.h>
 
 //: Construct histogram from pixels in given image

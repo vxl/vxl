@@ -3,8 +3,8 @@
 // \brief Example of manipulating different views of a vil_image_view<T>.
 // \author Tim Cootes - Manchester
 
-#include <vcl_compiler.h>
 #include <iostream>
+#include <vcl_compiler.h>
 #include <vxl_config.h> // for vxl_byte
 #include <vil/vil_image_view.h>
 #include <vil/vil_crop.h>

@@ -1,4 +1,5 @@
 // This is brl/bbas/bgrl/bgrl_graph.cxx
+#include <iostream>
 #include "bgrl_graph.h"
 //:
 // \file
@@ -7,8 +8,6 @@
 #include <vbl/io/vbl_io_smart_ptr.h>
 #include <vsl/vsl_set_io.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 
 //: Constructor
 bgrl_graph::bgrl_graph()

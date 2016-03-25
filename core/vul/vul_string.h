@@ -5,9 +5,9 @@
 // \file
 // \brief Utility functions for C strings and std::strings
 
-#include <vcl_compiler.h>
 #include <string>
 #include <vector>
+#include <vcl_compiler.h>
 
 // C string functions:
 

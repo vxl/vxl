@@ -1,11 +1,11 @@
+#include <iostream>
+#include <sstream>
 #include "bstm_ocl_render_tableau.h"
 //:
 // \file
 #include <vpgl/vpgl_perspective_camera.h>
 #include <vgui/vgui_modifier.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <sstream>
 
 #include <bocl/bocl_device.h>
 #include <bocl/bocl_kernel.h>

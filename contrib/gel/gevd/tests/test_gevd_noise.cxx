@@ -8,12 +8,11 @@
 // 1.0     |2003/02/02| Peter Vanroose           |Creation
 //*****************************************************************************
 
+#include <iostream>
 #include <gevd/gevd_noise.h>
 #include <testlib/testlib_test.h>
 #include <vnl/vnl_sample.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 
 void
 test_gevd_noise()

@@ -5,12 +5,11 @@
 //:
 //  \file
 
+#include <iostream>
+#include <cmath>
 #include "PMatrixDec.h"
 
 #include <vcl_compiler.h>
-#include <iostream>
-#include <cmath>
-#include <iostream>
 
 //--------------------------------------------------------------
 //: Constructor

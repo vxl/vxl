@@ -6,10 +6,10 @@
 // \brief Create a big image by tiling images in patches
 // \author Tim Cootes
 
-#include <vil/vil_image_view.h>
-#include <vcl_compiler.h>
 #include <vector>
 #include <cmath>
+#include <vil/vil_image_view.h>
+#include <vcl_compiler.h>
 #include <vcl_cassert.h>
 
 //: Create a big image by tiling images in patches (must be of same size).

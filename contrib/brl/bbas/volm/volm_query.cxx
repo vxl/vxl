@@ -1,3 +1,5 @@
+#include <iostream>
+#include <algorithm>
 #include "volm_query.h"
 //:
 // \file
@@ -12,8 +14,6 @@
 #include <volm/volm_tile.h>
 #include <volm/volm_spherical_layers.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <algorithm>
 #include <vcl_cassert.h>
 #include <volm/volm_camera_space.h>
 #include <vsl/vsl_vector_io.h>

@@ -1,4 +1,6 @@
 // This is brl/bseg/bstm/pro/processes/bstm_cpp_majority_filter_process.cxx
+#include <iostream>
+#include <fstream>
 #include <bprb/bprb_func_process.h>
 //:
 // \file
@@ -8,8 +10,6 @@
 // \date June 25, 2013
 
 #include <vcl_compiler.h>
-#include <iostream>
-#include <fstream>
 #include <bstm/bstm_scene.h>
 #include <bstm/bstm_util.h>
 #include <bstm/io/bstm_cache.h>

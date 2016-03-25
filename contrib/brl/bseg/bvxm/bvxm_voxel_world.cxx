@@ -1,15 +1,14 @@
 // This is brl/bseg/bvxm/bvxm_voxel_world.cxx
+#include <string>
+#include <iostream>
+#include <fstream>
+#include <sstream>
 #include "bvxm_voxel_world.h"
 //:
 // \file
 
 #include <vcl_cassert.h>
-#include <string>
-#include <iostream>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <fstream>
-#include <sstream>
 #include <vgl/vgl_plane_3d.h>
 #include <vgl/vgl_vector_3d.h>
 #include <vgl/vgl_box_2d.h>

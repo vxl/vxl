@@ -1,7 +1,6 @@
+#include <iostream>
 #include "osl_fit_lines_params.h"
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 //:
 // \file
 

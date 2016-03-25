@@ -28,10 +28,10 @@
 // \endverbatim
 //---------------------------------------------------------------------------
 
-#include <bugl/bugl_normal_point_3d_sptr.h>
-#include <vcl_compiler.h>
 #include <iostream>
 #include <vector>
+#include <bugl/bugl_normal_point_3d_sptr.h>
+#include <vcl_compiler.h>
 
 class bugl_curve_3d
 {

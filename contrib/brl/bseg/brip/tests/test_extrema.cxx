@@ -1,12 +1,11 @@
 // This is brl/bseg/brip/tests/test_extrema.cxx
 
+#include <iostream>
+#include <iomanip>
 #include <vil/vil_image_view.h>
 #include <brip/brip_vil_float_ops.h>
 #include <testlib/testlib_test.h>
-#include <iostream>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iomanip>
 
 static void test_extrema()
 {

@@ -5,10 +5,10 @@
 // \author Ian Scott, ISBE, Manchester
 // \date   5 Oct 2004
 
-#include "vil3d_copy.h"
-#include <vcl_compiler.h>
 #include <iostream>
 #include <algorithm>
+#include "vil3d_copy.h"
+#include <vcl_compiler.h>
 #include <vil3d/vil3d_image_resource.h>
 #include <vil3d/vil3d_property.h>
 

@@ -5,9 +5,8 @@
 
 #include <exception>
 #include <iostream>
-#include <vcl_compiler.h>
-#include <iostream>
 #include <algorithm>
+#include <vcl_compiler.h>
 #include <vul/vul_arg.h>
 #include <mbl/mbl_log.h>
 #include <vimt3d/vimt3d_add_all_loaders.h>

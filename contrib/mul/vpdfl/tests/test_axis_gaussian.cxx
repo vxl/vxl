@@ -1,4 +1,6 @@
 // This is mul/vpdfl/tests/test_axis_gaussian.cxx
+#include <iostream>
+#include <sstream>
 #include <testlib/testlib_test.h>
 //:
 // \file
@@ -6,9 +8,6 @@
 // \brief test vpdfl_axis_gaussian, building, sampling, saving, etc.
 
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
-#include <sstream>
 #include <vpdfl/vpdfl_axis_gaussian.h>
 #include <vpdfl/vpdfl_axis_gaussian_builder.h>
 #include <vpdfl/vpdfl_axis_gaussian_sampler.h>

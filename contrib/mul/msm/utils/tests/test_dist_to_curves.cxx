@@ -4,6 +4,7 @@
 //  Copyright: (C) 2015 The University of Manchester
 //
 //=======================================================================
+#include <iostream>
 #include <testlib/testlib_test.h>
 //:
 // \file
@@ -11,8 +12,6 @@
 // \brief Test msm_dist_to_curves functions
 
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 #include <msm/utils/msm_closest_pt.h>
 #include <msm/utils/msm_dist_to_curves.h>
 

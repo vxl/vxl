@@ -1,3 +1,5 @@
+#include <iostream>
+#include <cmath>
 #include "m23d_rotation_matrix.h"
 //:
 // \file
@@ -5,8 +7,6 @@
 // \brief Generate pure 3x3 rotation matrices
 
 #include <vcl_compiler.h>
-#include <iostream>
-#include <cmath>
 
 //: Generate 3x3 matrix which applies a rotation about the x axis
 vnl_matrix<double> m23d_rotation_matrix_x(double A)

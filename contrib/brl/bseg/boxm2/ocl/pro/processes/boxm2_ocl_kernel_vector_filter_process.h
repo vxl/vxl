@@ -7,6 +7,9 @@
 // \date April 12, 2012
 
 
+#include <string>
+#include <iostream>
+#include <map>
 #include <bprb/bprb_func_process.h>
 #include <brdb/brdb_value.h>
 
@@ -19,10 +22,7 @@
 
 #include <bvpl/kernels/bvpl_kernel.h>
 
-#include <string>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <map>
 
 
 //:global variables

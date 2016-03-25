@@ -15,8 +15,8 @@
 // \endverbatim
 //
 #include <vector>
-#include <vcl_compiler.h>
 #include <utility>
+#include <vcl_compiler.h>
 
 
 //: Represents the configuration of a sparse matrix but not the data

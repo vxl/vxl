@@ -1,6 +1,9 @@
 #ifndef boxm_opt_rt_bayesian_optimizer_hxx_
 #define boxm_opt_rt_bayesian_optimizer_hxx_
 
+#include <vector>
+#include <iostream>
+#include <string>
 #include "boxm_opt_rt_bayesian_optimizer.h"
 #include "boxm_opt_appearance_estimator.h"
 
@@ -9,10 +12,7 @@
 #include <boxm/boxm_scene.h>
 #include <boxm/boxm_aux_scene.h>
 
-#include <vector>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <string>
 
 template <class T_loc, boxm_apm_type APM, boxm_aux_type AUX>
 boxm_opt_rt_bayesian_optimizer<T_loc,APM,AUX>::boxm_opt_rt_bayesian_optimizer(boxm_scene<boct_tree<T_loc, boxm_sample<APM> > > &scene,

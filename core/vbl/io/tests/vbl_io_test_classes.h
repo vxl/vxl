@@ -1,11 +1,11 @@
 #ifndef vbl_io_test_classes_h_
 #define vbl_io_test_classes_h_
 
+#include <iosfwd>
 #include <vbl/vbl_ref_count.h>
 #include <vbl/io/vbl_io_smart_ptr.h>
 #include <vsl/vsl_binary_io.h>
 #include <vcl_compiler.h>
-#include <iosfwd>
 
 class impl : public vbl_ref_count
 {

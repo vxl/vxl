@@ -8,9 +8,9 @@
 // \author Matt Leotta
 // \date Oct. 14, 2008
 
-#include <vcl_compiler.h>
 #include <iostream>
 #include <vector>
+#include <vcl_compiler.h>
 #include <vil/vil_image_view.h>
 
 template <class T>

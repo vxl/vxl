@@ -1,15 +1,13 @@
-#include <vcl_compiler.h>
 #include <iostream>
 #include <fstream>
 #include <string>
+#include <sstream>
+#include <vcl_compiler.h>
 #include <vul/vul_arg.h>
 #include <vul/vul_file.h>
 #include "../boxm2_vecf_orbit_params.h"
 #include "../boxm2_vecf_orbit_param_stats.h"
-#include <sstream>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <fstream>
 int main(int argc, char ** argv)
 {
 

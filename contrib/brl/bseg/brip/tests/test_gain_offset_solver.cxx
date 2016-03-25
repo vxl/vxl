@@ -1,16 +1,15 @@
 // This is brl/bseg/brip/tests/test_gain_offset_solver.cxx
 
+#include <iostream>
+#include <cstdlib>
 #include <vil/vil_image_view.h>
 #include <brip/brip_gain_offset_solver.h>
 #include <brip/brip_vil_float_ops.h>
 #include <testlib/testlib_test.h>
-#include <iostream>
 #include <vil/vil_load.h>
 #include <vil/vil_save.h>
 #include <vil/vil_math.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <cstdlib> // for std::rand()
 
 static void test_gain_offset_solver()
 {

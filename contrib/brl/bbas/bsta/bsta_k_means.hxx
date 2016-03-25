@@ -2,15 +2,14 @@
 #ifndef vgl_distance_hxx_
 #define vgl_distance_hxx_
 
+#include <iostream>
+#include <algorithm>
+#include <cstdlib>
 #include "bsta_k_means.h"
 //:
 //  \file
 
 #include <vcl_compiler.h>
-#include <iostream>
-#include <algorithm>
-#include <iostream>
-#include <cstdlib>
 #include <vcl_cassert.h>
 
 //: Find k cluster centres

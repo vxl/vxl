@@ -1,9 +1,8 @@
+#include <iostream>
 #include <testlib/testlib_test.h>
 
 #include <rgrl/rgrl_spline.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 #include <vcl_cassert.h>
 #include <vnl/vnl_random.h>
 #include <vnl/vnl_math.h> // for vnl_math::isnan()

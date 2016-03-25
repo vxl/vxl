@@ -3,10 +3,10 @@
 #pragma implementation
 #endif
 
-#include "osl_fit_circle.h"
-#include <vcl_compiler.h>
 #include <iostream>
 #include <cmath>
+#include "osl_fit_circle.h"
+#include <vcl_compiler.h>
 #include <vnl/vnl_double_2.h>
 #include <vnl/algo/vnl_svd.h>
 

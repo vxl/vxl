@@ -5,11 +5,11 @@
 // \author Tim Cootes
 // \brief Apply limits to each parameter independently
 
+#include <iostream>
+#include <iosfwd>
 #include <msm/msm_param_limiter.h>
 #include <vnl/vnl_vector.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iosfwd>
 
 //: Apply limits to each parameter independently
 //  Each parameter is forced to lie in range [-k*s_i,+k*s_i],

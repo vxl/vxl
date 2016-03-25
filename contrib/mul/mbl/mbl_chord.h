@@ -6,10 +6,9 @@
 // \author Tim Cootes
 // \brief Horizontal line used in images, with integer co-ordinates
 
+#include <iostream>
 #include <vsl/vsl_binary_io.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 
 //: Horizontal line used in images, with integer co-ordinates
 

@@ -1,4 +1,6 @@
 // This is core/vgui/vgui_color_text.cxx
+#include <cstdio>
+#include <iostream>
 #include "vgui_color_text.h"
 //:
 // \file
@@ -12,8 +14,6 @@
 // \endverbatim
 
 #include <vcl_compiler.h>
-#include <cstdio>
-#include <iostream>
 #include <vgui/vgui_macro.h>
 
 static bool debug = false;

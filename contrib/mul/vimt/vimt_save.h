@@ -7,9 +7,9 @@
 // \note Adapted from vimt3d_save
 
 
-#include <vcl_compiler.h>
 #include <iostream>
 #include <string>
+#include <vcl_compiler.h>
 #include <vil/vil_fwd.h>
 class vimt_transform_2d;
 class vimt_image_2d;

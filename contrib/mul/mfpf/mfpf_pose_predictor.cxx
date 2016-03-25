@@ -1,3 +1,5 @@
+#include <iostream>
+#include <cmath>
 #include "mfpf_pose_predictor.h"
 //:
 // \file
@@ -16,8 +18,6 @@
 #include <vnl/io/vnl_io_vector.h>
 #include <vnl/io/vnl_io_matrix.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <cmath>
 #include <vcl_cassert.h>
 
 //=======================================================================

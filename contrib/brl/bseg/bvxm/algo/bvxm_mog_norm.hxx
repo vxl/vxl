@@ -3,13 +3,13 @@
 //:
 // \file
 
+#include <iostream>
+#include <cmath>
+#include <vector>
 #include "bvxm_mog_norm.h"
 
 #include <vnl/vnl_math.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <cmath>
-#include <vector>
 #include <bvxm/grid/bvxm_voxel_grid.h>
 
 //: Computes the l2 distances between the mixtures of gaussians in a bvxm_grid and a reference.

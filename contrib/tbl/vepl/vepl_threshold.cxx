@@ -1,8 +1,7 @@
 // This is tbl/vepl/vepl_threshold.cxx
+#include <iostream>
 #include "vepl_threshold.h"
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 #include <vepl/accessors/vipl_accessors_vil_image_view_base.h>
 #include <vipl/vipl_threshold.h>
 #include <vil/vil_image_view.h>

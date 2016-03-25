@@ -9,9 +9,9 @@
 // \date August 12, 2007
 //
 
-#include <vcl_compiler.h>
 #include <iostream>
 #include <vector>
+#include <vcl_compiler.h>
 #include <vnl/vnl_vector.h>
 #include <vnl/vnl_least_squares_function.h>
 #include <vgl/vgl_point_3d.h>

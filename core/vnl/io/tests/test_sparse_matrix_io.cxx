@@ -1,6 +1,6 @@
 // This is core/vnl/io/tests/test_sparse_matrix_io.cxx
-#include <vcl_compiler.h>
 #include <iostream>
+#include <vcl_compiler.h>
 #include <vsl/vsl_binary_io.h>
 #include <vnl/vnl_sparse_matrix.h>
 #include <vnl/io/vnl_io_sparse_matrix.h>

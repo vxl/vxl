@@ -1,4 +1,8 @@
 // This is mul/pdf1d/pdf1d_mixture_builder.cxx
+#include <cmath>
+#include <iostream>
+#include <algorithm>
+#include <cstdlib>
 #include "pdf1d_mixture_builder.h"
 //:
 // \file
@@ -6,11 +10,7 @@
 // \author Tim Cootes and Ian Scott
 
 #include <vcl_cassert.h>
-#include <cmath>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <algorithm>
-#include <cstdlib> // for std::abort()
 #include <vsl/vsl_indent.h>
 #include <vsl/vsl_vector_io.h>
 #include <vsl/vsl_binary_loader.h>

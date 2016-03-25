@@ -15,15 +15,14 @@
 //  The classifiers are trained to distinguish the examples mis-classified
 //  by the currently selected classifiers.
 
+#include <iostream>
+#include <cstdlib>
+#include <algorithm>
 #include "clsfy_direct_boost_builder.h"
 #include "clsfy_direct_boost.h"
 #include "clsfy_builder_1d.h"
 
-#include <iostream>
-#include <cstdlib> // for std::abort()
 #include <vcl_compiler.h>
-#include <iostream>
-#include <algorithm>
 #include <vcl_cassert.h>
 #include <mbl/mbl_file_data_collector.h>
 #include <mbl/mbl_data_collector_list.h>

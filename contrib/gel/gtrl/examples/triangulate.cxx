@@ -4,10 +4,9 @@
 // \author Peter Vanroose
 // \date   8 October 2002
 
+#include <iostream>
 #include <gtrl/gtrl_triangulation.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 
 inline std::ostream& operator<<(std::ostream& os, gtrl_vertex const& v)
 {

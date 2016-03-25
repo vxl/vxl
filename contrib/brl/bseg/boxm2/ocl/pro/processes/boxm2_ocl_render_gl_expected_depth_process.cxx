@@ -6,12 +6,12 @@
 // \author Daniel Crispell
 // \date 16 Sep 2014
 
-#include <bprb/bprb_func_process.h>
-
 #include <fstream>
-#include <vcl_compiler.h>
 #include <iostream>
 #include <algorithm>
+#include <bprb/bprb_func_process.h>
+
+#include <vcl_compiler.h>
 #include <boxm2/ocl/boxm2_opencl_cache.h>
 #include <boxm2/ocl/algo/boxm2_ocl_camera_converter.h>
 #include <boxm2/boxm2_scene.h>

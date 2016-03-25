@@ -4,12 +4,12 @@
 #endif
 //:
 // \file
-#include "vnl_brent_minimizer.h"
-
-#include <vcl_compiler.h>
 #include <cmath>
 #include <iostream>
 #include <algorithm>
+#include "vnl_brent_minimizer.h"
+
+#include <vcl_compiler.h>
 #include <vcl_cassert.h>
 
 #include <vnl/vnl_vector.h>

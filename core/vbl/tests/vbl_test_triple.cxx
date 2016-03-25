@@ -1,8 +1,8 @@
+#include <iostream>
+#include <sstream>
 #include <testlib/testlib_test.h>
 #include <vbl/vbl_triple.h>
-#include <iostream>
 #include <vcl_compiler.h>
-#include <sstream>
 
 static
 void vbl_test_triple()

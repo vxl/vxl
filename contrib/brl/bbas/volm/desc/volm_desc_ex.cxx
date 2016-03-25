@@ -1,10 +1,10 @@
+#include <iostream>
+#include <algorithm>
 #include "volm_desc_ex.h"
 //:
 // \file
 #include <vsl/vsl_vector_io.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <algorithm>
 
 unsigned locate_idx(double const& target, std::vector<double> const& arr)
 {

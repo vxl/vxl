@@ -1,3 +1,6 @@
+#include <cmath>
+#include <iostream>
+#include <algorithm>
 #include "mfpf_norm_corr1d.h"
 //:
 // \file
@@ -5,11 +8,8 @@
 // \author Tim Cootes
 
 #include <vsl/vsl_binary_loader.h>
-#include <cmath> // for std::abs()
 #include <vcl_cassert.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <algorithm>
 
 #include <vimt/vimt_sample_profile_bilin.h>
 #include <vnl/io/vnl_io_vector.h>

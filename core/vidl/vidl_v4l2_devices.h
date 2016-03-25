@@ -11,8 +11,8 @@
 //     15 Apr 2009 Created (A. Garrido)
 //\endverbatim
 
-#include <vcl_compiler.h>
 #include <vector>
+#include <vcl_compiler.h>
 #include "vidl_v4l2_device.h"
 #include "vidl_v4l2_device_sptr.h"
 

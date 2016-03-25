@@ -1,10 +1,10 @@
+#include <iostream>
+#include <cmath>
+#include <complex>
 #include "bpgl_interpolate.h"
 #include <vnl/vnl_math.h>
 #include <vnl/algo/vnl_complex_eigensystem.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <cmath>
-#include <complex>
 #include <vgl/vgl_point_3d.h>
 #if 0
 #include <vgl/vgl_vector_3d.h>

@@ -13,13 +13,13 @@
 // \endverbatim
 //=========================================================================
 
+#include <string>
 #include <vgui/vgui_statusbuf.h>
 #include <vgui/vgui_statusbar.h>
 
 class wxStatusBar;
 
 #include <vcl_compiler.h>
-#include <string>
 
 //-------------------------------------------------------------------------
 //: wxWidgets implementation of vgui_statusbar.

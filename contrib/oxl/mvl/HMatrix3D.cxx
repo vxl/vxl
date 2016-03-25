@@ -4,11 +4,10 @@
 #endif
 //:
 // \file
+#include <iostream>
 #include "HMatrix3D.h"
 
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 #include <vcl_cassert.h>
 
 #include <vnl/vnl_matlab_print.h>

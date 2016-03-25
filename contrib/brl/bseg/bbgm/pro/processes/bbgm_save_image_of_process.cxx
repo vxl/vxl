@@ -1,11 +1,10 @@
 // This is brl/bseg/bbgm/pro/processes/bbgm_save_image_of_process.cxx
+#include <iostream>
 #include <bprb/bprb_func_process.h>
 //:
 // \file
 
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 #include <bbgm/bbgm_image_of.h>
 #include <bbgm/bbgm_image_sptr.h>
 #include <brdb/brdb_value.h>

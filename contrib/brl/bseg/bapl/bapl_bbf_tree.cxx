@@ -1,14 +1,13 @@
 // This is brl/bseg/bapl/bapl_bbf_tree.cxx
+#include <limits>
+#include <utility>
+#include <iostream>
+#include <algorithm>
 #include "bapl_bbf_tree.h"
 //:
 // \file
 
-#include <limits>
-#include <utility>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <algorithm>
-#include <iostream>
 #include <vcl_cassert.h>
 #include <vnl/vnl_math.h>
 #include <vnl/vnl_vector.h>

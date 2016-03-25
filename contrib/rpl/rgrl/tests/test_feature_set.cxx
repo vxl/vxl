@@ -1,8 +1,8 @@
+#include <iostream>
+#include <vector>
 #include <testlib/testlib_test.h>
 
 #include <vcl_compiler.h>
-#include <iostream>
-#include <vector>
 #include <rgrl/rgrl_feature_sptr.h>
 #include <rgrl/rgrl_feature_point.h>
 #include <rgrl/rgrl_feature_set_sptr.h>

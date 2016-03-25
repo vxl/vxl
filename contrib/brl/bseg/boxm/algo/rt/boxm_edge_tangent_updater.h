@@ -12,9 +12,9 @@
 // \endverbatim
 
 #include <vector>
-#include <vcl_compiler.h>
 #include <iostream>
 #include <string>
+#include <vcl_compiler.h>
 
 #include <boxm/boxm_aux_traits.h>
 #include <boxm/boxm_apm_traits.h>

@@ -1,3 +1,7 @@
+#include <algorithm>
+#include <cmath>
+#include <limits>
+#include <cstdlib>
 #include "vil_j2k_image.h"
 //:
 // \file
@@ -12,12 +16,8 @@
 
 #include <NCSFile.h>
 
-#include <algorithm>
 #include <vcl_cassert.h>
-#include <cmath> // for ceil()
-#include <limits>
 #include <vcl_compiler.h>
-#include <cstdlib>
 #include <vil/vil_memory_chunk.h>
 #include <vil/vil_image_view.h>
 #include <vil/vil_load.h>

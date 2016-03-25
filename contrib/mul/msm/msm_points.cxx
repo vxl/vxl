@@ -1,17 +1,16 @@
+#include <iostream>
+#include <cstdlib>
 #include "msm_points.h"
 //:
 // \file
 // \brief Set of 2D points, stored in a vnl_vector (x0,y0,x1,y1...)
 // \author Tim Cootes
 
-#include <iostream>
 #include <vsl/vsl_indent.h>
 #include <vsl/vsl_binary_io.h>
 #include <vnl/io/vnl_io_vector.h>
 #include <vgl/vgl_point_2d.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <cstdlib>  // for std::atoi() & std::abort()
 
 
 //=======================================================================

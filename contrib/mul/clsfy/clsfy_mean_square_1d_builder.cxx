@@ -1,22 +1,21 @@
 // This is mul/clsfy/clsfy_mean_square_1d_builder.cxx
+#include <cmath>
+#include <iostream>
+#include <string>
+#include <cstdlib>
+#include <algorithm>
 #include "clsfy_mean_square_1d_builder.h"
 //:
 // \file
 // \author dac
 // \date   Tue Mar  5 01:11:31 2002
 
-#include <cmath>
-#include <iostream>
-#include <string>
 #include <vcl_cassert.h>
-#include <cstdlib>
 #include <vsl/vsl_binary_loader.h>
 #include <vnl/vnl_double_2.h>
 #include <clsfy/clsfy_builder_1d.h>
 #include <clsfy/clsfy_mean_square_1d.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <algorithm>
 
 //=======================================================================
 

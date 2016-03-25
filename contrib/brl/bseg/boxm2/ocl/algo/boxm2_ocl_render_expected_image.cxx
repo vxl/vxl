@@ -1,3 +1,5 @@
+#include <iostream>
+#include <algorithm>
 #include "boxm2_ocl_render_expected_image.h"
 //
 #include <vul/vul_timer.h>
@@ -8,8 +10,6 @@
 #include <vgl/vgl_ray_3d.h>
 #include <boct/boct_bit_tree.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <algorithm>
 
 #include <brad/brad_image_metadata.h>
 #include <brad/brad_atmospheric_parameters.h>

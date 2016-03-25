@@ -2,14 +2,13 @@
 #ifndef vil1_to_Image_h_
 #define vil1_to_Image_h_
 
+#include <iostream>
 #include <ImageClasses/Image.h>
 #include <vil1/vil1_image.h>
 
 #include <ImageClasses/MemoryImage.h>
 
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 
 inline Image* vil1_to_Image(vil1_image const& im)
 {

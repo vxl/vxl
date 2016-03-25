@@ -45,15 +45,15 @@
 // \author Simon Brady
 //----------------------------------------------------------------------
 
+#include <iostream>
+#include <csignal>
+#include <cstddef>
 #include <unistd.h>
 #ifndef _POSIX_ASYNCHRONOUS_IO
 #error Your system does not support POSIX asynchronous I/O
 #endif
 #include <aio.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <csignal>
-#include <cstddef> // for size_t
 
 class AsyncIO_Shared_State
 {

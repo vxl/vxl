@@ -1,4 +1,6 @@
 // This is core/vgui/vgui_vil_image_renderer.cxx
+#include <iostream>
+#include <cmath>
 #include "vgui_vil_image_renderer.h"
 //:
 // \file
@@ -7,9 +9,7 @@
 //
 // Cut-n-paste and modify from vil1_image_renderer.cxx
 
-#include <iostream>
 #include <vcl_compiler.h>
-#include <cmath>
 #include <vul/vul_timer.h>
 #include <vil/vil_property.h>
 #include <vil/vil_image_resource.h>

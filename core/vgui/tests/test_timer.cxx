@@ -1,8 +1,8 @@
 // This is core/vgui/tests/test_timer.cxx
 // \author fsm
-#include <vcl_compiler.h>
 #include <cmath>
 #include <iostream>
+#include <vcl_compiler.h>
 #include <vgui/vgui.h>
 #include <vgui/vgui_event.h>
 #include <vgui/vgui_tableau.h>

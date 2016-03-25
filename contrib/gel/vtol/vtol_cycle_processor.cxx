@@ -1,14 +1,13 @@
 // This is gel/vtol/vtol_cycle_processor.cxx
+#include <vector>
+#include <iostream>
+#include <algorithm>
+#include <cmath>
 #include "vtol_cycle_processor.h"
 //:
 // \file
 
-#include <vector>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <algorithm>
-#include <iostream>
-#include <cmath>
 
 #include <vsol/vsol_box_2d.h>
 #include <vsol/vsol_box_2d_sptr.h>

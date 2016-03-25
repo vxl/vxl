@@ -16,10 +16,10 @@
 //   20 April 2001 IMS - Implemented log_p_min in nearest_plausible
 // \endverbatim
 
-#include <vpdfl/vpdfl_pdf_base.h>
-#include <vcl_compiler.h>
 #include <iostream>
 #include <iosfwd>
+#include <vpdfl/vpdfl_pdf_base.h>
+#include <vcl_compiler.h>
 
 //: Multi-variate Gaussian PDF, with a diagonal covariance matrix
 class vpdfl_axis_gaussian : public vpdfl_pdf_base

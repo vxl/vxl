@@ -1,6 +1,5 @@
 // not used? #include <vcl_compiler.h>
 #include <iostream>
-#include <iostream>
 #include <vgui/vgui.h>
 #include <vgui/vgui_dialog.h>
 #include <vgui/vgui_menu.h>

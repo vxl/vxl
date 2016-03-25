@@ -15,12 +15,12 @@
 
 //=======================================================================
 
+#include <iostream>
+#include <iosfwd>
 #include <vpdfl/vpdfl_builder_base.h>
 #include <vpdfl/vpdfl_mixture_builder.h>
 #include <vpdfl/vpdfl_mixture.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iosfwd>
 
 //=======================================================================
 

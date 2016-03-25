@@ -8,8 +8,8 @@
 // \file
 // \brief Enumeration of possible key strokes.
 
-#include <vcl_compiler.h>
 #include <iosfwd>
+#include <vcl_compiler.h>
 
 //: Enumeration of possible key strokes.
 enum vgui_key

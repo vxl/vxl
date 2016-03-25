@@ -11,12 +11,12 @@
 //   2004/09/17 Peter Vanroose  do not pass vcsl_unit objects; use vcsl_unit_sptr instead
 // \endverbatim
 
+#include <string>
 #include <vbl/vbl_ref_count.h>
 #include <vcsl/vcsl_axis_sptr.h>
 #include <vcsl/vcsl_unit_sptr.h>
 #include <vcsl/vcsl_dimension_sptr.h>
 #include <vcl_compiler.h>
-#include <string>
 
 //: Axis descriptor: a dimension, a unit, a label
 class vcsl_axis

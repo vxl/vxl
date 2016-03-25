@@ -8,12 +8,12 @@
 // \date   21 Oct 1999
 // \brief  See vgui_listmanager2D_tableau.h for a description of this file.
 
-#include "vgui_listmanager2D_tableau.h"
-
 #include <iostream>
-#include <vcl_compiler.h>
 #include <vector>
 #include <algorithm>
+#include "vgui_listmanager2D_tableau.h"
+
+#include <vcl_compiler.h>
 
 #include <vgui/vgui_gl.h>
 #include <vgui/vgui_parent_child_link.h>

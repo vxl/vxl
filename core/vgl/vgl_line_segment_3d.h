@@ -16,8 +16,8 @@
 // Kieran O'Mahony - 13 Aug 2007 - Added contains()
 // \endverbatim
 
-#include <vcl_compiler.h>
 #include <iosfwd>
+#include <vcl_compiler.h>
 #include <vgl/vgl_point_3d.h> // data member of this class
 
 //: Represents a 3D line segment using two points.

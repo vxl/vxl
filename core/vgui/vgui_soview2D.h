@@ -24,9 +24,9 @@
 //   04 Jul 2000 Marko Bacic - Fixed vgui_soview2D_circle
 // \endverbatim
 
+#include <iosfwd>
 #include "vgui_soview.h"
 #include <vcl_compiler.h>
-#include <iosfwd>
 
 #include "vgui_gl.h"
 

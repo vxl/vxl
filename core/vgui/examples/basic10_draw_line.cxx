@@ -1,7 +1,7 @@
 // In this example a line is drawn by clicking on the end points.
 
-#include <vcl_compiler.h>
 #include <iostream>
+#include <vcl_compiler.h>
 #include <vgui/vgui.h>
 #include <vgui/vgui_projection_inspector.h>
 #include <vgui/vgui_image_tableau.h>

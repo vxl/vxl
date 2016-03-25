@@ -10,11 +10,11 @@
 //  Modifications
 //   <None yet>
 // \endverbatim
+#include <iostream>
+#include <string>
 #include <vgl/vgl_ray_3d.h>
 #include <vbl/vbl_array_2d.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <string>
 #include <vbl/vbl_ref_count.h>
 #include <vsl/vsl_binary_io.h>
 

@@ -1,13 +1,13 @@
+#include <fstream>
+#include <iostream>
+#include <complex>
+#include <limits>
 #include "brip_vil_float_ops.h"
 //:
 // \file
 
 #include <vcl_cassert.h>
-#include <fstream>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <complex>
-#include <limits>
 #include <vgl/vgl_box_2d.h>
 #include <vgl/vgl_point_2d.h>
 #include <vgl/vgl_vector_2d.h>

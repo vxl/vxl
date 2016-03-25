@@ -1,10 +1,9 @@
+#include <iostream>
 #include "bnl_parabolic_interpolator.h"
 
 #include <vnl/vnl_vector.h>
 #include <vnl/algo/vnl_svd.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 
 void
 bnl_parabolic_interpolator::add_data_point(const double p, const double v)

@@ -6,17 +6,17 @@
 // \file
 // \author fsm
 
+#include <iostream>
+#include <cstring>
+#include <fstream>
 #include "vil_open.h"
 
-#include <iostream>
-#include <cstring>  // strncmp()
 
 #include <vil/vil_stream_fstream.h>
 
 #include <vil/vil_stream_core.h>
 #include <vil/vil_stream_url.h>
 // not used? #include <vcl_compiler.h>
-#include <fstream>
 
 vil_stream *vil_open(char const* what, char const* how)
 {

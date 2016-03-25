@@ -2,6 +2,12 @@
 #define boxm_scene_hxx_
 //:
 // \file
+#include <cmath>
+#include <cstdio>
+#include <sstream>
+#include <iostream>
+#include <algorithm>
+#include <iterator>
 #include "boxm_scene.h"
 //
 #include "boxm_apm_traits.h"
@@ -16,13 +22,7 @@
 #include <vpgl/xio/vpgl_xio_lvcs.h>
 
 #include <vpl/vpl.h>
-#include <cmath>
-#include <cstdio>
-#include <sstream>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <algorithm>
-#include <iterator>
 #include <vcl_cassert.h>
 
 template <class T>

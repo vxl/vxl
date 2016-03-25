@@ -16,6 +16,8 @@
 //    23 Oct 2002 - Peter Vanroose - using fixed 3x3 matrices throughout
 // \endverbatim
 
+#include <iostream>
+#include <iosfwd>
 #include <vnl/vnl_double_4x4.h>
 #include <vnl/vnl_fwd.h>
 #include <vgl/vgl_homg_point_3d.h>
@@ -24,8 +26,6 @@
 #include <mvl/HomgLine3D.h>
 #include <mvl/HomgLineSeg3D.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iosfwd>
 
 class PMatrix;
 

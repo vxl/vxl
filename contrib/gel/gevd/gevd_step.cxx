@@ -1,4 +1,6 @@
 // This is gel/gevd/gevd_step.cxx
+#include <vector>
+#include <iostream>
 #include "gevd_step.h"
 //:
 // \file
@@ -22,10 +24,7 @@
 //
 //\endverbatim
 
-#include <vector>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 #include <vnl/vnl_math.h>
 #include <gevd/gevd_noise.h>
 #include <gevd/gevd_float_operators.h>

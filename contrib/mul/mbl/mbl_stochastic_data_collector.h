@@ -6,12 +6,12 @@
 // \author Ian Scott
 //=======================================================================
 
-#include <mbl/mbl_data_collector.h>
-#include <mbl/mbl_data_array_wrapper.h>
 #include <vector>
-#include <vcl_compiler.h>
 #include <iostream>
 #include <iosfwd>
+#include <mbl/mbl_data_collector.h>
+#include <mbl/mbl_data_array_wrapper.h>
+#include <vcl_compiler.h>
 #include <vnl/vnl_random.h>
 
 //=======================================================================

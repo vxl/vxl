@@ -1,13 +1,13 @@
+#include <vector>
+#include <iostream>
+#include <algorithm>
+#include <stdexcept>
 #include "boxm2_ocl_update_vis_score.h"
 
-#include <vector>
 #include <boxm2/ocl/boxm2_ocl_util.h>
 #include <boxm2/ocl/algo/boxm2_ocl_camera_converter.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <algorithm>
 #include <vul/vul_timer.h>
-#include <stdexcept>
 
 bool
 boxm2_ocl_update_vis_score

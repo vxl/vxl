@@ -7,6 +7,8 @@
 // See wx_xrc_frame.h for details.
 //=========================================================================
 
+#include <iostream>
+#include <cstdlib>
 #include "wx_xrc_frame.h"
 #include <wx/xrc/xmlres.h>
 
@@ -27,9 +29,7 @@
 
 #include <vgui/wx/wxSliderPanel.h>
 
-#include <iostream>
 #include <vcl_compiler.h>
-#include <cstdlib> // for std::exit()
 
 //-------------------------------------------------------------------------
 //-------------------------------------------------------------------------

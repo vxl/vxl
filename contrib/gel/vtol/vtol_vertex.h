@@ -21,10 +21,10 @@
 //   Sept.2004, Peter Vanroose -is_endpoint() now accepts smart pointer argument
 // \endverbatim
 
-#include <vtol/vtol_topology_object.h>
-#include <vcl_compiler.h>
 #include <iostream>
 #include <iosfwd>
+#include <vtol/vtol_topology_object.h>
+#include <vcl_compiler.h>
 class vtol_vertex_2d;
 class vtol_edge;
 class vtol_zero_chain;

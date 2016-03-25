@@ -7,9 +7,9 @@
 //:
 //  \file
 
-#include <vcl_compiler.h>
 #include <iostream>
 #include <vector>
+#include <vcl_compiler.h>
 
 template < class DataType > class vipl_section_container; //template forward reference
 template < class DataType > class vipl_section_iterator; //template forward reference

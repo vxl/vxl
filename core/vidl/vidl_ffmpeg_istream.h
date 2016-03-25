@@ -16,9 +16,9 @@
 //    Matt Leotta   21 Dec 2005   Adapted from code by Amitha Perera
 // \endverbatim
 
+#include <string>
 #include "vidl_istream.h"
 #include <vcl_compiler.h>
-#include <string>
 
 
 //: A video input stream using FFMPEG to decoded files

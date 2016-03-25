@@ -1,7 +1,7 @@
+#include <string>
 #include <testlib/testlib_test.h>
 
 #include <vcl_compiler.h>
-#include <string>
 
 MAIN_ARGS( test_args )
 {

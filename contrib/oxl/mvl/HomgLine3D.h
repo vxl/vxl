@@ -16,10 +16,10 @@
 //   Peter Vanroose - 11 Mar 97 - added operator==
 // \endverbatim
 
-#include <mvl/HomgPoint3D.h>
-#include <vcl_compiler.h>
 #include <iostream>
 #include <iosfwd>
+#include <mvl/HomgPoint3D.h>
+#include <vcl_compiler.h>
 
 class HomgLine3D
 {

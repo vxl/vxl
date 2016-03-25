@@ -1,11 +1,10 @@
 // This is gel/vifa/vifa_coll_lines_params.cxx
+#include <iostream>
 #include "vifa_coll_lines_params.h"
 //:
 // \file
 
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 
 vifa_coll_lines_params::
 vifa_coll_lines_params(float midpt_distance,

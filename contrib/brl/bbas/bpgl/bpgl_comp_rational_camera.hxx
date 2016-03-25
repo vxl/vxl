@@ -3,12 +3,12 @@
 #define bpgl_comp_rational_camera_hxx_
 //:
 // \file
-#include "bpgl_comp_rational_camera.h"
-#include <vcl_compiler.h>
 #include <iostream>
 #include <cmath>
 #include <vector>
 #include <fstream>
+#include "bpgl_comp_rational_camera.h"
+#include <vcl_compiler.h>
 #include <vgl/vgl_point_2d.h>
 #include <vgl/vgl_point_3d.h>
 //--------------------------------------

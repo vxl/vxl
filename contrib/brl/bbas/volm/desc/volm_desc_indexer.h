@@ -14,11 +14,11 @@
 // \endverbatim
 //
 
-#include <vbl/vbl_ref_count.h>
-#include <vcl_compiler.h>
 #include <iostream>
 #include <string>
 #include <vector>
+#include <vbl/vbl_ref_count.h>
+#include <vcl_compiler.h>
 #include <volm/volm_geo_index.h>
 #include <volm/volm_geo_index_sptr.h>
 

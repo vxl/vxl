@@ -6,10 +6,10 @@
 // \file
 // \author fsm
 
+#include <iostream>
 #include "vil1_stream_section.h"
 #include <vcl_cassert.h>
 #include <vcl_compiler.h>
-#include <iostream>
 
 // underlying_: pointer to underlying stream.
 // begin_     : start of section in the underlying stream.

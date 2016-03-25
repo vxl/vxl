@@ -13,9 +13,9 @@
 //                           New definition: diff(a,b) = abs(log(a/b))
 // \endverbatim
 
-#include <vcl_compiler.h>
 #include <string>
 #include <iostream>
+#include <vcl_compiler.h>
 #include <vil/vil_file_format.h>
 #include <vil/vil_pyramid_image_resource.h>
 

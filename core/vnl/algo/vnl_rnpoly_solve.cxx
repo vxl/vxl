@@ -4,15 +4,15 @@
 #endif
 //:
 // \file
+#include <cmath>
+#include <iostream>
+#include <fstream>
 #include "vnl_rnpoly_solve.h"
 
 #include <vnl/vnl_math.h> // for vnl_math::twopi
 #include <vcl_compiler.h>
-#include <cmath>
 #include <vcl_cassert.h>
 #ifdef DEBUG
-#include <iostream>
-#include <fstream>
 #endif
 
 static unsigned int dim_ = 0; // dimension of the problem

@@ -4,13 +4,13 @@
 //:
 // \file
 
+#include <cmath>
+#include <limits>
 #include "vpgl_radial_distortion.h"
 #include <vgl/vgl_homg_point_2d.h>
 #include <vgl/vgl_point_2d.h>
 
-#include <cmath>
 #include <vcl_compiler.h>
-#include <limits>
 
 //: Distort a projected point on the image plane
 //  Calls the pure virtual radial distortion function

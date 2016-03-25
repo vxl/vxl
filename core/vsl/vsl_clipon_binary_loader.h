@@ -7,11 +7,11 @@
 //:
 // \file
 
+#include <vector>
+#include <string>
 #include <vsl/vsl_binary_loader_base.h>
 #include <vsl/vsl_binary_io.h>
-#include <vector>
 #include <vcl_compiler.h>
-#include <string>
 
 //: Class to load objects by baseclass pointer using `clipon' classes
 // An example of a singleton design pattern for loading

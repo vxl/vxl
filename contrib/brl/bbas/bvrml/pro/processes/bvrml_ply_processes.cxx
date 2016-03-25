@@ -1,16 +1,15 @@
 //This is brl/bbas/bvrml/pro/processes/bvrml_ply_processes.cxx
+#include <string>
+#include <iostream>
 #include <bprb/bprb_func_process.h>
 //:
 // \file
 //
 #include <bprb/bprb_parameters.h>
 
-#include <string>
 #include <vcl_cassert.h>
 #ifdef DEBUG
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 #endif
 
 #include <brdb/brdb_value.h>

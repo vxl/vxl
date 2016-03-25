@@ -10,13 +10,13 @@
 //   23 Oct.2003 - Peter Vanroose - Added support for 64-bit int pixels
 // \endverbatim
 
-#include "vil_save.h"
-
 #include <cctype>
 #include <cstring>
-#include <vcl_compiler.h>
 #include <string>
 #include <iostream>
+#include "vil_save.h"
+
+#include <vcl_compiler.h>
 #include <vxl_config.h> // for vxl_byte
 
 #include <vil/vil_open.h>

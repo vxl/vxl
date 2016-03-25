@@ -10,9 +10,9 @@
 //   10 Sep. 2004 Peter Vanroose  Inlined all 1-line methods in class decl
 // \endverbatim
 
-#include <vcl_compiler.h>
 #include <iostream>
 #include <cmath>
+#include <vcl_compiler.h>
 #include <osl/osl_hacks.h>
 #include <osl/osl_ortho_regress.h>
 

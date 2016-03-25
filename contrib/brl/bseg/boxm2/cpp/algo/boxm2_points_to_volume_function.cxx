@@ -1,3 +1,6 @@
+#include <iostream>
+#include <queue>
+#include <set>
 #include "boxm2_points_to_volume_function.h"
 //:
 // \file
@@ -10,9 +13,6 @@
 #include <vgl/vgl_box_3d.h>
 #include <vgl/vgl_point_3d.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <queue>
-#include <set>
 
 //: constructor - populates list of AABBs
 boxm2_points_to_volume::boxm2_points_to_volume(boxm2_scene_sptr scene,

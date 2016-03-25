@@ -1,9 +1,8 @@
 // This is mul/vil3d/tests/test_image_resource.cxx
+#include <iostream>
 #include <testlib/testlib_test.h>
 
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 #include <vil3d/vil3d_image_resource.h>
 #include <vil3d/vil3d_math.h>
 #include <vil3d/vil3d_new.h>

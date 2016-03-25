@@ -1,4 +1,8 @@
 // This is core/vil/tests/test_save_load_image.cxx
+#include <cstring>
+#include <string>
+#include <iostream>
+#include <fstream>
 #include <testlib/testlib_test.h>
 //:
 // \file
@@ -25,11 +29,7 @@
 //   14 Nov 2011 - Gehua Yang     - added tests for saving/loading 32bpp ARGB image with PNG, TIFF, and BMP format
 // \endverbatim
 
-#include <cstring>
 #include <vcl_compiler.h>
-#include <string>
-#include <iostream>
-#include <fstream>
 
 #include <vxl_config.h> // for vxl_byte
 #include <vil/vil_config.h> // for HAS_JPEG

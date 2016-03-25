@@ -5,11 +5,10 @@
 //:
 //  \file
 
+#include <iostream>
 #include "HomgLine3D.h"
 #include <mvl/Homg3D.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 
 //--------------------------------------------------------------
 //

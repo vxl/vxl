@@ -1,5 +1,12 @@
 // This is mul/clsfy/tests/test_k_nearest_neighbour.cxx
 // Copyright: (C) 2000 British Telecommunications PLC
+#include <vector>
+#include <iostream>
+#include <sstream>
+#include <iomanip>
+#include <ios>
+#include <algorithm>
+#include <string>
 #include <testlib/testlib_test.h>
 //:
 // \file
@@ -7,15 +14,7 @@
 // \author Ian Scott
 // Test construction, IO etc.
 
-#include <vector>
-#include <iostream>
-#include <sstream>
-#include <iomanip>
-#include <ios>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <algorithm>
-#include <string>
 #include <vpl/vpl.h> // vpl_unlink()
 
 #include <clsfy/clsfy_add_all_loaders.h>

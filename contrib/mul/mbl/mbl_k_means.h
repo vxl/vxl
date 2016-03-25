@@ -7,9 +7,9 @@
 // \date 18-May-2001
 // \brief K Means clustering functions
 
-#include <vcl_compiler.h>
 #include <iostream>
 #include <vector>
+#include <vcl_compiler.h>
 #include <vnl/vnl_vector.h>
 #include <mbl/mbl_data_wrapper.h>
 

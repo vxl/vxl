@@ -1,11 +1,10 @@
 // This is gel/pop/pop_geometric_object.cxx
+#include <iostream>
 #include "pop_geometric_object.h"
 //:
 // \file
 #include <pop/pop_edge.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 
 //: constructor
 pop_geometric_object::pop_geometric_object(pop_vertex *coordinate_system)

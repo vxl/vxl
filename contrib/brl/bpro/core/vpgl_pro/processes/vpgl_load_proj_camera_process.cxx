@@ -1,14 +1,13 @@
 // This is brl/bpro/core/vpgl_pro/processes/vpgl_load_proj_camera_process.cxx
+#include <iostream>
+#include <fstream>
+#include <iomanip>
 #include <bprb/bprb_func_process.h>
 //:
 // \file
 
 #include <bprb/bprb_parameters.h>
-#include <iostream>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <fstream>
-#include <iomanip>
 #include <vpgl/vpgl_camera.h>
 #include <vpgl/vpgl_proj_camera.h>
 #include <vpgl/io/vpgl_io_proj_camera.h>

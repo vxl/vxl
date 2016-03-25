@@ -1,19 +1,18 @@
 // This is brl/bpro/core/vil_pro/processes/bil_read_CLIF07_data_process.cxx
+#include <iostream>
+#include <string>
+#include <sstream>
+#include <cstdio>
 #include <bprb/bprb_func_process.h>
 //:
 // \file
 
 #include <bprb/bprb_parameters.h>
-#include <iostream>
-#include <string>
 #include <vil/vil_save.h>
 #include <vil/vil_image_view.h>
 
 #include <bil/bil_raw_image_istream.h>
-#include <sstream>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <cstdio>
 
 //: Constructor
 bool bil_read_CLIF07_data_process_cons(bprb_func_process& pro)

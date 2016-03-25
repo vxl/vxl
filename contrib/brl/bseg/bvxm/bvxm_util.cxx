@@ -1,3 +1,8 @@
+#include <iostream>
+#include <fstream>
+#include <cmath>
+#include <string>
+#include <vector>
 #include "bvxm_util.h"
 #include "bvxm_world_params.h"
 
@@ -20,13 +25,7 @@
 
 #include "grid/bvxm_voxel_slab.h"
 
-#include <iostream>
-#include <fstream>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <cmath>
-#include <string>
-#include <vector>
 
 bool bvxm_util::read_cameras(const std::string filename, std::vector<vnl_double_3x3> &Ks, std::vector<vnl_double_3x3> &Rs, std::vector<vnl_double_3x1> &Ts)
 {

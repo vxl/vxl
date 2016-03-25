@@ -5,12 +5,11 @@
 #ifndef rgtl_octree_point_location_txx
 #define rgtl_octree_point_location_txx
 
+#include <iostream>
 #include "rgtl_octree_point_location.hxx"
 #include "rgtl_octree_cell_location.hxx"
 
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 
 //----------------------------------------------------------------------------
 template <unsigned int D>

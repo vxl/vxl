@@ -1,15 +1,14 @@
 // This is gel/vsol/vsol_digital_curve_2d.cxx
+#include <iostream>
+#include <cmath>
 #include "vsol_digital_curve_2d.h"
 //:
 // \file
 #include <vsol/vsol_point_2d.h>
-#include <iostream>
 #include <vgl/vgl_point_2d.h>
 #include <vgl/vgl_closest_point.h>
 #include <vsl/vsl_vector_io.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <cmath>
 #include <vcl_cassert.h>
 
 //***************************************************************************

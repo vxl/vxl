@@ -1,4 +1,6 @@
 // This is vpgl/algo/vpgl_bundle_adjust_lsqr.cxx
+#include <iostream>
+#include <algorithm>
 #include "vpgl_bundle_adjust_lsqr.h"
 //:
 // \file
@@ -6,9 +8,7 @@
 #include <vnl/vnl_vector_ref.h>
 #include <vnl/vnl_double_3.h>
 
-#include <iostream>
 #include <vcl_compiler.h>
-#include <algorithm>
 #include <vcl_cassert.h>
 
 

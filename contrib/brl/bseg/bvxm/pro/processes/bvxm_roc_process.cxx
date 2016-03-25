@@ -1,12 +1,14 @@
 // This is brl/bseg/bvxm/pro/processes/bvxm_roc_process.cxx
+#include <iostream>
+#include <fstream>
+#include <vector>
+#include <sstream>
 #include "bvxm_roc_process.h"
 //:
 // \file
 #include <bprb/bprb_func_process.h>
 
 #include <vcl_compiler.h>
-#include <iostream>
-#include <fstream>
 
 #include <vil/vil_load.h>
 #include <vil/vil_save.h>
@@ -16,8 +18,6 @@
 #include <vul/vul_file.h>
 #include <vul/vul_file_iterator.h>
 
-#include <vector>
-#include <sstream>
 
 bool bvxm_roc_process_cons(bprb_func_process& pro)
 {

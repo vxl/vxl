@@ -1,7 +1,7 @@
 // This is core/vil/algo/tests/test_suppress_non_max.cxx
+#include <iostream>
 #include <testlib/testlib_test.h>
 #include <vcl_compiler.h>
-#include <iostream>
 #include <vil/algo/vil_suppress_non_max.h>
 
 static void test_suppress_non_max_byte()

@@ -7,6 +7,8 @@
 // \author Matt Leotta
 // \date April 18, 2005
 
+#include <iostream>
+#include <vector>
 #include <vnl/vnl_vector.h>
 #include <vnl/vnl_sparse_lst_sqr_function.h>
 #include <vgl/vgl_point_2d.h>
@@ -15,8 +17,6 @@
 #include <vgl/algo/vgl_rotation_3d.h>
 #include <vpgl/vpgl_perspective_camera.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <vector>
 
 
 //: Computes the residuals for bundle adjustment given that the cameras share a fixed internal calibration, shared rolling rate which needs to be estimated

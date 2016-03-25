@@ -6,11 +6,12 @@
 // \brief Build Gaussian image pyramids at any scale separation
 // \author Ian Scott
 
-#include "vimt_scale_pyramid_builder_2d.h"
 #include <cstdlib>
-#include <vcl_cassert.h>
 #include <string>
 #include <iostream>
+#include <cmath>
+#include "vimt_scale_pyramid_builder_2d.h"
+#include <vcl_cassert.h>
 #include <vil/vil_bilin_interp.h>
 #include <vgl/vgl_point_2d.h>
 #include <vgl/vgl_vector_2d.h>
@@ -18,8 +19,6 @@
 #include <vimt/vimt_image_pyramid.h>
 #include <vsl/vsl_indent.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <cmath>
 #include <vimt/vimt_crop.h>
 
 //=======================================================================

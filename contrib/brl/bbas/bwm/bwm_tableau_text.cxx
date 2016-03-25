@@ -1,9 +1,8 @@
-#include "bwm_tableau_text.h"
-
-#include <iostream>
-#include <vcl_compiler.h>
 #include <iostream>
 #include <fstream>
+#include "bwm_tableau_text.h"
+
+#include <vcl_compiler.h>
 
 void bwm_tableau_text::set_text(std::string filename)
 {

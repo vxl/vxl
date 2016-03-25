@@ -15,13 +15,13 @@
 //   2004/09/17 Peter Vanroose - made beat(), parent(), motion() non-virtual: they just return a member and should not be overloaded
 // \endverbatim
 
+#include <vector>
 #include <vcsl/vcsl_coordinate_system.h>
 #include <vcsl/vcsl_spatial_sptr.h>
 #include <vcsl/vcsl_spatial_transformation_sptr.h>
 #include <vcsl/vcsl_graph_sptr.h>
 #include <vnl/vnl_vector.h>
 #include <vcl_compiler.h>
-#include <vector>
 class vcsl_cartesian_2d;
 class vcsl_polar;
 class vcsl_cartesian_3d;

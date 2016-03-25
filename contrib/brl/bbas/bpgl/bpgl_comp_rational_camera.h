@@ -16,11 +16,10 @@
 // that includes: translation(2 dof); rotation(1 dof);
 // and scale in u and v (2 dof).
 //
-#include <vgl/vgl_fwd.h>
-#include <vcl_compiler.h>
-#include <iostream>
 #include <iostream>
 #include <string>
+#include <vgl/vgl_fwd.h>
+#include <vcl_compiler.h>
 #include <vnl/vnl_vector_fixed.h>
 #include <vnl/vnl_matrix_fixed.h>
 #include <vpgl/vpgl_rational_camera.h>

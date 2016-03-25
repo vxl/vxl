@@ -1,9 +1,9 @@
 // This is core/vil1/examples/vil1_print_section.cxx
 #include <iostream>
 #include <vector>
+#include <cstdlib>
 #include <vcl_cassert.h>
 #include <vcl_compiler.h>
-#include <cstdlib>    // atoi()
 
 #include <vil1/vil1_load.h>
 #include <vil1/vil1_image.h>

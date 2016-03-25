@@ -1,5 +1,10 @@
 // This is mul/clsfy/clsfy_rbf_svm_smo_1_builder.cxx
 // Copyright: (C) 2001 British Telecommunications plc.
+#include <string>
+#include <vector>
+#include <sstream>
+#include <iostream>
+#include <algorithm>
 #include "clsfy_rbf_svm_smo_1_builder.h"
 //:
 // \file
@@ -9,12 +14,7 @@
 
 //=======================================================================
 
-#include <string>
-#include <vector>
-#include <sstream>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <algorithm>
 #include <vcl_cassert.h>
 #include <vul/vul_string.h>
 

@@ -1,4 +1,6 @@
 // This is brl/bseg/boxm2/pro/processes/boxm2_write_scene_xml_process.cxx
+#include <iostream>
+#include <fstream>
 #include <bprb/bprb_func_process.h>
 //:
 // \file
@@ -8,8 +10,6 @@
 // \date Mar 15, 2011
 
 #include <vcl_compiler.h>
-#include <iostream>
-#include <fstream>
 #include <boxm2/boxm2_scene.h>
 #include <vul/vul_file.h>
 

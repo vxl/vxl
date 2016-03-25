@@ -1,7 +1,7 @@
+#include <iostream>
 #include <vxl_copyright.h>
 #include <vxl_version.h>
 #include <vcl_compiler.h>
-#include <iostream>
 
 int main (int argc, char * argv[])
 {

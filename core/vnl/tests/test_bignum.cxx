@@ -8,10 +8,10 @@
 // \endverbatim
 
 #include <iostream>
-#include <limits> // for std::numeric_limits<double>::infinity()
+#include <limits>
 #include <sstream>
-#include <vcl_compiler.h>
 #include <iomanip>
+#include <vcl_compiler.h>
 #include <vnl/vnl_bignum.h>
 #include <vnl/vnl_bignum_traits.h>
 #include <vnl/vnl_numeric_traits.h> // for vnl_numeric_traits<double>::maxval
@@ -69,6 +69,7 @@ static void run_constructor_tests()
   {vnl_bignum b(-1234567e3); TEST("vnl_bignum b(-1234567e3);", (double)b, -1234567e3);}
   {vnl_bignum b(double(0xf00000)); TEST("vnl_bignum b(double(0xf00000));", b, 0xf00000);}
 
+#ifdef INCLUDE_LONG_DOUBLE_TESTS
   std::cout << "long double constructor:\n";
   {vnl_bignum b(0.0L); TEST("vnl_bignum b(0.0L);", (long double)b, 0.0L);}
   {vnl_bignum b(1.0L); TEST("vnl_bignum b(1.0L);", (long double)b, 1.0L);}
@@ -78,6 +79,7 @@ static void run_constructor_tests()
   {vnl_bignum b(1234567e3L); TEST("vnl_bignum b(1234567e3L);", (long double)b, 1234567e3L);}
   {vnl_bignum b(-1234567e3L); TEST("vnl_bignum b(-1234567e3L);", (long double)b, -1234567e3L);}
   {vnl_bignum b((long double)(0xf00000)); TEST("vnl_bignum b((long double)(0xf00000));", (long double)b, (long double)0xf00000);}
+#endif
 
   std::cout << "char* constructor:\n";
   {vnl_bignum b("-1"); TEST("vnl_bignum b(\"-1\");", b, -1L);}

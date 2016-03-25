@@ -10,8 +10,8 @@
 // \author awf@robots.ox.ac.uk
 // \date 15 Mar 00
 
-#include <vcl_compiler.h>
 #include <string>
+#include <vcl_compiler.h>
 #include <vil1/vil1_image.h>
 
 //: Load an image from disk

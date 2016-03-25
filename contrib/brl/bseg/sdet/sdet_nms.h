@@ -40,9 +40,9 @@
 //\endverbatim
 //
 //-------------------------------------------------------------------------
-#include <vcl_compiler.h>
 #include <iostream>
 #include <vector>
+#include <vcl_compiler.h>
 #include <vbl/vbl_array_2d.h>
 #include <vil/vil_image_view.h>
 #include <vgl/vgl_point_2d.h>

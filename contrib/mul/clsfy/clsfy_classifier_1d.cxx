@@ -3,12 +3,11 @@
 // \brief Describe an abstract classifier of 1D data
 // \author Tim Cootes
 
+#include <iostream>
+#include <vector>
 #include "clsfy_classifier_1d.h"
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 #include <vcl_cassert.h>
-#include <vector>
 #include <vsl/vsl_indent.h>
 #include <vsl/vsl_binary_loader.h>
 

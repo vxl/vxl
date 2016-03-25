@@ -2,14 +2,13 @@
 // \file
 // \brief Parses the configuration file for bwm tool.
 //
-#include "bvgl_labelme_parser.h"
-
 #include <sstream>
 #include <cstring>
 #include <iostream>
-#include <vcl_compiler.h>
-#include <iostream>
 #include <cstdio>
+#include "bvgl_labelme_parser.h"
+
+#include <vcl_compiler.h>
 
 
 //Constructor from file

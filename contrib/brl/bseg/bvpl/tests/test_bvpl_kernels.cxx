@@ -1,5 +1,10 @@
 //:
 // \file
+#include <sstream>
+#include <iostream>
+#include <iomanip>
+#include <fstream>
+#include <limits>
 #include <testlib/testlib_test.h>
 #include <bvpl/kernels/bvpl_edge2d_kernel_factory.h>
 #include <bvpl/kernels/bvpl_edge3d_kernel_factory.h>
@@ -10,13 +15,7 @@
 
 #include <vnl/vnl_math.h>
 
-#include <sstream>
-#include <iostream>
-#include <iomanip>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <fstream>
-#include <limits>
 
 bool test_edge2d()
 {

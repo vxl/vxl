@@ -1,7 +1,6 @@
 // This is brl/bbas/bdgl/tests/test_region_algs.cxx
+#include <iostream>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 #include <vdgl/vdgl_digital_region.h>
 #include <bdgl/bdgl_region_algs.h>
 #include <testlib/testlib_test.h>

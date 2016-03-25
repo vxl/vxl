@@ -4,6 +4,8 @@
 //  Copyright: (C) 2009 The University of Manchester
 //
 //=======================================================================
+#include <iostream>
+#include <sstream>
 #include <testlib/testlib_test.h>
 //:
 // \file
@@ -11,9 +13,6 @@
 // \brief test mfpf_patch_data
 
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
-#include <sstream>
 #include <mfpf/mfpf_patch_data.h>
 #include <mfpf/mfpf_add_all_loaders.h>
 

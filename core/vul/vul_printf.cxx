@@ -8,12 +8,12 @@
 //
 //-----------------------------------------------------------------------------
 
+#include <cstdarg>
+#include <iostream>
+#include <cstdio>
 #include "vul_printf.h"
 
 #include <vcl_compiler.h>
-#include <cstdarg>
-#include <iostream>
-#include <cstdio> // for vsprintf()
 
 std::ostream& vul_printf(std::ostream& s, char const * fmt, ...)
 {

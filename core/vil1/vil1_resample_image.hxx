@@ -2,10 +2,10 @@
 #ifndef vil1_resample_image_hxx_
 #define vil1_resample_image_hxx_
 
-#include "vil1_resample_image.h"
-#include <vcl_compiler.h>
 #include <vector>
 #include <iostream>
+#include "vil1_resample_image.h"
+#include <vcl_compiler.h>
 #include <vcl_cassert.h>
 
 #include <vil1/vil1_image.h>

@@ -8,11 +8,10 @@
 // \file
 // \author Ian Scott, Tim Cootes.
 
+#include <iostream>
 #include <vil/vil_print.h>
 #include <vil3d/vil3d_image_view.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 
 #ifdef VCL_VC_DOTNET
 #  pragma warning( push )

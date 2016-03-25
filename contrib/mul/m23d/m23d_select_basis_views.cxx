@@ -1,3 +1,6 @@
+#include <iostream>
+#include <cstdlib>
+#include <algorithm>
 #include "m23d_select_basis_views.h"
 //:
 // \file
@@ -6,11 +9,7 @@
 
 #include <mbl/mbl_random_n_from_m.h>
 #include <vnl/algo/vnl_svd.h>
-#include <iostream>
-#include <cstdlib>  // abort()
 #include <vcl_compiler.h>
-#include <iostream>
-#include <algorithm>  // std::sort
 
 //: Select a subset most suitable for use as a basis set
 //  Data matrix is 2ns x np (ns= number of samples, np = number of points)

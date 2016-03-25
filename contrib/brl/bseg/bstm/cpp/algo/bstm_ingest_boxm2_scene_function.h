@@ -3,6 +3,8 @@
 //:
 // \file
 
+#include <iostream>
+#include <map>
 #include <bstm/bstm_time_block.h>
 #include <bstm/bstm_block.h>
 #include <bstm/bstm_scene.h>
@@ -11,13 +13,10 @@
 #include <boxm2/basic/boxm2_array_3d.h>
 #include <vnl/vnl_vector_fixed.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 #include <bstm/io/bstm_cache.h>
 
 #include <boxm2/boxm2_scene.h>
 #include <boxm2/io/boxm2_cache.h>
-#include <map>
 
 #include <bstm/cpp/algo/bstm_data_similarity_traits.h>
 

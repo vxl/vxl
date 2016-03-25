@@ -1,15 +1,15 @@
 // This is mul/clsfy/clsfy_rbf_parzen.cxx
+#include <string>
+#include <iostream>
+#include <algorithm>
+#include <cmath>
 #include "clsfy_rbf_parzen.h"
 //:
 // \file
 // \author
 //   Copyright: (C) 2000 British Telecommunications plc
 
-#include <string>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <algorithm>
-#include <cmath>
 #include <vcl_cassert.h>
 #include <vsl/vsl_binary_io.h>
 #include <vsl/vsl_vector_io.h>

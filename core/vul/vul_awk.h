@@ -21,9 +21,9 @@
 
 
 #include <string>
-#include <vcl_compiler.h>
 #include <iosfwd>
 #include <vector>
+#include <vcl_compiler.h>
 
 //: The core of awk
 // vul_awk reads lines from a std::istream and breaks them into whitespace-separated

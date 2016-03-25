@@ -7,8 +7,8 @@
 // Refactored by Nicolas Rannou (Harvard), Oct 2010, such that the algorithm
 // presents itself in a templated and more object-oriented manner.
 
-#include <vcl_compiler.h>
 #include <vector>
+#include <vcl_compiler.h>
 #include <vnl/vnl_matrix.h>
 
 //: Find the best column to row assignment given a cost matrix.

@@ -2,6 +2,10 @@
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
+#include <iostream>
+#include <cctype>
+#include <cstring>
+#include <string>
 #include "bhdfs_vil_save.h"
 //:
 // \file
@@ -12,11 +16,6 @@
 // \endverbatim
 
 #include <vcl_compiler.h>
-#include <iostream>
-#include <cctype>
-#include <cstring>
-#include <string>
-#include <iostream>
 #include <vxl_config.h> // for vxl_byte
 
 #include <vil/vil_open.h>

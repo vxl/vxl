@@ -10,8 +10,8 @@
 // Peter Vanroose - 2 July 2002 - part of vnl_complex_ops.h moved here
 // \endverbatim
 
-#include <vcl_compiler.h>
 #include <complex>
+#include <vcl_compiler.h>
 #include <vnl/vnl_vector.h>
 #include <vnl/vnl_vector_fixed.h>
 #include <vnl/vnl_matrix.h>

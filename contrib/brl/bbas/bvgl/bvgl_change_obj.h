@@ -11,10 +11,10 @@
 //   <None yet>
 // \endverbatim
 
-#include <vgl/vgl_polygon.h>
-#include <vcl_compiler.h>
 #include <iostream>
 #include <string>
+#include <vgl/vgl_polygon.h>
+#include <vcl_compiler.h>
 #include <vbl/vbl_ref_count.h>
 #include <vsl/vsl_binary_io.h>
 

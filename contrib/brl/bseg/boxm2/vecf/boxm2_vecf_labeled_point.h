@@ -9,10 +9,10 @@
 //
 #include <vector>
 #include <string>
-#include <vgl/vgl_point_3d.h>
-#include <vcl_compiler.h>
 #include <iostream>
 #include <map>
+#include <vgl/vgl_point_3d.h>
+#include <vcl_compiler.h>
 //: a structure for holding a 3-d point with associated label
 struct boxm2_vecf_labeled_point{
   boxm2_vecf_labeled_point(){}

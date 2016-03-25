@@ -1,11 +1,10 @@
 // This is brl/bbas/bdpg/tests/test_array_dynamic_prg.cxx
+#include <cstdlib>
+#include <iostream>
+#include <cmath>
 #include <testlib/testlib_test.h>
-#include <cstdlib> // for rand()
 #include <vcl_compiler.h>
-#include <iostream>
-#include <cmath> //for exp
 #include <vnl/vnl_math.h> //for vnl_math::pi
-#include <iostream>
 #include <bdpg/bdpg_node.h>
 #include <bdpg/bdpg_array_dynamic_prg.h>
 

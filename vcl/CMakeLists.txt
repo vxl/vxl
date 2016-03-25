@@ -28,9 +28,9 @@ set( vcl_sources
   vcl_compiler.h
   vcl_deprecated.cxx     vcl_deprecated.h
 
-  vcl_cmath.cxx          vcl_cmath.h
-  vcl_cassert.cxx        vcl_cassert.h
-  vcl_cstdlib.cxx        vcl_cstdlib.h
+  vcl_cmath.h
+  vcl_cassert.h
+  vcl_cstdlib.h
 
   vcl_algorithm.h
   vcl_bitset.h
@@ -103,7 +103,7 @@ set( vcl_sources
 #aux_source_directory(Templates vcl_sources)
 vxl_add_library(LIBRARY_NAME ${VXL_LIB_PREFIX}vcl
   LIBRARY_SOURCES ${vcl_sources}
-  HEADER_INSTALL_DIR vcl)
+  )
 if(UNIX)
   target_link_libraries(${VXL_LIB_PREFIX}vcl m)
 endif()

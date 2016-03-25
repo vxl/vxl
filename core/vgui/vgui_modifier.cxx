@@ -2,9 +2,9 @@
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma implementation
 #endif
+#include <iostream>
 #include "vgui_modifier.h"
 #include <vcl_compiler.h>
-#include <iostream>
 //:
 // \file
 // \author VGG, Oxford University

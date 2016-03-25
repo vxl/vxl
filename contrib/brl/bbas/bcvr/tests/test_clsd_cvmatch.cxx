@@ -1,9 +1,9 @@
+#include <iostream>
+#include <string>
 #include <testlib/testlib_test.h>
 #include <bcvr/bcvr_clsd_cvmatch.h>
 #include <bcvr/bcvr_clsd_cvmatch_sptr.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <string>
 
 MAIN_ARGS(test_clsd_cvmatch)
 {

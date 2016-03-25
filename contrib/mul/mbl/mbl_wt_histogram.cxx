@@ -1,4 +1,6 @@
 // This is mul/mbl/mbl_wt_histogram.cxx
+#include <iostream>
+#include <cmath>
 #include "mbl_wt_histogram.h"
 //:
 // \file
@@ -6,9 +8,6 @@
 // \author Tim Cootes
 
 #include <vcl_compiler.h>
-#include <iostream>
-#include <cmath>
-#include <iostream>
 #include <vcl_cassert.h>
 #include <vsl/vsl_vector_io.h>
 

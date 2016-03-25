@@ -23,14 +23,14 @@
 // computations are simple enough so everything is in the .h file
 //
 
-#include <vcl_compiler.h>
 #include <vector>
+#include <iostream>
+#include <vcl_compiler.h>
 #include <vgl/vgl_vector_3d.h>
 #include <vgl/vgl_vector_3d.h>
 #include <vgl/vgl_point_3d.h>
 #include <vgl/vgl_plane_3d.h>
 #include <vcl_cassert.h>
-#include <iostream>
 
 template <class Type>
 class vgl_cubic_spline_3d
@@ -54,7 +54,9 @@ class vgl_cubic_spline_3d
   bool closed() const {return closed_curve_;}
   Type s() const {return s_;}
   unsigned n_knots() const {return static_cast<unsigned>(knots_.size());}
+
   std::vector<vgl_point_3d<Type> > knots() const {return knots_;}
+  std::vector<vgl_point_3d<Type> > const & const_knots() const {return knots_;}
 
   void set_knots(std::vector<vgl_point_3d<Type> > const& knots, bool closed)
   { knots_ = knots; closed_curve_ = closed;}

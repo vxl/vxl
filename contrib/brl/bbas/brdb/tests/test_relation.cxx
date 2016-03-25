@@ -1,10 +1,9 @@
+#include <iostream>
 #include <testlib/testlib_test.h>
 #include <brdb/brdb_value.h>
 #include <brdb/brdb_tuple.h>
 #include <brdb/brdb_relation.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 
 static void test_relation()
 {

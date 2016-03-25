@@ -1,9 +1,9 @@
 #ifndef vgl_convex_hull_2d_hxx_
 #define vgl_convex_hull_2d_hxx_
+#include <cstdlib>
 #include "vgl_convex_hull_2d.h"
 
 #include <vcl_compiler.h>
-#include <cstdlib> // std::qsort
 
 //:
 // \file

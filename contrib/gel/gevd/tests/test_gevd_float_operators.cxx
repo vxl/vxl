@@ -8,11 +8,11 @@
 // 1.0     |2003/02/02| Peter Vanroose           |Creation
 //*****************************************************************************
 
+#include <iostream>
+#include <cmath>
 #include <gevd/gevd_float_operators.h>
 #include <gevd/gevd_bufferxy.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <cmath> // for sqrt(float)
 #include <testlib/testlib_test.h>
 
 void

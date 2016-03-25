@@ -1,7 +1,9 @@
+#include <stdexcept>
+#include <iostream>
+#include <algorithm>
 #include "boxm2_vecf_ocl_transform_scene.h"
 //:
 // \file
-#include <stdexcept>
 #include <vnl/vnl_vector_fixed.h>
 #include <bocl/bocl_cl.h>
 #include <vgl/vgl_box_3d.h>
@@ -19,8 +21,6 @@
 #include <bocl/bocl_kernel.h>
 #include <vcl_where_root_dir.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <algorithm>
 #include <vnl/vnl_vector_fixed.h>
 typedef vnl_vector_fixed<unsigned char,16> uchar16;
 static bool transform_scene_compiled = false;

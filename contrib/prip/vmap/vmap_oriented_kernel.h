@@ -12,10 +12,10 @@
 //   06 May 2004 Jocelyn Marchadier
 // \endverbatim
 
-#include "vmap_types.h" // for vmap_dart_index
-#include <vcl_compiler.h>
 #include <iostream>
 #include <vector>
+#include "vmap_types.h" // for vmap_dart_index
+#include <vcl_compiler.h>
 
 //: Wrapper to avoid having non rooted hierarchies while constructing a kernel.
 template <class TKernel>

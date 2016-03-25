@@ -11,9 +11,9 @@
 // corresponding bilin file that would likely also benefit from
 // the same change.
 
+#include <cstddef>
 #include <vcl_cassert.h>
 #include <vcl_compiler.h>
-#include <cstddef>
 #include <vil/vil_image_view.h>
 
 //: Compute bicubic interpolation at (x,y), no bound checks. Requires 1<x<ni-3, 1<y<nj-3

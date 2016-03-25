@@ -8,9 +8,9 @@
 // \file
 // \author fsm
 
+#include <vector>
 #include <vil1/vil1_image.h>
 #include <vcl_compiler.h>
-#include <vector>
 
 //:
 // vil1_pyramid is \e not an image. It is like an array of images, with

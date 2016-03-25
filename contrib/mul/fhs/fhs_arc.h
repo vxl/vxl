@@ -6,11 +6,11 @@
 // \author Tim Cootes
 // \brief Link between one node and another
 
-#include <vsl/vsl_binary_io.h>
 #include <vector>
-#include <vcl_compiler.h>
 #include <iostream>
 #include <iosfwd>
+#include <vsl/vsl_binary_io.h>
+#include <vcl_compiler.h>
 
 //: Link between one node and another
 //  Indicates that position of node j, p(j) = p(i) + (N(dx,var_x),N(dy,var_y))

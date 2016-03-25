@@ -1,7 +1,8 @@
+#include <cmath>
+#include <limits>
 #include "vpgl_rational_adjust_onept.h"
 //:
 // \file
-#include <cmath>
 #include <vcl_cassert.h>
 #include <vgl/vgl_plane_3d.h>
 #include <vgl/vgl_point_3d.h>
@@ -11,7 +12,6 @@
 #include <vpgl/algo/vpgl_ray_intersect.h>
 
 #include <vcl_compiler.h>
-#include <limits>
 
 //#define TRANS_ONE_DEBUG
 

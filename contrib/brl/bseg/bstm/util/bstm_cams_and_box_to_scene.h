@@ -2,14 +2,14 @@
 #define bstm_cams_and_box_to_scene_h
 //:
 // \file
+#include <iostream>
+#include <cstdlib>
 #include <bstm/bstm_scene.h>
 #include <vpgl/vpgl_perspective_camera.h>
 #include <vgl/vgl_vector_3d.h>
 #include <vgl/vgl_box_3d.h>
 #include <vil/vil_image_view.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <cstdlib> // for rand()
 
 typedef vpgl_perspective_camera<double> CamType;
 

@@ -1,10 +1,10 @@
 #ifndef _TEST_IFA_FACTORY_H
 #define _TEST_IFA_FACTORY_H
 
-#include <vcl_compiler.h>
 #include <iostream>
 #include <utility>
 #include <vector>
+#include <vcl_compiler.h>
 #include <vdgl/vdgl_fit_lines_params.h>
 #include <vifa/vifa_int_face_attr_factory.h>
 #include <vifa/vifa_group_pgram_params.h>

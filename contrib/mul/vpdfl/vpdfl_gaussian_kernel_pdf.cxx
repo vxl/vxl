@@ -7,14 +7,14 @@
 // \brief Multi-variate spherical gaussian_kernel_pdf kernel PDF.
 // \author Tim Cootes
 
-#include "vpdfl_gaussian_kernel_pdf.h"
-
 #include <cstdlib>
-#include <vcl_cassert.h>
 #include <string>
-#include <vcl_compiler.h>
 #include <iostream>
 #include <cmath>
+#include "vpdfl_gaussian_kernel_pdf.h"
+
+#include <vcl_cassert.h>
+#include <vcl_compiler.h>
 
 #include <vnl/vnl_math.h>
 #include <vpdfl/vpdfl_gaussian_kernel_pdf_sampler.h>

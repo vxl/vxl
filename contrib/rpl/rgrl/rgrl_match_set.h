@@ -7,16 +7,16 @@
 // \date 14 Nov 2002
 
 #include <vector>
-#include <vcl_compiler.h>
 #include <iostream>
 #include <cstddef>
+#include <iosfwd>
+#include <vcl_compiler.h>
 
 #include <rgrl/rgrl_feature_sptr.h>
 #include <rgrl/rgrl_feature_set.h>
 #include <rgrl/rgrl_object.h>
 #include <rgrl/rgrl_match_set_sptr.h>
 
-#include <iosfwd>
 
 class rgrl_transformation;
 

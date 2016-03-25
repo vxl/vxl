@@ -2,12 +2,11 @@
 #define bsta_joint_histogram_hxx_
 //:
 // \file
+#include <iostream>
+#include <cmath>
 #include "bsta_joint_histogram.h"
 
 #include <vcl_compiler.h>
-#include <iostream>
-#include <cmath> // for log()
-#include <iostream>
 #include "bsta_gauss.h"
 #include <vnl/vnl_math.h> // for log2e == 1/std::log(2.0)
 template <class T>

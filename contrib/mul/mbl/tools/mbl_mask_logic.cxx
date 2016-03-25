@@ -4,10 +4,9 @@
  */
 
 #include <string>
-#include <vcl_compiler.h>
 #include <iostream>
 #include <exception>
-#include <iostream>
+#include <vcl_compiler.h>
 #include <vul/vul_arg.h>
 #include <mbl/mbl_mask.h>
 

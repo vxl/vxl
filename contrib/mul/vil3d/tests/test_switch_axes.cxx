@@ -1,8 +1,7 @@
 // This is mul/vil3d/tests/test_switch_axes.cxx
+#include <iostream>
 #include <testlib/testlib_test.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 #include <vxl_config.h>
 #include <vil3d/vil3d_switch_axes.h>
 

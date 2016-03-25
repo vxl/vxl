@@ -1,12 +1,12 @@
 #ifndef boxm_opt2_optimizer_hxx_
 #define boxm_opt2_optimizer_hxx_
 
-#include "boxm_opt2_optimizer.h"
-
 #include <vector>
-#include <vcl_compiler.h>
 #include <iostream>
 #include <string>
+#include "boxm_opt2_optimizer.h"
+
+#include <vcl_compiler.h>
 
 #include <boxm/sample/algo/boxm_mog_grey_processor.h>
 #include <boxm/sample/algo/boxm_simple_grey_processor.h>

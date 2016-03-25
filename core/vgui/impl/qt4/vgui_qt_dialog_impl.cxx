@@ -1,12 +1,12 @@
 // This is core/vgui/impl/qt4/vgui_qt_dialog_impl.cxx
-#include "vgui_qt_dialog_impl.h"
-#include "vgui_qt_adaptor.h"
-
 #include <vector>
 #include <sstream>
 #include <iostream>
-#include <vcl_compiler.h>
 #include <limits>
+#include "vgui_qt_dialog_impl.h"
+#include "vgui_qt_adaptor.h"
+
+#include <vcl_compiler.h>
 
 #include <vgui/internals/vgui_dialog_impl.h>
 #include <vgui/internals/vgui_simple_field.h>

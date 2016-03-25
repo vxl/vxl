@@ -11,9 +11,9 @@
 //-----------------------------------------------------------------------------
 
 #include <vector>
-#include <vcl_compiler.h>
 #include <iostream>
 #include <utility>
+#include <vcl_compiler.h>
 
 #include <vxl_config.h>
 #include <vil1/vil1_memory_image_of.h>

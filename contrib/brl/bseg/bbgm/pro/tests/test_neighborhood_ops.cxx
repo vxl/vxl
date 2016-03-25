@@ -1,8 +1,7 @@
-#include <testlib/testlib_test.h>
-#include <vcl_compiler.h>
 #include <iostream>
 #include <cmath>
-#include <iostream>
+#include <testlib/testlib_test.h>
+#include <vcl_compiler.h>
 #include <bbgm/bbgm_image_of.h>
 #include <bsta/bsta_gauss_sf1.h>
 #include <vil/vil_image_view.h>

@@ -1,7 +1,7 @@
-#include <vsph/vsph_sph_cover_2d.h>
-#include <vcl_compiler.h>
 #include <iostream>
 #include <limits>
+#include <vsph/vsph_sph_cover_2d.h>
+#include <vcl_compiler.h>
 #include <vcl_cassert.h>
 
 double vsph_sph_cover_2d::

@@ -12,9 +12,9 @@
 // (should be changed to any stl container type later) of any
 // datatype with x() and y() functions defined.
 
-#include <vcl_compiler.h>
 #include <iostream>
 #include <vector>
+#include <vcl_compiler.h>
 #include <vbl/vbl_array_2d.h>
 
 //: Defines functions associated with a templated borgefors distance map.

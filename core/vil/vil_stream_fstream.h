@@ -5,6 +5,7 @@
 #pragma interface
 #endif
 
+#include <fstream>
 #ifdef VIL_USE_FSTREAM64
 #include <vil/vil_stream_fstream64.h>
 #endif //VIL_USE_FSTREAM64
@@ -16,7 +17,6 @@
 // \date 16 Feb 00
 
 #include <vcl_compiler.h>
-#include <fstream>
 #include <vil/vil_stream.h>
 #include <vxl_config.h>
 

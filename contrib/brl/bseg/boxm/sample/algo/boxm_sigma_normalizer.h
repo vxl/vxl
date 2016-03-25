@@ -12,9 +12,9 @@
 //   <none yet>
 // \endverbatim
 
-#include <vcl_compiler.h>
 #include <iostream>
 #include <vector>
+#include <vcl_compiler.h>
 
 class boxm_sigma_normalizer
 {

@@ -1,3 +1,6 @@
+#include <iostream>
+#include <cmath>
+#include <sstream>
 #include "brip_filter_bank.h"
 //
 #include <brip/brip_vil_float_ops.h>
@@ -6,10 +9,7 @@
 #include <vil/vil_save.h>
 #include <vil/vil_load.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <cmath>
 #include <vcl_cassert.h>
-#include <sstream>
 #include <vul/vul_file.h>
 
 // cutoff ratio determines Gaussian values that are assumed negligible

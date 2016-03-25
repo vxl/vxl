@@ -5,13 +5,13 @@
 // \brief Searches for rectangular region using HOG features
 // \author Tim Cootes
 
+#include <iostream>
+#include <iosfwd>
 #include <mfpf/mfpf_point_finder.h>
 #include <mipa/mipa_vector_normaliser.h>
 #include <mfpf/mfpf_vec_cost.h>
 #include <mbl/mbl_cloneable_ptr.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iosfwd>
 
 //: Searches for rectangular region using HOG features.
 //  Features are combinations of histograms of orientations of

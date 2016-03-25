@@ -1,4 +1,6 @@
 // This is core/vul/vul_timer.cxx
+#include <ctime>
+#include <iostream>
 #include "vul_timer.h"
 //:
 // \file
@@ -31,7 +33,6 @@
 //
 
 #include <vcl_compiler.h>
-#include <ctime>
 #include <vcl_sys/time.h>
 # undef __USE_BSD
 
@@ -47,7 +48,6 @@ struct vul_timer_data
 };
 
 #include <vcl_climits.h>   // for CLK_TCK
-#include <iostream>
 
 
 //#define CLK_TCK _sysconf(3) in <limits.h> has error

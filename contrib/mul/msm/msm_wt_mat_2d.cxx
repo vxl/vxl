@@ -1,3 +1,5 @@
+#include <iostream>
+#include <cmath>
 #include "msm_wt_mat_2d.h"
 //:
 // \file
@@ -6,10 +8,7 @@
 
 #include <vsl/vsl_indent.h>
 #include <vsl/vsl_binary_io.h>
-#include <iostream>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <cmath>
 
 //: Sets axis (eigenvector) of matrix and var along each
 //  Sets to s1*u*u' + s2*v*v', where u is the unit vector

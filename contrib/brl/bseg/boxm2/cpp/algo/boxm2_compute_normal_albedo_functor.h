@@ -3,14 +3,14 @@
 //:
 // \file
 
+#include <iostream>
+#include <vector>
 #include <boxm2/boxm2_data_traits.h>
 #include <boxm2/boxm2_data_base.h>
 #include <boxm2/boxm2_data.h>
 #include <boxm2/basic/boxm2_block_id.h>
 #include <boxm2/io/boxm2_stream_cache.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <vector>
 
 #include <brad/brad_image_metadata.h>
 #include <brad/brad_atmospheric_parameters.h>

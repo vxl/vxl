@@ -12,10 +12,9 @@
 //   <none yet>
 // \endverbatim
 
+#include <iostream>
 #include <boxm/boxm_scene.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 #include <vnl/vnl_double_3x3.h>
 #include <vnl/algo/vnl_determinant.h>
 

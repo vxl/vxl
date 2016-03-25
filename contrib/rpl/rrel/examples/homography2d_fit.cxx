@@ -6,10 +6,9 @@
 // \brief Program demonstrating use of the Robust Estimation library in line fitting
 //
 
-#include <vcl_compiler.h>
-#include <iostream>
 #include <iostream>
 #include <vector>
+#include <vcl_compiler.h>
 #include <vnl/vnl_vector.h>
 
 #include <rrel/rrel_homography2d_est.h>

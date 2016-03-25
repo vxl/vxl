@@ -1,9 +1,9 @@
+#include <iostream>
+#include <algorithm>
 #include "boxm2_volm_desc_ex_indexer.h"
 //:
 // \file
 #include <vcl_compiler.h>
-#include <iostream>
-#include <algorithm>
 #include <vul/vul_file.h>
 
 std::string&  volm_desc_ex_indexer::get_name()

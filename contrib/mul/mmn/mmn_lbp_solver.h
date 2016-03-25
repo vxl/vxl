@@ -7,15 +7,15 @@
 
 #include <vector>
 #include <map>
-#include <vcl_compiler.h>
 #include <iostream>
 #include <deque>
+#include <iosfwd>
+#include <vcl_compiler.h>
 #include <vnl/vnl_vector.h>
 #include <vnl/vnl_matrix.h>
 #include <mmn/mmn_arc.h>
 #include <mmn/mmn_graph_rep1.h>
 #include <mmn/mmn_solver.h>
-#include <iosfwd>
 
 //: Run loopy belief to estimate overall marginal probabilities of all node states
 //  Then use converged LBP messages to also estimate overall most likely configuration

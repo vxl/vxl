@@ -1,6 +1,6 @@
 // This is core/vbl/io/tests/test_array_1d_io.cxx
-#include <vcl_compiler.h>
 #include <iostream>
+#include <vcl_compiler.h>
 #include <vbl/io/vbl_io_array_1d.h>
 #include <vsl/vsl_binary_io.h>
 #include <vsl/vsl_indent.h>

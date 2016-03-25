@@ -5,14 +5,14 @@
 // \file
 // \author Martin Roberts, Ian Scott
 
+#include <iostream>
+#include <cstring>
 #include <vil/vil_image_resource.h>
 #include <vil/vil_convert.h>
 #include <vil/vil_load.h>
 #include <vil/vil_flatten.h>
 #include <vimt/vimt_image_2d_of.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <cstring>
 
 //: Create a transform from the properties of image resource.
 // \param unit_scaling is to convert from metres to desired world units (e.g. 1000 for mm)

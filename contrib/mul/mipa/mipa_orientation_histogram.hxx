@@ -5,10 +5,10 @@
 // \brief Functions to compute histogram of orientations (HOGs)
 // \author Tim Cootes
 
-#include "mipa_orientation_histogram.h"
-#include <vcl_compiler.h>
 #include <iostream>
 #include <cmath>
+#include "mipa_orientation_histogram.h"
+#include <vcl_compiler.h>
 #include <vnl/vnl_math.h> // for pi
 #include <vcl_cassert.h>
 

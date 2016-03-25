@@ -12,10 +12,10 @@
 //   bijective, though a closed form solution for the inverse may not exist in general.
 //   A default iterative solver is implemented to solve
 
+#include <vector>
 #include "vpgl_radial_distortion.h"
 #include <vgl/vgl_point_2d.h>
 #include <vcl_compiler.h>
-#include <vector>
 #include <vcl_cassert.h>
 
 //: A class for nth order polynomial radial lens distortion

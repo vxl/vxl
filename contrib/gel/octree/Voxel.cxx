@@ -12,10 +12,9 @@
 // \endverbatim
 //-----------------------------------------------------------------------------
 
+#include <iostream>
 #include "Voxel.h"
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 #include <vcl_cassert.h>
 
 #if 0

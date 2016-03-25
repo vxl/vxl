@@ -5,10 +5,10 @@
 // \brief Computes weighted sum of square differences to a mean
 // \author Tim Cootes
 
-#include <mfpf/mfpf_vec_cost.h>
-#include <vcl_compiler.h>
 #include <iostream>
 #include <iosfwd>
+#include <mfpf/mfpf_vec_cost.h>
+#include <vcl_compiler.h>
 
 //: Computes weighted sum of square differences to a mean
 class mfpf_ssd_vec_cost : public mfpf_vec_cost

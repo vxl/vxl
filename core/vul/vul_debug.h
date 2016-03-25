@@ -32,10 +32,10 @@ bool vul_debug_core_dump(const char * filename);
 // \returns true on success, false when coredump could not be taken
 bool vul_debug_core_dump_in_windows_se(const char * filename,
                                        void* pep);
+#include <exception>
 #include <vcl_config_compiler.h>
 
 #if VCL_HAS_EXCEPTIONS
-# include <exception>
 //: A translated structured exception.
 class vul_debug_windows_structured_exception : public std::exception
 {

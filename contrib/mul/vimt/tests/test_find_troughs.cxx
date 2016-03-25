@@ -1,8 +1,8 @@
 // This is mul/vimt/tests/test_find_troughs.cxx
-#include <testlib/testlib_test.h>
-#include <vcl_compiler.h>
 #include <iostream>
 #include <vector>
+#include <testlib/testlib_test.h>
+#include <vcl_compiler.h>
 #include <vxl_config.h> // for vxl_byte
 #include <vimt/algo/vimt_find_troughs.h>
 #include <vgl/vgl_point_2d.h>

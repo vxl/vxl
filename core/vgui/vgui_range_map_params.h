@@ -23,11 +23,11 @@
 //  Modifications
 //   <none>
 // \endverbatim
-#include <vbl/vbl_ref_count.h>
 #include <iostream>
 #include <vector>
-#include <vcl_compiler.h>
 #include <string>
+#include <vbl/vbl_ref_count.h>
+#include <vcl_compiler.h>
 
 class vgui_range_map_params : public vbl_ref_count
 {

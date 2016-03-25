@@ -1,4 +1,6 @@
 // This is brl/bseg/bvxm/pro/processes/bvxm_expected_edge_image_process.cxx
+#include <iostream>
+#include <cstdio>
 #include "bvxm_expected_edge_image_process.h"
 //:
 // \file
@@ -13,8 +15,6 @@
 #include <sdet/sdet_img_edge.h>
 #include <vpgl/algo/vpgl_backproject.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <cstdio>
 
 //: set input and output types
 bool bvxm_expected_edge_image_process_cons(bprb_func_process& pro)

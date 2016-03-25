@@ -13,9 +13,9 @@
 
 class rgtl_serialize_access;
 
-#include <vcl_compiler.h>
 #include <iostream>
 #include <vector>
+#include <vcl_compiler.h>
 
 //: Efficiently keep track of objects visited to avoid repeat visits.
 class rgtl_object_once

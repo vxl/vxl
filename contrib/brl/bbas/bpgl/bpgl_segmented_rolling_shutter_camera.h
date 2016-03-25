@@ -8,11 +8,10 @@
 // \date February 08, 2011
 //
 
-#include <vgl/vgl_fwd.h>
-#include <vcl_compiler.h>
-#include <iostream>
 #include <iostream>
 #include <string>
+#include <vgl/vgl_fwd.h>
+#include <vcl_compiler.h>
 #include <bpgl/bpgl_rolling_shutter_camera.h>
 #include <vpgl/vpgl_perspective_camera.h>
 

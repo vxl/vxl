@@ -1,4 +1,6 @@
 // This is core/vul/tests/test_awk.cxx
+#include <sstream>
+#include <iostream>
 #include <vul/vul_awk.h>
 #include <testlib/testlib_test.h>
 //:
@@ -9,8 +11,6 @@
 // History: built upon the shell of test_regexp, but has no tests in common
 
 #include <vcl_compiler.h>
-#include <sstream>
-#include <iostream>
 
 void test_awk()
 {

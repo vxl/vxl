@@ -15,11 +15,12 @@
 //                          - Set event.ascii_char to actual key stroke
 // \endverbatim
 
+#include <cstdlib>
+#include <utility>
+#include <iostream>
 #include "vgui_gtk2_adaptor.h"
 #include <vcl_compiler.h>
-#include <cstdlib>
 #include <vcl_cassert.h>
-#include <utility>
 #include <gdk/gdkkeysyms.h>
 #include <gtk/gtk.h>
 #include <gdk/gdkgl.h>
@@ -30,7 +31,6 @@
 #include <vgui/internals/vgui_overlay_helper.h>
 #include "vgui_gtk2_utils.h"
 #include "vgui_gtk2_window.h"
-#include <iostream>
 
 vgui_menu vgui_gtk2_adaptor::last_popup;
 

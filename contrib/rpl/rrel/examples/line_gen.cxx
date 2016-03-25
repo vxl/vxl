@@ -5,9 +5,8 @@
 //  Simple program to generate line data plus outliers.
 //
 
+#include <iostream>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 #include <vnl/vnl_random.h>
 
 int

@@ -1,4 +1,6 @@
 // This is gel/vifa/vifa_int_face_attr_common.cxx
+#include <iostream>
+#include <cmath>
 #include "vifa_int_face_attr_common.h"
 //:
 // \file
@@ -10,8 +12,6 @@
 #include <vtol/vtol_vertex_sptr.h>
 #include <vifa/vifa_group_pgram.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <cmath> // fabs()
 
 vifa_int_face_attr_common::
 vifa_int_face_attr_common(vdgl_fit_lines_params*    fitter_params,

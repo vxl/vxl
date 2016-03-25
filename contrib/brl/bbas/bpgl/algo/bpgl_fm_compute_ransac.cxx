@@ -2,14 +2,13 @@
 #ifndef bpgl_fm_compute_ransac_cxx_
 #define bpgl_fm_compute_ransac_cxx_
 
+#include <iostream>
+#include <cmath>
 #include "bpgl_fm_compute_ransac.h"
 #include <vpgl/algo/vpgl_fm_compute_8_point.h>
 
-#include <iostream>
 #include <vcl_cassert.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <cmath>
 #include <vgl/vgl_point_2d.h>
 #include <vgl/vgl_homg_point_2d.h>
 #include <vgl/vgl_homg_line_2d.h>

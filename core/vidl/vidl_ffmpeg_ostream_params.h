@@ -16,8 +16,8 @@
 //   Matt Leotta   3 Jan 2006   Adapted from code by Amitha Perera
 // \endverbatim
 
-#include <vcl_compiler.h>
 #include <string>
+#include <vcl_compiler.h>
 
 //: A parameters struct for vidl_ffmpeg_ostream
 //

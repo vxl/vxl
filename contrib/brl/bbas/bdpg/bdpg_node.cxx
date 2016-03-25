@@ -1,9 +1,9 @@
+#include <iostream>
+#include <cmath>
 #include "bdpg_node.h"
 //:
 // \file
 #include <vcl_compiler.h>
-#include <iostream>
-#include <cmath> //for exp() & log()
 #include <vnl/vnl_numeric_traits.h>
 
 bdpg_node::bdpg_node() :

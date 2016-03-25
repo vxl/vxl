@@ -1,3 +1,5 @@
+#include <iostream>
+#include <ctime>
 #include <testlib/testlib_test.h>
 //:
 // \file
@@ -6,9 +8,7 @@
 //   2009-03-08 Peter Vanroose - Increased test coverage: added "inside" & "plane intersection" tests
 // \endverbatim
 
-#include <iostream>
 #include <vcl_compiler.h>
-#include <ctime>
 #include <vcl_cassert.h>
 #include <vgl/vgl_triangle_3d.h>
 #include <vgl/vgl_distance.h>

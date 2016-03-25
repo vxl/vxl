@@ -1,4 +1,7 @@
 // This is brl/bbas/imesh/algo/imesh_pca.cxx
+#include <iostream>
+#include <fstream>
+#include <sstream>
 #include "imesh_pca.h"
 //:
 // \file
@@ -7,9 +10,6 @@
 #include <vnl/vnl_vector.h>
 #include <vnl/algo/vnl_svd.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <fstream>
-#include <sstream>
 #include <vcl_cassert.h>
 
 imesh_pca_mesh::imesh_pca_mesh(const std::vector<imesh_mesh>& meshes)

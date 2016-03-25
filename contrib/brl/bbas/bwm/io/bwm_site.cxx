@@ -1,10 +1,10 @@
+#include <iostream>
+#include <utility>
 #include "bwm_site.h"
 //:
 // \file
 
 #include <vcl_compiler.h>
-#include <iostream>
-#include <utility>
 #include <vcl_cassert.h>
 #include <vsl/vsl_basic_xml_element.h>
 #include <vsol/vsol_point_2d.h>

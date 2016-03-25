@@ -5,12 +5,11 @@
 //:
 // \file
 
-#include "HomgPoint2D.h"
 #include <iostream>
+#include <cmath>
+#include "HomgPoint2D.h"
 #include <vnl/vnl_double_2.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <cmath> // for sqrt()
 
 //--------------------------------------------------------------
 //

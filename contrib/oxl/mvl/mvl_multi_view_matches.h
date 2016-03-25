@@ -21,12 +21,12 @@
 //     David Capel, Oxford RRG, 16 April 2000
 //-----------------------------------------------------------------------------
 
-#include <vcl_compiler.h>
 #include <iostream>
 #include <functional>
 #include <vector>
 #include <iosfwd>
 #include <map>
+#include <vcl_compiler.h>
 
 class mvl_multi_view_matches
 {

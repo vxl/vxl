@@ -1,3 +1,5 @@
+#include <iostream>
+#include <sstream>
 #include "mfpf_region_about_lineseg.h"
 //:
 // \file
@@ -7,8 +9,6 @@
 #include <vsl/vsl_binary_loader.h>
 #include <vcl_cassert.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <sstream>
 
 #include <mbl/mbl_parse_block.h>
 #include <mbl/mbl_read_props.h>

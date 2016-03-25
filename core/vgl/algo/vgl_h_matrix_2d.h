@@ -20,14 +20,14 @@
 //   27 Oct 2010 - Peter Vanroose - moved Doxygen docs from .txx to .h
 // \endverbatim
 
+#include <vector>
+#include <iosfwd>
 #include <vnl/vnl_fwd.h> // for vnl_vector_fixed<T,2>
 #include <vnl/vnl_matrix_fixed.h>
 #include <vgl/vgl_homg_point_2d.h>
 #include <vgl/vgl_homg_line_2d.h>
 #include <vgl/vgl_conic.h>
-#include <vector>
 #include <vcl_compiler.h>
-#include <iosfwd>
 
 //:
 // A class to hold a plane-to-plane projective transformation matrix

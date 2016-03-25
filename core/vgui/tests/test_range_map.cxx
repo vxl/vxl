@@ -4,6 +4,7 @@
 #include <vgui/vgui_range_map.h>
 #include <vbl/vbl_array_1d.h>
 
+#if define INCLUDE_LONG_DOUBLE_TESTS
 static void test_range_map()
 {
   //Test the range map parameter class
@@ -176,5 +177,8 @@ static void test_range_map()
 
   TEST("RGB vxl_byte values", Rval==127&&Gval==127&&Bval==127&&!RGBrmuc.offset()&&map_good, true);
 }
+#else
+static void test_range_map() { return; } // Can not test with valgrind
+#endif
 
 TESTMAIN(test_range_map);

@@ -17,12 +17,12 @@
 // \date   August 2011
 //-----------------------------------------------------------------------------
 
-#include <vnl/vnl_polynomial.h>
 #include <iostream>
-#include <vcl_compiler.h>
 #include <sstream>
 #include <cstring>
 #include <vector>
+#include <vnl/vnl_polynomial.h>
+#include <vcl_compiler.h>
 
 std::vector<vnl_polynomial<double> > stack;
 

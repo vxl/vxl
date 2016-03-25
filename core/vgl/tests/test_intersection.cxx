@@ -1,8 +1,8 @@
 // Some tests for vgl_intersection
 // J.L. Mundy June 13, 2014
 
-#include <vcl_compiler.h>
 #include <iostream>
+#include <vcl_compiler.h>
 #include <testlib/testlib_test.h>
 #include <vgl/vgl_box_2d.h>
 #include <vgl/vgl_line_segment_2d.h>

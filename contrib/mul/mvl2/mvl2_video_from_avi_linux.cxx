@@ -1,3 +1,6 @@
+#include <cstring>
+#include <iostream>
+#include <cstdlib>
 #include "mvl2_video_from_avi_linux.h"
 //:
 // \file
@@ -11,10 +14,7 @@
 #include <version.h>
 #include <avm_default.h>
 #include <avm_fourcc.h>
-#include <cstring>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <cstdlib> // malloc()
 
 mvl2_video_from_avi::mvl2_video_from_avi()
 {

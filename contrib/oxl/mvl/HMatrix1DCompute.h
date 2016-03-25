@@ -10,10 +10,10 @@
 //
 
 class HMatrix1D;
-#include <vgl/vgl_homg_point_1d.h>
-#include <vcl_compiler.h>
 #include <iostream>
 #include <vector>
+#include <vgl/vgl_homg_point_1d.h>
+#include <vcl_compiler.h>
 
 class HMatrix1DCompute
 {

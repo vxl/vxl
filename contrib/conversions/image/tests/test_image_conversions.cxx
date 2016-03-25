@@ -1,9 +1,11 @@
 // This is conversions/image/tests/test_image_conversions.cxx
+#include <iostream>
+#include <cstring>
+#include <fstream>
 #include <testlib/testlib_test.h>
 
 #ifdef HAS_NO_IMAGE
 
-#include <iostream>
 void test_image_conversions()
 {
   std::cerr << "test not run since you do not have the TargetJr Image package\n";
@@ -14,9 +16,6 @@ void test_image_conversions()
 #include <image/vil1_to_Image.h>
 
 #include <vcl_compiler.h>
-#include <iostream>
-#include <cstring> // for memcmp()
-#include <fstream>
 #include <vpl/vpl.h> // for vpl_unlink()
 #include <vul/vul_temp_filename.h>
 #include <vil1/vil1_load.h>

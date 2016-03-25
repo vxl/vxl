@@ -20,10 +20,10 @@
 //   24-Oct-2010 - Peter Vanroose - mutators and setters now return *this
 // \endverbatim
 
+#include <iosfwd>
 #include <vcl_cassert.h>
 #include <vnl/vnl_vector_fixed.h>
 #include <vcl_compiler.h>
-#include <iosfwd>
 
 
 template <class T, unsigned int n>

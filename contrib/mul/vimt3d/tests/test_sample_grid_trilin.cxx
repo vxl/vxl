@@ -1,9 +1,8 @@
 // This is mul/vimt3d/tests/test_sample_grid_trilin.cxx
 // It also tests vimt3d_reconstruct_from_grid
 
+#include <iostream>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 #include <vnl/vnl_vector.h>
 #include <vil/vil_na.h>
 #include <vgl/vgl_point_3d.h>

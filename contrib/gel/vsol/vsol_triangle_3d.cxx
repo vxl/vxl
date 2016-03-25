@@ -1,11 +1,10 @@
 // This is gel/vsol/vsol_triangle_3d.cxx
+#include <iostream>
 #include "vsol_triangle_3d.h"
 //:
 // \file
 #include <vcl_cassert.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 #include <vsol/vsol_point_3d.h>
 #include <vgl/vgl_vector_3d.h>
 #include <vnl/vnl_math.h>

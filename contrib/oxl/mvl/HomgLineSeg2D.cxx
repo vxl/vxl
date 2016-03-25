@@ -5,14 +5,13 @@
 //:
 // \file
 
+#include <iostream>
 #include "HomgLineSeg2D.h"
 #include <mvl/HomgPoint2D.h>
 #include <mvl/HomgLine2D.h>
 #include <mvl/HomgOperator2D.h>
 #include <vnl/vnl_double_2.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 
 //--------------------------------------------------------------
 //

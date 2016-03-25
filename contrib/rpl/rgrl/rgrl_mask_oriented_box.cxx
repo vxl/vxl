@@ -1,11 +1,11 @@
+#include <iostream>
+#include <limits>
 #include "rgrl_mask_oriented_box.h"
 //:
 // \file
 
 #include <vcl_cassert.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <limits>
 #include <vnl/vnl_transpose.h>
 
 //******************** mask using an oriented box ***********************

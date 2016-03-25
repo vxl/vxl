@@ -12,9 +12,9 @@
 //\endverbatim
 
 #include <cmath>
-#include <vcl_compiler.h>
 #include <iostream>
 #include <algorithm>
+#include <vcl_compiler.h>
 
 //#include "sdet_BS.h"
 

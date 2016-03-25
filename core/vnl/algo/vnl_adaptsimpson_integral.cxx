@@ -1,7 +1,7 @@
-#include "vnl_adaptsimpson_integral.h"
 #include <iostream>
-#include <vcl_compiler.h>
 #include <cmath>
+#include "vnl_adaptsimpson_integral.h"
+#include <vcl_compiler.h>
 
 double vnl_adaptsimpson_integral::int_fnct_(double* x)
 {

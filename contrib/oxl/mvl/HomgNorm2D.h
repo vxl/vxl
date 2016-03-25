@@ -25,9 +25,9 @@
 // \endverbatim
 //-----------------------------------------------------------------------------
 
-#include <vcl_compiler.h>
 #include <iostream>
 #include <vector>
+#include <vcl_compiler.h>
 #include <vgl/vgl_homg_point_2d.h>
 #include <mvl/HomgPoint2D.h>
 #include <mvl/SimilarityMetric.h>

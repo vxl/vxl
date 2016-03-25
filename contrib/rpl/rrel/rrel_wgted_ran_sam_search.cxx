@@ -1,15 +1,14 @@
 // This is rpl/rrel/rrel_wgted_ran_sam_search.cxx
+#include <iostream>
+#include <vector>
+#include <algorithm>
 #include "rrel_wgted_ran_sam_search.h"
 #include <rrel/rrel_objective.h>
 #include <rrel/rrel_estimation_problem.h>
 #include <rrel/rrel_util.h>
 
-#include <iostream>
-#include <vector>
 #include <vcl_cassert.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <algorithm>
 
 rrel_wgted_ran_sam_search::~rrel_wgted_ran_sam_search( )
 {

@@ -1,9 +1,9 @@
 #ifndef bwm_image_proc_h_
 #define bwm_image_proc_h_
 
-#include <vcl_compiler.h>
 #include <iostream>
 #include <vector>
+#include <vcl_compiler.h>
 
 #include <vgl/vgl_polygon.h>
 

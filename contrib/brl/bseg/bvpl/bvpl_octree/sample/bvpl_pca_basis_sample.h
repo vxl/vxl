@@ -13,10 +13,9 @@
 //   <none yet>
 // \endverbatim
 
+#include <iostream>
 #include <vnl/vnl_vector_fixed.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 #include <vsl/vsl_binary_io.h>
 
 template <unsigned dim>

@@ -5,13 +5,13 @@
 // \brief Representation of an instance of a shape model in ref frame.
 // \author Tim Cootes
 
+#include <iostream>
+#include <iosfwd>
 #include <msm/msm_points.h>
 #include <msm/msm_wt_mat_2d.h>
 #include <msm/msm_param_limiter.h>
 #include <mbl/mbl_cloneable_ptr.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iosfwd>
 
 class msm_ref_shape_model;
 

@@ -12,11 +12,10 @@
 //   (none yet)
 // \endverbatim
 
-#include "bsta_distribution.h"
 #include <vector>
+#include <iostream>
+#include "bsta_distribution.h"
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 
 template <class T>
 class bsta_beta : public bsta_distribution<T,1>

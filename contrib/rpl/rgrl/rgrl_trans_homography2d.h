@@ -5,12 +5,12 @@
 // \author Charlene Tsai
 // \date   Oct 2004
 
+#include <iostream>
+#include <iosfwd>
 #include "rgrl_transformation.h"
 #include <vnl/vnl_matrix_fixed.h>
 #include <vnl/vnl_vector_fixed.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iosfwd>
 
 //: Represents a 2D homography transformation.
 //

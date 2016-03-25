@@ -1,4 +1,9 @@
 // This is brl/bbas/bmsh3d/algo/bmsh3d_fileio.cxx
+#include <iostream>
+#include <cstdio>
+#include <fstream>
+#include <string>
+#include <cstring>
 #include "bmsh3d_fileio.h"
 //:
 // \file
@@ -15,13 +20,7 @@
 //-------------------------------------------------------------------------
 
 #include <vcl_compiler.h>
-#include <iostream>
-#include <cstdio>
 #include <vcl_cassert.h>
-#include <fstream>
-#include <string>
-#include <cstring>
-#include <iostream>
 #include <vul/vul_file.h>
 #include <vul/vul_string.h>
 #include <vgl/vgl_point_3d.h>

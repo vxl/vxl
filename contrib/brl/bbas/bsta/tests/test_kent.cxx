@@ -1,14 +1,13 @@
 //:
 // \file
+#include <iostream>
+#include <vector>
 #include <testlib/testlib_test.h>
 #include <bsta/bsta_kent.h>
 #include <vgl/vgl_plane_3d.h>
 #include <vnl/vnl_inverse.h>
 
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
-#include <vector>
 
 //: Test bsta kent distribution
 void test_kent()

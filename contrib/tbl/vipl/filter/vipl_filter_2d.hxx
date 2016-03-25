@@ -2,11 +2,10 @@
 #ifndef vipl_filter_2d_hxx_
 #define vipl_filter_2d_hxx_
 
+#include <iostream>
 #include "vipl_filter_2d.h"
 #include <vcl_compiler.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 
 // Main constructor for this abstract class. If dst_image
 // (by default) the output will be generated automatically when

@@ -10,20 +10,19 @@
 
 
 #include <iostream>
-
-#if VCL_HAS_EXCEPTIONS
 #include <exception>
 #include <iterator>
 #include <stdexcept>
 #include <sstream>
-#include <vcl_compiler.h>
-#include <iostream>
 #include <cstdio>
 #include <deque>
 #include <map>
 #include <iomanip>
-#include <vcl_cassert.h>
 #include <cstdlib>
+
+#if VCL_HAS_EXCEPTIONS
+#include <vcl_compiler.h>
+#include <vcl_cassert.h>
 #include <vsl/vsl_deque_io.hxx>
 #include <vsl/vsl_map_io.hxx>
 #include <vsl/vsl_stream.h>

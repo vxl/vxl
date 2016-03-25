@@ -1,8 +1,8 @@
 #include <string>
 #include <vector>
-#include <vcl_compiler.h>
 #include <iostream>
 #include <cstdio>
+#include <vcl_compiler.h>
 #include <vbl/vbl_bounding_box.h>
 #include <vul/vul_sprintf.h>
 #include <vul/vul_file.h>

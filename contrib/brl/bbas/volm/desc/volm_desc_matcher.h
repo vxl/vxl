@@ -15,12 +15,12 @@
 // \endverbatim
 //
 
+#include <iostream>
+#include <string>
 #include <volm/desc/volm_desc.h>
 #include <volm/desc/volm_desc_indexer.h>
 #include <vbl/vbl_smart_ptr.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <string>
 #include <volm/volm_geo_index.h>
 #include <volm/volm_geo_index_sptr.h>
 #include <volm/volm_io.h>

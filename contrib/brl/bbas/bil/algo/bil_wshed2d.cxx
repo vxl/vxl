@@ -1,11 +1,11 @@
+#include <cstdio>
+#include <iostream>
+#include <cmath>
 #include "bil_wshed2d.h"
 //:
 // \file
 
-#include <cstdio>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <cmath>
 #include <vcl_climits.h>
 
 #include <vil/vil_image_view.h>

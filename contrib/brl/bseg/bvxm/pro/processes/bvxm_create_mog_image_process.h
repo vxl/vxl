@@ -16,6 +16,7 @@
 //   Peter Vanroose - Jul 10, 2009 - split into .h and .cxx
 // \endverbatim
 
+#include <iostream>
 #include <bprb/bprb_func_process.h>
 
 #include <bvxm/bvxm_image_metadata.h>
@@ -24,8 +25,6 @@
 #include <bvxm/grid/bvxm_voxel_slab_base.h>
 
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 
 bool bvxm_create_mog_image_process_cons(bprb_func_process& pro);
 

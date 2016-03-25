@@ -5,13 +5,13 @@
 // \author Tim Cootes
 // \brief Base for objects which compute a cost function for one basis direction
 
-#include <vsl/vsl_fwd.h>
 #include <string>
 #include <memory>
-#include <vnl/vnl_vector.h>
-#include <vcl_compiler.h>
 #include <iostream>
 #include <iosfwd>
+#include <vsl/vsl_fwd.h>
+#include <vnl/vnl_vector.h>
+#include <vcl_compiler.h>
 
 //: Base for objects which compute a cost function for one basis direction.
 // We assume that the component analysis aims to choose a set of orthogonal

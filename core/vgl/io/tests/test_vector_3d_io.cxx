@@ -1,6 +1,6 @@
 // This is core/vgl/io/tests/test_vector_3d_io.cxx
-#include <vcl_compiler.h>
 #include <iostream>
+#include <vcl_compiler.h>
 #include <vgl/vgl_vector_3d.h>
 #include <vsl/vsl_indent.h>
 #include <vgl/io/vgl_io_vector_3d.h>

@@ -19,9 +19,9 @@
 // \endverbatim
 //
 //-----------------------------------------------------------------------------
-#include <vcl_compiler.h>
 #include <iostream>
 #include <vector>
+#include <vcl_compiler.h>
 #include <vsol/vsol_digital_curve_2d.h>
 #include <bsta/bsta_histogram.h>
 #include "bwm_reg_edge_champher.h"

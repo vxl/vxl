@@ -1,11 +1,11 @@
 // Some tests for vgl_fit_plane_3d
 // Gamze Tunali, Dec 18, 2006.
+#include <iostream>
+#include <cstdlib>
 #include <testlib/testlib_test.h>
 #include <vgl/algo/vgl_fit_plane_3d.h>
 #include <vgl/vgl_distance.h>
-#include <iostream>
 #include <vcl_compiler.h>
-#include <cstdlib> // for rand()
 
 // creates points on the z=0 plane
 static void test_fit_plane_z()

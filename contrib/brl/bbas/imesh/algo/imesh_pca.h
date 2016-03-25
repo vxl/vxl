@@ -13,10 +13,10 @@
 // \endverbatim
 
 
-#include <imesh/imesh_mesh.h>
-#include <vcl_compiler.h>
 #include <iostream>
 #include <vector>
+#include <imesh/imesh_mesh.h>
+#include <vcl_compiler.h>
 #include <vcl_cassert.h>
 #include <vnl/vnl_vector.h>
 #include <vnl/vnl_matrix.h>

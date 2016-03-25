@@ -1,8 +1,8 @@
+#include <iostream>
+#include <cmath>
 #include <vgui/vgui.h>
 #include <vgui/vgui_shell_tableau.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <cmath>
 #include <vnl/vnl_math.h>
 #include <vgl/vgl_vector_3d.h>
 

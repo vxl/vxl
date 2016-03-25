@@ -4,10 +4,10 @@
 //:
 // \file
 
+#include <iostream>
 #include "vgl_norm_trans_2d.h"
 #include <vgl/vgl_point_2d.h>
 #include <vcl_compiler.h>
-#include <iostream>
 #include <vnl/vnl_math.h>
 
 //--------------------------------------------------------------

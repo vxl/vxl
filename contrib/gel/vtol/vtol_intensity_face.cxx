@@ -1,11 +1,11 @@
 // This is gel/vtol/vtol_intensity_face.cxx
+#include <iostream>
+#include <vector>
 #include "vtol_intensity_face.h"
 //:
 // \file
 
 #include <vcl_compiler.h>
-#include <iostream>
-#include <vector>
 #include <vnl/vnl_matrix.h>
 #include <vdgl/vdgl_digital_region.h>
 #include <vsol/vsol_curve_2d.h>

@@ -1,4 +1,7 @@
 //This is brl/bseg/boxm/algo/rt/pro/processes/boxm_opt_bayesian_update_process.cxx
+#include <string>
+#include <iostream>
+#include <fstream>
 #include <bprb/bprb_func_process.h>
 //:
 // \file
@@ -11,10 +14,7 @@
 //   Aug 3, 2009  Gamze Tunali - Moved from lemsvxl/psm_opt to vxl
 // \endverbatim
 
-#include <string>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <fstream>
 
 #include <brdb/brdb_value.h>
 #include <bprb/bprb_parameters.h>

@@ -5,6 +5,7 @@
 //:
 // \file
 
+#include <iostream>
 #include "vbl_array_3d.h"
 #include <vcl_cassert.h>
 
@@ -110,7 +111,6 @@ void vbl_array_3d<T>::fill(T const& value)
 //--------------------------------------------------------------------------------
 
 #include <vcl_compiler.h>
-#include <iostream>
 
 template <class T>
 std::ostream & operator<<(std::ostream& os, vbl_array_3d<T> const& A)

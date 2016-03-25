@@ -12,13 +12,13 @@
 //   None
 // \endverbatim
 
+#include <vector>
+#include <algorithm>
+#include <memory>
 #include <vpdl/vpdl_multi_cmp_dist.h>
 #include <vpdl/vpdt/vpdt_access.h>
 #include <vcl_cassert.h>
-#include <vector>
-#include <algorithm>
 #include <vcl_compiler.h>
-#include <memory>
 
 //: A mixture of distributions
 // A mixture is a weighted linear combination of other mixtures.

@@ -6,11 +6,10 @@
 // \file
 // \author crossge@crd.ge.com
 
+#include <iostream>
 #include "gmvl_database.h"
 #include <gmvl/gmvl_tag_node.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 
 // specific node references
 

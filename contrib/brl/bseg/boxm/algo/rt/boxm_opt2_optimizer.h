@@ -2,9 +2,9 @@
 #define boxm_opt2_bayesian_optimizer_h_
 
 #include <vector>
-#include <vcl_compiler.h>
 #include <iostream>
 #include <string>
+#include <vcl_compiler.h>
 
 #include <boxm/boxm_aux_traits.h>
 #include <boxm/boxm_apm_traits.h>

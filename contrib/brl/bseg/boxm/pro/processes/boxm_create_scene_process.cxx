@@ -1,4 +1,7 @@
 //This is brl/bseg/boxm/pro/processes/boxm_create_scene_process.cxx
+#include <string>
+#include <iostream>
+#include <fstream>
 #include <boxm/boxm_scene_base.h>
 #include <boxm/boxm_scene.h>
 //:
@@ -19,11 +22,7 @@
 
 #include <brdb/brdb_value.h>
 
-#include <string>
-#include <iostream>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <fstream>
 
 #include <boxm/boxm_scene_parser.h>
 #include <boxm/sample/boxm_sample_multi_bin.h>

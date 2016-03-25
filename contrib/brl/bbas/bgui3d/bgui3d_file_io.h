@@ -13,9 +13,8 @@
 // \endverbatim
 
 #include <string>
+#include <iostream>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 
 // forward declarations
 class SoNode;

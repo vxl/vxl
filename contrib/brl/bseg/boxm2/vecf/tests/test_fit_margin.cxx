@@ -4,10 +4,10 @@
 // \date 6/23/15
 
 
-#include <testlib/testlib_test.h>
-#include <vcl_compiler.h>
 #include <iostream>
 #include <fstream>
+#include <testlib/testlib_test.h>
+#include <vcl_compiler.h>
 #include <vul/vul_timer.h>
 #include <vul/vul_file.h>
 #include <vul/vul_timer.h>

@@ -11,11 +11,11 @@
 // (See accompanying file rgtl_license_1_0.txt or copy at
 // http://www.boost.org/LICENSE_1_0.txt)
 
+#include <iostream>
+#include <iosfwd>
 #include "rgtl_compact_tree_index.hxx"
 
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iosfwd>
 
 //: Represent the logical index of an octree cell in D dimensions.
 //

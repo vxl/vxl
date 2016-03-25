@@ -9,10 +9,9 @@
 //   <none yet>
 // \endverbatim
 //
+#include <iostream>
 #include <volm/volm_tile.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 #include <volm/volm_osm_objects.h>
 #include <volm/volm_geo_index2.h>
 #include <volm/volm_geo_index2_sptr.h>

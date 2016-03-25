@@ -7,9 +7,9 @@
 // \author Ozge C. Ozcanli
 // \date Jan 13, 2014
 
+#include <utility>
 #include <vpgl/vpgl_proj_camera.h>
 #include <vcl_compiler.h>
-#include <utility>
 #include <vgl/algo/vgl_rotation_3d.h>
 #include <vnl/vnl_least_squares_function.h>
 #include <vpgl/vpgl_calibration_matrix.h>

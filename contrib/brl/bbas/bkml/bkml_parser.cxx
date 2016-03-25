@@ -1,5 +1,11 @@
 //:
 // \file
+#include <sstream>
+#include <iostream>
+#include <cstdio>
+#include <cstring>
+#include <algorithm>
+#include <cstddef>
 #include "bkml_parser.h"
 //
 // \brief Parses the kml configuration file for bwm tool.
@@ -8,14 +14,7 @@
 //   2012-09-10 Yi Dong - Modified to parser the polygon and path(LineString) coordinates stored in kml
 // \endverbatim
 //
-#include <sstream>
-#include <iostream>
-#include <cstdio>
-#include <cstring>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <algorithm>
-#include <cstddef> // for std::size_t
 
 // --------------
 // --- PARSER ---

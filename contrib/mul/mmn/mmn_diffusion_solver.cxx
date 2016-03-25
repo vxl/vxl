@@ -1,3 +1,8 @@
+#include <iostream>
+#include <algorithm>
+#include <iterator>
+#include <sstream>
+#include <cmath>
 #include "mmn_diffusion_solver.h"
 //:
 // \file
@@ -9,11 +14,6 @@
 
 #include <mmn/mmn_csp_solver.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <algorithm>
-#include <iterator>
-#include <sstream>
-#include <cmath>
 #include <vnl/vnl_vector_ref.h>
 #include <mbl/mbl_exception.h>
 #include <mbl/mbl_stl.h>

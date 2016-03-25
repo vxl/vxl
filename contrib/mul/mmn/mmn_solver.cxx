@@ -1,3 +1,5 @@
+#include <iostream>
+#include <sstream>
 #include "mmn_solver.h"
 //:
 // \file
@@ -7,8 +9,6 @@
 #include <vsl/vsl_indent.h>
 #include <vsl/vsl_binary_loader.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <sstream>
 #include <vcl_cassert.h>
 
 #include <mbl/mbl_parse_block.h>

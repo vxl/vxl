@@ -3,6 +3,10 @@
 #define bvpl_direction_to_color_map_h_
 //:
 // \file
+#include <iostream>
+#include <iomanip>
+#include <limits>
+#include <string>
 #include <bvxm/grid/bvxm_voxel_grid.h>
 #include <bvpl/kernels/bvpl_kernel_factory.h>
 #include <bdgl/bdgl_peano_curve.h>
@@ -18,11 +22,6 @@
 
 #include <vgl/vgl_point_3d.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iomanip>
-#include <limits>
-#include <iostream>
-#include <string>
 
 struct point_3d_cmp
 {

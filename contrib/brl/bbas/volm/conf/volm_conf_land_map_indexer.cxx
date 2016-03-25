@@ -1,3 +1,5 @@
+#include <iostream>
+#include <algorithm>
 #include <volm/conf/volm_conf_land_map_indexer.h>
 //:
 // \file
@@ -6,8 +8,6 @@
 #include <vsol/vsol_box_2d.h>
 #include <brip/brip_roi.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <algorithm>
 #include <vil/vil_save.h>
 #include <vil/vil_convert.h>
 #include <vil/algo/vil_threshold.h>

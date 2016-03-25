@@ -1,15 +1,15 @@
 // This is mul/mmn/tests/test_diffusion_solver.cxx
-#include <testlib/testlib_test.h>
 #include <vector>
-#include <mmn/mmn_graph_rep1.h>
-#include <mmn/mmn_diffusion_solver.h>
-#include <mmn/mmn_dp_solver.h>
-#include <vcl_compiler.h>
 #include <iostream>
 #include <algorithm>
 #include <numeric>
 #include <iterator>
 #include <cmath>
+#include <testlib/testlib_test.h>
+#include <mmn/mmn_graph_rep1.h>
+#include <mmn/mmn_diffusion_solver.h>
+#include <mmn/mmn_dp_solver.h>
+#include <vcl_compiler.h>
 #include <vcl_cassert.h>
 #include <vgl/vgl_point_2d.h>
 #include <vgl/vgl_vector_2d.h>

@@ -12,13 +12,13 @@
 //   None
 // \endverbatim
 
+#include <vector>
+#include <algorithm>
+#include <memory>
 #include <vpdl/vpdt/vpdt_dist_traits.h>
 #include <vpdl/vpdt/vpdt_probability.h>
 #include <vcl_cassert.h>
-#include <vector>
-#include <algorithm>
 #include <vcl_compiler.h>
-#include <memory>
 
 // forward declarations
 template<class dist_t> class vpdt_mixture_of;

@@ -25,11 +25,11 @@
 //                                  set_translation(),set_affine(), cf vgl_h_matrix_2d
 // \endverbatim
 
+#include <vector>
+#include <iosfwd>
 #include <vnl/vnl_matrix_fixed.h>
 #include <vgl/vgl_homg_point_1d.h>
-#include <vector>
 #include <vcl_compiler.h>
-#include <iosfwd>
 
 //:
 // A class to hold a line-to-line projective transformation matrix

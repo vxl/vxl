@@ -6,10 +6,10 @@
 // \brief Contains a base class for sparse arrays.
 // \author Ian Scott
 
+#include <utility>
 #include "vbl_sparse_array_base.h"
 #include <vcl_cassert.h>
 #include <vcl_compiler.h>
-#include <utility>
 
 //: Empty the sparse matrix.
 template <class T, class Index>

@@ -17,8 +17,8 @@
 //\endverbatim
 
 class vil1_stream;
-#include <vcl_compiler.h>
 #include <vector>
+#include <vcl_compiler.h>
 #include <vil1/vil1_file_format.h>
 #include <vil1/vil1_image_impl.h>
 #include <vil1/vil1_image.h>

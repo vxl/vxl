@@ -1,9 +1,9 @@
 // This is core/vil/tests/test_blocked_image_resource.cxx
+#include <iostream>
+#include <string>
 #include <testlib/testlib_test.h>
 #include <testlib/testlib_root_dir.h>
-#include <iostream>
 #include <vcl_compiler.h>
-#include <string>
 #include <vil/vil_new.h>
 #include <vil/vil_load.h>
 #include <vil/vil_property.h>

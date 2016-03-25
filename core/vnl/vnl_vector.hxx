@@ -34,14 +34,14 @@
 // v*m, vnl_vector is implicitly a row matrix.
 //
 
-#include "vnl_vector.h"
-
-#include <vcl_compiler.h>
-#include <cstdlib> // abort()
-#include <vcl_cassert.h>
+#include <cstdlib>
 #include <vector>
 #include <iostream>
 #include <algorithm>
+#include "vnl_vector.h"
+
+#include <vcl_compiler.h>
+#include <vcl_cassert.h>
 
 #include <vnl/vnl_math.h>
 #include <vnl/vnl_matrix.h>

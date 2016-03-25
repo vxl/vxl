@@ -7,9 +7,9 @@
 // \author fsm
 // \brief  See vgui_command.h for a description of this file.
 
+#include <iostream>
 #include "vgui_command.h"
 #include <vcl_compiler.h>
-#include <iostream>
 
 //-----------------------------------------------------------------------------
 vgui_command::vgui_command()

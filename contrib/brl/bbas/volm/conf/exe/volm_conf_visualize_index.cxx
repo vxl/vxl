@@ -10,12 +10,11 @@
 //    <none yet>
 // \endverbatim
 //
-#include <vul/vul_arg.h>
-#include <vul/vul_file.h>
-#include <iostream>
-#include <vcl_compiler.h>
 #include <iostream>
 #include <iomanip>
+#include <vul/vul_arg.h>
+#include <vul/vul_file.h>
+#include <vcl_compiler.h>
 #include <volm/volm_geo_index.h>
 #include <volm/volm_loc_hyp.h>
 #include <volm/conf/volm_conf_object.h>

@@ -10,9 +10,9 @@
 //--------------------------------------------------------------------------------
 #include <vector>
 #include <map>
-#include <vcl_compiler.h>
 #include <iostream>
 #include <iosfwd>
+#include <vcl_compiler.h>
 #include <mvl/NViewMatches.h>
 #include <vbl/vbl_ref_count.h>
 

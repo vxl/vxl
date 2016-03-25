@@ -7,11 +7,11 @@
 //   L. Guichard
 //--------------------------------------------------------------------------------
 
+#include <iostream>
+#include <vector>
 #include <vnl/vnl_double_3.h>
 #include <vnl/vnl_double_3x3.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <vector>
 
 class vmal_homog2d
 {

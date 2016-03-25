@@ -5,15 +5,15 @@
 // \author Tim Cootes
 // \brief Base for objects which perform some form of linear component analysis.
 
-#include <vsl/vsl_fwd.h>
 #include <string>
 #include <memory>
+#include <iostream>
+#include <iosfwd>
+#include <vsl/vsl_fwd.h>
 #include <vnl/vnl_vector.h>
 #include <vnl/vnl_matrix.h>
 #include <mbl/mbl_data_wrapper.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iosfwd>
 
 //: Base for objects which perform some form of linear component analysis.
 // Derived classes (such as mcal_pca) generate linear modes to span

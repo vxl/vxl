@@ -1,11 +1,11 @@
+#include <iostream>
+#include <algorithm>
 #include "boxm2_ocl_hierarchical_points_to_volume_reg.h"
 #include <boxm2/ocl/boxm2_ocl_util.h>
 #include <boct/boct_bit_tree.h>
 #include <vcl_where_root_dir.h>
 #include <vnl/vnl_random.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <algorithm>
 boxm2_ocl_hierarchical_points_to_volume_reg::boxm2_ocl_hierarchical_points_to_volume_reg( boxm2_opencl_cache_sptr  & cache,
                                                    float *pts,
                                                    boxm2_scene_sptr sceneB,

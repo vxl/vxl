@@ -1,11 +1,11 @@
 #ifndef bstm_refine_blk_in_space_function_hxx_
 #define bstm_refine_blk_in_space_function_hxx_
 
+#include <iostream>
+#include <algorithm>
 #include "bstm_refine_blk_in_space_function.h"
 #include <bstm/io/bstm_lru_cache.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <algorithm>
 
 template <bstm_data_type APM_DATA_TYPE, bstm_data_type NOBS_DATA_TYPE >
 bstm_refine_blk_in_space_function<APM_DATA_TYPE, NOBS_DATA_TYPE>::bstm_refine_blk_in_space_function(bstm_time_block* t_blk, bstm_block* blk, std::vector<bstm_data_base*> & datas, float change_prob_t)

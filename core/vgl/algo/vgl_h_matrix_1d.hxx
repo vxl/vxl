@@ -2,15 +2,15 @@
 #ifndef vgl_h_matrix_1d_hxx_
 #define vgl_h_matrix_1d_hxx_
 
+#include <cstdlib>
+#include <iostream>
+#include <fstream>
 #include "vgl_h_matrix_1d.h"
 #include <vgl/vgl_homg_point_1d.h>
 #include <vnl/vnl_inverse.h>
 #include <vnl/vnl_vector_fixed.h>
 #include <vnl/algo/vnl_svd.h>
 #include <vcl_compiler.h>
-#include <cstdlib> // for exit()
-#include <iostream>
-#include <fstream>
 #include <vcl_cassert.h>
 # include <vcl_deprecated.h>
 

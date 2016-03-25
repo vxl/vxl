@@ -7,10 +7,10 @@
 //:
 // \file
 
+#include <string>
 #include <vil1/vil1_image_impl.h>
 #include <vil1/vil1_image.h>
 #include <vcl_compiler.h>
-#include <string>
 
 class vil1_scale_intensities_image_impl : public vil1_image_impl
 {

@@ -14,11 +14,10 @@
 
 #include <iostream>
 #include <vector>
-#include <vcl_cassert.h>
-#include <vcl_compiler.h>
-#include <iostream>
 #include <cmath>
 #include <limits>
+#include <vcl_cassert.h>
+#include <vcl_compiler.h>
 
 #include <vpgl/vpgl_perspective_camera.h>
 

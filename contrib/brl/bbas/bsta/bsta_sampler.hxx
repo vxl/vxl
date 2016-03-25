@@ -4,14 +4,14 @@
 //:
 // \file
 
-#include "bsta_sampler.h"
-#include <vnl/vnl_random.h>
 #include <cstdlib>
 #include <set>
 #include <utility>
-#include <vcl_compiler.h>
 #include <iostream>
 #include <algorithm>
+#include "bsta_sampler.h"
+#include <vnl/vnl_random.h>
+#include <vcl_compiler.h>
 
 template<class T>
 vnl_random bsta_sampler<T>::default_rand = vnl_random();

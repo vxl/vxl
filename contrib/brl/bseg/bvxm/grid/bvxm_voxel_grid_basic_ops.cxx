@@ -1,3 +1,5 @@
+#include <iostream>
+#include <list>
 #include "bvxm_voxel_grid_basic_ops.h"
 //:
 // \file
@@ -6,8 +8,6 @@
 #include <vgl/vgl_box_3d.h>
 #include <vgl/vgl_vector_3d.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <list>
 
 //: function to convert a mesh in global coordinates to a mesh in local coordinates
 void covert_global_mesh_to_local(imesh_mesh & inmesh,vpgl_lvcs& lvcs)

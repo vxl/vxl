@@ -9,14 +9,14 @@
 //
 // See vgui_mfc_dialog_impl.h for a description of this file.
 
-#include "vgui_mfc_dialog_impl.h"
-
-#include <vcl_compiler.h>
 #include <string>
 #include <iostream>
 #include <vector>
-#include <cstdio> // for sprintf()
+#include <cstdio>
 #include <cstring>
+#include "vgui_mfc_dialog_impl.h"
+
+#include <vcl_compiler.h>
 
 #include <vgui/internals/vgui_dialog_field.h>
 #include <vgui/internals/vgui_simple_field.h>

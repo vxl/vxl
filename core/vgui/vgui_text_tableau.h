@@ -22,8 +22,8 @@
 // \endverbatim
 
 
-#include <vcl_compiler.h>
 #include <string>
+#include <vcl_compiler.h>
 #include <vgui/vgui_tableau.h>
 #include <vgui/vgui_text_tableau_sptr.h>
 

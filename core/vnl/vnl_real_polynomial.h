@@ -19,10 +19,10 @@
 // 12/22/2004 Kongbin Kang - add structured comment for operator==()
 // \endverbatim
 
-#include <vnl/vnl_vector.h>
 #include <complex>
-#include <vcl_compiler.h>
 #include <iosfwd>
+#include <vnl/vnl_vector.h>
+#include <vcl_compiler.h>
 #include <vcl_cassert.h>
 
 //:Evaluation of real polynomials at real and complex points.

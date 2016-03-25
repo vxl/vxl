@@ -7,13 +7,13 @@
 // \author fsm
 // \brief  See vgui_texture_hacks.h for a description of this file.
 
+#include <cstdio>
 #include "vgui_texture_hacks.h"
 
 #ifdef fsm_fake_gl_texture_calls
 
 #include <dlfcn.h>
 #include <vcl_compiler.h>
-#include <cstdio>
 #include <vcl_cassert.h>
 
 static bool debug = false;

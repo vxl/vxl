@@ -13,6 +13,8 @@
 //   <none yet>
 // \endverbatim
 
+#include <iostream>
+#include <vector>
 #include "volm_category_io.h"
 #include "volm_osm_parser.h"
 #include "volm_osm_object_point.h"
@@ -20,8 +22,6 @@
 #include "volm_osm_object_polygon.h"
 #include <vsl/vsl_binary_io.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <vector>
 #include <vbl/vbl_ref_count.h>
 #include <vbl/vbl_smart_ptr.h>
 

@@ -1,3 +1,4 @@
+#include <algorithm>
 #include <testlib/testlib_test.h>
 #include <vgl/vgl_point_2d.h>
 #include <vgl/vgl_vector_2d.h>
@@ -11,7 +12,6 @@
 #include <vnl/vnl_random.h>
 #include <vnl/vnl_double_3.h>
 #include <vcl_compiler.h>
-#include <algorithm>
 
 
 // create a test scene with world points, cameras, and ideal projections

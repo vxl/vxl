@@ -16,9 +16,9 @@
 //
 //-----------------------------------------------------------------------------
 
-#include <vcl_compiler.h>
 #include <iostream>
 #include <vector>
+#include <vcl_compiler.h>
 #include <mvl/HomgPoint2D.h>
 #include <mvl/PairMatchSetCorner.h>
 

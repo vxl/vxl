@@ -1,5 +1,7 @@
 // Some tests for vgl_closest_point
 // Peter Vanroose, 5 June 2003
+#include <iostream>
+#include <cmath>
 #include <testlib/testlib_test.h>
 #include <vgl/vgl_closest_point.h>
 #include <vgl/vgl_distance.h>
@@ -17,9 +19,8 @@
 #include <vgl/vgl_infinite_line_3d.h>
 #include <vgl/vgl_plane_3d.h>
 #include <vgl/vgl_sphere_3d.h>
-#include <iostream>
 #include <vcl_compiler.h>
-#include <cmath> // for sqrt()
+#include <vgl/vgl_cubic_spline_3d.h>
 
 static void testHomgLine2DClosestPoint()
 {
@@ -553,6 +554,24 @@ static void test_sphere_3d_closest_point(){
   double er = std::sqrt(x*x + y*y + z*z);
   TEST_NEAR("Closest point on sphere", er, 0.0, 1.e-5);
 }
+// Test for closest point on a cubic spline
+static void test_spline_3d_closest_point()
+{
+  std::cout << "-------------------------------------------------\n"
+           << " Testing vgl_closest_points(3-d spline):\n"
+           << "-------------------------------------------------\n";
+  vgl_point_3d<double> pm1(1.0, 0.0, 0.0);
+  vgl_point_3d<double>  p0(1.0, 3.0, 2.0);
+  vgl_point_3d<double>  p1(2.0, 2.0, 4.0);
+  std::vector<vgl_point_3d<double> > knots;
+  knots.push_back(pm1); knots.push_back(p0);  knots.push_back(p1);
+  vgl_cubic_spline_3d<double> spl(knots, 0.5, true);
+  vgl_point_3d<double> p(1.5, 2.5, 3.0);
+  vgl_point_3d<double> cp = vgl_closest_point(spl, p);
+  vgl_point_3d<double> actual_cp = spl(1.43);
+  double dist = (cp-actual_cp).length();
+  TEST_NEAR("Closest point on spline", dist, 0.0, 0.002);
+}
 
 static void test_closest_point()
 {
@@ -571,6 +590,7 @@ static void test_closest_point()
   testLineSegment3DClosestPoints();
   test_infinite_line_3d_closest_points();
   test_sphere_3d_closest_point();
+  test_spline_3d_closest_point();
 }
 
 TESTMAIN(test_closest_point);

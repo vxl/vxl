@@ -15,17 +15,16 @@
 //  The classifiers are trained to distinguish the examples mis-classified
 //  by the currently selected classifiers.
 
+#include <iostream>
+#include <cstdlib>
+#include <cmath>
+#include <ctime>
+#include <algorithm>
 #include "clsfy_adaboost_sorted_builder.h"
 #include "clsfy_simple_adaboost.h"
 #include "clsfy_builder_1d.h"
 
-#include <iostream>
-#include <cstdlib> // for std::abort()
-#include <cmath>
-#include <ctime> // for clock()
 #include <vcl_compiler.h>
-#include <iostream>
-#include <algorithm>
 #include <vcl_cassert.h>
 #include <vbl/vbl_triple.h>
 #include <mbl/mbl_file_data_collector.h>

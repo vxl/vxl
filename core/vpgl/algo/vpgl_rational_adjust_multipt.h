@@ -12,8 +12,8 @@
 //    Yi Dong  Jun-2015  added new function to optimize the Lev-Marq refinement with given initial 3-d point, height range and search diameter
 // \endverbatim
 
-#include <vcl_compiler.h>
 #include <vector>
+#include <vcl_compiler.h>
 #include <vnl/vnl_vector.h>
 #include <vnl/vnl_least_squares_function.h>
 #include <vpgl/vpgl_rational_camera.h>

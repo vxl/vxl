@@ -26,10 +26,10 @@
 //      calibration matrices and an essential matrix.
 // \endverbatim
 
+#include <iosfwd>
 #include <vnl/vnl_fwd.h>
 #include <vgl/vgl_fwd.h>
 #include <vcl_compiler.h>
-#include <iosfwd>
 
 #include "vpgl_proj_camera.h"
 

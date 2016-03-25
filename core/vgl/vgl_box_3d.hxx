@@ -4,13 +4,13 @@
 //:
 // \file
 
-#include "vgl_box_3d.h"
-#include <vgl/vgl_point_3d.h>
 #include <iostream>
 #include <algorithm>
+#include <cmath>
+#include "vgl_box_3d.h"
+#include <vgl/vgl_point_3d.h>
 #include <vcl_cassert.h>
 #include <vcl_compiler.h>
-#include <cmath>
 
 // Constructors/Destructor---------------------------------------------------
 

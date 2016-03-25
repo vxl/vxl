@@ -9,8 +9,8 @@
 // \author fsm
 
 class vil1_stream;
-#include <vcl_compiler.h>
 #include <iosfwd>
+#include <vcl_compiler.h>
 
 struct vil1_bmp_info_header
 {

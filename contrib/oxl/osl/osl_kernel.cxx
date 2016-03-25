@@ -6,10 +6,10 @@
 // \file
 // \author fsm
 
-#include "osl_kernel.h"
-#include <vcl_compiler.h>
 #include <iostream>
 #include <cmath>
+#include "osl_kernel.h"
+#include <vcl_compiler.h>
 #include <vnl/vnl_math.h>
 
 // Construct one half of a Gaussian convolution kernel.

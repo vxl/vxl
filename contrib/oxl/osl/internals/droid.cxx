@@ -1,10 +1,10 @@
 // This is oxl/osl/internals/droid.cxx
+#include <iostream>
+#include <cmath>
+#include <cstring>
 #include "droid.h"
 
 #include <vcl_compiler.h>
-#include <iostream>
-#include <cmath>   // pow()
-#include <cstring> // memset()
 
 #include <osl/osl_roi_window.h>
 

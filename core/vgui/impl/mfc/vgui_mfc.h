@@ -19,8 +19,8 @@
 //   16-NOV-2007 Gamze Tunali - added produce_dialog_extension()
 // \endverbatim
 
-#include <vcl_compiler.h>
 #include <vector>
+#include <vcl_compiler.h>
 #include <vgui/vgui_toolkit.h>
 class vgui_mfc_adaptor;
 class vgui_mfc_window;

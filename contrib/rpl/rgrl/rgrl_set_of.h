@@ -7,9 +7,9 @@
 // \date   Feb 2003
 
 #include <vector>
-#include <vcl_compiler.h>
 #include <iostream>
 #include <cstddef>
+#include <vcl_compiler.h>
 
 //: A collection of objects
 //

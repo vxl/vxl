@@ -4,9 +4,9 @@
 // \author Peter Vanroose
 // \date   March 2003
 
-#include <vcl_compiler.h>
 #include <cstdlib>
 #include <iostream>
+#include <vcl_compiler.h>
 #include <vil/vil_load.h>
 #include <vil/vil_image_view.h>
 #include <vgui/vgui.h>

@@ -1,10 +1,9 @@
+#include <iostream>
 #include "boxm2_phongs_model_processor.h"
 //
 #include <vnl/algo/vnl_levenberg_marquardt.h>
 #include <vnl/vnl_math.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 
 float boxm2_phongs_model_processor::expected_color(brad_phongs_model & pmodel,
                                                    vnl_double_3 view_dir,

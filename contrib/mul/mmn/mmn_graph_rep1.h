@@ -5,12 +5,12 @@
 // \brief Representation of a graph, stored by links at each node.
 // \author Tim Cootes
 
+#include <vector>
+#include <iostream>
+#include <utility>
 #include <mmn/mmn_arc.h>
 #include <mmn/mmn_dependancy.h>
-#include <vector>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <utility>  // For std::pair
 
 //: Representation of a graph, stored by links at each node.
 //  Optimised for adding arcs and finding arcs for each node.

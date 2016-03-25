@@ -2,14 +2,14 @@
 #ifndef vpgl_camera_compute_cxx_
 #define vpgl_camera_compute_cxx_
 
+#include <iostream>
+#include <cstdlib>
+#include <cmath>
 #include "vpgl_camera_compute.h"
 //:
 // \file
-#include <iostream>
 #include <vcl_cassert.h>
 #include <vcl_compiler.h>
-#include <cstdlib> // for rand()
-#include <cmath>
 #include <vnl/vnl_numeric_traits.h>
 #include <vnl/vnl_det.h>
 #include <vnl/vnl_inverse.h>

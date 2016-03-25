@@ -1,11 +1,10 @@
+#include <iostream>
+#include <iomanip>
 #include "HMatrix1DComputeOptimize1.h"
 #include "HMatrix1DComputeDesign.h"
 
 #include <vcl_cassert.h>
-#include <iostream>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iomanip>
 
 #include <vnl/vnl_least_squares_function.h>
 #include <vnl/algo/vnl_levenberg_marquardt.h>

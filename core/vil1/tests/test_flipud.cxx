@@ -1,5 +1,5 @@
-#include <vcl_compiler.h>
 #include <iostream>
+#include <vcl_compiler.h>
 
 #include <vil1/vil1_memory_image.h>
 #include <vil1/vil1_flipud.h>

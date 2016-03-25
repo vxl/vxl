@@ -1,9 +1,8 @@
 // This is mul/vimt/tests/test_correlate_2d.cxx
-#include <testlib/testlib_test.h>
-#include <vcl_compiler.h>
-#include <iostream>
 #include <iostream>
 #include <vector>
+#include <testlib/testlib_test.h>
+#include <vcl_compiler.h>
 #include <vxl_config.h> // for vxl_byte
 #include <vimt/algo/vimt_find_peaks.h>
 #include <vimt/algo/vimt_correlate_2d.h>

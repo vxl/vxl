@@ -11,12 +11,12 @@
 // \author Ian Scott
 // \date 2001-10-07
 
-#include <clsfy/clsfy_builder_base.h>
 #include <vector>
 #include <string>
-#include <vcl_compiler.h>
 #include <iostream>
 #include <iosfwd>
+#include <clsfy/clsfy_builder_base.h>
+#include <vcl_compiler.h>
 #include <mbl/mbl_data_wrapper.h>
 #include <vnl/vnl_vector.h>
 

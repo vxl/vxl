@@ -1,11 +1,10 @@
 //:
 // \file
-#include <testlib/testlib_test.h>
-#include <bsta/bsta_k_medoid.h>
-#include <iostream>
-#include <vcl_compiler.h>
 #include <iostream>
 #include <cmath>
+#include <testlib/testlib_test.h>
+#include <bsta/bsta_k_medoid.h>
+#include <vcl_compiler.h>
 
 //: Test bsta histograms
 void test_k_medoid()

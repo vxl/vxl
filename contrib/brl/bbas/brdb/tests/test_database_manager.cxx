@@ -1,3 +1,5 @@
+#include <iostream>
+#include <sstream>
 #include <testlib/testlib_test.h>
 #include <brdb/brdb_value.h>
 #include <brdb/brdb_tuple.h>
@@ -8,9 +10,6 @@
 #include <brdb/brdb_database_manager.h>
 #include <brdb/brdb_query.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
-#include <sstream>
 
 static void test_database_manager()
 {

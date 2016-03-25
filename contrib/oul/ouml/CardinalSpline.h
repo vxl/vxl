@@ -1,19 +1,18 @@
 #ifndef CARDINAL_SPLINE_D_
 #define CARDINAL_SPLINE_D_
 
+#include <vector>
+#include <string>
+#include <iostream>
 #include <vnl/vnl_matrix.h>
 #include <vnl/vnl_vector_fixed.h>
 #include <vnl/vnl_matrix_fixed.h>
-#include <vector>
-#include <string>
 #include <vcl_cassert.h>
 #include <vnl/io/vnl_io_vector_fixed.hxx>
 #include <vnl/io/vnl_io_matrix.hxx>
 #include <vsl/vsl_binary_io.h>
 #include <vsl/vsl_vector_io.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 
 // A 3D cardinal spline class. See Hearn and Baker, "Computer
 // Graphics", C Version, Second Edition, page 325. Cardinal splines

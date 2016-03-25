@@ -4,10 +4,10 @@
 //:
 // \file
 
-#include "bsta_gaussian_indep.h"
-#include <vcl_compiler.h>
 #include <iostream>
 #include <limits>
+#include "bsta_gaussian_indep.h"
+#include <vcl_compiler.h>
 #include <vnl/vnl_erf.h>
 
 namespace

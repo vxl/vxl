@@ -16,11 +16,11 @@
 // \endverbatim
 //*****************************************************************************
 
+#include <iostream>
+#include <string>
 #include "bwm_observable.h"
 
 #include <vcl_compiler.h>
-#include <iostream>
-#include <string>
 
 #include <vgl/vgl_point_3d.h>
 #include <vsol/vsol_point_3d_sptr.h>

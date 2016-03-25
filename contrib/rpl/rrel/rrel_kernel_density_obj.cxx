@@ -1,13 +1,12 @@
 // This is rpl/rrel/rrel_kernel_density_obj.cxx
+#include <iostream>
+#include <algorithm>
 #include "rrel_kernel_density_obj.h"
 #include <rrel/rrel_muset_obj.h>
 #include <vnl/vnl_vector.h>
 #include <vnl/vnl_math.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <algorithm>
 #include <vcl_cassert.h>
-#include <iostream>
 
 namespace {
   inline void shft2(double &a, double &b, const double c)

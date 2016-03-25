@@ -19,6 +19,8 @@
 //   Peter Vanroose, Feb.2004 - replaced vil1_image by vil_image_view<T>
 // \endverbatim
 //
+#include <iostream>
+#include <cmath>
 #include <vipl/accessors/vipl_accessors_vil_image_view.h>
 #include <vil/vil_image_view.h>
 #include <vipl/vipl_moment.h>
@@ -29,10 +31,7 @@
 // for I/O:
 #include <vil/vil_load.h>
 #include <vil/vil_save.h>
-#include <iostream>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <cmath> // for std::sqrt()
 
 #include <vxl_config.h> // for vxl_byte
 float square(float const& x) { return x*x; }

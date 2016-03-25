@@ -13,6 +13,7 @@
 // \endverbatim
 //=========================================================================
 
+#include <map>
 #include <vgui/vgui_menu.h>
 
 #include <wx/event.h>
@@ -20,7 +21,6 @@ class wxMenu;
 class wxMenuBar;
 
 #include <vcl_compiler.h>
-#include <map>
 
 //-------------------------------------------------------------------------
 //: The wxWidgets mapping of the vgui_menu.

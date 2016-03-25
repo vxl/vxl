@@ -1,7 +1,6 @@
 // This is mul/mbl/tests/test_correspond_points.cxx
+#include <iostream>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 #include <mbl/mbl_correspond_points.h>
 #include <vnl/vnl_random.h>
 #include <vgl/vgl_point_2d.h>

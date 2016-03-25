@@ -1,4 +1,7 @@
 // This is core/vul/tests/test_debug.cxx
+#include <iostream>
+#include <new>
+#include <string>
 #include <testlib/testlib_test.h>
 //:
 // \file
@@ -6,14 +9,11 @@
 // \author Ian Scott
 //
 
-#include <iostream>
 #include <vcl_compiler.h>
-#include <new>
 #include <vul/vul_debug.h>
 #include <vul/vul_file.h>
 #include <vul/vul_sprintf.h>
 #include <vpl/vpl.h>
-#include <string>
 
 //=======================================================================
 static void test_debug()

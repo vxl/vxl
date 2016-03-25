@@ -3,9 +3,8 @@
 // \file
 
 #include <sstream>
+#include <iostream>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 #include <vul/vul_arg.h>
 #include <vil/vil_load.h>
 #include <vil/vil_new.h>

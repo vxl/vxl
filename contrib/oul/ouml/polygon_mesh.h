@@ -9,12 +9,12 @@
 //
 //----------------------------------------------------------------------
 
-#include <vgl/vgl_point_3d.h>
-#include <vnl/vnl_vector_fixed.h>
 #include <vector>
-#include <vcl_compiler.h>
 #include <iostream>
 #include <iosfwd>
+#include <vgl/vgl_point_3d.h>
+#include <vnl/vnl_vector_fixed.h>
+#include <vcl_compiler.h>
 
 class PolygonMesh
 {

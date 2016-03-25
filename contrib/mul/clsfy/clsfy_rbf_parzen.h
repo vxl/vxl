@@ -12,10 +12,10 @@
 //   2 May 2001 IMS Converted to VXL
 // \endverbatim
 
-#include <clsfy/clsfy_classifier_base.h>
-#include <vcl_compiler.h>
 #include <iostream>
 #include <iosfwd>
+#include <clsfy/clsfy_classifier_base.h>
+#include <vcl_compiler.h>
 
 //: A Parzen binary classifier using an RBF Window
 // A given vector, x0, is classified, by placing a window defined by w = exp(-1/(2*sigma^p) * |x-x0|^p),

@@ -2,9 +2,9 @@
 // \file
 // \author fsm, Oxford RRG
 // \date    7 September 1999
-#include <vcl_compiler.h>
 #include <complex>
 #include <iostream>
+#include <vcl_compiler.h>
 #include <vnl/algo/vnl_complex_eigensystem.h>
 
 #include <testlib/testlib_test.h>

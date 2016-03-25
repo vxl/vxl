@@ -1,9 +1,9 @@
-#include "NCSJPCVilIOStream.h"
 #include <sstream>
-#include <vil/vil_stream.h>
 #include <string>
-#include <vcl_compiler.h>
 #include <limits>
+#include "NCSJPCVilIOStream.h"
+#include <vil/vil_stream.h>
+#include <vcl_compiler.h>
 #undef max
 #undef min
 // Do not remove the following notice

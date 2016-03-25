@@ -5,11 +5,11 @@
 // \brief Trains regressor in an mfpf_pose_predictor
 // \author Tim Cootes
 
+#include <iostream>
+#include <iosfwd>
 #include <mfpf/mfpf_pose_predictor.h>
 #include <vnl/vnl_random.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iosfwd>
 
 //: Trains regressor in an mfpf_pose_predictor.
 //  Object set up with a pose predictor which has been

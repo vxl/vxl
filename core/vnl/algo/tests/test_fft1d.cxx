@@ -1,4 +1,9 @@
 // This is core/vnl/algo/tests/test_fft1d.cxx
+#include <cstdlib>
+#include <cmath>
+#include <iostream>
+#include <complex>
+#include <vector>
 #include <testlib/testlib_test.h>
 //:
 // \file
@@ -18,11 +23,6 @@
 
 //-----------------------------------------------------------------------------
 #include <vcl_compiler.h>
-#include <cstdlib> // for std::abort
-#include <cmath> // for std::fabs
-#include <iostream>
-#include <complex>
-#include <vector>
 #include <vnl/vnl_vector.h>
 #include <vnl/algo/vnl_fft_1d.h>
 

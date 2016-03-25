@@ -4,10 +4,10 @@
 //:
 // \file
 
-#include "bbgm_image_of.h"
-#include <vcl_compiler.h>
 #include <iostream>
 #include <typeinfo>
+#include "bbgm_image_of.h"
+#include <vcl_compiler.h>
 #include <vbl/io/vbl_io_array_2d.h>
 
 

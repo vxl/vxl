@@ -5,13 +5,13 @@
 // \file
 // \author fsm
 
-#include "vgl_clip.h"
-#include <vcl_compiler.h>
-#include <cstdlib> // for std::malloc() and std::free()
-#include <cstdio> // for std::fprintf()
-#include <algorithm> // for swap
+#include <cstdlib>
+#include <cstdio>
+#include <algorithm>
 #include <limits>
 #include <cmath>
+#include "vgl_clip.h"
+#include <vcl_compiler.h>
 
 template <class T>
 bool vgl_clip_lineseg_to_line(T &x1, T &y1,

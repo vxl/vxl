@@ -4,14 +4,14 @@
 //:
 // \file
 
+#include <cstdlib>
+#include <complex>
+#include <iostream>
+#include <algorithm>
 #include "vnl_svd_fixed.h"
 
 #include <vcl_cassert.h>
 #include <vcl_compiler.h>
-#include <cstdlib>
-#include <complex>
-#include <iostream>
-#include <algorithm> // min()
 
 #include <vnl/vnl_math.h>
 #include <vnl/vnl_fortran_copy_fixed.h>

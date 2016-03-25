@@ -1,12 +1,12 @@
 // This is brl/bbas/bgui3d/bgui3d_examiner_tableau.cxx
+#include <iostream>
+#include <algorithm>
 #include "bgui3d_examiner_tableau.h"
 //:
 // \file
 
 #include <vcl_cassert.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <algorithm>
 
 #include <vgui/vgui_menu.h>
 #include <vgui/vgui_command.h>

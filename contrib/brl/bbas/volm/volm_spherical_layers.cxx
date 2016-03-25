@@ -1,11 +1,11 @@
+#include <iostream>
+#include <algorithm>
 #include "volm_spherical_layers.h"
 #include "volm_io.h"
 #include <bpgl/depth_map/depth_map_scene.h>
 #include <volm/volm_spherical_container.h>
 #include <volm/volm_spherical_shell_container.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <algorithm>
 #include <bsol/bsol_algs.h>
 
 #define TOL -1E-8

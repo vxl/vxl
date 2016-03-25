@@ -1,6 +1,10 @@
 #ifndef bwm_io_kml_parser_h_
 #define bwm_io_kml_parser_h_
 
+#include <iostream>
+#include <string>
+#include <vector>
+#include <utility>
 #include "bwm_io_structs.h"
 
 
@@ -9,10 +13,6 @@
 #endif
 #include <expatpp.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <string>
-#include <vector>
-#include <utility>
 
 
 class bwm_io_kml_parser : public expatpp

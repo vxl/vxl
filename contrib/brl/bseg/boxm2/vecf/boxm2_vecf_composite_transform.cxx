@@ -1,3 +1,5 @@
+#include <iostream>
+#include <stdexcept>
 #include "boxm2_vecf_composite_transform.h"
 #include <boxm2/boxm2_data.h>
 #include <boxm2/boxm2_block.h>
@@ -6,8 +8,6 @@
 #include <boct/boct_bit_tree.h>
 #include <vgl/vgl_point_3d.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <stdexcept>
 
 boxm2_vecf_composite_transform::
 boxm2_vecf_composite_transform(std::vector<boxm2_vecf_vector_field_base_sptr> xforms)

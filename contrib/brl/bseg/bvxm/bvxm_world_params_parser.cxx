@@ -1,13 +1,12 @@
+#include <cstring>
+#include <iostream>
+#include <cstdio>
+#include <sstream>
 #include "bvxm_world_params_parser.h"
 //:
 // \file
 
-#include <cstring>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <cstdio>
-#include <iostream>
-#include <sstream>
 #include <vgl/vgl_point_3d.h>
 #include <vgl/vgl_box_3d.h>
 

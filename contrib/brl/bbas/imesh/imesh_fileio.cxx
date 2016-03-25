@@ -1,13 +1,13 @@
 // This is brl/bbas/imesh/imesh_fileio.cxx
+#include <iostream>
+#include <fstream>
+#include <sstream>
+#include <limits>
 #include "imesh_fileio.h"
 //:
 // \file
 
 #include <vcl_compiler.h>
-#include <iostream>
-#include <fstream>
-#include <sstream>
-#include <limits>
 #include <vul/vul_file.h>
 #include <vgl/vgl_point_2d.h>
 

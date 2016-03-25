@@ -1,13 +1,12 @@
 // This is brl/bseg/sdet/sdet_gauss_fit.cxx
+#include <iostream>
+#include <fstream>
+#include <cmath>
 #include "sdet_gauss_fit.h"
 //:
 // \file
 
-#include <iostream>
-#include <fstream>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <cmath>
 #include <vgl/vgl_point_3d.h>
 #include <vnl/vnl_math.h>
 #include <vsol/vsol_point_2d.h> // for dereferencing ps_list[j]

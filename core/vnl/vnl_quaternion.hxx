@@ -30,12 +30,12 @@
 //
 
 
-#include "vnl_quaternion.h"
-
 #include <cmath>
-#include <vcl_compiler.h>
 #include <limits>
 #include <iostream>
+#include "vnl_quaternion.h"
+
+#include <vcl_compiler.h>
 
 #include <vnl/vnl_cross.h>
 #include <vnl/vnl_math.h>

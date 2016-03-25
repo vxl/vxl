@@ -4,9 +4,9 @@
 // \file
 // \author Lee, Ying-Lin (Bess)
 
-#include <vcl_compiler.h>
 #include <iostream>
 #include <vector>
+#include <vcl_compiler.h>
 #include <rgrl/rgrl_object.h>
 
 class rgrl_evaluator : public rgrl_object

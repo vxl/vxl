@@ -6,6 +6,8 @@
 #ifndef rtvl_weight_smooth_txx
 #define rtvl_weight_smooth_txx
 
+#include <iostream>
+#include <cstdlib>
 #include "rtvl_weight_smooth.hxx"
 
 #include "rtvl_terms.hxx"
@@ -13,8 +15,6 @@
 
 #include <vnl/vnl_vector_fixed.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <cstdlib>
 
 //----------------------------------------------------------------------------
 template <unsigned int N>

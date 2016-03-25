@@ -1,8 +1,8 @@
+#include <list>
+#include <iostream>
 #include <testlib/testlib_test.h>
 #include "vbl_test_classes.h"
 #include <vcl_compiler.h>
-#include <list>
-#include <iostream>
 
 //----------------------------------------------------------------------
 

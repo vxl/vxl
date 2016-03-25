@@ -1,6 +1,6 @@
 // This is core/vsl/tests/test_indent.cxx
-#include <vcl_compiler.h>
 #include <iostream>
+#include <vcl_compiler.h>
 #include <vsl/vsl_indent.h>
 #include <testlib/testlib_test.h>
 

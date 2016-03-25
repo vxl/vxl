@@ -1,4 +1,7 @@
 // This is brl/bseg/boxm2/pro/processes/boxm2_blob_change_detection_process.cxx
+#include <vector>
+#include <iostream>
+#include <string>
 #include <bprb/bprb_func_process.h>
 //:
 // \file
@@ -10,10 +13,7 @@
 #include <boxm2/util/boxm2_detect_change_blobs.h>
 #include <vil/vil_image_view.h>
 #include <vil/vil_save.h>
-#include <vector>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <string>
 
 namespace boxm2_blob_change_detection_process_globals
 {

@@ -1,3 +1,6 @@
+#include <iostream>
+#include <cmath>
+#include <vector>
 #include "rgrl_spline.h"
 //:
 // \file
@@ -5,12 +8,8 @@
 // \date   Sept 2003
 
 #include <vcl_compiler.h>
-#include <iostream>
-#include <cmath>
-#include <iostream>
 #include <vcl_cassert.h>
 #include <vnl/vnl_math.h>
-#include <vector>
 
 static double g( int a1, int a2, int m );
 static double g_prime( int a1, int a2, int m );

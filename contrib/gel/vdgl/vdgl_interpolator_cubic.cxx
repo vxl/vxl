@@ -5,11 +5,11 @@
 //:
 // \file
 
+#include <iostream>
+#include <cmath>
 #include "vdgl_interpolator_cubic.h"
 #include <vcl_cassert.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <cmath> // for sqrt()
 #include <vnl/vnl_matrix_fixed.h>
 #include <vnl/vnl_vector_fixed.h>
 #include <vnl/vnl_math.h>

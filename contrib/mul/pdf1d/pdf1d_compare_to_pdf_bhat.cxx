@@ -5,11 +5,11 @@
 // \author Tim Cootes
 // \brief Test if data from a given distribution using Bhattacharyya overlap
 
+#include <iostream>
+#include <string>
 #include "pdf1d_compare_to_pdf_bhat.h"
 
 #include <vcl_compiler.h>
-#include <iostream>
-#include <string>
 
 #include <pdf1d/pdf1d_gaussian.h>
 #include <pdf1d/pdf1d_gaussian_kernel_pdf_builder.h>

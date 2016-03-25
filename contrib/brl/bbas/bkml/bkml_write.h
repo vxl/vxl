@@ -15,13 +15,12 @@
 //   Yi Dong --- Oct, 2014  added method to write a point as a 2-d box
 // \endverbatim
 
-#include <vcl_compiler.h>
 #include <iostream>
 #include <fstream>
 #include <string>
 #include <iomanip>
-#include <iostream>
 #include <functional>
+#include <vcl_compiler.h>
 #include <vnl/vnl_double_2.h>
 #include <vgl/vgl_box_2d.h>
 #include <vgl/vgl_polygon.h>

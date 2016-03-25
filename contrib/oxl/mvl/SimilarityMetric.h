@@ -22,12 +22,12 @@
 //
 //-----------------------------------------------------------------------------
 
+#include <iostream>
+#include <iosfwd>
 #include <vnl/vnl_double_3x3.h>
 #include <vgl/vgl_fwd.h>
 #include <mvl/ImageMetric.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iosfwd>
 class Image;
 
 class SimilarityMetric : public ImageMetric

@@ -1,8 +1,7 @@
+#include <iostream>
 #include <testlib/testlib_test.h>
 // not used? #include <vector>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 #include <vil3d/algo/vil3d_quad_distance_function.h>
 #include <vil3d/vil3d_print.h>
 

@@ -3,11 +3,11 @@
 #define bpgl_segmented_rolling_shutter_camera_hxx_
 //:
 // \file
-#include "bpgl_segmented_rolling_shutter_camera.h"
 #include <vector>
-#include <vcl_compiler.h>
 #include <iostream>
 #include <fstream>
+#include "bpgl_segmented_rolling_shutter_camera.h"
+#include <vcl_compiler.h>
 #include <vgl/vgl_point_2d.h>
 #include <vgl/vgl_point_3d.h>
 //--------------------------------------

@@ -13,15 +13,14 @@
 //   <none yet>
 // \endverbatim
 
+#include <limits>
+#include <iostream>
 #include <bvpl/kernels/bvpl_kernel_iterator.h>
 #include <bvxm/grid/bvxm_opinion.h>
 #include <bsta/bsta_gauss_sf1.h>
 #include <bsta/bsta_attributes.h>
-#include <limits>
 #ifdef DEBUG
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 #endif
 
 template <class T>

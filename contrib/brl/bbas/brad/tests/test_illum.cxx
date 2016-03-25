@@ -1,10 +1,10 @@
+#include <iostream>
+#include <cstdlib>
+#include <fstream>
 #include <testlib/testlib_test.h>
 #include <brad/brad_illum_util.h>
 #include <bsta/bsta_histogram.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <cstdlib> // for rand()
-#include <fstream>
 
 static void test_illum()
 {

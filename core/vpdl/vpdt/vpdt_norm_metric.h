@@ -13,12 +13,12 @@
 // \endverbatim
 
 
+#include <limits>
+#include <cmath>
 #include <vpdl/vpdt/vpdt_field_traits.h>
 #include <vpdl/vpdt/vpdt_access.h>
 #include <vpdl/vpdt/vpdt_eigen_sym_matrix.h>
 #include <vcl_compiler.h>
-#include <limits>
-#include <cmath>
 #include <vcl_cassert.h>
 
 

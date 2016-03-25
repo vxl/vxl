@@ -1,7 +1,7 @@
-#include <testlib/testlib_test.h>
-#include <vcl_compiler.h>
 #include <iostream>
 #include <vector>
+#include <testlib/testlib_test.h>
+#include <vcl_compiler.h>
 #include <vsph/vsph_unit_sphere.h>
 #include <vsph/vsph_sph_point_3d.h>
 #include <depth_map/depth_map_scene.h>

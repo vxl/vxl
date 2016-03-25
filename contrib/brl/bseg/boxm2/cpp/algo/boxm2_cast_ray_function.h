@@ -3,10 +3,11 @@
 //:
 // \file
 
+#include <iostream>
+#include <algorithm>
 #include <vgl/vgl_ray_3d.h>
 
 #include <vcl_cassert.h>
-#include <iostream>
 
 #include <boxm2/boxm2_scene.h>
 #include <boxm2/boxm2_block.h>
@@ -16,8 +17,6 @@
 #include <boct/boct_bit_tree.h>
 
 #include <vcl_compiler.h>
-#include <iostream>
-#include <algorithm>
 #include <vpgl/vpgl_generic_camera.h>
 
 #define BLOCK_EPSILON .006125f

@@ -9,10 +9,10 @@
 // \author awf@robots.ox.ac.uk
 // \date   19 Mar 00
 
-#include <vcl_compiler.h>
 #include <iostream>
 #include <iosfwd>
 #include <vector>
+#include <vcl_compiler.h>
 
 class vrml_out_vertex_to_texture;
 

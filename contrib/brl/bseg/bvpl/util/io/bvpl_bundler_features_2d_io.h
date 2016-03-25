@@ -12,11 +12,10 @@
 //   <none yet>
 // \endverbatim
 
+#include <iostream>
 #include <bvpl/util/bvpl_bundler_features_2d.h>
 
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 
 #include <vsl/vsl_binary_io.h>
 

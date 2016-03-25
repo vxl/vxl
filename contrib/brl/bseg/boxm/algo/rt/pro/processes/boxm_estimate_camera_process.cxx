@@ -1,6 +1,8 @@
 // This is brl/bseg/boxm/algo/rt/pro/processes/boxm_estimate_camera_process.cxx
 //:
 // \file
+#include <iostream>
+#include <cstdio>
 #include <bprb/bprb_func_process.h>
 #include <bprb/bprb_parameters.h>
 #include <brdb/brdb_value.h>
@@ -14,8 +16,6 @@
 #include <bpgl/bpgl_camera_estimator_amoeba.h>
 
 #include <vcl_compiler.h>
-#include <iostream>
-#include <cstdio>
 #include <vcl_cassert.h>
 
 #include <boxm/algo/rt/boxm_expected_edge_functor.h>

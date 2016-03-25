@@ -4,10 +4,9 @@
 // \author  Gamze Tunali
 // \date    2007-06-10
 //
-#include <vcl_compiler.h>
-#include <iostream>
 #include <iostream>
 #include <vector>
+#include <vcl_compiler.h>
 #include <testlib/testlib_test.h>
 
 #include <bwm/algo/bwm_delaunay_tri.h>

@@ -1,11 +1,11 @@
+#include <iostream>
+#include <algorithm>
 #include "boxm2_multi_update.h"
 #include "boxm2_multi_store_aux.h"
 #include "boxm2_multi_pre_vis_inf.h"
 #include "boxm2_multi_update_cell.h"
 
 #include <vcl_compiler.h>
-#include <iostream>
-#include <algorithm>
 #include <boxm2/boxm2_scene.h>
 #include <boxm2/boxm2_util.h>
 #include <boxm2/ocl/algo/boxm2_ocl_camera_converter.h>

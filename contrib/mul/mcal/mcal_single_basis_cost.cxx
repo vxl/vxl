@@ -1,9 +1,9 @@
 //:
 // \file
-#include "mcal_single_basis_cost.h"
-#include <vcl_compiler.h>
 #include <iostream>
 #include <cstdlib>
+#include "mcal_single_basis_cost.h"
+#include <vcl_compiler.h>
 #include <mbl/mbl_exception.h>
 #include <mbl/mbl_cloneables_factory.h>
 #include <mbl/mbl_parse_block.h>

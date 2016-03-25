@@ -1,8 +1,8 @@
 // This is brl/bseg/sdet/sdet_denoise_mrf_bp.cxx
-#include "sdet_denoise_mrf_bp.h"
-#include <vcl_compiler.h>
 #include <iostream>
 #include <cstdlib>
+#include "sdet_denoise_mrf_bp.h"
+#include <vcl_compiler.h>
 #include <vul/vul_timer.h>
 #include <brip/brip_vil_float_ops.h>
 #include <brip/brip_line_generator.h>

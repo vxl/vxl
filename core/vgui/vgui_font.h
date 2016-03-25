@@ -13,8 +13,8 @@
 // \endverbatim
 //=========================================================================
 
-#include <vcl_compiler.h>
 #include <string>
+#include <vcl_compiler.h>
 #include <vbl/vbl_ref_count.h>
 
 //-------------------------------------------------------------------------

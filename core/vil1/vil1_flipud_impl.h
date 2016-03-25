@@ -8,9 +8,9 @@
 // \file
 // \author fsm
 
+#include <string>
 #include <vil1/vil1_image.h>
 #include <vcl_compiler.h>
-#include <string>
 
 //: A view of an image which is flipped up/down (ie top row becomes bottom)
 class vil1_flipud_impl : public vil1_image_impl

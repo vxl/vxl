@@ -5,11 +5,10 @@
 #ifndef rgtl_sqt_cell_location_txx
 #define rgtl_sqt_cell_location_txx
 
+#include <iostream>
 #include "rgtl_sqt_cell_location.hxx"
 
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 
 //----------------------------------------------------------------------------
 template <unsigned int D>

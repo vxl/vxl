@@ -23,9 +23,9 @@
 //   None
 // \endverbatim
 //
-#include <vcl_compiler.h>
 #include <iostream>
 #include <string>
+#include <vcl_compiler.h>
 #include <vnl/vnl_matrix_fixed.h>
 #include <vnl/vnl_math.h>
 #include <vil/vil_image_view.h>

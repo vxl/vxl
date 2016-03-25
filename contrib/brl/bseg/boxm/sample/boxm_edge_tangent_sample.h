@@ -3,14 +3,13 @@
 //:
 // \file
 
+#include <iostream>
+#include <vector>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 #include <vsl/vsl_binary_io.h>
 #include "boxm_plane_obs.h"
 #include <boxm/boxm_aux_traits.h>
 
-#include <vector>
 
 template <class T>
 class boxm_edge_tangent_sample

@@ -8,8 +8,8 @@
 //-----------------------------------------------------------------------------
 
 #include <iostream>
+#include <cstdlib>
 #include <vcl_compiler.h>
-#include <cstdlib> // for atof()
 #include <vnl/vnl_vector.h>
 #include <vnl/algo/vnl_rpoly_roots.h>
 

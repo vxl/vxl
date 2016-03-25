@@ -4,11 +4,10 @@
 //:
 // \file
 
+#include <iostream>
+#include <algorithm>
 #include "vipl_filter.h"
-#include <iostream>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <algorithm> // for std::max and std::min
 
 #ifdef VCL_VC
 #pragma warning( disable: 4390 )

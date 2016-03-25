@@ -1,6 +1,6 @@
+#include <iostream>
 #include <testlib/testlib_test.h>
 #include <vcl_compiler.h>
-#include <iostream>
 #include <vpgl/vpgl_proj_camera.h>
 #include <vpgl/io/vpgl_io_proj_camera.h>
 #include <vpl/vpl.h>

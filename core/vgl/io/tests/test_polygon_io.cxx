@@ -1,6 +1,6 @@
 // This is core/vgl/io/tests/test_polygon_io.cxx
-#include <vcl_compiler.h>
 #include <iostream>
+#include <vcl_compiler.h>
 #include <vgl/vgl_polygon.h>
 #include <vsl/vsl_indent.h>
 #include <vgl/io/vgl_io_polygon.h>

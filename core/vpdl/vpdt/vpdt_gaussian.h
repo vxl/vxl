@@ -13,6 +13,7 @@
 // \endverbatim
 
 
+#include <limits>
 #include <vpdl/vpdt/vpdt_field_traits.h>
 #include <vpdl/vpdt/vpdt_field_default.h>
 #include <vpdl/vpdt/vpdt_dist_traits.h>
@@ -21,7 +22,6 @@
 #include <vpdl/vpdt/vpdt_norm_metric.h>
 #include <vnl/vnl_math.h> // for twopi
 #include <vcl_compiler.h>
-#include <limits>
 #include <vnl/vnl_erf.h>
 
 

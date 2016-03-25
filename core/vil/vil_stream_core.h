@@ -9,8 +9,8 @@
 // \brief An in-core vil_stream implementation
 // \author  fsm
 
-#include <vcl_compiler.h>
 #include <vector>
+#include <vcl_compiler.h>
 #include <vil/vil_stream.h>
 
 //: An in-core vil_stream implementation.

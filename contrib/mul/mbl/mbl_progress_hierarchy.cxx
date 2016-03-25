@@ -5,11 +5,11 @@
 // \author Ian Scott
 // \date 10 Jan 2008
 
-#include "mbl_progress_hierarchy.h"
 #include <cmath>
-#include <vcl_compiler.h>
 #include <iostream>
 #include <algorithm>
+#include "mbl_progress_hierarchy.h"
+#include <vcl_compiler.h>
 #include <mbl/mbl_log.h>
 
 

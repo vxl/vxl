@@ -11,6 +11,8 @@
 // (See accompanying file rgtl_license_1_0.txt or copy at
 // http://www.boost.org/LICENSE_1_0.txt)
 
+#include <iostream>
+#include <vector>
 #include "rgtl_tagged_index.hxx"
 #include "rgtl_serialize_access.hxx"
 #include "rgtl_serialize_base.hxx"
@@ -18,8 +20,6 @@
 #include "rgtl_serialize_stl_vector.hxx"
 
 #include <vcl_compiler.h>
-#include <iostream>
-#include <vector>
 
 //: Wrap an STL vector and replace the indexing operators with tagged-indexing equivalents.
 template <typename Tag, typename T>

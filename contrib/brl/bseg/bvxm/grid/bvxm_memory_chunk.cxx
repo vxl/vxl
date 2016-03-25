@@ -1,13 +1,13 @@
+#include <cstring>
+#include <iostream>
+#include <cstddef>
 #include "bvxm_memory_chunk.h"
 //:
 // \file
 // \brief Ref. counted block of data on the heap. Based on vil_memory_chunk.cxx
 // \author Dan Crispell
 
-#include <cstring>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <cstddef> // for std::size_t
 #include <vbl/vbl_smart_ptr.hxx>
 
 //: Default constructor

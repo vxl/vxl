@@ -10,9 +10,9 @@
 // Copied to bsta to avoid cross linking, J.L. Mundy June 4, 2013
 // Templated and added interfaces for vnl_vector_fixed, J.L. Mundy June 22, 2013
 // \endverbatim
-#include <vcl_compiler.h>
 #include <iostream>
 #include <vector>
+#include <vcl_compiler.h>
 #include <vnl/vnl_vector.h>
 #include <vnl/vnl_vector_fixed.h>
 

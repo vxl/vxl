@@ -11,14 +11,14 @@
 //   none
 // \endverbatim
 
+#include <vector>
+#include <iostream>
+#include <iosfwd>
 #include <vbl/vbl_ref_count.h>
 #include <bapl/bapl_keypoint_set_sptr.h>
 #include <bapl/bapl_keypoint_sptr.h>
-#include <vector>
 #include <vsl/vsl_binary_io.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iosfwd> // for std::ostream
 
 typedef std::pair< int, bapl_keypoint_sptr > bapl_image_key;
 typedef std::vector< bapl_image_key > bapl_image_key_vector;

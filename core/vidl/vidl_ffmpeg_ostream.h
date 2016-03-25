@@ -16,9 +16,9 @@
 //   Matt Leotta   3 Jan 2006   Adapted from code by Amitha Perera
 // \endverbatim
 
+#include <string>
 #include "vidl_ostream.h"
 #include <vcl_compiler.h>
-#include <string>
 #include "vidl_ffmpeg_ostream_params.h"
 
 

@@ -2,9 +2,8 @@
 // Description: Test gevd_bufferxy class
 
 #include <iostream>
+#include <cstring>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <cstring> // memcpy
 #include <vpl/vpl.h>
 #include <testlib/testlib_test.h>
 #include <gevd/gevd_bufferxy.h>

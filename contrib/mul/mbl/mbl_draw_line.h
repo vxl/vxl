@@ -5,13 +5,13 @@
 // \brief Functions to draw shapes into an image (may get moved to vil in time)
 // \author Tim Cootes
 
+#include <iostream>
+#include <algorithm>
+#include <cmath>
 #include <vil/vil_image_view.h>
 #include <vgl/vgl_point_2d.h>
 #include <vgl/vgl_vector_2d.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <algorithm>
-#include <cmath>
 
 //: Draws value along line between p1 and p2
 //  Effective, but not terribly efficient.

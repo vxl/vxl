@@ -11,6 +11,8 @@
 // \author Brad King
 // \date March 2007
 
+#include <iostream>
+#include <vector>
 #include "rgtl_object_array.hxx"
 #include "rgtl_serialize_access.hxx"
 #include "rgtl_serialize_base.hxx"
@@ -18,8 +20,6 @@
 
 #include <vnl/vnl_vector_fixed.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <vector>
 
 //----------------------------------------------------------------------------
 template <unsigned int D>

@@ -6,14 +6,14 @@
 // \file
 // \author fsm
 
-#include "osl_load_topology.h"
-#include <vcl_cassert.h>
 #include <cstring>
-#include <vcl_compiler.h>
 #include <iostream>
-#include <cstdio> // sscanf()
+#include <cstdio>
 #include <fstream>
 #include <vector>
+#include "osl_load_topology.h"
+#include <vcl_cassert.h>
+#include <vcl_compiler.h>
 
 void osl_load_topology(char const *f, std::list<osl_edge*> &e, std::list<osl_vertex*> &v)
 {

@@ -1,9 +1,9 @@
+#include <iostream>
+#include <queue>
 #include "bvxm_to_boxm2.h"
 //:
 // \file
 #include <vcl_compiler.h>
-#include <iostream>
-#include <queue>
 
 //executable args
 #include <vul/vul_arg.h>

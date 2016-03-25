@@ -3,10 +3,10 @@
 //:
 // \file
 
-#include <bundler/bundler_inters.h>
-#include <vcl_compiler.h>
 #include <iostream>
 #include <vector>
+#include <bundler/bundler_inters.h>
+#include <vcl_compiler.h>
 
 //:
 // An abstract functor. Takes in the track set, and fills the

@@ -1,3 +1,6 @@
+#include <string>
+#include <iostream>
+#include <algorithm>
 #include <testlib/testlib_test.h>
 
 #include <bsta/bsta_mixture_fixed.h>
@@ -5,13 +8,9 @@
 #include <bsta/bsta_gaussian_sphere.h>
 #include <bsta/algo/bsta_fit_gaussian.h>
 
-#include <string>
-#include <iostream>
 #include <bsta/bsta_histogram.h>
 #include <vnl/vnl_random.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <algorithm>
 
 MAIN( test_rand_sampling)
 {

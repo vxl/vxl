@@ -1,3 +1,5 @@
+#include <iostream>
+#include <algorithm>
 #include "volm_io_tools.h"
 //:
 // \file
@@ -13,8 +15,6 @@
 #include <vpgl/vpgl_lvcs.h>
 #include <vpgl/vpgl_lvcs_sptr.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <algorithm>
 #include <vgl/algo/vgl_fit_lines_2d.h>
 #include <vgl/vgl_intersection.h>
 #include <vgl/vgl_line_segment_3d.h>

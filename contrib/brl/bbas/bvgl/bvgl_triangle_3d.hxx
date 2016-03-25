@@ -4,14 +4,13 @@
 //:
 // \file
 
-#include "bvgl_triangle_3d.h"
-#include <vgl/vgl_point_3d.h>
-#include <iostream>
-#include <vcl_compiler.h>
 #include <iostream>
 #include <algorithm>
-#include <vcl_cassert.h>
 #include <cmath>
+#include "bvgl_triangle_3d.h"
+#include <vgl/vgl_point_3d.h>
+#include <vcl_compiler.h>
+#include <vcl_cassert.h>
 
 // Constructors/Destructor---------------------------------------------------
 

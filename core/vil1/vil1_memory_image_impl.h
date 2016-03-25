@@ -16,10 +16,10 @@
 // 7 June 2001 - Peter Vanroose - added support for packed 1-bit pixel type
 //\endverbatim
 
+#include <string>
 #include <vil1/vil1_image_impl.h>
 #include <vil1/vil1_memory_image.h>
 #include <vcl_compiler.h>
-#include <string>
 
 //: Implementation class for vil1_memory_image.
 class vil1_memory_image_impl : public vil1_image_impl

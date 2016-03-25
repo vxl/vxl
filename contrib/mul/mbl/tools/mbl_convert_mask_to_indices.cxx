@@ -3,9 +3,9 @@
 // \brief Convert a mask file to a list of indices file.
 
 #include <string>
-#include <vcl_compiler.h>
 #include <iostream>
 #include <fstream>
+#include <vcl_compiler.h>
 #include <vul/vul_arg.h>
 #include <mbl/mbl_log.h>
 #include <mbl/mbl_exception.h>

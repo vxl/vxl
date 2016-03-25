@@ -1,4 +1,5 @@
 // This is brl/bseg/sdet/sdet_detector.cxx
+#include <iostream>
 #include "sdet_detector.h"
 //:
 // \file
@@ -8,8 +9,6 @@
 
 #include <vil1/vil1_image.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 #include <gevd/gevd_float_operators.h>
 #include <gevd/gevd_step.h>
 #include <gevd/gevd_bufferxy.h>

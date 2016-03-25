@@ -20,14 +20,14 @@
 //
 //=========================================================================
 
+#include <string>
+#include <vector>
 #include <vidl/vidl_istream.h>
 #include <vidl/vidl_frame.h>
 #include <vidl/vidl_frame_sptr.h>
 #include <vidl/vidl_pixel_format.h>
 
 #include <vcl_compiler.h>
-#include <string>
-#include <vector>
 
 #include <atlbase.h>
 #include <dshow.h>

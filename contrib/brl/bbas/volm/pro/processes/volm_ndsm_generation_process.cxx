@@ -1,4 +1,10 @@
 // This is contrib/brl/bbas/volm/pro/process/volm_ndsm_generation_process.cxx
+#include <iomanip>
+#include <iostream>
+#include <sstream>
+#include <fstream>
+#include <algorithm>
+#include <complex>
 #include <bprb/bprb_func_process.h>
 //:
 // \file
@@ -12,13 +18,7 @@
 //    none yet
 // \endverbatim
 
-#include <iomanip>
-#include <iostream>
-#include <sstream>
-#include <fstream>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <algorithm>
 #include <vpgl/file_formats/vpgl_geo_camera.h>
 #include <vil/vil_image_view.h>
 #include <vil/vil_load.h>
@@ -27,7 +27,6 @@
 #include <vgl/vgl_intersection.h>
 #include <bvgl/algo/bvgl_2d_geo_index.h>
 #include <bvgl/algo/bvgl_2d_geo_index_sptr.h>
-#include <complex>
 #include <vul/vul_file.h>
 #include <vul/vul_file_iterator.h>
 #include <volm/volm_io_tools.h>

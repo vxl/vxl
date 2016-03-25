@@ -7,16 +7,16 @@
 // \author Tim Cootes
 // \brief Initialises kernel pdfs
 
-#include "vpdfl_kernel_pdf_builder.h"
-//
-#include <vcl_cassert.h>
 #include <string>
 #include <sstream>
-#include <cstdlib> // std::abort()
-#include <vcl_compiler.h>
+#include <cstdlib>
 #include <iostream>
 #include <cmath>
 #include <vector>
+#include "vpdfl_kernel_pdf_builder.h"
+//
+#include <vcl_cassert.h>
+#include <vcl_compiler.h>
 
 #include <mbl/mbl_data_wrapper.h>
 #include <mbl/mbl_data_array_wrapper.h>

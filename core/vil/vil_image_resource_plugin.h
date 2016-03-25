@@ -12,8 +12,8 @@
 // \author      Franck Bettinger
 // \date        Sun Mar 17 22:57:00 2002
 
-#include <vcl_compiler.h>
 #include <string>
+#include <vcl_compiler.h>
 #include <vil/vil_image_view_base.h>
 #include <vil/vil_image_resource.h>
 

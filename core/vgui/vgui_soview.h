@@ -14,12 +14,12 @@
 //  Notes: We use floats instead of doubles as size is a speed issue (sic.)
 //
 
-#include "dll.h"
-
 #include <string>
-#include <vcl_compiler.h>
 #include <iosfwd>
 #include <vector>
+#include "dll.h"
+
+#include <vcl_compiler.h>
 
 #include "vgui_style_sptr.h"
 

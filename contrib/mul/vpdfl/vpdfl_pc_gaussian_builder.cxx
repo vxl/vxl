@@ -13,14 +13,15 @@
 // 23 April 2001 IMS - Ported to VXL
 // \endverbatim
 
-#include "vpdfl_pc_gaussian_builder.h"
-//
 #include <string>
 #include <sstream>
+#include <algorithm>
+#include <iostream>
+#include <cstdlib>
+#include "vpdfl_pc_gaussian_builder.h"
+//
 #include <vcl_cassert.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <cstdlib> // for std::abort()
 #include <mbl/mbl_data_wrapper.h>
 #include <vnl/vnl_math.h>
 #include <vnl/vnl_c_vector.h>
@@ -334,7 +335,7 @@ unsigned vpdfl_pc_gaussian_builder::decide_partition(const vnl_vector<double>& e
   assert (eVals.size() > 0);
   if (partitionMethod_ == vpdfl_pc_gaussian_builder::fixed)
   {
-    return std::min(eVals.size(), (unsigned)fixed_partition()+1);;
+    return std::min<size_t>(eVals.size(), fixed_partition()+1);;
   }
   else if (partitionMethod_ == proportionate)
   {

@@ -3,11 +3,11 @@
 //:
 // \file
 
+#include <iostream>
+#include <map>
 #include "bwm_observer_cam.h"
 #include "video/bwm_video_corr_sptr.h"
 #include <vcl_compiler.h>
-#include <iostream>
-#include <map>
 #include <vgl/vgl_plane_3d.h>
 #include <vgui/vgui_style.h>
 #include <vpgl/vpgl_camera.h>

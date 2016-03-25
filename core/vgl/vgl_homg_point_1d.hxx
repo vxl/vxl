@@ -2,9 +2,9 @@
 #ifndef vgl_homg_point_1d_hxx_
 #define vgl_homg_point_1d_hxx_
 
+#include <iostream>
 #include "vgl_homg_point_1d.h"
 #include <vcl_compiler.h>
-#include <iostream>
 
 template <class Type>
 std::ostream& operator<<(std::ostream& s, vgl_homg_point_1d<Type> const& p)

@@ -1,9 +1,9 @@
+#include <iostream>
+#include <string>
 #include <testlib/testlib_test.h>
 #include "../bmdl_processes.h"
 
 #include <vcl_compiler.h>
-#include <iostream>
-#include <string>
 #include <vcl_string.h>
 
 #include <vgl/vgl_polygon.h>

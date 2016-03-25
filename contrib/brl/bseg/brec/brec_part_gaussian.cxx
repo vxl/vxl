@@ -1,3 +1,7 @@
+#include <iostream>
+#include <cmath>
+#include <fstream>
+#include <sstream>
 #include "brec_part_gaussian.h"
 //:
 // \file
@@ -15,12 +19,7 @@
 
 #include <bxml/bxml_find.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <cmath>
 #include <vnl/vnl_gamma.h>
-#include <iostream>
-#include <fstream>
-#include <sstream>
 
 #include <bsta/algo/bsta_fit_weibull.h>
 #include <bsta/bsta_histogram.h>

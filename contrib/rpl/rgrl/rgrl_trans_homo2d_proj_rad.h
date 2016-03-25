@@ -6,12 +6,12 @@
 // \date   March 2007
 // \brief  Represents a 2D homography plus radial distortion transformation.
 
+#include <iostream>
+#include <iosfwd>
 #include "rgrl_transformation.h"
 #include <rgrl/rgrl_est_proj_rad_func.h>
 #include <vnl/vnl_matrix_fixed.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iosfwd>
 
 //: Represents a 2D homography plus radial distortion transformation.
 //  A transformation for x'_u=Hx, and x'_d = x'_u + k*radial_dist( x'_u )

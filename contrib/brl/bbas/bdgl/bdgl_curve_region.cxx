@@ -1,3 +1,5 @@
+#include <iostream>
+#include <cmath>
 #include "bdgl_curve_region.h"
 //-----------------------------------------------------------------------------
 //:
@@ -9,8 +11,6 @@
 #include <vdgl/vdgl_edgel_chain.h>
 #include <vdgl/vdgl_edgel_chain_sptr.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <cmath>
 
 //-----------------------------------------------------------------------------
 void bdgl_curve_region::init(vdgl_edgel_chain_sptr curve)

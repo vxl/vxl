@@ -9,10 +9,10 @@
 // \author Tim Cootes
 // \brief A wrapper to provide access to C-arrays of objects
 
-#include <mbl/mbl_data_wrapper.h>
-#include <vcl_compiler.h>
 #include <iostream>
 #include <vector>
+#include <mbl/mbl_data_wrapper.h>
+#include <vcl_compiler.h>
 
 //: A wrapper to provide access to C-arrays of objects
 template<class T>

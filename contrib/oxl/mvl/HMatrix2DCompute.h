@@ -18,11 +18,11 @@
 
 class HMatrix2D;
 class PairMatchSetCorner;
+#include <iostream>
+#include <vector>
 #include <mvl/HomgPoint2D.h>
 #include <mvl/HomgLine2D.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <vector>
 
 class HMatrix2DCompute {
 public:

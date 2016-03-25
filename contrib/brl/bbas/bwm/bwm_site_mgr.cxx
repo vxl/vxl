@@ -1,3 +1,6 @@
+#include <iostream>
+#include <cstdio>
+#include <sstream>
 #include "bwm_site_mgr.h"
 //:
 // \file
@@ -24,9 +27,6 @@
 #include <vnl/vnl_double_3.h>
 #include <vnl/vnl_quaternion.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <cstdio>
-#include <sstream>
 
 #include <vul/vul_file.h>
 #include <vul/vul_string.h>

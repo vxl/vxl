@@ -1,6 +1,6 @@
 #include <iostream>
-#include <vcl_compiler.h>
 #include <fstream>
+#include <vcl_compiler.h>
 #include <testlib/testlib_test.h>
 #include <testlib/testlib_root_dir.h>
 

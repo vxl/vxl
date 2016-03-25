@@ -1,4 +1,6 @@
 // This is oul/ouel/kalman_filter.cxx
+#include <iostream>
+#include <cstdlib>
 #include "kalman_filter.h"
 //:
 // \file
@@ -24,9 +26,6 @@
 //----------------------------------------------------------------------
 
 #include <vcl_compiler.h>
-#include <iostream>
-#include <cstdlib>
-#include <iostream>
 
 #include <vnl/algo/vnl_svd.h>
 

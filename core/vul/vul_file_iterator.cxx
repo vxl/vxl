@@ -3,9 +3,9 @@
 #pragma implementation
 #endif
 
+#include <string>
 #include "vul_file_iterator.h"
 #include <vcl_compiler.h>
-#include <string>
 #include <vcl_cassert.h>
 
 #include <vul/vul_file.h>
