@@ -49,7 +49,6 @@
 #include <string>
 #include <vector>
 #include <iostream>
-#include <set>
 #include <boxm2/boxm2_block.h>
 #include <boxm2/vecf/boxm2_vecf_articulated_scene.h>
 #include <boxm2/vecf/boxm2_vecf_articulated_params.h>
@@ -61,6 +60,7 @@
 #include "boxm2_vecf_eyelid_crease.h"
 #include <vgl/vgl_point_3d.h>
 #include <vcl_compiler.h>
+
 
 class boxm2_vecf_orbit_scene
 : public boxm2_vecf_articulated_scene
@@ -151,6 +151,14 @@ public:
   bool vfield_params_change_check(const boxm2_vecf_orbit_params& params);
   // store the neigbors of each cell for each anatomical component in a vector;
   void cache_neighbors();
+
+  //: refine target cells to match the refinement level of the source block
+  virtual int prerefine_target_sub_block(vgl_point_3d<double> const& sub_block_pt, unsigned pt_index){return -1;}//FIXME
+  //: compute inverse vector field for unrefined sub_block centers
+  virtual void inverse_vector_field_unrefined(std::vector<vgl_point_3d<double> > const& unrefined_target_pts){}//FIXME
+
+  virtual bool inverse_vector_field(vgl_point_3d<double> const& target_pt, vgl_vector_3d<double>& inv_vf) const{return false;}//FIXME
+  virtual bool apply_vector_field(cell_info const& target_cell, vgl_vector_3d<double> const& inv_vf){return false;}//FIXME
 
  // ============   eye methods ================
  //: construct eye sphere, iris and pupil

@@ -67,7 +67,7 @@ class boxm2_vecf_lid_base{
   virtual vgl_box_3d<double> bounding_box(double margin = 1.0) const;
 
   //: distance to closest point on closed lid_base surface
-  virtual double surface_distance(vgl_point_3d<double> const& p) const = 0;
+  virtual double distance(vgl_point_3d<double> const& p) const = 0;
 
   //: test if point is inside the tmin, tmax bounds
   virtual bool inside(vgl_point_3d<double> const& p, double tolerance=0.5) const;

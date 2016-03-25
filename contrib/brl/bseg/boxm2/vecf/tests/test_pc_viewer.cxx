@@ -15,7 +15,7 @@
 #include "../boxm2_vecf_point_cloud_orbit_viewer.h"
 #include "../boxm2_vecf_orbit_params.h"
 
-#define BUILD_TEST_PC_VIEWER
+//#define BUILD_TEST_PC_VIEWER
 void test_pc_viewer()
 {
 #ifdef BUILD_TEST_PC_VIEWER

@@ -79,7 +79,7 @@ double boxm2_vecf_eyelid::t(double xp, double y) const{
 }
 // theory of closest point - compute distance to eyelid sphere, compute distance to plane, take closest
 // need to fix for inferior lid different thickness - later
-double boxm2_vecf_eyelid::surface_distance(vgl_point_3d<double> const& p) const{
+double boxm2_vecf_eyelid::distance(vgl_point_3d<double> const& p) const{
   vgl_vector_3d<double> normal(0.0,0.0,1.0);
   vgl_point_3d<double> pt(0.0, 0.0, zlim(p.x()));
   vgl_plane_3d<double> pl(normal, pt);

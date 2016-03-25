@@ -25,6 +25,7 @@ typedef vnl_vector_fixed<unsigned char, 16> uchar16;
 
 void test_eye()
 {
+#if 0
   // Set up the scenes
   std::string base_dir_path = "c:/Users/mundy/VisionSystems/Janus/experiments/vector_flow/eye/";
   std::string eye_scene_path = base_dir_path + "eye.xml";
@@ -115,6 +116,7 @@ void test_eye()
   boxm2_data<BOXM2_NUM_OBS_SINGLE>* nobs_data=new boxm2_data<BOXM2_NUM_OBS_SINGLE>(nobs_base->data_buffer(),nobs_base->buffer_length(),nobs_base->block_id());
   boxm2_data_traits<BOXM2_NUM_OBS_SINGLE>::datatype nobs = 0;
   nobs_data->data()[indx] = nobs;
+#endif
 #endif
 #endif
 

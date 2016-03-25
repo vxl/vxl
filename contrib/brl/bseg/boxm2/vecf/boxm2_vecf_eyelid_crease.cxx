@@ -153,8 +153,7 @@ double boxm2_vecf_eyelid_crease::t(double xp, double y) const{
 }
 
 // theory of closest point - compute distance to eyelid sphere, compute distance to plane, take closest
-double boxm2_vecf_eyelid_crease::surface_distance(vgl_point_3d<double> const& p) const{
-
+double boxm2_vecf_eyelid_crease::distance(vgl_point_3d<double> const& p) const{
   double ct = opr_.eyelid_crease_ct_;
   double t = this->t(p.x(), p.y());
   // if in the lower part of the crease region

@@ -39,7 +39,7 @@ class boxm2_vecf_eyelid_crease : public boxm2_vecf_lid_base{
   double t(double xp, double y) const;
 
   //: distance to closest point on crease surface
-  double surface_distance(vgl_point_3d<double> const& p) const;
+  double distance(vgl_point_3d<double> const& p) const;
 
   //: socket surface tapers from brow (params.mid_eyelid_crease_z_) to medial and lateral socket planes
   // matches z values at t = params.eyelid_crease_ct_
