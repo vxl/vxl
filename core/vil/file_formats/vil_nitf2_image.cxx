@@ -646,10 +646,10 @@ vil_image_view_base_sptr vil_nitf2_image::get_block_j2k( unsigned int blockIndex
   //if this is a bug in the file or if we need to handle it.  Anyway,
   //we handle it by using std::min.  test file named p0_11xa,ntf exhibits
   //this issue
-  unsigned int i0 = std::min( blockIndexX * size_block_i(), ni() );
-  unsigned int num_i = std::min( size_block_i(), ni() - i0 );
-  unsigned int j0 = std::min( blockIndexY * size_block_j(), nj() );
-  unsigned int num_j = std::min( size_block_j(), nj() - j0 );
+  unsigned int i0 = (std::min)( blockIndexX * size_block_i(), ni() );
+  unsigned int num_i = (std::min)( size_block_i(), ni() - i0 );
+  unsigned int j0 = (std::min)( blockIndexY * size_block_j(), nj() );
+  unsigned int num_j = (std::min)( size_block_j(), nj() - j0 );
   return get_copy_view( i0, num_i, j0, num_j );
 }
 
