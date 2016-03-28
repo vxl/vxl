@@ -14,6 +14,7 @@
 #include <vnl/vnl_least_squares_function.h>
 #include <vnl/vnl_cost_function.h>
 #include <vgl/vgl_pointset_3d.h>
+#include <functional>   // std::greater
 
 class neutral_residual_function : public vnl_least_squares_function{
  public:
