@@ -4,10 +4,10 @@ if(BUILD_BRL)
 endif()
 
 # Set up boxm2_ocl_where_root_dir.h to have a macro set to $BOXM2_OPENCL_SRC_DIR
-vxl_configure_file(${CMAKE_CURRENT_SOURCE_DIR}/boxm2_ocl_where_root_dir.h.in
-  ${CMAKE_CURRENT_BINARY_DIR}/boxm2_ocl_where_root_dir.h contrib/brl/bseg/boxm2/ocl
+vxl_configure_file(${CMAKE_CURRENT_LIST_DIR}/boxm2_ocl_where_root_dir.h.in
+  ${PROJECT_BINARY_DIR}/bseg/boxm2/ocl/boxm2_ocl_where_root_dir.h contrib/brl/bseg/boxm2/ocl
 )
-include_directories( ${CMAKE_BINARY_DIR}/contrib/brl/bseg/boxm2/ocl/ )
+include_directories( ${PROJECT_BINARY_DIR}/bseg/boxm2/ocl/ )
 
 
 #depends on OPENCL being found...
