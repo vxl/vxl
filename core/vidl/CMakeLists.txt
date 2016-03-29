@@ -18,8 +18,8 @@ include( ${VXL_CMAKE_DIR}/NewCMake/FindDirectShow.cmake )
 find_file(VIDEODEV_FOUND videodev.h /usr/include/linux/)
 find_file(VIDEODEV2_FOUND videodev2.h /usr/include/linux/)
 
-vxl_configure_file( ${CMAKE_SOURCE_DIR}/core/vidl/vidl_config.h.in
-                ${CMAKE_BINARY_DIR}/core/vidl/vidl_config.h include/vxl/core/vidl )
+vxl_configure_file( ${CMAKE_CURRENT_LIST_DIR}/vidl_config.h.in
+                    ${PROJECT_BINARY_DIR}/vidl_config.h include/vxl/core/vidl )
 
 if( FFMPEG_FOUND )
   # Mark FFMPEG is found.  In future we can even export

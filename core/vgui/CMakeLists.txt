@@ -500,8 +500,8 @@ endif()
 # that depend on these configuration parameters to be automatically
 # recompiled when the config changes.
 
-vxl_configure_file( ${CMAKE_SOURCE_DIR}/core/vgui/vgui_config.h.in
-                ${CMAKE_BINARY_DIR}/core/vgui/vgui_config.h include/vxl/core/vgui)
+vxl_configure_file( ${VXL_ROOT_SOURCE_DIR}/core/vgui/vgui_config.h.in
+                    ${PROJECT_BINARY_DIR}/vgui_config.h include/vxl/core/vgui)
 
 # Register each toolkit that was compiled in.
 set( vgui_sources ${vgui_sources}
