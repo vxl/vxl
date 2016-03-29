@@ -372,7 +372,7 @@ vil_j2k_image::get_copy_view_decimated_by_size(unsigned sample0,
   //We don't want infinite hangs or application crashes.
   unsigned int maxDim = mRemoteFile ? mMaxRemoteDimension : mMaxLocalDimension;
   if ( output_width > maxDim || output_height > maxDim ) {
-    unsigned int biggestDim = std::max( output_width, output_height );
+    unsigned int biggestDim = (std::max)( output_width, output_height );
     double zoomFactor = ((double)maxDim) / ((double)biggestDim);
     output_width  = (unsigned int) ( ((double)output_width)  * zoomFactor );
     output_height = (unsigned int) ( ((double)output_height) * zoomFactor );
