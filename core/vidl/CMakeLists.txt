@@ -54,7 +54,6 @@ endif()
 
 set(vidl_sources
     vidl_pixel_format.h           vidl_pixel_format.cxx
-	vidl_export.h
     vidl_color.h                  vidl_color.cxx
     vidl_frame.h                  vidl_frame.cxx           vidl_frame_sptr.h
     vidl_pixel_iterator.h         vidl_pixel_iterator.cxx
@@ -142,7 +141,14 @@ endif()
 
 aux_source_directory(Templates vidl_sources)
 
+include_directories(${CMAKE_CURRENT_BINARY_DIR})
 vxl_add_library(LIBRARY_NAME ${VXL_LIB_PREFIX}vidl LIBRARY_SOURCES ${vidl_sources})
+include(GenerateExportHeader)
+generate_export_header(${VXL_LIB_PREFIX}vidl BASE_NAME vidl)
+install(FILES ${CMAKE_CURRENT_BINARY_DIR}/vidl_export.h
+    DESTINATION ${VXL_INSTALL_INCLUDE_DIR}/core/vidl
+    PERMISSIONS OWNER_WRITE OWNER_READ GROUP_READ WORLD_READ
+    COMPONENT Development )
 
 target_link_libraries( ${VXL_LIB_PREFIX}vidl ${VXL_LIB_PREFIX}vil ${VXL_LIB_PREFIX}vul ${VXL_LIB_PREFIX}vbl )
 if( FFMPEG_FOUND )
