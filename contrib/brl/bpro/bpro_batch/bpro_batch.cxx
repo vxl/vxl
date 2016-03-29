@@ -325,7 +325,7 @@ PyObject *get_output_string(PyObject * /*self*/, PyObject *args)
   if (!PyArg_ParseTuple(args, "i:get_output_string", &id))
     return NULL;
 
-  std::string relation_name = "std::string_data";
+  std::string relation_name = "vcl_string_data";
 
   // query to get the data
   brdb_query_aptr Q = brdb_query_comp_new("id", brdb_query::EQ, id);
