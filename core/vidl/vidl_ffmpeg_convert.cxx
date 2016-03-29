@@ -10,12 +10,13 @@
 //
 //-----------------------------------------------------------------------------
 
+#include <cstring>
+#include <iostream>
 #include "vidl_ffmpeg_convert.h"
 #include "vidl_ffmpeg_pixel_format.h"
 #include "vidl_frame.h"
 #include <vcl_cassert.h>
-#include <vcl_cstring.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
 
 #include <vidl/vidl_config.h>
 extern "C" {
@@ -130,11 +131,11 @@ bool vidl_ffmpeg_convert(vidl_frame const& in_frame,
   }
 
   AVPicture in_pic;
-  vcl_memset(&in_pic, 0, sizeof(in_pic));
+  std::memset(&in_pic, 0, sizeof(in_pic));
   avpicture_fill(&in_pic, (uint8_t*)in_frame.data(), in_fmt, ni, nj);
 
   AVPicture out_pic;
-  vcl_memset(&out_pic, 0, sizeof(out_pic));
+  std::memset(&out_pic, 0, sizeof(out_pic));
   avpicture_fill(&out_pic, (uint8_t*)out_frame.data(), out_fmt, ni, nj);
 
 #if LIBAVCODEC_BUILD < ((52<<16)+(10<<8)+0)  // before ver 52.10.0
@@ -182,11 +183,11 @@ bool vidl_ffmpeg_convert(const vidl_frame_sptr& in_frame,
                                             new vil_memory_chunk(out_size, VIL_PIXEL_FORMAT_BYTE));
 
   AVPicture in_pic;
-  vcl_memset(&in_pic, 0, sizeof(in_pic));
+  std::memset(&in_pic, 0, sizeof(in_pic));
   avpicture_fill(&in_pic, (uint8_t*)in_frame->data(), in_fmt, ni, nj);
 
   AVPicture out_pic;
-  vcl_memset(&out_pic, 0, sizeof(out_pic));
+  std::memset(&out_pic, 0, sizeof(out_pic));
   avpicture_fill(&out_pic, (uint8_t*)out_frame->data(), out_fmt, ni, nj);
 
 #if LIBAVCODEC_BUILD < ((52<<16)+(10<<8)+0)  // before ver 52.10.0

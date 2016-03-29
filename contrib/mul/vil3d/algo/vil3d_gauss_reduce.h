@@ -23,11 +23,11 @@
 template<class T>
 void vil3d_gauss_reduce_i(const T* src_im,
                           unsigned src_ni, unsigned src_nj, unsigned src_nk,
-                          vcl_ptrdiff_t s_i_step, vcl_ptrdiff_t s_j_step,
-                          vcl_ptrdiff_t s_k_step,
+                          std::ptrdiff_t s_i_step, std::ptrdiff_t s_j_step,
+                          std::ptrdiff_t s_k_step,
                           T* dest_im,
-                          vcl_ptrdiff_t d_i_step,
-                          vcl_ptrdiff_t d_j_step, vcl_ptrdiff_t d_k_step);
+                          std::ptrdiff_t d_i_step,
+                          std::ptrdiff_t d_j_step, std::ptrdiff_t d_k_step);
 
 //: Smooth and subsample src_im to produce dest_im
 //  Applies filter in i,j and k directions, then samples every other pixel.

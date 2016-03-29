@@ -28,6 +28,7 @@
 #ifndef OFITER_H
 #define OFITER_H
 
+#include <algorithm>
 #include "osconfig.h"    /* make sure OS specific configuration is included first */
 #include "oftypes.h"
 
@@ -77,7 +78,6 @@
 // Important: If you want to use the standard template library (STL), no
 // variable within a namespace using a class of the STL shall have a name
 // of one class of the STL
-#include <algorithm>
 #define OFForEach(InputIterator_type, Function_type, first, last, f) for_each((first), (last), (f))
 #define OFFind(InputIterator_type, T_type, first, last, value) find((first), (last), (value))
 #define OFFindIf(InputIterator_type, Predicate_type, first, last, pred) find_if((first), (last), (pred))

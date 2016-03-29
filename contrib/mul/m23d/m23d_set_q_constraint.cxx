@@ -1,10 +1,12 @@
+#include <iostream>
+#include <algorithm>
 #include "m23d_set_q_constraint.h"
 //:
 // \file
 // \author Tim Cootes
 // \brief Functions to construct linear constraints as rows in a matrix
 
-#include <vcl_algorithm.h>
+#include <vcl_compiler.h>
 #include <vcl_cassert.h>
 
 //: Defines constraint on elements of Q of form a'Qb=r
@@ -71,7 +73,7 @@ void m23d_set_q_constraints(const vnl_matrix<double> & M, unsigned k,
   {
     vnl_vector<double> rxj = M.get_row(2*j);
     vnl_vector<double> ryj = M.get_row(2*j+1);
-    for (unsigned i=0;i<=vcl_min(j,m);++i)
+    for (unsigned i=0;i<=std::min(j,m);++i)
     {
       vnl_vector<double> rxi = M.get_row(2*i);
       vnl_vector<double> ryi = M.get_row(2*i+1);

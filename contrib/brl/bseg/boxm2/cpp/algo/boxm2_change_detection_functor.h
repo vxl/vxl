@@ -3,12 +3,13 @@
 //:
 // \file
 
+#include <iostream>
 #include <boxm2/boxm2_data_traits.h>
 #include <boxm2/cpp/algo/boxm2_cast_ray_function.h>
 #include <boxm2/cpp/algo/boxm2_mog3_grey_processor.h>
 #include <vil/algo/vil_gauss_filter.h>
 #ifdef DEBUG
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
 #endif
 
 class boxm2_change_detection_functor
@@ -17,7 +18,7 @@ class boxm2_change_detection_functor
   //: "default" constructor
   boxm2_change_detection_functor() {}
 
-  bool init_data(vcl_vector<boxm2_data_base*> & datas,vil_image_view<float> * in_img, vil_image_view<float> * expected, vil_image_view<float>* vis_img)
+  bool init_data(std::vector<boxm2_data_base*> & datas,vil_image_view<float> * in_img, vil_image_view<float> * expected, vil_image_view<float>* vis_img)
   {
       alpha_data_=new boxm2_data<BOXM2_ALPHA>(datas[0]->data_buffer(),datas[0]->buffer_length(),datas[0]->block_id());
       mog3_data_=new boxm2_data<BOXM2_MOG3_GREY>(datas[1]->data_buffer(),datas[1]->buffer_length(),datas[1]->block_id());
@@ -33,10 +34,10 @@ class boxm2_change_detection_functor
     float vis=(*vis_img_)(i,j);
     float exp_int=(*expected_img_)(i,j);
     float intensity=(*in_img_)(i,j);
-    float curr_p=(1-vcl_exp(-alpha*seg_len))*vis;
+    float curr_p=(1-std::exp(-alpha*seg_len))*vis;
     exp_int+=curr_p*boxm2_processor_type<BOXM2_MOG3_GREY>::type::prob_density(mog3_data_->data()[index],intensity);
     (*expected_img_)(i,j)=exp_int;
-    vis*=vcl_exp(-alpha*seg_len);
+    vis*=std::exp(-alpha*seg_len);
     (*vis_img_)(i,j)=vis;
     return true;
   }
@@ -56,7 +57,7 @@ class normalize_foreground_probability_density
 
   float operator()(float &pix) const
   {
-    return 1.f/(1.f+pix)-0.5f*vcl_min(pix,1.f/pix);
+    return 1.f/(1.f+pix)-0.5f*std::min(pix,1.f/pix);
   }
 };
 
@@ -81,7 +82,7 @@ class boxm2_change_detection_with_uncertainity_functor
     dist_image_->fill(0.0f);
   }
 
-  bool set_data(vcl_vector<boxm2_data_base*> & datas,
+  bool set_data(std::vector<boxm2_data_base*> & datas,
                 vil_image_view<float> * in_img,
                 vil_image_view<float> * change_image)
   {
@@ -101,7 +102,7 @@ class boxm2_change_detection_with_uncertainity_functor
     boxm2_data<BOXM2_MOG3_GREY>::datatype mog3=mog3_data_->data()[index];
 
     float vis=(*vis_img_)(i,j);
-    float curr_p=(1-vcl_exp(-alpha*seg_len))*vis;
+    float curr_p=(1-std::exp(-alpha*seg_len))*vis;
 
     vnl_vector_fixed<unsigned char,8> updated_exp_distribution((unsigned char)0);
 
@@ -119,16 +120,16 @@ class boxm2_change_detection_with_uncertainity_functor
     else
       boxm2_processor_type<BOXM2_MOG3_GREY>::type::merge_mixtures(mog3,curr_p,exp_distribution,w2,updated_exp_distribution);
 #ifdef DEBUG
-    vcl_cout<<'[';
+    std::cout<<'[';
     for (unsigned k=0;k<8;k++)
-      vcl_cout<<(int)exp_distribution[k]<<',';
-    vcl_cout<<"] *"<<w2<<" +\n[";
+      std::cout<<(int)exp_distribution[k]<<',';
+    std::cout<<"] *"<<w2<<" +\n[";
     for (unsigned k=0;k<8;k++)
-      vcl_cout<<(int)mog3_data_->data()[index][k]<<',';
-    vcl_cout<<"]* "<<curr_p<<" =\n [";
+      std::cout<<(int)mog3_data_->data()[index][k]<<',';
+    std::cout<<"]* "<<curr_p<<" =\n [";
     for (unsigned k=0;k<8;k++)
-      vcl_cout<<(int)updated_exp_distribution[k]<<',';
-    vcl_cout<<"]\n\n";
+      std::cout<<(int)updated_exp_distribution[k]<<',';
+    std::cout<<"]\n\n";
 #endif
     (*running_weight_)(i,j)=curr_p+w2;
 
@@ -136,7 +137,7 @@ class boxm2_change_detection_with_uncertainity_functor
     double * final=reinterpret_cast<double *>(updated_exp_distribution.data_block());
     (*dist_image_)(i,j)=(*final);
 
-    vis*=vcl_exp(-alpha*seg_len);
+    vis*=std::exp(-alpha*seg_len);
     (*vis_img_)(i,j)=vis;
     return true;
   }
@@ -157,13 +158,13 @@ class boxm2_change_detection_with_uncertainity_functor
           {
               float pb=(*change_image_)(i,j);
               pb+=(*vis_img_)(i,j)*1.0f;
-              float bf=1.f/(1.f+pb)-0.5f*vcl_min(pb,1.f/pb);
+              float bf=1.f/(1.f+pb)-0.5f*std::min(pb,1.f/pb);
 
               ++count;
               unsigned char * exp_distribution_array=reinterpret_cast<unsigned char *>(dist_image_->top_left_ptr()+count);
               vnl_vector_fixed<unsigned char,8> exp_distribution(exp_distribution_array);
               float pr=boxm2_processor_type<BOXM2_MOG3_GREY>::type::prob_density(exp_distribution,expblur(i,j));
-              float br=pr/(1.f+pr)-0.5f*vcl_min(pr,1.f/pr);
+              float br=pr/(1.f+pr)-0.5f*std::min(pr,1.f/pr);
 
               (*change_image_)(i,j)=bf*br;
           }

@@ -20,13 +20,14 @@
 //   27 Oct 2010 - Peter Vanroose - moved Doxygen docs from .txx to .h
 // \endverbatim
 
+#include <vector>
+#include <iosfwd>
 #include <vnl/vnl_fwd.h> // for vnl_vector_fixed<T,2>
 #include <vnl/vnl_matrix_fixed.h>
 #include <vgl/vgl_homg_point_2d.h>
 #include <vgl/vgl_homg_line_2d.h>
 #include <vgl/vgl_conic.h>
-#include <vcl_vector.h>
-#include <vcl_iosfwd.h>
+#include <vcl_compiler.h>
 
 //:
 // A class to hold a plane-to-plane projective transformation matrix
@@ -54,12 +55,12 @@ class vgl_h_matrix_2d
   //: Constructor from 3x3 C-array
   explicit vgl_h_matrix_2d(T const* M) : t12_matrix_(M) {}
   //: Constructor from istream
-  explicit vgl_h_matrix_2d(vcl_istream& s);
+  explicit vgl_h_matrix_2d(std::istream& s);
   //: Constructor from file
   explicit vgl_h_matrix_2d(char const* filename);
   //: Constructor - calculate homography between two sets of 2D points (minimum 4)
-  vgl_h_matrix_2d(vcl_vector<vgl_homg_point_2d<T> > const& points1,
-                  vcl_vector<vgl_homg_point_2d<T> > const& points2);
+  vgl_h_matrix_2d(std::vector<vgl_homg_point_2d<T> > const& points1,
+                  std::vector<vgl_homg_point_2d<T> > const& points2);
 
   // Operations----------------------------------------------------------------
 
@@ -181,14 +182,14 @@ class vgl_h_matrix_2d
   //                   0  &   1  &   0  &   1  \\%
   //                   0  &   0  &   1  &   1
   // \end{array}$
-  bool projective_basis(vcl_vector<vgl_homg_point_2d<T> > const& four_points);
+  bool projective_basis(std::vector<vgl_homg_point_2d<T> > const& four_points);
 
   //: transformation to projective basis (canonical frame)
   // Compute the homography that takes the input set of lines to the canonical
   // frame.  The lines act as the dual projective basis for the canonical
   // coordinate system.  In the canonical frame the lines have equations:
   // x=0; y=0; w=0; x+y+w=0.  (The third line is the line at infinity.)
-  bool projective_basis(vcl_vector<vgl_homg_line_2d<T> > const& four_lines
+  bool projective_basis(std::vector<vgl_homg_line_2d<T> > const& four_lines
                        );
 
   // ---------- extract components as transformations ----------
@@ -203,16 +204,16 @@ class vgl_h_matrix_2d
   //: corresponds to translation for affine transformations
   vnl_vector_fixed<T,2> get_translation_vector() const;
 
-  //: Read H from vcl_istream
-  bool read(vcl_istream& s);
+  //: Read H from std::istream
+  bool read(std::istream& s);
   //: Read H from file
   bool read(char const* filename);
 };
 
-//: Print H on vcl_ostream
-template <class T> vcl_ostream& operator<<(vcl_ostream& s, vgl_h_matrix_2d<T> const& H);
-//: Read H from vcl_istream
-template <class T> vcl_istream& operator>>(vcl_istream& s, vgl_h_matrix_2d<T>&       H)
+//: Print H on std::ostream
+template <class T> std::ostream& operator<<(std::ostream& s, vgl_h_matrix_2d<T> const& H);
+//: Read H from std::istream
+template <class T> std::istream& operator>>(std::istream& s, vgl_h_matrix_2d<T>&       H)
 { H.read(s); return s; }
 
 #define VGL_H_MATRIX_2D_INSTANTIATE(T) extern "please include vgl/algo/vgl_h_matrix_2d.txx first"

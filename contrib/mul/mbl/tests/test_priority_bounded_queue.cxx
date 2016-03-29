@@ -1,17 +1,18 @@
 // This is mul/mbl/tests/test_priority_bounded_queue.cxx
-#include <vcl_functional.h>
-#include <vcl_deque.h>
-#include <vcl_iostream.h>
+#include <functional>
+#include <iostream>
+#include <deque>
+#include <vcl_compiler.h>
 #include <mbl/mbl_priority_bounded_queue.h>
 #include <testlib/testlib_test.h>
 
 void test_priority_bounded_queue()
 {
-  vcl_cout << "************************************\n"
+  std::cout << "************************************\n"
            << " Testing mbl_priority_bounded_queue\n"
            << "************************************\n";
 
-  mbl_priority_bounded_queue<int, vcl_deque<int>, vcl_greater<int> > pq(3);
+  mbl_priority_bounded_queue<int, std::deque<int>, std::greater<int> > pq(3);
 
   pq.push(6);
   pq.push(4);

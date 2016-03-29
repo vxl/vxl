@@ -1,5 +1,6 @@
 // This is core/vgl/io/tests/test_line_3d_2_points_io.cxx
-#include <vcl_iostream.h>
+#include <iostream>
+#include <vcl_compiler.h>
 #include <vgl/vgl_point_3d.h>
 #include <vsl/vsl_indent.h>
 #include <vgl/io/vgl_io_line_3d_2_points.h>
@@ -8,7 +9,7 @@
 
 void test_line_3d_2_points_float_io()
 {
-  vcl_cout << "**************************************\n"
+  std::cout << "**************************************\n"
            << "Testing vgl_line_3d_2_points<float> io\n"
            << "**************************************\n";
 
@@ -36,14 +37,14 @@ void test_line_3d_2_points_float_io()
   TEST("p2 == p_in.point2()", p2, p_in.point2());
   TEST("p_out == p_in", p_out, p_in);
 
-  vsl_print_summary(vcl_cout, p_out);
-  vcl_cout << '\n';
+  vsl_print_summary(std::cout, p_out);
+  std::cout << '\n';
 }
 
 
 void test_line_3d_2_points_double_io()
 {
-  vcl_cout << "***************************************\n"
+  std::cout << "***************************************\n"
            << "Testing vgl_line_3d_2_points<double> io\n"
            << "***************************************\n";
 
@@ -71,8 +72,8 @@ void test_line_3d_2_points_double_io()
   TEST("p2 == p_in.point2()", p2, p_in.point2());
   TEST("p_out == p_in", p_out, p_in);
 
-  vsl_print_summary(vcl_cout, p_out);
-  vcl_cout << '\n';
+  vsl_print_summary(std::cout, p_out);
+  std::cout << '\n';
 }
 
 

@@ -1,7 +1,8 @@
 // Some tests for vgl_intersection
 // J.L. Mundy June 13, 2014
 
-#include <vcl_iostream.h>
+#include <iostream>
+#include <vcl_compiler.h>
 #include <testlib/testlib_test.h>
 #include <vgl/vgl_box_2d.h>
 #include <vgl/vgl_line_segment_2d.h>
@@ -11,7 +12,7 @@
 #include <vgl/vgl_box_3d.h>
 void test_intersection()
 {
-  vcl_cout << "*****************************\n"
+  std::cout << "*****************************\n"
            << " Testing vgl_intersection\n"
            << "*****************************\n\n";
   //unit box with lower left corner at (0, 0)
@@ -59,7 +60,7 @@ void test_intersection()
   vgl_point_3d<double> org(0.0, 0.0, 0.0);
   vgl_plane_3d<double> pl(n,org);
   vgl_pointset_3d<double> psint = vgl_intersection<double>(pl, ptset, 1.0);
-  vcl_cout << psint << '\n';
+  std::cout << psint << '\n';
   TEST("Pointset intersect plane", psint.npts() == 2, true);
   vgl_box_3d<double> box3;
   box3.add(p1); box3.add(p2);

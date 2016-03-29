@@ -14,7 +14,7 @@ static void test_image_tableau(int argc, char* argv[])
   const char* input_file = argc>1 ? argv[1] : "Please give it as command line parameter";
   vil1_image img = vil1_load( input_file );
   if ( !img ) {
-    vcl_cout << "Couldn't load test image \"" << input_file << "\"\n";
+    std::cout << "Couldn't load test image \"" << input_file << "\"\n";
   } else {
     vgui_image_tableau_new img_tab( input_file );
     vil1_image img2 = img_tab->get_image();
@@ -46,7 +46,7 @@ static void test_image_tableau(int argc, char* argv[])
     }
     TEST( "Contents are correct", okay, true);
 
-    delete img1_buf;
+    delete [] img1_buf;
     delete img2_buf;
   }
 }

@@ -16,7 +16,8 @@
 // 2009-05-21 Peter Vanroose  istream operator>> re-implemented
 // \endverbatim
 
-#include <vcl_iosfwd.h>
+#include <iosfwd>
+#include <vcl_compiler.h>
 
 //----------------------------------------------------------------------
 
@@ -68,7 +69,7 @@ class vgl_vector_2d
   //  Either just reads two blank-separated numbers,
   //  or reads two comma-separated numbers,
   //  or reads two numbers in parenthesized form "(123, 321)"
-  vcl_istream& read(vcl_istream& is);
+  std::istream& read(std::istream& is);
 };
 
 #define v vgl_vector_2d<T>
@@ -77,14 +78,14 @@ class vgl_vector_2d
 
 //: Write "<vgl_vector_2d x,y> " to stream
 // \relatesalso vgl_vector_2d
-template <class T> vcl_ostream& operator<<(vcl_ostream& s, v const& p);
+template <class T> std::ostream& operator<<(std::ostream& s, v const& p);
 
 //: Read from stream, possibly with formatting
 //  Either just reads two blank-separated numbers,
 //  or reads two comma-separated numbers,
 //  or reads two numbers in parenthesized form "(123, 321)"
 // \relatesalso vgl_vector_2d
-template <class T> vcl_istream& operator>>(vcl_istream& s, v& p);
+template <class T> std::istream& operator>>(std::istream& s, v& p);
 
 
 //  +-+-+ vector_2d geometry and algebra +-+-+

@@ -8,11 +8,12 @@
 // \date   12 Oct 1999
 // \brief  See vgui_tview_tableau.h for a description of this file.
 
+#include <string>
+#include <cmath>
+#include <iostream>
 #include "vgui_tview_tableau.h"
 
-#include <vcl_string.h>
-#include <vcl_cmath.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
 
 #include <vgui/vgui_gl.h>
 #include <vgui/vgui_event.h>
@@ -24,7 +25,7 @@
 #include <vgui/vgui_popup_params.h>
 #include <vgui/vgui_menu.h>
 
-vcl_string vgui_tview_tableau::type_name() const {return "vgui_tview_tableau";}
+std::string vgui_tview_tableau::type_name() const {return "vgui_tview_tableau";}
 
 
 vgui_tview_tableau::vgui_tview_tableau(vgui_tableau_sptr const& t)
@@ -102,7 +103,7 @@ void vgui_tview_tableau::draw_tview_icon(float x, float y)
 
 void vgui_tview_tableau::draw_icons(vgui_tableau_sptr const& parent, float x, float y)
 {
-  vcl_vector<vgui_tableau_sptr> children;
+  std::vector<vgui_tableau_sptr> children;
   parent->get_children(&children);
 
   if (children.size() > 0)
@@ -120,7 +121,7 @@ void vgui_tview_tableau::draw_icons(vgui_tableau_sptr const& parent, float x, fl
     glLineWidth(1);
 
     int ia = 0;
-    for (vcl_vector<vgui_tableau_sptr>::iterator i = children.begin();
+    for (std::vector<vgui_tableau_sptr>::iterator i = children.begin();
          i != children.end(); ++i, ++ia)
     {
       glDisable(GL_LINE_STIPPLE);
@@ -204,10 +205,10 @@ void vgui_tview_tableau::draw_icons(vgui_tableau_sptr const& parent, float x, fl
 }
 
 
-void vgui_tview_tableau::add_icons(vcl_vector<vgui_tview_tableau::icon>* icons, vgui_tableau_sptr const& parent,
+void vgui_tview_tableau::add_icons(std::vector<vgui_tview_tableau::icon>* icons, vgui_tableau_sptr const& parent,
                                    float x, float y)
 {
-  vcl_vector<vgui_tableau_sptr> children;
+  std::vector<vgui_tableau_sptr> children;
   parent->get_children(&children);
 
   if (children.size() > 0)
@@ -221,7 +222,7 @@ void vgui_tview_tableau::add_icons(vcl_vector<vgui_tview_tableau::icon>* icons, 
     float offset_x = 0;
 
 
-    for (vcl_vector<vgui_tableau_sptr>::iterator i = children.begin();
+    for (std::vector<vgui_tableau_sptr>::iterator i = children.begin();
          i != children.end(); ++i)
     {
       add_icons(icons, *i, start_x+offset_x, ny);
@@ -237,22 +238,22 @@ void vgui_tview_tableau::add_icons(vcl_vector<vgui_tview_tableau::icon>* icons, 
   icons->push_back(this_icon);
 }
 
-vgui_tableau_sptr vgui_tview_tableau::find_closest_icon(vcl_vector<vgui_tview_tableau::icon> const& icons, float ix, float iy)
+vgui_tableau_sptr vgui_tview_tableau::find_closest_icon(std::vector<vgui_tview_tableau::icon> const& icons, float ix, float iy)
 {
 #ifdef DEBUG
-  vcl_cerr << "vgui_tview_tableau::find_closest_icon() number of icons = " << icons.size() << '\n';
+  std::cerr << "vgui_tview_tableau::find_closest_icon() number of icons = " << icons.size() << '\n';
 #endif
 
   float closest_dist = -1;
   vgui_tableau_sptr closest;
 
-  for (vcl_vector<icon>::const_iterator i_iter = icons.begin();
+  for (std::vector<icon>::const_iterator i_iter = icons.begin();
        i_iter != icons.end(); ++i_iter) {
     icon i = *i_iter;
     //hypot(i.x - ix, i.y - iy);
     float dx = i.x - ix;
     float dy = i.y - iy;
-    float dist = vcl_sqrt(dx*dx + dy*dy);
+    float dist = std::sqrt(dx*dx + dy*dy);
     if (!closest || dist < closest_dist) {
       closest_dist = dist;
       closest = i.tableau;
@@ -263,11 +264,11 @@ vgui_tableau_sptr vgui_tview_tableau::find_closest_icon(vcl_vector<vgui_tview_ta
 }
 
 
-vcl_string strip_preceeding_numerals(const char* name)
+std::string strip_preceeding_numerals(const char* name)
 {
-  vcl_string str(name);
+  std::string str(name);
 
-  vcl_string::iterator s_iter = str.begin();
+  std::string::iterator s_iter = str.begin();
   for (; s_iter != str.end(); ++s_iter) {
     if (*s_iter < '0' || *s_iter > '9') {
       break;
@@ -283,7 +284,7 @@ vcl_string strip_preceeding_numerals(const char* name)
 bool vgui_tview_tableau::handle(const vgui_event& e)
 {
 #ifdef DEBUG
-  vcl_cerr << "vgui_tview_tableau::handle\n";
+  std::cerr << "vgui_tview_tableau::handle\n";
 #endif
 
   GLfloat vp[4];
@@ -306,7 +307,7 @@ bool vgui_tview_tableau::handle(const vgui_event& e)
     return true;
   }
   else if (e.type==vgui_MOTION) {
-    vcl_vector<icon> icons;
+    std::vector<icon> icons;
     add_icons(&icons, child, startx, starty);
 
     vgui_projection_inspector pi;
@@ -316,7 +317,7 @@ bool vgui_tview_tableau::handle(const vgui_event& e)
     closest_icon = find_closest_icon(icons, ix, iy);
   }
   else if (e.type==vgui_BUTTON_DOWN) {
-    vcl_vector<icon> icons;
+    std::vector<icon> icons;
     add_icons(&icons, child, startx, starty);
 
     vgui_projection_inspector pi;
@@ -327,16 +328,16 @@ bool vgui_tview_tableau::handle(const vgui_event& e)
     active_icon = t;
 
 #ifdef DEBUG
-    vcl_cerr << "icon is " << (void*) t << '\n';
+    std::cerr << "icon is " << (void*) t << '\n';
 #endif
     if (t) {
-      vcl_cerr << "---------\n"
+      std::cerr << "---------\n"
 #ifdef DEBUG
                << "| type : " << strip_preceeding_numerals(typeid(*t).name()) << '\n'
 #endif
-               << "| type_name   : " << t->type_name() << vcl_endl
-               << "| file_name   : " << t->file_name() << vcl_endl
-               << "| pretty_name : " << t->pretty_name() << vcl_endl
+               << "| type_name   : " << t->type_name() << std::endl
+               << "| file_name   : " << t->file_name() << std::endl
+               << "| pretty_name : " << t->pretty_name() << std::endl
                << "---------\n\n";
     }
 

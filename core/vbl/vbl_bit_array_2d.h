@@ -16,7 +16,8 @@
 // \endverbatim
 //-----------------------------------------------------------------------------
 
-#include <vcl_iosfwd.h>
+#include <iosfwd>
+#include <vcl_compiler.h>
 
 //: simple 2D bit array
 // essentially identical to vbl_array_2d<bool> but more efficiently stored
@@ -24,7 +25,7 @@ class vbl_bit_array_2d
 {
  public:
   // Default constructor
-  vbl_bit_array_2d() : data_(0), num_rows_(0), num_cols_(0) {}
+  vbl_bit_array_2d() : data_(VXL_NULLPTR), num_rows_(0), num_cols_(0) {}
   //: Construct num_rows x num_cols array and leave data uninitialised
   vbl_bit_array_2d(unsigned int m, unsigned int n) { construct(m,n); }
   //: Construct num_rows x num_cols array and fill all cells with v
@@ -77,13 +78,13 @@ class vbl_bit_array_2d
   unsigned int num_rows_;
   unsigned int num_cols_;
 
-  void destruct() { delete[] data_; data_=0; }
+  void destruct() { delete[] data_; data_=VXL_NULLPTR; }
   void construct(unsigned int m, unsigned int n);
 
   //helper
   void index( unsigned int x, unsigned int y, unsigned long &byteindex, unsigned int &bitindex) const;
 };
 
-vcl_ostream& operator<< (vcl_ostream& os, const vbl_bit_array_2d &v);
+std::ostream& operator<< (std::ostream& os, const vbl_bit_array_2d &v);
 
 #endif // vbl_bit_array_2d_h_

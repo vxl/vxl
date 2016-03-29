@@ -13,9 +13,10 @@
 //   <none yet>
 // \endverbatim
 
+#include <vector>
+#include <iostream>
 #include "brec_part_base.h"
-#include <vcl_vector.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
 #include "brec_part_gaussian_sptr.h"
 
 #include <vnl/vnl_vector_fixed.h>
@@ -44,10 +45,10 @@ class brec_part_gaussian : public brec_part_instance
   virtual vnl_vector_fixed<float,2> direction_vector(void);  // return a unit vector that gives direction of this instance in the image
 
   //: Print an ascii summary to the stream
-  virtual void print_summary(vcl_ostream &os) const
+  virtual void print_summary(std::ostream &os) const
   {
-    os << "x: " << x_ << " y: " << y_ << " strength: " << strength_ << vcl_endl
-       << "lambda0: " << lambda0_ << " lambda1: " << lambda1_ << " theta: " << theta_ << vcl_endl;
+    os << "x: " << x_ << " y: " << y_ << " strength: " << strength_ << std::endl
+       << "lambda0: " << lambda0_ << " lambda1: " << lambda1_ << " theta: " << theta_ << std::endl;
   }
 
   virtual brec_part_gaussian* cast_to_gaussian(void);
@@ -90,12 +91,12 @@ class brec_part_gaussian : public brec_part_instance
   //  \return all the instances which have a posterior larger than zero (--> no thresholding, return "all" the responses)
   //  \p fg_prob_img is the probability of being foreground for each pixel
   //  \p pb_zero is the constant required for the background response model (probability of zero response)
-  bool extract(vil_image_view<float>& img, vil_image_view<float>& fg_prob_img, float rot_angle, vcl_string model_dir, vcl_vector<brec_part_instance_sptr>& instances, float prior_class);
+  bool extract(vil_image_view<float>& img, vil_image_view<float>& fg_prob_img, float rot_angle, std::string model_dir, std::vector<brec_part_instance_sptr>& instances, float prior_class);
 
   //: extract and set rho to class probability density of the response
   //  Assumes weibull parameters have already been fitted (i.e. fitted_weibull_ = true)
   //  This method is to be used during training and it returns an instance if class_prob >= 0.9
-  bool extract(vil_image_view<float>& img, vil_image_view<float>& class_prob_image, float rot_angle, vcl_vector<brec_part_instance_sptr>& instances);
+  bool extract(vil_image_view<float>& img, vil_image_view<float>& class_prob_image, float rot_angle, std::vector<brec_part_instance_sptr>& instances);
 
   //: find P(alpha in foreground): the probability that this operator alpha is in foreground
   //  P(alpha in foreground) = argmax_x_kl P(x_kl in foreground) where x_kl is in mask of operator alpha
@@ -104,7 +105,7 @@ class brec_part_gaussian : public brec_part_instance
   //  P(alpha in background) = 1-argmax_x_kl P(x_kl in foreground) where x_kl is in mask of operator alpha
   float bg_prob_operator(vil_image_view<float>& fg_prob_img, unsigned i, unsigned j);
 
-  vcl_string string_identifier();
+  std::string string_identifier();
 
  public:
   float lambda0_;  // axis
@@ -125,7 +126,7 @@ class brec_part_gaussian : public brec_part_instance
 
 //: extracts only one type of primitive and adds to the part vector
 //  Strength_threshold in [0,1] - min strength to declare the part as detected
-bool extract_gaussian_primitives(vil_image_resource_sptr img, float lambda0, float lambda1, float theta, bool bright, float cutoff_percentage, float strength_threshold, unsigned type, vcl_vector<brec_part_instance_sptr>& parts);
+bool extract_gaussian_primitives(vil_image_resource_sptr img, float lambda0, float lambda1, float theta, bool bright, float cutoff_percentage, float strength_threshold, unsigned type, std::vector<brec_part_instance_sptr>& parts);
 
 bool draw_gauss_to_ps(vul_psfile& ps, brec_part_gaussian_sptr pi, float x, float y, float cr, float cg, float cb);
 

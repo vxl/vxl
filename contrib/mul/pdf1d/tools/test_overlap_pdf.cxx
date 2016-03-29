@@ -1,7 +1,8 @@
 //:
 // \file
-#include <vcl_iostream.h>
-#include <vcl_cmath.h>
+#include <iostream>
+#include <cmath>
+#include <vcl_compiler.h>
 #include <mbl/mbl_stats_1d.h>
 #include <vnl/vnl_vector.h>
 #include <vnl/vnl_random.h>
@@ -43,18 +44,18 @@ void run_experiment(const pdf1d_pdf& pdf,
 
   pdf1d_calc_mean_var(B_mean,B_var,b);
 #if 0
-  vcl_cout<<B_mean<<" sd:"<<vcl_sqrt(B_var)<<vcl_endl;
+  std::cout<<B_mean<<" sd:"<<std::sqrt(B_var)<<std::endl;
 
   // Test if distribution of B is gaussian or log gaussian:
-  vcl_cout<<"Compare B pdf to gaussian: "<<pdf1d_compare_to_gaussian_1d(b,n_reps)<<vcl_endl;
+  std::cout<<"Compare B pdf to gaussian: "<<pdf1d_compare_to_gaussian_1d(b,n_reps)<<std::endl;
 
   vnl_vector<double> log_b = b;
-  for (int i=0;i<b.size();++i) log_b[i]=vcl_log(b[i]);
-  vcl_cout<<"Compare log(B) pdf to gaussian: "<<pdf1d_compare_to_gaussian_1d(log_b,n_reps)<<vcl_endl;
+  for (int i=0;i<b.size();++i) log_b[i]=std::log(b[i]);
+  std::cout<<"Compare log(B) pdf to gaussian: "<<pdf1d_compare_to_gaussian_1d(log_b,n_reps)<<std::endl;
 
   vnl_vector<double> exp_b = b;
-  for (int i=0;i<b.size();++i) exp_b[i]=vcl_exp(b[i]);
-  vcl_cout<<"Compare exp(B) pdf to gaussian: "<<pdf1d_compare_to_gaussian_1d(exp_b,n_reps)<<vcl_endl;
+  for (int i=0;i<b.size();++i) exp_b[i]=std::exp(b[i]);
+  std::cout<<"Compare exp(B) pdf to gaussian: "<<pdf1d_compare_to_gaussian_1d(exp_b,n_reps)<<std::endl;
 #endif
 }
 
@@ -70,9 +71,9 @@ void run_experiment(const pdf1d_pdf& pdf,int n_samples, int n_repeats)
     B_var_stats.obs(B_var);
   }
 
-  vcl_cout<<"Overall statistics of B(stochastic):"<<vcl_endl;
-  B_mean_stats.print_summary(vcl_cout);
-  vcl_cout<<"\nAverage SD: "<<vcl_sqrt(B_var_stats.mean())<<vcl_endl;
+  std::cout<<"Overall statistics of B(stochastic):"<<std::endl;
+  B_mean_stats.print_summary(std::cout);
+  std::cout<<"\nAverage SD: "<<std::sqrt(B_var_stats.mean())<<std::endl;
 }
 #endif
 
@@ -98,9 +99,9 @@ void run_multi_experiments(const pdf1d_pdf& pdf,
 // Generate graph of Mean/SD B for increasing numbers of samples
 void graph_results(const pdf1d_pdf& pdf,
                    const pdf1d_builder& test_builder,
-                   const vcl_string& path)
+                   const std::string& path)
 {
-  vcl_ofstream ofs(path.c_str(),vcl_ios::out);
+  std::ofstream ofs(path.c_str(),std::ios::out);
   double B_mean,B_var;
 
   int n_repeats = 50;
@@ -109,12 +110,12 @@ void graph_results(const pdf1d_pdf& pdf,
   {
     int ns = i*10;
     run_multi_experiments(pdf,test_builder,B_mean,B_var,ns,n_repeats);
-    ofs<<ns<<' '<<B_mean<<' '<<vcl_sqrt(B_var)<<vcl_endl;
+    ofs<<ns<<' '<<B_mean<<' '<<std::sqrt(B_var)<<std::endl;
   }
 
   ofs.close();
 
-  vcl_cout<<"Results saved to "<<path<<vcl_endl;
+  std::cout<<"Results saved to "<<path<<std::endl;
 }
 
 int main()
@@ -127,7 +128,7 @@ int main()
   // Generate samples with one pdf and test if it matches form defined by the builder
   graph_results(flat,g_builder,"B_vs_Nsamples.txt");
 #if 0
-  vcl_cout<<"Testing distribution of Bhat. overlaps."<<vcl_endl;
+  std::cout<<"Testing distribution of Bhat. overlaps."<<std::endl;
 
   int n_samples = 10;
   int n_repeats = 20;

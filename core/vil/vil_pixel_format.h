@@ -4,7 +4,7 @@
 //:
 // \file
 // \author Ian Scott.
-// Note that a vcl_complex<float> is thought of as a scalar
+// Note that a std::complex<float> is thought of as a scalar
 // pixel type for vil's purposes.
 //
 // \verbatim
@@ -12,11 +12,12 @@
 //   23 Oct.2003 - Peter Vanroose - Added support for 64-bit int pixels
 // \endverbatim
 
+#include <iosfwd>
+#include <complex>
 #include <vil/vil_rgb.h>
 #include <vil/vil_rgba.h>
 #include <vxl_config.h> // for vxl_uint_32 etc.
-#include <vcl_iosfwd.h>
-#include <vcl_complex.h>
+#include <vcl_compiler.h>
 
 //: Describes the type of the concrete data.
 enum vil_pixel_format
@@ -66,9 +67,9 @@ enum vil_pixel_format
   VIL_PIXEL_FORMAT_RGBA_DOUBLE = 33,
 //  VIL_PIXEL_FORMAT_RGBA_LONG_DOUBLE = 34,
 
-//: vcl_complex<float> is a scalar for vil's purposes.
+//: std::complex<float> is a scalar for vil's purposes.
   VIL_PIXEL_FORMAT_COMPLEX_FLOAT = 35,
-//: vcl_complex<double> is a scalar for vil's purposes.
+//: std::complex<double> is a scalar for vil's purposes.
   VIL_PIXEL_FORMAT_COMPLEX_DOUBLE = 36,
 
 // Add values here and be careful to keep values in vil_pixel_format.cxx in sync
@@ -154,8 +155,8 @@ vil_pixel_format_macro(vil_rgba<vxl_sbyte>,   vxl_sbyte,   VIL_PIXEL_FORMAT_RGBA
 vil_pixel_format_macro(vil_rgba<float>,       float,       VIL_PIXEL_FORMAT_RGBA_FLOAT);
 vil_pixel_format_macro(vil_rgba<double>,      double,      VIL_PIXEL_FORMAT_RGBA_DOUBLE);
 
-vil_pixel_format_macro(vcl_complex<float>, vcl_complex<float>, VIL_PIXEL_FORMAT_COMPLEX_FLOAT);
-vil_pixel_format_macro(vcl_complex<double>,vcl_complex<double>,VIL_PIXEL_FORMAT_COMPLEX_DOUBLE);
+vil_pixel_format_macro(std::complex<float>, std::complex<float>, VIL_PIXEL_FORMAT_COMPLEX_FLOAT);
+vil_pixel_format_macro(std::complex<double>,std::complex<double>,VIL_PIXEL_FORMAT_COMPLEX_DOUBLE);
 
 #undef vil_pixel_format_macro
 
@@ -169,7 +170,7 @@ unsigned vil_pixel_format_num_components(enum vil_pixel_format f);
 vil_pixel_format vil_pixel_format_component_format(enum vil_pixel_format f);
 
 //: Output a pretty string representing the pixel format.
-vcl_ostream & operator << (vcl_ostream &os, vil_pixel_format f);
+std::ostream & operator << (std::ostream &os, vil_pixel_format f);
 
 //: Convert a string into a pixel format.
 // This uses the same encoding as operator<<.

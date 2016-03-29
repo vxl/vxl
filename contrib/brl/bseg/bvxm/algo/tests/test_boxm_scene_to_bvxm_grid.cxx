@@ -11,23 +11,23 @@ const bool debug = true;
 
 void fill_octree(boct_tree<short,float>* tree)
 {
-  vcl_cout << "Creating Octree" << vcl_endl;
+  std::cout << "Creating Octree" << std::endl;
 
   //Create tree
   tree->init_cells(0.1f);
   tree->split();
-  vcl_cout << "Level 1" << vcl_endl;
+  std::cout << "Level 1" << std::endl;
 
   {
-    vcl_vector<boct_tree_cell<short,float>*> leaves = tree->leaf_cells();
+    std::vector<boct_tree_cell<short,float>*> leaves = tree->leaf_cells();
     tree->init_cells(0.1f);
     leaves[1]->set_data(0.5f);
     if (debug)
       for (unsigned i=0; i<leaves.size(); i++) {
-        vcl_cout << leaves[i]->get_code().x_loc_ << ','
+        std::cout << leaves[i]->get_code().x_loc_ << ','
                  << leaves[i]->get_code().y_loc_ << ','
                  << leaves[i]->get_code().z_loc_ << ','
-                 << leaves[i]->data() << vcl_endl;
+                 << leaves[i]->data() << std::endl;
       }
 
     leaves[1]->split();
@@ -35,28 +35,28 @@ void fill_octree(boct_tree<short,float>* tree)
 
   if (debug)
   {
-    vcl_cout << "Level 0" << vcl_endl;
-    vcl_vector<boct_tree_cell<short,float>*> leaves = tree->cells_at_level((short)0);
+    std::cout << "Level 0" << std::endl;
+    std::vector<boct_tree_cell<short,float>*> leaves = tree->cells_at_level((short)0);
     for (unsigned i=0; i<leaves.size(); i++) {
       leaves[i]->set_data(0.9f);
-      vcl_cout << leaves[i]->get_code().x_loc_ << ','
+      std::cout << leaves[i]->get_code().x_loc_ << ','
                << leaves[i]->get_code().y_loc_ << ','
                << leaves[i]->get_code().z_loc_ << ','
                << leaves[i]->get_code().level << ','
-               << leaves[i]->data() << vcl_endl;
+               << leaves[i]->data() << std::endl;
     }
   }
 
   if (debug)
   {
-    vcl_cout << "All Levels" << vcl_endl;
-    vcl_vector<boct_tree_cell<short,float>*> leaves = tree->all_cells();
+    std::cout << "All Levels" << std::endl;
+    std::vector<boct_tree_cell<short,float>*> leaves = tree->all_cells();
     for (unsigned i=0; i<leaves.size(); i++) {
-      vcl_cout << leaves[i]->get_code().x_loc_ << ','
+      std::cout << leaves[i]->get_code().x_loc_ << ','
                << leaves[i]->get_code().y_loc_ << ','
                << leaves[i]->get_code().z_loc_ << ','
                << leaves[i]->get_code().level << ','
-               << leaves[i]->data() << vcl_endl;
+               << leaves[i]->data() << std::endl;
     }
   }
 }
@@ -78,7 +78,7 @@ static void test_boxm_scene_to_bvxm_grid()
   vgl_vector_3d<unsigned> world_dim(1,1,1);
 
   boxm_scene<tree_type> *scene= new boxm_scene<tree_type>(lvcs, origin, block_dim, world_dim,true);
-  vcl_string scene_path=".";
+  std::string scene_path=".";
   scene->set_paths(scene_path, "in_block");
   scene->set_appearance_model(BOXM_FLOAT);
   scene->clean_scene();
@@ -89,7 +89,7 @@ static void test_boxm_scene_to_bvxm_grid()
   boxm_block<tree_type> *block = scene->get_active_block();
   block->init_tree(tree);
   scene->write_active_block();
-  vcl_string input_path("scene_to_grid.vox");
+  std::string input_path("scene_to_grid.vox");
 
   bvxm_voxel_grid<float> *grid = boxm_scene_to_bvxm_grid(*scene,input_path, 0);
 
@@ -100,7 +100,7 @@ static void test_boxm_scene_to_bvxm_grid()
     for (unsigned y = 0; y<grid->grid_size().y(); ++y)
       for (unsigned x= 0; x<grid->grid_size().x(); ++x)
       {
-        vcl_cout << "Value at " << '(' << x << ',' << y <<',' <<z << ")= " << (*grid_it)(x,y,z) << vcl_endl;
+        std::cout << "Value at " << '(' << x << ',' << y <<',' <<z << ")= " << (*grid_it)(x,y,z) << std::endl;
       }
 
   // TEST("Valid cropped tree", result, true);

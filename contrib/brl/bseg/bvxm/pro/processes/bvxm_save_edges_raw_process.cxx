@@ -26,11 +26,11 @@ bool bvxm_save_edges_raw_process_cons(bprb_func_process& pro)
   //input[1]: The filename to write to
   //input[2]: Scale
 
-  vcl_vector<vcl_string> input_types_(n_inputs_);
+  std::vector<std::string> input_types_(n_inputs_);
   input_types_[0] = "bvxm_voxel_world_sptr";
   input_types_[1] = "vcl_string";
   input_types_[2] = "unsigned";
-  vcl_vector<vcl_string> output_types_(n_outputs_);
+  std::vector<std::string> output_types_(n_outputs_);
   return pro.set_input_types(input_types_)
       && pro.set_output_types(output_types_);
 }
@@ -41,7 +41,7 @@ bool bvxm_save_edges_raw_process(bprb_func_process& pro)
 
   if (pro.n_inputs()<n_inputs_)
   {
-    vcl_cout << pro.name() << " The number of inputs should be " << n_inputs_<< vcl_endl;
+    std::cout << pro.name() << " The number of inputs should be " << n_inputs_<< std::endl;
     return false;
   }
 
@@ -49,13 +49,13 @@ bool bvxm_save_edges_raw_process(bprb_func_process& pro)
   unsigned i = 0;
   bvxm_voxel_world_sptr world = pro.get_input<bvxm_voxel_world_sptr>(i++);
   bvxm_edge_ray_processor edge_proc(world);
-  vcl_string filename = pro.get_input<vcl_string>(i++);
+  std::string filename = pro.get_input<std::string>(i++);
   unsigned scale = pro.get_input<unsigned>(i++);
 
   float n_normal = world->get_params()->edges_n_normal();
 
   if ( !world ){
-    vcl_cout << pro.name() <<" :--  Input 0  is not valid!\n";
+    std::cout << pro.name() <<" :--  Input 0  is not valid!\n";
     return false;
   }
 

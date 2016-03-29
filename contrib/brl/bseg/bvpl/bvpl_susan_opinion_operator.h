@@ -13,6 +13,7 @@
 //
 // \endverbatim
 
+#include <iostream>
 #include "bvpl_subgrid_iterator.h"
 #include <bvpl/kernels/bvpl_kernel_iterator.h>
 #include "bvpl_voxel_subgrid.h"
@@ -20,7 +21,7 @@
 #include <bvxm/grid/bvxm_opinion.h>
 
 #include <vgl/vgl_point_3d.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
 
 class bvpl_susan_opinion_operator
 {
@@ -34,8 +35,8 @@ class bvpl_susan_opinion_operator
                bvpl_kernel_vector_sptr kernel,
                bvxm_voxel_grid<bvxm_opinion>* out_grid)
   {
-    vcl_cout<<"Operator"<<vcl_endl
-            <<"Min "<<kernel->min()<<" Max "<< kernel->max()<<vcl_endl;
+    std::cout<<"Operator"<<std::endl
+            <<"Min "<<kernel->min()<<" Max "<< kernel->max()<<std::endl;
     bvpl_subgrid_iterator<int > sub_dir_iter(dirgrid, kernel->min(), kernel->max());
     bvpl_subgrid_iterator<bvxm_opinion> sub_opn_iter(opngrid, kernel->min(), kernel->max());
     bvpl_subgrid_iterator<bvxm_opinion> output_iter(out_grid, kernel->min(), kernel->max());
@@ -52,8 +53,8 @@ class bvpl_susan_opinion_operator
         bvpl_kernel_iterator kernel_iter = cur_kernel->iterator();
 
         bvxm_opinion cur_opn=(*sub_opn_iter).get_voxel();
-        vcl_vector<float> thetai;
-        vcl_vector<float> wi;
+        std::vector<float> thetai;
+        std::vector<float> wi;
 
         //reset the iterator
         kernel_iter.begin();
@@ -72,7 +73,7 @@ class bvpl_susan_opinion_operator
             {
               vnl_float_3 normal=kernel->kernels_[kernel_id]->axis();
               float dot_prod=dot_product<float,3>(cur_normal,normal);
-              float measure_dot_prod=1-vcl_fabs(dot_prod);
+              float measure_dot_prod=1-std::fabs(dot_prod);
 
               thetai.push_back(measure_dot_prod);
               wi.push_back(opn.b());
@@ -97,7 +98,7 @@ class bvpl_susan_opinion_operator
           sig=tot/cnt;
         float weight_sig=0.0;
         if (sig!=0.0)
-          weight_sig=1-vcl_exp(-mu*mu/(sig));
+          weight_sig=1-std::exp(-mu*mu/(sig));
         // set the result at the output grid
         (*output_iter).set_voxel(bvxm_opinion(cur_opn.b()*weight_sig));
       }

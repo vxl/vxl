@@ -1,4 +1,6 @@
 // This is brl/bseg/boxm2/ocl/pro/processes/boxm2_update_parents_alpha_process.cxx
+#include <iostream>
+#include <fstream>
 #include <bprb/bprb_func_process.h>
 //:
 // \file
@@ -7,7 +9,7 @@
 // \author Vishal Jain
 // \date Apr 23, 2013
 
-#include <vcl_fstream.h>
+#include <vcl_compiler.h>
 #include <boxm2/ocl/boxm2_opencl_cache.h>
 #include <boxm2/boxm2_scene.h>
 #include <boxm2/boxm2_block.h>
@@ -30,8 +32,8 @@ namespace boxm2_ocl_update_parents_alpha_process_globals
     void compile_kernel(bocl_device_sptr device, bocl_kernel* merge_kernel)
     {
         //gather all render sources... seems like a lot for rendering...
-        vcl_vector<vcl_string> src_paths;
-        vcl_string source_dir = boxm2_ocl_util::ocl_src_root();
+        std::vector<std::string> src_paths;
+        std::string source_dir = boxm2_ocl_util::ocl_src_root();
         src_paths.push_back(source_dir + "scene_info.cl");
         src_paths.push_back(source_dir + "bit/bit_tree_library_functions.cl");
         src_paths.push_back(source_dir + "bit/update_parents_alpha.cl");
@@ -45,7 +47,7 @@ namespace boxm2_ocl_update_parents_alpha_process_globals
     }
 
     //map of compiled kernels, organized by data type
-    static vcl_map<vcl_string,bocl_kernel* > kernels;
+    static std::map<std::string,bocl_kernel* > kernels;
 }
 
 bool boxm2_ocl_update_parents_alpha_process_cons(bprb_func_process& pro)
@@ -53,14 +55,14 @@ bool boxm2_ocl_update_parents_alpha_process_cons(bprb_func_process& pro)
     using namespace boxm2_ocl_update_parents_alpha_process_globals;
 
     //process takes 1 input
-    vcl_vector<vcl_string> input_types_(n_inputs_);
+    std::vector<std::string> input_types_(n_inputs_);
     input_types_[0] = "bocl_device_sptr";
     input_types_[1] = "boxm2_scene_sptr";
     input_types_[2] = "boxm2_opencl_cache_sptr";
 
     // process has 1 output:
     // output[0]: scene sptr
-    vcl_vector<vcl_string>  output_types_(n_outputs_);
+    std::vector<std::string>  output_types_(n_outputs_);
     return pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
 }
 
@@ -68,7 +70,7 @@ bool boxm2_ocl_update_parents_alpha_process(bprb_func_process& pro)
 {
     using namespace boxm2_ocl_update_parents_alpha_process_globals;
     if ( pro.n_inputs() < n_inputs_ ) {
-        vcl_cout << pro.name() << ": The input number should be " << n_inputs_<< vcl_endl;
+        std::cout << pro.name() << ": The input number should be " << n_inputs_<< std::endl;
         return false;
     }
     float transfer_time=0.0f;
@@ -79,21 +81,21 @@ bool boxm2_ocl_update_parents_alpha_process(bprb_func_process& pro)
     boxm2_scene_sptr scene =pro.get_input<boxm2_scene_sptr>(i++);
     boxm2_opencl_cache_sptr opencl_cache= pro.get_input<boxm2_opencl_cache_sptr>(i++);
 
-    vcl_string identifier=device->device_identifier();
+    std::string identifier=device->device_identifier();
     // create a command queue.
     int status=0;
     cl_command_queue queue = clCreateCommandQueue(device->context(),
                                                   *(device->device_id()),
                                                   CL_QUEUE_PROFILING_ENABLE,&status);
     if (status!=0) {
-        vcl_cout<<" ERROR in initializing a queue"<<vcl_endl;
+        std::cout<<" ERROR in initializing a queue"<<std::endl;
         return false;
     }
 
     //set tree identifier and compile (indexes into merge tree kernel)
     if (kernels.find(identifier)==kernels.end())
     {
-        vcl_cout<<"===========Compiling kernels==========="<<vcl_endl;
+        std::cout<<"===========Compiling kernels==========="<<std::endl;
         bocl_kernel * kernel=new bocl_kernel();
         compile_kernel(device,kernel);
         kernels[identifier]=kernel;
@@ -111,13 +113,13 @@ bool boxm2_ocl_update_parents_alpha_process(bprb_func_process& pro)
 
     //2. set workgroup size
     opencl_cache->clear_cache();
-    vcl_map<boxm2_block_id, boxm2_block_metadata> blocks = scene->blocks();
-    vcl_map<boxm2_block_id, boxm2_block_metadata>::iterator blk_iter;
+    std::map<boxm2_block_id, boxm2_block_metadata> blocks = scene->blocks();
+    std::map<boxm2_block_id, boxm2_block_metadata>::iterator blk_iter;
         bocl_kernel* kern=kernels[identifier];
     for (blk_iter = blocks.begin(); blk_iter != blocks.end(); ++blk_iter)
     {
         boxm2_block_id id = blk_iter->first;
-        vcl_cout<<"Updating Parents Alpha"<<id<<vcl_endl;
+        std::cout<<"Updating Parents Alpha"<<id<<std::endl;
         //clear cache
         boxm2_block_metadata data = blk_iter->second;
         int numTrees = data.sub_block_num_.x() * data.sub_block_num_.y() * data.sub_block_num_.z();
@@ -128,8 +130,8 @@ bool boxm2_ocl_update_parents_alpha_process(bprb_func_process& pro)
         bocl_mem* alpha     = opencl_cache->get_data<BOXM2_ALPHA>(scene,id);
         bocl_mem* blk_info  = opencl_cache->loaded_block_info();
         transfer_time += (float) transfer.all();
-        vcl_size_t lThreads[] = {16, 1};
-        vcl_size_t gThreads[] = {RoundUp(numTrees,lThreads[0]), 1};
+        std::size_t lThreads[] = {16, 1};
+        std::size_t gThreads[] = {RoundUp(numTrees,lThreads[0]), 1};
 
         //set first kernel args
         kern->set_arg( blk_info );
@@ -152,7 +154,7 @@ bool boxm2_ocl_update_parents_alpha_process(bprb_func_process& pro)
 
     }
 
-    vcl_cout<<"Update Parents Alpha: "<<gpu_time<<vcl_endl;
+    std::cout<<"Update Parents Alpha: "<<gpu_time<<std::endl;
     return true;
 }
 

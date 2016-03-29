@@ -49,7 +49,7 @@ class rgrl_est_spline
             rgrl_transformation const& cur_transform ) const;
 
   //: Type of transformation estimated by this estimator.
-  const vcl_type_info& transformation_type() const;
+  const std::type_info& transformation_type() const;
 
   void set_optimize_method( int optimize_method )
     { optimize_method_ = optimize_method; }

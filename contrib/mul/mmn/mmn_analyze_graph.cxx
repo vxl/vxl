@@ -16,9 +16,9 @@
 //  root to the leaves.  The original order gives a method of
 //  visiting every node only after any child/leaf nodes have been
 //  visited first.
-bool mmn_analyze_graph(const vcl_vector<unsigned>& n,
-                       const vcl_vector<mmn_arc>& arc,
-                       vcl_vector<mmn_dependancy>& dep,
+bool mmn_analyze_graph(const std::vector<unsigned>& n,
+                       const std::vector<mmn_arc>& arc,
+                       std::vector<mmn_dependancy>& dep,
                        unsigned& max_n_arcs)
 {
   mmn_graph_rep1 g;

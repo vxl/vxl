@@ -18,8 +18,10 @@
 //   Peter Vanroose  - Jul 10, 2009 - split into .h and .cxx
 // \endverbatim
 
+#include <iostream>
+#include <string>
 #include <bprb/bprb_func_process.h>
-#include <vcl_string.h>
+#include <vcl_compiler.h>
 
 //: global variables
 namespace bvxm_change_detection_display_process_globals
@@ -27,8 +29,8 @@ namespace bvxm_change_detection_display_process_globals
   const unsigned n_inputs_ = 3;
   const unsigned n_outputs_ = 2;
   // The parameters strings
-  const vcl_string param_prob_thresh_ = "prob_thresh";
-  const vcl_string param_prob_image_scale_ = "prob_image_scale";
+  const std::string param_prob_thresh_ = "prob_thresh";
+  const std::string param_prob_image_scale_ = "prob_image_scale";
 }
 
 //: sets input and output types for  bvxm_change_detection_display_process

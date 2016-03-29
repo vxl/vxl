@@ -1,7 +1,8 @@
-#include <vcl_iostream.h>
+#include <iostream>
+#include <string>
+#include <vcl_compiler.h>
 #include <testlib/testlib_test.h>
 #include <vul/vul_file.h>
-#include <vcl_string.h>
 #include <vpl/vpl.h> // vpl_unlink()
 #include <vpgl/vpgl_perspective_camera.h>
 
@@ -32,13 +33,13 @@ static void test_cam_iostream()
     vgl_h_matrix_3d<double> R;
     R.set_identity();
     R.set_rotation_about_axis(axis, theta);
-    vcl_cout <<"Rotation Matrix\n" << R << '\n';
+    std::cout <<"Rotation Matrix\n" << R << '\n';
     vpgl_perspective_camera<double> P(K, center, vgl_rotation_3d<double>(R));
 
-    vcl_cout << "Camera " << P;
+    std::cout << "Camera " << P;
 
-    vcl_string dir = "cam_dir";
-    vcl_cout << "Made camera stream directory "<< dir << '\n';
+    std::string dir = "cam_dir";
+    std::cout << "Made camera stream directory "<< dir << '\n';
     vul_file::make_directory(dir.c_str());
     bwm_video_cam_ostream cam_ostr(dir);
     bool open = cam_ostr.is_open();
@@ -49,15 +50,15 @@ static void test_cam_iostream()
     TEST("write to camera stream", write, true);
     cam_ostr.close();
     //test for reading
-    vcl_string glob = dir + "/*";
+    std::string glob = dir + "/*";
     bwm_video_cam_istream cam_istr(glob);
     open = cam_istr.is_open();
     TEST("open input camera stream", open, true);
     bool read = false;
-    vpgl_perspective_camera<double>* c = 0;
+    vpgl_perspective_camera<double>* c = VXL_NULLPTR;
     c = cam_istr.read_camera();
     if(c){
-      vcl_cout << "Camera from stream \n" << *c << '\n';
+      std::cout << "Camera from stream \n" << *c << '\n';
       read = (*c == P);
       if(!read){//may not not exactly be equal due to precision issues
         // Test principal axis vector instead

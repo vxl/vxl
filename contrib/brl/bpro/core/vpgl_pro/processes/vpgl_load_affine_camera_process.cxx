@@ -1,10 +1,11 @@
 // This is brl/bpro/core/vpgl_pro/processes/vpgl_load_affine_camera_process.cxx
+#include <iostream>
 #include <bprb/bprb_func_process.h>
 //:
 // \file
 
 #include <bprb/bprb_parameters.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
 #include <vpgl/vpgl_camera.h>
 #include <vpgl/vpgl_affine_camera.h>
 
@@ -13,7 +14,7 @@ bool vpgl_load_affine_camera_process_cons(bprb_func_process& pro)
 {
   //this process takes one input: the filename
   bool ok=false;
-  vcl_vector<vcl_string> input_types;
+  std::vector<std::string> input_types;
   input_types.push_back("vcl_string");
   input_types.push_back("double"); // view distance
   input_types.push_back("double"); // viewing direction (x)
@@ -32,7 +33,7 @@ bool vpgl_load_affine_camera_process_cons(bprb_func_process& pro)
   brdb_value_sptr default_view_z = new brdb_value_t<double>(-1.0);
   pro.set_input(4, default_view_z);
 
-  vcl_vector<vcl_string> output_types;
+  std::vector<std::string> output_types;
   output_types.push_back("vpgl_camera_double_sptr");  // label image
   ok = pro.set_output_types(output_types);
   if (!ok) return ok;
@@ -45,18 +46,18 @@ bool vpgl_load_affine_camera_process_cons(bprb_func_process& pro)
 bool vpgl_load_affine_camera_process(bprb_func_process& pro)
 {
   if (pro.n_inputs() != 5) {
-    vcl_cout << "vpgl_load_affine_camera_process: The input number should be 2" << vcl_endl;
+    std::cout << "vpgl_load_affine_camera_process: The input number should be 2" << std::endl;
     return false;
   }
   // get the inputs
-  vcl_string camera_filename = pro.get_input<vcl_string>(0);
+  std::string camera_filename = pro.get_input<std::string>(0);
   double dist = pro.get_input<double>(1);
   double look_x = pro.get_input<double>(2);
   double look_y = pro.get_input<double>(3);
   double look_z = pro.get_input<double>(4);
-  vcl_ifstream ifs(camera_filename.c_str());
+  std::ifstream ifs(camera_filename.c_str());
   if (!ifs.is_open()) {
-    vcl_cerr << "Failed to open file " << camera_filename << '\n';
+    std::cerr << "Failed to open file " << camera_filename << '\n';
     return false;
   }
   vnl_matrix_fixed<double,3,4> affine_matrix;

@@ -1,9 +1,11 @@
 #ifndef bwm_tableau_h_
 #define bwm_tableau_h_
 
+#include <iostream>
+#include <string>
 #include <vbl/vbl_ref_count.h>
 #include <vgui/vgui_viewer2D_tableau_sptr.h>
-#include <vcl_string.h>
+#include <vcl_compiler.h>
 
 class bwm_tableau : public vbl_ref_count
 {
@@ -12,7 +14,7 @@ class bwm_tableau : public vbl_ref_count
 
   ~bwm_tableau(){}
 
-  virtual vcl_string type_name() const { return "bwm_tableau"; }
+  virtual std::string type_name() const { return "bwm_tableau"; }
 
   virtual void set_viewer(vgui_viewer2D_tableau_sptr)=0;
 

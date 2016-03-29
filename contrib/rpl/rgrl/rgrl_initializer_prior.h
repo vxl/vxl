@@ -6,7 +6,9 @@
 // \author Chuck Stewart
 // \date 25 Nov 2002
 
-#include <vcl_vector.h>
+#include <iostream>
+#include <vector>
+#include <vcl_compiler.h>
 
 #include "rgrl_initializer.h"
 #include "rgrl_estimator_sptr.h"
@@ -67,7 +69,7 @@ class rgrl_initializer_prior
  protected:
   rgrl_view_sptr           init_view_;
   rgrl_scale_sptr          prior_scale_;
-  vcl_vector< rgrl_view_sptr > views_;
+  std::vector< rgrl_view_sptr > views_;
   unsigned int xform_index_;
 };
 

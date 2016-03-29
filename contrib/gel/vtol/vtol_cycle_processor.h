@@ -18,7 +18,9 @@
 //
 //-----------------------------------------------------------------------------
 
-#include <vcl_vector.h>
+#include <iostream>
+#include <vector>
+#include <vcl_compiler.h>
 #include <vtol/vtol_edge_sptr.h>
 #include <vtol/vtol_edge_2d_sptr.h>
 #include <vtol/vtol_one_chain_sptr.h>
@@ -28,31 +30,31 @@ class vtol_edge;
 class vtol_cycle_processor
 {
  public:
-  vtol_cycle_processor(vcl_vector<vtol_edge_2d_sptr>& edges,
+  vtol_cycle_processor(std::vector<vtol_edge_2d_sptr>& edges,
                        bool debug1=false, bool debug_2=false);
-  vtol_cycle_processor(vcl_vector<vtol_edge*>& edges,
+  vtol_cycle_processor(std::vector<vtol_edge*>& edges,
                        bool debug1=false, bool debug_2=false);
   ~vtol_cycle_processor() {}
 
   // PUBLIC INTERFACE----------------------------------------------------------
-  bool nested_one_cycles(vcl_vector<vtol_one_chain_sptr>& one_chains,
+  bool nested_one_cycles(std::vector<vtol_one_chain_sptr>& one_chains,
                          const float& tolerance = 1e-03);
   //:
   // set operations on edges
   //
-  static bool intersect_edges(vcl_vector<vtol_edge_sptr>& s1,
-                              vcl_vector<vtol_edge_sptr>& s2,
-                              vcl_vector<vtol_edge_sptr>& s1_and_s2);
-  static bool difference_edges(vcl_vector<vtol_edge_sptr>& s1,
-                               vcl_vector<vtol_edge_sptr>& s2,
-                               vcl_vector<vtol_edge_sptr>& s1_minus_s2);
+  static bool intersect_edges(std::vector<vtol_edge_sptr>& s1,
+                              std::vector<vtol_edge_sptr>& s2,
+                              std::vector<vtol_edge_sptr>& s1_and_s2);
+  static bool difference_edges(std::vector<vtol_edge_sptr>& s1,
+                               std::vector<vtol_edge_sptr>& s2,
+                               std::vector<vtol_edge_sptr>& s1_minus_s2);
 
   //: topology repair methods useful in forming cycles.
-  static bool corrupt_boundary(vcl_vector<vtol_edge_2d_sptr>& edges,
-                               vcl_vector<vtol_vertex_sptr>& bad_verts);
+  static bool corrupt_boundary(std::vector<vtol_edge_2d_sptr>& edges,
+                               std::vector<vtol_vertex_sptr>& bad_verts);
 
-  static bool connect_paths(vcl_vector<vtol_edge_2d_sptr>& edges,
-                            vcl_vector<vtol_vertex_sptr>& bad_verts);
+  static bool connect_paths(std::vector<vtol_edge_2d_sptr>& edges,
+                            std::vector<vtol_vertex_sptr>& bad_verts);
 
   static double angle_between_edges(vtol_edge_2d_sptr e0, vtol_edge_2d_sptr e1,
                                     vtol_vertex_sptr v);
@@ -61,14 +63,14 @@ class vtol_cycle_processor
   //internal utilities
   void print_edge(vtol_edge_2d_sptr& e);
   void set_bridge_vars();
-  void init(vcl_vector<vtol_edge_2d_sptr>& edges);
-  vtol_edge_2d_sptr search_for_next_edge(vcl_vector<vtol_edge_2d_sptr>& edges_at_last);
+  void init(std::vector<vtol_edge_2d_sptr>& edges);
+  vtol_edge_2d_sptr search_for_next_edge(std::vector<vtol_edge_2d_sptr>& edges_at_last);
   bool assignable(vtol_edge_2d_sptr edg, vtol_vertex_sptr last);
   void assign_initial_edge(vtol_edge_2d_sptr& e, vtol_vertex_sptr& first,
                            vtol_vertex_sptr& last);
   void assign_ends(vtol_edge_2d_sptr edg, vtol_vertex_sptr& last);
   void add_edge_to_path();
-  bool classify_path(vcl_vector<vtol_edge_2d_sptr>& path_edges, vtol_one_chain_sptr& chain);
+  bool classify_path(std::vector<vtol_edge_2d_sptr>& path_edges, vtol_one_chain_sptr& chain);
   void compute_cycles();
   void sort_one_cycles();
   void process();
@@ -83,11 +85,11 @@ class vtol_cycle_processor
   vtol_vertex_sptr last_;
   vtol_edge_2d_sptr l_;
   vtol_edge_2d_sptr next_edge_;
-  vcl_vector<vtol_edge_2d_sptr> edges_;
-  vcl_vector<vtol_edge_2d_sptr> e_stack_;
-  vcl_vector<vtol_vertex_sptr> v_stack_;
-  vcl_vector<vtol_one_chain_sptr> chains_;
-  vcl_vector<vtol_one_chain_sptr> nested_one_cycles_;
+  std::vector<vtol_edge_2d_sptr> edges_;
+  std::vector<vtol_edge_2d_sptr> e_stack_;
+  std::vector<vtol_vertex_sptr> v_stack_;
+  std::vector<vtol_one_chain_sptr> chains_;
+  std::vector<vtol_one_chain_sptr> nested_one_cycles_;
 };
 
 #endif // vtol_cycle_processor_h_

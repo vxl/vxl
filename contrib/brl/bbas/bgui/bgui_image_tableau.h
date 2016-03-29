@@ -35,7 +35,7 @@ class bgui_image_tableau_vp_sc_snapshot
   bgui_image_tableau_vp_sc_snapshot() {
     glGetIntegerv(GL_VIEWPORT, vp);
 
-    //vcl_cout << "Saving    [" << vp[0] << ' ' << vp[1] << ' ' << vp[2] << ' ' << vp[3] << vcl_endl;
+    //std::cout << "Saving    [" << vp[0] << ' ' << vp[1] << ' ' << vp[2] << ' ' << vp[3] << std::endl;
     glGetIntegerv(GL_SCISSOR_BOX, sc);
     sc_was_enabled = glIsEnabled(GL_SCISSOR_TEST) == GL_TRUE;
   }
@@ -43,7 +43,7 @@ class bgui_image_tableau_vp_sc_snapshot
   ~bgui_image_tableau_vp_sc_snapshot() {
     // restore viewport :
     glViewport(vp[0], vp[1], vp[2], vp[3]);
-    //vcl_cout << "restoring [" << vp[0] << ' ' << vp[1] << ' ' << vp[2] << ' ' << vp[3] << vcl_endl;
+    //std::cout << "restoring [" << vp[0] << ' ' << vp[1] << ' ' << vp[2] << ' ' << vp[3] << std::endl;
     // turn off the scissor test, if it wasn't already on, and
     // restore old scissor settings :
     if (sc_was_enabled)
@@ -74,7 +74,7 @@ class bgui_image_tableau : public vgui_image_tableau
                      vgui_range_map_params_sptr const & rmp = 0);
 
 
-  vcl_string type_name() const { return "vgui_image_tableau"; }
+  std::string type_name() const { return "vgui_image_tableau"; }
 
   //: Return the vil1_image
   vil1_image get_image() const;
@@ -87,16 +87,16 @@ class bgui_image_tableau : public vgui_image_tableau
                   const float row_start,
                   const float col_end,
                   const float row_end,
-                  vcl_vector<double>& line_pos,
-                  vcl_vector<double>& vals);
+                  std::vector<double>& line_pos,
+                  std::vector<double>& vals);
 
   //: Extract a line of pixel values return color if available
   void image_line(const float col_start,
                   const float row_start,
                   const float col_end,
                   const float row_end,
-                  vcl_vector<double>& line_pos,
-                  vcl_vector<vcl_vector<double> >& vals);
+                  std::vector<double>& line_pos,
+                  std::vector<std::vector<double> >& vals);
 
   //: set handle_motion true
   void set_handle_motion() { handle_motion_ = true; }
@@ -109,8 +109,8 @@ class bgui_image_tableau : public vgui_image_tableau
   void set_mouse_message() {mouse_message_ = true; capture_mouse_ = true;}
   void unset_mouse_message();
   bool mouse_message() const {return mouse_message_;}
-  void set_mouse_message_text(vcl_string const& msg){mouse_message_text_ = msg;}
-  vcl_string mouse_message_text() const{ return mouse_message_text_;}
+  void set_mouse_message_text(std::string const& msg){mouse_message_text_ = msg;}
+  std::string mouse_message_text() const{ return mouse_message_text_;}
   bool mouse_pos(float& mouse_u, float& mouse_v){mouse_u = mouse_pos_[0],
       mouse_v = mouse_pos_[1]; return mouse_message_;}
 
@@ -126,7 +126,7 @@ class bgui_image_tableau : public vgui_image_tableau
   double get_pixel_value(const unsigned c, const unsigned r);
 
 //: get the pixel value as color
-  vcl_vector<double> get_color_pixel_value(const unsigned c, const unsigned r);
+  std::vector<double> get_color_pixel_value(const unsigned c, const unsigned r);
 
   //: Get pixel info from the frame buffer)
   void get_pixel_info_from_frame_buffer(const int x, const int y,
@@ -143,7 +143,7 @@ class bgui_image_tableau : public vgui_image_tableau
   bool show_path_;
   bool mouse_message_;
   bool capture_mouse_;
-  vcl_string mouse_message_text_;
+  std::string mouse_message_text_;
   float mouse_pos_[2];
   vgui_text_tableau_sptr tt_;
 };

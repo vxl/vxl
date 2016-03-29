@@ -40,8 +40,8 @@ bool bvpl_visualize_response_process_cons(bprb_func_process& pro)
 {
   using namespace bvpl_visualize_response_process_globals;
 
-  vcl_vector<vcl_string> input_types_(n_inputs_);
-  vcl_vector<vcl_string> output_types_(n_outputs_);
+  std::vector<std::string> input_types_(n_inputs_);
+  std::vector<std::string> output_types_(n_outputs_);
   input_types_[0] = "bvxm_voxel_grid_base_sptr";
   input_types_[1] = "bvxm_voxel_grid_base_sptr";
   input_types_[2] = "unsigned";
@@ -56,8 +56,8 @@ bool bvpl_visualize_response_process(bprb_func_process& pro)
 
   if (pro.n_inputs() < n_inputs_)
   {
-    vcl_cout << pro.name() << ": the input number should be " << n_inputs_
-             << " but instead it is " << pro.n_inputs() << vcl_endl;
+    std::cout << pro.name() << ": the input number should be " << n_inputs_
+             << " but instead it is " << pro.n_inputs() << std::endl;
     return false;
   }
 
@@ -66,13 +66,13 @@ bool bvpl_visualize_response_process(bprb_func_process& pro)
   bvxm_voxel_grid_base_sptr grid_base = pro.get_input<bvxm_voxel_grid_base_sptr>(i++);
   bvxm_voxel_grid_base_sptr id_grid_base = pro.get_input<bvxm_voxel_grid_base_sptr>(i++);
   unsigned target_id = pro.get_input<unsigned>(i++);
-  vcl_string raw_path = pro.get_input<vcl_string>(i++);
+  std::string raw_path = pro.get_input<std::string>(i++);
 
   typedef bsta_num_obs<bsta_gauss_sf1> gauss_type;
 
   //check input's validity
   if (!grid_base.ptr()) {
-    vcl_cout <<  " :-- Grid is not valid!\n";
+    std::cout <<  " :-- Grid is not valid!\n";
     return false;
   }
 

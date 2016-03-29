@@ -1,3 +1,6 @@
+#include <iostream>
+#include <cmath>
+#include <sstream>
 #include "mfpf_region_finder_builder.h"
 //:
 // \file
@@ -7,8 +10,7 @@
 #include <mfpf/mfpf_region_finder.h>
 #include <vsl/vsl_binary_loader.h>
 #include <vul/vul_string.h>
-#include <vcl_cmath.h>
-#include <vcl_sstream.h>
+#include <vcl_compiler.h>
 #include <vcl_cassert.h>
 
 #include <mbl/mbl_parse_block.h>
@@ -79,21 +81,21 @@ void mfpf_region_finder_builder::set_region(const mfpf_region_form& form)
 
   if (form.form()=="box")
   {
-    int ni = vcl_max(1,int(0.99+form.wi()));
-    int nj = vcl_max(1,int(0.99+form.wj()));
+    int ni = std::max(1,int(0.99+form.wi()));
+    int nj = std::max(1,int(0.99+form.wj()));
     set_as_box(unsigned(ni),unsigned(nj),0.5*ni,0.5*nj);
   }
   else
   if (form.form()=="ellipse")
   {
-    double ri = vcl_max(1.0,form.wi());
-    double rj = vcl_max(1.0,form.wj());
+    double ri = std::max(1.0,form.wi());
+    double rj = std::max(1.0,form.wj());
     set_as_ellipse(ri,rj);
   }
   else
   {
-    vcl_cerr<<"mfpf_region_finder_builder::set_region : Unknown form: "<<form<<vcl_endl;
-    vcl_abort();
+    std::cerr<<"mfpf_region_finder_builder::set_region : Unknown form: "<<form<<std::endl;
+    std::abort();
   }
 }
 
@@ -104,8 +106,8 @@ void mfpf_region_finder_builder::set_region_size(double wi, double wj)
 {
   wi/=step_size();
   wj/=step_size();
-  int ni = vcl_max(1,int(0.99+wi));
-  int nj = vcl_max(1,int(0.99+wj));
+  int ni = std::max(1,int(0.99+wi));
+  int nj = std::max(1,int(0.99+wj));
   set_as_box(unsigned(ni),unsigned(nj),0.5*(ni-1),0.5*(nj-1));
 }
 
@@ -163,7 +165,7 @@ void mfpf_region_finder_builder::set_as_ellipse(double ri, double rj)
   for (int j = -nj;j<=nj;++j)
   {
     // Find start and end of line of pixels inside disk
-    int x = int(ri*vcl_sqrt(1.0-j*j/(rj*rj)));
+    int x = int(ri*std::sqrt(1.0-j*j/(rj*rj)));
     roi_.push_back(mbl_chord(ni-x,ni+x,nj+j));
     n_pixels_+=2*x+1;
   }
@@ -242,7 +244,7 @@ void mfpf_region_finder_builder::add_example(const vimt_image_2d_of<float>& imag
   for (int iA=-int(nA_);iA<=(int)nA_;++iA)
   {
     double A = iA*dA_;
-    vgl_vector_2d<double> uA = u*vcl_cos(A)+v*vcl_sin(A);
+    vgl_vector_2d<double> uA = u*std::cos(A)+v*std::sin(A);
     add_one_example(image,p,uA);
   }
 }
@@ -274,11 +276,11 @@ void mfpf_region_finder_builder::build(mfpf_point_finder& pf)
         alpha=0.98;
       else
       {
-        alpha=1-vcl_pow(r,dn);
-        alpha=vcl_min(alpha,0.98);
+        alpha=1-std::pow(r,dn);
+        alpha=std::min(alpha,0.98);
       }
       tvar_min_ *= alpha;
-      var_min_ = vcl_max(var_min_,tvar_min_);
+      var_min_ = std::max(var_min_,tvar_min_);
     }
     rp.set_var_min(var_min_);
   }
@@ -289,11 +291,11 @@ void mfpf_region_finder_builder::build(mfpf_point_finder& pf)
 
 //: Parse stream to set up as a box shape.
 // Expects: "{ ni: 3 nj: 5 ref_x: 1.0 ref_y: 2.0 }
-void mfpf_region_finder_builder::config_as_box(vcl_istream &is)
+void mfpf_region_finder_builder::config_as_box(std::istream &is)
 {
   // Cycle through string and produce a map of properties
-  vcl_string s = mbl_parse_block(is);
-  vcl_istringstream ss(s);
+  std::string s = mbl_parse_block(is);
+  std::istringstream ss(s);
   mbl_read_props_type props = mbl_read_props_ws(ss);
 
   unsigned ni=5,nj=5;
@@ -333,11 +335,11 @@ void mfpf_region_finder_builder::config_as_box(vcl_istream &is)
 
 //: Parse stream to set up as an ellipse shape.
 // Expects: "{ ri: 2.1 rj: 5.2 }
-void mfpf_region_finder_builder::config_as_ellipse(vcl_istream &is)
+void mfpf_region_finder_builder::config_as_ellipse(std::istream &is)
 {
   // Cycle through string and produce a map of properties
-  vcl_string s = mbl_parse_block(is);
-  vcl_istringstream ss(s);
+  std::string s = mbl_parse_block(is);
+  std::istringstream ss(s);
   mbl_read_props_type props = mbl_read_props_ws(ss);
 
   double ri=3.1,rj=3.1;
@@ -366,11 +368,11 @@ void mfpf_region_finder_builder::config_as_ellipse(vcl_istream &is)
 // Method: set_from_stream
 //=======================================================================
 //: Initialise from a string stream
-bool mfpf_region_finder_builder::set_from_stream(vcl_istream &is)
+bool mfpf_region_finder_builder::set_from_stream(std::istream &is)
 {
   // Cycle through string and produce a map of properties
-  vcl_string s = mbl_parse_block(is);
-  vcl_istringstream ss(s);
+  std::string s = mbl_parse_block(is);
+  std::istringstream ss(s);
   mbl_read_props_type props = mbl_read_props_ws(ss);
 
   set_defaults();
@@ -380,7 +382,7 @@ bool mfpf_region_finder_builder::set_from_stream(vcl_istream &is)
 
   if (props.find("shape")!=props.end())
   {
-    vcl_istringstream shape_s(props["shape"]);
+    std::istringstream shape_s(props["shape"]);
     shape_s>>shape_;
     if (shape_=="box")
     {
@@ -409,7 +411,7 @@ bool mfpf_region_finder_builder::set_from_stream(vcl_istream &is)
   }
   if (props.find("estimate_var_min") !=props.end())
   {
-    vcl_string strEstimate=props["estimate_var_min"];
+    std::string strEstimate=props["estimate_var_min"];
     if (strEstimate[0]=='f' || strEstimate[0]=='F' || strEstimate[0]=='0')
         estimate_var_min_=false;
     else
@@ -435,8 +437,8 @@ bool mfpf_region_finder_builder::set_from_stream(vcl_istream &is)
 
   if (props.find("cost_builder")!=props.end())
   {
-    vcl_istringstream b_ss(props["cost_builder"]);
-    vcl_auto_ptr<mfpf_vec_cost_builder> bb =
+    std::istringstream b_ss(props["cost_builder"]);
+    std::auto_ptr<mfpf_vec_cost_builder> bb =
          mfpf_vec_cost_builder::create_from_stream(b_ss);
     cost_builder_ = bb->clone();
     props.erase("cost_builder");
@@ -452,9 +454,9 @@ bool mfpf_region_finder_builder::set_from_stream(vcl_istream &is)
 // Method: is_a
 //=======================================================================
 
-vcl_string mfpf_region_finder_builder::is_a() const
+std::string mfpf_region_finder_builder::is_a() const
 {
-  return vcl_string("mfpf_region_finder_builder");
+  return std::string("mfpf_region_finder_builder");
 }
 
 //: Create a copy on the heap and return base class pointer
@@ -467,7 +469,7 @@ mfpf_point_finder_builder* mfpf_region_finder_builder::clone() const
 // Method: print
 //=======================================================================
 
-void mfpf_region_finder_builder::print_summary(vcl_ostream& os) const
+void mfpf_region_finder_builder::print_summary(std::ostream& os) const
 {
   os << "{ size: " << roi_ni_ << 'x' << roi_nj_
      << " n_pixels: " << n_pixels_
@@ -476,7 +478,7 @@ void mfpf_region_finder_builder::print_summary(vcl_ostream& os) const
   if (norm_method_==0) os<<vsl_indent()<<"norm: none"<<'\n';
   else                 os<<vsl_indent()<<"norm: linear"<<'\n';
   os <<vsl_indent()<< "cost_builder: ";
-  if (cost_builder_.ptr()==0) os << '-'<<'\n';
+  if (cost_builder_.ptr()==VXL_NULLPTR) os << '-'<<'\n';
   else                       os << cost_builder_<<'\n';
   os <<vsl_indent()<< "nA: " << nA_ << " dA: " << dA_ << ' '<<'\n'
      <<vsl_indent();
@@ -486,7 +488,7 @@ void mfpf_region_finder_builder::print_summary(vcl_ostream& os) const
   os <<vsl_indent()<< '}';
 }
 
-void mfpf_region_finder_builder::print_shape(vcl_ostream& os) const
+void mfpf_region_finder_builder::print_shape(std::ostream& os) const
 {
   vil_image_view<vxl_byte> im(roi_ni_,roi_nj_);
   im.fill(0);
@@ -562,9 +564,9 @@ void mfpf_region_finder_builder::b_read(vsl_b_istream& bfs)
           var_min_=1.0E-6;
       break;
     default:
-      vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&)\n"
-               << "           Unknown version number "<< version << vcl_endl;
-      bfs.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
+      std::cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&)\n"
+               << "           Unknown version number "<< version << std::endl;
+      bfs.is().clear(std::ios::badbit); // Set an unrecoverable IO error on stream
       return;
   }
 }

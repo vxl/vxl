@@ -5,7 +5,7 @@
 
 
 //: constructor
-pop_transform::pop_transform(vcl_vector<pop_parameter*> params,
+pop_transform::pop_transform(std::vector<pop_parameter*> params,
                              pop_vertex *cs1, pop_vertex *cs2):
   pop_object(params)
 {

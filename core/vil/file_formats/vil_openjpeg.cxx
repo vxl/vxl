@@ -14,17 +14,18 @@
 // \brief Image I/O for JPEG2000 imagery using OpenJPEG
 // \author Chuck Atkins
 
-#include <vcl_cmath.h>
-#include <vcl_cstring.h> // for std::memcmp()
-#include <vcl_iostream.h>
-#include <vcl_stdexcept.h>
-#include <vcl_limits.h>
+#include <cmath>
+#include <cstring>
+#include <iostream>
+#include <stdexcept>
+#include <limits>
+#include <vcl_compiler.h>
 #include <vcl_cassert.h>
 
 #include <vil/vil_stream.h>
 #include <vbl/vbl_smart_ptr.h>
-#include <vbl/vbl_smart_ptr.txx>
-#include <vil/vil_image_view.txx>
+#include <vbl/vbl_smart_ptr.hxx>
+#include <vil/vil_image_view.hxx>
 
 // TODO: How can we avoid using the "deprecated" functions?
 #define USE_OPJ_DEPRECATED
@@ -161,8 +162,8 @@ struct vil_openjpeg_image_impl
   : encode_codec_(VXL_NULLPTR), image_(VXL_NULLPTR), vstream_(VXL_NULLPTR), vstream_start_(0),
     is_valid_(false), error_(false)
   {
-    vcl_memset(&this->encode_params_, 0, sizeof(opj_cparameters_t));
-    vcl_memset(&this->header_, 0, sizeof(opj_header));
+    std::memset(&this->encode_params_, 0, sizeof(opj_cparameters_t));
+    std::memset(&this->header_, 0, sizeof(opj_header));
   }
 };
 
@@ -177,8 +178,8 @@ vil_openjpeg_decoder
 : codec_(VXL_NULLPTR), image_(VXL_NULLPTR), stream_(VXL_NULLPTR), opj_codec_format_(opj_codec_format),
   error_(false), silent_(false)
 {
-  vcl_memset(&this->params_, 0, sizeof(opj_dparameters_t));
-  vcl_memset(&this->header_, 0, sizeof(opj_header));
+  std::memset(&this->params_, 0, sizeof(opj_dparameters_t));
+  std::memset(&this->header_, 0, sizeof(opj_header));
 }
 
 
@@ -278,7 +279,7 @@ vil_openjpeg_decoder
   }
 
   // Set decoder parameters
-  vcl_memset(&this->params_, 0, sizeof(opj_dparameters_t));
+  std::memset(&this->params_, 0, sizeof(opj_dparameters_t));
   opj_set_default_decoder_parameters(&this->params_);
   this->params_.cp_reduce = reduction;
   this->params_.cp_layer = 0;
@@ -381,9 +382,9 @@ vil_openjpeg_decoder
   {
     return static_cast<vxl_uint_32>(-1);
   }
-  if ( b > static_cast<vil_streampos>(vcl_numeric_limits<vxl_uint_32>::max()) )
+  if ( b > static_cast<vil_streampos>(std::numeric_limits<vxl_uint_32>::max()) )
   {
-    throw vcl_runtime_error("Stream position outof range");
+    throw std::runtime_error("Stream position outof range");
   }
   return static_cast<vxl_uint_32>(b);
 }
@@ -401,9 +402,9 @@ vil_openjpeg_decoder
   {
     return static_cast<vxl_uint_32>(-1);
   }
-  if ( b > static_cast<vil_streampos>(vcl_numeric_limits<vxl_uint_32>::max()) )
+  if ( b > static_cast<vil_streampos>(std::numeric_limits<vxl_uint_32>::max()) )
   {
-    throw vcl_runtime_error("Stream position outof range");
+    throw std::runtime_error("Stream position outof range");
   }
   return static_cast<vxl_uint_32>(b);
 }
@@ -423,9 +424,9 @@ vil_openjpeg_decoder
   }
   vil_streampos end = stream->tell();
   vil_streampos b = end-start;
-  if ( b > static_cast<vil_streampos>(vcl_numeric_limits<vxl_uint_32>::max()) )
+  if ( b > static_cast<vil_streampos>(std::numeric_limits<vxl_uint_32>::max()) )
   {
-    throw vcl_runtime_error("Stream position outof range");
+    throw std::runtime_error("Stream position outof range");
   }
   return static_cast<vxl_uint_32>(b);
 }
@@ -443,9 +444,9 @@ vil_openjpeg_decoder
     return false;
   }
   vil_streampos pos = stream->tell();
-  if ( pos > static_cast<vil_streampos>(vcl_numeric_limits<vxl_uint_32>::max()) )
+  if ( pos > static_cast<vil_streampos>(std::numeric_limits<vxl_uint_32>::max()) )
   {
-    throw vcl_runtime_error("Stream position outof range");
+    throw std::runtime_error("Stream position outof range");
   }
   return p_nb_bytes == static_cast<vxl_uint_32>(pos);
 }
@@ -459,7 +460,7 @@ void
 vil_openjpeg_decoder
 ::opj_event_info(const char *msg, void * /*data*/)
 {
-  vcl_clog << "vil_openjpeg_decoder::INFO  : " << msg << vcl_endl;
+  std::clog << "vil_openjpeg_decoder::INFO  : " << msg << std::endl;
 }
 
 
@@ -467,7 +468,7 @@ void
 vil_openjpeg_decoder
 ::opj_event_warning(const char *msg, void * /*data*/)
 {
-  vcl_clog << "vil_openjpeg_decoder::WARN  : " << msg << vcl_endl;
+  std::clog << "vil_openjpeg_decoder::WARN  : " << msg << std::endl;
 }
 
 
@@ -477,7 +478,7 @@ vil_openjpeg_decoder
 {
   vil_openjpeg_decoder *decoder = reinterpret_cast<vil_openjpeg_decoder*>(data);
   if ( !decoder->silent_ )
-    vcl_cerr << "vil_openjpeg_decoder::ERROR : " << msg << vcl_endl;
+    std::cerr << "vil_openjpeg_decoder::ERROR : " << msg << std::endl;
   decoder->error_ = true;
 }
 
@@ -520,7 +521,7 @@ vil_openjpeg_image
     return;
 
   // Copy headers and image from decoder
-  vcl_memcpy(&this->impl_->header_, decoder.header(), sizeof(opj_header));
+  std::memcpy(&this->impl_->header_, decoder.header(), sizeof(opj_header));
   this->impl_->image_ = decoder.take_image();
 
   // Delay num reduction computation until requested
@@ -575,7 +576,7 @@ vil_openjpeg_image
       {0x00, 0x00, 0x00, 0x0C, 0x6A, 0x50, 0x20, 0x20, 0x0D, 0x0A, 0x87, 0x0A};
     unsigned char sig_file[12];
     this->impl_->vstream_->read(sig_file, 12);
-    if ( vcl_memcmp( sig, sig_file, 12) == 0 )
+    if ( std::memcmp( sig, sig_file, 12) == 0 )
     {
       this->impl_->vstream_->seek(pos_start);
       return true;
@@ -591,7 +592,7 @@ vil_openjpeg_image
     unsigned char sig[2] = {0xFF, 0x4F};
     unsigned char sig_file[2];
     this->impl_->vstream_->read(sig_file, 2);
-    if ( vcl_memcmp( sig, sig_file, 2) == 0 )
+    if ( std::memcmp( sig, sig_file, 2) == 0 )
     {
       this->impl_->vstream_->seek(pos_start);
       return true;

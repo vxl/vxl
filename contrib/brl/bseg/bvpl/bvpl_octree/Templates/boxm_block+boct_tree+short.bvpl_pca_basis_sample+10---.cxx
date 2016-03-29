@@ -1,7 +1,7 @@
 #include <bvpl/bvpl_octree/sample/bvpl_pca_basis_sample.h>
-#include <boxm/boxm_block.txx>
-#include <boxm/boxm_scene.txx>
-#include <vbl/vbl_array_3d.txx>
+#include <boxm/boxm_block.hxx>
+#include <boxm/boxm_scene.hxx>
+#include <vbl/vbl_array_3d.hxx>
 
 typedef boct_tree<short, bvpl_pca_basis_sample<10> > tree_type;
 

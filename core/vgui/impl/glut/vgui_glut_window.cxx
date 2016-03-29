@@ -78,7 +78,7 @@ void vgui_glut_window::reposition(int x,int y)
   glutSetWindow( old );
 }
 
-void vgui_glut_window::set_title(vcl_string const &s)
+void vgui_glut_window::set_title(std::string const &s)
 {
   glutSetWindowTitle(s.c_str());
   glutSetIconTitle(s.c_str());

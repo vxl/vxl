@@ -119,14 +119,14 @@ double vdgl_digital_curve::length() const
 
 void vdgl_digital_curve::set_p0(const vsol_point_2d_sptr &p)
 {
-  vcl_cerr << "vdgl_digital_curve::set_p0() not allowed and ignored...\n";
+  std::cerr << "vdgl_digital_curve::set_p0() not allowed and ignored...\n";
   int i = 0;
   interpolator_->get_edgel_chain()->set_edgel(i, vdgl_edgel ( p->x(), p->y() ) );
 }
 
 void vdgl_digital_curve::set_p1(const vsol_point_2d_sptr &p )
 {
-  vcl_cerr << "vdgl_digital_curve::set_p1() not allowed and ignored...\n";
+  std::cerr << "vdgl_digital_curve::set_p1() not allowed and ignored...\n";
   int i = interpolator_->get_edgel_chain()->size() - 1;
   interpolator_->get_edgel_chain()->set_edgel(i, vdgl_edgel ( p->x(), p->y() ) );
 }
@@ -229,7 +229,7 @@ short vdgl_digital_curve::version() const
 }
 
 //: Print an ascii summary to the stream
-void vdgl_digital_curve::print_summary(vcl_ostream &os) const
+void vdgl_digital_curve::print_summary(std::ostream &os) const
 {
   os << *this;
 }
@@ -257,17 +257,17 @@ void vsl_b_read(vsl_b_istream &is, vdgl_digital_curve* &dc)
     dc->b_read(is);
   }
   else
-    dc = 0;
+    dc = VXL_NULLPTR;
 }
 
 //: Print human readable summary of vdgl_digital_curve* to a stream.
-void vsl_print_summary(vcl_ostream &os, const vdgl_digital_curve* dc)
+void vsl_print_summary(std::ostream &os, const vdgl_digital_curve* dc)
 {
   os << *dc;
 }
 
 //: Stream operator
-vcl_ostream& operator<<(vcl_ostream& s, const vdgl_digital_curve& dc)
+std::ostream& operator<<(std::ostream& s, const vdgl_digital_curve& dc)
 {
   return s << "[order: " << dc.order() << ' ' << *(dc.get_interpolator()->get_edgel_chain()) << ']';
 }

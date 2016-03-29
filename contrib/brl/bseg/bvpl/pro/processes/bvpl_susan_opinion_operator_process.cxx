@@ -42,7 +42,7 @@ bool bvpl_susan_opinion_operator_process_cons(bprb_func_process& pro)
   //          -opinion
   //input[4]: The functor type
   //input[5]: Output grid path
-  vcl_vector<vcl_string> input_types_(n_inputs_);
+  std::vector<std::string> input_types_(n_inputs_);
   input_types_[0] = "bvxm_voxel_grid_base_sptr"; //: normals grid
   input_types_[1] = "bvxm_voxel_grid_base_sptr"; //: response grid
   input_types_[2] = "vcl_string";                //: path for the output grid
@@ -50,7 +50,7 @@ bool bvpl_susan_opinion_operator_process_cons(bprb_func_process& pro)
   if (!pro.set_input_types(input_types_))
     return false;
 
-  vcl_vector<vcl_string> output_types_(n_outputs_);
+  std::vector<std::string> output_types_(n_outputs_);
   output_types_[0] = "bvxm_voxel_grid_base_sptr";
   if (!pro.set_output_types(output_types_))
     return false;
@@ -65,7 +65,7 @@ bool bvpl_susan_opinion_operator_process(bprb_func_process& pro)
 
   if (pro.n_inputs() < n_inputs_)
   {
-    vcl_cout << pro.name() << " The input number should be " << n_inputs_<< vcl_endl;
+    std::cout << pro.name() << " The input number should be " << n_inputs_<< std::endl;
     return false;
   }
 
@@ -73,7 +73,7 @@ bool bvpl_susan_opinion_operator_process(bprb_func_process& pro)
   unsigned i = 0;
   bvxm_voxel_grid_base_sptr in_dir_grid_base = pro.get_input<bvxm_voxel_grid_base_sptr>(i++);
   bvxm_voxel_grid_base_sptr in_opn_grid_base = pro.get_input<bvxm_voxel_grid_base_sptr>(i++);
-  vcl_string out_grid_path = pro.get_input<vcl_string>(i++);
+  std::string out_grid_path = pro.get_input<std::string>(i++);
   bvpl_kernel_vector_sptr kernel = pro.get_input<bvpl_kernel_vector_sptr>(i++);
 
 
@@ -83,7 +83,7 @@ bool bvpl_susan_opinion_operator_process(bprb_func_process& pro)
       =dynamic_cast<bvxm_voxel_grid<bvxm_opinion> *>(in_opn_grid_base.ptr());
 
   if(in_opn_grid)
-    vcl_cout<<"Successful cast"<<vcl_endl;
+    std::cout<<"Successful cast"<<std::endl;
   bvxm_voxel_grid<bvxm_opinion> * output_grid=new bvxm_voxel_grid<bvxm_opinion>(out_grid_path,in_dir_grid->grid_size());
   bvpl_susan_opinion_operator oper;
   oper.operate(in_dir_grid,in_opn_grid,kernel,output_grid);

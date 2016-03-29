@@ -15,7 +15,9 @@
 //   Feb.2002 - Peter Vanroose - brief doxygen comment placed on single line
 // \endverbatim
 //--------------------------------------------------------------------------------
-#include <vcl_vector.h>
+#include <iostream>
+#include <vector>
+#include <vcl_compiler.h>
 #include <vxl_config.h>
 #include <vtol/vtol_edge_2d_sptr.h>
 #include <vmal/vmal_multi_view_data_edge_sptr.h>
@@ -45,9 +47,9 @@ class vmal_track_lines
 //---------------------------------------------------------------------------
 //: Main function that computes the matches between lines in the images.
 //---------------------------------------------------------------------------
-  void track_lines(const vcl_vector<vcl_vector<vtol_edge_2d_sptr>*>* fit_lines,
-                   const vcl_vector<vcl_vector<vtol_edge_2d_sptr>*>* transformed_lines,
-                   const vcl_vector<vil1_image> &images, const vcl_vector<vnl_double_3x3> &homo,
+  void track_lines(const std::vector<std::vector<vtol_edge_2d_sptr>*>* fit_lines,
+                   const std::vector<std::vector<vtol_edge_2d_sptr>*>* transformed_lines,
+                   const std::vector<vil1_image> &images, const std::vector<vnl_double_3x3> &homo,
                    vmal_multi_view_data_edge_sptr matches);
 
 //---------------------------------------------------------------------------
@@ -90,8 +92,8 @@ class vmal_track_lines
 //: Find the transformed of line.
 //-----------------------------------------------------------------------------
   vtol_edge_2d_sptr find_transfo(vtol_edge_2d_sptr line,
-                                 vcl_vector<vtol_edge_2d_sptr>& fit_lines,
-                                 const vcl_vector<vtol_edge_2d_sptr>& transformed_lines);
+                                 std::vector<vtol_edge_2d_sptr>& fit_lines,
+                                 const std::vector<vtol_edge_2d_sptr>& transformed_lines);
 //-----------------------------------------------------------------------------
 //: Compute two new lines by comparing the input lines and keeping their common part through the homography
 //-----------------------------------------------------------------------------

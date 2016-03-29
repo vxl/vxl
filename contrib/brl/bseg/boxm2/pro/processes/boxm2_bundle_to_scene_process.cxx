@@ -1,4 +1,7 @@
 // This is brl/bseg/boxm2/pro/processes/boxm2_bundle_to_scene_process.cxx
+#include <fstream>
+#include <iostream>
+#include <cstdio>
 #include <bprb/bprb_func_process.h>
 //:
 // \file
@@ -6,8 +9,7 @@
 //
 // \author Andy Miller
 // \date Sep 16, 2011
-#include <vcl_fstream.h>
-#include <vcl_cstdio.h> // for sprintf()
+#include <vcl_compiler.h>
 #include <boxm2/boxm2_scene.h>
 #include <boxm2/util/boxm2_convert_bundle.h>
 #include <boxm2/util/boxm2_convert_nvm.h>
@@ -29,7 +31,7 @@ bool boxm2_bundle_to_scene_process_cons(bprb_func_process& pro)
   using namespace boxm2_bundle_to_scene_process_globals;
 
   //process takes 5 inputs
-  vcl_vector<vcl_string> input_types_(n_inputs_);
+  std::vector<std::string> input_types_(n_inputs_);
   input_types_[0] = "vcl_string"; // bundler or nvm file
   input_types_[1] = "vcl_string"; // image dir path (all images)
   input_types_[2] = "vcl_string"; // appearnce model
@@ -42,7 +44,7 @@ bool boxm2_bundle_to_scene_process_cons(bprb_func_process& pro)
   input_types_[9] = "float";      // lvcs y
   input_types_[10] = "float";      // lvcs z
   // process has 2 outputs
-  vcl_vector<vcl_string>  output_types_(n_outputs_);
+  std::vector<std::string>  output_types_(n_outputs_);
   output_types_[0] = "boxm2_scene_sptr";  //update scene
 
 
@@ -52,9 +54,9 @@ bool boxm2_bundle_to_scene_process_cons(bprb_func_process& pro)
   //default arguments - default filename is "scene"
   brdb_value_sptr do_axis_align = new brdb_value_t<bool>(true);
   pro.set_input(5, do_axis_align);
-  brdb_value_sptr dir_name = new brdb_value_t<vcl_string>("");
+  brdb_value_sptr dir_name = new brdb_value_t<std::string>("");
   pro.set_input(6, dir_name);
-  brdb_value_sptr ply_name = new brdb_value_t<vcl_string>("");
+  brdb_value_sptr ply_name = new brdb_value_t<std::string>("");
   pro.set_input(7, ply_name);
   brdb_value_sptr x = new brdb_value_t<float>(0.0);
   pro.set_input(8, x);
@@ -71,7 +73,7 @@ bool boxm2_bundle_to_scene_process(bprb_func_process& pro)
   using namespace boxm2_bundle_to_scene_process_globals;
   typedef vpgl_perspective_camera<double> CamType;
   if ( pro.n_inputs() < n_inputs_ ) {
-    vcl_cout << pro.name() << ": The number of inputs should be " << n_inputs_<< vcl_endl;
+    std::cout << pro.name() << ": The number of inputs should be " << n_inputs_<< std::endl;
     return false;
   }
 
@@ -79,15 +81,15 @@ bool boxm2_bundle_to_scene_process(bprb_func_process& pro)
   //get the inputs
   //----------------------------------------------------------------------------
   unsigned i = 0;
-  vcl_string bundler_out = pro.get_input<vcl_string>(i++); //bundler out
-  vcl_string in_img_dir  = pro.get_input<vcl_string>(i++); //input png/tiff images
-  vcl_vector<vcl_string> appearance(2,"");
-  appearance[0]          = pro.get_input<vcl_string>(i++); //Appearance Model String
-  appearance[1]          = pro.get_input<vcl_string>(i++); //Occupancy Model String
+  std::string bundler_out = pro.get_input<std::string>(i++); //bundler out
+  std::string in_img_dir  = pro.get_input<std::string>(i++); //input png/tiff images
+  std::vector<std::string> appearance(2,"");
+  appearance[0]          = pro.get_input<std::string>(i++); //Appearance Model String
+  appearance[1]          = pro.get_input<std::string>(i++); //Occupancy Model String
   int nblks              = pro.get_input<int>(i++);        // TODO: unused!!!
   bool axis_align        = pro.get_input<bool>(i++);
-  vcl_string out_dir     = pro.get_input<vcl_string>(i++); //output dir for imgs/files
-  vcl_string ply_file     = pro.get_input<vcl_string>(i++); //output dir for imgs/files
+  std::string out_dir     = pro.get_input<std::string>(i++); //output dir for imgs/files
+  std::string ply_file     = pro.get_input<std::string>(i++); //output dir for imgs/files
 
   float x = pro.get_input<float>(i++);
   float y = pro.get_input<float>(i++);
@@ -97,18 +99,18 @@ bool boxm2_bundle_to_scene_process(bprb_func_process& pro)
   //----------------------------------------------------------------------------
   //run bundle to scene
   //----------------------------------------------------------------------------
-  vcl_map<vcl_string, CamType*> cams;
+  std::map<std::string, CamType*> cams;
   vgl_box_3d<double>            bbox;
   double                        resolution;
-  vcl_vector<vgl_point_3d<double>  > pts3d;
+  std::vector<vgl_point_3d<double>  > pts3d;
   if (vul_file::extension(bundler_out) == ".out")
     boxm2_util_convert_bundle(bundler_out, in_img_dir, cams, bbox, resolution);
   else if (vul_file::extension(bundler_out) == ".nvm")
     boxm2_util_convert_nvm(bundler_out, in_img_dir, cams,pts3d, bbox, resolution,axis_align);
 
   //create vector of camera objects
-  vcl_vector<vpgl_perspective_camera<double> > cs;
-  vcl_map<vcl_string, vpgl_perspective_camera<double>* >::iterator iter;
+  std::vector<vpgl_perspective_camera<double> > cs;
+  std::map<std::string, vpgl_perspective_camera<double>* >::iterator iter;
   for (iter=cams.begin(); iter!=cams.end(); ++iter)
     cs.push_back(* iter->second);
 
@@ -116,10 +118,10 @@ bool boxm2_bundle_to_scene_process(bprb_func_process& pro)
   //run cams and bounding box to rscene/uscene
   //----------------------------------------------------------------------------
   //create update scene
-  vcl_string scene_dir = "model";
+  std::string scene_dir = "model";
   if (!vul_file::make_directory_path( scene_dir.c_str()))
     return false;
-  vcl_cout<<"Writting Uscene.xml ";
+  std::cout<<"Writting Uscene.xml ";
   boxm2_scene_sptr uscene = new boxm2_scene(scene_dir, bbox.min_point());
   uscene->set_lvcs(lvcs);
   uscene->set_local_origin(vgl_point_3d<double>(0.0,0.0,0.0));
@@ -128,38 +130,38 @@ bool boxm2_bundle_to_scene_process(bprb_func_process& pro)
   boxm2_util_cams_and_box_to_scene(cs, bbox, *uscene,nblks);
   uscene->set_xml_path(scene_dir+"/uscene.xml");
   uscene->save_scene();
-    vcl_cout<<"Writting Image & camera "<<vcl_endl;
+    std::cout<<"Writting Image & camera "<<std::endl;
   //----------------------------------------------------------------------------
   //if output directory is non empty, create directory and save imgs, cams dirs
   //----------------------------------------------------------------------------
   if (out_dir != "")
   {
-    vcl_string krt_dir = out_dir + "/cams_krt";
-    vcl_string img_dir = out_dir + "/imgs";
+    std::string krt_dir = out_dir + "/cams_krt";
+    std::string img_dir = out_dir + "/imgs";
     if (! vul_file::make_directory_path( out_dir.c_str() ) ||
         ! vul_file::make_directory_path( krt_dir.c_str() ) ||
         ! vul_file::make_directory_path( img_dir.c_str() ) ) {
-      vcl_cout<<"boxm2_bundle_to_scene_process: cannot write images/cams to disk"<<vcl_endl;
+      std::cout<<"boxm2_bundle_to_scene_process: cannot write images/cams to disk"<<std::endl;
     }
     else {
-      vcl_cout<<"    Writing cameras and images to disk"<<vcl_endl;
+      std::cout<<"    Writing cameras and images to disk"<<std::endl;
 
       //write cams to disk
-      vcl_map<vcl_string, CamType*>::iterator iter;
+      std::map<std::string, CamType*>::iterator iter;
       for (iter = cams.begin(); iter != cams.end(); ++iter)
       {
         //image basename
-        vcl_string full_img_name = iter->first;
-        vcl_string img_name      = vul_file::basename(full_img_name);
-        vcl_string stripped_name = vul_file::strip_extension(img_name);
+        std::string full_img_name = iter->first;
+        std::string img_name      = vul_file::basename(full_img_name);
+        std::string stripped_name = vul_file::strip_extension(img_name);
 
         //good camera
         CamType    cam      = *iter->second;
 
         //save cam file
         char filename[1024];
-        vcl_sprintf(filename,"%s/%s_cam.txt", krt_dir.c_str(), stripped_name.c_str());
-        vcl_ofstream ofile(filename);
+        std::sprintf(filename,"%s/%s_cam.txt", krt_dir.c_str(), stripped_name.c_str());
+        std::ofstream ofile(filename);
         double u1,v1;
         cam.project(0,0,0,u1,v1);
         if (ofile)
@@ -174,18 +176,18 @@ bool boxm2_bundle_to_scene_process(bprb_func_process& pro)
 
         //save image
 
-        vcl_string outImgName;
-        vcl_string inImgGlob = in_img_dir + "/" + stripped_name + ".*";
+        std::string outImgName;
+        std::string inImgGlob = in_img_dir + "/" + stripped_name + ".*";
         vul_file_iterator moveImage(inImgGlob.c_str());
         if (moveImage) {
-          outImgName = vcl_string(moveImage());
-          vcl_cout<<"    Writing camera and image for image "<<outImgName<<vcl_endl;
+          outImgName = std::string(moveImage());
+          std::cout<<"    Writing camera and image for image "<<outImgName<<std::endl;
           vil_image_view_base_sptr img = vil_load(outImgName.c_str());
-          vcl_string img_path = img_dir + "/" + vul_file::basename(outImgName);
+          std::string img_path = img_dir + "/" + vul_file::basename(outImgName);
           vil_save( *img, img_path.c_str() );
         }
         else {
-          vcl_cout<<"Cannot move image "<<full_img_name<<" ! breaking !"<<vcl_endl;
+          std::cout<<"Cannot move image "<<full_img_name<<" ! breaking !"<<std::endl;
         }
       }
     }
@@ -193,18 +195,18 @@ bool boxm2_bundle_to_scene_process(bprb_func_process& pro)
 
   if(ply_file != "")
   {
-      vcl_ofstream ofile(ply_file.c_str() ) ;
+      std::ofstream ofile(ply_file.c_str() ) ;
       if(! ofile )
       {
-          vcl_cout<<"Could not open the output ply file "<<ply_file<<vcl_endl;
+          std::cout<<"Could not open the output ply file "<<ply_file<<std::endl;
           return false;
       }
       ofile << "ply\nformat ascii 1.0\nelement vertex " << pts3d.size();
       ofile << "\nproperty float32 x\nproperty float32 y\nproperty float32 z";
       ofile << "\nend_header\n";
-      ofile << vcl_fixed;
+      ofile << std::fixed;
       for (unsigned k = 0 ; k < pts3d.size(); k++)
-          ofile <<pts3d[k].x() << ' ' << pts3d[k].y() << ' ' << pts3d[k].z()<<vcl_endl;
+          ofile <<pts3d[k].x() << ' ' << pts3d[k].y() << ' ' << pts3d[k].z()<<std::endl;
 
       ofile.close() ;
   }

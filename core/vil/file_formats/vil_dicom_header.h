@@ -9,11 +9,12 @@
 // \author Chris Wolstenholme - Manchester
 // Modified by Ian Scott to work with vil loader.
 
-#include <vcl_ostream.h>
-#include <vcl_string.h>
+#include <ostream>
+#include <string>
+#include <vector>
+#include <vcl_compiler.h>
 #include <vxl_config.h>
 #include <vil/vil_stream.h>
-#include <vcl_vector.h>
 
 //: DICOM types
 //  Defines the type of the dicom file being loaded. A
@@ -277,37 +278,37 @@ enum vil_dicom_header_vr_type
 template <int T /* enum vil_dicom_header_vr_type */>
 struct vil_dicom_header_type_of
 {
-  typedef vcl_string type; // preferred C++ type for this VR (specialised below)
+  typedef std::string type; // preferred C++ type for this VR (specialised below)
 };
 
 #define vr_macro( VR, CPPT ) \
   VCL_DEFINE_SPECIALIZATION struct  vil_dicom_header_type_of<VR> { typedef CPPT type; }
 
-vr_macro( vil_dicom_header_AE, vcl_string );
-vr_macro( vil_dicom_header_AS, vcl_string );
-vr_macro( vil_dicom_header_AT, vcl_string );
-vr_macro( vil_dicom_header_CS, vcl_string );
+vr_macro( vil_dicom_header_AE, std::string );
+vr_macro( vil_dicom_header_AS, std::string );
+vr_macro( vil_dicom_header_AT, std::string );
+vr_macro( vil_dicom_header_CS, std::string );
 vr_macro( vil_dicom_header_DA, long );
 vr_macro( vil_dicom_header_DS, float );
 vr_macro( vil_dicom_header_FD, double );
 vr_macro( vil_dicom_header_FL, float );
 vr_macro( vil_dicom_header_IS, long );
-vr_macro( vil_dicom_header_LO, vcl_string );
-vr_macro( vil_dicom_header_LT, vcl_string );
-vr_macro( vil_dicom_header_OB, vcl_string );
-vr_macro( vil_dicom_header_OW, vcl_string );
-vr_macro( vil_dicom_header_PN, vcl_string );
-vr_macro( vil_dicom_header_SH, vcl_string );
+vr_macro( vil_dicom_header_LO, std::string );
+vr_macro( vil_dicom_header_LT, std::string );
+vr_macro( vil_dicom_header_OB, std::string );
+vr_macro( vil_dicom_header_OW, std::string );
+vr_macro( vil_dicom_header_PN, std::string );
+vr_macro( vil_dicom_header_SH, std::string );
 vr_macro( vil_dicom_header_SL, vxl_sint_32 );
-vr_macro( vil_dicom_header_SQ, vcl_string );
+vr_macro( vil_dicom_header_SQ, std::string );
 vr_macro( vil_dicom_header_SS, vxl_sint_16 );
-vr_macro( vil_dicom_header_ST, vcl_string );
+vr_macro( vil_dicom_header_ST, std::string );
 vr_macro( vil_dicom_header_TM, float );
-vr_macro( vil_dicom_header_UI, vcl_string );
+vr_macro( vil_dicom_header_UI, std::string );
 vr_macro( vil_dicom_header_UL, vxl_uint_32 );
-vr_macro( vil_dicom_header_UN, vcl_string );
+vr_macro( vil_dicom_header_UN, std::string );
 vr_macro( vil_dicom_header_US, vxl_uint_16 );
-vr_macro( vil_dicom_header_UT, vcl_string );
+vr_macro( vil_dicom_header_UT, std::string );
 #undef vr_macro
 
 
@@ -425,8 +426,8 @@ struct vil_dicom_header_info
   vil_dicom_header_type_of<vil_dicom_header_IS>::type acquisition_number_;           /*< The number of the acquisition */
   vil_dicom_header_type_of<vil_dicom_header_IS>::type image_number_;                 /*< The number of this image instance */
   vil_dicom_header_type_of<vil_dicom_header_CS>::type pat_orient_;                   /*< The orientation of the patient */
-  vcl_vector<vil_dicom_header_type_of<vil_dicom_header_DS>::type> image_pos_;        /*< The image position relative to the patient */
-  vcl_vector<vil_dicom_header_type_of<vil_dicom_header_DS>::type> image_orient_;     /*< The image orientation relative to the patient */
+  std::vector<vil_dicom_header_type_of<vil_dicom_header_DS>::type> image_pos_;        /*< The image position relative to the patient */
+  std::vector<vil_dicom_header_type_of<vil_dicom_header_DS>::type> image_orient_;     /*< The image orientation relative to the patient */
   vil_dicom_header_type_of<vil_dicom_header_UI>::type frame_of_ref_;                 /*< The frame of reference */
   vil_dicom_header_type_of<vil_dicom_header_IS>::type images_in_acq_;                /*< Then number ot images in the acquisition */
   vil_dicom_header_type_of<vil_dicom_header_LO>::type pos_ref_ind_;                  /*< The position reference indicator */
@@ -755,6 +756,6 @@ class vil_dicom_header_format
   vil_dicom_header_image_type image_type_;
 };
 
-void vil_dicom_header_print(vcl_ostream &os, const vil_dicom_header_info &s);
+void vil_dicom_header_print(std::ostream &os, const vil_dicom_header_info &s);
 
 #endif // vil_dicom_header_h_

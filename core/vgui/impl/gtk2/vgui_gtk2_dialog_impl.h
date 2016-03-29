@@ -39,7 +39,7 @@ class vgui_gtk2_dialog_impl : public vgui_dialog_impl
   ~vgui_gtk2_dialog_impl();
 
   void* pushbutton_field_widget(const char*, const void*);
-  void* choice_field_widget(const char*, const vcl_vector<vcl_string>&, int&);
+  void* choice_field_widget(const char*, const std::vector<std::string>&, int&);
   void* inline_tableau_widget(const vgui_tableau_sptr tab, unsigned width, unsigned height);
 
   //--------------------------------------------------------------------------------
@@ -66,9 +66,9 @@ class vgui_gtk2_dialog_impl : public vgui_dialog_impl
 
   status_type dialog_status_;
 
-  vcl_string ok_text;
-  vcl_string cancel_text;
-  vcl_string title;
+  std::string ok_text;
+  std::string cancel_text;
+  std::string title;
 };
 
 #endif // vgui_gtk2_dialog_impl_h_

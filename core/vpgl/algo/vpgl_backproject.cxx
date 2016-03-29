@@ -49,10 +49,10 @@ bool vpgl_backproject::bproj_plane(const vpgl_camera<double>* cam,
    vnl_double_2 final_proj;
    final_proj[0]=u; final_proj[1]=v;
   double err = (final_proj-image_point).magnitude();
-  // was: double err = vcl_sqrt(cf.f(x));
+  // was: double err = std::sqrt(cf.f(x));
   if (err > error_tol) // greater than a 20th of a pixel
   {
-      vcl_cerr << "ERROR: backprojection error = " << err << vcl_endl;
+      std::cerr << "ERROR: backprojection error = " << err << std::endl;
       return false;
   }
   return true;

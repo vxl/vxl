@@ -1,4 +1,4 @@
-#include <boct/boct_tree_cell_reader.txx>
+#include <boct/boct_tree_cell_reader.hxx>
 #include "boxm/boxm_apm_traits.h"
 #include "boxm/sample/boxm_sample.h"
 

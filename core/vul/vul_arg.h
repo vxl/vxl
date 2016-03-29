@@ -16,10 +16,11 @@
 //   Feb.2002 - Peter Vanroose - brief doxygen comment placed on single line
 // \endverbatim
 
-#include <vcl_vector.h>
-#include <vcl_string.h>
-#include <vcl_list.h>
-#include <vcl_iosfwd.h>
+#include <vector>
+#include <string>
+#include <list>
+#include <iosfwd>
+#include <vcl_compiler.h>
 #include <vxl_config.h>
 #include <vul/vul_export.h>
 
@@ -27,7 +28,7 @@
 class vul_arg_info_list;
 template <class T> class vul_arg;
 template <class T> void settype     (vul_arg<T> &);
-template <class T> void print_value (vcl_ostream &, vul_arg<T> const &);
+template <class T> void print_value (std::ostream &, vul_arg<T> const &);
 template <class T> int  parse       (vul_arg<T>*, char**);
 
 //: This is the base class for the templated vul_arg<T>s
@@ -47,8 +48,8 @@ class vul_arg_base
   static void set_help_option( char const*str);
   static void set_help_description( char const*str);
   static void set_help_precis( char const*str);
-  static void display_usage(char const* msg = 0);
-  static void display_usage_and_exit(char const* msg = 0);
+  static void display_usage(char const* msg = VXL_NULLPTR);
+  static void display_usage_and_exit(char const* msg = VXL_NULLPTR);
 
   friend class vul_arg_info_list;
 
@@ -58,7 +59,7 @@ class vul_arg_base
   //: Returns true if arg was set on the command line.
   bool set() const;
 
-  virtual vcl_ostream& print_value(vcl_ostream&) = 0;
+  virtual std::ostream& print_value(std::ostream&) = 0;
 
  public:   // Avoid errors on some compilers that don't follow
            // protected: directive correctly with type_
@@ -71,9 +72,9 @@ class vul_arg_base
   //: if true, this flag must be set on command line.
   bool required_;
   //: Option flag including "-" or "--".
-  vcl_string option_;
+  std::string option_;
   //: Description of argument.
-  vcl_string help_;
+  std::string help_;
 
   vul_arg_base(vul_arg_info_list& l, char const* option_string,
                char const*helpstring, bool required= false);
@@ -123,7 +124,7 @@ void vul_arg_parse(int& argc, char **& argv,
 void vul_arg_include(vul_arg_info_list& l);
 
 //: Print all args, and usage messages.
-void vul_arg_display_usage_and_exit(char const* msg = 0);
+void vul_arg_display_usage_and_exit(char const* msg = VXL_NULLPTR);
 
 //: parse command-line arguments
 template <class T>
@@ -144,8 +145,8 @@ class vul_arg : public vul_arg_base
   // first plain word in the command line (warning: this causes problems for
   // T=char *, but that just means that you have to have a help string if you
   // want a default... good)
-  vul_arg(char const* option_string = 0,
-          char const* helpstring = 0,
+  vul_arg(char const* option_string = VXL_NULLPTR,
+          char const* helpstring = VXL_NULLPTR,
           T default_value = T()
          )
     : vul_arg_base(option_string,helpstring, false),
@@ -153,8 +154,8 @@ class vul_arg : public vul_arg_base
 
   //: As above, but add the arg to the list \a l, on which \c parse() can be called later.
   vul_arg(vul_arg_info_list & l,
-          char const * option_string = 0,
-          char const * helpstring = 0,
+          char const * option_string = VXL_NULLPTR,
+          char const * helpstring = VXL_NULLPTR,
           T default_value = T() )
     : vul_arg_base(l, option_string, helpstring, false),
       value_(default_value) { settype(); }
@@ -195,7 +196,7 @@ class vul_arg : public vul_arg_base
   int parse(char ** argv) { return ::parse(this, argv); }
 
   //: print
-  vcl_ostream& print_value(vcl_ostream &s) {
+  std::ostream& print_value(std::ostream &s) {
     ::print_value(s, *this);
     return s; // << flush
   }
@@ -233,45 +234,19 @@ class vul_arg_info_list
   void set_help_description(char const* str) { description_ = str; }
 
  public://protected:
-  vcl_vector<vul_arg_base*> args_;
-  vcl_string help_;
-  vcl_string description_;
-  vcl_string command_precis_;
+  std::vector<vul_arg_base*> args_;
+  std::string help_;
+  std::string description_;
+  std::string command_precis_;
   bool verbose_;
   autonomy autonomy_;
 
-  void display_help( char const* progname= 0);
+  void display_help( char const* progname= VXL_NULLPTR);
 
  private:
   // Disallow assigning to objects of this class:
   vul_arg_info_list(vul_arg_info_list const &) {}
   vul_arg_info_list& operator=(vul_arg_info_list const &) { return *this; }
 };
-
-#if defined(VCL_ICC)
-#define declare_specialization(T) \
-template<> void settype(vul_arg<T > &); \
-template<> void print_value(vcl_ostream &, vul_arg<T > const &); \
-template<> int  parse(vul_arg<T > *, char **)
-
-declare_specialization(bool);
-declare_specialization(int);
-declare_specialization(unsigned);
-declare_specialization(char*);
-declare_specialization(char const*);
-declare_specialization(float);
-declare_specialization(double);
-declare_specialization(vcl_list<int>);
-declare_specialization(vcl_vector<int>);
-declare_specialization(vcl_vector<unsigned>);
-declare_specialization(vcl_vector<double>);
-declare_specialization(vcl_string);
-
-#ifdef VXL_HAS_INT_64
-declare_specialization(vxl_int_64);
-#endif
-
-#undef declare_specialization
-#endif // VCL_KAI
 
 #endif // vul_arg_h_

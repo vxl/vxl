@@ -23,14 +23,15 @@
 //                           then failed to create the vtable causing the error.
 //\endverbatim
 
+#include <iostream>
+#include <fstream>
+#include <deque>
+#include <algorithm>
 #include "sdet_sel_utils.h"
 #include "sdet_sel_base.h"
 
-#include <vcl_iostream.h>
-#include <vcl_fstream.h>
 #include <vcl_cassert.h>
-#include <vcl_deque.h>
-#include <vcl_algorithm.h>
+#include <vcl_compiler.h>
 
 //: A templatized subclass that can work with different curve models
 template <class curve_model>
@@ -134,7 +135,7 @@ public:
   }
 
   //: form an edgel grouping from an ordered list of edgemap_->edgels
-  virtual sdet_curvelet* form_an_edgel_grouping(sdet_edgel* ref_e, vcl_deque<sdet_edgel*> &edgel_chain,
+  virtual sdet_curvelet* form_an_edgel_grouping(sdet_edgel* ref_e, std::deque<sdet_edgel*> &edgel_chain,
       bool forward=true,  bool centered=true, bool leading=true);
 };
 
@@ -176,7 +177,7 @@ void sdet_sel<curve_model>::build_curvelets_greedy_for_edge(sdet_edgel* eA, unsi
                                 bool forward, bool centered, bool leading)
 {
   // 1) construct a structure to temporarily hold the pairwise-hypotheses
-  vcl_vector<sel_hyp> eA_hyps;
+  std::vector<sel_hyp> eA_hyps;
 
   //get the grid coordinates of this edgel
   unsigned const ii = sdet_round(eA->pt.x());
@@ -223,7 +224,7 @@ void sdet_sel<curve_model>::build_curvelets_greedy_for_edge(sdet_edgel* eA, unsi
   }
 
   // 5) first sort the pair-wise hyps by distance
-  vcl_sort(eA_hyps.begin(), eA_hyps.end(), comp_dist_hyps_less);
+  std::sort(eA_hyps.begin(), eA_hyps.end(), comp_dist_hyps_less);
 
   // 6) for each pair-wise hyps formed by this edgel
   for (unsigned h1=0; h1<eA_hyps.size(); h1++)
@@ -235,7 +236,7 @@ void sdet_sel<curve_model>::build_curvelets_greedy_for_edge(sdet_edgel* eA, unsi
     if (use_hybrid_){ if (cId_[eA->id]==cId_[eA_hyps[h1].eN->id]) continue;}
 
     // 7) initialize a new edgel chain that will grow in a greedy depth-first fashion
-    vcl_deque<sdet_edgel*> cur_edgel_chain; //chain can grow either way
+    std::deque<sdet_edgel*> cur_edgel_chain; //chain can grow either way
 
     //insert ref edgel first
     cur_edgel_chain.push_back(eA);
@@ -322,21 +323,21 @@ void sdet_sel<curve_model>::build_curvelets_greedy_for_edge(sdet_edgel* eA, unsi
 template <class curve_model>
 sdet_curvelet*
 sdet_sel<curve_model>::form_an_edgel_grouping(sdet_edgel* ref_e,
-    vcl_deque<sdet_edgel*> &edgel_chain,
+    std::deque<sdet_edgel*> &edgel_chain,
     bool forward,  bool centered, bool leading)
 {
   //1) Go over the edgels in the chain and attempt to form a curvelet from it
   curve_model* chain_cm=0;
 
   // 2) form an ordered list based on distance from ref_edgel
-  vcl_map<double, unsigned > dist_order; // ordered list of edgels (closest to furthest)
+  std::map<double, unsigned > dist_order; // ordered list of edgels (closest to furthest)
   for (unsigned i=0; i< edgel_chain.size(); i++)
   {
     if (edgel_chain[i] == ref_e)   continue;
-    dist_order.insert(vcl_pair<double, unsigned>(vgl_distance(ref_e->pt, edgel_chain[i]->pt), i));
+    dist_order.insert(std::pair<double, unsigned>(vgl_distance(ref_e->pt, edgel_chain[i]->pt), i));
   }
 
-  vcl_map<double, unsigned >::iterator it = dist_order.begin();
+  std::map<double, unsigned >::iterator it = dist_order.begin();
   for (; it!=dist_order.end(); it++)
   {
     sdet_edgel* cur_e = edgel_chain[it->second];

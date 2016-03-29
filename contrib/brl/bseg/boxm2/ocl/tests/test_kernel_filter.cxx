@@ -46,7 +46,7 @@ bool test_gauss_filter()
   unsigned gpu_idx = 0;
 
   if (mgr.numGPUs()<1) {
-    vcl_cerr << "No GPU available\n";
+    std::cerr << "No GPU available\n";
     return false;
   }
   if (mgr.numGPUs()==1) gpu_idx = 0;
@@ -60,16 +60,16 @@ bool test_gauss_filter()
   //verify values of the response
 
   //iterate through response blocks
-  vcl_map<boxm2_block_id, boxm2_block_metadata> blocks = scene->blocks();
-  vcl_map<boxm2_block_id, boxm2_block_metadata>::iterator blk_iter;
+  std::map<boxm2_block_id, boxm2_block_metadata> blocks = scene->blocks();
+  std::map<boxm2_block_id, boxm2_block_metadata>::iterator blk_iter;
   bool result = true;
   for (blk_iter = blocks.begin(); blk_iter != blocks.end(); ++blk_iter)
   {
     boxm2_block_id id = blk_iter->first;
-    vcl_cout << "Printing results for block " << id << ':' << vcl_endl;
+    std::cout << "Printing results for block " << id << ':' << std::endl;
 
     boxm2_block *     blk     = boxm2_cache::instance()->get_block(scene,id);
-    vcl_stringstream filter_ident; filter_ident << filter->name() << '_' << filter->id();
+    std::stringstream filter_ident; filter_ident << filter->name() << '_' << filter->id();
     boxm2_data_base * response    = boxm2_cache::instance()->get_data_base(scene,id, boxm2_data_traits<BOXM2_FLOAT>::prefix(filter_ident.str()));
     boxm2_block_metadata data = blk_iter->second;
 
@@ -80,7 +80,7 @@ bool test_gauss_filter()
     //iterate through each block, filtering the root level first
 
     for (unsigned int x = 0; x < trees.get_row1_count(); ++x) {
-      vcl_cout << '[' << x << '/' << trees.get_row1_count() << ']' << vcl_endl;
+      std::cout << '[' << x << '/' << trees.get_row1_count() << ']' << std::endl;
       for (unsigned int y = 0; y < trees.get_row2_count(); ++y) {
         for (unsigned int z = 0; z < trees.get_row3_count(); ++z) {
           //load current block/tree
@@ -88,16 +88,16 @@ bool test_gauss_filter()
           boct_bit_tree bit_tree((unsigned char*) tree.data_block(), data.max_level_);
 
           //FOR ALL LEAVES IN CURRENT TREE
-          vcl_vector<int> leafBits = bit_tree.get_leaf_bits();
-          vcl_vector<int>::iterator iter;
+          std::vector<int> leafBits = bit_tree.get_leaf_bits();
+          std::vector<int>::iterator iter;
           for (iter = leafBits.begin(); iter != leafBits.end(); ++iter)
           {
             int currBitIndex = (*iter);
             int currIdx = bit_tree.get_data_index(currBitIndex);
 
-            result = result && ( (vcl_abs(response_data[currIdx]-val1) < 1e-5) ||(vcl_abs(response_data[currIdx]-val2) < 1e-5) || (vcl_abs(response_data[currIdx]-0.0f) < 1e-5));
+            result = result && ( (std::abs(response_data[currIdx]-val1) < 1e-5) ||(std::abs(response_data[currIdx]-val2) < 1e-5) || (std::abs(response_data[currIdx]-0.0f) < 1e-5));
 
-            //vcl_cout << " P(leaf[" << currIdx << "])=" << response_data[currIdx] << vcl_endl;
+            //std::cout << " P(leaf[" << currIdx << "])=" << response_data[currIdx] << std::endl;
           }
         }
       }
@@ -139,7 +139,7 @@ bool test_gauss_x_filter()
   unsigned gpu_idx = 0;
 
   if (mgr.numGPUs()<1) {
-    vcl_cerr << "No GPU available\n";
+    std::cerr << "No GPU available\n";
     return false;
   }
   if (mgr.numGPUs()==1) gpu_idx = 0;
@@ -153,16 +153,16 @@ bool test_gauss_x_filter()
   //verify values of the response
 
   //iterate through response blocks
-  vcl_map<boxm2_block_id, boxm2_block_metadata> blocks = scene->blocks();
-  vcl_map<boxm2_block_id, boxm2_block_metadata>::iterator blk_iter;
+  std::map<boxm2_block_id, boxm2_block_metadata> blocks = scene->blocks();
+  std::map<boxm2_block_id, boxm2_block_metadata>::iterator blk_iter;
   bool result = true;
   for (blk_iter = blocks.begin(); blk_iter != blocks.end(); ++blk_iter)
   {
     boxm2_block_id id = blk_iter->first;
-    vcl_cout << "Printing results for block " << id << ':' << vcl_endl;
+    std::cout << "Printing results for block " << id << ':' << std::endl;
 
     boxm2_block *     blk     = boxm2_cache::instance()->get_block(scene,id);
-    vcl_stringstream filter_ident; filter_ident << filter->name() << '_' << filter->id();
+    std::stringstream filter_ident; filter_ident << filter->name() << '_' << filter->id();
     boxm2_data_base * response    = boxm2_cache::instance()->get_data_base(scene,id, boxm2_data_traits<BOXM2_FLOAT>::prefix(filter_ident.str()));
     boxm2_block_metadata data = blk_iter->second;
 
@@ -173,7 +173,7 @@ bool test_gauss_x_filter()
     //iterate through each block, filtering the root level first
 
     for (unsigned int x = 0; x < trees.get_row1_count(); ++x) {
-      vcl_cout << '[' << x << '/' << trees.get_row1_count() << ']' << vcl_endl;
+      std::cout << '[' << x << '/' << trees.get_row1_count() << ']' << std::endl;
       for (unsigned int y = 0; y < trees.get_row2_count(); ++y) {
         for (unsigned int z = 0; z < trees.get_row3_count(); ++z) {
           //load current block/tree
@@ -181,16 +181,16 @@ bool test_gauss_x_filter()
           boct_bit_tree bit_tree((unsigned char*) tree.data_block(), data.max_level_);
 
           //FOR ALL LEAVES IN CURRENT TREE
-          vcl_vector<int> leafBits = bit_tree.get_leaf_bits();
-          vcl_vector<int>::iterator iter;
+          std::vector<int> leafBits = bit_tree.get_leaf_bits();
+          std::vector<int>::iterator iter;
           for (iter = leafBits.begin(); iter != leafBits.end(); ++iter)
           {
             int currBitIndex = (*iter);
             int currIdx = bit_tree.get_data_index(currBitIndex);
 
-            result = result && ((vcl_abs(response_data[currIdx]-0.0f) < 1e-5));
+            result = result && ((std::abs(response_data[currIdx]-0.0f) < 1e-5));
 
-            //vcl_cout << "P(leaf[" << currIdx << "])=" << response_data[currIdx] << vcl_endl;
+            //std::cout << "P(leaf[" << currIdx << "])=" << response_data[currIdx] << std::endl;
           }
         }
       }

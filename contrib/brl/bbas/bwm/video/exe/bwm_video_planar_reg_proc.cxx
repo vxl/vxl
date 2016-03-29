@@ -1,7 +1,9 @@
+#include <iostream>
+#include <fstream>
+#include <string>
 #include <vul/vul_file.h>
 #include <vul/vul_arg.h>
-#include <vcl_fstream.h>
-#include <vcl_string.h>
+#include <vcl_compiler.h>
 #include <vnl/vnl_double_4.h>
 #include <vgl/vgl_point_3d.h>
 #include <vgl/vgl_plane_3d.h>
@@ -11,18 +13,18 @@
 #include <vidl/vidl_frame.h>
 #include <bwm/video/bwm_video_cam_istream.h>
 
-static bool planar_reg(vcl_string const& video_input_glob,
-                       vcl_string const& camera_input_glob,
-                       vcl_string const& video_output_dir,
-                       vcl_string const& world_plane_path,
-                       vcl_string const& homography_path,
-                       vcl_string const& preserve_float)
+static bool planar_reg(std::string const& video_input_glob,
+                       std::string const& camera_input_glob,
+                       std::string const& video_output_dir,
+                       std::string const& world_plane_path,
+                       std::string const& homography_path,
+                       std::string const& preserve_float)
 {
   vnl_double_4 pv;
   unsigned skip_frames = 0;
   if (world_plane_path == "")
     return false;
-  vcl_ifstream wis(world_plane_path.c_str());
+  std::ifstream wis(world_plane_path.c_str());
   wis >> pv;
   vgl_plane_3d<double> world_plane(pv[0], pv[1], pv[2], pv[3]);
 
@@ -94,16 +96,16 @@ static bool planar_reg(vcl_string const& video_input_glob,
 int main(int argc, char** argv)
 {
   vul_arg_info_list arglist;
-  vul_arg<vcl_string> video_input_glob(arglist, "-video_input_glob",
+  vul_arg<std::string> video_input_glob(arglist, "-video_input_glob",
                                        "video input file glob", "");
-  vul_arg<vcl_string> camera_input_glob(arglist, "-camera_input_glob",
+  vul_arg<std::string> camera_input_glob(arglist, "-camera_input_glob",
                                         "camera input file glob", "");
-  vul_arg<vcl_string> video_output_dir(arglist, "-video_output_dir",
+  vul_arg<std::string> video_output_dir(arglist, "-video_output_dir",
                                        "video output file directory", "");
-  vul_arg<vcl_string> world_plane_path(arglist, "-world_plane",
+  vul_arg<std::string> world_plane_path(arglist, "-world_plane",
                                        "world plane (4 element vector)", "");
-  vul_arg<vcl_string> homography_path(arglist, "-homg_dir", "homography dir", "");
-  vul_arg<vcl_string> preserve_float(arglist, "-preserve_float", "keep float format", "");
+  vul_arg<std::string> homography_path(arglist, "-homg_dir", "homography dir", "");
+  vul_arg<std::string> preserve_float(arglist, "-preserve_float", "keep float format", "");
   arglist.parse(argc, argv, true);
 
   if (!planar_reg(video_input_glob(), camera_input_glob(),

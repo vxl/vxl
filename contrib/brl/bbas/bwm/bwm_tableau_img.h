@@ -3,10 +3,12 @@
 //:
 // \file
 
+#include <iostream>
+#include <string>
 #include "bwm_tableau.h"
 #include "bwm_observer_img.h"
 
-#include <vcl_string.h>
+#include <vcl_compiler.h>
 
 #include <vgui/vgui_menu.h>
 #include <vgui/vgui_event.h>
@@ -25,13 +27,13 @@ class bwm_tableau_img : public bwm_tableau, public bgui_picker_tableau
   // Tableaux are responsible for their observers
   virtual ~bwm_tableau_img() { delete my_observer_; }
 
-  virtual vcl_string type_name() const { return "bwm_tableau_img"; }
+  virtual std::string type_name() const { return "bwm_tableau_img"; }
 
   void get_popup(vgui_popup_params const &params, vgui_menu &menu);
 
   bool handle(const vgui_event& e);
 
-  vcl_string img_path() const { return my_observer_->image_tableau()->file_name(); }
+  std::string img_path() const { return my_observer_->image_tableau()->file_name(); }
 
   virtual void create_box();
   virtual void create_polygon();

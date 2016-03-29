@@ -1,7 +1,9 @@
+#include <iostream>
+#include <queue>
 #include "bvxm_to_boxm2.h"
 //:
 // \file
-#include <vcl_queue.h>
+#include <vcl_compiler.h>
 
 //executable args
 #include <vul/vul_arg.h>
@@ -28,13 +30,13 @@
 // this method creates a regular boxm2 world, i.e. each subblock/octree is one voxel of the bvxm_world, octrees are not refined/sub-divided.
 void create_regular_world_scene_xml(boxm2_scene& new_scene, bvxm_world_params_sptr params, bvxm_voxel_world_sptr world, int max_level)
 {
-  vcl_cout << "boxm2 scene directory: " << new_scene.data_path() << vcl_endl;
-  vcl_cout << "setting 1 block only. number of subblocks, dimx: " << params->num_voxels().x() << " dimy: " << params->num_voxels().y() << " dimz: " << params->num_voxels().z() << vcl_endl;
+  std::cout << "boxm2 scene directory: " << new_scene.data_path() << std::endl;
+  std::cout << "setting 1 block only. number of subblocks, dimx: " << params->num_voxels().x() << " dimy: " << params->num_voxels().y() << " dimz: " << params->num_voxels().z() << std::endl;
 
   vgl_point_3d<double> local_orig((double)params->corner().x(), (double)params->corner().y(), (double)params->corner().z());
 
   //boxm2_lru_cache::create(&new_scene);
-  vcl_map<boxm2_block_id, boxm2_block_metadata> new_blocks;
+  std::map<boxm2_block_id, boxm2_block_metadata> new_blocks;
 
   // create only 1 block for a regular world
   boxm2_block_id block_id(0,0,0);
@@ -61,27 +63,33 @@ void initialize_regular_world_scene(boxm2_scene_sptr new_scene, boxm2_cache_sptr
   // iterate over each subblock (tree) and create alpha values according to surface occupancy probabilities read from corresponding voxels in bvxm world
   typedef vnl_vector_fixed<unsigned char, 16> uchar16;
 
-  vcl_map<boxm2_block_id, boxm2_block_metadata> blocks = new_scene->blocks();
-  vcl_map<boxm2_block_id, boxm2_block_metadata>::iterator blk_iter;
+  std::map<boxm2_block_id, boxm2_block_metadata> blocks = new_scene->blocks();
+  std::map<boxm2_block_id, boxm2_block_metadata>::iterator blk_iter;
   for (blk_iter = blocks.begin(); blk_iter != blocks.end(); ++blk_iter)
   {
     boxm2_block_id id = blk_iter->first;
     boxm2_block_metadata data = blk_iter->second;
 
     // to initialize alphas
-    //float empty_prob_alpha = -vcl_log(1.0f-data.p_init_) / data.sub_block_dim_.x();
+    //float empty_prob_alpha = -std::log(1.0f-data.p_init_) / data.sub_block_dim_.x();
     float empty_prob_alpha = data.p_init_;
 
     //get data from cache
     boxm2_data_base * alpha = cache->get_data_base(new_scene, id,boxm2_data_traits<BOXM2_ALPHA>::prefix());
-    vcl_size_t alphaTypeSize = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_ALPHA>::prefix());
+    std::size_t alphaTypeSize = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_ALPHA>::prefix());
 
     //3d array of trees
     const boxm2_array_3d<uchar16> trees = cache->get_block(new_scene, id)->trees();
 
     boxm2_data_traits<BOXM2_ALPHA>::datatype * alpha_data = (boxm2_data_traits<BOXM2_ALPHA>::datatype*) alpha->data_buffer();
+    // check for invalid parameters
+    if( alphaTypeSize == 0 ) //This should never happen, it will result in division by zero later
+    {
+      std::cerr << "ERROR: Division by 0 in " << __FILE__ << __LINE__ << std::endl;
+      throw 0;
+    }
 
-    vcl_cout << " alpha array size: " << alpha->buffer_length() /alphaTypeSize << vcl_endl; vcl_cout.flush();
+    std::cout << " alpha array size: " << alpha->buffer_length() /alphaTypeSize << std::endl; std::cout.flush();
 
     for ( unsigned i = 0 ; i < (alpha->buffer_length() /alphaTypeSize) ; ++i)
     {
@@ -111,8 +119,8 @@ void initialize_regular_world_scene(boxm2_scene_sptr new_scene, boxm2_cache_sptr
          boct_bit_tree bit_tree((unsigned char*) tree.data_block(), data.max_level_);
 
          //iterate through leaves of the tree
-         vcl_vector<int> leafBits = bit_tree.get_leaf_bits(0,data.max_level_);  // OZGE: what should depth be here?
-         vcl_vector<int>::iterator iter;
+         std::vector<int> leafBits = bit_tree.get_leaf_bits(0,data.max_level_);  // OZGE: what should depth be here?
+         std::vector<int>::iterator iter;
          for (iter = leafBits.begin(); iter != leafBits.end(); ++iter) {
            int currBitIndex = (*iter);
            int currIdx = bit_tree.get_data_index(currBitIndex); //data index
@@ -120,7 +128,7 @@ void initialize_regular_world_scene(boxm2_scene_sptr new_scene, boxm2_cache_sptr
            int curr_depth = bit_tree.depth_at(currBitIndex);
            double side_len = 1.0 / (double) (1<<curr_depth);
 
-           alpha_data[currIdx] = -vcl_log(1.0f-occ_prob) / side_len;
+           alpha_data[currIdx] = -std::log(1.0f-occ_prob) / side_len;
          }
         }
       }
@@ -130,9 +138,9 @@ void initialize_regular_world_scene(boxm2_scene_sptr new_scene, boxm2_cache_sptr
 
 int main(int argc, char** argv)
 {
-  vcl_cout << "Converting bvxm scene to boxm2 Scene" << vcl_endl;
-  vul_arg<vcl_string> scene_path("-bvxm_scene", "bvxm scene filename", "");
-  vul_arg<vcl_string> out_dir("-out", "output world directory for boxm2 scene", "");
+  std::cout << "Converting bvxm scene to boxm2 Scene" << std::endl;
+  vul_arg<std::string> scene_path("-bvxm_scene", "bvxm scene filename", "");
+  vul_arg<std::string> out_dir("-out", "output world directory for boxm2 scene", "");
   vul_arg<bool> only_create_xml("-only_scene_xml", "if present creates boxm2 scene xml file by converting bvxm scene file and exists", false);
   vul_arg_parse(argc, argv);
 
@@ -151,7 +159,7 @@ int main(int argc, char** argv)
   new_scene.set_local_origin(local_orig);
   new_scene.set_lvcs(*(params->lvcs()));
   new_scene.set_xml_path(out_dir()+"/scene.xml");
-  vcl_vector<vcl_string> apps;
+  std::vector<std::string> apps;
   apps.push_back("boxm2_mog3_grey");
   apps.push_back("boxm2_num_obs");
   new_scene.set_appearances(apps);

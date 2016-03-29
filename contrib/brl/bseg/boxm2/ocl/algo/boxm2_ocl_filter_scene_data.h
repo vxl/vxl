@@ -1,5 +1,7 @@
 #pragma once
-#include <vcl_fstream.h>
+#include <iostream>
+#include <fstream>
+#include <vcl_compiler.h>
 #include <boxm2/ocl/boxm2_opencl_cache.h>
 #include <boxm2/boxm2_scene.h>
 #include <boxm2/boxm2_block.h>
@@ -20,7 +22,7 @@ class boxm2_ocl_filter_scene_data{
 public:
         boxm2_ocl_filter_scene_data(){}
         boxm2_ocl_filter_scene_data(boxm2_opencl_cache_sptr opencl_cache, bocl_device_sptr device,
-                bvpl_kernel_vector_sptr filter_vector,vcl_string appType,vcl_size_t appTypeSize,cl_command_queue* queue){
+                bvpl_kernel_vector_sptr filter_vector,std::string appType,std::size_t appTypeSize,cl_command_queue* queue){
                 filter_vector_=filter_vector;
                 opencl_cache_=opencl_cache;
                 device_=device;
@@ -38,9 +40,9 @@ private:
         bvpl_kernel_vector_sptr filter_vector_;
         boxm2_opencl_cache_sptr opencl_cache_;
         bocl_device_sptr device_;
-        vcl_string appType_;
-        vcl_size_t appTypeSize_;
+        std::string appType_;
+        std::size_t appTypeSize_;
         boxm2_scene_sptr scene_;
-        vcl_vector<bocl_kernel*> kernels;
+        std::vector<bocl_kernel*> kernels;
         cl_command_queue* queue_;
 };

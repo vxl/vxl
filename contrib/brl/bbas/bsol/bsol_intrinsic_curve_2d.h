@@ -23,13 +23,14 @@
 // \endverbatim
 //*****************************************************************************
 
+#include <vector>
+#include <iostream>
 #include <vsol/vsol_curve_2d.h>
 #include <vsol/vsol_point_2d.h>
 #include <vsol/vsol_point_2d_sptr.h>
 #include <vsol/vsol_polyline_2d_sptr.h>
 #include <vsol/vsol_polygon_2d_sptr.h>
-#include <vcl_vector.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
 #include <vcl_cassert.h>
 
 #define ZERO_TOLERANCE 1E-1 // used in bsol_intrinsic_curve_2d.cxx
@@ -43,28 +44,28 @@ class bsol_intrinsic_curve_2d : public vsol_curve_2d
   // Data members
 
   //: Pointer to list of vsol_point_2d smart pointers
-  vcl_vector<vsol_point_2d_sptr> *storage_;
+  std::vector<vsol_point_2d_sptr> *storage_;
   //: First point of the curve : just to conform to vsol_curve_2d standard
   vsol_point_2d_sptr p0_;
   //: Last point of the curve
   vsol_point_2d_sptr p1_;
   //: Arclength measured from the p0_
-  vcl_vector<double> arcLength_;
+  std::vector<double> arcLength_;
   //: Arclength of the current segment i to i+1
-  vcl_vector<double> s_;
+  std::vector<double> s_;
   //: Normalized arclength measured from the p0_
   //  Normalized arclength of the whole curve is 1.
-  vcl_vector<double> normArcLength_;
+  std::vector<double> normArcLength_;
   //: Length of the intrinsic curve
   double length_;
   //: dx of the intrinsic curve
-  vcl_vector<double> dx_;
+  std::vector<double> dx_;
   //: dy of the intrinsic curve
-  vcl_vector<double> dy_;
+  std::vector<double> dy_;
   //: Curvature of the intrinsic curve
-  vcl_vector<double> curvature_;
+  std::vector<double> curvature_;
   //: Bending angle of the intrinsic curve
-  vcl_vector<double> angle_;
+  std::vector<double> angle_;
   //: Total curvature of the intrinsic curve
   double totalCurvature_;
   //: Total angle change of the intrinsic curve
@@ -78,8 +79,8 @@ class bsol_intrinsic_curve_2d : public vsol_curve_2d
 
   //: Default Constructor
   bsol_intrinsic_curve_2d();
-  //: Constructor from a vcl_vector of points
-  bsol_intrinsic_curve_2d(const vcl_vector<vsol_point_2d_sptr> &new_vertices);
+  //: Constructor from a std::vector of points
+  bsol_intrinsic_curve_2d(const std::vector<vsol_point_2d_sptr> &new_vertices);
   //: Constructor from a vsol_polyline_2d_sptr
   bsol_intrinsic_curve_2d(const vsol_polyline_2d_sptr poly);
   bsol_intrinsic_curve_2d(const vsol_polygon_2d_sptr poly);
@@ -93,7 +94,7 @@ class bsol_intrinsic_curve_2d : public vsol_curve_2d
   virtual vsol_spatial_object_2d* clone(void) const;
 
   //: Return a platform independent string identifying the class
-  vcl_string is_a() const { return vcl_string("bsol_intrinsic_curve_2d"); }
+  std::string is_a() const { return std::string("bsol_intrinsic_curve_2d"); }
 
   //***************************************************************************
   // Access
@@ -209,7 +210,7 @@ class bsol_intrinsic_curve_2d : public vsol_curve_2d
   //  Note that it insert the vertex into `i-1'
   void insert_vertex (int i, double x, double y, bool bRecomputeProterties=false);
 
-  void readCONFromFile(vcl_string fileName);
+  void readCONFromFile(std::string fileName);
 
   //: Added by Ozge Can Ozcanli to upsample the curve
   bool upsample(int new_size);
@@ -221,7 +222,7 @@ class bsol_intrinsic_curve_2d : public vsol_curve_2d
   virtual void compute_bounding_box(void) const;
 
   //: output description to stream
-  inline void describe(vcl_ostream &strm, int blanking=0) const {
+  inline void describe(std::ostream &strm, int blanking=0) const {
     if (blanking < 0) blanking = 0; while (blanking--) strm << ' ';
     strm << "<bsol_intrinsic_curve_2d "
       // << static_cast<vsol_curve_2d>(*this) << ' '

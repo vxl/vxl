@@ -3,9 +3,11 @@
 //:
 // \file expatpp parser to parse bpro process parameter files of bvxm worlds in order to create them outside bpro processes
 
+#include <string>
+#include <iostream>
+#include <sstream>
 #include <expatpplib.h>
-#include <vcl_string.h>
-#include <vcl_sstream.h>
+#include <vcl_compiler.h>
 // bvxm files
 #include <bvxm/bvxm_world_params.h>
 
@@ -27,12 +29,12 @@ class bvxm_world_param_parser : public expatpp
 {
  public:
   bvxm_world_param_parser() {}
-  bvxm_world_param_parser(vcl_string& filename);
+  bvxm_world_param_parser(std::string& filename);
   ~bvxm_world_param_parser(void) {}
 
   bvxm_world_params_sptr create_bvxm_world_params();
 
-  vcl_string world_directory() const { return world_dir_; } //  "input_directory";
+  std::string world_directory() const { return world_dir_; } //  "input_directory";
   float corner_x() const { return corner_x_; } //  "corner_x";
   float corner_y() const { return corner_y_; } //  "corner_y";
   float corner_z() const { return corner_z_; } // "corner_z";
@@ -40,7 +42,7 @@ class bvxm_world_param_parser : public expatpp
   unsigned int voxel_dim_y() const { return voxel_dim_y_; } // "voxel_dim_y";
   unsigned int voxel_dim_z() const { return voxel_dim_z_; } // "voxel_dim_z";
   float voxel_length() const { return voxel_length_; } // "voxel_length";
-  vcl_string lvcs_path() const { return lvcs_path_; } // "lvcs";
+  std::string lvcs_path() const { return lvcs_path_; } // "lvcs";
   float min_ocp_prob() const { return min_ocp_prob_; } // "min_ocp_prob";
   float max_ocp_prob() const { return max_ocp_prob_; } // "max_ocp_prob";
   unsigned int max_scale() const { return max_scale_; } // "max_scale";
@@ -50,7 +52,7 @@ class bvxm_world_param_parser : public expatpp
   virtual void endElement(const XML_Char* name);
   virtual void charData(const XML_Char* s, int len);
 
-  vcl_string world_dir_, lvcs_path_, temp_str_, active_tag_;
+  std::string world_dir_, lvcs_path_, temp_str_, active_tag_;
   float corner_x_, corner_y_, corner_z_;
   unsigned int voxel_dim_x_, voxel_dim_y_, voxel_dim_z_, max_scale_;
   float voxel_length_;
@@ -59,9 +61,9 @@ class bvxm_world_param_parser : public expatpp
 
 //string converter
 template <typename T>
-void bvxm_world_param_parser_convert(vcl_string s, T& d)
+void bvxm_world_param_parser_convert(std::string s, T& d)
 {
-  vcl_stringstream strm(s);
+  std::stringstream strm(s);
   strm >> d;
 }
 

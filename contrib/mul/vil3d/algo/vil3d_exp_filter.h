@@ -22,10 +22,10 @@ inline void vil3d_exp_filter_i(const vil3d_image_view<srcT>& src_im,
   unsigned nj = src_im.nj();
   unsigned nk = src_im.nk();
   dest_im.set_size(ni,nj,nk,src_im.nplanes());
-  vcl_ptrdiff_t s_istep = src_im.istep(), s_jstep = src_im.jstep();
-  vcl_ptrdiff_t s_kstep = src_im.kstep();
-  vcl_ptrdiff_t d_istep = dest_im.istep(),d_jstep = dest_im.jstep();
-  vcl_ptrdiff_t d_kstep = dest_im.kstep();
+  std::ptrdiff_t s_istep = src_im.istep(), s_jstep = src_im.jstep();
+  std::ptrdiff_t s_kstep = src_im.kstep();
+  std::ptrdiff_t d_istep = dest_im.istep(),d_jstep = dest_im.jstep();
+  std::ptrdiff_t d_kstep = dest_im.kstep();
 
   for (unsigned p=0;p<src_im.nplanes();++p)
   {

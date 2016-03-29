@@ -57,7 +57,7 @@ void vsol_cylinder::b_read(vsl_b_istream &is)
     vsl_b_read(is, cyl_);
     break;
    default:
-    vcl_cerr << "vsol_cylinder: unknown I/O version " << ver << '\n';
+    std::cerr << "vsol_cylinder: unknown I/O version " << ver << '\n';
   }
 }
 
@@ -68,27 +68,27 @@ short vsol_cylinder::version() const
 }
 
 //: Print an ascii summary to the stream
-void vsol_cylinder::print_summary(vcl_ostream &os) const
+void vsol_cylinder::print_summary(std::ostream &os) const
 {
   os << *this;
 }
 
 //: describe to the output stream
-void vsol_cylinder::describe(vcl_ostream &strm, int blanking) const
+void vsol_cylinder::describe(std::ostream &strm, int blanking) const
 {
   if (blanking < 0) blanking = 0;
   while (blanking--) { strm << ' '; }
   strm << "[vsol_cylinder center=" << cyl_.center()
        << " radius=" << cyl_.radius() << " length=" << cyl_.length()
        << " direction=" << cyl_.orientation()
-       << ']' << vcl_endl;
+       << ']' << std::endl;
 }
 
 //: Binary save vsol_cylinder* to stream.
 void
 vsl_b_write(vsl_b_ostream &os, const vsol_cylinder* p)
 {
-  if (p==0) {
+  if (p==VXL_NULLPTR) {
     vsl_b_write(os, false); // Indicate null pointer stored
   }
   else{
@@ -101,7 +101,7 @@ vsl_b_write(vsl_b_ostream &os, const vsol_cylinder* p)
 void
 vsl_b_write(vsl_b_ostream &os, const vsol_cylinder_sptr &p)
 {
-  if (p==0) {
+  if (p==VXL_NULLPTR) {
     vsl_b_write(os, false); // Indicate null pointer stored
   }
   else{
@@ -114,7 +114,7 @@ vsl_b_write(vsl_b_ostream &os, const vsol_cylinder_sptr &p)
 void
 vsl_b_read(vsl_b_istream &is, vsol_cylinder* &cyl)
 {
-  delete cyl; cyl=0;
+  delete cyl; cyl=VXL_NULLPTR;
   bool not_null_ptr;
   vsl_b_read(is, not_null_ptr);
   if (not_null_ptr) {

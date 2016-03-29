@@ -7,30 +7,34 @@
 // \author J.L. Mundy
 // \date   28 Aug 2015
 //
-#include <vcl_iostream.h>
-#include <vcl_fstream.h>
-#include <vcl_vector.h>
-#include <vcl_string.h>
-#include <vcl_map.h>
+#include <iostream>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <fstream>
+#include <vector>
+#include <string>
+#include <map>
 #include <vgl/vgl_vector_3d.h>
 #include <vgl/vgl_cubic_spline_3d.h>
 #include <vgl/vgl_pointset_3d.h>
 #include "boxm2_vecf_spline_field.h"
 #include <bvgl/bvgl_cross_section.h>
 #include <bvgl/bvgl_gen_cylinder.h>
+#include <vgl/algo/vgl_rotation_3d.h>
 #include "boxm2_vecf_mandible_params.h"
-class boxm2_vecf_mandible : public bvgl_gen_cylinder{
+#include "boxm2_vecf_geometry_base.h"
+class boxm2_vecf_mandible : public bvgl_gen_cylinder, public boxm2_vecf_geometry_base{
  public:
 
  boxm2_vecf_mandible(){
-   fill_boundary_map();
+   fill_boundary_map(); set_inv_rot();
   }
- boxm2_vecf_mandible(vcl_string const& geometry_file);
+ boxm2_vecf_mandible(std::string const& geometry_file);
 
- boxm2_vecf_mandible(vcl_map<vcl_string, unsigned> const& boundary_knots, vgl_cubic_spline_3d<double> const& axis,
-                     vcl_vector<bvgl_cross_section> const& cross_sects, double cross_section_interval=0.5):
+ boxm2_vecf_mandible(std::map<std::string, unsigned> const& boundary_knots, vgl_cubic_spline_3d<double> const& axis,
+                     std::vector<bvgl_cross_section> const& cross_sects, double cross_section_interval=0.5):
  bvgl_gen_cylinder(axis, cross_sects, cross_section_interval), boundary_knots_(boundary_knots){
-   fill_boundary_map();
+   fill_boundary_map(); set_inv_rot();
  }
 
  boxm2_vecf_spline_field translate(vgl_vector_3d<double> const& tr);
@@ -49,16 +53,26 @@ class boxm2_vecf_mandible : public bvgl_gen_cylinder{
 
  //: the functor operator for surface distance. dist_thresh is the distance a closest point on the normal plane
  // can be away from the closest point in the cross-section pointset.
- double operator() (vgl_point_3d<double> p) const{ return bvgl_gen_cylinder::surface_distance(p, params_.planar_surface_dist_thresh_);}
+ virtual double operator() (vgl_point_3d<double> const& p) const{ return bvgl_gen_cylinder::distance(p, params_.planar_surface_dist_thresh_);}
+
+ //: compute the inverse vector field for a target point
+ virtual bool inverse_vector_field(vgl_point_3d<double> const& target_pt, vgl_vector_3d<double>& inv_vf) const;
+ //: accessors
+ void set_params(boxm2_vecf_mandible_params const& params){params_ = params; this->set_inv_rot();}
+
+ //: set inv_rot_ from params_;
+ void set_inv_rot();
+ const vgl_rotation_3d<double>& inv_rot() const{return inv_rot_;}
 
  //:for debug purposes
- virtual void display_axis_spline(vcl_ofstream& ostr) const;
+ virtual void display_axis_spline(std::ofstream& ostr) const;
  private:
+ vgl_rotation_3d<double> inv_rot_;
  boxm2_vecf_mandible_params params_;
  void fill_boundary_map();
- vcl_map<vcl_string, unsigned> boundary_knots_;
+ std::map<std::string, unsigned> boundary_knots_;
 };
-vcl_ostream&  operator << (vcl_ostream& s, boxm2_vecf_mandible const& pr);
-vcl_istream&  operator >> (vcl_istream& s, boxm2_vecf_mandible& pr);
+std::ostream&  operator << (std::ostream& s, boxm2_vecf_mandible const& pr);
+std::istream&  operator >> (std::istream& s, boxm2_vecf_mandible& pr);
 
 #endif// boxm2_vecf_mandible

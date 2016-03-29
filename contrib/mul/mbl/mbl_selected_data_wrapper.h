@@ -9,8 +9,10 @@
 // \author Ian Scott
 // \brief A subset of an existing mbl_data_wrapper.
 
-#include <vcl_string.h>
-#include <vcl_vector.h>
+#include <iostream>
+#include <string>
+#include <vector>
+#include <vcl_compiler.h>
 #include <mbl/mbl_data_wrapper.h>
 
 //: A subset of an existing mbl_data_wrapper.
@@ -23,7 +25,7 @@ template <class T>
 class mbl_selected_data_wrapper: public mbl_data_wrapper<T>
 {
   mbl_data_wrapper<T> *data_;
-  vcl_vector<unsigned> selection_;
+  std::vector<unsigned> selection_;
   unsigned index_;
  public:
   //: Copy constructor.
@@ -33,7 +35,7 @@ class mbl_selected_data_wrapper: public mbl_data_wrapper<T>
   // This will take its own copy of selection and the data wrapper,
   // but not the underlying data.
   mbl_selected_data_wrapper(const mbl_data_wrapper<T>& data,
-                            const vcl_vector<unsigned> &subset);
+                            const std::vector<unsigned> &subset);
 
   //: Default constructor.
   mbl_selected_data_wrapper();
@@ -48,7 +50,7 @@ class mbl_selected_data_wrapper: public mbl_data_wrapper<T>
   // This will take its own copy of selection and the data wrapper,
   // but not the underlying data.
   void set(const mbl_data_wrapper<T>& data,
-    const vcl_vector<unsigned> &selection);
+    const std::vector<unsigned> &selection);
 
   //: Number of objects available.
   virtual unsigned long size() const;
@@ -77,10 +79,10 @@ class mbl_selected_data_wrapper: public mbl_data_wrapper<T>
   virtual mbl_data_wrapper< T >* clone() const ;
 
   //: Name of the class.
-  virtual vcl_string is_a() const;
+  virtual std::string is_a() const;
 
   //: True if this is (or is derived from) class named s
-  virtual bool is_class(vcl_string const& s) const;
+  virtual bool is_class(std::string const& s) const;
 };
 
 #endif // mbl_selected_data_wrapper_h

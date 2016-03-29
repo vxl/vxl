@@ -11,7 +11,7 @@ set(bapl_sources
    bapl_keypoint.cxx            bapl_keypoint.h                 bapl_keypoint_sptr.h
    bapl_keypoint_set.cxx        bapl_keypoint_set.h             bapl_keypoint_set_sptr.h
    bapl_lowe_keypoint.cxx       bapl_lowe_keypoint.h            bapl_lowe_keypoint_sptr.h
-   bapl_lowe_pyramid.txx        bapl_lowe_pyramid.h
+   bapl_lowe_pyramid.hxx        bapl_lowe_pyramid.h
    bapl_lowe_pyramid_set.cxx    bapl_lowe_pyramid_set.h         bapl_lowe_pyramid_set_sptr.h
    bapl_keypoint_extractor.cxx  bapl_keypoint_extractor.h
    bapl_bbf_tree.cxx            bapl_bbf_tree.h
@@ -27,7 +27,7 @@ set(bapl_sources
    )
 aux_source_directory(Templates bapl_sources)
 
-add_library(bapl  ${bapl_sources})
+vxl_add_library(LIBRARY_NAME bapl LIBRARY_SOURCES  ${bapl_sources})
 target_link_libraries(bapl bpgl_algo ${VXL_LIB_PREFIX}vpgl_algo ipts vimt brip rrel ${VXL_LIB_PREFIX}vnl_algo ${VXL_LIB_PREFIX}vnl ${VXL_LIB_PREFIX}vil_algo ${VXL_LIB_PREFIX}vil_io ${VXL_LIB_PREFIX}vil ${VXL_LIB_PREFIX}vgl_algo ${VXL_LIB_PREFIX}vgl ${VXL_LIB_PREFIX}vbl_io ${VXL_LIB_PREFIX}vbl)
 
 #if( BUILD_EXAMPLES )

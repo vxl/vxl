@@ -3,6 +3,9 @@
 //:
 // \file
 
+#include <iostream>
+#include <map>
+#include <fstream>
 #include <bstm/bstm_time_block.h>
 #include <bstm/bstm_block.h>
 #include <bstm/bstm_scene.h>
@@ -10,13 +13,11 @@
 #include <boct/boct_bit_tree.h>
 #include <boxm2/basic/boxm2_array_3d.h>
 #include <vnl/vnl_vector_fixed.h>
-#include <vcl_iostream.h>
 #include <bstm/io/bstm_cache.h>
 
 #include <boxm2/boxm2_scene.h>
 #include <boxm2/io/boxm2_cache.h>
-#include <vcl_map.h>
-#include <vcl_fstream.h>
+#include <vcl_compiler.h>
 
 class bstm_analyze_coherency_function
 {
@@ -31,7 +32,7 @@ class bstm_analyze_coherency_function
    //: "default" constructor does all the work
    bstm_analyze_coherency_function(bstm_block* blk, bstm_block_metadata blk_data, bstm_time_block* blk_t, bstm_data_traits<BSTM_MOG6_VIEW_COMPACT>::datatype *app,
                                        bstm_data_traits<BSTM_ALPHA>::datatype * alpha, double init_local_time, double end_local_time, vgl_box_3d<double> box,
-                                       float p_threshold, vcl_ofstream & output_file);
+                                       float p_threshold, std::ofstream & output_file);
 
 };
 

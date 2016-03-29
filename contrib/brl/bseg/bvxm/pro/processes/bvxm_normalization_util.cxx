@@ -1,9 +1,11 @@
+#include <iostream>
+#include <algorithm>
+#include <cmath>
 #include "bvxm_normalization_util.h"
 //:
 // \file
 
-#include <vcl_algorithm.h>
-#include <vcl_cmath.h>
+#include <vcl_compiler.h>
 
 //: Float specialized function to normalize and image given a,b where new_I = a*I +b;
 bool bvxm_normalization_util::normalize_image(const vil_image_view<float>& in_view,
@@ -23,7 +25,7 @@ bool bvxm_normalization_util::normalize_image(const vil_image_view<float>& in_vi
       {
         float p = a*in_view(i,j,k) + b;
         // Proposed fix
-        out_img(i, j, k) = vcl_min(vcl_max(0.f, p), max_value);
+        out_img(i, j, k) = std::min(std::max(0.f, p), max_value);
       }
 
   return true;
@@ -45,11 +47,11 @@ bool bvxm_normalization_util::normalize_image(const vil_image_view<vxl_byte>& in
     for (unsigned j=0;j<nj;++j)
       for (unsigned i=0;i<ni;++i)
       {
-        int p = (int)vcl_floor(a*in_view(i,j,k) + b);
-        out_img(i, j, k) = (vxl_byte)vcl_min(vcl_max(0, p), (int)max_value);
+        int p = (int)std::floor(a*in_view(i,j,k) + b);
+        out_img(i, j, k) = (vxl_byte)std::min(std::max(0, p), (int)max_value);
       }
 #ifdef DEBUG
-  vcl_cerr << "entered byte case..................\n";
+  std::cerr << "entered byte case..................\n";
 #endif
   return true;
 }

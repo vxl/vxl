@@ -1,3 +1,6 @@
+#include <string>
+#include <iostream>
+#include <iomanip>
 #include <testlib/testlib_test.h>
 
 #include <bundler/bundler.h>
@@ -6,8 +9,7 @@
 
 
 #include <vil/vil_load.h>
-#include <vcl_string.h>
-#include <vcl_iomanip.h>
+#include <vcl_compiler.h>
 
 static const char* IMG_PATH = "contrib/cul/bundler/test/test_data";
 
@@ -18,10 +20,10 @@ static const double SENSOR_WIDTH_MM = 5.312;
 
 static void test_pipeline(int argc, char** argv)
 {
-    vcl_string filepath;
+    std::string filepath;
 
     if (argc < 2) {
-        vcl_cerr << "Supply a test_data directory name (containing files"
+        std::cerr << "Supply a test_data directory name (containing files"
                  << " kermit*.jpg) on the command line!\n";
         TEST("test_pipeline", true, false);
 
@@ -32,21 +34,21 @@ static void test_pipeline(int argc, char** argv)
     }
 
     //-------------------- Load all the images.
-    vcl_vector<vil_image_resource_sptr> imgs(NUM_IMGS);
-    vcl_vector<double> exif_tags(NUM_IMGS);
+    std::vector<vil_image_resource_sptr> imgs(NUM_IMGS);
+    std::vector<double> exif_tags(NUM_IMGS);
 
     for (int i = 0; i < NUM_IMGS; ++i) {
-        vcl_stringstream str;
+        std::stringstream str;
         str << filepath << "/kermit"
-            << vcl_setw(3) << vcl_setfill('0') << i << ".jpg";
+            << std::setw(3) << std::setfill('0') << i << ".jpg";
 
         imgs[i] = vil_load_image_resource(str.str().c_str(), false);
         exif_tags[i] = imgs[i]->ni() * FOCAL_LENGTH_MM / SENSOR_WIDTH_MM;;
     }
 
     //-------------------- Run the pipeline
-    vcl_vector<vpgl_perspective_camera<double> > cameras;
-    vcl_vector<vgl_point_3d<double> > points;
+    std::vector<vpgl_perspective_camera<double> > cameras;
+    std::vector<vgl_point_3d<double> > points;
     vnl_sparse_matrix<bool> visibility_graph;
 
     bundler_routines routines;
@@ -61,12 +63,12 @@ static void test_pipeline(int argc, char** argv)
         "points.ply",
         points);
 
-    vcl_cout<<"\n\n\n------------------------\n";
+    std::cout<<"\n\n\n------------------------\n";
 
     for (unsigned int i = 0; i < cameras.size(); i++) {
-        vcl_cout<<"=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-\n"
+        std::cout<<"=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-\n"
                 << cameras[i]
-                <<"\n=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-"<<vcl_endl;
+                <<"\n=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-"<<std::endl;
     }
 }
 

@@ -1,10 +1,12 @@
+#include <iostream>
+#include <algorithm>
 #include "mmn_csp_solver.h"
 //:
 // \file
 // \brief see if the Constraint Satisfaction Problem is satisfiable
 // \author Martin Roberts
 
-#include <vcl_algorithm.h>
+#include <vcl_compiler.h>
 #include <vcl_cassert.h>
 
 //: Default constructor
@@ -14,7 +16,7 @@ mmn_csp_solver::mmn_csp_solver():nnodes_(0),verbose_(false)
 }
 
 //: Construct with arcs
-mmn_csp_solver::mmn_csp_solver(unsigned num_nodes,const vcl_vector<mmn_arc>& arcs):
+mmn_csp_solver::mmn_csp_solver(unsigned num_nodes,const std::vector<mmn_arc>& arcs):
         nnodes_(num_nodes),verbose_(false)
 {
     init();
@@ -26,7 +28,7 @@ void mmn_csp_solver::init()
 }
 
 //: Pass in the arcs, which are then used to build the graph object
-void mmn_csp_solver::set_arcs(unsigned num_nodes,const vcl_vector<mmn_arc>& arcs)
+void mmn_csp_solver::set_arcs(unsigned num_nodes,const std::vector<mmn_arc>& arcs)
 {
     nnodes_=num_nodes;
     arcs_ = arcs;
@@ -34,11 +36,11 @@ void mmn_csp_solver::set_arcs(unsigned num_nodes,const vcl_vector<mmn_arc>& arcs
     unsigned max_node=0;
     for (unsigned i=0; i<arcs.size();++i)
     {
-        max_node=vcl_max(max_node,arcs[i].max_v());
+        max_node=std::max(max_node,arcs[i].max_v());
     }
     if (nnodes_ != max_node+1)
     {
-        vcl_cerr<<"Arcs appear to be inconsistent with number of nodes in mmn_csp_solver::set_arcs\n"
+        std::cerr<<"Arcs appear to be inconsistent with number of nodes in mmn_csp_solver::set_arcs\n"
                 <<"Max node in Arcs is: "<<max_node<<" but number of nodes= "<<nnodes_ << '\n';
     }
 
@@ -47,8 +49,8 @@ void mmn_csp_solver::set_arcs(unsigned num_nodes,const vcl_vector<mmn_arc>& arcs
 
 
 //: Run the algorithm
-bool mmn_csp_solver::operator()(const vcl_vector<mmn_csp_solver::label_subset_t >& node_labels_subset,
-                                const vcl_vector<mmn_csp_solver::arc_labels_subset_t >& links_subset)
+bool mmn_csp_solver::operator()(const std::vector<mmn_csp_solver::label_subset_t >& node_labels_subset,
+                                const std::vector<mmn_csp_solver::arc_labels_subset_t >& links_subset)
 {
     init();
 
@@ -76,7 +78,7 @@ bool mmn_csp_solver::operator()(const vcl_vector<mmn_csp_solver::label_subset_t 
     return !emptyKernel;
 }
 
-void  mmn_csp_solver::initialise_arc_labels_linked(const vcl_vector<mmn_csp_solver::arc_labels_subset_t >& links_subset)
+void  mmn_csp_solver::initialise_arc_labels_linked(const std::vector<mmn_csp_solver::arc_labels_subset_t >& links_subset)
 {
     arc_labels_linked1_.clear();
     arc_labels_linked2_.clear();
@@ -105,15 +107,15 @@ bool mmn_csp_solver::check_for_node_deletions()
     bool deleted=false;
     for (unsigned inode=0;inode<nnodes_;++inode)
     {
-        vcl_set<unsigned>::iterator labelIter=node_labels_present_[inode].begin();
-        vcl_set<unsigned>::iterator labelIterEnd=node_labels_present_[inode].end();
-        const vcl_vector<vcl_pair<unsigned,unsigned> >& neighbourhood = graph_.node_data()[inode];
+        std::set<unsigned>::iterator labelIter=node_labels_present_[inode].begin();
+        std::set<unsigned>::iterator labelIterEnd=node_labels_present_[inode].end();
+        const std::vector<std::pair<unsigned,unsigned> >& neighbourhood = graph_.node_data()[inode];
         while (labelIter != labelIterEnd)
         {
             unsigned label = *labelIter; //this label value
             //Now loop over all arcs in the node's neighbourhood
-            vcl_vector<vcl_pair<unsigned,unsigned> >::const_iterator neighIter=neighbourhood.begin();
-            vcl_vector<vcl_pair<unsigned,unsigned> >::const_iterator neighIterEnd=neighbourhood.end();
+            std::vector<std::pair<unsigned,unsigned> >::const_iterator neighIter=neighbourhood.begin();
+            std::vector<std::pair<unsigned,unsigned> >::const_iterator neighIterEnd=neighbourhood.end();
             bool found=true;
             while (neighIter != neighIterEnd)
             {
@@ -121,7 +123,7 @@ bool mmn_csp_solver::check_for_node_deletions()
                 unsigned arcId=neighIter->second;
                 if (inode<neighIter->first)
                 {
-                    vcl_pair<unsigned ,unsigned > sought(label,0);
+                    std::pair<unsigned ,unsigned > sought(label,0);
                     arc_labels_subset_t1::const_iterator linkIter=arc_labels_linked1_[arcId].lower_bound(sought);
                     if (linkIter != arc_labels_linked1_[arcId].end())
                     {
@@ -133,7 +135,7 @@ bool mmn_csp_solver::check_for_node_deletions()
                 }
                 else
                 {
-                    vcl_pair<unsigned ,unsigned > sought(0,label);
+                    std::pair<unsigned ,unsigned > sought(0,label);
                     arc_labels_subset_t2::const_iterator linkIter=arc_labels_linked2_[arcId].lower_bound(sought);
                     if (linkIter != arc_labels_linked2_[arcId].end())
                     {
@@ -148,7 +150,7 @@ bool mmn_csp_solver::check_for_node_deletions()
                 {
                     if (verbose_)
                     {
-                        vcl_cout<<"Found no arc linking labels for node "<<inode<<" label "<<label<<" to node "<<neighIter->first<<"along arc ID "<<arcId<<vcl_endl;
+                        std::cout<<"Found no arc linking labels for node "<<inode<<" label "<<label<<" to node "<<neighIter->first<<"along arc ID "<<arcId<<std::endl;
                     }
                     break;
                 }
@@ -159,11 +161,11 @@ bool mmn_csp_solver::check_for_node_deletions()
             {
                 //Found no links from this label to anywhere
                 //So delete it
-                vcl_set<unsigned>::iterator labelIterNext=labelIter;
+                std::set<unsigned>::iterator labelIterNext=labelIter;
                 ++labelIterNext;
                 if (verbose_)
                 {
-                    vcl_cout<<"Have removed label "<<*labelIter<<" for node "<<inode<<" as it has no linking arcs"<<vcl_endl;
+                    std::cout<<"Have removed label "<<*labelIter<<" for node "<<inode<<" as it has no linking arcs"<<std::endl;
                 }
                 node_labels_present_[inode].erase(labelIter);
                 labelIter=labelIterNext;
@@ -194,23 +196,23 @@ bool mmn_csp_solver::check_for_arc_deletions()
             unsigned node1=arcs_[iarc].min_v();
             unsigned node2=arcs_[iarc].max_v();
             assert(node1<node2);
-            vcl_set<unsigned>& labelSet1=node_labels_present_[node1];
+            std::set<unsigned>& labelSet1=node_labels_present_[node1];
 
             bool found=false;
             if (labelSet1.find(label1)!=labelSet1.end())
             {
-                vcl_set<unsigned>& labelSet2=node_labels_present_[node2];
+                std::set<unsigned>& labelSet2=node_labels_present_[node2];
                 found = labelSet2.find(label2)!=labelSet2.end();
             }
             if (!found) //failed to find at least one of target labels
             {
                 deleted=true;
-                //vcl_pair<unsigned,unsigned > pair2(linkIter->second,linkIter->first); //transpose
-                vcl_pair<unsigned,unsigned > pair2(linkIter->first,linkIter->second); //transpose
+                //std::pair<unsigned,unsigned > pair2(linkIter->second,linkIter->first); //transpose
+                std::pair<unsigned,unsigned > pair2(linkIter->first,linkIter->second); //transpose
 
                 labels_linked1.erase(linkIter++); //remove from multset 1
                 //Find all possible instances in multiset 2 for removal
-                vcl_pair<arc_labels_subset_t2::iterator,arc_labels_subset_t2::iterator> range=
+                std::pair<arc_labels_subset_t2::iterator,arc_labels_subset_t2::iterator> range=
                     labels_linked2.equal_range(pair2);
                 arc_labels_subset_t2::iterator killer=range.first;
 
@@ -222,8 +224,8 @@ bool mmn_csp_solver::check_for_arc_deletions()
                         labels_linked2.erase(killer++);
                         if (verbose_)
                         {
-                            vcl_cout<<"Have removed arc Id "<<iarc<<" Linking nodes "<<node1<<'\t'<<node2
-                                    <<" for respective labels "<<pair2.second<<'\t'<<pair2.first<<vcl_endl;
+                            std::cout<<"Have removed arc Id "<<iarc<<" Linking nodes "<<node1<<'\t'<<node2
+                                    <<" for respective labels "<<pair2.second<<'\t'<<pair2.first<<std::endl;
                         }
                     }
                     else

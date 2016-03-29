@@ -4,35 +4,36 @@
 //:
 // \file
 
+#include <iostream>
 #include "vpgl_fm_compute_7_point.h"
 //
 #include <vnl/vnl_fwd.h>
 #include <vnl/vnl_math.h> // for twopi
 #include <vgl/algo/vgl_norm_trans_2d.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
 
 //-------------------------------------------
 bool
 vpgl_fm_compute_7_point::compute(
-  const vcl_vector< vgl_homg_point_2d<double> >& pr,
-  const vcl_vector< vgl_homg_point_2d<double> >& pl,
-  vcl_vector< vpgl_fundamental_matrix<double>* >& fm )
+  const std::vector< vgl_homg_point_2d<double> >& pr,
+  const std::vector< vgl_homg_point_2d<double> >& pl,
+  std::vector< vpgl_fundamental_matrix<double>* >& fm )
 {
   // Check that there are at least 7 points.
   if ( pr.size() < 7 || pl.size() < 7 ) {
-    vcl_cerr << "vpgl_fm_compute_7_point: Need at least 7 point pairs.\n"
-             << "Number in each set: " << pr.size() << ", " << pl.size() << vcl_endl;
+    std::cerr << "vpgl_fm_compute_7_point: Need at least 7 point pairs.\n"
+             << "Number in each set: " << pr.size() << ", " << pl.size() << std::endl;
     return false;
   }
 
   // Check that the correspondence lists are the same size.
   if ( pr.size() != pl.size() ) {
-    vcl_cerr << "vpgl_fm_compute_7_point: Need correspondence lists of same size.\n";
+    std::cerr << "vpgl_fm_compute_7_point: Need correspondence lists of same size.\n";
     return false;
   }
 
   // Condition if necessary.
-  vcl_vector< vgl_homg_point_2d<double> > pr_norm, pl_norm;
+  std::vector< vgl_homg_point_2d<double> > pr_norm, pl_norm;
   vgl_norm_trans_2d<double> prnt, plnt;
   if ( precondition_ ) {
     prnt.compute_from_points(pr);
@@ -76,8 +77,8 @@ vpgl_fm_compute_7_point::compute(
 
   // Using the fact that Det(alpha*F1 +(1 - alpha)*F2) == 0
   // find the real roots of the cubic equation that satisfy
-  vcl_vector<double> a = get_coeffs(F1, F2);
-  vcl_vector<double> roots = solve_cubic(a);
+  std::vector<double> a = get_coeffs(F1, F2);
+  std::vector<double> roots = solve_cubic(a);
   for (unsigned int i = 0; i < roots.size(); i++) {
     vpgl_fundamental_matrix<double> F_temp( F1.as_ref()*roots[0] + F2*(1 - roots[i]) );
     if ( precondition_ )
@@ -89,7 +90,7 @@ vpgl_fm_compute_7_point::compute(
 
 
 //------------------------------------------------
-vcl_vector<double>
+std::vector<double>
 vpgl_fm_compute_7_point::get_coeffs( vnl_double_3x3 const& F1,
                                      vnl_double_3x3 const& F2 )
 {
@@ -108,7 +109,7 @@ vpgl_fm_compute_7_point::get_coeffs( vnl_double_3x3 const& F1,
   double d1=bb*ii-cc*hh, e1=bb*r+ii*k-cc*q-hh*l, f1=r*k-l*q;
   double g1=bb*ff-cc*ee, h1=bb*o+ff*k-cc*n-ee*l, i1=o*k-l*n;
 
-  vcl_vector<double> v;
+  std::vector<double> v;
   v.push_back(aa*a1-dd*d1+gg*g1);
   v.push_back(aa*b1+a1*j-dd*e1-d1*m+gg*h1+g1*p);
   v.push_back(aa*c1+b1*j-dd*f1-e1*m+gg*i1+h1*p);
@@ -119,8 +120,8 @@ vpgl_fm_compute_7_point::get_coeffs( vnl_double_3x3 const& F1,
 
 
 //------------------------------------------------
-vcl_vector<double>
-vpgl_fm_compute_7_point::solve_quadratic( vcl_vector<double> v )
+std::vector<double>
+vpgl_fm_compute_7_point::solve_quadratic( std::vector<double> v )
 {
   double a = v[1], b = v[2], c = v[3];
   double s = (b > 0.0) ? 1.0 : -1.0;
@@ -131,23 +132,23 @@ vpgl_fm_compute_7_point::solve_quadratic( vcl_vector<double> v )
     d = 0.0;
 
   if (d < 0.0) // doesn't work for compl_normex roots
-    return vcl_vector<double>(); // empty list
+    return std::vector<double>(); // empty list
 
-  double q = -0.5 * ( b + s * vcl_sqrt(d));
-  vcl_vector<double> l; l.push_back(q/a); l.push_back(c/q);
+  double q = -0.5 * ( b + s * std::sqrt(d));
+  std::vector<double> l; l.push_back(q/a); l.push_back(c/q);
   return l;
 };
 
 
 //------------------------------------------------
-vcl_vector<double>
-vpgl_fm_compute_7_point::solve_cubic( vcl_vector<double> v )
+std::vector<double>
+vpgl_fm_compute_7_point::solve_cubic( std::vector<double> v )
 {
   double a = v[0], b = v[1], c = v[2], d = v[3];
 
   // firstly check to see if we have appr_normoximately a quadratic
   double len = a*a + b*b + c*c + d*d;
-  if (vcl_abs(a*a/len) < 1e-6 )
+  if (std::abs(a*a/len) < 1e-6 )
     return solve_quadratic(v);
 
   b /= a; c /= a; d /= a; b /= 3;
@@ -157,8 +158,8 @@ vpgl_fm_compute_7_point::solve_cubic( vcl_vector<double> v )
   // At this point, a, c and d are no longer needed (c and d will be reused).
 
   if (q == 0) {
-    vcl_vector<double> w;
-    double cbrt = (r<0) ? vcl_exp(vcl_log(-2*r)/3.0) : -vcl_exp(vcl_log(2*r)/3.0);
+    std::vector<double> w;
+    double cbrt = (r<0) ? std::exp(std::log(-2*r)/3.0) : -std::exp(std::log(2*r)/3.0);
     w.push_back(cbrt - b);
     return w;
   }
@@ -170,20 +171,20 @@ vpgl_fm_compute_7_point::solve_cubic( vcl_vector<double> v )
   if ( d >= 0.0 ) {
     // Compute a cube root
     double z;
-    if ( -r + vcl_sqrt(d) >= 0 ) z = vcl_exp(vcl_log(-r + vcl_sqrt(d))/3.0);
-    else z = -vcl_exp(vcl_log(-r + vcl_sqrt(d))/3.0);
+    if ( -r + std::sqrt(d) >= 0 ) z = std::exp(std::log(-r + std::sqrt(d))/3.0);
+    else z = -std::exp(std::log(-r + std::sqrt(d))/3.0);
 
     // The case z=0 is excluded since this is q==0 which is handled above
-    vcl_vector<double> w; w.push_back(z + q/z - b); return w;
+    std::vector<double> w; w.push_back(z + q/z - b); return w;
   }
 
   // And finally the "irreducible case" (with 3 solutions):
-  c = vcl_sqrt(q);
-  double theta = vcl_acos( r/q/c ) / 3;
-  vcl_vector<double> l;
-  l.push_back(-2.0*c*vcl_cos(theta)                     - b);
-  l.push_back(-2.0*c*vcl_cos(theta + vnl_math::twopi/3) - b);
-  l.push_back(-2.0*c*vcl_cos(theta - vnl_math::twopi/3) - b);
+  c = std::sqrt(q);
+  double theta = std::acos( r/q/c ) / 3;
+  std::vector<double> l;
+  l.push_back(-2.0*c*std::cos(theta)                     - b);
+  l.push_back(-2.0*c*std::cos(theta + vnl_math::twopi/3) - b);
+  l.push_back(-2.0*c*std::cos(theta - vnl_math::twopi/3) - b);
   return l;
 };
 

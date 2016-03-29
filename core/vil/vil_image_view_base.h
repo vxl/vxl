@@ -14,8 +14,9 @@
 //   10 Sep. 2004 Peter Vanroose  Inlined all 1-line methods in class decl
 // \endverbatim
 
-#include <vcl_iosfwd.h>
-#include <vcl_string.h>
+#include <iosfwd>
+#include <string>
+#include <vcl_compiler.h>
 #include <vcl_cassert.h>
 #include <vcl_atomic_count.h>
 #include <vil/vil_pixel_format.h>
@@ -64,10 +65,10 @@ class vil_image_view_base
   virtual void set_size(unsigned width, unsigned height, unsigned n_planes) =0;
 
   //: Print a 1-line summary of contents
-  virtual void print(vcl_ostream&) const =0;
+  virtual void print(std::ostream&) const =0;
 
   //: Return class name
-  virtual vcl_string is_a() const =0;
+  virtual std::string is_a() const =0;
 
   //: Return a description of the concrete data pixel type.
   // For example if the value is VIL_PIXEL_FORMAT_BYTE,
@@ -76,7 +77,7 @@ class vil_image_view_base
   virtual enum vil_pixel_format pixel_format() const=0;
 
   //: True if this is (or is derived from) class s
-  virtual bool is_class(vcl_string const& s) const { return s=="vil_image_view_base"; }
+  virtual bool is_class(std::string const& s) const { return s=="vil_image_view_base"; }
 
  private:
   // You probably should not use a vil_image_view in a vbl_smart_ptr, so the
@@ -101,7 +102,7 @@ typedef vil_smart_ptr<vil_image_view_base> vil_image_view_base_sptr;
 
 //: Print a 1-line summary of contents
 inline
-vcl_ostream& operator<<(vcl_ostream& s, vil_image_view_base const& im)
+std::ostream& operator<<(std::ostream& s, vil_image_view_base const& im)
 { im.print(s); return s; }
 
 #endif // vil_image_view_base_h_

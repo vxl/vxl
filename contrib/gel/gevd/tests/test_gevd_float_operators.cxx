@@ -8,15 +8,17 @@
 // 1.0     |2003/02/02| Peter Vanroose           |Creation
 //*****************************************************************************
 
+#include <iostream>
+#include <cmath>
 #include <gevd/gevd_float_operators.h>
 #include <gevd/gevd_bufferxy.h>
-#include <vcl_cmath.h> // for sqrt(float)
+#include <vcl_compiler.h>
 #include <testlib/testlib_test.h>
 
 void
 test_gevd_float_operators()
 {
-  gevd_bufferxy buf_in(8,8,32), *buf_out=0, *buf_mag=0, *buf_dirx=0, *buf_diry=0;
+  gevd_bufferxy buf_in(8,8,32), *buf_out=VXL_NULLPTR, *buf_mag=VXL_NULLPTR, *buf_dirx=VXL_NULLPTR, *buf_diry=VXL_NULLPTR;
   gevd_float_operators::Fill(buf_in, 5.0f); *(float*)buf_in.GetElementAddr(1,2) = 3.0f;
   int r = gevd_float_operators::Threshold(buf_in, 4.0f);
   TEST("gevd_float_operators::Threshold()", r, 1);
@@ -34,7 +36,7 @@ test_gevd_float_operators()
   delete buf_mag;
   delete buf_dirx;
   delete buf_diry;
-  float* kernel = 0; int radius;
+  float* kernel = VXL_NULLPTR; int radius;
   gevd_float_operators::Find1dGaussianKernel(7.0f, kernel, radius);
   TEST("gevd_float_operators::Find1dGaussianKernel(7) radius", radius, 20);
   TEST_NEAR("gevd_float_operators::Find1dGaussianKernel(7) kernel values", kernel[20], 0.0571849, 1e-7);
@@ -55,11 +57,11 @@ test_gevd_float_operators()
   }
   gevd_float_operators::Correlation(buf_in, kernel_buf, buf_out);
   for (int i=1; i<7; ++i) for (int j=1; j<7; ++j) {
-    if      (i==2 && j==3) TEST_("Correlation", i,j, -3.f/vcl_sqrt(177.f));
-    else if (i==2 && j==2) TEST_("Correlation", i,j, 5.f/vcl_sqrt(177.f));
-    else if (i==1 && j==2) TEST_("Correlation", i,j, -11.f/vcl_sqrt(177.f));
-    else if (i==1 && j==3) TEST_("Correlation", i,j, 9.f/vcl_sqrt(177.f));
-    else                   TEST_("Correlation", i,j, 0.f/vcl_sqrt(177.f));
+    if      (i==2 && j==3) TEST_("Correlation", i,j, -3.f/std::sqrt(177.f));
+    else if (i==2 && j==2) TEST_("Correlation", i,j, 5.f/std::sqrt(177.f));
+    else if (i==1 && j==2) TEST_("Correlation", i,j, -11.f/std::sqrt(177.f));
+    else if (i==1 && j==3) TEST_("Correlation", i,j, 9.f/std::sqrt(177.f));
+    else                   TEST_("Correlation", i,j, 0.f/std::sqrt(177.f));
   }
   gevd_float_operators::CorrelationAlongAxis(buf_in, kernel_buf, buf_out);
   for (int i=1; i<7; ++i) for (int j=1; j<7; ++j) {

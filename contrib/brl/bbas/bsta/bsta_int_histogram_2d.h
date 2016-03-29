@@ -30,7 +30,9 @@
 // \endverbatim
 //-----------------------------------------------------------------------------
 
-#include <vcl_vector.h>
+#include <iostream>
+#include <vector>
+#include <vcl_compiler.h>
 #include <vcl_cassert.h>
 #include <bsta/bsta_int_histogram_1d.h>
 
@@ -40,7 +42,7 @@ class bsta_int_histogram_2d
   unsigned int nbins_x_;
   unsigned int nbins_y_;
   unsigned int diag_;                               // # buckets in diagonal 1D hist
-  vcl_vector<vcl_vector<long int> > counts_;        // the histogram buckets
+  std::vector<std::vector<long int> > counts_;        // the histogram buckets
 
  public:
 

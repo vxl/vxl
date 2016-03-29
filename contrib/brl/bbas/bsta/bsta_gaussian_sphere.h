@@ -13,8 +13,9 @@
 //                               add probability integration over a box
 // \endverbatim
 
+#include <iostream>
 #include "bsta_gaussian.h"
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
 #include <vnl/vnl_random.h>
 
 //: A (hyper-)spherical Gaussian distribution
@@ -52,8 +53,8 @@ class bsta_gaussian_sphere : public bsta_gaussian<T,n>
   {
     if (det_covar_ <= 0)
       return T(0);
-    return static_cast<T>(vcl_sqrt(1/(det_covar_*two_pi_power<n>::value()))
-         * vcl_exp(-sqr_mahal_dist/2));
+    return static_cast<T>(std::sqrt(1/(det_covar_*two_pi_power<n>::value()))
+         * std::exp(-sqr_mahal_dist/2));
   }
 
   //: The probability density at this sample
@@ -88,7 +89,7 @@ class bsta_gaussian_sphere : public bsta_gaussian<T,n>
 };
 
 template <class T , unsigned n>
-inline vcl_ostream& operator<< (vcl_ostream& os,
+inline std::ostream& operator<< (std::ostream& os,
                                 bsta_gaussian_sphere<T, n> const& g)
 {
   os << "gauss_sphere:mean(" << g.mean() << ")\n"

@@ -1,3 +1,3 @@
-#include <vbl/vbl_attributes.txx>
+#include <vbl/vbl_attributes.hxx>
 VBL_ATTRIBUTES_INSTANTIATE(unsigned);
 

@@ -16,7 +16,7 @@ class bwm_tableau_video : public bwm_tableau_cam
 
   virtual ~bwm_tableau_video(){}
 
-  virtual vcl_string type_name() const { return "bwm_tableau_video"; }
+  virtual std::string type_name() const { return "bwm_tableau_video"; }
 
   bool handle(const vgui_event &);
 
@@ -48,7 +48,7 @@ class bwm_tableau_video : public bwm_tableau_cam
   void extract_neighborhoods();
   void extract_histograms();
   void set_world_pt();
-  void set_corrs(vcl_vector<bwm_video_corr_sptr> const& corrs) { my_observer_->set_corrs(corrs); }
+  void set_corrs(std::vector<bwm_video_corr_sptr> const& corrs) { my_observer_->set_corrs(corrs); }
   void add_match_at_vertex();
 protected:
   bwm_observer_video* my_observer_;

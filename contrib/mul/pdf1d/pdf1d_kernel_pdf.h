@@ -7,10 +7,12 @@
 // \brief Univariate kernel_pdf PDF
 // \author Tim Cootes
 
+#include <vector>
+#include <iostream>
+#include <iosfwd>
 #include <pdf1d/pdf1d_pdf.h>
 #include <vnl/vnl_vector.h>
-#include <vcl_vector.h>
-#include <vcl_iosfwd.h>
+#include <vcl_compiler.h>
 
 //: Class for univariate kernel based PDFs.
 //  Distribution is the sum of a set of kernel functions placed on the training
@@ -32,7 +34,7 @@ class pdf1d_kernel_pdf : public pdf1d_pdf
 
   //: Workspace
   // If non-empty x_(index[i]) <= x_(index[i+1])
-  mutable vcl_vector<int> index_;
+  mutable std::vector<int> index_;
 
   //: True if all kernels have the same width
   bool all_same_width_;
@@ -69,13 +71,13 @@ class pdf1d_kernel_pdf : public pdf1d_pdf
   short version_no() const;
 
   //: Name of the class
-  virtual vcl_string is_a() const;
+  virtual std::string is_a() const;
 
   //: Does the name of the class match the argument?
-  virtual bool is_class(vcl_string const& s) const;
+  virtual bool is_class(std::string const& s) const;
 
   //: Print class to os
-  virtual void print_summary(vcl_ostream& os) const;
+  virtual void print_summary(std::ostream& os) const;
 
   //: Save class to binary file stream
   virtual void b_write(vsl_b_ostream& bfs) const;

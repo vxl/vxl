@@ -1,4 +1,7 @@
 // This is brl/bseg/boxm2/cpp/pro/processes/boxm2_cpp_render_z_images_process.cxx
+#include <iostream>
+#include <fstream>
+#include <sstream>
 #include <bprb/bprb_func_process.h>
 //:
 // \file
@@ -7,7 +10,7 @@
 // \author Vishal Jain
 // \date Mar 10, 2011
 
-#include <vcl_fstream.h>
+#include <vcl_compiler.h>
 #include <boxm2/io/boxm2_cache.h>
 #include <boxm2/io/boxm2_stream_cache.h>
 #include <boxm2/boxm2_scene.h>
@@ -21,7 +24,6 @@
 #include <vcl_where_root_dir.h>
 #include <boct/boct_bit_tree.h>
 #include <brad/brad_phongs_model_est.h>
-#include <vcl_sstream.h>
 #include <vil/vil_save.h>
 
 //#define SEGLEN_FACTOR 93206.7555f   //Hack representation of int32.maxvalue/(ni*nj*block_length)
@@ -37,13 +39,13 @@ bool boxm2_cpp_render_z_images_process_cons(bprb_func_process& pro)
   using namespace boxm2_cpp_render_z_images_process_globals;
 
   //process takes 4 inputs
-  vcl_vector<vcl_string> input_types_(n_inputs_);
+  std::vector<std::string> input_types_(n_inputs_);
   input_types_[0] = "boxm2_scene_sptr";
   input_types_[1] = "boxm2_cache_sptr";
   input_types_[2] = "vcl_string"; // data identifier
   input_types_[3] = "vcl_string"; //outputdir
   //and no outputs
-  vcl_vector<vcl_string>  output_types_(n_outputs_);
+  std::vector<std::string>  output_types_(n_outputs_);
 
   return pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
 }
@@ -53,19 +55,19 @@ bool  boxm2_cpp_render_z_images_process(bprb_func_process& pro)
   using namespace boxm2_cpp_render_z_images_process_globals;
 
   if ( pro.n_inputs() < n_inputs_ ) {
-    vcl_cout << pro.name() << ": The input number should be " << n_inputs_<< vcl_endl;
+    std::cout << pro.name() << ": The input number should be " << n_inputs_<< std::endl;
     return false;
   }
   //get the inputs
   unsigned i = 0;
   boxm2_scene_sptr scene =pro.get_input<boxm2_scene_sptr>(i++);
   boxm2_cache_sptr cache =pro.get_input<boxm2_cache_sptr>(i++);
-  vcl_string data_identifier= pro.get_input<vcl_string>(i++);
-  vcl_string outdir         = pro.get_input<vcl_string>(i++);
+  std::string data_identifier= pro.get_input<std::string>(i++);
+  std::string outdir         = pro.get_input<std::string>(i++);
 
   vgl_box_3d<double> bbox=scene->bounding_box();
-  vcl_vector<boxm2_block_id> vis_order = scene->get_block_ids();// (vpgl_perspective_camera<double>*) cam.ptr());
-  vcl_vector<boxm2_block_id>::iterator id;
+  std::vector<boxm2_block_id> vis_order = scene->get_block_ids();// (vpgl_perspective_camera<double>*) cam.ptr());
+  std::vector<boxm2_block_id>::iterator id;
   double xint=0.0;
   double yint=0.0;
   double zint=0.0;
@@ -95,12 +97,12 @@ bool  boxm2_cpp_render_z_images_process(bprb_func_process& pro)
         boxm2_block_id id;
         if (!scene->contains(vgl_point_3d<double>(x, y, z), id, local))
         {
-          vcl_cout<<"does not contain"<<vcl_endl;
+          std::cout<<"does not contain"<<std::endl;
           continue;
         }
-        int index_x=(int)vcl_floor(local.x());
-        int index_y=(int)vcl_floor(local.y());
-        int index_z=(int)vcl_floor(local.z());
+        int index_x=(int)std::floor(local.x());
+        int index_y=(int)std::floor(local.y());
+        int index_z=(int)std::floor(local.z());
 
         boxm2_block * blk=cache->get_block(scene,id);
         boxm2_block_metadata mdata = scene->get_block_metadata_const(id);
@@ -115,7 +117,7 @@ bool  boxm2_cpp_render_z_images_process(bprb_func_process& pro)
         img(i,j) = buffer[index];
       }
     }
-    vcl_ostringstream ss;
+    std::ostringstream ss;
     ss<<outdir<<'/'<<k<<".tiff";
     vil_save(img,ss.str().c_str());
   }

@@ -1,5 +1,6 @@
+#include <iostream>
 #include <testlib/testlib_test.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
 #include <vpl/vpl.h>
 #include <vil/vil_image_view.h>
 #include <vil/vil_image_resource.h>
@@ -11,7 +12,7 @@
 
 static void test_tile()
 {
-  vcl_vector<volm_tile> tiles = volm_tile::generate_p1_wr1_tiles();
+  std::vector<volm_tile> tiles = volm_tile::generate_p1_wr1_tiles();
   // test the lower left corner
   TEST("tile 1", tiles[0].lat_, 37);
   TEST("tile 1", tiles[0].lon_, 118);
@@ -37,8 +38,8 @@ static void test_tile()
 
   unsigned i, j;
   TEST("tile1 global to img", tiles[0].global_to_img(lon2, lat2, i, j), true);
-  vcl_cout << " i = " << i << ", tiles[0].ni_ = " << tiles[0].ni() << '\n';
-  vcl_cout << " j = " << j << ", tiles[0].nj_ = " << tiles[0].nj() << '\n';
+  std::cout << " i = " << i << ", tiles[0].ni_ = " << tiles[0].ni() << '\n';
+  std::cout << " j = " << j << ", tiles[0].nj_ = " << tiles[0].nj() << '\n';
   TEST("tile1 global to img", j, 0);
   TEST("tile1 global to img", i+1, tiles[0].nj_);
   // for location out of current tile, it will return nothing
@@ -47,14 +48,14 @@ static void test_tile()
   volm_tile tt(38, -117, tiles[0].scale_i_, tiles[0].scale_j_, tiles[0].ni_, tiles[0].nj_);
   TEST("tt global to img", tt.global_to_img(lon2, lat2, i, j), true);
   TEST("tt global to img", i, 0);
-  vcl_cout << " j = " << j << ", tt.nj_ = " <<  tt.nj_ << '\n';
+  std::cout << " j = " << j << ", tt.nj_ = " <<  tt.nj_ << '\n';
   TEST("tt global to img", j+1, tt.nj_);
 
   //volm_tile ttt(37.622991f, 118.209999f, 'N', 'W', 1.108007f, 0.930012f, (unsigned)10000, (unsigned)10000);
   volm_tile ttt(37.622991f, 118.209999f, 'N', 'W', 1.0f, 0.9f, (unsigned)10000, (unsigned)10000);
-  vcl_cout << "width is: " << ttt.calculate_width() << " meters = " << ttt.calculate_width()/1000.0 << " Km..\n";
-  vcl_cout << "height is: " << ttt.calculate_height() << " meters = " << ttt.calculate_height()/1000.0 << " Km..\n";
-  vcl_cout << "one pixel is: " << ttt.calculate_width()/ttt.ni_ << " meters..\n";
+  std::cout << "width is: " << ttt.calculate_width() << " meters = " << ttt.calculate_width()/1000.0 << " Km..\n";
+  std::cout << "height is: " << ttt.calculate_height() << " meters = " << ttt.calculate_height()/1000.0 << " Km..\n";
+  std::cout << "one pixel is: " << ttt.calculate_width()/ttt.ni_ << " meters..\n";
   ttt.write_kml("./t0.kml", 1000);
 
   // test the transformation as tile is in southern hemisphere

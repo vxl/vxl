@@ -26,7 +26,7 @@ class vgui_event_server_interpose_tableau : public vgui_wrapper_tableau
       the_server_(s) {}
 
   bool handle(const vgui_event& event);
-  vcl_string type_name() const {return "vgui_event_server";}
+  std::string type_name() const {return "vgui_event_server";}
 };
 
 //: Interaction (i.e. mouse/kb) events are saved, and said to be consumed.

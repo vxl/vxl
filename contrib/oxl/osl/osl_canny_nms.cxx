@@ -6,8 +6,10 @@
 // \file
 // \author fsm
 
+#include <iostream>
+#include <cmath>
 #include "osl_canny_nms.h"
-#include <vcl_cmath.h>
+#include <vcl_compiler.h>
 #include <vnl/vnl_math.h>
 
 //: returns number of edgels found [?]
@@ -21,7 +23,7 @@ unsigned int osl_canny_nms(int xsize_, int ysize_,
   for (int y=ysize_-2; y>0; --y) {
     for (int x=xsize_-2; x>0; --x) {
       float del;
-      if (vcl_fabs(dx_[x][y])>vcl_fabs(dy_[x][y])) {
+      if (std::fabs(dx_[x][y])>std::fabs(dy_[x][y])) {
         if    (grad_[x][y]<=grad_[x+1][y  ] || grad_[x][y]<grad_[x-1][y  ])
           continue;
       }
@@ -30,7 +32,7 @@ unsigned int osl_canny_nms(int xsize_, int ysize_,
 
       // we have an edge
       float thick = grad_[x][y];
-      float theta = k*(float)vcl_atan2(dx_[x][y],dy_[x][y]);
+      float theta = k*(float)std::atan2(dx_[x][y],dy_[x][y]);
       // theta not to be used to define theta_[x][y]. Only to define orient.
       int orient = ( (int) (theta+202.5) ) / 45; orient %= 8;
 
@@ -93,7 +95,7 @@ unsigned int osl_canny_nms(int xsize_, int ysize_,
       //  theta_[x][y] now stores the normal to the edge tangent.
       //  Before it stored the tangent to the edge.
       //  theta_[x][y] = theta;  // This how it was defined previously
-      theta_[x][y] = k*(float)vcl_atan2(-dy_[x][y],dx_[x][y]);
+      theta_[x][y] = k*(float)std::atan2(-dy_[x][y],dx_[x][y]);
 
       thick_[x][y] = thick;
       dx_[x][y] = newx;

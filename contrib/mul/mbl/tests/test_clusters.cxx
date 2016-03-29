@@ -1,10 +1,11 @@
 // This is mul/mbl/tests/test_clusters.cxx
+#include <iostream>
 #include <testlib/testlib_test.h>
 //:
 // \file
 #include <mbl/mbl_clusters.h>
-#include <mbl/mbl_clusters.txx>
-#include <vcl_iostream.h>
+#include <mbl/mbl_clusters.hxx>
+#include <vcl_compiler.h>
 
 //: Distance class
 class test_scalar_distance
@@ -18,7 +19,7 @@ MBL_CLUSTERS_INSTANTIATE(double,test_scalar_distance);
 
 void test_clusters()
 {
-  vcl_cout << "**********************\n"
+  std::cout << "**********************\n"
            << " Testing mbl_clusters\n"
            << "**********************\n";
 
@@ -26,7 +27,7 @@ void test_clusters()
 
   unsigned n=15;
   double max_r = 5.001;
-  vcl_vector<double> data(n);
+  std::vector<double> data(n);
   for (unsigned i=0;i<n;++i) data[i]=i;
 
   clusters.set_max_r(max_r);

@@ -8,7 +8,7 @@ doxygen_add_library(core/vpdl
   )
 
 set( vpdl_sources
-  vpdl_distribution.h      vpdl_distribution.txx
+  vpdl_distribution.h      vpdl_distribution.hxx
 
   vpdl_gaussian_base.h
   vpdl_gaussian_sphere.h
@@ -47,7 +47,7 @@ set( vpdl_sources
 
 aux_source_directory(Templates vpdl_sources)
 
-vxl_add_library(LIBNAME ${VXL_LIB_PREFIX}vpdl LIBSRCS ${vpdl_sources})
+vxl_add_library(LIBRARY_NAME ${VXL_LIB_PREFIX}vpdl LIBRARY_SOURCES ${vpdl_sources})
 target_link_libraries( ${VXL_LIB_PREFIX}vpdl ${VXL_LIB_PREFIX}vnl_algo ${VXL_LIB_PREFIX}vnl )
 
 if( BUILD_TESTING )

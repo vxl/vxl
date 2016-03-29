@@ -1,4 +1,6 @@
 // This is brl/bseg/boxm2/cpp/pro/processes/boxm2_cpp_image_density_process.cxx
+#include <iostream>
+#include <fstream>
 #include <bprb/bprb_func_process.h>
 //:
 // \file
@@ -7,7 +9,7 @@
 // \author Ozge C. Ozcanli
 // \date July 07, 2011
 
-#include <vcl_fstream.h>
+#include <vcl_compiler.h>
 #include <boxm2/io/boxm2_cache.h>
 #include <boxm2/boxm2_scene.h>
 #include <boxm2/boxm2_block.h>
@@ -28,7 +30,7 @@ namespace boxm2_cpp_image_density_process_globals
 {
   const unsigned n_inputs_ = 5;
   const unsigned n_outputs_ = 2;
-  vcl_size_t lthreads[2]={8,8};
+  std::size_t lthreads[2]={8,8};
 }
 
 bool boxm2_cpp_image_density_process_cons(bprb_func_process& pro)
@@ -36,7 +38,7 @@ bool boxm2_cpp_image_density_process_cons(bprb_func_process& pro)
   using namespace boxm2_cpp_image_density_process_globals;
 
   //process takes 1 input
-  vcl_vector<vcl_string> input_types_(n_inputs_);
+  std::vector<std::string> input_types_(n_inputs_);
   input_types_[0] = "boxm2_scene_sptr";
   input_types_[1] = "boxm2_cache_sptr";
   input_types_[2] = "vil_image_view_base_sptr";
@@ -45,14 +47,14 @@ bool boxm2_cpp_image_density_process_cons(bprb_func_process& pro)
 
   // process has 1 output:
   // output[0]: scene sptr
-  vcl_vector<vcl_string>  output_types_(n_outputs_);
+  std::vector<std::string>  output_types_(n_outputs_);
   output_types_[0] = "vil_image_view_base_sptr";
   output_types_[1] = "float";  // the cumulative normalized density measure for the image
 
   bool good = pro.set_input_types(input_types_) &&
     pro.set_output_types(output_types_);
   // in case the 4th input is not set
-  brdb_value_sptr idx = new brdb_value_t<vcl_string>("");
+  brdb_value_sptr idx = new brdb_value_t<std::string>("");
   pro.set_input(4, idx);
   return good;
 }
@@ -62,7 +64,7 @@ bool boxm2_cpp_image_density_process(bprb_func_process& pro)
   using namespace boxm2_cpp_image_density_process_globals;
 
   if ( pro.n_inputs() < n_inputs_ ) {
-    vcl_cout << pro.name() << ": The input number should be " << n_inputs_<< vcl_endl;
+    std::cout << pro.name() << ": The input number should be " << n_inputs_<< std::endl;
     return false;
   }
   //get the inputs
@@ -72,11 +74,11 @@ bool boxm2_cpp_image_density_process(bprb_func_process& pro)
   vil_image_view_base_sptr img = pro.get_input<vil_image_view_base_sptr>(i++);
   vil_image_view_base_sptr float_image=boxm2_util::prepare_input_image(img);
   vpgl_camera_double_sptr cam= pro.get_input<vpgl_camera_double_sptr>(i++);
-  vcl_string identifier = pro.get_input<vcl_string>(i);
+  std::string identifier = pro.get_input<std::string>(i);
 
   bool foundDataType = false;
-  vcl_string data_type;
-  vcl_vector<vcl_string> apps = scene->appearances();
+  std::string data_type;
+  std::vector<std::string> apps = scene->appearances();
   for (unsigned int i=0; i<apps.size(); ++i) {
     if ( apps[i] == boxm2_data_traits<BOXM2_MOG3_GREY>::prefix() )
     {
@@ -95,7 +97,7 @@ bool boxm2_cpp_image_density_process(bprb_func_process& pro)
     }
   }
   if (!foundDataType) {
-    vcl_cout<<"BOXM2_CPP_RENDER_PROCESS ERROR: scene doesn't have BOXM2_MOG3_GREY or BOXM2_MOG3_GREY_16 data type"<<vcl_endl;
+    std::cout<<"BOXM2_CPP_RENDER_PROCESS ERROR: scene doesn't have BOXM2_MOG3_GREY or BOXM2_MOG3_GREY_16 data type"<<std::endl;
     return false;
   }
 
@@ -104,10 +106,10 @@ bool boxm2_cpp_image_density_process(bprb_func_process& pro)
   }
   if (vil_image_view<float> * input_image=dynamic_cast<vil_image_view<float> * > (float_image.ptr()))
   {
-    vcl_vector<boxm2_block_id> vis_order=scene->get_vis_blocks(reinterpret_cast<vpgl_generic_camera<double>*>(cam.ptr()));
+    std::vector<boxm2_block_id> vis_order=scene->get_vis_blocks(reinterpret_cast<vpgl_generic_camera<double>*>(cam.ptr()));
     if (vis_order.empty())
     {
-      vcl_cout<<" None of the blocks are visible from this viewpoint"<<vcl_endl;
+      std::cout<<" None of the blocks are visible from this viewpoint"<<std::endl;
       return true;
     }
 
@@ -117,30 +119,30 @@ bool boxm2_cpp_image_density_process(bprb_func_process& pro)
     density_img->fill(0.0f);
     vis_img->fill(1.0f);
 
-     vcl_vector<boxm2_block_id>::iterator id;
+     std::vector<boxm2_block_id>::iterator id;
     for (id = vis_order.begin(); id != vis_order.end(); ++id)
     {
-      vcl_cout<<"Block Id "<<(*id)<<vcl_endl;
+      std::cout<<"Block Id "<<(*id)<<std::endl;
       boxm2_block *     blk  =  cache->get_block(scene,*id);
       boxm2_data_base *  alph = cache->get_data_base(scene,*id,boxm2_data_traits<BOXM2_ALPHA>::prefix());
       boxm2_data_base *  mog  = cache->get_data_base(scene,*id,data_type);
-      vcl_vector<boxm2_data_base*> datas;
+      std::vector<boxm2_data_base*> datas;
       datas.push_back(alph);
       datas.push_back(mog);
       boxm2_scene_info_wrapper *scene_info_wrapper=new boxm2_scene_info_wrapper();
       scene_info_wrapper->info=scene->get_blk_metadata(*id);
 
-      if ( data_type.find(boxm2_data_traits<BOXM2_MOG3_GREY>::prefix()) != vcl_string::npos )
+      if ( data_type.find(boxm2_data_traits<BOXM2_MOG3_GREY>::prefix()) != std::string::npos )
       {
         boxm2_image_density_functor<BOXM2_MOG3_GREY> render_functor;
         render_functor.init_data(datas, input_image, density_img, vis_img);
         cast_ray_per_block<boxm2_image_density_functor<BOXM2_MOG3_GREY> >
           (render_functor,scene_info_wrapper->info,blk,cam,input_image->ni(),input_image->nj());
       }
-      else if (data_type.find(boxm2_data_traits<BOXM2_GAUSS_GREY>::prefix()) != vcl_string::npos )
+      else if (data_type.find(boxm2_data_traits<BOXM2_GAUSS_GREY>::prefix()) != std::string::npos )
       {
-        vcl_cout << "Rendering using gauss grey!\n";
-        vcl_cout.flush();
+        std::cout << "Rendering using gauss grey!\n";
+        std::cout.flush();
         boxm2_image_density_functor<BOXM2_GAUSS_GREY> render_functor;
         render_functor.init_data(datas, input_image, density_img, vis_img);
         cast_ray_per_block<boxm2_image_density_functor<BOXM2_GAUSS_GREY> >
@@ -167,7 +169,7 @@ namespace boxm2_cpp_image_density_masked_process_globals
 {
   const unsigned n_inputs_ = 8;
   const unsigned n_outputs_ = 2;
-  vcl_size_t lthreads[2]={8,8};
+  std::size_t lthreads[2]={8,8};
 }
 
 bool boxm2_cpp_image_density_masked_process_cons(bprb_func_process& pro)
@@ -175,7 +177,7 @@ bool boxm2_cpp_image_density_masked_process_cons(bprb_func_process& pro)
   using namespace boxm2_cpp_image_density_masked_process_globals;
 
   //process takes 1 input
-  vcl_vector<vcl_string> input_types_(n_inputs_);
+  std::vector<std::string> input_types_(n_inputs_);
   input_types_[0] = "boxm2_scene_sptr";
   input_types_[1] = "boxm2_cache_sptr";
   input_types_[2] = "vil_image_view_base_sptr";
@@ -187,14 +189,14 @@ bool boxm2_cpp_image_density_masked_process_cons(bprb_func_process& pro)
 
   // process has 1 output:
   // output[0]: scene sptr
-  vcl_vector<vcl_string>  output_types_(n_outputs_);
+  std::vector<std::string>  output_types_(n_outputs_);
   output_types_[0] = "vil_image_view_base_sptr";
   output_types_[1] = "float";  // the cumulative normalized density measure for the image
 
   bool good = pro.set_input_types(input_types_) &&
     pro.set_output_types(output_types_);
   // in case the 8th input is not set
-  brdb_value_sptr idx = new brdb_value_t<vcl_string>("");
+  brdb_value_sptr idx = new brdb_value_t<std::string>("");
   pro.set_input(7, idx);
   return good;
 }
@@ -204,7 +206,7 @@ bool boxm2_cpp_image_density_masked_process(bprb_func_process& pro)
   using namespace boxm2_cpp_image_density_masked_process_globals;
 
   if ( pro.n_inputs() < n_inputs_ ) {
-    vcl_cout << pro.name() << ": The input number should be " << n_inputs_<< vcl_endl;
+    std::cout << pro.name() << ": The input number should be " << n_inputs_<< std::endl;
     return false;
   }
   //get the inputs
@@ -217,11 +219,11 @@ bool boxm2_cpp_image_density_masked_process(bprb_func_process& pro)
   float shadow_prior = pro.get_input<float>(i++);
   float shadow_sigma = pro.get_input<float>(i++);
   float shadow_thres = pro.get_input<float>(i++);
-  vcl_string identifier = pro.get_input<vcl_string>(i);
+  std::string identifier = pro.get_input<std::string>(i);
 
   bool foundDataType = false;
-  vcl_string data_type;
-  vcl_vector<vcl_string> apps = scene->appearances();
+  std::string data_type;
+  std::vector<std::string> apps = scene->appearances();
   for (unsigned int i=0; i<apps.size(); ++i) {
     if ( apps[i] == boxm2_data_traits<BOXM2_MOG3_GREY>::prefix() )
     {
@@ -240,7 +242,7 @@ bool boxm2_cpp_image_density_masked_process(bprb_func_process& pro)
     }
   }
   if (!foundDataType) {
-    vcl_cout<<"BOXM2_CPP_RENDER_PROCESS ERROR: scene doesn't have BOXM2_MOG3_GREY or BOXM2_MOG3_GREY_16 data type"<<vcl_endl;
+    std::cout<<"BOXM2_CPP_RENDER_PROCESS ERROR: scene doesn't have BOXM2_MOG3_GREY or BOXM2_MOG3_GREY_16 data type"<<std::endl;
     return false;
   }
 
@@ -249,10 +251,10 @@ bool boxm2_cpp_image_density_masked_process(bprb_func_process& pro)
   }
   if (vil_image_view<float> * input_image=dynamic_cast<vil_image_view<float> * > (float_image.ptr()))
   {
-    vcl_vector<boxm2_block_id> vis_order=scene->get_vis_blocks(reinterpret_cast<vpgl_generic_camera<double>*>(cam.ptr()));
+    std::vector<boxm2_block_id> vis_order=scene->get_vis_blocks(reinterpret_cast<vpgl_generic_camera<double>*>(cam.ptr()));
     if (vis_order.empty())
     {
-      vcl_cout<<" None of the blocks are visible from this viewpoint"<<vcl_endl;
+      std::cout<<" None of the blocks are visible from this viewpoint"<<std::endl;
       return true;
     }
 
@@ -262,30 +264,30 @@ bool boxm2_cpp_image_density_masked_process(bprb_func_process& pro)
     density_img->fill(0.0f);
     vis_img->fill(1.0f);
 
-     vcl_vector<boxm2_block_id>::iterator id;
+     std::vector<boxm2_block_id>::iterator id;
     for (id = vis_order.begin(); id != vis_order.end(); ++id)
     {
-      vcl_cout<<"Block Id "<<(*id)<<vcl_endl;
+      std::cout<<"Block Id "<<(*id)<<std::endl;
       boxm2_block *     blk  =  cache->get_block(scene,*id);
       boxm2_data_base *  alph = cache->get_data_base(scene,*id,boxm2_data_traits<BOXM2_ALPHA>::prefix());
       boxm2_data_base *  mog  = cache->get_data_base(scene,*id,data_type);
-      vcl_vector<boxm2_data_base*> datas;
+      std::vector<boxm2_data_base*> datas;
       datas.push_back(alph);
       datas.push_back(mog);
       boxm2_scene_info_wrapper *scene_info_wrapper=new boxm2_scene_info_wrapper();
       scene_info_wrapper->info=scene->get_blk_metadata(*id);
 
-      if ( data_type.find(boxm2_data_traits<BOXM2_MOG3_GREY>::prefix()) != vcl_string::npos )
+      if ( data_type.find(boxm2_data_traits<BOXM2_MOG3_GREY>::prefix()) != std::string::npos )
       {
         boxm2_image_density_functor<BOXM2_MOG3_GREY> render_functor;
         render_functor.init_data(datas, input_image, density_img, vis_img);
         cast_ray_per_block<boxm2_image_density_functor<BOXM2_MOG3_GREY> >
           (render_functor,scene_info_wrapper->info,blk,cam,input_image->ni(),input_image->nj());
       }
-      else if (data_type.find(boxm2_data_traits<BOXM2_GAUSS_GREY>::prefix()) != vcl_string::npos )
+      else if (data_type.find(boxm2_data_traits<BOXM2_GAUSS_GREY>::prefix()) != std::string::npos )
       {
-        vcl_cout << "Rendering using gauss grey!\n";
-        vcl_cout.flush();
+        std::cout << "Rendering using gauss grey!\n";
+        std::cout.flush();
         boxm2_image_density_functor<BOXM2_GAUSS_GREY> render_functor;
         render_functor.init_data(datas, input_image, density_img, vis_img);
         cast_ray_per_block<boxm2_image_density_functor<BOXM2_GAUSS_GREY> >
@@ -314,7 +316,7 @@ bool boxm2_cpp_image_density_masked_process(bprb_func_process& pro)
         else
           alt_prob_img(i,j) = 0.0f;
 
-    vcl_cout << "saving shadow density mask image\n";
+    std::cout << "saving shadow density mask image\n";
     vil_save(alt_prob_img, "shadow_density_mask_img.tiff");
 
     // store scene smart pointer

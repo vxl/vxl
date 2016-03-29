@@ -1,4 +1,4 @@
-#include <mbl/mbl_cluster_tree.txx>
+#include <mbl/mbl_cluster_tree.hxx>
 #include <vnl/vnl_vector.h>
 #include <mbl/mbl_vector_distance.h>
 

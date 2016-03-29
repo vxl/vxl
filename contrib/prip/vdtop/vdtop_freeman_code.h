@@ -12,8 +12,10 @@
 //   06 May 2004 Jocelyn Marchadier
 // \endverbatim
 
+#include <iostream>
+#include <utility>
 #include <vxl_config.h>
-#include <vcl_utility.h>
+#include <vcl_compiler.h>
 #include <vdtop/vdtop_export.h>
 
 //: Freeman code class.
@@ -88,19 +90,19 @@ class vdtop_freeman_code
   {
     return opposite_[code_] ;
   }
-  vcl_pair<vdtop_freeman_code,vdtop_freeman_code> reduction(vdtop_freeman_code arg)
+  std::pair<vdtop_freeman_code,vdtop_freeman_code> reduction(vdtop_freeman_code arg)
   {
     vxl_byte m =  reduction_[code_][arg.code_];
-    return vcl_pair<vdtop_freeman_code,vdtop_freeman_code>(m&0x0F,(m&0xF0) >> 4) ;
+    return std::pair<vdtop_freeman_code,vdtop_freeman_code>(m&0x0F,(m&0xF0) >> 4) ;
   }
 #if 0
   bool adjacent(vdtop_freeman_code arg)
   {
-    return vcl_abs(arg.code_-code_)<=1 || vcl_abs(arg.code_-code_)==7 ;
+    return std::abs(arg.code_-code_)<=1 || std::abs(arg.code_-code_)==7 ;
   }
   bool strictly_adjacent(vdtop_freeman_code arg)
   {
-    return vcl_abs(arg.code_-code_)==1 || vcl_abs(arg.code_-code_)==7 ;
+    return std::abs(arg.code_-code_)==1 || std::abs(arg.code_-code_)==7 ;
   }
 #endif // 0
 

@@ -40,18 +40,19 @@
 //     Jnx4 = -[(xi-x0)/ri  (yi-y0)/ri  (zi-z0)/ri  1]
 //             [                 ...                 ]
 //
-#include <vcl_vector.h>
+#include <vector>
+#include <iosfwd>
 #include <vgl/vgl_point_3d.h>
 #include <vgl/vgl_homg_point_3d.h>
 #include <vgl/vgl_sphere_3d.h>
-#include <vcl_iosfwd.h>
+#include <vcl_compiler.h>
 
 template <class T>
 class vgl_fit_sphere_3d
 {
   // Data Members--------------------------------------------------------------
  protected:
-  vcl_vector<vgl_homg_point_3d<T> > points_;
+  std::vector<vgl_homg_point_3d<T> > points_;
   vgl_sphere_3d<T> sphere_lin_;
   vgl_sphere_3d<T> sphere_non_lin_;
 
@@ -61,7 +62,7 @@ class vgl_fit_sphere_3d
 
    vgl_fit_sphere_3d() {}
 
-   vgl_fit_sphere_3d(vcl_vector<vgl_point_3d<T> > points);
+   vgl_fit_sphere_3d(std::vector<vgl_point_3d<T> > points);
 
   ~vgl_fit_sphere_3d() {}
 
@@ -78,21 +79,21 @@ class vgl_fit_sphere_3d
   // returns the average distance from the points to the sphere
   // used as an initial condition for Levenberg Marquardt
   // error conditions are reported on outstream
-  T fit_linear(vcl_ostream* outstream=0);
+  T fit_linear(std::ostream* outstream=0);
 
   //:fits a sphere to the stored points using a linear method
-  bool fit_linear(const T error_marg, vcl_ostream* outstream=0);
+  bool fit_linear(const T error_marg, std::ostream* outstream=0);
 
   //:fits a sphere nonlinearly to the stored points using Levenberg Marquardt
   // returns the average distance from the points to the sphere
-  T fit(vcl_ostream* outstream=0, bool verbose = false);
+  T fit(std::ostream* outstream=0, bool verbose = false);
 
   //:fits a sphere nonlinearly to the stored points using Levenberg Marquardt
-  bool fit_(const T error_marg, vcl_ostream* outstream=0, bool verbose = false);
+  bool fit_(const T error_marg, std::ostream* outstream=0, bool verbose = false);
 
 // Data Access---------------------------------------------------------------
 
-  vcl_vector<vgl_point_3d<T> > get_points() const;
+  std::vector<vgl_point_3d<T> > get_points() const;
 
   //: appropriate fit function should be called first to get the sphere corresponding to the points
   vgl_sphere_3d<T>& get_sphere_linear_fit() {return sphere_lin_;}

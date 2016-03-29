@@ -10,10 +10,11 @@
 //     11 Oct 2002 Ian Scott - converted to vil
 //\endverbatim
 
+#include <iostream>
 #include "vil_jpeg_compressor.h"
 #include "vil_jpeg_destination_mgr.h"
 #include <vil/vil_stream.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
 #include <vxl_config.h>
 
 vil_jpeg_compressor::vil_jpeg_compressor(vil_stream *s)
@@ -63,7 +64,7 @@ bool vil_jpeg_compressor::write_scanline(unsigned line, JSAMPLE const *scanline)
       jobj.in_color_space = JCS_RGB;
       break;
      default:
-      vcl_cerr << __FILE__ " : urgh!\n";
+      std::cerr << __FILE__ " : urgh!\n";
       return false;
     }
 
@@ -80,7 +81,7 @@ bool vil_jpeg_compressor::write_scanline(unsigned line, JSAMPLE const *scanline)
 
   //
   if (line != jobj.next_scanline) {
-    vcl_cerr << "scanlines must be written in order\n";
+    std::cerr << "scanlines must be written in order\n";
     return false;
   }
 

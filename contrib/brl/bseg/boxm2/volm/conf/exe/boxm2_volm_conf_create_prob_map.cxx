@@ -33,7 +33,7 @@
 
 bool is_same(double const& x, double const& y)
 {
-  return (vcl_fabs(x-y) < 1E-6);
+  return (std::fabs(x-y) < 1E-6);
 }
 
 double distance_in_meter(double const& q_lon, double const& q_lat, double const& d_lon, double const& d_lat)
@@ -42,17 +42,17 @@ double distance_in_meter(double const& q_lon, double const& q_lat, double const&
   vpgl_lvcs lvcs(q_lat, q_lon, 0.0, vpgl_lvcs::wgs84, vpgl_lvcs::DEG, vpgl_lvcs::METERS);
   double lx, ly, lz;
   lvcs.global_to_local(d_lon, d_lat, 0.0, vpgl_lvcs::wgs84, lx, ly, lz);
-  return vcl_sqrt(lx*lx + ly*ly);
+  return std::sqrt(lx*lx + ly*ly);
 }
 
 int main(int argc, char** argv)
 {
   vul_arg<unsigned>      world_id("-world",     "ROI world id", 9999);
   vul_arg<unsigned>       tile_id("-tile",      "ROI tile id", 9999);
-  vul_arg<vcl_string>  geo_folder("-geo",      "folder to read the geo hypotheses ", "");
-  vul_arg<vcl_string>  index_name("-idx-name", "name of the loaded index", "");
-  vul_arg<vcl_string>  out_folder("-out",      "output probability map image","");
-  vul_arg<vcl_string> cand_folder("-cand",     "candidate region kml provided by previous matcher", "");
+  vul_arg<std::string>  geo_folder("-geo",      "folder to read the geo hypotheses ", "");
+  vul_arg<std::string>  index_name("-idx-name", "name of the loaded index", "");
+  vul_arg<std::string>  out_folder("-out",      "output probability map image","");
+  vul_arg<std::string> cand_folder("-cand",     "candidate region kml provided by previous matcher", "");
   vul_arg<float>  buffer_capacity("-buffer",   "buffer capacity for index creation (in GByte)", 2.0f);
   vul_arg<bool>       query_score("-query",    "option to return the score value at a given location", false);
   vul_arg<double>          gt_lon("-lon",      "location longitude", 0.0);
@@ -64,12 +64,12 @@ int main(int argc, char** argv)
     vul_arg_display_usage_and_exit();
     return volm_io::EXE_ARGUMENT_ERROR;
   }
-  vcl_stringstream log_file;
-  vcl_stringstream log;
+  std::stringstream log_file;
+  std::stringstream log;
   log_file << out_folder() << "/log_prob_map_tile_" << tile_id() << ".xml";
 
   // load geo index
-  vcl_stringstream file_name_pre;
+  std::stringstream file_name_pre;
   file_name_pre << geo_folder() << "/geo_index_tile_" << tile_id();
   if (!vul_file::exists(file_name_pre.str()+".txt")) {
     log << "ERROR: loading geo index locations fails from file: " << file_name_pre.str() << ".txt!\n";
@@ -79,7 +79,7 @@ int main(int argc, char** argv)
   float min_size;
   volm_geo_index_node_sptr root = volm_geo_index::read_and_construct(file_name_pre.str()+".txt", min_size);
   volm_geo_index::read_hyps(root, file_name_pre.str());
-  vcl_vector<volm_geo_index_node_sptr> loc_leaves;
+  std::vector<volm_geo_index_node_sptr> loc_leaves;
   loc_leaves.clear();
   volm_geo_index::get_leaves_with_hyps(root, loc_leaves);
 
@@ -88,30 +88,30 @@ int main(int argc, char** argv)
     unsigned hyp_id;
     volm_geo_index_node_sptr leaf = volm_geo_index::get_closest(root, gt_lat(), gt_lon(), hyp_id);
     if (!leaf) {
-      vcl_cout << "query location " << gt_lon() << ", " << gt_lat() << " is not in location database" << vcl_endl;
+      std::cout << "query location " << gt_lon() << ", " << gt_lat() << " is not in location database" << std::endl;
       return volm_io::SUCCESS;
     }
     vgl_point_3d<double> closest_pt = leaf->hyps_->locs_[hyp_id];
     // load associate score for it
-    vcl_stringstream score_file_pre;
+    std::stringstream score_file_pre;
     score_file_pre << out_folder() << "/conf_score_tile_" << tile_id();
-    vcl_string score_bin_file = score_file_pre.str() + "_" + leaf->get_string() + "_" + index_name() + ".bin";
+    std::string score_bin_file = score_file_pre.str() + "_" + leaf->get_string() + "_" + index_name() + ".bin";
     double dist = distance_in_meter(gt_lon(), gt_lat(), closest_pt.x(), closest_pt.y());
-    vcl_cout << "location " << vcl_setprecision(6) << vcl_fixed << gt_lon() << ", " << vcl_setprecision(6) << vcl_fixed << gt_lat()
+    std::cout << "location " << std::setprecision(6) << std::fixed << gt_lon() << ", " << std::setprecision(6) << std::fixed << gt_lat()
              << " is in leaf " << leaf->extent_
              << " and closest location (" << dist << " meter away) is "
-             << vcl_setprecision(6) << vcl_fixed << closest_pt.x() << ", " << vcl_setprecision(6) << vcl_fixed << closest_pt.y() << vcl_endl;
+             << std::setprecision(6) << std::fixed << closest_pt.x() << ", " << std::setprecision(6) << std::fixed << closest_pt.y() << std::endl;
     if (!vul_file::exists(score_bin_file)) {
-      vcl_cout << "No score for the query location (probably outside candidate region)" << vcl_endl;
+      std::cout << "No score for the query location (probably outside candidate region)" << std::endl;
       return volm_io::SUCCESS;
     }
     volm_conf_buffer<volm_conf_score> score_idx(buffer_capacity());
-    vcl_cout << leaf->hyps_->locs_.size() << " locations are in leaf" << vcl_endl;
+    std::cout << leaf->hyps_->locs_.size() << " locations are in leaf" << std::endl;
     score_idx.initialize_read(score_bin_file);
     // load the candidate list for current leaf
     bool is_cand = false;
     // load and check candidate region
-    vcl_string outer_region_file = cand_folder() + "/cand_region_outer_" + leaf->get_string() + ".bin";
+    std::string outer_region_file = cand_folder() + "/cand_region_outer_" + leaf->get_string() + ".bin";
     vgl_polygon<double> cand_outer, cand_inner;
     cand_outer.clear();
     cand_inner.clear();
@@ -121,7 +121,7 @@ int main(int argc, char** argv)
       vsl_b_read(ifs_out, cand_outer);
       ifs_out.close();
     }
-    vcl_string inner_region_file = cand_folder() + "/cand_region_inner_" + leaf->get_string() + ".bin";
+    std::string inner_region_file = cand_folder() + "/cand_region_inner_" + leaf->get_string() + ".bin";
     if (vul_file::exists(inner_region_file)) {
       vsl_b_ifstream ifs_in(inner_region_file);
       vsl_b_read(ifs_in, cand_inner);
@@ -143,17 +143,17 @@ int main(int argc, char** argv)
       volm_conf_score score_in;
       score_idx.get_next(score_in);
       if ( h_pt == closest_pt) {
-        vcl_cout << "  Score = ";
-        score_in.print(vcl_cout);
+        std::cout << "  Score = ";
+        score_in.print(std::cout);
         return volm_io::SUCCESS;
       }
     }
-    vcl_cout << "ERROR: can not find score value for the gt location!\n";
+    std::cout << "ERROR: can not find score value for the gt location!\n";
     return volm_io::SUCCESS;
   }
 
   // start to create probability map
-  vcl_vector<volm_tile> tiles;
+  std::vector<volm_tile> tiles;
   if (!volm_tile::generate_tiles(world_id(), tiles)) {
     log << "ERROR: unknown world id " << world_id() << "!\n";
     volm_io::write_error_log(log_file.str(), log.str());
@@ -170,14 +170,14 @@ int main(int argc, char** argv)
   tile_img.fill(-1.0f);
 
   // load the score to create the probability map
-  vcl_cout << "---------  Start to create probability map for tile " << tile_id() << " in world " << world_id() << " -------------------- " << vcl_endl;
-  vcl_cout << "There are " << loc_leaves.size() << " leaves for tile " << tile_id() << vcl_endl;
-  vcl_stringstream score_file_pre;
+  std::cout << "---------  Start to create probability map for tile " << tile_id() << " in world " << world_id() << " -------------------- " << std::endl;
+  std::cout << "There are " << loc_leaves.size() << " leaves for tile " << tile_id() << std::endl;
+  std::stringstream score_file_pre;
   score_file_pre << out_folder() << "/conf_score_tile_" << tile_id();
   for (unsigned i = 0; i < loc_leaves.size(); i++)
   {
     volm_geo_index_node_sptr leaf = loc_leaves[i];
-    vcl_string score_bin_file = score_file_pre.str() + "_" + leaf->get_string() + "_" + index_name() + ".bin";
+    std::string score_bin_file = score_file_pre.str() + "_" + leaf->get_string() + "_" + index_name() + ".bin";
     if (!vul_file::exists(score_bin_file))
       continue;  // case where leaf is entirely outside the candidate region
 
@@ -187,7 +187,7 @@ int main(int argc, char** argv)
     // load the candidate region
     bool is_cand = false;
     // load and check candidate region
-    vcl_string outer_region_file = cand_folder() + "/cand_region_outer_" + leaf->get_string() + ".bin";
+    std::string outer_region_file = cand_folder() + "/cand_region_outer_" + leaf->get_string() + ".bin";
     vgl_polygon<double> cand_outer, cand_inner;
     cand_outer.clear();
     cand_inner.clear();
@@ -197,7 +197,7 @@ int main(int argc, char** argv)
       vsl_b_read(ifs_out, cand_outer);
       ifs_out.close();
     }
-    vcl_string inner_region_file = cand_folder() + "/cand_region_inner_" + leaf->get_string() + ".bin";
+    std::string inner_region_file = cand_folder() + "/cand_region_inner_" + leaf->get_string() + ".bin";
     if (vul_file::exists(inner_region_file)) {
       vsl_b_ifstream ifs_in(inner_region_file);
       vsl_b_read(ifs_in, cand_inner);
@@ -227,7 +227,7 @@ int main(int argc, char** argv)
     }
   }
   // save the probability image
-  vcl_string img_name = out_folder() + "/ProbMap_float_" + tile.get_string() + ".tif";
+  std::string img_name = out_folder() + "/ProbMap_float_" + tile.get_string() + ".tif";
   vil_save(tile_img, img_name.c_str());
   return volm_io::SUCCESS;
 #if 0
@@ -236,8 +236,8 @@ int main(int argc, char** argv)
     vul_arg_display_usage_and_exit();
     return volm_io::EXE_ARGUMENT_ERROR;
   }
-  vcl_stringstream log_file;
-  vcl_stringstream log;
+  std::stringstream log_file;
+  std::stringstream log;
   log_file << out_folder() << "/log_prob_map_tile_" << tile_id() << ".xml";
   // load the geo index
   // create the candidate polygon if exists
@@ -248,13 +248,13 @@ int main(int argc, char** argv)
     //cand_poly = bkml_parser::parse_polygon(cand_file());
     unsigned n_out, n_in;
     vgl_polygon<double> poly = bkml_parser::parse_polygon_with_inner(cand_file(), cand_out, cand_in, n_out, n_in);
-    vcl_cout << "candidate regions (" << cand_out.num_sheets() << " outer sheet and " << cand_in.num_sheets() << " inner sheet)are loaded from file: "
-             << cand_file() << "!!!!!!!!!!" << vcl_endl;
+    std::cout << "candidate regions (" << cand_out.num_sheets() << " outer sheet and " << cand_in.num_sheets() << " inner sheet)are loaded from file: "
+             << cand_file() << "!!!!!!!!!!" << std::endl;
     is_cand = (cand_out.num_sheets() != 0);
   }
 
   // load geo index locations
-  vcl_stringstream file_name_pre;
+  std::stringstream file_name_pre;
   file_name_pre << geo_folder() << "/geo_index_tile_" << tile_id();
   if (!vul_file::exists(file_name_pre.str() + ".txt")) {
     log << "ERROR: loading geo index locations fails from file: " << file_name_pre.str() << ".txt!\n";
@@ -263,12 +263,12 @@ int main(int argc, char** argv)
   float min_size;
   volm_geo_index_node_sptr root = volm_geo_index::read_and_construct(file_name_pre.str()+".txt", min_size);
   volm_geo_index::read_hyps(root, file_name_pre.str());
-  vcl_vector<volm_geo_index_node_sptr> loc_leaves_all;
+  std::vector<volm_geo_index_node_sptr> loc_leaves_all;
   loc_leaves_all.clear();
   volm_geo_index::get_leaves_with_hyps(root, loc_leaves_all);
 
   // obtain the desired leaf
-  vcl_vector<volm_geo_index_node_sptr> loc_leaves;
+  std::vector<volm_geo_index_node_sptr> loc_leaves;
   for (unsigned i = 0; i < loc_leaves_all.size(); i++)
     if (is_cand && vgl_intersection(loc_leaves_all[i]->extent_, cand_out))
       loc_leaves.push_back(loc_leaves_all[i]);
@@ -280,25 +280,25 @@ int main(int argc, char** argv)
     unsigned hyp_id;
     volm_geo_index_node_sptr leaf = volm_geo_index::get_closest(root, gt_lat(), gt_lon(), hyp_id);
     if (!leaf) {
-      vcl_cout << "query location " << gt_lon() << ", " << gt_lat() << " is not in location database" << vcl_endl;
+      std::cout << "query location " << gt_lon() << ", " << gt_lat() << " is not in location database" << std::endl;
       return volm_io::SUCCESS;
     }
     vgl_point_3d<double> closest_pt = leaf->hyps_->locs_[hyp_id];
     // load associate score for it
-    vcl_stringstream score_file_pre;
+    std::stringstream score_file_pre;
     score_file_pre << out_folder() << "/conf_score_tile_" << tile_id();
-    vcl_string score_bin_file = score_file_pre.str() + "_" + leaf->get_string() + "_" + index_name() + ".bin";
+    std::string score_bin_file = score_file_pre.str() + "_" + leaf->get_string() + "_" + index_name() + ".bin";
     double dist = distance_in_meter(gt_lon(), gt_lat(), closest_pt.x(), closest_pt.y());
-    vcl_cout << "location " << vcl_setprecision(6) << vcl_fixed << gt_lon() << ", " << vcl_setprecision(6) << vcl_fixed << gt_lat()
+    std::cout << "location " << std::setprecision(6) << std::fixed << gt_lon() << ", " << std::setprecision(6) << std::fixed << gt_lat()
              << " is in leaf " << leaf->extent_
              << " and closest location (" << dist << " meter away) is "
-             << vcl_setprecision(6) << vcl_fixed << closest_pt.x() << ", " << vcl_setprecision(6) << vcl_fixed << closest_pt.y() << vcl_endl;
+             << std::setprecision(6) << std::fixed << closest_pt.x() << ", " << std::setprecision(6) << std::fixed << closest_pt.y() << std::endl;
     if (!vul_file::exists(score_bin_file)) {
-      vcl_cout << "No score for the query location (probably outside candidate region)" << vcl_endl;
+      std::cout << "No score for the query location (probably outside candidate region)" << std::endl;
       return volm_io::SUCCESS;
     }
     volm_conf_buffer<volm_conf_score> score_idx(buffer_capacity());
-    vcl_cout << leaf->hyps_->locs_.size() << " locations are in leaf" << vcl_endl;
+    std::cout << leaf->hyps_->locs_.size() << " locations are in leaf" << std::endl;
     score_idx.initialize_read(score_bin_file);
     // loop over the location and retrieve the score
     vgl_point_3d<double> h_pt;
@@ -312,16 +312,16 @@ int main(int argc, char** argv)
       volm_conf_score score_in;
       score_idx.get_next(score_in);
       if ( h_pt == closest_pt ) {
-        vcl_cout << "  Score = ";
-        score_in.print(vcl_cout);
+        std::cout << "  Score = ";
+        score_in.print(std::cout);
         return volm_io::SUCCESS;
       }
     }
-    vcl_cout << "No score for the query location (probably outside candidate region)" << vcl_endl;
+    std::cout << "No score for the query location (probably outside candidate region)" << std::endl;
       return volm_io::SUCCESS;
   }
   // start to create the probability map
-  vcl_vector<volm_tile> tiles;
+  std::vector<volm_tile> tiles;
   if (!volm_tile::generate_tiles(world_id(), tiles)) {
     log << "ERROR: unknown world id " << world_id() << "!\n";
     volm_io::write_error_log(log_file.str(), log.str());
@@ -338,14 +338,14 @@ int main(int argc, char** argv)
   tile_img.fill(-1.0f);
 
   // load the score to create the probability map
-  vcl_cout << "---------  Start to create probability map for tile " << tile_id() << " in world " << world_id() << " -------------------- " << vcl_endl;
-  vcl_cout << "There are " << loc_leaves.size() << " leaves for tile " << tile_id() << vcl_endl;
-  vcl_stringstream score_file_pre;
+  std::cout << "---------  Start to create probability map for tile " << tile_id() << " in world " << world_id() << " -------------------- " << std::endl;
+  std::cout << "There are " << loc_leaves.size() << " leaves for tile " << tile_id() << std::endl;
+  std::stringstream score_file_pre;
   score_file_pre << out_folder() << "/conf_score_tile_" << tile_id();
   for (unsigned i = 0; i < loc_leaves.size(); i++)
   {
     volm_geo_index_node_sptr leaf = loc_leaves[i];
-    vcl_string score_bin_file = score_file_pre.str() + "_" + leaf->get_string() + "_" + index_name() + ".bin";
+    std::string score_bin_file = score_file_pre.str() + "_" + leaf->get_string() + "_" + index_name() + ".bin";
     if (!vul_file::exists(score_bin_file))
       continue;
     volm_conf_buffer<volm_conf_score> score_idx(buffer_capacity());
@@ -367,7 +367,7 @@ int main(int argc, char** argv)
     }
   }
   // save the probability image
-  vcl_string img_name = out_folder() + "/ProbMap_float_" + tile.get_string() + ".tif";
+  std::string img_name = out_folder() + "/ProbMap_float_" + tile.get_string() + ".tif";
   vil_save(tile_img, img_name.c_str());
   return volm_io::SUCCESS;
 #endif

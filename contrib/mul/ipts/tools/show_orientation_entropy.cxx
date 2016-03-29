@@ -3,7 +3,8 @@
 // \brief Experimental tool to load in an image and compute orientation entropy.
 // \author Tim Cootes
 
-#include <vcl_iostream.h>
+#include <iostream>
+#include <vcl_compiler.h>
 #include <vul/vul_arg.h>
 #include <vxl_config.h> // for vxl_byte
 #include <vil/vil_load.h>
@@ -19,17 +20,17 @@
 
 void print_usage()
 {
-  vcl_cout<<"show_orientation_entropy -i in_image -e entropy_image -o out_image -h half_width -a angle_image\n"
+  std::cout<<"show_orientation_entropy -i in_image -e entropy_image -o out_image -h half_width -a angle_image\n"
           <<"Load in an image and generate entropy of orientatins in square regions.\n"
           <<"Show peaks in entropy as crosses on original image.\n";
 }
 
 int main( int argc, char* argv[] )
 {
-  vul_arg<vcl_string> in_path("-i","Input image");
-  vul_arg<vcl_string> entropy_path("-e","Entropy image","entropy.jpg");
-  vul_arg<vcl_string> out_path("-o","Output image","output.jpg");
-  vul_arg<vcl_string> angle_path("-a","Angle image","angle.pnm");
+  vul_arg<std::string> in_path("-i","Input image");
+  vul_arg<std::string> entropy_path("-e","Entropy image","entropy.jpg");
+  vul_arg<std::string> out_path("-o","Output image","output.jpg");
+  vul_arg<std::string> angle_path("-a","Angle image","angle.pnm");
   vul_arg<int> half_width("-h","Half width of RIO",10);
   vul_arg<float> threshold("-t","Threshold on edge magnitude",5.0f);
   vul_arg_parse(argc, argv);
@@ -43,7 +44,7 @@ int main( int argc, char* argv[] )
   vil_image_view<vxl_byte> src_im = vil_load(in_path().c_str());
   if (src_im.size()==0)
   {
-    vcl_cout<<"Unable to load source image from "<<in_path()<<vcl_endl;
+    std::cout<<"Unable to load source image from "<<in_path()<<std::endl;
     return 1;
   }
 
@@ -65,32 +66,32 @@ int main( int argc, char* argv[] )
 
   if (!vil_save(dest_im, entropy_path().c_str()))
   {
-    vcl_cerr<<"Unable to save entropy image to "<<entropy_path()<<vcl_endl;
+    std::cerr<<"Unable to save entropy image to "<<entropy_path()<<std::endl;
     return 1;
   }
 
-  vcl_cout<<"Saved image to "<<entropy_path()<<vcl_endl;
+  std::cout<<"Saved image to "<<entropy_path()<<std::endl;
 
-  vcl_vector<vgl_point_2d<unsigned> > peaks;
+  std::vector<vgl_point_2d<unsigned> > peaks;
   vimt_find_image_peaks_3x3(peaks,entropy_im);
   for (unsigned i=0;i<peaks.size();++i)
     ipts_draw_cross(grey_im,peaks[i].x()+half_width(),peaks[i].y()+half_width(),half_width(),vxl_byte(255));
 
   if (!vil_save(grey_im, out_path().c_str()))
   {
-    vcl_cerr<<"Unable to save result image to "<<out_path()<<vcl_endl;
+    std::cerr<<"Unable to save result image to "<<out_path()<<std::endl;
     return 1;
   }
 
-  vcl_cout<<"Saved image to "<<out_path()<<vcl_endl;
+  std::cout<<"Saved image to "<<out_path()<<std::endl;
 
   if (!vil_save(orient_im, angle_path().c_str()))
   {
-    vcl_cerr<<"Unable to save angle image to "<<out_path()<<vcl_endl;
+    std::cerr<<"Unable to save angle image to "<<out_path()<<std::endl;
     return 1;
   }
 
-  vcl_cout<<"Saved orientation image to "<<angle_path()<<vcl_endl;
+  std::cout<<"Saved orientation image to "<<angle_path()<<std::endl;
 
   return 0;
 }

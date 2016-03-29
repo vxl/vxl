@@ -24,7 +24,7 @@ bool bvpl_compute_beaudet_measure_process_cons(bprb_func_process& pro)
 {
   using namespace bvpl_compute_beaudet_measure_process_globals ;
 
-  vcl_vector<vcl_string> input_types_(n_inputs_);
+  std::vector<std::string> input_types_(n_inputs_);
   unsigned i = 0;
   input_types_[i++] = "bvpl_global_taylor_sptr" ;
   input_types_[i++] = "bvpl_global_corners_sptr" ;
@@ -33,7 +33,7 @@ bool bvpl_compute_beaudet_measure_process_cons(bprb_func_process& pro)
   input_types_[i++] = "int";
   input_types_[i++] = "int";
 
-  vcl_vector<vcl_string> output_types_(n_outputs_);
+  std::vector<std::string> output_types_(n_outputs_);
 
   return pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
 }

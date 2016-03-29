@@ -1,5 +1,6 @@
 // @author fsm
-#include <vcl_iostream.h>
+#include <iostream>
+#include <vcl_compiler.h>
 
 #include <vul/vul_sprintf.h>
 
@@ -32,9 +33,9 @@ int main(int argc, char **argv)
     for (int i=-N; i<=N; ++i)
       kernel[i+N] /= sum;
   }
-  vcl_cerr << "kernel:\n";
+  std::cerr << "kernel:\n";
   for (int i=-N; i<=N; ++i)
-    vcl_cerr << kernel[i+N] << vcl_endl;
+    std::cerr << kernel[i+N] << std::endl;
 
   vil1_convolve_boundary_option option[] = {
     vil1_convolve_no_extend,
@@ -46,10 +47,10 @@ int main(int argc, char **argv)
   };
 
   for (int i=1; i<argc; ++i) {
-    vcl_cerr << "loading image \'" << argv[i] << "\'\n";
+    std::cerr << "loading image \'" << argv[i] << "\'\n";
     vil1_image I = vil1_load(argv[i]);
     if (!I) {
-      vcl_cerr << "load failed\n";
+      std::cerr << "load failed\n";
       continue;
     }
 
@@ -63,23 +64,23 @@ int main(int argc, char **argv)
     vil1_memory_image_of<vxl_byte> const& bytesc = bytes;
 
     for (unsigned j=0; j<sizeof(option)/sizeof(option[0]); ++j) {
-      vcl_cerr << "convolve x..." << vcl_flush;
+      std::cerr << "convolve x..." << std::flush;
       vil1_convolve_1d_x(K,
                          vil1_convolve_signal_2d<vxl_byte const>(bytesc.row_array(), 0, 0, w,  0, 0, h),
                          (double*)VXL_NULLPTR,
                          vil1_convolve_signal_2d<double        >(tmp   .row_array(), 0, 0, w,  0, 0, h),
                          option[j], option[j]);
-      vcl_cerr << "done\n"
-               << "convolve y..." << vcl_flush;
+      std::cerr << "done\n"
+               << "convolve y..." << std::flush;
       vil1_convolve_1d_y(K,
                          vil1_convolve_signal_2d<double const>(tmpc  .row_array(), 0, 0, w,  0, 0, h),
                          (double*)VXL_NULLPTR,
                          vil1_convolve_signal_2d<float       >(smooth.row_array(), 0, 0, w,  0, 0, h),
                          option[j], option[j]);
-      vcl_cerr << "done\n"
-               << "save..." << vcl_flush;
+      std::cerr << "done\n"
+               << "save..." << std::flush;
       vil1_save(vil1_image_as_byte(smooth), vul_sprintf("%s.%d.pnm", argv[i], j).c_str(), "pnm");
-      vcl_cerr << "done\n" << vcl_flush;
+      std::cerr << "done\n" << std::flush;
     }
   }
   return 0;

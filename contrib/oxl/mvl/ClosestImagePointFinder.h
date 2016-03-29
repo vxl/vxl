@@ -19,7 +19,9 @@
 // \endverbatim
 //-----------------------------------------------------------------------------
 
-#include <vcl_vector.h>
+#include <iostream>
+#include <vector>
+#include <vcl_compiler.h>
 #include <vnl/vnl_vector.h>
 #include <vgl/vgl_fwd.h>
 
@@ -33,16 +35,16 @@ class ClosestImagePointFinder
   // Constructors/Destructors--------------------------------------------------
 
   ClosestImagePointFinder(const HomgInterestPointSet& corners);
-  ClosestImagePointFinder(vcl_vector<vgl_homg_point_2d<double> > const& corners);
-  ClosestImagePointFinder(const vcl_vector<HomgPoint2D>& corners);
+  ClosestImagePointFinder(std::vector<vgl_homg_point_2d<double> > const& corners);
+  ClosestImagePointFinder(const std::vector<HomgPoint2D>& corners);
   ~ClosestImagePointFinder();
 
   // ClosestImagePointFinder(const ClosestImagePointFinder& that); - use default
   // ClosestImagePointFinder& operator=(const ClosestImagePointFinder& that); - use default
 
   // Operations----------------------------------------------------------------
-  void get_all_within_search_region(double cx, double cy, double w, double h, vcl_vector<int>* out_indices);
-  void get_all_within_search_region(vgl_box_2d<double> const& region, vcl_vector<int>* out_indices);
+  void get_all_within_search_region(double cx, double cy, double w, double h, std::vector<int>* out_indices);
+  void get_all_within_search_region(vgl_box_2d<double> const& region, std::vector<int>* out_indices);
 
   int get_closest_within_region(double cx, double cy, double w, double h, int* out_index = 0);
   int get_closest_within_distance(double cx, double cy, double r, int* out_index = 0);

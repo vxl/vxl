@@ -13,6 +13,9 @@
 //                                   Some of the methods for reconstruction have been left out
 // \endverbatim
 
+#include <iostream>
+#include <string>
+#include <vector>
 #include <vpgl/vpgl_perspective_camera.h>
 #include <vpgl/vpgl_rational_camera.h>
 
@@ -28,8 +31,7 @@
 #include <vgl/vgl_point_3d.h>
 #include <vgl/vgl_vector_3d.h>
 
-#include <vcl_string.h>
-#include <vcl_vector.h>
+#include <vcl_compiler.h>
 
 class bvxm_synth_world_generator
 {
@@ -40,7 +42,7 @@ class bvxm_synth_world_generator
   void set_dim_parmas( unsigned nx, unsigned ny, unsigned nz);
   void set_min_dim_params( unsigned minx, unsigned miny, unsigned minz);
   void set_bool_params ( bool gen_out_imgs, bool gen2box, bool rand1, bool rand2);
-  void set_world_dir(vcl_string world_dir);
+  void set_world_dir(std::string world_dir);
   void set_app_val (float app_val);
   void set_world_length(float len);
 
@@ -62,8 +64,8 @@ class bvxm_synth_world_generator
   bool gen_images_;
   bool gen2_box_;
   bool texture_map_;
-  vcl_string world_dir_;
-  vcl_string recon_world_dir_;
+  std::string world_dir_;
+  std::string recon_world_dir_;
   bool rand1_;
   bool rand2_;
   float app_val_;
@@ -82,7 +84,7 @@ class bvxm_synth_world_generator
   //for debugging purposes
   bool verbose;
 
-  vcl_vector<vgl_box_3d<double> > boxes_vector;
+  std::vector<vgl_box_3d<double> > boxes_vector;
 
   //this process functions
   int on_box_surface(vgl_box_3d<double> box, vgl_point_3d<double> v);
@@ -93,20 +95,20 @@ class bvxm_synth_world_generator
                              vgl_point_3d<double>& camera_center,
                              vpgl_perspective_camera<double>& cam);
   vpgl_rational_camera<double> perspective_to_rational(vpgl_perspective_camera<double>& cam_pers);
-  vcl_vector<vpgl_camera_double_sptr > generate_cameras_yz(vgl_box_3d<double>& world);
-  vcl_vector<vpgl_camera_double_sptr > generate_cameras_z(vgl_box_3d<double>& world);
+  std::vector<vpgl_camera_double_sptr > generate_cameras_yz(vgl_box_3d<double>& world);
+  std::vector<vpgl_camera_double_sptr > generate_cameras_z(vgl_box_3d<double>& world);
   bool update(vgl_vector_3d<unsigned> grid_size,
               bvxm_voxel_world_sptr world,
               bvxm_voxel_grid<float>* intensity_grid,
               bvxm_voxel_grid<float>* ocp_grid,
               bvxm_voxel_grid<apm_datatype>* apm_grid,
-              vcl_vector<vpgl_camera_double_sptr>& cameras,
-              vcl_vector <vil_image_view_base_sptr>& image_set,
+              std::vector<vpgl_camera_double_sptr>& cameras,
+              std::vector <vil_image_view_base_sptr>& image_set,
               unsigned int bin_num);
   void gen_texture_map(vgl_box_3d<double> box,
-                       vcl_vector<vcl_vector<float> >& intens_map_bt,
-                       vcl_vector<vcl_vector<float> >& intens_map_side1,
-                       vcl_vector<vcl_vector<float> >& intens_map_side2,
+                       std::vector<std::vector<float> >& intens_map_bt,
+                       std::vector<std::vector<float> >& intens_map_side1,
+                       std::vector<std::vector<float> >& intens_map_side2,
                        bool gen_rand, float app_val);
 
   void gen_voxel_world_2box(vgl_vector_3d<unsigned> grid_size,

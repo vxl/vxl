@@ -24,7 +24,7 @@ if(HDFS_FOUND)
       bhdfs_vil_load.h bhdfs_vil_load.cxx
   )
   aux_source_directory(Templates bhdfs_sources)
-  add_library(bhdfs ${bhdfs_sources} )
+  vxl_add_library(LIBRARY_NAME bhdfs LIBRARY_SOURCES ${bhdfs_sources} )
 
   target_link_libraries(bhdfs ${HDFS_LIBRARIES})
 

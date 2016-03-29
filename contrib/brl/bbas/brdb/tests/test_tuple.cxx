@@ -1,8 +1,9 @@
+#include <iostream>
 #include <testlib/testlib_test.h>
 #include <brdb/brdb_tuple.h>
 #include <brdb/brdb_tuple_sptr.h>
 #include <brdb/brdb_value.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
 
 
 static void test_tuple()
@@ -10,8 +11,8 @@ static void test_tuple()
   brdb_tuple_sptr tup0 = new brdb_tuple();
   brdb_tuple_sptr tup1 = new brdb_tuple(10);
   brdb_tuple_sptr tup2 = new brdb_tuple(10, 11.4f);
-  brdb_tuple_sptr tup3 = new brdb_tuple(-12.43f, vcl_string("this is a string"), -1 );
-  brdb_tuple_sptr tup4 = new brdb_tuple(-12.43f, 200, vcl_string("some text"), -1 );
+  brdb_tuple_sptr tup3 = new brdb_tuple(-12.43f, std::string("this is a string"), -1 );
+  brdb_tuple_sptr tup4 = new brdb_tuple(-12.43f, 200, std::string("some text"), -1 );
 
   // pass if it made it this far
   TEST("Constructors", true, true);
@@ -31,10 +32,10 @@ static void test_tuple()
   TEST("set() right type", tup1->set(0, 9) && tup1->get(0,int_val) && int_val==9, true);
   TEST("set() bad bounds", tup2->set(2, 9), false);
 
-  brdb_value_t<vcl_string> new_value_string("hello");
-  vcl_string new_string("hello");
-  vcl_string get_string1;
-  vcl_string get_string2;
+  brdb_value_t<std::string> new_value_string("hello");
+  std::string new_string("hello");
+  std::string get_string1;
+  std::string get_string2;
   tup1->add_value(new_value_string);
   tup1->get(tup1->arity()-1, get_string1);
   tup2->add(new_string);
@@ -50,14 +51,14 @@ static void test_tuple()
   //////////////////////////////////////////////////////////////////
   //// test prototyping for binary I/O
   //////////////////////////////////////////////////////////////////
-  brdb_tuple_sptr out_tup = new brdb_tuple(12, -12.43f, 34.56, static_cast<long>(987654321), vcl_string("this is a string"), false);
-  vcl_vector<vcl_string> types;
-  vcl_cout << "test tuple types\n";
+  brdb_tuple_sptr out_tup = new brdb_tuple(12, -12.43f, 34.56, static_cast<long>(987654321), std::string("this is a string"), false);
+  std::vector<std::string> types;
+  std::cout << "test tuple types\n";
   for (unsigned int i=0; i<out_tup->arity(); ++i) {
     types.push_back((*out_tup)[i].is_a());
-    vcl_cout << "  " << types.back() << '\n';
+    std::cout << "  " << types.back() << '\n';
   }
-  vcl_cout << vcl_flush;
+  std::cout << std::flush;
 
   brdb_tuple_sptr in_tup = brdb_tuple::make_prototype(types);
 
@@ -67,30 +68,30 @@ static void test_tuple()
   }
   TEST("make_prototype()", type_check, true);
   if (!type_check) {
-    vcl_cout << "mismatched prototype tuple types\n";
+    std::cout << "mismatched prototype tuple types\n";
     for (unsigned int i=0; type_check && i<out_tup->arity(); ++i) {
-      vcl_cout << "  " << (*in_tup)[i].is_a() << '\n';
+      std::cout << "  " << (*in_tup)[i].is_a() << '\n';
     }
-    vcl_cout << vcl_flush;
+    std::cout << std::flush;
   }
 
   //////////////////////////////////////////////////////////////////
   //// test binary io on regular data types
   //////////////////////////////////////////////////////////////////
 
-  vcl_cout << "Warning: Binary I/O test deactivated because of failures" <<vcl_endl;
+  std::cout << "Warning: Binary I/O test deactivated because of failures" <<std::endl;
 #if 0
-  vcl_cout << "out_tup: ";
+  std::cout << "out_tup: ";
   out_tup->print();
 
-  vcl_cout << "in_tup before b_read: ";
+  std::cout << "in_tup before b_read: ";
   in_tup->print();
 
   vsl_b_ofstream out_stream("test_tuple_bio.vsl");
   if (!out_stream){
-    vcl_cerr<<"Failed to open test_tuple_bio.vsl for output.\n";
+    std::cerr<<"Failed to open test_tuple_bio.vsl for output.\n";
   }
-  vcl_cout << "Opened file successfully " << vcl_endl;
+  std::cout << "Opened file successfully " << std::endl;
 
   out_tup->b_write_values(out_stream);
   out_stream.close();
@@ -98,13 +99,13 @@ static void test_tuple()
 
   vsl_b_ifstream in_stream("test_tuple_bio.vsl");
   if (!out_stream){
-    vcl_cerr<<"Failed to open test_tuple_bio.vsl for input.\n";
+    std::cerr<<"Failed to open test_tuple_bio.vsl for input.\n";
   }
-  vcl_cout << "Opened file successfully " << vcl_endl;
+  std::cout << "Opened file successfully " << std::endl;
   in_tup->b_read_values(in_stream);
   in_stream.close();
 
-  vcl_cout << "in_tup after b_read: ";
+  std::cout << "in_tup after b_read: ";
   in_tup->print();
 
   bool val_check = true;

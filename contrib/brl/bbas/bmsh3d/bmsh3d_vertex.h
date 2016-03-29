@@ -16,9 +16,11 @@
 //
 //-------------------------------------------------------------------------
 
-#include <vcl_set.h>
-#include <vcl_string.h>
-#include <vcl_sstream.h>
+#include <iostream>
+#include <set>
+#include <string>
+#include <sstream>
+#include <vcl_compiler.h>
 #include <vcl_cassert.h>
 #include <vgl/vgl_point_3d.h>
 
@@ -131,12 +133,12 @@ class bmsh3d_vertex : public vispt_elm
   void set_F_list(bmsh3d_ptr_node* F_list) {
     F_list_ = F_list;
   }
-  unsigned int get_Fs(vcl_set<const void*>& ptrs) {
+  unsigned int get_Fs(std::set<const void*>& ptrs) {
     return get_all_ptrs(F_list_, ptrs);
   }
 #if 0 // DEPRECATED: calls the deprecated non-const get_all_ptrs() version
   //  \deprecated
-  unsigned int get_Fs(vcl_set<void*>& ptrs) {
+  unsigned int get_Fs(std::set<void*>& ptrs) {
     return get_all_ptrs(F_list_, ptrs);
   }
 #endif
@@ -200,16 +202,16 @@ class bmsh3d_vertex : public vispt_elm
   }
 
   //: Return a platform-independent name of the class
-  virtual vcl_string is_a() const
+  virtual std::string is_a() const
   {return "bmsh3d_vertex"; }
 
   //###### Handle the incident edges ######
-  unsigned int get_incident_Es(vcl_set<void const*>& incident_Es) const {
+  unsigned int get_incident_Es(std::set<void const*>& incident_Es) const {
     return get_all_ptrs(E_list_, incident_Es);
   }
 #if 0 // DEPRECATED! -- use the above "const" version instead
   //  \deprecated
-  unsigned int get_incident_Es(vcl_set<void*>& incident_Es) const {
+  unsigned int get_incident_Es(std::set<void*>& incident_Es) const {
     return get_all_ptrs(E_list_, incident_Es);
   }
 #endif // 0
@@ -244,7 +246,7 @@ class bmsh3d_vertex : public vispt_elm
   const bmsh3d_halfedge* get_1st_bnd_HE() const;
 
   //: function to return all incident faces of this vertex
-  int get_incident_Fs(vcl_set<bmsh3d_face*>& face_set);
+  int get_incident_Fs(std::set<bmsh3d_face*>& face_set);
 
   //: return the vertex topology type
   VTOPO_TYPE detect_vtopo_type() const;
@@ -252,11 +254,11 @@ class bmsh3d_vertex : public vispt_elm
   const bmsh3d_edge* find_unvisited_E_() const;
 
   //###### Other functions ######
-  virtual void getInfo(vcl_ostringstream& ostrm);
+  virtual void getInfo(std::ostringstream& ostrm);
 
   //###### For the face of a 2-manifold mesh only ######
   //  these functions start with a tag m2 (manifold-2)
-  bmsh3d_halfedge* m2_get_ordered_HEs(vcl_vector<const bmsh3d_halfedge*>& ordered_halfedges) const;
+  bmsh3d_halfedge* m2_get_ordered_HEs(std::vector<const bmsh3d_halfedge*>& ordered_halfedges) const;
 
   bmsh3d_halfedge* m2_get_next_bnd_HE(const bmsh3d_halfedge* inputHE) const;
 
@@ -272,7 +274,7 @@ class bmsh3d_vertex : public vispt_elm
 bmsh3d_edge* E_sharing_2V(const bmsh3d_vertex* V1, const bmsh3d_vertex* V2);
 
 //: Find the mesh face sharing the given vertices.
-bmsh3d_face* find_F_sharing_Vs(vcl_vector<bmsh3d_vertex*>& vertices);
+bmsh3d_face* find_F_sharing_Vs(std::vector<bmsh3d_vertex*>& vertices);
 
 bmsh3d_face* get_non_manifold_1ring_extra_Fs(bmsh3d_vertex* V);
 

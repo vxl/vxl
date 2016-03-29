@@ -2,8 +2,11 @@
 //:
 // \file
 
+#include <iostream>
+#include <cmath>
+#include <sstream>
 #include "bapl_lowe_pyramid_set.h"
-#include <vcl_cmath.h>
+#include <vcl_compiler.h>
 #include <vnl/vnl_math.h>
 #include <vil/vil_convert.h>
 #include <vil/vil_resample_bilin.h>
@@ -14,7 +17,6 @@
 #include <bapl/bapl_lowe_keypoint.h>
 
 #include <vil/vil_copy.h>
-#include <vcl_sstream.h>
 #include <vcl_cassert.h>
 
 //: Constructor
@@ -43,7 +45,7 @@ bapl_lowe_pyramid_set::bapl_lowe_pyramid_set( const vil_image_resource_sptr& ima
   }
 
   if (verbose) {
-    vcl_cout << " number of octaves: " << num_octaves_ << vcl_endl;
+    std::cout << " number of octaves: " << num_octaves_ << std::endl;
   }
 
   // Cast into float and upsample by 2x
@@ -69,13 +71,13 @@ bapl_lowe_pyramid_set::bapl_lowe_pyramid_set( const vil_image_resource_sptr& ima
   //brip_gauss_filter(image2x, temp, 1, 7, vil_convolve_constant_extend );
   brip_gauss_filter(image2x, temp, 1.6, 13, vil_convolve_constant_extend );
 
-  double reduction = vcl_sqrt(vcl_pow(2.0,2.0/octave_size_)-1);
+  double reduction = std::sqrt(std::pow(2.0,2.0/octave_size_)-1);
 
   // create the Gaussian Pyramid
   for (int lvl=0; lvl<num_octaves_; ++lvl) {
     for (unsigned octsz=0; octsz<octave_size; ++octsz) {
       vil_copy_deep(temp, gauss_pyramid_(lvl,octsz));
-      double scale = vcl_pow(2.0,double(octsz)/octave_size_);
+      double scale = std::pow(2.0,double(octsz)/octave_size_);
       double sigma = scale*reduction;
       int size = 2*int(sigma*3.5+0.5)+1;
       assert(size > 0);
@@ -138,7 +140,7 @@ const vil_image_view<float>&
 bapl_lowe_pyramid_set::pyramid_at( const bapl_lowe_pyramid<float> & pyramid,
                                    float scale, float *actual_scale, float *rel_scale) const
 {
-  double log2_scale = vcl_log(scale*2.0)/vcl_log(2.0);
+  double log2_scale = std::log(scale*2.0)/std::log(2.0);
   int index = int(log2_scale*octave_size_ +0.5);
   int octave = index/octave_size_;
   int sub_index = index%octave_size_;
@@ -148,8 +150,8 @@ bapl_lowe_pyramid_set::pyramid_at( const bapl_lowe_pyramid<float> & pyramid,
     sub_index = octave_size_-1;
   }
 
-  if ( actual_scale ) *actual_scale = vcl_pow(2.0f, float(octave-1));
-  if ( rel_scale )    *rel_scale    = vcl_pow(2.0f, float(sub_index)/octave_size_);
+  if ( actual_scale ) *actual_scale = std::pow(2.0f, float(octave-1));
+  if ( rel_scale )    *rel_scale    = std::pow(2.0f, float(sub_index)/octave_size_);
 
   return pyramid(octave, sub_index);
 }
@@ -157,7 +159,7 @@ bapl_lowe_pyramid_set::pyramid_at( const bapl_lowe_pyramid<float> & pyramid,
 
 inline float gaussian( float x, float y)
 {
-  return vcl_exp(-((x*x)+(y*y))/(128.0f));
+  return std::exp(-((x*x)+(y*y))/(128.0f));
 }
 
 //: Make the descriptor for the given keypoint
@@ -179,17 +181,17 @@ bapl_lowe_pyramid_set::make_descriptor(bapl_lowe_keypoint* keypoint)
     for (int hj=0; hj<4; ++hj) {
       for (int i=4*hi; i<4*(hi+1); ++i) {
         for (int j=4*hj; j<4*(hj+1); ++j) {
-          double x = ( (i-7.5)*vcl_cos(key_orient)
-                      -(j-7.5)*vcl_sin(key_orient)) * ref_scale;
-          double y = ( (i-7.5)*vcl_sin(key_orient)
-                      +(j-7.5)*vcl_cos(key_orient)) * ref_scale;
+          double x = ( (i-7.5)*std::cos(key_orient)
+                      -(j-7.5)*std::sin(key_orient)) * ref_scale;
+          double y = ( (i-7.5)*std::sin(key_orient)
+                      +(j-7.5)*std::cos(key_orient)) * ref_scale;
           for (int c=0; c<4; ++c) {
             int xc = int(x+key_x) + c/2;
             int yc = int(y+key_y) + c%2;
             if ( xc>=0 && xc<int(grad_orient.ni()) &&
                  yc>=0 && yc<int(grad_orient.nj()) ) {
-              float interp_x = 1.0f - vcl_fabs( key_x + float(x-xc) );
-              float interp_y = 1.0f - vcl_fabs( key_y + float(y-yc) );
+              float interp_x = 1.0f - std::fabs( key_x + float(x-xc) );
+              float interp_y = 1.0f - std::fabs( key_y + float(y-yc) );
               float weight = grad_mag(xc,yc) * interp_x * interp_y
                            * gaussian((xc-key_x)/ref_scale, (yc-key_y)/ref_scale);
               float orient = float(vnl_math::angle_0_to_2pi(grad_orient(xc,yc)-key_orient+vnl_math::pi));

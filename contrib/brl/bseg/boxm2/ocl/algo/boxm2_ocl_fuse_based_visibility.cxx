@@ -1,4 +1,7 @@
 // This is brl/bseg/boxm2/ocl/algo/boxm2_ocl_fuse_based_visibility.cxx
+#include <fstream>
+#include <iostream>
+#include <algorithm>
 #include "boxm2_ocl_fuse_based_visibility.h"
 //:
 // \file
@@ -7,8 +10,7 @@
 // \author Vishal Jain
 // \date Nov 13, 2013
 
-#include <vcl_fstream.h>
-#include <vcl_algorithm.h>
+#include <vcl_compiler.h>
 #include <boxm2/boxm2_data_base.h>
 #include <boxm2/ocl/boxm2_ocl_util.h>
 #include <boxm2/boxm2_util.h>
@@ -24,7 +26,7 @@
 #include <vnl/vnl_numeric_traits.h>
 
 //: Map of kernels should persist between process executions
-vcl_map<vcl_string,vcl_vector<bocl_kernel*> > boxm2_ocl_fuse_based_visibility::kernels_;
+std::map<std::string,std::vector<bocl_kernel*> > boxm2_ocl_fuse_based_visibility::kernels_;
 
 //Main public method, updates color model
 bool boxm2_ocl_fuse_based_visibility::fuse_based_visibility(boxm2_scene_sptr         sceneA,
@@ -36,8 +38,8 @@ bool boxm2_ocl_fuse_based_visibility::fuse_based_visibility(boxm2_scene_sptr    
 
   float transfer_time=0.0f;
   float gpu_time=0.0f;
-  vcl_size_t local_threads[1]={64};
-  vcl_size_t global_threads[1]={64};
+  std::size_t local_threads[1]={64};
+  std::size_t global_threads[1]={64};
 
   bocl_mem_sptr centerX = new bocl_mem(device->context(), boct_bit_tree::centerX, sizeof(cl_float)*585, "centersX lookup buffer");
   bocl_mem_sptr centerY = new bocl_mem(device->context(), boct_bit_tree::centerY, sizeof(cl_float)*585, "centersY lookup buffer");
@@ -57,17 +59,17 @@ bool boxm2_ocl_fuse_based_visibility::fuse_based_visibility(boxm2_scene_sptr    
   int status = 0;
   cl_command_queue queue = clCreateCommandQueue(device->context(),*(device->device_id()),CL_QUEUE_PROFILING_ENABLE,&status);
   //cache size sanity check
-  vcl_size_t binCache = opencl_cache.ptr()->bytes_in_cache();
-  vcl_cout<<"Update MBs in cache: "<<binCache/(1024.0*1024.0)<<vcl_endl;
+  std::size_t binCache = opencl_cache.ptr()->bytes_in_cache();
+  std::cout<<"Update MBs in cache: "<<binCache/(1024.0*1024.0)<<std::endl;
 
-  vcl_string options = "";
+  std::string options = "";
   // compile the kernel if not already compiled
-  vcl_vector<bocl_kernel*>& kernels = get_kernels(device, options);
-  vcl_vector<boxm2_block_id> blocks_A = sceneA->get_block_ids();
-  vcl_vector<boxm2_block_id> blocks_B = sceneB->get_block_ids();
-  vcl_cout<<sceneA->data_path()<<" "<<sceneB->data_path()<<vcl_endl;
-  vcl_vector<boxm2_block_id>::iterator iter_blks_A = blocks_A.begin();
-  vcl_vector<boxm2_block_id>::iterator iter_blks_B = blocks_B.begin();
+  std::vector<bocl_kernel*>& kernels = get_kernels(device, options);
+  std::vector<boxm2_block_id> blocks_A = sceneA->get_block_ids();
+  std::vector<boxm2_block_id> blocks_B = sceneB->get_block_ids();
+  std::cout<<sceneA->data_path()<<" "<<sceneB->data_path()<<std::endl;
+  std::vector<boxm2_block_id>::iterator iter_blks_A = blocks_A.begin();
+  std::vector<boxm2_block_id>::iterator iter_blks_B = blocks_B.begin();
 
   int alphaTypeSize = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_ALPHA>::prefix());
 
@@ -76,7 +78,7 @@ bool boxm2_ocl_fuse_based_visibility::fuse_based_visibility(boxm2_scene_sptr    
   {
       if((*iter_blks_A) != (*iter_blks_B))
       {
-          vcl_cout<<"Blocks do  not match "<<(*iter_blks_A)<<" "<<(*iter_blks_B)<<vcl_endl;
+          std::cout<<"Blocks do  not match "<<(*iter_blks_A)<<" "<<(*iter_blks_B)<<std::endl;
           return false;
       }
       bocl_mem* blk_A       = opencl_cache->get_block(sceneA, *iter_blks_A);
@@ -98,7 +100,7 @@ bool boxm2_ocl_fuse_based_visibility::fuse_based_visibility(boxm2_scene_sptr    
       blk_info_B->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR);
       global_threads[0] = (unsigned) RoundUp(info_buffer_A->scene_dims[0]*info_buffer_A->scene_dims[1]*info_buffer_A->scene_dims[2],(int)local_threads[0]);
 
-      vcl_cout<<alpha_A->num_bytes()<<" "<<alpha_B->num_bytes()<<vcl_endl;
+      std::cout<<alpha_A->num_bytes()<<" "<<alpha_B->num_bytes()<<std::endl;
       kern->set_arg(centerX.ptr());
       kern->set_arg(centerY.ptr());
       kern->set_arg(centerZ.ptr());
@@ -119,7 +121,7 @@ bool boxm2_ocl_fuse_based_visibility::fuse_based_visibility(boxm2_scene_sptr    
       kern->set_local_arg(16*local_threads[0]*sizeof(unsigned char)); // local trees
       if(!kern->execute(queue, 1, local_threads, global_threads))
       {
-          vcl_cout<<"Kernel Failed to Execute "<<vcl_endl;
+          std::cout<<"Kernel Failed to Execute "<<std::endl;
           return false;
       }
       int status = clFinish(queue);
@@ -141,25 +143,25 @@ bool boxm2_ocl_fuse_based_visibility::fuse_based_visibility(boxm2_scene_sptr    
       delete info_buffer_A;
 
   }
-  vcl_cout<<"Gpu time "<<gpu_time<<" transfer time "<<transfer_time<<vcl_endl;
+  std::cout<<"Gpu time "<<gpu_time<<" transfer time "<<transfer_time<<std::endl;
   clReleaseCommandQueue(queue);
   return true;
 }
 
 
 //Returns vector of color update kernels (and caches them per device
-vcl_vector<bocl_kernel*>& boxm2_ocl_fuse_based_visibility::get_kernels(bocl_device_sptr device, vcl_string opts)
+std::vector<bocl_kernel*>& boxm2_ocl_fuse_based_visibility::get_kernels(bocl_device_sptr device, std::string opts)
 {
   // compile kernels if not already compiled
-  vcl_string identifier = device->device_identifier() + opts;
+  std::string identifier = device->device_identifier() + opts;
   if (kernels_.find(identifier) != kernels_.end())
     return kernels_[identifier];
 
   //otherwise compile the kernels
-  vcl_cout<<"=== boxm2_ocl_fuse_based_visibility_process::compiling kernels on device "<<identifier<<"==="<<vcl_endl;
+  std::cout<<"=== boxm2_ocl_fuse_based_visibility_process::compiling kernels on device "<<identifier<<"==="<<std::endl;
 
-  vcl_vector<vcl_string> src_paths;
-  vcl_string source_dir = boxm2_ocl_util::ocl_src_root();
+  std::vector<std::string> src_paths;
+  std::string source_dir = boxm2_ocl_util::ocl_src_root();
   src_paths.push_back(source_dir + "scene_info.cl");
   src_paths.push_back(source_dir + "bit/bit_tree_library_functions.cl");
   src_paths.push_back(source_dir + "pixel_conversion.cl");
@@ -168,12 +170,12 @@ vcl_vector<bocl_kernel*>& boxm2_ocl_fuse_based_visibility::get_kernels(bocl_devi
   src_paths.push_back(source_dir + "ray_bundle_library_opt.cl");
   src_paths.push_back(source_dir + "fusion/fusion_kernels.cl");
   //compilation options
-  vcl_string options = opts;
+  std::string options = opts;
   //populate vector of kernels
-  vcl_vector<bocl_kernel*> vec_kernels;
+  std::vector<bocl_kernel*> vec_kernels;
   //may need DIFF LIST OF SOURCES FOR
   bocl_kernel* fuse = new bocl_kernel();
-  vcl_string update_opts = options + " -D VISIBILITY_BASED";
+  std::string update_opts = options + " -D VISIBILITY_BASED";
   fuse->create_kernel(&device->context(), device->device_id(), src_paths, "fuse_blockwise_based_visibility", update_opts, "fusion::fuse_blockwise_based_visibility");
   vec_kernels.push_back(fuse);
   //store and return
@@ -183,7 +185,7 @@ vcl_vector<bocl_kernel*>& boxm2_ocl_fuse_based_visibility::get_kernels(bocl_devi
 
 
 //: Map of kernels should persist between process executions
-vcl_map<vcl_string,vcl_vector<bocl_kernel*> > boxm2_ocl_fuse_based_orientation::kernels_;
+std::map<std::string,std::vector<bocl_kernel*> > boxm2_ocl_fuse_based_orientation::kernels_;
 
 //Main public method, updates color model
 bool boxm2_ocl_fuse_based_orientation::fuse_based_orientation(boxm2_scene_sptr         sceneA,
@@ -195,8 +197,8 @@ bool boxm2_ocl_fuse_based_orientation::fuse_based_orientation(boxm2_scene_sptr  
 
   float transfer_time=0.0f;
   float gpu_time=0.0f;
-  vcl_size_t local_threads[1]={64};
-  vcl_size_t global_threads[1]={64};
+  std::size_t local_threads[1]={64};
+  std::size_t global_threads[1]={64};
 
   bocl_mem_sptr centerX = new bocl_mem(device->context(), boct_bit_tree::centerX, sizeof(cl_float)*585, "centersX lookup buffer");
   bocl_mem_sptr centerY = new bocl_mem(device->context(), boct_bit_tree::centerY, sizeof(cl_float)*585, "centersY lookup buffer");
@@ -216,17 +218,17 @@ bool boxm2_ocl_fuse_based_orientation::fuse_based_orientation(boxm2_scene_sptr  
   int status = 0;
   cl_command_queue queue = clCreateCommandQueue(device->context(),*(device->device_id()),CL_QUEUE_PROFILING_ENABLE,&status);
   //cache size sanity check
-  vcl_size_t binCache = opencl_cache.ptr()->bytes_in_cache();
-  vcl_cout<<"Update MBs in cache: "<<binCache/(1024.0*1024.0)<<vcl_endl;
+  std::size_t binCache = opencl_cache.ptr()->bytes_in_cache();
+  std::cout<<"Update MBs in cache: "<<binCache/(1024.0*1024.0)<<std::endl;
 
-  vcl_string options = "";
+  std::string options = "";
   // compile the kernel if not already compiled
-  vcl_vector<bocl_kernel*>& kernels = get_kernels(device, options);
-  vcl_vector<boxm2_block_id> blocks_A = sceneA->get_block_ids();
-  vcl_vector<boxm2_block_id> blocks_B = sceneB->get_block_ids();
-  vcl_cout<<sceneA->data_path()<<" "<<sceneB->data_path()<<vcl_endl;
-  vcl_vector<boxm2_block_id>::iterator iter_blks_A = blocks_A.begin();
-  vcl_vector<boxm2_block_id>::iterator iter_blks_B = blocks_B.begin();
+  std::vector<bocl_kernel*>& kernels = get_kernels(device, options);
+  std::vector<boxm2_block_id> blocks_A = sceneA->get_block_ids();
+  std::vector<boxm2_block_id> blocks_B = sceneB->get_block_ids();
+  std::cout<<sceneA->data_path()<<" "<<sceneB->data_path()<<std::endl;
+  std::vector<boxm2_block_id>::iterator iter_blks_A = blocks_A.begin();
+  std::vector<boxm2_block_id>::iterator iter_blks_B = blocks_B.begin();
 
   int alphaTypeSize = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_ALPHA>::prefix());
 
@@ -235,7 +237,7 @@ bool boxm2_ocl_fuse_based_orientation::fuse_based_orientation(boxm2_scene_sptr  
   {
       if((*iter_blks_A) != (*iter_blks_B))
       {
-          vcl_cout<<"Blocks do  not match "<<(*iter_blks_A)<<" "<<(*iter_blks_B)<<vcl_endl;
+          std::cout<<"Blocks do  not match "<<(*iter_blks_A)<<" "<<(*iter_blks_B)<<std::endl;
           return false;
       }
       bocl_mem* blk_A       = opencl_cache->get_block(sceneA, *iter_blks_A);
@@ -259,7 +261,7 @@ bool boxm2_ocl_fuse_based_orientation::fuse_based_orientation(boxm2_scene_sptr  
       blk_info_B->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR);
       global_threads[0] = (unsigned) RoundUp(info_buffer_A->scene_dims[0]*info_buffer_A->scene_dims[1]*info_buffer_A->scene_dims[2],(int)local_threads[0]);
 
-      vcl_cout<<alpha_A->num_bytes()<<" "<<alpha_B->num_bytes()<<vcl_endl;
+      std::cout<<alpha_A->num_bytes()<<" "<<alpha_B->num_bytes()<<std::endl;
       kern->set_arg(centerX.ptr());
       kern->set_arg(centerY.ptr());
       kern->set_arg(centerZ.ptr());
@@ -282,7 +284,7 @@ bool boxm2_ocl_fuse_based_orientation::fuse_based_orientation(boxm2_scene_sptr  
       kern->set_local_arg(16*local_threads[0]*sizeof(unsigned char)); // local trees
       if(!kern->execute(queue, 1, local_threads, global_threads))
       {
-          vcl_cout<<"Kernel Failed to Execute "<<vcl_endl;
+          std::cout<<"Kernel Failed to Execute "<<std::endl;
           return false;
       }
       int status = clFinish(queue);
@@ -304,25 +306,25 @@ bool boxm2_ocl_fuse_based_orientation::fuse_based_orientation(boxm2_scene_sptr  
       delete info_buffer_A;
 
   }
-  vcl_cout<<"Gpu time "<<gpu_time<<" transfer time "<<transfer_time<<vcl_endl;
+  std::cout<<"Gpu time "<<gpu_time<<" transfer time "<<transfer_time<<std::endl;
   clReleaseCommandQueue(queue);
   return true;
 }
 
 
 //Returns vector of color update kernels (and caches them per device
-vcl_vector<bocl_kernel*>& boxm2_ocl_fuse_based_orientation::get_kernels(bocl_device_sptr device, vcl_string opts)
+std::vector<bocl_kernel*>& boxm2_ocl_fuse_based_orientation::get_kernels(bocl_device_sptr device, std::string opts)
 {
   // compile kernels if not already compiled
-  vcl_string identifier = device->device_identifier() + opts;
+  std::string identifier = device->device_identifier() + opts;
   if (kernels_.find(identifier) != kernels_.end())
     return kernels_[identifier];
 
   //otherwise compile the kernels
-  vcl_cout<<"=== boxm2_ocl_fuse_based_visibility_process::compiling kernels on device "<<identifier<<"==="<<vcl_endl;
+  std::cout<<"=== boxm2_ocl_fuse_based_visibility_process::compiling kernels on device "<<identifier<<"==="<<std::endl;
 
-  vcl_vector<vcl_string> src_paths;
-  vcl_string source_dir = boxm2_ocl_util::ocl_src_root();
+  std::vector<std::string> src_paths;
+  std::string source_dir = boxm2_ocl_util::ocl_src_root();
   src_paths.push_back(source_dir + "scene_info.cl");
   src_paths.push_back(source_dir + "bit/bit_tree_library_functions.cl");
   src_paths.push_back(source_dir + "pixel_conversion.cl");
@@ -331,12 +333,12 @@ vcl_vector<bocl_kernel*>& boxm2_ocl_fuse_based_orientation::get_kernels(bocl_dev
   src_paths.push_back(source_dir + "ray_bundle_library_opt.cl");
   src_paths.push_back(source_dir + "fusion/fusion_kernels.cl");
   //compilation options
-  vcl_string options = opts;
+  std::string options = opts;
   //populate vector of kernels
-  vcl_vector<bocl_kernel*> vec_kernels;
+  std::vector<bocl_kernel*> vec_kernels;
   //may need DIFF LIST OF SOURCES FOR
   bocl_kernel* fuse = new bocl_kernel();
-  vcl_string update_opts = options + " -D ORIENTATION_BASED";
+  std::string update_opts = options + " -D ORIENTATION_BASED";
   fuse->create_kernel(&device->context(), device->device_id(), src_paths, "fuse_blockwise_based_orientation", update_opts, "fusion::fuse_blockwise_based_orientation");
   vec_kernels.push_back(fuse);
   //store and return
@@ -348,7 +350,7 @@ vcl_vector<bocl_kernel*>& boxm2_ocl_fuse_based_orientation::get_kernels(bocl_dev
 
 
 //: Map of kernels should persist between process executions
-vcl_map<vcl_string,vcl_vector<bocl_kernel*> > boxm2_ocl_fuse_surface_density::kernels_;
+std::map<std::string,std::vector<bocl_kernel*> > boxm2_ocl_fuse_surface_density::kernels_;
 
 //Main public method, updates color model
 bool boxm2_ocl_fuse_surface_density::fuse_surface_density(boxm2_scene_sptr         sceneA,
@@ -360,8 +362,8 @@ bool boxm2_ocl_fuse_surface_density::fuse_surface_density(boxm2_scene_sptr      
 
   float transfer_time=0.0f;
   float gpu_time=0.0f;
-  vcl_size_t local_threads[1]={64};
-  vcl_size_t global_threads[1]={64};
+  std::size_t local_threads[1]={64};
+  std::size_t global_threads[1]={64};
 
   bocl_mem_sptr centerX = new bocl_mem(device->context(), boct_bit_tree::centerX, sizeof(cl_float)*585, "centersX lookup buffer");
   bocl_mem_sptr centerY = new bocl_mem(device->context(), boct_bit_tree::centerY, sizeof(cl_float)*585, "centersY lookup buffer");
@@ -381,17 +383,17 @@ bool boxm2_ocl_fuse_surface_density::fuse_surface_density(boxm2_scene_sptr      
   int status = 0;
   cl_command_queue queue = clCreateCommandQueue(device->context(),*(device->device_id()),CL_QUEUE_PROFILING_ENABLE,&status);
   //cache size sanity check
-  vcl_size_t binCache = opencl_cache.ptr()->bytes_in_cache();
-  vcl_cout<<"Update MBs in cache: "<<binCache/(1024.0*1024.0)<<vcl_endl;
+  std::size_t binCache = opencl_cache.ptr()->bytes_in_cache();
+  std::cout<<"Update MBs in cache: "<<binCache/(1024.0*1024.0)<<std::endl;
 
-  vcl_string options = "";
+  std::string options = "";
   // compile the kernel if not already compiled
-  vcl_vector<bocl_kernel*>& kernels = get_kernels(device, options);
-  vcl_vector<boxm2_block_id> blocks_A = sceneA->get_block_ids();
-  vcl_vector<boxm2_block_id> blocks_B = sceneB->get_block_ids();
-  vcl_cout<<sceneA->data_path()<<" "<<sceneB->data_path()<<vcl_endl;
-  vcl_vector<boxm2_block_id>::iterator iter_blks_A = blocks_A.begin();
-  vcl_vector<boxm2_block_id>::iterator iter_blks_B = blocks_B.begin();
+  std::vector<bocl_kernel*>& kernels = get_kernels(device, options);
+  std::vector<boxm2_block_id> blocks_A = sceneA->get_block_ids();
+  std::vector<boxm2_block_id> blocks_B = sceneB->get_block_ids();
+  std::cout<<sceneA->data_path()<<" "<<sceneB->data_path()<<std::endl;
+  std::vector<boxm2_block_id>::iterator iter_blks_A = blocks_A.begin();
+  std::vector<boxm2_block_id>::iterator iter_blks_B = blocks_B.begin();
 
   int alphaTypeSize = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_ALPHA>::prefix());
 
@@ -400,7 +402,7 @@ bool boxm2_ocl_fuse_surface_density::fuse_surface_density(boxm2_scene_sptr      
   {
       if((*iter_blks_A) != (*iter_blks_B))
       {
-          vcl_cout<<"Blocks do  not match "<<(*iter_blks_A)<<" "<<(*iter_blks_B)<<vcl_endl;
+          std::cout<<"Blocks do  not match "<<(*iter_blks_A)<<" "<<(*iter_blks_B)<<std::endl;
           return false;
       }
       bocl_mem* blk_A       = opencl_cache->get_block(sceneA, *iter_blks_A);
@@ -424,7 +426,7 @@ bool boxm2_ocl_fuse_surface_density::fuse_surface_density(boxm2_scene_sptr      
       blk_info_B->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR);
       global_threads[0] = (unsigned) RoundUp(info_buffer_A->scene_dims[0]*info_buffer_A->scene_dims[1]*info_buffer_A->scene_dims[2],(int)local_threads[0]);
 
-      vcl_cout<<alpha_A->num_bytes()<<" "<<alpha_B->num_bytes()<<vcl_endl;
+      std::cout<<alpha_A->num_bytes()<<" "<<alpha_B->num_bytes()<<std::endl;
       kern->set_arg(centerX.ptr());
       kern->set_arg(centerY.ptr());
       kern->set_arg(centerZ.ptr());
@@ -447,7 +449,7 @@ bool boxm2_ocl_fuse_surface_density::fuse_surface_density(boxm2_scene_sptr      
       kern->set_local_arg(16*local_threads[0]*sizeof(unsigned char)); // local trees
       if(!kern->execute(queue, 1, local_threads, global_threads))
       {
-          vcl_cout<<"Kernel Failed to Execute "<<vcl_endl;
+          std::cout<<"Kernel Failed to Execute "<<std::endl;
           return false;
       }
       int status = clFinish(queue);
@@ -469,25 +471,25 @@ bool boxm2_ocl_fuse_surface_density::fuse_surface_density(boxm2_scene_sptr      
       delete info_buffer_A;
 
   }
-  vcl_cout<<"Gpu time "<<gpu_time<<" transfer time "<<transfer_time<<vcl_endl;
+  std::cout<<"Gpu time "<<gpu_time<<" transfer time "<<transfer_time<<std::endl;
   clReleaseCommandQueue(queue);
   return true;
 }
 
 
 //Returns vector of color update kernels (and caches them per device
-vcl_vector<bocl_kernel*>& boxm2_ocl_fuse_surface_density::get_kernels(bocl_device_sptr device, vcl_string opts)
+std::vector<bocl_kernel*>& boxm2_ocl_fuse_surface_density::get_kernels(bocl_device_sptr device, std::string opts)
 {
   // compile kernels if not already compiled
-  vcl_string identifier = device->device_identifier() + opts;
+  std::string identifier = device->device_identifier() + opts;
   if (kernels_.find(identifier) != kernels_.end())
     return kernels_[identifier];
 
   //otherwise compile the kernels
-  vcl_cout<<"=== boxm2_ocl_fuse_based_visibility_process::compiling kernels on device "<<identifier<<"==="<<vcl_endl;
+  std::cout<<"=== boxm2_ocl_fuse_based_visibility_process::compiling kernels on device "<<identifier<<"==="<<std::endl;
 
-  vcl_vector<vcl_string> src_paths;
-  vcl_string source_dir = boxm2_ocl_util::ocl_src_root();
+  std::vector<std::string> src_paths;
+  std::string source_dir = boxm2_ocl_util::ocl_src_root();
   src_paths.push_back(source_dir + "scene_info.cl");
   src_paths.push_back(source_dir + "bit/bit_tree_library_functions.cl");
   src_paths.push_back(source_dir + "pixel_conversion.cl");
@@ -496,12 +498,12 @@ vcl_vector<bocl_kernel*>& boxm2_ocl_fuse_surface_density::get_kernels(bocl_devic
   src_paths.push_back(source_dir + "ray_bundle_library_opt.cl");
   src_paths.push_back(source_dir + "fusion/fusion_kernels.cl");
   //compilation options
-  vcl_string options = opts;
+  std::string options = opts;
   //populate vector of kernels
-  vcl_vector<bocl_kernel*> vec_kernels;
+  std::vector<bocl_kernel*> vec_kernels;
   //may need DIFF LIST OF SOURCES FOR
   bocl_kernel* fuse = new bocl_kernel();
-  vcl_string update_opts = options + " -D SURFACE_DENSITY_BASED";
+  std::string update_opts = options + " -D SURFACE_DENSITY_BASED";
   fuse->create_kernel(&device->context(), device->device_id(), src_paths, "fuse_blockwise_based_surface_density", update_opts, "fusion::fuse_blockwise_based_surface_density");
   vec_kernels.push_back(fuse);
   //store and return

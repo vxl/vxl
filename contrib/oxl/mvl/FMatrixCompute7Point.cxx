@@ -1,4 +1,7 @@
 // This is oxl/mvl/FMatrixCompute7Point.cxx
+#include <vector>
+#include <iostream>
+#include <cmath>
 #include "FMatrixCompute7Point.h"
 //:
 // \file
@@ -6,9 +9,7 @@
 // \date   25 Nov 2000
 //-----------------------------------------------------------------------------
 
-#include <vcl_vector.h>
-#include <vcl_iostream.h>
-#include <vcl_cmath.h>
+#include <vcl_compiler.h>
 
 #include <vnl/vnl_matrix.h>
 #include <vnl/vnl_math.h>
@@ -32,22 +33,22 @@ FMatrixCompute7Point::FMatrixCompute7Point(bool precondition, bool rank2_truncat
 // Return false if the calculation fails or there are fewer than eight point
 // matches in the list.
 
-bool FMatrixCompute7Point::compute(PairMatchSetCorner& matches, vcl_vector<FMatrix*>& F)
+bool FMatrixCompute7Point::compute(PairMatchSetCorner& matches, std::vector<FMatrix*>& F)
 {
   // Copy matching points from matchset.
-  vcl_vector<HomgPoint2D> points1(matches.count());
-  vcl_vector<HomgPoint2D> points2(matches.count());
+  std::vector<HomgPoint2D> points1(matches.count());
+  std::vector<HomgPoint2D> points2(matches.count());
   matches.extract_matches(points1, points2);
   return compute(points1, points2, F);
 }
 
 //-----------------------------------------------------------------------------
-bool FMatrixCompute7Point::compute (vcl_vector<vgl_homg_point_2d<double> >& points1,
-                                    vcl_vector<vgl_homg_point_2d<double> >& points2,
-                                    vcl_vector<FMatrix*>& F)
+bool FMatrixCompute7Point::compute (std::vector<vgl_homg_point_2d<double> >& points1,
+                                    std::vector<vgl_homg_point_2d<double> >& points2,
+                                    std::vector<FMatrix*>& F)
 {
   if (points1.size() < 7 || points2.size() < 7) {
-    vcl_cerr << "FMatrixCompute7Point: Need at least 7 point pairs.\n"
+    std::cerr << "FMatrixCompute7Point: Need at least 7 point pairs.\n"
              << "Number in each set: " << points1.size() << ", " << points2.size() << '\n';
     return false;
   }
@@ -78,12 +79,12 @@ bool FMatrixCompute7Point::compute (vcl_vector<vgl_homg_point_2d<double> >& poin
 }
 
 //-----------------------------------------------------------------------------
-bool FMatrixCompute7Point::compute(vcl_vector<HomgPoint2D>& points1,
-                                   vcl_vector<HomgPoint2D>& points2,
-                                   vcl_vector<FMatrix*>& F)
+bool FMatrixCompute7Point::compute(std::vector<HomgPoint2D>& points1,
+                                   std::vector<HomgPoint2D>& points2,
+                                   std::vector<FMatrix*>& F)
 {
   if (points1.size() < 7 || points2.size() < 7) {
-    vcl_cerr << "FMatrixCompute7Point: Need at least 7 point pairs.\n"
+    std::cerr << "FMatrixCompute7Point: Need at least 7 point pairs.\n"
              << "Number in each set: " << points1.size() << ", " << points2.size() << '\n';
     return false;
   }
@@ -111,9 +112,9 @@ bool FMatrixCompute7Point::compute(vcl_vector<HomgPoint2D>& points1,
 }
 
 //-----------------------------------------------------------------------------
-bool FMatrixCompute7Point::compute_preconditioned(vcl_vector<vgl_homg_point_2d<double> >& points1,
-                                                  vcl_vector<vgl_homg_point_2d<double> >& points2,
-                                                  vcl_vector<FMatrix*>& F)
+bool FMatrixCompute7Point::compute_preconditioned(std::vector<vgl_homg_point_2d<double> >& points1,
+                                                  std::vector<vgl_homg_point_2d<double> >& points2,
+                                                  std::vector<FMatrix*>& F)
 {
   // Create design matrix from conditioned points
   FDesignMatrix design(points1, points2);
@@ -134,8 +135,8 @@ bool FMatrixCompute7Point::compute_preconditioned(vcl_vector<vgl_homg_point_2d<d
 
   // Using the fact that Det(alpha*F1 +(1 - alpha)*F2) == 0
   // find the real roots of the cubic equation that satisfy
-  vcl_vector<double> a = FMatrixCompute7Point::GetCoef(F1, F2);
-  vcl_vector<double> roots = FMatrixCompute7Point::solve_cubic(a);
+  std::vector<double> a = FMatrixCompute7Point::GetCoef(F1, F2);
+  std::vector<double> roots = FMatrixCompute7Point::solve_cubic(a);
 
   if (roots.empty())
     return false;
@@ -155,9 +156,9 @@ bool FMatrixCompute7Point::compute_preconditioned(vcl_vector<vgl_homg_point_2d<d
 }
 
 //-----------------------------------------------------------------------------
-bool FMatrixCompute7Point::compute_preconditioned(vcl_vector<HomgPoint2D>& points1,
-                                                  vcl_vector<HomgPoint2D>& points2,
-                                                  vcl_vector<FMatrix*>& F)
+bool FMatrixCompute7Point::compute_preconditioned(std::vector<HomgPoint2D>& points1,
+                                                  std::vector<HomgPoint2D>& points2,
+                                                  std::vector<FMatrix*>& F)
 {
   // Create design matrix from conditioned points
   FDesignMatrix design(points1, points2);
@@ -178,8 +179,8 @@ bool FMatrixCompute7Point::compute_preconditioned(vcl_vector<HomgPoint2D>& point
 
   // Using the fact that Det(alpha*F1 +(1 - alpha)*F2) == 0
   // find the real roots of the cubic equation that satisfy
-  vcl_vector<double> a = FMatrixCompute7Point::GetCoef(F1, F2);
-  vcl_vector<double> roots = FMatrixCompute7Point::solve_cubic(a);
+  std::vector<double> a = FMatrixCompute7Point::GetCoef(F1, F2);
+  std::vector<double> roots = FMatrixCompute7Point::solve_cubic(a);
 
   for (unsigned int i = 0; i < roots.size(); i++) {
     vnl_matrix<double> F_temp =
@@ -199,7 +200,7 @@ bool FMatrixCompute7Point::compute_preconditioned(vcl_vector<HomgPoint2D>& point
 // Det(alpha*F1 +(1 - alpha)*F2) == 0
 // (I obtained these coefficients from Maple (fingers crossed!!!))
 //
-vcl_vector<double> FMatrixCompute7Point::GetCoef(FMatrix const& F1, FMatrix const& F2)
+std::vector<double> FMatrixCompute7Point::GetCoef(FMatrix const& F1, FMatrix const& F2)
 {
   double a=F1.get(0,0), j=F2.get(0,0), aa=a-j,
          b=F1.get(0,1), k=F2.get(0,1), bb=b-k,
@@ -215,7 +216,7 @@ vcl_vector<double> FMatrixCompute7Point::GetCoef(FMatrix const& F1, FMatrix cons
   double d1=bb*ii-cc*hh, e1=bb*r+ii*k-cc*q-hh*l, f1=r*k-l*q;
   double g1=bb*ff-cc*ee, h1=bb*o+ff*k-cc*n-ee*l, i1=o*k-l*n;
 
-  vcl_vector<double> v;
+  std::vector<double> v;
   v.push_back(aa*a1-dd*d1+gg*g1);
   v.push_back(aa*b1+a1*j-dd*e1-d1*m+gg*h1+g1*p);
   v.push_back(aa*c1+b1*j-dd*f1-e1*m+gg*i1+h1*p);
@@ -231,7 +232,7 @@ vcl_vector<double> FMatrixCompute7Point::GetCoef(FMatrix const& F1, FMatrix cons
 //  empty list, otherwise a list of length two.
 //  v is a 4-vector of which the first element is ignored.
 //-------------------
-vcl_vector<double> FMatrixCompute7Point::solve_quadratic (vcl_vector<double> v)
+std::vector<double> FMatrixCompute7Point::solve_quadratic (std::vector<double> v)
 {
    double a = v[1], b = v[2], c = v[3];
    double s = (b > 0.0) ? 1.0 : -1.0;
@@ -242,18 +243,18 @@ vcl_vector<double> FMatrixCompute7Point::solve_quadratic (vcl_vector<double> v)
      d = 0.0;
 
    if (d < 0.0) // doesn't work for complex roots
-      return vcl_vector<double>(); // empty list
+      return std::vector<double>(); // empty list
 
-   double q = -0.5 * ( b + s * vcl_sqrt(d));
+   double q = -0.5 * ( b + s * std::sqrt(d));
 
-   vcl_vector<double> l; l.push_back(q/a); l.push_back(c/q);
+   std::vector<double> l; l.push_back(q/a); l.push_back(c/q);
    return l;
 }
 
 // Compute cube root of a positive or a negative number
 inline double my_cbrt(double x)
 {
-   return (x>=0) ? vcl_exp(vcl_log(x)/3.0) : -vcl_exp(vcl_log(-x)/3.0);
+   return (x>=0) ? std::exp(std::log(x)/3.0) : -std::exp(std::log(-x)/3.0);
 }
 
 //------------------
@@ -266,13 +267,13 @@ inline double my_cbrt(double x)
 //-------------------
 // Rewritten and documented by Peter Vanroose, 23 October 2001.
 
-vcl_vector<double> FMatrixCompute7Point::solve_cubic(vcl_vector<double> v)
+std::vector<double> FMatrixCompute7Point::solve_cubic(std::vector<double> v)
 {
    double a = v[0], b = v[1], c = v[2], d = v[3];
 
    /* firstly check to see if we have approximately a quadratic */
    double len = a*a + b*b + c*c + d*d;
-   if (vcl_abs(a*a/len) < 1e-6 )
+   if (std::abs(a*a/len) < 1e-6 )
       return FMatrixCompute7Point::solve_quadratic(v);
 
    b /= a; c /= a; d /= a; b /= 3;
@@ -282,7 +283,7 @@ vcl_vector<double> FMatrixCompute7Point::solve_cubic(vcl_vector<double> v)
    // At this point, a, c and d are no longer needed (c and d will be reused).
 
    if (q == 0) {
-      vcl_vector<double> w; w.push_back(my_cbrt(-2*r) - b); return w;
+      std::vector<double> w; w.push_back(my_cbrt(-2*r) - b); return w;
    }
 
    // With the Vieta substitution y = z+q/z this becomes z^6+2rz^3+q^3 = 0
@@ -291,17 +292,17 @@ vcl_vector<double> FMatrixCompute7Point::solve_cubic(vcl_vector<double> v)
    d = r*r - q*q*q;
    if ( d >= 0.0 )
    {
-      double z  = my_cbrt(-r + vcl_sqrt(d));
+      double z  = my_cbrt(-r + std::sqrt(d));
       // The case z=0 is excluded since this is q==0 which is handled above
-      vcl_vector<double> w; w.push_back(z + q/z - b); return w;
+      std::vector<double> w; w.push_back(z + q/z - b); return w;
    }
 
    // And finally the "irreducible case" (with 3 solutions):
-   c = vcl_sqrt(q);
-   double theta = vcl_acos( r/q/c ) / 3;
-   vcl_vector<double> l;
-   l.push_back(-2.0*c*vcl_cos(theta)                     - b);
-   l.push_back(-2.0*c*vcl_cos(theta + vnl_math::twopi/3) - b);
-   l.push_back(-2.0*c*vcl_cos(theta - vnl_math::twopi/3) - b);
+   c = std::sqrt(q);
+   double theta = std::acos( r/q/c ) / 3;
+   std::vector<double> l;
+   l.push_back(-2.0*c*std::cos(theta)                     - b);
+   l.push_back(-2.0*c*std::cos(theta + vnl_math::twopi/3) - b);
+   l.push_back(-2.0*c*std::cos(theta - vnl_math::twopi/3) - b);
    return l;
 }

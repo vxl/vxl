@@ -6,10 +6,11 @@
 // \brief Various mathematical manipulations of 2D images
 // \author Tim Cootes
 
+#include <vector>
+#include <cmath>
+#include <algorithm>
 #include <vcl_cassert.h>
-#include <vcl_vector.h>
-#include <vcl_cmath.h>
-#include <vcl_algorithm.h>
+#include <vcl_compiler.h>
 #include <vil/vil_image_view.h>
 #include <vil/vil_view_as.h>
 #include <vil/vil_plane.h>
@@ -81,8 +82,8 @@ inline void vil_math_value_range(const vil_image_view<vil_rgb<float> >& rgb_view
 // and can be very expensive in terms of both processing and memory.
 template <class T>
 inline void vil_math_value_range_percentiles(const vil_image_view<T>& im,
-                                             const vcl_vector<double>& fraction,
-                                             vcl_vector<T>& value)
+                                             const std::vector<double>& fraction,
+                                             std::vector<T>& value)
 {
   value.clear();
 
@@ -91,8 +92,8 @@ inline void vil_math_value_range_percentiles(const vil_image_view<T>& im,
   {
     return;
   }
-  const vcl_size_t nfrac = fraction.size();
-  for (vcl_size_t f=0; f<nfrac; ++f)
+  const std::size_t nfrac = fraction.size();
+  for (std::size_t f=0; f<nfrac; ++f)
   {
     if (fraction[f]<0.0 || fraction[f]>1.0)
       return;
@@ -102,12 +103,12 @@ inline void vil_math_value_range_percentiles(const vil_image_view<T>& im,
   unsigned ni = im.ni();
   unsigned nj = im.nj();
   unsigned np = im.nplanes();
-  vcl_ptrdiff_t istep = im.istep();
-  vcl_ptrdiff_t jstep = im.jstep();
-  vcl_ptrdiff_t pstep = im.planestep();
-  vcl_vector<T> data(ni*nj*np);
+  std::ptrdiff_t istep = im.istep();
+  std::ptrdiff_t jstep = im.jstep();
+  std::ptrdiff_t pstep = im.planestep();
+  std::vector<T> data(ni*nj*np);
 
-  typename vcl_vector<T>::iterator it = data.begin();
+  typename std::vector<T>::iterator it = data.begin();
   const T* plane = im.top_left_ptr();
   for (unsigned int p=0; p<np; ++p, plane+=pstep)
   {
@@ -122,15 +123,15 @@ inline void vil_math_value_range_percentiles(const vil_image_view<T>& im,
       }
     }
   }
-  const vcl_size_t npix = data.size();
+  const std::size_t npix = data.size();
 
   // Get the nth_element corresponding to the specified fractions
   value.resize(nfrac);
   for (unsigned f=0; f<nfrac; ++f)
   {
     unsigned index = static_cast<unsigned>(fraction[f]*npix - 0.5);
-    typename vcl_vector<T>::iterator index_it = data.begin() + index;
-    vcl_nth_element(data.begin(), index_it, data.end());
+    typename std::vector<T>::iterator index_it = data.begin() + index;
+    std::nth_element(data.begin(), index_it, data.end());
     value[f] = *index_it;
   }
 }
@@ -149,8 +150,8 @@ inline void vil_math_value_range_percentile(const vil_image_view<T>& im,
                                             const double fraction,
                                             T& value)
 {
-  vcl_vector<double> fractions(1, fraction);
-  vcl_vector<T> values;
+  std::vector<double> fractions(1, fraction);
+  std::vector<T> values;
   vil_math_value_range_percentiles(im, fractions, values);
   if (values.size() > 0)
     value = values[0]; // Bounds-checked access in case previous line failed.
@@ -178,8 +179,8 @@ inline sumT vil_math_ssd(const vil_image_view<imT>& imA, const vil_image_view<im
 // \relatesalso vil_image_view
 template <class imT, class sumT>
 inline sumT
-vil_math_ssd_complex(const vil_image_view<vcl_complex<imT> >& imA,
-                     const vil_image_view<vcl_complex<imT> >& imB,
+vil_math_ssd_complex(const vil_image_view<std::complex<imT> >& imA,
+                     const vil_image_view<std::complex<imT> >& imB,
                      sumT /*dummy*/)
 {
   assert(imA.ni() == imB.ni() && imB.nj() == imB.nj() && imA.nplanes() == imB.nplanes());
@@ -188,7 +189,7 @@ vil_math_ssd_complex(const vil_image_view<vcl_complex<imT> >& imA,
     for (unsigned j=0;j<imA.nj();++j)
       for (unsigned i=0;i<imA.ni();++i)
       {
-        const vcl_complex<imT> d = imA(i,j,p) - imB(i,j,p);
+        const std::complex<imT> d = imA(i,j,p) - imB(i,j,p);
         ssd += sumT( d.real()*d.real() + d.imag()*d.imag() );
       }
   return ssd;
@@ -240,9 +241,9 @@ template<class imT, class sumT>
 inline void vil_math_sum(sumT& sum, const vil_image_view<imT>& im, unsigned p)
 {
   const imT* row = im.top_left_ptr()+p*im.planestep();
-  vcl_ptrdiff_t istep = im.istep(),jstep=im.jstep();
+  std::ptrdiff_t istep = im.istep(),jstep=im.jstep();
   const imT* row_end = row + im.nj()*jstep;
-  vcl_ptrdiff_t row_len = im.ni()*im.istep();
+  std::ptrdiff_t row_len = im.ni()*im.istep();
   sum = 0;
   for (;row!=row_end;row+=jstep)
   {
@@ -290,9 +291,9 @@ template<class imT, class sumT>
 inline void vil_math_sum_squares(sumT& sum, sumT& sum_sq, const vil_image_view<imT>& im, unsigned p)
 {
   const imT* row = im.top_left_ptr()+p*im.planestep();
-  vcl_ptrdiff_t istep = im.istep(),jstep=im.jstep();
+  std::ptrdiff_t istep = im.istep(),jstep=im.jstep();
   const imT* row_end = row + im.nj()*jstep;
-  vcl_ptrdiff_t row_len = im.ni()*im.istep();
+  std::ptrdiff_t row_len = im.ni()*im.istep();
   sum = 0; sum_sq = 0;
   for (;row!=row_end;row+=jstep)
   {
@@ -317,12 +318,12 @@ inline void vil_math_mean_and_variance(sumT& mean, sumT& var, const vil_image_vi
 class vil_math_sqrt_functor
 {
  public:
-  vxl_byte operator()(vxl_byte x) const { return static_cast<vxl_byte>(0.5+vcl_sqrt(double(x))); }
-  unsigned operator()(unsigned x) const { return static_cast<unsigned int>(0.5+vcl_sqrt(double(x))); }
-  int operator()(int x)           const { return x>0?static_cast<int>(0.5+vcl_sqrt(double(x))):0; }
-  short operator()(short x)       const { return x>0?static_cast<short>(0.5+vcl_sqrt(double(x))):0; }
-  float operator()(float x)       const { return x>0?vcl_sqrt(x):0.0f; }
-  double operator()(double x)     const { return x>0?vcl_sqrt(x):0.0; }
+  vxl_byte operator()(vxl_byte x) const { return static_cast<vxl_byte>(0.5+std::sqrt(double(x))); }
+  unsigned operator()(unsigned x) const { return static_cast<unsigned int>(0.5+std::sqrt(double(x))); }
+  int operator()(int x)           const { return x>0?static_cast<int>(0.5+std::sqrt(double(x))):0; }
+  short operator()(short x)       const { return x>0?static_cast<short>(0.5+std::sqrt(double(x))):0; }
+  float operator()(float x)       const { return x>0?std::sqrt(x):0.0f; }
+  double operator()(double x)     const { return x>0?std::sqrt(x):0.0; }
 };
 
 //: Compute square-root of each pixel element (or zero if negative)
@@ -342,7 +343,7 @@ template<class T>
 inline void vil_math_truncate_range(vil_image_view<T>& image, T min_v, T max_v)
 {
   unsigned ni = image.ni(),nj = image.nj(),np = image.nplanes();
-  vcl_ptrdiff_t istep=image.istep(),jstep=image.jstep(),pstep = image.planestep();
+  std::ptrdiff_t istep=image.istep(),jstep=image.jstep(),pstep = image.planestep();
   T* plane = image.top_left_ptr();
   for (unsigned p=0;p<np;++p,plane += pstep)
   {
@@ -371,7 +372,7 @@ class vil_math_scale_functor
   int operator()(int x)       const { double r=s_*x; return int(r<0?r-0.5:r+0.5); }
   float operator()(float x)       const { return float(s_*x); }
   double operator()(double x)     const { return s_*x; }
-  vcl_complex<double> operator()(vcl_complex<double> x) const { return s_*x; }
+  std::complex<double> operator()(std::complex<double> x) const { return s_*x; }
 };
 
 
@@ -393,7 +394,7 @@ class vil_math_scale_and_translate_functor
   int operator()(int x)           const { double r=s_*x+t_; return int(r<0?r-0.5:r+0.5); }
   float operator()(float x)       const { return float(s_*x+t_); }
   double operator()(double x)     const { return s_*x+t_; }
-  vcl_complex<double> operator()(vcl_complex<double> x) const { return s_*x+t_; } // Not sure if this one makes sense
+  std::complex<double> operator()(std::complex<double> x) const { return s_*x+t_; } // Not sure if this one makes sense
 
  private:
   double s_;
@@ -405,12 +406,12 @@ class vil_math_scale_and_translate_functor
 class vil_math_log_functor
 {
  public:
-  vxl_byte operator()(vxl_byte x) const { return static_cast<vxl_byte>(0.5+vcl_log(double(x))); }
-  unsigned operator()(unsigned x) const { return static_cast<unsigned int>(0.5+vcl_log(double(x))); }
-  int operator()(int x)           const { return x>0?static_cast<int>(0.5+vcl_log(double(x))):0; }
-  short operator()(short x)       const { return x>0?static_cast<short>(0.5+vcl_log(double(x))):0; }
-  float operator()(float x)       const { return x>0?vcl_log(x):0.0f; }
-  double operator()(double x)     const { return x>0?vcl_log(x):0.0; }
+  vxl_byte operator()(vxl_byte x) const { return static_cast<vxl_byte>(0.5+std::log(double(x))); }
+  unsigned operator()(unsigned x) const { return static_cast<unsigned int>(0.5+std::log(double(x))); }
+  int operator()(int x)           const { return x>0?static_cast<int>(0.5+std::log(double(x))):0; }
+  short operator()(short x)       const { return x>0?static_cast<short>(0.5+std::log(double(x))):0; }
+  float operator()(float x)       const { return x>0?std::log(x):0.0f; }
+  double operator()(double x)     const { return x>0?std::log(x):0.0; }
 };
 
 
@@ -428,7 +429,7 @@ template<class imT, class offsetT>
 inline void vil_math_scale_and_offset_values(vil_image_view<imT>& image, double scale, offsetT offset)
 {
   unsigned ni = image.ni(),nj = image.nj(),np = image.nplanes();
-  vcl_ptrdiff_t istep=image.istep(),jstep=image.jstep(),pstep = image.planestep();
+  std::ptrdiff_t istep=image.istep(),jstep=image.jstep(),pstep = image.planestep();
   imT* plane = image.top_left_ptr();
   for (unsigned p=0;p<np;++p,plane += pstep)
   {
@@ -450,7 +451,7 @@ inline void vil_math_normalise(vil_image_view<imT>& image)
   double mean,var;
   vil_math_mean_and_variance(mean,var,image,0);
   double s=0;
-  if (var>0) s = 1.0/vcl_sqrt(var);
+  if (var>0) s = 1.0/std::sqrt(var);
   vil_math_scale_and_offset_values(image,s,-s*mean);
 }
 
@@ -465,8 +466,8 @@ void vil_math_rms(const vil_image_view<srcT>& src,
   unsigned ni = src.ni(),nj = src.nj(),np = src.nplanes();
   dest.set_size(ni,nj,1);
 
-  vcl_ptrdiff_t istepA=src.istep(),jstepA=src.jstep(),pstepA = src.planestep();
-  vcl_ptrdiff_t istepB=dest.istep(),jstepB=dest.jstep();
+  std::ptrdiff_t istepA=src.istep(),jstepA=src.jstep(),pstepA = src.planestep();
+  std::ptrdiff_t istepB=dest.istep(),jstepB=dest.jstep();
   const srcT* rowA = src.top_left_ptr();
   destT* rowB = dest.top_left_ptr();
   for (unsigned j=0;j<nj;++j,rowA += jstepA,rowB += jstepB)
@@ -478,7 +479,7 @@ void vil_math_rms(const vil_image_view<srcT>& src,
     if (np==1)
     {
       for (;pixelA!=end_pixelA; pixelA+=istepA,pixelB+=istepB)
-        *pixelB = vcl_fabs(destT(*pixelA));
+        *pixelB = std::fabs(destT(*pixelA));
     }
     else if (np==2)
     {
@@ -486,7 +487,7 @@ void vil_math_rms(const vil_image_view<srcT>& src,
       {
         destT sum2 = destT(*pixelA)*(*pixelA)
                      + destT(pixelA[pstepA])*(pixelA[pstepA]);
-        *pixelB = destT(vcl_sqrt(sum2/2));
+        *pixelB = destT(std::sqrt(sum2/2));
       }
     }
     else
@@ -497,7 +498,7 @@ void vil_math_rms(const vil_image_view<srcT>& src,
         const srcT* p=pixelA+pstepA;
         const srcT* end_p=pixelA+np*pstepA;
         for (;p!=end_p;p+=pstepA) *pixelB += destT(*p)*destT(*p);
-        *pixelB = destT(vcl_sqrt(*pixelB/np));
+        *pixelB = destT(std::sqrt(*pixelB/np));
       }
     }
   }
@@ -515,8 +516,8 @@ void vil_math_rss(const vil_image_view<srcT>& src,
   unsigned ni = src.ni(),nj = src.nj(),np = src.nplanes();
   dest.set_size(ni,nj,1);
 
-  vcl_ptrdiff_t istepA=src.istep(),jstepA=src.jstep(),pstepA = src.planestep();
-  vcl_ptrdiff_t istepB=dest.istep(),jstepB=dest.jstep();
+  std::ptrdiff_t istepA=src.istep(),jstepA=src.jstep(),pstepA = src.planestep();
+  std::ptrdiff_t istepB=dest.istep(),jstepB=dest.jstep();
   const srcT* rowA = src.top_left_ptr();
   destT* rowB = dest.top_left_ptr();
   for (unsigned j=0;j<nj;++j,rowA += jstepA,rowB += jstepB)
@@ -528,7 +529,7 @@ void vil_math_rss(const vil_image_view<srcT>& src,
     if (np==1)
     {
       for (;pixelA!=end_pixelA; pixelA+=istepA,pixelB+=istepB)
-        *pixelB = vcl_fabs(destT(*pixelA));
+        *pixelB = std::fabs(destT(*pixelA));
     }
     else if (np==2)
     {
@@ -536,7 +537,7 @@ void vil_math_rss(const vil_image_view<srcT>& src,
       {
         destT sum2 = destT(*pixelA)*(*pixelA)
                      + destT(pixelA[pstepA])*(pixelA[pstepA]);
-        *pixelB = destT(vcl_sqrt(sum2));
+        *pixelB = destT(std::sqrt(sum2));
       }
     }
     else
@@ -547,7 +548,7 @@ void vil_math_rss(const vil_image_view<srcT>& src,
         const srcT* p=pixelA+pstepA;
         const srcT* end_p=pixelA+np*pstepA;
         for (;p!=end_p;p+=pstepA) *pixelB += destT(*p)*destT(*p);
-        *pixelB = destT(vcl_sqrt(*pixelB));
+        *pixelB = destT(std::sqrt(*pixelB));
       }
     }
   }
@@ -565,8 +566,8 @@ void vil_math_sum_sqr(const vil_image_view<srcT>& src,
   unsigned ni = src.ni(),nj = src.nj(),np = src.nplanes();
   dest.set_size(ni,nj,1);
 
-  vcl_ptrdiff_t istepA=src.istep(),jstepA=src.jstep(),pstepA = src.planestep();
-  vcl_ptrdiff_t istepB=dest.istep(),jstepB=dest.jstep();
+  std::ptrdiff_t istepA=src.istep(),jstepA=src.jstep(),pstepA = src.planestep();
+  std::ptrdiff_t istepB=dest.istep(),jstepB=dest.jstep();
   const srcT* rowA = src.top_left_ptr();
   destT* rowB = dest.top_left_ptr();
   for (unsigned j=0;j<nj;++j,rowA += jstepA,rowB += jstepB)
@@ -609,9 +610,9 @@ inline void vil_math_image_sum(const vil_image_view<aT>& imA,
   assert(imB.ni()==ni && imB.nj()==nj && imB.nplanes()==np);
   im_sum.set_size(ni,nj,np);
 
-  vcl_ptrdiff_t istepA=imA.istep(),jstepA=imA.jstep(),pstepA = imA.planestep();
-  vcl_ptrdiff_t istepB=imB.istep(),jstepB=imB.jstep(),pstepB = imB.planestep();
-  vcl_ptrdiff_t istepS=im_sum.istep(),jstepS=im_sum.jstep(),pstepS = im_sum.planestep();
+  std::ptrdiff_t istepA=imA.istep(),jstepA=imA.jstep(),pstepA = imA.planestep();
+  std::ptrdiff_t istepB=imB.istep(),jstepB=imB.jstep(),pstepB = imB.planestep();
+  std::ptrdiff_t istepS=im_sum.istep(),jstepS=im_sum.jstep(),pstepS = im_sum.planestep();
   const aT* planeA = imA.top_left_ptr();
   const bT* planeB = imB.top_left_ptr();
   sumT* planeS     = im_sum.top_left_ptr();
@@ -646,9 +647,9 @@ inline void vil_math_image_product(const vil_image_view<aT>& imA,
   assert(imB.nplanes()==1 || imB.nplanes()==np);
   im_product.set_size(ni,nj,np);
 
-  vcl_ptrdiff_t istepA=imA.istep(),jstepA=imA.jstep(),pstepA = imA.planestep();
-  vcl_ptrdiff_t istepB=imB.istep(),jstepB=imB.jstep(),pstepB = imB.planestep();
-  vcl_ptrdiff_t istepP=im_product.istep(),jstepP=im_product.jstep(),
+  std::ptrdiff_t istepA=imA.istep(),jstepA=imA.jstep(),pstepA = imA.planestep();
+  std::ptrdiff_t istepB=imB.istep(),jstepB=imB.jstep(),pstepB = imB.planestep();
+  std::ptrdiff_t istepP=im_product.istep(),jstepP=im_product.jstep(),
                 pstepP = im_product.planestep();
 
   // For one plane case, arrange that im_prod(i,j,p) = imA(i,j,p)*imB(i,j,0)
@@ -684,9 +685,9 @@ inline void vil_math_image_max(const vil_image_view<aT>& imA,
   assert(imB.ni()==ni && imB.nj()==nj && imB.nplanes()==np);
   im_max.set_size(ni,nj,np);
 
-  vcl_ptrdiff_t istepA=imA.istep(),jstepA=imA.jstep(),pstepA = imA.planestep();
-  vcl_ptrdiff_t istepB=imB.istep(),jstepB=imB.jstep(),pstepB = imB.planestep();
-  vcl_ptrdiff_t istepS=im_max.istep(),jstepS=im_max.jstep(),pstepS = im_max.planestep();
+  std::ptrdiff_t istepA=imA.istep(),jstepA=imA.jstep(),pstepA = imA.planestep();
+  std::ptrdiff_t istepB=imB.istep(),jstepB=imB.jstep(),pstepB = imB.planestep();
+  std::ptrdiff_t istepS=im_max.istep(),jstepS=im_max.jstep(),pstepS = im_max.planestep();
   const aT* planeA = imA.top_left_ptr();
   const bT* planeB = imB.top_left_ptr();
   maxT* planeS     = im_max.top_left_ptr();
@@ -701,7 +702,7 @@ inline void vil_math_image_max(const vil_image_view<aT>& imA,
       const bT* pixelB = rowB;
       maxT* pixelS = rowS;
       for (unsigned i=0;i<ni;++i,pixelA+=istepA,pixelB+=istepB,pixelS+=istepS)
-        *pixelS = maxT(vcl_max(*pixelA, *pixelB));
+        *pixelS = maxT(std::max(*pixelA, *pixelB));
     }
   }
 }
@@ -717,9 +718,9 @@ inline void vil_math_image_min(const vil_image_view<aT>& imA,
   assert(imB.ni()==ni && imB.nj()==nj && imB.nplanes()==np);
   im_min.set_size(ni,nj,np);
 
-  vcl_ptrdiff_t istepA=imA.istep(),jstepA=imA.jstep(),pstepA = imA.planestep();
-  vcl_ptrdiff_t istepB=imB.istep(),jstepB=imB.jstep(),pstepB = imB.planestep();
-  vcl_ptrdiff_t istepS=im_min.istep(),jstepS=im_min.jstep(),pstepS = im_min.planestep();
+  std::ptrdiff_t istepA=imA.istep(),jstepA=imA.jstep(),pstepA = imA.planestep();
+  std::ptrdiff_t istepB=imB.istep(),jstepB=imB.jstep(),pstepB = imB.planestep();
+  std::ptrdiff_t istepS=im_min.istep(),jstepS=im_min.jstep(),pstepS = im_min.planestep();
   const aT* planeA = imA.top_left_ptr();
   const bT* planeB = imB.top_left_ptr();
   minT* planeS     = im_min.top_left_ptr();
@@ -734,7 +735,7 @@ inline void vil_math_image_min(const vil_image_view<aT>& imA,
       const bT* pixelB = rowB;
       minT* pixelS = rowS;
       for (unsigned i=0;i<ni;++i,pixelA+=istepA,pixelB+=istepB,pixelS+=istepS)
-        *pixelS = minT(vcl_min(*pixelA, *pixelB));
+        *pixelS = minT(std::min(*pixelA, *pixelB));
     }
   }
 }
@@ -758,9 +759,9 @@ inline void vil_math_image_ratio(const vil_image_view<aT>& imA,
   assert(imB.nplanes()==1 || imB.nplanes()==np);
   im_ratio.set_size(ni,nj,np);
 
-  vcl_ptrdiff_t istepA=imA.istep(),jstepA=imA.jstep(),pstepA = imA.planestep();
-  vcl_ptrdiff_t istepB=imB.istep(),jstepB=imB.jstep(),pstepB = imB.planestep();
-  vcl_ptrdiff_t istepR=im_ratio.istep(),jstepR=im_ratio.jstep(),
+  std::ptrdiff_t istepA=imA.istep(),jstepA=imA.jstep(),pstepA = imA.planestep();
+  std::ptrdiff_t istepB=imB.istep(),jstepB=imB.jstep(),pstepB = imB.planestep();
+  std::ptrdiff_t istepR=im_ratio.istep(),jstepR=im_ratio.jstep(),
                 pstepR = im_ratio.planestep();
 
   // For one plane case, arrange that im_ratio(i,j,p) = imA(i,j,p)/imB(i,j,0)
@@ -797,9 +798,9 @@ inline void vil_math_image_difference(const vil_image_view<aT>& imA,
   assert(imB.ni()==ni && imB.nj()==nj && imB.nplanes()==np);
   im_sum.set_size(ni,nj,np);
 
-  vcl_ptrdiff_t istepA=imA.istep(),jstepA=imA.jstep(),pstepA = imA.planestep();
-  vcl_ptrdiff_t istepB=imB.istep(),jstepB=imB.jstep(),pstepB = imB.planestep();
-  vcl_ptrdiff_t istepS=im_sum.istep(),jstepS=im_sum.jstep(),pstepS = im_sum.planestep();
+  std::ptrdiff_t istepA=imA.istep(),jstepA=imA.jstep(),pstepA = imA.planestep();
+  std::ptrdiff_t istepB=imB.istep(),jstepB=imB.jstep(),pstepB = imB.planestep();
+  std::ptrdiff_t istepS=im_sum.istep(),jstepS=im_sum.jstep(),pstepS = im_sum.planestep();
   const aT* planeA = imA.top_left_ptr();
   const bT* planeB = imB.top_left_ptr();
   sumT* planeS     = im_sum.top_left_ptr();
@@ -830,9 +831,9 @@ inline void vil_math_image_abs_difference(const vil_image_view<aT>& imA,
   assert(imB.ni()==ni && imB.nj()==nj && imB.nplanes()==np);
   im_sum.set_size(ni,nj,np);
 
-  vcl_ptrdiff_t istepA=imA.istep(),jstepA=imA.jstep(),pstepA = imA.planestep();
-  vcl_ptrdiff_t istepB=imB.istep(),jstepB=imB.jstep(),pstepB = imB.planestep();
-  vcl_ptrdiff_t istepS=im_sum.istep(),jstepS=im_sum.jstep(),pstepS = im_sum.planestep();
+  std::ptrdiff_t istepA=imA.istep(),jstepA=imA.jstep(),pstepA = imA.planestep();
+  std::ptrdiff_t istepB=imB.istep(),jstepB=imB.jstep(),pstepB = imB.planestep();
+  std::ptrdiff_t istepS=im_sum.istep(),jstepS=im_sum.jstep(),pstepS = im_sum.planestep();
   const aT* planeA = imA.top_left_ptr();
   const bT* planeB = imB.top_left_ptr();
   sumT* planeS     = im_sum.top_left_ptr();
@@ -865,8 +866,8 @@ inline double vil_math_image_abs_difference(const vil_image_view<aT>& imA,
   unsigned ni = imA.ni(),nj = imA.nj(),np = imA.nplanes();
   assert(imB.ni()==ni && imB.nj()==nj && imB.nplanes()==np);
 
-  vcl_ptrdiff_t istepA=imA.istep(),jstepA=imA.jstep(),pstepA = imA.planestep();
-  vcl_ptrdiff_t istepB=imB.istep(),jstepB=imB.jstep(),pstepB = imB.planestep();
+  std::ptrdiff_t istepA=imA.istep(),jstepA=imA.jstep(),pstepA = imA.planestep();
+  std::ptrdiff_t istepB=imB.istep(),jstepB=imB.jstep(),pstepB = imB.planestep();
   const aT* planeA = imA.top_left_ptr();
   const bT* planeB = imB.top_left_ptr();
   for (unsigned p=0;p<np;++p,planeA += pstepA,planeB += pstepB)
@@ -898,9 +899,9 @@ inline void vil_math_image_vector_mag(const vil_image_view<aT>& imA,
   assert(imB.ni()==ni && imB.nj()==nj && imB.nplanes()==np);
   im_mag.set_size(ni,nj,np);
 
-  vcl_ptrdiff_t istepA=imA.istep(),jstepA=imA.jstep(),pstepA = imA.planestep();
-  vcl_ptrdiff_t istepB=imB.istep(),jstepB=imB.jstep(),pstepB = imB.planestep();
-  vcl_ptrdiff_t istepM=im_mag.istep(),jstepM=im_mag.jstep(),pstepM = im_mag.planestep();
+  std::ptrdiff_t istepA=imA.istep(),jstepA=imA.jstep(),pstepA = imA.planestep();
+  std::ptrdiff_t istepB=imB.istep(),jstepB=imB.jstep(),pstepB = imB.planestep();
+  std::ptrdiff_t istepM=im_mag.istep(),jstepM=im_mag.jstep(),pstepM = im_mag.planestep();
   const aT* planeA = imA.top_left_ptr();
   const bT* planeB = imB.top_left_ptr();
   magT* planeM     = im_mag.top_left_ptr();
@@ -936,8 +937,8 @@ inline void vil_math_add_image_fraction(vil_image_view<aT>& imA, scaleT fa,
   unsigned ni = imA.ni(),nj = imA.nj(),np = imA.nplanes();
   assert(imB.ni()==ni && imB.nj()==nj && imB.nplanes()==np);
 
-  vcl_ptrdiff_t istepA=imA.istep(),jstepA=imA.jstep(),pstepA = imA.planestep();
-  vcl_ptrdiff_t istepB=imB.istep(),jstepB=imB.jstep(),pstepB = imB.planestep();
+  std::ptrdiff_t istepA=imA.istep(),jstepA=imA.jstep(),pstepA = imA.planestep();
+  std::ptrdiff_t istepB=imB.istep(),jstepB=imB.jstep(),pstepB = imB.planestep();
   aT* planeA = imA.top_left_ptr();
   const bT* planeB = imB.top_left_ptr();
   for (unsigned p=0;p<np;++p,planeA += pstepA,planeB += pstepB)
@@ -971,18 +972,18 @@ inline void vil_math_integral_image(const vil_image_view<aT>& imA,
   im_sum.set_size(ni1,nj1,1);
 
   // Put zeros along first row of im_sum
-  vcl_ptrdiff_t istepS=im_sum.istep(),jstepS=im_sum.jstep();
+  std::ptrdiff_t istepS=im_sum.istep(),jstepS=im_sum.jstep();
   sumT* rowS     = im_sum.top_left_ptr();
   sumT* pixelS = rowS;
   for (unsigned i=0;i<ni1;++i,pixelS+=istepS)
     *pixelS=0;
 
   // Now sum from original image (imA)
-  vcl_ptrdiff_t istepA=imA.istep(),jstepA=imA.jstep();
+  std::ptrdiff_t istepA=imA.istep(),jstepA=imA.jstep();
   const aT* rowA = imA.top_left_ptr();
 
   sumT sum;
-  vcl_ptrdiff_t prev_j = -jstepS;
+  std::ptrdiff_t prev_j = -jstepS;
   rowS += jstepS;
 
   for (unsigned j=0;j<nj;++j,rowA += jstepA,rowS += jstepS)
@@ -1022,8 +1023,8 @@ inline void vil_math_integral_sqr_image(const vil_image_view<aT>& imA,
   im_sum_sq.set_size(ni1,nj1,1);
 
   // Put zeros along first row of im_sum & im_sum_sq
-  vcl_ptrdiff_t istepS=im_sum.istep(),jstepS=im_sum.jstep();
-  vcl_ptrdiff_t istepS2=im_sum_sq.istep(),jstepS2=im_sum_sq.jstep();
+  std::ptrdiff_t istepS=im_sum.istep(),jstepS=im_sum.jstep();
+  std::ptrdiff_t istepS2=im_sum_sq.istep(),jstepS2=im_sum_sq.jstep();
   sumT* rowS     = im_sum.top_left_ptr();
   sumT* rowS2     = im_sum_sq.top_left_ptr();
   // im_sum
@@ -1037,12 +1038,12 @@ inline void vil_math_integral_sqr_image(const vil_image_view<aT>& imA,
     *pixelS2=0;
 
   // Now sum from original image (imA)
-  vcl_ptrdiff_t istepA=imA.istep(),jstepA=imA.jstep();
+  std::ptrdiff_t istepA=imA.istep(),jstepA=imA.jstep();
   const aT* rowA = imA.top_left_ptr();
 
   sumT sum,sum2;
-  vcl_ptrdiff_t prev_j = -jstepS;
-  vcl_ptrdiff_t prev_j2 = -jstepS2;
+  std::ptrdiff_t prev_j = -jstepS;
+  std::ptrdiff_t prev_j2 = -jstepS2;
   rowS += jstepS;
   rowS2 += jstepS2;
 

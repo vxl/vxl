@@ -21,9 +21,11 @@
 // For complete generality there should be a rotation transform associated
 // with the cylinder, but not implemented.
 //
+#include <iostream>
+#include <vector>
 #include <vil/vil_image_view.h>
 #include <vbl/vbl_ref_count.h>
-#include <vcl_vector.h>
+#include <vcl_compiler.h>
 #include <vpgl/vpgl_camera_double_sptr.h>
 #include <vgl/vgl_point_3d.h>
 #include <vgl/vgl_ray_3d.h>
@@ -43,8 +45,8 @@ class icam_cylinder_map : public vbl_ref_count
   ~icam_cylinder_map(){}
 
   //: images must have RGB byte pixel type
-  void set_data(vcl_vector<vil_image_view<vxl_byte> > const& images,
-                vcl_vector<vpgl_camera_double_sptr > const& cams){
+  void set_data(std::vector<vil_image_view<vxl_byte> > const& images,
+                std::vector<vpgl_camera_double_sptr > const& cams){
     images_ = images; cams_ = cams;}
     bool closest_camera(vgl_ray_3d<double> const& cyl_ray,
                           vgl_point_3d<double> const& p,
@@ -71,9 +73,9 @@ class icam_cylinder_map : public vbl_ref_count
   double lower_height_;
   vil_image_view<vxl_byte> cyl_map_;
   // input data (RGB byte images)
-  vcl_vector<vil_image_view<vxl_byte> > images_;
+  std::vector<vil_image_view<vxl_byte> > images_;
   // currently supports only projective or perspective camera type
-  vcl_vector<vpgl_camera_double_sptr > cams_;
+  std::vector<vpgl_camera_double_sptr > cams_;
 };
 
 

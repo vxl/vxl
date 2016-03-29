@@ -1,7 +1,9 @@
+#include <iostream>
+#include <fstream>
+#include <string>
 #include <vul/vul_file.h>
 #include <vul/vul_arg.h>
-#include <vcl_fstream.h>
-#include <vcl_string.h>
+#include <vcl_compiler.h>
 #include <vnl/vnl_double_4.h>
 #include <vpl/vpl.h> // vpl_unlink()
 #include <vpgl/vpgl_perspective_camera.h>
@@ -11,15 +13,15 @@
 #include <bwm/video/bwm_video_cam_istream.h>
 #include <bwm/video/bwm_video_cam_ostream.h>
 
-static bool process(vcl_string const& site_path,
-                    vcl_string const& trans_site_path,
-                    vcl_string const& trans_cam_dir,
-                    vcl_string const& plane_path)
+static bool process(std::string const& site_path,
+                    std::string const& trans_site_path,
+                    std::string const& trans_cam_dir,
+                    std::string const& plane_path)
 {
   if (site_path == ""||trans_site_path == "" ||trans_cam_dir == "")
     return false;
   vnl_double_4 pv;
-  vcl_ifstream wis(plane_path.c_str());
+  std::ifstream wis(plane_path.c_str());
   wis >> pv;
   vgl_plane_3d<double> world_plane(pv[0], pv[1], pv[2], pv[3]);
 
@@ -27,8 +29,8 @@ static bool process(vcl_string const& site_path,
   cp.set_verbose(true);
   if (!cp.open_video_site(site_path, true))
     return false;
-  vcl_string cam_path = cp.camera_path();
-  vcl_vector<vgl_point_3d<double> > pts = cp.world_pts();
+  std::string cam_path = cp.camera_path();
+  std::vector<vgl_point_3d<double> > pts = cp.world_pts();
   bwm_video_cam_istream cam_istr(cam_path);
   bool open = cam_istr.is_open();
   if (open)
@@ -53,10 +55,10 @@ static bool process(vcl_string const& site_path,
       break;
   }
   //transform the points
-  vcl_vector<vgl_point_3d<double> > tr_pts =
+  std::vector<vgl_point_3d<double> > tr_pts =
     bpgl_camera_homographies::transform_points_to_plane(world_plane, cen, pts );
   cp.set_world_pts(tr_pts);
-  vcl_string camera_opath = trans_cam_dir+"/*";
+  std::string camera_opath = trans_cam_dir+"/*";
   cp.set_camera_path(camera_opath);
   cp.write_video_site(trans_site_path);
   return true;
@@ -65,14 +67,14 @@ static bool process(vcl_string const& site_path,
 int main(int argc, char** argv)
 {
   vul_arg_info_list arglist;
-  vul_arg<vcl_string> site_path(arglist, "-site_path",
+  vul_arg<std::string> site_path(arglist, "-site_path",
                                 "video site path", "");
-  vul_arg<vcl_string> trans_site_path(arglist, "-trans_site_path",
+  vul_arg<std::string> trans_site_path(arglist, "-trans_site_path",
                                       "transformed_site", "");
-  vul_arg<vcl_string> trans_cam_dir(arglist, "-trans_cam_dir",
+  vul_arg<std::string> trans_cam_dir(arglist, "-trans_cam_dir",
                                     "transformed_cams", "");
 
-  vul_arg<vcl_string> plane_path(arglist, "-plane",
+  vul_arg<std::string> plane_path(arglist, "-plane",
                                  "path to 3d plane", "");
   arglist.parse(argc, argv, true);
 

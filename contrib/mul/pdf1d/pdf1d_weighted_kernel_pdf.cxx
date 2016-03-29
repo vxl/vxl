@@ -7,9 +7,10 @@
 // \date   Tue Apr  9 14:00:27 2002
 
 
+#include <iostream>
+#include <string>
 #include "pdf1d_weighted_kernel_pdf.h"
-#include <vcl_iostream.h>
-#include <vcl_string.h>
+#include <vcl_compiler.h>
 #include <vcl_cassert.h>
 #include <vsl/vsl_indent.h>
 #include <vnl/vnl_math.h>
@@ -102,23 +103,23 @@ short pdf1d_weighted_kernel_pdf::version_no() const
 
 //=======================================================================
 
-bool pdf1d_weighted_kernel_pdf::is_class(vcl_string const& s) const
+bool pdf1d_weighted_kernel_pdf::is_class(std::string const& s) const
 {
   return s == pdf1d_weighted_kernel_pdf::is_a() || pdf1d_kernel_pdf::is_class(s);
 }
 
 //=======================================================================
 
-vcl_string pdf1d_weighted_kernel_pdf::is_a() const
+std::string pdf1d_weighted_kernel_pdf::is_a() const
 {
-  return vcl_string("pdf1d_weighted_kernel_pdf");
+  return std::string("pdf1d_weighted_kernel_pdf");
 }
 
 
 //=======================================================================
 
     // required if data is present in this base class
-void pdf1d_weighted_kernel_pdf::print_summary(vcl_ostream& os) const
+void pdf1d_weighted_kernel_pdf::print_summary(std::ostream& os) const
 {
   pdf1d_kernel_pdf::print_summary(os);
   os << vsl_indent() << "Weights: "; vsl_print_summary(os, weight_) ; os << '\n';
@@ -152,9 +153,9 @@ void pdf1d_weighted_kernel_pdf::b_read(vsl_b_istream& bfs)
 
     break;
   default:
-    vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, pdf1d_weighted_kernel_pdf&)\n"
+    std::cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, pdf1d_weighted_kernel_pdf&)\n"
              << "           Unknown version number "<< version << '\n';
-    bfs.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
+    bfs.is().clear(std::ios::badbit); // Set an unrecoverable IO error on stream
     return;
   }
 }

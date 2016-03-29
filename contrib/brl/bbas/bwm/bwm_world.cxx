@@ -1,11 +1,12 @@
+#include <iostream>
+#include <sstream>
 #include "bwm_world.h"
 #include "bwm_observer_mgr.h"
 #include "algo/bwm_shape_file.h"
 #include "algo/bwm_algo.h"
 #include "algo/bwm_utils.h"
 
-#include <vcl_iostream.h>
-#include <vcl_sstream.h>
+#include <vcl_compiler.h>
 
 #include <vul/vul_file.h>
 #include <vgl/vgl_vector_3d.h>
@@ -14,7 +15,7 @@
 #include "bwm_observable.h"
 #include "bwm_observable_textured_mesh.h"
 
-bwm_world* bwm_world::instance_ = 0;
+bwm_world* bwm_world::instance_ = VXL_NULLPTR;
 
 bwm_world* bwm_world::instance()
 {
@@ -35,7 +36,7 @@ void  bwm_world::set_world_pt(vgl_point_3d<double> const& pt)
 bool bwm_world::add(bwm_observable_sptr obj)
 {
   // find the object
-  vcl_vector<bwm_observable_sptr>::iterator it = objects_.begin();
+  std::vector<bwm_observable_sptr>::iterator it = objects_.begin();
   while (it != objects_.end()) {
     if (*it == obj)
       return false;
@@ -48,7 +49,7 @@ bool bwm_world::add(bwm_observable_sptr obj)
 bool bwm_world::remove(bwm_observable_sptr obj)
 {
   // find the object
-  vcl_vector<bwm_observable_sptr>::iterator it = objects_.begin();
+  std::vector<bwm_observable_sptr>::iterator it = objects_.begin();
   while (it != objects_.end()) {
     if (*it == obj) {
       objects_.erase(it, it+1);
@@ -106,12 +107,12 @@ bool bwm_world::get_lvcs(vpgl_lvcs &lvcs)
 
 void bwm_world::load_shape_file()
 {
-  vcl_string file = bwm_utils::select_file();
+  std::string file = bwm_utils::select_file();
   bwm_shape_file sfile;
   if (sfile.load(file)) {
     // "#define SHPT_POLYGONZ 15" in shapefil.h
     if (sfile.shape_type() == 15) {
-      vcl_vector<vcl_vector<vsol_point_3d_sptr> > polys = sfile.vertices();
+      std::vector<std::vector<vsol_point_3d_sptr> > polys = sfile.vertices();
       for (unsigned i=0; i<polys.size(); i++) {
         bwm_observable_mesh_sptr mesh = new bwm_observable_mesh();
         bwm_observer_mgr::instance()->attach(mesh);
@@ -133,14 +134,14 @@ void bwm_world::save_all()
   }
 
   vgui_dialog_extensions save("Save 3D objects");
-  vcl_vector<vcl_string> file_types;
+  std::vector<std::string> file_types;
   file_types.push_back("ply");
   file_types.push_back("gml");
   file_types.push_back("kml");
   file_types.push_back("kml collada");
   file_types.push_back("x3d");
 
-  vcl_string ext, file_path;
+  std::string ext, file_path;
   unsigned t = 0;
   save.dir("Path:", ext, file_path);
   save.choice("File Type", file_types, t);
@@ -152,7 +153,7 @@ void bwm_world::save_all()
   // what if they choose a dir instead of a file name
   if (vul_file::is_directory(file_path)) {
    // for (unsigned i=0; i<objects_.size(); i++) {
-    //  vcl_string path = file_path + "\\objects";
+    //  std::string path = file_path + "\\objects";
 
       if (file_types[t].compare("ply") == 0)
         save_ply(path); // HOW ABOUT LVCS, do we use world point to create one
@@ -176,7 +177,7 @@ void bwm_world::save_all()
 void bwm_world::save_ply()  // how about use lvcs??
 {
   vgui_dialog params("File Save");
-  vcl_string ext, list_name, empty="";
+  std::string ext, list_name, empty="";
   bool use_lvcs = false;
 
   params.file ("Filename...", ext, list_name);
@@ -192,21 +193,21 @@ void bwm_world::save_ply()  // how about use lvcs??
     return;
   }
 
-  vcl_string directory_name = vul_file::dirname(list_name);
+  std::string directory_name = vul_file::dirname(list_name);
 
-  vcl_ofstream list_out(list_name.data());
+  std::ofstream list_out(list_name.data());
   if (!list_out.good()) {
-    vcl_cerr << "error opening file "<< list_name <<vcl_endl;
+    std::cerr << "error opening file "<< list_name <<std::endl;
     return;
   }
 
   for (unsigned idx=0; idx<objects_.size(); idx++) {
-    vcl_ostringstream objname;
-    vcl_ostringstream fullpath;
+    std::ostringstream objname;
+    std::ostringstream fullpath;
     objname << "obj" << idx <<".ply";
     fullpath << directory_name << '/' << objname.str();
 
-    list_out << objname.str() << vcl_endl;
+    list_out << objname.str() << std::endl;
     bwm_observable_sptr o = objects_[idx];
     // figure out the lvcs here
 
@@ -218,14 +219,14 @@ void bwm_world::save_gml()
 {
 #if 0
   if (!lvcs_) {
-    vcl_cerr << "Error: lvcs not defined.\n";
+    std::cerr << "Error: lvcs not defined.\n";
     return;
   }
 #endif // 0
 
   vgui_dialog params("File Save (.gml) ");
-  vcl_string ext, gml_filename, empty="";
-  vcl_string model_name;
+  std::string ext, gml_filename, empty="";
+  std::string model_name;
 
   params.field("model name", model_name);
 
@@ -234,11 +235,11 @@ void bwm_world::save_gml()
     return;
 
   if (gml_filename == "") {
-    vcl_cerr << "Error: no filename selected.\n";
+    std::cerr << "Error: no filename selected.\n";
     return;
   }
 
-  vcl_ofstream os(gml_filename.c_str());
+  std::ofstream os(gml_filename.c_str());
 
   os << "<?xml version=\"1.0\" encoding=\"utf-8\" standalone=\"yes\"?>\n"
      << "<CityModel xmlns=\"http://www.citygml.org/citygml/1/0/0\" xmlns:gml=\"http://www.opengis.net/gml\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xsi:schemaLocation=\"http://www.citygml.org/citygml/1/0/0 http://www.citygml.org/citygml/1/0/0/CityGML.xsd\">\n"
@@ -263,13 +264,13 @@ void bwm_world::save_kml()
 {
   vpgl_lvcs lvcs;
   if (!get_lvcs(lvcs)) {
-    vcl_cerr << "Error: lvcs not defined.\n";
+    std::cerr << "Error: lvcs not defined.\n";
     return;
   }
 
   vgui_dialog params("File Save");
-  vcl_string ext, kml_filename, empty="";
-  vcl_string model_name;
+  std::string ext, kml_filename, empty="";
+  std::string model_name;
   double ground_height = 0.0;
   double x_offset = 0.0;
   double y_offset = 0.0;
@@ -284,11 +285,11 @@ void bwm_world::save_kml()
     return;
 
   if (kml_filename == "") {
-    vcl_cerr << "Error: no filename selected.\n";
+    std::cerr << "Error: no filename selected.\n";
     return;
   }
 
-  vcl_ofstream os(kml_filename.c_str());
+  std::ofstream os(kml_filename.c_str());
 
   os << "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n"
      << "<kml xmlns=\"http://earth.google.com/kml/2.1\">\n"
@@ -320,23 +321,23 @@ void bwm_world::save_x3d()
 {
   vpgl_lvcs lvcs;
   if (!get_lvcs(lvcs)) {
-    vcl_cerr << "Error: lvcs not defined.\n";
+    std::cerr << "Error: lvcs not defined.\n";
     return;
   }
 
   vgui_dialog params("File Save");
-  vcl_string ext, x3d_filename, empty="";
+  std::string ext, x3d_filename, empty="";
 
   params.file("Save...",ext,x3d_filename);
   if (!params.ask())
     return;
 
   if (x3d_filename == "") {
-    vcl_cerr << "Error: no filename selected.\n";
+    std::cerr << "Error: no filename selected.\n";
     return;
   }
 
-  vcl_ofstream os(x3d_filename.c_str());
+  std::ofstream os(x3d_filename.c_str());
 
   os << "#VRML V2.0 utf8\n"
      << "PROFILE Immersive\n\n";
@@ -364,7 +365,7 @@ void bwm_world::save_kml_collada()
 {
   vpgl_lvcs lvcs;
   if (!get_lvcs(lvcs)) {
-    vcl_cerr << "Error: lvcs not defined.\n";
+    std::cerr << "Error: lvcs not defined.\n";
     return;
   }
 
@@ -372,7 +373,7 @@ void bwm_world::save_kml_collada()
   lvcs_.get_origin(origin_lat,origin_lon,origin_elev);
 
   vgui_dialog params("File Save");
-  vcl_string ext, kmz_dir, empty="";
+  std::string ext, kmz_dir, empty="";
 
   // guess at ground height = lowest vertex
   double minz = 1e6;
@@ -384,7 +385,7 @@ void bwm_world::save_kml_collada()
   double ground_height = minz;
   double lat_offset = 0.0;
   double lon_offset = 0.0;
-  vcl_string model_name;
+  std::string model_name;
 
   params.field("model name",model_name);
   params.field("ground height",ground_height);
@@ -396,34 +397,34 @@ void bwm_world::save_kml_collada()
     return;
 
   if (kmz_dir == "") {
-    vcl_cerr << "Error: no filename selected.\n";
+    std::cerr << "Error: no filename selected.\n";
     return;
   }
 
   if (!vul_file::is_directory(kmz_dir)) {
-    vcl_cerr << "Error: Select a directory name.\n";
+    std::cerr << "Error: Select a directory name.\n";
     return;
   }
 
-  vcl_ostringstream dae_fname;
+  std::ostringstream dae_fname;
   dae_fname << kmz_dir << "/models/mesh.dae";
 
-  vcl_ofstream os (dae_fname.str().data());
+  std::ofstream os (dae_fname.str().data());
 
-  vcl_vector<vcl_string> image_names;
-  vcl_vector<vcl_string> image_fnames;
-  vcl_vector<vcl_string> material_ids;
-  vcl_vector<vcl_string> material_names;
-  vcl_vector<vcl_string> effect_ids;
-  vcl_vector<vcl_string> surface_ids;
-  vcl_vector<vcl_string> image_sampler_ids;
-  vcl_vector<vcl_string> geometry_ids;
-  vcl_vector<vcl_string> geometry_position_ids;
-  vcl_vector<vcl_string> geometry_position_array_ids;
-  vcl_vector<vcl_string> geometry_uv_ids;
-  vcl_vector<vcl_string> geometry_uv_array_ids;
-  vcl_vector<vcl_string> geometry_vertex_ids;
-  vcl_vector<vcl_string> mesh_ids;
+  std::vector<std::string> image_names;
+  std::vector<std::string> image_fnames;
+  std::vector<std::string> material_ids;
+  std::vector<std::string> material_names;
+  std::vector<std::string> effect_ids;
+  std::vector<std::string> surface_ids;
+  std::vector<std::string> image_sampler_ids;
+  std::vector<std::string> geometry_ids;
+  std::vector<std::string> geometry_position_ids;
+  std::vector<std::string> geometry_position_array_ids;
+  std::vector<std::string> geometry_uv_ids;
+  std::vector<std::string> geometry_uv_array_ids;
+  std::vector<std::string> geometry_vertex_ids;
+  std::vector<std::string> mesh_ids;
 
   int nobjects = 0;
   unsigned min_faces = 3;
@@ -438,46 +439,46 @@ void bwm_world::save_kml_collada()
     if (obj->type_name().compare("bwm_observable_textured_mesh") == 0)
     {
       bwm_observable_textured_mesh* mesh = static_cast<bwm_observable_textured_mesh*>(obj.as_pointer());
-      vcl_string image_fname = vul_file::strip_directory(mesh->tex_map_uri()); // assume all faces have same texmap img
-      vcl_string image_name = vul_file::strip_extension(image_fname);
+      std::string image_fname = vul_file::strip_directory(mesh->tex_map_uri()); // assume all faces have same texmap img
+      std::string image_name = vul_file::strip_extension(image_fname);
 
-      vcl_ostringstream image_path;
+      std::ostringstream image_path;
       image_path << "../images/" << image_fname;
 
-      vcl_ostringstream objname;
+      std::ostringstream objname;
       objname << "object_"<<nobjects;
 
-      vcl_ostringstream material_id;
+      std::ostringstream material_id;
       material_id << objname.str() <<"_materialID";
 
-      vcl_ostringstream material_name;
+      std::ostringstream material_name;
       material_name << objname.str() <<"_material";
 
-      vcl_ostringstream effect_id;
+      std::ostringstream effect_id;
       effect_id << objname.str() << "_effect";
 
-      vcl_ostringstream surface_id;
+      std::ostringstream surface_id;
       surface_id << objname.str() << "_surface";
 
-      vcl_ostringstream image_sampler_id;
+      std::ostringstream image_sampler_id;
       image_sampler_id << objname.str() << "_sampler";
 
-      vcl_ostringstream geometry_id;
+      std::ostringstream geometry_id;
       geometry_id << objname.str() << "_geometry";
 
-      vcl_ostringstream geometry_position_id;
+      std::ostringstream geometry_position_id;
       geometry_position_id << objname.str() << "_geometry_position";
 
-      vcl_ostringstream geometry_position_array_id;
+      std::ostringstream geometry_position_array_id;
       geometry_position_array_id << objname.str() <<"_geometry_position_array";
 
-      vcl_ostringstream geometry_uv_id;
+      std::ostringstream geometry_uv_id;
       geometry_uv_id << objname.str() << "_geometry_uv";
 
-      vcl_ostringstream geometry_uv_array_id;
+      std::ostringstream geometry_uv_array_id;
       geometry_uv_array_id << objname.str() << "_geometry_uv_array";
 
-      vcl_stringstream geometry_vertex_id;
+      std::stringstream geometry_vertex_id;
       geometry_vertex_id << objname.str() << "_geometry_vertex";
 
       mesh_ids.push_back(objname.str());
@@ -641,19 +642,19 @@ void bwm_world::save_kml_collada()
 
   os.close();
 
-  vcl_ostringstream textures_fname;
+  std::ostringstream textures_fname;
   textures_fname << kmz_dir << "/textures.txt";
 
-  vcl_ofstream ost(textures_fname.str().data());
+  std::ofstream ost(textures_fname.str().data());
 
   for (int i=0; i<nobjects; i++) {
     ost << '<' << image_fnames[i].c_str() << "> <" << image_fnames[i].c_str() << ">\n";
   }
 
-  vcl_ostringstream kml_fname;
+  std::ostringstream kml_fname;
   kml_fname << kmz_dir << "/doc.kml";
 
-  vcl_ofstream oskml(kml_fname.str().data());
+  std::ofstream oskml(kml_fname.str().data());
 
   oskml << "<?xml version='1.0' encoding='UTF-8'?>\n"
         << "<kml xmlns='http://earth.google.com/kml/2.1'>\n"

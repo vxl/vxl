@@ -3,7 +3,7 @@
 #define vmap_map_iterator_wrapper_h_
 //:
 // \file
-// \brief provides a wrapper in order to use any iterator on pairs (e.g. vcl_map::iterator) as if it was an iterator on the 2nd elmt
+// \brief provides a wrapper in order to use any iterator on pairs (e.g. std::map::iterator) as if it was an iterator on the 2nd elmt
 // \author Jocelyn Marchadier
 // \date 06 May 2004
 //
@@ -12,7 +12,7 @@
 //   06 May 2004 Jocelyn Marchadier
 // \endverbatim
 
-//: A wrapper in order to use any iterator on pairs (e.g. vcl_map::iterator) as if it was an iterator on the second element.
+//: A wrapper in order to use any iterator on pairs (e.g. std::map::iterator) as if it was an iterator on the second element.
 template <typename Ref, typename Ptr, class It>
 class vmap_map_iterator_wrapper
 {

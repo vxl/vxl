@@ -18,7 +18,7 @@ bgui_bargraph_clipon_tableau(vgui_easy2D_tableau_sptr const& easy)
   easy_->set_foreground(1.0, 1.0, 0);
   easy_->set_line_width(3.0);
   // Draw a square around the bargraph_clipon
-  vcl_vector<float> x_corners, y_corners;
+  std::vector<float> x_corners, y_corners;
   x_corners.push_back(left_offset_);
   x_corners.push_back(left_offset_+graph_width_);
   x_corners.push_back(left_offset_+graph_width_);
@@ -29,8 +29,8 @@ bgui_bargraph_clipon_tableau(vgui_easy2D_tableau_sptr const& easy)
   y_corners.push_back(top_offset_+graph_height_);
   easy_->add_polygon(4, &x_corners[0], &y_corners[0]);
   // set up color values
-  vcl_vector<float> c0(3), c1(3), c2(3), c3(3), c4(3);
-  vcl_vector<float> c5(3), c6(3), c7(3);
+  std::vector<float> c0(3), c1(3), c2(3), c3(3), c4(3);
+  std::vector<float> c5(3), c6(3), c7(3);
   c0[0]=0.0;   c0[1]=0.0;   c0[2]=1.0;
   c1[0]=0.0;   c1[1]=1.0;   c1[2]=0.0;
   c2[0]=0.0;   c2[1]=1.0;   c2[2]=1.0;
@@ -56,7 +56,7 @@ bgui_bargraph_clipon_tableau::~bgui_bargraph_clipon_tableau()
 // If fixed = 0 then the plot is automatically scaled. If fixed is
 // not false then scale is used. That is,
 // the data is multiplied by scale*graph_height_
-void bgui_bargraph_clipon_tableau::update(vcl_vector<float> const& bars,
+void bgui_bargraph_clipon_tableau::update(std::vector<float> const& bars,
                                           const bool fixed,
                                           const float scale)
 {
@@ -65,7 +65,7 @@ void bgui_bargraph_clipon_tableau::update(vcl_vector<float> const& bars,
   bars_.resize(nbars);
   if (!nbars)
   {
-    vcl_cout << "In bgui_bargraph_clipon_tableau::update(..) - no data\n";
+    std::cout << "In bgui_bargraph_clipon_tableau::update(..) - no data\n";
     return;
   }
   if (!fixed)
@@ -103,7 +103,7 @@ void bgui_bargraph_clipon_tableau::update(vcl_vector<float> const& bars,
       if (temp<=7)
         color_index = temp;
     }
-    vcl_vector<float> c = color_values_[color_index];
+    std::vector<float> c = color_values_[color_index];
     easy_->set_foreground(c[0], c[1], c[2]);
     vgui_soview2D_lineseg* l = easy_->add_line(x0, y0, x1, y1);
     bar_plot_.push_back(l);
@@ -111,7 +111,7 @@ void bgui_bargraph_clipon_tableau::update(vcl_vector<float> const& bars,
   easy_->post_redraw();
 }
 
-void bgui_bargraph_clipon_tableau::set_color_vector(vcl_vector<unsigned char> const& colors)
+void bgui_bargraph_clipon_tableau::set_color_vector(std::vector<unsigned char> const& colors)
 {
   color_index_.clear();
   color_index_ = colors;
@@ -119,7 +119,7 @@ void bgui_bargraph_clipon_tableau::set_color_vector(vcl_vector<unsigned char> co
 
 void bgui_bargraph_clipon_tableau::clear()
 {
-  for (vcl_vector<vgui_soview2D_lineseg*>::iterator sit = bar_plot_.begin();
+  for (std::vector<vgui_soview2D_lineseg*>::iterator sit = bar_plot_.begin();
        sit != bar_plot_.end();++sit)
   {
     easy_->remove(*sit);

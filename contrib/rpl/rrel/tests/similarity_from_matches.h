@@ -4,7 +4,9 @@
 //  Test support class that gives an example of a non-unique matching
 //  problem.  This may eventually be moved to rrel/examples.
 
-#include <vcl_vector.h>
+#include <iostream>
+#include <vector>
+#include <vcl_compiler.h>
 #include <vnl/vnl_vector_fixed.h>
 #include <vnl/vnl_matrix.h>
 #include <rrel/rrel_estimation_problem.h>
@@ -35,30 +37,30 @@ class image_point_match
 
 class similarity_from_matches : public rrel_estimation_problem
 {
-  vcl_vector<image_point_match> matches_;
+  std::vector<image_point_match> matches_;
   int num_points_to_match_;
  public:
   similarity_from_matches() : rrel_estimation_problem(2,2) {}
-  similarity_from_matches( const vcl_vector<image_point_match>& matches );
+  similarity_from_matches( const std::vector<image_point_match>& matches );
   ~similarity_from_matches() {}
   virtual unsigned int num_unique_samples( ) const{ return num_points_to_match_; }
   virtual unsigned int num_samples( ) const;
-  virtual bool fit_from_minimal_set( const vcl_vector<int>& match_indices,
+  virtual bool fit_from_minimal_set( const std::vector<int>& match_indices,
                                      vnl_vector<double>& params ) const;
   virtual void compute_residuals( const vnl_vector<double>& params,
-                                  vcl_vector<double>& residuals ) const;
-  virtual void compute_weights( const vcl_vector<double>& residuals,
+                                  std::vector<double>& residuals ) const;
+  virtual void compute_weights( const std::vector<double>& residuals,
                                 const rrel_wls_obj* obj,
                                 double scale,
-                                vcl_vector<double>& weights ) const;
+                                std::vector<double>& weights ) const;
   virtual bool weighted_least_squares_fit( vnl_vector<double>& params,
                                            vnl_matrix<double>& cofact,
-                                           const vcl_vector<double>* weights=0 ) const;
+                                           const std::vector<double>* weights=0 ) const;
 };
 
 void
 generate_similarity_matches( const vnl_vector<double>& params,
                              double sigma,
-                             vcl_vector<image_point_match>& matches );
+                             std::vector<image_point_match>& matches );
 
 #endif // similarity_from_matches_h_

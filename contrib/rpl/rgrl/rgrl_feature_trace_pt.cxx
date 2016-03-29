@@ -162,7 +162,7 @@ absolute_signature_weight( rgrl_feature_sptr other ) const
 
   rgrl_feature_trace_pt* trace_ptr = rgrl_cast<rgrl_feature_trace_pt*>(other);
   assert( trace_ptr );
-  double dir_wgt = vcl_abs( dot_product( this->tangent_, trace_ptr->tangent_ ) );
+  double dir_wgt = std::abs( dot_product( this->tangent_, trace_ptr->tangent_ ) );
 
   double scale_wgt = 1;
   if ( this->scale_ && trace_ptr->scale_ ) {
@@ -174,38 +174,38 @@ absolute_signature_weight( rgrl_feature_sptr other ) const
     // scale_wgt = scale_wgt * scale_wgt;
   }
 
-  return  dir_wgt* vcl_sqrt(scale_wgt);
+  return  dir_wgt* std::sqrt(scale_wgt);
 }
 
 //: write out feature
 void
 rgrl_feature_trace_pt::
-write( vcl_ostream& os ) const
+write( std::ostream& os ) const
 {
   // tag
-  os << "TRACE" << vcl_endl;
+  os << "TRACE" << std::endl;
 
   // dim
-  os << location_.size() << vcl_endl;
+  os << location_.size() << std::endl;
 
   // atributes
   os << location_ << "    " << scale_ << "\n"
      << tangent_ << "\n"
-     << error_proj_ << vcl_endl;
+     << error_proj_ << std::endl;
 }
 
 //: read in feature
 bool
 rgrl_feature_trace_pt::
-read( vcl_istream& is, bool skip_tag )
+read( std::istream& is, bool skip_tag )
 {
   if( !skip_tag ) {
 
     // skip empty lines
     rgrl_util_skip_empty_lines( is );
 
-    vcl_string str;
-    vcl_getline( is, str );
+    std::string str;
+    std::getline( is, str );
 
     // The token should appear at the beginning of line
     if ( str.find( "TRACE" ) != 0 ) {

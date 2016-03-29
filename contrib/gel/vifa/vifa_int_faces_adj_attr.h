@@ -21,7 +21,9 @@
 // \endverbatim
 //-----------------------------------------------------------------------------
 
-#include <vcl_vector.h>
+#include <iostream>
+#include <vector>
+#include <vcl_compiler.h>
 #include <vdgl/vdgl_fit_lines_params.h>
 #include <vtol/vtol_intensity_face_sptr.h>
 #include <vifa/vifa_coll_lines_params.h>
@@ -53,8 +55,8 @@ class vifa_int_faces_adj_attr: public vifa_int_faces_attr
   // attribute slots
 
   // ratios of seed attr to neighborhood mean
-  vcl_vector<float>      mean_ratios_;
-  vcl_vector<float>      min_ratios_;
+  std::vector<float>      mean_ratios_;
+  std::vector<float>      min_ratios_;
 
  public:
   vifa_int_faces_adj_attr();
@@ -87,9 +89,9 @@ class vifa_int_faces_adj_attr: public vifa_int_faces_attr
   iface_list*        GetFaceList();
 
   virtual bool  ComputeAttributes();
-  virtual bool  GetAttributes(vcl_vector<float>&  attrs);
-  static  void  GetAttributeNames(vcl_vector<vcl_string>&  names);
-  virtual bool  GetNativeAttributes(vcl_vector<float>&  attrs);
+  virtual bool  GetAttributes(std::vector<float>&  attrs);
+  static  void  GetAttributeNames(std::vector<std::string>&  names);
+  virtual bool  GetNativeAttributes(std::vector<float>&  attrs);
 
   vtol_intensity_face_sptr  GetSeed() { return seed_; }
   void                      SetSeed(vtol_intensity_face_sptr  seed);

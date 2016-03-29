@@ -5,21 +5,23 @@
 //:
 //  \file
 
+#include <iostream>
+#include <vector>
 #include "TripleMatchSetCorner.h"
 
 #include <vcl_cassert.h>
-#include <vcl_vector.h>
+#include <vcl_compiler.h>
 #include <mvl/HomgInterestPointSet.h>
 #include <mvl/PairMatchSetCorner.h>
 
-static void set_size(vcl_vector<HomgPoint2D>& v, unsigned n)
+static void set_size(std::vector<HomgPoint2D>& v, unsigned n)
 {
   v.resize(n);
 }
 
 
 TripleMatchSetCorner::TripleMatchSetCorner():
-  TripleMatchSet(0,0)
+  TripleMatchSet(VXL_NULLPTR,VXL_NULLPTR)
 {
 }
 
@@ -52,9 +54,9 @@ TripleMatchSetCorner::TripleMatchSetCorner(const TripleMatchSetCorner& that):
 
 
 //: Copy the inliers from the TripleMatchSetCorner into the given arrays of corners and corner indices.
-void TripleMatchSetCorner::extract_matches(vcl_vector<HomgPoint2D> &points1, vcl_vector<int> &indices1,
-                                           vcl_vector<HomgPoint2D> &points2, vcl_vector<int> &indices2,
-                                           vcl_vector<HomgPoint2D> &points3, vcl_vector<int> &indices3) const
+void TripleMatchSetCorner::extract_matches(std::vector<HomgPoint2D> &points1, std::vector<int> &indices1,
+                                           std::vector<HomgPoint2D> &points2, std::vector<int> &indices2,
+                                           std::vector<HomgPoint2D> &points3, std::vector<int> &indices3) const
 {
   const HomgInterestPointSet* corners1 = get_corners1();
   const HomgInterestPointSet* corners2 = get_corners2();
@@ -81,9 +83,9 @@ void TripleMatchSetCorner::extract_matches(vcl_vector<HomgPoint2D> &points1, vcl
 }
 
 //: Copy the inliers from the TripleMatchSetCorner into the given arrays.
-void TripleMatchSetCorner::extract_matches(vcl_vector <HomgPoint2D>& points1,
-                                           vcl_vector <HomgPoint2D>& points2,
-                                           vcl_vector <HomgPoint2D>& points3) const
+void TripleMatchSetCorner::extract_matches(std::vector <HomgPoint2D>& points1,
+                                           std::vector <HomgPoint2D>& points2,
+                                           std::vector <HomgPoint2D>& points3) const
 {
   const HomgInterestPointSet* corners1 = get_corners1();
   const HomgInterestPointSet* corners2 = get_corners2();
@@ -129,14 +131,14 @@ main()
   fred.add_match(2,1,2);
   fred.add_match(3,3,3);
 
-  vcl_vector<HomgPoint2D> p1;
-  vcl_vector<HomgPoint2D> p2;
-  vcl_vector<HomgPoint2D> p3;
+  std::vector<HomgPoint2D> p1;
+  std::vector<HomgPoint2D> p2;
+  std::vector<HomgPoint2D> p3;
 
-  vcl_cerr << "count  = " << fred.count() << vcl_endl;
+  std::cerr << "count  = " << fred.count() << std::endl;
 
   fred.extract_matches(p1, p2, p3);
 
-  vcl_cerr << p1 << vcl_endl;
+  std::cerr << p1 << std::endl;
 }
 #endif

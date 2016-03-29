@@ -1,4 +1,9 @@
 // Copyright: (C) 2009 Imorphics PLC
+#include <string>
+#include <iostream>
+#include <sstream>
+#include <vector>
+#include <algorithm>
 #include "clsfy_binary_1d_wrapper_builder.h"
 //:
 // \file
@@ -8,12 +13,8 @@
 
 //=======================================================================
 
-#include <vcl_string.h>
-#include <vcl_iostream.h>
-#include <vcl_sstream.h>
-#include <vcl_vector.h>
 #include <vcl_cassert.h>
-#include <vcl_algorithm.h>
+#include <vcl_compiler.h>
 #include <mbl/mbl_parse_block.h>
 #include <mbl/mbl_read_props.h>
 #include <clsfy/clsfy_binary_threshold_1d_builder.h>
@@ -27,7 +28,7 @@ clsfy_binary_1d_wrapper_builder::clsfy_binary_1d_wrapper_builder():
 //: Create a new untrained linear classifier with binary output
   clsfy_classifier_base* clsfy_binary_1d_wrapper_builder::new_classifier() const
 {
-  vcl_auto_ptr<clsfy_classifier_1d> c_1d(builder_1d_->new_classifier());
+  std::auto_ptr<clsfy_classifier_1d> c_1d(builder_1d_->new_classifier());
 
   clsfy_binary_1d_wrapper classifier;
   classifier.set_classifier_1d(*c_1d);
@@ -37,21 +38,21 @@ clsfy_binary_1d_wrapper_builder::clsfy_binary_1d_wrapper_builder():
 
 //=======================================================================
 
-vcl_string clsfy_binary_1d_wrapper_builder::is_a() const
+std::string clsfy_binary_1d_wrapper_builder::is_a() const
 {
-  return vcl_string("clsfy_binary_1d_wrapper_builder");
+  return std::string("clsfy_binary_1d_wrapper_builder");
 }
 
 //=======================================================================
 
-bool clsfy_binary_1d_wrapper_builder::is_class(vcl_string const& s) const
+bool clsfy_binary_1d_wrapper_builder::is_class(std::string const& s) const
 {
   return s == clsfy_binary_1d_wrapper_builder::is_a() || clsfy_builder_base::is_class(s);
 }
 
 //=======================================================================
 
-void clsfy_binary_1d_wrapper_builder::print_summary(vcl_ostream& os) const
+void clsfy_binary_1d_wrapper_builder::print_summary(std::ostream& os) const
 {
   os << "Underlying 1d builder: "; vsl_print_summary(os, builder_1d_);
 }
@@ -62,15 +63,15 @@ void clsfy_binary_1d_wrapper_builder::print_summary(vcl_ostream& os) const
 double clsfy_binary_1d_wrapper_builder::build(
   clsfy_classifier_base &classifier,
   mbl_data_wrapper<vnl_vector<double> > &inputs,
-  const vcl_vector<unsigned> &outputs) const
+  const std::vector<unsigned> &outputs) const
 {
   assert(outputs.size() == inputs.size());
-  assert(* vcl_max_element(outputs.begin(), outputs.end()) <= 1);
+  assert(* std::max_element(outputs.begin(), outputs.end()) <= 1);
   assert(classifier.is_class("clsfy_binary_1d_wrapper"));
 
   clsfy_binary_1d_wrapper &c_wrap = (clsfy_binary_1d_wrapper &) classifier;
 
-  vcl_auto_ptr<clsfy_classifier_1d> c_1d(builder_1d_->new_classifier());
+  std::auto_ptr<clsfy_classifier_1d> c_1d(builder_1d_->new_classifier());
 
   vnl_vector<double> inputs_1d(inputs.size());
   unsigned i=0;
@@ -97,7 +98,7 @@ double clsfy_binary_1d_wrapper_builder::build(
 // n_classes must be 1.
 double clsfy_binary_1d_wrapper_builder::build(
   clsfy_classifier_base &classifier, mbl_data_wrapper<vnl_vector<double> > &inputs,
-  unsigned n_classes, const vcl_vector<unsigned> &outputs) const
+  unsigned n_classes, const std::vector<unsigned> &outputs) const
 {
   assert (n_classes == 1);
   return build(classifier, inputs, outputs);
@@ -126,9 +127,9 @@ void clsfy_binary_1d_wrapper_builder::b_read(vsl_b_istream &bfs)
      vsl_b_read(bfs, builder_1d_);
      break;
     default:
-      vcl_cerr << "I/O ERROR: clsfy_binary_1d_wrapper_builder::b_read(vsl_b_istream&)\n"
+      std::cerr << "I/O ERROR: clsfy_binary_1d_wrapper_builder::b_read(vsl_b_istream&)\n"
                << "           Unknown version number "<< version << '\n';
-      bfs.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
+      bfs.is().clear(std::ios::badbit); // Set an unrecoverable IO error on stream
   }
 }
 
@@ -142,16 +143,16 @@ void clsfy_binary_1d_wrapper_builder::b_read(vsl_b_istream &bfs)
 // }
 // \endverbatim
 // \throw mbl_exception_parse_error if the parse fails.
-void clsfy_binary_1d_wrapper_builder::config(vcl_istream &as)
+void clsfy_binary_1d_wrapper_builder::config(std::istream &as)
 {
- vcl_string s = mbl_parse_block(as);
+ std::string s = mbl_parse_block(as);
 
-  vcl_istringstream ss(s);
+  std::istringstream ss(s);
   mbl_read_props_type props = mbl_read_props_ws(ss);
 
   {
-    vcl_stringstream ss2(props.get_required_property("builder_1d"));
-    vcl_auto_ptr<clsfy_builder_1d> b_1d =
+    std::stringstream ss2(props.get_required_property("builder_1d"));
+    std::auto_ptr<clsfy_builder_1d> b_1d =
       clsfy_builder_1d::new_builder(ss2);
   }
 

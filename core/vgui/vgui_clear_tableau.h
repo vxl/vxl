@@ -37,7 +37,7 @@ class vgui_clear_tableau : public vgui_tableau
   vgui_clear_tableau();
 
   //: Returns the type of this tableau ('vgui_clear_tableau').
-  vcl_string type_name() const { return "vgui_clear_tableau"; }
+  std::string type_name() const { return "vgui_clear_tableau"; }
 
   //: Set colour of clear_tableau to the given red, green, blue values.
   void set_colour(float r, float g, float b, float a=1);

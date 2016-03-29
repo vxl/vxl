@@ -14,15 +14,16 @@
 //
 //-----------------------------------------------------------------------------
 
+#include <cctype>
+#include <cstring>
+#include <iostream>
+#include <cstdio>
 #include "vul_awk.h"
 
-#include <vcl_cctype.h>
-#include <vcl_cstring.h>
-#include <vcl_iostream.h>
-#include <vcl_cstdio.h> // for EOF
+#include <vcl_compiler.h>
 
 //: Construct from input stream
-vul_awk::vul_awk(vcl_istream& s, ModeFlags mode):
+vul_awk::vul_awk(std::istream& s, ModeFlags mode):
   fd_(s),
   mode_(mode)
 {
@@ -69,7 +70,7 @@ void vul_awk::next()
     // copy string
     delete [] split_line_;
     split_line_ = new char[line_.size() + 1];
-    vcl_strcpy(split_line_, linep);
+    std::strcpy(split_line_, linep);
 
     //strip comments
     if (do_strip_comments) {
@@ -100,7 +101,7 @@ void vul_awk::next()
 
       while (true) {
         // Eat white
-        while (*cp && vcl_isspace(*cp))
+        while (*cp && std::isspace(*cp))
           ++cp;
         if (!*cp) break;
 
@@ -108,7 +109,7 @@ void vul_awk::next()
         fields_.push_back(cp);
 
         // Find nonwhite
-        while (*cp && !vcl_isspace(*cp))
+        while (*cp && !std::isspace(*cp))
           ++cp;
         if (!*cp) break;
 
@@ -127,7 +128,7 @@ char const* vul_awk::line_from(int field_number) const
   if (field_number >= NF())
     field_number = NF() - 1;
   if (field_number < 0) {
-    vcl_cerr << "vul_awk::line_from("<< field_number <<") -- ZOIKS\n";
+    std::cerr << "vul_awk::line_from("<< field_number <<") -- ZOIKS\n";
     return line();
   }
 
@@ -136,8 +137,8 @@ char const* vul_awk::line_from(int field_number) const
 
 void testvul_awk()
 {
-  vcl_cout << "Start\n";
-  for (vul_awk awk(vcl_cin); awk; ++awk) {
-    vcl_cout << awk.NF() << ':' << awk[2] << vcl_endl;
+  std::cout << "Start\n";
+  for (vul_awk awk(std::cin); awk; ++awk) {
+    std::cout << awk.NF() << ':' << awk[2] << std::endl;
   }
 }

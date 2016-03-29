@@ -30,14 +30,16 @@
 //
 //\endverbatim
 
+#include <vector>
+#include <iostream>
+#include <list>
+#include <set>
+#include <map>
+#include <queue>
+#include <utility>
 #include <vbl/vbl_ref_count.h>
 #include <vbl/vbl_array_2d.h>
-#include <vcl_vector.h>
-#include <vcl_list.h>
-#include <vcl_set.h>
-#include <vcl_map.h>
-#include <vcl_queue.h>
-#include <vcl_utility.h>
+#include <vcl_compiler.h>
 
 #include "sdet_edgel.h"
 #include "sdet_edgemap_sptr.h"
@@ -93,7 +95,7 @@ public:
   unsigned maxN() { return maxN_; }
 
   //: return a reference to the edgel buckets
-  vbl_array_2d<vcl_vector<sdet_edgel*> > & cells() { return edgemap_->edge_cells; }
+  vbl_array_2d<std::vector<sdet_edgel*> > & cells() { return edgemap_->edge_cells; }
 
   //: return the cvlet map
   sdet_curvelet_map& cvlet_map() { return curvelet_map_; }
@@ -143,11 +145,11 @@ public:
         bool use_flag=false, bool forward=true,  bool centered=true, bool leading=true) = 0;
 
     //: form an edgel grouping from an ordered list of edgemap_->edgels
-    virtual sdet_curvelet* form_an_edgel_grouping(sdet_edgel* ref_e, vcl_deque<sdet_edgel*> &edgel_chain,
+    virtual sdet_curvelet* form_an_edgel_grouping(sdet_edgel* ref_e, std::deque<sdet_edgel*> &edgel_chain,
         bool forward=true,  bool centered=true, bool leading=true) = 0;
 
     //: check to see if curvelets are balanced
-    bool curvelet_is_balanced(sdet_edgel* ref_e, vcl_deque<sdet_edgel*> &edgel_chain);
+    bool curvelet_is_balanced(sdet_edgel* ref_e, std::deque<sdet_edgel*> &edgel_chain);
 
     //: form the full curvelet map (curvelet map lists all the curvelets it participated in and not just the ones anchored to it)
     void form_full_cvlet_map();
@@ -273,10 +275,10 @@ public:
   void propagate_HTs_N_steps(int N);
 
     void propagate_HT_from_the_next_leaf_node();
-      vcl_set<sdet_hyp_tree_node*> check_for_interaction(sdet_hyp_tree_node* node);
+      std::set<sdet_hyp_tree_node*> check_for_interaction(sdet_hyp_tree_node* node);
       bool C1_CPL_interaction(sdet_hyp_tree_node* node1, sdet_hyp_tree_node* node2);
 
-    //bool explore_continuations(vcl_queue<sdet_hyp_tree_node*>& BFS_queue, sdet_edgel* e);
+    //bool explore_continuations(std::queue<sdet_hyp_tree_node*>& BFS_queue, sdet_edgel* e);
     void explore_continuations(sdet_hyp_tree_node* cur_node, sdet_link* link);
 
       int dist_from_edge(sdet_curvelet* cvlet, sdet_edgel* e);
@@ -308,8 +310,8 @@ public:
 
     void resolve_HT(sdet_hyp_tree* HT);
 
-    double compute_path_metric(vcl_vector<sdet_curvelet*>& path);
-    void back_propagate_solution(vcl_vector<sdet_curvelet*>& path, vgl_point_2d<double> sol);
+    double compute_path_metric(std::vector<sdet_curvelet*>& path);
+    void back_propagate_solution(std::vector<sdet_curvelet*>& path, vgl_point_2d<double> sol);
 
   void print_all_trees();
 
@@ -336,12 +338,12 @@ public:
   void Post_Process();
 
   //: perform a geometric consistency check to determine whether a given temp path is valid
-  bool is_EHT_path_legal(vcl_vector<sdet_edgel*>& edgel_chain);
+  bool is_EHT_path_legal(std::vector<sdet_edgel*>& edgel_chain);
 
   //: compute a simple path metric based on the chain and its neighboring support chains
-  double compute_path_metric2(vcl_vector<sdet_edgel*>& Pchain,
-                             vcl_vector<sdet_edgel*>& Tchain,
-                             vcl_vector<sdet_edgel*>& Cchain);
+  double compute_path_metric2(std::vector<sdet_edgel*>& Pchain,
+                             std::vector<sdet_edgel*>& Tchain,
+                             std::vector<sdet_edgel*>& Cchain);
 
   //: disambiguate the CFG, basically to produce a disjoint set
   void disambiguate_the_CFTG();
@@ -414,20 +416,20 @@ protected:
   unsigned min_deg_to_link_; ///< minimum degree of a link before it is linked
 
   //for the connected components algo to separate the link graph and the cvlet map
-  vcl_set<sdet_curvelet*> cv_set1;
-  vcl_map<vcl_pair<int, int>, sdet_link*> link_map;
-  vcl_queue<sdet_link*> BFS_links_queue;
-  vcl_map<sdet_link*, sdet_link*> link_pairs;
+  std::set<sdet_curvelet*> cv_set1;
+  std::map<std::pair<int, int>, sdet_link*> link_map;
+  std::queue<sdet_link*> BFS_links_queue;
+  std::map<sdet_link*, sdet_link*> link_pairs;
 
 public: //temp
 
   //for the hybrid algorithm
   bool use_hybrid_;
-  vcl_vector<int> cId_; ///< id of the contour that each edgel belongs to
+  std::vector<int> cId_; ///< id of the contour that each edgel belongs to
 
   //for the DHT algorithm
   sdet_HT_graph HTG;             ///< The global HTG
-  vcl_queue<sdet_hyp_tree_node*> BFS_queue_global; ///< BFS queue for propagating the HTs simultaneously
+  std::queue<sdet_hyp_tree_node*> BFS_queue_global; ///< BFS queue for propagating the HTs simultaneously
 
   sdet_edgel_labels ELs;         ///< edgel labels for contour ownership
 

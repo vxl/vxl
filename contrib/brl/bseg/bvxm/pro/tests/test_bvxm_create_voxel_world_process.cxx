@@ -4,12 +4,13 @@
 // \author Gamze D. Tunali
 // \date   February 23, 2008
 
+#include <string>
+#include <iostream>
 #include <testlib/testlib_test.h>
 #include <bvxm/bvxm_world_params.h>
 #include <bvxm/bvxm_voxel_world.h>
 
-#include <vcl_string.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
 
 #include <brdb/brdb_value.h>
 #include <brdb/brdb_selection.h>
@@ -30,7 +31,7 @@ static void test_bvxm_create_voxel_world_process()
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bvxm_create_voxel_world_process, "bvxmCreateVoxelWorldProcess");
   REGISTER_DATATYPE(bvxm_voxel_world_sptr);
 
-  vcl_string test_dir("./create_world_test");
+  std::string test_dir("./create_world_test");
   vul_file::make_directory(test_dir);
 
   bool good = bprb_batch_process_manager::instance()->init_process("bvxmCreateVoxelWorldProcess");
@@ -45,16 +46,16 @@ static void test_bvxm_create_voxel_world_process()
   brdb_query_aptr Q = brdb_query_comp_new("id", brdb_query::EQ, id);
   brdb_selection_sptr S = DATABASE->select("bvxm_voxel_world_sptr_data", Q);
   if (S->size()!=1){
-    vcl_cout << "in bprb_batch_process_manager::set_input_from_db(.) -"
+    std::cout << "in bprb_batch_process_manager::set_input_from_db(.) -"
              << " no selections\n";
   }
 
   brdb_value_sptr value;
-  if (!S->get_value(vcl_string("value"), value)) {
-    vcl_cout << "in bprb_batch_process_manager::set_input_from_db(.) -"
+  if (!S->get_value(std::string("value"), value)) {
+    std::cout << "in bprb_batch_process_manager::set_input_from_db(.) -"
              << " didn't get value\n";
   }
-  bool non_null = (value != 0);
+  bool non_null = (value != VXL_NULLPTR);
   TEST("bvxm_voxel_world_sptr non-null", non_null ,true);
 
   brdb_value_t<bvxm_voxel_world_sptr>* result =
@@ -63,7 +64,7 @@ static void test_bvxm_create_voxel_world_process()
   // compare the values with the params given
   bvxm_voxel_world_sptr voxel_world = result->value();
   bvxm_world_params_sptr params = voxel_world->get_params();
-  vcl_string dir = params->model_dir();
+  std::string dir = params->model_dir();
 
   bool comp = (!dir.compare("./create_world_test"));
   comp = comp && (params->corner() == vgl_point_3d<float>(0,0,0));

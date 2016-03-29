@@ -1,12 +1,13 @@
+#include <iostream>
+#include <fstream>
+#include <cmath>
+#include <string>
+#include <vector>
 #include "bvxm_edge_util.h"
 
 #include "bvxm_util.h"
 
-#include <vcl_iostream.h>
-#include <vcl_fstream.h>
-#include <vcl_cmath.h>
-#include <vcl_string.h>
-#include <vcl_vector.h>
+#include <vcl_compiler.h>
 #include <vpgl/vpgl_camera.h>
 #include <vnl/vnl_double_3x3.h>
 #include <vnl/vnl_double_3x1.h>
@@ -70,14 +71,14 @@ vil_image_view<vxl_byte> bvxm_edge_util::detect_edges(vil_image_view<vxl_byte> i
   vil_image_resource_sptr img_res_sptr = vil_new_image_resource_of_view(img);
   detector.SetImage(img_res_sptr);
   detector.DoContour();
-  vcl_vector<vtol_edge_2d_sptr> * edges = detector.GetEdges();
+  std::vector<vtol_edge_2d_sptr> * edges = detector.GetEdges();
 
   // initialize the output edge image
   vil_image_view<vxl_byte> img_edge(img.ni(),img.nj(),1);
   img_edge.fill(0);
 
   // iterate over each connected edge component
-  for (vcl_vector<vtol_edge_2d_sptr>::iterator eit = edges->begin(); eit != edges->end(); eit++)
+  for (std::vector<vtol_edge_2d_sptr>::iterator eit = edges->begin(); eit != edges->end(); eit++)
   {
     vsol_curve_2d_sptr c = (*eit)->curve();
     vdgl_digital_curve_sptr dc = c->cast_to_vdgl_digital_curve();
@@ -132,7 +133,7 @@ void bvxm_edge_util::edge_distance_transform(vil_image_view<vxl_byte>& inp_image
   out_edt.set_size(ni,nj,1);
   for (unsigned i=0; i<ni; i++) {
     for (unsigned j=0; j<nj; j++) {
-      out_edt(i,j) = vcl_sqrt((float)curr_image_edt(i,j));
+      out_edt(i,j) = std::sqrt((float)curr_image_edt(i,j));
     }
   }
 }
@@ -141,7 +142,7 @@ int bvxm_edge_util::convert_uncertainty_from_meters_to_pixels(float uncertainty,
 {
   // estimate the offset search size in the image space
   vgl_box_3d<double> box_uncertainty(-uncertainty,-uncertainty,-uncertainty,uncertainty,uncertainty,uncertainty);
-  vcl_vector<vgl_point_3d<double> > box_uncertainty_corners = bvxm_util::corners_of_box_3d<double>(box_uncertainty);
+  std::vector<vgl_point_3d<double> > box_uncertainty_corners = bvxm_util::corners_of_box_3d<double>(box_uncertainty);
   vgl_box_2d<double>* roi_uncertainty = new vgl_box_2d<double>();
 
   for (unsigned i=0; i<box_uncertainty_corners.size(); i++) {
@@ -165,7 +166,7 @@ int bvxm_edge_util::convert_uncertainty_from_meters_to_pixels(float uncertainty,
     roi_uncertainty->add(p2d_uncertainty);
   }
 
-  return vnl_math::ceil(0.5*vnl_math::max(roi_uncertainty->width(),roi_uncertainty->height()));
+  return vnl_math::ceil(0.5*std::max(roi_uncertainty->width(),roi_uncertainty->height()));
 }
 
 float bvxm_edge_util::convert_edge_statistics_to_probability(float edge_statistic, float n_normal, int dof)
@@ -215,7 +216,7 @@ void bvxm_edge_util::estimate_edge_prob_image(const vil_image_view<vxl_byte>& im
 
   for (unsigned i=0; i<kernel.rows(); i++) {
     for (unsigned j=0; j<kernel.columns(); j++) {
-      kernel(i,j) = vcl_log(1.0f - kernel(i,j));
+      kernel(i,j) = std::log(1.0f - kernel(i,j));
     }
   }
 
@@ -224,7 +225,7 @@ void bvxm_edge_util::estimate_edge_prob_image(const vil_image_view<vxl_byte>& im
 
   for (unsigned i=0; i<img_edgeness.ni(); i++) {
     for (unsigned j=0; j<img_edgeness.nj(); j++) {
-      img_edgeness(i,j) = 1.0f - vcl_exp(img_edgeness(i,j));
+      img_edgeness(i,j) = 1.0f - std::exp(img_edgeness(i,j));
     }
   }
 }

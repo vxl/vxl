@@ -15,12 +15,13 @@
 //
 //=========================================================================
 
+#include <string>
+#include <vector>
+#include <iostream>
 #include <vidl/vidl_exception.h>
 #include <vidl/vidl_pixel_format.h>
 
-#include <vcl_string.h>
-#include <vcl_vector.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
 
 #include <atlbase.h>
 #include <dshow.h>
@@ -32,7 +33,7 @@ struct vidl_dshow
   static void initialize_com();
 
   //: Get an error description for the given HRESULT.
-  static vcl_string get_error_text(const char* file, int line, HRESULT hr);
+  static std::string get_error_text(const char* file, int line, HRESULT hr);
 
   //: Register object in Running Object Table (ROT)
   static void register_in_rot(IUnknown* unknown, DWORD& reg);
@@ -42,17 +43,17 @@ struct vidl_dshow
 
   //: Save filter graph to a *.grf file.
   static void save_graph_to_file(const CComPtr<IFilterGraph2>& filter_graph,
-                                 const vcl_string& filename);
+                                 const std::string& filename);
 
   //: Load filter graph from a *.grf file.
   static void load_graph_from_file(const CComPtr<IFilterGraph2>& filter_graph,
-                                   const vcl_wstring& filename);
+                                   const std::wstring& filename);
 
   //: Get GUID name or FOURCC.
-  static vcl_string get_guid_name(const GUID& guid);
+  static std::string get_guid_name(const GUID& guid);
 
   //: Get multimedia subtype GUID from FOURCC.
-  static GUID get_guid_from_fourcc(const vcl_string& fourcc);
+  static GUID get_guid_from_fourcc(const std::string& fourcc);
 
   //: Extract information from AM_MEDIA_TYPE object.
   static void get_media_info(const AM_MEDIA_TYPE& amt,
@@ -67,10 +68,10 @@ struct vidl_dshow
   static void print_capture_device_names();
 
   //: Get a list of capture device names (i.e., FriendlyName).
-  static vcl_vector<vcl_string> get_capture_device_names();
+  static std::vector<std::string> get_capture_device_names();
 
   //: Get IMoniker associated with name.
-  static CComPtr<IMoniker> get_capture_device_moniker(const vcl_string& name);
+  static CComPtr<IMoniker> get_capture_device_moniker(const std::string& name);
 
 #if 0
   static void build_filter_graph(/*CComPtr<ICaptureGraphBuilder2>& graph_builder,*/
@@ -91,7 +92,7 @@ struct vidl_dshow
 #define DSHOW_WARN_IF_FAILED(stm) {                                       \
   HRESULT hr = (stm);                                                     \
   if FAILED(hr) {                                                         \
-    vcl_cerr << vidl_dshow_exception(                                     \
+    std::cerr << vidl_dshow_exception(                                     \
                   vidl_dshow::get_error_text(__FILE__,__LINE__,hr)).what()\
              << '\n';                                                     \
   }}

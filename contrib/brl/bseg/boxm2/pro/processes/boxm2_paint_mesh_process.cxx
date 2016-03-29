@@ -1,4 +1,6 @@
 // This is brl/bseg/boxm2/pro/processes/boxm2_paint_mesh_process.cxx
+#include <iostream>
+#include <fstream>
 #include <bprb/bprb_func_process.h>
 //:
 // \file
@@ -19,7 +21,7 @@
 #include <bmsh3d/algo/bmsh3d_fileio.h>
 #include <boct/boct_bit_tree.h>
 
-#include <vcl_fstream.h>
+#include <vcl_compiler.h>
 #include <vcl_cassert.h>
 
 #include <rply.h>
@@ -35,7 +37,7 @@ bool boxm2_paint_mesh_process_cons(bprb_func_process& pro)
   using namespace boxm2_paint_mesh_process_globals;
 
   //process takes 4 or 5 inputs and no outputs
-  vcl_vector<vcl_string> input_types_(n_inputs_);
+  std::vector<std::string> input_types_(n_inputs_);
   input_types_[0] = "boxm2_scene_sptr";
   input_types_[1] = "boxm2_cache_sptr";
   input_types_[2] = "vcl_string"; //input mesh filename
@@ -45,7 +47,7 @@ bool boxm2_paint_mesh_process_cons(bprb_func_process& pro)
   brdb_value_sptr prob_t = new brdb_value_t<float>(0.0);
   pro.set_input(4, prob_t);
 
-  vcl_vector<vcl_string>  output_types_(n_outputs_);
+  std::vector<std::string>  output_types_(n_outputs_);
   return pro.set_input_types(input_types_)
       && pro.set_output_types(output_types_);
 }
@@ -55,7 +57,7 @@ bool boxm2_paint_mesh_process(bprb_func_process& pro)
   using namespace boxm2_paint_mesh_process_globals;
 
   if ( pro.n_inputs() < n_inputs_ ) {
-    vcl_cout << pro.name() << ": The input number should be " << n_inputs_<< vcl_endl;
+    std::cout << pro.name() << ": The input number should be " << n_inputs_<< std::endl;
     return false;
   }
 
@@ -63,14 +65,14 @@ bool boxm2_paint_mesh_process(bprb_func_process& pro)
   unsigned i = 0;
   boxm2_scene_sptr scene = pro.get_input<boxm2_scene_sptr>(i++);
   boxm2_cache_sptr cache = pro.get_input<boxm2_cache_sptr>(i++);
-  vcl_string input_mesh_filename = pro.get_input<vcl_string>(i++);
-  vcl_string output_mesh_filename = pro.get_input<vcl_string>(i++);
+  std::string input_mesh_filename = pro.get_input<std::string>(i++);
+  std::string output_mesh_filename = pro.get_input<std::string>(i++);
   float prob_t = pro.get_input<float>(i++);
 
   bool foundDataType = false;
 
-  vcl_string data_type;
-  vcl_vector<vcl_string> apps = scene->appearances();
+  std::string data_type;
+  std::vector<std::string> apps = scene->appearances();
   for (unsigned int i=0; i<apps.size(); ++i) {
       if ( apps[i] == boxm2_data_traits<BOXM2_GAUSS_RGB>::prefix() )
       {
@@ -81,7 +83,7 @@ bool boxm2_paint_mesh_process(bprb_func_process& pro)
   }
 
   if (!foundDataType) {
-      vcl_cout<<"BOXM2_PAINT_MESH_PROCESS ERROR: scene doesn't have GAUSS_RGB appearance..."<<vcl_endl;
+      std::cout<<"BOXM2_PAINT_MESH_PROCESS ERROR: scene doesn't have GAUSS_RGB appearance..."<<std::endl;
       return false;
   }
 
@@ -91,10 +93,10 @@ bool boxm2_paint_mesh_process(bprb_func_process& pro)
   input_mesh.assign_IFS_vertex_vid_by_vertex_order();
 
   //print input mesh summary
-  input_mesh.print_summary(vcl_cout);
+  input_mesh.print_summary(std::cout);
 
   //write outgoing mesh header
-  p_ply oply = ply_create(output_mesh_filename.c_str(), PLY_ASCII, NULL, 0, NULL);
+  p_ply oply = ply_create(output_mesh_filename.c_str(), PLY_ASCII, VXL_NULLPTR, 0, VXL_NULLPTR);
 
   // HEADER SECTION
   // vertex
@@ -113,7 +115,7 @@ bool boxm2_paint_mesh_process(bprb_func_process& pro)
   // end header
   ply_write_header(oply);
 
-  vcl_cout << "Start iterating over pts..." << vcl_endl;
+  std::cout << "Start iterating over pts..." << std::endl;
   //zip thru points
   float prob;
   vnl_vector_fixed<float,3> intensity;
@@ -123,13 +125,13 @@ bool boxm2_paint_mesh_process(bprb_func_process& pro)
     const vgl_point_3d<double> pt = input_mesh.vertexmap(i)->pt();
 
     if (!scene->contains(pt, id, local)) {
-      vcl_cout << "ERROR: point: " << pt << " isn't in scene. Exiting...." << vcl_endl;
+      std::cout << "ERROR: point: " << pt << " isn't in scene. Exiting...." << std::endl;
       return false;
     }
 
-    int index_x=(int)vcl_floor(local.x());
-    int index_y=(int)vcl_floor(local.y());
-    int index_z=(int)vcl_floor(local.z());
+    int index_x=(int)std::floor(local.x());
+    int index_y=(int)std::floor(local.y());
+    int index_z=(int)std::floor(local.z());
     boxm2_block * blk=cache->get_block(scene,id);
     boxm2_block_metadata mdata = scene->get_block_metadata_const(id);
     vnl_vector_fixed<unsigned char,16> treebits=blk->trees()(index_x,index_y,index_z);
@@ -145,10 +147,10 @@ bool boxm2_paint_mesh_process(bprb_func_process& pro)
     float alpha=(alpha_data->data())[data_offset];
     double side_len = 1.0 / (double) (1 << depth);
     //store cell probability
-    prob = 1.0f - (float)vcl_exp(-alpha * side_len * mdata.sub_block_dim_.x());
+    prob = 1.0f - (float)std::exp(-alpha * side_len * mdata.sub_block_dim_.x());
 
     boxm2_data_base *  int_base  = cache->get_data_base(scene,id, data_type);
-    if (data_type.find(boxm2_data_traits<BOXM2_GAUSS_RGB>::prefix()) != vcl_string::npos) {
+    if (data_type.find(boxm2_data_traits<BOXM2_GAUSS_RGB>::prefix()) != std::string::npos) {
       boxm2_data<BOXM2_GAUSS_RGB> *int_data = new boxm2_data<BOXM2_GAUSS_RGB>(int_base->data_buffer(),int_base->buffer_length(),int_base->block_id());
       intensity = boxm2_gauss_rgb_processor::expected_color( (int_data->data())[data_offset]);
     }
@@ -168,10 +170,10 @@ bool boxm2_paint_mesh_process(bprb_func_process& pro)
       ply_write(oply, 0 );
     }
   }
-  vcl_cout << "Done iterating over pts..." << vcl_endl;
+  std::cout << "Done iterating over pts..." << std::endl;
 
   // faces
-  vcl_map<int, bmsh3d_face*>::iterator fit = input_mesh.facemap().begin();
+  std::map<int, bmsh3d_face*>::iterator fit = input_mesh.facemap().begin();
   for (; fit != input_mesh.facemap().end(); fit++)
   {
     bmsh3d_face* f = (*fit).second;

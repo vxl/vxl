@@ -11,10 +11,12 @@
 // \author Ian Scott
 // \date 2009-08-25
 
+#include <iostream>
+#include <iosfwd>
 #include "clsfy_classifier_base.h"
 #include <vsl/vsl_fwd.h>
 #include <vnl/vnl_fwd.h>
-#include <vcl_iosfwd.h>
+#include <vcl_compiler.h>
 
 //:  A classifier that always returns the same answer.
 class clsfy_null_classifier : public clsfy_classifier_base
@@ -27,7 +29,7 @@ class clsfy_null_classifier : public clsfy_classifier_base
   clsfy_null_classifier(unsigned dc): n_dims_(0u), default_class_(dc) {}
 
   //: Return the probability the input being in each class.
-  virtual void class_probabilities(vcl_vector<double> &outputs, const vnl_vector<double> &input) const;
+  virtual void class_probabilities(std::vector<double> &outputs, const vnl_vector<double> &input) const;
 
   //: Log likelihood of being in class
   virtual double log_l(const vnl_vector<double> &input) const;
@@ -56,16 +58,16 @@ class clsfy_null_classifier : public clsfy_classifier_base
   { default_class_ = dc; }
 
   //: Name of the class
-  virtual vcl_string is_a() const;
+  virtual std::string is_a() const;
 
   //: Name of the class
-  virtual bool is_class(vcl_string const& s) const;
+  virtual bool is_class(std::string const& s) const;
 
   //: Create a copy on the heap and return base class pointer
   virtual clsfy_classifier_base* clone() const;
 
   //: Print class to os
-  virtual void print_summary(vcl_ostream& os) const;
+  virtual void print_summary(std::ostream& os) const;
 
   //: Save class to binary file stream
   virtual void b_write(vsl_b_ostream& bfs) const;
@@ -74,11 +76,11 @@ class clsfy_null_classifier : public clsfy_classifier_base
   virtual void b_read(vsl_b_istream& bfs);
 
   //: The probabilities of returning a value in each class.
-  const vcl_vector<double> & probs() const;
+  const std::vector<double> & probs() const;
 
   //: Set the prior probabilities of each class
   // The values are normalised to sum to 1.
-  void set_probs(const vcl_vector<double> &);
+  void set_probs(const std::vector<double> &);
 
 
  private:

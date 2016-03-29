@@ -4,13 +4,14 @@
 //
 //////////////////////////////////////////////////////////////////////////
 
-#include <vcl_iostream.h>
-#include <vcl_iterator.h>
-#include <vcl_fstream.h>
-#include <vcl_string.h>
-#include <vcl_exception.h>
-#include <vcl_map.h>
-#include <vcl_typeinfo.h>
+#include <iostream>
+#include <iterator>
+#include <fstream>
+#include <string>
+#include <exception>
+#include <map>
+#include <typeinfo>
+#include <vcl_compiler.h>
 #include <vul/vul_arg.h>
 #include <vul/vul_sprintf.h>
 #include <mbl/mbl_log.h>
@@ -39,7 +40,7 @@ static mbl_logger& logger()
 //=========================================================================
 // Report an error message in several ways, then throw an exception.
 //=========================================================================
-static void do_error(const vcl_string& msg)
+static void do_error(const std::string& msg)
 {
   MBL_LOG(ERR, logger(), msg);
   throw mbl_exception_abort(msg);
@@ -68,12 +69,12 @@ int main2(int argc, char *argv[])
   // Parse the program arguments
 
   // These options are I/O and format-related
-  vul_arg<vcl_string> in_file("-i", "input file containing scalar values (whitespace-separated); otherwise uses stdin", "");
-  vul_arg<vcl_string> out_file("-o", "output file to append statistics; otherwise write to stdout", "");
-  vul_arg<vcl_string> label("-label","Adds this label to each line outputting a statistic - useful for later grep");
-  vul_arg<vcl_string> format("-fmt","Specify the output format, e.g. \"table\", \"list\" (default is list). See help for more details.");
+  vul_arg<std::string> in_file("-i", "input file containing scalar values (whitespace-separated); otherwise uses stdin", "");
+  vul_arg<std::string> out_file("-o", "output file to append statistics; otherwise write to stdout", "");
+  vul_arg<std::string> label("-label","Adds this label to each line outputting a statistic - useful for later grep");
+  vul_arg<std::string> format("-fmt","Specify the output format, e.g. \"table\", \"list\" (default is list). See help for more details.");
   vul_arg<bool> nohead("-h","Specify this to SUPPRESS column headers in tabular format", false);
-  vul_arg<vcl_string> sep("-sep", "String to use as a separator between columns in tabular format, e.g. \", \" or \"  \" (default=TAB)", "\t");
+  vul_arg<std::string> sep("-sep", "String to use as a separator between columns in tabular format, e.g. \", \" or \"  \" (default=TAB)", "\t");
   // These options are statistical measures:
   vul_arg<bool> n("-n", "Specify this to record the number of samples", false);
   vul_arg<bool> mean("-mean", "Specify this to record the mean", false);
@@ -83,8 +84,8 @@ int main2(int argc, char *argv[])
   vul_arg<bool> med("-med", "Specify this to record the median", false);
   vul_arg<bool> min("-min", "Specify this to record the minimum", false);
   vul_arg<bool> max("-max", "Specify this to record the maximum", false);
-  vul_arg<vcl_vector<int> > pc("-pc", "Specify this switch with 1 or more comma-separated integers (e.g. 5,50,95) to record percentile(s)");
-  vul_arg<vcl_vector<double> > quant("-q", "Specify this switch with 1 or more comma-separated floats (e.g. 0.05,0.50,0.95) to record quantile(s)");
+  vul_arg<std::vector<int> > pc("-pc", "Specify this switch with 1 or more comma-separated integers (e.g. 5,50,95) to record percentile(s)");
+  vul_arg<std::vector<double> > quant("-q", "Specify this switch with 1 or more comma-separated floats (e.g. 0.05,0.50,0.95) to record quantile(s)");
   vul_arg<bool> sum("-sum", "Specify this to record the sum", false);
   vul_arg<bool> sum_squares("-ssq", "Specify this to record the sum of squares", false);
   vul_arg<bool> rms("-rms", "Specify this to record the rms", false);
@@ -95,46 +96,46 @@ int main2(int argc, char *argv[])
   vul_arg_parse(argc, argv);
 
   // Try to open the input file if specified or use stdin
-  vcl_istream* is=0;
+  std::istream* is=VXL_NULLPTR;
   if (!in_file().empty())
   {
-    is = new vcl_ifstream(in_file().c_str());
+    is = new std::ifstream(in_file().c_str());
     if (!is || !is->good())
-      do_error(vcl_string("Failed to open input file ") + in_file().c_str());
+      do_error(std::string("Failed to open input file ") + in_file().c_str());
     MBL_LOG(DEBUG, logger(), "Opened input file: " << in_file().c_str());
   }
   else
   {
-    is = &vcl_cin;
+    is = &std::cin;
   }
-  MBL_LOG(INFO, logger(), "in_file: " << (in_file.set() ? in_file() : vcl_string("stdin")));
+  MBL_LOG(INFO, logger(), "in_file: " << (in_file.set() ? in_file() : std::string("stdin")));
 
   // Load the data from stream until end
-  vcl_vector<double> data_vec;
-  data_vec.assign(vcl_istream_iterator<double>(*is), vcl_istream_iterator<double>());
+  std::vector<double> data_vec;
+  data_vec.assign(std::istream_iterator<double>(*is), std::istream_iterator<double>());
   if (data_vec.empty())
     do_error("Could not parse data file.");
   MBL_LOG(DEBUG, logger(), "data file contained " << data_vec.size() << " values.");
 
   if (absolute())
   {
-    for (unsigned i=0;i<data_vec.size();++i) data_vec[i]=vcl_abs(data_vec[i]);
+    for (unsigned i=0;i<data_vec.size();++i) data_vec[i]=std::abs(data_vec[i]);
   }
 
   // Clean up if input was from a file
   {
-    vcl_ifstream* ifs = dynamic_cast<vcl_ifstream*>(is);
+    std::ifstream* ifs = dynamic_cast<std::ifstream*>(is);
     if (ifs)
     {
       ifs->close();
       delete ifs;
     }
-    is = 0;
+    is = VXL_NULLPTR;
   }
 
   // Calculate the requested statistics
   mbl_sample_stats_1d data(data_vec);
-  vcl_map<vcl_string, double> stats;
+  std::map<std::string, double> stats;
   if (n.set())                 stats["n"]=data.n_samples();
   if (mean.set())              stats["mean"]=data.mean();
   if (variance.set())          stats["var"]=data.variance();
@@ -151,38 +152,38 @@ int main2(int argc, char *argv[])
   if (kurtosis.set())          stats["kurt"]=data.kurtosis();
   if (pc.set())
   {
-    for (vcl_vector<int>::const_iterator it=pc().begin(); it!=pc().end(); ++it)
+    for (std::vector<int>::const_iterator it=pc().begin(); it!=pc().end(); ++it)
     {
-      vcl_string name = vul_sprintf("pc%02u", *it);
+      std::string name = vul_sprintf("pc%02u", *it);
       stats[name] = data.nth_percentile(*it);
     }
   }
   if (quant.set())
   {
-    for (vcl_vector<double>::const_iterator it=quant().begin(); it!=quant().end(); ++it)
+    for (std::vector<double>::const_iterator it=quant().begin(); it!=quant().end(); ++it)
     {
-      vcl_string name = vul_sprintf("q%f", *it);
+      std::string name = vul_sprintf("q%f", *it);
       stats[name] = data.quantile(*it);
     }
   }
 
   // Open output file if requested, otherwise use stdout
-  vcl_ostream* os=0;
+  std::ostream* os=VXL_NULLPTR;
   if (!out_file().empty())
   {
-    os = new vcl_ofstream(out_file().c_str(), vcl_ios::app);
+    os = new std::ofstream(out_file().c_str(), std::ios::app);
     if (!os || !os->good())
-      do_error(vcl_string("Failed to open outout file ") + out_file().c_str());
+      do_error(std::string("Failed to open outout file ") + out_file().c_str());
     MBL_LOG(DEBUG, logger(), "Opened output file: " << out_file().c_str());
   }
   else
   {
-    os = &vcl_cout;
+    os = &std::cout;
   }
 
 
   // Use provided label if specified, otherwise use input filename (or empty string).
-  vcl_string my_label = label.set() ? label() : in_file();
+  std::string my_label = label.set() ? label() : in_file();
 
   // Write statistics in 1 of multiple formats
   enum OutputFormat output_format = format()=="table" ? TABLE : LIST;
@@ -194,7 +195,7 @@ int main2(int argc, char *argv[])
       if (!nohead())
       {
         if (os && os->good()) *os << '#' << sep();
-        for (vcl_map<vcl_string,double>::const_iterator it=stats.begin(); it!=stats.end(); ++it)
+        for (std::map<std::string,double>::const_iterator it=stats.begin(); it!=stats.end(); ++it)
         {
           if (os && os->good()) *os << it->first << sep();
         }
@@ -203,19 +204,19 @@ int main2(int argc, char *argv[])
 
       // Write all statistics on one line arranged in columns
       if (os && os->good()) *os << my_label << sep();
-      for (vcl_map<vcl_string,double>::const_iterator it=stats.begin(); it!=stats.end(); ++it)
+      for (std::map<std::string,double>::const_iterator it=stats.begin(); it!=stats.end(); ++it)
       {
         if (os && os->good())
           *os << it->second << sep();
       }
-      if (os && os->good()) *os << vcl_endl;
+      if (os && os->good()) *os << std::endl;
     }
     break;
 
   default:
     {
       // List format
-      for (vcl_map<vcl_string,double>::const_iterator it=stats.begin(); it!=stats.end(); ++it)
+      for (std::map<std::string,double>::const_iterator it=stats.begin(); it!=stats.end(); ++it)
       {
         if (os && os->good())
         {
@@ -228,13 +229,13 @@ int main2(int argc, char *argv[])
 
   // Clean up if output was to a file
   {
-    vcl_ofstream* ofs = dynamic_cast<vcl_ofstream*>(os);
+    std::ofstream* ofs = dynamic_cast<std::ofstream*>(os);
     if (ofs)
     {
       ofs->close();
       delete ofs;
     }
-    os = 0;
+    os = VXL_NULLPTR;
   }
 
   return 0;
@@ -255,10 +256,10 @@ int main(int argc, char *argv[])
   {
     errcode = main2(argc, argv);
   }
-  catch (const vcl_exception & e)
+  catch (const std::exception & e)
   {
-    vcl_cerr << "ERROR: " << typeid(e).name() << '\n' <<
-      e.what() << vcl_endl;
+    std::cerr << "ERROR: " << typeid(e).name() << '\n' <<
+      e.what() << std::endl;
     errcode = 4;
   }
 

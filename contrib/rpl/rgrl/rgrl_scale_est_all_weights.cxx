@@ -1,9 +1,11 @@
+#include <iostream>
+#include <cmath>
 #include "rgrl_scale_est_all_weights.h"
 //:
 // \file
 // \author Chuck Stewart
 
-#include <vcl_cmath.h>
+#include <vcl_compiler.h>
 
 #include <vnl/vnl_math.h>
 #include <vnl/algo/vnl_svd.h>
@@ -11,7 +13,6 @@
 #include "rgrl_scale.h"
 #include "rgrl_match_set.h"
 #include "rgrl_util.h"
-#include <vcl_iostream.h>
 
 rgrl_scale_est_all_weights::
 rgrl_scale_est_all_weights( bool do_signature_scale )
@@ -83,20 +84,20 @@ compute_geometric_scale( double& return_scale,
     }
   }
   const double epsilon = 1e-16;
-  double scale = vcl_sqrt( sum_weighted_error / sum_weights );
+  double scale = std::sqrt( sum_weighted_error / sum_weights );
   // is finite?
   if ( !vnl_math::isfinite( scale ) )
     return false;
 
-  return_scale = scaling * vnl_math::max( scale, epsilon );
+  return_scale = scaling * std::max( scale, epsilon );
 
-  DebugMacro(1, "  Final geometric scale" << return_scale << vcl_endl );
+  DebugMacro(1, "  Final geometric scale" << return_scale << std::endl );
   return true;
 
 #if 0
-  double est_scale = vcl_sqrt( sum_weighted_error / sum_weights );
-  vcl_cout << " rgrl_scale_est_all_weights : scale = " << est_scale << " (lower bound=1.0)\n";
-  return vnl_math::max( est_scale, 1.0 );
+  double est_scale = std::sqrt( sum_weighted_error / sum_weights );
+  std::cout << " rgrl_scale_est_all_weights : scale = " << est_scale << " (lower bound=1.0)\n";
+  return std::max( est_scale, 1.0 );
 #endif
 }
 

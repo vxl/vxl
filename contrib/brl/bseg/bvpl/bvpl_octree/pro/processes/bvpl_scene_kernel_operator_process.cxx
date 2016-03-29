@@ -49,14 +49,14 @@ bool bvpl_scene_kernel_operator_process_cons(bprb_func_process& pro)
 {
   using namespace bvpl_scene_kernel_operator_process_globals;
 
-  vcl_vector<vcl_string> input_types_(n_inputs_);
+  std::vector<std::string> input_types_(n_inputs_);
   input_types_[0] = "boxm_scene_base_sptr";
   input_types_[1] = "bvpl_kernel_sptr";
   input_types_[2] = "vcl_string";
   input_types_[3] = "vcl_string";
   input_types_[4] = "vcl_string";
 
-  vcl_vector<vcl_string> output_types_(n_outputs_);
+  std::vector<std::string> output_types_(n_outputs_);
   output_types_[0] = "boxm_scene_base_sptr";
 
   return pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
@@ -68,7 +68,7 @@ bool bvpl_scene_kernel_operator_process(bprb_func_process& pro)
 
   if (pro.n_inputs() < n_inputs_)
   {
-    vcl_cerr << pro.name() << ": the input number should be " << n_inputs_
+    std::cerr << pro.name() << ": the input number should be " << n_inputs_
              << " but instead it is " << pro.n_inputs() << '\n';
     return false;
   }
@@ -77,24 +77,24 @@ bool bvpl_scene_kernel_operator_process(bprb_func_process& pro)
   unsigned i = 0;
   boxm_scene_base_sptr scene_base = pro.get_input<boxm_scene_base_sptr>(i++);
   bvpl_kernel_sptr kernel = pro.get_input<bvpl_kernel_sptr>(i++);
-  vcl_string datatype = pro.get_input<vcl_string>(i++);
-  vcl_string functor_name = pro.get_input<vcl_string>(i++);
-  vcl_string output_path = pro.get_input<vcl_string>(i++);
+  std::string datatype = pro.get_input<std::string>(i++);
+  std::string functor_name = pro.get_input<std::string>(i++);
+  std::string output_path = pro.get_input<std::string>(i++);
   //short level = 0;
 
   //print inputs
-  vcl_cout << "In bvpl_scene_kernel_operator:\n"
-           << "Datatype:     " << datatype << vcl_endl
-           << "Functor Name: " << functor_name << vcl_endl;
+  std::cout << "In bvpl_scene_kernel_operator:\n"
+           << "Datatype:     " << datatype << std::endl
+           << "Functor Name: " << functor_name << std::endl;
 
   //check input's validity
   if (!scene_base.ptr()) {
-    vcl_cerr <<  " :-- Grid is not valid!\n";
+    std::cerr <<  " :-- Grid is not valid!\n";
     return false;
   }
 
   if ( !kernel ) {
-    vcl_cerr << pro.name() << " :-- Kernel is not valid!\n";
+    std::cerr << pro.name() << " :-- Kernel is not valid!\n";
     return false;
   }
 

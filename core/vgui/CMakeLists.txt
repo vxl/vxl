@@ -63,7 +63,6 @@ if(OPENGL_FOUND)
 
 set(vgui_sources
   vgui_fwd.h
-  vgui_config.h.in
 
   # basic classes
   vgui.cxx                      vgui.h
@@ -83,7 +82,7 @@ set(vgui_sources
   vgui_message.h
   vgui_observer.cxx             vgui_observer.h
   vgui_observable.cxx           vgui_observable.h
-  vgui_satellite_tableau.txx vgui_satellite_tableau.h
+  vgui_satellite_tableau.hxx vgui_satellite_tableau.h
   vgui_font.cxx                 vgui_font.h       vgui_font_sptr.h
   vgui_font_bitmap.cxx          vgui_font_bitmap.h
   vgui_font_textured.cxx        vgui_font_textured.h
@@ -106,7 +105,7 @@ set(vgui_sources
   vgui_section_buffer.cxx       vgui_section_buffer.h
   vgui_range_map_params.h       vgui_range_map_params_sptr.h
   vgui_range_map_params.cxx
-  vgui_range_map.txx            vgui_range_map.h
+  vgui_range_map.hxx            vgui_range_map.h
   vgui_texture_hacks.cxx        vgui_texture_hacks.h
   vgui_cache_wizard.cxx         vgui_cache_wizard.h
   vgui_image_renderer.cxx       vgui_image_renderer.h
@@ -501,15 +500,15 @@ endif()
 # that depend on these configuration parameters to be automatically
 # recompiled when the config changes.
 
-configure_file( ${vxl_SOURCE_DIR}/core/vgui/vgui_config.h.in
-                ${vxl_BINARY_DIR}/core/vgui/vgui_config.h @ONLY IMMEDIATE )
+vxl_configure_file( ${CMAKE_SOURCE_DIR}/core/vgui/vgui_config.h.in
+                ${CMAKE_BINARY_DIR}/core/vgui/vgui_config.h include/vxl/core/vgui)
 
 # Register each toolkit that was compiled in.
 set( vgui_sources ${vgui_sources}
   vgui_register_all.cxx
 )
 
-vxl_add_library(LIBNAME ${VXL_LIB_PREFIX}vgui LIBSRCS ${vgui_sources})
+vxl_add_library(LIBRARY_NAME ${VXL_LIB_PREFIX}vgui LIBRARY_SOURCES ${vgui_sources})
 set( VGUI_FOUND "YES" CACHE INTERNAL "Was vgui successfully built?" )
 
 # Dependencies on other vxl libraries

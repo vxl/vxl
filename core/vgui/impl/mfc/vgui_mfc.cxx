@@ -15,6 +15,7 @@
 //   16-NOV-2007 Gamze Tunali - added produce_dialog_extension()
 // \endverbatim
 //-----------------------------------------------------------------------------
+#include <iostream>
 #include "vgui_mfc.h"
 
 #include <vgui/vgui_adaptor.h>
@@ -36,7 +37,7 @@
 #include "vgui_mfc_app.h"
 
 #include <vcl_cassert.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
 #include <vgui/vgui_gl.h>
 
 static bool debug = false;
@@ -64,20 +65,20 @@ vgui_mfc::~vgui_mfc()
 
 //--------------------------------------------------------------------------------
 //: Pure virtual function from vgui - returns the name of the GUI toolkit.
-vcl_string vgui_mfc::name() const { return "mfc"; }
+std::string vgui_mfc::name() const { return "mfc"; }
 
 
 //--------------------------------------------------------------------------------
 //: Virtual function from vgui - initialise the implementation of vgui.
 void vgui_mfc::init(int &argc, char **argv)
 {
-  if (debug) vcl_cerr << "vgui_mfc::init()\n";
+  if (debug) std::cerr << "vgui_mfc::init()\n";
 
   // If we are here, then we aren't trying to use vgui in an MFC
   // framework. That is, there shouldn't be another CWinApp
   // somewhere. So, create the vgui one.
   if ( AfxGetApp() )
-    vcl_cerr << "vgui_mfc::init(): another CWinApp object exists!\n";
+    std::cerr << "vgui_mfc::init(): another CWinApp object exists!\n";
   else
     theApp_ = new vgui_mfc_app;
 
@@ -85,7 +86,7 @@ void vgui_mfc::init(int &argc, char **argv)
   if (!AfxWinInit(::GetModuleHandle(NULL), NULL, ::GetCommandLine(), SW_SHOW))
   {
     // TODO: change error code to suit your needs
-    vcl_cerr << _T("Fatal Error: MFC initialization failed") << vcl_endl;
+    std::cerr << _T("Fatal Error: MFC initialization failed") << std::endl;
     assert(0);
   }
   AfxGetApp()->InitInstance();
@@ -102,7 +103,7 @@ void vgui_mfc::uninit()
 //: Virtual function from vgui - runs the event loop.
 void vgui_mfc::run()
 {
-  if (debug) vcl_cerr << "vgui_mfc::run()\n";
+  if (debug) std::cerr << "vgui_mfc::run()\n";
 
   //: Start the main thread
   AfxGetThread()->Run();

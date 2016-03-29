@@ -1,11 +1,12 @@
 // This is core/vidl/examples/vidl_player_manager.cxx
+#include <iostream>
+#include <cstdlib>
 #include "vidl_player_manager.h"
 //:
 // \file
 // \author Matt Leotta
 
-#include <vcl_iostream.h>
-#include <vcl_cstdlib.h> // for vcl_exit()
+#include <vcl_compiler.h>
 #include <vul/vul_timer.h>
 #include <vgui/vgui.h>
 #include <vgui/vgui_dialog.h>
@@ -81,7 +82,7 @@ bool vidl_player_manager::handle(const vgui_event &e)
 //: clean up before the program terminates
 void vidl_player_manager::quit()
 {
-  vcl_exit(1);
+  std::exit(1);
 }
 
 
@@ -159,7 +160,7 @@ void vidl_player_manager::pipe_streams()
   }
 
   vgui_dialog dlg("Pipe Input Stream to Output Stream");
-  vcl_string description = "This will take images from the input stream\n";
+  std::string description = "This will take images from the input stream\n";
   description += "and pipe them into the output stream.\n";
   description += "Then the output stream will be closed.\n";
   dlg.message(description.c_str());
@@ -174,7 +175,7 @@ void vidl_player_manager::pipe_streams()
 
   vidl_frame_sptr frame;
   if (num_frames < 0) {
-    vcl_cout <<"streaming all frames"<<vcl_endl;
+    std::cout <<"streaming all frames"<<std::endl;
     frame = istream_->current_frame();
     while (bool(frame)) {
       if (!ostream_->write_frame(frame))
@@ -185,7 +186,7 @@ void vidl_player_manager::pipe_streams()
     }
   }
   else {
-    vcl_cout <<"streaming "<<num_frames<<" frames"<<vcl_endl;
+    std::cout <<"streaming "<<num_frames<<" frames"<<std::endl;
     for (int i=0; i<num_frames; ++i) {
       frame = istream_->current_frame();
       if (!frame)
@@ -215,9 +216,9 @@ void vidl_player_manager::redraw()
       vgui::out << "frame "<< frame_num+1 ;
       int num_frames = istream_->num_frames();
       if (num_frames >=0)
-        vgui::out << " of "<<num_frames<< vcl_endl;
+        vgui::out << " of "<<num_frames<< std::endl;
       else
-        vgui::out << vcl_endl;
+        vgui::out << std::endl;
     }
 
     vidl_frame_sptr frame = istream_->current_frame();
@@ -251,7 +252,7 @@ void vidl_player_manager::play_video()
   if (play_video_)
     return;
   if (!istream_.get()) {
-    vcl_cout << "No movie has been loaded\n";
+    std::cout << "No movie has been loaded\n";
     return;
   }
 
@@ -268,7 +269,7 @@ void vidl_player_manager::play_video()
     ++count;
   }
   long time = t2.all();
-  vcl_cout << "average play time " << double(time)/count << vcl_endl;
+  std::cout << "average play time " << double(time)/count << std::endl;
 
   // if played to the end, go back to the first frame;
   if (play_video_)
@@ -299,7 +300,7 @@ void vidl_player_manager::go_to_frame()
   if (!istream_.get())
     return;
   if (!istream_->is_seekable()) {
-    vcl_cerr << "This stream does not support seeking\n";
+    std::cerr << "This stream does not support seeking\n";
     return;
   }
 

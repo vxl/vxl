@@ -1,5 +1,6 @@
+#include <iostream>
 #include <testlib/testlib_test.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
 
 #include <vpgl/vpgl_essential_matrix.h>
 #include <vpgl/vpgl_perspective_camera.h>
@@ -72,31 +73,31 @@ static void test_essential_matrix()
   vnl_double_3x3 R = Rh.get_upper_3x3_matrix();
   t = -R*cv;
   vpgl_essential_matrix<double> Ei(skew_symmetric(t[0],t[1],t[2])*R);
-  vcl_cout << "\nIdeal Essential Matrix\n" << Ei << '\n';
+  std::cout << "\nIdeal Essential Matrix\n" << Ei << '\n';
   vpgl_perspective_camera<double> pcl, pcr;
   pcl.set_rotation(vgl_rotation_3d<double>(Rh));
   pcl.set_camera_center(c);
-  vcl_cout << "Ideal Left Perspective Camera  " << pcl << '\n';
+  std::cout << "Ideal Left Perspective Camera  " << pcl << '\n';
   vgl_point_3d<double> X(0,0,10);
   vgl_point_2d<double> xl = pcl.project(X), xr(0,0);
   vpgl_essential_matrix<double> Er(pcr, pcl);
-  vcl_cout << "Essential Matrix with rotation\n" << Er << '\n';
+  std::cout << "Essential Matrix with rotation\n" << Er << '\n';
   vnl_double_3x3 error = Ei.get_matrix()-Er.get_matrix();
   TEST_NEAR("Construct essential matrix from cameras", error.frobenius_norm(), 0, 1);
   vpgl_perspective_camera<double> pclr;//reconstructed camera
   success = extract_left_camera<double>(Er, xl,xr, pclr);
   TEST("test extract_left_camera", success, true);
-  vcl_cout << "Left Camera with Rotation " << pclr << '\n';
+  std::cout << "Left Camera with Rotation " << pclr << '\n';
   vgl_point_3d<double> rc = pclr.get_camera_center();
   TEST_NEAR("Extract Left Camera", (rc.x()-1)*(rc.x()-1), 0, 1e-3);
   //test using actual essential matrix
   vpgl_essential_matrix<double> Ea = actual_e_matrix();
-  vcl_cout << "Actual E Matrix\n" << Ea << '\n';
+  std::cout << "Actual E Matrix\n" << Ea << '\n';
   vgl_point_2d<double> xal(0.207847,0.2126),  xar(-0.1289,-0.0683432);
   vpgl_perspective_camera<double> palr;//reconstructed actual camera
   success = extract_left_camera<double>(Ea, xal,xar, palr, 6.25);
   TEST("test extract_left_camera", success, true);
-  vcl_cout << "Actual Left Camera\n" << palr << '\n';
+  std::cout << "Actual Left Camera\n" << palr << '\n';
   rc = palr.get_camera_center();
   vgl_point_3d<double> ac(-1.62446,-1.03223,5.94627);
   TEST_NEAR("Test on actual E matrix", vgl_distance<double>(rc,ac), 0, 1e-3);

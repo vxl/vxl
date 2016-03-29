@@ -53,7 +53,7 @@ class vipl_monadic : public vipl_filter_2d<ImgIn,ImgOut,DataIn,DataOut,PixelItr>
 };
 
 #ifdef INSTANTIATE_TEMPLATES
-#include "vipl_monadic.txx"
+#include "vipl_monadic.hxx"
 #endif
 
 #endif // vipl_monadic_h_

@@ -45,7 +45,7 @@ estimate( rgrl_set_of<rgrl_match_set_sptr> const& matches,
     ++ms;
   if ( ms == matches.size() ) {
     DebugMacro( 0, "No data!\n" );
-    return 0; // no data!
+    return VXL_NULLPTR; // no data!
   }
   const unsigned int m = matches[ms]->from_begin().from_feature()->location().size();
   assert ( m==2 ); // only 2D similarity2d estimation
@@ -97,7 +97,7 @@ estimate( rgrl_set_of<rgrl_match_set_sptr> const& matches,
   // if the weight is too small or zero,
   // that means there is no good match
   if ( sum_wgt < 1e-13 ) {
-    return 0;
+    return VXL_NULLPTR;
   }
 
   from_centre /= sum_wgt;
@@ -143,9 +143,9 @@ estimate( rgrl_set_of<rgrl_match_set_sptr> const& matches,
 
   // Find the scales and scale the matrices appropriate to normalize
   // them and increase the numerical stability.
-  double factor0 = vnl_math::max(XtWX(2,2),XtWX(3,3));
-  double factor1 = vnl_math::max(XtWX(1,1),XtWX(0,0));
-  double scale = vcl_sqrt( (factor1 > 0 && factor0 > 0) ? factor1 / factor0 : 1 );   // neither should be 0
+  double factor0 = std::max(XtWX(2,2),XtWX(3,3));
+  double factor1 = std::max(XtWX(1,1),XtWX(0,0));
+  double scale = std::sqrt( (factor1 > 0 && factor0 > 0) ? factor1 / factor0 : 1 );   // neither should be 0
 
   vnl_vector_fixed<double, 4> s;
   s(2) = s(3) = scale; s(0) = s(1) = 1;
@@ -168,7 +168,7 @@ estimate( rgrl_set_of<rgrl_match_set_sptr> const& matches,
   if ( (unsigned)svd.rank() < 4) {
     DebugMacro(1, "rank ("<<svd.rank()<<") < 4; no solution." );
     DebugMacro_abv(1, "(used " << count << " correspondences)\n" );
-    return 0; // no solution
+    return VXL_NULLPTR; // no solution
   }
 
   // Compute the solution into XtWy
@@ -213,7 +213,7 @@ estimate( rgrl_match_set_sptr matches,
   return rgrl_estimator::estimate( matches, cur_transform );
 }
 
-const vcl_type_info&
+const std::type_info&
 rgrl_est_similarity2d::
 transformation_type() const
 {

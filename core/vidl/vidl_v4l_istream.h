@@ -11,8 +11,9 @@
 // \author Paul Crane and Brendan McCane
 // \date 21 Feb 2006
 
+#include <string>
 #include "vidl_istream.h"
-#include <vcl_string.h> // this is for the strings scattered about the place
+#include <vcl_compiler.h>
 
 // this is linux specific
 using namespace std;
@@ -42,12 +43,12 @@ class vidl_v4l_istream:public vidl_istream
         open("/dev/video0");
     }
 
-    vidl_v4l_istream(const vcl_string &device_name):buf(NULL)
+    vidl_v4l_istream(const std::string &device_name):buf(NULL)
     {
         open(device_name);
     }
 
-    vidl_v4l_istream(const vcl_string &device_name, const vidl_v4l_params p)
+    vidl_v4l_istream(const std::string &device_name, const vidl_v4l_params p)
         :buf(NULL)
     {
         open(device_name);
@@ -89,7 +90,7 @@ class vidl_v4l_istream:public vidl_istream
     virtual unsigned int frame_number() const { return frame_number_; }
 
     //: Open
-    bool open(const vcl_string &device_name);
+    bool open(const std::string &device_name);
 
     //: Close the stream
     virtual void close();

@@ -1,4 +1,6 @@
 // This is brl/bpro/core/vil_pro/processes/vil_pixelwise_roc_process.cxx
+#include <iostream>
+#include <algorithm>
 #include <bprb/bprb_func_process.h>
 //:
 // \file
@@ -7,7 +9,7 @@
 #include <vil/vil_image_view.h>
 #include <vil/vil_convert.h>
 #include <bbas_pro/bbas_1d_array_float.h>
-#include <vcl_algorithm.h>
+#include <vcl_compiler.h>
 
 // do pixelwise sort on the image, and then
 struct Pair
@@ -33,7 +35,7 @@ bool pair_sorter2(Pair const& lhs, Pair const& rhs)
 bool vil_pixelwise_roc_process_cons(bprb_func_process& pro)
 {
   // this process takes 4 inputs, 2 of which are optional:
-  vcl_vector<vcl_string> input_types;
+  std::vector<std::string> input_types;
   input_types.push_back("vil_image_view_base_sptr");  // change image
   input_types.push_back("vil_image_view_base_sptr");  // ground truth map
   input_types.push_back("vil_image_view_base_sptr");  // mask image
@@ -49,7 +51,7 @@ bool vil_pixelwise_roc_process_cons(bprb_func_process& pro)
   pro.set_input(3, idx);
 
   // this process takes 7 outputs:
-  vcl_vector<vcl_string> output_types;
+  std::vector<std::string> output_types;
   output_types.push_back("bbas_1d_array_float_sptr");  // tp
   output_types.push_back("bbas_1d_array_float_sptr");  // tn
   output_types.push_back("bbas_1d_array_float_sptr");  // fp
@@ -66,7 +68,7 @@ bool vil_pixelwise_roc_process(bprb_func_process& pro)
 {
   // Sanity check
   if (pro.n_inputs() < 2) {
-    vcl_cerr << "vil_pixelwise_roc_process: The number of inputs should be 2 (with optional 3rd (num thresh) and 4th (mask image))\n";
+    std::cerr << "vil_pixelwise_roc_process: The number of inputs should be 2 (with optional 3rd (num thresh) and 4th (mask image))\n";
     return false;
   }
 
@@ -80,7 +82,7 @@ bool vil_pixelwise_roc_process(bprb_func_process& pro)
   // catch a "null" mask (not really null because that throws an error)
   bool use_mask = true;
   if (mask_map_sptr->ni()==1 && mask_map_sptr->nj()==1) {
-    vcl_cout<<"USE mask = false"<<vcl_endl;
+    std::cout<<"USE mask = false"<<std::endl;
     use_mask = false;
   }
 
@@ -95,13 +97,13 @@ bool vil_pixelwise_roc_process(bprb_func_process& pro)
   // check bounds to make sure they match
   if (detection_map_sptr->ni() != ground_truth_map_sptr->ni() ||
       detection_map_sptr->nj() != ground_truth_map_sptr->nj() ) {
-    vcl_cout<<"vil_pixelwise_roc_process:: detection map doesn't match ground truth map"<<vcl_endl;
+    std::cout<<"vil_pixelwise_roc_process:: detection map doesn't match ground truth map"<<std::endl;
     return false;
   }
   if (use_mask) {
     if (detection_map_sptr->ni()!=mask_map_sptr->ni() ||
         detection_map_sptr->nj()!=mask_map_sptr->nj() ) {
-      vcl_cout<<"vil_pixelwise_roc_process:: detection map doesn't match mask map"<<vcl_endl;
+      std::cout<<"vil_pixelwise_roc_process:: detection map doesn't match mask map"<<std::endl;
       return false;
     }
   }
@@ -115,11 +117,11 @@ bool vil_pixelwise_roc_process(bprb_func_process& pro)
   else if (dynamic_cast<vil_image_view<float>*>(detection_map_sptr.ptr()))
   {
     detection_map=dynamic_cast<vil_image_view<float>*>(detection_map_sptr.ptr());
-    vcl_cout << "detection map is float!\n";
+    std::cout << "detection map is float!\n";
   }
   else
   {
-    vcl_cout<<"Detection Map cannot be converted to float image"<<vcl_endl;
+    std::cout<<"Detection Map cannot be converted to float image"<<std::endl;
     return false;
   }
 
@@ -127,19 +129,19 @@ bool vil_pixelwise_roc_process(bprb_func_process& pro)
   vil_image_view<unsigned char> * ground_truth_map = dynamic_cast<vil_image_view<unsigned char> *>(ground_truth_map_sptr.ptr());
   if ( !ground_truth_map )
   {
-    vcl_cout<<"vil_pixelwise_roc_process:: gt map is not an unsigned char map"<<vcl_endl;
+    std::cout<<"vil_pixelwise_roc_process:: gt map is not an unsigned char map"<<std::endl;
     return false;
   }
   vil_image_view<unsigned char> * mask_map=dynamic_cast<vil_image_view<unsigned char> *>(mask_map_sptr.ptr());
   if (!mask_map)
   {
-    vcl_cout<<"vil_pixelwise_roc_process:: mask map is not an unsigned char map"<<vcl_endl;
+    std::cout<<"vil_pixelwise_roc_process:: mask map is not an unsigned char map"<<std::endl;
     return false;
   }
 
   // sort pixel/gt pairs
   //Pair* pairs = new Pair[ detection_map->ni() * detection_map->nj() ];
-  vcl_vector<Pair> pairs;
+  std::vector<Pair> pairs;
   unsigned c = 0;
   for (unsigned j=0; j<detection_map->nj(); ++j) {
     for (unsigned i=0; i<detection_map->ni(); ++i) {
@@ -162,17 +164,17 @@ bool vil_pixelwise_roc_process(bprb_func_process& pro)
   //
   //unsigned totPix = detection_map->ni() * detection_map->nj();
   unsigned totPix = pairs.size();
-  //vcl_sort(pairs, pairs + totPix, &pair_sorter);
+  //std::sort(pairs, pairs + totPix, &pair_sorter);
   if (use_pair_sorter)
-    vcl_sort(pairs.begin(), pairs.end(), &pair_sorter);
+    std::sort(pairs.begin(), pairs.end(), &pair_sorter);
   else
-    vcl_sort(pairs.begin(), pairs.end(), &pair_sorter2);
+    std::sort(pairs.begin(), pairs.end(), &pair_sorter2);
 
   // grab 100 points for the ROC curve
   unsigned int incr = totPix / numPoints;
   for (unsigned int pnt=0; pnt<numPoints; ++pnt) {
      if (pnt%100 == 0 )
-         vcl_cout<<".";
+         std::cout<<".";
     tp->data_array[pnt]=0.0f;
     fp->data_array[pnt]=0.0f;
     tn->data_array[pnt]=0.0f;
@@ -201,11 +203,13 @@ bool vil_pixelwise_roc_process(bprb_func_process& pro)
     for (unsigned int i=exampleIdx; i<totPix; ++i) {
       bool truth = (pairs[i].gt == 255);
       bool ignore= (pairs[i].gt > 0 && pairs[i].gt < 255);
-      if(!ignore)
-      if (truth )
-        tp->data_array[pnt]++; // gt = true, class = true => true pos
-      else
-        fp->data_array[pnt]++; // gt = false, class = true => false pos
+      if(!ignore) {
+        if (truth ) {
+          tp->data_array[pnt]++; // gt = true, class = true => true pos
+        }
+        else
+          fp->data_array[pnt]++; // gt = false, class = true => false pos
+        }
     }
   }
 
@@ -269,14 +273,14 @@ bool vil_pixelwise_roc_process2_cons(bprb_func_process& pro)
 {
   using namespace vil_pixelwise_roc_process2_globals;
   // this process takes 5 inputs, mask image and positive sign is optional
-  vcl_vector<vcl_string> input_types_(n_inputs_);
+  std::vector<std::string> input_types_(n_inputs_);
   input_types_[0] = "vil_image_view_base_sptr";  // probability image
   input_types_[1] = "vil_image_view_base_sptr";  // positive ground truth image
   input_types_[2] = "vil_image_view_base_sptr";  // negative ground truth image
   input_types_[3] = "vil_image_view_base_sptr";  // mask image
   input_types_[4] = "vcl_string";                // option to define ground truth being lower than threshold or higher than threshold
   // this process takes 5 outputs
-  vcl_vector<vcl_string> output_types_(n_outputs_);
+  std::vector<std::string> output_types_(n_outputs_);
   output_types_[0] = "bbas_1d_array_float_sptr";  // threshold array
   output_types_[1] = "bbas_1d_array_float_sptr";  // tp
   output_types_[2] = "bbas_1d_array_float_sptr";  // tn
@@ -297,7 +301,7 @@ bool vil_pixelwise_roc_process2(bprb_func_process& pro)
 {
   using namespace vil_pixelwise_roc_process2_globals;
   if (!pro.verify_inputs()) {
-    vcl_cerr << pro.name() << ": Wrong Inputs!\n";
+    std::cerr << pro.name() << ": Wrong Inputs!\n";
     return false;
   }
   // get the inputs
@@ -306,44 +310,44 @@ bool vil_pixelwise_roc_process2(bprb_func_process& pro)
   vil_image_view_base_sptr ground_truth_map_sptr = pro.get_input<vil_image_view_base_sptr>(in_i++);
   vil_image_view_base_sptr neg_gt_map_sptr  = pro.get_input<vil_image_view_base_sptr>(in_i++);
   vil_image_view_base_sptr mask_map_sptr         = pro.get_input<vil_image_view_base_sptr>(in_i++);
-  vcl_string positive_sign = pro.get_input<vcl_string>(in_i++);
+  std::string positive_sign = pro.get_input<std::string>(in_i++);
 
   // catch a "null" mask (not really null because that throws an error)
   bool use_mask = true;
   if (mask_map_sptr->ni()==1 && mask_map_sptr->nj()==1) {
-    vcl_cout << "USE mask = false" << vcl_endl;
+    std::cout << "USE mask = false" << std::endl;
     use_mask = false;
   }
 
   bool is_neg_gt = true;
   if (neg_gt_map_sptr->ni() == 1 && neg_gt_map_sptr->nj() == 1) {
-    vcl_cout << "negative ground truth exist = false" << vcl_endl;
+    std::cout << "negative ground truth exist = false" << std::endl;
     is_neg_gt = false;
   }
 
   // check bounds to make sure they match
   if (detection_map_sptr->ni() != ground_truth_map_sptr->ni() || detection_map_sptr->nj() != ground_truth_map_sptr->nj() ) {
-    vcl_cerr << pro.name() << ": detection map doesn't match ground truth map" << vcl_endl;
+    std::cerr << pro.name() << ": detection map doesn't match ground truth map" << std::endl;
     return false;
   }
   if (use_mask) {
     if (detection_map_sptr->ni()!=mask_map_sptr->ni() || detection_map_sptr->nj()!=mask_map_sptr->nj() ) {
-      vcl_cerr << pro.name() << ": detection map doesn't match mask map" << vcl_endl;
+      std::cerr << pro.name() << ": detection map doesn't match mask map" << std::endl;
       return false;
     }
   }
   if (is_neg_gt) {
     if (detection_map_sptr->ni() != neg_gt_map_sptr->ni() || detection_map_sptr->nj() != neg_gt_map_sptr->nj() ) {
-      vcl_cerr << pro.name() << ": detection map doesn't match negative ground truth map" << vcl_endl;
+      std::cerr << pro.name() << ": detection map doesn't match negative ground truth map" << std::endl;
       return false;
     }
     if (ground_truth_map_sptr->ni() != neg_gt_map_sptr->ni() || ground_truth_map_sptr->nj() != neg_gt_map_sptr->nj()) {
-      vcl_cerr << pro.name() << ": positive ground truth map doesn't match negative ground truth map" << vcl_endl;
+      std::cerr << pro.name() << ": positive ground truth map doesn't match negative ground truth map" << std::endl;
       return false;
     }
     if (use_mask) {
       if (neg_gt_map_sptr->ni() != mask_map_sptr->ni() || neg_gt_map_sptr->nj() != mask_map_sptr->nj()) {
-        vcl_cerr << pro.name() << ": negative ground truth map doesn't match mask map" << vcl_endl;
+        std::cerr << pro.name() << ": negative ground truth map doesn't match mask map" << std::endl;
         return false;
       }
     }
@@ -359,11 +363,11 @@ bool vil_pixelwise_roc_process2(bprb_func_process& pro)
   else if (dynamic_cast<vil_image_view<float>*>(detection_map_sptr.ptr()))
   {
     detection_map=dynamic_cast<vil_image_view<float>*>(detection_map_sptr.ptr());
-    vcl_cout << "detection map is float!\n";
+    std::cout << "detection map is float!\n";
   }
   else
   {
-    vcl_cerr << pro.name() << ": detection map cannot be converted to float image" << vcl_endl;
+    std::cerr << pro.name() << ": detection map cannot be converted to float image" << std::endl;
     return false;
   }
 
@@ -371,27 +375,27 @@ bool vil_pixelwise_roc_process2(bprb_func_process& pro)
   vil_image_view<unsigned char> * gt_map = dynamic_cast<vil_image_view<unsigned char> *>(ground_truth_map_sptr.ptr());
   if ( !gt_map )
   {
-    vcl_cerr << pro.name() << ": gt map is not an unsigned char map" << vcl_endl;
+    std::cerr << pro.name() << ": gt map is not an unsigned char map" << std::endl;
     return false;
   }
   vil_image_view<unsigned char> * mask_map=dynamic_cast<vil_image_view<unsigned char> *>(mask_map_sptr.ptr());
   if (!mask_map)
   {
-    vcl_cerr << pro.name() << ": mask map is not an unsigned char map" << vcl_endl;
+    std::cerr << pro.name() << ": mask map is not an unsigned char map" << std::endl;
     return false;
   }
   vil_image_view<unsigned char> * neg_gt_map = dynamic_cast<vil_image_view<unsigned char>*>(neg_gt_map_sptr.ptr());
   if (!neg_gt_map) {
-    vcl_cerr << pro.name() << ": negative ground truth map is not an unsigned char map" << vcl_endl;
+    std::cerr << pro.name() << ": negative ground truth map is not an unsigned char map" << std::endl;
     return false;
   }
 
   // go over the ground truth image to collect positive and negative pixels
   unsigned ni = gt_map->ni();
   unsigned nj = gt_map->nj();
-  vcl_vector<vcl_pair<unsigned, unsigned> > pos_pixels;
-  vcl_vector<vcl_pair<unsigned, unsigned> > neg_pixels;
-  vcl_cout << "Collect ground truth positive and negative pixels..." << vcl_flush << vcl_endl;
+  std::vector<std::pair<unsigned, unsigned> > pos_pixels;
+  std::vector<std::pair<unsigned, unsigned> > neg_pixels;
+  std::cout << "Collect ground truth positive and negative pixels..." << std::flush << std::endl;
   if (is_neg_gt)
   {
     for (unsigned i = 0; i < ni; i++) {
@@ -399,9 +403,9 @@ bool vil_pixelwise_roc_process2(bprb_func_process& pro)
         if (use_mask && (*mask_map)(i,j) == 0)
           continue;
         if ((*gt_map)(i,j))
-          pos_pixels.push_back(vcl_pair<unsigned, unsigned>(i,j));
+          pos_pixels.push_back(std::pair<unsigned, unsigned>(i,j));
         if ((*neg_gt_map)(i,j))
-          neg_pixels.push_back(vcl_pair<unsigned, unsigned>(i,j));
+          neg_pixels.push_back(std::pair<unsigned, unsigned>(i,j));
       }
     }
   }
@@ -412,27 +416,27 @@ bool vil_pixelwise_roc_process2(bprb_func_process& pro)
         if (use_mask && (*mask_map)(i,j) == 0)
           continue;
         if ((*gt_map)(i,j))
-          pos_pixels.push_back(vcl_pair<unsigned, unsigned>(i,j));
+          pos_pixels.push_back(std::pair<unsigned, unsigned>(i,j));
         else
-          neg_pixels.push_back(vcl_pair<unsigned, unsigned>(i,j));
+          neg_pixels.push_back(std::pair<unsigned, unsigned>(i,j));
       }
     }
   }
   
   
-  vcl_cout << "In ground truth map, " << pos_pixels.size() << " pixels are positive and " << neg_pixels.size() << " are negative." << vcl_endl;
+  std::cout << "In ground truth map, " << pos_pixels.size() << " pixels are positive and " << neg_pixels.size() << " are negative." << std::endl;
   
   // create threshold based on image range
   float min_val, max_val;
   vil_math_value_range(*detection_map, min_val, max_val);
-  vcl_vector<float> thresholds;
+  std::vector<float> thresholds;
   unsigned num_thres = 200;
   float delta = (max_val - min_val) / num_thres;
   for (unsigned i = 0; i <= (num_thres+1); i++) {
     thresholds.push_back(min_val + delta*i);
   }
   const unsigned n_thres = thresholds.size();
-  vcl_cout << "Start ROC count using " << n_thres << " thresholds, ranging from " << min_val << " to " << max_val << "..." << vcl_endl;
+  std::cout << "Start ROC count using " << n_thres << " thresholds, ranging from " << min_val << " to " << max_val << "..." << std::endl;
 
   bbas_1d_array_float* tp  = new bbas_1d_array_float(n_thres);
   bbas_1d_array_float* tn  = new bbas_1d_array_float(n_thres);
@@ -532,7 +536,7 @@ bool vil_pixelwise_roc_process2(bprb_func_process& pro)
     }
   }
   else {
-    vcl_cerr << pro.name() << ": Unknown positive sign -- " << positive_sign << ", only 'high', 'low', 'equal' are allowed!\n";
+    std::cerr << pro.name() << ": Unknown positive sign -- " << positive_sign << ", only 'high', 'low', 'equal' are allowed!\n";
     return false;
   }
 

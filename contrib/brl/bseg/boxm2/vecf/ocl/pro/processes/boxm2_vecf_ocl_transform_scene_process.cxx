@@ -6,9 +6,11 @@
 // \author J.L. Mundy
 // \date October 5, 2011
 
+#include <iostream>
+#include <fstream>
 #include <bprb/bprb_func_process.h>
 #include <boxm2/ocl/boxm2_opencl_cache.h>
-#include <vcl_fstream.h>
+#include <vcl_compiler.h>
 #include <boxm2/boxm2_scene.h>
 #include <boxm2/boxm2_util.h>
 #include <boxm2/boxm2_data_traits.h>
@@ -28,7 +30,7 @@ bool boxm2_vecf_ocl_transform_scene_process_cons(bprb_func_process& pro)
   using namespace boxm2_vecf_ocl_transform_scene_process_globals;
 
   //process takes 18 inputs
-  vcl_vector<vcl_string> input_types_(n_inputs_);
+  std::vector<std::string> input_types_(n_inputs_);
   input_types_[0] = "boxm2_scene_sptr";     // source scene
   input_types_[1] = "boxm2_scene_sptr";     // target scene
   input_types_[2] = "boxm2_opencl_cache_sptr";
@@ -49,7 +51,7 @@ bool boxm2_vecf_ocl_transform_scene_process_cons(bprb_func_process& pro)
   input_types_[16] = "double";
   input_types_[17] = "double";
   // process has 1 output:
-  vcl_vector<vcl_string>  output_types_(n_outputs_);
+  std::vector<std::string>  output_types_(n_outputs_);
   output_types_[0] = "boxm2_scene_sptr";
   return pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
 }
@@ -58,7 +60,7 @@ bool boxm2_vecf_ocl_transform_scene_process(bprb_func_process& pro)
 {
   using namespace boxm2_vecf_ocl_transform_scene_process_globals;
   if ( pro.n_inputs() < n_inputs_ ){
-    vcl_cout << pro.name() << ": The input number should be " << n_inputs_<< vcl_endl;
+    std::cout << pro.name() << ": The input number should be " << n_inputs_<< std::endl;
     return false;
   }
   //get the inputs

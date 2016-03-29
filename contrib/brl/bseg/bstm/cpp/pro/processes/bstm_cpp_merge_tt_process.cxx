@@ -1,4 +1,6 @@
 // This is brl/bseg/bstm/cpp/pro/processes/bstm_cpp_merge_tt_process.cxx
+#include <iostream>
+#include <fstream>
 #include <bprb/bprb_func_process.h>
 //:
 // \file
@@ -7,7 +9,7 @@
 // \author Ali Osman Ulusoy
 // \date June 17, 2013
 
-#include <vcl_fstream.h>
+#include <vcl_compiler.h>
 #include <bstm/io/bstm_cache.h>
 #include <bstm/io/bstm_lru_cache.h>
 #include <bstm/bstm_scene.h>
@@ -30,7 +32,7 @@ bool bstm_cpp_merge_tt_process_cons(bprb_func_process& pro)
   using namespace bstm_cpp_merge_tt_process_globals;
 
   //process takes 1 input
-  vcl_vector<vcl_string> input_types_(n_inputs_);
+  std::vector<std::string> input_types_(n_inputs_);
 
   input_types_[0] = "bstm_scene_sptr";
   input_types_[1] = "bstm_cache_sptr";
@@ -40,7 +42,7 @@ bool bstm_cpp_merge_tt_process_cons(bprb_func_process& pro)
 
   // process has 0 output:
   // output[0]: scene sptr
-  vcl_vector<vcl_string>  output_types_(n_outputs_);
+  std::vector<std::string>  output_types_(n_outputs_);
 
   bool good = pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
   return good;
@@ -52,7 +54,7 @@ bool bstm_cpp_merge_tt_process(bprb_func_process& pro)
   using namespace bstm_cpp_merge_tt_process_globals;
 
   if ( pro.n_inputs() < n_inputs_ ) {
-    vcl_cout << pro.name() << ": The input number should be " << n_inputs_<< vcl_endl;
+    std::cout << pro.name() << ": The input number should be " << n_inputs_<< std::endl;
     return false;
   }
 
@@ -66,7 +68,7 @@ bool bstm_cpp_merge_tt_process(bprb_func_process& pro)
 
   bool foundAppDataType = false, foundNumobsDataType = false;
 
-  vcl_vector<vcl_string> apps = scene->appearances();
+  std::vector<std::string> apps = scene->appearances();
   for (unsigned int i=0; i<apps.size(); ++i) {
     if ( apps[i] == bstm_data_traits<BSTM_MOG6_VIEW_COMPACT>::prefix() )
     {
@@ -78,12 +80,12 @@ bool bstm_cpp_merge_tt_process(bprb_func_process& pro)
     }
   }
   if (!foundAppDataType || !foundNumobsDataType ) {
-    vcl_cout<<"bstm_cpp_merge_tt_process_ERROR: scene doesn't have BSTM_MOG6_VIEW_COMPACT or BSTM_NUM_OBS_VIEW_COMPACT data type"<<vcl_endl;
+    std::cout<<"bstm_cpp_merge_tt_process_ERROR: scene doesn't have BSTM_MOG6_VIEW_COMPACT or BSTM_NUM_OBS_VIEW_COMPACT data type"<<std::endl;
     return false;
   }
 
-  vcl_map<bstm_block_id, bstm_block_metadata> blocks = scene->blocks();
-  vcl_map<bstm_block_id, bstm_block_metadata>::iterator blk_iter;
+  std::map<bstm_block_id, bstm_block_metadata> blocks = scene->blocks();
+  std::map<bstm_block_id, bstm_block_metadata>::iterator blk_iter;
   for (blk_iter = blocks.begin(); blk_iter != blocks.end(); ++blk_iter)
   {
     bstm_block_id id = blk_iter->first;
@@ -93,7 +95,7 @@ bool bstm_cpp_merge_tt_process(bprb_func_process& pro)
     double local_time;
     if(!mdata.contains_t(time,local_time))
       continue;
-    vcl_cout<<"Merging Block: "<<id<<vcl_endl;
+    std::cout<<"Merging Block: "<<id<<std::endl;
 
     bstm_block     * blk     = cache->get_block(id);
     bstm_time_block* blk_t   = cache->get_time_block(id);
@@ -102,7 +104,7 @@ bool bstm_cpp_merge_tt_process(bprb_func_process& pro)
     bstm_data_base * mog     = cache->get_data_base(id, bstm_data_traits<BSTM_MOG6_VIEW_COMPACT>::prefix(), bstm_data_traits<BSTM_MOG6_VIEW_COMPACT>::datasize() * num_el);
     bstm_data_base * num_obs = cache->get_data_base(id, bstm_data_traits<BSTM_NUM_OBS_VIEW_COMPACT>::prefix(),bstm_data_traits<BSTM_NUM_OBS_VIEW_COMPACT>::datasize() * num_el );
 
-    vcl_vector<bstm_data_base*> datas;
+    std::vector<bstm_data_base*> datas;
     datas.push_back(alph);
     datas.push_back(mog);
     datas.push_back(num_obs);
@@ -111,6 +113,6 @@ bool bstm_cpp_merge_tt_process(bprb_func_process& pro)
     bstm_merge_tt_blk( blk_t, blk, datas, p_threshold);
   }
 
-  vcl_cout << "Finished merging scene..." << vcl_endl;
+  std::cout << "Finished merging scene..." << std::endl;
   return true;
 }

@@ -92,3 +92,5 @@ add_subdirectory(bkml)
 # volumetric matching tools
 add_subdirectory(volm)
 
+# kd nearest neighbor
+add_subdirectory(bnabo)

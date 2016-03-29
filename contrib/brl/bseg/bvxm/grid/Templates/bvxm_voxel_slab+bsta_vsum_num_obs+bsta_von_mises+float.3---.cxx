@@ -1,4 +1,4 @@
-#include <bvxm/grid/bvxm_voxel_slab.txx>
+#include <bvxm/grid/bvxm_voxel_slab.hxx>
 #include <bsta/bsta_attributes.h>
 #include <bsta/bsta_von_mises.h>
 #include <bsta/io/bsta_io_von_mises.h>

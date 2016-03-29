@@ -1,4 +1,6 @@
 // This is mul/pdf1d/pdf1d_bhat_overlap.cxx
+#include <iostream>
+#include <cmath>
 #include "pdf1d_bhat_overlap.h"
 //:
 // \file
@@ -6,7 +8,7 @@
 // \brief Functions to calculate Bhattacharyya overlap.
 
 #include <pdf1d/pdf1d_sampler.h>
-#include <vcl_cmath.h>
+#include <vcl_compiler.h>
 #include <vnl/vnl_vector.h>
 #include <vnl/vnl_math.h>
 
@@ -50,7 +52,7 @@ double pdf1d_bhat_overlap(const pdf1d_pdf& pdf,
   double sum = 0;
   for (int i=0;i<n;++i)
   {
-    sum += vcl_sqrt( pdf(x[i])/p[i] );
+    sum += std::sqrt( pdf(x[i])/p[i] );
   }
 
   return sum/n;
@@ -61,14 +63,14 @@ double pdf1d_bhat_overlap_gaussian(double m, double v,
                                    const double* x,
                                    const double* p, int n)
 {
-  double k = vnl_math::one_over_sqrt2pi/vcl_sqrt(v);
+  double k = vnl_math::one_over_sqrt2pi/std::sqrt(v);
 
   double sum = 0;
   for (int i=0;i<n;++i)
   {
     double dx=x[i]-m;
-    double pgi = k*vcl_exp(-0.5*dx*dx/v);
-    sum += vcl_sqrt(pgi/p[i]);
+    double pgi = k*std::exp(-0.5*dx*dx/v);
+    sum += std::sqrt(pgi/p[i]);
   }
   return sum/n;
 }
@@ -78,8 +80,8 @@ double pdf1d_bhat_overlap_gaussians(double m1, double v1,
                                     double m2, double v2)
 {
   double dm = m1-m2;
-  double k = vcl_sqrt(2*vcl_sqrt(v1*v2))/vcl_sqrt(v1+v2);
-  return k * vcl_exp(-0.25*dm*dm/(v1+v2));
+  double k = std::sqrt(2*std::sqrt(v1*v2))/std::sqrt(v1+v2);
+  return k * std::exp(-0.25*dm*dm/(v1+v2));
 }
 
 //: Bhat. overlap between two 1D Gaussians
@@ -94,8 +96,8 @@ double pdf1d_bhat_overlap_gaussian_with_pdf(double m, double v, const pdf1d_pdf&
   if (pdf.is_class("pdf1d_gaussian"))
     return pdf1d_bhat_overlap_gaussians(m,v,pdf.mean(),pdf.variance());
 
-  double k = vnl_math::one_over_sqrt2pi/vcl_sqrt(v);
-  double sd = vcl_sqrt(v);
+  double k = vnl_math::one_over_sqrt2pi/std::sqrt(v);
+  double sd = std::sqrt(v);
 
   // Place n samples along range [-3,3]*sd
   double dx = 6.0/(n-1);
@@ -103,8 +105,8 @@ double pdf1d_bhat_overlap_gaussian_with_pdf(double m, double v, const pdf1d_pdf&
   double sum = 0.0;
   for (int i=0;i<n;++i)
   {
-    double pgi = k*vcl_exp(-0.5*x*x);
-    sum += vcl_sqrt(pgi*pdf(m+sd*x));
+    double pgi = k*std::exp(-0.5*x*x);
+    sum += std::sqrt(pgi*pdf(m+sd*x));
     x += dx;
   }
 

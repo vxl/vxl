@@ -13,7 +13,9 @@
 //   Peter Vanroose - 22 Feb 2009 - Added bmsh3d_dist_3d(point,point)
 // \endverbatim
 
-#include <vcl_cmath.h>
+#include <iostream>
+#include <cmath>
+#include <vcl_compiler.h>
 #include <vgl/vgl_point_3d.h>
 #include <vgl/vgl_box_3d.h>
 
@@ -26,7 +28,7 @@ inline double bmsh3d_sqdist_3d(const double& x1, const double& y1, const double&
 inline double bmsh3d_dist_3d(const double& x1, const double& y1, const double& z1,
                              const double& x2, const double& y2, const double& z2)
 {
-  return vcl_sqrt( bmsh3d_sqdist_3d(x1, y1, z1, x2, y2, z2) );
+  return std::sqrt( bmsh3d_sqdist_3d(x1, y1, z1, x2, y2, z2) );
 }
 
 inline double bmsh3d_sqdist_3d(const vgl_point_3d<double>& pt1,

@@ -4,8 +4,9 @@
 // \author Tim Cootes
 // Slices may be cropped, and range is stretched linearly
 
+#include <iostream>
 #include <vul/vul_arg.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
 #include <vil3d/vil3d_property.h>
 #include <vil3d/vil3d_load.h>
 #include <vil3d/vil3d_convert.h>
@@ -19,16 +20,16 @@
 
 void print_usage()
 {
-  vcl_cout<<"Tool to load in a 3D image and produce 2D slices."<<vcl_endl;
+  std::cout<<"Tool to load in a 3D image and produce 2D slices."<<std::endl;
   vul_arg_display_usage_and_exit();
 }
 
 void save_slice(const vil_image_view<float>& image,
                 float wi, float wj, double border,
-                vcl_string path)
+                std::string path)
 {
   // Resize so that image has square pixels
-  float w=vcl_min(wi,wj);
+  float w=std::min(wi,wj);
   unsigned ni=vnl_math::rnd(image.ni()*wi/w);
   unsigned nj=vnl_math::rnd(image.nj()*wj/w);
 
@@ -50,15 +51,15 @@ void save_slice(const vil_image_view<float>& image,
   vil_convert_stretch_range(cropped_image,byte_im);
 
   if (vil_save(byte_im,path.c_str()))
-    vcl_cerr<<"Saved image to "<<path<<'\n';
+    std::cerr<<"Saved image to "<<path<<'\n';
   else
-    vcl_cerr<<"Failed to save image to "<<path<<'\n';
+    std::cerr<<"Failed to save image to "<<path<<'\n';
 }
 
 int main(int argc, char** argv)
 {
-  vul_arg<vcl_string> image_path("-i","3D image filename");
-  vul_arg<vcl_string> output_path("-o","Base path for output","slice");
+  vul_arg<std::string> image_path("-i","3D image filename");
+  vul_arg<std::string> output_path("-o","Base path for output","slice");
   vul_arg<double> pi("-pi","Slice position as %age along i",50);
   vul_arg<double> pj("-pj","Slice position as %age along i",50);
   vul_arg<double> pk("-pk","Slice position as %age along i",50);
@@ -74,17 +75,17 @@ int main(int argc, char** argv)
 
   // Attempt to load in the 3D image
   vil3d_image_resource_sptr im_res = vil3d_load_image_resource(image_path().c_str());
-  if (im_res==0)
+  if (im_res==VXL_NULLPTR)
   {
-    vcl_cerr<<"Failed to load in image from "<<image_path()<<'\n';
+    std::cerr<<"Failed to load in image from "<<image_path()<<'\n';
     return 1;
   }
 
   // Read in voxel size if available
   float width[3] = { 1.0f, 1.0f, 1.0f };
   im_res->get_property(vil3d_property_voxel_size, width);
-  vcl_cout<<"Voxel sizes: "
-          <<width[0]<<" x "<<width[1]<<" x "<<width[2]<<vcl_endl;
+  std::cout<<"Voxel sizes: "
+          <<width[0]<<" x "<<width[1]<<" x "<<width[2]<<std::endl;
 
 //  vil3d_image_view_base_sptr im_ptr = im_res->get_view();
 
@@ -94,19 +95,19 @@ int main(int argc, char** argv)
 
   if (image3d.size()==0)
 
-  vcl_cout<<"Image3D: "<<image3d<<vcl_endl;
+  std::cout<<"Image3D: "<<image3d<<std::endl;
   {
-    vcl_cerr<<"Failed to load in image from "<<image_path()<<'\n';
+    std::cerr<<"Failed to load in image from "<<image_path()<<'\n';
     return 1;
   }
 
   // Select i,j,k values
   unsigned i=vnl_math::rnd(0.01*pi()*(image3d.ni()-1));
-  i=vcl_min(i,image3d.ni()-1);
+  i=std::min(i,image3d.ni()-1);
   unsigned j=vnl_math::rnd(0.01*pj()*(image3d.nj()-1));
-  j=vcl_min(j,image3d.nj()-1);
+  j=std::min(j,image3d.nj()-1);
   unsigned k=vnl_math::rnd(0.01*pk()*(image3d.nk()-1));
-  k=vcl_min(k,image3d.nk()-1);
+  k=std::min(k,image3d.nk()-1);
 
   vil_image_view<float> slice_jk = vil3d_slice_jk(image3d,i);
   vil_image_view<float> slice_ik = vil3d_slice_ik(image3d,j);

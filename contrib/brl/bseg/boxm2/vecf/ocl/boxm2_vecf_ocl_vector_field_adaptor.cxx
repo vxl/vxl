@@ -25,7 +25,7 @@ compute_forward_transform(boxm2_scene_sptr source,
   int status = clFinish(queue);
   bool good_read = check_val(status, CL_SUCCESS, "BUFFER READ FAILED: " + error_to_string(status));
   if(!good_read) {
-    vcl_cerr << "ERROR: boxm2_vecf_ocl_vector_field_adaptor::compute_forward_transform(): bad read of source points" << vcl_endl;
+    std::cerr << "ERROR: boxm2_vecf_ocl_vector_field_adaptor::compute_forward_transform(): bad read of source points" << std::endl;
     return false;
   }
 
@@ -38,7 +38,7 @@ compute_forward_transform(boxm2_scene_sptr source,
   status = clFinish(queue);
   bool good_write= check_val(status, CL_SUCCESS, "BUFFER WRITE FAILED: " + error_to_string(status));
   if(!good_write) {
-    vcl_cerr << "ERROR: boxm2_vecf_ocl_vector_field_adaptor::compute_forward_transform(): bad write of target points" << vcl_endl;
+    std::cerr << "ERROR: boxm2_vecf_ocl_vector_field_adaptor::compute_forward_transform(): bad write of target points" << std::endl;
     return false;
   }
 
@@ -65,7 +65,7 @@ compute_inverse_transform(boxm2_scene_sptr target,
   int status = clFinish(queue);
   bool good_read = check_val(status, CL_SUCCESS, "BUFFER READ FAILED: " + error_to_string(status));
   if(!good_read) {
-    vcl_cerr << "ERROR: boxm2_vecf_ocl_vector_field_adaptor::compute_forward_transform(): bad read of target points" << vcl_endl;
+    std::cerr << "ERROR: boxm2_vecf_ocl_vector_field_adaptor::compute_forward_transform(): bad read of target points" << std::endl;
     return false;
   }
 
@@ -78,7 +78,7 @@ compute_inverse_transform(boxm2_scene_sptr target,
   status = clFinish(queue);
   bool good_write = check_val(status, CL_SUCCESS, "BUFFER WRITE FAILED: " + error_to_string(status));
   if(!good_write) {
-    vcl_cerr << "ERROR: boxm2_vecf_ocl_vector_field_adaptor::compute_forward_transform(): bad write of source points" << vcl_endl;
+    std::cerr << "ERROR: boxm2_vecf_ocl_vector_field_adaptor::compute_forward_transform(): bad write of source points" << std::endl;
     return false;
   }
 

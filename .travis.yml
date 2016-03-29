@@ -8,21 +8,31 @@ compiler:
   - gcc
   - clang
 
-cache:
-  directories:
-  - $HOME/deps
+# https://docs.travis-ci.com/user/customizing-the-build/
+git:
+  depth: 3
 
-before_script:
-  - bash .travis/install-deps.sh
+#cache: false
+#  directories:
+#  - $HOME/deps
 
+#before_script:
+#  - bash .travis/install-deps.sh
+
+#script:
+#  - export PATH=$HOME/deps/bin:$PATH
 script:
-  - export PATH=$HOME/deps/bin:$PATH
+  - cmake --version
   - mkdir build
   - mkdir $HOME/install
   - cd build
-  - cmake -DCMAKE_INSTALL_PREFIX=$HOME/install
+  - cmake
+          -DCMAKE_INSTALL_PREFIX=$HOME/install
           -DCMAKE_CXX_STANDARD=98
           ../
-  - make -j2
-  - ctest
+  - ctest -D ExperimentalStart
+  - ctest -D ExperimentalConfigure
+  - ctest -D ExperimentalBuild -j2
+  - ctest -D ExperimentalTest --schedule-random -j2
+  - ctest -D ExperimentalSubmit
   - make install

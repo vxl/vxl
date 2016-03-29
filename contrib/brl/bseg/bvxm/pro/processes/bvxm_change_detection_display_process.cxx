@@ -1,4 +1,6 @@
 //This is brl/bseg/bvxm/pro/processes/bvxm_change_detection_display_process.cxx
+#include <iostream>
+#include <cmath>
 #include "bvxm_change_detection_display_process.h"
 //:
 // \file
@@ -16,14 +18,14 @@
 #include <vgl/vgl_point_2d.h>
 #endif
 
-#include <vcl_cmath.h>
+#include <vcl_compiler.h>
 
 //:sets input and output types for  bvxm_change_detection_display_process
 bool bvxm_change_detection_display_process_cons(bprb_func_process& pro)
 {
   using namespace bvxm_change_detection_display_process_globals;
 
-  vcl_vector<vcl_string> input_types_(n_inputs_);
+  std::vector<std::string> input_types_(n_inputs_);
   unsigned i = 0;
   //: original image
   input_types_[i++] = "vil_image_view_base_sptr";
@@ -37,7 +39,7 @@ bool bvxm_change_detection_display_process_cons(bprb_func_process& pro)
 
   unsigned j = 0;
   //output
-  vcl_vector<vcl_string> output_types_(n_outputs_);
+  std::vector<std::string> output_types_(n_outputs_);
   // red changes image
   output_types_[j++]= "vil_image_view_base_sptr";
   // probability image in range 0-255
@@ -54,7 +56,7 @@ bool bvxm_change_detection_display_process(bprb_func_process& pro)
   // Check number of inputs
   if (pro.n_inputs()<3)
   {
-    vcl_cout << "bvxm_change_detection_display_process: The input number should be 3" << vcl_endl;
+    std::cout << "bvxm_change_detection_display_process: The input number should be 3" << std::endl;
     return false;
   }
 
@@ -67,26 +69,26 @@ bool bvxm_change_detection_display_process(bprb_func_process& pro)
   // check input's validity
   i = 0;
   if (!img0) {
-    vcl_cout << pro.name() <<" :--  Input " << i++ << " is not valid!\n";
+    std::cout << pro.name() <<" :--  Input " << i++ << " is not valid!\n";
     return false;
   }
 
   if (!img1) {
-    vcl_cout << pro.name() <<" :--  Input " << i++ << " is not valid!\n";
+    std::cout << pro.name() <<" :--  Input " << i++ << " is not valid!\n";
     return false;
   }
 
   if (!img2) {
-    vcl_cout << pro.name() <<" :--  Input " << i++ << " is not valid!\n";
+    std::cout << pro.name() <<" :--  Input " << i++ << " is not valid!\n";
     return false;
   }
 
   if (img0->pixel_format()!=7) {
-    vcl_cout << pro.name() <<" :--  Input " << 0 << " wrong pixel-format!\n";
+    std::cout << pro.name() <<" :--  Input " << 0 << " wrong pixel-format!\n";
     return false;
   }
   if (img1->pixel_format()!=9) {
-    vcl_cout << pro.name() <<" :--  Input " << 1 << " wrong pixel-format!\n";
+    std::cout << pro.name() <<" :--  Input " << 1 << " wrong pixel-format!\n";
     return false;
   }
 
@@ -119,15 +121,15 @@ bool bvxm_change_detection_display_process(bprb_func_process& pro)
   //map to 0-255 range
     for ( unsigned int i = 0; i < image_width; i++ ) {
     for ( unsigned int j = 0; j < image_height; j++ ) {
-      prob_img_byte(i,j) = static_cast<unsigned char>(vcl_floor((prob_image(i,j)/max_prob) * 255.0f));
+      prob_img_byte(i,j) = static_cast<unsigned char>(std::floor((prob_image(i,j)/max_prob) * 255.0f));
     }
   }
 
   for ( unsigned int i = 0; i < image_width; i++ ) {
     for ( unsigned int j = 0; j < image_height; j++ ) {
 #if 0
-      vgl_point_2d<double> prob_img_pixel((int)vcl_floor(prob_image_scale*i),
-                                          (int)vcl_floor(prob_image_scale*j) );
+      vgl_point_2d<double> prob_img_pixel((int)std::floor(prob_image_scale*i),
+                                          (int)std::floor(prob_image_scale*j) );
 #endif
       float this_prob = 1.0f;
       unsigned original_prob_byte = 0;
@@ -136,9 +138,9 @@ bool bvxm_change_detection_display_process(bprb_func_process& pro)
         this_prob = prob_image( i,j )/(prob_thresh);
       }
 
-      output_image0(i,j,0) = static_cast<unsigned char>(vcl_floor( float(input_image(i,j))*this_prob + 255.f*(1.f-this_prob) ));
-      output_image0(i,j,1) = static_cast<unsigned char>(vcl_floor( float(input_image(i,j))*this_prob ));
-      output_image0(i,j,2) = static_cast<unsigned char>(vcl_floor( float(input_image(i,j))*this_prob ));
+      output_image0(i,j,0) = static_cast<unsigned char>(std::floor( float(input_image(i,j))*this_prob + 255.f*(1.f-this_prob) ));
+      output_image0(i,j,1) = static_cast<unsigned char>(std::floor( float(input_image(i,j))*this_prob ));
+      output_image0(i,j,2) = static_cast<unsigned char>(std::floor( float(input_image(i,j))*this_prob ));
 
       if (mask_image(i,j)) {
         original_prob_byte = prob_img_byte(i,j);
@@ -149,7 +151,7 @@ bool bvxm_change_detection_display_process(bprb_func_process& pro)
     }
   }
 
-  vcl_cout << "Max prob: " << max_prob;
+  std::cout << "Max prob: " << max_prob;
 
   // Set and Store outputs
   int j =0;

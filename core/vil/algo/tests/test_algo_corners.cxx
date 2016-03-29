@@ -1,6 +1,7 @@
 // This is core/vil/algo/tests/test_algo_corners.cxx
+#include <iostream>
 #include <testlib/testlib_test.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
 #include <vil/algo/vil_corners.h>
 #include <vil/vil_crop.h>
 #include <vxl_config.h>
@@ -8,14 +9,14 @@
 
 static void test_algo_corners_byte_float()
 {
-  vcl_cout << "*********************\n"
+  std::cout << "*********************\n"
            << " Testing vil_corners\n"
            << "*********************\n";
 
   vil_image_view<vxl_byte> image0;
   image0.set_size(20,20);
 
-  vcl_cout<<"Testing white square on black background\n";
+  std::cout<<"Testing white square on black background\n";
   image0.fill(0);
   // Put a white square in the centre
   vil_crop(image0,6,8,6,8).fill(vxl_byte(100));
@@ -31,7 +32,7 @@ static void test_algo_corners_byte_float()
   TEST("Peak just inside corner", vil_is_peak_3x3(&corner_im(12,12),corner_im.istep(),corner_im.jstep()), true);
 
 
-  vcl_cout<<"Testing black square on white background\n";
+  std::cout<<"Testing black square on white background\n";
   image0.fill(100);
   // Put a black square in the centre
   vil_crop(image0,6,8,6,8).fill(vxl_byte(0));

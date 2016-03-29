@@ -5,8 +5,10 @@
 // \brief Class to generate simple EPS files containing images and lines
 // \author Tim Cootes
 
-#include <vcl_string.h>
-#include <vcl_fstream.h>
+#include <string>
+#include <iostream>
+#include <fstream>
+#include <vcl_compiler.h>
 #include <vsl/vsl_fwd.h>
 #include <vil/vil_image_view.h>
 #include <vgl/vgl_point_2d.h>
@@ -33,7 +35,7 @@ class mbl_eps_writer
 {
  private:
   //: Stream to eps file
-  vcl_ofstream ofs_;
+  std::ofstream ofs_;
 
   //: Bounding box (in points)
   double nx_,ny_;
@@ -79,7 +81,7 @@ class mbl_eps_writer
   virtual ~mbl_eps_writer();
 
   //: Current stream used to write EPS file.
-  vcl_ofstream& ofs() { return ofs_; }
+  std::ofstream& ofs() { return ofs_; }
 
   //: Define shade of subsequent graphics [0,1] = black-white
   void set_grey_shade(double shade);
@@ -95,7 +97,7 @@ class mbl_eps_writer
   //  Valid options include black,grey25,grey,grey75,white red,green,blue,
   //  cyan,yellow.  Note: Probably need a tidy map thing to
   //  do this properly.  Sets to grey if colour not known.
-  void set_colour(const vcl_string& colour_name);
+  void set_colour(const std::string& colour_name);
 
   //: Define scaling factor
   void set_scaling(double s);
@@ -133,14 +135,14 @@ class mbl_eps_writer
   //: Draws polygon connecting points.
   //  If closed, then adds line joining last to first point.
   //  If filled, then fills with current colour/greyshade.
-  void draw_polygon(const vcl_vector<vgl_point_2d<double> >& pts,
+  void draw_polygon(const std::vector<vgl_point_2d<double> >& pts,
                     bool closed=true, bool filled=false);
 
   //: Define line width.
   void set_line_width(double w);
 
   //: Writes first plane of image in hex format to os
-  void write_image_data(vcl_ostream& os,
+  void write_image_data(std::ostream& os,
                         const vil_image_view<vxl_byte>& image);
 
   //: Creates an image  at (tx,ty) with given pixel widths

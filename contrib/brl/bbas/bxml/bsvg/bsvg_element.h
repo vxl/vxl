@@ -22,16 +22,16 @@
 class bsvg_element : public bxml_element
 {
  public:
-  bsvg_element(const vcl_string& name) : bxml_element(name) {}
+  bsvg_element(const std::string& name) : bxml_element(name) {}
   //:  rotation angle is specified in degrees, e.g. 90
   void set_transformation(float trans_x, float trans_y, float rot_angle);
   void set_location(float trans_x, float trans_y);
   //: adds rotation to an existing translation if any angle is specified in degrees, e.g. 90
   void set_rotation(float rot_angle);
-  void set_fill_color(const vcl_string& c);
+  void set_fill_color(const std::string& c);
   //: turns the given red, green, blue values in range [0,255] to #00 00 00 notation (Hex color) for each color
   void set_fill_color(unsigned red, unsigned green, unsigned blue);
-  void set_stroke_color(const vcl_string& c);
+  void set_stroke_color(const std::string& c);
   //: turns the given red, green, blue values in range [0,255] to #00 00 00 notation (Hex color) for each color
   void set_stroke_color(unsigned red, unsigned green, unsigned blue);
   void set_stroke_width(float w);
@@ -44,7 +44,7 @@ class bsvg_element : public bxml_element
 class bsvg_text : public bsvg_element
 {
  public:
-  bsvg_text(const vcl_string& msg) : bsvg_element("text") { this->append_text(msg); }
+  bsvg_text(const std::string& msg) : bsvg_element("text") { this->append_text(msg); }
   void set_font_size(int s);
 };
 
@@ -86,7 +86,7 @@ class bsvg_arrow_head : public bsvg_group
 class bsvg_polyline : public bsvg_element
 {
  public:
-  bsvg_polyline(const vcl_vector<float>& xs, const vcl_vector<float>& ys);
+  bsvg_polyline(const std::vector<float>& xs, const std::vector<float>& ys);
 };
 
 //: draw a splice e.g. for a "pie chart".

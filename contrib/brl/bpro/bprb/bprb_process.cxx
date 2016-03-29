@@ -1,10 +1,11 @@
 // This is brl/bpro/bprb/bprb_process.cxx
+#include <iostream>
 #include "bprb_process.h"
 //:
 // \file
 
 #include <bprb/bprb_parameters.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
 
 
 bprb_process::bprb_process()
@@ -39,7 +40,7 @@ void bprb_process::set_parameters(const bprb_parameters_sptr& params)
   parameters_ = params;
 }
 
-bool bprb_process::parse_params_XML(const vcl_string& xml_path)
+bool bprb_process::parse_params_XML(const std::string& xml_path)
 {
   return parameters_->parse_XML(xml_path, name());
 }
@@ -51,7 +52,7 @@ unsigned bprb_process::n_inputs() const
 }
 
 //: The type of each input
-vcl_string bprb_process::input_type(unsigned i) const
+std::string bprb_process::input_type(unsigned i) const
 {
   if (i<n_inputs())
     return input_types_[i];
@@ -65,7 +66,7 @@ unsigned bprb_process::n_outputs() const
 }
 
 //: The type of each output
-vcl_string bprb_process::output_type(unsigned i) const
+std::string bprb_process::output_type(unsigned i) const
 {
   if (i<n_outputs())
     return output_types_[i];
@@ -73,7 +74,7 @@ vcl_string bprb_process::output_type(unsigned i) const
 }
 
 //: Set all the inputs at once
-bool bprb_process::set_input_data(vcl_vector<brdb_value_sptr> const& inputs)
+bool bprb_process::set_input_data(std::vector<brdb_value_sptr> const& inputs)
 {
   if (inputs.size()!= n_inputs())
     return false;
@@ -87,15 +88,15 @@ bool bprb_process::set_input_data(vcl_vector<brdb_value_sptr> const& inputs)
 bool bprb_process::set_input(unsigned i, brdb_value_sptr const& value)
 {
   if (i>=n_inputs()){
-    vcl_cout << "bprb_process::set_input() - index out of range\n";
+    std::cout << "bprb_process::set_input() - index out of range\n";
     return false;
   }
   if (!value){
-    vcl_cout << "bprb_process::set_input() - null value\n";
+    std::cout << "bprb_process::set_input() - null value\n";
     return false;
   }
   if (!(value->is_a() == input_type(i))){
-    vcl_cout << "bprb_process::set_input() - type mismatch\n";
+    std::cout << "bprb_process::set_input() - type mismatch\n";
     return false;
   }
   input_data_[i]=value;
@@ -107,11 +108,11 @@ bool bprb_process::verify_inputs()
   for (unsigned i = 0; i<n_inputs(); ++i)
   {
     if (!input_data_[i]) {
-       vcl_cerr << "Missing Input " << i << vcl_endl;
+       std::cerr << "Missing Input " << i << std::endl;
        return false;
     }
     if (!(input_data_[i]->is_a()==input_types_[i])) {
-      vcl_cout << "Invalid input_data_type[" << i << "] - should be " << input_types_[i]
+      std::cout << "Invalid input_data_type[" << i << "] - should be " << input_types_[i]
                << " but is " << input_data_[i]->is_a() << " instead\n";
       return false;
     }

@@ -27,7 +27,7 @@ private:
   vnl_vector<double> b_sd_;
   vnl_vector<double> b_;
 
-  vcl_vector<msm_points> points_;
+  std::vector<msm_points> points_;
 
     //: Number of shapes for each mode
   unsigned n_per_mode_;
@@ -68,7 +68,7 @@ public:
 
     //: Current array of sets of points
     //  These are the shapes to be displayed
-  const vcl_vector<msm_points>& points() const { return points_; }
+  const std::vector<msm_points>& points() const { return points_; }
 
   //: Compute the shapes so they fit into current window
   // \param n_shapes  Number of shapes to display

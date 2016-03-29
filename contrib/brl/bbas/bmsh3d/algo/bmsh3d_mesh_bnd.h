@@ -22,7 +22,7 @@
 class bmsh3d_bnd_chain
 {
  protected:
-  vcl_vector<bmsh3d_halfedge*> HE_list_;
+  std::vector<bmsh3d_halfedge*> HE_list_;
 
  public:
   //=========== Constructor & Destructor ===========
@@ -33,7 +33,7 @@ class bmsh3d_bnd_chain
   }
 
   //=========== Data Accessing ===========
-  vcl_vector<bmsh3d_halfedge*>& HE_list() {
+  std::vector<bmsh3d_halfedge*>& HE_list() {
     return HE_list_;
   }
   bmsh3d_halfedge* HE_list (unsigned int i) const {
@@ -45,7 +45,7 @@ class bmsh3d_bnd_chain
 
   //=========== Querying Functions ===========
   bool is_V_incident_via_HE (const bmsh3d_vertex* V);
-  void trace_polyline (vcl_vector<vgl_point_3d<double> >& polyline_vertices);
+  void trace_polyline (std::vector<vgl_point_3d<double> >& polyline_vertices);
 
   //=========== Modification Functions ===========
   void trace_bnd_chain (bmsh3d_halfedge* startHE);
@@ -57,7 +57,7 @@ class bmsh3d_bnd_chain_set
 {
  protected:
   bmsh3d_mesh*     mesh_;
-  vcl_vector<bmsh3d_bnd_chain*> chainset_;
+  std::vector<bmsh3d_bnd_chain*> chainset_;
 
  public:
   //=========== Constructor & Destructor ===========
@@ -71,7 +71,7 @@ class bmsh3d_bnd_chain_set
   }
 
   //=========== Data Accessing ===========
-  vcl_vector<bmsh3d_bnd_chain*>& chainset() {
+  std::vector<bmsh3d_bnd_chain*>& chainset() {
     return chainset_;
   }
 

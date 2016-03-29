@@ -17,9 +17,10 @@
 //   07-Aug-1999 K.Y.McGaul - Added Doxygen style comments.
 // \endverbatim
 
-#include <vcl_string.h>
-#include <vcl_vector.h>
-#include <vcl_iosfwd.h>
+#include <string>
+#include <vector>
+#include <iosfwd>
+#include <vcl_compiler.h>
 #include <vgui/vgui_key.h>
 #include <vgui/vgui_modifier.h>
 #include <vgui/vgui_command_sptr.h>
@@ -60,7 +61,7 @@ struct vgui_menu_item
   ~vgui_menu_item();
 
   //: Name of item, "" for separators.
-  vcl_string name;
+  std::string name;
 
   //: Pointer to the command to be executed.
   //  Non-zero for command items only.
@@ -97,7 +98,7 @@ struct vgui_menu_item
 // NB. empty strings are not acceptable names.
 class vgui_menu
 {
-  vcl_vector<vgui_menu_item> items;
+  std::vector<vgui_menu_item> items;
 
  public:
   //: Constructor - creates an empty menu.
@@ -113,26 +114,26 @@ class vgui_menu
   ~vgui_menu() { clear(); }
 
   //: Add given command to this menu.
-  void add(vcl_string const &,
+  void add(std::string const &,
            vgui_command_sptr c,
            vgui_key key =vgui_KEY_NULL,
            vgui_modifier modifiers =vgui_MODIFIER_NULL);
 
   //: Add given callback function to this menu.
-  void add(vcl_string const &,
+  void add(std::string const &,
            vgui_menu_callback_no_client_data f,
            vgui_key key =vgui_KEY_NULL,
            vgui_modifier modifiers =vgui_MODIFIER_NULL);
 
   //: Add callback function with client data to this menu.
-  void add(vcl_string const &,
+  void add(std::string const &,
            vgui_menu_callback f,
            void const *client_data,
            vgui_key key =vgui_KEY_NULL,
            vgui_modifier modifiers =vgui_MODIFIER_NULL);
 
   //: Add given submenu to this menu.
-  void add(vcl_string const &,
+  void add(std::string const &,
            vgui_menu const &,
            vgui_key key =vgui_KEY_NULL,
            vgui_modifier modifiers =vgui_MODIFIER_NULL);
@@ -153,7 +154,7 @@ class vgui_menu
   vgui_menu_item const & operator[](unsigned i) const { return items[i]; }
 };
 
-vcl_ostream & operator<<(vcl_ostream &,vgui_menu const &);
+std::ostream & operator<<(std::ostream &,vgui_menu const &);
 
 //--------------------------------------------------------------------------------
 

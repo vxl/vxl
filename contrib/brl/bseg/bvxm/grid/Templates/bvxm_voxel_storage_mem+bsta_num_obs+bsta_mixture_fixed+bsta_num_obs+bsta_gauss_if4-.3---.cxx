@@ -1,4 +1,4 @@
-#include <bvxm/grid/bvxm_voxel_storage_mem.txx>
+#include <bvxm/grid/bvxm_voxel_storage_mem.hxx>
 #include <bsta/bsta_gauss_if4.h>
 #include <bsta/bsta_attributes.h>
 #include <bsta/bsta_mixture_fixed.h>

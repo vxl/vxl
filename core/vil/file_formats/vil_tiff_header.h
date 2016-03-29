@@ -37,10 +37,11 @@
 //   January 9, 2012  - Use default value (1) for images that do not have SamplesPerPixel tag - GY
 // \endverbatim
 
-#include <vcl_string.h>
-#include <vcl_vector.h>
+#include <string>
+#include <vector>
+#include <cmath>
+#include <vcl_compiler.h>
 #include <vxl_config.h>
-#include <vcl_cmath.h>
 #include <vil/vil_config.h>
 #include <vil/vil_pixel_format.h>
 #include <tiffio.h>
@@ -73,7 +74,7 @@ class vil_tiff_header
                   const unsigned nplanes, vil_pixel_format const& fmt,
                   const unsigned size_block_i, const unsigned size_block_j);
 // the baseline tiff header stucture
-  vcl_string artist;
+  std::string artist;
 
   //**Issue** spec says this should be an array[samples_per_pixel] but
   //actual multi-sample tiff file headers have this as an
@@ -88,14 +89,14 @@ class vil_tiff_header
 
   // color_map[index][pixel_sample] index ranges from 0->2^bits_per_sample-1
   // pixel_sample 0->samples_per_pixel -1
-  vcl_vector<vcl_vector<vxl_uint_16> >color_map;
+  std::vector<std::vector<vxl_uint_16> >color_map;
   bool color_map_valid;
 
   ushort_tag compression;
 
-  vcl_string copyright;
+  std::string copyright;
 
-  vcl_string date_time;
+  std::string date_time;
 
   //Additional samples per pixel, e.g. transparency
   ushort_tag extra_samples;
@@ -104,14 +105,14 @@ class vil_tiff_header
 
   //for gray scale data provides a radiometry map, e.g. true reflectance
   //index ranges from 0->2^bits_per_sample-1
-  vcl_vector<vxl_uint_16> gray_response_curve;
+  std::vector<vxl_uint_16> gray_response_curve;
   bool grey_response_curve_valid;
 
   //the unit of radiometry
   ushort_tag gray_response_unit;
 
-  vcl_string host_computer;
-  vcl_string image_description;
+  std::string host_computer;
+  std::string image_description;
 
   ulong_tag image_length;
 
@@ -125,13 +126,13 @@ class vil_tiff_header
 
   unsigned nplanes;
 
-  vcl_string make;
+  std::string make;
 
   ushort_tag max_sample_value;
 
   ushort_tag min_sample_value;
 
-  vcl_string model;
+  std::string model;
 
   ushort_tag orientation;
 
@@ -147,7 +148,7 @@ class vil_tiff_header
 
   vxl_uint_32 strips_per_image() const
   { return rows_per_strip.valid ?
-      static_cast<vxl_uint_32>(vcl_floor(1.0+(image_length.val-1)/rows_per_strip.val)) : 1L;
+      static_cast<vxl_uint_32>(std::floor(1.0+(image_length.val-1)/rows_per_strip.val)) : 1L;
   }
 
   //the actual size of the strip in the file
@@ -159,7 +160,7 @@ class vil_tiff_header
   ushort_tag sample_format;
   ushort_tag samples_per_pixel;
 
-  vcl_string software;
+  std::string software;
 
   //for planar_config = 1
   //[st0|st1|...|strips_per_image-1]
@@ -200,12 +201,12 @@ class vil_tiff_header
 
   vxl_uint_32 tiles_across() const
   { return tile_width.valid ?
-      static_cast<vxl_uint_32>(vcl_floor(1.0+(image_width.val-1)/tile_width.val)) : 0L;
+      static_cast<vxl_uint_32>(std::floor(1.0+(image_width.val-1)/tile_width.val)) : 0L;
   }
 
   vxl_uint_32 tiles_down() const
   { return tile_length.valid ?
-      static_cast<vxl_uint_32>(vcl_floor(1.0+(image_length.val-1)/tile_length.val)) : 0L;
+      static_cast<vxl_uint_32>(std::floor(1.0+(image_length.val-1)/tile_length.val)) : 0L;
   }
 
   vxl_uint_32 tiles_per_image() const {return tiles_across()*tiles_down();}

@@ -5,9 +5,10 @@
 //:
 // \file
 
+#include <iostream>
 #include "FMatrixComputeNonLinear.h"
 
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
 
 #include <vnl/vnl_matrix.h>
 #include <vnl/algo/vnl_levenberg_marquardt.h>
@@ -39,8 +40,8 @@ FMatrixComputeNonLinear::FMatrixComputeNonLinear(PairMatchSetCorner* matches)
   // Set up some initial variables
   HomgInterestPointSet const* points1 = matches_.get_corners1();
   HomgInterestPointSet const* points2 = matches_.get_corners2();
-  vcl_vector<HomgPoint2D> dead1, dead2;
-  vcl_vector<int> point1_int, point2_int;
+  std::vector<HomgPoint2D> dead1, dead2;
+  std::vector<int> point1_int, point2_int;
   matches_.extract_matches(dead1, point1_int, dead2, point2_int);
   data_size_ = matches_.count();
   points1_.resize(points1->size());
@@ -63,14 +64,14 @@ FMatrixComputeNonLinear::FMatrixComputeNonLinear(PairMatchSetCorner* matches)
 //-----------------------------------------------------------------------------
 //: Compute the F Matrix by augmenting a 7 point basis
 
-bool FMatrixComputeNonLinear::compute_basis(FMatrix* F, vcl_vector<int> basis)
+bool FMatrixComputeNonLinear::compute_basis(FMatrix* F, std::vector<int> basis)
 {
   one_ = false;
-  vcl_vector<vgl_homg_point_2d<double> > basis1(7), basis2(7);
+  std::vector<vgl_homg_point_2d<double> > basis1(7), basis2(7);
   for (int i = 0; i < 7; i++) {
     int other = matches_.get_match_12(basis[i]);
     if (other == -1)
-      vcl_cerr << "The basis index doesn't include a match for " << i << ".\n";
+      std::cerr << "The basis index doesn't include a match for " << i << ".\n";
     else {
       vnl_double_2 p1 = matches_.get_corners1()->get_2d(basis[i]);
       vnl_double_2 p2 = matches_.get_corners2()->get_2d(other);
@@ -90,7 +91,7 @@ bool FMatrixComputeNonLinear::compute(FMatrix* F)
 {
   FMatrix F_final;
   // fm_fmatrix_nagmin
-  vcl_cerr << "FMatrixComputeNonLinear: matches = "<< data_size_ <<", using "<< FMatrixComputeNonLinear_nparams <<" parameters\n";
+  std::cerr << "FMatrixComputeNonLinear: matches = "<< data_size_ <<", using "<< FMatrixComputeNonLinear_nparams <<" parameters\n";
   double so_far = 1e+8;
   FMatrix norm_F = *F;
   if (one_)
@@ -139,12 +140,12 @@ bool FMatrixComputeNonLinear::compute(FMatrix* F)
 
           if (lm.get_end_error() < so_far) {
             so_far = lm.get_end_error();
-            vcl_cerr << "so_far : " << so_far << vcl_endl;
+            std::cerr << "so_far : " << so_far << std::endl;
             norm_F = params_to_fmatrix(f_params);
             F_final = norm_F;
             vgl_homg_point_2d<double> e1, e2;
             F_final.get_epipoles(e1, e2);
-            vcl_cerr << "Epipole locations 1 : " << e1 << " 2 : " << e2 << '\n';
+            std::cerr << "Epipole locations 1 : " << e1 << " 2 : " << e2 << '\n';
           }
         }
       }
@@ -172,15 +173,15 @@ bool FMatrixComputeNonLinear::compute(FMatrix* F)
 
     if (lm.get_end_error() < so_far) {
       so_far = lm.get_end_error();
-      vcl_cerr << "so_far : " << so_far << vcl_endl;
+      std::cerr << "so_far : " << so_far << std::endl;
       for (int l = 0; l < 7; l++)
-        vcl_cerr << f_params(l) << vcl_endl;
+        std::cerr << f_params(l) << std::endl;
       norm_F = params_to_fmatrix(f_params);
       F_final = norm_F;
       lm.diagnose_outcome();
       vgl_homg_point_2d<double> e1, e2;
       F_final.get_epipoles(e1, e2);
-      vcl_cerr << "Epipole locations 1 : " << e1 << " 2 : " << e2 << '\n';
+      std::cerr << "Epipole locations 1 : " << e1 << " 2 : " << e2 << '\n';
     }
   }
   *F = F_final;
@@ -348,7 +349,7 @@ FMatrix FMatrixComputeNonLinear::params_to_fmatrix(const vnl_vector<double>& par
   }
   else
   {
-    vcl_vector<vgl_homg_point_2d<double> > new_points1(7);
+    std::vector<vgl_homg_point_2d<double> > new_points1(7);
     vgl_homg_point_2d<double> e1, e2;
     F_orig_.get_epipoles(e1, e2);
     double e1nx = e1.x()/e1.w(), e1ny = e1.y()/e1.w();
@@ -362,9 +363,9 @@ FMatrix FMatrixComputeNonLinear::params_to_fmatrix(const vnl_vector<double>& par
 //    new_points2[i] = vgl_homg_point_2d<double>(params[i]/grads2 + t2x, params[i]*grads2 + t2y, 1.0);
     }
     FMatrixCompute7Point computor(true, true);
-    vcl_vector<FMatrix*> ref;
+    std::vector<FMatrix*> ref;
     if (!computor.compute(new_points1, basis2_, ref))
-      vcl_cerr << "FMatrixCompute7Point Failure\n";
+      std::cerr << "FMatrixCompute7Point Failure\n";
     double final = 0.0;
     unsigned int num = 0;
     for (unsigned int l = 0; l < ref.size(); l++) {
@@ -372,7 +373,7 @@ FMatrix FMatrixComputeNonLinear::params_to_fmatrix(const vnl_vector<double>& par
       double so_far = 0.0;
       for (unsigned int m = 0; m < res.size(); m++)
         so_far += res[m];
-//      vcl_cerr << "so_far : " << so_far << vcl_endl;
+//      std::cerr << "so_far : " << so_far << std::endl;
       if (so_far < final) {
         final = so_far;
         num = l;

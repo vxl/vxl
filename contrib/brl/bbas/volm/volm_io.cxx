@@ -1,3 +1,5 @@
+#include <iostream>
+#include <iomanip>
 #include "volm_io.h"
 //:
 // \file
@@ -12,15 +14,14 @@
 #include <vsol/vsol_polygon_2d_sptr.h>
 #include <bsol/bsol_algs.h>
 #include <vul/vul_file.h>
-#include <vcl_iostream.h>
-#include <vcl_iomanip.h>
+#include <vcl_compiler.h>
 #include <vcl_cassert.h>
 #include <vsl/vsl_vector_io.h>
 #include "volm_utils.h"
 
-vcl_map<vcl_string, depth_map_region::orientation> create_orient_map()
+std::map<std::string, depth_map_region::orientation> create_orient_map()
 {
-  vcl_map<vcl_string, depth_map_region::orientation> m;
+  std::map<std::string, depth_map_region::orientation> m;
   m["horizontal"] = depth_map_region::HORIZONTAL;
   m["front_parallel"] = depth_map_region::FRONT_PARALLEL;
   m["slanted_right"] = depth_map_region::SLANTED_RIGHT;
@@ -31,9 +32,9 @@ vcl_map<vcl_string, depth_map_region::orientation> create_orient_map()
 }
 
 // list of the possible values for indexed orientations from the reference world
-vcl_map<int, vil_rgb<vxl_byte> > create_orient_colors()
+std::map<int, vil_rgb<vxl_byte> > create_orient_colors()
 {
-  vcl_map<int, vil_rgb<vxl_byte> > m;
+  std::map<int, vil_rgb<vxl_byte> > m;
   m[0] = vil_rgb<vxl_byte>(255, 0, 0);  // no value
   m[10] = vil_rgb<vxl_byte>(255, 255, 255);  // no value
   m[100] = vil_rgb<vxl_byte>(100, 0, 0);  // no value
@@ -49,9 +50,9 @@ vcl_map<int, vil_rgb<vxl_byte> > create_orient_colors()
   return m;
 }
 
-vcl_map<int, volm_attributes > create_label_map()
+std::map<int, volm_attributes > create_label_map()
 {
-  vcl_map<int, volm_attributes > m;
+  std::map<int, volm_attributes > m;
   m[0] = volm_attributes(0, "invalid",                                                 vil_rgb<vxl_byte>(255,  0,    0));  // invalid
   m[volm_label_table::WATER] = volm_attributes(1, "Open Water",                         vil_rgb<vxl_byte>(0,    0,    100));
   m[12] = volm_attributes(2, "Perennial Ice/Snow",                                      vil_rgb<vxl_byte>(255,  255,  200));  //
@@ -98,9 +99,9 @@ vcl_map<int, volm_attributes > create_label_map()
   return m;
 }
 
-vcl_map<vcl_string, depth_map_region::orientation> volm_orient_table::ori_id = create_orient_map();
-vcl_map<int, volm_attributes > volm_label_table::land_id = create_label_map();
-vcl_map<int, vil_rgb<vxl_byte> > volm_orient_table::ori_index_colors = create_orient_colors();
+std::map<std::string, depth_map_region::orientation> volm_orient_table::ori_id = create_orient_map();
+std::map<int, volm_attributes > volm_label_table::land_id = create_label_map();
+std::map<int, vil_rgb<vxl_byte> > volm_orient_table::ori_index_colors = create_orient_colors();
 
 // assume that ids are ordered from 0 to n so the number of labels is n+1
 unsigned volm_label_table::compute_number_of_labels()
@@ -108,7 +109,7 @@ unsigned volm_label_table::compute_number_of_labels()
   return volm_osm_category_io::volm_land_table.size();
 #if 0
   unsigned max = 0;
-  for (vcl_map<int, volm_attributes >::iterator it = land_id.begin(); it != land_id.end(); it++) {
+  for (std::map<int, volm_attributes >::iterator it = land_id.begin(); it != land_id.end(); it++) {
     if (it->second.id_ > max)
       max = it->second.id_;
   }
@@ -119,16 +120,16 @@ unsigned volm_label_table::compute_number_of_labels()
 unsigned volm_label_table::number_of_labels_ = compute_number_of_labels();
 
 
-void volm_category_attribute::read_category(vcl_map<vcl_string, volm_category_attribute> & category_table, vcl_string fname)
+void volm_category_attribute::read_category(std::map<std::string, volm_category_attribute> & category_table, std::string fname)
 {
-  vcl_ifstream ifs(fname.c_str());
-  vcl_string type;
-  vcl_string lnd;
-  vcl_string ori;
+  std::ifstream ifs(fname.c_str());
+  std::string type;
+  std::string lnd;
+  std::string ori;
   unsigned   is_active;
   while (!ifs.eof()) {
     ifs >> type; ifs >> ori;  ifs >> lnd;  ifs >> is_active;
-    vcl_pair<vcl_string, volm_category_attribute> pair;
+    std::pair<std::string, volm_category_attribute> pair;
     pair.first = type;
     pair.second = volm_category_attribute(lnd, ori, is_active);
     category_table.insert(pair);
@@ -137,22 +138,22 @@ void volm_category_attribute::read_category(vcl_map<vcl_string, volm_category_at
 }
 
 
-vcl_map<unsigned char, vcl_vector<unsigned char> > create_fallback_label()
+std::map<unsigned char, std::vector<unsigned char> > create_fallback_label()
 {
   // read the pre-defined fallback category table from text file
   // NOTE: this function needs modification if more fallback categroy is added
-  vcl_map<unsigned char, vcl_vector<unsigned char> > m;
-  vcl_vector<unsigned char> f(4,0);
+  std::map<unsigned char, std::vector<unsigned char> > m;
+  std::vector<unsigned char> f(4,0);
   // load the text file
-  vcl_string txt_file = volm_utils::volm_src_root() + "fallback_category.txt";
-  vcl_ifstream ifs(txt_file.c_str());
+  std::string txt_file = volm_utils::volm_src_root() + "fallback_category.txt";
+  std::ifstream ifs(txt_file.c_str());
   if (!ifs.is_open()) {
-    vcl_cerr << " cannot open: " << txt_file << '\n';
+    std::cerr << " cannot open: " << txt_file << '\n';
     return m;
   }
-  vcl_string header;
-  vcl_getline(ifs, header);
-  vcl_string name;
+  std::string header;
+  std::getline(ifs, header);
+  std::string name;
   unsigned level;
   float width;
   unsigned id, f1, f2, f3, f4;
@@ -167,8 +168,8 @@ vcl_map<unsigned char, vcl_vector<unsigned char> > create_fallback_label()
   }
   return m;
 #if 0
-  vcl_map<unsigned char, vcl_vector<unsigned char> > m;
-  vcl_vector<unsigned char> f(4,0);
+  std::map<unsigned char, std::vector<unsigned char> > m;
+  std::vector<unsigned char> f(4,0);
   f.clear();  f.push_back(0);  f.push_back(0);  f.push_back(0);  f.push_back(0);  m[0] = f;   // invalid    ----------> [invalid, invalid, invalid, invalid]
   f.clear();  f.push_back(1);  f.push_back(6);  f.push_back(17); f.push_back(3);  m[1] = f;   // open water ----------> [open water, sand, beach, develop(open space)]
   f.clear();  f.push_back(2);  f.push_back(1);  f.push_back(6);  f.push_back(3);  m[2] = f;   // perennial ice/snow --> [perennial ice/snow, water, sand, develop(open)]
@@ -208,19 +209,19 @@ vcl_map<unsigned char, vcl_vector<unsigned char> > create_fallback_label()
 #endif
 }
 
-vcl_map<unsigned char, vcl_vector<float> > create_fallback_weight()
+std::map<unsigned char, std::vector<float> > create_fallback_weight()
 {
-  vcl_map<unsigned char, vcl_vector<float> > m;
-  vcl_vector<float> w(4,0.0f);
-  vcl_string txt_file = volm_utils::volm_src_root() + "fallback_category.txt";
-  vcl_ifstream ifs(txt_file.c_str());
+  std::map<unsigned char, std::vector<float> > m;
+  std::vector<float> w(4,0.0f);
+  std::string txt_file = volm_utils::volm_src_root() + "fallback_category.txt";
+  std::ifstream ifs(txt_file.c_str());
   if (!ifs.is_open()) {
-    vcl_cerr << " cannot open: " << txt_file << '\n';
+    std::cerr << " cannot open: " << txt_file << '\n';
     return m;
   }
-  vcl_string header;
-  vcl_getline(ifs, header);
-  vcl_string name;
+  std::string header;
+  std::getline(ifs, header);
+  std::string name;
   unsigned level;
   float width;
   unsigned id, f1, f2, f3, f4;
@@ -236,8 +237,8 @@ vcl_map<unsigned char, vcl_vector<float> > create_fallback_weight()
   return m;
 
 #if 0
-  vcl_map<unsigned char, vcl_vector<float> > m;
-  vcl_vector<float> f(4, 0.0f);
+  std::map<unsigned char, std::vector<float> > m;
+  std::vector<float> f(4, 0.0f);
   f.clear();  f.push_back(1.0f);  f.push_back(1.0f);  f.push_back(1.0f);  f.push_back(1.0f);  m[0] = f; //
   f.clear();  f.push_back(1.0f);  f.push_back(0.1f);  f.push_back(0.1f);  f.push_back(0.1f);  m[1] = f; //
   f.clear();  f.push_back(1.0f);  f.push_back(0.5f);  f.push_back(0.4f);  f.push_back(0.1f);  m[2] = f; //
@@ -277,23 +278,23 @@ vcl_map<unsigned char, vcl_vector<float> > create_fallback_weight()
 #endif
 }
 
-vcl_map<unsigned char, vcl_vector<unsigned char> > volm_fallback_label::fallback_id = create_fallback_label();
-vcl_map<unsigned char, vcl_vector<float> > volm_fallback_label::fallback_weight = create_fallback_weight();
+std::map<unsigned char, std::vector<unsigned char> > volm_fallback_label::fallback_id = create_fallback_label();
+std::map<unsigned char, std::vector<float> > volm_fallback_label::fallback_weight = create_fallback_weight();
 
 void volm_fallback_label::print_fallback_table()
 {
-  for (vcl_map<unsigned char, vcl_vector<unsigned char> >::iterator iter = fallback_id.begin(); iter != fallback_id.end(); iter++) {
-    vcl_cout << volm_label_table::land_string(iter->first) << " (" << (int)iter->first << "):\t";
+  for (std::map<unsigned char, std::vector<unsigned char> >::iterator iter = fallback_id.begin(); iter != fallback_id.end(); iter++) {
+    std::cout << volm_label_table::land_string(iter->first) << " (" << (int)iter->first << "):\t";
     for (unsigned k = 0; k < iter->second.size(); k++) {
-      vcl_cout << volm_label_table::land_string(iter->second[k]) << '(' << (int)iter->second[k] << ", w: " << fallback_weight[iter->first][k] << ")\t";
+      std::cout << volm_label_table::land_string(iter->second[k]) << '(' << (int)iter->second[k] << ", w: " << fallback_weight[iter->first][k] << ")\t";
     }
-    vcl_cout << '\n';
+    std::cout << '\n';
   }
 }
 
-vcl_string volm_label_table::land_string(unsigned char id)
+std::string volm_label_table::land_string(unsigned char id)
 {
-  vcl_map<int, volm_attributes >::iterator mit = volm_label_table::land_id.begin();
+  std::map<int, volm_attributes >::iterator mit = volm_label_table::land_id.begin();
   for (; mit != volm_label_table::land_id.end(); ++mit) {
     if ( mit->second.id_ == id ) {
       return mit->second.name_;
@@ -317,15 +318,15 @@ void volm_io_extract_values(unsigned char combined_value, unsigned char& orienta
   label_value = combined_value - (orientation_value << 6);
 }
 
-bool volm_attributes::contains(vcl_string name)
+bool volm_attributes::contains(std::string name)
 {
-  return name_.find(name) != vcl_string::npos
-     ||  name.find(name_) != vcl_string::npos;
+  return name_.find(name) != std::string::npos
+     ||  name.find(name_) != std::string::npos;
 }
 
-unsigned char volm_label_table::get_id_closest_name(vcl_string name)
+unsigned char volm_label_table::get_id_closest_name(std::string name)
 {
-  for (vcl_map<int, volm_attributes >::iterator iter = land_id.begin(); iter != land_id.end(); iter++) {
+  for (std::map<int, volm_attributes >::iterator iter = land_id.begin(); iter != land_id.end(); iter++) {
     if (iter->second.contains(name))
       return iter->first;
   }
@@ -335,17 +336,17 @@ unsigned char volm_label_table::get_id_closest_name(vcl_string name)
 //: pass the id of the class labeled in the query (volm_attribute.id_)
 vil_rgb<vxl_byte> volm_label_table::get_color(unsigned char id)
 {
-  vcl_map<int, volm_attributes >::iterator mit = volm_label_table::land_id.begin();
+  std::map<int, volm_attributes >::iterator mit = volm_label_table::land_id.begin();
   for (; mit != volm_label_table::land_id.end(); ++mit) {
     if ( mit->second.id_ == id ) {
       return mit->second.color_;
     }
   }
-  vcl_cerr << "cannot find id: " << (int)id << " (and thus color) in the land class table, returning invalid color!\n";
+  std::cerr << "cannot find id: " << (int)id << " (and thus color) in the land class table, returning invalid color!\n";
   return vil_rgb<vxl_byte>(255,0,0); // default invalid color
 }
 
-bool volm_io::read_camera(vcl_string kml_file,
+bool volm_io::read_camera(std::string kml_file,
                           unsigned const& ni, unsigned const& nj,
                           double& heading,   double& heading_dev,
                           double& tilt,      double& tilt_dev,
@@ -359,14 +360,14 @@ bool volm_io::read_camera(vcl_string kml_file,
   top_fov_dev = 0;
   heading = 0;
   bkml_parser* parser = new bkml_parser();
-  vcl_FILE* xmlFile = vcl_fopen(kml_file.c_str(), "r");
+  std::FILE* xmlFile = std::fopen(kml_file.c_str(), "r");
   if (!xmlFile) {
-    vcl_cerr << kml_file.c_str() << " ERROR in camera kml: can not open the given camera kml file.\n";
+    std::cerr << kml_file.c_str() << " ERROR in camera kml: can not open the given camera kml file.\n";
     delete parser;
     return false;
   }
   if (!parser->parseFile(xmlFile)) {
-    vcl_cerr << XML_ErrorString(parser->XML_GetErrorCode()) << " at line "
+    std::cerr << XML_ErrorString(parser->XML_GetErrorCode()) << " at line "
              << parser->XML_GetCurrentLineNumber() << '\n';
     delete parser;
     return false;
@@ -388,25 +389,25 @@ bool volm_io::read_camera(vcl_string kml_file,
   double ppv = 0.5*nj;
   // check the consistency of input parameters
   if ( parser->right_fov_dev_ && !parser->right_fov_ ) {
-    vcl_cerr << " ERROR in camera kml: deviation of right_fov is defined without given initial right_fov.\n";
+    std::cerr << " ERROR in camera kml: deviation of right_fov is defined without given initial right_fov.\n";
     return false;
   }
   if ( parser->top_fov_dev_ && !parser->top_fov_) {
-    vcl_cerr << " ERROR in camera kml: deviation of top_fov is defined without given initial top_fov.\n";
+    std::cerr << " ERROR in camera kml: deviation of top_fov is defined without given initial top_fov.\n";
     return false;
   }
 
   // define the viewing volume
   if ( parser->right_fov_ && parser->top_fov_ ) {  // use averaged value to define top_fov_
-    double tr = vcl_tan(parser->right_fov_*dtor), tt = vcl_tan(parser->top_fov_*dtor);
+    double tr = std::tan(parser->right_fov_*dtor), tt = std::tan(parser->top_fov_*dtor);
     double fr = ppu/tr, ft = ppv/tt;
     double f = 0.5*(fr+ft);
-    top_fov = vcl_atan(0.5*nj/f)/dtor;
+    top_fov = std::atan(0.5*nj/f)/dtor;
   }
   else if ( parser->right_fov_ ) {  // transfer right_fov to top_fov to serve query purpose
-    double tr = vcl_tan(parser->right_fov_*dtor);
+    double tr = std::tan(parser->right_fov_*dtor);
     double fr = ni/tr;
-    top_fov = vcl_atan(nj/fr)/dtor;
+    top_fov = std::atan(nj/fr)/dtor;
   }
   else if ( parser->top_fov_ ) {   // use top_fov directly in query
     top_fov = parser->top_fov_;
@@ -414,8 +415,8 @@ bool volm_io::read_camera(vcl_string kml_file,
   // define the deviation of viewing volume
   if ( parser->right_fov_dev_ && parser->top_fov_dev_ ) {
     // If both given, use the one that gives larger focal range
-    double trd = vcl_tan( dtor*(parser->right_fov_ + parser->right_fov_dev_) );
-    double ttd = vcl_tan( dtor*(parser->top_fov_ + parser->top_fov_dev_) );
+    double trd = std::tan( dtor*(parser->right_fov_ + parser->right_fov_dev_) );
+    double ttd = std::tan( dtor*(parser->top_fov_ + parser->top_fov_dev_) );
     double frd = ppu/trd, ftd = ppv/ttd;
     if (frd >= ftd)
       top_fov_dev = parser->top_fov_dev_;
@@ -424,8 +425,8 @@ bool volm_io::read_camera(vcl_string kml_file,
   }
   else if ( parser->right_fov_dev_ ) {
     // transfer right_fov_dev to top_fov_dev
-    double trd = vcl_tan( dtor*(parser->right_fov_ + parser->right_fov_dev_) );
-    top_fov_dev = vcl_atan(nj*trd/ni)/dtor - top_fov;
+    double trd = std::tan( dtor*(parser->right_fov_ + parser->right_fov_dev_) );
+    top_fov_dev = std::atan(nj*trd/ni)/dtor - top_fov;
   }
   else if ( parser->top_fov_dev_ ) {
     // use top_fov
@@ -433,40 +434,40 @@ bool volm_io::read_camera(vcl_string kml_file,
   }
 
   delete parser;
-  vcl_fclose(xmlFile);
+  std::fclose(xmlFile);
   return true;
 }
 
-bool volm_io::read_labelme(vcl_string xml_file, vcl_string category_file, depth_map_scene_sptr& depth_scene, vcl_string& img_category)
+bool volm_io::read_labelme(std::string xml_file, std::string category_file, depth_map_scene_sptr& depth_scene, std::string& img_category)
 {
   bvgl_labelme_parser parser(xml_file);
-  vcl_vector<vgl_polygon<double> > polys = parser.polygons();
-  vcl_vector<vcl_string>& object_names = parser.obj_names();
-  vcl_vector<vcl_string>& object_types = parser.obj_types();
-  vcl_vector<int>& object_orders = parser.obj_depth_orders();
-  vcl_vector<float>& object_mindist = parser.obj_mindists();
-  vcl_vector<float>& object_maxdist = parser.obj_maxdists();
+  std::vector<vgl_polygon<double> > polys = parser.polygons();
+  std::vector<std::string>& object_names = parser.obj_names();
+  std::vector<std::string>& object_types = parser.obj_types();
+  std::vector<int>& object_orders = parser.obj_depth_orders();
+  std::vector<float>& object_mindist = parser.obj_mindists();
+  std::vector<float>& object_maxdist = parser.obj_maxdists();
   if (polys.size() != object_names.size()   ||
       polys.size() != object_types.size()   ||
       polys.size() != object_maxdist.size() ||
       polys.size() != object_mindist.size() ||
       polys.size() != object_orders.size()     ) {
-    vcl_cerr << " ERROR in labelme xml file: imcomplete object properties definition, check object attributes\n";
+    std::cerr << " ERROR in labelme xml file: imcomplete object properties definition, check object attributes\n";
     return false;
   }
   if (!parser.image_ni() || !parser.image_nj()) {
-    vcl_cerr << " ERROR in labelme xml file: Missing image size information, check <nrows> and <ncols>\n";
+    std::cerr << " ERROR in labelme xml file: Missing image size information, check <nrows> and <ncols>\n";
     return false;
   }
   if (parser.image_category() == "") {
-    vcl_cerr << " ERROR in labelme xml file: Missing image category information, check <ImageCategory>\n";
+    std::cerr << " ERROR in labelme xml file: Missing image category information, check <ImageCategory>\n";
     return false;
   }
   // load the image category
   img_category = parser.image_category();
   if ( img_category != "desert" && img_category != "coast" ) {
-    vcl_cout << " image_category is " << img_category << vcl_endl;
-    vcl_cerr << " WARNING in labelme xml file: undefined img_category found\n";
+    std::cout << " image_category is " << img_category << std::endl;
+    std::cerr << " WARNING in labelme xml file: undefined img_category found\n";
   }
   // load the image size
   unsigned ni = parser.image_ni();
@@ -474,15 +475,15 @@ bool volm_io::read_labelme(vcl_string xml_file, vcl_string category_file, depth_
   depth_scene->set_image_size(nj, ni);
 
   // create depth_map_scene from labelme
-  vcl_map<vcl_string, volm_category_attribute> category_table;
+  std::map<std::string, volm_category_attribute> category_table;
   volm_category_attribute::read_category(category_table, category_file);
 
   for (unsigned i = 0; i < polys.size(); i++) {
     vsol_polygon_2d_sptr poly = bsol_algs::poly_from_vgl(polys[i]);
     double min_dist = object_mindist[i], max_dist = object_maxdist[i];
     unsigned order = object_orders[i];
-    vcl_string type = object_types[i];
-    vcl_string name = object_names[i];
+    std::string type = object_types[i];
+    std::string name = object_names[i];
     // sky region
     if (type == "sky")
       depth_scene->add_sky(poly, 255, object_names[i]);
@@ -495,7 +496,7 @@ bool volm_io::read_labelme(vcl_string xml_file, vcl_string category_file, depth_
     else {
       if (category_table[type].is_active_) {
         unsigned land_id = volm_label_table::land_id[volm_label_table::get_id_closest_name(category_table[type].lnd_)].id_;
-        vcl_string orient = category_table[type].ori_;
+        std::string orient = category_table[type].ori_;
         vgl_vector_3d<double> np;
         if (orient == "horizontal")          np.set(0.0, 0.0, 1.0);
         else if (orient == "front_parallel") np.set(1.0, 1.0, 0.0);
@@ -507,32 +508,32 @@ bool volm_io::read_labelme(vcl_string xml_file, vcl_string category_file, depth_
   return true;
 }
 
-bool volm_io::read_query_tags(vcl_string xml_file,
+bool volm_io::read_query_tags(std::string xml_file,
                               depth_map_scene_sptr& depth_scene,
-                              vcl_vector<volm_weight>& weights,
-                              vcl_string& world_region,
+                              std::vector<volm_weight>& weights,
+                              std::string& world_region,
                               unsigned& ni,
                               unsigned& nj,
-                              vcl_string& query_name)
+                              std::string& query_name)
 {
   bvgl_labelme_parser parser(xml_file);
-  vcl_vector<vgl_polygon<double> > polys = parser.polygons();
-  vcl_vector<vgl_point_2d<double> > points = parser.pixels();
-  vcl_vector<vcl_string>& object_names = parser.obj_names();
-  vcl_vector<vcl_string>& object_land_types = parser.obj_land_categories();
-  vcl_vector<float>& object_mindist = parser.obj_mindists();
-  vcl_vector<float>& object_maxdist = parser.obj_maxdists();
-  vcl_vector<float>& object_weight =  parser.obj_weights();
+  std::vector<vgl_polygon<double> > polys = parser.polygons();
+  std::vector<vgl_point_2d<double> > points = parser.pixels();
+  std::vector<std::string>& object_names = parser.obj_names();
+  std::vector<std::string>& object_land_types = parser.obj_land_categories();
+  std::vector<float>& object_mindist = parser.obj_mindists();
+  std::vector<float>& object_maxdist = parser.obj_maxdists();
+  std::vector<float>& object_weight =  parser.obj_weights();
 
   unsigned num_objs = object_names.size();
   if (num_objs != object_land_types.size() || num_objs != object_mindist.size() ||
       num_objs != object_maxdist.size()    || num_objs != object_weight.size())
   {
-    vcl_cerr << "ERROR parsing tag file " << xml_file << ": incomplete object properties definition, check tags in xml file\n";
+    std::cerr << "ERROR parsing tag file " << xml_file << ": incomplete object properties definition, check tags in xml file\n";
     return false;
   }
   if (!parser.image_ni() || !parser.image_nj()) {
-    vcl_cerr << "ERROR parsing tag file " << xml_file  << ": missing image size information, check <nrows> and <ncols>\n";
+    std::cerr << "ERROR parsing tag file " << xml_file  << ": missing image size information, check <nrows> and <ncols>\n";
     return false;
   }
 
@@ -562,7 +563,7 @@ bool volm_io::read_query_tags(vcl_string xml_file,
   weights.clear();
   // create depth_map scene from loaded tag (here we treat all labeled object as non-sky, non-ground object)
   for (unsigned i = 0; i < num_objs; i++) {
-    vcl_string land_type = object_land_types[i];
+    std::string land_type = object_land_types[i];
     if (volm_osm_category_io::tag_to_volm_land_table.find(land_type) == volm_osm_category_io::tag_to_volm_land_table.end())
       continue;
     vsol_polygon_2d_sptr poly = bsol_algs::poly_from_vgl(polys[i]);
@@ -577,50 +578,50 @@ bool volm_io::read_query_tags(vcl_string xml_file,
   return true;
 }
 
-bool volm_io::read_conf_query_tags(vcl_string xml_file,
+bool volm_io::read_conf_query_tags(std::string xml_file,
                                   float const& floor_height,
                                   depth_map_scene_sptr& depth_scene,
-                                  vcl_string& world_region,
+                                  std::string& world_region,
                                   unsigned& img_ni, unsigned& img_nj,
-                                  vcl_string& query_name)
+                                  std::string& query_name)
 {
   if (!vul_file::exists(xml_file))
     return false;
   bvgl_labelme_parser parser(xml_file);
-  vcl_vector<vgl_point_2d<double> > points = parser.pixels(); // <point> tag
-  vcl_vector<vcl_string>& object_names = parser.obj_names();  // <name> tag
-  vcl_vector<vcl_string>& object_land_types = parser.obj_land_categories();  // <land> tag
-  vcl_vector<float>& object_mindist = parser.obj_mindists();
-  vcl_vector<float>& object_maxdist = parser.obj_maxdists();
-  vcl_vector<int>& object_heights = parser.obj_heights();
-  vcl_vector<bool>& object_references = parser.obj_references();
+  std::vector<vgl_point_2d<double> > points = parser.pixels(); // <point> tag
+  std::vector<std::string>& object_names = parser.obj_names();  // <name> tag
+  std::vector<std::string>& object_land_types = parser.obj_land_categories();  // <land> tag
+  std::vector<float>& object_mindist = parser.obj_mindists();
+  std::vector<float>& object_maxdist = parser.obj_maxdists();
+  std::vector<int>& object_heights = parser.obj_heights();
+  std::vector<bool>& object_references = parser.obj_references();
   // check the consistency
   unsigned num_objs = object_names.size();
   if (num_objs != points.size() || num_objs != object_land_types.size() || num_objs != object_references.size() ||
       num_objs != object_mindist.size() || num_objs != object_maxdist.size() || num_objs != object_heights.size() )
   {
-    vcl_cerr << "ERROR parsing tag file " << xml_file << ": incomplete object properties definition, check tags in xml file\n";
+    std::cerr << "ERROR parsing tag file " << xml_file << ": incomplete object properties definition, check tags in xml file\n";
     return false;
   }
   if (!parser.image_ni() || !parser.image_nj())
   {
-    vcl_cerr << "ERROR parsing tag file " << xml_file << ": missing image size or image name, check <nrows>, <ncols> or <filename>\n";
+    std::cerr << "ERROR parsing tag file " << xml_file << ": missing image size or image name, check <nrows>, <ncols> or <filename>\n";
     return false;
   }
 
   if (parser.image_name().compare("") == 0)
   {
-    vcl_cerr << "ERROR parsing tag file " << xml_file << ": missing image name tag <filename>\n";
+    std::cerr << "ERROR parsing tag file " << xml_file << ": missing image name tag <filename>\n";
     return false;
   }
   if (parser.region().compare("") == 0)
   {
-    vcl_cerr << "ERROR parsing tag file " << xml_file << ": missing <region> tag to specify the world region\n";
+    std::cerr << "ERROR parsing tag file " << xml_file << ": missing <region> tag to specify the world region\n";
     return false;
   }
 
   // create polygon from points -- expands to 4 points
-  vcl_vector<vgl_polygon<double> > polys;
+  std::vector<vgl_polygon<double> > polys;
   for (unsigned i = 0; i < num_objs; i++)
   {
     vgl_polygon<double> poly;
@@ -635,7 +636,7 @@ bool volm_io::read_conf_query_tags(vcl_string xml_file,
   // parse the world region
   world_region = parser.region();
   // parse the query name
-  vcl_string filename = parser.image_name();
+  std::string filename = parser.image_name();
   query_name = vul_file::strip_extension(filename);
   // parser the image dimension
   img_ni = parser.image_ni();
@@ -645,7 +646,7 @@ bool volm_io::read_conf_query_tags(vcl_string xml_file,
   depth_scene->set_image_size(img_ni, img_nj);
   for (unsigned i = 0; i < num_objs; i++)
   {
-    vcl_string land_type = object_land_types[i];
+    std::string land_type = object_land_types[i];
     if (volm_osm_category_io::tag_to_volm_land_table.find(land_type) == volm_osm_category_io::tag_to_volm_land_table.end())
       continue;
     if (volm_osm_category_io::tag_to_volm_land_table.find(land_type)->second.name_ == "invalid")
@@ -674,10 +675,10 @@ bool volm_io::read_conf_query_tags(vcl_string xml_file,
 
 }
 
-bool volm_io::write_status(vcl_string out_folder, int status_code, int percent, vcl_string log_message, vcl_string status_file)
+bool volm_io::write_status(std::string out_folder, int status_code, int percent, std::string log_message, std::string status_file)
 {
-  vcl_ofstream file;
-  vcl_string out_file = out_folder + "/" + status_file;
+  std::ofstream file;
+  std::string out_file = out_folder + "/" + status_file;
   file.open (out_file.c_str());
   file << "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<status>\n";
   switch (status_code) {
@@ -709,7 +710,7 @@ bool volm_io::write_status(vcl_string out_folder, int status_code, int percent, 
       file << "PREP exe finished\n<percent>30</percent>\n"; break;
     default:
       file << "Unidentified status code!\n";
-      vcl_cerr << "Unidentified status code!\n";
+      std::cerr << "Unidentified status code!\n";
       break;
   }
   file << "<code>\n" << status_code << "\n</code>\n"
@@ -720,16 +721,16 @@ bool volm_io::write_status(vcl_string out_folder, int status_code, int percent, 
 }
 
 //: return true if MATCHER_EXE_FINISHED, otherwise return false
-bool volm_io::check_matcher_status(vcl_string out_folder)
+bool volm_io::check_matcher_status(std::string out_folder)
 {
-  vcl_ifstream ifs;
-  vcl_string file = out_folder + "/status.xml";
+  std::ifstream ifs;
+  std::string file = out_folder + "/status.xml";
   ifs.open(file.c_str());
   char buf[10000];
   ifs.getline(buf, 10000);
   ifs.close();
-  vcl_stringstream str(buf);
-  vcl_string dummy;
+  std::stringstream str(buf);
+  std::string dummy;
   str >> dummy;
   while (dummy.compare("<code>") != 0)
     str >> dummy;
@@ -739,10 +740,10 @@ bool volm_io::check_matcher_status(vcl_string out_folder)
 }
 
 
-bool volm_io::write_log(vcl_string out_folder, vcl_string log)
+bool volm_io::write_log(std::string out_folder, std::string log)
 {
-  vcl_ofstream file;
-  vcl_string out_file = out_folder + "/log.xml";
+  std::ofstream file;
+  std::string out_file = out_folder + "/log.xml";
   file.open (out_file.c_str());
   file << "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<status>\n"
        << "<log>\n"<<log<<"</log>\n";
@@ -750,10 +751,10 @@ bool volm_io::write_log(vcl_string out_folder, vcl_string log)
   return true;
 }
 
-bool volm_io::write_composer_log(vcl_string out_folder, vcl_string log)
+bool volm_io::write_composer_log(std::string out_folder, std::string log)
 {
-  vcl_ofstream file;
-  vcl_string out_file = out_folder + "/composer_log.xml";
+  std::ofstream file;
+  std::string out_file = out_folder + "/composer_log.xml";
   file.open (out_file.c_str());
   file << "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<status>\n"
        << "<log>\n"<<log<<"</log>\n";
@@ -761,9 +762,9 @@ bool volm_io::write_composer_log(vcl_string out_folder, vcl_string log)
   return true;
 }
 
-bool volm_io::write_post_processing_log(vcl_string log_file, vcl_string log)
+bool volm_io::write_post_processing_log(std::string log_file, std::string log)
 {
-  vcl_ofstream file;
+  std::ofstream file;
   file.open(log_file.c_str());
   file << "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<status>\n"
        << "<log>\n"<<log<<"</log>\n</status>";
@@ -771,9 +772,9 @@ bool volm_io::write_post_processing_log(vcl_string log_file, vcl_string log)
   return true;
 }
 
-bool volm_io::write_error_log(vcl_string const& log_file, vcl_string const& log)
+bool volm_io::write_error_log(std::string const& log_file, std::string const& log)
 {
-  vcl_cerr << log;  volm_io::write_post_processing_log(log_file, log);
+  std::cerr << log;  volm_io::write_post_processing_log(log_file, log);
   return true;
 }
 
@@ -803,7 +804,7 @@ unsigned char volm_io::scale_score_to_1_255_sig(float const& kl, float const & k
   float x;
   if (score < t) {
     x = -1*kl*(score-threshold);
-    return 1 + (unsigned char)(253.999f / ( 1+vcl_exp(x)));
+    return 1 + (unsigned char)(253.999f / ( 1+std::exp(x)));
   }
   else
     return  volm_io::scale_score_to_1_255(threshold, score);
@@ -815,7 +816,7 @@ float volm_io::scale_score_to_0_1_sig(float const& kl, float const& ku, float co
     if (pix_value == 1)
       return 0.0f;
     else
-      return (threshold - vcl_log(253.999/(pix_value-1)-1)/kl);
+      return (threshold - std::log(253.999/(pix_value-1)-1)/kl);
   else {
     return volm_io::scale_score_to_0_1(pix_value, threshold);
   }
@@ -830,18 +831,18 @@ unsigned char volm_io::scale_score_to_1_127(float threshold, float score)
     return (unsigned char) (((score-threshold)/(1-threshold))*64 + 63);
 }
 
-bool operator>(const vcl_pair<float, volm_rationale>& a, const vcl_pair<float, volm_rationale>& b)
+bool operator>(const std::pair<float, volm_rationale>& a, const std::pair<float, volm_rationale>& b)
 {  return a.first>b.first; }
 
-bool volm_rationale::write_top_matches(vcl_multiset<vcl_pair<float, volm_rationale>, std::greater<vcl_pair<float, volm_rationale> > >& top_matches, vcl_string& filename)
+bool volm_rationale::write_top_matches(std::multiset<std::pair<float, volm_rationale>, std::greater<std::pair<float, volm_rationale> > >& top_matches, std::string& filename)
 {
-  vcl_ofstream ofs(filename.c_str());
+  std::ofstream ofs(filename.c_str());
   if (!ofs.is_open()) {
-    vcl_cerr << " cannot open: " << filename << " for write!\n";
+    std::cerr << " cannot open: " << filename << " for write!\n";
     return false;
   }
-  vcl_multiset<vcl_pair<float, volm_rationale>, std::greater<vcl_pair<float, volm_rationale> > >::iterator iter;
-  ofs << top_matches.size() << vcl_endl;
+  std::multiset<std::pair<float, volm_rationale>, std::greater<std::pair<float, volm_rationale> > >::iterator iter;
+  ofs << top_matches.size() << std::endl;
   for (iter = top_matches.begin(); iter != top_matches.end(); iter++) {
     ofs << iter->first
         << ' ' << iter->second.lat
@@ -850,17 +851,17 @@ bool volm_rationale::write_top_matches(vcl_multiset<vcl_pair<float, volm_rationa
         << ' ' << iter->second.index_id
         << ' ' << iter->second.cam_id << '\n'
         << iter->second.index_file << '\n'
-        << iter->second.score_file << vcl_endl;
+        << iter->second.score_file << std::endl;
   }
   ofs.close();
   return true;
 }
 
-bool volm_rationale::read_top_matches(vcl_multiset<vcl_pair<float, volm_rationale>, std::greater<vcl_pair<float, volm_rationale> > >& top_matches, vcl_string& filename)
+bool volm_rationale::read_top_matches(std::multiset<std::pair<float, volm_rationale>, std::greater<std::pair<float, volm_rationale> > >& top_matches, std::string& filename)
 {
-  vcl_ifstream ifs(filename.c_str());
+  std::ifstream ifs(filename.c_str());
   if (!ifs.is_open()) {
-    vcl_cerr << " cannot open: " << filename << '\n';
+    std::cerr << " cannot open: " << filename << '\n';
     return false;
   }
   unsigned cnt = 0;
@@ -871,16 +872,16 @@ bool volm_rationale::read_top_matches(vcl_multiset<vcl_pair<float, volm_rational
     volm_rationale r;
     ifs >> r.lat >> r.lon >> r.elev >> r.index_id >> r.cam_id;
     ifs >> r.index_file >> r.score_file;
-    top_matches.insert(vcl_pair<float, volm_rationale>(score, r));
+    top_matches.insert(std::pair<float, volm_rationale>(score, r));
   }
   ifs.close();
   return true;
 }
 
 // x is lon, y is lat
-void volm_io::read_polygons(vcl_string poly_file, vgl_polygon<double>& out)
+void volm_io::read_polygons(std::string poly_file, vgl_polygon<double>& out)
 {
-  vcl_ifstream ifs(poly_file.c_str());
+  std::ifstream ifs(poly_file.c_str());
   unsigned np, nvert;
   double x,y;
 
@@ -965,42 +966,42 @@ void volm_score::b_read(vsl_b_istream& is)
   }
   else
   {
-    vcl_cerr << "I/O ERROR: volm_score::b_read(vsl_b_istream&)\n"
+    std::cerr << "I/O ERROR: volm_score::b_read(vsl_b_istream&)\n"
              << "           Unknown version number "<< ver << '\n';
-    is.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
+    is.is().clear(std::ios::badbit); // Set an unrecoverable IO error on stream
   }
 }
 
-int volm_io::read_gt_file(vcl_string gt_file, vcl_vector<vcl_pair<vgl_point_3d<double>, vcl_pair<vcl_pair<vcl_string, int>, vcl_string> > >& samples)
+int volm_io::read_gt_file(std::string gt_file, std::vector<std::pair<vgl_point_3d<double>, std::pair<std::pair<std::string, int>, std::string> > >& samples)
 {
-  vcl_ifstream ifs(gt_file.c_str());
+  std::ifstream ifs(gt_file.c_str());
   int cnt; ifs >> cnt;
   for (int j = 0; j < cnt; j++) {
-    vcl_string name; ifs >> name; vcl_string type;
+    std::string name; ifs >> name; std::string type;
     char name_buf[1000];
     for (unsigned kk = 0; kk < name.size(); kk++)
       name_buf[kk] = name[kk];
 
-    char *tok = vcl_strtok(name_buf, "-");
-    char *tok2 = vcl_strtok(tok, "_");
-    tok2 = vcl_strtok(NULL, "_"); // tokenize the remaining string
+    char *tok = std::strtok(name_buf, "-");
+    char *tok2 = std::strtok(tok, "_");
+    tok2 = std::strtok(VXL_NULLPTR, "_"); // tokenize the remaining string
     int img_id;
-    vcl_stringstream tv(tok2); tv >> img_id;
+    std::stringstream tv(tok2); tv >> img_id;
 
     double lat, lon, elev;
     ifs >> lat; ifs >> lon; ifs >> elev;
     ifs >> type;
     vgl_point_3d<double> pt(lon, lat, elev);
-    vcl_pair<vcl_string, int> np(name, img_id);
-    vcl_pair<vcl_pair<vcl_string, int>, vcl_string> p(np, type);
-    samples.push_back(vcl_pair<vgl_point_3d<double>,
-                      vcl_pair<vcl_pair<vcl_string, int>, vcl_string> >(pt,  p) );
+    std::pair<std::string, int> np(name, img_id);
+    std::pair<std::pair<std::string, int>, std::string> p(np, type);
+    samples.push_back(std::pair<vgl_point_3d<double>,
+                      std::pair<std::pair<std::string, int>, std::string> >(pt,  p) );
   }
   ifs.close();
   return cnt;
 }
 
-void volm_score::write_scores(vcl_vector<volm_score_sptr>& scores, vcl_string const& file_name)
+void volm_score::write_scores(std::vector<volm_score_sptr>& scores, std::string const& file_name)
 {
   vsl_b_ofstream ofs(file_name);
   vsl_b_write(ofs, (unsigned)(scores.size()));
@@ -1009,7 +1010,7 @@ void volm_score::write_scores(vcl_vector<volm_score_sptr>& scores, vcl_string co
   ofs.close();
 }
 
-void volm_score::read_scores(vcl_vector<volm_score_sptr>& scores, vcl_string const& file_name)
+void volm_score::read_scores(std::vector<volm_score_sptr>& scores, std::string const& file_name)
 {
   vsl_b_ifstream ifs(file_name);
   unsigned size;
@@ -1023,14 +1024,14 @@ void volm_score::read_scores(vcl_vector<volm_score_sptr>& scores, vcl_string con
   ifs.close();
 }
 
-void volm_weight::read_weight(vcl_vector<volm_weight>& weights, vcl_string const& file_name)
+void volm_weight::read_weight(std::vector<volm_weight>& weights, std::string const& file_name)
 {
-  vcl_ifstream ifs(file_name.c_str());
-  vcl_string dummy;
-  vcl_getline(ifs, dummy); vcl_getline(ifs, dummy); vcl_getline(ifs, dummy); vcl_getline(ifs, dummy);
+  std::ifstream ifs(file_name.c_str());
+  std::string dummy;
+  std::getline(ifs, dummy); std::getline(ifs, dummy); std::getline(ifs, dummy); std::getline(ifs, dummy);
 
-  vcl_string w_typ;
-  vcl_string w_name;
+  std::string w_typ;
+  std::string w_name;
   float w_ori, w_lnd, w_dst, w_ord, w_obj;
   while (true) {
     ifs >> w_name;
@@ -1046,12 +1047,12 @@ void volm_weight::read_weight(vcl_vector<volm_weight>& weights, vcl_string const
   ifs.close();
 }
 
-bool volm_weight::check_weight(vcl_vector<volm_weight> const& /*weight*/)
+bool volm_weight::check_weight(std::vector<volm_weight> const& /*weight*/)
 {
   return true;
 }
 
-void volm_weight::equal_weight(vcl_vector<volm_weight>& weights, depth_map_scene_sptr dms)
+void volm_weight::equal_weight(std::vector<volm_weight>& weights, depth_map_scene_sptr dms)
 {
   float w_avg;
   float w_obj;
@@ -1103,44 +1104,44 @@ void volm_weight::equal_weight(vcl_vector<volm_weight>& weights, depth_map_scene
     weights.push_back(volm_weight("ground", 0.3333f, 0.3333f, 0.0f, 0.3333f, w_obj));
   }
 
-  vcl_vector<depth_map_region_sptr> obj_reg = dms->scene_regions();
-  for ( vcl_vector<depth_map_region_sptr>::iterator vit = obj_reg.begin(); vit != obj_reg.end(); ++vit)
+  std::vector<depth_map_region_sptr> obj_reg = dms->scene_regions();
+  for ( std::vector<depth_map_region_sptr>::iterator vit = obj_reg.begin(); vit != obj_reg.end(); ++vit)
     weights.push_back(volm_weight("object", 0.25f, 0.25f, 0.25f, 0.25f, w_obj));
 #endif
 }
 
-void volm_io_expt_params::read_params(vcl_string const& params_file)
+void volm_io_expt_params::read_params(std::string const& params_file)
 {
-  vcl_ifstream ifs(params_file.c_str());
-  vcl_string dummy;
-  ifs >> dummy; ifs >> fov_inc;     vcl_cout << dummy << ' ' << fov_inc << ' ';
-  ifs >> dummy; ifs >> tilt_inc;    vcl_cout << dummy << ' ' << tilt_inc << ' ';
-  ifs >> dummy; ifs >> roll_inc;    vcl_cout << dummy << ' ' << roll_inc << ' ';
-  ifs >> dummy; ifs >> head_inc;    vcl_cout << dummy << ' ' << head_inc << ' ';
-  ifs >> dummy; ifs >> vmin;        vcl_cout << dummy << ' ' << vmin << ' ';
-  ifs >> dummy; ifs >> solid_angle; vcl_cout << dummy << ' ' << solid_angle << ' ';
-  ifs >> dummy; ifs >> dmax;        vcl_cout << dummy << ' ' << dmax << ' ';
-  ifs >> dummy; ifs >> cap_angle;   vcl_cout << dummy << ' ' << cap_angle << ' ';
-  ifs >> dummy; ifs >> point_angle; vcl_cout << dummy << ' ' << point_angle << ' ';
-  ifs >> dummy; ifs >> top_angle;   vcl_cout << dummy << ' ' << top_angle << ' ';
-  ifs >> dummy; ifs >> bottom_angle;vcl_cout << dummy << ' ' << bottom_angle << '\n';
+  std::ifstream ifs(params_file.c_str());
+  std::string dummy;
+  ifs >> dummy; ifs >> fov_inc;     std::cout << dummy << ' ' << fov_inc << ' ';
+  ifs >> dummy; ifs >> tilt_inc;    std::cout << dummy << ' ' << tilt_inc << ' ';
+  ifs >> dummy; ifs >> roll_inc;    std::cout << dummy << ' ' << roll_inc << ' ';
+  ifs >> dummy; ifs >> head_inc;    std::cout << dummy << ' ' << head_inc << ' ';
+  ifs >> dummy; ifs >> vmin;        std::cout << dummy << ' ' << vmin << ' ';
+  ifs >> dummy; ifs >> solid_angle; std::cout << dummy << ' ' << solid_angle << ' ';
+  ifs >> dummy; ifs >> dmax;        std::cout << dummy << ' ' << dmax << ' ';
+  ifs >> dummy; ifs >> cap_angle;   std::cout << dummy << ' ' << cap_angle << ' ';
+  ifs >> dummy; ifs >> point_angle; std::cout << dummy << ' ' << point_angle << ' ';
+  ifs >> dummy; ifs >> top_angle;   std::cout << dummy << ' ' << top_angle << ' ';
+  ifs >> dummy; ifs >> bottom_angle;std::cout << dummy << ' ' << bottom_angle << '\n';
   ifs.close();
 }
 
-void volm_io_expt_params::read_cam_inc_params(vcl_string const& params_file)
+void volm_io_expt_params::read_cam_inc_params(std::string const& params_file)
 {
-  vcl_ifstream ifs(params_file.c_str());
-  vcl_string dummy;
-  ifs >> dummy; ifs >> fov_inc;     vcl_cout << dummy << ' ' << fov_inc << ' ';
-  ifs >> dummy; ifs >> tilt_inc;    vcl_cout << dummy << ' ' << tilt_inc << ' ';
-  ifs >> dummy; ifs >> roll_inc;    vcl_cout << dummy << ' ' << roll_inc << ' ';
-  ifs >> dummy; ifs >> head_inc;    vcl_cout << dummy << ' ' << head_inc << '\n';
+  std::ifstream ifs(params_file.c_str());
+  std::string dummy;
+  ifs >> dummy; ifs >> fov_inc;     std::cout << dummy << ' ' << fov_inc << ' ';
+  ifs >> dummy; ifs >> tilt_inc;    std::cout << dummy << ' ' << tilt_inc << ' ';
+  ifs >> dummy; ifs >> roll_inc;    std::cout << dummy << ' ' << roll_inc << ' ';
+  ifs >> dummy; ifs >> head_inc;    std::cout << dummy << ' ' << head_inc << '\n';
   ifs.close();
 }
 
-bool volm_io::read_ray_index_data(vcl_string path, vcl_vector<unsigned char>& data)
+bool volm_io::read_ray_index_data(std::string path, std::vector<unsigned char>& data)
 {
-  vcl_ifstream is(path.c_str());
+  std::ifstream is(path.c_str());
   if (!is.is_open())
     return false;
   int nrays;
@@ -1154,10 +1155,10 @@ bool volm_io::read_ray_index_data(vcl_string path, vcl_vector<unsigned char>& da
 }
 
 //: read the building footprint file
-bool volm_io::read_building_file(vcl_string file, vcl_vector<vcl_pair<vgl_polygon<double>, vgl_point_2d<double> > >& builds, vcl_vector<double>& heights)
+bool volm_io::read_building_file(std::string file, std::vector<std::pair<vgl_polygon<double>, vgl_point_2d<double> > >& builds, std::vector<double>& heights)
 {
-  vcl_cout << "\t\t !!!!!!!!!!!!!! reading file: " << file << vcl_endl;
-  vcl_ifstream ifs(file.c_str());
+  std::cout << "\t\t !!!!!!!!!!!!!! reading file: " << file << std::endl;
+  std::ifstream ifs(file.c_str());
   if (!ifs.is_open())
     return false;
   while (!ifs.eof()) {
@@ -1165,41 +1166,41 @@ bool volm_io::read_building_file(vcl_string file, vcl_vector<vcl_pair<vgl_polygo
     double height, volume, area, confidence, cent_lon, cent_lat, lon, lat;
     char buffer[100000];
     ifs.getline(buffer, 100000);
-    vcl_string temp_buf(buffer);
+    std::string temp_buf(buffer);
     if (ifs.eof()) break;
-    char *tok = vcl_strtok(buffer, ",");
-    vcl_stringstream th(tok); th >> height;
+    char *tok = std::strtok(buffer, ",");
+    std::stringstream th(tok); th >> height;
 
-    tok = vcl_strtok(NULL, ","); // tokenize the remaining string
-    vcl_stringstream tv(tok); tv >> volume;
+    tok = std::strtok(VXL_NULLPTR, ","); // tokenize the remaining string
+    std::stringstream tv(tok); tv >> volume;
 
-    tok = vcl_strtok(NULL, ",");
-    vcl_stringstream ta(tok); ta >> area;
+    tok = std::strtok(VXL_NULLPTR, ",");
+    std::stringstream ta(tok); ta >> area;
 
-    tok = vcl_strtok(NULL, ",");
-    vcl_stringstream tc(tok); tc >> confidence;
+    tok = std::strtok(VXL_NULLPTR, ",");
+    std::stringstream tc(tok); tc >> confidence;
 
-    tok = vcl_strtok(NULL, ",");
-    vcl_stringstream tcl(tok); tcl >> cent_lon;
+    tok = std::strtok(VXL_NULLPTR, ",");
+    std::stringstream tcl(tok); tcl >> cent_lon;
 
-    tok = vcl_strtok(NULL, ",");
-    vcl_stringstream tcla(tok); tcla >> cent_lat;
+    tok = std::strtok(VXL_NULLPTR, ",");
+    std::stringstream tcla(tok); tcla >> cent_lat;
 
     vgl_point_2d<double> cent_pt(cent_lon, cent_lat);
 
     vgl_polygon<double> poly(1);
-    tok = vcl_strtok(NULL, ",");
-    while (tok != NULL) {
-      vcl_stringstream tl(tok);
+    tok = std::strtok(VXL_NULLPTR, ",");
+    while (tok != VXL_NULLPTR) {
+      std::stringstream tl(tok);
       tl >> lon;
 
-      tok = vcl_strtok(NULL, ",");
-      vcl_stringstream tlat(tok);
+      tok = std::strtok(VXL_NULLPTR, ",");
+      std::stringstream tlat(tok);
       tlat >> lat;
 
       vgl_point_2d<double> pt(lon, lat);  // lon is x
       poly[0].push_back(pt);
-      tok = vcl_strtok(NULL, ",");
+      tok = std::strtok(VXL_NULLPTR, ",");
     }
     // remove the duplicated points inside polygon
     vgl_polygon<double> prune_poly(1);
@@ -1207,95 +1208,95 @@ bool volm_io::read_building_file(vcl_string file, vcl_vector<vcl_pair<vgl_polygo
     for (unsigned i = 1; i < poly[0].size(); i++)
       if (poly[0][i] != poly[0][i-1])
         prune_poly[0].push_back(poly[0][i]);
-    builds.push_back(vcl_pair<vgl_polygon<double>, vgl_point_2d<double> >(prune_poly, cent_pt));
+    builds.push_back(std::pair<vgl_polygon<double>, vgl_point_2d<double> >(prune_poly, cent_pt));
     heights.push_back(height);
   }
   return true;
 }
 
 //: read the sme labels
-bool volm_io::read_sme_file(vcl_string file, vcl_vector<vcl_pair<vgl_point_2d<double>, int> >& objects)
+bool volm_io::read_sme_file(std::string file, std::vector<std::pair<vgl_point_2d<double>, int> >& objects)
 {
-  vcl_cout << "\t\t !!!!!!!!!!!!!! reading file: " << file << vcl_endl;
-  vcl_ifstream ifs(file.c_str());
+  std::cout << "\t\t !!!!!!!!!!!!!! reading file: " << file << std::endl;
+  std::ifstream ifs(file.c_str());
   if (!ifs.is_open())
     return false;
 
   while (!ifs.eof()) {
     // each line is one object
-    vcl_string name, type;
+    std::string name, type;
     double lon, lat;
     char buffer[100000];
     ifs.getline(buffer, 100000);
-    vcl_string temp_buf(buffer);
+    std::string temp_buf(buffer);
     if (ifs.eof()) break;
 
-    char *tok = vcl_strtok(buffer, ",");
-    vcl_stringstream th(tok); th >> name;
+    char *tok = std::strtok(buffer, ",");
+    std::stringstream th(tok); th >> name;
 
-    tok = vcl_strtok(NULL, ","); // tokenize the remaining string
-    vcl_stringstream tv(tok); tv >> lon;
+    tok = std::strtok(VXL_NULLPTR, ","); // tokenize the remaining string
+    std::stringstream tv(tok); tv >> lon;
 
-    tok = vcl_strtok(NULL, ",");
-    vcl_stringstream ta(tok); ta >> lat;
+    tok = std::strtok(VXL_NULLPTR, ",");
+    std::stringstream ta(tok); ta >> lat;
 
-    tok = vcl_strtok(NULL, ",");
-    vcl_stringstream tc(tok); tc >> type;
+    tok = std::strtok(VXL_NULLPTR, ",");
+    std::stringstream tc(tok); tc >> type;
 
     vgl_point_2d<double> pt(lon, lat);
 
     // find its label code
     int label = 0;
-    vcl_map<vcl_string, volm_land_layer>::iterator mit = volm_osm_category_io::volm_land_table_name.find(type);
+    std::map<std::string, volm_land_layer>::iterator mit = volm_osm_category_io::volm_land_table_name.find(type);
     if (mit != volm_osm_category_io::volm_land_table_name.end())
       label = mit->second.id_;
 #if 0
-    for (vcl_map<int, volm_attributes >::iterator iter = volm_label_table::land_id.begin();
+    for (std::map<int, volm_attributes >::iterator iter = volm_label_table::land_id.begin();
          iter != volm_label_table::land_id.end(); ++iter)
       if (iter->second.name_.compare(type) == 0)
         label = iter->first;
 #endif
 
-    objects.push_back(vcl_pair<vgl_point_2d<double>, int>(pt, label));
+    objects.push_back(std::pair<vgl_point_2d<double>, int>(pt, label));
   }
   return true;
 }
 
-bool volm_io::write_sme_kml(vcl_string file, vcl_vector<vcl_pair<vgl_point_2d<double>, int> >& objects)
+bool volm_io::write_sme_kml(std::string file, std::vector<std::pair<vgl_point_2d<double>, int> >& objects)
 {
-  vcl_ofstream ofs(file.c_str());
+  std::ofstream ofs(file.c_str());
   bkml_write::open_document(ofs);
   for (unsigned i = 0; i < objects.size(); i++) {
-    vcl_stringstream ids; ids << i;
-    vcl_string name = volm_label_table::land_id[objects[i].second].name_;
+    std::stringstream ids; ids << i;
+    std::string name = volm_label_table::land_id[objects[i].second].name_;
     bkml_write::write_location(ofs, name, ids.str(), objects[i].first.y(), objects[i].first.x(), 0.0);
   }
   bkml_write::close_document(ofs);
   return true;
 }
 
-bool volm_io::write_sme_kml_type(vcl_string file, vcl_string type_name, vcl_vector<vcl_pair<vgl_point_2d<double>, int> >& objects)
+bool volm_io::write_sme_kml_type(std::string file, std::string type_name, std::vector<std::pair<vgl_point_2d<double>, int> >& objects)
 {
-  vcl_ofstream ofs(file.c_str());
+  std::ofstream ofs(file.c_str());
   bkml_write::open_document(ofs);
   for (unsigned i = 0; i < objects.size(); i++) {
-    vcl_string name = volm_label_table::land_id[objects[i].second].name_;
+    std::string name = volm_label_table::land_id[objects[i].second].name_;
     if (name.compare(type_name) != 0)
       continue;
-    vcl_stringstream ids; ids << i;
+    std::stringstream ids; ids << i;
     bkml_write::write_location(ofs, name, ids.str(), objects[i].first.y(), objects[i].first.x(), 0.0);
   }
   bkml_write::close_document(ofs);
   return true;
 }
 
-bool volm_io::read_dem_peak_file(vcl_string const& file, vcl_vector<vcl_pair<vgl_point_2d<double>, double> >& objects)
+bool volm_io::read_dem_peak_file(std::string const& file, std::vector<std::pair<vgl_point_2d<double>, double> >& objects)
 {
   if (!vul_file::exists(file)) {
-    vcl_cerr << "In volm_io::read_dem_peak_file: can not find input file: " << file << "!\n";
+    std::cerr << "In volm_io::read_dem_peak_file: can not find input file: " << file << "!\n";
     return false;
   }
-  vcl_ifstream ifs(file.c_str());
+  std::ifstream ifs(file.c_str());
   if (!ifs.is_open())
     return false;
 
@@ -1303,19 +1304,19 @@ bool volm_io::read_dem_peak_file(vcl_string const& file, vcl_vector<vcl_pair<vgl
     double lon, lat, height;
     char buffer[10000];
     ifs.getline(buffer, 10000);
-    vcl_string temp_buf(buffer);
+    std::string temp_buf(buffer);
     if (ifs.eof()) break;
-    char *tok = vcl_strtok(buffer, " ");
-    vcl_stringstream tlat(tok);  tlat >> lat;
+    char *tok = std::strtok(buffer, " ");
+    std::stringstream tlat(tok);  tlat >> lat;
 
-    tok = vcl_strtok(NULL, " ");
-    vcl_stringstream tlon(tok);  tlon >> lon;
+    tok = std::strtok(VXL_NULLPTR, " ");
+    std::stringstream tlon(tok);  tlon >> lon;
 
-    tok = vcl_strtok(NULL, " ");
-    vcl_stringstream theight(tok);  theight >> height;
+    tok = std::strtok(VXL_NULLPTR, " ");
+    std::stringstream theight(tok);  theight >> height;
 
     vgl_point_2d<double> peak_loc(lon, lat);
-    objects.push_back(vcl_pair<vgl_point_2d<double>, double>(peak_loc, height));
+    objects.push_back(std::pair<vgl_point_2d<double>, double>(peak_loc, height));
   }
   return true;
 }

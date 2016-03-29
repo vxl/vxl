@@ -22,12 +22,12 @@ class bvpl_global_pca: public vbl_ref_count
 {
  public:
   //: Constructor
-  bvpl_global_pca(vcl_vector<vcl_string> const &scenes, vcl_vector<vcl_string> const &aux_dirs, vcl_vector<double> const &finest_cell_length,
-                  vgl_box_3d<int> nbbox,  double training_fraction = 0.1, vcl_string path_out = "./"):
+  bvpl_global_pca(std::vector<std::string> const &scenes, std::vector<std::string> const &aux_dirs, std::vector<double> const &finest_cell_length,
+                  vgl_box_3d<int> nbbox,  double training_fraction = 0.1, std::string path_out = "./"):
   scenes_(scenes), aux_dirs_(aux_dirs), finest_cell_length_(finest_cell_length), nbbox_(nbbox), training_fraction_(training_fraction),path_out_(path_out)
   {
-    training_scenes_ = vcl_vector<bool>(scenes_.size(), true);
-    nleaves_ =  vcl_vector<unsigned long>(scenes_.size(), 0);
+    training_scenes_ = std::vector<bool>(scenes_.size(), true);
+    nleaves_ =  std::vector<unsigned long>(scenes_.size(), 0);
     nsamples_ = 0;
     training_mean_.fill(0.0);
     pc_.fill(0.0);
@@ -37,7 +37,7 @@ class bvpl_global_pca: public vbl_ref_count
   }
 
   //:Create from xml file
-  bvpl_global_pca(const vcl_string &path);
+  bvpl_global_pca(const std::string &path);
 
   //: Init auxiliary scenes and smallest cell length values
   void init(unsigned scene_id);
@@ -74,7 +74,7 @@ class bvpl_global_pca: public vbl_ref_count
   //: Access the mean of samples
   const vnl_vector_fixed<double, feature_dim>& mean()  { return training_mean_; }
 
-  bool register_scene(vcl_string scene_path, vcl_string aux_path)
+  bool register_scene(std::string scene_path, std::string aux_path)
   {
     if (scenes_.size()!=aux_dirs_.size())
       return false;
@@ -91,26 +91,26 @@ class bvpl_global_pca: public vbl_ref_count
   void projection_error(int scene_id, int block_i, int block_j, int block_k);
 
 
-  vcl_string path_out() const { return path_out_; }
+  std::string path_out() const { return path_out_; }
 
-  inline vcl_vector<vcl_string> scenes() const { return scenes_; }
-  inline vcl_vector<vcl_string> aux_dirs() const { return aux_dirs_; }
-  inline vcl_vector<double> cell_lengths() const { return finest_cell_length_; }
-  inline vcl_vector<bool> training_scenes() const { return training_scenes_; }
+  inline std::vector<std::string> scenes() const { return scenes_; }
+  inline std::vector<std::string> aux_dirs() const { return aux_dirs_; }
+  inline std::vector<double> cell_lengths() const { return finest_cell_length_; }
+  inline std::vector<bool> training_scenes() const { return training_scenes_; }
   inline vgl_box_3d<int> nbbox() const { return nbbox_; }
   inline unsigned nscenes() const { return scenes_.size(); }
  protected:
 
   //: A vector to hold scene paths
-  vcl_vector<vcl_string> scenes_;
+  std::vector<std::string> scenes_;
   //: A vector to hold paths to keep any kind of auxiliary scene or info(must be in the same order as scenes_)
-  vcl_vector<vcl_string> aux_dirs_;
+  std::vector<std::string> aux_dirs_;
   //: A vector to hold the finest cell length of the corresponding scene scene
-  vcl_vector<double> finest_cell_length_;
+  std::vector<double> finest_cell_length_;
   //: A vector that indicates whether a scene should be used as train (True) or test(False). Order is equivalent to scenes_
-  vcl_vector<bool> training_scenes_;
+  std::vector<bool> training_scenes_;
   //: A vector to keep the size of each scene
-  vcl_vector<unsigned long> nleaves_;
+  std::vector<unsigned long> nleaves_;
 
   //: The size around the central feature to include in PCA vectors
   vgl_box_3d<int> nbbox_;
@@ -129,12 +129,12 @@ class bvpl_global_pca: public vbl_ref_count
   double training_fraction_;
 
   //: Paths for i/o of matrices and vectors
-  vcl_string path_out_;
-  vcl_string pc_path() const { return path_out_ + "/pc.txt" ; }
-  vcl_string weights_path() const { return path_out_ + "/weights.txt"; }
-  vcl_string mean_path() const { return  path_out_ + "/mean.txt"; }
-  vcl_string scatter_path() const { return  path_out_ + "/scatter.txt"; }
-  vcl_string xml_path() const { return path_out_ + "/pca_global_info.xml"; }
+  std::string path_out_;
+  std::string pc_path() const { return path_out_ + "/pc.txt" ; }
+  std::string weights_path() const { return path_out_ + "/weights.txt"; }
+  std::string mean_path() const { return  path_out_ + "/mean.txt"; }
+  std::string scatter_path() const { return  path_out_ + "/scatter.txt"; }
+  std::string xml_path() const { return path_out_ + "/pca_global_info.xml"; }
 
   void write_pca_matrices();
 

@@ -40,11 +40,11 @@ else()
   #
 
 
-    if(EXISTS ${vxl_SOURCE_DIR}/v3p/png/png.h)
+    if(EXISTS ${VXL_ROOT_SOURCE_DIR}/v3p/png/png.h)
 
       set( PNG_FOUND "YES" )
       set( PNG_LIBRARIES png)
-      set( PNG_INCLUDE_DIR ${vxl_SOURCE_DIR}/v3p/png ${ZLIB_INCLUDE_DIR} )
+      set( PNG_INCLUDE_DIR ${VXL_ROOT_SOURCE_DIR}/v3p/png ${ZLIB_INCLUDE_DIR} )
       set( PNG_INSTALL_INCLUDE_DIR
         ${CMAKE_INSTALL_PREFIX}/include/vxl/v3p/png
         ${ZLIB_INSTALL_INCLUDE_DIR}

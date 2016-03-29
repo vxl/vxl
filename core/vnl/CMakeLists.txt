@@ -1,5 +1,7 @@
 # vxl/core/vnl/CMakeLists.txt
 
+project(vnl)
+
 doxygen_add_library(core/vnl
   DEPENDS core/vsl
   PACKAGE core
@@ -71,55 +73,55 @@ if(VNL_CONFIG_ENABLE_SSE2_ROUNDING)
 else()
   set(VNL_CONFIG_ENABLE_SSE2_ROUNDING 0)
 endif()
-configure_file(${vxl_SOURCE_DIR}/core/vnl/vnl_config.h.in
-               ${vxl_BINARY_DIR}/core/vnl/vnl_config.h @ONLY IMMEDIATE)
+
+vxl_configure_file(${CMAKE_CURRENT_LIST_DIR}/vnl_config.h.in
+               ${PROJECT_BINARY_DIR}/vnl_config.h include/vxl/core/vnl)
 
 set( vnl_sources
   dll.h
   vnl_export.h
 
-  vnl_config.h.in
   vnl_fwd.h
   vnl_tag.h
 
   # vector and matrix
-  vnl_c_vector.txx             vnl_c_vector.h
-  vnl_vector.txx               vnl_vector.h
+  vnl_c_vector.hxx             vnl_c_vector.h
+  vnl_vector.hxx               vnl_vector.h
                                vnl_vector_ref.h
-  vnl_vector_fixed.txx         vnl_vector_fixed.h
-  vnl_vector_fixed_ref.txx     vnl_vector_fixed_ref.h
-  vnl_file_vector.txx          vnl_file_vector.h
-  vnl_matrix.txx               vnl_matrix.h
+  vnl_vector_fixed.hxx         vnl_vector_fixed.h
+  vnl_vector_fixed_ref.hxx     vnl_vector_fixed_ref.h
+  vnl_file_vector.hxx          vnl_file_vector.h
+  vnl_matrix.hxx               vnl_matrix.h
                                vnl_matrix_ref.h
-  vnl_matrix_fixed.txx         vnl_matrix_fixed.h
-  vnl_matrix_fixed_ref.txx     vnl_matrix_fixed_ref.h
-  vnl_diag_matrix.txx          vnl_diag_matrix.h
-  vnl_diag_matrix_fixed.txx    vnl_diag_matrix_fixed.h
-  vnl_sparse_matrix.txx        vnl_sparse_matrix.h
-  vnl_matrix_exp.txx           vnl_matrix_exp.h
-  vnl_file_matrix.txx          vnl_file_matrix.h
-  vnl_sym_matrix.txx           vnl_sym_matrix.h
+  vnl_matrix_fixed.hxx         vnl_matrix_fixed.h
+  vnl_matrix_fixed_ref.hxx     vnl_matrix_fixed_ref.h
+  vnl_diag_matrix.hxx          vnl_diag_matrix.h
+  vnl_diag_matrix_fixed.hxx    vnl_diag_matrix_fixed.h
+  vnl_sparse_matrix.hxx        vnl_sparse_matrix.h
+  vnl_matrix_exp.hxx           vnl_matrix_exp.h
+  vnl_file_matrix.hxx          vnl_file_matrix.h
+  vnl_sym_matrix.hxx           vnl_sym_matrix.h
 
   # matrix operators
-  vnl_fortran_copy.txx         vnl_fortran_copy.h
-  vnl_det.txx                  vnl_det.h
+  vnl_fortran_copy.hxx         vnl_fortran_copy.h
+  vnl_det.hxx                  vnl_det.h
                                vnl_transpose.h
                                vnl_inverse.h
                                vnl_power.h
                                vnl_trace.h
-  vnl_rank.txx                 vnl_rank.h
-  vnl_scalar_join_iterator.txx vnl_scalar_join_iterator.h
+  vnl_rank.hxx                 vnl_rank.h
+  vnl_scalar_join_iterator.hxx vnl_scalar_join_iterator.h
 
   #
   vnl_alloc.cxx                vnl_alloc.h
   vnl_block.cxx                vnl_block.h
   vnl_math.cxx                 vnl_math.h
   vnl_na.cxx                   vnl_na.h
-  vnl_c_na_vector.txx          vnl_c_na_vector.h
+  vnl_c_na_vector.hxx          vnl_c_na_vector.h
   vnl_copy.cxx                 vnl_copy.h
                                vnl_complex.h
   vnl_error.cxx                vnl_error.h
-  vnl_matlab_print.txx         vnl_matlab_print.h
+  vnl_matlab_print.hxx         vnl_matlab_print.h
   vnl_matlab_print_format.cxx  vnl_matlab_print_format.h
   vnl_matlab_print_scalar.cxx  vnl_matlab_print_scalar.h
                                vnl_matlab_print2.h
@@ -129,14 +131,14 @@ set( vnl_sources
   vnl_matlab_filewrite.cxx     vnl_matlab_filewrite.h
   vnl_matops.cxx               vnl_matops.h
   # Polyniomial representations
-  vnl_polynomial.txx           vnl_polynomial.h
+  vnl_polynomial.hxx           vnl_polynomial.h
   vnl_real_polynomial.cxx      vnl_real_polynomial.h
   vnl_real_npolynomial.cxx     vnl_real_npolynomial.h
 
   # alternative number representations
 
   # Quaternions
-  vnl_quaternion.txx           vnl_quaternion.h
+  vnl_quaternion.hxx           vnl_quaternion.h
   # Rational number arithmetic; represented by two long integers
   vnl_rational.cxx             vnl_rational.h
   # Arbitrary precision integers
@@ -150,7 +152,7 @@ set( vnl_sources
   vnl_fastops.cxx              vnl_fastops.h
   vnl_operators.h
   vnl_linear_operators_3.h
-  vnl_complex_ops.txx          vnl_complexify.h vnl_real.h vnl_imag.h
+  vnl_complex_ops.hxx          vnl_complexify.h vnl_real.h vnl_imag.h
 
   # traits
   vnl_numeric_traits.cxx       vnl_numeric_traits.h
@@ -204,7 +206,7 @@ set( vnl_sources
   vnl_sparse_lst_sqr_function.cxx     vnl_sparse_lst_sqr_function.h
   vnl_nonlinear_minimizer.cxx         vnl_nonlinear_minimizer.h
 
-  vnl_hungarian_algorithm.txx         vnl_hungarian_algorithm.h
+  vnl_hungarian_algorithm.hxx         vnl_hungarian_algorithm.h
 
   # linear systems
   vnl_linear_system.cxx               vnl_linear_system.h
@@ -225,7 +227,7 @@ set( vnl_sources
                                vnl_beta.h
   vnl_erf.cxx                  vnl_erf.h
   vnl_sample.cxx               vnl_sample.h
-  vnl_unary_function.txx       vnl_unary_function.h
+  vnl_unary_function.hxx       vnl_unary_function.h
   vnl_identity.h
   vnl_random.cxx               vnl_random.h
   vnl_index_sort.h
@@ -264,7 +266,9 @@ if(CMAKE_COMPILER_IS_GNUCXX)
   endif()
 endif()
 
-vxl_add_library(LIBNAME ${VXL_LIB_PREFIX}vnl LIBSRCS ${vnl_sources})
+vxl_add_library(LIBRARY_NAME ${VXL_LIB_PREFIX}vnl
+  LIBRARY_SOURCES ${vnl_sources}
+  HEADER_INSTALL_DIR vnl)
 target_link_libraries( ${VXL_LIB_PREFIX}vnl ${VXL_LIB_PREFIX}vcl )
 
 if( BUILD_TESTING )

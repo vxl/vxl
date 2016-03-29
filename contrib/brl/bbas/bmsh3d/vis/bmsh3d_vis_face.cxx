@@ -1,12 +1,13 @@
 // This is brl/bbas/bmsh3d/vis/bmsh3d_vis_face.cxx
+#include <iostream>
+#include <cstdio>
 #include "bmsh3d_vis_face.h"
 //:
 // \file
 // \author Ming-Ching Chang
 // \date May 03, 2005.
 
-#include <vcl_iostream.h>
-#include <vcl_cstdio.h>
+#include <vcl_compiler.h>
 #include <vul/vul_printf.h>
 
 #include <bmsh3d/bmsh3d_mesh.h>
@@ -49,7 +50,7 @@ SoCoordinate3* _draw_F_ifs_geom (SoGroup* group, const bmsh3d_face* F)
     group->addChild (coords);
   }
   else
-    vul_printf (vcl_cerr, "  -- Skip drawing face %d: only %d salient edges.\n", F->id(), count);
+    vul_printf (std::cerr, "  -- Skip drawing face %d: only %d salient edges.\n", F->id(), count);
   delete[] verts;
   return coords;
 }
@@ -58,7 +59,7 @@ SoCoordinate3* _draw_F_ifs_geom (SoGroup* group, const bmsh3d_face* F)
 //
 SoCoordinate3* _draw_F_mhe_geom (SoGroup* group, const bmsh3d_face* F)
 {
-  vcl_vector<bmsh3d_vertex*> vertices;
+  std::vector<bmsh3d_vertex*> vertices;
   F->get_ordered_Vs (vertices);
   const unsigned int nVertices = vertices.size();
   if (nVertices<3)
@@ -84,7 +85,7 @@ SoCoordinate3* _draw_F_mhe_geom (SoGroup* group, const bmsh3d_face* F)
     group->addChild (coords);
   }
   else
-    vul_printf (vcl_cerr, "  -- Skip drawing face %d: only %d salient edges.\n", F->id(), count);
+    vul_printf (std::cerr, "  -- Skip drawing face %d: only %d salient edges.\n", F->id(), count);
   delete[] verts;
   return coords;
 }
@@ -176,7 +177,7 @@ SoSeparator* draw_F_with_id (const bmsh3d_face* F, const SbColor& color,
 
   // show id
   char buf[64];
-  vcl_sprintf (buf, "%d", F->id());
+  std::sprintf (buf, "%d", F->id());
   vgl_point_3d<double> cen = F->compute_center_pt ();
   root->addChild (draw_text2d (buf, float(cen.x()), float(cen.y()), float(cen.z()), idbasecolor));
 
@@ -198,7 +199,7 @@ SoSeparator* draw_F_with_id (const bmsh3d_face* F,
 
   // show id
   char buf[64];
-  vcl_sprintf (buf, "%d", F->id());
+  std::sprintf (buf, "%d", F->id());
   vgl_point_3d<double> cen = F->compute_center_pt ();
   root->addChild (draw_text2d (buf, float(cen.x()), float(cen.y()), float(cen.z()), idbasecolor));
 

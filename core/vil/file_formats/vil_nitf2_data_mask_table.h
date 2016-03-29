@@ -7,9 +7,10 @@
 //:
 // \file
 
-#include <vcl_vector.h>
+#include <vector>
+#include <string>
 #include <vxl_config.h>
-#include <vcl_string.h>
+#include <vcl_compiler.h>
 #include <vil/vil_pixel_format.h>
 
 class vil_stream;
@@ -22,7 +23,7 @@ class vil_nitf2_data_mask_table
 {
  public:
   vil_nitf2_data_mask_table( unsigned int numBlocksX, unsigned int numBlocksY,
-                             unsigned int numBands, const vcl_string imode );
+                             unsigned int numBands, const std::string imode );
   bool parse( vil_stream* stream );
 
   //: If this function returns true, then you may call \sa block_band_offset()
@@ -73,16 +74,16 @@ class vil_nitf2_data_mask_table
   //Block n, Band m Offset
   //indexed BMR_n_BND_m[row][col][band] for i_mode = "S" else
   //indexed BMR_n_BND_m[row][col]
-  vcl_vector< vcl_vector< vcl_vector< vxl_uint_32 > > > BMR_n_BND_m;
+  std::vector< std::vector< std::vector< vxl_uint_32 > > > BMR_n_BND_m;
   //Pad Pixel n, Band m
   //indexed TMR_n_BND_m[row][col][band] for i_mode = "S" else
   //indexed TMR_n_BND_m[row][col]
-  vcl_vector< vcl_vector< vcl_vector< vxl_uint_32 > > > TMR_n_BND_m;
+  std::vector< std::vector< std::vector< vxl_uint_32 > > > TMR_n_BND_m;
 
   unsigned int num_blocks_x;
   unsigned int num_blocks_y;
   unsigned int num_bands;
-  vcl_string i_mode;
+  std::string i_mode;
 };
 
 #endif // VIL_NITF2_DATA_MASK_TABLE_H

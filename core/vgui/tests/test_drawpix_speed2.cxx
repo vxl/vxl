@@ -1,8 +1,9 @@
 // This is core/vgui/tests/test_drawpix_speed2.cxx
-#include <vcl_iostream.h>
-#include <vcl_iomanip.h>
-#include <vcl_cstring.h>
-#include <vcl_cmath.h>
+#include <iostream>
+#include <iomanip>
+#include <cstring>
+#include <cmath>
+#include <vcl_compiler.h>
 
 #include <vul/vul_timer.h>
 
@@ -42,11 +43,11 @@ struct result_type
   double pixmove;
 };
 
-vcl_ostream& operator<<( vcl_ostream& ostr, result_type const& r )
+std::ostream& operator<<( std::ostream& ostr, result_type const& r )
 {
-  return ostr << '(' << vcl_fixed << vcl_setprecision(2)
-              << vcl_setw(7) << r.draw << " draw fps, "
-              << vcl_setw(7) << r.total << " total fps)";
+  return ostr << '(' << std::fixed << std::setprecision(2)
+              << std::setw(7) << r.draw << " draw fps, "
+              << std::setw(7) << r.total << " total fps)";
 }
 
 
@@ -124,7 +125,7 @@ void create_pattern( PixType*& buf, PixType*& buf_copy )
       buf[j*ni+i] = PixType(0,0,255-j*255/nj,0);
     }
   }
-  vcl_memcpy( buf_copy, buf, ni*nj*sizeof(PixType) );
+  std::memcpy( buf_copy, buf, ni*nj*sizeof(PixType) );
 }
 
 
@@ -154,7 +155,7 @@ move_dot( unsigned &i, unsigned &j,
 }
 
 
-vcl_string
+std::string
 option_string( unsigned option )
 {
   switch ( option ) {
@@ -174,12 +175,12 @@ struct test_it
   PixType* buffer_copy;
   GLenum pack_type;
   GLenum pix_type;
-  vcl_string in_pix_name;
+  std::string in_pix_name;
 
   result_type best_result;
   unsigned best_option;
 
-  test_it( vcl_string const& name, GLenum pack_type, GLenum pix_type );
+  test_it( std::string const& name, GLenum pack_type, GLenum pix_type );
   ~test_it();
   void test_pattern( unsigned option );
 };
@@ -187,7 +188,7 @@ struct test_it
 
 template<class PixType>
 test_it<PixType>::
-test_it( vcl_string const& name, GLenum in_pack_type, GLenum in_pix_type )
+test_it( std::string const& name, GLenum in_pack_type, GLenum in_pix_type )
   : pack_type( in_pack_type ),
     pix_type( in_pix_type ),
     in_pix_name( name )
@@ -208,8 +209,8 @@ void
 test_it<PixType>::
 test_pattern( unsigned option )
 {
-  vcl_cout << "  " << in_pix_name << option_string(option);
-  vcl_cout.flush();
+  std::cout << "  " << in_pix_name << option_string(option);
+  std::cout.flush();
 
   glPixelTransferf( GL_RED_SCALE, 1.0f );
   glPixelTransferf( GL_RED_BIAS,  0.0f );
@@ -276,7 +277,7 @@ test_pattern( unsigned option )
   long elapsed_pix = timer.real();
 
   // reset the buffer
-  vcl_memcpy( buffer, buffer_copy, ni*nj*sizeof(PixType) );
+  std::memcpy( buffer, buffer_copy, ni*nj*sizeof(PixType) );
 
   result_type r;
   r.total   = draws*1000.0 / elapsed;
@@ -288,7 +289,7 @@ test_pattern( unsigned option )
     best_result = r;
   }
 
-  vcl_cout << r << vcl_endl;
+  std::cout << r << std::endl;
 }
 
 
@@ -336,35 +337,35 @@ run_tests( void(*test_func)() )
   g_scale = 1.0f;
   g_bias  = 0.0f;
   glPixelZoom(1.0f,1.0f);
-  vcl_cout << "Pixel zoom 1, no scaling, no colormap\n";
+  std::cout << "Pixel zoom 1, no scaling, no colormap\n";
   test_func();
   glPixelZoom(0.51f,0.51f);
-  vcl_cout << "Pixel zoom 0.51, no scaling, no colormap\n";
+  std::cout << "Pixel zoom 0.51, no scaling, no colormap\n";
   test_func();
   glPixelZoom(1.27f,1.27f);
-  vcl_cout << "Pixel zoom 1.27, no scaling, no colormap\n";
+  std::cout << "Pixel zoom 1.27, no scaling, no colormap\n";
   test_func();
 
   g_scale = 0.5f;
   g_bias  = 30.0f;
   glPixelZoom(1.0f,1.0f);
-  vcl_cout << "Pixel zoom 1, scaling, no colormap\n";
+  std::cout << "Pixel zoom 1, scaling, no colormap\n";
   test_func();
   glPixelZoom(0.51f,0.51f);
-  vcl_cout << "Pixel zoom 0.51, scaling, no colormap\n";
+  std::cout << "Pixel zoom 0.51, scaling, no colormap\n";
   test_func();
 
   g_use_color_maps = true;
   g_scale = 1.0f;
   g_bias  = 0.0f;
   glPixelZoom(1.0f,1.0f);
-  vcl_cout << "Pixel zoom 1, no scaling, color map\n";
+  std::cout << "Pixel zoom 1, no scaling, color map\n";
   test_func();
 
   g_scale = 0.5f;
   g_bias  = 30.0f;
   glPixelZoom(1.0f,1.0f);
-  vcl_cout << "Pixel zoom 1, scaling, color map\n";
+  std::cout << "Pixel zoom 1, scaling, color map\n";
   test_func();
 }
 
@@ -376,18 +377,18 @@ int main( int argc, char** argv )
   // need this on some toolkit implementations to get the window up.
   vgui::run_till_idle();
 
-  vcl_cout << "GL_VERSION : " <<  (const char*) glGetString(GL_VERSION) << '\n'
+  std::cout << "GL_VERSION : " <<  (const char*) glGetString(GL_VERSION) << '\n'
            << "GL_RENDERER : " << (const char*) glGetString(GL_RENDERER)<< "\n\n"
            << "GL Gets -\n";
   GLint data_int;
   glGetIntegerv(GL_RED_BITS, &data_int);
-  vcl_cout << "        red-bits : " << data_int << vcl_endl;
+  std::cout << "        red-bits : " << data_int << std::endl;
   glGetIntegerv(GL_GREEN_BITS, &data_int);
-  vcl_cout << "      green-bits : " << data_int << vcl_endl;
+  std::cout << "      green-bits : " << data_int << std::endl;
   glGetIntegerv(GL_BLUE_BITS, &data_int);
-  vcl_cout << "       blue-bits : " << data_int << vcl_endl;
+  std::cout << "       blue-bits : " << data_int << std::endl;
   glGetIntegerv(GL_ALPHA_BITS, &data_int);
-  vcl_cout << "      alpha-bits : " << data_int << vcl_endl;
+  std::cout << "      alpha-bits : " << data_int << std::endl;
 
   glViewport( 0, 0, ni, nj );
   glMatrixMode( GL_PROJECTION );
@@ -411,25 +412,25 @@ int main( int argc, char** argv )
   // Generate color maps
   {
     for ( unsigned i = 0; i < 256; ++i ) {
-      g_mapRfloat[i] = float(vcl_sqrt( (i-128.0)*(i-128.0) )) / 128;
-      g_mapGfloat[i] = float(vcl_sqrt( (i-128.0)*(i-128.0) )) / 128;
-      g_mapBfloat[i] = float(128 - vcl_sqrt( (i-128.0)*(i-128.0) )) / 128;
+      g_mapRfloat[i] = float(std::sqrt( (i-128.0)*(i-128.0) )) / 128;
+      g_mapGfloat[i] = float(std::sqrt( (i-128.0)*(i-128.0) )) / 128;
+      g_mapBfloat[i] = float(128 - std::sqrt( (i-128.0)*(i-128.0) )) / 128;
       g_mapRbyte[i] = GLubyte( g_mapRfloat[i]*255 );
       g_mapGbyte[i] = GLubyte( g_mapGfloat[i]*255 );
       g_mapBbyte[i] = GLubyte( g_mapBfloat[i]*255 );
     }
   }
 
-  vcl_cout << "\n\n8-BIT RGB\n\n";
+  std::cout << "\n\n8-BIT RGB\n\n";
   run_tests( &run_8bit_rgb );
 
-  vcl_cout << "\n\n8-BIT RGBA\n\n";
+  std::cout << "\n\n8-BIT RGBA\n\n";
   run_tests( &run_8bit_rgba );
 
-  vcl_cout << "\n\n16-BIT RGB\n\n";
+  std::cout << "\n\n16-BIT RGB\n\n";
   run_tests( &run_16bit_rgb );
 
-  vcl_cout << "\n\nFLOAT RGB\n\n";
+  std::cout << "\n\nFLOAT RGB\n\n";
   run_tests( &run_float_rgb );
 
   return 0;

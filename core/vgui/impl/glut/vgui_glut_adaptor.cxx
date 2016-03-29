@@ -1,4 +1,9 @@
 // This is core/vgui/impl/glut/vgui_glut_adaptor.cxx
+#include <cstdlib>
+#include <iostream>
+#include <algorithm>
+#include <utility>
+#include <list>
 #include "vgui_glut_adaptor.h"
 //:
 // \file
@@ -9,9 +14,7 @@
 #include "menu_hack.h"
 
 #include <vcl_cassert.h>
-#include <vcl_cstdlib.h>
-#include <vcl_iostream.h>
-#include <vcl_algorithm.h>
+#include <vcl_compiler.h>
 
 #include <vgui/vgui_glut.h>
 #include <vgui/vgui_macro.h>
@@ -64,7 +67,7 @@ vgui_glut_adaptor::~vgui_glut_adaptor()
   sub_contexts.clear();
 
   // remove `this' from `all()'.
-  vcl_vector<vgui_glut_adaptor*>::iterator it = vcl_find(all().begin(), all().end(), this);
+  std::vector<vgui_glut_adaptor*>::iterator it = std::find(all().begin(), all().end(), this);
   assert(it != all().end());
   all().erase(it);
 }
@@ -168,12 +171,12 @@ void vgui_glut_adaptor::establish_overlays()
     glutOverlayDisplayFunc(overlay_display_callback);
     // Establishing the layer implicitly makes it the current layer.
     glutUseLayer(GLenum(GLUT_NORMAL));
-    vcl_cerr << "GLUT hardware overlay established\n";
+    std::cerr << "GLUT hardware overlay established\n";
   }
   else {
     assert(! ovl_helper);
     ovl_helper = new vgui_overlay_helper(this);
-    vcl_cerr << "emulation overlay helper established\n";
+    std::cerr << "emulation overlay helper established\n";
   }
 
   // done.
@@ -230,11 +233,11 @@ bool vgui_glut_adaptor::glut_dispatch(vgui_event &e)
           {
             GLint bits;
             glGetIntegerv(GL_INDEX_BITS, &bits);
-            vcl_cerr << __FILE__ ": color index information:\n";
+            std::cerr << __FILE__ ": color index information:\n";
             int cmapsize = glutGet(GLenum(GLUT_WINDOW_COLORMAP_SIZE));
-            vcl_cerr << "  color map size is " << cmapsize << vcl_endl
-                     << "  transparent color index is " << index << vcl_endl
-                     << "  # color index bits is " << bits << vcl_endl;
+            std::cerr << "  color map size is " << cmapsize << std::endl
+                     << "  transparent color index is " << index << std::endl
+                     << "  # color index bits is " << bits << std::endl;
             // The default color index values appear to be all transparent
             // which is not very helpful, so let's set some more useful
             // values here.
@@ -251,10 +254,10 @@ bool vgui_glut_adaptor::glut_dispatch(vgui_event &e)
             int tmp = cmapsize; tmp = 8; ++tmp;
 #if 1
             for (int cell=0; cell<tmp; ++cell)
-              vcl_cerr << cell << ':'
+              std::cerr << cell << ':'
                        << glutGetColor(cell, GLUT_RED) << ' '
                        << glutGetColor(cell, GLUT_GREEN) << ' '
-                       << glutGetColor(cell, GLUT_BLUE) << vcl_endl;
+                       << glutGetColor(cell, GLUT_BLUE) << std::endl;
 #endif
             once=true;
           }
@@ -304,19 +307,19 @@ void vgui_glut_adaptor::register_static_callbacks()
   glutMenuStatusFunc(menustatus_callback);
 }
 
-// returns a vcl_list of glut adaptors. having a static data member can cause
+// returns a std::list of glut adaptors. having a static data member can cause
 // a segfault at module initialization time (linux-egcs).
-vcl_vector<vgui_glut_adaptor*> &vgui_glut_adaptor::all()
+std::vector<vgui_glut_adaptor*> &vgui_glut_adaptor::all()
 {
-  static vcl_vector<vgui_glut_adaptor*> *the_vector = VXL_NULLPTR;
+  static std::vector<vgui_glut_adaptor*> *the_vector = VXL_NULLPTR;
   if (!the_vector)
-    the_vector = new vcl_vector<vgui_glut_adaptor*>;
+    the_vector = new std::vector<vgui_glut_adaptor*>;
   return *the_vector;
 }
 
 vgui_glut_adaptor *vgui_glut_adaptor::get_adaptor(int window_id)
 {
-  vcl_vector<vgui_glut_adaptor*> &all = vgui_glut_adaptor::all();
+  std::vector<vgui_glut_adaptor*> &all = vgui_glut_adaptor::all();
   for (unsigned i=0; i<all.size(); ++i)
     if (all[i]->id == window_id)
       return all[i];
@@ -568,7 +571,7 @@ void vgui_glut_adaptor::pre_menu_hook(int menu_id)
       return;
     }
   }
-  vgui_macro_warning << "unrecognised menu id " << menu_id << vcl_endl;
+  vgui_macro_warning << "unrecognised menu id " << menu_id << std::endl;
 }
 
 void vgui_glut_adaptor::make_popup()
@@ -609,7 +612,7 @@ void vgui_glut_adaptor::make_popup()
     break;
   }
 #ifdef DEBUG
-  vcl_cerr << "button = " << button << '\n';
+  std::cerr << "button = " << button << '\n';
 #endif
 
   // translate vgui modifiers to GLUT modifiers :
@@ -621,7 +624,7 @@ void vgui_glut_adaptor::make_popup()
   if (popup_modifier & vgui_ALT)
     mods |= GLUT_ACTIVE_ALT;
 #ifdef DEBUG
-  vcl_cerr << "mods = " << mods << '\n';
+  std::cerr << "mods = " << mods << '\n';
 #endif
 
   // bind buttons and set the menu_hack callback.
@@ -647,10 +650,8 @@ struct vgui_glut_adaptor_callback_data
   int val;
 };
 
-#include <vcl_utility.h>
-#include <vcl_list.h>
-typedef vcl_pair<void*, int> pair_Pv_i;
-typedef vcl_list<pair_Pv_i> list_Pv_i;
+typedef std::pair<void*, int> pair_Pv_i;
+typedef std::list<pair_Pv_i> list_Pv_i;
 static list_Pv_i *timer_posts = VXL_NULLPTR;
 
 //: timeout is in milliseconds
@@ -704,7 +705,7 @@ void vgui_glut_adaptor::name##_callback proto \
 { \
   vgui_glut_adaptor *v=get_adaptor(glutGetWindow()); \
   if (v) v->name args; \
-  else   vcl_abort(); \
+  else   std::abort(); \
 }
 
 implement_static_callback(display,(),());

@@ -6,7 +6,8 @@
 // click through the dialog to the tableau, even the mouse events were
 // happening (appeared to happen) on the dialog.
 
-#include <vcl_iostream.h>
+#include <iostream>
+#include <vcl_compiler.h>
 
 #include <vgui/vgui.h>
 #include <vgui/vgui_dialog.h>
@@ -22,7 +23,7 @@ struct pick_client
 
     static int count = 0;
 
-    vcl_cout << "Add point (" << x << ',' << y << ") with count=" << count << vcl_endl;
+    std::cout << "Add point (" << x << ',' << y << ") with count=" << count << std::endl;
 
     if ( count == 0 )
     {
@@ -45,10 +46,10 @@ struct pick_client
                    "clicked only in the dialog window" );
     }
 
-    vcl_cout << "About to pop up dialog " << count << vcl_endl;
+    std::cout << "About to pop up dialog " << count << std::endl;
     ++count;
     dlg.ask();
-    vcl_cout << "Done with dialog" << vcl_endl;
+    std::cout << "Done with dialog" << std::endl;
   }
 };
 

@@ -41,7 +41,7 @@ template <class srcT, class destT, class kernelT, class accumT>
 inline void vil3d_convolve_1d(const vil3d_image_view<srcT>& src_im,
                               vil3d_image_view<destT>& dest_im,
                               const kernelT* kernel,
-                              vcl_ptrdiff_t k_lo, vcl_ptrdiff_t k_hi,
+                              std::ptrdiff_t k_lo, std::ptrdiff_t k_hi,
                               accumT ac,
                               enum vil_convolve_boundary_option start_option,
                               enum vil_convolve_boundary_option end_option)
@@ -51,14 +51,14 @@ inline void vil3d_convolve_1d(const vil3d_image_view<srcT>& src_im,
                  n_k = src_im.nk(),
                  n_p = src_im.nplanes();
   assert(k_hi - k_lo +1 <= (int) n_i);
-  const vcl_ptrdiff_t s_istep = src_im.istep(),
+  const std::ptrdiff_t s_istep = src_im.istep(),
                     s_jstep = src_im.jstep(),
                     s_kstep = src_im.kstep(),
                     s_pstep = src_im.planestep();
 
   dest_im.set_size(n_i, n_j, n_k, n_p);
 
-  const vcl_ptrdiff_t d_istep = dest_im.istep(),
+  const std::ptrdiff_t d_istep = dest_im.istep(),
                       d_jstep = dest_im.jstep(),
                       d_kstep = dest_im.kstep(),
                       d_pstep = dest_im.planestep();

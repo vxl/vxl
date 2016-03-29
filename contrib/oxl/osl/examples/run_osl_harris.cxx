@@ -3,8 +3,9 @@
 #pragma implementation "vul_arg.h"//otherwise "unresolved typeinfo vul_arg_base"
 #endif
 
-#include <vcl_string.h>
-#include <vcl_iostream.h>
+#include <string>
+#include <iostream>
+#include <vcl_compiler.h>
 #include <vul/vul_arg.h>
 #include <vil1/vil1_image.h>
 #include <vil1/vil1_load.h>
@@ -16,21 +17,21 @@
 // usable in a script, as a filter. **
 int main(int argc,char **argv)
 {
-  vul_arg<vcl_string> infile ("-in"   ,"input image file"    ,"-"); // default is stdin.
-  vul_arg<vcl_string> outfile("-out"  ,"output corner file (default is stdout)"  ,"");
+  vul_arg<std::string> infile ("-in"   ,"input image file"    ,"-"); // default is stdin.
+  vul_arg<std::string> outfile("-out"  ,"output corner file (default is stdout)"  ,"");
   vul_arg<double>     sigma  ("-sigma","gauss sigma"         ,0.7);
   vul_arg<int>        corner_count_max("-c","Max number of corners", 900);
   vul_arg<int>        adaptive_window_size("-w","Adaptive window size (0 disables)", 64);
-  vul_arg<vcl_string> cormap ("-map"  ,"cornerness map (pnm)","");
+  vul_arg<std::string> cormap ("-map"  ,"cornerness map (pnm)","");
   vul_arg<bool>       pab    ("-pab"  ,"emulate pab harris"  ,false);
   vul_arg_parse(argc,argv);
 
   // load image
   vil1_image I;
   if (infile() == "-") {
-    //vcl_cerr << "reading image from stdin\n";
+    //std::cerr << "reading image from stdin\n";
     //I = vil1_load(cin);
-    vcl_cerr << "cannot read from stdin yet\n";
+    std::cerr << "cannot read from stdin yet\n";
     return 1;
   }
   else
@@ -51,8 +52,8 @@ int main(int argc,char **argv)
 
   // save
   if (outfile() == "") {
-    vcl_cerr << "writing image to stdout\n";
-    H.save_corners(vcl_cout);
+    std::cerr << "writing image to stdout\n";
+    H.save_corners(std::cout);
   }
   else
     H.save_corners(outfile().c_str());

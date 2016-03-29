@@ -23,7 +23,7 @@ private:
   msdi_marked_images& marked_images_;
 
   //: Indicate correspondences between shape and its reflection
-  vcl_vector<unsigned> sym_pts_;
+  std::vector<unsigned> sym_pts_;
 
   //: When true, supply only reflection of original data
   //  When false, supply original and reflection.
@@ -66,7 +66,7 @@ public:
     // /params sym_pts[i] indicates symmetric match to point i
     // /params only_reflect: When true, only supply reflected shapes.
   msdi_reflected_marked_images(msdi_marked_images& raw_data,
-                             const vcl_vector<unsigned>& sym_pts,
+                             const std::vector<unsigned>& sym_pts,
                              bool only_reflect=false);
 
     //: Construct with external vectors of images and points
@@ -99,10 +99,10 @@ public:
   virtual const msm_points& points();
 
     //: Return current image file name
-  virtual vcl_string image_name() const;
+  virtual std::string image_name() const;
 
     //: Return current points file name
-  virtual vcl_string points_name() const;
+  virtual std::string points_name() const;
 };
 
 #endif // msdi_reflected_marked_images_h_

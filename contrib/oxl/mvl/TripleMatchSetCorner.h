@@ -39,14 +39,14 @@ class TripleMatchSetCorner : public TripleMatchSet
   TripleMatchSetCorner(const PairMatchSetCorner& matches12, const PairMatchSetCorner& matches23);
 
   //: Copy inliers to three arrays, and record the original indices.
-  void extract_matches(vcl_vector <HomgPoint2D>& points1, vcl_vector <int>& corner_index_1,
-                       vcl_vector <HomgPoint2D>& points2, vcl_vector <int>& corner_index_2,
-                       vcl_vector <HomgPoint2D>& points3, vcl_vector <int>& corner_index_3) const;
+  void extract_matches(std::vector <HomgPoint2D>& points1, std::vector <int>& corner_index_1,
+                       std::vector <HomgPoint2D>& points2, std::vector <int>& corner_index_2,
+                       std::vector <HomgPoint2D>& points3, std::vector <int>& corner_index_3) const;
 
   //: Copy inliers to three arrays
-  void extract_matches(vcl_vector <HomgPoint2D>& points1,
-                       vcl_vector <HomgPoint2D>& points2,
-                       vcl_vector <HomgPoint2D>& points3) const;
+  void extract_matches(std::vector <HomgPoint2D>& points1,
+                       std::vector <HomgPoint2D>& points2,
+                       std::vector <HomgPoint2D>& points3) const;
 
   PairMatchSetCorner* get_matches12() { return (PairMatchSetCorner*)match12_; }
   PairMatchSetCorner* get_matches23() { return (PairMatchSetCorner*)match23_; }

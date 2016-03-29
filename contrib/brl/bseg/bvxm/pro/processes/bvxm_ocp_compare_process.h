@@ -21,8 +21,10 @@
 //   Peter Vanroose  - Jul 10, 2009 - split into .h and .cxx
 // \endverbatim
 
+#include <iostream>
+#include <string>
 #include <bprb/bprb_func_process.h>
-#include <vcl_string.h>
+#include <vcl_compiler.h>
 
 #include <bvxm/bvxm_voxel_world.h>
 
@@ -33,7 +35,7 @@ namespace bvxm_ocp_compare_process_gloabals
   const unsigned n_outputs_ = 1;
 
   // functions
-  bool save_raw(char *ocp_array, int x, int y, int z, vcl_string filename);
+  bool save_raw(char *ocp_array, int x, int y, int z, std::string filename);
   double compare(bvxm_voxel_world_sptr w1, bvxm_voxel_world_sptr w2, unsigned n, unsigned scale);
 }
 

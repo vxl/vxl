@@ -1,8 +1,9 @@
 //:
 // \file
+#include <iostream>
+#include <cmath>
 #include "bvpl_opinion_functor.h"
-#include <vcl_cmath.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
 
 
 // Default constructor
@@ -22,21 +23,21 @@ void bvpl_opinion_functor::init()
 
 void bvpl_opinion_functor::apply(bvxm_opinion& val, bvpl_kernel_dispatch& d)
 {
-  //vcl_cout << "-->>>B=" << val.b() << " U=" << val.u() << vcl_endl;
+  //std::cout << "-->>>B=" << val.b() << " U=" << val.u() << std::endl;
 
   if (d.c_ == 1) {
     if (n_p_ > 1)
-      b_=vcl_pow(b_, n_p_/(n_p_+1))*vcl_pow(val.b(), 1/(n_p_+1));
+      b_=std::pow(b_, n_p_/(n_p_+1))*std::pow(val.b(), 1/(n_p_+1));
      else
       b_=val.b();
-    //vcl_cout << "++ n=" << n_p_ << "  B=" << b_ << vcl_endl<< vcl_endl;
+    //std::cout << "++ n=" << n_p_ << "  B=" << b_ << std::endl<< std::endl;
     n_p_++;
   } else if (d.c_ == -1) {
     if (n_m_ > 1)
-      u_=vcl_pow(u_, n_m_/(n_m_+1))*vcl_pow(val.u(), 1/(n_m_+1));
+      u_=std::pow(u_, n_m_/(n_m_+1))*std::pow(val.u(), 1/(n_m_+1));
     else
       u_=val.u();
-    //vcl_cout << "-- n=" << n_m_ << "  U=" << u_ << vcl_endl<< vcl_endl;
+    //std::cout << "-- n=" << n_m_ << "  U=" << u_ << std::endl<< std::endl;
     n_m_++;
   }
 }

@@ -1,7 +1,8 @@
+#include <limits>
+#include <iostream>
 #include <testlib/testlib_test.h>
 #include <imesh/algo/imesh_intersect.h>
-#include <vcl_limits.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
 #include <vgl/vgl_triangle_3d.h>
 
 
@@ -28,7 +29,7 @@ vgl_point_3d<double> operator + (const vgl_point_3d<double>& p1, const vgl_point
 
 static void test_intersect()
 {
-  vcl_cout << "Mesh Intersection\n";
+  std::cout << "Mesh Intersection\n";
   {
     vgl_point_3d<double> p(2,3,4);
     vgl_vector_3d<double> d(-2,-3,-4);
@@ -36,7 +37,7 @@ static void test_intersect()
     vgl_point_3d<double> a(2,0,0), b(-1,1,0), c(0,-3,0);
 
     vgl_vector_3d<double> n(cross_product(b-a,c-a));
-    double dist = vcl_numeric_limits<double>::infinity();
+    double dist = std::numeric_limits<double>::infinity();
     double dist2 = dist;
     double u1,v1,u2,v2;
 
@@ -50,7 +51,7 @@ static void test_intersect()
     TEST("intersection occurred", hit1 , true);
     TEST_NEAR("barycentric coords", (r2-r1).length(), 0.0, 1e-14);
 
-    vcl_cout << "diff: " << r2 - r1 << vcl_endl;
+    std::cout << "diff: " << r2 - r1 << std::endl;
 
     dist2 -= 0.001;
     bool hit3 = imesh_intersect_triangle_min_dist(p,d,a,b,c,n,dist2,u2,v2);
@@ -68,49 +69,49 @@ static void test_intersect()
     vgl_point_3d<double> p7(-1,0,-3); // cp on ac
     double u,v,dist;
     unsigned char i = imesh_triangle_closest_point(p1,a,b,c,dist,u,v);
-    vcl_cout << int(i) << " ("<<u<<','<<v<<") "<< dist << vcl_endl;
+    std::cout << int(i) << " ("<<u<<','<<v<<") "<< dist << std::endl;
     TEST("Inside point flag", i, 7);
     TEST_NEAR("Inside point dist", dist, vgl_triangle_3d_distance(p1,a,b,c), 1e-14);
     TEST_NEAR("Inside point location", ( imesh_triangle_closest_point(p1,a,b,c,dist)
                    - vgl_triangle_3d_closest_point(p1,a,b,c)).length(), 0.0,  1e-14);
 
     i = imesh_triangle_closest_point(p2,a,b,c,dist,u,v);
-    vcl_cout << int(i) << " ("<<u<<','<<v<<") "<< dist << vcl_endl;
+    std::cout << int(i) << " ("<<u<<','<<v<<") "<< dist << std::endl;
     TEST("Edge ab point flag", i, 3);
     TEST_NEAR("Edge ab point dist", dist, vgl_triangle_3d_distance(p2,a,b,c), 1e-14);
     TEST_NEAR("Edge ab location", ( imesh_triangle_closest_point(p2,a,b,c,dist)
                    - vgl_triangle_3d_closest_point(p2,a,b,c)).length(), 0.0,  1e-14);
 
     i = imesh_triangle_closest_point(p3,a,b,c,dist,u,v);
-    vcl_cout << int(i) << " ("<<u<<','<<v<<") "<< dist << vcl_endl;
+    std::cout << int(i) << " ("<<u<<','<<v<<") "<< dist << std::endl;
     TEST("Corner a point flag", i, 1);
     TEST_NEAR("Corner a point dist", dist, vgl_triangle_3d_distance(p3,a,b,c), 1e-14);
     TEST_NEAR("Corner a location", ( imesh_triangle_closest_point(p3,a,b,c,dist)
                    - vgl_triangle_3d_closest_point(p3,a,b,c)).length(), 0.0,  1e-14);
 
     i = imesh_triangle_closest_point(p4,a,b,c,dist,u,v);
-    vcl_cout << int(i) << " ("<<u<<','<<v<<") "<< dist << vcl_endl;
+    std::cout << int(i) << " ("<<u<<','<<v<<") "<< dist << std::endl;
     TEST("Corner b point flag", i, 2);
     TEST_NEAR("Corner b point dist", dist, vgl_triangle_3d_distance(p4,a,b,c), 1e-14);
     TEST_NEAR("Corner b location", ( imesh_triangle_closest_point(p4,a,b,c,dist)
                    - vgl_triangle_3d_closest_point(p4,a,b,c)).length(), 0.0,  1e-14);
 
     i = imesh_triangle_closest_point(p5,a,b,c,dist,u,v);
-    vcl_cout << int(i) << " ("<<u<<','<<v<<") "<< dist << vcl_endl;
+    std::cout << int(i) << " ("<<u<<','<<v<<") "<< dist << std::endl;
     TEST("Edge bc point flag", i, 6);
     TEST_NEAR("Edge bc point dist", dist, vgl_triangle_3d_distance(p5,a,b,c), 1e-14);
     TEST_NEAR("Edge bc location", ( imesh_triangle_closest_point(p5,a,b,c,dist)
                    - vgl_triangle_3d_closest_point(p5,a,b,c)).length(), 0.0,  1e-14);
 
     i = imesh_triangle_closest_point(p6,a,b,c,dist,u,v);
-    vcl_cout << int(i) << " ("<<u<<','<<v<<") "<< dist << vcl_endl;
+    std::cout << int(i) << " ("<<u<<','<<v<<") "<< dist << std::endl;
     TEST("Corner c point flag", i, 4);
     TEST_NEAR("Corner c point dist", dist, vgl_triangle_3d_distance(p6,a,b,c), 1e-14);
     TEST_NEAR("Corner c location", ( imesh_triangle_closest_point(p6,a,b,c,dist)
                    - vgl_triangle_3d_closest_point(p6,a,b,c)).length(), 0.0,  1e-14);
 
     i = imesh_triangle_closest_point(p7,a,b,c,dist,u,v);
-    vcl_cout << int(i) << " ("<<u<<','<<v<<") "<< dist << vcl_endl;
+    std::cout << int(i) << " ("<<u<<','<<v<<") "<< dist << std::endl;
     TEST("Edge ac point flag", i, 5);
     TEST_NEAR("Edge ac point dist", dist, vgl_triangle_3d_distance(p7,a,b,c), 1e-14);
     TEST_NEAR("Edge ac location", ( imesh_triangle_closest_point(p7,a,b,c,dist)

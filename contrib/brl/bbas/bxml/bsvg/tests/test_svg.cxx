@@ -75,7 +75,7 @@ bsvg_plot make_simple_plot()
   float fpr[] = {0.1f, 0.2f, 0.4f, 0.8f};
   float tpr[] = {0.4f, 0.8f, 0.9f, 0.99f};
 
-  vcl_vector<float> xs, ys;
+  std::vector<float> xs, ys;
   for (unsigned i = 0; i < 4; i++) {
     xs.push_back(fpr[i]); ys.push_back(tpr[i]);
   }
@@ -96,7 +96,7 @@ bsvg_plot make_simple_histogram()
 
   float heights[] = {0.1f, 0.2f, 0.0f, 0.8f, 0.9f, 0.0f, 0.3f};
 
-  vcl_vector<float> hs; vcl_vector<float> labels;
+  std::vector<float> hs; std::vector<float> labels;
   for (unsigned i = 0; i < 7; i++) {
     hs.push_back(heights[i]);
     labels.push_back(float(i));
@@ -122,7 +122,7 @@ bsvg_plot make_simple_pie_chart()
 static void test_svg()
 {
   bsvg_document doc = make_simple_doc();
-  vcl_string out_file = "./test.svg";
+  std::string out_file = "./test.svg";
   bxml_write(out_file, doc);
 
   bsvg_plot p = make_simple_plot();

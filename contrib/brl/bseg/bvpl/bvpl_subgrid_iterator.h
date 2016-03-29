@@ -11,7 +11,9 @@
 //   <None yet>
 // \endverbatim
 
-#include <vcl_iterator.h>
+#include <iostream>
+#include <iterator>
+#include <vcl_compiler.h>
 #include <vbl/vbl_ref_count.h>
 
 #include <vgl/vgl_vector_3d.h>
@@ -53,7 +55,7 @@ class bvpl_subgrid_iterator_base : public vbl_ref_count
 
 template <class T>
 class bvpl_subgrid_iterator : public bvpl_subgrid_iterator_base,
-  public vcl_iterator<vcl_bidirectional_iterator_tag, T>
+  public std::iterator<std::bidirectional_iterator_tag, T>
 {
  public:
   bvpl_subgrid_iterator()

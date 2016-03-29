@@ -5,10 +5,11 @@
 // \date   August 07, 2008
 //
 
+#include <string>
+#include <iostream>
 #include <testlib/testlib_test.h>
 
-#include <vcl_string.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
 
 #include <brdb/brdb_value.h>
 #include <brdb/brdb_selection.h>
@@ -43,8 +44,8 @@ vil_image_view_base_sptr test_process(vil_image_view_base_sptr const &ref_img)
   TEST("output image is in db", S_img->size(), 1);
 
   brdb_value_sptr value_img;
-  TEST("output image is in db", S_img->get_value(vcl_string("value"), value_img), true);
-  TEST("output image is non-null", (value_img != 0) ,true);
+  TEST("output image is in db", S_img->get_value(std::string("value"), value_img), true);
+  TEST("output image is non-null", (value_img != VXL_NULLPTR) ,true);
 
   brdb_value_t<vil_image_view_base_sptr>* result =
     static_cast<brdb_value_t<vil_image_view_base_sptr>* >(value_img.ptr());
@@ -68,7 +69,7 @@ static void test_vil_convert_to_n_planes_process()
 
   //Initialize testing images
   const unsigned n=10;
-  vcl_cout<<"testing test_convert_to_n_planes(src,dest):\n";
+  std::cout<<"testing test_convert_to_n_planes(src,dest):\n";
   vil_image_view<float> f_image(n,n,4);
   vil_image_view<vxl_byte> byte_image(n,n,4);
   vil_image_view<float> f_expected(n,n,3);

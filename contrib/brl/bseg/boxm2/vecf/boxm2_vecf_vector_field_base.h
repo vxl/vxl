@@ -1,7 +1,9 @@
 #ifndef boxm2_vecf_vector_field_base_h_included_
 #define boxm2_vecf_vector_field_base_h_included_
 
-#include <vcl_string.h>
+#include <iostream>
+#include <string>
+#include <vcl_compiler.h>
 #include <vbl/vbl_ref_count.h>
 #include <vbl/vbl_smart_ptr.h>
 #include <boxm2/boxm2_scene.h>

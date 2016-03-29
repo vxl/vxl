@@ -1,8 +1,10 @@
+#include <vector>
+#include <memory>
+#include <iostream>
+#include <cmath>
 #include <testlib/testlib_test.h>
 
-#include <vcl_vector.h>
-#include <vcl_memory.h>
-#include <vcl_cmath.h>
+#include <vcl_compiler.h>
 
 #include <vnl/vnl_matrix.h>
 #include <vnl/vnl_vector.h>
@@ -38,8 +40,8 @@ static void test_scale_est()
   }
 
 
-  vcl_vector< vnl_vector<double> > from;
-  vcl_vector< vnl_vector<double> > err;
+  std::vector< vnl_vector<double> > from;
+  std::vector< vnl_vector<double> > err;
 
   // Create one to one correspondences with unit scale.
   //
@@ -59,7 +61,7 @@ static void test_scale_est()
   }
   var /= num_pts;
 
-  vcl_auto_ptr<rrel_objective> obj( new rrel_muset_obj( num_pts ) );
+  std::auto_ptr<rrel_objective> obj( new rrel_muset_obj( num_pts ) );
   rgrl_scale_est_closest closest_est( obj );
 
   // Simple, one-to-one errors
@@ -67,15 +69,15 @@ static void test_scale_est()
   {
     rgrl_match_set ms( rgrl_feature_point::type_id() );
     for ( unsigned i=0; i < from.size(); ++i ) {
-      ms.add_feature_and_match( pf( from[i] ), 0, pf( from[i]+err[i] ) );
+      ms.add_feature_and_match( pf( from[i] ), VXL_NULLPTR, pf( from[i]+err[i] ) );
     }
     ms.remap_from_features( *trans );
 
-    rgrl_scale_sptr scale = closest_est.estimate_unweighted( ms, 0 );
+    rgrl_scale_sptr scale = closest_est.estimate_unweighted( ms, VXL_NULLPTR );
     TEST( "Estimate scale from one-to-one",
           scale->has_geometric_scale() && ! scale->has_signature_inv_covar(), true);
 
-    TEST_NEAR( "Geometric scale is correct", scale->geometric_scale(), vcl_sqrt(var), 0.35 );
+    TEST_NEAR( "Geometric scale is correct", scale->geometric_scale(), std::sqrt(var), 0.35 );
     one_to_one_scale = scale->geometric_scale();
   }
 
@@ -85,17 +87,17 @@ static void test_scale_est()
   {
     rgrl_match_set ms( rgrl_feature_point::type_id() );
     for ( unsigned i=0; i < from.size(); ++i ) {
-      vcl_vector< rgrl_feature_sptr > to;
+      std::vector< rgrl_feature_sptr > to;
       unsigned num = rand(5)+1;
       unsigned pos = rand(num);
       for ( unsigned j=0; j < num; ++j ) {
         to.push_back( pf( from[i] + err[i] * ((j+pos)%num + 1) ) );
       }
-      ms.add_feature_and_matches( pf( from[i] ), 0, to );
+      ms.add_feature_and_matches( pf( from[i] ), VXL_NULLPTR, to );
     }
     ms.remap_from_features( *trans );
 
-    rgrl_scale_sptr scale = closest_est.estimate_unweighted( ms, 0 );
+    rgrl_scale_sptr scale = closest_est.estimate_unweighted( ms, VXL_NULLPTR );
     TEST( "Estimate scale from closest in one-to-many",
           scale->has_geometric_scale() && ! scale->has_signature_inv_covar(), true);
 
@@ -109,15 +111,15 @@ static void test_scale_est()
   {
     rgrl_match_set ms( rgrl_feature_point::type_id() );
     for ( unsigned i=0; i < from.size(); ++i ) {
-      ms.add_feature_and_match( pf( from[i] ), 0, pf( from[i]+err[i] ) );
+      ms.add_feature_and_match( pf( from[i] ), VXL_NULLPTR, pf( from[i]+err[i] ) );
     }
     ms.remap_from_features( *trans );
 
-    rgrl_scale_sptr scale = allwgt_est.estimate_weighted( ms, 0, false );
+    rgrl_scale_sptr scale = allwgt_est.estimate_weighted( ms, VXL_NULLPTR, false );
     TEST( "Estimate weighted scale from one-to-one, unit weight",
           scale->has_geometric_scale() && ! scale->has_signature_inv_covar(), true);
 
-    TEST_NEAR( "Geometric scale is correct", scale->geometric_scale(), vcl_sqrt(var), 1e-6 );
+    TEST_NEAR( "Geometric scale is correct", scale->geometric_scale(), std::sqrt(var), 1e-6 );
   }
 }
 

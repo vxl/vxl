@@ -1,16 +1,17 @@
 // Some tests for vgl_fit_plane_3d
 // Gamze Tunali, Dec 18, 2006.
+#include <iostream>
+#include <cstdlib>
 #include <testlib/testlib_test.h>
 #include <vgl/algo/vgl_fit_plane_3d.h>
 #include <vgl/vgl_distance.h>
-#include <vcl_iostream.h>
-#include <vcl_cstdlib.h> // for rand()
+#include <vcl_compiler.h>
 
 // creates points on the z=0 plane
 static void test_fit_plane_z()
 {
-  vcl_cout << "Fit Points to a plane\n";
-  vcl_vector<vgl_homg_point_3d<double> > points;
+  std::cout << "Fit Points to a plane\n";
+  std::vector<vgl_homg_point_3d<double> > points;
   vgl_fit_plane_3d<double> fit_plane;
 
   // add points in the z=0 plane
@@ -21,7 +22,7 @@ static void test_fit_plane_z()
     }
   }
    double tol = 1e-3;
-bool success =   fit_plane.fit(tol, &vcl_cerr);
+bool success =   fit_plane.fit(tol, &std::cerr);
 TEST("exact fit", success, true);
   vgl_homg_plane_3d<double> plane = fit_plane.get_plane();
 
@@ -42,8 +43,8 @@ TEST("exact fit", success, true);
 // creates points a on the x+3y+2z=5 plane
 static void test_fit_plane_xyz()
 {
-  vcl_cout << "Fit Points to a plane\n";
-  vcl_vector<vgl_homg_point_3d<double> > points;
+  std::cout << "Fit Points to a plane\n";
+  std::vector<vgl_homg_point_3d<double> > points;
   vgl_fit_plane_3d<double> fit_plane;
   double a=1, b=3, c=2, d=-5;
 
@@ -58,7 +59,7 @@ static void test_fit_plane_xyz()
     }
   }
   double tol = 1e-3;
-  bool success = fit_plane.fit(tol, &vcl_cerr);
+  bool success = fit_plane.fit(tol, &std::cerr);
   TEST("test fit", success, true);
   vgl_homg_plane_3d<double> plane = fit_plane.get_plane();
 
@@ -73,23 +74,23 @@ static void test_fit_plane_xyz()
 // creates 20 random points
 static void test_fit_plane_random()
 {
-  vcl_cout << "Fit random points to a plane\n";
-  vcl_vector<vgl_homg_point_3d<double> > points;
+  std::cout << "Fit random points to a plane\n";
+  std::vector<vgl_homg_point_3d<double> > points;
   vgl_fit_plane_3d<double> fit_plane;
 
   for (int x=0; x<20; ++x) {
-    double r1 = vcl_rand()/(RAND_MAX+1.0);
-    double r2 = vcl_rand()/(RAND_MAX+1.0);
-    double r3 = vcl_rand()/(RAND_MAX+1.0);
+    double r1 = std::rand()/(RAND_MAX+1.0);
+    double r2 = std::rand()/(RAND_MAX+1.0);
+    double r3 = std::rand()/(RAND_MAX+1.0);
     vgl_homg_point_3d<double> p(r1, r2, r3);
     fit_plane.add_point(p);
   }
   double tol = 1e-3;
-  bool success = fit_plane.fit(tol, &vcl_cerr);
+  bool success = fit_plane.fit(tol, &std::cerr);
   TEST("random fit", success, false);
   vgl_homg_plane_3d<double> plane = fit_plane.get_plane();
 
-  vcl_cout << plane;
+  std::cout << plane;
 }
 
 static void test_fit_plane_3d()

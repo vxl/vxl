@@ -20,10 +20,11 @@
 //                            - Removed 'playback' - doesn't seem to be used.
 // \endverbatim
 
+#include <vector>
 #include "vgui_blackbox_tableau_sptr.h"
 #include <vgui/vgui_wrapper_tableau.h>
 #include <vgui/vgui_event.h>
-#include <vcl_vector.h>
+#include <vcl_compiler.h>
 
 //: Tableau for event record and playback.
 //
@@ -49,7 +50,7 @@ class vgui_blackbox_tableau : public vgui_wrapper_tableau
   virtual bool handle(const vgui_event& event);
 
   //: Return the name of this tableau ('vgui_blackbox_tableau').
-  virtual vcl_string type_name() const;
+  virtual std::string type_name() const;
 
  protected:
   //: Destructor - called by smart-pointer vgui_blackbox_tableau_sptr.
@@ -59,7 +60,7 @@ class vgui_blackbox_tableau : public vgui_wrapper_tableau
   bool recording;
 
   //: List of recorded events.
-  vcl_vector<vgui_event> events;
+  std::vector<vgui_event> events;
 };
 
 //: Create a smart-pointer to a vgui_blackbox_tableau.

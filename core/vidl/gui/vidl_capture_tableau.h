@@ -30,7 +30,7 @@ class vidl_capture_tableau : public vgui_wrapper_tableau
   vidl_capture_tableau(vgui_tableau_sptr const& child);
 
   //: Returns the type of this tableau ('vidl_capture_tableau').
-  vcl_string type_name() const;
+  std::string type_name() const;
 
   //: Handle all events sent to this tableau
   bool handle( vgui_event const &e);

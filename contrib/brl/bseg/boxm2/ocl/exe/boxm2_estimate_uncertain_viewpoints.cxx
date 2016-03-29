@@ -1,8 +1,9 @@
+#include <sstream>
+#include <iostream>
+#include <fstream>
 #include <bocl/bocl_cl.h>
-#include <vcl_sstream.h>
 #include <vcl_where_root_dir.h>
-#include <vcl_iostream.h>
-#include <vcl_fstream.h>
+#include <vcl_compiler.h>
 
 #include <vpgl/vpgl_perspective_camera.h>
 #include <vsph/vsph_view_sphere.h>
@@ -51,7 +52,7 @@
 //      - img directory (contains a rendering of stills
 //
 //   * Pre Rendered Stills
-int closest_camera(vgl_point_3d<double> p, vcl_vector<vpgl_perspective_camera<double> *> cams)
+int closest_camera(vgl_point_3d<double> p, std::vector<vpgl_perspective_camera<double> *> cams)
 {
     double min_distance = 1e20;
     int min_cam_index = -1;
@@ -68,17 +69,17 @@ int closest_camera(vgl_point_3d<double> p, vcl_vector<vpgl_perspective_camera<do
     return min_cam_index;
 }
 
-bool compare_second_element(const vcl_pair<vgl_point_3d<double>, double> &a,
-                            const vcl_pair<vgl_point_3d<double>, double> &b)
+bool compare_second_element(const std::pair<vgl_point_3d<double>, double> &a,
+                            const std::pair<vgl_point_3d<double>, double> &b)
 {
     return a.second > b.second;
 }
 
 int main(int argc,  char** argv)
 {
-    vcl_cout<<"Boxm2 Uncertain Viewponts"<<vcl_endl;
-    vul_arg<vcl_string> scene_file("-scene", "scene filename", "");
-    vul_arg<vcl_string> dir("-dir", "output image directory", "");
+    std::cout<<"Boxm2 Uncertain Viewponts"<<std::endl;
+    vul_arg<std::string> scene_file("-scene", "scene filename", "");
+    vul_arg<std::string> dir("-dir", "output image directory", "");
     vul_arg<unsigned> ni("-ni", "Width of image", 1024);
     vul_arg<unsigned> nj("-nj", "Height of image", 768);
     vul_arg<unsigned> num_az("-num_az", "Number of views along azimuth", 36);
@@ -87,7 +88,7 @@ int main(int argc,  char** argv)
     vul_arg<double> incline_1("-end_incline", "Angle of incline nearest zenith (degrees)", 15.0);
     vul_arg<double> radius("-radius", "Distance from center of bounding box", 11.12);
 
-    vul_arg<vcl_string> outfile("-out", "store uncertainties", "");
+    vul_arg<std::string> outfile("-out", "store uncertainties", "");
     vul_arg_parse(argc, argv);
 
     //////////////////////////////////////////////////////////////////////////////
@@ -95,25 +96,25 @@ int main(int argc,  char** argv)
     //////////////////////////////////////////////////////////////////////////////
     //see if directory exists
     if ( vul_file::exists(dir()) && vul_file::is_directory(dir()) ) {
-        vcl_cout<<"Directory "<<dir()<<" exists - overwriting it."<<vcl_endl;
+        std::cout<<"Directory "<<dir()<<" exists - overwriting it."<<std::endl;
     }
     else {
         vul_file::make_directory_path(dir());
 #ifdef DEBUG
-        vcl_cout<<"Couldn't make directory at "<<dir()<<vcl_endl;
+        std::cout<<"Couldn't make directory at "<<dir()<<std::endl;
         return -1;
 #endif
     }
 
     //see if img folder exists
-    vcl_string imgdir = dir() + "/img/";
+    std::string imgdir = dir() + "/img/";
     if ( vul_file::exists(imgdir) && vul_file::is_directory(imgdir) ) {
         vul_file::delete_file_glob(imgdir+"*");
     }
     else {
         vul_file::make_directory_path(imgdir);
 #ifdef DEBUG
-        vcl_cout<<"Couldn't make img directory at "<<dir()<<vcl_endl;
+        std::cout<<"Couldn't make img directory at "<<dir()<<std::endl;
         return -1;
 #endif
     }
@@ -144,23 +145,23 @@ int main(int argc,  char** argv)
     brdb_value_sptr brdb_opencl_cache = new brdb_value_t<boxm2_opencl_cache_sptr>(opencl_cache);
     brdb_value_sptr brdb_ni = new brdb_value_t<unsigned>(ni());
     brdb_value_sptr brdb_nj = new brdb_value_t<unsigned>(nj());
-    brdb_value_sptr brdb_ident = new brdb_value_t<vcl_string>("cubic_model");
+    brdb_value_sptr brdb_ident = new brdb_value_t<std::string>("cubic_model");
 
     // FOR  GRID
     //////////////////////////////////////////////////////////////////////////////
     //set up a view sphere, use find closest for closest neighbors
-    vsph_view_sphere<vsph_view_point<vcl_string> > sphere(vgl_point_3d<double>(0,0,-0.28), radius());
+    vsph_view_sphere<vsph_view_point<std::string> > sphere(vgl_point_3d<double>(0,0,-0.28), radius());
 
     //map of ID's that have been rendered
-    vcl_map<int, vcl_string> saved_imgs;
+    std::map<int, std::string> saved_imgs;
 
     /////////////////////////////////////////////////////////////////////////////
     //rendered array of views
-    vcl_map<int, vil_image_view<vxl_byte>* > img_map;
+    std::map<int, vil_image_view<vxl_byte>* > img_map;
     vbl_array_2d<vil_image_view<vxl_byte>* > imgs(num_in(), num_az());
 
-    typedef vcl_pair<vgl_point_3d<double>,double> ptdistpair;
-    vcl_vector<ptdistpair > distances ;
+    typedef std::pair<vgl_point_3d<double>,double> ptdistpair;
+    std::vector<ptdistpair > distances ;
     // determine increment along azimuth and elevation (incline)
     double az_incr = 2.0*vnl_math::pi/num_az();
     double el_incr = (incline_0() - incline_1()) / (num_in()-1); //degrees (to include both start and end)
@@ -178,8 +179,8 @@ int main(int argc,  char** argv)
             sphere.add_view(curr_point,ni(), nj());
             vgl_point_3d<double> cart_point = sphere.cart_coord(curr_point);
             int uid; double dist;
-            vsph_view_point<vcl_string> view = sphere.find_closest(cart_point, uid, dist);
-            vcl_stringstream     idstream;
+            vsph_view_point<std::string> view = sphere.find_closest(cart_point, uid, dist);
+            std::stringstream     idstream;
             idstream<<imgdir<<"uncertainty_"<<el_i<<'_'<<az_i<<".tiff";
 
             if ( saved_imgs.find(uid) == saved_imgs.end() )
@@ -191,13 +192,15 @@ int main(int argc,  char** argv)
                 brdb_value_sptr brdb_cam = new brdb_value_t<vpgl_camera_double_sptr>(cam_sptr);
                 mat.set_focal_length(5270.5f);
                 cam->set_calibration(mat);
-                vcl_cout<<"Focal Length "<<mat.focal_length()<<vcl_endl;
+                std::cout<<"Focal Length "<<mat.focal_length()<<std::endl;
                 //if scene has RGB data type, use color render process
                 bool good;
-                if (scene->has_data_type(boxm2_data_traits<BOXM2_GAUSS_RGB>::prefix()) )
+                if (scene->has_data_type(boxm2_data_traits<BOXM2_GAUSS_RGB>::prefix()) ) {
                   good = bprb_batch_process_manager::instance()->init_process("boxm2OclRenderExpectedColorProcess");
-                else
+                }
+                else {
                   good = bprb_batch_process_manager::instance()->init_process("boxm2OclRenderExpectedImageProcess");
+                }
                 //set process args
                 good = good
                     && bprb_batch_process_manager::instance()->set_input(0, brdb_device)        // device
@@ -208,34 +211,43 @@ int main(int argc,  char** argv)
                     && bprb_batch_process_manager::instance()->set_input(5, brdb_nj)            // nj for rendered image
                     && bprb_batch_process_manager::instance()->set_input(6, brdb_ident)            // identifier for rendered image
                     && bprb_batch_process_manager::instance()->run_process();
+                if( !good ) {
+                  std::cout << "ERROR!!: process args not set: " << __FILE__ << __LINE__ << std::endl;
+                  return -1;
+                }
                 unsigned int img_id=0;
                 good = good && bprb_batch_process_manager::instance()->commit_output(0, img_id);
+                if( !good ) {
+                  std::cout << "ERROR!!: commit_output failed: " << __FILE__ << __LINE__ << std::endl;
+                  return -1;
+                }
+
                 brdb_query_aptr Q = brdb_query_comp_new("id", brdb_query::EQ, img_id);
                 brdb_selection_sptr S = DATABASE->select("vil_image_view_base_sptr_data", Q);
                 if (S->size()!=1) {
-                  vcl_cout << "in bprb_batch_process_manager::set_input_from_db(.) -"
+                  std::cout << "in bprb_batch_process_manager::set_input_from_db(.) -"
                            << " no selections\n";
                 }
                 brdb_value_sptr value;
-                if (!S->get_value(vcl_string("value"), value)) {
-                  vcl_cout << "in bprb_batch_process_manager::set_input_from_db(.) -"
+                if (!S->get_value(std::string("value"), value)) {
+                  std::cout << "in bprb_batch_process_manager::set_input_from_db(.) -"
                            << " didn't get value\n";
                 }
                 vil_image_view_base_sptr outimg=value->val<vil_image_view_base_sptr>();
                 vil_image_view<float>* expimg_view = static_cast<vil_image_view<float>* >(outimg.ptr());
                 vil_math_mean<float,float>(mean, *expimg_view,0);
-                vcl_cout<<el<<' '<<az<<' '<<mean<<vcl_endl;
+                std::cout<<el<<' '<<az<<' '<<mean<<std::endl;
                 distances.push_back(ptdistpair(cart_point,mean));
                 saved_imgs[uid] = idstream.str();
                 vil_save(*expimg_view, idstream.str().c_str() );
             }
         }
     }
-    vcl_ofstream ofile(outfile().c_str());
-    vcl_sort(distances.begin(), distances.end(), compare_second_element);
+    std::ofstream ofile(outfile().c_str());
+    std::sort(distances.begin(), distances.end(), compare_second_element);
 
     for (unsigned int k = 0 ; k < distances.size(); ++k)
-        ofile<<distances[k].first.x()<<' '<<distances[k].first.y()<<' '<<distances[k].first.z()<<' '<<distances[k].second<<vcl_endl;
+        ofile<<distances[k].first.x()<<' '<<distances[k].first.y()<<' '<<distances[k].first.z()<<' '<<distances[k].second<<std::endl;
     return 0;
 }
 

@@ -11,7 +11,9 @@
 // \author
 //    Geoff Cross
 
-#include <vcl_iosfwd.h>
+#include <iostream>
+#include <iosfwd>
+#include <vcl_compiler.h>
 #include <vgl/vgl_point_2d.h>
 
 class vdgl_edgel
@@ -28,7 +30,7 @@ class vdgl_edgel
   vdgl_edgel& operator=(const vdgl_edgel& that);
 
   friend bool operator==( const vdgl_edgel &e1, const vdgl_edgel &e2);
-  friend vcl_ostream& operator<<(vcl_ostream& s, const vdgl_edgel& p);
+  friend std::ostream& operator<<(std::ostream& s, const vdgl_edgel& p);
 
   // Data Access---------------------------------------------------------------
 
@@ -57,6 +59,6 @@ class vdgl_edgel
 };
 
 bool operator==( const vdgl_edgel &e1, const vdgl_edgel &e2);
-vcl_ostream& operator<<(vcl_ostream& s, const vdgl_edgel& p);
+std::ostream& operator<<(std::ostream& s, const vdgl_edgel& p);
 
 #endif // vdgl_edgel_h

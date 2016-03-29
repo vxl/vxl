@@ -1,8 +1,8 @@
-#include <bvxm/grid/bvxm_voxel_grid.txx>
-#include <bvxm/grid/bvxm_voxel_storage_disk.txx>
-#include <bvxm/grid/bvxm_voxel_storage_mem.txx>
-#include <bvxm/grid/bvxm_voxel_storage_slab_mem.txx>
-#include <bvxm/grid/bvxm_voxel_storage_disk_cached.txx>
+#include <bvxm/grid/bvxm_voxel_grid.hxx>
+#include <bvxm/grid/bvxm_voxel_storage_disk.hxx>
+#include <bvxm/grid/bvxm_voxel_storage_mem.hxx>
+#include <bvxm/grid/bvxm_voxel_storage_slab_mem.hxx>
+#include <bvxm/grid/bvxm_voxel_storage_disk_cached.hxx>
 #include <vnl/vnl_vector_fixed.h>
 
 typedef vnl_vector_fixed<float,3> vnl_vector_fixed_f3;

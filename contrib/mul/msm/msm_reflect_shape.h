@@ -14,7 +14,7 @@
 //  if reflecting a face, the left eye becomes the right eye.
 //  This would mangle a model, so we renumber.
 void msm_reflect_shape_along_x(const msm_points& points,
-                               const vcl_vector<unsigned>& sym_pts,
+                               const std::vector<unsigned>& sym_pts,
                                msm_points& new_points,
                                double ax=0.0);
 

@@ -14,7 +14,8 @@
 // Initial version Sept. 17,  2010
 // \endverbatim
 
-#include <vcl_iosfwd.h>
+#include <iosfwd>
+#include <vcl_compiler.h>
 #include <vgl/vgl_vector_3d.h>
 #include <vgl/vgl_point_3d.h>
 #include <vgl/vgl_line_segment_3d.h>
@@ -90,12 +91,12 @@ class vgl_ray_3d
 //: Write to stream
 // \relatesalso vgl_ray_3d
 template <class Type>
-vcl_ostream&  operator<<(vcl_ostream& s, const vgl_ray_3d<Type>& p);
+std::ostream&  operator<<(std::ostream& s, const vgl_ray_3d<Type>& p);
 
 //: Read from stream
 // \relatesalso vgl_ray_3d
 template <class Type>
-vcl_istream&  operator>>(vcl_istream& is,  vgl_ray_3d<Type>& p);
+std::istream&  operator>>(std::istream& is,  vgl_ray_3d<Type>& p);
 //: public functions
 template <class Type>
 //: angle between rays

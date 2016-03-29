@@ -6,6 +6,9 @@
 // \file
 // \author fsm
 
+#include <iostream>
+#include <list>
+#include <vector>
 #include "osl_edge.h"
 
 #include <osl/osl_hacks.h>
@@ -41,8 +44,8 @@ osl_edge::~osl_edge() {
   v1->unref();
   v2->unref();
 #endif
-  v1 = 0;
-  v2 = 0;
+  v1 = VXL_NULLPTR;
+  v2 = VXL_NULLPTR;
 }
 
 void osl_edge::set_v1(osl_vertex *newv) {
@@ -82,7 +85,6 @@ void osl_edge::SetEndY(float v) { v2->y = v; }
 
 //--------------------------------------------------------------------------------
 
-#include <vcl_list.h>
-#include <vcl_vector.h>
-OSL_TOPOLOGY_REF_UNREF_INSTANTIATE(vcl_list<osl_edge*>);
-OSL_TOPOLOGY_REF_UNREF_INSTANTIATE(vcl_vector<osl_edge*>);
+#include <vcl_compiler.h>
+OSL_TOPOLOGY_REF_UNREF_INSTANTIATE(std::list<osl_edge*>);
+OSL_TOPOLOGY_REF_UNREF_INSTANTIATE(std::vector<osl_edge*>);

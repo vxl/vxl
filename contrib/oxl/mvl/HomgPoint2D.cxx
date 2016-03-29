@@ -5,10 +5,11 @@
 //:
 // \file
 
+#include <iostream>
+#include <cmath>
 #include "HomgPoint2D.h"
-#include <vcl_iostream.h>
 #include <vnl/vnl_double_2.h>
-#include <vcl_cmath.h> // for sqrt()
+#include <vcl_compiler.h>
 
 //--------------------------------------------------------------
 //
@@ -73,26 +74,26 @@ HomgPoint2D HomgPoint2D::get_unitized() const
   double norm = x()*x() + y()*y() + w()*w();
 
   if (norm == 0.0) {
-    vcl_cerr << "HomgPoint2D::get_unitized() -- Zero length vector\n";
+    std::cerr << "HomgPoint2D::get_unitized() -- Zero length vector\n";
     return *this;
   }
 
-  norm = 1.0/vcl_sqrt(norm);
+  norm = 1.0/std::sqrt(norm);
   return HomgPoint2D(x()*norm, y()*norm, w()*norm);
 }
 
 //-----------------------------------------------------------------------------
 //
-//: Print to vcl_ostream as <HomgPoint2D x y z>
-vcl_ostream& operator<<(vcl_ostream& s, const HomgPoint2D& p)
+//: Print to std::ostream as <HomgPoint2D x y z>
+std::ostream& operator<<(std::ostream& s, const HomgPoint2D& p)
 {
   return s << "<HomgPoint2D " << p.get_vector() << '>';
 }
 
 //-----------------------------------------------------------------------------
 //
-//: Read from ASCII vcl_istream.  Assumes points are stored in homogeneous form as 3 reals.
-vcl_istream& operator>>(vcl_istream& is, HomgPoint2D& p)
+//: Read from ASCII std::istream.  Assumes points are stored in homogeneous form as 3 reals.
+std::istream& operator>>(std::istream& is, HomgPoint2D& p)
 {
   double x, y, z;
   is >> x >> y >> z;
@@ -103,9 +104,9 @@ vcl_istream& operator>>(vcl_istream& is, HomgPoint2D& p)
 
 //-----------------------------------------------------------------------------
 //
-//: read from vcl_istream.  Default is to assume that points are nonhomogeneous
+//: read from std::istream.  Default is to assume that points are nonhomogeneous
 // 2D, set is_homogeneous to true if points are already in homogeneous form.
-HomgPoint2D HomgPoint2D::read(vcl_istream& is, bool is_homogeneous)
+HomgPoint2D HomgPoint2D::read(std::istream& is, bool is_homogeneous)
 {
   if (is_homogeneous) {
     HomgPoint2D ret;

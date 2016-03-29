@@ -6,9 +6,11 @@
 // \file
 // \author fsm
 
+#include <iostream>
+#include <cmath>
 #include "mvl_six_point_design_matrix_row.h"
 
-#include <vcl_cmath.h>
+#include <vcl_compiler.h>
 
 void mvl_six_point_design_matrix_row(vnl_matrix<double> const &A,
                                      vnl_matrix<double> const &B,
@@ -33,7 +35,7 @@ void mvl_six_point_design_matrix_row(vnl_matrix<double> const &A,
     for (int i=0; i<2; ++i)
       for (int j=0; j<4; ++j)
         nn += CA[i][j] * CA[i][j] + CB[i][j] * CB[i][j];
-    nn = vcl_sqrt(nn);
+    nn = std::sqrt(nn);
 
     for (int i=0; i<2; ++i) {
       for (int j=0; j<4; ++j) {

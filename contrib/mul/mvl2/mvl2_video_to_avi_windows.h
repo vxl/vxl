@@ -24,7 +24,7 @@ class mvl2_video_to_avi: public mvl2_video_writer
 
     //: Initialize the file (format can be Grey, RGB, or more complex)
   bool  open( int width, int height,
-              vcl_string format, vcl_string file_name);
+              std::string format, std::string file_name);
 
     //: Tidy up and close the file
   void  close();
@@ -51,7 +51,7 @@ class mvl2_video_to_avi: public mvl2_video_writer
   void write_frame(vil_image_view<vxl_byte>& image);
 
     //: Name of the class
-  vcl_string is_a() const;
+  std::string is_a() const;
 
     //: Create a copy on the heap and return base class pointer
   mvl2_video_writer* clone() const;

@@ -1,7 +1,8 @@
+#include <limits>
+#include <iostream>
 #include <testlib/testlib_test.h>
 #include <vpgl/algo/vpgl_affine_rectification.h>
-#include <vcl_limits.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
 
 static void test_affine_rect()
 {
@@ -33,14 +34,14 @@ static void test_affine_rect()
   vnl_matrix_fixed<double, 3, 3> FAM = FA.get_matrix();
   vgl_homg_point_2d<double> er, el;
   FA.get_epipoles(er, el);
-  vcl_cout << "er: " << er << " el: " << el << vcl_endl;
+  std::cout << "er: " << er << " el: " << el << std::endl;
 
   vnl_matrix_fixed<double, 1, 1> val = P2.transpose()*FAM*P1;
-  vcl_cout << val[0][0] << vcl_endl;
-  TEST("check computed f", vcl_abs(val[0][0]) < 0.01, true);
+  std::cout << val[0][0] << std::endl;
+  TEST("check computed f", std::abs(val[0][0]) < 0.01, true);
 
   // test computation of rectification matrices
-  vcl_vector<vnl_vector_fixed<double, 3> > img_p1, img_p2;
+  std::vector<vnl_vector_fixed<double, 3> > img_p1, img_p2;
   vnl_vector_fixed<double, 3> p1;
   p1[0] = P1[0][0]; p1[1] = P1[1][0]; p1[2] = P1[2][0];
   vnl_vector_fixed<double, 3> p2;
@@ -49,8 +50,8 @@ static void test_affine_rect()
   vnl_matrix_fixed<double, 3, 3> H1, H2;
   TEST("compute rectification", vpgl_affine_rectification::compute_rectification(FA, img_p1, img_p2, H1, H2), true);
 
-  vcl_cout << "\nH1:\n" << H1 << vcl_endl;
-  vcl_cout << "H2:\n" << H2 << vcl_endl;
+  std::cout << "\nH1:\n" << H1 << std::endl;
+  std::cout << "H2:\n" << H2 << std::endl;
 
 }
 

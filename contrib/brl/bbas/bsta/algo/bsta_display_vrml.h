@@ -12,9 +12,10 @@
 //   (none yet)
 // \endverbatim
 
+#include <iostream>
 #include <bsta/bsta_gaussian_full.h>
 #include <bsta/bsta_mixture.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
 #include <vnl/vnl_det.h>
 #include <vnl/algo/vnl_symmetric_eigensystem.h>
 #include <vnl/algo/vnl_svd_fixed.h>
@@ -23,11 +24,11 @@
 //: display bsta_gaussian_full to the stream as vrml. If single = true
 // then a vmrl header is written to form a complete display string.
 template<class T>
-bool bsta_display_vrml(vcl_ostream& os, bsta_gaussian_full<T, 3> const& dist,
+bool bsta_display_vrml(std::ostream& os, bsta_gaussian_full<T, 3> const& dist,
                        bool single = true, T r = T(0), T g = T(1), T b = T(0)){
   if(!os)
     {
-      vcl_cout << "out stream is not open\n";
+      std::cout << "out stream is not open\n";
       return false;
     }
   const vnl_vector_fixed<T, 3> mean = dist.mean();
@@ -38,24 +39,24 @@ bool bsta_display_vrml(vcl_ostream& os, bsta_gaussian_full<T, 3> const& dist,
   bool good = vnl_symmetric_eigensystem_compute<T>(covar, V, D);
 #ifdef VRML_DEBUG
   assert(good);
-  vcl_cout << "V \n" << V << '\n';
-  vcl_cout << "V^t \n" << V.transpose() << '\n';
-  vcl_cout << "D \n" << D << '\n';
-  vcl_cout << "V * D * Vt \n" << V*vnl_diag_matrix<float>(D)*V.transpose() << '\n';
+  std::cout << "V \n" << V << '\n';
+  std::cout << "V^t \n" << V.transpose() << '\n';
+  std::cout << "D \n" << D << '\n';
+  std::cout << "V * D * Vt \n" << V*vnl_diag_matrix<float>(D)*V.transpose() << '\n';
 #endif
   vnl_matrix_fixed<T,3,3> R(V);
   vgl_rotation_3d<T> rot(R);
   vnl_vector_fixed<T, 3> axis = rot.axis();
   double ang = rot.angle();
-  if(vcl_fabs(ang) < 1.0e-3){
+  if(std::fabs(ang) < 1.0e-3){
     // covar is already diagonal
     D[0]= covar[0][0];    D[1]= covar[1][1]; D[2]= covar[2][2];
   }
   vnl_vector_fixed<T,3> temp=axis*T(ang);
   vgl_rotation_3d<T> rot_temp(temp);
 #ifdef VRML_DEBUG
-  vcl_cout << "recon rot \n" << rot_temp.as_matrix() << '\n';
-  vcl_cout << "Axis, angle " << axis << ' ' << ang << '\n';
+  std::cout << "recon rot \n" << rot_temp.as_matrix() << '\n';
+  std::cout << "Axis, angle " << axis << ' ' << ang << '\n';
 #endif
   if(single)
       os << "#VRML V2.0 utf8\n";
@@ -67,8 +68,8 @@ bool bsta_display_vrml(vcl_ostream& os, bsta_gaussian_full<T, 3> const& dist,
      << axis[2] << ' ' << ang << '\n';
   os << "   children [\n";
   os << "    Transform{\n";
-  os << "     scale " << vcl_sqrt(D[0]) << ' ' << vcl_sqrt(D[1]) << ' '
-     << vcl_sqrt(D[2]) << '\n';
+  os << "     scale " << std::sqrt(D[0]) << ' ' << std::sqrt(D[1]) << ' '
+     << std::sqrt(D[2]) << '\n';
   os << "     children [ \n";
   os << "      Shape {\n";
   os << "       appearance Appearance {\n";
@@ -89,10 +90,10 @@ bool bsta_display_vrml(vcl_ostream& os, bsta_gaussian_full<T, 3> const& dist,
 }
 
 template<class T>
-bool bsta_display_vrml(vcl_ostream& os, bsta_mixture< bsta_gaussian_full<T, 3> > const& mix, T r = T(0), T g = T(1), T b = T(0)){
+bool bsta_display_vrml(std::ostream& os, bsta_mixture< bsta_gaussian_full<T, 3> > const& mix, T r = T(0), T g = T(1), T b = T(0)){
   if(!os)
     {
-      vcl_cout << "out stream is not open\n";
+      std::cout << "out stream is not open\n";
       return false;
     }
   os << "#VRML V2.0 utf8\n";
@@ -102,7 +103,7 @@ bool bsta_display_vrml(vcl_ostream& os, bsta_mixture< bsta_gaussian_full<T, 3> >
     T w = mix.weight(i);
     bool good = bsta_display_vrml(os, comp, false, w*r, w*g, w*b);
     if(!good){
-      vcl_cout << "display component failed\n";
+      std::cout << "display component failed\n";
       return false;
     }
   }

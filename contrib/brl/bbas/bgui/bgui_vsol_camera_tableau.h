@@ -15,8 +15,10 @@
 //   Now obsolete == do not use in new code === J.L. Mundy, March 1, 2008
 // \endverbatim
 //-----------------------------------------------------------------------------
-#include <vcl_vector.h>
-#include <vcl_map.h>
+#include <vector>
+#include <iostream>
+#include <map>
+#include <vcl_compiler.h>
 #include <vgl/algo/vgl_p_matrix.h>
 #include <vgui/vgui_style.h>
 #include <vgl/vgl_point_2d.h>
@@ -75,15 +77,15 @@ class bgui_vsol_camera_tableau : public vgui_easy2D_tableau
   void add_spatial_object_3d(vsol_spatial_object_3d_sptr const& sos);
 
   //: display methods for sets of objects
-  void add_spatial_objects_3d(vcl_vector<vsol_spatial_object_3d_sptr> const& sos);
+  void add_spatial_objects_3d(std::vector<vsol_spatial_object_3d_sptr> const& sos);
 
-  void add_points_3d(vcl_vector<vsol_point_3d_sptr> const & lines);
+  void add_points_3d(std::vector<vsol_point_3d_sptr> const & lines);
 
-  void add_lines_3d(vcl_vector<vsol_line_3d_sptr> const & lines);
+  void add_lines_3d(std::vector<vsol_line_3d_sptr> const & lines);
 
-  void add_polygons_3d(vcl_vector<vsol_polygon_3d_sptr> const & lines);
+  void add_polygons_3d(std::vector<vsol_polygon_3d_sptr> const & lines);
 
-  void add_boxes_3d(vcl_vector<vsol_box_3d_sptr> const & lines);
+  void add_boxes_3d(std::vector<vsol_box_3d_sptr> const & lines);
 
 
   //: clear the tableau including the highlight map
@@ -113,8 +115,8 @@ class bgui_vsol_camera_tableau : public vgui_easy2D_tableau
   //members
   bool highlight_;
   void init();
-  vcl_map<int, vsol_spatial_object_3d_sptr> obj_map_;
-  vcl_map<vcl_string, vgui_style_sptr> style_map_;
+  std::map<int, vsol_spatial_object_3d_sptr> obj_map_;
+  std::map<std::string, vgui_style_sptr> style_map_;
   int old_id_;
   vgui_style_sptr highlight_style_;
   vgui_style_sptr old_style_;

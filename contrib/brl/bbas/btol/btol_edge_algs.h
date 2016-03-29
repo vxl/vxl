@@ -12,7 +12,9 @@
 // \endverbatim
 //
 //-----------------------------------------------------------------------------
-#include <vcl_vector.h>
+#include <iostream>
+#include <vector>
+#include <vcl_compiler.h>
 #include "dll.h"
 #include <vtol/vtol_vertex_sptr.h>
 #include <vtol/vtol_edge_sptr.h>
@@ -40,11 +42,11 @@ class btol_edge_algs
                                    vtol_edge_sptr const& e);
 
   //:A convenient erase interface
-  static void edge_2d_erase(vcl_vector<vtol_edge_2d_sptr>& edges,
+  static void edge_2d_erase(std::vector<vtol_edge_2d_sptr>& edges,
                             vtol_edge_2d_sptr const& e);
 
   //:Get the bounding box for a set of edges
-  static vsol_box_2d bounding_box(vcl_vector<vtol_edge_2d_sptr>& edges);
+  static vsol_box_2d bounding_box(std::vector<vtol_edge_2d_sptr>& edges);
 
   //:Find the vertex closest to the specified position
   static vtol_vertex_2d_sptr closest_vertex(vtol_edge_2d_sptr const& e,

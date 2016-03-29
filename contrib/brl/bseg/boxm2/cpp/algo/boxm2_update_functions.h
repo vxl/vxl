@@ -9,8 +9,8 @@
 #include <vil/vil_image_view.h>
 
 bool boxm2_update_cone_image(boxm2_scene_sptr & scene,
-                             vcl_string data_type,
-                             vcl_string num_obs_type,
+                             std::string data_type,
+                             std::string num_obs_type,
                              vpgl_camera_double_sptr cam ,
                              vil_image_view<float>  * input_img,
                              unsigned int roi_ni,
@@ -20,8 +20,8 @@ bool boxm2_update_cone_image(boxm2_scene_sptr & scene,
 
 
 bool boxm2_update_image(boxm2_scene_sptr & scene,
-                             vcl_string data_type,int appTypeSize,
-                             vcl_string num_obs_type,
+                             std::string data_type,int appTypeSize,
+                             std::string num_obs_type,
                              vpgl_camera_double_sptr cam ,
                              vil_image_view<float>  * input_img,
                              unsigned int roi_ni,
@@ -30,8 +30,8 @@ bool boxm2_update_image(boxm2_scene_sptr & scene,
                              unsigned int roi_nj0=0);
 
 bool boxm2_update_with_shadow(boxm2_scene_sptr & scene,
-                              vcl_string data_type,int appTypeSize,
-                              vcl_string num_obs_type,
+                              std::string data_type,int appTypeSize,
+                              std::string num_obs_type,
                               vpgl_camera_double_sptr cam ,
                               float shadow_prior,
                               float shadow_sigma,
@@ -42,8 +42,8 @@ bool boxm2_update_with_shadow(boxm2_scene_sptr & scene,
                               unsigned int roi_nj0=0);
 
 bool boxm2_update_using_quality(boxm2_scene_sptr & scene,
-                                vcl_string data_type,int appTypeSize,
-                                vcl_string num_obs_type,
+                                std::string data_type,int appTypeSize,
+                                std::string num_obs_type,
                                 vpgl_camera_double_sptr cam ,
                                 vil_image_view<float>  * input_img,
                                 vil_image_view<float>& quality_img,

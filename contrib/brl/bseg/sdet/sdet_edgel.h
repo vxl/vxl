@@ -19,10 +19,12 @@
 //
 //\endverbatim
 
+#include <vector>
+#include <iostream>
+#include <deque>
+#include <list>
 #include <vbl/vbl_ref_count.h>
-#include <vcl_vector.h>
-#include <vcl_deque.h>
-#include <vcl_list.h>
+#include <vcl_compiler.h>
 
 #include <vgl/vgl_point_2d.h>
 
@@ -33,13 +35,13 @@ class sdet_edgel;
 class sdet_curvelet;
 
 //useful type definitions
-typedef vcl_deque<sdet_edgel* > sdet_edgel_list;
-typedef vcl_deque<sdet_edgel* >::iterator sdet_edgel_list_iter;
-typedef vcl_deque<sdet_edgel* >::const_iterator sdet_edgel_list_const_iter;
+typedef std::deque<sdet_edgel* > sdet_edgel_list;
+typedef std::deque<sdet_edgel* >::iterator sdet_edgel_list_iter;
+typedef std::deque<sdet_edgel* >::const_iterator sdet_edgel_list_const_iter;
 
-typedef vcl_list<sdet_curvelet* > sdet_curvelet_list;
-typedef vcl_list<sdet_curvelet* >::iterator sdet_curvelet_list_iter;
-typedef vcl_list<sdet_curvelet* >::const_iterator sdet_curvelet_list_const_iter;
+typedef std::list<sdet_curvelet* > sdet_curvelet_list;
+typedef std::list<sdet_curvelet* >::iterator sdet_curvelet_list_iter;
+typedef std::list<sdet_curvelet* >::const_iterator sdet_curvelet_list_const_iter;
 
 //: edgel class: contains pt, tangent and collection of all the groupings around it
 class sdet_edgel
@@ -129,7 +131,7 @@ public:
     }
   }
 
-  void append(vcl_vector<sdet_edgel*>& n_chain)
+  void append(std::vector<sdet_edgel*>& n_chain)
   {
     for (unsigned i=0; i<n_chain.size(); i++)
       edgels.push_back(n_chain[i]);
@@ -146,7 +148,7 @@ public:
   void push_front(sdet_edgel* edgel){ edgels.push_front(edgel); }
 };
 
-typedef vcl_list<sdet_edgel_chain*> sdet_edgel_chain_list;
-typedef vcl_list<sdet_edgel_chain*>::iterator sdet_edgel_chain_list_iter;
+typedef std::list<sdet_edgel_chain*> sdet_edgel_chain_list;
+typedef std::list<sdet_edgel_chain*>::iterator sdet_edgel_chain_list_iter;
 
 #endif // sdet_edgel_h

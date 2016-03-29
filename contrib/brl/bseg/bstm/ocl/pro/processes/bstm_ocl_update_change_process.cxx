@@ -7,6 +7,10 @@
 // \author Ali Osman Ulusoy
 // \date May 15, 2013
 
+#include <fstream>
+#include <iostream>
+#include <algorithm>
+#include <sstream>
 #include <bprb/bprb_func_process.h>
 #include <bstm/ocl/bstm_opencl_cache.h>
 #include <bstm/ocl/algo/bstm_ocl_change_detection.h>
@@ -23,9 +27,7 @@
 // directory utility
 #include <vul/vul_timer.h>
 #include <vcl_where_root_dir.h>
-#include <vcl_fstream.h>
-#include <vcl_algorithm.h>
-#include <vcl_sstream.h>
+#include <vcl_compiler.h>
 #include <bocl/bocl_device.h>
 #include <bocl/bocl_kernel.h>
 
@@ -40,7 +42,7 @@ bool bstm_ocl_update_change_process_cons(bprb_func_process& pro)
   using namespace bstm_ocl_update_change_process_globals;
 
   // process takes 9 inputs and two outputs
-  vcl_vector<vcl_string> input_types_(n_inputs_);
+  std::vector<std::string> input_types_(n_inputs_);
   input_types_[0] = "bocl_device_sptr";
   input_types_[1] = "bstm_scene_sptr";
   input_types_[2] = "bstm_opencl_cache_sptr";
@@ -52,7 +54,7 @@ bool bstm_ocl_update_change_process_cons(bprb_func_process& pro)
   brdb_value_sptr empty_mask = new brdb_value_t<vil_image_view_base_sptr>(new vil_image_view<unsigned char>(1,1));
   pro.set_input(5, empty_mask);
 
-  vcl_vector<vcl_string>  output_types_(n_outputs_);
+  std::vector<std::string>  output_types_(n_outputs_);
   output_types_[0] = "vil_image_view_base_sptr";  // prob of change image
   bool good = pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
 
@@ -63,7 +65,7 @@ bool bstm_ocl_update_change_process(bprb_func_process& pro)
 {
   using namespace bstm_ocl_update_change_process_globals;
   if ( pro.n_inputs() < n_inputs_ ) {
-    vcl_cout << pro.name() << ": The input number should be " << n_inputs_<< vcl_endl;
+    std::cout << pro.name() << ": The input number should be " << n_inputs_<< std::endl;
     return false;
   }
 
@@ -96,7 +98,7 @@ bool bstm_ocl_update_change_process(bprb_func_process& pro)
                                              img,
                                              mask_img,
                                              time);
-  vcl_cout<<" change time: "<<t.all()<<" ms"<<vcl_endl;
+  std::cout<<" change time: "<<t.all()<<" ms"<<std::endl;
 
   // set outputs
   i=0;

@@ -1,13 +1,17 @@
 // This is core/vul/vul_debug.cxx
+#include <iostream>
+#include <new>
+#include <cstdlib>
+#include <cstdio>
+#include <string>
 #include "vul_debug.h"
 //: \file
 //  \brief Get debug related information like core dumps, and stack traces
 //  \author Ian Scott
 
-#include <vcl_iostream.h>
 #include <vxl_config.h>
-#include <vcl_new.h>
-#include <vcl_cstdlib.h>
+#include <vcl_compiler.h>
+#include <vcl_cstdio.h> // for vcl_snprintf()
 
 #ifdef _WIN32
 
@@ -32,7 +36,6 @@
 #define NOMCX
 #include <windows.h>
 #include <DbgHelp.h>
-#include <vcl_cstdio.h>
 #pragma comment (lib, "dbghelp")
 
 static bool vul_debug_core_dump_in_windows_seh(const char * filename,
@@ -48,7 +51,7 @@ static bool vul_debug_core_dump_in_windows_seh(const char * filename,
 
   if ( ( hFile == NULL ) || ( hFile == INVALID_HANDLE_VALUE ) )
   {
-    vcl_cerr << "WARNING: vul_debug_core_dump: Unable to create core dump file: " << filename << vcl_endl;
+    std::cerr << "WARNING: vul_debug_core_dump: Unable to create core dump file: " << filename << std::endl;
     return false;
   }
 
@@ -59,7 +62,7 @@ static bool vul_debug_core_dump_in_windows_seh(const char * filename,
 
   if (! MiniDumpWriteDump( GetCurrentProcess(), GetCurrentProcessId(),
     hFile, MiniDumpWithFullMemory, (pep != 0) ? &mdei : 0, 0, 0 ))
-    vcl_cerr << "WARNING: vul_debug_core_dump: Unable to dump core: " << filename << vcl_endl;
+    std::cerr << "WARNING: vul_debug_core_dump: Unable to dump core: " << filename << std::endl;
 
   CloseHandle( hFile );
   return true;
@@ -106,7 +109,7 @@ void *vul_debug_windows_structured_exception::address() const
 const char *vul_debug_windows_structured_exception::what() const throw()
 {
   static char buf[100];
-  vcl_sprintf(buf, "Caught Windows Structured Exception. Code %lx. Address %lx", code(), address());
+  std::sprintf(buf, "Caught Windows Structured Exception. Code %lx. Address %lx", code(), address());
   return buf;
 }
 #endif
@@ -120,8 +123,8 @@ void vul_debug_set_coredump_and_throw_on_windows_se_handler(
 #if VCL_HAS_EXCEPTIONS
   throw vul_debug_windows_structured_exception(ex_ptr);
 #else
-  vcl_cerr << static_cast<char*>(ex_ptr) << '\n';
-  vcl_abort();
+  std::cerr << static_cast<char*>(ex_ptr) << '\n';
+  std::abort();
 #endif
 }
 
@@ -139,13 +142,13 @@ void vul_debug_set_coredump_and_throw_on_windows_se(const char * filename)
 
 bool vul_debug_core_dump_in_windows_seh(const char *, void*)
 {
-  vcl_cerr << "WARNING: vul_debug_core_dump_in_windows_seh: Unable to core dump\n";
+  std::cerr << "WARNING: vul_debug_core_dump_in_windows_seh: Unable to core dump\n";
   return false;
 }
 
 bool vul_debug_core_dump(const char *)
 {
-  vcl_cerr << "WARNING: vul_debug_core_dump: Unable to core dump\n";
+  std::cerr << "WARNING: vul_debug_core_dump: Unable to core dump\n";
   return false;
 }
 
@@ -171,7 +174,7 @@ const char *vul_debug_windows_structured_exception::what() const throw()
 // \throws vul_debug_windows_structured_exception.
 void vul_debug_set_coredump_and_throw_on_windows_se(const char * )
 {
-  vcl_cerr << "WARNING: No DbgHelp.h on this platform - can't set SE Handler.\n";
+  std::cerr << "WARNING: No DbgHelp.h on this platform - can't set SE Handler.\n";
 }
 
 # endif // VXL_HAS_DBGHELP_H
@@ -179,7 +182,6 @@ void vul_debug_set_coredump_and_throw_on_windows_se(const char * )
 
 #else // _WIN32
 
-#include <vcl_string.h>
 #ifdef VXL_UNISTD_HAS_GETPID
 # include <unistd.h>
 #endif
@@ -189,7 +191,7 @@ bool vul_debug_core_dump(const char * filename)
 {
   static int count = 0;
 #ifdef VXL_UNISTD_HAS_GETPID
-  vcl_string syscall = "gcore -o ";
+  std::string syscall = "gcore -o ";
   syscall += vul_sprintf(filename, count++);
   syscall += vul_sprintf(" %d", getpid());
   if (system(syscall.c_str())==0) return true;
@@ -198,7 +200,7 @@ bool vul_debug_core_dump(const char * filename)
   syscall += vul_sprintf(" %d", getpid());
   if (system(syscall.c_str())==0) return true;
 #endif
-  vcl_cerr << "WARNING: vul_debug_core_dump: Unable to core dump\n";
+  std::cerr << "WARNING: vul_debug_core_dump: Unable to core dump\n";
   return false;
 }
 // For a more reliable way of dumping core try forking and sending a SIGSTOP to the child.
@@ -224,17 +226,17 @@ void
 {
   vul_debug_core_dump(out_of_memory_coredump_filename);
 #if VCL_HAS_EXCEPTIONS
-  throw vcl_bad_alloc();
+  throw std::bad_alloc();
 #else
-  vcl_cerr << "Out of Memory.\n";
-  vcl_abort();
+  std::cerr << "Out of Memory.\n";
+  std::abort();
 #endif
 }
 
 //: Setup the system to core dump and throw a C++ exception on detection of out of memory.
-// The system will throw vcl_bad_alloc.
+// The system will throw std::bad_alloc.
 void vul_debug_set_coredump_and_throw_on_out_of_memory(const char * filename)
 {
   out_of_memory_coredump_filename = filename;
-  vcl_set_new_handler(vul_debug_set_coredump_and_throw_on_out_of_memory_handler);
+  std::set_new_handler(vul_debug_set_coredump_and_throw_on_out_of_memory_handler);
 }

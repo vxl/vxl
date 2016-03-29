@@ -8,29 +8,30 @@
 //
 //-----------------------------------------------------------------------------
 
+#include <cstdarg>
+#include <cstring>
+#include <iostream>
+#include <cstdio>
 #include "vul_sprintf.h"
 
-#include <vcl_cstdarg.h>
-#include <vcl_cstring.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
 #undef vsprintf // this works around a bug in libintl.h
-#include <vcl_cstdio.h> // for vsprintf()
 
-vul_sprintf::vul_sprintf(char const *fmt, ...) : vcl_string("")
+vul_sprintf::vul_sprintf(char const *fmt, ...) : std::string("")
 {
-  vcl_va_list ap;
+  std::va_list ap;
   va_start(ap, fmt);
 
   char s[65536];
-  vcl_vsprintf(s, fmt, ap);
-  if (vcl_strlen(s) >= sizeof s)
-    vcl_cerr << __FILE__ ": WARNING! Possible memory corruption after call to vsprintf()\n";
-  vcl_string::operator=(s);
+  std::vsprintf(s, fmt, ap);
+  if (std::strlen(s) >= sizeof s)
+    std::cerr << __FILE__ ": WARNING! Possible memory corruption after call to vsprintf()\n";
+  std::string::operator=(s);
 
   va_end(ap);
 }
 
-vcl_ostream & operator<<(vcl_ostream &os,const vul_sprintf& s)
+std::ostream & operator<<(std::ostream &os,const vul_sprintf& s)
 {
   return os << (char const*)s;
 }
@@ -40,8 +41,8 @@ vcl_ostream & operator<<(vcl_ostream &os,const vul_sprintf& s)
 #ifdef RUNTEST
 main()
 {
-  vcl_cout << vul_sprintf("fred%d\n", 3);
-  vcl_string fmt("foobar%d\n");
-  vcl_cout << vul_sprintf(fmt, 4);
+  std::cout << vul_sprintf("fred%d\n", 3);
+  std::string fmt("foobar%d\n");
+  std::cout << vul_sprintf(fmt, 4);
 }
 #endif

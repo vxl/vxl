@@ -3,6 +3,13 @@
 // \author Andy Miller
 // \date 26-Oct-2010
 
+#include <iostream>
+#include <ios>
+#include <string>
+#include <vector>
+#include <map>
+#include <algorithm>
+#include <cmath>
 #include <testlib/testlib_test.h>
 #include <testlib/testlib_root_dir.h>
 #include <vcl_where_root_dir.h>
@@ -10,13 +17,7 @@
 #include <bocl/bocl_kernel.h>
 #include <bocl/bocl_mem.h>
 #include <bocl/bocl_device.h>
-#include <vcl_iostream.h>
-#include <vcl_ios.h> // for std::ios::fixed
-#include <vcl_string.h>
-#include <vcl_vector.h>
-#include <vcl_map.h>
-#include <vcl_algorithm.h>
-#include <vcl_cmath.h>
+#include <vcl_compiler.h>
 #include <vgl/vgl_vector_3d.h>
 
 
@@ -26,12 +27,12 @@ void print_column_major( float* buffer, int nrows, int ncols, int elementSize=4)
   for (int i=0; i<nrows; ++i) {
     for (int j=0; j<ncols; ++j) {
       int idx = elementSize*(nrows*j + i);
-      vcl_cout<<'[';
+      std::cout<<'[';
       for (int el=0; el<elementSize; ++el)
-        vcl_cout<<buffer[idx+el]<<',';
-      vcl_cout<<']';
+        std::cout<<buffer[idx+el]<<',';
+      std::cout<<']';
     }
-    vcl_cout<<vcl_endl;
+    std::cout<<std::endl;
   }
 }
 
@@ -44,10 +45,11 @@ void test_image()
   bocl_device_sptr device = mgr.gpus_[0];
 
   //compile pyramid test
-  vcl_vector<vcl_string> src_paths;
-  vcl_string source_dir = vcl_string(VCL_SOURCE_ROOT_DIR) + "/contrib/brl/bseg/boxm2/ocl/cl/";
+  std::vector<std::string> src_paths;
+  const std::string source_dir = std::string(VCL_SOURCE_ROOT_DIR) + "/contrib/brl/bseg/boxm2/ocl/cl/";
   src_paths.push_back(source_dir + "basic/image_pyramid.cl");
   bocl_kernel pyramid_test;
+  std::cout << "Reading file: " << source_dir + "basic/image_pyramid.cl" << std::endl;
   pyramid_test.create_kernel(&device->context(),device->device_id(), src_paths, "test_image_pyramid", " -D IMG_TYPE=float ", "test image pyramid kernel");
 
   // create a command queue.
@@ -87,8 +89,8 @@ void test_image()
   pyramid_test.set_arg( o3buff.ptr() );
 
   //set workspace
-  vcl_size_t lThreads[] = {8, 8};
-  vcl_size_t gThreads[] = {8, 8};
+  std::size_t lThreads[] = {8, 8};
+  std::size_t gThreads[] = {8, 8};
 
   //execute kernel
   pyramid_test.execute( queue, 2, lThreads, gThreads);
@@ -127,19 +129,19 @@ void test_image()
 
   //test 4x4 image
   for (int i=0; i<4*4; ++i) {
-    if ( vcl_fabs(out1GT[i] - out1[i]) > 1e-6f )
-      vcl_cout<<" img1 No match at "<<i<<vcl_endl;
+    if ( std::fabs(out1GT[i] - out1[i]) > 1e-6f )
+      std::cout<<" img1 No match at "<<i<<std::endl;
   }
 
   //test 2x2 image
   for (int i=0; i<2*2; ++i) {
-    if ( vcl_fabs(out2GT[i] - out2[i]) > 1e-6f )
-      vcl_cout<<" img2 No match at "<<i<<':'<<out2GT[i]<<" != "<<out2[i]<<vcl_endl;
+    if ( std::fabs(out2GT[i] - out2[i]) > 1e-6f )
+      std::cout<<" img2 No match at "<<i<<':'<<out2GT[i]<<" != "<<out2[i]<<std::endl;
   }
 
   //test 1x1 image
-  if ( vcl_fabs(out3GT - out3[0]) > 1e-6f )
-      vcl_cout<<" img3 No match at :"<<out3GT<<" != "<<out3[0]<<vcl_endl;
+  if ( std::fabs(out3GT - out3[0]) > 1e-6f )
+      std::cout<<" img3 No match at :"<<out3GT<<" != "<<out3[0]<<std::endl;
 }
 
 
@@ -152,8 +154,8 @@ void test_ray_pyramid()
   bocl_device_sptr device = mgr.gpus_[0];
 
   //compile pyramid test
-  vcl_vector<vcl_string> src_paths;
-  vcl_string source_dir = vcl_string(VCL_SOURCE_ROOT_DIR) + "/contrib/brl/bseg/boxm2/ocl/cl/";
+  std::vector<std::string> src_paths;
+  std::string source_dir = std::string(VCL_SOURCE_ROOT_DIR) + "/contrib/brl/bseg/boxm2/ocl/cl/";
   src_paths.push_back(source_dir + "basic/ray_pyramid.cl");
   bocl_kernel pyramid_test;
   pyramid_test.create_kernel(&device->context(),device->device_id(), src_paths, "test_ray_pyramid", "", "test ray pyramid kernel");
@@ -203,8 +205,8 @@ void test_ray_pyramid()
   pyramid_test.set_arg( o3buff.ptr() );
 
   //set workspace
-  vcl_size_t lThreads[] = {8, 8};
-  vcl_size_t gThreads[] = {8, 8};
+  std::size_t lThreads[] = {8, 8};
+  std::size_t gThreads[] = {8, 8};
 
   //execute kernel
   pyramid_test.execute( queue, 2, lThreads, gThreads);
@@ -270,36 +272,36 @@ void test_ray_pyramid()
   out3GT[3] = 4.0f;
 
 #if 0
-  vcl_cout<<"Out1GT.."<<vcl_endl;
+  std::cout<<"Out1GT.."<<std::endl;
   print_column_major(out1GT, 4, 4, 4);
 
-  vcl_cout<<"Out2GT.."<<vcl_endl;
+  std::cout<<"Out2GT.."<<std::endl;
   print_column_major(out2GT, 2, 2, 4);
-  vcl_cout<<"Out2.."<<vcl_endl;
+  std::cout<<"Out2.."<<std::endl;
   print_column_major(out2, 2, 2, 4);
 
-  vcl_cout<<"Out3GT.."<<vcl_endl;
+  std::cout<<"Out3GT.."<<std::endl;
   print_column_major(out3GT,1,1,4);
-  vcl_cout<<"Out3..."<<vcl_endl;
+  std::cout<<"Out3..."<<std::endl;
   print_column_major(out3, 1,1,4);
 #endif
 
   //test 4x4 image
   for (int i=0; i<4*4*4; ++i) {
-    if ( vcl_fabs(out1GT[i] - out1[i]) > 1e-6f )
-      vcl_cout<<" img1 No match at "<<i<<vcl_endl;
+    if ( std::fabs(out1GT[i] - out1[i]) > 1e-6f )
+      std::cout<<" img1 No match at "<<i<<std::endl;
   }
 
   //test 2x2 image
   for (int i=0; i<4*2*2; ++i) {
-    if ( vcl_fabs(out2GT[i] - out2[i]) > 1e-6f )
-      vcl_cout<<" img2 No match at "<<i<<':'<<out2GT[i]<<" != "<<out2[i]<<vcl_endl;
+    if ( std::fabs(out2GT[i] - out2[i]) > 1e-6f )
+      std::cout<<" img2 No match at "<<i<<':'<<out2GT[i]<<" != "<<out2[i]<<std::endl;
   }
 
   //test 1x1 image
   for (int i=0; i<4*1*1; ++i) {
-    if ( vcl_fabs(out3GT[i] - out3[i]) > 1e-6f )
-      vcl_cout<<" img3 No match at "<<i<<':'<<out3GT[i]<<" != "<<out3[i]<<vcl_endl;
+    if ( std::fabs(out3GT[i] - out3[i]) > 1e-6f )
+      std::cout<<" img3 No match at "<<i<<':'<<out3GT[i]<<" != "<<out3[i]<<std::endl;
   }
 }
 

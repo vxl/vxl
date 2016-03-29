@@ -3,9 +3,10 @@
 //  \date 8 April 2008
 //  \brief Program to print info about an image.
 
-#include <vcl_exception.h>
-#include <vcl_cstdlib.h>
-#include <vcl_iostream.h>
+#include <exception>
+#include <iostream>
+#include <cstdlib>
+#include <vcl_compiler.h>
 #include <vul/vul_arg.h>
 #include <vgl/vgl_point_2d.h>
 #include <vgl/vgl_vector_2d.h>
@@ -80,15 +81,15 @@ static unsigned try_3d_image(const char * filename, float unit_scaling, bool ran
     w2i = vimt3d_load_transform(ir, false);
   else
   {
-    vcl_cerr << "Can only cope with \"-s 1\" or \"-s 1000\" for 3D images.\n";
-    vcl_exit(3);
+    std::cerr << "Can only cope with \"-s 1\" or \"-s 1000\" for 3D images.\n";
+    std::exit(3);
   }
 
   vgl_vector_3d<double> voxel = voxel_size_from_transform(w2i);
   vgl_point_3d<double> world_min_point = w2i.inverse().origin();
   vgl_point_3d<double> world_max_point = w2i.inverse()(ir->ni()+0.999, ir->nj()+0.999, ir->nk()+0.999);
   vgl_point_3d<double> world_centre = world_min_point + (world_max_point-world_min_point)/2.0;
-  vcl_cout << "size: " << ir->ni() << 'x' << ir->nj() << 'x' << ir->nk() << " voxels x " << ir->nplanes() << "planes\n"
+  std::cout << "size: " << ir->ni() << 'x' << ir->nj() << 'x' << ir->nk() << " voxels x " << ir->nplanes() << "planes\n"
            << "size: " << ir->ni()*voxel.x() << 'x' << ir->nj()*voxel.y() << 'x' << ir->nk()*voxel.z()
            << " in units of " << 1.0/unit_scaling << "m\n"
            << "voxel size: " << voxel.x() << 'x' << voxel.y() << 'x' << voxel.z()
@@ -99,13 +100,13 @@ static unsigned try_3d_image(const char * filename, float unit_scaling, bool ran
            << "world centre: " << world_centre.x() << ',' << world_centre.y() << ',' << world_centre.z() << "\n"
            << "voxel_type: " << ir->pixel_format() << "\n"
            << "transform: " << w2i
-           << vcl_endl;
+           << std::endl;
 
   if (range)
   {
     double min,max;
     get_intensity_range_3d(ir, min, max);
-    vcl_cout << "intensity range: " << min << " to " << max << vcl_endl;
+    std::cout << "intensity range: " << min << " to " << max << std::endl;
   }
   return 0;
 }
@@ -123,7 +124,7 @@ static unsigned try_2d_image(const char * filename, float unit_scaling, bool ran
   vgl_point_2d<double> world_min_point = w2i.inverse().origin();
   vgl_point_2d<double> world_max_point = w2i.inverse()(ir->ni()+0.999, ir->nj()+0.999);
   vgl_point_2d<double> world_centre = world_min_point + (world_max_point-world_min_point)/2.0;
-  vcl_cout << "size: " << ir->ni() << 'x' << ir->nj() << " pixels x " << ir->nplanes() << "planes\n"
+  std::cout << "size: " << ir->ni() << 'x' << ir->nj() << " pixels x " << ir->nplanes() << "planes\n"
            << "size: " << ir->ni()*pixel.x() << 'x' << ir->nj()*pixel.y()
            << " in units of " << 1.0/unit_scaling << "m\n"
            << "pixel size: " << pixel.x() << 'x' << pixel.y()
@@ -134,13 +135,13 @@ static unsigned try_2d_image(const char * filename, float unit_scaling, bool ran
            << "world centre: " << world_centre.x() << ',' << world_centre.y() << "\n"
            << "pixel_type: " << ir->pixel_format() << "\n"
            << "transform: " << w2i
-           << vcl_endl;
+           << std::endl;
 
   if (range)
   {
     double min,max;
     get_intensity_range_2d(ir, min, max);
-    vcl_cout << "intensity range: " << min << " to " << max << vcl_endl;
+    std::cout << "intensity range: " << min << " to " << max << std::endl;
   }
 
   return 0;
@@ -156,7 +157,7 @@ int main2(int argc, char*argv[])
   vimt3d_add_all_loaders();
 
   // Parse the program arguments
-  vul_arg<vcl_string> img_src(0, "input image filename");
+  vul_arg<std::string> img_src(VXL_NULLPTR, "input image filename");
   vul_arg<float> unit_scaling("-s", "Unit scaling (1000 for mm)", 1000);
   vul_arg<bool> range("-r", "Determine intensity range", false);
   vul_arg<bool> only_3d("-3", "Only try to load 3d image", false);
@@ -184,9 +185,9 @@ int main2(int argc, char*argv[])
       if (try_3d_image(img_src().c_str(), unit_scaling(), range()) == 0)
         return 0;
     }
-    catch (vcl_exception& e)
+    catch (std::exception& e)
     {
-      vcl_cout << "caught exception " << e.what() << vcl_endl;
+      std::cout << "caught exception " << e.what() << std::endl;
     }
     return try_2d_image(img_src().c_str(), unit_scaling(), range());
   }
@@ -204,14 +205,14 @@ int main(int argc, char*argv[])
     mbl_logger::root().load_log_config_file();
     main2(argc, argv);
   }
-  catch (vcl_exception& e)
+  catch (std::exception& e)
   {
-    vcl_cout << "caught exception " << e.what() << vcl_endl;
+    std::cout << "caught exception " << e.what() << std::endl;
     return 3;
   }
   catch (...)
   {
-    vcl_cout << "caught unknown exception " << vcl_endl;
+    std::cout << "caught unknown exception " << std::endl;
     return 3;
   }
 

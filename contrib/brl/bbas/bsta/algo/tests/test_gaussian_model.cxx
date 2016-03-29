@@ -1,10 +1,12 @@
+#include <iostream>
+#include <string>
 #include <testlib/testlib_test.h>
 
 #include <bsta/bsta_mixture_fixed.h>
 #include <bsta/bsta_gaussian_indep.h>
 #include <bsta/algo/bsta_adaptive_updater.h>
 
-#include <vcl_string.h>
+#include <vcl_compiler.h>
 
 // This test was first written to verify whether the basic functionality of
 // bsta_mixtures is consistent across platforms.
@@ -71,17 +73,17 @@ void test_gauss_indep_update()
 
 static void test_gaussian_model()
 {
-  vcl_cout << "----------------------------------\n"
+  std::cout << "----------------------------------\n"
            << " float, 2-dimensional, 3-modal\n"
-           << "-----------------------------------" <<vcl_endl;
+           << "-----------------------------------" <<std::endl;
   test_gauss_indep_update<float,2>();
-  vcl_cout << "-----------------------------------\n"
+  std::cout << "-----------------------------------\n"
            << " float, 3-dimensional, 3-modal\n"
-           << "-----------------------------------" <<vcl_endl;
+           << "-----------------------------------" <<std::endl;
   test_gauss_indep_update<float,3>();
-  vcl_cout << "-----------------------------------\n"
+  std::cout << "-----------------------------------\n"
            << " float, 4-dimensional, 3-modal\n"
-           << "-----------------------------------" <<vcl_endl;
+           << "-----------------------------------" <<std::endl;
   test_gauss_indep_update<float,4>();
 }
 

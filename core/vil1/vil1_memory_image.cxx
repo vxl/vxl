@@ -5,10 +5,11 @@
 //:
 // \file
 
+#include <iostream>
 #include "vil1_memory_image.h"
 
 #include <vcl_cassert.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
 
 #include <vil1/vil1_image.h>
 #include <vil1/vil1_memory_image_impl.h>
@@ -82,11 +83,11 @@ vil1_image make_memory_image(vil1_image const * thatp)
   assert(that.components() > 0);
   assert(that.bits_per_component() > 0);
 #ifdef DEBUG
-  vcl_cout << "copying " << that.impl() << " to a "
+  std::cout << "copying " << that.impl() << " to a "
            << that.planes() << 'x' << that.width() << 'x' <<that.height()
            << 'x' << that.components() << " memory image, "
            << that.bits_per_component() << " bpc, component format "
-           << that.component_format() << '\n' << vcl_flush;
+           << that.component_format() << '\n' << std::flush;
 #endif
   vil1_memory_image mem(that.planes(),
                         that.width(),
@@ -137,9 +138,9 @@ void vil1_memory_image::resize(int planes, int width, int height)
 void vil1_memory_image::assert_size(int width, int height) const
 {
   if ((width != width_) || (height != height_)) {
-    vcl_cerr << __FILE__ ": In vil1_memory_image::assert_size():\n"
-             << __FILE__ ": Image has size   " << width_ << 'x' << height_ << vcl_endl
-             << __FILE__ ": but it should be " << width  << 'x' << height  << vcl_endl;
+    std::cerr << __FILE__ ": In vil1_memory_image::assert_size():\n"
+             << __FILE__ ": Image has size   " << width_ << 'x' << height_ << std::endl
+             << __FILE__ ": but it should be " << width  << 'x' << height  << std::endl;
     assert(false);
   }
 }

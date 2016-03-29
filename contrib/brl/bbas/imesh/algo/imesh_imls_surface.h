@@ -29,7 +29,7 @@ class imesh_imls_surface
   imesh_imls_surface(const imesh_mesh& mesh,
                      double eps = 0.01, double lambda = 0.1,
                      bool enforce_bounded = false,
-                     const vcl_set<unsigned int>& no_normal_faces = vcl_set<unsigned int>());
+                     const std::set<unsigned int>& no_normal_faces = std::set<unsigned int>());
 
   //: Copy Constructor
   imesh_imls_surface(const imesh_imls_surface& other);
@@ -164,11 +164,11 @@ class imesh_imls_surface
  private:
 
   //: recursively compute the area weighted centroids
-  void compute_centroids_rec(const vcl_auto_ptr<imesh_kd_tree_node>& node,
-                             const vcl_set<unsigned int>& no_normal_faces);
+  void compute_centroids_rec(const std::auto_ptr<imesh_kd_tree_node>& node,
+                             const std::set<unsigned int>& no_normal_faces);
 
   //: recursively compute the unweighted integrals
-  void compute_unweighed_rec(const vcl_auto_ptr<imesh_kd_tree_node>& node);
+  void compute_unweighed_rec(const std::auto_ptr<imesh_kd_tree_node>& node);
 
 
   //: compute the iso value such that the mean value at the vertices is zero
@@ -178,16 +178,16 @@ class imesh_imls_surface
   //  Also computes the iso level
   void compute_enclosing_phi();
 
-  vcl_vector<vgl_point_3d<double> > verts_;     // mesh vertices
-  vcl_auto_ptr<imesh_regular_face_array<3> > triangles_; // mesh triangles
+  std::vector<vgl_point_3d<double> > verts_;     // mesh vertices
+  std::auto_ptr<imesh_regular_face_array<3> > triangles_; // mesh triangles
 
-  vcl_auto_ptr<imesh_kd_tree_node> kd_tree_;    // root node of a kd-tree on triangles
-  vcl_vector<double> phi_;                      // phi values assigned per vertex
-  vcl_vector<double> area_;                     // surface area per node
-  vcl_vector<double> unweighted_;               // unweighted integrals of phi over the surface per node
-  vcl_vector<vgl_point_3d<double> > centroid_;  // area weighted centroid per node
-  vcl_vector<vgl_vector_3d<double> > normals_;  // area weighted normal per node
-  vcl_vector<double> normal_len_;               // cached magnitude of above normals
+  std::auto_ptr<imesh_kd_tree_node> kd_tree_;    // root node of a kd-tree on triangles
+  std::vector<double> phi_;                      // phi values assigned per vertex
+  std::vector<double> area_;                     // surface area per node
+  std::vector<double> unweighted_;               // unweighted integrals of phi over the surface per node
+  std::vector<vgl_point_3d<double> > centroid_;  // area weighted centroid per node
+  std::vector<vgl_vector_3d<double> > normals_;  // area weighted normal per node
+  std::vector<double> normal_len_;               // cached magnitude of above normals
 
   double eps2_;
   double lambda_;

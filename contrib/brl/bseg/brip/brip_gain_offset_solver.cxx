@@ -160,7 +160,7 @@ bool brip_gain_offset_solver::solve_with_constraints(double lambda)
     gain_ = static_cast<float>((lambda + sumxy - (sumx*sumy) / (double)(lambda + 1)) / (lambda + sumyy - (sumy*sumy) / (double)(lambda + 1)));
     offset_ = static_cast<float>((sumx - sumy*gain_) / (double)(1 + lambda));
 
-    vcl_cout << "Gain " << gain_ << " offset " << offset_ << vcl_endl;
+    std::cout << "Gain " << gain_ << " offset " << offset_ << std::endl;
     return true;
 }
 vil_image_view<float> brip_gain_offset_solver::mapped_test_image()

@@ -1,4 +1,6 @@
 // This is brl/bseg/bvxm/pro/processes/bvxm_update_edges_process.cxx
+#include <iostream>
+#include <cstdio>
 #include "bvxm_update_edges_process.h"
 //:
 // \file
@@ -23,7 +25,7 @@
 #include <brip/brip_vil_float_ops.h>
 
 #include <vil/vil_image_view.h>
-#include <vcl_cstdio.h>
+#include <vcl_compiler.h>
 
 //: set input and output types
 bool bvxm_update_edges_process_cons(bprb_func_process& pro)
@@ -37,7 +39,7 @@ bool bvxm_update_edges_process_cons(bprb_func_process& pro)
   //input[3]: Scale of the image
   //input[4]: edge_prob_mask_size
   //input[5]: edge_prob_mask_sigma
-  vcl_vector<vcl_string> input_types_(n_inputs_);
+  std::vector<std::string> input_types_(n_inputs_);
   unsigned i = 0;
   input_types_[i++] = "bvxm_voxel_world_sptr";
   input_types_[i++] = "vpgl_camera_double_sptr";
@@ -55,7 +57,7 @@ bool bvxm_update_edges_process(bprb_func_process& pro)
 
   //check number of inputs
   if ( pro.n_inputs() < n_inputs_ ) {
-    vcl_cout << pro.name() << " The input number should be " << n_inputs_<< vcl_endl;
+    std::cout << pro.name() << " The input number should be " << n_inputs_<< std::endl;
     return false;
   }
 
@@ -87,7 +89,7 @@ bool bvxm_update_edges_process(bprb_func_process& pro)
 
   int num_observations = vox_world->num_observations<EDGES>(0,scale);
 
-  vcl_cout << "number of observations before the update: " << num_observations << '\n'
+  std::cout << "number of observations before the update: " << num_observations << '\n'
            << "edge_prob_mask_size: " << edge_prob_mask_size << '\n'
            << "edge_prob_mask_sigma: " << edge_prob_mask_sigma << '\n';
 
@@ -102,7 +104,7 @@ bool bvxm_update_edges_process(bprb_func_process& pro)
   bool result = edge_ray_proc.update_edges(camera_metadata_out,0);
 
   if (!result) {
-    vcl_cerr << "error bvxm_rpc_registration: failed to update edge image\n";
+    std::cerr << "error bvxm_rpc_registration: failed to update edge image\n";
     return false;
   }
 

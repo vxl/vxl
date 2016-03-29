@@ -18,8 +18,8 @@ bool vil_image_dilate_disk_process_cons(bprb_func_process& pro)
 {
     using namespace vil_image_dilate_disk_process_globals;
 
-    vcl_vector<vcl_string> input_types_(n_inputs_);
-    vcl_vector<vcl_string> output_types_(n_outputs_);
+    std::vector<std::string> input_types_(n_inputs_);
+    std::vector<std::string> output_types_(n_outputs_);
 
     unsigned i = 0;
     input_types_[i++] = "vil_image_view_base_sptr";//original binary image
@@ -43,7 +43,7 @@ bool vil_image_dilate_disk_process(bprb_func_process& pro)
 {
     using namespace vil_image_dilate_disk_process_globals;
     if (!pro.verify_inputs()) {
-      vcl_cerr << pro.name() << ": Wrong Inputs!\n";
+      std::cerr << pro.name() << ": Wrong Inputs!\n";
       return false;
     }
 
@@ -54,7 +54,7 @@ bool vil_image_dilate_disk_process(bprb_func_process& pro)
 
     if ( imgPtr->nplanes() > 1 )
     {
-        vcl_cerr << pro.name()
+        std::cerr << pro.name()
                  << ":\tInput image must be a single plane.\n";
         return false;
     }
@@ -67,7 +67,7 @@ bool vil_image_dilate_disk_process(bprb_func_process& pro)
       temp.fill(false);
       vil_image_view<vxl_byte>* in_img_byte = dynamic_cast<vil_image_view<vxl_byte>*>(imgPtr.ptr());
       if (!in_img_byte) {
-        vcl_cerr << pro.name() << ": Unsupported image pixel format -- " << imgPtr->pixel_format() << ", only Boolean and Byte (0 and 255) are supported!\n";
+        std::cerr << pro.name() << ": Unsupported image pixel format -- " << imgPtr->pixel_format() << ", only Boolean and Byte (0 and 255) are supported!\n";
         return false;
       }
       for (unsigned i = 0; i < imgPtr->ni(); i++) {

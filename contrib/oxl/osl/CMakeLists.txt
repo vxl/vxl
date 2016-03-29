@@ -38,15 +38,13 @@ set(osl_sources
     internals/droid.cxx             internals/droid.h
     internals/osl_reorder_chain.cxx internals/osl_reorder_chain.h
 
-    osl_1d_half_kernel.txx          osl_1d_half_kernel.h
-    osl_canny_smooth.txx            osl_canny_smooth.h osl_canny_smooth.cxx
+    osl_1d_half_kernel.hxx          osl_1d_half_kernel.h
+    osl_canny_smooth.hxx            osl_canny_smooth.h osl_canny_smooth.cxx
     osl_hacks.h
 )
 aux_source_directory(Templates osl_sources)
 
-add_library(osl ${osl_sources})
-install_targets(/lib osl)
-INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/oxl/osl ${osl_sources})
+vxl_add_library(LIBRARY_NAME osl LIBRARY_SOURCES ${osl_sources})
 target_link_libraries(osl ${VXL_LIB_PREFIX}vnl_algo ${VXL_LIB_PREFIX}vnl ${VXL_LIB_PREFIX}vgl ${VXL_LIB_PREFIX}vil1 ${VXL_LIB_PREFIX}vbl)
 
 if(BUILD_EXAMPLES)

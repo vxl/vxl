@@ -9,14 +9,16 @@
 // \brief Pyramid of images of arbitrary type
 // \author Tim Cootes
 
-#include <vcl_vector.h>
-#include <vcl_iosfwd.h>
+#include <vector>
+#include <iostream>
+#include <iosfwd>
+#include <vcl_compiler.h>
 class vimt_image;
 
 //: Pyramid of images of arbitrary type
 class vimt_image_pyramid
 {
-  vcl_vector<vimt_image*> image_;
+  std::vector<vimt_image*> image_;
   double base_pixel_width_;
   double scale_step_;
 
@@ -70,15 +72,15 @@ class vimt_image_pyramid
 
   //: Access to image data
   //  Should only be used by pyramid builders
-  vcl_vector<vimt_image*>& data();
+  std::vector<vimt_image*>& data();
 
   //: Define pixel widths
   void set_widths(double base_pixel_width, double scale_step);
 
-  void print_summary(vcl_ostream& os) const;
+  void print_summary(std::ostream& os) const;
 
   //: Print whole of each image to os
-  void print_all(vcl_ostream& os) const;
+  void print_all(std::ostream& os) const;
 };
 
 //: Convert an image pyramid into a flat image containing each layer.
@@ -94,9 +96,9 @@ class vimt_image_pyramid
 // \endverbatim
 template <class T> void vimt_image_pyramid_flatten(T& out, const vimt_image_pyramid & in);
 
-vcl_ostream& operator<<(vcl_ostream& os, const vimt_image_pyramid& im_pyr);
-vcl_ostream& operator<<(vcl_ostream& os, const vimt_image_pyramid* im_pyr);
-void vsl_print_summary(vcl_ostream& os, const vimt_image_pyramid& im_pyr);
-void vsl_print_summary(vcl_ostream& os, const vimt_image_pyramid* im_pyr);
+std::ostream& operator<<(std::ostream& os, const vimt_image_pyramid& im_pyr);
+std::ostream& operator<<(std::ostream& os, const vimt_image_pyramid* im_pyr);
+void vsl_print_summary(std::ostream& os, const vimt_image_pyramid& im_pyr);
+void vsl_print_summary(std::ostream& os, const vimt_image_pyramid* im_pyr);
 
 #endif // vimt_image_pyramid_h_

@@ -70,7 +70,7 @@ class vipl_filter_2d : public vipl_filter< ImgIn, ImgOut, DataIn, DataOut, 2, Pi
 };
 
 #ifdef INSTANTIATE_TEMPLATES
-#include "vipl_filter_2d.txx"
+#include "vipl_filter_2d.hxx"
 #endif
 
 #endif // vipl_filter_2d_h_

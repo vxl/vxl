@@ -12,7 +12,9 @@
 //   <none yet>
 // \endverbatim
 
-#include <vcl_memory.h>
+#include <iostream>
+#include <memory>
+#include <vcl_compiler.h>
 #include <vgui/vgui_clear_tableau.h>
 #include <vgui/vgui_event.h>
 #include <vpgl/vpgl_proj_camera.h>
@@ -35,10 +37,10 @@ class bgui3d_tableau : public vgui_tableau
   virtual ~bgui3d_tableau();
 
   //: Return the type name of this tableau
-  virtual vcl_string type_name() const;
+  virtual std::string type_name() const;
 
   //: file name isn't valid, so return the type_name
-  virtual vcl_string file_name() const { return this->type_name(); }
+  virtual std::string file_name() const { return this->type_name(); }
 
   //: Handle vgui events
   virtual bool handle(const vgui_event& event);
@@ -90,7 +92,7 @@ class bgui3d_tableau : public vgui_tableau
 
   //: Get the scene camera
   // creates a vpgl camera (either perspective or affine) from the graphics camera
-  virtual vcl_auto_ptr<vpgl_proj_camera<double> > camera() const;
+  virtual std::auto_ptr<vpgl_proj_camera<double> > camera() const;
   //----------------------------------------------------------------
 
   //: Set the viewport

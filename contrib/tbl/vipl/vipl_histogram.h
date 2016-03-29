@@ -122,7 +122,7 @@ class vipl_histogram : public vipl_filter_2d<ImgIn,ImgOut,DataIn,DataOut,PixelIt
 };
 
 #ifdef INSTANTIATE_TEMPLATES
-#include "vipl_histogram.txx"
+#include "vipl_histogram.hxx"
 #endif
 
 #endif // vipl_histogram_h_

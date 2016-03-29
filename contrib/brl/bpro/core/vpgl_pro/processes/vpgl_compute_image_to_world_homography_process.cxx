@@ -16,14 +16,14 @@
 bool vpgl_compute_image_to_world_homography_process_cons(bprb_func_process& pro)
 {
   //set output types
-  vcl_vector<vcl_string> input_types_(3);
+  std::vector<std::string> input_types_(3);
   int i=0;
   input_types_[i++] = "vpgl_camera_double_sptr";  // camera  -- pass local rational camera
   input_types_[i++] = "bbas_1d_array_float_sptr";    //world plane
   input_types_[i++] = "bool";
   if (!pro.set_input_types(input_types_))
     return false;
-  vcl_vector<vcl_string> output_types_(1);
+  std::vector<std::string> output_types_(1);
   output_types_[0] = "bbas_1d_array_float_sptr";  // output affine camera
   return pro.set_output_types(output_types_);
 }

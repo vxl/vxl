@@ -8,9 +8,10 @@
 // \file
 // \author fsm
 
+#include <string>
 #include <vil1/vil1_image_impl.h>
 #include <vil1/vil1_image.h>
-#include <vcl_string.h>
+#include <vcl_compiler.h>
 
 //: vil1_block_cache_image_impl - adaptor which caches the given image in blocks of given size.
 class vil1_block_cache_image_impl : public vil1_image_impl
@@ -54,10 +55,10 @@ class vil1_block_cache_image_impl : public vil1_image_impl
   bool get_property(char const *tag, void *property_value_out = 0) const;
 
   //: Return the name of the class;
-  virtual vcl_string is_a() const;
+  virtual std::string is_a() const;
 
   //: Return true if the name of the class matches the argument
-  virtual bool is_class(vcl_string const&) const;
+  virtual bool is_class(std::string const&) const;
 
  private:
   // the underlying, uncached image.

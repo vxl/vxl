@@ -4,9 +4,10 @@
 #endif
 //:
 // \file
+#include <iostream>
 #include "HMatrix3D.h"
 
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
 #include <vcl_cassert.h>
 
 #include <vnl/vnl_matlab_print.h>
@@ -42,8 +43,8 @@ HMatrix3D::HMatrix3D(vnl_double_4x4 const& M):
 
 //--------------------------------------------------------------
 //
-//: Load H from ASCII vcl_istream.
-HMatrix3D::HMatrix3D(vcl_istream& s)
+//: Load H from ASCII std::istream.
+HMatrix3D::HMatrix3D(std::istream& s)
 {
   load(s);
 }
@@ -108,8 +109,8 @@ HomgLine3D HMatrix3D::transform(const HomgLine3D& l1) const
 }
 
 //-----------------------------------------------------------------------------
-//: Print H on vcl_ostream
-vcl_ostream& operator<<(vcl_ostream& s, const HMatrix3D& h)
+//: Print H on std::ostream
+std::ostream& operator<<(std::ostream& s, const HMatrix3D& h)
 {
   if (HomgPrettyPrint::pretty)
     return vnl_matlab_print(s, (vnl_matrix<double> const&)h, "");
@@ -118,14 +119,14 @@ vcl_ostream& operator<<(vcl_ostream& s, const HMatrix3D& h)
 }
 
 //: Load H from ASCII file.
-bool HMatrix3D::load(vcl_istream& s)
+bool HMatrix3D::load(std::istream& s)
 {
   this->read_ascii(s);
   return s.good() || s.eof();
 }
 
 //: Load H from ASCII file.
-vcl_istream& operator>>(vcl_istream& s, HMatrix3D& H)
+std::istream& operator>>(std::istream& s, HMatrix3D& H)
 {
   H.load(s);
   return s;

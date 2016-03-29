@@ -69,8 +69,8 @@ void bvpl_octree_vector_operator<T_data>::keep_max_response_tree(boct_tree<short
 {
   bvpl_local_max_functor<T_data> func_max;
 
-  vcl_vector<boct_tree_cell<short,T_data>*> new_leaves = new_tree->leaf_cells();
-  vcl_vector<boct_tree_cell<short,bvpl_octree_sample<T_data> >*> leaves_out = tree_out->leaf_cells();
+  std::vector<boct_tree_cell<short,T_data>*> new_leaves = new_tree->leaf_cells();
+  std::vector<boct_tree_cell<short,bvpl_octree_sample<T_data> >*> leaves_out = tree_out->leaf_cells();
 
   for (unsigned i=0; i< new_leaves.size(); i++)
   {

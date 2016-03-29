@@ -37,7 +37,7 @@ bool bvpl_create_wc_kernel_vector_process_cons(bprb_func_process& pro)
   // *input[5]: max thickness
   // *input[6]: string identifying a set of directions
 
-  vcl_vector<vcl_string> input_types_(n_inputs_);
+  std::vector<std::string> input_types_(n_inputs_);
   input_types_[0] = "int";
   input_types_[1] = "int";
   input_types_[2] = "int";
@@ -46,7 +46,7 @@ bool bvpl_create_wc_kernel_vector_process_cons(bprb_func_process& pro)
   input_types_[5] = "int";
   input_types_[6] = "vcl_string";
 
-  vcl_vector<vcl_string> output_types_(n_outputs_);
+  std::vector<std::string> output_types_(n_outputs_);
   output_types_[0] = "bvpl_kernel_vector_sptr";
 
   return pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
@@ -58,7 +58,7 @@ bool bvpl_create_wc_kernel_vector_process(bprb_func_process& pro)
 
   if (pro.n_inputs() < n_inputs_)
   {
-    vcl_cout << pro.name() << " The input number should be " << n_inputs_<< vcl_endl;
+    std::cout << pro.name() << " The input number should be " << n_inputs_<< std::endl;
     return false;
   }
 
@@ -72,7 +72,7 @@ bool bvpl_create_wc_kernel_vector_process(bprb_func_process& pro)
   int min_thickness = 0, max_thickness=0;
   min_thickness = pro.get_input<int>(4);
   max_thickness = pro.get_input<int>(5);
-  vcl_string dir_type = pro.get_input<vcl_string>(6);
+  std::string dir_type = pro.get_input<std::string>(6);
 
   //Create the factory and get the vector of kernels
   bvpl_neighborhood_kernel_factory factory(min_length, max_length,

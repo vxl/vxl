@@ -30,7 +30,7 @@ bool bvxm_update_process_cons(bprb_func_process& pro)
   //input[4]: The bin index to be updated
   //input[5]: The scale index  of the voxel world to be updated (default is 0)
   //input[6]: The option to use memory storage for voxel world data
-  vcl_vector<vcl_string> input_types_(n_inputs_);
+  std::vector<std::string> input_types_(n_inputs_);
   input_types_[0] = "vil_image_view_base_sptr";
   input_types_[1] = "vpgl_camera_double_sptr";
   input_types_[2] = "bvxm_voxel_world_sptr";
@@ -45,7 +45,7 @@ bool bvxm_update_process_cons(bprb_func_process& pro)
   //output[0] : The updated probability map
   //output[1] : The mask of image pixels used in update
   unsigned j = 0;
-  vcl_vector<vcl_string> output_types_(n_outputs_);
+  std::vector<std::string> output_types_(n_outputs_);
   output_types_[j++] = "vil_image_view_base_sptr";
   output_types_[j++] = "vil_image_view_base_sptr";
   return pro.set_output_types(output_types_);
@@ -57,7 +57,7 @@ bool bvxm_update_process(bprb_func_process& pro)
 
   if (pro.n_inputs() < n_inputs_)
   {
-    vcl_cout << pro.name() << " The input number should be " << n_inputs_<< vcl_endl;
+    std::cout << pro.name() << " The input number should be " << n_inputs_<< std::endl;
     return false;
   }
 
@@ -66,7 +66,7 @@ bool bvxm_update_process(bprb_func_process& pro)
   vil_image_view_base_sptr img = pro.get_input<vil_image_view_base_sptr>(i++);
   vpgl_camera_double_sptr camera = pro.get_input<vpgl_camera_double_sptr>(i++);
   bvxm_voxel_world_sptr world = pro.get_input<bvxm_voxel_world_sptr>(i++);
-  vcl_string voxel_type = pro.get_input<vcl_string>(i++);
+  std::string voxel_type = pro.get_input<std::string>(i++);
   unsigned bin_index = pro.get_input<unsigned>(i++);
   unsigned curr_scale = pro.get_input<unsigned>(i++);
   unsigned use_memory = pro.get_input<unsigned>(i++);
@@ -74,17 +74,17 @@ bool bvxm_update_process(bprb_func_process& pro)
   //check input's validity
   i = 0;
   if ( !img ){
-      vcl_cout << pro.name() << " :-- Input " << i++ << " is not valid!\n";
+      std::cout << pro.name() << " :-- Input " << i++ << " is not valid!\n";
       return false;
   }
 
   if ( !camera ){
-      vcl_cout << pro.name() << " :-- Input " << i++ << " is not valid!\n";
+      std::cout << pro.name() << " :-- Input " << i++ << " is not valid!\n";
       return false;
   }
 
   if ( !world ){
-      vcl_cout << pro.name() << " :-- Input " << i++ << " is not valid!\n";
+      std::cout << pro.name() << " :-- Input " << i++ << " is not valid!\n";
       return false;
   }
 
@@ -94,8 +94,8 @@ bool bvxm_update_process(bprb_func_process& pro)
   unsigned max_scale = world->get_params()->max_scale();
 
   //update
-  vcl_vector<vil_image_view<float> > prob_map_vec;
-  vcl_vector<vil_image_view<bool> >mask_vec;
+  std::vector<vil_image_view<float> > prob_map_vec;
+  std::vector<vil_image_view<bool> >mask_vec;
 
 
   for (unsigned scale = curr_scale;scale < max_scale;scale++)
@@ -124,7 +124,7 @@ bool bvxm_update_process(bprb_func_process& pro)
     {
       if (observation.img->nplanes()!= 2)
       {
-        vcl_cerr << "appearance model type" << voxel_type << "does not support images with " << observation.img->nplanes()
+        std::cerr << "appearance model type" << voxel_type << "does not support images with " << observation.img->nplanes()
                  << " planes\n";
         return false;
       }
@@ -137,22 +137,22 @@ bool bvxm_update_process(bprb_func_process& pro)
     {
       if (observation.img->nplanes()!= 4)
       {
-        vcl_cerr << "appearance model type" << voxel_type << "does not support images with " << observation.img->nplanes()
+        std::cerr << "appearance model type" << voxel_type << "does not support images with " << observation.img->nplanes()
                  << " planes\n";
         return false;
       }
       result = world->update<APM_MOG_MC_4_3>(observation, prob_map, mask, bin_index,scale, is_use_memory);
     }
     else
-      vcl_cerr << "Error in: bvxm_update_processor: Unsuppported appearance model\n";
+      std::cerr << "Error in: bvxm_update_processor: Unsuppported appearance model\n";
 
-    vcl_cout<<"update done ";
-    vcl_cout.flush();
+    std::cout<<"update done ";
+    std::cout.flush();
 
     prob_map_vec.push_back(prob_map);
     mask_vec.push_back(mask);
     if (!result){
-      vcl_cerr << "error bvxm_update_process: failed to update observation\n";
+      std::cerr << "error bvxm_update_process: failed to update observation\n";
       return false;
     }
   }

@@ -5,7 +5,7 @@
 // \brief pixel value histogram of 2D image
 //
 //   The vepl_histogram class creates a pixel value histogram of a 2D image
-//   and writes it into a vcl_vector<unsigned int>.
+//   and writes it into a std::vector<unsigned int>.
 //
 //   The number of bins for ubyte images is 256, for ushort images 65536,
 //   and for float or double image it is 1000.
@@ -21,10 +21,12 @@
 //   Peter Vanroose - 20 aug 2003 - changed parameter from vil_image_view_base_sptr to vil_image_resource_sptr
 // \endverbatim
 
+#include <iostream>
+#include <vector>
 #include <vil/vil_image_resource.h>
-#include <vcl_vector.h>
+#include <vcl_compiler.h>
 
 //: pixel value histogram of 2D image, stored in a vector
-vcl_vector<unsigned int> vepl_histogram(vil_image_resource_sptr );
+std::vector<unsigned int> vepl_histogram(vil_image_resource_sptr );
 
 #endif // vepl_histogram_h_

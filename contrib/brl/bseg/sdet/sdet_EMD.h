@@ -11,8 +11,10 @@
 //  Modifications
 //\endverbatim
 
-#include <vcl_cmath.h>
-#include <vcl_algorithm.h>
+#include <cmath>
+#include <iostream>
+#include <algorithm>
+#include <vcl_compiler.h>
 
 //#include "sdet_BS.h"
 

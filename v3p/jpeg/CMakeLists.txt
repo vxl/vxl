@@ -64,7 +64,6 @@ set( jpeg_sources
   jmemansi.c
 )
 
-add_library( jpeg ${jpeg_sources} )
-install_targets(/lib jpeg)
+vxl_add_library(LIBRARY_NAME jpeg LIBRARY_SOURCES ${jpeg_sources} )
 
 endif()

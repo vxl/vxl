@@ -1,6 +1,7 @@
 // This is mul/vimt/tests/test_sample_profile_bilin.cxx
+#include <iostream>
 #include <testlib/testlib_test.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
 #include <vxl_config.h> // for vxl_byte
 #include <vimt/vimt_sample_profile_bilin.h>
 #include <vnl/vnl_vector.h>
@@ -10,13 +11,13 @@
 
 static void test_sample_profile_bilin_byte_affine()
 {
-  vcl_cout << "***********************************\n"
+  std::cout << "***********************************\n"
            << " Testing vimt_sample_profile_bilin\n"
            << "***********************************\n";
 
-  vcl_cout<<"Testing up to affine mappings\n";
+  std::cout<<"Testing up to affine mappings\n";
 
-  vcl_cout<< "One plane image\n";
+  std::cout<< "One plane image\n";
   vimt_image_2d_of<vxl_byte> image1;
   image1.image().set_size(10,10);
 
@@ -39,7 +40,7 @@ static void test_sample_profile_bilin_byte_affine()
   TEST_NEAR("First value",vec2[0],55,1e-6);
   TEST_NEAR("Last value (outside image)",vec2[7],0,1e-6);
 
-  vcl_cout<< "Three plane image (float)\n";
+  std::cout<< "Three plane image (float)\n";
   vimt_image_2d_of<float> image3;
   image3.image().set_size(10,10,3);
 
@@ -65,11 +66,11 @@ static void test_sample_profile_bilin_byte_affine()
 
 static void test_sample_profile_bilin_byte_projective()
 {
-  vcl_cout << "***********************************\n"
+  std::cout << "***********************************\n"
            << " Testing vimt_sample_profile_bilin\n"
            << "***********************************\n";
 
-  vcl_cout<<"Testing projective mappings\n";
+  std::cout<<"Testing projective mappings\n";
   vimt_image_2d_of<vxl_byte> image1;
   image1.image().set_size(10,10);
 
@@ -85,7 +86,7 @@ static void test_sample_profile_bilin_byte_projective()
   TEST("Projective",trans.form(),vimt_transform_2d::Projective);
   image1.set_world2im(trans);
 
-  vcl_cout<< "One plane image\n";
+  std::cout<< "One plane image\n";
 
   for (unsigned int j=0;j<image1.image().nj();++j)
      for (unsigned int i=0;i<image1.image().ni();++i)
@@ -106,7 +107,7 @@ static void test_sample_profile_bilin_byte_projective()
   TEST_NEAR("First value",vec2[0],55,1e-6);
   TEST_NEAR("Last value (outside image)",vec2[7],0,1e-6);
 
-  vcl_cout<< "Three plane image (float)\n";
+  std::cout<< "Three plane image (float)\n";
   vimt_image_2d_of<float> image3;
   image3.image().set_size(10,10,3);
 

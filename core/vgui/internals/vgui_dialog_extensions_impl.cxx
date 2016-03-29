@@ -20,7 +20,7 @@ vgui_dialog_extensions_impl::~vgui_dialog_extensions_impl()
 {
 }
 
-void vgui_dialog_extensions_impl::dir_browser(const char* txt, vcl_string& regexp, vcl_string& val)
+void vgui_dialog_extensions_impl::dir_browser(const char* txt, std::string& regexp, std::string& val)
 {
   vgui_file_field *field = new vgui_file_field(txt, regexp, val);
 
@@ -40,5 +40,5 @@ void vgui_dialog_extensions_impl::line_break()
   elements.push_back(l);
 }
 
-void* vgui_dialog_extensions_impl::dir_browser_widget(const char*, vcl_string&, vcl_string&) { return VXL_NULLPTR; }
+void* vgui_dialog_extensions_impl::dir_browser_widget(const char*, std::string&, std::string&) { return VXL_NULLPTR; }
 

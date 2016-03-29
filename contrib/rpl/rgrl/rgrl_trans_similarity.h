@@ -5,8 +5,10 @@
 // \author Amitha Perera
 // \date   Feb 2003
 
+#include <iostream>
+#include <iosfwd>
 #include "rgrl_transformation.h"
-#include <vcl_iosfwd.h>
+#include <vcl_compiler.h>
 
 //: Represents a similarity transformation.
 //
@@ -99,10 +101,10 @@ class rgrl_trans_similarity
   rgrl_type_macro( rgrl_trans_similarity, rgrl_transformation );
 
   // for output
-  virtual void write(vcl_ostream& os ) const;
+  virtual void write(std::ostream& os ) const;
 
   // for input
-  virtual bool read(vcl_istream& is );
+  virtual bool read(std::istream& is );
 
   //: make a clone copy
   rgrl_transformation_sptr clone() const;

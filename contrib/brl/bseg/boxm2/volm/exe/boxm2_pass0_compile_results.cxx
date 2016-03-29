@@ -6,6 +6,9 @@
 // \author Yi Dong
 // \date Feb 18, 2013
 
+#include <set>
+#include <iostream>
+#include <iomanip>
 #include <volm/volm_io.h>
 #include <volm/volm_tile.h>
 #include <volm/volm_camera_space.h>
@@ -18,30 +21,29 @@
 #include <volm/volm_loc_hyp_sptr.h>
 #include <vil/vil_save.h>
 #include <vil/vil_load.h>
-#include <vcl_set.h>
-#include <vcl_iomanip.h>
+#include <vcl_compiler.h>
 #include <bkml_write.h>
 
 // generate gt hypos
 int main(int argc,  char** argv)
 {
-  vul_arg<vcl_string> gt_file("-gt_locs", "file with the gt locs of all test cases", "");
-  vul_arg<vcl_string> geo_hypo_folder("-hypo", "folder to read the geo hypotheses","");
+  vul_arg<std::string> gt_file("-gt_locs", "file with the gt locs of all test cases", "");
+  vul_arg<std::string> geo_hypo_folder("-hypo", "folder to read the geo hypotheses","");
   vul_arg<unsigned> zone_id("-zone", "zone_id", 0);
-  vul_arg<vcl_string> candidate_list("-cand", "candidate list if exist", "");
-  vul_arg<vcl_string> out("-out", "job output folder", "");
+  vul_arg<std::string> candidate_list("-cand", "candidate list if exist", "");
+  vul_arg<std::string> out("-out", "job output folder", "");
   vul_arg<unsigned> id("-id", "id of the test image", 6);
   vul_arg<unsigned> pass_id("-pass", "from pass 0 to pass 1", 1);
-  vul_arg<vcl_string> cam_kml("-camkml",  "camera KML", "");
-  vul_arg<vcl_string> cam_params("-camparams", "camera params", "");                                // query -- camera space binary
-  vul_arg<vcl_string> best_cam_kml("-bestcamkml",  "camera KML", "");                                // query -- camera space binary
-  vul_arg<vcl_string> dms_bin("-dms", "depth_map_scene binary", "");                             // query -- depth map scene
+  vul_arg<std::string> cam_kml("-camkml",  "camera KML", "");
+  vul_arg<std::string> cam_params("-camparams", "camera params", "");                                // query -- camera space binary
+  vul_arg<std::string> best_cam_kml("-bestcamkml",  "camera KML", "");                                // query -- camera space binary
+  vul_arg<std::string> dms_bin("-dms", "depth_map_scene binary", "");                             // query -- depth map scene
 
   vul_arg_parse(argc, argv);
 
-  vcl_cout << "argc: " << argc << vcl_endl;
-  vcl_stringstream log;
-  vcl_string log_file = out() + "/create_prob_map_log.xml";
+  std::cout << "argc: " << argc << std::endl;
+  std::stringstream log;
+  std::string log_file = out() + "/create_prob_map_log.xml";
 
   if (out().compare("") == 0 ||
       geo_hypo_folder().compare("") == 0 ||
@@ -54,7 +56,7 @@ int main(int argc,  char** argv)
     log << "EXE_ARGUMENT_ERROR!\n";
     vul_arg_display_usage_and_exit();
     volm_io::write_post_processing_log(log_file, log.str());
-    vcl_cerr << log.str();
+    std::cerr << log.str();
     return volm_io::EXE_ARGUMENT_ERROR;
   }
 
@@ -62,15 +64,15 @@ int main(int argc,  char** argv)
   if (!vul_file::exists(gt_file())) {
     log << "ERROR : can not find ground truth position file -->" << gt_file() << '\n';
     volm_io::write_post_processing_log(log_file, log.str());
-    vcl_cerr << log.str();
+    std::cerr << log.str();
     return volm_io::EXE_ARGUMENT_ERROR;
   }
-  vcl_vector<vcl_pair<vgl_point_3d<double>, vcl_pair<vcl_pair<vcl_string, int>, vcl_string> > > samples;
+  std::vector<std::pair<vgl_point_3d<double>, std::pair<std::pair<std::string, int>, std::string> > > samples;
   unsigned int cnt = volm_io::read_gt_file(gt_file(), samples);
   if (id() >= cnt) {
     log << "ERROR: gt_file " << gt_file() << " does not contain test id: " << id() << "!\n";
     volm_io::write_post_processing_log(log_file, log.str());
-    vcl_cerr << log.str();
+    std::cerr << log.str();
     return volm_io::EXE_ARGUMENT_ERROR;
   }
 
@@ -78,21 +80,20 @@ int main(int argc,  char** argv)
   bool is_candidate = false;
   vgl_polygon<double> cand_poly;
   if ( candidate_list().compare("") != 0) {
-    vcl_cout << " candidate list = " <<  candidate_list() << vcl_endl;
+    std::cout << " candidate list = " <<  candidate_list() << std::endl;
     if ( vul_file::extension(candidate_list()).compare(".txt") == 0) {
-      is_candidate = true;
       volm_io::read_polygons(candidate_list(), cand_poly);
     }
     else {
       log << " ERROR: candidate list exist but with wrong format, only txt allowed" << candidate_list() << '\n';
       volm_io::write_post_processing_log(log_file, log.str());
-      vcl_cerr << log.str();
+      std::cerr << log.str();
       return volm_io::EXE_ARGUMENT_ERROR;
     }
   }
 
   // create tiles
-  vcl_vector<volm_tile> tiles;
+  std::vector<volm_tile> tiles;
   if (samples[id()].second.second == "desert")
     tiles = volm_tile::generate_p1_wr1_tiles();
   else
@@ -100,9 +101,9 @@ int main(int argc,  char** argv)
 
   // initialize the Prob_map image if the prob_map doesn't exist
   // if the image exists, load the image instead
-  vcl_vector<vil_image_view<float> > tile_imgs;
+  std::vector<vil_image_view<float> > tile_imgs;
   for (unsigned i = 0 ; i < tiles.size(); i++) {
-    vcl_string img_name = out() + "/" + "ProbMap_" + tiles[i].get_string() + ".tif";
+    std::string img_name = out() + "/" + "ProbMap_" + tiles[i].get_string() + ".tif";
     if (vul_file::exists(img_name)) {
       // load the image
       vil_image_view<float> out_img = vil_load(img_name.c_str());
@@ -121,16 +122,16 @@ int main(int argc,  char** argv)
   unsigned max_score_cam_id;
   float max_score = 0.0f;
 
-  vcl_string geo_folders[1]={geo_hypo_folder()};
+  std::string geo_folders[1]={geo_hypo_folder()};
 
   for (unsigned k = 0 ; k < 1; k++)
   {
     for (unsigned i = 0; i < tiles.size(); i++) {
       volm_tile tile = tiles[i];
       // read in the volm_geo_index for tile i
-      vcl_stringstream file_name_pre;
+      std::stringstream file_name_pre;
       file_name_pre << geo_folders[k] << "geo_index_tile_" << i;
-      vcl_cout<<"Geo file "<<file_name_pre.str()<<vcl_endl;
+      std::cout<<"Geo file "<<file_name_pre.str()<<std::endl;
       // no index for tile i exists, continue
       if (!vul_file::exists(file_name_pre.str() + ".txt")) {
         continue;
@@ -146,26 +147,26 @@ int main(int argc,  char** argv)
       float min_size;
       volm_geo_index_node_sptr root = volm_geo_index::read_and_construct(file_name_pre.str() + ".txt", min_size);
       volm_geo_index::read_hyps(root, file_name_pre.str());
-      vcl_vector<volm_geo_index_node_sptr> leaves;
+      std::vector<volm_geo_index_node_sptr> leaves;
       volm_geo_index::get_leaves_with_hyps(root, leaves);
 
       // load score binary from output folder if exists
-      vcl_stringstream score_file;
+      std::stringstream score_file;
       score_file << out() << "ps_0_scores_" << "tile_" << i << ".bin";
-      vcl_cout<<"Score file "<<score_file.str()<<vcl_endl;
+      std::cout<<"Score file "<<score_file.str()<<std::endl;
       // continue if no score binary exists for this tile
       if (!vul_file::exists(score_file.str()))
       {
-        vcl_cout<<"Score file does not exist"<<vcl_endl;
+        std::cout<<"Score file does not exist"<<std::endl;
         continue;
       }
-      vcl_vector<volm_score_sptr> scores;
+      std::vector<volm_score_sptr> scores;
       volm_score::read_scores(scores, score_file.str());
       // refill the image
       unsigned total_ind = scores.size();
-      vcl_cout<<"total "<<total_ind<<vcl_endl;
+      std::cout<<"total "<<total_ind<<std::endl;
       for (unsigned ii = 0; ii < total_ind; ii++) {
-        // vcl_cout<<scores[ii]->max_score_<<' ';//<<vcl_endl;
+        // std::cout<<scores[ii]->max_score_<<' ';//<<std::endl;
         vgl_point_3d<double> h_pt = leaves[scores[ii]->leaf_id_]->hyps_->locs_[scores[ii]->hypo_id_];
         // look for location and camera giving maximum score
         if (scores[ii]->max_score_ > max_score) {
@@ -188,7 +189,7 @@ int main(int argc,  char** argv)
 
   // save the ProbMap image and output the grount truth score
   for (unsigned i = 0; i < tiles.size(); i++) {
-    vcl_string img_name = out() + "/" + "ProbMap_" + tiles[i].get_string() + ".tif";
+    std::string img_name = out() + "/" + "ProbMap_" + tiles[i].get_string() + ".tif";
     vil_save(tile_imgs[i],img_name.c_str());
     unsigned u, v;
     if (tiles[i].global_to_img(samples[id()].first.x(), samples[id()].first.y(), u, v) ) {
@@ -204,7 +205,7 @@ int main(int argc,  char** argv)
             << '\n';
         gt_score = tile_imgs[i](u, v);
         //volm_io::write_post_processing_log(log_file, log.str());
-        //vcl_cout << log.str();
+        //std::cout << log.str();
       }
     }
   }
@@ -223,7 +224,7 @@ int main(int argc,  char** argv)
   double tfov, top_fov_dev, altitude, lat, lon;
   if (!volm_io::read_camera(cam_kml(), dms->ni(), dms->nj(), heading, heading_dev,
       tilt, tilt_dev, roll, roll_dev, tfov, top_fov_dev, altitude, lat, lon)) {
-    vcl_cout << "problem parsing camera kml file: " << cam_kml()<< '\n';
+    std::cout << "problem parsing camera kml file: " << cam_kml()<< '\n';
     return volm_io::EXE_ARGUMENT_ERROR;
   }
   volm_camera_space_sptr  cam_space
@@ -234,13 +235,13 @@ int main(int argc,  char** argv)
 
   if (!volm_io::read_camera(best_cam_kml(), dms->ni(), dms->nj(), heading, heading_dev,
       tilt, tilt_dev, roll, roll_dev, tfov, top_fov_dev, altitude, lat, lon)) {
-    vcl_cout << "problem parsing camera kml file: " << cam_kml()<< '\n';
+    std::cout << "problem parsing camera kml file: " << cam_kml()<< '\n';
     return volm_io::EXE_ARGUMENT_ERROR;
   }
   cam_angles ca(roll, tfov, heading, tilt);
   unsigned int camindex = cam_space->closest_index(ca);
 
-  vcl_cout<<"Ground truth Score is "<<gt_score<<vcl_endl;
+  std::cout<<"Ground truth Score is "<<gt_score<<std::endl;
   int gt_count = 0;
   int tot_count = 0;
   for (unsigned k = 0 ; k < 1; k++)
@@ -248,7 +249,7 @@ int main(int argc,  char** argv)
     for (unsigned i = 0; i < tiles.size(); i++) {
       volm_tile tile = tiles[i];
       // read in the volm_geo_index for tile i
-      vcl_stringstream file_name_pre;
+      std::stringstream file_name_pre;
       file_name_pre << geo_folders[k] << "geo_index_tile_" << i;
       // no index for tile i exists, continue
       if (!vul_file::exists(file_name_pre.str() + ".txt")) {
@@ -257,19 +258,19 @@ int main(int argc,  char** argv)
       float min_size;
       volm_geo_index_node_sptr root = volm_geo_index::read_and_construct(file_name_pre.str() + ".txt", min_size);
       volm_geo_index::read_hyps(root, file_name_pre.str());
-      vcl_vector<volm_geo_index_node_sptr> leaves;
+      std::vector<volm_geo_index_node_sptr> leaves;
       volm_geo_index::get_leaves_with_hyps(root, leaves);
       // load score binary from output folder if exists
-      vcl_stringstream score_file;
+      std::stringstream score_file;
       score_file << out() << "ps_0_scores_" << "tile_" << i << ".bin";
 
       // continue if no score binary exists for this tile
       if (!vul_file::exists(score_file.str()))
       {
-        vcl_cout<<"Score file does not exist"<<vcl_endl;
+        std::cout<<"Score file does not exist"<<std::endl;
         continue;
       }
-      vcl_vector<volm_score_sptr> scores;
+      std::vector<volm_score_sptr> scores;
       volm_score::read_scores(scores, score_file.str());
       // refill the image
       unsigned total_ind = scores.size();
@@ -299,19 +300,19 @@ int main(int argc,  char** argv)
 
             if (scores[ii]->cam_id_[k] == camindex )
             {
-              vcl_cout<<"The rank of Pass 1's best camera is  "<<k<<vcl_endl;
+              std::cout<<"The rank of Pass 1's best camera is  "<<k<<std::endl;
               flag = true ;
             }
           }
           if (!flag)
-              vcl_cout<<" Could not Find the best Camera"<<vcl_endl;
-          vcl_cout<<"Cam id is "<<camindex<<" Min id is "<<min_diff_id<<" and the diff is "<<min_diff<<" rank  is "<<mink<<vcl_endl;
+              std::cout<<" Could not Find the best Camera"<<std::endl;
+          std::cout<<"Cam id is "<<camindex<<" Min id is "<<min_diff_id<<" and the diff is "<<min_diff<<" rank  is "<<mink<<std::endl;
         }
       }
     } // end of tiles
   }// end of zpones
 
-  vcl_cout<<"Rank of GT location is "<<gt_count<<" out of "<<tot_count<<vcl_endl;
+  std::cout<<"Rank of GT location is "<<gt_count<<" out of "<<tot_count<<std::endl;
 
   return volm_io::SUCCESS;
 }

@@ -6,11 +6,12 @@
 // \file
 // \author fsm
 
+#include <iostream>
 #include "vil1_image.h"
 #include <vcl_climits.h> // for CHAR_BIT
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
 
-vcl_ostream& vil1_image::print(vcl_ostream& s) const
+std::ostream& vil1_image::print(std::ostream& s) const
 {
   if (! *this) return s << "[vil1_image: empty]";
 

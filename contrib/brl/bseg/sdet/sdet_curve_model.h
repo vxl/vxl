@@ -15,9 +15,10 @@
 //
 //\endverbatim
 
-#include <vcl_vector.h>
-#include <vcl_iostream.h>
-#include <vcl_deque.h>
+#include <vector>
+#include <iostream>
+#include <deque>
+#include <vcl_compiler.h>
 #include <vnl/vnl_math.h>
 #include <vbl/vbl_array_2d.h>
 
@@ -67,10 +68,10 @@ public:
   virtual vgl_point_2d<double> compute_best_fit(){ return vgl_point_2d<double>(0,0); }
 
   //: Compute the best fit curve from the curve bundle given the edgel chain
-  virtual vgl_point_2d<double> compute_best_fit(vcl_deque<sdet_edgel*> &edgel_chain)=0;
+  virtual vgl_point_2d<double> compute_best_fit(std::deque<sdet_edgel*> &edgel_chain)=0;
 
   //: function to check if the curve fit is reasonable
-  virtual bool curve_fit_is_reasonable(vcl_deque<sdet_edgel*> &edgel_chain, sdet_edgel* ref_e, double dpos)=0;
+  virtual bool curve_fit_is_reasonable(std::deque<sdet_edgel*> &edgel_chain, sdet_edgel* ref_e, double dpos)=0;
 
   //: report accuracy of measurement
   virtual void report_accuracy(double *estimates, double *min_estimates, double *max_estimates)=0;
@@ -87,16 +88,16 @@ public:
   virtual void print_info()=0;
 
   //: print central info to file
-  virtual void print(vcl_ostream&) {
-    vcl_cerr << "ERROR: Curvelet I/O for type "
-      << type << " not implemented." << vcl_endl;
+  virtual void print(std::ostream&) {
+    std::cerr << "ERROR: Curvelet I/O for type "
+      << type << " not implemented." << std::endl;
     abort();
   }
 
   //: read central info from file
-  virtual void read(vcl_istream&) {
-    vcl_cerr << "ERROR: Curvelet I/O for type "
-      << type << " not implemented." << vcl_endl;
+  virtual void read(std::istream&) {
+    std::cerr << "ERROR: Curvelet I/O for type "
+      << type << " not implemented." << std::endl;
     abort();
   }
 };
@@ -124,7 +125,7 @@ public:
   //: print info
   virtual void print_info()
   {
-    vcl_cout << " : (th=" << theta << ", k=0.0, gamma=0.0 ";
+    std::cout << " : (th=" << theta << ", k=0.0, gamma=0.0 ";
   }
 
 };
@@ -145,7 +146,7 @@ public:
   sdet_simple_linear_curve_model(sdet_edgel* e1, sdet_edgel* e2, sdet_edgel* ref_e, double dpos, double dtheta, double token_len, double max_k, double max_gamma, bool adaptive);
 
   //: constructor 2: From a set of edgels
-  sdet_simple_linear_curve_model(vcl_vector<sdet_edgel*> /*edgels*/, sdet_edgel* /*ref_edgel*/){}
+  sdet_simple_linear_curve_model(std::vector<sdet_edgel*> /*edgels*/, sdet_edgel* /*ref_edgel*/){}
 
   //: constructor 3: From the intersection of two curve bundles
   sdet_simple_linear_curve_model(sdet_curve_model* cm1, sdet_curve_model* cm2);
@@ -168,10 +169,10 @@ public:
   void compute_curve_bundle(sdet_edgel* e1, sdet_edgel* e2, sdet_edgel* ref_e, double dpos, double dtheta, double token_len);
 
   //: Compute the best fit curve from the curve bundle
-  virtual vgl_point_2d<double> compute_best_fit(vcl_deque<sdet_edgel*> &edgel_chain);
+  virtual vgl_point_2d<double> compute_best_fit(std::deque<sdet_edgel*> &edgel_chain);
 
   //: function to check if the curve fit is reasonable
-  virtual bool curve_fit_is_reasonable(vcl_deque<sdet_edgel*> &edgel_chain, sdet_edgel* ref_e, double dpos);
+  virtual bool curve_fit_is_reasonable(std::deque<sdet_edgel*> &edgel_chain, sdet_edgel* ref_e, double dpos);
 
   //: report accuracy of measurement
   virtual void report_accuracy(double *estimates, double *min_estimates, double *max_estimates);
@@ -196,7 +197,7 @@ public:
   sdet_linear_curve_model(sdet_edgel* e1, sdet_edgel* e2, sdet_edgel* ref_e, double dpos, double dtheta, double token_len, double max_k, double max_gamma, bool adaptive);
 
   //: constructor 2: From a set of edgels
-  sdet_linear_curve_model(vcl_vector<sdet_edgel*> /*edgels*/, sdet_edgel* /*ref_edgel*/){}
+  sdet_linear_curve_model(std::vector<sdet_edgel*> /*edgels*/, sdet_edgel* /*ref_edgel*/){}
 
   //: constructor 3: From the intersection of two curve bundles
   sdet_linear_curve_model(sdet_curve_model* cm1, sdet_curve_model* cm2);
@@ -218,10 +219,10 @@ public:
   void compute_curve_bundle(sdet_edgel* e1, sdet_edgel* e2, sdet_edgel* ref_e, double dpos, double dtheta, double token_len);
 
   //: Compute the best fit curve from the curve bundle
-  virtual vgl_point_2d<double> compute_best_fit(vcl_deque<sdet_edgel*> &edgel_chain);
+  virtual vgl_point_2d<double> compute_best_fit(std::deque<sdet_edgel*> &edgel_chain);
 
   //: function to check if the curve fit is reasonable
-  virtual bool curve_fit_is_reasonable(vcl_deque<sdet_edgel*> &edgel_chain, sdet_edgel* ref_e, double dpos);
+  virtual bool curve_fit_is_reasonable(std::deque<sdet_edgel*> &edgel_chain, sdet_edgel* ref_e, double dpos);
 
   //: report accuracy of measurement
   virtual void report_accuracy(double *estimates, double *min_estimates, double *max_estimates);
@@ -252,7 +253,7 @@ public:
   sdet_CC_curve_model(sdet_edgel* e1, sdet_edgel* e2, sdet_edgel* ref_e, double dpos, double dtheta, double token_len, double max_k, double max_gamma, bool adaptive);
 
   //: constructor 2: From a set of edgels
-  sdet_CC_curve_model(vcl_vector<sdet_edgel*> /*edgels*/, sdet_edgel* /*ref_edgel*/){}
+  sdet_CC_curve_model(std::vector<sdet_edgel*> /*edgels*/, sdet_edgel* /*ref_edgel*/){}
 
   //: constructor 3: From the intersection of two curve bundles
   sdet_CC_curve_model(sdet_curve_model* cm1, sdet_curve_model* cm2);
@@ -277,10 +278,10 @@ public:
   void compute_curve_bundle(vgl_polygon<double>& bundle, sdet_int_params &params, bool first_is_ref, double dpos, double dtheta, double token_len, double max_k);
 
   //: Compute the best fit curve from the curve bundle
-  virtual vgl_point_2d<double> compute_best_fit(vcl_deque<sdet_edgel*> &edgel_chain);
+  virtual vgl_point_2d<double> compute_best_fit(std::deque<sdet_edgel*> &edgel_chain);
 
   //: function to check if the curve fit is reasonable
-  virtual bool curve_fit_is_reasonable(vcl_deque<sdet_edgel*> &edgel_chain, sdet_edgel* ref_e, double dpos);
+  virtual bool curve_fit_is_reasonable(std::deque<sdet_edgel*> &edgel_chain, sdet_edgel* ref_e, double dpos);
 
   //: report accuracy of measurement
   virtual void report_accuracy(double *estimates, double *min_estimates, double *max_estimates);
@@ -322,7 +323,7 @@ public:
   sdet_CC_curve_model_new(sdet_edgel* e1, sdet_edgel* e2, sdet_edgel* ref_e, double dpos, double dtheta, double token_len, double max_k, double max_gamma, bool adaptive);
 
   //: constructor 2: From a set of edgels
-  sdet_CC_curve_model_new(vcl_vector<sdet_edgel*> /*edgels*/, sdet_edgel* /*ref_edgel*/){}
+  sdet_CC_curve_model_new(std::vector<sdet_edgel*> /*edgels*/, sdet_edgel* /*ref_edgel*/){}
 
   //: constructor 3: From the intersection of two curve bundles
   sdet_CC_curve_model_new(sdet_CC_curve_model_new* cm1, sdet_CC_curve_model_new* cm2);
@@ -377,13 +378,13 @@ public:
   virtual vgl_point_2d<double> compute_best_fit();
 
   //: Compute the best fit curve from the curve bundle
-  virtual vgl_point_2d<double> compute_best_fit(vcl_deque<sdet_edgel*> &edgel_chain);
+  virtual vgl_point_2d<double> compute_best_fit(std::deque<sdet_edgel*> &edgel_chain);
 
   //: Set the best fit curve
   virtual void set_best_fit(vgl_point_2d<double> dx_dt, double k);
 
   //: function to check if the curve fit is reasonable
-  virtual bool curve_fit_is_reasonable(vcl_deque<sdet_edgel*> &edgel_chain, sdet_edgel* ref_e, double dpos);
+  virtual bool curve_fit_is_reasonable(std::deque<sdet_edgel*> &edgel_chain, sdet_edgel* ref_e, double dpos);
 
   //: report accuracy of measurement
   virtual void report_accuracy(double *estimates, double *min_estimates, double *max_estimates);
@@ -392,10 +393,10 @@ public:
   virtual void print_info();
 
   //: print central info to file
-  virtual void print(vcl_ostream&);
+  virtual void print(std::ostream&);
 
   //: read central info from file
-  virtual void read(vcl_istream&);
+  virtual void read(std::istream&);
 };
 
 ////: The circular arc curve model class (new model)
@@ -424,7 +425,7 @@ public:
 //  sdet_CC_curve_model_new(sdet_edgel* e1, sdet_edgel* e2, sdet_edgel* ref_e, double dpos, double dtheta, double token_len, double max_k, double max_gamma, bool adaptive);
 //
 //  //: constructor 2: From a set of edgels
-//  sdet_CC_curve_model_new(vcl_vector<sdet_edgel*> /*edgels*/, sdet_edgel* /*ref_edgel*/){}
+//  sdet_CC_curve_model_new(std::vector<sdet_edgel*> /*edgels*/, sdet_edgel* /*ref_edgel*/){}
 //
 //  //: constructor 3: From the intersection of two curve bundles
 //  sdet_CC_curve_model_new(sdet_CC_curve_model_new* cm1, sdet_CC_curve_model_new* cm2);
@@ -479,13 +480,13 @@ public:
 //  virtual vgl_point_2d<double> compute_best_fit();
 //
 //  //: Compute the best fit curve from the curve bundle
-//  virtual vgl_point_2d<double> compute_best_fit(vcl_deque<sdet_edgel*> &edgel_chain);
+//  virtual vgl_point_2d<double> compute_best_fit(std::deque<sdet_edgel*> &edgel_chain);
 //
 //  //: Set the best fit curve
 //  virtual void set_best_fit(vgl_point_2d<double> dx_dt, double k);
 //
 //  //: function to check if the curve fit is reasonable
-//  virtual bool curve_fit_is_reasonable(vcl_deque<sdet_edgel*> &edgel_chain, sdet_edgel* ref_e, double dpos);
+//  virtual bool curve_fit_is_reasonable(std::deque<sdet_edgel*> &edgel_chain, sdet_edgel* ref_e, double dpos);
 //
 //  //: report accuracy of measurement
 //  virtual void report_accuracy(double *estimates, double *min_estimates, double *max_estimates);
@@ -494,10 +495,10 @@ public:
 //  virtual void print_info();
 //
 //  //: print central info to file
-//  virtual void print(vcl_ostream&);
+//  virtual void print(std::ostream&);
 //
 //  //: read central info from file
-//  virtual void read(vcl_istream&);
+//  virtual void read(std::istream&);
 //};
 
 //discrete perturbations in position
@@ -524,7 +525,7 @@ public:
   sdet_CC_curve_model_perturbed(sdet_edgel* e1, sdet_edgel* e2, sdet_edgel* ref_e, double dpos, double dtheta, double token_len, double max_k, double max_gamma, bool adaptive);
 
   //: constructor 2: From a set of edgels
-  sdet_CC_curve_model_perturbed(vcl_vector<sdet_edgel*> edgels, sdet_edgel* ref_edgel): sdet_CC_curve_model(edgels, ref_edgel){}
+  sdet_CC_curve_model_perturbed(std::vector<sdet_edgel*> edgels, sdet_edgel* ref_edgel): sdet_CC_curve_model(edgels, ref_edgel){}
 
   //: constructor 3: From the intersection of two curve bundles
   sdet_CC_curve_model_perturbed(sdet_curve_model* cm1, sdet_curve_model* cm2);
@@ -557,7 +558,7 @@ public:
   void compute_curve_bundle(sdet_edgel* e1, sdet_edgel* e2, sdet_edgel* ref_e, double dpos, double dtheta, double token_len, double max_k);
 
   //: Compute the best fit curve from the curve bundle
-  virtual vgl_point_2d<double> compute_best_fit(vcl_deque<sdet_edgel*> &edgel_chain);
+  virtual vgl_point_2d<double> compute_best_fit(std::deque<sdet_edgel*> &edgel_chain);
 
   //: print info
   virtual void print_info();
@@ -645,7 +646,7 @@ class sdet_CC_curve_model_3d : public sdet_curve_model
 {
 public:
   vbl_array_2d<float> Kmin, Kmax; ///< The min and max curvature surfaces for the bundle (as a function of dx, dt)
-  //vcl_vector<double> Dx, Dt;       ///< The values of the Dx and Dt parameters at the grid points
+  //std::vector<double> Dx, Dt;       ///< The values of the Dx and Dt parameters at the grid points
 
   vgl_point_2d<double> ref_pt;   ///< Extrinsic anchoring position
   double ref_theta;              ///< Extrinsic anchoring orientation
@@ -680,7 +681,7 @@ public:
 
 
   //: constructor 2: From a set of edgels
-  sdet_CC_curve_model_3d(vcl_vector<sdet_edgel*> /*edgels*/, sdet_edgel* /*ref_edgel*/){}
+  sdet_CC_curve_model_3d(std::vector<sdet_edgel*> /*edgels*/, sdet_edgel* /*ref_edgel*/){}
 
   //: constructor 3: From the intersection of two curve bundles
   sdet_CC_curve_model_3d(sdet_CC_curve_model_3d* cm1, sdet_CC_curve_model_3d* cm2)
@@ -751,13 +752,13 @@ public:
   virtual vgl_point_2d<double> compute_best_fit();
 
   //: Compute the best fit curve from the curve bundle
-  virtual vgl_point_2d<double> compute_best_fit(vcl_deque<sdet_edgel*> &edgel_chain);
+  virtual vgl_point_2d<double> compute_best_fit(std::deque<sdet_edgel*> &edgel_chain);
 
   //: Set the best fit curve
   virtual void set_best_fit(vgl_point_2d<double> dx_dt, double k);
 
   //: function to check if the curve fit is reasonable
-  virtual bool curve_fit_is_reasonable(vcl_deque<sdet_edgel*> &edgel_chain, sdet_edgel* ref_e, double dpos);
+  virtual bool curve_fit_is_reasonable(std::deque<sdet_edgel*> &edgel_chain, sdet_edgel* ref_e, double dpos);
 
   //: report accuracy of measurement
   virtual void report_accuracy(double *estimates, double *min_estimates, double *max_estimates);
@@ -777,10 +778,10 @@ public:
   virtual void print_info();
 
   //: print central info to file
-  virtual void print(vcl_ostream&);
+  virtual void print(std::ostream&);
 
   //: read central info from file
-  virtual void read(vcl_istream&);
+  virtual void read(std::istream&);
 };
 
 
@@ -804,7 +805,7 @@ public:
   sdet_ES_curve_model(sdet_edgel* e1, sdet_edgel* e2, sdet_edgel* ref_e, double dpos, double dtheta, double token_len, double max_k, double max_gamma, bool adaptive);
 
   //: constructor 2: From a set of edgels
-  sdet_ES_curve_model(vcl_vector<sdet_edgel*> /*edgels*/, sdet_edgel* /*ref_edgel*/): k(0.0), gamma(0.0){}
+  sdet_ES_curve_model(std::vector<sdet_edgel*> /*edgels*/, sdet_edgel* /*ref_edgel*/): k(0.0), gamma(0.0){}
 
   //: constructor 3: From the intersection of two curve bundles
   sdet_ES_curve_model(sdet_curve_model* cm1, sdet_curve_model* cm2);
@@ -841,13 +842,13 @@ public:
                             bool first_is_ref, double dpos, double dtheta, double token_len, double max_k, double max_gamma);
 
   //: Compute the best fit curve from the curve bundle
-  virtual vgl_point_2d<double> compute_best_fit(vcl_deque<sdet_edgel*> &edgel_chain);
+  virtual vgl_point_2d<double> compute_best_fit(std::deque<sdet_edgel*> &edgel_chain);
 
   //: function to check if the curve fit is reasonable
-  virtual bool curve_fit_is_reasonable(vcl_deque<sdet_edgel*> &edgel_chain, sdet_edgel* ref_e, double dpos);
+  virtual bool curve_fit_is_reasonable(std::deque<sdet_edgel*> &edgel_chain, sdet_edgel* ref_e, double dpos);
 
   //: compute the distance between edgels and a curve model
-  double compute_distance(vcl_deque<sdet_edgel*> &edgel_chain,
+  double compute_distance(std::deque<sdet_edgel*> &edgel_chain,
                           vgl_point_2d<double>pt, double theta,
                           double k, double gamma);
 
@@ -891,7 +892,7 @@ public:
   sdet_ES_curve_model_perturbed(sdet_edgel* e1, sdet_edgel* e2, sdet_edgel* ref_e, double dpos, double dtheta, double token_len, double max_k, double max_gamma, bool adaptive);
 
   //: constructor 2: From a set of edgels
-  sdet_ES_curve_model_perturbed(vcl_vector<sdet_edgel*> edgels, sdet_edgel* ref_edgel): sdet_ES_curve_model(edgels, ref_edgel){}
+  sdet_ES_curve_model_perturbed(std::vector<sdet_edgel*> edgels, sdet_edgel* ref_edgel): sdet_ES_curve_model(edgels, ref_edgel){}
 
   //: constructor 3: From the intersection of two curve bundles
   sdet_ES_curve_model_perturbed(sdet_curve_model* cm1, sdet_curve_model* cm2);
@@ -927,7 +928,7 @@ public:
   void compute_curve_bundle(sdet_edgel* e1, sdet_edgel* e2, sdet_edgel* ref_e, double dpos, double dtheta, double token_len, double max_k, double max_gamma);
 
   //: Compute the best fit curve from the curve bundle
-  virtual vgl_point_2d<double> compute_best_fit(vcl_deque<sdet_edgel*> &edgel_chain);
+  virtual vgl_point_2d<double> compute_best_fit(std::deque<sdet_edgel*> &edgel_chain);
 
   //: print info
   virtual void print_info();

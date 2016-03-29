@@ -1,6 +1,8 @@
 // This is mul/vil3d/tests/test_gen_synthetic.cxx
-#include <vcl_functional.h>
-#include <vcl_algorithm.h>
+#include <functional>
+#include <iostream>
+#include <algorithm>
+#include <vcl_compiler.h>
 
 #include <vxl_config.h> // for vxl_uint_16 etc.
 
@@ -17,7 +19,7 @@
 template <class T>
 inline bool all_pixels_are(const vil3d_image_view<T> & im, T v)
 {
-  return vcl_find_if(im.begin(), im.end(), vcl_bind2nd(vcl_not_equal_to<T>(), v))==im.end();
+  return std::find_if(im.begin(), im.end(), std::bind2nd(std::not_equal_to<T>(), v))==im.end();
 }
 void test_gen_synthetic( )
 {

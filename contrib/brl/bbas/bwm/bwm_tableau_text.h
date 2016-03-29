@@ -12,8 +12,8 @@ public:
 
   virtual ~bwm_tableau_text() { this->unref(); }
 
-  void set_text(vcl_string filename);
-  void set_string(vcl_string& str);
+  void set_text(std::string filename);
+  void set_string(std::string& str);
 private:
   int xdim_, ydim_;
   int xmarg_, ymarg_, yinc_;

@@ -210,13 +210,13 @@ scale_by( double scale ) const
 
 void
 rgrl_trans_similarity::
-write( vcl_ostream& os ) const
+write( std::ostream& os ) const
 {
   // tag
   os << "SIMILARITY\n"
   // parameters
-     << t().size() << vcl_endl
-     << A_ << trans_ << ' ' << from_centre_ << vcl_endl;
+     << t().size() << std::endl
+     << A_ << trans_ << ' ' << from_centre_ << std::endl;
 
   // parent
   rgrl_transformation::write( os );
@@ -224,15 +224,15 @@ write( vcl_ostream& os ) const
 
 bool
 rgrl_trans_similarity::
-read( vcl_istream& is )
+read( std::istream& is )
 {
   int dim;
 
   // skip empty lines
   rgrl_util_skip_empty_lines( is );
 
-  vcl_string str;
-  vcl_getline( is, str );
+  std::string str;
+  std::getline( is, str );
 
   // The token should appear at the beginning of line
   if ( str.find( "SIMILARITY" ) != 0 ) {

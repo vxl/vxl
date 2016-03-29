@@ -24,7 +24,7 @@ double bwm_reg_image::diagonal_gsd()
   //get the image diagonal
   double ni = static_cast<double>(image_->ni()),
     nj = static_cast<double>(image_->nj());
-  double image_diag = vcl_sqrt(ni*ni + nj*nj);
+  double image_diag = std::sqrt(ni*ni + nj*nj);
   if(image_diag == 0)
     return -1;
   //get rough diagonal in world coordinates
@@ -55,7 +55,7 @@ double bwm_reg_image::diagonal_gsd()
                        xlr,ylr,zlr,
                        vpgl_lvcs::DEG,vpgl_lvcs::METERS);
 
-  double world_diag = vcl_sqrt((xlr-xul)*(xlr-xul)+(ylr-yul)*(ylr-yul));
+  double world_diag = std::sqrt((xlr-xul)*(xlr-xul)+(ylr-yul)*(ylr-yul));
   //shouldn't happen
   if(world_diag==0)
     return -1;
@@ -118,7 +118,7 @@ bool bwm_reg_image::compute_edges(float sigma, float noise_thresh,
   edges_valid_ = false;
   edges_back_projected_ = false;
   if(!image_||!image_->ni()||!image_->nj()){
-    vcl_cerr << "In bwm_reg_image::compute_edges() -"
+    std::cerr << "In bwm_reg_image::compute_edges() -"
              << " no image data\n";
     return false;
     }
@@ -135,7 +135,7 @@ bool bwm_reg_image::compute_edges(float sigma, float noise_thresh,
   edges_2d_.clear();
   if(!det.get_vsol_edges(edges_2d_))
     {
-    vcl_cerr << "In bwm_reg_image::compute_edges() -"
+    std::cerr << "In bwm_reg_image::compute_edges() -"
              << " edge detection failed\n";
     return false;
     }
@@ -143,7 +143,7 @@ bool bwm_reg_image::compute_edges(float sigma, float noise_thresh,
   return true;
 }
 
-bool bwm_reg_image::edges_2d(vcl_vector<vsol_digital_curve_2d_sptr>& edges)
+bool bwm_reg_image::edges_2d(std::vector<vsol_digital_curve_2d_sptr>& edges)
 {
   if(!edges_valid_)
     {
@@ -154,11 +154,11 @@ bool bwm_reg_image::edges_2d(vcl_vector<vsol_digital_curve_2d_sptr>& edges)
   return true;
 }
 
-bool bwm_reg_image::edges_3d(vcl_vector<vsol_digital_curve_3d_sptr>& edges)
+bool bwm_reg_image::edges_3d(std::vector<vsol_digital_curve_3d_sptr>& edges)
 {
   if(!edges_valid_)
     {
-    vcl_cerr << "In bwm_reg_image::compute_edges() -"
+    std::cerr << "In bwm_reg_image::compute_edges() -"
              << " no 2-d edges to back-project\n";
 
       edges.clear();
@@ -173,7 +173,7 @@ if(!edges_back_projected_)
                                                             edges_3d_);
  if(!edges_back_projected_)
    {
-    vcl_cerr << "In bwm_reg_image::compute_edges() -"
+    std::cerr << "In bwm_reg_image::compute_edges() -"
              << " back-projection of edges failed\n";
      edges.clear();
      return false;

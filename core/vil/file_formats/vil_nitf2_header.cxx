@@ -26,7 +26,7 @@ vil_nitf2_header::~vil_nitf2_header()
   delete m_field_sequence_classification;
 }
 
-vcl_string vil_nitf2_header::section_num_tag(section_type sec)
+std::string vil_nitf2_header::section_num_tag(section_type sec)
 {
   switch (sec) {
    case enum_file_header:                 assert(0); return "";
@@ -40,7 +40,7 @@ vcl_string vil_nitf2_header::section_num_tag(section_type sec)
   }
 }
 
-vcl_string vil_nitf2_header::section_len_header_tag(section_type sec)
+std::string vil_nitf2_header::section_len_header_tag(section_type sec)
 {
   switch (sec) {
    case enum_file_header:                 assert(0); return "";
@@ -54,7 +54,7 @@ vcl_string vil_nitf2_header::section_len_header_tag(section_type sec)
   }
 }
 
-vcl_string vil_nitf2_header::section_len_data_tag(section_type sec)
+std::string vil_nitf2_header::section_len_data_tag(section_type sec)
 {
   switch (sec) {
    case enum_file_header:                 assert(0); return "";
@@ -114,7 +114,7 @@ vil_nitf2_field_definitions* vil_nitf2_header::get_field_definitions_2(
     (*field_defs)
       .field("ONAME", "Originator's Name",    NITF_STR_ECSA(27), true, VXL_NULLPTR, VXL_NULLPTR);
   } else {
-    // TODO: These next three values should actually be read in as a vcl_vector of 3 (8bit) unsigned binary integers
+    // TODO: These next three values should actually be read in as a std::vector of 3 (8bit) unsigned binary integers
     (*field_defs)
       .field("FBKGC", "File Background Color 1", NITF_BIN(3),       true, VXL_NULLPTR, VXL_NULLPTR)
       .field("ONAME", "Originator's Name",       NITF_STR_ECSA(24), true, VXL_NULLPTR, VXL_NULLPTR);
@@ -215,8 +215,8 @@ vil_nitf2_field_definitions* vil_nitf2_header::get_field_definitions_1()
 
 vil_nitf2_classification::file_version vil_nitf2_header::file_version() const
 {
-  vcl_string file_profile;
-  vcl_string file_version;
+  std::string file_profile;
+  std::string file_version;
   if (get_property("FHDR", file_profile) && get_property("FVER", file_version)) {
     if (file_profile == "NSIF" && file_version == "01.00") return vil_nitf2_classification::V_NSIF_10;
     if (file_profile == "NITF" && file_version == "01.00") return vil_nitf2_classification::V_NITF_10;

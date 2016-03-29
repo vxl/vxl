@@ -5,12 +5,13 @@
 //:
 // \file
 
+#include <iostream>
 #include "HomgLineSeg2D.h"
 #include <mvl/HomgPoint2D.h>
 #include <mvl/HomgLine2D.h>
 #include <mvl/HomgOperator2D.h>
 #include <vnl/vnl_double_2.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
 
 //--------------------------------------------------------------
 //
@@ -46,8 +47,8 @@ void HomgLineSeg2D::set (const HomgPoint2D& point1,
 
 //-----------------------------------------------------------------------------
 //
-//: print to vcl_ostream
-vcl_ostream& operator<<(vcl_ostream& s, const HomgLineSeg2D& p)
+//: print to std::ostream
+std::ostream& operator<<(std::ostream& s, const HomgLineSeg2D& p)
 {
   return s << "<HomgLineSeg2D " << p.get_vector()
            << " from " << p.get_point1()
@@ -64,8 +65,8 @@ ImplicitLine* HomgLineSeg2D::get_implicitline() const
   IUPoint *startpoint = get_point1().get_iupoint();
   IUPoint *endpoint = get_point2().get_iupoint();
   if (!startpoint || !endpoint) {
-    vcl_cerr << "HomgLineSeg2D::get_implicitline() -- Endpoint at infinity\n"
-             << "    " << *this << vcl_endl;
+    std::cerr << "HomgLineSeg2D::get_implicitline() -- Endpoint at infinity\n"
+             << "    " << *this << std::endl;
     return 0;
   }
 

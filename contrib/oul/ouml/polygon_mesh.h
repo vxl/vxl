@@ -9,21 +9,23 @@
 //
 //----------------------------------------------------------------------
 
+#include <vector>
+#include <iostream>
+#include <iosfwd>
 #include <vgl/vgl_point_3d.h>
 #include <vnl/vnl_vector_fixed.h>
-#include <vcl_vector.h>
-#include <vcl_iosfwd.h>
+#include <vcl_compiler.h>
 
 class PolygonMesh
 {
  public:
   typedef vgl_point_3d<double> DPoint ;
   typedef vnl_vector_fixed<double, 3> DVector3D;
-  typedef vcl_vector<int> Face; // a face is a list of vertices
-  typedef vcl_vector<DPoint> Polygon;
+  typedef std::vector<int> Face; // a face is a list of vertices
+  typedef std::vector<DPoint> Polygon;
  private:
-  vcl_vector<DPoint> vertex_list;
-  vcl_vector<Face> face_list;
+  std::vector<DPoint> vertex_list;
+  std::vector<Face> face_list;
 
  public:
   PolygonMesh(int num_vertices=100, int num_faces=100):
@@ -41,8 +43,8 @@ class PolygonMesh
   inline int num_vertices() const {return vertex_list.size();}
 };
 
-vcl_ostream &operator <<(vcl_ostream &os, PolygonMesh &pmesh);
+std::ostream &operator <<(std::ostream &os, PolygonMesh &pmesh);
 // add these when I can access iostream docs
-vcl_istream &operator >>(vcl_istream &is, PolygonMesh &pmesh);
+std::istream &operator >>(std::istream &is, PolygonMesh &pmesh);
 
 #endif // OTAGO_polygon_mesh__h_INCLUDED

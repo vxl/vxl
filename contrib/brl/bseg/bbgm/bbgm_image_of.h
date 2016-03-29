@@ -7,7 +7,9 @@
 // \author Matt Leotta (mleotta@lems.brown.edu)
 // \date January 27, 2006
 
-#include <vcl_typeinfo.h>
+#include <iostream>
+#include <typeinfo>
+#include <vcl_compiler.h>
 #include <vbl/vbl_array_2d.h>
 #include <vbl/vbl_ref_count.h>
 #include <vsl/vsl_binary_loader.h>
@@ -19,7 +21,7 @@ class bbgm_image_base : public vbl_ref_count
     virtual ~bbgm_image_base(){}
 
     //: return the type_info for the distribution type
-    virtual const vcl_type_info& dist_typeid() const=0;
+    virtual const std::type_info& dist_typeid() const=0;
 
     //: Binary save self to stream.
     virtual void b_write(vsl_b_ostream &os) const=0;
@@ -27,7 +29,7 @@ class bbgm_image_base : public vbl_ref_count
     //: Binary load self from stream.
     virtual void b_read(vsl_b_istream &is)=0;
 
-    virtual vcl_string is_a() const=0;
+    virtual std::string is_a() const=0;
 
     virtual bbgm_image_base* clone() const = 0;
 };
@@ -44,7 +46,7 @@ class bbgm_image_of : public bbgm_image_base
                       const dist& model) : data_(nj,ni,model) {}
 
   //: return the type_info for the distribution type
-  virtual const vcl_type_info& dist_typeid() const { return typeid(dist); }
+  virtual const std::type_info& dist_typeid() const { return typeid(dist); }
 
   //: Return the width of the image
   unsigned int ni() const { return data_.cols(); }
@@ -113,7 +115,7 @@ class bbgm_image_of : public bbgm_image_base
 
   //: Return a string name
   // \note this is probably not portable
-  virtual vcl_string is_a() const;
+  virtual std::string is_a() const;
 
   virtual bbgm_image_base* clone() const;
 

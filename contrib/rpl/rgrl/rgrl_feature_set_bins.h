@@ -11,11 +11,13 @@
 //      based on point location alone
 // \endverbatim
 
+#include <iostream>
+#include <memory>
 #include <rsdl/rsdl_fwd.h>
 #include <rgrl/rgrl_feature_set.h>
 #include <rgrl/rgrl_mask.h>
 
-#include <vcl_memory.h>
+#include <vcl_compiler.h>
 
 //: A set of features grouped only by N-d location.
 //
@@ -87,7 +89,7 @@ class rgrl_feature_set_bins
   bounding_box() const;
 
   //:  Return the type of feature
-  const vcl_type_info&
+  const std::type_info&
   type() const;
 
   // Defines type-related functions
@@ -96,12 +98,12 @@ class rgrl_feature_set_bins
  private:
   typedef rsdl_bins<N,double,rgrl_feature_sptr> bin_type;
 
-  const vcl_type_info* feature_type_;
+  const std::type_info* feature_type_;
 
   rgrl_mask_box bounding_box_;
 
   // Using bins as the data structure
-  vcl_auto_ptr< bin_type > bins_;
+  std::auto_ptr< bin_type > bins_;
 
   // Using kd_tree as the data structure
   //feature_vector features_;

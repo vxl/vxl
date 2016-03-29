@@ -1,10 +1,11 @@
 //:
 // \file
 
+#include <iostream>
 #include <vdgl/vdgl_edgel_chain.h>
 #include <vdgl/vdgl_fit_line.h>
 #include <vsol/vsol_line_2d.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
 #include <testlib/testlib_test.h>
 
 static void test_vdgl()
@@ -36,7 +37,7 @@ static void test_vdgl()
   unsigned int N = ec->size();
   TEST("Chain should have 11 edgels", N, 11);
   for (unsigned int i = 0; i<N; i++)
-    vcl_cout << "edgel[" << i<<"] = (" << (*ec)[i] << ")\n";
+    std::cout << "edgel[" << i<<"] = (" << (*ec)[i] << ")\n";
 }
 
 TESTMAIN(test_vdgl);

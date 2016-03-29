@@ -1166,7 +1166,7 @@ For a BaseClass, one creates @file{BaseClassIO.cxx} as follows
 // \author Tim Cootes
 
 #include <BaseClass.h>
-#include <vsl/vsl_clipon_binary_loader.txx>
+#include <vsl/vsl_clipon_binary_loader.hxx>
 
 //: Constructor
 BaseClassIO()::BaseClassIO()

@@ -1,11 +1,12 @@
+#include <iostream>
 #include <testlib/testlib_test.h>
 
 #ifdef HAS_NO_COOL
 
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
 void test_CoolMatrix_conversions()
 {
-  vcl_cerr << "test not run since you do not have the TargetJr COOL package\n";
+  std::cerr << "test not run since you do not have the TargetJr COOL package\n";
 }
 
 #else

@@ -23,8 +23,9 @@
 //
 //-----------------------------------------------------------------------------
 
-#include <vcl_vector.h>
-// not used? #include <vcl_iostream.h>
+#include <vector>
+#include <iostream>
+// not used? #include <vcl_compiler.h>
 #include <vbl/vbl_array_2d.h>
 #include <bdpg/bdpg_node_sptr.h>
 
@@ -54,7 +55,7 @@ class bdpg_array_dynamic_prg
   bool scan();
 
   //: retrieve the optimal assignment
-  vcl_vector<unsigned> assignment();
+  std::vector<unsigned> assignment();
 
   //:the best final assignment column
   unsigned best_assign_col();

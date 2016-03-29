@@ -31,7 +31,7 @@ set(bmsh3d_sources
                                     bmsh3d_graph.h
 )
 
-add_library( bmsh3d  ${bmsh3d_sources})
+vxl_add_library(LIBRARY_NAME bmsh3d LIBRARY_SOURCES  ${bmsh3d_sources})
 
 target_link_libraries( bmsh3d ${VXL_LIB_PREFIX}vgl ${VXL_LIB_PREFIX}vgl_algo ${VXL_LIB_PREFIX}vnl ${VXL_LIB_PREFIX}vul)
 
@@ -41,6 +41,4 @@ add_subdirectory(vis)
 add_subdirectory(tests)
 add_subdirectory(examples)
 
-#install the .h .txx and libs
-install_targets(/lib bmsh3d)
-INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/brl/bbas/bmsh3d/ ${bmsh3d_sources})
+#install the .h .hxx and libs

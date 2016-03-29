@@ -24,8 +24,10 @@
 //
 //------------------------------------------------------------------------------
 
-#include <vcl_vector.h>
-#include <vcl_iosfwd.h>
+#include <vector>
+#include <iostream>
+#include <iosfwd>
+#include <vcl_compiler.h>
 
 #include <vbl/vbl_array_3d.h>
 
@@ -195,23 +197,23 @@ class TriTensor
   // Utility Methods---------------------------------------------------------
   void get_constraint_lines_image3(vgl_homg_point_2d<double> const& p1,
                                    vgl_homg_point_2d<double> const& p2,
-                                   vcl_vector<vgl_homg_line_2d<double> >& lines) const;
+                                   std::vector<vgl_homg_line_2d<double> >& lines) const;
   void get_constraint_lines_image2(vgl_homg_point_2d<double> const& p1,
                                    vgl_homg_point_2d<double> const& p3,
-                                   vcl_vector<vgl_homg_line_2d<double> >& lines) const;
+                                   std::vector<vgl_homg_line_2d<double> >& lines) const;
   void get_constraint_lines_image1(vgl_homg_point_2d<double> const& p2,
                                    vgl_homg_point_2d<double> const& p3,
-                                   vcl_vector<vgl_homg_line_2d<double> >& lines) const;
+                                   std::vector<vgl_homg_line_2d<double> >& lines) const;
 
   void get_constraint_lines_image3(HomgPoint2D const& p1,
                                    HomgPoint2D const& p2,
-                                   vcl_vector<HomgLine2D>* lines) const;
+                                   std::vector<HomgLine2D>* lines) const;
   void get_constraint_lines_image2(HomgPoint2D const& p1,
                                    HomgPoint2D const& p3,
-                                   vcl_vector<HomgLine2D>* lines) const;
+                                   std::vector<HomgLine2D>* lines) const;
   void get_constraint_lines_image1(HomgPoint2D const& p2,
                                    HomgPoint2D const& p3,
-                                   vcl_vector<HomgLine2D>* lines) const;
+                                   std::vector<HomgLine2D>* lines) const;
 
   //: Contract Tensor axis tensor_axis with first component of Matrix M.
   // That is:
@@ -259,7 +261,7 @@ class TriTensor
   void delete_caches() const; // mutable const
 };
 
-vcl_ostream& operator << (vcl_ostream&, const TriTensor& T);
-vcl_istream& operator >> (vcl_istream&, TriTensor& T);
+std::ostream& operator << (std::ostream&, const TriTensor& T);
+std::istream& operator >> (std::istream&, TriTensor& T);
 
 #endif // TriTensor_h_

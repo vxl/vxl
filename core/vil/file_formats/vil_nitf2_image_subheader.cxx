@@ -1,6 +1,8 @@
 // vil_nitf2: Written by Rob Radtke (rob@) and Harry Voorhees (hlv@) of
 // Stellar Science Ltd. Co. (stellarscience.com) for
 // Air Force Research Laboratory, 2005.
+#include <sstream>
+#include <cstdlib>
 #include "vil_nitf2_image_subheader.h"
 //:
 // \file
@@ -12,9 +14,8 @@
 // for TREs
 #include "vil_nitf2_tagged_record_definition.h"
 
-#include <vcl_sstream.h>
 #include <vcl_cassert.h>
-#include <vcl_cstdlib.h>
+#include <vcl_compiler.h>
 
 vil_nitf2_field_definitions* vil_nitf2_image_subheader::s_field_definitions_21 = VXL_NULLPTR;
 vil_nitf2_field_definitions* vil_nitf2_image_subheader::s_field_definitions_20 = VXL_NULLPTR;
@@ -50,10 +51,10 @@ bool vil_nitf2_image_subheader::read(vil_stream* stream)
   if (success)
   {
     // If this image has a data mask, we need to parse that too
-    vcl_string compression_code;
+    std::string compression_code;
     get_property("IC", compression_code);
-    if (compression_code.find_first_of("M") != vcl_string::npos) {
-      vcl_string imode;
+    if (compression_code.find_first_of("M") != std::string::npos) {
+      std::string imode;
       get_property("IMODE", imode);
       m_data_mask_table = new vil_nitf2_data_mask_table(
                                                         get_num_blocks_x(), get_num_blocks_y(), nplanes(), imode);
@@ -95,7 +96,7 @@ add_shared_field_defs_3(vil_nitf2_field_definitions* defs)
   (*defs)
     .field("NICOM", "Number of Image Comments", NITF_INT(1), false, VXL_NULLPTR, VXL_NULLPTR)
 
-    //TODO: does it make any sense for a vcl_vector to have blank entries????  For now, I'm saying no (false parameter)
+    //TODO: does it make any sense for a std::vector to have blank entries????  For now, I'm saying no (false parameter)
     .repeat("NICOM", vil_nitf2_field_definitions()
 
             .field("ICOMn", "Image Comment n", NITF_STR_ECSA(80), false, VXL_NULLPTR, VXL_NULLPTR))
@@ -121,7 +122,7 @@ add_shared_field_defs_3(vil_nitf2_field_definitions* defs)
                      .value("M8", "JPEG2000 - contains block mask and/or pad pixel mask")),
            false, VXL_NULLPTR, VXL_NULLPTR);
 
-  vcl_vector<vcl_string> comp_ic_values;
+  std::vector<std::string> comp_ic_values;
   comp_ic_values.push_back("C1");
   comp_ic_values.push_back("C3");
   comp_ic_values.push_back("C4");
@@ -137,7 +138,7 @@ add_shared_field_defs_3(vil_nitf2_field_definitions* defs)
   // Using string because the valid enum values are different based on the content of IC
   (*defs)
     .field("COMRAT", "Compression Rate Code",         NITF_STR_BCSA(4),true, VXL_NULLPTR,
-           new vil_nitf2_field_value_one_of<vcl_string>("IC", comp_ic_values))
+           new vil_nitf2_field_value_one_of<std::string>("IC", comp_ic_values))
 
     // The value of IREP determines which values are acceptable here
     // (e.g., if IREP=MONO, then this must equal 1)
@@ -224,14 +225,14 @@ void vil_nitf2_image_subheader::add_geo_field_defs(vil_nitf2_field_definitions* 
                          .value("C", "Geocentric")),
                false, VXL_NULLPTR, VXL_NULLPTR);
 
-      vcl_vector<vcl_string> igeolo_icords;
+      std::vector<std::string> igeolo_icords;
       igeolo_icords.push_back("U");
       igeolo_icords.push_back("G");
       igeolo_icords.push_back("C");
 
       (*defs)
         .field("IGEOLO", "Image Geographic Location", NITF_STR_BCSA(60), false, VXL_NULLPTR,
-               new vil_nitf2_field_value_one_of<vcl_string>("ICORDS", igeolo_icords));
+               new vil_nitf2_field_value_one_of<std::string>("ICORDS", igeolo_icords));
       break;
     }
     case vil_nitf2_classification::V_NITF_21:
@@ -352,28 +353,28 @@ void vil_nitf2_image_subheader::add_shared_field_defs_1(vil_nitf2_field_definiti
 bool vil_nitf2_image_subheader::
 get_date_time(int& year, int& month, int& day, int& hour, int& min)
 {
-  vcl_cout  << "In vil_nitf2_image_subheader::get_date_time!\n";
-  vcl_string date_time = "";
+  std::cout  << "In vil_nitf2_image_subheader::get_date_time!\n";
+  std::string date_time = "";
   bool success = this->get_property("IDATIM", date_time);
   if (!success) {
-    vcl_cout << "IDATIM Property failed in vil_nitf2_image_subheader\n";
+    std::cout << "IDATIM Property failed in vil_nitf2_image_subheader\n";
     return false;
   }
-  vcl_cout  << "In vil_nitf2_image_subheader::get_date_time!\n";
+  std::cout  << "In vil_nitf2_image_subheader::get_date_time!\n";
   //d==day,h==hour,n==min,ss==sec,Z==zulu,m==month, y==year suffix
   // format is ddhhnnssZmmmyy
-  vcl_string s_day, s_hour, s_min, s_month, s_year_suff;
+  std::string s_day, s_hour, s_min, s_month, s_year_suff;
   s_day       = date_time.substr(0,2);
   s_hour      = date_time.substr(2,2);
   s_min       = date_time.substr(4,2);
   s_month     = date_time.substr(9,3);
   s_year_suff = date_time.substr(12,2);
-  vcl_string months[]={"JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG",
+  std::string months[]={"JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG",
                         "SEP", "OCT", "NOV", "DEC"};
   bool found = false;
-  vcl_cout << date_time << '\n'
+  std::cout << date_time << '\n'
            << s_day << ' ' << s_hour << ' ' << s_min
-           << ' ' << s_month << ' ' << s_year_suff << vcl_endl;
+           << ' ' << s_month << ' ' << s_year_suff << std::endl;
   for (int i = 0; (i<12)&&(!found); ++i)
     if (s_month==months[i]){
       found = true;
@@ -381,10 +382,10 @@ get_date_time(int& year, int& month, int& day, int& hour, int& min)
     }
   if (!found)
     return false;
-  day  = vcl_atoi(s_day.c_str());
-  hour = vcl_atoi(s_hour.c_str());
-  min =  vcl_atoi(s_min.c_str());
-  year = vcl_atoi(s_year_suff.c_str());
+  day  = std::atoi(s_day.c_str());
+  hour = std::atoi(s_hour.c_str());
+  min =  std::atoi(s_min.c_str());
+  year = std::atoi(s_year_suff.c_str());
   year += 2000;//good until the next millenium
   return true;
 }
@@ -393,17 +394,17 @@ get_date_time(int& year, int& month, int& day, int& hour, int& min)
 bool vil_nitf2_image_subheader::
 get_date_time(int& year, int& month, int& day, int& hour, int& min, int& sec)
 {
-  vcl_string date_time = "";
+  std::string date_time = "";
   bool success = this->get_property("IDATIM", date_time);
   if (!success) {
-    vcl_cout << "IDATIM Property failed in vil_nitf2_image_subheader\n";
+    std::cout << "IDATIM Property failed in vil_nitf2_image_subheader\n";
     return false;
   }
   //d==day,h==hour,n==min,ss==sec,Z==zulu,m==month, y==year
   // format is ddhhnnssZmmmyy OR yyyymmddhhnnss (the NITF 2.1 Commercial format)
-  vcl_string s_day, s_hour, s_min, s_month, s_year, s_sec;
+  std::string s_day, s_hour, s_min, s_month, s_year, s_sec;
   // try ddhhnnssZmmmyy first
-  vcl_string s_zulu = date_time.substr(8,1);
+  std::string s_zulu = date_time.substr(8,1);
   if (s_zulu=="Z") {
     s_day   = date_time.substr(0,2);
     s_hour  = date_time.substr(2,2);
@@ -411,7 +412,7 @@ get_date_time(int& year, int& month, int& day, int& hour, int& min, int& sec)
     s_sec   = date_time.substr(6,2);
     s_month = date_time.substr(9,3);
     s_year  = date_time.substr(12,2);
-    vcl_string months[]={"JAN", "FEB", "MAR", "APR",
+    std::string months[]={"JAN", "FEB", "MAR", "APR",
                          "MAY", "JUN", "JUL", "AUG",
                          "SEP", "OCT", "NOV", "DEC"};
     bool found = false;
@@ -432,13 +433,13 @@ get_date_time(int& year, int& month, int& day, int& hour, int& min, int& sec)
     s_hour  = date_time.substr(8,2);
     s_min   = date_time.substr(10,2);
     s_sec   = date_time.substr(12,2);
-    month   = vcl_atoi(s_month.c_str());
+    month   = std::atoi(s_month.c_str());
   }
-  day  = vcl_atoi(s_day.c_str());
-  hour = vcl_atoi(s_hour.c_str());
-  min =  vcl_atoi(s_min.c_str());
-  sec =  vcl_atoi(s_sec.c_str());
-  year = vcl_atoi(s_year.c_str());
+  day  = std::atoi(s_day.c_str());
+  hour = std::atoi(s_hour.c_str());
+  min =  std::atoi(s_min.c_str());
+  sec =  std::atoi(s_sec.c_str());
+  year = std::atoi(s_year.c_str());
   if (year < 100)
     year += 2000;//good until the next millenium
   return true;
@@ -506,18 +507,18 @@ unsigned int vil_nitf2_image_subheader::get_number_of_bits_per_pixel() const
   return 0;
 }
 
-vcl_string vil_nitf2_image_subheader::get_image_source() const
+std::string vil_nitf2_image_subheader::get_image_source() const
 {
-  vcl_string source;
+  std::string source;
   if (get_property("ISORCE", source)) {
     return source;
   }
   return "";
 }
 
-vcl_string vil_nitf2_image_subheader::get_image_type() const
+std::string vil_nitf2_image_subheader::get_image_type() const
 {
-  vcl_string id;
+  std::string id;
   if (get_property("IREP", id)) {
     return id;
   }
@@ -526,7 +527,7 @@ vcl_string vil_nitf2_image_subheader::get_image_type() const
 
 bool vil_nitf2_image_subheader::get_lut_info(unsigned int band,
                                              int& n_luts, int& ne_lut,
-                                             vcl_vector< vcl_vector< unsigned char > >& lut_d) const
+                                             std::vector< std::vector< unsigned char > >& lut_d) const
 {
   if (!m_field_sequence.get_value("NLUTS", vil_nitf2_index_vector(band), n_luts) ||
       !m_field_sequence.get_value("NELUT", vil_nitf2_index_vector(band), ne_lut)) {
@@ -554,7 +555,7 @@ bool vil_nitf2_image_subheader::get_lut_info(unsigned int band,
 vil_nitf2_field::field_tree* vil_nitf2_image_subheader::get_tree( int i ) const
 {
   vil_nitf2_field::field_tree* t = new vil_nitf2_field::field_tree;
-  vcl_stringstream name_stream;
+  std::stringstream name_stream;
   name_stream << "Image Subheader";
   if ( i > 0 ) name_stream << " #" << i;
   t->columns.push_back( name_stream.str() );
@@ -688,13 +689,13 @@ get_sun_params( double& sun_el, double& sun_az)
   // Check through the TREs to find "RPC"
   for (tres_itr = isxhd_tres.begin(); tres_itr != isxhd_tres.end(); ++tres_itr)
   {
-    vcl_string type = (*tres_itr)->name();
+    std::string type = (*tres_itr)->name();
     if ( type == "USE00A")
     {
       success = (*tres_itr)->get_value("SUN_EL", sun_el);
       success = success && (*tres_itr)->get_value("SUN_AZ", sun_az);
       if (!success)
-        vcl_cout<<"\n Error reading USE00A\n";
+        std::cout<<"\n Error reading USE00A\n";
       else
         return success;
     }
@@ -703,7 +704,7 @@ get_sun_params( double& sun_el, double& sun_az)
       success = (*tres_itr)->get_value("SUN_EL", sun_el);
       success = success && (*tres_itr)->get_value("SUN_AZ", sun_az);
       if (!success)
-        vcl_cout<<"\n Error reading MPD26A\n";
+        std::cout<<"\n Error reading MPD26A\n";
       else
         return success;
     }
@@ -895,7 +896,7 @@ get_correction_offset(double & u_off, double & v_off)
   // Check through the TREs to find "RPC"
   for (tres_itr = isxhd_tres.begin(); tres_itr != isxhd_tres.end(); ++tres_itr)
   {
-    vcl_string type = (*tres_itr)->name();
+    std::string type = (*tres_itr)->name();
     if ( type == "ICHIPB" )
     {
       double r_off=1.0; // dummy initialisation
@@ -926,7 +927,7 @@ get_correction_offset(double & u_off, double & v_off)
     {
       int r_off=1;
       int c_off=1;
-      vcl_string temp_off;
+      std::string temp_off;
       if ( (*tres_itr)->get_value("START_ROW",    r_off) &&
            (*tres_itr)->get_value("START_COLUMN", temp_off) )
       {
@@ -950,22 +951,22 @@ get_correction_offset(double & u_off, double & v_off)
 // Collect the RPC parameters for the current image. Image corners are reported
 // as a string of geographic coordinates,one for each image corner.
   bool vil_nitf2_image_subheader::
-get_rpc_params( vcl_string& rpc_type, vcl_string& image_id,
-                vcl_string& image_corner_geo_locations,
+get_rpc_params( std::string& rpc_type, std::string& image_id,
+                std::string& image_corner_geo_locations,
                 double* rpc_data )
 {
   // Get image ID and location from main header values
-  vcl_string iid2 = "";
+  std::string iid2 = "";
   bool success = this->get_property("IID2", iid2);
   if (!success) {
-    vcl_cout << "IID2 Property failed in vil_nitf2_image_subheader\n";
+    std::cout << "IID2 Property failed in vil_nitf2_image_subheader\n";
     return false;
   }
   image_id = iid2.substr(0,39);// trim length to NN characters to match file ID
-  vcl_string igeolo = "";
+  std::string igeolo = "";
   success = this->get_property("IGEOLO", igeolo);
   if (!success) {
-    vcl_cout << "IGEOLO Property failed in vil_nitf2_image_subheader\n";
+    std::cout << "IGEOLO Property failed in vil_nitf2_image_subheader\n";
     return false;
   }
   image_corner_geo_locations = igeolo;
@@ -979,7 +980,7 @@ get_rpc_params( vcl_string& rpc_type, vcl_string& image_id,
   // Check through the TREs to find "RPC"
   for (tres_itr = isxhd_tres.begin(); tres_itr != isxhd_tres.end(); ++tres_itr)
   {
-    vcl_string type = (*tres_itr)->name();
+    std::string type = (*tres_itr)->name();
 
     if ( type == "RPC00B" || type == "RPC00A") // looking for "RPC..."
     {
@@ -990,7 +991,7 @@ get_rpc_params( vcl_string& rpc_type, vcl_string& image_id,
       int line_off;
       success = (*tres_itr)->get_value("LINE_OFF", line_off);
       if (!success) {
-        vcl_cout << "LINE_OFF Property failed in vil_nitf2_image_subheader\n";
+        std::cout << "LINE_OFF Property failed in vil_nitf2_image_subheader\n";
         return false;
       }
       rpc_data[80] = line_off;
@@ -998,7 +999,7 @@ get_rpc_params( vcl_string& rpc_type, vcl_string& image_id,
       int samp_off;
       success = (*tres_itr)->get_value("SAMP_OFF", samp_off);
       if (!success) {
-        vcl_cout << "SAMP_OFF Property failed in vil_nitf2_image_subheader\n";
+        std::cout << "SAMP_OFF Property failed in vil_nitf2_image_subheader\n";
         return false;
       }
       rpc_data[81]  = samp_off;
@@ -1006,7 +1007,7 @@ get_rpc_params( vcl_string& rpc_type, vcl_string& image_id,
       double lat_off;
       success = (*tres_itr)->get_value("LAT_OFF", lat_off);
       if (!success) {
-        vcl_cout << "LAT_OFF Property failed in vil_nitf2_image_subheader\n";
+        std::cout << "LAT_OFF Property failed in vil_nitf2_image_subheader\n";
         return false;
       }
       rpc_data[82] = lat_off;
@@ -1014,7 +1015,7 @@ get_rpc_params( vcl_string& rpc_type, vcl_string& image_id,
       double lon_off;
       success = (*tres_itr)->get_value("LON_OFF", lon_off);
       if (!success) {
-        vcl_cout << "LON_OFF Property failed in vil_nitf2_image_subheader\n";
+        std::cout << "LON_OFF Property failed in vil_nitf2_image_subheader\n";
         return false;
       }
       rpc_data[83] = lon_off;
@@ -1022,7 +1023,7 @@ get_rpc_params( vcl_string& rpc_type, vcl_string& image_id,
       int height_off;
       success = (*tres_itr)->get_value("HEIGHT_OFF", height_off);
       if (!success) {
-        vcl_cout << "HEIGHT_OFF Property failed in vil_nitf2_image_subheader\n";
+        std::cout << "HEIGHT_OFF Property failed in vil_nitf2_image_subheader\n";
         return false;
       }
       rpc_data[84] = height_off;
@@ -1030,7 +1031,7 @@ get_rpc_params( vcl_string& rpc_type, vcl_string& image_id,
       int line_scale;
       success = (*tres_itr)->get_value("LINE_SCALE", line_scale);
       if (!success) {
-        vcl_cout << "LINE_SCALE Property failed in vil_nitf2_image_subheader\n";
+        std::cout << "LINE_SCALE Property failed in vil_nitf2_image_subheader\n";
         return false;
       }
       rpc_data[85] = line_scale;
@@ -1038,7 +1039,7 @@ get_rpc_params( vcl_string& rpc_type, vcl_string& image_id,
       int samp_scale;
       success = (*tres_itr)->get_value("SAMP_SCALE", samp_scale);
       if (!success) {
-        vcl_cout << "SAMP_SCALE Property failed in vil_nitf2_image_subheader\n";
+        std::cout << "SAMP_SCALE Property failed in vil_nitf2_image_subheader\n";
         return false;
       }
       rpc_data[86] = samp_scale;
@@ -1046,7 +1047,7 @@ get_rpc_params( vcl_string& rpc_type, vcl_string& image_id,
       double lat_scale;
       success = (*tres_itr)->get_value("LAT_SCALE", lat_scale);
       if (!success) {
-        vcl_cout << "LAT_SCALE Property failed in vil_nitf2_image_subheader\n";
+        std::cout << "LAT_SCALE Property failed in vil_nitf2_image_subheader\n";
         return false;
       }
       rpc_data[87] = lat_scale;
@@ -1054,7 +1055,7 @@ get_rpc_params( vcl_string& rpc_type, vcl_string& image_id,
       double lon_scale;
       success = (*tres_itr)->get_value("LON_SCALE", lon_scale);
       if (!success) {
-        vcl_cout << "LON_SCALE Property failed in vil_nitf2_image_subheader\n";
+        std::cout << "LON_SCALE Property failed in vil_nitf2_image_subheader\n";
         return false;
       }
       rpc_data[88] = lon_scale;
@@ -1062,46 +1063,46 @@ get_rpc_params( vcl_string& rpc_type, vcl_string& image_id,
       int height_scale;
       success = (*tres_itr)->get_value("HEIGHT_SCALE", height_scale);
       if (!success) {
-        vcl_cout << "HEIGHT_SCALE Property failed in vil_nitf2_image_subheader\n";
+        std::cout << "HEIGHT_SCALE Property failed in vil_nitf2_image_subheader\n";
         return false;
       }
       rpc_data[89] = height_scale;
 
       // finally get the 80 polynomial coefficients  ##################
-      vcl_vector<double> LNC;
+      std::vector<double> LNC;
       success = (*tres_itr)->get_values("LNC", LNC);
       if (!success) {
-        vcl_cout << "LNC Property failed in vil_nitf2_image_subheader\n";
+        std::cout << "LNC Property failed in vil_nitf2_image_subheader\n";
         return false;
       }
       for (int i = 0; i < 20; i++) {
         rpc_data[i] = LNC[i];      // copy from vector to regular array.
       }
 
-      vcl_vector<double> LDC;
+      std::vector<double> LDC;
       success = (*tres_itr)->get_values("LDC", LDC);
       if (!success) {
-        vcl_cout << "LDC Property failed in vil_nitf2_image_subheader\n";
+        std::cout << "LDC Property failed in vil_nitf2_image_subheader\n";
         return false;
       }
       for (int i = 0; i < 20; i++) {
         rpc_data[i+20] = LDC[i];   // copy from vector to regular array.
       }
 
-      vcl_vector<double> SNC;
+      std::vector<double> SNC;
       success = (*tres_itr)->get_values("SNC", SNC);
       if (!success) {
-        vcl_cout << "SNC Property failed in vil_nitf2_image_subheader\n";
+        std::cout << "SNC Property failed in vil_nitf2_image_subheader\n";
         return false;
       }
       for (int i = 0; i < 20; i++) {
         rpc_data[i+40] = SNC[i];   // copy from vector to regular array.
       }
 
-      vcl_vector<double> SDC;
+      std::vector<double> SDC;
       success = (*tres_itr)->get_values("SDC", SDC);
       if (!success) {
-        vcl_cout << "SDC Property failed in vil_nitf2_image_subheader\n";
+        std::cout << "SDC Property failed in vil_nitf2_image_subheader\n";
         return false;
       }
       for (int i = 0; i < 20; i++) {

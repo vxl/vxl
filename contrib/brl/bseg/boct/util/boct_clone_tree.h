@@ -21,8 +21,8 @@ template<class T_loc, class T_data, class T_data_to>
 boct_tree<T_loc,T_data_to>* boct_clone_to_type(boct_tree<T_loc, T_data>* tree, short level, T_data_to default_val,
                                                boct_tree<T_loc, bool>* valid_tree= NULL)
 {
-  vcl_vector<boct_tree_cell<T_loc, T_data>*> cells = tree->leaf_cells_at_level(level);
-  vcl_vector<boct_tree_cell<T_loc, T_data_to> > cloned_cells;
+  std::vector<boct_tree_cell<T_loc, T_data>*> cells = tree->leaf_cells_at_level(level);
+  std::vector<boct_tree_cell<T_loc, T_data_to> > cloned_cells;
 
   if (!valid_tree) {
     for (unsigned i=0; i<cells.size(); i++) {
@@ -30,7 +30,7 @@ boct_tree<T_loc,T_data_to>* boct_clone_to_type(boct_tree<T_loc, T_data>* tree, s
     }
   }
   else {
-    vcl_vector<boct_tree_cell<T_loc, bool>*> valid_cells = valid_tree->leaf_cells_at_level(level);
+    std::vector<boct_tree_cell<T_loc, bool>*> valid_cells = valid_tree->leaf_cells_at_level(level);
     for (unsigned i=0; i<cells.size(); i++) {
       if (valid_cells[i]->data())
         cloned_cells.push_back(boct_tree_cell<T_loc, T_data_to>(cells[i]->code_));

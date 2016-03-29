@@ -1,4 +1,6 @@
 // This is brl/bseg/boxm2/cpp/pro/processes/boxm2_cpp_normals_to_id_process.cxx
+#include <iostream>
+#include <fstream>
 #include <bprb/bprb_func_process.h>
 //:
 // \file
@@ -10,7 +12,7 @@
 // \author Vishal Jain
 // \date Jan 17, 2013
 
-#include <vcl_fstream.h>
+#include <vcl_compiler.h>
 #include <boxm2/io/boxm2_cache.h>
 #include <boxm2/boxm2_scene.h>
 #include <boxm2/boxm2_block.h>
@@ -26,7 +28,7 @@ namespace boxm2_cpp_normals_to_id_process_globals
 {
     const unsigned n_inputs_ = 2;
     const unsigned n_outputs_ = 0;
-    vcl_size_t lthreads[2]={8,8};
+    std::size_t lthreads[2]={8,8};
 }
 
 bool boxm2_cpp_normals_to_id_process_cons(bprb_func_process& pro)
@@ -34,13 +36,13 @@ bool boxm2_cpp_normals_to_id_process_cons(bprb_func_process& pro)
     using namespace boxm2_cpp_normals_to_id_process_globals;
 
     //process takes 1 input
-    vcl_vector<vcl_string> input_types_(n_inputs_);
+    std::vector<std::string> input_types_(n_inputs_);
     input_types_[0] = "boxm2_scene_sptr";
     input_types_[1] = "boxm2_cache_sptr";
 
     // process has 1 output:
     // output[0]: scene sptr
-    vcl_vector<vcl_string>  output_types_(n_outputs_);
+    std::vector<std::string>  output_types_(n_outputs_);
 
     bool good = pro.set_input_types(input_types_) &&
         pro.set_output_types(output_types_);
@@ -53,23 +55,23 @@ bool boxm2_cpp_normals_to_id_process(bprb_func_process& pro)
     using namespace boxm2_cpp_normals_to_id_process_globals;
 
     if ( pro.n_inputs() < n_inputs_ ) {
-        vcl_cout << pro.name() << ": The input number should be " << n_inputs_<< vcl_endl;
+        std::cout << pro.name() << ": The input number should be " << n_inputs_<< std::endl;
         return false;
     }
     //get the inputs
     unsigned i = 0;
     boxm2_scene_sptr scene = pro.get_input<boxm2_scene_sptr>(i++);
     boxm2_cache_sptr cache = pro.get_input<boxm2_cache_sptr>(i++);
-    vcl_vector<boxm2_block_id> blocks=scene->get_block_ids();
+    std::vector<boxm2_block_id> blocks=scene->get_block_ids();
     boxm2_normals_to_id_functor functor;
-    for (vcl_vector<boxm2_block_id>::iterator id = blocks.begin(); id != blocks.end(); ++id)
+    for (std::vector<boxm2_block_id>::iterator id = blocks.begin(); id != blocks.end(); ++id)
     {
-        vcl_cout<<"Block Id "<<(*id)<<vcl_endl;
-        vcl_size_t alphaTypeSize = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_ALPHA>::prefix());
-        vcl_size_t pointTypeSize = boxm2_data_info::datasize(boxm2_data_traits<BOXM2_POINT>::prefix());
-        vcl_size_t normalTypeSize = boxm2_data_info::datasize(boxm2_data_traits<BOXM2_NORMAL>::prefix());
-        vcl_size_t visTypeSize = boxm2_data_info::datasize(boxm2_data_traits<BOXM2_VIS_SCORE>::prefix());
-        vcl_size_t labelshortSize = boxm2_data_info::datasize(boxm2_data_traits<BOXM2_LABEL_SHORT>::prefix());
+        std::cout<<"Block Id "<<(*id)<<std::endl;
+        std::size_t alphaTypeSize = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_ALPHA>::prefix());
+        std::size_t pointTypeSize = boxm2_data_info::datasize(boxm2_data_traits<BOXM2_POINT>::prefix());
+        std::size_t normalTypeSize = boxm2_data_info::datasize(boxm2_data_traits<BOXM2_NORMAL>::prefix());
+        std::size_t visTypeSize = boxm2_data_info::datasize(boxm2_data_traits<BOXM2_VIS_SCORE>::prefix());
+        std::size_t labelshortSize = boxm2_data_info::datasize(boxm2_data_traits<BOXM2_LABEL_SHORT>::prefix());
 
 
         boxm2_data_base * alpha =        cache->get_data_base(scene,*id,boxm2_data_traits<BOXM2_ALPHA>::prefix());
@@ -81,7 +83,7 @@ bool boxm2_cpp_normals_to_id_process(bprb_func_process& pro)
         boxm2_data_base * vis = cache->get_data_base(scene,*id,boxm2_data_traits<BOXM2_VIS_SCORE>::prefix(), data_buff_length * visTypeSize);
         boxm2_data_base * normalids = cache->get_data_base(scene,*id,boxm2_data_traits<BOXM2_LABEL_SHORT>::prefix("orientation"), data_buff_length * labelshortSize,false);
 
-        vcl_vector<boxm2_data_base*> datas;
+        std::vector<boxm2_data_base*> datas;
         datas.push_back(alpha);
         datas.push_back(points);
         datas.push_back(normals);

@@ -7,10 +7,11 @@
 // \date   24 Mar 1999
 // \brief  See vgui_soview2D.h for a description of this file.
 
+#include <cmath>
+#include <iostream>
 #include "vgui_soview2D.h"
 
-#include <vcl_cmath.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
 
 #include <vgl/vgl_distance.h>
 #include <vnl/vnl_math.h> // for twopi
@@ -25,7 +26,7 @@
 
 //--------------------------------------------------------------------------//
 
-vcl_ostream& vgui_soview2D_point::print(vcl_ostream& s) const
+std::ostream& vgui_soview2D_point::print(std::ostream& s) const
 {
   s << "[ vgui_soview2D_point " << x << ',' << y << ' ';
   return vgui_soview2D::print(s) << " ]";
@@ -84,7 +85,7 @@ void vgui_soview2D_point::translate(float tx, float ty)
 
 //--------------------------------------------------------------------------//
 
-vcl_ostream& vgui_soview2D_lineseg::print(vcl_ostream& s) const
+std::ostream& vgui_soview2D_lineseg::print(std::ostream& s) const
 {
   s << "[ vgui_soview2D_lineseg " << x0 << ',' << y0 << " -- " << x1 << ',' << y1 << ' ';
   return vgui_soview2D::print(s) << " ]";
@@ -93,7 +94,7 @@ vcl_ostream& vgui_soview2D_lineseg::print(vcl_ostream& s) const
 void vgui_soview2D_lineseg::draw() const
 {
 #ifdef DEBUG
-  vcl_cerr << "vgui_soview2D_lineseg::draw() line id=" << id << '\n';
+  std::cerr << "vgui_soview2D_lineseg::draw() line id=" << id << '\n';
 #endif
 
 #if 0
@@ -151,7 +152,7 @@ void vgui_soview2D_group::set_style(const vgui_style_sptr& s)
   vgui_soview::set_style( s);
 }
 
-vcl_ostream& vgui_soview2D_group::print(vcl_ostream& s) const
+std::ostream& vgui_soview2D_group::print(std::ostream& s) const
 {
   s << "[ vgui_soview2D_group ";
 
@@ -216,7 +217,7 @@ void vgui_soview2D_group::translate(float tx, float ty)
 
 //--------------------------------------------------------------------------//
 
-vcl_ostream& vgui_soview2D_infinite_line::print(vcl_ostream& s) const
+std::ostream& vgui_soview2D_infinite_line::print(std::ostream& s) const
 {
   s << "[ vgui_soview2D_infinite_line " << a << ',' << b << ',' << c << ' ';
   return vgui_soview2D::print(s) << " ]";
@@ -255,14 +256,14 @@ void vgui_soview2D_circle::compile()
   for (unsigned int i=0;i<100;i++)
   {
     double angle = vnl_math::twopi*0.01*i;
-    glVertex2d(vcl_cos(angle), vcl_sin(angle));
+    glVertex2d(std::cos(angle), std::sin(angle));
   }
   glEnd();
   glEndList();
 }
 
 
-vcl_ostream& vgui_soview2D_circle::print(vcl_ostream& s) const
+std::ostream& vgui_soview2D_circle::print(std::ostream& s) const
 {
   s << "[ vgui_soview2D_circle " << x << ',' << y << " r" << r << ' ';
   return vgui_soview2D::print(s) << " ]";
@@ -274,7 +275,7 @@ void vgui_soview2D_circle::draw() const
   for (unsigned int i=0;i<100;i++)
   {
     double angle = vnl_math::twopi*0.01*i;
-    glVertex2d(x+r*vcl_cos(angle), y+r*vcl_sin(angle));
+    glVertex2d(x+r*std::cos(angle), y+r*std::sin(angle));
   }
   glEnd();
 }
@@ -285,7 +286,7 @@ float vgui_soview2D_circle::distance_squared(float vx, float vy) const
   float dy = y - vy;
 
   // distance from point to centre
-  float dcentre = vcl_sqrt(dx*dx + dy*dy);
+  float dcentre = std::sqrt(dx*dx + dy*dy);
 
   // signed distance from point to circumference
   float dcircum = dcentre - this->r;
@@ -307,7 +308,7 @@ void vgui_soview2D_circle::translate(float tx, float ty)
 
 //--------------------------------------------------------------------------------//
 
-vcl_ostream& vgui_soview2D_ellipse::print(vcl_ostream& s) const
+std::ostream& vgui_soview2D_ellipse::print(std::ostream& s) const
 {
   s << "[ vgui_soview2D_ellipse " << x << ',' << y
     << " w" << w << " h" << h << " phi" << phi << ' ';
@@ -322,8 +323,8 @@ void vgui_soview2D_ellipse::draw() const
   for (unsigned int i=0;i<100;i++)
   {
     double angle = vnl_math::twopi*0.01*i;
-    px = w*vcl_cos(this->phi)*vcl_cos(angle) + h*vcl_sin(this->phi)*vcl_sin(angle);
-    py = h*vcl_cos(this->phi)*vcl_sin(angle) - w*vcl_sin(this->phi)*vcl_cos(angle);
+    px = w*std::cos(this->phi)*std::cos(angle) + h*std::sin(this->phi)*std::sin(angle);
+    py = h*std::cos(this->phi)*std::sin(angle) - w*std::sin(this->phi)*std::cos(angle);
     glVertex2d(x+px, y+py);
   }
   glEnd();
@@ -376,7 +377,7 @@ void vgui_soview2D_linestrip::draw() const
   glEnd();
 }
 
-vcl_ostream& vgui_soview2D_linestrip::print(vcl_ostream&s) const { return s << "[ a linestrip. FIXME ]"; }
+std::ostream& vgui_soview2D_linestrip::print(std::ostream&s) const { return s << "[ a linestrip. FIXME ]"; }
 
 float vgui_soview2D_linestrip::distance_squared(float vx, float vy) const
 {
@@ -459,7 +460,7 @@ void vgui_soview2D_polygon::draw() const
   }
 }
 
-vcl_ostream& vgui_soview2D_polygon::print(vcl_ostream&s) const { return s << "[ a polygon. FIXME ]"; }
+std::ostream& vgui_soview2D_polygon::print(std::ostream&s) const { return s << "[ a polygon. FIXME ]"; }
 
 float vgui_soview2D_polygon::distance_squared(float vx, float vy) const
 {
@@ -569,7 +570,7 @@ void vgui_soview2D_image::draw() const
     glDisable( GL_BLEND );
 }
 
-vcl_ostream& vgui_soview2D_image::print(vcl_ostream&s) const
+std::ostream& vgui_soview2D_image::print(std::ostream&s) const
 {
   return s << "[ vgui_soview2D_image "<<w_<<'x'<<h_<<", blend="<<blend_<<" ]";
 }

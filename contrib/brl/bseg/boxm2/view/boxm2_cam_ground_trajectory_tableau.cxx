@@ -49,7 +49,7 @@ bool boxm2_cam_ground_trajectory_tableau::handle(vgui_event const &e)
   if (e.type == vgui_KEY_PRESS)
   {
     if (e.key == vgui_key('r')) {
-        vcl_cout<<"resetting to initial camera view"<<vcl_endl;
+        std::cout<<"resetting to initial camera view"<<std::endl;
         stare_point_ = default_stare_point_;//vgl_homg_point_3d<double>(0,0,0);
         cam_ = default_cam_;
         this->post_redraw();

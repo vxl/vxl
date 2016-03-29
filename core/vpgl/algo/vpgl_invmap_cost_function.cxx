@@ -1,8 +1,9 @@
+#include <cmath>
+#include <iostream>
 #include "vpgl_invmap_cost_function.h"
 //:
 // \file
-#include <vcl_cmath.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
 #include <vcl_deprecated.h>
 
 vpgl_invmap_cost_function::
@@ -14,8 +15,8 @@ vpgl_invmap_cost_function(vnl_vector_fixed<double, 2> const& image_point,
 {
   //determine which parameterization of the plane to use
   // order the plane normals
-  double anx = vcl_fabs(plane_[0]), any = vcl_fabs(plane_[1]),
-    anz = vcl_fabs(plane_[2]);
+  double anx = std::fabs(plane_[0]), any = std::fabs(plane_[1]),
+    anz = std::fabs(plane_[2]);
   if (anx<any && anz<any)
     { pp_ = X_Z; return;}
   if (any<anx && anz<anx)
@@ -68,7 +69,7 @@ set_params(vnl_vector_fixed<double,3> const& xyz, vnl_vector_fixed<double,2> &x)
     default:
     {
       x[0] = 0; x[1] = 0;
-      vcl_cerr << "Improper prameterization in vpgl_invmap_cost_function\n";
+      std::cerr << "Improper prameterization in vpgl_invmap_cost_function\n";
     }
   }
 }
@@ -100,7 +101,7 @@ set_params(vnl_vector_fixed<double, 3> const& xyz, vnl_vector<double> &x)
     default:
     {
       x[0] = 0; x[1] = 0;
-      vcl_cerr << "Improper prameterization in vpgl_invmap_cost_function\n";
+      std::cerr << "Improper prameterization in vpgl_invmap_cost_function\n";
     }
   }
 }
@@ -135,7 +136,7 @@ point_3d(vnl_vector_fixed<double,2> const& x, vnl_vector_fixed<double,3>& xyz)
     default:
     {
       xyz[0] = 0; xyz[1] = 0; xyz[2] = 0;
-      vcl_cerr << "Improper prameterization in vpgl_invmap_cost_function\n";
+      std::cerr << "Improper prameterization in vpgl_invmap_cost_function\n";
     }
   }
 }
@@ -171,7 +172,7 @@ point_3d(vnl_vector<double> const& x, vnl_vector_fixed<double, 3>& xyz)
     default:
     {
       xyz[0] = 0; xyz[1] = 0; xyz[2] = 0;
-      vcl_cerr << "Improper prameterization in vpgl_invmap_cost_function\n";
+      std::cerr << "Improper prameterization in vpgl_invmap_cost_function\n";
     }
   }
 }

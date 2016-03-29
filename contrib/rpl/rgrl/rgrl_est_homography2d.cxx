@@ -25,13 +25,13 @@ estimate( rgrl_set_of<rgrl_match_set_sptr> const& matches,
   // such that the new center is the origin, and the average
   // distance from the origin is sqrt(2).
   //
-  vcl_vector< vnl_vector<double> > norm_from_pts, norm_to_pts;
-  vcl_vector< double > wgts;
+  std::vector< vnl_vector<double> > norm_from_pts, norm_to_pts;
+  std::vector< double > wgts;
   double from_scale, to_scale;
   vnl_vector<double> from_center(2), to_center(2);
   if ( !normalize( matches, norm_from_pts, norm_to_pts, wgts, from_scale, to_scale,
                    from_center, to_center ) )
-    return 0;
+    return VXL_NULLPTR;
 
   vnl_matrix< double > A( 2*norm_from_pts.size(), 9, 0.0 );
   for ( unsigned int i=0; i<norm_from_pts.size(); ++i ) {
@@ -49,7 +49,7 @@ estimate( rgrl_set_of<rgrl_match_set_sptr> const& matches,
 
   if ( svd.rank() < 8 ) {
     DebugMacro(1, "rank ("<<svd.rank()<<")  no solution." );
-    return 0; // no solution
+    return VXL_NULLPTR; // no solution
   }
   else {
     vnl_vector< double > nparams = svd.nullvector();
@@ -60,8 +60,8 @@ estimate( rgrl_set_of<rgrl_match_set_sptr> const& matches,
 
     // check rank of H
     vnl_double_3x3 tmpH(normH);
-    if ( vcl_abs(vnl_det(tmpH)) < 1e-8 )
-      return 0;
+    if ( std::abs(vnl_det(tmpH)) < 1e-8 )
+      return VXL_NULLPTR;
 
     vnl_matrix<double> to_scale_matrix_inv(3,3,vnl_matrix_identity);
     vnl_matrix<double> from_scale_matrix(3,3,vnl_matrix_identity);
@@ -92,7 +92,7 @@ estimate( rgrl_match_set_sptr matches,
   return rgrl_estimator::estimate( matches, cur_transform );
 }
 
-const vcl_type_info&
+const std::type_info&
 rgrl_est_homography2d::
 transformation_type() const
 {
@@ -102,9 +102,9 @@ transformation_type() const
 bool
 rgrl_est_homography2d::
 normalize( rgrl_set_of<rgrl_match_set_sptr> const& matches,
-           vcl_vector< vnl_vector<double> >& norm_froms,
-           vcl_vector< vnl_vector<double> >& norm_tos,
-           vcl_vector< double >& wgts,
+           std::vector< vnl_vector<double> >& norm_froms,
+           std::vector< vnl_vector<double> >& norm_tos,
+           std::vector< double >& wgts,
            double& from_scale,
            double& to_scale,
            vnl_vector< double > & from_center,
@@ -160,11 +160,11 @@ normalize( rgrl_set_of<rgrl_match_set_sptr> const& matches,
         double const wgt = ti.cumulative_weight();
         from_pt = fi.from_feature()->location();
         from_avg_distance +=
-          wgt * vcl_sqrt( vnl_math::sqr( from_pt[0] - from_center[0] ) +
+          wgt * std::sqrt( vnl_math::sqr( from_pt[0] - from_center[0] ) +
                           vnl_math::sqr( from_pt[1] - from_center[1] ) );
         to_pt = ti.to_feature()->location();
         to_avg_distance +=
-          wgt * vcl_sqrt( vnl_math::sqr( to_pt[0] - to_center[0] ) +
+          wgt * std::sqrt( vnl_math::sqr( to_pt[0] - to_center[0] ) +
                           vnl_math::sqr( to_pt[1] - to_center[1] ) );
       }
     }
@@ -213,9 +213,9 @@ normalize( rgrl_set_of<rgrl_match_set_sptr> const& matches,
 
 void
 rgrl_est_homography2d::
-estimate_covariance( const vcl_vector< vnl_vector<double> >& norm_froms,
-                     const vcl_vector< vnl_vector<double> >& norm_tos,
-                     const vcl_vector< double >& wgts,
+estimate_covariance( const std::vector< vnl_vector<double> >& norm_froms,
+                     const std::vector< vnl_vector<double> >& norm_tos,
+                     const std::vector< double >& wgts,
                      double from_scale, // FIXME: unused
                      double to_scale,   // FIXME: unused
                      vnl_matrix<double>& covar ) const

@@ -1,12 +1,14 @@
-#include <vcl_iostream.h>
-#include <vcl_iomanip.h>
-#include <vcl_sstream.h>
-#include <vcl_string.h>
-#include <vcl_algorithm.h>
+#include <iostream>
+#include <iomanip>
+#include <sstream>
+#include <string>
+#include <algorithm>
+#include <vector>
+#include <cmath>
+#include <vcl_compiler.h>
 #include <vul/vul_file.h>
 #include <vul/vul_file_iterator.h>
 #include <vul/vul_arg.h>
-#include <vcl_vector.h>
 #include <vil/vil_load.h>
 #include <vil/vil_save.h>
 #include <vil/vil_image_view.h>
@@ -14,7 +16,6 @@
 #include <vil/vil_convert.h>
 #include <vsol/vsol_box_2d.h>
 #include <vgl/vgl_polygon_scan_iterator.h>
-#include <vcl_cmath.h>
 #ifdef BWM_HAS_PROJECT_MESHES
   #include <bwm/bwm_observer_cam.h>
 #endif
@@ -30,31 +31,31 @@ float avg_intensity(vil_image_view<float> & img, int rx, int ry, int u, int v)
     return avgintensity/(2*rx+1.0f)/(2*ry+1.0f);
 }
 
-bool compute_correspondences(vcl_vector<vcl_string> img_files,
-                             vcl_vector<vcl_string> cam_files,
-                             vcl_vector<vcl_string> obj_files,
-                             vcl_vector<vcl_vector<bool> > & mask,
-                             vcl_vector<float> & corr_int)
+bool compute_correspondences(std::vector<std::string> img_files,
+                             std::vector<std::string> cam_files,
+                             std::vector<std::string> obj_files,
+                             std::vector<std::vector<bool> > & mask,
+                             std::vector<float> & corr_int)
 {
     for (unsigned i=0; i<img_files.size(); ++i)
     {
         vil_image_view_base_sptr img_ptr=vil_load(img_files[i].c_str());
-        vcl_vector<bool>  mask_j(obj_files.size(),false);
+        std::vector<bool>  mask_j(obj_files.size(),false);
         if (vil_image_view<unsigned short> *img_byte = dynamic_cast<vil_image_view<unsigned short>*>(img_ptr.ptr()))
         {
             vil_image_view<float>* floatimg = new vil_image_view<float>(img_byte->ni(), img_byte->nj(), 1);
             vil_convert_stretch_range_limited<unsigned short>(*img_byte, *floatimg, (unsigned short)29000, (unsigned short) 34000, 0.0f, 1.0f);
 
-            vcl_ifstream ifs(cam_files[i].c_str());
+            std::ifstream ifs(cam_files[i].c_str());
             if (!ifs.is_open()) {
-                vcl_cerr << "Failed to open file " << cam_files[i] << '\n';
+                std::cerr << "Failed to open file " << cam_files[i] << '\n';
                 return false;
             }
 
             vpgl_perspective_camera<double>* cam = new vpgl_perspective_camera<double>();
             ifs >> *cam;
             ifs.close();
-            vcl_vector<vgl_polygon<double> > poly_2d_list;
+            std::vector<vgl_polygon<double> > poly_2d_list;
 #ifdef BWM_HAS_PROJECT_MESHES
             bwm_project_meshes(obj_files, cam, poly_2d_list);
 #endif
@@ -91,49 +92,49 @@ bool compute_correspondences(vcl_vector<vcl_string> img_files,
 int main(int argc, char** argv)
 {
     //Input arguments
-    vul_arg<vcl_string> camdir   ("-camdir", "Camera Directory", "");
-    vul_arg<vcl_string> imgdir   ("-imgdir", "Image Directory", "");
-    vul_arg<vcl_string> objdir   ("-objdir", "Mesh Directory", "");
-    vul_arg<vcl_string> outdir   ("-outdir", "Output Directory", "");
+    vul_arg<std::string> camdir   ("-camdir", "Camera Directory", "");
+    vul_arg<std::string> imgdir   ("-imgdir", "Image Directory", "");
+    vul_arg<std::string> objdir   ("-objdir", "Mesh Directory", "");
+    vul_arg<std::string> outdir   ("-outdir", "Output Directory", "");
     vul_arg_parse(argc, argv);
 
-    vcl_string frame_glob=vul_file::dirname(imgdir())+"/*.???";
-    vcl_string cam_glob=vul_file::dirname(camdir())+"/*.???";
-    vcl_string obj_glob=vul_file::dirname(objdir())+"/*.???";
+    std::string frame_glob=vul_file::dirname(imgdir())+"/*.???";
+    std::string cam_glob=vul_file::dirname(camdir())+"/*.???";
+    std::string obj_glob=vul_file::dirname(objdir())+"/*.???";
 
     vul_file_iterator img_file_it(frame_glob.c_str());
     vul_file_iterator cam_file_it(cam_glob.c_str());
     vul_file_iterator obj_file_it(obj_glob.c_str());
 
-    vcl_vector<vcl_string> img_files;
-    vcl_vector<vcl_string> cam_files;
+    std::vector<std::string> img_files;
+    std::vector<std::string> cam_files;
     while (img_file_it && cam_file_it) {
-        vcl_string imgname(img_file_it());
-        vcl_string camname(cam_file_it());
+        std::string imgname(img_file_it());
+        std::string camname(cam_file_it());
         img_files.push_back(imgname);
         cam_files.push_back(camname);
         ++img_file_it;
         ++cam_file_it;
     }
-    vcl_sort(img_files.begin(), img_files.end());
-    vcl_sort(cam_files.begin(), cam_files.end());
-    vcl_vector<vcl_string> obj_files;
+    std::sort(img_files.begin(), img_files.end());
+    std::sort(cam_files.begin(), cam_files.end());
+    std::vector<std::string> obj_files;
     while (obj_file_it) {
-        vcl_string objname(obj_file_it());
+        std::string objname(obj_file_it());
         obj_files.push_back(objname);
         ++obj_file_it;
     }
 
-    vcl_vector<vcl_vector<bool> > mask;
-    vcl_vector<float> corr_int;
+    std::vector<std::vector<bool> > mask;
+    std::vector<float> corr_int;
 
     // project polygons in the images and record corresponding intensities.
     if (!compute_correspondences(img_files,cam_files,obj_files,mask,corr_int))
         return -1;
 
-    vcl_vector<float> mean_ref_intensity(obj_files.size(),0.0);
-    vcl_vector<float> stdev_ref_intensity(obj_files.size(),0.0);
-    vcl_vector<float> mean_ref_count(obj_files.size(),0.0);
+    std::vector<float> mean_ref_intensity(obj_files.size(),0.0);
+    std::vector<float> stdev_ref_intensity(obj_files.size(),0.0);
+    std::vector<float> mean_ref_count(obj_files.size(),0.0);
     int pointindex=0;
     for (unsigned i=0;i<mask.size();++i)
     {
@@ -151,14 +152,14 @@ int main(int argc, char** argv)
     for (unsigned j=0;j<mean_ref_intensity.size();++j)
     {
         mean_ref_intensity[j]/=mean_ref_count[j];
-        stdev_ref_intensity[j]=vcl_sqrt((stdev_ref_intensity[j]/mean_ref_count[j]-mean_ref_intensity[j]*mean_ref_intensity[j]));
-        vcl_cout<<"Mean "<<mean_ref_intensity[j]<<" Std "<<stdev_ref_intensity[j]<<vcl_endl;
+        stdev_ref_intensity[j]=std::sqrt((stdev_ref_intensity[j]/mean_ref_count[j]-mean_ref_intensity[j]*mean_ref_intensity[j]));
+        std::cout<<"Mean "<<mean_ref_intensity[j]<<" Std "<<stdev_ref_intensity[j]<<std::endl;
     }
     pointindex=0;
     for (unsigned i=0;i<img_files.size();++i)
     {
         vil_image_view_base_sptr img_ptr=vil_load(img_files[i].c_str());
-        vcl_string imgname=outdir()+"/"+vul_file::basename(img_files[i]);
+        std::string imgname=outdir()+"/"+vul_file::basename(img_files[i]);
         if (vil_image_view<unsigned short> *img_byte = dynamic_cast<vil_image_view<unsigned short>*>(img_ptr.ptr()))
         {
             vil_image_view<float>* floatimg = new vil_image_view<float>(img_byte->ni(), img_byte->nj(), 1);
@@ -185,14 +186,14 @@ int main(int argc, char** argv)
             {
                 float a=(summuixi-summui*sumxi/count)/(sumxi2-sumxi*sumxi/count);
                 float b =(summui-a*sumxi)/count;
-                vcl_cout<<"# of correspondences are "<<count<<"a(gain) "<<a<< " b(offset) "<<b<<vcl_endl;
+                std::cout<<"# of correspondences are "<<count<<"a(gain) "<<a<< " b(offset) "<<b<<std::endl;
                 vil_math_scale_and_offset_values<float>(*floatimg,a,b);
                 vil_convert_stretch_range_limited<float>(*floatimg, *img_byte, 0.0f, 1.0f, (unsigned short)0, (unsigned short)(256*256-1));
                 vil_save(*img_byte,imgname.c_str());
-                vcl_cout<<" ======="<<vcl_endl;
+                std::cout<<" ======="<<std::endl;
             }
             else
-                vcl_cout<<" Only "<<count << " correspondences"<<vcl_endl;
+                std::cout<<" Only "<<count << " correspondences"<<std::endl;
         }
     }
 

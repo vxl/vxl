@@ -35,8 +35,8 @@ class mbl_select_n_from_m
   bool is_done_;
   bool use_random_;
 
-  vcl_vector<int> index_;
-  vcl_vector<int> not_index_;
+  std::vector<int> index_;
+  std::vector<int> not_index_;
 
   mbl_random_n_from_m random_;
 
@@ -69,11 +69,11 @@ class mbl_select_n_from_m
 
   //: Current subset of n from m.
   //  is_done() should not be true when this function is being called
-  const vcl_vector<int>& subset() const;
+  const std::vector<int>& subset() const;
 
   //: Sub-set not chosen (m-n) from m.
   //  is_done() should not be true when this function is being called
-  const vcl_vector<int>& complement();
+  const std::vector<int>& complement();
 };
 
 #endif // mbl_select_n_from_m_h_

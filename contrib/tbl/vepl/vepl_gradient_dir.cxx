@@ -1,6 +1,7 @@
 // This is tbl/vepl/vepl_gradient_dir.cxx
+#include <iostream>
 #include "vepl_gradient_dir.h"
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
 #include <vepl/accessors/vipl_accessors_vil_image_view_base.h>
 #include <vipl/vipl_gradient_dir.h>
 #include <vil/vil_image_view.h>
@@ -27,7 +28,7 @@ vil_image_resource_sptr vepl_gradient_dir(vil_image_resource_sptr image, double 
       img_out->put_view(out);
     }
     else
-      vcl_cerr << __FILE__ ": vepl_dilate_disk() not implemented for multi-planar " << image << '\n';
+      std::cerr << __FILE__ ": vepl_dilate_disk() not implemented for multi-planar " << image << '\n';
   }
 
   // byte greyscale
@@ -87,7 +88,7 @@ vil_image_resource_sptr vepl_gradient_dir(vil_image_resource_sptr image, double 
 
   //
   else
-    vcl_cerr << __FILE__ ": vepl_gradient_dir() not implemented for " << image << '\n';
+    std::cerr << __FILE__ ": vepl_gradient_dir() not implemented for " << image << '\n';
 
   return img_out;
 }

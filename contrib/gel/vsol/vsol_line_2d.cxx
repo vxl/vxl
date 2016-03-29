@@ -1,10 +1,11 @@
 // This is gel/vsol/vsol_line_2d.cxx
+#include <iostream>
+#include <cmath>
 #include "vsol_line_2d.h"
 //:
 // \file
 #include <vcl_cassert.h>
-#include <vcl_cmath.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
 #include <vnl/vnl_math.h>
 #include <vbl/io/vbl_io_smart_ptr.h>
 #include <vsol/vsol_point_2d.h>
@@ -161,7 +162,7 @@ double vsol_line_2d::tangent_angle() const
   else if (dy == dx) ang = dy<0 ? 225.0 : 45.0;
   else if (dy+dx==0) ang = dy<0 ? 315.0 :135.0;
   // the general case:
-  else               ang = deg_per_rad * vcl_atan2(dy,dx);
+  else               ang = deg_per_rad * std::atan2(dy,dx);
   if (ang<0) ang+= 360.0;
   return ang;
 }
@@ -295,7 +296,7 @@ void vsol_line_2d::b_read(vsl_b_istream &is)
     vsl_b_read(is, p1_);
     break;
    default:
-    vcl_cerr << "vsol_line_2d: unknown I/O version " << ver << '\n';
+    std::cerr << "vsol_line_2d: unknown I/O version " << ver << '\n';
   }
 }
 //: Return IO version number;
@@ -305,7 +306,7 @@ short vsol_line_2d::version() const
 }
 
 //: Print an ascii summary to the stream
-void vsol_line_2d::print_summary(vcl_ostream &os) const
+void vsol_line_2d::print_summary(std::ostream &os) const
 {
   os << *this;
 }
@@ -314,7 +315,7 @@ void vsol_line_2d::print_summary(vcl_ostream &os) const
 void
 vsl_b_write(vsl_b_ostream &os, const vsol_line_2d* p)
 {
-  if (p==0) {
+  if (p==VXL_NULLPTR) {
     vsl_b_write(os, false); // Indicate null pointer stored
   }
   else{
@@ -336,11 +337,11 @@ vsl_b_read(vsl_b_istream &is, vsol_line_2d* &p)
     p->b_read(is);
   }
   else
-    p = 0;
+    p = VXL_NULLPTR;
 }
 
-void vsol_line_2d::describe(vcl_ostream &strm, int blanking) const
+void vsol_line_2d::describe(std::ostream &strm, int blanking) const
 {
   if (blanking < 0) blanking = 0; while (blanking--) strm << ' ';
-  strm << '[' << *(p0()) << ' ' << *(p1()) << ']' << vcl_endl;
+  strm << '[' << *(p0()) << ' ' << *(p1()) << ']' << std::endl;
 }

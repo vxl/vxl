@@ -7,7 +7,7 @@ doxygen_add_library(core/vil
 )
 
 # avoid undefined macro in subsequent SETs:
-set( vil_sources vil_config.h.in )
+set( vil_sources)
 
 include(${VXL_CMAKE_DIR}/FindPNG.cmake)
 if(PNG_FOUND)
@@ -132,8 +132,8 @@ endif()
 
 
 # Store the external library configurations in to the config file
-configure_file( ${vxl_SOURCE_DIR}/core/vil/vil_config.h.in
-                ${vxl_BINARY_DIR}/core/vil/vil_config.h @ONLY IMMEDIATE )
+vxl_configure_file( ${CMAKE_SOURCE_DIR}/core/vil/vil_config.h.in
+                ${CMAKE_BINARY_DIR}/core/vil/vil_config.h include/vxl/core/vil)
 
 set( vil_sources ${vil_sources}
 
@@ -141,7 +141,7 @@ set( vil_sources ${vil_sources}
   vil_memory_chunk.cxx                  vil_memory_chunk.h
   vil_image_view_base.h
   vil_chord.h
-  vil_image_view.h                      vil_image_view.txx
+  vil_image_view.h                      vil_image_view.hxx
   vil_image_resource.cxx                vil_image_resource.h
                                         vil_image_resource_sptr.h
   vil_blocked_image_resource.cxx        vil_blocked_image_resource.h
@@ -153,7 +153,7 @@ set( vil_sources ${vil_sources}
   vil_cached_image_resource.cxx         vil_cached_image_resource.h
   vil_pyramid_image_resource.cxx        vil_pyramid_image_resource.h
                                         vil_pyramid_image_resource_sptr.h
-  vil_pyramid_image_view.txx            vil_pyramid_image_view.h
+  vil_pyramid_image_view.hxx            vil_pyramid_image_view.h
   vil_image_list.cxx                    vil_image_list.h
   # file format readers/writers (see above for conditional ones)
 
@@ -222,7 +222,7 @@ set( vil_sources ${vil_sources}
   vil_decimate.cxx                      vil_decimate.h
   vil_load.cxx                          vil_load.h
   vil_save.cxx                          vil_save.h
-  vil_copy.txx       vil_copy.cxx       vil_copy.h
+  vil_copy.hxx       vil_copy.cxx       vil_copy.h
   vil_new.cxx                           vil_new.h
   vil_print.cxx                         vil_print.h
   vil_warp.h
@@ -230,29 +230,29 @@ set( vil_sources ${vil_sources}
 
   # Bilinear Sampling Operations
   vil_bilin_interp.h
-  vil_sample_profile_bilin.txx          vil_sample_profile_bilin.h
-  vil_sample_grid_bilin.txx             vil_sample_grid_bilin.h
-  vil_resample_bilin.txx                vil_resample_bilin.h
-  vil_rotate.txx                        vil_rotate.h
+  vil_sample_profile_bilin.hxx          vil_sample_profile_bilin.h
+  vil_sample_grid_bilin.hxx             vil_sample_grid_bilin.h
+  vil_resample_bilin.hxx                vil_resample_bilin.h
+  vil_rotate.hxx                        vil_rotate.h
 
   # Bicubic Sampling Operations
-  vil_bicub_interp.txx                  vil_bicub_interp.h
-  vil_sample_profile_bicub.txx          vil_sample_profile_bicub.h
-  vil_sample_grid_bicub.txx             vil_sample_grid_bicub.h
-  vil_resample_bicub.txx                vil_resample_bicub.h
+  vil_bicub_interp.hxx                  vil_bicub_interp.h
+  vil_sample_profile_bicub.hxx          vil_sample_profile_bicub.h
+  vil_sample_grid_bicub.hxx             vil_sample_grid_bicub.h
+  vil_resample_bicub.hxx                vil_resample_bicub.h
 
   # Nearest Neighbour Sampling Operations
   vil_nearest_interp.h
-  vil_resample_nearest.txx              vil_resample_nearest.h
+  vil_resample_nearest.hxx              vil_resample_nearest.h
 
   # Stuff
   vil_border.h
-  vil_smart_ptr.txx                     vil_smart_ptr.h
+  vil_smart_ptr.hxx                     vil_smart_ptr.h
   vil_property.h
   vil_pixel_format.cxx                  vil_pixel_format.h
   vil_exception.h
-  vil_rgb.txx                           vil_rgb.h
-  vil_rgba.txx                          vil_rgba.h
+  vil_rgb.hxx                           vil_rgb.h
+  vil_rgba.hxx                          vil_rgba.h
   vil_color_table.h                        vil_color_table.cxx
   vil_fwd.h
   vil_round.h
@@ -303,10 +303,10 @@ set( vil_network_sources
 )
 
 if(NOT SOLARIS)
-  vxl_add_library(LIBNAME ${VXL_LIB_PREFIX}vil LIBSRCS ${vil_sources} ${vil_network_sources})
+  vxl_add_library(LIBRARY_NAME ${VXL_LIB_PREFIX}vil LIBRARY_SOURCES ${vil_sources} ${vil_network_sources})
 else()
-  vxl_add_library(LIBNAME ${VXL_LIB_PREFIX}vil LIBSRCS ${vil_sources})
-  vxl_add_library(LIBNAME ${VXL_LIB_PREFIX}vil_network LIBSRCS ${vil_network_sources})
+  vxl_add_library(LIBRARY_NAME ${VXL_LIB_PREFIX}vil LIBRARY_SOURCES ${vil_sources})
+  vxl_add_library(LIBRARY_NAME ${VXL_LIB_PREFIX}vil_network LIBRARY_SOURCES ${vil_network_sources})
 endif()
 
 if(JPEG_FOUND)

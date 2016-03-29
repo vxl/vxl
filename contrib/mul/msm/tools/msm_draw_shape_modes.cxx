@@ -3,14 +3,16 @@
 // \brief Tool to write eps files showing modes of model
 // \author Tim Cootes
 
+#include <sstream>
+#include <fstream>
+#include <string>
+#include <iostream>
+#include <algorithm>
 #include <mbl/mbl_read_props.h>
 #include <mbl/mbl_exception.h>
 #include <vul/vul_arg.h>
 #include <vul/vul_string.h>
-#include <vcl_sstream.h>
-#include <vcl_fstream.h>
-#include <vcl_string.h>
-#include <vcl_algorithm.h>
+#include <vcl_compiler.h>
 #include <vsl/vsl_quick_file.h>
 
 #include <msm/msm_shape_model.h>
@@ -79,9 +81,9 @@ output_dir: ./
 
 void print_usage()
 {
-  vcl_cout << "msm_draw_shape_modes -p param_file\n"
+  std::cout << "msm_draw_shape_modes -p param_file\n"
            << "Tool to write eps files showing modes of model.\n"
-           << vcl_endl;
+           << std::endl;
 
   vul_arg_display_usage_and_exit();
 }
@@ -90,8 +92,8 @@ void print_usage()
 struct tool_params
 {
   //: Path to shape model
-  vcl_string shape_model_path;
-  vcl_string curves_path;
+  std::string shape_model_path;
+  std::string curves_path;
 
   //: Maximum number of shape modes
   unsigned max_modes;
@@ -112,25 +114,25 @@ struct tool_params
   double width;
 
   //: Optional path to text file containing a mode matrix
-  vcl_string subspace_mode_path;
+  std::string subspace_mode_path;
 
   //: Optional path to text files containing a variance vector
-  vcl_string subspace_var_path;
+  std::string subspace_var_path;
 
   //: Base name for output
-  vcl_string base_name;
+  std::string base_name;
 
   //: Directory to save eps files
-  vcl_string output_dir;
+  std::string output_dir;
 
   //: Line colour
-  vcl_string line_colour;
+  std::string line_colour;
 
   //: Point colour
-  vcl_string point_colour;
+  std::string point_colour;
 
   //: Colour of background (or "none" for transparent)
-  vcl_string background_colour;
+  std::string background_colour;
 
 
   //: Radius of points to display (if <0, then don't draw points)
@@ -141,17 +143,17 @@ struct tool_params
 
   //: Parse named text file to read in data
   //  Throws a mbl_exception_parse_error if fails
-  void read_from_file(const vcl_string& path);
+  void read_from_file(const std::string& path);
 };
 
 //: Parse named text file to read in data
 //  Throws a mbl_exception_parse_error if fails
-void tool_params::read_from_file(const vcl_string& path)
+void tool_params::read_from_file(const std::string& path)
 {
-  vcl_ifstream ifs(path.c_str());
+  std::ifstream ifs(path.c_str());
   if (!ifs)
   {
-    vcl_string error_msg = "Failed to open file: "+path;
+    std::string error_msg = "Failed to open file: "+path;
     throw (mbl_exception_parse_error(error_msg));
   }
 
@@ -194,7 +196,7 @@ void draw_mode(msm_shape_mode_view& mode_view,
   unsigned m = mode_view.mode();
   vgl_box_2d<int> win_box = mode_view.display_window();
 
-  vcl_stringstream ss;
+  std::stringstream ss;
   ss<<params.output_dir<<'/'<<params.base_name<<"_s"<<m<<".eps";
   mbl_eps_writer writer(ss.str().c_str(),
                         win_box.width(),win_box.height());
@@ -217,16 +219,16 @@ void draw_mode(msm_shape_mode_view& mode_view,
     if (params.overlap_shapes)
     {
       // Use dashes for one side of mean, dots for the other
-      if (i<n_shapes/2) writer.ofs()<<"[3 2] 0 setdash"<<vcl_endl;  // Dashes
+      if (i<n_shapes/2) writer.ofs()<<"[3 2] 0 setdash"<<std::endl;  // Dashes
       else
-      if (i==n_shapes/2) writer.ofs()<<"[1 0] 0 setdash"<<vcl_endl;  // Solid
+      if (i==n_shapes/2) writer.ofs()<<"[1 0] 0 setdash"<<std::endl;  // Solid
       else
-        writer.ofs()<<"[1 2] 0 setdash"<<vcl_endl;  // Dots
+        writer.ofs()<<"[1 2] 0 setdash"<<std::endl;  // Dots
     }
     msm_draw_shape_to_eps(writer,mode_view.points()[i],curves);
   }
   writer.close();
-  vcl_cout<<"Saved to "<<ss.str()<<vcl_endl;
+  std::cout<<"Saved to "<<ss.str()<<std::endl;
 }
 
 //: Write a set of eps files defining a movie of the mode.
@@ -245,7 +247,7 @@ void draw_mode_frames(msm_shape_mode_view& mode_view,
     unsigned f=i;
     if (i>=n_shapes) f=2*n_shapes-2-i;
 
-    vcl_stringstream ss;
+    std::stringstream ss;
     ss<<params.output_dir<<'/'<<params.base_name<<"_s"<<m<<'_';
     if (i<10) ss<<'0';
     ss<<i<<".eps";
@@ -268,8 +270,8 @@ void draw_mode_frames(msm_shape_mode_view& mode_view,
 
     writer.close();
   }
-  vcl_cout<<"Saved "<<2*n_shapes-2<<" frames to "
-          <<params.base_name<<"_s"<<m<<"_XX.eps"<<vcl_endl;
+  std::cout<<"Saved "<<2*n_shapes-2<<" frames to "
+          <<params.base_name<<"_s"<<m<<"_XX.eps"<<std::endl;
 }
 
 //: Create new model where modes are a subspace of the original model
@@ -278,54 +280,54 @@ void draw_mode_frames(msm_shape_mode_view& mode_view,
 //  original.
 msm_shape_model create_subspace_model(
             const msm_shape_model& shape_model,
-            const vcl_string& mode_path,
-            const vcl_string& var_path)
+            const std::string& mode_path,
+            const std::string& var_path)
 {
   // Attempt to load in modes
   vnl_matrix<double> Q;
-  vcl_ifstream Qs(mode_path.c_str());
+  std::ifstream Qs(mode_path.c_str());
   if (!Qs)
   {
-    vcl_cout<<"Failed to open "<<mode_path<<vcl_endl;
-    vcl_abort();
+    std::cout<<"Failed to open "<<mode_path<<std::endl;
+    std::abort();
   }
 
   if (!Q.read_ascii(Qs))
   {
-    vcl_cerr<<"Failed to read matrix from "<<mode_path<<'\n';
-    vcl_abort();
+    std::cerr<<"Failed to read matrix from "<<mode_path<<'\n';
+    std::abort();
   }
   Qs.close();
 
   vnl_vector<double> new_var;
-  vcl_ifstream Vs(var_path.c_str());
+  std::ifstream Vs(var_path.c_str());
   if (!Vs)
   {
-    vcl_cout<<"Failed to open "<<var_path<<vcl_endl;
-    vcl_abort();
+    std::cout<<"Failed to open "<<var_path<<std::endl;
+    std::abort();
   }
   if (!new_var.read_ascii(Vs))
   {
-    vcl_cerr<<"Failed to read vector from "<<var_path<<'\n';
-    vcl_abort();
+    std::cerr<<"Failed to read vector from "<<var_path<<'\n';
+    std::abort();
   }
   Vs.close();
 
-vcl_cout<<"new_var: "<<new_var<<vcl_endl;
+std::cout<<"new_var: "<<new_var<<std::endl;
 
-  vcl_cerr<<"Number of subspace modes = "<<Q.columns()<<'\n';
+  std::cerr<<"Number of subspace modes = "<<Q.columns()<<'\n';
 
   if (Q.columns()!=new_var.size())
   {
-    vcl_cerr<<"Number of variances = "<<new_var.size()<<'\n'
+    std::cerr<<"Number of variances = "<<new_var.size()<<'\n'
             <<"Numbers differ."<<'\n';
-    vcl_abort();
+    std::abort();
   }
 
   if (Q.rows()>shape_model.n_modes())
   {
-    vcl_cerr<<"More rows in matrix than number of modes available."<<'\n';
-    vcl_abort();
+    std::cerr<<"More rows in matrix than number of modes available."<<'\n';
+    std::abort();
   }
 
   const vnl_matrix<double>& allP = shape_model.modes();
@@ -344,7 +346,7 @@ vcl_cout<<"new_var: "<<new_var<<vcl_endl;
 
 int main(int argc, char** argv)
 {
-  vul_arg<vcl_string> param_path("-p","Parameter filename");
+  vul_arg<std::string> param_path("-p","Parameter filename");
   vul_arg_parse(argc,argv);
 
   msm_add_all_loaders();
@@ -362,7 +364,7 @@ int main(int argc, char** argv)
   }
   catch (mbl_exception_parse_error& e)
   {
-    vcl_cerr<<"Error: "<<e.what()<<'\n';
+    std::cerr<<"Error: "<<e.what()<<'\n';
     return 1;
   }
 
@@ -370,17 +372,17 @@ int main(int argc, char** argv)
 
   if (!vsl_quick_file_load(shape_model,params.shape_model_path))
   {
-    vcl_cerr<<"Failed to load shape model from "
+    std::cerr<<"Failed to load shape model from "
             <<params.shape_model_path<<'\n';
     return 2;
   }
 
-  vcl_cout<<"Model: "<<shape_model<<vcl_endl;
-  vcl_cerr<<"First mode variances are ";
+  std::cout<<"Model: "<<shape_model<<std::endl;
+  std::cerr<<"First mode variances are ";
   for (unsigned i=0;i<8;++i)
     if (i<shape_model.n_modes())
-      vcl_cout<<shape_model.mode_var()[i]<<' ';
-  vcl_cout<<vcl_endl;
+      std::cout<<shape_model.mode_var()[i]<<' ';
+  std::cout<<std::endl;
 
   if (params.subspace_mode_path!="")
     shape_model = create_subspace_model(shape_model,
@@ -389,7 +391,7 @@ int main(int argc, char** argv)
 
   msm_curves curves;
   if (!curves.read_text_file(params.curves_path))
-    vcl_cerr<<"Failed to read in curves from "<<params.curves_path<<'\n';
+    std::cerr<<"Failed to read in curves from "<<params.curves_path<<'\n';
 
   msm_shape_mode_view mode_view;
   mode_view.set_shape_model(shape_model);
@@ -415,7 +417,7 @@ int main(int argc, char** argv)
   vgl_box_2d<int> win_box = mode_view.display_window();
 #endif // 0
 
-  unsigned n_modes = vcl_min(params.max_modes,shape_model.n_modes());
+  unsigned n_modes = std::min(params.max_modes,shape_model.n_modes());
 
   for (unsigned m=0;m<n_modes;++m)
   {

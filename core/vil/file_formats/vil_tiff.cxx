@@ -1,4 +1,8 @@
 //This is core/vil/file_formats/vil_tiff.cxx
+#include <cstring>
+#include <iostream>
+#include <algorithm>
+#include <sstream>
 #include "vil_tiff.h"
 //:
 // \file
@@ -14,10 +18,7 @@
 // \endverbatim
 
 #include <vcl_cassert.h>
-#include <vcl_cstring.h>
-#include <vcl_iostream.h>
-#include <vcl_algorithm.h>
-#include <vcl_sstream.h>
+#include <vcl_compiler.h>
 #include <vil/vil_stream.h>
 #include <vil/vil_property.h>
 #include <vil/vil_image_view.h>
@@ -72,7 +73,7 @@ bool vil_tiff_file_format_probe(vil_stream* is)
 
   else if ( ((hdr[0]==0x4D && hdr[1]==0x4D) || (hdr[1]==0x49 && hdr[1]==0x49)) &&
             ((hdr[2]==0x00 && hdr[3]==0x2A) || (hdr[2]==0x2A && hdr[3]==0x00)) )  {
-    vcl_cerr << __FILE__ ": suspicious TIFF header\n";
+    std::cerr << __FILE__ ": suspicious TIFF header\n";
     return true; // allow it.
   }
 
@@ -140,7 +141,7 @@ static toff_t vil_tiff_sizeproc(thandle_t)
 {
   // TODO
 #ifdef DEBUG
-  vcl_cerr << "Warning: vil_tiff_sizeproc() not yet implemented\n";
+  std::cerr << "Warning: vil_tiff_sizeproc() not yet implemented\n";
 #endif
   return (toff_t)(-1); // could be unsigned - avoid compiler warning
 }
@@ -149,7 +150,7 @@ static int vil_tiff_mapfileproc(thandle_t, tdata_t*, toff_t*)
 {
   // TODO: Add mmap support to vil_tiff_mapfileproc
 #ifdef DEBUG
-  vcl_cerr << "Warning: mmap support not yet in vil_tiff_mapfileproc()\n";
+  std::cerr << "Warning: mmap support not yet in vil_tiff_mapfileproc()\n";
 #endif
   return 0;
 }
@@ -224,7 +225,7 @@ vil_tiff_file_format::make_input_pyramid_image(char const* file)
     return VXL_NULLPTR;
   bool open_for_reading = true;
   if (trace) // find test failure
-    vcl_cerr << "make_input_pyramid_image::opening multi-image tiff pyramid resource\n";
+    std::cerr << "make_input_pyramid_image::opening multi-image tiff pyramid resource\n";
   tif_smart_ptr tif_sptr = new tif_ref_cnt(in);
   vil_pyramid_image_resource_sptr pyr =
     new vil_tiff_pyramid_resource(tif_sptr, open_for_reading);
@@ -234,17 +235,17 @@ vil_tiff_file_format::make_input_pyramid_image(char const* file)
     return pyr;
 }
 
-static vcl_string level_filename(vcl_string& directory, vcl_string& filename,
+static std::string level_filename(std::string& directory, std::string& filename,
                                  unsigned level)
 {
-  vcl_string slash;
+  std::string slash;
 
 #ifdef VCL_WIN32
   slash =  "\\";
 #else
   slash = "/";
 #endif
-  vcl_stringstream cs;
+  std::stringstream cs;
   cs << level;
   return directory + slash + filename + cs.str();
 }
@@ -260,13 +261,13 @@ make_pyramid_image_from_base(char const* file,
     pyr->put_resource(base_image);
     //Create the other pyramid levels
     {//scope for resource files
-      vcl_string d = temp_dir;
-      vcl_string fn = "tempR";
+      std::string d = temp_dir;
+      std::string fn = "tempR";
       vil_image_resource_sptr image = base_image;
       for (unsigned L = 1; L<nlevels; ++L)
       {
-        vcl_cout << "Decimating Level " << L << vcl_endl;
-        vcl_string full_filename = level_filename(d, fn, L) + ".tif";
+        std::cout << "Decimating Level " << L << std::endl;
+        std::string full_filename = level_filename(d, fn, L) + ".tif";
         image =
           vil_pyramid_image_resource::decimate(image, full_filename.c_str());
       }
@@ -275,8 +276,8 @@ make_pyramid_image_from_base(char const* file,
     //reopen them for reading
     {//scope for il resources
       vil_image_list il(temp_dir);
-      vcl_vector<vil_image_resource_sptr> rescs = il.resources();
-      for (vcl_vector<vil_image_resource_sptr>::iterator rit = rescs.begin();
+      std::vector<vil_image_resource_sptr> rescs = il.resources();
+      for (std::vector<vil_image_resource_sptr>::iterator rit = rescs.begin();
            rit != rescs.end(); ++rit)
         pyr->put_resource(*rit);
     }//close il resources
@@ -286,7 +287,7 @@ make_pyramid_image_from_base(char const* file,
   vil_image_list vl(temp_dir);
   if (!vl.clean_directory())
   {
-    vcl_cout <<"Warning: In vil_tiff::make_pyramid_from_base(..) -"
+    std::cout <<"Warning: In vil_tiff::make_pyramid_from_base(..) -"
              << " temporary directory not cleaned\n";
   }
   //reopen for reading
@@ -304,7 +305,7 @@ vil_tiff_file_format::make_blocked_output_image(vil_stream* vs,
 {
   if (size_block_i%16!=0||size_block_j%16!=0)
   {
-    vcl_cerr << "In vil_tiff_file_format - Block dimensions must be a multiple of 16\n";
+    std::cerr << "In vil_tiff_file_format - Block dimensions must be a multiple of 16\n";
     return VXL_NULLPTR;
   }
 
@@ -374,13 +375,13 @@ vil_tiff_image::vil_tiff_image(tif_smart_ptr const& tif_sptr,
 
 bool vil_tiff_image::get_property(char const * tag, void * value) const
 {
-  if (vcl_strcmp(vil_property_quantisation_depth, tag)==0)
+  if (std::strcmp(vil_property_quantisation_depth, tag)==0)
   {
     if (value)
       *static_cast<unsigned*>(value) = h_->bits_per_sample.val;
     return true;
   }
-  if (vcl_strcmp(vil_property_size_block_i, tag)==0)
+  if (std::strcmp(vil_property_size_block_i, tag)==0)
   {
     if (!h_->is_tiled())
       return false;
@@ -389,7 +390,7 @@ bool vil_tiff_image::get_property(char const * tag, void * value) const
     return true;
   }
 
-  if (vcl_strcmp(vil_property_size_block_j, tag)==0)
+  if (std::strcmp(vil_property_size_block_j, tag)==0)
   {
     if (!h_->is_tiled())
       return false;
@@ -434,15 +435,15 @@ char const* vil_tiff_image::file_format() const
 static void tif_swap16(vxl_byte *a, unsigned n)
 {
   for (unsigned i = 0; i < n * 2; i += 2)
-    vcl_swap( a[i+0], a[i+1] );
+    std::swap( a[i+0], a[i+1] );
 }
 
 static void tif_swap32(vxl_byte *a, unsigned n)
 {
   for (unsigned i = 0; i < n * 4; i += 4)
   {
-    vcl_swap( a[i+0], a[i+3] );
-    vcl_swap( a[i+1], a[i+2] );
+    std::swap( a[i+0], a[i+3] );
+    std::swap( a[i+1], a[i+2] );
   }
 }
 
@@ -500,18 +501,18 @@ tiff_maybe_byte_align_data(vil_memory_chunk_sptr in_data,
   {
     vil_memory_chunk_sptr new_memory = new vil_memory_chunk(bytes_per_block, in_data->pixel_format());
 #ifdef DEBUG
-    vcl_cout << "Debug tiff_byte_align_data:"
+    std::cout << "Debug tiff_byte_align_data:"
              << "  Num Samples = " << num_samples
              << "  Input Bits/Sample = " << in_bits_per_sample
              << "  Bytes/Block = " << bytes_per_block
              << "  Output Bytes/Sample = " << vil_pixel_format_sizeof_components(in_data->pixel_format())
-             << vcl_flush;
+             << std::flush;
 #endif
     T* out_ptr = reinterpret_cast<T*>(new_memory->data());
     T* in_ptr = reinterpret_cast<T*>(in_data->data());
     tiff_byte_align_data(in_ptr, num_samples, in_bits_per_sample, out_ptr );
 #ifdef DEBUG
-    vcl_cout << " .\n" << vcl_flush;
+    std::cout << " .\n" << std::flush;
 #endif
     return new_memory;
   }
@@ -622,7 +623,7 @@ void vil_tiff_image::copy_byte_block(vxl_byte* data, const vxl_uint_32 nbytes, v
   if (nbytes==0)
     return;
   vxl_byte* c_data = reinterpret_cast<vxl_byte*>(cnk->data());
-  vcl_memcpy(c_data, data, nbytes);
+  std::memcpy(c_data, data, nbytes);
 }
 
 //: map the input buffer into the view.
@@ -848,10 +849,10 @@ vil_image_view_base_sptr vil_tiff_image::fill_block_from_strip(vil_memory_chunk_
       //buffer.
       vxl_byte* out_line_buf_ptr =
         reinterpret_cast<vxl_byte*>(out_line_buf->data());
-      vcl_memcpy(block_ptr, out_line_buf_ptr, bytes_expanded_line);
+      std::memcpy(block_ptr, out_line_buf_ptr, bytes_expanded_line);
     }
     else
-      vcl_memcpy(block_ptr, zero_ptr, bytes_expanded_line);
+      std::memcpy(block_ptr, zero_ptr, bytes_expanded_line);
   }
 
   return this->view_from_buffer(fmt, block_buf, spl*tl,
@@ -912,7 +913,7 @@ void vil_tiff_image::fill_block_from_view(unsigned bi, unsigned bj,
   //Causes warnings. Leave here to document default values
   unsigned view_istep = 1, view_jstep = im.ni()*bytes_per_pixel, view_pstep = 1;
 #endif
-  vcl_ptrdiff_t view_istep, view_jstep, view_pstep;
+  std::ptrdiff_t view_istep, view_jstep, view_pstep;
   vxl_byte* view_buf;
   //Cast the pixel type and reinterpret upper_left_ptr as a byte array.
   switch (h_->pix_fmt)
@@ -944,21 +945,21 @@ void vil_tiff_image::fill_block_from_view(unsigned bi, unsigned bj,
   //initial index into block buffer
   unsigned bptr = joff*block_jstep;
   unsigned ibstart = ioff*bytes_per_pixel;
-  vcl_ptrdiff_t vistp = view_istep*bytes_per_sample;
-  vcl_ptrdiff_t vjstp = view_jstep*bytes_per_sample;
-  vcl_ptrdiff_t vpstp = view_pstep*bytes_per_sample;
+  std::ptrdiff_t vistp = view_istep*bytes_per_sample;
+  std::ptrdiff_t vjstp = view_jstep*bytes_per_sample;
+  std::ptrdiff_t vpstp = view_pstep*bytes_per_sample;
   //initial index into view buffer
   // note that it is necessary to add the offset to the start of the
   // current block within the view, (view_i0, view_j0)
-  vcl_ptrdiff_t vptr = (view_j0 + joff)*vjstp;
+  std::ptrdiff_t vptr = (view_j0 + joff)*vjstp;
   unsigned ivstart = (view_i0 + ioff)*bytes_per_pixel;
   for (unsigned j = joff; j<jclip; ++j)
   {
-    vcl_ptrdiff_t vrow_ptr = ivstart;
-    vcl_ptrdiff_t brow_ptr = ibstart;
+    std::ptrdiff_t vrow_ptr = ivstart;
+    std::ptrdiff_t brow_ptr = ibstart;
     for (unsigned i = ioff; i<iclip; ++i)
     {
-      vcl_ptrdiff_t bpptr = 0, vpptr = 0;
+      std::ptrdiff_t bpptr = 0, vpptr = 0;
       for (unsigned p = 0; p<nplanes(); ++p)
       {
         for (unsigned b = 0; b<bytes_per_sample; ++b)
@@ -1175,7 +1176,7 @@ tiff_pyramid_level* vil_tiff_pyramid_resource::closest(const float scale) const
   unsigned lmin = 0;
   for (unsigned i = 0; i<nlevels; ++i)
   {
-    float ds = vcl_fabs(scale - levels_[i]->scale_);
+    float ds = std::fabs(scale - levels_[i]->scale_);
     if (ds<mind)
     {
       mind = ds;
@@ -1205,7 +1206,7 @@ vil_tiff_pyramid_resource(tif_smart_ptr const& t, bool read)
   {
     vil_tiff_header h(t_.tif());
     if (trace)
-      vcl_cerr << "In vil_tiff_pyramid_resource constructor"
+      std::cerr << "In vil_tiff_pyramid_resource constructor"
                << " constructed header\n"
                << "n-levels = " << this->nlevels() << '\n';
     tiff_pyramid_level* pl = new tiff_pyramid_level(this->nlevels(),
@@ -1215,21 +1216,21 @@ vil_tiff_pyramid_resource(tif_smart_ptr const& t, bool read)
                                                     h.pix_fmt);
     levels_.push_back(pl);
     if (trace)
-      vcl_cerr << "In vil_tiff_pyramid_resource constructor"
+      std::cerr << "In vil_tiff_pyramid_resource constructor"
                << " constructed level\n";
     int status = TIFFReadDirectory(t_.tif());
     if (trace)
-      vcl_cerr << "In vil_tiff_pyramid_resource constructor"
+      std::cerr << "In vil_tiff_pyramid_resource constructor"
                << " Read new directory\n";
 
     if (!status)
       break;
   }
   if (trace)
-    vcl_cerr << "In vil_tiff_pyramid_resource constructor"
+    std::cerr << "In vil_tiff_pyramid_resource constructor"
              << " Begin sorting\n";
   //sort the pyramid
-  vcl_sort(levels_.begin(), levels_.end(), level_compare);
+  std::sort(levels_.begin(), levels_.end(), level_compare);
   //normalize the scales
   this->normalize_scales();
 }
@@ -1252,8 +1253,8 @@ vil_tiff_pyramid_resource::get_copy_view(unsigned i0, unsigned n_i,
   vil_image_resource_sptr resc = this->get_resource(level);
   //scale input coordinates to the scale of the level
   float scale = levels_[level]->scale_;
-  float fi0 = vcl_floor(scale*i0), fj0 = vcl_floor(scale*j0);
-  float fni = vcl_floor(scale*n_i), fnj = vcl_floor(scale*n_j);
+  float fi0 = std::floor(scale*i0), fj0 = std::floor(scale*j0);
+  float fni = std::floor(scale*n_i), fnj = std::floor(scale*n_j);
   unsigned si0 = static_cast<unsigned>(fi0);
   unsigned sj0 = static_cast<unsigned>(fj0);
   unsigned sni = static_cast<unsigned>(fni);

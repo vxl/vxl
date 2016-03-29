@@ -65,9 +65,9 @@ short mfpf_ssd_vec_cost::version_no() const
 // Method: is_a
 //=======================================================================
 
-vcl_string mfpf_ssd_vec_cost::is_a() const
+std::string mfpf_ssd_vec_cost::is_a() const
 {
-  return vcl_string("mfpf_ssd_vec_cost");
+  return std::string("mfpf_ssd_vec_cost");
 }
 
 //: Create a copy on the heap and return base class pointer
@@ -80,7 +80,7 @@ mfpf_vec_cost* mfpf_ssd_vec_cost::clone() const
 // Method: print
 //=======================================================================
 
-void mfpf_ssd_vec_cost::print_summary(vcl_ostream& os) const
+void mfpf_ssd_vec_cost::print_summary(std::ostream& os) const
 {
   os<<"Size: "<<mean_.size()<<" Mean Wt: "<<wts_.mean();
 }
@@ -112,9 +112,9 @@ void mfpf_ssd_vec_cost::b_read(vsl_b_istream& bfs)
       vsl_b_read(bfs,wts_);
       break;
     default:
-      vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&)\n"
-               << "           Unknown version number "<< version << vcl_endl;
-      bfs.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
+      std::cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&)\n"
+               << "           Unknown version number "<< version << std::endl;
+      bfs.is().clear(std::ios::badbit); // Set an unrecoverable IO error on stream
       return;
   }
 }

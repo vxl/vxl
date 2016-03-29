@@ -1,8 +1,9 @@
+#include <iostream>
+#include <string>
+#include <vector>
 #include <testlib/testlib_test.h>
 #include <testlib/testlib_root_dir.h>
-#include <vcl_iostream.h>
-#include <vcl_string.h>
-#include <vcl_vector.h>
+#include <vcl_compiler.h>
 #include <vul/vul_file.h>
 #include <vgl/vgl_vector_2d.h>
 #include <vgl/vgl_point_2d.h>
@@ -24,17 +25,17 @@
 static void test_minimizer()
 {
   START("ihog minimizer test");
-  vcl_string root_dir = testlib_root_dir();
-  vcl_string image_file =
+  std::string root_dir = testlib_root_dir();
+  std::string image_file =
     root_dir + "/contrib/brl/bbas/bpgl/ihog/tests/dalmation.tif";
   bool exists = vul_file::exists(image_file);
-  vil_image_view_base_sptr img0_base = 0;
+  vil_image_view_base_sptr img0_base = VXL_NULLPTR;
   if(exists){
-    vcl_cout << "File " << image_file << " exists\n";
+    std::cout << "File " << image_file << " exists\n";
     img0_base = vil_load(image_file.c_str());
   }
   if (!img0_base) {
-    vcl_cerr << "error loading image.\n";
+    std::cerr << "error loading image.\n";
     TEST("FAILED TO LOAD TEST IMAGE",false,true);
     return;
   }
@@ -49,8 +50,8 @@ static void test_minimizer()
   vnl_double_2x3 HA;
   double rot_angle = 0.15;
   double tx = -20.0, ty = 30.0;
-  HA(0,0) = vcl_cos(rot_angle);   HA(0,1) = vcl_sin(rot_angle);  HA(0,2) = tx;
-  HA(1,0) = -vcl_sin(rot_angle);  HA(1,1) = vcl_cos(rot_angle) ; HA(1,2) = ty;
+  HA(0,0) = std::cos(rot_angle);   HA(0,1) = std::sin(rot_angle);  HA(0,2) = tx;
+  HA(1,0) = -std::sin(rot_angle);  HA(1,1) = std::cos(rot_angle) ; HA(1,2) = ty;
 
   ihog_transform_2d xform_in;
   xform_in.set_affine(HA);
@@ -91,31 +92,31 @@ static void test_minimizer()
   ihog_minimizer minimizer(from_img, to_img, mask_img, roi, false);
   minimizer.minimize(init_xform);
   double error = minimizer.get_end_error();
-  vcl_cout << "end_error = " << error << '\n'
+  std::cout << "end_error = " << error << '\n'
 
            << "original homography:\n"
-           << xform_in.get_matrix() << vcl_endl << '\n'
+           << xform_in.get_matrix() << std::endl << '\n'
 
            << "lm generated homography:\n"
-           << init_xform.get_matrix() << vcl_endl << vcl_endl;
+           << init_xform.get_matrix() << std::endl << std::endl;
   //test result
   vgl_point_2d<double> p0 = init_xform.origin();
   vgl_vector_2d<double> du = init_xform.delta(p0, vgl_vector_2d<double>(1,0));
-  double ang = vcl_acos(du.x());
-  double err_ang = vcl_fabs(ang-rot_angle);
-  double err_trans = (vcl_fabs(p0.x()-tx) + vcl_fabs(p0.y()-ty))/100;
+  double ang = std::acos(du.x());
+  double err_ang = std::fabs(ang-rot_angle);
+  double err_trans = (std::fabs(p0.x()-tx) + std::fabs(p0.y()-ty))/100;
   TEST_NEAR("rigid_body trans",err_ang+err_trans,0.0, 0.01);
 #if 0
-  vcl_string dest_file = root_dir + "/contrib/gel/mrc/vpgl/icam/tests/images/calibration/frame_142.png";
-  vcl_string source_file = root_dir + "/contrib/gel/mrc/vpgl/icam/tests/images/calibration/frame_145.png";
+  std::string dest_file = root_dir + "/contrib/gel/mrc/vpgl/icam/tests/images/calibration/frame_142.png";
+  std::string source_file = root_dir + "/contrib/gel/mrc/vpgl/icam/tests/images/calibration/frame_145.png";
   vil_image_view_base_sptr dest_img_base = vil_load(dest_file.c_str());
   if (!dest_img_base) {
-    vcl_cerr << "error loading image.\n";
+    std::cerr << "error loading image.\n";
     return;
   }
   vil_image_view_base_sptr source_img_base = vil_load(source_file.c_str());
   if (!source_img_base) {
-    vcl_cerr << "error loading image.\n";
+    std::cerr << "error loading image.\n";
     return;
   }
     vil_image_view<vxl_byte> *dest_img_byte = dynamic_cast<vil_image_view<vxl_byte>*>(dest_img_base.ptr());
@@ -137,9 +138,9 @@ static void test_minimizer()
   ihog_minimizer minimizer_d(from_img_d, to_img_d, roid);
   minimizer_d.minimize(init_xform_d);
   double error_d = minimizer_d.get_end_error();
-  vcl_cout << "end_error = " << error_d << '\n'
+  std::cout << "end_error = " << error_d << '\n'
            << "lm generated homography downtown:\n"
-           << init_xform_d.get_matrix() << vcl_endl << vcl_endl;
+           << init_xform_d.get_matrix() << std::endl << std::endl;
   // create mapped image
   ihog_image<float> mapped_source;
   ihog_resample_bilin(from_img_d, mapped_source, init_xform_d.inverse());

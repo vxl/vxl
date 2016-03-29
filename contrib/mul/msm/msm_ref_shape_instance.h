@@ -5,11 +5,13 @@
 // \brief Representation of an instance of a shape model in ref frame.
 // \author Tim Cootes
 
+#include <iostream>
+#include <iosfwd>
 #include <msm/msm_points.h>
 #include <msm/msm_wt_mat_2d.h>
 #include <msm/msm_param_limiter.h>
 #include <mbl/mbl_cloneable_ptr.h>
-#include <vcl_iosfwd.h>
+#include <vcl_compiler.h>
 
 class msm_ref_shape_model;
 
@@ -115,16 +117,16 @@ class msm_ref_shape_instance
   //  the shape parameters, and assume that wt_mat are
   //  inverse covariances.
   void fit_to_points_wt_mat(const msm_points& pts,
-                        const vcl_vector<msm_wt_mat_2d>& wt_mat);
+                        const std::vector<msm_wt_mat_2d>& wt_mat);
 
   //: Version number for I/O
   short version_no() const;
 
   //: Name of the class
-  vcl_string is_a() const;
+  std::string is_a() const;
 
   //: Print class to os
-  void print_summary(vcl_ostream& os) const;
+  void print_summary(std::ostream& os) const;
 
   //: Save class to binary file stream
   void b_write(vsl_b_ostream& bfs) const;
@@ -142,9 +144,9 @@ void vsl_b_write(vsl_b_ostream& bfs, const msm_ref_shape_instance& pts);
 void vsl_b_read(vsl_b_istream& bfs, msm_ref_shape_instance& pts);
 
 //: Stream output operator for class reference
-vcl_ostream& operator<<(vcl_ostream& os,const msm_ref_shape_instance& pts);
+std::ostream& operator<<(std::ostream& os,const msm_ref_shape_instance& pts);
 
 //: Stream output operator for class reference
-void vsl_print_summary(vcl_ostream& os,const msm_ref_shape_instance& pts);
+void vsl_print_summary(std::ostream& os,const msm_ref_shape_instance& pts);
 
 #endif // msm_ref_shape_instance_h_

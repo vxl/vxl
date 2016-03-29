@@ -13,8 +13,10 @@
 //
 //\endverbatim
 
+#include <iostream>
+#include <cmath>
 #include <vnl/vnl_math.h>
-#include <vcl_cmath.h>
+#include <vcl_compiler.h>
 #include <vgl/vgl_point_2d.h>
 #include <vgl/vgl_distance.h>
 
@@ -22,7 +24,7 @@
 
 inline int sdet_round(double val)
 {
-  return (int) vcl_floor(val+0.5);
+  return (int) std::floor(val+0.5);
 }
 
 //: Convert an angle to [0, 2Pi) range
@@ -30,9 +32,9 @@ inline double sdet_angle0To2Pi (double angle)
 {
   double a;
   if (angle>=2*vnl_math::pi)
-    a = vcl_fmod (angle,vnl_math::pi*2);
+    a = std::fmod (angle,vnl_math::pi*2);
   else if (angle < 0)
-    a = (2*vnl_math::pi+ vcl_fmod (angle,2*vnl_math::pi));
+    a = (2*vnl_math::pi+ std::fmod (angle,2*vnl_math::pi));
   else
     a= angle;
 
@@ -65,13 +67,13 @@ inline double sdet_CCW (double reference, double angle)
 
 inline double sdet_vPointPoint (vgl_point_2d<double> start, vgl_point_2d<double> end)
 {
-    return sdet_angle0To2Pi (vcl_atan2 (end.y() - start.y(), end.x() - start.x()) );
+    return sdet_angle0To2Pi (std::atan2 (end.y() - start.y(), end.x() - start.x()) );
 }
 
 //: dot product between two vectors
 inline double sdet_dot (double v1, double v2)
 {
-   return vcl_cos(v1)*vcl_cos(v2) + vcl_sin(v1)*vcl_sin(v2);
+   return std::cos(v1)*std::cos(v2) + std::sin(v1)*std::sin(v2);
 }
 
 //: this structure holds the intrinsic params for an edge pair
@@ -102,11 +104,11 @@ inline bool sdet_intersect_range(double a1, double b1, double a2, double b2,
 {
   if (a1<=a2 && a2<=b1){
     ai = a2;
-    bi = vnl_math::min(b1,b2);
+    bi = std::min(b1,b2);
     return true;
   }
   else if (a1<=b2 && b2<=b1){
-    ai = vnl_math::max(a1, a2);
+    ai = std::max(a1, a2);
     bi = b2;
     return true;
   }
@@ -144,7 +146,7 @@ inline double sdet_angle_min_max(double a1, double b1, double a2, double b2)
       return b1;
   }
   else
-    return vnl_math::min(b1, b2);
+    return std::min(b1, b2);
 }
 
 //compute the maximum of the minimums of the two ranges
@@ -162,7 +164,7 @@ inline double sdet_angle_max_min(double a1, double b1, double a2, double b2)
       return a1;
   }
   else
-    return vnl_math::max(a1, a2);
+    return std::max(a1, a2);
 }
 
 inline bool sdet_intersect_angle_range(double a1, double b1, double a2, double b2,

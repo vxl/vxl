@@ -2,13 +2,14 @@
 #ifndef vpgl_camera_compute_cxx_
 #define vpgl_camera_compute_cxx_
 
+#include <iostream>
+#include <cstdlib>
+#include <cmath>
 #include "vpgl_camera_compute.h"
 //:
 // \file
-#include <vcl_iostream.h>
 #include <vcl_cassert.h>
-#include <vcl_cstdlib.h> // for rand()
-#include <vcl_cmath.h>
+#include <vcl_compiler.h>
 #include <vnl/vnl_numeric_traits.h>
 #include <vnl/vnl_det.h>
 #include <vnl/vnl_inverse.h>
@@ -33,12 +34,12 @@
 //------------------------------------------
 bool
 vpgl_proj_camera_compute::compute(
-                                  const vcl_vector< vgl_point_2d<double> >& image_pts,
-                                  const vcl_vector< vgl_point_3d<double> >& world_pts,
+                                  const std::vector< vgl_point_2d<double> >& image_pts,
+                                  const std::vector< vgl_point_3d<double> >& world_pts,
                                   vpgl_proj_camera<double>& camera )
 {
-  vcl_vector< vgl_homg_point_2d<double> > image_pts2;
-  vcl_vector< vgl_homg_point_3d<double> > world_pts2;
+  std::vector< vgl_homg_point_2d<double> > image_pts2;
+  std::vector< vgl_homg_point_3d<double> > world_pts2;
   for (unsigned int i = 0; i < image_pts.size(); ++i)
     image_pts2.push_back( vgl_homg_point_2d<double>( image_pts[i] ) );
   for (unsigned int i = 0; i < world_pts.size(); ++i)
@@ -50,8 +51,8 @@ vpgl_proj_camera_compute::compute(
 //------------------------------------------
 bool
 vpgl_proj_camera_compute::compute(
-                                  const vcl_vector< vgl_homg_point_2d<double> >& image_pts,
-                                  const vcl_vector< vgl_homg_point_3d<double> >& world_pts,
+                                  const std::vector< vgl_homg_point_2d<double> >& image_pts,
+                                  const std::vector< vgl_homg_point_3d<double> >& world_pts,
                                   vpgl_proj_camera<double>& camera )
 {
   unsigned int num_correspondences = image_pts.size();
@@ -93,8 +94,8 @@ vpgl_proj_camera_compute::compute(
 //------------------------------------------
 bool
 vpgl_affine_camera_compute::compute(
-                                    const vcl_vector< vgl_point_2d<double> >& image_pts,
-                                    const vcl_vector< vgl_point_3d<double> >& world_pts,
+                                    const std::vector< vgl_point_2d<double> >& image_pts,
+                                    const std::vector< vgl_point_3d<double> >& world_pts,
                                     vpgl_affine_camera<double>& camera )
 {
   assert( image_pts.size() == world_pts.size() );
@@ -113,7 +114,7 @@ vpgl_affine_camera_compute::compute(
   vnl_matrix<double> AtA = A.transpose()*A;
   vnl_svd<double> svd(AtA);
   if ( svd.rank() < 4 ) {
-    vcl_cerr << "vpgl_affine_camera_compute:compute() cannot compute,\n"
+    std::cerr << "vpgl_affine_camera_compute:compute() cannot compute,\n"
              << "    input data has insufficient rank.\n";
     return false;
   }
@@ -132,21 +133,21 @@ vpgl_affine_camera_compute::compute(
 //perspective camera given world to image correspondences and
 //the calibration matrix
 bool vpgl_perspective_camera_compute::
-compute( const vcl_vector< vgl_point_2d<double> >& image_pts,
-         const vcl_vector< vgl_point_3d<double> >& world_pts,
+compute( const std::vector< vgl_point_2d<double> >& image_pts,
+         const std::vector< vgl_point_3d<double> >& world_pts,
          const vpgl_calibration_matrix<double>& K,
          vpgl_perspective_camera<double>& camera )
 {
   unsigned N = world_pts.size();
   if (image_pts.size()!=N)
   {
-    vcl_cout << "Unequal points sets in"
+    std::cout << "Unequal points sets in"
              << " vpgl_perspective_camera_compute::compute()\n";
     return false;
   }
   if (N<6)
   {
-    vcl_cout << "Need at least 6 points for"
+    std::cout << "Need at least 6 points for"
              << " vpgl_perspective_camera_compute::compute()\n";
     return false;
   }
@@ -166,13 +167,13 @@ compute( const vcl_vector< vgl_point_2d<double> >& image_pts,
     wp[3][c] = 1.0;
   }
 #ifdef CAMERA_DEBUG
-  vcl_cout << "World Points\n" << wp << '\n';
+  std::cout << "World Points\n" << wp << '\n';
 #endif
   vnl_svd<double> svd(wp);
   unsigned rank = svd.rank();
   if (rank != 4)
   {
-    vcl_cout << "Insufficient rank for world point"
+    std::cout << "Insufficient rank for world point"
              << " matrix in vpgl_perspective_camera_compute::compute()\n";
     return false;
   }
@@ -184,7 +185,7 @@ compute( const vcl_vector< vgl_point_2d<double> >& image_pts,
     for (unsigned r = 0; r<nr; ++r)
       null_space[r][c-4] = V[r][c];
 #ifdef CAMERA_DEBUG
-  vcl_cout << "Null Space\n" << null_space << '\n';
+  std::cout << "Null Space\n" << null_space << '\n';
 #endif
   //form Kronecker product of the null space (transpose) with K inverse
   unsigned nrk = 3*(nc-4), nck = 3*nr;
@@ -195,7 +196,7 @@ compute( const vcl_vector< vgl_point_2d<double> >& image_pts,
         for (unsigned ck = 0; ck<3; ++ck)
           v2k[rk+3*r][ck+3*c] = k_inv[rk][ck]*null_space[c][r];
 #ifdef CAMERA_DEBUG
-  vcl_cout << "V2K\n" << v2k << '\n';
+  std::cout << "V2K\n" << v2k << '\n';
 #endif
   //Stack the image points in homogeneous form in a diagonal matrix
   vnl_matrix<double> D(3*N, N);
@@ -206,7 +207,7 @@ compute( const vcl_vector< vgl_point_2d<double> >& image_pts,
     D[3*c][c] = p.x();  D[3*c+1][c] = p.y(); D[3*c+2][c] = 1.0;
   }
 #ifdef CAMERA_DEBUG
-  vcl_cout << "D\n" << D << '\n';
+  std::cout << "D\n" << D << '\n';
 #endif
   //form the singular matrix
   vnl_matrix<double> M = v2k*D;
@@ -216,7 +217,7 @@ compute( const vcl_vector< vgl_point_2d<double> >& image_pts,
   vnl_vector<double> depth = svdm.nullvector();
 
 #ifdef CAMERA_DEBUG
-  vcl_cout << "depths\n" << depth << '\n';
+  std::cout << "depths\n" << depth << '\n';
 #endif
 
   //Check if depths are all approximately the same (near affine projection)
@@ -228,7 +229,7 @@ compute( const vcl_vector< vgl_point_2d<double> >& image_pts,
   double max_dev = 0;
   for (unsigned i = 0; i<nd; ++i)
   {
-    double dev = vcl_fabs(depth[i]-average_depth);
+    double dev = std::fabs(depth[i]-average_depth);
     if (dev>max_dev)
       max_dev = dev;
   }
@@ -237,7 +238,7 @@ compute( const vcl_vector< vgl_point_2d<double> >& image_pts,
   //since variations are not meaningful
   if (norm_max_dev < 0.01)
     for (unsigned i = 0; i<nd; ++i)
-      depth[i]=vcl_fabs(average_depth);
+      depth[i]=std::fabs(average_depth);
 
   //Set up point sets for ortho Procrustes
   vnl_matrix<double> X(3,N), Y(3,N);
@@ -260,7 +261,7 @@ compute( const vcl_vector< vgl_point_2d<double> >& image_pts,
 
   vnl_vector_fixed<double, 3> t = op.t();
 #ifdef CAMERA_DEBUG
-  vcl_cout << "translation\n" << t << '\n'
+  std::cout << "translation\n" << t << '\n'
            << "scale = " << op.s() << '\n'
            << "residual = " << op.residual_mean_sq_error() << '\n';
 #endif
@@ -273,7 +274,7 @@ compute( const vcl_vector< vgl_point_2d<double> >& image_pts,
   tcam.set_rotation(R);
 
   //perform a final non-linear optimization
-  vcl_vector<vgl_homg_point_3d<double> > h_world_pts;
+  std::vector<vgl_homg_point_3d<double> > h_world_pts;
   for (unsigned i = 0; i<N; ++i)
     h_world_pts.push_back(vgl_homg_point_3d<double>(world_pts[i]));
   camera = vpgl_optimize_camera::opt_orient_pos_cal(tcam, h_world_pts, image_pts, 0.00005, 20000);
@@ -291,21 +292,21 @@ compute( const vcl_vector< vgl_point_2d<double> >& image_pts,
 //  projection error vector. camera is filled with the perspective
 //  decomposition of the projection matrix
 bool vpgl_perspective_camera_compute::
-compute_dlt (const vcl_vector< vgl_point_2d<double> >& image_pts,
-             const vcl_vector< vgl_point_3d<double> >& world_pts,
+compute_dlt (const std::vector< vgl_point_2d<double> >& image_pts,
+             const std::vector< vgl_point_3d<double> >& world_pts,
              vpgl_perspective_camera<double> &camera,
              double &err)
 {
   if (image_pts.size() < 6) {
-    vcl_cout<<"vpgl_perspective_camera_compute::compute needs at"
-            << " least 6 points!" << vcl_endl;
+    std::cout<<"vpgl_perspective_camera_compute::compute needs at"
+            << " least 6 points!" << std::endl;
     return false;
   }
   else if (image_pts.size() != world_pts.size()) {
-    vcl_cout<<"vpgl_perspective_camera_compute::compute needs to"
-            << " have input vectors of the same size!" << vcl_endl
+    std::cout<<"vpgl_perspective_camera_compute::compute needs to"
+            << " have input vectors of the same size!" << std::endl
             << "Currently, image_pts is size " << image_pts.size()
-            << " and world_pts is size " << world_pts.size() << vcl_endl;
+            << " and world_pts is size " << world_pts.size() << std::endl;
     return false;
   }
   else //Everything is good!
@@ -414,29 +415,29 @@ compute_dlt (const vcl_vector< vgl_point_2d<double> >& image_pts,
 // This computation is simpler than the general case above and only requires 4 points
 // Put the resulting camera into \p camera, return true if successful.
 bool vpgl_perspective_camera_compute::
-compute( const vcl_vector< vgl_point_2d<double> >& image_pts,
-         const vcl_vector< vgl_point_2d<double> >& ground_pts,
+compute( const std::vector< vgl_point_2d<double> >& image_pts,
+         const std::vector< vgl_point_2d<double> >& ground_pts,
          vpgl_perspective_camera<double>& camera )
 {
   unsigned num_pts = ground_pts.size();
   if (image_pts.size()!=num_pts)
   {
-    vcl_cout << "Unequal points sets in"
+    std::cout << "Unequal points sets in"
              << " vpgl_perspective_camera_compute::compute()\n";
     return false;
   }
   if (num_pts<4)
   {
-    vcl_cout << "Need at least 4 points for"
+    std::cout << "Need at least 4 points for"
              << " vpgl_perspective_camera_compute::compute()\n";
     return false;
   }
 
-  vcl_vector<vgl_homg_point_2d<double> > pi, pg;
+  std::vector<vgl_homg_point_2d<double> > pi, pg;
   for (unsigned i=0; i<num_pts; ++i) {
 #ifdef CAMERA_DEBUG
-    vcl_cout << '('<<image_pts[i].x()<<", "<<image_pts[i].y()<<") -> "
-             << '('<<ground_pts[i].x()<<", "<<ground_pts[i].y()<<')'<<vcl_endl;
+    std::cout << '('<<image_pts[i].x()<<", "<<image_pts[i].y()<<") -> "
+             << '('<<ground_pts[i].x()<<", "<<ground_pts[i].y()<<')'<<std::endl;
 #endif
     pi.push_back(vgl_homg_point_2d<double>(image_pts[i].x(),image_pts[i].y()));
     pg.push_back(vgl_homg_point_2d<double>(ground_pts[i].x(),ground_pts[i].y()));
@@ -485,11 +486,11 @@ compute( const vcl_vector< vgl_point_2d<double> >& image_pts,
   camera.set_camera_center(vgl_point_3d<double>(t[0],t[1],t[2]));
 
   //perform a final non-linear optimization
-  vcl_vector<vgl_homg_point_3d<double> > h_world_pts;
+  std::vector<vgl_homg_point_3d<double> > h_world_pts;
   for (unsigned i = 0; i<num_pts; ++i) {
     h_world_pts.push_back(vgl_homg_point_3d<double>(ground_pts[i].x(),ground_pts[i].y(),0,1));
     if (camera.is_behind_camera(h_world_pts.back())) {
-      vcl_cout << "behind camera" << vcl_endl;
+      std::cout << "behind camera" << std::endl;
       return false;
     }
   }

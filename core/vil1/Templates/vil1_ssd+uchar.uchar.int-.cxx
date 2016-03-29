@@ -1,5 +1,5 @@
 #include <vil1/vil1_ssd.h>
-#include <vil1/vil1_ssd.txx>
+#include <vil1/vil1_ssd.hxx>
 
 typedef unsigned char byte;
 

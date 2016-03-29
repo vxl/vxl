@@ -11,7 +11,8 @@
 //   Nov.2003 - Peter Vanroose - made constructor more robust w.r.t. its input
 // \endverbatim
 
-#include <vcl_cmath.h>
+#include <cmath>
+#include <vcl_compiler.h>
 #include <vgl/vgl_region_scan_iterator.h>
 
 //: Iterator to scan rectangular windows
@@ -27,16 +28,16 @@ class vgl_window_scan_iterator : public vgl_region_scan_iterator
   {
     // Make sure that the scan lines have positive x increment:
     if (x1_ > x2_) { T x=x1_; x1_=x2_; x2_=x; }
-    x1 = (int) vcl_ceil (x1_);
-    x2 = (int) vcl_floor(x2_);
+    x1 = (int) std::ceil (x1_);
+    x2 = (int) std::floor(x2_);
     // subsequent scan lines need not have positive y increment:
     if (y1_ <= y2_) {
-      y1 = (int) vcl_ceil (y1_);
-      y2 = (int) vcl_floor(y2_);
+      y1 = (int) std::ceil (y1_);
+      y2 = (int) std::floor(y2_);
     }
     else {
-      y2 = (int) vcl_ceil (y2_);
-      y1 = (int) vcl_floor(y1_);
+      y2 = (int) std::ceil (y2_);
+      y1 = (int) std::floor(y1_);
     }
   }
 
@@ -64,6 +65,6 @@ class vgl_window_scan_iterator : public vgl_region_scan_iterator
   inline int  endx  () const { return x2; }
 };
 
-#define VGL_WINDOW_SCAN_ITERATOR_INSTANTIATE(T) extern "please include <vgl/vgl_window_scan_iterator.txx> instead"
+#define VGL_WINDOW_SCAN_ITERATOR_INSTANTIATE(T) extern "please include <vgl/vgl_window_scan_iterator.hxx> instead"
 
 #endif // vgl_window_scan_iterator_h_

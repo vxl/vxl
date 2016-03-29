@@ -1,6 +1,8 @@
+#include <iostream>
+#include <sstream>
 #include "boxm2_nn_cache.h"
 #include <boxm2/boxm2_block_metadata.h>
-#include <vcl_sstream.h>
+#include <vcl_compiler.h>
 //:
 // \file
 
@@ -18,26 +20,26 @@ boxm2_nn_cache::~boxm2_nn_cache()
 
 #if 0
   // clean up block
-  vcl_map<boxm2_block_id, boxm2_block* >::iterator blk_i;
+  std::map<boxm2_block_id, boxm2_block* >::iterator blk_i;
   for (blk_i=cached_blocks_.begin(); blk_i!=cached_blocks_.end(); ++blk_i) {
     boxm2_block* blk = (*blk_i).second;
     if (blk) {
-      vcl_cout<<"Deleting block: "<<blk->block_id()<<vcl_endl;
+      std::cout<<"Deleting block: "<<blk->block_id()<<std::endl;
       delete blk;
     }
   }
 
   // clean up loaded data
-  vcl_map<vcl_string, vcl_map<boxm2_block_id, boxm2_data_base*> >::iterator dat_i;
+  std::map<std::string, std::map<boxm2_block_id, boxm2_data_base*> >::iterator dat_i;
   for (dat_i=cached_data_.begin(); dat_i!=cached_data_.end(); ++dat_i) {
-    vcl_map<boxm2_block_id, boxm2_data_base*>& dmap = (*dat_i).second;
-    vcl_map<boxm2_block_id, boxm2_data_base*>::iterator db_i;
+    std::map<boxm2_block_id, boxm2_data_base*>& dmap = (*dat_i).second;
+    std::map<boxm2_block_id, boxm2_data_base*>::iterator db_i;
 
     // go through individual map and delete
     for (db_i = dmap.begin(); db_i != dmap.end(); ++db_i) {
       boxm2_data_base* dat = (*db_i).second;
       if (dat) {
-        vcl_cout<<"Deleting data: "<<dat->block_id()<<vcl_endl;
+        std::cout<<"Deleting data: "<<dat->block_id()<<std::endl;
         delete dat;
       }
     }
@@ -56,20 +58,20 @@ boxm2_block* boxm2_nn_cache::get_block(boxm2_block_id id)
   {
     // congrats you've found the block in cache, now update cache and return block
 #ifdef DEBUG
-    vcl_cout<<"CACHE HIT :)"<<vcl_endl;
+    std::cout<<"CACHE HIT :)"<<std::endl;
 #endif
     this->update_block_cache(cached_blocks_[id]);
     return cached_blocks_[id];
   }
 #ifdef DEBUG
-  vcl_cout<<"Cache miss :("<<vcl_endl;
+  std::cout<<"Cache miss :("<<std::endl;
 #endif
   // otherwise load it from disk with blocking and update cache
   boxm2_block* loaded = boxm2_sio_mgr::load_block(scene_dir_, id);
 
   // if the block is null then initialize an empty one
   if (!loaded && scene_->block_exists(id)) {
-    vcl_cout<<"boxm2_nn_cache::initializing empty block "<<id<<vcl_endl;
+    std::cout<<"boxm2_nn_cache::initializing empty block "<<id<<std::endl;
     boxm2_block_metadata data = scene_->get_block_metadata(id);
     loaded = new boxm2_block(data);
   }
@@ -88,14 +90,14 @@ void boxm2_nn_cache::update_block_cache(boxm2_block* blk)
 {
   boxm2_block_id center = blk->block_id();
 #ifdef DEBUG
-  vcl_cout<<"update block cache around: "<<center<<vcl_endl;
+  std::cout<<"update block cache around: "<<center<<std::endl;
 #endif
 
   // find neighbors in x,y plane (i,j)
-  vcl_vector<boxm2_block_id> neighbor_list = this->get_neighbor_list(center);
+  std::vector<boxm2_block_id> neighbor_list = this->get_neighbor_list(center);
 
   // initialize new cache with existing neighbor ptrs
-  vcl_map<boxm2_block_id, boxm2_block*> new_cache;
+  std::map<boxm2_block_id, boxm2_block*> new_cache;
 
   // find neighbors in the cache already, store 'em
   for (unsigned int i=0; i<neighbor_list.size(); ++i)
@@ -110,7 +112,7 @@ void boxm2_nn_cache::update_block_cache(boxm2_block* blk)
     }
     else if ( !scene_->block_on_disk(id) ) // otherwise initialize it right here
     {
-      vcl_cout<<"boxm2_nn_cache::initializing empty block "<<id<<vcl_endl;
+      std::cout<<"boxm2_nn_cache::initializing empty block "<<id<<std::endl;
       boxm2_block_metadata data = scene_->get_block_metadata(id);
       boxm2_block* loaded = new boxm2_block(data);
       new_cache[id] = loaded;
@@ -122,14 +124,14 @@ void boxm2_nn_cache::update_block_cache(boxm2_block* blk)
   }
 
   // only non-neighbors remain in existing cache, delete 'em
-  vcl_map<boxm2_block_id, boxm2_block* >::iterator blk_i;
+  std::map<boxm2_block_id, boxm2_block* >::iterator blk_i;
   for (blk_i = cached_blocks_.begin(); blk_i != cached_blocks_.end(); ++blk_i)
   {
     boxm2_block_id bid = blk_i->first;
     boxm2_block* d_blk = blk_i->second;
     if (bid != center && d_blk) {
 #ifdef DEBUG
-       vcl_cout<<"deleting "<<bid<<" from cache"<<vcl_endl;
+       std::cout<<"deleting "<<bid<<" from cache"<<std::endl;
 #endif
        delete d_blk;
     }
@@ -145,13 +147,13 @@ void boxm2_nn_cache::update_block_cache(boxm2_block* blk)
 
 
 //: get data by type and id
-boxm2_data_base* boxm2_nn_cache::get_data_base(boxm2_block_id id, vcl_string type, vcl_size_t num_bytes, bool read_only)
+boxm2_data_base* boxm2_nn_cache::get_data_base(boxm2_block_id id, std::string type, std::size_t num_bytes, bool read_only)
 {
   // first thing to do is to load all async requests into the cache
   this->finish_async_data(type);
 
   // grab a reference to the map of cached_data_
-  vcl_map<boxm2_block_id, boxm2_data_base*>& data_map =
+  std::map<boxm2_block_id, boxm2_data_base*>& data_map =
     this->cached_data_map(type);
 
   // then look for the block you're requesting
@@ -159,7 +161,7 @@ boxm2_data_base* boxm2_nn_cache::get_data_base(boxm2_block_id id, vcl_string typ
   {
     // congrats you've found the data block in cache, update cache and return block
 #ifdef DEBUG
-    vcl_cout<<"DATA CACHE HIT :) for "<<type<<vcl_endl;
+    std::cout<<"DATA CACHE HIT :) for "<<type<<std::endl;
 #endif
     this->update_data_base_cache(data_map[id], type);
     return data_map[id];
@@ -167,11 +169,11 @@ boxm2_data_base* boxm2_nn_cache::get_data_base(boxm2_block_id id, vcl_string typ
 
   // otherwise it's a miss, load sync from disk, update cache
 #ifdef DEBUG
-  vcl_cout<<"Cache miss :( for "<<type<<vcl_endl;
+  std::cout<<"Cache miss :( for "<<type<<std::endl;
 #endif
   boxm2_data_base* loaded = boxm2_sio_mgr::load_block_data_generic(scene_dir_, id, type);
   if (!loaded && scene_->block_exists(id)) {
-    vcl_cout<<"boxm2_nn_cache::initializing empty data "<<id<<" type: "<<type<<vcl_endl;
+    std::cout<<"boxm2_nn_cache::initializing empty data "<<id<<" type: "<<type<<std::endl;
     boxm2_block_metadata data = scene_->get_block_metadata(id);
     loaded = new boxm2_data_base(data, type);
   }
@@ -182,39 +184,39 @@ boxm2_data_base* boxm2_nn_cache::get_data_base(boxm2_block_id id, vcl_string typ
 //: returns a data_base pointer which is initialized to the default value of the type.
 //  If a block for this type exists on the cache, it is removed and replaced with the new one.
 //  This method does not check whether a block of this type already exists on the disk nor writes it to the disk
-boxm2_data_base* boxm2_nn_cache::get_data_base_new(boxm2_block_id id, vcl_string type, vcl_size_t num_bytes, bool read_only)
+boxm2_data_base* boxm2_nn_cache::get_data_base_new(boxm2_block_id id, std::string type, std::size_t num_bytes, bool read_only)
 {
-  vcl_cout<<"BOXM2_DUMB_CACHE::get_data_base_new not implemented"<<vcl_endl;
-  return 0;
+  std::cout<<"BOXM2_DUMB_CACHE::get_data_base_new not implemented"<<std::endl;
+  return VXL_NULLPTR;
 }
 
-void boxm2_nn_cache::remove_data_base(boxm2_block_id, vcl_string type)
+void boxm2_nn_cache::remove_data_base(boxm2_block_id, std::string type)
 {
-  vcl_cout<<"BOXM2_DUMB_CACHE::remove_data_base not implemented"<<vcl_endl;
+  std::cout<<"BOXM2_DUMB_CACHE::remove_data_base not implemented"<<std::endl;
 }
 
-void boxm2_nn_cache::replace_data_base(boxm2_block_id id, vcl_string type, boxm2_data_base* replacement)
+void boxm2_nn_cache::replace_data_base(boxm2_block_id id, std::string type, boxm2_data_base* replacement)
 {
-  vcl_cout<<"BOXM2_DUMB_CACHE::replace_data_base not implemented"<<vcl_endl;
+  std::cout<<"BOXM2_DUMB_CACHE::replace_data_base not implemented"<<std::endl;
 }
 
 
 //: update data cache by type
-void boxm2_nn_cache::update_data_base_cache(boxm2_data_base* dat, vcl_string data_type)
+void boxm2_nn_cache::update_data_base_cache(boxm2_data_base* dat, std::string data_type)
 {
   // grab a reference to the map of cached_data
-  vcl_map<boxm2_block_id, boxm2_data_base*>& data_map =
+  std::map<boxm2_block_id, boxm2_data_base*>& data_map =
     this->cached_data_map(data_type);
 
   // determine the center
   boxm2_block_id center = dat->block_id();
-  // vcl_cout<<"update block cache around: "<<center<<vcl_endl;
+  // std::cout<<"update block cache around: "<<center<<std::endl;
 
   // find neighbors in x,y plane (i,j)
-  vcl_vector<boxm2_block_id> neighbor_list = this->get_neighbor_list(center);
+  std::vector<boxm2_block_id> neighbor_list = this->get_neighbor_list(center);
 
   // initialize new cache with existing neighbor ptrs
-  vcl_map<boxm2_block_id, boxm2_data_base*> new_cache;
+  std::map<boxm2_block_id, boxm2_data_base*> new_cache;
 
   // find neighbors in the cache already, store 'em
   for (unsigned int i=0; i<neighbor_list.size(); ++i)
@@ -229,7 +231,7 @@ void boxm2_nn_cache::update_data_base_cache(boxm2_data_base* dat, vcl_string dat
     }
     else if ( !scene_->data_on_disk(id, data_type) ) // send an async request for this block
     {
-      vcl_cout<<"boxm2_nn_cache::initializing empty data "<<id<<" type: "<<data_type<<vcl_endl;
+      std::cout<<"boxm2_nn_cache::initializing empty data "<<id<<" type: "<<data_type<<std::endl;
       boxm2_block_metadata data = scene_->get_block_metadata(id);
       boxm2_data_base* loaded = new boxm2_data_base(data, data_type);
       new_cache[id] = loaded;
@@ -241,14 +243,14 @@ void boxm2_nn_cache::update_data_base_cache(boxm2_data_base* dat, vcl_string dat
   }
 
   // only non-neighbors remain in existing cache, delete 'em
-  vcl_map<boxm2_block_id, boxm2_data_base*>::iterator blk_i;
+  std::map<boxm2_block_id, boxm2_data_base*>::iterator blk_i;
   for (blk_i = data_map.begin(); blk_i != data_map.end(); ++blk_i)
   {
     boxm2_block_id   bid = blk_i->first;
     boxm2_data_base* blk = blk_i->second;
     if (bid != center && blk) {
 #ifdef DEBUG
-       vcl_cout<<"deleting "<<bid<<" from cache"<<vcl_endl;
+       std::cout<<"deleting "<<bid<<" from cache"<<std::endl;
 #endif
        delete blk;
     }
@@ -265,7 +267,7 @@ void boxm2_nn_cache::update_data_base_cache(boxm2_data_base* dat, vcl_string dat
 void boxm2_nn_cache::finish_async_blocks()
 {
   // get async block list and push it into the cache
-  typedef vcl_map<boxm2_block_id, boxm2_block*> maptype;
+  typedef std::map<boxm2_block_id, boxm2_block*> maptype;
   maptype lmap = io_mgr_.get_loaded_blocks();
   maptype::iterator iter;
   for (iter = lmap.begin(); iter != lmap.end(); ++iter)
@@ -280,15 +282,15 @@ void boxm2_nn_cache::finish_async_blocks()
 
 
 //: finish async data
-void boxm2_nn_cache::finish_async_data(vcl_string data_type)
+void boxm2_nn_cache::finish_async_data(std::string data_type)
 {
   // grab a reference to the map of cached_data_
-  vcl_map<boxm2_block_id, boxm2_data_base*>& data_map =
+  std::map<boxm2_block_id, boxm2_data_base*>& data_map =
     this->cached_data_map(data_type);
 
   // get async block list and push it into the cache
-  vcl_map<boxm2_block_id, boxm2_data_base*> lmap = io_mgr_.get_loaded_data_generic(data_type);
-  vcl_map<boxm2_block_id, boxm2_data_base*>::iterator iter;
+  std::map<boxm2_block_id, boxm2_data_base*> lmap = io_mgr_.get_loaded_data_generic(data_type);
+  std::map<boxm2_block_id, boxm2_data_base*>::iterator iter;
   for (iter = lmap.begin(); iter != lmap.end(); ++iter)
   {
     // if this block doesn't exist in the cache put it in (otherwise delete it)
@@ -302,24 +304,24 @@ void boxm2_nn_cache::finish_async_data(vcl_string data_type)
 }
 
 //: helper method returns a reference to correct data map (ensures one exists)
-vcl_map<boxm2_block_id, boxm2_data_base*>& boxm2_nn_cache::cached_data_map(vcl_string prefix)
+std::map<boxm2_block_id, boxm2_data_base*>& boxm2_nn_cache::cached_data_map(std::string prefix)
 {
   // if map for this particular data type doesn't exist, initialize it
   if ( cached_data_.find(prefix) == cached_data_.end() )
   {
-    vcl_map<boxm2_block_id, boxm2_data_base*> dmap;
+    std::map<boxm2_block_id, boxm2_data_base*> dmap;
     cached_data_[prefix] = dmap;
   }
 
   // grab a reference to the map of cached_data_ and return it
-  vcl_map<boxm2_block_id, boxm2_data_base*>& data_map = cached_data_[prefix];
+  std::map<boxm2_block_id, boxm2_data_base*>& data_map = cached_data_[prefix];
   return data_map;
 }
 
 //: returns a list of neighbors to center
-vcl_vector<boxm2_block_id> boxm2_nn_cache::get_neighbor_list(boxm2_block_id center)
+std::vector<boxm2_block_id> boxm2_nn_cache::get_neighbor_list(boxm2_block_id center)
 {
-  vcl_vector<boxm2_block_id> neighbor_list;
+  std::vector<boxm2_block_id> neighbor_list;
   for (int i=-1; i<=1; ++i) {
     for (int j=-1; j<=1; ++j) {
       boxm2_block_id id(center.i() + i, center.j() + j, center.k());
@@ -340,24 +342,24 @@ bool boxm2_nn_cache::is_valid_id(boxm2_block_id id)
 
 
 //: Summarizes this cache's data
-vcl_string boxm2_nn_cache::to_string()
+std::string boxm2_nn_cache::to_string()
 {
-  vcl_stringstream stream;
+  std::stringstream stream;
   stream << "boxm2_nn_cache:: scene dir="<<scene_dir_<<'\n'
          << "  blocks: ";
-  vcl_map<boxm2_block_id, boxm2_block*>::iterator blk_iter;
+  std::map<boxm2_block_id, boxm2_block*>::iterator blk_iter;
   for (blk_iter = cached_blocks_.begin(); blk_iter != cached_blocks_.end(); ++blk_iter) {
     boxm2_block_id id = blk_iter->first;
     stream << '(' << id /* << ',' << blk_iter->second */ << ")  ";
   }
 
-  vcl_map<vcl_string, vcl_map<boxm2_block_id, boxm2_data_base*> >::iterator dat_iter;
+  std::map<std::string, std::map<boxm2_block_id, boxm2_data_base*> >::iterator dat_iter;
   for (dat_iter = cached_data_.begin(); dat_iter != cached_data_.end(); ++dat_iter)
   {
-    vcl_string data_type = dat_iter->first;
+    std::string data_type = dat_iter->first;
     stream<< '\n' << "  data: "<<data_type<<' ';
-    vcl_map<boxm2_block_id, boxm2_data_base*> dmap = dat_iter->second;
-    vcl_map<boxm2_block_id, boxm2_data_base*>::iterator it;
+    std::map<boxm2_block_id, boxm2_data_base*> dmap = dat_iter->second;
+    std::map<boxm2_block_id, boxm2_data_base*>::iterator it;
     for (it = dmap.begin(); it != dmap.end(); ++it)
     {
       boxm2_block_id id = it->first;
@@ -368,7 +370,7 @@ vcl_string boxm2_nn_cache::to_string()
 }
 
 //: shows elements in cache
-vcl_ostream& operator<<(vcl_ostream &s, boxm2_nn_cache& scene)
+std::ostream& operator<<(std::ostream &s, boxm2_nn_cache& scene)
 {
   s << scene.to_string();
   return s;

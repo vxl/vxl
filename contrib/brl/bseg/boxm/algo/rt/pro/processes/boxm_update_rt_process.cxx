@@ -1,4 +1,6 @@
 // This is brl/bseg/boxm/algo/rt/pro/processes/boxm_update_rt_process.cxx
+#include <iostream>
+#include <fstream>
 #include <bprb/bprb_func_process.h>
 //:
 // \file
@@ -11,7 +13,7 @@
 //   <none yet>
 // \endverbatim
 
-#include <vcl_fstream.h>
+#include <vcl_compiler.h>
 
 #include <boxm/boxm_scene_base.h>
 #include <boxm/boxm_scene.h>
@@ -41,14 +43,14 @@ bool boxm_update_rt_process_cons(bprb_func_process& pro)
   //input[2]: The scene
   //input[3]: The bin index to be updated
   //input[4]: Use black background?
-  vcl_vector<vcl_string> input_types_(n_inputs_);
+  std::vector<std::string> input_types_(n_inputs_);
   input_types_[0] = "vil_image_view_base_sptr";
   input_types_[1] = "vpgl_camera_double_sptr";
   input_types_[2] = "boxm_scene_base_sptr";
   input_types_[3] = "unsigned";
   input_types_[4] = "bool";
 
-  vcl_vector<vcl_string> output_types_(n_outputs_);
+  std::vector<std::string> output_types_(n_outputs_);
   return pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
 }
 
@@ -57,7 +59,7 @@ bool boxm_update_rt_process(bprb_func_process& pro)
   using namespace boxm_update_rt_process_globals;
 
   if ( pro.n_inputs() < n_inputs_ ){
-    vcl_cout << pro.name() << "boxm_update_rt_process: The input number should be " << n_inputs_<< vcl_endl;
+    std::cout << pro.name() << "boxm_update_rt_process: The input number should be " << n_inputs_<< std::endl;
     return false;
   }
 
@@ -70,8 +72,8 @@ bool boxm_update_rt_process(bprb_func_process& pro)
   bool use_black_background =  pro.get_input<bool>(i++);
 
   // check the input validity
-  if ((input_image == 0) || (camera == 0) || (scene == 0)) {
-     vcl_cout << "boxm_update_rt_process: null input value, cannot run" << vcl_endl;
+  if ((input_image == VXL_NULLPTR) || (camera == VXL_NULLPTR) || (scene == VXL_NULLPTR)) {
+     std::cout << "boxm_update_rt_process: null input value, cannot run" << std::endl;
      return false;
   }
 
@@ -89,7 +91,7 @@ bool boxm_update_rt_process(bprb_func_process& pro)
     }
     else
     {
-      vcl_cout<<"Not yet implemented"<<vcl_endl;
+      std::cout<<"Not yet implemented"<<std::endl;
     }
   // Mixture of Beta's
   } else if (scene->appearence_model() == BOXM_APM_MOB_GREY) {
@@ -105,7 +107,7 @@ bool boxm_update_rt_process(bprb_func_process& pro)
     }
     else
     {
-      vcl_cout<<"Not yet implemented"<<vcl_endl;
+      std::cout<<"Not yet implemented"<<std::endl;
     }
   } else if (scene->appearence_model() == BOXM_APM_SIMPLE_GREY) {
     vil_image_view<vxl_byte> *img_byte
@@ -120,11 +122,11 @@ bool boxm_update_rt_process(bprb_func_process& pro)
     }
     else
     {
-      vcl_cout<<"Not yet implemented"<<vcl_endl;
+      std::cout<<"Not yet implemented"<<std::endl;
     }
   }
   else {
-    vcl_cout << "boxm_update_rt_process: undefined APM type" << vcl_endl;
+    std::cout << "boxm_update_rt_process: undefined APM type" << std::endl;
     return false;
   }
 

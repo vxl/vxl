@@ -27,16 +27,16 @@
 // generate gt hypos
 int main(int argc,  char** argv)
 {
-  vul_arg<vcl_string> gt_file("-gt_locs", "file with the gt locs of all test cases", "");
+  vul_arg<std::string> gt_file("-gt_locs", "file with the gt locs of all test cases", "");
   vul_arg<unsigned> id("-id", "id of the test image", 40);
-  vul_arg<vcl_string> out("-out", "folder which has the output tiles", "");
+  vul_arg<std::string> out("-out", "folder which has the output tiles", "");
   vul_arg<unsigned> thres("-t", "output prob map threshold to count # of pixels less than", 127);
-  vul_arg<vcl_string> local_folder("-loc_out", "local output folder where the intermediate score files are stored", "");
+  vul_arg<std::string> local_folder("-loc_out", "local output folder where the intermediate score files are stored", "");
   vul_arg<unsigned> pass_id("-pass", "e.g. 0 to evaluate binary score output of pass 0 in the local output folder", 0);
   vul_arg<float> cam_threshold("-ct", "score threshold to count # of cameras below at each loc", 0.8f);
   vul_arg_parse(argc, argv);
 
-  vcl_cout << "argc: " << argc << vcl_endl;
+  std::cout << "argc: " << argc << std::endl;
   if (out().compare("") == 0 || local_folder().compare("") == 0 || gt_file().compare("") == 0) {
     vul_arg_display_usage_and_exit();
     return volm_io::EXE_ARGUMENT_ERROR;
@@ -47,43 +47,43 @@ int main(int argc,  char** argv)
   volm_camera_space_sptr camera_space = new volm_camera_space;
   camera_space->b_read(ifs);
   ifs.close();
-  vcl_cout << " READ camera space, number of cams: " << camera_space->valid_indices().size() << vcl_endl;
+  std::cout << " READ camera space, number of cams: " << camera_space->valid_indices().size() << std::endl;
 
-  vcl_vector<vcl_pair<vgl_point_3d<double>, vcl_pair<vcl_pair<vcl_string, int>, vcl_string> > > samples;
+  std::vector<std::pair<vgl_point_3d<double>, std::pair<std::pair<std::string, int>, std::string> > > samples;
   unsigned int cnt = volm_io::read_gt_file(gt_file(), samples);
   if (id() >= cnt) {
-    vcl_cerr << "the file: " << gt_file() << " does not contain test id: " << id() << "!\n";
+    std::cerr << "the file: " << gt_file() << " does not contain test id: " << id() << "!\n";
     return volm_io::EXE_ARGUMENT_ERROR;
   }
   else
-    vcl_cout << "evaluating using gt id: " << id() << " with name: " << samples[id()].second.first.first << " type: " << samples[id()].second.second << " lat: " << samples[id()].first.y() << " lon: " << samples[id()].first.x() << " elev: " << samples[id()].first.z() << '\n';
+    std::cout << "evaluating using gt id: " << id() << " with name: " << samples[id()].second.first.first << " type: " << samples[id()].second.second << " lat: " << samples[id()].first.y() << " lon: " << samples[id()].first.x() << " elev: " << samples[id()].first.z() << '\n';
 
-  vcl_cout << "\n==================================================================================================\n"
+  std::cout << "\n==================================================================================================\n"
            << "\t\t  Evaluate output prob maps using pixel value threshold: " << threshold << '\n'
-           << "==================================================================================================\n" << vcl_endl;
+           << "==================================================================================================\n" << std::endl;
 
 
   // read the output tiles
   unsigned cnt_below = 0;
   unsigned tot_pix_count = 0;
   unsigned tot_pix_unevaluated = 0;
-  vcl_vector<volm_tile> tiles;
+  std::vector<volm_tile> tiles;
   if (samples[id()].second.second == "desert")
     tiles = volm_tile::generate_p1_wr1_tiles();
   else
     tiles = volm_tile::generate_p1_wr2_tiles();
-  vcl_cout << " generated " << tiles.size() << " tiles for type: " << samples[id()].second.second << '\n';
+  std::cout << " generated " << tiles.size() << " tiles for type: " << samples[id()].second.second << '\n';
 
   for (unsigned i = 0; i < tiles.size(); i++)
   {
-    vcl_string name = out() + "/" + "ProbMap_" + tiles[i].get_string() + ".tif";
+    std::string name = out() + "/" + "ProbMap_" + tiles[i].get_string() + ".tif";
     if (!vul_file::exists(name))
     {
-      vcl_cerr << " missing:\t " << name << "!\n";
+      std::cerr << " missing:\t " << name << "!\n";
       continue;
     }
     else
-      vcl_cout << " adding:\t " << name << " to evaluation!\n";
+      std::cout << " adding:\t " << name << " to evaluation!\n";
 
     vil_image_view<vxl_byte> tile = vil_load(name.c_str());
     for (unsigned ii = 0; ii < tile.ni(); ii++)
@@ -104,16 +104,16 @@ int main(int argc,  char** argv)
     unsigned u, v;
     tiles[i].global_to_img(samples[id()].first.x(),  samples[id()].first.y(), u, v);
     if (u < tile.ni() && v < tile.nj())
-      vcl_cout << "\t GT location: " << samples[id()].first.x() << ", " << samples[id()].first.y() << " is at pixel: " << u << ", " << v << " and has value: " << (int)tile(u, v) << vcl_endl;
+      std::cout << "\t GT location: " << samples[id()].first.x() << ", " << samples[id()].first.y() << " is at pixel: " << u << ", " << v << " and has value: " << (int)tile(u, v) << std::endl;
   }
-  vcl_cout << "tot pixels unevaluated: " << tot_pix_unevaluated << '\n'
+  std::cout << "tot pixels unevaluated: " << tot_pix_unevaluated << '\n'
            << "tot pixels evaluated: " << tot_pix_count << '\n'
            << "tot pixels below threshold " << threshold << ": " << cnt_below << '\n'
            << "so knocked out " << (float)cnt_below/tot_pix_count*100 << " percent of the evaluated ROI!\n\n"
 
            << "\n==================================================================================================\n"
            << "\t\t  Evaluate output score binaries using camera score threshold: " << cam_threshold() << '\n'
-           << "==================================================================================================\n" << vcl_endl;
+           << "==================================================================================================\n" << std::endl;
 
   unsigned cnt_hyp_below = 0;
   unsigned tot_hyp_count = 0;
@@ -122,21 +122,21 @@ int main(int argc,  char** argv)
   int total_cams = camera_space->valid_indices().size();
   // read the scores, assumes that score binaries for a given tile fits into memory
   for (unsigned i = 0; i < tiles.size(); i++) {
-    vcl_stringstream score_file_name; score_file_name << local_folder() << "pass" << pass_id() << "_scores_tile_" << i << ".bin";
+    std::stringstream score_file_name; score_file_name << local_folder() << "pass" << pass_id() << "_scores_tile_" << i << ".bin";
     if (!vul_file::exists(score_file_name.str()))
     {
-      vcl_cerr << " missing:\t " << score_file_name.str() << "!\n";
+      std::cerr << " missing:\t " << score_file_name.str() << "!\n";
       continue;
     }
     else
-      vcl_cout << " adding:\t " << score_file_name.str() << " to evaluation!\n";
+      std::cout << " adding:\t " << score_file_name.str() << " to evaluation!\n";
 
-    vcl_cout << " \t\t size of the file is: " << (float)(vul_file::size(score_file_name.str()))/(1024.0*1024.0*1024.0) << " Gb, assuming it fits memory!!\n";
-    vcl_vector<volm_score_sptr> scores;
+    std::cout << " \t\t size of the file is: " << (float)(vul_file::size(score_file_name.str()))/(1024.0*1024.0*1024.0) << " Gb, assuming it fits memory!!\n";
+    std::vector<volm_score_sptr> scores;
     volm_score::read_scores(scores, score_file_name.str());  // this file may be too large, make sure it fits to memory!!
     tot_hyp_count += scores.size();
     for (unsigned j = 0; j < scores.size(); j++) {
-      //vcl_cout << "leaf id: " << scores[j]->leaf_id_ << " hyp_id: " << scores[j]->hypo_id_ << " max score: " << scores[j]->max_score_ << " # of cams: " << scores[j]->cam_id_.size() << '\n';
+      //std::cout << "leaf id: " << scores[j]->leaf_id_ << " hyp_id: " << scores[j]->hypo_id_ << " max score: " << scores[j]->max_score_ << " # of cams: " << scores[j]->cam_id_.size() << '\n';
       total_cam_in_file += scores[j]->cam_id_.size();
       if (scores[j]->max_score_ < cam_threshold()) {
         cnt_hyp_below++;
@@ -147,15 +147,15 @@ int main(int argc,  char** argv)
     }
   }
 
-  vcl_cout << "total # of hypotheses in the output score file: " << tot_hyp_count << vcl_endl
-           << "total # of hypotheses below threshold (" << cam_threshold() << "): " << cnt_hyp_below << vcl_endl
+  std::cout << "total # of hypotheses in the output score file: " << tot_hyp_count << std::endl
+           << "total # of hypotheses below threshold (" << cam_threshold() << "): " << cnt_hyp_below << std::endl
            << "  so previous pass knocked out: " << ((float)cnt_hyp_below/tot_hyp_count)*100.0 << " percent of locations!\n"
-           << "total # of cameras (total hyp*cam space size): " << tot_hyp_count*total_cams << vcl_endl
-           << "total # of cameras saved in score files: " << total_cam_in_file << vcl_endl
-           << "so total # of cameras knocked out: " << cnt_cam_below << vcl_endl
+           << "total # of cameras (total hyp*cam space size): " << tot_hyp_count*total_cams << std::endl
+           << "total # of cameras saved in score files: " << total_cam_in_file << std::endl
+           << "so total # of cameras knocked out: " << cnt_cam_below << std::endl
            << "  so previous pass knocked out: " << ((float)cnt_cam_below/(tot_hyp_count*total_cams))*100.0 << " percent of cameras!\n"
            << "\n==================================================================================================\n"
-           << "==================================================================================================\n" << vcl_endl;
+           << "==================================================================================================\n" << std::endl;
 
   return volm_io::SUCCESS;
 }

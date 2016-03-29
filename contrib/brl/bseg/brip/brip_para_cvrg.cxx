@@ -1,10 +1,12 @@
+#include <cstdlib>
+#include <iostream>
+#include <cmath>
 #include "brip_para_cvrg.h"
 //:
 // \file
 
 #include <vul/vul_timer.h>
-#include <vcl_cstdlib.h>
-#include <vcl_cmath.h>
+#include <vcl_compiler.h>
 #include <vcl_cassert.h>
 #include "brip_vil_float_ops.h"
 
@@ -14,11 +16,11 @@ void brip_para_cvrg::init_variables()
 {
   width_ = int(3*sigma_);
   proj_n_ = 2*proj_width_ + 1;
-  sup_proj_ = vcl_vector<float>(proj_n_, 0.0f);
-  proj_0_ = vcl_vector<float>(proj_n_, 0.0f);
-  proj_45_ = vcl_vector<float>(proj_n_, 0.0f);
-  proj_90_ = vcl_vector<float>(proj_n_, 0.0f);
-  proj_135_ = vcl_vector<float>(proj_n_, 0.0f);
+  sup_proj_ = std::vector<float>(proj_n_, 0.0f);
+  proj_0_ = std::vector<float>(proj_n_, 0.0f);
+  proj_45_ = std::vector<float>(proj_n_, 0.0f);
+  proj_90_ = std::vector<float>(proj_n_, 0.0f);
+  proj_135_ = std::vector<float>(proj_n_, 0.0f);
 }
 
 
@@ -34,9 +36,9 @@ void brip_para_cvrg::init(vil_image_resource_sptr const & image)
   xsize_ = w;
   ysize_ = h;
 
-  vcl_cout << "xstart = " << xstart_ << " ystart_ = " << ystart_ << '\n'
+  std::cout << "xstart = " << xstart_ << " ystart_ = " << ystart_ << '\n'
            << "xsize = " << xsize_ << " ysize_ = " << ysize_ << '\n'
-           << vcl_flush;
+           << std::flush;
 
   image_ = brip_vil_float_ops::convert_to_float(image);
   avg_.set_size(w,h);
@@ -47,8 +49,8 @@ void brip_para_cvrg::init(vil_image_resource_sptr const & image)
   det_.set_size(w,h);
   dir_.set_size(w,h);
   this->init_variables();
-  vcl_cout << "Do Initialization in " << t.real() << " msecs\n"
-           << vcl_flush;
+  std::cout << "Do Initialization in " << t.real() << " msecs\n"
+           << std::flush;
 }
 
 //-----------------------------------------------------------------------------
@@ -81,8 +83,8 @@ void brip_para_cvrg::smooth_image()
 {
   vul_timer t;
   smooth_ = brip_vil_float_ops::gaussian(image_, sigma_);
-  vcl_cout << "Smooth image in " << t.real() << " msecs\n"
-           << vcl_flush;
+  std::cout << "Smooth image in " << t.real() << " msecs\n"
+           << std::flush;
 }
 
 
@@ -177,8 +179,8 @@ void brip_para_cvrg::compute_gradients()
       this->grad90(x, y, smooth_, grad90_);
       this->grad135(x, y, smooth_, grad135_);
     }
-  vcl_cout << "Compute gradients in " << t.real() << " msecs\n"
-           << vcl_flush;
+  std::cout << "Compute gradients in " << t.real() << " msecs\n"
+           << std::flush;
 }
 
 
@@ -196,7 +198,7 @@ void brip_para_cvrg::compute_gradients()
 //                        \ / \ .
 // \endverbatim
 float brip_para_cvrg::project(int x, int y, int dir,
-                              vcl_vector<float>& projection)
+                              std::vector<float>& projection)
 {
   int w,h;
   int w0 = proj_width_;
@@ -226,7 +228,7 @@ float brip_para_cvrg::project(int x, int y, int dir,
   float max_energy = 0;
   for (int i =0; i<proj_n_; i++)
   {
-    float val = vcl_fabs(projection[i]);
+    float val = std::fabs(projection[i]);
     if (val>max_energy)
       max_energy = val;
   }
@@ -238,7 +240,7 @@ float brip_para_cvrg::project(int x, int y, int dir,
 // That is, it is possible to have a "flat" top peak with an arbitrarily
 // long sequence of equal, but maximum values.
 //
-void brip_para_cvrg::remove_flat_peaks(int n, vcl_vector<float>& array)
+void brip_para_cvrg::remove_flat_peaks(int n, std::vector<float>& array)
 {
   int nbm = n-1;
 
@@ -308,16 +310,16 @@ void brip_para_cvrg::remove_flat_peaks(int n, vcl_vector<float>& array)
 
 //------------------------------------------------------------------
 //: Find locally maximum peaks in the input array
-void brip_para_cvrg::non_maximum_supress(vcl_vector<float> const& input_array,
-                                         vcl_vector<float>& sup_array)
+void brip_para_cvrg::non_maximum_supress(std::vector<float> const& input_array,
+                                         std::vector<float>& sup_array)
 {
   if ((2*sup_radius_ +1)> proj_width_)
   {
-    vcl_cout << "In brip_para_cvrg::NonMaximumSupress(..) the kernel is too large\n";
+    std::cout << "In brip_para_cvrg::NonMaximumSupress(..) the kernel is too large\n";
   }
-  vcl_vector<float> tmp(proj_n_);
+  std::vector<float> tmp(proj_n_);
   for (int i=0; i<proj_n_; i++)
-    tmp[i]=vcl_fabs(input_array[i]);
+    tmp[i]=std::fabs(input_array[i]);
   // Get the counts array of "this"
   // Make a new Histogram for the suppressed
 
@@ -332,7 +334,7 @@ void brip_para_cvrg::non_maximum_supress(vcl_vector<float> const& input_array,
         max_val = tmp[index];
     }
     // Is position i a local maximum?
-    if (vcl_fabs(max_val-tmp[i])<1e-03)
+    if (std::fabs(max_val-tmp[i])<1e-03)
       sup_array[i] = max_val; // Yes. So set the counts to the max value
   }
   this->remove_flat_peaks(proj_n_, sup_array);
@@ -341,7 +343,7 @@ void brip_para_cvrg::non_maximum_supress(vcl_vector<float> const& input_array,
 
 //---------------------------------------------------------------
 //: Find the amount of overlapping parallel coverage
-float brip_para_cvrg::parallel_coverage(vcl_vector<float> const& input_array)
+float brip_para_cvrg::parallel_coverage(std::vector<float> const& input_array)
 {
   sup_proj_.resize(proj_n_, 0.0f);
   this->non_maximum_supress(input_array, sup_proj_);
@@ -374,10 +376,10 @@ void brip_para_cvrg::compute_parallel_coverage()
     for (int x=radius ;x<(xsize_-radius);x++)
     {
       // zero arrays
-      proj_0_ = vcl_vector<float>(proj_n_, 0.0f);
-      proj_45_ = vcl_vector<float>(proj_n_, 0.0f);
-      proj_90_ = vcl_vector<float>(proj_n_, 0.0f);
-      proj_135_ = vcl_vector<float>(proj_n_, 0.0f);
+      proj_0_ = std::vector<float>(proj_n_, 0.0f);
+      proj_45_ = std::vector<float>(proj_n_, 0.0f);
+      proj_90_ = std::vector<float>(proj_n_, 0.0f);
+      proj_135_ = std::vector<float>(proj_n_, 0.0f);
       float coverage[4];
       this->project(x, y, 0, proj_0_);
       coverage[0] = this->parallel_coverage(proj_0_);
@@ -405,7 +407,7 @@ void brip_para_cvrg::compute_parallel_coverage()
         direct = 135.f;
       }
 #ifdef DEBUG
-      vcl_cout << '(' << x << ',' << y << ") coverage:\n"
+      std::cout << '(' << x << ',' << y << ") coverage:\n"
                << "   O degrees = " << coverage[0] << '\n'
                << "  45 degrees = " << coverage[1] << '\n'
                << "  90 degrees = " << coverage[2] << '\n'
@@ -416,8 +418,8 @@ void brip_para_cvrg::compute_parallel_coverage()
       det_(x,y) = max_coverage;
       dir_(x,y) = direct;
     }
-  vcl_cout << "Do parallel coverage in " << t.real() << " msecs\n"
-           << vcl_flush;
+  std::cout << "Do parallel coverage in " << t.real() << " msecs\n"
+           << std::flush;
 }
 
 

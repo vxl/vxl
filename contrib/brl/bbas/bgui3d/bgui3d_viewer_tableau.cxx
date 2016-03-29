@@ -1,11 +1,12 @@
 // This is brl/bbas/bgui3d/bgui3d_viewer_tableau.cxx
+#include <iostream>
+#include <cmath>
 #include "bgui3d_viewer_tableau.h"
 //:
 // \file
 
-#include <vcl_iostream.h>
 #include <vcl_cassert.h>
-#include <vcl_cmath.h>
+#include <vcl_compiler.h>
 #include "bgui3d_algo.h"
 #include <vgui/vgui_gl.h>
 #include <vnl/vnl_quaternion.h>
@@ -114,7 +115,7 @@ bgui3d_viewer_tableau::set_scene_root(SoNode* scene_root)
   this->collect_vrml_cameras(scene_root);
 
   // find and used the first user scene camera (if it exists)
-  vcl_vector<SoCamera*> user_cams = find_cameras(user_scene_root_);
+  std::vector<SoCamera*> user_cams = find_cameras(user_scene_root_);
   if (!user_cams.empty()) {
     camera_group_->whichChild.setValue(-1);
     this->set_camera(user_cams[0]);
@@ -183,7 +184,7 @@ bgui3d_viewer_tableau::set_camera(const vpgl_proj_camera<double>& camera)
     cam *= -1.0;
   if ( bgui3d_decompose_camera(cam, K, R, t) ) {
     new_cam->aspectRatio = float(K[0][2]/K[1][2]);
-    new_cam->heightAngle = float(2*vcl_atan2(K[1][2],K[1][1]));
+    new_cam->heightAngle = float(2*std::atan2(K[1][2],K[1][1]));
 
     vnl_double_3 C = -R.transpose()*t;
     new_cam->position.setValue( float(C[0]), float(C[1]), float(C[2]) );
@@ -223,11 +224,11 @@ bgui3d_viewer_tableau::set_camera(const vpgl_proj_camera<double>& camera)
 
 //: Get the scene camera.
 // Creates a vpgl camera (either perspective or affine) from the active SoCamera
-vcl_auto_ptr<vpgl_proj_camera<double> >
+std::auto_ptr<vpgl_proj_camera<double> >
 bgui3d_viewer_tableau::camera() const
 {
   if (!scene_camera_)
-    return vcl_auto_ptr<vpgl_proj_camera<double> >(NULL);
+    return std::auto_ptr<vpgl_proj_camera<double> >(NULL);
 
   const SbVec3f& t_vec = scene_camera_->position.getValue();
   vnl_double_3 t(t_vec[0], t_vec[1], t_vec[2]);
@@ -246,7 +247,7 @@ bgui3d_viewer_tableau::camera() const
   {
    case PERSPECTIVE: {
     SoPerspectiveCamera* cam = (SoPerspectiveCamera*)scene_camera_;
-    double f = 1.0/(vcl_tan(cam->heightAngle.getValue()/2.0));
+    double f = 1.0/(std::tan(cam->heightAngle.getValue()/2.0));
     double sx = 1.0, sy = 1.0;
     if (width < height)
       sy = double(width)/height;
@@ -255,7 +256,7 @@ bgui3d_viewer_tableau::camera() const
     vgl_point_2d<double> p(0, 0);
     vpgl_calibration_matrix<double> K(f,p,sx,sy);
     vgl_point_3d<double> c(t[0],t[1],t[2]);
-    return vcl_auto_ptr<vpgl_proj_camera<double> >
+    return std::auto_ptr<vpgl_proj_camera<double> >
            ( new vpgl_perspective_camera<double>(K,c,R) );
     }
    case ORTHOGONAL:
@@ -263,11 +264,11 @@ bgui3d_viewer_tableau::camera() const
     SoOrthographicCamera* cam = (SoOrthographicCamera*)scene_camera_;
     double h = cam->height.getValue();
 #endif // 0
-    vcl_cerr << "WARNING: not implemented yet\n";
-    return vcl_auto_ptr<vpgl_proj_camera<double> >(NULL);
+    std::cerr << "WARNING: not implemented yet\n";
+    return std::auto_ptr<vpgl_proj_camera<double> >(NULL);
    default:
-    vcl_cerr << "WARNING: no such camera_type_\n";
-    return vcl_auto_ptr<vpgl_proj_camera<double> >(NULL);
+    std::cerr << "WARNING: no such camera_type_\n";
+    return std::auto_ptr<vpgl_proj_camera<double> >(NULL);
   }
 }
 
@@ -287,7 +288,7 @@ bgui3d_viewer_tableau::select_camera(int camera_index)
     }
   }
   else {
-    vcl_vector<SoCamera*> user_cams = find_cameras(user_scene_root_);
+    std::vector<SoCamera*> user_cams = find_cameras(user_scene_root_);
     if (!user_cams.empty()) {
       camera_group_->whichChild.setValue(-1);
       this->set_camera(user_cams[0]);
@@ -328,8 +329,8 @@ bgui3d_viewer_tableau::set_camera_type(camera_type_enum type)
       assert(!"This camera type is not supported");
 
     newCamera->ref();
-    vcl_vector<SoGroup *> cameraparents = get_parents_of_node(this->scene_camera_);
-    for (vcl_vector<SoGroup *>::iterator cp = cameraparents.begin(); cp != cameraparents.end(); ++cp)
+    std::vector<SoGroup *> cameraparents = get_parents_of_node(this->scene_camera_);
+    for (std::vector<SoGroup *>::iterator cp = cameraparents.begin(); cp != cameraparents.end(); ++cp)
     {
       (*cp)->replaceChild((*cp)->findChild(this->scene_camera_), newCamera);
     }
@@ -461,7 +462,7 @@ static void setTextCallback( void *data, SoSensor * /*sensor*/ )
   ((SoText2*)data)->string.deleteValues(0, 1);
 }
 
-void bgui3d_viewer_tableau::setText( const vcl_string& string )
+void bgui3d_viewer_tableau::setText( const std::string& string )
 {
   int numStrings = text_->string.getNum();
   text_->string.set1Value( numStrings, string.c_str() );
@@ -488,7 +489,7 @@ bgui3d_viewer_tableau::convertOrtho2Perspective(const SoOrthographicCamera * in,
 
   // focalDistance==0.0f happens for empty scenes.
   if (focaldist != 0.0f) {
-    out->heightAngle = 2.0f * (float)vcl_atan(in->height.getValue() / 2.0 / focaldist);
+    out->heightAngle = 2.0f * (float)std::atan(in->height.getValue() / 2.0 / focaldist);
   }
   else {
     // 45?is the default value of this field in SoPerspectiveCamera.
@@ -511,7 +512,7 @@ bgui3d_viewer_tableau::convertPerspective2Ortho(const SoPerspectiveCamera * in,
 
   float focaldist = in->focalDistance.getValue();
 
-  out->height = 2.0f * focaldist * (float)vcl_tan(in->heightAngle.getValue() / 2.0);
+  out->height = 2.0f * focaldist * (float)std::tan(in->heightAngle.getValue() / 2.0);
 }
 
 void
@@ -651,7 +652,7 @@ bgui3d_viewer_tableau::set_clipping_planes()
 }
 
 
-vcl_vector<SoGroup*>
+std::vector<SoGroup*>
 bgui3d_viewer_tableau::get_parents_of_node(SoNode * node)
 {
   SbBool oldsearch = SoBaseKit::isSearchingChildren();
@@ -666,7 +667,7 @@ bgui3d_viewer_tableau::get_parents_of_node(SoNode * node)
   search.apply(this->scene_root());
   SoPathList & pl = search.getPaths();
 
-  vcl_vector<SoGroup*> parents;
+  std::vector<SoGroup*> parents;
   for (int i = 0; i < pl.getLength(); ++i) {
     SoFullPath * p = (SoFullPath*) pl[i];
     if (p->getLength() > 0)
@@ -677,7 +678,7 @@ bgui3d_viewer_tableau::get_parents_of_node(SoNode * node)
 }
 
 
-vcl_vector<SoCamera*>
+std::vector<SoCamera*>
 bgui3d_viewer_tableau::find_cameras(SoNode* root) const
 {
   assert(camera_group_);
@@ -690,7 +691,7 @@ bgui3d_viewer_tableau::find_cameras(SoNode* root) const
   sa.apply(root);
   SoPathList & pl = sa.getPaths();
 
-  vcl_vector<SoCamera*> cameras;
+  std::vector<SoCamera*> cameras;
   for (int i = 0; i < pl.getLength(); ++i) {
     SoFullPath * p = (SoFullPath*) pl[i];
     if (p->getTail()->isOfType(SoCamera::getClassTypeId())) {

@@ -1,11 +1,12 @@
 // This is core/vgui/vgui_menu.cxx
+#include <iostream>
 #include "vgui_menu.h"
 //:
 // \file
 // \author fsm
 // \brief  See vgui_menu.h for a description of this file.
 
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
 #include <vgui/vgui_command.h>
 
 //--------------------------------------------------------------------------------
@@ -66,9 +67,9 @@ vgui_menu& vgui_menu::operator=(vgui_menu const &that)
 
 //--------------------------------------------------------------------------------
 
-#define im_here do { /* vcl_cerr << __FILE__ " : " << __LINE__ << vcl_endl; */ } while (false)
+#define im_here do { /* std::cerr << __FILE__ " : " << __LINE__ << std::endl; */ } while (false)
 
-void vgui_menu::add(vcl_string const &n,
+void vgui_menu::add(std::string const &n,
                     vgui_command_sptr c,
                     vgui_key key,
                     vgui_modifier modifiers)
@@ -82,7 +83,7 @@ void vgui_menu::add(vcl_string const &n,
   items.push_back(i);
 }
 
-void vgui_menu::add(vcl_string const &n,
+void vgui_menu::add(std::string const &n,
                     vgui_menu_callback f,
                     void const* client_data,
                     vgui_key key,
@@ -93,7 +94,7 @@ void vgui_menu::add(vcl_string const &n,
   add(n, /* (vgui_command*) */cfunc, key, modifiers);
 }
 
-void vgui_menu::add(vcl_string const &n,
+void vgui_menu::add(std::string const &n,
                     vgui_menu_callback_no_client_data f,
                     vgui_key key,
                     vgui_modifier modifiers)
@@ -103,7 +104,7 @@ void vgui_menu::add(vcl_string const &n,
   add(n, /* (vgui_command*) */cfunc, key, modifiers);
 }
 
-void vgui_menu::add(vcl_string const &n,
+void vgui_menu::add(std::string const &n,
                     vgui_menu const &m,
                     vgui_key key,
                     vgui_modifier modifiers)
@@ -139,7 +140,7 @@ void vgui_menu::include(vgui_menu const &that)
 // new line (usually spaces for indentation).
 // This could be a member function, but that would just clutter
 // the interface even more.
-static void dump(vgui_menu const &This, vcl_ostream &os, vcl_string const &pre)
+static void dump(vgui_menu const &This, std::ostream &os, std::string const &pre)
 {
   for (unsigned i=0;i<This.size();i++) {
     // name
@@ -178,7 +179,7 @@ static void dump(vgui_menu const &This, vcl_ostream &os, vcl_string const &pre)
   }
 }
 
-vcl_ostream &operator<<(vcl_ostream &os, vgui_menu const &m)
+std::ostream &operator<<(std::ostream &os, vgui_menu const &m)
 {
   dump(m, os, "  ");
   return os;

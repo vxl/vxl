@@ -13,8 +13,9 @@
 //   <none yet>
 // \endverbatim
 
+#include <iostream>
 #include "bvpl_kernel_factory.h"
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
 
 
 class bvpl_edge2d_kernel_factory : public bvpl_kernel_factory

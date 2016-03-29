@@ -1,10 +1,12 @@
+#include <iostream>
+#include <iosfwd>
 #include "msm_draw_shape_to_eps.h"
 //:
 // \file
 // \brief Draws current shape instance to an eps file
 // \author Tim Cootes
 
-#include <vcl_iosfwd.h>
+#include <vcl_compiler.h>
 #include <vcl_cassert.h>
 
 //: Draws current shape instance to an eps file
@@ -14,17 +16,17 @@ void msm_draw_shape_to_eps(mbl_eps_writer& writer,
                            const msm_points& points,
                            const msm_curves& curves)
 {
-  vcl_vector<vgl_point_2d<double> > pts;
+  std::vector<vgl_point_2d<double> > pts;
   points.get_points(pts);
 
   for (unsigned c=0;c<curves.size();++c)
   {
-    const vcl_vector<unsigned>& index = curves[c].index();
-    vcl_vector<vgl_point_2d<double> > p(index.size());
+    const std::vector<unsigned>& index = curves[c].index();
+    std::vector<vgl_point_2d<double> > p(index.size());
     for (unsigned i=0;i<index.size();++i)
     {
       if (index[i]>=pts.size())
-        vcl_cerr<<"Illegal index: "<<index[i]<<vcl_endl;
+        std::cerr<<"Illegal index: "<<index[i]<<std::endl;
       assert(index[i]<pts.size());
       p[i]=pts[index[i]];
     }

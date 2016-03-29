@@ -8,9 +8,11 @@
 // \author Ian Scott
 // \date 2000-05-26
 
+#include <iostream>
+#include <iosfwd>
 #include <clsfy/clsfy_binary_hyperplane.h>
 #include <clsfy/clsfy_builder_base.h>
-#include <vcl_iosfwd.h>
+#include <vcl_compiler.h>
 
 //: Build a binary linear classifier using least squares
 class clsfy_binary_hyperplane_ls_builder : public clsfy_builder_base
@@ -27,23 +29,23 @@ class clsfy_binary_hyperplane_ls_builder : public clsfy_builder_base
   // Return the mean error over the training set.
   double build(clsfy_classifier_base &classifier,
                mbl_data_wrapper<vnl_vector<double> > &inputs,
-               const vcl_vector<unsigned> &outputs) const;
+               const std::vector<unsigned> &outputs) const;
 
   //: Build a linear classifier, with the given data.
   // Return the mean error over the training set.
   // n_classes must be 1
   double build(clsfy_classifier_base &classifier,
                mbl_data_wrapper<vnl_vector<double> > &inputs,
-               unsigned n_classes, const vcl_vector<unsigned> &outputs) const;
+               unsigned n_classes, const std::vector<unsigned> &outputs) const;
 
   //: Name of the class
-  vcl_string is_a() const;
+  std::string is_a() const;
 
   //: Name of the class
-  virtual bool is_class(vcl_string const& s) const;
+  virtual bool is_class(std::string const& s) const;
 
   //: Print class to os
-  void print_summary(vcl_ostream& os) const;
+  void print_summary(std::ostream& os) const;
 
   //: Create a deep copy.
   // client is responsible for deleting returned object.

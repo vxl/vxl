@@ -4,6 +4,7 @@
 #include <vgui/vgui_range_map.h>
 #include <vbl/vbl_array_1d.h>
 
+#if define INCLUDE_LONG_DOUBLE_TESTS
 static void test_range_map()
 {
   //Test the range map parameter class
@@ -12,9 +13,9 @@ static void test_range_map()
   vgui_range_map_params_sptr rmpL1 =  new vgui_range_map_params(*rmpL);
   vgui_range_map_params_sptr rmpL2 =  new vgui_range_map_params(ma, mc);
 
-  rmpL->print(vcl_cout);
-  rmpL1->print(vcl_cout);
-  rmpL2->print(vcl_cout);
+  rmpL->print(std::cout);
+  rmpL1->print(std::cout);
+  rmpL2->print(std::cout);
   bool equal = *rmpL==*rmpL1;
   bool not_equal = *rmpL!=*rmpL2;
   TEST("range map params luminosity", equal&&not_equal, true);
@@ -25,9 +26,9 @@ static void test_range_map()
   vgui_range_map_params_sptr rmpRGB2 =
     new vgui_range_map_params(ma, mb, ma, mc, ma, me);
 
-  rmpRGB->print(vcl_cout);
-  rmpRGB1->print(vcl_cout);
-  rmpRGB2->print(vcl_cout);
+  rmpRGB->print(std::cout);
+  rmpRGB1->print(std::cout);
+  rmpRGB2->print(std::cout);
   bool RGBequal = *rmpRGB==*rmpRGB1;
   bool RGBnot_equal = *rmpRGB!=*rmpRGB2;
   TEST("range map params RGB", RGBequal&&RGBnot_equal, true);
@@ -38,9 +39,9 @@ static void test_range_map()
   vgui_range_map_params_sptr rmpRGBA2 =
     new vgui_range_map_params(ma, mb, ma, mc, ma, md, ma, mf);
 
-  rmpRGBA->print(vcl_cout);
-  rmpRGBA1->print(vcl_cout);
-  rmpRGBA2->print(vcl_cout);
+  rmpRGBA->print(std::cout);
+  rmpRGBA1->print(std::cout);
+  rmpRGBA2->print(std::cout);
   bool RGBAequal = *rmpRGBA==*rmpRGBA1;
   bool RGBAnot_equal = *rmpRGBA!=*rmpRGBA2;
   TEST("range map params RGBA", RGBAequal&&RGBAnot_equal, true);
@@ -176,5 +177,8 @@ static void test_range_map()
 
   TEST("RGB vxl_byte values", Rval==127&&Gval==127&&Bval==127&&!RGBrmuc.offset()&&map_good, true);
 }
+#else
+static void test_range_map() { return; } // Can not test with valgrind
+#endif
 
 TESTMAIN(test_range_map);

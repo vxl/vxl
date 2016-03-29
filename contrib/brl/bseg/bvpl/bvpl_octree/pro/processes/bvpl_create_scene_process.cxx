@@ -1,4 +1,6 @@
 //This is brl/bseg/bvpl/bvpl_octree/pro/processes/bvpl_create_scene_process.cxx
+#include <iostream>
+#include <string>
 #include <boxm/boxm_scene_base.h>
 //:
 // \file
@@ -17,7 +19,7 @@
 
 #include <brdb/brdb_value.h>
 
-#include <vcl_string.h>
+#include <vcl_compiler.h>
 
 #include <boxm/boxm_scene.h>
 #include <boxm/boxm_scene_parser.h>
@@ -35,10 +37,10 @@ bool bvpl_create_scene_process_cons(bprb_func_process& pro)
 {
   using namespace bvpl_create_scene_process_globals;
 
-  vcl_vector<vcl_string> input_types_(n_inputs_);
+  std::vector<std::string> input_types_(n_inputs_);
   input_types_[0] = "vcl_string";
 
-  vcl_vector<vcl_string> output_types_(n_outputs_);
+  std::vector<std::string> output_types_(n_outputs_);
   output_types_[0] = "boxm_scene_base_sptr";
 
   return pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
@@ -48,7 +50,7 @@ bool bvpl_create_scene_process_cons(bprb_func_process& pro)
 bool bvpl_create_scene_process(bprb_func_process& pro)
 {
   using namespace bvpl_create_scene_process_globals;
-  vcl_string fname = pro.get_input<vcl_string>(0);
+  std::string fname = pro.get_input<std::string>(0);
 
   boxm_scene_parser parser;
 
@@ -73,7 +75,7 @@ bool bvpl_create_scene_process(bprb_func_process& pro)
     }
   }
   else {
-    vcl_cerr << "bvpl_create_scene_process: undefined datatype\n";
+    std::cerr << "bvpl_create_scene_process: undefined datatype\n";
     return false;
   }
 

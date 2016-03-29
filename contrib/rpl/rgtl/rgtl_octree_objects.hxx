@@ -11,7 +11,9 @@
 // (See accompanying file rgtl_license_1_0.txt or copy at
 // http://www.boost.org/LICENSE_1_0.txt)
 
-#include <vcl_vector.h>
+#include <iostream>
+#include <vector>
+#include <vcl_compiler.h>
 
 class rgtl_serialize_access;
 
@@ -49,7 +51,7 @@ class rgtl_octree_objects
   //: Query the given hyper-sphere for objects its volume intersects.
   //  Returns the number of objects found.
   int query_sphere(double const center[D], double radius,
-                   vcl_vector<int>& ids) const;
+                   std::vector<int>& ids) const;
 
   //: Query the given object for other objects its volume intersects.
   //  Returns the number of objects found.  Note that the given id is
@@ -57,7 +59,7 @@ class rgtl_octree_objects
   //  and object_intersects_object callbacks.  It may therefore be out
   //  of range which is useful in querying the objects with another
   //  object not in the set.
-  int query_object(int id, vcl_vector<int>& ids) const;
+  int query_object(int id, std::vector<int>& ids) const;
 
   //: Query the k closest objects to the given point.
   //  Returns the number of objects found.  Any combination of the object ids,

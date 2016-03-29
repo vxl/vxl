@@ -18,7 +18,7 @@
 // \endverbatim
 //
 //-------------------------------------------------------------------------------
-#include<vcl_vector.h>
+#include<std::vector.h>
 #include<pop/pop_parameter.h>
 
 //: A base class for object that has parameters
@@ -28,16 +28,16 @@ class pop_object
   // constructor
   pop_object() {}
 
-  pop_object(vcl_vector<pop_parameter*> &params) { params_ = params; }
+  pop_object(std::vector<pop_parameter*> &params) { params_ = params; }
 
   // destructor
   virtual ~pop_object() {}
 
   //: get the parameters
-  vcl_vector<pop_parameter*> get_parameters() { return params_; }
+  std::vector<pop_parameter*> get_parameters() { return params_; }
 
   //: set the parameters
-  void set(vcl_vector<pop_parameter*> &params) { params_ = params; update(); }
+  void set(std::vector<pop_parameter*> &params) { params_ = params; update(); }
 
   //: update the object based on the parameters
   virtual void update();
@@ -45,7 +45,7 @@ class pop_object
  protected:
 
   //: the basic parameters
-  vcl_vector<pop_parameter*> params_;
+  std::vector<pop_parameter*> params_;
 };
 
 

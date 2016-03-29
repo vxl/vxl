@@ -27,7 +27,7 @@ class vgui_qt : public vgui_toolkit
 {
  public:
    static    vgui_qt*   instance();
-   virtual   vcl_string name() const { return "qt"; }
+   virtual   std::string name() const { return "qt"; }
    virtual   void       run();
    virtual   void       run_one_event();
    virtual   void       run_till_idle();

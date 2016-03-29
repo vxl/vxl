@@ -72,6 +72,6 @@ class vgl_ellipse_scan_iterator : public vgl_region_scan_iterator
   int end_x_;
 };
 
-#define VGL_ELLIPSE_SCAN_ITERATOR_INSTANTIATE(T) extern "please include <vgl/vgl_ellipse_scan_iterator.txx> instead"
+#define VGL_ELLIPSE_SCAN_ITERATOR_INSTANTIATE(T) extern "please include <vgl/vgl_ellipse_scan_iterator.hxx> instead"
 
 #endif // vgl_ellipse_scan_iterator_h_

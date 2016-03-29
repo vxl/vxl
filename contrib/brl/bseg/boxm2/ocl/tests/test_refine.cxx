@@ -3,6 +3,11 @@
 // \author Andy Miller
 // \date 26-Oct-2010
 
+#include <iostream>
+#include <string>
+#include <vector>
+#include <map>
+#include <algorithm>
 #include <testlib/testlib_test.h>
 #include <testlib/testlib_root_dir.h>
 #include <vcl_where_root_dir.h>
@@ -16,11 +21,7 @@
 #include <boxm2/ocl/boxm2_opencl_cache.h>
 #include <boxm2/ocl/pro/boxm2_opencl_processor.h> // beware: does not exist anymore
 
-#include <vcl_iostream.h>
-#include <vcl_string.h>
-#include <vcl_vector.h>
-#include <vcl_map.h>
-#include <vcl_algorithm.h>
+#include <vcl_compiler.h>
 #endif
 
 //: Three unit tests for the three main refine kernel functions
@@ -31,8 +32,8 @@ void test_refine_trees_kernel()
   //--- BEGIN BOXM2 API EXAMPLE ------------------------------------------------
   //----------------------------------------------------------------------------
   //start out rendering with the CPU
-  vcl_string test_dir  = testlib_root_dir()+ "/contrib/brl/bseg/boxm2/ocl/tests/";
-  vcl_string test_file = test_dir + "scene.xml";
+  std::string test_dir  = testlib_root_dir()+ "/contrib/brl/bseg/boxm2/ocl/tests/";
+  std::string test_file = test_dir + "scene.xml";
   boxm2_scene_sptr scene = new boxm2_scene(test_file);
 
 #if 0
@@ -46,8 +47,8 @@ void test_refine_trees_kernel()
   gpu_pro->init();
 
   //rendering sources
-  vcl_vector<vcl_string> src_paths;
-  vcl_string source_dir = vcl_string(VCL_SOURCE_ROOT_DIR) + "/contrib/brl/bseg/boxm2/ocl/cl/";
+  std::vector<std::string> src_paths;
+  std::string source_dir = std::string(VCL_SOURCE_ROOT_DIR) + "/contrib/brl/bseg/boxm2/ocl/cl/";
   src_paths.push_back(source_dir + "scene_info.cl");
   src_paths.push_back(source_dir + "bit/bit_tree_library_functions.cl");
   src_paths.push_back(source_dir + "bit/refine_bit_scene.cl");
@@ -77,8 +78,8 @@ void test_refine_trees_kernel()
   lookup.create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR);
 
   //For each ID in the visibility order, grab that block
-  vcl_map<boxm2_block_id, boxm2_block_metadata> blocks = scene->blocks();
-  vcl_map<boxm2_block_id, boxm2_block_metadata>::iterator blk_iter = blocks.begin();
+  std::map<boxm2_block_id, boxm2_block_metadata> blocks = scene->blocks();
+  std::map<boxm2_block_id, boxm2_block_metadata>::iterator blk_iter = blocks.begin();
   boxm2_block_metadata data = blk_iter->second;
 
   //get id
@@ -114,8 +115,8 @@ void test_refine_trees_kernel()
   refine_trees.set_local_arg( sizeof(cl_uchar16) );
 
   //set workspace
-  vcl_size_t lThreads[] = {1, 1};
-  vcl_size_t gThreads[] = {numTrees, 1};
+  std::size_t lThreads[] = {1, 1};
+  std::size_t gThreads[] = {numTrees, 1};
 
   //execute kernel
   refine_trees.execute( *gpu_pro->get_queue(), 2, lThreads, gThreads);
@@ -125,7 +126,7 @@ void test_refine_trees_kernel()
   refine_trees.clear_args();
 
   blk_copy->read_to_buffer(*gpu_pro->get_queue());
-  vcl_cout<<"Testing refine results"<<vcl_endl;
+  std::cout<<"Testing refine results"<<std::endl;
   vxl_byte* cpy = (vxl_byte*) blk_copy->cpu_buffer();
   for (int i=0; i<numTrees; ++i) {
     if (cpy[16*i] != 1) {
@@ -136,7 +137,7 @@ void test_refine_trees_kernel()
   TEST(" First pass refine trees test ", true, true);
 
   tree_sizes->read_to_buffer(*gpu_pro->get_queue());
-  vcl_cout<<"outputting new tree sizes"<<vcl_endl;
+  std::cout<<"outputting new tree sizes"<<std::endl;
   int* sizes = (int*) tree_sizes->cpu_buffer();
   for (int i=0; i<numTrees; ++i) {
     if (sizes[i] != 9) {
@@ -157,7 +158,7 @@ void test_refine_trees_kernel()
   for (int i=numTrees-1; i>0; --i) sizebuff[i] = sizebuff[i-1];
   sizebuff[0] = 0;
   tree_sizes->write_to_buffer(*gpu_pro->get_queue());
-  vcl_cout<<"New data size: "<<newDataSize<<vcl_endl;
+  std::cout<<"New data size: "<<newDataSize<<std::endl;
   /////////////////////////////////////////////////////////////////////////
 
   /////////////////////////////////////////////////////////////////////////////
@@ -197,28 +198,28 @@ void test_refine_trees_kernel()
   //original alphas
   float* abuf = (float*) alpha->cpu_buffer();
   for (int i=0; i<8; ++i)
-    vcl_cout<<abuf[i]<<vcl_endl;
+    std::cout<<abuf[i]<<std::endl;
 
-  vcl_cout<<"NEW ALPHAS"<<vcl_endl;
+  std::cout<<"NEW ALPHAS"<<std::endl;
   alpha_copy->read_to_buffer(*gpu_pro->get_queue());
   float* alph = (float*) alpha_copy->cpu_buffer();
   for (int i=0; i<newDataSize; ++i)
-    vcl_cout<<alph[i]<<vcl_endl;
+    std::cout<<alph[i]<<std::endl;
 
   //TEST to make sure the new trees are lined up correctly
   blk->read_to_buffer(*gpu_pro->get_queue());
   vxl_byte* refined = (vxl_byte*) blk->cpu_buffer();
   for (int i=0; i<numTrees; ++i) {
     if (refined[16*i] != 1) {
-      vcl_cout<<"value is: "<<(int) refined[16*i]<<"... should be 1 at "<<i<<vcl_endl;
+      std::cout<<"value is: "<<(int) refined[16*i]<<"... should be 1 at "<<i<<std::endl;
       TEST(" THIRD PASS REFINE TEST (trees) ", true, false);
       return;
     }
     int pointer;
-    vcl_memcpy(&pointer, &refined[16*i]+10, sizeof(int));
+    std::memcpy(&pointer, &refined[16*i]+10, sizeof(int));
     if (pointer != 9*i) {
       TEST(" THIRD PASS Refine data pointer ", true, false);
-      vcl_cout<<"Pointer is: "<<pointer<<"... should be "<<9*i<<" at "<<i<<vcl_endl;
+      std::cout<<"Pointer is: "<<pointer<<"... should be "<<9*i<<" at "<<i<<std::endl;
       return;
     }
   }

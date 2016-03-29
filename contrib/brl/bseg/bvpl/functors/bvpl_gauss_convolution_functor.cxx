@@ -62,6 +62,6 @@ void bvpl_gauss_convolution_functor::set_max(bvpl_kernel_iterator kernel_iter)
     ++kernel_iter;
   }
 
-  vcl_cout << "max response : " << max_val << vcl_endl;
+  std::cout << "max response : " << max_val << std::endl;
   max_ = max_val;
 }

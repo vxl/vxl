@@ -16,9 +16,11 @@
 //   Peter Vanroose - 11 Mar 97 - added operator==
 // \endverbatim
 
+#include <iostream>
+#include <iosfwd>
 #include <mvl/HomgLine2D.h>
 #include <mvl/HomgPoint2D.h>
-#include <vcl_iosfwd.h>
+#include <vcl_compiler.h>
 
 class HomgLineSeg2D : public HomgLine2D
 {
@@ -45,7 +47,7 @@ class HomgLineSeg2D : public HomgLine2D
   double picking_distance(const HomgPoint2D& point1) const;
 };
 
-vcl_ostream& operator<<(vcl_ostream& s, const HomgLineSeg2D& );
+std::ostream& operator<<(std::ostream& s, const HomgLineSeg2D& );
 
 //--------------------------------------------------------------
 //

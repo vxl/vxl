@@ -9,7 +9,7 @@
 // \author fsm
 // \brief  Some handy preprocessor macros commonly used in vgui
 //
-// Do not include <vcl_iostream.h> from this file.
+// Do not include <std::iostream.h> from this file.
 
 
 //: Handy gl debugging macro.
@@ -19,8 +19,8 @@
 
 //: Handy for printing warnings stamped with the location of the source line.
 // E.g. vgui_macro_warning << "no more megabytes" << endl;
-// You will need to include vcl_iostream to use this.
-#define vgui_macro_warning (vcl_cerr << __FILE__ ", line " << __LINE__ << ": ")
+// You will need to include std::iostream to use this.
+#define vgui_macro_warning (std::cerr << __FILE__ ", line " << __LINE__ << ": ")
 
 
 // internals

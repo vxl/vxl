@@ -59,7 +59,7 @@ get_command(unsigned int tag)
   observer_map::iterator i =  observers_.find( tag );
 
   if ( i == observers_.end() )
-    return 0;
+    return VXL_NULLPTR;
 
   return i->second.command_;
 }

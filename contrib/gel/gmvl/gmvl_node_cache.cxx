@@ -6,8 +6,9 @@
 // \file
 // \author crossge@crd.ge.com
 
+#include <iostream>
 #include "gmvl_node_cache.h"
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
 
 // constructors and destructors
 gmvl_node_cache::gmvl_node_cache()
@@ -38,7 +39,7 @@ void gmvl_node_cache::add( const gmvl_node_sptr node)
 
   if (!found)
   {
-    vcl_pair<vcl_string,vcl_vector<gmvl_node_sptr> > pair;
+    std::pair<std::string,std::vector<gmvl_node_sptr> > pair;
 
     pair.first= node->type_;
     pair.second.push_back( node);
@@ -49,7 +50,7 @@ void gmvl_node_cache::add( const gmvl_node_sptr node)
 
 void gmvl_node_cache::remove( const gmvl_node_sptr node)
 {
-  vcl_vector<gmvl_node_sptr> newnodes;
+  std::vector<gmvl_node_sptr> newnodes;
 
   for (unsigned int i=0; i< nodes_.size(); ++i)
   {
@@ -72,9 +73,9 @@ bool gmvl_node_cache::cached( const gmvl_node_sptr node) const
 
 // clever accessors
 
-vcl_vector<gmvl_node_sptr> gmvl_node_cache::get( const vcl_string type) const
+std::vector<gmvl_node_sptr> gmvl_node_cache::get( const std::string type) const
 {
-  vcl_vector<gmvl_node_sptr> empty;
+  std::vector<gmvl_node_sptr> empty;
 
   for (unsigned int i=0; i< typecache_.size(); ++i)
   {
@@ -106,7 +107,7 @@ void gmvl_node_cache::rebuild()
 
     if (!found)
     {
-      vcl_pair<vcl_string,vcl_vector<gmvl_node_sptr> > pair;
+      std::pair<std::string,std::vector<gmvl_node_sptr> > pair;
 
       pair.first= nodes_[i]->type_;
       pair.second.push_back( nodes_[i]);
@@ -117,7 +118,7 @@ void gmvl_node_cache::rebuild()
 }
 
 // input and output
-vcl_ostream &operator<<( vcl_ostream &os, const gmvl_node_cache &c)
+std::ostream &operator<<( std::ostream &os, const gmvl_node_cache &c)
 {
   for (unsigned int i=0; i< c.nodes_.size(); ++i)
     os << *c.nodes_[i] << ' ';

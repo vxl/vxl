@@ -32,16 +32,16 @@ pdf1d_gaussian_sampler::~pdf1d_gaussian_sampler()
 // Method: is_a
 //=======================================================================
 
-vcl_string pdf1d_gaussian_sampler::is_a() const
+std::string pdf1d_gaussian_sampler::is_a() const
 {
-  return vcl_string("pdf1d_gaussian_sampler");
+  return std::string("pdf1d_gaussian_sampler");
 }
 
 //=======================================================================
 // Method: is_class
 //=======================================================================
 
-bool pdf1d_gaussian_sampler::is_class(vcl_string const& s) const
+bool pdf1d_gaussian_sampler::is_class(std::string const& s) const
 {
   return pdf1d_sampler::is_class(s) || s==pdf1d_gaussian_sampler::is_a();
 }

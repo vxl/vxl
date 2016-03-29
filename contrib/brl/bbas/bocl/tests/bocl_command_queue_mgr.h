@@ -13,7 +13,9 @@
 //  It also stores a list of blocks to process (in a given order).
 //  When run is called, it will run the same process on each set of blocks
 //  (this may need to be pushed down to the processor)
-#include <vcl_vector.h>
+#include <iostream>
+#include <vector>
+#include <vcl_compiler.h>
 
 //open cl includes
 #include <bocl/bocl_cl.h>

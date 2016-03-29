@@ -1,7 +1,8 @@
 // This example displays an image in a window.  The image is loaded from
 // the filename given as the first command line parameter.
 
-#include <vcl_iostream.h>
+#include <iostream>
+#include <vcl_compiler.h>
 #include <vgui/vgui.h>
 #include <vgui/vgui_image_tableau.h>
 #include <vgui/vgui_viewer2D_tableau.h>
@@ -12,7 +13,7 @@ int main(int argc, char **argv)
   vgui::init(argc, argv);
   if (argc <= 1)
   {
-    vcl_cerr << "Please give an image filename on the command line\n";
+    std::cerr << "Please give an image filename on the command line\n";
     return 0;
   }
 

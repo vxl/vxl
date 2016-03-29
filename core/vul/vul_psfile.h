@@ -12,11 +12,12 @@
 //                                print_greyscale_image() & print_color_image()
 // \endverbatim
 
-#include <vcl_string.h>
-#include <vcl_fstream.h>
+#include <string>
+#include <fstream>
+#include <vcl_compiler.h>
 
 //: Write a PostScript file
-class vul_psfile: public vcl_ofstream
+class vul_psfile: public std::ofstream
 {
  public:
   enum paper_type {
@@ -91,7 +92,7 @@ class vul_psfile: public vcl_ofstream
   void object_translate_and_scale();
   void done();
 
-  vcl_ofstream output_filestream;
+  std::ofstream output_filestream;
 
   float fg_r, fg_g, fg_b;
   float bg_r, bg_g, bg_b;
@@ -102,7 +103,7 @@ class vul_psfile: public vcl_ofstream
   double psizex, psizey;   /* current paper size, in inches */
   double pos_inx, pos_iny; /* top-left offset of image, in inches */
   int width, height;       /* image width and height */
-  vcl_string filename;     /* postscript path/filename */
+  std::string filename;     /* postscript path/filename */
   paper_type printer_paper_type;
   paper_orientation printer_paper_orientation;
   paper_layout printer_paper_layout;
@@ -114,9 +115,9 @@ class vul_psfile: public vcl_ofstream
 
  private: /*even more*/
 
-  vcl_streampos translate_pos;
-  vcl_streampos sobj_t_pos;
-  vcl_streampos header_pos;
+  std::streampos translate_pos;
+  std::streampos sobj_t_pos;
+  std::streampos header_pos;
 
   bool graphics_prolog_exists;
   bool exist_image;

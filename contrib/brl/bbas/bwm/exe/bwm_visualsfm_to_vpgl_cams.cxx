@@ -1,15 +1,16 @@
+#include <vector>
+#include <set>
+#include <iostream>
+#include <fstream>
+#include <string>
+#include <cstdlib>
 #include <bwm/bwm_observer_cam.h>
 #include <bwm/video/bwm_video_cam_ostream.h>
 #include <bwm/video/bwm_video_corr_sptr.h>
 #include <bwm/video/bwm_video_corr.h>
 #include <bwm/video/bwm_video_site_io.h>
 
-#include <vcl_vector.h>
-#include <vcl_set.h>
 #include <vcl_cassert.h>
-#include <vcl_iostream.h>
-#include <vcl_fstream.h>
-#include <vcl_string.h>
 #include <vul/vul_arg.h>
 #include <vul/vul_file.h>
 #include <vgl/algo/vgl_fit_plane_3d.h>
@@ -26,12 +27,12 @@
 
 #include <vidl/vidl_image_list_istream.h>
 
-#include <vcl_cstdlib.h> // for rand()
+#include <vcl_compiler.h>
 #include <bwm/bwm_site_mgr.h>
 
 #include <bxml/bxml_write.h>
 
-static void write_vrml_header(vcl_ofstream& str)
+static void write_vrml_header(std::ofstream& str)
 {
   str << "#VRML V2.0 utf8\n"
       << "Background {\n"
@@ -41,7 +42,7 @@ static void write_vrml_header(vcl_ofstream& str)
 }
 
 static void
-write_vrml_cameras(vcl_ofstream& str,vcl_vector<vpgl_perspective_camera<double> > & cams, double rad, vcl_set<int> const& bad_cams)
+write_vrml_cameras(std::ofstream& str,std::vector<vpgl_perspective_camera<double> > & cams, double rad, std::set<int> const& bad_cams)
 {
   str << "#VRML V2.0 utf8\n"
       << "Background {\n"
@@ -101,8 +102,8 @@ write_vrml_cameras(vcl_ofstream& str,vcl_vector<vpgl_perspective_camera<double> 
   }
 }
 
-static void write_vrml_points(vcl_ofstream& str,
-                              vcl_vector<vgl_point_3d<double> > const& pts3d, double rad=2.0)
+static void write_vrml_points(std::ofstream& str,
+                              std::vector<vgl_point_3d<double> > const& pts3d, double rad=2.0)
 {
   int n = pts3d.size();
   str<<"Shape {\n"
@@ -125,7 +126,7 @@ static void write_vrml_points(vcl_ofstream& str,
 }
 
 #if 0 // unused!
-static void write_vrml_box(vcl_ofstream& os,
+static void write_vrml_box(std::ofstream& os,
                            vgl_box_3d<double> const& bounding_box,
                            vnl_vector_fixed<double,3> const& color, float const& transparency)
 {
@@ -148,24 +149,24 @@ static void write_vrml_box(vcl_ofstream& os,
 }
 #endif
 
-bool fit_plane_ransac(vcl_vector<vgl_homg_point_3d<double> > & points, vgl_homg_plane_3d<double>  & plane)
+bool fit_plane_ransac(std::vector<vgl_homg_point_3d<double> > & points, vgl_homg_plane_3d<double>  & plane)
 {
   unsigned int nchoose=3;
   unsigned int nsize=points.size();
   unsigned int max_its = 500;
   double err=10.0;
   double inlier_dist = 0.01;
-  vcl_vector<int> best_inliers;
+  std::vector<int> best_inliers;
   for (unsigned i=0;i<max_its;++i)
   {
-    vcl_cout << '.';
-    vcl_vector<vgl_homg_point_3d<double> > subset;
-    vcl_vector<int> inliers;
+    std::cout << '.';
+    std::vector<vgl_homg_point_3d<double> > subset;
+    std::vector<int> inliers;
     for (unsigned j=0;j<nchoose;++j)
-      subset.push_back(points[vcl_rand()%nsize]);
-    vcl_cout<<subset.size();vcl_cout.flush();
+      subset.push_back(points[std::rand()%nsize]);
+    std::cout<<subset.size();std::cout.flush();
     vgl_fit_plane_3d<double> fit_plane(subset);
-    if (fit_plane.fit(err, &vcl_cerr))
+    if (fit_plane.fit(err, &std::cerr))
     {
       vgl_homg_plane_3d<double> plane=fit_plane.get_plane();
       for (unsigned j=0;j<nsize;++j)
@@ -186,8 +187,8 @@ bool fit_plane_ransac(vcl_vector<vgl_homg_point_3d<double> > & points, vgl_homg_
   {
     fit_plane_inliers.add_point(points[best_inliers[i]]);
   }
-  vcl_cout<<"Inliers "<<best_inliers.size()<<vcl_endl;
-  if (fit_plane_inliers.fit(23.0, &vcl_cerr))
+  std::cout<<"Inliers "<<best_inliers.size()<<std::endl;
+  if (fit_plane_inliers.fit(23.0, &std::cerr))
   {
     plane=fit_plane_inliers.get_plane();
     return true;
@@ -196,10 +197,10 @@ bool fit_plane_ransac(vcl_vector<vgl_homg_point_3d<double> > & points, vgl_homg_
     return false;
 }
 
-bool axis_align_scene(vcl_vector<vgl_point_3d<double> > & corrs,
-                      vcl_vector<vpgl_perspective_camera<double> > & cams)
+bool axis_align_scene(std::vector<vgl_point_3d<double> > & corrs,
+                      std::vector<vpgl_perspective_camera<double> > & cams)
 {
-  vcl_vector<vgl_homg_point_3d<double> > hpoints;
+  std::vector<vgl_homg_point_3d<double> > hpoints;
   for (unsigned i=0;i<corrs.size();++i)
   {
     vgl_homg_point_3d<double> homg_world_pt(corrs[i]);
@@ -207,14 +208,14 @@ bool axis_align_scene(vcl_vector<vgl_point_3d<double> > & corrs,
   }
   // fit the plane
   vgl_fit_plane_3d<double> fit_plane(hpoints);
-  if (!fit_plane.fit(1e6, &vcl_cerr)) return false;
+  if (!fit_plane.fit(1e6, &std::cerr)) return false;
   vgl_homg_plane_3d<double> plane=fit_plane.get_plane();
-  vcl_cout<<" Original Plane "<<plane<<vcl_endl;
+  std::cout<<" Original Plane "<<plane<<std::endl;
 
   vgl_rotation_3d<double> rot_scene(plane.normal(),
                                     vgl_vector_3d<double>(0,0,1));
 
-  vcl_cout<<"Rotation "<<rot_scene<<vcl_endl;
+  std::cout<<"Rotation "<<rot_scene<<std::endl;
   for (unsigned i=0;i<corrs.size();++i)
   {
     vgl_homg_point_3d<double> p(corrs[i]);
@@ -228,7 +229,7 @@ bool axis_align_scene(vcl_vector<vgl_point_3d<double> > & corrs,
                                 points_center.y(),
                                 points_center.z());
 
-  vcl_vector<vgl_homg_point_3d<double> > xformed_points;
+  std::vector<vgl_homg_point_3d<double> > xformed_points;
   for (unsigned i=0;i<corrs.size();++i)
   {
     vgl_point_3d<double> p(corrs[i]);
@@ -237,7 +238,7 @@ bool axis_align_scene(vcl_vector<vgl_point_3d<double> > & corrs,
                                    p.z()-points_center.z()));
     xformed_points.push_back(vgl_homg_point_3d<double>(corrs[i]));
   }
-  vcl_vector<vpgl_perspective_camera<double> > new_cams;
+  std::vector<vpgl_perspective_camera<double> > new_cams;
   unsigned int up=0;
   for (unsigned i=0;i<cams.size();++i)
   {
@@ -257,16 +258,16 @@ bool axis_align_scene(vcl_vector<vgl_point_3d<double> > & corrs,
     cams[i]=new_cams[i];
 
   vgl_fit_plane_3d<double> fit_plane1(xformed_points);
-  if (!fit_plane1.fit(1e6, &vcl_cerr))
+  if (!fit_plane1.fit(1e6, &std::cerr))
       return false;
 
   vgl_homg_plane_3d<double> plane1=fit_plane1.get_plane();
 
-  vcl_cout<<plane1<<vcl_endl;
+  std::cout<<plane1<<std::endl;
   return true;
 }
 
-vnl_vector_fixed<double,3> stddev( vcl_vector<vgl_point_3d<double> > const& v)
+vnl_vector_fixed<double,3> stddev( std::vector<vgl_point_3d<double> > const& v)
 {
   unsigned n = v.size();
   assert(n>0);
@@ -289,27 +290,27 @@ vnl_vector_fixed<double,3> stddev( vcl_vector<vgl_point_3d<double> > const& v)
   }
 
   for (unsigned i = 0; i < 3; ++i)
-    stddev[i] = vcl_sqrt(stddev[i]/(n-1));
+    stddev[i] = std::sqrt(stddev[i]/(n-1));
 
   return stddev;
 }
 
-bool LoadNVM(vcl_ifstream& in,
+bool LoadNVM(std::ifstream& in,
              vgl_point_2d<double> principal_point,
-             vcl_vector<vpgl_perspective_camera<double> >& camera_data,
-             vcl_vector<vgl_point_3d<double> >& point_data,
-             vcl_vector<vgl_point_2d<double> >& measurements,
-             vcl_vector<int>& ptidx,
-             vcl_vector<int>& camidx,
-             vcl_vector<vcl_string>& names)
+             std::vector<vpgl_perspective_camera<double> >& camera_data,
+             std::vector<vgl_point_3d<double> >& point_data,
+             std::vector<vgl_point_2d<double> >& measurements,
+             std::vector<int>& ptidx,
+             std::vector<int>& camidx,
+             std::vector<std::string>& names)
 {
   int rotation_parameter_num = 4;
-  vcl_string token;
+  std::string token;
   // bool format_r9t = false; // unused
   if (in.peek() == 'N')
   {
     in >> token; //file header
-    if (vcl_strstr(token.c_str(), "R9T"))
+    if (std::strstr(token.c_str(), "R9T"))
     {
       rotation_parameter_num = 9;  //rotation as 3x3 matrix
       // format_r9t = true;
@@ -369,7 +370,7 @@ bool LoadNVM(vcl_ifstream& in,
     point_data[i]=vgl_point_3d<double>(pt[0],pt[1],pt[2]);
   }
   ///////////////////////////////////////////////////////////////////////////////
-  vcl_cout << ncam << " cameras; " << npoint << " 3D points; " << nproj << " projections\n";
+  std::cout << ncam << " cameras; " << npoint << " 3D points; " << nproj << " projections\n";
   return true;
 }
 
@@ -378,11 +379,11 @@ int main(int argc, char** argv)
 {
   //Get Inputs
 
-  vul_arg<vcl_string> bundlerfile   ("-vsfm", "Output file of bundler",  "");
-  vul_arg<vcl_string> cam_dir       ("-cam_dir",      "directory to store cams", "");
-  vul_arg<vcl_string> img_dir       ("-img_dir",     "list of images filenames", "");
-  vul_arg<vcl_string> vrml_file     ("-vrml_file",      "vrml file", "");
-  vul_arg<vcl_string> xml_file      ("-xml_file",      "xml file", "");
+  vul_arg<std::string> bundlerfile   ("-vsfm", "Output file of bundler",  "");
+  vul_arg<std::string> cam_dir       ("-cam_dir",      "directory to store cams", "");
+  vul_arg<std::string> img_dir       ("-img_dir",     "list of images filenames", "");
+  vul_arg<std::string> vrml_file     ("-vrml_file",      "vrml file", "");
+  vul_arg<std::string> xml_file      ("-xml_file",      "xml file", "");
   vul_arg<bool>       draw_box      ("-draw_box", "Draw Bounding Box around points within 2*(standard deviation) from the center of scene",true);
   vul_arg<bool>       filter        ("-filter_cams", "Filter camera based on Reprojection error of 3d correspondences", false);
   vul_arg<float>      filter_thresh ("-filter_thresh", "Threshold for average rms value for a given view. Units are pixels", .75);
@@ -392,7 +393,7 @@ int main(int argc, char** argv)
   // verify image dir
   if (!vul_file::is_directory(img_dir().c_str()))
   {
-    vcl_cout<<"Image directory does not exist"<<vcl_endl;
+    std::cout<<"Image directory does not exist"<<std::endl;
     return -1;
   }
 
@@ -401,7 +402,7 @@ int main(int argc, char** argv)
 
   if (!imgstream.is_open())
   {
-    vcl_cout<<"Invalid image stream"<<vcl_endl;
+    std::cout<<"Invalid image stream"<<std::endl;
     return -1;
   }
 
@@ -412,25 +413,25 @@ int main(int argc, char** argv)
   // central point of the image
   vgl_point_2d<double> principal_point((double)ni/2,(double)nj/2);
   // open the bundler file
-  vcl_ifstream bfile( bundlerfile().c_str() );
+  std::ifstream bfile( bundlerfile().c_str() );
   if (!bfile)
   {
-    vcl_cout<<"Error Opening Bundler output file"<<vcl_endl;
+    std::cout<<"Error Opening Bundler output file"<<std::endl;
     return -1;
   }
 
-  vcl_vector<vpgl_perspective_camera<double> > cams;
-  vcl_vector<vgl_point_3d<double> > point_data;
-  vcl_vector<vgl_point_2d<double> > measurements;
-  vcl_vector<int> ptidx;
-  vcl_vector<int> camidx;
-  vcl_vector<vcl_string> names;
+  std::vector<vpgl_perspective_camera<double> > cams;
+  std::vector<vgl_point_3d<double> > point_data;
+  std::vector<vgl_point_2d<double> > measurements;
+  std::vector<int> ptidx;
+  std::vector<int> camidx;
+  std::vector<std::string> names;
 
   LoadNVM(bfile,principal_point,cams,point_data,measurements, ptidx, camidx,names);
   if (!axis_align_scene(point_data,cams))
     return -1;
-  vcl_set<int>  bad_cams;
-  vcl_ofstream os(vrml_file().c_str());
+  std::set<int>  bad_cams;
+  std::ofstream os(vrml_file().c_str());
   if (os)
   {
     write_vrml_header(os);

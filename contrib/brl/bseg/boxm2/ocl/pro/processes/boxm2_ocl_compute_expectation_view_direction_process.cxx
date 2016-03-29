@@ -6,10 +6,12 @@
 // \author Vishal Jain
 // \date Aug 08, 2011
 
+#include <fstream>
+#include <iostream>
+#include <algorithm>
 #include <bprb/bprb_func_process.h>
 
-#include <vcl_fstream.h>
-#include <vcl_algorithm.h>
+#include <vcl_compiler.h>
 #include <boxm2/ocl/boxm2_opencl_cache.h>
 #include <boxm2/boxm2_scene.h>
 #include <boxm2/boxm2_block.h>
@@ -35,23 +37,23 @@ namespace boxm2_ocl_compute_expectation_view_direction_process_globals
     const unsigned n_inputs_  = 5;
     const unsigned n_outputs_ = 0;
 
-    void compile_kernel(bocl_device_sptr device,vcl_vector<bocl_kernel*> & vec_kernels,vcl_string opts)
+    void compile_kernel(bocl_device_sptr device,std::vector<bocl_kernel*> & vec_kernels,std::string opts)
     {
         //gather all render sources... seems like a lot for rendering...
-        vcl_vector<vcl_string> src_paths;
-        vcl_string source_dir = boxm2_ocl_util::ocl_src_root();
+        std::vector<std::string> src_paths;
+        std::string source_dir = boxm2_ocl_util::ocl_src_root();
         src_paths.push_back(source_dir + "scene_info.cl");
         src_paths.push_back(source_dir + "stat/directional_statistics.cl");
 
         //compilation options
-        vcl_string options = opts;
+        std::string options = opts;
         //create all passes
-        vcl_string accumulate_opts = options + " -D ACCUMULATE_DIRECTION_VECTORS";
+        std::string accumulate_opts = options + " -D ACCUMULATE_DIRECTION_VECTORS";
         bocl_kernel* accumulate_direction_kernel = new bocl_kernel();
         accumulate_direction_kernel->create_kernel(&device->context(),device->device_id(), src_paths, "accumulate_direction_vectors", accumulate_opts, "accumulate_direction_vectors");
         vec_kernels.push_back(accumulate_direction_kernel);
 
-        vcl_string dispersion_opts = options + " -D COMPUTE_DISPERSION";
+        std::string dispersion_opts = options + " -D COMPUTE_DISPERSION";
         bocl_kernel* compute_dispersion = new bocl_kernel();
         compute_dispersion->create_kernel(&device->context(),device->device_id(), src_paths, "compute_dispersion",dispersion_opts, "compute_dispersion");
         vec_kernels.push_back(compute_dispersion);
@@ -59,7 +61,7 @@ namespace boxm2_ocl_compute_expectation_view_direction_process_globals
     }
 
 
-    static vcl_map<vcl_string,vcl_vector<bocl_kernel*> > kernels;
+    static std::map<std::string,std::vector<bocl_kernel*> > kernels;
 }
 
 bool boxm2_ocl_compute_expectation_view_direction_process_cons(bprb_func_process& pro)
@@ -67,7 +69,7 @@ bool boxm2_ocl_compute_expectation_view_direction_process_cons(bprb_func_process
     using namespace boxm2_ocl_compute_expectation_view_direction_process_globals;
 
     //process takes 1 input
-    vcl_vector<vcl_string> input_types_(n_inputs_);
+    std::vector<std::string> input_types_(n_inputs_);
     input_types_[0] = "bocl_device_sptr";
     input_types_[1] = "boxm2_scene_sptr";
     input_types_[2] = "boxm2_opencl_cache_sptr";
@@ -76,12 +78,12 @@ bool boxm2_ocl_compute_expectation_view_direction_process_cons(bprb_func_process
 
     // process has 1 output:
     // output[0]: scene sptr
-    vcl_vector<vcl_string>  output_types_(n_outputs_);
+    std::vector<std::string>  output_types_(n_outputs_);
 
     bool good = pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
-    brdb_value_sptr idx = new brdb_value_t<vcl_string>("");
+    brdb_value_sptr idx = new brdb_value_t<std::string>("");
     pro.set_input(3, idx);
-    brdb_value_sptr idx_coordinate_type = new brdb_value_t<vcl_string>("Cartesian");
+    brdb_value_sptr idx_coordinate_type = new brdb_value_t<std::string>("Cartesian");
     pro.set_input(4, idx_coordinate_type);
     return good;
 }
@@ -89,11 +91,11 @@ bool boxm2_ocl_compute_expectation_view_direction_process_cons(bprb_func_process
 bool boxm2_ocl_compute_expectation_view_direction_process(bprb_func_process& pro)
 {
     using namespace boxm2_ocl_compute_expectation_view_direction_process_globals;
-    vcl_size_t local_threads[1]={64};
-    vcl_size_t global_threads[1]={64};
+    std::size_t local_threads[1]={64};
+    std::size_t global_threads[1]={64};
 
     if ( pro.n_inputs() < n_inputs_ ) {
-        vcl_cout << pro.name() << ": The input number should be " << n_inputs_<< vcl_endl;
+        std::cout << pro.name() << ": The input number should be " << n_inputs_<< std::endl;
         return false;
     }
     float transfer_time=0.0f;
@@ -103,10 +105,10 @@ bool boxm2_ocl_compute_expectation_view_direction_process(bprb_func_process& pro
     bocl_device_sptr device               = pro.get_input<bocl_device_sptr>(i++);
     boxm2_scene_sptr scene                = pro.get_input<boxm2_scene_sptr>(i++);
     boxm2_opencl_cache_sptr opencl_cache  = pro.get_input<boxm2_opencl_cache_sptr>(i++);
-    vcl_string identifier_file            = pro.get_input<vcl_string>(i++);
-    vcl_string coordinate_type            = pro.get_input<vcl_string>(i++);
+    std::string identifier_file            = pro.get_input<std::string>(i++);
+    std::string coordinate_type            = pro.get_input<std::string>(i++);
     long binCache = opencl_cache.ptr()->bytes_in_cache();
-    vcl_cout<<"Update MBs in cache: "<<binCache/(1024.0*1024.0)<<vcl_endl;
+    std::cout<<"Update MBs in cache: "<<binCache/(1024.0*1024.0)<<std::endl;
 
     // create a command queue.
     int status=0;
@@ -115,25 +117,25 @@ bool boxm2_ocl_compute_expectation_view_direction_process(bprb_func_process& pro
     if (status!=0)
         return false;
 
-    vcl_string identifier=device->device_identifier();
+    std::string identifier=device->device_identifier();
     // compile the kernel if not already compiled
     if (kernels.find(identifier)==kernels.end())
     {
-        vcl_cout<<"===========Compiling kernels==========="<<vcl_endl;
-        vcl_vector<bocl_kernel*> ks;
+        std::cout<<"===========Compiling kernels==========="<<std::endl;
+        std::vector<bocl_kernel*> ks;
         compile_kernel(device,ks,"");
         kernels[identifier]=ks;
     }
-    vcl_ifstream ifile( identifier_file.c_str() );
+    std::ifstream ifile( identifier_file.c_str() );
     if(!ifile )
     {
-        vcl_cout<<"Cannot open the files for suffixes "<<vcl_endl;
+        std::cout<<"Cannot open the files for suffixes "<<std::endl;
         return false;
     }
-    vcl_vector<vcl_string> suffixes;
+    std::vector<std::string> suffixes;
     while(!ifile.eof())
     {
-        vcl_string suffix;
+        std::string suffix;
         ifile>>suffix;
         suffixes.push_back(suffix);
     }
@@ -150,8 +152,8 @@ bool boxm2_ocl_compute_expectation_view_direction_process(bprb_func_process& pro
     bocl_mem_sptr lookup=new bocl_mem(device->context(), lookup_arr, sizeof(cl_uchar)*256, "bit lookup buffer");
     lookup->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR);
 
-    vcl_vector<boxm2_block_id> vis_order = scene->get_block_ids();
-    for (vcl_vector<boxm2_block_id>::iterator id = vis_order.begin(); id != vis_order.end(); ++id)
+    std::vector<boxm2_block_id> vis_order = scene->get_block_ids();
+    for (std::vector<boxm2_block_id>::iterator id = vis_order.begin(); id != vis_order.end(); ++id)
     {
         boxm2_block_metadata mdata = scene->get_block_metadata(*id);
         //write the image values to the buffer
@@ -177,7 +179,7 @@ bool boxm2_ocl_compute_expectation_view_direction_process(bprb_func_process& pro
         global_threads[0]=RoundUp(info_buffer->data_buffer_length,local_threads[0]);
         /*for(unsigned int k = 0 ; k < suffixes.size() ; k++)
         {
-            vcl_string suffix = suffixes[k];
+            std::string suffix = suffixes[k];
             //grab an appropriately sized AUX data buffer
             auxTypeSize = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_AUX0>::prefix());
             bocl_mem *aux0  = opencl_cache->get_data(*id, boxm2_data_traits<BOXM2_AUX0>::prefix("viewdir_"+suffix),info_buffer->data_buffer_length*auxTypeSize,false);
@@ -258,7 +260,7 @@ bool boxm2_ocl_compute_expectation_view_direction_process(bprb_func_process& pro
         }
     }
 
-    vcl_cout<<"Gpu time "<<gpu_time<<" transfer time "<<transfer_time<<vcl_endl;
+    std::cout<<"Gpu time "<<gpu_time<<" transfer time "<<transfer_time<<std::endl;
     opencl_cache->get_cpu_cache()->write_to_disk();
     clReleaseCommandQueue(queue);
     return true;

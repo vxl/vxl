@@ -8,13 +8,14 @@
 // E-mail: cwolstenholme@imorphics.com
 // Copyright (c) 2001 iMorphics Ltd
 
+#include <iostream>
+#include <cstdlib>
 #include <vil/vil_config.h>
 #if HAS_DCMTK
 
 #include "vil_dicom_header.h"
 #include <vil/vil_stream.h>
-#include <vcl_iostream.h>
-#include <vcl_cstdlib.h>
+#include <vcl_compiler.h>
 
 //================================================================
 
@@ -202,7 +203,7 @@ vil_dicom_header_info vil_dicom_header_format::readHeader(vil_stream &fs)
   } // End of if (dtype != VIL_DICOM_HEADER_DTUNKNOWN)
   else // It's not a dicom file, so can't read
   {
-    vcl_cerr<<"Unknown file type - not a DICOM file...\n"
+    std::cerr<<"Unknown file type - not a DICOM file...\n"
             <<"File header not read\n";
   }
   return last_read_;
@@ -249,7 +250,7 @@ vil_dicom_header_type vil_dicom_header_format::determineFileType(vil_stream &fs)
 {
   vil_dicom_header_type result = VIL_DICOM_HEADER_DTUNKNOWN;
 
-  // Check the file is open, otherwise fail - the vcl_fstream should
+  // Check the file is open, otherwise fail - the std::fstream should
   // be controlled outside of this class
   if (fs.ok())
   {
@@ -259,7 +260,7 @@ vil_dicom_header_type vil_dicom_header_format::determineFileType(vil_stream &fs)
     // The file is a non-Part10 dicom file
     // The file is not a dicom file (or can't be determined as such)
     char dicm_read[5];
-    vcl_string dicm_test;
+    std::string dicm_test;
 
     // Skip 128 byte pre-amble and test for DICM again
     fs.seek(128);
@@ -308,7 +309,7 @@ vil_dicom_header_type vil_dicom_header_format::determineFileType(vil_stream &fs)
           fs.read(&data_block_size, sizeof(vxl_uint_32));
           data_block_size = intSwap(data_block_size);
           if (data_block_size > 0x1000000) {
-            vcl_cerr<< __FILE__ << ": " << __LINE__ << " : WARNING:\n"
+            std::cerr<< __FILE__ << ": " << __LINE__ << " : WARNING:\n"
                     <<"data_block_size=" << data_block_size << " is most probably too large\n";
             break;
           }
@@ -330,7 +331,7 @@ vil_dicom_header_type vil_dicom_header_format::determineFileType(vil_stream &fs)
             fs.read(&data_block_size, sizeof(vxl_uint_32));
             data_block_size = intSwap(data_block_size);
             if (data_block_size > 0x1000000) {
-              vcl_cerr<< __FILE__ << ": " << __LINE__ << " : WARNING:\n"
+              std::cerr<< __FILE__ << ": " << __LINE__ << " : WARNING:\n"
                       <<"data_block_size=" << data_block_size << " is most probably too large\n";
               break;
             }
@@ -380,7 +381,7 @@ vil_dicom_header_type vil_dicom_header_format::determineFileType(vil_stream &fs)
   } // End of if (fs.ok())
   else
   {
-    vcl_cerr << "File not open for reading:\n"
+    std::cerr << "File not open for reading:\n"
              << "vil_dicom_header_format::determineFileType()\n";
   } // End of else
 
@@ -393,8 +394,8 @@ void vil_dicom_header_format::readHeaderElements(vil_stream &fs)
 {
   vxl_uint_16 group, element;  // The groups and elements read from the header part of the dicom file
   vxl_uint_32 data_block_size; // The size of the information held for this group/element pair
-  vcl_cerr << "vil_dicom_header_format::readHeaderElements - Deprecated function called - use the DCMTK code instead!";
-  vcl_abort();
+  std::cerr << "vil_dicom_header_format::readHeaderElements - Deprecated function called - use the DCMTK code instead!";
+  std::abort();
 
   // Read the first group/element pair
   fs.read(&group, sizeof(vxl_uint_16));
@@ -412,7 +413,7 @@ void vil_dicom_header_format::readHeaderElements(vil_stream &fs)
       break;
     data_block_size = intSwap(data_block_size);
     if (data_block_size > 0x1000000) {
-      vcl_cerr<< __FILE__ << ": " << __LINE__ << " : WARNING:\n"
+      std::cerr<< __FILE__ << ": " << __LINE__ << " : WARNING:\n"
               <<"data_block_size=" << data_block_size << " is most probably too large\n";
       break;
     }
@@ -475,7 +476,7 @@ void vil_dicom_header_format::readHeaderElements(vil_stream &fs)
     return;
   data_block_size = intSwap(data_block_size);
   if (data_block_size > 0x1000000)
-    vcl_cerr << __FILE__ << ": " << __LINE__ << " : WARNING\n"
+    std::cerr << __FILE__ << ": " << __LINE__ << " : WARNING\n"
              <<"data_block_size=" << data_block_size << " is most probably too large\n";
   else
     convertValueRepresentation(data_block_size, fs);
@@ -520,14 +521,14 @@ void vil_dicom_header_format::readIdentifyingElements(short element,
    CASE(VIL_DICOM_HEADER_IDIMAGETYPE,         image_id_type_, (char *)); // It's the image type
    CASE(VIL_DICOM_HEADER_IDSOPCLASSID,        sop_cl_uid_, (char *)); // It's the SOP class ID
    CASE(VIL_DICOM_HEADER_IDSOPINSTANCEID,     sop_in_uid_, (char *)); // It's the SOP instance ID
-   CASE(VIL_DICOM_HEADER_IDSTUDYDATE,         study_date_,vcl_atol); // It's the study date
-   CASE(VIL_DICOM_HEADER_IDSERIESDATE,        series_date_,vcl_atol); // It's the series date
-   CASE(VIL_DICOM_HEADER_IDACQUISITIONDATE,   acquisition_date_,vcl_atol); // It's the acquisition date
-   CASE(VIL_DICOM_HEADER_IDIMAGEDATE,         image_date_,vcl_atol); // It's the image date
-   CASE(VIL_DICOM_HEADER_IDSTUDYTIME,         study_time_,(float)vcl_atof); // It's the study time
-   CASE(VIL_DICOM_HEADER_IDSERIESTIME,        series_time_,(float)vcl_atof); // It's the series time
-   CASE(VIL_DICOM_HEADER_IDACQUISITIONTIME,   acquisition_time_,(float)vcl_atof); // It's the acquisition time
-   CASE(VIL_DICOM_HEADER_IDIMAGETIME,         image_time_,(float)vcl_atof); // It's the image time
+   CASE(VIL_DICOM_HEADER_IDSTUDYDATE,         study_date_,std::atol); // It's the study date
+   CASE(VIL_DICOM_HEADER_IDSERIESDATE,        series_date_,std::atol); // It's the series date
+   CASE(VIL_DICOM_HEADER_IDACQUISITIONDATE,   acquisition_date_,std::atol); // It's the acquisition date
+   CASE(VIL_DICOM_HEADER_IDIMAGEDATE,         image_date_,std::atol); // It's the image date
+   CASE(VIL_DICOM_HEADER_IDSTUDYTIME,         study_time_,(float)std::atof); // It's the study time
+   CASE(VIL_DICOM_HEADER_IDSERIESTIME,        series_time_,(float)std::atof); // It's the series time
+   CASE(VIL_DICOM_HEADER_IDACQUISITIONTIME,   acquisition_time_,(float)std::atof); // It's the acquisition time
+   CASE(VIL_DICOM_HEADER_IDIMAGETIME,         image_time_,(float)std::atof); // It's the image time
    CASE(VIL_DICOM_HEADER_IDACCESSIONNUMBER,   accession_number_, (char *)); // It's the accession number
    CASE(VIL_DICOM_HEADER_IDMODALITY,          modality_, (char *)); // It's the imaging modality
    CASE(VIL_DICOM_HEADER_IDMANUFACTURER,      manufacturer_, (char *)); // It's the manufacturer name
@@ -562,10 +563,10 @@ void vil_dicom_header_format::readPatientElements(short element,
   {
    CASE(VIL_DICOM_HEADER_PIPATIENTNAME,     patient_name_, (char *)); // It's the patient's name
    CASE(VIL_DICOM_HEADER_PIPATIENTID,       patient_id_, (char *)); // It's the patient's id
-   CASE(VIL_DICOM_HEADER_PIPATIENTBIRTHDATE,patient_dob_,vcl_atol); // It's the patient's date of birth
+   CASE(VIL_DICOM_HEADER_PIPATIENTBIRTHDATE,patient_dob_,std::atol); // It's the patient's date of birth
    CASE(VIL_DICOM_HEADER_PIPATIENTSEX,      patient_sex_, (char *)); // It's the patient's sex
    CASE(VIL_DICOM_HEADER_PIPATIENTAGE,      patient_age_, (char *)); // It's the patient's age
-   CASE(VIL_DICOM_HEADER_PIPATIENTWEIGHT,   patient_weight_,(float)vcl_atof); // It's the patient's weight
+   CASE(VIL_DICOM_HEADER_PIPATIENTWEIGHT,   patient_weight_,(float)std::atof); // It's the patient's weight
    CASE(VIL_DICOM_HEADER_PIPATIENTHISTORY,  patient_hist_, (char *)); // It's the patient's history
    default: // It's nothing we want, so skip it!
     fs.seek(dblock_size + fs.tell());
@@ -593,27 +594,27 @@ void vil_dicom_header_format::readAcquisitionElements(short element,
    CASE(VIL_DICOM_HEADER_AQMRACQUISITIONTYPE,     mr_acq_type_, (char *)); // It's the MR acquisition type
    CASE(VIL_DICOM_HEADER_AQSEQUENCENAME,          sequence_name_, (char *)); // It's the sequence name
    CASE(VIL_DICOM_HEADER_AQANGIOFLAG,             angio_flag_, (char *)); // It's the angio flag
-   CASE(VIL_DICOM_HEADER_AQSLICETHICKNESS,        slice_thickness_,(float)vcl_atof); // It's the slice thickness
-   CASE(VIL_DICOM_HEADER_AQREPETITIONTIME,        repetition_time_,(float)vcl_atof); // It's the repetition time
-   CASE(VIL_DICOM_HEADER_AQECHOTIME,              echo_time_,(float)vcl_atof); // It's the echo time
-   CASE(VIL_DICOM_HEADER_AQINVERSIONTIME,         inversion_time_,(float)vcl_atof); // It's the inversion time
-   CASE(VIL_DICOM_HEADER_AQNUMBEROFAVERAGES,      number_of_averages_,(float)vcl_atof); // It's the number of averages
-   CASE(VIL_DICOM_HEADER_AQECHONUMBERS,           echo_numbers_,vcl_atoi); // It's the echo numbers
-   CASE(VIL_DICOM_HEADER_AQMAGNETICFIELDSTRENGTH, mag_field_strength_,(float)vcl_atof); // It's the magnetic field strength
-   CASE(VIL_DICOM_HEADER_AQSLICESPACING,          spacing_slice_,(float)vcl_atof); // It's the slice spacing
-   CASE(VIL_DICOM_HEADER_AQECHOTRAINLENGTH,       echo_train_length_,(int)vcl_atoi); // It's the echo train length
-   CASE(VIL_DICOM_HEADER_AQPIXELBANDWIDTH,        pixel_bandwidth_,(float)vcl_atof); // It's the pixel bandwidth
+   CASE(VIL_DICOM_HEADER_AQSLICETHICKNESS,        slice_thickness_,(float)std::atof); // It's the slice thickness
+   CASE(VIL_DICOM_HEADER_AQREPETITIONTIME,        repetition_time_,(float)std::atof); // It's the repetition time
+   CASE(VIL_DICOM_HEADER_AQECHOTIME,              echo_time_,(float)std::atof); // It's the echo time
+   CASE(VIL_DICOM_HEADER_AQINVERSIONTIME,         inversion_time_,(float)std::atof); // It's the inversion time
+   CASE(VIL_DICOM_HEADER_AQNUMBEROFAVERAGES,      number_of_averages_,(float)std::atof); // It's the number of averages
+   CASE(VIL_DICOM_HEADER_AQECHONUMBERS,           echo_numbers_,std::atoi); // It's the echo numbers
+   CASE(VIL_DICOM_HEADER_AQMAGNETICFIELDSTRENGTH, mag_field_strength_,(float)std::atof); // It's the magnetic field strength
+   CASE(VIL_DICOM_HEADER_AQSLICESPACING,          spacing_slice_,(float)std::atof); // It's the slice spacing
+   CASE(VIL_DICOM_HEADER_AQECHOTRAINLENGTH,       echo_train_length_,(int)std::atoi); // It's the echo train length
+   CASE(VIL_DICOM_HEADER_AQPIXELBANDWIDTH,        pixel_bandwidth_,(float)std::atof); // It's the pixel bandwidth
    CASE(VIL_DICOM_HEADER_AQSOFTWAREVERSION,       software_vers_, (char *)); // It's the scanner software version
    CASE(VIL_DICOM_HEADER_AQPROTOCOLNAME,          protocol_name_, (char *)); // It's the protocol name
-   CASE(VIL_DICOM_HEADER_AQTRIGGERTIME,           trigger_time_,(float)vcl_atof); // It's the trigger time
-   CASE(VIL_DICOM_HEADER_AQHEARTRATE,             heart_rate_,vcl_atoi); // It's the heart rate
-   CASE(VIL_DICOM_HEADER_AQCARDIACNUMBEROFIMAGES, card_num_images_,vcl_atoi); // It's the cardiac number of images
-   CASE(VIL_DICOM_HEADER_AQTRIGGERWINDOW,         trigger_window_,vcl_atoi); // It's the trigger window
-   CASE(VIL_DICOM_HEADER_AQRECONTRUCTIONDIAMETER, reconst_diameter_,(float)vcl_atof); // It's the reconstruction diameter
+   CASE(VIL_DICOM_HEADER_AQTRIGGERTIME,           trigger_time_,(float)std::atof); // It's the trigger time
+   CASE(VIL_DICOM_HEADER_AQHEARTRATE,             heart_rate_,std::atoi); // It's the heart rate
+   CASE(VIL_DICOM_HEADER_AQCARDIACNUMBEROFIMAGES, card_num_images_,std::atoi); // It's the cardiac number of images
+   CASE(VIL_DICOM_HEADER_AQTRIGGERWINDOW,         trigger_window_,std::atoi); // It's the trigger window
+   CASE(VIL_DICOM_HEADER_AQRECONTRUCTIONDIAMETER, reconst_diameter_,(float)std::atof); // It's the reconstruction diameter
    CASE(VIL_DICOM_HEADER_AQRECEIVINGCOIL,         receiving_coil_, (char *)); // It's the receiving coil
    CASE(VIL_DICOM_HEADER_AQPHASEENCODINGDIRECTION,phase_enc_dir_, (char *)); // It's the phase encoding direction
-   CASE(VIL_DICOM_HEADER_AQFLIPANGLE,             flip_angle_,(float)vcl_atof); // It's the flip angle
-   CASE(VIL_DICOM_HEADER_AQSAR,                   sar_,(float)vcl_atof); // It's the sar
+   CASE(VIL_DICOM_HEADER_AQFLIPANGLE,             flip_angle_,(float)std::atof); // It's the flip angle
+   CASE(VIL_DICOM_HEADER_AQSAR,                   sar_,(float)std::atof); // It's the sar
    CASE(VIL_DICOM_HEADER_AQPATIENTPOSITION,       patient_pos_, (char *)); // It's the patient position
    case VIL_DICOM_HEADER_AQIMAGERPIXELSPACING : // It's the sensor pixel spacing
     data_p = new char[dblock_size+1];
@@ -621,7 +622,7 @@ void vil_dicom_header_format::readAcquisitionElements(short element,
     {
       fs.read(data_p,dblock_size);
       data_p[dblock_size]=0;
-      last_read_.imager_spacing_x_ = (float) vcl_atof(data_p);
+      last_read_.imager_spacing_x_ = (float) std::atof(data_p);
 
       // The y size should come after a '\'
       // If only a 0 is found, ysize = xsize
@@ -633,7 +634,7 @@ void vil_dicom_header_format::readAcquisitionElements(short element,
           data_p[i] = data_p[i+1];
       }
       if (gone == '\\')
-        last_read_.imager_spacing_y_ = (float) vcl_atof(data_p);
+        last_read_.imager_spacing_y_ = (float) std::atof(data_p);
       else
         last_read_.imager_spacing_y_ = (float) last_read_.imager_spacing_x_;
     }
@@ -661,16 +662,16 @@ void vil_dicom_header_format::readRelationshipElements(short element,
    CASE(VIL_DICOM_HEADER_RSSTUDYINSTANCEUID,   stud_ins_uid_, (char *)); // It's the study instance id
    CASE(VIL_DICOM_HEADER_RSSERIESINSTANCEUID,  ser_ins_uid_, (char *)); // It's the series instance id
    CASE(VIL_DICOM_HEADER_RSSTUDYID,            study_id_, (char *)); // It's the study id
-   CASE(VIL_DICOM_HEADER_RSSERIESNUMBER,       series_number_,vcl_atoi); // It's the series number
-   CASE(VIL_DICOM_HEADER_RSAQUISITIONNUMBER,   acquisition_number_,vcl_atoi); // It's the acqusition number
-   CASE(VIL_DICOM_HEADER_RSIMAGENUMBER,        image_number_,vcl_atoi); // It's the image number
+   CASE(VIL_DICOM_HEADER_RSSERIESNUMBER,       series_number_,std::atoi); // It's the series number
+   CASE(VIL_DICOM_HEADER_RSAQUISITIONNUMBER,   acquisition_number_,std::atoi); // It's the acqusition number
+   CASE(VIL_DICOM_HEADER_RSIMAGENUMBER,        image_number_,std::atoi); // It's the image number
    CASE(VIL_DICOM_HEADER_RSPATIENTORIENTATION, pat_orient_, (char *)); // It's the patient orientation
-//   CASE(VIL_DICOM_HEADER_RSIMAGEPOSITION,      image_pos_, (float)vcl_atof); // It's the image position
-//   CASE(VIL_DICOM_HEADER_RSIMAGEORIENTATION,   image_orient_, (float)vcl_atof); // It's the image orientation
+//   CASE(VIL_DICOM_HEADER_RSIMAGEPOSITION,      image_pos_, (float)std::atof); // It's the image position
+//   CASE(VIL_DICOM_HEADER_RSIMAGEORIENTATION,   image_orient_, (float)std::atof); // It's the image orientation
    CASE(VIL_DICOM_HEADER_RSFRAMEOFREFERENCEUID,frame_of_ref_, (char *)); // It's the frame of reference uid
-   CASE(VIL_DICOM_HEADER_RSIMAGESINACQUISITION,images_in_acq_,vcl_atoi); // It's the number of images in the acquisition
+   CASE(VIL_DICOM_HEADER_RSIMAGESINACQUISITION,images_in_acq_,std::atoi); // It's the number of images in the acquisition
    CASE(VIL_DICOM_HEADER_RSPOSITIONREFERENCE,  pos_ref_ind_, (char *)); // It's the position reference
-   CASE(VIL_DICOM_HEADER_RSSLICELOCATION,      slice_location_,(float) vcl_atof); // It's the slice location
+   CASE(VIL_DICOM_HEADER_RSSLICELOCATION,      slice_location_,(float) std::atof); // It's the slice location
    default: // It's nothing we want, so skip it!
     fs.seek(dblock_size + fs.tell());
     break;
@@ -704,17 +705,17 @@ void vil_dicom_header_format::readImageElements(short element,
    CASE_SWP(VIL_DICOM_HEADER_IMSMALLIMPIXELVALUE,  small_im_pix_val_); // It's the smallest image pixel value
    CASE_SWP(VIL_DICOM_HEADER_IMLARGEIMPIXELVALUE,  large_im_pix_val_); // It's the largest image pixel value
    CASE_SWP(VIL_DICOM_HEADER_IMPIXELPADDINGVALUE,  pixel_padding_val_); // It's the pixel padding value
-   CASE(VIL_DICOM_HEADER_IMWINDOWCENTER,           window_centre_,(float) vcl_atof); // It's the window centre
-   CASE(VIL_DICOM_HEADER_IMWINDOWWIDTH,            window_width_,(float) vcl_atof); // It's the window width
-   CASE(VIL_DICOM_HEADER_IMRESCALEINTERCEPT,       res_intercept_,(float) vcl_atof); // It's the rescale intercept
-   CASE(VIL_DICOM_HEADER_IMRESCALESLOPE,           res_slope_,(float) vcl_atof); // It's the rescale slope
+   CASE(VIL_DICOM_HEADER_IMWINDOWCENTER,           window_centre_,(float) std::atof); // It's the window centre
+   CASE(VIL_DICOM_HEADER_IMWINDOWWIDTH,            window_width_,(float) std::atof); // It's the window width
+   CASE(VIL_DICOM_HEADER_IMRESCALEINTERCEPT,       res_intercept_,(float) std::atof); // It's the rescale intercept
+   CASE(VIL_DICOM_HEADER_IMRESCALESLOPE,           res_slope_,(float) std::atof); // It's the rescale slope
    case VIL_DICOM_HEADER_IMPIXELSPACING : // It's the pixel spacing
     data_p = new char[dblock_size+1];
     if (data_p)
     {
       fs.read(data_p,dblock_size);
       data_p[dblock_size]=0;
-      last_read_.spacing_x_ = (float) vcl_atof(data_p);
+      last_read_.spacing_x_ = (float) std::atof(data_p);
 
       // The y size should come after a '\'
       // If only a 0 is found, ysize = xsize
@@ -726,7 +727,7 @@ void vil_dicom_header_format::readImageElements(short element,
           data_p[i] = data_p[i+1];
       }
       if (gone == '\\')
-        last_read_.spacing_y_ = (float) vcl_atof(data_p);
+        last_read_.spacing_y_ = (float) std::atof(data_p);
       else
         last_read_.spacing_y_ = (float) last_read_.spacing_x_;
     }
@@ -772,11 +773,11 @@ void vil_dicom_header_format::readProcedureElements(short element,
   // Check the elements
   switch ((vxl_uint_16)element)
   {
-   vcl_cout << "Proecedure group; element: " << element << vcl_endl;
-   CASE(VIL_DICOM_HEADER_PRREALWORLDVALUEINTERCEPT,real_world_value_intercept_,(double)vcl_atof); // It's the real world intercept value
-   CASE(VIL_DICOM_HEADER_PRREALWORLDVALUESLOPE    ,real_world_value_slope_,(double)vcl_atof); // It's the real world intercept value
+   std::cout << "Proecedure group; element: " << element << std::endl;
+   CASE(VIL_DICOM_HEADER_PRREALWORLDVALUEINTERCEPT,real_world_value_intercept_,(double)std::atof); // It's the real world intercept value
+   CASE(VIL_DICOM_HEADER_PRREALWORLDVALUESLOPE    ,real_world_value_slope_,(double)std::atof); // It's the real world intercept value
    default: // It's nothing we want, so skip it!
-   vcl_cout << "Procedure group; unread element: " << element << vcl_endl;
+   std::cout << "Procedure group; unread element: " << element << std::endl;
     fs.seek(dblock_size + fs.tell());
     break;
   } // End of switch
@@ -796,11 +797,11 @@ void vil_dicom_header_format::readNSPhilipsElements(short element,
   // Check the elements
   switch ((vxl_uint_16)element)
   {
-   vcl_cout << "Non-standard Philips group; element: " << element << vcl_endl;
-   CASE(VIL_DICOM_HEADER_NSPHILIPSPRIVATEINTERCEPT,philips_private_intercept_,(float)vcl_atof); // It's the Philips private intercept value
-   CASE(VIL_DICOM_HEADER_NSPHILIPSPRIVATESLOPE    ,philips_private_slope_,(float)vcl_atof); // It's the Philips private slope value
+   std::cout << "Non-standard Philips group; element: " << element << std::endl;
+   CASE(VIL_DICOM_HEADER_NSPHILIPSPRIVATEINTERCEPT,philips_private_intercept_,(float)std::atof); // It's the Philips private intercept value
+   CASE(VIL_DICOM_HEADER_NSPHILIPSPRIVATESLOPE    ,philips_private_slope_,(float)std::atof); // It's the Philips private slope value
    default: // It's nothing we want, so skip it!
-   vcl_cout << "Non-standard Philips group; unread element: " << element << vcl_endl;
+   std::cout << "Non-standard Philips group; unread element: " << element << std::endl;
     fs.seek(dblock_size + fs.tell());
     break;
   } // End of switch
@@ -814,7 +815,7 @@ bool vil_dicom_header_format::convertValueRepresentation(unsigned int &dblock_si
                                                          vil_stream &fs)
 {
   bool result = false;
-  vcl_string first, last;
+  std::string first, last;
   char temp[3];
 
   // Union to convert the int to chars
@@ -829,7 +830,7 @@ bool vil_dicom_header_format::convertValueRepresentation(unsigned int &dblock_si
     conv_dblock.int_val = dblock_size;
 
     // Create the strings to check (the latter two positions in
-    // the vcl_string are swapped in case of little endian-ness)
+    // the std::string are swapped in case of little endian-ness)
     temp[0] = conv_dblock.char_val[0];
     temp[1] = conv_dblock.char_val[1];
     temp[2] = 0;
@@ -1013,7 +1014,7 @@ vil_dicom_header_endian vil_dicom_header_format::determineMetaInfo(vil_stream &f
     data_block_size = intSwap(data_block_size);
 
     if (data_block_size > 0x1000000) {
-      vcl_cerr<< __FILE__ << ": " << __LINE__ << " : WARNING:\n"
+      std::cerr<< __FILE__ << ": " << __LINE__ << " : WARNING:\n"
               <<"data_block_size=" << data_block_size << " is most probably too large\n";
       break;
     }
@@ -1032,7 +1033,7 @@ vil_dicom_header_endian vil_dicom_header_format::determineMetaInfo(vil_stream &f
 
         // Now see what it is
 
-        vcl_string temp = tfx_type;
+        std::string temp = tfx_type;
         delete [] tfx_type;
 
         if (temp == VIL_DICOM_HEADER_IMPLICITLITTLE ||
@@ -1229,126 +1230,126 @@ void vil_dicom_header_format::charSwap(char *char_in, int val_size)
 }
 
 
-void vil_dicom_header_print(vcl_ostream &os, const vil_dicom_header_info &s)
+void vil_dicom_header_print(std::ostream &os, const vil_dicom_header_info &s)
 {
   os << "\n\nGeneral info fields\n"
-     << " file_type        The type of dicom file: " << s.file_type_ << vcl_endl
-     << " sys_endian       The endian of the architecture: " << s.sys_endian_ << vcl_endl
-     << " image_type       The encapsulated (or not) image type: " <<s.image_type_ << vcl_endl
+     << " file_type        The type of dicom file: " << s.file_type_ << std::endl
+     << " sys_endian       The endian of the architecture: " << s.sys_endian_ << std::endl
+     << " image_type       The encapsulated (or not) image type: " <<s.image_type_ << std::endl
 
      << "\n\nIdentifying fields\n"
-     << " image_id_type    The image type from the dicom header: " << s.image_id_type_ << vcl_endl
-     << " sop_cl_uid       The class unique id for the Service/Object Pair: " << s.sop_cl_uid_ << vcl_endl
-     << " sop_in_uid       The instance uid for the SOP: " << s.sop_in_uid_ << vcl_endl
-     << " study_date       The date of the study: " << s.study_date_ << vcl_endl
-     << " series_date      The date this series was collected: " << s.series_date_ << vcl_endl
-     << " acquisition_date The date of acquisition: " << s.acquisition_date_ << vcl_endl
-     << " image_date       The date of this image: " << s.image_date_ << vcl_endl
-     << " study_time       The time of the study: " << s.study_time_ << vcl_endl
-     << " series_time      The time of the series: " << s.series_time_ << vcl_endl
-     << " acquisition_time The time acquisition: " << s.acquisition_time_ << vcl_endl
-     << " image_time       The time of the image: " << s.image_time_ << vcl_endl
-     << " accession_number The accession number for this image: " << s.accession_number_ << vcl_endl
-     << " modality         The imaging modality: " << s.modality_ << vcl_endl
-     << " manufacturer     The name of the scanner manufacturer: " << s.manufacturer_ << vcl_endl
-     << " institution_name The name of the institution: " << s.institution_name_ << vcl_endl
-     << " institution_addr The address of the institution: " << s.institution_addr_ << vcl_endl
-     << " ref_phys_name    The name of the referring physician: " << s.ref_phys_name_ << vcl_endl
-     << " station_name     The name of the station used: " << s.station_name_ << vcl_endl
-     << " study_desc       A description of the study: " << s.study_desc_ << vcl_endl
-     << " series_desc      A description of the series: " << s.series_desc_ << vcl_endl
-     << " att_phys_name    The name of the attending physician: " << s.att_phys_name_ << vcl_endl
-     << " operator_name    The name of the MR operator: " << s.operator_name_ << vcl_endl
-     << " model_name       The name of the MR scanner model: " << s.model_name_ << vcl_endl
+     << " image_id_type    The image type from the dicom header: " << s.image_id_type_ << std::endl
+     << " sop_cl_uid       The class unique id for the Service/Object Pair: " << s.sop_cl_uid_ << std::endl
+     << " sop_in_uid       The instance uid for the SOP: " << s.sop_in_uid_ << std::endl
+     << " study_date       The date of the study: " << s.study_date_ << std::endl
+     << " series_date      The date this series was collected: " << s.series_date_ << std::endl
+     << " acquisition_date The date of acquisition: " << s.acquisition_date_ << std::endl
+     << " image_date       The date of this image: " << s.image_date_ << std::endl
+     << " study_time       The time of the study: " << s.study_time_ << std::endl
+     << " series_time      The time of the series: " << s.series_time_ << std::endl
+     << " acquisition_time The time acquisition: " << s.acquisition_time_ << std::endl
+     << " image_time       The time of the image: " << s.image_time_ << std::endl
+     << " accession_number The accession number for this image: " << s.accession_number_ << std::endl
+     << " modality         The imaging modality: " << s.modality_ << std::endl
+     << " manufacturer     The name of the scanner manufacturer: " << s.manufacturer_ << std::endl
+     << " institution_name The name of the institution: " << s.institution_name_ << std::endl
+     << " institution_addr The address of the institution: " << s.institution_addr_ << std::endl
+     << " ref_phys_name    The name of the referring physician: " << s.ref_phys_name_ << std::endl
+     << " station_name     The name of the station used: " << s.station_name_ << std::endl
+     << " study_desc       A description of the study: " << s.study_desc_ << std::endl
+     << " series_desc      A description of the series: " << s.series_desc_ << std::endl
+     << " att_phys_name    The name of the attending physician: " << s.att_phys_name_ << std::endl
+     << " operator_name    The name of the MR operator: " << s.operator_name_ << std::endl
+     << " model_name       The name of the MR scanner model: " << s.model_name_ << std::endl
 
      << "\n\nPatient info\n"
-     << " patient_name     Patient's name: " << s.patient_name_ << vcl_endl
-     << " patient_id       Patient's ID: " << s.patient_id_ << vcl_endl
-     << " patient_dob      The patient's date of birth: " << s.patient_dob_ << vcl_endl
-     << " patient_sex      The sex of the patient: " << s.patient_sex_ << vcl_endl
-     << " patient_age      The age of the patient: " << s.patient_age_ << vcl_endl
-     << " patient_weight_  The weight of the patient: " << s.patient_weight_ << vcl_endl
-     << " patient_hist     Any additional patient history: " << s.patient_hist_ << vcl_endl
+     << " patient_name     Patient's name: " << s.patient_name_ << std::endl
+     << " patient_id       Patient's ID: " << s.patient_id_ << std::endl
+     << " patient_dob      The patient's date of birth: " << s.patient_dob_ << std::endl
+     << " patient_sex      The sex of the patient: " << s.patient_sex_ << std::endl
+     << " patient_age      The age of the patient: " << s.patient_age_ << std::endl
+     << " patient_weight_  The weight of the patient: " << s.patient_weight_ << std::endl
+     << " patient_hist     Any additional patient history: " << s.patient_hist_ << std::endl
 
      << "\n\nAcquisition Info\n"
-     << " scanning_seq     A description of the scanning sequence: " << s.scanning_seq_ << vcl_endl
-     << " sequence_var     A description of the sequence variant: " << s.sequence_var_ << vcl_endl
-     << " scan_options     A description of various scan options: " << s.scan_options_ << vcl_endl
-     << " mr_acq_type      The acquisition type for this scan: " << s.mr_acq_type_ << vcl_endl
-     << " sequence_name    The name of the sequence: " << s.sequence_name_ << vcl_endl
-     << " angio_flag       The angio flag for this sequence: " << s.angio_flag_ << vcl_endl
-     << " slice_thickness_ Slice thickness (for voxel size): " << s.slice_thickness_ << vcl_endl
-     << " repetition_time_ Scan repetition time: " << s.repetition_time_ << vcl_endl
-     << " echo_time        Scan echo time: " << s.echo_time_ << vcl_endl
-     << " inversion_time   Scan inversion time: " << s.inversion_time_ << vcl_endl
-     << " number_of_averages The number of averages for this scan: " << s.number_of_averages_ << vcl_endl
-     << " echo_numbers     The echo numbers for this scan: " << s.echo_numbers_ << vcl_endl
-     << " mag_field_strength The strength of the magnetic field: " << s.mag_field_strength_ << vcl_endl
-     << " echo_train_length The length of the echo train: " << s.echo_train_length_ << vcl_endl
-     << " pixel_bandwidth  The bandwidth of the pixels: " << s.pixel_bandwidth_ << vcl_endl
-     << " software_vers_   Versions of the scanner software used: " << s.software_vers_ << vcl_endl
-     << " protocol_name    The name of the protocol used: " << s.protocol_name_ << vcl_endl
-     << " trigger_time     The trigger time: " << s.trigger_time_ << vcl_endl
-     << " heart_rate       The patient's heart rate: " << s.heart_rate_ << vcl_endl
-     << " card_num_images  The cardiac number of images: " << s.card_num_images_ << vcl_endl
-     << " trigger_window   The trigger window for this image: " << s.trigger_window_ << vcl_endl
-     << " reconst_diameter The reconstruction diameter: " << s.reconst_diameter_ << vcl_endl
-     << " receiving_coil_  Details of the receiving coil: " << s.receiving_coil_ << vcl_endl
-     << " phase_enc_dir    The phase encoding direction: " << s.phase_enc_dir_ << vcl_endl
-     << " flip_angle       The flip angle: " << s.flip_angle_ << vcl_endl
-     << " sar              The specific absorption rate: " << s.sar_ << vcl_endl
-     << " patient_pos      The position of the patient in the scanner: " << s.patient_pos_ << vcl_endl
+     << " scanning_seq     A description of the scanning sequence: " << s.scanning_seq_ << std::endl
+     << " sequence_var     A description of the sequence variant: " << s.sequence_var_ << std::endl
+     << " scan_options     A description of various scan options: " << s.scan_options_ << std::endl
+     << " mr_acq_type      The acquisition type for this scan: " << s.mr_acq_type_ << std::endl
+     << " sequence_name    The name of the sequence: " << s.sequence_name_ << std::endl
+     << " angio_flag       The angio flag for this sequence: " << s.angio_flag_ << std::endl
+     << " slice_thickness_ Slice thickness (for voxel size): " << s.slice_thickness_ << std::endl
+     << " repetition_time_ Scan repetition time: " << s.repetition_time_ << std::endl
+     << " echo_time        Scan echo time: " << s.echo_time_ << std::endl
+     << " inversion_time   Scan inversion time: " << s.inversion_time_ << std::endl
+     << " number_of_averages The number of averages for this scan: " << s.number_of_averages_ << std::endl
+     << " echo_numbers     The echo numbers for this scan: " << s.echo_numbers_ << std::endl
+     << " mag_field_strength The strength of the magnetic field: " << s.mag_field_strength_ << std::endl
+     << " echo_train_length The length of the echo train: " << s.echo_train_length_ << std::endl
+     << " pixel_bandwidth  The bandwidth of the pixels: " << s.pixel_bandwidth_ << std::endl
+     << " software_vers_   Versions of the scanner software used: " << s.software_vers_ << std::endl
+     << " protocol_name    The name of the protocol used: " << s.protocol_name_ << std::endl
+     << " trigger_time     The trigger time: " << s.trigger_time_ << std::endl
+     << " heart_rate       The patient's heart rate: " << s.heart_rate_ << std::endl
+     << " card_num_images  The cardiac number of images: " << s.card_num_images_ << std::endl
+     << " trigger_window   The trigger window for this image: " << s.trigger_window_ << std::endl
+     << " reconst_diameter The reconstruction diameter: " << s.reconst_diameter_ << std::endl
+     << " receiving_coil_  Details of the receiving coil: " << s.receiving_coil_ << std::endl
+     << " phase_enc_dir    The phase encoding direction: " << s.phase_enc_dir_ << std::endl
+     << " flip_angle       The flip angle: " << s.flip_angle_ << std::endl
+     << " sar              The specific absorption rate: " << s.sar_ << std::endl
+     << " patient_pos      The position of the patient in the scanner: " << s.patient_pos_ << std::endl
 
      << "\n\nRelationship info\n"
-     << " stud_ins_uid     The study instance unique id: " << s.stud_ins_uid_ << vcl_endl
-     << " ser_ins_uid      The series instance unique id: " << s.ser_ins_uid_ << vcl_endl
-     << " study_id         The id of this study: " << s.study_id_ << vcl_endl
-     << " series_number    The number of this series: " << s.series_number_ << vcl_endl
-     << " acquisition_number The number of the acquisition: " << s.acquisition_number_ << vcl_endl
-     << " image_number     The number of this image instance: " << s.image_number_ << vcl_endl
-     << " pat_orient       The orientation of the patient: " << s.pat_orient_ << vcl_endl
-     << " image_pos        The image position relative to the patient: " << s.image_pos_[0] << '/' << s.image_pos_[1] << '/' << s.image_pos_[2] << vcl_endl
-     << " image_orient     The image orientation relative to the patient: " << s.image_orient_[0] << '/' << s.image_orient_[1] << '/' << s.image_orient_[2] << '/' << s.image_orient_[3] << '/' << s.image_orient_[4] << '/' << s.image_orient_[5] << vcl_endl
-     << " frame_of_ref     The frame of reference" << s.frame_of_ref_ << vcl_endl
-     << " images_in_acq    Then number ot images in the acquisition: " << s.images_in_acq_ << vcl_endl
-     << " pos_ref_ind      The position reference indicator: " << s.pos_ref_ind_ << vcl_endl
-     << " slice_location   The location of the slice: " << s.slice_location_ << vcl_endl
+     << " stud_ins_uid     The study instance unique id: " << s.stud_ins_uid_ << std::endl
+     << " ser_ins_uid      The series instance unique id: " << s.ser_ins_uid_ << std::endl
+     << " study_id         The id of this study: " << s.study_id_ << std::endl
+     << " series_number    The number of this series: " << s.series_number_ << std::endl
+     << " acquisition_number The number of the acquisition: " << s.acquisition_number_ << std::endl
+     << " image_number     The number of this image instance: " << s.image_number_ << std::endl
+     << " pat_orient       The orientation of the patient: " << s.pat_orient_ << std::endl
+     << " image_pos        The image position relative to the patient: " << s.image_pos_[0] << '/' << s.image_pos_[1] << '/' << s.image_pos_[2] << std::endl
+     << " image_orient     The image orientation relative to the patient: " << s.image_orient_[0] << '/' << s.image_orient_[1] << '/' << s.image_orient_[2] << '/' << s.image_orient_[3] << '/' << s.image_orient_[4] << '/' << s.image_orient_[5] << std::endl
+     << " frame_of_ref     The frame of reference" << s.frame_of_ref_ << std::endl
+     << " images_in_acq    Then number ot images in the acquisition: " << s.images_in_acq_ << std::endl
+     << " pos_ref_ind      The position reference indicator: " << s.pos_ref_ind_ << std::endl
+     << " slice_location   The location of the slice: " << s.slice_location_ << std::endl
 
      << "\n\nImage info\n"
-     << " pix_samps        The number of samples per pixel: " << s.pix_samps_ << vcl_endl
-     << " photo_interp     The photometric interpretation: " << s.photo_interp_ << vcl_endl
-     << " size_x           The number of columns: " << s.size_x_ << vcl_endl
-     << " size_y           The number of rows: " << s.size_y_ << vcl_endl
-     << " size_z           The number of planes: " << s.size_z_ << vcl_endl
-     << " high_bit         The bit used as the high bit: " << s.high_bit_ << vcl_endl
-     << " small_im_pix_val The smallest image pixel value: " << s.small_im_pix_val_ << vcl_endl
-     << " large_im_pix_val The largest image pixel value: " << s.large_im_pix_val_ << vcl_endl
-     << " pixel_padding_val The value used for padding pixels: " << s.pixel_padding_val_ << vcl_endl
-     << " window_centre    The value of the image window's centre: " << s.window_centre_ << vcl_endl
-     << " window_width     The actual width of the image window: " << s.window_width_ << vcl_endl
+     << " pix_samps        The number of samples per pixel: " << s.pix_samps_ << std::endl
+     << " photo_interp     The photometric interpretation: " << s.photo_interp_ << std::endl
+     << " size_x           The number of columns: " << s.size_x_ << std::endl
+     << " size_y           The number of rows: " << s.size_y_ << std::endl
+     << " size_z           The number of planes: " << s.size_z_ << std::endl
+     << " high_bit         The bit used as the high bit: " << s.high_bit_ << std::endl
+     << " small_im_pix_val The smallest image pixel value: " << s.small_im_pix_val_ << std::endl
+     << " large_im_pix_val The largest image pixel value: " << s.large_im_pix_val_ << std::endl
+     << " pixel_padding_val The value used for padding pixels: " << s.pixel_padding_val_ << std::endl
+     << " window_centre    The value of the image window's centre: " << s.window_centre_ << std::endl
+     << " window_width     The actual width of the image window: " << s.window_width_ << std::endl
 
      << "\n\nInfo from the tags specifically for reading the image data\n"
-     << " spaxing_x        The pixel spacing in x: " << s.spacing_x_ << vcl_endl
-     << " spacing_y        The pixel spacing in y: " << s.spacing_y_ << vcl_endl
-     << " spacing_slice    The pixel spacing in z: " << s.spacing_slice_ << vcl_endl
-     << " res_intercept    The image rescale intercept: " << s.res_intercept_ << vcl_endl
-     << " res_slope        The image rescale slope: " << s.res_slope_ << vcl_endl
-     << " pix_rep          The pixel representation (+/-): " << s.pix_rep_ << vcl_endl
-     << " stored_bits      The bits stored: " << s.stored_bits_ << vcl_endl
-     << " allocated_bits   The bits allocated: " << s.allocated_bits_ << vcl_endl
-     << " imager_spacing_x The sensor pixel spacing in x: " << s.imager_spacing_x_ << vcl_endl
-     << " imager_spacing_y The sensor pixel spacing in y: " << s.imager_spacing_y_ << vcl_endl
+     << " spaxing_x        The pixel spacing in x: " << s.spacing_x_ << std::endl
+     << " spacing_y        The pixel spacing in y: " << s.spacing_y_ << std::endl
+     << " spacing_slice    The pixel spacing in z: " << s.spacing_slice_ << std::endl
+     << " res_intercept    The image rescale intercept: " << s.res_intercept_ << std::endl
+     << " res_slope        The image rescale slope: " << s.res_slope_ << std::endl
+     << " pix_rep          The pixel representation (+/-): " << s.pix_rep_ << std::endl
+     << " stored_bits      The bits stored: " << s.stored_bits_ << std::endl
+     << " allocated_bits   The bits allocated: " << s.allocated_bits_ << std::endl
+     << " imager_spacing_x The sensor pixel spacing in x: " << s.imager_spacing_x_ << std::endl
+     << " imager_spacing_y The sensor pixel spacing in y: " << s.imager_spacing_y_ << std::endl
 
      << "\n\nInfo from the tags specifically for the procedure group\n"
-     << " real_world_value_intercept        The real world intercept value: " << s.real_world_value_intercept_ << vcl_endl
-     << " real_world_value_slope            The real world slope value: " << s.real_world_value_slope_ << vcl_endl
-     << " exposedarea_x    The exposed area in x: " << s.exposedarea_x_ << vcl_endl
-     << " exposedarea_y    The exposed ares in y: " << s.exposedarea_y_ << vcl_endl
+     << " real_world_value_intercept        The real world intercept value: " << s.real_world_value_intercept_ << std::endl
+     << " real_world_value_slope            The real world slope value: " << s.real_world_value_slope_ << std::endl
+     << " exposedarea_x    The exposed area in x: " << s.exposedarea_x_ << std::endl
+     << " exposedarea_y    The exposed ares in y: " << s.exposedarea_y_ << std::endl
 
 
      << "\n\nInfo from the tags specifically for the Philips private group (2005)\n"
-     << " philips_private_intercept        The philips private intercept value: " << s.philips_private_intercept_ << vcl_endl
-     << " philips_private_slope            The philips private slope value: " << s.philips_private_slope_ << vcl_endl;
+     << " philips_private_intercept        The philips private intercept value: " << s.philips_private_intercept_ << std::endl
+     << " philips_private_slope            The philips private slope value: " << s.philips_private_slope_ << std::endl;
 }
 
 #endif // HAS_DCMTK

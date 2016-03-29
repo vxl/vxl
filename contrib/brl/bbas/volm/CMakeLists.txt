@@ -40,23 +40,23 @@ if(EXPAT_FOUND)
      volm_geo_index2_node_base.h            volm_geo_index2_node_base.cxx
      volm_geo_index2_sptr.h
      volm_geo_index2.h                      volm_geo_index2.cxx
-     volm_geo_index2.txx
+     volm_geo_index2.hxx
      volm_category_io.h                     volm_category_io.cxx
      volm_satellite_resources.h             volm_satellite_resources.cxx
      volm_satellite_resources_sptr.h
-     volm_utils.h                           volm_utils.txx
+     volm_utils.h                           volm_utils.hxx
      volm_osm_parser.h                      volm_osm_parser.cxx
      volm_osm_objects.h                     volm_osm_objects.cxx
      volm_osm_object_point.h                volm_osm_object_point.cxx
      volm_osm_object_line.h                 volm_osm_object_line.cxx
      volm_osm_object_polygon.h              volm_osm_object_polygon.cxx
      volm_candidate_region_parser.h         volm_candidate_region_parser.cxx
-     volm_utils.h                           volm_utils.txx                   volm_utils.cxx
+     volm_utils.h                           volm_utils.hxx                   volm_utils.cxx
     )
 
     aux_source_directory(Templates volm_sources)
 
-    add_library(volm  ${volm_sources})
+    vxl_add_library(LIBRARY_NAME volm LIBRARY_SOURCES  ${volm_sources})
 
     target_link_libraries(volm vsph bpgl ${VXL_LIB_PREFIX}vgl ${VXL_LIB_PREFIX}vgl_algo ${VXL_LIB_PREFIX}vgl_io ${VXL_LIB_PREFIX}vil ${VXL_LIB_PREFIX}vil_io ${VXL_LIB_PREFIX}vil_algo ${VXL_LIB_PREFIX}vbl_io vsol bkml bvgl ${VXL_LIB_PREFIX}vbl ${VXL_LIB_PREFIX}vsl ${VXL_LIB_PREFIX}vul bvrml depth_map brad)
     target_link_libraries(volm ${EXPAT_LIBRARIES})

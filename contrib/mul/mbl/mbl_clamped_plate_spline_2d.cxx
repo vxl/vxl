@@ -1,13 +1,15 @@
 // This is mul/mbl/mbl_clamped_plate_spline_2d.cxx
+#include <iostream>
+#include <cmath>
+#include <cstdlib>
 #include "mbl_clamped_plate_spline_2d.h"
 //:
 // \file
 // \brief Construct thin plate spline to map 2D to 2D
 // \author Tim Cootes
 
-#include <vcl_cmath.h>
+#include <vcl_compiler.h>
 #include <vcl_cassert.h>
-#include <vcl_cstdlib.h> // for vcl_abort()
 #include <vsl/vsl_indent.h>
 #include <vsl/vsl_vector_io.h>
 #include <vnl/algo/vnl_svd.h>
@@ -37,7 +39,7 @@ mbl_clamped_plate_spline_2d::~mbl_clamped_plate_spline_2d()
 }
 
 //: Check that all points are inside unit circle
-bool mbl_clamped_plate_spline_2d::all_in_unit_circle(const vcl_vector<vgl_point_2d<double> >& pts)
+bool mbl_clamped_plate_spline_2d::all_in_unit_circle(const std::vector<vgl_point_2d<double> >& pts)
 {
   int n = pts.size();
   const vgl_point_2d<double> *p = &pts[0];
@@ -64,7 +66,7 @@ inline double cps_green(const vgl_point_2d<double>&  p1, const vgl_point_2d<doub
   double d  = p1.x() * p2.x() + p1.y() * p2.y();  // Dot product
   double A2 = (L1*L2-2*d+1)/d2;
 
-  return 0.5*d2*(A2-vcl_log(A2)-1);
+  return 0.5*d2*(A2-std::log(A2)-1);
 }
 
 //: Green's function for the clamped plate spline
@@ -82,13 +84,13 @@ inline double cps_green(double x, double y, const vgl_point_2d<double>& p2)
   double d  = x * p2.x() + y * p2.y();  // Dot product
   double A2 = (L1*L2-2*d+1)/d2;
 
-  return 0.5*d2*(A2-vcl_log(A2)-1);
+  return 0.5*d2*(A2-std::log(A2)-1);
 }
 
 // Sets L to be a symmetric square matrix of size n x n (n = pts.nelems)
 // with L(i,j) = cps_green(pts[i],pts[j])
 static void build_L(vnl_matrix<double>& L,
-                    const vcl_vector<vgl_point_2d<double> >& pts)
+                    const std::vector<vgl_point_2d<double> >& pts)
 {
   unsigned int n = pts.size();
   if ( (L.rows()!=n) || (L.columns()!=n) ) L.set_size(n,n);
@@ -117,8 +119,8 @@ void mbl_clamped_plate_spline_2d::set_params(const vnl_vector<double>& Wx,
 
 void mbl_clamped_plate_spline_2d::set_up_rhs(vnl_vector<double>& Bx,
                                              vnl_vector<double>& By,
-                                             const vcl_vector<vgl_point_2d<double> >& src_pts,
-                                             const vcl_vector<vgl_point_2d<double> >& dest_pts)
+                                             const std::vector<vgl_point_2d<double> >& src_pts,
+                                             const std::vector<vgl_point_2d<double> >& dest_pts)
 {
   int n =dest_pts.size();
 
@@ -136,8 +138,8 @@ void mbl_clamped_plate_spline_2d::set_up_rhs(vnl_vector<double>& Bx,
   }
 }
 
-void mbl_clamped_plate_spline_2d::build(const vcl_vector<vgl_point_2d<double> >& source_pts,
-                                        const vcl_vector<vgl_point_2d<double> >& dest_pts)
+void mbl_clamped_plate_spline_2d::build(const std::vector<vgl_point_2d<double> >& source_pts,
+                                        const std::vector<vgl_point_2d<double> >& dest_pts)
 {
   assert(all_in_unit_circle(source_pts));
   assert(all_in_unit_circle(dest_pts));
@@ -145,8 +147,8 @@ void mbl_clamped_plate_spline_2d::build(const vcl_vector<vgl_point_2d<double> >&
   unsigned int n=source_pts.size();
   if (dest_pts.size() != n)
   {
-    vcl_cerr<<"mbl_clamped_plate_spline_2d::build - incompatible number of points.\n";
-    vcl_abort();
+    std::cerr<<"mbl_clamped_plate_spline_2d::build - incompatible number of points.\n";
+    std::abort();
   }
 
   L_inv_.set_size(0,0);
@@ -177,7 +179,7 @@ void mbl_clamped_plate_spline_2d::build(const vcl_vector<vgl_point_2d<double> >&
 //: Define source point positions
 //  Performs pre-computations so that build(dest_points) can be
 //  called multiple times efficiently
-void mbl_clamped_plate_spline_2d::set_source_pts(const vcl_vector<vgl_point_2d<double> >& source_pts)
+void mbl_clamped_plate_spline_2d::set_source_pts(const std::vector<vgl_point_2d<double> >& source_pts)
 {
   assert(all_in_unit_circle(source_pts));
 
@@ -196,15 +198,15 @@ void mbl_clamped_plate_spline_2d::set_source_pts(const vcl_vector<vgl_point_2d<d
 }
 
 //: Sets up internal transformation to map source_pts onto dest_pts
-void mbl_clamped_plate_spline_2d::build(const vcl_vector<vgl_point_2d<double> >& dest_pts)
+void mbl_clamped_plate_spline_2d::build(const std::vector<vgl_point_2d<double> >& dest_pts)
 {
   assert(all_in_unit_circle(dest_pts));
 
   unsigned int n=src_pts_.size();
   if (dest_pts.size() != n)
   {
-    vcl_cerr<<"mbl_clamped_plate_spline_2d::build - incompatible number of points.\n";
-    vcl_abort();
+    std::cerr<<"mbl_clamped_plate_spline_2d::build - incompatible number of points.\n";
+    std::abort();
   }
 
   vnl_vector<double> Bx(n);  // Used to compute X parameters
@@ -256,7 +258,7 @@ short mbl_clamped_plate_spline_2d::version_no() const
 //=======================================================================
 
 // required if data is present in this class
-void mbl_clamped_plate_spline_2d::print_summary(vcl_ostream& os) const
+void mbl_clamped_plate_spline_2d::print_summary(std::ostream& os) const
 {
   os<<"\nfx:";
   for (unsigned int i=0;i<Wx_.size();++i)
@@ -300,9 +302,9 @@ void mbl_clamped_plate_spline_2d::b_read(vsl_b_istream& bfs)
       vsl_b_read(bfs,L_inv_);
       break;
     default:
-      vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, mbl_clamped_plate_spline_2d &)\n"
+      std::cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, mbl_clamped_plate_spline_2d &)\n"
                << "           Unknown version number "<< version << '\n';
-      bfs.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
+      bfs.is().clear(std::ios::badbit); // Set an unrecoverable IO error on stream
   }
 }
 
@@ -337,7 +339,7 @@ void vsl_b_read(vsl_b_istream& bfs, mbl_clamped_plate_spline_2d& b)
 // Associated function: operator<<
 //=======================================================================
 
-vcl_ostream& operator<<(vcl_ostream& os,const mbl_clamped_plate_spline_2d& b)
+std::ostream& operator<<(std::ostream& os,const mbl_clamped_plate_spline_2d& b)
 {
   os << "mbl_clamped_plate_spline_2d: ";
   vsl_indent_inc(os);

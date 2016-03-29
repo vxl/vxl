@@ -14,15 +14,17 @@
 //   Ozge C. Ozcanli - July 08, 09 - ported to vxl from local repository - minor fixes
 // \endverbatim
 
+#include <iostream>
+#include <string>
 #include <bxml/bxml_document.h>
-#include <vcl_string.h>
+#include <vcl_compiler.h>
 
 class bsvg_document : public bxml_document
 {
  public:
   bsvg_document(float w, float h);  // if viewBox params are not specified, then each pixel corresponds to one unit square while drawing
   bsvg_document(float w, float h, float viewBox_x, float viewBox_y, float viewBox_w, float viewBox_h);
-  bool add_description(const vcl_string& d);
+  bool add_description(const std::string& d);
   bool add_element(const bxml_data_sptr& element);
 
  public:

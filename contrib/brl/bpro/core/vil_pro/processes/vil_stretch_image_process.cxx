@@ -13,7 +13,7 @@ bool vil_stretch_image_process_cons(bprb_func_process& pro)
 {
   //input
   bool ok=false;
-  vcl_vector<vcl_string> input_types(4);
+  std::vector<std::string> input_types(4);
   input_types[0] = "vil_image_view_base_sptr";
   input_types[1] = "float";   // min limit
   input_types[2] = "float";   // max limit
@@ -23,7 +23,7 @@ bool vil_stretch_image_process_cons(bprb_func_process& pro)
   if (!ok) return ok;
 
   //output
-  vcl_vector<vcl_string> output_types;
+  std::vector<std::string> output_types;
   output_types.push_back("vil_image_view_base_sptr");
   ok = pro.set_output_types(output_types);
   if (!ok) return ok;
@@ -36,7 +36,7 @@ bool vil_stretch_image_process(bprb_func_process& pro)
 
    // Sanity check
   if(!pro.verify_inputs()){
-    vcl_cerr << "vil_stretch_image_process: Invalid inputs" << vcl_endl;
+    std::cerr << "vil_stretch_image_process: Invalid inputs" << std::endl;
     return false;
   }
 
@@ -47,11 +47,11 @@ bool vil_stretch_image_process(bprb_func_process& pro)
   float min_limit = pro.get_input<float>(1);
   float max_limit = pro.get_input<float>(2);
   if(min_limit>=max_limit){
-    vcl_cerr << "vil_stretch_image_process: invalid stretch limits\n";
+    std::cerr << "vil_stretch_image_process: invalid stretch limits\n";
       return false;
   }
 
-  vcl_string out_type = pro.get_input<vcl_string>(3);
+  std::string out_type = pro.get_input<std::string>(3);
   // retrieve float image
   vil_image_view_base_sptr fimage;
   // if the src imagery is of type float then vil_convert_cast simply does a
@@ -104,7 +104,7 @@ bool vil_stretch_image_process(bprb_func_process& pro)
     pro.set_output_val<vil_image_view_base_sptr>(0, fimage);
   }
   else{
-    vcl_cerr << "vil_stretch_image_process: unknown output type\n";
+    std::cerr << "vil_stretch_image_process: unknown output type\n";
       return false;
   }
 

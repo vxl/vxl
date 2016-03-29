@@ -5,9 +5,11 @@
 // \author Tim Cootes
 // \brief Base for objects with apply limits to parameters
 
-#include <vcl_string.h>
-#include <vcl_memory.h>
-#include <vcl_iosfwd.h>
+#include <string>
+#include <memory>
+#include <iostream>
+#include <iosfwd>
+#include <vcl_compiler.h>
 #include <vsl/vsl_fwd.h>
 #include <vnl/vnl_fwd.h>
 
@@ -34,13 +36,13 @@ class msm_param_limiter
   virtual void apply_limit(vnl_vector<double>& b) const = 0;
 
   //: Name of the class
-  virtual vcl_string is_a() const = 0;
+  virtual std::string is_a() const = 0;
 
   //: Create a copy on the heap and return base class pointer
   virtual msm_param_limiter* clone() const = 0;
 
   //: Print class to os
-  virtual void print_summary(vcl_ostream& os) const=0;
+  virtual void print_summary(std::ostream& os) const=0;
 
   //: Save class to binary file stream
   virtual void b_write(vsl_b_ostream& bfs) const = 0;
@@ -49,12 +51,12 @@ class msm_param_limiter
   virtual void b_read(vsl_b_istream& bfs) = 0;
 
   //: Create a concrete msm_param_limiter-derived object, from a text specification.
-  static vcl_auto_ptr<msm_param_limiter> create_from_stream(vcl_istream &is);
+  static std::auto_ptr<msm_param_limiter> create_from_stream(std::istream &is);
 
   //: Initialise from a text stream.
   // The default implementation is for attribute-less normalisers,
   // and throws if it finds any data in the stream.
-  virtual void config_from_stream(vcl_istream &is);
+  virtual void config_from_stream(std::istream &is);
 };
 
 //: Allows derived class to be loaded by base-class pointer
@@ -75,16 +77,16 @@ void vsl_b_write(vsl_b_ostream& bfs, const msm_param_limiter& b);
 void vsl_b_read(vsl_b_istream& bfs, msm_param_limiter& b);
 
 //: Stream output operator for class reference
-vcl_ostream& operator<<(vcl_ostream& os,const msm_param_limiter& b);
+std::ostream& operator<<(std::ostream& os,const msm_param_limiter& b);
 
 //: Stream output operator for class pointer
-vcl_ostream& operator<<(vcl_ostream& os,const msm_param_limiter* b);
+std::ostream& operator<<(std::ostream& os,const msm_param_limiter* b);
 
 //: Stream output operator for class reference
-void vsl_print_summary(vcl_ostream& os,const msm_param_limiter& b);
+void vsl_print_summary(std::ostream& os,const msm_param_limiter& b);
 
 //: Stream output operator for class reference
-void vsl_print_summary(vcl_ostream& os,const msm_param_limiter* b);
+void vsl_print_summary(std::ostream& os,const msm_param_limiter* b);
 
 
 //: Returns X such that P(chi<X | dof==n)==p

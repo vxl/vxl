@@ -16,11 +16,11 @@ bool test_multiply_kernel()
   bocl_command_queue_mgr &mgr = bocl_command_queue_mgr::instance();
 
   //create command queue
-  cl_command_queue queue = clCreateCommandQueue(mgr.context(), mgr.devices()[0], CL_QUEUE_PROFILING_ENABLE, NULL);
+  cl_command_queue queue = clCreateCommandQueue(mgr.context(), mgr.devices()[0], CL_QUEUE_PROFILING_ENABLE, VXL_NULLPTR);
 
   //create kernel
-  vcl_string src_path = testlib_root_dir() + "/contrib/brl/bbas/bocl/tests/test_kernel.cl";
-  vcl_vector<vcl_string> paths; paths.push_back(src_path);
+  std::string src_path = testlib_root_dir() + "/contrib/brl/bbas/bocl/tests/test_kernel.cl";
+  std::vector<std::string> paths; paths.push_back(src_path);
   bocl_kernel test_kernel;
   test_kernel.create_kernel( &mgr.context(), &mgr.devices()[0], paths, "test_multiply", "", "bocl test multiply kernel");
 
@@ -31,15 +31,15 @@ bool test_multiply_kernel()
   b_mem.create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
 
   //set up thread arrays
-  vcl_size_t lthread[] = { 1, 1, 1 };
-  vcl_size_t gthread[] = { 128, 128, 1 };
+  std::size_t lthread[] = { 1, 1, 1 };
+  std::size_t gthread[] = { 128, 128, 1 };
 
   //execute kernel
   test_kernel.set_arg(&a_mem);
   test_kernel.set_arg(&b_mem);
   test_kernel.execute(queue, 3, lthread, gthread);
   clFinish(queue);
-  vcl_cout<<"Execution time: "<<test_kernel.exec_time()<<" ms"<<vcl_endl;
+  std::cout<<"Execution time: "<<test_kernel.exec_time()<<" ms"<<std::endl;
 
   //read from output
   b_mem.read_to_buffer(queue);

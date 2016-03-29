@@ -1,6 +1,9 @@
 #ifndef bwm_algo_t_
 #define bwm_algo_t_
 
+#include <vector>
+#include <iostream>
+#include <list>
 #include <vgl/vgl_point_3d.h>
 #include <vgl/vgl_vector_3d.h>
 #include <vgl/vgl_homg_point_2d.h>
@@ -14,8 +17,7 @@
 
 #include <vil/vil_image_resource_sptr.h>
 
-#include <vcl_vector.h>
-#include <vcl_list.h>
+#include <vcl_compiler.h>
 
 class bwm_algo
 {
@@ -30,7 +32,7 @@ class bwm_algo
 
   static vsol_polygon_3d_sptr move_points_to_plane(vsol_polygon_3d_sptr polygon);
 
-  static vsol_polygon_3d_sptr move_points_to_plane(vcl_vector<vsol_point_3d_sptr> points);
+  static vsol_polygon_3d_sptr move_points_to_plane(std::vector<vsol_point_3d_sptr> points);
 
 
   static vgl_point_3d<double> fit_sphere_to_corner(vgl_point_3d<double> P1, vgl_vector_3d<double> N1,
@@ -47,9 +49,9 @@ class bwm_algo
                                        vgl_point_3d<double>& l3, vgl_point_3d<double>& l4);
 
   static vpgl_rational_camera<double>* extract_nitf_camera(vil_image_resource_sptr img);
-  static vpgl_rational_camera<double>* extract_nitf_camera(vcl_string img_path);
+  static vpgl_rational_camera<double>* extract_nitf_camera(std::string img_path);
 
-  static bool fit_circle(const vcl_list<vgl_point_2d<double> > &points,
+  static bool fit_circle(const std::list<vgl_point_2d<double> > &points,
                          double &radius, vgl_point_2d<double> &center);
 };
 

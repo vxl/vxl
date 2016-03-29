@@ -23,10 +23,11 @@
 //  Modifications
 //   <none>
 // \endverbatim
+#include <iostream>
+#include <vector>
+#include <string>
 #include <vbl/vbl_ref_count.h>
-#include <vcl_iostream.h>
-#include <vcl_vector.h>
-#include <vcl_string.h>
+#include <vcl_compiler.h>
 
 class vgui_range_map_params : public vbl_ref_count
 {
@@ -34,7 +35,7 @@ class vgui_range_map_params : public vbl_ref_count
   //alpha channel map or projection of 4 bands onto 3
   enum {RGBA_m, RGB_m, XRG_m, RXB_m, RGX_m, END_m};
   //string representation of map index
-  static vcl_vector<vcl_string> bmap;
+  static std::vector<std::string> bmap;
   //Mapping parameters
   unsigned n_components_; //!< number of components for pixel data
   long double min_L_;  //!< map domain minimum for luminance data
@@ -163,7 +164,7 @@ class vgui_range_map_params : public vbl_ref_count
   inline bool operator!=(vgui_range_map_params const& p)const
   { return !operator==(p); }
 
-  void print(vcl_ostream& os) const
+  void print(std::ostream& os) const
   {
     os << '\n';
     if (n_components_ == 1)

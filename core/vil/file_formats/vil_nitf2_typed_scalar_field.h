@@ -5,10 +5,11 @@
 #ifndef VIL_NITF2_TYPED_SCALAR_FIELD_H
 #define VIL_NITF2_TYPED_SCALAR_FIELD_H
 
+#include <iosfwd>
 #include "vil_nitf2_scalar_field.h"
 #include "vil_nitf2_tagged_record.h"
 #include "vil_nitf2.h"
-#include <vcl_iosfwd.h>
+#include <vcl_compiler.h>
 
 // Typed concrete class for scalar NITF fields.
 // During file reading, this class is instantiated only for non-blank
@@ -42,7 +43,7 @@ class vil_nitf2_typed_scalar_field : public vil_nitf2_scalar_field
   void set_value(const T& value) { m_value = value; }
 
   // Output to stream. Overload as necessary.
-  virtual vcl_ostream& output(vcl_ostream& os) const { return os << m_value; }
+  virtual std::ostream& output(std::ostream& os) const { return os << m_value; }
 
   virtual field_tree* get_tree() const { return vil_nitf2_scalar_field::get_tree(); }
  private:
@@ -57,7 +58,7 @@ class vil_nitf2_typed_scalar_field : public vil_nitf2_scalar_field
 
 // Overload for vil_nitf2_location* (Necessary because it's a pointer.)
 template<>
-inline vcl_ostream& vil_nitf2_typed_scalar_field<vil_nitf2_location*>::output(vcl_ostream& os) const
+inline std::ostream& vil_nitf2_typed_scalar_field<vil_nitf2_location*>::output(std::ostream& os) const
 {
   if (m_value==0) {
     os << m_value;

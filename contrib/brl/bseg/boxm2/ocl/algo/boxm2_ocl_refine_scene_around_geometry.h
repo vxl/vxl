@@ -1,8 +1,9 @@
 #pragma once
+#include <iostream>
 #include <boxm2/boxm2_data_traits.h>
 #include <boct/boct_bit_tree.h>
 #include <vnl/vnl_vector_fixed.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
 #include <boxm2/io/boxm2_cache.h>
 #include <bocl/bocl_device.h>
 #include <boxm2/ocl/boxm2_opencl_cache.h>
@@ -36,14 +37,14 @@ public:
     scene_(scene),
     device_(device)
   {
-  vcl_vector<vcl_string> valid_types;
+  std::vector<std::string> valid_types;
   valid_types.push_back("boxm2_mog6_view_compact");
   valid_types.push_back("boxm2_mog3_grey");
   valid_types.push_back("boxm2_gauss_rgb_view");
   if (!boxm2_util::verify_appearance(*scene_,valid_types,app_type_,app_type_size_))
     {
-    vcl_cout << "scene doesn't have the correct appearance type - "
-             << "only boxm2_gauss_rgb_view and mog6_view compact allowed!!" << vcl_endl;
+    std::cout << "scene doesn't have the correct appearance type - "
+             << "only boxm2_gauss_rgb_view and mog6_view compact allowed!!" << std::endl;
     }
   this->compile_kernel();
   }
@@ -64,8 +65,8 @@ private:
   boxm2_opencl_cache_sptr cache_;
   boxm2_scene_sptr scene_;
   bocl_device_sptr device_;
-  vcl_vector<bocl_kernel*> kerns_;
-  vcl_string app_type_;
+  std::vector<bocl_kernel*> kerns_;
+  std::string app_type_;
   int app_type_size_;
 
 };

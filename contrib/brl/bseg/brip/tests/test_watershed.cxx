@@ -1,7 +1,8 @@
+#include <queue>
+#include <vector>
+#include <iostream>
 #include <testlib/testlib_test.h>
-#include <vcl_queue.h>
-#include <vcl_vector.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
 #include <vgl/vgl_point_2d.h>
 #include <vil1/vil1_memory_image_of.h>
 #include <brip/brip_region_pixel.h>
@@ -30,15 +31,15 @@ static void test_watershed()
   brip_region_pixel_sptr pixel2 =
     new brip_region_pixel(location, nearest2, 0, 0, 0);
   brip_region_pixel::compare c;
-  vcl_cout << "compare c() " << c(pixel1, pixel2) << '\n'<< vcl_flush;
+  std::cout << "compare c() " << c(pixel1, pixel2) << '\n'<< std::flush;
 #if 0
-  vcl_priority_queue<brip_region_pixel_sptr, vcl_vector<brip_region_pixel_sptr>, brip_region_pixel::compare> pq;
+  std::priority_queue<brip_region_pixel_sptr, std::vector<brip_region_pixel_sptr>, brip_region_pixel::compare> pq;
 
   pq.push(pixel1);
   pq.push(pixel2);
   brip_region_pixel_sptr top = pq.top();
-  vcl_cout << "top element " << *top << '\n'
-           << "pq.size() " << pq.size() << '\n'<< vcl_flush;
+  std::cout << "top element " << *top << '\n'
+           << "pq.size() " << pq.size() << '\n'<< std::flush;
 #endif
   //  TEST("",x  , y);
   //Create test image for watershed
@@ -53,9 +54,9 @@ static void test_watershed()
       input(c,r) = parabola(2.f, 0.f, 255.f, 4.f, 4.f, float(c), float(r))
                  + parabola(2.f, 0.f, 255.f, 7.f, 7.f, float(c), float(r))
                  + parabola(2.f, 0.f, 255.f, 3.f, 8.f, float(c), float(r));
-      vcl_cout << ' ' << input(c,r);
+      std::cout << ' ' << input(c,r);
     }
-    vcl_cout << vcl_endl;
+    std::cout << std::endl;
   }
   brip_watershed_params wp;
   brip_watershed ws(wp);
@@ -63,9 +64,9 @@ static void test_watershed()
   ws.compute_regions();
   ws.print_region_array();
   ws.print_adjacency_map();
-  vcl_vector<unsigned int> adj;
+  std::vector<unsigned int> adj;
   ws.adjacent_regions(3, adj);
-  vcl_cout << "# adjacent to 3 " << adj.size() << '\n';
+  std::cout << "# adjacent to 3 " << adj.size() << '\n';
   TEST("Number of adjacent regions", adj.size(), 3);
 }
 

@@ -1,5 +1,6 @@
+#include <iostream>
 #include <testlib/testlib_test.h>
-// not used? #include <vcl_iostream.h>
+// not used? #include <vcl_compiler.h>
 
 #include <vpgl/vpgl_proj_camera.h>
 #include <vnl/vnl_fwd.h>
@@ -16,7 +17,7 @@
 #include <vgl/vgl_homg_plane_3d.h>
 #include <vgl/algo/vgl_h_matrix_3d.h>
 #include <vgl/vgl_ray_3d.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
 
 static void test_proj_camera()
 {
@@ -133,8 +134,8 @@ static void test_proj_camera()
   vgl_h_matrix_3d<double> H = get_canonical_h( P6 );
   vnl_matrix_fixed<double,3,4> I6 = P6.get_matrix() * H.get_matrix();
   TEST( "get_canonical_h",
-        vcl_fabs(I6(0,0)*I6(1,1)*I6(2,2)-1) < 1e-06 &&
-        vcl_fabs(I6(1,0)*I6(2,0)*I6(0,1)*I6(2,1)*I6(0,2)*I6(1,2)*I6(0,3)*I6(1,3)*I6(2,3))< 1e-06,
+        std::fabs(I6(0,0)*I6(1,1)*I6(2,2)-1) < 1e-06 &&
+        std::fabs(I6(1,0)*I6(2,0)*I6(0,1)*I6(2,1)*I6(0,2)*I6(1,2)*I6(0,3)*I6(1,3)*I6(2,3))< 1e-06,
         true );
 
   // Test camera center
@@ -180,10 +181,10 @@ static void test_proj_camera()
   TEST_NEAR("test triangulate_3d", p3d.z(), 10, 1.0e-6);
 
   P1.set_matrix( random_matrix );
-  vcl_vector<vgl_point_3d<double> > pts;
+  std::vector<vgl_point_3d<double> > pts;
   pts.push_back(vgl_point_3d<double>(29,-3, 8));
   pts.push_back(vgl_point_3d<double>(-0.2,4.1,1.0));
-  vcl_vector<vnl_matrix_fixed<double,2,3> > Jac = image_jacobians(P1,pts);
+  std::vector<vnl_matrix_fixed<double,2,3> > Jac = image_jacobians(P1,pts);
   double eps = 1e-6;
   bool valid = true;
   for(unsigned int i=0; i<pts.size(); ++i)
@@ -208,7 +209,7 @@ static void test_proj_camera()
 
     double err = (J_diff - Jac[i]).array_inf_norm();
     if(err > eps){
-      vcl_cerr << "Jacobian\n"<<J_diff<<"\nshould be\n"<<Jac[i]<<vcl_endl;
+      std::cerr << "Jacobian\n"<<J_diff<<"\nshould be\n"<<Jac[i]<<std::endl;
       valid = false;
       break;
     }

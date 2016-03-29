@@ -37,7 +37,7 @@ static void test1_vdgl()
   unsigned int N = ec->size();
   TEST("Chain should have 11 edgels", N, 11);
   for (unsigned int i = 0; i<N; i++)
-    vcl_cout << "edgel[" << i<<"] = (" << (*ec)[i] << ")\n";
+    std::cout << "edgel[" << i<<"] = (" << (*ec)[i] << ")\n";
 
   //--------------------------------------------------
   // test the angle computation for the linear interpolator

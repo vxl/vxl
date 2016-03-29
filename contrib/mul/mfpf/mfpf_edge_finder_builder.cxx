@@ -1,3 +1,5 @@
+#include <iostream>
+#include <sstream>
 #include "mfpf_edge_finder_builder.h"
 //:
 // \file
@@ -6,7 +8,7 @@
 
 #include <mfpf/mfpf_edge_finder.h>
 #include <vsl/vsl_binary_loader.h>
-#include <vcl_sstream.h>
+#include <vcl_compiler.h>
 #include <vcl_cassert.h>
 
 #include <mbl/mbl_parse_block.h>
@@ -71,11 +73,11 @@ void mfpf_edge_finder_builder::build(mfpf_point_finder& pf)
 // Method: set_from_stream
 //=======================================================================
 //: Initialise from a string stream
-bool mfpf_edge_finder_builder::set_from_stream(vcl_istream &is)
+bool mfpf_edge_finder_builder::set_from_stream(std::istream &is)
 {
   // Cycle through string and produce a map of properties
-  vcl_string s = mbl_parse_block(is);
-  vcl_istringstream ss(s);
+  std::string s = mbl_parse_block(is);
+  std::istringstream ss(s);
   mbl_read_props_type props = mbl_read_props_ws(ss);
 
   search_ni_=5;
@@ -92,9 +94,9 @@ bool mfpf_edge_finder_builder::set_from_stream(vcl_istream &is)
 // Method: is_a
 //=======================================================================
 
-vcl_string mfpf_edge_finder_builder::is_a() const
+std::string mfpf_edge_finder_builder::is_a() const
 {
-  return vcl_string("mfpf_edge_finder_builder");
+  return std::string("mfpf_edge_finder_builder");
 }
 
 //: Create a copy on the heap and return base class pointer
@@ -107,7 +109,7 @@ mfpf_point_finder_builder* mfpf_edge_finder_builder::clone() const
 // Method: print
 //=======================================================================
 
-void mfpf_edge_finder_builder::print_summary(vcl_ostream& os) const
+void mfpf_edge_finder_builder::print_summary(std::ostream& os) const
 {
   os << "{ ";
   mfpf_point_finder_builder::print_summary(os);
@@ -141,9 +143,9 @@ void mfpf_edge_finder_builder::b_read(vsl_b_istream& bfs)
       mfpf_point_finder_builder::b_read(bfs);  // Load base class
       break;
     default:
-      vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&)\n"
-               << "           Unknown version number "<< version << vcl_endl;
-      bfs.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
+      std::cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&)\n"
+               << "           Unknown version number "<< version << std::endl;
+      bfs.is().clear(std::ios::badbit); // Set an unrecoverable IO error on stream
       return;
   }
 }

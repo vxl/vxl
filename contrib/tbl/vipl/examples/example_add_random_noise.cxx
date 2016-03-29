@@ -16,30 +16,31 @@
 //   Peter Vanroose, Feb.2004 - replaced vil1_image by vil_image_view<T>
 // \endverbatim
 //
+#include <iostream>
+#include <cstdlib>
 #include <vil/vil_image_view.h>
 #include <vil/vil_load.h>
 #include <vil/vil_save.h>
 
 #include <vipl/accessors/vipl_accessors_vil_image_view.h>
 #include <vipl/vipl_add_random_noise.h>
-#include <vcl_iostream.h>
-#include <vcl_cstdlib.h> // for atof()
+#include <vcl_compiler.h>
 #include <vxl_config.h> // for vxl_byte
 
 int
 main(int argc, char** argv)
 {
-  if (argc < 3) { vcl_cerr << "Syntax: example_add_random_noise file_in file_out [width]\n"; return 1; }
+  if (argc < 3) { std::cerr << "Syntax: example_add_random_noise file_in file_out [width]\n"; return 1; }
 
   // The input image:
   vil_image_view<vxl_byte> in = vil_load(argv[1]);
-  if (!in) { vcl_cerr << "Please use a ubyte image as input\n"; return 2; }
+  if (!in) { std::cerr << "Please use a ubyte image as input\n"; return 2; }
 
   // The output image:
   vil_image_view<vxl_byte> out(in.ni(),in.nj(),in.nplanes());
 
   // The noise `width':
-  double sigma = (argc < 4) ? 5.0 : vcl_atof(argv[3]);
+  double sigma = (argc < 4) ? 5.0 : std::atof(argv[3]);
   vxl_byte s = (vxl_byte)(sigma+0.5); // round to integer
 
   // The filter:
@@ -49,6 +50,6 @@ main(int argc, char** argv)
   op.filter();
 
   vil_save(out, argv[2]);
-  vcl_cout << "Noisy image written to " << argv[2] << vcl_endl;
+  std::cout << "Noisy image written to " << argv[2] << std::endl;
   return 0;
 }

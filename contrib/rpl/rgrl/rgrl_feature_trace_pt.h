@@ -5,9 +5,11 @@
 // \author Amitha Perera
 // \date   Feb 2003
 
+#include <vector>
+#include <iostream>
+#include <iosfwd>
 #include "rgrl_feature.h"
-#include <vcl_vector.h>
-#include <vcl_iosfwd.h>
+#include <vcl_compiler.h>
 
 //: Represent a point along a trace (of a vessel, neuron, etc.)
 //
@@ -18,7 +20,7 @@ class rgrl_feature_trace_pt
   : public rgrl_feature
 {
  public:
-  typedef vcl_vector<rgrl_feature_sptr >  feature_vector;
+  typedef std::vector<rgrl_feature_sptr >  feature_vector;
 
   //: Constructor
   //  should not be used by anything other than the reader.
@@ -37,11 +39,11 @@ class rgrl_feature_trace_pt
 
   //: read in feature
   virtual
-  bool read( vcl_istream& is, bool skip_tag=false );
+  bool read( std::istream& is, bool skip_tag=false );
 
   //: write out feature
   virtual
-  void write( vcl_ostream& os ) const;
+  void write( std::ostream& os ) const;
 
   virtual vnl_vector<double> const&
   tangent() const;
@@ -101,7 +103,7 @@ class rgrl_feature_trace_pt
 
   // to be able to use the protected constructor
   friend rgrl_feature_sptr
-         rgrl_feature_reader( vcl_istream& is );
+         rgrl_feature_reader( std::istream& is );
 
   vnl_vector<double> tangent_;
   vnl_matrix<double> error_proj_;

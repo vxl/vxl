@@ -42,9 +42,11 @@
 //*****************************************************************************
 // External declarations for values
 //*****************************************************************************
+#include <iostream>
+#include <iosfwd>
 #include <vsol/vsol_polygon_2d.h>
 #include <vsl/vsl_binary_io.h>
-#include <vcl_iosfwd.h>
+#include <vcl_compiler.h>
 
 class vsol_rectangle_2d : public vsol_polygon_2d
 {
@@ -172,24 +174,24 @@ class vsol_rectangle_2d : public vsol_polygon_2d
   short version() const;
 
   //: Print an ascii summary to the stream
-  void print_summary(vcl_ostream &os) const;
+  void print_summary(std::ostream &os) const;
 
   //: Return a platform independent string identifying the class
-  virtual vcl_string is_a() const { return "vsol_rectangle_2d"; }
+  virtual std::string is_a() const { return "vsol_rectangle_2d"; }
 
   //: Return true if the argument matches the string identifying the class or any parent class
-  virtual bool is_class(const vcl_string& cls) const
+  virtual bool is_class(const std::string& cls) const
   { return cls==is_a() || vsol_polygon_2d::is_class(cls); }
 
   //---------------------------------------------------------------------------
   //: Are `new_vertices' valid to build a rectangle ?
   //---------------------------------------------------------------------------
-  virtual bool valid_vertices(const vcl_vector<vsol_point_2d_sptr> new_vertices) const;
+  virtual bool valid_vertices(const std::vector<vsol_point_2d_sptr> new_vertices) const;
 
   //---------------------------------------------------------------------------
   //: output description to stream
   //---------------------------------------------------------------------------
-  void describe(vcl_ostream &strm, int blanking=0) const;
+  void describe(std::ostream &strm, int blanking=0) const;
 };
 
 

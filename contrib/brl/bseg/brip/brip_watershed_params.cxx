@@ -1,8 +1,9 @@
+#include <sstream>
+#include <iostream>
 #include "brip_watershed_params.h"
 //:
 // \file
-#include <vcl_sstream.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
 
 //------------------------------------------------------------------------
 // Constructors
@@ -37,33 +38,33 @@ void brip_watershed_params::InitParams(float sigma, float thresh,
 //
 bool brip_watershed_params::SanityCheck()
 {
-  vcl_stringstream msg;
+  std::stringstream msg;
   bool valid = true;
 
   if (sigma_ <= 0)  // Standard deviation of the smoothing kernel
   {
-    msg << "ERROR: Value of gaussian smoothing sigma is too low <=0" << vcl_ends;
+    msg << "ERROR: Value of gaussian smoothing sigma is too low <=0" << std::ends;
     valid = false;
   }
 
   if (thresh_ < 0)  // Noise weighting factor
   {
-    msg << "ERROR: Value of noise weight must be >=0" << vcl_ends;
+    msg << "ERROR: Value of noise weight must be >=0" << std::ends;
     valid = false;
   }
 
-  msg << vcl_ends;
+  msg << std::ends;
   SetErrorMsg(msg.str().c_str());
   return valid;
 }
 
-vcl_ostream& operator<<(vcl_ostream& os, const brip_watershed_params& wp)
+std::ostream& operator<<(std::ostream& os, const brip_watershed_params& wp)
 {
   return
   os << "brip_watershed_params:\n[---\n"
-     << "sigma " << wp.sigma_ << vcl_endl
-     << "thresh " << wp.thresh_ << vcl_endl
-     << "eight connected? " << wp.eight_connected_ << vcl_endl
-     << "verbose " << wp.verbose_ << vcl_endl
-     << "---]" << vcl_endl;
+     << "sigma " << wp.sigma_ << std::endl
+     << "thresh " << wp.thresh_ << std::endl
+     << "eight connected? " << wp.eight_connected_ << std::endl
+     << "verbose " << wp.verbose_ << std::endl
+     << "---]" << std::endl;
 }

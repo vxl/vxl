@@ -22,9 +22,10 @@
 //   generating OpenGL display list during initialization of tableau tree.
 // \endverbatim
 
+#include <map>
 #include <vgui/vgui_adaptor.h>
 #include <vgui/internals/vgui_adaptor_mixin.h>
-#include <vcl_map.h>
+#include <vcl_compiler.h>
 
 #include <gtk/gtk.h>
 
@@ -118,7 +119,7 @@ class vgui_gtk2_adaptor : public vgui_adaptor, public vgui_adaptor_mixin
   };
 
   // map of timers currently in use
-  vcl_map<int, internal_timer>  timers_;
+  std::map<int, internal_timer>  timers_;
 
   // This is a place to store any menu passed in,
   // so that it doesn't go out of scope while the popup is on screen.

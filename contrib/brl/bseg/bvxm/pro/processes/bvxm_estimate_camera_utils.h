@@ -12,10 +12,11 @@
 // \endverbatim
 
 
-#include <vcl_iostream.h>
-#include <vcl_vector.h>
+#include <iostream>
+#include <vector>
+#include <cmath>
 #include <vcl_cassert.h>
-#include <vcl_cmath.h>
+#include <vcl_compiler.h>
 
 #include <vgl/vgl_box_3d.h>
 #include <vgl/vgl_point_2d.h>
@@ -46,7 +47,7 @@ class bvxm_camera_estimator
 
   vil_image_view<float> convert_to_spherical_coordinates(const vil_image_view<float> &img, const vpgl_perspective_camera<double> &cam, const double rotate);
 
-  static vcl_vector<vgl_point_3d<double> > convert_3d_box_to_3d_points(const vgl_box_3d<double> box_3d);
+  static std::vector<vgl_point_3d<double> > convert_3d_box_to_3d_points(const vgl_box_3d<double> box_3d);
   static vgl_polygon<double> convert_3d_box_to_2d_polygon(const vgl_box_3d<double> box_3d, const vpgl_perspective_camera<double> *cam);
 
   static void convert_angles_to_vector(const double theta, const double phi, double &vx, double &vy, double &vz);
@@ -163,14 +164,14 @@ vil_image_view<TR> bvxm_camera_estimator::estimate_offsets_fd(const vil_image_vi
 
   for (unsigned i=0; i<img_cc_mag.ni(); i++) {
     for (unsigned j=0; j<img_cc_mag.nj(); j++) {
-      float a = img_1_mag(i,j)*vcl_cos(img_1_phase(i,j));
-      float b = img_1_mag(i,j)*vcl_sin(img_1_phase(i,j));
-      float c = img_2_mag(i,j)*vcl_cos(img_2_phase(i,j));
-      float d = img_2_mag(i,j)*vcl_sin(img_2_phase(i,j));
+      float a = img_1_mag(i,j)*std::cos(img_1_phase(i,j));
+      float b = img_1_mag(i,j)*std::sin(img_1_phase(i,j));
+      float c = img_2_mag(i,j)*std::cos(img_2_phase(i,j));
+      float d = img_2_mag(i,j)*std::sin(img_2_phase(i,j));
       float res_real = (a*c)-(b*d);
       float res_img = (b*c)+(a*d);
-      float res_mag = vcl_sqrt((res_real*res_real)+(res_img*res_img));
-      float res_phase = vcl_atan2(res_img, res_real);
+      float res_mag = std::sqrt((res_real*res_real)+(res_img*res_img));
+      float res_phase = std::atan2(res_img, res_real);
 
       img_cc_mag(i,j) = res_mag;
       img_cc_phase(i,j) = res_phase;
@@ -179,7 +180,7 @@ vil_image_view<TR> bvxm_camera_estimator::estimate_offsets_fd(const vil_image_vi
 
   brip_vil_float_ops::inverse_fourier_transform(img_cc_mag,img_cc_phase,img_cc);
 
-  score = vcl_numeric_limits<float>::min();
+  score = std::numeric_limits<float>::min();
 
   for (unsigned i=0; i<img_cc.ni(); i++) {
     for (unsigned j=0; j<img_cc.nj(); j++) {
@@ -251,7 +252,7 @@ class bvxm_camera_estimator_amoeba : public vnl_cost_function
     cam->set_calibration(best_camera.get_calibration());
     cam->set_camera_center(best_camera.get_camera_center());
     cam->set_rotation(best_camera.get_rotation());
-    vcl_cout << '\n';
+    std::cout << '\n';
     return best_score;
   }
 

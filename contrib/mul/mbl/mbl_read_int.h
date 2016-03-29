@@ -20,7 +20,7 @@
 // - Returns:       The answer or a default
 // - Description:   Asks question and waits for an answer.
 //                  If the answer is an integer, returns it.
-//                  If the answer is an empty vcl_string (return)
+//                  If the answer is an empty std::string (return)
 //                  then returns default.
 //                  Otherwise waits for another input.
 // - References:    -

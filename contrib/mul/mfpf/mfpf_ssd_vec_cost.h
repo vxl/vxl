@@ -5,8 +5,10 @@
 // \brief Computes weighted sum of square differences to a mean
 // \author Tim Cootes
 
+#include <iostream>
+#include <iosfwd>
 #include <mfpf/mfpf_vec_cost.h>
-#include <vcl_iosfwd.h>
+#include <vcl_compiler.h>
 
 //: Computes weighted sum of square differences to a mean
 class mfpf_ssd_vec_cost : public mfpf_vec_cost
@@ -46,13 +48,13 @@ class mfpf_ssd_vec_cost : public mfpf_vec_cost
   short version_no() const;
 
   //: Name of the class
-  virtual vcl_string is_a() const;
+  virtual std::string is_a() const;
 
   //: Create a copy on the heap and return base class pointer
   virtual mfpf_vec_cost* clone() const;
 
   //: Print class to os
-  virtual void print_summary(vcl_ostream& os) const;
+  virtual void print_summary(std::ostream& os) const;
 
   //: Save class to binary file stream
   virtual void b_write(vsl_b_ostream& bfs) const;

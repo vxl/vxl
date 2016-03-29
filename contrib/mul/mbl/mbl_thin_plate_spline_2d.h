@@ -6,12 +6,14 @@
 // \brief Construct thin plate spline to map 2D to 2D
 // \author Tim Cootes
 
+#include <vector>
+#include <iostream>
+#include <iosfwd>
 #include <vgl/vgl_point_2d.h>
 #include <vnl/vnl_vector.h>
 #include <vnl/vnl_matrix.h>
 #include <vsl/vsl_binary_io.h>
-#include <vcl_vector.h>
-#include <vcl_iosfwd.h>
+#include <vcl_compiler.h>
 
 //=======================================================================
 //: Construct thin plate spline to map 2D to 2D.
@@ -26,7 +28,7 @@
 // use set_source_pts(src_pts);  then build(target_pts); for each target set.
 //
 // \verbatim
-// vcl_vector<vgl_point_2d<double> > src_pts(n_points),dest_pts(n_points);
+// std::vector<vgl_point_2d<double> > src_pts(n_points),dest_pts(n_points);
 //
 // Fill src_pts and dest_pts
 // .....
@@ -49,14 +51,14 @@ class mbl_thin_plate_spline_2d
 
   bool return_pure_affine_;
 
-  vcl_vector<vgl_point_2d<double> > src_pts_;
+  std::vector<vgl_point_2d<double> > src_pts_;
 
     //: Used to estimate weights in set_source_points()
   vnl_matrix<double> L_inv_;
 
     //: Build from small number of points
-  void build_pure_affine(const vcl_vector<vgl_point_2d<double> >& source_pts,
-                         const vcl_vector<vgl_point_2d<double> >& dest_pts);
+  void build_pure_affine(const std::vector<vgl_point_2d<double> >& source_pts,
+                         const std::vector<vgl_point_2d<double> >& dest_pts);
 
    //: Set parameters from vectors
   void set_params(const vnl_vector<double>& W1,
@@ -64,7 +66,7 @@ class mbl_thin_plate_spline_2d
 
   void set_up_rhs(vnl_vector<double>& Bx,
                   vnl_vector<double>& By,
-                  const vcl_vector<vgl_point_2d<double> >& dest_pts);
+                  const std::vector<vgl_point_2d<double> >& dest_pts);
 
    //: Compute spline-bending energy
   void compute_energy(vnl_vector<double>& W1,
@@ -80,22 +82,22 @@ class mbl_thin_plate_spline_2d
   virtual ~mbl_thin_plate_spline_2d();
 
     //: Sets up internal transformation to map source_pts onto dest_pts
-  void build(const vcl_vector<vgl_point_2d<double> >& source_pts,
-             const vcl_vector<vgl_point_2d<double> >& dest_pts,
+  void build(const std::vector<vgl_point_2d<double> >& source_pts,
+             const std::vector<vgl_point_2d<double> >& dest_pts,
              bool compute_the_energy=false);
 
     //: Define source point positions
     //  Performs pre-computations so that build(dest_points) can be
     //  called multiple times efficiently
-  void set_source_pts(const vcl_vector<vgl_point_2d<double> >& source_pts);
+  void set_source_pts(const std::vector<vgl_point_2d<double> >& source_pts);
 
   //: Return current source points
-  const vcl_vector<vgl_point_2d<double> >& src_pts() const
+  const std::vector<vgl_point_2d<double> >& src_pts() const
   { return src_pts_; }
 
 
     //: Sets up internal transformation to map source_pts onto dest_pts
-  void build(const vcl_vector<vgl_point_2d<double> >& dest_pts);
+  void build(const std::vector<vgl_point_2d<double> >& dest_pts);
 
        //: Return transformed version of (x,y)
   vgl_point_2d<double>  operator()(double x, double y) const;
@@ -121,7 +123,7 @@ class mbl_thin_plate_spline_2d
   short version_no() const;
 
     //: Print class to os
-  void print_summary(vcl_ostream& os) const;
+  void print_summary(std::ostream& os) const;
 
     //: Save class to binary file stream
   void b_write(vsl_b_ostream& bfs) const;
@@ -140,7 +142,7 @@ void vsl_b_write(vsl_b_ostream& bfs, const mbl_thin_plate_spline_2d& b);
 void vsl_b_read(vsl_b_istream& bfs, mbl_thin_plate_spline_2d& b);
 
   //: Stream output operator for class reference
-vcl_ostream& operator<<(vcl_ostream& os,const mbl_thin_plate_spline_2d& b);
+std::ostream& operator<<(std::ostream& os,const mbl_thin_plate_spline_2d& b);
 
 #endif
 

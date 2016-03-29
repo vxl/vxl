@@ -12,9 +12,10 @@
 //   <none yet>
 // \endverbatim
 
+#include <iostream>
 #include <bvpl/util/bvpl_bundler_features_2d.h>
 
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
 
 #include <vsl/vsl_binary_io.h>
 
@@ -27,6 +28,6 @@ void vsl_b_read(vsl_b_istream &is, bvpl_bundler_features_2d* &p);
 
 void vsl_b_write(vsl_b_ostream &os, const bvpl_bundler_features_2d* p);
 
-void vsl_print_summary(vcl_ostream& os, const bvpl_bundler_features_2d *p);
+void vsl_print_summary(std::ostream& os, const bvpl_bundler_features_2d *p);
 
 #endif //BVPL_BUNDLER_FEATURES_2D_IO_H_

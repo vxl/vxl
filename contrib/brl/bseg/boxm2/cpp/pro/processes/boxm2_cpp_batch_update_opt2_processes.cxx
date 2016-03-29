@@ -1,4 +1,6 @@
 // This is brl/bseg/boxm2/cpp/pro/processes/boxm2_cpp_batch_update_opt2_processes.cxx
+#include <iostream>
+#include <fstream>
 #include <bprb/bprb_func_process.h>
 //:
 // \file
@@ -7,7 +9,7 @@
 // \author Ozge C. Ozcanli
 // \date May 12, 2011
 
-#include <vcl_fstream.h>
+#include <vcl_compiler.h>
 #include <boxm2/io/boxm2_stream_cache.h>
 #include <boxm2/io/boxm2_cache.h>
 #include <boxm2/boxm2_scene.h>
@@ -44,7 +46,7 @@ bool boxm2_cpp_create_aux_data_opt2_process_cons(bprb_func_process& pro)
   // 2) camera
   // 3) image
   // 4) image identifier
-  vcl_vector<vcl_string> input_types_(n_inputs_);
+  std::vector<std::string> input_types_(n_inputs_);
   input_types_[0] = "boxm2_scene_sptr";
   input_types_[1] = "boxm2_cache_sptr";
   input_types_[2] = "vpgl_camera_double_sptr";
@@ -53,7 +55,7 @@ bool boxm2_cpp_create_aux_data_opt2_process_cons(bprb_func_process& pro)
   input_types_[5] = "float"; // alternative appearance model of shadow, prior
   input_types_[6] = "float"; // alternative appearance model of shadow, sigma
   // process has 0 output:
-  vcl_vector<vcl_string>  output_types_(n_outputs_);
+  std::vector<std::string>  output_types_(n_outputs_);
 
   bool good = pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
 
@@ -69,7 +71,7 @@ bool boxm2_cpp_create_aux_data_opt2_process(bprb_func_process& pro)
   using namespace boxm2_cpp_create_aux_data_opt2_process_globals;
 
   if ( pro.n_inputs() < n_inputs_ ){
-    vcl_cout << pro.name() << ": The number of inputs should be " << n_inputs_<< vcl_endl;
+    std::cout << pro.name() << ": The number of inputs should be " << n_inputs_<< std::endl;
     return false;
   }
   //get the inputs
@@ -79,24 +81,24 @@ bool boxm2_cpp_create_aux_data_opt2_process(bprb_func_process& pro)
   vpgl_camera_double_sptr cam          = pro.get_input<vpgl_camera_double_sptr>(i++);
   vil_image_view_base_sptr in_img      = pro.get_input<vil_image_view_base_sptr>(i++);
   vil_image_view_base_sptr float_image = boxm2_util::prepare_input_image(in_img, true);
-  vcl_string identifier                = pro.get_input<vcl_string>(i++);
+  std::string identifier                = pro.get_input<std::string>(i++);
   float shadow_prior                   = pro.get_input<float>(i++);
   float shadow_sigma                   = pro.get_input<float>(i++);
 
   if (vil_image_view<float> * input_image=dynamic_cast<vil_image_view<float> * > (float_image.ptr()))
   {
-    vcl_vector<boxm2_block_id> vis_order=scene->get_vis_blocks(reinterpret_cast<vpgl_generic_camera<double>*>(cam.ptr()));
+    std::vector<boxm2_block_id> vis_order=scene->get_vis_blocks(reinterpret_cast<vpgl_generic_camera<double>*>(cam.ptr()));
     if (vis_order.empty())
     {
-      vcl_cout<<" None of the blocks are visible from this viewpoint"<<vcl_endl;
+      std::cout<<" None of the blocks are visible from this viewpoint"<<std::endl;
       return true;
     }
 
     bool foundDataType = false;
 
-    vcl_string data_type;
-    vcl_string num_obs_type;
-    vcl_vector<vcl_string> apps = scene->appearances();
+    std::string data_type;
+    std::string num_obs_type;
+    std::vector<std::string> apps = scene->appearances();
     for (unsigned int i=0; i<apps.size(); ++i) {
       if ( apps[i] == boxm2_data_traits<BOXM2_MOG3_GREY>::prefix() )
       {
@@ -118,7 +120,7 @@ bool boxm2_cpp_create_aux_data_opt2_process(bprb_func_process& pro)
       }
     }
     if (!foundDataType) {
-      vcl_cerr<<"boxm2_cpp_create_aux_data_process ERROR: scene doesn't have BOXM2_MOG3_GREY or BOXM2_MOG3_GREY_16 data type\n";
+      std::cerr<<"boxm2_cpp_create_aux_data_process ERROR: scene doesn't have BOXM2_MOG3_GREY or BOXM2_MOG3_GREY_16 data type\n";
       return false;
     }
 
@@ -128,18 +130,18 @@ bool boxm2_cpp_create_aux_data_opt2_process(bprb_func_process& pro)
     pre_inf_img.fill(0.0f);
     vis_inf_img.fill(1.0f);
 
-    vcl_vector<boxm2_block_id>::iterator id;
+    std::vector<boxm2_block_id>::iterator id;
 
     for (id = vis_order.begin(); id != vis_order.end(); ++id)
     {
-      vcl_cout<<"Block id "<<(*id)<<' ';
+      std::cout<<"Block id "<<(*id)<<' ';
       boxm2_block *     blk   = cache->get_block(scene,*id);
       boxm2_data_base *  alph  = cache->get_data_base(scene,*id,boxm2_data_traits<BOXM2_ALPHA>::prefix(),0,false);
       boxm2_data_base *  mog   = cache->get_data_base(scene,*id,data_type,0,false);
       boxm2_data_base *aux0 = cache->get_data_base(scene,*id,boxm2_data_traits<BOXM2_AUX0>::prefix(identifier));
       boxm2_data_base *aux1 = cache->get_data_base(scene,*id,boxm2_data_traits<BOXM2_AUX1>::prefix(identifier));
 
-      vcl_vector<boxm2_data_base*> datas;
+      std::vector<boxm2_data_base*> datas;
       datas.push_back(aux0);
       datas.push_back(aux1);
       datas.push_back(alph);
@@ -179,7 +181,7 @@ bool boxm2_cpp_create_aux_data_opt2_process(bprb_func_process& pro)
     float model_prior = 1.0f - shadow_prior;
     // sanity check
     if (model_prior <= 0.0f) {
-      vcl_cerr << "error: boxm_generate_opt2_samples : alt_appearance_priors sum to " << 1.0f - model_prior << " >= 1.0!\n";
+      std::cerr << "error: boxm_generate_opt2_samples : alt_appearance_priors sum to " << 1.0f - model_prior << " >= 1.0!\n";
     }
 
     // compute alternate appearance probability for each pixel in the image
@@ -206,7 +208,7 @@ bool boxm2_cpp_create_aux_data_opt2_process(bprb_func_process& pro)
 
     for (id = vis_order.begin(); id != vis_order.end(); ++id)
     {
-      vcl_cout<<"Block id "<<(*id)<<' ';
+      std::cout<<"Block id "<<(*id)<<' ';
       boxm2_block *     blk   = cache->get_block(scene,*id);
       boxm2_data_base *  alph  = cache->get_data_base(scene,*id,boxm2_data_traits<BOXM2_ALPHA>::prefix(),0,false);
       boxm2_data_base *  mog   = cache->get_data_base(scene,*id,data_type,0,false);
@@ -216,7 +218,7 @@ bool boxm2_cpp_create_aux_data_opt2_process(bprb_func_process& pro)
       // generate aux in a writable mode
       boxm2_data_base *aux = cache->get_data_base_new(scene,*id, boxm2_data_traits<BOXM2_AUX>::prefix(identifier),false);
 
-      vcl_vector<boxm2_data_base*> datas;
+      std::vector<boxm2_data_base*> datas;
       datas.push_back(aux0);
       datas.push_back(aux1);
       datas.push_back(alph);
@@ -269,13 +271,13 @@ bool boxm2_cpp_batch_update_opt2_process_cons(bprb_func_process& pro)
   // 1) cache
   // 2) stream cache
   // 3) the pre-computed sigma normalizer table, for fast access to normalizer values given number of images
-  vcl_vector<vcl_string> input_types_(n_inputs_);
+  std::vector<std::string> input_types_(n_inputs_);
   input_types_[0] = "boxm2_scene_sptr";
   input_types_[1] = "boxm2_cache_sptr";
   input_types_[2] = "boxm2_stream_cache_sptr";
   input_types_[3] = "bsta_sigma_normalizer_sptr";
   // process has no output:
-  vcl_vector<vcl_string>  output_types_(n_outputs_);
+  std::vector<std::string>  output_types_(n_outputs_);
 
   return pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
 }
@@ -286,7 +288,7 @@ bool boxm2_cpp_batch_update_opt2_process(bprb_func_process& pro)
   using namespace boxm2_cpp_batch_update_opt2_process_globals;
 
   if ( pro.n_inputs() < n_inputs_ ){
-      vcl_cout << pro.name() << ": The input number should be " << n_inputs_<< vcl_endl;
+      std::cout << pro.name() << ": The input number should be " << n_inputs_<< std::endl;
       return false;
   }
   // get the inputs
@@ -296,9 +298,9 @@ bool boxm2_cpp_batch_update_opt2_process(bprb_func_process& pro)
   boxm2_stream_cache_sptr str_cache = pro.get_input<boxm2_stream_cache_sptr>(i++);
   bsta_sigma_normalizer_sptr n_table = pro.get_input<bsta_sigma_normalizer_sptr>(i++);
 
-  vcl_string data_type;
+  std::string data_type;
   bool foundDataType = false;
-  vcl_vector<vcl_string> apps = scene->appearances();
+  std::vector<std::string> apps = scene->appearances();
   for (unsigned int i=0; i<apps.size(); ++i) {
     if ( apps[i] == boxm2_data_traits<BOXM2_MOG3_GREY>::prefix() )
     {
@@ -308,7 +310,7 @@ bool boxm2_cpp_batch_update_opt2_process(bprb_func_process& pro)
     }
     else if ( apps[i] == boxm2_data_traits<BOXM2_MOG3_GREY_16>::prefix() )
     {
-      vcl_cout << "In boxm2_cpp_batch_update_process ERROR: datatype BOXM2_MOG3_GREY_16 not implemented!\n";
+      std::cout << "In boxm2_cpp_batch_update_process ERROR: datatype BOXM2_MOG3_GREY_16 not implemented!\n";
       return false;
     }
     else if ( apps[i] == boxm2_data_traits<BOXM2_GAUSS_GREY>::prefix() )
@@ -319,28 +321,28 @@ bool boxm2_cpp_batch_update_opt2_process(bprb_func_process& pro)
     }
   }
   if (!foundDataType) {
-    vcl_cout<<"boxm2_cpp_batch_update_process ERROR: scene doesn't have BOXM2_MOG3_GREY or BOXM2_MOG3_GREY_16 data type"<<vcl_endl;
+    std::cout<<"boxm2_cpp_batch_update_process ERROR: scene doesn't have BOXM2_MOG3_GREY or BOXM2_MOG3_GREY_16 data type"<<std::endl;
     return false;
   }
 
   // assumes that the data of each image has been created in the data models previously
   int alphaTypeSize = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_ALPHA>::prefix());
   // iterate the scene block by block and write to output
-  vcl_vector<boxm2_block_id> blk_ids = scene->get_block_ids();
-  vcl_vector<boxm2_block_id>::iterator id;
+  std::vector<boxm2_block_id> blk_ids = scene->get_block_ids();
+  std::vector<boxm2_block_id>::iterator id;
   id = blk_ids.begin();
   for (id = blk_ids.begin(); id != blk_ids.end(); ++id) {
     boxm2_data_base *  alph  = cache->get_data_base(scene,*id,boxm2_data_traits<BOXM2_ALPHA>::prefix(),0,false);
     boxm2_data_base *  mog  = cache->get_data_base(scene,*id,data_type,0,false);
 
-    if ( data_type.find(boxm2_data_traits<BOXM2_MOG3_GREY>::prefix()) != vcl_string::npos )
+    if ( data_type.find(boxm2_data_traits<BOXM2_MOG3_GREY>::prefix()) != std::string::npos )
     {
       boxm2_batch_update_opt2_functor<BOXM2_MOG3_GREY> data_functor;
       data_functor.init_data(alph, mog, str_cache, n_table);
       int data_buff_length = (int) (alph->buffer_length()/alphaTypeSize);
       boxm2_data_serial_iterator<boxm2_batch_update_opt2_functor<BOXM2_MOG3_GREY> >(data_buff_length,data_functor);
     }
-    if (data_type.find(boxm2_data_traits<BOXM2_GAUSS_GREY>::prefix()) != vcl_string::npos )
+    if (data_type.find(boxm2_data_traits<BOXM2_GAUSS_GREY>::prefix()) != std::string::npos )
     {
       boxm2_batch_update_opt2_functor<BOXM2_GAUSS_GREY> data_functor;
       data_functor.init_data(alph, mog, str_cache, n_table);

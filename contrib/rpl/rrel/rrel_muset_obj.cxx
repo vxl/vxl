@@ -1,10 +1,11 @@
 // This is rpl/rrel/rrel_muset_obj.cxx
+#include <limits>
+#include <iostream>
+#include <vector>
+#include <algorithm>
 #include "rrel_muset_obj.h"
 //
-#include <vcl_limits.h>
-#include <vcl_iostream.h>
-#include <vcl_vector.h>
-#include <vcl_algorithm.h>
+#include <vcl_compiler.h>
 #include <vcl_cassert.h>
 #include <vnl/vnl_math.h>
 #include <rrel/rrel_muse_table.h>
@@ -80,12 +81,12 @@ rrel_muset_obj::internal_fcn( vect_const_iter begin, vect_const_iter end,
                               double& sigma_est, int& best_k ) const
 {
   // Calculate the absolute residuals and sort them.
-  vcl_vector<double> abs_residuals;
+  std::vector<double> abs_residuals;
   abs_residuals.reserve( end - begin );
   for ( ; begin != end; ++begin ) {
     abs_residuals.push_back( vnl_math::abs( *begin ) );
   }
-  vcl_sort( abs_residuals.begin(), abs_residuals.end() );
+  std::sort( abs_residuals.begin(), abs_residuals.end() );
 
   unsigned int num_residuals = abs_residuals.size();
   bool at_start=true;
@@ -101,7 +102,7 @@ rrel_muset_obj::internal_fcn( vect_const_iter begin, vect_const_iter end,
    case RREL_MUSE_TRIMMED:
    {
 #ifdef DEBUG
-    vcl_cout << "\nRREL_MUSE_TRIMMED\n";
+    std::cout << "\nRREL_MUSE_TRIMMED\n";
 #endif
     double sum_residuals=0;
     double best_sum = 0;
@@ -117,7 +118,7 @@ rrel_muset_obj::internal_fcn( vect_const_iter begin, vect_const_iter end,
            table_->standard_dev_kth(k, num_residuals) < min_exp_kth_to_stddev_ratio )
       {
         if ( notwarned ) {
-          vcl_cerr << "WARNING:  rrel_muset_obj::internal_fcn "
+          std::cerr << "WARNING:  rrel_muset_obj::internal_fcn "
                    << "attempted evaluation at value of k that lead to unstable estimates\n";
           notwarned = false;
         }
@@ -132,7 +133,7 @@ rrel_muset_obj::internal_fcn( vect_const_iter begin, vect_const_iter end,
                          table_->expected_kth(k, num_residuals);
 
 #ifdef DEBUG
-      vcl_cout << "k = " << k << ", sk = " << sk
+      std::cout << "k = " << k << ", sk = " << sk
                << ", objective = " << objective << '\n';
 #endif
 
@@ -147,9 +148,9 @@ rrel_muset_obj::internal_fcn( vect_const_iter begin, vect_const_iter end,
     }
 
     if ( at_start ) {
-      vcl_cerr << "WARNING:  There were NO values of k with stable estimates.\n"
+      std::cerr << "WARNING:  There were NO values of k with stable estimates.\n"
                << "          Setting sigma = +Infinity\n";
-      sigma_est = vcl_numeric_limits<double>::infinity();
+      sigma_est = std::numeric_limits<double>::infinity();
       return;
     }
 
@@ -157,18 +158,18 @@ rrel_muset_obj::internal_fcn( vect_const_iter begin, vect_const_iter end,
     if ( ! use_sk_refine_ ) {
       sigma_est = best_sk;
 #ifdef DEBUG
-      vcl_cout << "No sk refinement\n";
+      std::cout << "No sk refinement\n";
 #endif
     }
     else {
 #ifdef DEBUG
-      vcl_cout << "sk refinement\n";
+      std::cout << "sk refinement\n";
 #endif
       unsigned int new_n = best_k;
       while ( new_n<num_residuals && abs_residuals[new_n] < 2.5*best_sk )
         ++new_n;
 #ifdef DEBUG
-      vcl_cout << "New n = " << new_n << '\n';
+      std::cout << "New n = " << new_n << '\n';
 #endif
       sigma_est = best_sum / table_ -> muset_divisor(best_k, new_n);
     }
@@ -178,7 +179,7 @@ rrel_muset_obj::internal_fcn( vect_const_iter begin, vect_const_iter end,
    case RREL_MUSE_TRIMMED_SQUARE:
    {
 #ifdef DEBUG
-    vcl_cout << "\nRREL_MUSE_TRIMMED_SQUARE\n";
+    std::cout << "\nRREL_MUSE_TRIMMED_SQUARE\n";
 #endif
     double sum_sq_residuals=0;
     double best_sum_sq = 0;
@@ -193,7 +194,7 @@ rrel_muset_obj::internal_fcn( vect_const_iter begin, vect_const_iter end,
            table_->standard_dev_kth(k, num_residuals) < min_exp_kth_to_stddev_ratio )
         {
           if ( notwarned ) {
-            vcl_cerr << "WARNING:  rrel_muset_obj::internal_fcn attempted evaluation at "
+            std::cerr << "WARNING:  rrel_muset_obj::internal_fcn attempted evaluation at "
                      << "value of k that lead to unstable estimates\n";
             notwarned = false;
           }
@@ -203,13 +204,13 @@ rrel_muset_obj::internal_fcn( vect_const_iter begin, vect_const_iter end,
       for ( unsigned int i=prev_k; i<k; ++i ) {
         sum_sq_residuals += vnl_math::sqr( abs_residuals[i] );
       }
-      double sk = vcl_sqrt( sum_sq_residuals
+      double sk = std::sqrt( sum_sq_residuals
                             / table_->muset_sq_divisor(k, num_residuals) );
       double objective = sk * table_->standard_dev_kth(k, num_residuals) /
                          table_->expected_kth(k, num_residuals);
 
 #ifdef DEBUG
-      vcl_cout << "k = " << k << ", sk = " << sk
+      std::cout << "k = " << k << ", sk = " << sk
                << ", objective = " << objective << '\n';
 #endif
 
@@ -224,9 +225,9 @@ rrel_muset_obj::internal_fcn( vect_const_iter begin, vect_const_iter end,
     }
 
     if ( at_start ) {
-      vcl_cerr << "WARNING:  There were NO values of k with stable estimates.\n"
+      std::cerr << "WARNING:  There were NO values of k with stable estimates.\n"
                << "          Setting sigma = +Infinity\n";
-      sigma_est = vcl_numeric_limits<double>::infinity();
+      sigma_est = std::numeric_limits<double>::infinity();
       return;
     }
 
@@ -234,20 +235,20 @@ rrel_muset_obj::internal_fcn( vect_const_iter begin, vect_const_iter end,
     if ( ! use_sk_refine_ ) {
       sigma_est = best_sk;
 #ifdef DEBUG
-      vcl_cout << "No sk refinement\n";
+      std::cout << "No sk refinement\n";
 #endif
     }
     else {
 #ifdef DEBUG
-      vcl_cout << "sk refinement\n";
+      std::cout << "sk refinement\n";
 #endif
       unsigned int new_n = best_k;
       while ( new_n<num_residuals && abs_residuals[new_n] < 2.5*best_sk )
         ++new_n;
 #ifdef DEBUG
-      vcl_cout << "New n = " << new_n << '\n';
+      std::cout << "New n = " << new_n << '\n';
 #endif
-      sigma_est = vcl_sqrt( best_sum_sq
+      sigma_est = std::sqrt( best_sum_sq
                             / table_->muset_sq_divisor(best_k, new_n) );
     }
     break;
@@ -256,7 +257,7 @@ rrel_muset_obj::internal_fcn( vect_const_iter begin, vect_const_iter end,
    case RREL_MUSE_QUANTILE:
    {
 #ifdef DEBUG
-    vcl_cout << "\nRREL_MUSE_QUANTILE\n";
+    std::cout << "\nRREL_MUSE_QUANTILE\n";
 #endif
     for ( double frac=min_frac_; frac<=max_frac_+0.00001; frac+=frac_inc_ ) {
       int kk = vnl_math::rnd( frac*num_residuals );
@@ -266,7 +267,7 @@ rrel_muset_obj::internal_fcn( vect_const_iter begin, vect_const_iter end,
            table_->standard_dev_kth(k, num_residuals) < min_exp_kth_to_stddev_ratio )
         {
           if ( notwarned ) {
-            vcl_cerr << "WARNING:  rrel_muset_obj::internal_fcn attempted evaluation at "
+            std::cerr << "WARNING:  rrel_muset_obj::internal_fcn attempted evaluation at "
                      << "value of k that lead to unstable estimates\n";
             notwarned = false;
           }
@@ -278,7 +279,7 @@ rrel_muset_obj::internal_fcn( vect_const_iter begin, vect_const_iter end,
                          table_->expected_kth(k, num_residuals);
 
 #ifdef DEBUG
-      vcl_cout << "k = " << k << ", sk = " << sk
+      std::cout << "k = " << k << ", sk = " << sk
                << ", objective = " << objective << '\n';
 #endif
 
@@ -291,9 +292,9 @@ rrel_muset_obj::internal_fcn( vect_const_iter begin, vect_const_iter end,
     }
 
     if ( at_start ) {
-      vcl_cerr << "WARNING:  There were NO values of k with stable estimates.\n"
+      std::cerr << "WARNING:  There were NO values of k with stable estimates.\n"
                << "          Setting sigma = +Infinity\n";
-      sigma_est = vcl_numeric_limits<double>::infinity();
+      sigma_est = std::numeric_limits<double>::infinity();
       return;
     }
 
@@ -301,18 +302,18 @@ rrel_muset_obj::internal_fcn( vect_const_iter begin, vect_const_iter end,
     if ( ! use_sk_refine_ ) {
       sigma_est = best_sk;
 #ifdef DEBUG
-      vcl_cout << "No sk refinement\n";
+      std::cout << "No sk refinement\n";
 #endif
     }
     else {
 #ifdef DEBUG
-      vcl_cout << "sk refinement\n";
+      std::cout << "sk refinement\n";
 #endif
       unsigned int new_n = best_k;
       while ( new_n<num_residuals && abs_residuals[new_n] < 2.5*best_sk )
         ++new_n;
 #ifdef DEBUG
-      vcl_cout << "New n = " << new_n << '\n';
+      std::cout << "New n = " << new_n << '\n';
 #endif
       sigma_est = abs_residuals[ best_k ] / table_->expected_kth(best_k, new_n);
     }

@@ -14,11 +14,12 @@
 //  Notes: We use floats instead of doubles as size is a speed issue (sic.)
 //
 
+#include <string>
+#include <iosfwd>
+#include <vector>
 #include "dll.h"
 
-#include <vcl_string.h>
-#include <vcl_iosfwd.h>
-#include <vcl_vector.h>
+#include <vcl_compiler.h>
 
 #include "vgui_style_sptr.h"
 
@@ -57,10 +58,10 @@ class vgui_soview
   virtual void load_name() const;
 
   //: Prints the ID of this soview.
-  virtual vcl_ostream& print(vcl_ostream& s) const;
+  virtual std::ostream& print(std::ostream& s) const;
 
   //: This should never be called, derived classes should implement this.
-  virtual vcl_string type_name() const { return "vgui_soview"; }
+  virtual std::string type_name() const { return "vgui_soview"; }
 
   //: Set the style (colour, line width) of the soview.
   virtual void set_style(const vgui_style_sptr& newstyle) { style = newstyle; }
@@ -84,7 +85,7 @@ class vgui_soview
   void detach(vgui_observer*);
 
   //: Get a list of all observers attached to this soview.
-  void get_observers(vcl_vector<vgui_observer*>&) const;
+  void get_observers(std::vector<vgui_observer*>&) const;
 
   //: Update all observers.
   virtual void notify() const;
@@ -128,7 +129,7 @@ class vgui_soview
   static vgui_DLLDATA unsigned current_id;
 };
 
-inline vcl_ostream& operator<<(vcl_ostream& s, const vgui_soview& so)
+inline std::ostream& operator<<(std::ostream& s, const vgui_soview& so)
 {
   return so.print(s);
 }

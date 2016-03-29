@@ -1,13 +1,14 @@
 // This is gel/vsol/vsol_digital_curve_2d.cxx
+#include <iostream>
+#include <cmath>
 #include "vsol_digital_curve_2d.h"
 //:
 // \file
 #include <vsol/vsol_point_2d.h>
-#include <vcl_iostream.h>
 #include <vgl/vgl_point_2d.h>
 #include <vgl/vgl_closest_point.h>
 #include <vsl/vsl_vector_io.h>
-#include <vcl_cmath.h>
+#include <vcl_compiler.h>
 #include <vcl_cassert.h>
 
 //***************************************************************************
@@ -23,10 +24,10 @@ vsol_digital_curve_2d::vsol_digital_curve_2d()
 }
 
 //---------------------------------------------------------------------------
-//: Constructor from a vcl_vector of points
+//: Constructor from a std::vector of points
 //---------------------------------------------------------------------------
 
-vsol_digital_curve_2d::vsol_digital_curve_2d(const vcl_vector<vsol_point_2d_sptr> &samples)
+vsol_digital_curve_2d::vsol_digital_curve_2d(const std::vector<vsol_point_2d_sptr> &samples)
  : vsol_curve_2d(), samples_(samples)
 {
 }
@@ -37,7 +38,7 @@ vsol_digital_curve_2d::vsol_digital_curve_2d(const vcl_vector<vsol_point_2d_sptr
 vsol_digital_curve_2d::vsol_digital_curve_2d(const vsol_digital_curve_2d &other)
   : vsol_curve_2d(other), samples_()
 {
-  for ( vcl_vector<vsol_point_2d_sptr>::const_iterator itr=other.samples_.begin();
+  for ( std::vector<vsol_point_2d_sptr>::const_iterator itr=other.samples_.begin();
         itr != other.samples_.end();  ++itr )
     this->samples_.push_back(new vsol_point_2d(**itr));
 }
@@ -68,7 +69,7 @@ vsol_spatial_object_2d* vsol_digital_curve_2d::clone(void) const
 vsol_point_2d_sptr vsol_digital_curve_2d::p0(void) const
 {
   if ( samples_.empty() )
-    return NULL;
+    return VXL_NULLPTR;
 
   return samples_.front();
 }
@@ -79,7 +80,7 @@ vsol_point_2d_sptr vsol_digital_curve_2d::p0(void) const
 vsol_point_2d_sptr vsol_digital_curve_2d::p1(void) const
 {
   if ( samples_.empty() )
-    return NULL;
+    return VXL_NULLPTR;
 
   return samples_.back();
 }
@@ -106,12 +107,12 @@ vsol_digital_curve_2d::interp(double index) const
   assert(index >= 0.0);
   assert(index <= double(samples_.size()-1));
 
-  int i1 = (int)vcl_floor(index);
-  if ( vcl_floor(index) == index )
+  int i1 = (int)std::floor(index);
+  if ( std::floor(index) == index )
     return samples_[i1]->get_p();
 
-  int i2 = (int)vcl_ceil(index);
-  double f = index - vcl_floor(index);
+  int i2 = (int)std::ceil(index);
+  double f = index - std::floor(index);
 
   vgl_point_2d<double> p1 = samples_[i1]->get_p();
   vgl_point_2d<double> p2 = samples_[i2]->get_p();
@@ -166,7 +167,7 @@ bool vsol_digital_curve_2d::operator==(const vsol_spatial_object_2d& obj) const
 double vsol_digital_curve_2d::length(void) const
 {
   double curve_length = 0.0;
-  for ( vcl_vector<vsol_point_2d_sptr>::const_iterator itr=samples_.begin();
+  for ( std::vector<vsol_point_2d_sptr>::const_iterator itr=samples_.begin();
         itr+1 != samples_.end();  ++itr )
   {
     curve_length += ((*(itr+1))->get_p() - (*itr)->get_p()).length();
@@ -253,7 +254,7 @@ short vsol_digital_curve_2d::version() const
 }
 
 //: Print an ascii summary to the stream
-void vsol_digital_curve_2d::print_summary(vcl_ostream &os) const
+void vsol_digital_curve_2d::print_summary(std::ostream &os) const
 {
   os << *this;
 }
@@ -268,7 +269,7 @@ void vsol_digital_curve_2d::print_summary(vcl_ostream &os) const
 void
 vsl_b_write(vsl_b_ostream &os, const vsol_digital_curve_2d* p)
 {
-  if (p==0) {
+  if (p==VXL_NULLPTR) {
     vsl_b_write(os, false); // Indicate null pointer stored
   }
   else {
@@ -290,16 +291,16 @@ vsl_b_read(vsl_b_istream &is, vsol_digital_curve_2d* &p)
     p->b_read(is);
   }
   else
-    p = 0;
+    p = VXL_NULLPTR;
 }
 
-void vsol_digital_curve_2d::describe(vcl_ostream &strm, int blanking) const
+void vsol_digital_curve_2d::describe(std::ostream &strm, int blanking) const
 {
   if (blanking < 0) blanking = 0; while (blanking--) strm << ' ';
   strm << "[vsol_digital_curve_2d";
   for (unsigned int i=0; i<size(); ++i)
     strm << ' ' << *(point(i));
-  strm << ']' << vcl_endl;
+  strm << ']' << std::endl;
 }
 
 
@@ -330,7 +331,7 @@ bool split(const vsol_digital_curve_2d_sptr &input,
   if (index <= 0.0 || index >= double(n-1))
     return false;
 
-  vcl_vector<vsol_point_2d_sptr> vec1, vec2;
+  std::vector<vsol_point_2d_sptr> vec1, vec2;
   vgl_point_2d<double> break_point = input->interp(index);
   vec2.push_back(new vsol_point_2d(break_point));
   for (int i=0; i<n; ++i) {

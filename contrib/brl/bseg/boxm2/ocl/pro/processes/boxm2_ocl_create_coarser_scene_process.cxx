@@ -1,4 +1,6 @@
 // This is brl/bseg/boxm2/ocl/pro/processes/boxm2_ocl_create_coarser_scene_process.cxx
+#include <iostream>
+#include <fstream>
 #include <bprb/bprb_func_process.h>
 //:
 // \file
@@ -7,7 +9,7 @@
 // \author Vishal Jain
 // \date Apr 23, 2013
 
-#include <vcl_fstream.h>
+#include <vcl_compiler.h>
 #include <boxm2/ocl/boxm2_opencl_cache.h>
 #include <boxm2/boxm2_scene.h>
 #include <boxm2/boxm2_block.h>
@@ -31,8 +33,8 @@ namespace boxm2_ocl_create_coarser_scene_process_globals
     void compile_kernel(bocl_device_sptr device, bocl_kernel* merge_kernel)
     {
         //gather all render sources... seems like a lot for rendering...
-        vcl_vector<vcl_string> src_paths;
-        vcl_string source_dir = boxm2_ocl_util::ocl_src_root();
+        std::vector<std::string> src_paths;
+        std::string source_dir = boxm2_ocl_util::ocl_src_root();
         src_paths.push_back(source_dir + "scene_info.cl");
         src_paths.push_back(source_dir + "bit/bit_tree_library_functions.cl");
         src_paths.push_back(source_dir + "bit/update_parents_alpha.cl");
@@ -46,20 +48,20 @@ namespace boxm2_ocl_create_coarser_scene_process_globals
     }
 
     //map of compiled kernels, organized by data type
-    static vcl_map<vcl_string,bocl_kernel* > kernels;
+    static std::map<std::string,bocl_kernel* > kernels;
 bool copy_fine_to_coarse(boxm2_block & blk,
                          boxm2_block_metadata & mdata,
                          boxm2_data_base * alpha_base ,
                          boxm2_cache_sptr cache)
 {
     // assuming exactly one scene in cache!
-    vcl_vector<boxm2_scene_sptr> scenes = cache->get_scenes();
+    std::vector<boxm2_scene_sptr> scenes = cache->get_scenes();
     if (scenes.size() == 0) {
-      vcl_cerr << "Error: boxm2_ocl_create_coarser: no scenes in cache! " << vcl_endl;
+      std::cerr << "Error: boxm2_ocl_create_coarser: no scenes in cache! " << std::endl;
       return false;
     }
     if (scenes.size() > 1) {
-      vcl_cerr << "Warning: boxm2_ocl_create_coarser: multiple scenes in cache - using the first." << vcl_endl;
+      std::cerr << "Warning: boxm2_ocl_create_coarser: multiple scenes in cache - using the first." << std::endl;
     }
     boxm2_scene_sptr scene = scenes[0];
     vgl_box_3d<int> bbox = scene->bounding_box_blk_ids();
@@ -104,7 +106,7 @@ bool copy_fine_to_coarse(boxm2_block & blk,
                         int depth = curr_tree.depth_at(ti);
                         float side_len = 1.0f/(float) (1<<depth) *sub_blk_dims.x() ;
                         if(depth == 2)
-                        vcl_cout<<depth<<vcl_endl;
+                        std::cout<<depth<<std::endl;
                         int index = curr_tree.get_data_index(ti);
                         vgl_point_3d<double> cc = curr_tree.cell_center(ti);
                         vgl_point_3d<double> pt = mdata.local_origin_ + vgl_vector_3d<double>(((double)i+cc.x())*sub_blk_dims.x(),
@@ -115,12 +117,9 @@ bool copy_fine_to_coarse(boxm2_block & blk,
                         if (scene->contains(pt, id, local) && id == mdata.id_)
                         {
                             boxm2_block_metadata mdata = scene->get_block_metadata_const(id);
-                            unsigned int blk_index = (id.i()-bbox.min_x())*(bbox.depth()+1)*(bbox.height()+1)+
-                                                     (id.j()-bbox.min_y())*(bbox.depth()+1)+
-                                                     (id.k()-bbox.min_z());
-                            int index_x=(int)vcl_floor(local.x());
-                            int index_y=(int)vcl_floor(local.y());
-                            int index_z=(int)vcl_floor(local.z());
+                            int index_x=(int)std::floor(local.x());
+                            int index_y=(int)std::floor(local.y());
+                            int index_z=(int)std::floor(local.z());
 
                             boct_bit_tree tree(blksB->trees_copy()(index_x,index_y,index_z).data_block()) ;
                             int bit_index=tree.traverse_to_level(local,1);
@@ -145,14 +144,14 @@ bool boxm2_ocl_create_coarser_scene_process_cons(bprb_func_process& pro)
     using namespace boxm2_ocl_create_coarser_scene_process_globals;
 
     //process takes 1 input
-    vcl_vector<vcl_string> input_types_(n_inputs_);
+    std::vector<std::string> input_types_(n_inputs_);
     input_types_[0] = "bocl_device_sptr";
     input_types_[1] = "boxm2_scene_sptr";
     input_types_[2] = "boxm2_opencl_cache_sptr";
     input_types_[3] = "vcl_string";             // directory for the coarser model
     // process has 1 output:
     // output[0]: scene sptr
-    vcl_vector<vcl_string>  output_types_(n_outputs_);
+    std::vector<std::string>  output_types_(n_outputs_);
     return pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
 }
 
@@ -160,7 +159,7 @@ bool boxm2_ocl_create_coarser_scene_process(bprb_func_process& pro)
 {
     using namespace boxm2_ocl_create_coarser_scene_process_globals;
     if ( pro.n_inputs() < n_inputs_ ) {
-        vcl_cout << pro.name() << ": The input number should be " << n_inputs_<< vcl_endl;
+        std::cout << pro.name() << ": The input number should be " << n_inputs_<< std::endl;
         return false;
     }
     float transfer_time=0.0f;
@@ -170,26 +169,26 @@ bool boxm2_ocl_create_coarser_scene_process(bprb_func_process& pro)
     bocl_device_sptr device= pro.get_input<bocl_device_sptr>(i++);
     boxm2_scene_sptr scene =pro.get_input<boxm2_scene_sptr>(i++);
     boxm2_opencl_cache_sptr opencl_cache= pro.get_input<boxm2_opencl_cache_sptr>(i++);
-    vcl_string coarse_model_dir = pro.get_input<vcl_string>(i++);
+    std::string coarse_model_dir = pro.get_input<std::string>(i++);
 
     if(!vul_file::make_directory_path(coarse_model_dir.c_str()))
     {
-        vcl_cout<<"Invalid Path for the Coarse Model"<<vcl_endl;
+        std::cout<<"Invalid Path for the Coarse Model"<<std::endl;
         return false;
     }
 
     boxm2_scene_sptr coarse_scene = new boxm2_scene(coarse_model_dir,  scene->local_origin() );
     coarse_scene->set_xml_path(coarse_model_dir+"/scene.xml");
 
-    vcl_vector<boxm2_block_id> scene_blks = scene->get_block_ids();
-    vcl_vector<boxm2_block_id>::iterator iter = scene_blks.begin();
+    std::vector<boxm2_block_id> scene_blks = scene->get_block_ids();
+    std::vector<boxm2_block_id>::iterator iter = scene_blks.begin();
     for(; iter!=scene_blks.end(); iter++)
     {
         boxm2_block_metadata mdata = scene->get_block_metadata_const(*iter);
         //: fix the parameteres of the mdata;
-        vgl_vector_3d<unsigned> coarse_blk_num (vcl_ceil(mdata.sub_block_num_.x()/8.0f),
-                                                vcl_ceil(mdata.sub_block_num_.y()/8.0f),
-                                                vcl_ceil(mdata.sub_block_num_.z()/8.0f));
+        vgl_vector_3d<unsigned> coarse_blk_num (std::ceil(mdata.sub_block_num_.x()/8.0f),
+                                                std::ceil(mdata.sub_block_num_.y()/8.0f),
+                                                std::ceil(mdata.sub_block_num_.z()/8.0f));
         vgl_vector_3d<double> coarse_blk_dim(mdata.sub_block_dim_.x()*(double) mdata.sub_block_num_.x() / (double) coarse_blk_num.x(),
                                              mdata.sub_block_dim_.y()*(double) mdata.sub_block_num_.y() / (double) coarse_blk_num.y(),
                                              mdata.sub_block_dim_.z()*(double) mdata.sub_block_num_.z() / (double) coarse_blk_num.z() );
@@ -201,8 +200,8 @@ bool boxm2_ocl_create_coarser_scene_process(bprb_func_process& pro)
     }
 
     coarse_scene->save_scene();
-    vcl_vector<boxm2_block_id> coarse_scene_blks = coarse_scene->get_block_ids();
-    vcl_vector<boxm2_block_id>::iterator coarse_iter = coarse_scene_blks.begin();
+    std::vector<boxm2_block_id> coarse_scene_blks = coarse_scene->get_block_ids();
+    std::vector<boxm2_block_id>::iterator coarse_iter = coarse_scene_blks.begin();
     for(; coarse_iter!=coarse_scene_blks.end(); coarse_iter++)
     {
         boxm2_block_metadata mdata = coarse_scene->get_block_metadata(*coarse_iter);
@@ -214,6 +213,6 @@ bool boxm2_ocl_create_coarser_scene_process(bprb_func_process& pro)
         copy_fine_to_coarse(blk,mdata,&alpha_buff,opencl_cache->get_cpu_cache());
         boxm2_sio_mgr::save_block_data_base(coarse_scene->data_path()+"/",(*coarse_iter),&alpha_buff,boxm2_data_traits<BOXM2_ALPHA>::prefix());
     }
-    vcl_cout<<"Update Parents Alpha: "<<gpu_time<<vcl_endl;
+    std::cout<<"Update Parents Alpha: "<<gpu_time<<std::endl;
     return true;
 }

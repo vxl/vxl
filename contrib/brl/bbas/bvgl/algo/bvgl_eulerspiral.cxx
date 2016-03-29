@@ -2,11 +2,12 @@
 //:
 // \file
 
+#include <iostream>
+#include <algorithm>
+#include <fstream>
+#include <string>
 #include "bvgl_eulerspiral.h"
-#include <vcl_algorithm.h>
-#include <vcl_iostream.h>
-#include <vcl_fstream.h>
-#include <vcl_string.h>
+#include <vcl_compiler.h>
 #include <vsl/vsl_binary_io.h>
 #include <vsl/vsl_vector_io.h>
 
@@ -86,7 +87,7 @@ bvgl_eulerspiral(const bvgl_eulerspiral & es )
 //: Set the start angle, converted to the range [0, 2*pi)
 void bvgl_eulerspiral::
 set_start_angle( double start_angle ){
-  double theta = vcl_fmod(start_angle, vnl_math::pi * 2);
+  double theta = std::fmod(start_angle, vnl_math::pi * 2);
   if (theta < 0.0)
     theta = theta + vnl_math::pi * 2;
   this->start_angle_ = theta;
@@ -95,7 +96,7 @@ set_start_angle( double start_angle ){
 //: Set end angle of the biarc, converted to the range [0, 2*pi)
 void bvgl_eulerspiral::
 set_end_angle( double end_angle ){
-  double theta = vcl_fmod(end_angle, vnl_math::pi * 2);
+  double theta = std::fmod(end_angle, vnl_math::pi * 2);
   if (theta < 0.0)
     theta = theta + vnl_math::pi * 2;
   this->end_angle_ = theta;
@@ -120,7 +121,7 @@ vgl_vector_2d< double > bvgl_eulerspiral::
 tangent_at_length( double s) const {
   double angle;
   angle = this->start_angle() + s*(this->k0() + 0.5*this->gamma()*s);
-  return vgl_vector_2d<double >(vcl_cos(angle), vcl_sin(angle));
+  return vgl_vector_2d<double >(std::cos(angle), std::sin(angle));
 }
 
 vgl_vector_2d< double > bvgl_eulerspiral::
@@ -133,7 +134,7 @@ tangent_at( double s) const {
 double bvgl_eulerspiral::tangent_angle_at_length(double s) const {
   double angle = this->start_angle() + s*(this->k0() + 0.5*this->gamma()*s);
   // make sure angle is in [0, 2pi)
-  angle = vcl_fmod(angle, vnl_math::pi*2);
+  angle = std::fmod(angle, vnl_math::pi*2);
   if (angle <0)
     angle = angle + vnl_math::pi*2;
   return angle;
@@ -157,7 +158,7 @@ curvature_at( double s ) const {
 
 //: compute extrinsic points of eulerspiral
 void bvgl_eulerspiral::
-compute_spiral(vcl_vector<vgl_point_2d<double> >& spiral, double ds, int npts){
+compute_spiral(std::vector<vgl_point_2d<double> >& spiral, double ds, int npts){
   // check if default values are applied
   if (ds==0 && npts==0){
     //use default values
@@ -277,23 +278,23 @@ operator=( bvgl_eulerspiral const& that){
 // ---------------- MISCELLANEOUS ----------------------
 //: Print parameters of the eulerspiral
 void bvgl_eulerspiral::
-print(vcl_ostream &os ){
-  os << vcl_endl << "Start parameters" << vcl_endl;
-  os << "Start point = ( "<< this->start().x() << " , " << this->start().y() << " )" << vcl_endl;
-  os << "Start angle = " << this->start_angle() << vcl_endl;
-  os << "End parameters" << vcl_endl;
-  os << "End point = ( "<< this->end().x() << " , " << this->end().y() << " )" << vcl_endl;
-  os << "End angle = " << this->end_angle() << vcl_endl;
+print(std::ostream &os ){
+  os << std::endl << "Start parameters" << std::endl;
+  os << "Start point = ( "<< this->start().x() << " , " << this->start().y() << " )" << std::endl;
+  os << "Start angle = " << this->start_angle() << std::endl;
+  os << "End parameters" << std::endl;
+  os << "End point = ( "<< this->end().x() << " , " << this->end().y() << " )" << std::endl;
+  os << "End angle = " << this->end_angle() << std::endl;
 
-  os << "k0 = " << this->k0() << vcl_endl;
-  os << "gamma = " << this->gamma() << vcl_endl;
-  os << "len = " << this->len_ << vcl_endl;
-  os << "turning angle = " << this->turning_angle_ << vcl_endl;
-  os << "error = " << this->error_ << vcl_endl;
-  os << "psi = " << this->psi_ << vcl_endl;
-  os << "Number of iterations for last optimization = " << this->num_iterations() << vcl_endl;
+  os << "k0 = " << this->k0() << std::endl;
+  os << "gamma = " << this->gamma() << std::endl;
+  os << "len = " << this->len_ << std::endl;
+  os << "turning angle = " << this->turning_angle_ << std::endl;
+  os << "error = " << this->error_ << std::endl;
+  os << "psi = " << this->psi_ << std::endl;
+  os << "Number of iterations for last optimization = " << this->num_iterations() << std::endl;
   os << "Number of end-point function evaluation for last optimization = "
-    << this->num_evaluations() << vcl_endl;
+    << this->num_evaluations() << std::endl;
 }
 
 
@@ -327,7 +328,7 @@ compute_end_pt( double k0, double gamma, double len, bool normalized ) const {
   if (normalized){
     start_pt.set(0, 0);
     // convert this->psi - this->start_angle to the range [0, 2pi) and assign to theta
-    theta = vcl_fmod(this->start_angle()-this->psi_, 2*vnl_math::pi);
+    theta = std::fmod(this->start_angle()-this->psi_, 2*vnl_math::pi);
     theta = (theta < 0)? theta+2*vnl_math::pi : theta;
   }
   else{
@@ -338,23 +339,23 @@ compute_end_pt( double k0, double gamma, double len, bool normalized ) const {
   if (len == 0)
     return start_pt;
 
-  if ( vcl_fabs(gamma) < bvgl_eulerspiral_e_gamma ){
-    if ( vcl_fabs(k0) < bvgl_eulerspiral_e_k ){
+  if ( std::fabs(gamma) < bvgl_eulerspiral_e_gamma ){
+    if ( std::fabs(k0) < bvgl_eulerspiral_e_k ){
       //straight line
-      end_pt = start_pt + vgl_vector_2d< double >(vcl_cos(theta), vcl_sin(theta)) * len;
+      end_pt = start_pt + vgl_vector_2d< double >(std::cos(theta), std::sin(theta)) * len;
     }
     else
     {
       //circle
       double const_term = 1.0/k0;
-      end_pt.set(start_pt.x()+ const_term*(vcl_sin(k0*len+theta)-vcl_sin(theta)),
-        start_pt.y()+ const_term*(-vcl_cos(k0*len+theta)+vcl_cos(theta)));
+      end_pt.set(start_pt.x()+ const_term*(std::sin(k0*len+theta)-std::sin(theta)),
+        start_pt.y()+ const_term*(-std::cos(k0*len+theta)+std::cos(theta)));
     }
     return end_pt;
   }
 
-  double const1 = vcl_sqrt( vnl_math::pi*vcl_fabs(gamma) );
-  double const2 = vcl_sqrt( vnl_math::pi/vcl_fabs(gamma) );
+  double const1 = std::sqrt( vnl_math::pi*std::fabs(gamma) );
+  double const2 = std::sqrt( vnl_math::pi/std::fabs(gamma) );
 
   double fresnel1_cos, fresnel1_sin;
   double fresnel2_cos, fresnel2_sin;
@@ -366,8 +367,8 @@ compute_end_pt( double k0, double gamma, double len, bool normalized ) const {
 
   double s = fresnel1_sin - fresnel2_sin;
 
-  double cos_term = vcl_cos(theta-((k0*k0)/(2.0*gamma)));
-  double sin_term = vcl_sin(theta-((k0*k0)/(2.0*gamma)));
+  double cos_term = std::cos(theta-((k0*k0)/(2.0*gamma)));
+  double sin_term = std::sin(theta-((k0*k0)/(2.0*gamma)));
 
   end_pt.set(start_pt.x()+const2*(c*cos_term - s*sin_term),
     start_pt.y()+const2*(c*sin_term + s*cos_term));
@@ -387,7 +388,7 @@ compute_es_params_use_simple_gradient_descent( bool use_lookup_table ){
   vgl_vector_2d< double > v = this->end() - this->start();
   double d = v.length();
   // psi is the angle of line from start point to end point
-  this->psi_ = vcl_atan2(v.y(), v.x());
+  this->psi_ = std::atan2(v.y(), v.x());
   if (this->psi_ < 0)
     this->psi_ += vnl_math::pi * 2;
 
@@ -484,7 +485,7 @@ compute_es_params_use_simple_gradient_descent( bool use_lookup_table ){
     if (len > dstep_len)
       e4 = this->compute_error(k0, len - dstep_len);
 
-    error = vcl_min(vcl_min(e1,e2), vcl_min(e3,e4));
+    error = std::min(std::min(e1,e2), std::min(e3,e4));
 
     if (error > prev_error){
        // dstep = dstep/2;
@@ -541,7 +542,7 @@ compute_es_params_use_levenberg_marquardt(bool use_lookup_table ){
   }
 
   // psi is the angle of line from start point to end point
-  this->psi_ = vcl_atan2(v.y(), v.x());
+  this->psi_ = std::atan2(v.y(), v.x());
   if (this->psi_ < 0)
     this->psi_ += vnl_math::pi * 2;
 
@@ -627,7 +628,7 @@ compute_es_params_use_levenberg_marquardt(bool use_lookup_table ){
   this->set_gamma(2*(this->turning_angle_ - k0*len)/(len*len)/(d*d));
 
   // other optimization parameters
-  this->error_ = vcl_sqrt(lm.get_end_error());
+  this->error_ = std::sqrt(lm.get_end_error());
   this->num_iterations_ = lm.get_num_iterations();
   return true;
 }
@@ -640,16 +641,16 @@ compute_es_params_use_levenberg_marquardt(bool use_lookup_table ){
 
 #ifdef BVGL_WHERE_BRL_LIB_DIR_H_EXISTS
   #include <bvgl_where_brl_lib_dir.h>
-  const vcl_string bvgl_eulerspiral_lookup_table::file_path = vcl_string(BRL_LIB_DIR);
+  const std::string bvgl_eulerspiral_lookup_table::file_path = std::string(BRL_LIB_DIR);
 #else
-  const vcl_string bvgl_eulerspiral_lookup_table::file_path = vcl_string();
+  const std::string bvgl_eulerspiral_lookup_table::file_path = std::string();
 #endif
 
-const vcl_string bvgl_eulerspiral_lookup_table::
-file_name = vcl_string("bvgl_eulerspiral_lookup_table.bvl");
+const std::string bvgl_eulerspiral_lookup_table::
+file_name = std::string("bvgl_eulerspiral_lookup_table.bvl");
 
 //: static bvgl_eulerspiral_lookup_table instance
-bvgl_eulerspiral_lookup_table* bvgl_eulerspiral_lookup_table::instance_ = 0;
+bvgl_eulerspiral_lookup_table* bvgl_eulerspiral_lookup_table::instance_ = VXL_NULLPTR;
 
 //: Return the pointer to the only instance of the class
 bvgl_eulerspiral_lookup_table *bvgl_eulerspiral_lookup_table::instance(){
@@ -661,7 +662,7 @@ bvgl_eulerspiral_lookup_table *bvgl_eulerspiral_lookup_table::instance(){
 
 //: Constructor
 bvgl_eulerspiral_lookup_table::bvgl_eulerspiral_lookup_table(){
-  vcl_string full_path = bvgl_eulerspiral_lookup_table::file_path + vcl_string("/") +
+  std::string full_path = bvgl_eulerspiral_lookup_table::file_path + std::string("/") +
     bvgl_eulerspiral_lookup_table::file_name;
   vsl_b_ifstream in_stream(full_path);
   // vsl_b_ifstream in_stream(bvgl_eulerspiral_lookup_table::file_path +
@@ -670,9 +671,9 @@ bvgl_eulerspiral_lookup_table::bvgl_eulerspiral_lookup_table(){
   if (!in_stream){
     this->has_table_ = false;
     in_stream.close();
-    vcl_cerr << "The data file used to speed-up Euler Spiral computation " <<
+    std::cerr << "The data file used to speed-up Euler Spiral computation " <<
       bvgl_eulerspiral_lookup_table::file_name
-      << " is corrupted or missing." << vcl_endl;
+      << " is corrupted or missing." << std::endl;
     return;
   }
 
@@ -682,10 +683,10 @@ bvgl_eulerspiral_lookup_table::bvgl_eulerspiral_lookup_table(){
 
   // k0
   for (int i = 0; i < this->npts_; i++ ){
-    vcl_vector< double > k0_row;
+    std::vector< double > k0_row;
     vsl_b_read(in_stream, k0_row);
     if (! in_stream ){
-      vcl_cerr << "Reading data file failed. " << vcl_endl;
+      std::cerr << "Reading data file failed. " << std::endl;
       return;
     }
     this->k0_table_.push_back(k0_row);
@@ -693,10 +694,10 @@ bvgl_eulerspiral_lookup_table::bvgl_eulerspiral_lookup_table(){
 
   // gamma
   for (int i = 0; i < this->npts_; i++ ){
-    vcl_vector< double > gamma_row;
+    std::vector< double > gamma_row;
     vsl_b_read(in_stream, gamma_row);
     if (! in_stream ){
-      vcl_cerr << "Reading data file failed. " << vcl_endl;
+      std::cerr << "Reading data file failed. " << std::endl;
       return;
     }
     this->gamma_table_.push_back(gamma_row);
@@ -704,10 +705,10 @@ bvgl_eulerspiral_lookup_table::bvgl_eulerspiral_lookup_table(){
 
   // len
   for (int i = 0; i < this->npts_; i++ ){
-    vcl_vector< double > len_row;
+    std::vector< double > len_row;
     vsl_b_read(in_stream, len_row);
     if (! in_stream ){
-      vcl_cerr << "Reading data file failed. " << vcl_endl;
+      std::cerr << "Reading data file failed. " << std::endl;
       return;
     }
     this->len_table_.push_back(len_row);
@@ -739,22 +740,22 @@ look_up(double start_angle, double end_angle, double* k0, double* gamma, double*
   double a, b;
 
   // convert to range [0, 2pi)
-  start_angle = vcl_fmod(start_angle, 2*vnl_math::pi);
+  start_angle = std::fmod(start_angle, 2*vnl_math::pi);
   start_angle = (start_angle < 0) ? start_angle+2*vnl_math::pi : start_angle;
-  end_angle = vcl_fmod(end_angle, 2*vnl_math::pi);
+  end_angle = std::fmod(end_angle, 2*vnl_math::pi);
   end_angle = (end_angle < 0) ? end_angle+2*vnl_math::pi : end_angle;
 
   // find high and low index for each
   // start_angle
-  start_index_low = (int)vcl_floor(start_angle / this->dt_);
-  start_index_high = (int)vcl_ceil(start_angle / this->dt_);
+  start_index_low = (int)std::floor(start_angle / this->dt_);
+  start_index_high = (int)std::ceil(start_angle / this->dt_);
   start_index_high = (start_index_high >= this->npts_) ? 0 : start_index_high;
   a = (start_angle - start_index_low * this->dt_)/this->dt_;
 
 
   // end_angle
-  end_index_low = (int)vcl_floor(end_angle / this->dt());
-  end_index_high = (int)vcl_ceil(end_angle / this->dt());
+  end_index_low = (int)std::floor(end_angle / this->dt());
+  end_index_high = (int)std::ceil(end_angle / this->dt());
   end_index_high = (end_index_high >= this->npts_) ? 0 : end_index_high;
   b = (end_angle - end_index_low*this->dt_)/this->dt_;
 
@@ -775,12 +776,12 @@ look_up(double start_angle, double end_angle, double* k0, double* gamma, double*
   x12 = this->k0_table_.at(start_index_low).at(end_index_high);
   x22 = this->k0_table_.at(start_index_high).at(end_index_high);
   *k0 = (1-a)*(1-b)*x11 + a*(1-b)*x21 + (1-a)*b*x12 + a*b*x22;
-  *k0_max_error = vnl_math::max(
-    vnl_math::max((double)x11, (double)x21),
-    vnl_math::max((double)x12, (double)x22)
-    ) - vnl_math::min(
-    vnl_math::min((double)x11, (double)x21),
-    vnl_math::min((double)x12,(double)x22)
+  *k0_max_error = std::max(
+    std::max((double)x11, (double)x21),
+    std::max((double)x12, (double)x22)
+    ) - std::min(
+    std::min((double)x11, (double)x21),
+    std::min((double)x12,(double)x22)
     );
 
   x11 = this->gamma_table_.at(start_index_low).at(end_index_low);
@@ -788,12 +789,12 @@ look_up(double start_angle, double end_angle, double* k0, double* gamma, double*
   x12 = this->gamma_table_.at(start_index_low).at(end_index_high);
   x22 = this->gamma_table_.at(start_index_high).at(end_index_high);
   *gamma = (1-a)*(1-b)*x11 + a*(1-b)*x21 + (1-a)*b*x12 + a*b*x22;
-  *gamma_max_error = vnl_math::max(
-    vnl_math::max((double)x11, (double)x21),
-    vnl_math::max((double)x12, (double)x22)
-    ) - vnl_math::min(
-    vnl_math::min((double)x11, (double)x21),
-    vnl_math::min((double)x12,(double)x22)
+  *gamma_max_error = std::max(
+    std::max((double)x11, (double)x21),
+    std::max((double)x12, (double)x22)
+    ) - std::min(
+    std::min((double)x11, (double)x21),
+    std::min((double)x12,(double)x22)
     );
 
   x11 = this->len_table_.at(start_index_low).at(end_index_low);
@@ -801,12 +802,12 @@ look_up(double start_angle, double end_angle, double* k0, double* gamma, double*
   x12 = this->len_table_.at(start_index_low).at(end_index_high);
   x22 = this->len_table_.at(start_index_high).at(end_index_high);
   *len = (1-a)*(1-b)*x11 + a*(1-b)*x21 + (1-a)*b*x12 + a*b*x22;
-  *len_max_error = vnl_math::max(
-    vnl_math::max((double)x11, (double)x21),
-    vnl_math::max((double)x12, (double)x22)
-    ) - vnl_math::min(
-    vnl_math::min((double)x11, (double)x21),
-    vnl_math::min((double)x12,(double)x22)
+  *len_max_error = std::max(
+    std::max((double)x11, (double)x21),
+    std::max((double)x12, (double)x22)
+    ) - std::min(
+    std::min((double)x11, (double)x21),
+    std::min((double)x12,(double)x22)
     );
 
   return;
@@ -821,7 +822,7 @@ bvgl_eulerspiral_optimization_function(unsigned int number_of_unknowns,
                                        UseGradient g):
 vnl_least_squares_function(number_of_unknowns, number_of_residuals, g)
 {
-  this->es_ = 0;
+  this->es_ = VXL_NULLPTR;
 }
 
 //: Main function for optimization

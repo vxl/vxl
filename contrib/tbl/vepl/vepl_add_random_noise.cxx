@@ -29,7 +29,7 @@ vil_image_resource_sptr vepl_add_random_noise(vil_image_resource_sptr image, dou
       img_out->put_view(out);
     }
     else
-      vcl_cerr << __FILE__ ": vepl_dilate_disk() not implemented for multi-planar " << image << '\n';
+      std::cerr << __FILE__ ": vepl_dilate_disk() not implemented for multi-planar " << image << '\n';
   }
 
   // byte greyscale
@@ -90,7 +90,7 @@ vil_image_resource_sptr vepl_add_random_noise(vil_image_resource_sptr image, dou
 
   //
   else
-    vcl_cerr << __FILE__ ": vepl_add_random_noise() not implemented for " << image << '\n';
+    std::cerr << __FILE__ ": vepl_add_random_noise() not implemented for " << image << '\n';
 
   return img_out;
 }

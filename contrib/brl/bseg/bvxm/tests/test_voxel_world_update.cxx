@@ -14,7 +14,7 @@
 
 static void test_voxel_world_update()
 {
-  vcl_string model_dir("test_world_dir");
+  std::string model_dir("test_world_dir");
   if (vul_file::is_directory(model_dir))
     vpl_rmdir(model_dir.c_str());  //use this instead of vul since some MS versions hang on on Y/N?
   else if (vul_file::exists(model_dir))

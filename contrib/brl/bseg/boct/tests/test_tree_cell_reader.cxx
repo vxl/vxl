@@ -15,7 +15,7 @@ static void test_tree_cell_reader()
 
   block->split();
 
-  vcl_vector<boct_tree_cell<short,float>*> leaves = block->leaf_cells();
+  std::vector<boct_tree_cell<short,float>*> leaves = block->leaf_cells();
   for (unsigned i=0; i<leaves.size(); i++) {
     leaves[i]->set_data((float)i);
   }
@@ -29,10 +29,10 @@ static void test_tree_cell_reader()
   vsl_b_write(os,save_internal_nodes, *block);
   os.close();
 
-  vsl_b_ifstream is("tree.bin", vcl_ios_binary);
+  vsl_b_ifstream is("tree.bin", std::ios::binary);
   boct_tree_cell_reader<short,float> reader("tree.bin");//&is);
   boct_tree_cell<short,float> cell;
-  vcl_vector<boct_tree_cell<short,float> > cells;
+  std::vector<boct_tree_cell<short,float> > cells;
   reader.begin();
   while (reader.next(cell)) {
     cells.push_back(cell);

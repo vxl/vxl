@@ -1,12 +1,13 @@
+#include <iostream>
 #include <testlib/testlib_test.h>
 #include "../bvxm_mog_norm.h"
 #include <bvxm/grid/bvxm_voxel_grid.h>
 #include <bvxm/grid/bvxm_voxel_grid_base.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
 
 void test_l2_mog_norm()
 {
-  vcl_cout << "test l2 norm for mixtures of gaussians\n";
+  std::cout << "test l2 norm for mixtures of gaussians\n";
   //define some known mixtures
   typedef bsta_num_obs<bsta_gauss_sf1> gauss_type;
   typedef bsta_mixture_fixed<gauss_type, 3> mix_gauss;
@@ -92,7 +93,7 @@ void test_l2_mog_norm()
 
 void test_gauss2mix()
 {
-  vcl_cout << "test l2 norm from a gaussian to a mixture\n";
+  std::cout << "test l2 norm from a gaussian to a mixture\n";
   //define some known mixtures
   typedef bsta_num_obs<bsta_gauss_sf1> gauss_type;
   typedef bsta_mixture<gauss_type> mix_gauss;

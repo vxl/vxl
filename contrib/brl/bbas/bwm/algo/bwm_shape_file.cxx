@@ -2,11 +2,11 @@
 #include "vul/vul_file.h"
 #include <vsol/vsol_point_3d.h>
 
-bool bwm_shape_file::load(vcl_string filename)
+bool bwm_shape_file::load(std::string filename)
 {
-  vcl_string ext = vul_file::extension(filename);
+  std::string ext = vul_file::extension(filename);
   if (!ext.compare(".shp") == 0) {
-    vcl_cerr << filename << "is not a .shp file\n";
+    std::cerr << filename << "is not a .shp file\n";
     return false;
   }
 
@@ -18,7 +18,7 @@ bool bwm_shape_file::load(vcl_string filename)
     bb_.add_point(padfMinBound[0], padfMinBound[1], padfMinBound[2]);
     bb_.add_point(padfMaxBound[0], padfMaxBound[1], padfMaxBound[2]);
 
-    vcl_vector<vsol_point_3d_sptr> vlist;
+    std::vector<vsol_point_3d_sptr> vlist;
     for (int i=0; i<nEntities_; i++) {
       SHPObject* obj = SHPReadObject( handle_, i );
       if (obj->nShapeId != -1) {  // undefined shape types are meaningless
@@ -47,22 +47,22 @@ bool bwm_shape_file::load(vcl_string filename)
 void bwm_shape_file::print()
 {
   if (handle_) {
-    vcl_cout << "SHAPE TYPE:" << nShapeType_ << '\n'
+    std::cout << "SHAPE TYPE:" << nShapeType_ << '\n'
              << "NUMBER OF OBJECTS:" << nEntities_ << '\n'
-             << "BOUNDING BOX:" << bb_ << vcl_endl;
+             << "BOUNDING BOX:" << bb_ << std::endl;
 
     for (int i=0; i<nEntities_; i++) {
       SHPObject* obj = SHPReadObject( handle_, i );
-      vcl_cout << i << "th Object -----" << '\n'
+      std::cout << i << "th Object -----" << '\n'
                << "SHAPE TYPE:" << obj->nSHPType << '\n'
                << "SHAPE ID:" << obj->nShapeId << '\n'
                << "NUM PARTS:" << obj->nParts << '\n'
-               << "NUM Vertices:" << obj->nVertices << vcl_endl;
+               << "NUM Vertices:" << obj->nVertices << std::endl;
       for (int j=0; j<obj->nVertices; j++) {
         double x = obj->padfX[j];
         double y = obj->padfY[j];
         double z = obj->padfZ[j];
-        vcl_cout << "   Vertex[" << j << "]=(" << x << ',' << y << ',' << z << ')' << vcl_endl;
+        std::cout << "   Vertex[" << j << "]=(" << x << ',' << y << ',' << z << ')' << std::endl;
       }
     }
   }

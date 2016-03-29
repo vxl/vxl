@@ -1,11 +1,12 @@
 // This is rpl/rrel/rrel_kernel_density_obj.cxx
+#include <iostream>
+#include <algorithm>
 #include "rrel_kernel_density_obj.h"
 #include <rrel/rrel_muset_obj.h>
 #include <vnl/vnl_vector.h>
 #include <vnl/vnl_math.h>
-#include <vcl_algorithm.h>
+#include <vcl_compiler.h>
 #include <vcl_cassert.h>
-#include <vcl_iostream.h>
 
 namespace {
   inline void shft2(double &a, double &b, const double c)
@@ -33,7 +34,7 @@ rrel_kernel_density_obj::fcn(vect_const_iter /*res_begin*/, vect_const_iter /*re
                              vect_const_iter /*scale_begin*/,
                              vnl_vector<double>* /*param_vector*/ ) const
 {
-  vcl_cerr << "rrel_kernel_density_obj::fcn() not implemented\n";
+  std::cerr << "rrel_kernel_density_obj::fcn() not implemented\n";
   return 0;
 }
 
@@ -68,8 +69,8 @@ rrel_kernel_density_obj::best_x(vect_const_iter res_begin,
   double h = bandwidth(res_begin, res_end, prior_scale);
   assert(h!=0);
 
-  vcl_vector<double> sort_res( res_begin, res_end );
-  vcl_sort( sort_res.begin(), sort_res.end() );
+  std::vector<double> sort_res( res_begin, res_end );
+  std::sort( sort_res.begin(), sort_res.end() );
 
   unsigned int loc = 0;
   unsigned int i = 0;
@@ -117,7 +118,7 @@ double
 rrel_kernel_density_obj::bandwidth(vect_const_iter res_begin, vect_const_iter res_end,
                                    double prior_scale) const
 {
-  vcl_vector<double>::difference_type n = res_end - res_begin;
+  std::vector<double>::difference_type n = res_end - res_begin;
   double scale = 1.0;
 
   switch ( scale_type_ )
@@ -128,18 +129,18 @@ rrel_kernel_density_obj::bandwidth(vect_const_iter res_begin, vect_const_iter re
     //Here I avoid using rrel_util_median_abs_dev_scale
     //because it assumes residuals are zero-based and have a Gaussian distribution.
 
-    vcl_vector<double> residuals(res_begin, res_end);
-    vcl_vector<double>::iterator loc = residuals.begin() + n / 2;
-    vcl_nth_element( residuals.begin(), loc, residuals.end() );
+    std::vector<double> residuals(res_begin, res_end);
+    std::vector<double>::iterator loc = residuals.begin() + n / 2;
+    std::nth_element( residuals.begin(), loc, residuals.end() );
 
     double res_median = *loc;
-    vcl_vector<double> abs_res_median;
+    std::vector<double> abs_res_median;
     abs_res_median.reserve( n );
-    for (vcl_vector<double>::difference_type i=0; i<n; ++i ) {
+    for (std::vector<double>::difference_type i=0; i<n; ++i ) {
       abs_res_median.push_back( vnl_math::abs( residuals[i] - res_median ) );
     }
     loc = abs_res_median.begin() + n / 2;
-    vcl_nth_element( abs_res_median.begin(), loc, abs_res_median.end() );
+    std::nth_element( abs_res_median.begin(), loc, abs_res_median.end() );
     // c=0.5 is chosen to avoid over-smoothing of the estimated density.
     scale = 0.5 * (*loc);
     break;
@@ -162,7 +163,7 @@ rrel_kernel_density_obj::bandwidth(vect_const_iter res_begin, vect_const_iter re
   // R(K) = Integral ( K(u)^2 ) du
   // Mu(K) = Integral ( u^2 * K(u) ) du
   const double c = 65610.0 / 143;
-  return vcl_pow( c / n , 0.2 ) * scale;
+  return std::pow( c / n , 0.2 ) * scale;
 }
 
 double
@@ -172,7 +173,7 @@ rrel_kernel_density_obj::kernel_density(vect_const_iter res_begin,
                                         double h) const
 {
   double f=0;
-  vcl_vector<double>::difference_type n = res_end - res_begin;
+  std::vector<double>::difference_type n = res_end - res_begin;
   for ( ; res_begin!= res_end; ++res_begin ) {
     f += kernel_function( ( *res_begin - x ) / h );
   }

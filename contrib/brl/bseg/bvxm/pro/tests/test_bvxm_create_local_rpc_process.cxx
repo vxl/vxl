@@ -4,12 +4,13 @@
 // \author Ibrahim Eden
 // \date   March 14, 2008
 //
+#include <string>
+#include <iostream>
 #include <testlib/testlib_test.h>
 #include <bvxm/pro/processes/bvxm_create_local_rpc_process.h>
 #include <bvxm/bvxm_voxel_world.h>
 
-#include <vcl_string.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
 
 #include <brdb/brdb_value.h>
 #include <brdb/brdb_selection.h>
@@ -64,16 +65,16 @@ static void test_bvxm_create_local_rpc_process()
   brdb_query_aptr Q = brdb_query_comp_new("id", brdb_query::EQ, id_cam);
   brdb_selection_sptr S = DATABASE->select("vpgl_camera_double_sptr_data", Q);
   if (S->size()!=1){
-    vcl_cout << "in bprb_batch_process_manager::set_input_from_db(.) -"
+    std::cout << "in bprb_batch_process_manager::set_input_from_db(.) -"
              << " no selections\n";
   }
 
   brdb_value_sptr value;
-  if (!S->get_value(vcl_string("value"), value)) {
-    vcl_cout << "in bprb_batch_process_manager::set_input_from_db(.) -"
+  if (!S->get_value(std::string("value"), value)) {
+    std::cout << "in bprb_batch_process_manager::set_input_from_db(.) -"
              << " didn't get value\n";
   }
-  bool non_null = (value != 0);
+  bool non_null = (value != VXL_NULLPTR);
   TEST("vpgl_camera_double_sptr non-null", non_null ,true);
 
   brdb_value_t<vpgl_camera_double_sptr>* result =

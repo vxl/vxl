@@ -30,7 +30,7 @@ if( NOT TIFF_FOUND )
   #
 
   if( NOT TIFF_FOUND )
-    if(EXISTS ${vxl_SOURCE_DIR}/v3p/tiff/tiff.h)
+    if(EXISTS ${VXL_ROOT_SOURCE_DIR}/v3p/tiff/tiff.h)
 
       set( TIFF_FOUND "YES" )
       set( TIFF_INCLUDE_DIR ${tiff_BINARY_DIR} ${tiff_SOURCE_DIR})

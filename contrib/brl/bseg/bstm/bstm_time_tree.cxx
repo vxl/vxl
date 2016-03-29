@@ -1,16 +1,17 @@
 //:
 // \file
+#include <iostream>
+#include <list>
+#include <algorithm>
+#include <cstring>
 #include "bstm_time_tree.h"
-#include <vcl_iostream.h>
-#include <vcl_list.h>
-#include <vcl_algorithm.h>
-#include <vcl_cstring.h> // for std::memcpy()
+#include <vcl_compiler.h>
 
 //: default constructor
 bstm_time_tree::bstm_time_tree()
 {
   bits_ = new unsigned char[TT_NUM_BYTES];
-  vcl_memset(bits_, 0, TT_NUM_BYTES);
+  std::memset(bits_, 0, TT_NUM_BYTES);
 }
 
 //: copy constructor
@@ -18,7 +19,7 @@ bstm_time_tree::bstm_time_tree(const bstm_time_tree& other)
 {
   bits_ = new unsigned char[TT_NUM_BYTES];
   num_levels_ = other.number_levels();
-  vcl_memcpy(bits_, other.get_bits(), TT_NUM_BYTES);
+  std::memcpy(bits_, other.get_bits(), TT_NUM_BYTES);
 }
 
 //: constructor from an array of char bits
@@ -27,24 +28,24 @@ bstm_time_tree::bstm_time_tree(const unsigned char* bits, int num_levels)
     bits_ = new unsigned char[TT_NUM_BYTES];
 
     //initialize num levels, bits
-    num_levels_ = vcl_min(TT_NUM_LVLS,num_levels);
+    num_levels_ = std::min(TT_NUM_LVLS,num_levels);
     //copy bytes
-    vcl_memcpy(bits_, bits, TT_NUM_BYTES);
+    std::memcpy(bits_, bits, TT_NUM_BYTES);
 }
 
 int  bstm_time_tree::max_num_cells() const
 {
-  return int(vcl_pow(2.0f,(float)num_levels_) - 1.0);
+  return int(std::pow(2.0f,(float)num_levels_) - 1.0);
 }
 
 int bstm_time_tree::max_num_inner_cells() const
 {
-  return int(vcl_pow(2.0f,(float)num_levels_-1) - 1.0);
+  return int(std::pow(2.0f,(float)num_levels_-1) - 1.0);
 }
 
 int bstm_time_tree::depth_at(const int index) const
 {
-  return (int)(vcl_log((double)index+1)/vcl_log(2.0));
+  return (int)(std::log((double)index+1)/std::log(2.0));
 }
 
 unsigned char bstm_time_tree::bit_at(int index) const
@@ -56,7 +57,7 @@ unsigned char bstm_time_tree::bit_at(int index) const
   int byte_index = index/8; // is already effectively a "floor()"; no need for std::floor() here
   int bit_index = index%8;
 #ifdef DEBUG
-  vcl_cout << "query: " << index << " byte index: " << byte_index << " bit index: " << bit_index << vcl_endl;
+  std::cout << "query: " << index << " byte index: " << byte_index << " bit index: " << bit_index << std::endl;
 #endif
   return (1<<(7-bit_index) & bits_[byte_index]) ? 1 : 0;
 }
@@ -64,7 +65,7 @@ unsigned char bstm_time_tree::bit_at(int index) const
 void bstm_time_tree::set_bit_at(int index, bool val)
 {
   if (index > 30) {
-    vcl_cerr<<"No bit above 30, bad set call!\n";
+    std::cerr<<"No bit above 30, bad set call!\n";
     return;
   }
 
@@ -74,7 +75,7 @@ void bstm_time_tree::set_bit_at(int index, bool val)
   unsigned char byte = bits_[byte_index];
   bits_[byte_index] = (val) ? (byte | mask) : (byte & (mask ^ 0xFF));
 #ifdef DEBUG
-  vcl_cout << "byte: " << (int)byte << " mask: " << (int)mask << " after " << (int)bits_[byte_index] << vcl_endl;
+  std::cout << "byte: " << (int)byte << " mask: " << (int)mask << " after " << (int)bits_[byte_index] << std::endl;
 #endif
 }
 
@@ -82,10 +83,10 @@ void bstm_time_tree::set_bit_at(int index, bool val)
 void bstm_time_tree::erase_cells()
 {
   unsigned char zeros[TT_NUM_BYTES];
-  vcl_fill_n(zeros,TT_NUM_BYTES,(unsigned char)0);
+  std::fill_n(zeros,TT_NUM_BYTES,(unsigned char)0);
 
   int data_ptr = this->get_data_ptr();
-  vcl_memcpy(bits_, zeros, TT_NUM_BYTES);
+  std::memcpy(bits_, zeros, TT_NUM_BYTES);
   this->set_data_ptr(data_ptr);
 }
 
@@ -137,12 +138,12 @@ int  bstm_time_tree::get_relative_index(int bit_index) const
   unsigned char temp = bits_[byte_index]>>sub_bit_index;
 
 #ifdef DEBUG
-  vcl_cout << "parent bit: " << (int)oneuplevel << '\n'
+  std::cout << "parent bit: " << (int)oneuplevel << '\n'
            << "count up tp parents bit: " << count << '\n'
            << "sub_bit_index: " << (int)sub_bit_index << '\n'
            << "bits_[byte_index]: " << (int)bits_[byte_index] << '\n'
            << "bits_[byte_index] (after shift): " << (int)temp << '\n'
-           << "bit_lookup[temp]: " << (int)bit_lookup[temp] << vcl_endl;
+           << "bit_lookup[temp]: " << (int)bit_lookup[temp] << std::endl;
 #endif
 
   count = count + bit_lookup[temp];
@@ -196,7 +197,7 @@ int  bstm_time_tree::get_relative_index(int bit_index) const
 int bstm_time_tree::traverse(const double t, int deepest) const
 {
   //deepest level to traverse is either
-  deepest = vcl_max(deepest-1, num_levels_-1);
+  deepest = std::max(deepest-1, num_levels_-1);
 
   int depth = 0;
 
@@ -261,9 +262,9 @@ int bstm_time_tree::num_leaves() const
 
 
 //returns bit indices of leaf nodes under rootBit, using pre-order traversal
-vcl_vector<int> bstm_time_tree::get_leaf_bits(int rootBit) const
+std::vector<int> bstm_time_tree::get_leaf_bits(int rootBit) const
 {
-  vcl_vector<int> leafBits;
+  std::vector<int> leafBits;
 
   //special root case
   if ( bits_[0] == 0 && rootBit == 0 ) {
@@ -297,18 +298,18 @@ vcl_vector<int> bstm_time_tree::get_leaf_bits(int rootBit) const
 int bstm_time_tree::max_depth(int rootBit) const
 {
   int max_index = 0;
-  vcl_vector<int> leaves = get_leaf_bits(rootBit);
+  std::vector<int> leaves = get_leaf_bits(rootBit);
   for (unsigned int i = 0; i < leaves.size(); ++i)
-    max_index = vcl_max(max_index, leaves[i]);
+    max_index = std::max(max_index, leaves[i]);
   return depth_at(max_index);
 }
 
 //returns the leaves residing at the maximum depth
-vcl_vector<int> bstm_time_tree::max_depth_leaves() const
+std::vector<int> bstm_time_tree::max_depth_leaves() const
 {
   int max_depth = this->max_depth(0);
-  vcl_vector<int> leaves = get_leaf_bits(0);
-  vcl_vector<int> selected_leaves;
+  std::vector<int> leaves = get_leaf_bits(0);
+  std::vector<int> selected_leaves;
   for (unsigned int i = 0; i < leaves.size(); ++i)
     if( depth_at(leaves[i]) == max_depth)
       selected_leaves.push_back(leaves[i]);
@@ -318,10 +319,10 @@ vcl_vector<int> bstm_time_tree::max_depth_leaves() const
 //OLD DEPRECATED CODE
 #if 0
 //returns bit indices of leaf nodes under rootBit
-vcl_vector<int> bstm_time_tree::get_leaf_bits(int rootBit) const
+std::vector<int> bstm_time_tree::get_leaf_bits(int rootBit) const
 {
   //use num cells to accelerate (cut off for loop)
-  vcl_vector<int> leafBits;
+  std::vector<int> leafBits;
 
   //special root case
   if ( bits_[0] == 0 && rootBit == 0 ) {
@@ -330,8 +331,8 @@ vcl_vector<int> bstm_time_tree::get_leaf_bits(int rootBit) const
   }
 
   //otherwise calc list of bit indices in the subtree of rootBIT, and then verify leaves
-  vcl_vector<int> subTree;
-  vcl_list<unsigned> toVisit;
+  std::vector<int> subTree;
+  std::list<unsigned> toVisit;
   toVisit.push_back(rootBit);
   while (!toVisit.empty()) {
     int currBitIndex = toVisit.front();
@@ -417,7 +418,7 @@ float bstm_time_tree::cell_centers[]=
 
 #if 0
 //------ I/O ----------------------------------------------------------
-vcl_ostream& operator <<(vcl_ostream &s, bstm_time_tree &t)
+std::ostream& operator <<(std::ostream &s, bstm_time_tree &t)
 {
   s << "bstm_time_tree:\n"
     << "Tree bits:\n"

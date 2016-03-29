@@ -9,9 +9,11 @@
 // \brief A base class for images of any dimension and type
 // \author Tim Cootes
 
-#include <vcl_string.h>
-#include <vcl_iosfwd.h>
-#include <vcl_vector.h>
+#include <string>
+#include <iostream>
+#include <iosfwd>
+#include <vector>
+#include <vcl_compiler.h>
 #include <vsl/vsl_fwd.h>
 
 //: A base class for images of any dimension and type
@@ -41,27 +43,27 @@ class vimt_image
     //  2D image is v[0] x v[1],  3D image is v[0] x v[1] x v[2]
     //  Somewhat inefficient: Only use when you absolutely have to.
     //  Usually one only needs to know the size once one knows the exact type.
-  virtual vcl_vector<unsigned> image_size() const = 0;
+  virtual std::vector<unsigned> image_size() const = 0;
 
     //: Return vectors defining bounding box containing image in world co-ords
     //  Somewhat inefficient: Only use when you absolutely have to.
     //  Usually one only needs to know the size once one knows the exact type.
-  virtual void world_bounds(vcl_vector<double>& b_lo,
-                            vcl_vector<double>& b_hi) const = 0;
+  virtual void world_bounds(std::vector<double>& b_lo,
+                            std::vector<double>& b_hi) const = 0;
 
 
     //: Return vector indicating the size of a pixel
     //  2D image is v[0] x v[1],  3D image is v[0] x v[1] x v[2]
-  virtual vcl_vector<double> pixel_size() const = 0;
+  virtual std::vector<double> pixel_size() const = 0;
 
     //: Version number for I/O
   short version_no() const;
 
     //: Name of the class
-  virtual vcl_string is_a() const = 0;
+  virtual std::string is_a() const = 0;
 
     //: Does the name of the class match the argument?
-  virtual bool is_class(vcl_string const&) const = 0;
+  virtual bool is_class(std::string const&) const = 0;
 
     //: Create a copy on the heap and return base class pointer
     //  Note that this will make a shallow copy of any contained images
@@ -77,10 +79,10 @@ class vimt_image
   bool operator==(const vimt_image &) const;
 
     //: Print class to os
-  virtual void print_summary(vcl_ostream& os) const = 0;
+  virtual void print_summary(std::ostream& os) const = 0;
 
     //: Print whole image to os
-  virtual void print_all(vcl_ostream& os) const = 0;
+  virtual void print_all(std::ostream& os) const = 0;
 
     //: Save class to binary file stream
   virtual void b_write(vsl_b_ostream& bfs) const = 0;
@@ -107,12 +109,12 @@ void vsl_b_write(vsl_b_ostream& bfs, const vimt_image& b);
 void vsl_b_read(vsl_b_istream& bfs, vimt_image& b);
 
 //: Stream output operator for class reference
-vcl_ostream& operator<<(vcl_ostream& os,const vimt_image& b);
+std::ostream& operator<<(std::ostream& os,const vimt_image& b);
 
 //: Stream output operator for class pointer
-vcl_ostream& operator<<(vcl_ostream& os,const vimt_image* b);
+std::ostream& operator<<(std::ostream& os,const vimt_image* b);
 
 //: Print class to os
-void vsl_print_summary(vcl_ostream& os, const vimt_image& im);
+void vsl_print_summary(std::ostream& os, const vimt_image& im);
 
 #endif // vimt_image_h_

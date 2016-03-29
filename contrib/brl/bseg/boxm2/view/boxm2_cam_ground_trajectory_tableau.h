@@ -42,8 +42,8 @@ class boxm2_cam_ground_trajectory_tableau:  public vgui_tableau
      vgl_homg_point_3d<double> stare_point_;
      vgl_homg_point_3d<double> default_stare_point_;
 
-     vcl_list<vgl_point_3d<double> > waypoints_;
-     vcl_list<vgl_point_3d<double> >::iterator waypoint_iter;
+     std::list<vgl_point_3d<double> > waypoints_;
+     std::list<vgl_point_3d<double> >::iterator waypoint_iter;
      double scale_;
 
 };

@@ -5,9 +5,11 @@
 // \brief Representation of an instance of a shape model.
 // \author Tim Cootes
 
+#include <iostream>
+#include <iosfwd>
 #include <msm/msm_ref_shape_instance.h>
 #include <msm/msm_shape_model.h>
-#include <vcl_iosfwd.h>
+#include <vcl_compiler.h>
 
 //: Representation of an instance of a shape model.
 //  Contains shape model parameters and the parameters of
@@ -113,16 +115,16 @@ class msm_shape_instance
   //: Finds parameters and pose to best match to points
   //  Errors on point i are weighted by wt_mat[i] in target frame
   void fit_to_points_wt_mat(const msm_points& pts,
-                            const vcl_vector<msm_wt_mat_2d>& wt_mat);
+                            const std::vector<msm_wt_mat_2d>& wt_mat);
 
   //: Version number for I/O
   short version_no() const;
 
   //: Name of the class
-  vcl_string is_a() const;
+  std::string is_a() const;
 
   //: Print class to os
-  void print_summary(vcl_ostream& os) const;
+  void print_summary(std::ostream& os) const;
 
   //: Save class to binary file stream
   void b_write(vsl_b_ostream& bfs) const;
@@ -140,9 +142,9 @@ void vsl_b_write(vsl_b_ostream& bfs, const msm_shape_instance& pts);
 void vsl_b_read(vsl_b_istream& bfs, msm_shape_instance& pts);
 
 //: Stream output operator for class reference
-vcl_ostream& operator<<(vcl_ostream& os,const msm_shape_instance& pts);
+std::ostream& operator<<(std::ostream& os,const msm_shape_instance& pts);
 
 //: Stream output operator for class reference
-void vsl_print_summary(vcl_ostream& os,const msm_shape_instance& pts);
+void vsl_print_summary(std::ostream& os,const msm_shape_instance& pts);
 
 #endif // msm_shape_instance_h_

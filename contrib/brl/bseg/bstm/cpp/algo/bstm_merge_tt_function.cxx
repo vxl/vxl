@@ -1,7 +1,9 @@
+#include <iostream>
+#include <set>
 #include "bstm_merge_tt_function.h"
-#include <vcl_set.h>
+#include <vcl_compiler.h>
 
-bool bstm_merge_tt_function::init_data(bstm_time_block* blk_t, bstm_block* blk, vcl_vector<bstm_data_base*> & datas, float prob_thresh)
+bool bstm_merge_tt_function::init_data(bstm_time_block* blk_t, bstm_block* blk, std::vector<bstm_data_base*> & datas, float prob_thresh)
 {
   //store block and pointer to uchar16 3d block
    blk_   = blk;
@@ -25,7 +27,7 @@ bool bstm_merge_tt_function::init_data(bstm_time_block* blk_t, bstm_block* blk, 
 
    //USE rootlevel to determine MAX_INNER and MAX_CELLS
    if (max_level_t_ == 1) {
-     vcl_cout<<"Trying to refine scene with max level 1"<<vcl_endl;
+     std::cout<<"Trying to refine scene with max level 1"<<std::endl;
      return true;
    }
    else if (max_level_t_ == 2) {
@@ -46,7 +48,7 @@ bool bstm_merge_tt_function::init_data(bstm_time_block* blk_t, bstm_block* blk, 
 
    //USE rootlevel to determine MAX_INNER and MAX_CELLS
    if (max_level_ == 1) {
-     vcl_cout<<"Trying to refine scene with max level 1"<<vcl_endl;
+     std::cout<<"Trying to refine scene with max level 1"<<std::endl;
      return true;
    }
    else if (max_level_ == 2) {
@@ -65,7 +67,7 @@ bool bstm_merge_tt_function::init_data(bstm_time_block* blk_t, bstm_block* blk, 
 }
 
 
-bool bstm_merge_tt_function::merge(vcl_vector<bstm_data_base*>& datas)
+bool bstm_merge_tt_function::merge(std::vector<bstm_data_base*>& datas)
 {
   //1. loop over each tree to save spatial depth of each time tree
   boxm2_array_1d<uchar8>&  old_time_trees = blk_t_->time_trees();    //old time trees
@@ -109,7 +111,7 @@ bool bstm_merge_tt_function::merge(vcl_vector<bstm_data_base*>& datas)
       //2. merge time tree
       bstm_time_tree new_time_tree = this->merge_tt(old_time_tree, depths[currIndex]);
       //3. copy new tree into trees_copy
-      vcl_memcpy (trees_copy[currIndex].data_block(), new_time_tree.get_bits(), TT_NUM_BYTES);
+      std::memcpy (trees_copy[currIndex].data_block(), new_time_tree.get_bits(), TT_NUM_BYTES);
       //4. account new datasize
       dataSize += new_time_tree.num_leaves();
       old_dataSize += old_time_tree.num_leaves();
@@ -129,7 +131,7 @@ bool bstm_merge_tt_function::merge(vcl_vector<bstm_data_base*>& datas)
 
 
 
-  vcl_cout << "Num elements saved: " << old_dataSize - dataSize << "." << vcl_endl;
+  std::cout << "Num elements saved: " << old_dataSize - dataSize << "." << std::endl;
 
   //43. loop through trees again, putting the time trees in the right place as well as refining the time trees
   currIndex = 0;
@@ -150,7 +152,7 @@ bool bstm_merge_tt_function::merge(vcl_vector<bstm_data_base*>& datas)
       this->move_data(old_tree, merged_tree,  depths[currIndex], alpha_cpy, mog_cpy, numobs_cpy);
 
       //4. store old tree in new tree, swap data out
-      vcl_memcpy(old_time_trees_iter, merged_tree.get_bits(), TT_NUM_BYTES);
+      std::memcpy(old_time_trees_iter, merged_tree.get_bits(), TT_NUM_BYTES);
   }
 
 
@@ -169,9 +171,9 @@ bool bstm_merge_tt_function::merge(vcl_vector<bstm_data_base*>& datas)
 void bstm_merge_tt_function::move_data(bstm_time_tree old_tree, bstm_time_tree merged_tree,  int depth, bstm_data_traits<BSTM_ALPHA>::datatype* alpha_cpy,
                                             bstm_data_traits<BSTM_MOG6_VIEW_COMPACT>::datatype* mog_cpy, bstm_data_traits<BSTM_NUM_OBS_VIEW_COMPACT>::datatype* numobs_cpy)
 {
-  vcl_vector<int> merged_tree_leaves = merged_tree.get_leaf_bits();
+  std::vector<int> merged_tree_leaves = merged_tree.get_leaf_bits();
 
-  for (vcl_vector<int>::iterator iter = merged_tree_leaves.begin(); iter != merged_tree_leaves.end(); iter++)
+  for (std::vector<int>::iterator iter = merged_tree_leaves.begin(); iter != merged_tree_leaves.end(); iter++)
   {
     //get new data ptr
     int newDataPtr = merged_tree.get_data_index(*iter);
@@ -188,10 +190,10 @@ void bstm_merge_tt_function::move_data(bstm_time_tree old_tree, bstm_time_tree m
     {
       if(old_tree.is_leaf(old_tree.child_index(*iter) )==0 || old_tree.is_leaf(old_tree.child_index(*iter) + 1 ) == 0)
       {
-        vcl_cout << "Bit " << *iter << " and childs: " << old_tree.child_index(*iter) << " and " << old_tree.child_index(*iter) + 1 << vcl_endl;
-        vcl_cout << "Valid cells " << old_tree.valid_cell(old_tree.child_index(*iter) ) << " and " << old_tree.valid_cell(old_tree.child_index(*iter) + 1 ) << vcl_endl;
-        vcl_cout << "Valid leaves " << old_tree.is_leaf(old_tree.child_index(*iter) ) << " and " << old_tree.is_leaf(old_tree.child_index(*iter) + 1 ) << vcl_endl;
-        vcl_cout << "Num leaves in old tree " << old_tree.num_leaves() << " and in the new one: " << merged_tree.num_leaves() << vcl_endl;
+        std::cout << "Bit " << *iter << " and childs: " << old_tree.child_index(*iter) << " and " << old_tree.child_index(*iter) + 1 << std::endl;
+        std::cout << "Valid cells " << old_tree.valid_cell(old_tree.child_index(*iter) ) << " and " << old_tree.valid_cell(old_tree.child_index(*iter) + 1 ) << std::endl;
+        std::cout << "Valid leaves " << old_tree.is_leaf(old_tree.child_index(*iter) ) << " and " << old_tree.is_leaf(old_tree.child_index(*iter) + 1 ) << std::endl;
+        std::cout << "Num leaves in old tree " << old_tree.num_leaves() << " and in the new one: " << merged_tree.num_leaves() << std::endl;
       }
 
       //find children in old tree
@@ -202,10 +204,10 @@ void bstm_merge_tt_function::move_data(bstm_time_tree old_tree, bstm_time_tree m
       float alpha_left_child = alpha_[oldDataPtr_left_child];
       float alpha_right_child = alpha_[oldDataPtr_right_child];
       float side_len = (float)block_len_ / float(1<<depth);
-      float left_child_p =  1.0f - (float)vcl_exp(-alpha_left_child * side_len);
-      float right_child_p =  1.0f - (float)vcl_exp(-alpha_right_child * side_len);
+      float left_child_p =  1.0f - (float)std::exp(-alpha_left_child * side_len);
+      float right_child_p =  1.0f - (float)std::exp(-alpha_right_child * side_len);
       float avg_p = (left_child_p + right_child_p) / 2;
-      alpha_cpy[newDataPtr]  = -vcl_log(1- avg_p) / side_len;
+      alpha_cpy[newDataPtr]  = -std::log(1- avg_p) / side_len;
 
       //avg mog
       bstm_data_traits<BSTM_MOG6_VIEW_COMPACT>::datatype left_mog = mog_[oldDataPtr_left_child];
@@ -217,13 +219,13 @@ void bstm_merge_tt_function::move_data(bstm_time_tree old_tree, bstm_time_tree m
         float left_std = (float)(left_mog[2*i + 1]) / 255.0f;
         float right_std = (float)(right_mog[2*i + 1]) / 255.0f;
         avg_mog[2*i] = (unsigned char)( (left_mean + right_mean) / 2);
-        avg_mog[2*i + 1] = (unsigned char) ( 255.0f * vcl_sqrt( (left_std*left_std + right_std*right_std) / 4 ) );
+        avg_mog[2*i + 1] = (unsigned char) ( 255.0f * std::sqrt( (left_std*left_std + right_std*right_std) / 4 ) );
 
 
 //        float left_std = (float)(left_mog[2*i + 1]);
 //        float right_std = (float)(right_mog[2*i + 1]) ;
 //        avg_mog[2*i] = ( (left_mean + right_mean) / 2);
-//        avg_mog[2*i + 1] = ( vcl_sqrt( (left_std*left_std + right_std*right_std) / 4 ) );
+//        avg_mog[2*i + 1] = ( std::sqrt( (left_std*left_std + right_std*right_std) / 4 ) );
 
 
       }
@@ -246,24 +248,24 @@ void bstm_merge_tt_function::move_data(bstm_time_tree old_tree, bstm_time_tree m
 
 bstm_time_tree bstm_merge_tt_function::merge_tt(const bstm_time_tree& old_tree, int curr_depth)
 {
-  vcl_vector<int> old_leaves = old_tree.max_depth_leaves();
-  vcl_set<int> parents;
+  std::vector<int> old_leaves = old_tree.max_depth_leaves();
+  std::set<int> parents;
   bstm_time_tree merged_tree(old_tree.get_bits(), max_level_t_);
   //get parents of current leaves
-  for (vcl_vector<int>::iterator iter = old_leaves.begin(); iter != old_leaves.end(); iter++) {
+  for (std::vector<int>::iterator iter = old_leaves.begin(); iter != old_leaves.end(); iter++) {
     if(*iter > 0)
       parents.insert(old_tree.parent_index(*iter));
   }
 
-  for(vcl_set<int>::iterator iter = parents.begin(); iter != parents.end(); iter++)
+  for(std::set<int>::iterator iter = parents.begin(); iter != parents.end(); iter++)
   {
     int bit_index_left_child = old_tree.child_index(*iter);
     int bit_index_right_child = bit_index_left_child + 1;
     //check if they can be merged
     float side_len = (float)block_len_ / float(1<<curr_depth);
-    float left_child_p =  1.0f - (float)vcl_exp(-alpha_[old_tree.get_data_index(bit_index_left_child)] * side_len);
-    float right_child_p =  1.0f - (float)vcl_exp(-alpha_[old_tree.get_data_index(bit_index_right_child)] * side_len);
-    bool merge = vcl_abs(left_child_p - right_child_p ) < prob_t_; //merge decision |p_left - p_right| < p_t
+    float left_child_p =  1.0f - (float)std::exp(-alpha_[old_tree.get_data_index(bit_index_left_child)] * side_len);
+    float right_child_p =  1.0f - (float)std::exp(-alpha_[old_tree.get_data_index(bit_index_right_child)] * side_len);
+    bool merge = std::abs(left_child_p - right_child_p ) < prob_t_; //merge decision |p_left - p_right| < p_t
     if(merge)
       merged_tree.set_bit_at(*iter,false);
   }
@@ -275,7 +277,7 @@ bstm_time_tree bstm_merge_tt_function::merge_tt(const bstm_time_tree& old_tree, 
 //MAIN MERGE FUNCTION
 ////////////////////////////////////////////////////////////////////////////////
 void bstm_merge_tt_blk(bstm_time_block* t_blk, bstm_block* blk,
-                          vcl_vector<bstm_data_base*> & datas,
+                          std::vector<bstm_data_base*> & datas,
                           float prob_thresh)
 {
   bstm_merge_tt_function merge_block;

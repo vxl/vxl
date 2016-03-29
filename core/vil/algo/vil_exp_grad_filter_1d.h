@@ -13,8 +13,8 @@
 //  sign(i)*exp(c*|i|) applied. c=log(k)
 //  Uses fast recursive implementation.
 template <class srcT, class destT, class accumT>
-inline void vil_exp_grad_filter_1d(const srcT* src, vcl_ptrdiff_t sstep,
-                                   destT* dest, vcl_ptrdiff_t dstep,
+inline void vil_exp_grad_filter_1d(const srcT* src, std::ptrdiff_t sstep,
+                                   destT* dest, std::ptrdiff_t dstep,
                                    int n, accumT k)
 {
   const srcT* s = src;
@@ -62,8 +62,8 @@ inline void vil_exp_grad_filter_i(const vil_image_view<srcT>& src_im,
   unsigned ni = src_im.ni();
   unsigned nj = src_im.nj();
   dest_im.set_size(ni,nj,src_im.nplanes());
-  vcl_ptrdiff_t s_istep = src_im.istep(), s_jstep = src_im.jstep();
-  vcl_ptrdiff_t d_istep = dest_im.istep(),d_jstep = dest_im.jstep();
+  std::ptrdiff_t s_istep = src_im.istep(), s_jstep = src_im.jstep();
+  std::ptrdiff_t d_istep = dest_im.istep(),d_jstep = dest_im.jstep();
 
   for (unsigned p=0;p<src_im.nplanes();++p)
   {
@@ -87,8 +87,8 @@ inline void vil_exp_grad_filter_j(const vil_image_view<srcT>& src_im,
   unsigned ni = src_im.ni();
   unsigned nj = src_im.nj();
   dest_im.set_size(ni,nj,src_im.nplanes());
-  vcl_ptrdiff_t s_istep = src_im.istep(), s_jstep = src_im.jstep();
-  vcl_ptrdiff_t d_istep = dest_im.istep(),d_jstep = dest_im.jstep();
+  std::ptrdiff_t s_istep = src_im.istep(), s_jstep = src_im.jstep();
+  std::ptrdiff_t d_istep = dest_im.istep(),d_jstep = dest_im.jstep();
 
   for (unsigned p=0;p<src_im.nplanes();++p)
   {

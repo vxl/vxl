@@ -30,15 +30,15 @@ else()
   # will not have the v3p mpeg2 library
   #
 
-  if(EXISTS ${vxl_SOURCE_DIR}/v3p/mpeg2/include/mpeg2dec/mpeg2.h)
+  if(EXISTS ${VXL_ROOT_SOURCE_DIR}/v3p/mpeg2/include/mpeg2dec/mpeg2.h)
 
     set( MPEG2_FOUND "YES" )
     set( MPEG2_LIBRARIES mpeg2 vo )
     set( MPEG2_INCLUDE_DIR
-      ${vxl_SOURCE_DIR}/v3p/mpeg2/include
+      ${VXL_ROOT_SOURCE_DIR}/v3p/mpeg2/include
       # use of the following is deprecated
       # it is better to use #include <mpeg2dec/mpeg2.h> in client code
-      ${vxl_SOURCE_DIR}/v3p/mpeg2/include/mpeg2dec
+      ${VXL_ROOT_SOURCE_DIR}/v3p/mpeg2/include/mpeg2dec
     )
     set( MPEG2_INSTALL_INCLUDE_DIR
       ${CMAKE_INSTALL_PREFIX}/include/vxl/v3p/mpeg2/include

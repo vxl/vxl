@@ -22,10 +22,12 @@
 //
 //----------------------------------------------------------------------
 
+#include <iostream>
+#include <cstring>
+#include <map>
+#include <utility>
 #include <vcl_sys/types.h>
-#include <vcl_cstring.h> // for strcpy(), strcmp()
-#include <vcl_map.h>
-#include <vcl_utility.h>
+#include <vcl_compiler.h>
 #include <vil1/vil1_memory_image.h>
 
 class ImageDatabase
@@ -39,26 +41,26 @@ class ImageDatabase
 
  private:
   // the multimap to store label/image pairs
-  vcl_multimap<const char*, vil1_memory_image *, ltstr> image_db;
+  std::multimap<const char*, vil1_memory_image *, ltstr> image_db;
 
  public:
   // typedefs for access to the image_db
-  typedef vcl_multimap<const char*, vil1_memory_image *, ltstr>::iterator iterator;
-  typedef vcl_multimap<const char*, vil1_memory_image *, ltstr>::const_iterator const_iterator;
-  typedef vcl_pair<const char *, vil1_memory_image *> value_type;
+  typedef std::multimap<const char*, vil1_memory_image *, ltstr>::iterator iterator;
+  typedef std::multimap<const char*, vil1_memory_image *, ltstr>::const_iterator const_iterator;
+  typedef std::pair<const char *, vil1_memory_image *> value_type;
 
   ImageDatabase(){}
   ~ImageDatabase();
   inline iterator insert(const char *label, vil1_memory_image *image)
-    {char *new_label=new char[200]; vcl_strcpy(new_label, label);
+    {char *new_label=new char[200]; std::strcpy(new_label, label);
     value_type ins(new_label, image); return image_db.insert(ins);}
   inline iterator begin(){return image_db.begin();}
   inline iterator end(){return image_db.end();}
   inline const_iterator begin() const {return image_db.begin();}
   inline const_iterator end() const {return image_db.end();}
-  inline vcl_pair<iterator, iterator> equal_range(const char *&label)
+  inline std::pair<iterator, iterator> equal_range(const char *&label)
     {return image_db.equal_range(label);}
-  inline vcl_pair<const_iterator, const_iterator> equal_range(const char *&label)
+  inline std::pair<const_iterator, const_iterator> equal_range(const char *&label)
     const {return image_db.equal_range(label);}
   inline bool label_exists(const char *label) const
     {return image_db.count(label)>0;}

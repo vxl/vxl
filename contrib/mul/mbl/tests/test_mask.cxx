@@ -1,8 +1,10 @@
 // This is mul/mbl/tests/test_mask.cxx
 
-#include <vcl_vector.h>
-#include <vcl_fstream.h>
-#include <vcl_sstream.h>
+#include <vector>
+#include <iostream>
+#include <fstream>
+#include <sstream>
+#include <vcl_compiler.h>
 #include <vsl/vsl_vector_io.h>
 #include <vsl/vsl_binary_io.h>
 #include <testlib/testlib_test.h>
@@ -16,9 +18,9 @@ unsigned mask4_to_number(const mbl_mask & r)
          (r[3] ? 1 : 0);
 }
 
-vcl_string number_to_fourbit(unsigned n)
+std::string number_to_fourbit(unsigned n)
 {
-  vcl_stringstream ss;
+  std::stringstream ss;
   for (int i = 3; i >= 0; --i)
   {
     ss << ((n >> i) & 1);
@@ -37,7 +39,7 @@ void setup_default_masks(mbl_mask & m1, mbl_mask & m2)
   m2 = m1;
 }
 
-void setup_default_values(vcl_vector<unsigned> & v1, vcl_vector<unsigned> & v2)
+void setup_default_values(std::vector<unsigned> & v1, std::vector<unsigned> & v2)
 {
   v1.resize(5); v2.resize(5);
   for (unsigned i = 0 ; i < 5 ; ++i)
@@ -50,12 +52,12 @@ void setup_default_values(vcl_vector<unsigned> & v1, vcl_vector<unsigned> & v2)
 void test_mask()
 {
   // workspace
-  vcl_vector<unsigned> v1, v2, v_tgt;
+  std::vector<unsigned> v1, v2, v_tgt;
   mbl_mask m1, m2, m_op;
 
 
   // Test mask IO
-  vcl_cout << "\nTesting mbl_mask IO" << vcl_endl;
+  std::cout << "\nTesting mbl_mask IO" << std::endl;
   setup_default_masks(m1, m2);
   m2.clear();
   mbl_save_mask(m1, "mbl_mask_test_maskfile.txt");
@@ -63,7 +65,7 @@ void test_mask()
   TEST("Mask saved and loaded", (m1 == m2), true);
 
   // Test proper failure of badly formatted file
-  vcl_ofstream fout("mbl_mask_test_badmask.txt");
+  std::ofstream fout("mbl_mask_test_badmask.txt");
   fout << "1\n0\nbad\n1\n";
   fout.close();
   bool failed_load = false;
@@ -75,7 +77,7 @@ void test_mask()
 
 
   // Test mbl_apply_mask(mask,vector)
-  vcl_cout << "\nTesting mbl_apply_mask(mask,vector) version" << vcl_endl;
+  std::cout << "\nTesting mbl_apply_mask(mask,vector) version" << std::endl;
   setup_default_masks(m1, m2);
   setup_default_values(v1, v2);
   v_tgt.clear();
@@ -100,7 +102,7 @@ void test_mask()
 
 
   // Test mbl_apply_mask(mask,vector,vector)
-  vcl_cout << "\nTesting mbl_apply_mask(mask,vector,vector) version" << vcl_endl;
+  std::cout << "\nTesting mbl_apply_mask(mask,vector,vector) version" << std::endl;
   setup_default_masks(m1, m2);
   setup_default_values(v1, v2);
   v_tgt.clear();
@@ -124,27 +126,27 @@ void test_mask()
   TEST("Values invariant on failure of mask application", (v1 == v_tgt), true);
 
   // Test iterator version
-  vcl_cout << "\nTesting mbl_apply_mask iterator version" << vcl_endl;
+  std::cout << "\nTesting mbl_apply_mask iterator version" << std::endl;
   setup_default_masks(m1, m2);
   setup_default_values(v1, v2);
-  vcl_vector<unsigned> result;
+  std::vector<unsigned> result;
   v_tgt.clear();
   v_tgt.push_back(0); // see definition of m1 above for relationship values->target
   v_tgt.push_back(3);
   v_tgt.push_back(4);
-  mbl_apply_mask(m1, v1.begin(), v1.end(), vcl_inserter(result, result.begin()));
+  mbl_apply_mask(m1, v1.begin(), v1.end(), std::inserter(result, result.begin()));
   TEST("Application of mask using insert iterator method", (result == v_tgt), true);
   failed_application = false;
   result.clear();
   m1.resize(4);
-  try         { mbl_apply_mask(m1, v1.begin(), v1.end(), vcl_inserter(result, result.begin())); }
+  try         { mbl_apply_mask(m1, v1.begin(), v1.end(), std::inserter(result, result.begin())); }
   catch (...) { failed_application = true; }
   TEST("Expected fail of apply mask where lengths differ", failed_application, true);
   TEST("Values invariant on failure of mask application", result.empty(), true);
 
 
   // Test mbl_mask_logic
-  vcl_cout << "\nTesting mbl_mask_logic" << vcl_endl;
+  std::cout << "\nTesting mbl_mask_logic" << std::endl;
   m1.clear(); m2.clear();
   m1.push_back(false); m2.push_back(false);
   m1.push_back(false); m2.push_back(true);
@@ -181,7 +183,7 @@ void test_mask()
   TEST("Result invariant on failure of mask logic", (m2 == m_op), true);
 
   // Test merging of value vectors
-  vcl_cout << "\nTesting mbl_mask_merge_values" << vcl_endl;
+  std::cout << "\nTesting mbl_mask_merge_values" << std::endl;
   setup_default_masks(m1, m2);
   setup_default_values(v1, v2);
   v_tgt.resize(5);
@@ -204,7 +206,7 @@ void test_mask()
   TEST("Values invariant on failure of merge operation", v2 == v_tgt, true);
 
   // Test mbl_mask_on_mask
-  vcl_cout << "\nTesting mbl_mask_on_mask" << vcl_endl;
+  std::cout << "\nTesting mbl_mask_on_mask" << std::endl;
   m1.resize(4); m2.resize(6); m_op.resize(6);
   m1[0] = true;  m2[0] = true;  m_op[0] = true;
   m1[1] = false; m2[1] = true;  m_op[1] = false;
@@ -231,14 +233,14 @@ void test_mask()
   TEST("Result invariant on failure of mask-on-mask operation", (m2 == m_op), true);
 
   // Test mbl_masks_from_index_set
-  vcl_cout << "\nTesting mbl_masks_from_index_set" << vcl_endl;
-  vcl_vector<unsigned> index_set(5);
+  std::cout << "\nTesting mbl_masks_from_index_set" << std::endl;
+  std::vector<unsigned> index_set(5);
   index_set[0] = 1;
   index_set[1] = 4;
   index_set[2] = 2;
   index_set[3] = 1;
   index_set[4] = 2;
-  vcl_vector<mbl_mask> masks;
+  std::vector<mbl_mask> masks;
   mbl_masks_from_index_set(index_set, masks);
   mbl_mask mask1(5), mask2(5), mask4(5);
   mask1[0] = true;
@@ -253,11 +255,11 @@ void test_mask()
   TEST("Correctness of masks from index set", index_masks_match, true);
 
   // Test mbl_mask_to_indices() and mbl_indices_to_mask()
-  vcl_cout << "\nTesting mbl mask-indices conversions" << vcl_endl;
+  std::cout << "\nTesting mbl mask-indices conversions" << std::endl;
   const unsigned n=10;
   mbl_mask mask_true(n, false);
   mask_true[1]=true; mask_true[3]=true; mask_true[6]=true; mask_true[8]=true;
-  vcl_vector<unsigned> inds, inds_true;
+  std::vector<unsigned> inds, inds_true;
   inds_true.push_back(1); inds_true.push_back(3); inds_true.push_back(6); inds_true.push_back(8);
   mbl_mask_to_indices(mask_true, inds);
   TEST("mbl_mask_to_indices()", inds==inds_true, true);
@@ -270,9 +272,9 @@ void test_mask()
     mbl_mask mask(2);
     mask[0] = false;
     mask[1] = true;
-    vcl_vector<unsigned> src1(2,1);
-    vcl_vector<unsigned> src2(1,2);
-    vcl_vector<unsigned> dst;
+    std::vector<unsigned> src1(2,1);
+    std::vector<unsigned> src2(1,2);
+    std::vector<unsigned> dst;
     mbl_replace_using_mask( mask, src1, src2, dst );
 
     bool replace_ok = ( dst.size() == 2 );

@@ -1,9 +1,11 @@
+#include <cstdio>
+#include <iostream>
+#include <cmath>
 #include "bil_wshed2d.h"
 //:
 // \file
 
-#include <vcl_cstdio.h>
-#include <vcl_cmath.h>
+#include <vcl_compiler.h>
 #include <vcl_climits.h>
 
 #include <vil/vil_image_view.h>
@@ -27,7 +29,7 @@ bil_wshed_2d::~bil_wshed_2d()
 
 //public functions
 
-vcl_vector< vil_image_view< unsigned char > >
+std::vector< vil_image_view< unsigned char > >
 bil_wshed_2d::bil_wshed_2d_main(vil_image_view< unsigned char > src_img, double gsigma1, double gsigma2,
                                 int min_x, int min_y, int max_x, int max_y)
 {
@@ -81,7 +83,7 @@ bil_wshed_2d::bil_wshed_2d_main(vil_image_view< unsigned char > src_img, double 
         output_img_uchar_(i + min_x, j + min_y) = WSHED;
     }
   }
-  vcl_vector< vil_image_view< unsigned char > > output_vector;
+  std::vector< vil_image_view< unsigned char > > output_vector;
   output_vector.push_back(output_img_uchar_);
 
   output_img_wout_wsheds_uchar_.set_size(src_img.ni(), src_img.nj());
@@ -198,7 +200,7 @@ bil_wshed_2d::compute_watershed_regions()
     //if there are any pixels of the specific height -> call the flooding function
     if (control == 1)
     {
-      vcl_printf("height %d start %d end %d\n", h, h_start_, h_end_);
+      std::printf("height %d start %d end %d\n", h, h_start_, h_end_);
       //h_start_ and h_end_ point to the start and end of the pixels in the sorted arrays to be processed
       flood_current_height();
       control = 0;
@@ -464,7 +466,7 @@ bil_wshed_2d::smooth_and_gradient_img(double gsigma1, double gsigma2)
   }
   else
   {
-    vcl_cout << vcl_endl << "No Gaussian Smoothing Applied..." << vcl_endl;
+    std::cout << std::endl << "No Gaussian Smoothing Applied..." << std::endl;
     vil_copy_deep(input_img_, smoothed_img);
   }
   //gradient
@@ -480,7 +482,7 @@ bil_wshed_2d::smooth_and_gradient_img(double gsigma1, double gsigma2)
 
   for (int j = 0; j < height_; j++)
     for (int i = 0; i < width_; i++)
-      gradient_img_float(i, j) = vcl_fabs(gradient_img_float(i, j));
+      gradient_img_float(i, j) = std::fabs(gradient_img_float(i, j));
 
   float min_value_grad, max_value_grad;
   vil_math_value_range(gradient_img_float, min_value_grad, max_value_grad);

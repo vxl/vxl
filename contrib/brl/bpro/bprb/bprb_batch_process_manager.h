@@ -12,8 +12,10 @@
 //   22 May 2012 - Peter Vanroose - catching failing redirect of stdout
 // \endverbatim
 
-#include <vcl_vector.h>
-#include <vcl_string.h>
+#include <vector>
+#include <iostream>
+#include <string>
+#include <vcl_compiler.h>
 #include <bprb/bprb_process_sptr.h>
 #include <bprb/bprb_process_manager.h>
 #include <brdb/brdb_value_sptr.h>
@@ -29,13 +31,13 @@ class bprb_batch_process_manager : public bprb_process_manager<bprb_batch_proces
   bool clear();
 
   //: initialize the process
-  bool init_process(vcl_string const& process_name);
+  bool init_process(std::string const& process_name);
 
   //: print the default values of the process into the specified XML file
-  bool print_default_params(vcl_string const & process_name, vcl_string const& params_XML);
+  bool print_default_params(std::string const & process_name, std::string const& params_XML);
 
   //: read and set the parameters from an XML file for the current process
-  bool set_params(vcl_string const& params_XML);
+  bool set_params(std::string const& params_XML);
 
   //: set the parameters from another parameter instance for the current process
   bool set_params(const bprb_parameters_sptr& params);
@@ -43,7 +45,7 @@ class bprb_batch_process_manager : public bprb_process_manager<bprb_batch_proces
   //: set primitive data type input on current process
   bool set_input(unsigned i, brdb_value_sptr const& input);
 
-  bool set_input_from_db(unsigned i, unsigned id, vcl_string type);
+  bool set_input_from_db(unsigned i, unsigned id, std::string type);
 
   //: set input from the database
   bool set_input_from_db(unsigned i, unsigned id);
@@ -52,10 +54,10 @@ class bprb_batch_process_manager : public bprb_process_manager<bprb_batch_proces
   bool commit_output(unsigned i, unsigned& id);
 
   //: put the output into the database
-  bool commit_output(unsigned i, unsigned& id, vcl_string& type);
+  bool commit_output(unsigned i, unsigned& id, std::string& type);
 
   //: put the output into the database
-  bool commit_all_outputs(vcl_vector<unsigned>& ids);
+  bool commit_all_outputs(std::vector<unsigned>& ids);
 
   //: remove data from the database
   bool remove_data(unsigned id);
@@ -80,16 +82,16 @@ class bprb_batch_process_manager : public bprb_process_manager<bprb_batch_proces
 
   //: Set stdout
   // \return false on failure
-  bool set_stdout(vcl_string file);
+  bool set_stdout(std::string file);
 
   //: Reset stdout back to the console
   // \return false on failure
   bool reset_stdout();
 
   //: Interface to database binary read/write
-  void b_write_db(vcl_string const& path);
+  void b_write_db(std::string const& path);
 
-  void b_read_db(vcl_string const& path);
+  void b_read_db(std::string const& path);
 
   friend class bprb_process_manager<bprb_batch_process_manager>;
 

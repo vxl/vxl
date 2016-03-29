@@ -5,11 +5,12 @@
 //:
 // \file
 
+#include <iostream>
+#include <vector>
 #include "vil_ras.h"
 
 #include <vcl_cassert.h>
-#include <vcl_iostream.h>
-#include <vcl_vector.h>
+#include <vcl_compiler.h>
 
 #include <vil/vil_stream.h>
 #include <vil/vil_image_resource.h>
@@ -172,7 +173,7 @@ vil_ras_image(vil_stream* vs,
   components_ = nplanes * vil_pixel_format_num_components( format );
   if ( components_ != 1 && components_ != 3 )
   {
-    vcl_cerr << __FILE__ << ": can't handle "
+    std::cerr << __FILE__ << ": can't handle "
              << nplanes << " x "
              << vil_pixel_format_num_components( format ) << " components\n";
     return;
@@ -181,7 +182,7 @@ vil_ras_image(vil_stream* vs,
   bits_per_component_ = 8 * vil_pixel_format_sizeof_components( format );
 
   if ( bits_per_component_ != 8 ) {
-    vcl_cerr << __FILE__ << ": can't handle " << bits_per_component_ << " bits per component\n";
+    std::cerr << __FILE__ << ": can't handle " << bits_per_component_ << " bits per component\n";
     return;
   }
 
@@ -241,20 +242,20 @@ read_header()
 
   if (type_ != RT_OLD && type_ != RT_STANDARD &&
       type_ != RT_BYTE_ENCODED && type_ != RT_FORMAT_RGB ) {
-    vcl_cerr << __FILE__ << ": unknown type " << type_ << vcl_endl;
+    std::cerr << __FILE__ << ": unknown type " << type_ << std::endl;
     return false;
   }
   if ( map_type_ != RMT_NONE && map_type_ != RMT_EQUAL_RGB ) {
-    vcl_cerr << __FILE__ << ": unknown map type " << map_type_ << vcl_endl;
+    std::cerr << __FILE__ << ": unknown map type " << map_type_ << std::endl;
     return false;
   }
   if ( map_type_ == RMT_NONE && map_length_ != 0 ) {
-    vcl_cerr << __FILE__ << ": No colour map according to header, but there is a map!\n";
+    std::cerr << __FILE__ << ": No colour map according to header, but there is a map!\n";
     return false;
   }
 
   if ( depth_ != 8 && !(depth_== 16&&components_==1) && depth_ != 24 ) {
-    vcl_cerr << __FILE__ << ": depth " << depth_ << " not implemented\n";
+    std::cerr << __FILE__ << ": depth " << depth_ << " not implemented\n";
     return false;
   }
 
@@ -263,16 +264,16 @@ read_header()
     length_ = compute_length( width_, height_, depth_ );
   }
   if ( length_ == 0 ) {
-    vcl_cerr << __FILE__ << ": header says image has length zero\n";
+    std::cerr << __FILE__ << ": header says image has length zero\n";
     return false;
   }
   if ( type_ != RT_BYTE_ENCODED && length_ != compute_length( width_, height_, depth_ ) ) {
-    vcl_cerr << __FILE__ << ": length " << length_ << " does not match wxhxd = "
-             << compute_length( width_, height_, depth_ ) << vcl_endl;
+    std::cerr << __FILE__ << ": length " << length_ << " does not match wxhxd = "
+             << compute_length( width_, height_, depth_ ) << std::endl;
     return false;
   }
   if ( map_length_ % 3 != 0 ) {
-    vcl_cerr << __FILE__ << ": color map length is not a multiple of 3\n";
+    std::cerr << __FILE__ << ": color map length is not a multiple of 3\n";
     return false;
   }
 
@@ -395,7 +396,7 @@ get_copy_view( unsigned i0, unsigned ni,
     assert( file_bytes_per_pixel == 1 && buff_bytes_per_pixel == 3 );
     unsigned col_len = map_length_ / 3;
     // Read a line, and map every index into an RGB triple
-    vcl_vector<vxl_uint_8> line( ni );
+    std::vector<vxl_uint_8> line( ni );
     for ( unsigned j = 0; j < nj; ++j ) {
       vs_->seek( file_byte_start + j * file_byte_width );
       vs_->read( &line[0], line.size() );
@@ -449,20 +450,20 @@ put_view( const vil_image_view_base& view, unsigned i0, unsigned j0 )
   }
 
   if ( section.nplanes() != components_ ) {
-    vcl_cerr << "ERROR: " << __FILE__ << ": data parameters of view don't match\n";
+    std::cerr << "ERROR: " << __FILE__ << ": data parameters of view don't match\n";
     return false;
   }
 
   if ( col_map_ ) {
-    vcl_cerr << __FILE__ << ": writing to file with a colour map is not implemented\n";
+    std::cerr << __FILE__ << ": writing to file with a colour map is not implemented\n";
     return false;
   }
   if ( type_ == RT_BYTE_ENCODED ) {
-    vcl_cerr << __FILE__ << ": writing to a run-length encoded file is not implemented\n";
+    std::cerr << __FILE__ << ": writing to a run-length encoded file is not implemented\n";
     return false;
   }
   if ( components_ == 3 && type_ != RT_FORMAT_RGB ) {
-    vcl_cerr << __FILE__ << ": writing BGR format is not implemented\n";
+    std::cerr << __FILE__ << ": writing BGR format is not implemented\n";
     return false;
   }
 
@@ -482,7 +483,7 @@ put_view( const vil_image_view_base& view, unsigned i0, unsigned j0 )
   // byte is set to zero. Otherwise, assume that the current data is
   // valid, and therefore that the padding byte is already zero.
   //
-  vcl_vector<vxl_uint_8> data_buffer;
+  std::vector<vxl_uint_8> data_buffer;
   if ( file_byte_width == buff_byte_width+1 ) {
     data_buffer.resize( file_byte_width );
     data_buffer[ file_byte_width-1 ] = 0;

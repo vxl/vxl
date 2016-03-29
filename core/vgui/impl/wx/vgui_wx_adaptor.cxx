@@ -1,4 +1,6 @@
 // This is core/vgui/impl/wx/vgui_wx_adaptor.cxx
+#include <iostream>
+#include <map>
 #include "vgui_wx_adaptor.h"
 //=========================================================================
 //:
@@ -24,8 +26,7 @@
 #endif
 
 #include <vcl_cassert.h>
-#include <vcl_iostream.h>
-// not used? #include <vcl_map.h>
+// not used? #include <vcl_compiler.h>
 
 //-------------------------------------------------------------------------
 // Private helpers - declarations.
@@ -248,8 +249,8 @@ void vgui_wx_adaptor::on_key(vgui_event& ve, wxKeyEvent& event)
 #if 0
   if (ve.type == vgui_KEY_PRESS)
   {
-    vcl_cout << "key (wx, vgui): " << ve.key << '\t' << ve.ascii_char
-             << '\t' << ve.modifier << vcl_endl;
+    std::cout << "key (wx, vgui): " << ve.key << '\t' << ve.ascii_char
+             << '\t' << ve.modifier << std::endl;
   }
 #endif
 
@@ -275,7 +276,7 @@ void vgui_wx_adaptor::on_key_down(wxKeyEvent& event)
   }
 
 #if 0
-  vcl_cout << "EVT_KEY_DOWN: " << event.GetKeyCode() << vcl_endl;
+  std::cout << "EVT_KEY_DOWN: " << event.GetKeyCode() << std::endl;
 #endif
 
   // save the code and let the event propagate to the on_char handler
@@ -296,8 +297,8 @@ void vgui_wx_adaptor::on_key_up(wxKeyEvent& event)
   }
 
 #if 0
-  vcl_cout << "EVT_KEY_UP  : " << event.GetKeyCode()
-           << " (" << ascii_code_[event.GetKeyCode()] << ')' << vcl_endl;
+  std::cout << "EVT_KEY_UP  : " << event.GetKeyCode()
+           << " (" << ascii_code_[event.GetKeyCode()] << ')' << std::endl;
 #endif
 
   // get the ascii char of the last key down with same code
@@ -321,8 +322,8 @@ void vgui_wx_adaptor::on_char(wxKeyEvent& event)
   }
 
 #if 0
-  vcl_cout << "EVT_CHAR    : " << last_key_down_
-           << " (" << event.GetKeyCode() << ')' << vcl_endl;
+  std::cout << "EVT_CHAR    : " << last_key_down_
+           << " (" << event.GetKeyCode() << ')' << std::endl;
 #endif
 
   // save ascii code of last on_key_down event for on_key_up to use
@@ -532,7 +533,7 @@ namespace
     case wxMOUSE_BTN_MIDDLE : return vgui_MIDDLE;
     case wxMOUSE_BTN_RIGHT  : return vgui_RIGHT;
     default:
-      vcl_cerr << "VGUI wx Error: Unknown button identifier.\n";
+      std::cerr << "VGUI wx Error: Unknown button identifier.\n";
       return vgui_BUTTON_NULL;
     }
   }
@@ -578,7 +579,7 @@ namespace
       else
       {
 #ifdef __WXDEBUG__
-        vcl_cerr << "VGUI wx Error: Unknown key code.\n";
+        std::cerr << "VGUI wx Error: Unknown key code.\n";
 #endif
         return vgui_KEY_NULL;
       }

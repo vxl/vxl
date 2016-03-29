@@ -1,7 +1,8 @@
+#include <iostream>
 #include <testlib/testlib_test.h>
 
 #include <boct/boct_bit_tree.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
 
 void test_print_centers()
 {
@@ -51,30 +52,30 @@ void test_print_centers()
   }
 
   for (int i=0; i<25; ++i) {
-    vcl_cout<<" bi : "<<i<<" center: "<<vgl_point_3d<float>(centerX[i], centerY[i], centerZ[i])<<vcl_endl;
+    std::cout<<" bi : "<<i<<" center: "<<vgl_point_3d<float>(centerX[i], centerY[i], centerZ[i])<<std::endl;
   }
 
   //print out in an easily copied format.....
-  vcl_cout<<"float centerX = { ";
+  std::cout<<"float centerX = { ";
   for (int i=0; i<584; ++i) {
-    vcl_cout<<centerX[i]<<',';
-    if (i%10 == 0) vcl_cout<<'\n';
+    std::cout<<centerX[i]<<',';
+    if (i%10 == 0) std::cout<<'\n';
   }
-  vcl_cout<<centerX[584]<<"};"<<vcl_endl;
+  std::cout<<centerX[584]<<"};"<<std::endl;
 
-  vcl_cout<<"float centerY = { ";
+  std::cout<<"float centerY = { ";
   for (int i=0; i<584; ++i) {
-    vcl_cout<<centerY[i]<<',';
-    if (i%10 == 0) vcl_cout<<'\n';
+    std::cout<<centerY[i]<<',';
+    if (i%10 == 0) std::cout<<'\n';
   }
-  vcl_cout<<centerY[584]<<"};"<<vcl_endl;
+  std::cout<<centerY[584]<<"};"<<std::endl;
 
-  vcl_cout<<"float centerZ = { ";
+  std::cout<<"float centerZ = { ";
   for (int i=0; i<584; ++i) {
-    vcl_cout<<centerZ[i]<<',';
-    if (i%10 == 0) vcl_cout<<'\n';
+    std::cout<<centerZ[i]<<',';
+    if (i%10 == 0) std::cout<<'\n';
   }
-  vcl_cout<<centerZ[584]<<"};"<<vcl_endl;
+  std::cout<<centerZ[584]<<"};"<<std::endl;
 }
 
 static void test_bit_tree()
@@ -100,7 +101,7 @@ static void test_bit_tree()
     for (int i=0; i<73; i++) {
       good = good && (tree.bit_at(i) == bits[i]);
       if (!good)
-        vcl_cout<<"i";
+        std::cout<<"i";
     }
     TEST("Set bits and get bits works ", true, good);
 
@@ -125,7 +126,7 @@ static void test_bit_tree()
   int leaf_opt = tree.traverse(o);
   int mid_opt = tree.traverse(m);
   int high_opt = tree.traverse(h);
-  vcl_cout<<"origin: "<<leaf_opt<<"  mid: "<<mid_opt<<"  high: "<<high_opt<<vcl_endl;
+  std::cout<<"origin: "<<leaf_opt<<"  mid: "<<mid_opt<<"  high: "<<high_opt<<std::endl;
   good = (leaf_opt == leaf_bit_index) && (mid_opt == mid_bit_index);
   TEST("Traverse opt works ", good, true);
 
@@ -133,15 +134,15 @@ static void test_bit_tree()
   //test data_index lookup
   //---------------------------------------------------------------------------
   int origin_data = tree.get_data_index(leaf_bit_index);
-  vcl_cout<<origin_data<<vcl_endl;
+  std::cout<<origin_data<<std::endl;
   TEST("Origin data at 73", origin_data, 73);
 
   int mid_data = tree.get_data_index(mid_bit_index);
-  vcl_cout<<mid_data<<vcl_endl;
+  std::cout<<mid_data<<std::endl;
   TEST("Mid data @ 12", mid_data, 12);
 
   int high_data = tree.get_data_index(high_bit_index);
-  vcl_cout<<high_data<<vcl_endl;
+  std::cout<<high_data<<std::endl;
   TEST("Mid data @ 12", mid_data, 12);
   //---------------------------------------------------------------------------
   //Test size of tree

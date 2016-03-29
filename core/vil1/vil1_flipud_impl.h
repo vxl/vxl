@@ -8,8 +8,9 @@
 // \file
 // \author fsm
 
+#include <string>
 #include <vil1/vil1_image.h>
-#include <vcl_string.h>
+#include <vcl_compiler.h>
 
 //: A view of an image which is flipped up/down (ie top row becomes bottom)
 class vil1_flipud_impl : public vil1_image_impl
@@ -30,10 +31,10 @@ class vil1_flipud_impl : public vil1_image_impl
   bool put_section(void const *buf, int x0, int y0, int w, int h);
 
   //: Return the name of the class;
-  virtual vcl_string is_a() const;
+  virtual std::string is_a() const;
 
   //: Return true if the name of the class matches the argument
-  virtual bool is_class(vcl_string const&) const;
+  virtual bool is_class(std::string const&) const;
 
  private:
   vil1_image base;

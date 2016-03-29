@@ -6,13 +6,15 @@
 #ifndef rtvl_weight_smooth_txx
 #define rtvl_weight_smooth_txx
 
+#include <iostream>
+#include <cstdlib>
 #include "rtvl_weight_smooth.hxx"
 
 #include "rtvl_terms.hxx"
 #include "rtvl_intpow.hxx"
 
 #include <vnl/vnl_vector_fixed.h>
-#include <vcl_cstdlib.h>
+#include <vcl_compiler.h>
 
 //----------------------------------------------------------------------------
 template <unsigned int N>
@@ -31,7 +33,7 @@ rtvl_weight_smooth<N>::rtvl_weight_smooth(double gs, unsigned int n):
     case 6: this->intpow = rtvl_intpow_impl<double, 11>::compute; break;
     case 7: this->intpow = rtvl_intpow_impl<double, 13>::compute; break;
     case 8: this->intpow = rtvl_intpow_impl<double, 15>::compute; break;
-    default: vcl_abort();
+    default: std::abort();
     }
 }
 

@@ -1,8 +1,9 @@
 /*
   fsm
 */
-#include <vcl_cstdlib.h>
-#include <vcl_iostream.h>
+#include <cstdlib>
+#include <iostream>
+#include <vcl_compiler.h>
 
 #include <vgui/vgui.h>
 #include <vgui/vgui_window.h>
@@ -14,10 +15,10 @@
 // example of a tableau which has an associated menu :
 struct joe_tab : public vgui_tableau
 {
-  vcl_string msg;
+  std::string msg;
   vgui_menu the_menu;
 
-  joe_tab(const vcl_string &m) : msg(m) {
+  joe_tab(const std::string &m) : msg(m) {
     the_menu.add("joe(0)",joe_callback,VXL_NULLPTR /*data*/);
     the_menu.add("joe(this)",joe_callback,this /*data*/);
     the_menu.add("toggle1", new vgui_command_toggle(false) );
@@ -26,9 +27,9 @@ struct joe_tab : public vgui_tableau
   ~joe_tab() { }
 
   static void joe_callback(void const *data) {
-    vcl_cerr << "this is joe_tab::joe_callback(" << data << ")\n";
+    std::cerr << "this is joe_tab::joe_callback(" << data << ")\n";
     if (data)
-      vcl_cerr << "  msg=\"" << static_cast<const joe_tab*>(data)->msg << "\"\n";
+      std::cerr << "  msg=\"" << static_cast<const joe_tab*>(data)->msg << "\"\n";
   }
   void add_popup(vgui_menu &m) {
     m.include(the_menu);
@@ -36,7 +37,7 @@ struct joe_tab : public vgui_tableau
   bool handle(const vgui_event &) {
     return true;
   }
-  vcl_string type_name() const { return "joe_tab"; }
+  std::string type_name() const { return "joe_tab"; }
 };
 
 //--------------------------------------------------------------------------------
@@ -62,7 +63,7 @@ static void FPE()
 
 static void ABRT()
 {
-  vcl_abort();
+  std::abort();
 }
 
 vgui_menu get_fault_menu()
@@ -79,17 +80,17 @@ vgui_menu get_fault_menu()
 
 static void Quit()
 {
-  vcl_exit(0);
+  std::exit(0);
 }
 
 static void Load()
 {
-  vcl_cerr << "Load\n";
+  std::cerr << "Load\n";
 }
 
 static void Save()
 {
-  vcl_cerr << "Load\n";
+  std::cerr << "Load\n";
 }
 
 vgui_menu get_file_menu()
@@ -111,13 +112,13 @@ int main(int argc, char **argv)
   vgui_window *win1 = vgui::adapt(new joe_tab("Joe1"), 256,256, get_fault_menu(), "Joe1");
   win1->get_adaptor()->bind_popups(vgui_CTRL, vgui_RIGHT);
   win1->show();
-  vcl_cerr << "Joe1 : ctrl+right for popup\n";
+  std::cerr << "Joe1 : ctrl+right for popup\n";
 
   // window 2
   vgui_window *win2 = vgui::adapt(new joe_tab("Joe2"), 256,256, get_file_menu(), "Joe2");
   win2->get_adaptor()->bind_popups(vgui_SHIFT, vgui_LEFT);
   win2->show();
-  vcl_cerr << "Joe2 : shift+left for popup\n";
+  std::cerr << "Joe2 : shift+left for popup\n";
 
   return vgui::run();
 }

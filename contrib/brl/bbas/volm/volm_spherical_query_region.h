@@ -13,9 +13,10 @@
 // None
 // \endverbatim
 
-#include <vcl_vector.h>
-#include <vcl_iostream.h>
-#include <vcl_string.h>
+#include <vector>
+#include <iostream>
+#include <string>
+#include <vcl_compiler.h>
 #include <vpgl/vpgl_perspective_camera.h>
 #include <bpgl/depth_map/depth_map_region.h>
 #include <vsph/vsph_sph_box_2d.h>
@@ -42,7 +43,7 @@ class volm_spherical_query_region
   unsigned char order() const {return order_;}
   unsigned char nlcd_id() const {return nlcd_id_;}
 
-  void print(vcl_ostream& os) const;
+  void print(std::ostream& os) const;
 
  private:
   //: box in spherical coordinates

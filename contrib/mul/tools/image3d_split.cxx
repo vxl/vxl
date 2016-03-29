@@ -3,6 +3,8 @@
 //  \date 16 Dec 2009
 //  \brief Program to split a 3d image into blocks.
 
+#include <iostream>
+#include <exception>
 #include <vul/vul_arg.h>
 #include <vul/vul_reg_exp.h>
 #include <vul/vul_sprintf.h>
@@ -16,8 +18,7 @@
 #include <vil3d/vil3d_new.h>
 #include <vil3d/vil3d_crop.h>
 #include <vul/vul_string.h>
-#include <vcl_exception.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
 
 //=========================================================================
 // Static function to create a static logger when first required
@@ -38,11 +39,11 @@ int main2(int argc, char*argv[])
 
   // Parse the program arguments
   vul_arg_base::set_help_precis("Divide a volume image in smaller pieces.");
-  vul_arg<vcl_string> img_src(0, "input image filename");
-  vul_arg<vcl_string> img_dst(0, "output image file-stem");
-  vul_arg<vcl_string> max_voxels_arg(0, "Max number of voxels in an output image. (Suffix k=1000, kb=1024, M=1e6, G=1e9 etc.)");
-  vul_arg<vcl_string> replace_str("-I", "Replace this string in the filestem with the split numbering. Default puts it at end.");
-  vul_arg<vcl_string> output_format_arg("-f", "Format of output images (e.g. v3i, dcm, gipl.) Guesses from filestem by default.");
+  vul_arg<std::string> img_src(VXL_NULLPTR, "input image filename");
+  vul_arg<std::string> img_dst(VXL_NULLPTR, "output image file-stem");
+  vul_arg<std::string> max_voxels_arg(VXL_NULLPTR, "Max number of voxels in an output image. (Suffix k=1000, kb=1024, M=1e6, G=1e9 etc.)");
+  vul_arg<std::string> replace_str("-I", "Replace this string in the filestem with the split numbering. Default puts it at end.");
+  vul_arg<std::string> output_format_arg("-f", "Format of output images (e.g. v3i, dcm, gipl.) Guesses from filestem by default.");
   vul_arg<bool> split_z("-z", "Split along z-plane boundaries, default is rough cubes.");
   vul_arg<bool> label_seq("-s", "Number output images sequentially, default is according to x,y,z pos");
 //  vul_arg<bool> ("-t", "Try to keep all images roughly same size - Default keeps all bu last ones identically sized.");
@@ -53,11 +54,11 @@ int main2(int argc, char*argv[])
 
 
   // Determine the output filetype
-  vcl_string output_format;
+  std::string output_format;
   if (!output_format_arg.set())
   {
     vul_reg_exp re("([^A-Za-z0-9])$");
-    vcl_string filename_test;
+    std::string filename_test;
     if (re.find(img_dst()))
       filename_test = img_dst().substr(0, re.start()); // strip trailing "._, "etc;
     else
@@ -76,7 +77,7 @@ int main2(int argc, char*argv[])
   vil3d_image_resource_sptr ir = vil3d_load_image_resource(img_src().c_str());
   if (!ir)
   {
-    vcl_cerr << "ERROR: Failed to load input image resource\n";
+    std::cerr << "ERROR: Failed to load input image resource\n";
     return 1;
   }
 
@@ -98,7 +99,7 @@ int main2(int argc, char*argv[])
   {
     if (max_voxels < ni*nj)
     {
-      vcl_cerr << "ERROR: More voxels in single plane than " << max_voxels << '\n';
+      std::cerr << "ERROR: More voxels in single plane than " << max_voxels << '\n';
       return 3;
     }
 
@@ -106,18 +107,18 @@ int main2(int argc, char*argv[])
     blockwidth_j = nj;
     blockcount_i = 1;
     blockcount_j = 1;
-    blockwidth_k = vcl_min(nk,  max_voxels / (ni*nj));
+    blockwidth_k = std::min(nk,  max_voxels / (ni*nj));
     blockcount_k = (nk+blockwidth_k-1) / blockwidth_k;
   }
   else
   {
-    blockwidth_k = vcl_min<unsigned long>(nk,
+    blockwidth_k = std::min<unsigned long>(nk,
                                           vnl_math::rnd(vnl_math::cuberoot(static_cast<double>(max_voxels))) );
     blockcount_k = (nk+blockwidth_k-1) / blockwidth_k;
-    blockwidth_j = vcl_min<unsigned long>(nj,
-                                          vnl_math::rnd(vcl_sqrt(static_cast<double>(max_voxels/blockwidth_k))));
+    blockwidth_j = std::min<unsigned long>(nj,
+                                          vnl_math::rnd(std::sqrt(static_cast<double>(max_voxels/blockwidth_k))));
     blockcount_j = (nj+blockwidth_j-1) / blockwidth_j;
-    blockwidth_i = vcl_min<unsigned long>(ni,  max_voxels / (blockwidth_k*blockwidth_j));
+    blockwidth_i = std::min<unsigned long>(ni,  max_voxels / (blockwidth_k*blockwidth_j));
     blockcount_i = (ni+blockwidth_i-1) / blockwidth_i;
   }
 
@@ -128,24 +129,24 @@ int main2(int argc, char*argv[])
 
   // Figure out output filename pattern.
 
-  vcl_string filename_pattern;
+  std::string filename_pattern;
 
   if (label_seq())
     filename_pattern = vul_sprintf("%%0%dd",
-                                   vnl_math::floor( vcl_log10( static_cast<double>(
+                                   vnl_math::floor( std::log10( static_cast<double>(
                                      blockcount_i*blockcount_j*blockcount_k )))+1 );
   else
     filename_pattern = vul_sprintf("%%0%dd%%0%dd%%0%dd",
-                                   vnl_math::floor(vcl_log10(static_cast<double>(blockcount_i)))+1,
-                                   vnl_math::floor(vcl_log10(static_cast<double>(blockcount_j)))+1,
-                                   vnl_math::floor(vcl_log10(static_cast<double>(blockcount_k)))+1 );
+                                   vnl_math::floor(std::log10(static_cast<double>(blockcount_i)))+1,
+                                   vnl_math::floor(std::log10(static_cast<double>(blockcount_j)))+1,
+                                   vnl_math::floor(std::log10(static_cast<double>(blockcount_k)))+1 );
 
   if (replace_str.set())
   {
-    vcl_string::size_type n = img_dst().find(replace_str());
-    if (n==vcl_string::npos)
+    std::string::size_type n = img_dst().find(replace_str());
+    if (n==std::string::npos)
     {
-      vcl_cerr << "ERROR: Could not find replace string \"" << replace_str()
+      std::cerr << "ERROR: Could not find replace string \"" << replace_str()
                << "\" in \"" << img_dst() << "\"\n";
       return 3;
     }
@@ -159,19 +160,19 @@ int main2(int argc, char*argv[])
   unsigned k0=0;
   for (unsigned k=0; k<blockcount_k; ++k)
   {
-    unsigned klen = vcl_min<unsigned long>(nk, k0+blockwidth_k)-k0; // Handle truncated last block.
+    unsigned klen = std::min<unsigned long>(nk, k0+blockwidth_k)-k0; // Handle truncated last block.
     unsigned j0=0;
     for (unsigned j=0; j<blockcount_j; ++j)
     {
-      unsigned jlen = vcl_min<unsigned long>(nj, j0+blockwidth_j)-j0;
+      unsigned jlen = std::min<unsigned long>(nj, j0+blockwidth_j)-j0;
       unsigned i0=0;
       for (unsigned i=0; i<blockcount_i; ++i)
       {
-        unsigned ilen = vcl_min<unsigned long>(ni, i0+blockwidth_i)-i0;
+        unsigned ilen = std::min<unsigned long>(ni, i0+blockwidth_i)-i0;
 
         vil3d_image_view_base_sptr block = ir->get_copy_view(i0, ilen, j0, jlen, k0, klen);
 
-        vcl_string filename;
+        std::string filename;
         if (label_seq())
           filename = vul_sprintf(filename_pattern.c_str(),
                                  i + j*blockcount_i + k*blockcount_i*blockcount_j );
@@ -183,7 +184,7 @@ int main2(int argc, char*argv[])
           block->pixel_format(), output_format.c_str());
         if (!ir2)
         {
-          vcl_cerr << "ERROR: Failed to create output image resource\n";
+          std::cerr << "ERROR: Failed to create output image resource\n";
           return 2;
         }
         vimt3d_transform_3d trans;
@@ -221,14 +222,14 @@ int main(int argc, char*argv[])
   {
     main2(argc, argv);
   }
-  catch (vcl_exception& e)
+  catch (std::exception& e)
   {
-    vcl_cout << "caught exception " << e.what() << vcl_endl;
+    std::cout << "caught exception " << e.what() << std::endl;
     return 3;
   }
   catch (...)
   {
-    vcl_cout << "caught unknown exception" << vcl_endl;
+    std::cout << "caught unknown exception" << std::endl;
     return 3;
   }
 

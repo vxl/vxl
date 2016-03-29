@@ -42,7 +42,7 @@ namespace
 // vgui_font_textured implementation.
 //-------------------------------------------------------------------------
 //: Constructor - from a font file (BMF font file only, for now).
-vgui_font_textured::vgui_font_textured(const vcl_string& font_file)
+vgui_font_textured::vgui_font_textured(const std::string& font_file)
   : display_list_base_id_(0)
   , texture_id_(0)
 {
@@ -90,13 +90,13 @@ void vgui_font_textured::gl_draw(unsigned int i) const
 }
 
 //: Draw a string of font symbols.
-void vgui_font_textured::draw(const vcl_string& str) const
+void vgui_font_textured::draw(const std::string& str) const
 {
   draw(str, 24);
 }
 
 //: Draw a string of font symbols.
-void vgui_font_textured::draw(const vcl_string& str,
+void vgui_font_textured::draw(const std::string& str,
                               unsigned int size) const
 {
   if (!display_list_base_id_) { return; }
@@ -125,15 +125,15 @@ void vgui_font_textured::draw(const vcl_string& str,
 }
 
 //: Load font from file.
-bool vgui_font_textured::load_bmf_font(const vcl_string &font_file)
+bool vgui_font_textured::load_bmf_font(const std::string &font_file)
 {
   // create and open the file
   vil_smart_ptr<vil_stream> stream
     = new vil_stream_fstream(font_file.c_str(), "r");
   if (!stream->ok())
   {
-    vcl_cerr << __FILE__ ":couldn't open font file:"
-             << font_file << vcl_endl;
+    std::cerr << __FILE__ ":couldn't open font file:"
+             << font_file << std::endl;
     return false;
   }
 
@@ -141,12 +141,12 @@ bool vgui_font_textured::load_bmf_font(const vcl_string &font_file)
   char format[3];
   if (stream->read(format, 3) != 3)
   {
-    vcl_cerr << __FILE__ ":couldn't read magic number!\n";
+    std::cerr << __FILE__ ":couldn't read magic number!\n";
     return false;
   }
-  if (vcl_string(format, 3) != "BMF")
+  if (std::string(format, 3) != "BMF")
   {
-    vcl_cerr << __FILE__ ":not a BMF file!\n";
+    std::cerr << __FILE__ ":not a BMF file!\n";
     return false;
   }
 
@@ -154,7 +154,7 @@ bool vgui_font_textured::load_bmf_font(const vcl_string &font_file)
   char font_name[96];
   if (stream->read(font_name, 96) != 96)
   {
-    vcl_cerr << __FILE__ ":couldn't read font name!\n";
+    std::cerr << __FILE__ ":couldn't read font name!\n";
     return false;
   }
 
@@ -185,7 +185,7 @@ bool vgui_font_textured::load_bmf_font(const vcl_string &font_file)
   }
   if (sum != 256*4*4) // 256 symbols * 4 floats * 4 bytes
   {
-    vcl_cerr << __FILE__ ":couldn't read symbol info!\n";
+    std::cerr << __FILE__ ":couldn't read symbol info!\n";
     return false;
   }
 

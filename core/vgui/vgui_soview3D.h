@@ -14,8 +14,9 @@
 // Notes:  We use floats instead of doubles as size is a speed issue (sic.)
 //
 
+#include <iosfwd>
 #include "vgui_soview.h"
-#include <vcl_iosfwd.h>
+#include <vcl_compiler.h>
 
 //: 3-dimensional spatial object view.
 class vgui_soview3D : public vgui_soview
@@ -34,8 +35,8 @@ class vgui_point3D : public vgui_soview3D
   vgui_point3D(float x_, float y_, float z_) : vgui_soview3D(), x(x_), y(y_), z(z_) {}
 
   virtual void draw() const;
-  virtual vcl_ostream& print(vcl_ostream&) const;
-  vcl_string type_name() const { return "vgui_point3D"; }
+  virtual std::ostream& print(std::ostream&) const;
+  std::string type_name() const { return "vgui_point3D"; }
 
   float x,y,z;
 };
@@ -51,8 +52,8 @@ class vgui_lineseg3D : public vgui_soview3D
     : x0(x0_), y0(y0_), z0(z0_), x1(x1_), y1(y1_), z1(z1_) {}
 
   virtual void draw() const;
-  virtual vcl_ostream& print(vcl_ostream&) const;
-  vcl_string type_name() const { return "vgui_lineseg3D"; }
+  virtual std::ostream& print(std::ostream&) const;
+  std::string type_name() const { return "vgui_lineseg3D"; }
 
   float x0, y0, z0, x1, y1, z1;
 };
@@ -71,8 +72,8 @@ class vgui_triangle3D : public vgui_soview3D
       x2(x2_), y2(y2_), z2(z2_) {}
 
   virtual void draw() const;
-  virtual vcl_ostream& print(vcl_ostream&) const;
-  vcl_string type_name() const { return "vgui_triangle3D"; }
+  virtual std::ostream& print(std::ostream&) const;
+  std::string type_name() const { return "vgui_triangle3D"; }
 
   float x0, y0, z0, x1, y1, z1, x2, y2, z2;
 };

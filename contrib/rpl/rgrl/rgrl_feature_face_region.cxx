@@ -1,8 +1,9 @@
 
+#include <iostream>
 #include "rgrl_feature_face_region.h"
 #include <rgrl/rgrl_transformation.h>
 #include <vnl/algo/vnl_svd.h>
-// not used? #include <vcl_iostream.h>
+// not used? #include <vcl_compiler.h>
 #include <vcl_cassert.h>
 #include <rgrl/rgrl_cast.h>
 #include <rgrl/rgrl_util.h>
@@ -128,7 +129,7 @@ generate_pixel_coordinates( vnl_vector< double > const& spacing_ratio )
 
   unsigned int dim = this -> location_ . size();
   vnl_matrix< double > tangents = this -> tangent_subspace();
-  vcl_vector< vnl_vector<double> > directions;
+  std::vector< vnl_vector<double> > directions;
   directions.reserve( dim );
 //    directions.push_back( this -> normal_ );
 

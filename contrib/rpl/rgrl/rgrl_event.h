@@ -6,8 +6,10 @@
 // \author  Charlene Tsai
 // \date    April 2004
 
+#include <iostream>
+#include <string>
 #include <vbl/vbl_ref_count.h>
-#include <vcl_string.h>
+#include <vcl_compiler.h>
 #include "rgrl_event_sptr.h"
 
 //: Event class provides a standard coding for sending and receiving messages.
@@ -33,7 +35,7 @@ class rgrl_event: public vbl_ref_count
   virtual ~rgrl_event() {}
 
   //: Return the string name associated with the event
-  virtual vcl_string name(void) const = 0;
+  virtual std::string name(void) const = 0;
 
   virtual bool is_same_type(rgrl_event const& e) const = 0;
 };
@@ -45,7 +47,7 @@ class rgrl_event: public vbl_ref_count
    classname() {} \
    classname(classname const& c) : rgrl_event(c) {} \
    virtual ~classname() {} \
-   virtual vcl_string name() const { return #classname; } \
+   virtual std::string name() const { return #classname; } \
    virtual bool is_same_type(rgrl_event const& e) const \
      { rgrl_event const* p=&e; return dynamic_cast<classname const*>(p) ? true : false; } \
  }

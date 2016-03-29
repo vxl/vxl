@@ -12,7 +12,9 @@
 //   Jun 22, 2009  I. Eden Added the method: interpolate_next
 // \endverbatim
 
-#include <vcl_vector.h>
+#include <iostream>
+#include <vector>
+#include <vcl_compiler.h>
 #include <vnl/vnl_double_3.h>
 #include <vnl/vnl_double_3x3.h>
 #include <vpgl/vpgl_perspective_camera.h>
@@ -88,7 +90,7 @@ class bpgl_interpolate
   // F. C. Park, B. Ravani,"Smooth invariant interpolation of rotations,"
   // ACM Transactions on Graphics, Vol. 16, No. 3, July 1997, pp. 277-295.
   //
-  static vcl_vector<vnl_double_3x3> interpolateR(vnl_double_3x3 R0,
+  static std::vector<vnl_double_3x3> interpolateR(vnl_double_3x3 R0,
                                                  vnl_double_3x3 R1,
                                                  unsigned n_between);
 
@@ -98,15 +100,15 @@ class bpgl_interpolate
                             vnl_double_3x3 R1,
                             vnl_double_3 t1,
                             unsigned n_between,
-                            vcl_vector<vnl_double_3x3>& Rintrp,
-                            vcl_vector<vnl_double_3>& tintrp);
+                            std::vector<vnl_double_3x3>& Rintrp,
+                            std::vector<vnl_double_3>& tintrp);
 
   //:Interpolate between two perspective cameras with the same K given that cam0 = K[R0|t0], cam1 = K[R1|t1]
   // The interpolation produces cameras on uniform intervals in Lie distance
   static bool interpolate(vpgl_perspective_camera<double> const& cam0,
                           vpgl_perspective_camera<double> const& cam1,
                           unsigned n_between,
-                          vcl_vector<vpgl_perspective_camera<double> >& cams);
+                          std::vector<vpgl_perspective_camera<double> >& cams);
 
   //:Linearly interpolate (or extrapolate if abs(alpha) > 1) a rotation
   // Using the Lie algebra about R0, the interpolated rotation = R0 + alpha*(R1 - R0)

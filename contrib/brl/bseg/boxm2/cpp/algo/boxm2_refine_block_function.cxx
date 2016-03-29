@@ -6,7 +6,7 @@
 
 
 //: initialize generic data base pointers as their data type
-bool boxm2_refine_block_function::init_data(boxm2_scene_sptr scene, boxm2_block* blk, vcl_vector<boxm2_data_base*> & datas, float prob_thresh)
+bool boxm2_refine_block_function::init_data(boxm2_scene_sptr scene, boxm2_block* blk, std::vector<boxm2_data_base*> & datas, float prob_thresh)
 {
     //store block and pointer to uchar16 3d block
     scene_ = scene;
@@ -22,7 +22,7 @@ bool boxm2_refine_block_function::init_data(boxm2_scene_sptr scene, boxm2_block*
     max_level_ = blk_->max_level();
 
     //max alpha integrated
-    max_alpha_int_ = -vcl_log(1.f - prob_thresh);
+    max_alpha_int_ = -std::log(1.f - prob_thresh);
 
     //Data length now is constant
     data_len_ = 65536;
@@ -32,7 +32,7 @@ bool boxm2_refine_block_function::init_data(boxm2_scene_sptr scene, boxm2_block*
 
     //USE rootlevel to determine MAX_INNER and MAX_CELLS
     if (max_level_ == 1) {
-      vcl_cout<<"Trying to refine scene with max level 1"<<vcl_endl;
+      std::cout<<"Trying to refine scene with max level 1"<<std::endl;
       return true;
     }
     else if (max_level_ == 2) {
@@ -45,12 +45,12 @@ bool boxm2_refine_block_function::init_data(boxm2_scene_sptr scene, boxm2_block*
       MAX_INNER_CELLS_=73, MAX_CELLS_=585;
     }
 
-    vcl_cout<<"Refine Info: [blk "<<blk->block_id()
+    std::cout<<"Refine Info: [blk "<<blk->block_id()
             <<"] [blk_len "<<block_len_
             <<"] [data_len "<<data_len_
             <<"] [max_alpha_int "<<max_alpha_int_
             <<"] [max level "<<max_level_
-            <<']'<<vcl_endl;
+            <<']'<<std::endl;
 
     //for debugging
     num_split_ = 0;
@@ -70,9 +70,9 @@ bool boxm2_refine_block_function::init_data(boxm2_scene_sptr scene, boxm2_block*
 //    - get a new data pointer (with newSize), will create CPU buffer and GPU buffer
 //    - Run refine_data_kernel with the two buffers
 //    - delete the old BOCL_MEM*, and that's it...
-bool boxm2_refine_block_function::refine_deterministic(vcl_vector<boxm2_data_base*>& datas)
+bool boxm2_refine_block_function::refine_deterministic(std::vector<boxm2_data_base*>& datas)
 {
-  vcl_cout<<"CPU deterministic refine:"<<vcl_endl;
+  std::cout<<"CPU deterministic refine:"<<std::endl;
 
   //loop over each tree, refine it in place (keep a vector of locations for
   // posterities sake
@@ -96,13 +96,13 @@ bool boxm2_refine_block_function::refine_deterministic(vcl_vector<boxm2_data_bas
       int newSize = refined_tree.num_cells();
 
       //cache refined tree
-      vcl_memcpy (trees_copy[currIndex].data_block(), refined_tree.get_bits(), 16);
+      std::memcpy (trees_copy[currIndex].data_block(), refined_tree.get_bits(), 16);
       dataSize += newSize;
   }
 
 
   //2. allocate new data arrays of the appropriate size
-  vcl_cout<<"Allocating new data blocks"<<vcl_endl;
+  std::cout<<"Allocating new data blocks"<<std::endl;
   boxm2_block_id id = datas[0]->block_id();
   boxm2_data_base* newA = new boxm2_data_base(new char[dataSize * sizeof(float) ], dataSize * sizeof(float), id);
   boxm2_data_base* newM = new boxm2_data_base(new char[dataSize * sizeof(uchar8)], dataSize * sizeof(uchar8), id);
@@ -112,7 +112,7 @@ bool boxm2_refine_block_function::refine_deterministic(vcl_vector<boxm2_data_bas
   ushort4* num_obs_cpy = (ushort4*) newN->data_buffer();
 
   //3. loop through tree again, putting the data in the right place
-  vcl_cout<<"Swapping data into new blocks..."<<vcl_endl;
+  std::cout<<"Swapping data into new blocks..."<<std::endl;
   int newInitCount = 0;
   currIndex = 0;
   for (blk_iter = trees.begin(); blk_iter != trees.end(); ++blk_iter, ++currIndex)
@@ -133,10 +133,10 @@ bool boxm2_refine_block_function::refine_deterministic(vcl_vector<boxm2_data_bas
       newInitCount += this->move_data(old_tree, refined_tree, alpha_cpy, mog_cpy, num_obs_cpy);
 
       //4. store old tree in new tree, swap data out
-      vcl_memcpy(blk_iter, refined_tree.get_bits(), 16);
+      std::memcpy(blk_iter, refined_tree.get_bits(), 16);
   }
   blk_->set_trees(trees);
-  vcl_cout<<"Number of new cells: "<<newInitCount<<vcl_endl;
+  std::cout<<"Number of new cells: "<<newInitCount<<std::endl;
 
   //3. Replace data in the cache
   boxm2_cache_sptr cache = boxm2_cache::instance();
@@ -253,7 +253,7 @@ int boxm2_refine_block_function::move_data(boct_bit_tree& unrefined_tree,
       int parentLevel = unrefined_tree.depth_at(pj);
       double side_len = block_len_ / double(1<<parentLevel);
       int dataIndex = unrefined_tree.get_data_index(pj, false);
-      alpha_cpy[newDataPtr]  = float(max_alpha_int_ / side_len); // (float(-vcl_log(1.0f - p_init_) / side_len));
+      alpha_cpy[newDataPtr]  = float(max_alpha_int_ / side_len); // (float(-std::log(1.0f - p_init_) / side_len));
 #if copy_parent_data_
       mog_cpy[newDataPtr]    = mog_[dataIndex];
 #else
@@ -283,7 +283,7 @@ int boxm2_refine_block_function::free_space(int startPtr, int endPtr)
 ////////////////////////////////////////////////////////////////////////////////
 void boxm2_refine_block( boxm2_scene_sptr scene,
                          boxm2_block* blk,
-                         vcl_vector<boxm2_data_base*> & datas,
+                         std::vector<boxm2_data_base*> & datas,
                          float prob_thresh,
                          bool is_random)
 {

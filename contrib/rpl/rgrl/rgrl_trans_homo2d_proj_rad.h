@@ -6,10 +6,12 @@
 // \date   March 2007
 // \brief  Represents a 2D homography plus radial distortion transformation.
 
+#include <iostream>
+#include <iosfwd>
 #include "rgrl_transformation.h"
 #include <rgrl/rgrl_est_proj_rad_func.h>
 #include <vnl/vnl_matrix_fixed.h>
-#include <vcl_iosfwd.h>
+#include <vcl_compiler.h>
 
 //: Represents a 2D homography plus radial distortion transformation.
 //  A transformation for x'_u=Hx, and x'_d = x'_u + k*radial_dist( x'_u )
@@ -18,7 +20,7 @@ class rgrl_trans_homo2d_proj_rad
     public rgrl_est_proj_rad_func<2, 2>
 {
   vnl_matrix_fixed<double,3,3> H_;
-  vcl_vector<double>           rad_k_;
+  std::vector<double>           rad_k_;
  public:
   //: Initialize to the identity matrix
   rgrl_trans_homo2d_proj_rad();
@@ -26,7 +28,7 @@ class rgrl_trans_homo2d_proj_rad
   //: Constructor based on an initial transformation and covar estimate
   //  The radial parameters are assumed to be unnormalized.
   rgrl_trans_homo2d_proj_rad( vnl_matrix_fixed<double, 3, 3> const& H,
-                              vcl_vector<double>             const & k,
+                              std::vector<double>             const & k,
                               vnl_vector_fixed< double, 2 >  const & image_centre );
 
   //: Constructor based on an initial transformation and unknown covar
@@ -36,7 +38,7 @@ class rgrl_trans_homo2d_proj_rad
   //: Construct a centered transform.
   //  The radial parameters are assumed to be unnormalized.
   rgrl_trans_homo2d_proj_rad( vnl_matrix_fixed<double, 3, 3> const& H,
-                              vcl_vector<double>             const & k,
+                              std::vector<double>             const & k,
                               vnl_vector_fixed< double, 2 >  const & image_centre,
                               vnl_matrix<double> const& covar,
                               vnl_vector<double> const& from_centre,
@@ -44,13 +46,13 @@ class rgrl_trans_homo2d_proj_rad
 
   //: Constructor based on an initial transformation and covar estimate
   //  The radial parameters are assumed to be normalized.
-  rgrl_trans_homo2d_proj_rad( vcl_vector<double>             const & norm_k,
+  rgrl_trans_homo2d_proj_rad( std::vector<double>             const & norm_k,
                               vnl_matrix_fixed<double, 3, 3> const& H,
                               vnl_vector_fixed< double, 2 >  const & image_centre );
 
   //: Construct a centered transform.
   //  The radial parameters are assumed to be normalized.
-  rgrl_trans_homo2d_proj_rad( vcl_vector<double>             const & norm_k,
+  rgrl_trans_homo2d_proj_rad( std::vector<double>             const & norm_k,
                               vnl_matrix_fixed<double, 3, 3> const& H,
                               vnl_vector_fixed< double, 2 >  const & image_centre,
                               vnl_matrix<double> const& covar,
@@ -74,10 +76,10 @@ class rgrl_trans_homo2d_proj_rad
   rgrl_type_macro( rgrl_trans_homo2d_proj_rad, rgrl_transformation );
 
   //: for output UNCENTERED transformation, with the origin as the center.
-  void write(vcl_ostream& os ) const;
+  void write(std::ostream& os ) const;
 
   //: for input
-  bool read(vcl_istream& is );
+  bool read(std::istream& is );
 
   //: make a clone copy
   rgrl_transformation_sptr clone() const;
@@ -86,11 +88,11 @@ class rgrl_trans_homo2d_proj_rad
   vnl_matrix_fixed<double, 3, 3> H() const;
 
   //: return unnormalized radial parameters
-  vcl_vector<double>
+  std::vector<double>
   radial_params() const;
 
   //: return the normalized radial parameters
-  vcl_vector<double> const&
+  std::vector<double> const&
   normalized_radial_params() const
   { return rad_k_; }
 
@@ -102,7 +104,7 @@ class rgrl_trans_homo2d_proj_rad
                 vnl_vector<double> const& from_dir,
                 vnl_vector<double>      & to_dir  ) const;
 
-  void set_up_rad_k(vcl_vector<double> const & rad_k);
+  void set_up_rad_k(std::vector<double> const & rad_k);
 };
 
 #endif // rgrl_trans_homo2d_proj_rad_h_

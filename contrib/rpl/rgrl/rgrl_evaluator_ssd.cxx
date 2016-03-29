@@ -7,9 +7,9 @@
 // Normalized SSD
 double
 rgrl_evaluator_ssd::
-evaluate( vcl_vector< double > const& a,
-          vcl_vector< double > const& b,
-          vcl_vector< double > const& weight ) const
+evaluate( std::vector< double > const& a,
+          std::vector< double > const& b,
+          std::vector< double > const& weight ) const
 {
   assert( a.size() == b.size() && a.size() > 2);
 
@@ -27,8 +27,8 @@ evaluate( vcl_vector< double > const& a,
     sigma_b += vnl_math::sqr( b[ i ] - mean_b );
   }
 
-  sigma_a = vcl_sqrt( sigma_a / (a.size()-1) );
-  sigma_b = vcl_sqrt( sigma_b / (b.size()-1) );
+  sigma_a = std::sqrt( sigma_a / (a.size()-1) );
+  sigma_b = std::sqrt( sigma_b / (b.size()-1) );
 
   double f = 0;
   double aa, bb;
@@ -46,7 +46,7 @@ evaluate( vcl_vector< double > const& a,
       bb = ( b[ i ] - mean_b ) / sigma_b;
 
     double ff = (double) vnl_math::sqr ( aa - bb ) / a.size();
-    f += weight[i] * vcl_sqrt ( ff );
+    f += weight[i] * std::sqrt ( ff );
   }
 
   return f;

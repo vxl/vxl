@@ -23,11 +23,11 @@ bool grid_to_vrml()
         (*grid_it)(i,j)=1.0f;
 
   //Write to VRML file
-  vcl_ofstream os("point_set.wrl");
+  std::ofstream os("point_set.wrl");
   bvrml_write::write_vrml_header(os);
   bvxm_vrml_voxel_grid::write_vrml_grid(os, grid, 0.2f);
 
-  vcl_ofstream os2("spheres.wrl");
+  std::ofstream os2("spheres.wrl");
   bvrml_write::write_vrml_header(os2);
   bvxm_vrml_voxel_grid::write_vrml_grid_as_spheres(os2, grid, 0.2f);
 
@@ -48,7 +48,7 @@ bool color_grid_to_vrml()
       for (unsigned j=0; j < (*grid_it).ny(); j=j+2)
         (*grid_it)(i,j)=vnl_float_4(255.0f, 0.0f, 0.0f, 255.0f);
 
-  vcl_ofstream os("color_spheres.wrl");
+  std::ofstream os("color_spheres.wrl");
   bvrml_write::write_vrml_header(os);
   bvxm_vrml_voxel_grid::write_vrml_grid_as_spheres(os, grid, 0.2f);
 
@@ -57,9 +57,9 @@ bool color_grid_to_vrml()
 
 static void test_bvxm_vrml()
 {
-  vcl_cout << "Grid to vrml\n";
+  std::cout << "Grid to vrml\n";
   grid_to_vrml();
-  vcl_cout << "Color Grid to vrml\n";
+  std::cout << "Color Grid to vrml\n";
   color_grid_to_vrml();
 }
 

@@ -14,7 +14,7 @@ bool vil_truncate_image_process_cons(bprb_func_process& pro)
 {
   //input
   bool ok=false;
-  vcl_vector<vcl_string> input_types(3);
+  std::vector<std::string> input_types(3);
   input_types[0] = "vil_image_view_base_sptr";
   input_types[1] = "float";   // min value
   input_types[2] = "float";   // max value
@@ -22,7 +22,7 @@ bool vil_truncate_image_process_cons(bprb_func_process& pro)
   if (!ok) return ok;
 
   //output
-  vcl_vector<vcl_string> output_types;
+  std::vector<std::string> output_types;
   output_types.push_back("vil_image_view_base_sptr");  // returns a truncated float image!!
   ok = pro.set_output_types(output_types);
   if (!ok) return ok;
@@ -35,7 +35,7 @@ bool vil_truncate_image_process(bprb_func_process& pro)
 
    // Sanity check
   if(!pro.verify_inputs()){
-    vcl_cerr << "vil_stretch_image_process: Invalid inputs" << vcl_endl;
+    std::cerr << "vil_stretch_image_process: Invalid inputs" << std::endl;
     return false;
   }
 
@@ -46,7 +46,7 @@ bool vil_truncate_image_process(bprb_func_process& pro)
   float min_value = pro.get_input<float>(1);
   float max_value = pro.get_input<float>(2);
   if(min_value>=max_value){
-    vcl_cerr << "vil_truncate_image_process: invalid truncate limits\n";
+    std::cerr << "vil_truncate_image_process: invalid truncate limits\n";
       return false;
   }
 

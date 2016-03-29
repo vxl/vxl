@@ -1,0 +1,22 @@
+#ifndef vipl_monadic_hxx_
+#define vipl_monadic_hxx_
+
+#include "vipl_monadic.h"
+
+template <class ImgIn,class ImgOut,class DataIn,class DataOut,class PixelItr>
+bool vipl_monadic <ImgIn,ImgOut,DataIn,DataOut,PixelItr> :: section_applyop()
+{
+  const ImgIn &in = this->in_data();
+  ImgOut &out = this->out_data();
+
+  int startx = vipl_filter<ImgIn,ImgOut,DataIn,DataOut,2,PixelItr>::start(this->X_Axis());
+  int starty = vipl_filter<ImgIn,ImgOut,DataIn,DataOut,2,PixelItr>::start(this->Y_Axis());
+  int stopx  = vipl_filter<ImgIn,ImgOut,DataIn,DataOut,2,PixelItr>::stop(this->X_Axis());
+  int stopy  = vipl_filter<ImgIn,ImgOut,DataIn,DataOut,2,PixelItr>::stop(this->Y_Axis());
+  for (int j = starty; j < stopy; ++j)
+    for (int i = startx; i < stopx; ++i)
+      fsetpixel(out, i, j, func()(fgetpixel(in, i, j, DataIn(0))));
+  return true;
+}
+
+#endif // vipl_monadic_hxx_

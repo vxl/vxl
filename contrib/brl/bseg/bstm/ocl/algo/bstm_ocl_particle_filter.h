@@ -10,6 +10,8 @@
 //          low ranking particles are eliminated.
 
 
+#include <iostream>
+#include <set>
 #include <bstm/ocl/bstm_opencl_cache.h>
 #include <bstm/bstm_scene.h>
 #include <bstm/bstm_block.h>
@@ -19,7 +21,7 @@
 #include <vnl/vnl_matrix_fixed.h>
 #include <vnl/vnl_random.h>
 #include <bbas/bsta/bsta_gaussian_indep.h>
-#include <vcl_set.h>
+#include <vcl_compiler.h>
 #include <vgl/algo/vgl_orient_box_3d.h>
 
 class bstm_ocl_particle_filter
@@ -27,7 +29,7 @@ class bstm_ocl_particle_filter
  public:
   bstm_ocl_particle_filter(bocl_device_sptr device, bstm_scene_sptr scene, bstm_cache_sptr cache, bstm_opencl_cache_sptr opencl_cache,
                            unsigned start_t, unsigned end_t, vgl_box_3d<double> initial_bb, int num_particles, double t_sigma, double w_sigma,
-                           vcl_string kernel_opt, int nbins, int label, double radius = 0 );
+                           std::string kernel_opt, int nbins, int label, double radius = 0 );
 
   virtual void track();
 
@@ -48,9 +50,9 @@ class bstm_ocl_particle_filter
 
   void propagate_particles(unsigned prev_time, unsigned curr_time);
 
-  vcl_vector<double> eval_mi(unsigned prev_time, unsigned cur_time);
+  std::vector<double> eval_mi(unsigned prev_time, unsigned cur_time);
 
-  vcl_vector<double> compute_mi_from_hist();
+  std::vector<double> compute_mi_from_hist();
 
   bool compile_kernel();
 
@@ -58,19 +60,19 @@ class bstm_ocl_particle_filter
   vgl_rotation_3d<double> angular_velocity_estimate(unsigned prev2_time, unsigned prev_time);
 
   void mean_state( unsigned t, vgl_vector_3d<double> & mean_T, vgl_rotation_3d<double>& mean_R);
-  vgl_rotation_3d<double> mean_rot( vcl_vector< vgl_rotation_3d<double> > rot, vcl_vector< double > weights );
+  vgl_rotation_3d<double> mean_rot( std::vector< vgl_rotation_3d<double> > rot, std::vector< double > weights );
   vgl_rotation_3d<double> sample_rot(vgl_rotation_3d<double> rot, double kappa , double w_sigma );
 
 
   //helper
-  void populate_blk_mapping(vcl_map<bstm_block_id, vcl_vector<bstm_block_id> > & mapping, const vgl_box_3d<double>& aabb, const vgl_rotation_3d<double>& r,
+  void populate_blk_mapping(std::map<bstm_block_id, std::vector<bstm_block_id> > & mapping, const vgl_box_3d<double>& aabb, const vgl_rotation_3d<double>& r,
                             const  vgl_vector_3d<double>& t, unsigned prev_time, unsigned curr_time);
 
   void write_particle_ocl_info(unsigned prev_time,unsigned cur_time );
 
-  vgl_box_3d<double> w_mean_bb( vcl_vector<vgl_orient_box_3d<double> > bb,  vcl_vector< double> weights);
+  vgl_box_3d<double> w_mean_bb( std::vector<vgl_orient_box_3d<double> > bb,  std::vector< double> weights);
 
-  vgl_orient_box_3d<double> best_bb( vcl_vector<vgl_orient_box_3d<double> > bb,  vcl_vector< double> weights,  vcl_vector< vgl_vector_3d<double> > T, vcl_vector< vgl_rotation_3d<double> > R);
+  vgl_orient_box_3d<double> best_bb( std::vector<vgl_orient_box_3d<double> > bb,  std::vector< double> weights,  std::vector< vgl_vector_3d<double> > T, std::vector< vgl_rotation_3d<double> > R);
 
   double survival_diagnostic(unsigned cur_time);
 
@@ -104,24 +106,24 @@ class bstm_ocl_particle_filter
   cl_uint app_view_dir_num_;
 
   //bb
-  vcl_vector< vcl_vector<vgl_orient_box_3d<double> > > bb_;
+  std::vector< std::vector<vgl_orient_box_3d<double> > > bb_;
   //mean bounding box
-  vcl_vector<vgl_box_3d<double> > mean_bb_;
+  std::vector<vgl_box_3d<double> > mean_bb_;
   //MI
-  vcl_vector< vcl_vector< double > > mi_;
+  std::vector< std::vector< double > > mi_;
   //Transformations
-  vcl_vector< vcl_vector< vgl_rotation_3d<double> > > R_;
-  vcl_vector< vcl_vector< vgl_rotation_3d<double> > > infrot_;
-  vcl_vector< vcl_vector< vgl_vector_3d<double> > > T_ ;
-  vcl_vector< vcl_vector< vgl_vector_3d<double> > > inft_ ;
+  std::vector< std::vector< vgl_rotation_3d<double> > > R_;
+  std::vector< std::vector< vgl_rotation_3d<double> > > infrot_;
+  std::vector< std::vector< vgl_vector_3d<double> > > T_ ;
+  std::vector< std::vector< vgl_vector_3d<double> > > inft_ ;
 
   //blk mappings
-  vcl_vector< vcl_vector< vcl_map<bstm_block_id, vcl_vector<bstm_block_id> > > > blk_map_;
+  std::vector< std::vector< std::map<bstm_block_id, std::vector<bstm_block_id> > > > blk_map_;
   //store all possible blk mappings
-  vcl_set< vcl_pair< bstm_block_id, bstm_block_id>  > global_blk_map_;
+  std::set< std::pair< bstm_block_id, bstm_block_id>  > global_blk_map_;
 
   //kernels
-  vcl_string kernel_opt_;
+  std::string kernel_opt_;
   bocl_kernel * kern_;
 
   //3d gaussians
@@ -160,7 +162,7 @@ class bstm_ocl_particle_filter
   bocl_mem_sptr target_blk_origin_;
   bocl_mem_sptr target_subblk_num_;
   bocl_mem_sptr scene_sub_block_len_;
-  vcl_vector<bocl_mem_sptr> particle_no_mems_;
+  std::vector<bocl_mem_sptr> particle_no_mems_;
 
   //tmp param
   float * app_hist_;

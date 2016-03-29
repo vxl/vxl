@@ -3,8 +3,10 @@
 #define boxm2_mog6_view_processor_h_
 
 
+#include <iostream>
+#include <vector>
 #include <vnl/vnl_vector_fixed.h>
-#include <vcl_vector.h>
+#include <vcl_compiler.h>
 
 class  boxm2_mog6_view_processor
 {

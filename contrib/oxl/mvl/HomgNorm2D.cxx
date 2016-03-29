@@ -5,21 +5,22 @@
 //:
 // \file
 
+#include <iostream>
 #include "HomgNorm2D.h"
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
 #include <vnl/vnl_math.h>
 #include <vgl/vgl_homg_point_2d.h>
 #include <vgl/algo/vgl_homg_operators_2d.h> // for matrix * vgl_homg_point_2d
 
 // ctor
-HomgNorm2D::HomgNorm2D(vcl_vector<vgl_homg_point_2d<double> > const& points, bool unit_omega):
+HomgNorm2D::HomgNorm2D(std::vector<vgl_homg_point_2d<double> > const& points, bool unit_omega):
   normalized_(points.size()),
   unit_omega_(unit_omega)
 {
   normalize(points);
 }
 
-HomgNorm2D::HomgNorm2D(const vcl_vector<HomgPoint2D>& points, bool unit_omega):
+HomgNorm2D::HomgNorm2D(const std::vector<HomgPoint2D>& points, bool unit_omega):
   normalized_(points.size()),
   unit_omega_(unit_omega)
 {
@@ -32,14 +33,14 @@ HomgNorm2D::~HomgNorm2D()
 }
 
 static bool paranoid = true;
-static void centre(const vcl_vector<HomgPoint2D>& in, vcl_vector<HomgPoint2D>& out, double* cx_out, double* cy_out);
-static void centre(vcl_vector<vgl_homg_point_2d<double> > const& in, vcl_vector<HomgPoint2D>& out, double&, double&);
-static double scale_xyroot2(const vcl_vector<HomgPoint2D>& in, vcl_vector<HomgPoint2D>& out);
+static void centre(const std::vector<HomgPoint2D>& in, std::vector<HomgPoint2D>& out, double* cx_out, double* cy_out);
+static void centre(std::vector<vgl_homg_point_2d<double> > const& in, std::vector<HomgPoint2D>& out, double&, double&);
+static double scale_xyroot2(const std::vector<HomgPoint2D>& in, std::vector<HomgPoint2D>& out);
 
 //: Put the cog at the origin.
 // Scale x,y so that mean (x^2 + y^2) = 2 when z = 1.
 
-void HomgNorm2D::normalize(vcl_vector<vgl_homg_point_2d<double> > const& points)
+void HomgNorm2D::normalize(std::vector<vgl_homg_point_2d<double> > const& points)
 {
   // from ho_trivechomg_normalise
   normalized_.resize(points.size());
@@ -49,7 +50,7 @@ void HomgNorm2D::normalize(vcl_vector<vgl_homg_point_2d<double> > const& points)
 
   double diameter = scale_xyroot2(normalized_, normalized_);
   if (diameter == 0) {
-    vcl_cerr << "HomgNorm2D: All points coincident\n";
+    std::cerr << "HomgNorm2D: All points coincident\n";
     diameter = 1;
     was_coincident_=true;
   }
@@ -66,7 +67,7 @@ void HomgNorm2D::normalize(vcl_vector<vgl_homg_point_2d<double> > const& points)
       ni[0] -= mi.x(); ni[1] -= mi.y(); ni[2] -= mi.w();
       double l = ni.magnitude();
       if (l > 1e-12) {
-        vcl_cerr << "HomgNorm2D: "
+        std::cerr << "HomgNorm2D: "
                  << "d = " << diameter
                  << ", ni = " << normalized_[i].get_vector()
                  << ", mi = " << mi
@@ -87,7 +88,7 @@ void HomgNorm2D::normalize(vcl_vector<vgl_homg_point_2d<double> > const& points)
       if (w == 0) {
         /* average magnitude of finite points is root(3) after this stage - do the same for pts at infinity. */
 
-        double scaling = vcl_sqrt(3.0) / vnl_math::hypot(x, y);
+        double scaling = std::sqrt(3.0) / vnl_math::hypot(x, y);
         x *= scaling;
         y *= scaling;
       }
@@ -101,14 +102,14 @@ void HomgNorm2D::normalize(vcl_vector<vgl_homg_point_2d<double> > const& points)
   }
 }
 
-void HomgNorm2D::normalize(const vcl_vector<HomgPoint2D>& points)
+void HomgNorm2D::normalize(const std::vector<HomgPoint2D>& points)
 {
   // from ho_trivechomg_normalise
   normalized_.resize(points.size());
 
 #if 0
   for (unsigned i = 0; i < points.size(); ++i)
-    vcl_cerr << points[i].get_vector() << '\n';
+    std::cerr << points[i].get_vector() << '\n';
 #endif
 
   double cx, cy;
@@ -116,7 +117,7 @@ void HomgNorm2D::normalize(const vcl_vector<HomgPoint2D>& points)
 
   double diameter = scale_xyroot2(normalized_, normalized_);
   if (diameter == 0) {
-    vcl_cerr << "HomgNorm2D: All points coincident\n";
+    std::cerr << "HomgNorm2D: All points coincident\n";
     diameter = 1;
     was_coincident_=true; // FSM
   }
@@ -125,7 +126,7 @@ void HomgNorm2D::normalize(const vcl_vector<HomgPoint2D>& points)
 
   SimilarityMetric::set_center_and_scale(cx, cy, 1/diameter);
 
-  //vcl_cerr << "NORM = " << norm_matrix_ << '\n';
+  //std::cerr << "NORM = " << norm_matrix_ << '\n';
   if (paranoid) {
     SimilarityMetric::scale_matrices(1/diameter);
     for (unsigned i = 0; i < points.size(); ++i) {
@@ -134,13 +135,13 @@ void HomgNorm2D::normalize(const vcl_vector<HomgPoint2D>& points)
       vnl_double_3 residual = ni - mi;
       double l = residual.magnitude();
       if (l > 1e-12) {
-     // vcl_cerr << "\n\n";
-        vcl_cerr << "HomgNorm2D: "
+     // std::cerr << "\n\n";
+        std::cerr << "HomgNorm2D: "
                  << "d = " << diameter
                  << "ni = " << ni
                  << "mi = " << mi
                  << "Residual = " << residual
-                 << " mag = " << l << vcl_endl;
+                 << " mag = " << l << std::endl;
       }
     }
   }
@@ -156,7 +157,7 @@ void HomgNorm2D::normalize(const vcl_vector<HomgPoint2D>& points)
       if (w == 0) {
         /* average magnitude of finite points is root(3) after this stage - do the same for pts at infinity. */
 
-        double scaling = vcl_sqrt(3.0) / vnl_math::hypot(x, y);
+        double scaling = std::sqrt(3.0) / vnl_math::hypot(x, y);
         x *= scaling;
         y *= scaling;
       }
@@ -170,8 +171,8 @@ void HomgNorm2D::normalize(const vcl_vector<HomgPoint2D>& points)
   }
 }
 
-static void centre(const vcl_vector<HomgPoint2D>& in,
-                   vcl_vector<HomgPoint2D>& out,
+static void centre(const std::vector<HomgPoint2D>& in,
+                   std::vector<HomgPoint2D>& out,
                    double *cx, double *cy)
 {
   // Compute center of mass
@@ -222,12 +223,12 @@ static void centre(const vcl_vector<HomgPoint2D>& in,
       }
     }
     if (vnl_math::hypot(cog_x, cog_y) > 1e-10)
-      vcl_cerr << "HomgNorm2D: expected (0,0) computed (" << cog_x << ',' << cog_y << ")\n";
+      std::cerr << "HomgNorm2D: expected (0,0) computed (" << cog_x << ',' << cog_y << ")\n";
   }
 }
 
-static void centre(vcl_vector<vgl_homg_point_2d<double> > const& in,
-                   vcl_vector<HomgPoint2D>& out,
+static void centre(std::vector<vgl_homg_point_2d<double> > const& in,
+                   std::vector<HomgPoint2D>& out,
                    double& cx, double& cy)
 {
   // Compute center of mass
@@ -278,15 +279,15 @@ static void centre(vcl_vector<vgl_homg_point_2d<double> > const& in,
       }
     }
     if (vnl_math::hypot(cog_x, cog_y) > 1e-10)
-      vcl_cerr << "HomgNorm2D: expected (0,0) computed (" << cog_x << ',' << cog_y << ")\n";
+      std::cerr << "HomgNorm2D: expected (0,0) computed (" << cog_x << ',' << cog_y << ")\n";
   }
 }
 
-// - Scale the x and y components so that the average bivec magnitude is vcl_sqrt(2).
+// - Scale the x and y components so that the average bivec magnitude is std::sqrt(2).
 // Scale x,y so that mean (x^2 + y^2) = 2 when z = 1.
 
-static double scale_xyroot2(const vcl_vector<HomgPoint2D>& in,
-                            vcl_vector<HomgPoint2D>& out)
+static double scale_xyroot2(const std::vector<HomgPoint2D>& in,
+                            std::vector<HomgPoint2D>& out)
 {
   double magnitude = 0;
   unsigned numfinite = 0;
@@ -303,7 +304,7 @@ static double scale_xyroot2(const vcl_vector<HomgPoint2D>& in,
   double diameter = 1;
   if (numfinite > 0) {
     magnitude /= (double) numfinite;
-    diameter = magnitude / vcl_sqrt(2.0);
+    diameter = magnitude / std::sqrt(2.0);
   }
 
   // Scale the points
@@ -324,9 +325,9 @@ static double scale_xyroot2(const vcl_vector<HomgPoint2D>& in,
       }
     }
     if (numfinite > 0) magnitude /= numfinite;
-    const double expected = vcl_sqrt(2.0);
+    const double expected = std::sqrt(2.0);
     if (vnl_math::abs(expected - magnitude) > 1e-13) // 1e-14 gave false alarm -- fsm
-      vcl_cerr << "HomgNorm2D: Expected magnitude " << expected << " computed magnitude " << magnitude << '\n';
+      std::cerr << "HomgNorm2D: Expected magnitude " << expected << " computed magnitude " << magnitude << '\n';
   }
 
   // Return

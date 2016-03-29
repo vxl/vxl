@@ -1,15 +1,16 @@
 //:
 // \file
+#include <iostream>
+#include <cmath>
+#include <fstream>
 #include <testlib/testlib_test.h>
-#include <vcl_cmath.h>
+#include <vcl_compiler.h>
 #include <bsta/bsta_histogram.h>
 #include <bsta/bsta_joint_histogram.h>
 #include <bsta/bsta_joint_histogram_3d.h>
 #include <bsta/bsta_int_histogram_1d.h>
 #include <bsta/bsta_int_histogram_2d.h>
 #include <vpl/vpl.h>
-#include <vcl_iostream.h>
-#include <vcl_fstream.h>
 #include <bsta/io/bsta_io_histogram.h>
 #include <vsl/vsl_binary_io.h>
 
@@ -21,13 +22,13 @@
 static void test_int_hist()
 {
   bsta_int_histogram_1d h1d(50);
-  vcl_cout << "Num 1d bins "  << h1d.get_nbins() << '\n';
+  std::cout << "Num 1d bins "  << h1d.get_nbins() << '\n';
   TEST("Test No Bins 1d", h1d.get_nbins(), 50);
   for (unsigned k = 0; k<50; ++k)
     h1d.set_count(k, k*k);
   unsigned int index;
   unsigned long int max_value = h1d.get_max_val(index);
-  vcl_cout << "Max value " << max_value << " at index " << index << '\n';
+  std::cout << "Max value " << max_value << " at index " << index << '\n';
 
   bsta_int_histogram_2d h2d(50, 50);
 
@@ -46,7 +47,7 @@ void test_bsta_histogram()
   double v = 0.0;
   for (int b =0; b<bins; b++, v+=delta)
     h.upcount(v, 1.0);
-  vcl_cout << "Bins\n";
+  std::cout << "Bins\n";
   h.print();
   double area = h.area();
   double fraction_below = h.fraction_below(33.0);
@@ -61,17 +62,17 @@ void test_bsta_histogram()
   TEST_NEAR("value_above"   , value_above ,   56.0+32, 1e-9);
 
   //Test data constructor
-  vcl_vector<double> data(16, 1.0);
+  std::vector<double> data(16, 1.0);
   bsta_histogram<double> hdata(0, 128, data);
   hdata.upcount(32,1);
-  vcl_cout << "Bins\n";
+  std::cout << "Bins\n";
   hdata.print();
-  vcl_cout << "p(32) " << hdata.p(32.0) << '\n';
+  std::cout << "p(32) " << hdata.p(32.0) << '\n';
   TEST_NEAR("test data constructor p(32.0)", hdata.p(32.0), 0.117647, 1e-6);
 
   //Test entropy
   double ent = h.entropy();
-  vcl_cout << "Uniform Entropy for " << bins << " bins = " << ent  << " bits.\n";
+  std::cout << "Uniform Entropy for " << bins << " bins = " << ent  << " bits.\n";
   TEST_NEAR("test histogram uniform distribution entropy", ent, 31.0/8, 1e-9);
 
   //Joint Histogram Tests
@@ -84,8 +85,8 @@ void test_bsta_histogram()
       jh.upcount(va, 1.0, vb, 1.0);
   }
   double jent = jh.entropy();
-  vcl_cout << "Uniform Joint Entropy for " << bins*bins << " bins = " << jent  << " bits.\n";
-  vcl_ofstream of("joint_out.out");
+  std::cout << "Uniform Joint Entropy for " << bins*bins << " bins = " << jent  << " bits.\n";
+  std::ofstream of("joint_out.out");
   jh.print_to_m(of);
   of.close();
 
@@ -93,7 +94,7 @@ void test_bsta_histogram()
   for (int a =0; a<bins; a++, va+=delta) {
     double avg, var;
     jh.avg_and_variance_bin_for_row_a(a, avg, var);
-    vcl_cout << "avg: " << avg << " var: " << var << vcl_endl;
+    std::cout << "avg: " << avg << " var: " << var << std::endl;
 
     bsta_gauss_sf1 g(static_cast<float>(avg), static_cast<float>(var));
     for (int b = 0; b < bins; b++) {
@@ -101,7 +102,7 @@ void test_bsta_histogram()
       new_jh.upcount(static_cast<float>((a+1)*delta), 0.0f, static_cast<float>((b+1)*delta), b_val);
     }
   }
-  vcl_ofstream of2("joint_out_new.out");
+  std::ofstream of2("joint_out_new.out");
   new_jh.print_to_m(of2);
   of2.close();
 
@@ -152,10 +153,10 @@ void test_bsta_histogram()
   float err3d = pbin+bval+volume - 5.0f;
   TEST_NEAR("3-d histogram", err3d, 0.0f, 0.00001f);
   bsta_joint_histogram_3d<float> hist_3d(1.0, 10, 1.0, 10, 1.0, 10);
-  vcl_string hpath = "./test_3d_hist_plot.wrl";
+  std::string hpath = "./test_3d_hist_plot.wrl";
   hist_3d.upcount(0.5,1.0, 0.5,1.0, 0.5,1.0);
   hist_3d.upcount(0.25,1.0, 0.25, 1.0, 0.25, 1.0);
-  vcl_ofstream os_3d(hpath.c_str());
+  std::ofstream os_3d(hpath.c_str());
   if (os_3d.is_open()){
     hist_3d.print_to_vrml(os_3d);
     os_3d.close();

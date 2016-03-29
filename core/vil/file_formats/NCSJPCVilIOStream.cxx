@@ -1,8 +1,9 @@
+#include <sstream>
+#include <string>
+#include <limits>
 #include "NCSJPCVilIOStream.h"
-#include <vcl_sstream.h>
 #include <vil/vil_stream.h>
-#include <vcl_string.h>
-#include <vcl_limits.h>
+#include <vcl_compiler.h>
 #undef max
 #undef min
 // Do not remove the following notice
@@ -12,8 +13,8 @@
 
 unsigned short CNCSJPCVilIOStream::mId = 0;//initialize static id variable
   //vil_streams can only hand 32 bit offsets (unless large file support is on)
-  static const vil_streampos maxVilStreamPos = vcl_numeric_limits< vil_streampos >::max();
-  static const vil_streampos minVilStreamPos = vcl_numeric_limits< vil_streampos >::min();
+  static const vil_streampos maxVilStreamPos = std::numeric_limits< vil_streampos >::max();
+  static const vil_streampos minVilStreamPos = std::numeric_limits< vil_streampos >::min();
 
 CNCSJPCVilIOStream::CNCSJPCVilIOStream()
   : mVilStream( 0 ),
@@ -29,13 +30,13 @@ CNCSError CNCSJPCVilIOStream::Open( vil_stream* stream, bool bWrite)
   mVilStream = stream;
   mVilStream->ref();
   mHomePos = stream->tell();
-  vcl_stringstream str;
+  std::stringstream str;
   str << "name " << mId++;
-  vcl_string nm = str.str();
+  std::string nm = str.str();
   unsigned n = nm.size();
   char* name = new char[n+1];
   unsigned i = 0;
-  for(vcl_string::iterator sit = nm.begin(); sit !=nm.end(); ++sit, ++i)
+  for(std::string::iterator sit = nm.begin(); sit !=nm.end(); ++sit, ++i)
     name[i]=*sit;
   name[n]='\0';
   *(CNCSError*)this = CNCSJPCIOStream::Open(name, bWrite);
@@ -65,9 +66,9 @@ bool CNCSJPCVilIOStream::Seek(INT64 offset, Origin origin )
 {
 #undef max
 #undef min
-  //static const INT64 maxInt64 = vcl_numeric_limits< INT64 >::max();
-//NOT USED  static const vil_streampos maxVilStreamPos = vcl_numeric_limits< vil_streampos >::max();
-//NOT USED  static const vil_streampos minVilStreamPos = vcl_numeric_limits< vil_streampos >::min();
+  //static const INT64 maxInt64 = std::numeric_limits< INT64 >::max();
+//NOT USED  static const vil_streampos maxVilStreamPos = std::numeric_limits< vil_streampos >::max();
+//NOT USED  static const vil_streampos minVilStreamPos = std::numeric_limits< vil_streampos >::min();
 
   INT64 absoluteOffset = mHomePos;
   switch ( origin )

@@ -9,10 +9,11 @@
 //  Modifications none
 // \endverbatim
 
+#include <iostream>
+#include <vector>
 #include <vsl/vsl_binary_io.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
 #include <vsph/vsph_sph_point_2d.h>
-#include <vcl_vector.h>
 #include <vgl/vgl_vector_3d.h>
 
 //: An axis-aligned box on the unit sphere.
@@ -114,28 +115,28 @@ class vsph_sph_box_2d
 
   //:subdivide box into potentially a 2x2 set of sub-boxes. Don't subdivide
   // along a given axis if resulting angular range is less than min_ang
-  bool sub_divide(vcl_vector<vsph_sph_box_2d>& sub_boxes,
+  bool sub_divide(std::vector<vsph_sph_box_2d>& sub_boxes,
                   double min_ang = 0.035) const;
 
   //: decompose box into approximately planar quadrilaterals
-  void planar_quads(vcl_vector<vgl_vector_3d<double> >& verts,
-                    vcl_vector<vcl_vector<int> >& quads,
+  void planar_quads(std::vector<vgl_vector_3d<double> >& verts,
+                    std::vector<std::vector<int> >& quads,
                     double tol = 0.01) const;
 
   //: display the box as a set of planar quadrilaterals in vrml
-  void display_box(vcl_ostream& os, float r, float g, float b,
+  void display_box(std::ostream& os, float r, float g, float b,
                    double tol = 0.01,
                    double factor =1.0) const;
 
   //: display a set of boxes
-  static void display_boxes(vcl_string const& path,
-                            vcl_vector<vsph_sph_box_2d> const& boxes,
-                            vcl_vector<vcl_vector<float> > colors,
+  static void display_boxes(std::string const& path,
+                            std::vector<vsph_sph_box_2d> const& boxes,
+                            std::vector<std::vector<float> > colors,
                             double tol = 0.01,
                             double factor =1.0);
 
   //: support for binary I/O
-  void print(vcl_ostream& os, bool in_radians = false) const;
+  void print(std::ostream& os, bool in_radians = false) const;
 
   void b_read(vsl_b_istream& is);
 
@@ -177,11 +178,11 @@ class vsph_sph_box_2d
 //: return a box that represents the intersection of two boxes (could be empty)
 // note that it is possible to have two disjoint intervals in phi (2 boxes)
 bool intersection(vsph_sph_box_2d const& b1, vsph_sph_box_2d const& b2,
-                  vcl_vector<vsph_sph_box_2d>& boxes);
+                  std::vector<vsph_sph_box_2d>& boxes);
 
 //: return the area of the intersection
 double intersection_area(vsph_sph_box_2d const& b1, vsph_sph_box_2d const& b2);
 
-vcl_ostream& operator<<(vcl_ostream& os, vsph_sph_box_2d const& p);
+std::ostream& operator<<(std::ostream& os, vsph_sph_box_2d const& p);
 
 #endif //vsph_sph_box_2d_h_

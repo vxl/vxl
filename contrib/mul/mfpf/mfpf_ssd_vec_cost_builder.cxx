@@ -1,3 +1,6 @@
+#include <iostream>
+#include <algorithm>
+#include <sstream>
 #include "mfpf_ssd_vec_cost_builder.h"
 //:
 // \file
@@ -8,8 +11,7 @@
 #include <vsl/vsl_binary_loader.h>
 #include <vul/vul_string.h>
 #include <vcl_cassert.h>
-#include <vcl_algorithm.h>
-#include <vcl_sstream.h>
+#include <vcl_compiler.h>
 
 #include <mbl/mbl_parse_block.h>
 #include <mbl/mbl_read_props.h>
@@ -68,7 +70,7 @@ inline void abs_diff(const vnl_vector<double>& v1,
 {
   unsigned n = v1.size();
   dv.set_size(n);
-  for (unsigned i=0;i<n;++i) dv[i]=vcl_fabs(v1[i]-v2[i]);
+  for (unsigned i=0;i<n;++i) dv[i]=std::fabs(v1[i]-v2[i]);
 }
 
 //: Build this object from the data supplied in add_example()
@@ -107,7 +109,7 @@ void mfpf_ssd_vec_cost_builder::build(mfpf_vec_cost& pf)
   for (unsigned i=0;i<mean.size();++i)
   {
     double mad = dv_sum[i]/n;
-    wts[i]=1.0/vcl_max(min_var_,mad*mad);
+    wts[i]=1.0/std::max(min_var_,mad*mad);
   }
 
   nc.set(mean,wts);
@@ -130,11 +132,11 @@ void mfpf_ssd_vec_cost_builder::build(mfpf_vec_cost& pf)
 // Method: set_from_stream
 //=======================================================================
 //: Initialise from a string stream
-bool mfpf_ssd_vec_cost_builder::set_from_stream(vcl_istream &is)
+bool mfpf_ssd_vec_cost_builder::set_from_stream(std::istream &is)
 {
   // Cycle through string and produce a map of properties
-  vcl_string s = mbl_parse_block(is);
-  vcl_istringstream ss(s);
+  std::string s = mbl_parse_block(is);
+  std::istringstream ss(s);
   mbl_read_props_type props = mbl_read_props_ws(ss);
 
   set_defaults();
@@ -156,9 +158,9 @@ bool mfpf_ssd_vec_cost_builder::set_from_stream(vcl_istream &is)
 // Method: is_a
 //=======================================================================
 
-vcl_string mfpf_ssd_vec_cost_builder::is_a() const
+std::string mfpf_ssd_vec_cost_builder::is_a() const
 {
-  return vcl_string("mfpf_ssd_vec_cost_builder");
+  return std::string("mfpf_ssd_vec_cost_builder");
 }
 
 //: Create a copy on the heap and return base class pointer
@@ -171,7 +173,7 @@ mfpf_vec_cost_builder* mfpf_ssd_vec_cost_builder::clone() const
 // Method: print
 //=======================================================================
 
-void mfpf_ssd_vec_cost_builder::print_summary(vcl_ostream& os) const
+void mfpf_ssd_vec_cost_builder::print_summary(std::ostream& os) const
 {
   os << "{ min_var: " << min_var_ << " }";
 }
@@ -206,9 +208,9 @@ void mfpf_ssd_vec_cost_builder::b_read(vsl_b_istream& bfs)
       vsl_b_read(bfs,data_);
       break;
     default:
-      vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&)\n"
-               << "           Unknown version number "<< version << vcl_endl;
-      bfs.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
+      std::cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&)\n"
+               << "           Unknown version number "<< version << std::endl;
+      bfs.is().clear(std::ios::badbit); // Set an unrecoverable IO error on stream
       return;
   }
 }

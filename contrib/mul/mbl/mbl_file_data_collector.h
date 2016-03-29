@@ -6,11 +6,13 @@
 // \brief Collect data objects and store them in a file.
 // \author dac
 
+#include <string>
+#include <iostream>
+#include <iosfwd>
 #include <mbl/mbl_data_collector.h>
 #include <mbl/mbl_file_data_wrapper.h>
 #include <vsl/vsl_binary_io.h>
-#include <vcl_string.h>
-#include <vcl_iosfwd.h>
+#include <vcl_compiler.h>
 
 //: Collect data objects and store them in a file.
 template<class T>
@@ -20,7 +22,7 @@ class mbl_file_data_collector : public mbl_data_collector<T>
   vsl_b_ofstream *bfs_;
 
   //: path to binary data stream
-  vcl_string path_;
+  std::string path_;
 
   //: wrapper object point to same file (return reference to this object!)
   mbl_file_data_wrapper<T>* wrapper_;
@@ -28,7 +30,7 @@ class mbl_file_data_collector : public mbl_data_collector<T>
  public:
 
   //: Constructor
-  mbl_file_data_collector( const vcl_string & path );
+  mbl_file_data_collector( const std::string & path );
 
 //#if 0
   // Copy constructor
@@ -63,16 +65,16 @@ class mbl_file_data_collector : public mbl_data_collector<T>
   short version_no() const;
 
   //: Name of the class
-  virtual vcl_string is_a() const;
+  virtual std::string is_a() const;
 
   //: Does the name of the class match the argument?
-  virtual bool is_class(vcl_string const& s) const;
+  virtual bool is_class(std::string const& s) const;
 
   //: Create a copy on the heap and return base class pointer
   virtual mbl_data_collector_base* clone() const;
 
   //: Print class to os
-  virtual void print_summary(vcl_ostream& os) const;
+  virtual void print_summary(std::ostream& os) const;
 
   //: Save class to binary file stream
   virtual void b_write(vsl_b_ostream& bfs) const;

@@ -16,9 +16,11 @@
 // \endverbatim
 //*****************************************************************************
 
+#include <iostream>
+#include <string>
 #include "bwm_observable.h"
 
-#include <vcl_string.h>
+#include <vcl_compiler.h>
 
 #include <vgl/vgl_point_3d.h>
 #include <vsol/vsol_point_3d_sptr.h>
@@ -30,7 +32,7 @@ class bwm_observable_point : public bwm_observable
   bwm_observable_point() : object_(0) {}
   ~bwm_observable_point() {}
 
-  vcl_string type_name() const { return "bwm_observable_point"; }
+  std::string type_name() const { return "bwm_observable_point"; }
 
   bwm_observable_point(const vsol_point_3d_sptr p) { object_ = p; }
 

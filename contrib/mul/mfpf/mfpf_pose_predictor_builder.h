@@ -5,9 +5,11 @@
 // \brief Trains regressor in an mfpf_pose_predictor
 // \author Tim Cootes
 
+#include <iostream>
+#include <iosfwd>
 #include <mfpf/mfpf_pose_predictor.h>
 #include <vnl/vnl_random.h>
-#include <vcl_iosfwd.h>
+#include <vcl_compiler.h>
 
 //: Trains regressor in an mfpf_pose_predictor.
 //  Object set up with a pose predictor which has been
@@ -72,16 +74,16 @@ class mfpf_pose_predictor_builder
   short version_no() const;
 
   //: Name of the class
-  virtual vcl_string is_a() const;
+  virtual std::string is_a() const;
 
   //: Create a copy on the heap and return base class pointer
   virtual mfpf_pose_predictor_builder* clone() const;
 
   //: Print class to os
-  virtual void print_summary(vcl_ostream& os) const;
+  virtual void print_summary(std::ostream& os) const;
 
   //: Prints ASCII representation of shape to os
-  void print_shape(vcl_ostream& os) const;
+  void print_shape(std::ostream& os) const;
 
   //: Save class to binary file stream
   virtual void b_write(vsl_b_ostream& bfs) const;
@@ -102,7 +104,7 @@ void vsl_b_read(vsl_b_istream& bfs,
                 mfpf_pose_predictor_builder& b);
 
 //: Stream output operator for class reference
-vcl_ostream& operator<<(vcl_ostream& os,
+std::ostream& operator<<(std::ostream& os,
                         const mfpf_pose_predictor_builder& b);
 
 #endif

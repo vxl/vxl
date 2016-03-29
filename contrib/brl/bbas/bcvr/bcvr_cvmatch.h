@@ -36,9 +36,9 @@ double curve_angleDiff (double a1, double a2);
 
 double  curve_maxof (double a, double b, double c);
 
-typedef vcl_vector< vcl_vector<double> >            DPCostType;
-typedef vcl_vector< vcl_vector< vcl_pair <int,int> > >  DPMapType;
-typedef vcl_vector< vcl_pair<int,int> >            FinalMapType;
+typedef std::vector< std::vector<double> >            DPCostType;
+typedef std::vector< std::vector< std::pair <int,int> > >  DPMapType;
+typedef std::vector< std::pair<int,int> >            FinalMapType;
 
 class bcvr_cvmatch : public vbl_ref_count
 {
@@ -48,16 +48,16 @@ class bcvr_cvmatch : public vbl_ref_count
   bsol_intrinsic_curve_2d_sptr    curve2_;
 
   DPCostType        DPCost_;          //DPMap of cost: n*m array of double
-  DPMapType        DPMap_;          //DPMap of prev point vcl_map: n*m array of vcl_pair of index
+  DPMapType        DPMap_;          //DPMap of prev point std::map: n*m array of std::pair of index
   FinalMapType      finalMap_;        //alignment curve
-  vcl_vector<double>  finalMapCost_;      //cost on alignment curve
+  std::vector<double>  finalMapCost_;      //cost on alignment curve
   double          finalCost_;        //final cost
 
   double  R_;
   bool normalized_stretch_cost_;
   int template_size_;
-  vcl_vector<int> XOFFSET;
-  vcl_vector<int> YOFFSET;
+  std::vector<int> XOFFSET;
+  std::vector<int> YOFFSET;
 
  public:
 
@@ -65,7 +65,7 @@ class bcvr_cvmatch : public vbl_ref_count
   DPCostType*        DPCost()      { return &DPCost_; }
   DPMapType*        DPMap()      { return &DPMap_; }
   FinalMapType*      finalMap()    { return &finalMap_; }
-  vcl_vector<double>*  finalMapCost() { return &finalMapCost_; }
+  std::vector<double>*  finalMapCost() { return &finalMapCost_; }
   double          finalCost()    { return finalCost_; }
 
   int getFMapFirst (int i) {
@@ -77,7 +77,7 @@ class bcvr_cvmatch : public vbl_ref_count
     return (*finalMap())[i].second;
   }
 
-  vcl_string    fileName1_, fileName2_;
+  std::string    fileName1_, fileName2_;
   bsol_intrinsic_curve_2d_sptr curve1() { return curve1_; }
   bsol_intrinsic_curve_2d_sptr curve2() { return curve2_; }
   void setCurve1 (const bsol_intrinsic_curve_2d_sptr& c1) {
@@ -94,7 +94,7 @@ class bcvr_cvmatch : public vbl_ref_count
     finalMap_ = map;
   }
 
-  void setFinalMapCost (vcl_vector<double>* map) {
+  void setFinalMapCost (std::vector<double>* map) {
     finalMapCost_ = *map;
   }
 

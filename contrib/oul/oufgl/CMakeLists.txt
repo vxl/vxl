@@ -14,9 +14,7 @@ set(oufgl_sources
     frame_grabber.h
 )
 
-add_library(oufgl ${oufgl_sources})
-install_targets(/lib oufgl)
-INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/oul/oufgl ${oufgl_sources})
+vxl_add_library(LIBRARY_NAME oufgl LIBRARY_SOURCES ${oufgl_sources})
 target_link_libraries( oufgl ${VXL_LIB_PREFIX}vil ${VXL_LIB_PREFIX}vil1 rt)
 
 if( BUILD_TESTING )

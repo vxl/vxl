@@ -1,3 +1,5 @@
+#include <iostream>
+#include <cmath>
 #include "vsph_camera_bounds.h"
 #include <bpgl/algo/bpgl_project.h>
 #include <vpgl/algo/vpgl_ray.h>
@@ -5,17 +7,17 @@
 #include <vgl/vgl_closest_point.h>
 #include <vgl/vgl_plane_3d.h>
 #include <vgl/vgl_intersection.h>
-#include <vcl_cmath.h>
+#include <vcl_compiler.h>
 #include <vnl/vnl_math.h>
 
 principal_ray_scan::principal_ray_scan(double cone_half_angle,
                                        unsigned& n_samples)
 {
   //temporary array for samples
-  vcl_vector<double> theta(n_samples+1);
-  vcl_vector<double> phi(n_samples+1);
+  std::vector<double> theta(n_samples+1);
+  std::vector<double> phi(n_samples+1);
   //find the fraction of the sphere defined by the cone half angle
-  double cone_solid_angle = vnl_math::twopi*(1.0-vcl_cos(cone_half_angle));
+  double cone_solid_angle = vnl_math::twopi*(1.0-std::cos(cone_half_angle));
   double fraction_of_sphere = cone_solid_angle/(4.0*vnl_math::pi);
   //number of points that would cover the entire sphere
   unsigned limit = static_cast<unsigned>(n_samples/fraction_of_sphere);
@@ -35,11 +37,11 @@ principal_ray_scan::principal_ray_scan(double cone_half_angle,
   for (k = 2; k<=(limit-1)&&elv<=cone_half_angle; ++k) {
     double kp  = a*k + b;
     double h   = -1.0 + 2*(kp-1.0)/(limit-1);
-    double rk  = vcl_sqrt(1-h*h);
-    theta[k-1] = vcl_acos(h);
+    double rk  = std::sqrt(1-h*h);
+    theta[k-1] = std::acos(h);
     // cut off the scan when the elevation reaches the cone half angle
     elv = vnl_math::pi-theta[k-1];
-    double temp  = phi[k-2] + 3.6/vcl_sqrt(ns)*2/(rkm1+rk);
+    double temp  = phi[k-2] + 3.6/std::sqrt(ns)*2/(rkm1+rk);
     phi[k-1] = vnl_math::angle_0_to_2pi(temp);
     rkm1 = rk;
   }
@@ -70,17 +72,17 @@ bool principal_ray_scan::next()
 vgl_point_3d<double> principal_ray_scan::pt_on_unit_sphere(unsigned i) const
 {
   double th = theta_[i], ph = phi_[i];
-  double st = vcl_sin(th), ct = vcl_cos(th);
-  double x = st*vcl_cos(ph), y = st*vcl_sin(ph), z = ct;
+  double st = std::sin(th), ct = std::cos(th);
+  double x = st*std::cos(ph), y = st*std::sin(ph), z = ct;
   return vgl_point_3d<double>(x, y, z);
 }
 
 vgl_rotation_3d<double> principal_ray_scan::rot(unsigned i, double alpha) const
 {
   double th = theta_[i], ph = phi_[i];
-  double st = vcl_sin(th), ct = vcl_cos(th);
+  double st = std::sin(th), ct = std::cos(th);
   //principal axis
-  double x = st*vcl_cos(ph), y = st*vcl_sin(ph), z = ct;
+  double x = st*std::cos(ph), y = st*std::sin(ph), z = ct;
   vnl_vector_fixed<double, 3> za(0.0, 0.0, 1.0), v(x, y, z);
   //rotation from principal axis to z axis
   vgl_rotation_3d<double> R_axis(v, za);
@@ -92,13 +94,13 @@ vgl_rotation_3d<double> principal_ray_scan::rot(unsigned i, double alpha) const
 
 double vsph_camera_bounds::solid_angle(double cone_half_angle)
 {
-  return vnl_math::twopi*(1.0-vcl_cos(cone_half_angle));
+  return vnl_math::twopi*(1.0-std::cos(cone_half_angle));
 }
 
 double vsph_camera_bounds::cone_half_angle(double solid_angle)
 {
   double temp = solid_angle/vnl_math::twopi;
-  temp = vcl_acos(1.0-temp);
+  temp = std::acos(1.0-temp);
   return temp;
 }
 
@@ -193,7 +195,7 @@ rotation_angle_interval(vpgl_perspective_camera<double> const& cam)
   if (pp.x()<rmin) rmin = pp.x();
   if (rmin <= 0) return 0;
   //half length is 0.5 (1/2 pixel)
-  double half_angle = vcl_atan(0.5/rmin);
+  double half_angle = std::atan(0.5/rmin);
   return 2.0*half_angle;
 }
 
@@ -273,7 +275,7 @@ bool vsph_camera_bounds::planar_bounding_box(vpgl_perspective_camera<double> con
   return good;
 }
 
-bool vsph_camera_bounds::planar_bounding_box(vcl_vector<vpgl_perspective_camera<double> > const& cams,
+bool vsph_camera_bounds::planar_bounding_box(std::vector<vpgl_perspective_camera<double> > const& cams,
                                              vgl_box_2d<double>& bbox,
                                              double z_plane)
 {

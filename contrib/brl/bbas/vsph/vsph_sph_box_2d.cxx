@@ -74,7 +74,7 @@ void vsph_sph_box_2d::phi_bounds(double& phi_start, double& phi_end) const
     return;
   }
   assert(false);
-  vcl_cout<< "IMPOSSIBLE CONDITION in phi_bounds(..)\n";
+  std::cout<< "IMPOSSIBLE CONDITION in phi_bounds(..)\n";
 }
 
 vsph_sph_box_2d::vsph_sph_box_2d(): in_radians_(true)
@@ -266,7 +266,7 @@ bool vsph_sph_box_2d::extend_interval(double ph)
 
   double dpa = vsph_utils::azimuth_diff(a_phi_, ph,  in_radians_);
   double dpb = vsph_utils::azimuth_diff(b_phi_, ph,  in_radians_);
-  dpa = vcl_fabs(dpa); dpb = vcl_fabs(dpb);
+  dpa = std::fabs(dpa); dpb = std::fabs(dpb);
   if (dpa <= dpb)
     a_phi_ = ph;
   else
@@ -321,9 +321,9 @@ void vsph_sph_box_2d::add( double theta, double phi, bool in_radians)
     c_phi_ = ph;
     // all three points are defined so can set up the compact interval
     // find the interpoint distances
-    double dab = vcl_fabs(vsph_utils::azimuth_diff(a_phi_, b_phi_, in_radians_));
-    double dac = vcl_fabs(vsph_utils::azimuth_diff(a_phi_, c_phi_, in_radians_));
-    double dbc = vcl_fabs(vsph_utils::azimuth_diff(b_phi_, c_phi_, in_radians_));
+    double dab = std::fabs(vsph_utils::azimuth_diff(a_phi_, b_phi_, in_radians_));
+    double dac = std::fabs(vsph_utils::azimuth_diff(a_phi_, c_phi_, in_radians_));
+    double dbc = std::fabs(vsph_utils::azimuth_diff(b_phi_, c_phi_, in_radians_));
     // assign the points so that a < c < b in the smaller interval
     double ang_a = a_phi_, ang_b = b_phi_, ang_c = c_phi_;
     if (dab>dac && dab>dbc) {
@@ -507,14 +507,14 @@ double vsph_sph_box_2d::area() const
   //everything in radians
   double min_ph = min_phi(true), max_ph = max_phi(true);
   double min_th = min_theta(true), max_th = max_theta(true);
-  double a = vcl_fabs(vcl_cos(min_th)-vcl_cos(max_th));
+  double a = std::fabs(std::cos(min_th)-std::cos(max_th));
   double ang1, ang2;
   vsph_utils::half_angle(min_ph, max_ph, ang1, ang2, true);
   double ha = ang2;
   if (this->in_interval(ang1, true))
     ha = ang1;
-  double dif = vcl_fabs(vsph_utils::azimuth_diff(min_ph, ha, true));
-  dif += vcl_fabs(vsph_utils::azimuth_diff(ha, max_ph, true));
+  double dif = std::fabs(vsph_utils::azimuth_diff(min_ph, ha, true));
+  dif += std::fabs(vsph_utils::azimuth_diff(ha, max_ph, true));
   return a*dif;
 }
 
@@ -568,8 +568,8 @@ vsph_sph_box_2d vsph_sph_box_2d::transform(double t_theta,
   // circle cut.
   double c_ph = center.phi_;
   double ph_start=min_phi_, ph_end = max_phi_;
-  double difs = vcl_fabs(vsph_utils::azimuth_diff(ph_start, c_ph, in_radians_));
-  double dife = vcl_fabs(vsph_utils::azimuth_diff(c_ph, ph_end, in_radians_));
+  double difs = std::fabs(vsph_utils::azimuth_diff(ph_start, c_ph, in_radians_));
+  double dife = std::fabs(vsph_utils::azimuth_diff(c_ph, ph_end, in_radians_));
   double s = scale;
   if (s*(difs+dife) > 2.0*pye()) {
     ph_end = ph_start;
@@ -651,17 +651,17 @@ vsph_sph_box_2d vsph_sph_box_2d::transform(double t_theta, double t_phi,
   return rbox;
 }
 
-void vsph_sph_box_2d::planar_quads(vcl_vector<vgl_vector_3d<double> >& verts,
-                                   vcl_vector<vcl_vector<int> >& quads,
+void vsph_sph_box_2d::planar_quads(std::vector<vgl_vector_3d<double> >& verts,
+                                   std::vector<std::vector<int> >& quads,
                                    double tol) const{
   assert(tol >0.0 && tol < 1.0);
   verts.clear(); quads.clear();
   double temp = 1.0-tol;
-  double max_ang = 2.0*vcl_acos(temp);
+  double max_ang = 2.0*std::acos(temp);
   if (!in_radians_)
     max_ang *= vnl_math::deg_per_rad;
   double min_th = min_theta(in_radians_), max_th = max_theta(in_radians_);
-  double theta_range =  vcl_fabs(max_th - min_th);
+  double theta_range =  std::fabs(max_th - min_th);
   double ha1, ha2;
   double min_ph = min_phi(in_radians_), max_ph = max_phi(in_radians_);
   vsph_utils::half_angle(min_ph,max_ph, ha1, ha2, in_radians_);
@@ -670,11 +670,11 @@ void vsph_sph_box_2d::planar_quads(vcl_vector<vgl_vector_3d<double> >& verts,
     ha = ha1;
   double ph_start, ph_end;
   this->phi_bounds(ph_start, ph_end);
-  double phi_range = vcl_fabs(vsph_utils::azimuth_diff(ph_start, ha, in_radians_));
-  phi_range += vcl_fabs(vsph_utils::azimuth_diff(ha, ph_end, in_radians_));
+  double phi_range = std::fabs(vsph_utils::azimuth_diff(ph_start, ha, in_radians_));
+  phi_range += std::fabs(vsph_utils::azimuth_diff(ha, ph_end, in_radians_));
   double phi_last = ph_start + phi_range;
-  double n_thd = vcl_ceil(theta_range/max_ang);
-  double n_phd = vcl_ceil(phi_range/max_ang);
+  double n_thd = std::ceil(theta_range/max_ang);
+  double n_phd = std::ceil(phi_range/max_ang);
   double th_inc = theta_range/n_thd, ph_inc = phi_range/n_phd;
   int n_th = static_cast<int>(n_thd), n_ph = static_cast<int>(n_phd);
   if (n_th == 0) n_th = 1;
@@ -691,7 +691,7 @@ void vsph_sph_box_2d::planar_quads(vcl_vector<vgl_vector_3d<double> >& verts,
     verts.resize(4);
     int ill = 0, ilr = 1, iur =2 , iul = 3;//ccw order
     verts[iul]=vul; verts[iur]=vur; verts[ilr]=vlr; verts[ill]=vll;
-    vcl_vector<int> quad(4);
+    std::vector<int> quad(4);
     quad[ill]=ill; quad[ilr]=ilr; quad[iur]=iur; quad[iul]=iul;
     quads.push_back(quad);
     return;
@@ -727,7 +727,7 @@ void vsph_sph_box_2d::planar_quads(vcl_vector<vgl_vector_3d<double> >& verts,
       int ilr = verts.size();
       verts.push_back(vlr);
 
-      vcl_vector<int> quad(4);
+      std::vector<int> quad(4);
       quad[0]=ill; quad[1]=ilr; quad[2]=iur; quad[3]=iul;
       quads.push_back(quad);
 
@@ -738,13 +738,13 @@ void vsph_sph_box_2d::planar_quads(vcl_vector<vgl_vector_3d<double> >& verts,
   }
 }
 
-bool vsph_sph_box_2d::sub_divide(vcl_vector<vsph_sph_box_2d>& sub_boxes,
+bool vsph_sph_box_2d::sub_divide(std::vector<vsph_sph_box_2d>& sub_boxes,
                                  double min_ang) const{
   sub_boxes.clear();
   double min_th = this->min_theta(in_radians_);
   double max_th = this->max_theta(in_radians_);
   double c_th = (min_th + max_th)/2.0;
-  double dth = vcl_fabs(max_th-c_th);
+  double dth = std::fabs(max_th-c_th);
   bool div_th = dth>min_ang;
   double ph_start, ph_end;
   this->phi_bounds(ph_start, ph_end);
@@ -753,7 +753,7 @@ bool vsph_sph_box_2d::sub_divide(vcl_vector<vsph_sph_box_2d>& sub_boxes,
   double ha = ha2;
   if (this->in_interval(ha1, in_radians_))
     ha = ha1;
-  double dph = vcl_fabs(vsph_utils::azimuth_diff(ph_start, ha, in_radians_));
+  double dph = std::fabs(vsph_utils::azimuth_diff(ph_start, ha, in_radians_));
   bool div_ph = dph > min_ang;
   if (!div_th&&!div_ph)
     return false; // no division
@@ -802,19 +802,19 @@ bool vsph_sph_box_2d::sub_divide(vcl_vector<vsph_sph_box_2d>& sub_boxes,
   return true;
 }
 
-void vsph_sph_box_2d::print(vcl_ostream& os, bool in_radians) const
+void vsph_sph_box_2d::print(std::ostream& os, bool in_radians) const
 {
   os << " vsph_sph_box_2d:[(" << min_theta(in_radians) << ' '
      << min_phi(in_radians) << ")->(" << max_theta(in_radians)
      << ' ' << max_phi(in_radians) << ")]\n";
 }
 
-void vsph_sph_box_2d::display_box(vcl_ostream& os,
+void vsph_sph_box_2d::display_box(std::ostream& os,
                                   float r, float g, float b,
                                   double tol, double factor) const
 {
-  vcl_vector<vgl_vector_3d<double> > verts;
-  vcl_vector<vcl_vector<int> > quads;
+  std::vector<vgl_vector_3d<double> > verts;
+  std::vector<std::vector<int> > quads;
   this->planar_quads(verts, quads, tol);
   os << "Shape {\n"
      <<"  appearance Appearance{\n"
@@ -838,7 +838,7 @@ void vsph_sph_box_2d::display_box(vcl_ostream& os,
      << "  coordIndex [\n";
   unsigned nq = quads.size();
   for (unsigned iq = 0; iq<nq; ++iq) {
-    vcl_vector<int> quad = quads[iq];
+    std::vector<int> quad = quads[iq];
     os << quad[0] << ',' << quad[1] << ',' << quad[2] << ','
        << quad[3] << ", -1";
     if (iq < (nq-1)) os << ",\n";
@@ -849,11 +849,11 @@ void vsph_sph_box_2d::display_box(vcl_ostream& os,
      << "}\n";
 }
 
-void vsph_sph_box_2d::display_boxes(vcl_string const& path,
-                                    vcl_vector<vsph_sph_box_2d> const& boxes,
-                                    vcl_vector<vcl_vector<float> > colors,
+void vsph_sph_box_2d::display_boxes(std::string const& path,
+                                    std::vector<vsph_sph_box_2d> const& boxes,
+                                    std::vector<std::vector<float> > colors,
                                     double tol,double factor ) {
-  vcl_ofstream os(path.c_str());
+  std::ofstream os(path.c_str());
   if (!os.is_open())
     return;
   bvrml_write::write_vrml_header(os);
@@ -861,7 +861,7 @@ void vsph_sph_box_2d::display_boxes(vcl_string const& path,
   unsigned nc = colors.size();
   assert(nc == nb);
   for (unsigned i = 0; i<nb; ++i) {
-    vcl_vector<float> c = colors[i];
+    std::vector<float> c = colors[i];
     boxes[i].display_box(os, c[0], c[1],c[2],tol,factor);
   }
   os.close();
@@ -897,7 +897,7 @@ void vsph_sph_box_2d::b_write(vsl_b_ostream& /*os*/)
 
 #if 0
 bool intersection(vsph_sph_box_2d const& b1, vsph_sph_box_2d const& b2,
-                  vcl_vector<vsph_sph_box_2d>& boxes)
+                  std::vector<vsph_sph_box_2d>& boxes)
 {
   bool in_radians = b1.in_radians();
   vsph_sph_box_2d rbox(in_radians);
@@ -1017,14 +1017,14 @@ bool intersection(vsph_sph_box_2d const& b1, vsph_sph_box_2d const& b2,
     boxes[1]=rbox2;
     return true;
   }
-  vcl_cout << "IMPOSSIBLE INTERSECTION CONDITION NOT HANDLED!!\n";
+  std::cout << "IMPOSSIBLE INTERSECTION CONDITION NOT HANDLED!!\n";
   assert(false); //shouldn't happen
   return false;
 }
 #endif
 
 bool intersection(vsph_sph_box_2d const& b1, vsph_sph_box_2d const& b2,
-                  vcl_vector<vsph_sph_box_2d>& boxes)
+                  std::vector<vsph_sph_box_2d>& boxes)
 {
   if (b1 == b2){
     boxes.resize(1);
@@ -1117,7 +1117,7 @@ bool intersection(vsph_sph_box_2d const& b1, vsph_sph_box_2d const& b2,
     return true;
    }
    default:
-    vcl_cout << "IMPOSSIBLE INTERSECTION CONDITION NOT HANDLED!!\n";
+    std::cout << "IMPOSSIBLE INTERSECTION CONDITION NOT HANDLED!!\n";
     assert(false); //shouldn't happen
     return false;
   }
@@ -1138,7 +1138,7 @@ double intersection_area(vsph_sph_box_2d const& b1, vsph_sph_box_2d const& b2)
   // empty box.
   if (theta_max <= theta_min)
     return 0.0;
-  double a = vcl_fabs(vcl_cos(theta_min)-vcl_cos(theta_max));
+  double a = std::fabs(std::cos(theta_min)-std::cos(theta_max));
 
   double b2_min_ph = b2.min_phi(in_radians), b1_min_ph = b1.min_phi(in_radians);
   double b2_max_ph = b2.max_phi(in_radians), b1_max_ph = b1.max_phi(in_radians);
@@ -1218,13 +1218,13 @@ double intersection_area(vsph_sph_box_2d const& b1, vsph_sph_box_2d const& b2)
       return a*(dph+dph2);
     }
     default:
-      vcl_cout << "IMPOSSIBLE INTERSECTION CONDITION NOT HANDLED!!\n";
+      std::cout << "IMPOSSIBLE INTERSECTION CONDITION NOT HANDLED!!\n";
       assert(false); //shouldn't happen
       return 0.0;
   }
 }
 
-vcl_ostream& operator<<(vcl_ostream& os, vsph_sph_box_2d const& p)
+std::ostream& operator<<(std::ostream& os, vsph_sph_box_2d const& p)
 {
   p.print(os);
   return os;

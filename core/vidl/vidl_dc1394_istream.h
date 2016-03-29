@@ -23,9 +23,10 @@
 // prerelease version.  As a result, the vidl_dc1394_istream is
 // is subject to change with it.
 
+#include <string>
 #include "vidl_istream.h"
 #include "vidl_iidc1394_params.h"
-#include <vcl_string.h>
+#include <vcl_compiler.h>
 
 
 //: A video input stream using libdc1394

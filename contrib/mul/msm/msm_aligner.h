@@ -6,9 +6,11 @@
 // \author Tim Cootes
 // \brief Base for functions which calculate and apply 2D transformations
 
-#include <vcl_string.h>
-#include <vcl_memory.h>
-#include <vcl_iosfwd.h>
+#include <string>
+#include <memory>
+#include <iostream>
+#include <iosfwd>
+#include <vcl_compiler.h>
 #include <vsl/vsl_fwd.h>
 #include <vnl/vnl_fwd.h>
 #include <msm/msm_points.h>
@@ -25,7 +27,6 @@ class mbl_read_props_type;
 class msm_aligner
 {
  public:
-
   virtual ~msm_aligner() {}
 
   //: Return number of parameters defining the transformation
@@ -77,13 +78,13 @@ class msm_aligner
 //  ie error is sum (p2_i-T(p1_i)'*wt_mat[i]*(p2_i-T(p1_i)
   virtual void calc_transform_wt_mat(const msm_points& points1,
                               const msm_points& points2,
-                              const vcl_vector<msm_wt_mat_2d>& wt_mat,
+                              const std::vector<msm_wt_mat_2d>& wt_mat,
                               vnl_vector<double>& trans) const =0;
 
   //: Apply transform to weight matrices (ie ignore translation component)
-  virtual void transform_wt_mat(const vcl_vector<msm_wt_mat_2d>& wt_mat,
+  virtual void transform_wt_mat(const std::vector<msm_wt_mat_2d>& wt_mat,
                                 const vnl_vector<double>& trans,
-                                vcl_vector<msm_wt_mat_2d>& new_wt_mat) const = 0;
+                                std::vector<msm_wt_mat_2d>& new_wt_mat) const = 0;
 
   //: Returns params of pose such that pose(x) = pose1(pose2(x))
   virtual vnl_vector<double> compose(const vnl_vector<double>& pose1,
@@ -94,30 +95,35 @@ class msm_aligner
   //  centre of gravity is at the origin and scale to a unit size.
   virtual void normalise_shape(msm_points& points) const = 0;
 
+  //: Options for defining pose in reference frame
+  enum ref_pose_source { first_shape, mean_pose };
+
   //: Find poses which align a set of points
   //  On exit ref_mean_shape is the mean shape in the reference
   //  frame, pose_to_ref[i] maps points[i] into the reference
   //  frame (ie pose is the mapping from the reference frame to
   //  the target frames).
+  // \param pose_source defines how alignment of ref_mean_shape is calculated
   // \param average_pose Some estimate of the average mapping
-  virtual void align_set(const vcl_vector<msm_points>& points,
+  virtual void align_set(const std::vector<msm_points>& points,
                          msm_points& ref_mean_shape,
-                         vcl_vector<vnl_vector<double> >& pose_to_ref,
-                         vnl_vector<double>& average_pose) const =0;
+                         std::vector<vnl_vector<double> >& pose_to_ref,
+                         vnl_vector<double>& average_pose,
+                         ref_pose_source pose_source=first_shape) const =0;
 
   //: Compute mean of points[i] after transforming with pose[i]
-  void mean_of_transformed(const vcl_vector<msm_points>& points,
-                         const vcl_vector<vnl_vector<double> >& pose,
+  void mean_of_transformed(const std::vector<msm_points>& points,
+                         const std::vector<vnl_vector<double> >& pose,
                          msm_points& mean) const;
 
   //: Name of the class
-  virtual vcl_string is_a() const = 0;
+  virtual std::string is_a() const = 0;
 
   //: Create a copy on the heap and return base class pointer
   virtual msm_aligner* clone() const = 0;
 
   //: Print class to os
-  virtual void print_summary(vcl_ostream& os) const;
+  virtual void print_summary(std::ostream& os) const;
 
   //: Save class to binary file stream
   virtual void b_write(vsl_b_ostream& bfs) const;
@@ -126,12 +132,12 @@ class msm_aligner
   virtual void b_read(vsl_b_istream& bfs);
 
   //: Create a concrete msm_aligner-derived object, from a text specification.
-  static vcl_auto_ptr<msm_aligner> create_from_stream(vcl_istream &is);
+  static std::auto_ptr<msm_aligner> create_from_stream(std::istream &is);
 
   //: Initialise from a text stream.
   // The default implementation is for attribute-less normalisers,
   // and throws if it finds any data in the stream.
-  virtual void config_from_stream(vcl_istream &is);
+  virtual void config_from_stream(std::istream &is);
 };
 
 //: Allows derived class to be loaded by base-class pointer
@@ -152,16 +158,16 @@ void vsl_b_write(vsl_b_ostream& bfs, const msm_aligner& b);
 void vsl_b_read(vsl_b_istream& bfs, msm_aligner& b);
 
 //: Stream output operator for class reference
-vcl_ostream& operator<<(vcl_ostream& os,const msm_aligner& b);
+std::ostream& operator<<(std::ostream& os,const msm_aligner& b);
 
 //: Stream output operator for class pointer
-vcl_ostream& operator<<(vcl_ostream& os,const msm_aligner* b);
+std::ostream& operator<<(std::ostream& os,const msm_aligner* b);
 
 //: Stream output operator for class reference
-void vsl_print_summary(vcl_ostream& os,const msm_aligner& b);
+void vsl_print_summary(std::ostream& os,const msm_aligner& b);
 
 //: Stream output operator for class reference
-void vsl_print_summary(vcl_ostream& os,const msm_aligner* b);
+void vsl_print_summary(std::ostream& os,const msm_aligner* b);
 
 #endif // msm_aligner_h_
 

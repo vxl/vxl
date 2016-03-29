@@ -1,4 +1,6 @@
 // This is brl/bseg/boxm2/pro/processes/boxm2_ingest_convex_mesh_process.cxx
+#include <iostream>
+#include <fstream>
 #include <bprb/bprb_func_process.h>
 //:
 // \file
@@ -7,7 +9,7 @@
 // \author Vishal Jain
 // \date Aug 22, 2012
 
-#include <vcl_fstream.h>
+#include <vcl_compiler.h>
 #include <vul/vul_file.h>
 #include <boxm2/boxm2_scene.h>
 #include <boxm2/boxm2_util.h>
@@ -45,7 +47,7 @@ bool boxm2_ingest_convex_mesh_process_cons(bprb_func_process& pro)
 
   //process takes 2 inputs
   int i=0;
-  vcl_vector<vcl_string> input_types_(n_inputs_);
+  std::vector<std::string> input_types_(n_inputs_);
   input_types_[i++] = "boxm2_scene_sptr";  // scene
   input_types_[i++] = "boxm2_cache_sptr";  // scene
   input_types_[i++] = "vcl_string";        // input ply file
@@ -53,7 +55,7 @@ bool boxm2_ingest_convex_mesh_process_cons(bprb_func_process& pro)
   input_types_[i++] = "vcl_string";        // Name of the category
 
   // process has 1 output
-  vcl_vector<vcl_string>  output_types_(n_outputs_);
+  std::vector<std::string>  output_types_(n_outputs_);
 
   return pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
 }
@@ -62,29 +64,29 @@ bool boxm2_ingest_convex_mesh_process(bprb_func_process& pro)
 {
   using namespace boxm2_ingest_convex_mesh_process_globals;
   if ( pro.n_inputs() < n_inputs_ ) {
-    vcl_cout << pro.name() << ": The input number should be " << n_inputs_<< vcl_endl;
+    std::cout << pro.name() << ": The input number should be " << n_inputs_<< std::endl;
     return false;
   }
 
   //get the inputs
   boxm2_scene_sptr scene = pro.get_input<boxm2_scene_sptr>(0);
   boxm2_cache_sptr cache = pro.get_input<boxm2_cache_sptr>(1);
-  vcl_string ply_file = pro.get_input<vcl_string>(2);
+  std::string ply_file = pro.get_input<std::string>(2);
   int label_id  = pro.get_input<int>(3);
-  vcl_string identifier = pro.get_input<vcl_string>(4);
+  std::string identifier = pro.get_input<std::string>(4);
 
-  vcl_vector<bmsh3d_mesh_mc *> meshes;
-  vcl_vector<int> label_ids;
+  std::vector<bmsh3d_mesh_mc *> meshes;
+  std::vector<int> label_ids;
   if (vul_file::extension(ply_file.c_str())==".xml")
   {
     boxm2_bounding_box_parser parser;
-    vcl_FILE* xmlFile = vcl_fopen(ply_file.c_str(), "r");
+    std::FILE* xmlFile = std::fopen(ply_file.c_str(), "r");
     parser.parseFile(xmlFile);
 
-    vcl_map<int, vcl_map<int, vcl_vector< vgl_point_3d<double> > > >::iterator entity_iter= parser.verts_.begin();
+    std::map<int, std::map<int, std::vector< vgl_point_3d<double> > > >::iterator entity_iter= parser.verts_.begin();
     for (; entity_iter!= parser.verts_.end(); entity_iter++)
     {
-      vcl_map<int, vcl_vector< vgl_point_3d<double> > >::iterator volume_iter = entity_iter->second.begin();
+      std::map<int, std::vector< vgl_point_3d<double> > >::iterator volume_iter = entity_iter->second.begin();
       for (; volume_iter != entity_iter->second.end(); volume_iter++)
       {
         bmsh3d_mesh_mc *  bmesh = new bmsh3d_mesh_mc();
@@ -181,28 +183,28 @@ bool boxm2_ingest_convex_mesh_process(bprb_func_process& pro)
   }
   else
   {
-    vcl_cout<<"Other extensions not supoort yet";
+    std::cout<<"Other extensions not supoort yet";
     return false;
   }
-  vcl_cout<<"Orienting face normals"<<vcl_endl;
-  vcl_cout.flush();
+  std::cout<<"Orienting face normals"<<std::endl;
+  std::cout.flush();
 
   for (unsigned nm = 0 ; nm < meshes.size() ; nm++)
   {
     meshes[nm]->orient_face_normals();
   }
-  vcl_map<boxm2_block_id, boxm2_block_metadata> blocks=scene->blocks();
-  vcl_map<boxm2_block_id, boxm2_block_metadata>::iterator iter;
+  std::map<boxm2_block_id, boxm2_block_metadata> blocks=scene->blocks();
+  std::map<boxm2_block_id, boxm2_block_metadata>::iterator iter;
   for (iter = blocks.begin(); iter!= blocks.end(); iter ++)
   {
-        vcl_cout<<"Blk id "<<iter->first<<vcl_endl;
+        std::cout<<"Blk id "<<iter->first<<std::endl;
     boxm2_block_metadata mdata = iter->second;
     boxm2_block *     blk  = cache->get_block(scene,iter->first);
     boxm2_data_base *  alpha  = cache->get_data_base(scene,iter->first,boxm2_data_traits<BOXM2_ALPHA>::prefix(),0,true);
     int len_buffer  = alpha->buffer_length()/4*boxm2_data_info::datasize("boxm2_label_short") ;
     boxm2_data<BOXM2_ALPHA> alpha_data(alpha->data_buffer(),alpha->buffer_length(),iter->first);
-    boxm2_data_base *  label_data_base = 0;
-    boxm2_data<BOXM2_LABEL_SHORT> * label_data = 0; // avoid compiler warning on uninitialised use
+    boxm2_data_base *  label_data_base = VXL_NULLPTR;
+    boxm2_data<BOXM2_LABEL_SHORT> * label_data = VXL_NULLPTR; // avoid compiler warning on uninitialised use
     boxm2_array_3d<uchar16>  trees = blk->trees();
     bool flag = false;
     for (unsigned nm = 0 ; nm < meshes.size() ; nm++)
@@ -210,8 +212,8 @@ bool boxm2_ingest_convex_mesh_process(bprb_func_process& pro)
       label_id = label_ids[nm];
 
       //meshes[nm]->print_topo_summary();
-      vcl_map<int, bmsh3d_face* > fmap = meshes[nm]->facemap();
-      vcl_map<int, bmsh3d_face* >::iterator face_it ;
+      std::map<int, bmsh3d_face* > fmap = meshes[nm]->facemap();
+      std::map<int, bmsh3d_face* >::iterator face_it ;
       vgl_box_3d<double> bbox;
       for ( unsigned k = 0 ; k < meshes[nm]->num_vertices() ; k++)
       {
@@ -229,12 +231,12 @@ bool boxm2_ingest_convex_mesh_process(bprb_func_process& pro)
         }
         vgl_vector_3d<double> min_dir = rbox.min_point()-mdata.bbox().min_point();
         vgl_vector_3d<double> max_dir = rbox.max_point()-mdata.bbox().min_point();
-        unsigned int min_i = (unsigned int ) vcl_floor(min_dir.x()/mdata.sub_block_dim_.x());
-        unsigned int min_j = (unsigned int ) vcl_floor(min_dir.y()/mdata.sub_block_dim_.y());
-        unsigned int min_k = (unsigned int ) vcl_floor(min_dir.z()/mdata.sub_block_dim_.z());
-        unsigned int max_i = (unsigned int ) vcl_floor(max_dir.x()/mdata.sub_block_dim_.x());
-        unsigned int max_j = (unsigned int ) vcl_floor(max_dir.y()/mdata.sub_block_dim_.y());
-        unsigned int max_k = (unsigned int ) vcl_floor(max_dir.z()/mdata.sub_block_dim_.z());
+        unsigned int min_i = (unsigned int ) std::floor(min_dir.x()/mdata.sub_block_dim_.x());
+        unsigned int min_j = (unsigned int ) std::floor(min_dir.y()/mdata.sub_block_dim_.y());
+        unsigned int min_k = (unsigned int ) std::floor(min_dir.z()/mdata.sub_block_dim_.z());
+        unsigned int max_i = (unsigned int ) std::floor(max_dir.x()/mdata.sub_block_dim_.x());
+        unsigned int max_j = (unsigned int ) std::floor(max_dir.y()/mdata.sub_block_dim_.y());
+        unsigned int max_k = (unsigned int ) std::floor(max_dir.z()/mdata.sub_block_dim_.z());
         // read the trees info
 
         for (unsigned int i = min_i ; i < max_i; i++)
@@ -242,7 +244,7 @@ bool boxm2_ingest_convex_mesh_process(bprb_func_process& pro)
             for (unsigned int k = min_k ; k < max_k; k++)
             {
               boct_bit_tree tree( trees(i,j,k).data_block() );
-              vcl_vector<int> leaf_bits = tree.get_leaf_bits();
+              std::vector<int> leaf_bits = tree.get_leaf_bits();
               for (unsigned t = 0 ; t < leaf_bits.size(); t++)
               {
                 vgl_point_3d<double> cc = tree.cell_center(leaf_bits[t]);
@@ -274,6 +276,6 @@ bool boxm2_ingest_convex_mesh_process(bprb_func_process& pro)
       boxm2_sio_mgr::save_block_data_base(scene->data_path(), iter->first, label_data_base,boxm2_data_traits<BOXM2_LABEL_SHORT>::prefix(identifier));
     }
   }
-  vcl_cout<<"DONE."<<vcl_endl;
+  std::cout<<"DONE."<<std::endl;
   return true;
 }

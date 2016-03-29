@@ -2,6 +2,7 @@
 #define boxm_generate_edge_tangent_sample_functor_h
 //:
 // \file
+#include <iostream>
 #include <boxm/boxm_apm_traits.h>
 #include <boxm/basic/boxm_raytrace_function.h>
 #include <boxm/sample/boxm_edge_tangent_sample.h>
@@ -11,7 +12,7 @@
 #include <boxm/sample/algo/boxm_simple_grey_processor.h>
 #include <vgl/vgl_homg_plane_3d.h>
 #include <vil/vil_image_view.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
 
 template <class T, class T_aux>
 class boxm_generate_edge_tangent_sample_functor
@@ -25,7 +26,7 @@ class boxm_generate_edge_tangent_sample_functor
     is_aux_=true;
     // make sure that the image has 4 planes ((a,b,c,d) params of a plane ax+by+cz=d )
     if (observation.nplanes() != 4)
-      vcl_cerr << "boxm_generate_edge_tangent_sample_functor: the image does not have 4 planes\n";
+      std::cerr << "boxm_generate_edge_tangent_sample_functor: the image does not have 4 planes\n";
   }
 
   inline bool step_cell(unsigned int i, unsigned int j,
@@ -59,17 +60,17 @@ template <class T_loc, class T_data>
 void boxm_generate_edge_tangent_sample_rt(boxm_scene<boct_tree<T_loc, T_data > > &scene,
                                           vpgl_camera_double_sptr cam,
                                           vil_image_view<float> &obs,
-                                          vcl_string iname)
+                                          std::string iname)
 {
     typedef boxm_edge_tangent_sample<float> aux_datatype;
     boxm_aux_scene<T_loc, T_data, aux_datatype> aux_scene(&scene,iname, boxm_aux_scene<T_loc,T_data,aux_datatype>::CLONE, BOXM_EDGE_TANGENT_LINE);
     typedef boxm_generate_edge_tangent_sample_functor<boxm_inf_line_sample<float>,aux_datatype> func;
     boxm_raytrace_function<func,T_loc, T_data, aux_datatype> raytracer(scene,aux_scene,cam.ptr(),obs.ni(),obs.nj());
-    vcl_cerr << "PROCESSING EDGE IMAGE\n";
+    std::cerr << "PROCESSING EDGE IMAGE\n";
     func functor(obs,obs.ni(),obs.nj());
     raytracer.run(functor);
     //aux_scene.clean_scene();
-    vcl_cerr << "DONE.\n";
+    std::cerr << "DONE.\n";
 }
 
 #endif // boxm_generate_edge_tangent_sample_functor_h

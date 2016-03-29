@@ -16,7 +16,7 @@
 vsol_group_3d::vsol_group_3d(void)
   : vsol_spatial_object_3d()
 {
-  storage_=new vcl_vector<vsol_spatial_object_3d_sptr>();
+  storage_=new std::vector<vsol_spatial_object_3d_sptr>();
 }
 
 //---------------------------------------------------------------------------
@@ -26,7 +26,7 @@ vsol_group_3d::vsol_group_3d(void)
 vsol_group_3d::vsol_group_3d(vsol_group_3d const& other)
   : vsol_spatial_object_3d(other)
 {
-  storage_=new vcl_vector<vsol_spatial_object_3d_sptr>(*other.storage_);
+  storage_=new std::vector<vsol_spatial_object_3d_sptr>(*other.storage_);
 }
 
 //---------------------------------------------------------------------------
@@ -85,7 +85,7 @@ void vsol_group_3d::compute_bounding_box(void) const
   // require
   assert(size()>0);
 
-  vcl_vector<vsol_spatial_object_3d_sptr>::iterator i = storage_->begin();
+  std::vector<vsol_spatial_object_3d_sptr>::iterator i = storage_->begin();
   set_bounding_box(   (*i)->get_min_x(), (*i)->get_min_y(), (*i)->get_min_z());
   add_to_bounding_box((*i)->get_max_x(), (*i)->get_max_y(), (*i)->get_max_z());
   for (++i; i!=storage_->end(); ++i)
@@ -101,11 +101,11 @@ void vsol_group_3d::compute_bounding_box(void) const
 unsigned int vsol_group_3d::deep_size(void) const
 {
   int result=0;
-  vcl_vector<vsol_spatial_object_3d_sptr>::iterator i;
+  std::vector<vsol_spatial_object_3d_sptr>::iterator i;
   for (i=storage_->begin(); i!=storage_->end(); ++i)
   {
     vsol_group_3d const* g=(*i)->cast_to_group();
-    if (g!=0)
+    if (g!=VXL_NULLPTR)
       result+=g->deep_size();
     else
       ++result;
@@ -142,7 +142,7 @@ void vsol_group_3d::remove_object(unsigned int i)
   // require
   assert(i<size());
 
-  vcl_vector<vsol_spatial_object_3d_sptr>::iterator j = storage_->begin() + i;
+  std::vector<vsol_spatial_object_3d_sptr>::iterator j = storage_->begin() + i;
   storage_->erase(j);
 }
 
@@ -152,13 +152,13 @@ void vsol_group_3d::remove_object(unsigned int i)
 bool
 vsol_group_3d::is_child(vsol_spatial_object_3d_sptr const& new_object) const
 {
-  vcl_vector<vsol_spatial_object_3d_sptr>::iterator i;
+  std::vector<vsol_spatial_object_3d_sptr>::iterator i;
   for (i=storage_->begin(); i!=storage_->end(); ++i)
   {
     if ((*i).ptr()==new_object.ptr())
       return true;
     vsol_group_3d const* g=(*i)->cast_to_group();
-    if (g!=0 && g->is_child(new_object))
+    if (g!=VXL_NULLPTR && g->is_child(new_object))
       return true;
   }
   return false;
@@ -261,7 +261,7 @@ void vsol_group_3d::b_write(vsl_b_ostream &os) const
       g->b_write(os);
     }
   }
-  vsl_b_write(os, vcl_string("vsol_group_3d_end"));
+  vsl_b_write(os, std::string("vsol_group_3d_end"));
 #endif // 0
 }
 
@@ -279,7 +279,7 @@ void vsol_group_3d::b_read(vsl_b_istream &is)
    case 1:
     vsl_b_read(is, *storage_);
 #if 0
-    vcl_string type;
+    std::string type;
     while (true)
     {
       vsl_b_read(is, type);
@@ -353,7 +353,7 @@ short vsol_group_3d::version() const
 }
 
 //: Print an ascii summary to the stream
-void vsol_group_3d::print_summary(vcl_ostream &os) const
+void vsol_group_3d::print_summary(std::ostream &os) const
 {
   os << *this;
 }
@@ -384,5 +384,5 @@ vsl_b_read(vsl_b_istream &is, vsol_group_3d* &g)
     g->b_read(is);
   }
   else
-    g = 0;
+    g = VXL_NULLPTR;
 }

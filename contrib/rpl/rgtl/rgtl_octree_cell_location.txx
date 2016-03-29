@@ -5,9 +5,10 @@
 #ifndef rgtl_octree_cell_location_txx
 #define rgtl_octree_cell_location_txx
 
+#include <iostream>
 #include "rgtl_octree_cell_location.hxx"
 
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
 
 //----------------------------------------------------------------------------
 template <unsigned int D>
@@ -126,7 +127,7 @@ bool operator==(rgtl_octree_cell_location<D> const& l,
 
 //----------------------------------------------------------------------------
 template <unsigned int D>
-vcl_ostream& operator<<(vcl_ostream& os,
+std::ostream& operator<<(std::ostream& os,
                         rgtl_octree_cell_location<D> const& cell)
 {
   os << "[" << cell.level() << ":" << cell[0];
@@ -145,7 +146,7 @@ vcl_ostream& operator<<(vcl_ostream& os,
                           rgtl_octree_cell_location< D > const& r); \
   template bool operator==(rgtl_octree_cell_location< D > const& l, \
                            rgtl_octree_cell_location< D > const& r); \
-  template vcl_ostream& operator<<(vcl_ostream& os, \
+  template std::ostream& operator<<(std::ostream& os, \
                                    rgtl_octree_cell_location< D > const& cell)
 
 #endif

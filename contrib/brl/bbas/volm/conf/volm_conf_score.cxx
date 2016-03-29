@@ -1,13 +1,15 @@
+#include <iostream>
+#include <cmath>
+#include <limits>
 #include "volm_conf_score.h"
 //:
 // \file
-#include <vcl_cmath.h>
+#include <vcl_compiler.h>
 #include <vnl/vnl_math.h>
-#include <vcl_limits.h>
 
 // note the angular value is from 0 to 2*pi and 0 refers to the east direction
 
-volm_conf_score::volm_conf_score(float const& score, float const& theta, vcl_vector<volm_conf_object> const& landmarks)
+volm_conf_score::volm_conf_score(float const& score, float const& theta, std::vector<volm_conf_object> const& landmarks)
  : score_(score), theta_(theta), landmarks_(landmarks)
 {
   while (theta_ > vnl_math::twopi)
@@ -61,7 +63,7 @@ void volm_conf_score::b_read(vsl_b_istream& is)
     }
   }
   else {
-    vcl_cout << "volm_conf_score: binary read -- unknown binary io version: " << (int)ver << ", most updated version is " << this->version() << '\n';
+    std::cout << "volm_conf_score: binary read -- unknown binary io version: " << (int)ver << ", most updated version is " << this->version() << '\n';
     return;
   }
 }
@@ -73,7 +75,7 @@ void vsl_b_write(vsl_b_ostream& os, volm_conf_score const& score)
 
 void vsl_b_write(vsl_b_ostream& os, volm_conf_score const* score_ptr)
 {
-  if (score_ptr == 0)
+  if (score_ptr == VXL_NULLPTR)
     vsl_b_write(os,false);
   else {
     vsl_b_write(os, true);
@@ -93,7 +95,7 @@ void vsl_b_read(vsl_b_istream& is, volm_conf_score& score)
 
 void vsl_b_read(vsl_b_istream& is, volm_conf_score*& score_ptr)
 {
-  delete score_ptr;  score_ptr = 0;
+  delete score_ptr;  score_ptr = VXL_NULLPTR;
   bool not_null_ptr;
   vsl_b_read(is, not_null_ptr);
   if (not_null_ptr)
@@ -105,7 +107,7 @@ void vsl_b_read(vsl_b_istream& is, volm_conf_score*& score_ptr)
 
 void vsl_b_read(vsl_b_istream& is, volm_conf_score_sptr& score_sptr)
 {
-  volm_conf_score* score_ptr = 0;
+  volm_conf_score* score_ptr = VXL_NULLPTR;
   vsl_b_read(is, score_ptr);
   score_sptr = score_ptr;
 }

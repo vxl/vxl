@@ -8,13 +8,14 @@
 // \date   14 Sep 1999
 // \brief  See vgui_displaybase_tableau.h for a description of this file.
 
+#include <iostream>
+#include <vector>
+#include <algorithm>
+#include <utility>
 #include "vgui_displaybase_tableau.h"
 #include "vgui_macro.h"
 
-#include <vcl_iostream.h>
-#include <vcl_vector.h>
-#include <vcl_algorithm.h>
-#include <vcl_utility.h> // for vcl_pair<,>
+#include <vcl_compiler.h>
 
 #include <vgui/vgui_gl.h>
 #include <vgui/vgui_glu.h>
@@ -64,12 +65,12 @@ void vgui_displaybase_tableau::set_selection_callback(vgui_displaybase_tableau_s
 void vgui_displaybase_tableau::add(vgui_soview* object)
 {
 #ifndef NDEBUG
-  vcl_vector<vgui_soview*>::iterator i = vcl_find(objects.begin(), objects.end(), object);
+  std::vector<vgui_soview*>::iterator i = std::find(objects.begin(), objects.end(), object);
   if (i == objects.end())
   {
 #endif
     objects.push_back(object);
-    vcl_map< vcl_string , vgui_displaybase_tableau_grouping >::iterator it = groupings.find( current_grouping );
+    std::map< std::string , vgui_displaybase_tableau_grouping >::iterator it = groupings.find( current_grouping );
     if ( it == groupings.end() )
     {
       vgui_displaybase_tableau_grouping temp;
@@ -79,14 +80,14 @@ void vgui_displaybase_tableau::add(vgui_soview* object)
       temp.line_width_override = false;
       temp.point_size_override = false;
       temp.objects.push_back( object );
-      groupings.insert( vcl_pair< vcl_string , vgui_displaybase_tableau_grouping >( current_grouping , temp ) );
+      groupings.insert( std::pair< std::string , vgui_displaybase_tableau_grouping >( current_grouping , temp ) );
     }
     else
       it->second.objects.push_back( object );
 #ifndef NDEBUG
   }
   else
-    vcl_cerr << "Warning: attempt to add an soview twice.\n";
+    std::cerr << "Warning: attempt to add an soview twice.\n";
 #endif
 }
 
@@ -103,15 +104,15 @@ void vgui_displaybase_tableau::remove(vgui_soview*& object)
   // must first unselect the object, if it's selected
   deselect( object->get_id());
 
-  vcl_vector<vgui_soview*>::iterator i = vcl_find(objects.begin(), objects.end(), object);
+  std::vector<vgui_soview*>::iterator i = std::find(objects.begin(), objects.end(), object);
   if (i != objects.end())
   {
     objects.erase(i);
   }
 
-  for ( vcl_map< vcl_string , vgui_displaybase_tableau_grouping >::iterator it = groupings.begin() ;
+  for ( std::map< std::string , vgui_displaybase_tableau_grouping >::iterator it = groupings.begin() ;
         it != groupings.end(); it++ )  {
-    vcl_vector<vgui_soview*>::iterator a = vcl_find(it->second.objects.begin(), it->second.objects.end(), object);
+    std::vector<vgui_soview*>::iterator a = std::find(it->second.objects.begin(), it->second.objects.end(), object);
     if (a != it->second.objects.end()) {
       it->second.objects.erase(a);
       if ( it->second.objects.size() == 0 )  {
@@ -137,7 +138,7 @@ void vgui_displaybase_tableau::clear()
   deselect_all();
 
   // destroy the objects
-  for (vcl_vector<vgui_soview*>::iterator so_iter = objects.begin();
+  for (std::vector<vgui_soview*>::iterator so_iter = objects.begin();
        so_iter != objects.end(); ++so_iter)
   {
     delete *so_iter;
@@ -145,7 +146,7 @@ void vgui_displaybase_tableau::clear()
 
   objects.clear();
 
-  for ( vcl_map< vcl_string , vgui_displaybase_tableau_grouping >::iterator it = groupings.begin() ;
+  for ( std::map< std::string , vgui_displaybase_tableau_grouping >::iterator it = groupings.begin() ;
         it != groupings.end() ;
         it++ )
   {
@@ -159,13 +160,13 @@ void vgui_displaybase_tableau::draw_soviews_render()
 {
   vgui_macro_report_errors;
   {
-    for (vcl_map< vcl_string , vgui_displaybase_tableau_grouping >::iterator it = groupings.begin();
+    for (std::map< std::string , vgui_displaybase_tableau_grouping >::iterator it = groupings.begin();
          it != groupings.end();
          it++ )
     {
       if ( ! it->second.hide )
       {
-        for (vcl_vector<vgui_soview*>::iterator so_iter= it->second.objects.begin();
+        for (std::vector<vgui_soview*>::iterator so_iter= it->second.objects.begin();
              so_iter != it->second.objects.end(); ++so_iter)
         {
           vgui_soview *so = *so_iter;
@@ -212,13 +213,13 @@ void vgui_displaybase_tableau::draw_soviews_select()
 
   glPushName(0); // will be replaced by the id of each object
 
-  for ( vcl_map< vcl_string , vgui_displaybase_tableau_grouping >::iterator it = groupings.begin();
+  for ( std::map< std::string , vgui_displaybase_tableau_grouping >::iterator it = groupings.begin();
         it != groupings.end();
         it++ )
   {
     if ( ! it->second.hide )
     {
-      for (vcl_vector<vgui_soview*>::iterator so_iter=it->second.objects.begin();
+      for (std::vector<vgui_soview*>::iterator so_iter=it->second.objects.begin();
            so_iter != it->second.objects.end(); ++so_iter)
       {
         // only highlight if the so is selectable
@@ -257,13 +258,13 @@ bool vgui_displaybase_tableau::handle(const vgui_event& e)
 
 bool vgui_displaybase_tableau::is_selected(unsigned iden)
 {
-  vcl_vector<unsigned>::iterator result = vcl_find(selections.begin(), selections.end(), iden);
+  std::vector<unsigned>::iterator result = std::find(selections.begin(), selections.end(), iden);
   return result != selections.end();
 }
 
-vcl_vector<vgui_soview*> vgui_displaybase_tableau::get_selected_soviews() const
+std::vector<vgui_soview*> vgui_displaybase_tableau::get_selected_soviews() const
 {
-  vcl_vector<vgui_soview*> svs;
+  std::vector<vgui_soview*> svs;
   for (unsigned i=0; i<selections.size(); ++i)
   {
     svs.push_back(vgui_soview::id_to_object(selections[i]));
@@ -271,9 +272,9 @@ vcl_vector<vgui_soview*> vgui_displaybase_tableau::get_selected_soviews() const
   return svs;
 }
 
-vcl_vector<unsigned> vgui_displaybase_tableau::get_all_ids() const
+std::vector<unsigned> vgui_displaybase_tableau::get_all_ids() const
 {
-  vcl_vector<unsigned> ids;
+  std::vector<unsigned> ids;
   for (unsigned int i=0; i< objects.size(); ++i)
     ids.push_back(objects[i]->get_id());
 
@@ -282,10 +283,10 @@ vcl_vector<unsigned> vgui_displaybase_tableau::get_all_ids() const
 
 bool vgui_displaybase_tableau::select(unsigned iden)
 {
-  vcl_vector<unsigned>::iterator result = vcl_find(selections.begin(), selections.end(), iden);
+  std::vector<unsigned>::iterator result = std::find(selections.begin(), selections.end(), iden);
   if (result == selections.end())
   {
-    // add selection to vcl_list
+    // add selection to std::list
     selections.push_back(iden);
 
     // notify so's observers
@@ -309,10 +310,10 @@ bool vgui_displaybase_tableau::select(unsigned iden)
 
 bool vgui_displaybase_tableau::deselect(unsigned iden)
 {
-  vcl_vector<unsigned>::iterator result = vcl_find(selections.begin(), selections.end(), iden);
+  std::vector<unsigned>::iterator result = std::find(selections.begin(), selections.end(), iden);
   if (result != selections.end())
   {
-    // remove selection from vcl_list
+    // remove selection from std::list
     selections.erase(result);
 
     // notify so's observers
@@ -333,12 +334,12 @@ bool vgui_displaybase_tableau::deselect(unsigned iden)
 bool vgui_displaybase_tableau::deselect_all()
 {
   // this is a bit inelegant but you have to make a copy
-  // of the selections vcl_list as sending the deselect message
+  // of the selections std::list as sending the deselect message
   // may actually change the selections
 
-  vcl_vector<unsigned> oldselections = selections;
+  std::vector<unsigned> oldselections = selections;
 
-  for (vcl_vector<unsigned>::iterator s_iter = oldselections.begin();
+  for (std::vector<unsigned>::iterator s_iter = oldselections.begin();
        s_iter != oldselections.end(); ++s_iter )
   {
     unsigned iden = *s_iter;
@@ -364,17 +365,17 @@ vgui_soview* vgui_displaybase_tableau::get_highlighted_soview()
     return vgui_soview::id_to_object(highlighted);
 }
 
-vgui_soview* vgui_displaybase_tableau::contains_hit(vcl_vector<unsigned> names)
+vgui_soview* vgui_displaybase_tableau::contains_hit(std::vector<unsigned> names)
 {
-  for (vcl_vector<vgui_soview*>::iterator i = objects.begin() ;
+  for (std::vector<vgui_soview*>::iterator i = objects.begin() ;
        i != objects.end() ; ++i)
   {
     // get id of soview
     unsigned soview_id = (*i)->get_id();
 #ifdef DEBUG
-    vcl_cerr << "vgui_displaybase_tableau::contains_hit soview_id=" << soview_id << '\n';
+    std::cerr << "vgui_displaybase_tableau::contains_hit soview_id=" << soview_id << '\n';
 #endif
-    vcl_vector<unsigned>::iterator ni = vcl_find(names.begin(), names.end(), soview_id);
+    std::vector<unsigned>::iterator ni = std::find(names.begin(), names.end(), soview_id);
     if (ni != names.end())
       return *i;
   }
@@ -382,20 +383,20 @@ vgui_soview* vgui_displaybase_tableau::contains_hit(vcl_vector<unsigned> names)
   return VXL_NULLPTR;
 }
 
-vgui_displaybase_tableau_grouping* vgui_displaybase_tableau::get_grouping_ptr( vcl_string t_name )
+vgui_displaybase_tableau_grouping* vgui_displaybase_tableau::get_grouping_ptr( std::string t_name )
 {
-  vcl_map< vcl_string , vgui_displaybase_tableau_grouping >::iterator it = groupings.find( t_name );
+  std::map< std::string , vgui_displaybase_tableau_grouping >::iterator it = groupings.find( t_name );
   if ( it != groupings.end() )
     return & it->second;
   else
     return VXL_NULLPTR;
 }
 
-vcl_vector< vcl_string > vgui_displaybase_tableau::get_grouping_names()
+std::vector< std::string > vgui_displaybase_tableau::get_grouping_names()
 {
-  vcl_vector< vcl_string > to_return;
+  std::vector< std::string > to_return;
 
-  for ( vcl_map< vcl_string , vgui_displaybase_tableau_grouping >::iterator it = groupings.begin();
+  for ( std::map< std::string , vgui_displaybase_tableau_grouping >::iterator it = groupings.begin();
         it != groupings.end();
         it++ )
   {

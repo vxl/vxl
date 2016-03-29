@@ -2,18 +2,20 @@
 #define bstm_cams_and_box_to_scene_h
 //:
 // \file
+#include <iostream>
+#include <cstdlib>
 #include <bstm/bstm_scene.h>
 #include <vpgl/vpgl_perspective_camera.h>
 #include <vgl/vgl_vector_3d.h>
 #include <vgl/vgl_box_3d.h>
 #include <vil/vil_image_view.h>
-#include <vcl_cstdlib.h> // for rand()
+#include <vcl_compiler.h>
 
 typedef vpgl_perspective_camera<double> CamType;
 
 //: Main bstm_cams_and_box_to_scene function
 //  Takes in bundle.out file and image directory that created img_dir
-void bstm_util_cams_and_box_to_scene (vcl_vector<CamType>& cams,
+void bstm_util_cams_and_box_to_scene (std::vector<CamType>& cams,
                                        vgl_box_3d<double>   bbox,
                                        bstm_scene&         uscene,
                                        unsigned time_steps = 32,

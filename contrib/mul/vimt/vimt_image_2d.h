@@ -33,18 +33,18 @@ class vimt_image_2d : public vimt_image
   //  2D image is v[0] x v[1]
   //  Somewhat inefficient: Only use when you absolutely have to.
   //  Usually one only needs to know the size once one knows the exact type.
-  virtual vcl_vector<unsigned> image_size() const;
+  virtual std::vector<unsigned> image_size() const;
 
   //: Return 2 element vector indicating the size of a pixel
   //  Somewhat inefficient: Only use when you absolutely have to.
   //  Usually one only needs to know the size once one knows the exact type.
-  virtual vcl_vector<double> pixel_size() const;
+  virtual std::vector<double> pixel_size() const;
 
   //: Return vectors defining bounding box containing image in world co-ords
   //  Somewhat inefficient: Only use when you absolutely have to.
   //  Usually one only needs to know the size once one knows the exact type.
-  virtual void world_bounds(vcl_vector<double>& b_lo,
-                            vcl_vector<double>& b_hi) const;
+  virtual void world_bounds(std::vector<double>& b_lo,
+                            std::vector<double>& b_hi) const;
 
   //: Current world-to-image transformation
   const vimt_transform_2d& world2im() const { return world2im_; }
@@ -60,10 +60,10 @@ class vimt_image_2d : public vimt_image
   virtual const vil_image_view_base& image_base() const = 0;
 
   //: Name of the class
-  virtual vcl_string is_a() const { return "vimt_image_2d"; }
+  virtual std::string is_a() const { return "vimt_image_2d"; }
 
   //: Does the name of the class match the argument?
-  virtual bool is_class(vcl_string const& s) const
+  virtual bool is_class(std::string const& s) const
   { return s=="vimt_image_2d" || vimt_image::is_class(s); }
 };
 

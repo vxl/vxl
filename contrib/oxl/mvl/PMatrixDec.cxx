@@ -5,10 +5,11 @@
 //:
 //  \file
 
+#include <iostream>
+#include <cmath>
 #include "PMatrixDec.h"
 
-#include <vcl_cmath.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
 
 //--------------------------------------------------------------
 //: Constructor
@@ -17,7 +18,7 @@ PMatrixDec::PMatrixDec(const vnl_matrix<double>& p_matrix)
   : PMatrix(p_matrix), j_matrix_(3,3), d_matrix_(4,4)
 {
   if (!((p_matrix.rows() == 3) && (p_matrix.columns() == 4)))
-    vcl_cerr << "PMatrixDec WARNING: Incorrect size of matrix\n";
+    std::cerr << "PMatrixDec WARNING: Incorrect size of matrix\n";
   Init();
 }
 
@@ -49,11 +50,11 @@ void PMatrixDec::Init()
     a_u = a_u-u0*u0;
     a_v = a_v-v0*v0;
     if ((a_u <= 0.0) || (a_v <= 0.0))
-      vcl_cerr << "PMatrixDec WARNING: Incorrect projection matrix\n";
+      std::cerr << "PMatrixDec WARNING: Incorrect projection matrix\n";
     else
     {
-      a_u = vcl_sqrt(a_u);
-      a_v = vcl_sqrt(a_v);
+      a_u = std::sqrt(a_u);
+      a_v = std::sqrt(a_v);
 
       // INTRINSIC parameters => J
       j_matrix_(0,0) = a_u;
@@ -93,8 +94,8 @@ void PMatrixDec::Init()
 
 
 //---------------------------------------------------------------
-//: Print to vcl_ostream
-vcl_ostream& operator<<(vcl_ostream& s, const PMatrixDec& P)
+//: Print to std::ostream
+std::ostream& operator<<(std::ostream& s, const PMatrixDec& P)
 {
   s << "PROJECTION MATRIX = [\n" << P.get_matrix() << "]\n"
     << "DECOMPOSITION:\n"
@@ -115,15 +116,15 @@ void PMatrixDec::Test()
   matrix1(0,2)= 552.506; matrix1(1,2)= 194.806; matrix1(2,2)= 0.960472;
   matrix1(0,3)= -596.353;matrix1(1,3)= 92.4159; matrix1(2,3)= 0.228363;
 
-  vcl_cerr << "Correct Matrix:\n" << matrix1 << '\n';
+  std::cerr << "Correct Matrix:\n" << matrix1 << '\n';
   PMatrixDec pmat1(matrix1);
-  vcl_cerr << pmat1;
+  std::cerr << pmat1;
   vnl_matrix<double> J(3,4);
   J.update(pmat1.IntrinsicParameters(), 0, 0); // Copy columns 0,1 and 2
   J(0,3) = 0.0; // Last column = 0
   J(1,3) = 0.0;
   J(2,3) = 0.0;
-  vcl_cerr << "P = [J O_3]*D = [\n"
+  std::cerr << "P = [J O_3]*D = [\n"
            << J * pmat1.ExtrinsicParameters() << "]\n"
            << "AlphaU=" << pmat1.GetAlphaU() << '\n'
            << "AlphaV=" << pmat1.GetAlphaV() << '\n'
@@ -136,18 +137,18 @@ void PMatrixDec::Test()
     for (i=0; i<4; i++)
       matrix2(i,j)= 1.0;
 
-  vcl_cerr << "Another Incorrect Matrix:\n"
+  std::cerr << "Another Incorrect Matrix:\n"
            << matrix2 << '\n';
   PMatrixDec pmat2(matrix2);
-  vcl_cerr << pmat2;
+  std::cerr << pmat2;
 
   vnl_matrix<double> matrix3(2, 2);
   for (j=0; j<2; j++)
     for (i=0; i<2; i++)
       matrix3(i,j)= 2.0;
 
-  vcl_cerr << "Incorrect Matrix:\n"
+  std::cerr << "Incorrect Matrix:\n"
            << matrix3 << '\n';
   PMatrixDec pmat3(matrix3);
-  vcl_cerr << pmat3;
+  std::cerr << pmat3;
 }

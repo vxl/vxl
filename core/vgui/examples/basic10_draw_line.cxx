@@ -1,6 +1,7 @@
 // In this example a line is drawn by clicking on the end points.
 
-#include <vcl_iostream.h>
+#include <iostream>
+#include <vcl_compiler.h>
 #include <vgui/vgui.h>
 #include <vgui/vgui_projection_inspector.h>
 #include <vgui/vgui_image_tableau.h>
@@ -47,11 +48,11 @@ struct example_tableau : public vgui_easy2D_tableau
       {
         this->set_line_width(3);
         this->add_line(start_x, start_y, ix, iy);
-        vcl_cout << "Adding line to display" << vcl_endl;
+        std::cout << "Adding line to display" << std::endl;
         this->post_redraw();
         start_x = start_y = -1;
       }
-      vcl_cout << "selecting at " << e.wx << " " << e.wy << vcl_endl;
+      std::cout << "selecting at " << e.wx << " " << e.wy << std::endl;
       return true; // event has been used
     }
 
@@ -73,7 +74,7 @@ int main(int argc,char **argv)
   vgui::init(argc, argv);
   if (argc <= 1)
   {
-    vcl_cerr << "Please give an image filename on the command line" << vcl_endl;
+    std::cerr << "Please give an image filename on the command line" << std::endl;
     return 0;
   }
 

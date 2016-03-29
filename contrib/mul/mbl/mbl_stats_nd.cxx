@@ -1,13 +1,14 @@
 // This is mul/mbl/mbl_stats_nd.cxx
+#include <iostream>
+#include <cmath>
 #include "mbl_stats_nd.h"
 //:
 // \file
 // \brief Simple statistics (mean, variance) on vectors.
 // \author Tim Cootes
 
-#include <vcl_cmath.h>
+#include <vcl_compiler.h>
 #include <vcl_cassert.h>
-#include <vcl_iostream.h>
 #include <vnl/io/vnl_io_vector.h>
 
 mbl_stats_nd::mbl_stats_nd()
@@ -74,7 +75,7 @@ vnl_vector<double> mbl_stats_nd::sd() const
   {
     double var = (sum_sq_[i]-(sum_[i]*sum_[i]/n_obs_))/(n_obs_-1);
     if (var<=0) sd[i]=0.0;
-    else        sd[i]=vcl_sqrt(var);
+    else        sd[i]=std::sqrt(var);
   }
   return sd;
 }
@@ -91,7 +92,7 @@ vnl_vector<double> mbl_stats_nd::stdError() const
   {
     double var = (sum_sq_[i]-(sum_[i]*sum_[i]/n_obs_))/(n_obs_-1);
     if (var<=0) se[i]=0.0;
-    else        se[i]=vcl_sqrt(var/n_obs_);
+    else        se[i]=std::sqrt(var/n_obs_);
   }
   return se;
 }
@@ -150,14 +151,14 @@ void mbl_stats_nd::b_read(vsl_b_istream& bfs)
     }
     break;
    default:
-    vcl_cerr << "I/O ERROR: mbl_stats_nd::b_read(vsl_b_istream&)\n"
+    std::cerr << "I/O ERROR: mbl_stats_nd::b_read(vsl_b_istream&)\n"
              << "           Unknown version number "<< file_version_no << '\n';
-    bfs.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
+    bfs.is().clear(std::ios::badbit); // Set an unrecoverable IO error on stream
     return;
   }
 }
 
-void mbl_stats_nd::print_summary(vcl_ostream& os) const
+void mbl_stats_nd::print_summary(std::ostream& os) const
 {
   os << "mbl_stats_nd: ";
   if (n_obs_==0)
@@ -168,14 +169,14 @@ void mbl_stats_nd::print_summary(vcl_ostream& os) const
   }
 }
 
-vcl_ostream& operator<<(vcl_ostream& os, const mbl_stats_nd& stats)
+std::ostream& operator<<(std::ostream& os, const mbl_stats_nd& stats)
 {
   stats.print_summary(os);
   return os;
 }
 
   //: Stream output operator for class reference
-void vsl_print_summary(vcl_ostream& os,const mbl_stats_nd& stats)
+void vsl_print_summary(std::ostream& os,const mbl_stats_nd& stats)
 {
   stats.print_summary(os);
 }

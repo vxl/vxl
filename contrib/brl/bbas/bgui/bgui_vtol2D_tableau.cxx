@@ -41,7 +41,7 @@ static void print_edgels(vtol_edge_2d_sptr const & e)
     return;
   int N = ec->size();
   for (int i = 0; i<N; i++)
-    vcl_cout << "egl(" << i << ")=" << (*ec)[i] << '\n';
+    std::cout << "egl(" << i << ")=" << (*ec)[i] << '\n';
 }
 #endif
 
@@ -111,7 +111,7 @@ bgui_vtol2D_tableau::add_edge(vtol_edge_2d_sptr const& e,
 
 
 bgui_vtol_soview2D_edge_group*
-bgui_vtol2D_tableau::add_edge_group(vcl_vector<vtol_edge_2d_sptr>& edges,
+bgui_vtol2D_tableau::add_edge_group(std::vector<vtol_edge_2d_sptr>& edges,
                                     const vgui_style_sptr& style )
 {
   bgui_vtol_soview2D_edge_group* obj =
@@ -149,10 +149,10 @@ bgui_vtol2D_tableau::add_face(vtol_face_2d_sptr const& f,
 // Add a list of generic topology objects
 //
 void bgui_vtol2D_tableau::
-add_topology_objects(vcl_vector<vtol_topology_object_sptr> const& tos,
+add_topology_objects(std::vector<vtol_topology_object_sptr> const& tos,
                      const vgui_style_sptr& style)
 {
-  for (vcl_vector<vtol_topology_object_sptr>::const_iterator tot = tos.begin();
+  for (std::vector<vtol_topology_object_sptr>::const_iterator tot = tos.begin();
        tot != tos.end(); tot++)
     {
       add_topology_object((*tot) , style );
@@ -188,19 +188,19 @@ add_topology_object(vtol_topology_object_sptr const& tos,
 }
 
 
-void bgui_vtol2D_tableau::add_edges(vcl_vector<vtol_edge_2d_sptr> const& edges,
+void bgui_vtol2D_tableau::add_edges(std::vector<vtol_edge_2d_sptr> const& edges,
                                     bool verts ,
                                     const vgui_style_sptr& style )
 {
-  for (vcl_vector<vtol_edge_2d_sptr>::const_iterator eit = edges.begin();
+  for (std::vector<vtol_edge_2d_sptr>::const_iterator eit = edges.begin();
        eit != edges.end(); eit++)
   {
     this->add_edge(*eit , style );
     //optionally display the edge vertices
     if (verts)
     {
-      vcl_vector<vtol_vertex_sptr> vts; (*eit)->vertices(vts);
-      for (vcl_vector<vtol_vertex_sptr>::iterator vit = vts.begin();
+      std::vector<vtol_vertex_sptr> vts; (*eit)->vertices(vts);
+      for (std::vector<vtol_vertex_sptr>::iterator vit = vts.begin();
            vit != vts.end(); vit++)
         this->add_vertex((*vit)->cast_to_vertex_2d(), style);
     }
@@ -209,19 +209,19 @@ void bgui_vtol2D_tableau::add_edges(vcl_vector<vtol_edge_2d_sptr> const& edges,
 
 
 void
-bgui_vtol2D_tableau::add_faces(vcl_vector<vtol_face_2d_sptr> const& faces,
+bgui_vtol2D_tableau::add_faces(std::vector<vtol_face_2d_sptr> const& faces,
                                bool verts,
                                const vgui_style_sptr& style )
 {
-  for (vcl_vector<vtol_face_2d_sptr>::const_iterator fit = faces.begin();
+  for (std::vector<vtol_face_2d_sptr>::const_iterator fit = faces.begin();
        fit != faces.end(); fit++)
   {
     vtol_face_2d_sptr f = (*fit);
     this->add_face(f , style );
     if (verts)
     {
-      vcl_vector<vtol_vertex_sptr> vts; f->vertices(vts);
-      for (vcl_vector<vtol_vertex_sptr>::iterator vit = vts.begin();
+      std::vector<vtol_vertex_sptr> vts; f->vertices(vts);
+      for (std::vector<vtol_vertex_sptr>::iterator vit = vts.begin();
            vit != vts.end(); vit++)
         this->add_vertex((*vit)->cast_to_vertex_2d(), style);
     }
@@ -234,8 +234,8 @@ vtol_edge_2d_sptr bgui_vtol2D_tableau::get_mapped_edge(const int id)
   vtol_topology_object_sptr to = obj_map_[id];
   if (!to)
   {
-    vcl_cout << "In bgui_vtol2D_tableau::get_mapped_edge(..) - null map entry\n";
-    return 0;
+    std::cout << "In bgui_vtol2D_tableau::get_mapped_edge(..) - null map entry\n";
+    return VXL_NULLPTR;
   }
   return to->cast_to_edge()->cast_to_edge_2d();
 }
@@ -245,8 +245,8 @@ vtol_face_2d_sptr bgui_vtol2D_tableau::get_mapped_face(const int id)
   vtol_topology_object_sptr to = obj_map_[id];
   if (!to)
   {
-    vcl_cout << "In bgui_vtol2D_tableau::get_mapped_face(..) - null map entry\n";
-    return 0;
+    std::cout << "In bgui_vtol2D_tableau::get_mapped_face(..) - null map entry\n";
+    return VXL_NULLPTR;
   }
   return to->cast_to_face()->cast_to_face_2d();
 }

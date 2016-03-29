@@ -1,4 +1,6 @@
 // This is oxl/xcv/xcv_segmentation.cxx
+#include <iostream>
+#include <cmath>
 #include "xcv_segmentation.h"
 //:
 // \file
@@ -7,8 +9,7 @@
 // \author K.Y.McGaul
 
 #include <vil1/vil1_image.h>
-#include <vcl_cmath.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
 
 #include <osl/osl_harris_params.h>
 #include <osl/osl_harris.h>
@@ -26,7 +27,7 @@
 
 #include <xcv/xcv_image_tableau.h>
 
-vcl_list<osl_edge*> xcv_segmentation::detected_edges = vcl_list<osl_edge*>();
+std::list<osl_edge*> xcv_segmentation::detected_edges = std::list<osl_edge*>();
 
 extern void get_current(unsigned*, unsigned*);
 extern bool get_image_at(vil1_image*, unsigned, unsigned);
@@ -67,7 +68,7 @@ void xcv_segmentation::perform_harris(osl_harris_params& params,
   osl_harris harris(params);
   harris.compute(img);
 
-  vcl_vector<vcl_pair<float, float> > cor;
+  std::vector<std::pair<float, float> > cor;
   harris.get_corners(cor);
 
   if (!easy_tab)
@@ -104,7 +105,7 @@ void xcv_segmentation::harris()
 //-----------------------------------------------------------------------------
 //: Draw the given edges onto the given location.
 //-----------------------------------------------------------------------------
-void xcv_segmentation::draw_edges(vcl_list<osl_edge*> lines, unsigned col,
+void xcv_segmentation::draw_edges(std::list<osl_edge*> lines, unsigned col,
                                   unsigned row)
 {
   vgui_easy2D_tableau_sptr easy_tab = get_easy2D_at(col, row);
@@ -112,8 +113,8 @@ void xcv_segmentation::draw_edges(vcl_list<osl_edge*> lines, unsigned col,
     return;
 
   // Delete old edges and then add the new edges:
-  vcl_vector<vgui_soview*> sel_edges = easy_tab->get_all();
-  for (vcl_vector<vgui_soview*>::iterator i = sel_edges.begin();
+  std::vector<vgui_soview*> sel_edges = easy_tab->get_all();
+  for (std::vector<vgui_soview*>::iterator i = sel_edges.begin();
        i != sel_edges.end(); i++)
   {
     if ((*i)->type_name() == "vgui_soview2D_linestrip")
@@ -123,7 +124,7 @@ void xcv_segmentation::draw_edges(vcl_list<osl_edge*> lines, unsigned col,
   xcv_image_tableau_sptr tableau = get_image_tableau_at(col,row);
   float low[3],high[3];
   tableau->get_bounding_box(low,high);
-  for (vcl_list<osl_edge*>::const_iterator i = lines.begin(); i != lines.end(); ++i)
+  for (std::list<osl_edge*>::const_iterator i = lines.begin(); i != lines.end(); ++i)
   {
     osl_edge const* e = *i;
     float *x = e->GetY(),*y = e->GetX(); // note x-y confusion.
@@ -146,8 +147,8 @@ void xcv_segmentation::draw_edges(vcl_list<osl_edge*> lines, unsigned col,
 //-----------------------------------------------------------------------------
 //: Draw straight lines onto the given location.
 //-----------------------------------------------------------------------------
-void xcv_segmentation::draw_straight_lines(vcl_vector<float> x1, vcl_vector<float> y1,
-                                           vcl_vector<float> x2, vcl_vector<float> y2,
+void xcv_segmentation::draw_straight_lines(std::vector<float> x1, std::vector<float> y1,
+                                           std::vector<float> x2, std::vector<float> y2,
                                            unsigned col, unsigned row)
 {
   vgui_easy2D_tableau_sptr easy_tab = get_easy2D_at(col, row);
@@ -155,8 +156,8 @@ void xcv_segmentation::draw_straight_lines(vcl_vector<float> x1, vcl_vector<floa
     return;
 
   // Delete old edges and then add the new edges:
-  vcl_vector<vgui_soview*> sel_edges = easy_tab->get_all();
-  for (vcl_vector<vgui_soview*>::iterator i = sel_edges.begin();
+  std::vector<vgui_soview*> sel_edges = easy_tab->get_all();
+  for (std::vector<vgui_soview*>::iterator i = sel_edges.begin();
        i != sel_edges.end(); i++)
   {
     if ((*i)->type_name() == "vgui_soview2D_linestrip")
@@ -225,8 +226,8 @@ void xcv_segmentation::canny_ox()
   draw_edges(detected_edges, col, row);
 
   // Example code to save the edges
-  //vcl_ofstream ofs("/temp/1.txt");
-  //for(vcl_list<osl_edge*>::const_iterator i=detected_edges.begin(); i!=detected_edges.end(); ++i)
+  //std::ofstream ofs("/temp/1.txt");
+  //for(std::list<osl_edge*>::const_iterator i=detected_edges.begin(); i!=detected_edges.end(); ++i)
   //        {
   //                (*i)->write_ascii(ofs);
   //                ofs << "\n";
@@ -246,7 +247,7 @@ bool xcv_segmentation::get_break_lines_ox_params(double* bk_thresh)
 //-----------------------------------------------------------------------------
 //: Get a list of broken edges from the current image.
 //-----------------------------------------------------------------------------
-void xcv_segmentation::get_broken_edges(double bk_thresh, vcl_list<osl_edge*>* broken_edges)
+void xcv_segmentation::get_broken_edges(double bk_thresh, std::list<osl_edge*>* broken_edges)
 {
   unsigned col, row;
   get_current(&col, &row);
@@ -276,7 +277,7 @@ void xcv_segmentation::get_broken_edges(double bk_thresh, vcl_list<osl_edge*>* b
   cox.detect_edges(img, &detected_edges);
 
   // breaking edges -----
-  for (vcl_list<osl_edge*>::iterator iter = detected_edges.begin();
+  for (std::list<osl_edge*>::iterator iter = detected_edges.begin();
        iter!= detected_edges.end(); iter++)
     osl_break_edge(*iter, broken_edges, bk_thresh);
 }
@@ -292,7 +293,7 @@ void xcv_segmentation::break_lines_ox()
   unsigned col, row;
   get_current(&col, &row);
 
-  vcl_list<osl_edge*> broken_edges;
+  std::list<osl_edge*> broken_edges;
   get_broken_edges(bk_thresh, &broken_edges);
   draw_edges(broken_edges, col, row);
 }
@@ -326,12 +327,12 @@ void xcv_segmentation::detect_lines_ox()
   get_current(&col, &row);
 
   double bk_thresh = 0.3;
-  vcl_list<osl_edge*> broken_edges;
+  std::list<osl_edge*> broken_edges;
   get_broken_edges(bk_thresh, &broken_edges);
 
   // Select straight edges only:
-  vcl_vector<float> x1, y1, x2, y2;
-  for (vcl_list<osl_edge*>::iterator iter = broken_edges.begin();
+  std::vector<float> x1, y1, x2, y2;
+  for (std::list<osl_edge*>::iterator iter = broken_edges.begin();
        iter!= broken_edges.end(); iter++)
   {
     osl_edge* e = *iter;
@@ -348,7 +349,7 @@ void xcv_segmentation::detect_lines_ox()
       continue;
 
     // Now project the endpoints of the edge onto the fitted line:
-    double m = vcl_sqrt(a*a + b*b);
+    double m = std::sqrt(a*a + b*b);
     if (m == 0)
       continue;
 

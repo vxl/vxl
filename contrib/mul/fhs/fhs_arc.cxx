@@ -1,10 +1,12 @@
+#include <iostream>
+#include <algorithm>
 #include "fhs_arc.h"
 //:
 // \file
 // \author Tim Cootes
 // \brief Link between one node and another
 
-#include <vcl_algorithm.h>
+#include <vcl_compiler.h>
 
     //: Write to binary stream
 void fhs_arc::b_write(vsl_b_ostream& bfs) const
@@ -29,7 +31,7 @@ void fhs_arc::b_read(vsl_b_istream& bfs)
 }
 
 //: Print
-vcl_ostream& operator<<(vcl_ostream& os, const fhs_arc& a)
+std::ostream& operator<<(std::ostream& os, const fhs_arc& a)
 {
   os<<'('<<a.i()<<"->"<<a.j()<<" Offset: ("<<a.dx()<<','<<a.dy()
     <<") var: ("<<a.var_x()<<','<<a.var_y()<<')';
@@ -37,7 +39,7 @@ vcl_ostream& operator<<(vcl_ostream& os, const fhs_arc& a)
 }
 
 //: Print set
-vcl_ostream& operator<<(vcl_ostream& os, const vcl_vector<fhs_arc>& arc)
+std::ostream& operator<<(std::ostream& os, const std::vector<fhs_arc>& arc)
 {
   os<<arc.size()<<" arcs:"<<'\n';
   for (unsigned i=0;i<arc.size();++i)
@@ -46,17 +48,17 @@ vcl_ostream& operator<<(vcl_ostream& os, const vcl_vector<fhs_arc>& arc)
 }
 
 //: Print
-void vsl_print_summary(vcl_ostream& os, const fhs_arc& a)
+void vsl_print_summary(std::ostream& os, const fhs_arc& a)
 {
   os<<a;
 }
 
 //: Find children of node p_node
 //  Add relevant arcs to new_arc, and fill children list
-static void fhs_find_children(const vcl_vector<fhs_arc>& arc0,
-                         vcl_vector<bool>& used,
-                         vcl_vector<fhs_arc>& new_arc,
-                         vcl_vector<unsigned>& children,
+static void fhs_find_children(const std::vector<fhs_arc>& arc0,
+                         std::vector<bool>& used,
+                         std::vector<fhs_arc>& new_arc,
+                         std::vector<unsigned>& children,
                          unsigned p_node)
 {
   children.resize(0);
@@ -83,9 +85,9 @@ static void fhs_find_children(const vcl_vector<fhs_arc>& arc0,
 //  Assumes that there are n nodes (indexed 0..n-1),
 //  thus n-1 arcs defining a tree.
 //  On exit children[i] gives list of children of node i
-bool fhs_order_tree_from_root(const vcl_vector<fhs_arc>& arc0,
-                         vcl_vector<fhs_arc>& new_arc,
-                         vcl_vector<vcl_vector<unsigned> >& children,
+bool fhs_order_tree_from_root(const std::vector<fhs_arc>& arc0,
+                         std::vector<fhs_arc>& new_arc,
+                         std::vector<std::vector<unsigned> >& children,
                          unsigned new_root)
 {
   // Number of nodes is one more than number of arcs for a tree
@@ -94,7 +96,7 @@ bool fhs_order_tree_from_root(const vcl_vector<fhs_arc>& arc0,
   for (unsigned i=0;i<arc0.size();++i)
     if (arc0[i].i()>=n || arc0[i].j()>=n)
     {
-      vcl_cerr<<"Arc index outside range [0,"<<n-1<<']'<<'\n'
+      std::cerr<<"Arc index outside range [0,"<<n-1<<']'<<'\n'
               <<"Arc = "<<arc0[i]<<'\n';
       return false;
     }
@@ -102,8 +104,8 @@ bool fhs_order_tree_from_root(const vcl_vector<fhs_arc>& arc0,
   children.resize(n);
   for (unsigned i=0;i<n;++i) children[i].resize(0);
 
-  vcl_vector<bool> used(n);
-  vcl_fill(used.begin(),used.end(),false);
+  std::vector<bool> used(n);
+  std::fill(used.begin(),used.end(),false);
 
   new_arc.resize(0);
 

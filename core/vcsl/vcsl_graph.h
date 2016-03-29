@@ -10,15 +10,16 @@
 //  Modifications
 //   2000/08/01 Francois BERTEL Creation.
 //   2001/04/10 Ian Scott (Manchester) Converted perceps header to doxygen
-//   2002/01/28 Peter Vanroose - vcl_vector member vertices_ changed to non-ptr
+//   2002/01/28 Peter Vanroose - std::vector member vertices_ changed to non-ptr
 //   2004/09/10 Peter Vanroose - Added explicit copy constructor (ref_count !)
 //   2004/09/17 Peter Vanroose - made count() non-virtual - it just returns a member and should not be overloaded
 // \endverbatim
 
+#include <vector>
 #include <vbl/vbl_ref_count.h>
 #include <vcsl/vcsl_graph_sptr.h>
 #include <vcsl/vcsl_spatial_sptr.h>
-#include <vcl_vector.h>
+#include <vcl_compiler.h>
 
 //: Spatial coordinate system transformation graph
 // Graph where nodes are spatial coordinate systems and arrows are
@@ -85,7 +86,7 @@ class vcsl_graph
  protected:
 
   //: Vertices of the graph: all the spatial coordinate systems
-  vcl_vector<vcsl_spatial_sptr> vertices_;
+  std::vector<vcsl_spatial_sptr> vertices_;
 };
 
 #endif // vcsl_graph_h_

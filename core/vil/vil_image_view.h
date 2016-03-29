@@ -13,10 +13,11 @@
 //   Peter Vanroose - 21 Aug.2003 - support added for interleaved planes
 // \endverbatim
 
-#include <vcl_iosfwd.h>
-#include <vcl_string.h>
+#include <iosfwd>
+#include <string>
+#include <cstddef>
+#include <vcl_compiler.h>
 #include <vcl_cassert.h>
-#include <vcl_cstddef.h>
 #include <vil/vil_image_view_base.h>
 #include <vil/vil_memory_chunk.h>
 #include <vil/vil_pixel_format.h>
@@ -45,17 +46,17 @@ class vil_image_view : public vil_image_view_base
   //: Pointer to pixel at origin.
   T * top_left_;
   //: Add this to a pixel pointer to move one column left.
-  vcl_ptrdiff_t istep_;
+  std::ptrdiff_t istep_;
   //: Add this to a pixel pointer to move one row down.
-  vcl_ptrdiff_t jstep_;
+  std::ptrdiff_t jstep_;
   //: Add this to a pixel pointer to move one plane back.
-  vcl_ptrdiff_t planestep_;
+  std::ptrdiff_t planestep_;
 
   //: Reference to actual image data.
   vil_memory_chunk_sptr ptr_;
 
   //: Disconnect this view from the underlying data,
-  void release_memory() { ptr_ = 0; }
+  void release_memory() { ptr_ = VXL_NULLPTR; }
 
  public:
   //: Dflt ctor
@@ -73,7 +74,7 @@ class vil_image_view : public vil_image_view_base
   //  If the data goes out of scope then this view could be invalid, and
   //  there's no way of knowing until it's too late - so take care!
   vil_image_view(const T* top_left, unsigned ni, unsigned nj, unsigned nplanes,
-                 vcl_ptrdiff_t i_step, vcl_ptrdiff_t j_step, vcl_ptrdiff_t plane_step);
+                 std::ptrdiff_t i_step, std::ptrdiff_t j_step, std::ptrdiff_t plane_step);
 
   //: Set this view to look at another view's data
   //  Typically used by functions which generate a manipulated view of
@@ -81,7 +82,7 @@ class vil_image_view : public vil_image_view_base
   //  Need to pass the memory chunk to set up the internal smart ptr appropriately
   vil_image_view(const vil_memory_chunk_sptr& mem_chunk,
                  const T* top_left, unsigned ni, unsigned nj, unsigned nplanes,
-                 vcl_ptrdiff_t i_step, vcl_ptrdiff_t j_step, vcl_ptrdiff_t plane_step);
+                 std::ptrdiff_t i_step, std::ptrdiff_t j_step, std::ptrdiff_t plane_step);
 
   //: Copy constructor.
   // The new object will point to the same underlying image as the rhs.
@@ -143,21 +144,21 @@ class vil_image_view : public vil_image_view_base
 
   //: Add this to your pixel pointer to get next i pixel.
   //  Note that istep() may well be negative; see e.g. vil_flip_lr
-  inline vcl_ptrdiff_t istep() const { return istep_; }
+  inline std::ptrdiff_t istep() const { return istep_; }
   //: Add this to your pixel pointer to get next j pixel.
   //  Note that jstep() may well be negative; see e.g. vil_flip_ud
-  inline vcl_ptrdiff_t jstep() const { return jstep_; }
+  inline std::ptrdiff_t jstep() const { return jstep_; }
   //: Add this to your pixel pointer to get pixel on next plane.
   //  Note that planestep() may well be negative, e.g. with BMP file images
-  inline vcl_ptrdiff_t planestep() const { return planestep_; }
+  inline std::ptrdiff_t planestep() const { return planestep_; }
 
   //: Cast to bool is true if pointing at some data.
   operator safe_bool() const
-  { return (top_left_ != (T*)0)? VCL_SAFE_BOOL_TRUE : 0; }
+  { return (top_left_ != VXL_NULLPTR)? VCL_SAFE_BOOL_TRUE : VXL_NULLPTR; }
 
   //: Return false if pointing at some data.
   bool operator!() const
-  { return (top_left_ != (T*)0)? false : true; }
+  { return (top_left_ != VXL_NULLPTR)? false : true; }
 
   //: The number of bytes in the data
   inline unsigned size_bytes() const { return size() * sizeof(T); }
@@ -222,7 +223,7 @@ class vil_image_view : public vil_image_view_base
 
   //: Make empty.
   // Disconnects view from underlying data.
-  inline void clear() { release_memory(); ni_=nj_=nplanes_=0; top_left_=0; istep_=jstep_=planestep_=0; }
+  inline void clear() { release_memory(); ni_=nj_=nplanes_=0; top_left_=VXL_NULLPTR; istep_=jstep_=planestep_=0; }
 
   //: Set this view to look at someone else's memory data.
   //  If the data goes out of scope then this view could be invalid, and
@@ -231,19 +232,19 @@ class vil_image_view : public vil_image_view_base
   //  Note that though top_left is passed in as const, the data may be manipulated
   //  through the view.
   void set_to_memory(const T* top_left, unsigned ni, unsigned nj, unsigned nplanes,
-                     vcl_ptrdiff_t i_step, vcl_ptrdiff_t j_step, vcl_ptrdiff_t plane_step);
+                     std::ptrdiff_t i_step, std::ptrdiff_t j_step, std::ptrdiff_t plane_step);
 
   //: Fill view with given value
   void fill(T value);
 
   //: Print a 1-line summary of contents
-  virtual void print(vcl_ostream&) const;
+  virtual void print(std::ostream&) const;
 
   //: Return class name
-  virtual vcl_string is_a() const;
+  virtual std::string is_a() const;
 
   //: True if this is (or is derived from) class s
-  virtual bool is_class(vcl_string const& s) const;
+  virtual bool is_class(std::string const& s) const;
 
   //: Return a description of the concrete data pixel type.
   // The value corresponds directly to pixel_type.
@@ -308,7 +309,7 @@ class vil_image_view : public vil_image_view_base
 //: Print a 1-line summary of contents
 template <class T>
 inline
-vcl_ostream& operator<<(vcl_ostream& s, vil_image_view<T> const& im)
+std::ostream& operator<<(std::ostream& s, vil_image_view<T> const& im)
 {
   im.print(s); return s;
 }

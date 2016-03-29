@@ -15,9 +15,7 @@ set(ipts_sources
     ipts_orientation_pyramid.cxx ipts_orientation_pyramid.h
 )
 
-add_library(ipts ${ipts_sources})
-install_targets(/lib ipts)
-INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/mul/ipts ${ipts_sources})
+vxl_add_library(LIBRARY_NAME ipts LIBRARY_SOURCES ${ipts_sources})
 target_link_libraries(ipts vimt_algo vimt ${VXL_LIB_PREFIX}vgl ${VXL_LIB_PREFIX}vil_algo ${VXL_LIB_PREFIX}vil)
 
 if(BUILD_MUL_TOOLS)

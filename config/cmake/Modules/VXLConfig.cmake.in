@@ -1,6 +1,6 @@
 # vxl/config/cmake/VXLConfig.cmake.in
 #   also configured by CMake to
-# @vxl_BINARY_DIR@/VXLConfig.cmake
+# @PROJECT_BINARY_DIR@/VXLConfig.cmake
 #
 # This CMake module is configured by VXL's build process to export the
 # project settings for use by client projects.  A client project may
@@ -71,6 +71,7 @@ set(VXL_CORE_INCLUDE_DIR "@VXLCORE_INCLUDE_DIR@")
 set(VXL_CORE_VIDEO_FOUND "@CORE_VIDEO_FOUND@" )
 set(VXL_CORE_VIDEO_INCLUDE_DIR "@VXLCORE_INCLUDE_DIR@")
 set(VXL_CORE_VIDEO_LIBRARIES "vidl")
+set(VXL_CORE_VIDEO_FFMPEG_FOUND "@CORE_VIDEO_FFMPEG_FOUND@" )
 
 set(VXL_VGUI_FOUND "@VGUI_FOUND@")
 set(VXL_VGUI_INCLUDE_DIR "@OPENGL_INCLUDE_DIR@")
@@ -178,28 +179,8 @@ set(VXL_EXPAT_LIBRARIES "@EXPAT_LIBRARIES@")
 # Tell UseVXL.cmake that VXLConfig.cmake has been included.
 set(VXL_CONFIG_CMAKE 1)
 
-### deprecated variables set below ###
-# These should be removed after some time to upgrade has passed.
-
-# VXL include directories.
-# There is no need for clients to use this directly
-set(VXL_V3P_INCLUDE_DIR_deprecated "@VTHREEP_INCLUDE_DIR@")
-
-# Would a client project need to use these variables ever?
-# These are needed for backward compatibility mode for now, see UseVXL.cmake
-set(VXL_VGUI_USE_GLUT_deprecated "@VGUI_USE_GLUT@")
-set(VXL_VGUI_USE_QT_deprecated "@VGUI_USE_QT@")
-set(VXL_VGUI_USE_MFC_deprecated "@VGUI_USE_MFC@")
-set(VXL_VGUI_USE_GTK_deprecated "@VGUI_USE_GTK@")
-set(VXL_VGUI_USE_GTK2_deprecated "@VGUI_USE_GTK2@")
-
-# There is no need for clients to know this.
-# These are needed for backward compatibility mode for now, see UseVXL.cmake
-set(VXL_FORCE_V3P_ZLIB_deprecated "@VXL_FORCE_V3P_ZLIB@")
-set(VXL_FORCE_V3P_JPEG_deprecated "@VXL_FORCE_V3P_JPEG@")
-set(VXL_FORCE_V3P_TIFF_deprecated "@VXL_FORCE_V3P_TIFF@")
-set(VXL_FORCE_V3P_GEOTIFF_deprecated "@VXL_FORCE_V3P_GEOTIFF@")
-set(VXL_FORCE_V3P_PNG_deprecated "@VXL_FORCE_V3P_PNG@")
-set(VXL_FORCE_V3P_MPEG2_deprecated "@VXL_FORCE_V3P_MPEG2@")
-set(VXL_FORCE_V3P_RPLY_deprecated "@VXL_FORCE_V3P_RPLY@")
-
+# Import VXL targets.
+if(NOT VXL_TARGETS_IMPORTED@VXL_CONFIG_TARGETS_CONDITION@)
+  set(VXL_TARGETS_IMPORTED 1)
+  include("${CMAKE_CURRENT_LIST_DIR}/VXLTargets.cmake")
+endif()

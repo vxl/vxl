@@ -1,4 +1,4 @@
-#include <boct/boct_tree_cell_reader.txx>
+#include <boct/boct_tree_cell_reader.hxx>
 #include <boxm/sample/boxm_scalar_sample.h>
 
 typedef boxm_scalar_sample<float> sample;

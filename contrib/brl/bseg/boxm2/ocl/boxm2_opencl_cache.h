@@ -3,6 +3,9 @@
 //:
 // \file
 // \brief boxm2_opencl_scene_streamer assists the processor in streaming blocks
+#include <vector>
+#include <list>
+#include <iostream>
 #include <boxm2/boxm2_scene.h>
 #include <boxm2/boxm2_block.h>
 #include <boxm2/boxm2_data.h>
@@ -13,10 +16,8 @@
 #include <boxm2/io/boxm2_cache.h>
 #include <boxm2/io/boxm2_lru_cache.h>
 #include <brdb/brdb_value_sptr.h>
-#include <vcl_vector.h>
-#include <vcl_list.h>
 #ifdef DEBUG
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
 #endif
 
 //open cl includes
@@ -53,15 +54,15 @@ class boxm2_opencl_cache: public vbl_ref_count
 
     //: returns data pointer to data block specified by ID
     template<boxm2_data_type T>
-    bocl_mem* get_data(boxm2_scene_sptr scene,boxm2_block_id, vcl_size_t num_bytes=0, bool read_only = true,vcl_string ident = "");
-    bocl_mem* get_data(boxm2_scene_sptr scene,boxm2_block_id, vcl_string type, vcl_size_t num_bytes=0, bool read_only = true);
+    bocl_mem* get_data(boxm2_scene_sptr scene,boxm2_block_id, std::size_t num_bytes=0, bool read_only = true,std::string ident = "");
+    bocl_mem* get_data(boxm2_scene_sptr scene,boxm2_block_id, std::string type, std::size_t num_bytes=0, bool read_only = true);
 
     template<boxm2_data_type T>
-        bocl_mem* get_data_new(boxm2_scene_sptr scene,boxm2_block_id, vcl_size_t num_bytes=0, bool read_only = true);
-    bocl_mem* get_data_new(boxm2_scene_sptr scene,boxm2_block_id id, vcl_string type, vcl_size_t num_bytes = 0, bool read_only = true);
+        bocl_mem* get_data_new(boxm2_scene_sptr scene,boxm2_block_id, std::size_t num_bytes=0, bool read_only = true);
+    bocl_mem* get_data_new(boxm2_scene_sptr scene,boxm2_block_id id, std::string type, std::size_t num_bytes = 0, bool read_only = true);
 
     //: returns a flat bocl_mem of a certain size
-    bocl_mem* alloc_mem(vcl_size_t num_bytes, void* cpu_buff=NULL, vcl_string id="bocl_mem in pool");
+    bocl_mem* alloc_mem(std::size_t num_bytes, void* cpu_buff=NULL, std::string id="bocl_mem in pool");
     void      unref_mem(bocl_mem* mem);
     void      free_mem(bocl_mem* mem);
     void      free_mem_pool();
@@ -75,22 +76,22 @@ class boxm2_opencl_cache: public vbl_ref_count
     bool clear_cache_if_necessary();
 
     //: returns num bytes in cache
-    vcl_size_t bytes_in_cache();
+    std::size_t bytes_in_cache();
 
     //: deep_replace data replaces not only the current data on the gpu cached, but pushes a block to the cpu cache
-    void deep_replace_data(boxm2_scene_sptr scene,boxm2_block_id id, vcl_string type, bocl_mem* mem, bool read_only=true);
+    void deep_replace_data(boxm2_scene_sptr scene,boxm2_block_id id, std::string type, bocl_mem* mem, bool read_only=true);
 
     //: deep_remove_data removes this id and type from ocl cache, as well as the cpu cache
-    void deep_remove_data(boxm2_scene_sptr scene,boxm2_block_id id, vcl_string type, bool write_out=true);
+    void deep_remove_data(boxm2_scene_sptr scene,boxm2_block_id id, std::string type, bool write_out=true);
 
     //: shallow_remove_data removes data with id and type from ocl cache only
-    void shallow_remove_data(boxm2_scene_sptr scene,boxm2_block_id id, vcl_string type);
+    void shallow_remove_data(boxm2_scene_sptr scene,boxm2_block_id id, std::string type);
 
     //: removes block data with id from opencl cache only, caution if block data changed: this method does not enqueu a read event before deletion!
     void shallow_remove_block(boxm2_scene_sptr scene,boxm2_block_id id);
 
     //: to string method prints out LRU order
-    vcl_string to_string();
+    std::string to_string();
 
   private:
 
@@ -101,9 +102,9 @@ class boxm2_opencl_cache: public vbl_ref_count
     boxm2_cache_sptr cpu_cache_;
 
     //: maximum number of blocks this cache will allow (eventually this will become smart)
-    void lru_push_front( vcl_pair<boxm2_scene_sptr, boxm2_block_id>  scene_id_pair );
-    bool lru_remove_last(vcl_pair<boxm2_scene_sptr, boxm2_block_id> & scene_id_pair); //removes all data and block with this ID. returns false if lru is empty
-    vcl_list<vcl_pair<boxm2_scene_sptr,boxm2_block_id> > lru_order_;
+    void lru_push_front( std::pair<boxm2_scene_sptr, boxm2_block_id>  scene_id_pair );
+    bool lru_remove_last(std::pair<boxm2_scene_sptr, boxm2_block_id> & scene_id_pair); //removes all data and block with this ID. returns false if lru is empty
+    std::list<std::pair<boxm2_scene_sptr,boxm2_block_id> > lru_order_;
     unsigned int maxBlocksInCache;
     unsigned long bytesInCache_;
     unsigned long maxBytesInCache_;
@@ -115,17 +116,17 @@ class boxm2_opencl_cache: public vbl_ref_count
     bocl_mem* block_info_;
 
     //: dumb cache keeps one cached block, the last one used.
-    vcl_map<boxm2_scene_sptr, vcl_map<boxm2_block_id, bocl_mem*>,ltstr1 > cached_blocks_;
+    std::map<boxm2_scene_sptr, std::map<boxm2_block_id, bocl_mem*>,ltstr1 > cached_blocks_;
 
     //: keeps one copy of each type of cached data
-    vcl_map<boxm2_scene_sptr, vcl_map<vcl_string, vcl_map<boxm2_block_id, bocl_mem*> >,ltstr1 > cached_data_;
+    std::map<boxm2_scene_sptr, std::map<std::string, std::map<boxm2_block_id, bocl_mem*> >,ltstr1 > cached_data_;
 
     //: helper method for finding the right data map
-    vcl_map<boxm2_block_id, bocl_mem*>& cached_data_map(boxm2_scene_sptr scene, vcl_string prefix);
+    std::map<boxm2_block_id, bocl_mem*>& cached_data_map(boxm2_scene_sptr scene, std::string prefix);
 
     //: memory cache - caches various non model memory (images, some aux data)
     // Does not account for block/data_base data
-    vcl_map<bocl_mem*, vcl_size_t> mem_pool_;
+    std::map<bocl_mem*, std::size_t> mem_pool_;
 
     ////////////////////////////////////////////////////////////////////////////
     // opencl objects
@@ -145,14 +146,14 @@ typedef vbl_smart_ptr<boxm2_opencl_cache> boxm2_opencl_cache_sptr;
 
 //: get data by type and id
 template<boxm2_data_type T>
-bocl_mem* boxm2_opencl_cache::get_data(boxm2_scene_sptr scene, boxm2_block_id id, vcl_size_t num_bytes, bool read_only,vcl_string ident )
+bocl_mem* boxm2_opencl_cache::get_data(boxm2_scene_sptr scene, boxm2_block_id id, std::size_t num_bytes, bool read_only,std::string ident )
 {
   return get_data(scene, id, boxm2_data_traits<T>::prefix(ident), num_bytes, read_only);
 }
 
 //: get new data by type and id
 template<boxm2_data_type T>
-bocl_mem* boxm2_opencl_cache::get_data_new(boxm2_scene_sptr scene,boxm2_block_id id, vcl_size_t num_bytes, bool read_only)
+bocl_mem* boxm2_opencl_cache::get_data_new(boxm2_scene_sptr scene,boxm2_block_id id, std::size_t num_bytes, bool read_only)
 {
   return get_data_new(scene, id, boxm2_data_traits<T>::prefix(), num_bytes, read_only);
 }

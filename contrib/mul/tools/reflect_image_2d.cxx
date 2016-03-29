@@ -42,9 +42,9 @@ int main2(int argc, char *argv[])
     "The output image is written in v2i format (vimt_image_2d_of<float>).\n"
     "NB. Default units are metres.\n"
   );
-  vul_arg<vcl_string> src_file(0, "Input image file");
-  vul_arg<vcl_string> dst_file(0, "Output image file");
-  vul_arg<vcl_string> axis("-a", "Axis along which to reflect, i.e. X means reflect in X direction (through Y axis)", "X");
+  vul_arg<std::string> src_file(VXL_NULLPTR, "Input image file");
+  vul_arg<std::string> dst_file(VXL_NULLPTR, "Output image file");
+  vul_arg<std::string> axis("-a", "Axis along which to reflect, i.e. X means reflect in X direction (through Y axis)", "X");
   vul_arg<bool> image_centre("-c", "Reflect about image centre if set, otherwise about world origin", false);
   vul_arg<bool> use_mm("-mm", "World coords in units of mm", false);
   vul_arg_parse(argc, argv);
@@ -131,23 +131,23 @@ int main(int argc, char *argv[])
 
     retcode = main2(argc, argv);
   }
-  catch (const vcl_runtime_error &e)
+  catch (const std::runtime_error &e)
   {
-    vcl_cout << '\n'
+    std::cout << '\n'
              << "====================================\n"
-             << "Caught vcl_runtime_error: " << e.what() << '\n'
+             << "Caught std::runtime_error: " << e.what() << '\n'
              << "Ending program.\n"
-             << "====================================\n" << vcl_endl;
+             << "====================================\n" << std::endl;
     MBL_LOG(ERR, logger(), "Caught exception: " << e.what());
     retcode = 1;
   }
   catch (...)
   {
-    vcl_cout << '\n'
+    std::cout << '\n'
              << "====================================\n"
              << "Caught unknown exception.\n"
              << "Ending program.\n"
-             << "====================================\n" << vcl_endl;
+             << "====================================\n" << std::endl;
     MBL_LOG(ERR, logger(), "Caught unknown exception");
     retcode = 2;
   }

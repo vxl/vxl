@@ -1,4 +1,6 @@
 // This is brl/bseg/boxm2/ocl/pro/processes/boxm2_ocl_batch_synoptic_function_process.cxx
+#include <iostream>
+#include <fstream>
 #include <bprb/bprb_func_process.h>
 //:
 // \file
@@ -7,7 +9,7 @@
 // \author Vishal Jain
 // \date Mar 10, 2011
 
-#include <vcl_fstream.h>
+#include <vcl_compiler.h>
 #include <boxm2/ocl/boxm2_opencl_cache.h>
 #include <boxm2/boxm2_scene.h>
 #include <boxm2/boxm2_block.h>
@@ -31,10 +33,10 @@ namespace boxm2_ocl_batch_synoptic_function_process_globals
 {
   const unsigned n_inputs_ =  6;
   const unsigned n_outputs_ = 0;
-  void compile_kernel(bocl_device_sptr device,vcl_vector<bocl_kernel*> & vec_kernels)
+  void compile_kernel(bocl_device_sptr device,std::vector<bocl_kernel*> & vec_kernels)
   {
-    vcl_vector<vcl_string> src_paths;
-    vcl_string source_dir = boxm2_ocl_util::ocl_src_root();
+    std::vector<std::string> src_paths;
+    std::string source_dir = boxm2_ocl_util::ocl_src_root();
     src_paths.push_back(source_dir + "scene_info.cl");
     src_paths.push_back(source_dir + "onl/onl_inverse_4x4.cl");
     src_paths.push_back(source_dir + "onl/cubic_fit.cl");
@@ -43,12 +45,12 @@ namespace boxm2_ocl_batch_synoptic_function_process_globals
     //compilation options
 
     bocl_kernel* compute_cubic = new bocl_kernel();
-    vcl_string opts = " -D COMPUTE_CUBIC ";
+    std::string opts = " -D COMPUTE_CUBIC ";
 
     compute_cubic->create_kernel(&device->context(), device->device_id(), src_paths, "batch_fit_cubic_polynomial", opts, "batch_fit_cubic_polynomial");
     vec_kernels.push_back(compute_cubic);
   }
-  static vcl_map<cl_device_id*,vcl_vector<bocl_kernel*> > kernels;
+  static std::map<cl_device_id*,std::vector<bocl_kernel*> > kernels;
 }
 
 bool boxm2_ocl_batch_synoptic_function_process_cons(bprb_func_process& pro)
@@ -56,7 +58,7 @@ bool boxm2_ocl_batch_synoptic_function_process_cons(bprb_func_process& pro)
   using namespace boxm2_ocl_batch_synoptic_function_process_globals;
 
   //process takes 6 inputs, no output
-  vcl_vector<vcl_string> input_types_(n_inputs_);
+  std::vector<std::string> input_types_(n_inputs_);
   input_types_[0] = "bocl_device_sptr";
   input_types_[1] = "boxm2_scene_sptr";
   input_types_[2] = "boxm2_opencl_cache_sptr";
@@ -64,7 +66,7 @@ bool boxm2_ocl_batch_synoptic_function_process_cons(bprb_func_process& pro)
   input_types_[4] = "vcl_string";       //: identifiers name file
   input_types_[5] = "float";            //: interim sigma
 
-  vcl_vector<vcl_string>  output_types_(n_outputs_);
+  std::vector<std::string>  output_types_(n_outputs_);
 
   return pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
 }
@@ -74,7 +76,7 @@ bool boxm2_ocl_batch_synoptic_function_process(bprb_func_process& pro)
   using namespace boxm2_ocl_batch_synoptic_function_process_globals;
 
   if ( pro.n_inputs() < n_inputs_ ) {
-    vcl_cout << pro.name() << ": The number of inputs should be " << n_inputs_<< vcl_endl;
+    std::cout << pro.name() << ": The number of inputs should be " << n_inputs_<< std::endl;
     return false;
   }
   //get the inputs
@@ -83,27 +85,27 @@ bool boxm2_ocl_batch_synoptic_function_process(bprb_func_process& pro)
   boxm2_scene_sptr scene              = pro.get_input<boxm2_scene_sptr>(i++);
   boxm2_opencl_cache_sptr opencl_cache= pro.get_input<boxm2_opencl_cache_sptr>(i++);
   unsigned int nobs                   = pro.get_input<unsigned>(i++);
-  vcl_string identifier_filename      = pro.get_input<vcl_string>(i++);
+  std::string identifier_filename      = pro.get_input<std::string>(i++);
   float interim_sigma                 = pro.get_input<float>(i++);
 
   boxm2_cache_sptr cache = opencl_cache->get_cpu_cache();
   //: Read data types and identifier file names.
-  vcl_ifstream ifs(identifier_filename.c_str());
+  std::ifstream ifs(identifier_filename.c_str());
   if (!ifs.good()) {
-      vcl_cerr << "error opening file " <<identifier_filename << '\n';
+      std::cerr << "error opening file " <<identifier_filename << '\n';
       return false;
   }
-  vcl_vector<vcl_string> image_ids;
+  std::vector<std::string> image_ids;
   unsigned int n_images = 0;
   ifs >> n_images;
   for (unsigned int i=0; i<n_images; ++i) {
-    vcl_string img_id;
+    std::string img_id;
     ifs >> img_id;
     image_ids.push_back(img_id);
   }
   ifs.close();
 
-  vcl_vector<vcl_string> type_names;
+  std::vector<std::string> type_names;
   type_names.push_back("aux0");
   type_names.push_back("aux1");
   type_names.push_back("aux2");
@@ -118,8 +120,8 @@ bool boxm2_ocl_batch_synoptic_function_process(bprb_func_process& pro)
   // compile the kernel
   if (kernels.find((device->device_id()))==kernels.end())
   {
-    vcl_cout<<"===========Compiling kernels==========="<<vcl_endl;
-    vcl_vector<bocl_kernel*> ks;
+    std::cout<<"===========Compiling kernels==========="<<std::endl;
+    std::vector<bocl_kernel*> ks;
     compile_kernel(device,ks);
     kernels[(device->device_id())]=ks;
   }
@@ -129,8 +131,8 @@ bool boxm2_ocl_batch_synoptic_function_process(bprb_func_process& pro)
   t.mark();
   boxm2_stream_block_cache str_blk_cache(scene, type_names, image_ids);
 
-  vcl_vector<boxm2_block_id> block_ids = scene->get_block_ids();
-  vcl_vector<boxm2_block_id>::iterator id;
+  std::vector<boxm2_block_id> block_ids = scene->get_block_ids();
+  std::vector<boxm2_block_id>::iterator id;
   for (id = block_ids.begin(); id != block_ids.end(); ++id)
   {
     //choose correct render kernel
@@ -162,22 +164,22 @@ bool boxm2_ocl_batch_synoptic_function_process(bprb_func_process& pro)
 
     bocl_mem_sptr bocl_data_type0 = new bocl_mem(device->context(),data_type0->data_buffer(),data_type0->buffer_length(),"");
     if (!bocl_data_type0->create_buffer(CL_MEM_USE_HOST_PTR|CL_MEM_READ_ONLY,queue))
-      vcl_cout<<"Aux0 buffer was not created"<<vcl_endl;
+      std::cout<<"Aux0 buffer was not created"<<std::endl;
     clFinish(queue);
     boxm2_data_base * data_type1 = str_blk_cache.data_types_["aux1"];
     bocl_mem_sptr bocl_data_type1 = new bocl_mem(device->context(),data_type1->data_buffer(),data_type1->buffer_length(),"");
     if (!bocl_data_type1->create_buffer(CL_MEM_USE_HOST_PTR|CL_MEM_READ_ONLY,queue))
-      vcl_cout<<"Aux1 buffer was not created"<<vcl_endl;
+      std::cout<<"Aux1 buffer was not created"<<std::endl;
 
     boxm2_data_base * data_type2 = str_blk_cache.data_types_["aux2"];
     bocl_mem_sptr bocl_data_type2 = new bocl_mem(device->context(),data_type2->data_buffer(),data_type2->buffer_length(),"");
     if (!bocl_data_type2->create_buffer(CL_MEM_USE_HOST_PTR|CL_MEM_READ_ONLY,queue))
-      vcl_cout<<"Aux2 buffer was not created"<<vcl_endl;
+      std::cout<<"Aux2 buffer was not created"<<std::endl;
 
     boxm2_data_base * data_type3 = str_blk_cache.data_types_["aux3"];
     bocl_mem_sptr bocl_data_type3 = new bocl_mem(device->context(),data_type3->data_buffer(),data_type3->buffer_length(),"");
     if (!bocl_data_type3->create_buffer(CL_MEM_USE_HOST_PTR|CL_MEM_READ_ONLY,queue))
-      vcl_cout<<"Aux3 buffer was not created"<<vcl_endl;
+      std::cout<<"Aux3 buffer was not created"<<std::endl;
 
     bocl_mem_sptr  nobs_mem=new bocl_mem(device->context(), &nobs, sizeof(int), "Number of Obs");
     nobs_mem->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
@@ -211,12 +213,12 @@ bool boxm2_ocl_batch_synoptic_function_process(bprb_func_process& pro)
     kern->set_local_arg(4*sizeof(float));
     kern->set_local_arg(1*sizeof(int));
 
-    vcl_size_t lThreads[] = {8, 8};
-    vcl_size_t gThreads[] = {static_cast<vcl_size_t>(datasize*8),8};
+    std::size_t lThreads[] = {8, 8};
+    std::size_t gThreads[] = {static_cast<std::size_t>(datasize*8),8};
     kern->execute(queue, 2, lThreads, gThreads);
 
     clFinish(queue);
-    vcl_cout<<"Time taken "<< kern->exec_time()<<vcl_endl;
+    std::cout<<"Time taken "<< kern->exec_time()<<std::endl;
 
     //clear render kernel args so it can reset em on next execution
     kern->clear_args();
@@ -227,6 +229,6 @@ bool boxm2_ocl_batch_synoptic_function_process(bprb_func_process& pro)
   }
   clReleaseCommandQueue(queue);
 
-  vcl_cout<<"Finished Ocl Cubic in "<<t.all()<<" ms"<<vcl_endl;
+  std::cout<<"Finished Ocl Cubic in "<<t.all()<<" ms"<<std::endl;
   return true;
 }

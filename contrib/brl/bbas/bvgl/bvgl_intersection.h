@@ -6,9 +6,11 @@
 // \brief Set of intersection functions
 // \author Jan 30, 2012 Andrew Miller
 
+#include <iostream>
+#include <vector>
 #include <bvgl/bvgl_triangle_3d.h>
 #include <vgl/vgl_box_3d.h>
-#include <vcl_vector.h>
+#include <vcl_compiler.h>
 
 //: returns true if 3d box A intersects with 3d triangle B
 template <typename T>

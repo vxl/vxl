@@ -1,2 +1,2 @@
-#include <vil/algo/vil_fft.txx>
+#include <vil/algo/vil_fft.hxx>
 VIL_FFT_INSTANTIATE(float);

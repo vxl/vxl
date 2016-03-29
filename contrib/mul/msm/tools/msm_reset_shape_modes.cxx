@@ -5,6 +5,9 @@
 // Given a model and a set of shape points, selected shape modes are set to 0 and the
 // shape points are updated (excluding the reset modes).
 
+#include <iostream>
+#include <iterator>
+#include <limits>
 #include <mbl/mbl_read_props.h>
 #include <mbl/mbl_exception.h>
 #include <mbl/mbl_parse_int_list.h>
@@ -12,7 +15,7 @@
 #include <vul/vul_arg.h>
 #include <vul/vul_string.h>
 #include <vul/vul_file.h>
-#include <vcl_iterator.h>
+#include <vcl_compiler.h>
 #include <vsl/vsl_quick_file.h>
 #include <msm/msm_shape_instance.h>
 #include <msm/msm_add_all_loaders.h>
@@ -41,9 +44,9 @@ out_points_dir: /home/points_new/
 
 void print_usage()
 {
-  vcl_cout << "msm_reset_shape_modes -p param_file\n"
+  std::cout << "msm_reset_shape_modes -p param_file\n"
            << "Resets selected modes to 0 and saves updated model points."
-           << vcl_endl;
+           << std::endl;
 
   vul_arg_display_usage_and_exit();
 }
@@ -52,33 +55,33 @@ void print_usage()
 struct tool_params
 {
    //: File to read model from
-  vcl_string shape_model_path;
+  std::string shape_model_path;
 
   //: Shape model modes to be excluded (i.e. reset to 0)
-  vcl_vector<unsigned> modes_to_reset;
+  std::vector<unsigned> modes_to_reset;
 
   //: Directory containing points
-  vcl_string points_dir;
+  std::string points_dir;
 
   //: Directory containing points
-  vcl_string out_points_dir;
+  std::string out_points_dir;
 
   //: List of points file names
-  vcl_vector<vcl_string> points_names;
+  std::vector<std::string> points_names;
 
   //: Parse named text file to read in data
   //  Throws a mbl_exception_parse_error if fails
-  void read_from_file(const vcl_string& path);
+  void read_from_file(const std::string& path);
 };
 
 //: Parse named text file to read in data
 //  Throws a mbl_exception_parse_error if fails
-void tool_params::read_from_file(const vcl_string& path)
+void tool_params::read_from_file(const std::string& path)
 {
-  vcl_ifstream ifs(path.c_str());
+  std::ifstream ifs(path.c_str());
   if (!ifs)
   {
-    vcl_string error_msg = "Failed to open file: "+path;
+    std::string error_msg = "Failed to open file: "+path;
     throw (mbl_exception_parse_error(error_msg));
   }
 
@@ -86,13 +89,13 @@ void tool_params::read_from_file(const vcl_string& path)
 
   shape_model_path=props.get_required_property("shape_model_path");
 
-  vcl_string modes_to_reset_str
+  std::string modes_to_reset_str
        =props.get_required_property("modes_to_reset");
   modes_to_reset.resize(0);
   if (modes_to_reset_str!="")
   {
-    vcl_stringstream ss(modes_to_reset_str);
-    mbl_parse_int_list(ss, vcl_back_inserter(modes_to_reset),
+    std::stringstream ss(modes_to_reset_str);
+    mbl_parse_int_list(ss, std::back_inserter(modes_to_reset),
                        unsigned());
   }
 
@@ -115,7 +118,7 @@ void tool_params::read_from_file(const vcl_string& path)
 
 int main(int argc, char** argv)
 {
-  vul_arg<vcl_string> param_path("-p","Parameter filename");
+  vul_arg<std::string> param_path("-p","Parameter filename");
   vul_arg_parse(argc,argv);
 
   msm_add_all_loaders();
@@ -133,7 +136,7 @@ int main(int argc, char** argv)
   }
   catch (mbl_exception_parse_error& e)
   {
-    vcl_cerr<<"Error: "<<e.what()<<'\n';
+    std::cerr<<"Error: "<<e.what()<<'\n';
     return 1;
   }
 
@@ -141,7 +144,7 @@ int main(int argc, char** argv)
   msm_shape_model shape_model;
   if (!vsl_quick_file_load(shape_model,params.shape_model_path))
   {
-    vcl_cerr<<"Failed to load shape model from "
+    std::cerr<<"Failed to load shape model from "
             <<params.shape_model_path<<'\n';
     return 2;
   }
@@ -150,14 +153,15 @@ int main(int argc, char** argv)
 
   if (params.modes_to_reset.size() <= 0)
   {
-    vcl_cerr<<"No shape model modes to be reset specified.\n"
+    std::cerr<<"No shape model modes to be reset specified.\n"
             <<"Please choose values between 0 and "
             << sm_inst.params().size()<<" for modes_to_reset.\n";
     return 3;
   }
 
   // check for valid modes
-  int min = INT_MAX; unsigned max = 0;
+  unsigned int min = std::numeric_limits<unsigned int>::max();
+  unsigned int max = std::numeric_limits<unsigned int>::min();
   for (unsigned k=0; k<params.modes_to_reset.size(); ++k)
   {
     if (min > params.modes_to_reset[k]) min = params.modes_to_reset[k];
@@ -165,7 +169,7 @@ int main(int argc, char** argv)
   }
   if ((min <= 0) || (max > sm_inst.params().size()))
   {
-    vcl_cerr<<"Invalid shape model mode index found in modes_to_reset.\n"
+    std::cerr<<"Invalid shape model mode index found in modes_to_reset.\n"
             <<"Please choose values between 1 and "
             << sm_inst.params().size()<<".\n";
     return 4;
@@ -174,20 +178,20 @@ int main(int argc, char** argv)
   // make sure not to overwrite points
   if (params.out_points_dir==params.points_dir)
   {
-    vcl_cerr<<"out_points_dir==points_dir\n"
+    std::cerr<<"out_points_dir==points_dir\n"
             <<"I'm not prepared to over-write the provided points.\n"
-            <<"Create a new directory."<<vcl_endl;
+            <<"Create a new directory."<<std::endl;
     return 5;
   }
 
   // check that output directory exists
   if (!vul_file::is_directory(params.out_points_dir))
   {
-    vcl_cout<<"Directory "<<params.out_points_dir
-            <<" does not exist. Creating it."<<vcl_endl;
+    std::cout<<"Directory "<<params.out_points_dir
+            <<" does not exist. Creating it."<<std::endl;
     if (!vul_file::make_directory_path(params.out_points_dir))
     {
-      vcl_cerr<<"Unable to create it."<<vcl_endl;
+      std::cerr<<"Unable to create it."<<std::endl;
       return 6;
     }
   }
@@ -197,11 +201,11 @@ int main(int argc, char** argv)
   for (unsigned ifile=0;ifile<n_point_files;++ifile)
   {
     msm_points points;
-    vcl_string pts_path = params.points_dir+"/"+params.points_names[ifile];
+    std::string pts_path = params.points_dir+"/"+params.points_names[ifile];
 
     if (!points.read_text_file(pts_path))
     {
-      vcl_cerr<<"Failed to load in points from "<<pts_path<<vcl_endl;
+      std::cerr<<"Failed to load in points from "<<pts_path<<std::endl;
       return 7;
     }
 
@@ -231,10 +235,10 @@ int main(int argc, char** argv)
     aligner.apply_transform(new_ref_points,sm_inst.pose(),new_points);
 
     // save updated points
-    vcl_string pts_new_path = params.out_points_dir+"/"+params.points_names[ifile];
+    std::string pts_new_path = params.out_points_dir+"/"+params.points_names[ifile];
     if (!new_points.write_text_file(pts_new_path))
     {
-        vcl_cerr<<"Cannot write updated points file to: "<<params.out_points_dir<<vcl_endl;
+        std::cerr<<"Cannot write updated points file to: "<<params.out_points_dir<<std::endl;
         return 8;
     }
   }

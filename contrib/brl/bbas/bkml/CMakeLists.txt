@@ -17,7 +17,7 @@ if(EXPAT_FOUND)
  endif()
 endif()
 
-add_library(bkml  ${bkml_sources})
+vxl_add_library(LIBRARY_NAME bkml LIBRARY_SOURCES  ${bkml_sources})
 
 target_link_libraries(bkml ${VXL_LIB_PREFIX}vgl)
 
@@ -36,6 +36,3 @@ if( BUILD_TESTING )
 endif()
 
 #add_subdirectory(pro)
-
-install_targets(/lib bkml)
-INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/brl/bbas/bkml ${bkml_sources})

@@ -12,10 +12,11 @@
 //    Yi Dong     SEP--2014    added height attribute
 // \endverbatim
 
+#include <iostream>
 #include <vbl/vbl_ref_count.h>
 #include <vbl/vbl_smart_ptr.h>
 #include <vsl/vsl_binary_io.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
 #include <vgl/vgl_point_2d.h>
 #include <vgl/vgl_point_3d.h>
 
@@ -82,7 +83,7 @@ public:
   bool is_same(volm_conf_object const* other_ptr);
 
   //: print method
-  void print(vcl_ostream& os) const
+  void print(std::ostream& os) const
   {
     os << "volm_conf_object -- theta: " << theta_ << " (" << this->theta_in_deg() << " degree), dist: " << dist_
        << ", height: " << height_
@@ -90,7 +91,7 @@ public:
   }
 
   //: visualization method for configuration index and values are the indices relative to geo-location defined by lon and lat
-  static bool write_to_kml(double const& lon, double const& lat, vcl_vector<volm_conf_object>& values, vcl_string const& kml_file);
+  static bool write_to_kml(double const& lon, double const& lat, std::vector<volm_conf_object>& values, std::string const& kml_file);
 
   // ================  binary I/O ===================
   //: version
@@ -115,7 +116,7 @@ void vsl_b_read(vsl_b_istream& is, volm_conf_object&           obj);
 void vsl_b_read(vsl_b_istream& is, volm_conf_object*&      obj_ptr);
 void vsl_b_read(vsl_b_istream& is, volm_conf_object_sptr& obj_sptr);
 
-void vsl_print_summary(vcl_ostream& os, volm_conf_object const& obj);
+void vsl_print_summary(std::ostream& os, volm_conf_object const& obj);
 
 
 #endif // volm_conf_object

@@ -1,4 +1,5 @@
-// Instantiation of IO for vcl_map<int>
-#include <vsl/vsl_map_io.txx>
-#include <vcl_string.h>
-VSL_MAP_IO_INSTANTIATE(int,vcl_string, vcl_less<int>);
+// Instantiation of IO for std::map<int>
+#include <string>
+#include <vsl/vsl_map_io.hxx>
+#include <vcl_compiler.h>
+VSL_MAP_IO_INSTANTIATE(int,std::string, std::less<int>);

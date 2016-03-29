@@ -1,17 +1,18 @@
 /*
   fsm
 */
+#include <iostream>
 #include <testlib/testlib_test.h>
 
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
 #include <vbl/vbl_shared_pointer.h>
 
-#define print vcl_cout
+#define print std::cout
 
 struct some_class
 {
-  some_class() { print << "ctor" << vcl_endl; }
-  ~some_class() { print << "dtor" << vcl_endl; }
+  some_class() { print << "ctor" << std::endl; }
+  ~some_class() { print << "dtor" << std::endl; }
 };
 
 static void test_int()
@@ -21,8 +22,8 @@ static void test_int()
   pi a(new int(13));
   pi b(new int(24));
 
-  print << "*a = " << *a << vcl_endl
-        << "*b = " << *b << vcl_endl;
+  print << "*a = " << *a << std::endl
+        << "*b = " << *b << std::endl;
 
   for (int i=0; i<10003; ++i) {
     pi tmp = a;
@@ -91,7 +92,7 @@ static void test_derived_class()
   typedef vbl_shared_pointer<base_class> bp;
 
   {
-    vcl_cout << "Construct with raw derived pointer\n";
+    std::cout << "Construct with raw derived pointer\n";
     {
       bp p( new derv_class1 );
       TEST( "  Points to derived", p->who(), 1 );
@@ -101,7 +102,7 @@ static void test_derived_class()
   }
 
   {
-    vcl_cout << "Construct with derived smart pointer\n";
+    std::cout << "Construct with derived smart pointer\n";
     {
       d1p dp( new derv_class1 );
       bp p( dp );
@@ -112,7 +113,7 @@ static void test_derived_class()
   }
 
   {
-    vcl_cout << "Assign with derived smart pointer\n";
+    std::cout << "Assign with derived smart pointer\n";
     {
       bp p;
       {
@@ -126,7 +127,7 @@ static void test_derived_class()
   }
 
   {
-    vcl_cout << "Base sptr can point to any derived\n";
+    std::cout << "Base sptr can point to any derived\n";
     {
       bp p( new derv_class1 );
       TEST( "  Object exists", derv_class1::cnt, 1 );

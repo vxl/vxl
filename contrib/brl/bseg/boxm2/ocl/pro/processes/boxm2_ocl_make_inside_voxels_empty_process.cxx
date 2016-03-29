@@ -1,4 +1,6 @@
 // This is brl/bseg/boxm2/ocl/pro/processes/boxm2_ocl_make_inside_voxels_empty_process.cxx
+#include <iostream>
+#include <fstream>
 #include <bprb/bprb_func_process.h>
 //:
 // \file
@@ -8,7 +10,7 @@
 // \author Ali Osman Ulusoy
 // \date Oct 10, 2011
 
-#include <vcl_fstream.h>
+#include <vcl_compiler.h>
 #include <boxm2/ocl/boxm2_opencl_cache.h>
 #include <boxm2/boxm2_scene.h>
 #include <boxm2/boxm2_block.h>
@@ -33,11 +35,11 @@ namespace boxm2_ocl_make_inside_voxels_empty_process_globals
       DECIDE_INSIDE = 1
   };
 
-  void compile_kernel(bocl_device_sptr device,vcl_vector<bocl_kernel*> & vec_kernels,vcl_string opts)
+  void compile_kernel(bocl_device_sptr device,std::vector<bocl_kernel*> & vec_kernels,std::string opts)
   {
     //gather all render sources... seems like a lot for rendering...
-    vcl_vector<vcl_string> src_paths;
-    vcl_string source_dir = boxm2_ocl_util::ocl_src_root();
+    std::vector<std::string> src_paths;
+    std::string source_dir = boxm2_ocl_util::ocl_src_root();
     src_paths.push_back(source_dir + "scene_info.cl");
     src_paths.push_back(source_dir + "cell_utils.cl");
     src_paths.push_back(source_dir + "bit/bit_tree_library_functions.cl");
@@ -49,10 +51,10 @@ namespace boxm2_ocl_make_inside_voxels_empty_process_globals
     src_paths.push_back(source_dir + "bit/cast_ray_bit.cl");
 
     //compilation options
-    vcl_string options = opts+ "-D INTENSITY ";
+    std::string options = opts+ "-D INTENSITY ";
 
     bocl_kernel* compute_vis = new bocl_kernel();
-    vcl_string seg_opts = options + "-D COMPVIS -D STEP_CELL=step_cell_computevis(aux_args,data_ptr,llid,d)";
+    std::string seg_opts = options + "-D COMPVIS -D STEP_CELL=step_cell_computevis(aux_args,data_ptr,llid,d)";
     compute_vis->create_kernel(&device->context(),device->device_id(), src_paths, "compute_vis", seg_opts, "compute_vis");
     vec_kernels.push_back(compute_vis);
 
@@ -62,7 +64,7 @@ namespace boxm2_ocl_make_inside_voxels_empty_process_globals
     return ;
   }
 
-  static vcl_map<vcl_string,vcl_vector<bocl_kernel*> > kernels;
+  static std::map<std::string,std::vector<bocl_kernel*> > kernels;
 }
 
 bool boxm2_ocl_make_inside_voxels_empty_process_cons(bprb_func_process& pro)
@@ -70,14 +72,14 @@ bool boxm2_ocl_make_inside_voxels_empty_process_cons(bprb_func_process& pro)
   using namespace boxm2_ocl_make_inside_voxels_empty_process_globals;
 
   //process takes 4 inputs
-  vcl_vector<vcl_string> input_types_(n_inputs_);
+  std::vector<std::string> input_types_(n_inputs_);
   input_types_[0] = "bocl_device_sptr";
   input_types_[1] = "boxm2_scene_sptr";
   input_types_[2] = "boxm2_opencl_cache_sptr";
   input_types_[3] = "bool";
 
   // process has no outputs
-  vcl_vector<vcl_string>  output_types_(n_outputs_);
+  std::vector<std::string>  output_types_(n_outputs_);
   bool good = pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
 
   return good;
@@ -87,12 +89,12 @@ bool boxm2_ocl_make_inside_voxels_empty_process_cons(bprb_func_process& pro)
 bool boxm2_ocl_make_inside_voxels_empty_process(bprb_func_process& pro)
 {
   using namespace boxm2_ocl_make_inside_voxels_empty_process_globals;
-  vcl_size_t local_threads[2]={8,8};
-  vcl_size_t global_threads[2]={8,8};
+  std::size_t local_threads[2]={8,8};
+  std::size_t global_threads[2]={8,8};
 
   //sanity check inputs
   if ( pro.n_inputs() < n_inputs_ ) {
-    vcl_cout << pro.name() << ": The input number should be " << n_inputs_<< vcl_endl;
+    std::cout << pro.name() << ": The input number should be " << n_inputs_<< std::endl;
     return false;
   }
   float transfer_time=0.0f;
@@ -107,14 +109,14 @@ bool boxm2_ocl_make_inside_voxels_empty_process(bprb_func_process& pro)
 
   //cache size sanity check
   long binCache = opencl_cache.ptr()->bytes_in_cache();
-  vcl_cout<<"Update MBs in cache: "<<binCache/(1024.0*1024.0)<<vcl_endl;
+  std::cout<<"Update MBs in cache: "<<binCache/(1024.0*1024.0)<<std::endl;
 
   //make correct data types are here
-  vcl_string data_type,num_obs_type,options;
+  std::string data_type,num_obs_type,options;
 
   if (use_sum) {
     options="-D USESUM ";
-    vcl_cout << "Using sum to compute visibility" << vcl_endl;
+    std::cout << "Using sum to compute visibility" << std::endl;
   }
 
 
@@ -128,10 +130,10 @@ bool boxm2_ocl_make_inside_voxels_empty_process(bprb_func_process& pro)
     return false;
 
   // compile the kernel if not already compiled
-  vcl_string identifier=device->device_identifier()+options;
+  std::string identifier=device->device_identifier()+options;
   if (kernels.find(identifier)==kernels.end()) {
-    vcl_cout<<"===========Compiling kernels==========="<<vcl_endl;
-    vcl_vector<bocl_kernel*> ks;
+    std::cout<<"===========Compiling kernels==========="<<std::endl;
+    std::vector<bocl_kernel*> ks;
     compile_kernel(device,ks,options);
     kernels[identifier]=ks;
   }
@@ -157,8 +159,8 @@ bool boxm2_ocl_make_inside_voxels_empty_process(bprb_func_process& pro)
   datasize_mem->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR);
 
   //zip through each block
-  vcl_map<boxm2_block_id, boxm2_block_metadata> blocks = scene->blocks();
-  vcl_map<boxm2_block_id, boxm2_block_metadata>::iterator blk_iter;
+  std::map<boxm2_block_id, boxm2_block_metadata> blocks = scene->blocks();
+  std::map<boxm2_block_id, boxm2_block_metadata>::iterator blk_iter;
   for (unsigned int i=0; i<kernels[identifier].size(); ++i)
   {
       //remove all the alphas and points from opencl cache
@@ -174,7 +176,7 @@ bool boxm2_ocl_make_inside_voxels_empty_process(bprb_func_process& pro)
       for (blk_iter = blocks.begin(); blk_iter != blocks.end(); ++blk_iter)
       {
         boxm2_block_id id = blk_iter->first;
-        vcl_cout << "Processing block: " << id << vcl_endl;
+        std::cout << "Processing block: " << id << std::endl;
 
         //get kernel
         bocl_kernel* kern =  kernels[identifier][i];
@@ -183,7 +185,7 @@ bool boxm2_ocl_make_inside_voxels_empty_process(bprb_func_process& pro)
 
         //load normals
         bocl_mem* normals = opencl_cache->get_data<BOXM2_NORMAL>(scene,blk_iter->first,0,false);
-        vcl_size_t normalsTypeSize = boxm2_data_info::datasize(boxm2_data_traits<BOXM2_NORMAL>::prefix());
+        std::size_t normalsTypeSize = boxm2_data_info::datasize(boxm2_data_traits<BOXM2_NORMAL>::prefix());
 
         //load block info
         datasize[0] = (unsigned)(normals->num_bytes()/normalsTypeSize);
@@ -194,16 +196,16 @@ bool boxm2_ocl_make_inside_voxels_empty_process(bprb_func_process& pro)
 
             //array to store visibilities computed around a sphere
             //ask for a new BOXM2_VIS_SPHERE data so that it gets initialized properly.
-            vcl_size_t visTypeSize = boxm2_data_info::datasize(boxm2_data_traits<BOXM2_VIS_SPHERE>::prefix());
+            std::size_t visTypeSize = boxm2_data_info::datasize(boxm2_data_traits<BOXM2_VIS_SPHERE>::prefix());
             bocl_mem *vis_sphere   = opencl_cache->get_data_new<BOXM2_VIS_SPHERE>(scene,blk_iter->first, (normals->num_bytes()/normalsTypeSize)*visTypeSize, false);
 
             //zip through each block
-            vcl_map<boxm2_block_id, boxm2_block_metadata>::iterator blk_iter_inner;
+            std::map<boxm2_block_id, boxm2_block_metadata>::iterator blk_iter_inner;
             for (blk_iter_inner = blocks.begin(); blk_iter_inner != blocks.end(); ++blk_iter_inner) {
 
               transfer.mark();
               boxm2_block_id id_inner = blk_iter_inner->first;
-              //vcl_cout << "--Loading block " << id_inner << vcl_endl;
+              //std::cout << "--Loading block " << id_inner << std::endl;
 
               //load tree and alpha
               boxm2_block_metadata mdata = blk_iter_inner->second;
@@ -310,7 +312,7 @@ bool boxm2_ocl_make_inside_voxels_empty_process(bprb_func_process& pro)
     }
   }
 
-  vcl_cout<<"Gpu time "<<gpu_time<<" transfer time "<<transfer_time<<vcl_endl;
+  std::cout<<"Gpu time "<<gpu_time<<" transfer time "<<transfer_time<<std::endl;
   clReleaseCommandQueue(queue);
   return true;
 }

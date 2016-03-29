@@ -805,10 +805,15 @@ Set decoding parameters to default values
 OPJ_API void OPJ_CALLCONV opj_set_default_decoder_parameters(opj_dparameters_t *parameters);
 
 #ifdef USE_OPJ_DEPRECATED
+#if 0
+// If we explcitly set USE_OPJ_DEPRECATED to on, then we have determined that we
+// want to use the deprecated function, and we should not warn about it.
+// This is documented in https://github.com/vxl/vxl/issues/229
 #ifdef _MSC_VER
 #pragma message ( "warning, opj_setup_decoder is deprecated")
 #else
 #warning "warning, opj_setup_decoder is deprecated"
+#endif
 #endif
 /**
 Setup the decoder decoding parameters using user parameters.
@@ -989,10 +994,15 @@ OPJ_API bool OPJ_CALLCONV opj_set_MCT(opj_cparameters_t *parameters,OPJ_FLOAT32 
 OPJ_API bool OPJ_CALLCONV opj_restrict_decoding (opj_dparameters_t *parameters,OPJ_INT32 p_start_x,OPJ_INT32 p_start_y,OPJ_INT32 p_end_x,OPJ_INT32 p_end_y);
 
 #ifdef USE_OPJ_DEPRECATED
+#if 0 // There is no need to report this warning.  It just makes the dashboard noisy.
+// If we explcitly set USE_OPJ_DEPRECATED to on, then we have determined that we
+// want to use the deprecated function, and we should not warn about it.
+// This is documented in https://github.com/vxl/vxl/issues/229
 #ifdef _MSC_VER
 #pragma message ("warning, opj_setup_encoder is deprecated")
 #else
 #warning "warning, opj_setup_encoder is deprecated"
+#endif
 #endif
 /**
 Setup the encoder parameters using the current image and using user parameters.

@@ -6,12 +6,13 @@
 // \file
 // \author fsm
 
+#include <iostream>
 #include "vil1_jpeg_decompressor.h"
 #include "vil1_jpeg_source_mgr.h"
 #include <vil1/vil1_stream.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
 
-#define trace if (true) { } else vcl_cerr
+#define trace if (true) { } else std::cerr
 
 //: using jpeg decompressor objects :
 // -# supply an error manager, e.g. with jpeg_std_err().

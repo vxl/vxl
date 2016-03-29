@@ -12,10 +12,12 @@
 //                         backward compatibility I left the original read function.
 // \endverbatim
 
+#include <iostream>
+#include <iosfwd>
+#include <vector>
 #include <rgrl/rgrl_feature_sptr.h>
 
-#include <vcl_iosfwd.h>
-#include <vcl_vector.h>
+#include <vcl_compiler.h>
 
 //: Read one feature from input stream
 //  IMPORTANCE:
@@ -40,23 +42,23 @@ class rgrl_feature_reader
   //  NULL smart ptr is returned if reading operation fails.
   //  Please check the validity of the returned smart ptr.
   static
-  rgrl_feature_sptr read( vcl_istream& is );
+  rgrl_feature_sptr read( std::istream& is );
 
   //: add a feature candidate
   static
   void add_feature( rgrl_feature_sptr feat );
 
  protected:
-  static vcl_vector< rgrl_feature_sptr >   feature_candidates_;
+  static std::vector< rgrl_feature_sptr >   feature_candidates_;
 };
 
 //: The type of feature depends on the content of the input stream.
 //  NULL smart ptr is returned if the reading operation fails.
 //  Please check the validity of the returned smart ptr.
 rgrl_feature_sptr
-rgrl_feature_reader( vcl_istream& is );
+rgrl_feature_reader( std::istream& is );
 
 //: stream input operator for reading a feature
-vcl_istream& operator>>( vcl_istream& is, rgrl_feature_sptr& sptr );
+std::istream& operator>>( std::istream& is, rgrl_feature_sptr& sptr );
 
 #endif // rgrl_feature_reader_h_

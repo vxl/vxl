@@ -1,11 +1,12 @@
 // This is core/vil/algo/tests/test_algo_grid_merge.cxx
+#include <iostream>
 #include <testlib/testlib_test.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
 #include <vil/algo/vil_grid_merge.h>
 
 static void test_grid_merge_byte()
 {
-  vcl_cout << "************************\n"
+  std::cout << "************************\n"
            << " Testing vil_grid_merge\n"
            << "************************\n";
 

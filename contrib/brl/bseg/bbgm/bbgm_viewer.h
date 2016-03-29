@@ -34,7 +34,7 @@ class bbgm_viewer : public vbl_ref_count
   bool apply(const bbgm_image_sptr& dimg,
              vil_image_view<double>& image) const;
   //: Return the name of this view
-  virtual vcl_string name() const = 0;
+  virtual std::string name() const = 0;
 
   //: Set the value for failure at a pixel
   void set_failure_value(const vnl_vector<double>& val) { fail_val_[0] = val[0];
@@ -50,7 +50,7 @@ class bbgm_viewer : public vbl_ref_count
   //: Return a pointer to the view_maker that applies to this image type.
   //  Return a null pointer if no such view_maker is found
   virtual bbgm_view_maker_sptr
-  find_vm(const vcl_type_info& dist_type) const = 0;
+  find_vm(const std::type_info& dist_type) const = 0;
 
   //: the data used when a pixel fails the operation
   double fail_val_[3];
@@ -67,7 +67,7 @@ class bbgm_mean_viewer : public bbgm_viewer
 {
  public:
   //: Return the name of this view
-  virtual vcl_string name() const { return "mean"; }
+  virtual std::string name() const { return "mean"; }
 
   //: Register a new view_maker
   // \return true if successfully registered or false if invalid or already
@@ -77,19 +77,19 @@ class bbgm_mean_viewer : public bbgm_viewer
   //: Return a pointer to the view_maker that applies to this image type.
   //  Return a null pointer if no such view_maker is found
   static bbgm_view_maker_sptr
-  find_view_maker(const vcl_type_info& dist_type);
+  find_view_maker(const std::type_info& dist_type);
 
  protected:
   //: A virtual wrapper around the static find function
   virtual bbgm_view_maker_sptr
-  find_vm(const vcl_type_info& dist_type) const
+  find_vm(const std::type_info& dist_type) const
   {
     return find_view_maker(dist_type);
   }
 
  private:
   //: The registered view maker objects
-  static vcl_vector<bbgm_view_maker_sptr> reg_vms;
+  static std::vector<bbgm_view_maker_sptr> reg_vms;
 };
 
 //=============================================================================
@@ -99,7 +99,7 @@ class bbgm_variance_viewer : public bbgm_viewer
 {
  public:
   //: Return the name of this view
-  virtual vcl_string name() const { return "variance"; }
+  virtual std::string name() const { return "variance"; }
 
   //: Register a new view_maker
   // \return true if successfully registered or false if invalid or already
@@ -109,19 +109,19 @@ class bbgm_variance_viewer : public bbgm_viewer
   //: Return a pointer to the view_maker that applies to this image type.
   //  Return a null pointer if no such view_maker is found
   static bbgm_view_maker_sptr
-  find_view_maker(const vcl_type_info& dist_type);
+  find_view_maker(const std::type_info& dist_type);
 
  protected:
   //: A virtual wrapper around the static find function
   virtual bbgm_view_maker_sptr
-  find_vm(const vcl_type_info& dist_type) const
+  find_vm(const std::type_info& dist_type) const
   {
     return find_view_maker(dist_type);
   }
 
  private:
   //: The registered view maker objects
-  static vcl_vector<bbgm_view_maker_sptr> reg_vms;
+  static std::vector<bbgm_view_maker_sptr> reg_vms;
 };
 
 //=============================================================================
@@ -131,7 +131,7 @@ class bbgm_weight_viewer : public bbgm_viewer
 {
  public:
   //: Return the name of this view
-  virtual vcl_string name() const { return "weight"; }
+  virtual std::string name() const { return "weight"; }
 
   //: Register a new view_maker
   // \return true if successfully registered or false if invalid or already
@@ -141,19 +141,19 @@ class bbgm_weight_viewer : public bbgm_viewer
   //: Return a pointer to the view_maker that applies to this image type.
   //  Return a null pointer if no such view_maker is found
   static bbgm_view_maker_sptr
-  find_view_maker(const vcl_type_info& dist_type);
+  find_view_maker(const std::type_info& dist_type);
 
  protected:
   //: A virtual wrapper around the static find function
   virtual bbgm_view_maker_sptr
-  find_vm(const vcl_type_info& dist_type) const
+  find_vm(const std::type_info& dist_type) const
   {
     return find_view_maker(dist_type);
   }
 
  private:
   //: The registered view maker objects
-  static vcl_vector<bbgm_view_maker_sptr> reg_vms;
+  static std::vector<bbgm_view_maker_sptr> reg_vms;
 };
 
 

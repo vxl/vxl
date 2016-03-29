@@ -5,10 +5,12 @@
 // \author Tim Cootes
 // \brief Multi-res point finder.  Searches at range of scales.
 
+#include <iostream>
+#include <iosfwd>
 #include <mbl/mbl_cloneable_ptr.h>
 #include <mfpf/mfpf_point_finder.h>
 #include <vcl_cassert.h>
-#include <vcl_iosfwd.h>
+#include <vcl_compiler.h>
 
 class vimt_image_pyramid;
 
@@ -20,7 +22,7 @@ class mfpf_mr_point_finder
  protected:
 
   //: Set of cost function objects.
-  vcl_vector<mbl_cloneable_ptr<mfpf_point_finder> > finders_;
+  std::vector<mbl_cloneable_ptr<mfpf_point_finder> > finders_;
 
   //: Maximum number of candidates to retain during multi_search_and_prune
   //  If zero, then refine all.
@@ -46,7 +48,7 @@ class mfpf_mr_point_finder
   { assert (L<finders_.size()); return *finders_[L]; }
 
   //: Define point finders.  Clone of each taken
-  void set(const vcl_vector<mfpf_point_finder*>& finders);
+  void set(const std::vector<mfpf_point_finder*>& finders);
 
 
   //: Maximum number of candidates to retain during multi_search_and_prune
@@ -69,7 +71,7 @@ class mfpf_mr_point_finder
                          const vgl_point_2d<double>& p,
                          const vgl_vector_2d<double>& u,
                          unsigned L,
-                         vcl_vector<double>& v);
+                         std::vector<double>& v);
 
   //: Searches around given pose, starting at coarsest model.
   //  Searches with coarsest model, and feeds best result into
@@ -102,8 +104,8 @@ class mfpf_mr_point_finder
   //  Final responses may be further improved with refine_match()
   void multi_search(const vimt_image_pyramid& im_pyr,
                     const mfpf_pose& pose0,
-                    vcl_vector<mfpf_pose>& poses,
-                    vcl_vector<double>& fits);
+                    std::vector<mfpf_pose>& poses,
+                    std::vector<double>& fits);
 
   //: Find all non-overlapping local optima.
   //  Runs search at coarsest resolution, to find all local optima.
@@ -118,22 +120,22 @@ class mfpf_mr_point_finder
   //  Final responses may be further improved with refine_match().
   void multi_search_and_prune(const vimt_image_pyramid& im_pyr,
                               const mfpf_pose& pose0,
-                              vcl_vector<mfpf_pose>& poses,
-                              vcl_vector<double>& fits,
+                              std::vector<mfpf_pose>& poses,
+                              std::vector<double>& fits,
                               int prune_level=-1);
 
   //: Save an image summarising each model in the hierarchy
   //  Saves images to basepath_L0.png, basepath_L1.png ...
-  void save_images_of_models(const vcl_string& basepath) const;
+  void save_images_of_models(const std::string& basepath) const;
 
   //: Version number for I/O
   short version_no() const;
 
   //: Name of the class
-  virtual vcl_string is_a() const;
+  virtual std::string is_a() const;
 
   //: Print class to os
-  virtual void print_summary(vcl_ostream& os) const;
+  virtual void print_summary(std::ostream& os) const;
 
   //: Save class to binary file stream
   virtual void b_write(vsl_b_ostream& bfs) const;
@@ -143,7 +145,7 @@ class mfpf_mr_point_finder
 };
 
 //: Stream output operator for class reference
-vcl_ostream& operator<<(vcl_ostream& os,const mfpf_mr_point_finder& b);
+std::ostream& operator<<(std::ostream& os,const mfpf_mr_point_finder& b);
 
 //: Binary file stream output operator for class reference
 void vsl_b_write(vsl_b_ostream& bfs, const mfpf_mr_point_finder& b);

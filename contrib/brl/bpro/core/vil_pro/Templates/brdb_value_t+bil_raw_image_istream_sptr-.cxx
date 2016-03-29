@@ -1,4 +1,4 @@
-#include <brdb/brdb_value.txx>
+#include <brdb/brdb_value.hxx>
 #include <bil/bil_raw_image_istream.h>
 #include <bil/bil_arf_image_istream.h>
 

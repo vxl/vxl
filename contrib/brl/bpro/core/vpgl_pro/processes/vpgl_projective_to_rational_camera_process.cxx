@@ -1,11 +1,12 @@
 // This is brl/bpro/core/vpgl_pro/processes/vpgl_projective_to_rational_camera_process.cxx
+#include <iostream>
+#include <fstream>
 #include <bprb/bprb_func_process.h>
 //:
 // \file
 // \brief A process to convert perspective camera to rational camera.
 
-#include <vcl_iostream.h>
-#include <vcl_fstream.h>
+#include <vcl_compiler.h>
 #include <vpgl/vpgl_camera.h>
 #include <vpgl/vpgl_proj_camera.h>
 #include <vpgl/vpgl_rational_camera.h>
@@ -18,12 +19,12 @@ bool vpgl_projective_to_rational_camera_process_cons(bprb_func_process& pro)
 {
   //this process takes one input: the filename
   bool ok=false;
-  vcl_vector<vcl_string> input_types;
+  std::vector<std::string> input_types;
   input_types.push_back("vpgl_camera_double_sptr");
   ok = pro.set_input_types(input_types);
   if (!ok) return ok;
 
-  vcl_vector<vcl_string> output_types;
+  std::vector<std::string> output_types;
   output_types.push_back("vpgl_camera_double_sptr");  // label image
   ok = pro.set_output_types(output_types);
   if (!ok) return ok;
@@ -35,7 +36,7 @@ bool vpgl_projective_to_rational_camera_process_cons(bprb_func_process& pro)
 bool vpgl_projective_to_rational_camera_process(bprb_func_process& pro)
 {
   if (pro.n_inputs()< 1) {
-    vcl_cout << "vpgl_projective_to_rational_camera_process: The input number should be 1" << vcl_endl;
+    std::cout << "vpgl_projective_to_rational_camera_process: The input number should be 1" << std::endl;
     return false;
   }
 
@@ -49,7 +50,7 @@ bool vpgl_projective_to_rational_camera_process(bprb_func_process& pro)
     pro.set_output_val<vpgl_camera_double_sptr>(0, rat_cam_sptr);
   }
   else {
-    vcl_cout<<"Wrong type of camera input"<<vcl_endl;
+    std::cout<<"Wrong type of camera input"<<std::endl;
     return false;
   }
 
@@ -60,7 +61,7 @@ vpgl_rational_camera<double>
 projective_to_rational(vpgl_proj_camera<double>& cam_proj)
 {
   vnl_matrix_fixed<double,3,4> cam_pers_matrix = cam_proj.get_matrix();
-  vcl_vector<double> neu_u,den_u,neu_v,den_v;
+  std::vector<double> neu_u,den_u,neu_v,den_v;
   double x_scale = 1.0,
          x_off = 0.0,
          y_scale = 1.0,

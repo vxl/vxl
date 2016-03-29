@@ -1,8 +1,9 @@
+#include <iostream>
+#include <algorithm>
+#include <cmath>
 #include <testlib/testlib_test.h>
 
-#include <vcl_iostream.h>
-#include <vcl_algorithm.h>
-#include <vcl_cmath.h>
+#include <vcl_compiler.h>
 #include <vcl_cassert.h>
 #include <rgrl/rgrl_util.h>
 #include <vnl/vnl_vector.h>
@@ -28,14 +29,14 @@ normal_space( vnl_matrix< double > const& dirs )
 // get the possible region ( reference to rgrl_util.cxx )
 void
 get_region( vnl_vector< double > const & center,
-            vcl_vector< vnl_vector< double > > const& basis_dirs,
+            std::vector< vnl_vector< double > > const& basis_dirs,
             vnl_vector< double > const& basis_radii,
             vnl_vector< double > & x0,
             vnl_vector< double > & x1 )
 {
   unsigned dimension = basis_radii.size();
-  vcl_vector< vnl_vector<double> > corner_points;
-  int num_corners = vnl_math::rnd( vcl_exp( dimension * vcl_log(2.0) ));
+  std::vector< vnl_vector<double> > corner_points;
+  int num_corners = vnl_math::rnd( std::exp( dimension * std::log(2.0) ));
   corner_points.reserve( num_corners );
 
   //  1b. Since the dimension is computed dynamically, we can't do the
@@ -88,7 +89,7 @@ get_region( vnl_vector< double > const & center,
 void
 generate_random_data( unsigned dim,
                       vnl_vector< double > & center,
-                      vcl_vector< vnl_vector< double > > & basis_dirs,
+                      std::vector< vnl_vector< double > > & basis_dirs,
                       vnl_vector< double > & basis_radii )
 {
   center.set_size( dim );
@@ -110,9 +111,9 @@ generate_random_data( unsigned dim,
   double norm = 1;
   for ( unsigned i = 0; i < dim - 1; ++i ) {
     tangent[ i ] = mz_random.drand32( -norm, norm );
-    norm = vcl_sqrt( norm * norm - tangent[ i ] * tangent[ i ] );
+    norm = std::sqrt( norm * norm - tangent[ i ] * tangent[ i ] );
   }
-  tangent[ dim - 1 ] = ( mz_random.drand32( -1, 1 ) < 0 ) ? -vcl_sqrt( norm ) : vcl_sqrt( norm );
+  tangent[ dim - 1 ] = ( mz_random.drand32( -1, 1 ) < 0 ) ? -std::sqrt( norm ) : std::sqrt( norm );
   basis_dirs.push_back( tangent );
 
   while ( dim >  basis_dirs.size() ) {
@@ -140,32 +141,32 @@ generate_random_data( unsigned dim,
 void
 test_util_extract_region_locations()
 {
-  vcl_cout << " util extract region locations\n";
+  std::cout << " util extract region locations\n";
   {
-    vcl_cout << " 1D case :" << vcl_endl;
+    std::cout << " 1D case :" << std::endl;
     unsigned dim = 1;
     vnl_vector< double > center;
-    vcl_vector< vnl_vector< double > > basis_dirs;
+    std::vector< vnl_vector< double > > basis_dirs;
     vnl_vector< double > basis_radii;
     generate_random_data( dim, center, basis_dirs, basis_radii );
 
-    vcl_vector< vnl_vector< int > > pixel_locations;
+    std::vector< vnl_vector< int > > pixel_locations;
 
-    vcl_cout << center << '\n' << basis_dirs[0] << '\n' << basis_radii  << vcl_endl;
+    std::cout << center << '\n' << basis_dirs[0] << '\n' << basis_radii  << std::endl;
     rgrl_util_extract_region_locations( center, basis_dirs, basis_radii, pixel_locations );
 
     // calculate the correct result
-    vcl_vector< vnl_vector< int > > true_locations;
+    std::vector< vnl_vector< int > > true_locations;
     vnl_vector< double > x0( dim ), x1( dim );
     get_region( center, basis_dirs, basis_radii, x0, x1 );
 
     vnl_vector< double > double_pt( dim );
     vnl_vector< int > int_pt( dim ) ;
-    for ( int i = (int) vcl_ceil(x0[ 0 ]); i <= (int)vcl_floor(x1[ 0 ]); ++i ) {
+    for ( int i = (int) std::ceil(x0[ 0 ]); i <= (int)std::floor(x1[ 0 ]); ++i ) {
       double_pt[ 0 ] = i;
       bool good_point = true;
       for ( unsigned n = 0; n < basis_dirs.size(); ++n ) {
-        if ( vcl_abs( inner_product( double_pt - center, basis_dirs[ n ] ) ) > basis_radii[ n ] ) {
+        if ( std::abs( inner_product( double_pt - center, basis_dirs[ n ] ) ) > basis_radii[ n ] ) {
           good_point = false;
           break;
         }
@@ -176,15 +177,15 @@ test_util_extract_region_locations()
       }
     }
 
-    vcl_cout << " number of true pixels: " << true_locations.size() << vcl_endl;
+    std::cout << " number of true pixels: " << true_locations.size() << std::endl;
 
     bool test_pass = true;
     if ( true_locations.size() != pixel_locations.size() )
       test_pass = false;
     else {
       for ( unsigned i = 0; i < true_locations.size(); ++i ) {
-        if ( vcl_find( pixel_locations.begin(), pixel_locations.end(), true_locations[ i ] ) == pixel_locations.end() ) {
-          vcl_cout << " point " << true_locations[ i ] << " is not extracted" << vcl_endl;
+        if ( std::find( pixel_locations.begin(), pixel_locations.end(), true_locations[ i ] ) == pixel_locations.end() ) {
+          std::cout << " point " << true_locations[ i ] << " is not extracted" << std::endl;
           test_pass = false;
           break;
         }
@@ -194,30 +195,30 @@ test_util_extract_region_locations()
     TEST( " extract 1D region result is correct " , test_pass, true );
   }
   {
-    vcl_cout << " 2D case :" << vcl_endl;
+    std::cout << " 2D case :" << std::endl;
     unsigned dim = 2;
     vnl_vector< double > center;
-    vcl_vector< vnl_vector< double > > basis_dirs;
+    std::vector< vnl_vector< double > > basis_dirs;
     vnl_vector< double > basis_radii;
     generate_random_data( dim, center, basis_dirs, basis_radii );
 
-    vcl_vector< vnl_vector< int > > pixel_locations;
+    std::vector< vnl_vector< int > > pixel_locations;
     rgrl_util_extract_region_locations( center, basis_dirs, basis_radii, pixel_locations );
 
     // calculate the correct result
-    vcl_vector< vnl_vector< int > > true_locations;
+    std::vector< vnl_vector< int > > true_locations;
     vnl_vector< double > x0( dim ), x1( dim );
     get_region( center, basis_dirs, basis_radii, x0, x1 );
 
     vnl_vector< double > double_pt( dim );
     vnl_vector< int > int_pt( dim ) ;
-    for ( int i = (int) vcl_ceil( x0[ 0 ] ); i <= (int) vcl_floor( x1[ 0 ] ); ++i ) {
+    for ( int i = (int) std::ceil( x0[ 0 ] ); i <= (int) std::floor( x1[ 0 ] ); ++i ) {
       double_pt[ 0 ] = i;
       for ( int j = (int) x0[ 1 ]; j <= (int) x1[ 1 ]; ++j ) {
         double_pt[ 1 ] = j;
         bool good_point = true;
         for ( unsigned n = 0; n < basis_dirs.size(); ++n ) {
-          if ( vcl_abs( inner_product( double_pt - center, basis_dirs[ n ] ) ) > basis_radii[ n ] ) {
+          if ( std::abs( inner_product( double_pt - center, basis_dirs[ n ] ) ) > basis_radii[ n ] ) {
             good_point = false;
             break;
           }
@@ -229,15 +230,15 @@ test_util_extract_region_locations()
       }
     }
 
-    vcl_cout << " number of true pixels: " << true_locations.size() << vcl_endl;
+    std::cout << " number of true pixels: " << true_locations.size() << std::endl;
 
     bool test_pass = true;
     if ( true_locations.size() != pixel_locations.size() )
       test_pass = false;
     else {
       for ( unsigned i = 0; i < true_locations.size(); ++i ) {
-        if ( vcl_find( pixel_locations.begin(), pixel_locations.end(), true_locations[ i ] ) == pixel_locations.end() ) {
-          vcl_cout << " point " << true_locations[ i ] << " is not extracted" << vcl_endl;
+        if ( std::find( pixel_locations.begin(), pixel_locations.end(), true_locations[ i ] ) == pixel_locations.end() ) {
+          std::cout << " point " << true_locations[ i ] << " is not extracted" << std::endl;
           test_pass = false;
           break;
         }
@@ -247,24 +248,24 @@ test_util_extract_region_locations()
     TEST( " extract 2D region result is correct " , test_pass, true );
   }
   {
-    vcl_cout << " 3D case :" << vcl_endl;
+    std::cout << " 3D case :" << std::endl;
     unsigned dim = 3;
     vnl_vector< double > center;
-    vcl_vector< vnl_vector< double > > basis_dirs;
+    std::vector< vnl_vector< double > > basis_dirs;
     vnl_vector< double > basis_radii;
     generate_random_data( dim, center, basis_dirs, basis_radii );
 
-    vcl_vector< vnl_vector< int > > pixel_locations;
+    std::vector< vnl_vector< int > > pixel_locations;
     rgrl_util_extract_region_locations( center, basis_dirs, basis_radii, pixel_locations );
 
     // calculate the correct result
-    vcl_vector< vnl_vector< int > > true_locations;
+    std::vector< vnl_vector< int > > true_locations;
     vnl_vector< double > x0( dim ), x1( dim );
     get_region( center, basis_dirs, basis_radii, x0, x1 );
 
     vnl_vector< double > double_pt( dim );
     vnl_vector< int > int_pt( dim ) ;
-    for ( int i = (int) vcl_ceil( x0[ 0 ] ); i <= (int) vcl_floor( x1[ 0 ] ); ++i ) {
+    for ( int i = (int) std::ceil( x0[ 0 ] ); i <= (int) std::floor( x1[ 0 ] ); ++i ) {
       double_pt[ 0 ] = i;
       for ( int j = (int) x0[ 1 ]; j <= (int) x1[ 1 ]; ++j ) {
         double_pt[ 1 ] = j;
@@ -272,7 +273,7 @@ test_util_extract_region_locations()
           double_pt[ 2 ] = k;
           bool good_point = true;
           for ( unsigned n = 0; n < basis_dirs.size(); ++n ) {
-            if ( vcl_abs( inner_product( double_pt - center, basis_dirs[ n ] ) ) > basis_radii[ n ] ) {
+            if ( std::abs( inner_product( double_pt - center, basis_dirs[ n ] ) ) > basis_radii[ n ] ) {
               good_point = false;
               break;
             }
@@ -285,15 +286,15 @@ test_util_extract_region_locations()
       }
     }
 
-    vcl_cout << " number of true pixels: " << true_locations.size() << vcl_endl;
+    std::cout << " number of true pixels: " << true_locations.size() << std::endl;
 
     bool test_pass = true;
     if ( true_locations.size() != pixel_locations.size() )
       test_pass = false;
     else {
       for ( unsigned i = 0; i < true_locations.size(); ++i ) {
-        if ( vcl_find( pixel_locations.begin(), pixel_locations.end(), true_locations[ i ] ) == pixel_locations.end() ) {
-          vcl_cout << " point " << true_locations[ i ] << " is not extracted" << vcl_endl;
+        if ( std::find( pixel_locations.begin(), pixel_locations.end(), true_locations[ i ] ) == pixel_locations.end() ) {
+          std::cout << " point " << true_locations[ i ] << " is not extracted" << std::endl;
           test_pass = false;
           break;
         }

@@ -12,7 +12,7 @@ set(fhs_sources
 )
 aux_source_directory(Templates fhs_sources)
 
-add_library(fhs ${fhs_sources})
+vxl_add_library(LIBRARY_NAME fhs LIBRARY_SOURCES ${fhs_sources})
 target_link_libraries(fhs vimt ${VXL_LIB_PREFIX}vnl ${VXL_LIB_PREFIX}vil_algo ${VXL_LIB_PREFIX}vgl ${VXL_LIB_PREFIX}vsl)
 
 if(BUILD_TESTING)

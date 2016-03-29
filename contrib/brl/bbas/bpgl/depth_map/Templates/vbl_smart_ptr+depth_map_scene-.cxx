@@ -1,4 +1,4 @@
-#include <vbl/vbl_smart_ptr.txx>
+#include <vbl/vbl_smart_ptr.hxx>
 #include <depth_map/depth_map_scene.h>
 #include <vsol/vsol_box_2d.h>
 #include <vsol/vsol_polygon_2d.h>

@@ -19,9 +19,9 @@ inline void bil_math_boolean_and(const vil_image_view<bool>& mask1,
   assert(mask2.ni()==ni && mask2.nj()==nj && mask2.nplanes()==np);
   assert(result.ni()==ni && result.nj()==nj && result.nplanes()==np);
 
-  vcl_ptrdiff_t istep1=mask1.istep(),jstep1=mask1.jstep(),pstep1=mask1.planestep();
-  vcl_ptrdiff_t istep2=mask2.istep(),jstep2=mask2.jstep(),pstep2=mask2.planestep();
-  vcl_ptrdiff_t istepR=result.istep(),jstepR=result.jstep(),pstepR=result.planestep();
+  std::ptrdiff_t istep1=mask1.istep(),jstep1=mask1.jstep(),pstep1=mask1.planestep();
+  std::ptrdiff_t istep2=mask2.istep(),jstep2=mask2.jstep(),pstep2=mask2.planestep();
+  std::ptrdiff_t istepR=result.istep(),jstepR=result.jstep(),pstepR=result.planestep();
 
   const bool* plane1 = mask1.top_left_ptr();
   const bool* plane2 = mask2.top_left_ptr();
@@ -55,9 +55,9 @@ inline void bil_math_boolean_or(const vil_image_view<bool>& mask1,
   assert(mask2.ni()==ni && mask2.nj()==nj && mask2.nplanes()==np);
   assert(result.ni()==ni && result.nj()==nj && result.nplanes()==np);
 
-  vcl_ptrdiff_t istep1=mask1.istep(),jstep1=mask1.jstep(),pstep1=mask1.planestep();
-  vcl_ptrdiff_t istep2=mask2.istep(),jstep2=mask2.jstep(),pstep2=mask2.planestep();
-  vcl_ptrdiff_t istepR=result.istep(),jstepR=result.jstep(),pstepR=result.planestep();
+  std::ptrdiff_t istep1=mask1.istep(),jstep1=mask1.jstep(),pstep1=mask1.planestep();
+  std::ptrdiff_t istep2=mask2.istep(),jstep2=mask2.jstep(),pstep2=mask2.planestep();
+  std::ptrdiff_t istepR=result.istep(),jstepR=result.jstep(),pstepR=result.planestep();
 
   const bool* plane1 = mask1.top_left_ptr();
   const bool* plane2 = mask2.top_left_ptr();
@@ -89,8 +89,8 @@ inline void bil_math_boolean_not(const vil_image_view<bool>& mask,
   if (!inv_mask) inv_mask = vil_image_view<bool>(ni,nj,np);
   assert(inv_mask.ni()==ni && inv_mask.nj()==nj && inv_mask.nplanes()==np);
 
-  vcl_ptrdiff_t istep1=mask.istep(),jstep1=mask.jstep(),pstep1=mask.planestep();
-  vcl_ptrdiff_t istep2=inv_mask.istep(),jstep2=inv_mask.jstep(),pstep2=inv_mask.planestep();
+  std::ptrdiff_t istep1=mask.istep(),jstep1=mask.jstep(),pstep1=mask.planestep();
+  std::ptrdiff_t istep2=inv_mask.istep(),jstep2=inv_mask.jstep(),pstep2=inv_mask.planestep();
 
   const bool* plane = mask.top_left_ptr();
   bool*       plane_inv = inv_mask.top_left_ptr();
@@ -123,8 +123,8 @@ inline void bil_math_threshold_mask(const vil_image_view<T>& image, T min, T max
   assert(mask.ni()==ni && mask.nj()==nj);
   assert(mask.nplanes()==1);
 
-  vcl_ptrdiff_t istepM=mask.istep(),jstepM=mask.jstep();
-  vcl_ptrdiff_t istepD=image.istep(),jstepD=image.jstep();
+  std::ptrdiff_t istepM=mask.istep(),jstepM=mask.jstep();
+  std::ptrdiff_t istepD=image.istep(),jstepD=image.jstep();
   const T* rowD = image.top_left_ptr();
   bool*    rowM = mask.top_left_ptr();
 

@@ -193,10 +193,10 @@ bgui_vsol2D_tableau::add_dotted_edgel_curve(vdgl_digital_curve_sptr const& dc,
 
 
 void bgui_vsol2D_tableau::
-add_spatial_objects(vcl_vector<vsol_spatial_object_2d_sptr> const& sos,
+add_spatial_objects(std::vector<vsol_spatial_object_2d_sptr> const& sos,
                     const vgui_style_sptr& style)
 {
-  for (vcl_vector<vsol_spatial_object_2d_sptr>::const_iterator sit = sos.begin();
+  for (std::vector<vsol_spatial_object_2d_sptr>::const_iterator sit = sos.begin();
        sit != sos.end(); sit++)
   {
     add_spatial_object( (*sit) , style );

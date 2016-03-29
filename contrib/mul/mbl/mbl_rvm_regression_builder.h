@@ -6,7 +6,9 @@
 // \brief Object to train Relevance Vector Machines for regression
 // \author Tim Cootes
 
-#include <vcl_vector.h>
+#include <iostream>
+#include <vector>
+#include <vcl_compiler.h>
 #include <vnl/vnl_vector.h>
 #include <vnl/vnl_matrix.h>
 #include <mbl/mbl_data_wrapper.h>
@@ -27,17 +29,17 @@ class mbl_rvm_regression_builder
   //: Compute design matrix F from subset of elements in kernel matrix
   //  Uses gaussian distance expression with variance var
   void design_matrix(const vnl_matrix<double>& kernel_matrix,
-                     const vcl_vector<int>& index,
+                     const std::vector<int>& index,
                      vnl_matrix<double>& F);
 
   //: Perform one iteration of optimisation
   bool update_step(const vnl_matrix<double>& design_matrix,
                    const vnl_vector<double>& targets,
-                   const vcl_vector<int>& index0,
-                   const vcl_vector<double>& alpha0,
+                   const std::vector<int>& index0,
+                   const std::vector<double>& alpha0,
                    double sqr_width0,
-                   vcl_vector<int>& index,
-                   vcl_vector<double>& alpha,
+                   std::vector<int>& index,
+                   std::vector<double>& alpha,
                    double &error_var);
  public:
   //: Dflt ctor
@@ -61,7 +63,7 @@ class mbl_rvm_regression_builder
   void gauss_build(mbl_data_wrapper<vnl_vector<double> >& data,
                    double var,
                    const vnl_vector<double>& targets,
-                   vcl_vector<int>& index,
+                   std::vector<int>& index,
                    vnl_vector<double>& weights,
                    double &error_var);
 
@@ -89,7 +91,7 @@ class mbl_rvm_regression_builder
   // \param error_var returns estimated error variance for resulting function
   void build(const vnl_matrix<double>& kernel_matrix,
              const vnl_vector<double>& targets,
-             vcl_vector<int>& index,
+             std::vector<int>& index,
              vnl_vector<double>& weights,
              double &error_var);
 };

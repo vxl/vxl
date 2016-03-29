@@ -1,4 +1,4 @@
-#include <bvpl/bvpl_octree/bvpl_global_pca.txx>
-#include <bvpl/bvpl_octree/bvpl_global_taylor.txx>
+#include <bvpl/bvpl_octree/bvpl_global_pca.hxx>
+#include <bvpl/bvpl_octree/bvpl_global_taylor.hxx>
 
 int main() { return 0; }

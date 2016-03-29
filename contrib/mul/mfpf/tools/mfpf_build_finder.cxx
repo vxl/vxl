@@ -19,6 +19,9 @@
 // }
 // \endcode
 
+#include <iostream>
+#include <cmath>
+#include <sstream>
 #include <mbl/mbl_parse_colon_pairs_list.h>
 #include <mbl/mbl_read_props.h>
 #include <mbl/mbl_exception.h>
@@ -40,15 +43,14 @@
 #include <vimt/vimt_gaussian_pyramid_builder_2d.h>
 
 #include <msm/msm_points.h>
-#include <vcl_cmath.h>
+#include <vcl_compiler.h>
 #include <vcl_cassert.h>
-#include <vcl_sstream.h>
 
 //: Structure to hold parameters
 struct tool_params
 {
   //: Path to which to save the model
-  vcl_string model_path;
+  std::string model_path;
 
   //: Resolution level at which to build model
   unsigned res_level;
@@ -57,26 +59,26 @@ struct tool_params
   unsigned pt_index;
 
   //: Object to build patch model
-  vcl_auto_ptr<mfpf_point_finder_builder> patch_builder;
+  std::auto_ptr<mfpf_point_finder_builder> patch_builder;
 
   //: Image directory
-  vcl_string image_dir;
+  std::string image_dir;
 
   //: Points directory
-  vcl_string points_dir;
+  std::string points_dir;
 
   //: List of image filenames
-  vcl_vector<vcl_string> image_names;
+  std::vector<std::string> image_names;
 
   //: List of points filenames
-  vcl_vector<vcl_string> points_names;
+  std::vector<std::string> points_names;
 
   // Constructor to set defaults
   tool_params();
 
   //: Parse named text file to read in data
   //  Throws a upf_exception_parse_error if fails
-  void read_from_file(const vcl_string& path);
+  void read_from_file(const std::string& path);
 };
 
 tool_params::tool_params()
@@ -85,12 +87,12 @@ tool_params::tool_params()
 
 //: Parse named text file to read in data
 //  Throws a upf_exception_parse_error if fails
-void tool_params::read_from_file(const vcl_string& path)
+void tool_params::read_from_file(const std::string& path)
 {
-  vcl_ifstream ifs(path.c_str());
+  std::ifstream ifs(path.c_str());
   if (!ifs)
   {
-    vcl_string error_msg = "Failed to open file: "+path;
+    std::string error_msg = "Failed to open file: "+path;
     throw (mbl_exception_parse_error(error_msg));
   }
 
@@ -107,8 +109,8 @@ void tool_params::read_from_file(const vcl_string& path)
   res_level = vul_string_atoi(props.get_optional_property("res_level","0"));
   pt_index = vul_string_atoi(props.get_optional_property("pt_index","0"));
 
-  vcl_string builder_str= props.get_required_property("patch_builder");
-  vcl_istringstream iss(builder_str);
+  std::string builder_str= props.get_required_property("patch_builder");
+  std::istringstream iss(builder_str);
   patch_builder = mfpf_point_finder_builder::create_from_stream(iss);
 
   try {
@@ -123,14 +125,14 @@ void tool_params::read_from_file(const vcl_string& path)
 
 void print_usage()
 {
-  vcl_cout<<"mfpf_build_finder -p param_file\n"
+  std::cout<<"mfpf_build_finder -p param_file\n"
           <<"Tool to build a finder from a set of training images\n"
-          <<vcl_endl;
+          <<std::endl;
 }
 
 int main(int argc, char** argv)
 {
-  vul_arg<vcl_string> param_path("-p","Parameter filename");
+  vul_arg<std::string> param_path("-p","Parameter filename");
 
   vul_arg_parse(argc,argv);
 
@@ -146,7 +148,7 @@ int main(int argc, char** argv)
   try { params.read_from_file(param_path()); }
   catch (mbl_exception_parse_error& e)
   {
-    vcl_cerr<<"Error: "<<e.what()<<vcl_endl;
+    std::cerr<<"Error: "<<e.what()<<std::endl;
     return 1;
   }
 
@@ -154,7 +156,7 @@ int main(int argc, char** argv)
 
   vimt_gaussian_pyramid_builder_2d<float> pyr_builder;
 
-  params.patch_builder->set_step_size(vcl_pow(2.0,double(params.res_level)));
+  params.patch_builder->set_step_size(std::pow(2.0,double(params.res_level)));
   params.patch_builder->clear(n_images);
 
   vgl_vector_2d<double> u(1,0);  // Default to unit scale and fixed angle
@@ -163,11 +165,11 @@ int main(int argc, char** argv)
   {
     // Load in image
     vil_image_view<vxl_byte> byte_image;
-    vcl_string image_path = params.image_dir+"/"+params.image_names[i];
+    std::string image_path = params.image_dir+"/"+params.image_names[i];
     byte_image = vil_load(image_path.c_str());
     if (byte_image.size()==0)
     {
-      vcl_cerr<<"Failed to load in image from "<<image_path<<vcl_endl;
+      std::cerr<<"Failed to load in image from "<<image_path<<std::endl;
       return 2;
     }
 
@@ -189,12 +191,12 @@ int main(int argc, char** argv)
 
     // Load in points
     msm_points points;
-    vcl_string points_path = params.points_dir + "/"
+    std::string points_path = params.points_dir + "/"
                            + params.points_names[i];
 
     if (!points.read_text_file(points_path))
     {
-      vcl_cerr<<"Failed to load points from "<<points_path<<vcl_endl;
+      std::cerr<<"Failed to load points from "<<points_path<<std::endl;
       return 3;
     }
 
@@ -207,15 +209,15 @@ int main(int argc, char** argv)
   mfpf_point_finder *finder = params.patch_builder->new_finder();
   params.patch_builder->build(*finder);
 
-  vcl_cout<<"Finder: "<<*finder<<vcl_endl;
+  std::cout<<"Finder: "<<*finder<<std::endl;
 
   vsl_quick_file_save(finder,params.model_path);
 
   vimt_image_2d_of<vxl_byte> model_image;
   finder->get_image_of_model(model_image);
-  vcl_string patch_image_path = "./model_patch.jpg";
+  std::string patch_image_path = "./model_patch.jpg";
   if (vil_save(model_image.image(),patch_image_path.c_str()))
-    vcl_cout<<"Saved patch image to "<<patch_image_path<<vcl_endl;
+    std::cout<<"Saved patch image to "<<patch_image_path<<std::endl;
 
   delete finder;
 

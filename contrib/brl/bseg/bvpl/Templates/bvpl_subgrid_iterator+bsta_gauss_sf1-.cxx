@@ -1,4 +1,4 @@
-#include <bvpl/bvpl_subgrid_iterator.txx>
+#include <bvpl/bvpl_subgrid_iterator.hxx>
 #include <bsta/bsta_gauss_sf1.h>
 #include <bsta/bsta_attributes.h>
 

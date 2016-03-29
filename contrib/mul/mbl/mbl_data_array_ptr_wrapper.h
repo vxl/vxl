@@ -9,8 +9,10 @@
 // \author Tim Cootes
 // \brief A wrapper to provide access to objects through C-arrays of pointers
 
+#include <iostream>
+#include <vector>
 #include <mbl/mbl_data_wrapper.h>
-#include <vcl_vector.h>
+#include <vcl_compiler.h>
 
 //: A wrapper to provide access to objects through C-arrays of pointers
 template<class T>
@@ -29,9 +31,9 @@ class mbl_data_array_ptr_wrapper : public mbl_data_wrapper<T>
   mbl_data_array_ptr_wrapper(const T*const* data, unsigned long n);
 
   //: Constructor
-  // Sets up object to wrap a vcl_vector.
+  // Sets up object to wrap a std::vector.
   // The data must be kept in scope, this does not take a copy.
-  mbl_data_array_ptr_wrapper(const vcl_vector<const T* > &data);
+  mbl_data_array_ptr_wrapper(const std::vector<const T* > &data);
 
   //: Initialise to return elements from data[i]
   // Sets up object to return n examples beginning at data[0].
@@ -68,10 +70,10 @@ class mbl_data_array_ptr_wrapper : public mbl_data_wrapper<T>
   virtual mbl_data_wrapper< T >* clone() const;
 
   //: Name of the class
-  virtual vcl_string is_a() const;
+  virtual std::string is_a() const;
 
   //: True if this is (or is derived from) class named s
-  virtual bool is_class(vcl_string const& s) const;
+  virtual bool is_class(std::string const& s) const;
 };
 
 #endif // mbl_data_array_ptr_wrapper_h

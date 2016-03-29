@@ -1,4 +1,6 @@
 // This is core/vgl/tests/test_cartesian.cxx
+#include <iostream>
+#include <sstream>
 #include <testlib/testlib_test.h>
 //:
 // \file
@@ -10,31 +12,30 @@
 //   PVr -  4 May 2009 - added tests for operator>>
 //   PVr - 21 May 2009 - added more tests for operator>>
 
-#include <vcl_iostream.h>
-#include <vcl_sstream.h>
+#include <vcl_compiler.h>
 #include <vgl/vgl_tolerance.h>
-#include <vgl/vgl_point_2d.txx>
-#include <vgl/vgl_point_3d.txx>
-#include <vgl/vgl_line_2d.txx>
-#include <vgl/vgl_line_segment_2d.txx>
-#include <vgl/vgl_line_3d_2_points.txx>
-#include <vgl/vgl_line_segment_3d.txx>
-#include <vgl/vgl_plane_3d.txx>
-#include <vgl/vgl_vector_2d.txx>
-#include <vgl/vgl_vector_3d.txx>
+#include <vgl/vgl_point_2d.hxx>
+#include <vgl/vgl_point_3d.hxx>
+#include <vgl/vgl_line_2d.hxx>
+#include <vgl/vgl_line_segment_2d.hxx>
+#include <vgl/vgl_line_3d_2_points.hxx>
+#include <vgl/vgl_line_segment_3d.hxx>
+#include <vgl/vgl_plane_3d.hxx>
+#include <vgl/vgl_vector_2d.hxx>
+#include <vgl/vgl_vector_3d.hxx>
 #include <vgl/vgl_box_2d.h>
 #include <vgl/vgl_box_3d.h>
-#include <vgl/vgl_clip.txx>
-#include <vgl/vgl_distance.txx>
-#include <vgl/vgl_lineseg_test.txx>
+#include <vgl/vgl_clip.hxx>
+#include <vgl/vgl_distance.hxx>
+#include <vgl/vgl_lineseg_test.hxx>
 #include <vgl/vgl_1d_basis.h>
-#include <vgl/vgl_intersection.txx>
+#include <vgl/vgl_intersection.hxx>
 
 static void test_vector_2d()
 {
   // standard constructor
   vgl_vector_2d<float> const v(1.5f, 0.625f);
-  vcl_cout << v << vcl_endl;
+  std::cout << v << std::endl;
 
   // default constructor
   vgl_vector_2d<float> v0; // == (0,0)
@@ -83,21 +84,21 @@ static void test_vector_2d()
   TEST("orthogonal", orthogonal(v,vgl_vector_2d<float>(0.625,-1.5)), true);
 
   {
-    vcl_stringstream is; is << "4.4 -5 7e1";
+    std::stringstream is; is << "4.4 -5 7e1";
     vgl_vector_2d<double> p(0.0,0.0); is >> p;
-    vcl_cout << p << vcl_endl;
+    std::cout << p << std::endl;
     TEST("istream vgl_vector_2d (blank-separated)", p, vgl_vector_2d<double>(4.4,-5));
   }
   {
-    vcl_stringstream is; is << "7e1, 11 , blabla";
+    std::stringstream is; is << "7e1, 11 , blabla";
     vgl_vector_2d<double> p(0.0,0.0); is >> p;
-    vcl_cout << p << vcl_endl;
+    std::cout << p << std::endl;
     TEST("istream vgl_vector_2d (comma-separated)", p, vgl_vector_2d<double>(70,11));
   }
   {
-    vcl_stringstream is; is << " (12,13 ) !";
+    std::stringstream is; is << " (12,13 ) !";
     vgl_vector_2d<double> p(0.0,0.0); is >> p;
-    vcl_cout << p << vcl_endl;
+    std::cout << p << std::endl;
     TEST("istream vgl_vector_2d (parenthesized)", p, vgl_vector_2d<double>(12,13));
   }
 }
@@ -106,7 +107,7 @@ static void test_vector_3d()
 {
   // standard constructor
   vgl_vector_3d<float> v(1.5f, 0.625f, 0.0f);
-  vcl_cout << v << vcl_endl;
+  std::cout << v << std::endl;
 
   // default constructor
   vgl_vector_3d<float> v0; // == (0,0,0)
@@ -241,7 +242,7 @@ static void test_vector_3d()
   }
   TEST_NEAR("orthogonal vectors case 5", check, 0.0, 1e-8);
 
-  vcl_stringstream is; is << "4.4 -5 7e1 10,11 , 12 (12 , 13,14 )";
+  std::stringstream is; is << "4.4 -5 7e1 10,11 , 12 (12 , 13,14 )";
   vgl_vector_3d<float> p; is >> p;
   TEST("istream vgl_vector_3d (blank-separated)", p, vgl_vector_3d<float>(4.4f,-5,70));
   is >> p;
@@ -254,7 +255,7 @@ static void test_point_2d()
 {
   int d[] = {5,5};
   vgl_point_2d<int> p1(3,7), p2(d), p3(-1,-8);
-  vcl_cout << p3 << vcl_endl;
+  std::cout << p3 << std::endl;
 
   TEST("constructor", p1.x()==3 && p1.y()==7, true);
 
@@ -305,21 +306,21 @@ static void test_point_2d()
   TEST("vgl_distance_origin", vgl_distance_origin(l1), 1);
 
   {
-    vcl_stringstream is; is << "4.4 -5 7e1";
+    std::stringstream is; is << "4.4 -5 7e1";
     vgl_point_2d<double> p(0.0,0.0); is >> p;
-    vcl_cout << p << vcl_endl;
+    std::cout << p << std::endl;
     TEST("istream vgl_point_2d (blank-separated)", p, vgl_point_2d<double>(4.4,-5));
   }
   {
-    vcl_stringstream is; is << "7e1, 11 , blabla";
+    std::stringstream is; is << "7e1, 11 , blabla";
     vgl_point_2d<double> p(0.0,0.0); is >> p;
-    vcl_cout << p << vcl_endl;
+    std::cout << p << std::endl;
     TEST("istream vgl_point_2d (comma-separated)", p, vgl_point_2d<double>(70,11));
   }
   {
-    vcl_stringstream is; is << " (12,13 ) !";
+    std::stringstream is; is << " (12,13 ) !";
     vgl_point_2d<double> p(0.0,0.0); is >> p;
-    vcl_cout << p << vcl_endl;
+    std::cout << p << std::endl;
     TEST("istream vgl_point_2d (parenthesized)", p, vgl_point_2d<double>(12,13));
   }
 }
@@ -328,7 +329,7 @@ static void test_point_3d()
 {
   int d[] = {5,5,5};
   vgl_point_3d<int> p1(3,7,-1), p2(d), p3(-1,-8,7);
-  vcl_cout << p3 << vcl_endl;
+  std::cout << p3 << std::endl;
 
   TEST("inequality", (p1 != p3), true);
 
@@ -368,7 +369,7 @@ static void test_point_3d()
   vgl_point_3d<double> pp(0,0,0);
   TEST("intersection", pi, pp);
 
-  vcl_stringstream is; is << "4.4 -5 7e1 10,11 , 12 (12 , 13,14 )";
+  std::stringstream is; is << "4.4 -5 7e1 10,11 , 12 (12 , 13,14 )";
   vgl_point_3d<float> p; is >> p;
   TEST("istream vgl_point_3d (blank-separated)", p, vgl_point_3d<float>(4.4f,-5,70));
   is >> p;
@@ -381,7 +382,7 @@ static void test_line_2d()
 {
   double d[] = {5,5,-1};
   vgl_line_2d<double> l1(3,7,0), l2(d), l3(0,-1,-8);
-  vcl_cout << l3 << vcl_endl;
+  std::cout << l3 << std::endl;
 
   TEST("inequality", (l1 != l3), true);
 
@@ -397,7 +398,7 @@ static void test_line_2d()
                        p10(1,0), p11(1,1), p12(1,2), p13(1,3),
                        p20(2,0), p21(2,1), p30(3,0), p31(3,1);
   vgl_line_2d<double> li(p10,p01); // line through these two points
-  vcl_cout << li << vcl_endl;
+  std::cout << li << std::endl;
   vgl_line_2d<double> ll(1,1,-1);
   TEST("join", li, ll);
 
@@ -504,7 +505,7 @@ static void test_line_2d()
 
   vgl_box_2d<double> bx(0,2,0,3);
   vgl_line_segment_2d<double> ls3 = vgl_clip_line_to_box(li,bx);
-  vcl_cout << ls3 << '\n';
+  std::cout << ls3 << '\n';
   TEST("line segment equality", ls3, ls);
   TEST("line segment equality", ls3, ls2);
 
@@ -514,24 +515,24 @@ static void test_line_2d()
 
   {
     // check reason for error on other platforms - JLM
-    vcl_stringstream is; is << "4.5 -5 7e1" << vcl_ends;
-    vcl_cout << "stringstr "<< is.str() << '\n';
+    std::stringstream is; is << "4.5 -5 7e1" << std::ends;
+    std::cout << "stringstr "<< is.str() << '\n';
     vgl_line_2d<float> line;
     is >> line;
-    vcl_cout << "formatted line " << line << '\n';;
+    std::cout << "formatted line " << line << '\n';;
     TEST("istream vgl_line_2d", line, vgl_line_2d<float>(4.5f,-5,70));
 #if 0  // HACK This test is always failing
-    vcl_stringstream is1;
-    is1 << "9x+7y-8=0" << vcl_ends;
-    vcl_cout << "stringstr 1 "<< is1.str() << '\n';
+    std::stringstream is1;
+    is1 << "9x+7y-8=0" << std::ends;
+    std::cout << "stringstr 1 "<< is1.str() << '\n';
     vgl_line_2d<float> line1;
     is1 >> line1;
-    vcl_cout << "formatted line " << line1 << '\n';
+    std::cout << "formatted line " << line1 << '\n';
     TEST("istream vgl_line_2d formatted", line1, vgl_line_2d<float>(9,7,-8));
 #endif
   }
 
-  vcl_stringstream is; is << "\n4 6 7 9";
+  std::stringstream is; is << "\n4 6 7 9";
   vgl_line_segment_2d<float> l_s; is >> l_s;
   TEST("istream line_segment_2d", l_s, vgl_line_segment_2d<float>(vgl_point_2d<float>(4,6), vgl_point_2d<float>(7,9)));
 }
@@ -571,9 +572,9 @@ static void test_line_3d()
   bool intersection_ok = ( p2 == p1-dir*0.5 );
   TEST("intersection", intersection_ok, true);
 
-  vcl_stringstream is; is << "4 5 6  (7, 8, 9)";
+  std::stringstream is; is << "4 5 6  (7, 8, 9)";
   vgl_line_segment_3d<float> l_s; is >> l_s;
-  vcl_cout << l_s << vcl_endl;
+  std::cout << l_s << std::endl;
   TEST("istream vgl_line_segment_3d", l_s, vgl_line_segment_3d<float>(vgl_point_3d<float>(4,5,6), vgl_point_3d<float>(7,8,9)));
 }
 
@@ -583,18 +584,18 @@ static void test_plane_3d()
   vgl_plane_3d<double> pl1(vgl_point_3d<double>( 0,  0, 10),
                            vgl_point_3d<double>(10,  0, 10),
                            vgl_point_3d<double>( 0, 10, 10));
-  vcl_cout << "plane1: " << pl1 << vcl_endl;
+  std::cout << "plane1: " << pl1 << std::endl;
 
   // Define the same plane using the point+normal representation
   vgl_plane_3d<double> pl2(vgl_vector_3d<double>(0, 0, 1),
                            vgl_point_3d<double>(0, 0, 10));
-  vcl_cout << "plane2: " << pl2 << vcl_endl;
+  std::cout << "plane2: " << pl2 << std::endl;
 
   // Define the same plane using other points
   vgl_plane_3d<double> pl3(vgl_point_3d<double>( 0,  0, 10),
                            vgl_point_3d<double>(10,  0, 10),
                            vgl_point_3d<double>(10, 10, 10));
-  vcl_cout << "plane3: " << pl3 << vcl_endl;
+  std::cout << "plane3: " << pl3 << std::endl;
 
   // Are these planes considered equal?
   TEST("plane1==plane2", pl1, pl2);
@@ -637,7 +638,7 @@ static void test_plane_3d()
   // And some other planes:
   double d[] = {0,3,4,1};
   vgl_plane_3d<double> plane1(3,7,-1,1), plane2(d), plane3(-1,-8,7,1);
-  vcl_cout << plane3 << vcl_endl;
+  std::cout << plane3 << std::endl;
 
   TEST("inequality", (plane1 != plane3), true);
 
@@ -646,26 +647,26 @@ static void test_plane_3d()
 
   vgl_vector_3d<double> d1 = plane2.normal();
   vgl_vector_3d<double> d2 = vgl_vector_3d<double>(0,0.6,0.8);
-  vcl_cout << d1 << vcl_endl;
+  std::cout << d1 << std::endl;
   TEST_NEAR("normal", (d1-d2).sqr_length(), 0.0, 1e-12);
 
   vgl_point_3d<double> p1(1,0,0), p2(0,1,0), p3(0,0,1);
   vgl_plane_3d<double> pl(p1,p2,p3); // plane through 3 points
-  vcl_cout << pl << vcl_endl;
+  std::cout << pl << std::endl;
   vgl_plane_3d<double> pp(1,1,1,-1);
   TEST("join", pl, pp);
 
   TEST_NEAR("vgl_distance(plane,point)", vgl_distance(plane2,p2), 0.8, 1e-9);
   TEST("vgl_distance(point,plane)", vgl_distance(p3,plane2), 1);
 
-  vcl_stringstream is; is << "4.5 -5 7e1 5e-1   -6x+7y-8z+9=0";
+  std::stringstream is; is << "4.5 -5 7e1 5e-1   -6x+7y-8z+9=0";
   // check error on other platforms - JLM
-  vcl_cout << is.str();
+  std::cout << is.str();
   vgl_plane_3d<double> l; is >> l;
   TEST("istream vgl_plane_3d", l, vgl_plane_3d<double>(4.5,-5,70,0.5));
 #if 0  // HACK This test is always failing
   is >> l;
-  vcl_cout << "second form for l " << l << '\n';
+  std::cout << "second form for l " << l << '\n';
   TEST("istream vgl_plane_3d formatted", l, vgl_plane_3d<double>(-6,7,-8,9));
 #endif
 }
@@ -674,7 +675,7 @@ static void test_box_2d()
 {
   // Create empty box
   vgl_box_2d<double> b;
-  vcl_cout << b << vcl_endl;
+  std::cout << b << std::endl;
   TEST("box is empty", b.is_empty(), true);
   TEST("box has no volume", b.volume(), 0.0);
 
@@ -684,7 +685,7 @@ static void test_box_2d()
   TEST("!contains(p2)", b.contains(p2), false);
   TEST("!contains(p12)", b.contains(p12), false);
 
-  b.add(p0); vcl_cout << b << vcl_endl;
+  b.add(p0); std::cout << b << std::endl;
   TEST("contains(p0)", b.contains(p0), true);
   TEST("!contains(p1)", b.contains(p1), false);
   TEST("!contains(p2)", b.contains(p2), false);
@@ -695,7 +696,7 @@ static void test_box_2d()
   TEST("min_point", b.min_point(), p0);
   TEST("max_point", b.max_point(), p0);
 
-  b.add(p1); vcl_cout << b << vcl_endl;
+  b.add(p1); std::cout << b << std::endl;
   TEST("contains(p0)", b.contains(p0), true);
   TEST("contains(p1)", b.contains(p1), true);
   TEST("!contains(p2)", b.contains(p2), false);
@@ -706,7 +707,7 @@ static void test_box_2d()
   TEST("min_point", b.min_point(), p0);
   TEST("max_point", b.max_point(), p1);
 
-  b.add(p2); vcl_cout << b << vcl_endl;
+  b.add(p2); std::cout << b << std::endl;
   TEST("contains(p0)", b.contains(p0), true);
   TEST("contains(p1)", b.contains(p1), true);
   TEST("contains(p2)", b.contains(p2), true);
@@ -723,23 +724,23 @@ static void test_box_2d()
   TEST("!contains(b2)", b.contains(b2), false);
   vgl_box_2d<double> b3(p5,p4);
   TEST("boxes are equal", b3, b2);
-  b.add(b2); vcl_cout << b << vcl_endl;
+  b.add(b2); std::cout << b << std::endl;
   TEST("union box has volume 4", b.volume(), 4.0);
   TEST("contains(b2)", b.contains(b2), true);
   TEST("centroid", b.centroid(), p12);
   TEST("min_point", b.min_point(), p0);
   TEST("max_point", b.max_point(), p5);
 
-  b2=b; b2.set_centroid(p0); vcl_cout << b2 << vcl_endl;
+  b2=b; b2.set_centroid(p0); std::cout << b2 << std::endl;
   TEST("set_centroid", b2.centroid(), p0);
   TEST("volume did not change", b2.volume(), 4.0);
   TEST("min_point", b2.min_point(), vgl_point_2d<double>(-1,-1));
   TEST("max_point", b2.max_point(), p12);
 
-  b2.set_width(1.0); vcl_cout << b2 << vcl_endl;
+  b2.set_width(1.0); std::cout << b2 << std::endl;
   TEST("set_width", b2.centroid(), p0);
   TEST("volume is now 2", b2.volume(), 2.0);
-  b2.set_height(1.0); vcl_cout << b2 << vcl_endl;
+  b2.set_height(1.0); std::cout << b2 << std::endl;
   TEST("set_height", b2.centroid(), p0);
   TEST("volume is now 1", b2.volume(), 1.0);
   b2.scale_about_centroid(2.0);
@@ -761,20 +762,20 @@ static void test_box_2d()
   TEST("set_max_point", b2, b);
 
   double d0[2] = {0.0,0.0}, d1[2] = {1.0,1.0}, d2[2] = {2.0,2.0};
-  b = vgl_box_2d<double>(d0,d2); vcl_cout << b << vcl_endl;
+  b = vgl_box_2d<double>(d0,d2); std::cout << b << std::endl;
   TEST("construct from two points", b, b2);
-  b = vgl_box_2d<double>(d1,2,2,vgl_box_2d<double>::centre); vcl_cout << b << vcl_endl;
+  b = vgl_box_2d<double>(d1,2,2,vgl_box_2d<double>::centre); std::cout << b << std::endl;
   TEST("construct from centroid", b, b2);
-  b = vgl_box_2d<double>(p12,2,2,vgl_box_2d<double>::centre); vcl_cout << b << vcl_endl;
+  b = vgl_box_2d<double>(p12,2,2,vgl_box_2d<double>::centre); std::cout << b << std::endl;
   TEST("construct from centroid", b, b2);
   p12 = b2.min_point();
-  b = vgl_box_2d<double>(p12,2,2,vgl_box_2d<double>::min_pos); vcl_cout << b << vcl_endl;
+  b = vgl_box_2d<double>(p12,2,2,vgl_box_2d<double>::min_pos); std::cout << b << std::endl;
   TEST("construct from min_pos", b, b2);
   p12 = b2.max_point();
-  b = vgl_box_2d<double>(p12,2,2,vgl_box_2d<double>::max_pos); vcl_cout << b << vcl_endl;
+  b = vgl_box_2d<double>(p12,2,2,vgl_box_2d<double>::max_pos); std::cout << b << std::endl;
   TEST("construct from max_pos", b, b2);
 
-  b.empty(); vcl_cout << b << vcl_endl;
+  b.empty(); std::cout << b << std::endl;
   TEST("empty", b2==b, false);
   TEST("!contains(p0)", b.contains(p0), false);
   TEST("!contains(p1)", b.contains(p1), false);
@@ -783,10 +784,10 @@ static void test_box_2d()
   TEST("box has no volume", b.volume(), 0.0);
 
   vgl_box_2d<int> ib(10, 11, 10, 11);
-  vcl_cout << ib << vcl_endl;
+  std::cout << ib << std::endl;
   TEST("Integer box centroid", ib.centroid_x()==10 && ib.centroid_y()==10, true);
   ib.set_width(1); ib.set_height(1);
-  vcl_cout << ib << vcl_endl;
+  std::cout << ib << std::endl;
   TEST("Integer box centroid drift", ib.centroid_x()==10 && ib.centroid_y()==10, true);
 
   ib = vgl_box_2d<int>(10, 11, 10, 11);
@@ -795,32 +796,32 @@ static void test_box_2d()
   ib.set_width(4); ib.set_height(4);
   ib.set_width(3); ib.set_height(3);
   ib.set_width(4); ib.set_height(4);
-  vcl_cout << ib << ib.centroid() << vcl_endl;
+  std::cout << ib << ib.centroid() << std::endl;
   TEST("Integer box centroid drift", ib.centroid_x()==10 && ib.centroid_y()==10, true);
 
   ib = vgl_box_2d<int>(9, 11, 9, 11);
-  vcl_cout << ib << ib.centroid() << vcl_endl;
+  std::cout << ib << ib.centroid() << std::endl;
   ib.set_width(3); ib.set_height(3);
-  vcl_cout << ib << ib.centroid() << vcl_endl;
+  std::cout << ib << ib.centroid() << std::endl;
   TEST("Integer box centroid", ib.centroid_x()==10 && ib.centroid_y()==10, true);
 
   ib = vgl_box_2d<int>(-11, -10, -11, -10);
-  vcl_cout << ib << ib.centroid() << vcl_endl;
+  std::cout << ib << ib.centroid() << std::endl;
   ib.set_width(3); ib.set_height(3);
   ib.set_width(4); ib.set_height(4);
   ib.set_width(3); ib.set_height(3);
   ib.set_width(4); ib.set_height(4);
   ib.set_width(3); ib.set_height(3);
-  vcl_cout << ib << ib.centroid() << vcl_endl;
+  std::cout << ib << ib.centroid() << std::endl;
   TEST("Integer box negative centroid drift", ib.centroid_x()==-10 && ib.centroid_y()==-10, true);
 
   ib = vgl_box_2d<int>(-11, -9, -11, -9);
-  vcl_cout << ib << ib.centroid() << vcl_endl;
+  std::cout << ib << ib.centroid() << std::endl;
   ib.set_width(3); ib.set_height(3);
   ib.set_width(4); ib.set_height(4);
   ib.set_width(3); ib.set_height(3);
   ib.set_width(4); ib.set_height(4);
-  vcl_cout << ib << ib.centroid() << vcl_endl;
+  std::cout << ib << ib.centroid() << std::endl;
   TEST("Integer box negative centroid drift", ib.centroid_x()==-10 && ib.centroid_y()==-10, true);
 
   vgl_point_2d<double> min1(10,10), max1(20,20),
@@ -840,7 +841,7 @@ static void test_box_2d()
   TEST("vgl_intersection(box2, box3) = true", false, i2.is_empty());
   TEST("vgl_intersection(box2, box3) volume", 25.0, i2.volume());
 
-  vcl_stringstream is; is << "4.4 -5 7e1 5e-1";
+  std::stringstream is; is << "4.4 -5 7e1 5e-1";
   vgl_box_2d<double> l; is >> l;
   TEST("istream vgl_box_2d", l, vgl_box_2d<double>(4.4,70,-5,0.5)); // note different order!!
 }
@@ -849,7 +850,7 @@ static void test_box_3d()
 {
   // Create empty box
   vgl_box_3d<double> b;
-  vcl_cout << b << vcl_endl;
+  std::cout << b << std::endl;
   TEST("box is empty", b.is_empty(), true);
   TEST("box has no volume", b.volume(), 0.0);
 
@@ -864,7 +865,7 @@ static void test_box_3d()
   TEST("!contains(p23)", b.contains(p23), false);
   TEST("!contains(p123)", b.contains(p123), false);
 
-  b.add(p0); vcl_cout << b << vcl_endl;
+  b.add(p0); std::cout << b << std::endl;
   TEST("contains(p0)", b.contains(p0), true);
   TEST("!contains(p1)", b.contains(p1), false);
   TEST("!contains(p2)", b.contains(p2), false);
@@ -879,7 +880,7 @@ static void test_box_3d()
   TEST("min_point", b.min_point(), p0);
   TEST("max_point", b.max_point(), p0);
 
-  b.add(p1); vcl_cout << b << vcl_endl;
+  b.add(p1); std::cout << b << std::endl;
   TEST("contains(p0)", b.contains(p0), true);
   TEST("contains(p1)", b.contains(p1), true);
   TEST("!contains(p2)", b.contains(p2), false);
@@ -894,7 +895,7 @@ static void test_box_3d()
   TEST("min_point", b.min_point(), p0);
   TEST("max_point", b.max_point(), p1);
 
-  b.add(p2); vcl_cout << b << vcl_endl;
+  b.add(p2); std::cout << b << std::endl;
   TEST("contains(p0)", b.contains(p0), true);
   TEST("contains(p1)", b.contains(p1), true);
   TEST("contains(p2)", b.contains(p2), true);
@@ -909,7 +910,7 @@ static void test_box_3d()
   TEST("min_point", b.min_point(), p0);
   TEST("max_point", b.max_point(), p12);
 
-  b.add(p3); vcl_cout << b << vcl_endl;
+  b.add(p3); std::cout << b << std::endl;
   TEST("contains(p0)", b.contains(p0), true);
   TEST("contains(p1)", b.contains(p1), true);
   TEST("contains(p2)", b.contains(p2), true);
@@ -930,26 +931,26 @@ static void test_box_3d()
   TEST("!contains(b2)", b.contains(b2), false);
   vgl_box_3d<double> b3(p5,p4);
   TEST("boxes are equal", b3, b2);
-  b.add(b2); vcl_cout << b << vcl_endl;
+  b.add(b2); std::cout << b << std::endl;
   TEST("union box has volume 8", b.volume(), 8.0);
   TEST("contains(b2)", b.contains(b2), true);
   TEST("centroid", b.centroid(), p123);
   TEST("min_point", b.min_point(), p0);
   TEST("max_point", b.max_point(), p5);
 
-  b2=b; b2.set_centroid(p0); vcl_cout << b2 << vcl_endl;
+  b2=b; b2.set_centroid(p0); std::cout << b2 << std::endl;
   TEST("set_centroid", b2.centroid(), p0);
   TEST("volume did not change", b2.volume(), 8.0);
   TEST("min_point", b2.min_point(), vgl_point_3d<double>(-1,-1,-1));
   TEST("max_point", b2.max_point(), p123);
 
-  b2.set_width(1.0); vcl_cout << b2 << vcl_endl;
+  b2.set_width(1.0); std::cout << b2 << std::endl;
   TEST("set_width", b2.centroid(), p0);
   TEST("volume is now 4", b2.volume(), 4.0);
-  b2.set_height(1.0); vcl_cout << b2 << vcl_endl;
+  b2.set_height(1.0); std::cout << b2 << std::endl;
   TEST("set_height", b2.centroid(), p0);
   TEST("volume is now 2", b2.volume(), 2.0);
-  b2.set_depth(1.0); vcl_cout << b2 << vcl_endl;
+  b2.set_depth(1.0); std::cout << b2 << std::endl;
   TEST("set_depth", b2.centroid(), p0);
   TEST("volume is now 1", b2.volume(), 1.0);
   b2.scale_about_centroid(2.0);
@@ -972,20 +973,20 @@ static void test_box_3d()
   TEST("set_max_point", b2, b);
 
   double d0[3] = {0.0,0.0,0.0}, d1[3] = {1.0,1.0,1.0}, d2[3] = {2.0,2.0,2.0};
-  b = vgl_box_3d<double>(d0,d2); vcl_cout << b << vcl_endl;
+  b = vgl_box_3d<double>(d0,d2); std::cout << b << std::endl;
   TEST("construct from two points", b, b2);
-  b = vgl_box_3d<double>(d1,2,2,2,vgl_box_3d<double>::centre); vcl_cout << b << vcl_endl;
+  b = vgl_box_3d<double>(d1,2,2,2,vgl_box_3d<double>::centre); std::cout << b << std::endl;
   TEST("construct from centroid", b, b2);
-  b = vgl_box_3d<double>(p123,2,2,2,vgl_box_3d<double>::centre); vcl_cout << b << vcl_endl;
+  b = vgl_box_3d<double>(p123,2,2,2,vgl_box_3d<double>::centre); std::cout << b << std::endl;
   TEST("construct from centroid", b, b2);
   p123 = b2.min_point();
-  b = vgl_box_3d<double>(p123,2,2,2,vgl_box_3d<double>::min_pos); vcl_cout << b << vcl_endl;
+  b = vgl_box_3d<double>(p123,2,2,2,vgl_box_3d<double>::min_pos); std::cout << b << std::endl;
   TEST("construct from min_pos", b, b2);
   p123 = b2.max_point();
-  b = vgl_box_3d<double>(p123,2,2,2,vgl_box_3d<double>::max_pos); vcl_cout << b << vcl_endl;
+  b = vgl_box_3d<double>(p123,2,2,2,vgl_box_3d<double>::max_pos); std::cout << b << std::endl;
   TEST("construct from max_pos", b, b2);
 
-  b.empty(); vcl_cout << b << vcl_endl;
+  b.empty(); std::cout << b << std::endl;
   TEST("empty", b2==b, false);
   TEST("!contains(p0)", b.contains(p0), false);
   TEST("!contains(p1)", b.contains(p1), false);
@@ -1011,7 +1012,7 @@ static void test_box_3d()
   TEST("vgl_intersection(box2, box3) = true", false, i2.is_empty());
   TEST("vgl_intersection(box2, box3) volume", 125.0, i2.volume());
 
-  vcl_stringstream is; is << "4.4 -5 0 7e1 5e-1 0";
+  std::stringstream is; is << "4.4 -5 0 7e1 5e-1 0";
   vgl_box_3d<float> bx; is >> bx;
   TEST("istream vgl_box_3d", bx, vgl_box_3d<float>(4.4f,-5,0,70,0.5f,0));
 }
@@ -1056,7 +1057,7 @@ inline bool is_ideal(float) { return false; }
 
 static void test_1d_basis()
 {
-  vcl_cout << "  TEST OF PROJECTIVE BASIS WITH 1D POINTS\n";
+  std::cout << "  TEST OF PROJECTIVE BASIS WITH 1D POINTS\n";
 
   float p11=0.f, p12=1.f, p13=1e33f; // almost infinity ;-)
   vgl_1d_basis<float> b_1_p(p11,p12,p13);
@@ -1071,7 +1072,7 @@ static void test_1d_basis()
   p = b_1_p.project(-3.f);
   TEST_NEAR("point at -3", vgl_distance(p, vgl_homg_point_1d<double>(-3.0)), 0.0, 1e-6);
 
-  vcl_cout << "  TEST OF PROJECTIVE BASIS ON A 2D LINE\n";
+  std::cout << "  TEST OF PROJECTIVE BASIS ON A 2D LINE\n";
 
   vgl_point_2d<int> p21(0,1), p22(1,3), p23(2,5); // On the line 2x-y+1=0
   vgl_1d_basis<vgl_point_2d<int> > b_2_p(p21,p22,p23);
@@ -1084,7 +1085,7 @@ static void test_1d_basis()
   p = b_2_p.project(vgl_point_2d<int>(-1,-1));
   TEST("point at -1", p, vgl_homg_point_1d<double>(-1/3.0));
 
-  vcl_cout << "  TEST OF PROJECTIVE BASIS ON A 3D LINE\n";
+  std::cout << "  TEST OF PROJECTIVE BASIS ON A 3D LINE\n";
 
   vgl_point_3d<double> p31(0,1,3), p32(1,3,2), p33(2,5,1); // On the line 2x-y+1=0,x+z=3
   vgl_1d_basis<vgl_point_3d<double> > b_3_p(p31,p32,p33);
@@ -1097,7 +1098,7 @@ static void test_1d_basis()
   p = b_3_p.project(vgl_point_3d<double>(-1,-1,4));
   TEST("point at -1", p, vgl_homg_point_1d<double>(-1/3.0));
 
-  vcl_cout << "  TEST OF PROJECTIVE BASIS OF CONCURRENT 2D LINES\n";
+  std::cout << "  TEST OF PROJECTIVE BASIS OF CONCURRENT 2D LINES\n";
 
   vgl_line_2d<int> l21(0,1,1), l22(1,3,1), l23(2,5,1); // Through the point (2,-1,1)
   vgl_1d_basis<vgl_line_2d<int> > b_2_l(l21,l22,l23);
@@ -1108,28 +1109,28 @@ static void test_1d_basis()
   p = b_2_l.project(l23);
   TEST("infinity point", p, vgl_homg_point_1d<double>(1.0,0.0));
   p = b_2_l.project(vgl_line_2d<int>(-1,-1,1));
-  vcl_cout << p << '\n';
+  std::cout << p << '\n';
   TEST("point at -1", p, vgl_homg_point_1d<double>(-1/3.0));
 }
 
 
 static void test_cartesian()
 {
-  vcl_cout << "--- test_vector_2d ---\n";     test_vector_2d();
-  vcl_cout << "--- test_vector_3d ---\n";     test_vector_3d();
-  vcl_cout << "--- test_point_2d ---\n";      test_point_2d();
-  vcl_cout << "--- test_point_3d ---\n";      test_point_3d();
-  vcl_cout << "--- test_line_2d ---\n";       test_line_2d();
-  vcl_cout << "--- test_line_3d ---\n";       test_line_3d();
-  vcl_cout << "--- test_plane_3d ---\n";      test_plane_3d();
-  vcl_cout << "--- test_box_2d ---\n";        test_box_2d();
-  vcl_cout << "--- test_box_3d ---\n";        test_box_3d();
-  vcl_cout << "-- Testing vgl_1d_basis --\n"; test_1d_basis();
+  std::cout << "--- test_vector_2d ---\n";     test_vector_2d();
+  std::cout << "--- test_vector_3d ---\n";     test_vector_3d();
+  std::cout << "--- test_point_2d ---\n";      test_point_2d();
+  std::cout << "--- test_point_3d ---\n";      test_point_3d();
+  std::cout << "--- test_line_2d ---\n";       test_line_2d();
+  std::cout << "--- test_line_3d ---\n";       test_line_3d();
+  std::cout << "--- test_plane_3d ---\n";      test_plane_3d();
+  std::cout << "--- test_box_2d ---\n";        test_box_2d();
+  std::cout << "--- test_box_3d ---\n";        test_box_3d();
+  std::cout << "-- Testing vgl_1d_basis --\n"; test_1d_basis();
 }
 
 TESTMAIN(test_cartesian);
 
-#include <vgl/vgl_1d_basis.txx>
+#include <vgl/vgl_1d_basis.hxx>
 VGL_1D_BASIS_INSTANTIATE(float);
 VGL_1D_BASIS_INSTANTIATE(vgl_point_2d<int>);
 VGL_1D_BASIS_INSTANTIATE(vgl_line_2d<int>);

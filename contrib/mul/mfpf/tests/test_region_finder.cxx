@@ -1,4 +1,6 @@
 // This is mul/mfpf/tests/test_region_finder.cxx
+#include <iostream>
+#include <sstream>
 #include <testlib/testlib_test.h>
 //:
 // \file
@@ -10,8 +12,7 @@
 //
 //=======================================================================
 
-#include <vcl_iostream.h>
-#include <vcl_sstream.h>
+#include <vcl_compiler.h>
 #include <vsl/vsl_binary_loader.h>
 #include <mfpf/mfpf_add_all_loaders.h>
 #include <mfpf/mfpf_region_finder.h>
@@ -27,7 +28,7 @@
 
 void test_region_finder_search(mfpf_point_finder_builder& b)
 {
-  vcl_cout<<"Testing building and search for: "<<b.is_a()<<vcl_endl;
+  std::cout<<"Testing building and search for: "<<b.is_a()<<std::endl;
 
   mfpf_point_finder* pf = b.new_finder();
 
@@ -45,22 +46,22 @@ void test_region_finder_search(mfpf_point_finder_builder& b)
   b.add_example(image,p0,u);
   b.build(*pf);
 
-  vcl_cout<<"Built model: "<<pf<<vcl_endl;
+  std::cout<<"Built model: "<<pf<<std::endl;
 
   vgl_point_2d<double> new_p;
   vgl_vector_2d<double> new_u;
 
-  vcl_cout<<"Value at true point ="<<pf->evaluate(image,p0,u)<<vcl_endl;
+  std::cout<<"Value at true point ="<<pf->evaluate(image,p0,u)<<std::endl;
 
   pf->set_search_area(0,0);
   pf->search(image,p0,u,new_p,new_u);
-  vcl_cout<<"search(): Found point: "<<new_p<<vcl_endl;
+  std::cout<<"search(): Found point: "<<new_p<<std::endl;
   TEST_NEAR("Correct location (in 1x1)",(new_p-p0).length(),0.0,1e-6);
 
   pf->set_search_area(3,3);
   pf->search(image,p1,u,new_p,new_u);
-  vcl_cout<<"Found point: "<<new_p<<vcl_endl
-          <<"Should be : "<<p0<<vcl_endl;
+  std::cout<<"Found point: "<<new_p<<std::endl
+          <<"Should be : "<<p0<<std::endl;
 
   TEST_NEAR("Correct orientation",(new_u-u).length(),0.0,1e-6);
   TEST_NEAR("Correct location (in 7x7)",(new_p-p0).length(),0.0,1e-6);
@@ -69,7 +70,7 @@ void test_region_finder_search(mfpf_point_finder_builder& b)
   pf->evaluate_region(image,p1,u,response);
   TEST("Response ni",response.image().ni(),7);
   TEST("Response nj",response.image().nj(),7);
-  vcl_cout<<"World2im: "<<response.world2im()<<vcl_endl;
+  std::cout<<"World2im: "<<response.world2im()<<std::endl;
 
   // Check that response has local minima in correct place
   vgl_point_2d<double> ip = response.world2im()(new_p);
@@ -79,7 +80,7 @@ void test_region_finder_search(mfpf_point_finder_builder& b)
   double r0 = vil_bilin_interp_safe(response.image(),ip.x(),ip.y());
   double r1 = vil_bilin_interp_safe(response.image(),ip.x()-1,ip.y());
   double r2 = vil_bilin_interp_safe(response.image(),ip.x()+1,ip.y());
-  vcl_cout<<r0<<','<<r1<<','<<r2<<vcl_endl;
+  std::cout<<r0<<','<<r1<<','<<r2<<std::endl;
   TEST("Local minima 1",r0<r1,true);
   TEST("Local minima 2",r0<r2,true);
 
@@ -88,7 +89,7 @@ void test_region_finder_search(mfpf_point_finder_builder& b)
 
 void test_region_finder()
 {
-  vcl_cout << "*************************\n"
+  std::cout << "*************************\n"
            << " Testing mfpf_region_finder\n"
            << "*************************\n";
 
@@ -99,15 +100,15 @@ void test_region_finder()
   mfpf_region_finder_builder r_builder;
   r_builder.set_as_box(4,5,sad_vec_cost_builder);
   TEST("Number of pixels",r_builder.n_pixels(),20);
-  vcl_cout<<r_builder<<vcl_endl;
-  r_builder.print_shape(vcl_cout);
+  std::cout<<r_builder<<std::endl;
+  r_builder.print_shape(std::cout);
 
   test_region_finder_search(r_builder);
 
   r_builder.set_as_ellipse(4,3,sad_vec_cost_builder);
   TEST("Number of pixels",r_builder.n_pixels(),35);
-  vcl_cout<<r_builder<<vcl_endl;
-  r_builder.print_shape(vcl_cout);
+  std::cout<<r_builder<<std::endl;
+  r_builder.print_shape(std::cout);
 
   test_region_finder_search(r_builder);
 
@@ -127,8 +128,8 @@ void test_region_finder()
   // -------------------------------------------
 
   {
-    vcl_cout<<"Testing initialisation as box"<<vcl_endl;
-    vcl_istringstream ss(
+    std::cout<<"Testing initialisation as box"<<std::endl;
+    std::istringstream ss(
           "mfpf_region_finder_builder\n"
           "{\n"
           "  shape: box { ni: 5 nj: 3 ref_x: 2.5 ref_y: 1.5 }\n"
@@ -137,14 +138,14 @@ void test_region_finder()
           "  cost_builder: mfpf_sad_vec_cost_builder { min_mad: 1.1 }\n"
           "}\n");
 
-    vcl_auto_ptr<mfpf_point_finder_builder>
+    std::auto_ptr<mfpf_point_finder_builder>
             pf = mfpf_point_finder_builder::create_from_stream(ss);
 
     TEST("Correct Point Finder Builder", pf->is_a(),"mfpf_region_finder_builder");
     if (pf->is_a()=="mfpf_region_finder_builder")
     {
       mfpf_region_finder_builder &a_pf = static_cast<mfpf_region_finder_builder&>(*pf);
-      vcl_cout<<a_pf<<vcl_endl;
+      std::cout<<a_pf<<std::endl;
       TEST("search_ni configured",a_pf.search_ni(),17);
       TEST("search_nj configured",a_pf.search_nj(),15);
       TEST("shape",a_pf.shape(),"box");
@@ -155,8 +156,8 @@ void test_region_finder()
   }
 
   {
-    vcl_cout<<"Testing initialisation as ellipse"<<vcl_endl;
-    vcl_istringstream ss(
+    std::cout<<"Testing initialisation as ellipse"<<std::endl;
+    std::istringstream ss(
           "mfpf_region_finder_builder\n"
           "{\n"
           "  shape: ellipse { ri: 5 rj: 3 }\n"
@@ -168,14 +169,14 @@ void test_region_finder()
           "  cost_builder: mfpf_sad_vec_cost_builder { min_mad: 1.2 }\n"
           "}\n");
 
-    vcl_auto_ptr<mfpf_point_finder_builder>
+    std::auto_ptr<mfpf_point_finder_builder>
             pf = mfpf_point_finder_builder::create_from_stream(ss);
 
     TEST("Correct Point Finder Builder", pf->is_a(),"mfpf_region_finder_builder");
     if (pf->is_a()=="mfpf_region_finder_builder")
     {
       mfpf_region_finder_builder &a_pf = static_cast<mfpf_region_finder_builder&>(*pf);
-      vcl_cout<<a_pf<<vcl_endl;
+      std::cout<<a_pf<<std::endl;
       TEST("search_ni configured",a_pf.search_ni(),17);
       TEST("search_nj configured",a_pf.search_nj(),15);
       TEST("shape",a_pf.shape(),"ellipse");
@@ -207,7 +208,7 @@ void test_region_finder()
     bfs_out.close();
 
     mfpf_region_finder region_finder_in;
-    mfpf_point_finder *base_ptr_in = 0;
+    mfpf_point_finder *base_ptr_in = VXL_NULLPTR;
 
     vsl_b_ifstream bfs_in("test_region_finder.bvl.tmp");
     TEST ("Opened test_region_finder.bvl.tmp for reading", (!bfs_in), false);
@@ -215,8 +216,8 @@ void test_region_finder()
     vsl_b_read(bfs_in, base_ptr_in);
     TEST ("Finished reading file successfully", (!bfs_in), false);
     bfs_in.close();
-    vcl_cout<<region_finder<<vcl_endl
-            <<region_finder_in<<vcl_endl;
+    std::cout<<region_finder<<std::endl
+            <<region_finder_in<<std::endl;
     TEST("Loaded==Saved",region_finder_in,region_finder);
     TEST("Load region_finder by base ptr (type)",
          base_ptr_in->is_a()==region_finder.is_a(),true);

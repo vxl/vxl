@@ -1,5 +1,5 @@
 //#include <depth_map/depth_map_region.h>
-#include <vbl/vbl_smart_ptr.txx>
+#include <vbl/vbl_smart_ptr.hxx>
 #include <vsol/vsol_box_3d.h>
 #include <vsol/vsol_polygon_3d.h>
 #include <vsol/vsol_box_2d.h>

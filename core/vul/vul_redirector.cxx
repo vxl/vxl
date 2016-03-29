@@ -5,16 +5,17 @@
 //:
 // \file
 
+#include <iostream>
+#include <cstdio>
 #include <vcl_compiler.h>
 
 #include "vul_redirector.h"
-#include <vcl_iostream.h>
-#include <vcl_cstdio.h> // for EOF
+#include <vcl_compiler.h>
 
 //----------------------------------------------------------------------
 // This class is used as a stream buffer that can
 // redirect output from cout, cerr, clog to a CoutWindow class.
-class vul_redirector_streambuf : public vcl_streambuf
+class vul_redirector_streambuf : public std::streambuf
 {
   vul_redirector_data* p;
  public:
@@ -28,10 +29,10 @@ class vul_redirector_streambuf : public vcl_streambuf
 #if defined(__INTEL_COMPILER)
   // RogueWave or ISO?
 # define xsputn_const const
-# define xsputn_sizet vcl_streamsize
+# define xsputn_sizet std::streamsize
 #else
 # define xsputn_const /* */
-# define xsputn_sizet vcl_streamsize
+# define xsputn_sizet std::streamsize
 #endif
   xsputn_sizet xsputn (xsputn_const char* text, xsputn_sizet n);
 };
@@ -39,9 +40,9 @@ class vul_redirector_streambuf : public vcl_streambuf
 struct vul_redirector_data
 {
   vul_redirector* owner;
-  vcl_streambuf* old_cerrbuf;
+  std::streambuf* old_cerrbuf;
   vul_redirector_streambuf* buf;
-  vcl_ostream* s;
+  std::ostream* s;
 };
 
 /////////////////////////////////////////////////////////////////////////////
@@ -49,7 +50,7 @@ struct vul_redirector_data
 
 int vul_redirector_streambuf::sync ()
 {
-  vcl_ptrdiff_t n = pptr () - pbase ();
+  std::ptrdiff_t n = pptr () - pbase ();
   return (n && p->owner->putchunk ( pbase (), n) != n) ? EOF : 0;
 }
 
@@ -77,7 +78,7 @@ xsputn_sizet vul_redirector_streambuf::xsputn (xsputn_const char* text, xsputn_s
 //////////////// Data for debugging
 
 
-vul_redirector::vul_redirector(vcl_ostream& s):
+vul_redirector::vul_redirector(std::ostream& s):
   p(new vul_redirector_data)
 {
   p->owner = this;
@@ -99,13 +100,13 @@ int vul_redirector::sync_passthru()
   return p->old_cerrbuf->pubsync();
 }
 
-vcl_streamsize vul_redirector::put_passthru(char const* buf, vcl_streamsize n)
+std::streamsize vul_redirector::put_passthru(char const* buf, std::streamsize n)
 {
   return p->old_cerrbuf->sputn(buf, n);
 }
 
 //: Default action is just to pass text on the old stream.
-vcl_streamsize vul_redirector::putchunk(char const* buf, vcl_streamsize n)
+std::streamsize vul_redirector::putchunk(char const* buf, std::streamsize n)
 {
   return put_passthru(buf, n);
 }

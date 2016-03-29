@@ -2,6 +2,8 @@
 //:
 // \file
 
+#include <iostream>
+#include <cmath>
 #include <core/vidl_pro/vidl_pro_utils.h>
 #include <bprb/bprb_func_process.h>
 #include <brip/brip_vil_float_ops.h>
@@ -14,13 +16,12 @@
 #include <vbl/io/vbl_io_smart_ptr.h>
 #include <vil/vil_convert.h>
 #include <vil/vil_math.h>
-#include <vcl_iostream.h>
-#include <vcl_cmath.h>
+#include <vcl_compiler.h>
 
 static void eigenvalues(double B, double C, double E, double& la,
                         double& lb)
 {
-  double temp = vcl_sqrt((B-E)*(B-E)+4.0*C*C);
+  double temp = std::sqrt((B-E)*(B-E)+4.0*C*C);
   la = 0.5*((B+E) + temp);
   lb = 0.5*((B+E) - temp);
 }
@@ -28,7 +29,7 @@ static void eigenvalues(double B, double C, double E, double& la,
 bool bbgm_local_frame_trans_process_cons(bprb_func_process& pro)
 {
   //input
-  vcl_vector<vcl_string> in_types(8), out_types(1);
+  std::vector<std::string> in_types(8), out_types(1);
 
   in_types[0]= "bbgm_image_sptr"; //background model
   in_types[1]= "vil_image_view_base_sptr"; //input frame
@@ -50,7 +51,7 @@ bool bbgm_local_frame_trans_process(bprb_func_process& pro)
 {
   // Sanity check
   if (!pro.verify_inputs()) {
-    vcl_cerr << "In bbgm_local_frame_trans_process::execute() -"
+    std::cerr << "In bbgm_local_frame_trans_process::execute() -"
              << " invalid inputs\n";
     return false;
   }
@@ -59,7 +60,7 @@ bool bbgm_local_frame_trans_process(bprb_func_process& pro)
   bbgm_image_sptr bgm = pro.get_input<bbgm_image_sptr>(0);
   if (!bgm)
   {
-    vcl_cerr << "In bbgm_measure_process::execute() -"
+    std::cerr << "In bbgm_measure_process::execute() -"
              << " null background distribution image\n";
     return false;
   }
@@ -142,9 +143,9 @@ bool bbgm_local_frame_trans_process(bprb_func_process& pro)
       // first get eigenvalues to check for singularities
       double la, lb;
       eigenvalues(B, C, E, la, lb);
-      if (vcl_fabs(la)< min_eigenvalue || vcl_fabs(lb)< min_eigenvalue)
+      if (std::fabs(la)< min_eigenvalue || std::fabs(lb)< min_eigenvalue)
         trans = false;
-      if (vcl_fabs(la/lb)>max_condition_number)
+      if (std::fabs(la/lb)>max_condition_number)
         trans = false;
       if (trans)
       {
@@ -154,10 +155,10 @@ bool bbgm_local_frame_trans_process(bprb_func_process& pro)
         double inv10 = -C*rdet, inv11 = B*rdet;
         double tu = -(A*inv00 + D*inv01);
         double tv = -(A*inv10 + D*inv11);
-        if (vcl_fabs(tu)<max_translation && vcl_fabs(tv)<max_translation) {
+        if (std::fabs(tu)<max_translation && std::fabs(tv)<max_translation) {
           n_translate += 1.0f;
-          du += vcl_fabs(tu);
-          dv += vcl_fabs(tv);
+          du += std::fabs(tu);
+          dv += std::fabs(tv);
           for (unsigned p = 0; p<3; ++p) {
             double itrans = gauss_smooth(i,j,p)+
               tu*Ix(i,j,p)+tv*Iy(i,j,p);
@@ -166,12 +167,12 @@ bool bbgm_local_frame_trans_process(bprb_func_process& pro)
         }
       }
     }
-    vcl_cout << '.';
+    std::cout << '.';
   }
-  vcl_cout << "\nFraction translated " << n_translate/total
+  std::cout << "\nFraction translated " << n_translate/total
            << " with <tu> = " << du/n_translate
-           << "and <tv> = " << dv/n_translate << '\n' << vcl_flush;
-  vcl_vector<vcl_string> output_types(1);
+           << "and <tv> = " << dv/n_translate << '\n' << std::flush;
+  std::vector<std::string> output_types(1);
   output_types[0]= "vil_image_view_base_sptr";
   pro.set_output_types(output_types);
 

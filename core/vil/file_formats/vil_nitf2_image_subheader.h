@@ -6,7 +6,8 @@
 //:
 // \file
 
-#include <vcl_vector.h>
+#include <vector>
+#include <vcl_compiler.h>
 
 #include "vil_nitf2_field_sequence.h"
 #include "vil_nitf2_classification.h"
@@ -38,15 +39,15 @@ class vil_nitf2_image_subheader
   //: Sets \a out_value to the value of field specified by tag.
   // \returns 0 if such a field is not found or is of the wrong type.
   template< class T >
-  bool get_property(vcl_string tag, T& out_value) const
+  bool get_property(std::string tag, T& out_value) const
   {
     return m_field_sequence.get_value( tag, out_value );
   }
 
-  //: Sets out_value to the value of vcl_vector field element specified by tag and index.
+  //: Sets out_value to the value of std::vector field element specified by tag and index.
   // \returns 0 if such a field is not found or is of the wrong type.
   template< class T >
-  bool get_property(vcl_string tag, int i, T& out_value) const
+  bool get_property(std::string tag, int i, T& out_value) const
   {
     return m_field_sequence.get_value( tag, i, out_value );
   }
@@ -57,9 +58,9 @@ class vil_nitf2_image_subheader
   unsigned int get_num_blocks_x() const;
   unsigned int get_num_blocks_y() const;
   unsigned int get_number_of_bits_per_pixel() const;
-  vcl_string get_image_source() const;
-  vcl_string get_image_type() const;
-  bool has_data_mask_table() const { return data_mask_table() != 0; }
+  std::string get_image_source() const;
+  std::string get_image_type() const;
+  bool has_data_mask_table() const { return data_mask_table() != VXL_NULLPTR; }
   const vil_nitf2_data_mask_table* data_mask_table() const { return m_data_mask_table; }
 
   //:
@@ -84,7 +85,7 @@ class vil_nitf2_image_subheader
   // lut_d[0] shall map to Red, lut_d[1] shall map to Green, and lut_d[2] shall map
   // to Blue.
   bool get_lut_info( unsigned int band, int& n_luts, int& ne_lut,
-                     vcl_vector< vcl_vector< unsigned char > >& lut_d ) const;
+                     std::vector< std::vector< unsigned char > >& lut_d ) const;
 
   // I allocate the return value, but you own it after I return it to you
   // so you need to delete it.
@@ -109,8 +110,8 @@ class vil_nitf2_image_subheader
   //
   //  The ordering of coefficients can vary as indicated by rpc_type
   //  Defined extensions are RPC00A and RPC00B.
-  bool get_rpc_params( vcl_string& rpc_type, vcl_string& image_id,
-                       vcl_string& image_corner_geo_locations,
+  bool get_rpc_params( std::string& rpc_type, std::string& image_id,
+                       std::string& image_corner_geo_locations,
                        double* rpc_data );
 
   //: Return the elevation and azimuth angles of the sun

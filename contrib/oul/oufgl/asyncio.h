@@ -45,18 +45,20 @@
 // \author Simon Brady
 //----------------------------------------------------------------------
 
+#include <iostream>
+#include <csignal>
+#include <cstddef>
 #include <unistd.h>
 #ifndef _POSIX_ASYNCHRONOUS_IO
 #error Your system does not support POSIX asynchronous I/O
 #endif
 #include <aio.h>
-#include <vcl_csignal.h>
-#include <vcl_cstddef.h> // for size_t
+#include <vcl_compiler.h>
 
 class AsyncIO_Shared_State
 {
  protected:
-  static volatile vcl_sig_atomic_t complete;   // 0 - in progress, 1 - complete
+  static volatile std::sig_atomic_t complete;   // 0 - in progress, 1 - complete
 
   // Set complete flag when completion signal arrives. Currently ignores
   // the signal number (see the warning at the start of this header)
@@ -80,16 +82,16 @@ class AsyncIO : protected AsyncIO_Shared_State
   // on failure
 
   // Begin reading n bytes into buf starting at current file position
-  int read(volatile void *buf, vcl_size_t n);
+  int read(volatile void *buf, std::size_t n);
 
   // Begin reading n bytes into buf starting at absolute file position pos
-  int read(volatile void *buf, vcl_size_t n, off_t pos);
+  int read(volatile void *buf, std::size_t n, off_t pos);
 
   // Begin writing n bytes from buf starting at current file position
-  int write(volatile void *buf, vcl_size_t nbytes);
+  int write(volatile void *buf, std::size_t nbytes);
 
   // Begin writing n bytes from buf starting at absolute file position pos
-  int write(volatile void *buf, vcl_size_t nbytes, off_t pos);
+  int write(volatile void *buf, std::size_t nbytes, off_t pos);
 
   // Wait for I/O to complete, then return status. If suspend is true, block
   // the calling process while waiting, otherwise continuously poll for

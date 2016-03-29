@@ -31,11 +31,11 @@ bool bvpl_init_sf_response_scene_process_cons(bprb_func_process& pro)
 {
   using namespace bvpl_init_sf_response_scene_process_globals ;
 
-  vcl_vector<vcl_string> input_types_(n_inputs_);
+  std::vector<std::string> input_types_(n_inputs_);
   input_types_[0] = "boxm_scene_base_sptr";  //input scene
   input_types_[1] = "vcl_string";            //output path
 
-  vcl_vector<vcl_string> output_types_(n_outputs_);
+  std::vector<std::string> output_types_(n_outputs_);
   output_types_[0] = "boxm_scene_base_sptr";  //response scene
   output_types_[1] = "boxm_scene_base_sptr";  //valid scene
 
@@ -52,7 +52,7 @@ bool bvpl_init_sf_response_scene_process(bprb_func_process& pro)
   //get inputs:
   unsigned i = 0;
   boxm_scene_base_sptr scene_base = pro.get_input<boxm_scene_base_sptr>(i++);
-  vcl_string output_path = pro.get_input<vcl_string>(i++);
+  std::string output_path = pro.get_input<std::string>(i++);
 
   //get scene
   typedef boct_tree<short, float> float_tree_type;

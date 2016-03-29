@@ -66,7 +66,7 @@ vtol_topology_object::is_inferior(vtol_topology_object_sptr inferior) const
 bool
 vtol_topology_object::is_superior(vtol_topology_object* const& superior) const
 {
-  vcl_list<vtol_topology_object*>::const_iterator i;
+  std::list<vtol_topology_object*>::const_iterator i;
   for (i=superiors_.begin(); i!=superiors_.end(); ++i)
     if (*i == superior)
       return true;
@@ -80,11 +80,11 @@ vtol_topology_object::is_superior(vtol_topology_object* const& superior) const
 //---------------------------------------------------------------------------
 const topology_list * vtol_topology_object::superiors(void) const
 {
-  vcl_cerr << "*** Warning: superiors() is deprecated\n";
+  std::cerr << "*** Warning: superiors() is deprecated\n";
   topology_list *result=new topology_list;
   result->reserve(superiors_.size());
 
-  vcl_list<vtol_topology_object*>::const_iterator i;
+  std::list<vtol_topology_object*>::const_iterator i;
   for (i=superiors_.begin();i!=superiors_.end();++i)
     result->push_back(*i);
 
@@ -128,7 +128,7 @@ void vtol_topology_object::unlink_inferior(vtol_topology_object_sptr inferior)
   assert(is_inferior(inferior));
   assert(inferior->is_superior(this));
 
-  vcl_list<vtol_topology_object*>::iterator i=inferior->superiors_.begin();
+  std::list<vtol_topology_object*>::iterator i=inferior->superiors_.begin();
   while ( i!=inferior->superiors_.end() && *i!=this ) ++i;
   // check presence in "superiors_" list of inferior:
   assert(*i==this);
@@ -275,14 +275,14 @@ void vtol_topology_object::blocks(block_list &new_list) const
 }
 
 //: print the object
-void vtol_topology_object::print(vcl_ostream &strm) const
+void vtol_topology_object::print(std::ostream &strm) const
 {
   strm<<"<vtol_topology_object "<<(void const *)this<<">\n"
-      <<"number of inferiors "<<numinf()<<vcl_endl
-      <<"number of superiors "<<numsup()<<vcl_endl;
+      <<"number of inferiors "<<numinf()<<std::endl
+      <<"number of superiors "<<numsup()<<std::endl;
 }
 
-void vtol_topology_object::describe_inferiors(vcl_ostream &strm,
+void vtol_topology_object::describe_inferiors(std::ostream &strm,
                                               int blanking) const
 {
   for (int n=0; n<blanking; ++n) strm << ' ';
@@ -299,7 +299,7 @@ void vtol_topology_object::describe_inferiors(vcl_ostream &strm,
   }
 }
 
-void vtol_topology_object::describe_superiors(vcl_ostream &strm,
+void vtol_topology_object::describe_superiors(std::ostream &strm,
                                               int blanking) const
 {
   for (int n=0; n<blanking; ++n) strm << ' ';
@@ -311,7 +311,7 @@ void vtol_topology_object::describe_superiors(vcl_ostream &strm,
   else
     strm<<"**SUPERIORS:\n";
 
-  vcl_list<vtol_topology_object*>::const_iterator i;
+  std::list<vtol_topology_object*>::const_iterator i;
   for (i=superiors_.begin();i!= superiors_.end();++i)
   {
     for (int n=0; n<blanking+2; ++n) strm << ' ';
@@ -319,7 +319,7 @@ void vtol_topology_object::describe_superiors(vcl_ostream &strm,
   }
 }
 
-void vtol_topology_object::describe(vcl_ostream &strm,
+void vtol_topology_object::describe(std::ostream &strm,
                                     int blanking) const
 {
   describe_inferiors(strm,blanking);
@@ -333,69 +333,69 @@ void vtol_topology_object::describe(vcl_ostream &strm,
 //---------------------------------------------------------------------------
 //: Compute lists of vertices
 //---------------------------------------------------------------------------
-vcl_vector<vtol_vertex *> *vtol_topology_object::compute_vertices(void)
+std::vector<vtol_vertex *> *vtol_topology_object::compute_vertices(void)
 {
-  vcl_cout << "Compute vertices\n";
-  return 0;
+  std::cout << "Compute vertices\n";
+  return VXL_NULLPTR;
 }
 
 
 //---------------------------------------------------------------------------
 //: Compute lists of zero chains
 //---------------------------------------------------------------------------
-vcl_vector<vtol_zero_chain *> *
+std::vector<vtol_zero_chain *> *
 vtol_topology_object::compute_zero_chains(void)
 {
-  vcl_cout << "Compute zero_chains\n";
-  return 0;
+  std::cout << "Compute zero_chains\n";
+  return VXL_NULLPTR;
 }
 
 //---------------------------------------------------------------------------
 //: compute lists of edges
 //---------------------------------------------------------------------------
 
-vcl_vector<vtol_edge *> *vtol_topology_object::compute_edges(void)
+std::vector<vtol_edge *> *vtol_topology_object::compute_edges(void)
 {
-  vcl_cout << "Compute edges\n";
-  return 0;
+  std::cout << "Compute edges\n";
+  return VXL_NULLPTR;
 }
 
 //---------------------------------------------------------------------------
 //: compute lists of one chains
 //---------------------------------------------------------------------------
-vcl_vector<vtol_one_chain *> *
+std::vector<vtol_one_chain *> *
 vtol_topology_object::compute_one_chains(void)
 {
-  vcl_cout << "Compute one chains\n";
-  return 0;
+  std::cout << "Compute one chains\n";
+  return VXL_NULLPTR;
 }
 
 //---------------------------------------------------------------------------
 //: compute lists of faces
 //---------------------------------------------------------------------------
-vcl_vector<vtol_face *> *vtol_topology_object::compute_faces(void)
+std::vector<vtol_face *> *vtol_topology_object::compute_faces(void)
 {
-  vcl_cout << "Compute faces\n";
-  return 0;
+  std::cout << "Compute faces\n";
+  return VXL_NULLPTR;
 }
 
 //---------------------------------------------------------------------------
 //: compute lists of two chains
 //---------------------------------------------------------------------------
-vcl_vector<vtol_two_chain *> *
+std::vector<vtol_two_chain *> *
 vtol_topology_object::compute_two_chains(void)
 {
-  vcl_cout << "Compute two chains\n";
-  return 0;
+  std::cout << "Compute two chains\n";
+  return VXL_NULLPTR;
 }
 
 //---------------------------------------------------------------------------
 //: compute lists of blocks
 //---------------------------------------------------------------------------
-vcl_vector<vtol_block *> *vtol_topology_object::compute_blocks(void)
+std::vector<vtol_block *> *vtol_topology_object::compute_blocks(void)
 {
-  vcl_cout << "Compute blocks\n";
-  return 0;
+  std::cout << "Compute blocks\n";
+  return VXL_NULLPTR;
 }
 
 //---------------------------------------------------------------------------

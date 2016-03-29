@@ -28,8 +28,8 @@ static void test_warp()
   vil_image_view<vxl_byte>  out(2,3);
   vil_warp(in, out, mapper, interpolator);
 
-  vil_print_all(vcl_cout, in);
-  vil_print_all(vcl_cout, out);
+  vil_print_all(std::cout, in);
+  vil_print_all(std::cout, out);
 
   TEST("pixel 0,0", out(0,0), 2);
   TEST("pixel 0,1", out(0,1), 4);

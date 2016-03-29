@@ -19,21 +19,21 @@
 #define DEBUG
 
 vpgl_camera<double>* bwm_observer_proj_cam::
-read_camera(vcl_string cam_path, vcl_string subtype,
+read_camera(std::string cam_path, std::string subtype,
             unsigned ni, unsigned nj)
 {
-  vcl_string ext = vul_file_extension(cam_path);
+  std::string ext = vul_file_extension(cam_path);
   if (ext == ".rpc")
-    return 0;
+    return VXL_NULLPTR;
   if (subtype=="perspective") {
     if (ext == ".vsl") // binary form
     {
       vpgl_perspective_camera<double> pcam;
       vsl_b_ifstream bp_in(cam_path.c_str());
       if (!bp_in) {
-        vcl_cerr << "In bwm_observer_proj_cam::read_camera(.) -\n"
+        std::cerr << "In bwm_observer_proj_cam::read_camera(.) -\n"
                  << " invalid binary camera file " << cam_path.data() << '\n';
-        return 0;
+        return VXL_NULLPTR;
       }
       vsl_b_read(bp_in, pcam);
       bp_in.close();
@@ -48,9 +48,9 @@ read_camera(vcl_string cam_path, vcl_string subtype,
         bwm_io_kml_camera::read_camera(cam_path, right_fov, top_fov,
                                        altitude, heading, tilt, roll);
       if (!success) {
-        vcl_cerr << "In bwm_observer_proj_cam::read_kml_camera(.) -\n"
+        std::cerr << "In bwm_observer_proj_cam::read_kml_camera(.) -\n"
                  << " invalid binary camera file " << cam_path.data() << '\n';
-        return 0;
+        return VXL_NULLPTR;
       }
       vpgl_perspective_camera<double> cam =
         bpgl_camera_utils::camera_from_kml(ni, nj, right_fov, top_fov,
@@ -59,18 +59,18 @@ read_camera(vcl_string cam_path, vcl_string subtype,
     }
     //An ASCII stream for perspective camera
     vpgl_perspective_camera<double> pcam;
-    vcl_ifstream cam_stream(cam_path.data());
+    std::ifstream cam_stream(cam_path.data());
 
     if (!cam_stream.is_open())
     {
-      vcl_cerr << "In bwm_observer_proj_cam::read_projective_camera(.) -\n"
+      std::cerr << "In bwm_observer_proj_cam::read_projective_camera(.) -\n"
                << " invalid camera file " << cam_path.data() << '\n';
-      return 0;
+      return VXL_NULLPTR;
     }
 
     cam_stream >> pcam;
 #ifdef DEBUG
-    vcl_cout << pcam << vcl_endl;
+    std::cout << pcam << std::endl;
 #endif
 #if 0 // was returning a projective cam
     vpgl_proj_camera<double> cam(pcam.get_matrix());
@@ -80,20 +80,20 @@ read_camera(vcl_string cam_path, vcl_string subtype,
     return new vpgl_perspective_camera<double>(pcam);
   }
   //must be an ASCII stream for projective camera
-  vcl_ifstream cam_stream(cam_path.data());
+  std::ifstream cam_stream(cam_path.data());
   vpgl_proj_camera<double> cam;
   cam_stream >> cam;
 #ifdef DEBUG
-  vcl_cout << cam << vcl_endl;
+  std::cout << cam << std::endl;
 #endif
   return cam.clone();
 }
 
 bwm_observer_proj_cam::bwm_observer_proj_cam(bgui_image_tableau_sptr img,
-                                             vcl_string name,
-                                             vcl_string& image_path,
-                                             vcl_string& cam_path,
-                                             vcl_string& subtype,
+                                             std::string name,
+                                             std::string& image_path,
+                                             std::string& cam_path,
+                                             std::string& subtype,
                                              bool display_image_path)
   : bwm_observer_cam(img)
 {
@@ -130,8 +130,8 @@ bwm_observer_proj_cam::bwm_observer_proj_cam(bgui_image_tableau_sptr img,
     vpgl_perspective_camera<double>* cam =
       static_cast<vpgl_perspective_camera<double>*>(camera_);
     scene_.set_camera(*cam);
-    vcl_string ipath = img_tab_->file_name();
-    vcl_string img_file = vul_file::strip_directory(ipath);
+    std::string ipath = img_tab_->file_name();
+    std::string img_file = vul_file::strip_directory(ipath);
     scene_.set_image_path(img_file);
   }
 
@@ -174,7 +174,7 @@ vgl_vector_3d<double> bwm_observer_proj_cam::camera_direction(vgl_point_3d<doubl
   return direction;
 }
 
-vcl_ostream& bwm_observer_proj_cam::print_camera(vcl_ostream& s)
+std::ostream& bwm_observer_proj_cam::print_camera(std::ostream& s)
 {
   vpgl_proj_camera<double>* proj_cam = static_cast<vpgl_proj_camera<double> *> (camera_);
   s << *proj_cam;

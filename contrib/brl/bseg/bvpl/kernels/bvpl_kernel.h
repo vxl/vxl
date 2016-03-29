@@ -12,8 +12,9 @@
 //   August 25, 2009 Moved out of bvpl_kernel_factory.h
 // \endverbatim
 
-#include <vcl_iostream.h>
-#include <vcl_string.h>
+#include <iostream>
+#include <string>
+#include <vcl_compiler.h>
 #include <vnl/vnl_float_3.h>
 #include <vbl/vbl_ref_count.h>
 #include "bvpl_kernel_iterator.h"
@@ -30,11 +31,11 @@ class bvpl_kernel: public vbl_ref_count
   //: Default constructor
   bvpl_kernel(){id_=bvpl_kernel::get_next_id();}
   //: Constructor
-  bvpl_kernel(bvpl_kernel_iterator kernel, vnl_float_3 axis, vnl_float_3 aux_axis, float angle, vgl_vector_3d<int> dim, vgl_point_3d<int> min_pt, vgl_point_3d<int> max_pt, vcl_string name = "", double voxel_length = 1.0)
+  bvpl_kernel(bvpl_kernel_iterator kernel, vnl_float_3 axis, vnl_float_3 aux_axis, float angle, vgl_vector_3d<int> dim, vgl_point_3d<int> min_pt, vgl_point_3d<int> max_pt, std::string name = "", double voxel_length = 1.0)
   : kernel_(kernel),axis_(axis),aux_axis_(aux_axis), angle_(angle),dim_(dim),min_point_(min_pt),max_point_(max_pt),name_(name),voxel_length_(voxel_length)
   {
 //#ifdef DEBUG
-    vcl_cout << "Creating kernel with axis, angle, dim, max, min = " << axis_ << ' ' << angle_<< ' ' << dim_<< ' ' <<max_point_<< ' ' << min_point_ << '\n';
+    std::cout << "Creating kernel with axis, angle, dim, max, min = " << axis_ << ' ' << angle_<< ' ' << dim_<< ' ' <<max_point_<< ' ' << min_point_ << '\n';
 //#endif
     id_=bvpl_kernel::get_next_id();
   }
@@ -52,7 +53,7 @@ class bvpl_kernel: public vbl_ref_count
   double voxel_length() const {return voxel_length_;}
   void set_voxel_length(double length) {voxel_length_=length;}
   void set_xml_element(bxml_data_sptr x_data) {factory_data_ = x_data; }
-  vcl_string name() { return name_; }
+  std::string name() { return name_; }
   vgl_vector_3d<int> offset()
   {
     int x=0;
@@ -70,7 +71,7 @@ class bvpl_kernel: public vbl_ref_count
 
   void print()
   {
-    vcl_cout << "***************Printing bvpl_kernel **********************\n"
+    std::cout << "***************Printing bvpl_kernel **********************\n"
              << "Axis: " << axis_ << '\n'
              << "Aux-axis: " << aux_axis_ << '\n'
              << "Angle: " << angle_ << '\n';
@@ -79,8 +80,8 @@ class bvpl_kernel: public vbl_ref_count
       vgl_point_3d<int> coord =kernel_.index();
       float val= ((*kernel_).c_);
 
-      //vcl_cout.precision(2);
-      vcl_cout << coord << "  " << val<< vcl_endl;
+      //std::cout.precision(2);
+      std::cout << coord << "  " << val<< std::endl;
       ++kernel_;
     }
   }
@@ -89,9 +90,9 @@ class bvpl_kernel: public vbl_ref_count
   float max_val();
   float min_val();
 
-  void print_to_file(vcl_string filename);
+  void print_to_file(std::string filename);
 
-  bool save_raw(vcl_string filename);
+  bool save_raw(std::string filename);
 
   //: Return an xml element
   bxml_data_sptr xml_element();
@@ -108,7 +109,7 @@ class bvpl_kernel: public vbl_ref_count
       val += ((*kernel_).c_);
       ++kernel_;
     }
-    vcl_cout << "Kernel sums to : " << val << vcl_endl;
+    std::cout << "Kernel sums to : " << val << std::endl;
     return val;
   }
 
@@ -117,7 +118,7 @@ class bvpl_kernel: public vbl_ref_count
   static unsigned get_next_id();
 
   //: Set up access to the floating point kernel -- this should be made more elegantly
-  vcl_vector<vcl_pair<vgl_point_3d<float>, bvpl_kernel_dispatch> > float_kernel_;
+  std::vector<std::pair<vgl_point_3d<float>, bvpl_kernel_dispatch> > float_kernel_;
 
  private:
   bvpl_kernel_iterator kernel_;
@@ -133,7 +134,7 @@ class bvpl_kernel: public vbl_ref_count
   vgl_point_3d<int> max_point_;
   unsigned int id_;
   //: Identifying string
-  vcl_string name_;
+  std::string name_;
   //: Length of a voxel in global coordinates
   double voxel_length_;
   bxml_data_sptr factory_data_;
@@ -144,7 +145,7 @@ class bvpl_kernel: public vbl_ref_count
 class bvpl_kernel_vector : public vbl_ref_count
 {
  public:
-  typedef vcl_vector< bvpl_kernel_sptr >::iterator iterator;
+  typedef std::vector< bvpl_kernel_sptr >::iterator iterator;
   //: Default constructor
   bvpl_kernel_vector() {}
 
@@ -207,7 +208,7 @@ class bvpl_kernel_vector : public vbl_ref_count
   }
 
   //: vector of kernel
-  vcl_vector< bvpl_kernel_sptr> kernels_;
+  std::vector< bvpl_kernel_sptr> kernels_;
 };
 
 typedef vbl_smart_ptr<bvpl_kernel_vector> bvpl_kernel_vector_sptr;

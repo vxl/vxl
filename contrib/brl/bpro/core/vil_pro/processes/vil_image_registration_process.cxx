@@ -26,7 +26,7 @@ namespace vil_image_registration_process_globals
 bool vil_image_registration_process_cons(bprb_func_process& pro)
 {
   using namespace vil_image_registration_process_globals;
-  vcl_vector<vcl_string> input_types_(n_inputs_);
+  std::vector<std::string> input_types_(n_inputs_);
   input_types_[0] = "vil_image_view_base_sptr";  // source image that require registration
   input_types_[1] = "vil_image_view_base_sptr";  // target image
   input_types_[2] = "unsigned";                  // search space along image column
@@ -35,7 +35,7 @@ bool vil_image_registration_process_cons(bprb_func_process& pro)
   input_types_[5] = "double";                    // pixel resolution in meter unit
   input_types_[6] = "float";                     // invalid pixel value
   input_types_[7] = "vil_image_view_base_sptr";  // mask image used to mask out the invalid pixels
-  vcl_vector<vcl_string> output_types_(n_outputs_);
+  std::vector<std::string> output_types_(n_outputs_);
   output_types_[0] = "double";                   // translation along image column (trans_x)
   output_types_[1] = "double";                   // translation along image row (trans_y)
   output_types_[2] = "double";                   // translation along image pixel values (trans_z)
@@ -54,7 +54,7 @@ bool vil_image_registration_process(bprb_func_process& pro)
 {
   // sanity check
   if (!pro.verify_inputs()) {
-    vcl_cerr << pro.name() << ": Wrong inputs!!!\n";
+    std::cerr << pro.name() << ": Wrong inputs!!!\n";
     return false;
   }
   // get the inputs
@@ -71,7 +71,7 @@ bool vil_image_registration_process(bprb_func_process& pro)
   unsigned s_ni = src_img_sptr->ni(), s_nj = src_img_sptr->nj();
   unsigned t_ni = tgr_img_sptr->ni(), t_nj = tgr_img_sptr->nj();
   if (s_ni != t_ni || s_nj != t_nj) {
-    vcl_cerr << pro.name() << ": Image size mismatch, source image is (" << s_ni << "," << s_nj << ") but target image is (" << t_ni << "," << t_nj << ")!!!\n";
+    std::cerr << pro.name() << ": Image size mismatch, source image is (" << s_ni << "," << s_nj << ") but target image is (" << t_ni << "," << t_nj << ")!!!\n";
     return false;
   }
 
@@ -84,9 +84,9 @@ bool vil_image_registration_process(bprb_func_process& pro)
     use_mask = false;
   }
   else {
-    vcl_cout << "Use mask = true" << vcl_endl;
+    std::cout << "Use mask = true" << std::endl;
     if (mask_img_sptr->ni() != s_ni || mask_img_sptr->nj() != s_nj) {
-      vcl_cerr << pro.name() << ": Mask image size mismatch -- source image size: (" << s_ni << "," << s_nj 
+      std::cerr << pro.name() << ": Mask image size mismatch -- source image size: (" << s_ni << "," << s_nj
                << "), mask image size: (" << mask_img_sptr->ni() << "," << mask_img_sptr->nj() << ")!!\n";
       return false;
     }
@@ -94,7 +94,7 @@ bool vil_image_registration_process(bprb_func_process& pro)
   vil_image_view<unsigned char> * mask_img=dynamic_cast<vil_image_view<unsigned char> *>(mask_img_sptr.ptr());
   if (!mask_img)
   {
-    vcl_cerr << pro.name() <<": mask image is not an unsigned char map"<<vcl_endl;
+    std::cerr << pro.name() <<": mask image is not an unsigned char map"<< std::endl;
     return false;
   }
 
@@ -106,7 +106,7 @@ bool vil_image_registration_process(bprb_func_process& pro)
   double min_dz = -1*sz;
   double max_dz = sz;
   double step_dz = 0.2;
-  vcl_map<double, vcl_vector<double> > rmse_map;
+  std::map<double, std::vector<double> > rmse_map;
   for (int dx = min_dx; dx <= max_dx; dx++)
   {
     for (int dy = min_dy; dy <= max_dy; dy++)
@@ -115,18 +115,18 @@ bool vil_image_registration_process(bprb_func_process& pro)
       {
         double var = 0.0;
         unsigned num_p = 0;
-        for (int i = sx; i < (s_ni-sx); i++)
+        for (int i = sx; i < (int)(s_ni-sx); i++)
         {
-          for (int j = sy; j < (s_nj-sy); j++)
+          for (int j = sy; j < (int)(s_nj-sy); j++)
           {
             int si = i+dx, sj = j+dy;
             if ( use_mask ) {
               if ( (*mask_img)(i,j) == 0 || (*mask_img)(si, sj) == 0 )
                 continue;
             }
-            if ( vcl_abs(tgr_img(i, j) - invalid_pixel) < 1E-5)
+            if ( std::abs(tgr_img(i, j) - invalid_pixel) < 1E-5)
               continue;
-            if ( vcl_abs(src_img(si, sj)-invalid_pixel) < 1E-5)
+            if ( std::abs(src_img(si, sj)-invalid_pixel) < 1E-5)
               continue;
             double diff = (src_img(si, sj)-tgr_img(i,j)+dz)*(src_img(si, sj)-tgr_img(i,j)+dz);
             var += diff;
@@ -134,19 +134,18 @@ bool vil_image_registration_process(bprb_func_process& pro)
           }
         }
         // compute rmse
-        double rmse = vcl_sqrt(var/(double)num_p);
-        vcl_vector<double> values;
+        double rmse = std::sqrt(var/(double)num_p);
+        std::vector<double> values;
         values.push_back(dx);
         values.push_back(dy);
         values.push_back(dz);
         values.push_back(var);
-        rmse_map.insert(vcl_pair<double, vcl_vector<double> >(rmse,values));
-        //vcl_cout << "RMES: " << rmse << " -- dx: " << dx << ", dy: " << dy << ", dz: " << dz << ", var: " << var << ", num_p: " << num_p << vcl_endl;
+        rmse_map.insert(std::pair<double, vcl_vector<double> >(rmse,values));
       } // end of loop over z
     } // end of loop over y
   } // end of loop over x
 
-  vcl_map<double, vcl_vector<double> >::iterator mit = rmse_map.begin();
+  std::map<double, std::vector<double> >::iterator mit = rmse_map.begin();
   double rmse_z  = mit->first;
   double trans_x = pixel_res * mit->second[0];
   double trans_y = pixel_res * mit->second[1];
@@ -155,9 +154,9 @@ bool vil_image_registration_process(bprb_func_process& pro)
 
 #if 0
   for (; mit != rmse_map.end(); ++mit) {
-    vcl_cout << "RMES: " << mit->first << " -- dx: " << mit->second[0] << ", dy: " << mit->second[1] << ", dz: " << mit->second[2]
+    std::cout << "RMES: " << mit->first << " -- dx: " << mit->second[0] << ", dy: " << mit->second[1] << ", dz: " << mit->second[2]
              << ", var: " << mit->second[3]
-             << vcl_endl;
+             << std::endl;
   }
 #endif
 

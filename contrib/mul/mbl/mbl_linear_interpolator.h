@@ -5,7 +5,9 @@
 // \brief Linear interpolation of tabulated data
 // \author Graham Vincent
 
-#include <vcl_vector.h>
+#include <iostream>
+#include <vector>
+#include <vcl_compiler.h>
 
 // Linear interpolation of tabulated data
 class mbl_linear_interpolator
@@ -17,7 +19,7 @@ class mbl_linear_interpolator
   void clear();
 
   //: Add a (x,y) data
-  bool set(const vcl_vector<double> &x, const vcl_vector<double> &y);
+  bool set(const std::vector<double> &x, const std::vector<double> &y);
 
   //! estimate y and x using linear interpolation. Returns NaN if there is no data
   double y(double x) const;
@@ -28,10 +30,10 @@ class mbl_linear_interpolator
   void sort();
 
   // ordered x values
-  vcl_vector<double> x_;
+  std::vector<double> x_;
 
   // ordered y values
-  vcl_vector<double> y_;
+  std::vector<double> y_;
 };
 
 #endif

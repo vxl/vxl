@@ -34,13 +34,14 @@
 //   2004/11/15 H.Can Aras     added inheritance from vsol_box
 // \endverbatim
 
+#include <iostream>
 #include <vsol/vsol_box.h>
 #include <vsl/vsl_binary_io.h>
 #include <vul/vul_timestamp.h>
 #include <vbl/vbl_ref_count.h>
 #include <vbl/vbl_bounding_box.h>
 #include "vsol_box_3d_sptr.h"
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
 
 //: A bounding box for 3d spatial objects
 
@@ -104,17 +105,17 @@ class vsol_box_3d : public vsol_box, public vbl_ref_count , public vul_timestamp
   short version() const;
 
   //: Print an ascii summary to the stream
-  void print_summary(vcl_ostream &os) const;
+  void print_summary(std::ostream &os) const;
 
   //: Return a platform independent string identifying the class
-  virtual vcl_string is_a() const { return vcl_string("vsol_box_3d"); }
+  virtual std::string is_a() const { return std::string("vsol_box_3d"); }
 
   //: Return true if the argument matches the string identifying the class or any parent class
-  virtual bool is_class(const vcl_string& cls) const { return cls==is_a(); }
+  virtual bool is_class(const std::string& cls) const { return cls==is_a(); }
 };
 
 //: Stream operator
-vcl_ostream&  operator<<(vcl_ostream& s, vsol_box_3d const& p);
+std::ostream&  operator<<(std::ostream& s, vsol_box_3d const& p);
 
 //: Binary save vsol_box_3d* to stream.
 void vsl_b_write(vsl_b_ostream &os, vsol_box_3d_sptr const& p);
@@ -124,7 +125,7 @@ void vsl_b_read(vsl_b_istream &is, vsol_box_3d_sptr &p);
 
 //: Print human readable summary of box to a stream
 //  (This is needed for the instantiation of vsl_vector_io<vsol_box_3d_sptr>)
-inline void vsl_print_summary(vcl_ostream& os, vsol_box_3d_sptr const& b)
+inline void vsl_print_summary(std::ostream& os, vsol_box_3d_sptr const& b)
 {
   os << *b;
 }

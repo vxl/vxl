@@ -7,7 +7,7 @@ include_directories( ${GEL_INCLUDE_DIR} )
 set( bpgl_algo_sources
   bpgl_construct_cameras.h         bpgl_construct_cameras.cxx
   bpgl_vsol_lens_warp.h            bpgl_vsol_lens_warp.cxx
-  bpgl_list.h                      bpgl_list.txx
+  bpgl_list.h                      bpgl_list.hxx
   bpgl_interpolate.h               bpgl_interpolate.cxx
   bpgl_camera_homographies.h       bpgl_camera_homographies.cxx
   bpgl_nitf_camera_coverage.h      bpgl_nitf_camera_coverage.cxx
@@ -30,7 +30,7 @@ endif()
 
 aux_source_directory(Templates bpgl_algo_sources)
 
-add_library(bpgl_algo ${bpgl_algo_sources})
+vxl_add_library(LIBRARY_NAME bpgl_algo LIBRARY_SOURCES ${bpgl_algo_sources})
 
 target_link_libraries(bpgl_algo bpgl ${VXL_LIB_PREFIX}vpgl ${VXL_LIB_PREFIX}vpgl_file_formats vsol ${VXL_LIB_PREFIX}vgl_algo ${VXL_LIB_PREFIX}vnl_algo ${VXL_LIB_PREFIX}vnl ${VXL_LIB_PREFIX}vgl ${VXL_LIB_PREFIX}vil ${VXL_LIB_PREFIX}vul ${VXL_LIB_PREFIX}vbl)
 
@@ -45,6 +45,3 @@ endif()
 if( BUILD_EXAMPLES )
 #  add_subdirectory(examples)
 endif()
-
-install_targets(/lib bpgl_algo)
-INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/brl/bbas/bpgl/algo ${bpgl_algo_sources})

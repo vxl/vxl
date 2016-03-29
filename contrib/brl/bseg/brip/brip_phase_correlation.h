@@ -47,8 +47,10 @@
 //          confidence of 0.9.
 //
 //
+#include <iostream>
+#include <vector>
 #include <vil/vil_image_view.h>
-#include <vcl_vector.h>
+#include <vcl_compiler.h>
 
 // a struct for holding correlation peak info
 struct peak{
@@ -116,7 +118,7 @@ class brip_phase_correlation
   // average of the Gauss smoothed correlation values
   float gauss_avg_;
   // the vector of local maxima
-  vcl_vector<peak> peaks_;
+  std::vector<peak> peaks_;
 };
 
 #endif // brip_phase_correlation_h

@@ -10,9 +10,10 @@
 // \author awf@robots.ox.ac.uk
 // \date 16 Feb 00
 
+#include <string>
 #include <vil1/vil1_image_impl.h>
 #include <vil1/vil1_image.h>
-#include <vcl_string.h>
+#include <vcl_compiler.h>
 
 //: A generic_image adaptor that behaves like a cropped version of its input
 class vil1_crop_image_impl : public vil1_image_impl
@@ -38,10 +39,10 @@ class vil1_crop_image_impl : public vil1_image_impl
   //  vil1_image get_plane(unsigned int p) const;
 
   //: Return the name of the class;
-  virtual vcl_string is_a() const;
+  virtual std::string is_a() const;
 
   //: Return true if the name of the class matches the argument
-  virtual bool is_class(vcl_string const&) const;
+  virtual bool is_class(std::string const&) const;
 
  protected:
   vil1_image gi_;

@@ -40,14 +40,14 @@ class bsvg_plot : public bsvg_document
 
     void set_margin(float m) { margin_ = m; }
     void set_font_size(int s) { font_size_ = s; }
-    void add_title(const vcl_string& t);
+    void add_title(const std::string& t);
 
-    void add_line(const vcl_vector<float>& xs, const vcl_vector<float>& ys, const vcl_string& color, float stroke_width = default_stroke_width);
+    void add_line(const std::vector<float>& xs, const std::vector<float>& ys, const std::string& color, float stroke_width = default_stroke_width);
 
     //: add equally spaced and equal width bars with the given heights
-    void add_bars(const vcl_vector<float>& heights, const vcl_string& color);
-    void add_bars(const vcl_vector<float>& heights, const vcl_vector<float>& x_labels, bool vertical_labels, const vcl_string& color);
-    void add_bars(const vcl_vector<float>& heights, const vcl_vector<vcl_string>& x_labels, bool vertical_labels, const vcl_string& color);
+    void add_bars(const std::vector<float>& heights, const std::string& color);
+    void add_bars(const std::vector<float>& heights, const std::vector<float>& x_labels, bool vertical_labels, const std::string& color);
+    void add_bars(const std::vector<float>& heights, const std::vector<std::string>& x_labels, bool vertical_labels, const std::string& color);
 
     //:return the number of bars in the plot (counts the number of element with name "rect")
     int number_of_bars();
@@ -55,16 +55,16 @@ class bsvg_plot : public bsvg_document
     //: add bars sequentially with a fixed interval and width.
     //  use margin_ as the width of each bar and leave margin_/3 intervals in between
     //  the total width of the plot needs to be adjusted during initialization to contain all desired number of bars
-    int add_bar(const float height, const vcl_string& color);
-    int add_bar(const float height, const float x_label, bool vertical_label, const vcl_string& color);
-    int add_bar(const float height, const vcl_string& label, bool vertical_label, const vcl_string& color);
+    int add_bar(const float height, const std::string& color);
+    int add_bar(const float height, const float x_label, bool vertical_label, const std::string& color);
+    int add_bar(const float height, const std::string& label, bool vertical_label, const std::string& color);
 
-    bsvg_group* add_bars_helper(const vcl_vector<float>& heights, const vcl_string& color);
-    bsvg_group* add_x_labels_helper(const vcl_vector<vcl_string>& x_labels, const vcl_string& color, bool vertical_labels);
+    bsvg_group* add_bars_helper(const std::vector<float>& heights, const std::string& color);
+    bsvg_group* add_x_labels_helper(const std::vector<std::string>& x_labels, const std::string& color, bool vertical_labels);
 
     //: add splices for a pie chart
     //  angle is zero at the x-axis and is positive counter-clockwise, use angles in range [0,2*pi]
-    void add_splice(float center_x, float center_y, float radius, float start_angle, float end_angle, const vcl_string& color);
+    void add_splice(float center_x, float center_y, float radius, float start_angle, float end_angle, const std::string& color);
     //  angle is zero at the x-axis and is positive counter-clockwise, use angles in range [0,2*pi], colors red, green, blue are each in range [0,255]
     void add_splice(float center_x, float center_y, float radius, float start_angle, float end_angle, unsigned red, unsigned green, unsigned blue);
 

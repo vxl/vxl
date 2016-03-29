@@ -1,4 +1,6 @@
 // This is brl/bbas/bocl/pro/processes/bocl_init_manager_process.cxx
+#include <iostream>
+#include <fstream>
 #include <bprb/bprb_func_process.h>
 //:
 // \file
@@ -11,7 +13,7 @@
 //   <none yet>
 // \endverbatim
 
-#include <vcl_fstream.h>
+#include <vcl_compiler.h>
 #include <bocl/bocl_manager.h>
 
 
@@ -25,7 +27,7 @@ bool bocl_init_manager_process_cons(bprb_func_process& pro)
 {
   using namespace bocl_init_manager_process_globals;
 
-  vcl_vector<vcl_string>  output_types_(n_outputs_);
+  std::vector<std::string>  output_types_(n_outputs_);
 
   return pro.set_output_types(output_types_);
 }

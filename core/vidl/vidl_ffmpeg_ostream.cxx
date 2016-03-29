@@ -21,23 +21,23 @@ extern "C" {
 #include "vidl_ffmpeg_convert.h"
 
 #if LIBAVCODEC_BUILD < ((51<<16)+(49<<8)+0)  // ver 51.49.0
-# include "vidl_ffmpeg_ostream_v1.txx"
+# include "vidl_ffmpeg_ostream_v1.hxx"
 #elif LIBAVCODEC_BUILD < ((52<<16)+(10<<8)+0)  // before ver 52.10.0
-# include "vidl_ffmpeg_ostream_v2.txx"
+# include "vidl_ffmpeg_ostream_v2.hxx"
 #elif LIBAVCODEC_BUILD < ((53<<16)+(0<<8)+0)  // before ver 53.0.0
-# include "vidl_ffmpeg_ostream_v3.txx"
+# include "vidl_ffmpeg_ostream_v3.hxx"
 #elif LIBAVCODEC_BUILD < ((53<<16)+(24<<8)+0)  // before ver 53.24.0
-# include "vidl_ffmpeg_ostream_v4.txx"
+# include "vidl_ffmpeg_ostream_v4.hxx"
 #elif LIBAVCODEC_BUILD < ((54<<16)+(23<<8)+100)  // before ver 54.23.100
-# include "vidl_ffmpeg_ostream_v0.9.txx"
+# include "vidl_ffmpeg_ostream_v0.9.hxx"
 #elif LIBAVCODEC_BUILD < ((56<<16)+(0<<8)+100)  // before ver 56.0.100
-# include "vidl_ffmpeg_ostream_v0.11.txx"
+# include "vidl_ffmpeg_ostream_v0.11.hxx"
 #else
-# include "vidl_ffmpeg_ostream_v56.txx"
+# include "vidl_ffmpeg_ostream_v56.hxx"
 #endif
 
 #else // VIDL_HAS_FFMPEG
 
-# include "vidl_ffmpeg_ostream_stub.txx"
+# include "vidl_ffmpeg_ostream_stub.hxx"
 
 #endif // VIDL_HAS_FFMPEG

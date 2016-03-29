@@ -1,9 +1,10 @@
+#include <string>
+#include <iostream>
 #include <testlib/testlib_test.h>
 #include <bvxm/bvxm_world_params.h>
 #include <bvxm/bvxm_voxel_world.h>
 
-#include <vcl_string.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
 
 #include <brdb/brdb_value.h>
 #include <brdb/brdb_selection.h>
@@ -41,7 +42,7 @@ static void test_bvxm_change_detection_display_process()
   brdb_value_sptr v2 = new brdb_value_t<vil_image_view_base_sptr>(new vil_image_view<bool>(mask));
 
   bool good = bprb_batch_process_manager::instance()->init_process("bvxmChangeDetectionDisplayProcess");
-  good = bprb_batch_process_manager::instance()->set_params("change_display_params.xml");
+  good &= bprb_batch_process_manager::instance()->set_params("change_display_params.xml");
   good = good && bprb_batch_process_manager::instance()->set_input(0, v0);
   good = good && bprb_batch_process_manager::instance()->set_input(1, v1);
   good = good && bprb_batch_process_manager::instance()->set_input(2, v2);
@@ -55,16 +56,16 @@ static void test_bvxm_change_detection_display_process()
   brdb_query_aptr Q_img = brdb_query_comp_new("id", brdb_query::EQ, id_img);
   brdb_selection_sptr S_img = DATABASE->select("vil_image_view_base_sptr_data", Q_img);
   if (S_img->size()!=1){
-    vcl_cout << "in bprb_batch_process_manager::set_input_from_db(.) -"
+    std::cout << "in bprb_batch_process_manager::set_input_from_db(.) -"
              << " no selections\n";
   }
 
   brdb_value_sptr value_img;
-  if (!S_img->get_value(vcl_string("value"), value_img)) {
-    vcl_cout << "in bprb_batch_process_manager::set_input_from_db(.) -"
+  if (!S_img->get_value(std::string("value"), value_img)) {
+    std::cout << "in bprb_batch_process_manager::set_input_from_db(.) -"
              << " didn't get value\n";
   }
-  bool non_null = (value_img != 0);
+  bool non_null = (value_img != VXL_NULLPTR);
   TEST("display output non-null", non_null ,true);
 
   brdb_value_t<vil_image_view_base_sptr>* result =

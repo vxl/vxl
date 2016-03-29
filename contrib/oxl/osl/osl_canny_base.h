@@ -47,12 +47,12 @@ protected:
 
   static void Initial_follow(float * const *thin, int xsize, int ysize, float low,
                              int x,int y,
-                             vcl_list<int> *xc,vcl_list<int> *yc,
-                             vcl_list<float> *grad);
-  void Final_follow(int,int,vcl_list<int>*,vcl_list<int>*,vcl_list<float>*,int);
-  static void Follow_junctions(int * const *junction, int x, int y, vcl_list<int> *xc, vcl_list<int> *yc);
+                             std::list<int> *xc,std::list<int> *yc,
+                             std::list<float> *grad);
+  void Final_follow(int,int,std::list<int>*,std::list<int>*,std::list<float>*,int);
+  static void Follow_junctions(int * const *junction, int x, int y, std::list<int> *xc, std::list<int> *yc);
   static void Cluster_centre_of_gravity(int * const *jx, int * const *jy,
-                                        vcl_list<int> &xc, vcl_list<int> &yc,
+                                        std::list<int> &xc, std::list<int> &yc,
                                         int &x0,int &y0);
   static int Junction_neighbour(int const * const *junction, int x, int y);
 
@@ -72,9 +72,9 @@ protected:
 
   int **junction_;     // Binary image true only at junctions ends, and relevant lists
   int **jx_,**jy_;     // Images of (x,y) coordinates of nearest cluster centre
-  vcl_list<int> *xjunc_;
-  vcl_list<int> *yjunc_;
-  vcl_list<osl_Vertex*> *vlist_;   // The junction cluster centres
+  std::list<int> *xjunc_;
+  std::list<int> *yjunc_;
+  std::list<osl_Vertex*> *vlist_;   // The junction cluster centres
 
   float gauss_tail_;  // The value of the kernel at its tail
   float sigma_;       // Smoothing sigma

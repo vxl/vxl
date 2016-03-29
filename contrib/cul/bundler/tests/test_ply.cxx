@@ -3,7 +3,7 @@
 
 
 static void test_ply(){
-    vcl_vector<vgl_point_3d<double> > pts(10);
+    std::vector<vgl_point_3d<double> > pts(10);
 
     for(int i = 0; i < 10; i++){
         pts[i].set(i, i, i);

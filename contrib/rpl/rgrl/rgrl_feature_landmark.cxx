@@ -11,11 +11,11 @@
 #include <vnl/vnl_math.h>
 #include <vcl_cassert.h>
 
-typedef vcl_vector< vnl_vector<double> > vec_vec_type;
+typedef std::vector< vnl_vector<double> > vec_vec_type;
 
 rgrl_feature_landmark::
 rgrl_feature_landmark( vnl_vector<double> const& loc,
-                       vcl_vector< vnl_vector<double> > const& outgoing_directions)
+                       std::vector< vnl_vector<double> > const& outgoing_directions)
   : rgrl_feature( loc ),
     error_proj_( loc.size(), loc.size(), vnl_matrix_identity ),
     outgoing_directions_( outgoing_directions )
@@ -90,10 +90,10 @@ absolute_signature_weight( rgrl_feature_sptr other ) const
     return 1;
 
   rgrl_feature_landmark* other_ptr = rgrl_cast<rgrl_feature_landmark *>(other);
-  const vcl_vector<vnl_vector<double> >& sig_P = this->outgoing_directions_;
-  const vcl_vector<vnl_vector<double> >& sig_Q = other_ptr->outgoing_directions_;
+  const std::vector<vnl_vector<double> >& sig_P = this->outgoing_directions_;
+  const std::vector<vnl_vector<double> >& sig_Q = other_ptr->outgoing_directions_;
 
-  int ones = vnl_math::min((int)sig_P.size(), (int)sig_Q.size());
+  int ones = std::min((int)sig_P.size(), (int)sig_Q.size());
   double max;
   if (sig_P.size() < sig_Q.size()) {
     vbl_array_2d<bool> invalid(sig_P.size(), sig_Q.size(), false);
@@ -104,7 +104,7 @@ absolute_signature_weight( rgrl_feature_sptr other ) const
     max = max_similarity(sig_Q, sig_P, ones, invalid);
   }
 
-  return vcl_pow( 0.5*max/ones, 100 );
+  return std::pow( 0.5*max/ones, 100 );
 }
 
 
@@ -112,8 +112,8 @@ absolute_signature_weight( rgrl_feature_sptr other ) const
 //
 double
 rgrl_feature_landmark::
-max_similarity(const vcl_vector<vnl_vector<double> >& u,
-               const vcl_vector<vnl_vector<double> >& v,
+max_similarity(const std::vector<vnl_vector<double> >& u,
+               const std::vector<vnl_vector<double> >& v,
                int count,
                const vbl_array_2d<bool>& invalid) const
 {
@@ -138,13 +138,13 @@ max_similarity(const vcl_vector<vnl_vector<double> >& u,
 //: write out feature
 void
 rgrl_feature_landmark::
-write( vcl_ostream& os ) const
+write( std::ostream& os ) const
 {
   // tag
-  os << "LANDMARK" << vcl_endl;
+  os << "LANDMARK" << std::endl;
 
   // dim
-  os << location_.size() << vcl_endl;
+  os << location_.size() << std::endl;
 
   // atributes
   os << location_ << '\n'
@@ -152,21 +152,21 @@ write( vcl_ostream& os ) const
      << outgoing_directions_.size() << '\n';
   for ( unsigned i=0; i<outgoing_directions_.size(); ++i )
     os << outgoing_directions_[i] << '\n';
-  os << vcl_endl;
+  os << std::endl;
 }
 
 //: read in feature
 bool
 rgrl_feature_landmark::
-read( vcl_istream& is, bool skip_tag )
+read( std::istream& is, bool skip_tag )
 {
   if ( !skip_tag )
   {
     // skip empty lines
     rgrl_util_skip_empty_lines( is );
 
-    vcl_string str;
-    vcl_getline( is, str );
+    std::string str;
+    std::getline( is, str );
 
     // The token should appear at the beginning of line
     if ( str.find( "LANDMARK" ) != 0 ) {

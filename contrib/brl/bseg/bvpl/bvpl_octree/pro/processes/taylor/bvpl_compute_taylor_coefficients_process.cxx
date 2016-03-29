@@ -25,7 +25,7 @@ bool bvpl_compute_taylor_coefficients_process_cons(bprb_func_process& pro)
 {
   using namespace bvpl_compute_taylor_coefficients_process_globals ;
 
-  vcl_vector<vcl_string> input_types_(n_inputs_);
+  std::vector<std::string> input_types_(n_inputs_);
   unsigned i = 0;
   input_types_[i++] = "vcl_string" ;  //path of taylor_global_info.xml
   input_types_[i++] = "int"; //scene id
@@ -34,7 +34,7 @@ bool bvpl_compute_taylor_coefficients_process_cons(bprb_func_process& pro)
   input_types_[i++] = "int";
   input_types_[i++] = "int"; // dimension (3 for xyz derivatives, 10 for all 1st and 2nd order derivatives)
 
-  vcl_vector<vcl_string> output_types_(n_outputs_);
+  std::vector<std::string> output_types_(n_outputs_);
 
   return pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
 }
@@ -47,7 +47,7 @@ bool bvpl_compute_taylor_coefficients_process(bprb_func_process& pro)
 
   //get inputs
   unsigned i = 0;
-  vcl_string taylor_dir = pro.get_input<vcl_string>(i++);
+  std::string taylor_dir = pro.get_input<std::string>(i++);
   int scene_id = pro.get_input<int>(i++);
   int block_i = pro.get_input<int>(i++);
   int block_j = pro.get_input<int>(i++);
@@ -60,14 +60,14 @@ bool bvpl_compute_taylor_coefficients_process(bprb_func_process& pro)
   switch (dim) {
     case 3:
     {
-      vcl_string kernel_names[] = {"Ix", "Iy", "Iz"};
+      std::string kernel_names[] = {"Ix", "Iy", "Iz"};
       bvpl_global_taylor<float, 3> global_taylor(taylor_dir, kernel_names);
       global_taylor.compute_taylor_coefficients(scene_id, block_i, block_j, block_k);
       break;
     }
     case 10:
     {
-      const vcl_string kernel_names[10] = {"I0", "Ix", "Iy", "Iz", "Ixx", "Iyy", "Izz", "Ixy", "Ixz", "Iyz" };
+      const std::string kernel_names[10] = {"I0", "Ix", "Iy", "Iz", "Ixx", "Iyy", "Izz", "Ixy", "Ixz", "Iyz" };
       bvpl_global_taylor<double, 10> global_taylor(taylor_dir, kernel_names);
       global_taylor.compute_taylor_coefficients(scene_id, block_i, block_j, block_k);
       break;

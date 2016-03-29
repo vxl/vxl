@@ -1,4 +1,6 @@
 // This is brl/bseg/boxm/algo/pro/processes/boxm_render_expected_edge_vrml_process.cxx
+#include <iostream>
+#include <fstream>
 #include <bprb/bprb_func_process.h>
 //:
 // \file
@@ -20,7 +22,7 @@
 #include <bvrml/bvrml_write.h>
 #include <vgl/vgl_point_3d.h>
 #include <vgl/vgl_intersection.h>
-#include <vcl_fstream.h>
+#include <vcl_compiler.h>
 
 namespace boxm_render_expected_edge_vrml_process_globals
 {
@@ -37,13 +39,13 @@ bool boxm_render_expected_edge_vrml_process_cons(bprb_func_process& pro)
   //input[1]: the path for vrml file
   //input[2]: threshold
   //input[3]: s (to write every s cell)
-  vcl_vector<vcl_string> input_types_(n_inputs_);
+  std::vector<std::string> input_types_(n_inputs_);
   input_types_[0] = "boxm_scene_base_sptr";
   input_types_[1] = "vcl_string";
   input_types_[2] = "float";
   input_types_[3] = "int";
 
-  vcl_vector<vcl_string> output_types_(n_outputs_);
+  std::vector<std::string> output_types_(n_outputs_);
   return pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
 }
 
@@ -52,7 +54,7 @@ bool boxm_render_expected_edge_vrml_process(bprb_func_process& pro)
   using namespace boxm_render_expected_edge_vrml_process_globals;
 
   if ( pro.n_inputs() < n_inputs_ ) {
-    vcl_cerr << pro.name() << ": The input number should be " << n_inputs_<< '\n';
+    std::cerr << pro.name() << ": The input number should be " << n_inputs_<< '\n';
     return false;
   }
 
@@ -60,11 +62,11 @@ bool boxm_render_expected_edge_vrml_process(bprb_func_process& pro)
   unsigned i = 0;
   boxm_scene_base_sptr scene_ptr = pro.get_input<boxm_scene_base_sptr>(i++);
   //vpgl_camera_double_sptr camera = pro.get_input<vpgl_camera_double_sptr>(i++);
-  vcl_string path = pro.get_input<vcl_string>(i++);
+  std::string path = pro.get_input<std::string>(i++);
   float threshold = pro.get_input<float>(i++);
   int s = pro.get_input<int>(i++); // FIXME - unused!
 
-  vcl_ofstream stream(path.c_str());
+  std::ofstream stream(path.c_str());
 
   if (scene_ptr->appearence_model() == BOXM_EDGE_LINE)
   {
@@ -73,7 +75,7 @@ bool boxm_render_expected_edge_vrml_process(bprb_func_process& pro)
       typedef boct_tree<short, boxm_inf_line_sample<float> > type;
       boxm_scene<type>* scene = dynamic_cast<boxm_scene<type>*> (scene_ptr.as_pointer());
       if (!scene) {
-        vcl_cout << "boxm_render_expected_edge_process: the scene is not of expected type" << vcl_endl;
+        std::cout << "boxm_render_expected_edge_process: the scene is not of expected type" << std::endl;
         return false;
       }
       bvrml_write::write_vrml_header(stream);
@@ -94,7 +96,7 @@ bool boxm_render_expected_edge_vrml_process(bprb_func_process& pro)
         scene->load_block(iter.index());
         boxm_block<type>* block = *iter;
         type* tree = block->get_tree();
-        vcl_vector<boct_tree_cell<short,boxm_inf_line_sample<float> >*> cells = tree->leaf_cells();
+        std::vector<boct_tree_cell<short,boxm_inf_line_sample<float> >*> cells = tree->leaf_cells();
 
         // iterate over cells
         for (unsigned i=0; i<cells.size(); ++i)
@@ -117,7 +119,7 @@ bool boxm_render_expected_edge_vrml_process(bprb_func_process& pro)
                 vgl_vector_3d<double> dir(p1-p0);
                 double length=dir.length();
                 dir/=length;
-                vcl_cout<<data.residual_<<' ';
+                std::cout<<data.residual_<<' ';
                 if (data.residual_<threshold)
                 {
                   bvrml_write::write_vrml_line(stream, p0,dir,float(length),1.f,0.f,0.f);
@@ -132,12 +134,12 @@ bool boxm_render_expected_edge_vrml_process(bprb_func_process& pro)
     }
     else
     {
-      vcl_cerr << "Ray tracing version not yet implemented\n";
+      std::cerr << "Ray tracing version not yet implemented\n";
       return false;
     }
   }
   else {
-    vcl_cerr << "boxm_render_expected_edge_vrml_process: undefined APM type\n";
+    std::cerr << "boxm_render_expected_edge_vrml_process: undefined APM type\n";
     return false;
   }
 

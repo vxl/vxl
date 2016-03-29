@@ -7,9 +7,9 @@
 // \author Tim Cootes
 // \brief Base class for Univariate random sampler classes.
 
+#include <string>
+#include <iosfwd>
 #include <vnl/vnl_vector.h>
-#include <vcl_string.h>
-#include <vcl_iosfwd.h>
 class pdf1d_pdf;
 
 //=======================================================================
@@ -62,32 +62,34 @@ class pdf1d_sampler
   //: Reseeds the internal random number generator
   // To achieve quasi-random initialisation use;
   // \code
-  // #include <vcl_ctime.h>
+  // #include <vcl_compiler.h>
+  // #include <iostream>
+  // #include <ctime>
   // ..
-  // sampler.reseed(vcl_time(0));
+  // sampler.reseed(std::time(0));
   // \endcode
   virtual void reseed(unsigned long)=0;
 
 
   //: Name of the class
-  virtual vcl_string is_a() const;
+  virtual std::string is_a() const;
 
   //: Does the name of the class match the argument?
-  virtual bool is_class(vcl_string const& s) const;
+  virtual bool is_class(std::string const& s) const;
 
   //: Create a copy on the heap and return base class pointer
   virtual pdf1d_sampler* clone() const = 0;
 
   //: Print class to os
-  virtual void print_summary(vcl_ostream& os) const;
+  virtual void print_summary(std::ostream& os) const;
 };
 
 
 //: Stream output operator for class reference
-void vsl_print_summary(vcl_ostream& os,const pdf1d_sampler& b);
+void vsl_print_summary(std::ostream& os,const pdf1d_sampler& b);
 
 //: Stream output operator for class pointer
-void vsl_print_summary(vcl_ostream& os,const pdf1d_sampler* b);
+void vsl_print_summary(std::ostream& os,const pdf1d_sampler* b);
 
 
 #endif // pdf1d_sampler_h

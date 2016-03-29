@@ -41,10 +41,11 @@
 // defined in this file.  So you don't need to modify these functions
 // when you add a new pixel format into this header file.
 
-#include <vcl_string.h>
-#include <vcl_cstddef.h>
-#include <vcl_iosfwd.h>
-#include <vcl_typeinfo.h>
+#include <string>
+#include <cstddef>
+#include <iosfwd>
+#include <typeinfo>
+#include <vcl_compiler.h>
 #include <vxl_config.h>
 #include <vidl/vidl_export.h>
 
@@ -124,8 +125,8 @@ enum vidl_pixel_arrangement
 // - packed are the pixels packed into macro pixels
 struct vidl_pixel_traits
 {
-  vcl_string name;
-  const vcl_type_info* type;
+  std::string name;
+  const std::type_info* type;
   unsigned bits_per_pixel;
   unsigned num_channels;
   vidl_pixel_color color;
@@ -223,7 +224,7 @@ struct vidl_pixel_traits_of;
 VCL_DEFINE_SPECIALIZATION \
 struct vidl_pixel_traits_of<VIDL_PIXEL_FORMAT_##FMT> \
 {\
-  static inline vcl_string name() { return NAME; }\
+  static inline std::string name() { return NAME; }\
   typedef T type;\
   enum { bits_per_pixel = BPP };\
   enum { num_channels = vidl_color_traits_of<VIDL_PIXEL_COLOR_##CLR>::num_channels };\
@@ -289,7 +290,7 @@ struct vidl_pixel_pack_of<VIDL_PIXEL_FORMAT_##FMT> \
 {\
   enum { macro_pix_size = 1<<vidl_pixel_traits_of<VIDL_PIXEL_FORMAT_##FMT>::chroma_shift_x }; \
   enum { num_channels = vidl_pixel_traits_of<VIDL_PIXEL_FORMAT_##FMT>::num_channels }; \
-  static VIDL_EXPORT const vcl_ptrdiff_t offset[macro_pix_size][num_channels]; \
+  static VIDL_EXPORT const std::ptrdiff_t offset[macro_pix_size][num_channels]; \
 }
 
 vidl_pp_mac( YUYV_422 );
@@ -317,7 +318,7 @@ vidl_pixel_format_traits(vidl_pixel_format f);
 
 
 //: Return the typeid of the pixel format datatype
-inline const vcl_type_info&
+inline const std::type_info&
 vidl_pixel_format_typeid(vidl_pixel_format f)
 {
   return *vidl_pixel_format_traits(f).type;
@@ -372,12 +373,12 @@ vidl_pixel_format_chroma_shift_y(vidl_pixel_format f)
 
 
 //: Output a pretty string representing the pixel format.
-vcl_ostream &
-operator << (vcl_ostream &os, vidl_pixel_format f);
+std::ostream &
+operator << (std::ostream &os, vidl_pixel_format f);
 
 
 //: Convert a string into a pixel format.
-inline vcl_string
+inline std::string
 vidl_pixel_format_to_string(vidl_pixel_format f)
 {
   return vidl_pixel_format_traits(f).name;
@@ -386,7 +387,7 @@ vidl_pixel_format_to_string(vidl_pixel_format f)
 
 //: Convert a string into a pixel format.
 vidl_pixel_format
-vidl_pixel_format_from_string(const vcl_string& s);
+vidl_pixel_format_from_string(const std::string& s);
 
 
 //: Compute the size (in bytes) of a \a ni x \a nj image buffer of pixel format \a f

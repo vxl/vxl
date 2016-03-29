@@ -6,9 +6,10 @@
 // \file
 // \author fsm
 
+#include <iostream>
 #include "vil_bmp_core_header.h"
 
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
 
 #include <vil/vil_stream.h>
 #include <vil/vil_stream_read.h>
@@ -42,12 +43,12 @@ void vil_bmp_core_header::write(vil_stream *s) const
   vil_stream_write_little_endian_uint_16(s, bitsperpixel);
 }
 
-void vil_bmp_core_header::print(vcl_ostream &s) const
+void vil_bmp_core_header::print(std::ostream &s) const
 {
   s << "vil_bmp_core_header:\n"
-    << "  header_size  : " << header_size  << vcl_endl
-    << "  width        : " << width        << vcl_endl
-    << "  height       : " << height       << vcl_endl
-    << "  planes       : " << planes       << vcl_endl
-    << "  bitsperpixel : " << bitsperpixel << vcl_endl << vcl_endl;
+    << "  header_size  : " << header_size  << std::endl
+    << "  width        : " << width        << std::endl
+    << "  height       : " << height       << std::endl
+    << "  planes       : " << planes       << std::endl
+    << "  bitsperpixel : " << bitsperpixel << std::endl << std::endl;
 }

@@ -16,9 +16,10 @@
 // Approved for public release, distribution unlimited (DISTAR Case 14389)
 //
 
+#include <vector>
+#include <iostream>
 #include "bsta_distribution.h"
-#include <vcl_vector.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
 
 //: A Von_Mises distribution
 template <class T, unsigned n>
@@ -41,10 +42,10 @@ class bsta_von_mises : public bsta_distribution<T,n>
   void set_kappa(T kappa) {kappa_=kappa;}
 
   //: The probability density at a given unit vector
-  T prob_density(vector_type const& v) const{vcl_cerr << "not implemented\n"; return 0;}
+  T prob_density(vector_type const& v) const{std::cerr << "not implemented\n"; return 0;}
 
   //:Probability of an angular range of vectors about v, which defines a cone.
-  T probability(vector_type const& v,const T theta_max) const {vcl_cerr << "not implemented\n"; return 0;}
+  T probability(vector_type const& v,const T theta_max) const {std::cerr << "not implemented\n"; return 0;}
 
  protected:
   //: The mean vector
@@ -111,7 +112,7 @@ class bsta_von_mises<T,2>
   T prob_density(vector_type const& v) const;
 
   //:Probability of an angular range of vectors about v, which defines a cone.
-  T probability(vector_type const& /*v*/,const T /*theta_max*/) const {vcl_cerr << "not implemented\n"; return 0;}
+  T probability(vector_type const& /*v*/,const T /*theta_max*/) const {std::cerr << "not implemented\n"; return 0;}
 
  protected:
   //: The mean vector
@@ -123,7 +124,7 @@ class bsta_von_mises<T,2>
 #endif //VCL_CAN_DO_PARTIAL_SPECIALIZATION
 
 template <class T , unsigned n>
-inline vcl_ostream& operator<< (vcl_ostream& os,
+inline std::ostream& operator<< (std::ostream& os,
                                 bsta_von_mises<T, n> const& vm)
 {
   os << "von_mises:mean(" << vm.mean() << ")\n"

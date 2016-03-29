@@ -1,8 +1,9 @@
+#include <iostream>
 #include "bsta_histogram.h"
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
 
 template <>
-void bsta_histogram<char>::pretty_print(vcl_ostream& os) const
+void bsta_histogram<char>::pretty_print(std::ostream& os) const
 {
   os << "area valid: " << area_valid_ << "\n"
   << "area: " << (int)area_ << "\n"

@@ -1,12 +1,13 @@
 // This is mul/mbl/mbl_sum_1d.cxx
+#include <iostream>
+#include <cmath>
 #include "mbl_sum_1d.h"
 //:
 // \file
 // \brief Computes sum and mean of 1D variable.
 // \author Tim Cootes
 
-#include <vcl_cmath.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
 
 mbl_sum_1d::mbl_sum_1d()
 {
@@ -32,7 +33,7 @@ const double MAX_ERROR = 1.0e-8;
 bool mbl_sum_1d::operator==(const mbl_sum_1d& s) const
 {
   return n_obs_==s.nObs() &&
-         vcl_fabs(sum_-s.sum())<MAX_ERROR;
+         std::fabs(sum_-s.sum())<MAX_ERROR;
 }
 
 //: Version number for I/O
@@ -62,14 +63,14 @@ void mbl_sum_1d::b_read(vsl_b_istream& bfs)
     vsl_b_read(bfs,sum_);
     break;
    default:
-    vcl_cerr << "I/O ERROR: mbl_sum_1d::b_read(vsl_b_istream&)\n"
+    std::cerr << "I/O ERROR: mbl_sum_1d::b_read(vsl_b_istream&)\n"
              << "           Unknown version number "<< file_version_no << '\n';
-    bfs.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
+    bfs.is().clear(std::ios::badbit); // Set an unrecoverable IO error on stream
     return;
   }
 }
 
-void mbl_sum_1d::print_summary(vcl_ostream& os) const
+void mbl_sum_1d::print_summary(std::ostream& os) const
 {
   os << "mbl_sum_1d: ";
   if (n_obs_==0)
@@ -80,14 +81,14 @@ void mbl_sum_1d::print_summary(vcl_ostream& os) const
   }
 }
 
-vcl_ostream& operator<<(vcl_ostream& os, const mbl_sum_1d& stats)
+std::ostream& operator<<(std::ostream& os, const mbl_sum_1d& stats)
 {
   stats.print_summary(os);
   return os;
 }
 
   //: Stream output operator for class reference
-void vsl_print_summary(vcl_ostream& os,const mbl_sum_1d& stats)
+void vsl_print_summary(std::ostream& os,const mbl_sum_1d& stats)
 {
   stats.print_summary(os);
 }

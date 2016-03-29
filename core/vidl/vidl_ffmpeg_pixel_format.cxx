@@ -11,9 +11,10 @@
 //
 //-----------------------------------------------------------------------------
 
+#include <cstring>
+#include <iostream>
 #include "vidl_ffmpeg_pixel_format.h"
-#include <vcl_cstring.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
 
 
 #ifdef LIBAVFORMAT_BUILD
@@ -134,6 +135,6 @@ vidl_pixel_format_to_ffmpeg(vidl_pixel_format vidl_pix_fmt)
   case VIDL_PIXEL_FORMAT_MONO_8:   return AV_PIX_FMT_GRAY8;
   default: break;
   }
-  vcl_cerr << "Warning: unknown FFMPeg pixel format type : " << vidl_pix_fmt << '\n';
+  std::cerr << "Warning: unknown FFMPeg pixel format type : " << vidl_pix_fmt << '\n';
   return AV_PIX_FMT_NONE;
 }

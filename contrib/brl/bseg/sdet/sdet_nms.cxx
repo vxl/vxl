@@ -1,10 +1,12 @@
 // This is brl/bseg/sdet/sdet_nms.cxx
+#include <iostream>
+#include <cstdio>
+#include <cstdlib>
 #include "sdet_nms.h"
 //:
 // \file
 
-#include <vcl_cstdio.h>
-#include <vcl_cstdlib.h>   // for vcl_abs(int) and vcl_sqrt()
+#include <vcl_compiler.h>
 #include <vnl/vnl_matrix.h>
 #include <vnl/algo/vnl_svd.h>
 #include <vgl/vgl_homg_point_2d.h>
@@ -14,24 +16,6 @@
 //---------------------------------------------------------------
 // Constructors
 //----------------------------------------------------------------
-
-//: default constructor
-sdet_nms::sdet_nms():
-  thresh_(0.0),
-  parabola_fit_type_(sdet_nms_params::PFIT_3_POINTS),
-  margin_(1),
-  rel_thresh_(2.5),
-  use_adaptive_thresh_(true),
-  dir_x_(vil_image_view<double>(0,0,1)), // FIXME: this does not make sense: reference member is initialized to a temporary that doesn't persist after the constructor exits
-  dir_y_(vil_image_view<double>(0,0,1)), // idem
-  grad_mag_(vil_image_view<double>(0,0,1)), // idem
-  x_(0,0, 0.0),
-  y_(0,0, 0.0),
-  dir_(0,0, 0.0),
-  mag_(0,0, 0.0),
-  deriv_(0,0, 0.0)
-{
-}
 
 //: Constructor from a parameter block, gradient magnitudes given as an image and directions given as component image
 sdet_nms::sdet_nms(const sdet_nms_params& nsp, const vil_image_view<double>& dir_x,
@@ -56,24 +40,24 @@ sdet_nms::sdet_nms(const sdet_nms_params& nsp, const vil_image_view<double>& dir
 
 // backward compatible method
 void sdet_nms::apply(bool collect_tokens,
-                     vcl_vector<vgl_point_2d<double> >& loc,
-                     vcl_vector<double>& orientation,
-                     vcl_vector<double>& mag)
+                     std::vector<vgl_point_2d<double> >& loc,
+                     std::vector<double>& orientation,
+                     std::vector<double>& mag)
 {
-  vcl_vector<double> d2f;
-  vcl_vector<vgl_point_2d<int> > pix_loc;
+  std::vector<double> d2f;
+  std::vector<vgl_point_2d<int> > pix_loc;
 
   //call the main method
   apply(collect_tokens, loc, orientation, mag, d2f, pix_loc);
 }
 
 void sdet_nms::apply(bool collect_tokens,
-                     vcl_vector<vgl_point_2d<double> >& loc,
-                     vcl_vector<double>& orientation,
-                     vcl_vector<double>& mag,
-                     vcl_vector<double>& d2f)
+                     std::vector<vgl_point_2d<double> >& loc,
+                     std::vector<double>& orientation,
+                     std::vector<double>& mag,
+                     std::vector<double>& d2f)
 {
-  vcl_vector<vgl_point_2d<int> > pix_loc;
+  std::vector<vgl_point_2d<int> > pix_loc;
 
   //call the main method
   apply(collect_tokens, loc, orientation, mag, d2f, pix_loc);
@@ -81,11 +65,11 @@ void sdet_nms::apply(bool collect_tokens,
 
 //: Apply the algorithm
 void sdet_nms::apply(bool collect_tokens,
-                     vcl_vector<vgl_point_2d<double> >& loc,
-                     vcl_vector<double>& orientation,
-                     vcl_vector<double>& mag,
-                     vcl_vector<double>& d2f,
-                     vcl_vector<vgl_point_2d<int> >& pix_loc)
+                     std::vector<vgl_point_2d<double> >& loc,
+                     std::vector<double>& orientation,
+                     std::vector<double>& mag,
+                     std::vector<double>& d2f,
+                     std::vector<vgl_point_2d<int> >& pix_loc)
 {
   double f[3], s_list[3];
 
@@ -102,7 +86,7 @@ void sdet_nms::apply(bool collect_tokens,
       normalize(direction);
 
       //The gradient has to be non-degenerate
-      if (vcl_abs(direction.x()) < 10e-6 && vcl_abs(direction.y()) < 10e-6)
+      if (std::abs(direction.x()) < 10e-6 && std::abs(direction.y()) < 10e-6)
         continue;
 
       //now compute the values orthogonal to the edge and fit a parabola
@@ -124,12 +108,12 @@ void sdet_nms::apply(bool collect_tokens,
         double s_star = (parabola_fit_type_ == sdet_nms_params::PFIT_3_POINTS) ?
                             subpixel_s(s_list, f, max_val, grad_val) : subpixel_s(x, y, direction, max_val);
 
-        if (vcl_fabs(s_star)< 0.7)
+        if (std::fabs(s_star)< 0.7)
         {
           //record this edgel
           x_(y,x) = x + s_star * direction.x();
           y_(y,x) = y + s_star * direction.y();
-          dir_(y,x) = vcl_atan2(direction.x(), -direction.y());
+          dir_(y,x) = std::atan2(direction.x(), -direction.y());
           mag_(y,x) = max_val; //the mag at the max of the parabola
           deriv_(y,x) = grad_val;
         }
@@ -198,21 +182,21 @@ int sdet_nms::intersected_face_number(const vgl_vector_2d<double>& direction)
   }
   else if (direction.x() < 0 && direction.y() >= 0)
   {
-    if (vcl_abs(direction.x()) < direction.y())
+    if (std::abs(direction.x()) < direction.y())
       return 3;
     else
       return 4;
   }
   else if (direction.x() < 0 && direction.y() < 0)
   {
-    if (vcl_abs(direction.x()) >= vcl_abs(direction.y()))
+    if (std::abs(direction.x()) >= std::abs(direction.y()))
       return 5;
     else
       return 6;
   }
   else if (direction.x() >= 0 && direction.y() < 0)
   {
-    if (direction.x() < vcl_abs(direction.y()))
+    if (direction.x() < std::abs(direction.y()))
       return 7;
     else
       return 8;
@@ -348,7 +332,7 @@ double sdet_nms::subpixel_s(double *s, double *f, double &max_f, double &max_d)
       //derivatives at f+ and f-
       double d2fp = 2*A*s[2] + B;
       double d2fm = 2*A*s[0] + B;
-      if (vcl_fabs(d2fp)>rel_thresh_ || vcl_fabs(d2fm)>rel_thresh_)
+      if (std::fabs(d2fp)>rel_thresh_ || std::fabs(d2fm)>rel_thresh_)
 #endif // 0
       if (d2f<-rel_thresh_)//d2f is always negative at a maxima
         return s_star;
@@ -396,7 +380,7 @@ double sdet_nms::subpixel_s(int x, int y, const vgl_vector_2d<double>& direction
     {
       find_distance_s_and_f_for_point(i, j, line1, d, s, direction);
       f = grad_mag_(x+i,y+j);
-      A(index, 0) = vcl_pow(s,2.0);
+      A(index, 0) = std::pow(s,2.0);
       A(index, 1) = s;
       A(index, 2) = 1.0;
       B(index, 0) = f;

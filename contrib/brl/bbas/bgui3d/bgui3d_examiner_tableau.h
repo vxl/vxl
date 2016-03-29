@@ -63,7 +63,7 @@ class bgui3d_examiner_tableau : public bgui3d_fullviewer_tableau
   virtual bool handle(const vgui_event& event);
 
   //: Return the type name of this tableau
-  vcl_string type_name() const;
+  std::string type_name() const;
 
   //: Builds a popup menu
   virtual void get_popup(const vgui_popup_params&, vgui_menu &m);

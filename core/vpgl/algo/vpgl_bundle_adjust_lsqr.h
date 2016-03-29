@@ -13,6 +13,7 @@
 // \endverbatim
 
 
+#include <vector>
 #include <vnl/vnl_vector.h>
 #include <vnl/vnl_double_3x3.h>
 #include <vnl/vnl_double_3x4.h>
@@ -20,7 +21,7 @@
 #include <vgl/vgl_point_2d.h>
 #include <vgl/vgl_homg_point_3d.h>
 #include <vpgl/vpgl_perspective_camera.h>
-#include <vcl_vector.h>
+#include <vcl_compiler.h>
 
 
 //: base class bundle adjustment sparse least squares function
@@ -33,8 +34,8 @@ class vpgl_bundle_adjust_lsqr : public vnl_sparse_lst_sqr_function
   vpgl_bundle_adjust_lsqr(unsigned int num_params_per_a,
                           unsigned int num_params_per_b,
                           unsigned int num_params_c,
-                          const vcl_vector<vgl_point_2d<double> >& image_points,
-                          const vcl_vector<vcl_vector<bool> >& mask);
+                          const std::vector<vgl_point_2d<double> >& image_points,
+                          const std::vector<std::vector<bool> >& mask);
 
   //: Constructor
   //  Each image point is assigned an inverse covariance (error projector) matrix
@@ -43,9 +44,9 @@ class vpgl_bundle_adjust_lsqr : public vnl_sparse_lst_sqr_function
   vpgl_bundle_adjust_lsqr(unsigned int num_params_per_a,
                           unsigned int num_params_per_b,
                           unsigned int num_params_c,
-                          const vcl_vector<vgl_point_2d<double> >& image_points,
-                          const vcl_vector<vnl_matrix<double> >& inv_covars,
-                          const vcl_vector<vcl_vector<bool> >& mask);
+                          const std::vector<vgl_point_2d<double> >& image_points,
+                          const std::vector<vnl_matrix<double> >& inv_covars,
+                          const std::vector<std::vector<bool> >& mask);
 
   // Destructor
   virtual ~vpgl_bundle_adjust_lsqr() {}
@@ -75,9 +76,9 @@ class vpgl_bundle_adjust_lsqr : public vnl_sparse_lst_sqr_function
   virtual void jac_blocks(vnl_vector<double> const& a,
                           vnl_vector<double> const& b,
                           vnl_vector<double> const& c,
-                          vcl_vector<vnl_matrix<double> >& A,
-                          vcl_vector<vnl_matrix<double> >& B,
-                          vcl_vector<vnl_matrix<double> >& C);
+                          std::vector<vnl_matrix<double> >& A,
+                          std::vector<vnl_matrix<double> >& B,
+                          std::vector<vnl_matrix<double> >& C);
 
   //: compute the Jacobian Aij
   virtual void jac_Aij(unsigned int i,
@@ -211,9 +212,9 @@ class vpgl_bundle_adjust_lsqr : public vnl_sparse_lst_sqr_function
 
  protected:
   //: The corresponding points in the image
-  vcl_vector<vgl_point_2d<double> > image_points_;
+  std::vector<vgl_point_2d<double> > image_points_;
   //: The Cholesky factored inverse covariances for each image point
-  vcl_vector<vnl_matrix<double> > factored_inv_covars_;
+  std::vector<vnl_matrix<double> > factored_inv_covars_;
   //: Flag to enable covariance weighted errors
   bool use_covars_;
   //: The square of the scale of the robust estimator

@@ -17,7 +17,7 @@ static void test_edges()
   vgl_vector_3d<unsigned> world_dim(1,1,1);
   boxm_scene<boct_tree<short,data_type> > scene(lvcs, origin, block_dim, world_dim);
   // create the auxiliary scenes for each image
-  vcl_vector<vcl_string> image_names;
+  std::vector<std::string> image_names;
   image_names.push_back("image1");
   image_names.push_back("image2");
   image_names.push_back("image3");

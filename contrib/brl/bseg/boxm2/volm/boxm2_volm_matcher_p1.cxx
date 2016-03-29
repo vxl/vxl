@@ -1,39 +1,41 @@
 // This is brl/bseg/boxm2/volm/boxm2_volm_matcher_p1.cxx
+#include <iostream>
+#include <algorithm>
+#include <iomanip>
 #include "boxm2_volm_matcher_p1.h"
 #include <vul/vul_timer.h>
 #include <vcl_where_root_dir.h>
-#include <vcl_algorithm.h>
-#include <vcl_iomanip.h>
+#include <vcl_compiler.h>
 
 #define GBYTE 1073741824
 
 boxm2_volm_matcher_p1::boxm2_volm_matcher_p1(volm_camera_space_sptr const& cam_space,
                                              volm_query_sptr const& query,
-                                             vcl_vector<volm_geo_index_node_sptr> const& leaves,
+                                             std::vector<volm_geo_index_node_sptr> const& leaves,
                                              float const& buffer_capacity,
-                                             vcl_string const& geo_index_folder,
+                                             std::string const& geo_index_folder,
                                              unsigned const& tile_id,
-                                             vcl_vector<float> const& depth_interval,
+                                             std::vector<float> const& depth_interval,
                                              vgl_polygon<double> const& cand_poly,
                                              bocl_device_sptr gpu,
                                              bool const& is_candidate,
                                              bool const& is_last_pass,
-                                             vcl_string const& out_folder,
+                                             std::string const& out_folder,
                                              float const& threshold,
                                              unsigned const& max_cam_per_loc,
-                                             vcl_vector<volm_weight> weights)
+                                             std::vector<volm_weight> weights)
 : cam_space_(cam_space), query_(query), leaves_(leaves), ind_buffer_(buffer_capacity),
   weights_(weights),
-  fallback_size_buff_(0), layer_size_buff_(0), is_candidate_(is_candidate), cand_poly_(cand_poly),
+  fallback_size_buff_(VXL_NULLPTR), layer_size_buff_(VXL_NULLPTR), is_candidate_(is_candidate), cand_poly_(cand_poly),
   is_last_pass_(is_last_pass), out_folder_(out_folder), depth_interval_(depth_interval),
-  gpu_(gpu), is_grd_reg_(true), is_sky_reg_(true), is_obj_reg_(true), n_cam_(0), n_obj_(0),
-  grd_id_buff_(0), grd_dist_buff_(0), grd_land_buff_(0), grd_land_wgt_buff_(0),
-  grd_id_offset_buff_(0), grd_weight_buff_(0), grd_wgt_attri_buff_(0),
-  sky_id_buff_(0), sky_id_offset_buff_(0), sky_weight_buff_(0),
-  obj_id_buff_(0), obj_id_offset_buff_(0), obj_min_dist_buff_(0), obj_order_buff_(0),
-  obj_weight_buff_(0), obj_wgt_attri_buff_(0),
-  obj_orient_buff_(0), obj_land_buff_(0), obj_land_wgt_buff_(0), depth_interval_buff_(0),
-  depth_length_buff_(0), threshold_(threshold), max_cam_per_loc_(max_cam_per_loc)
+  gpu_(gpu), is_grd_reg_(true), is_sky_reg_(true), is_obj_reg_(true), n_cam_(VXL_NULLPTR), n_obj_(VXL_NULLPTR),
+  grd_id_buff_(VXL_NULLPTR), grd_dist_buff_(VXL_NULLPTR), grd_land_buff_(VXL_NULLPTR), grd_land_wgt_buff_(VXL_NULLPTR),
+  grd_id_offset_buff_(VXL_NULLPTR), grd_weight_buff_(VXL_NULLPTR), grd_wgt_attri_buff_(VXL_NULLPTR),
+  sky_id_buff_(VXL_NULLPTR), sky_id_offset_buff_(VXL_NULLPTR), sky_weight_buff_(VXL_NULLPTR),
+  obj_id_buff_(VXL_NULLPTR), obj_id_offset_buff_(VXL_NULLPTR), obj_min_dist_buff_(VXL_NULLPTR), obj_order_buff_(VXL_NULLPTR),
+  obj_weight_buff_(VXL_NULLPTR), obj_wgt_attri_buff_(VXL_NULLPTR),
+  obj_orient_buff_(VXL_NULLPTR), obj_land_buff_(VXL_NULLPTR), obj_land_wgt_buff_(VXL_NULLPTR), depth_interval_buff_(VXL_NULLPTR),
+  depth_length_buff_(VXL_NULLPTR), threshold_(threshold), max_cam_per_loc_(max_cam_per_loc)
 {
   valid_cam_indices_ = cam_space_->valid_indices();
   layer_size_ = query_->get_query_size();
@@ -89,7 +91,7 @@ bool boxm2_volm_matcher_p1::volm_matcher_p1(int const& num_locs_to_kernel)
   *n_cam_ = (unsigned)query_->get_cam_num();
   n_cam_cl_mem_ = new bocl_mem(gpu_->context(), n_cam_, sizeof(unsigned), " n_cam " );
   if (!n_cam_cl_mem_->create_buffer( CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR )) {
-    vcl_cerr << "\n ERROR: creating bocl_mem failed for N_CAM\n";
+    std::cerr << "\n ERROR: creating bocl_mem failed for N_CAM\n";
     delete n_cam_cl_mem_;
     return false;
   }
@@ -97,7 +99,7 @@ bool boxm2_volm_matcher_p1::volm_matcher_p1(int const& num_locs_to_kernel)
   *n_obj_ = (unsigned)(query_->depth_regions()).size();
   n_obj_cl_mem_ = new bocl_mem(gpu_->context(), n_obj_, sizeof(unsigned), " n_obj " );
   if (!n_obj_cl_mem_->create_buffer( CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR )) {
-    vcl_cerr << "\n ERROR: creating bocl_mem failed for N_OBJ\n";
+    std::cerr << "\n ERROR: creating bocl_mem failed for N_OBJ\n";
     delete n_cam_cl_mem_;  delete n_obj_cl_mem_;
     return false;
   }
@@ -108,14 +110,14 @@ bool boxm2_volm_matcher_p1::volm_matcher_p1(int const& num_locs_to_kernel)
   query_local_mem_ = 0;
   vul_timer trans_query_time;
   if (!this->transfer_query()) {
-    vcl_cerr << "\n ERROR: transferring query to 1D structure failed.\n";
+    std::cerr << "\n ERROR: transferring query to 1D structure failed.\n";
     return false;
   }
 
-  vcl_cout << "\t 4.1.1 Setting up query in pass 1 matcher for GPU ------> \t" << trans_query_time.all()/1000.0 << " seconds." << vcl_endl;
+  std::cout << "\t 4.1.1 Setting up query in pass 1 matcher for GPU ------> \t" << trans_query_time.all()/1000.0 << " seconds." << std::endl;
   // create queue
   if (!this->create_queue()) {
-    vcl_cerr << "\n ERROR: creating pass 1 matcher queue failed.\n";
+    std::cerr << "\n ERROR: creating pass 1 matcher queue failed.\n";
     return false;
   }
 
@@ -126,7 +128,7 @@ bool boxm2_volm_matcher_p1::volm_matcher_p1(int const& num_locs_to_kernel)
 
   depth_interval_cl_mem_ = new bocl_mem(gpu_->context(), depth_interval_buff_, sizeof(float)*((unsigned)depth_interval_.size()), " depth_interval ");
   if (!depth_interval_cl_mem_->create_buffer( CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR )) {
-    vcl_cerr << "\n ERROR: creating bocl_mem failed for DEPTH_INTERVAL\n";
+    std::cerr << "\n ERROR: creating bocl_mem failed for DEPTH_INTERVAL\n";
     this->clean_query_cl_mem();
     delete depth_interval_cl_mem_;
     return false;
@@ -135,7 +137,7 @@ bool boxm2_volm_matcher_p1::volm_matcher_p1(int const& num_locs_to_kernel)
   *depth_length_buff_ = (unsigned)depth_interval_.size();
   depth_length_cl_mem_ = new bocl_mem(gpu_->context(), depth_length_buff_, sizeof(unsigned), " depth_length ");
   if (!depth_length_cl_mem_->create_buffer( CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR )) {
-    vcl_cerr << "\n ERROR: creating bocl_mem failed for DEPTH_LENGTH\n";
+    std::cerr << "\n ERROR: creating bocl_mem failed for DEPTH_LENGTH\n";
     this->clean_query_cl_mem();
     delete depth_interval_cl_mem_;    delete depth_length_cl_mem_;
     return false;
@@ -146,7 +148,7 @@ bool boxm2_volm_matcher_p1::volm_matcher_p1(int const& num_locs_to_kernel)
   *layer_size_buff_ = layer_size_;
   layer_size_cl_mem_ = new bocl_mem(gpu_->context(), layer_size_buff_, sizeof(unsigned), " layer_size ");
   if (!layer_size_cl_mem_->create_buffer( CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR )) {
-    vcl_cerr << "\n ERROR: creating bocl_mem failed for LAYER_SIZE\n";
+    std::cerr << "\n ERROR: creating bocl_mem failed for LAYER_SIZE\n";
     this->clean_query_cl_mem();
     delete depth_interval_cl_mem_;        delete depth_length_cl_mem_;
     delete layer_size_cl_mem_;
@@ -158,7 +160,7 @@ bool boxm2_volm_matcher_p1::volm_matcher_p1(int const& num_locs_to_kernel)
   *fallback_size_buff_ = fallback_size_;
   fallback_size_cl_mem_ = new bocl_mem(gpu_->context(), fallback_size_buff_, sizeof(unsigned char), " fallback size ");
   if (!fallback_size_cl_mem_->create_buffer( CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR )) {
-    vcl_cerr << "\n ERROR: creating bocl_mem failed for FALLBACK SIZE\n";
+    std::cerr << "\n ERROR: creating bocl_mem failed for FALLBACK SIZE\n";
     this->clean_query_cl_mem();
     delete depth_interval_cl_mem_;        delete depth_length_cl_mem_;
     delete layer_size_cl_mem_;
@@ -167,12 +169,12 @@ bool boxm2_volm_matcher_p1::volm_matcher_p1(int const& num_locs_to_kernel)
   }
 
   // compile the kernel
-  vcl_string identifier = gpu_->device_identifier();
+  std::string identifier = gpu_->device_identifier();
   if (kernels_.find(identifier) == kernels_.end()) {
-    vcl_cout << "\t 4.1.2 Comipling kernels for device " << identifier << vcl_endl;
-    vcl_vector<bocl_kernel*> ks;
+    std::cout << "\t 4.1.2 Comipling kernels for device " << identifier << std::endl;
+    std::vector<bocl_kernel*> ks;
     if (!this->compile_kernel(ks)) {
-      vcl_cerr << "\n ERROR: compiling matcher kernel failed.\n";
+      std::cerr << "\n ERROR: compiling matcher kernel failed.\n";
       this->clean_query_cl_mem();
       delete depth_interval_cl_mem_;    delete depth_length_cl_mem_;
       return false;
@@ -184,7 +186,7 @@ bool boxm2_volm_matcher_p1::volm_matcher_p1(int const& num_locs_to_kernel)
   cl_ulong avail_global_mem = device_global_mem_ - query_global_mem_ ;
   cl_ulong extra_global_mem = (cl_ulong)(1.5*GBYTE);  // leave extra 1.5 GB space for kernel to run
   if (avail_global_mem < extra_global_mem) {
-    vcl_cerr << "\n ERROR: available memory is smaller than pre-defined extra memory, reduce the extra memory space (current value = "
+    std::cerr << "\n ERROR: available memory is smaller than pre-defined extra memory, reduce the extra memory space (current value = "
              << extra_global_mem / GBYTE  << ")\n";
     this->clean_query_cl_mem();
     delete depth_interval_cl_mem_;    delete depth_length_cl_mem_;
@@ -200,7 +202,7 @@ bool boxm2_volm_matcher_p1::volm_matcher_p1(int const& num_locs_to_kernel)
   if (index_global_mem < per_index_mem) {
     this->clean_query_cl_mem();
     delete depth_interval_cl_mem_;    delete depth_length_cl_mem_;
-    vcl_cerr << "\n ERROR: available memory can not take a single index, reduce the extra memory space (current value = "
+    std::cerr << "\n ERROR: available memory can not take a single index, reduce the extra memory space (current value = "
              << extra_global_mem / GBYTE  << ")\n";
     return false;
   }
@@ -227,11 +229,11 @@ bool boxm2_volm_matcher_p1::volm_matcher_p1(int const& num_locs_to_kernel)
       else                      ni = 2;
     }
   }
-  vcl_cout << "\t 4.1.3: device have total " << device_global_mem_ << " Byte (" << (float)device_global_mem_/(float)GBYTE << " GB) memory space\n"
+  std::cout << "\t 4.1.3: device have total " << device_global_mem_ << " Byte (" << (float)device_global_mem_/(float)GBYTE << " GB) memory space\n"
            << "\t        query requires " << query_global_mem_ << " Byte (" << (float)query_global_mem_/(float)GBYTE << " GB)\n"
            << "\t        leave " << extra_global_mem  << " Byte (" << (float)extra_global_mem/(float)GBYTE << " GB) extra empty space on device\n"
            << "\t        a single index require " << per_index_mem << " Byte given " << nc << " cameras and " << no << " objects\n"
-           << "\t        ---> kernel can calcualte " << ni << " indices per lunching" << vcl_endl;
+           << "\t        ---> kernel can calcualte " << ni << " indices per lunching" << std::endl;
 
   // define the work group size and NDRange dimension
   work_dim_ = 2;
@@ -250,11 +252,11 @@ bool boxm2_volm_matcher_p1::volm_matcher_p1(int const& num_locs_to_kernel)
   cl_ulong total_index_num = 0;
 
   // initialize the indices
-  vcl_string index_dst_file = leaves_[leaf_id]->get_index_name(file_name_pre_.str());
-  vcl_string index_ori_file = leaves_[leaf_id]->get_label_index_name(file_name_pre_.str(), "orientation");
-  vcl_string index_lnd_file = leaves_[leaf_id]->get_label_index_name(file_name_pre_.str(), "land");
+  std::string index_dst_file = leaves_[leaf_id]->get_index_name(file_name_pre_.str());
+  std::string index_ori_file = leaves_[leaf_id]->get_label_index_name(file_name_pre_.str(), "orientation");
+  std::string index_lnd_file = leaves_[leaf_id]->get_label_index_name(file_name_pre_.str(), "land");
 #if 0
-  vcl_cerr << " index_combine_file = " << index_combine_file << '\n';
+  std::cerr << " index_combine_file = " << index_combine_file << '\n';
 #endif
   ind_->initialize_read(index_dst_file);
   ind_orient_->initialize_read(index_ori_file);
@@ -268,8 +270,8 @@ bool boxm2_volm_matcher_p1::volm_matcher_p1(int const& num_locs_to_kernel)
     unsigned char* index_land_buff_ = new unsigned char[ni*layer_size_];
 
     // fill the index buffer
-    vcl_vector<unsigned> l_id;  // leaf_id for indices filled into buffer
-    vcl_vector<unsigned> h_id;  // hypo_id in this leaf_id for indices filled into buffer
+    std::vector<unsigned> l_id;  // leaf_id for indices filled into buffer
+    std::vector<unsigned> h_id;  // hypo_id in this leaf_id for indices filled into buffer
     unsigned actual_n_ind = ni; // handling the last round where the number of loaded indices is smaller than pre-computed ni
 
 
@@ -297,7 +299,7 @@ bool boxm2_volm_matcher_p1::volm_matcher_p1(int const& num_locs_to_kernel)
     *n_ind_ = ni;
     bocl_mem* n_ind_cl_mem_ = new bocl_mem(gpu_->context(), n_ind_, sizeof(unsigned), " n_ind ");
     if (!n_ind_cl_mem_->create_buffer( CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR )) {
-      vcl_cerr << "\n ERROR: creating bocl_mem failed for N_IND\n";
+      std::cerr << "\n ERROR: creating bocl_mem failed for N_IND\n";
       this->clean_query_cl_mem();
       delete depth_interval_cl_mem_;        delete depth_length_cl_mem_;
       delete layer_size_cl_mem_;
@@ -316,7 +318,7 @@ bool boxm2_volm_matcher_p1::volm_matcher_p1(int const& num_locs_to_kernel)
     global_threads_[1] = cl_nj;
 
     if (round_cnt % 1000 == 0)
-      vcl_cout << " --------  in round " << round_cnt << " ------\n"
+      std::cout << " --------  in round " << round_cnt << " ------\n"
                << " Number of indices have been matched = " << total_index_num << '\n'
                << " Giving " << nc << " camera hypos per location and " << ni << " locations pre lunching\n"
                << " NDRange structure:\n"
@@ -324,25 +326,25 @@ bool boxm2_volm_matcher_p1::volm_matcher_p1(int const& num_locs_to_kernel)
                << " \t work group size = (" << local_threads_[0] << ", " << local_threads_[1] << ")\n"
                << " \t number of work item =  (" << global_threads_[0] << ", " << global_threads_[1] << ")\n"
                << " \t number of work group = (" << global_threads_[0]/local_threads_[0]
-               << ", " << global_threads_[1]/local_threads_[1] << ')' << vcl_flush
-               << vcl_endl;
+               << ", " << global_threads_[1]/local_threads_[1] << ')' << std::flush
+               << std::endl;
     round_cnt++;
 #if 0
     // check loaded indices and associated ids
-    vcl_cout << " -------> leaf_id_updated = " << leaf_id << vcl_endl;
+    std::cout << " -------> leaf_id_updated = " << leaf_id << std::endl;
     for (unsigned i = 0; i < ni; i++) {
-      vcl_cout << " i = " << i
+      std::cout << " i = " << i
                << ", leaf_id = " << l_id[i]
                << ", hypo_id = " << h_id[i]
                << ",\nindex_depth\t";
       unsigned start = i*layer_size_;
       unsigned end = (i+1)*layer_size_;
       for (unsigned j = start; j < end; j++)
-        vcl_cout << ' ' << (int)index_buff_[j];
-      vcl_cout << ",\nindex_orient\t";
+        std::cout << ' ' << (int)index_buff_[j];
+      std::cout << ",\nindex_orient\t";
       for (unsigned j = start; j < end; j++)
-        vcl_cout << ' ' << (int)index_orient_buff_[j];
-      vcl_cout << '\n';
+        std::cout << ' ' << (int)index_orient_buff_[j];
+      std::cout << '\n';
     }
 #endif
 
@@ -350,7 +352,7 @@ bool boxm2_volm_matcher_p1::volm_matcher_p1(int const& num_locs_to_kernel)
     // Note: here the data passed into device may be smaller than the pre-assigned index_buff size (since actual_n_ind < pre-calculated ni)
     bocl_mem* index_cl_mem_ = new bocl_mem(gpu_->context(), index_buff_, sizeof(unsigned char)*ni*layer_size_, " index ");
     if (!index_cl_mem_->create_buffer( CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR )) {
-      vcl_cerr << "\n ERROR: creating bocl_mem failed for INDEX\n";
+      std::cerr << "\n ERROR: creating bocl_mem failed for INDEX\n";
       this->clean_query_cl_mem();
       delete depth_interval_cl_mem_;        delete depth_length_cl_mem_;
       delete layer_size_cl_mem_;
@@ -366,7 +368,7 @@ bool boxm2_volm_matcher_p1::volm_matcher_p1(int const& num_locs_to_kernel)
     // create combined index (both orientation and land type, decouple them inside kernel)
     bocl_mem* index_combine_cl_mem_ = new bocl_mem(gpu_->context(), index_combine_buff_, sizeof(unsigned char)*ni*layer_size_, " index_combine ");
     if (!index_combine_cl_mem_->create_buffer( CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR )) {
-      vcl_cerr << "\n ERROR: creating bocl_mem failed for INDEX_COMBINE\n";
+      std::cerr << "\n ERROR: creating bocl_mem failed for INDEX_COMBINE\n";
       this->clean_query_cl_mem();
       delete depth_interval_cl_mem_;        delete depth_length_cl_mem_;
       delete layer_size_cl_mem_;
@@ -381,7 +383,7 @@ bool boxm2_volm_matcher_p1::volm_matcher_p1(int const& num_locs_to_kernel)
     // create index orientation
     bocl_mem* index_orient_cl_mem_ = new bocl_mem(gpu_->context(), index_orient_buff_, sizeof(unsigned char)*ni*layer_size_, " index_orient ");
     if (!index_orient_cl_mem_->create_buffer( CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR )) {
-      vcl_cerr << "\n ERROR: creating bocl_mem failed for INDEX_ORIENT\n";
+      std::cerr << "\n ERROR: creating bocl_mem failed for INDEX_ORIENT\n";
       this->clean_query_cl_mem();
       delete depth_interval_cl_mem_;        delete depth_length_cl_mem_;
       delete layer_size_cl_mem_;
@@ -396,7 +398,7 @@ bool boxm2_volm_matcher_p1::volm_matcher_p1(int const& num_locs_to_kernel)
     // create index land cl_mem
     bocl_mem* index_land_cl_mem_ = new bocl_mem(gpu_->context(), index_land_buff_, sizeof(unsigned char)*ni*layer_size_, " index_land ");
     if (!index_land_cl_mem_->create_buffer( CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR )) {
-      vcl_cerr << "\n ERROR: creating bocl_mem failed for INDEX_LAND\n";
+      std::cerr << "\n ERROR: creating bocl_mem failed for INDEX_LAND\n";
       this->clean_query_cl_mem();
       delete depth_interval_cl_mem_;        delete depth_length_cl_mem_;
       delete layer_size_cl_mem_;
@@ -413,7 +415,7 @@ bool boxm2_volm_matcher_p1::volm_matcher_p1(int const& num_locs_to_kernel)
     // create score cl_mem
     bocl_mem* score_cl_mem_ = new bocl_mem(gpu_->context(), score_buff_, sizeof(float)*ni*nc, " score ");
     if (!score_cl_mem_->create_buffer( CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR )) {
-      vcl_cerr << "\n ERROR: creating bocl_mem failed for SCORE\n";
+      std::cerr << "\n ERROR: creating bocl_mem failed for SCORE\n";
       this->clean_query_cl_mem();
       delete depth_interval_cl_mem_;        delete depth_length_cl_mem_;
       delete layer_size_cl_mem_;
@@ -431,7 +433,7 @@ bool boxm2_volm_matcher_p1::volm_matcher_p1(int const& num_locs_to_kernel)
     // create mu cl_mem
     bocl_mem* mu_cl_mem_ = new bocl_mem(gpu_->context(), mu_buff_, sizeof(float)*ni*nc*no, " mu ");
     if (!mu_cl_mem_->create_buffer( CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR )) {
-      vcl_cerr << "\n ERROR: creating bocl_mem failed for MU\n";
+      std::cerr << "\n ERROR: creating bocl_mem failed for MU\n";
       this->clean_query_cl_mem();
       delete depth_interval_cl_mem_;        delete depth_length_cl_mem_;
       delete layer_size_cl_mem_;
@@ -447,7 +449,7 @@ bool boxm2_volm_matcher_p1::volm_matcher_p1(int const& num_locs_to_kernel)
     }
 
     // start the obj_based kernel matcher
-    vcl_string identifier = gpu_->device_identifier();
+    std::string identifier = gpu_->device_identifier();
     if (!this->execute_matcher_kernel_orient(gpu_, queue_, kernels_[identifier], n_ind_cl_mem_,
                                              index_cl_mem_,
                                              index_orient_cl_mem_,
@@ -455,7 +457,7 @@ bool boxm2_volm_matcher_p1::volm_matcher_p1(int const& num_locs_to_kernel)
                                              score_cl_mem_,
                                              mu_cl_mem_))
     {
-      vcl_cerr << "\n ERROR: executing pass 1 kernel(with orientation) failed on device " << identifier << '\n';
+      std::cerr << "\n ERROR: executing pass 1 kernel(with orientation) failed on device " << identifier << '\n';
       this->clean_query_cl_mem();
       delete depth_interval_cl_mem_;        delete depth_length_cl_mem_;
       delete layer_size_cl_mem_;
@@ -472,10 +474,12 @@ bool boxm2_volm_matcher_p1::volm_matcher_p1(int const& num_locs_to_kernel)
 
     // block everything to ensure the reading score
     status = clFinish(queue_);
+    check_val(status, MEM_FAILURE, " release N_INDEX failed on device " + gpu_->device_identifier() + error_to_string(status));
     // read score
     score_cl_mem_->read_to_buffer(queue_);
     //mu_cl_mem_->read_to_buffer(queue_);
     status = clFinish(queue_);
+    check_val(status, MEM_FAILURE, " release N_INDEX failed on device " + gpu_->device_identifier() + error_to_string(status));
     // count time
     if (is_grd_reg_ && is_sky_reg_)
       gpu_matcher_time += kernels_[identifier][0]->exec_time();
@@ -493,8 +497,8 @@ bool boxm2_volm_matcher_p1::volm_matcher_p1(int const& num_locs_to_kernel)
       float max_score = 0.0f;
       unsigned max_cam_id = 0;
       float min_score_in_list = 0.0f;
-      vcl_vector<unsigned> cam_ids;
-      vcl_vector<float> cam_scores;
+      std::vector<unsigned> cam_ids;
+      std::vector<float> cam_scores;
       for (unsigned cam_id = 0; cam_id < nc; cam_id++) {
         unsigned id = cam_id + ind_id*nc;
         float s = score_buff_[id];
@@ -567,9 +571,9 @@ bool boxm2_volm_matcher_p1::volm_matcher_p1(int const& num_locs_to_kernel)
 
   // time evaluation
   float total_time = (float)total_matcher_time.all();
-  vcl_cout << "\t\t total time for " << total_index_num << " indices and " << *n_cam_ << " cameras -------> " << total_time/1000.0 << " seconds (" << total_time << " ms)\n"
+  std::cout << "\t\t total time for " << total_index_num << " indices and " << *n_cam_ << " cameras -------> " << total_time/1000.0 << " seconds (" << total_time << " ms)\n"
            << "\t\t GPU kernel execution ------------------> " << gpu_matcher_time/1000.0 << " seconds (" << gpu_matcher_time << " ms)\n"
-           << "\t\t CPU host execution --------------------> " << (total_time - gpu_matcher_time)/1000.0 << " seconds (" << total_time - gpu_matcher_time << " ms)" << vcl_endl;
+           << "\t\t CPU host execution --------------------> " << (total_time - gpu_matcher_time)/1000.0 << " seconds (" << total_time - gpu_matcher_time << " ms)" << std::endl;
 
   clReleaseCommandQueue(queue_);
   // clear query_cl_mem
@@ -592,12 +596,12 @@ bool boxm2_volm_matcher_p1::fill_index(unsigned const& n_ind,
                                        unsigned char* index_buff,
                                        unsigned char* index_orient_buff,
                                        unsigned char* index_land_buff,
-                                       vcl_vector<unsigned>& l_id,
-                                       vcl_vector<unsigned>& h_id,
+                                       std::vector<unsigned>& l_id,
+                                       std::vector<unsigned>& h_id,
                                        unsigned& actual_n_ind)
 {
   if (is_last_pass_) {
-    vcl_cerr << " pass 1 check whether we have last_pass is NOT implemented yet ...\n";
+    std::cerr << " pass 1 check whether we have last_pass is NOT implemented yet ...\n";
     return false;
   }
   else
@@ -623,20 +627,20 @@ bool boxm2_volm_matcher_p1::fill_index(unsigned const& n_ind,
             //ind_combine_->get_next(values_combine, layer_size);
             cnt++;
 #if 0
-            vcl_cout << "=> leaf_id = " << li
+            std::cout << "=> leaf_id = " << li
                      << ", hypo_id = " << leaves_[li]->hyps_->current_-1
-                     << ", h_pt = " << h_pt << vcl_endl;
+                     << ", h_pt = " << h_pt << std::endl;
 #endif
             l_id.push_back(li);  h_id.push_back(leaves_[li]->hyps_->current_-1);
           }
           else {                                       // having candidate list but current hypo is outside candidate list --> ignore
-            vcl_vector<unsigned char> values(layer_size);
-            vcl_vector<unsigned char> values_ori(layer_size);
-            vcl_vector<unsigned char> values_lnd(layer_size);
+            std::vector<unsigned char> values(layer_size);
+            std::vector<unsigned char> values_ori(layer_size);
+            std::vector<unsigned char> values_lnd(layer_size);
             ind_->get_next(values);
             ind_orient_->get_next(values_ori);
             ind_label_->get_next(values_lnd);
-            //vcl_vector<unsigned char> values_combine(layer_size);
+            //std::vector<unsigned char> values_combine(layer_size);
             //ind_combine_->get_next(values_combine);
           }
         }
@@ -671,7 +675,7 @@ bool boxm2_volm_matcher_p1::fill_index(unsigned const& n_ind,
             //ind_label_->finalize();
             //ind_combine_->initialize_read(leaves_[li+1]->get_label_index_name(file_name_pre_.str(), "combined"));
 #if 0
-            vcl_cerr << " leaf = " << li+1 << ", combine_file = " << leaves_[li+1]->get_label_index_name(file_name_pre_.str(), "combined") << '\n';
+            std::cerr << " leaf = " << li+1 << ", combine_file = " << leaves_[li+1]->get_label_index_name(file_name_pre_.str(), "combined") << '\n';
 #endif
           }
         }
@@ -694,7 +698,7 @@ bool boxm2_volm_matcher_p1::is_leaf_finish(unsigned const& leaf_id)
 // execute kernel with orientation considered
 bool boxm2_volm_matcher_p1::execute_matcher_kernel_orient(bocl_device_sptr                  device,
                                                           cl_command_queue&                  queue,
-                                                          vcl_vector<bocl_kernel*>        kern_vec,
+                                                          std::vector<bocl_kernel*>        kern_vec,
                                                           bocl_mem*                  n_ind_cl_mem_,
                                                           bocl_mem*                  index_cl_mem_,
                                                           bocl_mem*           index_orient_cl_mem_,
@@ -706,10 +710,10 @@ bool boxm2_volm_matcher_p1::execute_matcher_kernel_orient(bocl_device_sptr      
   cl_int status;
   unsigned debug_size = 100;
   float* debug_buff_ = new float[debug_size];
-  vcl_fill(debug_buff_, debug_buff_+debug_size, (float)12.31);
+  std::fill(debug_buff_, debug_buff_+debug_size, (float)12.31);
   bocl_mem* debug_cl_mem_ = new bocl_mem(gpu_->context(), debug_buff_, sizeof(float)*debug_size, " debug ");
   if (!debug_cl_mem_->create_buffer( CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR )) {
-    vcl_cerr << "\n ERROR: creating bocl_mem failed for DEBUG\n";
+    std::cerr << "\n ERROR: creating bocl_mem failed for DEBUG\n";
     delete debug_cl_mem_;     delete [] debug_buff_;
     return false;
   }
@@ -718,7 +722,7 @@ bool boxm2_volm_matcher_p1::execute_matcher_kernel_orient(bocl_device_sptr      
   // choose whether kernel to use
   if (is_grd_reg_ && is_sky_reg_) {              // both sky and ground
 #if 0
-    vcl_cout << "\t using both sky and grd kernel with orientatl attribute" << vcl_endl;
+    std::cout << "\t using both sky and grd kernel with orientatl attribute" << std::endl;
 #endif
     kern = kern_vec[0];
     // set up argument list
@@ -732,7 +736,7 @@ bool boxm2_volm_matcher_p1::execute_matcher_kernel_orient(bocl_device_sptr      
   }
   else if ( !is_grd_reg_ && is_sky_reg_) {     // no ground but sky
 #if 0
-    vcl_cout << "\t using NO grd kernel with orientation attribute" << vcl_endl;
+    std::cout << "\t using NO grd kernel with orientation attribute" << std::endl;
 #endif
     kern = kern_vec[1];
     // set up argument list
@@ -742,7 +746,7 @@ bool boxm2_volm_matcher_p1::execute_matcher_kernel_orient(bocl_device_sptr      
 
 #if 0
     // check the global memory
-    vcl_cerr << " ------------ INSIDE execute_kernel -------------------------------\n"
+    std::cerr << " ------------ INSIDE execute_kernel -------------------------------\n"
              << " n_cam_cl_mem = " << n_cam_cl_mem_->num_bytes() << '\n'
              << " n_obj_cl_mem = " << n_obj_cl_mem_->num_bytes() << '\n'
              << " sky_id_cl_mem_ = " << sky_id_cl_mem_->num_bytes() << '\n'
@@ -752,7 +756,7 @@ bool boxm2_volm_matcher_p1::execute_matcher_kernel_orient(bocl_device_sptr      
   }
   else if (  is_grd_reg_ && !is_sky_reg_) {    // no sky but ground
 #if 0
-    vcl_cout << "\t using NO sky kernel with orientation attribute" << vcl_endl;
+    std::cout << "\t using NO sky kernel with orientation attribute" << std::endl;
 #endif
     kern = kern_vec[2];
     // set up argument list
@@ -765,7 +769,7 @@ bool boxm2_volm_matcher_p1::execute_matcher_kernel_orient(bocl_device_sptr      
   }
   else {                                       // neither sky nor ground
 #if 0
-    vcl_cout << "\t using NO grd NOR sky kernel" << vcl_endl;
+    std::cout << "\t using NO grd NOR sky kernel" << std::endl;
 #endif
     kern = kern_vec[3];
     kern->set_arg(n_cam_cl_mem_);
@@ -805,7 +809,7 @@ bool boxm2_volm_matcher_p1::execute_matcher_kernel_orient(bocl_device_sptr      
   kern->set_local_arg((*depth_length_buff_)*sizeof(float));   // local memory for depth_interval table
 
 #if 0
-  vcl_cerr << " obj_id = " << obj_id_cl_mem_->num_bytes() << '\n'
+  std::cerr << " obj_id = " << obj_id_cl_mem_->num_bytes() << '\n'
            << " obj_offset = " << obj_id_offset_cl_mem_->num_bytes() << '\n'
            << " obj_min_dist = " << obj_min_dist_cl_mem_->num_bytes() << '\n'
            << " obj_weight = " << obj_weight_cl_mem_->num_bytes() << '\n'
@@ -824,14 +828,14 @@ bool boxm2_volm_matcher_p1::execute_matcher_kernel_orient(bocl_device_sptr      
 
   // execute kernel
   if (!kern->execute(queue, work_dim_, local_threads_, global_threads_)) {
-    vcl_cerr << "\n ERROR: kernel execution failed\n";
+    std::cerr << "\n ERROR: kernel execution failed\n";
     delete debug_cl_mem_;
     delete debug_buff_;
     return false;
   }
   status = clFinish(queue);  // block to ensure kernel finishes
   if (status != 0) {
-    vcl_cerr << "\n ERROR: " << status << "  kernel matcher failed: " + error_to_string(status) << '\n';
+    std::cerr << "\n ERROR: " << status << "  kernel matcher failed: " + error_to_string(status) << '\n';
     return false;
   }
   // clear bocl_kernel argument list
@@ -842,7 +846,7 @@ bool boxm2_volm_matcher_p1::execute_matcher_kernel_orient(bocl_device_sptr      
   debug_cl_mem_->read_to_buffer(queue);
   unsigned i = 0;
   while ((debug_buff_[i]-12.31)*(debug_buff_[i]-12.31)>0.0001 && i < 1000) {
-    vcl_cout << " debug[" << i << "] = " << debug_buff_[i] << vcl_endl;
+    std::cout << " debug[" << i << "] = " << debug_buff_[i] << std::endl;
     i++;
   }
 #endif
@@ -885,11 +889,11 @@ bool boxm2_volm_matcher_p1::clean_weight_cl_mem()
 }
 
 // compile kernel
-bool boxm2_volm_matcher_p1::compile_kernel(vcl_vector<bocl_kernel*>& vec_kernels)
+bool boxm2_volm_matcher_p1::compile_kernel(std::vector<bocl_kernel*>& vec_kernels)
 {
   // declare the kernel source
-  vcl_vector<vcl_string> src_paths;
-  vcl_string volm_cl_source_dir = vcl_string(VCL_SOURCE_ROOT_DIR) + "/contrib/brl/bseg/boxm2/volm/cl/";
+  std::vector<std::string> src_paths;
+  std::string volm_cl_source_dir = std::string(VCL_SOURCE_ROOT_DIR) + "/contrib/brl/bseg/boxm2/volm/cl/";
   // add orientation kernels in
   src_paths.push_back(volm_cl_source_dir + "generalized_volm_obj_based_matching_with_orient.cl");
   src_paths.push_back(volm_cl_source_dir + "generalized_volm_obj_based_matching_no_grd_with_orient.cl");
@@ -946,7 +950,7 @@ bool boxm2_volm_matcher_p1::create_queue()
   return true;
 }
 
-bool boxm2_volm_matcher_p1::write_matcher_result(vcl_string const& tile_fname_bin, vcl_string const& tile_fname_txt)
+bool boxm2_volm_matcher_p1::write_matcher_result(std::string const& tile_fname_bin, std::string const& tile_fname_txt)
 {
   // write the output store binary as tile
   // write the scores out as binary
@@ -958,10 +962,10 @@ bool boxm2_volm_matcher_p1::write_matcher_result(vcl_string const& tile_fname_bi
   unsigned all_loc = (unsigned)score_all_.size();
   for (unsigned i = 0; i < all_loc; i++) {
     volm_score_sptr score = score_all_[i];
-    vcl_vector<unsigned> cam_ids = score->cam_id_;
+    std::vector<unsigned> cam_ids = score->cam_id_;
     // write the txt output
-    vcl_ofstream txt_ofs(tile_fname_txt.c_str(), vcl_ios_app);
-    txt_ofs << vcl_setprecision(6) << score->leaf_id_ << ' ' << score->hypo_id_ << ' ' << score->max_score_ << ' ' << score->max_cam_id_ << '\n';
+    std::ofstream txt_ofs(tile_fname_txt.c_str(), std::ios::app);
+    txt_ofs << std::setprecision(6) << score->leaf_id_ << ' ' << score->hypo_id_ << ' ' << score->max_score_ << ' ' << score->max_cam_id_ << '\n';
     for (unsigned jj = 0; jj < cam_ids.size(); jj++)
       txt_ofs << ' ' << cam_ids[jj];
     txt_ofs << '\n';
@@ -970,23 +974,23 @@ bool boxm2_volm_matcher_p1::write_matcher_result(vcl_string const& tile_fname_bi
   return true;
 }
 
-bool boxm2_volm_matcher_p1::write_matcher_result(vcl_string const& tile_fname_bin)
+bool boxm2_volm_matcher_p1::write_matcher_result(std::string const& tile_fname_bin)
 {
   volm_score::write_scores(score_all_, tile_fname_bin);
   return true;
 }
 
 // write the score for all cameras whose score higher than threshold
-bool boxm2_volm_matcher_p1::write_gt_cam_score(unsigned const& leaf_id, unsigned const& hypo_id, vcl_string const& out_fname)
+bool boxm2_volm_matcher_p1::write_gt_cam_score(unsigned const& leaf_id, unsigned const& hypo_id, std::string const& out_fname)
 {
-  vcl_ofstream ofs(out_fname.c_str());
+  std::ofstream ofs(out_fname.c_str());
   for (unsigned i = 0; i < score_cam_.size(); i++) {
     if (score_cam_[i].l_id_ == leaf_id && score_cam_[i].h_id_ == hypo_id) {
       ofs << score_cam_[i].l_id_ << ' ' << score_cam_[i].h_id_ << '\n';
-      vcl_vector<unsigned> cam_ids = score_cam_[i].cam_id_;
-      vcl_vector<float> cam_scores = score_cam_[i].cam_score_;
+      std::vector<unsigned> cam_ids = score_cam_[i].cam_id_;
+      std::vector<float> cam_scores = score_cam_[i].cam_score_;
       for (unsigned jj = 0; jj < cam_ids.size(); jj++) {
-        ofs << vcl_setprecision(6) << cam_ids[jj] << ' ' << cam_scores[jj] << ' ' << query_->get_cam_string(cam_ids[jj]) << '\n';
+        ofs << std::setprecision(6) << cam_ids[jj] << ' ' << cam_scores[jj] << ' ' << query_->get_cam_string(cam_ids[jj]) << '\n';
       }
       return true;
     }
@@ -998,11 +1002,11 @@ bool boxm2_volm_matcher_p1::write_gt_cam_score(unsigned const& leaf_id, unsigned
 bool boxm2_volm_matcher_p1::transfer_query()
 {
   if ( !is_grd_reg_ && !is_sky_reg_ && !is_obj_reg_ ) {
-    vcl_cerr << "\n ERROR: no depth_map_region defined in query image, check the labelme.xml\n";
+    std::cerr << "\n ERROR: no depth_map_region defined in query image, check the labelme.xml\n";
     return false;
   }
   if (!is_obj_reg_) {
-    vcl_cerr << "\n ERROR: current pass 01 matcher is not able to match query without any non_grd, non_sky object, add at least one in the labelme.xml\n";
+    std::cerr << "\n ERROR: current pass 01 matcher is not able to match query without any non_grd, non_sky object, add at least one in the labelme.xml\n";
     return false;
   }
 
@@ -1011,7 +1015,7 @@ bool boxm2_volm_matcher_p1::transfer_query()
 
   // transfer weight parameter from volm_weights
   if (!this->transfer_weight()) {
-    vcl_cerr << "\n ERROR: failed when transferring volm_weight parameters to 1D weight buffer\n";
+    std::cerr << "\n ERROR: failed when transferring volm_weight parameters to 1D weight buffer\n";
     return false;
   }
 
@@ -1023,8 +1027,8 @@ bool boxm2_volm_matcher_p1::transfer_query()
     grd_dist_buff_ = new unsigned char[grd_vox_size];
     grd_id_offset_buff_ = new unsigned[*n_cam_+1];
     unsigned grd_count = 0;
-    vcl_vector<vcl_vector<unsigned> >& grd_id = query_->ground_id();
-    vcl_vector<vcl_vector<unsigned char> >& grd_dist = query_->ground_dist();
+    std::vector<std::vector<unsigned> >& grd_id = query_->ground_id();
+    std::vector<std::vector<unsigned char> >& grd_dist = query_->ground_dist();
     for (unsigned cam_id = 0; cam_id < *n_cam_; cam_id++) {
       grd_id_offset_buff_[cam_id] = grd_count;
       for (unsigned vox_id = 0; vox_id < grd_id[cam_id].size(); vox_id++) {
@@ -1039,8 +1043,8 @@ bool boxm2_volm_matcher_p1::transfer_query()
     // construct grd_land_buff and grd_land_wgt_buff
     grd_land_buff_ = new unsigned char[grd_vox_size*fallback_size_];
     grd_land_wgt_buff_ = new float[grd_vox_size*fallback_size_];
-    vcl_vector<vcl_vector<vcl_vector<unsigned char> > > grd_land = query_->ground_land_id();
-    vcl_vector<vcl_vector<vcl_vector<float> > > grd_land_wgt = query_->ground_land_wgt();
+    std::vector<std::vector<std::vector<unsigned char> > > grd_land = query_->ground_land_id();
+    std::vector<std::vector<std::vector<float> > > grd_land_wgt = query_->ground_land_wgt();
     unsigned cnt = 0;
     for (unsigned cam_id = 0; cam_id < *n_cam_; cam_id++)
       for (unsigned vox_id = 0; vox_id < grd_land[cam_id].size(); vox_id++)
@@ -1051,44 +1055,44 @@ bool boxm2_volm_matcher_p1::transfer_query()
 
 #if 0
     // check the grd_land_buff and grd_land_wgt_buff_
-    vcl_cout << " ----------------- date in query ---------------" << vcl_endl;
+    std::cout << " ----------------- date in query ---------------" << std::endl;
     for (unsigned cam_id = 0; cam_id < *n_cam_; cam_id++) {
       for (unsigned vox_id = 0; vox_id < grd_land[cam_id].size(); vox_id++) {
-        vcl_cout << " cam_id = " << cam_id << ", vox_id = " << vox_id << " --> lnd_id = [";
-        for (vcl_vector<unsigned char>::iterator vit = grd_land[cam_id][vox_id].begin(); vit != grd_land[cam_id][vox_id].end(); ++vit)
-          vcl_cout << (int)(*vit) << ' ';
-        vcl_cout << "] ---> lnd_wgt = [";
-        for (vcl_vector<float>::iterator vit = grd_land_wgt[cam_id][vox_id].begin(); vit != grd_land_wgt[cam_id][vox_id].end(); ++vit)
-          vcl_cout << *vit << ' ';
-        vcl_cout << ']' << vcl_endl;
+        std::cout << " cam_id = " << cam_id << ", vox_id = " << vox_id << " --> lnd_id = [";
+        for (std::vector<unsigned char>::iterator vit = grd_land[cam_id][vox_id].begin(); vit != grd_land[cam_id][vox_id].end(); ++vit)
+          std::cout << (int)(*vit) << ' ';
+        std::cout << "] ---> lnd_wgt = [";
+        for (std::vector<float>::iterator vit = grd_land_wgt[cam_id][vox_id].begin(); vit != grd_land_wgt[cam_id][vox_id].end(); ++vit)
+          std::cout << *vit << ' ';
+        std::cout << ']' << std::endl;
       }
     }
 
-    vcl_cout << " ++++++++++++++++++ date in 1D buffer ++++++++++++++" << vcl_endl;
+    std::cout << " ++++++++++++++++++ date in 1D buffer ++++++++++++++" << std::endl;
     for (unsigned cam_id = 0; cam_id < *n_cam_; cam_id++) {
       /*unsigned land_start = grd_id_offset_buff_[cam_id] * 4;
       unsigned land_end = grd_id_offset_buff_[cam_id+1] * 4;*/
       unsigned vox_start = grd_id_offset_buff_[cam_id];
       unsigned vox_end = grd_id_offset_buff_[cam_id+1];
       for (unsigned vox_id = vox_start; vox_id < vox_end; vox_id++) {
-        vcl_cout << " in buffer, cam_id = " << cam_id << ", vox_global_id = " << vox_id << ", vox_id = " << vox_id - vox_start << " ---> lnd_id = [";
+        std::cout << " in buffer, cam_id = " << cam_id << ", vox_global_id = " << vox_id << ", vox_id = " << vox_id - vox_start << " ---> lnd_id = [";
         for (unsigned ii = 0; ii < fallback_size_; ii++) {
           unsigned lnd_id = vox_id * 4 + ii ;
-          vcl_cout << (int)grd_land_buff_[lnd_id] << ' ';
+          std::cout << (int)grd_land_buff_[lnd_id] << ' ';
         }
-        vcl_cout << "] ---> lnd_wgt = [";
+        std::cout << "] ---> lnd_wgt = [";
         for (unsigned ii = 0; ii < fallback_size_; ii++) {
           unsigned lnd_id = vox_id * 4 + ii;
-          vcl_cout << grd_land_wgt_buff_[lnd_id] << ' ';
+          std::cout << grd_land_wgt_buff_[lnd_id] << ' ';
         }
-        vcl_cout << ']' << vcl_endl;
+        std::cout << ']' << std::endl;
       }
     }
 #endif
 
     grd_id_cl_mem_ = new bocl_mem(gpu_->context(), grd_id_buff_, sizeof(unsigned)*grd_vox_size, " grd_id " );
     if (!grd_id_cl_mem_->create_buffer( CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR )) {
-      vcl_cerr << "\n ERROR: creating bocl_mem failed for GROUND_ID\n";
+      std::cerr << "\n ERROR: creating bocl_mem failed for GROUND_ID\n";
       this->clean_weight_cl_mem();
       delete n_cam_cl_mem_;   delete n_obj_cl_mem_;
       delete grd_id_cl_mem_;
@@ -1096,7 +1100,7 @@ bool boxm2_volm_matcher_p1::transfer_query()
     }
     grd_dist_cl_mem_ = new bocl_mem(gpu_->context(), grd_dist_buff_, sizeof(unsigned char)*grd_vox_size, " grd_dist " );
     if (!grd_dist_cl_mem_->create_buffer( CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR )) {
-      vcl_cerr << "\n ERROR: creating bocl_mem failed for GROUND_DIST\n";
+      std::cerr << "\n ERROR: creating bocl_mem failed for GROUND_DIST\n";
       this->clean_weight_cl_mem();
       delete n_cam_cl_mem_;   delete n_obj_cl_mem_;
       delete grd_id_cl_mem_;  delete grd_dist_cl_mem_;
@@ -1104,7 +1108,7 @@ bool boxm2_volm_matcher_p1::transfer_query()
     }
     grd_id_offset_cl_mem_ = new bocl_mem(gpu_->context(), grd_id_offset_buff_, sizeof(unsigned)*(*n_cam_+1), " grd_offset " );
     if (!grd_id_offset_cl_mem_->create_buffer( CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR )) {
-      vcl_cerr << "\n ERROR: creating bocl_mem failed for GROUND_OFFSET\n";
+      std::cerr << "\n ERROR: creating bocl_mem failed for GROUND_OFFSET\n";
       this->clean_weight_cl_mem();
       delete n_cam_cl_mem_;   delete n_obj_cl_mem_;
       delete grd_id_cl_mem_;  delete grd_dist_cl_mem_;  delete grd_id_offset_cl_mem_;
@@ -1112,7 +1116,7 @@ bool boxm2_volm_matcher_p1::transfer_query()
     }
     grd_land_cl_mem_ = new bocl_mem(gpu_->context(), grd_land_buff_, sizeof(unsigned char)*grd_vox_size*fallback_size_, " grd_lnd ");
     if (!grd_land_cl_mem_->create_buffer( CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR )) {
-      vcl_cerr << "\n ERROR: creating bocl_mem failed for GROUND_LAND\n";
+      std::cerr << "\n ERROR: creating bocl_mem failed for GROUND_LAND\n";
       this->clean_weight_cl_mem();
       delete n_cam_cl_mem_;   delete n_obj_cl_mem_;
       delete grd_id_cl_mem_;  delete grd_dist_cl_mem_;  delete grd_id_offset_cl_mem_;
@@ -1121,7 +1125,7 @@ bool boxm2_volm_matcher_p1::transfer_query()
     }
     grd_land_wgt_cl_mem_ = new bocl_mem(gpu_->context(), grd_land_wgt_buff_, sizeof(float)*grd_vox_size*fallback_size_, " grd_lnd_wgt ");
     if (!grd_land_wgt_cl_mem_->create_buffer( CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR )) {
-      vcl_cerr << "\n ERROR: creating bocl_mem failed for GROUND_LAND_WGT\n";
+      std::cerr << "\n ERROR: creating bocl_mem failed for GROUND_LAND_WGT\n";
       this->clean_weight_cl_mem();
       delete n_cam_cl_mem_;    delete n_obj_cl_mem_;
       delete grd_id_cl_mem_;   delete grd_dist_cl_mem_;  delete grd_id_offset_cl_mem_;
@@ -1141,7 +1145,7 @@ bool boxm2_volm_matcher_p1::transfer_query()
     sky_id_buff_ = new unsigned[sky_vox_size];
     sky_id_offset_buff_ = new unsigned[*n_cam_+1];
     unsigned sky_count = 0;
-    vcl_vector<vcl_vector<unsigned> >& sky_id = query_->sky_id();
+    std::vector<std::vector<unsigned> >& sky_id = query_->sky_id();
     for (unsigned cam_id = 0; cam_id < *n_cam_; cam_id++) {
       sky_id_offset_buff_[cam_id] = sky_count;
       for (unsigned vox_id = 0; vox_id < sky_id[cam_id].size(); vox_id++) {
@@ -1154,7 +1158,7 @@ bool boxm2_volm_matcher_p1::transfer_query()
 
     sky_id_cl_mem_ = new bocl_mem(gpu_->context(), sky_id_buff_, sizeof(unsigned)*sky_vox_size, " sky_id " );
     if (!sky_id_cl_mem_->create_buffer( CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR )) {
-      vcl_cerr << "\n ERROR: creating bocl_mem failed for SKY_ID\n";
+      std::cerr << "\n ERROR: creating bocl_mem failed for SKY_ID\n";
       this->clean_weight_cl_mem();
       delete n_cam_cl_mem_;   delete n_obj_cl_mem_;
       if (is_grd_reg_) {
@@ -1166,7 +1170,7 @@ bool boxm2_volm_matcher_p1::transfer_query()
     }
     sky_id_offset_cl_mem_ = new bocl_mem(gpu_->context(), sky_id_offset_buff_, sizeof(unsigned)*(*n_cam_+1), " sky_offset " );
     if (!sky_id_offset_cl_mem_->create_buffer( CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR )) {
-      vcl_cerr << "\n ERROR: creating bocl_mem failed for SKY_OFFSET\n";
+      std::cerr << "\n ERROR: creating bocl_mem failed for SKY_OFFSET\n";
       this->clean_weight_cl_mem();
       delete n_cam_cl_mem_;   delete n_obj_cl_mem_;
       if (is_grd_reg_) {
@@ -1187,7 +1191,7 @@ bool boxm2_volm_matcher_p1::transfer_query()
     unsigned obj_offset_size = (*n_cam_) * (*n_obj_);
     obj_id_buff_ = new unsigned[obj_vox_size];
     obj_id_offset_buff_ = new unsigned[obj_offset_size+1];
-    vcl_vector<vcl_vector<vcl_vector<unsigned> > >& dist_id = query_->dist_id();
+    std::vector<std::vector<std::vector<unsigned> > >& dist_id = query_->dist_id();
     unsigned obj_count = 0;
     for (unsigned cam_id = 0; cam_id < *n_cam_; cam_id++) {
       for (unsigned obj_id = 0; obj_id < *n_obj_; obj_id++) {
@@ -1223,35 +1227,35 @@ bool boxm2_volm_matcher_p1::transfer_query()
 
 #if 0
     // check the constructed 1D obj_land_array
-    vcl_cout << " ---------------- in the volm_query -----------------" << vcl_endl;
+    std::cout << " ---------------- in the volm_query -----------------" << std::endl;
     for (unsigned obj_id = 0; obj_id < *n_obj_; obj_id++) {
-      vcl_cout << " obj_id = " << obj_id << " ---> lnd_id = [";
-      for (vcl_vector<unsigned char>::iterator vit = query_->obj_land_id()[obj_id].begin(); vit != query_->obj_land_id()[obj_id].end(); ++vit)
-        vcl_cout << (int)(*vit) << ' ';
-      vcl_cout << "] ---> lnd_wgt = [";
-      for (vcl_vector<float>::iterator vit = query_->obj_land_wgt()[obj_id].begin(); vit != query_->obj_land_wgt()[obj_id].end(); ++vit)
-        vcl_cout << *vit << ' ';
-      vcl_cout << ']' << vcl_endl;
+      std::cout << " obj_id = " << obj_id << " ---> lnd_id = [";
+      for (std::vector<unsigned char>::iterator vit = query_->obj_land_id()[obj_id].begin(); vit != query_->obj_land_id()[obj_id].end(); ++vit)
+        std::cout << (int)(*vit) << ' ';
+      std::cout << "] ---> lnd_wgt = [";
+      for (std::vector<float>::iterator vit = query_->obj_land_wgt()[obj_id].begin(); vit != query_->obj_land_wgt()[obj_id].end(); ++vit)
+        std::cout << *vit << ' ';
+      std::cout << ']' << std::endl;
     }
     // I am back
-    vcl_cout << " ++++++++++++++++ in the 1D array ++++++++++++++++++++++" << vcl_endl;
+    std::cout << " ++++++++++++++++ in the 1D array ++++++++++++++++++++++" << std::endl;
     for (unsigned k = 0; k < *n_obj_; k++) {
-      vcl_cout << " obj_id = " << k << " ---> lnd_id_buff = [";
+      std::cout << " obj_id = " << k << " ---> lnd_id_buff = [";
       unsigned land_start = k*fallback_size_;
       unsigned land_end = (k+1)*fallback_size_;
       for (unsigned ii = land_start; ii < land_end; ii++)
-        vcl_cout << (int)obj_land_buff_[ii] << ' ';
-      vcl_cout << "] ---> lnd_wgt_buff = [";
+        std::cout << (int)obj_land_buff_[ii] << ' ';
+      std::cout << "] ---> lnd_wgt_buff = [";
       for (unsigned ii = land_start; ii < land_end; ii++)
-        vcl_cout << obj_land_wgt_buff_[ii] << ' ';
-      vcl_cout << ']' << vcl_endl;
+        std::cout << obj_land_wgt_buff_[ii] << ' ';
+      std::cout << ']' << std::endl;
     }
 #endif
 
     // create corresponding cl_mem
     obj_id_cl_mem_ = new bocl_mem(gpu_->context(), obj_id_buff_, sizeof(unsigned)*obj_vox_size, " obj_id " );
     if (!obj_id_cl_mem_->create_buffer( CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR )) {
-      vcl_cerr << "\n ERROR: creating bocl_mem failed for OBJ_ID\n";
+      std::cerr << "\n ERROR: creating bocl_mem failed for OBJ_ID\n";
       this->clean_weight_cl_mem();
       delete n_cam_cl_mem_;   delete n_obj_cl_mem_;
       if (is_grd_reg_) {
@@ -1264,7 +1268,7 @@ bool boxm2_volm_matcher_p1::transfer_query()
     }
     obj_id_offset_cl_mem_ = new bocl_mem(gpu_->context(), obj_id_offset_buff_, sizeof(unsigned)*(obj_offset_size+1), " obj_offset " );
     if (!obj_id_offset_cl_mem_->create_buffer( CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR )) {
-      vcl_cerr << "\n ERROR: creating bocl_mem failed for OBJ_OFFSET\n";
+      std::cerr << "\n ERROR: creating bocl_mem failed for OBJ_OFFSET\n";
       this->clean_weight_cl_mem();
       delete n_cam_cl_mem_;   delete n_obj_cl_mem_;
       if (is_grd_reg_) {
@@ -1277,7 +1281,7 @@ bool boxm2_volm_matcher_p1::transfer_query()
     }
     obj_min_dist_cl_mem_ = new bocl_mem(gpu_->context(), obj_min_dist_buff_, sizeof(unsigned char)*(*n_obj_), " obj_min_dist " );
     if (!obj_min_dist_cl_mem_->create_buffer( CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR )) {
-      vcl_cerr << "\n ERROR: creating bocl_mem failed for OBJ_MIN_DIST\n";
+      std::cerr << "\n ERROR: creating bocl_mem failed for OBJ_MIN_DIST\n";
       this->clean_weight_cl_mem();
       delete n_cam_cl_mem_;         delete n_obj_cl_mem_;
       if (is_grd_reg_) {
@@ -1291,7 +1295,7 @@ bool boxm2_volm_matcher_p1::transfer_query()
     }
     obj_order_cl_mem_ = new bocl_mem(gpu_->context(), obj_order_buff_, sizeof(unsigned char)*(*n_obj_), " obj_order " );
     if (!obj_order_cl_mem_->create_buffer( CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR )) {
-      vcl_cerr << "\n ERROR: creating bocl_mem failed for OBJ_ORDER\n";
+      std::cerr << "\n ERROR: creating bocl_mem failed for OBJ_ORDER\n";
       this->clean_weight_cl_mem();
       delete n_cam_cl_mem_;         delete n_obj_cl_mem_;
       if (is_grd_reg_) {
@@ -1305,7 +1309,7 @@ bool boxm2_volm_matcher_p1::transfer_query()
     }
     obj_land_cl_mem_ = new bocl_mem(gpu_->context(), obj_land_buff_, sizeof(unsigned char)*(*n_obj_)*fallback_size_, " obj_land " );
     if (!obj_land_cl_mem_->create_buffer( CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR )) {
-      vcl_cerr << "\n ERROR: creating bocl_mem failed for OBJ_LAND\n";
+      std::cerr << "\n ERROR: creating bocl_mem failed for OBJ_LAND\n";
       this->clean_weight_cl_mem();
       delete n_cam_cl_mem_;         delete n_obj_cl_mem_;
       if (is_grd_reg_) {
@@ -1320,7 +1324,7 @@ bool boxm2_volm_matcher_p1::transfer_query()
     }
     obj_land_wgt_cl_mem_ = new bocl_mem(gpu_->context(), obj_land_wgt_buff_, sizeof(float)*(*n_obj_)*fallback_size_, " obj_land_wgt ");
     if (!obj_land_wgt_cl_mem_->create_buffer( CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR )) {
-      vcl_cerr << "\n ERROR: creating bocl_mem failed for OBJ_LAND_WGT\n";
+      std::cerr << "\n ERROR: creating bocl_mem failed for OBJ_LAND_WGT\n";
       this->clean_weight_cl_mem();
       delete n_cam_cl_mem_;         delete n_obj_cl_mem_;
       if (is_grd_reg_) {
@@ -1343,7 +1347,7 @@ bool boxm2_volm_matcher_p1::transfer_query()
 
   // implement orientation transfer function
   if (!this->transfer_orient()) {
-    vcl_cerr << " ERROR: transferring query orientation failed\n";
+    std::cerr << " ERROR: transferring query orientation failed\n";
     return false;
   }
 
@@ -1361,14 +1365,14 @@ bool boxm2_volm_matcher_p1::transfer_query()
   device_local_mem_ = (gpu_->info()).total_local_memory_;
 
   if (query_global_mem_ > device_global_mem_) {
-    vcl_cerr << " ERROR: the required global memory for query "  << query_global_mem_/1073741824.0
+    std::cerr << " ERROR: the required global memory for query "  << query_global_mem_/1073741824.0
              << " GByte is larger than available global memory " << device_global_mem_/1073741824.0
              << " GB\n";
     this->clean_query_cl_mem();
     return false;
   }
   if (query_local_mem_ > device_local_mem_) {
-    vcl_cerr << " ERROR: the required local memory for query " << query_local_mem_/1024.0
+    std::cerr << " ERROR: the required local memory for query " << query_local_mem_/1024.0
              << " KByte is larger than available local memory " << device_local_mem_/1024.0
              << " KB\n";
     this->clean_query_cl_mem();
@@ -1384,7 +1388,7 @@ bool boxm2_volm_matcher_p1::transfer_orient()
   // depth_map_region::FRONT_PARALLEL, SLANTED_RIGHT, SLANTED_LEFT --- vertical --- ori = 2
   // all other defined orientation in depth_map_scene (query) --- invalid --- ori = 0
 
-  vcl_vector<unsigned char>& obj_orient = query_->obj_orient();
+  std::vector<unsigned char>& obj_orient = query_->obj_orient();
   obj_orient_buff_ = new unsigned char[*n_obj_];
   for (unsigned i = 0; i < *n_obj_; i++) {
     if (obj_orient[i] == depth_map_region::HORIZONTAL)
@@ -1399,14 +1403,14 @@ bool boxm2_volm_matcher_p1::transfer_orient()
 #if 0
   // check the transferred orientation
   for (unsigned i = 0; i < *n_obj_; i++) {
-    vcl_cout << " i = " << i << ", query_orient = "  << (int)obj_orient[i]
-             << ", orient_buff = " << (int)obj_orient_buff_[i] << vcl_endl;
+    std::cout << " i = " << i << ", query_orient = "  << (int)obj_orient[i]
+             << ", orient_buff = " << (int)obj_orient_buff_[i] << std::endl;
   }
 #endif
   // declare cl_mem for orient
   obj_orient_cl_mem_ = new bocl_mem(gpu_->context(), obj_orient_buff_, sizeof(unsigned char)*(*n_obj_), " obj_orient ");
   if (!obj_orient_cl_mem_->create_buffer( CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR )) {
-    vcl_cerr << "\n ERROR: creating bocl_mem failed for OBJ_ORIENT\n";
+    std::cerr << "\n ERROR: creating bocl_mem failed for OBJ_ORIENT\n";
     this->clean_query_cl_mem();
     return false;
   }
@@ -1425,7 +1429,7 @@ bool boxm2_volm_matcher_p1::transfer_weight()
   if (is_sky_reg_ && is_grd_reg_)
   {
     if (this->weights_.size() != (2+(*n_obj_)) ) {
-      vcl_cerr << "\n ERROR: inconsistency between volm_query and volm_weight\n";
+      std::cerr << "\n ERROR: inconsistency between volm_query and volm_weight\n";
       return false;
     }
     // sky is line 1, grd is line 2
@@ -1450,21 +1454,21 @@ bool boxm2_volm_matcher_p1::transfer_weight()
     // create cl_mem for sky and ground
     sky_weight_cl_mem_ = new bocl_mem(gpu_->context(), sky_weight_buff_, sizeof(float), " sky_weight " );
     if (!sky_weight_cl_mem_->create_buffer( CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR )) {
-      vcl_cerr << "\n ERROR: creating bocl_mem failed for SKY_WEIGHT\n";
+      std::cerr << "\n ERROR: creating bocl_mem failed for SKY_WEIGHT\n";
       delete n_cam_cl_mem_;   delete n_obj_cl_mem_;
       delete sky_weight_cl_mem_;
       return false;
     }
     grd_weight_cl_mem_ = new bocl_mem(gpu_->context(), grd_weight_buff_, sizeof(float), " grd_weight " );
     if (!grd_weight_cl_mem_->create_buffer( CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR )) {
-      vcl_cerr << "\n ERROR: create bocl_mem failed for GRD_WEIGHT\n";
+      std::cerr << "\n ERROR: create bocl_mem failed for GRD_WEIGHT\n";
       delete sky_weight_cl_mem_;
       delete grd_weight_cl_mem_;
       return false;
     }
     grd_wgt_attri_cl_mem_ = new bocl_mem(gpu_->context(), grd_wgt_attri_buff_, 3*sizeof(float), " grd_wgt_attri " );
     if (!grd_wgt_attri_cl_mem_->create_buffer( CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR )) {
-      vcl_cerr << "\n ERROR: create bocl_mem failed for GRD_WGT_ATTRI\n";
+      std::cerr << "\n ERROR: create bocl_mem failed for GRD_WGT_ATTRI\n";
       delete sky_weight_cl_mem_;
       delete grd_weight_cl_mem_;  delete grd_wgt_attri_cl_mem_;
       return false;
@@ -1480,8 +1484,8 @@ bool boxm2_volm_matcher_p1::transfer_weight()
   }
   else if (is_sky_reg_)
   {
-    for (vcl_vector<volm_weight>::iterator vit = this->weights_.begin(); vit != this->weights_.end(); ++vit)
-      vcl_cerr << ' ' << vit->w_typ_
+    for (std::vector<volm_weight>::iterator vit = this->weights_.begin(); vit != this->weights_.end(); ++vit)
+      std::cerr << ' ' << vit->w_typ_
                << ' ' << vit->w_ori_
                << ' ' << vit->w_lnd_
                << ' ' << vit->w_dst_
@@ -1489,7 +1493,7 @@ bool boxm2_volm_matcher_p1::transfer_weight()
                << ' ' << vit->w_obj_ << '\n';
 
     if (this->weights_.size() != (1+(*n_obj_)) ) {
-      vcl_cerr << "\n ERROR: inconsistency between volm_query and volm_weight\n";
+      std::cerr << "\n ERROR: inconsistency between volm_query and volm_weight\n";
       return false;
     }
     // sky is line 1, all other objects starts from line 2
@@ -1508,7 +1512,7 @@ bool boxm2_volm_matcher_p1::transfer_weight()
     // create cl_mem for sky
     sky_weight_cl_mem_ = new bocl_mem(gpu_->context(), sky_weight_buff_, sizeof(float), " sky_weight " );
     if (!sky_weight_cl_mem_->create_buffer( CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR )) {
-      vcl_cerr << "\n ERROR: creating bocl_mem failed for SKY_WEIGHT\n";
+      std::cerr << "\n ERROR: creating bocl_mem failed for SKY_WEIGHT\n";
       delete n_cam_cl_mem_;   delete n_obj_cl_mem_;
       delete sky_weight_cl_mem_;
       return false;
@@ -1523,7 +1527,7 @@ bool boxm2_volm_matcher_p1::transfer_weight()
   else if (is_grd_reg_)
   {
     if (this->weights_.size() != (1+(*n_obj_)) ) {
-      vcl_cerr << "\n ERROR: inconsistency between volm_query and volm_weight\n";
+      std::cerr << "\n ERROR: inconsistency between volm_query and volm_weight\n";
       return false;
     }
     // grd is line 1, objects starts from line 2
@@ -1546,13 +1550,13 @@ bool boxm2_volm_matcher_p1::transfer_weight()
     // create cl_mem for ground
     grd_weight_cl_mem_ = new bocl_mem(gpu_->context(), grd_weight_buff_, sizeof(float), " grd_weight " );
     if (!grd_weight_cl_mem_->create_buffer( CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR )) {
-      vcl_cerr << "\n ERROR: create bocl_mem failed for GRD_WEIGHT\n";
+      std::cerr << "\n ERROR: create bocl_mem failed for GRD_WEIGHT\n";
       delete grd_weight_cl_mem_;
       return false;
     }
     grd_wgt_attri_cl_mem_ = new bocl_mem(gpu_->context(), grd_wgt_attri_buff_, 3*sizeof(float), " grd_wgt_attri " );
     if (!grd_wgt_attri_cl_mem_->create_buffer( CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR )) {
-      vcl_cerr << "\n ERROR: create bocl_mem failed for GRD_WGT_ATTRI\n";
+      std::cerr << "\n ERROR: create bocl_mem failed for GRD_WGT_ATTRI\n";
       delete grd_weight_cl_mem_;  delete grd_wgt_attri_cl_mem_;
       return false;
     }
@@ -1566,7 +1570,7 @@ bool boxm2_volm_matcher_p1::transfer_weight()
   else
   {
     if (this->weights_.size() != (*n_obj_) ) {
-      vcl_cerr << "\n ERROR: inconsistency between volm_query and volm_weight\n";
+      std::cerr << "\n ERROR: inconsistency between volm_query and volm_weight\n";
       return false;
     }
     // objects starts from line1
@@ -1587,7 +1591,7 @@ bool boxm2_volm_matcher_p1::transfer_weight()
   // create cl_mem for non sky/grd objects
   obj_weight_cl_mem_ = new bocl_mem(gpu_->context(), obj_weight_buff_, (*n_obj_)*sizeof(float), " obj_weight ");
   if (!obj_weight_cl_mem_->create_buffer( CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR )) {
-    vcl_cerr << "\n ERROR: create bocl_mem failed for OBJ_WEIGHT\n";
+    std::cerr << "\n ERROR: create bocl_mem failed for OBJ_WEIGHT\n";
     delete sky_weight_cl_mem_;
     delete grd_weight_cl_mem_;  delete grd_wgt_attri_cl_mem_;
     delete obj_weight_cl_mem_;
@@ -1596,7 +1600,7 @@ bool boxm2_volm_matcher_p1::transfer_weight()
 
   obj_wgt_attri_cl_mem_ = new bocl_mem(gpu_->context(), obj_wgt_attri_buff_, 4*(*n_obj_)*sizeof(float), " obj_wgt_attri " );
   if (!obj_wgt_attri_cl_mem_->create_buffer( CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR )) {
-    vcl_cerr << "\n ERROR: create bocl_mem failed for OBJ_WGT_ATTRI\n";
+    std::cerr << "\n ERROR: create bocl_mem failed for OBJ_WGT_ATTRI\n";
     delete sky_weight_cl_mem_;
     delete grd_weight_cl_mem_;  delete grd_wgt_attri_cl_mem_;
     delete obj_weight_cl_mem_;  delete obj_wgt_attri_cl_mem_;
@@ -1605,42 +1609,42 @@ bool boxm2_volm_matcher_p1::transfer_weight()
 
 #if 0
   // screen output
-  vcl_cout << " we have weight parameters in p1_matcher as follows" << vcl_endl;
-  for (vcl_vector<volm_weight>::iterator vit = this->weights_.begin(); vit != this->weights_.end(); ++vit)
-    vcl_cout << ' '
+  std::cout << " we have weight parameters in p1_matcher as follows" << std::endl;
+  for (std::vector<volm_weight>::iterator vit = this->weights_.begin(); vit != this->weights_.end(); ++vit)
+    std::cout << ' '
              << vit->w_typ_ << ' '
              << vit->w_ori_ << ' '
              << vit->w_lnd_ << ' '
              << vit->w_dst_ << ' '
              << vit->w_ord_ << ' '
-             << vit->w_obj_ << vcl_endl;
+             << vit->w_obj_ << std::endl;
 
-  vcl_cout << " ---------------- WEIGHT BUFFER ------------------" << vcl_endl;
+  std::cout << " ---------------- WEIGHT BUFFER ------------------" << std::endl;
   if (is_sky_reg_ && is_grd_reg_) {
-    vcl_cout << " sky 0.0 0.0 1.0 0.0 " << *sky_weight_buff_
+    std::cout << " sky 0.0 0.0 1.0 0.0 " << *sky_weight_buff_
              << "\n ground "
              << grd_wgt_attri_buff_[0] << ' '
              << grd_wgt_attri_buff_[1] << ' '
              << grd_wgt_attri_buff_[2]
-             << " 0.0 " << *grd_weight_buff_ << vcl_endl;
+             << " 0.0 " << *grd_weight_buff_ << std::endl;
   }
   else if (is_sky_reg_) {
-    vcl_cout << " sky 0.0 0.0 1.0 0.0 " << *sky_weight_buff_ << vcl_endl;
+    std::cout << " sky 0.0 0.0 1.0 0.0 " << *sky_weight_buff_ << std::endl;
   }
   else if (is_grd_reg_) {
-    vcl_cout << " ground "
+    std::cout << " ground "
              << grd_wgt_attri_buff_[0] << ' '
              << grd_wgt_attri_buff_[1] << ' '
              << grd_wgt_attri_buff_[2]
-             << " 0.0 " << *grd_weight_buff_ << vcl_endl;
+             << " 0.0 " << *grd_weight_buff_ << std::endl;
   }
   for (unsigned i = 0; i < (*n_obj_); i++) {
-    vcl_cout << " object "
+    std::cout << " object "
              << obj_wgt_attri_buff_[i*4] << ' '
              << obj_wgt_attri_buff_[i*4+1] << ' '
              << obj_wgt_attri_buff_[i*4+2] << ' '
              << obj_wgt_attri_buff_[i*4+3] << ' '
-             << obj_weight_buff_[i] << vcl_endl;
+             << obj_weight_buff_[i] << std::endl;
   }
 #endif
 
@@ -1654,7 +1658,7 @@ bool boxm2_volm_matcher_p1::volm_matcher_p1_test_ori(unsigned n_ind,
                                                      float* score_buff,
                                                      float* mu_buff)
 {
-  vcl_vector<float> mu;
+  std::vector<float> mu;
   unsigned nc = *n_cam_;
   unsigned no = *n_obj_;
 
@@ -1684,7 +1688,7 @@ bool boxm2_volm_matcher_p1::volm_matcher_p1_test_ori(unsigned n_ind,
     }
   }
   // calculate sky score
-  vcl_vector<float> score_sky_all;
+  std::vector<float> score_sky_all;
   if (is_sky_reg_) {
     for (unsigned ind_id = 0; ind_id < n_ind; ind_id++) {
       unsigned start_ind = ind_id * (layer_size_);
@@ -1708,10 +1712,10 @@ bool boxm2_volm_matcher_p1::volm_matcher_p1_test_ori(unsigned n_ind,
   // the altitude ratio defined the tolerance for ground distance d as delta_d = alt_ratio * d
   // this delte_d could be in depth_interval unit ?
   unsigned char alt_ratio = 2;
-  vcl_vector<float> score_grd_all;
-  vcl_vector<float> score_grd_dist_all;
-  vcl_vector<float> score_grd_ori_all;
-  vcl_vector<float> score_grd_lnd_all;
+  std::vector<float> score_grd_all;
+  std::vector<float> score_grd_dist_all;
+  std::vector<float> score_grd_ori_all;
+  std::vector<float> score_grd_lnd_all;
   if (is_grd_reg_)
   {
     for (unsigned ind_id = 0; ind_id < n_ind; ind_id++) {
@@ -1765,10 +1769,10 @@ bool boxm2_volm_matcher_p1::volm_matcher_p1_test_ori(unsigned n_ind,
   }
 
   // calculate the object score
-  vcl_vector<float> score_ord_all;
-  vcl_vector<float> score_min_all;
-  vcl_vector<float> score_ori_all;
-  vcl_vector<float> score_lnd_all;
+  std::vector<float> score_ord_all;
+  std::vector<float> score_min_all;
+  std::vector<float> score_ori_all;
+  std::vector<float> score_lnd_all;
   if ( is_obj_reg_)
   {
     for (unsigned ind_id = 0; ind_id < n_ind; ind_id++)
@@ -1829,7 +1833,7 @@ bool boxm2_volm_matcher_p1::volm_matcher_p1_test_ori(unsigned n_ind,
               s_ori = 1;
             // check the land_type score
 #ifdef DEBUG
-            vcl_cout << (int)ind_lnd << vcl_endl;
+            std::cout << (int)ind_lnd << std::endl;
 #endif
             if (ind_lnd != 0 && ind_lnd != 254) {
               for (unsigned ii = lnd_start; ii < lnd_end; ii++) {
@@ -1850,12 +1854,12 @@ bool boxm2_volm_matcher_p1::volm_matcher_p1_test_ori(unsigned n_ind,
           score_ord_k = score_ord_k * obj_weight_buff_[k] * this->obj_wgt_attri_buff_[4*k+3];
 #if 1
           if (ind_id == 2 && cam_id == 90) {
-            vcl_cout << " ind_id = " << ind_id
+            std::cout << " ind_id = " << ind_id
                      << " cam_id = " << cam_id
                      << " k = " << k
                      << " num_rays = " << end_obj - start_obj
                      << " score_ord = " << score_ord_k
-                     << vcl_endl;
+                     << std::endl;
           }
 #endif
           // normalized the min_dist score for object k
@@ -1886,9 +1890,9 @@ bool boxm2_volm_matcher_p1::volm_matcher_p1_test_ori(unsigned n_ind,
   }
 
   // get the overall object score
-  vcl_vector<float> score_obj_all;
+  std::vector<float> score_obj_all;
   // get the overall score
-  vcl_vector<float> score_all;
+  std::vector<float> score_all;
   for (unsigned ind_id = 0; ind_id < n_ind; ind_id++) {
     for (unsigned cam_id = 0; cam_id < nc; cam_id++) {
       unsigned id = cam_id + ind_id * nc;
@@ -1910,7 +1914,7 @@ bool boxm2_volm_matcher_p1::volm_matcher_p1_test_ori(unsigned n_ind,
     for (unsigned cam_id = 0; cam_id < nc; cam_id++) {
       unsigned id = cam_id + ind_id * nc;
       if (cam_id == 0 && ind_id == 2)
-        vcl_cout << " ind_id = " << ind_id << " cam_id = " << cam_id
+        std::cout << " ind_id = " << ind_id << " cam_id = " << cam_id
                  //<< " score_sky[" << id << "] = " << score_sky_all[id]
                  << "\t score_grd[" << id << "] = " << score_grd_all[id]
                  << "\t score_grd_lnd[" << id << "] = " << score_grd_lnd_all[id]
@@ -1919,7 +1923,7 @@ bool boxm2_volm_matcher_p1::volm_matcher_p1_test_ori(unsigned n_ind,
                  << "\t score_ori[" << id << "] = " << score_ori_all[id]
                  << "\t score_lnd[" << id << "] = " << score_lnd_all[id]
                  << "\t score_obj[" << id << "] = " << score_ord_all[id] + score_min_all[id] + score_ori_all[id] + score_lnd_all[id]
-                 << vcl_endl;
+                 << std::endl;
     }
   }
 #endif
@@ -1933,7 +1937,7 @@ bool boxm2_volm_matcher_p1::volm_matcher_p1_test_ori(unsigned n_ind,
         unsigned id = obj_id + cam_id * no + ind_id * nc * no;
       //if ( mu[id] - mu_buff[id] != 0)
         if (ind_id == 2 && cam_id == 90) {
-          vcl_cout << " ind_id = " << ind_id
+          std::cout << " ind_id = " << ind_id
                    << " cam_id = " << cam_id
                    << " obj_id = " << obj_id
                    << " start_ind = " << start_ind
@@ -1941,7 +1945,7 @@ bool boxm2_volm_matcher_p1::volm_matcher_p1_test_ori(unsigned n_ind,
                    << " mu_cpu = " << mu[id]
                    << " mu_gpu = " << mu_buff[id]
                    << " mu_diff = " << mu[id] - mu_buff[id]
-                   << vcl_endl;
+                   << std::endl;
         }
       }
 #endif
@@ -1953,14 +1957,14 @@ bool boxm2_volm_matcher_p1::volm_matcher_p1_test_ori(unsigned n_ind,
       for (unsigned obj_id = 0; obj_id < no; obj_id++) {
         unsigned id = cam_id + ind_id * nc;
       //if ( mu[id] - mu_buff[id] != 0)
-        vcl_cout << " ind_id = " << ind_id
+        std::cout << " ind_id = " << ind_id
                  << " cam_id = " << cam_id
                  << " obj_id = " << obj_id
                  << " id = " << id
                  << "\t score_order = " << score_ord_all[id]
                  << "\t score_min = " << score_min_all[id]
                  << "\t score_ori = " << score_ori_all[id]
-                 << vcl_endl;
+                 << std::endl;
       }
 #endif
 
@@ -1969,11 +1973,11 @@ bool boxm2_volm_matcher_p1::volm_matcher_p1_test_ori(unsigned n_ind,
     for (unsigned cam_id = 0; cam_id < nc; cam_id++) {
       unsigned id = cam_id + ind_id * nc;
       if (ind_id == 2 && cam_id == 90)
-        vcl_cout << " ind = " << ind_id << " cam = " << cam_id << " id = " << id
+        std::cout << " ind = " << ind_id << " cam = " << cam_id << " id = " << id
                  << "\t score_cpu = " << score_all[id]
                  << "\t score_gpu = " << score_buff[id]
                  << "\t diff = " << score_all[id] - score_buff[id]
-                 << vcl_endl;
+                 << std::endl;
     }
   }
   return true;

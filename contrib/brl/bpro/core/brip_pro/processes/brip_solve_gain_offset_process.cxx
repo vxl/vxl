@@ -12,7 +12,7 @@ bool brip_solve_gain_offset_process_cons(bprb_func_process& pro)
 {
   //input image assumed to be in the range 0 - 1
   bool ok=false;
-  vcl_vector<vcl_string> input_types;
+  std::vector<std::string> input_types;
   input_types.push_back("vil_image_view_base_sptr"); // model image
   input_types.push_back("vil_image_view_base_sptr"); // test image
   input_types.push_back("vil_image_view_base_sptr"); // model mask
@@ -20,12 +20,12 @@ bool brip_solve_gain_offset_process_cons(bprb_func_process& pro)
   ok = pro.set_input_types(input_types);
   if (!ok) return ok;
 
-  vcl_vector<vcl_string> output_types;
+  std::vector<std::string> output_types;
   output_types.push_back("vil_image_view_base_sptr");  // mapped test image
   ok = pro.set_output_types(output_types);
   if (!ok) return ok;
 
-  brdb_value_sptr null = new brdb_value_t<vil_image_view_base_sptr>(0);
+  brdb_value_sptr null = new brdb_value_t<vil_image_view_base_sptr>(VXL_NULLPTR);
   // initialize mask inputs to null
   pro.set_input(2, null);
   pro.set_input(3, null);
@@ -38,7 +38,7 @@ bool brip_solve_gain_offset_process(bprb_func_process& pro)
 {
   // Sanity check
   if (!pro.verify_inputs()) {
-    vcl_cout << "brip_solve_gain_offset_process: Invalid inputs" << vcl_endl;
+    std::cout << "brip_solve_gain_offset_process: Invalid inputs" << std::endl;
     return false;
   }
 
@@ -82,7 +82,7 @@ bool brip_solve_gain_offset_constraints_process_cons(bprb_func_process& pro)
 {
     //input image assumed to be in the range 0 - 1
     bool ok = false;
-    vcl_vector<vcl_string> input_types;
+    std::vector<std::string> input_types;
     input_types.push_back("vil_image_view_base_sptr"); // model image
     input_types.push_back("vil_image_view_base_sptr"); // test image
     input_types.push_back("double"); // default lambda = 0 for no constraints and 1 for all constraints
@@ -91,12 +91,12 @@ bool brip_solve_gain_offset_constraints_process_cons(bprb_func_process& pro)
     ok = pro.set_input_types(input_types);
     if (!ok) return ok;
 
-    vcl_vector<vcl_string> output_types;
+    std::vector<std::string> output_types;
     output_types.push_back("vil_image_view_base_sptr");  // mapped test image
     ok = pro.set_output_types(output_types);
     if (!ok) return ok;
 
-    brdb_value_sptr null = new brdb_value_t<vil_image_view_base_sptr>(0);
+    brdb_value_sptr null = new brdb_value_t<vil_image_view_base_sptr>(VXL_NULLPTR);
     // initialize mask inputs to null
     pro.set_input(3, null);
     pro.set_input(4, null);
@@ -111,7 +111,7 @@ bool brip_solve_gain_offset_constraints_process(bprb_func_process& pro)
 {
     // Sanity check
     if (!pro.verify_inputs()) {
-        vcl_cout << "brip_solve_gain_offset_process: Invalid inputs" << vcl_endl;
+        std::cout << "brip_solve_gain_offset_process: Invalid inputs" << std::endl;
         return false;
     }
 

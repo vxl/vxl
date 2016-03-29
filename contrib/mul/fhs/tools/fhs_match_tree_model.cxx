@@ -17,6 +17,8 @@
 //  response_scale: 0.5
 // \endverbatim
 
+#include <iostream>
+#include <algorithm>
 #include <vul/vul_arg.h>
 #include <vimt/vimt_image_2d_of.h>
 #include <vimt/vimt_gaussian_pyramid_builder_2d.h>
@@ -25,7 +27,7 @@
 #include <mbl/mbl_read_props.h>
 #include <vil/vil_load.h>
 #include <vul/vul_string.h>
-#include <vcl_algorithm.h>
+#include <vcl_compiler.h>
 #include <vil/vil_save.h>
 #include <vil/vil_fill.h>
 #include <vil/vil_crop.h>
@@ -41,39 +43,39 @@
 
 void print_usage()
 {
-  vcl_cout<<"fhs_match_tree_model -p param_file\n"
+  std::cout<<"fhs_match_tree_model -p param_file\n"
           <<"Loads in parameter file, which defines images,\n"
           <<"points, the arcs defining a tree and related details.\n"
           <<"Constructs a tree model from the first image.\n"
           <<"Uses normalised correlation and this model to locate\n"
-          <<"equivalent points on the second image."<<vcl_endl;
+          <<"equivalent points on the second image."<<std::endl;
   vul_arg_display_usage_and_exit();
 }
 
 class fhs_model_params
 {
  public:
-  vcl_string image1_path;
-  vcl_string image2_path;
-  vcl_string points_path;
-  vcl_string arcs_path;
-  vcl_string output_image1_path;
-  vcl_string output_image2_path;
+  std::string image1_path;
+  std::string image2_path;
+  std::string points_path;
+  std::string arcs_path;
+  std::string output_image1_path;
+  std::string output_image2_path;
   int L_lo,L_hi;
   int half_width;
   double response_scale;
 };
 
-bool parse_param_file(const vcl_string& param_path,
+bool parse_param_file(const std::string& param_path,
                       fhs_model_params& params)
 {
   // ---------------------------------------------------------------
   // Load the parameters
   // ---------------------------------------------------------------
-  vcl_ifstream ifs(param_path.c_str());
+  std::ifstream ifs(param_path.c_str());
   if (!ifs)
   {
-    vcl_cerr<<"Failed to open parameter file: "<<param_path<<'\n';
+    std::cerr<<"Failed to open parameter file: "<<param_path<<'\n';
     return false;
   }
 
@@ -81,39 +83,39 @@ bool parse_param_file(const vcl_string& param_path,
 
   if (props.find("image1_path")!=props.end())
     params.image1_path = props["image1_path"];
-  else {vcl_cerr<<"No image1_path: specified.\n"; return false; }
+  else {std::cerr<<"No image1_path: specified.\n"; return false; }
 
   if (props.find("image2_path")!=props.end())
     params.image2_path = props["image2_path"];
-  else {vcl_cerr<<"No image2_path: specified.\n"; return false; }
+  else {std::cerr<<"No image2_path: specified.\n"; return false; }
 
   if (props.find("output_image1_path")!=props.end())
     params.output_image1_path = props["output_image1_path"];
-  else {vcl_cerr<<"No output_image1_path: specified.\n"; return false; }
+  else {std::cerr<<"No output_image1_path: specified.\n"; return false; }
 
   if (props.find("output_image2_path")!=props.end())
     params.output_image2_path = props["output_image2_path"];
-  else {vcl_cerr<<"No output_image2_path: specified.\n"; return false; }
+  else {std::cerr<<"No output_image2_path: specified.\n"; return false; }
 
   if (props.find("points_path")!=props.end())
     params.points_path = props["points_path"];
-  else {vcl_cerr<<"No points_path: specified.\n"; return false; }
+  else {std::cerr<<"No points_path: specified.\n"; return false; }
 
   if (props.find("arcs_path")!=props.end())
     params.arcs_path = props["arcs_path"];
-  else {vcl_cerr<<"No arcs2_path: specified.\n"; return false; }
+  else {std::cerr<<"No arcs2_path: specified.\n"; return false; }
 
   if (props.find("L_lo")!=props.end())
     params.L_lo = vul_string_atoi(props["L_lo"]);
-  else {vcl_cerr<<"No L_lo: specified.\n"; return false; }
+  else {std::cerr<<"No L_lo: specified.\n"; return false; }
 
   if (props.find("half_width")!=props.end())
     params.half_width = vul_string_atoi(props["half_width"]);
-  else {vcl_cerr<<"No half_width: specified.\n"; return false; }
+  else {std::cerr<<"No half_width: specified.\n"; return false; }
 
   if (props.find("L_hi")!=props.end())
     params.L_hi = vul_string_atoi(props["L_hi"]);
-  else {vcl_cerr<<"No L_hi: specified.\n"; return false; }
+  else {std::cerr<<"No L_hi: specified.\n"; return false; }
 
   params.response_scale=0.1;
   if (props.find("response_scale")!=props.end())
@@ -130,13 +132,13 @@ bool parse_param_file(const vcl_string& param_path,
 //    3 4
 //    ....
 //  }
-bool fhs_load_points(const vcl_string& path,
-                     vcl_vector<vgl_point_2d<double> >& pts)
+bool fhs_load_points(const std::string& path,
+                     std::vector<vgl_point_2d<double> >& pts)
 {
-  vcl_ifstream ifs( path.c_str(), vcl_ios_in );
+  std::ifstream ifs( path.c_str(), std::ios::in );
   if (!ifs)
-    { vcl_cerr<<"Failed to load in points from "<<path<<'\n'; return false; }
-  vcl_string label;
+    { std::cerr<<"Failed to load in points from "<<path<<'\n'; return false; }
+  std::string label;
 
     // Possible extra data - ignore it
   int image_nx, image_ny, image_nz;
@@ -174,13 +176,13 @@ bool fhs_load_points(const vcl_string& path,
       ifs>>label;
       if (label!="}")
       {
-        vcl_cerr<<"Expecting }, got "<<label<<'\n';
+        std::cerr<<"Expecting }, got "<<label<<'\n';
         return false;
       }
     }
     else
     {
-      vcl_cerr<<"Unexpected label: <"<<label<<">\n";
+      std::cerr<<"Unexpected label: <"<<label<<">\n";
       return false;
     }
     ifs>>label;
@@ -190,31 +192,31 @@ bool fhs_load_points(const vcl_string& path,
 
 //: Load in pairs of indices indicating connections between points
 //  File format: Each line contains two integers
-bool fhs_load_arcs(const vcl_string& path,
-                   vcl_vector<vcl_pair<int,int> >& pairs)
+bool fhs_load_arcs(const std::string& path,
+                   std::vector<std::pair<int,int> >& pairs)
 {
-  vcl_vector<int> v;
-    vcl_ifstream ifs( path.c_str(), vcl_ios_in );
+  std::vector<int> v;
+    std::ifstream ifs( path.c_str(), std::ios::in );
   if (!ifs)
-    { vcl_cerr<<"Failed to load in arc links from "<<path<<'\n'; return false; }
+    { std::cerr<<"Failed to load in arc links from "<<path<<'\n'; return false; }
 
   int x;
-  ifs>>vcl_ws;
+  ifs>>std::ws;
   while (!ifs.eof())
   {
-    ifs>>x>>vcl_ws;
+    ifs>>x>>std::ws;
     v.push_back(x);
   }
 
   if (v.size()%2==1)
   {
-    vcl_cerr<<"Odd number of indices supplied in "<<path<<'\n';
+    std::cerr<<"Odd number of indices supplied in "<<path<<'\n';
     return false;
   }
 
   pairs.resize(v.size()/2);
   for (unsigned i=0;i<pairs.size();++i)
-    pairs[i] = vcl_pair<int,int>(v[2*i],v[2*i+1]);
+    pairs[i] = std::pair<int,int>(v[2*i],v[2*i+1]);
   return true;
 }
 
@@ -223,10 +225,10 @@ bool fhs_load_arcs(const vcl_string& path,
 //  When near an image edge, patch may be truncated
 //  ref_pts defines position of original point relative to the patch origin
 void extract_normalised_patches(const vimt_image& image,
-                                const vcl_vector<vgl_point_2d<double> >& pts,
+                                const std::vector<vgl_point_2d<double> >& pts,
                                 int half_width,
-                                vcl_vector<vil_image_view<float> >& patch,
-                                vcl_vector<vgl_point_2d<double> >& ref_pts)
+                                std::vector<vil_image_view<float> >& patch,
+                                std::vector<vgl_point_2d<double> >& ref_pts)
 {
   const vimt_image_2d_of<vxl_byte>& byte_im =
                static_cast<const vimt_image_2d_of<vxl_byte>&>(image);
@@ -240,10 +242,10 @@ void extract_normalised_patches(const vimt_image& image,
     int py = vnl_math::rnd(im_p.y()+0.5);
 
     // Select region around point, allowing for image edges.
-    int ilo = vcl_max(0,px-half_width);
-    int ihi = vcl_min(ni-1,px+half_width);
-    int jlo = vcl_max(0,py-half_width);
-    int jhi = vcl_min(nj-1,py+half_width);
+    int ilo = std::max(0,px-half_width);
+    int ihi = std::min(ni-1,px+half_width);
+    int jlo = std::max(0,py-half_width);
+    int jhi = std::min(nj-1,py+half_width);
 
     // Compute position of reference point relative to corner
     int kx = px-ilo;
@@ -258,8 +260,8 @@ void extract_normalised_patches(const vimt_image& image,
 }
 
 void draw_tree(vil_image_view<vxl_byte>& image,
-               const vcl_vector<vgl_point_2d<double> >& pts,
-               const vcl_vector<vcl_pair<int,int> >& pairs)
+               const std::vector<vgl_point_2d<double> >& pts,
+               const std::vector<std::pair<int,int> >& pairs)
 {
   // Draw tree into image for display purposes
   for (unsigned i=0;i<pairs.size();++i)
@@ -299,7 +301,7 @@ void vimt_resample(const vimt_image_2d_of<float>& src_im, int src_L,
 
 int main( int argc, char* argv[] )
 {
-  vul_arg<vcl_string> param_path("-p","Parameter file path");
+  vul_arg<std::string> param_path("-p","Parameter file path");
 
   vul_arg_parse(argc, argv);
 
@@ -320,13 +322,13 @@ int main( int argc, char* argv[] )
   image1.image() = vil_load(params.image1_path.c_str());
   if (image1.image().size()==0)
   {
-    vcl_cerr<<"Unable to read in image from "<<params.image1_path<<'\n';
+    std::cerr<<"Unable to read in image from "<<params.image1_path<<'\n';
     return 1;
   }
   image2.image() = vil_load(params.image2_path.c_str());
   if (image2.image().size()==0)
   {
-    vcl_cerr<<"Unable to read in image from "<<params.image2_path<<'\n';
+    std::cerr<<"Unable to read in image from "<<params.image2_path<<'\n';
     return 1;
   }
 
@@ -338,10 +340,10 @@ int main( int argc, char* argv[] )
   pyr_builder.build(image_pyr1,image1);
   pyr_builder.build(image_pyr2,image2);
 
-  int max_L = vcl_min(image_pyr1.hi(),image_pyr2.hi());
+  int max_L = std::min(image_pyr1.hi(),image_pyr2.hi());
   if (params.L_lo<0  || params.L_lo>max_L  || params.L_hi<params.L_lo)
   {
-    vcl_cerr<<"Levels must be in range [0,"<<max_L<<"], with lo<=hi\n";
+    std::cerr<<"Levels must be in range [0,"<<max_L<<"], with lo<=hi\n";
     return 2;
   }
 
@@ -349,33 +351,33 @@ int main( int argc, char* argv[] )
   // Load in the points
   // ============================================
 
-  vcl_vector<vgl_point_2d<double> > ref_pts;
+  std::vector<vgl_point_2d<double> > ref_pts;
   if (!fhs_load_points(params.points_path,ref_pts)) return 3;
 
-  vcl_vector<unsigned> im_level(ref_pts.size());
+  std::vector<unsigned> im_level(ref_pts.size());
   for (unsigned i=0;i<ref_pts.size();++i) im_level[i]=params.L_hi;
 
   // ============================================
   // Load in the arcs (links between pairs)
   // ============================================
-  vcl_vector<vcl_pair<int,int> > pairs;
+  std::vector<std::pair<int,int> > pairs;
   if (!fhs_load_arcs(params.arcs_path,pairs)) return 4;
 
   // Check arc ends are all valid points
   for (unsigned i=0;i<pairs.size();++i)
   {
     if (pairs[i].first<0 || (unsigned int)(pairs[i].first)>=ref_pts.size())
-    { vcl_cerr<<"Invalid point index "<<pairs[i].first<<'\n'; return 5; }
+    { std::cerr<<"Invalid point index "<<pairs[i].first<<'\n'; return 5; }
     if (pairs[i].second<0 || (unsigned int)(pairs[i].second)>=ref_pts.size())
-    { vcl_cerr<<"Invalid point index "<<pairs[i].second<<'\n'; return 5; }
+    { std::cerr<<"Invalid point index "<<pairs[i].second<<'\n'; return 5; }
   }
 
   // ====================================================================
   // Create model, consisting of patches and a tree of relative positions
   // ====================================================================
 
-  vcl_vector<vil_image_view<float> > patch;
-  vcl_vector<vgl_point_2d<double> > patch_ref;  // Reference point
+  std::vector<vil_image_view<float> > patch;
+  std::vector<vgl_point_2d<double> > patch_ref;  // Reference point
 
   // Extract patches for each point, pushing back onto patch,patch_ref
   extract_normalised_patches(image_pyr1(params.L_hi),ref_pts,
@@ -386,15 +388,15 @@ int main( int argc, char* argv[] )
   // Construct the arc model from the points and pairs
   // =================================================
 
-  vcl_vector<fhs_arc> arcs(pairs.size());
+  std::vector<fhs_arc> arcs(pairs.size());
   int root_node = pairs[0].first;
   for (unsigned i=0;i<pairs.size();++i)
   {
     int i1 = pairs[i].first;
     int i2 = pairs[i].second;
     vgl_vector_2d<double> dp = ref_pts[i2]-ref_pts[i1];
-    double sd_x = vcl_max(double(1 << im_level[i]),0.2*dp.length());
-    double sd_y = vcl_max(double(1 << im_level[i]),0.2*dp.length());
+    double sd_x = std::max(double(1 << im_level[i]),0.2*dp.length());
+    double sd_y = std::max(double(1 << im_level[i]),0.2*dp.length());
     arcs[i]=fhs_arc(i1,i2,dp.x(),dp.y(),sd_x*sd_x,sd_y*sd_y);
   }
 
@@ -402,7 +404,7 @@ int main( int argc, char* argv[] )
   // =================================================
   // Apply filters to image2 (initially to whole image)
   // =================================================
-  vcl_vector<vimt_image_2d_of<float> > feature_response(ref_pts.size());
+  std::vector<vimt_image_2d_of<float> > feature_response(ref_pts.size());
   for (unsigned i=0;i<ref_pts.size();++i)
   {
     const vimt_image_2d_of<vxl_byte>& byte_im =
@@ -416,10 +418,10 @@ int main( int argc, char* argv[] )
     vgl_point_2d<double> im_p = byte_im.world2im()(ref_pts[i]);
     int xc = int(0.5+im_p.x());
     int yc = int(0.5+im_p.y());
-    int ilo = vcl_max(0,xc-xw);
-    int ihi = vcl_min(ni-1,xc+xw);
-    int jlo = vcl_max(0,yc-yw);
-    int jhi = vcl_min(nj-1,yc+yw);
+    int ilo = std::max(0,xc-xw);
+    int ihi = std::min(ni-1,xc+xw);
+    int jlo = std::max(0,yc-yw);
+    int jhi = std::min(nj-1,yc+yw);
     vimt_image_2d_of<vxl_byte> cropped_im = vimt_crop(byte_im,
                                                       ilo, 1+ihi-ilo,
                                                       jlo, 1+jhi-jlo);
@@ -446,7 +448,7 @@ int main( int argc, char* argv[] )
   fhs_searcher searcher;
   searcher.set_tree(arcs,root_node);
   searcher.search(feature_response);
-  vcl_vector<vgl_point_2d<double> > pts2;
+  std::vector<vgl_point_2d<double> > pts2;
   searcher.best_points(pts2);
 
   // Draw tree into image for display purposes
@@ -454,7 +456,7 @@ int main( int argc, char* argv[] )
 
   if (vil_save(image1.image(),params.output_image1_path.c_str()))
   {
-    vcl_cout<<"Saved output image 1 to "<<params.output_image1_path<<vcl_endl;
+    std::cout<<"Saved output image 1 to "<<params.output_image1_path<<std::endl;
   }
 
   // Draw tree into image for display purposes
@@ -462,7 +464,7 @@ int main( int argc, char* argv[] )
 
   if (vil_save(image2.image(),params.output_image2_path.c_str()))
   {
-    vcl_cout<<"Saved output image 2 to "<<params.output_image2_path<<vcl_endl;
+    std::cout<<"Saved output image 2 to "<<params.output_image2_path<<std::endl;
   }
 
 

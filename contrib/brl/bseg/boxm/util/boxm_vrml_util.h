@@ -12,11 +12,12 @@
 //   <none yet>
 // \endverbatim
 
+#include <iostream>
+#include <fstream>
 #include <boxm/boxm_scene.h>
 #include "boxm_cell_data_traits.h"
 #include <bvrml/bvrml_write.h>
-#include <vcl_fstream.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
 
 class boxm_vrml_util
 {
@@ -24,24 +25,24 @@ class boxm_vrml_util
 
   // Writes the values in the scene above the threshold as vrml dots
   template <class T_data>
-  static void write_vrml_scene(vcl_ofstream& str, boxm_scene<boct_tree<short,T_data> > *scene,
+  static void write_vrml_scene(std::ofstream& str, boxm_scene<boct_tree<short,T_data> > *scene,
                                const float threshold= 0.0f);
 #if 0 // not yet working?
-  static void write_vrml_scene(vcl_ofstream& str, bvxm_voxel_scene<bsta_num_obs<bsta_gauss_sf1> > *scene,
+  static void write_vrml_scene(std::ofstream& str, bvxm_voxel_scene<bsta_num_obs<bsta_gauss_sf1> > *scene,
                                const float threshold);
-  static void write_vrml_scene_as_spheres(vcl_ofstream& str, bvxm_voxel_scene<float> *scene, float threshold);
-  static void write_vrml_scene_as_spheres(vcl_ofstream& str, bvxm_voxel_scene<vnl_float_4> *scene, float threshold, int s=1);
-  static void write_vrml_scene_as_pointers(vcl_ofstream& str, bvxm_voxel_scene<vnl_float_4> *scene, float threshold, int s=1);
+  static void write_vrml_scene_as_spheres(std::ofstream& str, bvxm_voxel_scene<float> *scene, float threshold);
+  static void write_vrml_scene_as_spheres(std::ofstream& str, bvxm_voxel_scene<vnl_float_4> *scene, float threshold, int s=1);
+  static void write_vrml_scene_as_pointers(std::ofstream& str, bvxm_voxel_scene<vnl_float_4> *scene, float threshold, int s=1);
 #endif // 0
 };
 
 
 template <class T_data>
-void boxm_vrml_util::write_vrml_scene(vcl_ofstream& str, boxm_scene<boct_tree<short,T_data> > *scene, float /*threshold*/)
+void boxm_vrml_util::write_vrml_scene(std::ofstream& str, boxm_scene<boct_tree<short,T_data> > *scene, float /*threshold*/)
 {
   typedef boct_tree<short, T_data> tree_type;
   typedef boct_tree_cell<short, T_data> cell_type;
-  vcl_ofstream temp_stream("temp.txt");
+  std::ofstream temp_stream("temp.txt");
 
   bvrml_write::write_vrml_header(str);
 
@@ -60,7 +61,7 @@ void boxm_vrml_util::write_vrml_scene(vcl_ofstream& str, boxm_scene<boct_tree<sh
     tree_type  *tree = (*iter)->get_tree();
 
     // iterate through the tree
-    vcl_vector<cell_type*> cells = tree->leaf_cells();
+    std::vector<cell_type*> cells = tree->leaf_cells();
 
     for (unsigned i = 0; i < cells.size(); i++)
     {
@@ -76,29 +77,29 @@ void boxm_vrml_util::write_vrml_scene(vcl_ofstream& str, boxm_scene<boct_tree<sh
       << "        point[\n";
 
   // write the coordinates.
-  vcl_ifstream fin;  // file in
-  vcl_filebuf *fb;   // file buffer
+  std::ifstream fin;  // file in
+  std::filebuf *fb;   // file buffer
   fb = fin.rdbuf();
-  fb->open ("temp.txt",vcl_ios::in);
+  fb->open ("temp.txt",std::ios::in);
   if (fb->is_open() )
   {
     while (fb->sgetc()!=EOF)
     {
-      vcl_string temp_str;
-      vcl_istream isbf(fb);
-      vcl_getline(isbf, temp_str);
+      std::string temp_str;
+      std::istream isbf(fb);
+      std::getline(isbf, temp_str);
       str << temp_str << '\n';
     }
   }
   else
-    vcl_cerr << "file is not open.\n";
+    std::cerr << "file is not open.\n";
 
   fin.close();
   str << "        ]\n     }\n   }\n}\n";
 }
 
 #if 0 // not yet working?
-void bvxm_vrml_voxel_grid::write_vrml_grid(vcl_ofstream& str, bvxm_voxel_grid<bsta_num_obs<bsta_gauss_sf1> > *grid, float threshold)
+void bvxm_vrml_voxel_grid::write_vrml_grid(std::ofstream& str, bvxm_voxel_grid<bsta_num_obs<bsta_gauss_sf1> > *grid, float threshold)
 {
   bvxm_voxel_grid<bsta_num_obs<bsta_gauss_sf1> >::iterator grid_it = grid->begin();
 
@@ -123,7 +124,7 @@ void bvxm_vrml_voxel_grid::write_vrml_grid(vcl_ofstream& str, bvxm_voxel_grid<bs
   // write the coordinates
   grid_it = grid->begin();
   for (unsigned k=0; grid_it != grid->end(); ++grid_it, ++k) {
-    vcl_cout << '.';
+    std::cout << '.';
     for (unsigned i=0; i<(*grid_it).nx(); ++i) {
       for (unsigned j=0; j < (*grid_it).ny(); ++j) {
         if (((*grid_it)(i,j)).mean() > threshold)
@@ -135,7 +136,7 @@ void bvxm_vrml_voxel_grid::write_vrml_grid(vcl_ofstream& str, bvxm_voxel_grid<bs
 }
 
 
-void bvxm_vrml_voxel_grid::write_vrml_grid_as_spheres(vcl_ofstream& str, bvxm_voxel_grid<float> *grid, float threshold)
+void bvxm_vrml_voxel_grid::write_vrml_grid_as_spheres(std::ofstream& str, bvxm_voxel_grid<float> *grid, float threshold)
 {
   bvxm_voxel_grid<float>::iterator grid_it = grid->begin();
   vgl_vector_3d<unsigned> dim=grid->grid_size();
@@ -160,7 +161,7 @@ void bvxm_vrml_voxel_grid::write_vrml_grid_as_spheres(vcl_ofstream& str, bvxm_vo
   }
 }
 
-void bvxm_vrml_voxel_grid::write_vrml_grid_as_spheres(vcl_ofstream& str, bvxm_voxel_grid<vnl_float_4> *grid, float threshold, int s)
+void bvxm_vrml_voxel_grid::write_vrml_grid_as_spheres(std::ofstream& str, bvxm_voxel_grid<vnl_float_4> *grid, float threshold, int s)
 {
   bvxm_voxel_grid<vnl_float_4>::iterator grid_it = grid->begin();
   // write the colors
@@ -177,7 +178,7 @@ void bvxm_vrml_voxel_grid::write_vrml_grid_as_spheres(vcl_ofstream& str, bvxm_vo
 }
 
 
-void bvxm_vrml_voxel_grid::write_vrml_grid_as_pointers(vcl_ofstream& str, bvxm_voxel_grid<vnl_float_4> *grid, float threshold, int s)
+void bvxm_vrml_voxel_grid::write_vrml_grid_as_pointers(std::ofstream& str, bvxm_voxel_grid<vnl_float_4> *grid, float threshold, int s)
 {
   bvxm_voxel_grid<vnl_float_4>::iterator grid_it = grid->begin();
   vgl_point_3d<double> origin(0.0,0.0,0.0);

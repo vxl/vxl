@@ -14,8 +14,9 @@
 // EndLatex
 
 
-#include <vcl_fstream.h>
-#include <vcl_iostream.h>
+#include <iostream>
+#include <fstream>
+#include <vcl_compiler.h>
 #include <vnl/vnl_vector_fixed.h>
 #include <testlib/testlib_test.h>
 void testlib_enter_stealth_mode(); // defined in core/testlib/testlib_main.cxx
@@ -55,7 +56,7 @@ class command_iteration_update: public rgrl_command
       dynamic_cast<const rgrl_feature_based_registration*>(caller);
     rgrl_transformation_sptr trans = reg_engine->current_transformation();
     rgrl_trans_translation* xform = rgrl_cast<rgrl_trans_translation*>(trans);
-    vcl_cout<<"Xform T = "<<xform->t()<<vcl_endl;
+    std::cout<<"Xform T = "<<xform->t()<<std::endl;
   }
 };
 
@@ -63,7 +64,7 @@ int
 main( int argc, char* argv[] )
 {
   if ( argc < 2 ) {
-    vcl_cerr << "Missing Parameters\n"
+    std::cerr << "Missing Parameters\n"
              << "Usage: " << argv[0] << " ImageFeatureFile\n";
     return 1;
   }
@@ -96,16 +97,16 @@ main( int argc, char* argv[] )
   // EndLatex
 
   const char* filename = argv[1];
-  vcl_ifstream istr( filename );
+  std::ifstream istr( filename );
   if ( !istr ) {
-    vcl_cerr<<"ERROR: Cannot open "<<filename<<'\n';
+    std::cerr<<"ERROR: Cannot open "<<filename<<'\n';
     return 1;
   }
 
   // Don't allow Visual Studio to open critical error dialog boxes
   testlib_enter_stealth_mode();
 
-  typedef vcl_vector< rgrl_feature_sptr >         feature_vector;
+  typedef std::vector< rgrl_feature_sptr >         feature_vector;
   typedef vnl_vector_fixed<double,2>              vector_2d;
 
   feature_vector  moving_feature_points;
@@ -291,11 +292,11 @@ main( int argc, char* argv[] )
 
   // BeginCodeSnippet
   if ( reg.has_final_transformation() ) {
-    vcl_cout<<"Final xform:"<<vcl_endl;
+    std::cout<<"Final xform:"<<std::endl;
     rgrl_transformation_sptr trans = reg.final_transformation();
     rgrl_trans_translation* a_xform = rgrl_cast<rgrl_trans_translation*>(trans);
-    vcl_cout<<"t = "<<a_xform->t()<<vcl_endl
-            <<"Final alignment error = "<<reg.final_status()->error()<<vcl_endl;
+    std::cout<<"t = "<<a_xform->t()<<std::endl
+            <<"Final alignment error = "<<reg.final_status()->error()<<std::endl;
   }
   // EndCodeSnippet
 

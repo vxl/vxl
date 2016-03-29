@@ -19,7 +19,8 @@
 //----------------------------------------------------------------------------
 
 
-#include <vcl_vector.h>
+#include <vector>
+#include <vcl_compiler.h>
 #include <vidl/vidl_iidc1394_params.h>
 #include <vidl/vidl_istream.h>
 #include <vidl/vidl_ostream.h>
@@ -64,7 +65,7 @@ namespace vidl_gui_param_dialog
   //: Use vgui dialogs to open a v4l2 istream
   vidl_v4l2_istream* v4l2_istream();
 
-  bool update_iidc1394_params(vcl_vector<vidl_iidc1394_params::
+  bool update_iidc1394_params(std::vector<vidl_iidc1394_params::
                               feature_options>& features);
 };
 

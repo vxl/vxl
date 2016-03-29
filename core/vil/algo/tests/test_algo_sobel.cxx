@@ -1,17 +1,18 @@
 // This is core/vil/algo/tests/test_algo_sobel.cxx
+#include <iostream>
 #include <testlib/testlib_test.h>
 //:
 // \file
 // \author Peter Vanroose
 // \date   26 Aug. 2004
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
 #include <vxl_config.h> // for vxl_byte
 #include <vil/algo/vil_sobel_1x3.h>
 #include <vil/algo/vil_sobel_3x3.h>
 
 static void test_algo_sobel()
 {
-  vcl_cout << "*******************\n"
+  std::cout << "*******************\n"
            << " Testing vil_sobel\n"
            << "*******************\n";
 

@@ -3,25 +3,26 @@
 #define vsl_complex_io_h_
 //:
 // \file
-// \brief  binary IO functions for vcl_complex<T>
+// \brief  binary IO functions for std::complex<T>
 // \author K.Y.McGaul
 
-#include <vcl_iosfwd.h>
-#include <vcl_complex.h>
+#include <iosfwd>
+#include <complex>
+#include <vcl_compiler.h>
 
 class vsl_b_ostream;
 class vsl_b_istream;
 
 //: Write complex to binary stream
 template <class T>
-void vsl_b_write(vsl_b_ostream& s, const vcl_complex<T>& v);
+void vsl_b_write(vsl_b_ostream& s, const std::complex<T>& v);
 
 //: Read complex from binary stream
 template <class T>
-void vsl_b_read(vsl_b_istream& s, vcl_complex<T>& v);
+void vsl_b_read(vsl_b_istream& s, std::complex<T>& v);
 
 //: Print human readable summary of object to a stream
 template <class T>
-void vsl_print_summary(vcl_ostream &os, const vcl_complex<T> &v);
+void vsl_print_summary(std::ostream &os, const std::complex<T> &v);
 
 #endif // vsl_complex_io_h_

@@ -15,7 +15,8 @@
 //   FSM Renamed method names for consistency with projection_inspector.
 // \endverbatim
 
-#include <vcl_iosfwd.h>
+#include <iosfwd>
+#include <vcl_compiler.h>
 #include <vgui/vgui_gl.h>
 #include <vnl/vnl_fwd.h>
 
@@ -41,7 +42,7 @@ class vgui_matrix_state
 
   void save();
   void restore() const;
-  void print(vcl_ostream& );
+  void print(std::ostream& );
 
   // set
   static void identity_gl_matrices(); // set both matrices to the identity.

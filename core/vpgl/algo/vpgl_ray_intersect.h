@@ -23,7 +23,8 @@
 //  coordinates of image_pts[i].
 //
 
-#include <vcl_vector.h>
+#include <vector>
+#include <vcl_compiler.h>
 #include <vgl/vgl_point_2d.h>
 #include <vgl/vgl_point_3d.h>
 #include <vpgl/vpgl_camera.h>
@@ -40,16 +41,16 @@ class vpgl_ray_intersect
   //: Intersect the rays. return false if intersection fails
   // Note image points are not homogeneous because require
   // finite points to measure projection error
-  bool intersect(vcl_vector<const vpgl_camera<T>* > const& cams,
-                 vcl_vector<vgl_point_2d<T> > const& image_pts,
+  bool intersect(std::vector<const vpgl_camera<T>* > const& cams,
+                 std::vector<vgl_point_2d<T> > const& image_pts,
                  vgl_point_3d<T> const& initial_intersection,
                  vgl_point_3d<T>& intersection);
 
  protected:
   //members
   unsigned dim_;
-  vcl_vector<const vpgl_camera<T>* > f_cameras_; //cameras
-  vcl_vector<vgl_point_2d<T> > f_image_pts_; //image points
+  std::vector<const vpgl_camera<T>* > f_cameras_; //cameras
+  std::vector<vgl_point_2d<T> > f_image_pts_; //image points
 };
 
 

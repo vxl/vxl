@@ -23,13 +23,14 @@
 // computations are simple enough so everything is in the .h file
 //
 
-#include <vcl_vector.h>
+#include <vector>
+#include <iostream>
+#include <vcl_compiler.h>
 #include <vgl/vgl_vector_3d.h>
 #include <vgl/vgl_vector_3d.h>
 #include <vgl/vgl_point_3d.h>
 #include <vgl/vgl_plane_3d.h>
 #include <vcl_cassert.h>
-#include <vcl_iostream.h>
 
 template <class Type>
 class vgl_cubic_spline_3d
@@ -37,14 +38,14 @@ class vgl_cubic_spline_3d
   //: members
   bool closed_curve_;                     // is the curve closed?
   Type s_;                                // the parameter defining the first derivative at knots
-  vcl_vector<vgl_point_3d<Type> > knots_; // the spline knots
+  std::vector<vgl_point_3d<Type> > knots_; // the spline knots
 
  public:
   //: Default constructor
   vgl_cubic_spline_3d(): closed_curve_(false), s_(Type(0.5)) {}
 
   //: Construct from set of knots
-  vgl_cubic_spline_3d(vcl_vector<vgl_point_3d<Type> > const& knots,
+  vgl_cubic_spline_3d(std::vector<vgl_point_3d<Type> > const& knots,
                       Type s = Type(0.5),
                       bool closed = false)
     : closed_curve_(closed), s_(s), knots_(knots){}
@@ -53,9 +54,11 @@ class vgl_cubic_spline_3d
   bool closed() const {return closed_curve_;}
   Type s() const {return s_;}
   unsigned n_knots() const {return static_cast<unsigned>(knots_.size());}
-  vcl_vector<vgl_point_3d<Type> > knots() const {return knots_;}
 
-  void set_knots(vcl_vector<vgl_point_3d<Type> > const& knots, bool closed)
+  std::vector<vgl_point_3d<Type> > knots() const {return knots_;}
+  std::vector<vgl_point_3d<Type> > const & const_knots() const {return knots_;}
+
+  void set_knots(std::vector<vgl_point_3d<Type> > const& knots, bool closed)
   { knots_ = knots; closed_curve_ = closed;}
   void set_s(Type s){s_ = s;}
 
@@ -134,7 +137,7 @@ template <class Type>
   bool vgl_cubic_spline_3d<Type>::operator==(const vgl_cubic_spline_3d<Type> &spl) const{
   if(spl.closed()!=closed_curve_) return false;
   if(spl.s()!=s_) return false;
-  vcl_vector<vgl_point_3d<Type> > knots = spl.knots();
+  std::vector<vgl_point_3d<Type> > knots = spl.knots();
   unsigned n = static_cast<unsigned>(knots.size());
   if(n!= static_cast<unsigned>(knots_.size())) return false;
   for(unsigned i =0; i<n; ++i)
@@ -212,9 +215,9 @@ vgl_vector_3d<Type> vgl_cubic_spline_3d<Type>::tangent(Type t) const{
 
 
 template <class Type>
-vcl_ostream&  operator<<(vcl_ostream& ostr, vgl_cubic_spline_3d<Type> const& spl){
+std::ostream&  operator<<(std::ostream& ostr, vgl_cubic_spline_3d<Type> const& spl){
   if(!ostr){
-    vcl_cout << "Bad ostream in write vgl_cubic_spline_3d to stream\n";
+    std::cout << "Bad ostream in write vgl_cubic_spline_3d to stream\n";
     return ostr;
   }
   int ic = 0;
@@ -222,7 +225,7 @@ vcl_ostream&  operator<<(vcl_ostream& ostr, vgl_cubic_spline_3d<Type> const& spl
     ic = 1;
   Type s = spl.s();
   ostr << ic << ' ' << s << '\n';
-  vcl_vector<vgl_point_3d<Type> > knots = spl.knots();
+  std::vector<vgl_point_3d<Type> > knots = spl.knots();
   for(unsigned i =0; i<static_cast<unsigned>(knots.size()); i++){
     const vgl_point_3d<Type>& p = knots[i];
     ostr << p.x() << ',' << p.y() << ',' << p.z() << '\n';
@@ -231,9 +234,9 @@ vcl_ostream&  operator<<(vcl_ostream& ostr, vgl_cubic_spline_3d<Type> const& spl
 }
 
 template <class Type>
-vcl_istream&  operator>>(vcl_istream& istr, vgl_cubic_spline_3d<Type>& spl){
+std::istream&  operator>>(std::istream& istr, vgl_cubic_spline_3d<Type>& spl){
   if(!istr){
-    vcl_cout << "Bad istream in read vgl_cubic_spline_3d from stream\n";
+    std::cout << "Bad istream in read vgl_cubic_spline_3d from stream\n";
     return istr;
   }
   int ic;
@@ -242,19 +245,19 @@ vcl_istream&  operator>>(vcl_istream& istr, vgl_cubic_spline_3d<Type>& spl){
   bool closed = ic!=0;
   Type x, y, z;
   unsigned char c;
-  vcl_vector<vgl_point_3d<Type> > knots;
+  std::vector<vgl_point_3d<Type> > knots;
    // this loop termination may look strange
   // but testing the stream is more reliable
   // then the state of istr.eof()
   while(istr >> x >> c){
     if(c!=','){
-        vcl_cout << "Bad file format\n";
+        std::cout << "Bad file format\n";
       return istr;
         }
 
     istr >> y >> c;
     if(c!=','){
-          vcl_cout << "Bad file format\n";
+          std::cout << "Bad file format\n";
       return istr;
        }
     istr >> z ;

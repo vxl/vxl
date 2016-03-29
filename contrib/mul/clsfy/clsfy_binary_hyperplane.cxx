@@ -1,5 +1,9 @@
 // This is mul/clsfy/clsfy_binary_hyperplane.cxx
 // Copyright: (C) 2000 British Telecommunications PLC
+#include <string>
+#include <iostream>
+#include <vector>
+#include <cmath>
 #include "clsfy_binary_hyperplane.h"
 //:
 // \file
@@ -9,10 +13,7 @@
 //
 //=======================================================================
 
-#include <vcl_string.h>
-#include <vcl_iostream.h>
-#include <vcl_vector.h>
-#include <vcl_cmath.h>
+#include <vcl_compiler.h>
 #include <vsl/vsl_binary_io.h>
 #include <vnl/io/vnl_io_matrix.h>
 #include <vnl/io/vnl_io_vector.h>
@@ -32,11 +33,11 @@ unsigned clsfy_binary_hyperplane::classify(const vnl_vector<double> &input) cons
 
 //: Find the posterior probability of the input being in the positive class.
 // The result is outputs(0)
-void clsfy_binary_hyperplane::class_probabilities(vcl_vector<double> &outputs,
+void clsfy_binary_hyperplane::class_probabilities(std::vector<double> &outputs,
                                                   const vnl_vector<double> &input) const
 {
   outputs.resize(1);
-  outputs[0] = 1.0 / (1.0 + vcl_exp(-log_l(input)));
+  outputs[0] = 1.0 / (1.0 + std::exp(-log_l(input)));
 }
 
 
@@ -53,14 +54,14 @@ double clsfy_binary_hyperplane::log_l(const vnl_vector<double> &input) const
 //=======================================================================
 
 
-vcl_string clsfy_binary_hyperplane::is_a() const
+std::string clsfy_binary_hyperplane::is_a() const
 {
-  return vcl_string("clsfy_binary_hyperplane");
+  return std::string("clsfy_binary_hyperplane");
 }
 
 //=======================================================================
 
-bool clsfy_binary_hyperplane::is_class(vcl_string const& s) const
+bool clsfy_binary_hyperplane::is_class(std::string const& s) const
 {
   return s == clsfy_binary_hyperplane::is_a() || clsfy_classifier_base::is_class(s);
 }
@@ -69,7 +70,7 @@ bool clsfy_binary_hyperplane::is_class(vcl_string const& s) const
 
 //:
 // required if data is present in this class
-void clsfy_binary_hyperplane::print_summary(vcl_ostream& os) const
+void clsfy_binary_hyperplane::print_summary(std::ostream& os) const
 {
   os << "bias: " << bias_ << "   weights: ";
   vsl_print_summary(os, weights_);
@@ -106,9 +107,9 @@ void clsfy_binary_hyperplane::b_read(vsl_b_istream& bfs)
       vsl_b_read(bfs,bias_);
       break;
     default:
-      vcl_cerr << "I/O ERROR: clsfy_binary_hyperplane::b_read(vsl_b_istream&)\n"
+      std::cerr << "I/O ERROR: clsfy_binary_hyperplane::b_read(vsl_b_istream&)\n"
                << "           Unknown version number "<< version << '\n';
-      bfs.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
+      bfs.is().clear(std::ios::badbit); // Set an unrecoverable IO error on stream
   }
 }
 

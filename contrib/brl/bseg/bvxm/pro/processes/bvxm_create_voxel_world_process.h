@@ -18,8 +18,10 @@
 //   Peter Vanroose  Jul 10, 2009 - split into .h and .cxx
 // \endverbatim
 
+#include <iostream>
+#include <string>
 #include <bprb/bprb_func_process.h>
-#include <vcl_string.h>
+#include <vcl_compiler.h>
 
 //: global variables
 namespace bvxm_create_voxel_world_process_globals
@@ -27,18 +29,18 @@ namespace bvxm_create_voxel_world_process_globals
   // this process takes no inputs
   const unsigned n_outputs_ = 1;
   // Define parameters here
-  const vcl_string param_input_directory_ =  "input_directory";
-  const vcl_string param_corner_x_ = "corner_x";
-  const vcl_string param_corner_y_ = "corner_y";
-  const vcl_string param_corner_z_ = "corner_z";
-  const vcl_string param_voxel_dim_x_ = "voxel_dim_x";
-  const vcl_string param_voxel_dim_y_ = "voxel_dim_y";
-  const vcl_string param_voxel_dim_z_ = "voxel_dim_z";
-  const vcl_string param_voxel_length_ = "voxel_length";
-  const vcl_string param_lvcs_ = "lvcs";
-  const vcl_string param_min_ocp_prob_ = "min_ocp_prob";
-  const vcl_string param_max_ocp_prob_ = "max_ocp_prob";
-  const vcl_string param_max_scale_ = "max_scale";
+  const std::string param_input_directory_ =  "input_directory";
+  const std::string param_corner_x_ = "corner_x";
+  const std::string param_corner_y_ = "corner_y";
+  const std::string param_corner_z_ = "corner_z";
+  const std::string param_voxel_dim_x_ = "voxel_dim_x";
+  const std::string param_voxel_dim_y_ = "voxel_dim_y";
+  const std::string param_voxel_dim_z_ = "voxel_dim_z";
+  const std::string param_voxel_length_ = "voxel_length";
+  const std::string param_lvcs_ = "lvcs";
+  const std::string param_min_ocp_prob_ = "min_ocp_prob";
+  const std::string param_max_ocp_prob_ = "max_ocp_prob";
+  const std::string param_max_scale_ = "max_scale";
 }
 
 //: sets input and output types

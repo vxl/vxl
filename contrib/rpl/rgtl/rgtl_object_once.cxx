@@ -1,3 +1,5 @@
+#include <iostream>
+#include <cstddef>
 #include "rgtl_object_once.hxx"
 //:
 // \file
@@ -12,7 +14,7 @@
 #include "rgtl_serialize_ostream.hxx"
 
 #include <vcl_cassert.h>
-#include <vcl_cstddef.h>
+#include <vcl_compiler.h>
 
 //----------------------------------------------------------------------------
 rgtl_object_once::rgtl_object_once(): marks_(), mark_(0)
@@ -38,7 +40,7 @@ void rgtl_object_once::reset() const
   // Rollover the counter if necessary.
   if (this->mark_ == 0xFFFFFFFF)
   {
-    vcl_size_t s = this->marks_.size();
+    std::size_t s = this->marks_.size();
     this->mark_ = 0;
     this->marks_.resize(0);
     this->marks_.resize(s, 0);

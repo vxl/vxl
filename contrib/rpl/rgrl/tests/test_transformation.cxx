@@ -1,6 +1,7 @@
 //:
 // \file
-#include <vcl_iostream.h>
+#include <iostream>
+#include <vcl_compiler.h>
 
 #include <testlib/testlib_test.h>
 
@@ -196,7 +197,7 @@ test_trans_homography()
 
   testlib_test_begin( "Construct 2D homography transform object" );
   rgrl_transformation_sptr xform = new rgrl_trans_homography2d( H );
-  testlib_test_perform( xform != 0 );
+  testlib_test_perform( xform != VXL_NULLPTR );
 
   testlib_test_begin( "Transform 2D location" );
 
@@ -233,8 +234,8 @@ test_trans_spline()
 {
   // 1D spline
   {
-    vcl_cout << "test 1D spline transformation with affine\n";
-    vcl_vector< rgrl_spline_sptr > splines;
+    std::cout << "test 1D spline transformation with affine\n";
+    std::vector< rgrl_spline_sptr > splines;
     rgrl_spline_sptr spline = new rgrl_spline( vnl_vector< unsigned > ( 1, 1 ) );
     vnl_vector< double > c( spline->num_of_control_points() );
 #if 0
@@ -262,7 +263,7 @@ test_trans_spline()
     vnl_vector< double > to( 1 );
     vnl_vector< double > mapped_to( 1, 11.75/6+0.5*2+1 );
     trans.map_location( from, to );
-    vcl_cout << "mapped to = " << to << '\n';
+    std::cout << "mapped to = " << to << '\n';
     TEST( "test map_location()", (mapped_to-to).two_norm() < 1e-5, true );
   }
 }
@@ -301,8 +302,8 @@ void test_trans_rigid()
     double det = vnl_determinant(R);
     if ( fabs(det-1.0) >= 1e-10 )
     {
-      vcl_cout<<"Failing with determinant test\n"
-              <<"Determinant is "<<det<<vcl_endl;
+      std::cout<<"Failing with determinant test\n"
+              <<"Determinant is "<<det<<std::endl;
       statusdet = false;
     }
 
@@ -311,9 +312,9 @@ void test_trans_rigid()
            vnl_math::abs(alpha-dalpha)< tol ))
     {
       testlib_test_perform(false);
-      vcl_cout<<"Failing for this case:\n"
+      std::cout<<"Failing for this case:\n"
               <<"initial   phi,alpha,theta = "<<phi<<' '<<alpha<<' '<<theta<<'\n'
-              <<"extracted phi,alpha,theta = "<<dphi<<' '<<dalpha<<' '<<dtheta<<vcl_endl;
+              <<"extracted phi,alpha,theta = "<<dphi<<' '<<dalpha<<' '<<dtheta<<std::endl;
       status3 = false;
     }
 
@@ -322,9 +323,9 @@ void test_trans_rigid()
     if (! (vnl_math::abs(theta-dtheta)< tol ) )
     {
       testlib_test_perform(false);
-      vcl_cout<<"Failing for this case:\n"
+      std::cout<<"Failing for this case:\n"
               <<"initial   theta = "<<theta<<'\n'
-              <<"extracted theta = "<<dtheta<<vcl_endl;
+              <<"extracted theta = "<<dtheta<<std::endl;
       status2 = false;
     }
   }
@@ -403,10 +404,10 @@ void test_trans_rigid()
   xform->inv_map(point, inv_map_pt);
   xform->map_location(inv_map_pt,inv_inv_map_pt);
   testlib_test_perform( close(point, inv_inv_map_pt, 1e-7) );
-  vcl_cout << "point = " << point << '\n'
+  std::cout << "point = " << point << '\n'
            << "inv_map(point) = " << inv_map_pt << '\n'
            << "map_location(inv_map(point)) = " << inv_inv_map_pt << '\n'
-           << "difference = " << inv_inv_map_pt-point << vcl_endl;
+           << "difference = " << inv_inv_map_pt-point << std::endl;
 }
 
 } // end anonymous namespace

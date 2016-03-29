@@ -22,12 +22,12 @@ bool vil_shadow_detection_process_cons(bprb_func_process& pro)
   using namespace vil_shadow_detection_process_globals;
 
   //process takes 2 inputs
-  vcl_vector<vcl_string> input_types_(n_inputs_);
+  std::vector<std::string> input_types_(n_inputs_);
   input_types_[0] = "vil_image_view_base_sptr";
   input_types_[1] = "float"; // threshold
 
   // process has 1 output:
-  vcl_vector<vcl_string>  output_types_(n_outputs_);
+  std::vector<std::string>  output_types_(n_outputs_);
   output_types_[0] = "vil_image_view_base_sptr"; //X
 
   return pro.set_input_types(input_types_) &&
@@ -40,7 +40,7 @@ bool vil_shadow_detection_process(bprb_func_process& pro)
   using namespace vil_shadow_detection_process_globals;
   // Sanity check
   if (pro.n_inputs()< 2) {
-    vcl_cout << "vil_shadow_detection_process: The number of inputs should be 2" << vcl_endl;
+    std::cout << "vil_shadow_detection_process: The number of inputs should be 2" << std::endl;
     return false;
   }
   // get the inputs
@@ -50,7 +50,7 @@ bool vil_shadow_detection_process(bprb_func_process& pro)
 
   if (in_img->nplanes() != 3)
   {
-    vcl_cout<<"Input needs to be a color image" << vcl_endl;
+    std::cout<<"Input needs to be a color image" << std::endl;
     return false;
   }
   vil_image_view<bool> * out_img = new vil_image_view<bool>(in_img->ni(),in_img->nj());

@@ -10,9 +10,11 @@
 //    Brown University
 //
 //-----------------------------------------------------------------------------
+#include <iostream>
+#include <iosfwd>
+#include <vector>
 #include <gevd/gevd_param_mixin.h>
-#include <vcl_iosfwd.h>
-#include <vcl_vector.h>
+#include <vcl_compiler.h>
 #include <vsl/vsl_binary_io.h>
 
 class sdet_texture_classifier_params : public gevd_param_mixin
@@ -38,9 +40,9 @@ class sdet_texture_classifier_params : public gevd_param_mixin
  ~sdet_texture_classifier_params() {}
 
   bool SanityCheck();
-  vcl_string filter_dir_name();
+  std::string filter_dir_name();
  friend
-  vcl_ostream& operator<<(vcl_ostream& os, const sdet_texture_classifier_params& imp);
+  std::ostream& operator<<(std::ostream& os, const sdet_texture_classifier_params& imp);
  protected:
   void InitParams(unsigned n_scales,
                   float scale_interval,
@@ -100,7 +102,7 @@ void vsl_b_write(vsl_b_ostream &os,
 void vsl_b_read(vsl_b_istream &is, sdet_texture_classifier_params & tcp);
 
 //: Print human readable summary of object to a stream
-void vsl_print_summary(vcl_ostream& os,
+void vsl_print_summary(std::ostream& os,
                        const sdet_texture_classifier_params & tcp);
 
 #endif // sdet_texture_classifier_params_h_

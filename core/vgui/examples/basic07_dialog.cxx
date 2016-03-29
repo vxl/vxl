@@ -2,7 +2,8 @@
 // When the user has added values to the dialog box and clicked on OK
 // their list of choices will be printed to cerr.
 
-#include <vcl_iostream.h>
+#include <iostream>
+#include <vcl_compiler.h>
 #include <vbl/vbl_bool_ostream.h>
 #include <vgui/vgui.h>
 #include <vgui/vgui_menu.h>
@@ -18,21 +19,21 @@ static void test_dialog()
   static long long_value = 3;
   static float float_value = 3.1f;
   static double double_value = 4.2;
-  static vcl_string string_value = "dialog test";
+  static std::string string_value = "dialog test";
   static bool bool_value = true;
-  static vcl_string inline_file_value = "/tmp/myfile_inline.txt";
-  static vcl_string file_value = "/tmp/myfile.txt";
-  static vcl_string regexp = "*.txt";
-  static vcl_string inline_color_value = "blue";
-  static vcl_string color_value = "red";
+  static std::string inline_file_value = "/tmp/myfile_inline.txt";
+  static std::string file_value = "/tmp/myfile.txt";
+  static std::string regexp = "*.txt";
+  static std::string inline_color_value = "blue";
+  static std::string color_value = "red";
 
   static int choice_value = 1;
-  vcl_vector<vcl_string> labels;
-  labels.push_back(vcl_string("fltk"));
-  labels.push_back(vcl_string("motif"));
-  labels.push_back(vcl_string("gtk"));
-  labels.push_back(vcl_string("glut"));
-  labels.push_back(vcl_string("glX"));
+  std::vector<std::string> labels;
+  labels.push_back(std::string("fltk"));
+  labels.push_back(std::string("motif"));
+  labels.push_back(std::string("gtk"));
+  labels.push_back(std::string("glut"));
+  labels.push_back(std::string("glX"));
 
   vgui_dialog mydialog("My dialog");
   mydialog.field("int value", int_value);
@@ -49,31 +50,31 @@ static void test_dialog()
 
   if (mydialog.ask())
   {
-    vcl_cerr << "OK pressed.\n";
-    vcl_cerr << "int_value : " << int_value << vcl_endl;
-    vcl_cerr << "long_value : " << long_value << vcl_endl;
-    vcl_cerr << "float_value : " << float_value << vcl_endl;
-    vcl_cerr << "double_value : " << double_value << vcl_endl;
-    vcl_cerr << "string_value : " << string_value << vcl_endl;
-    vcl_cerr << "bool_value : " << vbl_bool_ostream::true_false(bool_value) << vcl_endl;
-    vcl_cerr << "choice_value : " << choice_value << " " << labels[choice_value] << vcl_endl;
-    vcl_cerr << "inline_file_value: " << inline_file_value << vcl_endl;
-    vcl_cerr << "file_value: " << file_value << vcl_endl;
-    vcl_cerr << "inline_color_value: " << inline_color_value << vcl_endl;
-    vcl_cerr << "color_value: " << color_value << vcl_endl;
+    std::cerr << "OK pressed.\n";
+    std::cerr << "int_value : " << int_value << std::endl;
+    std::cerr << "long_value : " << long_value << std::endl;
+    std::cerr << "float_value : " << float_value << std::endl;
+    std::cerr << "double_value : " << double_value << std::endl;
+    std::cerr << "string_value : " << string_value << std::endl;
+    std::cerr << "bool_value : " << vbl_bool_ostream::true_false(bool_value) << std::endl;
+    std::cerr << "choice_value : " << choice_value << " " << labels[choice_value] << std::endl;
+    std::cerr << "inline_file_value: " << inline_file_value << std::endl;
+    std::cerr << "file_value: " << file_value << std::endl;
+    std::cerr << "inline_color_value: " << inline_color_value << std::endl;
+    std::cerr << "color_value: " << color_value << std::endl;
   } else {
-    vcl_cerr << "Cancel pressed.\n";
-    vcl_cerr << "int_value : " << int_value << vcl_endl;
-    vcl_cerr << "long_value : " << long_value << vcl_endl;
-    vcl_cerr << "float_value : " << float_value << vcl_endl;
-    vcl_cerr << "double_value : " << double_value << vcl_endl;
-    vcl_cerr << "string_value : " << string_value << vcl_endl;
-    vcl_cerr << "bool_value : " << vbl_bool_ostream::true_false(bool_value) << vcl_endl;
-    vcl_cerr << "choice_value : " << choice_value << " " << labels[choice_value] << vcl_endl;
-    vcl_cerr << "inline_file_value: " << inline_file_value << vcl_endl;
-    vcl_cerr << "file_value: " << file_value << vcl_endl;
-    vcl_cerr << "inline_color_value: " << inline_color_value << vcl_endl;
-    vcl_cerr << "color_value: " << color_value << vcl_endl;
+    std::cerr << "Cancel pressed.\n";
+    std::cerr << "int_value : " << int_value << std::endl;
+    std::cerr << "long_value : " << long_value << std::endl;
+    std::cerr << "float_value : " << float_value << std::endl;
+    std::cerr << "double_value : " << double_value << std::endl;
+    std::cerr << "string_value : " << string_value << std::endl;
+    std::cerr << "bool_value : " << vbl_bool_ostream::true_false(bool_value) << std::endl;
+    std::cerr << "choice_value : " << choice_value << " " << labels[choice_value] << std::endl;
+    std::cerr << "inline_file_value: " << inline_file_value << std::endl;
+    std::cerr << "file_value: " << file_value << std::endl;
+    std::cerr << "inline_color_value: " << inline_color_value << std::endl;
+    std::cerr << "color_value: " << color_value << std::endl;
   }
 }
 
@@ -86,7 +87,7 @@ static void test_dialog2()
 
   mydialog.message("A picture");
 
-  vcl_string button_txt("close");
+  std::string button_txt("close");
   mydialog.set_ok_button(button_txt.c_str());
   mydialog.set_cancel_button(VXL_NULLPTR);
   mydialog.ask();

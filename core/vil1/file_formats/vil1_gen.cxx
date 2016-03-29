@@ -3,13 +3,14 @@
 #pragma implementation
 #endif
 
+#include <cstdlib>
+#include <cstdio>
+#include <cstring>
+#include <iostream>
 #include "vil1_gen.h"
 
 #include <vcl_cassert.h>
-#include <vcl_cstdlib.h> // vcl_abort()
-#include <vcl_cstdio.h>  // sprintf()
-#include <vcl_cstring.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
 
 #include <vil1/vil1_stream.h>
 #include <vil1/vil1_image_impl.h>
@@ -21,7 +22,7 @@ char const* vil1_gen_format_tag = "gen";
 vil1_image_impl* vil1_gen_file_format::make_input_image(vil1_stream* vs)
 {
   // Attempt to read header
-  vcl_string s;
+  std::string s;
   for (;;) {
     char buf;
     if (vs->read(&buf, 1L) == 0L)
@@ -30,7 +31,7 @@ vil1_image_impl* vil1_gen_file_format::make_input_image(vil1_stream* vs)
       break;
     s += buf;
   }
-  vcl_cerr << "vil1_gen_file_format: s= [" << s << "]\n";
+  std::cerr << "vil1_gen_file_format: s= [" << s << "]\n";
 
   bool ok = (s[0] == 'g' &&
              s[1] == 'e' &&
@@ -40,7 +41,7 @@ vil1_image_impl* vil1_gen_file_format::make_input_image(vil1_stream* vs)
   if (!ok)
     return VXL_NULLPTR;
 
-  vcl_cerr << "vil1_gen_file_format: s= [" << s << "]\n";
+  std::cerr << "vil1_gen_file_format: s= [" << s << "]\n";
 
   return new vil1_gen_generic_image(s);
 }
@@ -57,7 +58,7 @@ char const* vil1_gen_generic_image::file_format() const
   return vil1_gen_format_tag;
 }
 
-vil1_gen_generic_image::vil1_gen_generic_image(vcl_string const& /*s*/,
+vil1_gen_generic_image::vil1_gen_generic_image(std::string const& /*s*/,
                                                int /*planes*/,
                                                int /*width*/,
                                                int /*height*/,
@@ -65,7 +66,7 @@ vil1_gen_generic_image::vil1_gen_generic_image(vcl_string const& /*s*/,
                                                int /*bits_per_component*/,
                                                vil1_component_format /*format*/)
 {
-  vcl_abort();
+  std::abort();
 }
 
 static int read_int(char const** p_inout)
@@ -81,7 +82,7 @@ static int read_int(char const** p_inout)
   return val;
 }
 
-void vil1_gen_generic_image::init(vcl_string const& s)
+void vil1_gen_generic_image::init(std::string const& s)
 {
   char const* p = s.c_str();
   // 1. Skip over "gen:"
@@ -89,9 +90,9 @@ void vil1_gen_generic_image::init(vcl_string const& s)
   // 2. Get size
   width_ = -1;
   height_ = -1;
-  vcl_sscanf(p, "%dx%d:", &width_, &height_);
+  std::sscanf(p, "%dx%d:", &width_, &height_);
   if (height_ == -1) {
-    vcl_cerr << "vil1_gen_generic_image: bad height, should be gen:WxH:\n";
+    std::cerr << "vil1_gen_generic_image: bad height, should be gen:WxH:\n";
     width_ = 0;
     height_ = 0;
     return;
@@ -106,13 +107,13 @@ void vil1_gen_generic_image::init(vcl_string const& s)
   ++p;
 
   // Read type
-  vcl_string type;
+  std::string type;
   while (*p != 0 && *p != ',') {
     type += *p;
     ++p;
   }
 
-  vcl_cerr << "vil1_gen_generic_image: type = ["<<type<<"]\n";
+  std::cerr << "vil1_gen_generic_image: type = ["<<type<<"]\n";
 
   if (type == "grey" || type == "gray")
   {
@@ -126,7 +127,7 @@ void vil1_gen_generic_image::init(vcl_string const& s)
     bits_per_component_ = 8;
     type_ = vil1_gen_gray;
 
-    vcl_cerr << "vil1_gen_generic_image: p0 = ["<<params_[0]<<"]\n";
+    std::cerr << "vil1_gen_generic_image: p0 = ["<<params_[0]<<"]\n";
   }
   else if (type == "rgb")
   {
@@ -144,7 +145,7 @@ void vil1_gen_generic_image::init(vcl_string const& s)
     bits_per_component_ = 8;
     type_ = vil1_gen_rgb;
 
-    vcl_cerr << "vil1_gen_generic_image: p0 = [" << params_[0] << "], p1 = ["
+    std::cerr << "vil1_gen_generic_image: p0 = [" << params_[0] << "], p1 = ["
              << params_[1] << "], p2 = [" << params_[2] << "]\n";
   }
   else
@@ -153,10 +154,10 @@ void vil1_gen_generic_image::init(vcl_string const& s)
 
 bool vil1_gen_generic_image::get_property(char const *tag, void *prop) const
 {
-  if (0==vcl_strcmp(tag, vil1_property_top_row_first))
+  if (0==std::strcmp(tag, vil1_property_top_row_first))
     return prop ? (*(bool*)prop) = true : true;
 
-  if (0==vcl_strcmp(tag, vil1_property_left_first))
+  if (0==std::strcmp(tag, vil1_property_left_first))
     return prop ? (*(bool*)prop) = true : true;
 
   return false;
@@ -166,7 +167,7 @@ bool vil1_gen_generic_image::get_section(void* buf, int /*x0*/, int /*y0*/, int 
 {
   // A constant (generic) image pixel value is independent of (x0,y0)
   if (type_ == vil1_gen_gray) {
-    vcl_memset(buf, params_[0], xs*ys);
+    std::memset(buf, params_[0], xs*ys);
     return true;
   }
   else if (type_ == vil1_gen_rgb) {
@@ -188,7 +189,7 @@ bool vil1_gen_generic_image::get_section(void* buf, int /*x0*/, int /*y0*/, int 
 
 bool vil1_gen_generic_image::put_section(void const* /*buf*/, int /*x0*/, int /*y0*/, int /*xs*/, int /*ys*/)
 {
-  vcl_abort();
+  std::abort();
   return false;
 }
 

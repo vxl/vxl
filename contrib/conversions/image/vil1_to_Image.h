@@ -2,17 +2,18 @@
 #ifndef vil1_to_Image_h_
 #define vil1_to_Image_h_
 
+#include <iostream>
 #include <ImageClasses/Image.h>
 #include <vil1/vil1_image.h>
 
 #include <ImageClasses/MemoryImage.h>
 
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
 
 inline Image* vil1_to_Image(vil1_image const& im)
 {
   if (im.planes() > 1)
-    { vcl_cerr << "vil1_to_Image: Error: cannot handle >1 plane\n"; return 0; }
+    { std::cerr << "vil1_to_Image: Error: cannot handle >1 plane\n"; return 0; }
 
   // Create a MemoryImage and return:
   int cmpts = im.components();
@@ -29,7 +30,7 @@ inline Image* vil1_to_Image(vil1_image const& im)
 
   MemoryImage* imo = new MemoryImage(&imt);
   if (imo->GetBitsPixel() != im.bits_per_component() * cmpts)
-    { vcl_cerr << "vil1_to_Image: Error: pixel size\n"; return 0; }
+    { std::cerr << "vil1_to_Image: Error: pixel size\n"; return 0; }
 
   char* buf = new char[im.get_size_bytes()];
   im.get_section(buf, 0, 0, width, height);

@@ -3,10 +3,12 @@
 //:
 // \file
 
+#include <iostream>
+#include <string>
+#include <utility>
 #include "clsfy_k_nearest_neighbour.h"
 
-#include <vcl_string.h>
-#include <vcl_utility.h>
+#include <vcl_compiler.h>
 #include <vcl_cassert.h>
 
 #include <vnl/vnl_math.h>
@@ -16,8 +18,8 @@
 #include <mbl/mbl_priority_bounded_queue.h>
 
 //: Set the training data.
-void clsfy_k_nearest_neighbour::set(const vcl_vector<vnl_vector<double> > &inputs,
-                                    const vcl_vector<unsigned> &outputs)
+void clsfy_k_nearest_neighbour::set(const std::vector<vnl_vector<double> > &inputs,
+                                    const std::vector<unsigned> &outputs)
 {
   assert(inputs.size() == outputs.size());
   trainInputs_ = inputs;
@@ -25,7 +27,7 @@ void clsfy_k_nearest_neighbour::set(const vcl_vector<vnl_vector<double> > &input
 }
 
 // stuff to get the priority queue to work happily
-typedef vcl_pair<double, unsigned> pairDV;
+typedef std::pair<double, unsigned> pairDV;
 struct first_lt { bool operator()(const pairDV &x, const pairDV &y)
 { return x.first < y.first;} };
 struct second_eq_one { bool operator()(const pairDV &x) {return x.second == 1;}};
@@ -34,12 +36,12 @@ struct second_eq_one { bool operator()(const pairDV &x) {return x.second == 1;}}
 unsigned clsfy_k_nearest_neighbour::classify(const vnl_vector<double> &input) const
 {
   const unsigned nTrainingVecs = trainInputs_.size();
-  const unsigned k = vnl_math::min(k_, nTrainingVecs-1 + (nTrainingVecs%2));
-  mbl_priority_bounded_queue<pairDV, vcl_vector<pairDV>, first_lt >  pq(k);
+  const unsigned k = std::min(k_, nTrainingVecs-1 + (nTrainingVecs%2));
+  mbl_priority_bounded_queue<pairDV, std::vector<pairDV>, first_lt >  pq(k);
   unsigned i;
 
   for (i = 0; i < nTrainingVecs; i++)
-    pq.push(vcl_make_pair(vnl_vector_ssd(input, trainInputs_[i]), trainOutputs_[i]));
+    pq.push(std::make_pair(vnl_vector_ssd(input, trainInputs_[i]), trainOutputs_[i]));
 
   unsigned count = 0;
   for (i = 0; i < k; i++)
@@ -54,16 +56,16 @@ unsigned clsfy_k_nearest_neighbour::classify(const vnl_vector<double> &input) co
 //: Return a probability like value that the input being in each class.
 // output(i) i<<nClasses, contains the probability that the input
 // is in class i;
-void clsfy_k_nearest_neighbour::class_probabilities(vcl_vector<double> &outputs,
+void clsfy_k_nearest_neighbour::class_probabilities(std::vector<double> &outputs,
                                                     const vnl_vector<double> &input) const
 {
   const unsigned nTrainingVecs = trainInputs_.size();
-  const unsigned k = vnl_math::min(k_, nTrainingVecs-1 + (nTrainingVecs%2));
-  mbl_priority_bounded_queue<pairDV, vcl_vector<pairDV>, first_lt >  pq(k);
+  const unsigned k = std::min(k_, nTrainingVecs-1 + (nTrainingVecs%2));
+  mbl_priority_bounded_queue<pairDV, std::vector<pairDV>, first_lt >  pq(k);
   unsigned i;
 
   for (i = 0; i < nTrainingVecs; i++)
-    pq.push(vcl_make_pair(vnl_vector_ssd(input, trainInputs_[i]), trainOutputs_[i]));
+    pq.push(std::make_pair(vnl_vector_ssd(input, trainInputs_[i]), trainOutputs_[i]));
 
   unsigned count = 0;
   for (i = 0; i < k; i++)
@@ -91,22 +93,22 @@ unsigned clsfy_k_nearest_neighbour::n_dims() const
 // class probability = exp(logL) / (1+exp(logL))
 double clsfy_k_nearest_neighbour::log_l(const vnl_vector<double> &input) const
 {
-  vcl_vector<double> outputs(1);
+  std::vector<double> outputs(1);
   class_probabilities(outputs, input);
   double prob = outputs[0];
-  return vcl_log(prob/(1-prob));
+  return std::log(prob/(1-prob));
 }
 
 //=======================================================================
 
-vcl_string clsfy_k_nearest_neighbour::is_a() const
+std::string clsfy_k_nearest_neighbour::is_a() const
 {
-  return vcl_string("clsfy_k_nearest_neighbour");
+  return std::string("clsfy_k_nearest_neighbour");
 }
 
 //=======================================================================
 
-bool clsfy_k_nearest_neighbour::is_class(vcl_string const& s) const
+bool clsfy_k_nearest_neighbour::is_class(std::string const& s) const
 {
   return s == clsfy_k_nearest_neighbour::is_a() || clsfy_classifier_base::is_class(s);
 }
@@ -127,7 +129,7 @@ clsfy_classifier_base* clsfy_k_nearest_neighbour::clone() const
 
 //=======================================================================
 
-void clsfy_k_nearest_neighbour::print_summary(vcl_ostream& os) const
+void clsfy_k_nearest_neighbour::print_summary(std::ostream& os) const
 {
   os << trainInputs_.size() << " training samples, k=" << k_;
 }
@@ -158,9 +160,9 @@ void clsfy_k_nearest_neighbour::b_read(vsl_b_istream& bfs)
     vsl_b_read(bfs,trainInputs_);
     break;
   default:
-    vcl_cerr << "I/O ERROR: clsfy_k_nearest_neighbour::b_read(vsl_b_istream&)\n"
+    std::cerr << "I/O ERROR: clsfy_k_nearest_neighbour::b_read(vsl_b_istream&)\n"
              << "           Unknown version number "<< version << '\n';
-    bfs.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
+    bfs.is().clear(std::ios::badbit); // Set an unrecoverable IO error on stream
     return;
   }
 }

@@ -65,26 +65,26 @@ PyObject *get_boxm_array_1d_float(PyObject * /*self*/, PyObject *args)
   if (!PyArg_ParseTuple(args, "i:get_boxm_array_1d_float", &id))
     return NULL;
 
-  vcl_string relation_name = "boxm_array_1d_float_sptr_data";
+  std::string relation_name = "boxm_array_1d_float_sptr_data";
 
   // query to get the data
   brdb_query_aptr Q = brdb_query_comp_new("id", brdb_query::EQ, id);
   brdb_selection_sptr selec = DATABASE->select(relation_name, Q);
   PyObject *array_1d=0;
   if (selec->size()!=1) {
-    vcl_cout << "in get_boxm_array_1d_float() - no relation with type" << relation_name << " id: " << id << vcl_endl;
+    std::cout << "in get_boxm_array_1d_float() - no relation with type" << relation_name << " id: " << id << std::endl;
 
     return array_1d;
   }
 
   brdb_value_sptr brdb_value;
-  if (!selec->get_value(vcl_string("value"), brdb_value)) {
-    vcl_cout << "in get_boxm_array_1d_float() didn't get value\n";
+  if (!selec->get_value(std::string("value"), brdb_value)) {
+    std::cout << "in get_boxm_array_1d_float() didn't get value\n";
     return array_1d;
   }
 
   if (!brdb_value) {
-    vcl_cout << "in get_boxm_array_1d_float() - null value\n";
+    std::cout << "in get_boxm_array_1d_float() - null value\n";
     return array_1d;
   }
 

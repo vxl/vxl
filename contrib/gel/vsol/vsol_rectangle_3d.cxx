@@ -1,11 +1,12 @@
 // This is gel/vsol/vsol_rectangle_3d.cxx
+#include <iostream>
 #include "vsol_rectangle_3d.h"
 //:
 // \file
 #include <vcl_cassert.h>
 #include <vgl/vgl_vector_3d.h>
 #include <vsol/vsol_point_3d.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
 
 //***************************************************************************
 // Initialization
@@ -22,7 +23,7 @@ vsol_rectangle_3d::vsol_rectangle_3d(vsol_point_3d_sptr const& new_p0,
                                      vsol_point_3d_sptr const& new_p1,
                                      vsol_point_3d_sptr const& new_p2)
 {
-  storage_=new vcl_vector<vsol_point_3d_sptr>(3);
+  storage_=new std::vector<vsol_point_3d_sptr>(3);
   (*storage_)[0]=new_p0;
   (*storage_)[1]=new_p1;
   (*storage_)[2]=new_p2;
@@ -152,7 +153,7 @@ double vsol_rectangle_3d::area(void) const
 //---------------------------------------------------------------------------
 //: Are `new_vertices' valid to build a rectangle ?
 //---------------------------------------------------------------------------
-bool vsol_rectangle_3d::valid_vertices(const vcl_vector<vsol_point_3d_sptr> new_vertices) const
+bool vsol_rectangle_3d::valid_vertices(const std::vector<vsol_point_3d_sptr> new_vertices) const
 {
   if (new_vertices.size() != 3) return false;
   vgl_vector_3d<double> a=new_vertices[0]->to_vector(*(new_vertices[1]));
@@ -171,7 +172,7 @@ bool vsol_rectangle_3d::valid_vertices(const vcl_vector<vsol_point_3d_sptr> new_
 //---------------------------------------------------------------------------
 bool vsol_rectangle_3d::in(vsol_point_3d_sptr const& ) const
 {
-  vcl_cerr << "Warning: vsol_rectangle_3d::in() has not been implemented yet\n";
+  std::cerr << "Warning: vsol_rectangle_3d::in() has not been implemented yet\n";
   return true;
 }
 
@@ -196,13 +197,13 @@ vsol_rectangle_3d::normal_at_point(vsol_point_3d_sptr const& p) const
   return normalized(cross_product(v1,v2));
 }
 
-inline void vsol_rectangle_3d::describe(vcl_ostream &strm, int blanking) const
+inline void vsol_rectangle_3d::describe(std::ostream &strm, int blanking) const
 {
   if (blanking < 0) blanking = 0; while (blanking--) strm << ' ';
   strm << "<vsol_rectangle_3d with corners";
   for (unsigned int i=0; i<size(); ++i)
     strm << ' ' << *(vertex(i));
-  strm << '>' << vcl_endl;
+  strm << '>' << std::endl;
 }
 
 //----------------------------------------------------------------
@@ -228,17 +229,17 @@ void vsol_rectangle_3d::b_read(vsl_b_istream &is)
    case 1:
     vsol_polygon_3d::b_read(is);
     if (storage_->size()!=4){
-      vcl_cerr << "I/O ERROR: vsol_rectangle_3d::b_read(vsl_b_istream&)\n"
+      std::cerr << "I/O ERROR: vsol_rectangle_3d::b_read(vsl_b_istream&)\n"
                << "           Incorrect number of vertices: "<< storage_->size() << '\n';
-      is.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
+      is.is().clear(std::ios::badbit); // Set an unrecoverable IO error on stream
       return;
     }
     break;
 
    default:
-    vcl_cerr << "I/O ERROR: vsol_rectangle_3d::b_read(vsl_b_istream&)\n"
+    std::cerr << "I/O ERROR: vsol_rectangle_3d::b_read(vsl_b_istream&)\n"
              << "           Unknown version number "<< ver << '\n';
-    is.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
+    is.is().clear(std::ios::badbit); // Set an unrecoverable IO error on stream
     return;
   }
 }
@@ -249,7 +250,7 @@ short vsol_rectangle_3d::version() const
 }
 
 //: Print an ascii summary to the stream
-void vsol_rectangle_3d::print_summary(vcl_ostream &os) const
+void vsol_rectangle_3d::print_summary(std::ostream &os) const
 {
   os << *this;
 }
@@ -281,5 +282,5 @@ vsl_b_read(vsl_b_istream &is, vsol_rectangle_3d* &r)
     r->b_read(is);
   }
   else
-    r = 0;
+    r = VXL_NULLPTR;
 }

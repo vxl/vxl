@@ -6,6 +6,6 @@
 #include <vcsl/vcsl_spatial_transformation.h>
 
 #include <vcsl/vcsl_coordinate_system.h>
-#include <vbl/vbl_smart_ptr.txx>
+#include <vbl/vbl_smart_ptr.hxx>
 
 VBL_SMART_PTR_INSTANTIATE(vcsl_coordinate_system);

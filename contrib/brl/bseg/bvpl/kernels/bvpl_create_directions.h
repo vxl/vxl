@@ -14,10 +14,11 @@
 //   <none yet>
 // \endverbatim
 
+#include <iostream>
+#include <vector>
+#include <string>
 #include <vnl/vnl_float_3.h>
-#include <vcl_iostream.h>
-#include <vcl_vector.h>
-#include <vcl_string.h>
+#include <vcl_compiler.h>
 
 class bvpl_create_directions_base
 {
@@ -30,15 +31,15 @@ class bvpl_create_directions_base
 #endif
 
  //:Accessor methods
- vcl_vector<vnl_float_3> get_axes() const { return axes_; }
- vcl_vector<float> get_angles() const { return angles_; }
+ std::vector<vnl_float_3> get_axes() const { return axes_; }
+ std::vector<float> get_angles() const { return angles_; }
 
  //:Print to file
- void save_directions_map(vcl_string outfile);
+ void save_directions_map(std::string outfile);
 
  protected:
-  vcl_vector<vnl_float_3> axes_;
-  vcl_vector<float> angles_;
+  std::vector<vnl_float_3> axes_;
+  std::vector<float> angles_;
 };
 
 //: Creates directions aligned the positive x,y,z axis

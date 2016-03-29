@@ -11,9 +11,11 @@
 //  Modifications
 //   <none yet>
 // \endverbatim
+#include <string>
+#include <iostream>
+#include <cstddef>
 #include "bocl/bocl_cl.h"
-#include <vcl_string.h>
-#include <vcl_cstddef.h>
+#include <vcl_compiler.h>
 
 #define SDK_SUCCESS 0
 #define SDK_FAILURE 1
@@ -24,9 +26,9 @@
 #define RESULT_FLAG_BUFFER_NAME "result_flag_buf"
 
 //: function to pad the global threads if it is not exact multiple of the workgroup size
-vcl_size_t RoundUp(int global_size,int group_size);
+std::size_t RoundUp(int global_size,int group_size);
 //: function to display decoded error message.
-vcl_string error_to_string(cl_int  status );
+std::string error_to_string(cl_int  status );
 //: Check for error returns
 int check_val(cl_int status, cl_int result, std::string message);
 

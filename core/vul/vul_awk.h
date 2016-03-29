@@ -20,19 +20,20 @@
 // \endverbatim
 
 
-#include <vcl_string.h>
-#include <vcl_iosfwd.h>
-#include <vcl_vector.h>
+#include <string>
+#include <iosfwd>
+#include <vector>
+#include <vcl_compiler.h>
 
 //: The core of awk
-// vul_awk reads lines from a vcl_istream and breaks them into whitespace-separated
+// vul_awk reads lines from a std::istream and breaks them into whitespace-separated
 // fields.  Its primary advantage is that its name defines the semantics of
 // its methods---except that this C++ version uses zero-based fields.  The
 // usage is exemplified in this example, to print the second field in every
 // line:
 // \code
 //    for (vul_awk awk=cin; awk; ++awk)
-//      vcl_cout << awk[2] << vcl_endl;
+//      std::cout << awk[2] << std::endl;
 // \endcode
 //
 // The constructor takes an integer mode-flag variable.  Right now,
@@ -49,7 +50,7 @@
 // comments in the file, write:
 // \code
 //    for (vul_awk awk(cin, vul_awk::strip_comments); awk; ++awk)
-//      vcl_cout << awk[2] << vcl_endl;
+//      std::cout << awk[2] << std::endl;
 // \endcode
 //
 
@@ -65,7 +66,7 @@ class vul_awk
     backslash_continuations = 0x04
   };
 
-  vul_awk(vcl_istream& s, ModeFlags mode = none);
+  vul_awk(std::istream& s, ModeFlags mode = none);
   ~vul_awk();
 
   // Operations----------------------------------------------------------------
@@ -75,7 +76,7 @@ class vul_awk
     if (i < fields_.size())
       return fields_[i];
     else
-      return 0;
+      return VXL_NULLPTR;
   }
 
 //: Return the current "record number", i.e. line number
@@ -93,7 +94,7 @@ class vul_awk
 
 //: Return true if this line is not the last.
   operator safe_bool () const
-    { return (!done_)? VCL_SAFE_BOOL_TRUE : 0; }
+    { return (!done_)? VCL_SAFE_BOOL_TRUE : VXL_NULLPTR; }
 
 //: Return false if this line is not the last.
   bool operator!() const
@@ -105,22 +106,22 @@ class vul_awk
 //: Display error message, line number.
 // Also display optional field number and  char within field.
 
-  void error(vcl_ostream&, char const* message, int field = -1,
+  void error(std::ostream&, char const* message, int field = -1,
              int char_within_field = 0);
 
  protected:
   // Data Members--------------------------------------------------------------
-  vcl_istream& fd_;
+  std::istream& fd_;
 
   ModeFlags mode_;
 
   // The last input line.
-  vcl_string line_;
+  std::string line_;
 
   // Copy of last line with null characters at the start of every field
   char* split_line_;
   // Pointers to the fields within split_line_;
-  vcl_vector<char *> fields_;
+  std::vector<char *> fields_;
 
   // May as well keep track of it...
   int line_number_;

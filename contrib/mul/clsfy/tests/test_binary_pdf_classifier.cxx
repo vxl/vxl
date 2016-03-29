@@ -1,5 +1,9 @@
 // This is mul/clsfy/tests/test_binary_pdf_classifier.cxx
 // Copyright: (C) 2000 British Telecommunications PLC
+#include <iostream>
+#include <iomanip>
+#include <ios>
+#include <string>
 #include <testlib/testlib_test.h>
 //:
 // \file
@@ -7,10 +11,7 @@
 // \author Ian Scott
 // Test construction, IO etc.
 
-#include <vcl_iostream.h>
-#include <vcl_iomanip.h>
-#include <vcl_ios.h>
-#include <vcl_string.h>
+#include <vcl_compiler.h>
 #include <vpl/vpl.h> // vpl_unlink()
 #include <vsl/vsl_binary_loader.h>
 
@@ -26,11 +27,11 @@ void test_binary_pdf_classifier()
 {
   vsl_add_to_binary_loader(vpdfl_axis_gaussian());
 
-  vcl_cout << "*************************************\n"
+  std::cout << "*************************************\n"
            << " Testing clsfy_binary_pdf_classifier\n"
            << "*************************************\n";
 
-  vcl_cout<<"\n======== TESTING CONSTRUCTION ===========\n";
+  std::cout<<"\n======== TESTING CONSTRUCTION ===========\n";
 
   vpdfl_axis_gaussian PDF0;
   unsigned nDims=2;
@@ -39,41 +40,41 @@ void test_binary_pdf_classifier()
   var0.fill(1);
   PDF0.set(mean0, var0);
 
-  vcl_cout << "PDF model: " << PDF0;
+  std::cout << "PDF model: " << PDF0;
 
   clsfy_binary_pdf_classifier classifier(PDF0, -2.0);
 
   // print input, print output
 
   vnl_vector<double> x(nDims);
-  vcl_vector<double> out(1);
+  std::vector<double> out(1);
   x.fill(0.0);
-  vcl_cout << "x(2) varies across from -2 to + 2\n"
+  std::cout << "x(2) varies across from -2 to + 2\n"
            << "x(1) varies down from -2 to + 2\n";
 
-  vcl_cout << vcl_setprecision(4);
+  std::cout << std::setprecision(4);
   for (x(0) = -2; x(0) <= 2 ; x(0) += 0.25)
   {
     for (x(1) = -2; x(1) <= 2 ; x(1) += 0.25)
     {
       classifier.class_probabilities(out, x);
-      vcl_cout << vcl_fixed << vcl_setw(4) << out[0] << ' ';
+      std::cout << std::fixed << std::setw(4) << out[0] << ' ';
     }
-    vcl_cout << vcl_endl;
+    std::cout << std::endl;
   }
 
   for (x(0) = -2; x(0) <= 2 ; x(0) += 0.25)
   {
     for (x(1) = -2; x(1) <= 2 ; x(1) += 0.25)
     {
-      vcl_cout << classifier.classify(x);
+      std::cout << classifier.classify(x);
     }
-    vcl_cout << vcl_endl;
+    std::cout << std::endl;
   }
 
-  vcl_cout<<"======== TESTING I/O ===========\n";
+  std::cout<<"======== TESTING I/O ===========\n";
 
-  vcl_string test_path = "test_binary_pdf_classifier.bvl.tmp";
+  std::string test_path = "test_binary_pdf_classifier.bvl.tmp";
 
   vsl_b_ofstream bfs_out(test_path);
   TEST(("Opened " + test_path + " for writing").c_str(), (!bfs_out ), false);
@@ -91,8 +92,8 @@ void test_binary_pdf_classifier()
   vpl_unlink(test_path.c_str());
 #endif
 
-  vcl_cout<<"Saved : " << classifier << vcl_endl
-          <<"Loaded: " << classifier2 << vcl_endl;
+  std::cout<<"Saved : " << classifier << std::endl
+          <<"Loaded: " << classifier2 << std::endl;
 
   TEST("Original KNN == Loaded KNN",
        classifier.n_classes() == classifier2.n_classes() &&
@@ -102,13 +103,13 @@ void test_binary_pdf_classifier()
 
   const vnl_vector<double> probe1(2,0.5);
   const vnl_vector<double> probe2(2,2.0);
-  vcl_cout << "classifier.log_l(2.0, 2.0) = "
-           << classifier.log_l(probe2) << vcl_endl;
+  std::cout << "classifier.log_l(2.0, 2.0) = "
+           << classifier.log_l(probe2) << std::endl;
   TEST("Original classifier(2.0, 2.0) == Loaded classifier(2.0, 2.0)",
        classifier.log_l(probe2) == classifier2.log_l(probe2) &&
        classifier.log_l(probe1) == classifier2.log_l(probe1),
        true);
-  vcl_cout << vcl_setprecision(6) << vcl_resetiosflags(vcl_ios_floatfield);
+  std::cout << std::setprecision(6) << std::resetiosflags(std::ios::floatfield);
   vsl_delete_all_loaders();
 
 }

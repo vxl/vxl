@@ -90,7 +90,7 @@ class rrel_cauchy_obj : public rrel_m_est_obj
 inline double
 rrel_cauchy_obj::rho_fast( double u ) const
 {
-  return 0.5 * vcl_log( 1 + vnl_math::sqr( u/C_ ) );
+  return 0.5 * std::log( 1 + vnl_math::sqr( u/C_ ) );
 }
 
 inline double

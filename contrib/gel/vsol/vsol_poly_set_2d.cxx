@@ -1,11 +1,12 @@
 // This is gel/vsol/vsol_poly_set_2d.cxx
+#include <iostream>
+#include <cmath>
 #include "vsol_poly_set_2d.h"
 //:
 // \file
 #include <vsl/vsl_vector_io.h>
-#include <vcl_iostream.h>
 #include <vcl_cassert.h>
-#include <vcl_cmath.h>
+#include <vcl_compiler.h>
 #include <vsol/vsol_polygon_2d.h>
 
 //***************************************************************************
@@ -13,13 +14,13 @@
 //***************************************************************************
 
 //---------------------------------------------------------------------------
-//: Constructor from a vcl_vector (not a geometric vector but a list of points)
+//: Constructor from a std::vector (not a geometric vector but a list of points)
 // Require: new_vertices.size()>=3
 //---------------------------------------------------------------------------
-vsol_poly_set_2d::vsol_poly_set_2d(const vcl_vector<vsol_polygon_2d_sptr> &new_polys)
+vsol_poly_set_2d::vsol_poly_set_2d(const std::vector<vsol_polygon_2d_sptr> &new_polys)
   : vsol_region_2d()
 {
-  storage_=new vcl_vector<vsol_polygon_2d_sptr>(new_polys);
+  storage_=new std::vector<vsol_polygon_2d_sptr>(new_polys);
 }
 
 //---------------------------------------------------------------------------
@@ -29,7 +30,7 @@ vsol_poly_set_2d::vsol_poly_set_2d(const vsol_poly_set_2d &other)
   : vsol_region_2d(other)
 {
   //vsol_point_2d_sptr p;
-  storage_=new vcl_vector<vsol_polygon_2d_sptr>(*other.storage_);
+  storage_=new std::vector<vsol_polygon_2d_sptr>(*other.storage_);
   for (unsigned int i=0;i<storage_->size();++i)
     (*storage_)[i]=new vsol_polygon_2d(*((*other.storage_)[i]));
 }
@@ -40,7 +41,7 @@ vsol_poly_set_2d::vsol_poly_set_2d(const vsol_poly_set_2d &other)
 vsol_poly_set_2d::~vsol_poly_set_2d()
 {
   for (unsigned i = 0; i < storage_->size(); i++)
-   (*storage_)[i] = 0;
+   (*storage_)[i] = VXL_NULLPTR;
   delete storage_;
 }
 
@@ -163,7 +164,7 @@ double vsol_poly_set_2d::area(void) const
   for (unsigned int i=0; i<last; ++i)
     area += ((*storage_)[i]->area());;
 
-  return vcl_abs(area / 2.0);
+  return std::abs(area / 2.0);
 }
 
 //---------------------------------------------------------------------------
@@ -191,7 +192,7 @@ double vsol_poly_set_2d::area(void) const
 //
 vsol_point_2d_sptr vsol_poly_set_2d::centroid(void) const
 {
-  vcl_vector<vsol_point_2d_sptr> p;
+  std::vector<vsol_point_2d_sptr> p;
   for (unsigned int i=0; i<storage_->size(); ++i)
   {
     vsol_point_2d_sptr c = (*storage_)[i]->centroid();
@@ -253,7 +254,7 @@ void vsol_poly_set_2d::b_read(vsl_b_istream &is)
     vsol_spatial_object_2d::b_read(is);
 
     delete storage_;
-    storage_ = new vcl_vector<vsol_polygon_2d_sptr>();
+    storage_ = new std::vector<vsol_polygon_2d_sptr>();
     bool null_ptr;
     vsl_b_read(is, null_ptr);
     if (!null_ptr)
@@ -261,7 +262,7 @@ void vsol_poly_set_2d::b_read(vsl_b_istream &is)
     vsl_b_read(is, *storage_);
     break;
    default:
-    vcl_cerr << "vsol_poly_set_2d: unknown I/O version " << ver << '\n';
+    std::cerr << "vsol_poly_set_2d: unknown I/O version " << ver << '\n';
   }
 }
 
@@ -272,7 +273,7 @@ short vsol_poly_set_2d::version() const
 }
 
 //: Print an ascii summary to the stream
-void vsol_poly_set_2d::print_summary(vcl_ostream &os) const
+void vsol_poly_set_2d::print_summary(std::ostream &os) const
 {
   os << *this;
 }
@@ -286,7 +287,7 @@ void vsol_poly_set_2d::print_summary(vcl_ostream &os) const
 //---------------------------------------------------------------------------
 vsol_poly_set_2d::vsol_poly_set_2d(void)
 {
-  storage_=new vcl_vector<vsol_polygon_2d_sptr>();
+  storage_=new std::vector<vsol_polygon_2d_sptr>();
 }
 
 
@@ -294,7 +295,7 @@ vsol_poly_set_2d::vsol_poly_set_2d(void)
 void
 vsl_b_write(vsl_b_ostream &os, const vsol_poly_set_2d* p)
 {
-  if (p==0) {
+  if (p==VXL_NULLPTR) {
     vsl_b_write(os, false); // Indicate null pointer stored
   }
   else{
@@ -316,11 +317,11 @@ vsl_b_read(vsl_b_istream &is, vsol_poly_set_2d* &p)
     p->b_read(is);
   }
   else
-    p = 0;
+    p = VXL_NULLPTR;
 }
 
 
-inline void vsol_poly_set_2d::describe(vcl_ostream &strm, int blanking) const
+inline void vsol_poly_set_2d::describe(std::ostream &strm, int blanking) const
 {
   if (blanking < 0) blanking = 0; while (blanking--) strm << ' ';
   if (size() == 0)
@@ -332,5 +333,5 @@ inline void vsol_poly_set_2d::describe(vcl_ostream &strm, int blanking) const
       strm << " p" << i << ':' << *(poly(i));
     strm << ']';
   }
-  strm << vcl_endl;
+  strm << std::endl;
 }

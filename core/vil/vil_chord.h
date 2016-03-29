@@ -5,8 +5,9 @@
 // \brief Object to store information about position of a row of pixels.
 // \author Tim Cootes
 
-#include <vcl_iostream.h>
-#include <vcl_vector.h>
+#include <iostream>
+#include <vector>
+#include <vcl_compiler.h>
 
 //: Store information about position of a row of pixels in an image
 //  Pixels are ([ilo,ihi],y)
@@ -28,13 +29,13 @@ struct vil_chord
 };
 
 //: Print to stream
-inline vcl_ostream& operator<<(vcl_ostream& os, vil_chord c)
+inline std::ostream& operator<<(std::ostream& os, vil_chord c)
 {
   return os<<"(["<<c.ilo<<','<<c.ihi<<"],"<<c.j<<')';
 }
 
 //: Compute area of region defined by (non-overlapping) chords
-inline unsigned vil_area(const vcl_vector<vil_chord>& region)
+inline unsigned vil_area(const std::vector<vil_chord>& region)
 {
   unsigned A=0;
   for (unsigned i=0;i<region.size();++i) A+=region[i].length();

@@ -16,6 +16,8 @@
 //    23 Oct 2002 - Peter Vanroose - using fixed 3x3 matrices throughout
 // \endverbatim
 
+#include <iostream>
+#include <iosfwd>
 #include <vnl/vnl_double_4x4.h>
 #include <vnl/vnl_fwd.h>
 #include <vgl/vgl_homg_point_3d.h>
@@ -23,7 +25,7 @@
 #include <mvl/HomgPoint3D.h>
 #include <mvl/HomgLine3D.h>
 #include <mvl/HomgLineSeg3D.h>
-#include <vcl_iosfwd.h>
+#include <vcl_compiler.h>
 
 class PMatrix;
 
@@ -36,7 +38,7 @@ class HMatrix3D : public vnl_double_4x4
   HMatrix3D(vnl_double_4x4 const& M);
   HMatrix3D(vnl_double_3x3 const& M, vnl_double_3 const& m);
   HMatrix3D(const double* t_matrix);
-  HMatrix3D(vcl_istream&);
+  HMatrix3D(std::istream&);
  ~HMatrix3D();
 
   // Operations----------------------------------------------------------------
@@ -46,7 +48,7 @@ class HMatrix3D : public vnl_double_4x4
     { return (*this) * x1; }
   HomgLine3D transform(const HomgLine3D& l1) const;
 
-  bool load(vcl_istream&);
+  bool load(std::istream&);
 
   // Data Access---------------------------------------------------------------
 
@@ -60,7 +62,7 @@ class HMatrix3D : public vnl_double_4x4
 PMatrix operator* (const PMatrix&, const HMatrix3D& H);
 
 // stream I/O
-vcl_ostream& operator<<(vcl_ostream &,HMatrix3D const &);
-vcl_istream& operator>>(vcl_istream &,HMatrix3D       &);
+std::ostream& operator<<(std::ostream &,HMatrix3D const &);
+std::istream& operator>>(std::istream &,HMatrix3D       &);
 
 #endif // HMatrix3D_h_

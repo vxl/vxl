@@ -28,15 +28,15 @@ static void test_block_vis_graph()
   boxm_block_vis_graph_iterator<tree_type> block_vis_iter(camera, &scene, IMAGE_U, IMAGE_V);
 
   int vis_count = -1;
-  vcl_vector<boxm_block<tree_type>*> blocks;
+  std::vector<boxm_block<tree_type>*> blocks;
   int counts[] = {4,4,4};
   while (block_vis_iter.next()) {
     int block_count = 0;
     ++vis_count;
-    vcl_cout << "Frontier\n";
+    std::cout << "Frontier\n";
     blocks = block_vis_iter.frontier_blocks();
     for (unsigned i=0; i<blocks.size(); ++i) {
-      vcl_cout << i << "- " << blocks[i]->bounding_box() << vcl_endl;
+      std::cout << i << "- " << blocks[i]->bounding_box() << std::endl;
       ++block_count;
     }
     TEST("block count", block_count, counts[vis_count]);

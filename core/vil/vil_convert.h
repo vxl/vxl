@@ -80,9 +80,10 @@
 //   30 Mar.2007 - Peter Vanroose - Commented out deprecated versions of vil_convert_cast & vil_convert_to_grey_using_average
 // \endverbatim
 
+#include <limits>
+#include <cmath>
 #include <vcl_cassert.h>
-#include <vcl_limits.h>
-#include <vcl_cmath.h>
+#include <vcl_compiler.h>
 #include <vil/vil_transform.h>
 #include <vil/vil_math.h>
 #include <vil/vil_plane.h>
@@ -178,11 +179,11 @@ inline void vil_convert_cast_pixel<vil_rgba<vxl_byte>, vil_rgba<vxl_byte> >::ope
   vil_rgba<vxl_byte> v, vil_rgba<vxl_byte>& d) const { d.r=v.r, d.g=v.g, d.b=v.b, d.a=v.a; }
 #define macro( in )\
 VCL_DEFINE_SPECIALIZATION \
-inline void vil_convert_cast_pixel<in,vcl_complex<double> >::operator () (in v, vcl_complex<double>& d) const \
-{ d = vcl_complex<double>(double(v),0.0); } \
+inline void vil_convert_cast_pixel<in,std::complex<double> >::operator () (in v, std::complex<double>& d) const \
+{ d = std::complex<double>(double(v),0.0); } \
 VCL_DEFINE_SPECIALIZATION \
-inline void vil_convert_cast_pixel<in,vcl_complex<float> >::operator () (in v, vcl_complex<float>& d) const \
-{ d = vcl_complex<float>(float(v),0.0f); }
+inline void vil_convert_cast_pixel<in,std::complex<float> >::operator () (in v, std::complex<float>& d) const \
+{ d = std::complex<float>(float(v),0.0f); }
 macro( vxl_byte )
 macro( vxl_sbyte )
 macro( vxl_int_16 )
@@ -196,10 +197,10 @@ macro( vxl_uint_64 )
 #undef macro
 #define macro( out )\
 VCL_DEFINE_SPECIALIZATION \
-inline void vil_convert_cast_pixel<vcl_complex<double>,out >::operator () (vcl_complex<double> d, out& v) const \
+inline void vil_convert_cast_pixel<std::complex<double>,out >::operator () (std::complex<double> d, out& v) const \
 { v = (out)(d.real()); } \
 VCL_DEFINE_SPECIALIZATION \
-inline void vil_convert_cast_pixel<vcl_complex<float>,out >::operator () (vcl_complex<float> d, out& v) const \
+inline void vil_convert_cast_pixel<std::complex<float>,out >::operator () (std::complex<float> d, out& v) const \
 { v = (out)(d.real()); }
 macro( vxl_byte )
 macro( vxl_sbyte )
@@ -915,7 +916,7 @@ macro(VIL_PIXEL_FORMAT_DOUBLE , double )
     default:
       vil_exception_warning(vil_exception_unsupported_pixel_format(
         src->pixel_format(), "vil_convert_to_compound_order") );
-      dest=0;
+      dest=VXL_NULLPTR;
   }
   return dest;
 }
@@ -1029,7 +1030,7 @@ inline vil_image_view_base_sptr vil_convert_to_grey_using_average(
   default:
     vil_exception_warning(vil_exception_unsupported_pixel_format(
       src->pixel_format(), "vil_convert_to_grey_using_average") );
-    return 0;
+    return VXL_NULLPTR;
   }
 }
 
@@ -1263,10 +1264,10 @@ inline vil_image_view_base_sptr vil_convert_stretch_range(
 
   double hi,lo;
 
-  if (vcl_numeric_limits<outP>::is_integer)
+  if (std::numeric_limits<outP>::is_integer)
   {
-    hi = vcl_numeric_limits<outP>::max()+0.999;
-    lo = vcl_numeric_limits<outP>::min();
+    hi = std::numeric_limits<outP>::max()+0.999;
+    lo = std::numeric_limits<outP>::min();
   }
   else
   {

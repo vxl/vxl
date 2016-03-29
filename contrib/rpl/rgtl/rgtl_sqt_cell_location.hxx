@@ -11,9 +11,11 @@
 // \author Brad King
 // \date February 2007
 
+#include <iostream>
+#include <iosfwd>
 #include "rgtl_octree_cell_location.hxx"
 
-#include <vcl_iosfwd.h>
+#include <vcl_compiler.h>
 
 //: Represent the logical index of a spherical quad-tree cell.
 //
@@ -59,7 +61,7 @@ bool operator==(rgtl_sqt_cell_location<D> const& l,
 
 //: Print a logical cell location in a human-readable form.
 template <unsigned int D>
-vcl_ostream& operator<<(vcl_ostream& os,
+std::ostream& operator<<(std::ostream& os,
                         rgtl_sqt_cell_location<D> const& cell);
 
 #endif

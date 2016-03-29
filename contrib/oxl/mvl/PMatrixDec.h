@@ -34,9 +34,11 @@
 //
 //----------------------------------------------------------------------------
 
+#include <iostream>
+#include <iosfwd>
 #include <vnl/vnl_matrix.h>
 #include <mvl/PMatrix.h>
-#include <vcl_iosfwd.h>
+#include <vcl_compiler.h>
 
 class PMatrixDec : public PMatrix
 {
@@ -63,7 +65,7 @@ class PMatrixDec : public PMatrix
   // make tests for this class
   void Test();
 
-  friend vcl_ostream& operator<<(vcl_ostream& s, const PMatrixDec& P);
+  friend std::ostream& operator<<(std::ostream& s, const PMatrixDec& P);
 
   // INTERNALS---------------------------------------------------------------
  private:

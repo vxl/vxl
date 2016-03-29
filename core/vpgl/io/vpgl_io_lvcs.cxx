@@ -66,15 +66,15 @@ void vsl_b_read(vsl_b_istream & is, vpgl_lvcs &lvcs)
       break;
     }
     default:
-      vcl_cerr << "I/O ERROR: vpgl_lvcs::b_read(vsl_b_istream&)\n"
+      std::cerr << "I/O ERROR: vpgl_lvcs::b_read(vsl_b_istream&)\n"
                << "           Unknown version number "<< ver << '\n';
-      is.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
+      is.is().clear(std::ios::badbit); // Set an unrecoverable IO error on stream
       return;
   }
 }
 
 //: Print human readable summary of object to a stream
-void vsl_print_summary(vcl_ostream& os,const vpgl_lvcs & c)
+void vsl_print_summary(std::ostream& os,const vpgl_lvcs & c)
 {
   os << c << '\n';
 }

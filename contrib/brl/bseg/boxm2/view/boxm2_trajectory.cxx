@@ -1,8 +1,10 @@
+#include <iostream>
+#include <algorithm>
 #include "boxm2_trajectory.h"
 //:
 // \file
 #include <vpgl/vpgl_perspective_camera.h>
-#include <vcl_algorithm.h>
+#include <vcl_compiler.h>
 #include <boxm2/boxm2_util.h>
 #include <bpgl/bpgl_camera_utils.h>
 #include <vcl_cassert.h>
@@ -53,7 +55,7 @@ boxm2_trajectory::boxm2_trajectory(vgl_box_3d<double> bb, vil_image_view<float>&
         double y = y_img(i,j);
         double z = z_img(i,j);
         if ( i == i_start && j == j_start)
-          vcl_cout << "i: " << i << " j: " << j << " x: " << x << " y: " << y << " z: " << z << vcl_endl;
+          std::cout << "i: " << i << " j: " << j << " x: " << x << " y: " << y << " z: " << z << std::endl;
         if (bb.contains(vgl_point_3d<double>(x,y,z))) {
             vpgl_perspective_camera<double>* cam =
             new vpgl_perspective_camera<double>(

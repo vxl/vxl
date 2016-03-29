@@ -8,7 +8,8 @@
 // \author Peter Carr
 // \date 14 Feb 2013
 
-#include <vcl_vector.h>
+#include <vector>
+#include <vcl_compiler.h>
 #include <vgl/vgl_point_2d.h>
 #include <vgl/algo/vgl_h_matrix_2d.h>
 #include <vpgl/vpgl_calibration_matrix.h>
@@ -33,8 +34,8 @@ class vpgl_calibration_matrix_compute
 
   static
   bool
-  natural(const vcl_vector< vgl_point_2d<double> >& image_pts,
-          const vcl_vector< vgl_point_2d<double> >& ground_pts,
+  natural(const std::vector< vgl_point_2d<double> >& image_pts,
+          const std::vector< vgl_point_2d<double> >& ground_pts,
           const vgl_point_2d<double>& principal_point,
           vpgl_calibration_matrix<double>& K);
 };

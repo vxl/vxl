@@ -18,15 +18,16 @@
 //   20-Oct-1999  awf         Changed timestamp to int.
 //   19-Oct-1999  fsm. added pointer to adaptor.
 //    1-Nov-1999  fsm. events now use viewport, not window coordinates.
-//   28-Nov-1999  fsm. added vcl_string event.
+//   28-Nov-1999  fsm. added std::string event.
 //   22-Aug-2000  Marko Bacic. added support for scroll bar events
 //   04-Oct-2002  K.Y.McGaul - Added set_key() to make sure vgui_key is now
 //                             always lower case to save confusion.
 //                           - Added ascii_char value to vgui_event.
 // \endverbatim
 
-#include <vcl_string.h>
-#include <vcl_iosfwd.h>
+#include <string>
+#include <iosfwd>
+#include <vcl_compiler.h>
 #include <vgui/vgui_key.h>
 #include <vgui/vgui_button.h>
 #include <vgui/vgui_modifier.h>
@@ -59,7 +60,7 @@ enum vgui_event_type
   vgui_EVENT_MAX    // This must be the last entry in the list
 };
 
-vcl_ostream& operator<<(vcl_ostream& s, vgui_event_type e);
+std::ostream& operator<<(std::ostream& s, vgui_event_type e);
 
 //: The vgui_event class encapsulates the events handled by the vgui system.
 //
@@ -118,14 +119,14 @@ class vgui_event
   // that was given when the timer request was posted.
   int timer_id;
 
-  //: A vcl_string message, for an event of type vgui_STRING.
+  //: A std::string message, for an event of type vgui_STRING.
   //  An event of type vgui_STRING implies that
   //  this field contains some sort of textual message. The exact
   //  encoding of these messages is unspecified; the sender and the
   //  receiver may use any protocol they like. Caveat : as a
   //  corollary there is no guarantee that one protocol will not
   //  clash with another.
-  vcl_string str;
+  std::string str;
 
   //: Type and data for events of type vgui_OTHER.
   //  The fields user and data are used only when the event type is vgui_OTHER.
@@ -145,6 +146,6 @@ class vgui_event
 };
 
 bool operator==(vgui_event const& a, vgui_event const& b);
-vcl_ostream& operator<<(vcl_ostream&, vgui_event const&);
+std::ostream& operator<<(std::ostream&, vgui_event const&);
 
 #endif // vgui_event_h_

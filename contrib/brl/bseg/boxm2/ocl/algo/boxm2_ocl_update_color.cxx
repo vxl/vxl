@@ -1,4 +1,7 @@
 // This is brl/bseg/boxm2/ocl/algo/boxm2_ocl_update_color.cxx
+#include <fstream>
+#include <iostream>
+#include <algorithm>
 #include "boxm2_ocl_update_color.h"
 //:
 // \file
@@ -7,8 +10,7 @@
 // \author Vishal Jain
 // \date Mar 25, 2011
 
-#include <vcl_fstream.h>
-#include <vcl_algorithm.h>
+#include <vcl_compiler.h>
 #include <boxm2/ocl/boxm2_opencl_cache.h>
 #include <boxm2/boxm2_scene.h>
 #include <boxm2/boxm2_block.h>
@@ -26,23 +28,23 @@
 #include <bocl/bocl_kernel.h>
 
 //: Map of kernels should persist between process executions
-vcl_map<vcl_string,vcl_vector<bocl_kernel*> > boxm2_ocl_update_color::kernels_;
+std::map<std::string,std::vector<bocl_kernel*> > boxm2_ocl_update_color::kernels_;
 
 bool boxm2_ocl_update_color::update_color(boxm2_scene_sptr         scene,
                                           bocl_device_sptr         device,
                                           boxm2_opencl_cache_sptr  opencl_cache,
                                           vpgl_camera_double_sptr  cam,
                                           vil_image_view_base_sptr img,
-                                          vcl_string               in_identifier,
-                                          vcl_string    mask_filename,
+                                          std::string               in_identifier,
+                                          std::string    mask_filename,
                                           bool                     update_alpha,
-                                          vcl_size_t               startI,
-                                          vcl_size_t               startJ)
+                                          std::size_t               startI,
+                                          std::size_t               startJ)
 {
   vil_image_view_base_sptr mask_img;
   if (mask_filename!="")
   {
-    vcl_cout<<"MASK FOUND"<<vcl_endl;
+    std::cout<<"MASK FOUND"<<std::endl;
     mask_img=vil_load(mask_filename.c_str());
   }
   return update_color(scene, device, opencl_cache, cam, img, in_identifier, mask_img, update_alpha, startI, startJ);
@@ -54,18 +56,18 @@ bool boxm2_ocl_update_color::update_color(boxm2_scene_sptr         scene,
                                           boxm2_opencl_cache_sptr  opencl_cache,
                                           vpgl_camera_double_sptr  cam,
                                           vil_image_view_base_sptr img,
-                                          vcl_string               in_identifier,
+                                          std::string               in_identifier,
                                           vil_image_view_base_sptr mask_img,
                                           bool                     update_alpha,
-                                          vcl_size_t               startI,
-                                          vcl_size_t               startJ)
+                                          std::size_t               startI,
+                                          std::size_t               startJ)
 {
   float transfer_time=0.0f;
   float gpu_time=0.0f;
 
   //setup local/global size
-  vcl_size_t local_threads[2]={8,8};
-  vcl_size_t global_threads[2]={8,8};
+  std::size_t local_threads[2]={8,8};
+  std::size_t global_threads[2]={8,8};
   enum {
       UPDATE_SEGLEN = 0,
       UPDATE_COMPRESS = 1,
@@ -77,7 +79,7 @@ bool boxm2_ocl_update_color::update_color(boxm2_scene_sptr         scene,
 
   //make sure the scene corresponds to this datatype
   bool foundDataType = false, foundNumObsType = false;
-  vcl_string data_type, num_obs_type, options;
+  std::string data_type, num_obs_type, options;
   if ( scene->has_data_type(boxm2_data_traits<BOXM2_GAUSS_RGB>::prefix(in_identifier)) ) {
     data_type = boxm2_data_traits<BOXM2_GAUSS_RGB>::prefix(in_identifier);
     foundDataType = true;
@@ -88,11 +90,11 @@ bool boxm2_ocl_update_color::update_color(boxm2_scene_sptr         scene,
     foundNumObsType = true;
   }
   if (!foundDataType) {
-    vcl_cout<<"boxm2_ocl_update_color: ERROR: scene doesn't have BOXM2_GAUSS_RGB data type"<<vcl_endl;
+    std::cout<<"boxm2_ocl_update_color: ERROR: scene doesn't have BOXM2_GAUSS_RGB data type"<<std::endl;
     return false;
   }
   if (!foundNumObsType) {
-    vcl_cout<<"boxm2_ocl_update_color: ERROR: scene doesn't have BOXM2_NUM_OBS_SINGLE type"<<vcl_endl;
+    std::cout<<"boxm2_ocl_update_color: ERROR: scene doesn't have BOXM2_NUM_OBS_SINGLE type"<<std::endl;
     return false;
   }
 
@@ -104,12 +106,12 @@ bool boxm2_ocl_update_color::update_color(boxm2_scene_sptr         scene,
     return false;
 
   // compile kernels if not already compiled
-  vcl_vector<bocl_kernel*>& kernels = get_kernels(device, options);
+  std::vector<bocl_kernel*>& kernels = get_kernels(device, options);
 
   //prepare input image
   vil_image_view_base_sptr float_img = boxm2_util::prepare_input_image(img, false);
   if ( float_img->pixel_format() != VIL_PIXEL_FORMAT_RGBA_BYTE ) {
-    vcl_cout<<"boxm2_ocl_update_color::using a non RGBA image!!"<<vcl_endl;
+    std::cout<<"boxm2_ocl_update_color::using a non RGBA image!!"<<std::endl;
     return false;
   }
   vil_image_view<vil_rgba<vxl_byte> >* img_view = static_cast<vil_image_view<vil_rgba<vxl_byte> >* >(float_img.ptr());
@@ -131,9 +133,9 @@ bool boxm2_ocl_update_color::update_color(boxm2_scene_sptr         scene,
   float* vis_buff = new float[cl_ni*cl_nj];
   float* pre_buff = new float[cl_ni*cl_nj];
   float* norm_buff = new float[cl_ni*cl_nj];
-  vcl_fill(vis_buff, vis_buff+cl_ni*cl_nj, 1.0f);
-  vcl_fill(pre_buff, pre_buff+cl_ni*cl_nj, 0.0f);
-  vcl_fill(norm_buff, norm_buff+cl_ni*cl_nj, 0.0f);
+  std::fill(vis_buff, vis_buff+cl_ni*cl_nj, 1.0f);
+  std::fill(pre_buff, pre_buff+cl_ni*cl_nj, 0.0f);
+  std::fill(norm_buff, norm_buff+cl_ni*cl_nj, 0.0f);
 
   float tnearfar[2] = { 0.0f, 1000000.0f} ;
   bocl_mem_sptr tnearfar_mem_ptr = opencl_cache->alloc_mem(2*sizeof(float), tnearfar, "tnearfar  buffer");
@@ -204,13 +206,13 @@ bool boxm2_ocl_update_color::update_color(boxm2_scene_sptr         scene,
   app_density->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
 
   // set arguments
-  vcl_vector<boxm2_block_id> vis_order;
+  std::vector<boxm2_block_id> vis_order;
   if(cam->type_name() == "vpgl_perspective_camera")
       vis_order= scene->get_vis_blocks_opt((vpgl_perspective_camera<double>*)cam.ptr(),img_view->ni(),img_view->nj());
   else
       vis_order= scene->get_vis_blocks(cam);
 
-  vcl_vector<boxm2_block_id>::iterator id;
+  std::vector<boxm2_block_id>::iterator id;
   for (unsigned int i=0; i<kernels.size(); ++i)
   {
     if ( i == UPDATE_PROC ) {
@@ -278,7 +280,7 @@ bool boxm2_ocl_update_color::update_color(boxm2_scene_sptr         scene,
         }
       }
       else {
-        vcl_cerr << "ERROR: boxm2_ocl_update_color: upsupported mask type! " << vcl_endl;
+        std::cerr << "ERROR: boxm2_ocl_update_color: upsupported mask type! " << std::endl;
         return false;
       }
       in_image->write_to_buffer(queue);
@@ -495,25 +497,25 @@ bool boxm2_ocl_update_color::update_color(boxm2_scene_sptr         scene,
   global_threads[0]=cl_ni;
   global_threads[1]=cl_nj;
 
-  vcl_cout<<"Gpu time "<<gpu_time<<" transfer time "<<transfer_time<<vcl_endl;
+  std::cout<<"Gpu time "<<gpu_time<<" transfer time "<<transfer_time<<std::endl;
   clReleaseCommandQueue(queue);
   return true;
 }
 
 
 //Returns vector of color update kernels (and caches them per device
-vcl_vector<bocl_kernel*>& boxm2_ocl_update_color::get_kernels(bocl_device_sptr device, vcl_string opts)
+std::vector<bocl_kernel*>& boxm2_ocl_update_color::get_kernels(bocl_device_sptr device, std::string opts)
 {
   // compile kernels if not already compiled
-  vcl_string identifier = device->device_identifier() + opts;
+  std::string identifier = device->device_identifier() + opts;
   if (kernels_.find(identifier) != kernels_.end())
     return kernels_[identifier];
 
   //otherwise compile the kernels
-  vcl_cout<<"=== boxm2_ocl_update_color::compiling kernels on device "<<identifier<<"==="<<vcl_endl;
+  std::cout<<"=== boxm2_ocl_update_color::compiling kernels on device "<<identifier<<"==="<<std::endl;
 
-  vcl_vector<vcl_string> src_paths;
-  vcl_string source_dir = boxm2_ocl_util::ocl_src_root();
+  std::vector<std::string> src_paths;
+  std::string source_dir = boxm2_ocl_util::ocl_src_root();
   src_paths.push_back(source_dir + "scene_info.cl");
   src_paths.push_back(source_dir + "pixel_conversion.cl");
   src_paths.push_back(source_dir + "bit/bit_tree_library_functions.cl");
@@ -521,32 +523,32 @@ vcl_vector<bocl_kernel*>& boxm2_ocl_update_color::get_kernels(bocl_device_sptr d
   src_paths.push_back(source_dir + "statistics_library_functions.cl");
   src_paths.push_back(source_dir + "ray_bundle_library_opt.cl");
   src_paths.push_back(source_dir + "bit/update_rgb_kernels.cl");
-  vcl_vector<vcl_string> non_ray_src = vcl_vector<vcl_string>(src_paths);
+  std::vector<std::string> non_ray_src = std::vector<std::string>(src_paths);
   src_paths.push_back(source_dir + "update_rgb_functors.cl");
   src_paths.push_back(source_dir + "bit/cast_ray_bit.cl");
 
   //compilation options
-  vcl_string options = " -D INTENSITY ";
+  std::string options = " -D INTENSITY ";
   options += " -D YUV -D DETERMINISTIC -D MOG_TYPE_8 ";
   options += opts;
 
   //populate vector of kernels
-  vcl_vector<bocl_kernel*> vec_kernels;
+  std::vector<bocl_kernel*> vec_kernels;
 
   //seg len pass
   bocl_kernel* seg_len = new bocl_kernel();
-  vcl_string seg_opts = options + " -D SEGLEN -D STEP_CELL=step_cell_seglen(aux_args,data_ptr,llid,d) ";
+  std::string seg_opts = options + " -D SEGLEN -D STEP_CELL=step_cell_seglen(aux_args,data_ptr,llid,d) ";
   seg_len->create_kernel(&device->context(), device->device_id(), src_paths, "seg_len_main", seg_opts, "update_color::seg_len");
   vec_kernels.push_back(seg_len);
 
   //create  compress rgb pass
   bocl_kernel* comp = new bocl_kernel();
-  vcl_string comp_opts = options + " -D COMPRESS_RGB ";
+  std::string comp_opts = options + " -D COMPRESS_RGB ";
   comp->create_kernel(&device->context(), device->device_id(), non_ray_src, "compress_rgb", comp_opts, "update_color::compress_rgb");
   vec_kernels.push_back(comp);
 
   bocl_kernel* pre_inf = new bocl_kernel();
-  vcl_string pre_opts = options + " -D PREINF -D STEP_CELL=step_cell_preinf(aux_args,data_ptr,llid,d) ";
+  std::string pre_opts = options + " -D PREINF -D STEP_CELL=step_cell_preinf(aux_args,data_ptr,llid,d) ";
   pre_inf->create_kernel(&device->context(), device->device_id(), src_paths, "pre_inf_main", pre_opts, "update_color::pre_inf");
   vec_kernels.push_back(pre_inf);
 
@@ -557,7 +559,7 @@ vcl_vector<bocl_kernel*>& boxm2_ocl_update_color::get_kernels(bocl_device_sptr d
 
   //push back cast_ray_bit
   bocl_kernel* bayes_main = new bocl_kernel();
-  vcl_string bayes_opt = options + " -D BAYES -D STEP_CELL=step_cell_bayes(aux_args,data_ptr,llid,d) ";
+  std::string bayes_opt = options + " -D BAYES -D STEP_CELL=step_cell_bayes(aux_args,data_ptr,llid,d) ";
   bayes_main->create_kernel(&device->context(), device->device_id(), src_paths, "bayes_main", bayes_opt, "update_color::bayes_main");
   vec_kernels.push_back(bayes_main);
 

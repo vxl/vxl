@@ -6,10 +6,12 @@
 // \author Vishal Jain
 // \date Mar 10, 2011
 
+#include <fstream>
+#include <iostream>
+#include <algorithm>
 #include <bprb/bprb_func_process.h>
 
-#include <vcl_fstream.h>
-#include <vcl_algorithm.h>
+#include <vcl_compiler.h>
 #include <boxm2/ocl/boxm2_opencl_cache.h>
 #include <boxm2/boxm2_scene.h>
 #include <boxm2/boxm2_block.h>
@@ -29,15 +31,15 @@ namespace boxm2_ocl_convert_float_image_to_rgba_process_globals
 {
   const unsigned n_inputs_ = 7 ;
   const unsigned n_outputs_ = 0;
-  vcl_size_t lthreads[2]={8,8};
+  std::size_t lthreads[2]={8,8};
 
-  static vcl_map<vcl_string,vcl_vector<bocl_kernel*> > kernels;
+  static std::map<std::string,std::vector<bocl_kernel*> > kernels;
 
-  void compile_kernel(bocl_device_sptr device,vcl_vector<bocl_kernel*> & vec_kernels, vcl_string opts)
+  void compile_kernel(bocl_device_sptr device,std::vector<bocl_kernel*> & vec_kernels, std::string opts)
   {
     //create normalize image kernel
-    vcl_string source_dir = boxm2_ocl_util::ocl_src_root();
-    vcl_vector<vcl_string> norm_src_paths;
+    std::string source_dir = boxm2_ocl_util::ocl_src_root();
+    std::vector<std::string> norm_src_paths;
     norm_src_paths.push_back(source_dir + "pixel_conversion.cl");
     norm_src_paths.push_back(source_dir + "bit/pixel_conversion_kernels.cl");
     bocl_kernel * convert_float_to_rgba=new bocl_kernel();
@@ -66,7 +68,7 @@ bool boxm2_ocl_convert_float_image_to_rgba_process_cons(bprb_func_process& pro)
   using namespace boxm2_ocl_convert_float_image_to_rgba_process_globals;
 
   //process takes 1 input
-  vcl_vector<vcl_string> input_types_(n_inputs_);
+  std::vector<std::string> input_types_(n_inputs_);
   input_types_[0] = "bocl_device_sptr";
   input_types_[1] = "boxm2_scene_sptr";
   input_types_[2] = "bocl_mem_sptr"; // float image
@@ -75,7 +77,7 @@ bool boxm2_ocl_convert_float_image_to_rgba_process_cons(bprb_func_process& pro)
   input_types_[5] = "unsigned"; // gl image (rgba)
   input_types_[6] = "unsigned"; // gl image (rgba)
 
-  vcl_vector<vcl_string> output_types_(n_outputs_);
+  std::vector<std::string> output_types_(n_outputs_);
 
   return pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
 }
@@ -85,7 +87,7 @@ bool boxm2_ocl_convert_float_image_to_rgba_process(bprb_func_process& pro)
   using namespace boxm2_ocl_convert_float_image_to_rgba_process_globals;
 
   if ( pro.n_inputs() < n_inputs_ ) {
-    vcl_cout << pro.name() << ": The input number should be " << n_inputs_<< vcl_endl;
+    std::cout << pro.name() << ": The input number should be " << n_inputs_<< std::endl;
     return false;
   }
   //get the inputs
@@ -99,8 +101,8 @@ bool boxm2_ocl_convert_float_image_to_rgba_process(bprb_func_process& pro)
   unsigned nj =pro.get_input<unsigned>(i++);
 
   bool foundDataType = false;
-  vcl_string data_type="";
-  vcl_vector<vcl_string> apps = scene->appearances();
+  std::string data_type="";
+  std::vector<std::string> apps = scene->appearances();
   for (unsigned int i=0; i<apps.size(); ++i) {
       if ( apps[i] == boxm2_data_traits<BOXM2_MOG3_GREY>::prefix() )
       {
@@ -114,7 +116,7 @@ bool boxm2_ocl_convert_float_image_to_rgba_process(bprb_func_process& pro)
       }
   }
   if (!foundDataType) {
-      vcl_cout<<"BOXM2_OCL_CONVERT_FLOAT_IMAGE_TO_RGBA_PROCESS ERROR: scene doesn't have BOXM2_MOG3_GREY or BOXM2_MOG3_GREY_16 data type"<<vcl_endl;
+      std::cout<<"BOXM2_OCL_CONVERT_FLOAT_IMAGE_TO_RGBA_PROCESS ERROR: scene doesn't have BOXM2_MOG3_GREY or BOXM2_MOG3_GREY_16 data type"<<std::endl;
       return false;
   }
 
@@ -123,13 +125,13 @@ bool boxm2_ocl_convert_float_image_to_rgba_process(bprb_func_process& pro)
   cl_command_queue queue = clCreateCommandQueue(device->context(),*(device->device_id()),
                                                 CL_QUEUE_PROFILING_ENABLE,&status);
   if (status!=0) return false;
-  vcl_string identifier=device->device_identifier();
+  std::string identifier=device->device_identifier();
 
   // compile the kernel
   if (kernels.find(identifier)==kernels.end())
   {
-    vcl_cout<<"===========Compiling kernels==========="<<vcl_endl;
-    vcl_vector<bocl_kernel*> ks;
+    std::cout<<"===========Compiling kernels==========="<<std::endl;
+    std::vector<bocl_kernel*> ks;
     compile_kernel(device,ks,"");
     kernels[identifier]=ks;
   }
@@ -141,7 +143,7 @@ bool boxm2_ocl_convert_float_image_to_rgba_process(bprb_func_process& pro)
 
   if (data_type=="boxm2_gauss_rgb")
   {
-    vcl_size_t gThreads[] = {cl_ni,cl_nj};
+    std::size_t gThreads[] = {cl_ni,cl_nj};
     bocl_kernel* convert_to_rgba_kern= kernels[identifier][1];
     convert_to_rgba_kern->set_arg( in_image.ptr() );
     convert_to_rgba_kern->set_arg( in_img_dim.ptr());
@@ -155,7 +157,7 @@ bool boxm2_ocl_convert_float_image_to_rgba_process(bprb_func_process& pro)
   }
   else  if (data_type=="boxm2_mog3_grey" || data_type=="boxm2_mog3_grey_16")
   {
-    vcl_size_t gThreads[] = {cl_ni,cl_nj};
+    std::size_t gThreads[] = {cl_ni,cl_nj};
     bocl_kernel* convert_to_rgba_kern= kernels[identifier][0];
     convert_to_rgba_kern->set_arg( in_image.ptr() );
     convert_to_rgba_kern->set_arg( in_img_dim.ptr());
@@ -169,7 +171,7 @@ bool boxm2_ocl_convert_float_image_to_rgba_process(bprb_func_process& pro)
   }
   else
   {
-    vcl_cout<<" Unable to know data type of the image"<<vcl_endl;
+    std::cout<<" Unable to know data type of the image"<<std::endl;
     return false;
   }
 

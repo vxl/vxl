@@ -7,7 +7,7 @@
 #include <vgl/vgl_polygon_scan_iterator.h>
 
 vil_image_view_base_sptr
-bvgl_changes::create_mask_from_objs(unsigned ni, unsigned nj, vcl_string change_type)
+bvgl_changes::create_mask_from_objs(unsigned ni, unsigned nj, std::string change_type)
 {
   vil_image_view<vxl_byte>* mask = new vil_image_view<vxl_byte>(ni, nj);
   mask->fill(0);
@@ -69,16 +69,16 @@ void bvgl_changes::add_obj(bvgl_change_obj_sptr obj)
 
 void bvgl_changes::remove_obj(bvgl_change_obj_sptr obj)
 {
-  vcl_vector<bvgl_change_obj_sptr>::iterator iter = objs_.begin();
+  std::vector<bvgl_change_obj_sptr>::iterator iter = objs_.begin();
   while (iter!=objs_.end()) {
     if (*iter == obj) {
       objs_.erase(iter);
-      vcl_cout << "DELETED!" << vcl_endl;
+      std::cout << "DELETED!" << std::endl;
       return;
     }
     iter++;
   }
-  vcl_cout << "Object is no FOUND!" << vcl_endl;
+  std::cout << "Object is no FOUND!" << std::endl;
 }
 
 #if 0
@@ -135,7 +135,7 @@ void bvgl_changes::b_read(vsl_b_istream& is)
     break;
    }
    default:
-    vcl_cout << "In bvgl_changes::b_read() -- Unrecognized version number " << ver << vcl_endl;
+    std::cout << "In bvgl_changes::b_read() -- Unrecognized version number " << ver << std::endl;
     break;
   }
 
@@ -147,5 +147,5 @@ bvgl_changes::obj(unsigned int i)
 {
   if (i<size())
     return objs_[i];
-  return 0;
+  return VXL_NULLPTR;
 }

@@ -13,12 +13,12 @@ class rrel_homography2d_est_aff : public rrel_homography2d_est
  public:
 
   //: Constructor from vgl_homg_point_2d's
-  rrel_homography2d_est_aff( const vcl_vector< vgl_homg_point_2d<double> > & from_pts,
-                             const vcl_vector< vgl_homg_point_2d<double> > & to_pts );
+  rrel_homography2d_est_aff( const std::vector< vgl_homg_point_2d<double> > & from_pts,
+                             const std::vector< vgl_homg_point_2d<double> > & to_pts );
 
   //: Constructor from vnl_vectors
-  rrel_homography2d_est_aff( const vcl_vector< vnl_vector<double> > & from_pts,
-                             const vcl_vector< vnl_vector<double> > & to_pts );
+  rrel_homography2d_est_aff( const std::vector< vnl_vector<double> > & from_pts,
+                             const std::vector< vnl_vector<double> > & to_pts );
 
   //: Destructor.
   virtual ~rrel_homography2d_est_aff();

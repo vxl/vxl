@@ -35,9 +35,9 @@ public:
     enum_data_extension_segments,
     enum_reserved_extension_segments
   };
-  static vcl_string section_num_tag(section_type sec);
-  static vcl_string section_len_header_tag(section_type sec);
-  static vcl_string section_len_data_tag(section_type sec);
+  static std::string section_num_tag(section_type sec);
+  static std::string section_len_header_tag(section_type sec);
+  static std::string section_len_data_tag(section_type sec);
 
   // Read the image header starting at stream's current position. Return success.
   virtual bool read( vil_stream* stream );
@@ -46,17 +46,17 @@ public:
   // Sets out_value to the value of field specified by tag.
   // Returns 0 if such a field is not found or is of the wrong type.
   template< class T >
-  bool get_property(vcl_string tag, T& out_value) const
+  bool get_property(std::string tag, T& out_value) const
   {
     if ( m_field_sequence_classification && m_field_sequence_classification->get_value(tag, out_value) ) return true;
     else if ( m_field_sequence2 && m_field_sequence2->get_value(tag, out_value) ) return true;
     else return m_field_sequence1.get_value(tag, out_value);
   }
 
-  // Sets out_value to the value of vcl_vector field element specified by tag and index.
+  // Sets out_value to the value of std::vector field element specified by tag and index.
   // Returns 0 if such a field is not found or is of the wrong type.
   template< class T >
-  bool get_property(vcl_string tag, int i, T& out_value) const
+  bool get_property(std::string tag, int i, T& out_value) const
   {
     if ( m_field_sequence_classification && m_field_sequence_classification->get_value(tag, i, out_value) ) return true;
     else if ( m_field_sequence2 && m_field_sequence2->get_value(tag, i, out_value) ) return true;

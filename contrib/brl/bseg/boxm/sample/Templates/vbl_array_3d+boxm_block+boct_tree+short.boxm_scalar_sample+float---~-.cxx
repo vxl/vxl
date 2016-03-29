@@ -1,7 +1,9 @@
-#include <vcl_string.h>
-#include <vbl/vbl_array_3d.txx>
+#include <iostream>
+#include <string>
+#include <vcl_compiler.h>
+#include <vbl/vbl_array_3d.hxx>
 #include <vgl/io/vgl_io_point_3d.h>
-#include <boxm/boxm_block.txx>
+#include <boxm/boxm_block.hxx>
 #include <boxm/sample/boxm_scalar_sample.h>
 #include <boct/boct_tree.h>
 

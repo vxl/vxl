@@ -25,7 +25,7 @@ void vil3d_exp_distance_transform(vil3d_image_view<T>& image,
 {
   // Construct filter
   vil3d_structuring_element se;
-  vcl_vector<double> f;
+  std::vector<double> f;
   vil3d_make_edt_filter(width_i,width_j,width_k,r,se,f);
 
   for (unsigned p=0;p<image.nplanes();++p)
@@ -38,9 +38,9 @@ void vil3d_exp_distance_transform(vil3d_image_view<T>& image,
     unsigned nj = image.nj();
     unsigned nk = image.nk();
 
-    vcl_ptrdiff_t istep = image.istep();
-    vcl_ptrdiff_t jstep = image.jstep();
-    vcl_ptrdiff_t kstep = image.kstep();
+    std::ptrdiff_t istep = image.istep();
+    std::ptrdiff_t jstep = image.jstep();
+    std::ptrdiff_t kstep = image.kstep();
 
     vil3d_image_view<T> flipped_image(&image(ni-1,nj-1,nk-1,p),
                                  ni,nj,nk,1,

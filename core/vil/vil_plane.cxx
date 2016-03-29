@@ -54,8 +54,8 @@ vil_image_view_base_sptr vil_plane_image_resource::get_copy_view(unsigned i0, un
     macro(VIL_PIXEL_FORMAT_INT_16 , vxl_int_16 )
     macro(VIL_PIXEL_FORMAT_FLOAT , float )
     macro(VIL_PIXEL_FORMAT_DOUBLE , double )
-    macro(VIL_PIXEL_FORMAT_COMPLEX_FLOAT ,  vcl_complex<float>)
-    macro(VIL_PIXEL_FORMAT_COMPLEX_DOUBLE , vcl_complex<double>)
+    macro(VIL_PIXEL_FORMAT_COMPLEX_FLOAT ,  std::complex<float>)
+    macro(VIL_PIXEL_FORMAT_COMPLEX_DOUBLE , std::complex<double>)
 #undef macro
   default:
     return VXL_NULLPTR;
@@ -87,8 +87,8 @@ vil_image_view_base_sptr vil_plane_image_resource::get_view(unsigned i0, unsigne
     macro(VIL_PIXEL_FORMAT_INT_16 , vxl_int_16 )
     macro(VIL_PIXEL_FORMAT_FLOAT , float )
     macro(VIL_PIXEL_FORMAT_DOUBLE , double )
-    macro(VIL_PIXEL_FORMAT_COMPLEX_FLOAT ,  vcl_complex<float>)
-    macro(VIL_PIXEL_FORMAT_COMPLEX_DOUBLE , vcl_complex<double>)
+    macro(VIL_PIXEL_FORMAT_COMPLEX_FLOAT ,  std::complex<float>)
+    macro(VIL_PIXEL_FORMAT_COMPLEX_DOUBLE , std::complex<double>)
 #undef macro
   default:
     return VXL_NULLPTR;
@@ -128,8 +128,8 @@ bool vil_plane_image_resource::put_view(const vil_image_view_base& im,
     macro(VIL_PIXEL_FORMAT_INT_16 , vxl_int_16 )
     macro(VIL_PIXEL_FORMAT_FLOAT , float )
     macro(VIL_PIXEL_FORMAT_DOUBLE , double )
-    macro(VIL_PIXEL_FORMAT_COMPLEX_FLOAT ,  vcl_complex<float>)
-    macro(VIL_PIXEL_FORMAT_COMPLEX_DOUBLE , vcl_complex<double>)
+    macro(VIL_PIXEL_FORMAT_COMPLEX_FLOAT ,  std::complex<float>)
+    macro(VIL_PIXEL_FORMAT_COMPLEX_DOUBLE , std::complex<double>)
 #undef macro
   default:
     return false;

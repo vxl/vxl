@@ -12,9 +12,11 @@
 //   06 May 2004 Jocelyn Marchadier
 // \endverbatim
 
+#include <iostream>
+#include <iosfwd>
+#include <map>
 #include "vpyr_2_pyramid_level.h"
-#include <vcl_iosfwd.h>
-#include <vcl_map.h>
+#include <vcl_compiler.h>
 #include <vmap/vmap_map_iterator_wrapper.h>
 
 //: enables to handle combinatorial pyramids.
@@ -43,7 +45,7 @@ class vpyr_2_pyramid
  protected:
 
   //:
-  typedef vcl_map<vmap_level_index, level_type> level_array_type ;
+  typedef std::map<vmap_level_index, level_type> level_array_type ;
 
  public:
 
@@ -196,10 +198,10 @@ class vpyr_2_pyramid
   }
 
   //: Initializes the structure of the combinatorial map from "stream".
-  void read_structure(vcl_istream & stream) ;
+  void read_structure(std::istream & stream) ;
 
   //: Writes the structure of the combinatorial map to "stream".
-  void write_structure(vcl_ostream & stream) const ;
+  void write_structure(std::ostream & stream) const ;
 
   //: returns the ith dart of the base map.
   base_dart_type & base_dart(int index)
@@ -219,6 +221,6 @@ class vpyr_2_pyramid
   level_array_type level_ ;
 };
 
-#include "vpyr_2_pyramid.txx"
+#include "vpyr_2_pyramid.hxx"
 
 #endif

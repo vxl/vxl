@@ -47,7 +47,7 @@ bool bvpl_scene_vector_operator_process_cons(bprb_func_process& pro)
 {
   using namespace bvpl_scene_vector_operator_process_globals;
 
-  vcl_vector<vcl_string> input_types_(n_inputs_);
+  std::vector<std::string> input_types_(n_inputs_);
   input_types_[0] = "boxm_scene_base_sptr";
   input_types_[1] = "bvpl_kernel_vector_sptr";
   input_types_[2] = "vcl_string";
@@ -55,7 +55,7 @@ bool bvpl_scene_vector_operator_process_cons(bprb_func_process& pro)
   input_types_[4] = "vcl_string";
   input_types_[5] = "vcl_string";
 
-  vcl_vector<vcl_string> output_types_(n_outputs_);
+  std::vector<std::string> output_types_(n_outputs_);
   output_types_[0] = "boxm_scene_base_sptr";
 
   return pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
@@ -67,8 +67,8 @@ bool bvpl_scene_vector_operator_process(bprb_func_process& pro)
 
   if (pro.n_inputs() < n_inputs_)
   {
-    vcl_cout << pro.name() << ": the input number should be " << n_inputs_
-             << " but instead it is " << pro.n_inputs() << vcl_endl;
+    std::cout << pro.name() << ": the input number should be " << n_inputs_
+             << " but instead it is " << pro.n_inputs() << std::endl;
     return false;
   }
 
@@ -76,19 +76,19 @@ bool bvpl_scene_vector_operator_process(bprb_func_process& pro)
   unsigned i = 0;
   boxm_scene_base_sptr scene_base = pro.get_input<boxm_scene_base_sptr>(i++);
   bvpl_kernel_vector_sptr kernel_vec = pro.get_input<bvpl_kernel_vector_sptr>(i++);
-  vcl_string datatype = pro.get_input<vcl_string>(i++);
-  vcl_string operator_name = pro.get_input<vcl_string>(i++);
-  vcl_string functor_name = pro.get_input<vcl_string>(i++);
-  vcl_string output_path = pro.get_input<vcl_string>(i++);
+  std::string datatype = pro.get_input<std::string>(i++);
+  std::string operator_name = pro.get_input<std::string>(i++);
+  std::string functor_name = pro.get_input<std::string>(i++);
+  std::string output_path = pro.get_input<std::string>(i++);
 
   //check input's validity
   if (!scene_base.ptr()) {
-    vcl_cout <<  " :-- Grid is not valid!\n";
+    std::cout <<  " :-- Grid is not valid!\n";
     return false;
   }
 
   if ( !kernel_vec ) {
-    vcl_cout << pro.name() << " :-- Kernel is not valid!\n";
+    std::cout << pro.name() << " :-- Kernel is not valid!\n";
     return false;
   }
 

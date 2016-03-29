@@ -20,7 +20,7 @@ bool bvxm_detect_scale_process_cons(bprb_func_process& pro)
 {
   using namespace bvxm_detect_scale_process_globals;
   //inputs
-  vcl_vector<vcl_string> input_types_(n_inputs_);
+  std::vector<std::string> input_types_(n_inputs_);
   input_types_[0] = "bvxm_voxel_world_sptr";   // world
   input_types_[1] = "vpgl_camera_double_sptr";
   input_types_[2] = "vil_image_view_base_sptr";
@@ -28,7 +28,7 @@ bool bvxm_detect_scale_process_cons(bprb_func_process& pro)
     return false;
 
   //output
-  vcl_vector<vcl_string> output_types_(n_outputs_);
+  std::vector<std::string> output_types_(n_outputs_);
   output_types_[0]= "unsigned";      // output an expected image of the object at the highest prob location overlayed
   return pro.set_output_types(output_types_);
 }
@@ -41,7 +41,7 @@ bool bvxm_detect_scale_process(bprb_func_process& pro)
  //check number of inputs
   if (pro.n_inputs()<n_inputs_)
   {
-    vcl_cout << pro.name() <<" : The input number should be "<< n_inputs_ << vcl_endl;
+    std::cout << pro.name() <<" : The input number should be "<< n_inputs_ << std::endl;
     return false;
   }
 
@@ -53,15 +53,15 @@ bool bvxm_detect_scale_process(bprb_func_process& pro)
 
     //check input's validity
   if (!main_world) {
-    vcl_cout << pro.name() <<" :--  Input0  is not valid!\n";
+    std::cout << pro.name() <<" :--  Input0  is not valid!\n";
     return false;
   }
   if (!camera) {
-    vcl_cout << pro.name() <<" :--  Input1  is not valid!\n";
+    std::cout << pro.name() <<" :--  Input1  is not valid!\n";
     return false;
   }
   if (!input_img) {
-    vcl_cout << pro.name() <<" :--  Input2  is not valid!\n";
+    std::cout << pro.name() <<" :--  Input2  is not valid!\n";
     return false;
   }
 
@@ -69,7 +69,7 @@ bool bvxm_detect_scale_process(bprb_func_process& pro)
   double ni = static_cast<double>(input_img->ni());
   double nj = static_cast<double>(input_img->nj());
 
-  double image_diag = vcl_sqrt(ni*ni + nj*nj);
+  double image_diag = std::sqrt(ni*ni + nj*nj);
   if (image_diag == 0)
     return false;
 
@@ -87,7 +87,7 @@ bool bvxm_detect_scale_process(bprb_func_process& pro)
                                                world_point,
                                                wul);
 
-  vcl_cout<<"\n Success one";
+  std::cout<<"\n Success one";
 
   if (!success)
     return false;
@@ -95,7 +95,7 @@ bool bvxm_detect_scale_process(bprb_func_process& pro)
                                           world_plane,
                                           world_point,
                                           wlr);
-  vcl_cout<<"\n Success two";
+  std::cout<<"\n Success two";
   if (!success)
     return false;
 
@@ -112,19 +112,19 @@ bool bvxm_detect_scale_process(bprb_func_process& pro)
   //                     xlr,ylr,zlr,
   //                     vpgl_lvcs::DEG,vpgl_lvcs::METERS);
 
-  double world_diag = vcl_sqrt((wlr.x()-wul.x())*(wlr.x()-wul.x())+(wlr.y()-wul.y())*(wlr.y()-wul.y()));
+  double world_diag = std::sqrt((wlr.x()-wul.x())*(wlr.x()-wul.x())+(wlr.y()-wul.y())*(wlr.y()-wul.y()));
   //shouldn't happen
   if (world_diag==0)
     return false;
   double diag_gsd = world_diag/(image_diag*main_world->get_params()->voxel_length());
-  vcl_cout<<"\n Success three";
+  std::cout<<"\n Success three";
   // scale should always be greater than 0
   if (diag_gsd<0)
       return false;
   unsigned int scale=0;
   if (diag_gsd>=1)
-      scale=(unsigned) vcl_ceil((vcl_log(diag_gsd)/vcl_log(2.0))-0.5);
-  vcl_cout<<"The scale of the current image is "<<scale<< "and  "<<diag_gsd << vcl_endl;
+      scale=(unsigned) std::ceil((std::log(diag_gsd)/std::log(2.0))-0.5);
+  std::cout<<"The scale of the current image is "<<scale<< "and  "<<diag_gsd << std::endl;
 
   pro.set_output_val<unsigned>(0, scale);
 

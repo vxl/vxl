@@ -18,19 +18,19 @@ bool boxm2_vecf_ocl_transform_minimizer::minimize(){
   x[0] = 0.995; x[2]=1.005;
   vnl_levenberg_marquardt lm(*this);
   lm.minimize(x);
-  lm.diagnose_outcome(vcl_cout);
-  vcl_cout << "x = " << x << vcl_endl;
+  lm.diagnose_outcome(std::cout);
+  std::cout << "x = " << x << std::endl;
   x_ = x;
   return true;
 }
 
 void boxm2_vecf_ocl_transform_minimizer::error_surface_1d(unsigned vindx, double smin, double smax, double sinc){
   vnl_vector<double> x(3, 1.0), fx(ni_*nj_);
-  vcl_cout << '\n';
+  std::cout << '\n';
   for(double s = smin; s<=smax; s+=sinc){
     x[vindx]=s;
     f(x, fx);
     double error = fx.magnitude();
-    vcl_cout << s << ' ' << error << '\n';
+    std::cout << s << ' ' << error << '\n';
   }
 }

@@ -1,4 +1,7 @@
 // This is brl/bseg/bstm/ocl/pro/processes/bstm_ocl_update_process.cxx
+#include <fstream>
+#include <iostream>
+#include <algorithm>
 #include <bprb/bprb_func_process.h>
 //:
 // \file
@@ -7,8 +10,7 @@
 // \author Ali Osman Ulusoy
 // \date May 10, 2013
 
-#include <vcl_fstream.h>
-#include <vcl_algorithm.h>
+#include <vcl_compiler.h>
 #include <bstm/ocl/bstm_opencl_cache.h>
 #include <bstm/bstm_scene.h>
 #include <bstm/bstm_block.h>
@@ -43,7 +45,7 @@ bool bstm_ocl_update_process_cons(bprb_func_process& pro)
   using namespace bstm_ocl_update_process_globals;
 
   //process takes 9 inputs (of which the four last ones are optional):
-  vcl_vector<vcl_string> input_types_(n_inputs_);
+  std::vector<std::string> input_types_(n_inputs_);
   input_types_[0] = "bocl_device_sptr";
   input_types_[1] = "bstm_scene_sptr";
   input_types_[2] = "bstm_opencl_cache_sptr";
@@ -62,7 +64,7 @@ bool bstm_ocl_update_process_cons(bprb_func_process& pro)
   brdb_value_sptr def_update_changes_only    = new brdb_value_t<bool>(false);
 
   // process has no outputs
-  vcl_vector<vcl_string>  output_types_(n_outputs_);
+  std::vector<std::string>  output_types_(n_outputs_);
   bool good = pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
 
   pro.set_input(6, def_var);
@@ -79,7 +81,7 @@ bool bstm_ocl_update_process(bprb_func_process& pro)
 
   //sanity check inputs
   if ( pro.n_inputs() < n_inputs_ ) {
-    vcl_cout << pro.name() << ": The input number should be " << n_inputs_<< vcl_endl;
+    std::cout << pro.name() << ": The input number should be " << n_inputs_<< std::endl;
     return false;
   }
   //get the inputs
@@ -95,7 +97,7 @@ bool bstm_ocl_update_process(bprb_func_process& pro)
   bool                     update_alpha = pro.get_input<bool>(i++);
   bool                     update_changes_ony = pro.get_input<bool>(i++);
 
-  vcl_cout << "Updating scene at time " << time << vcl_endl;
+  std::cout << "Updating scene at time " << time << std::endl;
   if(scene->has_data_type(bstm_data_traits<BSTM_MOG6_VIEW>::prefix()) || scene->has_data_type(bstm_data_traits<BSTM_MOG6_VIEW_COMPACT>::prefix()))
     return bstm_ocl_update_viewdep::update(scene, device, opencl_cache, cam, img, time, mog_var, mask_img,  update_alpha, update_changes_ony);
   else

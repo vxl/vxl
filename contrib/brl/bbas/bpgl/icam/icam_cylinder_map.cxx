@@ -70,7 +70,7 @@ bool icam_cylinder_map::map_cylinder(){
     for(unsigned ith = 0; ith<n_theta_; ++ith){
       //determine point on cylinder
       double th = ith*dth;
-      double x = radius_*vcl_cos(th), y = radius_*vcl_sin(th);
+      double x = radius_*std::cos(th), y = radius_*std::sin(th);
       x+=ox; y+=oy;
       vgl_point_3d<double> pc(x, y, z);
       vgl_vector_3d<double> dir = pc-orig;
@@ -84,9 +84,9 @@ bool icam_cylinder_map::map_cylinder(){
       for(int p = 0; p<3; ++p)
         cyl_map_(ith, iz, p) = images_[cam_index](ui, vi, p);
     }
-      vcl_cout << '.';
+      std::cout << '.';
   }
-  vcl_cout << '\n';
+  std::cout << '\n';
   return true;
 }
 
@@ -145,7 +145,7 @@ render_map(vil_image_view<vxl_byte>const& backgnd,
       if(tth<0.0)
         tth += twopi;
       int kth = static_cast<int>(tth/dth);
-      double x = radius_*vcl_cos(th), y = radius_*vcl_sin(th);
+      double x = radius_*std::cos(th), y = radius_*std::sin(th);
       x+=ox; y+=oy;
       vgl_point_3d<double> pc(x, y, z);
       vgl_vector_3d<double> dir = pc-orig;
@@ -177,12 +177,12 @@ render_map(vil_image_view<vxl_byte>const& backgnd,
           sum += 0.25*cyl_map_(kth-1, iz,p);
           w+=0.25;
           }
-        if((iz+1)<nz_)
+        if(iz < (nz_-1))
           {
           sum += 0.25*cyl_map_(kth, iz+1,p);
           w+=0.25;
           }
-        if((iz-1)>=0)
+        if(iz != 0)
           {
           sum += 0.25*cyl_map_(kth, iz-1,p);
           w+=0.25;

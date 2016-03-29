@@ -1,8 +1,9 @@
+#include <string>
+#include <cstring>
 #include "vpgl_lvcs.h"
 //:
 // \file
-#include <vcl_string.h>
-#include <vcl_cstring.h>
+#include <vcl_compiler.h>
 #include <vsl/vsl_basic_xml_element.h>
 #include <vpgl/vpgl_datum_conversion.h>
 #include <vpgl/vpgl_earth_constants.h>
@@ -15,7 +16,7 @@ const char* vpgl_lvcs::cs_name_strings[]  = { "wgs84", "nad27n", "wgs72", "utm"}
 vpgl_lvcs::cs_names vpgl_lvcs::str_to_enum(const char* s)
 {
   for (int i=0; i < vpgl_lvcs::NumNames; i++)
-    if (vcl_strcmp(s, vpgl_lvcs::cs_name_strings[i]) == 0)
+    if (std::strcmp(s, vpgl_lvcs::cs_name_strings[i]) == 0)
       return (vpgl_lvcs::cs_names) i;
   return vpgl_lvcs::NumNames;
 }
@@ -114,7 +115,7 @@ vpgl_lvcs::vpgl_lvcs(double orig_lat, double orig_lon, double orig_elev,
     //: the origin is still given in wgs84
     vpgl_utm u;
     u.transform(localCSOriginLat_*local_to_degrees, localCSOriginLon_*local_to_degrees, localUTMOrigin_X_East_, localUTMOrigin_Y_North_, localUTMOrigin_Zone_);
-    //vcl_cout << "utm origin zone: " << localUTMOrigin_Zone_ << ' ' << localUTMOrigin_X_East_ << " East " << localUTMOrigin_Y_North_ << " North" << vcl_endl;
+    //std::cout << "utm origin zone: " << localUTMOrigin_Zone_ << ' ' << localUTMOrigin_X_East_ << " East " << localUTMOrigin_Y_North_ << " North" << std::endl;
     lat_scale_ = 0.0; lon_scale_ = 0.0;
   }
   if (lat_scale_ == 0.0 || lon_scale_ == 0.0)
@@ -146,7 +147,7 @@ vpgl_lvcs::vpgl_lvcs(double orig_lat, double orig_lon, double orig_elev,
     //: the origin is still given in wgs84
     vpgl_utm u;
     u.transform(localCSOriginLat_*local_to_degrees, localCSOriginLon_*local_to_degrees, localUTMOrigin_X_East_, localUTMOrigin_Y_North_, localUTMOrigin_Zone_);
-    //vcl_cout << "utm origin zone: " << localUTMOrigin_Zone_ << ' ' << localUTMOrigin_X_East_ << " East  " << localUTMOrigin_Y_North_ << " North  elev: " << localCSOriginElev_ << vcl_endl;
+    //std::cout << "utm origin zone: " << localUTMOrigin_Zone_ << ' ' << localUTMOrigin_X_East_ << " East  " << localUTMOrigin_Y_North_ << " North  elev: " << localCSOriginElev_ << std::endl;
   }
   lat_scale_ = 0;
   lon_scale_ = 0;
@@ -181,7 +182,7 @@ vpgl_lvcs::vpgl_lvcs(double lat_low, double lon_low,
     //: the origin is still given in wgs84
     vpgl_utm u;
     u.transform(localCSOriginLat_*local_to_degrees, localCSOriginLon_*local_to_degrees, localUTMOrigin_X_East_, localUTMOrigin_Y_North_, localUTMOrigin_Zone_);
-    //vcl_cout << "utm origin zone: " << localUTMOrigin_Zone_ << ' ' << localUTMOrigin_X_East_ << " East  " << localUTMOrigin_Y_North_ << " North" << vcl_endl;
+    //std::cout << "utm origin zone: " << localUTMOrigin_Zone_ << ' ' << localUTMOrigin_X_East_ << " East  " << localUTMOrigin_Y_North_ << " North" << std::endl;
   }
 
 
@@ -204,7 +205,7 @@ void  vpgl_lvcs::radians_to_degrees(double& x, double& y, double& z)
 
 void vpgl_lvcs::degrees_to_dms(double geoval, int& degrees, int& minutes, double& seconds)
 {
-  double fmin = vcl_fabs(geoval - (int)geoval)*60.0;
+  double fmin = std::fabs(geoval - (int)geoval)*60.0;
   int isec = (int) ((fmin - (int)fmin)*60.0 + .5);
   int imin = (int) ((isec == 60) ? fmin+1 : fmin) ;
   int extra = (geoval>0) ? 1 : -1;
@@ -294,7 +295,7 @@ void vpgl_lvcs::compute_scale()
     latlong_to_GRS(wgs84_phi, wgs84_lamda, wgs84_hgt,
                    &grs80_x1, &grs80_y1, &grs80_z1, GRS80_a, GRS80_b);
 
-    lat_scale_ = SMALL_STEP/vcl_sqrt((grs80_x - grs80_x1)*(grs80_x - grs80_x1) +
+    lat_scale_ = SMALL_STEP/std::sqrt((grs80_x - grs80_x1)*(grs80_x - grs80_x1) +
                                      (grs80_y - grs80_y1)*(grs80_y - grs80_y1) +
                                      (grs80_z - grs80_z1)*(grs80_z - grs80_z1));
     //lat_scale_ is in radians/meter.
@@ -329,7 +330,7 @@ void vpgl_lvcs::compute_scale()
     latlong_to_GRS(wgs84_phi, wgs84_lamda, wgs84_hgt,
                    &grs80_x1, &grs80_y1, &grs80_z1, GRS80_a, GRS80_b);
 
-    lon_scale_ = SMALL_STEP/vcl_sqrt((grs80_x - grs80_x1)*(grs80_x - grs80_x1) +
+    lon_scale_ = SMALL_STEP/std::sqrt((grs80_x - grs80_x1)*(grs80_x - grs80_x1) +
                                      (grs80_y - grs80_y1)*(grs80_y - grs80_y1) +
                                      (grs80_z - grs80_z1)*(grs80_z - grs80_z1));
     //lon_scale_ is in radians/meter
@@ -416,7 +417,7 @@ void vpgl_lvcs::local_to_global(const double pointin_x,
                      &global_lat, &global_lon, &global_elev);
     }
     else {
-      vcl_cout << "Error: Global CS " << vpgl_lvcs::cs_name_strings[global_cs_name]
+      std::cout << "Error: Global CS " << vpgl_lvcs::cs_name_strings[global_cs_name]
                << " unrecognized." << '\n';
       global_lat = global_lon = global_elev = 0.0; // dummy initialisation
     }
@@ -456,7 +457,7 @@ void vpgl_lvcs::local_to_global(const double pointin_x,
                         &global_lat, &global_lon, &global_elev);
       }
       else {
-        vcl_cout << "Error: Global CS " << vpgl_lvcs::cs_name_strings[global_cs_name]
+        std::cout << "Error: Global CS " << vpgl_lvcs::cs_name_strings[global_cs_name]
                  << " unrecognized." << '\n';
         global_lat = global_lon = global_elev = 0.0; // dummy initialisation
       }
@@ -479,7 +480,7 @@ void vpgl_lvcs::local_to_global(const double pointin_x,
                        &global_lat, &global_lon, &global_elev);
       }
       else {
-        vcl_cout << "Error: Global CS " << vpgl_lvcs::cs_name_strings[global_cs_name]
+        std::cout << "Error: Global CS " << vpgl_lvcs::cs_name_strings[global_cs_name]
                  << " unrecognized." << '\n';
         global_lat = global_lon = global_elev = 0.0; // dummy initialisation
       }
@@ -502,13 +503,13 @@ void vpgl_lvcs::local_to_global(const double pointin_x,
                        &global_lat, &global_lon, &global_elev);
       }
       else {
-        vcl_cout << "Error: Global CS " << vpgl_lvcs::cs_name_strings[global_cs_name]
+        std::cout << "Error: Global CS " << vpgl_lvcs::cs_name_strings[global_cs_name]
                  << " unrecognized." << '\n';
         global_lat = global_lon = global_elev = 0.0; // dummy initialisation
       }
     }
     else {
-      vcl_cout << "Error: Local CS " << vpgl_lvcs::cs_name_strings[local_cs_name_]
+      std::cout << "Error: Local CS " << vpgl_lvcs::cs_name_strings[local_cs_name_]
                << " unrecognized." << '\n';
       global_lat = global_lon = global_elev = 0.0; // dummy initialisation
     }
@@ -533,7 +534,7 @@ void vpgl_lvcs::local_to_global(const double pointin_x,
     pointout_z = global_elev*METERS_TO_FEET;
 
 #ifdef LVCS_DEBUG
-  vcl_cout << "Local " << vpgl_lvcs::cs_name_strings[local_cs_name_]
+  std::cout << "Local " << vpgl_lvcs::cs_name_strings[local_cs_name_]
            << " [" << pointin_y << ", " << pointin_x << ", "  << pointin_z
            << "]  MAPS TO Global "
            << vpgl_lvcs::cs_name_strings[global_cs_name]
@@ -593,7 +594,7 @@ void vpgl_lvcs::global_to_local(const double pointin_lon,
         return;
       }
       else {
-        vcl_cerr << "global cs UTM is not supported with other local cs like wgs84, etc.!\n";
+        std::cerr << "global cs UTM is not supported with other local cs like wgs84, etc.!\n";
         return;
       }
   }
@@ -638,7 +639,7 @@ void vpgl_lvcs::global_to_local(const double pointin_lon,
       vpgl_utm u; int zone;
       u.transform(local_lat, local_lon, pointout_x, pointout_y, zone);
       if (zone != localUTMOrigin_Zone_) {
-        vcl_cerr << "In vpgl_lvcs::global_to_local() -- the UTM zone of the input point is not the same as the zone of the lvcs origin!\n";
+        std::cerr << "In vpgl_lvcs::global_to_local() -- the UTM zone of the input point is not the same as the zone of the lvcs origin!\n";
         return;
       }
       pointout_x -= localUTMOrigin_X_East_;
@@ -655,7 +656,7 @@ void vpgl_lvcs::global_to_local(const double pointin_lon,
       return;
     }
     else {
-      vcl_cout << "Error: Local CS " << vpgl_lvcs::cs_name_strings[local_cs_name_]
+      std::cout << "Error: Local CS " << vpgl_lvcs::cs_name_strings[local_cs_name_]
                << " unrecognized." << '\n';
       local_lat = local_lon = local_elev = 0.0; // dummy initialisation
     }
@@ -681,7 +682,7 @@ void vpgl_lvcs::global_to_local(const double pointin_lon,
       vpgl_utm u; int zone;
       u.transform(local_lat, local_lon, pointout_x, pointout_y, zone);
       if (zone != localUTMOrigin_Zone_) {
-        vcl_cerr << "In vpgl_lvcs::global_to_local() -- the UTM zone of the input point is not the same as the zone of the lvcs origin!\n";
+        std::cerr << "In vpgl_lvcs::global_to_local() -- the UTM zone of the input point is not the same as the zone of the lvcs origin!\n";
         return;
       }
       pointout_x -= localUTMOrigin_X_East_;
@@ -698,7 +699,7 @@ void vpgl_lvcs::global_to_local(const double pointin_lon,
       return;
     }
     else {
-      vcl_cout << "Error: Local CS " << vpgl_lvcs::cs_name_strings[local_cs_name_]
+      std::cout << "Error: Local CS " << vpgl_lvcs::cs_name_strings[local_cs_name_]
                << " unrecognized." << '\n';
       local_lat = local_lon = local_elev = 0.0; // dummy initialisation
     }
@@ -721,7 +722,7 @@ void vpgl_lvcs::global_to_local(const double pointin_lon,
       vpgl_utm u; int zone;
       u.transform(global_lat, global_lon, pointout_x, pointout_y, zone);
       if (zone != localUTMOrigin_Zone_) {
-        vcl_cerr << "In vpgl_lvcs::global_to_local() -- the UTM zone of the input point is not the same as the zone of the lvcs origin!\n";
+        std::cerr << "In vpgl_lvcs::global_to_local() -- the UTM zone of the input point is not the same as the zone of the lvcs origin!\n";
         return;
       }
       pointout_x -= localUTMOrigin_X_East_;
@@ -738,13 +739,13 @@ void vpgl_lvcs::global_to_local(const double pointin_lon,
       return;
     }
     else {
-      vcl_cout << "Error: Local CS " << vpgl_lvcs::cs_name_strings[local_cs_name_]
+      std::cout << "Error: Local CS " << vpgl_lvcs::cs_name_strings[local_cs_name_]
                << " unrecognized." << '\n';
       local_lat = local_lon = local_elev = 0.0; // dummy initialisation
     }
   }
   else {
-    vcl_cout << "Error: Global CS " <<  vpgl_lvcs::cs_name_strings[global_cs_name]
+    std::cout << "Error: Global CS " <<  vpgl_lvcs::cs_name_strings[global_cs_name]
              << " unrecognized." << '\n';
     local_lat = local_lon = local_elev = 0.0; // dummy initialisation
   }
@@ -770,7 +771,7 @@ void vpgl_lvcs::global_to_local(const double pointin_lon,
   inverse_local_transform(pointout_x,pointout_y);
 
 #ifdef LVCS_DEBUG
-  vcl_cout << "Global " << vpgl_lvcs::cs_name_strings[global_cs_name]
+  std::cout << "Global " << vpgl_lvcs::cs_name_strings[global_cs_name]
            << " [" << pointin_lon << ", " << pointin_lat << ", "  << pointin_z
            << "]  MAPS TO Local "
            << vpgl_lvcs::cs_name_strings[local_cs_name_]
@@ -780,9 +781,9 @@ void vpgl_lvcs::global_to_local(const double pointin_lon,
 
 
 //: Print internals on strm.
-void vpgl_lvcs::print(vcl_ostream& strm) const
+void vpgl_lvcs::print(std::ostream& strm) const
 {
-  vcl_string len_u = "meters", ang_u="degrees";
+  std::string len_u = "meters", ang_u="degrees";
   if (localXYZUnit_ == FEET)
     len_u = "feet";
   if (geo_angle_unit_ == RADIANS)
@@ -799,11 +800,11 @@ void vpgl_lvcs::print(vcl_ostream& strm) const
 }
 
 //: Read internals from strm.
-void vpgl_lvcs::read(vcl_istream& strm)
+void vpgl_lvcs::read(std::istream& strm)
 {
-  vcl_string len_u = "meters", ang_u="degrees";
+  std::string len_u = "meters", ang_u="degrees";
 
-  vcl_string local_cs_name_str;
+  std::string local_cs_name_str;
   strm >> local_cs_name_str;
   if (local_cs_name_str.compare("wgs84") == 0)
     local_cs_name_ = wgs84;
@@ -814,7 +815,7 @@ void vpgl_lvcs::read(vcl_istream& strm)
   else if (local_cs_name_str.compare("utm") == 0)
     local_cs_name_ = utm;
   else
-    vcl_cerr << "undefined local_cs_name\n";
+    std::cerr << "undefined local_cs_name\n";
 
   strm >> len_u >> ang_u;
   if (len_u.compare("feet") == 0)
@@ -822,14 +823,14 @@ void vpgl_lvcs::read(vcl_istream& strm)
   else if (len_u.compare("meters") == 0)
     localXYZUnit_ = METERS;
   else
-    vcl_cerr << "undefined localXYZUnit_ " << len_u << '\n';
+    std::cerr << "undefined localXYZUnit_ " << len_u << '\n';
 
   if (ang_u.compare("degrees") == 0)
     geo_angle_unit_ = DEG;
   else if (ang_u.compare("radians") == 0)
     geo_angle_unit_ = RADIANS;
   else
-    vcl_cerr << "undefined geo_angle_unit_ " << ang_u << '\n';
+    std::cerr << "undefined geo_angle_unit_ " << ang_u << '\n';
 
   strm >> localCSOriginLat_ >> localCSOriginLon_ >> localCSOriginElev_;
   strm >> lat_scale_ >> lon_scale_;
@@ -844,7 +845,7 @@ void vpgl_lvcs::read(vcl_istream& strm)
     //: the origin is still given in wgs84
     vpgl_utm u;
     u.transform(localCSOriginLat_*local_to_degrees, localCSOriginLon_*local_to_degrees, localUTMOrigin_X_East_, localUTMOrigin_Y_North_, localUTMOrigin_Zone_);
-    //vcl_cout << "utm origin zone: " << localUTMOrigin_Zone_ << ' ' << localUTMOrigin_X_East_ << " East  " << localUTMOrigin_Y_North_ << " North" << vcl_endl;
+    //std::cout << "utm origin zone: " << localUTMOrigin_Zone_ << ' ' << localUTMOrigin_X_East_ << " East  " << localUTMOrigin_Y_North_ << " North" << std::endl;
   }
 
   if (lat_scale_==0.0 && lon_scale_==0.0) {
@@ -852,7 +853,7 @@ void vpgl_lvcs::read(vcl_istream& strm)
   }
 }
 
-void vpgl_lvcs::write(vcl_ostream& strm)  // write just "read" would read
+void vpgl_lvcs::write(std::ostream& strm)  // write just "read" would read
 {
   strm.precision(12);
 
@@ -865,7 +866,7 @@ void vpgl_lvcs::write(vcl_ostream& strm)  // write just "read" would read
   else if (local_cs_name_ == utm)
     strm << "utm" << '\n';
   else
-    vcl_cerr << "undefined local_cs_name\n";
+    std::cerr << "undefined local_cs_name\n";
 
   if (localXYZUnit_ == FEET)
     strm << "feet ";
@@ -896,15 +897,15 @@ void vpgl_lvcs::local_transform(double& x, double& y)
 
   // Rotate about that point to align y with north.
   double ct,st;
-  if (vcl_fabs(theta) < 1e-5)
+  if (std::fabs(theta) < 1e-5)
   {
     ct = 1.0;
     st = theta;
   }
   else
   {
-    ct = vcl_cos(-theta);
-    st = vcl_sin(-theta);
+    ct = std::cos(-theta);
+    st = std::sin(-theta);
   }
   x = ct*xo + st*yo;
   y = -st*xo + ct*yo;
@@ -920,15 +921,15 @@ void vpgl_lvcs::inverse_local_transform(double& x, double& y)
 
   // Rotate about that point to align y with north.
   double ct,st;
-  if (vcl_fabs(theta) < 1e-5)
+  if (std::fabs(theta) < 1e-5)
   {
     ct = 1.0;
     st = theta;
   }
   else
   {
-    ct = vcl_cos(-theta);
-    st = vcl_sin(-theta);
+    ct = std::cos(-theta);
+    st = std::sin(-theta);
   }
   double xo = ct*x + st*y;
   double yo = -st*x + ct*y;
@@ -938,13 +939,13 @@ void vpgl_lvcs::inverse_local_transform(double& x, double& y)
   y = yo + loy_;
 }
 
-vcl_ostream& operator << (vcl_ostream& os, const vpgl_lvcs& local_coord_sys)
+std::ostream& operator << (std::ostream& os, const vpgl_lvcs& local_coord_sys)
 {
   local_coord_sys.print(os);
   return os;
 }
 
-vcl_istream& operator >> (vcl_istream& is, vpgl_lvcs& local_coord_sys)
+std::istream& operator >> (std::istream& is, vpgl_lvcs& local_coord_sys)
 {
   local_coord_sys.read(is);
   return is;
@@ -1015,9 +1016,9 @@ void vpgl_lvcs::b_read( vsl_b_istream& is )
     break;
 
    default:
-    vcl_cerr << "I/O ERROR: vpgl_lvcs::b_read(vsl_b_istream&)\n"
+    std::cerr << "I/O ERROR: vpgl_lvcs::b_read(vsl_b_istream&)\n"
              << "           Unknown version number "<< ver << '\n';
-    is.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
+    is.is().clear(std::ios::badbit); // Set an unrecoverable IO error on stream
     return;
   }
 }

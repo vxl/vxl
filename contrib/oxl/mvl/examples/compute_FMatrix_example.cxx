@@ -2,8 +2,9 @@
 // Author: Andrew W. Fitzgibbon, Oxford RRG, July 96
 // Adapted to mvl by Peter Vanroose, January 2002.
 
-#include <vcl_iostream.h>
-#include <vcl_vector.h>
+#include <iostream>
+#include <vector>
+#include <vcl_compiler.h>
 #include <vgl/vgl_homg_point_2d.h>
 #include <mvl/FMatrix.h>
 #include <mvl/FMatrixComputeLinear.h>
@@ -14,17 +15,17 @@
 
 int main(int argc, char**argv)
 {
-  vcl_vector<vgl_homg_point_2d<double> > points1;
-  vcl_vector<vgl_homg_point_2d<double> > points2;
+  std::vector<vgl_homg_point_2d<double> > points1;
+  std::vector<vgl_homg_point_2d<double> > points2;
   bool ishomg = (argc > 1 && argv[1][0] == 'h');
 
   // Read points
-  while (vcl_cin.good()) {
-    double x,y,w=1.0; vcl_cin >> x >> y; if (ishomg) vcl_cin >> w; // Read 2 or 3 reals
+  while (std::cin.good()) {
+    double x,y,w=1.0; std::cin >> x >> y; if (ishomg) std::cin >> w; // Read 2 or 3 reals
     points1.push_back(vgl_homg_point_2d<double>(x,y,w));
-    w=1.0; vcl_cin >> x >> y; if (ishomg) vcl_cin >> w; // Read 2 or 3 reals
+    w=1.0; std::cin >> x >> y; if (ishomg) std::cin >> w; // Read 2 or 3 reals
     points2.push_back(vgl_homg_point_2d<double>(x,y,w));
-    vcl_cin >> vcl_ws; // Eat whitespace
+    std::cin >> std::ws; // Eat whitespace
   }
 
   {
@@ -33,28 +34,28 @@ int main(int argc, char**argv)
     FMatrix f = computor.compute(points1, points2);
     f.set_rank2_using_svd();
 
-    vcl_cout << "FMatrixComputeLinear:\nF = " << f << vcl_endl;
+    std::cout << "FMatrixComputeLinear:\nF = " << f << std::endl;
 
     double d = 0;
     for (unsigned int i = 0; i < points1.size(); ++i)
       d += f.image1_epipolar_distance_squared(points1[i], points2[i]);
-    vcl_cout << "Error = " << d/points1.size() << vcl_endl;
+    std::cout << "Error = " << d/points1.size() << std::endl;
   }
 
   {
     // Perform the fit using the non-normalised 7-point estimator.
     FMatrixCompute7Point computor(false);
     FMatrix f;
-    vcl_vector<FMatrix*> l; l.push_back(&f);
+    std::vector<FMatrix*> l; l.push_back(&f);
     computor.compute(points1, points2, l);
     f.set_rank2_using_svd();
 
-    vcl_cout << "FMatrixCompute7Point:\nF = " << f << vcl_endl;
+    std::cout << "FMatrixCompute7Point:\nF = " << f << std::endl;
 
     double d = 0;
     for (unsigned int i = 0; i < points1.size(); ++i)
       d += f.image1_epipolar_distance_squared(points1[i], points2[i]);
-    vcl_cout << "Error = " << d/points1.size() << vcl_endl;
+    std::cout << "Error = " << d/points1.size() << std::endl;
   }
 
   {
@@ -63,12 +64,12 @@ int main(int argc, char**argv)
     FMatrix f = computor.compute(points1, points2);
     f.set_rank2_using_svd();
 
-    vcl_cout << "FMatrixComputeMLESAC with rank truncation:\nF = " << f << vcl_endl;
+    std::cout << "FMatrixComputeMLESAC with rank truncation:\nF = " << f << std::endl;
 
     double d = 0;
     for (unsigned int i = 0; i < points1.size(); ++i)
       d += f.image1_epipolar_distance_squared(points1[i], points2[i]);
-    vcl_cout << "Error = " << d/points1.size() << vcl_endl;
+    std::cout << "Error = " << d/points1.size() << std::endl;
   }
 
   {
@@ -77,12 +78,12 @@ int main(int argc, char**argv)
     FMatrix f = computor.compute(points1, points2);
     f.set_rank2_using_svd();
 
-    vcl_cout << "FMatrixComputeRANSAC with rank truncation:\nF = " << f << vcl_endl;
+    std::cout << "FMatrixComputeRANSAC with rank truncation:\nF = " << f << std::endl;
 
     double d = 0;
     for (unsigned int i = 0; i < points1.size(); ++i)
       d += f.image1_epipolar_distance_squared(points1[i], points2[i]);
-    vcl_cout << "Error = " << d/points1.size() << vcl_endl;
+    std::cout << "Error = " << d/points1.size() << std::endl;
   }
 
   {
@@ -91,12 +92,12 @@ int main(int argc, char**argv)
     FMatrix f = computor.compute(points1, points2);
     f.set_rank2_using_svd();
 
-    vcl_cout << "FMatrixComputeLMedSq with rank truncation:\nF = " << f << vcl_endl;
+    std::cout << "FMatrixComputeLMedSq with rank truncation:\nF = " << f << std::endl;
 
     double d = 0;
     for (unsigned int i = 0; i < points1.size(); ++i)
       d += f.image1_epipolar_distance_squared(points1[i], points2[i]);
-    vcl_cout << "Error = " << d/points1.size() << vcl_endl;
+    std::cout << "Error = " << d/points1.size() << std::endl;
   }
 
   return 0;

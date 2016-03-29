@@ -12,9 +12,11 @@
 //   <none yet>
 // \endverbatim
 
-#include <vcl_vector.h>
-#include <vcl_utility.h>
-#include <vcl_string.h>
+#include <vector>
+#include <utility>
+#include <iostream>
+#include <string>
+#include <vcl_compiler.h>
 
 #include <vil/vil_image_resource_sptr.h>
 #include <bvgl/bvgl_changes_sptr.h>
@@ -26,7 +28,7 @@
 
 struct fg_pair_density_est : public vnl_least_squares_function
 {
-  fg_pair_density_est(vcl_vector<vcl_pair<float, float> > const& pairs)
+  fg_pair_density_est(std::vector<std::pair<float, float> > const& pairs)
     : vnl_least_squares_function(1, pairs.size(), use_gradient),
     pairs_(pairs)
   { }
@@ -38,12 +40,12 @@ struct fg_pair_density_est : public vnl_least_squares_function
     for (unsigned i = 0; i < pairs_.size(); i++) {
       //out += fd.gradient_of_log(pairs_[i].first, pairs_[i].second);
       //out += fd.negative_log(pairs_[i].first, pairs_[i].second);
-      //y[i] = vcl_abs(fd.gradient_of_log(pairs_[i].first, pairs_[i].second));
+      //y[i] = std::abs(fd.gradient_of_log(pairs_[i].first, pairs_[i].second));
       y[i] = fd.negative_log(pairs_[i].first, pairs_[i].second);
     }
 
-    //y[0] = vcl_abs(out);
-    //y[1] = vcl_abs(0.1-x[0]);
+    //y[0] = std::abs(out);
+    //y[1] = std::abs(0.1-x[0]);
   }
   void gradf(vnl_vector<double> const& x, vnl_matrix<double> &J) {
     //J[0][0] = 0.0;
@@ -55,13 +57,13 @@ struct fg_pair_density_est : public vnl_least_squares_function
     }
   }
 
-  vcl_vector<vcl_pair<float, float> > pairs_;
+  std::vector<std::pair<float, float> > pairs_;
 };
 
 class fg_pair_density_est_amoeba : public vnl_cost_function
 {
  public:
-  fg_pair_density_est_amoeba(vcl_vector<vcl_pair<float, float> > const& /*pairs*/): vnl_cost_function(1) {}
+  fg_pair_density_est_amoeba(std::vector<std::pair<float, float> > const& /*pairs*/): vnl_cost_function(1) {}
 
   double f(const vnl_vector<double>& x)
   {
@@ -75,7 +77,7 @@ class fg_pair_density_est_amoeba : public vnl_cost_function
     return out;
   }
 
-  vcl_vector<vcl_pair<float, float> > pairs_;
+  std::vector<std::pair<float, float> > pairs_;
 };
 
 class brec_param_estimation
@@ -83,15 +85,15 @@ class brec_param_estimation
  public:
 
   //: estimate the initial value as the real variation in the data
-  static double estimate_fg_pair_density_initial_sigma(vcl_vector<vcl_pair<float, float> >& pairs);
+  static double estimate_fg_pair_density_initial_sigma(std::vector<std::pair<float, float> >& pairs);
 
   //: we always assume that the intensities are scaled to [0,1] range, so we get a vector of float pairs
-  static double estimate_fg_pair_density_sigma(vcl_vector<vcl_pair<float, float> >& pairs, double initial_sigma);
+  static double estimate_fg_pair_density_sigma(std::vector<std::pair<float, float> >& pairs, double initial_sigma);
 
   //: we always assume that the intensities are scaled to [0,1] range, so we get a vector of float pairs
-  static double estimate_fg_pair_density_sigma_amoeba(vcl_vector<vcl_pair<float, float> >& pairs, double initial_sigma);
+  static double estimate_fg_pair_density_sigma_amoeba(std::vector<std::pair<float, float> >& pairs, double initial_sigma);
 
-  static bool create_fg_pairs(vil_image_resource_sptr img, bvgl_changes_sptr c, vcl_vector<vcl_pair<float, float> >& pairs, bool print_histogram = false, vcl_string out_name = "");
+  static bool create_fg_pairs(vil_image_resource_sptr img, bvgl_changes_sptr c, std::vector<std::pair<float, float> >& pairs, bool print_histogram = false, std::string out_name = "");
 };
 
 #endif // brec_param_estimation_H_

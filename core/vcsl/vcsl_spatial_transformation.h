@@ -12,20 +12,21 @@
 //   2001/04/10 Ian Scott (Manchester) Converted perceps header to doxygen
 //   2002/01/22 Peter Vanroose - added lmi() as it is used in vcsl_matrix.cxx
 //   2002/01/22 Peter Vanroose - return type of lqi(), lvi(), execute() and inverse() changed to non-ptr
-//   2002/01/28 Peter Vanroose - vcl_vector members beat_ and interpolator_ changed to non-ptr
+//   2002/01/28 Peter Vanroose - std::vector members beat_ and interpolator_ changed to non-ptr
 //   2004/09/10 Peter Vanroose - Added explicit copy constructor (ref_count !)
 //   2004/09/17 Peter Vanroose - made beat() and interpolators() non-virtual: they just return a member and should not be overloaded
 // \endverbatim
 
+#include <vector>
 #include <vcsl/vcsl_spatial_transformation_sptr.h>
 
 #include <vbl/vbl_ref_count.h>
-#include <vcl_vector.h>
+#include <vcl_compiler.h>
 #include <vnl/vnl_vector.h>
 #include <vnl/vnl_quaternion.h>
 
-typedef vcl_vector<double> list_of_scalars;
-typedef vcl_vector<vnl_vector<double> > list_of_vectors;
+typedef std::vector<double> list_of_scalars;
+typedef std::vector<vnl_vector<double> > list_of_vectors;
 
 enum vcsl_interpolator
 {
@@ -59,13 +60,13 @@ class vcsl_spatial_transformation : public vbl_ref_count
   //***************************************************************************
 
   //: Return the list of time clocks
-  vcl_vector<double> beat() const { return beat_; }
+  std::vector<double> beat() const { return beat_; }
 
   //: Return the time duration
   unsigned int duration() const { return (unsigned int)(beat_.size()); }
 
   //: Return the list of interpolators
-  vcl_vector<vcsl_interpolator> interpolators() const { return interpolator_; }
+  std::vector<vcsl_interpolator> interpolators() const { return interpolator_; }
 
   //: Is `time' between the two time bounds ?
   bool valid_time(double time) const;
@@ -103,10 +104,10 @@ class vcsl_spatial_transformation : public vbl_ref_count
   //***************************************************************************
 
   //: Set the list of time clocks
-  void set_beat(vcl_vector<double> const& new_beat) { beat_=new_beat; }
+  void set_beat(std::vector<double> const& new_beat) { beat_=new_beat; }
 
   //: Set the list of interpolators
-  void set_interpolators(vcl_vector<vcsl_interpolator> const& i) { interpolator_=i; }
+  void set_interpolators(std::vector<vcsl_interpolator> const& i) { interpolator_=i; }
 
   //: Empty the time clock and interpolators, thereby making the transf static
   void set_static();
@@ -141,8 +142,8 @@ class vcsl_spatial_transformation : public vbl_ref_count
 
  protected:
   //: List of time clocks
-  vcl_vector<double> beat_;
-  vcl_vector<vcsl_interpolator> interpolator_;
+  std::vector<double> beat_;
+  std::vector<vcsl_interpolator> interpolator_;
 };
 
 #endif // vcsl_spatial_transformation_h_

@@ -2,7 +2,7 @@
 #include "pop_geometric_cost_function.h"
 //:
 // \file
-#include<vcl_iostream.h>
+#include<std::iostream.h>
 
 //: constructor
 pop_geometric_cost_function::pop_geometric_cost_function(pop_geometric_object *observable,
@@ -30,7 +30,7 @@ double pop_geometric_cost_function::cost()
     return co;
   }
   else {
-    vcl_cout << "Warning: there is no mapping from the observable to the observation\n";
+    std::cout << "Warning: there is no mapping from the observable to the observation\n";
     return 0;
   }
 }

@@ -14,7 +14,8 @@
 //   10 Sep. 2004 Peter Vanroose  Inlined all 1-line methods in class decl
 // \endverbatim
 
-#include <vcl_string.h>
+#include <string>
+#include <vcl_compiler.h>
 #include "vgui_dialog_field.h"
 
 //: File browser in a dialog.
@@ -25,17 +26,17 @@
 class vgui_file_field : public vgui_dialog_field
 {
  public:
-  vgui_file_field(const char *txt, vcl_string& regex, vcl_string& var_to_modify)
+  vgui_file_field(const char *txt, std::string& regex, std::string& var_to_modify)
   : vgui_dialog_field(txt), var_(var_to_modify), regexp_(regex) {}
 
   ~vgui_file_field() {}
 
-  vcl_string current_value() const { return var_; }
-  bool update_value(vcl_string const& s) { var_ = s; return true; }
+  std::string current_value() const { return var_; }
+  bool update_value(std::string const& s) { var_ = s; return true; }
 
  private:
-  vcl_string &var_;
-  vcl_string &regexp_;
+  std::string &var_;
+  std::string &regexp_;
 };
 
 #endif // vgui_file_field_h_

@@ -12,6 +12,7 @@
 #ifndef OTAGO_frame_grabber_v4l__h_INCLUDED
 #define OTAGO_frame_grabber_v4l__h_INCLUDED
 
+#include <iostream>
 #include <vil1/vil1_memory_image.h>
 #include <vil1/vil1_memory_image_of.h>
 #include <vxl_config.h>
@@ -21,7 +22,7 @@
 #include <sys/ioctl.h>
 #include <sys/types.h>
 #include <linux/videodev.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
 
 //----------------------------------------------------------------------
 //: The FrameGrabberV4lGrey class
@@ -51,9 +52,9 @@ class FrameGrabberV4lGrey : public FrameGrabber
   {
     if (debug)
     {
-      vcl_cout << "get_current_frame called\n"
+      std::cout << "get_current_frame called\n"
                << "current = " << current
-               << " im = " << im[current] << vcl_endl;
+               << " im = " << im[current] << std::endl;
     }
     return im[current];
   }

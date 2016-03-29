@@ -17,9 +17,11 @@
 // the aziumuth range is:
 //  0 <= phi <= two_pi
 //
+#include <iostream>
+#include <vector>
 #include <vil/vil_image_view.h>
 #include <vbl/vbl_ref_count.h>
-#include <vcl_vector.h>
+#include <vcl_compiler.h>
 #include <vpgl/vpgl_camera_double_sptr.h>
 #include <vgl/vgl_point_3d.h>
 #include <vgl/vgl_ray_3d.h>
@@ -40,8 +42,8 @@ class icam_spherical_map : public vbl_ref_count
   ~icam_spherical_map(){}
   //: images must be RGB byte. Cameras projective or perspective
 
-  void set_data(vcl_vector<vil_image_view<vxl_byte> > const& images,
-                vcl_vector<vpgl_camera_double_sptr > const& cams){
+  void set_data(std::vector<vil_image_view<vxl_byte> > const& images,
+                std::vector<vpgl_camera_double_sptr > const& cams){
     images_ = images; cams_ = cams;}
 
   //: find the camera with ray most aligned with the sphere normal at p
@@ -87,9 +89,9 @@ class icam_spherical_map : public vbl_ref_count
   vil_image_view<vxl_byte> sph_map_;
   // input data
   // must be RGB byte images
-  vcl_vector<vil_image_view<vxl_byte> > images_;
+  std::vector<vil_image_view<vxl_byte> > images_;
   // currently projective/perspective cameras are supported
- vcl_vector<vpgl_camera_double_sptr > cams_;
+ std::vector<vpgl_camera_double_sptr > cams_;
 };
 
 

@@ -16,15 +16,17 @@
 //
 //-----------------------------------------------------------------------------
 
-#include <vcl_vector.h>
+#include <iostream>
+#include <vector>
+#include <vcl_compiler.h>
 #include <mvl/HomgPoint2D.h>
 #include <mvl/PairMatchSetCorner.h>
 
 class PairSetCorner
 {
  public:
-  vcl_vector<HomgPoint2D> points1;
-  vcl_vector<HomgPoint2D> points2;
+  std::vector<HomgPoint2D> points1;
+  std::vector<HomgPoint2D> points2;
 
   // Constructors/Destructors--------------------------------------------------
   PairSetCorner(const PairMatchSetCorner& matches);

@@ -1,16 +1,16 @@
-#include <bsta/bsta_beta.txx>
-#include <bsta/bsta_gaussian_full.txx>
-#include <bsta/bsta_gaussian_indep.txx>
-#include <bsta/bsta_gaussian_sphere.txx>
-#include <bsta/bsta_histogram.txx>
-#include <bsta/bsta_joint_histogram.txx>
-#include <bsta/bsta_joint_histogram_3d.txx>
-#include <bsta/bsta_kent.txx>
-#include <bsta/bsta_otsu_threshold.txx>
-#include <bsta/bsta_parzen_sphere.txx>
-#include <bsta/bsta_sampler.txx>
-#include <bsta/bsta_spherical_histogram.txx>
-#include <bsta/bsta_von_mises.txx>
-#include <bsta/bsta_weibull.txx>
+#include <bsta/bsta_beta.hxx>
+#include <bsta/bsta_gaussian_full.hxx>
+#include <bsta/bsta_gaussian_indep.hxx>
+#include <bsta/bsta_gaussian_sphere.hxx>
+#include <bsta/bsta_histogram.hxx>
+#include <bsta/bsta_joint_histogram.hxx>
+#include <bsta/bsta_joint_histogram_3d.hxx>
+#include <bsta/bsta_kent.hxx>
+#include <bsta/bsta_otsu_threshold.hxx>
+#include <bsta/bsta_parzen_sphere.hxx>
+#include <bsta/bsta_sampler.hxx>
+#include <bsta/bsta_spherical_histogram.hxx>
+#include <bsta/bsta_von_mises.hxx>
+#include <bsta/bsta_weibull.hxx>
 
 int main() { return 0; }

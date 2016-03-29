@@ -1,9 +1,11 @@
+#include <iostream>
+#include <cmath>
 #include "bwm_lidar_algo.h"
 
 #include <vil/vil_image_view.h>
 #include <vil/algo/vil_histogram.h>
 
-#include <vcl_cmath.h> // std::ceil()
+#include <vcl_compiler.h>
 
 void bwm_lidar_algo::label_lidar(vil_image_view<float> first_ret,
                                  vil_image_view<float> last_ret,
@@ -25,15 +27,15 @@ void bwm_lidar_algo::label_lidar(vil_image_view<float> first_ret,
 
   // make sure images are same size
   if ( (first_ret.ni() != last_ret.ni()) || (first_ret.nj() != last_ret.nj()) ) {
-    vcl_cerr << "error, first return and last return images should be same size!\n";
+    std::cerr << "error, first return and last return images should be same size!\n";
     return;
   }
   if ( (labeled.ni() != first_ret.ni()) || (labeled.nj() != first_ret.nj()) ) {
-    vcl_cerr << "error, lidar and labeled images should be same size!\n";
+    std::cerr << "error, lidar and labeled images should be same size!\n";
     return;
   }
   if (labeled.nplanes() != 3) {
-    vcl_cerr << "error, segmented image must have 3 planes (rgb)\n";
+    std::cerr << "error, segmented image must have 3 planes (rgb)\n";
     return;
   }
 
@@ -57,9 +59,9 @@ void bwm_lidar_algo::label_lidar(vil_image_view<float> first_ret,
   }
 
   // assume ground is horizontal and most common height value
-  vcl_vector<double> histo;
+  std::vector<double> histo;
   double bin_size = 0.5; // 0.5 meters per bin
-  int nbins = (int)vcl_ceil((max_elev - min_elev)/bin_size);
+  int nbins = (int)std::ceil((max_elev - min_elev)/bin_size);
   vil_histogram(last_ret, histo, min_elev, max_elev, nbins);
   double max_count = 0;
   double gnd_val = 0;

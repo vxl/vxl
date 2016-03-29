@@ -6,8 +6,10 @@
 // \brief parameter mixin for symbolic edge linker
 //
 //-----------------------------------------------------------------------------
+#include <iostream>
+#include <iosfwd>
 #include <gevd/gevd_param_mixin.h>
-#include <vcl_iosfwd.h>
+#include <vcl_compiler.h>
 
 
 class sdet_symbolic_edge_linker_params : public gevd_param_mixin
@@ -67,7 +69,7 @@ class sdet_symbolic_edge_linker_params : public gevd_param_mixin
 
   bool SanityCheck();
 
-  friend vcl_ostream& operator<<(vcl_ostream&,const sdet_symbolic_edge_linker_params& dp);
+  friend std::ostream& operator<<(std::ostream&,const sdet_symbolic_edge_linker_params& dp);
 
 protected:
 

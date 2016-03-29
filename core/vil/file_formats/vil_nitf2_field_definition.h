@@ -26,7 +26,8 @@
 #define NITF_STR_BCS(LEN)  NITF_STR(LEN, vil_nitf2_string_formatter::BCS)
 #define NITF_STR_BCSA(LEN) NITF_STR(LEN, vil_nitf2_string_formatter::BCSA)
 
-#include <vcl_list.h>
+#include <list>
+#include <vcl_compiler.h>
 
 #include "vil_nitf2.h" // vil_nitf2_istream, vil_nitf2_ostream
 #include "vil_nitf2_field_functor.h"
@@ -72,15 +73,15 @@ class vil_nitf2_field_definition : public vil_nitf2_field_definition_node
   // These members basically correspond to columns within a row of
   // a NITF tagged record spec. An instance of this class corresponds
   // to a row (or a sequence of contiguously repeating rows).
-  vcl_string tag;
-  vcl_string pretty_name;
+  std::string tag;
+  std::string pretty_name;
   bool required;
   vil_nitf2_field_formatter* formatter;
   bool blanks_ok;
   vil_nitf2_field_functor<int>* width_functor;
   vil_nitf2_field_functor<bool>* condition_functor;
-  vcl_string units;
-  vcl_string description;
+  std::string units;
+  std::string description;
 
   bool is_required() const;
   bool is_variable_width() const;
@@ -88,9 +89,9 @@ class vil_nitf2_field_definition : public vil_nitf2_field_definition_node
   // Constructor. Assumes ownership of pointer arguments.
   vil_nitf2_field_definition(
     // field identifier, generally < 10 characters long
-    vcl_string tag,
+    std::string tag,
     // the field name, typically a few words long
-    vcl_string pretty_name,
+    std::string pretty_name,
     // field type and format
     vil_nitf2_field_formatter* formatter,
     // whether this field may be unspecified (all blanks)
@@ -100,8 +101,8 @@ class vil_nitf2_field_definition : public vil_nitf2_field_definition_node
     // conditional field predicate; 0 for required fields
     vil_nitf2_field_functor<bool>* condition_functor = 0,
     // additional documentation fields
-    vcl_string units = "",
-    vcl_string description = "");
+    std::string units = "",
+    std::string description = "");
 
   // Copy method
   vil_nitf2_field_definition_node* copy() const;
@@ -116,14 +117,14 @@ class vil_nitf2_field_definition : public vil_nitf2_field_definition_node
 // containing other such sequences of fields. Methods field(), repeat(),
 // and cond() provide "syntactic sugar" for assembling the sequence.
 //
-class vil_nitf2_field_definitions : public vcl_list<vil_nitf2_field_definition_node*>
+class vil_nitf2_field_definitions : public std::list<vil_nitf2_field_definition_node*>
 {
  public:
   // Define a field and add it to this list of definitions, returning
   // the current list. Assumes ownership of pointer arguments.
   vil_nitf2_field_definitions& field(
-    vcl_string tag,
-    vcl_string pretty_name,
+    std::string tag,
+    std::string pretty_name,
     vil_nitf2_field_formatter* formatter,
     // whether this field may be unspecified (all blank)
     bool blanks_ok = false,
@@ -132,8 +133,8 @@ class vil_nitf2_field_definitions : public vcl_list<vil_nitf2_field_definition_n
     // predicate that returns whether this conditional field is present;
     // 0 for required fields
     vil_nitf2_field_functor<bool>* condition_functor = 0,
-    vcl_string units = "",
-    vcl_string description = "");
+    std::string units = "",
+    std::string description = "");
 
   // Define a repeat node, with repeat count determined by repeat_functor,
   // and add it to this list of definitions, returning the current list.
@@ -142,7 +143,7 @@ class vil_nitf2_field_definitions : public vcl_list<vil_nitf2_field_definition_n
                                       vil_nitf2_field_definitions& field_definitions);
 
   // Same as above where the repeat count is simply the value of a tag.
-  vil_nitf2_field_definitions& repeat(vcl_string intTag,
+  vil_nitf2_field_definitions& repeat(std::string intTag,
                                       vil_nitf2_field_definitions& field_definitions)
   { return repeat(new vil_nitf2_field_value<int>(intTag), field_definitions); }
 

@@ -56,14 +56,14 @@ if(CMAKE_COMPILER_IS_GNUCXX)
 endif()
 
 if(APPLE)
-  vxl_add_library(LIBNAME ${VXL_LIB_PREFIX}vul LIBSRCS ${vul_sources})
+  vxl_add_library(LIBRARY_NAME ${VXL_LIB_PREFIX}vul LIBRARY_SOURCES ${vul_sources})
 else()
 
 if(NOT SOLARIS)
-  vxl_add_library(LIBNAME ${VXL_LIB_PREFIX}vul LIBSRCS ${vul_sources} ${vul_network_sources})
+  vxl_add_library(LIBRARY_NAME ${VXL_LIB_PREFIX}vul LIBRARY_SOURCES ${vul_sources} ${vul_network_sources})
 else()
-  vxl_add_library(LIBNAME ${VXL_LIB_PREFIX}vul LIBSRCS ${vul_sources})
-  vxl_add_library(LIBNAME ${VXL_LIB_PREFIX}vul_network LIBSRCS ${vul_network_sources})
+  vxl_add_library(LIBRARY_NAME ${VXL_LIB_PREFIX}vul LIBRARY_SOURCES ${vul_sources})
+  vxl_add_library(LIBRARY_NAME ${VXL_LIB_PREFIX}vul_network LIBRARY_SOURCES ${vul_network_sources})
 endif()
 
 if(NOT UNIX)

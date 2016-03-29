@@ -1,4 +1,8 @@
 // This is mul/pdf1d/pdf1d_mixture.cxx
+#include <iostream>
+#include <cmath>
+#include <cstdlib>
+#include <string>
 #include "pdf1d_mixture.h"
 //:
 // \file
@@ -7,9 +11,7 @@
 
 //=======================================================================
 
-#include <vcl_cmath.h>
-#include <vcl_cstdlib.h>
-#include <vcl_string.h>
+#include <vcl_compiler.h>
 #include <vsl/vsl_indent.h>
 #include <vsl/vsl_binary_loader.h>
 #include <pdf1d/pdf1d_mixture_sampler.h>
@@ -97,8 +99,8 @@ void pdf1d_mixture::init(const pdf1d_pdf& comp_type, int n)
 
 void pdf1d_mixture::add_component(const pdf1d_pdf& comp)
 {
-  vcl_vector<pdf1d_pdf*> old_comps = component_;
-  vcl_vector<double> old_wts = weight_;
+  std::vector<pdf1d_pdf*> old_comps = component_;
+  std::vector<double> old_wts = weight_;
   unsigned int n = component_.size();
   assert(n == weight_.size());
 
@@ -135,7 +137,7 @@ bool pdf1d_mixture::is_valid_pdf() const
   if (weight_.size() != n || component_.size() != n || n < 1) return false;
     // weights should sum to 1.
   double sum = vnl_c_vector<double>::sum(&weight_[0]/*.begin()*/, n);
-  if (vcl_fabs(1.0 - sum) > 1e-10 ) return false;
+  if (std::fabs(1.0 - sum) > 1e-10 ) return false;
     // the number of dimensions should be consistent
   for (unsigned i=0; i<n; ++i)
   {
@@ -154,14 +156,14 @@ void pdf1d_mixture::set_mean_and_variance(double m, double v)
 
 //=======================================================================
 
-vcl_string pdf1d_mixture::is_a() const
+std::string pdf1d_mixture::is_a() const
 {
-  return vcl_string("pdf1d_mixture");
+  return std::string("pdf1d_mixture");
 }
 
 //=======================================================================
 
-bool pdf1d_mixture::is_class(vcl_string const& s) const
+bool pdf1d_mixture::is_class(std::string const& s) const
 {
   return pdf1d_pdf::is_class(s) || s==pdf1d_mixture::is_a();
 }
@@ -184,7 +186,7 @@ pdf1d_pdf* pdf1d_mixture::clone() const
 //=======================================================================
 
 
-void pdf1d_mixture::print_summary(vcl_ostream& os) const
+void pdf1d_mixture::print_summary(std::ostream& os) const
 {
   os<<'\n'<<vsl_indent();
   pdf1d_pdf::print_summary(os);
@@ -213,14 +215,14 @@ void pdf1d_mixture::b_read(vsl_b_istream& bfs)
 {
   if (!bfs) return;
 
-  vcl_string name;
+  std::string name;
   vsl_b_read(bfs,name);
   if (name != is_a())
   {
-    vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, pdf1d_mixture &)\n"
+    std::cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, pdf1d_mixture &)\n"
              << "           Attempted to load object of type "
-             << name <<" into object of type " << is_a() << vcl_endl;
-    bfs.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
+             << name <<" into object of type " << is_a() << std::endl;
+    bfs.is().clear(std::ios::badbit); // Set an unrecoverable IO error on stream
     return;
   }
 
@@ -236,9 +238,9 @@ void pdf1d_mixture::b_read(vsl_b_istream& bfs)
       vsl_b_read(bfs, weight_);
       break;
     default:
-      vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, pdf1d_mixture &)\n"
-               << "           Unknown version number "<< version << vcl_endl;
-      bfs.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
+      std::cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, pdf1d_mixture &)\n"
+               << "           Unknown version number "<< version << std::endl;
+      bfs.is().clear(std::ios::badbit); // Set an unrecoverable IO error on stream
       return;
   }
 }
@@ -248,7 +250,7 @@ void pdf1d_mixture::b_read(vsl_b_istream& bfs)
 
 double pdf1d_mixture::operator()(double x) const
 {
-  return vcl_exp(log_p(x));
+  return std::exp(log_p(x));
 }
 
 //=======================================================================
@@ -257,7 +259,7 @@ double pdf1d_mixture::log_p(double x) const
 {
   int n = n_components();
 
-  vcl_vector<double> log_ps(n);
+  std::vector<double> log_ps(n);
   double max_log_p = 0;
   for (int i=0;i<n;++i)
   {
@@ -273,10 +275,10 @@ double pdf1d_mixture::log_p(double x) const
   for (int i=0;i<n;i++)
   {
     if (weight_[i]>0.0)
-      sum += weight_[i] * vcl_exp(log_ps[i]-max_log_p);
+      sum += weight_[i] * std::exp(log_ps[i]-max_log_p);
   }
 
-  return vcl_log(sum) + max_log_p;
+  return std::log(sum) + max_log_p;
 }
 
 //: Cumulative Probability (P(x'<x) for x' drawn from the distribution)
@@ -328,11 +330,11 @@ unsigned pdf1d_mixture::nearest_comp(double x) const
   if (n==1) return 0;
 
   int best_i=0;
-  double min_d2 = vcl_fabs(x-component_[0]->mean());
+  double min_d2 = std::fabs(x-component_[0]->mean());
 
   for (int i=1;i<n;i++)
   {
-    double d2 = vcl_fabs(x-component_[i]->mean());
+    double d2 = std::fabs(x-component_[i]->mean());
     if (d2<min_d2)
     {
       best_i=i;
@@ -352,8 +354,8 @@ unsigned pdf1d_mixture::nearest_comp(double x) const
 // \param x This may be modified to the nearest plausible position.
 double pdf1d_mixture::nearest_plausible(double /*x*/, double /*log_p_min*/) const
 {
-  vcl_cerr << "ERROR: pdf1d_mixture::nearest_plausible NYI\n";
-  vcl_abort();
+  std::cerr << "ERROR: pdf1d_mixture::nearest_plausible NYI\n";
+  std::abort();
   return 0.0; // dummy return
 }
 

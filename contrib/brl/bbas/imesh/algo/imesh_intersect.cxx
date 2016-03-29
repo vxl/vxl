@@ -1,9 +1,11 @@
 // This is brl/bbas/imesh/algo/imesh_intersect.cxx
+#include <iostream>
+#include <limits>
 #include "imesh_intersect.h"
 //:
 // \file
 
-#include <vcl_limits.h>
+#include <vcl_compiler.h>
 #include <vcl_cassert.h>
 
 #include <vgl/vgl_triangle_3d.h>
@@ -152,7 +154,7 @@ int imesh_intersect_min_dist(const vgl_point_3d<double>& p,
          -faces.normal(0)).length() < 1e-14);
 
   int isect = -1;
-  dist = vcl_numeric_limits<double>::infinity();
+  dist = std::numeric_limits<double>::infinity();
   for (unsigned int i=0; i<faces.size(); ++i)
   {
     const imesh_regular_face<3>& f = faces[i];
@@ -204,7 +206,7 @@ imesh_triangle_closest_point(const vgl_point_3d<double>& p,
   vgl_vector_3d<double> bc(c-b);
   vgl_vector_3d<double> ca(a-c);
 
-  double eps = vcl_numeric_limits<double>::epsilon();
+  double eps = std::numeric_limits<double>::epsilon();
 
   unsigned char state = 0;
   double uv;
@@ -268,7 +270,7 @@ imesh_triangle_closest_point(const vgl_point_3d<double>& p,
       dist = cp.length();
       return 4;
     default:
-      dist = vcl_abs(dot_product(ap,n) * vcl_sqrt(denom));
+      dist = std::abs(dot_product(ap,n) * std::sqrt(denom));
       return 7;
   }
 
@@ -326,7 +328,7 @@ int imesh_closest_point(const vgl_point_3d<double>& p,
   const imesh_vertex_array<3>& verts = mesh.vertices<3>();
 
   int isect = -1;
-  double dist = vcl_numeric_limits<double>::infinity();
+  double dist = std::numeric_limits<double>::infinity();
   for (unsigned int i=0; i<faces.size(); ++i)
   {
     const imesh_regular_face<3>& f = faces[i];
@@ -398,7 +400,7 @@ imesh_triangle_intersect(double& u, double& v,
                          const double& eps)
 {
   unsigned char state = 0;
-  double best_t = vcl_numeric_limits<double>::infinity();
+  double best_t = std::numeric_limits<double>::infinity();
   if (du > 0.0)
   {
     double t = -u/du;
@@ -408,12 +410,12 @@ imesh_triangle_intersect(double& u, double& v,
       best_t = t;
       state = 5;
     }
-    else if (vcl_abs(vi) <= eps)
+    else if (std::abs(vi) <= eps)
     {
       best_t = t;
       state = 1;
     }
-    else if (vcl_abs(1-vi) <= eps)
+    else if (std::abs(1-vi) <= eps)
     {
       best_t = t;
       state = 4;
@@ -428,12 +430,12 @@ imesh_triangle_intersect(double& u, double& v,
       best_t = t;
       state = 3;
     }
-    else if (vcl_abs(ui) <= eps)
+    else if (std::abs(ui) <= eps)
     {
       best_t = t;
       state = 1;
     }
-    else if (vcl_abs(1-ui) <= eps)
+    else if (std::abs(1-ui) <= eps)
     {
       best_t = t;
       state = 2;
@@ -449,12 +451,12 @@ imesh_triangle_intersect(double& u, double& v,
       best_t = t;
       state = 6;
     }
-    else if (vcl_abs(ui) <= eps)
+    else if (std::abs(ui) <= eps)
     {
       best_t = t;
       state = 4;
     }
-    else if (vcl_abs(vi) <= eps)
+    else if (std::abs(vi) <= eps)
     {
       best_t = t;
       state = 2;

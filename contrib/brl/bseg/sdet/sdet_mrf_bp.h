@@ -12,12 +12,14 @@
 //     d
 // with index (u, l, r, d) ==> (0, 1, 2, 3)
 //
+#include <iostream>
+#include <vector>
 #include <sdet/sdet_mrf_site_bp_sptr.h>
 #include <vil/vil_image_resource.h>
 #include <vil/vil_image_view.h>
 #include <vbl/vbl_array_2d.h>
 #include <vbl/vbl_ref_count.h>
-#include <vcl_vector.h>
+#include <vcl_compiler.h>
 
 class sdet_mrf_bp : public vbl_ref_count
 {
@@ -81,11 +83,11 @@ class sdet_mrf_bp : public vbl_ref_count
   sdet_mrf_site_bp_sptr site(unsigned p) { unsigned i, j; index_to_image(p,i,j); return sites_[j][i]; }
 
   //: get the contents of a prior message buffer
-  vcl_vector<float> prior_message(unsigned i, unsigned j, unsigned n);
+  std::vector<float> prior_message(unsigned i, unsigned j, unsigned n);
 
   //: set the contents of a prior message buffer
   void set_prior_message(unsigned i, unsigned j, unsigned n,
-                         vcl_vector<float> const& msg);
+                         std::vector<float> const& msg);
 
   //:
   // all sites send messages to current buffer of neighbors,
@@ -125,12 +127,12 @@ class sdet_mrf_bp : public vbl_ref_count
 
 //: computes the lower envelope of a message array with $V(fp, fq) = w|fp-fq|$
 //  Computes in place
-void lower_envelope_linear(float w, vcl_vector<float>& msg);
+void lower_envelope_linear(float w, std::vector<float>& msg);
 
 //: computes the lower envelope of a message array with $V(fp, fq) = w(fp-fq)^2$
 //  Used in current implementation
-vcl_vector<float> lower_envelope_quadratic(float w,
-                                           vcl_vector<float> const& h);
+std::vector<float> lower_envelope_quadratic(float w,
+                                           std::vector<float> const& h);
 
 #include <sdet/sdet_mrf_bp_sptr.h>
 #endif // sdet_mrf_bp_h_

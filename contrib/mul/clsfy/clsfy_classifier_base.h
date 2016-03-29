@@ -12,12 +12,13 @@
 //   2 May 2001 IMS Converted to VXL
 // \endverbatim
 
-#include <vcl_string.h>
-#include <vcl_vector.h>
+#include <string>
+#include <vector>
+#include <iostream>
 #include <vnl/vnl_vector.h>
 #include <mbl/mbl_data_wrapper.h>
 #include <vsl/vsl_binary_io.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
 
 //:  A common interface for 1-out-of-N classifiers
 // This class takes a vector and classifies into one of
@@ -42,10 +43,10 @@ class clsfy_classifier_base
 
   //: Return the probability the input being in each class.
   // output(i) 0<=i<nClasses, contains the probability that the input is in class i
-  virtual void class_probabilities(vcl_vector<double> &outputs, const vnl_vector<double> &input) const = 0;
+  virtual void class_probabilities(std::vector<double> &outputs, const vnl_vector<double> &input) const = 0;
 
   //: Classify many input vectors
-  virtual void classify_many(vcl_vector<unsigned> &outputs, mbl_data_wrapper<vnl_vector<double> > &inputs) const;
+  virtual void classify_many(std::vector<unsigned> &outputs, mbl_data_wrapper<vnl_vector<double> > &inputs) const;
 
   //: Log likelihood of being in class (binary classifiers only)
   // class probability = 1 / (1+exp(-log_l))
@@ -59,16 +60,16 @@ class clsfy_classifier_base
   virtual unsigned n_dims() const = 0;
 
   //: Name of the class
-  virtual vcl_string is_a() const;
+  virtual std::string is_a() const;
 
   //: Name of the class
-  virtual bool is_class(vcl_string const& s) const;
+  virtual bool is_class(std::string const& s) const;
 
   //: Create a copy on the heap and return base class pointer
   virtual clsfy_classifier_base* clone() const = 0;
 
   //: Print class to os
-  virtual void print_summary(vcl_ostream& os) const = 0;
+  virtual void print_summary(std::ostream& os) const = 0;
 
   //: Save class to binary file stream
   virtual void b_write(vsl_b_ostream& bfs) const = 0;
@@ -87,17 +88,17 @@ void vsl_b_write(vsl_b_ostream& bfs, const clsfy_classifier_base& b);
 void vsl_b_read(vsl_b_istream& bfs, clsfy_classifier_base& b);
 
 //: Stream output operator for class reference
-vcl_ostream& operator<<(vcl_ostream& os, const clsfy_classifier_base& b);
+std::ostream& operator<<(std::ostream& os, const clsfy_classifier_base& b);
 
 //: Stream output operator for class pointer
-vcl_ostream& operator<<(vcl_ostream& os, const clsfy_classifier_base* b);
+std::ostream& operator<<(std::ostream& os, const clsfy_classifier_base* b);
 
 //: Stream output operator for class reference
-inline void vsl_print_summary(vcl_ostream& os, const clsfy_classifier_base& b)
+inline void vsl_print_summary(std::ostream& os, const clsfy_classifier_base& b)
 { os << b;}
 
 //: Stream output operator for class pointer
-inline void vsl_print_summary(vcl_ostream& os, const clsfy_classifier_base* b)
+inline void vsl_print_summary(std::ostream& os, const clsfy_classifier_base* b)
 { os << b;}
 
 
@@ -106,13 +107,13 @@ inline void vsl_print_summary(vcl_ostream& os, const clsfy_classifier_base* b)
 //: Calculate the fraction of test samples which are classified incorrectly
 double clsfy_test_error(const clsfy_classifier_base &classifier,
                         mbl_data_wrapper<vnl_vector<double> > & test_inputs,
-                        const vcl_vector<unsigned> & test_outputs);
+                        const std::vector<unsigned> & test_outputs);
 
 //: Calculate the fraction of test samples of a particular class which are classified incorrectly
 // \return -1 if there are no samples of test_class.
 double clsfy_test_error(const clsfy_classifier_base &classifier,
                         mbl_data_wrapper<vnl_vector<double> > & test_inputs,
-                        const vcl_vector<unsigned> & test_outputs,
+                        const std::vector<unsigned> & test_outputs,
                         unsigned test_class);
 
 

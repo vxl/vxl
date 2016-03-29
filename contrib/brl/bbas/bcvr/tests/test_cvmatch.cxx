@@ -1,10 +1,11 @@
+#include <iostream>
 #include <testlib/testlib_test.h>
 #include <bcvr/bcvr_cvmatch.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
 
 MAIN_ARGS(test_cvmatch)
 {
-  vcl_string dir_base;
+  std::string dir_base;
 
   if ( argc >= 2 ) {
     dir_base = argv[1];
@@ -15,7 +16,7 @@ MAIN_ARGS(test_cvmatch)
 
   testlib_test_start("testing curve matching ");
 
-  vcl_string data_file = "line1.con";
+  std::string data_file = "line1.con";
   // Test generic file loads
   bsol_intrinsic_curve_2d_sptr curve_2d1 = new bsol_intrinsic_curve_2d;
   curve_2d1->readCONFromFile( (dir_base+data_file).c_str() );
@@ -29,7 +30,7 @@ MAIN_ARGS(test_cvmatch)
   curveMatch->setCurve1 (curve_2d1);
   curveMatch->setCurve2 (curve_2d2);
   curveMatch->Match ();
-  vcl_cout << "Final cost is: " << curveMatch->finalCost() << vcl_endl;
+  std::cout << "Final cost is: " << curveMatch->finalCost() << std::endl;
   TEST("matching curve1 with itself ", curveMatch->finalCost(), 0.0);
 
   data_file = "line2.con";
@@ -42,7 +43,7 @@ MAIN_ARGS(test_cvmatch)
   curveMatch2->setCurve1 (curve_2d1);
   curveMatch2->setCurve2 (curve_2d2_n);
   curveMatch2->Match ();
-  vcl_cout << "Final cost is: " << curveMatch2->finalCost() << vcl_endl;
+  std::cout << "Final cost is: " << curveMatch2->finalCost() << std::endl;
   TEST_NEAR("matching curve1 with itself ", curveMatch2->finalCost(), 3.28, 0.01);
 
   return testlib_test_summary();

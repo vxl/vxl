@@ -1,9 +1,11 @@
 // This is bil_edt.cxx ATTENTION: MOVED TO core/vil/algo/vil_exact_distance_transform.cxx
 // THIS IS OBSOLETE - DO NOT MODIFY THIS FILE
+#include <limits>
+#include <iostream>
+#include <cmath>
+#include <vector>
 #include "bil_edt.h"
-#include <vcl_limits.h>
-#include <vcl_cmath.h>
-#include <vcl_vector.h>
+#include <vcl_compiler.h>
 //:
 // \file
 // \brief Computes the exact Euclidean distance transform
@@ -23,14 +25,14 @@ bool test_contiguous(vil_image_view<vxl_uint_32> &im)
 {
    if (!im.is_contiguous()) {
 #ifndef NDEBUG
-      vcl_cerr << "edt: only contiguous row-wise images currently supported\n";
+      std::cerr << "edt: only contiguous row-wise images currently supported\n";
 #endif
       return false;
    }
 
    if (im.istep() != 1) {
 #ifndef NDEBUG
-      vcl_cerr << "edt(2): only contiguous row-wise images currently supported\n"
+      std::cerr << "edt(2): only contiguous row-wise images currently supported\n"
                << "istep: " << im.istep() << '\n';
 #endif
       return false;
@@ -59,15 +61,15 @@ bil_edt_saito(vil_image_view<vxl_uint_32> &im, unsigned plane_idx)
    r = im.nj();  c = im.ni();
    unsigned n = r*c;
 
-   unsigned diag1 = (unsigned)vcl_ceil( vcl_sqrt(double(r*r + c*c)) ) -1;
+   unsigned diag1 = (unsigned)std::ceil( std::sqrt(double(r*r + c*c)) ) -1;
 
    unsigned nsqr = 2*(diag1 + 1);   // was: 2*r + 2 in Cuisenaire's code
-   vcl_vector<unsigned> sq;
+   std::vector<unsigned> sq;
    sq.resize(nsqr);
    for (i=0; i<nsqr; ++i)
       sq[i] = i*i;
 
-   infty_ = vcl_numeric_limits<vxl_uint_32>::max() - r*r - c*c -1;
+   infty_ = std::numeric_limits<vxl_uint_32>::max() - r*r - c*c -1;
 
    vxl_uint_32 *data;
    data = im.top_left_ptr();
@@ -93,15 +95,15 @@ bil_edt_saito_3D(vil_image_view<vxl_uint_32> &im)
    r = im.nj();  c = im.ni(); nk = im.nplanes();
    unsigned n = r*c*nk;
 
-   unsigned diag1 = (unsigned)vcl_ceil( vcl_sqrt(double(r*r + c*c + nk*nk)) ) -1;
+   unsigned diag1 = (unsigned)std::ceil( std::sqrt(double(r*r + c*c + nk*nk)) ) -1;
 
    unsigned nsqr = 2*(diag1 + 1);   // was: 2*r + 2 in Cuisenaire's code
-   vcl_vector<unsigned> sq;
+   std::vector<unsigned> sq;
    sq.resize(nsqr);
    for (i=0; i<nsqr; ++i)
       sq[i] = i*i;
 
-   infty_ = vcl_numeric_limits<vxl_uint_32>::max() - r*r - c*c - nk*nk -1;
+   infty_ = std::numeric_limits<vxl_uint_32>::max() - r*r - c*c - nk*nk -1;
 
    vxl_uint_32 *data;
    data = im.top_left_ptr();
@@ -121,7 +123,7 @@ bil_edt_saito_3D(vil_image_view<vxl_uint_32> &im)
 
    unsigned rc = r*c;
    for (unsigned j=0; j < r; ++j, data+=c) {
-      vcl_vector<unsigned> buff(nk);
+      std::vector<unsigned> buff(nk);
 
       vxl_uint_32 *pt;
 
@@ -250,7 +252,7 @@ bil_edt_1d_horizontal(vil_image_view<vxl_uint_32> &im)
 // Assumes given a Lookup table of integer squares.
 // Also assumes the image \a im already has infinity in all non-zero points.
 bool
-bil_edt_saito(vil_image_view<vxl_uint_32> &im, unsigned plane_idx, const vcl_vector<unsigned> &sq)
+bil_edt_saito(vil_image_view<vxl_uint_32> &im, unsigned plane_idx, const std::vector<unsigned> &sq)
 {
    if (!test_contiguous(im))
       return false;
@@ -279,7 +281,7 @@ bil_edt_saito(vil_image_view<vxl_uint_32> &im, unsigned plane_idx, const vcl_vec
 
    // ----------- Step 2 -----------
 
-   vcl_vector<unsigned> buff;
+   std::vector<unsigned> buff;
    buff.resize(r);
 
    unsigned *pt;
@@ -361,7 +363,7 @@ bil_edt_maurer(vil_image_view<vxl_uint_32> &im)
       return false;
 
    r = im.nj();  c = im.ni();
-   infty_ = vcl_numeric_limits<vxl_uint_32>::max() - r*r - c*c -1;
+   infty_ = std::numeric_limits<vxl_uint_32>::max() - r*r - c*c -1;
 
    data = im.top_left_ptr();
    for (i=0;  i<r*c;  ++i)
@@ -477,7 +479,7 @@ bil_edt_brute_force(vil_image_view<vxl_uint_32> &im)
    if (!test_contiguous(im))
       return false;
 
-   infty_ = vcl_numeric_limits<vxl_uint_32>::max();
+   infty_ = std::numeric_limits<vxl_uint_32>::max();
 
    ni = im.ni();
    nj = im.nj();
@@ -527,7 +529,7 @@ bil_edt_brute_force_with_list(vil_image_view<vxl_uint_32> &im)
    if (!test_contiguous(im))
       return false;
 
-   infty_ = vcl_numeric_limits<vxl_uint_32>::max();
+   infty_ = std::numeric_limits<vxl_uint_32>::max();
 
    c = im.ni();
    n = im.nj()*c;
@@ -601,14 +603,14 @@ bil_edt_signed(
 
    for (i=0; i<n; ++i) {
       if (image_data[i] == 0) {
-         distance_from_interior = (float)((dt_complement[i] >= 1) ?  vcl_sqrt((double)dt_complement[i]-1.0) : 0.0);
+         distance_from_interior = (float)((dt_complement[i] >= 1) ?  std::sqrt((double)dt_complement[i]-1.0) : 0.0);
          diff = cutoff_margin - distance_from_interior;
          if (diff < 0.0)
             diff = 0.0;
          surface_value = diff - cutoff_margin;
       }
       else {
-         surface_value = vcl_sqrt((float)dt_input[i]); // distance_from_exterior
+         surface_value = std::sqrt((float)dt_input[i]); // distance_from_exterior
       }
 
       signed_edt[i] = (float)(surface_value - 0.5);

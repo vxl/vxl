@@ -14,8 +14,8 @@
 
 int main(int argc,  char** argv)
 {
-  vcl_cout<<"Boxm2 Hemisphere"<<vcl_endl;
-  vul_arg<vcl_string> scene_file("-scene", "scene filename", "");
+  std::cout<<"Boxm2 Hemisphere"<<std::endl;
+  vul_arg<std::string> scene_file("-scene", "scene filename", "");
   vul_arg<float> thresh("-thresh", "Probability threshold", .3f);
   vul_arg<int> gpuNum("-gpu", "Device number", 0);
   vul_arg_parse(argc, argv);

@@ -10,7 +10,9 @@ class vimt_image_pyramid;
 class vimt_image_2d;
 class msm_points;
 
-#include <vcl_string.h>
+#include <iostream>
+#include <string>
+#include <vcl_compiler.h>
 
 //: Base for iterator which returns images+points
 class msdi_marked_images
@@ -37,10 +39,10 @@ class msdi_marked_images
   virtual const msm_points& points() = 0;
 
     //: Return name for current image
-  virtual vcl_string image_name() const = 0;
+  virtual std::string image_name() const = 0;
 
     //: Return name for current points
-  virtual vcl_string points_name() const = 0;
+  virtual std::string points_name() const = 0;
 
 };
 

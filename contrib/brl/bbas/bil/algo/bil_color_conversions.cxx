@@ -1,10 +1,11 @@
 // This is brl/bbas/bil/algo/bil_color_conversions.cxx
+#include <iostream>
 #include "bil_color_conversions.h"
 //:
 // \file
 #include <vnl/vnl_vector_fixed.h>
 #if 0
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
 #endif
 
 void rgb2lab(double R, double G, double B, double &L , double &a, double &b)
@@ -16,13 +17,13 @@ void rgb2lab(double R, double G, double B, double &L , double &a, double &b)
   double var_G = (G/255.0);   //G = From 0 to 255
   double var_B = (B/255.0);   //B = From 0 to 255
 
-  if ( var_R > 0.04045 ) var_R = vcl_pow( (var_R+0.055)/1.055, 2.4);
+  if ( var_R > 0.04045 ) var_R = std::pow( (var_R+0.055)/1.055, 2.4);
   else                   var_R = var_R /12.92;
 
-  if ( var_G > 0.04045 ) var_G = vcl_pow( (var_G+0.055)/1.055, 2.4);
+  if ( var_G > 0.04045 ) var_G = std::pow( (var_G+0.055)/1.055, 2.4);
   else                   var_G = var_G /12.92;
 
-  if ( var_B > 0.04045 ) var_B = vcl_pow( (var_B+0.055)/1.055, 2.4);
+  if ( var_B > 0.04045 ) var_B = std::pow( (var_B+0.055)/1.055, 2.4);
   else                   var_B = var_B /12.92;
 
   double X = var_R * 0.4124 + var_G * 0.3576 + var_B * 0.1805;
@@ -36,13 +37,13 @@ void rgb2lab(double R, double G, double B, double &L , double &a, double &b)
   double var_Y = Y * 100.0/100.000;
   double var_Z = Z * 100.0/108.883;
 
-  if ( var_X > 0.008856 ) var_X = vcl_pow(var_X, 1.0/3.0);
+  if ( var_X > 0.008856 ) var_X = std::pow(var_X, 1.0/3.0);
   else                    var_X = 7.787 * var_X + 16.0/116.0;
 
-  if ( var_Y > 0.008856 ) var_Y = vcl_pow(var_Y ,1.0/3.0);
+  if ( var_Y > 0.008856 ) var_Y = std::pow(var_Y ,1.0/3.0);
   else                    var_Y = 7.787 * var_Y + 16.0/ 116.0;
 
-  if ( var_Z > 0.008856 ) var_Z = vcl_pow(var_Z, 1.0/3.0);
+  if ( var_Z > 0.008856 ) var_Z = std::pow(var_Z, 1.0/3.0);
   else                    var_Z = 7.787 * var_Z + 16.0/ 116.0;
 
   //Finally
@@ -103,13 +104,13 @@ void rgb2luv(double R, double G, double B, double &L , double &u, double &v)
   double var_G = (G/255.0);   //G = From 0 to 255
   double var_B = (B/255.0);   //B = From 0 to 255
 
-  if ( var_R > 0.04045 ) var_R = vcl_pow( (var_R+0.055)/1.055, 2.4);
+  if ( var_R > 0.04045 ) var_R = std::pow( (var_R+0.055)/1.055, 2.4);
   else                   var_R = var_R /12.92;
 
-  if ( var_G > 0.04045 ) var_G = vcl_pow( (var_G+0.055)/1.055, 2.4);
+  if ( var_G > 0.04045 ) var_G = std::pow( (var_G+0.055)/1.055, 2.4);
   else                   var_G = var_G /12.92;
 
-  if ( var_B > 0.04045 ) var_B = vcl_pow( (var_B+0.055)/1.055, 2.4);
+  if ( var_B > 0.04045 ) var_B = std::pow( (var_B+0.055)/1.055, 2.4);
   else                   var_B = var_B /12.92;
 
   double X = var_R * 0.4124 + var_G * 0.3576 + var_B * 0.1805;
@@ -127,7 +128,7 @@ void rgb2luv(double R, double G, double B, double &L , double &u, double &v)
   double v_prime = 9.0*var_X/(var_X + 15.0*var_Y + 3*var_Z);
 
   //Finally
-  L = 116.0 * vcl_pow(var_Y ,1.0/3.0)  - 16.0;
+  L = 116.0 * std::pow(var_Y ,1.0/3.0)  - 16.0;
   u = 13.0 * L * (u_prime - 0.2009);
   v = 200.0 * L* (v_prime - 0.4610);
 }
@@ -168,14 +169,14 @@ double distance_LAB(vnl_vector_fixed<double, 3>& c1, vnl_vector_fixed<double, 3>
   double E = sub.two_norm();
   // the ground distance between colors is an exponential measure, with steepness governed by gamma (gamma = 14 in Tomasi PAMI 01)
 #if 0
-  vcl_cout << "APP E (Euclidean dist): " << E << " [e^(-E/gamma)]: " << vcl_exp(-E/color_gamma) << vcl_endl;
+  std::cout << "APP E (Euclidean dist): " << E << " [e^(-E/gamma)]: " << std::exp(-E/color_gamma) << std::endl;
 #endif
-  return vcl_exp(-E/color_gamma);
+  return std::exp(-E/color_gamma);
 }
 
 double distance_intensity(double plus_mean, double minus_mean, double intensity_gamma)
 {
-  double E = vcl_abs(plus_mean - minus_mean);
-  return vcl_exp(-E/intensity_gamma);
+  double E = std::abs(plus_mean - minus_mean);
+  return std::exp(-E/intensity_gamma);
 }
 

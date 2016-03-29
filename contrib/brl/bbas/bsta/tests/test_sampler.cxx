@@ -1,14 +1,15 @@
+#include <string>
+#include <limits>
+#include <iostream>
 #include <testlib/testlib_test.h>
 #include <bsta/bsta_sampler.h>
 #include <vnl/vnl_random.h>
-#include <vcl_string.h>
-#include <vcl_limits.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
 
 void test_sampler_helper(void)
 {
-  vcl_vector<unsigned> inp;
-  vcl_vector<float> inp_p;
+  std::vector<unsigned> inp;
+  std::vector<float> inp_p;
   vnl_random rand;
   float sum = 0.0f;
   for (unsigned i = 0; i < 4; i++) {
@@ -19,24 +20,24 @@ void test_sampler_helper(void)
   inp.push_back(4);
   inp_p.push_back(1-sum);
 
-  vcl_vector<unsigned> out;
+  std::vector<unsigned> out;
   bool done = bsta_sampler<unsigned>::sample(inp, inp_p, 50, out);
   TEST("sampler works", done, true);
-  vcl_cout << " samples:\n";
+  std::cout << " samples:\n";
   for (unsigned i = 0; i < inp.size(); i++) {
-    vcl_cout << inp[i] << ' ' << inp_p[i] << vcl_endl;
+    std::cout << inp[i] << ' ' << inp_p[i] << std::endl;
   }
 
-  vcl_cout << "\n selected:\n";
+  std::cout << "\n selected:\n";
   for (unsigned i = 0; i < out.size(); i++) {
-    vcl_cout << out[i] << vcl_endl;
+    std::cout << out[i] << std::endl;
   }
 }
 
 void test_sampler_helper2(void)
 {
-  vcl_vector<unsigned> inp;
-  vcl_vector<float> inp_p;
+  std::vector<unsigned> inp;
+  std::vector<float> inp_p;
   inp.push_back(0);
   inp.push_back(1);
   inp.push_back(2);
@@ -51,17 +52,17 @@ void test_sampler_helper2(void)
   inp_p.push_back(0.0f);
   inp_p.push_back(0.0f);
 
-  vcl_vector<unsigned> out;
+  std::vector<unsigned> out;
   bool done = bsta_sampler<unsigned>::sample(inp, inp_p, 50, out);
   TEST("sampler works", done, true);
-  vcl_cout << " samples:\n";
+  std::cout << " samples:\n";
   for (unsigned i = 0; i < inp.size(); i++) {
-    vcl_cout << inp[i] << ' ' << inp_p[i] << vcl_endl;
+    std::cout << inp[i] << ' ' << inp_p[i] << std::endl;
   }
 
-  vcl_cout << "\n selected:\n";
+  std::cout << "\n selected:\n";
   for (unsigned i = 0; i < out.size(); i++) {
-    vcl_cout << out[i] << vcl_endl;
+    std::cout << out[i] << std::endl;
   }
 }
 

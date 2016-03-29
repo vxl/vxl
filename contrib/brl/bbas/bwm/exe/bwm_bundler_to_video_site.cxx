@@ -1,15 +1,16 @@
+#include <vector>
+#include <set>
+#include <iostream>
+#include <fstream>
+#include <string>
+#include <cstdlib>
 #include <bwm/bwm_observer_cam.h>
 #include <bwm/video/bwm_video_cam_ostream.h>
 #include <bwm/video/bwm_video_corr_sptr.h>
 #include <bwm/video/bwm_video_corr.h>
 #include <bwm/video/bwm_video_site_io.h>
 
-#include <vcl_vector.h>
-#include <vcl_set.h>
 #include <vcl_cassert.h>
-#include <vcl_iostream.h>
-#include <vcl_fstream.h>
-#include <vcl_string.h>
 #include <vul/vul_arg.h>
 #include <vul/vul_file.h>
 #include <vgl/algo/vgl_fit_plane_3d.h>
@@ -33,12 +34,12 @@
 
 #include <vil/vil_image_view.h>
 #include <vil/vil_save.h>
-#include <vcl_cstdlib.h> // for rand()
+#include <vcl_compiler.h>
 #include <bwm/bwm_site_mgr.h>
 
 #include <bxml/bxml_write.h>
 
-static void write_vrml_header(vcl_ofstream& str)
+static void write_vrml_header(std::ofstream& str)
 {
   str << "#VRML V2.0 utf8\n"
       << "Background {\n"
@@ -48,7 +49,7 @@ static void write_vrml_header(vcl_ofstream& str)
 }
 
 static void
-write_vrml_cameras(vcl_ofstream& str,vcl_vector<vpgl_perspective_camera<double> > & cams, double rad, vcl_set<int> const& bad_cams)
+write_vrml_cameras(std::ofstream& str,std::vector<vpgl_perspective_camera<double> > & cams, double rad, std::set<int> const& bad_cams)
 {
   str << "#VRML V2.0 utf8\n"
       << "Background {\n"
@@ -111,8 +112,8 @@ write_vrml_cameras(vcl_ofstream& str,vcl_vector<vpgl_perspective_camera<double> 
   }
 }
 
-static void write_vrml_points(vcl_ofstream& str,
-                              vcl_vector<vgl_point_3d<double> > const& pts3d, double rad=2.0)
+static void write_vrml_points(std::ofstream& str,
+                              std::vector<vgl_point_3d<double> > const& pts3d, double rad=2.0)
 {
   int n = pts3d.size();
   str<<"Shape {\n"
@@ -134,7 +135,7 @@ static void write_vrml_points(vcl_ofstream& str,
      <<"}\n";
 }
 
-static void write_vrml_box(vcl_ofstream& os,
+static void write_vrml_box(std::ofstream& os,
                            vgl_box_3d<double> const& bounding_box,
                            vnl_vector_fixed<double,3> const& color, float const& transparency)
 {
@@ -156,24 +157,24 @@ static void write_vrml_box(vcl_ofstream& os,
        << "}\n"; //end Transform
 }
 
-bool fit_plane_ransac(vcl_vector<vgl_homg_point_3d<double> > & points, vgl_homg_plane_3d<double>  & plane)
+bool fit_plane_ransac(std::vector<vgl_homg_point_3d<double> > & points, vgl_homg_plane_3d<double>  & plane)
 {
   unsigned int nchoose=3;
   unsigned int nsize=points.size();
   unsigned int max_its = 500;
   double err=10.0;
   double inlier_dist = 0.01;
-  vcl_vector<int> best_inliers;
+  std::vector<int> best_inliers;
   for (unsigned i=0;i<max_its;++i)
   {
-    vcl_cout << '.';
-    vcl_vector<vgl_homg_point_3d<double> > subset;
-    vcl_vector<int> inliers;
+    std::cout << '.';
+    std::vector<vgl_homg_point_3d<double> > subset;
+    std::vector<int> inliers;
     for (unsigned j=0;j<nchoose;++j)
-      subset.push_back(points[vcl_rand()%nsize]);
-    vcl_cout<<subset.size();vcl_cout.flush();
+      subset.push_back(points[std::rand()%nsize]);
+    std::cout<<subset.size();std::cout.flush();
     vgl_fit_plane_3d<double> fit_plane(subset);
-    if (fit_plane.fit(err, &vcl_cerr))
+    if (fit_plane.fit(err, &std::cerr))
     {
       vgl_homg_plane_3d<double> plane=fit_plane.get_plane();
       for (unsigned j=0;j<nsize;++j)
@@ -194,8 +195,8 @@ bool fit_plane_ransac(vcl_vector<vgl_homg_point_3d<double> > & points, vgl_homg_
   {
     fit_plane_inliers.add_point(points[best_inliers[i]]);
   }
-  vcl_cout<<"Inliers "<<best_inliers.size()<<vcl_endl;
-  if (fit_plane_inliers.fit(23.0, &vcl_cerr))
+  std::cout<<"Inliers "<<best_inliers.size()<<std::endl;
+  if (fit_plane_inliers.fit(23.0, &std::cerr))
   {
     plane=fit_plane_inliers.get_plane();
     return true;
@@ -204,10 +205,10 @@ bool fit_plane_ransac(vcl_vector<vgl_homg_point_3d<double> > & points, vgl_homg_
     return false;
 }
 
-bool axis_align_scene(vcl_vector<bwm_video_corr_sptr> & corrs,
-                      vcl_vector<vpgl_perspective_camera<double> > & cams)
+bool axis_align_scene(std::vector<bwm_video_corr_sptr> & corrs,
+                      std::vector<vpgl_perspective_camera<double> > & cams)
 {
-  vcl_vector<vgl_homg_point_3d<double> > points;
+  std::vector<vgl_homg_point_3d<double> > points;
   for (unsigned i=0;i<corrs.size();++i)
   {
     vgl_homg_point_3d<double> homg_world_pt(corrs[i]->world_pt());
@@ -216,7 +217,7 @@ bool axis_align_scene(vcl_vector<bwm_video_corr_sptr> & corrs,
 
   // fit the plane
   vgl_fit_plane_3d<double> fit_plane(points);
-  if (!fit_plane.fit(1e6, &vcl_cerr))
+  if (!fit_plane.fit(1e6, &std::cerr))
     return false;
 
   vgl_homg_plane_3d<double> plane=fit_plane.get_plane();
@@ -236,14 +237,14 @@ bool axis_align_scene(vcl_vector<bwm_video_corr_sptr> & corrs,
   }
   vgl_point_3d<double> center(sumx/corrs.size(),sumy/corrs.size(),sumz/corrs.size());
   vnl_vector_fixed<double,3> tr(center.x(),center.y(),center.z());
-  vcl_vector<vgl_homg_point_3d<double> > xformed_points;
+  std::vector<vgl_homg_point_3d<double> > xformed_points;
   for (unsigned i=0;i<corrs.size();++i)
   {
     vgl_point_3d<double> p(corrs[i]->world_pt());
     corrs[i]->set_world_pt(vgl_point_3d<double>(p.x()-center.x(),p.y()-center.y(),p.z()-center.z()));
     xformed_points.push_back(vgl_homg_point_3d<double>(p.x()-center.x(),p.y()-center.y(),p.z()-center.z()));
   }
-  vcl_vector<vpgl_perspective_camera<double> > new_cams;
+  std::vector<vpgl_perspective_camera<double> > new_cams;
   unsigned int up=0;
   for (unsigned i=0;i<cams.size();++i)
   {
@@ -285,7 +286,7 @@ bool axis_align_scene(vcl_vector<bwm_video_corr_sptr> & corrs,
     cams[i]=new_cams[i];
 
   vgl_fit_plane_3d<double> fit_plane1(xformed_points);
-  if (!fit_plane1.fit(1e6, &vcl_cerr))
+  if (!fit_plane1.fit(1e6, &std::cerr))
       return false;
 
   vgl_homg_plane_3d<double> plane1=fit_plane1.get_plane();
@@ -293,7 +294,7 @@ bool axis_align_scene(vcl_vector<bwm_video_corr_sptr> & corrs,
   return true;
 }
 
-vnl_vector_fixed<double,3> stddev( vcl_vector<vgl_point_3d<double> > const& v)
+vnl_vector_fixed<double,3> stddev( std::vector<vgl_point_3d<double> > const& v)
 {
   unsigned n = v.size();
   assert(n>0);
@@ -316,7 +317,7 @@ vnl_vector_fixed<double,3> stddev( vcl_vector<vgl_point_3d<double> > const& v)
   }
 
   for (unsigned i = 0; i < 3; ++i)
-    stddev[i] = vcl_sqrt(stddev[i]/(n-1));
+    stddev[i] = std::sqrt(stddev[i]/(n-1));
 
   return stddev;
 }
@@ -326,14 +327,14 @@ int main(int argc, char** argv)
 {
   //Get Inputs
 
-  vul_arg<vcl_string> bundlerfile   ("-bundler", "Output file of bundler",  "");
-  vul_arg<vcl_string> cam_dir       ("-cam_dir",      "directory to store cams", "");
-  vul_arg<vcl_string> img_dir       ("-img_dir",     "list of images filenames", "");
-  vul_arg<vcl_string> site_name     ("-site_name",    "Name of the site", "");
-  vul_arg<vcl_string> site_directory("-site_dir", "Directory for the site", "");
-  vul_arg<vcl_string> cam_txt_dir   ("-cam_txt_dir",      "directory to store txt cams", "");
-  vul_arg<vcl_string> vrml_file     ("-vrml_file",      "vrml file", "");
-  vul_arg<vcl_string> xml_file      ("-xml_file",      "xml file", "");
+  vul_arg<std::string> bundlerfile   ("-bundler", "Output file of bundler",  "");
+  vul_arg<std::string> cam_dir       ("-cam_dir",      "directory to store cams", "");
+  vul_arg<std::string> img_dir       ("-img_dir",     "list of images filenames", "");
+  vul_arg<std::string> site_name     ("-site_name",    "Name of the site", "");
+  vul_arg<std::string> site_directory("-site_dir", "Directory for the site", "");
+  vul_arg<std::string> cam_txt_dir   ("-cam_txt_dir",      "directory to store txt cams", "");
+  vul_arg<std::string> vrml_file     ("-vrml_file",      "vrml file", "");
+  vul_arg<std::string> xml_file      ("-xml_file",      "xml file", "");
   vul_arg<bool>       draw_box      ("-draw_box", "Draw Bounding Box around points within 2*(standard deviation) from the center of scene",true);
   vul_arg<bool>       filter        ("-filter_cams", "Filter camera based on Reprojection error of 3d correspondences", false);
   vul_arg<float>      filter_thresh ("-filter_thresh", "Threshold for average rms value for a given view. Units are pixels", .75);
@@ -341,17 +342,17 @@ int main(int argc, char** argv)
   vul_arg_parse(argc, argv);
 
   // open the bundler file
-  vcl_ifstream bfile( bundlerfile().c_str() );
+  std::ifstream bfile( bundlerfile().c_str() );
   if (!bfile)
   {
-    vcl_cout<<"Error Opening Bundler output file"<<vcl_endl;
+    std::cout<<"Error Opening Bundler output file"<<std::endl;
     return -1;
   }
 
   // verify image dir
   if (!vul_file::is_directory(img_dir().c_str()))
   {
-    vcl_cout<<"Image directory does not exist"<<vcl_endl;
+    std::cout<<"Image directory does not exist"<<std::endl;
     return -1;
   }
 
@@ -360,7 +361,7 @@ int main(int argc, char** argv)
 
   if (!imgstream.is_open())
   {
-    vcl_cout<<"Invalid image stream"<<vcl_endl;
+    std::cout<<"Invalid image stream"<<std::endl;
     return -1;
   }
 
@@ -376,7 +377,7 @@ int main(int argc, char** argv)
 
   if (bfile.eof())
   {
-    vcl_cout<<"File Missing data"<<vcl_endl;
+    std::cout<<"File Missing data"<<std::endl;
     return -1;
   }
 
@@ -384,8 +385,8 @@ int main(int argc, char** argv)
   bfile>>num_cams>>num_pts; // reading number of cameras and number of 3-d pts
 
   // read the cams from bundler and write it to a directory
-  vcl_vector<vpgl_perspective_camera<double> > cams;
-  vcl_set<int> bad_cams;
+  std::vector<vpgl_perspective_camera<double> > cams;
+  std::set<int> bad_cams;
 
   // reading the cameras from bundler
   for (unsigned i=0;i<num_cams;++i)
@@ -420,9 +421,9 @@ int main(int argc, char** argv)
     }
   }
 
-  vcl_map<unsigned,double> view_error_map;
-  vcl_map<unsigned,unsigned> view_count_map;
-  vcl_vector<bwm_video_corr_sptr> corrs;
+  std::map<unsigned,double> view_error_map;
+  std::map<unsigned,unsigned> view_count_map;
+  std::vector<bwm_video_corr_sptr> corrs;
   //  Projection error
   double err=0;double cnt=0;
   double maxerr=0;
@@ -463,7 +464,7 @@ int main(int argc, char** argv)
       vgl_ray_3d<double> ray = cams[view_number].backproject_ray(u,v);
       vgl_vector_3d<double> point_dir = vgl_homg_point_3d<double>(x,y,z) - cams[view_number].camera_center();
       double dp = dot_product(point_dir, ray.direction());
-      vcl_cout<<"dot product: "<<dp<<vcl_endl;
+      std::cout<<"dot product: "<<dp<<std::endl;
       if (dp < 0.0) {
         bad_cams.insert(view_number);
       }
@@ -474,12 +475,12 @@ int main(int argc, char** argv)
       else
       {
         cams[view_number].project(x,y,z,u,v);
-        double rms=vcl_sqrt((u-img_x)*(u-img_x)+(v-img_y)*(v-img_y));
-        //vcl_cout<<view_number<<":: U: "<<u<<", X: "<<img_x<<" ... V: "<<v<<", Y: "<<img_y<<vcl_endl;
+        double rms=std::sqrt((u-img_x)*(u-img_x)+(v-img_y)*(v-img_y));
+        //std::cout<<view_number<<":: U: "<<u<<", X: "<<img_x<<" ... V: "<<v<<", Y: "<<img_y<<std::endl;
         err+=rms;
         ++cnt;
 
-        vcl_map<unsigned,double>::iterator ve_itr = view_error_map.find(view_number);
+        std::map<unsigned,double>::iterator ve_itr = view_error_map.find(view_number);
         if (ve_itr == view_error_map.end())
         {
           view_error_map[view_number]=rms;
@@ -495,8 +496,8 @@ int main(int argc, char** argv)
     }
     corrs.push_back(corr);
   }
-  vcl_cout<<"Avg Error per projection "<<err/cnt<<'\n'
-          <<"Max Error"<<maxerr<<" is in camera # "<<maxerrcam<<vcl_endl;
+  std::cout<<"Avg Error per projection "<<err/cnt<<'\n'
+          <<"Max Error"<<maxerr<<" is in camera # "<<maxerrcam<<std::endl;
 
   // save it to a site
   if (!axis_align_scene(corrs,cams))
@@ -511,8 +512,8 @@ int main(int argc, char** argv)
   {
     for (unsigned i=0;i<num_cams;++i)
     {
-      vcl_sprintf(filename,"%s/camera%05d.txt",cam_txt_dir().c_str(),i);
-      vcl_ofstream ofile(filename);
+      std::sprintf(filename,"%s/camera%05d.txt",cam_txt_dir().c_str(),i);
+      std::ofstream ofile(filename);
       double u1,v1;
       cams[i].project(0,0,0,u1,v1);
       if (ofile)
@@ -526,7 +527,7 @@ int main(int argc, char** argv)
 
   if ( filter() )
   {
-    vcl_map<unsigned,double>::iterator ve_itr = view_error_map.begin(), ve_end = view_error_map.end();
+    std::map<unsigned,double>::iterator ve_itr = view_error_map.begin(), ve_end = view_error_map.end();
     for (;ve_itr!=ve_end;++ve_itr)
     {
       ve_itr->second/=view_count_map[ve_itr->first];
@@ -535,19 +536,19 @@ int main(int argc, char** argv)
     }
 
     //save reprojection rms to a file
-    vcl_string rms_file=site_directory()+"/rms_error.txt";
-    vcl_ofstream ofstr(rms_file.c_str());
+    std::string rms_file=site_directory()+"/rms_error.txt";
+    std::ofstream ofstr(rms_file.c_str());
     if (ofstr)
     {
-      vcl_map<unsigned,double>::iterator ve_itr = view_error_map.begin(), ve_end = view_error_map.end();
+      std::map<unsigned,double>::iterator ve_itr = view_error_map.begin(), ve_end = view_error_map.end();
       for (; ve_itr != ve_end; ++ve_itr)
-        ofstr << "View: " << ve_itr->first << "\t RMS Error: " << ve_itr->second << vcl_endl;
+        ofstr << "View: " << ve_itr->first << "\t RMS Error: " << ve_itr->second << std::endl;
     }
     else
-        vcl_cout << "ERROR SAVING RMS FILE!" << vcl_endl;
+        std::cout << "ERROR SAVING RMS FILE!" << std::endl;
     ofstr.close();
 
-    vcl_string img_dir = site_directory()+"/frames";
+    std::string img_dir = site_directory()+"/frames";
     if ( !vul_file::is_directory(img_dir) ) { vul_file::make_directory(img_dir); }
     unsigned cnt=0;
     for (unsigned i = 0; i < num_cams; ++i)
@@ -559,30 +560,30 @@ int main(int argc, char** argv)
         vidl_convert_to_view(*imgstream.current_frame(),curr_img);
         char filename[1024];
 
-        vcl_sprintf(filename,"%s/frame%05d.png",img_dir.c_str(),cnt);
+        std::sprintf(filename,"%s/frame%05d.png",img_dir.c_str(),cnt);
         vil_save(curr_img,filename);
         ++cnt;
       }
     }//end frame iteration
 
 
-    vcl_string cam_dir = site_directory() + "/cameras_KRT";
+    std::string cam_dir = site_directory() + "/cameras_KRT";
     if ( !vul_file::is_directory(cam_dir) )
     {
       vul_file::make_directory(cam_dir);
     }
     else
-      vul_file::delete_file_glob(vcl_string(cam_dir+"/*.txt"));
+      vul_file::delete_file_glob(std::string(cam_dir+"/*.txt"));
     unsigned cnt2 = 0;
-    vcl_vector<vpgl_perspective_camera<double> > cams2 = cams;
+    std::vector<vpgl_perspective_camera<double> > cams2 = cams;
 
     for (unsigned i = 0; i < num_cams; ++i)
     {
       if ( !bad_cams.count(i) )
       {
         char filename[1024];
-        vcl_sprintf(filename,"%s/camera%05d.txt",cam_dir.c_str(),cnt2);
-        vcl_ofstream ofile(filename);
+        std::sprintf(filename,"%s/camera%05d.txt",cam_dir.c_str(),cnt2);
+        std::ofstream ofile(filename);
         double u1,v1;
         cams2[i].project(0,0,0,u1,v1);
         if (ofile)
@@ -598,7 +599,7 @@ int main(int argc, char** argv)
     }//end camera iteration
   }
 
-  vcl_vector<vgl_point_3d<double> > pts_3d;
+  std::vector<vgl_point_3d<double> > pts_3d;
   vgl_box_3d<double> bounding_box;
   for (unsigned i=0;i<corrs.size();++i)
   {
@@ -606,11 +607,11 @@ int main(int argc, char** argv)
     pts_3d.push_back(corrs[i]->world_pt());
   }
   // Dimensions of the World
-  vcl_cout<<"Bounding Box "<<bounding_box<<vcl_endl;
+  std::cout<<"Bounding Box "<<bounding_box<<std::endl;
   vgl_point_3d<double> c = centre(pts_3d);
-  vcl_cout<<"Center       "<<c<<vcl_endl;
+  std::cout<<"Center       "<<c<<std::endl;
   vnl_vector_fixed<double,3> sigma = stddev(pts_3d);
-  vcl_cout<<"Stddev       "<< sigma <<vcl_endl;
+  std::cout<<"Stddev       "<< sigma <<std::endl;
 
   // Define dimensions to be used for a boxm scene
   // Note: x-y dimensions are kind of a good approximation
@@ -637,7 +638,7 @@ int main(int argc, char** argv)
   root->append_data(bbox_elm);
   root->append_text("\n");
 
-  vcl_cout << "Bounding Box containing points which are [-3,3]sigma about x and y and [-1,5]-z_sigma about the scene center: " <<bounding_box2<<'\n'
+  std::cout << "Bounding Box containing points which are [-3,3]sigma about x and y and [-1,5]-z_sigma about the scene center: " <<bounding_box2<<'\n'
            << "min_x = " << bounding_box2.min_x() << '\n'
            << "min_y = " << bounding_box2.min_y() << '\n'
            << "min_z = " << bounding_box2.min_z() << '\n'
@@ -646,7 +647,7 @@ int main(int argc, char** argv)
            << "max_z = " << bounding_box2.max_z() << '\n'
            << "width = " << bounding_box2.width() << '\n'
            << "depth = " << bounding_box2.depth() << '\n'
-           << "height= " << bounding_box2.height() << vcl_endl;
+           << "height= " << bounding_box2.height() << std::endl;
 
   // Determining the resolution of the cells
   vgl_ray_3d<double> cone_axis;
@@ -658,7 +659,7 @@ int main(int argc, char** argv)
   vgl_point_3d<double> cc=cams[0].camera_center();
   double res=2*(cc-centre(pts_3d)).length()*cone_half_angle;
 
-  vcl_cout<<"Resolution     "<<res<<vcl_endl;
+  std::cout<<"Resolution     "<<res<<std::endl;
 
   //write resolution to xml
   bxml_element* res_elm = new bxml_element("resolution");
@@ -668,11 +669,11 @@ int main(int argc, char** argv)
   root->append_text("\n");
 
   //write to disk
-  vcl_ofstream xml_os(xml_file().c_str());
+  std::ofstream xml_os(xml_file().c_str());
   bxml_write(xml_os, doc);
   xml_os.close();
 
-  vcl_ofstream os(vrml_file().c_str());
+  std::ofstream os(vrml_file().c_str());
   if (os)
   {
     write_vrml_header(os);
@@ -681,7 +682,7 @@ int main(int argc, char** argv)
     if (draw_box())
       write_vrml_box(os,bounding_box2,vnl_vector_fixed<double,3>(0.0,0.0,1.0),0.6f);
   else
-    vcl_cout<<"ERROR OPENING  "<< vrml_file() <<vcl_endl;
+    std::cout<<"ERROR OPENING  "<< vrml_file() <<std::endl;
   }
 
   bwm_video_site_io site;
@@ -691,11 +692,11 @@ int main(int argc, char** argv)
   site.set_video_path(img_dir()+"/*");
   site.set_camera_path(cam_dir()+"/*");
 
-  vcl_string xml_filename=site_directory()+"/"+site_name()+".xml";
+  std::string xml_filename=site_directory()+"/"+site_name()+".xml";
   site.x_write(xml_filename.c_str());
 
-  vcl_cout<<"Bad cameras "<<bad_cams.size()<<" :";
-  vcl_set<int>::iterator iter=bad_cams.begin();
+  std::cout<<"Bad cameras "<<bad_cams.size()<<" :";
+  std::set<int>::iterator iter=bad_cams.begin();
   for (;iter!=bad_cams.end();++iter)
-    vcl_cout<<*iter<<' ';
+    std::cout<<*iter<<' ';
 }

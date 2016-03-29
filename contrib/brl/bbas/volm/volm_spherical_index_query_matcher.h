@@ -13,10 +13,11 @@
 // None
 // \endverbatim
 
-#include <vcl_vector.h>
-#include <vcl_iostream.h>
-#include <vcl_map.h>
-#include <vcl_string.h>
+#include <vector>
+#include <iostream>
+#include <map>
+#include <string>
+#include <vcl_compiler.h>
 #include <volm/volm_camera_space.h>
 #include <volm/volm_camera_space_sptr.h>
 #include <volm/volm_spherical_region_index.h>
@@ -38,7 +39,7 @@ private:
     volm_spherical_region_index & index_;
     volm_spherical_region_query & query_;
     volm_camera_space_sptr & cam_space_;
-    vcl_vector<double> scores_;
+    std::vector<double> scores_;
 };
 
 #endif // volm_spherical_index_query_matcher_h_

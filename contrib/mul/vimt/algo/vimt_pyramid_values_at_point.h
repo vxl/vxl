@@ -16,7 +16,7 @@
 template<class T>
 void vimt_pyramid_values_at_point(const vimt_image_pyramid& image_pyr,
                                   vgl_point_2d<double> p,
-                                  vcl_vector<double>& samples,
+                                  std::vector<double>& samples,
                                   T dummy, int plane=0)
 {
   samples.resize(image_pyr.n_levels());

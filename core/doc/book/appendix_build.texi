@@ -143,9 +143,9 @@ INCLUDE_DIRECTORIES(
 # code with commands like #include <vsol/vsol_box_2d.h>.  Do not do
 # any of the following.
 
-# NO # INCLUDE_DIRECTORIES( $@{vxl_SOURCE_DIR@} )
+# NO # INCLUDE_DIRECTORIES( $@{CMAKE_SOURCE_DIR@} )
 # NO # INCLUDE_DIRECTORIES( $@{GEL_INCLUDE_DIR@}/vsol )
-# NO # INCLUDE_DIRECTORIES( $@{vxl_SOURCE_DIR@}/contrib/gel/vsol )
+# NO # INCLUDE_DIRECTORIES( $@{CMAKE_SOURCE_DIR@}/contrib/gel/vsol )
 
 # Finally, we specify an actual executable. With recent versions of
 # CMake (2.x.y), the INCLUDE_DIRECTORIES, ADD_EXECUTABLE,

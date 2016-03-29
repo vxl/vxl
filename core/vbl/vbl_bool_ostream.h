@@ -12,7 +12,8 @@
 //   PDA (Manchester) 21/03/2001: Tidied up the documentation
 // \endverbatim
 
-#include <vcl_iosfwd.h>
+#include <iosfwd>
+#include <vcl_compiler.h>
 
 class vbl_bool_ostream
 {
@@ -39,11 +40,11 @@ class vbl_bool_ostream
   };
 };
 
-vcl_ostream& operator<<(vcl_ostream& s,
+std::ostream& operator<<(std::ostream& s,
                         const vbl_bool_ostream::on_off& proxy);
-vcl_ostream& operator<<(vcl_ostream& s,
+std::ostream& operator<<(std::ostream& s,
                         const vbl_bool_ostream::high_low& proxy);
-vcl_ostream& operator<<(vcl_ostream& s,
+std::ostream& operator<<(std::ostream& s,
                         const vbl_bool_ostream::true_false& proxy);
 
 #endif // vbl_bool_ostream_h_

@@ -23,7 +23,7 @@ class brdb_query
  protected:
   //: Destructor - private to prevent allocation on the heap
   virtual ~brdb_query() {}
-  friend class vcl_auto_ptr<brdb_query>;
+  friend class std::auto_ptr<brdb_query>;
 
  public:
   virtual brdb_query_aptr clone() const = 0;
@@ -126,9 +126,9 @@ class brdb_query_comp : public brdb_query
  public:
 
   //: make a query on a certain attribute, with a certain type of comparison to a value
-  brdb_query_comp(const vcl_string& attribute_name,
+  brdb_query_comp(const std::string& attribute_name,
                   const brdb_query::comp_type& type,
-                  vcl_auto_ptr<brdb_value> value);
+                  std::auto_ptr<brdb_value> value);
 
   //: Copy Constructor
   brdb_query_comp(const brdb_query_comp& other);
@@ -149,7 +149,7 @@ class brdb_query_comp : public brdb_query
   const brdb_value& value() const { return *value_; }
 
   //: get the name of the attribute
-  vcl_string attribute_name() const { return attribute_name_; }
+  std::string attribute_name() const { return attribute_name_; }
 
   //: get query comparison type
   brdb_query::comp_type comparison_type() const { return comparison_type_; }
@@ -161,24 +161,24 @@ class brdb_query_comp : public brdb_query
  private:
 
   //: indicates the name of the attribute which this query constraint will be applied on
-  vcl_string attribute_name_;
+  std::string attribute_name_;
 
   //: comparison_type_ indicates how the constraint will be;
   brdb_query::comp_type comparison_type_;
 
   //: the value which will be used by the constraints
-  vcl_auto_ptr<brdb_value> value_;
+  std::auto_ptr<brdb_value> value_;
 };
 
 
 template <class T>
 brdb_query_aptr
-    brdb_query_comp_new(const vcl_string& attribute_name,
+    brdb_query_comp_new(const std::string& attribute_name,
                         const brdb_query::comp_type& type,
                         const T& value)
 {
   return brdb_query_aptr(new brdb_query_comp(attribute_name, type,
-                            vcl_auto_ptr<brdb_value>(new brdb_value_t<T>(value))));
+                            std::auto_ptr<brdb_value>(new brdb_value_t<T>(value))));
 }
 
 

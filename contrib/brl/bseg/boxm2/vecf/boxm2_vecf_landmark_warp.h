@@ -1,12 +1,14 @@
 #ifndef boxm2_vecf_landmark_warp_h_included_
 #define boxm2_vecf_landmark_warp_h_included_
 
+#include <vector>
+#include <iostream>
+#include <utility>
 #include <boxm2/boxm2_scene.h>
 #include <boxm2/boxm2_block.h>
 #include <boxm2/boxm2_data_traits.h>
 #include <vgl/vgl_point_3d.h>
-#include <vcl_vector.h>
-#include <vcl_utility.h>
+#include <vcl_compiler.h>
 
 // forward declare rsdl_kd_tree so we can use pointers to it
 class rsdl_kd_tree;
@@ -19,8 +21,8 @@ template<class F>
 class boxm2_vecf_landmark_mapper
 {
   public:
-  boxm2_vecf_landmark_mapper(vcl_vector<vgl_point_3d<double> > const& control_pts_source,
-                             vcl_vector<vgl_point_3d<double> > const& control_pts_target,
+  boxm2_vecf_landmark_mapper(std::vector<vgl_point_3d<double> > const& control_pts_source,
+                             std::vector<vgl_point_3d<double> > const& control_pts_target,
                              F weight_function,
                              int n_nearest = 3);
 
@@ -30,8 +32,8 @@ class boxm2_vecf_landmark_mapper
 
   private:
 
-    const vcl_vector<vgl_point_3d<double> > control_pts_source_;
-    const vcl_vector<vgl_point_3d<double> > control_pts_target_;
+    const std::vector<vgl_point_3d<double> > control_pts_source_;
+    const std::vector<vgl_point_3d<double> > control_pts_target_;
     F weight_function_;
     int n_nearest_;
     rsdl_kd_tree* source_kd_tree_;
@@ -41,8 +43,8 @@ template<class F>
 class boxm2_vecf_landmark_warp : public boxm2_vecf_vector_field<boxm2_vecf_landmark_mapper<F> >
 {
   public:
-    boxm2_vecf_landmark_warp(vcl_vector<vgl_point_3d<double> > const& control_pts_source,
-                             vcl_vector<vgl_point_3d<double> > const& control_pts_target,
+    boxm2_vecf_landmark_warp(std::vector<vgl_point_3d<double> > const& control_pts_source,
+                             std::vector<vgl_point_3d<double> > const& control_pts_target,
                              F weight_function);
 
   private:
@@ -54,8 +56,8 @@ class boxm2_vecf_landmark_warp : public boxm2_vecf_vector_field<boxm2_vecf_landm
     virtual MAPPER_T make_inverse_mapper(boxm2_scene_sptr target, boxm2_block_id const& blk_id);
 
     //: data
-    const vcl_vector<vgl_point_3d<double> > control_pts_source_;
-    const vcl_vector<vgl_point_3d<double> > control_pts_target_;
+    const std::vector<vgl_point_3d<double> > control_pts_source_;
+    const std::vector<vgl_point_3d<double> > control_pts_target_;
     F weight_function_;
 
 

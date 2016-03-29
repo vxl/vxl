@@ -11,18 +11,18 @@ set(vimt_sources
     vimt_transform_2d.cxx                         vimt_transform_2d.h
     vimt_transform_util_2d.cxx                    vimt_transform_util_2d.h
     vimt_image_2d.h                               vimt_image_2d.cxx
-    vimt_image_2d_of.txx                          vimt_image_2d_of.h
+    vimt_image_2d_of.hxx                          vimt_image_2d_of.h
     vimt_crop.h
     vimt_convert.h
-    vimt_dog_pyramid_builder_2d.txx               vimt_dog_pyramid_builder_2d.h
-    vimt_image_pyramid.cxx vimt_image_pyramid.txx vimt_image_pyramid.h
+    vimt_dog_pyramid_builder_2d.hxx               vimt_dog_pyramid_builder_2d.h
+    vimt_image_pyramid.cxx vimt_image_pyramid.hxx vimt_image_pyramid.h
     vimt_image_pyramid_builder.cxx                vimt_image_pyramid_builder.h
-    vimt_gaussian_pyramid_builder_2d.txx          vimt_gaussian_pyramid_builder_2d.h
-    vimt_gaussian_pyramid_builder_2d_general.txx  vimt_gaussian_pyramid_builder_2d_general.h
-    vimt_scale_pyramid_builder_2d.txx             vimt_scale_pyramid_builder_2d.h
-    vimt_sample_profile_bilin.txx                 vimt_sample_profile_bilin.h
-    vimt_sample_grid_bilin.txx                    vimt_sample_grid_bilin.h
-    vimt_sample_grid_bicub.txx                    vimt_sample_grid_bicub.h
+    vimt_gaussian_pyramid_builder_2d.hxx          vimt_gaussian_pyramid_builder_2d.h
+    vimt_gaussian_pyramid_builder_2d_general.hxx  vimt_gaussian_pyramid_builder_2d_general.h
+    vimt_scale_pyramid_builder_2d.hxx             vimt_scale_pyramid_builder_2d.h
+    vimt_sample_profile_bilin.hxx                 vimt_sample_profile_bilin.h
+    vimt_sample_grid_bilin.hxx                    vimt_sample_grid_bilin.h
+    vimt_sample_grid_bicub.hxx                    vimt_sample_grid_bicub.h
     vimt_bilin_interp.h
     vimt_reflect.h
     vimt_resample_bilin.h
@@ -34,9 +34,7 @@ set(vimt_sources
 )
 aux_source_directory(Templates vimt_sources)
 
-add_library(vimt ${vimt_sources})
-install_targets(/lib vimt)
-INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/mul/vimt ${vimt_sources})
+vxl_add_library(LIBRARY_NAME vimt LIBRARY_SOURCES ${vimt_sources})
 target_link_libraries(vimt mbl ${VXL_LIB_PREFIX}vil_algo ${VXL_LIB_PREFIX}vgl ${VXL_LIB_PREFIX}vnl ${VXL_LIB_PREFIX}vil_io ${VXL_LIB_PREFIX}vil )
 
 add_subdirectory(algo)

@@ -12,13 +12,15 @@
 //   <none yet>
 // \endverbatim
 
-#include <vcl_vector.h>
-#include <vcl_set.h>
+#include <vector>
+#include <set>
+#include <memory>
+#include <utility>
+#include <string>
+#include <iostream>
+#include <algorithm>
 #include <vcl_cassert.h>
-#include <vcl_memory.h>
-#include <vcl_utility.h>
-#include <vcl_string.h>
-#include <vcl_algorithm.h>
+#include <vcl_compiler.h>
 #include <vgl/vgl_vector_3d.h>
 
 #define imesh_invalid_idx (static_cast<unsigned int>(-1))
@@ -33,7 +35,7 @@ class imesh_regular_face
   imesh_regular_face() { for (unsigned i=0; i<s; ++i) verts_[i]=imesh_invalid_idx; }
 
   //: Constructor from a vector
-  imesh_regular_face(const vcl_vector<unsigned int>& verts)
+  imesh_regular_face(const std::vector<unsigned int>& verts)
   {assert(verts.size()==s); for (unsigned i=0; i<s; ++i) verts_[i]=verts[i];}
 
   //: return the number of vertices
@@ -41,7 +43,7 @@ class imesh_regular_face
 
   void flip_orientation()
   {
-    vcl_reverse(verts_,verts_+s);
+    std::reverse(verts_,verts_+s);
   }
 
   //: Accessor
@@ -117,7 +119,7 @@ class imesh_face_array_base
   bool has_normals() const { return !normals_.empty(); }
 
   //: Set the face normals
-  void set_normals(const vcl_vector<vgl_vector_3d<double> >& n)
+  void set_normals(const std::vector<vgl_vector_3d<double> >& n)
   { assert(n.size() == this->size()); normals_ = n; }
 
   //: Access a face normal
@@ -125,38 +127,38 @@ class imesh_face_array_base
   const vgl_vector_3d<double>& normal(unsigned int f) const { return normals_[f]; }
 
   //: Access the entire vector of normals
-  const vcl_vector<vgl_vector_3d<double> >& normals() const { return normals_; }
+  const std::vector<vgl_vector_3d<double> >& normals() const { return normals_; }
 
   //: Returns true if the faces have named groups
   bool has_groups() const { return !groups_.empty(); }
 
   //: Return the group name for a given face index
-  vcl_string group_name(unsigned int f) const;
+  std::string group_name(unsigned int f) const;
 
   //: Assign a group name to all faces currently unnamed
   //  Return the number of faces in the new group
-  unsigned int make_group(const vcl_string& name);
+  unsigned int make_group(const std::string& name);
 
   //: Return a set of all faces in a group
-  vcl_set<unsigned int> group_face_set(const vcl_string& name) const;
+  std::set<unsigned int> group_face_set(const std::string& name) const;
 
   //: Access the groups
-  const vcl_vector<vcl_pair<vcl_string,unsigned int> >& groups() const { return groups_; }
+  const std::vector<std::pair<std::string,unsigned int> >& groups() const { return groups_; }
 
  protected:
   //: named groups of adjacent faces (a partition of the face array)
   //  Integers mark the group's ending vertex + 1
-  vcl_vector<vcl_pair<vcl_string,unsigned int> > groups_;
+  std::vector<std::pair<std::string,unsigned int> > groups_;
 
   //: vectors that are normal to each face
-  vcl_vector<vgl_vector_3d<double> > normals_;
+  std::vector<vgl_vector_3d<double> > normals_;
 };
 
 
 //: An array of mesh faces of arbitrary size
 class imesh_face_array : public imesh_face_array_base
 {
-  vcl_vector<vcl_vector<unsigned int> > faces_;
+  std::vector<std::vector<unsigned int> > faces_;
 
  public:
   //: Default Constructor
@@ -166,7 +168,7 @@ class imesh_face_array : public imesh_face_array_base
   imesh_face_array(unsigned int size) : faces_(size) {}
 
   //: Constructor (from a vector)
-  imesh_face_array(const vcl_vector<vcl_vector<unsigned int> >& faces)
+  imesh_face_array(const std::vector<std::vector<unsigned int> >& faces)
   : faces_(faces) {}
 
   //: Copy Constructor
@@ -197,7 +199,7 @@ class imesh_face_array : public imesh_face_array_base
   //: Flip a face over, inverting its orientation
   virtual void flip_orientation (unsigned int f)
   {
-    vcl_reverse(faces_[f].begin(),faces_[f].end());
+    std::reverse(faces_[f].begin(),faces_[f].end());
     imesh_face_array_base::flip_orientation(f);
   }
 
@@ -213,21 +215,21 @@ class imesh_face_array : public imesh_face_array_base
                       unsigned int ind_shift=0);
 
   //: Add a face to the array
-  void push_back(const vcl_vector<unsigned int>& f) { faces_.push_back(f); }
+  void push_back(const std::vector<unsigned int>& f) { faces_.push_back(f); }
 
   //: Add a face to the array
   template <unsigned int s>
   void push_back(const imesh_regular_face<s>& f)
   {
-    vcl_vector<unsigned int> f2(s);
+    std::vector<unsigned int> f2(s);
     for (unsigned int i=0; i<s; ++i)
       f2[i] = f[i];
     this->push_back(f2);
   }
 
   //: Access face \param f
-  vcl_vector<unsigned int>& operator[] (unsigned int f) { return faces_[f]; }
-  const vcl_vector<unsigned int>& operator[] (unsigned int f) const { return faces_[f]; }
+  std::vector<unsigned int>& operator[] (unsigned int f) { return faces_[f]; }
+  const std::vector<unsigned int>& operator[] (unsigned int f) const { return faces_[f]; }
 };
 
 
@@ -235,7 +237,7 @@ class imesh_face_array : public imesh_face_array_base
 template <unsigned int s>
 class imesh_regular_face_array : public imesh_face_array_base
 {
-  vcl_vector<imesh_regular_face<s> > faces_;
+  std::vector<imesh_regular_face<s> > faces_;
 
  public:
   //: Default Constructor
@@ -245,7 +247,7 @@ class imesh_regular_face_array : public imesh_face_array_base
   imesh_regular_face_array<s>(unsigned int size) : faces_(size) {}
 
   //: Constructor (from a vector)
-  imesh_regular_face_array<s>(const vcl_vector<imesh_regular_face<s> >& faces) : faces_(faces) {}
+  imesh_regular_face_array<s>(const std::vector<imesh_regular_face<s> >& faces) : faces_(faces) {}
 
   //: returns the number of vertices per face if the same for all faces
   //  Returns zero otherwise
@@ -302,8 +304,8 @@ class imesh_regular_face_array : public imesh_face_array_base
 
   //=====================================================
   // Face Iterators
-  typedef typename vcl_vector<imesh_regular_face<s> >::iterator iterator;
-  typedef typename vcl_vector<imesh_regular_face<s> >::const_iterator const_iterator;
+  typedef typename std::vector<imesh_regular_face<s> >::iterator iterator;
+  typedef typename std::vector<imesh_regular_face<s> >::const_iterator const_iterator;
 
   iterator begin() { return faces_.begin(); }
   const_iterator begin() const { return faces_.begin(); }
@@ -315,7 +317,7 @@ class imesh_regular_face_array : public imesh_face_array_base
 
 //: Merge the two face arrays
 //  Shift the mesh indices in \param f2 by \param ind_shift
-vcl_auto_ptr<imesh_face_array_base>
+std::auto_ptr<imesh_face_array_base>
 imesh_merge(const imesh_face_array_base& f1,
             const imesh_face_array_base& f2,
             unsigned int ind_shift=0);

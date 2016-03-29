@@ -21,11 +21,11 @@ bool vil_BGR_to_RGB_process_cons(bprb_func_process& pro)
     using namespace vil_BGR_to_RGB_process_globals;
 
     //process takes 1 input
-    vcl_vector<vcl_string> input_types_(n_inputs_);
+    std::vector<std::string> input_types_(n_inputs_);
     input_types_[0] = "vil_image_view_base_sptr";   //scene to operate on
 
     // process has 1 output:
-    vcl_vector<vcl_string>  output_types_(n_outputs_);
+    std::vector<std::string>  output_types_(n_outputs_);
     output_types_[0] = "vil_image_view_base_sptr";   //scene to operate on
 
     return pro.set_input_types(input_types_)
@@ -36,7 +36,7 @@ bool vil_BGR_to_RGB_process(bprb_func_process& pro)
 {
     // Sanity check
     if (pro.n_inputs()< 1) {
-        vcl_cout << "vil_BGR_to_RGB_process: The number of inputs should be 1" << vcl_endl;
+        std::cout << "vil_BGR_to_RGB_process: The number of inputs should be 1" << std::endl;
         return false;
     }
 
@@ -45,7 +45,7 @@ bool vil_BGR_to_RGB_process(bprb_func_process& pro)
     //Retrieve image from input
     vil_image_view_base_sptr in_img = pro.get_input<vil_image_view_base_sptr>(i++);
     //vil_image_view<vil_rgb<vxl_byte> > * bgr_img = new vil_image_view<vil_rgb<vxl_byte> >(in_img->ni(),in_img->nj());
-    vcl_cout<<"format : "<<in_img->pixel_format()<<" "<<in_img->nplanes()<<vcl_endl;
+    std::cout<<"format : "<<in_img->pixel_format()<<" "<<in_img->nplanes()<<std::endl;
     if(vil_image_view<vil_rgb<vxl_byte> > * bgr_img= dynamic_cast<vil_image_view<vil_rgb<vxl_byte> > *>(in_img.ptr()))
     {
         for(unsigned k = 0; k <bgr_img->ni(); k++)

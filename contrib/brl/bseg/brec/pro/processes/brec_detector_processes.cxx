@@ -30,10 +30,10 @@
 //: Constructor
 bool brec_initialize_detector_process_cons(bprb_func_process& pro)
 {
-  vcl_vector<vcl_string> input_types;
+  std::vector<std::string> input_types;
   input_types.push_back("brec_part_hierarchy_sptr"); // detector hierarchy for the type of structure to be recognized (needs to be loaded a priori)
   if (pro.set_input_types(input_types)) {
-    vcl_vector<vcl_string> output_types;
+    std::vector<std::string> output_types;
     output_types.push_back("brec_part_hierarchy_detector_sptr");
     return pro.set_output_types(output_types);
   }
@@ -45,7 +45,7 @@ bool brec_initialize_detector_process(bprb_func_process& pro)
 {
   // Sanity check
   if (pro.n_inputs() < 1) {
-    vcl_cerr << " brec_initialize_detector_process - invalid inputs\n";
+    std::cerr << " brec_initialize_detector_process - invalid inputs\n";
     return false;
   }
   // get input
@@ -59,11 +59,11 @@ bool brec_initialize_detector_process(bprb_func_process& pro)
 //: Constructor
 bool brec_add_hierarchy_to_detector_process_cons(bprb_func_process& pro)
 {
-  vcl_vector<vcl_string> input_types;
+  std::vector<std::string> input_types;
   input_types.push_back("brec_part_hierarchy_detector_sptr"); // detector hierarchy for the type of structure to be recognized (needs to be loaded a priori)
   input_types.push_back("brec_part_hierarchy_sptr"); // detector hierarchy for the type of structure to be recognized (needs to be loaded a priori)
   if (pro.set_input_types(input_types)) {
-    vcl_vector<vcl_string> output_types;
+    std::vector<std::string> output_types;
     return pro.set_output_types(output_types);
   }
   else
@@ -74,7 +74,7 @@ bool brec_add_hierarchy_to_detector_process(bprb_func_process& pro)
 {
   // Sanity check
   if (pro.n_inputs() < 2) {
-    vcl_cerr << " brec_add_hierarchy_to_detector_process - invalid inputs\n";
+    std::cerr << " brec_add_hierarchy_to_detector_process - invalid inputs\n";
     return false;
   }
   // get input
@@ -90,7 +90,7 @@ bool brec_add_hierarchy_to_detector_process(bprb_func_process& pro)
 bool brec_detect_hierarchy_process_cons(bprb_func_process& pro)
 {
   //inputs
-  vcl_vector<vcl_string> input_types;
+  std::vector<std::string> input_types;
   input_types.push_back("vil_image_view_base_sptr");      // input orig view
   input_types.push_back("vil_image_view_base_sptr");      // input view's "foreground" probability map, float img with values in [0,1] range,
                                                           // CAUTION: Convert it before passing to this process if necessary, e.g. if only the background map is available
@@ -103,7 +103,7 @@ bool brec_detect_hierarchy_process_cons(bprb_func_process& pro)
 
   if (pro.set_input_types(input_types)) {
     //output
-    vcl_vector<vcl_string> output_types;
+    std::vector<std::string> output_types;
     output_types.push_back("vil_image_view_base_sptr");      // output prob map: class foreground posterior
     output_types.push_back("vil_image_view_base_sptr");      // output map class foreground posterior overlayed on orig view as a byte image
     output_types.push_back("vil_image_view_base_sptr");      // output map class background posterior overlayed on orig view as a byte image
@@ -129,7 +129,7 @@ bool brec_detect_hierarchy_process(bprb_func_process& pro)
 {
   // Sanity check
   if (pro.n_inputs() < 7) {
-    vcl_cerr << " brec_detect_hierarchy_process - invalid inputs\n";
+    std::cerr << " brec_detect_hierarchy_process - invalid inputs\n";
     return false;
   }
 
@@ -147,10 +147,10 @@ bool brec_detect_hierarchy_process(bprb_func_process& pro)
 
   vil_image_view_base_sptr inp_prob_map = pro.get_input<vil_image_view_base_sptr>(i++);
   vil_image_view<float> fg_prob_map = *vil_convert_cast(float(), inp_prob_map);
-  //vcl_cout << "CAUTION: Input prob map is assumed to be a \"foreground\" probability map, convert it before passing to this process if necessary! (e.g. if only the background map is available)\n";
+  //std::cout << "CAUTION: Input prob map is assumed to be a \"foreground\" probability map, convert it before passing to this process if necessary! (e.g. if only the background map is available)\n";
 
   if (inp_prob_map->ni() != inp_img->ni() || inp_prob_map->nj() != inp_img->nj()) {
-    vcl_cout << "No fg prob map is passed! Will assume all image pixels are foreground!\n";
+    std::cout << "No fg prob map is passed! Will assume all image pixels are foreground!\n";
     fg_prob_map.set_size(inp_img->ni(), inp_img->nj());
     fg_prob_map.fill(1.0f);
   }
@@ -158,7 +158,7 @@ bool brec_detect_hierarchy_process(bprb_func_process& pro)
   if (inp_prob_map->pixel_format() == VIL_PIXEL_FORMAT_BOOL) {
     float min, max;
     vil_math_value_range(fg_prob_map, min, max);
-    vcl_cout << "checking proper conversion of bool to float: min val in the image: " << min << " max: " << max << vcl_endl;
+    std::cout << "checking proper conversion of bool to float: min val in the image: " << min << " max: " << max << std::endl;
   }
 
   brec_part_hierarchy_detector_sptr d = pro.get_input<brec_part_hierarchy_detector_sptr>(i++);
@@ -170,12 +170,12 @@ bool brec_detect_hierarchy_process(bprb_func_process& pro)
   vul_timer t2;
   t2.mark();
 
-  vcl_cout << "Hierarchy Detector will use the response models at: " << d->get_hierarchy()->model_dir() << vcl_endl;
+  std::cout << "Hierarchy Detector will use the response models at: " << d->get_hierarchy()->model_dir() << std::endl;
 
   d->detect(img, fg_prob_map, angle, brec_detector_methods::POSTERIOR, detection_radius, class_prior, layer_id);
 
-  //vcl_vector<brec_part_instance_sptr>& parts_upper_most = d->get_parts(d->get_hierarchy()->highest_layer_id());
-  vcl_vector<brec_part_instance_sptr>& parts_upper_most = d->get_parts(layer_id);
+  //std::vector<brec_part_instance_sptr>& parts_upper_most = d->get_parts(d->get_hierarchy()->highest_layer_id());
+  std::vector<brec_part_instance_sptr>& parts_upper_most = d->get_parts(layer_id);
 
   vil_image_view<float> output_map_float(ni, nj);
   brec_part_hierarchy::generate_output_map_posterior(parts_upper_most, output_map_float, brec_posterior_types::CLASS_FOREGROUND);
@@ -203,7 +203,7 @@ bool brec_detect_hierarchy_process(bprb_func_process& pro)
   pro.set_output_val<vil_image_view_base_sptr>(4, out_map_sptr4);
 
 
-  vcl_cout << " whole process took: " << t2.real() / 60000.0 << " mins.\n";
+  std::cout << " whole process took: " << t2.real() / 60000.0 << " mins.\n";
 
   return true;
 }

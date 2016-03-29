@@ -1,8 +1,9 @@
+#include <iostream>
+#include <cmath>
 #include "bnl_quadratic_interpolator.h"
 #include <vnl/vnl_vector.h>
 #include <vnl/algo/vnl_svd.h>
-#include <vcl_iostream.h>
-#include <vcl_cmath.h> // for fabs()
+#include <vcl_compiler.h>
 
 void bnl_quadratic_interpolator::add_data_point(const double px,
                                                  const double py,
@@ -76,19 +77,19 @@ bool bnl_quadratic_interpolator::solve()
   this->fill_scatter_matrix();
   vnl_svd<double> svd(s_);
   vnl_vector<double> nv = svd.nullvector();
-  vcl_cout << "W: " << svd.W() << '\n'
+  std::cout << "W: " << svd.W() << '\n'
            << "NV: " << nv << '\n';
-  if (vcl_fabs(nv[5])<1e-06)
+  if (std::fabs(nv[5])<1e-06)
     return false;
   // NV = [Ixx Ixy Iyy Ix Iy 1 I0]
   double Ixx = nv[0]/nv[5], Ixy = nv[1]/nv[5], Iyy = nv[2]/nv[5];
   double Ix = nv[3]/nv[5], Iy = nv[4]/nv[5], I0 = nv[6]/nv[5];
-  vcl_cout << "coef (" << Ixx << ' ' << Ixy << ' ' << Iyy << ' ' << Ix
+  std::cout << "coef (" << Ixx << ' ' << Ixy << ' ' << Iyy << ' ' << Ix
            << ' ' << Iy << ' ' << I0 << ")\n";
   //solve for extremum
   double det = 4*Ixx*Iyy-Ixy*Ixy;
   //Is the system singular?
-  if (vcl_fabs(det)<1e-06)
+  if (std::fabs(det)<1e-06)
     return false;
   //Is the Det Negative?
   if (det<0)
@@ -119,8 +120,8 @@ void bnl_quadratic_interpolator::extremum(double& px, double& py)
 
 void bnl_quadratic_interpolator::print()
 {
-  vcl_cout << "P / V\n";
+  std::cout << "P / V\n";
   for (int i = 0; i<this->n_points(); i++)
-    vcl_cout << px_[i] << '\t' << py_[i] << '\t' << v_[i] << '\n';
-  vcl_cout << vcl_flush;
+    std::cout << px_[i] << '\t' << py_[i] << '\t' << v_[i] << '\n';
+  std::cout << std::flush;
 }

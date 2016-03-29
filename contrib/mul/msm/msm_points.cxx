@@ -1,15 +1,16 @@
+#include <iostream>
+#include <cstdlib>
 #include "msm_points.h"
 //:
 // \file
 // \brief Set of 2D points, stored in a vnl_vector (x0,y0,x1,y1...)
 // \author Tim Cootes
 
-#include <vcl_iostream.h>
 #include <vsl/vsl_indent.h>
 #include <vsl/vsl_binary_io.h>
 #include <vnl/io/vnl_io_vector.h>
 #include <vgl/vgl_point_2d.h>
-#include <vcl_cstdlib.h>  // for vcl_atoi() & vcl_abort()
+#include <vcl_compiler.h>
 
 
 //=======================================================================
@@ -47,12 +48,12 @@ void msm_points::set_size(unsigned n, double x, double y)
 }
 
 //: Set this to be equal to supplied points
-void msm_points::set_points(const vcl_vector<vgl_point_2d<double> >& pts)
+void msm_points::set_points(const std::vector<vgl_point_2d<double> >& pts)
 {
   unsigned n=pts.size();
   v_.set_size(2*n);
   double* v=v_.data_block();
-  vcl_vector<vgl_point_2d<double> >::const_iterator p = pts.begin();
+  std::vector<vgl_point_2d<double> >::const_iterator p = pts.begin();
   for (;p!=pts.end();v+=2,++p)
   {
     v[0] = p->x();
@@ -61,11 +62,11 @@ void msm_points::set_points(const vcl_vector<vgl_point_2d<double> >& pts)
 }
 
 //: Copy points into pts
-void msm_points::get_points(vcl_vector<vgl_point_2d<double> >& pts) const
+void msm_points::get_points(std::vector<vgl_point_2d<double> >& pts) const
 {
   pts.resize(size());
   const double* v=v_.data_block();
-  vcl_vector<vgl_point_2d<double> >::iterator p = pts.begin();
+  std::vector<vgl_point_2d<double> >::iterator p = pts.begin();
   for (;p!=pts.end();v+=2,++p)
   {
     p->x()=v[0];
@@ -114,7 +115,7 @@ void msm_points::get_cog_and_scale(vgl_point_2d<double>& cog, double& scale) con
   double cx=sx/n, cy=sy/n;
   double L2=(s2x+s2y)/n-cx*cx-cy*cy;
   scale = 0.0;
-  if (L2>0) scale=vcl_sqrt(L2);
+  if (L2>0) scale=std::sqrt(L2);
   cog=vgl_point_2d<double>(cx,cy);
 }
 
@@ -201,7 +202,7 @@ bool msm_points::operator==(const msm_points& points) const
   if (points.v_.size()!=v_.size()) return false;
   if (size()==0) return true;
   double ssd=vnl_vector_ssd(points.v_,v_);
-  return (vcl_fabs(ssd/size())<1e-3);
+  return (std::fabs(ssd/size())<1e-3);
 }
 
 // ===============================================================
@@ -209,9 +210,9 @@ bool msm_points::operator==(const msm_points& points) const
 
 //: Write out points to named text file
 //  Returns true if successful.
-bool msm_points::write_text_file(const vcl_string& path) const
+bool msm_points::write_text_file(const std::string& path) const
 {
-  vcl_ofstream afs(path.c_str(),vcl_ios_out);
+  std::ofstream afs(path.c_str(),std::ios::out);
   if (!afs) return false;
 
   unsigned n = size();
@@ -229,13 +230,13 @@ bool msm_points::write_text_file(const vcl_string& path) const
   return true;
 }
 
-static bool read_points(vcl_istream& afs,
+static bool read_points(std::istream& afs,
                         vnl_vector<double>& vec, unsigned n)
 {
   if (n>999999)
   {
-    vcl_cerr << "msm_points read_points() :\n"
-             << "Bizarre number of points specified : " << n << vcl_endl;
+    std::cerr << "msm_points read_points() :\n"
+             << "Bizarre number of points specified : " << n << std::endl;
     return false;
   }
 
@@ -245,7 +246,7 @@ static bool read_points(vcl_istream& afs,
   {
     if (afs.eof())
     {
-      vcl_cerr << "msm_points read_points() :\n"
+      std::cerr << "msm_points read_points() :\n"
                << "EOF reached after reading "
                << i << " of " << n << " points.\n";
       return false;
@@ -258,24 +259,24 @@ static bool read_points(vcl_istream& afs,
 
 //: Read in points from named text file
 //  Returns true if successful.
-bool msm_points::read_text_file(const vcl_string& path)
+bool msm_points::read_text_file(const std::string& path)
 {
-  vcl_ifstream afs( path.c_str(), vcl_ios_in );
+  std::ifstream afs( path.c_str(), std::ios::in );
   if (!afs) return false;
 
   vnl_vector<double> vec;  // New data
-  vcl_string label;
+  std::string label;
   afs >> label;
   if (label != "version:")
   {
     // Attempt to load in old format
-    int n = vcl_atoi(label.c_str());
+    int n = std::atoi(label.c_str());
     if (n>0)
     {
       return read_points(afs, v_, n);
     }
 
-    vcl_cerr << "Expecting <version:> got <" << label << vcl_endl;
+    std::cerr << "Expecting <version:> got <" << label << std::endl;
     return false;
   }
 
@@ -283,8 +284,8 @@ bool msm_points::read_text_file(const vcl_string& path)
   afs >> ver;
   if (ver!=1)
   {
-    vcl_cerr << "msm_points::read_text_file() :\n"
-             << "Cannot cope with version number " << ver << vcl_endl;
+    std::cerr << "msm_points::read_text_file() :\n"
+             << "Cannot cope with version number " << ver << std::endl;
     return false;
   }
 
@@ -317,7 +318,7 @@ bool msm_points::read_text_file(const vcl_string& path)
     }
     else
     {
-      vcl_cerr << "Unexpected label: <" << label << vcl_endl;
+      std::cerr << "Unexpected label: <" << label << std::endl;
       return false;
     }
 
@@ -341,9 +342,9 @@ short msm_points::version_no() const
 // Method: is_a
 //=======================================================================
 
-vcl_string msm_points::is_a() const
+std::string msm_points::is_a() const
 {
-  return vcl_string("msm_points");
+  return std::string("msm_points");
 }
 
 //=======================================================================
@@ -351,7 +352,7 @@ vcl_string msm_points::is_a() const
 //=======================================================================
 
   // required if data is present in this class
-void msm_points::print_summary(vcl_ostream& os) const
+void msm_points::print_summary(std::ostream& os) const
 {
   os << size() << " pts: ";
   for (unsigned i=0;i<size();++i)
@@ -384,9 +385,9 @@ void msm_points::b_read(vsl_b_istream& bfs)
       vsl_b_read(bfs,v_);
       break;
     default:
-      vcl_cerr << "msm_points::b_read() :\n"
-               << "Unexpected version number " << version << vcl_endl;
-      vcl_abort();
+      std::cerr << "msm_points::b_read() :\n"
+               << "Unexpected version number " << version << std::endl;
+      std::abort();
   }
 }
 
@@ -413,7 +414,7 @@ void vsl_b_read(vsl_b_istream& bfs, msm_points& b)
 // Associated function: operator<<
 //=======================================================================
 
-vcl_ostream& operator<<(vcl_ostream& os,const msm_points& b)
+std::ostream& operator<<(std::ostream& os,const msm_points& b)
 {
   os << b.is_a() << ": ";
   vsl_indent_inc(os);
@@ -423,7 +424,7 @@ vcl_ostream& operator<<(vcl_ostream& os,const msm_points& b)
 }
 
 //: Stream output operator for class reference
-void vsl_print_summary(vcl_ostream& os,const msm_points& b)
+void vsl_print_summary(std::ostream& os,const msm_points& b)
 {
  os << b;
 }

@@ -2,15 +2,17 @@
 #define boxm2_array_2d_h_
 //:
 // \file
-#include <vcl_iosfwd.h>
-#include <vcl_cstddef.h>
+#include <iosfwd>
+#include <iostream>
+#include <cstddef>
+#include <vcl_compiler.h>
 
 //: simple wrapper for a 1D buffer (re interpreted as 2D)
 template <class T>
 class boxm2_array_2d
 {
  public:
-  typedef vcl_size_t size_type;
+  typedef std::size_t size_type;
  public:
 
   //: Default constructor
@@ -140,7 +142,7 @@ class boxm2_array_2d
 };
 
 VCL_TEMPLATE_EXPORT template <class T>
-vcl_ostream& operator<<(vcl_ostream &, boxm2_array_2d<T> const &);
+std::ostream& operator<<(std::ostream &, boxm2_array_2d<T> const &);
 
 #define BOXM2_ARRAY_2D_INSTANTIATE \
 extern "please include vbl/boxm2_array_2d.txx instead"

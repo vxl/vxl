@@ -3,10 +3,11 @@
 //:
 // \file
 
+#include <iostream>
 #include "bwm_observer_vgui.h"
 #include "bwm_observable_sptr.h"
 
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
 
 #include <vgui/vgui_easy2D_tableau.h>
 #include <vgui/vgui_viewer2D_tableau.h>
@@ -26,9 +27,9 @@
 #include <depth_map/depth_map_scene.h>
 #include <volm/volm_io.h>
 
-void bwm_project_meshes(vcl_vector<vcl_string> paths,
+void bwm_project_meshes(std::vector<std::string> paths,
                         vpgl_camera<double>* cam,
-                        vcl_vector<vgl_polygon<double> > &poly_2d_list);
+                        std::vector<vgl_polygon<double> > &poly_2d_list);
 
 class bwm_observer_cam : public bwm_observer_vgui
 {
@@ -36,7 +37,7 @@ class bwm_observer_cam : public bwm_observer_vgui
 
   typedef bwm_observer_vgui base;
 
-  bwm_observer_cam(bgui_image_tableau_sptr const& img, vpgl_camera<double> *camera, vcl_string cam_path)
+  bwm_observer_cam(bgui_image_tableau_sptr const& img, vpgl_camera<double> *camera, std::string cam_path)
   : bwm_observer_vgui(img), sun_elev_angle_(vnl_math::pi_over_4), sun_azim_angle_(vnl_math::pi_over_4),
     camera_(camera), cam_path_(cam_path), cam_adjusted_(false),
     proj_plane_(vgl_plane_3d<double>(0, 0, 1, 0)), extrude_mode_(false), show_geo_position_(false), focal_length_(3000.0), cam_height_(1.6),horizon_(0),
@@ -54,15 +55,15 @@ class bwm_observer_cam : public bwm_observer_vgui
 
   bgui_image_tableau_sptr image_tableau() { return img_tab_; }
 
-  vcl_string camera_path() const { return cam_path_; }
+  std::string camera_path() const { return cam_path_; }
 
-  void set_camera_path(vcl_string const& cam_path) { cam_path_=cam_path; }
+  void set_camera_path(std::string const& cam_path) { cam_path_=cam_path; }
 
   bool handle(const vgui_event &e);
 
-  virtual vcl_string type_name() const { return "bwm_observer_cam"; }
+  virtual std::string type_name() const { return "bwm_observer_cam"; }
 
-  void set_camera(vpgl_camera<double> *camera, vcl_string cam_path)
+  void set_camera(vpgl_camera<double> *camera, std::string cam_path)
   { camera_ = camera; cam_path_ = cam_path; cam_adjusted_ = false; }
 
   vpgl_camera<double> * camera() { return camera_; }
@@ -126,8 +127,8 @@ class bwm_observer_cam : public bwm_observer_vgui
                          vsol_polygon_2d_sptr& poly2d);
 
 #if 0
-  void proj_poly(vcl_vector<bmsh3d_vertex*> verts,
-                 vcl_vector<vgl_point_2d<double> > &projections);
+  void proj_poly(std::vector<bmsh3d_vertex*> verts,
+                 std::vector<vgl_point_2d<double> > &projections);
 #endif
 
   bool intersect(float x1, float y1, float x2, float y2);
@@ -163,9 +164,9 @@ class bwm_observer_cam : public bwm_observer_vgui
   void load_mesh_multiple();
 
   void save();
-  void save(vcl_string path);
+  void save(std::string path);
   void save_all();
-  void save_all(vcl_string path);
+  void save_all(std::string path);
 
   void triangulate_meshes();
 
@@ -184,7 +185,7 @@ class bwm_observer_cam : public bwm_observer_vgui
 
   void create_terrain();
 
-  void create_circular_polygon(vcl_vector< vsol_point_2d_sptr > ps_list,
+  void create_circular_polygon(std::vector< vsol_point_2d_sptr > ps_list,
                                vsol_polygon_3d_sptr &circle,
                                int num_sect, double &r, vgl_point_2d<double> &c);
 
@@ -194,11 +195,11 @@ class bwm_observer_cam : public bwm_observer_vgui
   void set_edge_mode() { mode_ = bwm_observer_vgui::MODE_EDGE; update_all(); }
   void set_vertex_mode() { mode_ = bwm_observer_vgui::MODE_VERTEX; update_all(); }
 
-  virtual vcl_ostream& print_camera(vcl_ostream& s) { return s; }
+  virtual std::ostream& print_camera(std::ostream& s) { return s; }
 
-  static void project_meshes(vcl_vector<vcl_string> paths,
+  static void project_meshes(std::vector<std::string> paths,
                              vpgl_camera<double>* cam,
-                             vcl_vector<vgl_polygon<double> > &poly_2d_list);
+                             std::vector<vgl_polygon<double> > &poly_2d_list);
 
 #if 0
   void create_boxm_scene();
@@ -213,19 +214,19 @@ class bwm_observer_cam : public bwm_observer_vgui
   //=====================  depth map methods ========================
   void set_depth_map_scene(depth_map_scene const& scene){scene_ = scene;}
   void set_ground_plane();
-  void add_ground_plane(unsigned order, unsigned nlcd_id, vcl_string name);
+  void add_ground_plane(unsigned order, unsigned nlcd_id, std::string name);
   void set_sky();
-  void add_sky(unsigned order, vcl_string name);
-  void add_region(vcl_string name, double min_depth, double max_depth, unsigned order, unsigned orient, unsigned land_id, double height);
+  void add_sky(unsigned order, std::string name);
+  void add_region(std::string name, double min_depth, double max_depth, unsigned order, unsigned orient, unsigned land_id, double height);
   void add_vertical_depth_region(double min_depth, double max_depth,
-                                 vcl_string name);
-  vcl_vector<volm_weight> weights() { return weights_; }
-  void set_weights(vcl_vector<volm_weight> weights) { weights_ = weights; }
-  void set_image_path(vcl_string const& ipath);
-  void save_depth_map_scene(vcl_string const& path);
-  void save_weight_params(vcl_string const& path);
+                                 std::string name);
+  std::vector<volm_weight> weights() { return weights_; }
+  void set_weights(std::vector<volm_weight> weights) { weights_ = weights; }
+  void set_image_path(std::string const& ipath);
+  void save_depth_map_scene(std::string const& path);
+  void save_weight_params(std::string const& path);
   void display_depth_map_scene();
-  vcl_vector<depth_map_region_sptr> scene_regions();
+  std::vector<depth_map_region_sptr> scene_regions();
   depth_map_scene scene() {return scene_;}
   void set_ground_plane_max_depth();
  protected:
@@ -235,11 +236,11 @@ class bwm_observer_cam : public bwm_observer_vgui
   double sun_azim_angle_;
   bool shadow_mode_;
 
-  vcl_vector<bgui_vsol_soview2D_line_seg*> shadow_line_segs_;
+  std::vector<bgui_vsol_soview2D_line_seg*> shadow_line_segs_;
 
   vpgl_camera<double> *camera_;
 
-  vcl_string cam_path_;
+  std::string cam_path_;
 
   bool cam_adjusted_;
 
@@ -255,7 +256,7 @@ class bwm_observer_cam : public bwm_observer_vgui
   bool show_geo_position_;
 
   //: list of selected soview objects after the last deselect_all
-  vcl_vector<vgui_soview*> selected_soviews_;
+  std::vector<vgui_soview*> selected_soviews_;
 
   bool geo_position(double u, double v, double& x, double& y, double& z);
 
@@ -264,7 +265,7 @@ class bwm_observer_cam : public bwm_observer_vgui
   virtual bool intersect_ray_and_plane(vgl_point_2d<double> /*img_point*/,
                                        vgl_plane_3d<double> /*plane*/,
                                        vgl_point_3d<double>& /*world_point*/)
-  { vcl_cout << "ERROR!  USING CAM OBSERVER's intersect_ray_and_plane"; return false; }
+  { std::cout << "ERROR!  USING CAM OBSERVER's intersect_ray_and_plane"; return false; }
 
   bool intersect_ray_and_box(vgl_box_3d<double> box,
                              vgl_point_2d<double> img_point,
@@ -298,7 +299,7 @@ class bwm_observer_cam : public bwm_observer_vgui
   //: objects for depth map
   depth_map_scene scene_;
   //: weight parameter for depth_map_scene
-  vcl_vector<volm_weight> weights_;
+  std::vector<volm_weight> weights_;
 };
 
 #endif

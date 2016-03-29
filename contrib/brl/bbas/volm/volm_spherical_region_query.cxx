@@ -1,7 +1,9 @@
+#include <iostream>
+#include <vector>
 #include "volm_spherical_region_query.h"
 #include <vsph/vsph_unit_sphere.h>
 #include <bsol/bsol_algs.h>
-#include <vcl_vector.h>
+#include <vcl_compiler.h>
 #include <vcl_cassert.h>
 #include <vsph/vsph_utils.h>
 #include <volm/volm_char_codes.h>
@@ -43,13 +45,13 @@ volm_spherical_region_query::set_from_depth_map_region(vpgl_perspective_camera<d
     double max_depth = dm_region->max_depth();
     unsigned char order =  static_cast<unsigned char>(dm_region->order());
     unsigned char nlcd_id = static_cast<unsigned char>(dm_region->land_id());
-    vcl_string nam = dm_region->name();
+    std::string nam = dm_region->name();
     if (otype == depth_map_region::GROUND_PLANE) {
 
         r.set_attribute(ORIENTATION, static_cast<unsigned char>(depth_map_region::HORIZONTAL));
         r.set_attribute(NLCD, nlcd_id);
     }
-    if (nam.find("sky") !=vcl_string::npos ){
+    if (nam.find("sky") !=std::string::npos ){
         r.set_attribute(SKY, static_cast<unsigned char>(254));
     }
     else {
@@ -131,18 +133,18 @@ void volm_spherical_region_query::construct_spherical_regions()
         assert(cam_index>=0);
         vpgl_perspective_camera<double> cam = cam_space_->camera(cam_index);
         // ====  construct object regions =====
-        vcl_vector<depth_map_region_sptr> sky_regions =dm_scene_->sky();
-        for (vcl_vector<depth_map_region_sptr>::iterator sit = sky_regions.begin();
+        std::vector<depth_map_region_sptr> sky_regions =dm_scene_->sky();
+        for (std::vector<depth_map_region_sptr>::iterator sit = sky_regions.begin();
              sit != sky_regions.end(); ++sit) {
             volm_spherical_region sph_reg = this->set_sky_from_depth_map_region(cam, *sit);
             sph_regions_[roll_idx].add_region(sph_reg);
         }
-        vcl_vector<depth_map_region_sptr> gp_regions = dm_scene_->ground_plane();
-        for (vcl_vector<depth_map_region_sptr>::iterator git = gp_regions.begin();git != gp_regions.end(); ++git) {
+        std::vector<depth_map_region_sptr> gp_regions = dm_scene_->ground_plane();
+        for (std::vector<depth_map_region_sptr>::iterator git = gp_regions.begin();git != gp_regions.end(); ++git) {
             volm_spherical_region sph_reg = this->set_ground_from_depth_map_region(cam, *git);
             sph_regions_[roll_idx].add_region(sph_reg);
         }
-        vcl_vector<depth_map_region_sptr> object_regions =dm_scene_->scene_regions();
+        std::vector<depth_map_region_sptr> object_regions =dm_scene_->scene_regions();
         unsigned n_regions = object_regions.size();
         for (unsigned reg_idx = 0; reg_idx<n_regions; ++reg_idx) {
             volm_spherical_region sph_reg = this->set_from_depth_map_region(cam, object_regions[reg_idx]);
@@ -156,17 +158,17 @@ volm_spherical_regions_layer volm_spherical_region_query::query_regions(unsigned
     return sph_regions_[roll_indx];
 }
 
-void volm_spherical_region_query::print(vcl_ostream& os) const
+void volm_spherical_region_query::print(std::ostream& os) const
 {
-    vcl_map< unsigned, volm_spherical_regions_layer >::const_iterator rolit =  sph_regions_.begin();
+    std::map< unsigned, volm_spherical_regions_layer >::const_iterator rolit =  sph_regions_.begin();
     for (; rolit != sph_regions_.end(); ++rolit) {
-        vcl_cout << "BoundingBoxes for roll = " << cam_space_->roll(rolit->first)<< " degrees\n";
+        std::cout << "BoundingBoxes for roll = " << cam_space_->roll(rolit->first)<< " degrees\n";
         volm_spherical_regions_layer  region_layer = rolit->second;
-        vcl_vector<volm_spherical_region> regions = region_layer.regions();
+        std::vector<volm_spherical_region> regions = region_layer.regions();
         for (unsigned i = 0 ; i < regions.size(); i++) {
             regions[i].print(os);
         }
-        vcl_cout << '\n';
+        std::cout << '\n';
     }
 }
 

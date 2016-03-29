@@ -1,5 +1,10 @@
 // This is mul/clsfy/clsfy_rbf_svm_smo_1_builder.cxx
 // Copyright: (C) 2001 British Telecommunications plc.
+#include <string>
+#include <vector>
+#include <sstream>
+#include <iostream>
+#include <algorithm>
 #include "clsfy_rbf_svm_smo_1_builder.h"
 //:
 // \file
@@ -9,10 +14,7 @@
 
 //=======================================================================
 
-#include <vcl_string.h>
-#include <vcl_vector.h>
-#include <vcl_sstream.h>
-#include <vcl_algorithm.h>
+#include <vcl_compiler.h>
 #include <vcl_cassert.h>
 #include <vul/vul_string.h>
 
@@ -31,20 +33,20 @@ inline int class_to_svm_target (unsigned v) {return v==1?1:-1;}
 // returns the training error, or +INF if there is an error.
 double clsfy_rbf_svm_smo_1_builder::build(clsfy_classifier_base& classifier,
                                           mbl_data_wrapper<vnl_vector<double> >& inputs,
-                                          const vcl_vector<unsigned> &outputs) const
+                                          const std::vector<unsigned> &outputs) const
 {
   inputs.reset();
 //const unsigned int nDims = inputs.current().size(); // unused variable
   const unsigned int nSamples = inputs.size();
   assert(outputs.size() == nSamples);
-  assert(*vcl_max_element(outputs.begin(), outputs.end()) <= 1);
+  assert(*std::max_element(outputs.begin(), outputs.end()) <= 1);
 
   assert(classifier.is_class("clsfy_rbf_svm"));
   clsfy_rbf_svm &svm = static_cast<clsfy_rbf_svm &>(classifier);
 
   clsfy_smo_1_rbf svAPI;
-  vcl_vector<int> targets(nSamples);
-  vcl_transform(outputs.begin(), outputs.end(),
+  std::vector<int> targets(nSamples);
+  std::transform(outputs.begin(), outputs.end(),
                 targets.begin(), class_to_svm_target);
 
   svAPI.set_data(inputs, targets);
@@ -59,10 +61,10 @@ double clsfy_rbf_svm_smo_1_builder::build(clsfy_classifier_base& classifier,
 
   // Get the SVM description, and build an SVM machine
   {
-    vcl_vector<vnl_vector<double> > supportVectors;
+    std::vector<vnl_vector<double> > supportVectors;
     const vnl_vector<double> &allAlphas = svAPI.lagrange_mults();
-    vcl_vector<double> alphas;
-    vcl_vector<unsigned> labels;
+    std::vector<double> alphas;
+    std::vector<unsigned> labels;
     for (unsigned i=0; i<nSamples; ++i)
       if (allAlphas[i]!=0.0)
       {
@@ -84,7 +86,7 @@ double clsfy_rbf_svm_smo_1_builder::build(clsfy_classifier_base& classifier,
 double clsfy_rbf_svm_smo_1_builder::build(clsfy_classifier_base& classifier,
                                           mbl_data_wrapper<vnl_vector<double> >& inputs,
                                           unsigned nClasses,
-                                          const vcl_vector<unsigned> &outputs) const
+                                          const std::vector<unsigned> &outputs) const
 {
   assert(nClasses == 1);
   return build(classifier, inputs, outputs);
@@ -105,14 +107,14 @@ void clsfy_rbf_svm_smo_1_builder::set_rbf_width(double rbf_width)
 }
 //=======================================================================
 
-vcl_string clsfy_rbf_svm_smo_1_builder::is_a() const
+std::string clsfy_rbf_svm_smo_1_builder::is_a() const
 {
-  return vcl_string("clsfy_rbf_svm_smo_1_builder");
+  return std::string("clsfy_rbf_svm_smo_1_builder");
 }
 
 //=======================================================================
 
-bool clsfy_rbf_svm_smo_1_builder::is_class(vcl_string const& s) const
+bool clsfy_rbf_svm_smo_1_builder::is_class(std::string const& s) const
 {
   return s == clsfy_rbf_svm_smo_1_builder::is_a() || clsfy_builder_base::is_class(s);
 }
@@ -133,7 +135,7 @@ clsfy_builder_base* clsfy_rbf_svm_smo_1_builder::clone() const
 
 //=======================================================================
 
-void clsfy_rbf_svm_smo_1_builder::print_summary(vcl_ostream& os) const
+void clsfy_rbf_svm_smo_1_builder::print_summary(std::ostream& os) const
 {
   // os << data_; // example of data output
   os << "RBF width = " << rbf_width_ << ", bounds = " << boundC_;
@@ -163,9 +165,9 @@ void clsfy_rbf_svm_smo_1_builder::b_read(vsl_b_istream& bfs)
     vsl_b_read(bfs,rbf_width_);
     break;
   default:
-    vcl_cerr << "I/O ERROR: clsfy_rbf_svm_smo_1_builder::b_read(vsl_b_istream&)\n"
+    std::cerr << "I/O ERROR: clsfy_rbf_svm_smo_1_builder::b_read(vsl_b_istream&)\n"
              << "           Unknown version number "<< version << '\n';
-    bfs.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
+    bfs.is().clear(std::ios::badbit); // Set an unrecoverable IO error on stream
     return;
   }
 }
@@ -184,11 +186,11 @@ void clsfy_rbf_svm_smo_1_builder::b_read(vsl_b_istream& bfs)
 // }
 // \endverbatim
 // \throw mbl_exception_parse_error if the parse fails.
-void clsfy_rbf_svm_smo_1_builder::config(vcl_istream &as)
+void clsfy_rbf_svm_smo_1_builder::config(std::istream &as)
 {
- vcl_string s = mbl_parse_block(as);
+ std::string s = mbl_parse_block(as);
 
-  vcl_istringstream ss(s);
+  std::istringstream ss(s);
   mbl_read_props_type props = mbl_read_props_ws(ss);
 
   {

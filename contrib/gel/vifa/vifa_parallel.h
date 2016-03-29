@@ -15,7 +15,9 @@
 // \endverbatim
 //-----------------------------------------------------------------------------
 
-#include <vcl_vector.h>
+#include <iostream>
+#include <vector>
+#include <vcl_compiler.h>
 #include <vtol/vtol_intensity_face_sptr.h>
 #include <vtol/vtol_edge_2d.h>
 #include <vifa/vifa_histogram.h>
@@ -42,7 +44,7 @@ class vifa_parallel: public vifa_parallel_params
                );
 
   //: Orientation-based constructor
-  vifa_parallel(vcl_vector<float>&  pixel_orientations,
+  vifa_parallel(std::vector<float>&  pixel_orientations,
                 vifa_parallel_params*  params = 0
                );
 

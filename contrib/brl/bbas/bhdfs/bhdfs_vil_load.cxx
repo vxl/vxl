@@ -37,7 +37,7 @@ vil_image_resource_sptr bhdfs_vil_load_image_resource_raw(char const* filename,
   }
 
   if (!isp && verbose)
-    vcl_cerr << __FILE__ ": Failed to load [" << filename << "]\n";
+    std::cerr << __FILE__ ": Failed to load [" << filename << "]\n";
   return isp;
 }
 
@@ -49,7 +49,7 @@ vil_image_resource_sptr bhdfs_vil_load_image_resource(char const* filename,
   //  im=bhdfs_vil_load_image_resource_raw(filename, verbose);
   vil_image_resource_sptr im = bhdfs_vil_load_image_resource_raw(filename, verbose);
   if (!im && verbose)
-    vcl_cerr << __FILE__ ": Failed to load [" << filename << "]\n";
+    std::cerr << __FILE__ ": Failed to load [" << filename << "]\n";
   return im;
 }
 
@@ -80,10 +80,10 @@ vil_load_pyramid_resource(char const* directory_or_file, bool verbose)
 {
   for (vil_file_format** p = vil_file_format::all(); *p; ++p) {
 #if 0 // debugging
-    vcl_cerr << __FILE__ " : trying \'" << (*p)->tag() << "\'\n";
+    std::cerr << __FILE__ " : trying \'" << (*p)->tag() << "\'\n";
 
 
-    vcl_cerr << "make_input_pyramid_image(" << directory_or_file << ")\n";
+    std::cerr << "make_input_pyramid_image(" << directory_or_file << ")\n";
 #endif
     vil_pyramid_image_resource_sptr pir =
       (*p)->make_input_pyramid_image(directory_or_file);
@@ -92,12 +92,12 @@ vil_load_pyramid_resource(char const* directory_or_file, bool verbose)
   }
   // failed.
   if (verbose) {
-    vcl_cerr << __FILE__ ": Unable to load pyramid image;\ntried";
+    std::cerr << __FILE__ ": Unable to load pyramid image;\ntried";
     for (vil_file_format** p = vil_file_format::all(); *p; ++p)
       // 'flush' in case of segfault next time through loop. Else, we
       // will not see those printed tags still in the stream buffer.
-      vcl_cerr << " \'" << (*p)->tag() << "\'" << vcl_flush;
-    vcl_cerr << vcl_endl;
+      std::cerr << " \'" << (*p)->tag() << "\'" << std::flush;
+    std::cerr << std::endl;
   }
   return 0;
 }

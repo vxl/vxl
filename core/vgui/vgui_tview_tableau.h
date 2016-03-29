@@ -20,8 +20,9 @@
 // \endverbatim
 
 
+#include <vector>
 #include "vgui_tview_tableau_sptr.h"
-#include <vcl_vector.h>
+#include <vcl_compiler.h>
 #include <vgui/vgui_wrapper_tableau.h>
 
 //: Tableau displaying a tableau tree.
@@ -32,7 +33,7 @@ class vgui_tview_tableau : public vgui_wrapper_tableau
   vgui_tview_tableau(vgui_tableau_sptr const&);
 
   bool handle(const vgui_event &);
-  vcl_string type_name() const;
+  std::string type_name() const;
 
   void get_popup(const vgui_popup_params& params, vgui_menu &menu);
 
@@ -49,8 +50,8 @@ class vgui_tview_tableau : public vgui_wrapper_tableau
   };
 
   void draw_icons(vgui_tableau_sptr const& parent, float x, float y);
-  void add_icons(vcl_vector<icon>* icons, vgui_tableau_sptr const& parent, float x, float y);
-  vgui_tableau_sptr find_closest_icon(vcl_vector<icon> const& icons, float x, float y);
+  void add_icons(std::vector<icon>* icons, vgui_tableau_sptr const& parent, float x, float y);
+  vgui_tableau_sptr find_closest_icon(std::vector<icon> const& icons, float x, float y);
 
   float spacing;
   float icon_height;

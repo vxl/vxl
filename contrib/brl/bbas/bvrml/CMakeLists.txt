@@ -5,7 +5,7 @@ set(bvrml_sources
   bvrml_export.h bvrml_write.h bvrml_write.cxx
 )
 
-add_library(bvrml  ${bvrml_sources})
+vxl_add_library(LIBRARY_NAME bvrml LIBRARY_SOURCES  ${bvrml_sources})
 
 target_link_libraries(bvrml ${VXL_LIB_PREFIX}vgl)
 
@@ -14,6 +14,3 @@ if( BUILD_TESTING )
 endif()
 
 add_subdirectory(pro)
-
-install_targets(/lib bvrml)
-INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/brl/bbas/bvrml ${bvrml_sources})

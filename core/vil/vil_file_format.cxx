@@ -4,13 +4,14 @@
 #endif
 //:
 // \file
+#include <cstdlib>
 #include "vil_file_format.h"
 
 vil_file_format::~vil_file_format()
 {
 }
 
-#include <vcl_cstdlib.h>
+#include <vcl_compiler.h>
 #include <vil/vil_config.h> // for list of configured file formats
 #include <vil/vil_exception.h>
 
@@ -162,8 +163,8 @@ void vil_file_format::add_file_format(vil_file_format* ff)
   while (c<MAX_FILE_FORMATS-1u && l[c]!=VXL_NULLPTR) ++c;
   if (l[c]!=VXL_NULLPTR)
   {
-    vcl_cerr << "ERROR vil_file_format::add_file_format Unable to add any more file formats\n";
-    vcl_abort();
+    std::cerr << "ERROR vil_file_format::add_file_format Unable to add any more file formats\n";
+    std::abort();
   }
   l[c] = ff;
   l[c+1] = VXL_NULLPTR;

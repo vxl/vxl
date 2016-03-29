@@ -1,15 +1,16 @@
+#include <iostream>
+#include <vector>
 #include <testlib/testlib_test.h>
-#include <vcl_iostream.h>
 #include <vpgl/vpgl_rational_camera.h>
 #include <vpgl/io/vpgl_io_rational_camera.h>
-#include <vcl_vector.h>
+#include <vcl_compiler.h>
 #include <vpl/vpl.h>
 #include <vsl/vsl_binary_io.h>
 
 static void test_rational_camera_io()
 {
   //Rational polynomial coefficients
-  vcl_vector<double> neu_u(20,0.0), den_u(20,0.0), neu_v(20,0.0), den_v(20,0.0);
+  std::vector<double> neu_u(20,0.0), den_u(20,0.0), neu_v(20,0.0), den_v(20,0.0);
   neu_u[0]=0.1; neu_u[10]=0.071; neu_u[7]=0.01;  neu_u[9]=0.3;
   neu_u[15]=1.0; neu_u[18]=1.0, neu_u[19]=0.75;
 
@@ -43,10 +44,10 @@ static void test_rational_camera_io()
   vsl_b_read(bp_in, rat_cam_r);
   bp_in.close();
 
-  vcl_vector<vcl_vector<double> > coefs = rat_cam_r.coefficients();
-  vcl_vector<double> neu_u_r = coefs[vpgl_rational_camera<double>::NEU_U],
+  std::vector<std::vector<double> > coefs = rat_cam_r.coefficients();
+  std::vector<double> neu_u_r = coefs[vpgl_rational_camera<double>::NEU_U],
     den_u_r = coefs[vpgl_rational_camera<double>::DEN_U];
-  vcl_vector<double> neu_v_r = coefs[vpgl_rational_camera<double>::NEU_V],
+  std::vector<double> neu_v_r = coefs[vpgl_rational_camera<double>::NEU_V],
     den_v_r = coefs[vpgl_rational_camera<double>::DEN_V];
   bool eq = (neu_u_r == neu_u) && (den_u_r == den_u);
   eq = eq && (neu_v_r == neu_v) && (den_v_r == den_v);

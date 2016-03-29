@@ -1,4 +1,6 @@
 //This is brl/bseg/bvxm/pro/processes/bvxm_normalize_image_process.cxx
+#include <string>
+#include <iostream>
 #include "bvxm_normalize_image_process.h"
 //:
 // \file
@@ -13,9 +15,8 @@
 #include <bvxm/bvxm_image_metadata.h>
 #include <bvxm/bvxm_voxel_world.h>
 
-#include <vcl_string.h>
 #ifdef DEBUG
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
 #endif
 
 #include <brdb/brdb_value.h>
@@ -28,7 +29,7 @@ bool bvxm_normalize_image_process_cons(bprb_func_process& pro)
   //inputs
   //0: The unnormalized image
   //1: The mog_image which should be created from the voxel world from the point of view of this input image (meaning using its camera) via bvxm_create_mog_image_process
-  vcl_vector<vcl_string> input_types_(n_inputs_);
+  std::vector<std::string> input_types_(n_inputs_);
   input_types_[0] = "vil_image_view_base_sptr";
   input_types_[1] = "bvxm_voxel_slab_base_sptr";
   input_types_[2] = "vcl_string";  // voxel type of the mog_image (same as voxel type of the voxel world that it is created from)
@@ -36,7 +37,7 @@ bool bvxm_normalize_image_process_cons(bprb_func_process& pro)
     return false;
 
   //output
-  vcl_vector<vcl_string> output_types_(n_outputs_);
+  std::vector<std::string> output_types_(n_outputs_);
   output_types_[0]= "vil_image_view_base_sptr";
   output_types_[1]= "float";  // output a
   output_types_[2]= "float";  // output b
@@ -50,7 +51,7 @@ bool bvxm_normalize_image_process(bprb_func_process& pro)
  //check number of inputs
   if (pro.n_inputs()<n_inputs_)
   {
-    vcl_cout << pro.name() << " The input number should be " << n_inputs_<< vcl_endl;
+    std::cout << pro.name() << " The input number should be " << n_inputs_<< std::endl;
     return false;
   }
 
@@ -58,11 +59,11 @@ bool bvxm_normalize_image_process(bprb_func_process& pro)
   unsigned i = 0;
   vil_image_view_base_sptr input_img = pro.get_input<vil_image_view_base_sptr>(i++);
   bvxm_voxel_slab_base_sptr mog_image = pro.get_input<bvxm_voxel_slab_base_sptr>(i++);
-  vcl_string voxel_type = pro.get_input<vcl_string>(i++);
+  std::string voxel_type = pro.get_input<std::string>(i++);
 
   //check inputs validity
   if (!input_img) {
-    vcl_cout << pro.name() <<" :--  Input 0  is not valid!\n";
+    std::cout << pro.name() <<" :--  Input 0  is not valid!\n";
     return false;
   }
 
@@ -80,7 +81,7 @@ bool bvxm_normalize_image_process(bprb_func_process& pro)
   nplanes_= input_img->nplanes();
 
   if (!mog_image) {
-    vcl_cout << pro.name() <<" bvxm_normalize_image_process(): Warning: -- Input 1 is an empty pointer! Either the world was empty, or a problem occurred during MOG creation, will return input image back.\n";
+    std::cout << pro.name() <<" bvxm_normalize_image_process(): Warning: -- Input 1 is an empty pointer! Either the world was empty, or a problem occurred during MOG creation, will return input image back.\n";
     pro.set_output_val<vil_image_view_base_sptr>(0,input_img);
     pro.set_output_val<float>(1, 1.0f);
     pro.set_output_val<float>(2, 0.0f); // switch back to byte
@@ -98,7 +99,7 @@ bool bvxm_normalize_image_process(bprb_func_process& pro)
   else if (voxel_type == "apm_mog_mc_4_3")
     norm_parameters<APM_MOG_MC_4_3>(input_img,input_img_float_stretched,mog_image,a,b);
   else{
-    vcl_cout << "In bvxm_normalize_image_process::execute() -- input appearance model: " << voxel_type << " is not supported\n";
+    std::cout << "In bvxm_normalize_image_process::execute() -- input appearance model: " << voxel_type << " is not supported\n";
     return false;
   }
 
@@ -131,14 +132,14 @@ template <bvxm_voxel_type APM_T>
                                                                float& a, float& b)
 {
   if (verbose_) {
-    vcl_cout << "normalization parameters to be used in this run:\n"
-             << "a_start: " << a_start_ << " a_end: " << a_end_ << " a_inc: " << a_inc_ << vcl_endl
-             << "b_start: " << b_start_ << " b_end: " << b_end_ << " b_ratio: " << b_ratio_ << vcl_endl;
+    std::cout << "normalization parameters to be used in this run:\n"
+             << "a_start: " << a_start_ << " a_end: " << a_end_ << " a_inc: " << a_inc_ << std::endl
+             << "b_start: " << b_start_ << " b_end: " << b_end_ << " b_ratio: " << b_ratio_ << std::endl;
   }
 
   // CAUTION: Assumption: Input image is of type vxl_byte
   if (input_img->pixel_format() != VIL_PIXEL_FORMAT_BYTE) {
-    vcl_cout << "Input image pixel format is not VIL_PIXEL_FORMAT_BYTE!\n";
+    std::cout << "Input image pixel format is not VIL_PIXEL_FORMAT_BYTE!\n";
     return false;
   }
 
@@ -157,7 +158,7 @@ template <bvxm_voxel_type APM_T>
   typedef typename bvxm_voxel_traits<APM_T>::obs_datatype obs_datatype;
 
   if (!mog_image) {
-    vcl_cout << "In bvxm_normalize_image_process::norm_parameters() - problems in creating mixture of gaussian image!\n";
+    std::cout << "In bvxm_normalize_image_process::norm_parameters() - problems in creating mixture of gaussian image!\n";
     return false;
   }
 
@@ -195,7 +196,7 @@ template <bvxm_voxel_type APM_T>
         // convert image to a voxel_slab
         bvxm_voxel_slab<obs_datatype> image_slab(ni_, nj_, 1);
         bvxm_util::img_to_slab(nimg_sptr,image_slab);
-        nimg_sptr = 0;  // to clear up space
+        nimg_sptr = VXL_NULLPTR;  // to clear up space
 
         bvxm_voxel_slab<float> prob = apm_processor.prob_density(*mog_image_ptr,image_slab); //prob( nimg );
 
@@ -204,23 +205,23 @@ template <bvxm_voxel_type APM_T>
         bvxm_util::multiply_slabs(prob, weights, product);
         float this_prob = bvxm_util::sum_slab(product);
 
-        //vcl_cerr << this_prob << ' ';
+        //std::cerr << this_prob << ' ';
         if ( this_prob < 0 ) {
-          vcl_cout << "In bvxm_normalize_image_process::execute() -- prob is negative, Exiting!\n";
+          std::cout << "In bvxm_normalize_image_process::execute() -- prob is negative, Exiting!\n";
           return false;
         }
 
         if ( this_prob > sb_best_prob ){ sb_best_prob = this_prob; sb_best = sb; }
         if ( this_prob > best_prob ){ best_prob = this_prob; a = sa; b = sb; }
       }
-      //vcl_cerr << '\n';
+      //std::cerr << '\n';
     }
-    //vcl_cerr << '\n';
+    //std::cerr << '\n';
   }
   if (verbose_)
   {
-    vcl_ofstream file;
-    file.open("./normalization_parameters.txt", vcl_ofstream::app);
+    std::ofstream file;
+    file.open("./normalization_parameters.txt", std::ofstream::app);
     file << a << ' ' << b <<'\n';
   }
 

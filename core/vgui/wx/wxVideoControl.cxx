@@ -1,4 +1,5 @@
 // This is core/vgui/wx/wxVideoControl.cxx
+#include <iostream>
 #include "wxVideoControl.h"
 //:
 // \file
@@ -18,7 +19,7 @@
 #include "bitmaps/pause.xpm"
 #include "bitmaps/next.xpm"
 
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
 
 
 IMPLEMENT_DYNAMIC_CLASS( wxVideoControl, wxPanel )
@@ -246,7 +247,7 @@ void wxVideoControl::OnButton( wxCommandEvent& event )
 //: Event handler
 void wxVideoControl::OnKeyDown( wxKeyEvent& event )
 {
-  vcl_cout << "key press!"<<vcl_endl;
+  std::cout << "key press!"<<std::endl;
 }
 
 //: Advance to next frame

@@ -10,12 +10,10 @@ set(bstm_io_sources
    )
 aux_source_directory(Templates bstm_io_sources)
 
-add_library(bstm_io  ${bstm_io_sources})
+vxl_add_library(LIBRARY_NAME bstm_io LIBRARY_SOURCES  ${bstm_io_sources})
 target_link_libraries(bstm_io bstm bstm_basic)
 
-#install the .h .txx and libs
-install_targets(/lib bstm_io)
-INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/brl/bseg/bstm/io ${bstm_io_sources})
+#install the .h .hxx and libs
 
 if( BUILD_TESTING )
   add_subdirectory(tests)

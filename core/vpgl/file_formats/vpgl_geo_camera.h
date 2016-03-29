@@ -12,8 +12,9 @@
 // to project and backproject the 3D points in local coordinates to pixel positions
 
 
-#include <vcl_iosfwd.h>
-#include <vcl_vector.h>
+#include <iosfwd>
+#include <vector>
+#include <vcl_compiler.h>
 
 #include <vpgl/vpgl_lvcs_sptr.h>
 #include <vpgl/vpgl_lvcs.h>
@@ -46,17 +47,17 @@ class vpgl_geo_camera : public vpgl_camera<double>
   //: warning, use this camera cautiously, the output of img_to_global method needs to be adjusted sign wise
   //  for 'S' use -lat and for 'W' -lon
   //  TODO: generalize geo_camera so that img_to_global method makes this adjustment internally if camera is created using this method
-  static bool init_geo_camera(vcl_string img_name, unsigned ni, unsigned nj, vpgl_lvcs_sptr lvcs, vpgl_geo_camera*& camera);
+  static bool init_geo_camera(std::string img_name, unsigned ni, unsigned nj, vpgl_lvcs_sptr lvcs, vpgl_geo_camera*& camera);
 
   // loads a geo_camera from the file and uses global WGS84 coordinates, so no need to convert negative values to positives in the global_to_img method as in the previous method
-  static bool init_geo_camera_from_filename(vcl_string img_name, unsigned ni, unsigned nj, vpgl_lvcs_sptr lvcs, vpgl_geo_camera*& camera);
+  static bool init_geo_camera_from_filename(std::string img_name, unsigned ni, unsigned nj, vpgl_lvcs_sptr lvcs, vpgl_geo_camera*& camera);
 
   //: init using a tfw file, reads the transformation matrix from the tfw
-  static bool init_geo_camera(vcl_string tfw_name, vpgl_lvcs_sptr lvcs, int utm_zone, unsigned northing, vpgl_geo_camera*& camera);
+  static bool init_geo_camera(std::string tfw_name, vpgl_lvcs_sptr lvcs, int utm_zone, unsigned northing, vpgl_geo_camera*& camera);
 
   ~vpgl_geo_camera() {}
 
-  virtual vcl_string type_name() const { return "vpgl_geo_camera"; }
+  virtual std::string type_name() const { return "vpgl_geo_camera"; }
 
   //northing=0 means North, 1 is south
   void set_utm(int utm_zone, unsigned northing) { is_utm=true, utm_zone_=utm_zone; northing_=northing; }
@@ -84,25 +85,25 @@ class vpgl_geo_camera : public vpgl_camera<double>
   bool operator ==(vpgl_geo_camera const& rhs) const;
 
   static bool comp_trans_matrix(double sx1, double sy1, double sz1,
-                                vcl_vector<vcl_vector<double> > tiepoints,
+                                std::vector<std::vector<double> > tiepoints,
                                 vnl_matrix<double>& trans_matrix,
                                 bool scale_tag = false);
 
   //: Return a platform independent string identifying the class
-  virtual vcl_string is_a() const { return vcl_string("vpgl_geo_camera"); }
+  virtual std::string is_a() const { return std::string("vpgl_geo_camera"); }
 
   //: Return true if the argument matches the string identifying the class or any parent class
-  virtual bool is_class(vcl_string const& cls) const
-  { return cls==is_a() || cls==vcl_string("vpgl_geo_camera"); }
+  virtual bool is_class(std::string const& cls) const
+  { return cls==is_a() || cls==std::string("vpgl_geo_camera"); }
 
   //: save the camera as tfw
-  void save_as_tfw(vcl_string const& tfw_filename);
+  void save_as_tfw(std::string const& tfw_filename);
 
   //: Write camera to stream
-  friend vcl_ostream&  operator<<(vcl_ostream& s, vpgl_geo_camera const& p);
+  friend std::ostream&  operator<<(std::ostream& s, vpgl_geo_camera const& p);
 
   //: Read camera  from stream
-  friend vcl_istream&  operator>>(vcl_istream& s, vpgl_geo_camera& p);
+  friend std::istream&  operator>>(std::istream& s, vpgl_geo_camera& p);
 
   //: returns the corresponding geographical coordinates for a given pixel position (i,j)
   //  the output global coord is wgs84

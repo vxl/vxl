@@ -16,7 +16,8 @@
 #pragma interface
 #endif
 
-#include <vcl_string.h>
+#include <string>
+#include <vcl_compiler.h>
 #include <vil1/vil1_file_format.h>
 #include <vil1/vil1_image_impl.h>
 
@@ -53,11 +54,11 @@ class vil1_gen_generic_image : public vil1_image_impl
   int params_[4];
 
   friend class vil1_gen_file_format;
-  void init(vcl_string const & s);
+  void init(std::string const & s);
 
  public:
-  vil1_gen_generic_image(vcl_string const & s) { init(s); }
-  vil1_gen_generic_image(vcl_string const & s,
+  vil1_gen_generic_image(std::string const & s) { init(s); }
+  vil1_gen_generic_image(std::string const & s,
                          int planes,
                          int width,
                          int height,

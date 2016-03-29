@@ -1,10 +1,11 @@
+#include <string>
+#include <iostream>
 #include <testlib/testlib_test.h>
 
 #include <bvxm/bvxm_world_params.h>
 #include <bvxm/bvxm_voxel_world.h>
 
-#include <vcl_string.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
 
 #include <brdb/brdb_value.h>
 #include <brdb/brdb_selection.h>
@@ -45,7 +46,7 @@ static void test_bvxm_update_lidar_process()
     bool good = bprb_batch_process_manager::instance()->init_process("bvxmCreateSynthLidarDataProcess");
     TEST("bprb_batch_process_manager::instance()->init_process()", good, true);
     if (!good) break;
-    vcl_string xml = "./synth_test_params.xml";
+    std::string xml = "./synth_test_params.xml";
     good = bprb_batch_process_manager::instance()->set_params(xml);
     TEST("bprb_batch_process_manager::instance()->set_params()", good, true);
     good = bprb_batch_process_manager::instance()->run_process();
@@ -67,16 +68,16 @@ static void test_bvxm_update_lidar_process()
     brdb_selection_sptr S_img = DATABASE->select("vil_image_view_base_sptr_data", Q_img);
 
     if (S_img->size()!=1) {
-      vcl_cout << "in bprb_batch_process_manager::set_input_from_db(.) -"
+      std::cout << "in bprb_batch_process_manager::set_input_from_db(.) -"
                << " no selections\n";
     }
 
     brdb_value_sptr value_img;
-    if (!S_img->get_value(vcl_string("value"), value_img)) {
-      vcl_cout << "in bprb_batch_process_manager::set_input_from_db(.) -"
+    if (!S_img->get_value(std::string("value"), value_img)) {
+      std::cout << "in bprb_batch_process_manager::set_input_from_db(.) -"
                << " didn't get value\n";
     }
-    bool non_null = (value_img != 0);
+    bool non_null = (value_img != VXL_NULLPTR);
     TEST("display output non-null", non_null ,true);
 
     brdb_value_t<vil_image_view_base_sptr>* result =
@@ -96,17 +97,17 @@ static void test_bvxm_update_lidar_process()
     brdb_selection_sptr S_cam = DATABASE->select("vpgl_camera_double_sptr_data", Q_cam);
 
     if (S_cam->size()!=1) {
-      vcl_cout << "in bprb_batch_process_manager::set_input_from_db(.) -"
+      std::cout << "in bprb_batch_process_manager::set_input_from_db(.) -"
                << " no selections\n";
     }
 
     brdb_value_sptr value_cam;
-    if (!S_cam->get_value(vcl_string("value"), value_cam)) {
-      vcl_cout << "in bprb_batch_process_manager::set_input_from_db(.) -"
+    if (!S_cam->get_value(std::string("value"), value_cam)) {
+      std::cout << "in bprb_batch_process_manager::set_input_from_db(.) -"
                << " didn't get value\n";
     }
 
-    non_null = (value_cam != 0);
+    non_null = (value_cam != VXL_NULLPTR);
     TEST("display output non-null", non_null ,true);
 
     brdb_value_t<vpgl_camera_double_sptr>* result2 =
@@ -125,7 +126,7 @@ static void test_bvxm_update_lidar_process()
     bool good = bprb_batch_process_manager::instance()->init_process("bvxmGenSyntheticWorldProcess");
     TEST("bprb_batch_process_manager::instance()->init_process()", good, true);
     if (!good) break;
-    vcl_string xml = vcl_string(argv[1]) + "/" + "change_display_params.xml";
+    std::string xml = std::string(argv[1]) + "/" + "change_display_params.xml";
 //  good = bprb_batch_process_manager::instance()->set_params(xml);
     TEST("bprb_batch_process_manager::instance()->set_params()", good, true);
     good = bprb_batch_process_manager::instance()->run_process();
@@ -142,13 +143,13 @@ static void test_bvxm_update_lidar_process()
     brdb_query_aptr Q_world = brdb_query_comp_new("id", brdb_query::EQ, id_world);
     brdb_selection_sptr S_world = DATABASE->select("bvxm_voxel_world_sptr_data", Q_world);
     if (S_world->size()!=1) {
-      vcl_cout << "in bprb_batch_process_manager::set_input_from_db(.) -"
+      std::cout << "in bprb_batch_process_manager::set_input_from_db(.) -"
                << " no selections\n";
     }
 
     brdb_value_sptr value_world;
-    if (!S_world->get_value(vcl_string("value"), value_world)) {
-      vcl_cout << "in bprb_batch_process_manager::set_input_from_db(.) -"
+    if (!S_world->get_value(std::string("value"), value_world)) {
+      std::cout << "in bprb_batch_process_manager::set_input_from_db(.) -"
                << " didn't get value\n";
     }
     bool non_null = (value_world != 0);
@@ -166,13 +167,13 @@ static void test_bvxm_update_lidar_process()
   for (int dummy = 0; dummy == 0; ++dummy)
   {
     // Set output for bvxm_gen_synthetic_world_process
-    vcl_string test_dir("./create_world_test");
+    std::string test_dir("./create_world_test");
     vul_file::make_directory(test_dir);
 
     bool good = bprb_batch_process_manager::instance()->init_process("bvxmCreateVoxelWorldProcess");
     TEST("bprb_batch_process_manager::instance()->init_process()", good, true);
     if (!good) break;
-    vcl_string xml = "./world_model_params.xml";
+    std::string xml = "./world_model_params.xml";
     good = bprb_batch_process_manager::instance()->set_params(xml);
     TEST("bprb_batch_process_manager::instance()->set_params()", good, true);
     good = bprb_batch_process_manager::instance()->run_process();
@@ -189,16 +190,16 @@ static void test_bvxm_update_lidar_process()
     brdb_query_aptr Q_world = brdb_query_comp_new("id", brdb_query::EQ, id_world);
     brdb_selection_sptr S_world = DATABASE->select("bvxm_voxel_world_sptr_data", Q_world);
     if (S_world->size()!=1) {
-      vcl_cout << "in bprb_batch_process_manager::set_input_from_db(.) -"
+      std::cout << "in bprb_batch_process_manager::set_input_from_db(.) -"
                << " no selections\n";
     }
 
     brdb_value_sptr value_world;
-    if (!S_world->get_value(vcl_string("value"), value_world)) {
-      vcl_cout << "in bprb_batch_process_manager::set_input_from_db(.) -"
+    if (!S_world->get_value(std::string("value"), value_world)) {
+      std::cout << "in bprb_batch_process_manager::set_input_from_db(.) -"
                << " didn't get value\n";
     }
-    bool non_null = (value_world != 0);
+    bool non_null = (value_world != VXL_NULLPTR);
     TEST("display output non-null", non_null ,true);
 
     brdb_value_t<bvxm_voxel_world_sptr>* result =
@@ -212,13 +213,13 @@ static void test_bvxm_update_lidar_process()
   for (int dummy = 0; dummy == 0; ++dummy)
   {
     // 3. Run save raw process
-     vcl_string empty_world("empty.raw");
+     std::string empty_world("empty.raw");
 
     // set the inputs
     brdb_value_sptr v0 = new brdb_value_t<bvxm_voxel_world_sptr>(world_);
-    brdb_value_sptr v1 = new brdb_value_t<vcl_string> (empty_world);
+    brdb_value_sptr v1 = new brdb_value_t<std::string> (empty_world);
     brdb_value_sptr v2 = new brdb_value_t<unsigned> (0);
-    brdb_value_sptr v3 = new brdb_value_t<vcl_string> ("float");
+    brdb_value_sptr v3 = new brdb_value_t<std::string> ("float");
 
     bool good = bprb_batch_process_manager::instance()->init_process("bvxmSaveOccupancyRaw");
     TEST("bprb_batch_process_manager::instance()->init_process()", good, true);
@@ -273,16 +274,16 @@ static void test_bvxm_update_lidar_process()
     brdb_query_aptr Q_img = brdb_query_comp_new("id", brdb_query::EQ, id_prob_map);
     brdb_selection_sptr S_img = DATABASE->select("vil_image_view_base_sptr_data", Q_img);
     if (S_img->size()!=1) {
-      vcl_cout << "in bprb_batch_process_manager::set_input_from_db(.) -"
+      std::cout << "in bprb_batch_process_manager::set_input_from_db(.) -"
                << " no selections\n";
     }
 
     brdb_value_sptr value_img;
-    if (!S_img->get_value(vcl_string("value"), value_img)) {
-      vcl_cout << "in bprb_batch_process_manager::set_input_from_db(.) -"
+    if (!S_img->get_value(std::string("value"), value_img)) {
+      std::cout << "in bprb_batch_process_manager::set_input_from_db(.) -"
                << " didn't get value\n";
     }
-    bool non_null = (value_img != 0);
+    bool non_null = (value_img != VXL_NULLPTR);
     TEST("display output non-null", non_null ,true);
 
     brdb_value_t<vil_image_view_base_sptr>* result =
@@ -297,13 +298,13 @@ static void test_bvxm_update_lidar_process()
   for (int dummy = 0; dummy == 0; ++dummy)
   {
     // 3. Run save raw process
-    vcl_string updated_world("updated_world.raw");
+    std::string updated_world("updated_world.raw");
 
     // set the inputs
     brdb_value_sptr v0 = new brdb_value_t<bvxm_voxel_world_sptr>(world_);
-    brdb_value_sptr v1 = new brdb_value_t<vcl_string> (updated_world);
+    brdb_value_sptr v1 = new brdb_value_t<std::string> (updated_world);
     brdb_value_sptr v2 = new brdb_value_t<unsigned>(0);
-    brdb_value_sptr v3 = new brdb_value_t<vcl_string>("float");
+    brdb_value_sptr v3 = new brdb_value_t<std::string>("float");
 
     bool good = bprb_batch_process_manager::instance()->init_process("bvxmSaveOccupancyRaw");
     TEST("bprb_batch_process_manager::instance()->init_process()", good, true);
@@ -336,13 +337,13 @@ static void test_bvxm_update_lidar_process()
   prob_img(3,3)=0.6f;
 
   // set the inputs
-  brdb_value_sptr v0 = new brdb_value_t<vcl_string> ("1st return path");
-  brdb_value_sptr v1 = new brdb_value_t<vcl_string> ("2st return path");
+  brdb_value_sptr v0 = new brdb_value_t<std::string> ("1st return path");
+  brdb_value_sptr v1 = new brdb_value_t<std::string> ("2st return path");
   brdb_value_sptr v2 = new brdb_value_t<bvxm_voxel_world_sptr>(new voxel_world_sptr(wolrd));
 
   bool good = bprb_batch_process_manager::instance()->init_process("bvxmLidarInitProcess");
   TEST("bprb_batch_process_manager::instance()->init_process()", good, true);
-  vcl_string xml = vcl_string(argv[1]) + "/" + "change_display_params.xml";
+  std::string xml = std::string(argv[1]) + "/" + "change_display_params.xml";
   good = bprb_batch_process_manager::instance()->set_params(xml);
     TEST("bprb_batch_process_manager::instance()->set_params()", good, true);
   good = bprb_batch_process_manager::instance()->set_input(0, v0)
@@ -367,14 +368,14 @@ static void test_bvxm_update_lidar_process()
   brdb_query_aptr Q_img = brdb_query_comp_new("id", brdb_query::EQ, id_img);
   brdb_selection_sptr S_img = DATABASE->select("vil_image_view_base_sptr_data", Q_img);
   if (S_img->size()!=1) {
-    vcl_cout << "in bprb_batch_process_manager::set_input_from_db(.) -"
+    std::cout << "in bprb_batch_process_manager::set_input_from_db(.) -"
              << " no selections\n";
   }
 
   //retrieve 1st return
   brdb_value_sptr value_img;
-  if (!S_img->get_value(vcl_string("value"), value_img)) {
-    vcl_cout << "in bprb_batch_process_manager::set_input_from_db(.) -"
+  if (!S_img->get_value(std::string("value"), value_img)) {
+    std::cout << "in bprb_batch_process_manager::set_input_from_db(.) -"
              << " didn't get value\n";
   }
   bool non_null = (value_img != 0);

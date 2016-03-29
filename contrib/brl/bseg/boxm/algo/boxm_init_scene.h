@@ -2,11 +2,12 @@
 #define boxm_init_scene_h_
 //:
 // \file
+#include <iostream>
 #include <boct/boct_tree.h>
 #include <boct/boct_tree_cell.h>
 #include <boxm/sample/boxm_sample.h>
 #include <boxm/boxm_scene.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
 
 
 //: This method inits the blocks (octrees) of the scene of type boxm_sample
@@ -19,7 +20,7 @@ void boxm_init_scene(boxm_scene<boct_tree<short, boxm_sample<APM_TYPE> > > &scen
   float dimx=(float)scene.block_dim().x();
   float numbercells=(float)(1<<(scene.init_level()-1));
 
-  float alpha_init=-vcl_log(1-pinit)*numbercells/dimx;
+  float alpha_init=-std::log(1-pinit)*numbercells/dimx;
   for (; !iter.end(); iter++) {
        vgl_point_3d<int> index=iter.index();
     if (!scene.discover_block(index.x(),index.y(),index.z()))

@@ -5,12 +5,14 @@
 // \brief Base for classes which build mfpf_vec_cost objects.
 // \author Tim Cootes
 
+#include <string>
+#include <memory>
+#include <iostream>
+#include <iosfwd>
 #include <mfpf/mfpf_vec_cost.h>
 
 #include <vsl/vsl_binary_io.h>
-#include <vcl_string.h>
-#include <vcl_memory.h>
-#include <vcl_iosfwd.h>
+#include <vcl_compiler.h>
 
 //: Base for classes which build mfpf_vec_cost objects.
 class mfpf_vec_cost_builder
@@ -39,19 +41,19 @@ class mfpf_vec_cost_builder
   virtual void build(mfpf_vec_cost&)=0;
 
   //: Initialise from a string stream
-  virtual bool set_from_stream(vcl_istream &is);
+  virtual bool set_from_stream(std::istream &is);
 
   //: Version number for I/O
   short version_no() const;
 
   //: Name of the class
-  virtual vcl_string is_a() const;
+  virtual std::string is_a() const;
 
   //: Create a copy on the heap and return base class pointer
   virtual mfpf_vec_cost_builder* clone() const = 0;
 
   //: Print class to os
-  virtual void print_summary(vcl_ostream& os) const =0;
+  virtual void print_summary(std::ostream& os) const =0;
 
   //: Save class to binary file stream
   virtual void b_write(vsl_b_ostream& bfs) const=0;
@@ -60,7 +62,7 @@ class mfpf_vec_cost_builder
   virtual void b_read(vsl_b_istream& bfs)=0;
 
   //: Create a concrete object, from a text specification.
-  static vcl_auto_ptr<mfpf_vec_cost_builder> create_from_stream(vcl_istream &is);
+  static std::auto_ptr<mfpf_vec_cost_builder> create_from_stream(std::istream &is);
 };
 
 //: Allows derived class to be loaded by base-class pointer
@@ -73,9 +75,9 @@ void vsl_b_write(vsl_b_ostream& bfs, const mfpf_vec_cost_builder& b);
 void vsl_b_read(vsl_b_istream& bfs, mfpf_vec_cost_builder& b);
 
 //: Stream output operator for class reference
-vcl_ostream& operator<<(vcl_ostream& os,const mfpf_vec_cost_builder& b);
+std::ostream& operator<<(std::ostream& os,const mfpf_vec_cost_builder& b);
 
 //: Stream output operator for class pointer
-vcl_ostream& operator<<(vcl_ostream& os,const mfpf_vec_cost_builder* b);
+std::ostream& operator<<(std::ostream& os,const mfpf_vec_cost_builder* b);
 
 #endif // mfpf_vec_cost_builder_h_

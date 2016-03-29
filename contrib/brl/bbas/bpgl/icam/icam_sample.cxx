@@ -82,7 +82,7 @@ void icam_sample::resample(unsigned int ni_dest,  unsigned int nj_dest,
       //assume grey scale, plane = 0
       double v = vil_bilin_interp_safe(source, to_u, to_v);
 #if 0
-      int iu = vcl_floor(to_u), iv = vcl_floor(to_v);
+      int iu = std::floor(to_u), iv = std::floor(to_v);
       double v = source(iu, iv);
 #endif
       dest(i,j) = static_cast<float>(v);

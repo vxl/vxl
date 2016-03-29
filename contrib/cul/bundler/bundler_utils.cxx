@@ -1,12 +1,14 @@
+#include <iostream>
+#include <cmath>
+#include <cstdlib>
+#include <vector>
 #include "bundler_utils.h"
 //
 #include <vpgl/algo/vpgl_triangulate_points.h>
 #include <vpgl/algo/vpgl_camera_compute.h>
 
-#include <vcl_cmath.h>
-#include <vcl_cstdlib.h>
+#include <vcl_compiler.h>
 #include <vcl_cassert.h>
-#include <vcl_vector.h>
 
 #include <vgl/vgl_point_2d.h>
 #include <vgl/vgl_homg_point_2d.h>
@@ -23,7 +25,7 @@ void bundler_utils_get_distinct_indices(
 
         do {
             found = true;
-            idx = vcl_rand() % number_entries;
+            idx = std::rand() % number_entries;
 
             for (int j = 0; j < i; ++j) {
                 if (idxs[j] == idx) {
@@ -43,8 +45,8 @@ void bundler_utils_get_distinct_indices(
 double bundler_utils_triangulate_points(
     const bundler_inters_track_sptr &track)
 {
-    vcl_vector<vpgl_perspective_camera<double> > persp_cameras;
-    vcl_vector<vgl_point_2d<double> > vgl_points;
+    std::vector<vpgl_perspective_camera<double> > persp_cameras;
+    std::vector<vgl_point_2d<double> > vgl_points;
 
     for (unsigned int i = 0; i < track->points.size(); ++i) {
         if (track->contributing_points[i]){
@@ -78,8 +80,8 @@ double bundler_utils_get_homography_inlier_percentage(
             4, match_idxs, match.num_features());
 
         // Fill these vectors with the points stored at the indices
-        vcl_vector<vgl_homg_point_2d<double> > rhs;
-        vcl_vector<vgl_homg_point_2d<double> > lhs;
+        std::vector<vgl_homg_point_2d<double> > rhs;
+        std::vector<vgl_homg_point_2d<double> > lhs;
 
         for (int i = 0; i < 4; ++i) {
             lhs.push_back(
@@ -99,7 +101,7 @@ double bundler_utils_get_homography_inlier_percentage(
 
         int current_num_inliers = 0;
 
-        vcl_vector<bundler_inters_feature_pair>::const_iterator m;
+        std::vector<bundler_inters_feature_pair>::const_iterator m;
         for (m = match.matches.begin(); m != match.matches.end(); ++m)
         {
             lhs_pt.set(m->first->point.x(), m->first->point.y());
@@ -132,11 +134,11 @@ void bundler_utils_fill_persp_camera_ransac(
     const double thresh_sq = inlier_threshold * inlier_threshold;
 
     // Get a list of all corresponding 3d points
-    vcl_vector< vgl_point_2d<double> > image_pts;
-    vcl_vector< vgl_point_3d<double> > world_pts;
+    std::vector< vgl_point_2d<double> > image_pts;
+    std::vector< vgl_point_3d<double> > world_pts;
 
     // Look at every feature in the set
-    vcl_vector<bundler_inters_feature_sptr>::const_iterator f;
+    std::vector<bundler_inters_feature_sptr>::const_iterator f;
     for (f = image->features.begin(); f != image->features.end(); ++f) {
         if ((*f)->track && (*f)->track->observed){
             //This is the image point.
@@ -154,8 +156,8 @@ void bundler_utils_fill_persp_camera_ransac(
     vpgl_perspective_camera<double> camera_estimate;
 
     for (int rnd = 0; rnd < ransac_rounds; ++rnd) {
-        vcl_vector< vgl_point_2d<double> > curr_image_pts(6);
-        vcl_vector< vgl_point_3d<double> > curr_world_pts(6);
+        std::vector< vgl_point_2d<double> > curr_image_pts(6);
+        std::vector< vgl_point_3d<double> > curr_world_pts(6);
 
         // Get the points to use in this RANSAC round
         int match_idxs[6] = {0};
@@ -206,7 +208,7 @@ void bundler_utils_fill_persp_camera_ransac(
         }
     }
 
-    vcl_cout << "add_image: best_inliers: " << best_inliers << " / " << image_pts.size() << '\n';
+    std::cout << "add_image: best_inliers: " << best_inliers << " / " << image_pts.size() << '\n';
 
     //------------------------------------------------------------------
     // Now that we have an estimate for the camera, re-do it into a more

@@ -8,19 +8,20 @@
 //
 //-----------------------------------------------------------------------------
 
+#include <cstdarg>
+#include <iostream>
+#include <cstdio>
 #include "vul_printf.h"
 
-#include <vcl_cstdarg.h>
-#include <vcl_iostream.h>
-#include <vcl_cstdio.h> // for vsprintf()
+#include <vcl_compiler.h>
 
-vcl_ostream& vul_printf(vcl_ostream& s, char const * fmt, ...)
+std::ostream& vul_printf(std::ostream& s, char const * fmt, ...)
 {
   char buf[65536];
 
-  vcl_va_list ap;
+  std::va_list ap;
   va_start(ap, fmt);
-  vcl_vsprintf(buf, fmt, ap);
+  std::vsprintf(buf, fmt, ap);
   va_end(ap);
 
   return s << buf;

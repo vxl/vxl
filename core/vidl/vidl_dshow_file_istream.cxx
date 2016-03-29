@@ -17,7 +17,7 @@
 //-------------------------------------------------------------------------
 //: Constructor - from a string containing a device name.
 vidl_dshow_file_istream
-::vidl_dshow_file_istream(const vcl_string& filename)
+::vidl_dshow_file_istream(const std::string& filename)
   : frame_index_(-1)
   , end_position_(0)
   , is_time_format_frame_(false)
@@ -38,7 +38,7 @@ vidl_dshow_file_istream::~vidl_dshow_file_istream(void)
 }
 
 //: Open the file specified in params object.
-void vidl_dshow_file_istream::open(const vcl_string& filename)
+void vidl_dshow_file_istream::open(const std::string& filename)
 {
   // ***** start: build the filter graph here *****
   DSHOW_ERROR_IF_FAILED(filter_graph_.CoCreateInstance(CLSID_FilterGraph));
@@ -298,7 +298,7 @@ inline bool vidl_dshow_file_istream::seek_frame(unsigned int frame_number)
   if (next >= end_position_)
   {
     // *****
-    vcl_cout << "Failed: " << frame_number << vcl_endl;
+    std::cout << "Failed: " << frame_number << std::endl;
     return false;
   }
 
@@ -306,7 +306,7 @@ inline bool vidl_dshow_file_istream::seek_frame(unsigned int frame_number)
   if (frame_number < frame_index_ && frame_index_ != -1)
   {
     // *****
-    vcl_cout << "Rewinding: " << frame_number << vcl_endl;
+    std::cout << "Rewinding: " << frame_number << std::endl;
     // rewind to 0;
     //next = 0;
     //DSHOW_ERROR_IF_FAILED(media_seeking_->SetPositions(
@@ -334,7 +334,7 @@ inline bool vidl_dshow_file_istream::seek_frame(unsigned int frame_number)
   {
     if (!advance_wait())
     {
-      vcl_cout << "Failed Loop: " << frame_number << vcl_endl;
+      std::cout << "Failed Loop: " << frame_number << std::endl;
       is_valid_ = false;
       return false;
     }
@@ -349,12 +349,12 @@ inline bool vidl_dshow_file_istream::seek_frame(unsigned int frame_number)
   // seeking backwards
   if (frame_number < frame_index_ && frame_index_ != -1)
   {
-    vcl_cout << "Failed: " << frame_number << vcl_endl;
+    std::cout << "Failed: " << frame_number << std::endl;
 #if 0
     DWORD caps = AM_SEEKING_CanSeekBackwards;
     if (media_seeking_->CheckCapabilities(&caps) != S_OK)
     {
-      vcl_cout << "Failed: " << frame_number << vcl_endl;
+      std::cout << "Failed: " << frame_number << std::endl;
       return false;
     }
 #endif // 0
@@ -371,7 +371,7 @@ inline bool vidl_dshow_file_istream::seek_frame(unsigned int frame_number)
 
   frame_index_ = frame_number;
 
-  vcl_cout << "Succeeded: " << frame_number << vcl_endl;
+  std::cout << "Succeeded: " << frame_number << std::endl;
   return true;
 #endif // 0
 }

@@ -1,5 +1,7 @@
-#include <vcl_vector.h>
-#include <vcl_cmath.h>
+#include <vector>
+#include <iostream>
+#include <cmath>
+#include <vcl_compiler.h>
 #include <testlib/testlib_test.h>
 #include <vpgl/vpgl_perspective_camera.h>
 #include <bpgl/algo/bpgl_interpolate.h>
@@ -119,7 +121,7 @@ static void test_video_corr_processor()
   };
 
   //make set of correspondences
-  vcl_vector<bwm_video_corr_sptr> corrs(32, new bwm_video_corr());
+  std::vector<bwm_video_corr_sptr> corrs(32, new bwm_video_corr());
   for (unsigned i = 0; i<32; ++i)
   {
     corrs[i]->add(0, p0[i]);
@@ -139,14 +141,14 @@ static void test_video_corr_processor()
   vpgl_calibration_matrix<double> K(M);
   // estimated distance is 330 meters
   /*bool good=*/ cp.initialize_world_pts_and_cameras(K, 330);
-  vcl_vector<vpgl_perspective_camera<double> > cameras = cp.cameras();
-  vcl_vector<bwm_video_corr_sptr> mcorrs = cp.correspondences();
+  std::vector<vpgl_perspective_camera<double> > cameras = cp.cameras();
+  std::vector<bwm_video_corr_sptr> mcorrs = cp.correspondences();
   /* bool valid = mcorrs[0]->world_pt_valid(); */
   vgl_point_3d<double> p3d = mcorrs[0]->world_pt();
   vgl_point_2d<double> p2d = cameras[2].project(p3d);
   double x2 = 0.6*p0[0].x()+0.4*p5[0].x();
   double y2 = 0.6*p0[0].y()+0.4*p5[0].y();
-  double d = vcl_fabs(p2d.x()-x2)+vcl_fabs(p2d.y()-y2);
+  double d = std::fabs(p2d.x()-x2)+std::fabs(p2d.y()-y2);
   TEST_NEAR("test initialize cameras and world points", d, 0, 0.1);
 }
 

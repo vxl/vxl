@@ -2,13 +2,14 @@
 #define boxm_seg_length_functor_h
 //:
 // \file
+#include <iostream>
 #include <boxm/boxm_apm_traits.h>
 #include "boxm_raytrace_function.h"
 #include <boxm/sample/boxm_rt_sample.h>
 #include <boxm/sample/algo/boxm_mog_grey_processor.h>
 #include <boxm/sample/algo/boxm_simple_grey_processor.h>
 #include <vil/vil_image_view.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
 
 template <boxm_apm_type APM, class T_aux>
 class boxm_seg_length_functor

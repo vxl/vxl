@@ -1,13 +1,15 @@
 // This is mul/clsfy/clsfy_rbf_parzen.cxx
+#include <string>
+#include <iostream>
+#include <algorithm>
+#include <cmath>
 #include "clsfy_rbf_parzen.h"
 //:
 // \file
 // \author
 //   Copyright: (C) 2000 British Telecommunications plc
 
-#include <vcl_string.h>
-#include <vcl_algorithm.h>
-#include <vcl_cmath.h>
+#include <vcl_compiler.h>
 #include <vcl_cassert.h>
 #include <vsl/vsl_binary_io.h>
 #include <vsl/vsl_vector_io.h>
@@ -23,18 +25,18 @@ unsigned clsfy_rbf_parzen::classify(const vnl_vector<double> &input) const
   if (power_ == 2) // optimise common case
     for (unsigned i = 0; i < nTrainingVecs; i++)
     {
-      weight = vcl_exp(gamma_ * vnl_vector_ssd(input, trainInputs_[i]));
+      weight = std::exp(gamma_ * vnl_vector_ssd(input, trainInputs_[i]));
 
       sumWeightings += weight;
       sumPredictions += weight * trainOutputs_[i];
     }
   else
   {
-    double gamma = - 0.5 * vcl_pow(-2*gamma_, 0.5*power_);
+    double gamma = - 0.5 * std::pow(-2*gamma_, 0.5*power_);
     double p = power_ / 2.0;
     for (unsigned i = 0; i < nTrainingVecs; i++)
     {
-      weight = vcl_exp(gamma * vcl_pow(vnl_vector_ssd(input, trainInputs_[i]), p) );
+      weight = std::exp(gamma * std::pow(vnl_vector_ssd(input, trainInputs_[i]), p) );
 
       sumWeightings += weight;
       sumPredictions += weight * trainOutputs_[i];
@@ -45,10 +47,10 @@ unsigned clsfy_rbf_parzen::classify(const vnl_vector<double> &input) const
 
 //=======================================================================
 //: Set the training data.
-void clsfy_rbf_parzen::set(const vcl_vector<vnl_vector<double> > &inputs,
-                           const vcl_vector<unsigned> &outputs)
+void clsfy_rbf_parzen::set(const std::vector<vnl_vector<double> > &inputs,
+                           const std::vector<unsigned> &outputs)
 {
-  assert(*vcl_max_element(outputs.begin(), outputs.end()) <= 1); // The class labels must be 0 or 1.
+  assert(*std::max_element(outputs.begin(), outputs.end()) <= 1); // The class labels must be 0 or 1.
   assert(inputs.size() == outputs.size());
   trainInputs_ = inputs;
   trainOutputs_ = outputs;
@@ -57,7 +59,7 @@ void clsfy_rbf_parzen::set(const vcl_vector<vnl_vector<double> > &inputs,
 //=======================================================================
 //: Return a probability like value that the input being in each class.
 // output(i) i<<nClasses, contains the probability that the input is in class i
-void clsfy_rbf_parzen::class_probabilities(vcl_vector<double>& outputs,
+void clsfy_rbf_parzen::class_probabilities(std::vector<double>& outputs,
                                            vnl_vector<double>const& input) const
 {
   const unsigned nTrainingVecs = trainInputs_.size();
@@ -66,18 +68,18 @@ void clsfy_rbf_parzen::class_probabilities(vcl_vector<double>& outputs,
   if (power_ == 2) // optimise common case
     for (unsigned i = 0; i < nTrainingVecs; i++)
     {
-      weight = vcl_exp(gamma_ * vnl_vector_ssd(input, trainInputs_[i]));
+      weight = std::exp(gamma_ * vnl_vector_ssd(input, trainInputs_[i]));
 
       sumWeightings += weight;
       sumPredictions += weight * trainOutputs_[i];
     }
   else
   {
-    double gamma = - 0.5 * vcl_pow(-2*gamma_, 0.5*power_);
+    double gamma = - 0.5 * std::pow(-2*gamma_, 0.5*power_);
     double p = power_ / 2.0;
     for (unsigned i = 0; i < nTrainingVecs; i++)
     {
-      weight = vcl_exp(gamma * vcl_pow(vnl_vector_ssd(input, trainInputs_[i]), p) );
+      weight = std::exp(gamma * std::pow(vnl_vector_ssd(input, trainInputs_[i]), p) );
 
       sumWeightings += weight;
       sumPredictions += weight * trainOutputs_[i];
@@ -96,13 +98,13 @@ double clsfy_rbf_parzen::weightings(const vnl_vector<double> &input) const
 
   if (power_ == 2) // optimise common case
     for (unsigned i = 0; i < nTrainingVecs; i++)
-      sumWeightings += vcl_exp(gamma_ * vnl_vector_ssd(input, trainInputs_[i]));
+      sumWeightings += std::exp(gamma_ * vnl_vector_ssd(input, trainInputs_[i]));
   else
   {
-    double gamma = - 0.5 * vcl_pow(-2*gamma_, 0.5*power_);
+    double gamma = - 0.5 * std::pow(-2*gamma_, 0.5*power_);
     double p = power_ / 2.0;
     for (unsigned i = 0; i < nTrainingVecs; i++)
-      sumWeightings += vcl_exp(gamma * vcl_pow(vnl_vector_ssd(input, trainInputs_[i]), p) );
+      sumWeightings += std::exp(gamma * std::pow(vnl_vector_ssd(input, trainInputs_[i]), p) );
   }
 
   return sumWeightings;
@@ -123,10 +125,10 @@ unsigned clsfy_rbf_parzen::n_dims() const
 // class probability = exp(logL) / (1+exp(logL))
 double clsfy_rbf_parzen::log_l(const vnl_vector<double> &input) const
 {
-  vcl_vector<double> outputs(1);
+  std::vector<double> outputs(1);
   class_probabilities(outputs, input);
   double prob = outputs[0];
-  return vcl_log(prob/(1.0-prob));
+  return std::log(prob/(1.0-prob));
 }
 
 //=======================================================================
@@ -155,14 +157,14 @@ void clsfy_rbf_parzen::set_power(double p)
 
 //=======================================================================
 
-vcl_string clsfy_rbf_parzen::is_a() const
+std::string clsfy_rbf_parzen::is_a() const
 {
-  return vcl_string("clsfy_rbf_parzen");
+  return std::string("clsfy_rbf_parzen");
 }
 
 //=======================================================================
 
-bool clsfy_rbf_parzen::is_class(vcl_string const& s) const
+bool clsfy_rbf_parzen::is_class(std::string const& s) const
 {
   return s == clsfy_rbf_parzen::is_a() || clsfy_classifier_base::is_class(s);
 }
@@ -183,7 +185,7 @@ clsfy_classifier_base* clsfy_rbf_parzen::clone() const
 
 //=======================================================================
 
-void clsfy_rbf_parzen::print_summary(vcl_ostream& os) const
+void clsfy_rbf_parzen::print_summary(std::ostream& os) const
 {
   os << trainInputs_.size() << " training samples, "
      << "Gaussian Width=" << rbf_width() << ", power=" << power_ << '\n';
@@ -212,7 +214,7 @@ void clsfy_rbf_parzen::b_read(vsl_b_istream& bfs)
   {
   case (1):
     vsl_b_read(bfs,gamma_);
-    width_ = vcl_sqrt(-0.5/gamma_);
+    width_ = std::sqrt(-0.5/gamma_);
     vsl_b_read(bfs,power_);
     vsl_b_read(bfs,trainOutputs_);
     vsl_b_read(bfs,trainInputs_);
@@ -225,8 +227,8 @@ void clsfy_rbf_parzen::b_read(vsl_b_istream& bfs)
     vsl_b_read(bfs,trainInputs_);
     break;
   default:
-    vcl_cerr << "I/O ERROR: clsfy_rbf_parzen::b_read(vsl_b_istream&)\n"
+    std::cerr << "I/O ERROR: clsfy_rbf_parzen::b_read(vsl_b_istream&)\n"
              << "           Unknown version number "<< version << "\n";
-    bfs.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
+    bfs.is().clear(std::ios::badbit); // Set an unrecoverable IO error on stream
   }
 }

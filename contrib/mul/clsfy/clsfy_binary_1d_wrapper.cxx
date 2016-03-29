@@ -1,4 +1,8 @@
 // Copyright: (C) 2009 Imorphics PLC
+#include <string>
+#include <iostream>
+#include <vector>
+#include <cmath>
 #include "clsfy_binary_1d_wrapper.h"
 //:
 // \file
@@ -8,10 +12,7 @@
 
 //=======================================================================
 
-#include <vcl_string.h>
-#include <vcl_iostream.h>
-#include <vcl_vector.h>
-#include <vcl_cmath.h>
+#include <vcl_compiler.h>
 #include <vsl/vsl_binary_io.h>
 #include <clsfy/clsfy_binary_threshold_1d.h>
 
@@ -23,14 +24,14 @@ clsfy_binary_1d_wrapper::clsfy_binary_1d_wrapper():
   classifier_1d_(new clsfy_binary_threshold_1d())
 {}
 
-vcl_string clsfy_binary_1d_wrapper::is_a() const
+std::string clsfy_binary_1d_wrapper::is_a() const
 {
-  return vcl_string("clsfy_binary_1d_wrapper");
+  return std::string("clsfy_binary_1d_wrapper");
 }
 
 //=======================================================================
 
-bool clsfy_binary_1d_wrapper::is_class(vcl_string const& s) const
+bool clsfy_binary_1d_wrapper::is_class(std::string const& s) const
 {
   return s == clsfy_binary_1d_wrapper::is_a() || clsfy_classifier_base::is_class(s);
 }
@@ -39,7 +40,7 @@ bool clsfy_binary_1d_wrapper::is_class(vcl_string const& s) const
 
 //:
 // required if data is present in this class
-void clsfy_binary_1d_wrapper::print_summary(vcl_ostream& os) const
+void clsfy_binary_1d_wrapper::print_summary(std::ostream& os) const
 {
   os << "underlying classifier: ";
   vsl_print_summary(os, classifier_1d_);
@@ -68,9 +69,9 @@ void clsfy_binary_1d_wrapper::b_read(vsl_b_istream& bfs)
       vsl_b_read(bfs,classifier_1d_);
       break;
     default:
-      vcl_cerr << "I/O ERROR: clsfy_binary_1d_wrapper::b_read(vsl_b_istream&)\n"
+      std::cerr << "I/O ERROR: clsfy_binary_1d_wrapper::b_read(vsl_b_istream&)\n"
                << "           Unknown version number "<< version << '\n';
-      bfs.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
+      bfs.is().clear(std::ios::badbit); // Set an unrecoverable IO error on stream
   }
 }
 

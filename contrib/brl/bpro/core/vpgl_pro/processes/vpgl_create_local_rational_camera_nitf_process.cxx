@@ -1,9 +1,10 @@
 // This is brl/bpro/core/vpgl_pro/processes/vpgl_create_local_rational_camera_nitf_process.cxx
+#include <iostream>
 #include <bprb/bprb_func_process.h>
 //:
 // \file
 
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
 #include <vpgl/vpgl_camera.h>
 #include <vpgl/vpgl_rational_camera.h>
 #include <vil/vil_image_resource.h>
@@ -18,10 +19,10 @@
 bool vpgl_create_local_rational_camera_nitf_process_cons(bprb_func_process& pro)
 {
   //this process takes 2 inputs and has 1 output
-  vcl_vector<vcl_string> input_types;
+  std::vector<std::string> input_types;
   input_types.push_back("vcl_string");
   input_types.push_back("vcl_string");
-  vcl_vector<vcl_string> output_types;
+  std::vector<std::string> output_types;
   output_types.push_back("vpgl_camera_double_sptr");  // label image
   return pro.set_input_types(input_types)
       && pro.set_output_types(output_types);
@@ -32,28 +33,28 @@ bool vpgl_create_local_rational_camera_nitf_process_cons(bprb_func_process& pro)
 bool vpgl_create_local_rational_camera_nitf_process(bprb_func_process& pro)
 {
   if (pro.n_inputs() != 2) {
-    vcl_cout << "vpgl_create_rational_camera_nitf_process: The number of inputs should be 2" << vcl_endl;
+    std::cout << "vpgl_create_rational_camera_nitf_process: The number of inputs should be 2" << std::endl;
     return false;
   }
 
   // get the inputs
-  vcl_string nitf_image_path = pro.get_input<vcl_string>(0);
-  vcl_string lvcs_filename = pro.get_input<vcl_string>(1);
+  std::string nitf_image_path = pro.get_input<std::string>(0);
+  std::string lvcs_filename = pro.get_input<std::string>(1);
 
   vil_image_resource_sptr image =
         vil_load_image_resource(nitf_image_path.c_str());
   if (!image)
   {
-    vcl_cout << "NITF image load failed in vpgl_create_local_rational_camera_nitf_process\n";
+    std::cout << "NITF image load failed in vpgl_create_local_rational_camera_nitf_process\n";
     return 0;
   }
 
-  vcl_string format = image->file_format();
-  vcl_string prefix = format.substr(0,4);
+  std::string format = image->file_format();
+  std::string prefix = format.substr(0,4);
 
   if (prefix != "nitf")
   {
-    vcl_cout << "source image is not NITF in vpgl_create_local_rational_camera_nitf_process\n";
+    std::cout << "source image is not NITF in vpgl_create_local_rational_camera_nitf_process\n";
     return 0;
   }
 
@@ -64,14 +65,14 @@ bool vpgl_create_local_rational_camera_nitf_process(bprb_func_process& pro)
   //vpgl_camera_double_sptr ratcam ( dynamic_cast<vpgl_rational_camera<double>* >(nitf_cam));
 
   //if ( !ratcam.as_pointer() ) {
-  //  vcl_cerr << "Failed to load rational camera from file" << nitf_image_path << '\n';
+  //  std::cerr << "Failed to load rational camera from file" << nitf_image_path << '\n';
    // return false;
   //}
 
   vpgl_lvcs lvcs;
-  vcl_ifstream ifs(lvcs_filename.c_str());
+  std::ifstream ifs(lvcs_filename.c_str());
   if (!ifs.good()) {
-    vcl_cerr << "Error opening lvcs filename " << lvcs_filename << '\n';
+    std::cerr << "Error opening lvcs filename " << lvcs_filename << '\n';
     return false;
   }
 

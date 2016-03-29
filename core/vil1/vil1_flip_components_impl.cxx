@@ -5,8 +5,9 @@
 //:
 // \file
 
+#include <cstring>
 #include "vil1_flip_components_impl.h"
-#include <vcl_cstring.h> // for memcpy
+#include <vcl_compiler.h>
 
 vil1_image vil1_flip_components_impl::get_plane(unsigned int p) const
 {
@@ -42,7 +43,7 @@ bool vil1_flip_components_impl::put_section(void const *buf, int x0, int y0, int
   int bpc = base.bits_per_component();
   if (bpc&7) return false; // TODO: currently this flipping only works when bpc is a multiple of 8
   char* b = new char[bpc/8 * w*h * 3];
-  vcl_memcpy(b, buf, bpc/8 * w*h * 3);
+  std::memcpy(b, buf, bpc/8 * w*h * 3);
   do_swap(b, bpc/8, w*h);
   bool r = base.put_section(b, x0, y0, w, h);
   delete[] b;
@@ -50,14 +51,14 @@ bool vil1_flip_components_impl::put_section(void const *buf, int x0, int y0, int
 }
 
 //: Return the name of the class
-vcl_string vil1_flip_components_impl::is_a() const
+std::string vil1_flip_components_impl::is_a() const
 {
-  static const vcl_string class_name_="vil1_flip_components_impl";
+  static const std::string class_name_="vil1_flip_components_impl";
   return class_name_;
 }
 
 //: Return true if the name of the class matches the argument
-bool vil1_flip_components_impl::is_class(vcl_string const& s) const
+bool vil1_flip_components_impl::is_class(std::string const& s) const
 {
   return s==vil1_flip_components_impl::is_a() || vil1_image_impl::is_class(s);
 }

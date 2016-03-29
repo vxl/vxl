@@ -1,12 +1,13 @@
 // This is mul/vil3d/tests/test_algo_exp_filter.cxx
+#include <iostream>
 #include <testlib/testlib_test.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
 #include <vil3d/algo/vil3d_exp_filter.h>
 #include <vil3d/vil3d_crop.h>
 
 static void test_exp_filter_float(vil3d_image_view<float>& image)
 {
-  vcl_cout << "**************************\n"
+  std::cout << "**************************\n"
            << " Testing vil3d_exp_filter\n"
            << "**************************\n";
 
@@ -37,7 +38,7 @@ static void test_exp_filter_float()
   vil3d_image_view<float> image(15,16,17);
   test_exp_filter_float(image);
 
-  vcl_cout<<"Test non-contiguous image\n";
+  std::cout<<"Test non-contiguous image\n";
   vil3d_image_view<float> crop_image = vil3d_crop(image,2,10,3,11,4,12);
   test_exp_filter_float(crop_image);
 }

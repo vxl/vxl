@@ -1,11 +1,12 @@
+#include <iostream>
+#include <fstream>
+#include <deque>
+#include <algorithm>
 #include "sdet_edgel.h"
 #include "sdet_sel_utils.h"
 
-#include <vcl_iostream.h>
-#include <vcl_fstream.h>
 #include <vcl_cassert.h>
-#include <vcl_deque.h>
-#include <vcl_algorithm.h>
+#include <vcl_compiler.h>
 
 //------------------------------------------------------------------------------
 // sdet_edgel methods

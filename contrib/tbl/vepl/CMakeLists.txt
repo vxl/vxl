@@ -25,11 +25,11 @@ set(vepl_sources
  vepl_moment.cxx               vepl_moment.h
  vepl_histogram.cxx            vepl_histogram.h
 
- vepl_convert.txx              vepl_convert.h
+ vepl_convert.hxx              vepl_convert.h
 
  accessors/vipl_accessors_vil_image_view_base.h
- accessors/vipl_accessors_vil_image_view_base.txx
- section/vipl_filterable_section_container_generator_vil_image_view_base.txx
+ accessors/vipl_accessors_vil_image_view_base.hxx
+ section/vipl_filterable_section_container_generator_vil_image_view_base.hxx
 )
 
 add_definitions(-DINSTANTIATE_TEMPLATES)
@@ -51,9 +51,7 @@ if(CMAKE_COMPILER_IS_GNUCXX)
   set_source_files_properties(Templates/vepl_convert+float-.cxx PROPERTIES COMPILE_FLAGS -O1)
 endif()
 
-add_library(vepl ${vepl_sources})
-install_targets(/lib vepl)
-INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/tbl/vepl ${vepl_sources})
+vxl_add_library(LIBRARY_NAME vepl LIBRARY_SOURCES ${vepl_sources})
 target_link_libraries(vepl vipl ${VXL_LIB_PREFIX}vil ${CMAKE_THREAD_LIBS})
 
 if(BUILD_EXAMPLES)

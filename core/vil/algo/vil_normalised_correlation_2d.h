@@ -6,19 +6,20 @@
 // \brief 2D normalised correlation
 // \author Tim Cootes
 
+#include <cmath>
+#include <cstddef>
 #include <vil/vil_image_view.h>
 #include <vcl_compiler.h>
 #include <vcl_cassert.h>
-#include <vcl_cmath.h>    // for std::sqrt()
-#include <vcl_cstddef.h>  // for std::ptrdiff_t
+#include <vcl_compiler.h>
 
 //: Evaluate dot product between kernel and src_im
 // Assumes that the kernel has been normalised to have zero mean
 // and unit variance
 // \relatesalso vil_image_view
 template <class srcT, class kernelT, class accumT>
-inline accumT vil_norm_corr_2d_at_pt(const srcT *src_im, vcl_ptrdiff_t s_istep,
-                                     vcl_ptrdiff_t s_jstep, vcl_ptrdiff_t s_pstep,
+inline accumT vil_norm_corr_2d_at_pt(const srcT *src_im, std::ptrdiff_t s_istep,
+                                     std::ptrdiff_t s_jstep, std::ptrdiff_t s_pstep,
                                      const vil_image_view<kernelT>& kernel,
                                      accumT)
 {
@@ -26,7 +27,7 @@ inline accumT vil_norm_corr_2d_at_pt(const srcT *src_im, vcl_ptrdiff_t s_istep,
   unsigned nj = kernel.nj();
   unsigned np = kernel.nplanes();
 
-  vcl_ptrdiff_t k_istep = kernel.istep(), k_jstep = kernel.jstep();
+  std::ptrdiff_t k_istep = kernel.istep(), k_jstep = kernel.jstep();
 
   accumT sum=0;
   accumT mean=0;
@@ -54,7 +55,7 @@ inline accumT vil_norm_corr_2d_at_pt(const srcT *src_im, vcl_ptrdiff_t s_istep,
   long n=ni*nj*np;
   mean/=(accumT)n;
   accumT var = sum_sq/(accumT)n - mean*mean;
-  return var<=0 ? 0 : sum/vcl_sqrt(var);
+  return var<=0 ? 0 : sum/std::sqrt(var);
 }
 
 //: Normalised cross-correlation of (pre-normalised) kernel with srcT.
@@ -73,11 +74,11 @@ inline void vil_normalised_correlation_2d(const vil_image_view<srcT>& src_im,
 {
   unsigned ni = 1+src_im.ni()-kernel.ni(); assert(1+src_im.ni() >= kernel.ni());
   unsigned nj = 1+src_im.nj()-kernel.nj(); assert(1+src_im.nj() >= kernel.nj());
-  vcl_ptrdiff_t s_istep = src_im.istep(), s_jstep = src_im.jstep();
-  vcl_ptrdiff_t s_pstep = src_im.planestep();
+  std::ptrdiff_t s_istep = src_im.istep(), s_jstep = src_im.jstep();
+  std::ptrdiff_t s_pstep = src_im.planestep();
 
   dest_im.set_size(ni,nj,1);
-  vcl_ptrdiff_t d_istep = dest_im.istep(),d_jstep = dest_im.jstep();
+  std::ptrdiff_t d_istep = dest_im.istep(),d_jstep = dest_im.jstep();
 
   // Select first row of p-th plane
   const srcT*  src_row  = src_im.top_left_ptr();

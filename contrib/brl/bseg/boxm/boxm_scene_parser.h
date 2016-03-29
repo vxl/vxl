@@ -1,13 +1,15 @@
 #ifndef boxm_scene_parser_h_
 #define boxm_scene_parser_h_
 
+#include <iostream>
+#include <string>
 #include <boxm/boxm_scene.h>
 
 #ifdef WIN32
  #define _LIB
 #endif
 #include <expatpp.h>
-#include <vcl_string.h>
+#include <vcl_compiler.h>
 
 #include <vpgl/vpgl_lvcs.h>
 #include <vgl/vgl_point_3d.h>
@@ -39,8 +41,8 @@ class boxm_scene_parser : public expatpp
    vgl_point_3d<double> origin() const { return vgl_point_3d<double>(local_orig_x_,local_orig_y_,local_orig_z_); }
    vgl_vector_3d<double> block_dim() const { return vgl_vector_3d<double>(block_dim_x_,block_dim_y_,block_dim_z_); }
    vgl_vector_3d<unsigned> block_nums() const { return vgl_vector_3d<unsigned>(block_num_x_,block_num_y_,block_num_z_); }
-   void paths(vcl_string& scene_path, vcl_string& block_pref) { scene_path=path_; block_pref=block_pref_; }
-   vcl_string app_model() const { return app_model_; }
+   void paths(std::string& scene_path, std::string& block_pref) { scene_path=path_; block_pref=block_pref_; }
+   std::string app_model() const { return app_model_; }
    bool multi_bin() const { return multi_bin_; }
    void levels(unsigned& max, unsigned& init) { max = max_tree_level_; init=init_tree_level_; }
    bool save_internal_nodes() const { return save_internal_nodes_; }
@@ -60,14 +62,14 @@ class boxm_scene_parser : public expatpp
 
   // temporary values
   //lvcs
-  vcl_string lvcs_cs_name_;
+  std::string lvcs_cs_name_;
   double lvcs_origin_lon_;
   double lvcs_origin_lat_;
   double lvcs_origin_elev_;
   double lvcs_lon_scale_;
   double lvcs_lat_scale_;
-  vcl_string lvcs_XYZ_unit_;
-  vcl_string lvcs_geo_angle_unit_;
+  std::string lvcs_XYZ_unit_;
+  std::string lvcs_geo_angle_unit_;
   double lvcs_local_origin_x_;
   double lvcs_local_origin_y_;
   double lvcs_theta_;
@@ -87,9 +89,9 @@ class boxm_scene_parser : public expatpp
   unsigned block_num_y_;
   unsigned block_num_z_;
 
-  vcl_string path_;
-  vcl_string block_pref_;
-  vcl_string app_model_;
+  std::string path_;
+  std::string block_pref_;
+  std::string app_model_;
   bool multi_bin_;
   unsigned max_tree_level_;
   unsigned init_tree_level_;

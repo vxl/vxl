@@ -11,8 +11,10 @@
 //   Ported to vxl July 01, 2004
 // \endverbatim
 //-----------------------------------------------------------------------------
+#include <iostream>
+#include <iosfwd>
 #include <gevd/gevd_param_mixin.h>
-#include <vcl_iosfwd.h>
+#include <vcl_compiler.h>
 
 class brip_watershed_params : public gevd_param_mixin
 {
@@ -25,7 +27,7 @@ class brip_watershed_params : public gevd_param_mixin
 
   brip_watershed_params(const brip_watershed_params& old_params);
   bool SanityCheck();
-  friend vcl_ostream& operator<<(vcl_ostream&, const brip_watershed_params& wp);
+  friend std::ostream& operator<<(std::ostream&, const brip_watershed_params& wp);
  protected:
   void InitParams(float sigma, float thresh,
                   bool eight_connected,

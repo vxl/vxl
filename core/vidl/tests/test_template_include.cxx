@@ -1,4 +1,4 @@
-#include <vidl/vidl_pixel_iterator.txx>
+#include <vidl/vidl_pixel_iterator.hxx>
 // Do not include the vidl_ffmpeg*.txx files here.
 // The vidl_ffmpeg txx files are alternate implementations
 // for different versions of ffmpeg.  They do not contain

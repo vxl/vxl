@@ -1,7 +1,8 @@
 // This is bbas/bvgl/algo/tests/test_biarc.cxx
 
-#include <vcl_iostream.h>
-#include <vcl_cmath.h>
+#include <iostream>
+#include <cmath>
+#include <vcl_compiler.h>
 #include <testlib/testlib_test.h>
 #include <vnl/vnl_math.h>
 #include <bvgl/algo/bvgl_biarc.h>
@@ -13,7 +14,7 @@ MAIN( test_biarc )
   double tolerance = 1e-7;
 
   START (" Test bvgl_biarc class");
-  vcl_cout << "Test Constructors" << vcl_endl;
+  std::cout << "Test Constructors" << std::endl;
   bvgl_biarc biarc1 = bvgl_biarc();
   // This must always be true TEST("Default Constructor", &biarc1 != 0, true);
   biarc1 = bvgl_biarc(vgl_point_2d<double >(0, 0), 0, vgl_point_2d< double >(5, 5), vnl_math::pi/2);
@@ -44,20 +45,20 @@ MAIN( test_biarc )
   double r1[] = {b.k1(), b.len1(), b.k2(), b.len2()};
   test_passed = true;
   for (int i = 0; i < 4; i ++){
-    if (vcl_fabs(r1[i] - result1[i]) > tolerance)
+    if (std::fabs(r1[i] - result1[i]) > tolerance)
       test_passed = false;
   }
   TEST("2 point-tangents on a circle", test_passed, true);
 
   // test case 2 - create biarc from 2 point-tangent not on a circle
-  vcl_cout << "Test biarc computation algorithms - compared with result from Matlab code" << vcl_endl;
+  std::cout << "Test biarc computation algorithms - compared with result from Matlab code" << std::endl;
   b.set_start_params(vgl_point_2d< double >(case2[0], case2[1]), case2[2]);
   b.set_end_params(vgl_point_2d< double >(case2[3], case2[4]), case2[5]);
   b.compute_biarc_params();
   double r2[] = {b.k1(), b.len1(), b.k2(), b.len2()};
   test_passed = true;
   for (int i = 0; i < 4; i ++){
-    if (vcl_fabs(r2[i] - result2[i]) > tolerance)
+    if (std::fabs(r2[i] - result2[i]) > tolerance)
       test_passed = false;
   }
   TEST("2 point-tangents not on a circle (1)", test_passed, true);
@@ -68,7 +69,7 @@ MAIN( test_biarc )
   double r3[] = {b.k1(), b.len1(), b.k2(), b.len2()};
   test_passed = true;
   for (int i = 0; i < 4; i ++){
-    if (vcl_fabs(r3[i] - result3[i]) > tolerance)
+    if (std::fabs(r3[i] - result3[i]) > tolerance)
       test_passed = false;
   }
   TEST("2 point-tangents not on a circle - (2)", test_passed, true);
@@ -79,7 +80,7 @@ MAIN( test_biarc )
   double r4[] = {b.k1(), b.len1(), b.k2(), b.len2()};
   test_passed = true;
   for (int i = 0; i < 4; i ++){
-    if (vcl_fabs(r4[i] - result4[i]) > tolerance)
+    if (std::fabs(r4[i] - result4[i]) > tolerance)
       test_passed = false;
   }
   TEST("2 point-tangents forming an S shape ", test_passed, true);
@@ -90,13 +91,13 @@ MAIN( test_biarc )
   double r5[] = {b.k1(), b.len1(), b.k2(), b.len2()};
   test_passed = true;
   for (int i = 0; i < 4; i ++){
-    if (vcl_fabs(r5[i] - result5[i]) > tolerance)
+    if (std::fabs(r5[i] - result5[i]) > tolerance)
       test_passed = false;
   }
   TEST("2 point-tangents on a line - (1)", test_passed, true);
 
   // test geometry functions
-  vcl_cout << "Test geometry functions" << vcl_endl;
+  std::cout << "Test geometry functions" << std::endl;
   b.compute_biarc_params(vgl_point_2d< double >(case4[0], case4[1]), case4[2],
     vgl_point_2d< double >(case4[3], case4[4]), case4[5]);
   // correct results
@@ -129,46 +130,46 @@ MAIN( test_biarc )
   //vgl_vector_2d< double > t4(1, 0);
   //double k4 = 0;
 
-  TEST("r1() ", vcl_fabs(b.r1() - radius1) < tolerance, true);
-  TEST("r2() ", vcl_fabs(b.r2() - radius2) < tolerance, true);
-  TEST("dir1() ", vcl_fabs((double)( b.dir1() - dir1)) < tolerance, true);
-  TEST("dir2() ", vcl_fabs((double)(b.dir2() - dir2)) < tolerance, true);
+  TEST("r1() ", std::fabs(b.r1() - radius1) < tolerance, true);
+  TEST("r2() ", std::fabs(b.r2() - radius2) < tolerance, true);
+  TEST("dir1() ", std::fabs((double)( b.dir1() - dir1)) < tolerance, true);
+  TEST("dir2() ", std::fabs((double)(b.dir2() - dir2)) < tolerance, true);
   // mid_pt
-  test_passed = vcl_fabs(b.mid_pt().x()-mid_pt.x()) < tolerance &&
-    vcl_fabs(b.mid_pt().y()-mid_pt.y()) < tolerance;
+  test_passed = std::fabs(b.mid_pt().x()-mid_pt.x()) < tolerance &&
+    std::fabs(b.mid_pt().y()-mid_pt.y()) < tolerance;
   TEST("mid_pt() ", test_passed, true);
 
-  test_passed = vcl_fabs(b.center1().x()-center1.x()) < tolerance &&
-    vcl_fabs(b.center1().y()-center1.y()) < tolerance;
+  test_passed = std::fabs(b.center1().x()-center1.x()) < tolerance &&
+    std::fabs(b.center1().y()-center1.y()) < tolerance;
   TEST("center1() ", test_passed, true);
 
-  test_passed = vcl_fabs(b.center2().x()-center2.x()) < tolerance &&
-    vcl_fabs(b.center2().y()-center2.y()) < tolerance;
+  test_passed = std::fabs(b.center2().x()-center2.x()) < tolerance &&
+    std::fabs(b.center2().y()-center2.y()) < tolerance;
   TEST("center2() ", test_passed, true);
 
-  TEST("len() ", vcl_fabs(b.len() - len) < tolerance, true);
+  TEST("len() ", std::fabs(b.len() - len) < tolerance, true);
 
   // point at s1
-  test_passed = vcl_fabs(b.point_at(s1).x()-p1.x()) < tolerance &&
-    vcl_fabs(b.point_at(s1).y()-p1.y()) < tolerance;
+  test_passed = std::fabs(b.point_at(s1).x()-p1.x()) < tolerance &&
+    std::fabs(b.point_at(s1).y()-p1.y()) < tolerance;
   TEST("Point at s1 ", test_passed, true);
   // tangent at s1
-  test_passed = vcl_fabs(b.tangent_at(s1).x()-t1.x()) < tolerance &&
-    vcl_fabs(b.tangent_at(s1).y()-t1.y()) < tolerance;
+  test_passed = std::fabs(b.tangent_at(s1).x()-t1.x()) < tolerance &&
+    std::fabs(b.tangent_at(s1).y()-t1.y()) < tolerance;
   TEST("Tangent at s1 - inside arc 1 ", test_passed, true);
   // curvature at s1
-  TEST("Curvature at s1", vcl_fabs(b.curvature_at(s1) - k1) < tolerance, true);
+  TEST("Curvature at s1", std::fabs(b.curvature_at(s1) - k1) < tolerance, true);
 
   // point at s2
-  test_passed = vcl_fabs(b.point_at(s2).x()-p2.x()) < tolerance &&
-    vcl_fabs(b.point_at(s2).y()-p2.y()) < tolerance;
+  test_passed = std::fabs(b.point_at(s2).x()-p2.x()) < tolerance &&
+    std::fabs(b.point_at(s2).y()-p2.y()) < tolerance;
   TEST("Point at s2 - inside arc 2 ", test_passed, true);
     // tangent at s2
-  test_passed = vcl_fabs(b.tangent_at(s2).x()-t2.x()) < tolerance &&
-    vcl_fabs(b.tangent_at(s2).y()-t2.y()) < tolerance;
+  test_passed = std::fabs(b.tangent_at(s2).x()-t2.x()) < tolerance &&
+    std::fabs(b.tangent_at(s2).y()-t2.y()) < tolerance;
   TEST("Tangent at s2 ", test_passed, true);
   // curvature at s2
-  TEST("Curvature at s2", vcl_fabs(b.curvature_at(s2) - k2) < tolerance, true);
+  TEST("Curvature at s2", std::fabs(b.curvature_at(s2) - k2) < tolerance, true);
 
   SUMMARY();
 }

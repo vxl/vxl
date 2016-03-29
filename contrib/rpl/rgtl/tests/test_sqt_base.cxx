@@ -4,10 +4,12 @@
 // Distributed under the Boost Software License, Version 1.0.
 // (See accompanying file rgtl_license_1_0.txt or copy at
 // http://www.boost.org/LICENSE_1_0.txt)
+#include <iostream>
+#include <cmath>
 #include <testlib/testlib_test.h>
 
 #include <rgtl/rgtl_sqt_base.hxx>
-#include <vcl_cmath.h>
+#include <vcl_compiler.h>
 
 static double const test_directions[100][3] =
 {{0.9409, 0.1315, -0.9139},
@@ -127,7 +129,7 @@ static void cross_product(double const a[3], double const b[3], double c[3])
 
 static void normalize(double d[3])
 {
-  double mag = vcl_sqrt(dot_product(d,d));
+  double mag = std::sqrt(dot_product(d,d));
   if (mag > 0)
   {
     d[0] /= mag;

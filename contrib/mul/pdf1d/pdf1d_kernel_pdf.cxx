@@ -9,10 +9,12 @@
 //  IMS 28 Feb 2002 Added inverse CDF.
 // \endverbatim
 
+#include <iostream>
+#include <cstdlib>
+#include <string>
 #include "pdf1d_kernel_pdf.h"
-#include <vcl_cstdlib.h>
+#include <vcl_compiler.h>
 #include <vcl_cassert.h>
-#include <vcl_string.h>
 #include <vnl/vnl_math.h>
 #include <vnl/io/vnl_io_vector.h>
 #include <mbl/mbl_index_sort.h>
@@ -156,22 +158,22 @@ double pdf1d_kernel_pdf::inverse_cdf(double P) const
     else
       x_above=x_middle;
   }
-  vcl_cerr << "ERROR: pdf1d_kernel_pdf::inverse_cdf() failed to converge.\n";
-  vcl_abort();
+  std::cerr << "ERROR: pdf1d_kernel_pdf::inverse_cdf() failed to converge.\n";
+  std::abort();
   return 0.0; // dummy return
 }
 
 //=======================================================================
 
-vcl_string pdf1d_kernel_pdf::is_a() const
+std::string pdf1d_kernel_pdf::is_a() const
 {
-  static vcl_string class_name_ = "pdf1d_kernel_pdf";
+  static std::string class_name_ = "pdf1d_kernel_pdf";
   return class_name_;
 }
 
 //=======================================================================
 
-bool pdf1d_kernel_pdf::is_class(vcl_string const& s) const
+bool pdf1d_kernel_pdf::is_class(std::string const& s) const
 {
   return pdf1d_pdf::is_class(s) || s==pdf1d_kernel_pdf::is_a();
 }
@@ -185,7 +187,7 @@ short pdf1d_kernel_pdf::version_no() const
 
 //=======================================================================
 
-void pdf1d_kernel_pdf::print_summary(vcl_ostream& os) const
+void pdf1d_kernel_pdf::print_summary(std::ostream& os) const
 {
   pdf1d_pdf::print_summary(os);
   os << '\n';
@@ -208,14 +210,14 @@ void pdf1d_kernel_pdf::b_read(vsl_b_istream& bfs)
 {
   if (!bfs) return;
 
-  vcl_string name;
+  std::string name;
   vsl_b_read(bfs,name);
   if (name != is_a())
   {
-    vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, pdf1d_kernel_pdf &)\n"
+    std::cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, pdf1d_kernel_pdf &)\n"
              << "           Attempted to load object of type "
              << name <<" into object of type " << is_a() << '\n';
-    bfs.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
+    bfs.is().clear(std::ios::badbit); // Set an unrecoverable IO error on stream
     return;
   }
 
@@ -229,9 +231,9 @@ void pdf1d_kernel_pdf::b_read(vsl_b_istream& bfs)
       vsl_b_read(bfs,width_);
       break;
     default:
-      vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, pdf1d_kernel_pdf &)\n"
+      std::cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, pdf1d_kernel_pdf &)\n"
                << "           Unknown version number "<< version << '\n';
-      bfs.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
+      bfs.is().clear(std::ios::badbit); // Set an unrecoverable IO error on stream
       return;
   }
 }

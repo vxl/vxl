@@ -9,21 +9,21 @@
 
 #define log_xtor 0
 #if log_xtor
-# include <vcl_iostream.h>
+# include <std::iostream.h>
 #endif
 
 vil_stream::vil_stream()
 : refcount_(0)
 {
 #if log_xtor
-  vcl_cerr << __FILE__ ", vil_stream ctor : this = " << (void*)this << vcl_endl;
+  std::cerr << __FILE__ ", vil_stream ctor : this = " << (void*)this << std::endl;
 #endif
 }
 
 vil_stream::~vil_stream()
 {
 #if log_xtor
-  vcl_cerr << __FILE__ ", vil_stream dtor : this = " << (void*)this << vcl_endl;
+  std::cerr << __FILE__ ", vil_stream dtor : this = " << (void*)this << std::endl;
 #endif
 }
 

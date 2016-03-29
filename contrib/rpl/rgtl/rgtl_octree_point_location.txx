@@ -5,10 +5,11 @@
 #ifndef rgtl_octree_point_location_txx
 #define rgtl_octree_point_location_txx
 
+#include <iostream>
 #include "rgtl_octree_point_location.hxx"
 #include "rgtl_octree_cell_location.hxx"
 
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
 
 //----------------------------------------------------------------------------
 template <unsigned int D>
@@ -83,7 +84,7 @@ bool operator<(rgtl_octree_point_location<D> const& l,
 
 //----------------------------------------------------------------------------
 template <unsigned int D>
-vcl_ostream& operator<<(vcl_ostream& os,
+std::ostream& operator<<(std::ostream& os,
                         rgtl_octree_point_location<D> const& point)
 {
   os << "[" << point.level() << ":" << point.index(0);
@@ -100,7 +101,7 @@ vcl_ostream& operator<<(vcl_ostream& os,
   template class rgtl_octree_point_location< D >; \
   template bool operator<(rgtl_octree_point_location< D > const& l, \
                           rgtl_octree_point_location< D > const& r); \
-  template vcl_ostream& operator<<(vcl_ostream& os, \
+  template std::ostream& operator<<(std::ostream& os, \
                                  rgtl_octree_point_location< D > const& point)
 
 #endif

@@ -1,9 +1,11 @@
+#include <iostream>
+#include <string>
 #include <testlib/testlib_test.h>
 #include <bsta/algo/bsta_fit_weibull.h>
-#include <vcl_string.h>
+#include <vcl_compiler.h>
 
 template <class T>
-void test_fit_weibull_type(T epsilon, const vcl_string& type_name)
+void test_fit_weibull_type(T epsilon, const std::string& type_name)
 {
   T sample_mean = T(0.404), sample_std_dev = T(0.33);
   bsta_weibull_cost_function wcf(sample_mean, sample_std_dev);

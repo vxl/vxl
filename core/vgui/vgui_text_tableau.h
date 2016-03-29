@@ -22,7 +22,8 @@
 // \endverbatim
 
 
-#include <vcl_string.h>
+#include <string>
+#include <vcl_compiler.h>
 #include <vgui/vgui_tableau.h>
 #include <vgui/vgui_text_tableau_sptr.h>
 
@@ -47,13 +48,13 @@ class vgui_text_tableau : public vgui_tableau
   unsigned size() const;
 
   //: Returns the tableau name ("vgui_text_tableau").
-  vcl_string type_name() const;
+  std::string type_name() const;
 
   //: Add the given text to the display at the given x,y position.
   int add(float x, float y, char const *text);
 
-  //: Add the given vcl_string to the display at the given x,y position.
-  int add(float x, float y, vcl_string const &text) { return add(x,y,text.c_str()); }
+  //: Add the given std::string to the display at the given x,y position.
+  int add(float x, float y, std::string const &text) { return add(x,y,text.c_str()); }
 
   //: Set the colour of the text
   void set_colour(float r, float g, float b);
@@ -70,7 +71,7 @@ class vgui_text_tableau : public vgui_tableau
   float get_posy(int hndl) const;
 
   //: Return the text associated to the given handle.
-  vcl_string const &get_text(int hndl) const;
+  std::string const &get_text(int hndl) const;
 
   //: Move text associated to given handle to the given x,y position.
   void move(int hndl, float nx, float ny);
@@ -78,8 +79,8 @@ class vgui_text_tableau : public vgui_tableau
   //: Change the text associated to given handle to the given new text.
   void change(int hndl, char const *ntext);
 
-  //: Change the text associated to given handle to the given new vcl_string.
-  void change(int hndl, vcl_string const &ntext) { change(hndl, ntext.c_str()); }
+  //: Change the text associated to given handle to the given new std::string.
+  void change(int hndl, std::string const &ntext) { change(hndl, ntext.c_str()); }
 
   //: Delete text associated to given handle from the display.
   void remove(int hndl);
@@ -93,11 +94,11 @@ class vgui_text_tableau : public vgui_tableau
   ~vgui_text_tableau() { }
 
  private:
-  vcl_vector<float> xs;
-  vcl_vector<float> ys;
-  vcl_vector<float> r_, g_, b_;
-  vcl_vector<vcl_string> ts;
-  vcl_vector<unsigned> sz_;
+  std::vector<float> xs;
+  std::vector<float> ys;
+  std::vector<float> r_, g_, b_;
+  std::vector<std::string> ts;
+  std::vector<unsigned> sz_;
 
   float cur_r_, cur_g_, cur_b_;
   unsigned cur_sz_;

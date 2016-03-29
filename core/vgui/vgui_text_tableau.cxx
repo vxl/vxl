@@ -28,7 +28,7 @@ vgui_text_tableau::vgui_text_tableau()
   cur_r_ = 1; cur_g_ = 0; cur_b_ = 0;
 }
 
-vcl_string vgui_text_tableau::type_name() const { return "vgui_text_tableau"; }
+std::string vgui_text_tableau::type_name() const { return "vgui_text_tableau"; }
 
 unsigned vgui_text_tableau::size() const
 {
@@ -118,7 +118,7 @@ float vgui_text_tableau::get_posy(int hndl) const
   return ys[hndl];
 }
 
-vcl_string const &vgui_text_tableau::get_text(int hndl) const
+std::string const &vgui_text_tableau::get_text(int hndl) const
 {
   assert(hndl >= 0);
   assert((unsigned int)hndl < size());

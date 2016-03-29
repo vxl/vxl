@@ -5,18 +5,19 @@
 // \brief Container for set of poses and associated fit values
 // \author Tim Cootes
 
+#include <iostream>
+#include <cstdlib>
 #include <mfpf/mfpf_pose.h>
 #include <vsl/vsl_vector_io.h>
-#include <vcl_iostream.h>
-#include <vcl_cstdlib.h>
+#include <vcl_compiler.h>
 
 struct mfpf_pose_set
 {
   //: List of poses
-  vcl_vector<mfpf_pose> poses;
+  std::vector<mfpf_pose> poses;
 
   //: List of associated fits
-  vcl_vector<double> fits;
+  std::vector<double> fits;
 };
 
 inline void vsl_b_write(vsl_b_ostream& bfs,
@@ -38,15 +39,15 @@ inline void vsl_b_read(vsl_b_istream& bfs, mfpf_pose_set& p)
       vsl_b_read(bfs,p.fits);
       break;
     default:
-      vcl_cerr << "vsl_b_read(bfs,mfpf_pose_set): "
-               << "Unexpected version number " << version << vcl_endl;
-      vcl_abort();
+      std::cerr << "vsl_b_read(bfs,mfpf_pose_set): "
+               << "Unexpected version number " << version << std::endl;
+      std::abort();
   }
 }
 
 //: Write vector of objects to stream
 inline void vsl_b_write(vsl_b_ostream& bfs,
-                        const vcl_vector<mfpf_pose_set>& p)
+                        const std::vector<mfpf_pose_set>& p)
 {
   vsl_b_write(bfs,short(1));  // Version number
   vsl_b_write(bfs,unsigned(p.size()));
@@ -56,7 +57,7 @@ inline void vsl_b_write(vsl_b_ostream& bfs,
 
 //: Read in vector of feature points from stream
 inline void vsl_b_read(vsl_b_istream& bfs,
-                       vcl_vector<mfpf_pose_set>& p)
+                       std::vector<mfpf_pose_set>& p)
 {
   short version;
   vsl_b_read(bfs,version);
@@ -69,9 +70,9 @@ inline void vsl_b_read(vsl_b_istream& bfs,
       for (unsigned i=0;i<n;++i) vsl_b_read(bfs,p[i]);
       break;
     default:
-      vcl_cerr << "vsl_b_read(bfs,vcl_vector<mfpf_pose_set>): "
-               << "Unexpected version number " << version << vcl_endl;
-      vcl_abort();
+      std::cerr << "vsl_b_read(bfs,std::vector<mfpf_pose_set>): "
+               << "Unexpected version number " << version << std::endl;
+      std::abort();
   }
 }
 

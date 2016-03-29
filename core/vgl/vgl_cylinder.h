@@ -14,9 +14,10 @@
 //  Modifications
 //   Nov 2005 created
 // \endverbatim
+#include <iosfwd>
 #include <vgl/vgl_point_3d.h>
 #include <vgl/vgl_vector_3d.h>
-#include <vcl_iosfwd.h>
+#include <vcl_compiler.h>
 
 template <class Type>
 class vgl_cylinder
@@ -60,14 +61,14 @@ class vgl_cylinder
   bool operator==(vgl_cylinder<Type> const& cyl) const;
 
   //: Writes "<vgl_cylinder center=(x0,y0,z0), radius=r, length=l, direction=(x1,y1,z1)>" to stream
-  vcl_ostream& print(vcl_ostream& s) const;
+  std::ostream& print(std::ostream& s) const;
 };
 
 template <class T>
-vcl_ostream& operator<<(vcl_ostream& os, const vgl_cylinder<T>& cyl);
+std::ostream& operator<<(std::ostream& os, const vgl_cylinder<T>& cyl);
 
 template <class T>
-vcl_istream& operator>>(vcl_istream& s, vgl_cylinder<T>& cyl);
+std::istream& operator>>(std::istream& s, vgl_cylinder<T>& cyl);
 
 #define VGL_CYLINDER_INSTANTIATE(T) extern "please include vgl/vgl_cylinder.txx first"
 

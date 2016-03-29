@@ -7,11 +7,11 @@
 
 //: Save to Drishti raw file
 VCL_DEFINE_SPECIALIZATION
-bool bvxm_grid_save_raw<bsta_num_obs<bsta_gauss_sf1> >(bvxm_voxel_grid<bsta_num_obs<bsta_gauss_sf1> > *grid,  vcl_string filename)
+bool bvxm_grid_save_raw<bsta_num_obs<bsta_gauss_sf1> >(bvxm_voxel_grid<bsta_num_obs<bsta_gauss_sf1> > *grid,  std::string filename)
 {
-    vcl_fstream ofs(filename.c_str(),vcl_ios::binary | vcl_ios::out);
+    std::fstream ofs(filename.c_str(),std::ios::binary | std::ios::out);
     if (!ofs.is_open()) {
-      vcl_cerr << "error opening file " << filename << " for write!\n";
+      std::cerr << "error opening file " << filename << " for write!\n";
       return false;
     }
 
@@ -34,30 +34,30 @@ bool bvxm_grid_save_raw<bsta_num_obs<bsta_gauss_sf1> >(bvxm_voxel_grid<bsta_num_
 
     //get the range
     bvxm_voxel_grid<bsta_num_obs<bsta_gauss_sf1> >::iterator grid_it = grid->begin();
-    float max=vcl_abs(((*grid_it)(0,0)).mean());
-    float min=vcl_abs(((*grid_it)(0,0)).mean());
+    float max=std::abs(((*grid_it)(0,0)).mean());
+    float min=std::abs(((*grid_it)(0,0)).mean());
     for (unsigned k=0; grid_it != grid->end(); ++grid_it, ++k) {
       for (unsigned i=0; i<(*grid_it).nx(); ++i) {
         for (unsigned j=0; j < (*grid_it).ny(); ++j) {
-          if (vcl_abs(((*grid_it)(i,j)).mean())> max)
-            max = vcl_abs(((*grid_it)(i,j)).mean());
-          if (vcl_abs(((*grid_it)(i,j)).mean())< min)
-            min = vcl_abs(((*grid_it)(i,j)).mean());
+          if (std::abs(((*grid_it)(i,j)).mean())> max)
+            max = std::abs(((*grid_it)(i,j)).mean());
+          if (std::abs(((*grid_it)(i,j)).mean())< min)
+            min = std::abs(((*grid_it)(i,j)).mean());
         }
       }
     }
-    vcl_cout << "max =  " << max << " min= " <<min << vcl_endl;
+    std::cout << "max =  " << max << " min= " <<min << std::endl;
 
     grid_it = grid->begin();
     for (unsigned k=0; grid_it != grid->end(); ++grid_it, ++k) {
-      vcl_cout << '.';
+      std::cout << '.';
       for (unsigned i=0; i<(*grid_it).nx(); ++i) {
         for (unsigned j=0; j < (*grid_it).ny(); ++j) {
-          data_array[i*ny*nz + j*nz + k] =vcl_abs(((*grid_it)(i,j)).mean());
+          data_array[i*ny*nz + j*nz + k] =std::abs(((*grid_it)(i,j)).mean());
         }
       }
     }
-    vcl_cout << vcl_endl;
+    std::cout << std::endl;
     ofs.write(reinterpret_cast<char*>(data_array),sizeof(DataType)*nx*ny*nz);
 
     ofs.close();

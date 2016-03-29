@@ -10,7 +10,7 @@
 bool bvxm_scene_kml_process_cons(bprb_func_process& pro)
 {
   using namespace bvxm_scene_kml_process_globals;
-  vcl_vector<vcl_string> input_types_(n_inputs_);
+  std::vector<std::string> input_types_(n_inputs_);
   input_types_[0] = "bvxm_voxel_world_sptr";      // voxel world spec
   input_types_[1] = "vcl_string";                 // kml filename
   input_types_[2] = "bool";                       // option to replace all previous content in kml file
@@ -20,7 +20,7 @@ bool bvxm_scene_kml_process_cons(bprb_func_process& pro)
   input_types_[6] = "unsigned";                   // color index a // controls transparency of the box as displayed in google earth, set = 255 for opaque box
   input_types_[7] = "vcl_string";                 // name of the scene
 
-  vcl_vector<vcl_string> output_types_(n_outputs_);
+  std::vector<std::string> output_types_(n_outputs_);
   return pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
 }
 
@@ -29,19 +29,19 @@ bool bvxm_scene_kml_process(bprb_func_process& pro)
   using namespace bvxm_scene_kml_process_globals;
   // sanity check
   if ( pro.n_inputs() < n_inputs_ ) {
-    vcl_cout << pro.name() << " The input number should be " << n_inputs_ << vcl_endl;
+    std::cout << pro.name() << " The input number should be " << n_inputs_ << std::endl;
     return false;
   }
   // get the inputs
   unsigned i = 0;
   bvxm_voxel_world_sptr voxel_world = pro.get_input<bvxm_voxel_world_sptr>(i++);
-  vcl_string kml_file = pro.get_input<vcl_string>(i++);
+  std::string kml_file = pro.get_input<std::string>(i++);
   bool is_overwrite = pro.get_input<bool>(i++);
   unsigned r = pro.get_input<unsigned>(i++);
   unsigned g = pro.get_input<unsigned>(i++);
   unsigned b = pro.get_input<unsigned>(i++);
   unsigned a = pro.get_input<unsigned>(i++);
-  vcl_string name = pro.get_input<vcl_string>(i++);
+  std::string name = pro.get_input<std::string>(i++);
 
   // obtain the bounding box for the scene region
   bvxm_world_params_sptr params = voxel_world->get_params();
@@ -64,7 +64,7 @@ bool bvxm_scene_kml_process(bprb_func_process& pro)
   vnl_double_2 ur;  ur[0] = bbox.max_point().x();  ur[1] = bbox.max_point().y();  // upp_right
   vnl_double_2 ul;  ul[0] = bbox.min_point().x();  ul[1] = bbox.max_point().y();  // upp_left
 
-  vcl_stringstream box_info;
+  std::stringstream box_info;
   box_info << "origin: " << low_left_lon << "x" << low_left_lat;
 
   // write to kml file
@@ -73,16 +73,16 @@ bool bvxm_scene_kml_process(bprb_func_process& pro)
     vgl_polygon<double> poly = bkml_parser::parse_polygon(kml_file);
 
     // write the previous content with same format
-    vcl_ofstream ofs(kml_file.c_str(), vcl_ios_trunc);
+    std::ofstream ofs(kml_file.c_str(), std::ios::trunc);
     bkml_write::open_document(ofs);
     unsigned num_sheet = poly.num_sheets();
-    vcl_string desc = "bvxm_scene";
+    std::string desc = "bvxm_scene";
     for (unsigned i = 0; i < num_sheet; i++) {
       vnl_double_2 ul_t(poly[i][0].y(), poly[i][0].x());
       vnl_double_2 ur_t(poly[i][1].y(), poly[i][1].x());
       vnl_double_2 lr_t(poly[i][2].y(), poly[i][2].x());
       vnl_double_2 ll_t(poly[i][3].y(), poly[i][3].x());
-      vcl_stringstream box_info_t;
+      std::stringstream box_info_t;
       box_info_t << "origin: " << ll_t[1] << "x" << ll_t[0];
       bkml_write::write_box(ofs, desc, box_info_t.str(), ul_t, ur_t, ll_t, lr_t, (unsigned char)r, (unsigned char)g, (unsigned char)b);
     }
@@ -91,7 +91,7 @@ bool bvxm_scene_kml_process(bprb_func_process& pro)
     ofs.close();
   }
   else {
-    vcl_ofstream ofs(kml_file.c_str());
+    std::ofstream ofs(kml_file.c_str());
     bkml_write::open_document(ofs);
     bkml_write::write_box(ofs, name, box_info.str(), ul, ur, ll, lr, (unsigned char)r, (unsigned char)g, (unsigned char)b, (unsigned char)a);
     bkml_write::close_document(ofs);
@@ -103,10 +103,10 @@ bool bvxm_scene_kml_process(bprb_func_process& pro)
 bool bvxm_scene_poly_overlap_process_cons(bprb_func_process& pro)
 {
   using namespace bvxm_scene_poly_overlap_process_globals;
-  vcl_vector<vcl_string> input_types_(n_inputs_);
+  std::vector<std::string> input_types_(n_inputs_);
   input_types_[0] = "bvxm_voxel_world_sptr";  // bvxm voxel world spec
   input_types_[1] = "vcl_string";             // input kml polygon
-  vcl_vector<vcl_string> output_types_(n_outputs_);
+  std::vector<std::string> output_types_(n_outputs_);
   return pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
 }
 
@@ -115,16 +115,16 @@ bool bvxm_scene_poly_overlap_process(bprb_func_process& pro)
   using namespace bvxm_scene_poly_overlap_process_globals;
   // sanity check
   if ( pro.n_inputs() < n_inputs_ ) {
-    vcl_cout << pro.name() << " The input number should be " << n_inputs_ << vcl_endl;
+    std::cout << pro.name() << " The input number should be " << n_inputs_ << std::endl;
     return false;
   }
   // get the inputs
   unsigned i = 0;
   bvxm_voxel_world_sptr voxel_world = pro.get_input<bvxm_voxel_world_sptr>(i++);
-  vcl_string kml_file = pro.get_input<vcl_string>(i++);
+  std::string kml_file = pro.get_input<std::string>(i++);
 
   if (!vul_file::exists(kml_file)) {
-    vcl_cout << pro.name() << " can not find input kml file: " << kml_file << vcl_endl;
+    std::cout << pro.name() << " can not find input kml file: " << kml_file << std::endl;
     return false;
   }
 
@@ -147,10 +147,10 @@ bool bvxm_scene_poly_overlap_process(bprb_func_process& pro)
   //vgl_box_2d<double> bbox(low_left_lon, low_left_lat, upp_rght_lon, upp_rght_lat);
   vgl_box_2d<double> bbox(low_left_lon, upp_rght_lon, low_left_lat, upp_rght_lat);
 #if 0
-  vcl_cout << " lower_left = " << low_left_lon << "," << low_left_lat << vcl_endl;
-  vcl_cout << " upper_rght = " << upp_rght_lon << "," << upp_rght_lat << vcl_endl;
-  vcl_cout << " bbox = " << bbox << vcl_endl;
-  poly.print(vcl_cout);
+  std::cout << " lower_left = " << low_left_lon << "," << low_left_lat << std::endl;
+  std::cout << " upper_rght = " << upp_rght_lon << "," << upp_rght_lat << std::endl;
+  std::cout << " bbox = " << bbox << std::endl;
+  poly.print(std::cout);
 #endif
 
   return vgl_intersection(bbox, poly);

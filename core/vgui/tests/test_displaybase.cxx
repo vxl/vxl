@@ -1,7 +1,8 @@
+#include <iostream>
 #include <vgui/vgui_easy2D_tableau.h>
 #include <vgui/vgui_soview2D.h>
 #include <vgui/vgui_style.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
 #include <testlib/testlib_test.h>
 
 void test_displaybase()
@@ -18,7 +19,7 @@ void test_displaybase()
 
   TEST_NEAR("Try to retrieve style for line 2", line2->get_style()->rgba[0], 0.5f, 1e-7f);
 
-  vcl_cout << "Clear tableau 1\n";
+  std::cout << "Clear tableau 1\n";
   tab1->clear();
 
   // this should create a new style object

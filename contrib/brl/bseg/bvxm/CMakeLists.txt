@@ -24,7 +24,7 @@ set(bvxm_sources
     bvxm_float_processor.h
     bvxm_mog_grey_processor.h       bvxm_mog_grey_processor.cxx
     bvxm_mog_rgb_processor.h        bvxm_mog_rgb_processor.cxx
-    bvxm_mog_mc_processor.h         bvxm_mog_mc_processor.txx
+    bvxm_mog_mc_processor.h         bvxm_mog_mc_processor.hxx
     bvxm_lidar_processor.h          bvxm_lidar_processor.cxx
     bvxm_world_params.h             bvxm_world_params.cxx
     bvxm_voxel_traits.h
@@ -32,7 +32,7 @@ set(bvxm_sources
     bvxm_image_metadata.h           bvxm_image_metadata.cxx
     bvxm_util.h                     bvxm_util.cxx
     bvxm_edge_ray_processor.h       bvxm_edge_ray_processor.cxx
-    bvxm_von_mises_tangent_processor.h     bvxm_von_mises_tangent_processor.txx
+    bvxm_von_mises_tangent_processor.h     bvxm_von_mises_tangent_processor.hxx
     bvxm_illum_util.h                     bvxm_illum_util.cxx
     bvxm_edge_util.h                      bvxm_edge_util.cxx
    )
@@ -48,7 +48,7 @@ if(EXPAT_FOUND)
      )
 endif()
 
-add_library( bvxm ${bvxm_sources})
+vxl_add_library(LIBRARY_NAME bvxm LIBRARY_SOURCES ${bvxm_sources})
 
 target_link_libraries( bvxm bvxm_grid bsta bsta_algo ${VXL_LIB_PREFIX}vpgl ${VXL_LIB_PREFIX}vpgl_io ${VXL_LIB_PREFIX}vpgl_file_formats brip sdet bil_algo ${VXL_LIB_PREFIX}vgl_io ${VXL_LIB_PREFIX}vgl_algo ${VXL_LIB_PREFIX}vil_algo ${VXL_LIB_PREFIX}vnl_algo ${VXL_LIB_PREFIX}vnl ${VXL_LIB_PREFIX}vgl ${VXL_LIB_PREFIX}vil ${VXL_LIB_PREFIX}vul ${VXL_LIB_PREFIX}vbl ${VXL_LIB_PREFIX}vsl ${VXL_LIB_PREFIX}vcl)
 

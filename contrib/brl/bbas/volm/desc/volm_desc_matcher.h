@@ -15,10 +15,12 @@
 // \endverbatim
 //
 
+#include <iostream>
+#include <string>
 #include <volm/desc/volm_desc.h>
 #include <volm/desc/volm_desc_indexer.h>
 #include <vbl/vbl_smart_ptr.h>
-#include <vcl_string.h>
+#include <vcl_compiler.h>
 #include <volm/volm_geo_index.h>
 #include <volm/volm_geo_index_sptr.h>
 #include <volm/volm_io.h>
@@ -50,29 +52,29 @@ public:
 
   //: Execute match algorithm implemented
   bool matcher(volm_desc_sptr const& query,
-               vcl_string const& geo_hypo_folder,
-               vcl_string const& desc_index_folder,
+               std::string const& geo_hypo_folder,
+               std::string const& desc_index_folder,
                float buffer_capacity,
                unsigned const& tile_id);
 
   //: write the matcher scores
-  bool write_out(vcl_string const& out_folder, unsigned const& tile_id);
+  bool write_out(std::string const& out_folder, unsigned const& tile_id);
 
   //: generate probability map
-  bool create_prob_map(vcl_string const& geo_hypo_folder,
-                       vcl_string const& out_folder,
+  bool create_prob_map(std::string const& geo_hypo_folder,
+                       std::string const& out_folder,
                        unsigned const& tile_id,
                        volm_tile tile,
                        vgl_point_3d<double> const& gt_loc,
                        float& gt_score);
 
-  bool create_empty_prob_map(vcl_string const& out_folder, unsigned tile_id, volm_tile& tile);
+  bool create_empty_prob_map(std::string const& out_folder, unsigned tile_id, volm_tile& tile);
 
   //: need a specialized prob map generator for a random matcher, cause random matcher do not need to create a desc_index nor save binary score files
-  bool create_random_prob_map(vnl_random& rng, vcl_string const& geo_hypo_folder, vcl_string const& out_folder, unsigned tile_id, volm_tile& tile);
+  bool create_random_prob_map(vnl_random& rng, std::string const& geo_hypo_folder, std::string const& out_folder, unsigned tile_id, volm_tile& tile);
 
   //: generate scaled probability map
-  static bool create_scaled_prob_map(vcl_string const& out_folder,
+  static bool create_scaled_prob_map(std::string const& out_folder,
                                      volm_tile tile,
                                      unsigned const& tile_id,
                                      float const& ku,
@@ -80,21 +82,21 @@ public:
                                      float const& thres_value);
 
   //: generate candidate list
-  static bool create_candidate_list(vcl_string const& map_root,
-                                    vcl_string const& cand_root,
+  static bool create_candidate_list(std::string const& map_root,
+                                    std::string const& cand_root,
                                     unsigned const& threshold,
                                     unsigned const& top_size,
                                     float const& ku,
                                     float const& kl,
                                     float const& thres_value,
-                                    vcl_string const& query_name,
-                                    vcl_string const& world_id);
+                                    std::string const& query_name,
+                                    std::string const& world_id);
 
-  virtual vcl_string get_index_type_str() = 0;
+  virtual std::string get_index_type_str() = 0;
 
 protected:
   // output scores (score per location, the vector contains scores for locations in a tile)
-  vcl_vector<volm_score_sptr> score_all_;
+  std::vector<volm_score_sptr> score_all_;
 
 };
 

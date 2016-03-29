@@ -25,6 +25,6 @@ void vsl_b_read(vsl_b_istream &is, vgl_homg_line_2d<T>& v);
 
 //: Print human readable summary of a vgl_homg_line_2d object to a stream
 template <class T>
-void vsl_print_summary(vcl_ostream& os,const vgl_homg_line_2d<T>& v);
+void vsl_print_summary(std::ostream& os,const vgl_homg_line_2d<T>& v);
 
 #endif // #ifndef vgl_io_homg_line_2d_h_

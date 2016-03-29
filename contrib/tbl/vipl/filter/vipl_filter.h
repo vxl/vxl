@@ -28,7 +28,7 @@ template < class ImgIn, class ImgOut, class DataIn, class DataOut, int Arity, cl
 #include <vipl/section/vipl_section_descriptor.h>
 #include <vipl/section/vipl_section_container.h>
 
-#include <vcl_stlfwd.h> // forward declaration for vcl_vector
+#include <vcl_stlfwd.h> // forward declaration for std::vector
 
 #ifdef USE_NAMED_ACCESSORS // cannot have both set,
 #undef USE_OPERATOR_ACCESSORS // to be safe if we have named we undefine operator()
@@ -139,9 +139,9 @@ class vipl_filter          : public vipl_filter_abs
  public: int numoutputs() const { return hsnumoutputs; }
  public: int & ref_numoutputs() { return hsnumoutputs; }
   // raw "C" like array of pointers to input images
- private: vcl_vector<inimagept> hsinf;
- public: vcl_vector<inimagept> inf() const { return hsinf; }
- public: vcl_vector<inimagept> & ref_inf() { return hsinf; }
+ private: std::vector<inimagept> hsinf;
+ public: std::vector<inimagept> inf() const { return hsinf; }
+ public: std::vector<inimagept> & ref_inf() { return hsinf; }
   // should be raw "C" like array of pointers to output images but
   // right now it is a direct pointer to the output image
  private: outimagept hsoutf;
@@ -407,7 +407,7 @@ class vipl_filter          : public vipl_filter_abs
 }; // end of class definition
 
 #ifdef INSTANTIATE_TEMPLATES
-#include "vipl_filter.txx"
+#include "vipl_filter.hxx"
 #endif
 
 #endif // file guard

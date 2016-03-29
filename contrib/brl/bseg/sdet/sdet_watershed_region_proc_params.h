@@ -8,9 +8,11 @@
 //    Joseph L. Mundy - July 11, 2004
 //
 //-----------------------------------------------------------------------------
+#include <iostream>
+#include <iosfwd>
 #include <gevd/gevd_param_mixin.h>
 #include <brip/brip_watershed_params.h>
-#include <vcl_iosfwd.h>
+#include <vcl_compiler.h>
 
 class sdet_watershed_region_proc_params : public gevd_param_mixin
 {
@@ -51,6 +53,6 @@ class sdet_watershed_region_proc_params : public gevd_param_mixin
   brip_watershed_params wp_; //!< params associated with step and fold detection
 };
 
-vcl_ostream& operator<<(vcl_ostream&, sdet_watershed_region_proc_params const&);
+std::ostream& operator<<(std::ostream&, sdet_watershed_region_proc_params const&);
 
 #endif // sdet_watershed_region_proc_params_h_

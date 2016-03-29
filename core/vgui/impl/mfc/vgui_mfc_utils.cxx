@@ -16,9 +16,10 @@
 //   11-FEB-2007  A. Khropov Fixed the "Main menu callbacks not initialized" bug.
 // \endverbatim
 
+#include <iostream>
 #include "vgui_mfc_utils.h"
 #include <vgui/vgui_command.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
 static bool debug = false;
 
 
@@ -47,26 +48,26 @@ vgui_mfc_utils::~vgui_mfc_utils()
 
 //: Add keyboard shortcut for this menu item to our accelerator table (accels).
 //  Also add text to the_menu_name for the shortcut.
-void vgui_mfc_utils::add_menu_accelerator(const vgui_menu_item menu_item, const WORD function_id, vcl_string& the_menu_name)
+void vgui_mfc_utils::add_menu_accelerator(const vgui_menu_item menu_item, const WORD function_id, std::string& the_menu_name)
 {
   ACCEL acc;
   acc.cmd = function_id;
-  the_menu_name += vcl_string("\t");  // tab to right hand side of label
+  the_menu_name += std::string("\t");  // tab to right hand side of label
   if (menu_item.short_cut.mod == vgui_SHIFT)
   {
     acc.fVirt = FSHIFT|FVIRTKEY;  // you can't use modifiers unless you use virtual key codes
                                   // hence the need for FVIRTKEY here.
-    the_menu_name += vcl_string("Shift+");
+    the_menu_name += std::string("Shift+");
   }
   else if (menu_item.short_cut.mod == vgui_CTRL)
   {
     acc.fVirt = FCONTROL|FVIRTKEY;
-    the_menu_name += vcl_string("Ctrl+");
+    the_menu_name += std::string("Ctrl+");
   }
   else if (menu_item.short_cut.mod == vgui_ALT)
   {
     acc.fVirt = FALT|FVIRTKEY;
-    the_menu_name += vcl_string("Alt+");
+    the_menu_name += std::string("Alt+");
   }
   else // we are going to give a virtual key code, even if there is no modifier:
     acc.fVirt = FVIRTKEY;
@@ -90,14 +91,14 @@ HMENU vgui_mfc_utils::add_submenu(const vgui_menu& menu)
   {
     if (menu[i].is_separator())
     {
-      if (debug) vcl_cerr << " <separator>\n";
+      if (debug) std::cerr << " <separator>\n";
         popdown_menu->AppendMenu(MF_SEPARATOR);
     }
     else if (menu[i].is_command())
     {
-      if (debug) vcl_cerr << " <command>\n";
+      if (debug) std::cerr << " <command>\n";
       int the_menu_id = ID_MENU_ITEMS+item_count++;
-      vcl_string the_menu_name = menu[i].name;
+      std::string the_menu_name = menu[i].name;
 
       // Add menu accelerators:
       if (menu[i].short_cut.mod!=vgui_MODIFIER_NULL ||
@@ -110,7 +111,7 @@ HMENU vgui_mfc_utils::add_submenu(const vgui_menu& menu)
       callbacks.push_back(cmnd);
     }
     else if (menu[i].is_submenu()) {
-      if (debug) vcl_cerr << " <submenu>\n";
+      if (debug) std::cerr << " <submenu>\n";
       popdown_menu->AppendMenu(MF_POPUP,(UINT)add_submenu(*menu[i].menu),menu[i].name.c_str());
     }
   }
@@ -134,20 +135,20 @@ void vgui_mfc_utils::set_menu(const vgui_menu& menu)
   {
     if (menu[i].is_separator())
     {
-      if (debug) vcl_cerr << " <separator>\n";
+      if (debug) std::cerr << " <separator>\n";
       menu_bar->AppendMenu(MF_SEPARATOR);
     }
     else if (menu[i].is_command())
     {
       int the_menu_id = ID_MENU_ITEMS+item_count++;
-      vcl_string the_menu_name = menu[i].name;
+      std::string the_menu_name = menu[i].name;
 
       // Add menu accelerators
       if (menu[i].short_cut.mod!=vgui_MODIFIER_NULL ||
           menu[i].short_cut.key!=vgui_KEY_NULL)
           add_menu_accelerator(menu[i], the_menu_id, the_menu_name);
 
-      if (debug) vcl_cerr << " <command> " << menu[i].name << vcl_endl;
+      if (debug) std::cerr << " <command> " << menu[i].name << std::endl;
       menu_bar->AppendMenu(MF_STRING|MF_ENABLED,the_menu_id,
                            the_menu_name.c_str());
       // Add to our callback list, the associated callback function pointer
@@ -156,7 +157,7 @@ void vgui_mfc_utils::set_menu(const vgui_menu& menu)
     }
     else if (menu[i].is_submenu())
     {
-      if (debug) vcl_cerr << " <submenu> " << menu[i].name << vcl_endl;
+      if (debug) std::cerr << " <submenu> " << menu[i].name << std::endl;
       menu_bar->AppendMenu(MF_POPUP,(UINT)add_submenu(*menu[i].menu),menu[i].name.c_str());
     }
   }
@@ -189,14 +190,14 @@ CMenu *vgui_mfc_utils::set_popup_menu(const vgui_menu &menu)
   {
     if (menu[i].is_separator())
     {
-      if (debug) vcl_cerr << " <separator>\n";
+      if (debug) std::cerr << " <separator>\n";
           pop_up->AppendMenu(MF_SEPARATOR);
     }
     else if (menu[i].is_command())
     {
-      if (debug) vcl_cerr << " <command>\n";
+      if (debug) std::cerr << " <command>\n";
       int the_menu_id = ID_MENU_ITEMS+item_count++;
-      vcl_string the_menu_name = menu[i].name;
+      std::string the_menu_name = menu[i].name;
 
       // Add menu accelerators:
       if (menu[i].short_cut.mod!=vgui_MODIFIER_NULL ||
@@ -210,7 +211,7 @@ CMenu *vgui_mfc_utils::set_popup_menu(const vgui_menu &menu)
     }
     else if (menu[i].is_submenu())
     {
-      if (debug) vcl_cerr << " <submenu>\n";
+      if (debug) std::cerr << " <submenu>\n";
         pop_up->AppendMenu(MF_POPUP,(UINT)add_submenu(*menu[i].menu),menu[i].name.c_str());
     }
   }

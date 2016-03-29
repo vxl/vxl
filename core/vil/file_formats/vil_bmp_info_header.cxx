@@ -6,9 +6,10 @@
 // \file
 // \author fsm
 
+#include <iostream>
 #include "vil_bmp_info_header.h"
 
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
 
 #include <vil/vil_stream.h>
 #include <vil/vil_stream_read.h>
@@ -44,13 +45,13 @@ void vil_bmp_info_header::write(vil_stream *s) const
   vil_stream_write_little_endian_uint_32(s, colorcount);
 }
 
-void vil_bmp_info_header::print(vcl_ostream &s) const
+void vil_bmp_info_header::print(std::ostream &s) const
 {
   s << "vil_bmp_info_header:\n"
-    << "  compression  : " << compression << vcl_endl
-    << "  bitmap_size  : " << bitmap_size << vcl_endl
-    << "  horiz_res    : " << horiz_res << vcl_endl
-    << "  verti_res    : " << verti_res << vcl_endl
-    << "  colormapsize : " << colormapsize << vcl_endl
-    << "  colorcount   : " << colorcount << vcl_endl << vcl_endl;
+    << "  compression  : " << compression << std::endl
+    << "  bitmap_size  : " << bitmap_size << std::endl
+    << "  horiz_res    : " << horiz_res << std::endl
+    << "  verti_res    : " << verti_res << std::endl
+    << "  colormapsize : " << colormapsize << std::endl
+    << "  colorcount   : " << colorcount << std::endl << std::endl;
 }

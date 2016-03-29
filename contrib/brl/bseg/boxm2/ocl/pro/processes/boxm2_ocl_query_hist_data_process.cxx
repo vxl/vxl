@@ -1,4 +1,6 @@
 // This is brl/bseg/boxm2/ocl/pro/processes/boxm2_ocl_query_hist_data_process.cxx
+#include <iostream>
+#include <fstream>
 #include <bprb/bprb_func_process.h>
 //:
 // \file
@@ -7,7 +9,7 @@
 // \author Vishal Jain
 // \date Mar 10, 2011
 
-#include <vcl_fstream.h>
+#include <vcl_compiler.h>
 #include <boxm2/ocl/boxm2_opencl_cache.h>
 #include <boxm2/boxm2_scene.h>
 #include <boxm2/boxm2_block.h>
@@ -35,7 +37,7 @@ bool boxm2_ocl_query_hist_data_process_cons(bprb_func_process& pro)
   using namespace boxm2_ocl_query_hist_data_process_globals;
 
   //process takes 1 input
-  vcl_vector<vcl_string> input_types_(n_inputs_);
+  std::vector<std::string> input_types_(n_inputs_);
   input_types_[0] = "boxm2_cache_sptr";
   input_types_[1] = "boxm2_scene_sptr";
   input_types_[2] = "float"; //x
@@ -43,7 +45,7 @@ bool boxm2_ocl_query_hist_data_process_cons(bprb_func_process& pro)
   input_types_[4] = "float"; //z
 
 
-  vcl_vector<vcl_string>  output_types_(n_outputs_);
+  std::vector<std::string>  output_types_(n_outputs_);
   for (unsigned i=0;i<7;i++) output_types_[i] = "float";
 
   return pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
@@ -54,7 +56,7 @@ bool boxm2_ocl_query_hist_data_process(bprb_func_process& pro)
   using namespace boxm2_ocl_query_hist_data_process_globals;
 
   if ( pro.n_inputs() < n_inputs_ ) {
-    vcl_cout << pro.name() << ": The input number should be " << n_inputs_<< vcl_endl;
+    std::cout << pro.name() << ": The input number should be " << n_inputs_<< std::endl;
     return false;
   }
   //get the inputs
@@ -64,10 +66,10 @@ bool boxm2_ocl_query_hist_data_process(bprb_func_process& pro)
   float x =pro.get_input<float>(i++);
   float y =pro.get_input<float>(i++);
   float z =pro.get_input<float>(i++);
-  vnl_vector_fixed<int,8> * element_int = 0;
+  vnl_vector_fixed<int,8> * element_int = VXL_NULLPTR;
   // set arguments
-  vcl_vector<boxm2_block_id> block_ids = scene->get_block_ids();
-  for (vcl_vector<boxm2_block_id>::iterator id = block_ids.begin(); id != block_ids.end(); ++id)
+  std::vector<boxm2_block_id> block_ids = scene->get_block_ids();
+  for (std::vector<boxm2_block_id>::iterator id = block_ids.begin(); id != block_ids.end(); ++id)
   {
     boxm2_block_metadata mdata=scene->get_block_metadata(*id);
     vgl_vector_3d<double> dims(mdata.sub_block_dim_.x()*mdata.sub_block_num_.x(),
@@ -83,9 +85,9 @@ bool boxm2_ocl_query_hist_data_process(bprb_func_process& pro)
     double local_y=(y-mdata.local_origin_.y())/mdata.sub_block_dim_.y();
     double local_z=(z-mdata.local_origin_.z())/mdata.sub_block_dim_.z();
 
-    int index_x=(int)vcl_floor(local_x);
-    int index_y=(int)vcl_floor(local_y);
-    int index_z=(int)vcl_floor(local_z);
+    int index_x=(int)std::floor(local_x);
+    int index_y=(int)std::floor(local_y);
+    int index_z=(int)std::floor(local_z);
     boxm2_block * blk=cache->get_block(scene, *id);
 
 

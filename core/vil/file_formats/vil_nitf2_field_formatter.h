@@ -5,9 +5,10 @@
 #ifndef VIL_NITF2_FIELD_FORMATTER_H
 #define VIL_NITF2_FIELD_FORMATTER_H
 
-#include <vcl_string.h>
-#include <vcl_istream.h>
-#include <vcl_ostream.h>
+#include <string>
+#include <istream>
+#include <ostream>
+#include <vcl_compiler.h>
 
 #include "vil_nitf2.h"
 class vil_nitf2_field;
@@ -23,7 +24,7 @@ class vil_nitf2_array_field;
 // values); they are used to read and write individual fields of the NITF
 // stream.
 
-// All formatters definitions include a field width, typically a vcl_fixed width,
+// All formatters definitions include a field width, typically a std::fixed width,
 // unless a length functor is specified which is evaluated when the file is
 // read.
 //
@@ -65,7 +66,7 @@ class vil_nitf2_field_formatter
 
   // Writes a blank instance of field value to output stream. Returns
   // true iff successfully written. No need to overload this method.
-  bool write_blank(vcl_ostream& output);
+  bool write_blank(std::ostream& output);
 
   // Same as above, but writes to a vil_stream.
   bool write_blank(vil_stream& output);
@@ -74,19 +75,19 @@ class vil_nitf2_field_formatter
   // a string (if possible), which it returns as a null-terminated C string,
   // which the caller owns. The length of the C string reflects the number
   // of characters read.
-  static char* read_char_array(vcl_istream& input, int length);
-  static bool read_c_str(vcl_istream& input, int length,
+  static char* read_char_array(std::istream& input, int length);
+  static bool read_c_str(std::istream& input, int length,
                          char*& out_cstr, bool& all_blank);
-  // Same as above, but returns a vcl_string.
-  static vcl_string read_string(vcl_istream& input, int length);
+  // Same as above, but returns a std::string.
+  static std::string read_string(std::istream& input, int length);
   // Same as above, but takes a vil_stream as input
-  static vcl_string read_string(vil_stream& input, int length);
+  static std::string read_string(vil_stream& input, int length);
 
   // Helper function to test presence of number sign. Returns true
   // iff first character is consistent with flag show_sign.
   static bool check_sign(const char* cstr, bool show_sign);
 
-  // Helper function to test whether the null-terminated C vcl_string contains
+  // Helper function to test whether the null-terminated C std::string contains
   // all blanks
   static bool is_all_blank(const char* cstr);
 };

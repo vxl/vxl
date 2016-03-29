@@ -73,8 +73,9 @@
 
 class gevd_bufferxy;
 
-#include <vcl_vector.h>
-#include <vcl_iostream.h>
+#include <vector>
+#include <iostream>
+#include <vcl_compiler.h>
 #include <vil1/vil1_image.h>
 
 #include <vtol/vtol_vertex_2d_sptr.h>
@@ -98,13 +99,13 @@ class gevd_detector : public gevd_detector_params
   bool DoContour();
 
   //Fold contour detection
-  void DoFoldContourDetector(vil1_image image, vcl_vector<vtol_edge_2d_sptr >& edgels);
+  void DoFoldContourDetector(vil1_image image, std::vector<vtol_edge_2d_sptr >& edgels);
 
   //Corner detection using curvature on edgel chains
   //GEOFF  void  DoCornerDetector(vil1_image image, IUPointGroup& corners);
 
   //Corner detection using curvature on edgel chains
-  void  DoBreakCorners(vcl_vector<vtol_edge_2d_sptr >& in_edgels, vcl_vector<vtol_edge_2d_sptr >& out_edgels);
+  void  DoBreakCorners(std::vector<vtol_edge_2d_sptr >& in_edgels, std::vector<vtol_edge_2d_sptr >& out_edgels);
 
   // internal interfaces
   bool DoFoldContour();
@@ -118,11 +119,11 @@ class gevd_detector : public gevd_detector_params
 
   gevd_bufferxy* GetBufferFromImage();
 
-  vcl_vector<vtol_vertex_2d_sptr> *GetVertices() {return vertices;}
-  vcl_vector<vtol_edge_2d_sptr> *GetEdges() {return edges;}
+  std::vector<vtol_vertex_2d_sptr> *GetVertices() {return vertices;}
+  std::vector<vtol_edge_2d_sptr> *GetEdges() {return edges;}
   void SetImage(vil1_image img);
 
-  void print(vcl_ostream &strm=vcl_cout) const;
+  void print(std::ostream &strm=std::cout) const;
 
  protected:
   void UnProtectLists();
@@ -137,8 +138,8 @@ class gevd_detector : public gevd_detector_params
   gevd_bufferxy *edgel,                      //!< output from DoStep
     *direction, *locationx, *locationy, *grad_mag, *angle; //!< detect step/fold
   int *junctionx, *junctiony, njunction; //!< junctions found
-  vcl_vector<vtol_vertex_2d_sptr >* vertices; //!< network of linked edges/vertices
-  vcl_vector<vtol_edge_2d_sptr >* edges;
+  std::vector<vtol_vertex_2d_sptr >* vertices; //!< network of linked edges/vertices
+  std::vector<vtol_edge_2d_sptr >* edges;
 
   float filterFactor;     //!< factor in convolution filter
   float hysteresisFactor; //!< hysteresis factor

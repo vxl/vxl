@@ -5,12 +5,14 @@
 // \file
 // \author Martin Roberts, Ian Scott
 
+#include <iostream>
+#include <cstring>
 #include <vil/vil_image_resource.h>
 #include <vil/vil_convert.h>
 #include <vil/vil_load.h>
 #include <vil/vil_flatten.h>
 #include <vimt/vimt_image_2d_of.h>
-#include <vcl_cstring.h>
+#include <vcl_compiler.h>
 
 //: Create a transform from the properties of image resource.
 // \param unit_scaling is to convert from metres to desired world units (e.g. 1000 for mm)
@@ -27,13 +29,13 @@ vimt_transform_2d vimt_load_transform_right_hand(const vil_image_resource_sptr &
 
 //: Load image from path into byte image
 // If input image is float or int16 then stretch values to byte
-void vimt_load_to_byte(const vcl_string& im_path, vimt_image_2d_of<vxl_byte>& image,
+void vimt_load_to_byte(const std::string& im_path, vimt_image_2d_of<vxl_byte>& image,
                        float unit_scaling);
 
 //: Load image from path into given image (forcing to given pixel type)
 // \param unit_scaling is to convert from metres to desired world units (e.g. 1000 for mm)
 template<class T> inline
-void vimt_load(const vcl_string& path,
+void vimt_load(const std::string& path,
                vimt_image_2d_of<T>& image,
                float unit_scaling=1.0f)
 {
@@ -51,7 +53,7 @@ void vimt_load(const vcl_string& path,
 //: Load image from path into given image (forcing to given pixel type), merging transparent planes
 // \param unit_scaling is to convert from metres to desired world units (e.g. 1000 for mm)
 template<class T> inline
-void vimt_load_as_grey_or_rgb(const vcl_string& path,
+void vimt_load_as_grey_or_rgb(const std::string& path,
                vimt_image_2d_of<T>& image,
                float unit_scaling=1.0f)
 {
@@ -89,7 +91,7 @@ void vimt_load_as_grey_or_rgb(const vcl_string& path,
 // the transform is put into a right-handed coordinate frame
 // (with y increasing from bottom to top of image).
 template<class T> inline
-void vimt_load_right_hand(const vcl_string& path,
+void vimt_load_right_hand(const std::string& path,
                           vimt_image_2d_of<T>& image,
                           float unit_scaling=1.0f)
 {

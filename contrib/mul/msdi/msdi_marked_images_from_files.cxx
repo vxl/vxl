@@ -3,8 +3,10 @@
 // \author Tim Cootes
 // \brief Iterator for images and points stored in files
 
+#include <iostream>
+#include <string>
 #include <vcl_cassert.h>
-#include <vcl_string.h>
+#include <vcl_compiler.h>
 
 #include "msdi_marked_images_from_files.h"
 #include <vil/vil_load.h>
@@ -23,20 +25,20 @@ msdi_marked_images_from_files::msdi_marked_images_from_files()
 
 //: Construct to use the external images and points of given type
 msdi_marked_images_from_files::msdi_marked_images_from_files(
-                     const vcl_string& image_dir,
-                     const vcl_vector<vcl_string>& image_names,
-                     const vcl_string& points_dir,
-                     const vcl_vector<vcl_string>& points_names)
+                     const std::string& image_dir,
+                     const std::vector<std::string>& image_names,
+                     const std::string& points_dir,
+                     const std::vector<std::string>& points_names)
   : grey_only_(true),unit_scaling_(1000.0f),index_(0)
 {
   set(image_dir,image_names, points_dir, points_names);
 }
 
 //: Initialise with directories and filenames
-void msdi_marked_images_from_files::set(const vcl_string& image_dir,
-                                        const vcl_vector<vcl_string>& image_names,
-                                        const vcl_string& points_dir,
-                                        const vcl_vector<vcl_string>& points_names,
+void msdi_marked_images_from_files::set(const std::string& image_dir,
+                                        const std::vector<std::string>& image_names,
+                                        const std::string& points_dir,
+                                        const std::vector<std::string>& points_names,
                                         bool load_as_float)
 {
   assert(image_names.size()==points_names.size());
@@ -53,12 +55,12 @@ void msdi_marked_images_from_files::set(const vcl_string& image_dir,
   load_as_float_ = load_as_float;
 }
 //: Initialise with directories and filenames
-void msdi_marked_images_from_files::set(const vcl_string& image_dir,
-                                        const vcl_vector<vcl_string>& image_names,
-                                        const vcl_string& points_dir)
+void msdi_marked_images_from_files::set(const std::string& image_dir,
+                                        const std::vector<std::string>& image_names,
+                                        const std::string& points_dir)
 {
   unsigned n=image_names.size();
-  vcl_vector<vcl_string> points_names(n);
+  std::vector<std::string> points_names(n);
 
   for (unsigned i=0;i<n;++i)
   {
@@ -171,7 +173,7 @@ bool msdi_marked_images_from_files::next()
 void msdi_marked_images_from_files::get_image()
 {
   // Read in the image
-  vcl_string image_path = image_dir_ + "/" + image_name_[index_];
+  std::string image_path = image_dir_ + "/" + image_name_[index_];
 
   if (!load_as_float_)
   {
@@ -179,7 +181,7 @@ void msdi_marked_images_from_files::get_image()
 
     if (image_.image().size()==0)
     {
-      vcl_cerr<<"Empty image!\n";
+      std::cerr<<"Empty image!\n";
     }
 
     if (grey_only_ && image_.image().nplanes()>1)
@@ -195,7 +197,7 @@ void msdi_marked_images_from_files::get_image()
 
     if (float_image_.image().size()==0)
     {
-      vcl_cerr<<"Empty image!\n";
+      std::cerr<<"Empty image!\n";
     }
 
     if (grey_only_ && float_image_.image().nplanes()>1)
@@ -212,10 +214,10 @@ void msdi_marked_images_from_files::get_image()
 void msdi_marked_images_from_files::get_points()
 {
   // Read in the points
-  vcl_string points_path = points_dir_ + "/" + points_name_[index_];
+  std::string points_path = points_dir_ + "/" + points_name_[index_];
   if (!points_.read_text_file(points_path))
   {
-    vcl_cerr<<"msdi_marked_images_from_files::get_points()"
+    std::cerr<<"msdi_marked_images_from_files::get_points()"
               ": Unable to read points from "<<points_path << '\n';
   }
   else
@@ -223,14 +225,14 @@ void msdi_marked_images_from_files::get_points()
 }
 
 //: Return current image file name
-vcl_string msdi_marked_images_from_files::image_name() const
+std::string msdi_marked_images_from_files::image_name() const
 {
   assert(index_ < (int)size());
   return image_name_[index_];
 }
 
 //: Return current points file name
-vcl_string msdi_marked_images_from_files::points_name() const
+std::string msdi_marked_images_from_files::points_name() const
 {
   assert(index_ < (int)size());
   return points_name_[index_];

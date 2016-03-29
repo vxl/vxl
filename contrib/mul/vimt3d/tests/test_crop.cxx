@@ -1,6 +1,7 @@
 // This is mul/vimt3d/tests/test_crop.cxx
 
-#include <vcl_iostream.h>
+#include <iostream>
+#include <vcl_compiler.h>
 #include <vgl/vgl_point_3d.h>
 #include <vgl/vgl_box_3d.h>
 #include <vimt3d/vimt3d_image_3d_of.h>
@@ -29,7 +30,7 @@ static void test_crop()
      ++count;
   }
 
-  vcl_vector<double> lo, hi;
+  std::vector<double> lo, hi;
   original_image.world_bounds(lo,hi);
 
   // crop whole image

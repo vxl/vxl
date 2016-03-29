@@ -6,23 +6,23 @@
 
 void boxm2_render_expected_image( boxm2_scene_info * linfo,
                                   boxm2_block * blk_sptr,
-                                  vcl_vector<boxm2_data_base*> & datas,
+                                  std::vector<boxm2_data_base*> & datas,
                                   vpgl_camera_double_sptr cam ,
                                   vil_image_view<float> *expected,
                                   vil_image_view<float> * vis,
                                   unsigned int roi_ni,
                                   unsigned int roi_nj,
                                   unsigned int roi_ni0,
-                                  unsigned int roi_nj0, vcl_string data_type)
+                                  unsigned int roi_nj0, std::string data_type)
 {
-  if ( data_type.find(boxm2_data_traits<BOXM2_MOG3_GREY>::prefix()) != vcl_string::npos )
+  if ( data_type.find(boxm2_data_traits<BOXM2_MOG3_GREY>::prefix()) != std::string::npos )
   {
     boxm2_render_exp_image_functor<BOXM2_MOG3_GREY> render_functor;
     render_functor.init_data(datas,expected,vis);
     cast_ray_per_block<boxm2_render_exp_image_functor<BOXM2_MOG3_GREY> >
       (render_functor,linfo,blk_sptr,cam,roi_ni,roi_nj,roi_ni0,roi_nj0);
   }
-  else if (data_type.find(boxm2_data_traits<BOXM2_GAUSS_GREY>::prefix()) != vcl_string::npos )
+  else if (data_type.find(boxm2_data_traits<BOXM2_GAUSS_GREY>::prefix()) != std::string::npos )
   {
     boxm2_render_exp_image_functor<BOXM2_GAUSS_GREY> render_functor;
     render_functor.init_data(datas,expected,vis);
@@ -33,7 +33,7 @@ void boxm2_render_expected_image( boxm2_scene_info * linfo,
 
 void boxm2_render_cone_exp_image(boxm2_scene_info * linfo,
                                  boxm2_block * blk_sptr,
-                                 vcl_vector<boxm2_data_base*> & datas,
+                                 std::vector<boxm2_data_base*> & datas,
                                  vpgl_camera_double_sptr cam ,
                                  vil_image_view<float> *expected,
                                  vil_image_view<float> * vis,
@@ -47,7 +47,7 @@ void boxm2_render_cone_exp_image(boxm2_scene_info * linfo,
   render_functor.init_data(datas,expected,vis);
   cast_cone_ray_per_block<boxm2_render_cone_functor>
       (render_functor,linfo,blk_sptr,cam,roi_ni,roi_nj,roi_ni0,roi_nj0);
-  vcl_cout<<"Cone Render Time: "<<t.all()<<"ms"<<vcl_endl;
+  std::cout<<"Cone Render Time: "<<t.all()<<"ms"<<std::endl;
 }
 
 void boxm2_render_expected_depth( boxm2_scene_info * linfo,

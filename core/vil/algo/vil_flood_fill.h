@@ -5,9 +5,10 @@
 // \brief Fills a connected region with a given value.
 // \author Tim Cootes
 
+#include <vector>
+#include <utility>
 #include <vil/vil_image_view.h>
-#include <vcl_vector.h>
-#include <vcl_utility.h> // for vcl_pair
+#include <vcl_compiler.h>
 #include <vil/vil_chord.h>
 
 //: Search along i direction either side for limits of pixels matching v
@@ -21,7 +22,7 @@ inline void vil_flood_fill_row(vil_image_view<T>& image,
 {
   T* row=image.top_left_ptr() + j*image.jstep();
   unsigned ni1=image.ni()-1;
-  vcl_ptrdiff_t istep=image.istep();
+  std::ptrdiff_t istep=image.istep();
   ilo=i;
   T* p=row+(i-1)*istep;
   while (ilo>0 && *p==v) { ilo--; *p=new_v; p-=istep; }
@@ -44,11 +45,11 @@ void vil_flood_fill4(vil_image_view<T>& image,
 {
   unsigned ni1=image.ni()-1;
   unsigned nj1=image.nj()-1;
-  vcl_vector<vcl_pair<unsigned,unsigned> > q;  // List of points to visit
+  std::vector<std::pair<unsigned,unsigned> > q;  // List of points to visit
   if (seed_i>ni1 || seed_j>nj1) return;  // Seed outside image
 
   // Initialise the queue with the seed
-  q.push_back(vcl_pair<unsigned,unsigned>(seed_i,seed_j));
+  q.push_back(std::pair<unsigned,unsigned>(seed_i,seed_j));
 
   unsigned k=0;
   while (k<q.size())
@@ -66,14 +67,14 @@ void vil_flood_fill4(vil_image_view<T>& image,
         // Consider row above
         for (unsigned i1=ilo;i1<=ihi;++i1)
           if (image(i1,j-1)==v)
-            q.push_back(vcl_pair<unsigned,unsigned>(i1,j-1));
+            q.push_back(std::pair<unsigned,unsigned>(i1,j-1));
       }
       if (j<nj1)
       {
         // Consider row below
         for (unsigned i1=ilo;i1<=ihi;++i1)
           if (image(i1,j+1)==v)
-            q.push_back(vcl_pair<unsigned,unsigned>(i1,j+1));
+            q.push_back(std::pair<unsigned,unsigned>(i1,j+1));
       }
     }
     k++;
@@ -94,16 +95,16 @@ template<class T>
 void vil_flood_fill4(vil_image_view<T>& image,
                      unsigned seed_i, unsigned seed_j,
                      T v, T new_v,
-                     vcl_vector<vil_chord>& region)
+                     std::vector<vil_chord>& region)
 {
   region.resize(0);
   unsigned ni1=image.ni()-1;
   unsigned nj1=image.nj()-1;
-  vcl_vector<vcl_pair<unsigned,unsigned> > q;  // List of points to visit
+  std::vector<std::pair<unsigned,unsigned> > q;  // List of points to visit
   if (seed_i>ni1 || seed_j>nj1) return;  // Seed outside image
 
   // Initialise the queue with the seed
-  q.push_back(vcl_pair<unsigned,unsigned>(seed_i,seed_j));
+  q.push_back(std::pair<unsigned,unsigned>(seed_i,seed_j));
 
   unsigned k=0;
   while (k<q.size())
@@ -123,14 +124,14 @@ void vil_flood_fill4(vil_image_view<T>& image,
         // Consider row above
         for (unsigned i1=ilo;i1<=ihi;++i1)
           if (image(i1,j-1)==v)
-            q.push_back(vcl_pair<unsigned,unsigned>(i1,j-1));
+            q.push_back(std::pair<unsigned,unsigned>(i1,j-1));
       }
       if (j<nj1)
       {
         // Consider row below
         for (unsigned i1=ilo;i1<=ihi;++i1)
           if (image(i1,j+1)==v)
-            q.push_back(vcl_pair<unsigned,unsigned>(i1,j+1));
+            q.push_back(std::pair<unsigned,unsigned>(i1,j+1));
       }
     }
     k++;
@@ -152,11 +153,11 @@ void vil_flood_fill8(vil_image_view<T>& image,
 {
   unsigned ni1=image.ni()-1;
   unsigned nj1=image.nj()-1;
-  vcl_vector<vcl_pair<unsigned,unsigned> > q;  // List of points to visit
+  std::vector<std::pair<unsigned,unsigned> > q;  // List of points to visit
   if (seed_i>ni1 || seed_j>nj1) return;  // Seed outside image
 
   // Initialise the queue with the seed
-  q.push_back(vcl_pair<unsigned,unsigned>(seed_i,seed_j));
+  q.push_back(std::pair<unsigned,unsigned>(seed_i,seed_j));
 
   unsigned k=0;
   while (k<q.size())
@@ -177,14 +178,14 @@ void vil_flood_fill8(vil_image_view<T>& image,
         // Consider row above
         for (unsigned i1=ilo;i1<=ihi;++i1)
           if (image(i1,j-1)==v)
-            q.push_back(vcl_pair<unsigned,unsigned>(i1,j-1));
+            q.push_back(std::pair<unsigned,unsigned>(i1,j-1));
       }
       if (j<nj1)
       {
         // Consider row below
         for (unsigned i1=ilo;i1<=ihi;++i1)
           if (image(i1,j+1)==v)
-            q.push_back(vcl_pair<unsigned,unsigned>(i1,j+1));
+            q.push_back(std::pair<unsigned,unsigned>(i1,j+1));
       }
     }
     k++;
@@ -205,16 +206,16 @@ template<class T>
 void vil_flood_fill8(vil_image_view<T>& image,
                      unsigned seed_i, unsigned seed_j,
                      T v, T new_v,
-                     vcl_vector<vil_chord>& region)
+                     std::vector<vil_chord>& region)
 {
   region.resize(0);
   unsigned ni1=image.ni()-1;
   unsigned nj1=image.nj()-1;
-  vcl_vector<vcl_pair<unsigned,unsigned> > q;  // List of points to visit
+  std::vector<std::pair<unsigned,unsigned> > q;  // List of points to visit
   if (seed_i>ni1 || seed_j>nj1) return;  // Seed outside image
 
   // Initialise the queue with the seed
-  q.push_back(vcl_pair<unsigned,unsigned>(seed_i,seed_j));
+  q.push_back(std::pair<unsigned,unsigned>(seed_i,seed_j));
 
   unsigned k=0;
   while (k<q.size())
@@ -237,14 +238,14 @@ void vil_flood_fill8(vil_image_view<T>& image,
         // Consider row above
         for (unsigned i1=ilo;i1<=ihi;++i1)
           if (image(i1,j-1)==v)
-            q.push_back(vcl_pair<unsigned,unsigned>(i1,j-1));
+            q.push_back(std::pair<unsigned,unsigned>(i1,j-1));
       }
       if (j<nj1)
       {
         // Consider row below
         for (unsigned i1=ilo;i1<=ihi;++i1)
           if (image(i1,j+1)==v)
-            q.push_back(vcl_pair<unsigned,unsigned>(i1,j+1));
+            q.push_back(std::pair<unsigned,unsigned>(i1,j+1));
       }
     }
     k++;

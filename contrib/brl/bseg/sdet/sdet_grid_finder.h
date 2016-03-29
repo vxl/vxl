@@ -27,7 +27,9 @@
 // \endverbatim
 //
 //-------------------------------------------------------------------------
-#include <vcl_vector.h>
+#include <iostream>
+#include <vector>
+#include <vcl_compiler.h>
 #include <vgl/vgl_homg_point_2d.h>
 #include <vgl/algo/vgl_h_matrix_2d.h>
 #include <vsol/vsol_line_2d_sptr.h>
@@ -48,10 +50,10 @@ class line_chamfer_1d
   line_chamfer_1d();
   ~line_chamfer_1d();
 
-  bool insert_lines(vcl_vector<vsol_line_2d_sptr> const& lines);
+  bool insert_lines(std::vector<vsol_line_2d_sptr> const& lines);
 
   bool get_lines_in_interval(const double dlo, const double dhi,
-                             vcl_vector<vsol_line_2d_sptr>& lines) const;
+                             std::vector<vsol_line_2d_sptr>& lines) const;
   int index_size() const {return size_;}
   int n_lines() const {return distances_.size();}
   double offset(int i) const {return distances_[i];}
@@ -59,9 +61,9 @@ class line_chamfer_1d
   void forward_champher();
   void backward_champher();
  private:
-  vcl_vector<int> index_;
-  vcl_vector<double> distances_;
-  vcl_vector<vcl_vector<vsol_line_2d_sptr>* > line_index_;
+  std::vector<int> index_;
+  std::vector<double> distances_;
+  std::vector<std::vector<vsol_line_2d_sptr>* > line_index_;
   int size_;
   double dmin_;
   double dmax_;
@@ -73,10 +75,10 @@ class grid_profile_matcher
  public:
   grid_profile_matcher();
   ~grid_profile_matcher();
-  bool insert_lines(vcl_vector<vsol_line_2d_sptr> const& lines,
+  bool insert_lines(std::vector<vsol_line_2d_sptr> const& lines,
                     bool horizontal_lines);
   bool get_lines_in_interval(const double dlo, const double dhi,
-                             vcl_vector<vsol_line_2d_sptr>& lines) const;
+                             std::vector<vsol_line_2d_sptr>& lines) const;
   double calculate_grid_offset(int n_lines, double spacing);
   int index_size() const {return size_;}
   int n_lines() const {return distances_.size();}
@@ -84,8 +86,8 @@ class grid_profile_matcher
   double distance(double x) const;
  private:
   vnl_vector<double> image_profile_;
-  vcl_vector<double> distances_;
-  vcl_vector<vcl_vector<vsol_line_2d_sptr>* > line_index_;
+  std::vector<double> distances_;
+  std::vector<std::vector<vsol_line_2d_sptr>* > line_index_;
   int size_;
   double dmin_;
   double dmax_;
@@ -113,32 +115,32 @@ class sdet_grid_finder : public sdet_grid_finder_params
 
   //: if there are less than 2 dominant groups then return false
   bool set_lines(const float xsize, const float ysize,
-                 vcl_vector<vsol_line_2d_sptr> const& lines);
+                 std::vector<vsol_line_2d_sptr> const& lines);
 
   bool get_homography(vgl_h_matrix_2d<double>& homog);
 
-  bool get_debug_lines(vcl_vector<vsol_line_2d_sptr> & lines);
-  bool get_debug_grid_lines(vcl_vector<vsol_line_2d_sptr> & lines);
+  bool get_debug_lines(std::vector<vsol_line_2d_sptr> & lines);
+  bool get_debug_grid_lines(std::vector<vsol_line_2d_sptr> & lines);
 
-  bool get_affine_lines(vcl_vector<vsol_line_2d_sptr> & lines);
-  bool get_matched_lines(vcl_vector<vsol_line_2d_sptr> & lines);
-  bool get_mapped_lines(vcl_vector<vsol_line_2d_sptr> & lines);
+  bool get_affine_lines(std::vector<vsol_line_2d_sptr> & lines);
+  bool get_matched_lines(std::vector<vsol_line_2d_sptr> & lines);
+  bool get_mapped_lines(std::vector<vsol_line_2d_sptr> & lines);
 
-  bool get_backprojected_grid(vcl_vector<vsol_line_2d_sptr> & lines);
+  bool get_backprojected_grid(std::vector<vsol_line_2d_sptr> & lines);
   void set_verbose() { verbose_=true; } //non-params interface
   void unset_verbose() { verbose_=false; }
   void set_line_length_threshold(double length)  { length_threshold_ = length; }
 
   //: get all grid corner points, in column-major order
-  bool get_grid_points(vcl_vector<double> &image_x, vcl_vector<double> &image_y);
+  bool get_grid_points(std::vector<double> &image_x, std::vector<double> &image_y);
 
   //:test camera parameter matrices
   bool transform_grid_points(vnl_matrix_fixed<double,3,3> & K,
                              vnl_matrix_fixed<double,3,4> & M,
-                             vcl_vector<vsol_point_2d_sptr> & points);
+                             std::vector<vsol_point_2d_sptr> & points);
   //:write transformed grid points to a file
-  bool init_output_file(vcl_ofstream & outstream);
-  bool write_image_points(vcl_ofstream & outstream);
+  bool init_output_file(std::ofstream & outstream);
+  bool write_image_points(std::ofstream & outstream);
 
   //:make sure homography and image correspond with each other
   bool check_grid_match(vil1_image img);
@@ -153,12 +155,12 @@ class sdet_grid_finder : public sdet_grid_finder_params
 
   //:the vanishing point of a line bundle
 
-  bool get_vanishing_point(vcl_vector<vsol_line_2d_sptr> const & para_lines,
+  bool get_vanishing_point(std::vector<vsol_line_2d_sptr> const & para_lines,
                            vgl_homg_point_2d<double>& vp);
 
   bool scale_transform(const double max_distance,
-                       vcl_vector<vsol_line_2d_sptr> const& gh,
-                       vcl_vector<vsol_line_2d_sptr> const& gv,
+                       std::vector<vsol_line_2d_sptr> const& gh,
+                       std::vector<vsol_line_2d_sptr> const& gv,
                        vnl_matrix_fixed<double, 3, 3>& S);
 
 
@@ -182,15 +184,15 @@ class sdet_grid_finder : public sdet_grid_finder_params
   bool homography_valid_;      //process state flag
   float xmax_;
   float ymax_;
-  vcl_vector<vsol_line_2d_sptr> lines_;
-  vcl_vector<vsol_line_2d_sptr> display_lines_;
-  vcl_vector<vsol_line_2d_sptr> matched_lines_;
-  vcl_vector<vsol_line_2d_sptr> debug_lines_;
-  vcl_vector<vsol_line_2d_sptr> debug_grid_lines_;
-  vcl_vector<vsol_line_2d_sptr> group0_;
-  vcl_vector<vsol_line_2d_sptr> group1_;
-  vcl_vector<vsol_line_2d_sptr> afgroup0_;
-  vcl_vector<vsol_line_2d_sptr> afgroup1_;
+  std::vector<vsol_line_2d_sptr> lines_;
+  std::vector<vsol_line_2d_sptr> display_lines_;
+  std::vector<vsol_line_2d_sptr> matched_lines_;
+  std::vector<vsol_line_2d_sptr> debug_lines_;
+  std::vector<vsol_line_2d_sptr> debug_grid_lines_;
+  std::vector<vsol_line_2d_sptr> group0_;
+  std::vector<vsol_line_2d_sptr> group1_;
+  std::vector<vsol_line_2d_sptr> afgroup0_;
+  std::vector<vsol_line_2d_sptr> afgroup1_;
   bsol_hough_line_index_sptr index_;
   //line_chamfer_1d chamf0_;
   //line_chamfer_1d chamf90_;
@@ -203,8 +205,8 @@ class sdet_grid_finder : public sdet_grid_finder_params
   vgl_h_matrix_2d<double> homography_;
 
   //: grid corner point coordinates in the image
-  vcl_vector<double> image_x_;
-  vcl_vector<double> image_y_;
+  std::vector<double> image_x_;
+  std::vector<double> image_y_;
 
   //: minimum length of line segments used to estimate the vanishing point
   //

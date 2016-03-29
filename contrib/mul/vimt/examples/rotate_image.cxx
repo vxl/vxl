@@ -3,8 +3,9 @@
 // \brief Example of rotating an image
 // \author Tim Cootes - Manchester
 
+#include <iostream>
 #include <vxl_config.h> // for vxl_byte
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
 #include <vimt/vimt_rotate.h>
 #include <vil/vil_load.h>
 #include <vil/vil_save.h>
@@ -12,11 +13,11 @@
 
 void print_usage()
 {
-  vcl_cout << "vimt_rotate_image -i image.jpg -A 15 -o output.jpg\n"
+  std::cout << "vimt_rotate_image -i image.jpg -A 15 -o output.jpg\n"
            << "Loads in named image.\n"
            << "Rotates by A (in degrees).\n"
            << "Saves output to given file.\n"
-           << vcl_endl;
+           << std::endl;
   vul_arg_display_usage_and_exit();
 }
 
@@ -39,8 +40,8 @@ void draw_line(vimt_image_2d_of<vxl_byte>& image,
 
 int main(int argc, char** argv)
 {
-  vul_arg<vcl_string> input_path("-i","Input image");
-  vul_arg<vcl_string> output_path("-o","Output path","output.jpg");
+  vul_arg<std::string> input_path("-i","Input image");
+  vul_arg<std::string> output_path("-o","Output path","output.jpg");
   vul_arg<double> angle("-A","Angle",45.0);
   vul_arg_parse(argc,argv);
 
@@ -55,7 +56,7 @@ int main(int argc, char** argv)
   image.image() = vil_load(input_path().c_str());
   if (image.image().size()==0)
   {
-    vcl_cout<<"Failed to load in image from "<<input_path()<<vcl_endl;
+    std::cout<<"Failed to load in image from "<<input_path()<<std::endl;
     return 1;
   }
 

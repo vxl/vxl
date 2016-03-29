@@ -21,9 +21,10 @@
 // The time is k x (n - k) x (n - k) x number of swaps to minimize
 // total distance.  There might be on the order of k swaps (or worse).
 
-#include <vcl_vector.h>
+#include <vector>
+#include <iostream>
 #include <vcl_cassert.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
 #include <vbl/vbl_array_2d.h>
 
 class bsta_k_medoid
@@ -60,7 +61,7 @@ class bsta_k_medoid
     {assert(k<this->k());return clusters_[k].size();}
 
   //: the elements in cluster k
-  inline vcl_vector<unsigned> elements(const unsigned k)
+  inline std::vector<unsigned> elements(const unsigned k)
     {assert(k<this->k());return clusters_[k];}
 
   //: is an element in cluster k ?
@@ -73,7 +74,7 @@ class bsta_k_medoid
   double total_distance(const unsigned k) const;
 
   //: print distance array (for debugging)
-  inline void print_distance_array(vcl_ostream & str = vcl_cout)
+  inline void print_distance_array(std::ostream & str = std::cout)
     {str << '\n' << distance_array_ << '\n';}
 
  protected:
@@ -104,10 +105,10 @@ class bsta_k_medoid
   unsigned n_elements_;
 
   //: the k medoids
-  vcl_vector<unsigned> medoids_;
+  std::vector<unsigned> medoids_;
 
   //: The set of elements closest to a given medoid
-  vcl_vector<vcl_vector<unsigned> > clusters_;
+  std::vector<std::vector<unsigned> > clusters_;
 
   //: The array of pair-wise distances between elements
   vbl_array_2d<double> distance_array_;

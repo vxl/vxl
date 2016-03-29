@@ -57,7 +57,7 @@ add_test( NAME vcl_test_set COMMAND $<TARGET_FILE:vcl_test_all> test_set )
 add_test( NAME vcl_test_string COMMAND $<TARGET_FILE:vcl_test_all> test_string )
 add_test( NAME vcl_test_sstream COMMAND $<TARGET_FILE:vcl_test_all> test_sstream )
 add_test( NAME vcl_test_vector COMMAND $<TARGET_FILE:vcl_test_all> test_vector )
-add_test( NAME vcl_test_cstdio COMMAND $<TARGET_FILE:vcl_test_all> test_cstdio ${CMAKE_CURRENT_SOURCE_DIR}/test_cstdio.txt )
+add_test( NAME vcl_test_cstdio COMMAND $<TARGET_FILE:vcl_test_all> test_cstdio ${CMAKE_CURRENT_LIST_DIR}/test_cstdio.txt )
 add_test( NAME vcl_test_preprocessor COMMAND $<TARGET_FILE:vcl_test_all> test_preprocessor )
 add_test( NAME vcl_test_atomic_count COMMAND $<TARGET_FILE:vcl_test_all> test_atomic_count )
 # Only a compiler test:
