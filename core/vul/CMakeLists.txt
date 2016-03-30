@@ -8,7 +8,6 @@ doxygen_add_library(core/vul
 
 
 set(vul_sources
-  vul_export.h
   vul_fwd.h
   vul_whereami.h
 
@@ -55,6 +54,7 @@ if(CMAKE_COMPILER_IS_GNUCXX)
   set_source_files_properties(vul_sequence_filename_map.cxx PROPERTIES COMPILE_FLAGS -O0)
 endif()
 
+include_directories(${CMAKE_CURRENT_BINARY_DIR})
 if(APPLE)
   vxl_add_library(LIBRARY_NAME ${VXL_LIB_PREFIX}vul LIBRARY_SOURCES ${vul_sources})
 else()
@@ -65,6 +65,12 @@ else()
   vxl_add_library(LIBRARY_NAME ${VXL_LIB_PREFIX}vul LIBRARY_SOURCES ${vul_sources})
   vxl_add_library(LIBRARY_NAME ${VXL_LIB_PREFIX}vul_network LIBRARY_SOURCES ${vul_network_sources})
 endif()
+include(GenerateExportHeader)
+generate_export_header(${VXL_LIB_PREFIX}vul BASE_NAME vul)
+install(FILES ${CMAKE_CURRENT_BINARY_DIR}/vul_export.h
+    DESTINATION ${VXL_INSTALL_INCLUDE_DIR}/core/vul
+    PERMISSIONS OWNER_WRITE OWNER_READ GROUP_READ WORLD_READ
+    COMPONENT Development )
 
 if(NOT UNIX)
   target_link_libraries( ${VXL_LIB_PREFIX}vul ws2_32 )

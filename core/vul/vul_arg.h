@@ -38,7 +38,7 @@ class vul_arg_base
    struct required_option_type {}; // see constructors of vul_arg
 
  public:
-  static vul_EXPORT required_option_type is_required;
+  static VUL_EXPORT required_option_type is_required;
 
   static void parse_deprecated(int& argc, char **& argv,
                                bool warn_about_unrecognized_arguments = true);

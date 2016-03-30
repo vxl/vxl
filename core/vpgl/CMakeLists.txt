@@ -10,7 +10,6 @@ doxygen_add_library(core/vpgl
 include_directories(${VXLCORE_INCLUDE_DIR})
 
 set( vpgl_sources
-  vpgl_export.h
   vpgl_camera.h                    vpgl_camera_double_sptr.h
                                    vpgl_camera_float_sptr.h
   vpgl_proj_camera.h               vpgl_proj_camera.hxx
@@ -35,8 +34,15 @@ set( vpgl_sources
 
 aux_source_directory(Templates vpgl_sources)
 
+include_directories(${CMAKE_CURRENT_BINARY_DIR})
 vxl_add_library(LIBRARY_NAME ${VXL_LIB_PREFIX}vpgl LIBRARY_SOURCES ${vpgl_sources})
 target_link_libraries(${VXL_LIB_PREFIX}vpgl ${VXL_LIB_PREFIX}vnl_algo ${VXL_LIB_PREFIX}vnl ${VXL_LIB_PREFIX}vgl_algo ${VXL_LIB_PREFIX}vgl ${VXL_LIB_PREFIX}vul ${VXL_LIB_PREFIX}vsl ${VXL_LIB_PREFIX}vbl)
+include(GenerateExportHeader)
+generate_export_header(${VXL_LIB_PREFIX}vpgl BASE_NAME vpgl)
+install(FILES ${CMAKE_CURRENT_BINARY_DIR}/vpgl_export.h
+    DESTINATION ${VXL_INSTALL_INCLUDE_DIR}/core/vpgl
+    PERMISSIONS OWNER_WRITE OWNER_READ GROUP_READ WORLD_READ
+    COMPONENT Development )
 
 if( BUILD_TESTING )
   add_subdirectory(tests)
