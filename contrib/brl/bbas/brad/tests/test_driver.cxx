@@ -9,7 +9,7 @@ DECLARE( test_phongs_model_est );
 DECLARE( test_synoptic_function );
 DECLARE( test_image_metadata );
 DECLARE( test_atmospheric_parameters );
-
+DECLARE(test_appearance_neighborhood_index );
 void register_tests()
 {
   REGISTER( test_illum );
@@ -21,6 +21,7 @@ void register_tests()
   REGISTER( test_synoptic_function );
   REGISTER( test_image_metadata );
   REGISTER( test_atmospheric_parameters );
+  REGISTER( test_appearance_neighborhood_index );
 }
 
 DEFINE_MAIN;

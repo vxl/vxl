@@ -32,6 +32,7 @@ class brad_image_metadata : public vbl_ref_count
 
   //: Default constructor
   brad_image_metadata() :
+    verbose_(false),
     gain_(1.0),
     offset_(0.0),
     n_bands_(0),
@@ -71,7 +72,8 @@ class brad_image_metadata : public vbl_ref_count
   unsigned n_bands_;  // 1 for PAN, 4 or 8 for MULTI
   std::vector<std::pair<double, double> > gains_;  // calibrating multispectral imagery requires a different gain, offset for each band
   double gsd_; // ground sampling distance of the image - parse from imd or pvl file
-
+  bool verbose_;
+  void set_verbose(bool verbose){verbose_ = verbose;}
   //: parse header in nitf image, assumes that metadata files are in the same folder with the image
   //  If meta_folder is not empty, they are searched in that folder as well
   bool parse(std::string const& nitf_filename, std::string const& meta_folder = "");

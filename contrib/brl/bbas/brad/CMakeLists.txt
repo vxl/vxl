@@ -19,7 +19,8 @@
       brad_atmospheric_parameters.h   brad_atmospheric_parameters.cxx
       brad_image_atmospherics_est.h   brad_image_atmospherics_est.cxx
       brad_estimate_shadows.h         brad_estimate_shadows.cxx
-     )
+      brad_appearance_neighborhood_index.h  brad_appearance_neighborhood_index.cxx
+)
   aux_source_directory(Templates brad_sources)
   vxl_add_library(LIBRARY_NAME brad LIBRARY_SOURCES ${brad_sources} )
 
