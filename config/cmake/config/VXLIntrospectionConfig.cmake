@@ -741,6 +741,20 @@ unset(VCL_CXX_HAS_HEADER_CFLOAT)
 # Reset the update configuration flag
 set( VXL_UPDATE_CONFIGURATION "OFF" CACHE BOOL "Re-run the configuration tests?" FORCE )
 
+# Identify the version of CXX compiler used when VXL was built. This needs to be
+# identified so that external applications can identify how VXL was built.
+set(VXL_COMPILED_CXX_STANDARD_VERSION 1)
+foreach(CXX_TEST_VERSION 199711L 201103L 201402L)
+  try_compile(VXL_MIN_CXX_LEVEL_TEST
+    ${CMAKE_CURRENT_BINARY_DIR}/CMakeTmp
+    ${CMAKE_CURRENT_LIST_DIR}/vxlGetCXXCompilerVersion.cxx
+    COMPILE_DEFINITIONS -DVXL_CXX_TEST_VERSION=${CXX_TEST_VERSION}
+    OUTPUT_VARIABLE VXL_COMPILED_CXX_STANDARD_VERSION_LOG )
+  if(VXL_MIN_CXX_LEVEL_TEST)
+     set(VXL_COMPILED_CXX_STANDARD_VERSION ${CXX_TEST_VERSION})
+  endif()
+endforeach()
+
 #These variables should no longer be used
 unset(vxl_config_SOURCE_DIR)
 unset(VXL_PLFM_TEST_FILE)
