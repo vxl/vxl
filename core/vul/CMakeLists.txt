@@ -65,12 +65,6 @@ else()
   vxl_add_library(LIBRARY_NAME ${VXL_LIB_PREFIX}vul LIBRARY_SOURCES ${vul_sources})
   vxl_add_library(LIBRARY_NAME ${VXL_LIB_PREFIX}vul_network LIBRARY_SOURCES ${vul_network_sources})
 endif()
-include(GenerateExportHeader)
-generate_export_header(${VXL_LIB_PREFIX}vul BASE_NAME vul)
-install(FILES ${CMAKE_CURRENT_BINARY_DIR}/vul_export.h
-    DESTINATION ${VXL_INSTALL_INCLUDE_DIR}/core/vul
-    PERMISSIONS OWNER_WRITE OWNER_READ GROUP_READ WORLD_READ
-    COMPONENT Development )
 
 if(NOT UNIX)
   target_link_libraries( ${VXL_LIB_PREFIX}vul ws2_32 )
@@ -81,6 +75,13 @@ if(SOLARIS)
 endif()
 
 endif()
+
+include(GenerateExportHeader)
+generate_export_header(${VXL_LIB_PREFIX}vul BASE_NAME vul)
+install(FILES ${CMAKE_CURRENT_BINARY_DIR}/vul_export.h
+    DESTINATION ${VXL_INSTALL_INCLUDE_DIR}/core/vul
+    PERMISSIONS OWNER_WRITE OWNER_READ GROUP_READ WORLD_READ
+    COMPONENT Development )
 
 target_link_libraries( ${VXL_LIB_PREFIX}vul ${VXL_LIB_PREFIX}vcl )
 
