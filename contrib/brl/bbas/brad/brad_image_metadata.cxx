@@ -1112,7 +1112,6 @@ bool brad_image_metadata::parse(std::string const& nitf_filename, std::string co
       std::cout << " gain: " << gains_[i].first << " off: " << gains_[i].second << std::endl;
     }
   }
-
   // solar irradiance is dependent on sensor because each has a different range of wavelengths they are sensitive to.
   // set solar irradiance to a reasonable default in case we don't have the information
   // "reasonable" is defined here as roughly in the range of the examples we know.
@@ -1159,7 +1158,7 @@ bool brad_image_metadata::parse(std::string const& nitf_filename, std::string co
         std::cerr << "ERROR unrecognized number of bands: " << n_bands_ << " from NITF " << nitf_filename << std::endl;;
         return false;
       }
-    } else if (img_info.find("WorldView") != std::string::npos || nitf_filename.find("WV") != std::string::npos || satellite_name_.compare("WV01") == 0 ) {
+    } else if (img_info.find("WorldView") != std::string::npos  || img_info.find("WV01") != std::string::npos || satellite_name_.compare("WV01") == 0 ) {
       solar_irrad = 1580.814;
       satellite_name_ = "WorldView";
     } else if (img_info.find("WorldView2") != std::string::npos || img_info.find("WV02") != std::string::npos || satellite_name_.compare("WV02") == 0) {
