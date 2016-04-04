@@ -49,7 +49,9 @@ bool boxm2_vecf_estimate_camera_from_canthus::estimate_camera(vgl_vector_2d<doub
   phi_ = atan( (llc.y() - rlc.y()) / (llc.x() - rlc.x()));
   double l_cc = len(llc,rlc);
   vcl_cout<<"l_cc "<< l_cc<<" , "<<vcl_sqrt( sq( l_cc /( this->canthus_line_length_ * s) ) - sq( sin(phi_) ) ) <<vcl_endl;
-  psi_ = acos( 1./cos(phi_) * vcl_sqrt( sq( l_cc /( this->canthus_line_length_ * s) ) - sq( sin(phi_) ) ) ) ;
+  double cos_psi = ( 1./cos(phi_) * vcl_sqrt( sq( l_cc /( this->canthus_line_length_ * s) ) - sq( sin(phi_) ) ) );
+    psi_ = acos(cos_psi) ;
+    vcl_cout<<" cos of phi and psi is "<< cos(phi_)<<" "<<cos_psi<<vcl_endl;
   vgl_point_2d<double> mid        = vgl_point_2d<double>((llc.x()+rlc.x()) / 2 , (llc.y()+rlc.y()) / 2);
   vgl_point_2d<double> nose_ridge = nr_0;
 
