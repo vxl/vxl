@@ -17,7 +17,9 @@ class dbvalue:
 def bvxm_load_image(file_path):
     bvxm_batch.init_process("vilLoadImageViewProcess")
     bvxm_batch.set_input_string(0, file_path)
-    bvxm_batch.run_process()
+    status = bvxm_batch.run_process()
+    if not status:
+      return None, 0, 0
     (id, type) = bvxm_batch.commit_output(0)
     (ni_id, ni_type) = bvxm_batch.commit_output(1)
     (nj_id, nj_type) = bvxm_batch.commit_output(2)
@@ -32,7 +34,9 @@ def bvxm_load_image(file_path):
 def bvxm_load_image_resource(file_path):
     bvxm_batch.init_process("vilLoadImageResourceProcess")
     bvxm_batch.set_input_string(0, file_path)
-    bvxm_batch.run_process()
+    status = bvxm_batch.run_process()
+    if not status:
+      return None, 0, 0
     (id, type) = bvxm_batch.commit_output(0)
     (ni_id, ni_type) = bvxm_batch.commit_output(1)
     (nj_id, nj_type) = bvxm_batch.commit_output(2)
