@@ -87,3 +87,16 @@ void boxm2_vecf_ocl_head_model::clear_target(boxm2_scene_sptr target_scene)
     }
   } // for each target block
 }
+void boxm2_vecf_ocl_head_model::inverse_vector_field_unrefined(std::vector<vgl_point_3d<double> > const& unrefined_target_pts) {
+
+  return ;
+}
+int boxm2_vecf_ocl_head_model::prerefine_target_sub_block(vgl_point_3d<double> const& sub_block_pt, unsigned pt_index) {
+  return true;
+}
+bool boxm2_vecf_ocl_head_model::inverse_vector_field(vgl_point_3d<double> const& target_pt, vgl_vector_3d<double>& inv_vf)const {
+  return true;
+}
+bool boxm2_vecf_ocl_head_model::apply_vector_field(cell_info const& target_cell, vgl_vector_3d<double> const& inv_vf) {
+  return true;
+}
