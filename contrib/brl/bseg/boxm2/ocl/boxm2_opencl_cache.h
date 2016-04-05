@@ -106,8 +106,8 @@ class boxm2_opencl_cache: public vbl_ref_count
     bool lru_remove_last(std::pair<boxm2_scene_sptr, boxm2_block_id> & scene_id_pair); //removes all data and block with this ID. returns false if lru is empty
     std::list<std::pair<boxm2_scene_sptr,boxm2_block_id> > lru_order_;
     unsigned int maxBlocksInCache;
-    size_t bytesInCache_;
-    size_t maxBytesInCache_;
+    std::size_t bytesInCache_;
+    std::size_t maxBytesInCache_;
 
     ////////////////////////////////////////////////////////////////////////////
     // bocl_mem objects
